@@ -1,0 +1,1 @@
+# wemake-python-styleguide
