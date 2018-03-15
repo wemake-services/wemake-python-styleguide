@@ -1,6 +1,6 @@
 # wemake-python-styleguide
 
-Wellcome to the most opinionated linter ever.
+Welcome to the most opinionated linter ever.
 
 
 ## Project status 
