@@ -14,6 +14,14 @@ wemake-python-styleguide
 Welcome to the most opinionated linter ever.
 
 
+Installation
+============
+
+.. code:: bash
+
+    pip install wemake-python-styleguide
+
+
 Project status
 ==============
 
