@@ -9,6 +9,15 @@ import os
 
 from setuptools import setup
 
+
+def get_version():
+    """Parses main file to find version token."""
+    with open('wemake_python_styleguide/version.py') as f:
+        for line in f:
+            if line.startswith('__version__'):
+                return line.split('=')[-1].strip().replace("'", '')
+
+
 # Package meta-data.
 NAME = 'wemake-python-styleguide'
 DESCRIPTION = 'Warns about redundant arguments'
@@ -27,7 +36,7 @@ with io.open(os.path.join(here, 'README.rst'), encoding='utf-8') as readme:
 
 setup(
     name=NAME,
-    version='0.0.1',
+    version=get_version(),
     description=DESCRIPTION,
     long_description=long_description,
     author=AUTHOR,
