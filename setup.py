@@ -12,8 +12,8 @@ from setuptools import setup
 
 def get_version():
     """Parses main file to find version token."""
-    with open('wemake_python_styleguide/version.py') as f:
-        for line in f:
+    with open('wemake_python_styleguide/version.py') as version_file:
+        for line in version_file:
             if line.startswith('__version__'):
                 return line.split('=')[-1].strip().replace("'", '')
 
