@@ -1,2 +1,2 @@
-recursive-include wemake-python-styleguide *.py
+recursive-include wemake_python_styleguide *.py
 include LICENSE README.rst

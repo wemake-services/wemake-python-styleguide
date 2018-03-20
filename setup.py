@@ -20,7 +20,7 @@ def get_version():
 
 # Package meta-data.
 NAME = 'wemake-python-styleguide'
-DESCRIPTION = 'Warns about redundant arguments'
+DESCRIPTION = 'Opinionated styleguide that we use in wemake.services projects'
 URL = 'https://github.com/wemake-services/wemake-python-styleguide'
 EMAIL = 'mail@sobolevn.me'
 AUTHOR = 'Nikita Sobolev'
@@ -42,13 +42,14 @@ setup(
     author=AUTHOR,
     author_email=EMAIL,
     url=URL,
-    py_modules=['flake8_arguments'],
+    packages=[
+        'wemake_python_styleguide',
+    ],
     keywords=[
         'flake8',
         'plugin',
-        'arguments',
-        'functions',
-        'methods',
+        'wemake.services',
+        'styleguide',
     ],
     install_requires=REQUIRED,
     include_package_data=True,
