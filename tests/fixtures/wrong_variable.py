@@ -21,6 +21,10 @@ for item in range(1, 3):
     continue
 
 
+for _ in range(1, 3):  # should not raise error here
+    continue
+
+
 class Fixture(object):
     data = 'data'
     result: int

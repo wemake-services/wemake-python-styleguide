@@ -15,3 +15,6 @@ y = locals()
 
 vars(z)
 dir(y)
+
+hasattr(None, 'missing', None)
+delattr(None, 'missing', None)

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# TODO(@sobolevn): write docs for each error, remove ignore
 
 """
 All style errors are defined here.
@@ -17,6 +18,7 @@ class BaseStyleViolation(object):
     _code: str
 
     def __init__(self, node: AST, text: str = None) -> None:
+        """Creates new instance."""
         self.node = node
 
         if text is None:
@@ -25,10 +27,14 @@ class BaseStyleViolation(object):
             self._text = text
 
     def message(self) -> str:
+        """Returns formated message."""
         return self._error_tmpl.format(self._code, self._text)
 
     def items(self) -> Tuple[int, int, str]:
-        return self.node.lineno, self.node.col_offset, self.message()
+        """Returns `tuple` to match `flake8` API format."""
+        lineno = getattr(self.node, 'lineno', 0)
+        col_offset = getattr(self.node, 'col_offset', 0)
+        return lineno, col_offset, self.message()
 
 
 class WrongKeywordViolation(BaseStyleViolation):
@@ -84,3 +90,13 @@ class NestedImportViolation(BaseStyleViolation):
 class DynamicImportViolation(BaseStyleViolation):
     _error_tmpl = '{} Found dynamic import "{}"'
     _code = 'WPS132'
+
+
+class NestedFunctionViolation(BaseStyleViolation):
+    _error_tmpl = '{} Found nested function "{}"'
+    _code = 'WPS140'
+
+
+class NestedClassViolation(BaseStyleViolation):
+    _error_tmpl = '{} Found nested class "{}"'
+    _code = 'WPS141'

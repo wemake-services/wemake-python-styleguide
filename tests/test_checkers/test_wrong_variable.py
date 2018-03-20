@@ -4,13 +4,14 @@ import subprocess
 
 
 def test_wrong_variables_in_fixture(absolute_path):
+    """End-to-End test to check variable rules."""
     filename = absolute_path('fixtures', 'wrong_variable.py')
-    p = subprocess.Popen(
+    process = subprocess.Popen(
         ['flake8', filename],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
-    stdout, _ = p.communicate()
+    stdout, _ = process.communicate()
 
     assert stdout.count(b'WPS120') == 6
     assert stdout.count(b'WPS121') == 2

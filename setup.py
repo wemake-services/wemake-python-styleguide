@@ -21,8 +21,8 @@ REQUIRED = [
 ]
 
 here = os.path.abspath(os.path.dirname(__file__))
-with io.open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
-    long_description = '\n' + f.read()
+with io.open(os.path.join(here, 'README.rst'), encoding='utf-8') as readme:
+    long_description = '\n' + readme.read()
 
 
 setup(
@@ -67,6 +67,7 @@ setup(
             'WPS11 = wemake_python_styleguide:WrongFunctionCallChecker',
             'WPS12 = wemake_python_styleguide:WrongVariableChecker',
             'WPS13 = wemake_python_styleguide:WrongImportChecker',
+            'WPS14 = wemake_python_styleguide:WrongNestedChecker',
         ],
     },
     zip_safe=False,

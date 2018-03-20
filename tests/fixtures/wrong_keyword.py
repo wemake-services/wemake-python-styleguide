@@ -13,7 +13,12 @@ def check_global():
 
 
 def check_nonlocal():
-    nonlocal x
+    j = 10
+
+    def nested():
+        nonlocal j
+        return j
+
     return
 
 

@@ -1,18 +1,22 @@
 # -*- coding: utf-8 -*-
 
 import ast
+from typing import Generator
 
+from wemake_python_styleguide.checkers.base.checker import BaseChecker
+from wemake_python_styleguide.checkers.base.visitor import BaseNodeVisitor
 from wemake_python_styleguide.errors import (
-    WrongArgumentNameViolation,
-    WrongAttributeNameViolation,
-    WrongVariableNameViolation,
     TooShortArgumentNameViolation,
     TooShortAttributeNameViolation,
     TooShortVariableNameViolation,
+    WrongArgumentNameViolation,
+    WrongAttributeNameViolation,
+    WrongVariableNameViolation,
 )
-from wemake_python_styleguide.checkers.base.checker import BaseChecker
-from wemake_python_styleguide.checkers.base.visitor import BaseNodeVisitor
-from wemake_python_styleguide.helpers.functions import given_function_called
+from wemake_python_styleguide.helpers.variables import (
+    is_too_short_variable_name,
+    is_wrong_variable_name,
+)
 
 BAD_VARIABLE_NAMES = frozenset((
     'data',
@@ -32,16 +36,24 @@ BAD_VARIABLE_NAMES = frozenset((
 
 
 class _WrongVariableVisitor(BaseNodeVisitor):
+    def _check_argument(self, node: ast.FunctionDef, arg: str) -> None:
+        if is_wrong_variable_name(arg, BAD_VARIABLE_NAMES):
+            self.add_error(WrongArgumentNameViolation(node, text=arg))
+
+        if is_too_short_variable_name(arg):
+            self.add_error(TooShortArgumentNameViolation(node, text=arg))
+
     def visit_Attribute(self, node: ast.Attribute):
+        """Used to find wrong attribute names inside classes."""
         context = getattr(node, 'ctx', None)
 
         if isinstance(context, ast.Store):
-            if node.attr in BAD_VARIABLE_NAMES:
+            if is_wrong_variable_name(node.attr, BAD_VARIABLE_NAMES):
                 self.add_error(
                     WrongAttributeNameViolation(node, text=node.attr),
                 )
 
-            if len(node.attr) < 2:  # TODO: configuration option
+            if is_too_short_variable_name(node.attr):
                 self.add_error(
                     TooShortAttributeNameViolation(node, text=node.attr),
                 )
@@ -49,40 +61,26 @@ class _WrongVariableVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def visit_FunctionDef(self, node: ast.FunctionDef):
+        """Used to find wrong function and method parameters."""
         for arg in node.args.args:
-            if arg.arg in BAD_VARIABLE_NAMES:
-                self.add_error(
-                    WrongArgumentNameViolation(node, text=arg.arg),
-                )
-
-            if len(arg.arg) < 2:  # TODO: configuration option
-                self.add_error(
-                    TooShortArgumentNameViolation(node, text=arg.arg),
-                )
+            self._check_argument(node, arg.arg)
 
         for arg in node.args.kwonlyargs:
-            if arg.arg in BAD_VARIABLE_NAMES:
-                self.add_error(
-                    WrongArgumentNameViolation(node, text=arg.arg),
-                )
-
-            if len(arg.arg) < 2:  # TODO: configuration option
-                self.add_error(
-                    TooShortArgumentNameViolation(node, text=arg.arg),
-                )
+            self._check_argument(node, arg.arg)
 
         self.generic_visit(node)
 
     def visit_Name(self, node: ast.Name):
+        """Used to find wrong regular variables."""
         context = getattr(node, 'ctx', None)
 
         if isinstance(context, ast.Store):
-            if node.id in BAD_VARIABLE_NAMES:
+            if is_wrong_variable_name(node.id, BAD_VARIABLE_NAMES):
                 self.add_error(
                     WrongVariableNameViolation(node, text=node.id),
                 )
 
-            if len(node.id) < 2:  # TODO: configuration option
+            if is_too_short_variable_name(node.id):
                 self.add_error(
                     TooShortVariableNameViolation(node, text=node.id),
                 )
@@ -91,9 +89,16 @@ class _WrongVariableVisitor(BaseNodeVisitor):
 
 
 class WrongVariableChecker(BaseChecker):
+    """
+    This class performs checks based on variable names.
+
+    It is responsible for finding short and blacklisted variables.
+    """
+
     name = 'wms-wrong-variable'
 
-    def run(self):
+    def run(self) -> Generator[tuple, None, None]:
+        """Runs the check."""
         visiter = _WrongVariableVisitor()
         visiter.visit(self.tree)
 
