@@ -5,14 +5,11 @@ from typing import Generator
 
 from wemake_python_styleguide.checkers.base.checker import BaseChecker
 from wemake_python_styleguide.checkers.base.visitor import BaseNodeVisitor
+from wemake_python_styleguide.constants import NESTED_CLASSES_WHITELIST
 from wemake_python_styleguide.errors import (
     NestedClassViolation,
     NestedFunctionViolation,
 )
-
-NESTED_CLASSES_WHITELIST = frozenset((
-    'Meta',
-))
 
 
 class _WrongNestedVisitor(BaseNodeVisitor):

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# TODO(@sobolevn): write docs for each error, remove ignore
+# TODO(@sobolevn): write docs for each error, remove ignore from setup.cfg
 
 """
 All style errors are defined here.
@@ -100,3 +100,33 @@ class NestedFunctionViolation(BaseStyleViolation):
 class NestedClassViolation(BaseStyleViolation):
     _error_tmpl = '{} Found nested class "{}"'
     _code = 'WPS141'
+
+
+class TooManyLocalsViolation(BaseStyleViolation):
+    _error_tmpl = '{} Found too many local variables "{}"'
+    _code = 'WPS150'
+
+
+class TooManyArgumentsViolation(BaseStyleViolation):
+    _error_tmpl = '{} Found too many arguments "{}"'
+    _code = 'WPS151'
+
+
+class TooManyBranchesViolation(BaseStyleViolation):
+    _error_tmpl = '{} Found too many branches "{}"'
+    _code = 'WPS152'
+
+
+class TooManyReturnsViolation(BaseStyleViolation):
+    _error_tmpl = '{} Found too many return statements "{}"'
+    _code = 'WPS153'
+
+
+class TooManyStatementsViolation(BaseStyleViolation):
+    _error_tmpl = '{} Found too many statements "{}"'
+    _code = 'WPS154'
+
+
+class TooDeepNestingViolation(BaseStyleViolation):
+    _error_tmpl = '{} Found too deep nesting "{}"'
+    _code = 'WPS155'

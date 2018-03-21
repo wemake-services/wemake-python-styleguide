@@ -78,6 +78,7 @@ setup(
             'WPS12 = wemake_python_styleguide:WrongVariableChecker',
             'WPS13 = wemake_python_styleguide:WrongImportChecker',
             'WPS14 = wemake_python_styleguide:WrongNestedChecker',
+            'WPS15 = wemake_python_styleguide:HighComplexityChecker',
         ],
     },
     zip_safe=False,

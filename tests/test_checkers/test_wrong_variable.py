@@ -14,7 +14,7 @@ def test_wrong_variables_in_fixture(absolute_path):
     stdout, _ = process.communicate()
 
     assert stdout.count(b'WPS120') == 6
-    assert stdout.count(b'WPS121') == 2
-    assert stdout.count(b'WPS122') == 2
-    assert stdout.count(b'WPS123') == 1
+    assert stdout.count(b'WPS121') == 3
+    assert stdout.count(b'WPS122') == 3
+    assert stdout.count(b'WPS123') == 2
     assert stdout.count(b'WPS124') == 1

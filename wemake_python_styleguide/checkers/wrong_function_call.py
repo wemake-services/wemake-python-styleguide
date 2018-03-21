@@ -5,29 +5,9 @@ from typing import Generator
 
 from wemake_python_styleguide.checkers.base.checker import BaseChecker
 from wemake_python_styleguide.checkers.base.visitor import BaseNodeVisitor
+from wemake_python_styleguide.constants import BAD_FUNCTIONS
 from wemake_python_styleguide.errors import WrongFunctionCallViolation
 from wemake_python_styleguide.helpers.functions import given_function_called
-
-BAD_FUNCTIONS = frozenset((
-    # Code generation:
-    'eval',
-    'exec',
-    'compile',
-
-    # Magic:
-    'globals',
-    'locals',
-    'vars',
-    'dir',
-
-    # IO:
-    'input',
-    'help',
-
-    # Attribute access:
-    'hasattr',
-    'delattr',
-))
 
 
 class _WrongFunctionCallVisitor(BaseNodeVisitor):

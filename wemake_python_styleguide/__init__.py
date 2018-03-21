@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# flake8: noqa
 
 from wemake_python_styleguide.checkers.wrong_function_call import (
     WrongFunctionCallChecker,
@@ -15,4 +14,7 @@ from wemake_python_styleguide.checkers.wrong_variable import (
 )
 from wemake_python_styleguide.checkers.wrong_nested import (
     WrongNestedChecker,
+)
+from wemake_python_styleguide.checkers.high_complexity import (
+    HighComplexityChecker,
 )

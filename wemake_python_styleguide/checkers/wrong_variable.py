@@ -5,6 +5,7 @@ from typing import Generator
 
 from wemake_python_styleguide.checkers.base.checker import BaseChecker
 from wemake_python_styleguide.checkers.base.visitor import BaseNodeVisitor
+from wemake_python_styleguide.constants import BAD_VARIABLE_NAMES
 from wemake_python_styleguide.errors import (
     TooShortArgumentNameViolation,
     TooShortAttributeNameViolation,
@@ -17,22 +18,6 @@ from wemake_python_styleguide.helpers.variables import (
     is_too_short_variable_name,
     is_wrong_variable_name,
 )
-
-BAD_VARIABLE_NAMES = frozenset((
-    'data',
-    'result',
-    'results',
-    'item',
-    'items',
-    'value',
-    'values',
-    'val',
-    'vals',
-    'var',
-    'vars',
-    'content',
-    'contents',
-))
 
 
 class _WrongVariableVisitor(BaseNodeVisitor):
@@ -68,7 +53,26 @@ class _WrongVariableVisitor(BaseNodeVisitor):
         for arg in node.args.kwonlyargs:
             self._check_argument(node, arg.arg)
 
+        if node.args.vararg:
+            self._check_argument(node, node.args.vararg.arg)
+
+        if node.args.kwarg:
+            self._check_argument(node, node.args.kwarg.arg)
+
         self.generic_visit(node)
+
+    def visit_ExceptHandler(self, node: ast.ExceptHandler):
+        """Used to find wrong exception instances in `try/except`."""
+        name = getattr(node, 'name', '_')
+        if is_wrong_variable_name(name, BAD_VARIABLE_NAMES):
+            self.add_error(
+                WrongVariableNameViolation(node, text=name),
+            )
+
+        if is_too_short_variable_name(name):
+            self.add_error(
+                TooShortVariableNameViolation(node, text=name),
+            )
 
     def visit_Name(self, node: ast.Name):
         """Used to find wrong regular variables."""

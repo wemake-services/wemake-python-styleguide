@@ -5,16 +5,13 @@ from typing import Generator
 
 from wemake_python_styleguide.checkers.base.checker import BaseChecker
 from wemake_python_styleguide.checkers.base.visitor import BaseNodeVisitor
+from wemake_python_styleguide.constants import BAD_IMPORT_FUNCTIONS
 from wemake_python_styleguide.errors import (
     DynamicImportViolation,
     LocalFolderImportViolation,
     NestedImportViolation,
 )
 from wemake_python_styleguide.helpers.functions import given_function_called
-
-BAD_IMPORT_FUNCTIONS = frozenset((
-    '__import__',
-))
 
 
 class _WrongImportVisitor(BaseNodeVisitor):
