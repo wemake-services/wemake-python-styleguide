@@ -15,7 +15,8 @@ class _WrongRaiseVisitor(BaseNodeVisitor):
     def visit_Raise(self, node: ast.Raise):
         exception = getattr(node, 'exc', None)
         if not exception:
-            if not isinstance(node.parent, ast.ExceptHandler):
+            parent = getattr(node, 'parent')
+            if not isinstance(parent, ast.ExceptHandler):
                 self.add_error(BareRiseViolation(node))
         else:
             exception_func = getattr(exception, 'func', None)

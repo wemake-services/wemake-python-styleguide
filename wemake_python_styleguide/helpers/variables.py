@@ -35,4 +35,4 @@ def is_too_short_variable_name(
     >>> is_too_short_variable_name('_')
     False
     """
-    return bool(name) and name != '_' and len(name) < min_length
+    return name is not None and name != '_' and len(name) < min_length
