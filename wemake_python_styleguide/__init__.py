@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from wemake_python_styleguide.checkers.base_rules import (
+    BaseRulesChecker,
+)
 from wemake_python_styleguide.checkers.wrong_function_call import (
     WrongFunctionCallChecker,
 )

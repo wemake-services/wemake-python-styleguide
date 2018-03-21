@@ -37,6 +37,16 @@ class BaseStyleViolation(object):
         return lineno, col_offset, self.message()
 
 
+class BareRiseViolation(BaseStyleViolation):
+    _error_tmpl = '{} Found bare raise outside of except "{}"'
+    _code = 'WPS001'
+
+
+class RiseNotImplementedViolation(BaseStyleViolation):
+    _error_tmpl = '{} Found raise NotImplemented "{}"'
+    _code = 'WPS002'
+
+
 class WrongKeywordViolation(BaseStyleViolation):
     _error_tmpl = '{} Found wrong keyword "{}"'
     _code = 'WPS100'

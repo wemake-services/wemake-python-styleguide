@@ -30,7 +30,7 @@ def chech_local_variables_with_single_body():
             a6 = '6'
             a7 = '7'
             a8 = '8'
-            a9 = '9'
+            a9 = '9'  # error here
 
 
 def check_too_many_returns():

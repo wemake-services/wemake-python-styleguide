@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Iterable
+from typing import Iterable, Optional
 
 
 def is_wrong_variable_name(name: str, to_check: Iterable[str]) -> bool:
@@ -16,11 +16,17 @@ def is_wrong_variable_name(name: str, to_check: Iterable[str]) -> bool:
     return name in to_check
 
 
-def is_too_short_variable_name(name: str, min_length: int = 2) -> bool:
+def is_too_short_variable_name(
+    name: Optional[str],
+    min_length: int = 2,
+) -> bool:
     """
     Checks for too short variable names.
 
     >>> is_too_short_variable_name('test')
+    False
+
+    >>> is_too_short_variable_name(None)
     False
 
     >>> is_too_short_variable_name('o')
@@ -29,4 +35,4 @@ def is_too_short_variable_name(name: str, min_length: int = 2) -> bool:
     >>> is_too_short_variable_name('_')
     False
     """
-    return name != '_' and len(name) < min_length  # TODO: add configuration
+    return bool(name) and name != '_' and len(name) < min_length
