@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Generator
 
-from wemake_python_styleguide.checkers.base.checker import BaseChecker
-from wemake_python_styleguide.checkers.base.visitor import BaseNodeVisitor
 from wemake_python_styleguide.constants import BAD_VARIABLE_NAMES
 from wemake_python_styleguide.errors import (
     TooShortArgumentNameViolation,
@@ -18,9 +15,16 @@ from wemake_python_styleguide.helpers.variables import (
     is_too_short_variable_name,
     is_wrong_variable_name,
 )
+from wemake_python_styleguide.visitors.base.visitor import BaseNodeVisitor
 
 
-class _WrongVariableVisitor(BaseNodeVisitor):
+class WrongVariableVisitor(BaseNodeVisitor):
+    """
+    This class performs checks based on variable names.
+
+    It is responsible for finding short and blacklisted variables.
+    """
+
     def _check_argument(self, node: ast.FunctionDef, arg: str) -> None:
         if is_wrong_variable_name(arg, BAD_VARIABLE_NAMES):
             self.add_error(WrongArgumentNameViolation(node, text=arg))
@@ -90,22 +94,3 @@ class _WrongVariableVisitor(BaseNodeVisitor):
                 )
 
         self.generic_visit(node)
-
-
-class WrongVariableChecker(BaseChecker):
-    """
-    This class performs checks based on variable names.
-
-    It is responsible for finding short and blacklisted variables.
-    """
-
-    name = 'wms-wrong-variable'
-
-    def run(self) -> Generator[tuple, None, None]:
-        """Runs the check."""
-        visiter = _WrongVariableVisitor()
-        visiter.visit(self.tree)
-
-        for error in visiter.errors:
-            lineno, col_offset, message = error.items()
-            yield lineno, col_offset, message, type(self)

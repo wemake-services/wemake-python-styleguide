@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Generator
 
-from wemake_python_styleguide.checkers.base.checker import BaseChecker
-from wemake_python_styleguide.checkers.base.visitor import BaseNodeVisitor
 from wemake_python_styleguide.constants import NESTED_CLASSES_WHITELIST
 from wemake_python_styleguide.errors import (
     NestedClassViolation,
     NestedFunctionViolation,
 )
+from wemake_python_styleguide.visitors.base.visitor import BaseNodeVisitor
 
 
-class _WrongNestedVisitor(BaseNodeVisitor):
+class WrongNestedVisitor(BaseNodeVisitor):
+    """This class checks that structures are not nested."""
+
     def visit_ClassDef(self, node: ast.ClassDef):
         """
         Used to find nested classes in other classes and functions.
@@ -35,23 +35,3 @@ class _WrongNestedVisitor(BaseNodeVisitor):
         if isinstance(parent, ast.FunctionDef):
             self.add_error(NestedFunctionViolation(node, text=node.name))
         self.generic_visit(node)
-
-
-class WrongNestedChecker(BaseChecker):
-    """
-    This class is responsible for finding nested structures.
-
-    It finds nested functions, nested classes, and classes in functions.
-    It all respects some whitelist classes such as `Meta.
-    """
-
-    name = 'wms-wrong-nested'
-
-    def run(self) -> Generator[tuple, None, None]:
-        """Runs the check."""
-        visiter = _WrongNestedVisitor()
-        visiter.visit(self.tree)
-
-        for error in visiter.errors:
-            lineno, col_offset, message = error.items()
-            yield lineno, col_offset, message, type(self)

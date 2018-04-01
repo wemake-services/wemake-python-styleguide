@@ -73,13 +73,7 @@ setup(
 
     entry_points={
         'flake8.extension': [
-            'WPS00 = wemake_python_styleguide:BaseRulesChecker',
-            'WPS10 = wemake_python_styleguide:WrongKeywordChecker',
-            'WPS11 = wemake_python_styleguide:WrongFunctionCallChecker',
-            'WPS12 = wemake_python_styleguide:WrongVariableChecker',
-            'WPS13 = wemake_python_styleguide:WrongImportChecker',
-            'WPS14 = wemake_python_styleguide:WrongNestedChecker',
-            'WPS15 = wemake_python_styleguide:HighComplexityChecker',
+            'WPS = wemake_python_styleguide.checker:Checker',
         ],
     },
     zip_safe=False,

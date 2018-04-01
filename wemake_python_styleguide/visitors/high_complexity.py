@@ -2,28 +2,32 @@
 
 import ast
 from collections import defaultdict
-from typing import DefaultDict, Generator
+from typing import DefaultDict
 
-from wemake_python_styleguide.checkers.base.checker import BaseChecker
-from wemake_python_styleguide.checkers.base.visitor import BaseNodeVisitor
 from wemake_python_styleguide.errors import (
     TooManyArgumentsViolation,
     TooManyLocalsViolation,
     TooManyReturnsViolation,
+    TooManyStatementsViolation,
 )
+from wemake_python_styleguide.visitors.base.visitor import BaseNodeVisitor
 
-# TODO: implement TooDeepNestingViolation, TooManyStatementsViolation,
-# and TooManyBranchesViolation
+# TODO: implement TooDeepNestingViolation, TooManyStatementsViolation
 
 
-class _LocalsVisitor(BaseNodeVisitor):
+class ComplexityVisitor(BaseNodeVisitor):
+    """This class checks for code with high complexity."""
+
     def __init__(self) -> None:
+        """Creates counters for tracked metrics."""
         super().__init__()
+
+        self.expressions: DefaultDict[str, int] = defaultdict(int)
         self.variables: DefaultDict[str, int] = defaultdict(int)
         self.returns: DefaultDict[str, int] = defaultdict(int)
 
     def _check_arguments_count(self, node: ast.FunctionDef):
-        counter = 0  # TODO: check for `self` and `cls`
+        counter = 0
         has_extra_self_or_cls = 0
         if getattr(node, 'function_type', None) in ['method', 'classmethod']:
             has_extra_self_or_cls = 1
@@ -56,36 +60,42 @@ class _LocalsVisitor(BaseNodeVisitor):
                 TooManyReturnsViolation(function, text=function.name),
             )
 
+    def _update_expression(self, function: ast.FunctionDef):
+        self.expressions[function.name] += 1
+        if self.expressions[function.name] == 15:  # TODO: config
+            self.add_error(
+                TooManyStatementsViolation(function, text=function.name),
+            )
+
     def visit_FunctionDef(self, node: ast.FunctionDef):
+        """Checks function internal complexity."""
         self._check_arguments_count(node)
 
         for body_item in node.body:
-            for sub_node in ast.walk(body_item):
+            for sub_node in ast.walk(body_item):  # TODO: iter_child
                 is_variable = isinstance(sub_node, ast.Name)
                 context = getattr(sub_node, 'ctx', None)
+
                 if is_variable and isinstance(context, ast.Store):
                     self._update_variables(node)
 
                 if isinstance(sub_node, ast.Return):
                     self._update_returns(node)
 
+                if isinstance(sub_node, ast.Expr):
+                    self._update_expression(node)
+
         self.generic_visit(node)
 
 
-class HighComplexityChecker(BaseChecker):
-    """This class is responsible for checking for code with high complexity."""
+# class _BranchesVisitor(BaseNodeVisitor):
+#     branches = frozenset((
+#         ast.For,
+#         ast.If,
+#         ast.While,
+#         ast.
+#     ))
 
-    name = 'wms-high-comlexity'
-
-    def run(self) -> Generator[tuple, None, None]:
-        """Runs the check."""
-        visiter = _LocalsVisitor()
-        visiter.visit(self.tree)
-
-        # for node in ast.walk(self.tree):
-        #     if isinstance(node, ast.arguments):
-        #         print(node, vars(node))
-
-        for error in visiter.errors:
-            lineno, col_offset, message = error.items()
-            yield lineno, col_offset, message, type(self)
+#     def visit_FunctionDef(self, node: ast.FunctionDef):
+#         for body_item in node.body:
+#             for sub_node in ast.walk(body_item):

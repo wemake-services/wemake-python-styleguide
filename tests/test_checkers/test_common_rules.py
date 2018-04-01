@@ -5,7 +5,7 @@ import subprocess
 
 def test_base_rules_called_in_fixture(absolute_path):
     """End-to-End test to check complexity rules."""
-    filename = absolute_path('fixtures', 'base_rules.py')
+    filename = absolute_path('fixtures', 'common_rules.py')
     process = subprocess.Popen(
         ['flake8', filename],
         stdout=subprocess.PIPE,

@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Generator
 
-from wemake_python_styleguide.checkers.base.checker import BaseChecker
-from wemake_python_styleguide.checkers.base.visitor import BaseNodeVisitor
 from wemake_python_styleguide.constants import BAD_IMPORT_FUNCTIONS
 from wemake_python_styleguide.errors import (
     DynamicImportViolation,
@@ -12,9 +9,12 @@ from wemake_python_styleguide.errors import (
     NestedImportViolation,
 )
 from wemake_python_styleguide.helpers.functions import given_function_called
+from wemake_python_styleguide.visitors.base.visitor import BaseNodeVisitor
 
 
-class _WrongImportVisitor(BaseNodeVisitor):
+class WrongImportVisitor(BaseNodeVisitor):
+    """This class is responsible for finding wrong imports."""
+
     def _get_error_text(self, node: ast.AST) -> str:
         module = getattr(node, 'module', None)
         if module is not None:
@@ -54,18 +54,3 @@ class _WrongImportVisitor(BaseNodeVisitor):
         if isinstance(getattr(node, 'parent', None), ast.FunctionDef):
             self.add_error(NestedImportViolation(node, text=text))
         self.generic_visit(node)
-
-
-class WrongImportChecker(BaseChecker):
-    """This class is responsible for finding wrong imports."""
-
-    name = 'wms-wrong-import'
-
-    def run(self) -> Generator[tuple, None, None]:
-        """Runs the check."""
-        visiter = _WrongImportVisitor()
-        visiter.visit(self.tree)
-
-        for error in visiter.errors:
-            lineno, col_offset, message = error.items()
-            yield lineno, col_offset, message, type(self)
