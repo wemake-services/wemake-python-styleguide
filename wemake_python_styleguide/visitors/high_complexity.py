@@ -6,13 +6,13 @@ from typing import DefaultDict
 
 from wemake_python_styleguide.errors import (
     TooManyArgumentsViolation,
+    TooManyExpressionsViolation,
     TooManyLocalsViolation,
     TooManyReturnsViolation,
-    TooManyStatementsViolation,
 )
 from wemake_python_styleguide.visitors.base.visitor import BaseNodeVisitor
 
-# TODO: implement TooDeepNestingViolation, TooManyStatementsViolation
+# TODO: implement TooDeepNestingViolation, TooManyBranchesViolation
 
 
 class ComplexityVisitor(BaseNodeVisitor):
@@ -62,9 +62,9 @@ class ComplexityVisitor(BaseNodeVisitor):
 
     def _update_expression(self, function: ast.FunctionDef):
         self.expressions[function.name] += 1
-        if self.expressions[function.name] == 15:  # TODO: config
+        if self.expressions[function.name] == 10:  # TODO: config
             self.add_error(
-                TooManyStatementsViolation(function, text=function.name),
+                TooManyExpressionsViolation(function, text=function.name),
             )
 
     def visit_FunctionDef(self, node: ast.FunctionDef):

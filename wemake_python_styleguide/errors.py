@@ -37,19 +37,19 @@ class BaseStyleViolation(object):
         return lineno, col_offset, self.message()
 
 
+class WrongKeywordViolation(BaseStyleViolation):
+    _error_tmpl = '{} Found wrong keyword "{}"'
+    _code = 'WPS100'
+
+
 class BareRiseViolation(BaseStyleViolation):
     _error_tmpl = '{} Found bare raise outside of except "{}"'
-    _code = 'WPS001'
+    _code = 'WPS101'
 
 
 class RiseNotImplementedViolation(BaseStyleViolation):
     _error_tmpl = '{} Found raise NotImplemented "{}"'
-    _code = 'WPS002'
-
-
-class WrongKeywordViolation(BaseStyleViolation):
-    _error_tmpl = '{} Found wrong keyword "{}"'
-    _code = 'WPS100'
+    _code = 'WPS102'
 
 
 class WrongFunctionCallViolation(BaseStyleViolation):
@@ -132,8 +132,8 @@ class TooManyReturnsViolation(BaseStyleViolation):
     _code = 'WPS153'
 
 
-class TooManyStatementsViolation(BaseStyleViolation):
-    _error_tmpl = '{} Found too many statements "{}"'
+class TooManyExpressionsViolation(BaseStyleViolation):
+    _error_tmpl = '{} Found too many expressions "{}"'
     _code = 'WPS154'
 
 
