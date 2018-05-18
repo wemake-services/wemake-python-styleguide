@@ -49,4 +49,4 @@ val = Fixture()  # error here
 print(val.var)  # no error here
 
 if val:
-    __author__ = 'John'  # no error here since it's a rare use of module metsta
+    __author__ = 'John'  # no error here since it's a rare use of module meta
