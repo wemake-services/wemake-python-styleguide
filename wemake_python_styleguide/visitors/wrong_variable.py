@@ -2,13 +2,17 @@
 
 import ast
 
-from wemake_python_styleguide.constants import BAD_VARIABLE_NAMES
+from wemake_python_styleguide.constants import (
+    BAD_MODULE_METADATA_VARIABLES,
+    BAD_VARIABLE_NAMES,
+)
 from wemake_python_styleguide.errors import (
     TooShortArgumentNameViolation,
     TooShortAttributeNameViolation,
     TooShortVariableNameViolation,
     WrongArgumentNameViolation,
     WrongAttributeNameViolation,
+    WrongModuleMetadataViolation,
     WrongVariableNameViolation,
 )
 from wemake_python_styleguide.helpers.variables import (
@@ -94,3 +98,19 @@ class WrongVariableVisitor(BaseNodeVisitor):
                 )
 
         self.generic_visit(node)
+
+
+class WrongModuleMetadata(BaseNodeVisitor):
+    """This class finds wrong metadata information of a module."""
+
+    def visit_Assign(self, node: ast.Assign):
+        """Used to find the bad metadata variable names"""
+        node_parent = getattr(node, 'parent')
+        if not isinstance(node_parent, ast.Module):
+            return
+
+        for target_node in node.targets:
+            if getattr(target_node, 'id') in BAD_MODULE_METADATA_VARIABLES:
+                self.add_error(
+                    WrongModuleMetadataViolation(node, text=target_node.id)
+                )
