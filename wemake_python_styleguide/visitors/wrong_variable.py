@@ -104,7 +104,7 @@ class WrongModuleMetadata(BaseNodeVisitor):
     """This class finds wrong metadata information of a module."""
 
     def visit_Assign(self, node: ast.Assign):
-        """Used to find the bad metadata variable names"""
+        """Used to find the bad metadata variable names."""
         node_parent = getattr(node, 'parent')
         if not isinstance(node_parent, ast.Module):
             return
@@ -112,5 +112,5 @@ class WrongModuleMetadata(BaseNodeVisitor):
         for target_node in node.targets:
             if getattr(target_node, 'id') in BAD_MODULE_METADATA_VARIABLES:
                 self.add_error(
-                    WrongModuleMetadataViolation(node, text=target_node.id)
+                    WrongModuleMetadataViolation(node, text=target_node.id),
                 )
