@@ -110,7 +110,8 @@ class WrongModuleMetadata(BaseNodeVisitor):
             return
 
         for target_node in node.targets:
-            if getattr(target_node, 'id') in BAD_MODULE_METADATA_VARIABLES:
+            target_node_id = getattr(target_node, 'id')
+            if target_node_id in BAD_MODULE_METADATA_VARIABLES:
                 self.add_error(
-                    WrongModuleMetadataViolation(node, text=target_node.id),
+                    WrongModuleMetadataViolation(node, text=target_node_id),
                 )
