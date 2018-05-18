@@ -15,8 +15,8 @@ from wemake_python_styleguide.visitors.wrong_keyword import (
 )
 from wemake_python_styleguide.visitors.wrong_nested import WrongNestedVisitor
 from wemake_python_styleguide.visitors.wrong_variable import (
-    WrongVariableVisitor,
     WrongModuleMetadata,
+    WrongVariableVisitor,
 )
 
 
