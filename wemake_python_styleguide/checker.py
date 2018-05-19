@@ -15,6 +15,7 @@ from wemake_python_styleguide.visitors.wrong_keyword import (
 )
 from wemake_python_styleguide.visitors.wrong_nested import WrongNestedVisitor
 from wemake_python_styleguide.visitors.wrong_variable import (
+    WrongModuleMetadata,
     WrongVariableVisitor,
 )
 
@@ -42,6 +43,7 @@ class Checker(object):
             WrongNestedVisitor,
             ComplexityVisitor,
             WrongVariableVisitor,
+            WrongModuleMetadata,
         )
 
     def run(self) -> Generator[tuple, None, None]:

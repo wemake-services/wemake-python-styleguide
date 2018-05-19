@@ -87,6 +87,11 @@ class TooShortAttributeNameViolation(BaseStyleViolation):
     _code = 'WPS125'
 
 
+class WrongModuleMetadataViolation(BaseStyleViolation):
+    _error_tmpl = '{} Found wrong metadata variable {}'
+    _code = 'WPS126'
+
+
 class LocalFolderImportViolation(BaseStyleViolation):
     _error_tmpl = '{} Found local folder import "{}"'
     _code = 'WPS130'
