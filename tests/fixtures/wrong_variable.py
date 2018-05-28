@@ -43,10 +43,12 @@ class Fixture(object):
 
     def __init__(self, value):  # error here
         self.var = value  # error here only for `var`, not for `value`
+        self.x = value  # error here only for `x`, not for `value`
 
 
 val = Fixture()  # error here
 print(val.var)  # no error here
+print(val.x)  # no error here
 
 if val:
     __author__ = 'John'  # no error here since it's a rare use of module meta
