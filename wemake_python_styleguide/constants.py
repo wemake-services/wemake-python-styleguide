@@ -19,7 +19,7 @@ BAD_FUNCTIONS = frozenset((
     # Attribute access:
     'hasattr',
     'delattr',
-    
+
     # Too generic:
     'handler',
     'handle',
