@@ -19,6 +19,10 @@ BAD_FUNCTIONS = frozenset((
     # Attribute access:
     'hasattr',
     'delattr',
+
+    # Too generic:
+    'handler',
+    'handle',
 ))
 
 BAD_IMPORT_FUNCTIONS = frozenset((
@@ -44,6 +48,7 @@ BAD_VARIABLE_NAMES = frozenset((
     'content',
     'contents',
     'info',
+    'handler',
 ))
 
 NESTED_CLASSES_WHITELIST = frozenset((
