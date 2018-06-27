@@ -31,3 +31,18 @@ Do you want to contribute? Feel free to submit:
 1. `python issues <https://github.com/wemake-services/wemake-python-styleguide/issues/1>`_
 2. `code smells <https://github.com/wemake-services/wemake-python-styleguide/issues/2>`_
 3. `django issues <https://github.com/wemake-services/wemake-python-styleguide/issues/4>`_
+
+
+Running tests
+=============
+
+Clone the repository, install `pipenv <https://docs.pipenv.org/#install-pipenv-today>`_,
+then do from within the project folder:
+
+.. code:: bash
+
+    pipenv install -d
+    pipenv run pip install -e .
+    pipenv run pytest
+
+It's OK if some tests are skipped.
