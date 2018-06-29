@@ -3,7 +3,8 @@
 """
 This file contains all broken variable names.
 """
-
+_data = 1
+_result = 1
 __author__ = 'John Doe'  # error here
 
 x = 1  # error here
