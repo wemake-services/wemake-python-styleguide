@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from ast import Module
-from typing import Generator
+from typing import Generator, Tuple
 
 from wemake_python_styleguide.version import __version__
 from wemake_python_styleguide.visitors.high_complexity import ComplexityVisitor
@@ -15,8 +15,11 @@ from wemake_python_styleguide.visitors.wrong_keyword import (
 )
 from wemake_python_styleguide.visitors.wrong_nested import WrongNestedVisitor
 from wemake_python_styleguide.visitors.wrong_variable import (
+    WrongModuleMetadata,
     WrongVariableVisitor,
 )
+
+CheckResult = Tuple[int, int, str, type]
 
 
 class Checker(object):
@@ -42,9 +45,10 @@ class Checker(object):
             WrongNestedVisitor,
             ComplexityVisitor,
             WrongVariableVisitor,
+            WrongModuleMetadata,
         )
 
-    def run(self) -> Generator[tuple, None, None]:
+    def run(self) -> Generator[CheckResult, None, None]:
         """
         Runs the checker.
 

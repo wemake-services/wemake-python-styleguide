@@ -3,13 +3,13 @@ language: python
 python: 3.6
 
 install:
-  - pip install pipenv
-  - pip install -e .
-  - pipenv install --dev --ignore-pipfile
+  - pip install poetry
+  - poetry install
+  - poetry develop
 
 script:
-  - pytest
-  - mypy wemake_python_styleguide tests
+  - poetry run pytest
+  - poetry run mypy wemake_python_styleguide
 
 after_success:
   - pip install coveralls

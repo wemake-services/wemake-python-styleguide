@@ -18,3 +18,5 @@ def test_wrong_variables_in_fixture(absolute_path):
     assert stdout.count(b'WPS122') == 3
     assert stdout.count(b'WPS123') == 2
     assert stdout.count(b'WPS124') == 1
+    assert stdout.count(b'WPS125') == 1
+    assert stdout.count(b'WPS126') == 1

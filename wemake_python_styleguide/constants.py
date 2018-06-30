@@ -28,6 +28,10 @@ BAD_IMPORT_FUNCTIONS = frozenset((
     '__import__',
 ))
 
+BAD_MODULE_METADATA_VARIABLES = frozenset((
+    '__author__',
+))
+
 BAD_VARIABLE_NAMES = frozenset((
     'data',
     'result',
@@ -43,6 +47,8 @@ BAD_VARIABLE_NAMES = frozenset((
     'content',
     'contents',
     'info',
+    'handle',
+    'handler',
 ))
 
 NESTED_CLASSES_WHITELIST = frozenset((
