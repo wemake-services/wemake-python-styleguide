@@ -59,5 +59,5 @@ class Checker(object):
             visiter.visit(self.tree)
 
             for error in visiter.errors:
-                lineno, col_offset, message = error.items()
+                lineno, col_offset, message = error.node_items()
                 yield lineno, col_offset, message, type(self)

@@ -86,16 +86,3 @@ class ComplexityVisitor(BaseNodeVisitor):
                     self._update_expression(node)
 
         self.generic_visit(node)
-
-
-# class _BranchesVisitor(BaseNodeVisitor):
-#     branches = frozenset((
-#         ast.For,
-#         ast.If,
-#         ast.While,
-#         ast.
-#     ))
-
-#     def visit_FunctionDef(self, node: ast.FunctionDef):
-#         for body_item in node.body:
-#             for sub_node in ast.walk(body_item):

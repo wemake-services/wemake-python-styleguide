@@ -12,13 +12,14 @@ def is_wrong_variable_name(name: str, to_check: Iterable[str]) -> bool:
 
     >>> is_wrong_variable_name('correct', ['wrong'])
     False
+
     """
     return name in to_check
 
 
 def is_too_short_variable_name(
     name: Optional[str],
-    min_length: int = 2,
+    min_length: int = 2,  # TODO: config
 ) -> bool:
     """
     Checks for too short variable names.
@@ -34,5 +35,6 @@ def is_too_short_variable_name(
 
     >>> is_too_short_variable_name('_')
     False
+
     """
     return name is not None and name != '_' and len(name) < min_length

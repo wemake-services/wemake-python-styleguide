@@ -4,7 +4,7 @@ import ast
 
 from wemake_python_styleguide.errors import (
     BareRiseViolation,
-    RiseNotImplementedViolation,
+    RaiseNotImplementedViolation,
     WrongKeywordViolation,
 )
 from wemake_python_styleguide.visitors.base.visitor import BaseNodeVisitor
@@ -13,23 +13,26 @@ from wemake_python_styleguide.visitors.base.visitor import BaseNodeVisitor
 class WrongRaiseVisitor(BaseNodeVisitor):
     """This class finds wrong `raise` keywords."""
 
-    def visit_Raise(self, node: ast.Raise):
+    def _check_exception_type(self, node: ast.Raise, exception) -> None:
+        exception_func = getattr(exception, 'func', None)
+        if exception_func:
+            exception = exception_func
+
+        exception_name = getattr(exception, 'id', None)
+        if exception_name == 'NotImplemented':
+            self.add_error(
+                RaiseNotImplementedViolation(node, text=exception_name),
+            )
+
+    def visit_Raise(self, node: ast.Raise) -> None:
         """Checks how `raise` keyword is used."""
         exception = getattr(node, 'exc', None)
         if not exception:
-            parent = getattr(node, 'parent')
+            parent = getattr(node, 'parent', None)
             if not isinstance(parent, ast.ExceptHandler):
                 self.add_error(BareRiseViolation(node))
         else:
-            exception_func = getattr(exception, 'func', None)
-            if exception_func:
-                exception = exception_func
-
-            exception_name = getattr(exception, 'id', None)
-            if exception_name == 'NotImplemented':
-                self.add_error(
-                    RiseNotImplementedViolation(node, text=exception_name),
-                )
+            self._check_exception_type(node, exception)
 
         self.generic_visit(node)
 

@@ -32,10 +32,22 @@ class BaseStyleViolation(object):
             self._text = text
 
     def message(self) -> str:
-        """Returns error's formated message."""
+        """
+        Returns error's formated message.
+
+        >>> import ast
+        >>> error = WrongKeywordViolation(ast.Pass())
+        >>> error.message()
+        'WPS100 Found wrong keyword "pass"'
+
+        >>> error = WrongKeywordViolation(ast.Delete(), text='del')
+        >>> error.message()
+        'WPS100 Found wrong keyword "del"'
+
+        """
         return self._error_tmpl.format(self._code, self._text)
 
-    def items(self) -> Tuple[int, int, str]:
+    def node_items(self) -> Tuple[int, int, str]:
         """Returns `Tuple` to match `flake8` API format."""
         lineno = getattr(self.node, 'lineno', 0)
         col_offset = getattr(self.node, 'col_offset', 0)
@@ -82,7 +94,7 @@ class BareRiseViolation(BaseStyleViolation):
     _code = 'WPS101'
 
 
-class RiseNotImplementedViolation(BaseStyleViolation):
+class RaiseNotImplementedViolation(BaseStyleViolation):
     """
     This rule forbids to use `NotImplemented` error.
 
@@ -233,6 +245,42 @@ class TooShortAttributeNameViolation(BaseStyleViolation):
 
     _error_tmpl = '{0} Found too short attribute name "{1}"'
     _code = 'WPS125'
+
+
+class WrongFunctionNameViolation(BaseStyleViolation):
+    """
+    This rule forbids to have functions with blacklisted names.
+
+    Example:
+        # Correct:
+        def request_dispatcher(): ...
+        # Wrong:
+        def handler(): ...
+
+    Note: Returns WPS126 as error code
+
+    """
+
+    _error_tmpl = '{0} Found wrong function name "{1}"'
+    _code = 'WPS126'
+
+
+class TooShortFunctionNameViolation(BaseStyleViolation):
+    """
+    This rule forbids to have functions with short names.
+
+    Example:
+        # Correct:
+        def collect_coverage(): ...
+        # Wrong:
+        def c(): ...
+
+    Note: Returns WPS127 as error code
+
+    """
+
+    _error_tmpl = '{0} Found too short function name "{1}"'
+    _code = 'WPS127'
 
 
 class WrongModuleMetadataViolation(BaseStyleViolation):
