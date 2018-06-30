@@ -30,6 +30,9 @@ BAD_IMPORT_FUNCTIONS = frozenset((
 
 BAD_MODULE_METADATA_VARIABLES = frozenset((
     '__author__',
+    '__all__',
+    '__version__',
+    '__about__',
 ))
 
 BAD_VARIABLE_NAMES = frozenset((
@@ -53,4 +56,9 @@ BAD_VARIABLE_NAMES = frozenset((
 
 NESTED_CLASSES_WHITELIST = frozenset((
     'Meta',
+))
+
+NESTED_FUNCTIONS_WHITELIST = frozenset((
+    'decorator',
+    'factory',
 ))

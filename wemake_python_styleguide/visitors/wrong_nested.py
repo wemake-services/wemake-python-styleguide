@@ -30,7 +30,11 @@ class WrongNestedVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def visit_FunctionDef(self, node: ast.FunctionDef):
-        """Used to find nested functions."""
+        """
+        Used to find nested functions.
+
+        TODO: support `NESTED_FUNCTIONS_WHITELIST`.
+        """
         parent = getattr(node, 'parent', None)
         if isinstance(parent, ast.FunctionDef):
             self.add_error(NestedFunctionViolation(node, text=node.name))
