@@ -19,6 +19,9 @@ BAD_FUNCTIONS = frozenset((
     # Attribute access:
     'hasattr',
     'delattr',
+
+    # Misc:
+    'copyright',
 ))
 
 BAD_IMPORT_FUNCTIONS = frozenset((
