@@ -20,10 +20,7 @@ class ComplexityVisitor(BaseNodeVisitor):
     """This class checks for code with high complexity."""
 
     def __init__(self) -> None:
-        """
-        Creates instance of config file parser
-        and counters for tracked metrics.
-        """
+        """Creates config parser instance and counters for tracked metrics."""
         super().__init__()
 
         self.config_parser = ConfigFileParser()
