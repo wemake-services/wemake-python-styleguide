@@ -4,13 +4,13 @@ import ast
 from collections import defaultdict
 from typing import DefaultDict, Optional
 
+from wemake_python_styleguide.config import ConfigFileParser
 from wemake_python_styleguide.errors import (
     TooManyArgumentsViolation,
     TooManyExpressionsViolation,
     TooManyLocalsViolation,
     TooManyReturnsViolation,
 )
-from wemake_python_styleguide.options.config import ConfigFileParser
 from wemake_python_styleguide.visitors.base.visitor import BaseNodeVisitor
 
 # TODO: implement TooDeepNestingViolation, TooManyBranchesViolation
