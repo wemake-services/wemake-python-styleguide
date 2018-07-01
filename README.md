@@ -25,9 +25,13 @@ Use it on your own risk.
 Clone the repository, install `poetry`, then do from within the project folder:
 
 ```bash
+# Installing dependencies (only required to be run once):
 poetry install
 poetry develop
+
+# Running tests:
 poetry run pytest
+poetry run mypy wemake_python_styleguide
 ```
 
 It's OK if some tests are skipped.

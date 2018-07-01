@@ -2,7 +2,7 @@
 
 import ast
 from collections import defaultdict
-from typing import DefaultDict
+from typing import DefaultDict, Optional
 
 from wemake_python_styleguide.errors import (
     TooManyArgumentsViolation,
@@ -26,10 +26,29 @@ class ComplexityVisitor(BaseNodeVisitor):
         self.variables: DefaultDict[str, int] = defaultdict(int)
         self.returns: DefaultDict[str, int] = defaultdict(int)
 
+    def _is_method(self, function_type: Optional[str]) -> bool:
+        """
+        Returns either or not given function type belongs to a class.
+
+        >>> ComplexityVisitor()._is_method('function')
+        False
+
+        >>> ComplexityVisitor()._is_method(None)
+        False
+
+        >>> ComplexityVisitor()._is_method('method')
+        True
+
+        >>> ComplexityVisitor()._is_method('classmethod')
+        True
+
+        """
+        return function_type in ['method', 'classmethod']
+
     def _check_arguments_count(self, node: ast.FunctionDef):
         counter = 0
         has_extra_self_or_cls = 0
-        if getattr(node, 'function_type', None) in ['method', 'classmethod']:
+        if self._is_method(getattr(node, 'function_type', None)):
             has_extra_self_or_cls = 1
 
         counter += len(node.args.args)
@@ -72,7 +91,7 @@ class ComplexityVisitor(BaseNodeVisitor):
         self._check_arguments_count(node)
 
         for body_item in node.body:
-            for sub_node in ast.walk(body_item):  # TODO: iter_child
+            for sub_node in ast.walk(body_item):
                 is_variable = isinstance(sub_node, ast.Name)
                 context = getattr(sub_node, 'ctx', None)
 

@@ -24,10 +24,6 @@ BAD_FUNCTIONS = frozenset((
     'copyright',
 ))
 
-BAD_IMPORT_FUNCTIONS = frozenset((
-    '__import__',
-))
-
 BAD_MODULE_METADATA_VARIABLES = frozenset((
     '__author__',
     '__all__',

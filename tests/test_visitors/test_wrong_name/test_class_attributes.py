@@ -13,12 +13,12 @@ from wemake_python_styleguide.visitors.wrong_name import (
     WrongVariableNameViolation,
 )
 
-static_attributes_test = """
+static_attribute = """
 class Test:
     {0} = None
 """
 
-attributes_test = """
+instance_attribute = """
 class Test:
     def __init__(self):
         self.{0} = 123
@@ -27,8 +27,8 @@ class Test:
 
 @pytest.mark.parametrize('bad_name', BAD_VARIABLE_NAMES)
 @pytest.mark.parametrize('code,error', [
-    (static_attributes_test, WrongVariableNameViolation),
-    (attributes_test, WrongAttributeNameViolation),
+    (static_attribute, WrongVariableNameViolation),
+    (instance_attribute, WrongAttributeNameViolation),
 ])
 def test_wrong_attributes_names(
     assert_errors, parse_ast_tree, bad_name, code, error,
@@ -44,8 +44,8 @@ def test_wrong_attributes_names(
 
 @pytest.mark.parametrize('short_name', string.ascii_letters)
 @pytest.mark.parametrize('code,error', [
-    (static_attributes_test, TooShortVariableNameViolation),
-    (attributes_test, TooShortAttributeNameViolation),
+    (static_attribute, TooShortVariableNameViolation),
+    (instance_attribute, TooShortAttributeNameViolation),
 ])
 def test_too_short_attribute_names(
     assert_errors, parse_ast_tree, short_name, code, error,
@@ -59,10 +59,16 @@ def test_too_short_attribute_names(
     assert_errors(visiter, [error])
 
 
-@pytest.mark.parametrize('correct_name', ['correct_name', 'xy'])
+@pytest.mark.parametrize('correct_name', [
+    'correct_name',
+    'xy',
+    'test1',
+    '__private',
+    '_protected',
+])
 @pytest.mark.parametrize('code', [
-    static_attributes_test,
-    attributes_test,
+    static_attribute,
+    instance_attribute,
 ])
 def test_correct_attribute_name(
     assert_errors, parse_ast_tree, code, correct_name,
