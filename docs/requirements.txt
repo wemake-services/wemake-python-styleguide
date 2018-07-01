@@ -1,6 +1,7 @@
-# ReadTheDocs can no work with poetry yet...
+# This file is used to setup env
+# to generate documentation.
 
-sphinx-readable-theme==1.3.0
+sphinx==1.7.4
 sphinxcontrib-napoleon==0.6.1
 recommonmark==0.4.0
 m2r==0.1.15
