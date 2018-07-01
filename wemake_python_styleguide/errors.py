@@ -4,7 +4,7 @@
 """
 All style errors are defined here.
 
-They should be sorted by `_code`.
+They should be sorted by ``_code``.
 """
 
 from ast import AST
@@ -60,11 +60,15 @@ class WrongKeywordViolation(BaseStyleViolation):
 
     We do this, since some keywords are anti-patterns.
 
-    Example:
-        # Wrong:
-        pass, exec, eval
+    Example::
 
-    Note: Returns WPS100 as error code
+        # Wrong:
+        pass
+        exec
+        eval
+
+    Note:
+        Returns WPS100 as error code
 
     """
 
@@ -79,14 +83,16 @@ class BareRiseViolation(BaseStyleViolation):
     This may be a serious error in your application,
     so we should prevent that.
 
-    Example:
+    Example::
+
         # Correct:
         raise ValueError('Value is to low')
 
         # Wrong:
         raise
 
-    Note: Returns WPS101 as error code
+    Note:
+        Returns WPS101 as error code
 
     """
 
@@ -101,7 +107,8 @@ class RaiseNotImplementedViolation(BaseStyleViolation):
     These two errors have different use cases.
     Use cases of `NotImplemented` is too limited to be generally available.
 
-    Example:
+    Example::
+
         # Correct:
         raise NotImplementedError('To be done')
         # Wrong:
@@ -110,7 +117,8 @@ class RaiseNotImplementedViolation(BaseStyleViolation):
     See Also:
         https://stackoverflow.com/a/44575926/4842742
 
-    Note: Returns WPS102 as error code
+    Note:
+        Returns WPS102 as error code
 
     """
 
@@ -125,7 +133,8 @@ class WrongFunctionCallViolation(BaseStyleViolation):
     Since some functions are only suitable for very specific usecases,
     we forbid to use them in a free manner.
 
-    Note: Returns WPS110 as error code
+    Note:
+        Returns WPS110 as error code
 
     """
 
@@ -137,13 +146,15 @@ class WrongVariableNameViolation(BaseStyleViolation):
     """
     This rule forbids to have blacklisted variable names.
 
-    Example:
+    Example::
+
         # Correct:
         html_node = None
         # Wrong:
         item = None
 
-    Note: Returns WPS120 as error code
+    Note:
+        Returns WPS120 as error code
 
     """
 
@@ -155,13 +166,15 @@ class TooShortVariableNameViolation(BaseStyleViolation):
     """
     This rule forbids to have too short variable names.
 
-    Example:
+    Example::
+
         # Correct:
         x_coord = 1
         # Wrong:
         x = 1
 
-    Note: Returns WPS121 as error code
+    Note:
+        Returns WPS121 as error code
 
     """
 
@@ -173,13 +186,15 @@ class WrongArgumentNameViolation(BaseStyleViolation):
     """
     This rule forbids to have blacklisted function argument names.
 
-    Example:
+    Example::
+
         # Correct:
         def parse(xml_tree): ...
         # Wrong:
         def parse(value): ...
 
-    Note: Returns WPS122 as error code
+    Note:
+        Returns WPS122 as error code
 
     """
 
@@ -191,13 +206,15 @@ class TooShortArgumentNameViolation(BaseStyleViolation):
     """
     This rule forbids to have short argument names.
 
-    Example:
+    Example::
+
         # Correct:
         def test(username): ...
         # Wrong:
         def test(a): ...
 
-    Note: Returns WPS123 as error code
+    Note:
+        Returns WPS123 as error code
 
     """
 
@@ -209,7 +226,8 @@ class WrongAttributeNameViolation(BaseStyleViolation):
     """
     This rule forbids to have attributes with blacklisted names.
 
-    Example:
+    Example::
+
         # Correct:
         class NormalClass:
             request_payload = None
@@ -217,7 +235,8 @@ class WrongAttributeNameViolation(BaseStyleViolation):
         class WithBlacklisted:
             data = None
 
-    Note: Returns WPS124 as error code
+    Note:
+        Returns WPS124 as error code
 
     """
 
@@ -229,7 +248,8 @@ class TooShortAttributeNameViolation(BaseStyleViolation):
     """
     This rule forbids to have attributes with short names.
 
-    Example:
+    Example::
+
         # Correct:
         class WithAttributes:
             def __init__(self):
@@ -239,7 +259,8 @@ class TooShortAttributeNameViolation(BaseStyleViolation):
             def __init__(self):
                 self.a = 1
 
-    Note: Returns WPS125 as error code
+    Note:
+        Returns WPS125 as error code
 
     """
 
@@ -251,13 +272,15 @@ class WrongFunctionNameViolation(BaseStyleViolation):
     """
     This rule forbids to have functions with blacklisted names.
 
-    Example:
+    Example::
+
         # Correct:
         def request_dispatcher(): ...
         # Wrong:
         def handler(): ...
 
-    Note: Returns WPS126 as error code
+    Note:
+        Returns WPS126 as error code
 
     """
 
@@ -269,13 +292,15 @@ class TooShortFunctionNameViolation(BaseStyleViolation):
     """
     This rule forbids to have functions with short names.
 
-    Example:
+    Example::
+
         # Correct:
         def collect_coverage(): ...
         # Wrong:
         def c(): ...
 
-    Note: Returns WPS127 as error code
+    Note:
+        Returns WPS127 as error code
 
     """
 
@@ -290,11 +315,13 @@ class WrongModuleMetadataViolation(BaseStyleViolation):
     We discourage using module variables like ``__author__``, because
     there's no need in them. Use proper docstrings and classifiers.
 
-    Example:
+    Example::
+
         # Wrong:
         __author__ = 'Nikita Sobolev'
 
-    Note: Returns WPS126 as error code
+    Note:
+        Returns WPS126 as error code
 
     """
 
@@ -306,14 +333,16 @@ class LocalFolderImportViolation(BaseStyleViolation):
     """
     This rule forbids to have imports relative to the current folder.
 
-    Example:
+    Example::
+
         # Correct:
         from my_package.version import get_version
         # Wrong:
         from .version import get_version
         from ..drivers import MySQLDriver
 
-    Note: Returns WPS130 as error code
+    Note:
+        Returns WPS130 as error code
 
     """
 
@@ -328,12 +357,14 @@ class NestedImportViolation(BaseStyleViolation):
     Nested imports show that there's an issue with you design.
     So, you don't need nested imports, you need to refactor your code.
 
-    Example:
+    Example::
+
         # Wrong:
         def some():
             from my_module import some_function
 
-    Note: Returns WPS131 as error code
+    Note:
+        Returns WPS131 as error code
 
     """
 
@@ -349,14 +380,16 @@ class DynamicImportViolation(BaseStyleViolation):
     Use regular imports instead.
     Or use ``importlib.import_module()`` in case you know what you are doing.
 
-    Example:
+    Example::
+
         # Wrong:
         my_module = __import__('my_module')
 
     See Also:
         https://docs.python.org/3/library/functions.html#__import__
 
-    Note: Returns WPS132 as error code
+    Note:
+        Returns WPS132 as error code
 
     """
 
@@ -371,13 +404,15 @@ class NestedFunctionViolation(BaseStyleViolation):
     Just write flat functions, there's no need to nest them.
     However, there are some whitelisted names like: ``decorator``.
 
-    Example:
+    Example::
+
         # Wrong:
         def do_some():
             def inner():
                 ...
 
-    Note: Returns WPS140 as error code
+    Note:
+        Returns WPS140 as error code
 
     """
 
@@ -392,13 +427,15 @@ class NestedClassViolation(BaseStyleViolation):
     Just write flat classes, there's no need nest them.
     However, there are some whitelisted class names like: ``Meta``.
 
-    Example:
+    Example::
+
         # Wrong:
         class Some:
             class Inner:
                 ...
 
-    Note: Returns WPS141 as error code
+    Note:
+        Returns WPS141 as error code
 
     """
 
@@ -412,7 +449,8 @@ class TooManyLocalsViolation(BaseStyleViolation):
 
     If you have too many variables in a function, you have to refactor it.
 
-    Note: Returns WPS150 as error code
+    Note:
+        Returns WPS150 as error code
 
     """
 
@@ -428,7 +466,8 @@ class TooManyArgumentsViolation(BaseStyleViolation):
     When function requires many arguments
     it shows that it is required to refactor this piece of code.
 
-    Note: Returns WPS10 as error code
+    Note:
+        Returns WPS10 as error code
 
     """
 
@@ -443,7 +482,8 @@ class TooManyBranchesViolation(BaseStyleViolation):
     When there are too many branches, functions are hard to test.
     They are also hard to read and hard to change and read.
 
-    Note: Returns WPS152 as error code
+    Note:
+        Returns WPS152 as error code
 
     """
 
@@ -458,7 +498,8 @@ class TooManyReturnsViolation(BaseStyleViolation):
     When there are too many ``return`` keywords, functions are hard to test.
     They are also hard to read and hard to change and read.
 
-    Note: Returns WPS153 as error code
+    Note:
+        Returns WPS153 as error code
 
     """
 
@@ -474,7 +515,8 @@ class TooManyExpressionsViolation(BaseStyleViolation):
     some logical or structural problems.
     We only have to identify them.
 
-    Note: Returns WPS154 as error code
+    Note:
+        Returns WPS154 as error code
 
     """
 
@@ -491,7 +533,8 @@ class TooDeepNestingViolation(BaseStyleViolation):
     So, we need to check these cases before
     they have made their way to production.
 
-    Note: Returns WPS155 as error code
+    Note:
+        Returns WPS155 as error code
 
     """
 

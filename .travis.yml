@@ -10,6 +10,7 @@ install:
 script:
   - poetry run pytest
   - poetry run mypy wemake_python_styleguide
+  - poetry run doc8 -q docs
 
 after_success:
   - pip install coveralls
