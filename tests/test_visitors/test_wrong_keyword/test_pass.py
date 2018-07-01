@@ -36,4 +36,4 @@ def test_pass_keyword(assert_errors, parse_ast_tree, code):
     visiter = WrongKeywordVisitor()
     visiter.visit(tree)
 
-    assert_errors(visiter, [WrongKeywordViolation._code])
+    assert_errors(visiter, [WrongKeywordViolation])

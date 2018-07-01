@@ -15,15 +15,6 @@ after_success:
   - pip install coveralls
   - coveralls
 
-deploy:
-  provider: pypi
-  user: sobolevn
-  password: $PYPI_PASSWORD  # password is hidden
-  distributions: sdist bdist_wheel
-  on:
-    branch: master
-    tags: true
-
 notifications:
   email:
     on_success: never

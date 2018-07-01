@@ -24,11 +24,12 @@ from wemake_python_styleguide.helpers.variables import (
 from wemake_python_styleguide.visitors.base.visitor import BaseNodeVisitor
 
 
-class WrongVariableVisitor(BaseNodeVisitor):
+class WrongNameVisitor(BaseNodeVisitor):
     """
     This class performs checks based on variable names.
 
-    It is responsible for finding short and blacklisted variables.
+    It is responsible for finding short and blacklisted variables,
+    functions, and arguments.
     """
 
     def _check_argument(self, node: ast.FunctionDef, arg: str) -> None:
@@ -110,7 +111,7 @@ class WrongVariableVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
 
-class WrongModuleMetadata(BaseNodeVisitor):
+class WrongModuleMetadataVisitor(BaseNodeVisitor):
     """This class finds wrong metadata information of a module."""
 
     def visit_Assign(self, node: ast.Assign):

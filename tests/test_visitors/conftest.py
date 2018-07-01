@@ -29,7 +29,7 @@ def assert_errors():
     """Helper function to assert visitor errors."""
     def factory(visiter: BaseNodeVisitor, errors: Sequence[str]):
         for index, error in enumerate(visiter.errors):
-            assert error._code == errors[index]
+            assert error._code == errors[index]._code
 
         assert len(visiter.errors) == len(errors)
 

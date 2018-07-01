@@ -28,7 +28,7 @@ def test_bare_raise_keyword(assert_errors, parse_ast_tree, code):
     visiter = WrongRaiseVisitor()
     visiter.visit(tree)
 
-    assert_errors(visiter, [BareRiseViolation._code])
+    assert_errors(visiter, [BareRiseViolation])
 
 
 def test_normal_raise_keyword(assert_errors, parse_ast_tree):

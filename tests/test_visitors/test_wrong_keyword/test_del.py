@@ -19,6 +19,6 @@ def test_del_keyword(assert_errors, parse_ast_tree):
     visiter.visit(tree)
 
     assert_errors(visiter, [
-        WrongKeywordViolation._code,
-        WrongKeywordViolation._code,
+        WrongKeywordViolation,
+        WrongKeywordViolation,
     ])

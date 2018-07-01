@@ -13,11 +13,11 @@ from wemake_python_styleguide.visitors.wrong_keyword import (
     WrongKeywordVisitor,
     WrongRaiseVisitor,
 )
-from wemake_python_styleguide.visitors.wrong_nested import WrongNestedVisitor
-from wemake_python_styleguide.visitors.wrong_variable import (
-    WrongModuleMetadata,
-    WrongVariableVisitor,
+from wemake_python_styleguide.visitors.wrong_name import (
+    WrongModuleMetadataVisitor,
+    WrongNameVisitor,
 )
+from wemake_python_styleguide.visitors.wrong_nested import WrongNestedVisitor
 
 CheckResult = Tuple[int, int, str, type]
 
@@ -44,8 +44,8 @@ class Checker(object):
             WrongKeywordVisitor,
             WrongNestedVisitor,
             ComplexityVisitor,
-            WrongVariableVisitor,
-            WrongModuleMetadata,
+            WrongNameVisitor,
+            WrongModuleMetadataVisitor,
         )
 
     def run(self) -> Generator[CheckResult, None, None]:

@@ -31,7 +31,7 @@ def test_raise_not_implemented(assert_errors, parse_ast_tree, code):
     visiter = WrongRaiseVisitor()
     visiter.visit(tree)
 
-    assert_errors(visiter, [RaiseNotImplementedViolation._code])
+    assert_errors(visiter, [RaiseNotImplementedViolation])
 
 
 def test_raise_not_implemented_error(assert_errors, parse_ast_tree):
