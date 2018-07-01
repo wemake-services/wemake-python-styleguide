@@ -31,3 +31,20 @@ Do you want to contribute? Feel free to submit:
 1. `python issues <https://github.com/wemake-services/wemake-python-styleguide/issues/1>`_
 2. `code smells <https://github.com/wemake-services/wemake-python-styleguide/issues/2>`_
 3. `django issues <https://github.com/wemake-services/wemake-python-styleguide/issues/4>`_
+
+
+Configuration file
+==================
+
+``setup.cfg`` file contains ``[wemake_python_styleguide]`` section where you can define your custom value for all
+available options.
+
+There are the following options:
+
+- ``max-returns`` - maximum allowed number of ``return`` statements in one function. Default value is 6.
+
+- ``max-local-variables`` - maximum allowed number of local variables in one function. Default is 10.
+
+- ``max-expressions`` - maximum allowed number of expressions in one function. Default value is 10.
+
+- ``max-arguments`` - maximum allowed number of arguments in one function. Default value is 5.
