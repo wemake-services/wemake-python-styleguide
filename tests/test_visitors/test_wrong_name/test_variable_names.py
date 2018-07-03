@@ -15,6 +15,13 @@ variable_test = """
 {0} = 'test'
 """
 
+underscore_variable_test = """
+_{0} = 'test'
+{0}_ = 'test'
+__{0} = 'test'
+{0}__ = 'test'
+"""
+
 for_variable_test = """
 for {0} in []:
     print()
@@ -39,6 +46,7 @@ except Exception as {0}:
     for_variable_test,
     with_variable_test,
     exception_test,
+    underscore_variable_test,
 ])
 def test_wrong_variable_names(
     assert_errors, parse_ast_tree, bad_name, code,
@@ -58,6 +66,7 @@ def test_wrong_variable_names(
     for_variable_test,
     with_variable_test,
     exception_test,
+    underscore_variable_test,
 ])
 def test_too_short_variable_names(
     assert_errors, parse_ast_tree, short_name, code,
@@ -77,6 +86,7 @@ def test_too_short_variable_names(
     for_variable_test,
     with_variable_test,
     exception_test,
+    underscore_variable_test,
 ])
 def test_correct_variable_name(
     assert_errors, parse_ast_tree, code, correct_name,
