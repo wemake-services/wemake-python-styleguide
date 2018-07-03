@@ -17,7 +17,6 @@ class BaseNodeVisitor(NodeVisitor):
     @property
     def errors(self) -> List[BaseStyleViolation]:
         """Return errors collected by this visitor."""
-        # TODO: sort errors
         return self._errors
 
     def add_error(self, error: BaseStyleViolation) -> None:

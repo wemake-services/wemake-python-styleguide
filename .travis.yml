@@ -3,26 +3,18 @@ language: python
 python: 3.6
 
 install:
-  - pip install pipenv
-  - pip install -e .
-  - pipenv install --dev --ignore-pipfile
+  - pip install poetry
+  - poetry install
+  - poetry develop
 
 script:
-  - pytest
-  - mypy wemake_python_styleguide tests
+  - poetry run pytest
+  - poetry run mypy wemake_python_styleguide
+  - poetry run doc8 -q docs
 
 after_success:
   - pip install coveralls
   - coveralls
-
-deploy:
-  provider: pypi
-  user: sobolevn
-  password: $PYPI_PASSWORD  # password is hidden
-  distributions: sdist bdist_wheel
-  on:
-    branch: master
-    tags: true
 
 notifications:
   email:

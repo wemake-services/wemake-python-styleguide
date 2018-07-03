@@ -9,9 +9,11 @@ from wemake_python_styleguide.constants import (
 from wemake_python_styleguide.errors import (
     TooShortArgumentNameViolation,
     TooShortAttributeNameViolation,
+    TooShortFunctionNameViolation,
     TooShortVariableNameViolation,
     WrongArgumentNameViolation,
     WrongAttributeNameViolation,
+    WrongFunctionNameViolation,
     WrongModuleMetadataViolation,
     WrongVariableNameViolation,
 )
@@ -22,11 +24,12 @@ from wemake_python_styleguide.helpers.variables import (
 from wemake_python_styleguide.visitors.base.visitor import BaseNodeVisitor
 
 
-class WrongVariableVisitor(BaseNodeVisitor):
+class WrongNameVisitor(BaseNodeVisitor):
     """
     This class performs checks based on variable names.
 
-    It is responsible for finding short and blacklisted variables.
+    It is responsible for finding short and blacklisted variables,
+    functions, and arguments.
     """
 
     def _check_argument(self, node: ast.FunctionDef, arg: str) -> None:
@@ -35,6 +38,19 @@ class WrongVariableVisitor(BaseNodeVisitor):
 
         if is_too_short_variable_name(arg):
             self.add_error(TooShortArgumentNameViolation(node, text=arg))
+
+    def _check_function_signature(self, node: ast.FunctionDef) -> None:
+        for arg in node.args.args:
+            self._check_argument(node, arg.arg)
+
+        for arg in node.args.kwonlyargs:
+            self._check_argument(node, arg.arg)
+
+        if node.args.vararg:
+            self._check_argument(node, node.args.vararg.arg)
+
+        if node.args.kwarg:
+            self._check_argument(node, node.args.kwarg.arg)
 
     def visit_Attribute(self, node: ast.Attribute):
         """Used to find wrong attribute names inside classes."""
@@ -55,18 +71,13 @@ class WrongVariableVisitor(BaseNodeVisitor):
 
     def visit_FunctionDef(self, node: ast.FunctionDef):
         """Used to find wrong function and method parameters."""
-        for arg in node.args.args:
-            self._check_argument(node, arg.arg)
+        if is_too_short_variable_name(node.name):
+            self.add_error(TooShortFunctionNameViolation(node, text=node.name))
 
-        for arg in node.args.kwonlyargs:
-            self._check_argument(node, arg.arg)
+        if is_wrong_variable_name(node.name, BAD_VARIABLE_NAMES):
+            self.add_error(WrongFunctionNameViolation(node, text=node.name))
 
-        if node.args.vararg:
-            self._check_argument(node, node.args.vararg.arg)
-
-        if node.args.kwarg:
-            self._check_argument(node, node.args.kwarg.arg)
-
+        self._check_function_signature(node)
         self.generic_visit(node)
 
     def visit_ExceptHandler(self, node: ast.ExceptHandler):
@@ -100,7 +111,7 @@ class WrongVariableVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
 
-class WrongModuleMetadata(BaseNodeVisitor):
+class WrongModuleMetadataVisitor(BaseNodeVisitor):
     """This class finds wrong metadata information of a module."""
 
     def visit_Assign(self, node: ast.Assign):

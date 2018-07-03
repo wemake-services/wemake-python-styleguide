@@ -2,7 +2,10 @@
 
 import ast
 
-from wemake_python_styleguide.constants import NESTED_CLASSES_WHITELIST
+from wemake_python_styleguide.constants import (
+    NESTED_CLASSES_WHITELIST,
+    NESTED_FUNCTIONS_WHITELIST,
+)
 from wemake_python_styleguide.errors import (
     NestedClassViolation,
     NestedFunctionViolation,
@@ -30,8 +33,14 @@ class WrongNestedVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def visit_FunctionDef(self, node: ast.FunctionDef):
-        """Used to find nested functions."""
+        """
+        Used to find nested functions.
+
+        Uses `NESTED_FUNCTIONS_WHITELIST` to respect some nested functions.
+        """
         parent = getattr(node, 'parent', None)
-        if isinstance(parent, ast.FunctionDef):
+        is_inside_function = isinstance(parent, ast.FunctionDef)
+
+        if is_inside_function and node.name not in NESTED_FUNCTIONS_WHITELIST:
             self.add_error(NestedFunctionViolation(node, text=node.name))
         self.generic_visit(node)

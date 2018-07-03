@@ -2,7 +2,6 @@
 
 import ast
 
-from wemake_python_styleguide.constants import BAD_IMPORT_FUNCTIONS
 from wemake_python_styleguide.errors import (
     DynamicImportViolation,
     LocalFolderImportViolation,
@@ -30,8 +29,8 @@ class WrongImportVisitor(BaseNodeVisitor):
             self.add_error(NestedImportViolation(node, text=text))
 
     def visit_Call(self, node: ast.Call):
-        """Used to find `BAD_IMPORT_FUNCTIONS` function calls."""
-        function_name = given_function_called(node, BAD_IMPORT_FUNCTIONS)
+        """Used to find `__import__` function calls."""
+        function_name = given_function_called(node, ['__import__'])
         if function_name:
             self.add_error(DynamicImportViolation(node, text=function_name))
         self.generic_visit(node)
