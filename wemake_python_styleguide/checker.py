@@ -3,7 +3,7 @@
 from ast import Module
 from typing import Generator, Tuple
 
-from wemake_python_styleguide.version import __version__
+from wemake_python_styleguide.version import version
 from wemake_python_styleguide.visitors.high_complexity import ComplexityVisitor
 from wemake_python_styleguide.visitors.wrong_function_call import (
     WrongFunctionCallVisitor,
@@ -30,7 +30,7 @@ class Checker(object):
     """
 
     name = 'wemake-python-styleguide'
-    version = __version__
+    version = version
 
     def __init__(self, tree: Module, filename: str = '-') -> None:
         """Creates new checker instance."""
