@@ -3,7 +3,7 @@
 from ast import Module
 from typing import Generator, Tuple
 
-from wemake_python_styleguide.version import __version__
+from wemake_python_styleguide.version import poetry develop
 from wemake_python_styleguide.visitors.high_complexity import ComplexityVisitor
 from wemake_python_styleguide.visitors.wrong_function_call import (
     WrongFunctionCallVisitor,
