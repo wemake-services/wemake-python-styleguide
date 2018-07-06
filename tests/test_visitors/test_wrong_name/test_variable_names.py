@@ -17,9 +17,6 @@ variable_test = """
 
 underscore_variable_test = """
 _{0} = 'test'
-{0}_ = 'test'
-__{0} = 'test'
-{0}__ = 'test'
 """
 
 for_variable_test = """
@@ -66,7 +63,6 @@ def test_wrong_variable_names(
     for_variable_test,
     with_variable_test,
     exception_test,
-    underscore_variable_test,
 ])
 def test_too_short_variable_names(
     assert_errors, parse_ast_tree, short_name, code,

@@ -9,12 +9,22 @@ def is_wrong_variable_name(name: str, to_check: Iterable[str]) -> bool:
 
     >>> is_wrong_variable_name('wrong', ['wrong'])
     True
-
     >>> is_wrong_variable_name('correct', ['wrong'])
     False
-
+    >>> is_wrong_variable_name('__wrong', ['wrong'])
+    True
     """
-    return name in to_check
+    for name_to_check in to_check:
+        choices_to_check = [
+            name_to_check,
+            '_{0}'.format(name_to_check),
+            '{0}_'.format(name_to_check),
+            '__{0}'.format(name_to_check),
+            '{0}__'.format(name_to_check),
+        ]
+        if name in choices_to_check:
+            return True
+    return False
 
 
 def is_too_short_variable_name(
