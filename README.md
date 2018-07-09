@@ -40,10 +40,19 @@ poetry run doc8 -q docs
 It's OK if some tests are skipped.
 
 
-## Configuration file
+## Configuration
 
-`setup.cfg` file contains `[wemake_python_styleguide]` section where you can define your custom value for all
-available options.
+You can adjust configuration via CLI option:
+
+```sh
+flake8 --max-returns 7
+```
+
+ or configuration option in `tox.ini`/`setup.cfg`.
+
+ ```ini
+max-returns = 7
+ ```
 
 There are the following options:
 
@@ -54,3 +63,4 @@ There are the following options:
 - `max-expressions` - maximum allowed number of expressions in one function. Default value is 10.
 
 - `max-arguments` - maximum allowed number of arguments in one function. Default value is 5.
+
