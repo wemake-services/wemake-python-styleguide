@@ -26,6 +26,10 @@ class ComplexityVisitor(BaseNodeVisitor):
         self.variables: DefaultDict[str, int] = defaultdict(int)
         self.returns: DefaultDict[str, int] = defaultdict(int)
 
+    def provide_options(self, options) -> None:
+        """Provides options for checking."""
+        self.options = options
+
     def _is_method(self, function_type: Optional[str]) -> bool:
         """
         Returns either or not given function type belongs to a class.
@@ -48,7 +52,7 @@ class ComplexityVisitor(BaseNodeVisitor):
     def _check_arguments_count(self, node: ast.FunctionDef):
         counter = 0
         has_extra_self_or_cls = 0
-        max_arguments_count = self.config_parser.get_option('max-arguments')
+        max_arguments_count = self.options.max_arguments
         if self._is_method(getattr(node, 'function_type', None)):
             has_extra_self_or_cls = 1
 
@@ -67,9 +71,7 @@ class ComplexityVisitor(BaseNodeVisitor):
             )
 
     def _update_variables(self, function: ast.FunctionDef):
-        max_local_variables_count = self.config_parser.get_option(
-            'max-local-variables',
-        )
+        max_local_variables_count = self.options.max_local_variables
         self.variables[function.name] += 1
         if self.variables[function.name] == max_local_variables_count:
             self.add_error(
@@ -77,7 +79,7 @@ class ComplexityVisitor(BaseNodeVisitor):
             )
 
     def _update_returns(self, function: ast.FunctionDef):
-        max_returns_count = self.config_parser.get_option('max-returns')
+        max_returns_count = self.options.max_returns
         self.returns[function.name] += 1
         if self.returns[function.name] == max_returns_count:
             self.add_error(
@@ -85,7 +87,7 @@ class ComplexityVisitor(BaseNodeVisitor):
             )
 
     def _update_expression(self, function: ast.FunctionDef):
-        max_expressions_count = self.config_parser.get_option('max-expressions')
+        max_expressions_count = self.options.max_expressions
         self.expressions[function.name] += 1
         if self.expressions[function.name] == max_expressions_count:
             self.add_error(
