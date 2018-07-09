@@ -4,7 +4,6 @@ import ast
 from collections import defaultdict
 from typing import DefaultDict, Optional
 
-from wemake_python_styleguide.config import ConfigFileParser
 from wemake_python_styleguide.errors import (
     TooManyArgumentsViolation,
     TooManyExpressionsViolation,
@@ -22,8 +21,6 @@ class ComplexityVisitor(BaseNodeVisitor):
     def __init__(self) -> None:
         """Creates config parser instance and counters for tracked metrics."""
         super().__init__()
-
-        self.config_parser = ConfigFileParser()
 
         self.expressions: DefaultDict[str, int] = defaultdict(int)
         self.variables: DefaultDict[str, int] = defaultdict(int)
