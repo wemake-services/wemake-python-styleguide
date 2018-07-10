@@ -10,7 +10,7 @@ class Configuration(object):
         """Registers options for WPS plugin."""
         parser.add_option(
             '--max-returns',
-            parse_from_config=True, 
+            parse_from_config=True,
             type='int',
             default=defaults.MAX_RETURNS,
             help='Maximum allowed number of return statements in one function.',
@@ -19,7 +19,7 @@ class Configuration(object):
         parser.add_option(
             '--max-local-variables',
             parse_from_config=True,
-            type='int', 
+            type='int',
             default=defaults.MAX_LOCAL_VARIABLES,
             help='Maximum allowed number of local variables in one function.',
         )
@@ -27,7 +27,7 @@ class Configuration(object):
         parser.add_option(
             '--max-expressions',
             parse_from_config=True,
-            type='int', 
+            type='int',
             default=defaults.MAX_EXPRESSIONS,
             help='Maximum allowed number of expressions in one function.',
         )
@@ -35,7 +35,7 @@ class Configuration(object):
         parser.add_option(
             '--max-arguments',
             parse_from_config=True,
-            type='int', 
+            type='int',
             default=defaults.MAX_ARGUMENTS,
             help='Maximum allowed number of arguments in one function.',
         )
