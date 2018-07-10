@@ -69,8 +69,7 @@ class Checker(object):
         """
         for visitor_class in self._visitors:
             visiter = visitor_class()
-            if hasattr(visiter, 'provide_options'):
-                visiter.provide_options(self.options)
+            visiter.provide_options(self.options)
             visiter.visit(self.tree)
 
             for error in visiter.errors:
