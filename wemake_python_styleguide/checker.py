@@ -34,6 +34,7 @@ class Checker(object):
     version = version
 
     config = Configuration()
+    options = None  # So that mypy could detect the attribute
 
     def __init__(self, tree: Module, filename: str = '-') -> None:
         """Creates new checker instance."""
