@@ -26,10 +26,6 @@ class ComplexityVisitor(BaseNodeVisitor):
         self.variables: DefaultDict[str, int] = defaultdict(int)
         self.returns: DefaultDict[str, int] = defaultdict(int)
 
-    def provide_options(self, options) -> None:
-        """Provides options for checking."""
-        self.options = options
-
     def _is_method(self, function_type: Optional[str]) -> bool:
         """
         Returns either or not given function type belongs to a class.
