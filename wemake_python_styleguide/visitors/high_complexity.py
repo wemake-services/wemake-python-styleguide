@@ -19,7 +19,7 @@ class ComplexityVisitor(BaseNodeVisitor):
     """This class checks for code with high complexity."""
 
     def __init__(self) -> None:
-        """Creates counters for tracked metrics."""
+        """Creates config parser instance and counters for tracked metrics."""
         super().__init__()
 
         self.expressions: DefaultDict[str, int] = defaultdict(int)
@@ -48,6 +48,7 @@ class ComplexityVisitor(BaseNodeVisitor):
     def _check_arguments_count(self, node: ast.FunctionDef):
         counter = 0
         has_extra_self_or_cls = 0
+        max_arguments_count = self.options.max_arguments
         if self._is_method(getattr(node, 'function_type', None)):
             has_extra_self_or_cls = 1
 
@@ -60,28 +61,31 @@ class ComplexityVisitor(BaseNodeVisitor):
         if node.args.kwarg:
             counter += 1
 
-        if counter > 5 + has_extra_self_or_cls:  # TODO: config
+        if counter > max_arguments_count + has_extra_self_or_cls:
             self.add_error(
                 TooManyArgumentsViolation(node, text=node.name),
             )
 
     def _update_variables(self, function: ast.FunctionDef):
+        max_local_variables_count = self.options.max_local_variables
         self.variables[function.name] += 1
-        if self.variables[function.name] == 9 + 1:  # TODO: config
+        if self.variables[function.name] == max_local_variables_count:
             self.add_error(
                 TooManyLocalsViolation(function, text=function.name),
             )
 
     def _update_returns(self, function: ast.FunctionDef):
+        max_returns_count = self.options.max_returns
         self.returns[function.name] += 1
-        if self.returns[function.name] == 5 + 1:  # TODO: config
+        if self.returns[function.name] == max_returns_count:
             self.add_error(
                 TooManyReturnsViolation(function, text=function.name),
             )
 
     def _update_expression(self, function: ast.FunctionDef):
+        max_expressions_count = self.options.max_expressions
         self.expressions[function.name] += 1
-        if self.expressions[function.name] == 10:  # TODO: config
+        if self.expressions[function.name] == max_expressions_count:
             self.add_error(
                 TooManyExpressionsViolation(function, text=function.name),
             )

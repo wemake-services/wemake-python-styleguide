@@ -22,3 +22,7 @@ class BaseNodeVisitor(NodeVisitor):
     def add_error(self, error: BaseStyleViolation) -> None:
         """Adds error to the visitor."""
         self._errors.append(error)
+
+    def provide_options(self, options) -> None:
+        """Provides options for checking."""
+        self.options = options
