@@ -45,6 +45,7 @@ class Fixture(object):
     def __init__(self, value):  # error here
         self.var = value  # error here only for `var`, not for `value`
         self.x = value  # error here only for `x`, not for `value`
+        self.__private = value  # error here for `__private`, not for `value`
 
 
 val = Fixture()  # error here

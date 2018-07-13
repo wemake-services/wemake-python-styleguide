@@ -25,8 +25,12 @@ class WrongImportVisitor(BaseNodeVisitor):
 
     def _check_nested_import(self, node: ast.AST, text: str):
         parent = getattr(node, 'parent', None)
-        if isinstance(parent, ast.FunctionDef):
+        if not isinstance(parent, ast.Module):
             self.add_error(NestedImportViolation(node, text=text))
+
+    def _check_local_import(self, node: ast.ImportFrom, text: str):
+        if node.level != 0:
+            self.add_error(LocalFolderImportViolation(node, text=text))
 
     def visit_Call(self, node: ast.Call):
         """Used to find `__import__` function calls."""
@@ -44,12 +48,6 @@ class WrongImportVisitor(BaseNodeVisitor):
     def visit_ImportFrom(self, node: ast.ImportFrom):
         """Used to find nested `from import` statements and local imports."""
         text = self._get_error_text(node)
-
-        if node.level != 0:
-            self.add_error(
-                LocalFolderImportViolation(node, text=text),
-            )
-
-        if isinstance(getattr(node, 'parent', None), ast.FunctionDef):
-            self.add_error(NestedImportViolation(node, text=text))
+        self._check_local_import(node, text)
+        self._check_nested_import(node, text)
         self.generic_visit(node)

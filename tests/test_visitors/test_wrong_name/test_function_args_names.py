@@ -6,9 +6,10 @@ import pytest
 
 from wemake_python_styleguide.visitors.wrong_name import (
     BAD_VARIABLE_NAMES,
-    TooShortArgumentNameViolation,
-    WrongArgumentNameViolation,
+    PrivateNameViolation,
+    TooShortVariableNameViolation,
     WrongNameVisitor,
+    WrongVariableNameViolation,
 )
 
 function_test = """
@@ -58,8 +59,8 @@ def test_wrong_function_arguments(
     visiter.visit(tree)
 
     assert_errors(visiter, [
-        TooShortArgumentNameViolation,
-        WrongArgumentNameViolation,
+        TooShortVariableNameViolation,
+        WrongVariableNameViolation,
     ])
 
 
@@ -82,8 +83,31 @@ def test_too_short_function_arguments(
     visiter.visit(tree)
 
     assert_errors(visiter, [
-        TooShortArgumentNameViolation,
-        WrongArgumentNameViolation,
+        TooShortVariableNameViolation,
+        WrongVariableNameViolation,
+    ])
+
+
+@pytest.mark.parametrize('code', [
+    function_test,
+    method_test,
+    function_kwargs_test,
+    method_kwargs_test,
+    function_args_kwargs_test,
+    method_args_kwargs_test,
+])
+def test_private_function_arguments(
+    assert_errors, parse_ast_tree, code,
+):
+    """Testing that function can not have private arguments."""
+    tree = parse_ast_tree(code.format('__private', '__name'))
+
+    visiter = WrongNameVisitor()
+    visiter.visit(tree)
+
+    assert_errors(visiter, [
+        PrivateNameViolation,
+        PrivateNameViolation,
     ])
 
 

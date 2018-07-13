@@ -8,19 +8,24 @@ from wemake_python_styleguide.visitors.wrong_name import (
     WrongModuleMetadataVisitor,
 )
 
-module_test = """
+module_metadata = """
 {0} = 'Nikita'
 """
 
-nested_test = """
+nested_metadata = """
 class ORM:
     {0} = None
+"""
+
+startup_metadata = """
+if __name__ == '__main__':
+    main()
 """
 
 
 @pytest.mark.parametrize('bad_name', BAD_MODULE_METADATA_VARIABLES)
 @pytest.mark.parametrize('code', [
-    module_test,
+    module_metadata,
 ])
 def test_wrong_metadata(
     assert_errors, parse_ast_tree, bad_name, code,
@@ -34,16 +39,30 @@ def test_wrong_metadata(
     assert_errors(visiter, [WrongModuleMetadataViolation])
 
 
-@pytest.mark.parametrize('correct_name', ['correct_name', 'xy', '_value'])
+@pytest.mark.parametrize('correct_name', [
+    'correct_name',
+    'xy',
+    '_value',
+])
 @pytest.mark.parametrize('code', [
-    module_test,
-    nested_test,
+    module_metadata,
+    nested_metadata,
 ])
 def test_correct_metadata(
     assert_errors, parse_ast_tree, code, correct_name,
 ):
     """Testing that metadata can have normal names."""
     tree = parse_ast_tree(code.format(correct_name))
+
+    visiter = WrongModuleMetadataVisitor()
+    visiter.visit(tree)
+
+    assert_errors(visiter, [])
+
+
+def test_correct_startup_metadata(assert_errors, parse_ast_tree):
+    """Testing that startup hook is allowed."""
+    tree = parse_ast_tree(startup_metadata)
 
     visiter = WrongModuleMetadataVisitor()
     visiter.visit(tree)

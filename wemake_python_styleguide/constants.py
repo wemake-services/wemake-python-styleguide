@@ -58,6 +58,8 @@ BAD_VARIABLE_NAMES = frozenset((
     'info',
     'handle',
     'handler',
+    'file',
+    'klass',
 ))
 
 #: List of nested classes' names we allow to use.

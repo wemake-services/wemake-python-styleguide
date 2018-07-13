@@ -178,134 +178,30 @@ class TooShortVariableNameViolation(BaseStyleViolation):
 
     """
 
-    _error_tmpl = '{0} Found too short variable name "{1}"'
+    _error_tmpl = '{0} Found too short name "{1}"'
     _code = 'WPS121'
 
 
-class WrongArgumentNameViolation(BaseStyleViolation):
+class PrivateNameViolation(BaseStyleViolation):
     """
-    This rule forbids to have blacklisted function argument names.
+    This rule forbids to have private name pattern.
+
+    It includes: variables, attributes, functions, and methods.
 
     Example::
 
         # Correct:
-        def parse(xml_tree): ...
+        def _collect_coverage(self): ...
         # Wrong:
-        def parse(value): ...
+        def __collect_coverage(self): ...
 
     Note:
         Returns WPS122 as error code
 
     """
 
-    _error_tmpl = '{0} Found wrong argument name "{1}"'
+    _error_tmpl = '{0} Found private name pattern "{1}"'
     _code = 'WPS122'
-
-
-class TooShortArgumentNameViolation(BaseStyleViolation):
-    """
-    This rule forbids to have short argument names.
-
-    Example::
-
-        # Correct:
-        def test(username): ...
-        # Wrong:
-        def test(a): ...
-
-    Note:
-        Returns WPS123 as error code
-
-    """
-
-    _error_tmpl = '{0} Found too short argument name "{1}"'
-    _code = 'WPS123'
-
-
-class WrongAttributeNameViolation(BaseStyleViolation):
-    """
-    This rule forbids to have attributes with blacklisted names.
-
-    Example::
-
-        # Correct:
-        class NormalClass:
-            request_payload = None
-        # Wrong:
-        class WithBlacklisted:
-            data = None
-
-    Note:
-        Returns WPS124 as error code
-
-    """
-
-    _error_tmpl = '{0} Found wrong attribute name "{1}"'
-    _code = 'WPS124'
-
-
-class TooShortAttributeNameViolation(BaseStyleViolation):
-    """
-    This rule forbids to have attributes with short names.
-
-    Example::
-
-        # Correct:
-        class WithAttributes:
-            def __init__(self):
-                self.room_number = 1
-        # Wrong:
-        class WithAttributes:
-            def __init__(self):
-                self.a = 1
-
-    Note:
-        Returns WPS125 as error code
-
-    """
-
-    _error_tmpl = '{0} Found too short attribute name "{1}"'
-    _code = 'WPS125'
-
-
-class WrongFunctionNameViolation(BaseStyleViolation):
-    """
-    This rule forbids to have functions with blacklisted names.
-
-    Example::
-
-        # Correct:
-        def request_dispatcher(): ...
-        # Wrong:
-        def handler(): ...
-
-    Note:
-        Returns WPS126 as error code
-
-    """
-
-    _error_tmpl = '{0} Found wrong function name "{1}"'
-    _code = 'WPS126'
-
-
-class TooShortFunctionNameViolation(BaseStyleViolation):
-    """
-    This rule forbids to have functions with short names.
-
-    Example::
-
-        # Correct:
-        def collect_coverage(): ...
-        # Wrong:
-        def c(): ...
-
-    Note:
-        Returns WPS127 as error code
-
-    """
-
-    _error_tmpl = '{0} Found too short function name "{1}"'
-    _code = 'WPS127'
 
 
 class WrongModuleMetadataViolation(BaseStyleViolation):
@@ -321,12 +217,12 @@ class WrongModuleMetadataViolation(BaseStyleViolation):
         __author__ = 'Nikita Sobolev'
 
     Note:
-        Returns WPS126 as error code
+        Returns WPS123 as error code
 
     """
 
     _error_tmpl = '{0} Found wrong metadata variable {1}'
-    _code = 'WPS126'
+    _code = 'WPS123'
 
 
 class LocalFolderImportViolation(BaseStyleViolation):
@@ -467,7 +363,7 @@ class TooManyArgumentsViolation(BaseStyleViolation):
     it shows that it is required to refactor this piece of code.
 
     Note:
-        Returns WPS10 as error code
+        Returns WPS151 as error code
 
     """
 
