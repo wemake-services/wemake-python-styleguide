@@ -4,10 +4,10 @@ from wemake_python_styleguide.options import defaults
 
 
 class Configuration(object):
-    """Provides method for registering options for WPS flake8 plugin."""
+    """Provides method for registering options for Z flake8 plugin."""
 
     def register_options(self, parser):
-        """Registers options for WPS plugin."""
+        """Registers options for Z plugin."""
         parser.add_option(
             '--max-returns',
             parse_from_config=True,

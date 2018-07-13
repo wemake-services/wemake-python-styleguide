@@ -87,7 +87,7 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
 
     def visit_Assign(self, node: ast.Assign):
         """Used to find the bad metadata variable names."""
-        node_parent = getattr(node, 'parent')
+        node_parent = getattr(node, 'parent', None)
         if not isinstance(node_parent, ast.Module):
             return
 

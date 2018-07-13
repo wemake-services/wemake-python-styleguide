@@ -14,7 +14,7 @@ def test_max_variables_cli_option(absolute_path):
         stderr=subprocess.PIPE,
     )
     stdout, _ = process.communicate()
-    assert stdout.count(b'WPS150') == 0
+    assert stdout.count(b'Z150') == 0
 
 
 def test_max_arguments_cli_option(absolute_path):
@@ -28,7 +28,7 @@ def test_max_arguments_cli_option(absolute_path):
         stderr=subprocess.PIPE,
     )
     stdout, _ = process.communicate()
-    assert stdout.count(b'WPS151') == 0
+    assert stdout.count(b'Z151') == 0
 
 
 def test_max_returns_cli_option(absolute_path):
@@ -42,7 +42,7 @@ def test_max_returns_cli_option(absolute_path):
         stderr=subprocess.PIPE,
     )
     stdout, _ = process.communicate()
-    assert stdout.count(b'WPS153') == 0
+    assert stdout.count(b'Z153') == 0
 
 
 def test_max_expressions_cli_options(absolute_path):
@@ -56,4 +56,4 @@ def test_max_expressions_cli_options(absolute_path):
         stderr=subprocess.PIPE,
     )
     stdout, _ = process.communicate()
-    assert stdout.count(b'WPS154') == 0
+    assert stdout.count(b'Z154') == 0

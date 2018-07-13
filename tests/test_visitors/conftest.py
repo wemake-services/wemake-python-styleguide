@@ -6,6 +6,7 @@ from typing import Sequence
 
 import pytest
 
+from wemake_python_styleguide.compat import maybe_set_parent
 from wemake_python_styleguide.visitors.base.visitor import BaseNodeVisitor
 
 
@@ -13,13 +14,7 @@ from wemake_python_styleguide.visitors.base.visitor import BaseNodeVisitor
 def parse_ast_tree():
     """Helper function to convert code to ast."""
     def factory(code: str) -> ast.AST:
-        tree = ast.parse(dedent(code))
-
-        for statement in ast.walk(tree):
-            for child in ast.iter_child_nodes(statement):
-                child.parent = statement
-
-        return tree
+        return maybe_set_parent(ast.parse(dedent(code)))
 
     return factory
 

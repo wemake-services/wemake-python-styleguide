@@ -37,7 +37,7 @@ classifiers = [
 ]
 
 [tool.poetry.plugins."flake8.extension"]
-WPS = "wemake_python_styleguide.checker:Checker"
+Z = "wemake_python_styleguide.checker:Checker"
 
 [tool.poetry.dependencies]
 python = "^3.6"
@@ -51,7 +51,6 @@ pytest = "^3.6"
 flake8-builtins = "^1.4"
 flake8-commas = "^2.0"
 flake8-quotes = "^1.0"
-flake8-pep3101 = "^1.2"
 flake8-comprehensions = "^1.4"
 flake8-blind-except = "^0.1.1"
 flake8-docstrings = "^1.3"

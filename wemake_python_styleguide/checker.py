@@ -3,6 +3,7 @@
 from ast import Module
 from typing import Generator, Tuple
 
+from wemake_python_styleguide.compat import maybe_set_parent
 from wemake_python_styleguide.options.config import Configuration
 from wemake_python_styleguide.version import version
 from wemake_python_styleguide.visitors.high_complexity import ComplexityVisitor
@@ -38,7 +39,7 @@ class Checker(object):
 
     def __init__(self, tree: Module, filename: str = '-') -> None:
         """Creates new checker instance."""
-        self.tree = tree
+        self.tree = maybe_set_parent(tree)
         self.filename = filename
 
         self._visitors = (

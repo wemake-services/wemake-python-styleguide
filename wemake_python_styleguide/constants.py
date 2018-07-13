@@ -30,6 +30,9 @@ BAD_FUNCTIONS = frozenset((
 
     # Misc:
     'copyright',
+
+    # Dynamic imports:
+    '__import__',
 ))
 
 #: List of module metadata we forbid to use.

@@ -38,11 +38,11 @@ class BaseStyleViolation(object):
         >>> import ast
         >>> error = WrongKeywordViolation(ast.Pass())
         >>> error.message()
-        'WPS100 Found wrong keyword "pass"'
+        'Z102 Found wrong keyword "pass"'
 
         >>> error = WrongKeywordViolation(ast.Delete(), text='del')
         >>> error.message()
-        'WPS100 Found wrong keyword "del"'
+        'Z102 Found wrong keyword "del"'
 
         """
         return self._error_tmpl.format(self._code, self._text)
@@ -52,6 +52,49 @@ class BaseStyleViolation(object):
         lineno = getattr(self.node, 'lineno', 0)
         col_offset = getattr(self.node, 'col_offset', 0)
         return lineno, col_offset, self.message()
+
+
+class LocalFolderImportViolation(BaseStyleViolation):
+    """
+    This rule forbids to have imports relative to the current folder.
+
+    Example::
+
+        # Correct:
+        from my_package.version import get_version
+        # Wrong:
+        from .version import get_version
+        from ..drivers import MySQLDriver
+
+    Note:
+        Returns Z100 as error code
+
+    """
+
+    _error_tmpl = '{0} Found local folder import "{1}"'
+    _code = 'Z100'
+
+
+class NestedImportViolation(BaseStyleViolation):
+    """
+    This rule forbids to have nested imports in functions.
+
+    Nested imports show that there's an issue with you design.
+    So, you don't need nested imports, you need to refactor your code.
+
+    Example::
+
+        # Wrong:
+        def some():
+            from my_module import some_function
+
+    Note:
+        Returns Z101 as error code
+
+    """
+
+    _error_tmpl = '{0} Found nested import "{1}"'
+    _code = 'Z101'
 
 
 class WrongKeywordViolation(BaseStyleViolation):
@@ -68,12 +111,12 @@ class WrongKeywordViolation(BaseStyleViolation):
         eval
 
     Note:
-        Returns WPS100 as error code
+        Returns Z102 as error code
 
     """
 
     _error_tmpl = '{0} Found wrong keyword "{1}"'
-    _code = 'WPS100'
+    _code = 'Z102'
 
 
 class BareRiseViolation(BaseStyleViolation):
@@ -92,12 +135,12 @@ class BareRiseViolation(BaseStyleViolation):
         raise
 
     Note:
-        Returns WPS101 as error code
+        Returns Z103 as error code
 
     """
 
     _error_tmpl = '{0} Found bare raise outside of except "{1}"'
-    _code = 'WPS101'
+    _code = 'Z103'
 
 
 class RaiseNotImplementedViolation(BaseStyleViolation):
@@ -118,12 +161,12 @@ class RaiseNotImplementedViolation(BaseStyleViolation):
         https://stackoverflow.com/a/44575926/4842742
 
     Note:
-        Returns WPS102 as error code
+        Returns Z104 as error code
 
     """
 
     _error_tmpl = '{0} Found raise NotImplemented "{1}"'
-    _code = 'WPS102'
+    _code = 'Z104'
 
 
 class WrongFunctionCallViolation(BaseStyleViolation):
@@ -134,12 +177,12 @@ class WrongFunctionCallViolation(BaseStyleViolation):
     we forbid to use them in a free manner.
 
     Note:
-        Returns WPS110 as error code
+        Returns Z105 as error code
 
     """
 
     _error_tmpl = '{0} Found wrong function call "{1}"'
-    _code = 'WPS110'
+    _code = 'Z105'
 
 
 class WrongVariableNameViolation(BaseStyleViolation):
@@ -154,12 +197,12 @@ class WrongVariableNameViolation(BaseStyleViolation):
         item = None
 
     Note:
-        Returns WPS120 as error code
+        Returns Z106 as error code
 
     """
 
     _error_tmpl = '{0} Found wrong variable name "{1}"'
-    _code = 'WPS120'
+    _code = 'Z106'
 
 
 class TooShortVariableNameViolation(BaseStyleViolation):
@@ -174,12 +217,12 @@ class TooShortVariableNameViolation(BaseStyleViolation):
         x = 1
 
     Note:
-        Returns WPS121 as error code
+        Returns Z107 as error code
 
     """
 
     _error_tmpl = '{0} Found too short name "{1}"'
-    _code = 'WPS121'
+    _code = 'Z107'
 
 
 class PrivateNameViolation(BaseStyleViolation):
@@ -196,12 +239,12 @@ class PrivateNameViolation(BaseStyleViolation):
         def __collect_coverage(self): ...
 
     Note:
-        Returns WPS122 as error code
+        Returns Z108 as error code
 
     """
 
     _error_tmpl = '{0} Found private name pattern "{1}"'
-    _code = 'WPS122'
+    _code = 'Z108'
 
 
 class WrongModuleMetadataViolation(BaseStyleViolation):
@@ -217,81 +260,16 @@ class WrongModuleMetadataViolation(BaseStyleViolation):
         __author__ = 'Nikita Sobolev'
 
     Note:
-        Returns WPS123 as error code
+        Returns Z109 as error code
 
     """
 
     _error_tmpl = '{0} Found wrong metadata variable {1}'
-    _code = 'WPS123'
+    _code = 'Z109'
 
 
-class LocalFolderImportViolation(BaseStyleViolation):
-    """
-    This rule forbids to have imports relative to the current folder.
-
-    Example::
-
-        # Correct:
-        from my_package.version import get_version
-        # Wrong:
-        from .version import get_version
-        from ..drivers import MySQLDriver
-
-    Note:
-        Returns WPS130 as error code
-
-    """
-
-    _error_tmpl = '{0} Found local folder import "{1}"'
-    _code = 'WPS130'
-
-
-class NestedImportViolation(BaseStyleViolation):
-    """
-    This rule forbids to have nested imports in functions.
-
-    Nested imports show that there's an issue with you design.
-    So, you don't need nested imports, you need to refactor your code.
-
-    Example::
-
-        # Wrong:
-        def some():
-            from my_module import some_function
-
-    Note:
-        Returns WPS131 as error code
-
-    """
-
-    _error_tmpl = '{0} Found nested import "{1}"'
-    _code = 'WPS131'
-
-
-class DynamicImportViolation(BaseStyleViolation):
-    """
-    This rule forbids importing your code with ``__import__()`` function.
-
-    This is almost never a good idea. So, it is an error by default.
-    Use regular imports instead.
-    Or use ``importlib.import_module()`` in case you know what you are doing.
-
-    Example::
-
-        # Wrong:
-        my_module = __import__('my_module')
-
-    See Also:
-        https://docs.python.org/3/library/functions.html#__import__
-
-    Note:
-        Returns WPS132 as error code
-
-    """
-
-    _error_tmpl = '{0} Found dynamic import "{1}"'
-    _code = 'WPS132'
-
+# Design:
+# These errors finds flaws in your application design and reports them.
 
 class NestedFunctionViolation(BaseStyleViolation):
     """
@@ -308,12 +286,12 @@ class NestedFunctionViolation(BaseStyleViolation):
                 ...
 
     Note:
-        Returns WPS140 as error code
+        Returns Z200 as error code
 
     """
 
     _error_tmpl = '{0} Found nested function "{1}"'
-    _code = 'WPS140'
+    _code = 'Z200'
 
 
 class NestedClassViolation(BaseStyleViolation):
@@ -331,12 +309,12 @@ class NestedClassViolation(BaseStyleViolation):
                 ...
 
     Note:
-        Returns WPS141 as error code
+        Returns Z201 as error code
 
     """
 
     _error_tmpl = '{0} Found nested class "{1}"'
-    _code = 'WPS141'
+    _code = 'Z201'
 
 
 class TooManyLocalsViolation(BaseStyleViolation):
@@ -346,12 +324,12 @@ class TooManyLocalsViolation(BaseStyleViolation):
     If you have too many variables in a function, you have to refactor it.
 
     Note:
-        Returns WPS150 as error code
+        Returns Z202 as error code
 
     """
 
     _error_tmpl = '{0} Found too many local variables "{1}"'
-    _code = 'WPS150'
+    _code = 'Z202'
 
 
 class TooManyArgumentsViolation(BaseStyleViolation):
@@ -363,12 +341,12 @@ class TooManyArgumentsViolation(BaseStyleViolation):
     it shows that it is required to refactor this piece of code.
 
     Note:
-        Returns WPS151 as error code
+        Returns Z203 as error code
 
     """
 
     _error_tmpl = '{0} Found too many arguments "{1}"'
-    _code = 'WPS151'
+    _code = 'Z203'
 
 
 class TooManyBranchesViolation(BaseStyleViolation):
@@ -379,12 +357,12 @@ class TooManyBranchesViolation(BaseStyleViolation):
     They are also hard to read and hard to change and read.
 
     Note:
-        Returns WPS152 as error code
+        Returns Z204 as error code
 
     """
 
     _error_tmpl = '{0} Found too many branches "{1}"'
-    _code = 'WPS152'
+    _code = 'Z204'
 
 
 class TooManyReturnsViolation(BaseStyleViolation):
@@ -395,12 +373,12 @@ class TooManyReturnsViolation(BaseStyleViolation):
     They are also hard to read and hard to change and read.
 
     Note:
-        Returns WPS153 as error code
+        Returns Z205 as error code
 
     """
 
     _error_tmpl = '{0} Found too many return statements "{1}"'
-    _code = 'WPS153'
+    _code = 'Z205'
 
 
 class TooManyExpressionsViolation(BaseStyleViolation):
@@ -412,12 +390,12 @@ class TooManyExpressionsViolation(BaseStyleViolation):
     We only have to identify them.
 
     Note:
-        Returns WPS154 as error code
+        Returns Z206 as error code
 
     """
 
     _error_tmpl = '{0} Found too many expressions "{1}"'
-    _code = 'WPS154'
+    _code = 'Z206'
 
 
 class TooDeepNestingViolation(BaseStyleViolation):
@@ -430,9 +408,9 @@ class TooDeepNestingViolation(BaseStyleViolation):
     they have made their way to production.
 
     Note:
-        Returns WPS155 as error code
+        Returns Z207 as error code
 
     """
 
     _error_tmpl = '{0} Found too deep nesting "{1}"'
-    _code = 'WPS155'
+    _code = 'Z207'

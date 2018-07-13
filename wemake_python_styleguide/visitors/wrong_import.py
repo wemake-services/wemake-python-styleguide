@@ -3,11 +3,9 @@
 import ast
 
 from wemake_python_styleguide.errors import (
-    DynamicImportViolation,
     LocalFolderImportViolation,
     NestedImportViolation,
 )
-from wemake_python_styleguide.helpers.functions import given_function_called
 from wemake_python_styleguide.visitors.base.visitor import BaseNodeVisitor
 
 
@@ -31,13 +29,6 @@ class WrongImportVisitor(BaseNodeVisitor):
     def _check_local_import(self, node: ast.ImportFrom, text: str):
         if node.level != 0:
             self.add_error(LocalFolderImportViolation(node, text=text))
-
-    def visit_Call(self, node: ast.Call):
-        """Used to find `__import__` function calls."""
-        function_name = given_function_called(node, ['__import__'])
-        if function_name:
-            self.add_error(DynamicImportViolation(node, text=function_name))
-        self.generic_visit(node)
 
     def visit_Import(self, node: ast.Import):
         """Used to find nested `import` statements."""
