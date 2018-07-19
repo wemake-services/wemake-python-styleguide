@@ -13,7 +13,7 @@ def test_wrong_variables_in_fixture(absolute_path):
     )
     stdout, _ = process.communicate()
 
-    assert stdout.count(b'Z106') == 12
-    assert stdout.count(b'Z107') == 6
-    assert stdout.count(b'Z108') == 1
-    assert stdout.count(b'Z109') == 1
+    assert stdout.count(b'Z114') == 12
+    assert stdout.count(b'Z115') == 6
+    assert stdout.count(b'Z116') == 1
+    assert stdout.count(b'Z117') == 1

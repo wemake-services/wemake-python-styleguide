@@ -2,6 +2,22 @@
 
 We follow Semantic Versions.
 
+## Version 0.0.4
+
+### Features
+
+- We now check `class`es to match our styleguide
+- Classes have their own error group `Z3`
+- Using `@staticmethod` is now forbidden
+- Declaring `object` as a base class is now required
+- Now we check that `__del__` magic method is not used
+- Variable names `async` and `await` are forbidden
+- We now forbid to use `__future__` imports
+- We now have a whitelist for `__future__` imports
+- Imports are now have its own subgroup `Z10`
+- General rules now start from `Z11`
+
+
 ## Version 0.0.3
 
 ### Features

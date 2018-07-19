@@ -40,6 +40,18 @@ def test_wrong_function_called(
     assert_errors(visiter, [WrongFunctionCallViolation])
 
 
+def test_wrong_decorator_used(assert_errors, parse_ast_tree):
+    """Testing that some built-in functions are restricted as decorators."""
+    tree = parse_ast_tree("""
+    some_static = staticmethod(some_function)
+    """)
+
+    visiter = WrongFunctionCallVisitor()
+    visiter.visit(tree)
+
+    assert_errors(visiter, [WrongFunctionCallViolation])
+
+
 @pytest.mark.parametrize('good_function', ['len', 'abs', 'max', 'custom'])
 @pytest.mark.parametrize('code', [
     regular_call,

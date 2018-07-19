@@ -38,11 +38,11 @@ class BaseStyleViolation(object):
         >>> import ast
         >>> error = WrongKeywordViolation(ast.Pass())
         >>> error.message()
-        'Z102 Found wrong keyword "pass"'
+        'Z110 Found wrong keyword "pass"'
 
         >>> error = WrongKeywordViolation(ast.Delete(), text='del')
         >>> error.message()
-        'Z102 Found wrong keyword "del"'
+        'Z110 Found wrong keyword "del"'
 
         """
         return self._error_tmpl.format(self._code, self._text)
@@ -54,6 +54,9 @@ class BaseStyleViolation(object):
         return lineno, col_offset, self.message()
 
 
+# Imports:
+# These errors represent
+
 class LocalFolderImportViolation(BaseStyleViolation):
     """
     This rule forbids to have imports relative to the current folder.
@@ -62,6 +65,7 @@ class LocalFolderImportViolation(BaseStyleViolation):
 
         # Correct:
         from my_package.version import get_version
+
         # Wrong:
         from .version import get_version
         from ..drivers import MySQLDriver
@@ -97,6 +101,32 @@ class NestedImportViolation(BaseStyleViolation):
     _code = 'Z101'
 
 
+class FutureImportViolation(BaseStyleViolation):
+    """
+    This rule forbids to use ``__future__`` imports.
+
+    Almost all ``__future__`` imports are legacy ``python2`` compatibility
+    tools that are no longer required.
+
+    Except, there are some new ones for ``python4`` support.
+
+    Example::
+
+        # Correct:
+        from __future__ import annotations
+
+        # Wrong:
+        from __future__ import print_function
+
+    Note:
+        Returns Z102 as error code
+
+    """
+
+    _error_tmpl = '{0} Found future import "{1}"'
+    _code = 'Z102'
+
+
 class WrongKeywordViolation(BaseStyleViolation):
     """
     This rule forbids to use some keywords from ``python``.
@@ -111,12 +141,12 @@ class WrongKeywordViolation(BaseStyleViolation):
         eval
 
     Note:
-        Returns Z102 as error code
+        Returns Z110 as error code
 
     """
 
     _error_tmpl = '{0} Found wrong keyword "{1}"'
-    _code = 'Z102'
+    _code = 'Z110'
 
 
 class BareRiseViolation(BaseStyleViolation):
@@ -135,12 +165,12 @@ class BareRiseViolation(BaseStyleViolation):
         raise
 
     Note:
-        Returns Z103 as error code
+        Returns Z111 as error code
 
     """
 
     _error_tmpl = '{0} Found bare raise outside of except "{1}"'
-    _code = 'Z103'
+    _code = 'Z111'
 
 
 class RaiseNotImplementedViolation(BaseStyleViolation):
@@ -154,6 +184,7 @@ class RaiseNotImplementedViolation(BaseStyleViolation):
 
         # Correct:
         raise NotImplementedError('To be done')
+
         # Wrong:
         raise NotImplemented
 
@@ -161,12 +192,12 @@ class RaiseNotImplementedViolation(BaseStyleViolation):
         https://stackoverflow.com/a/44575926/4842742
 
     Note:
-        Returns Z104 as error code
+        Returns Z112 as error code
 
     """
 
     _error_tmpl = '{0} Found raise NotImplemented "{1}"'
-    _code = 'Z104'
+    _code = 'Z112'
 
 
 class WrongFunctionCallViolation(BaseStyleViolation):
@@ -177,12 +208,12 @@ class WrongFunctionCallViolation(BaseStyleViolation):
     we forbid to use them in a free manner.
 
     Note:
-        Returns Z105 as error code
+        Returns Z113 as error code
 
     """
 
     _error_tmpl = '{0} Found wrong function call "{1}"'
-    _code = 'Z105'
+    _code = 'Z113'
 
 
 class WrongVariableNameViolation(BaseStyleViolation):
@@ -193,16 +224,17 @@ class WrongVariableNameViolation(BaseStyleViolation):
 
         # Correct:
         html_node = None
+
         # Wrong:
         item = None
 
     Note:
-        Returns Z106 as error code
+        Returns Z114 as error code
 
     """
 
     _error_tmpl = '{0} Found wrong variable name "{1}"'
-    _code = 'Z106'
+    _code = 'Z114'
 
 
 class TooShortVariableNameViolation(BaseStyleViolation):
@@ -213,16 +245,17 @@ class TooShortVariableNameViolation(BaseStyleViolation):
 
         # Correct:
         x_coord = 1
+
         # Wrong:
         x = 1
 
     Note:
-        Returns Z107 as error code
+        Returns Z115 as error code
 
     """
 
     _error_tmpl = '{0} Found too short name "{1}"'
-    _code = 'Z107'
+    _code = 'Z115'
 
 
 class PrivateNameViolation(BaseStyleViolation):
@@ -239,12 +272,12 @@ class PrivateNameViolation(BaseStyleViolation):
         def __collect_coverage(self): ...
 
     Note:
-        Returns Z108 as error code
+        Returns Z116 as error code
 
     """
 
     _error_tmpl = '{0} Found private name pattern "{1}"'
-    _code = 'Z108'
+    _code = 'Z116'
 
 
 class WrongModuleMetadataViolation(BaseStyleViolation):
@@ -253,6 +286,7 @@ class WrongModuleMetadataViolation(BaseStyleViolation):
 
     We discourage using module variables like ``__author__``, because
     there's no need in them. Use proper docstrings and classifiers.
+    Packaging should not be done in code.
 
     Example::
 
@@ -260,12 +294,12 @@ class WrongModuleMetadataViolation(BaseStyleViolation):
         __author__ = 'Nikita Sobolev'
 
     Note:
-        Returns Z109 as error code
+        Returns Z117 as error code
 
     """
 
     _error_tmpl = '{0} Found wrong metadata variable {1}'
-    _code = 'Z109'
+    _code = 'Z117'
 
 
 # Design:
@@ -414,3 +448,56 @@ class TooDeepNestingViolation(BaseStyleViolation):
 
     _error_tmpl = '{0} Found too deep nesting "{1}"'
     _code = 'Z207'
+
+
+# Classes:
+# These rules are related to defining valid classes
+
+
+class StaticMethodViolation(BaseStyleViolation):
+    """
+    This rule forbids to use ``@staticmethod`` decorator.
+
+    Use regular methods, ``classmethods``, or raw functions instead.
+
+    Note:
+        Returns Z300 as error code
+
+    """
+
+    _error_tmpl = '{0} Found using staticmethod "{1}"'
+    _code = 'Z300'
+
+
+class BadMagicMethodViolation(BaseStyleViolation):
+    """
+    This rule forbids to use some magic methods.
+
+    Note:
+        Returns Z301 as error code
+
+    """
+
+    _error_tmpl = '{0} Found using restricted magic method "{1}"'
+    _code = 'Z301'
+
+
+class RequiredBaseClassViolation(BaseStyleViolation):
+    """
+    This rule forbids to write classes without base classes.
+
+    Example::
+
+        # Correct:
+        class Some(object): ...
+
+        # Wrong:
+        class Some: ...
+
+    Note:
+        Returns Z302 as error code
+
+    """
+
+    _error_tmpl = '{0} Found class without a base class "{1}"'
+    _code = 'Z302'

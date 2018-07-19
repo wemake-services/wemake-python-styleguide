@@ -33,6 +33,9 @@ BAD_FUNCTIONS = frozenset((
 
     # Dynamic imports:
     '__import__',
+
+    # OOP:
+    'staticmethod',
 ))
 
 #: List of module metadata we forbid to use.
@@ -63,6 +66,15 @@ BAD_VARIABLE_NAMES = frozenset((
     'handler',
     'file',
     'klass',
+
+    # Compatibility with `python3.7`:
+    'async',
+    'await',
+))
+
+#: List of magic methods that are forbiden to use.
+BAD_MAGIC_METHODS = frozenset((
+    '__del__',
 ))
 
 #: List of nested classes' names we allow to use.
@@ -74,4 +86,9 @@ NESTED_CLASSES_WHITELIST = frozenset((
 NESTED_FUNCTIONS_WHITELIST = frozenset((
     'decorator',
     'factory',
+))
+
+#: List of allowed ``__future__`` imports.
+FUTURE_IMPORTS_WHITELIST = frozenset((
+    'annotations',
 ))

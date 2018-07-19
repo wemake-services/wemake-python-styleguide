@@ -7,6 +7,7 @@ from wemake_python_styleguide.compat import maybe_set_parent
 from wemake_python_styleguide.options.config import Configuration
 from wemake_python_styleguide.version import version
 from wemake_python_styleguide.visitors.high_complexity import ComplexityVisitor
+from wemake_python_styleguide.visitors.wrong_class import WrongClassVisitor
 from wemake_python_styleguide.visitors.wrong_function_call import (
     WrongFunctionCallVisitor,
 )
@@ -51,6 +52,7 @@ class Checker(object):
             ComplexityVisitor,
             WrongNameVisitor,
             WrongModuleMetadataVisitor,
+            WrongClassVisitor,
         )
 
     @classmethod
