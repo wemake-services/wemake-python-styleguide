@@ -127,6 +127,27 @@ class FutureImportViolation(BaseStyleViolation):
     _code = 'Z102'
 
 
+class DottedRawImportViolation(BaseStyleViolation):
+    """
+    This rule forbids to use imports like ``import os.path``.
+
+    Example::
+
+        # Correct:
+        from os import path
+
+        # Wrong:
+        import os.path
+
+    Note:
+        Returns Z103 as error code
+
+    """
+
+    _error_tmpl = '{0} Found dotted raw import "{1}"'
+    _code = 'Z103'
+
+
 class WrongKeywordViolation(BaseStyleViolation):
     """
     This rule forbids to use some keywords from ``python``.

@@ -4,6 +4,7 @@ import ast
 
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
 from wemake_python_styleguide.errors import (
+    DottedRawImportViolation,
     FutureImportViolation,
     LocalFolderImportViolation,
     NestedImportViolation,
@@ -42,13 +43,19 @@ class WrongImportVisitor(BaseNodeVisitor):
                         FutureImportViolation(node, text=alias.name),
                     )
 
+    def _check_dotted_raw_import(self, node: ast.Import):
+        for alias in node.names:
+            if '.' in alias.name:
+                self.add_error(DottedRawImportViolation(node, text=alias.name))
+
     def visit_Import(self, node: ast.Import):
-        """Used to find nested `import` statements."""
+        """Used to find wrong `import` statements."""
         self._check_nested_import(node)
+        self._check_dotted_raw_import(node)
         self.generic_visit(node)
 
     def visit_ImportFrom(self, node: ast.ImportFrom):
-        """Used to find nested `from import` statements and local imports."""
+        """Used to find wrong `from import` statements."""
         self._check_local_import(node)
         self._check_nested_import(node)
         self._check_future_import(node)

@@ -91,4 +91,5 @@ NESTED_FUNCTIONS_WHITELIST = frozenset((
 #: List of allowed ``__future__`` imports.
 FUTURE_IMPORTS_WHITELIST = frozenset((
     'annotations',
+    'generator_stop',
 ))

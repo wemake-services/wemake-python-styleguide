@@ -2,6 +2,19 @@
 
 We follow Semantic Versions.
 
+## Version 0.0.5
+
+### Features
+
+- We now allow `generator_stop` to be a `__future__` import
+- We now restrict dotted raw imports like: `import os.path`
+- We now check import aliases as regular variable names
+
+### Misc
+
+- We have added a `CONTRIBUTING.md` file to help new contributors
+
+
 ## Version 0.0.4
 
 ### Features

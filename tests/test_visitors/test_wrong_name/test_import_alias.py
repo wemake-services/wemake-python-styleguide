@@ -12,25 +12,24 @@ from wemake_python_styleguide.visitors.wrong_name import (
     WrongVariableNameViolation,
 )
 
-function_bad_name = """
-def {0}(): ...
+import_alias = """
+import os as {0}
 """
 
-method_bad_name = """
-class Input:
-    def {0}(self): ...
+from_import_alias = """
+from os import path as {0}
 """
 
 
 @pytest.mark.parametrize('bad_name', BAD_VARIABLE_NAMES)
 @pytest.mark.parametrize('code', [
-    function_bad_name,
-    method_bad_name,
+    import_alias,
+    from_import_alias,
 ])
-def test_wrong_function_names(
+def test_wrong_import_alias_names(
     assert_errors, parse_ast_tree, bad_name, code,
 ):
-    """Testing that function can not have blacklisted names."""
+    """Testing that import aliases can not have blacklisted names."""
     tree = parse_ast_tree(code.format(bad_name))
 
     visiter = WrongNameVisitor()
@@ -41,13 +40,13 @@ def test_wrong_function_names(
 
 @pytest.mark.parametrize('short_name', string.ascii_letters)
 @pytest.mark.parametrize('code', [
-    function_bad_name,
-    method_bad_name,
+    import_alias,
+    from_import_alias,
 ])
-def test_too_short_function_names(
+def test_too_short_import_alias_names(
     assert_errors, parse_ast_tree, short_name, code,
 ):
-    """Testing that function can not have too short names."""
+    """Testing that import aliases can not have too short names."""
     tree = parse_ast_tree(code.format(short_name))
 
     visiter = WrongNameVisitor()
@@ -57,13 +56,13 @@ def test_too_short_function_names(
 
 
 @pytest.mark.parametrize('code', [
-    function_bad_name,
-    method_bad_name,
+    import_alias,
+    from_import_alias,
 ])
-def test_private_function_names(
+def test_private_import_alias_names(
     assert_errors, parse_ast_tree, code,
 ):
-    """Testing that function can not have private names."""
+    """Testing that import aliases can not have too private names."""
     tree = parse_ast_tree(code.format('__hidden'))
 
     visiter = WrongNameVisitor()
@@ -73,20 +72,19 @@ def test_private_function_names(
 
 
 @pytest.mark.parametrize('correct_name', [
-    'my_function',
+    'my_alias',
     'xy',
     'test',
     '_protected',
-    '__magic__',
 ])
 @pytest.mark.parametrize('code', [
-    function_bad_name,
-    method_bad_name,
+    import_alias,
+    from_import_alias,
 ])
-def test_correct_function_names(
+def test_correct_import_alias_names(
     assert_errors, parse_ast_tree, correct_name, code,
 ):
-    """Testing that function can have normal names."""
+    """Testing that import aliases can have normal names."""
     tree = parse_ast_tree(code.format(correct_name))
 
     visiter = WrongNameVisitor()
