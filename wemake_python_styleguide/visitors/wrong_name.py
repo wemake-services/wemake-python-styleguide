@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Union
 
 from wemake_python_styleguide.constants import (
     BAD_MODULE_METADATA_VARIABLES,
@@ -18,6 +17,7 @@ from wemake_python_styleguide.helpers.variables import (
     is_too_short_variable_name,
     is_wrong_variable_name,
 )
+from wemake_python_styleguide.types import AnyImport
 from wemake_python_styleguide.visitors.base.visitor import BaseNodeVisitor
 
 
@@ -82,7 +82,7 @@ class WrongNameVisitor(BaseNodeVisitor):
 
         self.generic_visit(node)
 
-    def visit_Import(self, node: Union[ast.Import, ast.ImportFrom]):
+    def visit_Import(self, node: AnyImport):
         """Used to check wrong import alias names."""
         for alias in node.names:
             if alias.asname:

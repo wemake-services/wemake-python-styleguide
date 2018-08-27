@@ -4,9 +4,9 @@ from wemake_python_styleguide.options import defaults
 
 
 class Configuration(object):
-    """Provides method for registering options for Z flake8 plugin."""
+    """Provides method for registering options for `Z` flake8 plugin."""
 
-    def register_options(self, parser):
+    def register_options(self, parser) -> None:  # TODO: types
         """Registers options for Z plugin."""
         parser.add_option(
             '--max-returns',

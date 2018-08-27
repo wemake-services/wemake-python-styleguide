@@ -8,7 +8,9 @@ from wemake_python_styleguide.errors import (
     FutureImportViolation,
     LocalFolderImportViolation,
     NestedImportViolation,
+    SameAliasImportViolation,
 )
+from wemake_python_styleguide.types import AnyImport
 from wemake_python_styleguide.visitors.base.visitor import BaseNodeVisitor
 
 
@@ -48,10 +50,16 @@ class WrongImportVisitor(BaseNodeVisitor):
             if '.' in alias.name:
                 self.add_error(DottedRawImportViolation(node, text=alias.name))
 
+    def _check_alias(self, node: AnyImport):
+        for alias in node.names:
+            if alias.asname == alias.name:
+                self.add_error(SameAliasImportViolation(node, text=alias.name))
+
     def visit_Import(self, node: ast.Import):
         """Used to find wrong `import` statements."""
         self._check_nested_import(node)
         self._check_dotted_raw_import(node)
+        self._check_alias(node)
         self.generic_visit(node)
 
     def visit_ImportFrom(self, node: ast.ImportFrom):
@@ -59,4 +67,5 @@ class WrongImportVisitor(BaseNodeVisitor):
         self._check_local_import(node)
         self._check_nested_import(node)
         self._check_future_import(node)
+        self._check_alias(node)
         self.generic_visit(node)

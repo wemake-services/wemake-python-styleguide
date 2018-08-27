@@ -55,7 +55,6 @@ class BaseStyleViolation(object):
 
 
 # Imports:
-# These errors represent
 
 class LocalFolderImportViolation(BaseStyleViolation):
     """
@@ -147,6 +146,29 @@ class DottedRawImportViolation(BaseStyleViolation):
     _error_tmpl = '{0} Found dotted raw import "{1}"'
     _code = 'Z103'
 
+
+class SameAliasImportViolation(BaseStyleViolation):
+    """
+    This rule forbids to use the same alias as the original name in imports.
+
+    Example::
+
+        # Correct:
+        from os import path
+
+        # Wrong:
+        from os import path as path
+
+    Note:
+        Returns Z104 as error code
+
+    """
+
+    _error_tmpl = '{0} Found same alias import "{1}"'
+    _code = 'Z104'
+
+
+# General errors:
 
 class WrongKeywordViolation(BaseStyleViolation):
     """

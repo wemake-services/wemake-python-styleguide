@@ -94,7 +94,7 @@ class ComplexityVisitor(BaseNodeVisitor):
         """Checks function internal complexity."""
         self._check_arguments_count(node)
 
-        for body_item in node.body:
+        for body_item in node.body:  # TODO: move to the standalone function
             for sub_node in ast.walk(body_item):
                 is_variable = isinstance(sub_node, ast.Name)
                 context = getattr(sub_node, 'ctx', None)
