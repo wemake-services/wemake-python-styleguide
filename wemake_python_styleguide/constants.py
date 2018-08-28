@@ -8,6 +8,7 @@ It also contains some exceptions that we allow to use in our codebase.
 """
 
 import sys
+from typing import Tuple
 
 #: List of functions we forbid to use.
 BAD_FUNCTIONS = frozenset((
@@ -49,7 +50,7 @@ BAD_MODULE_METADATA_VARIABLES = frozenset((
 ))
 
 
-_BAD_VARIABLE_NAMES = (
+_BAD_VARIABLE_NAMES: Tuple[str, ...] = (
     'data',
     'result',
     'results',
@@ -71,7 +72,7 @@ _BAD_VARIABLE_NAMES = (
 )
 
 if sys.version_info < (3, 7):
-    _BAD_VARIABLE_NAMES+= (
+    _BAD_VARIABLE_NAMES += (
         # Compatibility with `python3.7`:
         'async',
         'await',
