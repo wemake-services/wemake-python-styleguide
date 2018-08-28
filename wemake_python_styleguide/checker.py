@@ -42,7 +42,7 @@ class Checker(object):
     Main checker class.
 
     Runs all checks that are bundled with this package.
-    If you want to add new checks they should be added to `ENABLED_VISITORS`.
+    If you want to add new checks they should be added to ``ENABLED_VISITORS``.
     """
 
     name = 'wemake-python-styleguide'

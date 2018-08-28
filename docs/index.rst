@@ -11,7 +11,7 @@ API Reference
    _pages/checker.rst
    _pages/errors.rst
    _pages/constants.rst
-   _pages/options/defaults.rst
+   _pages/options/config.rst
 
 
 Indices and tables
