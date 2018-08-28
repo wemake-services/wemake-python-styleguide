@@ -17,6 +17,7 @@ homepage = "https://github.com/wemake-services/wemake-python-styleguide"
 keywords = [
   "flake8",
   "plugin",
+  "linting",
   "wemake.services",
   "styleguide",
 ]
