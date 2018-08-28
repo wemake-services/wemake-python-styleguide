@@ -7,6 +7,8 @@ It contains lists of keywords and built-in functions we discourage to use.
 It also contains some exceptions that we allow to use in our codebase.
 """
 
+import sys
+
 #: List of functions we forbid to use.
 BAD_FUNCTIONS = frozenset((
     # Code generation:
@@ -46,8 +48,8 @@ BAD_MODULE_METADATA_VARIABLES = frozenset((
     '__about__',
 ))
 
-#: List of variable names we forbid to use.
-BAD_VARIABLE_NAMES = frozenset((
+
+_BAD_VARIABLE_NAMES = (
     'data',
     'result',
     'results',
@@ -66,11 +68,17 @@ BAD_VARIABLE_NAMES = frozenset((
     'handler',
     'file',
     'klass',
+)
 
-    # Compatibility with `python3.7`:
-    'async',
-    'await',
-))
+if sys.version_info < (3, 7):
+    _BAD_VARIABLE_NAMES+= (
+        # Compatibility with `python3.7`:
+        'async',
+        'await',
+    )
+
+#: List of variable names we forbid to use.
+BAD_VARIABLE_NAMES = frozenset(_BAD_VARIABLE_NAMES)
 
 #: List of magic methods that are forbiden to use.
 BAD_MAGIC_METHODS = frozenset((
