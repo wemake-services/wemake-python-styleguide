@@ -41,7 +41,7 @@ classifiers = [
 Z = "wemake_python_styleguide.checker:Checker"
 
 [tool.poetry.dependencies]
-python = "^3.6 | ^3.7"
+python = "^3.6 || ^3.7"
 flake8 = "^3.5"
 
 [tool.poetry.dev-dependencies]
