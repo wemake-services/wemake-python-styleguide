@@ -31,6 +31,7 @@ classifiers = [
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.6",
+  "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: Implementation :: CPython",
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Topic :: Software Development :: Quality Assurance",
@@ -40,7 +41,7 @@ classifiers = [
 Z = "wemake_python_styleguide.checker:Checker"
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.6 | ^3.7"
 flake8 = "^3.5"
 
 [tool.poetry.dev-dependencies]
