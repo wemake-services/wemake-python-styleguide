@@ -27,10 +27,10 @@ We are in early alpha. Use it on your own risk.
 
 ## Contributing
 
-See [`CONTRIBUTING.md`](/CONTRIBUTING.md) file if you want to contribute.
+See [CONTRIBUTING.md](https://github.com/wemake-services/wemake-python-styleguide/blob/master/CONTRIBUTING.md) file if you want to contribute.
 You can also check which [issues need some help](https://github.com/wemake-services/wemake-python-styleguide/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) right now.
 
 
 ## License
 
-MIT. See [LICENSE.md](/LICENSE.md) for more details.
+MIT. See [LICENSE.md](https://github.com/wemake-services/wemake-python-styleguide/blob/master/LICENSE) for more details.
