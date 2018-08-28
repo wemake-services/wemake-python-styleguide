@@ -33,4 +33,4 @@ You can also check which [issues need some help](https://github.com/wemake-servi
 
 ## License
 
-MIT. See [LICENSE.md](https://github.com/wemake-services/wemake-python-styleguide/blob/master/LICENSE) for more details.
+MIT. See [LICENSE](https://github.com/wemake-services/wemake-python-styleguide/blob/master/LICENSE) for more details.
