@@ -22,12 +22,12 @@ class Configuration(object):
 
     We support the following options:
 
-    - `max-returns` - maximum allowed number of `return` statements in one function,
-      defaults to ``MAX_RETURNS``
-    - `max-local-variables` - maximum allowed number of local variables in one function,
-      defaults to ``MAX_LOCAL_VARIABLES``
-    - `max-expressions` - maximum allowed number of expressions in one function,
-      defaults to ``MAX_EXPRESSIONS``
+    - `max-returns` - maximum allowed number of ``return``
+      statements in one function, defaults to ``MAX_RETURNS``
+    - `max-local-variables` - maximum allowed number of local
+      variables in one function, defaults to ``MAX_LOCAL_VARIABLES``
+    - `max-expressions` - maximum allowed number of expressions
+      in one function, defaults to ``MAX_EXPRESSIONS``
     - `max-arguments` - maximum allowed number of arguments in one function,
       defaults to ``MAX_ARGUMENTS``
 
