@@ -2,6 +2,25 @@
 
 We follow Semantic Versions.
 
+
+## Version 0.0.6
+
+### Features
+
+- We now check import aliases to be different from the original name
+- Default complexity checks' values have changed
+
+### Bugfixes
+
+- ReadTheDocs build is fixed by providing extra dependencies
+- Changed how local variables are counted
+
+### Misc
+
+- Improved typing support
+- Added new documentation sections
+
+
 ## Version 0.0.5
 
 ### Features

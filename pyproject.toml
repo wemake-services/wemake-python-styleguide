@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "wemake-python-styleguide"
-version = "0.0.5"
+version = "0.0.6"
 description = "Opinionated styleguide that we use in wemake.services"
 
 license = "MIT"
@@ -68,3 +68,4 @@ sphinxcontrib-napoleon = "^0.6.1"
 doc8 = "^0.8.0"
 m2r = "^0.1.15"
 sphinx_readable_theme = "^1.3"
+typing_extensions = "^3.6"

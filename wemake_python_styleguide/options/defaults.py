@@ -1,11 +1,27 @@
 # -*- coding: utf-8 -*-
 
-"""Constants with default values for configuration."""
+"""
+Constants with default values for configuration.
 
-MAX_RETURNS = 6
+We try to stick to "the magical 7 ± 2 number".
+https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two
 
-MAX_LOCAL_VARIABLES = 10
+What does it mean? It means that we choose these values based on our mind
+capacity. And it is really hard to keep in mind more that 9 objects
+at the same time.
 
-MAX_EXPRESSIONS = 10
+These values can be changed in the `setup.cfg` file, if you find them
+too strict or too permissive.
+"""
 
+#: Maximum number of `return` statements allowed in a single function:
+MAX_RETURNS = 5
+
+#: Maximum number of local variables in a function:
+MAX_LOCAL_VARIABLES = 5
+
+#: Maximum number of expressions in a single function:
+MAX_EXPRESSIONS = 9
+
+#: Maximum number of arguments for functions or method, `self` is not counted:
 MAX_ARGUMENTS = 5

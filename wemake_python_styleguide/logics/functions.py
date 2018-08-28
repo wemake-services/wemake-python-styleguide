@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from ast import Call
-from typing import Iterable
+from typing import Iterable, Optional
 
 
 def given_function_called(node: Call, to_check: Iterable[str]) -> str:
@@ -19,11 +19,30 @@ def given_function_called(node: Call, to_check: Iterable[str]) -> str:
     function_inner_id = getattr(function_value, 'id', None)
     function_attr = getattr(node.func, 'attr', None)
 
-    is_restricted_function = function_name in to_check
     is_restricted_function_attribute = (
         function_inner_id in to_check and function_attr in to_check
     )
 
-    if is_restricted_function or is_restricted_function_attribute:
+    if function_name in to_check or is_restricted_function_attribute:
         return function_name
     return ''
+
+
+def is_method(function_type: Optional[str]) -> bool:
+    """
+    Returns either or not given function type belongs to a class.
+
+    >>> is_method('function')
+    False
+
+    >>> is_method(None)
+    False
+
+    >>> is_method('method')
+    True
+
+    >>> is_method('classmethod')
+    True
+
+    """
+    return function_type in ['method', 'classmethod']

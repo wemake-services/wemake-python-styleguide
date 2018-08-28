@@ -2,58 +2,28 @@
 
 import subprocess
 
+import pytest
 
-def test_max_variables_cli_option(absolute_path):
-    """Test to check max-local-variables cli option."""
-    filename = absolute_path('fixtures', 'complexity', 'wrong_variables.py')
-    option_flag = '--max-local-variables'
-    option_value = '100'
+
+@pytest.mark.parametrize('filename, option_flag, option_value, error_code', [
+    ('wrong_variables.py', '--max-local-variables', '100', b'Z150'),
+    ('wrong_arguments.py', '--max-arguments', '100', b'Z151'),
+    ('wrong_returns.py', '--max-returns', '100', b'153'),
+    ('wrong_expressions.py', '--max-expressions', '100', b'154'),
+])
+def test_max_variables_cli_option(
+    absolute_path,
+    filename,
+    option_flag,
+    option_value,
+    error_code,
+):
+    """Test to check that cli options work."""
+    fixture = absolute_path('fixtures', 'complexity', filename)
     process = subprocess.Popen(
-        ['flake8', filename, option_flag, option_value],
+        ['flake8', fixture, option_flag, option_value],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
     stdout, _ = process.communicate()
-    assert stdout.count(b'Z150') == 0
-
-
-def test_max_arguments_cli_option(absolute_path):
-    """Test to check max-arguments cli option."""
-    filename = absolute_path('fixtures', 'complexity', 'wrong_arguments.py')
-    option_flag = '--max-arguments'
-    option_value = '100'
-    process = subprocess.Popen(
-        ['flake8', filename, option_flag, option_value],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    stdout, _ = process.communicate()
-    assert stdout.count(b'Z151') == 0
-
-
-def test_max_returns_cli_option(absolute_path):
-    """Test to check max-returns cli option."""
-    filename = absolute_path('fixtures', 'complexity', 'wrong_returns.py')
-    option_flag = '--max-returns'
-    option_value = '100'
-    process = subprocess.Popen(
-        ['flake8', filename, option_flag, option_value],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    stdout, _ = process.communicate()
-    assert stdout.count(b'Z153') == 0
-
-
-def test_max_expressions_cli_options(absolute_path):
-    """Test to check max-expressions cli option."""
-    filename = absolute_path('fixtures', 'complexity', 'wrong_expressions.py')
-    option_flag = '--max-expressions'
-    option_value = '100'
-    process = subprocess.Popen(
-        ['flake8', filename, option_flag, option_value],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    stdout, _ = process.communicate()
-    assert stdout.count(b'Z154') == 0
+    assert stdout.count(error_code) == 0

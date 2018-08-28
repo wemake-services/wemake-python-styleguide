@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# TODO(@sobolevn): write docs for each error, remove ignore from setup.cfg
+# TODO: separate errors into different modules
 
 """
 All style errors are defined here.
@@ -55,7 +55,6 @@ class BaseStyleViolation(object):
 
 
 # Imports:
-# These errors represent
 
 class LocalFolderImportViolation(BaseStyleViolation):
     """
@@ -147,6 +146,29 @@ class DottedRawImportViolation(BaseStyleViolation):
     _error_tmpl = '{0} Found dotted raw import "{1}"'
     _code = 'Z103'
 
+
+class SameAliasImportViolation(BaseStyleViolation):
+    """
+    This rule forbids to use the same alias as the original name in imports.
+
+    Example::
+
+        # Correct:
+        from os import path
+
+        # Wrong:
+        from os import path as path
+
+    Note:
+        Returns Z104 as error code
+
+    """
+
+    _error_tmpl = '{0} Found same alias import "{1}"'
+    _code = 'Z104'
+
+
+# General errors:
 
 class WrongKeywordViolation(BaseStyleViolation):
     """
@@ -377,6 +399,23 @@ class TooManyLocalsViolation(BaseStyleViolation):
     This rule forbids to have too many local variables in the unit of code.
 
     If you have too many variables in a function, you have to refactor it.
+    What counts as a local variable? We only count variable as local
+    in the following case: it is assigned inside the function body.
+
+    Example::
+
+        def first_function(param):
+            first_var = 1
+
+        def second_function(argument):
+            second_var = 1
+            argument = int(argument)
+
+    In this example we will count as locals only three variables:
+
+    1. `first_var`, because it is assigned inside the function's body
+    2. `second_var`, because it is assigned inside the function's body
+    3. `argument`, because it is reassigned inside the function's body
 
     Note:
         Returns Z202 as error code
@@ -473,7 +512,6 @@ class TooDeepNestingViolation(BaseStyleViolation):
 
 # Classes:
 # These rules are related to defining valid classes
-
 
 class StaticMethodViolation(BaseStyleViolation):
     """

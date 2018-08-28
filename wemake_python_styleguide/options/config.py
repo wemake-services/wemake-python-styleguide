@@ -4,10 +4,37 @@ from wemake_python_styleguide.options import defaults
 
 
 class Configuration(object):
-    """Provides method for registering options for Z flake8 plugin."""
+    """
+    Provides configuration options for `wemake-python-styleguide` plugin.
 
-    def register_options(self, parser):
-        """Registers options for Z plugin."""
+    You can adjust configuration via CLI option:
+
+    Example::
+
+        flake8 --max-returns 7
+
+    You can also provide configuration options in `tox.ini` or `setup.cfg`:
+
+    Example::
+
+        [flake8]
+        max-returns = 7
+
+    We support the following options:
+
+    - `max-returns` - maximum allowed number of ``return``
+      statements in one function, defaults to ``MAX_RETURNS``
+    - `max-local-variables` - maximum allowed number of local
+      variables in one function, defaults to ``MAX_LOCAL_VARIABLES``
+    - `max-expressions` - maximum allowed number of expressions
+      in one function, defaults to ``MAX_EXPRESSIONS``
+    - `max-arguments` - maximum allowed number of arguments in one function,
+      defaults to ``MAX_ARGUMENTS``
+
+    """
+
+    def register_options(self, parser) -> None:  # TODO: types
+        """Registers options for our plugin."""
         parser.add_option(
             '--max-returns',
             parse_from_config=True,
