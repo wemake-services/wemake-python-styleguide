@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# TODO(@sobolevn): write docs for each error, remove ignore from setup.cfg
+# TODO: separate errors into different modules
 
 """
 All style errors are defined here.
@@ -399,6 +399,23 @@ class TooManyLocalsViolation(BaseStyleViolation):
     This rule forbids to have too many local variables in the unit of code.
 
     If you have too many variables in a function, you have to refactor it.
+    What counts as a local variable? We only count variable as local
+    in the following case: it is assigned inside the function body.
+
+    Example::
+
+        def first_function(param):
+            first_var = 1
+
+        def second_function(argument):
+            second_var = 1
+            argument = int(argument)
+
+    In this example we will count as locals only three variables:
+
+    1. `first_var`, because it is assigned inside the function's body
+    2. `second_var`, because it is assigned inside the function's body
+    3. `argument`, because it is reassigned inside the function's body
 
     Note:
         Returns Z202 as error code
@@ -495,7 +512,6 @@ class TooDeepNestingViolation(BaseStyleViolation):
 
 # Classes:
 # These rules are related to defining valid classes
-
 
 class StaticMethodViolation(BaseStyleViolation):
     """

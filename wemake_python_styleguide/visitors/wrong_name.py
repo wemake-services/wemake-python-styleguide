@@ -12,7 +12,7 @@ from wemake_python_styleguide.errors import (
     WrongModuleMetadataViolation,
     WrongVariableNameViolation,
 )
-from wemake_python_styleguide.helpers.variables import (
+from wemake_python_styleguide.logics.variables import (
     is_private_variable,
     is_too_short_variable_name,
     is_wrong_variable_name,

@@ -18,6 +18,7 @@ Options = namedtuple('options', [
     'max_returns',
 ])
 
+
 @pytest.fixture()
 def options():
     """Returns the options builder."""

@@ -42,7 +42,7 @@ def test_locals_correct_count(assert_errors, parse_ast_tree, options, code):
     Regression test for #74.
     See: https://github.com/wemake-services/wemake-python-styleguide/issues/74
     """
-    option_values = options(max_local_variables=3)
+    option_values = options(max_local_variables=2)
     tree = parse_ast_tree(code)
 
     visiter = ComplexityVisitor()
@@ -64,7 +64,7 @@ def test_locals_wrong_count(assert_errors, parse_ast_tree, options, code):
     Regression test for #74.
     See: https://github.com/wemake-services/wemake-python-styleguide/issues/74
     """
-    option_values = options(max_local_variables=2)
+    option_values = options(max_local_variables=1)
     tree = parse_ast_tree(code)
 
     visiter = ComplexityVisitor()
