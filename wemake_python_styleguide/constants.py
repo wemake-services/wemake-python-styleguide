@@ -71,7 +71,7 @@ _BAD_VARIABLE_NAMES: Tuple[str, ...] = (
     'klass',
 )
 
-if sys.version_info < (3, 7):
+if sys.version_info < (3, 7):  # pragma: no cover
     _BAD_VARIABLE_NAMES += (
         # Compatibility with `python3.7`:
         'async',
