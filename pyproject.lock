@@ -326,7 +326,7 @@ name = "m2r"
 optional = false
 platform = "*"
 python-versions = "*"
-version = "0.1.15"
+version = "0.2.0"
 
 [package.dependencies]
 docutils = "*"
@@ -760,7 +760,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4"
 version = "1.23"
 
 [metadata]
-content-hash = "279d29d1496d072e4c2dfc0573f904b467c271d13ced5082ce2a588c65b856f2"
+content-hash = "76225509f11a3c94b99c6d00107efd463a6894366fc6bb180ae3affa4c1247fb"
 platform = "*"
 python-versions = "^3.6 || ^3.7"
 
@@ -794,7 +794,7 @@ idna = ["156a6814fb5ac1fc6850fb002e0852d56c0c8d2531923a51032d1b70760e186e", "684
 imagesize = ["3620cc0cadba3f7475f9940d22431fc4d407269f1be59ec9b8edcca26440cf18", "5b326e4678b6925158ccc66a9fa3122b6106d7c876ee32d7de6ce59385b96315"]
 isort = ["1153601da39a25b14ddc54955dbbacbb6b2d19135386699e2ad58517953b34af", "b9c40e9750f3d77e6e4d441d8b0266cf555e7cdabdcff33c4fd06366ca761ef8", "ec9ef8f4a9bc6f71eec99e1806bfa2de401650d996c59330782b89a5555c1497"]
 jinja2 = ["74c935a1b8bb9a3947c50a54766a969d4846290e1e788ea44c1392163723c3bd", "f84be1bb0040caca4cea721fcbbbbd61f9be9464ca236387158b0feea01914a4"]
-m2r = ["1c358d8bf21ff70e569968d604a0e3c9b05fe01b5f362389235e97bc7c0cd542"]
+m2r = ["b64ee5ac870311a69967fe787be8607df67b02a329f0fc76c8bf477336a99c78"]
 markupsafe = ["a6be69091dac236ea9c6bc7d012beab42010fa914c459791d627dad4910eb665"]
 mccabe = ["ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42", "dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f"]
 mistune = ["b4c512ce2fc99e5a62eb95a4aba4b73e5f90264115c40b70a21e1f7d4e0eac91", "bc10c33bfdcaa4e749b779f62f60d6e12f8215c46a292d05e486b869ae306619"]
