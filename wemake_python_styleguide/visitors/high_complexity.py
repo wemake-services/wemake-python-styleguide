@@ -59,7 +59,8 @@ class ComplexityVisitor(BaseNodeVisitor):
         max_local_variables_count = self.options.max_local_variables
         function_variables = self.variables[function.name]
         if variable_name not in function_variables:
-            function_variables.append(variable_name)
+            if variable_name != '_':
+                function_variables.append(variable_name)
 
             limit_exceeded = has_just_exceeded_limit(
                 len(function_variables),
