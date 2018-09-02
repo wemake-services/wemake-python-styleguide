@@ -4,7 +4,7 @@ import ast
 from collections import defaultdict
 from typing import DefaultDict, List
 
-from wemake_python_styleguide.errors import (
+from wemake_python_styleguide.errors.complexity import (
     TooManyArgumentsViolation,
     TooManyExpressionsViolation,
     TooManyLocalsViolation,
@@ -14,11 +14,17 @@ from wemake_python_styleguide.logics.functions import is_method
 from wemake_python_styleguide.logics.limits import has_just_exceeded_limit
 from wemake_python_styleguide.visitors.base.visitor import BaseNodeVisitor
 
-# TODO: implement TooDeepNestingViolation, TooManyBranchesViolation
 
+class FunctionComplexityVisitor(BaseNodeVisitor):
+    """
+    This class checks for complexity inside functions.
 
-class ComplexityVisitor(BaseNodeVisitor):
-    """This class checks for code with high complexity."""
+    This includes:
+    1. Number of arguments
+    2. Number of `return`s
+    3. Number of expressions
+    4. Number of local variables
+    """
 
     def __init__(self) -> None:
         """Creates config parser instance and counters for tracked metrics."""
@@ -49,18 +55,18 @@ class ComplexityVisitor(BaseNodeVisitor):
                 TooManyArgumentsViolation(node, text=node.name),
             )
 
+    # TODO: move this logics inside into another place:
     def _update_variables(self, function: ast.FunctionDef, variable_name: str):
         """
         Increases the counter of local variables.
 
         What is treated as local variable?
-        Check `TooManyLocalsViolation` documentation.
+        Check ``TooManyLocalsViolation`` documentation.
         """
         max_local_variables_count = self.options.max_local_variables
         function_variables = self.variables[function.name]
-        if variable_name not in function_variables:
-            if variable_name != '_':
-                function_variables.append(variable_name)
+        if variable_name not in function_variables and variable_name != '_':
+            function_variables.append(variable_name)
 
             limit_exceeded = has_just_exceeded_limit(
                 len(function_variables),
@@ -71,6 +77,7 @@ class ComplexityVisitor(BaseNodeVisitor):
                     TooManyLocalsViolation(function, text=function.name),
                 )
 
+    # TODO: move this logics inside into another place:
     def _update_returns(self, function: ast.FunctionDef):
         max_returns_count = self.options.max_returns
         self.returns[function.name] += 1
@@ -83,6 +90,7 @@ class ComplexityVisitor(BaseNodeVisitor):
                 TooManyReturnsViolation(function, text=function.name),
             )
 
+    # TODO: move this logics inside into another place:
     def _update_expression(self, function: ast.FunctionDef):
         max_expressions_count = self.options.max_expressions
         self.expressions[function.name] += 1

@@ -3,6 +3,23 @@
 We follow Semantic Versions.
 
 
+## Version 0.0.7
+
+### Features
+
+- Added new magic methods to the black list
+- We now do not count `_` as a variable in `TooManyLocals` check
+- We now restrict to nest `lambda`s
+- We now allow to configure the minimal variable's name length via `setup.cfg`
+
+### Misc
+
+- Refactored how complexity checks are defined
+- Refactored how errors are defined
+- Now each check has strict `Raises:` policy which lists all possible errors
+  that this check can find and raise
+
+
 ## Version 0.0.6
 
 ### Features

@@ -28,6 +28,7 @@ class ConfigurationOptions(Protocol):
     See: https://mypy.readthedocs.io/en/latest/protocols.html
     """
 
+    # TODO: add min_variable_length value
     max_arguments: int
     max_local_variables: int
     max_returns: int

@@ -7,7 +7,7 @@ matrix:
     - python: 3.7
       dist: xenial
       sudo: true
-  allow_failures:
+  allow_failures:  # we allow failures because of `flake8` warning, it's a bug
     - python: 3.7
       dist: xenial
       sudo: true

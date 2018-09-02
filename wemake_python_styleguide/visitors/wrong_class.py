@@ -3,7 +3,7 @@
 import ast
 
 from wemake_python_styleguide.constants import BAD_MAGIC_METHODS
-from wemake_python_styleguide.errors import (
+from wemake_python_styleguide.errors.classes import (
     BadMagicMethodViolation,
     RequiredBaseClassViolation,
     StaticMethodViolation,

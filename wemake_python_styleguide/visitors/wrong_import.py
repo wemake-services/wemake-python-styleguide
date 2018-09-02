@@ -3,7 +3,7 @@
 import ast
 
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
-from wemake_python_styleguide.errors import (
+from wemake_python_styleguide.errors.imports import (
     DottedRawImportViolation,
     FutureImportViolation,
     LocalFolderImportViolation,

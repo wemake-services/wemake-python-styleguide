@@ -25,7 +25,6 @@ BAD_FUNCTIONS = frozenset((
 
     # IO:
     'input',
-    'help',
 
     # Attribute access:
     'hasattr',
@@ -33,6 +32,7 @@ BAD_FUNCTIONS = frozenset((
 
     # Misc:
     'copyright',
+    'help',
 
     # Dynamic imports:
     '__import__',
@@ -83,7 +83,12 @@ BAD_VARIABLE_NAMES = frozenset(_BAD_VARIABLE_NAMES)
 
 #: List of magic methods that are forbiden to use.
 BAD_MAGIC_METHODS = frozenset((
-    '__del__',
+    '__del__',  # since we don't use `del`
+    '__delitem__',  # since we don't use `del`
+    '__delete__',  # since we don't use `del`
+
+    '__dir__',  # since we don't use `dir()`
+    '__delattr__',  # since we don't use `delattr()`
 ))
 
 #: List of nested classes' names we allow to use.
