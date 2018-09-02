@@ -3,7 +3,7 @@
 from ast import NodeVisitor
 from typing import List
 
-from wemake_python_styleguide.errors import BaseStyleViolation
+from wemake_python_styleguide.errors.base import BaseStyleViolation
 from wemake_python_styleguide.types import ConfigurationOptions
 
 

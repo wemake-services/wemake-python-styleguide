@@ -35,6 +35,7 @@ class Configuration(object):
 
     def register_options(self, parser) -> None:  # TODO: types
         """Registers options for our plugin."""
+        # TODO: add min_variable_length option
         parser.add_option(
             '--max-returns',
             parse_from_config=True,

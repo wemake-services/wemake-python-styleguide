@@ -2,7 +2,7 @@
 
 import ast
 
-from wemake_python_styleguide.errors import (
+from wemake_python_styleguide.errors.general import (
     BareRiseViolation,
     RaiseNotImplementedViolation,
     WrongKeywordViolation,

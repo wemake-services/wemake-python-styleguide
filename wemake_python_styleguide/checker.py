@@ -7,7 +7,12 @@ from wemake_python_styleguide.compat import maybe_set_parent
 from wemake_python_styleguide.options.config import Configuration
 from wemake_python_styleguide.types import CheckResult, ConfigurationOptions
 from wemake_python_styleguide.version import version
-from wemake_python_styleguide.visitors.high_complexity import ComplexityVisitor
+from wemake_python_styleguide.visitors.complexity.function import (
+    FunctionComplexityVisitor,
+)
+from wemake_python_styleguide.visitors.complexity.nested import (
+    NestedComplexityVisitor,
+)
 from wemake_python_styleguide.visitors.wrong_class import WrongClassVisitor
 from wemake_python_styleguide.visitors.wrong_function_call import (
     WrongFunctionCallVisitor,
@@ -21,19 +26,21 @@ from wemake_python_styleguide.visitors.wrong_name import (
     WrongModuleMetadataVisitor,
     WrongNameVisitor,
 )
-from wemake_python_styleguide.visitors.wrong_nested import WrongNestedVisitor
 
 #: Visitors that should be working by default:
 ENABLED_VISITORS = (
+    # Styling and correctness:
     WrongRaiseVisitor,
     WrongFunctionCallVisitor,
     WrongImportVisitor,
     WrongKeywordVisitor,
-    WrongNestedVisitor,
-    ComplexityVisitor,
     WrongNameVisitor,
     WrongModuleMetadataVisitor,
     WrongClassVisitor,
+
+    # Complexity:
+    FunctionComplexityVisitor,
+    NestedComplexityVisitor,
 )
 
 

@@ -14,6 +14,8 @@ These values can be changed in the `setup.cfg` file, if you find them
 too strict or too permissive.
 """
 
+# TODO: add min_variable_length value
+
 #: Maximum number of `return` statements allowed in a single function:
 MAX_RETURNS = 5
 

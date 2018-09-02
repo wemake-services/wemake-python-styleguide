@@ -2,8 +2,8 @@
 
 import pytest
 
-from wemake_python_styleguide.visitors.high_complexity import (
-    ComplexityVisitor,
+from wemake_python_styleguide.visitors.complexity.function import (
+    FunctionComplexityVisitor,
     TooManyLocalsViolation,
 )
 
@@ -11,6 +11,7 @@ function_with_locals = """
 def function():
     local_variable1 = 1
     local_variable2 = 2
+    _ = None  # `_` is not counted
 """
 
 function_with_locals_redefinition = """
@@ -45,7 +46,7 @@ def test_locals_correct_count(assert_errors, parse_ast_tree, options, code):
     option_values = options(max_local_variables=2)
     tree = parse_ast_tree(code)
 
-    visiter = ComplexityVisitor()
+    visiter = FunctionComplexityVisitor()
     visiter.provide_options(option_values)
     visiter.visit(tree)
 
@@ -67,7 +68,7 @@ def test_locals_wrong_count(assert_errors, parse_ast_tree, options, code):
     option_values = options(max_local_variables=1)
     tree = parse_ast_tree(code)
 
-    visiter = ComplexityVisitor()
+    visiter = FunctionComplexityVisitor()
     visiter.provide_options(option_values)
     visiter.visit(tree)
 

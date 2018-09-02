@@ -2,10 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.visitors.wrong_nested import (
+from wemake_python_styleguide.visitors.complexity.nested import (
     NESTED_FUNCTIONS_WHITELIST,
+    NestedComplexityVisitor,
     NestedFunctionViolation,
-    WrongNestedVisitor,
 )
 
 nested_function = """
@@ -28,7 +28,7 @@ def test_nested_function(assert_errors, parse_ast_tree, code):
     """Testing that nested functions are restricted."""
     tree = parse_ast_tree(code.format('nested'))
 
-    visiter = WrongNestedVisitor()
+    visiter = NestedComplexityVisitor()
     visiter.visit(tree)
 
     assert_errors(visiter, [NestedFunctionViolation])
@@ -45,7 +45,7 @@ def test_whitelist_nested_functions(
     """Testing that it is possible to nest whitelisted functions."""
     tree = parse_ast_tree(code.format(whitelist_name))
 
-    visiter = WrongNestedVisitor()
+    visiter = NestedComplexityVisitor()
     visiter.visit(tree)
 
     assert_errors(visiter, [])
@@ -58,23 +58,27 @@ def test_lambda_nested_functions(assert_errors, parse_ast_tree):
         lazy_value = lambda: 12
     """)
 
-    visiter = WrongNestedVisitor()
+    visiter = NestedComplexityVisitor()
     visiter.visit(tree)
 
     assert_errors(visiter, [])
 
 
 def test_lambda_nested_lambdas(assert_errors, parse_ast_tree):
-    """Testing that it is possible to nest lambdas."""
+    """
+    Testing that it is restricted to nest lambdas.
+
+    See: https://github.com/wemake-services/wemake-python-styleguide/issues/94
+    """
     tree = parse_ast_tree("""
     def container():
         nested_lambda = lambda: lambda value: value + 12
     """)
 
-    visiter = WrongNestedVisitor()
+    visiter = NestedComplexityVisitor()
     visiter.visit(tree)
 
-    assert_errors(visiter, [])
+    assert_errors(visiter, [NestedFunctionViolation])
 
 
 def test_lambda_nested_method(assert_errors, parse_ast_tree):
@@ -85,7 +89,7 @@ def test_lambda_nested_method(assert_errors, parse_ast_tree):
             lazy_value = lambda: 12
     """)
 
-    visiter = WrongNestedVisitor()
+    visiter = NestedComplexityVisitor()
     visiter.visit(tree)
 
     assert_errors(visiter, [])

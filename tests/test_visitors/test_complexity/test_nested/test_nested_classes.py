@@ -2,10 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.visitors.wrong_nested import (
+from wemake_python_styleguide.visitors.complexity.nested import (
     NESTED_CLASSES_WHITELIST,
     NestedClassViolation,
-    WrongNestedVisitor,
+    NestedComplexityVisitor,
 )
 
 nested_class = """
@@ -34,7 +34,7 @@ def test_nested_class(assert_errors, parse_ast_tree, code):
     """Testing that nested classes are restricted."""
     tree = parse_ast_tree(code.format('NestedClass'))
 
-    visiter = WrongNestedVisitor()
+    visiter = NestedComplexityVisitor()
     visiter.visit(tree)
 
     assert_errors(visiter, [NestedClassViolation])
@@ -50,7 +50,7 @@ def test_whitelist_nested_classes(
     """Testing that it is possible to nest whitelisted classes."""
     tree = parse_ast_tree(code.format(whitelist_name))
 
-    visiter = WrongNestedVisitor()
+    visiter = NestedComplexityVisitor()
     visiter.visit(tree)
 
     assert_errors(visiter, [])
@@ -70,7 +70,7 @@ def test_whitelist_nested_classes_in_functions(
     """Testing that it is restricted to nest any classes in functions."""
     tree = parse_ast_tree(code.format(whitelist_name))
 
-    visiter = WrongNestedVisitor()
+    visiter = NestedComplexityVisitor()
     visiter.visit(tree)
 
     assert_errors(visiter, [NestedClassViolation])
@@ -83,7 +83,7 @@ def test_ordinary_class(assert_errors, parse_ast_tree):
         def method(self): ...
     """)
 
-    visiter = WrongNestedVisitor()
+    visiter = NestedComplexityVisitor()
     visiter.visit(tree)
 
     assert_errors(visiter, [])
