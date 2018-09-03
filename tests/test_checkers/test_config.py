@@ -8,8 +8,9 @@ import pytest
 @pytest.mark.parametrize('filename, option_flag, option_value, error_code', [
     ('wrong_variables.py', '--max-local-variables', '100', b'Z150'),
     ('wrong_arguments.py', '--max-arguments', '100', b'Z151'),
-    ('wrong_returns.py', '--max-returns', '100', b'153'),
-    ('wrong_expressions.py', '--max-expressions', '100', b'154'),
+    ('wrong_returns.py', '--max-returns', '100', b'Z153'),
+    ('wrong_expressions.py', '--max-expressions', '100', b'Z154'),
+    ('wrong_variables.py', '--min-variable-length', '0', b'Z115'),
 ])
 def test_max_variables_cli_option(
     absolute_path,

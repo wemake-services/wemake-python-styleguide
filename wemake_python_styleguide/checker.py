@@ -81,8 +81,7 @@ class Checker(object):
         After all configuration is parsed and passed.
         """
         for visitor_class in ENABLED_VISITORS:
-            visiter = visitor_class()
-            visiter.provide_options(self.options)
+            visiter = visitor_class(self.options)
             visiter.visit(self.tree)
 
             for error in visiter.errors:

@@ -18,6 +18,9 @@ We follow Semantic Versions.
 - Refactored how errors are defined
 - Now each check has strict `Raises:` policy which lists all possible errors
   that this check can find and raise
+- Changed how visiters are initialized in tests
+- Tests now cover nested classes' explicit bases
+- Tests now cover nested classes and functions `noqa` comment
 
 
 ## Version 0.0.6

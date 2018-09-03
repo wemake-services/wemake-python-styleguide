@@ -24,13 +24,23 @@ class WrongRaiseVisitor(BaseNodeVisitor):
                 RaiseNotImplementedViolation(node, text=exception_name),
             )
 
+    def _check_bare_raise(self, node: ast.Raise) -> None:
+        parent = getattr(node, 'parent', None)
+        if not isinstance(parent, ast.ExceptHandler):
+            self.add_error(BareRiseViolation(node))
+
     def visit_Raise(self, node: ast.Raise) -> None:
-        """Checks how `raise` keyword is used."""
+        """
+        Checks how `raise` keyword is used.
+
+        Raises:
+            - RaiseNotImplementedViolation
+            - BareRiseViolation
+
+        """
         exception = getattr(node, 'exc', None)
         if not exception:
-            parent = getattr(node, 'parent', None)
-            if not isinstance(parent, ast.ExceptHandler):
-                self.add_error(BareRiseViolation(node))
+            self._check_bare_raise(node)
         else:
             self._check_exception_type(node, exception)
 
@@ -41,21 +51,45 @@ class WrongKeywordVisitor(BaseNodeVisitor):
     """This class is responsible for finding wrong keywords."""
 
     def visit_Global(self, node: ast.Global):
-        """Used to find `global` keyword."""
+        """
+        Used to find `global` keyword.
+
+        Raises:
+            - WrongKeywordViolation
+
+        """
         self.add_error(WrongKeywordViolation(node))
         self.generic_visit(node)
 
     def visit_Nonlocal(self, node: ast.Nonlocal):
-        """Used to find `nonlocal` keyword."""
+        """
+        Used to find `nonlocal` keyword.
+
+        Raises:
+            - WrongKeywordViolation
+
+        """
         self.add_error(WrongKeywordViolation(node))
         self.generic_visit(node)
 
     def visit_Delete(self, node: ast.Delete):
-        """Used to find `del` keyword."""
+        """
+        Used to find `del` keyword.
+
+        Raises:
+            - WrongKeywordViolation
+
+        """
         self.add_error(WrongKeywordViolation(node, text='del'))
         self.generic_visit(node)
 
     def visit_Pass(self, node: ast.Pass):
-        """Used to find `pass` keyword."""
+        """
+        Used to find `pass` keyword.
+
+        Raises:
+            - WrongKeywordViolation
+
+        """
         self.add_error(WrongKeywordViolation(node))
         self.generic_visit(node)

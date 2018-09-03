@@ -19,19 +19,12 @@ class BaseNodeVisitor(NodeVisitor):
 
     options: ConfigurationOptions
 
-    def __init__(self) -> None:
+    def __init__(self, options: ConfigurationOptions) -> None:
         """Creates new visitor instance."""
         super().__init__()
+        self.options = options
         self.errors: List[BaseStyleViolation] = []
 
     def add_error(self, error: BaseStyleViolation) -> None:
         """Adds error to the visitor."""
         self.errors.append(error)
-
-    def provide_options(self, options: ConfigurationOptions) -> None:
-        """
-        Provides options for checking.
-
-        It is done separately to make testing easy.
-        """
-        self.options = options

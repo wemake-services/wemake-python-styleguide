@@ -27,11 +27,11 @@ def check_nonlocal():
     global_in_function,
     nonlocal_in_function,
 ])
-def test_global_keywords(assert_errors, parse_ast_tree, code):
+def test_global_keywords(assert_errors, parse_ast_tree, code, default_options):
     """Testing that `global` and `nonlocal` keywords are restricted."""
     tree = parse_ast_tree(code)
 
-    visiter = WrongKeywordVisitor()
+    visiter = WrongKeywordVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [WrongKeywordViolation])

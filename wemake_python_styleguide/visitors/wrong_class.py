@@ -40,6 +40,9 @@ class WrongClassVisitor(BaseNodeVisitor):
         Used to find:
         1. Base class violations
 
+        Raises:
+            - RequiredBaseClassViolation
+
         """
         self._check_base_class(node)
         self.generic_visit(node)
@@ -51,6 +54,10 @@ class WrongClassVisitor(BaseNodeVisitor):
         Used to find:
         1. `@staticmethod` decorators
         2. Detect forbiden magic methods
+
+        Raises:
+            - StaticMethodViolation
+            - BadMagicMethodViolation
 
         """
         self._check_decorators(node)

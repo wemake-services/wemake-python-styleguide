@@ -34,7 +34,7 @@ def is_wrong_variable_name(name: str, to_check: Iterable[str]) -> bool:
 
 def is_too_short_variable_name(
     name: Optional[str],
-    min_length: int = 2,  # TODO: config
+    min_length: int = 2,
 ) -> bool:
     """
     Checks for too short variable names.

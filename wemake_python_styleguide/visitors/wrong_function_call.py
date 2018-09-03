@@ -16,7 +16,13 @@ class WrongFunctionCallVisitor(BaseNodeVisitor):
     """
 
     def visit_Call(self, node: ast.Call):
-        """Used to find `BAD_FUNCTIONS` calls."""
+        """
+        Used to find `BAD_FUNCTIONS` calls.
+
+        Raises:
+            - WrongFunctionCallViolation
+
+        """
         function_name = given_function_called(node, BAD_FUNCTIONS)
         if function_name:
             self.add_error(WrongFunctionCallViolation(

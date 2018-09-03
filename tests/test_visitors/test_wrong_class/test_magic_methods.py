@@ -15,11 +15,13 @@ class Example(object):
 
 
 @pytest.mark.parametrize('method', BAD_MAGIC_METHODS)
-def test_wrong_magic_used(assert_errors, parse_ast_tree, method):
+def test_wrong_magic_used(
+    assert_errors, parse_ast_tree, method, default_options,
+):
     """Testing that some magic methods are restricted."""
     tree = parse_ast_tree(magic_method.format(method))
 
-    visiter = WrongClassVisitor()
+    visiter = WrongClassVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [BadMagicMethodViolation])
@@ -31,11 +33,13 @@ def test_wrong_magic_used(assert_errors, parse_ast_tree, method):
     'next',
     'regular',
 ])
-def test_regular_method_used(assert_errors, parse_ast_tree, method):
+def test_regular_method_used(
+    assert_errors, parse_ast_tree, method, default_options,
+):
     """Testing that other methods are working fine."""
     tree = parse_ast_tree(magic_method.format(method))
 
-    visiter = WrongClassVisitor()
+    visiter = WrongClassVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [])

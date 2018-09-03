@@ -12,6 +12,7 @@ from wemake_python_styleguide.errors.complexity import (
 )
 from wemake_python_styleguide.logics.functions import is_method
 from wemake_python_styleguide.logics.limits import has_just_exceeded_limit
+from wemake_python_styleguide.types import ConfigurationOptions
 from wemake_python_styleguide.visitors.base.visitor import BaseNodeVisitor
 
 
@@ -26,9 +27,9 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
     4. Number of local variables
     """
 
-    def __init__(self) -> None:
+    def __init__(self, options: ConfigurationOptions) -> None:
         """Creates config parser instance and counters for tracked metrics."""
-        super().__init__()
+        super().__init__(options)
 
         self.expressions: DefaultDict[str, int] = defaultdict(int)
         self.variables: DefaultDict[str, List[str]] = defaultdict(list)
@@ -124,7 +125,16 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
                     self._update_expression(node)
 
     def visit_FunctionDef(self, node: ast.FunctionDef):
-        """Checks function's internal complexity."""
+        """
+        Checks function's internal complexity.
+
+        Raises:
+            - TooManyExpressionsViolation
+            - TooManyReturnsViolation
+            - TooManyLocalsViolation
+            - TooManyArgumentsViolation
+
+        """
         self._check_arguments_count(node)
         self._check_function_complexity(node)
         self.generic_visit(node)

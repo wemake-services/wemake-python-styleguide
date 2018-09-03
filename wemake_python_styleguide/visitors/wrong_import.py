@@ -56,14 +56,31 @@ class WrongImportVisitor(BaseNodeVisitor):
                 self.add_error(SameAliasImportViolation(node, text=alias.name))
 
     def visit_Import(self, node: ast.Import):
-        """Used to find wrong `import` statements."""
+        """
+        Used to find wrong `import` statements.
+
+        Raises:
+            - SameAliasImportViolation
+            - DottedRawImportViolation
+            - NestedImportViolation
+
+        """
         self._check_nested_import(node)
         self._check_dotted_raw_import(node)
         self._check_alias(node)
         self.generic_visit(node)
 
     def visit_ImportFrom(self, node: ast.ImportFrom):
-        """Used to find wrong `from import` statements."""
+        """
+        Used to find wrong `from import` statements.
+
+        Raises:
+            - SameAliasImportViolation
+            - NestedImportViolation
+            - LocalFolderImportViolation
+            - FutureImportViolation
+
+        """
         self._check_local_import(node)
         self._check_nested_import(node)
         self._check_future_import(node)

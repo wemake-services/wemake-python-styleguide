@@ -28,6 +28,10 @@ class NestedComplexityVisitor(BaseNodeVisitor):
         Used to find nested classes in other classes and functions.
 
         Uses ``NESTED_CLASSES_WHITELIST`` to respect some nested classes.
+
+        Raises:
+            - NestedClassViolation
+
         """
         parent = getattr(node, 'parent', None)
         is_inside_class = isinstance(parent, ast.ClassDef)
@@ -47,6 +51,10 @@ class NestedComplexityVisitor(BaseNodeVisitor):
         Respected usecases for nested functions:
         1. decorator
         2. factory function
+
+        Raises:
+            - NestedFunctionViolation
+
         """
         parent = getattr(node, 'parent', None)
         is_inside_function = isinstance(parent, ast.FunctionDef)
@@ -56,7 +64,13 @@ class NestedComplexityVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def visit_Lambda(self, node: ast.Lambda):
-        """Used to find nested ``lambda``s."""
+        """
+        Used to find nested ``lambda``s.
+
+        Raises:
+            - NestedFunctionViolation
+
+        """
         parent = getattr(node, 'parent', None)
         if isinstance(parent, ast.Lambda):
             self.add_error(NestedFunctionViolation(node))

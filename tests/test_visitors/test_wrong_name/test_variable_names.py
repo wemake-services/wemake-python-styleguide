@@ -52,12 +52,12 @@ except Exception as {0}:
     underscore_variable_test2,
 ])
 def test_wrong_variable_names(
-    assert_errors, parse_ast_tree, bad_name, code,
+    assert_errors, parse_ast_tree, bad_name, code, default_options,
 ):
     """Testing that variable can not have blacklisted names."""
     tree = parse_ast_tree(code.format(bad_name))
 
-    visiter = WrongNameVisitor()
+    visiter = WrongNameVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [WrongVariableNameViolation])
@@ -71,12 +71,31 @@ def test_wrong_variable_names(
     exception_test,
 ])
 def test_too_short_variable_names(
-    assert_errors, parse_ast_tree, short_name, code,
+    assert_errors, parse_ast_tree, short_name, code, default_options,
 ):
     """Testing that variable can not have too short names."""
     tree = parse_ast_tree(code.format(short_name))
 
-    visiter = WrongNameVisitor()
+    visiter = WrongNameVisitor(default_options)
+    visiter.visit(tree)
+
+    assert_errors(visiter, [TooShortVariableNameViolation])
+
+
+@pytest.mark.parametrize('code', [
+    variable_test,
+    for_variable_test,
+    with_variable_test,
+    exception_test,
+])
+def test_too_short_variable_names_configured(
+    assert_errors, parse_ast_tree, code, options,
+):
+    """Testing that variable length can be configured."""
+    tree = parse_ast_tree(code.format('some'))
+
+    option_values = options(min_variable_length=5)
+    visiter = WrongNameVisitor(option_values)
     visiter.visit(tree)
 
     assert_errors(visiter, [TooShortVariableNameViolation])
@@ -89,12 +108,12 @@ def test_too_short_variable_names(
     exception_test,
 ])
 def test_private_variable_names(
-    assert_errors, parse_ast_tree, code,
+    assert_errors, parse_ast_tree, code, default_options,
 ):
     """Testing that variable can not have private names."""
     tree = parse_ast_tree(code.format('__private_value'))
 
-    visiter = WrongNameVisitor()
+    visiter = WrongNameVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [PrivateNameViolation])
@@ -110,12 +129,12 @@ def test_private_variable_names(
     underscore_variable_test2,
 ])
 def test_correct_variable_name(
-    assert_errors, parse_ast_tree, code, correct_name,
+    assert_errors, parse_ast_tree, code, correct_name, default_options,
 ):
     """Testing that variable can have normal names."""
     tree = parse_ast_tree(code.format(correct_name))
 
-    visiter = WrongNameVisitor()
+    visiter = WrongNameVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [])

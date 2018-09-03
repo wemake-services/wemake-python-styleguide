@@ -26,5 +26,4 @@ def test_noqa_fixture(absolute_path):
     )
     stdout, _ = process.communicate()
 
-    print(stdout)
     assert stdout.count(b'Z') == 0

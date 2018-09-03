@@ -9,6 +9,8 @@ from .version import get_version  # noqa: Z100
 def some():
     from my_module import some_function  # noqa: Z101
 
+    def nested(): ...  # noqa: Z200
+
 
 del {'a': 1}['a'] # noqa: Z110
 raise  # noqa: Z111
@@ -25,3 +27,5 @@ class BadClass:  # noqa: Z302
     def some_static(): ...
 
     def __del__(self, *args, **kwargs): ...  # noqa: Z301
+
+    class Nested(object): ...  # noqa: Z201

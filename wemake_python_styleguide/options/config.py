@@ -30,12 +30,13 @@ class Configuration(object):
       in one function, defaults to ``MAX_EXPRESSIONS``
     - `max-arguments` - maximum allowed number of arguments in one function,
       defaults to ``MAX_ARGUMENTS``
+    - `min-variable-length` - minimum number of chars to define a valid
+      variable name, defaults to ``MIN_VARIABLE_LENGTH``
 
     """
 
     def register_options(self, parser) -> None:  # TODO: types
         """Registers options for our plugin."""
-        # TODO: add min_variable_length option
         parser.add_option(
             '--max-returns',
             parse_from_config=True,
@@ -66,4 +67,12 @@ class Configuration(object):
             type='int',
             default=defaults.MAX_ARGUMENTS,
             help='Maximum allowed number of arguments in one function.',
+        )
+
+        parser.add_option(
+            '--min-variable-length',
+            parse_from_config=True,
+            type='int',
+            default=defaults.MIN_VARIABLE_LENGTH,
+            help='Minimum required length of the variable name.',
         )

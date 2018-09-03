@@ -30,12 +30,12 @@ class Test:
     instance_attribute,
 ])
 def test_wrong_attributes_names(
-    assert_errors, parse_ast_tree, bad_name, code,
+    assert_errors, parse_ast_tree, bad_name, code, default_options,
 ):
     """Testing that attribute can not have blacklisted names."""
     tree = parse_ast_tree(code.format(bad_name))
 
-    visiter = WrongNameVisitor()
+    visiter = WrongNameVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [WrongVariableNameViolation])
@@ -47,12 +47,12 @@ def test_wrong_attributes_names(
     instance_attribute,
 ])
 def test_too_short_attribute_names(
-    assert_errors, parse_ast_tree, short_name, code,
+    assert_errors, parse_ast_tree, short_name, code, default_options,
 ):
     """Testing that attribute can not have too short names."""
     tree = parse_ast_tree(code.format(short_name))
 
-    visiter = WrongNameVisitor()
+    visiter = WrongNameVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [TooShortVariableNameViolation])
@@ -63,12 +63,12 @@ def test_too_short_attribute_names(
     instance_attribute,
 ])
 def test_private_attribute_names(
-    assert_errors, parse_ast_tree, code,
+    assert_errors, parse_ast_tree, code, default_options,
 ):
     """Testing that attribute can not have private names."""
     tree = parse_ast_tree(code.format('__private_name'))
 
-    visiter = WrongNameVisitor()
+    visiter = WrongNameVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [PrivateNameViolation])
@@ -86,12 +86,12 @@ def test_private_attribute_names(
     instance_attribute,
 ])
 def test_correct_attribute_name(
-    assert_errors, parse_ast_tree, code, correct_name,
+    assert_errors, parse_ast_tree, code, correct_name, default_options,
 ):
     """Testing that attribute can have normal names."""
     tree = parse_ast_tree(code.format(correct_name))
 
-    visiter = WrongNameVisitor()
+    visiter = WrongNameVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [])

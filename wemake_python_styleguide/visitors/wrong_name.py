@@ -33,7 +33,8 @@ class WrongNameVisitor(BaseNodeVisitor):
         if is_wrong_variable_name(arg, BAD_VARIABLE_NAMES):
             self.add_error(WrongVariableNameViolation(node, text=arg))
 
-        if is_too_short_variable_name(arg):
+        min_length = self.options.min_variable_length
+        if is_too_short_variable_name(arg, min_length=min_length):
             self.add_error(TooShortVariableNameViolation(node, text=arg))
 
         if is_private_variable(arg):
@@ -53,7 +54,15 @@ class WrongNameVisitor(BaseNodeVisitor):
             self._check_name(node, node.args.kwarg.arg)
 
     def visit_Attribute(self, node: ast.Attribute):
-        """Used to find wrong attribute names inside classes."""
+        """
+        Used to find wrong attribute names inside classes.
+
+        Raises:
+            - WrongVariableNameViolation
+            - TooShortVariableNameViolation
+            - PrivateNameViolation
+
+        """
         context = getattr(node, 'ctx', None)
 
         if isinstance(context, ast.Store):
@@ -62,20 +71,44 @@ class WrongNameVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def visit_FunctionDef(self, node: ast.FunctionDef):
-        """Used to find wrong function and method parameters."""
+        """
+        Used to find wrong function and method parameters.
+
+        Raises:
+            - WrongVariableNameViolation
+            - TooShortVariableNameViolation
+            - PrivateNameViolation
+
+        """
         name = getattr(node, 'name', None)
         self._check_name(node, name)
         self._check_function_signature(node)
         self.generic_visit(node)
 
     def visit_ExceptHandler(self, node: ast.ExceptHandler):
-        """Used to find wrong exception instances in `try/except`."""
+        """
+        Used to find wrong exception instances in ``try``/``except``.
+
+        Raises:
+            - WrongVariableNameViolation
+            - TooShortVariableNameViolation
+            - PrivateNameViolation
+
+        """
         name = getattr(node, 'name', None)
         self._check_name(node, name)
         self.generic_visit(node)
 
     def visit_Name(self, node: ast.Name):
-        """Used to find wrong regular variables."""
+        """
+        Used to find wrong regular variables.
+
+        Raises:
+            - WrongVariableNameViolation
+            - TooShortVariableNameViolation
+            - PrivateNameViolation
+
+        """
         context = getattr(node, 'ctx', None)
         if isinstance(context, ast.Store):
             self._check_name(node, node.id)
@@ -83,7 +116,15 @@ class WrongNameVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def visit_Import(self, node: AnyImport):
-        """Used to check wrong import alias names."""
+        """
+        Used to check wrong import alias names.
+
+        Raises:
+            - WrongVariableNameViolation
+            - TooShortVariableNameViolation
+            - PrivateNameViolation
+
+        """
         for alias in node.names:
             if alias.asname:
                 self._check_name(node, alias.asname)
@@ -96,8 +137,7 @@ class WrongNameVisitor(BaseNodeVisitor):
 class WrongModuleMetadataVisitor(BaseNodeVisitor):
     """This class finds wrong metadata information of a module."""
 
-    def visit_Assign(self, node: ast.Assign):
-        """Used to find the bad metadata variable names."""
+    def _check_metadata(self, node: ast.Assign):
         node_parent = getattr(node, 'parent', None)
         if not isinstance(node_parent, ast.Module):
             return
@@ -108,3 +148,14 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
                 self.add_error(
                     WrongModuleMetadataViolation(node, text=target_node_id),
                 )
+
+    def visit_Assign(self, node: ast.Assign):
+        """
+        Used to find the bad metadata variable names.
+
+        Raises:
+            - WrongModuleMetadataViolation
+
+        """
+        self._check_metadata(node)
+        self.generic_visit(node)
