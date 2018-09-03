@@ -62,11 +62,11 @@ from os import path
     nested_conditional_import,
     nested_try_import,
 ])
-def test_nested_import(assert_errors, parse_ast_tree, code):
+def test_nested_import(assert_errors, parse_ast_tree, code, default_options):
     """Testing that nested imports are restricted."""
     tree = parse_ast_tree(code)
 
-    visiter = WrongImportVisitor()
+    visiter = WrongImportVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [NestedImportViolation])
@@ -76,11 +76,11 @@ def test_nested_import(assert_errors, parse_ast_tree, code):
     regular_import,
     regular_from_import,
 ])
-def test_regular_imports(assert_errors, parse_ast_tree, code):
+def test_regular_imports(assert_errors, parse_ast_tree, code, default_options):
     """Testing that regular imports are allowed."""
     tree = parse_ast_tree(code)
 
-    visiter = WrongImportVisitor()
+    visiter = WrongImportVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [])

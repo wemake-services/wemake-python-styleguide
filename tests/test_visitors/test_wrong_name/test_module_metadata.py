@@ -28,12 +28,12 @@ if __name__ == '__main__':
     module_metadata,
 ])
 def test_wrong_metadata(
-    assert_errors, parse_ast_tree, bad_name, code,
+    assert_errors, parse_ast_tree, bad_name, code, default_options,
 ):
     """Testing that metadata can not have blacklisted names."""
     tree = parse_ast_tree(code.format(bad_name))
 
-    visiter = WrongModuleMetadataVisitor()
+    visiter = WrongModuleMetadataVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [WrongModuleMetadataViolation])
@@ -49,22 +49,24 @@ def test_wrong_metadata(
     nested_metadata,
 ])
 def test_correct_metadata(
-    assert_errors, parse_ast_tree, code, correct_name,
+    assert_errors, parse_ast_tree, code, correct_name, default_options,
 ):
     """Testing that metadata can have normal names."""
     tree = parse_ast_tree(code.format(correct_name))
 
-    visiter = WrongModuleMetadataVisitor()
+    visiter = WrongModuleMetadataVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [])
 
 
-def test_correct_startup_metadata(assert_errors, parse_ast_tree):
+def test_correct_startup_metadata(
+    assert_errors, parse_ast_tree, default_options,
+):
     """Testing that startup hook is allowed."""
     tree = parse_ast_tree(startup_metadata)
 
-    visiter = WrongModuleMetadataVisitor()
+    visiter = WrongModuleMetadataVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [])

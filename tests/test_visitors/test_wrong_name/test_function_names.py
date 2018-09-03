@@ -28,12 +28,12 @@ class Input:
     method_bad_name,
 ])
 def test_wrong_function_names(
-    assert_errors, parse_ast_tree, bad_name, code,
+    assert_errors, parse_ast_tree, bad_name, code, default_options,
 ):
     """Testing that function can not have blacklisted names."""
     tree = parse_ast_tree(code.format(bad_name))
 
-    visiter = WrongNameVisitor()
+    visiter = WrongNameVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [WrongVariableNameViolation])
@@ -45,12 +45,12 @@ def test_wrong_function_names(
     method_bad_name,
 ])
 def test_too_short_function_names(
-    assert_errors, parse_ast_tree, short_name, code,
+    assert_errors, parse_ast_tree, short_name, code, default_options,
 ):
     """Testing that function can not have too short names."""
     tree = parse_ast_tree(code.format(short_name))
 
-    visiter = WrongNameVisitor()
+    visiter = WrongNameVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [TooShortVariableNameViolation])
@@ -61,12 +61,12 @@ def test_too_short_function_names(
     method_bad_name,
 ])
 def test_private_function_names(
-    assert_errors, parse_ast_tree, code,
+    assert_errors, parse_ast_tree, code, default_options,
 ):
     """Testing that function can not have private names."""
     tree = parse_ast_tree(code.format('__hidden'))
 
-    visiter = WrongNameVisitor()
+    visiter = WrongNameVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [PrivateNameViolation])
@@ -84,12 +84,12 @@ def test_private_function_names(
     method_bad_name,
 ])
 def test_correct_function_names(
-    assert_errors, parse_ast_tree, correct_name, code,
+    assert_errors, parse_ast_tree, correct_name, code, default_options,
 ):
     """Testing that function can have normal names."""
     tree = parse_ast_tree(code.format(correct_name))
 
-    visiter = WrongNameVisitor()
+    visiter = WrongNameVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [])

@@ -14,8 +14,6 @@ These values can be changed in the `setup.cfg` file, if you find them
 too strict or too permissive.
 """
 
-# TODO: add min_variable_length value
-
 #: Maximum number of `return` statements allowed in a single function:
 MAX_RETURNS = 5
 
@@ -27,3 +25,6 @@ MAX_EXPRESSIONS = 9
 
 #: Maximum number of arguments for functions or method, `self` is not counted:
 MAX_ARGUMENTS = 5
+
+#: Minimum variable's name length:
+MIN_VARIABLE_LENGTH = 2

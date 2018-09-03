@@ -50,12 +50,12 @@ class Input:
     method_args_kwargs_test,
 ])
 def test_wrong_function_arguments(
-    assert_errors, parse_ast_tree, bad_name, code,
+    assert_errors, parse_ast_tree, bad_name, code, default_options,
 ):
     """Testing that function can not have blacklisted arguments."""
     tree = parse_ast_tree(code.format('x', bad_name))
 
-    visiter = WrongNameVisitor()
+    visiter = WrongNameVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [
@@ -74,12 +74,12 @@ def test_wrong_function_arguments(
     method_args_kwargs_test,
 ])
 def test_too_short_function_arguments(
-    assert_errors, parse_ast_tree, short_name, code,
+    assert_errors, parse_ast_tree, short_name, code, default_options,
 ):
     """Testing that function can not have too short arguments."""
     tree = parse_ast_tree(code.format(short_name, 'data'))
 
-    visiter = WrongNameVisitor()
+    visiter = WrongNameVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [
@@ -97,12 +97,12 @@ def test_too_short_function_arguments(
     method_args_kwargs_test,
 ])
 def test_private_function_arguments(
-    assert_errors, parse_ast_tree, code,
+    assert_errors, parse_ast_tree, code, default_options,
 ):
     """Testing that function can not have private arguments."""
     tree = parse_ast_tree(code.format('__private', '__name'))
 
-    visiter = WrongNameVisitor()
+    visiter = WrongNameVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [
@@ -119,11 +119,13 @@ def test_private_function_arguments(
     function_args_kwargs_test,
     method_args_kwargs_test,
 ])
-def test_correct_function_arguments(assert_errors, parse_ast_tree, code):
+def test_correct_function_arguments(
+    assert_errors, parse_ast_tree, code, default_options,
+):
     """Testing that function can have normal arguments."""
     tree = parse_ast_tree(code.format('xy', 'normal_name'))
 
-    visiter = WrongNameVisitor()
+    visiter = WrongNameVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [])

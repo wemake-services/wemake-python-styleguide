@@ -30,11 +30,11 @@ def container():
     nested_class_in_method,
     nested_class_in_function,
 ])
-def test_nested_class(assert_errors, parse_ast_tree, code):
+def test_nested_class(assert_errors, parse_ast_tree, code, default_options):
     """Testing that nested classes are restricted."""
     tree = parse_ast_tree(code.format('NestedClass'))
 
-    visiter = NestedComplexityVisitor()
+    visiter = NestedComplexityVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [NestedClassViolation])
@@ -45,12 +45,12 @@ def test_nested_class(assert_errors, parse_ast_tree, code):
     nested_class,
 ])
 def test_whitelist_nested_classes(
-    assert_errors, parse_ast_tree, whitelist_name, code,
+    assert_errors, parse_ast_tree, whitelist_name, code, default_options,
 ):
     """Testing that it is possible to nest whitelisted classes."""
     tree = parse_ast_tree(code.format(whitelist_name))
 
-    visiter = NestedComplexityVisitor()
+    visiter = NestedComplexityVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [])
@@ -65,25 +65,25 @@ def test_whitelist_nested_classes(
     nested_class_in_function,
 ])
 def test_whitelist_nested_classes_in_functions(
-    assert_errors, parse_ast_tree, whitelist_name, code,
+    assert_errors, parse_ast_tree, whitelist_name, code, default_options,
 ):
     """Testing that it is restricted to nest any classes in functions."""
     tree = parse_ast_tree(code.format(whitelist_name))
 
-    visiter = NestedComplexityVisitor()
+    visiter = NestedComplexityVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [NestedClassViolation])
 
 
-def test_ordinary_class(assert_errors, parse_ast_tree):
+def test_ordinary_class(assert_errors, parse_ast_tree, default_options):
     """Testing that it is possible to write basic classes."""
     tree = parse_ast_tree("""
     class Ordinary:
         def method(self): ...
     """)
 
-    visiter = NestedComplexityVisitor()
+    visiter = NestedComplexityVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [])

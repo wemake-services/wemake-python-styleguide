@@ -6,7 +6,7 @@ from wemake_python_styleguide.visitors.wrong_keyword import (
 )
 
 
-def test_del_keyword(assert_errors, parse_ast_tree):
+def test_del_keyword(assert_errors, parse_ast_tree, default_options):
     """Testing that `del` keyword is restricted."""
     tree = parse_ast_tree("""
     def check_del():
@@ -15,7 +15,7 @@ def test_del_keyword(assert_errors, parse_ast_tree):
         del s
     """)
 
-    visiter = WrongKeywordVisitor()
+    visiter = WrongKeywordVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [

@@ -46,8 +46,7 @@ def test_locals_correct_count(assert_errors, parse_ast_tree, options, code):
     option_values = options(max_local_variables=2)
     tree = parse_ast_tree(code)
 
-    visiter = FunctionComplexityVisitor()
-    visiter.provide_options(option_values)
+    visiter = FunctionComplexityVisitor(option_values)
     visiter.visit(tree)
 
     assert_errors(visiter, [])
@@ -68,8 +67,7 @@ def test_locals_wrong_count(assert_errors, parse_ast_tree, options, code):
     option_values = options(max_local_variables=1)
     tree = parse_ast_tree(code)
 
-    visiter = FunctionComplexityVisitor()
-    visiter.provide_options(option_values)
+    visiter = FunctionComplexityVisitor(option_values)
     visiter.visit(tree)
 
     assert_errors(visiter, [TooManyLocalsViolation])

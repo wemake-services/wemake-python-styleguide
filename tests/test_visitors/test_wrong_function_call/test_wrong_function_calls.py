@@ -29,24 +29,24 @@ def proxy(*args, **kwargs):
     nested_function_call,
 ])
 def test_wrong_function_called(
-    assert_errors, parse_ast_tree, bad_function, code,
+    assert_errors, parse_ast_tree, bad_function, code, default_options,
 ):
     """Testing that some built-in functions are restricted."""
     tree = parse_ast_tree(code.format(bad_function))
 
-    visiter = WrongFunctionCallVisitor()
+    visiter = WrongFunctionCallVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [WrongFunctionCallViolation])
 
 
-def test_wrong_decorator_used(assert_errors, parse_ast_tree):
+def test_wrong_decorator_used(assert_errors, parse_ast_tree, default_options):
     """Testing that some built-in functions are restricted as decorators."""
     tree = parse_ast_tree("""
     some_static = staticmethod(some_function)
     """)
 
-    visiter = WrongFunctionCallVisitor()
+    visiter = WrongFunctionCallVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [WrongFunctionCallViolation])
@@ -59,12 +59,12 @@ def test_wrong_decorator_used(assert_errors, parse_ast_tree):
     nested_function_call,
 ])
 def test_regular_function_called(
-    assert_errors, parse_ast_tree, good_function, code,
+    assert_errors, parse_ast_tree, good_function, code, default_options,
 ):
     """Testing that other functions are not restricted."""
     tree = parse_ast_tree(code.format(good_function))
 
-    visiter = WrongFunctionCallVisitor()
+    visiter = WrongFunctionCallVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [])

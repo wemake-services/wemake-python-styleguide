@@ -29,11 +29,11 @@ class Test:
     pass_class,
     pass_method,
 ])
-def test_pass_keyword(assert_errors, parse_ast_tree, code):
+def test_pass_keyword(assert_errors, parse_ast_tree, code, default_options):
     """Testing that pass keyword is restricted inside different definitions."""
     tree = parse_ast_tree(code)
 
-    visiter = WrongKeywordVisitor()
+    visiter = WrongKeywordVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [WrongKeywordViolation])

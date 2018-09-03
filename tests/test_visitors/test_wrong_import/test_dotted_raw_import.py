@@ -32,11 +32,13 @@ from {0} import some as alias
     'dotted.path'
     'nested.dotted.path',
 ])
-def test_wrong_dotted_import(assert_errors, parse_ast_tree, code, to_import):
+def test_wrong_dotted_import(
+    assert_errors, parse_ast_tree, code, to_import, default_options,
+):
     """Testing that dotted raw imports are restricted."""
     tree = parse_ast_tree(code.format(to_import))
 
-    visiter = WrongImportVisitor()
+    visiter = WrongImportVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [DottedRawImportViolation])
@@ -50,11 +52,13 @@ def test_wrong_dotted_import(assert_errors, parse_ast_tree, code, to_import):
     'os',
     'sys',
 ])
-def test_correct_flat_import(assert_errors, parse_ast_tree, code, to_import):
+def test_correct_flat_import(
+    assert_errors, parse_ast_tree, code, to_import, default_options,
+):
     """Testing that flat raw imports are allowed."""
     tree = parse_ast_tree(code.format(to_import))
 
-    visiter = WrongImportVisitor()
+    visiter = WrongImportVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [])
@@ -69,11 +73,13 @@ def test_correct_flat_import(assert_errors, parse_ast_tree, code, to_import):
     'dotted.path'
     'nested.dotted.path',
 ])
-def test_regular_from_import(assert_errors, parse_ast_tree, code, to_import):
+def test_regular_from_import(
+    assert_errors, parse_ast_tree, code, to_import, default_options,
+):
     """Testing that dotted `from` imports are allowed."""
     tree = parse_ast_tree(code.format(to_import))
 
-    visiter = WrongImportVisitor()
+    visiter = WrongImportVisitor(default_options)
     visiter.visit(tree)
 
     assert_errors(visiter, [])
