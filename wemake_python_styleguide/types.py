@@ -33,3 +33,4 @@ class ConfigurationOptions(Protocol):
     max_returns: int
     max_expressions: int
     min_variable_length: int
+    max_offset_blocks: int

@@ -60,9 +60,9 @@ class WrongImportVisitor(BaseNodeVisitor):
         Used to find wrong `import` statements.
 
         Raises:
-            - SameAliasImportViolation
-            - DottedRawImportViolation
-            - NestedImportViolation
+            SameAliasImportViolation
+            DottedRawImportViolation
+            NestedImportViolation
 
         """
         self._check_nested_import(node)
@@ -75,10 +75,10 @@ class WrongImportVisitor(BaseNodeVisitor):
         Used to find wrong `from import` statements.
 
         Raises:
-            - SameAliasImportViolation
-            - NestedImportViolation
-            - LocalFolderImportViolation
-            - FutureImportViolation
+            SameAliasImportViolation
+            NestedImportViolation
+            LocalFolderImportViolation
+            FutureImportViolation
 
         """
         self._check_local_import(node)

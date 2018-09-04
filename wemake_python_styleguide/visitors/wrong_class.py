@@ -41,7 +41,7 @@ class WrongClassVisitor(BaseNodeVisitor):
         1. Base class violations
 
         Raises:
-            - RequiredBaseClassViolation
+            RequiredBaseClassViolation
 
         """
         self._check_base_class(node)
@@ -56,8 +56,8 @@ class WrongClassVisitor(BaseNodeVisitor):
         2. Detect forbiden magic methods
 
         Raises:
-            - StaticMethodViolation
-            - BadMagicMethodViolation
+            StaticMethodViolation
+            BadMagicMethodViolation
 
         """
         self._check_decorators(node)

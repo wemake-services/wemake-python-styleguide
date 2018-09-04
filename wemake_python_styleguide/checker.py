@@ -13,6 +13,7 @@ from wemake_python_styleguide.visitors.complexity.function import (
 from wemake_python_styleguide.visitors.complexity.nested import (
     NestedComplexityVisitor,
 )
+from wemake_python_styleguide.visitors.complexity.offset import OffsetVisitor
 from wemake_python_styleguide.visitors.wrong_class import WrongClassVisitor
 from wemake_python_styleguide.visitors.wrong_function_call import (
     WrongFunctionCallVisitor,
@@ -41,6 +42,7 @@ ENABLED_VISITORS = (
     # Complexity:
     FunctionComplexityVisitor,
     NestedComplexityVisitor,
+    OffsetVisitor,
 )
 
 

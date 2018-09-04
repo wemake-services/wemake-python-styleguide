@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# TODO: implement TooDeepNestingViolation, TooManyBranchesViolation
 
 import ast
 from collections import defaultdict
@@ -38,7 +39,6 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
     def _check_arguments_count(self, node: ast.FunctionDef):
         counter = 0
         has_extra_self_or_cls = 0
-        max_arguments_count = self.options.max_arguments
         if is_method(getattr(node, 'function_type', None)):
             has_extra_self_or_cls = 1
 
@@ -51,7 +51,7 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
         if node.args.kwarg:
             counter += 1
 
-        if counter > max_arguments_count + has_extra_self_or_cls:
+        if counter > self.options.max_arguments + has_extra_self_or_cls:
             self.add_error(
                 TooManyArgumentsViolation(node, text=node.name),
             )
@@ -61,17 +61,16 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
         """
         Increases the counter of local variables.
 
-        What is treated as local variable?
+        What is treated as a local variable?
         Check ``TooManyLocalsViolation`` documentation.
         """
-        max_local_variables_count = self.options.max_local_variables
         function_variables = self.variables[function.name]
         if variable_name not in function_variables and variable_name != '_':
             function_variables.append(variable_name)
 
             limit_exceeded = has_just_exceeded_limit(
                 len(function_variables),
-                max_local_variables_count,
+                self.options.max_local_variables,
             )
             if limit_exceeded:
                 self.add_error(
@@ -80,11 +79,10 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
 
     # TODO: move this logics inside into another place:
     def _update_returns(self, function: ast.FunctionDef):
-        max_returns_count = self.options.max_returns
         self.returns[function.name] += 1
         limit_exceeded = has_just_exceeded_limit(
             self.returns[function.name],
-            max_returns_count,
+            self.options.max_returns,
         )
         if limit_exceeded:
             self.add_error(
@@ -93,11 +91,10 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
 
     # TODO: move this logics inside into another place:
     def _update_expression(self, function: ast.FunctionDef):
-        max_expressions_count = self.options.max_expressions
         self.expressions[function.name] += 1
         limit_exceeded = has_just_exceeded_limit(
             self.expressions[function.name],
-            max_expressions_count,
+            self.options.max_expressions,
         )
         if limit_exceeded:
             self.add_error(
@@ -129,10 +126,10 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
         Checks function's internal complexity.
 
         Raises:
-            - TooManyExpressionsViolation
-            - TooManyReturnsViolation
-            - TooManyLocalsViolation
-            - TooManyArgumentsViolation
+            TooManyExpressionsViolation
+            TooManyReturnsViolation
+            TooManyLocalsViolation
+            TooManyArgumentsViolation
 
         """
         self._check_arguments_count(node)

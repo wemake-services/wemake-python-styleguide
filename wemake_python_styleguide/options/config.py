@@ -32,6 +32,8 @@ class Configuration(object):
       defaults to ``MAX_ARGUMENTS``
     - `min-variable-length` - minimum number of chars to define a valid
       variable name, defaults to ``MIN_VARIABLE_LENGTH``
+    - `max_offset_blocks` - maximum number of block to nest expressions,
+      defaults to ``MAX_OFFSET_BLOCKS``
 
     """
 
@@ -75,4 +77,12 @@ class Configuration(object):
             type='int',
             default=defaults.MIN_VARIABLE_LENGTH,
             help='Minimum required length of the variable name.',
+        )
+
+        parser.add_option(
+            '--max-offset-blocks',
+            parse_from_config=True,
+            type='int',
+            default=defaults.MAX_OFFSET_BLOCKS,
+            help='Maximum number of blocks to nest different structures.',
         )

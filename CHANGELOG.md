@@ -1,6 +1,14 @@
 # Version history
 
-We follow Semantic Versions.
+We follow Semantic Versions since the `0.1.0` release.
+
+## Version 0.0.8 aka The Complex Complexity
+
+### Features
+
+- Adds direct dependencies, now there's no need to install any extra packages
+- Adds `TooDeepNesting` check
+- Adds `--max-offset-blocks` option
 
 
 ## Version 0.0.7

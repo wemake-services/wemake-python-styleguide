@@ -17,6 +17,7 @@ Options = namedtuple('options', [
     'max_local_variables',
     'max_returns',
     'min_variable_length',
+    'max_offset_blocks',
 ])
 
 
@@ -52,6 +53,7 @@ def options():
             'max_local_variables': defaults.MAX_LOCAL_VARIABLES,
             'max_returns': defaults.MAX_RETURNS,
             'min_variable_length': defaults.MIN_VARIABLE_LENGTH,
+            'max_offset_blocks': defaults.MAX_OFFSET_BLOCKS,
         }
 
         default_values.update(kwargs)

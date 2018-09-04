@@ -34,8 +34,8 @@ class WrongRaiseVisitor(BaseNodeVisitor):
         Checks how `raise` keyword is used.
 
         Raises:
-            - RaiseNotImplementedViolation
-            - BareRiseViolation
+            RaiseNotImplementedViolation
+            BareRiseViolation
 
         """
         exception = getattr(node, 'exc', None)
@@ -55,7 +55,7 @@ class WrongKeywordVisitor(BaseNodeVisitor):
         Used to find `global` keyword.
 
         Raises:
-            - WrongKeywordViolation
+            WrongKeywordViolation
 
         """
         self.add_error(WrongKeywordViolation(node))
@@ -66,7 +66,7 @@ class WrongKeywordVisitor(BaseNodeVisitor):
         Used to find `nonlocal` keyword.
 
         Raises:
-            - WrongKeywordViolation
+            WrongKeywordViolation
 
         """
         self.add_error(WrongKeywordViolation(node))
@@ -77,7 +77,7 @@ class WrongKeywordVisitor(BaseNodeVisitor):
         Used to find `del` keyword.
 
         Raises:
-            - WrongKeywordViolation
+            WrongKeywordViolation
 
         """
         self.add_error(WrongKeywordViolation(node, text='del'))
@@ -88,7 +88,7 @@ class WrongKeywordVisitor(BaseNodeVisitor):
         Used to find `pass` keyword.
 
         Raises:
-            - WrongKeywordViolation
+            WrongKeywordViolation
 
         """
         self.add_error(WrongKeywordViolation(node))

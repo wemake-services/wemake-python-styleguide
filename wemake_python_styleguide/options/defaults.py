@@ -28,3 +28,6 @@ MAX_ARGUMENTS = 5
 
 #: Minimum variable's name length:
 MIN_VARIABLE_LENGTH = 2
+
+#: Maximum number of blocks to nest different structures:
+MAX_OFFSET_BLOCKS = 5

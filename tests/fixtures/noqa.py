@@ -24,8 +24,11 @@ __author__ = 'Nikita Sobolev'  # noqa: Z117
 
 class BadClass:  # noqa: Z302
     @staticmethod  # noqa: Z300
-    def some_static(): ...
+    def some_static():
+        ...
 
-    def __del__(self, *args, **kwargs): ...  # noqa: Z301
+    def __del__(self, *args, **kwargs):  # noqa: Z301
+        ...
 
-    class Nested(object): ...  # noqa: Z201
+    class Nested:  # noqa: Z201,Z302
+        ...

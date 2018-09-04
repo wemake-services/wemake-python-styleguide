@@ -30,7 +30,7 @@ class NestedComplexityVisitor(BaseNodeVisitor):
         Uses ``NESTED_CLASSES_WHITELIST`` to respect some nested classes.
 
         Raises:
-            - NestedClassViolation
+            NestedClassViolation
 
         """
         parent = getattr(node, 'parent', None)
@@ -53,7 +53,7 @@ class NestedComplexityVisitor(BaseNodeVisitor):
         2. factory function
 
         Raises:
-            - NestedFunctionViolation
+            NestedFunctionViolation
 
         """
         parent = getattr(node, 'parent', None)
@@ -68,7 +68,7 @@ class NestedComplexityVisitor(BaseNodeVisitor):
         Used to find nested ``lambda``s.
 
         Raises:
-            - NestedFunctionViolation
+            NestedFunctionViolation
 
         """
         parent = getattr(node, 'parent', None)

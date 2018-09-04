@@ -58,9 +58,9 @@ class WrongNameVisitor(BaseNodeVisitor):
         Used to find wrong attribute names inside classes.
 
         Raises:
-            - WrongVariableNameViolation
-            - TooShortVariableNameViolation
-            - PrivateNameViolation
+            WrongVariableNameViolation
+            TooShortVariableNameViolation
+            PrivateNameViolation
 
         """
         context = getattr(node, 'ctx', None)
@@ -75,9 +75,9 @@ class WrongNameVisitor(BaseNodeVisitor):
         Used to find wrong function and method parameters.
 
         Raises:
-            - WrongVariableNameViolation
-            - TooShortVariableNameViolation
-            - PrivateNameViolation
+            WrongVariableNameViolation
+            TooShortVariableNameViolation
+            PrivateNameViolation
 
         """
         name = getattr(node, 'name', None)
@@ -90,9 +90,9 @@ class WrongNameVisitor(BaseNodeVisitor):
         Used to find wrong exception instances in ``try``/``except``.
 
         Raises:
-            - WrongVariableNameViolation
-            - TooShortVariableNameViolation
-            - PrivateNameViolation
+            WrongVariableNameViolation
+            TooShortVariableNameViolation
+            PrivateNameViolation
 
         """
         name = getattr(node, 'name', None)
@@ -104,9 +104,9 @@ class WrongNameVisitor(BaseNodeVisitor):
         Used to find wrong regular variables.
 
         Raises:
-            - WrongVariableNameViolation
-            - TooShortVariableNameViolation
-            - PrivateNameViolation
+            WrongVariableNameViolation
+            TooShortVariableNameViolation
+            PrivateNameViolation
 
         """
         context = getattr(node, 'ctx', None)
@@ -120,9 +120,9 @@ class WrongNameVisitor(BaseNodeVisitor):
         Used to check wrong import alias names.
 
         Raises:
-            - WrongVariableNameViolation
-            - TooShortVariableNameViolation
-            - PrivateNameViolation
+            WrongVariableNameViolation
+            TooShortVariableNameViolation
+            PrivateNameViolation
 
         """
         for alias in node.names:
@@ -154,7 +154,7 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
         Used to find the bad metadata variable names.
 
         Raises:
-            - WrongModuleMetadataViolation
+            WrongModuleMetadataViolation
 
         """
         self._check_metadata(node)

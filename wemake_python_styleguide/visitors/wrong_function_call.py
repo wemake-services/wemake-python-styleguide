@@ -20,7 +20,7 @@ class WrongFunctionCallVisitor(BaseNodeVisitor):
         Used to find `BAD_FUNCTIONS` calls.
 
         Raises:
-            - WrongFunctionCallViolation
+            WrongFunctionCallViolation
 
         """
         function_name = given_function_called(node, BAD_FUNCTIONS)
