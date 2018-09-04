@@ -54,7 +54,7 @@ flake8-debugger = "^3.1"
 pep8-naming = "^0.7"
 
 [tool.poetry.dev-dependencies]
-pytest-cov = "^2.5"
+pytest-cov = "^2.6"
 pytest-isort = "^0.2"
 pytest-flake8 = "^1.0"
 pytest-randomly = "^1.2"
