@@ -3,6 +3,8 @@
 from ast import Module
 from typing import Generator
 
+from flake8.options.manager import OptionManager
+
 from wemake_python_styleguide.compat import maybe_set_parent
 from wemake_python_styleguide.options.config import Configuration
 from wemake_python_styleguide.types import (
@@ -76,7 +78,7 @@ class Checker(object):
         self.filename = filename
 
     @classmethod
-    def add_options(cls, parser):  # TODO: types
+    def add_options(cls, parser: OptionManager):
         """Calls Configuration instance method for registering options."""
         cls.config.register_options(parser)
 

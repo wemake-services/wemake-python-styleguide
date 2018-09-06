@@ -2,8 +2,10 @@
 
 import ast
 
+from wemake_python_styleguide.types import AnyImport
 
-def get_error_text(node: ast.AST) -> str:
+
+def get_error_text(node: AnyImport) -> str:
     """Returns correct error text for import nodes."""
     module = getattr(node, 'module', None)
     if module is not None:

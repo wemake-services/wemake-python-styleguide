@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import ast
-
 from wemake_python_styleguide.errors.general import FormattedStringViolation
 from wemake_python_styleguide.visitors.base.visitor import BaseNodeVisitor
 
@@ -9,7 +7,7 @@ from wemake_python_styleguide.visitors.base.visitor import BaseNodeVisitor
 class WrongStringVisitor(BaseNodeVisitor):
     """Restricts to use `f` strings."""
 
-    def visit_JoinedStr(self, node: ast.JoinedStr):
+    def visit_JoinedStr(self, node):  # type is not defined in `ast` yet
         """
         Restricts to use `f` strings.
 

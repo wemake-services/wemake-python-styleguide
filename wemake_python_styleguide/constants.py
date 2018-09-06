@@ -10,6 +10,8 @@ It also contains some exceptions that we allow to use in our codebase.
 import sys
 from typing import Tuple
 
+# TODO: 'stdin' filename should be a constant
+
 #: List of functions we forbid to use.
 BAD_FUNCTIONS = frozenset((
     # Code generation:

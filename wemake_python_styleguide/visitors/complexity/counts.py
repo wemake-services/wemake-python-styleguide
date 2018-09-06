@@ -68,8 +68,7 @@ class MethodMembersVisitor(BaseNodeVisitor):
 
     def _check_method(self, node: ast.FunctionDef):
         parent = getattr(node, 'parent', None)
-        is_real_method = is_method(getattr(node, 'function_type', None))
-        if isinstance(parent, ast.ClassDef) and is_real_method:
+        if isinstance(parent, ast.ClassDef):
             self._methods[parent] += 1
             max_methods = self.options.max_methods
             if has_just_exceeded_limit(self._methods[parent], max_methods):

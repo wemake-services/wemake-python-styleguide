@@ -7,6 +7,8 @@ We follow Semantic Versions since the `0.1.0` release.
 
 ### Features
 
+- Now all dependencies are direct, they will be installed together
+  with this package
 - Adds direct dependencies, now there's no need to install any extra packages
 - Adds `TooDeepNestingViolation` and `TooManyElifsViolation` checks
 - Adds `--max-offset-blocks` and `--max-elifs` options
@@ -17,8 +19,12 @@ We follow Semantic Versions since the `0.1.0` release.
 ### Bugfixes
 
 - Removes incorrect `generic_visit()` calls
-- Removes some unused `getattr` calls
+- Removes some unused `getattr()` calls
 - Refactors how options are registered
+
+### Misc
+
+- Improved type support for options parsing
 
 
 ## Version 0.0.7

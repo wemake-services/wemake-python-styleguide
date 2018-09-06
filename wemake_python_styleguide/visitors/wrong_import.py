@@ -20,7 +20,7 @@ class _ImportsChecker(object):
     def __init__(self, delegate: 'WrongImportVisitor') -> None:
         self.delegate = delegate
 
-    def check_nested_import(self, node: ast.AST):
+    def check_nested_import(self, node: AnyImport):
         text = get_error_text(node)
         parent = getattr(node, 'parent', None)
         if not isinstance(parent, ast.Module):
