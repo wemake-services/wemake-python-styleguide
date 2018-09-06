@@ -9,11 +9,14 @@ General rule is: if there's a complex type, put it here.
 import ast
 from typing import TYPE_CHECKING, Sequence, Tuple, Type, Union
 
-from typing_extensions import Protocol
-
 if TYPE_CHECKING:  # pragma: no cover
+    from typing_extensions import Protocol  # noqa: Z101
+
     # This solves cycle imports problem:
     from .visitors.base import visitor  # noqa: Z100,Z101,F401
+else:
+    # We do not need to do anything if typechecker is not working:
+    Protocol = object
 
 #: Visitors container, that has all enable visitors' classes:
 VisitorSequence = Sequence[Type['visitor.BaseNodeVisitor']]

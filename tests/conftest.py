@@ -21,9 +21,18 @@ def _is_error_class(cls) -> bool:
 @pytest.fixture(scope='session')
 def all_errors():
     """Loads all errors from the package."""
-    return list(  # TODO: fix errors' checks
-        map(itemgetter(1), inspect.getmembers(errors, _is_error_class)),
-    )
+    modules = [
+        errors.imports,
+        errors.general,
+        errors.classes,
+        errors.complexity,
+    ]
+
+    classes = []
+    for module in modules:
+        classes.extend(inspect.getmembers(module, _is_error_class))
+
+    return list(map(itemgetter(1), classes))
 
 
 @pytest.fixture(scope='session')

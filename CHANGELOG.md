@@ -3,6 +3,22 @@
 We follow Semantic Versions since the `0.1.0` release.
 
 
+## Version 0.0.9
+
+This is just a supporting release.
+There are no new features introduced.
+
+### Bugfixes
+
+- Fixes `Attribute has no 'id'` error
+- Fixes `missing 'typing_extension'` error
+
+### Misc
+
+- Errors are now tested
+- Complexity tests are refactored
+
+
 ## Version 0.0.8 aka The Complex Complexity
 
 ### Features
