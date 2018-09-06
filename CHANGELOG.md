@@ -2,13 +2,29 @@
 
 We follow Semantic Versions since the `0.1.0` release.
 
+
 ## Version 0.0.8 aka The Complex Complexity
 
 ### Features
 
+- Now all dependencies are direct, they will be installed together
+  with this package
 - Adds direct dependencies, now there's no need to install any extra packages
-- Adds `TooDeepNesting` check
-- Adds `--max-offset-blocks` option
+- Adds `TooDeepNestingViolation` and `TooManyElifsViolation` checks
+- Adds `--max-offset-blocks` and `--max-elifs` options
+- Adds `TooManyModuleMembersViolation` and `TooManyMethodsViolation` checks
+- Adds `--max-module-members` and `--max-methods` options
+- Restricts to use `f` strings
+
+### Bugfixes
+
+- Removes incorrect `generic_visit()` calls
+- Removes some unused `getattr()` calls
+- Refactors how options are registered
+
+### Misc
+
+- Improved type support for options parsing
 
 
 ## Version 0.0.7

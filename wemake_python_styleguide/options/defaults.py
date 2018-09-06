@@ -31,3 +31,12 @@ MIN_VARIABLE_LENGTH = 2
 
 #: Maximum number of blocks to nest different structures:
 MAX_OFFSET_BLOCKS = 5
+
+#: Maximum number of `elif` blocks in a single `if` condition:
+MAX_ELIFS = 2
+
+#: Maximum number of classes and functions in a single module:
+MAX_MODULE_MEMBERS = 7
+
+#: Maximum number of methods in a single class:
+MAX_METHODS = 7

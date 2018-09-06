@@ -44,5 +44,8 @@ def is_method(function_type: Optional[str]) -> bool:
     >>> is_method('classmethod')
     True
 
+    >>> is_method('')
+    False
+
     """
     return function_type in ['method', 'classmethod']

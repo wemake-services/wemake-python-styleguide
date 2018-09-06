@@ -3,10 +3,20 @@
 from ast import Module
 from typing import Generator
 
+from flake8.options.manager import OptionManager
+
 from wemake_python_styleguide.compat import maybe_set_parent
 from wemake_python_styleguide.options.config import Configuration
-from wemake_python_styleguide.types import CheckResult, ConfigurationOptions
+from wemake_python_styleguide.types import (
+    CheckResult,
+    ConfigurationOptions,
+    VisitorSequence,
+)
 from wemake_python_styleguide.version import version
+from wemake_python_styleguide.visitors.complexity.counts import (
+    MethodMembersVisitor,
+    ModuleMembersVisitor,
+)
 from wemake_python_styleguide.visitors.complexity.function import (
     FunctionComplexityVisitor,
 )
@@ -29,7 +39,7 @@ from wemake_python_styleguide.visitors.wrong_name import (
 )
 
 #: Visitors that should be working by default:
-ENABLED_VISITORS = (
+ENABLED_VISITORS: VisitorSequence = [
     # Styling and correctness:
     WrongRaiseVisitor,
     WrongFunctionCallVisitor,
@@ -43,7 +53,9 @@ ENABLED_VISITORS = (
     FunctionComplexityVisitor,
     NestedComplexityVisitor,
     OffsetVisitor,
-)
+    ModuleMembersVisitor,
+    MethodMembersVisitor,
+]
 
 
 class Checker(object):
@@ -60,13 +72,13 @@ class Checker(object):
     config = Configuration()
     options: ConfigurationOptions
 
-    def __init__(self, tree: Module, filename: str = '-') -> None:
+    def __init__(self, tree: Module, filename: str = 'stdin') -> None:
         """Creates new checker instance."""
         self.tree = maybe_set_parent(tree)
         self.filename = filename
 
     @classmethod
-    def add_options(cls, parser):  # TODO: types
+    def add_options(cls, parser: OptionManager):
         """Calls Configuration instance method for registering options."""
         cls.config.register_options(parser)
 
@@ -83,7 +95,7 @@ class Checker(object):
         After all configuration is parsed and passed.
         """
         for visitor_class in ENABLED_VISITORS:
-            visiter = visitor_class(self.options)
+            visiter = visitor_class(self.options, filename=self.filename)
             visiter.visit(self.tree)
 
             for error in visiter.errors:

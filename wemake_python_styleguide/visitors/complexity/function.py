@@ -1,62 +1,32 @@
 # -*- coding: utf-8 -*-
-# TODO: implement TooDeepNestingViolation, TooManyBranchesViolation
 
 import ast
 from collections import defaultdict
-from typing import DefaultDict, List
+from typing import DefaultDict, List, Type
 
+from wemake_python_styleguide.errors.base import BaseStyleViolation
 from wemake_python_styleguide.errors.complexity import (
     TooManyArgumentsViolation,
+    TooManyElifsViolation,
     TooManyExpressionsViolation,
     TooManyLocalsViolation,
     TooManyReturnsViolation,
 )
 from wemake_python_styleguide.logics.functions import is_method
 from wemake_python_styleguide.logics.limits import has_just_exceeded_limit
-from wemake_python_styleguide.types import ConfigurationOptions
 from wemake_python_styleguide.visitors.base.visitor import BaseNodeVisitor
 
 
-class FunctionComplexityVisitor(BaseNodeVisitor):
-    """
-    This class checks for complexity inside functions.
+class _ComplexityCounter(object):
+    """Helper class to encapsulate logics from the visitor."""
 
-    This includes:
-    1. Number of arguments
-    2. Number of `return`s
-    3. Number of expressions
-    4. Number of local variables
-    """
-
-    def __init__(self, options: ConfigurationOptions) -> None:
-        """Creates config parser instance and counters for tracked metrics."""
-        super().__init__(options)
+    def __init__(self, delegate: 'FunctionComplexityVisitor') -> None:
+        self.delegate = delegate
 
         self.expressions: DefaultDict[str, int] = defaultdict(int)
         self.variables: DefaultDict[str, List[str]] = defaultdict(list)
         self.returns: DefaultDict[str, int] = defaultdict(int)
 
-    def _check_arguments_count(self, node: ast.FunctionDef):
-        counter = 0
-        has_extra_self_or_cls = 0
-        if is_method(getattr(node, 'function_type', None)):
-            has_extra_self_or_cls = 1
-
-        counter += len(node.args.args)
-        counter += len(node.args.kwonlyargs)
-
-        if node.args.vararg:
-            counter += 1
-
-        if node.args.kwarg:
-            counter += 1
-
-        if counter > self.options.max_arguments + has_extra_self_or_cls:
-            self.add_error(
-                TooManyArgumentsViolation(node, text=node.name),
-            )
-
-    # TODO: move this logics inside into another place:
     def _update_variables(self, function: ast.FunctionDef, variable_name: str):
         """
         Increases the counter of local variables.
@@ -70,38 +40,78 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
 
             limit_exceeded = has_just_exceeded_limit(
                 len(function_variables),
-                self.options.max_local_variables,
+                self.delegate.options.max_local_variables,
             )
             if limit_exceeded:
-                self.add_error(
+                self.delegate.add_error(
                     TooManyLocalsViolation(function, text=function.name),
                 )
 
-    # TODO: move this logics inside into another place:
-    def _update_returns(self, function: ast.FunctionDef):
-        self.returns[function.name] += 1
+    def _update_counter(
+        self,
+        function: ast.FunctionDef,
+        counter: DefaultDict[str, int],
+        max_value: int,
+        exception: Type[BaseStyleViolation],
+    ):
+        counter[function.name] += 1
         limit_exceeded = has_just_exceeded_limit(
-            self.returns[function.name],
-            self.options.max_returns,
+            counter[function.name], max_value,
         )
         if limit_exceeded:
-            self.add_error(
-                TooManyReturnsViolation(function, text=function.name),
+            self.delegate.add_error(exception(function, text=function.name))
+
+    def _update_elifs(self, node: ast.If, count: int = 0):
+        if node.orelse and isinstance(node.orelse[0], ast.If):
+            self._update_elifs(node.orelse[0], count=count + 1)
+        else:
+            if count > self.delegate.options.max_elifs:
+                self.delegate.add_error(TooManyElifsViolation(node))
+
+    def _check_sub_node(self, node: ast.FunctionDef, sub_node):
+        is_variable = isinstance(sub_node, ast.Name)
+        context = getattr(sub_node, 'ctx', None)
+
+        if is_variable and isinstance(context, ast.Store):
+            self._update_variables(node, getattr(sub_node, 'id'))
+        if isinstance(sub_node, ast.Return):
+            self._update_counter(
+                node,
+                self.returns,
+                self.delegate.options.max_returns,
+                TooManyReturnsViolation,
+            )
+        if isinstance(sub_node, ast.Expr):
+            self._update_counter(
+                node,
+                self.expressions,
+                self.delegate.options.max_expressions,
+                TooManyExpressionsViolation,
+            )
+        if isinstance(sub_node, ast.If):
+            self._update_elifs(sub_node)
+
+    def check_arguments_count(self, node: ast.FunctionDef):
+        """Checks the number of the arguments in a function."""
+        counter = 0
+        has_extra_arg = 0
+        if is_method(getattr(node, 'function_type', None)):
+            has_extra_arg = 1
+
+        counter += len(node.args.args) + len(node.args.kwonlyargs)
+
+        if node.args.vararg:
+            counter += 1
+
+        if node.args.kwarg:
+            counter += 1
+
+        if counter > self.delegate.options.max_arguments + has_extra_arg:
+            self.delegate.add_error(
+                TooManyArgumentsViolation(node, text=node.name),
             )
 
-    # TODO: move this logics inside into another place:
-    def _update_expression(self, function: ast.FunctionDef):
-        self.expressions[function.name] += 1
-        limit_exceeded = has_just_exceeded_limit(
-            self.expressions[function.name],
-            self.options.max_expressions,
-        )
-        if limit_exceeded:
-            self.add_error(
-                TooManyExpressionsViolation(function, text=function.name),
-            )
-
-    def _check_function_complexity(self, node: ast.FunctionDef):
+    def check_function_complexity(self, node: ast.FunctionDef):
         """
         In this function we iterate all the internal body's node.
 
@@ -109,17 +119,27 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
         """
         for body_item in node.body:
             for sub_node in ast.walk(body_item):
-                is_variable = isinstance(sub_node, ast.Name)
-                context = getattr(sub_node, 'ctx', None)
+                self._check_sub_node(node, sub_node)
 
-                if is_variable and isinstance(context, ast.Store):
-                    self._update_variables(node, getattr(sub_node, 'id'))
 
-                if isinstance(sub_node, ast.Return):
-                    self._update_returns(node)
+class FunctionComplexityVisitor(BaseNodeVisitor):
+    """
+    This class checks for complexity inside functions.
 
-                if isinstance(sub_node, ast.Expr):
-                    self._update_expression(node)
+    This includes:
+
+    1. Number of arguments
+    2. Number of `return`s
+    3. Number of expressions
+    4. Number of local variables
+    5. Number of `elif`s
+
+    """
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Creates a counter for tracked metrics."""
+        super().__init__(*args, **kwargs)
+        self._counter = _ComplexityCounter(self)
 
     def visit_FunctionDef(self, node: ast.FunctionDef):
         """
@@ -130,8 +150,9 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
             TooManyReturnsViolation
             TooManyLocalsViolation
             TooManyArgumentsViolation
+            TooManyElifsViolation
 
         """
-        self._check_arguments_count(node)
-        self._check_function_complexity(node)
+        self._counter.check_arguments_count(node)
+        self._counter.check_function_complexity(node)
         self.generic_visit(node)
