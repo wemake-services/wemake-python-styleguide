@@ -681,7 +681,7 @@ name = "sphinx"
 optional = false
 platform = "any"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "1.7.8"
+version = "1.7.9"
 
 [package.dependencies]
 Jinja2 = ">=2.3"
@@ -862,7 +862,7 @@ requests = ["63b52e3c866428a224f97cab011de738c36aec0185aa91cfacd418b5d58911d1", 
 restructuredtext-lint = ["c48ca9a84c312b262809f041fe47dcfaedc9ee4879b3e1f9532f745c182b4037"]
 six = ["70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9", "832dc0e10feb1aa2c68dcc57dbb658f1c7e65b9b61af69048abc87a2db00a0eb"]
 snowballstemmer = ["919f26a68b2c17a7634da993d91339e288964f93c274f1343e3bbbe2096e1128", "9f3bcd3c401c3e862ec0ebe6d2c069ebc012ce142cce209c098ccb5b09136e89"]
-sphinx = ["a07050845cc9a2f4026a6035cc8ed795a5ce7be6528bbc82032385c10807dfe7", "d719de667218d763e8fd144b7fcfeefd8d434a6201f76bf9f0f0c1fa6f47fcdb"]
+sphinx = ["217a7705adcb573da5bbe1e0f5cab4fa0bd89fd9342c9159121746f593c2d5a4", "a602513f385f1d5785ff1ca420d9c7eb1a1b63381733b2f0ea8188a391314a86"]
 sphinx-autodoc-typehints = ["1a9df6cb3ba72453ea4bfbe96ea887abc0d796b2ce9508c2189217a1bb69b366", "46cc9e985ee6d8bbbd07fffd95b815c39a72df6afb600f59671f85f7340e7d0d"]
 sphinx-readable-theme = ["f5fe65a2e112cb956b366df41e0fc894ff6b6f0e4a4814fcbff692566db47fc0"]
 sphinxcontrib-napoleon = ["614b779888629f14dfdfad6c17bffbb6d3813a0a0917a9541651d85384d4d6bd", "cbb31953b15d2102c18f16f02591f92e2614a08ef0218c9e514e2dc4c4f9daf9"]
