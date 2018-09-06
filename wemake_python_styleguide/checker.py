@@ -5,8 +5,15 @@ from typing import Generator
 
 from wemake_python_styleguide.compat import maybe_set_parent
 from wemake_python_styleguide.options.config import Configuration
-from wemake_python_styleguide.types import CheckResult, ConfigurationOptions
+from wemake_python_styleguide.types import (
+    CheckResult,
+    ConfigurationOptions,
+    VisitorSequence,
+)
 from wemake_python_styleguide.version import version
+from wemake_python_styleguide.visitors.complexity.counts import (
+    ModuleMembersVisitor,
+)
 from wemake_python_styleguide.visitors.complexity.function import (
     FunctionComplexityVisitor,
 )
@@ -29,7 +36,7 @@ from wemake_python_styleguide.visitors.wrong_name import (
 )
 
 #: Visitors that should be working by default:
-ENABLED_VISITORS = (
+ENABLED_VISITORS: VisitorSequence = [
     # Styling and correctness:
     WrongRaiseVisitor,
     WrongFunctionCallVisitor,
@@ -43,7 +50,8 @@ ENABLED_VISITORS = (
     FunctionComplexityVisitor,
     NestedComplexityVisitor,
     OffsetVisitor,
-)
+    ModuleMembersVisitor,
+]
 
 
 class Checker(object):
@@ -60,7 +68,7 @@ class Checker(object):
     config = Configuration()
     options: ConfigurationOptions
 
-    def __init__(self, tree: Module, filename: str = '-') -> None:
+    def __init__(self, tree: Module, filename: str = 'stdin') -> None:
         """Creates new checker instance."""
         self.tree = maybe_set_parent(tree)
         self.filename = filename
@@ -83,7 +91,7 @@ class Checker(object):
         After all configuration is parsed and passed.
         """
         for visitor_class in ENABLED_VISITORS:
-            visiter = visitor_class(self.options)
+            visiter = visitor_class(self.options, filename=self.filename)
             visiter.visit(self.tree)
 
             for error in visiter.errors:

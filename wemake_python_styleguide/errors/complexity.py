@@ -118,19 +118,21 @@ class TooManyArgumentsViolation(BaseStyleViolation):
     _code = 'Z203'
 
 
-class TooManyBranchesViolation(BaseStyleViolation):
+class TooManyElifsViolation(BaseStyleViolation):
     """
-    This rule forbids to have to many branches in a function.
+    This rule forbids to use many `elif` branches.
 
-    When there are too many branches, functions are hard to test.
-    They are also hard to read and hard to change and read.
+    This rule is specifically important, becase many `elif` branches indicate
+    a complex flow in your design: you are reimplementing `switch` in python.
+
+    There are different design patters to use instead.
 
     Note:
         Returns Z204 as error code
 
     """
 
-    _error_tmpl = '{0} Found too many branches "{1}"'
+    _error_tmpl = '{0} Found too many "{1}" branches'
     _code = 'Z204'
 
 
@@ -183,3 +185,25 @@ class TooDeepNestingViolation(BaseStyleViolation):
 
     _error_tmpl = '{0} Found too deep nesting "{1}"'
     _code = 'Z207'
+
+
+class TooManyModuleMembersViolation(BaseStyleViolation):
+    """
+    This rule forbids to have many classes and functions in a single module.
+
+    Having many classes and functions in a single module is a bad thing.
+    Because soon it will be hard to read this code and understand it.
+
+    It is better to split this module into several modules or a package.
+
+    We do not make any differences between classes and functions in this check.
+    They are treated as the same unit of logic.
+    However, methods are counted separatelly on a per-class basis.
+
+    Note:
+        Returns Z208 as error code
+
+    """
+
+    _error_tmpl = '{0} Found too many members "{1}"'
+    _code = 'Z208'

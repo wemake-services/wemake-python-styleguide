@@ -69,6 +69,9 @@ _BAD_VARIABLE_NAMES: Tuple[str, ...] = (
     'handler',
     'file',
     'klass',
+    'foo',
+    'bar',
+    'baz',
 )
 
 if sys.version_info < (3, 7):  # pragma: no cover
@@ -83,9 +86,10 @@ BAD_VARIABLE_NAMES = frozenset(_BAD_VARIABLE_NAMES)
 
 #: List of magic methods that are forbiden to use.
 BAD_MAGIC_METHODS = frozenset((
-    '__del__',  # since we don't use `del`
-    '__delitem__',  # since we don't use `del`
-    '__delete__',  # since we don't use `del`
+    # Since we don't use `del`:
+    '__del__',
+    '__delitem__',
+    '__delete__',
 
     '__dir__',  # since we don't use `dir()`
     '__delattr__',  # since we don't use `delattr()`

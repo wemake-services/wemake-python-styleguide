@@ -4,6 +4,7 @@
 These rules checks some general rules.
 
 Like:
+
 1. Naming
 2. Using some builtins
 3. Using keywords

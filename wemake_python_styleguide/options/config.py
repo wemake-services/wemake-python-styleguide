@@ -34,9 +34,11 @@ class Configuration(object):
       variable name, defaults to ``MIN_VARIABLE_LENGTH``
     - `max_offset_blocks` - maximum number of block to nest expressions,
       defaults to ``MAX_OFFSET_BLOCKS``
+    - `max_elifs` - maximum number of `elif` blocks, defaults to ``MAX_ELIFS``
 
     """
 
+    # TODO: this function should be refactored some-how:
     def register_options(self, parser) -> None:  # TODO: types
         """Registers options for our plugin."""
         parser.add_option(
@@ -85,4 +87,20 @@ class Configuration(object):
             type='int',
             default=defaults.MAX_OFFSET_BLOCKS,
             help='Maximum number of blocks to nest different structures.',
+        )
+
+        parser.add_option(
+            '--max_elifs',
+            parse_from_config=True,
+            type='int',
+            default=defaults.MAX_ELIFS,
+            help='Maximum number of `elif` blocks.',
+        )
+
+        parser.add_option(
+            '--max_module_members',
+            parse_from_config=True,
+            type='int',
+            default=defaults.MAX_MODULE_MEMBERS,
+            help='Maximum number of classes and functions in a single module.',
         )

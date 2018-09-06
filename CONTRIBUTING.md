@@ -28,6 +28,9 @@ To activate your `virtualenv` run `poetry shell`.
 ## Tests
 
 We use `pytest` and `flake8` for quality control.
+We also use `wemake_python_styleguide` itself
+to develop `wemake_python_styleguide`.
+
 To run all tests:
 
 ```bash

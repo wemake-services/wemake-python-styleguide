@@ -2,13 +2,20 @@
 
 We follow Semantic Versions since the `0.1.0` release.
 
+
 ## Version 0.0.8 aka The Complex Complexity
 
 ### Features
 
 - Adds direct dependencies, now there's no need to install any extra packages
-- Adds `TooDeepNesting` check
-- Adds `--max-offset-blocks` option
+- Adds `TooDeepNestingViolation` and `TooManyElifsViolation` checks
+- Adds `--max-offset-blocks` and `--max-elifs` options
+- Adds `TooManyModuleMembersViolation` and `TooManyMethodsViolation` checks
+- Adds `--max-module-members` and `--max-methods` options
+
+### Bugfixes
+
+- Removes incorrect `generic_visit()` calls
 
 
 ## Version 0.0.7

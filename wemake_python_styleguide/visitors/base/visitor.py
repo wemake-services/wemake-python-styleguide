@@ -13,16 +13,18 @@ class BaseNodeVisitor(NodeVisitor):
 
     Attributes:
         options: contains the options objects passed and parsed by `flake8`.
+        filename: filename passed by `flake8`.
         errors: list of errors for the specific checker.
 
     """
 
-    options: ConfigurationOptions
-
-    def __init__(self, options: ConfigurationOptions) -> None:
+    def __init__(
+        self, options: ConfigurationOptions, filename: str = 'stdin',
+    ) -> None:
         """Creates new visitor instance."""
         super().__init__()
         self.options = options
+        self.filename = filename
         self.errors: List[BaseStyleViolation] = []
 
     def add_error(self, error: BaseStyleViolation) -> None:
