@@ -35,11 +35,16 @@ class Configuration(object):
     - `max_offset_blocks` - maximum number of block to nest expressions,
       defaults to ``MAX_OFFSET_BLOCKS``
     - `max_elifs` - maximum number of `elif` blocks, defaults to ``MAX_ELIFS``
+    - `max_module_members` - maximum number of classes and functions
+      in a single module, defaults to ``MAX_MODULE_MEMBERS``
+    - `max_methods` - maximum number of methods in a single class,
+      defaults to ``MAX_METHODS``
 
     """
 
     # TODO: this function should be refactored some-how:
-    def register_options(self, parser) -> None:  # TODO: types
+    # TODO: add types
+    def register_options(self, parser) -> None:
         """Registers options for our plugin."""
         parser.add_option(
             '--max-returns',
@@ -103,4 +108,12 @@ class Configuration(object):
             type='int',
             default=defaults.MAX_MODULE_MEMBERS,
             help='Maximum number of classes and functions in a single module.',
+        )
+
+        parser.add_option(
+            '--max_methods',
+            parse_from_config=True,
+            type='int',
+            default=defaults.MAX_METHODS,
+            help='Maximum number of methods in a single class.',
         )

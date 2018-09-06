@@ -29,7 +29,7 @@ class Second(object):
 def test_module_counts_normal(
     assert_errors, parse_ast_tree, code, default_options,
 ):
-    """Testing that classes and functions in a module works well."""
+    """Testing that classes and functions in a module work well."""
     tree = parse_ast_tree(code)
 
     visiter = ModuleMembersVisitor(default_options)

@@ -46,3 +46,4 @@ class ConfigurationOptions(Protocol):
     max_offset_blocks: int
     max_elifs: int
     max_module_members: int
+    max_methods: int

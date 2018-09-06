@@ -2,8 +2,9 @@
 
 import ast
 from collections import defaultdict
-from typing import DefaultDict, List
+from typing import DefaultDict, List, Type
 
+from wemake_python_styleguide.errors.base import BaseStyleViolation
 from wemake_python_styleguide.errors.complexity import (
     TooManyArgumentsViolation,
     TooManyElifsViolation,
@@ -46,27 +47,19 @@ class _ComplexityCounter(object):
                     TooManyLocalsViolation(function, text=function.name),
                 )
 
-    def _update_returns(self, function: ast.FunctionDef):
-        self.returns[function.name] += 1
+    def _update_counter(
+        self,
+        function: ast.FunctionDef,
+        counter: DefaultDict[str, int],
+        max_value: int,
+        exception: Type[BaseStyleViolation],
+    ):
+        counter[function.name] += 1
         limit_exceeded = has_just_exceeded_limit(
-            self.returns[function.name],
-            self.delegate.options.max_returns,
+            counter[function.name], max_value,
         )
         if limit_exceeded:
-            self.delegate.add_error(
-                TooManyReturnsViolation(function, text=function.name),
-            )
-
-    def _update_expression(self, function: ast.FunctionDef):
-        self.expressions[function.name] += 1
-        limit_exceeded = has_just_exceeded_limit(
-            self.expressions[function.name],
-            self.delegate.options.max_expressions,
-        )
-        if limit_exceeded:
-            self.delegate.add_error(
-                TooManyExpressionsViolation(function, text=function.name),
-            )
+            self.delegate.add_error(exception(function, text=function.name))
 
     def _update_elifs(self, node: ast.If, count: int = 0):
         if node.orelse and isinstance(node.orelse[0], ast.If):
@@ -82,9 +75,19 @@ class _ComplexityCounter(object):
         if is_variable and isinstance(context, ast.Store):
             self._update_variables(node, getattr(sub_node, 'id'))
         if isinstance(sub_node, ast.Return):
-            self._update_returns(node)
+            self._update_counter(
+                node,
+                self.returns,
+                self.delegate.options.max_returns,
+                TooManyReturnsViolation,
+            )
         if isinstance(sub_node, ast.Expr):
-            self._update_expression(node)
+            self._update_counter(
+                node,
+                self.expressions,
+                self.delegate.options.max_expressions,
+                TooManyExpressionsViolation,
+            )
         if isinstance(sub_node, ast.If):
             self._update_elifs(sub_node)
 

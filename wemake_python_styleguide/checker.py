@@ -12,6 +12,7 @@ from wemake_python_styleguide.types import (
 )
 from wemake_python_styleguide.version import version
 from wemake_python_styleguide.visitors.complexity.counts import (
+    MethodMembersVisitor,
     ModuleMembersVisitor,
 )
 from wemake_python_styleguide.visitors.complexity.function import (
@@ -51,6 +52,7 @@ ENABLED_VISITORS: VisitorSequence = [
     NestedComplexityVisitor,
     OffsetVisitor,
     ModuleMembersVisitor,
+    MethodMembersVisitor,
 ]
 
 

@@ -188,3 +188,24 @@ class WrongModuleMetadataViolation(BaseStyleViolation):
 
     _error_tmpl = '{0} Found wrong metadata variable {1}'
     _code = 'Z117'
+
+
+class FormattedStringViolation(BaseStyleViolation):
+    """
+    This rule forbids to use `f` strings.
+
+    Example::
+
+        # Wrong:
+        f'Result is: {2 + 2}'
+
+        # Correct:
+        'Result is: {0}'.format(2 + 2)
+
+    Note:
+        Returns Z118 as error code
+
+    """
+
+    _error_tmpl = '{0} Found `f` string {1}'
+    _code = 'Z118'

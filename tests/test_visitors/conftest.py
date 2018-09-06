@@ -46,6 +46,7 @@ def options():
         'max_offset_blocks': defaults.MAX_OFFSET_BLOCKS,
         'max_elifs': defaults.MAX_ELIFS,
         'max_module_members': defaults.MAX_MODULE_MEMBERS,
+        'max_methods': defaults.MAX_METHODS,
     }
 
     Options = namedtuple('options', default_values.keys())

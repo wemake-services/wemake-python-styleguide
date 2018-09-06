@@ -37,3 +37,6 @@ MAX_ELIFS = 2
 
 #: Maximum number of classes and functions in a single module:
 MAX_MODULE_MEMBERS = 7
+
+#: Maximum number of methods in a single class:
+MAX_METHODS = 7

@@ -12,10 +12,13 @@ We follow Semantic Versions since the `0.1.0` release.
 - Adds `--max-offset-blocks` and `--max-elifs` options
 - Adds `TooManyModuleMembersViolation` and `TooManyMethodsViolation` checks
 - Adds `--max-module-members` and `--max-methods` options
+- Restricts to use `f` strings
 
 ### Bugfixes
 
 - Removes incorrect `generic_visit()` calls
+- Removes some unused `getattr` calls
+- Refactors how options are registered
 
 
 ## Version 0.0.7

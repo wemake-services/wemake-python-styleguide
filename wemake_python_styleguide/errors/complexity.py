@@ -198,6 +198,7 @@ class TooManyModuleMembersViolation(BaseStyleViolation):
 
     We do not make any differences between classes and functions in this check.
     They are treated as the same unit of logic.
+    We also do no care about functions and classes been public or not.
     However, methods are counted separatelly on a per-class basis.
 
     Note:
@@ -207,3 +208,28 @@ class TooManyModuleMembersViolation(BaseStyleViolation):
 
     _error_tmpl = '{0} Found too many members "{1}"'
     _code = 'Z208'
+
+
+class TooManyMethodsViolation(BaseStyleViolation):
+    """
+    This rule forbids to have many methods in a single class.
+
+    We do not make any difference between instance and class methods.
+    We also do no care about functions and classes been public or not.
+
+    What to do if you have too many methods in a single class?
+    Split this class in several classes.
+    Then use composition or inheritance to refactor your code.
+
+    This will protect you from "God object" anti-pattern.
+    See: https://en.wikipedia.org/wiki/God_object
+
+    This rule do not count attributes of a class.
+
+    Note:
+        Returns Z209 as error code
+
+    """
+
+    _error_tmpl = '{0} Found too many methods "{1}"'
+    _code = 'Z209'
