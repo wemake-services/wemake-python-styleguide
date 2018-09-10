@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Constants with default values for configuration.
+Constants with default values for plugin's configuration.
 
 We try to stick to "the magical 7 ± 2 number".
 https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two
@@ -10,8 +10,8 @@ What does it mean? It means that we choose these values based on our mind
 capacity. And it is really hard to keep in mind more that 9 objects
 at the same time.
 
-These values can be changed in the `setup.cfg` file, if you find them
-too strict or too permissive.
+These values can be changed in the `setup.cfg` file on a per-project bases,
+if you find them too strict or too permissive.
 """
 
 #: Maximum number of `return` statements allowed in a single function:
@@ -40,3 +40,9 @@ MAX_MODULE_MEMBERS = 7
 
 #: Maximum number of methods in a single class:
 MAX_METHODS = 7
+
+
+# Modules
+
+#: Minimum required module's name length:
+MIN_MODULE_NAME_LENGTH = 3

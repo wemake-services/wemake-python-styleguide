@@ -2,6 +2,8 @@
 
 import subprocess
 
+from wemake_python_styleguide.version import version
+
 
 def test_call_flake8_version():
     """Checks that module is registered and visible in the meta data."""
@@ -9,4 +11,7 @@ def test_call_flake8_version():
         ['flake8', '--version'],
         stderr=subprocess.STDOUT,
     )
-    assert b'wemake-python-styleguide' in output
+
+    output_text = output.decode('utf-8')
+    assert 'wemake-python-styleguide' in output_text
+    assert version in output_text

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from ast import AST
-from typing import Tuple
+import ast
+from typing import Optional, Tuple
 
 
 class BaseStyleViolation(object):
@@ -11,15 +11,16 @@ class BaseStyleViolation(object):
     It basically just defines how to create any error and how to format
     this error later on.
 
-    Each subclass must define ``_error_tmpl`` and ``_code`` fields.
+    Each subclass must define ``error_template`` and ``code`` fields.
     """
 
-    _error_tmpl: str
-    _code: str
+    error_template: str
+    code: str
+    should_use_text: bool = True
 
-    def __init__(self, node: AST, text: str = None) -> None:
-        """Creates new instance of style error."""
-        self.node = node
+    def __init__(self, node: Optional[ast.AST], text: str = None) -> None:
+        """Creates new instance of AST style violation."""
+        self._node = node
 
         if text is None:
             self._text = node.__class__.__name__.lower()
@@ -27,26 +28,29 @@ class BaseStyleViolation(object):
             self._text = text
 
     def message(self) -> str:
-        """
-        Returns error's formated message.
-
-        >>> import ast
-        >>> from wemake_python_styleguide.errors.general import (
-        ...     WrongKeywordViolation,
-        ... )
-        >>> error = WrongKeywordViolation(ast.Pass())
-        >>> error.message()
-        'Z110 Found wrong keyword "pass"'
-
-        >>> error = WrongKeywordViolation(ast.Delete(), text='del')
-        >>> error.message()
-        'Z110 Found wrong keyword "del"'
-
-        """
-        return self._error_tmpl.format(self._code, self._text)
+        """Returns error's formatted message."""
+        if self.should_use_text:
+            return self.error_template.format(self.code, self._text)
+        return self.error_template.format(self.code)
 
     def node_items(self) -> Tuple[int, int, str]:
         """Returns `Tuple` to match `flake8` API format."""
-        lineno = getattr(self.node, 'lineno', 0)
-        col_offset = getattr(self.node, 'col_offset', 0)
-        return lineno, col_offset, self.message()
+        line_number = getattr(self._node, 'lineno', 0)
+        column_offset = getattr(self._node, 'col_offset', 0)
+        return line_number, column_offset, self.message()
+
+
+class ASTStyleViolation(BaseStyleViolation):
+    """AST based style violations."""
+
+    def __init__(self, node: ast.AST, text: str = None) -> None:
+        """Creates new instance of AST style violation."""
+        super().__init__(node, text=text)
+
+
+class SimpleStyleViolation(BaseStyleViolation):
+    """Style violation for cases where there's no AST nodes."""
+
+    def __init__(self, node=None, text: str = None) -> None:
+        """Creates new instance of simple style violation."""
+        super().__init__(node, text=text)

@@ -13,13 +13,13 @@ if TYPE_CHECKING:  # pragma: no cover
     from typing_extensions import Protocol  # noqa: Z101
 
     # This solves cycle imports problem:
-    from .visitors.base import visitor  # noqa: Z100,Z101,F401
+    from .visitors import base  # noqa: Z100,Z101,F401
 else:
     # We do not need to do anything if typechecker is not working:
     Protocol = object
 
-#: Visitors container, that has all enable visitors' classes:
-VisitorSequence = Sequence[Type['visitor.BaseNodeVisitor']]
+#: Checkers container, that has all enabled visitors' classes:
+CheckerSequence = Sequence[Type['base.BaseChecker']]
 
 #: In cases we need to work with both import types:
 AnyImport = Union[ast.Import, ast.ImportFrom]
@@ -50,3 +50,6 @@ class ConfigurationOptions(Protocol):
     max_elifs: int
     max_module_members: int
     max_methods: int
+
+    # Modules:
+    min_module_name_length: int

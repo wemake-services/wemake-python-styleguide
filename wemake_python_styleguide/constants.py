@@ -10,8 +10,6 @@ It also contains some exceptions that we allow to use in our codebase.
 import sys
 from typing import Tuple
 
-# TODO: 'stdin' filename should be a constant
-
 #: List of functions we forbid to use.
 BAD_FUNCTIONS = frozenset((
     # Code generation:
@@ -70,7 +68,9 @@ _BAD_VARIABLE_NAMES: Tuple[str, ...] = (
     'handle',
     'handler',
     'file',
-    'klass',
+    'obj',
+    'objects',
+    'objs',
     'foo',
     'bar',
     'baz',
@@ -113,3 +113,27 @@ FUTURE_IMPORTS_WHITELIST = frozenset((
     'annotations',
     'generator_stop',
 ))
+
+#: List of blacklisted module names:
+BAD_MODULE_NAMES = frozenset((
+    'util',
+    'utils',
+    'utilities',
+    'helpers',
+))
+
+#: List of allowed module magic names:
+MAGIC_MODULE_NAMES_WHITELIST = frozenset((
+    '__init__',
+    '__main__',
+))
+
+
+# Internal variables
+# They are not publicly documented since they are only used internally
+
+# This variable is used as a default filename, when it is not passed by flake8:
+STDIN = 'stdin'
+
+# This variable is used to specify as a placeholder for `__init__.py`:
+INIT = '__init__'

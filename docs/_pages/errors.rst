@@ -15,3 +15,6 @@ Errors
 
 .. automodule:: wemake_python_styleguide.errors.complexity
    :members:
+
+.. automodule:: wemake_python_styleguide.errors.modules
+   :members:

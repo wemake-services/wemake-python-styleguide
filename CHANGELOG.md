@@ -3,6 +3,30 @@
 We follow Semantic Versions since the `0.1.0` release.
 
 
+## Version 0.0.10 aka The Module Reaper
+
+### Features
+
+- Adds `WrongModuleNameViolation`, `WrongModuleMagicNameViolation`,
+  and `TooShortModuleNameViolation`
+- Adds `--min-module-name-length` config option
+- Adds a blacklist of module names
+- Adds `InitModuleHasLogicsViolation`
+- Adds `EmptyModuleViolation`
+- Adds a whitelist of magic module names
+
+### Bugfixes
+
+- Fixes `Option` class to have have incorrect `type` field, now using strings
+- Fixes that `WrongStringVisitor` was not activated
+
+### Misc
+
+- Improved typing support
+- Now each error has a link to the corresponding constant (if any)
+- Improved docs with links to the corresponding configuration flags
+
+
 ## Version 0.0.9
 
 This is just a supporting release.
@@ -58,7 +82,7 @@ There are no new features introduced.
 - Refactored how errors are defined
 - Now each check has strict `Raises:` policy which lists all possible errors
   that this check can find and raise
-- Changed how visiters are initialized in tests
+- Changed how visitors are initialized in tests
 - Tests now cover nested classes' explicit bases
 - Tests now cover nested classes and functions `noqa` comment
 

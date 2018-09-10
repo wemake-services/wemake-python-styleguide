@@ -10,12 +10,16 @@ Like:
 3. Using keywords
 4. Working with exceptions
 
+Beautiful is better than ugly.
+Explicit is better than implicit.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
 """
 
-from wemake_python_styleguide.errors.base import BaseStyleViolation
+from wemake_python_styleguide.errors.base import ASTStyleViolation
 
 
-class WrongKeywordViolation(BaseStyleViolation):
+class WrongKeywordViolation(ASTStyleViolation):
     """
     This rule forbids to use some keywords from ``python``.
 
@@ -25,19 +29,20 @@ class WrongKeywordViolation(BaseStyleViolation):
 
         # Wrong:
         pass
-        exec
-        eval
+        del
+        nonlocal
+        global
 
     Note:
         Returns Z110 as error code
 
     """
 
-    _error_tmpl = '{0} Found wrong keyword "{1}"'
-    _code = 'Z110'
+    error_template = '{0} Found wrong keyword "{1}"'
+    code = 'Z110'
 
 
-class BareRiseViolation(BaseStyleViolation):
+class BareRiseViolation(ASTStyleViolation):
     """
     This rule forbids using bare `raise` keyword outside of `except` block.
 
@@ -57,11 +62,11 @@ class BareRiseViolation(BaseStyleViolation):
 
     """
 
-    _error_tmpl = '{0} Found bare raise outside of except "{1}"'
-    _code = 'Z111'
+    error_template = '{0} Found bare raise outside of except "{1}"'
+    code = 'Z111'
 
 
-class RaiseNotImplementedViolation(BaseStyleViolation):
+class RaiseNotImplementedViolation(ASTStyleViolation):
     """
     This rule forbids to use `NotImplemented` error.
 
@@ -84,29 +89,33 @@ class RaiseNotImplementedViolation(BaseStyleViolation):
 
     """
 
-    _error_tmpl = '{0} Found raise NotImplemented "{1}"'
-    _code = 'Z112'
+    error_template = '{0} Found raise NotImplemented "{1}"'
+    code = 'Z112'
 
 
-class WrongFunctionCallViolation(BaseStyleViolation):
+class WrongFunctionCallViolation(ASTStyleViolation):
     """
     This rule forbids to call some built-in functions.
 
     Since some functions are only suitable for very specific usecases,
     we forbid to use them in a free manner.
 
+    See ``BAD_FUNCTIONS`` for the full list of blacklisted functions.
+
     Note:
         Returns Z113 as error code
 
     """
 
-    _error_tmpl = '{0} Found wrong function call "{1}"'
-    _code = 'Z113'
+    error_template = '{0} Found wrong function call "{1}"'
+    code = 'Z113'
 
 
-class WrongVariableNameViolation(BaseStyleViolation):
+class WrongVariableNameViolation(ASTStyleViolation):
     """
     This rule forbids to have blacklisted variable names.
+
+    See ``BAD_VARIABLE_NAMES`` for the full list of blacklisted variable names.
 
     Example::
 
@@ -121,13 +130,15 @@ class WrongVariableNameViolation(BaseStyleViolation):
 
     """
 
-    _error_tmpl = '{0} Found wrong variable name "{1}"'
-    _code = 'Z114'
+    error_template = '{0} Found wrong variable name "{1}"'
+    code = 'Z114'
 
 
-class TooShortVariableNameViolation(BaseStyleViolation):
+class TooShortVariableNameViolation(ASTStyleViolation):
     """
     This rule forbids to have too short variable names.
+
+    This rule is configurable with ``--min-variable-length``.
 
     Example::
 
@@ -142,11 +153,11 @@ class TooShortVariableNameViolation(BaseStyleViolation):
 
     """
 
-    _error_tmpl = '{0} Found too short name "{1}"'
-    _code = 'Z115'
+    error_template = '{0} Found too short name "{1}"'
+    code = 'Z115'
 
 
-class PrivateNameViolation(BaseStyleViolation):
+class PrivateNameViolation(ASTStyleViolation):
     """
     This rule forbids to have private name pattern.
 
@@ -156,6 +167,7 @@ class PrivateNameViolation(BaseStyleViolation):
 
         # Correct:
         def _collect_coverage(self): ...
+
         # Wrong:
         def __collect_coverage(self): ...
 
@@ -164,17 +176,19 @@ class PrivateNameViolation(BaseStyleViolation):
 
     """
 
-    _error_tmpl = '{0} Found private name pattern "{1}"'
-    _code = 'Z116'
+    error_template = '{0} Found private name pattern "{1}"'
+    code = 'Z116'
 
 
-class WrongModuleMetadataViolation(BaseStyleViolation):
+class WrongModuleMetadataViolation(ASTStyleViolation):
     """
     This rule forbids to have some module level variables.
 
     We discourage using module variables like ``__author__``, because
     there's no need in them. Use proper docstrings and classifiers.
     Packaging should not be done in code.
+
+    See ``BAD_MODULE_METADATA_VARIABLES`` for full list of bad names.
 
     Example::
 
@@ -186,13 +200,17 @@ class WrongModuleMetadataViolation(BaseStyleViolation):
 
     """
 
-    _error_tmpl = '{0} Found wrong metadata variable {1}'
-    _code = 'Z117'
+    error_template = '{0} Found wrong metadata variable {1}'
+    code = 'Z117'
 
 
-class FormattedStringViolation(BaseStyleViolation):
+class FormattedStringViolation(ASTStyleViolation):
     """
     This rule forbids to use `f` strings.
+
+    `f` strings looses context to often, they are hard to lint.
+    Also, they promote a bad practice: putting a logic into the template.
+    Use `.format()` instead.
 
     Example::
 
@@ -207,5 +225,50 @@ class FormattedStringViolation(BaseStyleViolation):
 
     """
 
-    _error_tmpl = '{0} Found `f` string {1}'
-    _code = 'Z118'
+    should_use_text = False
+    error_template = '{0} Found `f` string'
+    code = 'Z118'
+
+
+class EmptyModuleViolation(ASTStyleViolation):
+    """
+    This rule forbids to have empty modules.
+
+    If you have an empty module there are two ways to handle that:
+
+    1. delete it, why is it even there?
+    2. drop some documentation in it, so you will explain why it is there
+
+    Note:
+        Returns Z119 as error code
+
+    """
+
+    should_use_text = False
+    error_template = '{0} Found empty module'
+    code = 'Z119'
+
+
+class InitModuleHasLogicViolation(ASTStyleViolation):
+    """
+    This rule forbids to have logic inside `__init__` module.
+
+    If you have logic inside the `__init__` module it means several things:
+
+    1. you are keeping some outdated stuff there, you need to refactor
+    2. you are placing this logic into the wrong file, just create another one
+    3. you are doing some dark magic, and you should not do that
+
+    However, we allow to have some contents inside the `__init__` module:
+
+    1. comments, since they are dropped before AST comes in play
+    2. docs string, because sometimes it is required to state something
+
+    Note:
+        Returns Z120 as error code
+
+    """
+
+    should_use_text = False
+    error_template = '{0} Found `__init__` module with logic'
+    code = 'Z120'
