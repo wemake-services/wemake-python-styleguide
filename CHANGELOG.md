@@ -3,6 +3,22 @@
 We follow Semantic Versions since the `0.1.0` release.
 
 
+## Version 0.0.11
+
+This is just a supporting release.
+There are no new features introduced.
+
+### Bugfixes
+
+- Fixes [`python3.7` support](https://github.com/wemake-services/wemake-python-styleguide/issues/93)
+- Fixes [`AttributeError: 'ExceptHandler' object has no attribute 'depth' `](https://github.com/wemake-services/wemake-python-styleguide/issues/112)
+
+### Misc
+
+- Introduced the concept of regression testing, see `test/fixtures/regression`
+- Removed `compat.py`
+
+
 ## Version 0.0.10 aka The Module Reaper
 
 ### Features
