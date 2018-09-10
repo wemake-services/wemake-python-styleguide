@@ -5,41 +5,55 @@ from typing import Generator
 
 from flake8.options.manager import OptionManager
 
+from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat import maybe_set_parent
 from wemake_python_styleguide.options.config import Configuration
 from wemake_python_styleguide.types import (
+    CheckerSequence,
     CheckResult,
     ConfigurationOptions,
-    VisitorSequence,
 )
 from wemake_python_styleguide.version import version
-from wemake_python_styleguide.visitors.complexity.counts import (
+from wemake_python_styleguide.visitors.ast.complexity.counts import (
     MethodMembersVisitor,
     ModuleMembersVisitor,
 )
-from wemake_python_styleguide.visitors.complexity.function import (
+from wemake_python_styleguide.visitors.ast.complexity.function import (
     FunctionComplexityVisitor,
 )
-from wemake_python_styleguide.visitors.complexity.nested import (
+from wemake_python_styleguide.visitors.ast.complexity.nested import (
     NestedComplexityVisitor,
 )
-from wemake_python_styleguide.visitors.complexity.offset import OffsetVisitor
-from wemake_python_styleguide.visitors.wrong_class import WrongClassVisitor
-from wemake_python_styleguide.visitors.wrong_function_call import (
+from wemake_python_styleguide.visitors.ast.complexity.offset import (
+    OffsetVisitor,
+)
+from wemake_python_styleguide.visitors.ast.wrong_class import WrongClassVisitor
+from wemake_python_styleguide.visitors.ast.wrong_contents import (
+    WrongContentsVisitor,
+)
+from wemake_python_styleguide.visitors.ast.wrong_function_call import (
     WrongFunctionCallVisitor,
 )
-from wemake_python_styleguide.visitors.wrong_import import WrongImportVisitor
-from wemake_python_styleguide.visitors.wrong_keyword import (
+from wemake_python_styleguide.visitors.ast.wrong_import import (
+    WrongImportVisitor,
+)
+from wemake_python_styleguide.visitors.ast.wrong_keyword import (
     WrongKeywordVisitor,
     WrongRaiseVisitor,
 )
-from wemake_python_styleguide.visitors.wrong_name import (
+from wemake_python_styleguide.visitors.ast.wrong_name import (
     WrongModuleMetadataVisitor,
     WrongNameVisitor,
 )
+from wemake_python_styleguide.visitors.ast.wrong_string import (
+    WrongStringVisitor,
+)
+from wemake_python_styleguide.visitors.filenames.wrong_module_name import (
+    WrongModuleNameVisitor,
+)
 
 #: Visitors that should be working by default:
-ENABLED_VISITORS: VisitorSequence = [
+ENABLED_VISITORS: CheckerSequence = [
     # Styling and correctness:
     WrongRaiseVisitor,
     WrongFunctionCallVisitor,
@@ -48,6 +62,8 @@ ENABLED_VISITORS: VisitorSequence = [
     WrongNameVisitor,
     WrongModuleMetadataVisitor,
     WrongClassVisitor,
+    WrongStringVisitor,
+    WrongContentsVisitor,
 
     # Complexity:
     FunctionComplexityVisitor,
@@ -55,6 +71,9 @@ ENABLED_VISITORS: VisitorSequence = [
     OffsetVisitor,
     ModuleMembersVisitor,
     MethodMembersVisitor,
+
+    # Modules:
+    WrongModuleNameVisitor,
 ]
 
 
@@ -72,19 +91,19 @@ class Checker(object):
     config = Configuration()
     options: ConfigurationOptions
 
-    def __init__(self, tree: Module, filename: str = 'stdin') -> None:
+    def __init__(self, tree: Module, filename: str = constants.STDIN) -> None:
         """Creates new checker instance."""
         self.tree = maybe_set_parent(tree)
         self.filename = filename
 
     @classmethod
-    def add_options(cls, parser: OptionManager):
+    def add_options(cls, parser: OptionManager) -> None:
         """Calls Configuration instance method for registering options."""
         cls.config.register_options(parser)
 
     @classmethod
-    def parse_options(cls, options: ConfigurationOptions):
-        """Parses registered options for providing to the visiter."""
+    def parse_options(cls, options: ConfigurationOptions) -> None:
+        """Parses registered options for providing to the visitor."""
         cls.options = options
 
     def run(self) -> Generator[CheckResult, None, None]:
@@ -95,8 +114,12 @@ class Checker(object):
         After all configuration is parsed and passed.
         """
         for visitor_class in ENABLED_VISITORS:
-            visiter = visitor_class(self.options, filename=self.filename)
-            visiter.visit(self.tree)
+            visitor = visitor_class(
+                self.options,
+                tree=self.tree,
+                filename=self.filename,
+            )
+            visitor.run()
 
-            for error in visiter.errors:
+            for error in visitor.errors:
                 yield (*error.node_items(), type(self))

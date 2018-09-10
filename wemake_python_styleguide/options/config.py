@@ -2,35 +2,23 @@
 
 from typing import Dict, Sequence, Union
 
+import attr
 from flake8.options.manager import OptionManager
 
 from wemake_python_styleguide.options import defaults
 
+ConfigValues = Dict[str, Union[str, int, bool]]
 
-class _Option(object):
+
+@attr.attrs(frozen=True, auto_attribs=True, slots=True)
+class Option(object):
     """This class represent `flake8` option object."""
 
-    def __init__(
-        self,
-        name: str,
-        default_value: int,
-        help_text: str,
-        option_type: type = int,
-        parse_from_config: bool = True,
-    ) -> None:
-        self.name = name
-        self.default_value = default_value
-        self.help_text = help_text
-        self.option_type = option_type
-        self.parse_from_config = parse_from_config
-
-    def to_option(self) -> Dict[str, Union[str, int, type]]:
-        return {
-            'parse_from_config': self.parse_from_config,
-            'type': self.option_type,
-            'default': self.default_value,
-            'help': self.help_text,
-        }
+    long_option_name: str
+    default: int  # noqa: E704
+    help: str
+    type: str = 'int'  # noqa: A003
+    parse_from_config: bool = True
 
 
 class Configuration(object):
@@ -62,70 +50,78 @@ class Configuration(object):
       defaults to ``MAX_ARGUMENTS``
     - `min-variable-length` - minimum number of chars to define a valid
       variable name, defaults to ``MIN_VARIABLE_LENGTH``
-    - `max_offset_blocks` - maximum number of block to nest expressions,
+    - `max-offset-blocks` - maximum number of block to nest expressions,
       defaults to ``MAX_OFFSET_BLOCKS``
-    - `max_elifs` - maximum number of `elif` blocks, defaults to ``MAX_ELIFS``
-    - `max_module_members` - maximum number of classes and functions
+    - `max-elifs` - maximum number of `elif` blocks, defaults to ``MAX_ELIFS``
+    - `max-module-members` - maximum number of classes and functions
       in a single module, defaults to ``MAX_MODULE_MEMBERS``
-    - `max_methods` - maximum number of methods in a single class,
+    - `max-methods` - maximum number of methods in a single class,
       defaults to ``MAX_METHODS``
+    - `min-module-name-length` - minimum required module's name length,
+      defaults to ``MIN_MODULE_NAME_LENGTH``
 
     """
 
-    def _all_options(self) -> Sequence[_Option]:
+    def _all_options(self) -> Sequence[Option]:
         return [
-            _Option(
+            Option(
                 '--max-returns',
                 defaults.MAX_RETURNS,
                 'Maximum allowed number of return statements in one function.',
             ),
 
-            _Option(
+            Option(
                 '--max-local-variables',
                 defaults.MAX_LOCAL_VARIABLES,
                 'Maximum allowed number of local variables in one function.',
             ),
 
-            _Option(
+            Option(
                 '--max-expressions',
                 defaults.MAX_EXPRESSIONS,
                 'Maximum allowed number of expressions in one function.',
             ),
 
-            _Option(
+            Option(
                 '--max-arguments',
                 defaults.MAX_ARGUMENTS,
                 'Maximum allowed number of arguments in one function.',
             ),
 
-            _Option(
+            Option(
                 '--min-variable-length',
                 defaults.MIN_VARIABLE_LENGTH,
                 'Minimum required length of the variable name.',
             ),
 
-            _Option(
+            Option(
                 '--max-offset-blocks',
                 defaults.MAX_OFFSET_BLOCKS,
                 'Maximum number of blocks to nest different structures.',
             ),
 
-            _Option(
-                '--max_elifs',
+            Option(
+                '--max-elifs',
                 defaults.MAX_ELIFS,
                 'Maximum number of `elif` blocks.',
             ),
 
-            _Option(
-                '--max_module_members',
+            Option(
+                '--max-module-members',
                 defaults.MAX_MODULE_MEMBERS,
                 'Maximum number of classes and functions in a single module.',
             ),
 
-            _Option(
-                '--max_methods',
+            Option(
+                '--max-methods',
                 defaults.MAX_METHODS,
                 'Maximum number of methods in a single class.',
+            ),
+
+            Option(
+                '--min-module-name-length',
+                defaults.MIN_MODULE_NAME_LENGTH,
+                "Minimum required module's name length",
             ),
         ]
 
@@ -133,4 +129,4 @@ class Configuration(object):
         """Registers options for our plugin."""
         options = self._all_options()
         for option in options:
-            parser.add_option(option.name, **option.to_option())
+            parser.add_option(**attr.asdict(option))

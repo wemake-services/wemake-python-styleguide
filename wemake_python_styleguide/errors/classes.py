@@ -1,11 +1,18 @@
 # -*- coding: utf-8 -*-
 
-"""These rules checks ``class``es to be defined correctly."""
+"""
+These rules checks that ``class``es are defined correctly.
 
-from wemake_python_styleguide.errors.base import BaseStyleViolation
+Beautiful is better than ugly.
+Explicit is better than implicit.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+"""
+
+from wemake_python_styleguide.errors.base import ASTStyleViolation
 
 
-class StaticMethodViolation(BaseStyleViolation):
+class StaticMethodViolation(ASTStyleViolation):
     """
     This rule forbids to use ``@staticmethod`` decorator.
 
@@ -16,24 +23,27 @@ class StaticMethodViolation(BaseStyleViolation):
 
     """
 
-    _error_tmpl = '{0} Found using staticmethod "{1}"'
-    _code = 'Z300'
+    should_use_text = False
+    error_template = '{0} Found using `@staticmethod`'
+    code = 'Z300'
 
 
-class BadMagicMethodViolation(BaseStyleViolation):
+class BadMagicMethodViolation(ASTStyleViolation):
     """
     This rule forbids to use some magic methods.
+
+    See ``BAD_MAGIC_METHODS`` for the full blacklist of the magic methods.
 
     Note:
         Returns Z301 as error code
 
     """
 
-    _error_tmpl = '{0} Found using restricted magic method "{1}"'
-    _code = 'Z301'
+    error_template = '{0} Found using restricted magic method "{1}"'
+    code = 'Z301'
 
 
-class RequiredBaseClassViolation(BaseStyleViolation):
+class RequiredBaseClassViolation(ASTStyleViolation):
     """
     This rule forbids to write classes without base classes.
 
@@ -50,5 +60,5 @@ class RequiredBaseClassViolation(BaseStyleViolation):
 
     """
 
-    _error_tmpl = '{0} Found class without a base class "{1}"'
-    _code = 'Z302'
+    error_template = '{0} Found class without a base class "{1}"'
+    code = 'Z302'

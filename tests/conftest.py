@@ -7,14 +7,22 @@ from operator import itemgetter
 import pytest
 
 from wemake_python_styleguide import errors
-from wemake_python_styleguide.errors.base import BaseStyleViolation
+from wemake_python_styleguide.errors.base import (
+    ASTStyleViolation,
+    BaseStyleViolation,
+    SimpleStyleViolation,
+)
 
 
 def _is_error_class(cls) -> bool:
+    base_classes = {
+        ASTStyleViolation, BaseStyleViolation, SimpleStyleViolation,
+    }
+
     return (
         inspect.isclass(cls) and
         issubclass(cls, BaseStyleViolation) and
-        cls is not BaseStyleViolation
+        cls not in base_classes
     )
 
 
@@ -26,6 +34,7 @@ def all_errors():
         errors.general,
         errors.classes,
         errors.complexity,
+        errors.modules,
     ]
 
     classes = []

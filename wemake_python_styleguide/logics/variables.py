@@ -2,6 +2,8 @@
 
 from typing import Iterable, Optional
 
+from wemake_python_styleguide.options.defaults import MIN_VARIABLE_LENGTH
+
 
 def is_wrong_variable_name(name: str, to_check: Iterable[str]) -> bool:
     """
@@ -34,7 +36,7 @@ def is_wrong_variable_name(name: str, to_check: Iterable[str]) -> bool:
 
 def is_too_short_variable_name(
     name: Optional[str],
-    min_length: int = 2,
+    min_length: int = MIN_VARIABLE_LENGTH,
 ) -> bool:
     """
     Checks for too short variable names.

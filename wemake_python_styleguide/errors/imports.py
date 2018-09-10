@@ -1,11 +1,18 @@
 # -*- coding: utf-8 -*-
 
-"""These rules checks ``import``s to be defined correctly."""
+"""
+These rules checks ``import``s to be defined correctly.
 
-from wemake_python_styleguide.errors.base import BaseStyleViolation
+Explicit is better than implicit.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+"""
+
+from wemake_python_styleguide.errors.base import ASTStyleViolation
 
 
-class LocalFolderImportViolation(BaseStyleViolation):
+class LocalFolderImportViolation(ASTStyleViolation):
     """
     This rule forbids to have imports relative to the current folder.
 
@@ -23,11 +30,11 @@ class LocalFolderImportViolation(BaseStyleViolation):
 
     """
 
-    _error_tmpl = '{0} Found local folder import "{1}"'
-    _code = 'Z100'
+    error_template = '{0} Found local folder import "{1}"'
+    code = 'Z100'
 
 
-class NestedImportViolation(BaseStyleViolation):
+class NestedImportViolation(ASTStyleViolation):
     """
     This rule forbids to have nested imports in functions.
 
@@ -35,6 +42,11 @@ class NestedImportViolation(BaseStyleViolation):
     So, you don't need nested imports, you need to refactor your code.
 
     Example::
+
+        # Correct:
+        from my_module import some_function
+
+        def some(): ...
 
         # Wrong:
         def some():
@@ -45,11 +57,11 @@ class NestedImportViolation(BaseStyleViolation):
 
     """
 
-    _error_tmpl = '{0} Found nested import "{1}"'
-    _code = 'Z101'
+    error_template = '{0} Found nested import "{1}"'
+    code = 'Z101'
 
 
-class FutureImportViolation(BaseStyleViolation):
+class FutureImportViolation(ASTStyleViolation):
     """
     This rule forbids to use ``__future__`` imports.
 
@@ -57,6 +69,8 @@ class FutureImportViolation(BaseStyleViolation):
     tools that are no longer required.
 
     Except, there are some new ones for ``python4`` support.
+    See ``FUTURE_IMPORTS_WHITELIST`` for the full
+    list of allowed future imports.
 
     Example::
 
@@ -71,11 +85,11 @@ class FutureImportViolation(BaseStyleViolation):
 
     """
 
-    _error_tmpl = '{0} Found future import "{1}"'
-    _code = 'Z102'
+    error_template = '{0} Found future import "{1}"'
+    code = 'Z102'
 
 
-class DottedRawImportViolation(BaseStyleViolation):
+class DottedRawImportViolation(ASTStyleViolation):
     """
     This rule forbids to use imports like ``import os.path``.
 
@@ -92,11 +106,11 @@ class DottedRawImportViolation(BaseStyleViolation):
 
     """
 
-    _error_tmpl = '{0} Found dotted raw import "{1}"'
-    _code = 'Z103'
+    error_template = '{0} Found dotted raw import "{1}"'
+    code = 'Z103'
 
 
-class SameAliasImportViolation(BaseStyleViolation):
+class SameAliasImportViolation(ASTStyleViolation):
     """
     This rule forbids to use the same alias as the original name in imports.
 
@@ -113,5 +127,5 @@ class SameAliasImportViolation(BaseStyleViolation):
 
     """
 
-    _error_tmpl = '{0} Found same alias import "{1}"'
-    _code = 'Z104'
+    error_template = '{0} Found same alias import "{1}"'
+    code = 'Z104'

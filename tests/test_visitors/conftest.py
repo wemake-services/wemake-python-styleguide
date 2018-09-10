@@ -9,7 +9,7 @@ import pytest
 
 from wemake_python_styleguide.compat import maybe_set_parent
 from wemake_python_styleguide.options import defaults
-from wemake_python_styleguide.visitors.base.visitor import BaseNodeVisitor
+from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
 @pytest.fixture(scope='session')
@@ -24,12 +24,12 @@ def parse_ast_tree():
 @pytest.fixture(scope='session')
 def assert_errors():
     """Helper function to assert visitor errors."""
-    def factory(visiter: BaseNodeVisitor, errors: Sequence[str]):
-        for index, error in enumerate(visiter.errors):
-            assert len(errors) > index, visiter.errors
-            assert error._code == errors[index]._code
+    def factory(visitor: BaseNodeVisitor, errors: Sequence[str]):
+        for index, error in enumerate(visitor.errors):
+            assert len(errors) > index, visitor.errors
+            assert error.code == errors[index].code
 
-        assert len(visiter.errors) == len(errors)
+        assert len(visitor.errors) == len(errors)
 
     return factory
 
@@ -47,6 +47,7 @@ def options():
         'max_elifs': defaults.MAX_ELIFS,
         'max_module_members': defaults.MAX_MODULE_MEMBERS,
         'max_methods': defaults.MAX_METHODS,
+        'min_module_name_length': defaults.MIN_MODULE_NAME_LENGTH,
     }
 
     Options = namedtuple('options', default_values.keys())
