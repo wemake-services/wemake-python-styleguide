@@ -6,7 +6,6 @@ from typing import Generator
 from flake8.options.manager import OptionManager
 
 from wemake_python_styleguide import constants
-from wemake_python_styleguide.compat import maybe_set_parent
 from wemake_python_styleguide.options.config import Configuration
 from wemake_python_styleguide.types import (
     CheckerSequence,
@@ -93,7 +92,7 @@ class Checker(object):
 
     def __init__(self, tree: Module, filename: str = constants.STDIN) -> None:
         """Creates new checker instance."""
-        self.tree = maybe_set_parent(tree)
+        self.tree = tree
         self.filename = filename
 
     @classmethod
