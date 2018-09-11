@@ -49,6 +49,7 @@ class NestedComplexityVisitor(BaseNodeVisitor):
 
         Uses ``NESTED_FUNCTIONS_WHITELIST`` to respect some nested functions.
         Respected usecases for nested functions:
+
         1. decorator
         2. factory function
 
@@ -65,7 +66,7 @@ class NestedComplexityVisitor(BaseNodeVisitor):
 
     def visit_Lambda(self, node: ast.Lambda) -> None:
         """
-        Used to find nested ``lambda``s.
+        Used to find nested ``lambda`` functions.
 
         Raises:
             NestedFunctionViolation

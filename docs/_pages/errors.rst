@@ -1,16 +1,16 @@
 Errors
 ------
 
-General
-~~~~~~~
-
-.. automodule:: wemake_python_styleguide.errors.general
-   :members:
-
 Imports
 ~~~~~~~
 
 .. automodule:: wemake_python_styleguide.errors.imports
+   :members:
+
+General
+~~~~~~~
+
+.. automodule:: wemake_python_styleguide.errors.general
    :members:
 
 Classes

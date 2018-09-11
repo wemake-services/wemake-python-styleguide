@@ -10,9 +10,11 @@
 
 Welcome to the most opinionated linter ever.
 
-`wemake-python-styleguide` is actually just a `flake8` plugin.
 The main goal of this tool is to make our `python` code
 consistent and to fight the code complexity.
+
+`wemake-python-styleguide` is actually `flake8` plugin
+with some other plugins as dependencies.
 
 ```text
 The Zen of Python, by Tim Peters
@@ -45,9 +47,20 @@ Namespaces are one honking great idea -- let's do more of those!
 pip install wemake-python-styleguide
 ```
 
+
 ## Project status
 
-We are in early alpha. Use it on your own risk.
+We are almost ready for our first public release.
+Until, use it on your own risk.
+
+
+## What we are not
+
+We are here not to:
+
+1. To assume or check types, use `mypy` instead
+2. To reformat code, since we believe that developers should do that
+3. Suite everyone, this is *our* linter
 
 
 ## Contributing

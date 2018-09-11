@@ -15,11 +15,18 @@ Note:
 from wemake_python_styleguide.errors.base import ASTStyleViolation
 
 
+# TODO: refactor to be `BadDecoratorViolation`
+# TODO: also forbid `@property`
 class StaticMethodViolation(ASTStyleViolation):
     """
     This rule forbids to use ``@staticmethod`` decorator.
 
-    Use regular methods, ``classmethods`` or raw functions instead.
+    Reasoning:
+        Static methods are not required to be inside the class.
+        Because it even does not an access to the current instance.
+
+    Solution:
+        Use regular methods, ``classmethods`` or raw functions instead.
 
     Note:
         Returns Z300 as error code
@@ -49,6 +56,11 @@ class BadMagicMethodViolation(ASTStyleViolation):
 class RequiredBaseClassViolation(ASTStyleViolation):
     """
     This rule forbids to write classes without base classes.
+
+    Reasoning:
+        We just need to decide how to do it.
+        We need a single and unified rule about base classes.
+        We have decided to stick to the explicit base class notation.
 
     Example::
 

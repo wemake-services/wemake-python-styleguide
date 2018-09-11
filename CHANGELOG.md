@@ -3,6 +3,22 @@
 We follow Semantic Versions since the `0.1.0` release.
 
 
+## Version 0.0.12
+
+This is just a supporting release.
+There are no new features introduced.
+
+### Bugfixes
+
+- Fixes bug with [nested imports missing `parent`](https://github.com/wemake-services/wemake-python-styleguide/issues/120)
+- Fixes bug with [incorrect `pycodestyle` version](https://github.com/wemake-services/wemake-python-styleguide/issues/118)
+
+### Misc
+
+- Improves docs: now all errors are sorted by `code`
+- Improves docs: now all errors have reasoning
+
+
 ## Version 0.0.11
 
 This is just a supporting release.

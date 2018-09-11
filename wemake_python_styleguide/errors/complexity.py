@@ -3,6 +3,12 @@
 """
 These checks finds flaws in your application design.
 
+We try to stick to "the magical 7 ± 2 number".
+https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two
+
+That's how many objects we can keep in our memory at a time.
+We try hard not to exceed the limit.
+
 What we call "design flaws":
 
 1. Complex code (there are a lof of complexity checks!)
@@ -23,11 +29,20 @@ class NestedFunctionViolation(ASTStyleViolation):
     """
     This rule forbids to have nested functions.
 
-    Just write flat functions, there's no need to nest them.
+        We also disallow to nest ``lambda``.
+
+    Reasoning:
+        Nesting functions is a bad practice.
+        It is hard to test them, it is hard then to separate them.
+        People tend to overuse closures, so it's hard to manage the dataflow.
+
+    Solution:
+        Just write flat functions, there's no need to nest them.
+        Pass parameters as normal arguments, do not use closures.
+        Until you need them for decorators or factories.
+
     However, there are some whitelisted names like,
     see ``NESTED_FUNCTIONS_WHITELIST`` for the whole list.
-
-    We also disallow to nest ``lambda``.
 
     Example::
 
@@ -53,7 +68,16 @@ class NestedClassViolation(ASTStyleViolation):
     """
     This rule forbids to have nested classes.
 
-    Just write flat classes, there's no need nest them.
+    Reasoning:
+        Nested classes are really hard to manage.
+        You can not even create an instance of this class in many cases.
+        Testing them is also really hard.
+
+    Solution:
+        Just write flat classes, there's no need nest them.
+        If you are nesting classes inside a function for parametrization,
+        then you will probably need to use different design (or metaclasses).
+
     However, there are some whitelisted class names like: ``Meta``.
     See ``NESTED_CLASSES_WHITELIST`` for the full list of names.
 
@@ -120,9 +144,14 @@ class TooManyArgumentsViolation(ASTStyleViolation):
     """
     This rule forbids to have too many arguments for a function or method.
 
-    This is an indicator of a bad desing.
-    When function requires many arguments
-    it shows that it is required to refactor this piece of code.
+    Reasoning:
+        This is an indicator of a bad desing. When function requires many
+        arguments it shows that it is required to refactor this piece of code.
+        It also indicates that function does to many things at once.
+
+    Solution:
+        Split function into several functions.
+        Then it will be easier to use them.
 
     This rule is configurable with ``--max-arguments``.
 
@@ -139,12 +168,15 @@ class TooManyElifsViolation(ASTStyleViolation):
     """
     This rule forbids to use many ``elif`` branches.
 
-    This rule is specifically important,
-    because many ``elif`` branches indicate
-    a complex flow in your design:
-    you are reimplementing ``switch`` in python.
+    Reasoning:
+        This rule is specifically important, because many ``elif``
+        branches indicate a complex flow in your design:
+        you are reimplementing ``switch`` in python.
 
-    There are different design patters to use instead.
+    Solution:
+        There are different design patters to use instead.
+        For example, you can use some interface that
+        just call a specific method without ``if``.
 
     This rule is configurable with ``--max-elifs``.
 
@@ -161,8 +193,13 @@ class TooManyReturnsViolation(ASTStyleViolation):
     """
     This rule forbids placing too many ``return`` statements into the function.
 
-    When there are too many ``return`` keywords, functions are hard to test.
-    They are also hard to read and hard to change and read.
+    Reasoning:
+        When there are too many ``return`` keywords,
+        functions are hard to test. They are also hard to read and
+        hard to change and keep everything inside your head at once.
+
+    Solution:
+        Change your design.
 
     This rule is configurable with ``--max-returns``.
 
@@ -179,9 +216,12 @@ class TooManyExpressionsViolation(ASTStyleViolation):
     """
     This rule forbids putting to many expression is a unit of code.
 
-    Because when there are too many expression, it means, that code has
-    some logical or structural problems.
-    We only have to identify them.
+    Reasoning:
+        When there are too many expression it means that this specific
+        function does too many things at once. It has too many logics.
+
+    Solution:
+        Split function into several functions, refactor your API.
 
     This rule is configurable with ``--max-expressions``.
 
@@ -198,10 +238,14 @@ class TooDeepNestingViolation(ASTStyleViolation):
     """
     This rule forbids nesting blocks too deep.
 
-    If nesting is too deep that indicates of another problem,
-    that there's to many things going on at the same time.
-    So, we need to check these cases before
-    they have made their way to production.
+    Reasoning:
+        If nesting is too deep that indicates of a complex logic
+        and language constructions. This means that our design is not
+        suited to handle such construction.
+
+    Solution:
+        We need to refactor our complex construction into simplier ones.
+        We can use new functions or different constructions.
 
     This rule is configurable with ``--max-offset-blocks``.
 
@@ -218,10 +262,12 @@ class TooManyModuleMembersViolation(ASTStyleViolation):
     """
     This rule forbids to have many classes and functions in a single module.
 
-    Having many classes and functions in a single module is a bad thing.
-    Because soon it will be hard to read this code and understand it.
+    Reasoning:
+        Having many classes and functions in a single module is a bad thing.
+        Soon it will be hard to read through this code and understand it.
 
-    It is better to split this module into several modules or a package.
+    Solution:
+        It is better to split this module into several modules or a package.
 
     We do not make any differences between classes and functions in this check.
     They are treated as the same unit of logic.
@@ -243,16 +289,21 @@ class TooManyMethodsViolation(ASTStyleViolation):
     """
     This rule forbids to have many methods in a single class.
 
+    Reasoning:
+        Having too many methods might lead to the "God object".
+        This kind of objects can handle everything.
+        So, in the end your code becomes to hard to maintain and test.
+
+    Solution:
+        What to do if you have too many methods in a single class?
+        Split this class into several classes.
+        Then use composition or inheritance to refactor your code.
+        This will protect you from "God object" anti-pattern.
+        See: https://en.wikipedia.org/wiki/God_object
+
     We do not make any difference between instance and class methods.
     We also do no care about functions and classes been public or not.
-
-    What to do if you have too many methods in a single class?
-    Split this class in several classes.
-    Then use composition or inheritance to refactor your code.
-
-    This will protect you from "God object" anti-pattern.
-    See: https://en.wikipedia.org/wiki/God_object
-
+    We also do not count inherited methods from parents.
     This rule do not count attributes of a class.
 
     This rule is configurable with ``--max-methods``.

@@ -23,7 +23,7 @@ class _ImportsChecker(object):
     def check_nested_import(self, node: AnyImport) -> None:
         text = get_error_text(node)
         parent = getattr(node, 'parent', None)
-        if not isinstance(parent, ast.Module):
+        if parent is not None and not isinstance(parent, ast.Module):
             self.delegate.add_error(NestedImportViolation(node, text=text))
 
     def check_local_import(self, node: ast.ImportFrom) -> None:
