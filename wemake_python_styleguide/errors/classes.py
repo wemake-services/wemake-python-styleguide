@@ -42,6 +42,11 @@ class BadMagicMethodViolation(ASTStyleViolation):
     """
     This rule forbids to use some magic methods.
 
+    Reasoning:
+        We forbid to use magic methods related to the forbidden language parts.
+        Like, we forbid to use ``del`` keyword, so we forbid to use all
+        magic methods related to it.
+
     See ``BAD_MAGIC_METHODS`` for the full blacklist of the magic methods.
 
     Note:

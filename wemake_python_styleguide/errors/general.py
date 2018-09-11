@@ -26,7 +26,16 @@ class WrongKeywordViolation(ASTStyleViolation):
     """
     This rule forbids to use some keywords from ``python``.
 
-    We do this, since some keywords are anti-patterns.
+    Reasoning:
+        We believe, tha some keywords are anti-patterns.
+        They promote bad-practices like ``global``  and ``pass``,
+        or just not user-friendly like ``del``.
+
+    Solution:
+        Solutions differ from keyword to keyword.
+        ``pass`` should be replaced with docstring or ``contextlib.suppress``.
+        ``del`` should be replaced with specialized methods like ``.pop()``.
+        ``global`` and ``nonlocal`` usages should be refactored.
 
     Example::
 
@@ -45,12 +54,10 @@ class WrongKeywordViolation(ASTStyleViolation):
     code = 'Z110'
 
 
+# TODO: remove this error
 class BareRiseViolation(ASTStyleViolation):
     """
     This rule forbids using bare ``raise`` keyword outside of ``except`` block.
-
-    This may be a serious error in your application,
-    so we should prevent that.
 
     Example::
 
@@ -73,8 +80,11 @@ class RaiseNotImplementedViolation(ASTStyleViolation):
     """
     This rule forbids to use ``NotImplemented`` error.
 
-    These two errors have different use cases.
-    Use cases of ``NotImplemented`` is too limited to be generally available.
+    Reasoning:
+        These two errors look so similar.
+        But, these errors have different use cases.
+        Use cases of ``NotImplemented`` is too limited
+        to be generally available.
 
     Example::
 
@@ -100,8 +110,10 @@ class WrongFunctionCallViolation(ASTStyleViolation):
     """
     This rule forbids to call some built-in functions.
 
-    Since some functions are only suitable for very specific usecases,
-    we forbid to use them in a free manner.
+    Reasoning:
+        Some functions are only suitable
+        for very specific usecases,
+        we forbid to use them in a free manner.
 
     See ``BAD_FUNCTIONS`` for the full list of blacklisted functions.
 
@@ -118,12 +130,20 @@ class WrongVariableNameViolation(ASTStyleViolation):
     """
     This rule forbids to have blacklisted variable names.
 
+    Reasoning:
+        Naming is hard. We have found names that are not expressive enough.
+        All names from ``BAD_VARIABLE_NAMES`` could be improved.
+
+    Solution:
+        If you really want to use any of the names from the list,
+        add a prefix or suffix to it. It will serve you well.
+
     See ``BAD_VARIABLE_NAMES`` for the full list of blacklisted variable names.
 
     Example::
 
         # Correct:
-        html_node = None
+        html_node_item = None
 
         # Wrong:
         item = None
@@ -140,6 +160,11 @@ class WrongVariableNameViolation(ASTStyleViolation):
 class TooShortVariableNameViolation(ASTStyleViolation):
     """
     This rule forbids to have too short variable names.
+
+    Reasoning:
+        Naming is hard.
+        It is hard to understand what this variable means,
+        if it's name is too short.
 
     This rule is configurable with ``--min-variable-length``.
 
@@ -164,7 +189,11 @@ class PrivateNameViolation(ASTStyleViolation):
     """
     This rule forbids to have private name pattern.
 
-    It includes: variables, attributes, functions, and methods.
+    Reasoning:
+        Naming is hard.
+        Private is not private in ``python``. So, why should we pretend it is?
+
+    This rule includes: variables, attributes, functions, and methods.
 
     Example::
 
@@ -187,9 +216,12 @@ class WrongModuleMetadataViolation(ASTStyleViolation):
     """
     This rule forbids to have some module level variables.
 
-    We discourage using module variables like ``__author__``, because
-    there's no need in them. Use proper docstrings and classifiers.
-    Packaging should not be done in code.
+    Reasoning:
+        We discourage using module variables like ``__author__``,
+        because code should not contain any metadata.
+
+    Solution:
+        Use proper docstrings and packaging classifiers.
 
     See ``BAD_MODULE_METADATA_VARIABLES`` for full list of bad names.
 
@@ -197,6 +229,7 @@ class WrongModuleMetadataViolation(ASTStyleViolation):
 
         # Wrong:
         __author__ = 'Nikita Sobolev'
+        __version__ = 0.1.2
 
     Note:
         Returns Z117 as error code
@@ -211,9 +244,13 @@ class FormattedStringViolation(ASTStyleViolation):
     """
     This rule forbids to use ``f`` strings.
 
-    ``f`` strings looses context too often and they are hard to lint.
-    Also, they promote a bad practice: putting your logic inside the template.
-    Use ``.format()`` instead.
+    Reasoning:
+        ``f`` strings looses context too often and they are hard to lint.
+        Also, they promote a bad practice:
+        putting your logic inside the template.
+
+    Solution:
+        Use ``.format()`` with indexed params instead.
 
     Example::
 
@@ -237,10 +274,14 @@ class EmptyModuleViolation(ASTStyleViolation):
     """
     This rule forbids to have empty modules.
 
-    If you have an empty module there are two ways to handle that:
+    Reasoning:
+        Why is it even there?
 
-    1. delete it, why is it even there?
-    2. drop some documentation in it, so you will explain why it is there
+    Solution:
+        If you have an empty module there are two ways to handle that:
+
+        1. delete it
+        2. drop some documentation in it, so you will explain why it is there
 
     Note:
         Returns Z119 as error code
@@ -256,11 +297,17 @@ class InitModuleHasLogicViolation(ASTStyleViolation):
     """
     This rule forbids to have logic inside ``__init__`` module.
 
-    If you have logic inside the ``__init__`` module it means several things:
+    Reasoning:
+        If you have logic inside the ``__init__`` module
+        it means several things:
 
-    1. you are keeping some outdated stuff there, you need to refactor
-    2. you are placing this logic into the wrong file, just create another one
-    3. you are doing some dark magic, and you should not do that
+        1. you are keeping some outdated stuff there, you need to refactor
+        2. you are placing this logic into the wrong file,
+           just create another one
+        3. you are doing some dark magic, and you should not do that
+
+    Solution:
+        Put your code in other modules.
 
     However, we allow to have some contents inside the ``__init__`` module:
 

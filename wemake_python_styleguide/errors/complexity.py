@@ -29,8 +29,6 @@ class NestedFunctionViolation(ASTStyleViolation):
     """
     This rule forbids to have nested functions.
 
-    We also disallow to nest ``lambda``.
-
     Reasoning:
         Nesting functions is a bad practice.
         It is hard to test them, it is hard then to separate them.
@@ -40,6 +38,8 @@ class NestedFunctionViolation(ASTStyleViolation):
         Just write flat functions, there's no need to nest them.
         Pass parameters as normal arguments, do not use closures.
         Until you need them for decorators or factories.
+
+    We also disallow to nest ``lambda`` functions.
 
     However, there are some whitelisted names like,
     see ``NESTED_FUNCTIONS_WHITELIST`` for the whole list.
@@ -152,7 +152,7 @@ class TooManyArgumentsViolation(ASTStyleViolation):
     This rule forbids to have too many arguments for a function or method.
 
     Reasoning:
-        This is an indicator of a bad desing. When function requires many
+        This is an indicator of a bad design. When function requires many
         arguments it shows that it is required to refactor this piece of code.
         It also indicates that function does to many things at once.
 

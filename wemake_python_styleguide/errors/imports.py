@@ -19,6 +19,10 @@ class LocalFolderImportViolation(ASTStyleViolation):
     """
     This rule forbids to have imports relative to the current folder.
 
+    Reasoning:
+        We should pick one style and stick to it.
+        We have decided to use the explicit one.
+
     Example::
 
         # Correct:
@@ -41,8 +45,12 @@ class NestedImportViolation(ASTStyleViolation):
     """
     This rule forbids to have nested imports in functions.
 
-    Nested imports show that there's an issue with you design.
-    So, you don't need nested imports, you need to refactor your code.
+    Reasoning:
+        Usually nested imports are used to fix the import cycle.
+        So, nested imports show that there's an issue with you design.
+
+    Solution:
+        You don't need nested imports, you need to refactor your code.
 
     Example::
 
@@ -68,8 +76,12 @@ class FutureImportViolation(ASTStyleViolation):
     """
     This rule forbids to use ``__future__`` imports.
 
-    Almost all ``__future__`` imports are legacy ``python2`` compatibility
-    tools that are no longer required.
+    Reasoning:
+        Almost all ``__future__`` imports are legacy ``python2`` compatibility
+        tools that are no longer required.
+
+    Solution:
+        Remove them. Drop ``python2`` support.
 
     Except, there are some new ones for ``python4`` support.
     See ``FUTURE_IMPORTS_WHITELIST`` for the full
@@ -96,6 +108,10 @@ class DottedRawImportViolation(ASTStyleViolation):
     """
     This rule forbids to use imports like ``import os.path``.
 
+    Reasoning:
+        We should pick one style and stick to it.
+        We have decided to use the readable one.
+
     Example::
 
         # Correct:
@@ -117,8 +133,8 @@ class SameAliasImportViolation(ASTStyleViolation):
     """
     This rule forbids to use the same alias as the original name in imports.
 
-    Why would you even do this in the first place?
-    However, sometimes we see this error in the real code.
+    Reasoning:
+        Why would you even do this in the first place?
 
     Example::
 
