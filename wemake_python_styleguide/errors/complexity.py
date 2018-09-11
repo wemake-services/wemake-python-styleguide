@@ -29,7 +29,7 @@ class NestedFunctionViolation(ASTStyleViolation):
     """
     This rule forbids to have nested functions.
 
-        We also disallow to nest ``lambda``.
+    We also disallow to nest ``lambda``.
 
     Reasoning:
         Nesting functions is a bad practice.
@@ -105,7 +105,14 @@ class TooManyLocalsViolation(ASTStyleViolation):
     """
     This rule forbids to have too many local variables in the unit of code.
 
-    If you have too many variables in a function, you have to refactor it.
+    Reasoning:
+        Having too many variables in a single function is bad thing.
+        Soon, you will find troubles to understand what this variable means.
+        It will also become hard to name new variables.
+
+    Solution:
+        If you have too many variables in a function, you have to refactor it.
+
     What counts as a local variable? We only count variable as local
     in the following case: it is assigned inside the function body.
 
