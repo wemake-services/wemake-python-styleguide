@@ -17,6 +17,9 @@ There are no new features introduced.
 
 - Introduced the concept of regression testing, see `test/fixtures/regression`
 - Removed `compat.py`
+- Fixes some minor typos, problems, markup inside the docs
+- Adds some new configuration to `sphinx`
+- Changes `sphinx` docs structure a little bit
 
 
 ## Version 0.0.10 aka The Module Reaper

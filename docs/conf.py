@@ -57,6 +57,11 @@ extensions = [
 
 autodoc_member_order = 'bysource'
 
+autodoc_mock_imports = [
+    'flake8',
+    'typing_extensions',
+]
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
@@ -176,6 +181,8 @@ texinfo_documents = [
 
 
 # -- Extension configuration -------------------------------------------------
+
+napoleon_numpy_docstring = False
 
 # -- Options for todo extension ----------------------------------------------
 

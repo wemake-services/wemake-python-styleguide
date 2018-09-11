@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
 """
-These rules checks that ``class``es are defined correctly.
+These rules checks that ``class`` definitions are correct.
 
-Beautiful is better than ugly.
-Explicit is better than implicit.
-In the face of ambiguity, refuse the temptation to guess.
-There should be one-- and preferably only one --obvious way to do it.
+Note:
+
+    Beautiful is better than ugly.
+    Explicit is better than implicit.
+    In the face of ambiguity, refuse the temptation to guess.
+    There should be one-- and preferably only one --obvious way to do it.
+
 """
 
 from wemake_python_styleguide.errors.base import ASTStyleViolation
@@ -16,7 +19,7 @@ class StaticMethodViolation(ASTStyleViolation):
     """
     This rule forbids to use ``@staticmethod`` decorator.
 
-    Use regular methods, ``classmethods``, or raw functions instead.
+    Use regular methods, ``classmethods`` or raw functions instead.
 
     Note:
         Returns Z300 as error code

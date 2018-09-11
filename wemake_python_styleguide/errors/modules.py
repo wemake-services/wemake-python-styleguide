@@ -4,6 +4,12 @@
 These rules checks that modules are defined correctly.
 
 Please, take a note that these rules are not applied to packages.
+
+Things we check here:
+
+1. Naming
+2. Contents: some modules must have contents, some must not
+
 """
 
 from wemake_python_styleguide.errors.base import SimpleStyleViolation

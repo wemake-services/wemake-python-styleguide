@@ -1,19 +1,22 @@
 # -*- coding: utf-8 -*-
 
 """
-These rules checks some general rules.
+These rules check some general issues.
 
 Like:
 
-1. Naming
-2. Using some builtins
-3. Using keywords
-4. Working with exceptions
+1. Incorrect naming
+2. Using wrong builtins
+3. Using wrong keywords
+4. Working with exceptions "the bad way"
 
-Beautiful is better than ugly.
-Explicit is better than implicit.
-In the face of ambiguity, refuse the temptation to guess.
-There should be one-- and preferably only one --obvious way to do it.
+Note:
+
+    Beautiful is better than ugly.
+    Explicit is better than implicit.
+    In the face of ambiguity, refuse the temptation to guess.
+    There should be one-- and preferably only one --obvious way to do it.
+
 """
 
 from wemake_python_styleguide.errors.base import ASTStyleViolation
@@ -44,7 +47,7 @@ class WrongKeywordViolation(ASTStyleViolation):
 
 class BareRiseViolation(ASTStyleViolation):
     """
-    This rule forbids using bare `raise` keyword outside of `except` block.
+    This rule forbids using bare ``raise`` keyword outside of ``except`` block.
 
     This may be a serious error in your application,
     so we should prevent that.
@@ -68,10 +71,10 @@ class BareRiseViolation(ASTStyleViolation):
 
 class RaiseNotImplementedViolation(ASTStyleViolation):
     """
-    This rule forbids to use `NotImplemented` error.
+    This rule forbids to use ``NotImplemented`` error.
 
     These two errors have different use cases.
-    Use cases of `NotImplemented` is too limited to be generally available.
+    Use cases of ``NotImplemented`` is too limited to be generally available.
 
     Example::
 
@@ -206,11 +209,11 @@ class WrongModuleMetadataViolation(ASTStyleViolation):
 
 class FormattedStringViolation(ASTStyleViolation):
     """
-    This rule forbids to use `f` strings.
+    This rule forbids to use ``f`` strings.
 
-    `f` strings looses context to often, they are hard to lint.
-    Also, they promote a bad practice: putting a logic into the template.
-    Use `.format()` instead.
+    ``f`` strings looses context too often and they are hard to lint.
+    Also, they promote a bad practice: putting your logic inside the template.
+    Use ``.format()`` instead.
 
     Example::
 
@@ -251,15 +254,15 @@ class EmptyModuleViolation(ASTStyleViolation):
 
 class InitModuleHasLogicViolation(ASTStyleViolation):
     """
-    This rule forbids to have logic inside `__init__` module.
+    This rule forbids to have logic inside ``__init__`` module.
 
-    If you have logic inside the `__init__` module it means several things:
+    If you have logic inside the ``__init__`` module it means several things:
 
     1. you are keeping some outdated stuff there, you need to refactor
     2. you are placing this logic into the wrong file, just create another one
     3. you are doing some dark magic, and you should not do that
 
-    However, we allow to have some contents inside the `__init__` module:
+    However, we allow to have some contents inside the ``__init__`` module:
 
     1. comments, since they are dropped before AST comes in play
     2. docs string, because sometimes it is required to state something

@@ -11,9 +11,10 @@
 Welcome to the most opinionated linter ever.
 
 `wemake-python-styleguide` is actually just a `flake8` plugin.
-The main goal of this tool is to make our `python` code consistent.
+The main goal of this tool is to make our `python` code
+consistent and to fight the code complexity.
 
-```
+```text
 The Zen of Python, by Tim Peters
 
 Beautiful is better than ugly.

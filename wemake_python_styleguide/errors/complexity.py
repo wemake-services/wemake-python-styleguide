@@ -8,9 +8,12 @@ What we call "design flaws":
 1. Complex code (there are a lof of complexity checks!)
 2. Nested classes, functions
 
-Simple is better than complex.
-Complex is better than complicated.
-Flat is better than nested.
+Note:
+
+    Simple is better than complex.
+    Complex is better than complicated.
+    Flat is better than nested.
+
 """
 
 from wemake_python_styleguide.errors.base import ASTStyleViolation
@@ -24,7 +27,7 @@ class NestedFunctionViolation(ASTStyleViolation):
     However, there are some whitelisted names like,
     see ``NESTED_FUNCTIONS_WHITELIST`` for the whole list.
 
-    We also disallow to nest ``lambda``s.
+    We also disallow to nest ``lambda``.
 
     Example::
 
@@ -94,10 +97,10 @@ class TooManyLocalsViolation(ASTStyleViolation):
 
     In this example we will count as locals only several variables:
 
-    1. `first_var`, because it is assigned inside the function's body
-    2. `second_var`, because it is assigned inside the function's body
-    3. `argument`, because it is reassigned inside the function's body
-    4. `third_var`, because it is assigned inside the function's body
+    1. ``first_var``, because it is assigned inside the function's body
+    2. ``second_var``, because it is assigned inside the function's body
+    3. ``argument``, because it is reassigned inside the function's body
+    4. ``third_var``, because it is assigned inside the function's body
 
     Please, note that `_` is a special case. It is not counted as a local
     variable. Since by design it means: do not count me as a real variable.
@@ -117,7 +120,7 @@ class TooManyArgumentsViolation(ASTStyleViolation):
     """
     This rule forbids to have too many arguments for a function or method.
 
-    This is an indecator of a bad desing.
+    This is an indicator of a bad desing.
     When function requires many arguments
     it shows that it is required to refactor this piece of code.
 
@@ -134,10 +137,12 @@ class TooManyArgumentsViolation(ASTStyleViolation):
 
 class TooManyElifsViolation(ASTStyleViolation):
     """
-    This rule forbids to use many `elif` branches.
+    This rule forbids to use many ``elif`` branches.
 
-    This rule is specifically important, becase many `elif` branches indicate
-    a complex flow in your design: you are reimplementing `switch` in python.
+    This rule is specifically important,
+    because many ``elif`` branches indicate
+    a complex flow in your design:
+    you are reimplementing ``switch`` in python.
 
     There are different design patters to use instead.
 

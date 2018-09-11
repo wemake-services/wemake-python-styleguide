@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
 """
-These rules checks ``import``s to be defined correctly.
+These rules checks ``import`` statements to be defined correctly.
 
-Explicit is better than implicit.
-Flat is better than nested.
-Sparse is better than dense.
-Readability counts.
+Note:
+
+    Explicit is better than implicit.
+    Flat is better than nested.
+    Sparse is better than dense.
+    Readability counts.
+
 """
 
 from wemake_python_styleguide.errors.base import ASTStyleViolation
@@ -113,6 +116,9 @@ class DottedRawImportViolation(ASTStyleViolation):
 class SameAliasImportViolation(ASTStyleViolation):
     """
     This rule forbids to use the same alias as the original name in imports.
+
+    Why would you even do this in the first place?
+    However, sometimes we see this error in the real code.
 
     Example::
 
