@@ -17,6 +17,7 @@ There are no new features introduced.
 
 - Improves docs: now all errors are sorted by `code`
 - Improves docs: now all errors have reasoning
+- Replaced `pytest-isort` with `flake8-isort`
 
 
 ## Version 0.0.11

@@ -217,6 +217,20 @@ pydocstyle = ">=2.1"
 
 [[package]]
 category = "main"
+description = "flake8 plugin that integrates isort ."
+name = "flake8-isort"
+optional = false
+platform = "*"
+python-versions = "*"
+version = "2.5"
+
+[package.dependencies]
+flake8 = ">=3.2.1"
+isort = ">=4.3.0"
+testfixtures = "*"
+
+[[package]]
+category = "main"
 description = "A flake8 plugin for testing PEP-8 conform package and module names."
 name = "flake8-module-name"
 optional = false
@@ -315,7 +329,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "1.1.0"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "A Python utility / library to sort Python imports."
 name = "isort"
 optional = false
@@ -562,19 +576,6 @@ pytest = ">=3.5"
 
 [[package]]
 category = "dev"
-description = "py.test plugin to check import ordering using isort"
-name = "pytest-isort"
-optional = false
-platform = "*"
-python-versions = "*"
-version = "0.2.1"
-
-[package.dependencies]
-isort = ">=4.0"
-pytest = ">=3.0"
-
-[[package]]
-category = "dev"
 description = "Pytest plugin to randomly order tests and control random.seed."
 name = "pytest-randomly"
 optional = false
@@ -723,6 +724,15 @@ pbr = ">=2.0.0,<2.1.0 || >2.1.0"
 six = ">=1.10.0"
 
 [[package]]
+category = "main"
+description = "A collection of helpers and mock objects for unit tests and doc tests."
+name = "testfixtures"
+optional = false
+platform = "*"
+python-versions = "*"
+version = "6.3.0"
+
+[[package]]
 category = "dev"
 description = "a fork of Python 2 and 3 ast modules with type comment support"
 name = "typed-ast"
@@ -762,7 +772,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4"
 version = "1.23"
 
 [metadata]
-content-hash = "715995f9c79d5a48b5e9ec9b2d3d497544b7c15873a1bb2b9c36c421e9b3589a"
+content-hash = "f0f624ecd3423a17aca6394f5a9f1fcb46a90bf572ee84ae3f9867be4ce1c2e7"
 platform = "*"
 python-versions = "^3.6 || ^3.7"
 
@@ -786,6 +796,7 @@ flake8-commas = ["d3005899466f51380387df7151fb59afec666a0f4f4a2c6a8995b975de0f44
 flake8-comprehensions = ["b83891fec0e680b07aa1fd92e53eb6993be29a0f3673a09badbe8da307c445e0", "e4ccf1627f75f192eb7fde640f5edb81c98d04b1390df9d4145ffd7710bb1ef2"]
 flake8-debugger = ["be4fb88de3ee8f6dd5053a2d347e2c0a2b54bab6733a2280bb20ebd3c4ca1d97"]
 flake8-docstrings = ["4e0ce1476b64e6291520e5570cf12b05016dd4e8ae454b8a8a9a48bc5f84e1cd", "8436396b5ecad51a122a2c99ba26e5b4e623bf6e913b0fea0cb6c2c4050f91eb"]
+flake8-isort = ["298d7904ac3a46274edf4ce66fd7e272c2a60c34c3cc999dea000608d64e5e6e", "5992850626ce96547b1f1c7e8a7f0ef49ab2be44eca2177934566437b636fa3c"]
 flake8-module-name = ["bc0a43cce6fc95215de39a0f18e06fdca160daaf63eae6926fabbb6d9458f3d2", "d155957f08c6dabd44d59ca229ca67375a34b14ee44c79097b66838dd919e5b6"]
 flake8-pep3101 = ["493821d6bdd083794eb0691ebe5b68e5c520b622b269d60e54308fb97440e21a", "b661ab718df42b87743dde266ef5de4f9e900b56c67dbccd45d24cf527545553"]
 flake8-polyfill = ["12be6a34ee3ab795b19ca73505e7b55826d5f6ad7230d31b18e106400169b9e9", "e44b087597f6da52ec6393a709e7108b2905317d0c0b744cdca6208e670d8eda"]
@@ -817,7 +828,6 @@ pyparsing = ["0832bcf47acd283788593e7a0f542407bd9550a55a8a8435214a1960e04bcb04",
 pytest = ["453cbbbe5ce6db38717d282b758b917de84802af4288910c12442984bde7b823", "a8a07f84e680482eb51e244370aaf2caa6301ef265f37c2bdefb3dd3b663f99d"]
 pytest-cov = ["513c425e931a0344944f84ea47f3956be0e416d95acbd897a44970c8d926d5d7", "e360f048b7dae3f2f2a9a4d067b2dd6b6a015d384d1577c994a43f3f7cbad762"]
 pytest-flake8 = ["4f30f5be3efb89755f38f11bdb2a5e22d19a6f5faa73428f703a3292a9572cd3", "c740ad6aa19e3958947d2118f70bed218caf1d2097039fb7318573a2a72f89a1"]
-pytest-isort = ["2221c0914dfca41914625a646f0d2d1d4c676861b9a7b26746a7fdd40aa2c59b", "c70d0f900f4647bb714f0843dd82d7f7b759904006de31254efdb72ce88e0c0e"]
 pytest-randomly = ["6db5e03d72b54052b9b379dc3cfa4749c19bfe4de161cf3eb24762049f4ce9be", "92ec6745d3ebdd690ecb598648748c9601f16f5afacf83ccef2b50d23e6edb7f"]
 pytz = ["a061aa0a9e06881eb8b3b2b43f05b9439d6583c206d0a6c340ff72a7b6669053", "ffb9ef1de172603304d9d2819af6f5ece76f2e85ec10692a524dd876e72bf277"]
 requests = ["63b52e3c866428a224f97cab011de738c36aec0185aa91cfacd418b5d58911d1", "ec22d826a36ed72a7358ff3fe56cbd4ba69dd7a6718ffd450ff0e9df7a47ce6a"]
@@ -830,6 +840,7 @@ sphinx-readable-theme = ["f5fe65a2e112cb956b366df41e0fc894ff6b6f0e4a4814fcbff692
 sphinxcontrib-napoleon = ["614b779888629f14dfdfad6c17bffbb6d3813a0a0917a9541651d85384d4d6bd", "cbb31953b15d2102c18f16f02591f92e2614a08ef0218c9e514e2dc4c4f9daf9"]
 sphinxcontrib-websupport = ["68ca7ff70785cbe1e7bccc71a48b5b6d965d79ca50629606c7861a21b206d9dd", "9de47f375baf1ea07cdb3436ff39d7a9c76042c10a769c52353ec46e4e8fc3b9"]
 stevedore = ["1e153545aca7a6a49d8337acca4f41c212fbfa60bf864ecd056df0cafb9627e8", "c7eac1c0d95824c88b655273da5c17cdde6482b2739f47c30bf851dcc9d3c2c0"]
+testfixtures = ["334497d26344e8c0c5d01b4d785a1c83464573151e6a5f7ab250eb7981d452ec", "53c06c1feb0bf378d63c54d1d96858978422d5a34793b39f0dcb0e44f8ec26f4"]
 typed-ast = ["0948004fa228ae071054f5208840a1e88747a357ec1101c17217bfe99b299d58", "25d8feefe27eb0303b73545416b13d108c6067b846b543738a25ff304824ed9a", "29464a177d56e4e055b5f7b629935af7f49c196be47528cc94e0a7bf83fbc2b9", "2e214b72168ea0275efd6c884b114ab42e316de3ffa125b267e732ed2abda892", "3e0d5e48e3a23e9a4d1a9f698e32a542a4a288c871d33ed8df1b092a40f3a0f9", "519425deca5c2b2bdac49f77b2c5625781abbaf9a809d727d3a5596b30bb4ded", "57fe287f0cdd9ceaf69e7b71a2e94a24b5d268b35df251a88fef5cc241bf73aa", "668d0cec391d9aed1c6a388b0d5b97cd22e6073eaa5fbaa6d2946603b4871efe", "68ba70684990f59497680ff90d18e756a47bf4863c604098f10de9716b2c0bdd", "6de012d2b166fe7a4cdf505eee3aaa12192f7ba365beeefaca4ec10e31241a85", "79b91ebe5a28d349b6d0d323023350133e927b4de5b651a8aa2db69c761420c6", "8550177fa5d4c1f09b5e5f524411c44633c80ec69b24e0e98906dd761941ca46", "a8034021801bc0440f2e027c354b4eafd95891b573e12ff0418dec385c76785c", "bc978ac17468fe868ee589c795d06777f75496b1ed576d308002c8a5756fb9ea", "c05b41bc1deade9f90ddc5d988fe506208019ebba9f2578c622516fd201f5863", "c9b060bd1e5a26ab6e8267fd46fc9e02b54eb15fffb16d112d4c7b1c12987559", "edb04bdd45bfd76c8292c4d9654568efaedf76fe78eb246dde69bdb13b2dad87", "f19f2a4f547505fe9072e15f6f4ae714af51b5a681a97f187971f50c283193b6"]
 typing = ["4027c5f6127a6267a435201981ba156de91ad0d1d98e9ddc2aa173453453492d", "57dcf675a99b74d64dacf6fba08fb17cf7e3d5fdff53d4a30ea2a5e7e52543d4", "a4c8473ce11a65999c8f59cb093e70686b6c84c98df58c1dae9b3b196089858a"]
 typing-extensions = ["1c0a8e3b4ce55207a03dd0dcb98bc47a704c71f14fe4311ec860cc8af8f4bd27", "8b0962ecb92847974514b1724c8ae2b6dd1ffe86bcdfac429517f5e583ada658", "be7b05ddab71727fabf1f071365043cf034e4cdac9cade1f1d61a6cc526aaafe"]
