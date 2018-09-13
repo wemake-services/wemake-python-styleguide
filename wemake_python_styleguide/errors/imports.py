@@ -84,8 +84,9 @@ class FutureImportViolation(ASTStyleViolation):
         Remove them. Drop ``python2`` support.
 
     Except, there are some new ones for ``python4`` support.
-    See ``FUTURE_IMPORTS_WHITELIST`` for the full
-    list of allowed future imports.
+    See
+    :py:data:`~wemake_python_styleguide.constants.FUTURE_IMPORTS_WHITELIST`
+    for the full list of allowed future imports.
 
     Example::
 

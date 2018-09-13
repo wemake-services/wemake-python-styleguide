@@ -13,13 +13,12 @@ def some():
 
 
 del {'a': 1}['a'] # noqa: Z110
-raise  # noqa: Z111
-raise NotImplemented  # noqa: Z112
-hasattr(object, 'some')  # noqa: Z113
-value = 1  # noqa: Z114
-x = 2  # noqa: Z115
-__private = 3  # noqa: Z116
-__author__ = 'Nikita Sobolev'  # noqa: Z117
+raise NotImplemented  # noqa: Z111
+hasattr(object, 'some')  # noqa: Z112
+value = 1  # noqa: Z113
+x = 2  # noqa: Z114
+__private = 3  # noqa: Z115
+__author__ = 'Nikita Sobolev'  # noqa: Z116
 
 
 class BadClass:  # noqa: Z302

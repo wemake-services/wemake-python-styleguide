@@ -1,6 +1,7 @@
 # Version history
 
 We follow Semantic Versions since the `0.1.0` release.
+We used to have incremental versioning before `0.1.0`.
 
 
 ## Version 0.0.12
@@ -8,15 +9,21 @@ We follow Semantic Versions since the `0.1.0` release.
 This is just a supporting release.
 There are no new features introduced.
 
+We have **changed** the error codes for general checks.
+
 ### Bugfixes
 
 - Fixes bug with [nested imports missing `parent`](https://github.com/wemake-services/wemake-python-styleguide/issues/120)
 - Fixes bug with [incorrect `pycodestyle` version](https://github.com/wemake-services/wemake-python-styleguide/issues/118)
+- Removes `BareRaiseViolation` as it does not fit the purpose of this package
 
 ### Misc
 
 - Improves docs: now all errors are sorted by `code`
 - Improves docs: now all errors have reasoning
+- Improves docs: some references are now clickable in web version
+- Improves docs: now docs include `CHANGELOG.md`
+- Improves docs: now we have templates for `bug` and `rule-request`
 - Replaced `pytest-isort` with `flake8-isort`
 
 

@@ -41,8 +41,9 @@ class NestedFunctionViolation(ASTStyleViolation):
 
     We also disallow to nest ``lambda`` functions.
 
-    However, there are some whitelisted names like,
-    see ``NESTED_FUNCTIONS_WHITELIST`` for the whole list.
+    See
+    :py:data:`~wemake_python_styleguide.constants.NESTED_FUNCTIONS_WHITELIST`
+    for the whole list of whitelisted names.
 
     Example::
 
@@ -78,8 +79,9 @@ class NestedClassViolation(ASTStyleViolation):
         If you are nesting classes inside a function for parametrization,
         then you will probably need to use different design (or metaclasses).
 
-    However, there are some whitelisted class names like: ``Meta``.
-    See ``NESTED_CLASSES_WHITELIST`` for the full list of names.
+    See
+    :py:data:`~wemake_python_styleguide.constants.NESTED_CLASSES_WHITELIST`
+    for the full list of whitelisted names.
 
     Example::
 
@@ -133,7 +135,7 @@ class TooManyLocalsViolation(ASTStyleViolation):
     3. ``argument``, because it is reassigned inside the function's body
     4. ``third_var``, because it is assigned inside the function's body
 
-    Please, note that `_` is a special case. It is not counted as a local
+    Please, note that ``_`` is a special case. It is not counted as a local
     variable. Since by design it means: do not count me as a real variable.
 
     This rule is configurable with ``--max-local-variables``.

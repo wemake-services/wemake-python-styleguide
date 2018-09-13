@@ -53,6 +53,9 @@ extensions = [
 
     # Used to insert typehints into the final docs:
     'sphinx_autodoc_typehints',
+
+    # Used to embed values from the source code into the docs:
+    'added_value',
 ]
 
 autodoc_member_order = 'bysource'

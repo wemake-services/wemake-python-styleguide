@@ -46,3 +46,20 @@ def test_raise_not_implemented_error(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+def test_bare_raise(
+    assert_errors, parse_ast_tree, default_options,
+):
+    """Testing that bare `raise` is allowed."""
+    tree = parse_ast_tree("""
+    try:
+        1 / 0
+    except Exception:
+        raise
+    """)
+
+    visitor = WrongRaiseVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])

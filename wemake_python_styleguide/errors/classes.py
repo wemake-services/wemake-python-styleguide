@@ -15,8 +15,6 @@ Note:
 from wemake_python_styleguide.errors.base import ASTStyleViolation
 
 
-# TODO: refactor to be `BadDecoratorViolation`
-# TODO: also forbid `@property`
 class StaticMethodViolation(ASTStyleViolation):
     """
     This rule forbids to use ``@staticmethod`` decorator.
@@ -47,7 +45,9 @@ class BadMagicMethodViolation(ASTStyleViolation):
         Like, we forbid to use ``del`` keyword, so we forbid to use all
         magic methods related to it.
 
-    See ``BAD_MAGIC_METHODS`` for the full blacklist of the magic methods.
+    See
+    :py:data:`~wemake_python_styleguide.constants.BAD_MAGIC_METHODS`
+    for the full blacklist of the magic methods.
 
     Note:
         Returns Z301 as error code

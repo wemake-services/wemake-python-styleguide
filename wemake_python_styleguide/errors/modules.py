@@ -27,7 +27,9 @@ class WrongModuleNameViolation(SimpleStyleViolation):
     Solution:
         Rename your module, reorganize the contents.
 
-    See ``BAD_MODULE_NAMES`` for the full list of bad module names.
+    See
+    :py:data:`~wemake_python_styleguide.constants.BAD_MODULE_NAMES`
+    for the full list of bad module names.
 
     Example::
 
@@ -58,8 +60,9 @@ class WrongModuleMagicNameViolation(SimpleStyleViolation):
         Do not fall in love with magic. There's no good reason to use
         magic names, when you can use regular names.
 
-    See ``MAGIC_MODULE_NAMES_WHITELIST`` for the full list of allowed
-    magic module names.
+    See
+    :py:data:`~wemake_python_styleguide.constants.MAGIC_MODULE_NAMES_WHITELIST`
+    for the full list of allowed magic module names.
 
     Example::
 

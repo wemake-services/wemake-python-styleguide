@@ -10,7 +10,7 @@ What does it mean? It means that we choose these values based on our mind
 capacity. And it is really hard to keep in mind more that 9 objects
 at the same time.
 
-These values can be changed in the `setup.cfg` file on a per-project bases,
+These values can be changed in the ``setup.cfg`` file on a per-project bases,
 if you find them too strict or too permissive.
 """
 

@@ -6,3 +6,4 @@ sphinxcontrib-napoleon==0.6.1
 sphinx_autodoc_typehints==1.3.0
 recommonmark==0.4.0
 m2r==0.2.0
+added-value==0.8

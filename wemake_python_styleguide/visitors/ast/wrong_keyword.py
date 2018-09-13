@@ -3,7 +3,6 @@
 import ast
 
 from wemake_python_styleguide.errors.general import (
-    BareRiseViolation,
     RaiseNotImplementedViolation,
     WrongKeywordViolation,
 )
@@ -13,7 +12,11 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 class WrongRaiseVisitor(BaseNodeVisitor):
     """This class finds wrong `raise` keywords."""
 
-    def _check_exception_type(self, node: ast.Raise, exception) -> None:
+    def _check_exception_type(self, node: ast.Raise) -> None:
+        exception = getattr(node, 'exc', None)
+        if exception is None:
+            return
+
         exception_func = getattr(exception, 'func', None)
         if exception_func:
             exception = exception_func
@@ -24,26 +27,15 @@ class WrongRaiseVisitor(BaseNodeVisitor):
                 RaiseNotImplementedViolation(node, text=exception_name),
             )
 
-    def _check_bare_raise(self, node: ast.Raise) -> None:
-        parent = getattr(node, 'parent', None)
-        if not isinstance(parent, ast.ExceptHandler):
-            self.add_error(BareRiseViolation(node))
-
     def visit_Raise(self, node: ast.Raise) -> None:
         """
         Checks how `raise` keyword is used.
 
         Raises:
             RaiseNotImplementedViolation
-            BareRiseViolation
 
         """
-        exception = getattr(node, 'exc', None)
-        if not exception:
-            self._check_bare_raise(node)
-        else:
-            self._check_exception_type(node, exception)
-
+        self._check_exception_type(node)
         self.generic_visit(node)
 
 

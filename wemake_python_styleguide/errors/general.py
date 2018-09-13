@@ -54,28 +54,6 @@ class WrongKeywordViolation(ASTStyleViolation):
     code = 'Z110'
 
 
-# TODO: remove this error
-class BareRiseViolation(ASTStyleViolation):
-    """
-    This rule forbids using bare ``raise`` keyword outside of ``except`` block.
-
-    Example::
-
-        # Correct:
-        raise ValueError('Value is too low')
-
-        # Wrong:
-        raise
-
-    Note:
-        Returns Z111 as error code
-
-    """
-
-    error_template = '{0} Found bare raise outside of except "{1}"'
-    code = 'Z111'
-
-
 class RaiseNotImplementedViolation(ASTStyleViolation):
     """
     This rule forbids to use ``NotImplemented`` error.
@@ -98,12 +76,12 @@ class RaiseNotImplementedViolation(ASTStyleViolation):
         https://stackoverflow.com/a/44575926/4842742
 
     Note:
-        Returns Z112 as error code
+        Returns Z111 as error code
 
     """
 
     error_template = '{0} Found raise NotImplemented "{1}"'
-    code = 'Z112'
+    code = 'Z111'
 
 
 class WrongFunctionCallViolation(ASTStyleViolation):
@@ -115,15 +93,17 @@ class WrongFunctionCallViolation(ASTStyleViolation):
         for very specific usecases,
         we forbid to use them in a free manner.
 
-    See ``BAD_FUNCTIONS`` for the full list of blacklisted functions.
+    See
+    :py:data:`~wemake_python_styleguide.constants.BAD_FUNCTIONS`
+    for the full list of blacklisted functions.
 
     Note:
-        Returns Z113 as error code
+        Returns Z112 as error code
 
     """
 
     error_template = '{0} Found wrong function call "{1}"'
-    code = 'Z113'
+    code = 'Z112'
 
 
 class WrongVariableNameViolation(ASTStyleViolation):
@@ -138,7 +118,9 @@ class WrongVariableNameViolation(ASTStyleViolation):
         If you really want to use any of the names from the list,
         add a prefix or suffix to it. It will serve you well.
 
-    See ``BAD_VARIABLE_NAMES`` for the full list of blacklisted variable names.
+    See
+    :py:data:`~wemake_python_styleguide.constants.BAD_VARIABLE_NAMES`
+    for the full list of blacklisted variable names.
 
     Example::
 
@@ -149,12 +131,12 @@ class WrongVariableNameViolation(ASTStyleViolation):
         item = None
 
     Note:
-        Returns Z114 as error code
+        Returns Z113 as error code
 
     """
 
     error_template = '{0} Found wrong variable name "{1}"'
-    code = 'Z114'
+    code = 'Z113'
 
 
 class TooShortVariableNameViolation(ASTStyleViolation):
@@ -177,12 +159,12 @@ class TooShortVariableNameViolation(ASTStyleViolation):
         x = 1
 
     Note:
-        Returns Z115 as error code
+        Returns Z114 as error code
 
     """
 
     error_template = '{0} Found too short name "{1}"'
-    code = 'Z115'
+    code = 'Z114'
 
 
 class PrivateNameViolation(ASTStyleViolation):
@@ -204,12 +186,12 @@ class PrivateNameViolation(ASTStyleViolation):
         def __collect_coverage(self): ...
 
     Note:
-        Returns Z116 as error code
+        Returns Z115 as error code
 
     """
 
     error_template = '{0} Found private name pattern "{1}"'
-    code = 'Z116'
+    code = 'Z115'
 
 
 class WrongModuleMetadataViolation(ASTStyleViolation):
@@ -223,7 +205,9 @@ class WrongModuleMetadataViolation(ASTStyleViolation):
     Solution:
         Use proper docstrings and packaging classifiers.
 
-    See ``BAD_MODULE_METADATA_VARIABLES`` for full list of bad names.
+    See
+    :py:data:`~wemake_python_styleguide.constants.BAD_MODULE_METADATA_VARIABLES`
+    for full list of bad names.
 
     Example::
 
@@ -232,12 +216,12 @@ class WrongModuleMetadataViolation(ASTStyleViolation):
         __version__ = 0.1.2
 
     Note:
-        Returns Z117 as error code
+        Returns Z116 as error code
 
     """
 
     error_template = '{0} Found wrong metadata variable {1}'
-    code = 'Z117'
+    code = 'Z116'
 
 
 class FormattedStringViolation(ASTStyleViolation):
@@ -252,6 +236,9 @@ class FormattedStringViolation(ASTStyleViolation):
     Solution:
         Use ``.format()`` with indexed params instead.
 
+    See also:
+        https://github.com/xZise/flake8-string-format
+
     Example::
 
         # Wrong:
@@ -261,13 +248,13 @@ class FormattedStringViolation(ASTStyleViolation):
         'Result is: {0}'.format(2 + 2)
 
     Note:
-        Returns Z118 as error code
+        Returns Z117 as error code
 
     """
 
     should_use_text = False
     error_template = '{0} Found `f` string'
-    code = 'Z118'
+    code = 'Z117'
 
 
 class EmptyModuleViolation(ASTStyleViolation):
@@ -284,13 +271,13 @@ class EmptyModuleViolation(ASTStyleViolation):
         2. drop some documentation in it, so you will explain why it is there
 
     Note:
-        Returns Z119 as error code
+        Returns Z118 as error code
 
     """
 
     should_use_text = False
     error_template = '{0} Found empty module'
-    code = 'Z119'
+    code = 'Z118'
 
 
 class InitModuleHasLogicViolation(ASTStyleViolation):
@@ -315,10 +302,10 @@ class InitModuleHasLogicViolation(ASTStyleViolation):
     2. docs string, because sometimes it is required to state something
 
     Note:
-        Returns Z120 as error code
+        Returns Z119 as error code
 
     """
 
     should_use_text = False
     error_template = '{0} Found `__init__` module with logic'
-    code = 'Z120'
+    code = 'Z119'
