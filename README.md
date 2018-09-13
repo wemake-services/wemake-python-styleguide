@@ -58,9 +58,10 @@ Until, use it on your own risk.
 
 We are here not to:
 
-1. To assume or check types, use `mypy` instead
-2. To reformat code, since we believe that developers should do that
+1. Assume or check types, use `mypy` instead
+2. Reformat code, since we believe that developers should do that
 3. Suite everyone, this is *our* linter
+4. Check for `SyntaxError`s or exceptions, write tests instead
 
 
 ## Contributing
