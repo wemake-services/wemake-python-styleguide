@@ -63,6 +63,7 @@ autodoc_member_order = 'bysource'
 autodoc_mock_imports = [
     'flake8',
     'typing_extensions',
+    'attr',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
