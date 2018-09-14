@@ -14,8 +14,8 @@ class BaseChecker(object):
 
     Attributes:
         tree: AST tree to be checked if any.
-        options: contains the options objects passed and parsed by `flake8`.
-        filename: filename passed by `flake8`.
+        options: contains the options objects passed and parsed by ``flake8``.
+        filename: filename passed by ``flake8``.
         errors: list of errors for the specific checker.
 
     """
@@ -46,15 +46,23 @@ class BaseNodeVisitor(ast.NodeVisitor, BaseChecker):
     """
     This class allows to store errors while traversing node tree.
 
-    This class should be used as a base class for all `ast`-based checkers.
-    Method `visit()` is defined in `NodeVisitor` class.
+    This class should be used as a base class for all ``ast``- based checkers.
+    Method ``visit()`` is defined in ``NodeVisitor`` class.
     """
 
+    def _post_visit(self) -> None:
+        """
+        This method is executed after all nodes have been visited.
+
+        By default, does nothing.
+        """
+
     def run(self) -> None:
-        """Runs `visit()` method of `NodeVisitor` with the correct params."""
+        """Runs the checking process."""
         if self.tree is None:
-            raise ValueError('Parsing without a defined trie')
+            raise ValueError('Parsing without a defined tree')
         self.visit(self.tree)
+        self._post_visit()
 
 
 class BaseFilenameVisitor(BaseChecker):
@@ -73,7 +81,7 @@ class BaseFilenameVisitor(BaseChecker):
         Checks module's filename.
 
         If filename equals to ``STDIN`` constant then this check is ignored.
-        Otherwise, runs `visit_filename()` method.
+        Otherwise, runs ``visit_filename()`` method.
         """
         if self.filename != constants.STDIN:
             self.visit_filename()

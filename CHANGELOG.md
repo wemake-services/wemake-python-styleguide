@@ -4,6 +4,22 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
+## Version 0.0.13 aka The Jones Complexity
+
+This release is the last feature release before `0.1.0`.
+However, there might be some supporting releases.
+
+### Features
+
+- Adds `jones` complexity checker
+- Adds `--max-line-complexity` and `--max-jones-score` options
+
+### Misc
+
+- Improves docs: adds detailed installation instructions
+- Removes `flake8-blind-except` plugin
+
+
 ## Version 0.0.12
 
 This is just a supporting release.

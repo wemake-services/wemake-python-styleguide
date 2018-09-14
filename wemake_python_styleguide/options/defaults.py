@@ -41,6 +41,12 @@ MAX_MODULE_MEMBERS = 7
 #: Maximum number of methods in a single class:
 MAX_METHODS = 7
 
+#: Maximum line complexity:
+MAX_LINE_COMPLEXITY = 14  # 7 * 2, also almost guessed
+
+#: Maximum median module Jones complexity:
+MAX_JONES_SCORE = 12  # this value was "guessed" based on existing source code
+
 
 # Modules
 

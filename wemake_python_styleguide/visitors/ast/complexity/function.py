@@ -18,7 +18,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
 class _ComplexityCounter(object):
-    """Helper class to encapsulate logics from the visitor."""
+    """Helper class to encapsulate logic from the visitor."""
 
     def __init__(self, delegate: 'FunctionComplexityVisitor') -> None:
         self.delegate = delegate
@@ -133,10 +133,10 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
     This includes:
 
     1. Number of arguments
-    2. Number of `return`s
+    2. Number of `return` statements
     3. Number of expressions
     4. Number of local variables
-    5. Number of `elif`s
+    5. Number of `elif` branches
 
     """
 

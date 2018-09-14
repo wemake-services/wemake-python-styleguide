@@ -22,7 +22,10 @@ Note:
 
 """
 
-from wemake_python_styleguide.errors.base import ASTStyleViolation
+from wemake_python_styleguide.errors.base import (
+    ASTStyleViolation,
+    SimpleStyleViolation,
+)
 
 
 class NestedFunctionViolation(ASTStyleViolation):
@@ -324,3 +327,77 @@ class TooManyMethodsViolation(ASTStyleViolation):
 
     error_template = '{0} Found too many methods "{1}"'
     code = 'Z209'
+
+
+# TODO: remove blind-except, replace with another plugin
+# since it is just a regex based tool
+class LineComplexityViolation(ASTStyleViolation):
+    """
+    This rule forbids to have complex lines.
+
+    We are using Jones Complexity algorithm to count complexity.
+    What is Jones Complexity? It is a simple yet power method to count
+    the number of ``ast`` nodes per line.
+    If the complexity of a single line is higher than a tresshold,
+    then an error is raised.
+
+    What nodes do we count? All except the following:
+
+    1. modules
+    2. function and classes, since they are checked differently
+    3. type annotations, since they do not increase complexity
+
+    Reasoning:
+        Having a complex line indicates that you somehow managed to put too
+        many logic inside a single line.
+        At some point in time you will no longer be able to understand
+        what this line means and what it does.
+
+    Solution:
+        Split a single line into several lines: by creating new variables,
+        statements or functions. Note, this might trigger new complexity issues.
+        With this technique a single new node in a line might trigger a complex
+        refactoring process including several modules.
+
+    See also:
+        https://github.com/Miserlou/JonesComplexity
+
+    This rule is configurable with ``--max-line-complexity``.
+
+    Note:
+        Returns Z210 as error code
+
+    """
+
+    error_template = '{0} Found too complex line: {1}'
+    code = 'Z210'
+
+
+class JonesScoreViolation(SimpleStyleViolation):
+    """
+    This rule forbids to have modules with complex lines.
+
+    We are using Jones Complexity algorithm to count module score.
+    See
+    :py:class:`~.LineComplexityViolation` for details of per-line-complexity.
+    How it is done: we count complexity per line
+
+    Reasoning:
+        Having complex modules will decrease your code maintability.
+
+    Solution:
+        Refactor the module contents.
+
+    See also:
+        https://github.com/Miserlou/JonesComplexity
+
+    This rule is configurable with ``--max-module-score``.
+
+    Note:
+        Returns Z211 as error code
+
+    """
+
+    should_use_text = False
+    error_template = '{0} Found module with high Jones score'
+    code = 'Z211'

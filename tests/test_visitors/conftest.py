@@ -7,11 +7,11 @@ from typing import Sequence
 
 import pytest
 
-from wemake_python_styleguide.options import defaults
+from wemake_python_styleguide.options.config import Configuration
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
-def maybe_set_parent(tree: ast.AST) -> ast.AST:
+def _maybe_set_parent(tree: ast.AST) -> ast.AST:
     """
     Sets parents for all nodes that do not have this prop.
 
@@ -31,11 +31,15 @@ def maybe_set_parent(tree: ast.AST) -> ast.AST:
     return tree
 
 
+def _to_dest_option(long_option_name: str) -> str:
+    return long_option_name[2:].replace('-', '_')
+
+
 @pytest.fixture(scope='session')
 def parse_ast_tree():
     """Helper function to convert code to ast."""
     def factory(code: str) -> ast.AST:
-        return maybe_set_parent(ast.parse(dedent(code)))
+        return _maybe_set_parent(ast.parse(dedent(code)))
 
     return factory
 
@@ -57,16 +61,8 @@ def assert_errors():
 def options():
     """Returns the options builder."""
     default_values = {
-        'max_arguments': defaults.MAX_ARGUMENTS,
-        'max_expressions': defaults.MAX_EXPRESSIONS,
-        'max_local_variables': defaults.MAX_LOCAL_VARIABLES,
-        'max_returns': defaults.MAX_RETURNS,
-        'min_variable_length': defaults.MIN_VARIABLE_LENGTH,
-        'max_offset_blocks': defaults.MAX_OFFSET_BLOCKS,
-        'max_elifs': defaults.MAX_ELIFS,
-        'max_module_members': defaults.MAX_MODULE_MEMBERS,
-        'max_methods': defaults.MAX_METHODS,
-        'min_module_name_length': defaults.MIN_MODULE_NAME_LENGTH,
+        _to_dest_option(option.long_option_name): option.default
+        for option in Configuration.all_options()
     }
 
     Options = namedtuple('options', default_values.keys())

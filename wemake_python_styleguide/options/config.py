@@ -69,10 +69,18 @@ class Configuration(object):
     - ``min-module-name-length`` - minimum required module's name length,
       defaults to
       :str:`wemake_python_styleguide.options.defaults.MIN_MODULE_NAME_LENGTH`
+    - ``max-line-complexity`` - maximum line complexity measured in number of
+      ``ast`` nodes per line, defaults to
+      :str:`wemake_python_styleguide.options.defaults.MAX_LINE_COMPLEXITY`
+    - ``max-jones-score`` - maximum Jones score for a module, which is equal
+      to the median of all lines complexity sum, defaults to
+      :str:`wemake_python_styleguide.options.defaults.MAX_JONES_SCORE`
 
     """
 
-    def _all_options(self) -> Sequence[_Option]:
+    @classmethod
+    def all_options(cls) -> Sequence[_Option]:
+        """Returns a list of option values we use in this plugin."""
         return [
             _Option(
                 '--max-returns',
@@ -133,10 +141,21 @@ class Configuration(object):
                 defaults.MIN_MODULE_NAME_LENGTH,
                 "Minimum required module's name length",
             ),
+
+            _Option(
+                '--max-line-complexity',
+                defaults.MAX_LINE_COMPLEXITY,
+                'Maximum line complexity, measured in `ast` nodes.',
+            ),
+
+            _Option(
+                '--max-jones-score',
+                defaults.MAX_JONES_SCORE,
+                'Maximum median module complexity, based on sum of lines.',
+            ),
         ]
 
     def register_options(self, parser: OptionManager) -> None:
         """Registers options for our plugin."""
-        options = self._all_options()
-        for option in options:
+        for option in self.all_options():
             parser.add_option(**attr.asdict(option))
