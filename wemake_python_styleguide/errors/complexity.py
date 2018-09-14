@@ -329,8 +329,6 @@ class TooManyMethodsViolation(ASTStyleViolation):
     code = 'Z209'
 
 
-# TODO: remove blind-except, replace with another plugin
-# since it is just a regex based tool
 class LineComplexityViolation(ASTStyleViolation):
     """
     This rule forbids to have complex lines.

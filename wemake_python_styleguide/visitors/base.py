@@ -46,7 +46,7 @@ class BaseNodeVisitor(ast.NodeVisitor, BaseChecker):
     """
     This class allows to store errors while traversing node tree.
 
-    This class should be used as a base class for all ``ast``- based checkers.
+    This class should be used as a base class for all ``ast`` based checkers.
     Method ``visit()`` is defined in ``NodeVisitor`` class.
     """
 
@@ -67,7 +67,7 @@ class BaseNodeVisitor(ast.NodeVisitor, BaseChecker):
 
 class BaseFilenameVisitor(BaseChecker):
     """
-    This class allows to check module filenames.
+    This class allows to check module file names.
 
     Method `visit()` is used only for API compatibility.
     """
