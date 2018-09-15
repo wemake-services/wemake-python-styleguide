@@ -55,7 +55,7 @@ class JonesComplexityVisitor(BaseNodeVisitor):
         """
         for line_nodes in self._lines.values():
             complexity = len(line_nodes)
-            if line_nodes and complexity > self.options.max_line_complexity:
+            if complexity > self.options.max_line_complexity:
                 self.add_error(LineComplexityViolation(
                     line_nodes[0], text=str(complexity),
                 ))
