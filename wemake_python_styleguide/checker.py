@@ -20,6 +20,9 @@ from wemake_python_styleguide.visitors.ast.complexity.counts import (
 from wemake_python_styleguide.visitors.ast.complexity.function import (
     FunctionComplexityVisitor,
 )
+from wemake_python_styleguide.visitors.ast.complexity.jones import (
+    JonesComplexityVisitor,
+)
 from wemake_python_styleguide.visitors.ast.complexity.nested import (
     NestedComplexityVisitor,
 )
@@ -70,6 +73,7 @@ ENABLED_VISITORS: CheckerSequence = [
     OffsetVisitor,
     ModuleMembersVisitor,
     MethodMembersVisitor,
+    JonesComplexityVisitor,
 
     # Modules:
     WrongModuleNameVisitor,
@@ -90,6 +94,7 @@ class Checker(object):
     config = Configuration()
     options: ConfigurationOptions
 
+    # Receive `logic_line` as the first argument to make this plugin logical
     def __init__(self, tree: Module, filename: str = constants.STDIN) -> None:
         """Creates new checker instance."""
         self.tree = tree

@@ -129,18 +129,6 @@ pyflakes = ">=1.5.0,<1.7.0"
 
 [[package]]
 category = "main"
-description = "A flake8 extension that checks for blind except: statements"
-name = "flake8-blind-except"
-optional = false
-platform = "*"
-python-versions = "*"
-version = "0.1.1"
-
-[package.dependencies]
-setuptools = "*"
-
-[[package]]
-category = "main"
 description = "A plugin for flake8 finding likely bugs and design problems in your program. Contains warnings that don't belong in pyflakes and pycodestyle."
 name = "flake8-bugbear"
 optional = false
@@ -797,7 +785,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4"
 version = "1.23"
 
 [metadata]
-content-hash = "98de8b21f5b2a1bcafe5a454c39f16a47e51980ebc85925b5c4e504eb73965bc"
+content-hash = "e00b93239a7e2149bee5a8ed276c3f7972c68bb16426bbb9d25f3e613a89cf5d"
 platform = "*"
 python-versions = "^3.6 || ^3.7"
 
@@ -814,7 +802,6 @@ coverage = ["03481e81d558d30d230bc12999e3edffe392d244349a90f4ef9b88425fac74ba", 
 doc8 = ["2df89f9c1a5abfb98ab55d0175fed633cae0cf45025b8b1e0ee5ea772be28543", "d12f08aa77a4a65eb28752f4bc78f41f611f9412c4155e2b03f1f5d4a45efe04"]
 docutils = ["02aec4bd92ab067f6ff27a38a38a41173bf01bed8f89157768c1573f53e474a6", "51e64ef2ebfb29cae1faa133b3710143496eca21c530f3f71424d77687764274", "7a4bd47eaf6596e1295ecb11361139febe29b084a87bf005bf899f9a42edc3c6"]
 flake8 = ["7253265f7abd8b313e3892944044a365e3f4ac3fcdcfb4298f55ee9ddf188ba0", "c7841163e2b576d435799169b78703ad6ac1bbb0f199994fc05f700b2a90ea37"]
-flake8-blind-except = ["0d7d1adb4cabf2268d6eebb815a7a5014bcb7e8419f7a74339c46d0b8847b858", "aca3356633825544cec51997260fe31a8f24a1a2795ce8e81696b9916745e599"]
 flake8-bugbear = ["07b6e769d7f4e168d590f7088eae40f6ddd9fa4952bed31602def65842682c83", "0ccf56975f4db1d69dc1cf3598c99d768ebf95d0cad27d76087954aa399b515a"]
 flake8-builtins = ["8d806360767947c0035feada4ddef3ede32f0a586ef457e62d811b8456ad9a51", "cd7b1b7fec4905386a3643b59f9ca8e305768da14a49a7efb31fe9364f33cd04"]
 flake8-coding = ["549c2b22c08711feda11795fb49f147a626305b602c547837bab405e7981f844", "f2ee7c3c8ae47f2d278111a2090655bcf170789c24ccfea519d93be2ede7571c"]

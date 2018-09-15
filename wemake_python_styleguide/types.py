@@ -50,6 +50,8 @@ class ConfigurationOptions(Protocol):
     max_elifs: int
     max_module_members: int
     max_methods: int
+    max_line_complexity: int
+    max_jones_score: int
 
     # Modules:
     min_module_name_length: int
