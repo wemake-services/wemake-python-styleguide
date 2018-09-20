@@ -4,7 +4,7 @@ import string
 
 import pytest
 
-from wemake_python_styleguide.visitors.ast.wrong_name import (
+from wemake_python_styleguide.visitors.ast.general.wrong_name import (
     BAD_VARIABLE_NAMES,
     PrivateNameViolation,
     TooShortVariableNameViolation,
@@ -12,24 +12,27 @@ from wemake_python_styleguide.visitors.ast.wrong_name import (
     WrongVariableNameViolation,
 )
 
-import_alias = """
-import os as {0}
+static_attribute = """
+class Test:
+    {0} = None
 """
 
-from_import_alias = """
-from os import path as {0}
+instance_attribute = """
+class Test:
+    def __init__(self):
+        self.{0} = 123
 """
 
 
 @pytest.mark.parametrize('bad_name', BAD_VARIABLE_NAMES)
 @pytest.mark.parametrize('code', [
-    import_alias,
-    from_import_alias,
+    static_attribute,
+    instance_attribute,
 ])
-def test_wrong_import_alias_names(
+def test_wrong_attributes_names(
     assert_errors, parse_ast_tree, bad_name, code, default_options,
 ):
-    """Testing that import aliases can not have blacklisted names."""
+    """Testing that attribute can not have blacklisted names."""
     tree = parse_ast_tree(code.format(bad_name))
 
     visitor = WrongNameVisitor(default_options, tree=tree)
@@ -40,13 +43,13 @@ def test_wrong_import_alias_names(
 
 @pytest.mark.parametrize('short_name', string.ascii_letters)
 @pytest.mark.parametrize('code', [
-    import_alias,
-    from_import_alias,
+    static_attribute,
+    instance_attribute,
 ])
-def test_too_short_import_alias_names(
+def test_too_short_attribute_names(
     assert_errors, parse_ast_tree, short_name, code, default_options,
 ):
-    """Testing that import aliases can not have too short names."""
+    """Testing that attribute can not have too short names."""
     tree = parse_ast_tree(code.format(short_name))
 
     visitor = WrongNameVisitor(default_options, tree=tree)
@@ -56,14 +59,14 @@ def test_too_short_import_alias_names(
 
 
 @pytest.mark.parametrize('code', [
-    import_alias,
-    from_import_alias,
+    static_attribute,
+    instance_attribute,
 ])
-def test_private_import_alias_names(
+def test_private_attribute_names(
     assert_errors, parse_ast_tree, code, default_options,
 ):
-    """Testing that import aliases can not have too private names."""
-    tree = parse_ast_tree(code.format('__hidden'))
+    """Testing that attribute can not have private names."""
+    tree = parse_ast_tree(code.format('__private_name'))
 
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
@@ -72,19 +75,20 @@ def test_private_import_alias_names(
 
 
 @pytest.mark.parametrize('correct_name', [
-    'my_alias',
+    'correct_name',
     'xy',
-    'test',
+    'test1',
     '_protected',
+    '__magic__',
 ])
 @pytest.mark.parametrize('code', [
-    import_alias,
-    from_import_alias,
+    static_attribute,
+    instance_attribute,
 ])
-def test_correct_import_alias_names(
-    assert_errors, parse_ast_tree, correct_name, code, default_options,
+def test_correct_attribute_name(
+    assert_errors, parse_ast_tree, code, correct_name, default_options,
 ):
-    """Testing that import aliases can have normal names."""
+    """Testing that attribute can have normal names."""
     tree = parse_ast_tree(code.format(correct_name))
 
     visitor = WrongNameVisitor(default_options, tree=tree)

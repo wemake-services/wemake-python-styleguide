@@ -2,7 +2,7 @@
 
 import pytest
 
-from wemake_python_styleguide.visitors.ast.wrong_contents import (
+from wemake_python_styleguide.visitors.ast.wrong_module import (
     InitModuleHasLogicViolation,
     WrongContentsVisitor,
 )

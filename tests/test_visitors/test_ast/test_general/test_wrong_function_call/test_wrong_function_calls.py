@@ -2,7 +2,7 @@
 
 import pytest
 
-from wemake_python_styleguide.visitors.ast.wrong_function_call import (
+from wemake_python_styleguide.visitors.ast.general.wrong_function_call import (
     BAD_FUNCTIONS,
     WrongFunctionCallViolation,
     WrongFunctionCallVisitor,

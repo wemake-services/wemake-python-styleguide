@@ -4,7 +4,7 @@ import string
 
 import pytest
 
-from wemake_python_styleguide.visitors.ast.wrong_name import (
+from wemake_python_styleguide.visitors.ast.general.wrong_name import (
     BAD_VARIABLE_NAMES,
     PrivateNameViolation,
     TooShortVariableNameViolation,

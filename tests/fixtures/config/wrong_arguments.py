@@ -34,4 +34,3 @@ class ClassWithWrongMethodArgs:
     @staticmethod
     def static_error_method(one, two, three, four, five, six):
         pass
-

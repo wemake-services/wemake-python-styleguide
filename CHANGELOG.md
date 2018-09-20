@@ -4,10 +4,25 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
-## Version 0.0.13 aka The Jones Complexity
+## Version 0.0.14
 
-This release is the last feature release before `0.1.0`.
-However, there might be some supporting releases.
+### Features
+
+- Adds `TooManyImportsViolation`
+- Adds `--max-imports` options
+- Adds `flake8`, `noqa`, and `type` comments check
+
+
+### Misc
+
+- Changes how many errors are generated for limits violations
+- Improves typing support
+- Adds `cohesion` plugin
+- Adds `flake8-print` plugin
+- Removes `delegate` concept
+
+
+## Version 0.0.13 aka The Jones Complexity
 
 ### Features
 

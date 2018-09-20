@@ -62,7 +62,7 @@ def options():
     """Returns the options builder."""
     default_values = {
         _to_dest_option(option.long_option_name): option.default
-        for option in Configuration.all_options()
+        for option in Configuration.options
     }
 
     Options = namedtuple('options', default_values.keys())

@@ -5,7 +5,10 @@ This file contains all possible errors.
 """
 
 from __future__ import print_function  # noqa: Z102
+
 from .version import get_version  # noqa: Z100
+
+
 def some():
     from my_module import some_function  # noqa: Z101
 

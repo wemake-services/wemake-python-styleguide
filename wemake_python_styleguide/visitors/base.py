@@ -1,37 +1,38 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import List
+from typing import List, Type
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.errors.base import BaseStyleViolation
 from wemake_python_styleguide.types import ConfigurationOptions
 
 
-class BaseChecker(object):
+class BaseVisitor(object):
     """
-    Base class for different type of checkers.
+    Base class for different types of visitors.
 
     Attributes:
-        tree: AST tree to be checked if any.
         options: contains the options objects passed and parsed by ``flake8``.
         filename: filename passed by ``flake8``.
-        errors: list of errors for the specific checker.
+        errors: list of errors for the specific visitor.
 
     """
 
     def __init__(
         self,
         options: ConfigurationOptions,
-        tree: ast.AST = None,
-        filename: str = 'stdin',
+        filename: str = constants.STDIN,
     ) -> None:
-        """Creates new  instance."""
-        super().__init__()
+        """Create base visitor instance."""
         self.options = options
-        self.tree = tree
         self.filename = filename
         self.errors: List[BaseStyleViolation] = []
+
+    @classmethod
+    def from_checker(cls: Type['BaseVisitor'], checker) -> 'BaseVisitor':
+        """Constructs visitor instance from the checker."""
+        return cls(options=checker.options, filename=checker.filename)
 
     def add_error(self, error: BaseStyleViolation) -> None:
         """Adds error to the visitor."""
@@ -42,34 +43,58 @@ class BaseChecker(object):
         raise NotImplementedError('Should be defined in a subclass')
 
 
-class BaseNodeVisitor(ast.NodeVisitor, BaseChecker):
+class BaseNodeVisitor(ast.NodeVisitor, BaseVisitor):
     """
-    This class allows to store errors while traversing node tree.
+    Allows to store errors while traversing node tree.
 
     This class should be used as a base class for all ``ast`` based checkers.
     Method ``visit()`` is defined in ``NodeVisitor`` class.
+
+    Attributes:
+        tree: ``ast`` tree to be checked.
+
     """
+
+    def __init__(
+        self,
+        options: ConfigurationOptions,
+        tree: ast.AST,
+        **kwargs,
+    ) -> None:
+        """Creates new ``ast`` based instance."""
+        super().__init__(options, **kwargs)
+        self.tree = tree
+
+    @classmethod
+    def from_checker(
+        cls: Type['BaseNodeVisitor'],
+        checker,
+    ) -> 'BaseNodeVisitor':
+        """Constructs visitor instance from the checker."""
+        return cls(
+            options=checker.options,
+            filename=checker.filename,
+            tree=checker.tree,
+        )
 
     def _post_visit(self) -> None:
         """
-        This method is executed after all nodes have been visited.
+        Executed after all nodes have been visited.
 
-        By default, does nothing.
+        By default does nothing.
         """
 
     def run(self) -> None:
         """Runs the checking process."""
-        if self.tree is None:
-            raise ValueError('Parsing without a defined tree')
         self.visit(self.tree)
         self._post_visit()
 
 
-class BaseFilenameVisitor(BaseChecker):
+class BaseFilenameVisitor(BaseVisitor):
     """
-    This class allows to check module file names.
+    Allows to check module file names.
 
-    Method `visit()` is used only for API compatibility.
+    Has ``visit_filename()`` method that should be redefined in subclasses.
     """
 
     def visit_filename(self) -> None:
@@ -77,11 +102,6 @@ class BaseFilenameVisitor(BaseChecker):
         raise NotImplementedError('Should be defined in a subclass')
 
     def run(self) -> None:
-        """
-        Checks module's filename.
-
-        If filename equals to ``STDIN`` constant then this check is ignored.
-        Otherwise, runs ``visit_filename()`` method.
-        """
+        """Checks module's filename."""
         if self.filename != constants.STDIN:
             self.visit_filename()

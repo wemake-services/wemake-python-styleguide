@@ -66,7 +66,7 @@ class JonesComplexityVisitor(BaseNodeVisitor):
             self.add_error(JonesScoreViolation())
 
     def _maybe_ignore_child(self, node: ast.AST) -> bool:
-        if isinstance(node, ast.AnnAssign):  # type: ignore
+        if isinstance(node, ast.AnnAssign):
             self._to_ignore.append(node.annotation)
 
         return node in self._to_ignore

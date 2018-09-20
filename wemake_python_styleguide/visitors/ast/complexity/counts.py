@@ -5,12 +5,12 @@ from collections import defaultdict
 from typing import DefaultDict
 
 from wemake_python_styleguide.errors.complexity import (
+    TooManyImportsViolation,
     TooManyMethodsViolation,
     TooManyModuleMembersViolation,
 )
 from wemake_python_styleguide.logics.functions import is_method
-from wemake_python_styleguide.logics.limits import has_just_exceeded_limit
-from wemake_python_styleguide.types import ModuleMembers
+from wemake_python_styleguide.types import AnyImport, ModuleMembers
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
@@ -29,11 +29,10 @@ class ModuleMembersVisitor(BaseNodeVisitor):
 
         if isinstance(parent, ast.Module) and not is_real_method:
             self._public_items_count += 1
-            max_members = self.options.max_module_members
-            if has_just_exceeded_limit(self._public_items_count, max_members):
-                self.add_error(
-                    TooManyModuleMembersViolation(node, text=self.filename),
-                )
+
+    def _post_visit(self) -> None:
+        if self._public_items_count > self.options.max_module_members:
+            self.add_error(TooManyModuleMembersViolation())
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """
@@ -58,6 +57,34 @@ class ModuleMembersVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
 
+class ImportMembersVisitor(BaseNodeVisitor):
+    """Counts imports in a module."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Creates a counter for tracked metrics."""
+        super().__init__(*args, **kwargs)
+        self._imports_count = 0
+
+    def _post_visit(self) -> None:
+        if self._imports_count > self.options.max_imports:
+            self.add_error(
+                TooManyImportsViolation(text=str(self._imports_count)),
+            )
+
+    def visit_Import(self, node: AnyImport) -> None:
+        """
+        Counts the number of ``import`` and ``from ... import ...``.
+
+        Raises:
+            TooManyImportsViolation
+
+        """
+        self._imports_count += 1
+        self.generic_visit(node)
+
+    visit_ImportFrom = visit_Import
+
+
 class MethodMembersVisitor(BaseNodeVisitor):
     """Counts methods in a single class."""
 
@@ -70,9 +97,11 @@ class MethodMembersVisitor(BaseNodeVisitor):
         parent = getattr(node, 'parent', None)
         if isinstance(parent, ast.ClassDef):
             self._methods[parent] += 1
-            max_methods = self.options.max_methods
-            if has_just_exceeded_limit(self._methods[parent], max_methods):
-                self.add_error(TooManyMethodsViolation(node, text=parent.name))
+
+    def _post_visit(self) -> None:
+        for node, count in self._methods.items():
+            if count > self.options.max_methods:
+                self.add_error(TooManyMethodsViolation(text=node.name))
 
     def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
         """

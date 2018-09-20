@@ -2,7 +2,7 @@
 
 import pytest
 
-from wemake_python_styleguide.visitors.ast.wrong_keyword import (
+from wemake_python_styleguide.visitors.ast.general.wrong_keyword import (
     WrongKeywordViolation,
     WrongKeywordVisitor,
 )
