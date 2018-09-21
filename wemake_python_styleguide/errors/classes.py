@@ -17,14 +17,14 @@ from wemake_python_styleguide.errors.base import ASTStyleViolation
 
 class StaticMethodViolation(ASTStyleViolation):
     """
-    This rule forbids to use ``@staticmethod`` decorator.
+    Forbids to use ``@staticmethod`` decorator.
 
     Reasoning:
         Static methods are not required to be inside the class.
         Because it even does not an access to the current instance.
 
     Solution:
-        Use regular methods, ``classmethods`` or raw functions instead.
+        Use instance methods, ``@classmethod``, or functions instead.
 
     Note:
         Returns Z300 as error code
@@ -33,12 +33,12 @@ class StaticMethodViolation(ASTStyleViolation):
 
     should_use_text = False
     error_template = '{0} Found using `@staticmethod`'
-    code = 'Z300'
+    code = 300
 
 
 class BadMagicMethodViolation(ASTStyleViolation):
     """
-    This rule forbids to use some magic methods.
+    Forbids to use some magic methods.
 
     Reasoning:
         We forbid to use magic methods related to the forbidden language parts.
@@ -55,12 +55,12 @@ class BadMagicMethodViolation(ASTStyleViolation):
     """
 
     error_template = '{0} Found using restricted magic method "{1}"'
-    code = 'Z301'
+    code = 301
 
 
 class RequiredBaseClassViolation(ASTStyleViolation):
     """
-    This rule forbids to write classes without base classes.
+    Forbids to write classes without base classes.
 
     Reasoning:
         We just need to decide how to do it.
@@ -81,4 +81,4 @@ class RequiredBaseClassViolation(ASTStyleViolation):
     """
 
     error_template = '{0} Found class without a base class "{1}"'
-    code = 'Z302'
+    code = 302

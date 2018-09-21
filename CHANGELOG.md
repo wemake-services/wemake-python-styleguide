@@ -8,18 +8,22 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
-- Adds `TooManyImportsViolation`
-- Adds `--max-imports` options
+- Adds `WrongModuleNamePatternViolation`
+  and `WrongModuleNameUnderscoresViolation`
+- Adds `TooManyImportsViolation` error and `--max-imports` option
+- Adds `--i-control-code` option to ignore `InitModuleHasLogicViolation`
+- Adds check for underscored numbers
 - Adds `flake8`, `noqa`, and `type` comments check
-
 
 ### Misc
 
 - Changes how many errors are generated for limits violations
+- Refactors how visitors are injected into the checker, now using presets
 - Improves typing support
 - Adds `cohesion` plugin
-- Adds `flake8-print` plugin
-- Removes `delegate` concept
+- Adds `flake8-eradicate` plugin
+- Adds `flake8-print` plugin for development
+- Removes `delegate` concept from the codebase
 
 
 ## Version 0.0.13 aka The Jones Complexity

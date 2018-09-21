@@ -23,13 +23,11 @@ class WrongRaiseVisitor(BaseNodeVisitor):
 
         exception_name = getattr(exception, 'id', None)
         if exception_name == 'NotImplemented':
-            self.add_error(
-                RaiseNotImplementedViolation(node, text=exception_name),
-            )
+            self.add_error(RaiseNotImplementedViolation(node))
 
     def visit_Raise(self, node: ast.Raise) -> None:
         """
-        Checks how `raise` keyword is used.
+        Checks how ``raise`` keyword is used.
 
         Raises:
             RaiseNotImplementedViolation
@@ -44,7 +42,7 @@ class WrongKeywordVisitor(BaseNodeVisitor):
 
     def visit_Global(self, node: ast.Global) -> None:
         """
-        Used to find `global` keyword.
+        Used to find ``global`` keyword.
 
         Raises:
             WrongKeywordViolation
@@ -55,7 +53,7 @@ class WrongKeywordVisitor(BaseNodeVisitor):
 
     def visit_Nonlocal(self, node: ast.Nonlocal) -> None:
         """
-        Used to find `nonlocal` keyword.
+        Used to find ``nonlocal`` keyword.
 
         Raises:
             WrongKeywordViolation
@@ -66,7 +64,7 @@ class WrongKeywordVisitor(BaseNodeVisitor):
 
     def visit_Delete(self, node: ast.Delete) -> None:
         """
-        Used to find `del` keyword.
+        Used to find ``del`` keyword.
 
         Raises:
             WrongKeywordViolation
@@ -77,7 +75,7 @@ class WrongKeywordVisitor(BaseNodeVisitor):
 
     def visit_Pass(self, node: ast.Pass) -> None:
         """
-        Used to find `pass` keyword.
+        Used to find ``pass`` keyword.
 
         Raises:
             WrongKeywordViolation

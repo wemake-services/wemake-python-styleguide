@@ -34,7 +34,7 @@ from wemake_python_styleguide.errors.base import (
 
 class NestedFunctionViolation(ASTStyleViolation):
     """
-    This rule forbids to have nested functions.
+    Forbids to have nested functions.
 
     Reasoning:
         Nesting functions is a bad practice.
@@ -69,12 +69,12 @@ class NestedFunctionViolation(ASTStyleViolation):
     """
 
     error_template = '{0} Found nested function "{1}"'
-    code = 'Z200'
+    code = 200
 
 
 class NestedClassViolation(ASTStyleViolation):
     """
-    This rule forbids to have nested classes.
+    Forbids to use nested classes.
 
     Reasoning:
         Nested classes are really hard to manage.
@@ -107,12 +107,12 @@ class NestedClassViolation(ASTStyleViolation):
     """
 
     error_template = '{0} Found nested class "{1}"'
-    code = 'Z201'
+    code = 201
 
 
 class TooManyLocalsViolation(ASTStyleViolation):
     """
-    This rule forbids to have too many local variables in the unit of code.
+    Forbids to have too many local variables in the unit of code.
 
     Reasoning:
         Having too many variables in a single function is bad thing.
@@ -153,12 +153,12 @@ class TooManyLocalsViolation(ASTStyleViolation):
     """
 
     error_template = '{0} Found too many local variables "{1}"'
-    code = 'Z202'
+    code = 202
 
 
 class TooManyArgumentsViolation(ASTStyleViolation):
     """
-    This rule forbids to have too many arguments for a function or method.
+    Forbids to have too many arguments for a function or method.
 
     Reasoning:
         This is an indicator of a bad design. When function requires many
@@ -177,12 +177,12 @@ class TooManyArgumentsViolation(ASTStyleViolation):
     """
 
     error_template = '{0} Found too many arguments "{1}"'
-    code = 'Z203'
+    code = 203
 
 
 class TooManyElifsViolation(ASTStyleViolation):
     """
-    This rule forbids to use many ``elif`` branches.
+    Forbids to use many ``elif`` branches.
 
     Reasoning:
         This rule is specifically important, because many ``elif``
@@ -203,12 +203,12 @@ class TooManyElifsViolation(ASTStyleViolation):
 
     should_use_text = False
     error_template = '{0} Found too many `elif` branches'
-    code = 'Z204'
+    code = 204
 
 
 class TooManyReturnsViolation(ASTStyleViolation):
     """
-    This rule forbids placing too many ``return`` statements into the function.
+    Forbids placing too many ``return`` statements into the function.
 
     Reasoning:
         When there are too many ``return`` keywords,
@@ -226,12 +226,12 @@ class TooManyReturnsViolation(ASTStyleViolation):
     """
 
     error_template = '{0} Found too many return statements "{1}"'
-    code = 'Z205'
+    code = 205
 
 
 class TooManyExpressionsViolation(ASTStyleViolation):
     """
-    This rule forbids putting to many expression is a unit of code.
+    Forbids putting to many expression is a unit of code.
 
     Reasoning:
         When there are too many expression it means that this specific
@@ -248,12 +248,12 @@ class TooManyExpressionsViolation(ASTStyleViolation):
     """
 
     error_template = '{0} Found too many expressions "{1}"'
-    code = 'Z206'
+    code = 206
 
 
 class TooDeepNestingViolation(ASTStyleViolation):
     """
-    This rule forbids nesting blocks too deep.
+    Forbids nesting blocks too deep.
 
     Reasoning:
         If nesting is too deep that indicates of a complex logic
@@ -272,12 +272,12 @@ class TooDeepNestingViolation(ASTStyleViolation):
     """
 
     error_template = '{0} Found too deep nesting "{1}"'
-    code = 'Z207'
+    code = 207
 
 
 class TooManyModuleMembersViolation(SimpleStyleViolation):
     """
-    This rule forbids to have many classes and functions in a single module.
+    Forbids to have many classes and functions in a single module.
 
     Reasoning:
         Having many classes and functions in a single module is a bad thing.
@@ -300,12 +300,12 @@ class TooManyModuleMembersViolation(SimpleStyleViolation):
 
     should_use_text = False
     error_template = '{0} Found too many members'
-    code = 'Z208'
+    code = 208
 
 
 class TooManyMethodsViolation(SimpleStyleViolation):
     """
-    This rule forbids to have many methods in a single class.
+    Forbids to have many methods in a single class.
 
     Reasoning:
         Having too many methods might lead to the "God object".
@@ -332,12 +332,12 @@ class TooManyMethodsViolation(SimpleStyleViolation):
     """
 
     error_template = '{0} Found too many methods "{1}"'
-    code = 'Z209'
+    code = 209
 
 
 class LineComplexityViolation(ASTStyleViolation):
     """
-    This rule forbids to have complex lines.
+    Forbids to have complex lines.
 
     We are using Jones Complexity algorithm to count complexity.
     What is Jones Complexity? It is a simple yet power method to count
@@ -374,12 +374,12 @@ class LineComplexityViolation(ASTStyleViolation):
     """
 
     error_template = '{0} Found too complex line: {1}'
-    code = 'Z210'
+    code = 210
 
 
 class JonesScoreViolation(SimpleStyleViolation):
     """
-    This rule forbids to have modules with complex lines.
+    Forbids to have modules with complex lines.
 
     We are using Jones Complexity algorithm to count module's score.
     See
@@ -405,12 +405,12 @@ class JonesScoreViolation(SimpleStyleViolation):
 
     should_use_text = False
     error_template = '{0} Found module with high Jones score'
-    code = 'Z211'
+    code = 211
 
 
 class TooManyImportsViolation(SimpleStyleViolation):
     """
-    This rule forbids to have modules with too many imports.
+    Forbids to have modules with too many imports.
 
     Namespaces are one honking great idea -- let's do more of those!
 
@@ -442,4 +442,4 @@ class TooManyImportsViolation(SimpleStyleViolation):
     """
 
     error_template = '{0} Found module with too many imports: {1}'
-    code = 'Z212'
+    code = 212

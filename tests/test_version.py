@@ -2,7 +2,7 @@
 
 import subprocess
 
-from wemake_python_styleguide.version import version
+from wemake_python_styleguide.version import pkg_name, pkg_version
 
 
 def test_call_flake8_version():
@@ -13,5 +13,5 @@ def test_call_flake8_version():
     )
 
     output_text = output.decode('utf-8')
-    assert 'wemake-python-styleguide' in output_text
-    assert version in output_text
+    assert pkg_name in output_text
+    assert pkg_version in output_text

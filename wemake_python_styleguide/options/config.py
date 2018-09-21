@@ -12,7 +12,7 @@ ConfigValues = Dict[str, Union[str, int, bool]]
 
 @attr.attrs(frozen=True, auto_attribs=True, slots=True)
 class _Option(object):
-    """This class represent `flake8` option object."""
+    """Represents ``flake8`` option object."""
 
     long_option_name: str
     default: int  # noqa: E704

@@ -24,7 +24,7 @@ from wemake_python_styleguide.errors.base import ASTStyleViolation
 
 class WrongKeywordViolation(ASTStyleViolation):
     """
-    This rule forbids to use some keywords from ``python``.
+    Forbids to use some keywords from ``python``.
 
     Reasoning:
         We believe, tha some keywords are anti-patterns.
@@ -51,12 +51,12 @@ class WrongKeywordViolation(ASTStyleViolation):
     """
 
     error_template = '{0} Found wrong keyword "{1}"'
-    code = 'Z110'
+    code = 110
 
 
 class RaiseNotImplementedViolation(ASTStyleViolation):
     """
-    This rule forbids to use ``NotImplemented`` error.
+    Forbids to use ``NotImplemented`` error.
 
     Reasoning:
         These two errors look so similar.
@@ -80,13 +80,14 @@ class RaiseNotImplementedViolation(ASTStyleViolation):
 
     """
 
-    error_template = '{0} Found raise NotImplemented "{1}"'
-    code = 'Z111'
+    should_use_text = False
+    error_template = '{0} Found raise NotImplemented'
+    code = 111
 
 
 class WrongFunctionCallViolation(ASTStyleViolation):
     """
-    This rule forbids to call some built-in functions.
+    Forbids to call some built-in functions.
 
     Reasoning:
         Some functions are only suitable
@@ -103,15 +104,16 @@ class WrongFunctionCallViolation(ASTStyleViolation):
     """
 
     error_template = '{0} Found wrong function call "{1}"'
-    code = 'Z112'
+    code = 112
 
 
 class WrongVariableNameViolation(ASTStyleViolation):
     """
-    This rule forbids to have blacklisted variable names.
+    Forbids to have blacklisted variable names.
 
     Reasoning:
-        Naming is hard. We have found names that are not expressive enough.
+        We have found some names that are not expressive enough.
+        However, they appear in the code more than offten.
         All names from ``BAD_VARIABLE_NAMES`` could be improved.
 
     Solution:
@@ -136,16 +138,16 @@ class WrongVariableNameViolation(ASTStyleViolation):
     """
 
     error_template = '{0} Found wrong variable name "{1}"'
-    code = 'Z113'
+    code = 113
 
 
 class TooShortVariableNameViolation(ASTStyleViolation):
     """
-    This rule forbids to have too short variable names.
+    Forbids to have too short variable names.
 
     Reasoning:
         Naming is hard.
-        It is hard to understand what this variable means,
+        It is hard to understand what the variable means and why it is used,
         if it's name is too short.
 
     This rule is configurable with ``--min-variable-length``.
@@ -164,18 +166,19 @@ class TooShortVariableNameViolation(ASTStyleViolation):
     """
 
     error_template = '{0} Found too short name "{1}"'
-    code = 'Z114'
+    code = 114
 
 
 class PrivateNameViolation(ASTStyleViolation):
     """
-    This rule forbids to have private name pattern.
+    Forbids to have private name pattern.
 
     Reasoning:
-        Naming is hard.
-        Private is not private in ``python``. So, why should we pretend it is?
+        Private is not private in ``python``.
+        So, why should we pretend it is?
+        This might lead to some serious design flaws.
 
-    This rule includes: variables, attributes, functions, and methods.
+    This rule checks: variables, attributes, functions, and methods.
 
     Example::
 
@@ -191,12 +194,12 @@ class PrivateNameViolation(ASTStyleViolation):
     """
 
     error_template = '{0} Found private name pattern "{1}"'
-    code = 'Z115'
+    code = 115
 
 
 class WrongModuleMetadataViolation(ASTStyleViolation):
     """
-    This rule forbids to have some module level variables.
+    Forbids to have some module level variables.
 
     Reasoning:
         We discourage using module variables like ``__author__``,
@@ -204,6 +207,7 @@ class WrongModuleMetadataViolation(ASTStyleViolation):
 
     Solution:
         Use proper docstrings and packaging classifiers.
+        Use ``pkg_resources`` if you need to import this data into your app.
 
     See
     :py:data:`~wemake_python_styleguide.constants.BAD_MODULE_METADATA_VARIABLES`
@@ -221,12 +225,12 @@ class WrongModuleMetadataViolation(ASTStyleViolation):
     """
 
     error_template = '{0} Found wrong metadata variable {1}'
-    code = 'Z116'
+    code = 116
 
 
 class FormattedStringViolation(ASTStyleViolation):
     """
-    This rule forbids to use ``f`` strings.
+    Forbids to use ``f`` strings.
 
     Reasoning:
         ``f`` strings looses context too often and they are hard to lint.
@@ -254,12 +258,12 @@ class FormattedStringViolation(ASTStyleViolation):
 
     should_use_text = False
     error_template = '{0} Found `f` string'
-    code = 'Z117'
+    code = 117
 
 
 class EmptyModuleViolation(ASTStyleViolation):
     """
-    This rule forbids to have empty modules.
+    Forbids to have empty modules.
 
     Reasoning:
         Why is it even there?
@@ -277,12 +281,12 @@ class EmptyModuleViolation(ASTStyleViolation):
 
     should_use_text = False
     error_template = '{0} Found empty module'
-    code = 'Z118'
+    code = 118
 
 
 class InitModuleHasLogicViolation(ASTStyleViolation):
     """
-    This rule forbids to have logic inside ``__init__`` module.
+    Forbids to have logic inside ``__init__`` module.
 
     Reasoning:
         If you have logic inside the ``__init__`` module
@@ -308,4 +312,4 @@ class InitModuleHasLogicViolation(ASTStyleViolation):
 
     should_use_text = False
     error_template = '{0} Found `__init__` module with logic'
-    code = 'Z119'
+    code = 119

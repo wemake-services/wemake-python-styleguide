@@ -10,14 +10,14 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 class WrongFunctionCallVisitor(BaseNodeVisitor):
     """
-    This class is responsible for restricting some dangerous function calls.
+    Responsible for restricting some dangerous function calls.
 
-    All these functions are defined in `BAD_FUNCTIONS`.
+    All these functions are defined in ``BAD_FUNCTIONS``.
     """
 
     def visit_Call(self, node: ast.Call) -> None:
         """
-        Used to find `BAD_FUNCTIONS` calls.
+        Used to find ``BAD_FUNCTIONS`` calls.
 
         Raises:
             WrongFunctionCallViolation

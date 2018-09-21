@@ -6,7 +6,7 @@ from typing import Optional, Tuple
 
 class BaseStyleViolation(object):
     """
-    This is a base class for all style errors.
+    Base class for all style errors.
 
     It basically just defines how to create any error and how to format
     this error later on.
@@ -15,7 +15,7 @@ class BaseStyleViolation(object):
     """
 
     error_template: str
-    code: str
+    code: int
     should_use_text: bool = True
 
     def __init__(self, node: Optional[ast.AST], text: str = None) -> None:
@@ -27,14 +27,18 @@ class BaseStyleViolation(object):
         else:
             self._text = text
 
+    def _full_code(self) -> str:
+        """Returns fully formated code."""
+        return 'Z' + str(self.code)
+
     def message(self) -> str:
         """Returns error's formatted message."""
         if self.should_use_text:
-            return self.error_template.format(self.code, self._text)
-        return self.error_template.format(self.code)
+            return self.error_template.format(self._full_code(), self._text)
+        return self.error_template.format(self._full_code())
 
     def node_items(self) -> Tuple[int, int, str]:
-        """Returns `Tuple` to match `flake8` API format."""
+        """Returns tuple to match ``flake8`` API format."""
         line_number = getattr(self._node, 'lineno', 0)
         column_offset = getattr(self._node, 'col_offset', 0)
         return line_number, column_offset, self.message()

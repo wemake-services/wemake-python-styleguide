@@ -9,7 +9,7 @@ authors = [
   "Nikita Sobolev <mail@sobolevn.me>"
 ]
 
-readme = "README.md"  # Markdown files are supported
+readme = "README.md"
 
 repository = "https://github.com/wemake-services/wemake-python-styleguide"
 homepage = "https://github.com/wemake-services/wemake-python-styleguide"
@@ -24,7 +24,7 @@ keywords = [
 ]
 
 classifiers = [
-  "Development Status :: 3 - Alpha",
+  "Development Status :: 4 - Beta",
   "Environment :: Console",
   "Framework :: Flake8",
   "Intended Audience :: Developers",
@@ -39,6 +39,7 @@ Z = "wemake_python_styleguide.checker:Checker"
 [tool.poetry.dependencies]
 python = "^3.6 || ^3.7"
 flake8 = "^3.5"
+attrs = "^18.2"
 
 # This is a fix for issue-118
 pycodestyle = "==2.3.1"
@@ -50,21 +51,20 @@ flake8-comprehensions = "^1.4"
 flake8-docstrings = "^1.3"
 flake8-string-format = "^0.2"
 flake8-coding = "^1.3"
-flake8-module-name = "^0.1"
 flake8-bugbear = "^18.2"
 flake8-pep3101 = "^1.2"
 flake8-super-call = "^1.0"
 flake8-debugger = "^3.1"
 flake8-isort = "^2.5"
+flake8-eradicate = "^0.1"
 pep8-naming = "^0.7"
-cohesion = "^0.8"
+cohesion = "^0.9"
 
 [tool.poetry.dev-dependencies]
 pytest-cov = "^2.6"
 pytest-flake8 = "^1.0"
 pytest-randomly = "^1.2"
 pytest-isort = "^0.2"
-pytest-eradicate = "^0.0.3"
 pytest = "^3.8"
 flake8-pytest = "^1.3"
 flake8-print = "^3.1"
@@ -76,4 +76,4 @@ doc8 = "^0.8"
 m2r = "^0.2"
 sphinx_readable_theme = "^1.3"
 typing_extensions = "^3.6"
-added-value = "^0.8.0"
+added-value = "^0.8"

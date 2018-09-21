@@ -57,7 +57,7 @@ class _ImportsChecker(object):
 
 
 class WrongImportVisitor(BaseNodeVisitor):
-    """This class is responsible for finding wrong imports."""
+    """Responsible for finding wrong imports."""
 
     def __init__(self, *args, **kwargs) -> None:
         """Creates a checker for tracked violations."""
@@ -66,7 +66,7 @@ class WrongImportVisitor(BaseNodeVisitor):
 
     def visit_Import(self, node: ast.Import) -> None:
         """
-        Used to find wrong `import` statements.
+        Used to find wrong ``import`` statements.
 
         Raises:
             SameAliasImportViolation
@@ -81,7 +81,7 @@ class WrongImportVisitor(BaseNodeVisitor):
 
     def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
         """
-        Used to find wrong `from import` statements.
+        Used to find wrong ``from ... import ...`` statements.
 
         Raises:
             SameAliasImportViolation

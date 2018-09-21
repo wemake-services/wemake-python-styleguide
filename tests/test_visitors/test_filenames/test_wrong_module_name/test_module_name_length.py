@@ -4,6 +4,7 @@ import pytest
 
 from wemake_python_styleguide.visitors.filenames.wrong_module_name import (
     TooShortModuleNameViolation,
+    WrongModuleNamePatternViolation,
     WrongModuleNameVisitor,
 )
 
@@ -19,7 +20,10 @@ def test_too_short_filename(assert_errors, filename, default_options):
     visitor = WrongModuleNameVisitor(default_options, filename=filename)
     visitor.run()
 
-    assert_errors(visitor, [TooShortModuleNameViolation])
+    assert_errors(visitor, [
+        TooShortModuleNameViolation,
+        WrongModuleNamePatternViolation,
+    ])
 
 
 def test_length_option(assert_errors, options):

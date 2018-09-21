@@ -23,7 +23,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 class WrongNameVisitor(BaseNodeVisitor):
     """
-    This class performs checks based on variable names.
+    Performs checks based on variable names.
 
     It is responsible for finding short and blacklisted variables,
     functions, and arguments.
@@ -130,7 +130,7 @@ class WrongNameVisitor(BaseNodeVisitor):
 
 
 class WrongModuleMetadataVisitor(BaseNodeVisitor):
-    """This class finds wrong metadata information of a module."""
+    """Finds wrong metadata information of a module."""
 
     def _check_metadata(self, node: ast.Assign) -> None:
         node_parent = getattr(node, 'parent', None)
