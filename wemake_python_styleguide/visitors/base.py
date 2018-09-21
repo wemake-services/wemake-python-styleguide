@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import List, Type
+import tokenize
+from typing import List, Sequence, Type
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.errors.base import BaseStyleViolation
@@ -85,7 +86,7 @@ class BaseNodeVisitor(ast.NodeVisitor, BaseVisitor):
         """
 
     def run(self) -> None:
-        """Runs the checking process."""
+        """Recursively visits all ``ast`` nodes. Then executes post hook."""
         self.visit(self.tree)
         self._post_visit()
 
@@ -105,3 +106,41 @@ class BaseFilenameVisitor(BaseVisitor):
         """Checks module's filename."""
         if self.filename != constants.STDIN:
             self.visit_filename()
+
+
+class BaseTokenVisitor(BaseVisitor):
+    """Allows to check ``tokenize`` sequences."""
+
+    def __init__(
+        self,
+        options: ConfigurationOptions,
+        file_tokens: Sequence[tokenize.TokenInfo],
+        **kwargs,
+    ) -> None:
+        """Creates new ``tokenize`` based instance."""
+        super().__init__(options, **kwargs)
+        self.file_tokens = file_tokens
+
+    @classmethod
+    def from_checker(
+        cls: Type['BaseTokenVisitor'],
+        checker,
+    ) -> 'BaseTokenVisitor':
+        """Constructs visitor instance from the checker."""
+        return cls(
+            options=checker.options,
+            filename=checker.filename,
+            file_tokens=checker.file_tokens,
+        )
+
+    def visit(self, token: tokenize.TokenInfo) -> None:
+        """Runs custom defined for each specific token type."""
+        token_type = tokenize.tok_name[token.type].lower()
+        method = getattr(self, 'visit_' + token_type, None)
+        if method is not None:
+            method(token)
+
+    def run(self) -> None:
+        """Visits all token types."""
+        for token in self.file_tokens:
+            self.visit(token)

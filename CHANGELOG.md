@@ -20,6 +20,7 @@ We used to have incremental versioning before `0.1.0`.
 
 - Changes how many errors are generated for limits violations
 - Refactors how visitors are injected into the checker, now using presets
+- Creates new visitor type: `BaseTokenVisitor` for working with `tokenize`
 - Improves typing support
 - Adds `cohesion` plugin
 - Adds `flake8-eradicate` plugin

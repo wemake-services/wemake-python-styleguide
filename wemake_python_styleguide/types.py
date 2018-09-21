@@ -30,7 +30,7 @@ TreeVisitorSequence = Sequence[
 ]
 
 #: Token specific visitors' classes:
-TokenVisitorSequence = Sequence[Type['base.BaseVisitor']]
+TokenVisitorSequence = Sequence[Type['base.BaseTokenVisitor']]
 
 #: In cases we need to work with both import types:
 AnyImport = Union[ast.Import, ast.ImportFrom]

@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from tokenize import TokenInfo
+import tokenize
 from typing import Generator, Sequence
 
 from flake8.options.manager import OptionManager
 
 from wemake_python_styleguide import constants, types, version
 from wemake_python_styleguide.options.config import Configuration
-from wemake_python_styleguide.visitors.presets.complexity import (
-    COMPLEXITY_PRESET,
+from wemake_python_styleguide.visitors.presets import (
+    complexity,
+    general,
+    tokens,
 )
-from wemake_python_styleguide.visitors.presets.general import GENERAL_PRESET
 
 
 class Checker(object):
@@ -34,16 +35,18 @@ class Checker(object):
 
     #: Visitors that should be working by default:
     ast_visitors: types.TreeVisitorSequence = (
-        *GENERAL_PRESET,
-        *COMPLEXITY_PRESET,
+        *general.GENERAL_PRESET,
+        *complexity.COMPLEXITY_PRESET,
     )
 
-    token_visitors: types.TokenVisitorSequence = ()
+    token_visitors: types.TokenVisitorSequence = (
+        *tokens.TOKENS_PRESET,
+    )
 
     def __init__(
         self,
         tree: ast.Module,
-        file_tokens: Sequence[TokenInfo],
+        file_tokens: Sequence[tokenize.TokenInfo],
         filename: str = constants.STDIN,
     ) -> None:
         """Creates new checker instance."""

@@ -9,6 +9,10 @@ from __future__ import print_function  # noqa: Z102
 from .version import get_version  # noqa: Z100
 
 
+full_name = u'Nikita Sobolev'  # noqa: Z001
+phone_number = 555_123_999  # noqa: Z002
+
+
 def some():
     from my_module import some_function  # noqa: Z101
 
