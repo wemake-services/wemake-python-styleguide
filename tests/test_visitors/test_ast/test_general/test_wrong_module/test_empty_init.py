@@ -70,3 +70,25 @@ def test_init_with_logic(
     visitor.run()
 
     assert_errors(visitor, [InitModuleHasLogicViolation])
+
+
+@pytest.mark.parametrize('code', [
+    module_with_imports,
+    module_with_one_import,
+    module_with_logic,
+])
+def test_init_with_logic_without_control(
+    assert_errors, parse_ast_tree, code, options,
+):
+    """Testing that `__init__` with logic is restricted."""
+    tree = parse_ast_tree(code)
+
+    option_values = options(i_control_code=False)
+    visitor = WrongContentsVisitor(
+        option_values,
+        tree=tree,
+        filename='__init__.py',
+    )
+    visitor.run()
+
+    assert_errors(visitor, [])

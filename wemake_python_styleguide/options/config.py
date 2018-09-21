@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Dict, Sequence, Union
+from typing import Dict, Optional, Sequence, Union
 
 import attr
 from flake8.options.manager import OptionManager
@@ -17,16 +17,19 @@ class _Option(object):
     long_option_name: str
     default: int  # noqa: E704
     help: str
-    type: str = 'int'  # noqa: A003
+    type: Optional[str] = 'int'  # noqa: A003
     parse_from_config: bool = True
+    action: str = 'store'
 
 
 class Configuration(object):
     """
-    Provides configuration options for ``wemake-python-styleguide`` plugin.
+    Provides configuration options for our plugin.
 
     We do not like our linter to be configurable.
     Since people may take the wrong path or make wrong decisions.
+    We try to make all defaults as reasonable as possible.
+
     However, you can adjust some options via CLI option:
 
     Example::
@@ -47,8 +50,11 @@ class Configuration(object):
     - ``min-variable-length`` - minimum number of chars to define a valid
       variable name, defaults to
       :str:`wemake_python_styleguide.options.defaults.MIN_VARIABLE_LENGTH`
+    - ``i-control-code`` - either or not your control ones who use your code,
+      more rule are enforced when you do control it, defaults to
+      :str:`wemake_python_styleguide.options.defaults.I_CONTROL_CODE`
 
-    Options for module related checks:
+    Options for module names related checks:
 
     - ``min-module-name-length`` - minimum required module's name length,
       defaults to
@@ -167,7 +173,15 @@ class Configuration(object):
             'Minimum required length of the variable name.',
         ),
 
-        # Modules:
+        _Option(
+            '--i-control-code',
+            defaults.I_CONTROL_CODE,
+            'Either or not you control ones who use your code.',
+            action='store_true',
+            type=None,
+        ),
+
+        # File names:
 
         _Option(
             '--min-module-name-length',

@@ -17,7 +17,7 @@ class WrongContentsVisitor(BaseNodeVisitor):
     def _is_init(self) -> bool:
         return is_stem_in_list(self.filename, [INIT])
 
-    def _is_doc_string(self, node: ast.stmt) -> bool:
+    def _is_doc_string(self, node: ast.stmt) -> bool:  # TODO: move
         if not isinstance(node, ast.Expr):
             return False
         return isinstance(node.value, ast.Str)
@@ -32,6 +32,9 @@ class WrongContentsVisitor(BaseNodeVisitor):
         if not self._is_init() or not node.body:
             return
 
+        if not self.options.i_control_code:
+            return
+
         if len(node.body) > 1:
             self.add_error(InitModuleHasLogicViolation(node))
             return
@@ -43,9 +46,10 @@ class WrongContentsVisitor(BaseNodeVisitor):
         """
         Checks that module has something other than module definition.
 
-        We have completely different rules for `__init__.py` and regular files.
-        Since, we believe that `__init__.py` must be empty.
-        But, other files must not be empty.
+        We have completely different rules
+        for ``__init__.py`` and regular files.
+        Since, we believe that ``__init__.py`` must be empty.
+        But, other files must have contents.
 
         Raises:
             EmptyModuleViolation

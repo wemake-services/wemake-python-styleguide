@@ -13,6 +13,7 @@ We used to have incremental versioning before `0.1.0`.
 - Adds `TooManyImportsViolation` error and `--max-imports` option
 - Adds `--i-control-code` option to ignore `InitModuleHasLogicViolation`
 - Adds check for underscored numbers
+- Forbids `u''` strings
 - Adds `flake8`, `noqa`, and `type` comments check
 
 ### Misc

@@ -19,6 +19,9 @@ if you find them too strict or too permissive.
 #: Minimum variable's name length:
 MIN_VARIABLE_LENGTH = 2
 
+#: Either or not you control ones who use your code:
+I_CONTROL_CODE = True
+
 
 # Complexity
 

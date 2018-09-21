@@ -46,7 +46,7 @@ class ConfigurationOptions(Protocol):
     """
     This class provides structure for the options we use in our checker.
 
-    It uses structural subtyping, and does not represent any kind of a real
+    It uses structural sub-typing, and does not represent any kind of a real
     class or structure.
 
     See: https://mypy.readthedocs.io/en/latest/protocols.html
@@ -54,6 +54,7 @@ class ConfigurationOptions(Protocol):
 
     # General:
     min_variable_length: int
+    i_control_code: bool
 
     # Complexity:
     max_arguments: int
@@ -68,5 +69,5 @@ class ConfigurationOptions(Protocol):
     max_jones_score: int
     max_imports: int
 
-    # Modules:
+    # File names:
     min_module_name_length: int
