@@ -58,7 +58,9 @@ class ASTStyleViolation(BaseStyleViolation):
     _node: ast.AST
 
     def _location(self) -> Tuple[int, int]:
-        return self._node.lineno, self._node.col_offset
+        line_number = getattr(self._node, 'lineno', 0)
+        column_offset = getattr(self._node, 'col_offset', 0)
+        return line_number, column_offset
 
 
 class SimpleStyleViolation(BaseStyleViolation):

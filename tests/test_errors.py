@@ -1,6 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from wemake_python_styleguide.errors.base import BaseStyleViolation
+import ast
+
+from wemake_python_styleguide.errors.base import (
+    ASTStyleViolation,
+    BaseStyleViolation,
+)
+
+
+def test_visitor_returns_location():
+    """Ensures that `BaseNodeVisitor` return correct error message."""
+    visitor = ASTStyleViolation(node=ast.parse(''), text='error')
+    visitor.error_template = '{0} {1}'
+    visitor.code = 1
+    assert visitor.node_items() == (0, 0, 'Z001 error')
 
 
 def test_checker_default_location():

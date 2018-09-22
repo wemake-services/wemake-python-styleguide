@@ -60,3 +60,30 @@ class UnderscoredNumberViolation(TokenStyleViolation):
 
     code = 2
     error_template = '{0} Found underscored number: {1}'
+
+
+class WrongMagicCommentViolation(TokenStyleViolation):
+    """
+    Restricts to use several control (or magic) comments.
+
+    We do not allow to use:
+
+    1. ``# noqa`` comment without specified errors
+    2. ``# flake8: noqa`` comment to disable the whole file
+    3. ``type: some_type`` comments to specify a type for ``typed_ast``
+
+    Reasoning:
+        We cover several different use-cases in a single rule.
+        ``# noqa`` comment is restricted because it can hide other errors.
+        ``# flake8: noqa`` is restricted because it is hard to tell
+        what files are ignored with this comment.
+        ``type: int`` comment is restricted because
+        we can already use type annotations instead.
+
+    Note:
+        Returns Z003 as error code
+
+    """
+
+    code = 3
+    error_template = '{0} Found wrong magic comment: {1}'

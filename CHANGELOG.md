@@ -22,7 +22,7 @@ We used to have incremental versioning before `0.1.0`.
 - Refactors how visitors are injected into the checker, now using presets
 - Creates new visitor type: `BaseTokenVisitor` for working with `tokenize`
 - Improves typing support
-- Adds `cohesion` plugin
+- Adds `flake8-bandit` plugin
 - Adds `flake8-eradicate` plugin
 - Adds `flake8-print` plugin for development
 - Removes `delegate` concept from the codebase

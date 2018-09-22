@@ -11,7 +11,7 @@ from wemake_python_styleguide.visitors.base import (
 )
 
 
-def test_checker_raises_not_implemented(default_options):
+def test_visitor_raises_not_implemented(default_options):
     """Ensures that `BaseChecker` raises `NotImplementedError`."""
     with pytest.raises(NotImplementedError):
         BaseVisitor(default_options).run()
