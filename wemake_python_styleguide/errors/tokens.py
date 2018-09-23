@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from wemake_python_styleguide.errors.base import TokenStyleViolation
+from wemake_python_styleguide.errors.base import (
+    SimpleStyleViolation,
+    TokenStyleViolation,
+)
 
 
 class UnicodeStringViolation(TokenStyleViolation):
@@ -62,7 +65,7 @@ class UnderscoredNumberViolation(TokenStyleViolation):
     error_template = '{0} Found underscored number: {1}'
 
 
-class WrongMagicCommentViolation(TokenStyleViolation):
+class WrongMagicCommentViolation(SimpleStyleViolation):
     """
     Restricts to use several control (or magic) comments.
 
