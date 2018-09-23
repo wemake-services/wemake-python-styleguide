@@ -6,22 +6,15 @@ import pytest
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.visitors.base import (
-    BaseChecker,
     BaseFilenameVisitor,
-    BaseNodeVisitor,
+    BaseVisitor,
 )
 
 
-def test_raises_value_error_without_tree(default_options):
-    """Ensures that ValueError is raised when visitor does not have a tree."""
-    with pytest.raises(ValueError):
-        BaseNodeVisitor(default_options).run()
-
-
-def test_checker_raises_not_implemented(default_options):
+def test_visitor_raises_not_implemented(default_options):
     """Ensures that `BaseChecker` raises `NotImplementedError`."""
     with pytest.raises(NotImplementedError):
-        BaseChecker(default_options).run()
+        BaseVisitor(default_options).run()
 
 
 def test_base_filename_raises_not_implemented(default_options):

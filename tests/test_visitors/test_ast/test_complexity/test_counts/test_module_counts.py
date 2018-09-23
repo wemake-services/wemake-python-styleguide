@@ -32,8 +32,8 @@ def test_module_counts_normal(
     """Testing that classes and functions in a module work well."""
     tree = parse_ast_tree(code)
 
-    visitor = ModuleMembersVisitor(default_options, None)
-    visitor.visit(tree)
+    visitor = ModuleMembersVisitor(default_options, tree=tree)
+    visitor.run()
 
     assert_errors(visitor, [])
 
@@ -49,7 +49,7 @@ def test_module_counts_violation(
     tree = parse_ast_tree(code)
 
     option_values = options(max_module_members=1)
-    visitor = ModuleMembersVisitor(option_values, None)
-    visitor.visit(tree)
+    visitor = ModuleMembersVisitor(option_values, tree=tree)
+    visitor.run()
 
     assert_errors(visitor, [TooManyModuleMembersViolation])

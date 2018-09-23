@@ -18,8 +18,19 @@ else:
     # We do not need to do anything if typechecker is not working:
     Protocol = object
 
-#: Checkers container, that has all enabled visitors' classes:
-CheckerSequence = Sequence[Type['base.BaseChecker']]
+#: Visitor container, that has all enabled visitors' classes:
+VisitorSequence = Sequence[Type['base.BaseVisitor']]
+
+#: Tree specific visitors' classes:
+TreeVisitorSequence = Sequence[
+    Union[
+        Type['base.BaseNodeVisitor'],
+        Type['base.BaseFilenameVisitor'],
+    ],
+]
+
+#: Token specific visitors' classes:
+TokenVisitorSequence = Sequence[Type['base.BaseTokenVisitor']]
 
 #: In cases we need to work with both import types:
 AnyImport = Union[ast.Import, ast.ImportFrom]
@@ -35,23 +46,28 @@ class ConfigurationOptions(Protocol):
     """
     This class provides structure for the options we use in our checker.
 
-    It uses structural subtyping, and does not represent any kind of a real
+    It uses structural sub-typing, and does not represent any kind of a real
     class or structure.
 
     See: https://mypy.readthedocs.io/en/latest/protocols.html
     """
 
+    # General:
+    min_variable_length: int
+    i_control_code: bool
+
+    # Complexity:
     max_arguments: int
     max_local_variables: int
     max_returns: int
     max_expressions: int
-    min_variable_length: int
     max_offset_blocks: int
     max_elifs: int
     max_module_members: int
     max_methods: int
     max_line_complexity: int
     max_jones_score: int
+    max_imports: int
 
-    # Modules:
+    # File names:
     min_module_name_length: int

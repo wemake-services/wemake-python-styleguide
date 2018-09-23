@@ -2,8 +2,10 @@
 
 from pathlib import PurePath
 from typing import Iterable
+from typing.re import Pattern
 
-from wemake_python_styleguide.options.defaults import MIN_MODULE_NAME_LENGTH
+from wemake_python_styleguide import constants
+from wemake_python_styleguide.options import defaults
 
 
 def _get_stem(file_path: str) -> str:
@@ -56,7 +58,7 @@ def is_magic(file_path: str) -> bool:
 
 def is_too_short_stem(
     file_path: str,
-    min_length: int = MIN_MODULE_NAME_LENGTH,
+    min_length: int = defaults.MIN_MODULE_NAME_LENGTH,
 ) -> bool:
     """
     Checks either the file's stem fits into the minimum length.
@@ -76,3 +78,28 @@ def is_too_short_stem(
     """
     stem = _get_stem(file_path)
     return len(stem) < min_length
+
+
+def is_matching_pattern(
+    file_path: str,
+    pattern: Pattern = constants.MODULE_NAME_PATTERN,
+) -> bool:
+    r"""
+    Checks either the file's stem matches the given pattern or not.
+
+    >>> is_matching_pattern('some.py')
+    True
+
+    >>> is_matching_pattern('__init__.py')
+    True
+
+    >>> is_matching_pattern('MyModule.py')
+    False
+
+    >>> import re
+    >>> is_matching_pattern('123.py', pattern=re.compile(r'\d{3}'))
+    True
+
+    """
+    stem = _get_stem(file_path)
+    return pattern.match(stem) is not None

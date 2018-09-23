@@ -14,6 +14,17 @@ These values can be changed in the ``setup.cfg`` file on a per-project bases,
 if you find them too strict or too permissive.
 """
 
+# General
+
+#: Minimum variable's name length:
+MIN_VARIABLE_LENGTH = 2
+
+#: Either or not you control ones who use your code:
+I_CONTROL_CODE = True
+
+
+# Complexity
+
 #: Maximum number of `return` statements allowed in a single function:
 MAX_RETURNS = 5
 
@@ -26,14 +37,11 @@ MAX_EXPRESSIONS = 9
 #: Maximum number of arguments for functions or method, `self` is not counted:
 MAX_ARGUMENTS = 5
 
-#: Minimum variable's name length:
-MIN_VARIABLE_LENGTH = 2
-
 #: Maximum number of blocks to nest different structures:
 MAX_OFFSET_BLOCKS = 5
 
 #: Maximum number of `elif` blocks in a single `if` condition:
-MAX_ELIFS = 2
+MAX_ELIFS = 3
 
 #: Maximum number of classes and functions in a single module:
 MAX_MODULE_MEMBERS = 7
@@ -46,6 +54,9 @@ MAX_LINE_COMPLEXITY = 14  # 7 * 2, also almost guessed
 
 #: Maximum median module Jones complexity:
 MAX_JONES_SCORE = 12  # this value was "guessed" based on existing source code
+
+#: Maximum number of imports in a single module:
+MAX_IMPORTS = 12
 
 
 # Modules

@@ -4,10 +4,31 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
-## Version 0.0.13 aka The Jones Complexity
+## Version 0.0.14
 
-This release is the last feature release before `0.1.0`.
-However, there might be some supporting releases.
+### Features
+
+- Adds `WrongModuleNamePatternViolation`
+  and `WrongModuleNameUnderscoresViolation`
+- Adds `TooManyImportsViolation` error and `--max-imports` option
+- Adds `--i-control-code` option to ignore `InitModuleHasLogicViolation`
+- Adds check for underscored numbers
+- Forbids `u''` strings
+- Adds `noqa` and `type` comments checks
+
+### Misc
+
+- Changes how many errors are generated for limits violations
+- Refactors how visitors are injected into the checker, now using presets
+- Creates new visitor type: `BaseTokenVisitor` for working with `tokenize`
+- Improves typing support
+- Adds `flake8-bandit` plugin
+- Adds `flake8-eradicate` plugin
+- Adds `flake8-print` plugin for development
+- Removes `delegate` concept from the codebase
+
+
+## Version 0.0.13 aka The Jones Complexity
 
 ### Features
 

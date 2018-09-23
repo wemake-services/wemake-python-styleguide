@@ -17,10 +17,9 @@ from wemake_python_styleguide.errors.base import SimpleStyleViolation
 
 class WrongModuleNameViolation(SimpleStyleViolation):
     """
-    This rule forbids to use blacklisted module names.
+    Forbids to use blacklisted module names.
 
     Reasoning:
-        Naming is hard.
         Some module names are not expressive enough.
         It is hard to tell what you can find inside the ``utils.py`` module.
 
@@ -48,15 +47,14 @@ class WrongModuleNameViolation(SimpleStyleViolation):
 
     should_use_text = False
     error_template = '{0} Found wrong module name'
-    code = 'Z400'
+    code = 400
 
 
 class WrongModuleMagicNameViolation(SimpleStyleViolation):
     """
-    This rule forbids to use any magic names except whitelisted ones.
+    Forbids to use any magic names except whitelisted ones.
 
     Reasoning:
-        Naming is hard.
         Do not fall in love with magic. There's no good reason to use
         magic names, when you can use regular names.
 
@@ -80,15 +78,14 @@ class WrongModuleMagicNameViolation(SimpleStyleViolation):
 
     should_use_text = False
     error_template = '{0} Found wrong module magic name'
-    code = 'Z401'
+    code = 401
 
 
 class TooShortModuleNameViolation(SimpleStyleViolation):
     """
-    This rule forbids to use module name shorter than some breakpoint.
+    Forbids to use module name shorter than some breakpoint.
 
     Reasoning:
-        Naming is hard.
         Too short module names are not expressive enough.
         We will have to open the code to find out what is going on there.
 
@@ -104,4 +101,69 @@ class TooShortModuleNameViolation(SimpleStyleViolation):
 
     should_use_text = False
     error_template = '{0} Found too short module name'
-    code = 'Z402'
+    code = 402
+
+
+class WrongModuleNameUnderscoresViolation(SimpleStyleViolation):
+    """
+    Forbids to use multiple underscores in a row in a module name.
+
+    Reasoning:
+        It is hard to tell how many underscores are there: two or three?
+
+    Solution:
+        Keep just one underscore in a module name.
+
+    Example::
+        # Correct:
+        __init__.py
+        some_module_name.py
+        test.py
+
+        # Wrong:
+        some__wrong__name.py
+        my__module.py
+        __fake__magic__.py
+
+    Note:
+        Returns Z403 as error code
+
+    """
+
+    should_use_text = False
+    error_template = '{0} Found repeating underscores in a module name'
+    code = 403
+
+
+class WrongModuleNamePatternViolation(SimpleStyleViolation):
+    """
+    Forbids to use module names that do not match our pattern.
+
+    Reasoning:
+        Just like the variable names - module names should be consistent.
+        Ideally, they should follow the same rules.
+        For ``python`` world it is common to use `snake_case` notation.
+
+    We use
+    :py:data:`~wemake_python_styleguide.constants.MODULE_NAME_PATTERN`
+    to validate the module names.
+
+    Example::
+        # Correct:
+        __init__.py
+        some_module_name.py
+        test12.py
+
+        # Wrong:
+        _some.py
+        MyModule.py
+        0001_migration.py
+
+    Note:
+        Returns Z404 as error code
+
+    """
+
+    should_use_text = False
+    error_template = '{0} Found incorrect module name pattern'
+    code = 404

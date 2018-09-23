@@ -21,7 +21,7 @@ def test_correct_magic_filename(assert_errors, filename, default_options):
 @pytest.mark.parametrize('filename', [
     '__version__.py',
     '__custom__.py',
-    '____.py',
+    '__some_extra__.py',
 ])
 def test_simple_filename(assert_errors, filename, default_options):
     """Testing that some file names are restricted."""

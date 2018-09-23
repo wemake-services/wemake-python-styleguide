@@ -17,7 +17,7 @@ from wemake_python_styleguide.errors.base import ASTStyleViolation
 
 class LocalFolderImportViolation(ASTStyleViolation):
     """
-    This rule forbids to have imports relative to the current folder.
+    Forbids to have imports relative to the current folder.
 
     Reasoning:
         We should pick one style and stick to it.
@@ -38,12 +38,12 @@ class LocalFolderImportViolation(ASTStyleViolation):
     """
 
     error_template = '{0} Found local folder import "{1}"'
-    code = 'Z100'
+    code = 100
 
 
 class NestedImportViolation(ASTStyleViolation):
     """
-    This rule forbids to have nested imports in functions.
+    Forbids to have nested imports in functions.
 
     Reasoning:
         Usually nested imports are used to fix the import cycle.
@@ -69,12 +69,12 @@ class NestedImportViolation(ASTStyleViolation):
     """
 
     error_template = '{0} Found nested import "{1}"'
-    code = 'Z101'
+    code = 101
 
 
 class FutureImportViolation(ASTStyleViolation):
     """
-    This rule forbids to use ``__future__`` imports.
+    Forbids to use ``__future__`` imports.
 
     Reasoning:
         Almost all ``__future__`` imports are legacy ``python2`` compatibility
@@ -102,12 +102,12 @@ class FutureImportViolation(ASTStyleViolation):
     """
 
     error_template = '{0} Found future import "{1}"'
-    code = 'Z102'
+    code = 102
 
 
 class DottedRawImportViolation(ASTStyleViolation):
     """
-    This rule forbids to use imports like ``import os.path``.
+    Forbids to use imports like ``import os.path``.
 
     Reasoning:
         We should pick one style and stick to it.
@@ -127,12 +127,12 @@ class DottedRawImportViolation(ASTStyleViolation):
     """
 
     error_template = '{0} Found dotted raw import "{1}"'
-    code = 'Z103'
+    code = 103
 
 
 class SameAliasImportViolation(ASTStyleViolation):
     """
-    This rule forbids to use the same alias as the original name in imports.
+    Forbids to use the same alias as the original name in imports.
 
     Reasoning:
         Why would you even do this in the first place?
@@ -151,4 +151,4 @@ class SameAliasImportViolation(ASTStyleViolation):
     """
 
     error_template = '{0} Found same alias import "{1}"'
-    code = 'Z104'
+    code = 104

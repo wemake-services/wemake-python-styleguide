@@ -7,6 +7,7 @@ It contains lists of keywords and built-in functions we discourage to use.
 It also contains some exceptions that we allow to use in our codebase.
 """
 
+import re
 import sys
 from typing import Tuple
 
@@ -99,7 +100,8 @@ BAD_MAGIC_METHODS = frozenset((
 
 #: List of nested classes' names we allow to use.
 NESTED_CLASSES_WHITELIST = frozenset((
-    'Meta',
+    'Meta',  # django forms, models, drf, etc
+    'Params',  # factoryboy specific
 ))
 
 #: List of nested functions' names we allow to use.
@@ -128,9 +130,12 @@ MAGIC_MODULE_NAMES_WHITELIST = frozenset((
     '__main__',
 ))
 
+#: Regex pattern to name modules:
+MODULE_NAME_PATTERN = re.compile(r'^_?_?[a-z][a-z\d_]+[a-z\d](__)?$')
+
 
 # Internal variables
-# They are not publicly documented since they are only used internally
+# They are not publicly documented since they are not used by the end user.
 
 # This variable is used as a default filename, when it is not passed by flake8:
 STDIN = 'stdin'
