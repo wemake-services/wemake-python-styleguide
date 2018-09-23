@@ -9,12 +9,9 @@ from wemake_python_styleguide.visitors.tokenize.wrong_comments import (
 
 
 @pytest.mark.parametrize('code', [
-    'x = 10_00  # noqa: Z002,Z114',
-    'x = 10_00  # noqa:Z002, Z114',
-    'x = 10_00  # noqa: Z002, Z114',
-    'wallet = 10_00  # noqa: Z002',
-    'x = 1000  # noqa: Z002',
-    'x = 1000  # noqa:  Z002  ',
+    '1 + "12"  # type: ignore',
+    '1 + "12"  # type:ignore',
+    'total = 1000  # type is not clear',
     'print(12 + 3)  # regular comment',
     'print(12 + 3)  #',
     'print(12 + 3)',
@@ -36,15 +33,16 @@ def test_correct_comments(
 
 
 @pytest.mark.parametrize('code', [
-    'x = 10_00  # noqa',
-    'x = 10_00  #   noqa   ',
-    'x = 10_00 #noqa',
-    'x = 10_00#noqa',
-    'wallet = 10_00  # noqa: some comments',
-    'x = 1000  # noqa:',
-    'x = 10_00 # noqa: -',
-    'x = 10_00 # noqa: *',
-    '# noqa',
+    'total = 1000  # type: int',
+    'total = 1000  # type:int',
+    'total = 1000 # type: int  ',
+    'total = 1000#type:int',
+    'numbs = [1, 2, 3]  # type: missing',
+    'numbs = [1, 2, 3]  # type: List[int]',
+    'numbs = [1, 2, 3]  # type: List["int"]',
+    "numbs = [1, 2, 3]  # type: List['int']",
+    'field = SomeField()  # type: drf.Field',
+    '# type: fixme',
 ])
 def test_incorrect_noqa_comment(
     parse_tokens,
@@ -52,7 +50,7 @@ def test_incorrect_noqa_comment(
     default_options,
     code,
 ):
-    """Ensures that incorrect `noqa` comments raise a warning."""
+    """Ensures that incorrect `type` comments raise a warning."""
     file_tokens = parse_tokens(code)
 
     visitor = WrongCommentVisitor(default_options, file_tokens=file_tokens)

@@ -72,14 +72,11 @@ class WrongMagicCommentViolation(SimpleStyleViolation):
     We do not allow to use:
 
     1. ``# noqa`` comment without specified errors
-    2. ``# flake8: noqa`` comment to disable the whole file
-    3. ``type: some_type`` comments to specify a type for ``typed_ast``
+    2. ``type: some_type`` comments to specify a type for ``typed_ast``
 
     Reasoning:
         We cover several different use-cases in a single rule.
         ``# noqa`` comment is restricted because it can hide other errors.
-        ``# flake8: noqa`` is restricted because it is hard to tell
-        what files are ignored with this comment.
         ``type: int`` comment is restricted because
         we can already use type annotations instead.
 

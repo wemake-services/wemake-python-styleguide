@@ -100,7 +100,8 @@ BAD_MAGIC_METHODS = frozenset((
 
 #: List of nested classes' names we allow to use.
 NESTED_CLASSES_WHITELIST = frozenset((
-    'Meta',
+    'Meta',  # django forms, models, drf, etc
+    'Params',  # factoryboy specific
 ))
 
 #: List of nested functions' names we allow to use.
