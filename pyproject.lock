@@ -816,7 +816,7 @@ name = "sphinxcontrib-napoleon"
 optional = false
 platform = "any"
 python-versions = "*"
-version = "0.6.1"
+version = "0.7"
 
 [package.dependencies]
 pockets = ">=0.3"
@@ -893,7 +893,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4"
 version = "1.23"
 
 [metadata]
-content-hash = "e4d06f3758d29e851ad79847ab2792181d88f4ca5349211096eeeb92104ab220"
+content-hash = "b57b7e26ba65e66950776effd5fa46529ba4b6b2a8c534ff148f7b3f68dc28f2"
 platform = "*"
 python-versions = "^3.6 || ^3.7"
 
@@ -968,7 +968,7 @@ snowballstemmer = ["919f26a68b2c17a7634da993d91339e288964f93c274f1343e3bbbe2096e
 sphinx = ["652eb8c566f18823a022bb4b6dbc868d366df332a11a0226b5bc3a798a479f17", "d222626d8356de702431e813a05c68a35967e3d66c6cd1c2c89539bb179a7464"]
 sphinx-autodoc-typehints = ["1a9df6cb3ba72453ea4bfbe96ea887abc0d796b2ce9508c2189217a1bb69b366", "46cc9e985ee6d8bbbd07fffd95b815c39a72df6afb600f59671f85f7340e7d0d"]
 sphinx-readable-theme = ["f5fe65a2e112cb956b366df41e0fc894ff6b6f0e4a4814fcbff692566db47fc0"]
-sphinxcontrib-napoleon = ["614b779888629f14dfdfad6c17bffbb6d3813a0a0917a9541651d85384d4d6bd", "cbb31953b15d2102c18f16f02591f92e2614a08ef0218c9e514e2dc4c4f9daf9"]
+sphinxcontrib-napoleon = ["407382beed396e9f2d7f3043fad6afda95719204a1e1a231ac865f40abcbfcf8", "711e41a3974bdf110a484aec4c1a556799eb0b3f3b897521a018ad7e2db13fef"]
 sphinxcontrib-websupport = ["68ca7ff70785cbe1e7bccc71a48b5b6d965d79ca50629606c7861a21b206d9dd", "9de47f375baf1ea07cdb3436ff39d7a9c76042c10a769c52353ec46e4e8fc3b9"]
 stevedore = ["1e153545aca7a6a49d8337acca4f41c212fbfa60bf864ecd056df0cafb9627e8", "c7eac1c0d95824c88b655273da5c17cdde6482b2739f47c30bf851dcc9d3c2c0"]
 testfixtures = ["334497d26344e8c0c5d01b4d785a1c83464573151e6a5f7ab250eb7981d452ec", "53c06c1feb0bf378d63c54d1d96858978422d5a34793b39f0dcb0e44f8ec26f4"]
