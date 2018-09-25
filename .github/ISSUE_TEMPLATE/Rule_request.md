@@ -1,3 +1,8 @@
+---
+name: Rule request
+about: Request a new rule to be checked
+---
+
 # Rule request
 
 <!-- Thanks for coming up with a proposal! -->
