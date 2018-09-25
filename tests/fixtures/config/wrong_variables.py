@@ -17,7 +17,7 @@ def chech_local_variables():
     a10 = '10'  # error here
 
 
-def chech_local_variables_with_single_body():
+def check_local_variables_with_single_body():
     with open('some') as context_counts:
         try:
             a1 = '1'

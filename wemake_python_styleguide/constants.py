@@ -72,6 +72,9 @@ _BAD_VARIABLE_NAMES: Tuple[str, ...] = (
     'obj',
     'objects',
     'objs',
+    'some',
+
+    # Names from examples:
     'foo',
     'bar',
     'baz',

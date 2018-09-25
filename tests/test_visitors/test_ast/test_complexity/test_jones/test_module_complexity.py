@@ -9,8 +9,8 @@ from wemake_python_styleguide.visitors.ast.complexity.jones import (
 
 module_without_nodes = ''
 module_with_nodes = """
-some = 1 + 2
-other = [number for number in range(0, some)]
+some_value = 1 + 2
+other = [number for number in range(0, some_value)]
 """
 
 

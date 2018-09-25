@@ -3,6 +3,7 @@
 import ast
 
 from wemake_python_styleguide.errors.general import (
+    MultipleIfsInComprehensionViolation,
     RaiseNotImplementedViolation,
     WrongKeywordViolation,
 )
@@ -10,7 +11,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
 class WrongRaiseVisitor(BaseNodeVisitor):
-    """This class finds wrong `raise` keywords."""
+    """Finds wrong ``raise`` keywords."""
 
     def _check_exception_type(self, node: ast.Raise) -> None:
         exception = getattr(node, 'exc', None)
@@ -38,7 +39,7 @@ class WrongRaiseVisitor(BaseNodeVisitor):
 
 
 class WrongKeywordVisitor(BaseNodeVisitor):
-    """This class is responsible for finding wrong keywords."""
+    """Finds wrong keywords."""
 
     def visit_Global(self, node: ast.Global) -> None:
         """
@@ -82,4 +83,23 @@ class WrongKeywordVisitor(BaseNodeVisitor):
 
         """
         self.add_error(WrongKeywordViolation(node))
+        self.generic_visit(node)
+
+
+class WrongListComprehensionVisitor(BaseNodeVisitor):
+    """Checks list comprehensions."""
+
+    def _check_ifs(self, node: ast.comprehension) -> None:
+        if len(node.ifs) > 1:
+            self.add_error(MultipleIfsInComprehensionViolation(node))
+
+    def visit_comprehension(self, node: ast.comprehension) -> None:
+        """
+        Finds multiple ``if`` nodes inside the comprehension.
+
+        Raises:
+            MultipleIfsInComprehensionViolation,
+
+        """
+        self._check_ifs(node)
         self.generic_visit(node)

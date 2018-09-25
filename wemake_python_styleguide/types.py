@@ -68,6 +68,7 @@ class ConfigurationOptions(Protocol):
     max_line_complexity: int
     max_jones_score: int
     max_imports: int
+    max_conditions: int
 
     # File names:
     min_module_name_length: int

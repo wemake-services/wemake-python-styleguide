@@ -31,12 +31,20 @@ for i in 'abc':
         print(i)
 """
 
+pass_exception = """
+try:
+    1 / 0
+except Exception:
+    pass
+"""
+
 
 @pytest.mark.parametrize('code', [
     pass_function,
     pass_class,
     pass_method,
     pass_condition,
+    pass_exception,
 ])
 def test_pass_keyword(assert_errors, parse_ast_tree, code, default_options):
     """Testing that pass keyword is restricted inside different definitions."""

@@ -56,6 +56,12 @@ class WrongCommentVisitor(BaseTokenVisitor):
             )
 
     def visit_comment(self, token: tokenize.TokenInfo) -> None:
-        """Performs comment checks."""
+        """
+        Performs comment checks.
+
+        Raises:
+            WrongMagicCommentViolation
+
+        """
         self._check_noqa(token)
         self._check_typed_ast(token)

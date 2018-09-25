@@ -92,7 +92,7 @@ def test_too_short_variable_names_configured(
     assert_errors, parse_ast_tree, code, options,
 ):
     """Testing that variable length can be configured."""
-    tree = parse_ast_tree(code.format('some'))
+    tree = parse_ast_tree(code.format('kira'))
 
     option_values = options(min_variable_length=5)
     visitor = WrongNameVisitor(option_values, tree=tree)

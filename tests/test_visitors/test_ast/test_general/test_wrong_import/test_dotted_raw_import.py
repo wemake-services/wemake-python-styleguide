@@ -9,8 +9,8 @@ from wemake_python_styleguide.visitors.ast.general.wrong_import import (
 
 regular_import = 'import {0}'
 regular_import_with_alias = 'import {0} as alias'
-from_import = 'from {0} import some'
-from_import_with_alias = 'from {0} import some as alias'
+from_import = 'from {0} import some_module'
+from_import_with_alias = 'from {0} import some_module as alias'
 
 
 @pytest.mark.parametrize('code', [

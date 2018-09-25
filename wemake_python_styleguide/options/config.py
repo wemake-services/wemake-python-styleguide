@@ -30,20 +30,10 @@ class Configuration(object):
     Since people may take the wrong path or make wrong decisions.
     We try to make all defaults as reasonable as possible.
 
-    However, you can adjust some options via CLI option:
-
-    Example::
-
-        flake8 --max-returns 7
-
-    Or you can provide options in ``tox.ini`` or ``setup.cfg``:
-
-    Example::
-
-        [flake8]
-        max-returns = 7
-
-    We use ``setup.cfg`` as a default way to provide configuration.
+    However, you can currently adjust some complexity options. Why?
+    Because we are quite sure about the ideal values. We are still researching
+    them, and providing a way for developers to help us out is a good thing
+    at the moment.
 
     Options for general checks:
 
@@ -91,6 +81,21 @@ class Configuration(object):
     - ``max-jones-score`` - maximum Jones score for a module, which is equal
       to the median of all lines complexity sum, defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_JONES_SCORE`
+
+    All options are configurable via ``flake8`` CLI:
+
+    Example::
+
+        flake8 --max-returns 7
+
+    Or you can provide options in ``tox.ini`` or ``setup.cfg``:
+
+    Example::
+
+        [flake8]
+        max-returns = 7
+
+    We use ``setup.cfg`` as a default way to provide configuration.
 
     """
 
@@ -163,6 +168,12 @@ class Configuration(object):
             '--max-imports',
             defaults.MAX_IMPORTS,
             'Maximum number of imports in a single module.',
+        ),
+
+        _Option(
+            '--max-conditions',
+            defaults.MAX_CONDITIONS,
+            'Maximum number of conditions in a `if` or `while` node.',
         ),
 
         # General:

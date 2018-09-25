@@ -443,3 +443,38 @@ class TooManyImportsViolation(SimpleStyleViolation):
 
     error_template = '{0} Found module with too many imports: {1}'
     code = 212
+
+
+class TooManyConditionsViolation(ASTStyleViolation):
+    """
+    Forbids to have conditions with too many logical operators.
+
+    Reasoning:
+        When reading through the complex conditions you will fail
+        to understand all the possible branches. And you will end up putting
+        debug breakpoint on this line just to figure out how it works.
+
+    Solution:
+        We can reduce the complexity of a single ``if`` by doing two things:
+        creating new variables or creating nested ``if`` statements.
+        Both of these actions will trigger other complexity checks.
+
+    We only check ``if`` and ``while`` nodes for this type of complexity.
+    We check ``if`` nodes inside list comprehensions and ternary expressions.
+
+    We count ``and`` and ``or`` keywords as conditions.
+
+    Example::
+
+        # The next line has 2 conditions:
+        if x_coord > 1 and x_coord < 10: ...
+
+    This rule is configurable with ``--max-conditions``.
+
+    Note:
+        Returns Z213 as error code
+
+    """
+
+    error_template = '{0} Found a condition with too many logic: {1}'
+    code = 213

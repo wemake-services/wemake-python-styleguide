@@ -68,7 +68,7 @@ class Checker(object):
         self,
         visitors: types.VisitorSequence,
     ) -> Generator[types.CheckResult, None, None]:
-        """Runs all ``ast`` based visitors one by one."""
+        """Runs all passed visitors one by one."""
         for visitor_class in visitors:
             visitor = visitor_class.from_checker(self)
             visitor.run()
@@ -81,7 +81,7 @@ class Checker(object):
         Runs the checker.
 
         This method is used by ``flake8`` API.
-        After all configuration is parsed and passed.
+        It is executed after all configuration is parsed.
         """
         yield from self._run_checks(self.ast_visitors)
         yield from self._run_checks(self.token_visitors)

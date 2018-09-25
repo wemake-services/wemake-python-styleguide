@@ -3,6 +3,19 @@
 We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
+## Version 0.0.15
+
+### Features
+
+- Adds `MultipleIfsInComprehensionViolation`
+- Adds `TooManyConditionsViolation`
+- Adds `--max-conditions` option
+
+### Misc
+
+- Improves `CONTRIBUTING.md`
+- Moves issues templates to `.github/` folder
+
 
 ## Version 0.0.14
 

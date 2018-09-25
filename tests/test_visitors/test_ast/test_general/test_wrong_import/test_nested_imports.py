@@ -38,9 +38,9 @@ class Test:
 
 nested_try_import = """
 try:
-    from missing import some
+    from missing import some_thing
 except ImportError:
-    some = None
+    some_thing = None
 """
 
 # Correct imports:

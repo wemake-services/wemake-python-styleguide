@@ -5,6 +5,7 @@ you will need to get familiar with these APIs:
 
 - [Writing a `flake8` plugin](http://flake8.pycqa.org/en/latest/plugin-development/)
 - [Using `ast` module](https://docs.python.org/3/library/ast.html)
+- [Tokenizer for Python source](https://docs.python.org/3/library/tokenize.html)
 
 It is also recommended to take a look at these resources:
 
@@ -62,6 +63,7 @@ Before submitting your code please do the following steps:
 4. Edit documentation if you have changed something significant
 5. Run `pytest` again to make sure it is still working
 6. Run `mypy` to ensure that types are correct
+7. Run `doc8` to ensure that docs are correct
 
 
 ## Other help

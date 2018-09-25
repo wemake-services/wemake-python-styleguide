@@ -18,7 +18,7 @@ module_with_comments = """
 # print('hi')
 """
 
-module_with_one_import = 'from some import other'
+module_with_one_import = 'from some_module import other'
 module_with_imports = """
 from one import one_func
 from two import two_func
@@ -26,10 +26,10 @@ from two import two_func
 
 module_with_logic = """
 try:
-    import some
+    import some_module
     has_some = True
 except ImportError:
-    some = None
+    some_module = None
     has_some = False
 """
 

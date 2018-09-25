@@ -313,3 +313,34 @@ class InitModuleHasLogicViolation(ASTStyleViolation):
     should_use_text = False
     error_template = '{0} Found `__init__` module with logic'
     code = 119
+
+
+class MultipleIfsInComprehensionViolation(ASTStyleViolation):
+    """
+    Forbids to have multiple ``if`` statements inside list comprehensions.
+
+    Reasoning:
+        It is very hard to read multiple ``if`` statements inside
+        a list comprehension. Since, it is even hard to tell all of them
+        should pass or fail.
+
+    Solution:
+        Use a single ``if`` statement inside list comprehensions.
+        Use ``filter()`` if you have complicated logic.
+
+    Example::
+
+        # Wrong:
+        nodes = [node for node in html if node != 'b' if node != 'i']
+
+        # Correct:
+        nodes = [node for node in html if node not in ('b', 'i')]
+
+    Note:
+        Returns Z120 as error code
+
+    """
+
+    should_use_text = False
+    error_template = '{0} Found list comprehension with multiple `if`s'
+    code = 120

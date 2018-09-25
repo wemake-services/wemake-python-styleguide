@@ -20,8 +20,9 @@ class OffsetVisitor(BaseNodeVisitor):
 
         We check only several nodes, because other nodes might have
         different offsets, which is fine.
-        For example, `Name` node has inline offset, which can take values
-        from 0 to ~80. But `Name` node is allowed to behave like so.
+        For example, ``ast.Name`` node has inline offset,
+        which can take values from ``0`` to ``~80``.
+        But ``Name`` node is allowed to behave like so.
 
         Raises:
             TooDeepNestingViolation

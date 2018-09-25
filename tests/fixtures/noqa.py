@@ -12,7 +12,7 @@ full_name = u'Nikita Sobolev'  # noqa: Z001
 phone_number = 555_123_999  # noqa: Z002
 
 
-def some():
+def some():  # noqa: Z113
     from my_module import some_function  # noqa: Z101
 
     def nested(): ...  # noqa: Z200
@@ -26,6 +26,7 @@ x = 2  # noqa: Z114
 __private = 3  # noqa: Z115
 __author__ = 'Nikita Sobolev'  # noqa: Z116
 
+nodes = [node for node in 'abc' if node != 'a' if node != 'b']  # noqa: Z120
 
 class BadClass:  # noqa: Z302
     @staticmethod  # noqa: Z300

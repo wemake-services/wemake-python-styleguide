@@ -58,6 +58,9 @@ MAX_JONES_SCORE = 12  # this value was "guessed" based on existing source code
 #: Maximum number of imports in a single module:
 MAX_IMPORTS = 12
 
+#: Maximum number of conditions in a single ``if`` or ``while`` statement:
+MAX_CONDITIONS = 4
+
 
 # Modules
 

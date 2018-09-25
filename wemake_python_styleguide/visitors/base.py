@@ -134,8 +134,8 @@ class BaseTokenVisitor(BaseVisitor):
         )
 
     def visit(self, token: tokenize.TokenInfo) -> None:
-        """Runs custom defined for each specific token type."""
-        token_type = tokenize.tok_name[token.type].lower()
+        """Runs custom defined handlers for each specific token type."""
+        token_type = tokenize.tok_name[token.exact_type].lower()
         method = getattr(self, 'visit_' + token_type, None)
         if method is not None:
             method(token)

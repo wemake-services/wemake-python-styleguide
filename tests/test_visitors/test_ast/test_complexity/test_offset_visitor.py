@@ -28,16 +28,16 @@ def container():
 nested_try = """
 def container():
     try:
-        some()
+        some_call()
     except Exception:
         raise
 """
 
 nested_try2 = """
 def container():
-    if some:
+    if some_call:
         try:
-            some()
+            some_call()
         except Exception:
             raise
 """

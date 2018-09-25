@@ -12,17 +12,17 @@ line_with_types = 'x: int = 2'
 line_with_comprehension = 'x = [f for f in "abc"]'
 line_with_math = 'x = y * 2 + 19 / 9.3'
 line_inside_function = """
-def some():
+def some_function():
     return 2 + 1
 """
 
 line_inside_class = """
-class Some():
+class SomeClass():
     field = 13 / 2
 """
 
-function_declaration = 'def some(): ...'
-class_declaration = 'class Some(object): ...'
+function_declaration = 'def some_function(): ...'
+class_declaration = 'class SomeClass(object): ...'
 empty_module = ''
 
 
