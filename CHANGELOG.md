@@ -3,6 +3,17 @@
 We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
+## Version 0.0.16
+
+### Features
+
+- Adds `PartialFloatViolation`
+
+### Misc
+
+- Improves docs: now including docs for `--max-condition` option
+
+
 ## Version 0.0.15
 
 ### Features

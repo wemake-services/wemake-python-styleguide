@@ -81,19 +81,23 @@ class Configuration(object):
     - ``max-jones-score`` - maximum Jones score for a module, which is equal
       to the median of all lines complexity sum, defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_JONES_SCORE`
+    - ``max-conditions`` - maximum number of boolean conditions
+      in a single ``if`` or ``while`` node, defaults to
+      :str:`wemake_python_styleguide.options.defaults.MAX_CONDITIONS`
 
     All options are configurable via ``flake8`` CLI:
 
     Example::
 
-        flake8 --max-returns 7
+        flake8 --max-returns=2 --max-elifs=2
 
     Or you can provide options in ``tox.ini`` or ``setup.cfg``:
 
     Example::
 
         [flake8]
-        max-returns = 7
+        max-returns = 2
+        max-elifs = 2
 
     We use ``setup.cfg`` as a default way to provide configuration.
 

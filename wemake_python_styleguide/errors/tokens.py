@@ -18,6 +18,7 @@ class UnicodeStringViolation(TokenStyleViolation):
         Remove this prefix.
 
     Example::
+
         # Correct:
         nickname = 'sobolevn'
         file_contents = b'aabbcc'
@@ -48,6 +49,7 @@ class UnderscoredNumberViolation(TokenStyleViolation):
         If you have a very big number with a lot of zeros, use multiplication.
 
     Example::
+
         # Correct:
         phone = 88313443
         million = 1000000
@@ -80,6 +82,20 @@ class WrongMagicCommentViolation(SimpleStyleViolation):
         ``type: int`` comment is restricted because
         we can already use type annotations instead.
 
+    Solution:
+        Use ``noqa`` comments with specified error types.
+        Use type annotations to specify types.
+
+    Example::
+
+        # Correct:
+        type = MyClass.get_type()  # noqa: A001
+        coordinate: int = 10
+
+        # Wrong:
+        type = MyClass.get_type()  # noqa
+        coordinate = 10  # type: int
+
     Note:
         Returns Z003 as error code
 
@@ -87,3 +103,35 @@ class WrongMagicCommentViolation(SimpleStyleViolation):
 
     code = 3
     error_template = '{0} Found wrong magic comment: {1}'
+
+
+class PartialFloatViolation(TokenStyleViolation):
+    """
+    Forbids to use partial floats like ``.05`` or ``23.``.
+
+    Reasoning:
+        Partial numbers are hard to read and they can be confused with
+        other numbers. For example, it is really
+        easy to confuse ``0.5`` and ``.05`` when reading
+        through the source code.
+
+    Solution:
+        Use full versions with leading and starting zeros.
+
+    Example::
+
+        # Correct:
+        half = 0.5
+        ten_float = 10.0
+
+        # Wrong:
+        half = .5
+        ten_float = 10.
+
+    Note:
+        Returns Z004 as error code
+
+    """
+
+    code = 4
+    error_template = '{0} Found partial float: {1}'
