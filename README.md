@@ -46,16 +46,22 @@ Namespaces are one honking great idea -- let's do more of those!
 pip install wemake-python-styleguide
 ```
 
+You will also need to create a `setup.cfg` file with [the following contents](https://wemake-python-styleguide.readthedocs.io/en/latest/_pages/options/config.html#third-party-plugins).
+
+This file is required to configure our linter and 3rd party plugins.
+
 
 ## What does this linter do?
 
 We have several primary objectives with this linter:
 
 0. Enforce `python3.6+` usage
-1. Significantly educe code's complexity and make it more maintainable
+1. Significantly reduce code's complexity and make it more maintainable
 2. Forbid to use different stuff from `python` language to match
   "There should be one-- and preferably only one --obvious way to do it" rule
 3. Create consistent coding style
+
+You can find all error codes and plugins [in the docs](https://wemake-python-styleguide.readthedocs.io/en/latest/_pages/errors/index.html).
 
 
 ## What we are not
