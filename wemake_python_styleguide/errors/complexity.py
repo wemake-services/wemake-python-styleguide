@@ -68,7 +68,8 @@ class NestedFunctionViolation(ASTStyleViolation):
 
     """
 
-    error_template = '{0} Found nested function "{1}"'
+    #: Error message showed to the user:
+    error_template = 'Found nested function "{0}"'
     code = 200
 
 
@@ -106,7 +107,8 @@ class NestedClassViolation(ASTStyleViolation):
 
     """
 
-    error_template = '{0} Found nested class "{1}"'
+    #: Error message showed to the user:
+    error_template = 'Found nested class "{0}"'
     code = 201
 
 
@@ -152,7 +154,8 @@ class TooManyLocalsViolation(ASTStyleViolation):
 
     """
 
-    error_template = '{0} Found too many local variables "{1}"'
+    #: Error message showed to the user:
+    error_template = 'Found too many local variables "{0}"'
     code = 202
 
 
@@ -176,7 +179,8 @@ class TooManyArgumentsViolation(ASTStyleViolation):
 
     """
 
-    error_template = '{0} Found too many arguments "{1}"'
+    #: Error message showed to the user:
+    error_template = 'Found too many arguments "{0}"'
     code = 203
 
 
@@ -202,7 +206,8 @@ class TooManyElifsViolation(ASTStyleViolation):
     """
 
     should_use_text = False
-    error_template = '{0} Found too many `elif` branches'
+    #: Error message showed to the user:
+    error_template = 'Found too many `elif` branches'
     code = 204
 
 
@@ -225,7 +230,8 @@ class TooManyReturnsViolation(ASTStyleViolation):
 
     """
 
-    error_template = '{0} Found too many return statements "{1}"'
+    #: Error message showed to the user:
+    error_template = 'Found too many return statements "{0}"'
     code = 205
 
 
@@ -247,7 +253,8 @@ class TooManyExpressionsViolation(ASTStyleViolation):
 
     """
 
-    error_template = '{0} Found too many expressions "{1}"'
+    #: Error message showed to the user:
+    error_template = 'Found too many expressions "{0}"'
     code = 206
 
 
@@ -271,7 +278,8 @@ class TooDeepNestingViolation(ASTStyleViolation):
 
     """
 
-    error_template = '{0} Found too deep nesting "{1}"'
+    #: Error message showed to the user:
+    error_template = 'Found too deep nesting "{0}"'
     code = 207
 
 
@@ -299,7 +307,8 @@ class TooManyModuleMembersViolation(SimpleStyleViolation):
     """
 
     should_use_text = False
-    error_template = '{0} Found too many members'
+    #: Error message showed to the user:
+    error_template = 'Found too many module members'
     code = 208
 
 
@@ -331,7 +340,8 @@ class TooManyMethodsViolation(SimpleStyleViolation):
 
     """
 
-    error_template = '{0} Found too many methods "{1}"'
+    #: Error message showed to the user:
+    error_template = 'Found too many methods "{0}"'
     code = 209
 
 
@@ -373,7 +383,8 @@ class LineComplexityViolation(ASTStyleViolation):
 
     """
 
-    error_template = '{0} Found too complex line: {1}'
+    #: Error message showed to the user:
+    error_template = 'Found line with high Jones Complexity: {0}'
     code = 210
 
 
@@ -404,7 +415,8 @@ class JonesScoreViolation(SimpleStyleViolation):
     """
 
     should_use_text = False
-    error_template = '{0} Found module with high Jones score'
+    #: Error message showed to the user:
+    error_template = 'Found module with high Jones Complexity score'
     code = 211
 
 
@@ -441,7 +453,8 @@ class TooManyImportsViolation(SimpleStyleViolation):
 
     """
 
-    error_template = '{0} Found module with too many imports: {1}'
+    #: Error message showed to the user:
+    error_template = 'Found module with too many imports: {0}'
     code = 212
 
 
@@ -476,5 +489,49 @@ class TooManyConditionsViolation(ASTStyleViolation):
 
     """
 
-    error_template = '{0} Found a condition with too many logic: {1}'
+    #: Error message showed to the user:
+    error_template = 'Found a condition with too many logic: {0}'
     code = 213
+
+
+class MagicNumberViolation(ASTStyleViolation):
+    """
+    Forbids to use magic numbers in your code.
+
+    What we call a "magic number"? Well, it is actually any number that
+    appears in your code out of nowhere. Like ``42``. Or ``0.32``.
+
+    Reasoning:
+        It is very hard to remember what these numbers actually mean.
+        Why were they used? Should they ever be changed?
+        Or are they eternal like ``3.14``?
+
+    Solution:
+        Give these numbers a name! Move them to a separate variable,
+        givin more context to the reader. And by moving things into new
+        variables you will trigger other complexity checks.
+
+    Example::
+
+        # Correct:
+        price_in_euro = 3.33  # could be changed later
+        total = get_items_from_cart() * price_in_euro
+
+        # Wrong:
+        total = get_items_from_cart() * 3.33
+
+    What are number that we exclude from this check?
+    Any numbers that are assigned to a variable, array, dictionary,
+    or keyword arguments inside a function.
+    ``int`` numbers that are in range ``[-10, 10]`` and
+    some other common numbers, that are defined in
+    :py:data:`~wemake_python_styleguide.constants.MAGIC_NUMBERS_WHITELIST`
+
+    Note:
+        Returns Z214 as error code
+
+    """
+
+    code = 214
+    #: Error message showed to the user:
+    error_template = 'Found magic number: {0}'

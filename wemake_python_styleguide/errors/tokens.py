@@ -1,5 +1,18 @@
 # -*- coding: utf-8 -*-
 
+"""
+These rules check different small syntax things.
+
+Note:
+
+    Beautiful is better than ugly.
+    Explicit is better than implicit.
+    Readability counts.
+    In the face of ambiguity, refuse the temptation to guess.
+    There should be one-- and preferably only one --obvious way to do it.
+
+"""
+
 from wemake_python_styleguide.errors.base import (
     SimpleStyleViolation,
     TokenStyleViolation,
@@ -32,7 +45,8 @@ class UnicodeStringViolation(TokenStyleViolation):
     """
 
     code = 1
-    error_template = '{0} Found unicode string prefix: {1}'
+    #: Error message showed to the user:
+    error_template = 'Found unicode string prefix: {0}'
 
 
 class UnderscoredNumberViolation(TokenStyleViolation):
@@ -64,7 +78,8 @@ class UnderscoredNumberViolation(TokenStyleViolation):
     """
 
     code = 2
-    error_template = '{0} Found underscored number: {1}'
+    #: Error message showed to the user:
+    error_template = 'Found underscored number: {0}'
 
 
 class WrongMagicCommentViolation(SimpleStyleViolation):
@@ -102,7 +117,8 @@ class WrongMagicCommentViolation(SimpleStyleViolation):
     """
 
     code = 3
-    error_template = '{0} Found wrong magic comment: {1}'
+    #: Error message showed to the user:
+    error_template = 'Found wrong magic comment: {0}'
 
 
 class PartialFloatViolation(TokenStyleViolation):
@@ -134,4 +150,5 @@ class PartialFloatViolation(TokenStyleViolation):
     """
 
     code = 4
-    error_template = '{0} Found partial float: {1}'
+    #: Error message showed to the user:
+    error_template = 'Found partial float: {0}'

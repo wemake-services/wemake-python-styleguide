@@ -32,6 +32,7 @@ def test_underscored_number(
     'x = 1000',
     'print(333555)',
     '33 + 55',
+    '_ = 12',
     'print("10_00")',
 ])
 def test_correct_number(

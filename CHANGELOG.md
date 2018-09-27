@@ -8,10 +8,16 @@ We used to have incremental versioning before `0.1.0`.
 ### Features
 
 - Adds `PartialFloatViolation`
+- Adds `MagicNumberViolation`
+- Adds `MAGIC_NUMBERS_WHITELIST` constant
+- Changes what variable names are blacklisted, adds `false`, `true`, and `no`
 
 ### Misc
 
 - Improves docs: now including docs for `--max-condition` option
+- Improves docs: adds some new `zen` references
+- Improves tests: adds many new examples
+- Improves docs: now each error has its error message displayed in the docs
 
 
 ## Version 0.0.15

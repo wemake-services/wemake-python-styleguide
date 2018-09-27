@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-These rules checks that modules are defined correctly.
+These rules check that modules are defined correctly.
 
 Please, take a note that these rules are not applied to packages.
 
@@ -9,6 +9,12 @@ Things we check here:
 
 1. Naming
 2. Contents: some modules must have contents, some must not
+
+Note:
+
+    Beautiful is better than ugly.
+    Explicit is better than implicit.
+    Readability counts.
 
 """
 
@@ -46,7 +52,8 @@ class WrongModuleNameViolation(SimpleStyleViolation):
     """
 
     should_use_text = False
-    error_template = '{0} Found wrong module name'
+    #: Error message showed to the user:
+    error_template = 'Found wrong module name'
     code = 400
 
 
@@ -77,7 +84,8 @@ class WrongModuleMagicNameViolation(SimpleStyleViolation):
     """
 
     should_use_text = False
-    error_template = '{0} Found wrong module magic name'
+    #: Error message showed to the user:
+    error_template = 'Found wrong module magic name'
     code = 401
 
 
@@ -100,7 +108,8 @@ class TooShortModuleNameViolation(SimpleStyleViolation):
     """
 
     should_use_text = False
-    error_template = '{0} Found too short module name'
+    #: Error message showed to the user:
+    error_template = 'Found too short module name'
     code = 402
 
 
@@ -131,7 +140,8 @@ class WrongModuleNameUnderscoresViolation(SimpleStyleViolation):
     """
 
     should_use_text = False
-    error_template = '{0} Found repeating underscores in a module name'
+    #: Error message showed to the user:
+    error_template = 'Found repeating underscores in a module name'
     code = 403
 
 
@@ -165,5 +175,6 @@ class WrongModuleNamePatternViolation(SimpleStyleViolation):
     """
 
     should_use_text = False
-    error_template = '{0} Found incorrect module name pattern'
+    #: Error message showed to the user:
+    error_template = 'Found incorrect module name pattern'
     code = 404

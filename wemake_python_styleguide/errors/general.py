@@ -14,6 +14,7 @@ Note:
 
     Beautiful is better than ugly.
     Explicit is better than implicit.
+    Readability counts.
     In the face of ambiguity, refuse the temptation to guess.
     There should be one-- and preferably only one --obvious way to do it.
 
@@ -50,7 +51,8 @@ class WrongKeywordViolation(ASTStyleViolation):
 
     """
 
-    error_template = '{0} Found wrong keyword "{1}"'
+    #: Error message showed to the user:
+    error_template = 'Found wrong keyword "{0}"'
     code = 110
 
 
@@ -81,7 +83,8 @@ class RaiseNotImplementedViolation(ASTStyleViolation):
     """
 
     should_use_text = False
-    error_template = '{0} Found raise NotImplemented'
+    #: Error message showed to the user:
+    error_template = 'Found raise NotImplemented'
     code = 111
 
 
@@ -103,7 +106,8 @@ class WrongFunctionCallViolation(ASTStyleViolation):
 
     """
 
-    error_template = '{0} Found wrong function call "{1}"'
+    #: Error message showed to the user:
+    error_template = 'Found wrong function call "{0}"'
     code = 112
 
 
@@ -137,7 +141,8 @@ class WrongVariableNameViolation(ASTStyleViolation):
 
     """
 
-    error_template = '{0} Found wrong variable name "{1}"'
+    #: Error message showed to the user:
+    error_template = 'Found wrong variable name "{0}"'
     code = 113
 
 
@@ -165,7 +170,8 @@ class TooShortVariableNameViolation(ASTStyleViolation):
 
     """
 
-    error_template = '{0} Found too short name "{1}"'
+    #: Error message showed to the user:
+    error_template = 'Found too short name "{0}"'
     code = 114
 
 
@@ -193,7 +199,8 @@ class PrivateNameViolation(ASTStyleViolation):
 
     """
 
-    error_template = '{0} Found private name pattern "{1}"'
+    #: Error message showed to the user:
+    error_template = 'Found private name pattern "{0}"'
     code = 115
 
 
@@ -224,7 +231,8 @@ class WrongModuleMetadataViolation(ASTStyleViolation):
 
     """
 
-    error_template = '{0} Found wrong metadata variable {1}'
+    #: Error message showed to the user:
+    error_template = 'Found wrong metadata variable {0}'
     code = 116
 
 
@@ -257,7 +265,8 @@ class FormattedStringViolation(ASTStyleViolation):
     """
 
     should_use_text = False
-    error_template = '{0} Found `f` string'
+    #: Error message showed to the user:
+    error_template = 'Found `f` string'
     code = 117
 
 
@@ -280,7 +289,8 @@ class EmptyModuleViolation(ASTStyleViolation):
     """
 
     should_use_text = False
-    error_template = '{0} Found empty module'
+    #: Error message showed to the user:
+    error_template = 'Found empty module'
     code = 118
 
 
@@ -311,7 +321,8 @@ class InitModuleHasLogicViolation(ASTStyleViolation):
     """
 
     should_use_text = False
-    error_template = '{0} Found `__init__` module with logic'
+    #: Error message showed to the user:
+    error_template = 'Found `__init__` module with logic'
     code = 119
 
 
@@ -342,5 +353,6 @@ class MultipleIfsInComprehensionViolation(ASTStyleViolation):
     """
 
     should_use_text = False
-    error_template = '{0} Found list comprehension with multiple `if`s'
+    #: Error message showed to the user:
+    error_template = 'Found list comprehension with multiple `if`s'
     code = 120

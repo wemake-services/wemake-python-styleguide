@@ -12,6 +12,7 @@ from wemake_python_styleguide.visitors.tokenize.wrong_primitives import (
     'x = u"text"',
     "print(u'unicode')",
     '"3_3" + u"5_5"',
+    'u""',
 ])
 def test_unicode_prefix(
     parse_tokens,
@@ -33,6 +34,7 @@ def test_unicode_prefix(
     'x = r"text"',
     "print(b'unicode')",
     '"u" + "12"',
+    'b""',
 ])
 def test_correct_strings(
     parse_tokens,

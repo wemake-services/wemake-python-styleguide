@@ -52,6 +52,7 @@ BAD_MODULE_METADATA_VARIABLES = frozenset((
 
 
 _BAD_VARIABLE_NAMES: Tuple[str, ...] = (
+    # Meaningless words:
     'data',
     'result',
     'results',
@@ -73,6 +74,11 @@ _BAD_VARIABLE_NAMES: Tuple[str, ...] = (
     'objects',
     'objs',
     'some',
+
+    # Confusables:
+    'no',
+    'true',
+    'false',
 
     # Names from examples:
     'foo',
@@ -135,6 +141,16 @@ MAGIC_MODULE_NAMES_WHITELIST = frozenset((
 
 #: Regex pattern to name modules:
 MODULE_NAME_PATTERN = re.compile(r'^_?_?[a-z][a-z\d_]+[a-z\d](__)?$')
+
+#: Common numbers that are allowed to be used without being called "magic":
+MAGIC_NUMBERS_WHITELIST = frozenset((
+    0.5,
+    100,
+    1000,
+    1024,  # bytes
+    24,  # hours
+    60,  # seconds, minutes
+))
 
 
 # Internal variables

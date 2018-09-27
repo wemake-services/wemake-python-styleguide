@@ -38,3 +38,5 @@ class BadClass:  # noqa: Z302
 
     class Nested:  # noqa: Z201,Z302
         ...
+
+magic_numbers = 13.2 + 50  # noqa: 214

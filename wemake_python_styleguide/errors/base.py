@@ -39,13 +39,16 @@ class BaseStyleViolation(object):
         return 'Z' + str(self.code).zfill(3)
 
     def _location(self) -> Tuple[int, int]:
+        """Default location."""
         return 0, 0
 
     def message(self) -> str:
-        """Returns error's formatted message."""
+        """Returns error's formatted message with code and reason."""
         if self.should_use_text:
-            return self.error_template.format(self._full_code(), self._text)
-        return self.error_template.format(self._full_code())
+            message = self.error_template.format(self._text)
+        else:
+            message = self.error_template
+        return '{0} {1}'.format(self._full_code(), message)
 
     def node_items(self) -> Tuple[int, int, str]:
         """Returns tuple to match ``flake8`` API format."""

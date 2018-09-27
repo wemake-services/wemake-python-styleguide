@@ -12,6 +12,7 @@ from wemake_python_styleguide.visitors.tokenize.wrong_primitives import (
     'x = 10.',
     'print(3. + 5.1)',
     '.05 + 1.2',
+    'words: int = 12.',
 ])
 def test_partial_float(
     parse_tokens,
@@ -32,6 +33,8 @@ def test_partial_float(
     'x = 10.0',
     'print(3.0 + 5.1)',
     '0.05 + 1.2',
+    'words: int = 12',
+    '# comment: .2',
 ])
 def test_correct_float(
     parse_tokens,

@@ -7,26 +7,88 @@ from wemake_python_styleguide.visitors.ast.general.wrong_keyword import (
     WrongListComprehensionVisitor,
 )
 
-ifs_multiple = """
+# Lists:
+
+list_ifs_multiple = """
 nodes = [node for node in 'abc' if node != 'a' if node != 'b' if node != 'c']
 """
 
-ifs_twice = """
+list_ifs_twice = """
 nodes = [node for node in 'abc' if node != 'a' if node != 'b']
 """
 
-ifs_single = """
+list_ifs_single = """
 nodes = [node for node in 'abc' if node != 'a']
 """
 
-without_ifs = """
+list_without_ifs = """
 nodes = [node for node in 'abc']
+"""
+
+# Dicts:
+
+dict_ifs_multiple = """
+nodes = {xy: xy for xy in 'abc' if xy != 'a' if xy != 'b' if xy != 'c'}
+"""
+
+dict_ifs_twice = """
+nodes = {xy: xy for xy in 'abc' if xy != 'a' if xy != 'b'}
+"""
+
+dict_ifs_single = """
+nodes = {xy: xy for xy in 'abc' if xy != 'a'}
+"""
+
+dict_without_ifs = """
+nodes = {xy: xy for xy in 'abc'}
+"""
+
+# Generator expressions:
+
+gen_ifs_multiple = """
+nodes = (xy for xy in 'abc' if xy != 'a' if xy != 'b' if xy != 'c')
+"""
+
+gen_ifs_twice = """
+nodes = (xy for xy in 'abc' if xy != 'a' if xy != 'b')
+"""
+
+gen_ifs_single = """
+nodes = (xy for xy in 'abc' if xy != 'a')
+"""
+
+gen_without_ifs = """
+nodes = (no for xy in 'abc')
+"""
+
+# Set comprehensions:
+
+set_ifs_multiple = """
+nodes = {xy for xy in 'abc' if xy != 'a' if xy != 'b' if xy != 'c'}
+"""
+
+set_ifs_twice = """
+nodes = {xy for xy in 'abc' if xy != 'a' if xy != 'b'}
+"""
+
+set_ifs_single = """
+nodes = {xy for xy in 'abc' if xy != 'a'}
+"""
+
+set_without_ifs = """
+nodes = {xy for xy in 'abc'}
 """
 
 
 @pytest.mark.parametrize('code', [
-    ifs_single,
-    without_ifs,
+    list_ifs_single,
+    list_without_ifs,
+    dict_ifs_single,
+    dict_without_ifs,
+    gen_ifs_single,
+    gen_without_ifs,
+    set_ifs_single,
+    set_without_ifs,
 ])
 def test_if_keyword_in_comprehension(
     assert_errors,
@@ -44,8 +106,14 @@ def test_if_keyword_in_comprehension(
 
 
 @pytest.mark.parametrize('code', [
-    ifs_multiple,
-    ifs_twice,
+    list_ifs_multiple,
+    list_ifs_twice,
+    dict_ifs_multiple,
+    dict_ifs_twice,
+    gen_ifs_multiple,
+    gen_ifs_twice,
+    set_ifs_multiple,
+    set_ifs_twice,
 ])
 def test_multiple_if_keywords_in_comprehension(
     assert_errors,

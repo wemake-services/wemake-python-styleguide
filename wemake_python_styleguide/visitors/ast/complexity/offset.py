@@ -7,7 +7,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
 class OffsetVisitor(BaseNodeVisitor):
-    """This visitor checks offset values for some nodes."""
+    """Checks offset values for several nodes."""
 
     def _check_offset(self, node: ast.AST) -> None:
         offset = getattr(node, 'col_offset', None)
@@ -23,6 +23,8 @@ class OffsetVisitor(BaseNodeVisitor):
         For example, ``ast.Name`` node has inline offset,
         which can take values from ``0`` to ``~80``.
         But ``Name`` node is allowed to behave like so.
+
+        So, we only check nodes that represent "all liners".
 
         Raises:
             TooDeepNestingViolation
