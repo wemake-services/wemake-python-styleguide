@@ -23,6 +23,7 @@ install:
   # about it being out of date.
   - "python -m pip install --disable-pip-version-check --user --upgrade pip"
 
+  # Setting up enviroment
   - "pip install poetry"
   - "poetry install"
   - "poetry develop"
