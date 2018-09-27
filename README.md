@@ -10,9 +10,6 @@
 
 Welcome to the most opinionated linter ever.
 
-The main goal of this tool is to make our `python` code
-consistent and to fight the code complexity.
-
 `wemake-python-styleguide` is actually `flake8` plugin
 with some other plugins as dependencies.
 
@@ -40,7 +37,6 @@ If the implementation is easy to explain, it may be a good idea.
 Namespaces are one honking great idea -- let's do more of those!
 ```
 
-
 ## Installation
 
 ```bash
@@ -48,10 +44,15 @@ pip install wemake-python-styleguide
 ```
 
 
-## Project status
+## What does this linter do?
 
-We are almost ready for our first public release.
-Until, use it on your own risk.
+We have several primary objectives with this linter:
+
+0. Enforce `python3.6+` usage
+1. Significantly educe code's complexity and make it more maintainable
+2. Forbid to use different stuff from `python` language to match
+  "There should be one-- and preferably only one --obvious way to do it" rule
+3. Create consistent coding style
 
 
 ## What we are not

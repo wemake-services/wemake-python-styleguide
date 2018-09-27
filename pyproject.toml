@@ -12,7 +12,7 @@ authors = [
 readme = "README.md"
 
 repository = "https://github.com/wemake-services/wemake-python-styleguide"
-homepage = "https://github.com/wemake-services/wemake-python-styleguide"
+homepage = "https://wemake-python-styleguide.readthedocs.io"
 
 keywords = [
   "flake8",
@@ -57,8 +57,8 @@ flake8-super-call = "^1.0"
 flake8-debugger = "^3.1"
 flake8-isort = "^2.5"
 flake8-eradicate = "^0.1"
-pep8-naming = "^0.7"
 flake8-bandit = "^1.0"
+pep8-naming = "^0.7"
 
 [tool.poetry.dev-dependencies]
 pytest-cov = "^2.6"

@@ -37,7 +37,7 @@ class LocalFolderImportViolation(ASTStyleViolation):
 
     """
 
-    #: Error message showed to the user:
+    #: Error message shown to the user:
     error_template = 'Found local folder import "{0}"'
     code = 100
 
@@ -69,7 +69,7 @@ class NestedImportViolation(ASTStyleViolation):
 
     """
 
-    #: Error message showed to the user:
+    #: Error message shown to the user:
     error_template = 'Found nested import "{0}"'
     code = 101
 
@@ -103,7 +103,7 @@ class FutureImportViolation(ASTStyleViolation):
 
     """
 
-    #: Error message showed to the user:
+    #: Error message shown to the user:
     error_template = 'Found future import "{0}"'
     code = 102
 
@@ -129,7 +129,7 @@ class DottedRawImportViolation(ASTStyleViolation):
 
     """
 
-    #: Error message showed to the user:
+    #: Error message shown to the user:
     error_template = 'Found dotted raw import "{0}"'
     code = 103
 
@@ -154,6 +154,6 @@ class SameAliasImportViolation(ASTStyleViolation):
 
     """
 
-    #: Error message showed to the user:
+    #: Error message shown to the user:
     error_template = 'Found same alias import "{0}"'
     code = 104

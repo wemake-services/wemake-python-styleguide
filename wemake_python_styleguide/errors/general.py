@@ -51,7 +51,7 @@ class WrongKeywordViolation(ASTStyleViolation):
 
     """
 
-    #: Error message showed to the user:
+    #: Error message shown to the user:
     error_template = 'Found wrong keyword "{0}"'
     code = 110
 
@@ -83,7 +83,7 @@ class RaiseNotImplementedViolation(ASTStyleViolation):
     """
 
     should_use_text = False
-    #: Error message showed to the user:
+    #: Error message shown to the user:
     error_template = 'Found raise NotImplemented'
     code = 111
 
@@ -106,7 +106,7 @@ class WrongFunctionCallViolation(ASTStyleViolation):
 
     """
 
-    #: Error message showed to the user:
+    #: Error message shown to the user:
     error_template = 'Found wrong function call "{0}"'
     code = 112
 
@@ -141,7 +141,7 @@ class WrongVariableNameViolation(ASTStyleViolation):
 
     """
 
-    #: Error message showed to the user:
+    #: Error message shown to the user:
     error_template = 'Found wrong variable name "{0}"'
     code = 113
 
@@ -170,7 +170,7 @@ class TooShortVariableNameViolation(ASTStyleViolation):
 
     """
 
-    #: Error message showed to the user:
+    #: Error message shown to the user:
     error_template = 'Found too short name "{0}"'
     code = 114
 
@@ -199,7 +199,7 @@ class PrivateNameViolation(ASTStyleViolation):
 
     """
 
-    #: Error message showed to the user:
+    #: Error message shown to the user:
     error_template = 'Found private name pattern "{0}"'
     code = 115
 
@@ -231,7 +231,7 @@ class WrongModuleMetadataViolation(ASTStyleViolation):
 
     """
 
-    #: Error message showed to the user:
+    #: Error message shown to the user:
     error_template = 'Found wrong metadata variable {0}'
     code = 116
 
@@ -265,7 +265,7 @@ class FormattedStringViolation(ASTStyleViolation):
     """
 
     should_use_text = False
-    #: Error message showed to the user:
+    #: Error message shown to the user:
     error_template = 'Found `f` string'
     code = 117
 
@@ -289,7 +289,7 @@ class EmptyModuleViolation(ASTStyleViolation):
     """
 
     should_use_text = False
-    #: Error message showed to the user:
+    #: Error message shown to the user:
     error_template = 'Found empty module'
     code = 118
 
@@ -321,7 +321,7 @@ class InitModuleHasLogicViolation(ASTStyleViolation):
     """
 
     should_use_text = False
-    #: Error message showed to the user:
+    #: Error message shown to the user:
     error_template = 'Found `__init__` module with logic'
     code = 119
 
@@ -353,6 +353,6 @@ class MultipleIfsInComprehensionViolation(ASTStyleViolation):
     """
 
     should_use_text = False
-    #: Error message showed to the user:
+    #: Error message shown to the user:
     error_template = 'Found list comprehension with multiple `if`s'
     code = 120

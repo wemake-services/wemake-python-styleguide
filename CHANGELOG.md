@@ -7,6 +7,8 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
+- Adds `flake8-params-indentation` dependency,
+  refactors the source code to match the new rules
 - Adds `PartialFloatViolation`
 - Adds `MagicNumberViolation`
 - Adds `MAGIC_NUMBERS_WHITELIST` constant
@@ -15,9 +17,12 @@ We used to have incremental versioning before `0.1.0`.
 ### Misc
 
 - Improves docs: now including docs for `--max-condition` option
-- Improves docs: adds some new `zen` references
+- Improves docs: adds some new `Zen of Python` references
 - Improves tests: adds many new examples
 - Improves docs: now each error has its error message displayed in the docs
+- Improves docs: readme is now ready for the release
+- Improves docs: now error pages are split
+- Improves docs: now all `flake8` plugin dependencies are documented
 
 
 ## Version 0.0.15

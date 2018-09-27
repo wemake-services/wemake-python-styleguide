@@ -5,10 +5,10 @@ API Reference
 -------------
 
 .. toctree::
-  :maxdepth: 5
+  :maxdepth: 2
   :caption: API:
 
-  _pages/errors.rst
+  _pages/errors/index.rst
   _pages/constants.rst
   _pages/options/config.rst
 

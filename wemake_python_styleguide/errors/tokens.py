@@ -45,7 +45,7 @@ class UnicodeStringViolation(TokenStyleViolation):
     """
 
     code = 1
-    #: Error message showed to the user:
+    #: Error message shown to the user:
     error_template = 'Found unicode string prefix: {0}'
 
 
@@ -78,7 +78,7 @@ class UnderscoredNumberViolation(TokenStyleViolation):
     """
 
     code = 2
-    #: Error message showed to the user:
+    #: Error message shown to the user:
     error_template = 'Found underscored number: {0}'
 
 
@@ -89,12 +89,12 @@ class WrongMagicCommentViolation(SimpleStyleViolation):
     We do not allow to use:
 
     1. ``# noqa`` comment without specified errors
-    2. ``type: some_type`` comments to specify a type for ``typed_ast``
+    2. ``# type: some_type`` comments to specify a type for ``typed_ast``
 
     Reasoning:
         We cover several different use-cases in a single rule.
         ``# noqa`` comment is restricted because it can hide other errors.
-        ``type: int`` comment is restricted because
+        ``# type: some_type`` comment is restricted because
         we can already use type annotations instead.
 
     Solution:
@@ -117,7 +117,7 @@ class WrongMagicCommentViolation(SimpleStyleViolation):
     """
 
     code = 3
-    #: Error message showed to the user:
+    #: Error message shown to the user:
     error_template = 'Found wrong magic comment: {0}'
 
 
@@ -150,5 +150,5 @@ class PartialFloatViolation(TokenStyleViolation):
     """
 
     code = 4
-    #: Error message showed to the user:
+    #: Error message shown to the user:
     error_template = 'Found partial float: {0}'

@@ -1,17 +1,17 @@
 Config
-------
+======
 
 .. automodule:: wemake_python_styleguide.options.config
    :members:
 
 Defaults
-~~~~~~~~
+--------
 
 .. automodule:: wemake_python_styleguide.options.defaults
    :members:
 
 Third party plugins
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
 It is also important to configure different plugins that we ship with
 this module.
@@ -27,7 +27,8 @@ this module.
     accept-encodings = utf-8
 
 Place this configuration inside ``setup.cfg`` file.
-Our repository contains the full working example.
+Our repository `contains <https://github.com/wemake-services/wemake-python-styleguide/blob/master/setup.cfg>`_
+the fully working example.
 
 We also use ``flake8-isort`` to style our imports.
 You will need to update your configuration with the following lines:
