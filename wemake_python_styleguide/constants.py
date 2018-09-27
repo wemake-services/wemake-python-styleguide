@@ -9,7 +9,6 @@ It also contains some exceptions that we allow to use in our codebase.
 
 import re
 import sys
-from typing import Tuple
 
 #: List of functions we forbid to use.
 BAD_FUNCTIONS = frozenset((
@@ -51,7 +50,7 @@ BAD_MODULE_METADATA_VARIABLES = frozenset((
 ))
 
 
-_BAD_VARIABLE_NAMES: Tuple[str, ...] = (
+_BAD_VARIABLE_NAMES = [
     # Meaningless words:
     'data',
     'result',
@@ -84,14 +83,14 @@ _BAD_VARIABLE_NAMES: Tuple[str, ...] = (
     'foo',
     'bar',
     'baz',
-)
+]
 
 if sys.version_info < (3, 7):  # pragma: no cover
-    _BAD_VARIABLE_NAMES += (
+    _BAD_VARIABLE_NAMES.extend([
         # Compatibility with `python3.7`:
         'async',
         'await',
-    )
+    ])
 
 #: List of variable names we forbid to use.
 BAD_VARIABLE_NAMES = frozenset(_BAD_VARIABLE_NAMES)
