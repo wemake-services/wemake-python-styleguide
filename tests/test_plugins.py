@@ -41,3 +41,4 @@ def test_noqa_fixture_disabled(absolute_path):
     assert output.count('S001') > 0  # flake8-pep3101
     assert output.count('S101') > 0  # flake8-bandit
     assert output.count('T100') > 0  # flake8-debugger
+    # TODO: test flake8-super-call

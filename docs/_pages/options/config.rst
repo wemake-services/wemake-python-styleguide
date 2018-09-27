@@ -23,10 +23,6 @@ this module.
     max-line-length = 80
     enable-extensions = G
 
-    # Flake plugins:
-    inline-quotes = single
-    accept-encodings = utf-8
-
 Place this configuration inside ``setup.cfg`` file.
 Our repository `contains <https://github.com/wemake-services/wemake-python-styleguide/blob/master/setup.cfg>`_
 the fully working example.
@@ -37,10 +33,8 @@ You will need to update your configuration with the following lines:
 .. code:: ini
 
       [isort]
-      # See https://github.com/timothycrosley/isort#multi-line-output-modes
       multi_line_output = 3
       include_trailing_comma = true
-      sections = FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER
       default_section = FIRSTPARTY
 
 Otherwise, your ``isort`` will complain about your imports.
