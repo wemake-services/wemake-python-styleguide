@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
+from typing import Optional
 
 from wemake_python_styleguide.constants import MAGIC_NUMBERS_WHITELIST
 from wemake_python_styleguide.errors.complexity import MagicNumberViolation
@@ -28,7 +29,7 @@ class MagicNumberVisitor(BaseNodeVisitor):
         ast.UnaryOp,
     )
 
-    def _get_real_parent(self, node: ast.Num) -> ast.AST:
+    def _get_real_parent(self, node: Optional[ast.AST]) -> Optional[ast.AST]:
         """
         Returns real number's parent.
 
@@ -54,7 +55,7 @@ class MagicNumberVisitor(BaseNodeVisitor):
         if isinstance(node.n, int) and node.n <= 10:
             return
 
-        self.add_error(MagicNumberViolation(node, text=node.n))
+        self.add_error(MagicNumberViolation(node, text=str(node.n)))
 
     def visit_Num(self, node: ast.Num) -> None:
         """
