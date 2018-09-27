@@ -14,8 +14,8 @@ install:
   - poetry develop
 
 script:
-  - poetry run pytest
   - poetry run mypy wemake_python_styleguide
+  - poetry run pytest
   - poetry run doc8 -q docs
 
 after_success:

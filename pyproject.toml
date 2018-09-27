@@ -16,8 +16,8 @@ homepage = "https://wemake-python-styleguide.readthedocs.io"
 
 keywords = [
   "flake8",
-  "plugin",
-  "linting",
+  "flake8-plugin",
+  "linter",
   "wemake.services",
   "styleguide",
   "code quality"
@@ -53,11 +53,12 @@ flake8-string-format = "^0.2"
 flake8-coding = "^1.3"
 flake8-bugbear = "^18.2"
 flake8-pep3101 = "^1.2"
-flake8-super-call = "^1.0"
 flake8-debugger = "^3.1"
 flake8-isort = "^2.5"
 flake8-eradicate = "^0.1"
 flake8-bandit = "^1.0"
+flake8-logging-format = "^0.5.0"
+flake8-super-call = "^1.0"
 pep8-naming = "^0.7"
 
 [tool.poetry.dev-dependencies]

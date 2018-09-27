@@ -21,6 +21,7 @@ this module.
     [flake8]
     max-complexity = 6
     max-line-length = 80
+    enable-extensions = G
 
     # Flake plugins:
     inline-quotes = single

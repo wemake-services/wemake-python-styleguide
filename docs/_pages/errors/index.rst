@@ -20,6 +20,7 @@ flake8-docstrings         `D100 - D414 <http://www.pydocstyle.org/en/2.1.1/error
 pycodestyle               `E001 - E902, W001 - W606 <http://pycodestyle.pycqa.org/en/latest/intro.html#error-codes>`_
 flake8-eradicate          `E800 <https://github.com/sobolevn/flake8-eradicate>`_
 flake8                    `F400 - F901 <http://flake8.pycqa.org/en/latest/user/error-codes.html>`_
+flake8-logging-format     `G001 - G202 <https://github.com/globality-corp/flake8-logging-format>`_
 flake8-isort              `I001 - I005 <https://github.com/gforcada/flake8-isort/blob/master/flake8_isort.py>`_
 pep8-naming               `N800 - N820 <https://github.com/PyCQA/pep8-naming>`_
 flake8-string-format      `P101 - P302 <https://github.com/xZise/flake8-string-format#error-codes>`_

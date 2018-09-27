@@ -9,6 +9,7 @@ We used to have incremental versioning before `0.1.0`.
 
 - Adds `flake8-params-indentation` dependency,
   refactors the source code to match the new rules
+- Adds `flake8-logging-format`
 - Adds `PartialFloatViolation`
 - Adds `MagicNumberViolation`
 - Adds `MAGIC_NUMBERS_WHITELIST` constant
