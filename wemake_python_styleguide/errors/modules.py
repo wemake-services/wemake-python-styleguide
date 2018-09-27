@@ -124,6 +124,7 @@ class WrongModuleNameUnderscoresViolation(SimpleStyleViolation):
         Keep just one underscore in a module name.
 
     Example::
+
         # Correct:
         __init__.py
         some_module_name.py
@@ -159,6 +160,7 @@ class WrongModuleNamePatternViolation(SimpleStyleViolation):
     to validate the module names.
 
     Example::
+
         # Correct:
         __init__.py
         some_module_name.py
