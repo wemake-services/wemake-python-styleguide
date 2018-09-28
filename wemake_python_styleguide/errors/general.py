@@ -51,7 +51,7 @@ class WrongKeywordViolation(ASTStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found wrong keyword "{0}"'
     code = 110
 
@@ -65,6 +65,9 @@ class RaiseNotImplementedViolation(ASTStyleViolation):
         But, these errors have different use cases.
         Use cases of ``NotImplemented`` is too limited
         to be generally available.
+
+    Solution:
+        Use ``NotImplementedError``.
 
     Example::
 
@@ -83,7 +86,7 @@ class RaiseNotImplementedViolation(ASTStyleViolation):
     """
 
     should_use_text = False
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found raise NotImplemented'
     code = 111
 
@@ -106,7 +109,7 @@ class WrongFunctionCallViolation(ASTStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found wrong function call "{0}"'
     code = 112
 
@@ -116,11 +119,13 @@ class WrongVariableNameViolation(ASTStyleViolation):
     Forbids to have blacklisted variable names.
 
     Reasoning:
+        Naming is hard.
         We have found some names that are not expressive enough.
         However, they appear in the code more than offten.
-        All names from ``BAD_VARIABLE_NAMES`` could be improved.
+        All names that we forbid to use could be improved.
 
     Solution:
+        Try to use more specific name instead.
         If you really want to use any of the names from the list,
         add a prefix or suffix to it. It will serve you well.
 
@@ -141,7 +146,7 @@ class WrongVariableNameViolation(ASTStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found wrong variable name "{0}"'
     code = 113
 
@@ -151,9 +156,11 @@ class TooShortVariableNameViolation(ASTStyleViolation):
     Forbids to have too short variable names.
 
     Reasoning:
-        Naming is hard.
         It is hard to understand what the variable means and why it is used,
         if it's name is too short.
+
+    Solution:
+        Think of another name. Give more context to it.
 
     This rule is configurable with ``--min-variable-length``.
 
@@ -170,7 +177,7 @@ class TooShortVariableNameViolation(ASTStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found too short name "{0}"'
     code = 114
 
@@ -183,6 +190,11 @@ class PrivateNameViolation(ASTStyleViolation):
         Private is not private in ``python``.
         So, why should we pretend it is?
         This might lead to some serious design flaws.
+
+    Solution:
+        Rename your variable or method to be protected.
+        Think about your design, why do you want to make it private?
+        Are there any other ways to achieve what you want?
 
     This rule checks: variables, attributes, functions, and methods.
 
@@ -199,7 +211,7 @@ class PrivateNameViolation(ASTStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found private name pattern "{0}"'
     code = 115
 
@@ -213,6 +225,8 @@ class WrongModuleMetadataViolation(ASTStyleViolation):
         because code should not contain any metadata.
 
     Solution:
+        Place all the metadata in ``setup.py``,
+        ``setup.cfg``, or ``pyproject.toml``.
         Use proper docstrings and packaging classifiers.
         Use ``pkg_resources`` if you need to import this data into your app.
 
@@ -231,7 +245,7 @@ class WrongModuleMetadataViolation(ASTStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found wrong metadata variable {0}'
     code = 116
 
@@ -242,6 +256,9 @@ class FormattedStringViolation(ASTStyleViolation):
 
     Reasoning:
         ``f`` strings looses context too often and they are hard to lint.
+        Imagine that you have a string that breaks
+        when you move it two lines above.
+        That's not how should a string behave.
         Also, they promote a bad practice:
         putting your logic inside the template.
 
@@ -258,6 +275,7 @@ class FormattedStringViolation(ASTStyleViolation):
 
         # Correct:
         'Result is: {0}'.format(2 + 2)
+        'Hey {user}! How are you?'.format(user='sobolevn')
 
     Note:
         Returns Z117 as error code
@@ -265,7 +283,7 @@ class FormattedStringViolation(ASTStyleViolation):
     """
 
     should_use_text = False
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found `f` string'
     code = 117
 
@@ -275,7 +293,7 @@ class EmptyModuleViolation(ASTStyleViolation):
     Forbids to have empty modules.
 
     Reasoning:
-        Why is it even there?
+        Why is it even there? Do not polute your project with empty files.
 
     Solution:
         If you have an empty module there are two ways to handle that:
@@ -289,7 +307,7 @@ class EmptyModuleViolation(ASTStyleViolation):
     """
 
     should_use_text = False
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found empty module'
     code = 118
 
@@ -321,7 +339,7 @@ class InitModuleHasLogicViolation(ASTStyleViolation):
     """
 
     should_use_text = False
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found `__init__` module with logic'
     code = 119
 
@@ -353,6 +371,6 @@ class MultipleIfsInComprehensionViolation(ASTStyleViolation):
     """
 
     should_use_text = False
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found list comprehension with multiple `if`s'
     code = 120

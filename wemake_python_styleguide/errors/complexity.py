@@ -68,7 +68,7 @@ class NestedFunctionViolation(ASTStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found nested function "{0}"'
     code = 200
 
@@ -107,7 +107,7 @@ class NestedClassViolation(ASTStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found nested class "{0}"'
     code = 201
 
@@ -154,7 +154,7 @@ class TooManyLocalsViolation(ASTStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found too many local variables "{0}"'
     code = 202
 
@@ -179,7 +179,7 @@ class TooManyArgumentsViolation(ASTStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found too many arguments "{0}"'
     code = 203
 
@@ -206,7 +206,7 @@ class TooManyElifsViolation(ASTStyleViolation):
     """
 
     should_use_text = False
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found too many `elif` branches'
     code = 204
 
@@ -230,7 +230,7 @@ class TooManyReturnsViolation(ASTStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found too many return statements "{0}"'
     code = 205
 
@@ -253,7 +253,7 @@ class TooManyExpressionsViolation(ASTStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found too many expressions "{0}"'
     code = 206
 
@@ -278,7 +278,7 @@ class TooDeepNestingViolation(ASTStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found too deep nesting "{0}"'
     code = 207
 
@@ -307,7 +307,7 @@ class TooManyModuleMembersViolation(SimpleStyleViolation):
     """
 
     should_use_text = False
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found too many module members'
     code = 208
 
@@ -340,7 +340,7 @@ class TooManyMethodsViolation(SimpleStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found too many methods "{0}"'
     code = 209
 
@@ -383,7 +383,7 @@ class LineComplexityViolation(ASTStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found line with high Jones Complexity: {0}'
     code = 210
 
@@ -415,7 +415,7 @@ class JonesScoreViolation(SimpleStyleViolation):
     """
 
     should_use_text = False
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found module with high Jones Complexity score'
     code = 211
 
@@ -453,7 +453,7 @@ class TooManyImportsViolation(SimpleStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found module with too many imports: {0}'
     code = 212
 
@@ -489,7 +489,7 @@ class TooManyConditionsViolation(ASTStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found a condition with too many logic: {0}'
     code = 213
 
@@ -533,5 +533,5 @@ class MagicNumberViolation(ASTStyleViolation):
     """
 
     code = 214
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found magic number: {0}'

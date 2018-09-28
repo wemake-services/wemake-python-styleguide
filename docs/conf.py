@@ -133,6 +133,7 @@ html_sidebars = {
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'wemake-python-styleguidedoc'
+add_module_names = False
 
 
 # -- Options for LaTeX output ------------------------------------------------

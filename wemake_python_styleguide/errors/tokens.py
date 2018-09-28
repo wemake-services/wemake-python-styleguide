@@ -45,18 +45,21 @@ class UnicodeStringViolation(TokenStyleViolation):
     """
 
     code = 1
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found unicode string prefix: {0}'
 
 
 class UnderscoredNumberViolation(TokenStyleViolation):
     """
-    Forbids to use ``_`` in numbers.
+    Forbids to use underscores (``_``) in numbers.
 
     Reasoning:
         It is possible to write ``1000`` in three different ways:
-        ``1_000``, ``10_00``, and ``100_0``. It all depends on cultural
-        habits of the author.
+        ``1_000``, ``10_00``, and ``100_0``.
+        And it would be still the same number.
+        Count how many ways there are to write bigger numbers.
+        Currently, it all depends on cultural habits of the author.
+        We enforce a single way to write numbers: without the underscore.
 
     Solution:
         Numbers should be written as numbers: ``1000``.
@@ -69,7 +72,7 @@ class UnderscoredNumberViolation(TokenStyleViolation):
         million = 1000000
 
         # Wrong:
-        phone = 883_134_43
+        phone = 8_83_134_43
         million = 100_00_00
 
     Note:
@@ -78,7 +81,7 @@ class UnderscoredNumberViolation(TokenStyleViolation):
     """
 
     code = 2
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found underscored number: {0}'
 
 
@@ -101,11 +104,15 @@ class WrongMagicCommentViolation(SimpleStyleViolation):
         Use ``noqa`` comments with specified error types.
         Use type annotations to specify types.
 
+    We still allow to use ``# type: ignore`` comment.
+    Since sometimes it is totally required.
+
     Example::
 
         # Correct:
         type = MyClass.get_type()  # noqa: A001
         coordinate: int = 10
+        some.int_field = 'text'  # type: ignore
 
         # Wrong:
         type = MyClass.get_type()  # noqa
@@ -117,7 +124,7 @@ class WrongMagicCommentViolation(SimpleStyleViolation):
     """
 
     code = 3
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found wrong magic comment: {0}'
 
 
@@ -150,5 +157,5 @@ class PartialFloatViolation(TokenStyleViolation):
     """
 
     code = 4
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found partial float: {0}'

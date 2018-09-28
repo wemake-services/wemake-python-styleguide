@@ -32,7 +32,7 @@ class StaticMethodViolation(ASTStyleViolation):
     """
 
     should_use_text = False
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found using `@staticmethod`'
     code = 300
 
@@ -55,7 +55,7 @@ class BadMagicMethodViolation(ASTStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found using restricted magic method "{0}"'
     code = 301
 
@@ -82,6 +82,6 @@ class RequiredBaseClassViolation(ASTStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found class without a base class "{0}"'
     code = 302

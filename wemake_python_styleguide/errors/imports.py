@@ -37,7 +37,7 @@ class LocalFolderImportViolation(ASTStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found local folder import "{0}"'
     code = 100
 
@@ -52,6 +52,8 @@ class NestedImportViolation(ASTStyleViolation):
 
     Solution:
         You don't need nested imports, you need to refactor your code.
+        Introduce a new module, a find another way to do what you want to do.
+        Rething how your layered architecture should look like.
 
     Example::
 
@@ -64,12 +66,15 @@ class NestedImportViolation(ASTStyleViolation):
         def some():
             from my_module import some_function
 
+    See also:
+        https://github.com/seddonym/layer_linter
+
     Note:
         Returns Z101 as error code
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found nested import "{0}"'
     code = 101
 
@@ -103,7 +108,7 @@ class FutureImportViolation(ASTStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found future import "{0}"'
     code = 102
 
@@ -129,7 +134,7 @@ class DottedRawImportViolation(ASTStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found dotted raw import "{0}"'
     code = 103
 
@@ -154,6 +159,6 @@ class SameAliasImportViolation(ASTStyleViolation):
 
     """
 
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found same alias import "{0}"'
     code = 104

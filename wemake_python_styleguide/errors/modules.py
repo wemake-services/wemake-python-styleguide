@@ -52,7 +52,7 @@ class WrongModuleNameViolation(SimpleStyleViolation):
     """
 
     should_use_text = False
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found wrong module name'
     code = 400
 
@@ -84,7 +84,7 @@ class WrongModuleMagicNameViolation(SimpleStyleViolation):
     """
 
     should_use_text = False
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found wrong module magic name'
     code = 401
 
@@ -108,7 +108,7 @@ class TooShortModuleNameViolation(SimpleStyleViolation):
     """
 
     should_use_text = False
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found too short module name'
     code = 402
 
@@ -141,7 +141,7 @@ class WrongModuleNameUnderscoresViolation(SimpleStyleViolation):
     """
 
     should_use_text = False
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found repeating underscores in a module name'
     code = 403
 
@@ -177,6 +177,6 @@ class WrongModuleNamePatternViolation(SimpleStyleViolation):
     """
 
     should_use_text = False
-    #: Error message shown to the user:
+    #: Error message shown to the user.
     error_template = 'Found incorrect module name pattern'
     code = 404
