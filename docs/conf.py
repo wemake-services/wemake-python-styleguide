@@ -19,14 +19,22 @@ sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
-from wemake_python_styleguide.version import pkg_name, pkg_version
+def _get_project_meta():
+    import tomlkit
 
-project = pkg_name
+    with open('../pyproject.toml') as pyproject:
+        contents = pyproject.read()
+
+    return tomlkit.parse(contents)['tool']['poetry']
+
+pkg_meta = _get_project_meta()
+
+project = pkg_meta['name']
 copyright = '2018, wemake.services'
 author = 'wemake.services'
 
 # The short X.Y version
-version = pkg_version
+version = pkg_meta['version']
 # The full version, including alpha/beta/rc tags
 release = version
 
