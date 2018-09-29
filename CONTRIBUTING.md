@@ -25,6 +25,15 @@ poetry develop
 
 To activate your `virtualenv` run `poetry shell`.
 
+### Adding new flake8 plugins
+
+If you are adding a `flake8` plugin dependency (not dev-dependency),
+you will have to do several things:
+
+1. Install plugin with `poetry`
+2. Add docs about the error code to the `errors/index.rst`
+3. Add a test that the plugin is working to `tests/test_plugins.py`
+
 
 ## Tests
 

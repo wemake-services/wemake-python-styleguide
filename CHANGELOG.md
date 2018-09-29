@@ -7,11 +7,12 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
-- Adds `flake8-params-indentation` dependency,
-  refactors the source code to match the new rules
-- Adds `flake8-logging-format`
+- Adds `flake8-logging-format` dependency
+- Adds `flake8-type-annotations` dependency
+- Removes `flake8-super-call` dependency
 - Adds `PartialFloatViolation`
 - Adds `MagicNumberViolation`
+- Adds `WrongDocCommentViolation`
 - Adds `MAGIC_NUMBERS_WHITELIST` constant
 - Changes what variable names are blacklisted, adds `false`, `true`, and `no`
 

@@ -46,6 +46,10 @@ class BadMagicMethodViolation(ASTStyleViolation):
         Like, we forbid to use ``del`` keyword, so we forbid to use all
         magic methods related to it.
 
+    Solution:
+        Refactor you code to use custom methods instead.
+        It will give more context to your app.
+
     See
     :py:data:`~wemake_python_styleguide.constants.BAD_MAGIC_METHODS`
     for the full blacklist of the magic methods.
@@ -68,6 +72,9 @@ class RequiredBaseClassViolation(ASTStyleViolation):
         We just need to decide how to do it.
         We need a single and unified rule about base classes.
         We have decided to stick to the explicit base class notation.
+
+    Solution:
+        Add a base class.
 
     Example::
 

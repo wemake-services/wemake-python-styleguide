@@ -58,8 +58,8 @@ flake8-isort = "^2.5"
 flake8-eradicate = "^0.1"
 flake8-bandit = "^1.0"
 flake8-logging-format = "^0.5.0"
-flake8-super-call = "^1.0"
 pep8-naming = "^0.7"
+flake8-type-annotations = "^0.1.0"
 
 [tool.poetry.dev-dependencies]
 pytest-cov = "^2.6"

@@ -18,22 +18,25 @@ import re
 import tokenize
 from typing.re import Match, Pattern
 
-from wemake_python_styleguide.errors.tokens import WrongMagicCommentViolation
+from wemake_python_styleguide.errors.tokens import (
+    WrongDocCommentViolation,
+    WrongMagicCommentViolation,
+)
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
-
-NOQA_CHECK: Pattern = re.compile(r'^noqa:?($|[A-Z\d\,\s]+)')
-TYPE_CHECK: Pattern = re.compile(r'^type:\s?([\w\d\[\]\'\"\.]+)$')
 
 
 class WrongCommentVisitor(BaseTokenVisitor):
     """Checks comment tokens."""
+
+    noqa_check: Pattern = re.compile(r'^noqa:?($|[A-Z\d\,\s]+)')
+    type_check: Pattern = re.compile(r'^type:\s?([\w\d\[\]\'\"\.]+)$')
 
     def _get_comment_text(self, token: tokenize.TokenInfo) -> str:
         return token.string[1:].strip()
 
     def _check_noqa(self, token: tokenize.TokenInfo) -> None:
         comment_text = self._get_comment_text(token)
-        match: Match = NOQA_CHECK.match(comment_text)
+        match: Match = self.noqa_check.match(comment_text)
         if not match:
             return
 
@@ -45,7 +48,7 @@ class WrongCommentVisitor(BaseTokenVisitor):
 
     def _check_typed_ast(self, token: tokenize.TokenInfo) -> None:
         comment_text = self._get_comment_text(token)
-        match: Match = TYPE_CHECK.match(comment_text)
+        match: Match = self.type_check.match(comment_text)
         if not match:
             return
 
@@ -55,13 +58,20 @@ class WrongCommentVisitor(BaseTokenVisitor):
                 WrongMagicCommentViolation(token, text=comment_text),
             )
 
+    def _check_empty_doc_comment(self, token: tokenize.TokenInfo) -> None:
+        comment_text = self._get_comment_text(token)
+        if comment_text == ':':
+            self.add_error(WrongDocCommentViolation(token))
+
     def visit_comment(self, token: tokenize.TokenInfo) -> None:
         """
         Performs comment checks.
 
         Raises:
+            WrongDocCommentViolation
             WrongMagicCommentViolation
 
         """
         self._check_noqa(token)
         self._check_typed_ast(token)
+        self._check_empty_doc_comment(token)

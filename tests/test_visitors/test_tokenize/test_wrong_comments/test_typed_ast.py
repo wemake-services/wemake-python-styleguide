@@ -44,7 +44,7 @@ def test_correct_comments(
     'field = SomeField()  # type: drf.Field',
     '# type: fixme',
 ])
-def test_incorrect_noqa_comment(
+def test_incorrect_type_comment(
     parse_tokens,
     assert_errors,
     default_options,

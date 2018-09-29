@@ -101,7 +101,7 @@ class WrongMagicCommentViolation(SimpleStyleViolation):
         we can already use type annotations instead.
 
     Solution:
-        Use ``noqa`` comments with specified error types.
+        Use ``# noqa`` comments with specified error types.
         Use type annotations to specify types.
 
     We still allow to use ``# type: ignore`` comment.
@@ -159,3 +159,38 @@ class PartialFloatViolation(TokenStyleViolation):
     code = 4
     #: Error message shown to the user.
     error_template = 'Found partial float: {0}'
+
+
+class WrongDocCommentViolation(TokenStyleViolation):
+    """
+    Forbids to use empty doc comments (``#:``).
+
+    Reasoning:
+        Doc comments are used to provide a documentation.
+        But supling empty doc comments breaks this use-case.
+        It is unclear why they can be used with no contents.
+
+    Solution:
+        Add some documentation to this comment. Or remove it.
+
+    Empty doc comments are not caught by the default ``pycodestyle`` checks.
+
+    Example::
+
+        # Correct:
+        #: List of allowed names:
+        NAMES_WHITELIST = ['feature', 'bug', 'research']
+
+        # Wrong:
+        #:
+        NAMES_WHITELIST = ['feature', 'bug', 'research']
+
+    Note:
+        Returns Z005 as error code
+
+    """
+
+    code = 5
+    should_use_text = False
+    #: Error message shown to the user.
+    error_template = 'Found wrong doc comment'

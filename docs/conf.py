@@ -19,14 +19,16 @@ sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'wemake-python-styleguide'
-copyright = '2018, Nikita Sobolev'
-author = 'Nikita Sobolev'
+from wemake_python_styleguide.version import pkg_name, pkg_version
+
+project = pkg_name
+copyright = '2018, wemake.services'
+author = 'wemake.services'
 
 # The short X.Y version
-version = ''
+version = pkg_version
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = version
 
 
 # -- General configuration ---------------------------------------------------
@@ -92,6 +94,12 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
 
+add_module_names = False
+
+autodoc_default_options = {
+    # 'show-inheritance': True,
+}
+
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -133,7 +141,6 @@ html_sidebars = {
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'wemake-python-styleguidedoc'
-add_module_names = False
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -175,8 +182,13 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'wemake-python-styleguide', 'wemake-python-styleguide Documentation',
-     [author], 1)
+    (
+        master_doc,
+        'wemake-python-styleguide',
+        'wemake-python-styleguide Documentation',
+        [author],
+        1,
+    )
 ]
 
 
@@ -186,9 +198,15 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'wemake-python-styleguide', 'wemake-python-styleguide Documentation',
-     author, 'wemake-python-styleguide', 'One line description of project.',
-     'Miscellaneous'),
+    (
+        master_doc,
+        'wemake-python-styleguide',
+        'wemake-python-styleguide Documentation',
+        author,
+        'wemake-python-styleguide',
+        'One line description of project.',
+        'Miscellaneous',
+    ),
 ]
 
 

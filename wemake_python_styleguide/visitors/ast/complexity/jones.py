@@ -22,7 +22,7 @@ from wemake_python_styleguide.logics.nodes import is_subtype_of_any
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
-class JonesComplexityVisitor(BaseNodeVisitor):
+class JonesComplexityVisitor(BaseNodeVisitor):  # TODO: consider `logical_line`
     """
     This visitor is used to find complex lines in the code.
 

@@ -103,7 +103,6 @@ class Configuration(object):
 
     """
 
-    #: List of option values we use in this plugin:
     options: Sequence[_Option] = [
 
         # Complexity:
