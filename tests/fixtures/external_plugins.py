@@ -27,3 +27,7 @@ logger.info(
 
 def function_name(plugin: str ='flake8') ->str:
     return plugin
+
+
+multiline_string = 'some\
+string'

@@ -16,7 +16,6 @@ TokenInfo(
 
 import re
 import tokenize
-from typing.re import Match, Pattern
 
 from wemake_python_styleguide.errors.tokens import (
     WrongDocCommentViolation,
@@ -28,15 +27,15 @@ from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 class WrongCommentVisitor(BaseTokenVisitor):
     """Checks comment tokens."""
 
-    noqa_check: Pattern = re.compile(r'^noqa:?($|[A-Z\d\,\s]+)')
-    type_check: Pattern = re.compile(r'^type:\s?([\w\d\[\]\'\"\.]+)$')
+    noqa_check = re.compile(r'^noqa:?($|[A-Z\d\,\s]+)')
+    type_check = re.compile(r'^type:\s?([\w\d\[\]\'\"\.]+)$')
 
     def _get_comment_text(self, token: tokenize.TokenInfo) -> str:
         return token.string[1:].strip()
 
     def _check_noqa(self, token: tokenize.TokenInfo) -> None:
         comment_text = self._get_comment_text(token)
-        match: Match = self.noqa_check.match(comment_text)
+        match = self.noqa_check.match(comment_text)
         if not match:
             return
 
@@ -48,7 +47,7 @@ class WrongCommentVisitor(BaseTokenVisitor):
 
     def _check_typed_ast(self, token: tokenize.TokenInfo) -> None:
         comment_text = self._get_comment_text(token)
-        match: Match = self.type_check.match(comment_text)
+        match = self.type_check.match(comment_text)
         if not match:
             return
 

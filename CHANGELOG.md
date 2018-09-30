@@ -9,6 +9,7 @@ We used to have incremental versioning before `0.1.0`.
 
 - Adds `flake8-logging-format` dependency
 - Adds `flake8-type-annotations` dependency
+- Adds `flake8-breaking-line` dependency
 - Removes `flake8-super-call` dependency
 - Adds `PartialFloatViolation`
 - Adds `MagicNumberViolation`

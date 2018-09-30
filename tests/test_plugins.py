@@ -35,6 +35,7 @@ def test_noqa_fixture_disabled(absolute_path):
     assert output.count('F401') > 0  # flake8
     assert output.count('G001') > 0  # flake8-logging-format
     assert output.count('I001') > 0  # flake8-isort
+    assert output.count('N400') > 0  # flake8-broken-line
     assert output.count('N802') > 0  # pep8-naming
     assert output.count('P101') > 0  # flake8-string-format
     assert output.count('Q000') > 0  # flake8-quotes
