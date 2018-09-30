@@ -35,16 +35,14 @@ wemake-python-styleguide  Z, defined here
 
 Our own codes are the following ones:
 
-=========== ======
-Plugin      Codes
------------ ------
-Tokens      :ref:`Z001 - Z099 <tokens>`
-Imports     :ref:`Z100 - Z109 <imports>`
-General     :ref:`Z110 - Z199 <general>`
-Complexity  :ref:`Z200 - Z299 <complexity>`
-Classes     :ref:`Z300 - Z399 <classes>`
-Modules     :ref:`Z400 - Z499 <modules>`
-=========== ======
+============== ======
+Plugin         Codes
+-------------- ------
+Naming         :ref:`Z100 - Z199 <naming>`
+Complexity     :ref:`Z200 - Z299 <complexity>`
+Consistency    :ref:`Z300 - Z399 <consistency>`
+Best practices :ref:`Z400 - Z499 <best-practices>`
+============== ======
 
 .. toctree::
   :maxdepth: 1

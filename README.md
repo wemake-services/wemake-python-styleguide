@@ -47,7 +47,9 @@ pip install wemake-python-styleguide
 
 You will also need to create a `setup.cfg` file with [the following contents](https://wemake-python-styleguide.readthedocs.io/en/latest/_pages/options/config.html#third-party-plugins).
 
-This file is required to configure our linter and 3rd party plugins.
+This file is required to configure our linter and 3rd party plugins it uses.
+However, this is a temporary solution. 
+We are working at providing the configuration for you in the future.
 
 
 ## What we are about
