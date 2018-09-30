@@ -4,7 +4,7 @@ import ast
 from typing import Optional
 
 from wemake_python_styleguide.constants import MAGIC_NUMBERS_WHITELIST
-from wemake_python_styleguide.errors.complexity import MagicNumberViolation
+from wemake_python_styleguide.errors.best_practices import MagicNumberViolation
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 

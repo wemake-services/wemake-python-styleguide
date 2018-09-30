@@ -16,6 +16,25 @@ def test_visitor_returns_location():
     assert visitor.node_items() == (0, 0, 'Z001 error')
 
 
+def test_all_errors_correct_numbers(all_module_errors):
+    """Ensures that all errors has correct error code numbers."""
+    assert len(all_module_errors) == 4
+
+    for index, module in enumerate(all_module_errors.keys()):
+        classes = all_module_errors[module]
+        code_number = (index + 1) * 100
+        for error_class in classes:
+            assert code_number <= error_class.code <= code_number + 100 - 1
+
+
+def test_all_errors_are_documented(all_module_errors):
+    """Ensures that all errors are documented."""
+    for module, classes in all_module_errors.items():
+        for error_class in classes:
+            # Once per summary and once per autoclass:
+            assert module.__doc__.count(error_class.__qualname__) == 2
+
+
 def test_checker_default_location():
     """Ensures that `BaseStyleViolation` returns correct location."""
     assert BaseStyleViolation(None)._location() == (0, 0)

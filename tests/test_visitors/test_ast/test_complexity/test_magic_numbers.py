@@ -2,9 +2,9 @@
 
 import pytest
 
+from wemake_python_styleguide.errors.best_practices import MagicNumberViolation
 from wemake_python_styleguide.visitors.ast.complexity.numbers import (
     MAGIC_NUMBERS_WHITELIST,
-    MagicNumberViolation,
     MagicNumberVisitor,
 )
 

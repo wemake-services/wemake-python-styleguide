@@ -2,8 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.visitors.filenames.wrong_module_name import (
+from wemake_python_styleguide.errors.naming import (
     WrongModuleNameUnderscoresViolation,
+)
+from wemake_python_styleguide.visitors.filenames.wrong_module_name import (
     WrongModuleNameVisitor,
 )
 

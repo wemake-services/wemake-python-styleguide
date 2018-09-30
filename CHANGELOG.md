@@ -3,6 +3,19 @@
 We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
+
+## Version 0.1.0
+
+### Features
+
+- **Breaking**: changes error codes, now they are grouped by meaning
+
+### Misc
+
+- Refactoring: changes how visitors are organized inside the package
+- Improves docs: now all error files contain fancy documentation and summary
+
+
 ## Version 0.0.16
 
 ### Features

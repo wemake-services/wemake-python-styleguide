@@ -27,8 +27,8 @@ def _get_project_meta():
 
     return tomlkit.parse(contents)['tool']['poetry']
 
-pkg_meta = _get_project_meta()
 
+pkg_meta = _get_project_meta()
 project = pkg_meta['name']
 copyright = '2018, wemake.services'
 author = 'wemake.services'
@@ -54,6 +54,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
+    'sphinx.ext.autosummary',
 
     # Used to include .md files:
     'm2r',
@@ -105,7 +106,7 @@ pygments_style = 'sphinx'
 add_module_names = False
 
 autodoc_default_options = {
-    # 'show-inheritance': True,
+    'show-inheritance': True,
 }
 
 
@@ -138,7 +139,6 @@ html_sidebars = {
     '**': [
         'about.html',
         'navigation.html',
-        'relations.html',  # needs 'show_related': True theme option to display
         'moreinfo.html',
         'searchbox.html',
     ]

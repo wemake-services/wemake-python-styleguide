@@ -3,10 +3,12 @@
 import ast
 
 from wemake_python_styleguide.constants import BAD_MAGIC_METHODS
-from wemake_python_styleguide.errors.classes import (
+from wemake_python_styleguide.errors.best_practices import (
     BadMagicMethodViolation,
-    RequiredBaseClassViolation,
     StaticMethodViolation,
+)
+from wemake_python_styleguide.errors.consistency import (
+    RequiredBaseClassViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 

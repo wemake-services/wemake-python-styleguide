@@ -36,5 +36,6 @@ You will need to update your configuration with the following lines:
       multi_line_output = 3
       include_trailing_comma = true
       default_section = FIRSTPARTY
+      line_length = 80
 
 Otherwise, your ``isort`` will complain about your imports.

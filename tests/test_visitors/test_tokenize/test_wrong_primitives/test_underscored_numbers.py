@@ -2,8 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.visitors.tokenize.wrong_primitives import (
+from wemake_python_styleguide.errors.consistency import (
     UnderscoredNumberViolation,
+)
+from wemake_python_styleguide.visitors.tokenize.wrong_primitives import (
     WrongPrimitivesVisitor,
 )
 

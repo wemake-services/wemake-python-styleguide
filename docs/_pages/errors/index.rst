@@ -51,9 +51,7 @@ Modules     :ref:`Z400 - Z499 <modules>`
   :caption: Error types:
   :hidden:
 
-  tokens.rst
-  imports.rst
-  general.rst
-  classes.rst
+  naming.rst
   complexity.rst
-  modules.rst
+  consistency.rst
+  best_practices.rst

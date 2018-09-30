@@ -2,8 +2,8 @@
 
 import pytest
 
+from wemake_python_styleguide.errors.consistency import FormattedStringViolation
 from wemake_python_styleguide.visitors.ast.general.wrong_string import (
-    FormattedStringViolation,
     WrongStringVisitor,
 )
 

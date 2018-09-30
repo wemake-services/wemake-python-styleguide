@@ -2,8 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.visitors.ast.general.wrong_import import (
+from wemake_python_styleguide.errors.consistency import (
     LocalFolderImportViolation,
+)
+from wemake_python_styleguide.visitors.ast.general.wrong_import import (
     WrongImportVisitor,
 )
 

@@ -3,7 +3,7 @@
 import ast
 
 from wemake_python_styleguide.constants import INIT
-from wemake_python_styleguide.errors.general import (
+from wemake_python_styleguide.errors.best_practices import (
     EmptyModuleViolation,
     InitModuleHasLogicViolation,
 )

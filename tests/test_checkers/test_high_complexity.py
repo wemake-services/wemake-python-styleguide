@@ -20,4 +20,4 @@ def test_too_many_arguments_in_fixture(absolute_path):
     )
     stdout, _ = process.communicate()
 
-    assert stdout.count(b'Z203') == 4
+    assert stdout.count(b'Z211') == 4

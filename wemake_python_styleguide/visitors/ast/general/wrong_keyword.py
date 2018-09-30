@@ -2,10 +2,12 @@
 
 import ast
 
-from wemake_python_styleguide.errors.general import (
-    MultipleIfsInComprehensionViolation,
+from wemake_python_styleguide.errors.best_practices import (
     RaiseNotImplementedViolation,
     WrongKeywordViolation,
+)
+from wemake_python_styleguide.errors.consistency import (
+    MultipleIfsInComprehensionViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 

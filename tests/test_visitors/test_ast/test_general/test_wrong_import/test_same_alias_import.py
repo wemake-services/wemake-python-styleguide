@@ -2,8 +2,8 @@
 
 import pytest
 
+from wemake_python_styleguide.errors.naming import SameAliasImportViolation
 from wemake_python_styleguide.visitors.ast.general.wrong_import import (
-    SameAliasImportViolation,
     WrongImportVisitor,
 )
 

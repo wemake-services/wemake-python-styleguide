@@ -4,4 +4,4 @@ Complexity
 ==========
 
 .. automodule:: wemake_python_styleguide.errors.complexity
-   :members:
+   :no-members:

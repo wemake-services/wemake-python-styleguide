@@ -56,8 +56,7 @@ We have several primary objectives with this linter:
 
 0. Enforce `python3.6+` usage
 1. Significantly reduce code's complexity and make it more maintainable
-2. Forbid to use different stuff from `python` language to match
-  "There should be one-- and preferably only one --obvious way to do it" rule
+2. Enforce "There should be one-- and preferably only one --obvious way to do it" rule
 3. Create consistent coding and naming style
 
 You can find all error codes and plugins [in the docs](https://wemake-python-styleguide.readthedocs.io/en/latest/_pages/errors/index.html).

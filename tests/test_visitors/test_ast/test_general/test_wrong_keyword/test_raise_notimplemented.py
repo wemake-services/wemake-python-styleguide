@@ -2,8 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.visitors.ast.general.wrong_keyword import (
+from wemake_python_styleguide.errors.best_practices import (
     RaiseNotImplementedViolation,
+)
+from wemake_python_styleguide.visitors.ast.general.wrong_keyword import (
     WrongRaiseVisitor,
 )
 

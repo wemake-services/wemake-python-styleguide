@@ -2,9 +2,11 @@
 
 import pytest
 
+from wemake_python_styleguide.errors.best_practices import (
+    WrongMagicCommentViolation,
+)
 from wemake_python_styleguide.visitors.tokenize.wrong_comments import (
     WrongCommentVisitor,
-    WrongMagicCommentViolation,
 )
 
 

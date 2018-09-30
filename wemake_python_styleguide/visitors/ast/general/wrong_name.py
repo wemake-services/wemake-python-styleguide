@@ -6,10 +6,12 @@ from wemake_python_styleguide.constants import (
     BAD_MODULE_METADATA_VARIABLES,
     BAD_VARIABLE_NAMES,
 )
-from wemake_python_styleguide.errors.general import (
+from wemake_python_styleguide.errors.best_practices import (
+    WrongModuleMetadataViolation,
+)
+from wemake_python_styleguide.errors.naming import (
     PrivateNameViolation,
     TooShortVariableNameViolation,
-    WrongModuleMetadataViolation,
     WrongVariableNameViolation,
 )
 from wemake_python_styleguide.logics.variables import (

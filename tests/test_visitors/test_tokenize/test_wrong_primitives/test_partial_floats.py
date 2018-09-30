@@ -2,8 +2,8 @@
 
 import pytest
 
+from wemake_python_styleguide.errors.consistency import PartialFloatViolation
 from wemake_python_styleguide.visitors.tokenize.wrong_primitives import (
-    PartialFloatViolation,
     WrongPrimitivesVisitor,
 )
 

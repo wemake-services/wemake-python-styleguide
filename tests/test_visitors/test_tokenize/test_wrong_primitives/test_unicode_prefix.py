@@ -2,8 +2,8 @@
 
 import pytest
 
+from wemake_python_styleguide.errors.consistency import UnicodeStringViolation
 from wemake_python_styleguide.visitors.tokenize.wrong_primitives import (
-    UnicodeStringViolation,
     WrongPrimitivesVisitor,
 )
 

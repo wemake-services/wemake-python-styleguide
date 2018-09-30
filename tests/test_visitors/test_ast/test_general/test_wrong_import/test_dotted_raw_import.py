@@ -2,8 +2,8 @@
 
 import pytest
 
+from wemake_python_styleguide.errors.consistency import DottedRawImportViolation
 from wemake_python_styleguide.visitors.ast.general.wrong_import import (
-    DottedRawImportViolation,
     WrongImportVisitor,
 )
 

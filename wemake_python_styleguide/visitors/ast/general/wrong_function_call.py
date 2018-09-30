@@ -3,7 +3,9 @@
 import ast
 
 from wemake_python_styleguide.constants import BAD_FUNCTIONS
-from wemake_python_styleguide.errors.general import WrongFunctionCallViolation
+from wemake_python_styleguide.errors.best_practices import (
+    WrongFunctionCallViolation,
+)
 from wemake_python_styleguide.logics.functions import given_function_called
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 

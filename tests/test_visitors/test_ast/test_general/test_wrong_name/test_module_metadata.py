@@ -2,9 +2,11 @@
 
 import pytest
 
+from wemake_python_styleguide.errors.best_practices import (
+    WrongModuleMetadataViolation,
+)
 from wemake_python_styleguide.visitors.ast.general.wrong_name import (
     BAD_MODULE_METADATA_VARIABLES,
-    WrongModuleMetadataViolation,
     WrongModuleMetadataVisitor,
 )
 

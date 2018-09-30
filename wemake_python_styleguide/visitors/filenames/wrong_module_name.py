@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from wemake_python_styleguide import constants
-from wemake_python_styleguide.errors.modules import (
+from wemake_python_styleguide.errors.naming import (
     TooShortModuleNameViolation,
     WrongModuleMagicNameViolation,
     WrongModuleNamePatternViolation,

@@ -2,8 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.visitors.ast.general.wrong_module import (
+from wemake_python_styleguide.errors.best_practices import (
     InitModuleHasLogicViolation,
+)
+from wemake_python_styleguide.visitors.ast.general.wrong_module import (
     WrongContentsVisitor,
 )
 

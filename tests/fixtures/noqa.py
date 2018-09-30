@@ -4,40 +4,43 @@
 This file contains all possible errors.
 """
 
-from __future__ import print_function  # noqa: Z102
+from __future__ import print_function  # noqa: Z422
 
-from .version import get_version  # noqa: Z100
+from .version import get_version  # noqa: Z300
 
-full_name = u'Nikita Sobolev'  # noqa: Z001
-phone_number = 555_123_999  # noqa: Z002
-partial_number = .05  # noqa: Z004
-
-
-def some():  # noqa: Z113
-    from my_module import some_function  # noqa: Z101
-
-    def nested(): ...  # noqa: Z200
+full_name = u'Nikita Sobolev'  # noqa: Z302
+phone_number = 555_123_999  # noqa:  Z303
+partial_number = .05  # noqa: Z304
+formatted_string = f'Hi, {full_name}'  # noqa: Z305
 
 
-del {'a': 1}['a'] # noqa: Z110
-raise NotImplemented  # noqa: Z111
-hasattr(object, 'some')  # noqa: Z112
-value = 1  # noqa: Z113
-x = 2  # noqa: Z114
-__private = 3  # noqa: Z115
-__author__ = 'Nikita Sobolev'  # noqa: Z116
+def some():  # noqa: Z110, Z113
+    from my_module import some_function  # noqa: Z435
 
-nodes = [node for node in 'abc' if node != 'a' if node != 'b']  # noqa: Z120
+    def nested(): ...  # noqa: Z430
 
-class BadClass:  # noqa: Z302
-    @staticmethod  # noqa: Z300
+
+del {'a': 1}['a'] # noqa: Z420
+raise NotImplemented  # noqa: Z423
+hasattr(object, 'some')  # noqa: Z421
+value = 1  # noqa: Z110
+x = 2  # noqa: Z111
+__private = 3  # noqa: Z112
+__author__ = 'Nikita Sobolev'  # noqa: Z410
+
+nodes = [node for node in 'abc' if node != 'a' if node != 'b']  # noqa: Z307
+
+
+class BadClass:  # noqa: Z306
+    @staticmethod  # noqa: Z433
     def some_static():
         ...
 
-    def __del__(self, *args, **kwargs):  # noqa: Z301
+    def __del__(self, *args, **kwargs):  # noqa: Z434
         ...
 
-    class Nested:  # noqa: Z201,Z302
+    class Nested:  # noqa: Z306,Z431
         ...
 
-magic_numbers = 13.2 + 50  # noqa: 214
+
+magic_numbers = 13.2 + 50  # noqa: Z432

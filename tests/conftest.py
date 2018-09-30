@@ -11,12 +11,16 @@ from wemake_python_styleguide.errors.base import (
     ASTStyleViolation,
     BaseStyleViolation,
     SimpleStyleViolation,
+    TokenStyleViolation,
 )
 
 
 def _is_error_class(cls) -> bool:
     base_classes = {
-        ASTStyleViolation, BaseStyleViolation, SimpleStyleViolation,
+        ASTStyleViolation,
+        BaseStyleViolation,
+        SimpleStyleViolation,
+        TokenStyleViolation,
     }
 
     return (
@@ -26,22 +30,36 @@ def _is_error_class(cls) -> bool:
     )
 
 
+def _load_all_error_classes():
+    modules = [
+        errors.naming,
+        errors.complexity,
+        errors.consistency,
+        errors.best_practices,
+    ]
+
+    classes = {}
+    for module in modules:
+        classes_names_list = inspect.getmembers(module, _is_error_class)
+        only_classes = map(itemgetter(1), classes_names_list)
+        classes.update({module: list(only_classes)})
+    return classes
+
+
 @pytest.fixture(scope='session')
 def all_errors():
     """Loads all errors from the package."""
-    modules = [
-        errors.imports,
-        errors.general,
-        errors.classes,
-        errors.complexity,
-        errors.modules,
-    ]
+    classes = _load_all_error_classes()
+    all_errors_container = []
+    for module_classes in classes.values():
+        all_errors_container.extend(module_classes)
+    return all_errors_container
 
-    classes = []
-    for module in modules:
-        classes.extend(inspect.getmembers(module, _is_error_class))
 
-    return list(map(itemgetter(1), classes))
+@pytest.fixture(scope='session')
+def all_module_errors():
+    """Loads all errors from the package."""
+    return _load_all_error_classes()
 
 
 @pytest.fixture(scope='session')

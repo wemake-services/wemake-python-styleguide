@@ -4,12 +4,14 @@ import string
 
 import pytest
 
-from wemake_python_styleguide.visitors.ast.general.wrong_name import (
-    BAD_VARIABLE_NAMES,
+from wemake_python_styleguide.errors.naming import (
     PrivateNameViolation,
     TooShortVariableNameViolation,
-    WrongNameVisitor,
     WrongVariableNameViolation,
+)
+from wemake_python_styleguide.visitors.ast.general.wrong_name import (
+    BAD_VARIABLE_NAMES,
+    WrongNameVisitor,
 )
 
 function_bad_name = """

@@ -2,9 +2,11 @@
 
 import pytest
 
+from wemake_python_styleguide.errors.best_practices import (
+    WrongFunctionCallViolation,
+)
 from wemake_python_styleguide.visitors.ast.general.wrong_function_call import (
     BAD_FUNCTIONS,
-    WrongFunctionCallViolation,
     WrongFunctionCallVisitor,
 )
 

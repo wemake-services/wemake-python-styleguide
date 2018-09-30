@@ -2,8 +2,8 @@
 
 import pytest
 
+from wemake_python_styleguide.errors.best_practices import EmptyModuleViolation
 from wemake_python_styleguide.visitors.ast.general.wrong_module import (
-    EmptyModuleViolation,
     WrongContentsVisitor,
 )
 

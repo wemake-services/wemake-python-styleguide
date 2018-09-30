@@ -10,10 +10,10 @@ import ast
 from typing import TYPE_CHECKING, Sequence, Tuple, Type, Union
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing_extensions import Protocol  # noqa: Z101
+    from typing_extensions import Protocol  # noqa: Z435
 
     # This solves cycle imports problem:
-    from .visitors import base  # noqa: Z100,Z101,F401
+    from .visitors import base  # noqa: F401,Z300,Z435
 else:
     # We do not need to do anything if typechecker is not working:
     Protocol = object

@@ -3,19 +3,14 @@
 """
 These checks finds flaws in your application design.
 
-We try to stick to "the magical 7 ± 2 number".
+We try to stick to "the magical 7 ± 2 number" when counting things.
 https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two
 
 That's how many objects we can keep in our memory at a time.
-We try hard not to exceed the limit.
+We try hard not to exceed the memory capacity limit.
 
 You can also find interesting reading about "Cognitive complexity":
 https://www.sonarsource.com/docs/CognitiveComplexity.pdf
-
-What we call "design flaws":
-
-1. Complex code (there are a lof of complexity checks!)
-2. Nested classes, functions
 
 Note:
 
@@ -23,6 +18,51 @@ Note:
     Complex is better than complicated.
     Flat is better than nested.
     Namespaces are one honking great idea -- let's do more of those!
+
+.. currentmodule:: wemake_python_styleguide.errors.complexity
+
+Summary
+-------
+
+.. autosummary::
+   :nosignatures:
+
+   JonesScoreViolation
+   TooManyImportsViolation
+   TooManyModuleMembersViolation
+   TooManyLocalsViolation
+   TooManyArgumentsViolation
+   TooManyReturnsViolation
+   TooManyExpressionsViolation
+   TooManyMethodsViolation
+   TooDeepNestingViolation
+   LineComplexityViolation
+   TooManyConditionsViolation
+   TooManyElifsViolation
+
+Module complexity
+-----------------
+
+.. autoclass:: JonesScoreViolation
+.. autoclass:: TooManyImportsViolation
+.. autoclass:: TooManyModuleMembersViolation
+
+Function and class complexity
+-----------------------------
+
+.. autoclass:: TooManyLocalsViolation
+.. autoclass:: TooManyArgumentsViolation
+.. autoclass:: TooManyReturnsViolation
+.. autoclass:: TooManyExpressionsViolation
+.. autoclass:: TooManyMethodsViolation
+
+Structures complexity
+---------------------
+
+.. autoclass:: TooDeepNestingViolation
+.. autoclass:: LineComplexityViolation
+.. autoclass:: TooManyConditionsViolation
+.. autoclass:: TooManyElifsViolation
 
 """
 
@@ -32,75 +72,65 @@ from wemake_python_styleguide.errors.base import (
 )
 
 
-class NestedFunctionViolation(ASTStyleViolation):
+class JonesScoreViolation(SimpleStyleViolation):
     """
-    Forbids to have nested functions.
+    Forbids to have modules with complex lines.
+
+    We are using Jones Complexity algorithm to count module's score.
+    See
+    :py:class:`~.LineComplexityViolation` for details of per-line-complexity.
+    How it is done: we count complexity per line, then measuring the median
+    complexity across the lines in the whole module.
 
     Reasoning:
-        Nesting functions is a bad practice.
-        It is hard to test them, it is hard then to separate them.
-        People tend to overuse closures, so it's hard to manage the dataflow.
+        Having complex modules will decrease your code maintainability.
 
     Solution:
-        Just write flat functions, there's no need to nest them.
-        Pass parameters as normal arguments, do not use closures.
-        Until you need them for decorators or factories.
+        Refactor the module contents.
 
-    We also disallow to nest ``lambda`` functions.
+    See also:
+        https://github.com/Miserlou/JonesComplexity
 
-    See
-    :py:data:`~wemake_python_styleguide.constants.NESTED_FUNCTIONS_WHITELIST`
-    for the whole list of whitelisted names.
-
-    Example::
-
-        # Correct:
-        def do_some(): ...
-        def other(): ...
-
-        # Wrong:
-        def do_some():
-            def inner():
-                ...
+    This rule is configurable with ``--max-module-score``.
 
     Note:
         Returns Z200 as error code
 
     """
 
+    should_use_text = False
     #: Error message shown to the user.
-    error_template = 'Found nested function "{0}"'
+    error_template = 'Found module with high Jones Complexity score'
     code = 200
 
 
-class NestedClassViolation(ASTStyleViolation):
+class TooManyImportsViolation(SimpleStyleViolation):
     """
-    Forbids to use nested classes.
+    Forbids to have modules with too many imports.
+
+    Namespaces are one honking great idea -- let's do more of those!
 
     Reasoning:
-        Nested classes are really hard to manage.
-        You can not even create an instance of this class in many cases.
-        Testing them is also really hard.
+        Having too many imports without prefixes is quite expensive.
+        You have to memorize all the source locations of the imports.
+        And sometimes it is hard to remember what kind of functions and classes
+        are already injected into your context.
+
+        It is also a questionable design if a single module has a lot of
+        imports. Why a single module has so many dependencies?
+        So, it becomes too coupled.
 
     Solution:
-        Just write flat classes, there's no need nest them.
-        If you are nesting classes inside a function for parametrization,
-        then you will probably need to use different design (or metaclasses).
+        Refactor the imports to import a common namespace. Something like
+        ``from package import module`` and then
+        use it like ``module.function()``.
 
-    See
-    :py:data:`~wemake_python_styleguide.constants.NESTED_CLASSES_WHITELIST`
-    for the full list of whitelisted names.
+        Or refactor your code and split the complex module into several ones.
 
-    Example::
+    We do not make any differences between
+    ``import`` and ``from ... import ...``.
 
-        # Correct:
-        class Some(object): ...
-        class Other(object): ...
-
-        # Wrong:
-        class Some(object):
-            class Inner(object):
-                ...
+    This rule is configurable with ``--max-imports``.
 
     Note:
         Returns Z201 as error code
@@ -108,9 +138,40 @@ class NestedClassViolation(ASTStyleViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found nested class "{0}"'
+    error_template = 'Found module with too many imports: {0}'
     code = 201
 
+
+class TooManyModuleMembersViolation(SimpleStyleViolation):
+    """
+    Forbids to have many classes and functions in a single module.
+
+    Reasoning:
+        Having many classes and functions in a single module is a bad thing.
+        Soon it will be hard to read through this code and understand it.
+
+    Solution:
+        It is better to split this module into several modules or a package.
+
+    We do not make any differences between classes and functions in this check.
+    They are treated as the same unit of logic.
+    We also do no care about functions and classes been public or not.
+    However, methods are counted separately on a per-class basis.
+
+    This rule is configurable with ``--max-module-members``.
+
+    Note:
+        Returns Z202 as error code
+
+    """
+
+    should_use_text = False
+    #: Error message shown to the user.
+    error_template = 'Found too many module members'
+    code = 202
+
+
+# Functions and classes:
 
 class TooManyLocalsViolation(ASTStyleViolation):
     """
@@ -150,13 +211,13 @@ class TooManyLocalsViolation(ASTStyleViolation):
     This rule is configurable with ``--max-local-variables``.
 
     Note:
-        Returns Z202 as error code
+        Returns Z210 as error code
 
     """
 
     #: Error message shown to the user.
     error_template = 'Found too many local variables "{0}"'
-    code = 202
+    code = 210
 
 
 class TooManyArgumentsViolation(ASTStyleViolation):
@@ -175,40 +236,13 @@ class TooManyArgumentsViolation(ASTStyleViolation):
     This rule is configurable with ``--max-arguments``.
 
     Note:
-        Returns Z203 as error code
+        Returns Z211 as error code
 
     """
 
     #: Error message shown to the user.
     error_template = 'Found too many arguments "{0}"'
-    code = 203
-
-
-class TooManyElifsViolation(ASTStyleViolation):
-    """
-    Forbids to use many ``elif`` branches.
-
-    Reasoning:
-        This rule is specifically important, because many ``elif``
-        branches indicate a complex flow in your design:
-        you are reimplementing ``switch`` in python.
-
-    Solution:
-        There are different design patters to use instead.
-        For example, you can use some interface that
-        just call a specific method without ``if``.
-
-    This rule is configurable with ``--max-elifs``.
-
-    Note:
-        Returns Z204 as error code
-
-    """
-
-    should_use_text = False
-    #: Error message shown to the user.
-    error_template = 'Found too many `elif` branches'
-    code = 204
+    code = 211
 
 
 class TooManyReturnsViolation(ASTStyleViolation):
@@ -226,13 +260,13 @@ class TooManyReturnsViolation(ASTStyleViolation):
     This rule is configurable with ``--max-returns``.
 
     Note:
-        Returns Z205 as error code
+        Returns Z212 as error code
 
     """
 
     #: Error message shown to the user.
     error_template = 'Found too many return statements "{0}"'
-    code = 205
+    code = 212
 
 
 class TooManyExpressionsViolation(ASTStyleViolation):
@@ -249,67 +283,13 @@ class TooManyExpressionsViolation(ASTStyleViolation):
     This rule is configurable with ``--max-expressions``.
 
     Note:
-        Returns Z206 as error code
+        Returns Z213 as error code
 
     """
 
     #: Error message shown to the user.
     error_template = 'Found too many expressions "{0}"'
-    code = 206
-
-
-class TooDeepNestingViolation(ASTStyleViolation):
-    """
-    Forbids nesting blocks too deep.
-
-    Reasoning:
-        If nesting is too deep that indicates of a complex logic
-        and language constructions. This means that our design is not
-        suited to handle such construction.
-
-    Solution:
-        We need to refactor our complex construction into simpler ones.
-        We can use new functions or different constructions.
-
-    This rule is configurable with ``--max-offset-blocks``.
-
-    Note:
-        Returns Z207 as error code
-
-    """
-
-    #: Error message shown to the user.
-    error_template = 'Found too deep nesting "{0}"'
-    code = 207
-
-
-class TooManyModuleMembersViolation(SimpleStyleViolation):
-    """
-    Forbids to have many classes and functions in a single module.
-
-    Reasoning:
-        Having many classes and functions in a single module is a bad thing.
-        Soon it will be hard to read through this code and understand it.
-
-    Solution:
-        It is better to split this module into several modules or a package.
-
-    We do not make any differences between classes and functions in this check.
-    They are treated as the same unit of logic.
-    We also do no care about functions and classes been public or not.
-    However, methods are counted separately on a per-class basis.
-
-    This rule is configurable with ``--max-module-members``.
-
-    Note:
-        Returns Z208 as error code
-
-    """
-
-    should_use_text = False
-    #: Error message shown to the user.
-    error_template = 'Found too many module members'
-    code = 208
+    code = 213
 
 
 class TooManyMethodsViolation(SimpleStyleViolation):
@@ -336,13 +316,40 @@ class TooManyMethodsViolation(SimpleStyleViolation):
     This rule is configurable with ``--max-methods``.
 
     Note:
-        Returns Z209 as error code
+        Returns Z214 as error code
 
     """
 
     #: Error message shown to the user.
     error_template = 'Found too many methods "{0}"'
-    code = 209
+    code = 214
+
+
+# Structures:
+
+class TooDeepNestingViolation(ASTStyleViolation):
+    """
+    Forbids nesting blocks too deep.
+
+    Reasoning:
+        If nesting is too deep that indicates of a complex logic
+        and language constructions. This means that our design is not
+        suited to handle such construction.
+
+    Solution:
+        We need to refactor our complex construction into simpler ones.
+        We can use new functions or different constructions.
+
+    This rule is configurable with ``--max-offset-blocks``.
+
+    Note:
+        Returns Z220 as error code
+
+    """
+
+    #: Error message shown to the user.
+    error_template = 'Found too deep nesting "{0}"'
+    code = 220
 
 
 class LineComplexityViolation(ASTStyleViolation):
@@ -379,83 +386,13 @@ class LineComplexityViolation(ASTStyleViolation):
     This rule is configurable with ``--max-line-complexity``.
 
     Note:
-        Returns Z210 as error code
+        Returns Z221 as error code
 
     """
 
     #: Error message shown to the user.
     error_template = 'Found line with high Jones Complexity: {0}'
-    code = 210
-
-
-class JonesScoreViolation(SimpleStyleViolation):
-    """
-    Forbids to have modules with complex lines.
-
-    We are using Jones Complexity algorithm to count module's score.
-    See
-    :py:class:`~.LineComplexityViolation` for details of per-line-complexity.
-    How it is done: we count complexity per line, then measuring the median
-    complexity across the lines in the whole module.
-
-    Reasoning:
-        Having complex modules will decrease your code maintainability.
-
-    Solution:
-        Refactor the module contents.
-
-    See also:
-        https://github.com/Miserlou/JonesComplexity
-
-    This rule is configurable with ``--max-module-score``.
-
-    Note:
-        Returns Z211 as error code
-
-    """
-
-    should_use_text = False
-    #: Error message shown to the user.
-    error_template = 'Found module with high Jones Complexity score'
-    code = 211
-
-
-class TooManyImportsViolation(SimpleStyleViolation):
-    """
-    Forbids to have modules with too many imports.
-
-    Namespaces are one honking great idea -- let's do more of those!
-
-    Reasoning:
-        Having too many imports without prefixes is quite expensive.
-        You have to memorize all the source locations of the imports.
-        And sometimes it is hard to remember what kind of functions and classes
-        are already injected into your context.
-
-        It is also a questionable design if a single module has a lot of
-        imports. Why a single module has so many dependencies?
-        So, it becomes too coupled.
-
-    Solution:
-        Refactor the imports to import a common namespace. Something like
-        ``from package import module`` and then
-        use it like ``module.function()``.
-
-        Or refactor your code and split the complex module into several ones.
-
-    We do not make any differences between
-    ``import`` and ``from ... import ...``.
-
-    This rule is configurable with ``--max-imports``.
-
-    Note:
-        Returns Z212 as error code
-
-    """
-
-    #: Error message shown to the user.
-    error_template = 'Found module with too many imports: {0}'
-    code = 212
+    code = 221
 
 
 class TooManyConditionsViolation(ASTStyleViolation):
@@ -485,53 +422,37 @@ class TooManyConditionsViolation(ASTStyleViolation):
     This rule is configurable with ``--max-conditions``.
 
     Note:
-        Returns Z213 as error code
+        Returns Z222 as error code
 
     """
 
     #: Error message shown to the user.
     error_template = 'Found a condition with too many logic: {0}'
-    code = 213
+    code = 222
 
 
-class MagicNumberViolation(ASTStyleViolation):
+class TooManyElifsViolation(ASTStyleViolation):
     """
-    Forbids to use magic numbers in your code.
-
-    What we call a "magic number"? Well, it is actually any number that
-    appears in your code out of nowhere. Like ``42``. Or ``0.32``.
+    Forbids to use many ``elif`` branches.
 
     Reasoning:
-        It is very hard to remember what these numbers actually mean.
-        Why were they used? Should they ever be changed?
-        Or are they eternal like ``3.14``?
+        This rule is specifically important, because many ``elif``
+        branches indicate a complex flow in your design:
+        you are reimplementing ``switch`` in python.
 
     Solution:
-        Give these numbers a name! Move them to a separate variable,
-        givin more context to the reader. And by moving things into new
-        variables you will trigger other complexity checks.
+        There are different design patters to use instead.
+        For example, you can use some interface that
+        just call a specific method without ``if``.
 
-    Example::
-
-        # Correct:
-        price_in_euro = 3.33  # could be changed later
-        total = get_items_from_cart() * price_in_euro
-
-        # Wrong:
-        total = get_items_from_cart() * 3.33
-
-    What are number that we exclude from this check?
-    Any numbers that are assigned to a variable, array, dictionary,
-    or keyword arguments inside a function.
-    ``int`` numbers that are in range ``[-10, 10]`` and
-    some other common numbers, that are defined in
-    :py:data:`~wemake_python_styleguide.constants.MAGIC_NUMBERS_WHITELIST`
+    This rule is configurable with ``--max-elifs``.
 
     Note:
-        Returns Z214 as error code
+        Returns Z223 as error code
 
     """
 
-    code = 214
+    should_use_text = False
     #: Error message shown to the user.
-    error_template = 'Found magic number: {0}'
+    error_template = 'Found too many `elif` branches'
+    code = 223
