@@ -9,7 +9,7 @@ def is_subtype_of_any(
     to_check: Iterable[Type[ast.AST]],
 ) -> bool:
     """
-    Checks either the given node is subtype of any of the provided types.
+    Checks whether the given node is subtype of any of the provided types.
 
     >>> import ast
     >>> node = ast.parse('')  # ast.Module

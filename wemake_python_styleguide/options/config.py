@@ -31,17 +31,17 @@ class Configuration(object):
     We try to make all defaults as reasonable as possible.
 
     However, you can currently adjust some complexity options. Why?
-    Because we are quite sure about the ideal values. We are still researching
-    them, and providing a way for developers to help us out is a good thing
-    at the moment.
+    Because we are not quite sure about the ideal values yet. We are still
+    researching them, and providing a way for developers to help us out is
+    a good thing at the moment.
 
     Options for general checks:
 
     - ``min-variable-length`` - minimum number of chars to define a valid
       variable name, defaults to
       :str:`wemake_python_styleguide.options.defaults.MIN_VARIABLE_LENGTH`
-    - ``i-control-code`` - either or not your control ones who use your code,
-      more rule are enforced when you do control it, defaults to
+    - ``i-control-code`` - whether you control ones who use your code,
+      more rules are enforced when you do control it, defaults to
       :str:`wemake_python_styleguide.options.defaults.I_CONTROL_CODE`
 
     Options for module names related checks:
@@ -190,7 +190,7 @@ class Configuration(object):
         _Option(
             '--i-control-code',
             defaults.I_CONTROL_CODE,
-            'Either or not you control ones who use your code.',
+            'Whether you control ones who use your code.',
             action='store_true',
             type=None,
         ),
