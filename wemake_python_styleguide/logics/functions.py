@@ -30,7 +30,7 @@ def given_function_called(node: Call, to_check: Iterable[str]) -> str:
 
 def is_method(function_type: Optional[str]) -> bool:
     """
-    Returns either or not given function type belongs to a class.
+    Returns whether a given function type belongs to a class.
 
     >>> is_method('function')
     False

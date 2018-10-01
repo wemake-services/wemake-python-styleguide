@@ -14,7 +14,7 @@ Glossary
       Set of rules of how we write ``python`` code in `wemake.services <https://wemake.services>`_.
 
    checker
-      ``flake8`` plugin compatible class that is used as an entrypoint.
+      ``flake8`` plugin compatible class that is used as an entry point.
       Entry point and violation codes are defined in ``pyproject.toml``.
       This class runs all visitors that exist in our style guide.
 

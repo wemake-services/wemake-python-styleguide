@@ -3,8 +3,6 @@
 """
 These checks ensures that you follow the best practices.
 
-It also
-
 Note:
 
     Explicit is better than implicit.
@@ -127,7 +125,7 @@ class WrongDocCommentViolation(TokenizeViolation):
 
     Reasoning:
         Doc comments are used to provide a documentation.
-        But supling empty doc comments breaks this use-case.
+        But supplying empty doc comments breaks this use-case.
         It is unclear why they can be used with no contents.
 
     Solution:
@@ -255,8 +253,8 @@ class WrongKeywordViolation(ASTViolation):
     Forbids to use some keywords from ``python``.
 
     Reasoning:
-        We believe, tha some keywords are anti-patterns.
-        They promote bad-practices like ``global``  and ``pass``,
+        We believe that some keywords are anti-patterns.
+        They promote bad-practices like ``global`` and ``pass``,
         or just not user-friendly like ``del``.
 
     Solution:
@@ -289,7 +287,7 @@ class WrongFunctionCallViolation(ASTViolation):
 
     Reasoning:
         Some functions are only suitable
-        for very specific usecases,
+        for very specific use cases,
         we forbid to use them in a free manner.
 
     See
@@ -471,7 +469,7 @@ class MagicNumberViolation(ASTViolation):
 
     Solution:
         Give these numbers a name! Move them to a separate variable,
-        givin more context to the reader. And by moving things into new
+        giving more context to the reader. And by moving things into new
         variables you will trigger other complexity checks.
 
     Example::
@@ -483,7 +481,7 @@ class MagicNumberViolation(ASTViolation):
         # Wrong:
         total = get_items_from_cart() * 3.33
 
-    What are number that we exclude from this check?
+    What are numbers that we exclude from this check?
     Any numbers that are assigned to a variable, array, dictionary,
     or keyword arguments inside a function.
     ``int`` numbers that are in range ``[-10, 10]`` and
@@ -506,7 +504,7 @@ class StaticMethodViolation(ASTViolation):
 
     Reasoning:
         Static methods are not required to be inside the class.
-        Because it even does not an access to the current instance.
+        Because they even do not have access to the current instance.
 
     Solution:
         Use instance methods, ``@classmethod``, or functions instead.
@@ -528,7 +526,7 @@ class BadMagicMethodViolation(ASTViolation):
 
     Reasoning:
         We forbid to use magic methods related to the forbidden language parts.
-        Like, we forbid to use ``del`` keyword, so we forbid to use all
+        Likewise, we forbid to use ``del`` keyword, so we forbid to use all
         magic methods related to it.
 
     Solution:
@@ -559,8 +557,8 @@ class NestedImportViolation(ASTViolation):
 
     Solution:
         You don't need nested imports, you need to refactor your code.
-        Introduce a new module, a find another way to do what you want to do.
-        Rething how your layered architecture should look like.
+        Introduce a new module or find another way to do what you want to do.
+        Rethink how your layered architecture should look like.
 
     Example::
 

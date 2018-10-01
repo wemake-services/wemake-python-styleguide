@@ -226,7 +226,7 @@ class WrongVariableNameViolation(ASTViolation):
 
     Reasoning:
         We have found some names that are not expressive enough.
-        However, they appear in the code more than offten.
+        However, they appear in the code more than often.
         All names that we forbid to use could be improved.
 
     Solution:

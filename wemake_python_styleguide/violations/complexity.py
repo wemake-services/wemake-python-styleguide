@@ -155,7 +155,7 @@ class TooManyModuleMembersViolation(SimpleViolation):
 
     We do not make any differences between classes and functions in this check.
     They are treated as the same unit of logic.
-    We also do no care about functions and classes been public or not.
+    We also do not care about functions and classes being public or not.
     However, methods are counted separately on a per-class basis.
 
     This rule is configurable with ``--max-module-members``.
@@ -227,7 +227,7 @@ class TooManyArgumentsViolation(ASTViolation):
     Reasoning:
         This is an indicator of a bad design. When function requires many
         arguments it shows that it is required to refactor this piece of code.
-        It also indicates that function does to many things at once.
+        It also indicates that function does too many things at once.
 
     Solution:
         Split function into several functions.
@@ -271,11 +271,11 @@ class TooManyReturnsViolation(ASTViolation):
 
 class TooManyExpressionsViolation(ASTViolation):
     """
-    Forbids putting to many expression is a unit of code.
+    Forbids putting too many expressions in a unit of code.
 
     Reasoning:
-        When there are too many expression it means that this specific
-        function does too many things at once. It has too many logic.
+        When there are too many expressions it means that this specific
+        function does too many things at once. It has too much logic.
 
     Solution:
         Split function into several functions, refactor your API.
@@ -299,7 +299,7 @@ class TooManyMethodsViolation(SimpleViolation):
     Reasoning:
         Having too many methods might lead to the "God object".
         This kind of objects can handle everything.
-        So, in the end your code becomes to hard to maintain and test.
+        So, in the end your code becomes too hard to maintain and test.
 
     Solution:
         What to do if you have too many methods in a single class?
@@ -309,9 +309,9 @@ class TooManyMethodsViolation(SimpleViolation):
         See: https://en.wikipedia.org/wiki/God_object
 
     We do not make any difference between instance and class methods.
-    We also do no care about functions and classes been public or not.
+    We also do not care about functions and classes being public or not.
     We also do not count inherited methods from parents.
-    This rule do not count attributes of a class.
+    This rule does not count attributes of a class.
 
     This rule is configurable with ``--max-methods``.
 
@@ -332,7 +332,7 @@ class TooDeepNestingViolation(ASTViolation):
     Forbids nesting blocks too deep.
 
     Reasoning:
-        If nesting is too deep that indicates of a complex logic
+        If nesting is too deep that indicates usage of a complex logic
         and language constructions. This means that our design is not
         suited to handle such construction.
 
@@ -357,7 +357,7 @@ class LineComplexityViolation(ASTViolation):
     Forbids to have complex lines.
 
     We are using Jones Complexity algorithm to count complexity.
-    What is Jones Complexity? It is a simple yet power method to count
+    What is Jones Complexity? It is a simple yet powerful method to count
     the number of ``ast`` nodes per line.
     If the complexity of a single line is higher than a threshold,
     then an error is raised.
@@ -370,7 +370,7 @@ class LineComplexityViolation(ASTViolation):
 
     Reasoning:
         Having a complex line indicates that you somehow managed to put too
-        many logic inside a single line.
+        much logic inside a single line.
         At some point in time you will no longer be able to understand
         what this line means and what it does.
 
@@ -427,7 +427,7 @@ class TooManyConditionsViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found a condition with too many logic: {0}'
+    error_template = 'Found a condition with too much logic: {0}'
     code = 222
 
 

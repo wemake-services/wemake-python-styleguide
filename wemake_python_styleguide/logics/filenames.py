@@ -14,7 +14,7 @@ def _get_stem(file_path: str) -> str:
 
 def is_stem_in_list(file_path: str, to_check: Iterable[str]) -> bool:
     """
-    Checks either module's name is included in a search list.
+    Checks whether module's name is included in a search list.
 
     >>> is_stem_in_list('/some/module.py', ['other'])
     False
@@ -34,7 +34,7 @@ def is_stem_in_list(file_path: str, to_check: Iterable[str]) -> bool:
 
 def is_magic(file_path: str) -> bool:
     """
-    Checks either the given `file_path` contains the magic module name.
+    Checks whether the given `file_path` contains the magic module name.
 
     >>> is_magic('__init__.py')
     True
@@ -61,7 +61,7 @@ def is_too_short_stem(
     min_length: int = defaults.MIN_MODULE_NAME_LENGTH,
 ) -> bool:
     """
-    Checks either the file's stem fits into the minimum length.
+    Checks whether the file's stem fits into the minimum length.
 
     >>> is_too_short_stem('a.py')
     True
@@ -85,7 +85,7 @@ def is_matching_pattern(
     pattern: Pattern = constants.MODULE_NAME_PATTERN,
 ) -> bool:
     r"""
-    Checks either the file's stem matches the given pattern or not.
+    Checks whether the file's stem matches the given pattern.
 
     >>> is_matching_pattern('some.py')
     True

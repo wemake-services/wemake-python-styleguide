@@ -224,7 +224,7 @@ class FormattedStringViolation(ASTViolation):
         ``f`` strings looses context too often and they are hard to lint.
         Imagine that you have a string that breaks
         when you move it two lines above.
-        That's not how should a string behave.
+        That's not how a string should behave.
         Also, they promote a bad practice:
         putting your logic inside the template.
 
