@@ -20,10 +20,8 @@ class Checker(object):
     Main checker class.
 
     Runs all checks that are bundled with this package.
-    If you want to add new checks they should be added to either:
 
-    - ``ast_visitors`` if it is an ``ast`` based visitor
-    - ``token_visitors`` if it is a ``token`` based visitor
+    # TODO: rewrite
 
     """
 
@@ -33,13 +31,9 @@ class Checker(object):
     config = Configuration()
     options: types.ConfigurationOptions
 
-    #: Visitors that should be working by default:
     ast_visitors: types.TreeVisitorSequence = (
         *general.GENERAL_PRESET,
         *complexity.COMPLEXITY_PRESET,
-    )
-
-    token_visitors: types.TokenVisitorSequence = (
         *tokens.TOKENS_PRESET,
     )
 
@@ -73,7 +67,7 @@ class Checker(object):
             visitor = visitor_class.from_checker(self)
             visitor.run()
 
-            for error in visitor.errors:
+            for error in visitor.violations:
                 yield (*error.node_items(), type(self))
 
     def run(self) -> Generator[types.CheckResult, None, None]:
@@ -84,4 +78,3 @@ class Checker(object):
         It is executed after all configuration is parsed.
         """
         yield from self._run_checks(self.ast_visitors)
-        yield from self._run_checks(self.token_visitors)

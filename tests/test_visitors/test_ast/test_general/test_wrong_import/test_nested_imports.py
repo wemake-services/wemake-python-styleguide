@@ -47,7 +47,7 @@ except ImportError:
 
 regular_import = 'import os'
 regular_from_import = 'from os import path'
-regular_nested_import = 'from core.errors import Error'
+regular_nested_import = 'from core.violations import Error'
 
 
 @pytest.mark.parametrize('code', [

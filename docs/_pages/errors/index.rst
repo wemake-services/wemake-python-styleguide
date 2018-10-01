@@ -33,7 +33,7 @@ flake8-type-annotations   `T800 - T801 <https://github.com/sobolevn/flake8-type-
 wemake-python-styleguide  Z, defined here
 ========================  ======
 
-Our own codes are the following ones:
+Our own codes:
 
 ============== ======
 Plugin         Codes

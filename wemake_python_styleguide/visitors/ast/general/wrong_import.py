@@ -26,12 +26,12 @@ class _ImportsChecker(object):
         text = get_error_text(node)
         parent = getattr(node, 'parent', None)
         if parent is not None and not isinstance(parent, ast.Module):
-            self.delegate.add_error(NestedImportViolation(node, text=text))
+            self.delegate.add_violation(NestedImportViolation(node, text=text))
 
     def check_local_import(self, node: ast.ImportFrom) -> None:
         text = get_error_text(node)
         if node.level != 0:
-            self.delegate.add_error(
+            self.delegate.add_violation(
                 LocalFolderImportViolation(node, text=text),
             )
 
@@ -39,21 +39,21 @@ class _ImportsChecker(object):
         if node.module == '__future__':
             for alias in node.names:
                 if alias.name not in FUTURE_IMPORTS_WHITELIST:
-                    self.delegate.add_error(
+                    self.delegate.add_violation(
                         FutureImportViolation(node, text=alias.name),
                     )
 
     def check_dotted_raw_import(self, node: ast.Import) -> None:
         for alias in node.names:
             if '.' in alias.name:
-                self.delegate.add_error(
+                self.delegate.add_violation(
                     DottedRawImportViolation(node, text=alias.name),
                 )
 
     def check_alias(self, node: AnyImport) -> None:
         for alias in node.names:
             if alias.asname == alias.name:
-                self.delegate.add_error(
+                self.delegate.add_violation(
                     SameAliasImportViolation(node, text=alias.name),
                 )
 

@@ -35,7 +35,7 @@ class ModuleMembersVisitor(BaseNodeVisitor):
 
     def _post_visit(self) -> None:
         if self._public_items_count > self.options.max_module_members:
-            self.add_error(TooManyModuleMembersViolation())
+            self.add_violation(TooManyModuleMembersViolation())
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """
@@ -70,7 +70,7 @@ class ImportMembersVisitor(BaseNodeVisitor):
 
     def _post_visit(self) -> None:
         if self._imports_count > self.options.max_imports:
-            self.add_error(
+            self.add_violation(
                 TooManyImportsViolation(text=str(self._imports_count)),
             )
 
@@ -104,7 +104,7 @@ class MethodMembersVisitor(BaseNodeVisitor):
     def _post_visit(self) -> None:
         for node, count in self._methods.items():
             if count > self.options.max_methods:
-                self.add_error(TooManyMethodsViolation(text=node.name))
+                self.add_violation(TooManyMethodsViolation(text=node.name))
 
     def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
         """
@@ -134,7 +134,7 @@ class ConditionsVisitor(BaseNodeVisitor):
     def _post_visit(self) -> None:
         for node, count in self._conditions.items():
             if count > self.options.max_conditions - 1:
-                self.add_error(
+                self.add_violation(
                     TooManyConditionsViolation(node, text=str(count)),
                 )
 

@@ -12,7 +12,7 @@ class OffsetVisitor(BaseNodeVisitor):
     def _check_offset(self, node: ast.AST) -> None:
         offset = getattr(node, 'col_offset', None)
         if offset is not None and offset > self.options.max_offset_blocks * 4:
-            self.add_error(TooDeepNestingViolation(node))
+            self.add_violation(TooDeepNestingViolation(node))
 
     def visit_Expr(self, node: ast.AST) -> None:
         """

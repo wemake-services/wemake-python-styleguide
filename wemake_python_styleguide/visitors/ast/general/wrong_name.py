@@ -33,14 +33,14 @@ class WrongNameVisitor(BaseNodeVisitor):
 
     def _check_name(self, node: ast.AST, name: str) -> None:
         if is_wrong_variable_name(name, BAD_VARIABLE_NAMES):
-            self.add_error(WrongVariableNameViolation(node, text=name))
+            self.add_violation(WrongVariableNameViolation(node, text=name))
 
         min_length = self.options.min_variable_length
         if is_too_short_variable_name(name, min_length=min_length):
-            self.add_error(TooShortVariableNameViolation(node, text=name))
+            self.add_violation(TooShortVariableNameViolation(node, text=name))
 
         if is_private_variable(name):
-            self.add_error(PrivateNameViolation(node, text=name))
+            self.add_violation(PrivateNameViolation(node, text=name))
 
     def _check_function_signature(self, node: ast.FunctionDef) -> None:
         for arg in node.args.args:
@@ -142,7 +142,7 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
         for target_node in node.targets:
             target_node_id = getattr(target_node, 'id', None)
             if target_node_id in BAD_MODULE_METADATA_VARIABLES:
-                self.add_error(
+                self.add_violation(
                     WrongModuleMetadataViolation(node, text=target_node_id),
                 )
 

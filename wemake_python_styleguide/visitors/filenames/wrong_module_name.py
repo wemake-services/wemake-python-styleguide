@@ -21,7 +21,7 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
             constants.BAD_MODULE_NAMES,
         )
         if is_wrong_name:
-            self.add_error(WrongModuleNameViolation())
+            self.add_violation(WrongModuleNameViolation())
 
     def _check_magic_name(self) -> None:
         if filenames.is_magic(self.filename):
@@ -30,7 +30,7 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
                 constants.MAGIC_MODULE_NAMES_WHITELIST,
             )
             if not good_magic:
-                self.add_error(WrongModuleMagicNameViolation())
+                self.add_violation(WrongModuleMagicNameViolation())
 
     def _check_module_name_length(self) -> None:
         is_short = filenames.is_too_short_stem(
@@ -38,18 +38,18 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
             min_length=self.options.min_module_name_length,
         )
         if is_short:
-            self.add_error(TooShortModuleNameViolation())
+            self.add_violation(TooShortModuleNameViolation())
 
     def _check_module_name_pattern(self) -> None:
         if not filenames.is_matching_pattern(self.filename):
-            self.add_error(WrongModuleNamePatternViolation())
+            self.add_violation(WrongModuleNamePatternViolation())
 
     def _check_underscores(self) -> None:
         repeating_underscores = self.filename.count('__')
         if filenames.is_magic(self.filename):
             repeating_underscores -= 2
         if repeating_underscores > 0:
-            self.add_error(WrongModuleNameUnderscoresViolation())
+            self.add_violation(WrongModuleNameUnderscoresViolation())
 
     def visit_filename(self) -> None:
         """

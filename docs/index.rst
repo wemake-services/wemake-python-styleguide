@@ -1,16 +1,26 @@
 .. mdinclude:: ../README.md
 
 
-API Reference
--------------
+User guide
+-----------
 
 .. toctree::
   :maxdepth: 2
-  :caption: API:
+  :caption: Userguide:
 
   _pages/errors/index.rst
   _pages/constants.rst
   _pages/options/config.rst
+
+
+API Reference
+-------------
+
+.. toctree::
+  :maxdepth: 1
+  :caption: API:
+
+  _pages/api.rst
 
 
 Changelog

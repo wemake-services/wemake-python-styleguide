@@ -15,5 +15,5 @@ class WrongStringVisitor(BaseNodeVisitor):
             FormattedStringViolation
 
         """
-        self.add_error(FormattedStringViolation(node))
+        self.add_violation(FormattedStringViolation(node))
         self.generic_visit(node)

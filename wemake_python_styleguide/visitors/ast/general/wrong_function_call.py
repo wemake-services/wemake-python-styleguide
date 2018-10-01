@@ -27,7 +27,7 @@ class WrongFunctionCallVisitor(BaseNodeVisitor):
         """
         function_name = given_function_called(node, BAD_FUNCTIONS)
         if function_name:
-            self.add_error(WrongFunctionCallViolation(
+            self.add_violation(WrongFunctionCallViolation(
                 node, text=function_name,
             ))
 

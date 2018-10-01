@@ -15,7 +15,7 @@ Note:
     In the face of ambiguity, refuse the temptation to guess.
     There should be one-- and preferably only one --obvious way to do it.
 
-.. currentmodule:: wemake_python_styleguide.errors.best_practices
+.. currentmodule:: wemake_python_styleguide.violations.best_practices
 
 Summary
 -------
@@ -84,12 +84,12 @@ class WrongMagicCommentViolation(SimpleStyleViolation):
 
     We do not allow to use:
 
-    1. ``# noqa`` comment without specified errors
+    1. ``# noqa`` comment without specified violations
     2. ``# type: some_type`` comments to specify a type for ``typed_ast``
 
     Reasoning:
         We cover several different use-cases in a single rule.
-        ``# noqa`` comment is restricted because it can hide other errors.
+        ``# noqa`` comment is restricted because it can hide other violations.
         ``# type: some_type`` comment is restricted because
         we can already use type annotations instead.
 
@@ -345,8 +345,8 @@ class RaiseNotImplementedViolation(ASTStyleViolation):
     Forbids to use ``NotImplemented`` error.
 
     Reasoning:
-        These two errors look so similar.
-        But, these errors have different use cases.
+        These two violations look so similar.
+        But, these violations have different use cases.
         Use cases of ``NotImplemented`` is too limited
         to be generally available.
 

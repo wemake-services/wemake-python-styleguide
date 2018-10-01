@@ -14,7 +14,7 @@ Note:
     Readability counts.
     Namespaces are one honking great idea -- let's do more of those!
 
-.. currentmodule:: wemake_python_styleguide.errors.naming
+.. currentmodule:: wemake_python_styleguide.violations.naming
 
 Summary
 -------

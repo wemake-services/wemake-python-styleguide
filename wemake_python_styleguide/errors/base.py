@@ -13,7 +13,7 @@ ErrorNode = Union[
 
 class BaseStyleViolation(object):
     """
-    Base class for all style errors.
+    Base class for all style violations.
 
     It basically just defines how to create any error and how to format
     this error later on.
@@ -56,7 +56,7 @@ class BaseStyleViolation(object):
 
 
 class ASTStyleViolation(BaseStyleViolation):
-    """AST based style violations."""
+    """Style violation for ``ast`` based style violations."""
 
     _node: ast.AST
 
@@ -67,7 +67,7 @@ class ASTStyleViolation(BaseStyleViolation):
 
 
 class SimpleStyleViolation(BaseStyleViolation):
-    """Style violation for cases where there's no AST nodes."""
+    """Style violation for cases where there's no associated nodes."""
 
     _node: None
 
@@ -77,7 +77,7 @@ class SimpleStyleViolation(BaseStyleViolation):
 
 
 class TokenStyleViolation(BaseStyleViolation):
-    """Style violation for ``tokenize`` errors."""
+    """Style violation for ``tokenize`` based violations."""
 
     _node: tokenize.TokenInfo
 

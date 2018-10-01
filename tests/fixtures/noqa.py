@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-This file contains all possible errors.
+This file contains all possible violations.
 """
 
 from __future__ import print_function  # noqa: Z422

@@ -113,31 +113,33 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
     def _check_possible_switch(self) -> None:
         for node, elifs in self._counter.elifs.items():
             if elifs > self.options.max_elifs:
-                self.add_error(TooManyElifsViolation(node))
+                self.add_violation(TooManyElifsViolation(node))
 
     def _check_function_internals(self) -> None:
         for node, variables in self._counter.variables.items():
             if len(variables) > self.options.max_local_variables:
-                self.add_error(
+                self.add_violation(
                     TooManyLocalsViolation(node, text=node.name),
                 )
 
         for node, expressions in self._counter.expressions.items():
             if expressions > self.options.max_expressions:
-                self.add_error(
+                self.add_violation(
                     TooManyExpressionsViolation(node, text=node.name),
                 )
 
     def _check_function_signature(self) -> None:
         for node, arguments in self._counter.arguments.items():
             if arguments > self.options.max_arguments:
-                self.add_error(
+                self.add_violation(
                     TooManyArgumentsViolation(node, text=str(arguments)),
                 )
 
         for node, returns in self._counter.returns.items():
             if returns > self.options.max_returns:
-                self.add_error(TooManyReturnsViolation(node, text=node.name))
+                self.add_violation(
+                    TooManyReturnsViolation(node, text=node.name),
+                )
 
     def _post_visit(self) -> None:
         self._check_function_signature()

@@ -19,7 +19,7 @@ other = [number for number in range(0, some_value)]
     module_with_nodes,
 ])
 def test_module_score(assert_errors, parse_ast_tree, code, default_options):
-    """Testing that regular nodes do not raise errors."""
+    """Testing that regular nodes do not raise violations."""
     tree = parse_ast_tree(code)
 
     visitor = JonesComplexityVisitor(default_options, tree=tree)
@@ -33,7 +33,7 @@ def test_module_score(assert_errors, parse_ast_tree, code, default_options):
     module_with_nodes,
 ])
 def test_module_score_error(assert_errors, parse_ast_tree, code, options):
-    """Testing that regular nodes do raise errors."""
+    """Testing that regular nodes do raise violations."""
     tree = parse_ast_tree(code)
 
     option_values = options(max_jones_score=-1)

@@ -55,7 +55,7 @@ class MagicNumberVisitor(BaseNodeVisitor):
         if isinstance(node.n, int) and node.n <= 10:
             return
 
-        self.add_error(MagicNumberViolation(node, text=str(node.n)))
+        self.add_violation(MagicNumberViolation(node, text=str(node.n)))
 
     def visit_Num(self, node: ast.Num) -> None:
         """

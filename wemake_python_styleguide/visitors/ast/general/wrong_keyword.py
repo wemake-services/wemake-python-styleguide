@@ -26,7 +26,7 @@ class WrongRaiseVisitor(BaseNodeVisitor):
 
         exception_name = getattr(exception, 'id', None)
         if exception_name == 'NotImplemented':
-            self.add_error(RaiseNotImplementedViolation(node))
+            self.add_violation(RaiseNotImplementedViolation(node))
 
     def visit_Raise(self, node: ast.Raise) -> None:
         """
@@ -51,7 +51,7 @@ class WrongKeywordVisitor(BaseNodeVisitor):
             WrongKeywordViolation
 
         """
-        self.add_error(WrongKeywordViolation(node))
+        self.add_violation(WrongKeywordViolation(node))
         self.generic_visit(node)
 
     def visit_Nonlocal(self, node: ast.Nonlocal) -> None:
@@ -62,7 +62,7 @@ class WrongKeywordVisitor(BaseNodeVisitor):
             WrongKeywordViolation
 
         """
-        self.add_error(WrongKeywordViolation(node))
+        self.add_violation(WrongKeywordViolation(node))
         self.generic_visit(node)
 
     def visit_Delete(self, node: ast.Delete) -> None:
@@ -73,7 +73,7 @@ class WrongKeywordVisitor(BaseNodeVisitor):
             WrongKeywordViolation
 
         """
-        self.add_error(WrongKeywordViolation(node, text='del'))
+        self.add_violation(WrongKeywordViolation(node, text='del'))
         self.generic_visit(node)
 
     def visit_Pass(self, node: ast.Pass) -> None:
@@ -84,8 +84,10 @@ class WrongKeywordVisitor(BaseNodeVisitor):
             WrongKeywordViolation
 
         """
-        self.add_error(WrongKeywordViolation(node))
+        self.add_violation(WrongKeywordViolation(node))
         self.generic_visit(node)
+
+    # TODO: def visit(self, node: ast.AST) -> None:
 
 
 class WrongListComprehensionVisitor(BaseNodeVisitor):
@@ -93,7 +95,7 @@ class WrongListComprehensionVisitor(BaseNodeVisitor):
 
     def _check_ifs(self, node: ast.comprehension) -> None:
         if len(node.ifs) > 1:
-            self.add_error(MultipleIfsInComprehensionViolation(node))
+            self.add_violation(MultipleIfsInComprehensionViolation(node))
 
     def visit_comprehension(self, node: ast.comprehension) -> None:
         """

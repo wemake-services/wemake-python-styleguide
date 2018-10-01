@@ -4,7 +4,7 @@ import subprocess
 
 
 def test_noqa_fixture_disabled(absolute_path):
-    """End-to-End test to check that all errors are present."""
+    """End-to-End test to check that all violations are present."""
     filename = absolute_path('fixtures', 'noqa.py')
     process = subprocess.Popen(
         ['flake8', '--disable-noqa', '--select', 'Z', filename],

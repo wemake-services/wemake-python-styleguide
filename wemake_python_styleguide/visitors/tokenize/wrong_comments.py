@@ -43,7 +43,7 @@ class WrongCommentVisitor(BaseTokenVisitor):
         if not excludes:
             # We can not pass the actual line here,
             # since it will be ignored due to `# noqa` comment:
-            self.add_error(WrongMagicCommentViolation(text=comment_text))
+            self.add_violation(WrongMagicCommentViolation(text=comment_text))
 
     def _check_typed_ast(self, token: tokenize.TokenInfo) -> None:
         comment_text = self._get_comment_text(token)
@@ -53,14 +53,14 @@ class WrongCommentVisitor(BaseTokenVisitor):
 
         declared_type = match.groups()[0].strip()
         if declared_type != 'ignore':
-            self.add_error(
+            self.add_violation(
                 WrongMagicCommentViolation(token, text=comment_text),
             )
 
     def _check_empty_doc_comment(self, token: tokenize.TokenInfo) -> None:
         comment_text = self._get_comment_text(token)
         if comment_text == ':':
-            self.add_error(WrongDocCommentViolation(token))
+            self.add_violation(WrongDocCommentViolation(token))
 
     def visit_comment(self, token: tokenize.TokenInfo) -> None:
         """

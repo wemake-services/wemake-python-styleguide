@@ -17,7 +17,7 @@ def test_visitor_returns_location():
 
 
 def test_all_errors_correct_numbers(all_module_errors):
-    """Ensures that all errors has correct error code numbers."""
+    """Ensures that all violations has correct error code numbers."""
     assert len(all_module_errors) == 4
 
     for index, module in enumerate(all_module_errors.keys()):
@@ -28,7 +28,7 @@ def test_all_errors_correct_numbers(all_module_errors):
 
 
 def test_all_errors_are_documented(all_module_errors):
-    """Ensures that all errors are documented."""
+    """Ensures that all violations are documented."""
     for module, classes in all_module_errors.items():
         for error_class in classes:
             # Once per summary and once per autoclass:
@@ -41,7 +41,7 @@ def test_checker_default_location():
 
 
 def test_all_unique_error_codes(all_errors):
-    """Ensures that all errors have unique error codes."""
+    """Ensures that all violations have unique error codes."""
     codes = []
     for error in all_errors:
         codes.append(int(error.code))
@@ -50,6 +50,6 @@ def test_all_unique_error_codes(all_errors):
 
 
 def test_all_errors_have_description_with_code(all_errors):
-    """Ensures that all errors have description with error code."""
+    """Ensures that all violations have description with error code."""
     for error in all_errors:
         assert str(error.code) in error.__doc__

@@ -38,7 +38,7 @@ empty_module = ''
     empty_module,
 ])
 def test_regular_nodes(assert_errors, parse_ast_tree, code, default_options):
-    """Testing that regular nodes do not raise errors."""
+    """Testing that regular nodes do not raise violations."""
     tree = parse_ast_tree(code)
 
     visitor = JonesComplexityVisitor(default_options, tree=tree)
@@ -53,7 +53,7 @@ def test_regular_nodes(assert_errors, parse_ast_tree, code, default_options):
     line_inside_class,
 ])
 def test_complex_lines(assert_errors, parse_ast_tree, code, options):
-    """Testing that complex lines do raise errors."""
+    """Testing that complex lines do raise violations."""
     tree = parse_ast_tree(code)
 
     option_values = options(max_line_complexity=1)

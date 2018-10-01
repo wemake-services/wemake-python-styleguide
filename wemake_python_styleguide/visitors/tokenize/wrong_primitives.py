@@ -15,13 +15,13 @@ class WrongPrimitivesVisitor(BaseTokenVisitor):
 
     def _check_underscored_number(self, token: tokenize.TokenInfo) -> None:
         if '_' in token.string:
-            self.add_error(
+            self.add_violation(
                 UnderscoredNumberViolation(token, text=token.string),
             )
 
     def _check_partial_float(self, token: tokenize.TokenInfo) -> None:
         if token.string.startswith('.') or token.string.endswith('.'):
-            self.add_error(PartialFloatViolation(token, text=token.string))
+            self.add_violation(PartialFloatViolation(token, text=token.string))
 
     def visit_string(self, token: tokenize.TokenInfo) -> None:
         """
@@ -35,7 +35,7 @@ class WrongPrimitivesVisitor(BaseTokenVisitor):
 
         """
         if token.string.startswith('u'):
-            self.add_error(UnicodeStringViolation(token, text=token.string))
+            self.add_violation(UnicodeStringViolation(token, text=token.string))
 
     def visit_number(self, token: tokenize.TokenInfo) -> None:
         """

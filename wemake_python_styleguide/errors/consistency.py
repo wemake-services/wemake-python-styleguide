@@ -23,7 +23,7 @@ Note:
     In the face of ambiguity, refuse the temptation to guess.
     There should be one-- and preferably only one --obvious way to do it.
 
-.. currentmodule:: wemake_python_styleguide.errors.consistency
+.. currentmodule:: wemake_python_styleguide.violations.consistency
 
 Summary
 -------

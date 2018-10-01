@@ -14,6 +14,8 @@ We used to have incremental versioning before `0.1.0`.
 
 - Refactoring: changes how visitors are organized inside the package
 - Improves docs: now all error files contain fancy documentation and summary
+- Improves docs: now we have added API reference to the docs
+- Improves docs: adds new plugin development guide
 
 
 ## Version 0.0.16

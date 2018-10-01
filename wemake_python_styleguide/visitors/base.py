@@ -16,7 +16,7 @@ class BaseVisitor(object):
     Attributes:
         options: contains the options objects passed and parsed by ``flake8``.
         filename: filename passed by ``flake8``.
-        errors: list of errors for the specific visitor.
+        violations: list of errors for the specific visitor.
 
     """
 
@@ -28,25 +28,40 @@ class BaseVisitor(object):
         """Create base visitor instance."""
         self.options = options
         self.filename = filename
-        self.errors: List[BaseStyleViolation] = []
+        self.violations: List[BaseStyleViolation] = []
 
     @classmethod
     def from_checker(cls: Type['BaseVisitor'], checker) -> 'BaseVisitor':
-        """Constructs visitor instance from the checker."""
+        """
+        Constructs visitor instance from the checker.
+
+        Each unique visitor class should know how to construct itself
+        from the ``checker`` instance.
+
+        Generally speaking, each visitor class needs to eject required
+        parameters from checker and then run
+        its constructor with these parameters.
+        """
         return cls(options=checker.options, filename=checker.filename)
 
-    def add_error(self, error: BaseStyleViolation) -> None:
-        """Adds error to the visitor."""
-        self.errors.append(error)
+    def add_violation(self, violation: BaseStyleViolation) -> None:
+        """Adds violation to the visitor."""
+        self.violations.append(violation)
 
     def run(self) -> None:
-        """This method should be defined in all subclasses of this class."""
+        """
+        Abstract method to run a visitor.
+
+        Each visitor should know what exactly it needs
+        to do when it was told to ``run``.
+        This method should be defined in all subclasses.
+        """
         raise NotImplementedError('Should be defined in a subclass')
 
 
 class BaseNodeVisitor(ast.NodeVisitor, BaseVisitor):
     """
-    Allows to store errors while traversing node tree.
+    Allows to store violations while traversing node tree.
 
     This class should be used as a base class for all ``ast`` based checkers.
     Method ``visit()`` is defined in ``NodeVisitor`` class.
@@ -82,6 +97,7 @@ class BaseNodeVisitor(ast.NodeVisitor, BaseVisitor):
         """
         Executed after all nodes have been visited.
 
+        This method is useful for counting statistics, etc.
         By default does nothing.
         """
 

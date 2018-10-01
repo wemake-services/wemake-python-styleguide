@@ -15,15 +15,15 @@ def _to_dest_option(long_option_name: str) -> str:
 
 @pytest.fixture(scope='session')
 def assert_errors():
-    """Helper function to assert visitor errors."""
+    """Helper function to assert visitor violations."""
     def factory(visitor: BaseVisitor, errors: Sequence[str]):
-        for index, error in enumerate(visitor.errors):
+        for index, error in enumerate(visitor.violations):
             assert len(errors) > index, [
-                (type(error), error.message()) for error in visitor.errors
+                (type(error), error.message()) for error in visitor.violations
             ]
             assert error.code == errors[index].code
 
-        assert len(visitor.errors) == len(errors)
+        assert len(visitor.violations) == len(errors)
 
     return factory
 

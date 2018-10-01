@@ -48,7 +48,7 @@ def _load_all_error_classes():
 
 @pytest.fixture(scope='session')
 def all_errors():
-    """Loads all errors from the package."""
+    """Loads all violations from the package."""
     classes = _load_all_error_classes()
     all_errors_container = []
     for module_classes in classes.values():
@@ -58,7 +58,7 @@ def all_errors():
 
 @pytest.fixture(scope='session')
 def all_module_errors():
-    """Loads all errors from the package."""
+    """Loads all violations from the package."""
     return _load_all_error_classes()
 
 

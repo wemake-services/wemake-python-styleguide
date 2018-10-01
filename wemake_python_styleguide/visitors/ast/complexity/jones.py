@@ -56,14 +56,14 @@ class JonesComplexityVisitor(BaseNodeVisitor):  # TODO: consider `logical_line`
         for line_nodes in self._lines.values():
             complexity = len(line_nodes)
             if complexity > self.options.max_line_complexity:
-                self.add_error(LineComplexityViolation(
+                self.add_violation(LineComplexityViolation(
                     line_nodes[0], text=str(complexity),
                 ))
 
         node_counts = [len(nodes) for nodes in self._lines.values()]
         total_count = median(node_counts) if node_counts else 0
         if total_count > self.options.max_jones_score:
-            self.add_error(JonesScoreViolation())
+            self.add_violation(JonesScoreViolation())
 
     def _maybe_ignore_child(self, node: ast.AST) -> bool:
         if isinstance(node, ast.AnnAssign):

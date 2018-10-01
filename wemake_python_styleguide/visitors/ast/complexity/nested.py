@@ -38,9 +38,9 @@ class NestedComplexityVisitor(BaseNodeVisitor):
         is_inside_function = isinstance(parent, ast.FunctionDef)
 
         if is_inside_class and node.name not in NESTED_CLASSES_WHITELIST:
-            self.add_error(NestedClassViolation(node, text=node.name))
+            self.add_violation(NestedClassViolation(node, text=node.name))
         elif is_inside_function:
-            self.add_error(NestedClassViolation(node, text=node.name))
+            self.add_violation(NestedClassViolation(node, text=node.name))
         self.generic_visit(node)
 
     def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
@@ -61,7 +61,7 @@ class NestedComplexityVisitor(BaseNodeVisitor):
         is_inside_function = isinstance(parent, ast.FunctionDef)
 
         if is_inside_function and node.name not in NESTED_FUNCTIONS_WHITELIST:
-            self.add_error(NestedFunctionViolation(node, text=node.name))
+            self.add_violation(NestedFunctionViolation(node, text=node.name))
         self.generic_visit(node)
 
     def visit_Lambda(self, node: ast.Lambda) -> None:
@@ -74,5 +74,5 @@ class NestedComplexityVisitor(BaseNodeVisitor):
         """
         parent = getattr(node, 'parent', None)
         if isinstance(parent, ast.Lambda):
-            self.add_error(NestedFunctionViolation(node))
+            self.add_violation(NestedFunctionViolation(node))
         self.generic_visit(node)

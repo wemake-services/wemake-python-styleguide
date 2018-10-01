@@ -24,15 +24,15 @@ class WrongClassVisitor(BaseNodeVisitor):
         for decorator in node.decorator_list:
             decorator_name = getattr(decorator, 'id', None)
             if decorator_name == 'staticmethod':
-                self.add_error(StaticMethodViolation(node))
+                self.add_violation(StaticMethodViolation(node))
 
     def _check_magic_methods(self, node: ast.FunctionDef) -> None:
         if node.name in BAD_MAGIC_METHODS:
-            self.add_error(BadMagicMethodViolation(node, text=node.name))
+            self.add_violation(BadMagicMethodViolation(node, text=node.name))
 
     def _check_base_class(self, node: ast.ClassDef) -> None:
         if len(node.bases) == 0:
-            self.add_error(RequiredBaseClassViolation(node, text=node.name))
+            self.add_violation(RequiredBaseClassViolation(node, text=node.name))
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """

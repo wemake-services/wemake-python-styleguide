@@ -19,7 +19,7 @@ Note:
     Flat is better than nested.
     Namespaces are one honking great idea -- let's do more of those!
 
-.. currentmodule:: wemake_python_styleguide.errors.complexity
+.. currentmodule:: wemake_python_styleguide.violations.complexity
 
 Summary
 -------
