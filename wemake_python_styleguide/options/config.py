@@ -31,8 +31,8 @@ class Configuration(object):
     We try to make all defaults as reasonable as possible.
 
     However, you can currently adjust some complexity options. Why?
-    Because we are not quite sure about the ideal values yet. We are still 
-    researching them, and providing a way for developers to help us out is 
+    Because we are not quite sure about the ideal values yet. We are still
+    researching them, and providing a way for developers to help us out is
     a good thing at the moment.
 
     Options for general checks:
