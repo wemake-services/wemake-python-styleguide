@@ -76,6 +76,11 @@ autodoc_mock_imports = [
     'attr',
 ]
 
+autodoc_default_flags = {
+    'members': '',
+    'exclude-members': '__dict__,__weakref__',
+}
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
