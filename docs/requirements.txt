@@ -8,3 +8,6 @@ recommonmark==0.4.0
 m2r==0.2.0
 added-value==0.8
 tomlkit==0.4.4
+
+# Dependencies of our linter:
+flake8<3.6

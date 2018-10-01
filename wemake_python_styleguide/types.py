@@ -1,13 +1,21 @@
 # -*- coding: utf-8 -*-
 
 """
-This module contains custom `mypy` types that we commonly use.
+This module contains custom ``mypy`` types that we commonly use.
 
-General rule is: if there's a complex type, put it here.
+Policy
+------
+
+If any of the following statements is true, move the type to this file:
+
+- if type is used in multiple files
+- if type is complex enough it has to be documented
+- if type is very important for the public API
+
 """
 
 import ast
-from typing import TYPE_CHECKING, Sequence, Tuple, Type, Union
+from typing import TYPE_CHECKING, Tuple, Type, Union
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing_extensions import Protocol  # noqa: Z435
@@ -15,22 +23,11 @@ if TYPE_CHECKING:  # pragma: no cover
     # This solves cycle imports problem:
     from .visitors import base  # noqa: F401,Z300,Z435
 else:
-    # We do not need to do anything if typechecker is not working:
+    # We do not need to do anything if type checker is not working:
     Protocol = object
 
-#: Visitor container, that has all enabled visitors' classes:
-VisitorSequence = Sequence[Type['base.BaseVisitor']]
-
-#: Tree specific visitors' classes:
-TreeVisitorSequence = Sequence[
-    Union[
-        Type['base.BaseNodeVisitor'],
-        Type['base.BaseFilenameVisitor'],
-    ],
-]
-
-#: Token specific visitors' classes:
-TokenVisitorSequence = Sequence[Type['base.BaseTokenVisitor']]
+#: Visitor type definition:
+VisitorClass = Type['base.BaseVisitor']
 
 #: In cases we need to work with both import types:
 AnyImport = Union[ast.Import, ast.ImportFrom]
@@ -44,12 +41,18 @@ ModuleMembers = Union[ast.FunctionDef, ast.ClassDef]
 
 class ConfigurationOptions(Protocol):
     """
-    This class provides structure for the options we use in our checker.
+    Provides structure for the options we use in our checker.
 
+    Then this protocol is passed to each individual visitor and used there.
     It uses structural sub-typing, and does not represent any kind of a real
     class or structure.
 
-    See: https://mypy.readthedocs.io/en/latest/protocols.html
+    This class actually works only when running type check.
+    At other cases it is just an ``object``.
+
+    See also:
+        https://mypy.readthedocs.io/en/latest/protocols.html
+
     """
 
     # General:

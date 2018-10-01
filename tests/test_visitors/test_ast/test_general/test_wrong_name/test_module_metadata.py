@@ -2,10 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.errors.best_practices import (
+from wemake_python_styleguide.violations.best_practices import (
     WrongModuleMetadataViolation,
 )
-from wemake_python_styleguide.visitors.ast.general.wrong_name import (
+from wemake_python_styleguide.visitors.ast.naming import (
     BAD_MODULE_METADATA_VARIABLES,
     WrongModuleMetadataVisitor,
 )

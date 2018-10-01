@@ -2,7 +2,9 @@
 
 import pytest
 
-from wemake_python_styleguide.errors.best_practices import NestedClassViolation
+from wemake_python_styleguide.violations.best_practices import (
+    NestedClassViolation,
+)
 from wemake_python_styleguide.visitors.ast.complexity.nested import (
     NESTED_CLASSES_WHITELIST,
     NestedComplexityVisitor,

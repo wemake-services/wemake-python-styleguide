@@ -1,8 +1,8 @@
-Errors
-======
+Violations
+==========
 
-Here we have all error codes listed for this plugin and all its dependencies.
-Our error codes are using ``Z`` letter.
+Here we have all violation codes listed for this plugin and its dependencies.
+Our violation codes are using ``Z`` letter.
 Other codes are coming from other tools.
 
 All codes are sorted alphabetically and by numerical codes.
@@ -46,7 +46,7 @@ Best practices :ref:`Z400 - Z499 <best-practices>`
 
 .. toctree::
   :maxdepth: 1
-  :caption: Error types:
+  :caption: Violation types:
   :hidden:
 
   naming.rst

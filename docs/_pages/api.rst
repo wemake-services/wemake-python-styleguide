@@ -36,4 +36,4 @@ And finally you will need to go through the API reference.
 
   checker.rst
   visitors/base.rst
-  errors/base.rst
+  violations/base.rst

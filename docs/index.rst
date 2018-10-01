@@ -8,12 +8,12 @@ User guide
   :maxdepth: 2
   :caption: Userguide:
 
-  _pages/errors/index.rst
+  _pages/violations/index.rst
   _pages/constants.rst
   _pages/options/config.rst
 
 
-API Reference
+Internal docs
 -------------
 
 .. toctree::

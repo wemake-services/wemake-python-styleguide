@@ -2,11 +2,11 @@
 
 import ast
 
-from wemake_python_styleguide.errors.best_practices import (
+from wemake_python_styleguide.violations.best_practices import (
     RaiseNotImplementedViolation,
     WrongKeywordViolation,
 )
-from wemake_python_styleguide.errors.consistency import (
+from wemake_python_styleguide.violations.consistency import (
     MultipleIfsInComprehensionViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -43,51 +43,27 @@ class WrongRaiseVisitor(BaseNodeVisitor):
 class WrongKeywordVisitor(BaseNodeVisitor):
     """Finds wrong keywords."""
 
-    def visit_Global(self, node: ast.Global) -> None:
+    forbidden_keywords = (
+        ast.Pass,
+        ast.Delete,
+        ast.Global,
+        ast.Nonlocal,
+    )
+
+    def _check_keyword(self, node: ast.AST) -> None:
+        if isinstance(node, self.forbidden_keywords):
+            self.add_violation(WrongKeywordViolation(node))
+
+    def visit(self, node: ast.AST) -> None:
         """
-        Used to find ``global`` keyword.
+        Used to find wrong keywords.
 
         Raises:
             WrongKeywordViolation
 
         """
-        self.add_violation(WrongKeywordViolation(node))
+        self._check_keyword(node)
         self.generic_visit(node)
-
-    def visit_Nonlocal(self, node: ast.Nonlocal) -> None:
-        """
-        Used to find ``nonlocal`` keyword.
-
-        Raises:
-            WrongKeywordViolation
-
-        """
-        self.add_violation(WrongKeywordViolation(node))
-        self.generic_visit(node)
-
-    def visit_Delete(self, node: ast.Delete) -> None:
-        """
-        Used to find ``del`` keyword.
-
-        Raises:
-            WrongKeywordViolation
-
-        """
-        self.add_violation(WrongKeywordViolation(node, text='del'))
-        self.generic_visit(node)
-
-    def visit_Pass(self, node: ast.Pass) -> None:
-        """
-        Used to find ``pass`` keyword.
-
-        Raises:
-            WrongKeywordViolation
-
-        """
-        self.add_violation(WrongKeywordViolation(node))
-        self.generic_visit(node)
-
-    # TODO: def visit(self, node: ast.AST) -> None:
 
 
 class WrongListComprehensionVisitor(BaseNodeVisitor):

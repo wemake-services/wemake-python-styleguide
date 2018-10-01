@@ -3,11 +3,11 @@
 import ast
 
 from wemake_python_styleguide.constants import INIT
-from wemake_python_styleguide.errors.best_practices import (
+from wemake_python_styleguide.logics.filenames import is_stem_in_list
+from wemake_python_styleguide.violations.best_practices import (
     EmptyModuleViolation,
     InitModuleHasLogicViolation,
 )
-from wemake_python_styleguide.logics.filenames import is_stem_in_list
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 

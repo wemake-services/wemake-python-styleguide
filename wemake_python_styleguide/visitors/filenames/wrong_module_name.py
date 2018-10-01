@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from wemake_python_styleguide import constants
-from wemake_python_styleguide.errors.naming import (
+from wemake_python_styleguide.logics import filenames
+from wemake_python_styleguide.violations.naming import (
     TooShortModuleNameViolation,
     WrongModuleMagicNameViolation,
     WrongModuleNamePatternViolation,
     WrongModuleNameUnderscoresViolation,
     WrongModuleNameViolation,
 )
-from wemake_python_styleguide.logics import filenames
 from wemake_python_styleguide.visitors.base import BaseFilenameVisitor
 
 

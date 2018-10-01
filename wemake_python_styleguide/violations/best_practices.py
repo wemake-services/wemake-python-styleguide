@@ -71,14 +71,14 @@ Design
 
 """
 
-from wemake_python_styleguide.errors.base import (
-    ASTStyleViolation,
-    SimpleStyleViolation,
-    TokenStyleViolation,
+from wemake_python_styleguide.violations.base import (
+    ASTViolation,
+    SimpleViolation,
+    TokenizeViolation,
 )
 
 
-class WrongMagicCommentViolation(SimpleStyleViolation):
+class WrongMagicCommentViolation(SimpleViolation):
     """
     Restricts to use several control (or magic) comments.
 
@@ -121,7 +121,7 @@ class WrongMagicCommentViolation(SimpleStyleViolation):
     error_template = 'Found wrong magic comment: {0}'
 
 
-class WrongDocCommentViolation(TokenStyleViolation):
+class WrongDocCommentViolation(TokenizeViolation):
     """
     Forbids to use empty doc comments (``#:``).
 
@@ -158,7 +158,7 @@ class WrongDocCommentViolation(TokenStyleViolation):
 
 # Modules:
 
-class WrongModuleMetadataViolation(ASTStyleViolation):
+class WrongModuleMetadataViolation(ASTViolation):
     """
     Forbids to have some module level variables.
 
@@ -192,7 +192,7 @@ class WrongModuleMetadataViolation(ASTStyleViolation):
     code = 410
 
 
-class EmptyModuleViolation(ASTStyleViolation):
+class EmptyModuleViolation(ASTViolation):
     """
     Forbids to have empty modules.
 
@@ -216,7 +216,7 @@ class EmptyModuleViolation(ASTStyleViolation):
     code = 411
 
 
-class InitModuleHasLogicViolation(ASTStyleViolation):
+class InitModuleHasLogicViolation(ASTViolation):
     """
     Forbids to have logic inside ``__init__`` module.
 
@@ -250,7 +250,7 @@ class InitModuleHasLogicViolation(ASTStyleViolation):
 
 # Modules:
 
-class WrongKeywordViolation(ASTStyleViolation):
+class WrongKeywordViolation(ASTViolation):
     """
     Forbids to use some keywords from ``python``.
 
@@ -283,7 +283,7 @@ class WrongKeywordViolation(ASTStyleViolation):
     code = 420
 
 
-class WrongFunctionCallViolation(ASTStyleViolation):
+class WrongFunctionCallViolation(ASTViolation):
     """
     Forbids to call some built-in functions.
 
@@ -306,7 +306,7 @@ class WrongFunctionCallViolation(ASTStyleViolation):
     code = 421
 
 
-class FutureImportViolation(ASTStyleViolation):
+class FutureImportViolation(ASTViolation):
     """
     Forbids to use ``__future__`` imports.
 
@@ -340,7 +340,7 @@ class FutureImportViolation(ASTStyleViolation):
     code = 422
 
 
-class RaiseNotImplementedViolation(ASTStyleViolation):
+class RaiseNotImplementedViolation(ASTViolation):
     """
     Forbids to use ``NotImplemented`` error.
 
@@ -377,7 +377,7 @@ class RaiseNotImplementedViolation(ASTStyleViolation):
 
 # Design:
 
-class NestedFunctionViolation(ASTStyleViolation):
+class NestedFunctionViolation(ASTViolation):
     """
     Forbids to have nested functions.
 
@@ -418,7 +418,7 @@ class NestedFunctionViolation(ASTStyleViolation):
     code = 430
 
 
-class NestedClassViolation(ASTStyleViolation):
+class NestedClassViolation(ASTViolation):
     """
     Forbids to use nested classes.
 
@@ -457,7 +457,7 @@ class NestedClassViolation(ASTStyleViolation):
     code = 431
 
 
-class MagicNumberViolation(ASTStyleViolation):
+class MagicNumberViolation(ASTViolation):
     """
     Forbids to use magic numbers in your code.
 
@@ -500,7 +500,7 @@ class MagicNumberViolation(ASTStyleViolation):
     error_template = 'Found magic number: {0}'
 
 
-class StaticMethodViolation(ASTStyleViolation):
+class StaticMethodViolation(ASTViolation):
     """
     Forbids to use ``@staticmethod`` decorator.
 
@@ -522,7 +522,7 @@ class StaticMethodViolation(ASTStyleViolation):
     code = 433
 
 
-class BadMagicMethodViolation(ASTStyleViolation):
+class BadMagicMethodViolation(ASTViolation):
     """
     Forbids to use some magic methods.
 
@@ -549,7 +549,7 @@ class BadMagicMethodViolation(ASTStyleViolation):
     code = 434
 
 
-class NestedImportViolation(ASTStyleViolation):
+class NestedImportViolation(ASTViolation):
     """
     Forbids to have nested imports in functions.
 

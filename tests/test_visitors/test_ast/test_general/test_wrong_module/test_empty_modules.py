@@ -2,10 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.errors.best_practices import EmptyModuleViolation
-from wemake_python_styleguide.visitors.ast.general.wrong_module import (
-    WrongContentsVisitor,
+from wemake_python_styleguide.violations.best_practices import (
+    EmptyModuleViolation,
 )
+from wemake_python_styleguide.visitors.ast.modules import WrongContentsVisitor
 
 
 @pytest.mark.parametrize('filename', [

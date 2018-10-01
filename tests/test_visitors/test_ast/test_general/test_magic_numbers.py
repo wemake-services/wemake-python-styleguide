@@ -2,8 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.errors.best_practices import MagicNumberViolation
-from wemake_python_styleguide.visitors.ast.complexity.numbers import (
+from wemake_python_styleguide.violations.best_practices import (
+    MagicNumberViolation,
+)
+from wemake_python_styleguide.visitors.ast.numbers import (
     MAGIC_NUMBERS_WHITELIST,
     MagicNumberVisitor,
 )

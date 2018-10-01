@@ -2,12 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.errors.best_practices import (
+from wemake_python_styleguide.violations.best_practices import (
     RaiseNotImplementedViolation,
 )
-from wemake_python_styleguide.visitors.ast.general.wrong_keyword import (
-    WrongRaiseVisitor,
-)
+from wemake_python_styleguide.visitors.ast.keywords import WrongRaiseVisitor
 
 raise_not_implemented = """
 class CheckAbstractMethods():

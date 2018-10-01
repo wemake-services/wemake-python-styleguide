@@ -6,21 +6,21 @@ from operator import itemgetter
 
 import pytest
 
-from wemake_python_styleguide import errors
-from wemake_python_styleguide.errors.base import (
-    ASTStyleViolation,
+from wemake_python_styleguide import violations
+from wemake_python_styleguide.violations.base import (
+    ASTViolation,
     BaseStyleViolation,
-    SimpleStyleViolation,
-    TokenStyleViolation,
+    SimpleViolation,
+    TokenizeViolation,
 )
 
 
 def _is_error_class(cls) -> bool:
     base_classes = {
-        ASTStyleViolation,
+        ASTViolation,
         BaseStyleViolation,
-        SimpleStyleViolation,
-        TokenStyleViolation,
+        SimpleViolation,
+        TokenizeViolation,
     }
 
     return (
@@ -32,10 +32,10 @@ def _is_error_class(cls) -> bool:
 
 def _load_all_error_classes():
     modules = [
-        errors.naming,
-        errors.complexity,
-        errors.consistency,
-        errors.best_practices,
+        violations.naming,
+        violations.complexity,
+        violations.consistency,
+        violations.best_practices,
     ]
 
     classes = {}
@@ -47,7 +47,7 @@ def _load_all_error_classes():
 
 
 @pytest.fixture(scope='session')
-def all_errors():
+def all_violations():
     """Loads all violations from the package."""
     classes = _load_all_error_classes()
     all_errors_container = []
@@ -57,7 +57,7 @@ def all_errors():
 
 
 @pytest.fixture(scope='session')
-def all_module_errors():
+def all_module_violations():
     """Loads all violations from the package."""
     return _load_all_error_classes()
 

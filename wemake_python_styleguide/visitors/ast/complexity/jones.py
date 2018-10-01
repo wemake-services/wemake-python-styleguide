@@ -14,11 +14,11 @@ from collections import defaultdict
 from statistics import median
 from typing import DefaultDict, List
 
-from wemake_python_styleguide.errors.complexity import (
+from wemake_python_styleguide.logics.nodes import is_subtype_of_any
+from wemake_python_styleguide.violations.complexity import (
     JonesScoreViolation,
     LineComplexityViolation,
 )
-from wemake_python_styleguide.logics.nodes import is_subtype_of_any
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 

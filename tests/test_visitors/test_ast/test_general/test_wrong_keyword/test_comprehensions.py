@@ -2,10 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.errors.consistency import (
+from wemake_python_styleguide.violations.consistency import (
     MultipleIfsInComprehensionViolation,
 )
-from wemake_python_styleguide.visitors.ast.general.wrong_keyword import (
+from wemake_python_styleguide.visitors.ast.keywords import (
     WrongListComprehensionVisitor,
 )
 

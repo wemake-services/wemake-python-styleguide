@@ -1,7 +1,6 @@
 from sys import *
 import sys
 
-
 int = 12
 ++int
 

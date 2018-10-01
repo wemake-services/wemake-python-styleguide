@@ -2,7 +2,9 @@
 
 import ast
 
-from wemake_python_styleguide.errors.complexity import TooDeepNestingViolation
+from wemake_python_styleguide.violations.complexity import (
+    TooDeepNestingViolation,
+)
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 

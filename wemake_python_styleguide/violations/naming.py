@@ -51,13 +51,13 @@ Variable names
 
 """
 
-from wemake_python_styleguide.errors.base import (
-    ASTStyleViolation,
-    SimpleStyleViolation,
+from wemake_python_styleguide.violations.base import (
+    ASTViolation,
+    SimpleViolation,
 )
 
 
-class WrongModuleNameViolation(SimpleStyleViolation):
+class WrongModuleNameViolation(SimpleViolation):
     """
     Forbids to use blacklisted module names.
 
@@ -93,7 +93,7 @@ class WrongModuleNameViolation(SimpleStyleViolation):
     code = 100
 
 
-class WrongModuleMagicNameViolation(SimpleStyleViolation):
+class WrongModuleMagicNameViolation(SimpleViolation):
     """
     Forbids to use any magic names except whitelisted ones.
 
@@ -125,7 +125,7 @@ class WrongModuleMagicNameViolation(SimpleStyleViolation):
     code = 101
 
 
-class TooShortModuleNameViolation(SimpleStyleViolation):
+class TooShortModuleNameViolation(SimpleViolation):
     """
     Forbids to use module name shorter than some breakpoint.
 
@@ -149,7 +149,7 @@ class TooShortModuleNameViolation(SimpleStyleViolation):
     code = 102
 
 
-class WrongModuleNameUnderscoresViolation(SimpleStyleViolation):
+class WrongModuleNameUnderscoresViolation(SimpleViolation):
     """
     Forbids to use multiple underscores in a row in a module name.
 
@@ -182,7 +182,7 @@ class WrongModuleNameUnderscoresViolation(SimpleStyleViolation):
     code = 103
 
 
-class WrongModuleNamePatternViolation(SimpleStyleViolation):
+class WrongModuleNamePatternViolation(SimpleViolation):
     """
     Forbids to use module names that do not match our pattern.
 
@@ -220,7 +220,7 @@ class WrongModuleNamePatternViolation(SimpleStyleViolation):
 
 # Variables
 
-class WrongVariableNameViolation(ASTStyleViolation):
+class WrongVariableNameViolation(ASTViolation):
     """
     Forbids to have blacklisted variable names.
 
@@ -256,7 +256,7 @@ class WrongVariableNameViolation(ASTStyleViolation):
     code = 110
 
 
-class TooShortVariableNameViolation(ASTStyleViolation):
+class TooShortVariableNameViolation(ASTViolation):
     """
     Forbids to have too short variable names.
 
@@ -289,7 +289,7 @@ class TooShortVariableNameViolation(ASTStyleViolation):
     code = 111
 
 
-class PrivateNameViolation(ASTStyleViolation):
+class PrivateNameViolation(ASTViolation):
     """
     Forbids to have private name pattern.
 
@@ -323,7 +323,7 @@ class PrivateNameViolation(ASTStyleViolation):
     code = 112
 
 
-class SameAliasImportViolation(ASTStyleViolation):
+class SameAliasImportViolation(ASTViolation):
     """
     Forbids to use the same alias as the original name in imports.
 

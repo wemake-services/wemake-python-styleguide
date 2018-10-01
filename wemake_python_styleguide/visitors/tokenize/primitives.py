@@ -2,7 +2,7 @@
 
 import tokenize
 
-from wemake_python_styleguide.errors.consistency import (
+from wemake_python_styleguide.violations.consistency import (
     PartialFloatViolation,
     UnderscoredNumberViolation,
     UnicodeStringViolation,

@@ -1,22 +1,52 @@
 # -*- coding: utf-8 -*-
 
+"""
+Contains detailed documentation about how to write a visitor.
+
+.. _visitors:
+
+Creating new visitor
+--------------------
+
+First of all, you have to decide what base class do you want to use?
+
+.. currentmodule:: wemake_python_styleguide.visitors.base
+
+Available base classes
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. autosummary::
+   :nosignatures:
+
+   BaseNodeVisitor
+   BaseFilenameVisitor
+   BaseTokenVisitor
+
+The decision relies on what parameters do you need for the task.
+It is highly unlikely that you will need two parameters at the same time.
+
+Visitors API
+------------
+
+"""
+
 import ast
 import tokenize
 from typing import List, Sequence, Type
 
 from wemake_python_styleguide import constants
-from wemake_python_styleguide.errors.base import BaseStyleViolation
 from wemake_python_styleguide.types import ConfigurationOptions
+from wemake_python_styleguide.violations.base import BaseStyleViolation
 
 
 class BaseVisitor(object):
     """
-    Base class for different types of visitors.
+    Abstract base class for different types of visitors.
 
     Attributes:
         options: contains the options objects passed and parsed by ``flake8``.
-        filename: filename passed by ``flake8``.
-        violations: list of errors for the specific visitor.
+        filename: filename passed by ``flake8``, each visitor has a file name.
+        violations: list of violations for the specific visitor.
 
     """
 
@@ -25,7 +55,7 @@ class BaseVisitor(object):
         options: ConfigurationOptions,
         filename: str = constants.STDIN,
     ) -> None:
-        """Create base visitor instance."""
+        """Creates base visitor instance."""
         self.options = options
         self.filename = filename
         self.violations: List[BaseStyleViolation] = []
@@ -109,23 +139,39 @@ class BaseNodeVisitor(ast.NodeVisitor, BaseVisitor):
 
 class BaseFilenameVisitor(BaseVisitor):
     """
-    Allows to check module file names.
+    Abstract base class that allows to visit and check module file names.
 
-    Has ``visit_filename()`` method that should be redefined in subclasses.
+    Has ``visit_filename()`` method that should be defined in subclasses.
     """
 
     def visit_filename(self) -> None:
-        """This method should be overridden in a subclass."""
+        """
+        Abstract method to check module file names.
+
+        This method should be overridden in a subclass.
+        """
         raise NotImplementedError('Should be defined in a subclass')
 
     def run(self) -> None:
-        """Checks module's filename."""
+        """
+        Checks module's filename.
+
+        Skips modules that are checked as piped output.
+        Since these modules are checked as a ``stdin`` input.
+        And do not have names.
+        """
         if self.filename != constants.STDIN:
             self.visit_filename()
 
 
 class BaseTokenVisitor(BaseVisitor):
-    """Allows to check ``tokenize`` sequences."""
+    """
+    Allows to check ``tokenize`` sequences.
+
+    Attributes:
+        file_tokens: ``tokenize.TokenInfo`` sequence to be checked.
+
+    """
 
     def __init__(
         self,
@@ -133,7 +179,7 @@ class BaseTokenVisitor(BaseVisitor):
         file_tokens: Sequence[tokenize.TokenInfo],
         **kwargs,
     ) -> None:
-        """Creates new ``tokenize`` based instance."""
+        """Creates new ``tokenize`` based visitor instance."""
         super().__init__(options, **kwargs)
         self.file_tokens = file_tokens
 
@@ -142,7 +188,7 @@ class BaseTokenVisitor(BaseVisitor):
         cls: Type['BaseTokenVisitor'],
         checker,
     ) -> 'BaseTokenVisitor':
-        """Constructs visitor instance from the checker."""
+        """Constructs ``tokenize`` based visitor instance from the checker."""
         return cls(
             options=checker.options,
             filename=checker.filename,
@@ -150,13 +196,26 @@ class BaseTokenVisitor(BaseVisitor):
         )
 
     def visit(self, token: tokenize.TokenInfo) -> None:
-        """Runs custom defined handlers for each specific token type."""
+        """
+        Runs custom defined handlers in a visitor for each specific token type.
+
+        Uses ``.exact_type`` property to fetch the token name.
+        So, you have to be extra careful with tokens
+        like ``->`` and other operators,
+        since they might resolve in just ``OP`` name.
+
+        Does nothing if handler for any token type is not defined.
+
+        See also:
+            https://docs.python.org/3/library/tokenize.html
+
+        """
         token_type = tokenize.tok_name[token.exact_type].lower()
         method = getattr(self, 'visit_' + token_type, None)
         if method is not None:
             method(token)
 
     def run(self) -> None:
-        """Visits all token types."""
+        """Visits all token types that have a handler method."""
         for token in self.file_tokens:
             self.visit(token)

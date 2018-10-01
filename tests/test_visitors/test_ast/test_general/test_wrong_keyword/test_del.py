@@ -2,10 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.errors.best_practices import WrongKeywordViolation
-from wemake_python_styleguide.visitors.ast.general.wrong_keyword import (
-    WrongKeywordVisitor,
+from wemake_python_styleguide.violations.best_practices import (
+    WrongKeywordViolation,
 )
+from wemake_python_styleguide.visitors.ast.keywords import WrongKeywordVisitor
 
 del_variable = """
 x = 5

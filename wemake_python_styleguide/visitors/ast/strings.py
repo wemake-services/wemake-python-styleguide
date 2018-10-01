@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from wemake_python_styleguide.errors.consistency import FormattedStringViolation
+from wemake_python_styleguide.violations.consistency import (
+    FormattedStringViolation,
+)
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 

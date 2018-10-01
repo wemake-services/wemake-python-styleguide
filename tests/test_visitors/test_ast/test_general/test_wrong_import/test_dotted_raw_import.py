@@ -2,10 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.errors.consistency import DottedRawImportViolation
-from wemake_python_styleguide.visitors.ast.general.wrong_import import (
-    WrongImportVisitor,
+from wemake_python_styleguide.violations.consistency import (
+    DottedRawImportViolation,
 )
+from wemake_python_styleguide.visitors.ast.imports import WrongImportVisitor
 
 regular_import = 'import {0}'
 regular_import_with_alias = 'import {0} as alias'

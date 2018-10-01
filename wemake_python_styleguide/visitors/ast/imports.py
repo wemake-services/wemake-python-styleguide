@@ -3,21 +3,22 @@
 import ast
 
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
-from wemake_python_styleguide.errors.best_practices import (
+from wemake_python_styleguide.logics.imports import get_error_text
+from wemake_python_styleguide.types import AnyImport
+from wemake_python_styleguide.violations.best_practices import (
     FutureImportViolation,
     NestedImportViolation,
 )
-from wemake_python_styleguide.errors.consistency import (
+from wemake_python_styleguide.violations.consistency import (
     DottedRawImportViolation,
     LocalFolderImportViolation,
 )
-from wemake_python_styleguide.errors.naming import SameAliasImportViolation
-from wemake_python_styleguide.logics.imports import get_error_text
-from wemake_python_styleguide.types import AnyImport
+from wemake_python_styleguide.violations.naming import SameAliasImportViolation
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
 class _ImportsChecker(object):
+    """Utility class to separate logic from the visitor."""
 
     def __init__(self, delegate: 'WrongImportVisitor') -> None:
         self.delegate = delegate

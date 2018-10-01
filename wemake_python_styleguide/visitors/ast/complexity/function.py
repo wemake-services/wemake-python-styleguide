@@ -4,14 +4,14 @@ import ast
 from collections import defaultdict
 from typing import DefaultDict, List
 
-from wemake_python_styleguide.errors.complexity import (
+from wemake_python_styleguide.logics.functions import is_method
+from wemake_python_styleguide.violations.complexity import (
     TooManyArgumentsViolation,
     TooManyElifsViolation,
     TooManyExpressionsViolation,
     TooManyLocalsViolation,
     TooManyReturnsViolation,
 )
-from wemake_python_styleguide.logics.functions import is_method
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 FunctionCounter = DefaultDict[ast.FunctionDef, int]

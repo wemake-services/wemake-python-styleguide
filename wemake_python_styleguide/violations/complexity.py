@@ -66,13 +66,13 @@ Structures complexity
 
 """
 
-from wemake_python_styleguide.errors.base import (
-    ASTStyleViolation,
-    SimpleStyleViolation,
+from wemake_python_styleguide.violations.base import (
+    ASTViolation,
+    SimpleViolation,
 )
 
 
-class JonesScoreViolation(SimpleStyleViolation):
+class JonesScoreViolation(SimpleViolation):
     """
     Forbids to have modules with complex lines.
 
@@ -104,7 +104,7 @@ class JonesScoreViolation(SimpleStyleViolation):
     code = 200
 
 
-class TooManyImportsViolation(SimpleStyleViolation):
+class TooManyImportsViolation(SimpleViolation):
     """
     Forbids to have modules with too many imports.
 
@@ -142,7 +142,7 @@ class TooManyImportsViolation(SimpleStyleViolation):
     code = 201
 
 
-class TooManyModuleMembersViolation(SimpleStyleViolation):
+class TooManyModuleMembersViolation(SimpleViolation):
     """
     Forbids to have many classes and functions in a single module.
 
@@ -173,7 +173,7 @@ class TooManyModuleMembersViolation(SimpleStyleViolation):
 
 # Functions and classes:
 
-class TooManyLocalsViolation(ASTStyleViolation):
+class TooManyLocalsViolation(ASTViolation):
     """
     Forbids to have too many local variables in the unit of code.
 
@@ -220,7 +220,7 @@ class TooManyLocalsViolation(ASTStyleViolation):
     code = 210
 
 
-class TooManyArgumentsViolation(ASTStyleViolation):
+class TooManyArgumentsViolation(ASTViolation):
     """
     Forbids to have too many arguments for a function or method.
 
@@ -245,7 +245,7 @@ class TooManyArgumentsViolation(ASTStyleViolation):
     code = 211
 
 
-class TooManyReturnsViolation(ASTStyleViolation):
+class TooManyReturnsViolation(ASTViolation):
     """
     Forbids placing too many ``return`` statements into the function.
 
@@ -269,7 +269,7 @@ class TooManyReturnsViolation(ASTStyleViolation):
     code = 212
 
 
-class TooManyExpressionsViolation(ASTStyleViolation):
+class TooManyExpressionsViolation(ASTViolation):
     """
     Forbids putting to many expression is a unit of code.
 
@@ -292,7 +292,7 @@ class TooManyExpressionsViolation(ASTStyleViolation):
     code = 213
 
 
-class TooManyMethodsViolation(SimpleStyleViolation):
+class TooManyMethodsViolation(SimpleViolation):
     """
     Forbids to have many methods in a single class.
 
@@ -327,7 +327,7 @@ class TooManyMethodsViolation(SimpleStyleViolation):
 
 # Structures:
 
-class TooDeepNestingViolation(ASTStyleViolation):
+class TooDeepNestingViolation(ASTViolation):
     """
     Forbids nesting blocks too deep.
 
@@ -352,7 +352,7 @@ class TooDeepNestingViolation(ASTStyleViolation):
     code = 220
 
 
-class LineComplexityViolation(ASTStyleViolation):
+class LineComplexityViolation(ASTViolation):
     """
     Forbids to have complex lines.
 
@@ -395,7 +395,7 @@ class LineComplexityViolation(ASTStyleViolation):
     code = 221
 
 
-class TooManyConditionsViolation(ASTStyleViolation):
+class TooManyConditionsViolation(ASTViolation):
     """
     Forbids to have conditions with too many logical operators.
 
@@ -431,7 +431,7 @@ class TooManyConditionsViolation(ASTStyleViolation):
     code = 222
 
 
-class TooManyElifsViolation(ASTStyleViolation):
+class TooManyElifsViolation(ASTViolation):
     """
     Forbids to use many ``elif`` branches.
 

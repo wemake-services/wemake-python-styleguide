@@ -72,7 +72,6 @@ extensions = [
 autodoc_member_order = 'bysource'
 
 autodoc_mock_imports = [
-    'flake8',
     'typing_extensions',
     'attr',
 ]

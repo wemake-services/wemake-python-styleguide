@@ -2,8 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.errors.best_practices import StaticMethodViolation
-from wemake_python_styleguide.visitors.ast.wrong_class import WrongClassVisitor
+from wemake_python_styleguide.violations.best_practices import (
+    StaticMethodViolation,
+)
+from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
 
 decorated_method = """
 class Example(object):

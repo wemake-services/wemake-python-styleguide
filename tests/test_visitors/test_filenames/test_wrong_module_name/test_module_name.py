@@ -3,7 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.constants import BAD_MODULE_NAMES
-from wemake_python_styleguide.errors.naming import WrongModuleNameViolation
+from wemake_python_styleguide.violations.naming import WrongModuleNameViolation
 from wemake_python_styleguide.visitors.filenames.wrong_module_name import (
     WrongModuleNameVisitor,
 )

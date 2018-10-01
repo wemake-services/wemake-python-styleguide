@@ -4,14 +4,14 @@ import ast
 from collections import defaultdict
 from typing import DefaultDict, Union
 
-from wemake_python_styleguide.errors.complexity import (
+from wemake_python_styleguide.logics.functions import is_method
+from wemake_python_styleguide.types import AnyImport, ModuleMembers
+from wemake_python_styleguide.violations.complexity import (
     TooManyConditionsViolation,
     TooManyImportsViolation,
     TooManyMethodsViolation,
     TooManyModuleMembersViolation,
 )
-from wemake_python_styleguide.logics.functions import is_method
-from wemake_python_styleguide.types import AnyImport, ModuleMembers
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 ConditionNodes = Union[ast.If, ast.While, ast.IfExp]

@@ -2,10 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.errors.consistency import (
+from wemake_python_styleguide.violations.consistency import (
     RequiredBaseClassViolation,
 )
-from wemake_python_styleguide.visitors.ast.wrong_class import WrongClassVisitor
+from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
 
 
 def test_wrong_base_class(assert_errors, parse_ast_tree, default_options):

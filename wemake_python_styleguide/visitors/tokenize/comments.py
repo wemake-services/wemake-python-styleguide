@@ -17,7 +17,7 @@ TokenInfo(
 import re
 import tokenize
 
-from wemake_python_styleguide.errors.best_practices import (
+from wemake_python_styleguide.violations.best_practices import (
     WrongDocCommentViolation,
     WrongMagicCommentViolation,
 )

@@ -3,10 +3,10 @@
 import pytest
 
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
-from wemake_python_styleguide.errors.best_practices import FutureImportViolation
-from wemake_python_styleguide.visitors.ast.general.wrong_import import (
-    WrongImportVisitor,
+from wemake_python_styleguide.violations.best_practices import (
+    FutureImportViolation,
 )
+from wemake_python_styleguide.visitors.ast.imports import WrongImportVisitor
 
 future_import = 'from __future__ import {0}'
 

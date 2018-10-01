@@ -54,13 +54,13 @@ Consistency checks
 
 """
 
-from wemake_python_styleguide.errors.base import (
-    ASTStyleViolation,
-    TokenStyleViolation,
+from wemake_python_styleguide.violations.base import (
+    ASTViolation,
+    TokenizeViolation,
 )
 
 
-class LocalFolderImportViolation(ASTStyleViolation):
+class LocalFolderImportViolation(ASTViolation):
     """
     Forbids to have imports relative to the current folder.
 
@@ -87,7 +87,7 @@ class LocalFolderImportViolation(ASTStyleViolation):
     code = 300
 
 
-class DottedRawImportViolation(ASTStyleViolation):
+class DottedRawImportViolation(ASTViolation):
     """
     Forbids to use imports like ``import os.path``.
 
@@ -117,7 +117,7 @@ class DottedRawImportViolation(ASTStyleViolation):
     code = 301
 
 
-class UnicodeStringViolation(TokenStyleViolation):
+class UnicodeStringViolation(TokenizeViolation):
     """
     Forbids to use ``u`` string prefix.
 
@@ -147,7 +147,7 @@ class UnicodeStringViolation(TokenStyleViolation):
     error_template = 'Found unicode string prefix: {0}'
 
 
-class UnderscoredNumberViolation(TokenStyleViolation):
+class UnderscoredNumberViolation(TokenizeViolation):
     """
     Forbids to use underscores (``_``) in numbers.
 
@@ -183,7 +183,7 @@ class UnderscoredNumberViolation(TokenStyleViolation):
     error_template = 'Found underscored number: {0}'
 
 
-class PartialFloatViolation(TokenStyleViolation):
+class PartialFloatViolation(TokenizeViolation):
     """
     Forbids to use partial floats like ``.05`` or ``23.``.
 
@@ -216,7 +216,7 @@ class PartialFloatViolation(TokenStyleViolation):
     error_template = 'Found partial float: {0}'
 
 
-class FormattedStringViolation(ASTStyleViolation):
+class FormattedStringViolation(ASTViolation):
     """
     Forbids to use ``f`` strings.
 
@@ -254,7 +254,7 @@ class FormattedStringViolation(ASTStyleViolation):
     code = 305
 
 
-class RequiredBaseClassViolation(ASTStyleViolation):
+class RequiredBaseClassViolation(ASTViolation):
     """
     Forbids to write classes without base classes.
 
@@ -284,7 +284,7 @@ class RequiredBaseClassViolation(ASTStyleViolation):
     code = 306
 
 
-class MultipleIfsInComprehensionViolation(ASTStyleViolation):
+class MultipleIfsInComprehensionViolation(ASTViolation):
     """
     Forbids to have multiple ``if`` statements inside list comprehensions.
 

@@ -6,20 +6,20 @@ from wemake_python_styleguide.constants import (
     BAD_MODULE_METADATA_VARIABLES,
     BAD_VARIABLE_NAMES,
 )
-from wemake_python_styleguide.errors.best_practices import (
-    WrongModuleMetadataViolation,
-)
-from wemake_python_styleguide.errors.naming import (
-    PrivateNameViolation,
-    TooShortVariableNameViolation,
-    WrongVariableNameViolation,
-)
 from wemake_python_styleguide.logics.variables import (
     is_private_variable,
     is_too_short_variable_name,
     is_wrong_variable_name,
 )
 from wemake_python_styleguide.types import AnyImport
+from wemake_python_styleguide.violations.best_practices import (
+    WrongModuleMetadataViolation,
+)
+from wemake_python_styleguide.violations.naming import (
+    PrivateNameViolation,
+    TooShortVariableNameViolation,
+    WrongVariableNameViolation,
+)
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 

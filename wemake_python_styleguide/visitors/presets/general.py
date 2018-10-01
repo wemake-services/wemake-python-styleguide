@@ -1,26 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from wemake_python_styleguide.visitors.ast.general.wrong_function_call import (
+from wemake_python_styleguide.visitors.ast import keywords, naming, numbers
+from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
+from wemake_python_styleguide.visitors.ast.functions import (
     WrongFunctionCallVisitor,
 )
-from wemake_python_styleguide.visitors.ast.general.wrong_import import (
-    WrongImportVisitor,
-)
-from wemake_python_styleguide.visitors.ast.general.wrong_keyword import (
-    WrongKeywordVisitor,
-    WrongRaiseVisitor,
-)
-from wemake_python_styleguide.visitors.ast.general.wrong_module import (
-    WrongContentsVisitor,
-)
-from wemake_python_styleguide.visitors.ast.general.wrong_name import (
-    WrongModuleMetadataVisitor,
-    WrongNameVisitor,
-)
-from wemake_python_styleguide.visitors.ast.general.wrong_string import (
-    WrongStringVisitor,
-)
-from wemake_python_styleguide.visitors.ast.wrong_class import WrongClassVisitor
+from wemake_python_styleguide.visitors.ast.imports import WrongImportVisitor
+from wemake_python_styleguide.visitors.ast.modules import WrongContentsVisitor
+from wemake_python_styleguide.visitors.ast.strings import WrongStringVisitor
 from wemake_python_styleguide.visitors.filenames.wrong_module_name import (
     WrongModuleNameVisitor,
 )
@@ -28,12 +15,13 @@ from wemake_python_styleguide.visitors.filenames.wrong_module_name import (
 #: Used to store all general visitors to be later passed to checker:
 GENERAL_PRESET = (
     # General:
-    WrongRaiseVisitor,
+    keywords.WrongRaiseVisitor,
+    keywords.WrongKeywordVisitor,
     WrongFunctionCallVisitor,
     WrongImportVisitor,
-    WrongKeywordVisitor,
-    WrongNameVisitor,
-    WrongModuleMetadataVisitor,
+    naming.WrongNameVisitor,
+    naming.WrongModuleMetadataVisitor,
+    numbers.MagicNumberVisitor,
     WrongStringVisitor,
     WrongContentsVisitor,
 

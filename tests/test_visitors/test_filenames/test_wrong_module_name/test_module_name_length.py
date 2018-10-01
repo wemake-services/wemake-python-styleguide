@@ -2,7 +2,7 @@
 
 import pytest
 
-from wemake_python_styleguide.errors.naming import (
+from wemake_python_styleguide.violations.naming import (
     TooShortModuleNameViolation,
     WrongModuleNamePatternViolation,
 )

@@ -2,10 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.errors.consistency import FormattedStringViolation
-from wemake_python_styleguide.visitors.ast.general.wrong_string import (
-    WrongStringVisitor,
+from wemake_python_styleguide.violations.consistency import (
+    FormattedStringViolation,
 )
+from wemake_python_styleguide.visitors.ast.strings import WrongStringVisitor
 
 regular_string = "'some value'"
 string_variable = "some = '123'"

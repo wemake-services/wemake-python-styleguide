@@ -3,10 +3,10 @@
 import pytest
 
 from wemake_python_styleguide.constants import BAD_MAGIC_METHODS
-from wemake_python_styleguide.errors.best_practices import (
+from wemake_python_styleguide.violations.best_practices import (
     BadMagicMethodViolation,
 )
-from wemake_python_styleguide.visitors.ast.wrong_class import WrongClassVisitor
+from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
 
 magic_method = """
 class Example(object):

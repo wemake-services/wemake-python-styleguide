@@ -4,12 +4,12 @@ import string
 
 import pytest
 
-from wemake_python_styleguide.errors.naming import (
+from wemake_python_styleguide.violations.naming import (
     PrivateNameViolation,
     TooShortVariableNameViolation,
     WrongVariableNameViolation,
 )
-from wemake_python_styleguide.visitors.ast.general.wrong_name import (
+from wemake_python_styleguide.visitors.ast.naming import (
     BAD_VARIABLE_NAMES,
     WrongNameVisitor,
 )

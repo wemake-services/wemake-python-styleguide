@@ -2,10 +2,8 @@
 
 import pytest
 
-from wemake_python_styleguide.errors.naming import SameAliasImportViolation
-from wemake_python_styleguide.visitors.ast.general.wrong_import import (
-    WrongImportVisitor,
-)
+from wemake_python_styleguide.violations.naming import SameAliasImportViolation
+from wemake_python_styleguide.visitors.ast.imports import WrongImportVisitor
 
 regular_import = 'import os as {0}'
 from_import = 'from sys import os as {0}'

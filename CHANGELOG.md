@@ -8,11 +8,13 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
-- **Breaking**: changes error codes, now they are grouped by meaning
+- **Breaking**: changes violation codes, now they are grouped by meaning
 
 ### Misc
 
 - Refactoring: changes how visitors are organized inside the package
+- Improves docs: now we have a glossary
+- Refactoring: refactoring terms that violate our glossary
 - Improves docs: now all error files contain fancy documentation and summary
 - Improves docs: now we have added API reference to the docs
 - Improves docs: adds new plugin development guide

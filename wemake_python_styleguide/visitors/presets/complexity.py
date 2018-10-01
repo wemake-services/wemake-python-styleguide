@@ -5,7 +5,6 @@ from wemake_python_styleguide.visitors.ast.complexity import (
     function,
     jones,
     nested,
-    numbers,
     offset,
 )
 
@@ -14,7 +13,6 @@ COMPLEXITY_PRESET = (
     function.FunctionComplexityVisitor,
     jones.JonesComplexityVisitor,
     nested.NestedComplexityVisitor,
-    numbers.MagicNumberVisitor,
     offset.OffsetVisitor,
     counts.ImportMembersVisitor,
     counts.ModuleMembersVisitor,

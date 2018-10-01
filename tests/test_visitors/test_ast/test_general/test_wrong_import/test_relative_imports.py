@@ -2,12 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.errors.consistency import (
+from wemake_python_styleguide.violations.consistency import (
     LocalFolderImportViolation,
 )
-from wemake_python_styleguide.visitors.ast.general.wrong_import import (
-    WrongImportVisitor,
-)
+from wemake_python_styleguide.visitors.ast.imports import WrongImportVisitor
 
 # Wrong:
 same_level_relative_import = 'from . import some_thing'

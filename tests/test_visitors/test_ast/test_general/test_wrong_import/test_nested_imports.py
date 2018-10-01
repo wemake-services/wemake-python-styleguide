@@ -2,10 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.errors.best_practices import NestedImportViolation
-from wemake_python_styleguide.visitors.ast.general.wrong_import import (
-    WrongImportVisitor,
+from wemake_python_styleguide.violations.best_practices import (
+    NestedImportViolation,
 )
+from wemake_python_styleguide.visitors.ast.imports import WrongImportVisitor
 
 # Incorrect imports:
 

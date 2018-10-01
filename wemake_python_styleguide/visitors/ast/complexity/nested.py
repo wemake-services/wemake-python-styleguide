@@ -6,7 +6,7 @@ from wemake_python_styleguide.constants import (
     NESTED_CLASSES_WHITELIST,
     NESTED_FUNCTIONS_WHITELIST,
 )
-from wemake_python_styleguide.errors.best_practices import (
+from wemake_python_styleguide.violations.best_practices import (
     NestedClassViolation,
     NestedFunctionViolation,
 )
