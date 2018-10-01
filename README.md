@@ -52,6 +52,19 @@ However, this is a temporary solution.
 We are working at providing the configuration for you in the future.
 
 
+## Usage
+
+Since we are just a `flake8` plugin, 
+it means that all you have to do is: [run](http://flake8.pycqa.org/en/latest/#using-flake8) `flake8`.
+
+```bash
+flake8 your_module_or_package.py
+```
+
+There are different options how to automate linting process. 
+We prefer `pytest-flake8` [plugin](https://github.com/tholo/pytest-flake8) to run our linter alongside with the tests.
+
+
 ## What we are about
 
 We have several primary objectives with this linter:
