@@ -69,6 +69,12 @@ async def container():
         pass
 """
 
+nested_await = """
+async def container1():
+    async def container2():
+        await cursor
+"""
+
 
 @pytest.mark.parametrize('code', [
     nested_if,
@@ -80,6 +86,7 @@ async def container():
     nested_while,
     nested_asyncfor,
     nested_asyncwith,
+    nested_await,
 ])
 def test_nested_offset(assert_errors, parse_ast_tree, code, default_options):
     """Testing that nested expression with default options works well."""
@@ -101,6 +108,7 @@ def test_nested_offset(assert_errors, parse_ast_tree, code, default_options):
     (nested_while, 1),
     (nested_asyncfor, 1),
     (nested_asyncwith, 1),
+    (nested_await, 2),
 ])
 def test_nested_offset_errors(
     assert_errors, parse_ast_tree, code, number_of_errors, options,
