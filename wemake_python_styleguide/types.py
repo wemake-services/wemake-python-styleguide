@@ -35,9 +35,6 @@ AnyImport = Union[ast.Import, ast.ImportFrom]
 #: Flake8 API format to return error messages:
 CheckResult = Tuple[int, int, str, type]
 
-#: Code members that we count in a module:
-ModuleMembers = Union[ast.FunctionDef, ast.ClassDef, ast.AsyncFunctionDef]
-
 
 class ConfigurationOptions(Protocol):
     """

@@ -21,8 +21,13 @@ from wemake_python_styleguide.violations.naming import (
     WrongVariableNameViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
+from wemake_python_styleguide.visitors.decorators import alias
 
 
+@alias('visit_any_import', (
+    'visit_ImportFrom',
+    'visit_Import',
+))
 class WrongNameVisitor(BaseNodeVisitor):
     """
     Performs checks based on variable names.
@@ -112,7 +117,7 @@ class WrongNameVisitor(BaseNodeVisitor):
 
         self.generic_visit(node)
 
-    def visit_Import(self, node: AnyImport) -> None:
+    def visit_any_import(self, node: AnyImport) -> None:
         """
         Used to check wrong import alias names.
 
@@ -122,13 +127,11 @@ class WrongNameVisitor(BaseNodeVisitor):
             PrivateNameViolation
 
         """
-        for alias in node.names:
-            if alias.asname:
-                self._check_name(node, alias.asname)
+        for alias_node in node.names:
+            if alias_node.asname:
+                self._check_name(node, alias_node.asname)
 
         self.generic_visit(node)
-
-    visit_ImportFrom = visit_Import
 
 
 class WrongModuleMetadataVisitor(BaseNodeVisitor):

@@ -5,7 +5,7 @@ from collections import defaultdict
 from typing import DefaultDict, Union
 
 from wemake_python_styleguide.logics.functions import is_method
-from wemake_python_styleguide.types import AnyImport, ModuleMembers
+from wemake_python_styleguide.types import AnyImport
 from wemake_python_styleguide.violations.complexity import (
     TooManyConditionsViolation,
     TooManyImportsViolation,
@@ -13,10 +13,17 @@ from wemake_python_styleguide.violations.complexity import (
     TooManyModuleMembersViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
+from wemake_python_styleguide.visitors.decorators import alias
 
 ConditionNodes = Union[ast.If, ast.While, ast.IfExp]
+ModuleMembers = Union[ast.AsyncFunctionDef, ast.FunctionDef, ast.ClassDef]
 
 
+@alias('visit_module_members', (
+    'visit_ClassDef',
+    'visit_AsyncFunctionDef',
+    'visit_FunctionDef',
+))
 class ModuleMembersVisitor(BaseNodeVisitor):
     """Counts classes and functions in a module."""
 
@@ -48,10 +55,11 @@ class ModuleMembersVisitor(BaseNodeVisitor):
         self._check_members_count(node)
         self.generic_visit(node)
 
-    visit_ClassDef = visit_module_members
-    visit_AsyncFunctionDef = visit_FunctionDef = visit_module_members
 
-
+@alias('visit_any_import', (
+    'visit_ImportFrom',
+    'visit_Import',
+))
 class ImportMembersVisitor(BaseNodeVisitor):
     """Counts imports in a module."""
 
@@ -66,7 +74,7 @@ class ImportMembersVisitor(BaseNodeVisitor):
                 TooManyImportsViolation(text=str(self._imports_count)),
             )
 
-    def visit_Import(self, node: AnyImport) -> None:
+    def visit_any_import(self, node: AnyImport) -> None:
         """
         Counts the number of ``import`` and ``from ... import ...``.
 
@@ -76,8 +84,6 @@ class ImportMembersVisitor(BaseNodeVisitor):
         """
         self._imports_count += 1
         self.generic_visit(node)
-
-    visit_ImportFrom = visit_Import
 
 
 class MethodMembersVisitor(BaseNodeVisitor):
@@ -110,6 +116,11 @@ class MethodMembersVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
 
+@alias('visit_condition', (
+    'visit_While',
+    'visit_IfExp',
+    'visit_If',
+))
 class ConditionsVisitor(BaseNodeVisitor):
     """Checks ``if`` and ``while`` statements for condition counts."""
 
@@ -145,7 +156,7 @@ class ConditionsVisitor(BaseNodeVisitor):
             self._check_conditions(node.ifs[0])
         self.generic_visit(node)
 
-    def visit_If(self, node: ConditionNodes) -> None:
+    def visit_condition(self, node: ConditionNodes) -> None:
         """
         Counts the number of conditions.
 
@@ -155,5 +166,3 @@ class ConditionsVisitor(BaseNodeVisitor):
         """
         self._check_conditions(node.test)
         self.generic_visit(node)
-
-    visit_While = visit_IfExp = visit_If

@@ -27,11 +27,20 @@ class Second(object):
     def method2(self): ...
 """
 
+module_with_async_methods = """
+class First(object):
+    async def method(self): ...
+
+class Second(object):
+    async def method2(self): ...
+"""
+
 
 @pytest.mark.parametrize('code', [
     module_with_function_and_class,
     module_with_async_function_and_class,
     module_with_methods,
+    module_with_async_methods,
 ])
 def test_module_counts_normal(
     assert_errors, parse_ast_tree, code, default_options,
@@ -49,6 +58,7 @@ def test_module_counts_normal(
     module_with_function_and_class,
     module_with_async_function_and_class,
     module_with_methods,
+    module_with_async_methods,
 ])
 def test_module_counts_violation(
     assert_errors, parse_ast_tree, code, options,
