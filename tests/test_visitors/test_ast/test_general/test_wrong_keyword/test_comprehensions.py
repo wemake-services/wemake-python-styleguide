@@ -16,7 +16,11 @@ async def f():
 """
 
 list_ifs_multiple = """
-nodes = [node {async_stmt}for node in 'abc' if node != 'a' if node != 'b' if node != 'c']
+nodes = [
+    node
+    {async_stmt}for node in 'abc'
+    if node != 'a' if node != 'b' if node != 'c'
+]
 """
 
 list_ifs_twice = """
@@ -34,7 +38,11 @@ nodes = [node {async_stmt}for node in 'abc']
 # Dicts:
 
 dict_ifs_multiple = """
-nodes = {{xy: xy {async_stmt}for xy in 'abc' if xy != 'a' if xy != 'b' if xy != 'c'}}
+nodes = {{
+    xy: xy
+    {async_stmt}for xy in 'abc'
+    if xy != 'a' if xy != 'b' if xy != 'c'
+}}
 """
 
 dict_ifs_twice = """
@@ -52,7 +60,11 @@ nodes = {{xy: xy {async_stmt}for xy in 'abc'}}
 # Generator expressions:
 
 gen_ifs_multiple = """
-nodes = (xy {async_stmt}for xy in 'abc' if xy != 'a' if xy != 'b' if xy != 'c')
+nodes = (
+    xy
+    {async_stmt}for xy in 'abc'
+    if xy != 'a' if xy != 'b' if xy != 'c'
+)
 """
 
 gen_ifs_twice = """
