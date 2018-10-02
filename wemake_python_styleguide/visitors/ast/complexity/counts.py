@@ -17,6 +17,7 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 ConditionNodes = Union[ast.If, ast.While, ast.IfExp]
 ModuleMembers = Union[ast.AsyncFunctionDef, ast.FunctionDef, ast.ClassDef]
+MethodMembers = Union[ast.FunctionDef, ast.AsyncFunctionDef]
 
 
 @alias('visit_module_members', (
@@ -86,6 +87,10 @@ class ImportMembersVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
 
+@alias('visit_any_function', (
+    'visit_FunctionDef',
+    'visit_AsyncFunctionDef',
+))
 class MethodMembersVisitor(BaseNodeVisitor):
     """Counts methods in a single class."""
 
@@ -94,7 +99,7 @@ class MethodMembersVisitor(BaseNodeVisitor):
         super().__init__(*args, **kwargs)
         self._methods: DefaultDict[ast.ClassDef, int] = defaultdict(int)
 
-    def _check_method(self, node: ast.FunctionDef) -> None:
+    def _check_method(self, node: MethodMembers) -> None:
         parent = getattr(node, 'parent', None)
         if isinstance(parent, ast.ClassDef):
             self._methods[parent] += 1
@@ -104,7 +109,7 @@ class MethodMembersVisitor(BaseNodeVisitor):
             if count > self.options.max_methods:
                 self.add_violation(TooManyMethodsViolation(text=node.name))
 
-    def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
+    def visit_any_function(self, node: MethodMembers) -> None:
         """
         Counts the number of methods in a single class.
 
