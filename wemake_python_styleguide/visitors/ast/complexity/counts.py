@@ -48,17 +48,7 @@ class ModuleMembersVisitor(BaseNodeVisitor):
         self._check_members_count(node)
         self.generic_visit(node)
 
-    def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
-        """
-        Counts the number of functions in a single module.
-
-        Raises:
-            TooManyModuleMembersViolation
-
-        """
-        self._check_members_count(node)
-        self.generic_visit(node)
-
+    visit_AsyncFunctionDef = visit_FunctionDef = visit_ClassDef
 
 class ImportMembersVisitor(BaseNodeVisitor):
     """Counts imports in a module."""
