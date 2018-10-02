@@ -6,9 +6,14 @@ We used to have incremental versioning before `0.1.0`.
 
 ## Version 0.1.1
 
+### Features
+
+- Now we are counting `async` function as a module member
+
 ### Misc
 
-- Improves docs: multiple typos, bugs, and issues fixes 
+- Improves docs: multiple typos, bugs, and issues fixes
+- Improves tests: now we are testing `async` comprehensions
 
 
 ## Version 0.1.0
