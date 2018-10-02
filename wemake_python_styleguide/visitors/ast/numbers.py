@@ -27,6 +27,7 @@ class MagicNumberVisitor(BaseNodeVisitor):
         ast.Tuple,
     )
 
+    # TODO: make consistent naming rules for class attributes:
     _PROXY_PARENTS = (
         ast.UnaryOp,
     )

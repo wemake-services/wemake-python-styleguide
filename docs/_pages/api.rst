@@ -1,13 +1,12 @@
-API Reference
+Internal Docs
 =============
-
-Internal documentation.
 
 Here you can find:
 
 1. How our development process works
 2. How to contribute to the project
 3. How to write new rules
+4. How our internal API looks like
 
 This information will also be helpful
 if you would like to create our own ``flake8`` plugin.
@@ -23,16 +22,20 @@ where we specify all technical details about our workflow and tools.
 
 And finally you will need to go through the API reference.
 
+Contributing
+------------
+
 .. toctree::
   :maxdepth: 2
-  :caption: Meta:
 
   glossary.rst
   contributing.rst
 
+API Reference
+-------------
+
 .. toctree::
   :maxdepth: 2
-  :caption: API Reference:
 
   checker.rst
   visitors/base.rst
