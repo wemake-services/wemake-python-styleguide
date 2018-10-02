@@ -82,7 +82,11 @@ nodes = (no {async_stmt}for xy in 'abc')
 # Set comprehensions:
 
 set_ifs_multiple = """
-nodes = {{xy {async_stmt}for xy in 'abc' if xy != 'a' if xy != 'b' if xy != 'c'}}
+nodes = {{
+    xy
+    {async_stmt}for xy in 'abc'
+    if xy != 'a' if xy != 'b' if xy != 'c'
+}}
 """
 
 set_ifs_twice = """
