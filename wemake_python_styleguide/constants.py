@@ -53,7 +53,7 @@ BAD_MODULE_METADATA_VARIABLES = frozenset((
 ))
 
 
-_BAD_VARIABLE_NAMES = [
+BAD_VARIABLE_NAMES = frozenset((
     # Meaningless words:
     'data',
     'result',
@@ -86,17 +86,7 @@ _BAD_VARIABLE_NAMES = [
     'foo',
     'bar',
     'baz',
-]
-
-if sys.version_info < (3, 7):  # pragma: no cover
-    _BAD_VARIABLE_NAMES.extend([
-        # Compatibility with `python3.7`:
-        'async',
-        'await',
-    ])
-
-#: List of variable names we forbid to use.
-BAD_VARIABLE_NAMES = frozenset(_BAD_VARIABLE_NAMES)
+))
 
 #: List of magic methods that are forbiden to use.
 BAD_MAGIC_METHODS = frozenset((
