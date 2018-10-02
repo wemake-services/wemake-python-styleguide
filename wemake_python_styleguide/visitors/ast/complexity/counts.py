@@ -37,9 +37,9 @@ class ModuleMembersVisitor(BaseNodeVisitor):
         if self._public_items_count > self.options.max_module_members:
             self.add_violation(TooManyModuleMembersViolation())
 
-    def visit_ClassDef(self, node: ModuleMembers) -> None:
+    def visit_module_members(self, node: ModuleMembers) -> None:
         """
-        Counts the number of `class`es in a single module.
+        Counts the number of ModuleMembers in a single module.
 
         Raises:
             TooManyModuleMembersViolation
@@ -48,7 +48,7 @@ class ModuleMembersVisitor(BaseNodeVisitor):
         self._check_members_count(node)
         self.generic_visit(node)
 
-    visit_AsyncFunctionDef = visit_FunctionDef = visit_ClassDef
+    visit_AsyncFunctionDef = visit_FunctionDef = visit_ClassDef = visit_module_members
 
 
 class ImportMembersVisitor(BaseNodeVisitor):
