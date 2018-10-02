@@ -23,6 +23,9 @@ from wemake_python_styleguide.visitors.decorators import alias
     'visit_Break',
     'visit_Assign',
     'visit_Expr',
+    'visit_AsyncFor',
+    'visit_AsyncWith',
+    'visit_Await',
 ))
 class OffsetVisitor(BaseNodeVisitor):
     """Checks offset values for several nodes."""
