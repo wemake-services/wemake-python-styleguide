@@ -294,6 +294,9 @@ class WrongFunctionCallViolation(ASTViolation):
     :py:data:`~wemake_python_styleguide.constants.BAD_FUNCTIONS`
     for the full list of blacklisted functions.
 
+    See also:
+        https://www.youtube.com/watch?v=YjHsOrOOSuI
+
     Note:
         Returns Z421 as error code
 
@@ -536,6 +539,9 @@ class BadMagicMethodViolation(ASTViolation):
     See
     :py:data:`~wemake_python_styleguide.constants.BAD_MAGIC_METHODS`
     for the full blacklist of the magic methods.
+
+    See also:
+        https://www.youtube.com/watch?v=F6u5rhUQ6dU
 
     Note:
         Returns Z434 as error code
