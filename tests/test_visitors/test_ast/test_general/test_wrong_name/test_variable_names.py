@@ -31,9 +31,21 @@ for {0} in []:
     print()
 """
 
+async_for_variable_test = """
+async def container():
+    async for {0} in []:
+        print()
+"""
+
 with_variable_test = """
 with open('test.py') as {0}:
     raise ValueError()
+"""
+
+async_with_variable_test = """
+async def container():
+    async with open('test.py') as {0}:
+        raise ValueError()
 """
 
 exception_test = """
@@ -48,7 +60,9 @@ except Exception as {0}:
 @pytest.mark.parametrize('code', [
     variable_test,
     for_variable_test,
+    async_for_variable_test,
     with_variable_test,
+    async_with_variable_test,
     exception_test,
     underscore_variable_test1,
     underscore_variable_test2,
@@ -69,7 +83,9 @@ def test_wrong_variable_names(
 @pytest.mark.parametrize('code', [
     variable_test,
     for_variable_test,
+    async_for_variable_test,
     with_variable_test,
+    async_with_variable_test,
     exception_test,
 ])
 def test_too_short_variable_names(
@@ -87,7 +103,9 @@ def test_too_short_variable_names(
 @pytest.mark.parametrize('code', [
     variable_test,
     for_variable_test,
+    async_for_variable_test,
     with_variable_test,
+    async_with_variable_test,
     exception_test,
 ])
 def test_too_short_variable_names_configured(
@@ -106,7 +124,9 @@ def test_too_short_variable_names_configured(
 @pytest.mark.parametrize('code', [
     variable_test,
     for_variable_test,
+    async_for_variable_test,
     with_variable_test,
+    async_with_variable_test,
     exception_test,
 ])
 def test_private_variable_names(
@@ -125,7 +145,9 @@ def test_private_variable_names(
 @pytest.mark.parametrize('code', [
     variable_test,
     for_variable_test,
+    async_for_variable_test,
     with_variable_test,
+    async_with_variable_test,
     exception_test,
     underscore_variable_test1,
     underscore_variable_test2,

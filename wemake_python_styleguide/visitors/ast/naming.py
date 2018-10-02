@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
+from typing import Union
 
 from wemake_python_styleguide.constants import (
     BAD_MODULE_METADATA_VARIABLES,
@@ -27,6 +28,9 @@ from wemake_python_styleguide.visitors.decorators import alias
 @alias('visit_any_import', (
     'visit_ImportFrom',
     'visit_Import',
+))
+@alias('visit_FunctionDef', (
+    'visit_AsyncFunctionDef',
 ))
 class WrongNameVisitor(BaseNodeVisitor):
     """
@@ -75,7 +79,7 @@ class WrongNameVisitor(BaseNodeVisitor):
 
         self.generic_visit(node)
 
-    def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
+    def visit_FunctionDef(self, node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> None:
         """
         Used to find wrong function and method parameters.
 
