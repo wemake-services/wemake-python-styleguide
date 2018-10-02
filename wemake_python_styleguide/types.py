@@ -36,7 +36,7 @@ AnyImport = Union[ast.Import, ast.ImportFrom]
 CheckResult = Tuple[int, int, str, type]
 
 #: Code members that we count in a module:
-ModuleMembers = Union[ast.FunctionDef, ast.ClassDef]
+ModuleMembers = Union[ast.FunctionDef, ast.ClassDef, ast.AsyncFunctionDef]
 
 
 class ConfigurationOptions(Protocol):
