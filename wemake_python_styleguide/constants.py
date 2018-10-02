@@ -10,6 +10,9 @@ It also contains some exceptions that we allow to use in our codebase.
 import re
 import sys
 
+# TODO: use consistent `.` for the `#:` comments
+# TODO: use consistent names: `*_BLACKLIST` and `*_WHITELIST`
+
 #: List of functions we forbid to use.
 BAD_FUNCTIONS = frozenset((
     # Code generation:
@@ -158,5 +161,6 @@ MAGIC_NUMBERS_WHITELIST = frozenset((
 # This variable is used as a default filename, when it is not passed by flake8:
 STDIN = 'stdin'
 
+# TODO: rename to `INIT_MODULE`
 # This variable is used to specify as a placeholder for `__init__.py`:
 INIT = '__init__'

@@ -16,6 +16,7 @@ class OffsetVisitor(BaseNodeVisitor):
         if offset is not None and offset > self.options.max_offset_blocks * 4:
             self.add_violation(TooDeepNestingViolation(node))
 
+    # TODO: make a proxy handler, something like `visit_line_expression`
     def visit_Expr(self, node: ast.AST) -> None:
         """
         Checks statement's offset.
@@ -35,6 +36,8 @@ class OffsetVisitor(BaseNodeVisitor):
         self._check_offset(node)
         self.generic_visit(node)
 
+    # TODO: use new `visit_line_expression` to assing it to other handlers
+    # TODO: assing `visit_Expr` as any other handlers
     visit_Try = visit_ExceptHandler = visit_Expr
     visit_For = visit_With = visit_While = visit_If = visit_Expr
     visit_Raise = visit_Return = visit_Continue = visit_Break = visit_Expr
