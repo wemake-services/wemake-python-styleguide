@@ -79,7 +79,10 @@ class WrongNameVisitor(BaseNodeVisitor):
 
         self.generic_visit(node)
 
-    def visit_FunctionDef(self, node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> None:
+    def visit_FunctionDef(
+        self,
+        node: Union[ast.FunctionDef, ast.AsyncFunctionDef],
+    ) -> None:
         """
         Used to find wrong function and method parameters.
 

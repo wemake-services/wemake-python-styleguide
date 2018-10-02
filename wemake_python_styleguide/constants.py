@@ -8,7 +8,6 @@ It also contains some exceptions that we allow to use in our codebase.
 """
 
 import re
-import sys
 
 # TODO: use consistent `.` for the `#:` comments
 # TODO: use consistent names: `*_BLACKLIST` and `*_WHITELIST`
