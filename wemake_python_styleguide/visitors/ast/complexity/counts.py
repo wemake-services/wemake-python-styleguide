@@ -48,7 +48,8 @@ class ModuleMembersVisitor(BaseNodeVisitor):
         self._check_members_count(node)
         self.generic_visit(node)
 
-    visit_AsyncFunctionDef = visit_FunctionDef = visit_ClassDef = visit_module_members
+    visit_ClassDef = visit_module_members
+    visit_AsyncFunctionDef = visit_FunctionDef = visit_module_members
 
 
 class ImportMembersVisitor(BaseNodeVisitor):
