@@ -13,6 +13,12 @@ def first(): ...
 class Second(object): ...
 """
 
+module_with_async_function_and_class = """
+async def first(): ...
+
+class Second(object): ...
+"""
+
 module_with_methods = """
 class First(object):
     def method(self): ...
@@ -24,6 +30,7 @@ class Second(object):
 
 @pytest.mark.parametrize('code', [
     module_with_function_and_class,
+    module_with_async_function_and_class,
     module_with_methods,
 ])
 def test_module_counts_normal(
@@ -40,6 +47,7 @@ def test_module_counts_normal(
 
 @pytest.mark.parametrize('code', [
     module_with_function_and_class,
+    module_with_async_function_and_class,
     module_with_methods,
 ])
 def test_module_counts_violation(
