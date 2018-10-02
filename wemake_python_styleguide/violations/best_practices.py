@@ -488,6 +488,9 @@ class MagicNumberViolation(ASTViolation):
     some other common numbers, that are defined in
     :py:data:`~wemake_python_styleguide.constants.MAGIC_NUMBERS_WHITELIST`
 
+    See also:
+        https://en.wikipedia.org/wiki/Magic_number_(programming)
+
     Note:
         Returns Z432 as error code
 
