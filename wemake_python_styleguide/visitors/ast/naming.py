@@ -50,7 +50,7 @@ class WrongNameVisitor(BaseNodeVisitor):
         if is_private_variable(name):
             self.add_violation(PrivateNameViolation(node, text=name))
 
-    def _check_function_signature(self, node: ast.FunctionDef) -> None:
+    def _check_function_signature(self, node: MethodMembers) -> None:
         for arg in node.args.args:
             self._check_name(node, arg.arg)
 
