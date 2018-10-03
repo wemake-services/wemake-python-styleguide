@@ -77,9 +77,10 @@ Before submitting your code please do the following steps:
 2. Add any changes you want
 3. Adds tests for the new changes
 4. Edit documentation if you have changed something significant
-5. Run `pytest` again to make sure it is still working
-6. Run `mypy` to ensure that types are correct
-7. Run `doc8` to ensure that docs are correct
+5. Update `CHANGELOG.md` with a quick summary of your changes
+6. Run `pytest` again to make sure it is still working
+7. Run `mypy` to ensure that types are correct
+8. Run `doc8` to ensure that docs are correct
 
 
 ## Other help
@@ -87,4 +88,4 @@ Before submitting your code please do the following steps:
 You can contribute by spreading a word about this library.
 It would also be a huge contribution to write
 a short article on how you are using this project.
-What are your best-practices?
+You can also share your best practices with us.

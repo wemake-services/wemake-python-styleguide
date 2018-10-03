@@ -3,6 +3,9 @@
 Glossary
 ========
 
+First of all, we should speak the same language.
+Here we collect all the specific terms that are used in this project.
+
 .. glossary::
 
    plugin

@@ -9,6 +9,10 @@ We used to have incremental versioning before `0.1.0`.
 ### Features
 
 - Now we are counting `async` function as a module member
+- We now forbid to use `credits()` builtin function
+- We now check for `async with` and `async for` nesting level
+- We now count `async` methods as method for classes complexity check
+- We now count `async` functions as functions for module complexity check
 
 ### Misc
 
