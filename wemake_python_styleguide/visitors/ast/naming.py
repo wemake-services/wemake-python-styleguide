@@ -28,7 +28,8 @@ from wemake_python_styleguide.visitors.decorators import alias
     'visit_ImportFrom',
     'visit_Import',
 ))
-@alias('visit_FunctionDef', (
+@alias('visit_any_function', (
+    'visit_FunctionDef',
     'visit_AsyncFunctionDef',
 ))
 class WrongNameVisitor(BaseNodeVisitor):
@@ -78,7 +79,7 @@ class WrongNameVisitor(BaseNodeVisitor):
 
         self.generic_visit(node)
 
-    def visit_FunctionDef(self, node: MethodMembers) -> None:
+    def visit_any_function(self, node: MethodMembers) -> None:
         """
         Used to find wrong function and method parameters.
 
