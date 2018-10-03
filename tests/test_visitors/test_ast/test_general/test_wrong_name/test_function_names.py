@@ -14,15 +14,15 @@ from wemake_python_styleguide.visitors.ast.naming import (
     WrongNameVisitor,
 )
 
-function_bad_name = """
+function_name = """
 def {0}(): ...
 """
 
-async_function_bad_name = """
+async_function_name = """
 async def {0}(): ...
 """
 
-method_bad_name = """
+method_name = """
 class Input:
     def {0}(self): ...
 """
@@ -30,9 +30,9 @@ class Input:
 
 @pytest.mark.parametrize('bad_name', BAD_VARIABLE_NAMES)
 @pytest.mark.parametrize('code', [
-    function_bad_name,
-    async_function_bad_name,
-    method_bad_name,
+    function_name,
+    async_function_name,
+    method_name,
 ])
 def test_wrong_function_names(
     assert_errors, parse_ast_tree, bad_name, code, default_options,
@@ -48,9 +48,9 @@ def test_wrong_function_names(
 
 @pytest.mark.parametrize('short_name', string.ascii_letters)
 @pytest.mark.parametrize('code', [
-    function_bad_name,
-    async_function_bad_name,
-    method_bad_name,
+    function_name,
+    async_function_name,
+    method_name,
 ])
 def test_too_short_function_names(
     assert_errors, parse_ast_tree, short_name, code, default_options,
@@ -65,9 +65,9 @@ def test_too_short_function_names(
 
 
 @pytest.mark.parametrize('code', [
-    function_bad_name,
-    async_function_bad_name,
-    method_bad_name,
+    function_name,
+    async_function_name,
+    method_name,
 ])
 def test_private_function_names(
     assert_errors, parse_ast_tree, code, default_options,
@@ -89,9 +89,9 @@ def test_private_function_names(
     '__magic__',
 ])
 @pytest.mark.parametrize('code', [
-    function_bad_name,
-    async_function_bad_name,
-    method_bad_name,
+    function_name,
+    async_function_name,
+    method_name,
 ])
 def test_correct_function_names(
     assert_errors, parse_ast_tree, correct_name, code, default_options,
