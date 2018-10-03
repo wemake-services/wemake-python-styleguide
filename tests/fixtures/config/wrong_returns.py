@@ -27,7 +27,7 @@ def acceptable_returns_count():
     return 3
 
 
-async def check_too_many_returns():
+async def async_check_too_many_returns():
     if 1 == 2:
         return 1
     elif 1 == 3:
