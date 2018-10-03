@@ -18,6 +18,7 @@ class MagicNumberVisitor(BaseNodeVisitor):
 
         # Constructor usages:
         ast.FunctionDef,
+        ast.AsyncFunctionDef,
         ast.arguments,
 
         # Primitives:

@@ -20,6 +20,11 @@ def function_name(param1, param2={0}):
     return param1 / param2
 """
 
+async_function_definition = """
+async def function_name(param1, param2={0}):
+    return param1 / param2
+"""
+
 list_definition = '[{0}]'
 dict_definition_key = '{{{0}: "value"}}'
 dict_definition_value = '{{"first": {0}}}'
@@ -47,6 +52,7 @@ some_dict[{0}]
     assignment,
     assignment_unary,
     function_definition,
+    async_function_definition,
     list_definition,
     dict_definition_key,
     dict_definition_value,
