@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Union
 
 from wemake_python_styleguide.constants import (
     BAD_MODULE_METADATA_VARIABLES,
@@ -12,7 +11,7 @@ from wemake_python_styleguide.logics.variables import (
     is_too_short_variable_name,
     is_wrong_variable_name,
 )
-from wemake_python_styleguide.types import AnyImport
+from wemake_python_styleguide.types import AnyImport, MethodMembers
 from wemake_python_styleguide.violations.best_practices import (
     WrongModuleMetadataViolation,
 )
@@ -79,10 +78,7 @@ class WrongNameVisitor(BaseNodeVisitor):
 
         self.generic_visit(node)
 
-    def visit_FunctionDef(
-        self,
-        node: Union[ast.FunctionDef, ast.AsyncFunctionDef],
-    ) -> None:
+    def visit_FunctionDef(self, node: MethodMembers) -> None:
         """
         Used to find wrong function and method parameters.
 
