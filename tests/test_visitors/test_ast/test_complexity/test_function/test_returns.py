@@ -7,10 +7,10 @@ from wemake_python_styleguide.visitors.ast.complexity.function import (
     TooManyReturnsViolation,
 )
 
-function_without_returns = 'def function(): ...'
+function_without_returns = '{0}def function(): ...'
 
 function_with_returns = """
-{0} def function():
+{0}def function():
     if 1 > 2:
         return 1
     return 0
@@ -22,7 +22,7 @@ function_with_returns = """
     function_with_returns,
 ])
 @pytest.mark.parametrize('mode', [
-    'async',  # coroutine
+    'async ',  # coroutine
     '',  # regular function
 ])
 def test_returns_correct_count(
@@ -41,7 +41,7 @@ def test_returns_correct_count(
     function_with_returns,
 ])
 @pytest.mark.parametrize('mode', [
-    'async',  # coroutine
+    'async ',  # coroutine
     '',  # regular function
 ])
 def test_returns_wrong_count(

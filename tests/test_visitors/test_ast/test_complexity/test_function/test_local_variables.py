@@ -8,14 +8,14 @@ from wemake_python_styleguide.visitors.ast.complexity.function import (
 )
 
 function_with_locals = """
-{0} def function():
+{0}def function():
     local_variable1 = 1
     local_variable2 = 2
     _ = None  # `_` is not counted
 """
 
 function_with_locals_redefinition = """
-{0} def function():
+{0}def function():
     local_variable1 = 1
     local_variable2 = 2
 
@@ -24,7 +24,7 @@ function_with_locals_redefinition = """
 """
 
 function_with_locals_and_params = """
-{0} def function(param):
+{0}def function(param):
     local_variable1 = 1
     param = param + 2
     param += 3
@@ -37,7 +37,7 @@ function_with_locals_and_params = """
     function_with_locals_and_params,
 ])
 @pytest.mark.parametrize('mode', [
-    'async',  # coroutine
+    'async ',  # coroutine
     '',  # regular function
 ])
 def test_locals_correct_count(
@@ -64,7 +64,7 @@ def test_locals_correct_count(
     function_with_locals_and_params,
 ])
 @pytest.mark.parametrize('mode', [
-    'async',  # coroutine
+    'async ',  # coroutine
     '',  # regular function
 ])
 def test_locals_wrong_count(

@@ -8,11 +8,11 @@ from wemake_python_styleguide.visitors.ast.complexity.function import (
 )
 
 function_without_expressions = """
-{0} def function(): ...
+{0}def function(): ...
 """
 
 function_with_expressions = """
-{0} def function():
+{0}def function():
     print(12)
     print(12 / 1)
 """
@@ -23,7 +23,7 @@ function_with_expressions = """
     function_with_expressions,
 ])
 @pytest.mark.parametrize('mode', [
-    'async',  # coroutine
+    'async ',  # coroutine
     '',  # regular function
 ])
 def test_expressions_correct_count(
@@ -42,7 +42,7 @@ def test_expressions_correct_count(
     function_with_expressions,
 ])
 @pytest.mark.parametrize('mode', [
-    'async',  # coroutine
+    'async ',  # coroutine
     '',  # regular function
 ])
 def test_expressions_wrong_count(
