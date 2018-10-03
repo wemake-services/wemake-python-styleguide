@@ -51,7 +51,7 @@ BAD_MODULE_METADATA_VARIABLES = frozenset((
     '__about__',
 ))
 
-
+#: List of variable names we forbid to use.
 BAD_VARIABLE_NAMES = frozenset((
     # Meaningless words:
     'data',
