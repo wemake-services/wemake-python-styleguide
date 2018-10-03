@@ -13,6 +13,7 @@ We used to have incremental versioning before `0.1.0`.
 - We now check for `async with` and `async for` nesting level
 - We now count `async` methods as method for classes complexity check
 - We now count `async` functions as functions for module complexity check
+- We now count `async` functions complexity
 
 ### Misc
 

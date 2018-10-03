@@ -5,6 +5,7 @@ from collections import defaultdict
 from typing import DefaultDict, List
 
 from wemake_python_styleguide.logics.functions import is_method
+from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations.complexity import (
     TooManyArgumentsViolation,
     TooManyElifsViolation,
@@ -13,8 +14,9 @@ from wemake_python_styleguide.violations.complexity import (
     TooManyReturnsViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
+from wemake_python_styleguide.visitors.decorators import alias
 
-FunctionCounter = DefaultDict[ast.FunctionDef, int]
+FunctionCounter = DefaultDict[AnyFunctionDef, int]
 
 
 class _ComplexityCounter(object):
@@ -26,12 +28,12 @@ class _ComplexityCounter(object):
         self.returns: FunctionCounter = defaultdict(int)
         self.expressions: FunctionCounter = defaultdict(int)
         self.variables: DefaultDict[
-            ast.FunctionDef, List[str],
+            AnyFunctionDef, List[str],
         ] = defaultdict(list)
 
     def _update_variables(
         self,
-        function: ast.FunctionDef,
+        function: AnyFunctionDef,
         variable_name: str,
     ) -> None:
         """
@@ -44,7 +46,7 @@ class _ComplexityCounter(object):
         if variable_name not in function_variables and variable_name != '_':
             function_variables.append(variable_name)
 
-    def _update_elifs(self, node: ast.FunctionDef, sub_node: ast.If) -> None:
+    def _update_elifs(self, node: AnyFunctionDef, sub_node: ast.If) -> None:
         has_elif = any(
             isinstance(if_node, ast.If) for if_node in sub_node.orelse
         )
@@ -52,7 +54,7 @@ class _ComplexityCounter(object):
         if has_elif:
             self.elifs[node] += 1
 
-    def _check_sub_node(self, node: ast.FunctionDef, sub_node) -> None:
+    def _check_sub_node(self, node: AnyFunctionDef, sub_node) -> None:
         is_variable = isinstance(sub_node, ast.Name)
         context = getattr(sub_node, 'ctx', None)
 
@@ -65,7 +67,7 @@ class _ComplexityCounter(object):
         elif isinstance(sub_node, ast.If):
             self._update_elifs(node, sub_node)
 
-    def check_arguments_count(self, node: ast.FunctionDef) -> None:
+    def check_arguments_count(self, node: AnyFunctionDef) -> None:
         """Checks the number of the arguments in a function."""
         counter = 0
         has_extra_arg = 0
@@ -80,7 +82,7 @@ class _ComplexityCounter(object):
 
         self.arguments[node] = counter - has_extra_arg
 
-    def check_function_complexity(self, node: ast.FunctionDef) -> None:
+    def check_function_complexity(self, node: AnyFunctionDef) -> None:
         """
         In this function we iterate all the internal body's node.
 
@@ -91,6 +93,10 @@ class _ComplexityCounter(object):
                 self._check_sub_node(node, sub_node)
 
 
+@alias('visit_function', (
+    'visit_AsyncFunctionDef',
+    'visit_FunctionDef',
+))
 class FunctionComplexityVisitor(BaseNodeVisitor):
     """
     This class checks for complexity inside functions.
@@ -146,7 +152,7 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
         self._check_function_internals()
         self._check_possible_switch()
 
-    def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
+    def visit_function(self, node: AnyFunctionDef) -> None:
         """
         Checks function's internal complexity.
 

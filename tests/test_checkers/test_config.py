@@ -7,6 +7,7 @@ import pytest
 
 @pytest.mark.parametrize('filename, option_flag, option_value, error_code', [
     ('wrong_arguments.py', '--max-arguments', '100', b'Z151'),
+    ('async_wrong_arguments.py', '--max-arguments', '100', b'Z151'),
 ])
 def test_max_variables_cli_option(
     absolute_path,

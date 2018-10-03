@@ -8,7 +8,7 @@ from wemake_python_styleguide.visitors.ast.complexity.function import (
 )
 
 function_with_elifs = """
-def test_module():
+{0}def test_module():
     if 1 > 2:
         print(1)
     elif 2 > 3:
@@ -20,7 +20,7 @@ def test_module():
 """
 
 function_with_ifs = """
-def test_module():
+{0}def test_module():
     if True:
         print(1)
     if 2 > 3:
@@ -30,13 +30,13 @@ def test_module():
 """
 
 function_with_raw_if = """
-def function():
+{0}def function():
     if 1 == 2:
         print(1)
 """
 
 function_with_if_else = """
-def function(param):
+{0}def function(param):
     if param == 2:
         print(1)
     else:
@@ -44,7 +44,7 @@ def function(param):
 """
 
 function_with_ternary = """
-def with_ternary(some_value):
+{0}def with_ternary(some_value):
     return [some_value] if some_value > 1 else []
 """
 
@@ -56,11 +56,15 @@ def with_ternary(some_value):
     function_with_if_else,
     function_with_ternary,
 ])
+@pytest.mark.parametrize('mode', [
+    'async ',  # coroutine
+    '',  # regular function
+])
 def test_elif_correct_count(
-    assert_errors, parse_ast_tree, code, default_options,
+    assert_errors, parse_ast_tree, code, default_options, mode,
 ):
     """Testing that all `if`/`elif`/`else` stuff is allowed."""
-    tree = parse_ast_tree(code)
+    tree = parse_ast_tree(code.format(mode))
 
     visitor = FunctionComplexityVisitor(default_options, tree=tree)
     visitor.run()
@@ -71,9 +75,15 @@ def test_elif_correct_count(
 @pytest.mark.parametrize('code', [
     function_with_elifs,
 ])
-def test_elif_incorrect_count(assert_errors, parse_ast_tree, code, options):
+@pytest.mark.parametrize('mode', [
+    'async ',  # coroutine
+    '',  # regular function
+])
+def test_elif_incorrect_count(
+    assert_errors, parse_ast_tree, code, options, mode,
+):
     """Testing that incorrect number of `elif` stuff is restricted."""
-    tree = parse_ast_tree(code)
+    tree = parse_ast_tree(code.format(mode))
 
     option_values = options(max_elifs=1)
     visitor = FunctionComplexityVisitor(option_values, tree=tree)
