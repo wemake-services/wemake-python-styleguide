@@ -8,7 +8,6 @@ It also contains some exceptions that we allow to use in our codebase.
 """
 
 import re
-import sys
 
 # TODO: use consistent `.` for the `#:` comments
 # TODO: use consistent names: `*_BLACKLIST` and `*_WHITELIST`
@@ -53,8 +52,8 @@ BAD_MODULE_METADATA_VARIABLES = frozenset((
     '__about__',
 ))
 
-
-_BAD_VARIABLE_NAMES = [
+#: List of variable names we forbid to use.
+BAD_VARIABLE_NAMES = frozenset((
     # Meaningless words:
     'data',
     'result',
@@ -87,17 +86,7 @@ _BAD_VARIABLE_NAMES = [
     'foo',
     'bar',
     'baz',
-]
-
-if sys.version_info < (3, 7):  # pragma: no cover
-    _BAD_VARIABLE_NAMES.extend([
-        # Compatibility with `python3.7`:
-        'async',
-        'await',
-    ])
-
-#: List of variable names we forbid to use.
-BAD_VARIABLE_NAMES = frozenset(_BAD_VARIABLE_NAMES)
+))
 
 #: List of magic methods that are forbiden to use.
 BAD_MAGIC_METHODS = frozenset((

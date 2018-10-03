@@ -18,6 +18,10 @@ function_bad_name = """
 def {0}(): ...
 """
 
+async_function_bad_name = """
+async def {0}(): ...
+"""
+
 method_bad_name = """
 class Input:
     def {0}(self): ...
@@ -27,6 +31,7 @@ class Input:
 @pytest.mark.parametrize('bad_name', BAD_VARIABLE_NAMES)
 @pytest.mark.parametrize('code', [
     function_bad_name,
+    async_function_bad_name,
     method_bad_name,
 ])
 def test_wrong_function_names(
@@ -44,6 +49,7 @@ def test_wrong_function_names(
 @pytest.mark.parametrize('short_name', string.ascii_letters)
 @pytest.mark.parametrize('code', [
     function_bad_name,
+    async_function_bad_name,
     method_bad_name,
 ])
 def test_too_short_function_names(
@@ -60,6 +66,7 @@ def test_too_short_function_names(
 
 @pytest.mark.parametrize('code', [
     function_bad_name,
+    async_function_bad_name,
     method_bad_name,
 ])
 def test_private_function_names(
@@ -83,6 +90,7 @@ def test_private_function_names(
 ])
 @pytest.mark.parametrize('code', [
     function_bad_name,
+    async_function_bad_name,
     method_bad_name,
 ])
 def test_correct_function_names(

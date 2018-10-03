@@ -11,7 +11,7 @@ from wemake_python_styleguide.logics.variables import (
     is_too_short_variable_name,
     is_wrong_variable_name,
 )
-from wemake_python_styleguide.types import AnyImport
+from wemake_python_styleguide.types import AnyImport, MethodMembers
 from wemake_python_styleguide.violations.best_practices import (
     WrongModuleMetadataViolation,
 )
@@ -27,6 +27,10 @@ from wemake_python_styleguide.visitors.decorators import alias
 @alias('visit_any_import', (
     'visit_ImportFrom',
     'visit_Import',
+))
+@alias('visit_any_function', (
+    'visit_FunctionDef',
+    'visit_AsyncFunctionDef',
 ))
 class WrongNameVisitor(BaseNodeVisitor):
     """
@@ -47,7 +51,7 @@ class WrongNameVisitor(BaseNodeVisitor):
         if is_private_variable(name):
             self.add_violation(PrivateNameViolation(node, text=name))
 
-    def _check_function_signature(self, node: ast.FunctionDef) -> None:
+    def _check_function_signature(self, node: MethodMembers) -> None:
         for arg in node.args.args:
             self._check_name(node, arg.arg)
 
@@ -75,7 +79,7 @@ class WrongNameVisitor(BaseNodeVisitor):
 
         self.generic_visit(node)
 
-    def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
+    def visit_any_function(self, node: MethodMembers) -> None:
         """
         Used to find wrong function and method parameters.
 
