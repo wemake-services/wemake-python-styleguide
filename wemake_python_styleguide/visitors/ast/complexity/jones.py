@@ -38,6 +38,7 @@ class JonesComplexityVisitor(BaseNodeVisitor):  # TODO: consider `logical_line`
     _ignored_nodes = (
         ast.FunctionDef,
         ast.ClassDef,
+        ast.AsyncFunctionDef,
     )
 
     def __init__(self, *args, **kwargs) -> None:

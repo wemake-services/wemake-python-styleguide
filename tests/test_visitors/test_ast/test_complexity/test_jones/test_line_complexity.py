@@ -16,12 +16,39 @@ def some_function():
     return 2 + 1
 """
 
+line_inside_async_function = """
+async def some_function():
+    return 2 + 1
+"""
+
 line_inside_class = """
 class SomeClass():
     field = 13 / 2
 """
 
+class_with_function = """
+class First:
+    def second():
+        return 2 + 1
+"""
+
+class_with_async_function = """
+class First:
+    async def second():
+        return 2 + 1
+"""
+
+class_with_usual_and_async_function = """
+class First:
+    async def second():
+        return 2 + 1
+
+    def third():
+        return 2 + 2
+"""
+
 function_declaration = 'def some_function(): ...'
+async_function_declaration = 'async def some_function(): ...'
 class_declaration = 'class SomeClass(object): ...'
 empty_module = ''
 
@@ -32,10 +59,15 @@ empty_module = ''
     line_with_comprehension,
     line_with_math,
     line_inside_function,
+    line_inside_async_function,
     line_inside_class,
     function_declaration,
+    async_function_declaration,
     class_declaration,
     empty_module,
+    class_with_function,
+    class_with_async_function,
+    class_with_usual_and_async_function,
 ])
 def test_regular_nodes(assert_errors, parse_ast_tree, code, default_options):
     """Testing that regular nodes do not raise violations."""
@@ -50,6 +82,7 @@ def test_regular_nodes(assert_errors, parse_ast_tree, code, default_options):
 @pytest.mark.parametrize('code', [
     line_simple,
     line_inside_function,
+    line_inside_async_function,
     line_inside_class,
 ])
 def test_complex_lines(assert_errors, parse_ast_tree, code, options):
@@ -96,3 +129,22 @@ def test_exact_complexity(parse_ast_tree, default_options, code, complexity):
 
     assert len(visitor._lines) == 1
     assert len(visitor._lines[1]) == complexity
+
+
+@pytest.mark.parametrize('code, number_of_lines', [
+    (line_inside_function, 1),
+    (line_inside_async_function, 1),
+    (class_with_async_function, 1),
+    (class_with_function, 1),
+    (class_with_usual_and_async_function, 2),
+])
+def test_that_some_nodes_are_ignored(
+    parse_ast_tree, default_options, code, assert_errors, number_of_lines,
+):
+    """Ensures that complexity is counted correctly."""
+    tree = parse_ast_tree(code)
+
+    visitor = JonesComplexityVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert len(visitor._lines) == number_of_lines
