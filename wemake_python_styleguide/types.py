@@ -33,7 +33,7 @@ VisitorClass = Type['base.BaseVisitor']
 AnyImport = Union[ast.Import, ast.ImportFrom]
 
 #: In cases we need to work with both function definitions:
-MethodMembers = Union[ast.FunctionDef, ast.AsyncFunctionDef]
+AnyFunctionDef = Union[ast.FunctionDef, ast.AsyncFunctionDef]
 
 #: Flake8 API format to return error messages:
 CheckResult = Tuple[int, int, str, type]

@@ -5,7 +5,7 @@ from collections import defaultdict
 from typing import DefaultDict, Union
 
 from wemake_python_styleguide.logics.functions import is_method
-from wemake_python_styleguide.types import AnyImport, MethodMembers
+from wemake_python_styleguide.types import AnyFunctionDef, AnyImport
 from wemake_python_styleguide.violations.complexity import (
     TooManyConditionsViolation,
     TooManyImportsViolation,
@@ -98,7 +98,7 @@ class MethodMembersVisitor(BaseNodeVisitor):
         super().__init__(*args, **kwargs)
         self._methods: DefaultDict[ast.ClassDef, int] = defaultdict(int)
 
-    def _check_method(self, node: MethodMembers) -> None:
+    def _check_method(self, node: AnyFunctionDef) -> None:
         parent = getattr(node, 'parent', None)
         if isinstance(parent, ast.ClassDef):
             self._methods[parent] += 1
@@ -108,7 +108,7 @@ class MethodMembersVisitor(BaseNodeVisitor):
             if count > self.options.max_methods:
                 self.add_violation(TooManyMethodsViolation(text=node.name))
 
-    def visit_any_function(self, node: MethodMembers) -> None:
+    def visit_any_function(self, node: AnyFunctionDef) -> None:
         """
         Counts the number of methods in a single class.
 
