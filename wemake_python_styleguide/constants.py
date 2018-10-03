@@ -35,6 +35,7 @@ BAD_FUNCTIONS = frozenset((
     # Misc:
     'copyright',
     'help',
+    'credits',
 
     # Dynamic imports:
     '__import__',
