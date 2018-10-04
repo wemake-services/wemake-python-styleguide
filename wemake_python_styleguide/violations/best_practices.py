@@ -392,7 +392,7 @@ class NestedFunctionViolation(ASTViolation):
         Pass parameters as normal arguments, do not use closures.
         Until you need them for decorators or factories.
 
-    We also disallow to nest ``lambda`` functions.
+    We also disallow to nest ``lambda`` and ``async`` functions.
 
     See
     :py:data:`~wemake_python_styleguide.constants.NESTED_FUNCTIONS_WHITELIST`

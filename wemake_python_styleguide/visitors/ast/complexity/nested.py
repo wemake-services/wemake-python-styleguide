@@ -74,10 +74,6 @@ class NestedComplexityVisitor(BaseNodeVisitor):
         Used to find nested functions.
 
         Uses ``NESTED_FUNCTIONS_WHITELIST`` to respect some nested functions.
-        Respected usecases for nested functions:
-
-        1. decorator
-        2. factory function
 
         Raises:
             NestedFunctionViolation

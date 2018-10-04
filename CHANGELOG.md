@@ -4,7 +4,16 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
-## WIP
+## 0.2.0 aka Revenge of the Async
+
+This release was made possible by awesome people who contributed
+to the project during `#hactoberfest`. List of awesome people:
+
+- [@novikovfred](https://github.com/novikovfred)
+- [@AlwxSin](https://github.com/AlwxSin)
+- [@TyVik](https://github.com/TyVik)
+- [@AlexArcPy](https://github.com/AlexArcPy)
+- [@tommbee](https://github.com/tommbee)
 
 ### Features
 
@@ -17,6 +26,8 @@ We used to have incremental versioning before `0.1.0`.
 - We now check `async` functions names and arguments
 - We now count `async` functions complexity
 - We now ignore `async` functions in jones complexity check
+- We now check for nested `async` functions
+- We now check for `async` functions with `@staticmethod` decorator
 
 ### Misc
 
