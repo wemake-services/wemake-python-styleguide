@@ -34,3 +34,8 @@ test_script:
   - "poetry run mypy wemake_python_styleguide"
   - "poetry run pytest"
   - "poetry run doc8 -q docs"
+
+notifications:
+  - provider: Email
+    on_build_success: false
+    on_build_failure: true

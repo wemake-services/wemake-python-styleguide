@@ -18,6 +18,7 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Misc
 
+- Improves docs: add `usage.rst`
 - Improves docs: multiple typos, bugs, and issues fixes
 - Improves tests: now we are testing `async` comprehensions
 

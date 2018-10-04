@@ -13,6 +13,7 @@ readme = "README.md"
 
 repository = "https://github.com/wemake-services/wemake-python-styleguide"
 homepage = "https://wemake-python-styleguide.readthedocs.io"
+download_url = "https://github.com/wemake-services/wemake-python-styleguide"
 
 keywords = [
   "flake8",
