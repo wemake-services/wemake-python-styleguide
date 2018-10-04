@@ -5,6 +5,7 @@
   :caption: Userguide:
   :hidden:
 
+  _pages/usage.rst
   _pages/violations/index.rst
   _pages/constants.rst
   _pages/options/config.rst

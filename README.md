@@ -48,20 +48,10 @@ You will also need to create a `setup.cfg` file with [the following contents](ht
 
 This file is required to configure our linter and 3rd party plugins it uses.
 However, this is a temporary solution.
-We are working at providing the configuration for you in the future.
+We are working at providing the required configuration for you in the future.
 
-
-## Usage
-
-Since we are just a `flake8` plugin,
-it means that all you have to do is: [run](http://flake8.pycqa.org/en/latest/#using-flake8) `flake8`.
-
-```bash
-flake8 your_module_or_package.py
-```
-
-There are different options how to automate linting process.
-We prefer `pytest-flake8` [plugin](https://github.com/tholo/pytest-flake8) to run our linter alongside with the tests.
+See ["Usage" section](https://wemake-python-styleguide.readthedocs.io/en/latest/_pages/usage.rst)
+in the docs for examples and integrations.
 
 
 ## What we are about
@@ -78,7 +68,7 @@ You can find all error codes and plugins [in the docs](https://wemake-python-sty
 
 ## What we are not
 
-We are here not to:
+We are here *not* to:
 
 0. Assume or check types, use `mypy` instead
 1. Reformat code, since we believe that developers should do that
