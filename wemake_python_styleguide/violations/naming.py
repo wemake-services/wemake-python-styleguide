@@ -14,6 +14,99 @@ Note:
     Readability counts.
     Namespaces are one honking great idea -- let's do more of those!
 
+
+Naming convention
+-----------------
+
+Our naming convention tries to cover all possible cases.
+It is partially automated with this linter, but
+
+- Some rules are still WIP
+- Some rules will never be automated, code reviews to the rescue!
+
+General
+~~~~~~~
+
+- Use clear names, do not use words that do not mean anything like ``obj``
+- Use names of an appropriate length: not too short, not too long
+- Protected members should use underscore as the first char
+- Private names are not allowed
+- When writing abbreviations in ``UpperCase``
+  capitalize all letters: ``HTTPAddress``
+- When writting abbreviations in ``snake_case`` use lowercase: ``http_address``
+- When writting numbers in ``snake_case``
+  do not use extra ``_`` as in ``http2_protocol``
+
+Packages
+~~~~~~~~
+
+- Packages should use ``snake_case``
+- One word for a package is the most prefitable name
+
+Modules
+~~~~~~~
+
+- Modules should use ``snake_case``
+- Module names should not be too short
+- Module names should not overuse magic names
+- Module names should be valid Python variable names
+
+Classes
+~~~~~~~
+
+- Classes should use ``UpperCase``
+- Python's built-in classes, however are typically lowercase words
+- Exception classes should end with ``Error``
+
+Instance attributes
+~~~~~~~~~~~~~~~~~~~
+
+- Instance attributes should use ``snake_case`` with no exceptions
+
+Class attributes
+~~~~~~~~~~~~~~~~
+
+- Class attributes should use ``snake_case``  with no exceptions
+
+Functions and methods
+~~~~~~~~~~~~~~~~~~~~~
+
+- Functions and methods should use ``snake_case`` with no exceptions
+
+Method arguments
+~~~~~~~~~~~~~~~~
+
+- Instance methods should have their first argument named ``self``
+- Class methods should have their first argument named ``cls``
+- Metaclass methods should have their first argument named ``mcs``
+- When argument is unused it should be prefixed with an underscore
+- Python's ``*args`` and ``**kwargs`` should be default names
+  when just passing these values to some other method/function
+- Unless you want to use these values in place, then name them explicitly
+- Keyword-only arguments might be separated from other arguments with ``*``
+
+Global (module level) variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Global variables should use ``CONSTANT_CASE``
+- Unless other is required by the API, example: ``urlpatterns`` in Django
+
+Variables
+~~~~~~~~~
+
+- Variables should use ``snake_case``
+- When some variable is unused it should be prefixed with an underscore
+
+Type aliases
+~~~~~~~~~~~~
+
+- Should use ``UpperCase`` as real classes
+- Should not contain word ``type`` in its name
+- Generic types should be called ``TT`` or ``KK`` or ``VV``
+- Covariant and contravariant types
+  should be marked with ``Cov`` and ``Contra`` suffixes
+- In this case one letter can be dropped: ``TCov`` and ``KContra``
+
 .. currentmodule:: wemake_python_styleguide.violations.naming
 
 Summary

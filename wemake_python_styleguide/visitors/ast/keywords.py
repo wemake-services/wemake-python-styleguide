@@ -43,7 +43,7 @@ class WrongRaiseVisitor(BaseNodeVisitor):
 class WrongKeywordVisitor(BaseNodeVisitor):
     """Finds wrong keywords."""
 
-    forbidden_keywords = (
+    _forbidden_keywords = (
         ast.Pass,
         ast.Delete,
         ast.Global,
@@ -51,7 +51,7 @@ class WrongKeywordVisitor(BaseNodeVisitor):
     )
 
     def _check_keyword(self, node: ast.AST) -> None:
-        if isinstance(node, self.forbidden_keywords):
+        if isinstance(node, self._forbidden_keywords):
             self.add_violation(WrongKeywordViolation(node))
 
     def visit(self, node: ast.AST) -> None:
