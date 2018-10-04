@@ -14,6 +14,7 @@ We used to have incremental versioning before `0.1.0`.
 - We now count `async` methods as method for classes complexity check
 - We now count `async` functions as functions for module complexity check
 - We now count `async` functions complexity
+- We now ignore `async` functions in jones complexity check
 
 ### Misc
 
