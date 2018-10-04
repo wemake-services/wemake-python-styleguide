@@ -13,7 +13,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 class MagicNumberVisitor(BaseNodeVisitor):
     """Checks magic numbers used in the code."""
 
-    _ALLOWED_PARENTS = (
+    _allowed_parents = (
         ast.Assign,
 
         # Constructor usages:
@@ -27,8 +27,7 @@ class MagicNumberVisitor(BaseNodeVisitor):
         ast.Tuple,
     )
 
-    # TODO: make consistent naming rules for class attributes:
-    _PROXY_PARENTS = (
+    _proxy_parents = (
         ast.UnaryOp,
     )
 
@@ -43,13 +42,13 @@ class MagicNumberVisitor(BaseNodeVisitor):
 
         """
         parent = getattr(node, 'parent', None)
-        if isinstance(parent, self._PROXY_PARENTS):
+        if isinstance(parent, self._proxy_parents):
             return self._get_real_parent(parent)
         return parent
 
     def _check_is_magic(self, node: ast.Num) -> None:
         parent = self._get_real_parent(node)
-        if isinstance(parent, self._ALLOWED_PARENTS):
+        if isinstance(parent, self._allowed_parents):
             return
 
         if node.n in MAGIC_NUMBERS_WHITELIST:

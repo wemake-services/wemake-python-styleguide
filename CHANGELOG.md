@@ -4,18 +4,21 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
-## Version 0.1.1
+## WIP
 
 ### Features
 
 - Now we are counting `async` function as a module member
 - We now forbid to use `credits()` builtin function
-- We now check for `async with` and `async for` nesting level
+- We now check `async for` and `async with` nesting level
+- We now check `async for` and `async with` variable names
 - We now count `async` methods as method for classes complexity check
 - We now count `async` functions as functions for module complexity check
+- We now check `async` functions names and arguments
 
 ### Misc
 
+- Improves docs: adds naming convention to the `naming.py`
 - Improves docs: multiple typos, bugs, and issues fixes
 - Improves tests: now we are testing `async` comprehensions
 
