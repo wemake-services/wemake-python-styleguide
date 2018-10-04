@@ -6,22 +6,55 @@ from wemake_python_styleguide.constants import (
     NESTED_CLASSES_WHITELIST,
     NESTED_FUNCTIONS_WHITELIST,
 )
+from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations.best_practices import (
     NestedClassViolation,
     NestedFunctionViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
+from wemake_python_styleguide.visitors.decorators import alias
 
 
+@alias('visit_any_function', (
+    'visit_FunctionDef',
+    'visit_AsyncFunctionDef',
+))
 class NestedComplexityVisitor(BaseNodeVisitor):
     """
-    This class checks that structures are not nested.
+    Checks that structures are not nested.
 
     We disallow to use nested functions and nested classes.
     Because flat is better than nested.
 
     We allow to nest function inside classes, that's called methods.
     """
+
+    _function_nodes = (
+        ast.FunctionDef,
+        ast.AsyncFunctionDef,
+    )
+
+    def _check_nested_function(self, node: AnyFunctionDef) -> None:
+        parent = getattr(node, 'parent', None)
+        is_inside_function = isinstance(parent, self._function_nodes)
+
+        if is_inside_function and node.name not in NESTED_FUNCTIONS_WHITELIST:
+            self.add_violation(NestedFunctionViolation(node, text=node.name))
+
+    def _check_nested_classes(self, node: ast.ClassDef) -> None:
+        parent = getattr(node, 'parent', None)
+        is_inside_class = isinstance(parent, ast.ClassDef)
+        is_inside_function = isinstance(parent, self._function_nodes)
+
+        if is_inside_class and node.name not in NESTED_CLASSES_WHITELIST:
+            self.add_violation(NestedClassViolation(node, text=node.name))
+        elif is_inside_function:
+            self.add_violation(NestedClassViolation(node, text=node.name))
+
+    def _check_nested_lambdas(self, node: ast.Lambda) -> None:
+        parent = getattr(node, 'parent', None)
+        if isinstance(parent, ast.Lambda):
+            self.add_violation(NestedFunctionViolation(node))
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """
@@ -33,17 +66,10 @@ class NestedComplexityVisitor(BaseNodeVisitor):
             NestedClassViolation
 
         """
-        parent = getattr(node, 'parent', None)
-        is_inside_class = isinstance(parent, ast.ClassDef)
-        is_inside_function = isinstance(parent, ast.FunctionDef)
-
-        if is_inside_class and node.name not in NESTED_CLASSES_WHITELIST:
-            self.add_violation(NestedClassViolation(node, text=node.name))
-        elif is_inside_function:
-            self.add_violation(NestedClassViolation(node, text=node.name))
+        self._check_nested_classes(node)
         self.generic_visit(node)
 
-    def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
+    def visit_any_function(self, node: AnyFunctionDef) -> None:
         """
         Used to find nested functions.
 
@@ -57,11 +83,7 @@ class NestedComplexityVisitor(BaseNodeVisitor):
             NestedFunctionViolation
 
         """
-        parent = getattr(node, 'parent', None)
-        is_inside_function = isinstance(parent, ast.FunctionDef)
-
-        if is_inside_function and node.name not in NESTED_FUNCTIONS_WHITELIST:
-            self.add_violation(NestedFunctionViolation(node, text=node.name))
+        self._check_nested_function(node)
         self.generic_visit(node)
 
     def visit_Lambda(self, node: ast.Lambda) -> None:
@@ -72,7 +94,5 @@ class NestedComplexityVisitor(BaseNodeVisitor):
             NestedFunctionViolation
 
         """
-        parent = getattr(node, 'parent', None)
-        if isinstance(parent, ast.Lambda):
-            self.add_violation(NestedFunctionViolation(node))
+        self._check_nested_lambdas(node)
         self.generic_visit(node)

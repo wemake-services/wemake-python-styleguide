@@ -17,6 +17,8 @@ formatted_string = f'Hi, {full_name}'  # noqa: Z305
 def some():  # noqa: Z110, Z113
     from my_module import some_function  # noqa: Z435
 
+    class Nested(object): ...  # noqa: 431
+
     def nested(): ...  # noqa: Z430
 
 
@@ -34,6 +36,10 @@ nodes = [node for node in 'abc' if node != 'a' if node != 'b']  # noqa: Z307
 class BadClass:  # noqa: Z306
     @staticmethod  # noqa: Z433
     def some_static():
+        ...
+
+    @staticmethod  # noqa: Z433
+    async def some_async_static():
         ...
 
     def __del__(self, *args, **kwargs):  # noqa: Z434

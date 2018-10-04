@@ -11,26 +11,39 @@ from wemake_python_styleguide.visitors.ast.complexity.nested import (
 )
 
 nested_class = """
-class Parent:
-    class {0}: ...
+class Parent(object):
+    class {0}(object): ...
 """
 
 nested_class_in_method = """
-class Parent:
+class Parent(object):
     def container(self):
-        class {0}: ...
+        class {0}(object): ...
+"""
+
+nested_class_in_async_method = """
+class Parent(object):
+    async def container(self):
+        class {0}(object): ...
 """
 
 nested_class_in_function = """
 def container():
-    class {0}: ...
+    class {0}(object): ...
+"""
+
+nested_class_in_async_function = """
+async def container():
+    class {0}(object): ...
 """
 
 
 @pytest.mark.parametrize('code', [
     nested_class,
     nested_class_in_method,
+    nested_class_in_async_method,
     nested_class_in_function,
+    nested_class_in_async_function,
 ])
 def test_nested_class(assert_errors, parse_ast_tree, code, default_options):
     """Testing that nested classes are restricted."""
@@ -64,7 +77,9 @@ def test_whitelist_nested_classes(
 ])
 @pytest.mark.parametrize('code', [
     nested_class_in_method,
+    nested_class_in_async_method,
     nested_class_in_function,
+    nested_class_in_async_function,
 ])
 def test_whitelist_nested_classes_in_functions(
     assert_errors, parse_ast_tree, whitelist_name, code, default_options,
@@ -81,7 +96,10 @@ def test_whitelist_nested_classes_in_functions(
 def test_ordinary_class(assert_errors, parse_ast_tree, default_options):
     """Testing that it is possible to write basic classes."""
     tree = parse_ast_tree("""
-    class Ordinary:
+    class Ordinary(object):
+        def method(self): ...
+
+    class Second(Ordinary):
         def method(self): ...
     """)
 
