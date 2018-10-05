@@ -7,10 +7,43 @@ from wemake_python_styleguide.violations.consistency import (
 )
 from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
 
+class_without_base = 'class WithoutBase: ...'
+class_with_empty_base = 'class EmptyBase(): ...'
 
-def test_wrong_base_class(assert_errors, parse_ast_tree, default_options):
+nested_class_without_base = """
+class Model(object):
+    class Meta: ...
+"""
+
+nested_class_with_empty_base = """
+class Model(object):
+    class Meta(): ...
+"""
+
+# Correct:
+
+class_with_base = 'class Example({0}): ...'
+
+nested_class_with_base = """
+class Model({0}):
+    class Meta({0}): ...
+"""
+
+
+@pytest.mark.parametrize('code', [
+    class_without_base,
+    class_with_empty_base,
+    nested_class_without_base,
+    nested_class_with_empty_base,
+])
+def test_wrong_base_class(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+):
     """Testing that not using explicit base class is forbiden."""
-    tree = parse_ast_tree('class WithoutBase: ...')
+    tree = parse_ast_tree(code)
 
     visitor = WrongClassVisitor(default_options, tree=tree)
     visitor.run()
@@ -18,37 +51,12 @@ def test_wrong_base_class(assert_errors, parse_ast_tree, default_options):
     assert_errors(visitor, [RequiredBaseClassViolation])
 
 
-def test_wrong_base_class_nested(
-    assert_errors, parse_ast_tree, default_options,
-):
-    """Testing that not using explicit base class on nested is forbiden."""
-    tree = parse_ast_tree("""
-    class Model(object):
-        class Meta: ...
-    """)
-
-    visitor = WrongClassVisitor(default_options, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [RequiredBaseClassViolation])
-
-
-def test_correct_base_class_nested(
-    assert_errors, parse_ast_tree, default_options,
-):
-    """Testing that using explicit base class on nested works."""
-    tree = parse_ast_tree("""
-    class Model(object):
-        class Meta(object): ...
-    """)
-
-    visitor = WrongClassVisitor(default_options, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [])
-
-
+@pytest.mark.parametrize('code', [
+    class_with_base,
+    nested_class_with_base,
+])
 @pytest.mark.parametrize('base', [
+    'type',
     'object',
     'dict',
     'CustomClass',
@@ -56,10 +64,14 @@ def test_correct_base_class_nested(
     'Custom, keyword=1',
 ])
 def test_regular_base_classes(
-    assert_errors, parse_ast_tree, base, default_options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    base,
+    default_options,
 ):
     """Testing that regular base classes work."""
-    tree = parse_ast_tree('class Example({0}): ...'.format(base))
+    tree = parse_ast_tree(code.format(base))
 
     visitor = WrongClassVisitor(default_options, tree=tree)
     visitor.run()
