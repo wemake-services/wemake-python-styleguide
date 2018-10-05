@@ -2,6 +2,9 @@
 
 from wemake_python_styleguide.visitors.ast import keywords, naming, numbers
 from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
+from wemake_python_styleguide.visitors.ast.comparisons import (
+    ConstantComparisonVisitor,
+)
 from wemake_python_styleguide.visitors.ast.functions import (
     WrongFunctionCallVisitor,
 )
@@ -24,6 +27,7 @@ GENERAL_PRESET = (
     numbers.MagicNumberVisitor,
     WrongStringVisitor,
     WrongContentsVisitor,
+    ConstantComparisonVisitor,
 
     # Classes:
     WrongClassVisitor,

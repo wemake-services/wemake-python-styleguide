@@ -39,6 +39,7 @@ Summary
    FormattedStringViolation
    RequiredBaseClassViolation
    MultipleIfsInComprehensionViolation
+   ConstantComparisonViolation
 
 Consistency checks
 ------------------
@@ -51,6 +52,7 @@ Consistency checks
 .. autoclass:: FormattedStringViolation
 .. autoclass:: RequiredBaseClassViolation
 .. autoclass:: MultipleIfsInComprehensionViolation
+.. autoclass:: ConstantComparisonViolation
 
 """
 
@@ -314,3 +316,37 @@ class MultipleIfsInComprehensionViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found list comprehension with multiple `if`s'
     code = 307
+
+
+class ConstantComparisonViolation(ASTViolation):
+    """
+    Forbids to have comparisons between two literals.
+
+    Reasoning:
+        When two constants are compared it is typically an indication of a
+        mistake, since the Boolean value of the comparison will always be
+        the same.
+
+    Solution:
+        Remove the constant comparison and any associated dead code.
+
+    Example::
+
+        # Wrong:
+        if 60 * 60 < 1000:
+            do_something()
+        else:
+            do_something_else()
+
+        # Correct:
+        do_something_else()
+
+    Note:
+        Returns Z308 as error code
+
+    """
+
+    should_use_text = False
+    #: Error message shown to the user.
+    error_template = 'Found constant comparison'
+    code = 308
