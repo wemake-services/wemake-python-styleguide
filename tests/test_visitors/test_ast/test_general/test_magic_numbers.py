@@ -35,7 +35,24 @@ tuple_definition = '({0}, )'
 
 assignment_binop = 'final = {0} + 1'
 function_call = 'print({0})'
+function_call_named = 'print(end={0})'
 expression = '{0}'
+
+inside_function = """
+def wrapper():
+    some_value = called_func() * {0}
+"""
+
+inside_class = """
+class Test(object):
+    class_field = SOME_CONST - {0}
+"""
+
+inside_method = """
+class Test(object):
+    def method(self):
+        return {0}
+"""
 
 list_index = """
 some_list = [1, 2, 3]
@@ -87,7 +104,11 @@ def test_magic_number(
 @pytest.mark.parametrize('code', [
     assignment_binop,
     function_call,
+    function_call_named,
     expression,
+    inside_function,
+    inside_class,
+    inside_method,
     list_index,
     dict_key,
 ])
@@ -117,7 +138,11 @@ def test_magic_number_whitelist(
 @pytest.mark.parametrize('code', [
     assignment_binop,
     function_call,
+    function_call_named,
     expression,
+    inside_function,
+    inside_class,
+    inside_method,
     list_index,
     dict_key,
 ])
