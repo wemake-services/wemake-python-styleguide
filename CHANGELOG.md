@@ -6,6 +6,10 @@ We used to have incremental versioning before `0.1.0`.
 
 ## WIP
 
+### Features
+
+- Forbids to use `quit` and `exit` functions
+
 ### Misc
 
 - Improves tests: now testing magic numbers in more situations

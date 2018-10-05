@@ -2,7 +2,7 @@
 
 import ast
 
-from wemake_python_styleguide.constants import BAD_MAGIC_METHODS
+from wemake_python_styleguide.constants import MAGIC_METHODS_BLACKLIST
 from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations.best_practices import (
     BadMagicMethodViolation,
@@ -33,7 +33,7 @@ class WrongClassVisitor(BaseNodeVisitor):
                 self.add_violation(StaticMethodViolation(node))
 
     def _check_magic_methods(self, node: AnyFunctionDef) -> None:
-        if node.name in BAD_MAGIC_METHODS:
+        if node.name in MAGIC_METHODS_BLACKLIST:
             self.add_violation(BadMagicMethodViolation(node, text=node.name))
 
     def _check_base_class(self, node: ast.ClassDef) -> None:
