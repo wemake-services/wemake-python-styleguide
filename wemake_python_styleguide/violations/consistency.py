@@ -39,6 +39,7 @@ Summary
    FormattedStringViolation
    RequiredBaseClassViolation
    MultipleIfsInComprehensionViolation
+   ComparisonOrderViolation
 
 Consistency checks
 ------------------
@@ -325,7 +326,7 @@ class ComparisonOrderViolation(ASTViolation):
         This will bring a consistency to the comparison. Making it more readable.
 
     Solution:
-        Refactor your comparision expression.
+        Refactor your comparison expression.
 
     Example::
 
@@ -341,6 +342,7 @@ class ComparisonOrderViolation(ASTViolation):
     """
 
     should_use_text = False
+    
     #: Error message shown to the user.
     error_template = 'Found inconsistent comparison order'
     code = 308
