@@ -6,6 +6,10 @@ We used to have incremental versioning before `0.1.0`.
 
 ## WIP
 
+### Features
+
+- Adds `ComparisonOrderViolation`
+
 ### Misc
 
 - Improves tests: now testing magic numbers in more situations
