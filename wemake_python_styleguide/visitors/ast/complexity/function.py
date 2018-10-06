@@ -93,7 +93,7 @@ class _ComplexityCounter(object):
                 self._check_sub_node(node, sub_node)
 
 
-@alias('visit_function', (
+@alias('visit_any_function', (
     'visit_AsyncFunctionDef',
     'visit_FunctionDef',
 ))
@@ -152,7 +152,7 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
         self._check_function_internals()
         self._check_possible_switch()
 
-    def visit_function(self, node: AnyFunctionDef) -> None:
+    def visit_any_function(self, node: AnyFunctionDef) -> None:
         """
         Checks function's internal complexity.
 

@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations.best_practices import (
     WrongFunctionCallViolation,
 )
 from wemake_python_styleguide.visitors.ast.functions import (
-    BAD_FUNCTIONS,
+    FUNCTIONS_BLACKLIST,
     WrongFunctionCallVisitor,
 )
 
@@ -19,7 +19,7 @@ def proxy(*args, **kwargs):
 """
 
 
-@pytest.mark.parametrize('bad_function', BAD_FUNCTIONS)
+@pytest.mark.parametrize('bad_function', FUNCTIONS_BLACKLIST)
 @pytest.mark.parametrize('code', [
     regular_call,
     assignment_call,

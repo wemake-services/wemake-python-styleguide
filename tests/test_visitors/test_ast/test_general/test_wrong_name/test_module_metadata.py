@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations.best_practices import (
     WrongModuleMetadataViolation,
 )
 from wemake_python_styleguide.visitors.ast.naming import (
-    BAD_MODULE_METADATA_VARIABLES,
+    MODULE_METADATA_VARIABLES_BLACKLIST,
     WrongModuleMetadataVisitor,
 )
 
@@ -25,7 +25,7 @@ if __name__ == '__main__':
 """
 
 
-@pytest.mark.parametrize('bad_name', BAD_MODULE_METADATA_VARIABLES)
+@pytest.mark.parametrize('bad_name', MODULE_METADATA_VARIABLES_BLACKLIST)
 @pytest.mark.parametrize('code', [
     module_metadata,
 ])

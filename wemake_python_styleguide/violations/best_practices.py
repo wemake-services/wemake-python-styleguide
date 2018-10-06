@@ -171,7 +171,7 @@ class WrongModuleMetadataViolation(ASTViolation):
         Use ``pkg_resources`` if you need to import this data into your app.
 
     See
-    :py:data:`~wemake_python_styleguide.constants.BAD_MODULE_METADATA_VARIABLES`
+    :py:data:`~wemake_python_styleguide.constants.MODULE_METADATA_VARIABLES_BLACKLIST`
     for full list of bad names.
 
     Example::
@@ -291,7 +291,7 @@ class WrongFunctionCallViolation(ASTViolation):
         we forbid to use them in a free manner.
 
     See
-    :py:data:`~wemake_python_styleguide.constants.BAD_FUNCTIONS`
+    :py:data:`~wemake_python_styleguide.constants.FUNCTIONS_BLACKLIST`
     for the full list of blacklisted functions.
 
     See also:
@@ -540,7 +540,7 @@ class BadMagicMethodViolation(ASTViolation):
         It will give more context to your app.
 
     See
-    :py:data:`~wemake_python_styleguide.constants.BAD_MAGIC_METHODS`
+    :py:data:`~wemake_python_styleguide.constants.MAGIC_METHODS_BLACKLIST`
     for the full blacklist of the magic methods.
 
     See also:

@@ -9,15 +9,16 @@ It also contains some exceptions that we allow to use in our codebase.
 
 import re
 
-# TODO: use consistent `.` for the `#:` comments
-# TODO: use consistent names: `*_BLACKLIST` and `*_WHITELIST`
-
 #: List of functions we forbid to use.
-BAD_FUNCTIONS = frozenset((
+FUNCTIONS_BLACKLIST = frozenset((
     # Code generation:
     'eval',
     'exec',
     'compile',
+
+    # Termination:
+    'exit',
+    'quit',
 
     # Magic:
     'globals',
@@ -32,7 +33,7 @@ BAD_FUNCTIONS = frozenset((
     'hasattr',
     'delattr',
 
-    # Misc:
+    # Gratis:
     'copyright',
     'help',
     'credits',
@@ -45,7 +46,7 @@ BAD_FUNCTIONS = frozenset((
 ))
 
 #: List of module metadata we forbid to use.
-BAD_MODULE_METADATA_VARIABLES = frozenset((
+MODULE_METADATA_VARIABLES_BLACKLIST = frozenset((
     '__author__',
     '__all__',
     '__version__',
@@ -53,7 +54,7 @@ BAD_MODULE_METADATA_VARIABLES = frozenset((
 ))
 
 #: List of variable names we forbid to use.
-BAD_VARIABLE_NAMES = frozenset((
+VARIABLE_NAMES_BLACKLIST = frozenset((
     # Meaningless words:
     'data',
     'result',
@@ -88,8 +89,8 @@ BAD_VARIABLE_NAMES = frozenset((
     'baz',
 ))
 
-#: List of magic methods that are forbiden to use.
-BAD_MAGIC_METHODS = frozenset((
+#: List of magic methods that are forbidden to use.
+MAGIC_METHODS_BLACKLIST = frozenset((
     # Since we don't use `del`:
     '__del__',
     '__delitem__',
@@ -117,24 +118,24 @@ FUTURE_IMPORTS_WHITELIST = frozenset((
     'generator_stop',
 ))
 
-#: List of blacklisted module names:
-BAD_MODULE_NAMES = frozenset((
+#: List of blacklisted module names.
+MODULE_NAMES_BLACKLIST = frozenset((
     'util',
     'utils',
     'utilities',
     'helpers',
 ))
 
-#: List of allowed module magic names:
+#: List of allowed module magic names.
 MAGIC_MODULE_NAMES_WHITELIST = frozenset((
     '__init__',
     '__main__',
 ))
 
-#: Regex pattern to name modules:
+#: Regex pattern to name modules.
 MODULE_NAME_PATTERN = re.compile(r'^_?_?[a-z][a-z\d_]+[a-z\d](__)?$')
 
-#: Common numbers that are allowed to be used without being called "magic":
+#: Common numbers that are allowed to be used without being called "magic".
 MAGIC_NUMBERS_WHITELIST = frozenset((
     0.5,
     100,
@@ -151,6 +152,5 @@ MAGIC_NUMBERS_WHITELIST = frozenset((
 # This variable is used as a default filename, when it is not passed by flake8:
 STDIN = 'stdin'
 
-# TODO: rename to `INIT_MODULE`
-# This variable is used to specify as a placeholder for `__init__.py`:
+# This variable is used to specify as a placeholder for `__init__`:
 INIT = '__init__'
