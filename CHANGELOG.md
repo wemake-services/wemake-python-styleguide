@@ -10,6 +10,7 @@ We used to have incremental versioning before `0.1.0`.
 
 - Forbids to use `quit` and `exit` functions
 - Forbids the comparison of two literals
+- Enforce consistent octal, binary, and hex numbers
 
 ### Misc
 

@@ -40,6 +40,7 @@ Summary
    RequiredBaseClassViolation
    MultipleIfsInComprehensionViolation
    ConstantComparisonViolation
+   BadNumberSuffixViolation
 
 Consistency checks
 ------------------
@@ -53,6 +54,7 @@ Consistency checks
 .. autoclass:: RequiredBaseClassViolation
 .. autoclass:: MultipleIfsInComprehensionViolation
 .. autoclass:: ConstantComparisonViolation
+.. autoclass:: BadNumberSuffixViolation
 
 """
 
@@ -350,3 +352,47 @@ class ConstantComparisonViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found constant comparison'
     code = 308
+
+
+class BadNumberSuffixViolation(TokenizeViolation):
+    """
+    Forbids to use capital (``XOBE``) in numbers.
+
+    Reasoning:
+        It is possible to write ``0xFF`` in two different ways:
+        ``0xFF``, ``0XFF``.
+        It is possible to write ``0o11`` in two different ways:
+        ``0o11``, ``0O11``.
+        It is possible to write ``0b1001`` in two different ways:
+        ``0b1001``, ``0B1001``.
+        It is possible to write ``1.5e+10`` in two different ways:
+        ``1.5e+10``, ``1.5E+10``.
+        We enforce a single way to write numbers with suffixes:
+        suffix without capital chars.
+
+    Solution:
+        Octal, hex, binary and scientific notation suffixes in numbers
+        should be written lowercase.
+
+    Example::
+
+        # Correct:
+        hex_number = 0xFF
+        octal_number = 0o11
+        binary_number = 0b1001
+        number_with_scientific_notation = 1.5e+10
+
+        # Wrong:
+        hex_number = 0XFF
+        octal_number = 0O11
+        binary_number = 0B1001
+        number_with_scientific_notation = 1.5E+10
+
+    Note:
+        Returns Z308 as error code
+
+    """
+
+    code = 308
+    #: Error message shown to the user.
+    error_template = 'Found underscored number: {0}'
