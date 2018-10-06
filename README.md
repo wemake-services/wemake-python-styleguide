@@ -58,9 +58,9 @@ in the docs for examples and integrations.
 
 We have several primary objectives:
 
-0. Enforce usage Python 3.6 or higher
+0. Enforce `python3.6+` usage
 1. Significantly reduce complexity of your code and make it more maintainable
-2. Enforce "There should be one --and preferably only one-- obvious way to do it" rule
+2. Enforce "There should be one-- and preferably only one --obvious way to do it" rule
 3. Create consistent coding and naming style
 
 You can find all error codes and plugins [in the docs](https://wemake-python-styleguide.readthedocs.io/en/latest/_pages/violations/index.html).
@@ -68,7 +68,7 @@ You can find all error codes and plugins [in the docs](https://wemake-python-sty
 
 ## What we are not
 
-We are *not* here to:
+We are *not* planning to do the following things:
 
 0. Assume or check types, use `mypy` instead
 1. Reformat code, since we believe that developers should do that
