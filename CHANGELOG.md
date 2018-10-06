@@ -8,6 +8,7 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
+- Forbids to use `quit` and `exit` functions
 - Adds `ComparisonOrderViolation`
 
 ### Misc
