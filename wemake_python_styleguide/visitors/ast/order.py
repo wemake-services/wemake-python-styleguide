@@ -10,15 +10,11 @@ class WrongOrderVisitor(BaseNodeVisitor):
     """Restricts comparision expressions where argument doesn't come first (only for single variable)."""
 
     def _check_order(self, node: ast.Compare) -> None:
-        left = node.left
-        ops = node.ops
-        comparators = node.comparators
-
-        if isinstance(left, ast.Name):
+        if isinstance(node.left, ast.Name):
             return
-        if len(ops) > 1:
+        if len(node.ops) > 1:
             return
-        if isinstance(comparators[0], ast.Compare):
+        if isinstance(node.comparators[0], ast.Compare):
             return
 
         self.add_violation(ComparisonOrderViolation(node))
