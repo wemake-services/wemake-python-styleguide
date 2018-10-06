@@ -7,42 +7,200 @@ from wemake_python_styleguide.violations.consistency import (
 )
 from wemake_python_styleguide.visitors.ast.order import WrongOrderVisitor
 
+# templates to be checked
+
+if_with_is = """
+if {0} is {1}:
+    return 1
+"""
+
+if_with_is_not = """
+if {0} is not {1}:
+    return 1
+"""
+
+if_with_eq = """
+if {0} == {1}:
+    return 1
+"""
+
+if_with_not_eq = """
+if {0} != {1}:
+    return 1
+"""
+
+if_with_gt = """
+if {0} > {1}:
+    return 1
+"""
+
+if_with_lt = """
+if {0} < {1}:
+    return 1
+"""
+
+ternary = """
+ternary = 5 if {0} > {1} else 6
+"""
+
+while_construct = """
+while {0} > {1}:
+    return 1
+"""
+
+if_with_compound_expr = """
+if {0} > {1} and {0} < {1}:
+    return 1
+"""
+
+if_with_chained_comparisons = """
+if {0} < {1} < {2}:
+    return 1
+"""
+
+
 @pytest.mark.parametrize('code', [
-    'a < 3',
-    '0 < x < 1',
-    'x == 3',
+    if_with_is,
+    if_with_is_not,
+    if_with_eq,
+    if_with_not_eq,
+    if_with_lt,
+    if_with_gt,
+    ternary,
+    while_construct,
+    if_with_compound_expr,
 ])
 
-def test_comparison_normal(
+@pytest.mark.parametrize('variable', [
+    'a',
+    'b',
+])
+
+def test_comparison_variables(
     assert_errors,
     parse_ast_tree,
     code,
+    variable,
     default_options,
 ):
-    """Testing that consistent comparisons (argument comes first) work well."""
-    tree = parse_ast_tree(code)
+    """Testing that comparisons work well for the case of all variables"""
+    tree = parse_ast_tree(code.format(variable))
 
     visitor = WrongOrderVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
 
+@pytest.mark.parametrize('code', [
+    if_with_is,
+    if_with_is_not,
+    if_with_eq,
+    if_with_not_eq,
+    if_with_lt,
+    if_with_gt,
+    ternary,
+    while_construct,
+    if_with_compound_expr,
+])
+
+@pytest.mark.parametrize('literal_right', [
+    'a',
+    1,
+])
+
+def test_comparison_literal_right(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    literal_right,
+    default_options,
+):
+    """Testing that comparisons work well with literal on right and argument on left"""
+    tree = parse_ast_tree(code.format(literal_right))
+
+    visitor = WrongOrderVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
 
 @pytest.mark.parametrize('code', [
-    '3 < x',
-    '3 == x',
+    if_with_is,
+    if_with_is_not,
+    if_with_eq,
+    if_with_not_eq,
+    if_with_lt,
+    if_with_gt,
+    ternary,
+    while_construct,
+    if_with_compound_expr,
+])
+
+@pytest.mark.parametrize('literal_left_argument_right', [
+    1,
+    'a',
 ])
 
 def test_wrong_comparison(
     assert_errors,
     parse_ast_tree,
     code,
+    literal_left_argument_right,
     default_options,
 ):
     """Testing that violations are raised when inconsistent comparisons are used."""
-    tree = parse_ast_tree(code)
-
+    tree = parse_ast_tree(code.format(literal_left_argument_right))
+    
     visitor = WrongOrderVisitor(default_options, tree=tree)
     visitor.run()
+    
+    assert_errors(visitor, [ComparisonOrderViolation])
 
+@pytest.mark.parametrize('code', [
+    if_with_chained_comparisons,
+])
+
+@pytest.mark.parametrize('consistent_order', [
+    0,
+    'a',
+    1,
+])
+
+def test_consistent_chained_comparison(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    consistent_order,
+    default_options,
+):
+    """Testing that comparisons work well for consistent chained comparison"""
+    tree = parse_ast_tree(code.format(consistent_order))
+    
+    visitor = WrongOrderVisitor(default_options, tree=tree)
+    visitor.run()
+    
+    assert_errors(visitor, [])
+
+@pytest.mark.parametrize('code', [
+    if_with_chained_comparisons,
+])
+
+@pytest.mark.parametrize('inconsistent_order', [
+    0,
+    5,
+    'x',
+])
+
+def test_consistent_chained_comparison(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    inconsistent_order,
+    default_options,
+):
+    """Testing that violations are raised when inconsistent chained comparisons are used."""
+    tree = parse_ast_tree(code.format(inconsistent_order))
+    
+    visitor = WrongOrderVisitor(default_options, tree=tree)
+    visitor.run()
+    
     assert_errors(visitor, [ComparisonOrderViolation])
