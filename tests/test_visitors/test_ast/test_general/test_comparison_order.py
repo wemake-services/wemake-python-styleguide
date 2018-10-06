@@ -72,8 +72,7 @@ if {0} < {1} < {2}:
 ])
 
 @pytest.mark.parametrize('variable', [
-    'a',
-    'b',
+    ('a', 'b'),
 ])
 
 def test_comparison_variables(
@@ -104,8 +103,9 @@ def test_comparison_variables(
 ])
 
 @pytest.mark.parametrize('literal_right', [
-    'a',
-    1,
+    ('a', 1),
+    ('a', 2.3),
+    ('a', [1,2]),
 ])
 
 def test_comparison_literal_right(
@@ -136,8 +136,9 @@ def test_comparison_literal_right(
 ])
 
 @pytest.mark.parametrize('literal_left_argument_right', [
-    1,
-    'a',
+    (1, 'a'),
+    (2.3, 'a'),
+    ([1,2], 'a'),
 ])
 
 def test_wrong_comparison(
@@ -160,9 +161,7 @@ def test_wrong_comparison(
 ])
 
 @pytest.mark.parametrize('consistent_order', [
-    0,
-    'a',
-    1,
+    (0, 'a', 1),
 ])
 
 def test_consistent_chained_comparison(
@@ -185,9 +184,7 @@ def test_consistent_chained_comparison(
 ])
 
 @pytest.mark.parametrize('inconsistent_order', [
-    0,
-    5,
-    'x',
+    (0, 5, 'x'),
 ])
 
 def test_consistent_chained_comparison(
