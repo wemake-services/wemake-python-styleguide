@@ -71,7 +71,7 @@ if {0} < {1} < {2}:
     if_with_compound_expr,
 ])
 
-@pytest.mark.parametrize('variable', [
+@pytest.mark.parametrize('variable1,variable2', [
     ('a', 'b'),
 ])
 
@@ -79,11 +79,12 @@ def test_comparison_variables(
     assert_errors,
     parse_ast_tree,
     code,
-    variable,
+    variable1,
+    variable2,
     default_options,
 ):
     """Testing that comparisons work well for the case of all variables"""
-    tree = parse_ast_tree(code.format(variable))
+    tree = parse_ast_tree(code.format(variable1, variable2))
 
     visitor = WrongOrderVisitor(default_options, tree=tree)
     visitor.run()
@@ -102,7 +103,7 @@ def test_comparison_variables(
     if_with_compound_expr,
 ])
 
-@pytest.mark.parametrize('literal_right', [
+@pytest.mark.parametrize('variable,literal', [
     ('a', 1),
     ('a', 2.3),
     ('a', [1,2]),
@@ -112,11 +113,12 @@ def test_comparison_literal_right(
     assert_errors,
     parse_ast_tree,
     code,
-    literal_right,
+    variable,
+    literal,
     default_options,
 ):
     """Testing that comparisons work well with literal on right and argument on left"""
-    tree = parse_ast_tree(code.format(literal_right))
+    tree = parse_ast_tree(code.format(variable, literal))
 
     visitor = WrongOrderVisitor(default_options, tree=tree)
     visitor.run()
@@ -135,7 +137,7 @@ def test_comparison_literal_right(
     if_with_compound_expr,
 ])
 
-@pytest.mark.parametrize('literal_left_argument_right', [
+@pytest.mark.parametrize('literal,variable', [
     (1, 'a'),
     (2.3, 'a'),
     ([1,2], 'a'),
@@ -145,11 +147,12 @@ def test_wrong_comparison(
     assert_errors,
     parse_ast_tree,
     code,
-    literal_left_argument_right,
+    literal,
+    variable,
     default_options,
 ):
     """Testing that violations are raised when inconsistent comparisons are used."""
-    tree = parse_ast_tree(code.format(literal_left_argument_right))
+    tree = parse_ast_tree(code.format(literal, variable))
     
     visitor = WrongOrderVisitor(default_options, tree=tree)
     visitor.run()
@@ -160,7 +163,7 @@ def test_wrong_comparison(
     if_with_chained_comparisons,
 ])
 
-@pytest.mark.parametrize('consistent_order', [
+@pytest.mark.parametrize('literal1,variable,literal2', [
     (0, 'a', 1),
 ])
 
@@ -168,11 +171,13 @@ def test_consistent_chained_comparison(
     assert_errors,
     parse_ast_tree,
     code,
-    consistent_order,
+    literal1,
+    variable,
+    literal2,
     default_options,
 ):
     """Testing that comparisons work well for consistent chained comparison"""
-    tree = parse_ast_tree(code.format(consistent_order))
+    tree = parse_ast_tree(code.format(literal1, variable, literal2))
     
     visitor = WrongOrderVisitor(default_options, tree=tree)
     visitor.run()
@@ -183,7 +188,7 @@ def test_consistent_chained_comparison(
     if_with_chained_comparisons,
 ])
 
-@pytest.mark.parametrize('inconsistent_order', [
+@pytest.mark.parametrize('literal1,literal2,variable', [
     (0, 5, 'x'),
 ])
 
@@ -191,11 +196,13 @@ def test_consistent_chained_comparison(
     assert_errors,
     parse_ast_tree,
     code,
-    inconsistent_order,
+    literal1,
+    literal2,
+    variable,
     default_options,
 ):
     """Testing that violations are raised when inconsistent chained comparisons are used."""
-    tree = parse_ast_tree(code.format(inconsistent_order))
+    tree = parse_ast_tree(code.format(literal1, literal2, variable))
     
     visitor = WrongOrderVisitor(default_options, tree=tree)
     visitor.run()

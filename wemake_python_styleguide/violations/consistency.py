@@ -320,10 +320,10 @@ class MultipleIfsInComprehensionViolation(ASTViolation):
 
 class ComparisonOrderViolation(ASTViolation):
     """
-    Forbids comparision expressions where argument doesn't come first (only for single variable).
+    Forbids comparisions where argument doesn't come first.
 
     Reasoning:
-        This will bring a consistency to the comparison. Making it more readable.
+        brings a consistency to the comparison.
 
     Solution:
         Refactor your comparison expression.
@@ -342,7 +342,6 @@ class ComparisonOrderViolation(ASTViolation):
     """
 
     should_use_text = False
-    
     #: Error message shown to the user.
     error_template = 'Found inconsistent comparison order'
     code = 308

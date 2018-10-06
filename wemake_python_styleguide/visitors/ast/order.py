@@ -9,7 +9,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
 class WrongOrderVisitor(BaseNodeVisitor):
-    """Restricts comparision expressions where argument doesn't come first (only for single variable)."""
+    """Restricts comparisions where argument doesn't come first."""
 
     def _get_num_variables(self, comparators: list) -> int:
         count = 0
@@ -18,7 +18,7 @@ class WrongOrderVisitor(BaseNodeVisitor):
                 count += 1
 
         return count
-    
+
     def _check_order(self, node: ast.Compare) -> None:
         if isinstance(node.left, ast.Name):
             return
@@ -31,7 +31,7 @@ class WrongOrderVisitor(BaseNodeVisitor):
 
     def visit_Compare(self, node: ast.Compare) -> None:
         """
-        Forbids comparision expressions where argument doesn't come first (only for single variable).
+        Forbids comparisions where argument doesn't come first.
 
         Raises:
             ComparisonOrderViolation
