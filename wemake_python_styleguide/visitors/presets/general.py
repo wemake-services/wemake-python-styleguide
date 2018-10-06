@@ -11,6 +11,7 @@ from wemake_python_styleguide.visitors.ast.strings import WrongStringVisitor
 from wemake_python_styleguide.visitors.filenames.wrong_module_name import (
     WrongModuleNameVisitor,
 )
+from wemake_python_styleguide.visitors.ast.order import WrongOrderVisitor
 
 #: Used to store all general visitors to be later passed to checker:
 GENERAL_PRESET = (
@@ -24,6 +25,7 @@ GENERAL_PRESET = (
     numbers.MagicNumberVisitor,
     WrongStringVisitor,
     WrongContentsVisitor,
+    WrongOrderVisitor
 
     # Classes:
     WrongClassVisitor,

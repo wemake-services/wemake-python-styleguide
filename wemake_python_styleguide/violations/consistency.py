@@ -51,6 +51,7 @@ Consistency checks
 .. autoclass:: FormattedStringViolation
 .. autoclass:: RequiredBaseClassViolation
 .. autoclass:: MultipleIfsInComprehensionViolation
+.. autoclass:: ComparisonOrderViolation
 
 """
 
@@ -314,3 +315,32 @@ class MultipleIfsInComprehensionViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found list comprehension with multiple `if`s'
     code = 307
+
+
+class ComparisonOrderViolation(ASTViolation):
+    """
+    Forbids comparision expressions where argument doesn't come first (only for single variable).
+
+    Reasoning:
+        This will bring a consistency to the comparison. Making it more readable.
+
+    Solution:
+        Refactor your comparision expression.
+
+    Example::
+
+        # Wrong:
+        if 3 < some_x:
+
+        # Correct:
+        if some_x > 3:
+
+    Note:
+        Returns Z308 as error code
+
+    """
+
+    should_use_text = False
+    #: Error message shown to the user.
+    error_template = 'Found inconsistent comparison order'
+    code = 308
