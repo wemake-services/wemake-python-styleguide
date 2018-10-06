@@ -13,7 +13,7 @@ class WrongOrderVisitor(BaseNodeVisitor):
         count = 0
         for comparator in comparators:
             if isinstance(comparator, ast.Name):
-                count+=1
+                count += 1
 
         return count
     
@@ -22,7 +22,7 @@ class WrongOrderVisitor(BaseNodeVisitor):
             return
         if self._get_num_variables(node.comparators) > 1:
             return
-        if isinstance(node.comparators[-1], ast.Name) != True:
+        if not isinstance(node.comparators[-1], ast.Name):
             return
 
         self.add_violation(ComparisonOrderViolation(node))
