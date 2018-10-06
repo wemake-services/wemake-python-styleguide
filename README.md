@@ -56,7 +56,7 @@ in the docs for examples and integrations.
 
 ## What we are about
 
-We have several primary objectives with regards to this linter:
+We have several primary objectives:
 
 0. Enforce usage Python 3.6 or higher
 1. Significantly reduce complexity of your code and make it more maintainable
@@ -78,7 +78,7 @@ We are *not* here to:
 
 ## Contributing
 
-See ["Contributing" section](https://wemake-python-styleguide.readthedocs.io/en/latest/_pages/contributing.html) file in the docs if you want to contribute.
+See ["Contributing" section](https://wemake-python-styleguide.readthedocs.io/en/latest/_pages/contributing.html) in the documentation if you want to contribute.
 You can also check which [issues need some help](https://github.com/wemake-services/wemake-python-styleguide/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) right now.
 
 
