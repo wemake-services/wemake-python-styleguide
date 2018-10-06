@@ -25,7 +25,7 @@ GENERAL_PRESET = (
     numbers.MagicNumberVisitor,
     WrongStringVisitor,
     WrongContentsVisitor,
-    WrongOrderVisitor
+    WrongOrderVisitor,
 
     # Classes:
     WrongClassVisitor,
