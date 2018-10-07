@@ -77,7 +77,7 @@ def is_too_short_stem(
 
     """
     stem = _get_stem(file_path)
-    return len(stem) < min_length
+    return min_length > len(stem)
 
 
 def is_matching_pattern(

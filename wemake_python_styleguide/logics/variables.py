@@ -55,7 +55,7 @@ def is_too_short_variable_name(
     False
 
     """
-    return name is not None and name != '_' and len(name) < min_length
+    return name is not None and name != '_' and min_length > len(name)
 
 
 def is_private_variable(name: Optional[str]) -> bool:

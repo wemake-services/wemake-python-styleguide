@@ -74,7 +74,6 @@ if {0} < {1} < {2}:
 @pytest.mark.parametrize('variable1,variable2', [
     ('a', 'b'),
 ])
-
 def test_comparison_variables(
     assert_errors,
     parse_ast_tree,
@@ -108,7 +107,6 @@ def test_comparison_variables(
     ('a', 2.3),
     ('a', [1,2]),
 ])
-
 def test_comparison_literal_right(
     assert_errors,
     parse_ast_tree,
@@ -117,7 +115,7 @@ def test_comparison_literal_right(
     literal,
     default_options,
 ):
-    """Testing that comparisons work well with literal on right and argument on left"""
+    """Testing that comparisons work well with argument on left"""
     tree = parse_ast_tree(code.format(variable, literal))
 
     visitor = WrongOrderVisitor(default_options, tree=tree)
@@ -181,7 +179,7 @@ def test_consistent_chained_comparison(
     
     visitor = WrongOrderVisitor(default_options, tree=tree)
     visitor.run()
-    
+
     assert_errors(visitor, [])
 
 @pytest.mark.parametrize('code', [
