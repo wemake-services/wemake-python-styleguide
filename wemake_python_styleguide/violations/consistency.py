@@ -40,6 +40,7 @@ Summary
    RequiredBaseClassViolation
    MultipleIfsInComprehensionViolation
    ConstantComparisonViolation
+   BadNumberSuffixViolation
    ComparisonOrderViolation
 
 Consistency checks
@@ -54,6 +55,7 @@ Consistency checks
 .. autoclass:: RequiredBaseClassViolation
 .. autoclass:: MultipleIfsInComprehensionViolation
 .. autoclass:: ConstantComparisonViolation
+.. autoclass:: BadNumberSuffixViolation
 .. autoclass:: ComparisonOrderViolation
 
 """
@@ -354,6 +356,55 @@ class ConstantComparisonViolation(ASTViolation):
     code = 308
 
 
+class BadNumberSuffixViolation(TokenizeViolation):
+    """
+    Forbids to use capital (``XOBE``) in numbers.
+
+    Reasoning:
+        Octal, hex, binary and scientific notation suffixes could
+        be written in two possible notations: lowercase and uppercase.
+        Which brings confusion and decreases code consistency and readability.
+
+        It is possible to write ``0xFF`` in two different ways:
+        ``0xFF``, ``0XFF``.
+        It is possible to write ``0o11`` in two different ways:
+        ``0o11``, ``0O11``.
+        It is possible to write ``0b1001`` in two different ways:
+        ``0b1001``, ``0B1001``.
+        It is possible to write ``1.5e+10`` in two different ways:
+        ``1.5e+10``, ``1.5E+10``.
+
+        We enforce a single way to write numbers with suffixes:
+        suffix without capital chars.
+
+    Solution:
+        Octal, hex, binary and scientific notation suffixes in numbers
+        should be written lowercase.
+
+    Example::
+
+        # Correct:
+        hex_number = 0xFF
+        octal_number = 0o11
+        binary_number = 0b1001
+        number_with_scientific_notation = 1.5e+10
+
+        # Wrong:
+        hex_number = 0XFF
+        octal_number = 0O11
+        binary_number = 0B1001
+        number_with_scientific_notation = 1.5E+10
+
+    Note:
+        Returns Z309 as error code
+
+    """
+
+    code = 309
+    #: Error message shown to the user.
+    error_template = 'Found underscored number: {0}'
+
+
 class ComparisonOrderViolation(ASTViolation):
     """
     Forbids comparisions where argument doesn't come first.
@@ -373,11 +424,12 @@ class ComparisonOrderViolation(ASTViolation):
         if some_x > 3:
 
     Note:
-        Returns Z309 as error code
+        Returns Z310 as error code
 
     """
 
     should_use_text = False
     #: Error message shown to the user.
     error_template = 'Found inconsistent comparison order'
-    code = 309
+    code = 310
+    
