@@ -128,7 +128,7 @@ def test_exact_complexity(parse_ast_tree, default_options, code, complexity):
     visitor.run()
 
     assert len(visitor._lines) == 1
-    assert complexity == len(visitor._lines[1])
+    assert len(visitor._lines[1]) == complexity
 
 
 @pytest.mark.parametrize('code, number_of_lines', [
@@ -147,4 +147,4 @@ def test_that_some_nodes_are_ignored(
     visitor = JonesComplexityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert number_of_lines == len(visitor._lines)
+    assert len(visitor._lines) == number_of_lines
