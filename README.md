@@ -56,10 +56,10 @@ in the docs for examples and integrations.
 
 ## What we are about
 
-We have several primary objectives with this linter:
+We have several primary objectives:
 
 0. Enforce `python3.6+` usage
-1. Significantly reduce code's complexity and make it more maintainable
+1. Significantly reduce complexity of your code and make it more maintainable
 2. Enforce "There should be one-- and preferably only one --obvious way to do it" rule
 3. Create consistent coding and naming style
 
@@ -68,17 +68,17 @@ You can find all error codes and plugins [in the docs](https://wemake-python-sty
 
 ## What we are not
 
-We are here *not* to:
+We are *not* planning to do the following things:
 
 0. Assume or check types, use `mypy` instead
 1. Reformat code, since we believe that developers should do that
-2. Check for `SyntaxError`s or exceptions, write tests instead
-3. Suite everyone, this is **our** linter
+2. Check for `SyntaxError` or exceptions, write tests instead
+3. Appeal to everyone, this is **our** linter
 
 
 ## Contributing
 
-See ["Contributing" section](https://wemake-python-styleguide.readthedocs.io/en/latest/_pages/contributing.html) file in the docs if you want to contribute.
+See ["Contributing" section](https://wemake-python-styleguide.readthedocs.io/en/latest/_pages/contributing.html) in the documentation if you want to contribute.
 You can also check which [issues need some help](https://github.com/wemake-services/wemake-python-styleguide/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) right now.
 
 
