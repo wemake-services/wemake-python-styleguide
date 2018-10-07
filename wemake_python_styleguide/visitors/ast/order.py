@@ -15,7 +15,7 @@ class WrongOrderVisitor(BaseNodeVisitor):
         for operator in operators:
             if isinstance(operator, ast.In):
                 return True
-            elif isinstance(operator, ast.NotIn):
+            if isinstance(operator, ast.NotIn):
                 return True
 
         return False

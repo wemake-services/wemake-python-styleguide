@@ -432,4 +432,3 @@ class ComparisonOrderViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found inconsistent comparison order'
     code = 310
-    
