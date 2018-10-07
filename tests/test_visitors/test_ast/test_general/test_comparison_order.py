@@ -70,25 +70,18 @@ if {0} < {1} < {2}:
     while_construct,
     if_with_compound_expr,
 ])
-
-@pytest.mark.parametrize('variable1,variable2', [
+@pytest.mark.parametrize('variable', [
     ('a', 'b'),
 ])
-def test_comparison_variables(
-    assert_errors,
-    parse_ast_tree,
-    code,
-    variable1,
-    variable2,
-    default_options,
-):
+def test_comparison_variables(assert_errors, parse_ast_tree, code, variable, default_options):
     """Testing that comparisons work well for the case of all variables"""
-    tree = parse_ast_tree(code.format(variable1, variable2))
+    tree = parse_ast_tree(code.format(variable[0], variable[1]))
 
     visitor = WrongOrderVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
+
 
 @pytest.mark.parametrize('code', [
     if_with_is,
@@ -101,27 +94,26 @@ def test_comparison_variables(
     while_construct,
     if_with_compound_expr,
 ])
-
-@pytest.mark.parametrize('variable,literal', [
+@pytest.mark.parametrize('var_lit', [
     ('a', 1),
     ('a', 2.3),
-    ('a', [1,2]),
+    ('a', [1,2]), 
 ])
 def test_comparison_literal_right(
     assert_errors,
     parse_ast_tree,
     code,
-    variable,
-    literal,
+    var_lit,
     default_options,
 ):
     """Testing that comparisons work well with argument on left"""
-    tree = parse_ast_tree(code.format(variable, literal))
+    tree = parse_ast_tree(code.format(var_lit[0], var_lit[1]))
 
     visitor = WrongOrderVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
+
 
 @pytest.mark.parametrize('code', [
     if_with_is,
@@ -134,73 +126,46 @@ def test_comparison_literal_right(
     while_construct,
     if_with_compound_expr,
 ])
-
-@pytest.mark.parametrize('literal,variable', [
+@pytest.mark.parametrize('lit_var', [
     (1, 'a'),
     (2.3, 'a'),
-    ([1,2], 'a'),
+    ([1,2], 'a'), 
 ])
-
-def test_wrong_comparison(
-    assert_errors,
-    parse_ast_tree,
-    code,
-    literal,
-    variable,
-    default_options,
-):
+def test_wrong_comparison(assert_errors, parse_ast_tree, code, lit_var, default_options):
     """Testing that violations are raised when inconsistent comparisons are used."""
-    tree = parse_ast_tree(code.format(literal, variable))
+    tree = parse_ast_tree(code.format(lit_var[0], lit_var[1]))
     
     visitor = WrongOrderVisitor(default_options, tree=tree)
     visitor.run()
     
     assert_errors(visitor, [ComparisonOrderViolation])
 
+
 @pytest.mark.parametrize('code', [
     if_with_chained_comparisons,
 ])
-
-@pytest.mark.parametrize('literal1,variable,literal2', [
+@pytest.mark.parametrize('lit_var_lit', [
     (0, 'a', 1),
 ])
-
-def test_consistent_chained_comparison(
-    assert_errors,
-    parse_ast_tree,
-    code,
-    literal1,
-    variable,
-    literal2,
-    default_options,
-):
+def test_consistent_chained_comparison(assert_errors, parse_ast_tree, code, lit_var_lit, default_options):
     """Testing that comparisons work well for consistent chained comparison"""
-    tree = parse_ast_tree(code.format(literal1, variable, literal2))
+    tree = parse_ast_tree(code.format(lit_var_lit[0], lit_var_lit[1], lit_var_lit[2]))
     
     visitor = WrongOrderVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
 
+
 @pytest.mark.parametrize('code', [
     if_with_chained_comparisons,
 ])
-
-@pytest.mark.parametrize('literal1,literal2,variable', [
+@pytest.mark.parametrize('lit_lit_var', [
     (0, 5, 'x'),
 ])
-
-def test_consistent_chained_comparison(
-    assert_errors,
-    parse_ast_tree,
-    code,
-    literal1,
-    literal2,
-    variable,
-    default_options,
-):
+def test_consistent_chained_comparison(assert_errors, parse_ast_tree, code, lit_lit_var, default_options):
     """Testing that violations are raised when inconsistent chained comparisons are used."""
-    tree = parse_ast_tree(code.format(literal1, literal2, variable))
+    tree = parse_ast_tree(code.format(lit_lit_var[0], lit_lit_var[1], lit_lit_var[2]))
     
     visitor = WrongOrderVisitor(default_options, tree=tree)
     visitor.run()
