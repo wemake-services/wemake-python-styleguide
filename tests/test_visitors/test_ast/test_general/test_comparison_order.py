@@ -93,6 +93,7 @@ if index > some_object.get_index():
     return 1
 """
 
+
 @pytest.mark.parametrize('code', [
     if_with_is,
     if_with_is_not,
