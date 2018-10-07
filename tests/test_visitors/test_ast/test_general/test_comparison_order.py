@@ -174,7 +174,7 @@ def test_wrong_compound_comparison(
     assert_errors(visitor, [ComparisonOrderViolation, ComparisonOrderViolation])
 
 
-@pytest.mark.parametrize('code', [
+@pytest.mark.parametrize('code_one', [
     if_with_chained_comparisons,
 ])
 @pytest.mark.parametrize('var_lit', [
@@ -183,12 +183,12 @@ def test_wrong_compound_comparison(
 def test_consistent_chained_comparison(
     assert_errors,
     parse_ast_tree,
-    code,
+    code_one,
     var_lit,
     default_options,
 ):
     """Testing : no violations with correct comparisons."""
-    tree = parse_ast_tree(code.format(var_lit[0], var_lit[1]))
+    tree = parse_ast_tree(code_one.format(var_lit[0], var_lit[1]))
 
     visitor = WrongOrderVisitor(default_options, tree=tree)
     visitor.run()
@@ -196,18 +196,21 @@ def test_consistent_chained_comparison(
     assert_errors(visitor, [])
 
 
+@pytest.mark.parametrize('code_two', [
+    if_with_chained_comparisons,
+])
 @pytest.mark.parametrize('lit_var', [
     (5, 'x'),
 ])
 def test_consistent_chained_comparison(
     assert_errors,
     parse_ast_tree,
-    code,
+    code_two,
     lit_var,
     default_options,
 ):
     """Testing : violations are raised with bad comparisons."""
-    tree = parse_ast_tree(code.format(lit_var[0], lit_var[1]))
+    tree = parse_ast_tree(code_two.format(lit_var[0], lit_var[1]))
 
     visitor = WrongOrderVisitor(default_options, tree=tree)
     visitor.run()
