@@ -39,6 +39,7 @@ Summary
    FormattedStringViolation
    RequiredBaseClassViolation
    MultipleIfsInComprehensionViolation
+   ConstantComparisonViolation
    ComparisonOrderViolation
 
 Consistency checks
@@ -52,6 +53,7 @@ Consistency checks
 .. autoclass:: FormattedStringViolation
 .. autoclass:: RequiredBaseClassViolation
 .. autoclass:: MultipleIfsInComprehensionViolation
+.. autoclass:: ConstantComparisonViolation
 .. autoclass:: ComparisonOrderViolation
 
 """
@@ -318,6 +320,40 @@ class MultipleIfsInComprehensionViolation(ASTViolation):
     code = 307
 
 
+class ConstantComparisonViolation(ASTViolation):
+    """
+    Forbids to have comparisons between two literals.
+
+    Reasoning:
+        When two constants are compared it is typically an indication of a
+        mistake, since the Boolean value of the comparison will always be
+        the same.
+
+    Solution:
+        Remove the constant comparison and any associated dead code.
+
+    Example::
+
+        # Wrong:
+        if 60 * 60 < 1000:
+            do_something()
+        else:
+            do_something_else()
+
+        # Correct:
+        do_something_else()
+
+    Note:
+        Returns Z308 as error code
+
+    """
+
+    should_use_text = False
+    #: Error message shown to the user.
+    error_template = 'Found constant comparison'
+    code = 308
+
+
 class ComparisonOrderViolation(ASTViolation):
     """
     Forbids comparisions where argument doesn't come first.
@@ -337,11 +373,11 @@ class ComparisonOrderViolation(ASTViolation):
         if some_x > 3:
 
     Note:
-        Returns Z308 as error code
+        Returns Z309 as error code
 
     """
 
     should_use_text = False
     #: Error message shown to the user.
     error_template = 'Found inconsistent comparison order'
-    code = 308
+    code = 309

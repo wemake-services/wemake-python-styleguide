@@ -9,6 +9,7 @@ We used to have incremental versioning before `0.1.0`.
 ### Features
 
 - Forbids to use `quit` and `exit` functions
+- Forbids the comparison of two literals
 - Adds `ComparisonOrderViolation`
 
 ### Misc
