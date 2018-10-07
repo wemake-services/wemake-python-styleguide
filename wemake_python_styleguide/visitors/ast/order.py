@@ -13,7 +13,9 @@ class WrongOrderVisitor(BaseNodeVisitor):
 
     def _check_for_in_op(self, operators: list) -> bool:
         for operator in operators:
-            if isinstance(operator, ast.In) or isinstance(operator, ast.NotIn):
+            if isinstance(operator, ast.In):
+                return True
+            elif isinstance(operator, ast.NotIn):
                 return True
 
         return False
