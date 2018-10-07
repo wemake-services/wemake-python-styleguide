@@ -14,7 +14,7 @@ class WrongOrderVisitor(BaseNodeVisitor):
     def _check_for_in_op(self, operators: list) -> bool:
         for operator in operators:
             if (isinstance(operator, ast.In) or
-                isinstance(operator, ast.NotIn)):
+                    isinstance(operator, ast.NotIn)):
                 return True
 
         return False
@@ -23,7 +23,7 @@ class WrongOrderVisitor(BaseNodeVisitor):
         count = 0
         for comparator in comparators:
             if (isinstance(comparator, ast.Name) or
-                isinstance(comparator, ast.Call)):
+                    isinstance(comparator, ast.Call)):
                 count += 1
 
         return count
@@ -40,18 +40,18 @@ class WrongOrderVisitor(BaseNodeVisitor):
             return count
 
         return (self._get_num_variables_and_calls_in_BinOp(node.left) +
-                self._get_num_variables_and_calls_in_BinOp(node.right))
+                    self._get_num_variables_and_calls_in_BinOp(node.right))
 
     def _check_order(self, node: ast.Compare) -> None:
         if isinstance(node.left, ast.Name) or isinstance(node.left, ast.Call):
             return
         if (self._get_num_variables_and_calls(node.comparators) > 1 or
-            self._get_num_variables_and_calls_in_BinOp(node.left) > 0):
+                self._get_num_variables_and_calls_in_BinOp(node.left) > 0):
             return
         if self._check_for_in_op(node.ops):
             return
         if (not isinstance(node.comparators[-1], ast.Name) and
-            not isinstance(node.comparators[-1], ast.BinOp)):
+                not isinstance(node.comparators[-1], ast.BinOp)):
             return
 
         self.add_violation(ComparisonOrderViolation(node))
