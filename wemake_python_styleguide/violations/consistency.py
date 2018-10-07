@@ -359,6 +359,10 @@ class BadNumberSuffixViolation(TokenizeViolation):
     Forbids to use capital (``XOBE``) in numbers.
 
     Reasoning:
+        Octal, hex, binary and scientific notation suffixes could
+        be written in two possible notations: lowercase and uppercase.
+        Which brings confusion and decreases code consistency and readability.
+
         It is possible to write ``0xFF`` in two different ways:
         ``0xFF``, ``0XFF``.
         It is possible to write ``0o11`` in two different ways:
@@ -367,6 +371,7 @@ class BadNumberSuffixViolation(TokenizeViolation):
         ``0b1001``, ``0B1001``.
         It is possible to write ``1.5e+10`` in two different ways:
         ``1.5e+10``, ``1.5E+10``.
+
         We enforce a single way to write numbers with suffixes:
         suffix without capital chars.
 
@@ -389,10 +394,10 @@ class BadNumberSuffixViolation(TokenizeViolation):
         number_with_scientific_notation = 1.5E+10
 
     Note:
-        Returns Z308 as error code
+        Returns Z309 as error code
 
     """
 
-    code = 308
+    code = 309
     #: Error message shown to the user.
     error_template = 'Found underscored number: {0}'
