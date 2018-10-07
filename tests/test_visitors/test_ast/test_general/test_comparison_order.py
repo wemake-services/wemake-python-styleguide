@@ -58,6 +58,16 @@ if 0 < {0} < {1}:
     return 1
 """
 
+if_with_in = """
+if {0} in a:
+    return 1
+"""
+
+if_with_not_in = """
+if {0} not in a:
+    return 1
+"""
+
 
 @pytest.mark.parametrize('code', [
     if_with_is,
@@ -216,3 +226,28 @@ def test_inconsistent_chained_comparison(
     visitor.run()
 
     assert_errors(visitor, [ComparisonOrderViolation])
+
+
+@pytest.mark.parametrize('code', [
+    if_with_in,
+    if_with_not_in,
+])
+@pytest.mark.parametrize('literal', [
+    5,
+    1.2,
+    [1, 2],
+])
+def test_in_comparison(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    literal,
+    default_options,
+):
+    """Testing : no violations with 'in' comparisons."""
+    tree = parse_ast_tree(code.format(literal))
+
+    visitor = WrongOrderVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
