@@ -22,7 +22,7 @@ def test_bad_number_suffixes(
     default_options,
     code,
 ):
-    """Ensures that numbers with siffix not in lowercase raise a warning."""
+    """Ensures that numbers with suffix not in lowercase raise a warning."""
     file_tokens = parse_tokens(code)
 
     visitor = WrongPrimitivesVisitor(default_options, file_tokens=file_tokens)
@@ -37,6 +37,7 @@ def test_bad_number_suffixes(
     '0o11 + 5',
     'y = 0b1001',
     'print("0XFF")',
+    'regular = "XOBE"',
 ])
 def test_correct_number_suffixes(
     parse_tokens,

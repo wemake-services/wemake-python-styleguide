@@ -356,24 +356,14 @@ class ConstantComparisonViolation(ASTViolation):
 
 class BadNumberSuffixViolation(TokenizeViolation):
     """
-    Forbids to use capital (``XOBE``) in numbers.
+    Forbids to use capital ``X``, ``O``, ``B``, and ``E`` in numbers.
 
     Reasoning:
         Octal, hex, binary and scientific notation suffixes could
         be written in two possible notations: lowercase and uppercase.
         Which brings confusion and decreases code consistency and readability.
-
-        It is possible to write ``0xFF`` in two different ways:
-        ``0xFF``, ``0XFF``.
-        It is possible to write ``0o11`` in two different ways:
-        ``0o11``, ``0O11``.
-        It is possible to write ``0b1001`` in two different ways:
-        ``0b1001``, ``0B1001``.
-        It is possible to write ``1.5e+10`` in two different ways:
-        ``1.5e+10``, ``1.5E+10``.
-
         We enforce a single way to write numbers with suffixes:
-        suffix without capital chars.
+        suffix with lowercase chars.
 
     Solution:
         Octal, hex, binary and scientific notation suffixes in numbers
