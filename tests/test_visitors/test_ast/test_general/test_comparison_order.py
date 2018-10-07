@@ -124,7 +124,6 @@ def test_comparison_literal_right(
     if_with_gt,
     ternary,
     while_construct,
-    if_with_compound_expr,
 ])
 @pytest.mark.parametrize('lit_var', [
     (1, 'a'),
@@ -139,6 +138,22 @@ def test_wrong_comparison(assert_errors, parse_ast_tree, code, lit_var, default_
     visitor.run()
     
     assert_errors(visitor, [ComparisonOrderViolation])
+
+
+@pytest.mark.parametrize('code', [
+    if_with_compound_expr,
+])
+@pytest.mark.parametrize('lit_var', [
+    ([1,2], 'a'), 
+])
+def test_wrong_compound_comparison(assert_errors, parse_ast_tree, code, lit_var, default_options):
+    """Testing that violations are raised when inconsistent comparisons are used."""
+    tree = parse_ast_tree(code.format(lit_var[0], lit_var[1]))
+    
+    visitor = WrongOrderVisitor(default_options, tree=tree)
+    visitor.run()
+    
+    assert_errors(visitor, [ComparisonOrderViolation, ComparisonOrderViolation])
 
 
 @pytest.mark.parametrize('code', [
