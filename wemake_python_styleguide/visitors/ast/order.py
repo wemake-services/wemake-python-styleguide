@@ -11,14 +11,6 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 class WrongOrderVisitor(BaseNodeVisitor):
     """Restricts comparisions where argument doesn't come first."""
 
-    def _check_for_in_op(self, operators: list) -> bool:
-        for operator in operators:
-            if (isinstance(operator, ast.In) or
-                    isinstance(operator, ast.NotIn)):
-                return True
-
-        return False
-
     def _get_num_variables_and_calls(self, comparators: list) -> int:
         count = 0
         for comparator in comparators:
@@ -48,8 +40,12 @@ class WrongOrderVisitor(BaseNodeVisitor):
         if (self._get_num_variables_and_calls(node.comparators) > 1 or
                 self._get_num_variables_and_calls_in_BinOp(node.left) > 0):
             return
-        if self._check_for_in_op(node.ops):
-            return
+
+        # _check_for_in_op
+        for operator in node.ops:
+            if (isinstance(operator, ast.In) or
+                    isinstance(operator, ast.NotIn)):
+                return
         if (not isinstance(node.comparators[-1], ast.Name) and
                 not isinstance(node.comparators[-1], ast.BinOp)):
             return
