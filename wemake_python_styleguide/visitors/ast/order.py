@@ -34,14 +34,21 @@ class WrongOrderVisitor(BaseNodeVisitor):
         return (self._get_num_variables_and_calls_in_BinOp(node.left) +
                 self._get_num_variables_and_calls_in_BinOp(node.right))
 
-    def _check_order(self, node: ast.Compare) -> None:
+    def visit_Compare(self, node: ast.Compare) -> None:
+        """
+        Forbids comparisions where argument doesn't come first.
+
+        Raises:
+            ComparisonOrderViolation
+
+        """
         if isinstance(node.left, ast.Name) or isinstance(node.left, ast.Call):
             return
         if (self._get_num_variables_and_calls(node.comparators) > 1 or
                 self._get_num_variables_and_calls_in_BinOp(node.left) > 0):
             return
 
-        # _check_for_in_op
+        # Check for in op
         for operator in node.ops:
             if (isinstance(operator, ast.In) or
                     isinstance(operator, ast.NotIn)):
@@ -51,14 +58,4 @@ class WrongOrderVisitor(BaseNodeVisitor):
             return
 
         self.add_violation(ComparisonOrderViolation(node))
-
-    def visit_Compare(self, node: ast.Compare) -> None:
-        """
-        Forbids comparisions where argument doesn't come first.
-
-        Raises:
-            ComparisonOrderViolation
-
-        """
-        self._check_order(node)
         self.generic_visit(node)
