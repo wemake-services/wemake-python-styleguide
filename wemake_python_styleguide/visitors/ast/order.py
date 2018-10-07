@@ -42,12 +42,9 @@ class WrongOrderVisitor(BaseNodeVisitor):
         return (self._get_num_variables_and_calls_in_BinOp(node.left) +
          self._get_num_variables_and_calls_in_BinOp(node.right))
 
-
     def _check_order(self, node: ast.Compare) -> None:
         if isinstance(node.left, ast.Name) or isinstance(node.left, ast.Call):
             return
-        nVarCallBinOp = self._get_num_variables_and_calls_in_BinOp(node.left)
-
         if (self._get_num_variables_and_calls(node.comparators) > 1 or
          self._get_num_variables_and_calls_in_BinOp(node.left) > 0):
             return
