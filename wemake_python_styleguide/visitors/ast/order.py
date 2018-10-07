@@ -13,7 +13,8 @@ class WrongOrderVisitor(BaseNodeVisitor):
 
     def _check_for_in_op(self, operators: list) -> bool:
         for operator in operators:
-            if isinstance(operator, ast.In) or isinstance(operator, ast.NotIn):
+            if (isinstance(operator, ast.In) or
+             isinstance(operator, ast.NotIn)):
                 return True
 
         return False
@@ -21,7 +22,8 @@ class WrongOrderVisitor(BaseNodeVisitor):
     def _get_num_variables_and_calls(self, comparators: list) -> int:
         count = 0
         for comparator in comparators:
-            if isinstance(comparator, ast.Name) or isinstance(comparator, ast.Call):
+            if (isinstance(comparator, ast.Name) or
+             isinstance(comparator, ast.Call)):
                 count += 1
 
         return count
@@ -36,19 +38,24 @@ class WrongOrderVisitor(BaseNodeVisitor):
             count += 1
         if count != 0:
             return count
-            
-        return self._get_num_variables_and_calls_in_BinOp(node.left) + self._get_num_variables_and_calls_in_BinOp(node.right)
+
+        return (self._get_num_variables_and_calls_in_BinOp(node.left) +
+         self._get_num_variables_and_calls_in_BinOp(node.right))
 
 
     def _check_order(self, node: ast.Compare) -> None:
         if isinstance(node.left, ast.Name) or isinstance(node.left, ast.Call):
             return
-        if self._get_num_variables_and_calls(node.comparators) > 1 or self._get_num_variables_and_calls_in_BinOp(node.left) > 0:
+        nVarCallBinOp = self._get_num_variables_and_calls_in_BinOp(node.left)
+
+        if (self._get_num_variables_and_calls(node.comparators) > 1 or
+         self._get_num_variables_and_calls_in_BinOp(node.left) > 0):
             return
         if self._check_for_in_op(node.ops):
             return
-        # if not isinstance(node.comparators[-1], ast.Name):
-        #     return
+        if (not isinstance(node.comparators[-1], ast.Name) and
+         not isinstance(node.comparators[-1], ast.BinOp)):
+            return
 
         self.add_violation(ComparisonOrderViolation(node))
 
