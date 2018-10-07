@@ -2,7 +2,7 @@
 
 import pytest
 
-+from wemake_python_styleguide.violations.consistency import (
+from wemake_python_styleguide.violations.consistency import (
     ComparisonOrderViolation,
 )
 from wemake_python_styleguide.visitors.ast.order import WrongOrderVisitor
