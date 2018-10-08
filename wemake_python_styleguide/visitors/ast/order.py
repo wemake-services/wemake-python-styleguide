@@ -63,6 +63,6 @@ class WrongOrderVisitor(BaseNodeVisitor):
         Raises:
             ComparisonOrderViolation
 
-        """  
+        """
         self._check_order(node)
         self.generic_visit(node)

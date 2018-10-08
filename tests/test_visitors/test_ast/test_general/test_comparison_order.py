@@ -68,11 +68,6 @@ if {0} not in a:
     return 1
 """
 
-more_than_one_variable = """
-if 0 < b < c:
-    return 1
-"""
-
 
 @pytest.mark.parametrize('code', [
     if_with_is,
@@ -251,24 +246,6 @@ def test_in_comparison(
 ):
     """Testing : no violations with 'in' comparisons."""
     tree = parse_ast_tree(code.format(literal))
-
-    visitor = WrongOrderVisitor(default_options, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [])
-
-
-@pytest.mark.parametrize('code', [
-    more_than_one_variable,
-])
-def test_more_variables_comparison(
-    assert_errors,
-    parse_ast_tree,
-    code,
-    default_options,
-):
-    """Testing : no violations with correct comparisons."""
-    tree = parse_ast_tree(code)
 
     visitor = WrongOrderVisitor(default_options, tree=tree)
     visitor.run()
