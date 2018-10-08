@@ -41,6 +41,7 @@ Summary
    MultipleIfsInComprehensionViolation
    ConstantComparisonViolation
    BadNumberSuffixViolation
+   ComparisonOrderViolation
 
 Consistency checks
 ------------------
@@ -55,6 +56,7 @@ Consistency checks
 .. autoclass:: MultipleIfsInComprehensionViolation
 .. autoclass:: ConstantComparisonViolation
 .. autoclass:: BadNumberSuffixViolation
+.. autoclass:: ComparisonOrderViolation
 
 """
 
@@ -391,3 +393,32 @@ class BadNumberSuffixViolation(TokenizeViolation):
     code = 309
     #: Error message shown to the user.
     error_template = 'Found underscored number: {0}'
+
+
+class ComparisonOrderViolation(ASTViolation):
+    """
+    Forbids comparisions where argument doesn't come first.
+
+    Reasoning:
+        brings a consistency to the comparison.
+
+    Solution:
+        Refactor your comparison expression.
+
+    Example::
+
+        # Wrong:
+        if 3 < some_x:
+
+        # Correct:
+        if some_x > 3:
+
+    Note:
+        Returns Z310 as error code
+
+    """
+
+    should_use_text = False
+    #: Error message shown to the user.
+    error_template = 'Found inconsistent comparison order'
+    code = 310

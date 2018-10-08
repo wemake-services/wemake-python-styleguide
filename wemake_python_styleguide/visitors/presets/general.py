@@ -10,6 +10,7 @@ from wemake_python_styleguide.visitors.ast.functions import (
 )
 from wemake_python_styleguide.visitors.ast.imports import WrongImportVisitor
 from wemake_python_styleguide.visitors.ast.modules import WrongContentsVisitor
+from wemake_python_styleguide.visitors.ast.order import WrongOrderVisitor
 from wemake_python_styleguide.visitors.ast.strings import WrongStringVisitor
 from wemake_python_styleguide.visitors.filenames.wrong_module_name import (
     WrongModuleNameVisitor,
@@ -28,6 +29,7 @@ GENERAL_PRESET = (
     WrongStringVisitor,
     WrongContentsVisitor,
     ConstantComparisonVisitor,
+    WrongOrderVisitor,
 
     # Classes:
     WrongClassVisitor,
