@@ -183,3 +183,23 @@ def test_underscored_number_in_variable_names(
     visitor.run()
 
     assert_errors(visitor, [UnderScoredNumberNameViolation])
+
+
+@pytest.mark.parametrize('code', [
+    variable_test,
+    for_variable_test,
+    async_for_variable_test,
+    with_variable_test,
+    async_with_variable_test,
+    exception_test,
+])
+def test_underscored_number_not_in_variable_names(
+    assert_errors, parse_ast_tree, code, default_options,
+):
+    """Testing that variable can not have private names."""
+    tree = parse_ast_tree(code.format('test34', 'test32_109'))
+
+    visitor = WrongNameVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])

@@ -459,6 +459,7 @@ class UnderScoredNumberNameViolation(SimpleViolation):
 
         # Correct:
         star_wars_episode2
+        iso_123_456
 
         # Wrong:
         star_wars_episode_2

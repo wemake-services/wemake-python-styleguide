@@ -86,18 +86,25 @@ def is_variable_name_with_underscored_number(name: str) -> bool:
 
     >>> is_variable_name_with_underscored_number('star_wars_episode2')
     False
+
     >>> is_variable_name_with_underscored_number(None)
     False
+
     >>> is_variable_name_with_underscored_number('come2_me')
     False
+
     >>> is_variable_name_with_underscored_number('_')
     False
+
     >>> is_variable_name_with_underscored_number('z1')
     False
+
     >>> is_variable_name_with_underscored_number('star_wars_episode_2')
     True
+
     >>> is_variable_name_with_underscored_number('come_2_me')
     True
+
     >>> is_variable_name_with_underscored_number('iso_123_456')
     False
 

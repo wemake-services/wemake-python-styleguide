@@ -109,13 +109,15 @@ def is_stem_with_underscored_number(
     file_path: str,
     pattern: Pattern = constants.UNDERSCORED_NUMBER_PATTERN,
 ) -> bool:
-    r"""
+    """
     Checks whether the file's stem contains an underscored number.
 
     >>> is_stem_with_underscored_number('episode2.py')
     True
+
     >>> is_stem_with_underscored_number('episode_2.py')
     False
+
     >>> is_stem_with_underscored_number('come2_me.py')
     True
 
