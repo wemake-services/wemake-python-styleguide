@@ -9,6 +9,7 @@ from wemake_python_styleguide.constants import (
 from wemake_python_styleguide.logics.variables import (
     is_private_variable,
     is_too_short_variable_name,
+    is_variable_name_with_underscored_number,
     is_wrong_variable_name,
 )
 from wemake_python_styleguide.types import AnyFunctionDef, AnyImport
@@ -18,6 +19,7 @@ from wemake_python_styleguide.violations.best_practices import (
 from wemake_python_styleguide.violations.naming import (
     PrivateNameViolation,
     TooShortVariableNameViolation,
+    UnderScoredNumberNameViolation,
     WrongVariableNameViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -50,6 +52,9 @@ class WrongNameVisitor(BaseNodeVisitor):
 
         if is_private_variable(name):
             self.add_violation(PrivateNameViolation(node, text=name))
+
+        if is_variable_name_with_underscored_number(name):
+            self.add_violation(UnderScoredNumberNameViolation())
 
     def _check_function_signature(self, node: AnyFunctionDef) -> None:
         for arg in node.args.args:

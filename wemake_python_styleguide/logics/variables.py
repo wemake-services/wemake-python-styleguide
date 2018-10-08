@@ -2,6 +2,7 @@
 
 from typing import Iterable, Optional
 
+from wemake_python_styleguide import constants
 from wemake_python_styleguide.options.defaults import MIN_VARIABLE_LENGTH
 
 
@@ -77,3 +78,29 @@ def is_private_variable(name: Optional[str]) -> bool:
     return (
         name is not None and name.startswith('__') and not name.endswith('__')
     )
+
+
+def is_variable_name_with_underscored_number(name: str) -> bool:
+    """
+    Checks for variable names with underscored number.
+
+    >>> is_variable_name_with_underscored_number('star_wars_episode2')
+    False
+    >>> is_variable_name_with_underscored_number(None)
+    False
+    >>> is_variable_name_with_underscored_number('come2_me')
+    False
+    >>> is_variable_name_with_underscored_number('_')
+    False
+    >>> is_variable_name_with_underscored_number('z1')
+    False
+    >>> is_variable_name_with_underscored_number('star_wars_episode_2')
+    True
+    >>> is_variable_name_with_underscored_number('come_2_me')
+    True
+    >>> is_variable_name_with_underscored_number('iso_123_456')
+    False
+
+    """
+    pattern = constants.UNDERSCORED_NUMBER_PATTERN
+    return name is not None and pattern.match(name) is not None

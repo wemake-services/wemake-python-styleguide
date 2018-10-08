@@ -124,6 +124,7 @@ Summary
    TooShortVariableNameViolation
    PrivateNameViolation
    SameAliasImportViolation
+   UnderScoredNumberNameViolation
 
 Module names
 ------------
@@ -141,6 +142,7 @@ Variable names
 .. autoclass:: TooShortVariableNameViolation
 .. autoclass:: PrivateNameViolation
 .. autoclass:: SameAliasImportViolation
+.. autoclass:: UnderScoredNumberNameViolation
 
 """
 
@@ -439,3 +441,33 @@ class SameAliasImportViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found same alias import "{0}"'
     code = 113
+
+
+class UnderScoredNumberNameViolation(SimpleViolation):
+    """
+    Forbids to have names with underscored numbers pattern.
+
+    Reasoning:
+        This is done for consistency in naming.
+
+    Solution:
+        Rename your variable or modules to not include underscored numbers
+
+    This rule checks: variables, and modules.
+
+    Example::
+
+        # Correct:
+        star_wars_episode2
+
+        # Wrong:
+        star_wars_episode_2
+
+    Note:
+        Returns Z114 as error code
+
+    """
+
+    #: Error message shown to the user.
+    error_template = 'Found underscored name pattern "{0}"'
+    code = 114

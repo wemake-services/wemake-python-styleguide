@@ -154,3 +154,5 @@ STDIN = 'stdin'
 # TODO: rename to `INIT_MODULE`
 # This variable is used to specify as a placeholder for `__init__.py`:
 INIT = '__init__'
+
+UNDERSCORED_NUMBER_PATTERN = re.compile(r'.*\D_\d(\D|$)')
