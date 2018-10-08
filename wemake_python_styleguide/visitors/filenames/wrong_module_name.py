@@ -19,7 +19,7 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
     def _check_module_name(self) -> None:
         is_wrong_name = filenames.is_stem_in_list(
             self.filename,
-            constants.BAD_MODULE_NAMES,
+            constants.MODULE_NAMES_BLACKLIST,
         )
         if is_wrong_name:
             self.add_violation(WrongModuleNameViolation())

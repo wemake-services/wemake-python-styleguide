@@ -2,7 +2,7 @@
 
 import pytest
 
-from wemake_python_styleguide.constants import BAD_MODULE_NAMES
+from wemake_python_styleguide.constants import MODULE_NAMES_BLACKLIST
 from wemake_python_styleguide.violations.naming import WrongModuleNameViolation
 from wemake_python_styleguide.visitors.filenames.wrong_module_name import (
     WrongModuleNameVisitor,
@@ -23,7 +23,7 @@ def test_simple_filename(assert_errors, filename, default_options):
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('filename', BAD_MODULE_NAMES)
+@pytest.mark.parametrize('filename', MODULE_NAMES_BLACKLIST)
 def test_restricted_filename(assert_errors, filename, default_options):
     """Testing that some file names are restricted."""
     visitor = WrongModuleNameVisitor(default_options, filename=filename + '.py')

@@ -50,3 +50,8 @@ class BadClass:  # noqa: Z306
 
 
 magic_numbers = 13.2 + 50  # noqa: Z432
+
+hex_number = 0XFF  # noqa: Z309
+octal_number = 0O11  # noqa: Z309
+binary_number = 0B1001  # noqa: Z309
+number_with_scientific_notation = 1.5E+10  # noqa: Z309

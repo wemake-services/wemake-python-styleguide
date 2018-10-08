@@ -6,9 +6,17 @@ We used to have incremental versioning before `0.1.0`.
 
 ## WIP
 
+### Features
+
+- Forbids to use `quit` and `exit` functions
+- Forbids the comparison of two literals
+- Enforce consistent octal, binary, and hex numbers
+- Adds `ComparisonOrderViolation`
+
 ### Misc
 
 - Improves tests: now testing magic numbers in more situations
+- Improves tests: now testing more situations with empty base classes
 
 
 ## 0.2.0 aka Revenge of the Async

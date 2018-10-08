@@ -2,7 +2,7 @@
 
 import ast
 
-from wemake_python_styleguide.constants import BAD_MAGIC_METHODS
+from wemake_python_styleguide.constants import MAGIC_METHODS_BLACKLIST
 from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations.best_practices import (
     BadMagicMethodViolation,
@@ -21,19 +21,23 @@ from wemake_python_styleguide.visitors.decorators import alias
 ))
 class WrongClassVisitor(BaseNodeVisitor):
     """
-    This class is responsible for restricting some ``class`` antipatterns.
+    This class is responsible for restricting some ``class`` anti-patterns.
 
     Here we check for stylistic issues and design patterns.
     """
 
+    _staticmethod_names = (
+        'staticmethod',
+    )
+
     def _check_decorators(self, node: AnyFunctionDef) -> None:
         for decorator in node.decorator_list:
             decorator_name = getattr(decorator, 'id', None)
-            if decorator_name == 'staticmethod':  # TODO: refactor magic str
+            if decorator_name in self._staticmethod_names:
                 self.add_violation(StaticMethodViolation(node))
 
     def _check_magic_methods(self, node: AnyFunctionDef) -> None:
-        if node.name in BAD_MAGIC_METHODS:
+        if node.name in MAGIC_METHODS_BLACKLIST:
             self.add_violation(BadMagicMethodViolation(node, text=node.name))
 
     def _check_base_class(self, node: ast.ClassDef) -> None:

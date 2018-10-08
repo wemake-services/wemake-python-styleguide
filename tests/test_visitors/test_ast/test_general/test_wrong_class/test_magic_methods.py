@@ -2,7 +2,7 @@
 
 import pytest
 
-from wemake_python_styleguide.constants import BAD_MAGIC_METHODS
+from wemake_python_styleguide.constants import MAGIC_METHODS_BLACKLIST
 from wemake_python_styleguide.violations.best_practices import (
     BadMagicMethodViolation,
 )
@@ -23,7 +23,7 @@ class Example(object):
     magic_method,
     async_magic_method,
 ])
-@pytest.mark.parametrize('method', BAD_MAGIC_METHODS)
+@pytest.mark.parametrize('method', MAGIC_METHODS_BLACKLIST)
 def test_wrong_magic_used(
     assert_errors,
     parse_ast_tree,

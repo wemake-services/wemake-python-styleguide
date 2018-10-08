@@ -3,8 +3,8 @@
 import ast
 
 from wemake_python_styleguide.constants import (
-    BAD_MODULE_METADATA_VARIABLES,
-    BAD_VARIABLE_NAMES,
+    MODULE_METADATA_VARIABLES_BLACKLIST,
+    VARIABLE_NAMES_BLACKLIST,
 )
 from wemake_python_styleguide.logics.variables import (
     is_private_variable,
@@ -43,7 +43,7 @@ class WrongNameVisitor(BaseNodeVisitor):
     """
 
     def _check_name(self, node: ast.AST, name: str) -> None:
-        if is_wrong_variable_name(name, BAD_VARIABLE_NAMES):
+        if is_wrong_variable_name(name, VARIABLE_NAMES_BLACKLIST):
             self.add_violation(WrongVariableNameViolation(node, text=name))
 
         min_length = self.options.min_variable_length
@@ -153,7 +153,7 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
 
         for target_node in node.targets:
             target_node_id = getattr(target_node, 'id', None)
-            if target_node_id in BAD_MODULE_METADATA_VARIABLES:
+            if target_node_id in MODULE_METADATA_VARIABLES_BLACKLIST:
                 self.add_violation(
                     WrongModuleMetadataViolation(node, text=target_node_id),
                 )

@@ -39,6 +39,9 @@ Summary
    FormattedStringViolation
    RequiredBaseClassViolation
    MultipleIfsInComprehensionViolation
+   ConstantComparisonViolation
+   BadNumberSuffixViolation
+   ComparisonOrderViolation
 
 Consistency checks
 ------------------
@@ -51,6 +54,9 @@ Consistency checks
 .. autoclass:: FormattedStringViolation
 .. autoclass:: RequiredBaseClassViolation
 .. autoclass:: MultipleIfsInComprehensionViolation
+.. autoclass:: ConstantComparisonViolation
+.. autoclass:: BadNumberSuffixViolation
+.. autoclass:: ComparisonOrderViolation
 
 """
 
@@ -314,3 +320,105 @@ class MultipleIfsInComprehensionViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found list comprehension with multiple `if`s'
     code = 307
+
+
+class ConstantComparisonViolation(ASTViolation):
+    """
+    Forbids to have comparisons between two literals.
+
+    Reasoning:
+        When two constants are compared it is typically an indication of a
+        mistake, since the Boolean value of the comparison will always be
+        the same.
+
+    Solution:
+        Remove the constant comparison and any associated dead code.
+
+    Example::
+
+        # Wrong:
+        if 60 * 60 < 1000:
+            do_something()
+        else:
+            do_something_else()
+
+        # Correct:
+        do_something_else()
+
+    Note:
+        Returns Z308 as error code
+
+    """
+
+    should_use_text = False
+    #: Error message shown to the user.
+    error_template = 'Found constant comparison'
+    code = 308
+
+
+class BadNumberSuffixViolation(TokenizeViolation):
+    """
+    Forbids to use capital ``X``, ``O``, ``B``, and ``E`` in numbers.
+
+    Reasoning:
+        Octal, hex, binary and scientific notation suffixes could
+        be written in two possible notations: lowercase and uppercase.
+        Which brings confusion and decreases code consistency and readability.
+        We enforce a single way to write numbers with suffixes:
+        suffix with lowercase chars.
+
+    Solution:
+        Octal, hex, binary and scientific notation suffixes in numbers
+        should be written lowercase.
+
+    Example::
+
+        # Correct:
+        hex_number = 0xFF
+        octal_number = 0o11
+        binary_number = 0b1001
+        number_with_scientific_notation = 1.5e+10
+
+        # Wrong:
+        hex_number = 0XFF
+        octal_number = 0O11
+        binary_number = 0B1001
+        number_with_scientific_notation = 1.5E+10
+
+    Note:
+        Returns Z309 as error code
+
+    """
+
+    code = 309
+    #: Error message shown to the user.
+    error_template = 'Found underscored number: {0}'
+
+
+class ComparisonOrderViolation(ASTViolation):
+    """
+    Forbids comparisions where argument doesn't come first.
+
+    Reasoning:
+        brings a consistency to the comparison.
+
+    Solution:
+        Refactor your comparison expression.
+
+    Example::
+
+        # Wrong:
+        if 3 < some_x:
+
+        # Correct:
+        if some_x > 3:
+
+    Note:
+        Returns Z310 as error code
+
+    """
+
+    should_use_text = False
+    #: Error message shown to the user.
+    error_template = 'Found inconsistent comparison order'
+    code = 310

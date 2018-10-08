@@ -164,7 +164,7 @@ class WrongModuleNameViolation(SimpleViolation):
         Rename your module, reorganize the contents.
 
     See
-    :py:data:`~wemake_python_styleguide.constants.BAD_MODULE_NAMES`
+    :py:data:`~wemake_python_styleguide.constants.MODULE_NAMES_BLACKLIST`
     for the full list of bad module names.
 
     Example::
@@ -330,7 +330,7 @@ class WrongVariableNameViolation(ASTViolation):
         add a prefix or suffix to it. It will serve you well.
 
     See
-    :py:data:`~wemake_python_styleguide.constants.BAD_VARIABLE_NAMES`
+    :py:data:`~wemake_python_styleguide.constants.VARIABLE_NAMES_BLACKLIST`
     for the full list of blacklisted variable names.
 
     Example::

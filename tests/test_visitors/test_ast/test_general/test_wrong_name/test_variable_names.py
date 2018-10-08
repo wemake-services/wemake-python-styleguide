@@ -11,7 +11,7 @@ from wemake_python_styleguide.violations.naming import (
     WrongVariableNameViolation,
 )
 from wemake_python_styleguide.visitors.ast.naming import (
-    BAD_VARIABLE_NAMES,
+    VARIABLE_NAMES_BLACKLIST,
     WrongNameVisitor,
 )
 
@@ -57,7 +57,7 @@ except Exception as {0}:
 """
 
 
-@pytest.mark.parametrize('bad_name', BAD_VARIABLE_NAMES)
+@pytest.mark.parametrize('bad_name', VARIABLE_NAMES_BLACKLIST)
 @pytest.mark.parametrize('code', [
     variable_test,
     for_variable_test,
