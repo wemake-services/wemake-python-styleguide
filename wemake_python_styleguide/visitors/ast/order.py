@@ -11,6 +11,14 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 class WrongOrderVisitor(BaseNodeVisitor):
     """Restricts comparisions where argument doesn't come first."""
 
+    def _check_for_in_op(self, operators: list) -> bool:
+        for operator in operators:
+            if (isinstance(operator, ast.In) or
+                    isinstance(operator, ast.NotIn)):
+                return True
+
+        return False
+
     def _get_num_variables_and_calls(self, comparators: list) -> int:
         count = 0
         for comparator in comparators:
@@ -34,6 +42,20 @@ class WrongOrderVisitor(BaseNodeVisitor):
         return (self._get_num_variables_and_calls_in_BinOp(node.left) +
                 self._get_num_variables_and_calls_in_BinOp(node.right))
 
+    def _check_order(self, node: ast.Compare) -> None:
+        if isinstance(node.left, ast.Name) or isinstance(node.left, ast.Call):
+            return
+        if (self._get_num_variables_and_calls(node.comparators) > 1 or
+                self._get_num_variables_and_calls_in_BinOp(node.left) > 0):
+            return
+        if self._check_for_in_op(node.ops):
+            return
+        if (not isinstance(node.comparators[-1], ast.Name) and
+                not isinstance(node.comparators[-1], ast.BinOp)):
+            return
+
+        self.add_violation(ComparisonOrderViolation(node))
+
     def visit_Compare(self, node: ast.Compare) -> None:
         """
         Forbids comparisions where argument doesn't come first.
@@ -41,21 +63,6 @@ class WrongOrderVisitor(BaseNodeVisitor):
         Raises:
             ComparisonOrderViolation
 
-        """
-        if isinstance(node.left, ast.Name) or isinstance(node.left, ast.Call):
-            return
-        if (self._get_num_variables_and_calls(node.comparators) > 1 or
-                self._get_num_variables_and_calls_in_BinOp(node.left) > 0):
-            return
-
-        # Check for in op
-        for operator in node.ops:
-            if (isinstance(operator, ast.In) or
-                    isinstance(operator, ast.NotIn)):
-                return
-        if (not isinstance(node.comparators[-1], ast.Name) and
-                not isinstance(node.comparators[-1], ast.BinOp)):
-            return
-
-        self.add_violation(ComparisonOrderViolation(node))
+        """  
+        self._check_order(node)
         self.generic_visit(node)

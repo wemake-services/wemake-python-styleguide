@@ -18,7 +18,7 @@ def assert_errors():
     """Helper function to assert visitor violations."""
     def factory(visitor: BaseVisitor, errors: Sequence[str]):
         for index, error in enumerate(visitor.violations):
-            assert index < len(errors), [
+            assert len(errors) > index, [
                 (type(error), error.message()) for error in visitor.violations
             ]
             assert error.code == errors[index].code
