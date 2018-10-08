@@ -11,12 +11,12 @@ if len(a) > b:
     return 1
 """
 
-if_with_complex_call_1 = """
+if_with_complex_call1 = """
 if random() + index - some > index:
     return 1
 """
 
-if_with_complex_call_2 = """
+if_with_complex_call2 = """
 if (index - some) + (x + y) > index:
     return 1
 """
@@ -34,8 +34,8 @@ if 0 < b < c:
 
 @pytest.mark.parametrize('code', [
     if_with_func_call,
-    if_with_complex_call_1,
-    if_with_complex_call_2,
+    if_with_complex_call1,
+    if_with_complex_call2,
     if_with_method_call,
 ])
 def test_functions_methods_comparison(
