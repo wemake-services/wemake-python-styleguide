@@ -12,7 +12,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 class WrongOrderVisitor(BaseNodeVisitor):
     """Restricts comparisions where argument doesn't come first."""
 
-    def _check_for_in_op(self, operators: List[ast.AST]) -> bool:
+    def _check_for_in_op(self, operators: List[ast.cmpop]) -> bool:
         for operator in operators:
             if (isinstance(operator, ast.In) or
                     isinstance(operator, ast.NotIn)):
@@ -20,7 +20,7 @@ class WrongOrderVisitor(BaseNodeVisitor):
 
         return False
 
-    def _get_num_variables_and_calls(self, comparators: List[ast.AST]) -> int:
+    def _get_num_variables_and_calls(self, comparators: List[ast.expr]) -> int:
         count = 0
         for comparator in comparators:
             if (isinstance(comparator, ast.Name) or
