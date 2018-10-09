@@ -9,7 +9,7 @@ import pytest
 from wemake_python_styleguide import violations
 from wemake_python_styleguide.violations.base import (
     ASTViolation,
-    BaseStyleViolation,
+    BaseViolation,
     SimpleViolation,
     TokenizeViolation,
 )
@@ -18,14 +18,14 @@ from wemake_python_styleguide.violations.base import (
 def _is_error_class(cls) -> bool:
     base_classes = {
         ASTViolation,
-        BaseStyleViolation,
+        BaseViolation,
         SimpleViolation,
         TokenizeViolation,
     }
 
     return (
         inspect.isclass(cls) and
-        issubclass(cls, BaseStyleViolation) and
+        issubclass(cls, BaseViolation) and
         cls not in base_classes
     )
 

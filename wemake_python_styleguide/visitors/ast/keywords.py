@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import ast
+from typing import ClassVar
 
+from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     RaiseNotImplementedViolation,
     WrongKeywordViolation,
@@ -43,7 +45,7 @@ class WrongRaiseVisitor(BaseNodeVisitor):
 class WrongKeywordVisitor(BaseNodeVisitor):
     """Finds wrong keywords."""
 
-    _forbidden_keywords = (
+    _forbidden_keywords: ClassVar[AnyNodes] = (
         ast.Pass,
         ast.Delete,
         ast.Global,

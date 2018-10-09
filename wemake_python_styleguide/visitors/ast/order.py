@@ -1,69 +1,71 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import List
+from typing import ClassVar
 
+from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.consistency import (
     ComparisonOrderViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
+# TODO: move to comparisons.py
 class WrongOrderVisitor(BaseNodeVisitor):
-    """Restricts comparisions where argument doesn't come first."""
+    """Restricts comparision where argument doesn't come first."""
 
-    def _check_for_in_op(self, operators: List[ast.cmpop]) -> bool:
-        for operator in operators:
-            if (isinstance(operator, ast.In) or
-                    isinstance(operator, ast.NotIn)):
-                return True
+    _allowed_left_nodes: ClassVar[AnyNodes] = (
+        ast.Name,
+        ast.Call,
+        ast.Attribute,
+    )
 
+    _special_cases: ClassVar[AnyNodes] = (
+        ast.In,
+        ast.NotIn,
+    )
+
+    def _is_special_case(self, node: ast.Compare) -> bool:
+        """
+        Operators ``in`` and ``not in`` are special cases.
+
+        Why? Because it is perfectly fine to use something like:
+        ``if 'key' in some_dict: ...``
+        This should not be an issue.
+
+        When there are multiple special operators it is still a separate issue.
+        """
+        return isinstance(node.ops[0], self._special_cases)
+
+    def _is_left_node_valid(self, left: ast.AST) -> bool:
+        if isinstance(left, self._allowed_left_nodes):
+            return True
+        if isinstance(left, ast.BinOp):
+            return (
+                self._is_left_node_valid(left.left) or
+                self._is_left_node_valid(left.right)
+            )
         return False
 
-    def _get_num_variables_and_calls(self, comparators: List[ast.expr]) -> int:
-        count = 0
-        for comparator in comparators:
-            if (isinstance(comparator, ast.Name) or
-                    isinstance(comparator, ast.Call)):
-                count += 1
-
-        return count
-
-    def _get_num_variables_and_calls_in_BinOp(self, node: ast.AST):
-        count = 0
-        if not isinstance(node, ast.BinOp):
-            return 0
-        if isinstance(node.left, ast.Name) or isinstance(node.left, ast.Call):
-            count += 1
-        if isinstance(node.right, ast.Name) or isinstance(node.right, ast.Call):
-            count += 1
-        if count != 0:
-            return count
-
-        return (self._get_num_variables_and_calls_in_BinOp(node.left) +
-                self._get_num_variables_and_calls_in_BinOp(node.right))
-
-    def _check_order(self, node: ast.Compare) -> None:
-        if isinstance(node.left, ast.Name) or isinstance(node.left, ast.Call):
+    def _check_ordering(self, node: ast.Compare) -> None:
+        if self._is_left_node_valid(node.left):
             return
-        if (self._get_num_variables_and_calls(node.comparators) > 1 or
-                self._get_num_variables_and_calls_in_BinOp(node.left) > 0):
+
+        if self._is_special_case(node):
             return
-        if self._check_for_in_op(node.ops):
-            return
-        if (not isinstance(node.comparators[-1], ast.Name) and
-                not isinstance(node.comparators[-1], ast.BinOp)):
+
+        if len(node.comparators) > 1:
             return
 
         self.add_violation(ComparisonOrderViolation(node))
 
     def visit_Compare(self, node: ast.Compare) -> None:
         """
-        Forbids comparisions where argument doesn't come first.
+        Forbids comparision where argument doesn't come first.
 
         Raises:
             ComparisonOrderViolation
 
         """
-        self._check_order(node)
+        self._check_ordering(node)
         self.generic_visit(node)

@@ -322,6 +322,7 @@ class MultipleIfsInComprehensionViolation(ASTViolation):
     code = 307
 
 
+# TODO: move to `best_practices.py`
 class ConstantComparisonViolation(ASTViolation):
     """
     Forbids to have comparisons between two literals.
@@ -397,21 +398,24 @@ class BadNumberSuffixViolation(TokenizeViolation):
 
 class ComparisonOrderViolation(ASTViolation):
     """
-    Forbids comparisions where argument doesn't come first.
+    Forbids comparision where argument doesn't come first.
 
     Reasoning:
-        brings a consistency to the comparison.
+        It is hard to read the code when
+        you have to shuffle ordering of the arguments all the time.
+        Bring a consistency to the comparison!
 
     Solution:
-        Refactor your comparison expression.
+        Refactor your comparison expression, place the argument first.
 
     Example::
 
-        # Wrong:
-        if 3 < some_x:
-
         # Correct:
         if some_x > 3:
+        if 3 < some_x < 10:
+
+        # Wrong:
+        if 3 < some_x:
 
     Note:
         Returns Z310 as error code
@@ -420,5 +424,5 @@ class ComparisonOrderViolation(ASTViolation):
 
     should_use_text = False
     #: Error message shown to the user.
-    error_template = 'Found inconsistent comparison order'
+    error_template = 'Found reversed comparison order'
     code = 310

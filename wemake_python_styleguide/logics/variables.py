@@ -12,14 +12,19 @@ def is_wrong_variable_name(name: str, to_check: Iterable[str]) -> bool:
 
     >>> is_wrong_variable_name('wrong', ['wrong'])
     True
+
     >>> is_wrong_variable_name('correct', ['wrong'])
     False
+
     >>> is_wrong_variable_name('_wrong', ['wrong'])
     True
+
     >>> is_wrong_variable_name('wrong_', ['wrong'])
     True
+
     >>> is_wrong_variable_name('wrong__', ['wrong'])
     False
+
     >>> is_wrong_variable_name('__wrong', ['wrong'])
     False
 
@@ -44,14 +49,19 @@ def is_too_short_variable_name(
 
     >>> is_too_short_variable_name('test')
     False
+
     >>> is_too_short_variable_name(None)
     False
+
     >>> is_too_short_variable_name('o')
     True
+
     >>> is_too_short_variable_name('_')
     False
+
     >>> is_too_short_variable_name('z1')
     False
+
     >>> is_too_short_variable_name('z', min_length=1)
     False
 
@@ -65,12 +75,16 @@ def is_private_variable(name: Optional[str]) -> bool:
 
     >>> is_private_variable(None)
     False
+
     >>> is_private_variable('regular')
     False
+
     >>> is_private_variable('__private')
     True
+
     >>> is_private_variable('_protected')
     False
+
     >>> is_private_variable('__magic__')
     False
 

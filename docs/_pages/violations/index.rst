@@ -28,6 +28,7 @@ flake8-string-format      `P101 - P302 <https://github.com/xZise/flake8-string-f
 flake8-quotes             `Q000 <https://github.com/zheller/flake8-quotes>`_
 flake8-pep3101            `S001 <https://github.com/gforcada/flake8-pep3101/blob/master/flake8_pep3101.py>`_
 flake8-bandit             `S100 - S710 <https://github.com/tylerwince/flake8-bandit>`_, see also original ``bandit`` `codes <https://bandit.readthedocs.io/en/latest/plugins/index.html#complete-test-plugin-listing>`_
+flake8-print              `T001 <https://github.com/jbkahn/flake8-print>`_
 flake8-debugger           `T100 <https://github.com/JBKahn/flake8-debugger/blob/master/flake8_debugger.py>`_
 flake8-type-annotations   `T800 - T801 <https://github.com/sobolevn/flake8-type-annotations#error-codes>`_
 wemake-python-styleguide  Z, defined here

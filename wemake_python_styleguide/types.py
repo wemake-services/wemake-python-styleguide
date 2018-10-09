@@ -18,6 +18,7 @@ import ast
 from typing import TYPE_CHECKING, Tuple, Type, Union
 
 if TYPE_CHECKING:  # pragma: no cover
+    # TODO: use Final types to annotate all constants
     from typing_extensions import Protocol  # noqa: Z435
 
     # This solves cycle imports problem:
@@ -37,6 +38,9 @@ AnyFunctionDef = Union[ast.FunctionDef, ast.AsyncFunctionDef]
 
 #: Flake8 API format to return error messages:
 CheckResult = Tuple[int, int, str, type]
+
+#: Tuple of AST node types for declarative syntax:
+AnyNodes = Tuple[Type[ast.AST], ...]
 
 
 class ConfigurationOptions(Protocol):

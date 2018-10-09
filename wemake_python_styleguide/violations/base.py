@@ -33,7 +33,7 @@ Violations API
 
 import ast
 import tokenize
-from typing import Tuple, Union
+from typing import ClassVar, Tuple, Union
 
 #: General type for all possible nodes where error happens.
 ErrorNode = Union[
@@ -43,7 +43,7 @@ ErrorNode = Union[
 ]
 
 
-class BaseStyleViolation(object):
+class BaseViolation(object):
     """
     Abstract base class for all style violations.
 
@@ -59,9 +59,9 @@ class BaseStyleViolation(object):
 
     """
 
-    error_template: str
-    code: int
-    should_use_text: bool = True
+    error_template: ClassVar[str]
+    code: ClassVar[int]
+    should_use_text: ClassVar[bool] = True
 
     def __init__(self, node: ErrorNode, text: str = None) -> None:
         """
@@ -113,7 +113,7 @@ class BaseStyleViolation(object):
         return (*self._location(), self.message())
 
 
-class ASTViolation(BaseStyleViolation):
+class ASTViolation(BaseViolation):
     """Violation for ``ast`` based style visitors."""
 
     _node: ast.AST
@@ -124,7 +124,7 @@ class ASTViolation(BaseStyleViolation):
         return line_number, column_offset
 
 
-class TokenizeViolation(BaseStyleViolation):
+class TokenizeViolation(BaseViolation):
     """Violation for ``tokenize`` based visitors."""
 
     _node: tokenize.TokenInfo
@@ -133,7 +133,7 @@ class TokenizeViolation(BaseStyleViolation):
         return self._node.start
 
 
-class SimpleViolation(BaseStyleViolation):
+class SimpleViolation(BaseViolation):
     """Violation for cases where there's no associated nodes."""
 
     _node: None

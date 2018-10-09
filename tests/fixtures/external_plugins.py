@@ -30,3 +30,5 @@ def function_name(plugin: str ='flake8') ->str:
 
 multiline_string = 'some\
 string'
+
+print('test')

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Optional
+from typing import ClassVar, Optional
 
 from wemake_python_styleguide.constants import MAGIC_NUMBERS_WHITELIST
+from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     MagicNumberViolation,
 )
@@ -13,7 +14,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 class MagicNumberVisitor(BaseNodeVisitor):
     """Checks magic numbers used in the code."""
 
-    _allowed_parents = (
+    _allowed_parents: ClassVar[AnyNodes] = (
         ast.Assign,
 
         # Constructor usages:
@@ -28,7 +29,7 @@ class MagicNumberVisitor(BaseNodeVisitor):
         ast.Tuple,
     )
 
-    _proxy_parents = (
+    _proxy_parents: ClassVar[AnyNodes] = (
         ast.UnaryOp,
     )
 

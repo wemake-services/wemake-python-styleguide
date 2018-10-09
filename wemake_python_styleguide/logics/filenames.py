@@ -2,7 +2,6 @@
 
 from pathlib import PurePath
 from typing import Iterable
-from typing.re import Pattern
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.options import defaults
@@ -80,11 +79,8 @@ def is_too_short_stem(
     return len(stem) < min_length
 
 
-def is_matching_pattern(
-    file_path: str,
-    pattern: Pattern = constants.MODULE_NAME_PATTERN,
-) -> bool:
-    r"""
+def is_matching_pattern(file_path: str) -> bool:
+    """
     Checks whether the file's stem matches the given pattern.
 
     >>> is_matching_pattern('some.py')
@@ -96,19 +92,12 @@ def is_matching_pattern(
     >>> is_matching_pattern('MyModule.py')
     False
 
-    >>> import re
-    >>> is_matching_pattern('123.py', pattern=re.compile(r'\d{3}'))
-    True
-
     """
     stem = _get_stem(file_path)
-    return pattern.match(stem) is not None
+    return constants.MODULE_NAME_PATTERN.match(stem) is not None
 
 
-def is_stem_with_underscored_number(
-    file_path: str,
-    pattern: Pattern = constants.UNDERSCORED_NUMBER_PATTERN,
-) -> bool:
+def is_stem_with_underscored_number(file_path: str) -> bool:
     """
     Checks whether the file's stem contains an underscored number.
 
@@ -123,4 +112,4 @@ def is_stem_with_underscored_number(
 
     """
     stem = _get_stem(file_path)
-    return pattern.match(stem) is None
+    return constants.UNDERSCORED_NUMBER_PATTERN.match(stem) is None

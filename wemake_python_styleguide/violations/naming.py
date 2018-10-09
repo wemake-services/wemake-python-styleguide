@@ -451,18 +451,22 @@ class UnderScoredNumberNameViolation(SimpleViolation):
         This is done for consistency in naming.
 
     Solution:
-        Rename your variable or modules to not include underscored numbers
+        Do not put an underscore between text and numbers, that confusing.
+        Rename your variable or modules to not include underscored numbers.
 
     This rule checks: variables, and modules.
+    Please, note that putting an underscore that replaces ``-`` in some
+    names between numbers is fine, example: ``ISO-123-456`` would became
+    ``iso_123_456``.
 
     Example::
 
         # Correct:
-        star_wars_episode2
-        iso_123_456
+        star_wars_episode2 = 'awesome!'
+        iso_123_456 = 'some data'
 
         # Wrong:
-        star_wars_episode_2
+        star_wars_episode_2 = 'not so awesome'
 
     Note:
         Returns Z114 as error code

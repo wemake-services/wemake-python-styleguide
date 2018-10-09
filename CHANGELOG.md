@@ -6,17 +6,31 @@ We used to have incremental versioning before `0.1.0`.
 
 ## WIP
 
+This release was made possible by awesome people who contributed
+to the project during `#hactoberfest`. List of awesome people:
+
+- [@novikovfred](https://github.com/novikovfred)
+- [@riyasyash](https://github.com/riyasyash)
+- [@sathwikmatsa](https://github.com/sathwikmatsa)
+- [@tipabu](https://github.com/tipabu)
+
 ### Features
 
+- Adds `flake8-print` as a dependency
 - Forbids to use `quit` and `exit` functions
 - Forbids the comparison of two literals
+- Forbids the incorrect order comparison
+- Forbids underscores before numbers in names
 - Enforce consistent octal, binary, and hex numbers
-- Adds `ComparisonOrderViolation`
 
 ### Misc
 
+- Refactoring: some general changes, including better names and APIs
+- Improves tests: now we have different `tests/` folder structure
+- Improves tests: now we are using different logic inside `assert_errors`
 - Improves tests: now testing magic numbers in more situations
 - Improves tests: now testing more situations with empty base classes
+- Improves types: now all class attributes are marked as `ClassVar`
 
 
 ## 0.2.0 aka Revenge of the Async

@@ -17,13 +17,10 @@ def _to_dest_option(long_option_name: str) -> str:
 def assert_errors():
     """Helper function to assert visitor violations."""
     def factory(visitor: BaseVisitor, errors: Sequence[str]):
-        for index, error in enumerate(visitor.violations):
-            assert len(errors) > index, [
-                (type(error), error.message()) for error in visitor.violations
-            ]
-            assert error.code == errors[index].code
+        assert len(errors) == len(visitor.violations)
 
-        assert len(visitor.violations) == len(errors)
+        for index, error in enumerate(visitor.violations):
+            assert error.code == errors[index].code
 
     return factory
 
