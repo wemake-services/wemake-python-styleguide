@@ -26,6 +26,7 @@ to the project during `#hactoberfest`. List of awesome people:
 ### Bugfixes
 
 - Fixes that `MultipleIfsInComprehensionViolation` was not enabled
+- Fixes flaky behaviour of test_module_names
 
 ### Misc
 
