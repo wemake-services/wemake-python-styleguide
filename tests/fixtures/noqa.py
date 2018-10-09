@@ -59,3 +59,9 @@ number_with_scientific_notation = 1.5E+10  # noqa: Z310
 
 assert 1 > 1 > hex_number  # noqa: Z308
 assert 2 > octal_number  # noqa: Z309
+
+
+for symbol in 'abc':  # noqa: Z224
+    ...
+else:
+    ...
