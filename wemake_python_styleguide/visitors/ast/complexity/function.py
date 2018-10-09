@@ -2,7 +2,7 @@
 
 import ast
 from collections import defaultdict
-from typing import DefaultDict, List
+from typing import DefaultDict, List, Union
 
 from wemake_python_styleguide.logics.functions import is_method
 from wemake_python_styleguide.types import AnyFunctionDef
@@ -16,7 +16,7 @@ from wemake_python_styleguide.violations.complexity import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
-FunctionCounter = DefaultDict[AnyFunctionDef, int]
+FunctionCounter = DefaultDict[Union[AnyFunctionDef, ast.Lambda], int]
 
 
 class _ComplexityCounter(object):
@@ -28,7 +28,7 @@ class _ComplexityCounter(object):
         self.returns: FunctionCounter = defaultdict(int)
         self.expressions: FunctionCounter = defaultdict(int)
         self.variables: DefaultDict[
-            AnyFunctionDef, List[str],
+            Union[AnyFunctionDef, ast.Lambda], List[str],
         ] = defaultdict(list)
 
     def _update_variables(
@@ -82,6 +82,18 @@ class _ComplexityCounter(object):
 
         self.arguments[node] = counter - has_extra_arg
 
+    def check_lambda_arguments_count(self, node: ast.Lambda) -> None:
+        """Checks the number of the arguments in a lambda function."""
+        counter = 0
+
+        counter += len(node.args.args) + len(node.args.kwonlyargs)
+        if node.args.vararg:
+            counter += 1
+        if node.args.kwarg:
+            counter += 1
+
+        self.arguments[node] = counter
+
     def check_function_complexity(self, node: AnyFunctionDef) -> None:
         """
         In this function we iterate all the internal body's node.
@@ -124,14 +136,16 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
     def _check_function_internals(self) -> None:
         for node, variables in self._counter.variables.items():
             if len(variables) > self.options.max_local_variables:
+                text = node.name if not isinstance(node, ast.Lambda) else None
                 self.add_violation(
-                    TooManyLocalsViolation(node, text=node.name),
+                    TooManyLocalsViolation(node, text=text),
                 )
 
         for node, expressions in self._counter.expressions.items():
             if expressions > self.options.max_expressions:
+                text = node.name if not isinstance(node, ast.Lambda) else None
                 self.add_violation(
-                    TooManyExpressionsViolation(node, text=node.name),
+                    TooManyExpressionsViolation(node, text=text),
                 )
 
     def _check_function_signature(self) -> None:
@@ -143,8 +157,9 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
 
         for node, returns in self._counter.returns.items():
             if returns > self.options.max_returns:
+                text = node.name if not isinstance(node, ast.Lambda) else None
                 self.add_violation(
-                    TooManyReturnsViolation(node, text=node.name),
+                    TooManyReturnsViolation(node, text=text),
                 )
 
     def _post_visit(self) -> None:
@@ -166,4 +181,19 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
         """
         self._counter.check_arguments_count(node)
         self._counter.check_function_complexity(node)
+        self.generic_visit(node)
+
+    def visit_Lambda(self, node: ast.Lambda) -> None:
+        """
+        Checks lambda function's internal complexity.
+
+        Raises:
+            TooManyExpressionsViolation
+            TooManyReturnsViolation
+            TooManyLocalsViolation
+            TooManyArgumentsViolation
+            TooManyElifsViolation
+
+        """
+        self._counter.check_lambda_arguments_count(node)
         self.generic_visit(node)
