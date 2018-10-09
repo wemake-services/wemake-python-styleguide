@@ -4,6 +4,7 @@ from wemake_python_styleguide import constants
 from wemake_python_styleguide.logics import filenames
 from wemake_python_styleguide.violations.naming import (
     TooShortModuleNameViolation,
+    UnderScoredNumberNameViolation,
     WrongModuleMagicNameViolation,
     WrongModuleNamePatternViolation,
     WrongModuleNameUnderscoresViolation,
@@ -51,6 +52,10 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
         if repeating_underscores > 0:
             self.add_violation(WrongModuleNameUnderscoresViolation())
 
+    def _check_underscored_numbers(self) -> None:
+        if not filenames.is_stem_with_underscored_number(self.filename):
+            self.add_violation(UnderScoredNumberNameViolation())
+
     def visit_filename(self) -> None:
         """
         Checks a single module's filename.
@@ -61,6 +66,7 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
             WrongModuleNameViolation
             WrongModuleNamePatternViolation
             WrongModuleNameUnderscoresViolation
+            UnderScoredNumberNameViolation
 
         """
         self._check_module_name()
@@ -68,3 +74,4 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
         self._check_module_name_length()
         self._check_module_name_pattern()
         self._check_underscores()
+        self._check_underscored_numbers()

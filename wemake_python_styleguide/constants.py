@@ -154,3 +154,5 @@ STDIN = 'stdin'
 
 # This variable is used to specify as a placeholder for `__init__`:
 INIT = '__init__'
+
+UNDERSCORED_NUMBER_PATTERN = re.compile(r'.*\D_\d(\D|$)')
