@@ -73,7 +73,10 @@ class WrongListComprehensionVisitor(BaseNodeVisitor):
 
     def _check_ifs(self, node: ast.comprehension) -> None:
         if len(node.ifs) > 1:
-            self.add_violation(MultipleIfsInComprehensionViolation(node))
+            # We are trying to fix line number in the report,
+            # since `comprehension` does not have this property.
+            parent = getattr(node, 'parent', node)
+            self.add_violation(MultipleIfsInComprehensionViolation(parent))
 
     def visit_comprehension(self, node: ast.comprehension) -> None:
         """

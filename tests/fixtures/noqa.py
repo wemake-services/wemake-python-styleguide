@@ -7,6 +7,7 @@ This file contains all possible violations.
 from __future__ import print_function  # noqa: Z422
 
 from .version import get_version  # noqa: Z300
+import sys as sys  # noqa: Z113
 
 full_name = u'Nikita Sobolev'  # noqa: Z302
 phone_number = 555_123_999  # noqa:  Z303
@@ -14,10 +15,10 @@ partial_number = .05  # noqa: Z304
 formatted_string = f'Hi, {full_name}'  # noqa: Z305
 
 
-def some():  # noqa: Z110, Z113
+def some():  # noqa: Z110
     from my_module import some_function  # noqa: Z435
 
-    class Nested(object): ...  # noqa: 431
+    class Nested(object): ...  # noqa: Z220, Z431
 
     def nested(): ...  # noqa: Z430
 
@@ -51,7 +52,10 @@ class BadClass:  # noqa: Z306
 
 magic_numbers = 13.2 + 50  # noqa: Z432
 
-hex_number = 0XFF  # noqa: Z309
-octal_number = 0O11  # noqa: Z309
-binary_number = 0B1001  # noqa: Z309
-number_with_scientific_notation = 1.5E+10  # noqa: Z309
+hex_number = 0XFF  # noqa: Z310
+octal_number = 0O11  # noqa: Z310
+binary_number = 0B1001  # noqa: Z310
+number_with_scientific_notation = 1.5E+10  # noqa: Z310
+
+assert 1 > 1 > hex_number  # noqa: Z308
+assert 2 > octal_number  # noqa: Z309

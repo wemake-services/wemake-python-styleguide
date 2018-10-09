@@ -5,7 +5,7 @@ import pytest
 from wemake_python_styleguide.violations.consistency import (
     ComparisonOrderViolation,
 )
-from wemake_python_styleguide.visitors.ast.order import WrongOrderVisitor
+from wemake_python_styleguide.visitors.ast.comparisons import WrongOrderVisitor
 
 if_with_is = 'if {0} is {1}: ...'
 if_with_is_not = 'if {0} is not {1}: ...'
@@ -60,6 +60,7 @@ assert_construct = 'assert {0} == {1}, "message"'
     ('first_name + 10', 1),
     ('first_name + second_name', 1),
     ('error.code', 'errors[index].code'),
+    (1, 2),
 ])
 def test_comparison_variables(
     assert_errors,

@@ -23,10 +23,15 @@ to the project during `#hactoberfest`. List of awesome people:
 - Forbids underscores before numbers in names
 - Enforce consistent octal, binary, and hex numbers
 
+### Bugfixes
+
+- Fixes that `MultipleIfsInComprehensionViolation` was not enabled
+
 ### Misc
 
 - Refactoring: some general changes, including better names and APIs
 - Improves tests: now we have different `tests/` folder structure
+- Improves tests: now we are testing presets
 - Improves tests: now we are using different logic inside `assert_errors`
 - Improves tests: now testing magic numbers in more situations
 - Improves tests: now testing more situations with empty base classes
