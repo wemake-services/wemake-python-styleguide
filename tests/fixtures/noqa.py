@@ -62,6 +62,6 @@ assert 2 > octal_number  # noqa: Z309
 
 
 for symbol in 'abc':  # noqa: Z436
-    ...
+    break
 else:
     ...
