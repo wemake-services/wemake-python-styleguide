@@ -2,17 +2,19 @@
 
 import pytest
 
-from wemake_python_styleguide.violations.complexity import UnusedElseViolation
-from wemake_python_styleguide.visitors.ast.loops import WrongForElseVisitor
+from wemake_python_styleguide.violations.best_practices import (
+    RedundantForElseViolation,
+)
+from wemake_python_styleguide.visitors.ast.keywords import WrongForElseVisitor
 
-wrong_else_in_for_loop = """
+right_else_in_for_loop = """
 for x in '123':
     ...
 else:
     ...
 """
 
-right_else_in_for_loop = """
+wrong_else_in_for_loop = """
 for x in '123':
     break
 else:
@@ -34,13 +36,13 @@ for x in '123':
 def test_wrong_else_in_for_loop(
     assert_errors, parse_ast_tree, code, default_options,
 ):
-    """Violations are raised when else without break statement in for loops."""
+    """Violations are raised when else with break statement."""
     tree = parse_ast_tree(code)
 
     visitor = WrongForElseVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [UnusedElseViolation])
+    assert_errors(visitor, [RedundantForElseViolation])
 
 
 @pytest.mark.parametrize('code', [
@@ -50,7 +52,7 @@ def test_wrong_else_in_for_loop(
 def test_correct_else_in_for_loop(
     assert_errors, parse_ast_tree, code, default_options,
 ):
-    """Violations are not raised when else with break statement in for loop."""
+    """Violations are not raised when else without break statement."""
     tree = parse_ast_tree(code)
 
     visitor = WrongForElseVisitor(default_options, tree=tree)

@@ -39,7 +39,6 @@ Summary
    LineComplexityViolation
    TooManyConditionsViolation
    TooManyElifsViolation
-   UnusedElseViolation
 
 Module complexity
 -----------------
@@ -64,7 +63,6 @@ Structures complexity
 .. autoclass:: LineComplexityViolation
 .. autoclass:: TooManyConditionsViolation
 .. autoclass:: TooManyElifsViolation
-.. autoclass:: UnusedElseViolation
 
 """
 
@@ -458,24 +456,3 @@ class TooManyElifsViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found too many `elif` branches'
     code = 223
-
-
-class UnusedElseViolation(ASTViolation):
-    """
-    Forbids to use ``else`` without ``break`` in ``for`` loop.
-
-    Reasoning:
-        ``else`` block in ``for`` loops will be
-        unused without ``break`` statement.
-
-    Solution:
-        Forbid use ``else`` without ``break`` statement.
-
-    Note:
-        Returns Z224 as error code
-
-    """
-
-    #: Error message shown to the user.
-    error_template = 'Found `else` in `for` loop without `break`'
-    code = 224

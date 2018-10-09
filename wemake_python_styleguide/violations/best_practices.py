@@ -36,6 +36,7 @@ Summary
    StaticMethodViolation
    BadMagicMethodViolation
    NestedImportViolation
+   RedundantForElseViolation
 
 Comments
 --------
@@ -66,6 +67,7 @@ Design
 .. autoclass:: StaticMethodViolation
 .. autoclass:: BadMagicMethodViolation
 .. autoclass:: NestedImportViolation
+.. autoclass:: RedundantForElseViolation
 
 """
 
@@ -591,3 +593,24 @@ class NestedImportViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found nested import "{0}"'
     code = 435
+
+
+class RedundantForElseViolation(ASTViolation):
+    """
+    Forbids to use ``else`` with ``break`` in ``for`` loop.
+
+    Reasoning:
+        This rule will reduce complexity, improve readability,
+         and protect for possible errors.
+
+    Solution:
+        Forbid use ``else`` with ``break`` statement.
+
+    Note:
+        Returns Z436 as error code
+
+    """
+
+    #: Error message shown to the user.
+    error_template = 'Found `else` in `for` loop with `break`'
+    code = 436

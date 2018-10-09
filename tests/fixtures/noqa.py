@@ -61,7 +61,7 @@ assert 1 > 1 > hex_number  # noqa: Z308
 assert 2 > octal_number  # noqa: Z309
 
 
-for symbol in 'abc':  # noqa: Z224
+for symbol in 'abc':  # noqa: Z436
     ...
 else:
     ...
