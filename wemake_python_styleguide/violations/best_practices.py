@@ -601,10 +601,10 @@ class RedundantForElseViolation(ASTViolation):
 
     Reasoning:
         This rule will reduce complexity, improve readability,
-        and protect for possible errors.
+        and protect from possible errors.
 
     Solution:
-        Refactor your ``else`` case logic 
+        Refactor your ``else`` case logic
         to be inside the ``for`` body.
 
     Note:
