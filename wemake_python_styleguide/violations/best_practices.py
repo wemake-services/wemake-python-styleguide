@@ -601,10 +601,11 @@ class RedundantForElseViolation(ASTViolation):
 
     Reasoning:
         This rule will reduce complexity, improve readability,
-         and protect for possible errors.
+        and protect for possible errors.
 
     Solution:
-        Forbid use ``else`` with ``break`` statement.
+        Refactor your ``else`` case logic 
+        to be inside the ``for`` body.
 
     Note:
         Returns Z436 as error code
