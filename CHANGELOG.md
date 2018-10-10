@@ -22,6 +22,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - Forbids the incorrect order comparison
 - Forbids underscores before numbers in names
 - Enforce consistent octal, binary, and hex numbers
+- Forbid `for` loops with unused `else`
 
 ### Bugfixes
 
