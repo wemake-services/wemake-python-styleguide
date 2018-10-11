@@ -438,17 +438,17 @@ class MultipleInComparisonViolation(ASTViolation):
         Bring a consistency to the comparison!
 
     Solution:
-        Refactor your comparison expression to use several `and` conditions
-        or separate `if` statements in case it is appropriate.
+        Refactor your comparison expression to use several ``and`` conditions
+        or separate ``if`` statements in case it is appropriate.
 
     Example::
 
         # Correct:
-        if item in list and list in master_list:
+        if item in bucket and bucket in master_list_of_buckets:
         if x_coord in line and line in square:
 
         # Wrong:
-        if item in list in master_list:
+        if item in bucket in master_list_of_buckets:
         if x_cord in line in square:
 
     Note:

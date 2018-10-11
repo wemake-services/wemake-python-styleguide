@@ -24,7 +24,7 @@ if_with_refactored_in = 'if x_coord in line and line in square: ...'
     if_with_refactored_in,
 ])
 @pytest.mark.parametrize('comparators', [
-    ('x', '6'),
+    ('x_coord', '6'),
     ('status', [True]),
     ('letter', ['a', 'b']),
 ])
