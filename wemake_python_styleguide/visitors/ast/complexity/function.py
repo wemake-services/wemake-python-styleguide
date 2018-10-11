@@ -193,6 +193,7 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
 
         Raises:
             TooManyArgumentsViolation
+
         """
         self._counter.check_lambda_arguments_count(node)
         self.generic_visit(node)

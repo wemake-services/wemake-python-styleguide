@@ -36,7 +36,11 @@ AnyImport = Union[ast.Import, ast.ImportFrom]
 AnyFunctionDef = Union[ast.FunctionDef, ast.AsyncFunctionDef]
 
 #: In cases we need to work with all function definitions (including Lambda)
-AnyFunctionDefAndLambda = Union[ast.FunctionDef, ast.AsyncFunctionDef, ast.Lambda]
+AnyFunctionDefAndLambda = Union[
+    ast.FunctionDef,
+    ast.AsyncFunctionDef,
+    ast.Lambda,
+]
 
 #: Flake8 API format to return error messages:
 CheckResult = Tuple[int, int, str, type]
