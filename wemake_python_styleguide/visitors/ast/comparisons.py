@@ -123,3 +123,27 @@ class WrongOrderVisitor(BaseNodeVisitor):
         """
         self._check_ordering(node)
         self.generic_visit(node)
+
+
+class RedundantComparisonVisitor(BaseNodeVisitor):
+    """Restricts the comparison where always same result"""
+
+    def visit_Compare(self, node: ast.Compare) -> None:
+        """
+        Ensures that compares are not evaluating statement that outputs same result.
+
+        Raises:
+            ConstantComparisonViolation
+
+        """
+
+    def _check_redundant_compare(self, node: ast.Compare) -> None:
+        for comparator in node.comparators:
+            print("HELLO" + node)
+            if node.ops[0] is node.ops[1]:
+                self.add_violation(ConstantComparisonViolation(node))
+                break
+
+        self._check_redundant_compare(node)
+        self.generic_visit(node)
+
