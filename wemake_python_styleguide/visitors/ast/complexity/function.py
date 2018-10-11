@@ -2,7 +2,7 @@
 
 import ast
 from collections import defaultdict
-from typing import DefaultDict, List, Union
+from typing import DefaultDict, List
 
 from wemake_python_styleguide.logics.functions import is_method
 from wemake_python_styleguide.types import (
