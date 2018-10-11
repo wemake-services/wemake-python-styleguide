@@ -7,6 +7,7 @@ from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.consistency import (
     ComparisonOrderViolation,
     ConstantComparisonViolation,
+    MultipleInComparisonViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
@@ -122,4 +123,30 @@ class WrongOrderVisitor(BaseNodeVisitor):
 
         """
         self._check_ordering(node)
+        self.generic_visit(node)
+
+
+class MultipleInVisitor(BaseNodeVisitor):
+    """Restricts comparision where multiple `in`s are used."""
+
+    def _has_multiple_in_comparisons(self, node: ast.Compare) -> bool:
+        count = 0
+        for op in node.ops:
+            if isinstance(op, ast.In):
+                count += 1
+        return count > 1
+
+    def _count_in_comparisons(self, node: ast.Compare) -> None:
+        if self._has_multiple_in_comparisons(node):
+            self.add_violation(MultipleInComparisonViolation(node))
+
+    def visit_Compare(self, node: ast.Compare) -> None:
+        """
+        Forbids comparisons including multiple 'in's in a statement.
+
+        Raise:
+            MultipleInComparisonViolation
+
+        """
+        self._count_in_comparisons(node)
         self.generic_visit(node)

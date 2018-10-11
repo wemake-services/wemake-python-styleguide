@@ -42,6 +42,7 @@ Summary
    ConstantComparisonViolation
    BadNumberSuffixViolation
    ComparisonOrderViolation
+   MultipleInComparisonViolation
 
 Consistency checks
 ------------------
@@ -57,6 +58,7 @@ Consistency checks
 .. autoclass:: ConstantComparisonViolation
 .. autoclass:: BadNumberSuffixViolation
 .. autoclass:: ComparisonOrderViolation
+.. autoclass:: MultipleInComparisonViolation
 
 """
 
@@ -425,3 +427,35 @@ class BadNumberSuffixViolation(TokenizeViolation):
     #: Error message shown to the user.
     error_template = 'Found underscored number: {0}'
     code = 310
+
+
+class MultipleInComparisonViolation(ASTViolation):
+    """
+    Forbids comparision where multiple 'in's are userd in a statement.
+
+    Reasoning:
+        This is unreadable. Use different comparisons for it.
+        Bring a consistency to the comparison!
+
+    Solution:
+        Refactor your comparison expression.
+        Use different Comparisons.
+
+    Example::
+
+        # Correct:
+        if item in list:
+        if 1 in [3,4]:
+
+        # Wrong:
+        if 3 in [3,4] in [True]:
+
+    Note:
+        Returns Z311 as error code
+
+    """
+
+    should_use_text = False
+    #: Error message shown to the user.
+    error_template = 'Found multiple in comparisons'
+    code = 311
