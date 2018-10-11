@@ -126,6 +126,7 @@ class WrongOrderVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
 
+# TODO(@sobolevn): refactor to be a single visitor
 class MultipleInVisitor(BaseNodeVisitor):
     """Restricts comparision where multiple `in`s are used."""
 

@@ -14,17 +14,19 @@ ternary = 'ternary = 0 if {0} in {1} else 1'
 ternary_with_multiple_in = 'ternary = 0 if {0} in {1} in {2} else 1'
 while_construct = 'while {0} in {1}: ...'
 while_with_multiple_in = 'while {0} in {1} in {2}: ...'
+if_with_refactored_in = 'if x_coord in line and line in square: ...'
 
 
 @pytest.mark.parametrize('code', [
     if_without_multiple_in_comparisons,
     ternary,
     while_construct,
+    if_with_refactored_in,
 ])
 @pytest.mark.parametrize('comparators', [
-    ('6', '6'),
-    ('6', [True]),
-    ('a', ['a', 'b']),
+    ('x', '6'),
+    ('status', [True]),
+    ('letter', ['a', 'b']),
 ])
 def test_comparison_with_in(
     assert_errors,
@@ -48,9 +50,9 @@ def test_comparison_with_in(
     while_with_multiple_in,
 ])
 @pytest.mark.parametrize('comparators', [
-    ('6', '6', '6'),
-    ('6', '6', [True]),
-    ('6', '5', '65'),
+    ('line', 'sqaure', 'shape'),
+    ('output', 'status', [True]),
+    ('letter', 'line', 'book'),
 ])
 def test_comparison_with_multiple_in(
     assert_errors,
