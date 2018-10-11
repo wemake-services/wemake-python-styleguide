@@ -138,12 +138,15 @@ class RedundantComparisonVisitor(BaseNodeVisitor):
         """
 
     def _check_redundant_compare(self, node: ast.Compare) -> None:
-        for comparator in node.comparators:
-            print("HELLO" + node)
-            if node.ops[0] is node.ops[1]:
-                self.add_violation(ConstantComparisonViolation(node))
-                break
-
+        last_was_variable = self._check_is_variable(node.left)
+        for right in node.comparators:
+            next_is_variable = self._check_is_variable(right)
+            if last_was_variable and next_is_variable:
+                if node.left.id is right.id:
+                    self.add_violation(ConstantComparisonViolation(node))
+                    break
+            last_was_variable = next_is_variable
+            
         self._check_redundant_compare(node)
         self.generic_visit(node)
 
