@@ -125,6 +125,7 @@ Summary
    PrivateNameViolation
    SameAliasImportViolation
    UnderScoredNumberNameViolation
+   UpperCaseAttributeViolation
 
 Module names
 ------------
@@ -143,6 +144,7 @@ Variable names
 .. autoclass:: PrivateNameViolation
 .. autoclass:: SameAliasImportViolation
 .. autoclass:: UnderScoredNumberNameViolation
+.. autoclass:: UpperCaseAttributeViolations
 
 """
 
@@ -476,3 +478,30 @@ class UnderScoredNumberNameViolation(SimpleViolation):
     #: Error message shown to the user.
     error_template = 'Found underscored name pattern "{0}"'
     code = 114
+
+
+class UpperCaseAttributeViolation(ASTViolation):
+    """
+    Forbids to use anything but snake_case for naming attributes on a class.
+
+    Reasoning:
+        Constants with upper-case names belong on a module level.
+
+    Example::
+
+        # Correct:
+        class A(object):
+            my_constant = 42
+
+        # Wrong:
+        class A(object):
+            MY_CONSTANT = 42
+
+    Note:
+        Returns Z115 as error code
+
+    """
+
+    #: Error message shown to the user.
+    error_template = 'Found upper-case constant in a class "{0}"'
+    code = 115
