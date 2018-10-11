@@ -5,7 +5,10 @@ from collections import defaultdict
 from typing import DefaultDict, List, Union
 
 from wemake_python_styleguide.logics.functions import is_method
-from wemake_python_styleguide.types import AnyFunctionDef
+from wemake_python_styleguide.types import (
+    AnyFunctionDef,
+    AnyFunctionDefAndLambda,
+)
 from wemake_python_styleguide.violations.complexity import (
     TooManyArgumentsViolation,
     TooManyElifsViolation,
@@ -16,19 +19,20 @@ from wemake_python_styleguide.violations.complexity import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
-FunctionCounter = DefaultDict[Union[AnyFunctionDef, ast.Lambda], int]
+FunctionCounter = DefaultDict[AnyFunctionDef, int]
+FunctionCounterWithLambda = DefaultDict[AnyFunctionDefAndLambda, int]
 
 
 class _ComplexityCounter(object):
     """Helper class to encapsulate logic from the visitor."""
 
     def __init__(self) -> None:
-        self.arguments: FunctionCounter = defaultdict(int)
+        self.arguments: FunctionCounterWithLambda = defaultdict(int)
         self.elifs: FunctionCounter = defaultdict(int)
         self.returns: FunctionCounter = defaultdict(int)
         self.expressions: FunctionCounter = defaultdict(int)
         self.variables: DefaultDict[
-            Union[AnyFunctionDef, ast.Lambda], List[str],
+            AnyFunctionDef, List[str],
         ] = defaultdict(list)
 
     def _update_variables(
@@ -85,6 +89,9 @@ class _ComplexityCounter(object):
     def check_lambda_arguments_count(self, node: ast.Lambda) -> None:
         """Checks the number of the arguments in a lambda function."""
         counter = 0
+        has_extra_arg = 0
+        if is_method(getattr(node, 'function_type', None)):
+            has_extra_arg = 1
 
         counter += len(node.args.args) + len(node.args.kwonlyargs)
         if node.args.vararg:
@@ -92,7 +99,7 @@ class _ComplexityCounter(object):
         if node.args.kwarg:
             counter += 1
 
-        self.arguments[node] = counter
+        self.arguments[node] = counter - has_extra_arg
 
     def check_function_complexity(self, node: AnyFunctionDef) -> None:
         """
@@ -136,16 +143,14 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
     def _check_function_internals(self) -> None:
         for node, variables in self._counter.variables.items():
             if len(variables) > self.options.max_local_variables:
-                text = node.name if not isinstance(node, ast.Lambda) else None
                 self.add_violation(
-                    TooManyLocalsViolation(node, text=text),
+                    TooManyLocalsViolation(node, text=node.name),
                 )
 
         for node, expressions in self._counter.expressions.items():
             if expressions > self.options.max_expressions:
-                text = node.name if not isinstance(node, ast.Lambda) else None
                 self.add_violation(
-                    TooManyExpressionsViolation(node, text=text),
+                    TooManyExpressionsViolation(node, text=node.name),
                 )
 
     def _check_function_signature(self) -> None:
@@ -157,9 +162,8 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
 
         for node, returns in self._counter.returns.items():
             if returns > self.options.max_returns:
-                text = node.name if not isinstance(node, ast.Lambda) else None
                 self.add_violation(
-                    TooManyReturnsViolation(node, text=text),
+                    TooManyReturnsViolation(node, text=node.name),
                 )
 
     def _post_visit(self) -> None:
@@ -188,12 +192,7 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
         Checks lambda function's internal complexity.
 
         Raises:
-            TooManyExpressionsViolation
-            TooManyReturnsViolation
-            TooManyLocalsViolation
             TooManyArgumentsViolation
-            TooManyElifsViolation
-
         """
         self._counter.check_lambda_arguments_count(node)
         self.generic_visit(node)
