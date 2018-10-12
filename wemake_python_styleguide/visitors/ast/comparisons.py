@@ -126,16 +126,21 @@ class WrongOrderVisitor(BaseNodeVisitor):
 
 
 class RedundantComparisonVisitor(BaseNodeVisitor):
-    """Restricts the comparison where always same result"""
+    """Restricts the comparison where always same result."""
 
     def visit_Compare(self, node: ast.Compare) -> None:
         """
-        Ensures that compares are not evaluating statement that outputs same result.
+        Ensures that compares are not for same variable.
 
         Raises:
             ConstantComparisonViolation
 
         """
+        self._check_redundant_compare(node)
+        self.generic_visit(node)
+
+    def _check_is_variable(self, node: ast.AST) -> bool:
+        return isinstance(node, ast.Name)
 
     def _check_redundant_compare(self, node: ast.Compare) -> None:
         last_was_variable = self._check_is_variable(node.left)
@@ -146,7 +151,3 @@ class RedundantComparisonVisitor(BaseNodeVisitor):
                     self.add_violation(ConstantComparisonViolation(node))
                     break
             last_was_variable = next_is_variable
-            
-        self._check_redundant_compare(node)
-        self.generic_visit(node)
-
