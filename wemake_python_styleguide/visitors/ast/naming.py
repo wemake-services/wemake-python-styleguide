@@ -71,6 +71,27 @@ class WrongNameVisitor(BaseNodeVisitor):
         if node.args.kwarg:
             self._check_name(node, node.args.kwarg.arg)
 
+    # FIXME: Remove "noqa" after fixing problem with comprehension
+    # variables being counted as locals.
+    def _check_attribute_name(self, node: ast.ClassDef) -> None:  # noqa: Z210
+        top_level_assigns = [
+            sub_node
+            for sub_node in node.body
+            if isinstance(sub_node, ast.Assign)
+        ]
+
+        upper_case_violations = [
+            target
+            for assignment in top_level_assigns
+            for target in assignment.targets
+            if isinstance(target, ast.Name) and is_upper_case_name(target.id)
+        ]
+
+        for violation in upper_case_violations:
+            self.add_violation(
+                UpperCaseAttributeViolation(violation, text=violation.id),
+            )
+
     def visit_Attribute(self, node: ast.Attribute) -> None:
         """
         Used to find wrong attribute names inside classes.
@@ -128,9 +149,7 @@ class WrongNameVisitor(BaseNodeVisitor):
 
         self.generic_visit(node)
 
-    # FIXME: Remove "noqa" after fixing problem with comprehension
-    # variables being counted as locals.
-    def visit_ClassDef(self, node: ast.ClassDef) -> None:  # noqa: Z210
+    def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """
         Used to find upper attribute declarations.
 
@@ -140,24 +159,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             PrivateNameViolation
 
         """
-        top_level_assigns = [
-            sub_node
-            for sub_node in node.body
-            if isinstance(sub_node, ast.Assign)
-        ]
-
-        upper_case_violations = [
-            target
-            for assignment in top_level_assigns
-            for target in assignment.targets
-            if isinstance(target, ast.Name) and is_upper_case_name(target.id)
-        ]
-
-        for violation in upper_case_violations:
-            self.add_violation(
-                UpperCaseAttributeViolation(violation, text=violation.id),
-            )
-
+        self._check_attribute_name(node)
         self.generic_visit(node)
 
     def visit_any_import(self, node: AnyImport) -> None:

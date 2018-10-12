@@ -453,7 +453,7 @@ class UnderScoredNumberNameViolation(SimpleViolation):
         This is done for consistency in naming.
 
     Solution:
-        Do not put an underscore between text and numbers, that confusing.
+        Do not put an underscore between text and numbers, that is confusing.
         Rename your variable or modules to not include underscored numbers.
 
     This rule checks: variables, and modules.
@@ -486,6 +486,10 @@ class UpperCaseAttributeViolation(ASTViolation):
 
     Reasoning:
         Constants with upper-case names belong on a module level.
+
+    Solution:
+        Move your constants to the module level.
+        Rename your variables so that they conform to "snake_case" convention.
 
     Example::
 

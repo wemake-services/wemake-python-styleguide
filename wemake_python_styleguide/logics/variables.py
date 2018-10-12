@@ -47,16 +47,22 @@ def is_upper_case_name(name: str):
 
     >>> is_upper_case_name('camelCase')
     True
+
     >>> is_upper_case_name('UPPER_CASE')
     True
+
     >>> is_upper_case_name('camel_Case')
     True
+
     >>> is_upper_case_name('snake_case')
     False
+
     >>> is_upper_case_name('snake')
     False
+
     >>> is_upper_case_name('snake111')
     False
+
     >>> is_upper_case_name('__variable_v2')
     False
     """
