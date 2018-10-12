@@ -43,6 +43,7 @@ Summary
    BadNumberSuffixViolation
    ComparisonOrderViolation
    MultipleInComparisonViolation
+   RedundantComparisonViolation
 
 Consistency checks
 ------------------
@@ -59,6 +60,7 @@ Consistency checks
 .. autoclass:: BadNumberSuffixViolation
 .. autoclass:: ComparisonOrderViolation
 .. autoclass:: MultipleInComparisonViolation
+.. autoclass:: RedundantComparisonViolation
 
 """
 
@@ -460,3 +462,38 @@ class MultipleInComparisonViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found multiple in comparisons'
     code = 311
+
+
+class RedundantComparisonViolation(ASTViolation):
+    """
+    Forbids to have comparisons between the same variable.
+
+    Reasoning:
+        When the same variables are compared it is typically an indication
+        of a mistake, since the Boolean value of the comparison will always be
+        the same.
+
+    Solution:
+        Remove the same variable comparison and any associated dead code.
+
+    Example::
+
+        # Wrong:
+        a = 1
+        if a < a:
+            do_something()
+        else:
+            do_something_else()
+
+        # Correct:
+        do_something()
+
+    Note:
+        Returns Z312 as error code
+
+    """
+
+    should_use_text = False
+    #: Error message shown to the user.
+    error_template = 'Found comparison between same variable'
+    code = 312

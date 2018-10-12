@@ -8,6 +8,7 @@ from wemake_python_styleguide.violations.consistency import (
     ComparisonOrderViolation,
     ConstantComparisonViolation,
     MultipleInComparisonViolation,
+    RedundantComparisonViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
@@ -161,7 +162,7 @@ class RedundantComparisonVisitor(BaseNodeVisitor):
         Ensures that compares are not for same variable.
 
         Raises:
-            ConstantComparisonViolation
+            RedundantComparisonViolation
 
         """
         self._check_redundant_compare(node)
@@ -177,6 +178,6 @@ class RedundantComparisonVisitor(BaseNodeVisitor):
         last_variable = node.left
         for next_variable in node.comparators:
             if self._is_same_variable(last_variable, next_variable):
-                self.add_violation(ConstantComparisonViolation(node))
+                self.add_violation(RedundantComparisonViolation(node))
                 break
             last_variable = next_variable
