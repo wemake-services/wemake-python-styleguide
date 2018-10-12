@@ -167,15 +167,16 @@ class RedundantComparisonVisitor(BaseNodeVisitor):
         self._check_redundant_compare(node)
         self.generic_visit(node)
 
-    def _check_is_variable(self, node: ast.AST) -> bool:
-        return isinstance(node, ast.Name)
+    def _is_same_variable(self, left: ast.AST, right: ast.AST) -> bool:
+        if isinstance(left, ast.Name) and isinstance(right, ast.Name):
+            if left.id is right.id:
+                return True
+        return False
 
     def _check_redundant_compare(self, node: ast.Compare) -> None:
-        last_was_variable = self._check_is_variable(node.left)
-        for right in node.comparators:
-            next_is_variable = self._check_is_variable(right)
-            if last_was_variable and next_is_variable:
-                if node.left.id is right.id:
-                    self.add_violation(ConstantComparisonViolation(node))
-                    break
-            last_was_variable = next_is_variable
+        last_variable = node.left
+        for next_variable in node.comparators:
+            if self._is_same_variable(last_variable, next_variable):
+                self.add_violation(ConstantComparisonViolation(node))
+                break
+            last_variable = next_variable
