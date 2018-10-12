@@ -23,6 +23,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - Forbids underscores before numbers in names
 - Forbids comparison of the same variable
 - Enforce consistent octal, binary, and hex numbers
+- We not check the argument count in Lambda functions
 - Forbid `for` loops with unused `else`
 
 ### Bugfixes

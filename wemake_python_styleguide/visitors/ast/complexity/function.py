@@ -5,7 +5,10 @@ from collections import defaultdict
 from typing import DefaultDict, List
 
 from wemake_python_styleguide.logics.functions import is_method
-from wemake_python_styleguide.types import AnyFunctionDef
+from wemake_python_styleguide.types import (
+    AnyFunctionDef,
+    AnyFunctionDefAndLambda,
+)
 from wemake_python_styleguide.violations.complexity import (
     TooManyArgumentsViolation,
     TooManyElifsViolation,
@@ -17,13 +20,14 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 FunctionCounter = DefaultDict[AnyFunctionDef, int]
+FunctionCounterWithLambda = DefaultDict[AnyFunctionDefAndLambda, int]
 
 
 class _ComplexityCounter(object):
     """Helper class to encapsulate logic from the visitor."""
 
     def __init__(self) -> None:
-        self.arguments: FunctionCounter = defaultdict(int)
+        self.arguments: FunctionCounterWithLambda = defaultdict(int)
         self.elifs: FunctionCounter = defaultdict(int)
         self.returns: FunctionCounter = defaultdict(int)
         self.expressions: FunctionCounter = defaultdict(int)
@@ -67,7 +71,7 @@ class _ComplexityCounter(object):
         elif isinstance(sub_node, ast.If):
             self._update_elifs(node, sub_node)
 
-    def check_arguments_count(self, node: AnyFunctionDef) -> None:
+    def check_arguments_count(self, node: AnyFunctionDefAndLambda) -> None:
         """Checks the number of the arguments in a function."""
         counter = 0
         has_extra_arg = 0
@@ -166,4 +170,15 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
         """
         self._counter.check_arguments_count(node)
         self._counter.check_function_complexity(node)
+        self.generic_visit(node)
+
+    def visit_Lambda(self, node: ast.Lambda) -> None:
+        """
+        Checks lambda function's internal complexity.
+
+        Raises:
+            TooManyArgumentsViolation
+
+        """
+        self._counter.check_arguments_count(node)
         self.generic_visit(node)
