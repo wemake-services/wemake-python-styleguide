@@ -71,23 +71,8 @@ class _ComplexityCounter(object):
         elif isinstance(sub_node, ast.If):
             self._update_elifs(node, sub_node)
 
-    def check_arguments_count(self, node: AnyFunctionDef) -> None:
+    def check_arguments_count(self, node: AnyFunctionDefAndLambda) -> None:
         """Checks the number of the arguments in a function."""
-        counter = 0
-        has_extra_arg = 0
-        if is_method(getattr(node, 'function_type', None)):
-            has_extra_arg = 1
-
-        counter += len(node.args.args) + len(node.args.kwonlyargs)
-        if node.args.vararg:
-            counter += 1
-        if node.args.kwarg:
-            counter += 1
-
-        self.arguments[node] = counter - has_extra_arg
-
-    def check_lambda_arguments_count(self, node: ast.Lambda) -> None:
-        """Checks the number of the arguments in a lambda function."""
         counter = 0
         has_extra_arg = 0
         if is_method(getattr(node, 'function_type', None)):
@@ -195,5 +180,5 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
             TooManyArgumentsViolation
 
         """
-        self._counter.check_lambda_arguments_count(node)
+        self._counter.check_arguments_count(node)
         self.generic_visit(node)
