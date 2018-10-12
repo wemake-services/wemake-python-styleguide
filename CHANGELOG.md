@@ -21,6 +21,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - Forbids the comparison of two literals
 - Forbids the incorrect order comparison
 - Forbids underscores before numbers in names
+- Forbids comparison of the same variable
 - Enforce consistent octal, binary, and hex numbers
 
 ### Bugfixes
