@@ -151,3 +151,32 @@ class MultipleInVisitor(BaseNodeVisitor):
         """
         self._count_in_comparisons(node)
         self.generic_visit(node)
+
+
+class RedundantComparisonVisitor(BaseNodeVisitor):
+    """Restricts the comparison where always same result."""
+
+    def visit_Compare(self, node: ast.Compare) -> None:
+        """
+        Ensures that compares are not for same variable.
+
+        Raises:
+            ConstantComparisonViolation
+
+        """
+        self._check_redundant_compare(node)
+        self.generic_visit(node)
+
+    def _is_same_variable(self, left: ast.AST, right: ast.AST) -> bool:
+        if isinstance(left, ast.Name) and isinstance(right, ast.Name):
+            if left.id is right.id:
+                return True
+        return False
+
+    def _check_redundant_compare(self, node: ast.Compare) -> None:
+        last_variable = node.left
+        for next_variable in node.comparators:
+            if self._is_same_variable(last_variable, next_variable):
+                self.add_violation(ConstantComparisonViolation(node))
+                break
+            last_variable = next_variable
