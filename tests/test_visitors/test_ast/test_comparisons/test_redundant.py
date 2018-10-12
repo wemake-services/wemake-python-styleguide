@@ -99,7 +99,7 @@ def test_redundant(
     comparators,
     default_options,
 ):
-    """Testing that violations are when using literal comparisons."""
+    """Testing that violations are when comparing identical variable."""
     tree = parse_ast_tree(create_variables.format(code.format(*comparators)))
 
     visitor = RedundantComparisonVisitor(default_options, tree=tree)
