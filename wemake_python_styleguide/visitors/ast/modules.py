@@ -11,7 +11,7 @@ from wemake_python_styleguide.violations.best_practices import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
-class WrongContentsVisitor(BaseNodeVisitor):
+class EmptyModuleContentsVisitor(BaseNodeVisitor):
     """Restricts to have empty modules."""
 
     def _is_init(self) -> bool:

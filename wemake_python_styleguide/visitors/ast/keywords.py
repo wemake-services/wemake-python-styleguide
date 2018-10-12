@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import ast
+from typing import ClassVar
 
+from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     RaiseNotImplementedViolation,
+    RedundantForElseViolation,
     WrongKeywordViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
@@ -43,7 +46,7 @@ class WrongRaiseVisitor(BaseNodeVisitor):
 class WrongKeywordVisitor(BaseNodeVisitor):
     """Finds wrong keywords."""
 
-    _forbidden_keywords = (
+    _forbidden_keywords: ClassVar[AnyNodes] = (
         ast.Pass,
         ast.Delete,
         ast.Global,
@@ -71,7 +74,10 @@ class WrongListComprehensionVisitor(BaseNodeVisitor):
 
     def _check_ifs(self, node: ast.comprehension) -> None:
         if len(node.ifs) > 1:
-            self.add_violation(MultipleIfsInComprehensionViolation(node))
+            # We are trying to fix line number in the report,
+            # since `comprehension` does not have this property.
+            parent = getattr(node, 'parent', node)
+            self.add_violation(MultipleIfsInComprehensionViolation(parent))
 
     def visit_comprehension(self, node: ast.comprehension) -> None:
         """
@@ -82,4 +88,23 @@ class WrongListComprehensionVisitor(BaseNodeVisitor):
 
         """
         self._check_ifs(node)
+        self.generic_visit(node)
+
+
+class WrongForElseVisitor(BaseNodeVisitor):
+    """Responsible for restricting else in for loops with break."""
+
+    def _check_for_needs_else(self, node: ast.For) -> None:
+        break_in_for_loop = False
+
+        for condition in ast.walk(node):
+            if isinstance(condition, ast.Break):
+                break_in_for_loop = True
+
+        if node.orelse and break_in_for_loop:
+            self.add_violation(RedundantForElseViolation(node=node))
+
+    def visit_For(self, node: ast.For) -> None:
+        """Used for find else block in for loops with break."""
+        self._check_for_needs_else(node)
         self.generic_visit(node)

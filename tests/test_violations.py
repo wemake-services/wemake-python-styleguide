@@ -2,10 +2,7 @@
 
 import ast
 
-from wemake_python_styleguide.violations.base import (
-    ASTViolation,
-    BaseStyleViolation,
-)
+from wemake_python_styleguide.violations.base import ASTViolation, BaseViolation
 
 
 def test_visitor_returns_location():
@@ -36,8 +33,8 @@ def test_all_violations_are_documented(all_module_violations):
 
 
 def test_checker_default_location():
-    """Ensures that `BaseStyleViolation` returns correct location."""
-    assert BaseStyleViolation(None)._location() == (0, 0)
+    """Ensures that `BaseViolation` returns correct location."""
+    assert BaseViolation(None)._location() == (0, 0)
 
 
 def test_all_unique_violation_codes(all_violations):

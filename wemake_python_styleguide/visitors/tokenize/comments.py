@@ -16,6 +16,8 @@ TokenInfo(
 
 import re
 import tokenize
+from typing import ClassVar
+from typing.re import Pattern
 
 from wemake_python_styleguide.violations.best_practices import (
     WrongDocCommentViolation,
@@ -27,8 +29,10 @@ from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 class WrongCommentVisitor(BaseTokenVisitor):
     """Checks comment tokens."""
 
-    noqa_check = re.compile(r'^noqa:?($|[A-Z\d\,\s]+)')
-    type_check = re.compile(r'^type:\s?([\w\d\[\]\'\"\.]+)$')
+    noqa_check: ClassVar[Pattern] = re.compile(r'^noqa:?($|[A-Z\d\,\s]+)')
+    type_check: ClassVar[Pattern] = re.compile(
+        r'^type:\s?([\w\d\[\]\'\"\.]+)$',
+    )
 
     def _get_comment_text(self, token: tokenize.TokenInfo) -> str:
         return token.string[1:].strip()

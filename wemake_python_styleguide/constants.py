@@ -149,8 +149,12 @@ MAGIC_NUMBERS_WHITELIST = frozenset((
 # Internal variables
 # They are not publicly documented since they are not used by the end user.
 
-# This variable is used as a default filename, when it is not passed by flake8:
+# Used as a default filename, when it is not passed by flake8:
 STDIN = 'stdin'
 
-# This variable is used to specify as a placeholder for `__init__`:
+# Used to specify as a placeholder for `__init__`:
 INIT = '__init__'
+
+# Used to specify a pattern which checks variables and modules for underscored
+# numbers in their names:
+UNDERSCORED_NUMBER_PATTERN = re.compile(r'.*\D_\d(\D|$)')

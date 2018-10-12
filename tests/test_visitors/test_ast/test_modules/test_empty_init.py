@@ -5,7 +5,9 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     InitModuleHasLogicViolation,
 )
-from wemake_python_styleguide.visitors.ast.modules import WrongContentsVisitor
+from wemake_python_styleguide.visitors.ast.modules import (
+    EmptyModuleContentsVisitor,
+)
 
 empty_module = ''
 module_with_docstring = """
@@ -45,7 +47,7 @@ def test_init_without_logic(
     """Testing that `__init__` without logic is allowed."""
     tree = parse_ast_tree(code)
 
-    visitor = WrongContentsVisitor(
+    visitor = EmptyModuleContentsVisitor(
         default_options, tree=tree, filename='__init__.py',
     )
     visitor.run()
@@ -64,7 +66,7 @@ def test_init_with_logic(
     """Testing that `__init__` with logic is restricted."""
     tree = parse_ast_tree(code)
 
-    visitor = WrongContentsVisitor(
+    visitor = EmptyModuleContentsVisitor(
         default_options, tree=tree, filename='__init__.py',
     )
     visitor.run()
@@ -84,7 +86,7 @@ def test_init_with_logic_without_control(
     tree = parse_ast_tree(code)
 
     option_values = options(i_control_code=False)
-    visitor = WrongContentsVisitor(
+    visitor = EmptyModuleContentsVisitor(
         option_values,
         tree=tree,
         filename='__init__.py',

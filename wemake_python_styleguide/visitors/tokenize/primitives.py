@@ -14,7 +14,7 @@ from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 class WrongPrimitivesVisitor(BaseTokenVisitor):
     """Visits primitive types to find incorrect usages."""
 
-    _bad_number_suffixes = ('X', 'O', 'B', 'E')
+    _bad_number_suffixes = frozenset(('X', 'O', 'B', 'E'))
 
     def _check_underscored_number(self, token: tokenize.TokenInfo) -> None:
         if '_' in token.string:

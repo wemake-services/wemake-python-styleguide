@@ -41,6 +41,8 @@ Summary
    MultipleIfsInComprehensionViolation
    ConstantComparisonViolation
    BadNumberSuffixViolation
+   ComparisonOrderViolation
+   MultipleInComparisonViolation
 
 Consistency checks
 ------------------
@@ -55,6 +57,8 @@ Consistency checks
 .. autoclass:: MultipleIfsInComprehensionViolation
 .. autoclass:: ConstantComparisonViolation
 .. autoclass:: BadNumberSuffixViolation
+.. autoclass:: ComparisonOrderViolation
+.. autoclass:: MultipleInComparisonViolation
 
 """
 
@@ -354,6 +358,38 @@ class ConstantComparisonViolation(ASTViolation):
     code = 308
 
 
+class ComparisonOrderViolation(ASTViolation):
+    """
+    Forbids comparision where argument doesn't come first.
+
+    Reasoning:
+        It is hard to read the code when
+        you have to shuffle ordering of the arguments all the time.
+        Bring a consistency to the comparison!
+
+    Solution:
+        Refactor your comparison expression, place the argument first.
+
+    Example::
+
+        # Correct:
+        if some_x > 3:
+        if 3 < some_x < 10:
+
+        # Wrong:
+        if 3 < some_x:
+
+    Note:
+        Returns Z309 as error code
+
+    """
+
+    should_use_text = False
+    #: Error message shown to the user.
+    error_template = 'Found reversed comparison order'
+    code = 309
+
+
 class BadNumberSuffixViolation(TokenizeViolation):
     """
     Forbids to use capital ``X``, ``O``, ``B``, and ``E`` in numbers.
@@ -384,10 +420,43 @@ class BadNumberSuffixViolation(TokenizeViolation):
         number_with_scientific_notation = 1.5E+10
 
     Note:
-        Returns Z309 as error code
+        Returns Z310 as error code
 
     """
 
-    code = 309
     #: Error message shown to the user.
     error_template = 'Found underscored number: {0}'
+    code = 310
+
+
+class MultipleInComparisonViolation(ASTViolation):
+    """
+    Forbids comparision where multiple 'in's are userd in a statement.
+
+    Reasoning:
+        This is unreadable. Use different comparisons for it.
+        Bring a consistency to the comparison!
+
+    Solution:
+        Refactor your comparison expression to use several ``and`` conditions
+        or separate ``if`` statements in case it is appropriate.
+
+    Example::
+
+        # Correct:
+        if item in bucket and bucket in master_list_of_buckets:
+        if x_coord in line and line in square:
+
+        # Wrong:
+        if item in bucket in master_list_of_buckets:
+        if x_cord in line in square:
+
+    Note:
+        Returns Z311 as error code
+
+    """
+
+    should_use_text = False
+    #: Error message shown to the user.
+    error_template = 'Found multiple in comparisons'
+    code = 311

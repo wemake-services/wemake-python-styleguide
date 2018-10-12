@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import ast
+from typing import Callable
 
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
 from wemake_python_styleguide.logics.imports import get_error_text
 from wemake_python_styleguide.types import AnyImport
+from wemake_python_styleguide.violations.base import BaseViolation
 from wemake_python_styleguide.violations.best_practices import (
     FutureImportViolation,
     NestedImportViolation,
@@ -16,23 +18,25 @@ from wemake_python_styleguide.violations.consistency import (
 from wemake_python_styleguide.violations.naming import SameAliasImportViolation
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
+ErrorCallback = Callable[[BaseViolation], None]
+
 
 class _ImportsChecker(object):
     """Utility class to separate logic from the visitor."""
 
-    def __init__(self, delegate: 'WrongImportVisitor') -> None:
-        self.delegate = delegate
+    def __init__(self, error_callback: ErrorCallback) -> None:
+        self.error_callback = error_callback
 
     def check_nested_import(self, node: AnyImport) -> None:
         text = get_error_text(node)
         parent = getattr(node, 'parent', None)
         if parent is not None and not isinstance(parent, ast.Module):
-            self.delegate.add_violation(NestedImportViolation(node, text=text))
+            self.error_callback(NestedImportViolation(node, text=text))
 
     def check_local_import(self, node: ast.ImportFrom) -> None:
         text = get_error_text(node)
         if node.level != 0:
-            self.delegate.add_violation(
+            self.error_callback(
                 LocalFolderImportViolation(node, text=text),
             )
 
@@ -40,21 +44,21 @@ class _ImportsChecker(object):
         if node.module == '__future__':
             for alias in node.names:
                 if alias.name not in FUTURE_IMPORTS_WHITELIST:
-                    self.delegate.add_violation(
+                    self.error_callback(
                         FutureImportViolation(node, text=alias.name),
                     )
 
     def check_dotted_raw_import(self, node: ast.Import) -> None:
         for alias in node.names:
             if '.' in alias.name:
-                self.delegate.add_violation(
+                self.error_callback(
                     DottedRawImportViolation(node, text=alias.name),
                 )
 
     def check_alias(self, node: AnyImport) -> None:
         for alias in node.names:
             if alias.asname == alias.name:
-                self.delegate.add_violation(
+                self.error_callback(
                     SameAliasImportViolation(node, text=alias.name),
                 )
 
@@ -65,7 +69,7 @@ class WrongImportVisitor(BaseNodeVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Creates a checker for tracked violations."""
         super().__init__(*args, **kwargs)
-        self._checker = _ImportsChecker(self)
+        self._checker = _ImportsChecker(self.add_violation)
 
     def visit_Import(self, node: ast.Import) -> None:
         """

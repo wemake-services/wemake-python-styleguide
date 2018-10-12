@@ -26,9 +26,9 @@ class WrongClassVisitor(BaseNodeVisitor):
     Here we check for stylistic issues and design patterns.
     """
 
-    _staticmethod_names = (
+    _staticmethod_names = frozenset((
         'staticmethod',
-    )
+    ))
 
     def _check_decorators(self, node: AnyFunctionDef) -> None:
         for decorator in node.decorator_list:

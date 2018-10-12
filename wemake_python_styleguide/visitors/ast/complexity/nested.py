@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import ast
+from typing import ClassVar
 
 from wemake_python_styleguide.constants import (
     NESTED_CLASSES_WHITELIST,
     NESTED_FUNCTIONS_WHITELIST,
 )
-from wemake_python_styleguide.types import AnyFunctionDef
+from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     NestedClassViolation,
     NestedFunctionViolation,
@@ -29,7 +30,7 @@ class NestedComplexityVisitor(BaseNodeVisitor):
     We allow to nest function inside classes, that's called methods.
     """
 
-    _function_nodes = (
+    _function_nodes: ClassVar[AnyNodes] = (
         ast.FunctionDef,
         ast.AsyncFunctionDef,
     )

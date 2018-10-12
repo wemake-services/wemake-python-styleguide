@@ -14,7 +14,7 @@ def alias(
     Because there are cases when we need to use the same method to
     handle different nodes types.
 
-    We can just create aliases like `visit_Import = visit_ImportFrom`,
+    We can just create aliases like ``visit_Import = visit_ImportFrom``,
     but it looks verbose and ugly.
     """
     def decorator(cls: type) -> type:

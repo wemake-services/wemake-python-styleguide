@@ -36,7 +36,7 @@ from typing import List, Sequence, Type
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.types import ConfigurationOptions
-from wemake_python_styleguide.violations.base import BaseStyleViolation
+from wemake_python_styleguide.violations.base import BaseViolation
 
 
 class BaseVisitor(object):
@@ -58,7 +58,7 @@ class BaseVisitor(object):
         """Creates base visitor instance."""
         self.options = options
         self.filename = filename
-        self.violations: List[BaseStyleViolation] = []
+        self.violations: List[BaseViolation] = []
 
     @classmethod
     def from_checker(cls: Type['BaseVisitor'], checker) -> 'BaseVisitor':
@@ -74,7 +74,7 @@ class BaseVisitor(object):
         """
         return cls(options=checker.options, filename=checker.filename)
 
-    def add_violation(self, violation: BaseStyleViolation) -> None:
+    def add_violation(self, violation: BaseViolation) -> None:
         """Adds violation to the visitor."""
         self.violations.append(violation)
 
