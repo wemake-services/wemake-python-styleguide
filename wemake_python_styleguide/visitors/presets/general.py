@@ -25,6 +25,7 @@ GENERAL_PRESET = (
     keywords.WrongRaiseVisitor,
     keywords.WrongKeywordVisitor,
     keywords.WrongListComprehensionVisitor,
+    keywords.WrongForElseVisitor,
 
     WrongFunctionCallVisitor,
     WrongImportVisitor,
@@ -37,6 +38,7 @@ GENERAL_PRESET = (
 
     comparisons.ConstantComparisonVisitor,
     comparisons.WrongOrderVisitor,
+    comparisons.MultipleInVisitor,
 
     # Classes:
     WrongClassVisitor,

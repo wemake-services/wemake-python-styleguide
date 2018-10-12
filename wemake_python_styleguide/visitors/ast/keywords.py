@@ -6,6 +6,7 @@ from typing import ClassVar
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     RaiseNotImplementedViolation,
+    RedundantForElseViolation,
     WrongKeywordViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
@@ -87,4 +88,23 @@ class WrongListComprehensionVisitor(BaseNodeVisitor):
 
         """
         self._check_ifs(node)
+        self.generic_visit(node)
+
+
+class WrongForElseVisitor(BaseNodeVisitor):
+    """Responsible for restricting else in for loops with break."""
+
+    def _check_for_needs_else(self, node: ast.For) -> None:
+        break_in_for_loop = False
+
+        for condition in ast.walk(node):
+            if isinstance(condition, ast.Break):
+                break_in_for_loop = True
+
+        if node.orelse and break_in_for_loop:
+            self.add_violation(RedundantForElseViolation(node=node))
+
+    def visit_For(self, node: ast.For) -> None:
+        """Used for find else block in for loops with break."""
+        self._check_for_needs_else(node)
         self.generic_visit(node)

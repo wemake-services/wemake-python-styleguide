@@ -292,7 +292,7 @@ class TooManyExpressionsViolation(ASTViolation):
     code = 213
 
 
-class TooManyMethodsViolation(SimpleViolation):
+class TooManyMethodsViolation(ASTViolation):
     """
     Forbids to have many methods in a single class.
 

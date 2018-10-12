@@ -106,7 +106,9 @@ class MethodMembersVisitor(BaseNodeVisitor):
     def _post_visit(self) -> None:
         for node, count in self._methods.items():
             if count > self.options.max_methods:
-                self.add_violation(TooManyMethodsViolation(text=node.name))
+                self.add_violation(
+                    TooManyMethodsViolation(node, text=node.name),
+                )
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """

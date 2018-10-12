@@ -23,10 +23,13 @@ to the project during `#hactoberfest`. List of awesome people:
 - Forbids underscores before numbers in names
 - Forbids comparison of the same variable
 - Enforce consistent octal, binary, and hex numbers
+- Forbid `for` loops with unused `else`
 
 ### Bugfixes
 
 - Fixes that `MultipleIfsInComprehensionViolation` was not enabled
+- Fixes flaky behaviour of test_module_names
+- Fixed `TooManyMethodsViolation` not displaying line number
 
 ### Misc
 
