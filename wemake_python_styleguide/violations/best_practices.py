@@ -37,6 +37,7 @@ Summary
    BadMagicMethodViolation
    NestedImportViolation
    RedundantForElseViolation
+   RedundantFinallyViolation
 
 Comments
 --------
@@ -68,6 +69,7 @@ Design
 .. autoclass:: BadMagicMethodViolation
 .. autoclass:: NestedImportViolation
 .. autoclass:: RedundantForElseViolation
+.. autoclass:: RedundantFinallyViolation
 
 """
 
@@ -615,3 +617,23 @@ class RedundantForElseViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found `else` in `for` loop with `break`'
     code = 436
+
+
+class RedundantFinallyViolation(ASTViolation):
+    """
+    Forbids to use ``finally`` in ``try`` block without ``except``.
+
+    Reasoning:
+        This rule will reduce complexity and improve readability.
+
+    Solution:
+        Refactor your ``try`` logic.
+
+    Note:
+        Returns Z437 as error code
+
+    """
+
+    #: Error message shown to the user.
+    error_template = 'Found `finally` in `try` block without `except`'
+    code = 437

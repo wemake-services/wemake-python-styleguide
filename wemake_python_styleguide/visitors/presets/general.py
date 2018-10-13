@@ -26,6 +26,7 @@ GENERAL_PRESET = (
     keywords.WrongKeywordVisitor,
     keywords.WrongListComprehensionVisitor,
     keywords.WrongForElseVisitor,
+    keywords.RedundantFinallyViolation,
 
     WrongFunctionCallVisitor,
     WrongImportVisitor,

@@ -66,3 +66,9 @@ for symbol in 'abc':  # noqa: Z436
     break
 else:
     ...
+
+
+try:  # noqa:Z437
+    ...
+finally:
+    ...
