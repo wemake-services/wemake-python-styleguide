@@ -52,6 +52,8 @@ def test_noqa_fixture_disabled(absolute_path):
     }
 
     for error in counts:
+        # TODO: parse all `Z` error out, create a list
+        # TODO: pop errors from `counts`, make sure nothing is left
         assert output.count(error) == counts[error], error
 
 
