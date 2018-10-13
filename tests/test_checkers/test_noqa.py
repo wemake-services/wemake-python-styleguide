@@ -49,6 +49,7 @@ def test_noqa_fixture_disabled(absolute_path):
         'Z433': 2,
         'Z434': 1,
         'Z435': 1,
+        'Z436': 1,
     }
 
     for error in counts:

@@ -21,11 +21,16 @@ to the project during `#hactoberfest`. List of awesome people:
 - Forbids the comparison of two literals
 - Forbids the incorrect order comparison
 - Forbids underscores before numbers in names
+- Forbids comparison of the same variable
 - Enforce consistent octal, binary, and hex numbers
+- We not check the argument count in Lambda functions
+- Forbid `for` loops with unused `else`
 
 ### Bugfixes
 
 - Fixes that `MultipleIfsInComprehensionViolation` was not enabled
+- Fixes flaky behaviour of test_module_names
+- Fixed `TooManyMethodsViolation` not displaying line number
 
 ### Misc
 
