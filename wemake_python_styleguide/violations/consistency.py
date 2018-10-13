@@ -433,11 +433,10 @@ class BadNumberSuffixViolation(TokenizeViolation):
 
 class MultipleInComparisonViolation(ASTViolation):
     """
-    Forbids comparision where multiple 'in's are userd in a statement.
+    Forbids comparision where multiple ``in`` checks.
 
     Reasoning:
-        This is unreadable. Use different comparisons for it.
-        Bring a consistency to the comparison!
+        Using multiple ``in`` is unreadable.
 
     Solution:
         Refactor your comparison expression to use several ``and`` conditions
@@ -460,7 +459,7 @@ class MultipleInComparisonViolation(ASTViolation):
 
     should_use_text = False
     #: Error message shown to the user.
-    error_template = 'Found multiple in comparisons'
+    error_template = 'Found multiple `in` comparisons'
     code = 311
 
 
