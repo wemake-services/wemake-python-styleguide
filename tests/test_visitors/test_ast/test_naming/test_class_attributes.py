@@ -44,7 +44,7 @@ def test_wrong_attributes_names(
     assert_errors(visitor, [WrongVariableNameViolation])
 
 
-@pytest.mark.parametrize('short_name', string.ascii_letters)
+@pytest.mark.parametrize('short_name', string.ascii_lowercase)
 @pytest.mark.parametrize('code', [
     static_attribute,
     instance_attribute,
@@ -53,7 +53,7 @@ def test_too_short_attribute_names(
     assert_errors, parse_ast_tree, short_name, code, default_options,
 ):
     """Testing that attribute can not have too short names."""
-    tree = parse_ast_tree(code.format(short_name.lower()))
+    tree = parse_ast_tree(code.format(short_name))
 
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
