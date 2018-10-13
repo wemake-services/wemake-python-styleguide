@@ -41,6 +41,34 @@ def is_wrong_variable_name(name: str, to_check: Iterable[str]) -> bool:
     return False
 
 
+def is_upper_case_name(name: str):
+    """
+    Checks that attribute name has no upper-case letters.
+
+    >>> is_upper_case_name('camelCase')
+    True
+
+    >>> is_upper_case_name('UPPER_CASE')
+    True
+
+    >>> is_upper_case_name('camel_Case')
+    True
+
+    >>> is_upper_case_name('snake_case')
+    False
+
+    >>> is_upper_case_name('snake')
+    False
+
+    >>> is_upper_case_name('snake111')
+    False
+
+    >>> is_upper_case_name('__variable_v2')
+    False
+    """
+    return any(character.isupper() for character in name)
+
+
 def is_too_short_variable_name(
     name: Optional[str],
     min_length: int = MIN_VARIABLE_LENGTH,

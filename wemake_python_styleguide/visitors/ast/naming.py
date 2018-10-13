@@ -9,6 +9,7 @@ from wemake_python_styleguide.constants import (
 from wemake_python_styleguide.logics.variables import (
     is_private_variable,
     is_too_short_variable_name,
+    is_upper_case_name,
     is_variable_name_with_underscored_number,
     is_wrong_variable_name,
 )
@@ -20,13 +21,14 @@ from wemake_python_styleguide.violations.naming import (
     PrivateNameViolation,
     TooShortVariableNameViolation,
     UnderScoredNumberNameViolation,
+    UpperCaseAttributeViolation,
     WrongVariableNameViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 
-@alias('visit_any_import', (
+@alias('visit_any_import', (  # noqa: Z214
     'visit_ImportFrom',
     'visit_Import',
 ))
@@ -68,6 +70,27 @@ class WrongNameVisitor(BaseNodeVisitor):
 
         if node.args.kwarg:
             self._check_name(node, node.args.kwarg.arg)
+
+    # FIXME: Remove "noqa" after fixing problem with comprehension
+    # variables being counted as locals.
+    def _check_attribute_name(self, node: ast.ClassDef) -> None:  # noqa: Z210
+        top_level_assigns = [
+            sub_node
+            for sub_node in node.body
+            if isinstance(sub_node, ast.Assign)
+        ]
+
+        upper_case_violations = [
+            target
+            for assignment in top_level_assigns
+            for target in assignment.targets
+            if isinstance(target, ast.Name) and is_upper_case_name(target.id)
+        ]
+
+        for violation in upper_case_violations:
+            self.add_violation(
+                UpperCaseAttributeViolation(violation, text=violation.id),
+            )
 
     def visit_Attribute(self, node: ast.Attribute) -> None:
         """
@@ -124,6 +147,19 @@ class WrongNameVisitor(BaseNodeVisitor):
         if isinstance(node.ctx, ast.Store):
             self._check_name(node, node.id)
 
+        self.generic_visit(node)
+
+    def visit_ClassDef(self, node: ast.ClassDef) -> None:
+        """
+        Used to find upper attribute declarations.
+
+        Raises:
+            WrongVariableNameViolation
+            TooShortVariableNameViolation
+            PrivateNameViolation
+
+        """
+        self._check_attribute_name(node)
         self.generic_visit(node)
 
     def visit_any_import(self, node: AnyImport) -> None:
