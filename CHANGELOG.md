@@ -25,6 +25,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - Enforce consistent octal, binary, and hex numbers
 - We not check the argument count in Lambda functions
 - Forbid `for` loops with unused `else`
+- Forbid `try` with `finally` without `except`
 
 ### Bugfixes
 
