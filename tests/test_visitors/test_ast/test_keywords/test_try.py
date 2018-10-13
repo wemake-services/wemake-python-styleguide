@@ -5,7 +5,9 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     RedundantFinallyViolation,
 )
-from wemake_python_styleguide.visitors.ast.keywords import WrongTryFinallyVisitor
+from wemake_python_styleguide.visitors.ast.keywords import (
+    WrongTryFinallyVisitor,
+)
 
 right_try_example = """
 try:
@@ -50,7 +52,7 @@ def test_wrong_finally(
     right_try_example,
     check_finally_with_except,
 ])
-def test_correct_else_in_for_loop(
+def test_correct_finally(
     assert_errors, parse_ast_tree, code, default_options,
 ):
     """Violations are not raised when finally with except in try block."""
