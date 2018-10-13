@@ -621,13 +621,27 @@ class RedundantForElseViolation(ASTViolation):
 
 class RedundantFinallyViolation(ASTViolation):
     """
-    Forbids to use ``finally`` in ``try`` block without ``except``.
+    Forbids to use ``finally`` in ``try`` block without ``except`` block.
 
     Reasoning:
         This rule will reduce complexity and improve readability.
 
     Solution:
         Refactor your ``try`` logic.
+        Replace the ``try-finally`` statement with a ``with`` statement.
+
+    Example::
+
+        # Correct:
+        with open("filename") as f:
+            f.write(...)
+
+        # Wrong:
+        try:
+            f = open("filename")
+            f.write(...)
+        finally:
+            f.close()
 
     Note:
         Returns Z437 as error code
