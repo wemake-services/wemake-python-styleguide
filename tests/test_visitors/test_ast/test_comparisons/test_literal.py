@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations.consistency import (
     ConstantComparisonViolation,
 )
 from wemake_python_styleguide.visitors.ast.comparisons import (
-    ConstantComparisonVisitor,
+    ComparisonSanityVisitor,
 )
 
 if_with_is = 'if {0} is {1}: ...'
@@ -63,7 +63,7 @@ def test_non_literal(
     """Testing that comparisons work well."""
     tree = parse_ast_tree(code.format(*comparators))
 
-    visitor = ConstantComparisonVisitor(default_options, tree=tree)
+    visitor = ComparisonSanityVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -101,7 +101,7 @@ def test_literal(
     """Testing that violations are when using literal comparisons."""
     tree = parse_ast_tree(code.format(*comparators))
 
-    visitor = ConstantComparisonVisitor(default_options, tree=tree)
+    visitor = ComparisonSanityVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [ConstantComparisonViolation])
@@ -125,7 +125,7 @@ def test_literal_special1(
     """Testing that special cases do work and raise warnings."""
     tree = parse_ast_tree(code.format(*comparators))
 
-    visitor = ConstantComparisonVisitor(default_options, tree=tree)
+    visitor = ComparisonSanityVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [ConstantComparisonViolation])
@@ -149,7 +149,7 @@ def test_literal_special2(
     """Testing that special cases do work and raise warnings."""
     tree = parse_ast_tree(code.format(*comparators))
 
-    visitor = ConstantComparisonVisitor(default_options, tree=tree)
+    visitor = ComparisonSanityVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [ConstantComparisonViolation])
@@ -169,7 +169,7 @@ def test_literal_special_without_errors(
     """Testing that special cases do work and do not raise warnings."""
     tree = parse_ast_tree(code.format('first_name', 'second_name'))
 
-    visitor = ConstantComparisonVisitor(default_options, tree=tree)
+    visitor = ComparisonSanityVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])

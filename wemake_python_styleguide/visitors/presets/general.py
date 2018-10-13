@@ -36,10 +36,8 @@ GENERAL_PRESET = (
     numbers.MagicNumberVisitor,
     WrongStringVisitor,
 
-    comparisons.ConstantComparisonVisitor,
-    comparisons.WrongOrderVisitor,
-    comparisons.MultipleInVisitor,
-    comparisons.RedundantComparisonVisitor,
+    comparisons.ComparisonSanityVisitor,
+    comparisons.WrongComparisionOrderVisitor,
 
     # Classes:
     WrongClassVisitor,

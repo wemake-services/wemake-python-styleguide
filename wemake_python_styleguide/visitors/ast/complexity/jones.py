@@ -14,7 +14,6 @@ from collections import defaultdict
 from statistics import median
 from typing import DefaultDict, List
 
-from wemake_python_styleguide.logics.nodes import is_subtype_of_any
 from wemake_python_styleguide.violations.complexity import (
     JonesScoreViolation,
     LineComplexityViolation,
@@ -84,7 +83,7 @@ class JonesComplexityVisitor(BaseNodeVisitor):  # TODO: consider `logical_line`
 
         """
         line_number = getattr(node, 'lineno', None)
-        is_ignored = is_subtype_of_any(node, self._ignored_nodes)
+        is_ignored = isinstance(node, self._ignored_nodes)
         if line_number is not None and not is_ignored:
             if not self._maybe_ignore_child(node):
                 self._lines[line_number].append(node)

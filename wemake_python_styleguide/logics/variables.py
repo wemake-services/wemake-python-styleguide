@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import ast
 from typing import Iterable, Optional
 
 from wemake_python_styleguide import constants
@@ -125,3 +126,10 @@ def is_variable_name_with_underscored_number(name: str) -> bool:
     """
     pattern = constants.UNDERSCORED_NUMBER_PATTERN
     return name is not None and pattern.match(name) is not None
+
+
+def is_same_variable(left: ast.AST, right: ast.AST) -> bool:
+    """Ensures that nodes are the same variable."""
+    if isinstance(left, ast.Name) and isinstance(right, ast.Name):
+        return left.id == right.id
+    return False

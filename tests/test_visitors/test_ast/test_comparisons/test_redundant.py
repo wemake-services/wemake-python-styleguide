@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations.consistency import (
     RedundantComparisonViolation,
 )
 from wemake_python_styleguide.visitors.ast.comparisons import (
-    RedundantComparisonVisitor,
+    ComparisonSanityVisitor,
 )
 
 create_variables = """
@@ -56,6 +56,8 @@ assert_with_message = 'assert {0} == {1}, "message"'
 ])
 @pytest.mark.parametrize('comparators', [
     ('variable', '"test"'),
+    ('variable', 'variable.call()'),
+    ('variable', 'len(variable)'),
     ('variable', 'another_variable'),
     ('variable', '222'),
 ])
@@ -69,7 +71,7 @@ def test_not_redundant(
     """Testing that comparisons work well."""
     tree = parse_ast_tree(create_variables.format(code.format(*comparators)))
 
-    visitor = RedundantComparisonVisitor(default_options, tree=tree)
+    visitor = ComparisonSanityVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -105,7 +107,21 @@ def test_redundant(
     """Testing that violations are when comparing identical variable."""
     tree = parse_ast_tree(create_variables.format(code.format(*comparators)))
 
-    visitor = RedundantComparisonVisitor(default_options, tree=tree)
+    visitor = ComparisonSanityVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [RedundantComparisonViolation])
+
+
+def test_multiple_compare(
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+):
+    """Ensuring than multiple redundant compare returns a single violation."""
+    tree = parse_ast_tree('assert some == some == some')
+
+    visitor = ComparisonSanityVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [RedundantComparisonViolation])

@@ -5,7 +5,9 @@ import pytest
 from wemake_python_styleguide.violations.consistency import (
     ComparisonOrderViolation,
 )
-from wemake_python_styleguide.visitors.ast.comparisons import WrongOrderVisitor
+from wemake_python_styleguide.visitors.ast.comparisons import (
+    WrongComparisionOrderVisitor,
+)
 
 if_with_is = 'if {0} is {1}: ...'
 if_with_is_not = 'if {0} is not {1}: ...'
@@ -74,7 +76,7 @@ def test_comparison_variables(
     """Comparisons work well for left variables."""
     tree = parse_ast_tree(code.format(*comparators))
 
-    visitor = WrongOrderVisitor(default_options, tree=tree)
+    visitor = WrongComparisionOrderVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -98,7 +100,7 @@ def test_comparison_variables_in_special_case(
     """Ensures that special case for `in` and `not in` is handled."""
     tree = parse_ast_tree(code.format(*comparators))
 
-    visitor = WrongOrderVisitor(default_options, tree=tree)
+    visitor = WrongComparisionOrderVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -139,7 +141,7 @@ def test_comparison_wrong_order(
     """Comparisons raise for left constants."""
     tree = parse_ast_tree(code.format(*comparators))
 
-    visitor = WrongOrderVisitor(default_options, tree=tree)
+    visitor = WrongComparisionOrderVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [ComparisonOrderViolation])
@@ -164,7 +166,7 @@ def test_comparison_wrong_order_multiple(
         'if {0} > {1} and {0} < {1}: ...'.format(*comparators),
     )
 
-    visitor = WrongOrderVisitor(default_options, tree=tree)
+    visitor = WrongComparisionOrderVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [
