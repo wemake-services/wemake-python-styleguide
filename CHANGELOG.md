@@ -40,6 +40,8 @@ to the project during `#hactoberfest`. List of awesome people:
 - Improves tests: now we are using different logic inside `assert_errors`
 - Improves tests: now testing magic numbers in more situations
 - Improves tests: now testing more situations with empty base classes
+- Improves tests: now testing presets, that they have all the existing visitors
+- Improves tests: now using stricter `noqa` checks
 - Improves types: now all class attributes are marked as `ClassVar`
 
 

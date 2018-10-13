@@ -26,7 +26,8 @@ if_with_not_in = 'if {0} not in {1}: ...'
 
 ternary = 'ternary = 0 if {0} > {1} else 1'
 while_construct = 'while {0} > {1}: ...'
-assert_construct = 'assert {0} == {1}, "message"'
+assert_construct = 'assert {0} == {1}'
+assert_with_message = 'assert {0} == {1}, "message"'
 
 
 @pytest.mark.parametrize('code', [
@@ -47,6 +48,7 @@ assert_construct = 'assert {0} == {1}, "message"'
     ternary,
     while_construct,
     assert_construct,
+    assert_with_message,
 ])
 @pytest.mark.parametrize('comparators', [
     ('first_name', 'second_name'),
@@ -116,6 +118,7 @@ def test_comparison_variables_in_special_case(
     ternary,
     while_construct,
     assert_construct,
+    assert_with_message,
 ])
 @pytest.mark.parametrize('comparators', [
     ('"string constant"', 'first_name'),

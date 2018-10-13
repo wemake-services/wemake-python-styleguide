@@ -39,6 +39,7 @@ GENERAL_PRESET = (
     comparisons.ConstantComparisonVisitor,
     comparisons.WrongOrderVisitor,
     comparisons.MultipleInVisitor,
+    comparisons.RedundantComparisonVisitor,
 
     # Classes:
     WrongClassVisitor,

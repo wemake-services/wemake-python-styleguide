@@ -1,25 +1,26 @@
 # -*- coding: utf-8 -*-
 
+import re
 import subprocess
+from collections import Counter
+
+ERROR_PATTERN = re.compile(r'(Z\d{3})')
+
+
+def _assert_errors_count_in_output(output, errors):
+    found_errors = Counter((
+        match.group(0) for match in ERROR_PATTERN.finditer(output)
+    ))
+
+    for found_error, found_count in found_errors.items():
+        assert found_error in errors, 'Error without a noqa count'
+        assert found_count == errors.pop(found_error)
+    assert len(errors) == 0
 
 
 def test_noqa_fixture_disabled(absolute_path):
     """End-to-End test to check that all violations are present."""
-    process = subprocess.Popen(
-        [
-            'flake8',
-            '--disable-noqa',
-            '--select',
-            'Z',
-            absolute_path('fixtures', 'noqa.py'),
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    stdout, _ = process.communicate()
-    output = stdout.decode('utf8')
-
-    counts = {
+    errors = {
         'Z110': 2,
         'Z111': 1,
         'Z112': 1,
@@ -37,6 +38,7 @@ def test_noqa_fixture_disabled(absolute_path):
         'Z308': 1,
         'Z309': 1,
         'Z310': 4,
+        'Z312': 1,
 
         'Z410': 1,
         'Z420': 1,
@@ -52,10 +54,20 @@ def test_noqa_fixture_disabled(absolute_path):
         'Z436': 1,
     }
 
-    for error in counts:
-        # TODO: parse all `Z` error out, create a list
-        # TODO: pop errors from `counts`, make sure nothing is left
-        assert output.count(error) == counts[error], error
+    process = subprocess.Popen(
+        [
+            'flake8',
+            '--disable-noqa',
+            '--select',
+            'Z',
+            absolute_path('fixtures', 'noqa.py'),
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    stdout, _ = process.communicate()
+
+    _assert_errors_count_in_output(stdout.decode('utf8'), errors)
 
 
 def test_noqa_fixture(absolute_path):
