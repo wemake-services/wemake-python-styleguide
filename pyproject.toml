@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "wemake-python-styleguide"
+name = "we-make-python-styleguide"
 version = "0.2.0"
-description = "The most opinionated linter ever, used by wemake.services"
+description = "The most opinionated linter ever, is used by wemake.services"
 
 license = "MIT"
 
