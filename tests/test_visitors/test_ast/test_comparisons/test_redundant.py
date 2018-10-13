@@ -3,7 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
-    ConstantComparisonViolation,
+    RedundantComparisonViolation,
 )
 from wemake_python_styleguide.visitors.ast.comparisons import (
     RedundantComparisonVisitor,
@@ -105,4 +105,4 @@ def test_redundant(
     visitor = RedundantComparisonVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [ConstantComparisonViolation])
+    assert_errors(visitor, [RedundantComparisonViolation])
