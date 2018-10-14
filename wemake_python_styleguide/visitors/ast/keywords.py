@@ -128,12 +128,14 @@ class WrongTryFinallyVisitor(BaseNodeVisitor):
 class WrongExceptionTypeVisitor(BaseNodeVisitor):
     """Finds use of ``BaseException`` exception."""
 
+    base_exception: ClassVar[str] = 'BaseException'
+
     def _check_exception_type(self, node: ast.ExceptHandler) -> None:
         exception_name = getattr(node, 'type', None)
         if exception_name is None:
             return
         exception_id = getattr(exception_name, 'id', None)
-        if exception_id == 'BaseException':
+        if exception_id == WrongExceptionTypeVisitor.base_exception:
             self.add_violation(BaseExceptionViolation(node))
 
     def visit_ExceptHandler(self, node: ast.ExceptHandler) -> None:
