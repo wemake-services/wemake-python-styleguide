@@ -4,6 +4,7 @@ import ast
 from collections import defaultdict
 from typing import DefaultDict, List
 
+from wemake_python_styleguide.constants import UNUSED_VARIABLE
 from wemake_python_styleguide.logics.functions import is_method
 from wemake_python_styleguide.types import (
     AnyFunctionDef,
@@ -46,9 +47,10 @@ class _ComplexityCounter(object):
         What is treated as a local variable?
         Check ``TooManyLocalsViolation`` documentation.
         """
-        function_variables = self.variables[function]
-        if variable_name not in function_variables and variable_name != '_':
-            function_variables.append(variable_name)
+        function_variables = self.variables[function]  # TODO: fix issue-247
+        if variable_name not in function_variables:
+            if variable_name != UNUSED_VARIABLE:
+                function_variables.append(variable_name)
 
     def _update_elifs(self, node: AnyFunctionDef, sub_node: ast.If) -> None:
         has_elif = any(

@@ -41,7 +41,7 @@ def is_wrong_variable_name(name: str, to_check: Iterable[str]) -> bool:
     return False
 
 
-def is_upper_case_name(name: str):
+def is_upper_case_name(name: Optional[str]) -> bool:
     """
     Checks that attribute name has no upper-case letters.
 
@@ -65,8 +65,12 @@ def is_upper_case_name(name: str):
 
     >>> is_upper_case_name('__variable_v2')
     False
+
+    >>> is_upper_case_name(None)
+    False
+
     """
-    return any(character.isupper() for character in name)
+    return name is not None and any(character.isupper() for character in name)
 
 
 def is_too_short_variable_name(
@@ -95,7 +99,10 @@ def is_too_short_variable_name(
     False
 
     """
-    return name is not None and name != '_' and len(name) < min_length
+    if name is None:
+        return False
+
+    return name != constants.UNUSED_VARIABLE and len(name) < min_length
 
 
 def is_private_variable(name: Optional[str]) -> bool:
@@ -161,3 +168,20 @@ def is_same_variable(left: ast.AST, right: ast.AST) -> bool:
     if isinstance(left, ast.Name) and isinstance(right, ast.Name):
         return left.id == right.id
     return False
+
+
+def get_assigned_name(node: ast.AST) -> Optional[str]:
+    """
+    Returns variable names for node that are just assigned.
+
+    Returns ``None`` for nodes that are used in a different manner.
+    """
+    if isinstance(node, ast.Name) and isinstance(node.ctx, ast.Store):
+        return node.id
+
+    if isinstance(node, ast.Attribute) and isinstance(node.ctx, ast.Store):
+        return node.attr
+
+    if isinstance(node, ast.ExceptHandler):
+        return getattr(node, 'name', None)
+    return None

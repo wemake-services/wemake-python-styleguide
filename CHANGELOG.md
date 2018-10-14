@@ -44,6 +44,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - Improves tests: now testing more situations with empty base classes
 - Improves tests: now testing presets, that they have all the existing visitors
 - Improves tests: now using stricter `noqa` checks
+- Improves tests: now testing that any name is allowed when using a variable
 - Improves types: now all class attributes are marked as `ClassVar`
 
 

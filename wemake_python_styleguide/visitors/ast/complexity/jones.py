@@ -21,7 +21,7 @@ from wemake_python_styleguide.violations.complexity import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
-class JonesComplexityVisitor(BaseNodeVisitor):  # TODO: consider `logical_line`
+class JonesComplexityVisitor(BaseNodeVisitor):
     """
     This visitor is used to find complex lines in the code.
 

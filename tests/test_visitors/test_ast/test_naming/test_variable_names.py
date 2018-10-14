@@ -69,7 +69,11 @@ except Exception as {0}:
     underscore_variable_test2,
 ])
 def test_wrong_variable_names(
-    assert_errors, parse_ast_tree, bad_name, code, default_options,
+    assert_errors,
+    parse_ast_tree,
+    bad_name,
+    code,
+    default_options,
 ):
     """Testing that variable can not have blacklisted names."""
     tree = parse_ast_tree(code.format(bad_name))
@@ -90,7 +94,11 @@ def test_wrong_variable_names(
     exception_test,
 ])
 def test_too_short_variable_names(
-    assert_errors, parse_ast_tree, short_name, code, default_options,
+    assert_errors,
+    parse_ast_tree,
+    short_name,
+    code,
+    default_options,
 ):
     """Testing that variable can not have too short names."""
     tree = parse_ast_tree(code.format(short_name))
@@ -110,7 +118,10 @@ def test_too_short_variable_names(
     exception_test,
 ])
 def test_too_short_variable_names_configured(
-    assert_errors, parse_ast_tree, code, options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    options,
 ):
     """Testing that variable length can be configured."""
     tree = parse_ast_tree(code.format('kira'))
@@ -131,7 +142,10 @@ def test_too_short_variable_names_configured(
     exception_test,
 ])
 def test_private_variable_names(
-    assert_errors, parse_ast_tree, code, default_options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
 ):
     """Testing that variable can not have private names."""
     tree = parse_ast_tree(code.format('__private_value'))
@@ -154,7 +168,11 @@ def test_private_variable_names(
     underscore_variable_test2,
 ])
 def test_correct_variable_name(
-    assert_errors, parse_ast_tree, code, correct_name, default_options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    correct_name,
+    default_options,
 ):
     """Testing that variable can have normal names."""
     tree = parse_ast_tree(code.format(correct_name))
@@ -174,7 +192,10 @@ def test_correct_variable_name(
     exception_test,
 ])
 def test_underscored_number_in_variable_names(
-    assert_errors, parse_ast_tree, code, default_options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
 ):
     """Testing that variable can not have private names."""
     tree = parse_ast_tree(code.format('number_2'))
@@ -194,7 +215,10 @@ def test_underscored_number_in_variable_names(
     exception_test,
 ])
 def test_underscored_number_not_in_variable_names(
-    assert_errors, parse_ast_tree, code, default_options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
 ):
     """Testing that variable can not have private names."""
     tree = parse_ast_tree(code.format('test34', 'test32_109'))
