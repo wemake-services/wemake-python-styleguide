@@ -39,7 +39,7 @@ class _ComplexityCounter(object):
     def _update_variables(
         self,
         function: AnyFunctionDef,
-        variable_name: str,
+        variable: ast.Name,
     ) -> None:
         """
         Increases the counter of local variables.
@@ -47,10 +47,16 @@ class _ComplexityCounter(object):
         What is treated as a local variable?
         Check ``TooManyLocalsViolation`` documentation.
         """
-        function_variables = self.variables[function]  # TODO: fix issue-247
-        if variable_name not in function_variables:
-            if variable_name != UNUSED_VARIABLE:
-                function_variables.append(variable_name)
+        function_variables = self.variables[function]
+        if variable.id not in function_variables:
+            if variable.id == UNUSED_VARIABLE:
+                return
+
+            parent = getattr(variable, 'parent', None)
+            if isinstance(parent, ast.comprehension):
+                return
+
+            function_variables.append(variable.id)
 
     def _update_elifs(self, node: AnyFunctionDef, sub_node: ast.If) -> None:
         has_elif = any(
@@ -65,7 +71,7 @@ class _ComplexityCounter(object):
         context = getattr(sub_node, 'ctx', None)
 
         if is_variable and isinstance(context, ast.Store):
-            self._update_variables(node, sub_node.id)
+            self._update_variables(node, sub_node)
         elif isinstance(sub_node, ast.Return):
             self.returns[node] += 1
         elif isinstance(sub_node, ast.Expr):
