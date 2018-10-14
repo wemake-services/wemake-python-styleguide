@@ -2,13 +2,14 @@
 
 import ast
 from collections import defaultdict
-from typing import DefaultDict, List
+from typing import ClassVar, DefaultDict, List
 
 from wemake_python_styleguide.constants import UNUSED_VARIABLE
 from wemake_python_styleguide.logics.functions import is_method
 from wemake_python_styleguide.types import (
     AnyFunctionDef,
     AnyFunctionDefAndLambda,
+    AnyNodes,
 )
 from wemake_python_styleguide.violations.complexity import (
     TooManyArgumentsViolation,
@@ -26,6 +27,10 @@ FunctionCounterWithLambda = DefaultDict[AnyFunctionDefAndLambda, int]
 
 class _ComplexityCounter(object):
     """Helper class to encapsulate logic from the visitor."""
+
+    _not_contain_locals: ClassVar[AnyNodes] = (
+        ast.comprehension,
+    )
 
     def __init__(self) -> None:
         self.arguments: FunctionCounterWithLambda = defaultdict(int)
@@ -53,7 +58,7 @@ class _ComplexityCounter(object):
                 return
 
             parent = getattr(variable, 'parent', None)
-            if isinstance(parent, ast.comprehension):
+            if isinstance(parent, self._not_contain_locals):
                 return
 
             function_variables.append(variable.id)
