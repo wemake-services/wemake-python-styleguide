@@ -43,6 +43,7 @@ Summary
    BadNumberSuffixViolation
    ComparisonOrderViolation
    MultipleInComparisonViolation
+   NamedConstantConditionalViolation
 
 Consistency checks
 ------------------
@@ -59,6 +60,7 @@ Consistency checks
 .. autoclass:: BadNumberSuffixViolation
 .. autoclass:: ComparisonOrderViolation
 .. autoclass:: MultipleInComparisonViolation
+.. autoclass:: NamedConstantConditionalViolation
 
 """
 
@@ -460,3 +462,34 @@ class MultipleInComparisonViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found multiple in comparisons'
     code = 311
+
+
+class NamedConstantConditionalViolation(ASTViolation):
+    """
+    Forbids using if statements that use only constant boolean values.
+
+    Reasoning:
+        When a constant boolean value is used in conditional
+        it is typically an indication of a mistake, since
+        the boolean value of the comparison will always be the same.
+
+    Solution:
+        Remove the conditional and any associated dead code.
+
+    Example::
+
+        # Correct:
+        if value is True: ...
+
+        # Wrong:
+        if True: ...
+
+    Note:
+        Returns Z313 as error code
+
+    """
+
+    should_use_text = False
+    #: Error message shown to the user.
+    error_template = 'Conditional is always true or false'
+    code = 313
