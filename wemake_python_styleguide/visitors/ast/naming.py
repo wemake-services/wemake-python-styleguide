@@ -14,6 +14,7 @@ from wemake_python_styleguide.logics.variables import (
 )
 from wemake_python_styleguide.types import AnyFunctionDef, AnyImport
 from wemake_python_styleguide.violations.best_practices import (
+    ReassigningVariableToItselfViolation,
     WrongModuleMetadataViolation,
 )
 from wemake_python_styleguide.violations.naming import (
@@ -167,4 +168,26 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
 
         """
         self._check_metadata(node)
+        self.generic_visit(node)
+
+
+class WrongVariableAssignmentVisitor(BaseNodeVisitor):
+    """Finds wrong variables assignments."""
+
+    def _check_assignment(self, node: ast.Assign) -> None:
+        node_value_id = getattr(node.value, 'id', None)
+        for target_node in node.targets:
+            target_node_id = getattr(target_node, 'id', None)
+            if target_node_id == node_value_id:
+                self.add_violation(ReassigningVariableToItselfViolation(node))
+
+    def visit_Assign(self, node: ast.Assign) -> None:
+        """
+        Used to check assignment variable to itself.
+
+        Raises:
+            ReassigningVariableToItselfViolation
+
+        """
+        self._check_assignment(node)
         self.generic_visit(node)

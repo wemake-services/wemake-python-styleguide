@@ -37,6 +37,7 @@ Summary
    BadMagicMethodViolation
    NestedImportViolation
    RedundantForElseViolation
+   ReassigningVariableToItselfViolation
 
 Comments
 --------
@@ -68,6 +69,7 @@ Design
 .. autoclass:: BadMagicMethodViolation
 .. autoclass:: NestedImportViolation
 .. autoclass:: RedundantForElseViolation
+.. autoclass:: ReassigningVariableToItselfViolation
 
 """
 
@@ -615,3 +617,19 @@ class RedundantForElseViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found `else` in `for` loop with `break`'
     code = 436
+
+
+class ReassigningVariableToItselfViolation(ASTViolation):
+    """
+    Forbids to assign variable to itself.
+
+    Reasoning:
+        There is no need to do that.
+
+    Note:
+        Returns Z437 as error code
+    """
+
+    #: Error message shown to the user.
+    error_template = 'Found reassigning variable to itself'
+    code = 437

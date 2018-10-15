@@ -13,6 +13,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - [@riyasyash](https://github.com/riyasyash)
 - [@sathwikmatsa](https://github.com/sathwikmatsa)
 - [@tipabu](https://github.com/tipabu)
+- [@roxe322](https://github.com/roxe322)
 
 ### Features
 
@@ -23,6 +24,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - Forbids underscores before numbers in names
 - Enforce consistent octal, binary, and hex numbers
 - Forbid `for` loops with unused `else`
+- Forbid variables self reassignment
 
 ### Bugfixes
 
