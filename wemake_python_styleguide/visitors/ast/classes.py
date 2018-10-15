@@ -9,6 +9,7 @@ from wemake_python_styleguide.violations.best_practices import (
     StaticMethodViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
+    RedundantClassParentViolation,
     RequiredBaseClassViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -29,6 +30,7 @@ class WrongClassVisitor(BaseNodeVisitor):
     _staticmethod_names = frozenset((
         'staticmethod',
     ))
+    _object_parent_class = 'object'
 
     def _check_decorators(self, node: AnyFunctionDef) -> None:
         for decorator in node.decorator_list:
@@ -44,15 +46,26 @@ class WrongClassVisitor(BaseNodeVisitor):
         if len(node.bases) == 0:
             self.add_violation(RequiredBaseClassViolation(node, text=node.name))
 
+    def _check_parents(self, node: ast.ClassDef) -> None:
+        """Checking for redundant `object` parent class."""
+        if len(node.bases) > 1:
+            for parent_class in node.bases:
+                parent_class_name = getattr(parent_class, 'id', None)
+                if parent_class_name == WrongClassVisitor._object_parent_class:
+                    self.add_violation(
+                        RedundantClassParentViolation(node, text=node.name))
+
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """
         Checking class definitions.
 
         Raises:
             RequiredBaseClassViolation
+            RedundantClassParentViolation
 
         """
         self._check_base_class(node)
+        self._check_parents(node)
         self.generic_visit(node)
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:

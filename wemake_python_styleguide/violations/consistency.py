@@ -44,6 +44,7 @@ Summary
    ComparisonOrderViolation
    MultipleInComparisonViolation
    RedundantComparisonViolation
+   RedundantClassParentViolation
 
 Consistency checks
 ------------------
@@ -61,6 +62,7 @@ Consistency checks
 .. autoclass:: ComparisonOrderViolation
 .. autoclass:: MultipleInComparisonViolation
 .. autoclass:: RedundantComparisonViolation
+.. autoclass:: RedundantClassParentViolation
 
 """
 
@@ -496,3 +498,38 @@ class RedundantComparisonViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found comparison between same variable'
     code = 312
+
+
+class RedundantClassParentViolation(ASTViolation):
+    """
+    Forbids to write classes with multiple parents and ``object`` base class.
+
+    Reasoning:
+        We should allow using ``object`` as a base class in a
+        class definition only when it is explicitly used as a
+        single parent class. When there are multiple parent
+        classes, it is not allowed to use ``object`` as a
+        parent class for consistency reasons.
+
+    Solution:
+        Remove the ``object`` from the list of base classes.
+
+    Example::
+
+        # Correct:
+        class Some(object): ...
+
+        # Wrong:
+        class Some(ParentClass1, ParentClass2, object): ...
+
+        # Wrong:
+        class Some(object, ParentClass): ...
+
+    Note:
+        Returns Z313 as error code
+
+    """
+
+    #: Error message shown to the user.
+    error_template = 'Found class with parents and `object` "{0}"'
+    code = 313
