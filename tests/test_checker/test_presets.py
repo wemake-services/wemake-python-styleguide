@@ -43,11 +43,22 @@ def _import_module_by_path(path: str):
     return module
 
 
+def _visitors_paths():
+    excluded_paths = glob.glob(
+        'wemake_python_styleguide/visitors/presets/**/*.py', recursive=True,
+    )
+    return [
+        path for path in
+        glob.glob('wemake_python_styleguide/visitors/**/*.py', recursive=True)
+        if path not in excluded_paths
+    ]
+
+
 @pytest.fixture(scope='module')
 def all_visitors():
     """Loads all visitors into the list to be checked."""
     visitors = []
-    for path in glob.glob('wemake_python_styleguide/visitors/**/*.py'):
+    for path in _visitors_paths():
         module = _import_module_by_path(path)
         classes_names_list = inspect.getmembers(module, _is_visitor_class)
         visitors.extend(map(itemgetter(1), classes_names_list))
