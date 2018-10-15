@@ -66,6 +66,24 @@ class Input(object):
     def validate(self, *{0}, **{1}): ...
 """
 
+function_kwonly_test = """
+def test(*, {0}=True, {1}=True): ...
+"""
+
+async_function_kwonly_test = """
+async def test(*, {0}=True, {1}=True): ...
+"""
+
+method_kwonly_test = """
+class Input(object):
+    def test(self, *, {0}=True, {1}=True): ...
+"""
+
+async_method_kwonly_test = """
+class Input(object):
+    async def test(self, *, {0}=True, {1}=True): ...
+"""
+
 
 @pytest.mark.parametrize('bad_name', VARIABLE_NAMES_BLACKLIST)
 @pytest.mark.parametrize('code', [
@@ -81,9 +99,17 @@ class Input(object):
     async_function_args_kwargs_test,
     method_args_kwargs_test,
     async_method_args_kwargs_test,
+    function_kwonly_test,
+    async_function_kwonly_test,
+    method_kwonly_test,
+    async_method_kwonly_test,
 ])
 def test_wrong_function_arguments(
-    assert_errors, parse_ast_tree, bad_name, code, default_options,
+    assert_errors,
+    parse_ast_tree,
+    bad_name,
+    code,
+    default_options,
 ):
     """Testing that function can not have blacklisted arguments."""
     tree = parse_ast_tree(code.format('x', bad_name))
@@ -110,9 +136,16 @@ def test_wrong_function_arguments(
     async_function_args_kwargs_test,
     method_args_kwargs_test,
     async_method_args_kwargs_test,
+    function_kwonly_test,
+    async_function_kwonly_test,
+    method_kwonly_test,
+    async_method_kwonly_test,
 ])
 def test_private_function_arguments(
-    assert_errors, parse_ast_tree, code, default_options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
 ):
     """Testing that function can not have private arguments."""
     tree = parse_ast_tree(code.format('__private', '__name'))
@@ -139,9 +172,16 @@ def test_private_function_arguments(
     async_function_args_kwargs_test,
     method_args_kwargs_test,
     async_method_args_kwargs_test,
+    function_kwonly_test,
+    async_function_kwonly_test,
+    method_kwonly_test,
+    async_method_kwonly_test,
 ])
 def test_correct_function_arguments(
-    assert_errors, parse_ast_tree, code, default_options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
 ):
     """Testing that function can have normal arguments."""
     tree = parse_ast_tree(code.format('good_name', 'normal_name'))

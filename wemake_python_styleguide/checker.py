@@ -99,7 +99,7 @@ class Checker(object):
 
     def __init__(
         self,
-        tree: ast.Module,
+        tree: ast.AST,
         file_tokens: Sequence[tokenize.TokenInfo],
         filename: str = constants.STDIN,
     ) -> None:

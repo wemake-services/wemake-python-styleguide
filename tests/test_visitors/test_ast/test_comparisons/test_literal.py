@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations.consistency import (
     ConstantComparisonViolation,
 )
 from wemake_python_styleguide.visitors.ast.comparisons import (
-    ConstantComparisonVisitor,
+    ComparisonSanityVisitor,
 )
 
 if_with_is = 'if {0} is {1}: ...'
@@ -28,7 +28,8 @@ if_with_not_in = 'if {0} not in {1}: ...'
 
 ternary = 'ternary = 0 if {0} > {1} else 1'
 while_construct = 'while {0} > {1}: ...'
-assert_construct = 'assert {0} == {1}, "message"'
+assert_construct = 'assert {0} == {1}'
+assert_with_message = 'assert {0} == {1}, "message"'
 
 
 @pytest.mark.parametrize('code', [
@@ -45,6 +46,7 @@ assert_construct = 'assert {0} == {1}, "message"'
     ternary,
     while_construct,
     assert_construct,
+    assert_with_message,
 ])
 @pytest.mark.parametrize('comparators', [
     ('first_name', 'second_name'),
@@ -61,7 +63,7 @@ def test_non_literal(
     """Testing that comparisons work well."""
     tree = parse_ast_tree(code.format(*comparators))
 
-    visitor = ConstantComparisonVisitor(default_options, tree=tree)
+    visitor = ComparisonSanityVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -81,6 +83,7 @@ def test_non_literal(
     ternary,
     while_construct,
     assert_construct,
+    assert_with_message,
 ])
 @pytest.mark.parametrize('comparators', [
     (1, 2),
@@ -98,7 +101,7 @@ def test_literal(
     """Testing that violations are when using literal comparisons."""
     tree = parse_ast_tree(code.format(*comparators))
 
-    visitor = ConstantComparisonVisitor(default_options, tree=tree)
+    visitor = ComparisonSanityVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [ConstantComparisonViolation])
@@ -122,7 +125,7 @@ def test_literal_special1(
     """Testing that special cases do work and raise warnings."""
     tree = parse_ast_tree(code.format(*comparators))
 
-    visitor = ConstantComparisonVisitor(default_options, tree=tree)
+    visitor = ComparisonSanityVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [ConstantComparisonViolation])
@@ -146,7 +149,7 @@ def test_literal_special2(
     """Testing that special cases do work and raise warnings."""
     tree = parse_ast_tree(code.format(*comparators))
 
-    visitor = ConstantComparisonVisitor(default_options, tree=tree)
+    visitor = ComparisonSanityVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [ConstantComparisonViolation])
@@ -166,7 +169,7 @@ def test_literal_special_without_errors(
     """Testing that special cases do work and do not raise warnings."""
     tree = parse_ast_tree(code.format('first_name', 'second_name'))
 
-    visitor = ConstantComparisonVisitor(default_options, tree=tree)
+    visitor = ComparisonSanityVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])

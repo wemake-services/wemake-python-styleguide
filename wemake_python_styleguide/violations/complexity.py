@@ -187,6 +187,8 @@ class TooManyLocalsViolation(ASTViolation):
 
     What counts as a local variable? We only count variable as local
     in the following case: it is assigned inside the function body.
+    We do not count variables defined inside comprehensions as local variables,
+    since it is impossible to use them outside of the comprehension.
 
     Example::
 

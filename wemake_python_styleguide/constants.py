@@ -152,6 +152,9 @@ MAGIC_NUMBERS_WHITELIST = frozenset((
 # Used as a default filename, when it is not passed by flake8:
 STDIN = 'stdin'
 
+# Used as a special name for unused variables:
+UNUSED_VARIABLE = '_'
+
 # Used to specify as a placeholder for `__init__`:
 INIT = '__init__'
 

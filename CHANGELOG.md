@@ -21,10 +21,12 @@ to the project during `#hactoberfest`. List of awesome people:
 - Forbids the comparison of two literals
 - Forbids the incorrect order comparison
 - Forbids underscores before numbers in names
+- Forbids class level attributes whose name is not in snake_case
 - Forbids comparison of the same variable
 - Enforce consistent octal, binary, and hex numbers
 - We not check the argument count in Lambda functions
 - Forbid `for` loops with unused `else`
+- Forbid `try` with `finally` without `except`
 
 ### Bugfixes
 
@@ -40,6 +42,9 @@ to the project during `#hactoberfest`. List of awesome people:
 - Improves tests: now we are using different logic inside `assert_errors`
 - Improves tests: now testing magic numbers in more situations
 - Improves tests: now testing more situations with empty base classes
+- Improves tests: now testing presets, that they have all the existing visitors
+- Improves tests: now using stricter `noqa` checks
+- Improves tests: now testing that any name is allowed when using a variable
 - Improves types: now all class attributes are marked as `ClassVar`
 
 

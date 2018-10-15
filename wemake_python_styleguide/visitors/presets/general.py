@@ -2,6 +2,7 @@
 
 from wemake_python_styleguide.visitors.ast import (
     comparisons,
+    conditionals,
     keywords,
     naming,
     numbers,
@@ -26,6 +27,7 @@ GENERAL_PRESET = (
     keywords.WrongKeywordVisitor,
     keywords.WrongListComprehensionVisitor,
     keywords.WrongForElseVisitor,
+    keywords.WrongTryFinallyVisitor,
 
     WrongFunctionCallVisitor,
     WrongImportVisitor,
@@ -36,9 +38,10 @@ GENERAL_PRESET = (
     numbers.MagicNumberVisitor,
     WrongStringVisitor,
 
-    comparisons.ConstantComparisonVisitor,
-    comparisons.WrongOrderVisitor,
-    comparisons.MultipleInVisitor,
+    conditionals.NamedConstantConditionalVisitor,
+
+    comparisons.ComparisonSanityVisitor,
+    comparisons.WrongComparisionOrderVisitor,
 
     # Classes:
     WrongClassVisitor,

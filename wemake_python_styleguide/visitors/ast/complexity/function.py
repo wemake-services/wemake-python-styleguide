@@ -2,12 +2,14 @@
 
 import ast
 from collections import defaultdict
-from typing import DefaultDict, List
+from typing import ClassVar, DefaultDict, List
 
+from wemake_python_styleguide.constants import UNUSED_VARIABLE
 from wemake_python_styleguide.logics.functions import is_method
 from wemake_python_styleguide.types import (
     AnyFunctionDef,
     AnyFunctionDefAndLambda,
+    AnyNodes,
 )
 from wemake_python_styleguide.violations.complexity import (
     TooManyArgumentsViolation,
@@ -26,6 +28,10 @@ FunctionCounterWithLambda = DefaultDict[AnyFunctionDefAndLambda, int]
 class _ComplexityCounter(object):
     """Helper class to encapsulate logic from the visitor."""
 
+    _not_contain_locals: ClassVar[AnyNodes] = (
+        ast.comprehension,
+    )
+
     def __init__(self) -> None:
         self.arguments: FunctionCounterWithLambda = defaultdict(int)
         self.elifs: FunctionCounter = defaultdict(int)
@@ -38,7 +44,7 @@ class _ComplexityCounter(object):
     def _update_variables(
         self,
         function: AnyFunctionDef,
-        variable_name: str,
+        variable: ast.Name,
     ) -> None:
         """
         Increases the counter of local variables.
@@ -47,8 +53,15 @@ class _ComplexityCounter(object):
         Check ``TooManyLocalsViolation`` documentation.
         """
         function_variables = self.variables[function]
-        if variable_name not in function_variables and variable_name != '_':
-            function_variables.append(variable_name)
+        if variable.id not in function_variables:
+            if variable.id == UNUSED_VARIABLE:
+                return
+
+            parent = getattr(variable, 'parent', None)
+            if isinstance(parent, self._not_contain_locals):
+                return
+
+            function_variables.append(variable.id)
 
     def _update_elifs(self, node: AnyFunctionDef, sub_node: ast.If) -> None:
         has_elif = any(
@@ -63,7 +76,7 @@ class _ComplexityCounter(object):
         context = getattr(sub_node, 'ctx', None)
 
         if is_variable and isinstance(context, ast.Store):
-            self._update_variables(node, sub_node.id)
+            self._update_variables(node, sub_node)
         elif isinstance(sub_node, ast.Return):
             self.returns[node] += 1
         elif isinstance(sub_node, ast.Expr):

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
+from typing import ClassVar, FrozenSet
 
 from wemake_python_styleguide.constants import MAGIC_METHODS_BLACKLIST
 from wemake_python_styleguide.types import AnyFunctionDef
@@ -26,7 +27,7 @@ class WrongClassVisitor(BaseNodeVisitor):
     Here we check for stylistic issues and design patterns.
     """
 
-    _staticmethod_names = frozenset((
+    _staticmethod_names: ClassVar[FrozenSet[str]] = frozenset((
         'staticmethod',
     ))
 

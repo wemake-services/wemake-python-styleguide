@@ -30,24 +30,38 @@ function_with_locals_and_params = """
     param += 3
 """
 
+function_with_comprehension = """
+{0}def function():
+    variable1 = [node for node in parse()]
+    variable2 = [xml for xml in variable1]
+"""
+
 
 @pytest.mark.parametrize('code', [
     function_with_locals,
     function_with_locals_redefinition,
     function_with_locals_and_params,
+    function_with_comprehension,
 ])
 @pytest.mark.parametrize('mode', [
     'async ',  # coroutine
     '',  # regular function
 ])
 def test_locals_correct_count(
-    assert_errors, parse_ast_tree, options, code, mode,
+    assert_errors,
+    parse_ast_tree,
+    options,
+    code,
+    mode,
 ):
     """
     Testing that local variables are counted correctly.
 
     Regression test for #74.
     See: https://github.com/wemake-services/wemake-python-styleguide/issues/74
+
+    Regression test for #247
+    See: https://github.com/wemake-services/wemake-python-styleguide/issues/247
     """
     option_values = options(max_local_variables=2)
     tree = parse_ast_tree(code.format(mode))
@@ -62,6 +76,7 @@ def test_locals_correct_count(
     function_with_locals,
     function_with_locals_redefinition,
     function_with_locals_and_params,
+    function_with_comprehension,
 ])
 @pytest.mark.parametrize('mode', [
     'async ',  # coroutine
@@ -75,6 +90,9 @@ def test_locals_wrong_count(
 
     Regression test for #74.
     See: https://github.com/wemake-services/wemake-python-styleguide/issues/74
+
+    Regression test for #247
+    See: https://github.com/wemake-services/wemake-python-styleguide/issues/247
     """
     option_values = options(max_local_variables=1)
     tree = parse_ast_tree(code.format(mode))

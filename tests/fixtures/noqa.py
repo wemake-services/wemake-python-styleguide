@@ -60,8 +60,15 @@ number_with_scientific_notation = 1.5E+10  # noqa: Z310
 assert 1 > 1 > hex_number  # noqa: Z308
 assert 2 > octal_number  # noqa: Z309
 
+assert hex_number == hex_number  # noqa: Z312
 
 for symbol in 'abc':  # noqa: Z436
     break
 else:
+    ...
+
+
+try:  # noqa: Z437
+    ...
+finally:
     ...
