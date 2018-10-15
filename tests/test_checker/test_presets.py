@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import glob
 import importlib
 import inspect
 from importlib.machinery import SourceFileLoader
 from operator import itemgetter
+from pathlib import Path
 
 import pytest
 
@@ -44,12 +44,11 @@ def _import_module_by_path(path: str):
 
 
 def _visitors_paths():
-    excluded_paths = glob.glob(
-        'wemake_python_styleguide/visitors/presets/**/*.py', recursive=True,
-    )
+    base_path = Path('wemake_python_styleguide', 'visitors')
+    excluded_paths = list(Path(base_path, 'presets').glob('**/*.py'))
     return [
         path for path in
-        glob.glob('wemake_python_styleguide/visitors/**/*.py', recursive=True)
+        base_path.glob('**/*.py')
         if path not in excluded_paths
     ]
 
@@ -59,7 +58,7 @@ def all_visitors():
     """Loads all visitors into the list to be checked."""
     visitors = []
     for path in _visitors_paths():
-        module = _import_module_by_path(path)
+        module = _import_module_by_path(str(path))
         classes_names_list = inspect.getmembers(module, _is_visitor_class)
         visitors.extend(map(itemgetter(1), classes_names_list))
     return set(visitors)
