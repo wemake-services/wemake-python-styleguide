@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import tokenize
+from typing import ClassVar, FrozenSet
 
 from wemake_python_styleguide.violations.consistency import (
     BadNumberSuffixViolation,
@@ -14,7 +15,9 @@ from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 class WrongPrimitivesVisitor(BaseTokenVisitor):
     """Visits primitive types to find incorrect usages."""
 
-    _bad_number_suffixes = frozenset(('X', 'O', 'B', 'E'))
+    _bad_number_suffixes: ClassVar[FrozenSet[str]] = frozenset((
+        'X', 'O', 'B', 'E',
+    ))
 
     def _check_underscored_number(self, token: tokenize.TokenInfo) -> None:
         if '_' in token.string:

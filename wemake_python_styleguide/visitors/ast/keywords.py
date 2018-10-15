@@ -6,6 +6,7 @@ from typing import ClassVar
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     RaiseNotImplementedViolation,
+    RedundantFinallyViolation,
     RedundantForElseViolation,
     WrongKeywordViolation,
 )
@@ -107,4 +108,17 @@ class WrongForElseVisitor(BaseNodeVisitor):
     def visit_For(self, node: ast.For) -> None:
         """Used for find else block in for loops with break."""
         self._check_for_needs_else(node)
+        self.generic_visit(node)
+
+
+class WrongTryFinallyVisitor(BaseNodeVisitor):
+    """Responsible for restricting finally in try blocks without except."""
+
+    def _check_for_needs_except(self, node: ast.Try) -> None:
+        if node.finalbody and not node.handlers:
+            self.add_violation(RedundantFinallyViolation(node=node))
+
+    def visit_Try(self, node: ast.Try) -> None:
+        """Used for find finally in try blocks without except."""
+        self._check_for_needs_except(node)
         self.generic_visit(node)

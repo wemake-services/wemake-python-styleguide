@@ -7,6 +7,7 @@ import pytest
 from wemake_python_styleguide.violations.naming import (
     PrivateNameViolation,
     TooShortVariableNameViolation,
+    UpperCaseAttributeViolation,
     WrongVariableNameViolation,
 )
 from wemake_python_styleguide.visitors.ast.naming import (
@@ -43,7 +44,7 @@ def test_wrong_attributes_names(
     assert_errors(visitor, [WrongVariableNameViolation])
 
 
-@pytest.mark.parametrize('short_name', string.ascii_letters)
+@pytest.mark.parametrize('short_name', string.ascii_lowercase)
 @pytest.mark.parametrize('code', [
     static_attribute,
     instance_attribute,
@@ -92,6 +93,46 @@ def test_correct_attribute_name(
 ):
     """Testing that attribute can have normal names."""
     tree = parse_ast_tree(code.format(correct_name))
+
+    visitor = WrongNameVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('non_snake_case_name', [
+    'Abc',
+    'A_CONSTANT',
+    'AAA',
+    'CONST1_bc',
+    'camelCase',
+    '_A_c',
+])
+def test_upper_case_class_attributes(
+    assert_errors, parse_ast_tree, non_snake_case_name, default_options,
+):
+    """Testing that attribute can not have too short names."""
+    tree = parse_ast_tree(static_attribute.format(non_snake_case_name))
+
+    visitor = WrongNameVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [UpperCaseAttributeViolation])
+
+
+@pytest.mark.parametrize('snake_case_name', [
+    'abc',
+    'a_variable',
+    'aaa',
+    'two_minutes_to_midnight',
+    'variable_42',
+    '_a_c',
+])
+def test_snake_case_class_attributes(
+    assert_errors, parse_ast_tree, snake_case_name, default_options,
+):
+    """Testing that attribute can not have too short names."""
+    tree = parse_ast_tree(static_attribute.format(snake_case_name))
 
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()

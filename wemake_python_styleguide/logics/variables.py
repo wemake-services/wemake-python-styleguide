@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import ast
 from typing import Iterable, Optional
 
 from wemake_python_styleguide import constants
@@ -40,6 +41,38 @@ def is_wrong_variable_name(name: str, to_check: Iterable[str]) -> bool:
     return False
 
 
+def is_upper_case_name(name: Optional[str]) -> bool:
+    """
+    Checks that attribute name has no upper-case letters.
+
+    >>> is_upper_case_name('camelCase')
+    True
+
+    >>> is_upper_case_name('UPPER_CASE')
+    True
+
+    >>> is_upper_case_name('camel_Case')
+    True
+
+    >>> is_upper_case_name('snake_case')
+    False
+
+    >>> is_upper_case_name('snake')
+    False
+
+    >>> is_upper_case_name('snake111')
+    False
+
+    >>> is_upper_case_name('__variable_v2')
+    False
+
+    >>> is_upper_case_name(None)
+    False
+
+    """
+    return name is not None and any(character.isupper() for character in name)
+
+
 def is_too_short_variable_name(
     name: Optional[str],
     min_length: int = MIN_VARIABLE_LENGTH,
@@ -66,7 +99,10 @@ def is_too_short_variable_name(
     False
 
     """
-    return name is not None and name != '_' and len(name) < min_length
+    if name is None:
+        return False
+
+    return name != constants.UNUSED_VARIABLE and len(name) < min_length
 
 
 def is_private_variable(name: Optional[str]) -> bool:
@@ -125,3 +161,27 @@ def is_variable_name_with_underscored_number(name: str) -> bool:
     """
     pattern = constants.UNDERSCORED_NUMBER_PATTERN
     return name is not None and pattern.match(name) is not None
+
+
+def is_same_variable(left: ast.AST, right: ast.AST) -> bool:
+    """Ensures that nodes are the same variable."""
+    if isinstance(left, ast.Name) and isinstance(right, ast.Name):
+        return left.id == right.id
+    return False
+
+
+def get_assigned_name(node: ast.AST) -> Optional[str]:
+    """
+    Returns variable names for node that are just assigned.
+
+    Returns ``None`` for nodes that are used in a different manner.
+    """
+    if isinstance(node, ast.Name) and isinstance(node.ctx, ast.Store):
+        return node.id
+
+    if isinstance(node, ast.Attribute) and isinstance(node.ctx, ast.Store):
+        return node.attr
+
+    if isinstance(node, ast.ExceptHandler):
+        return getattr(node, 'name', None)
+    return None

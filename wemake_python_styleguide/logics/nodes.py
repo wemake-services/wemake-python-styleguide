@@ -1,26 +1,18 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Iterable, Type
 
 
-def is_subtype_of_any(
-    node: ast.AST,
-    to_check: Iterable[Type[ast.AST]],
-) -> bool:
+def is_literal(node: ast.AST) -> bool:
     """
-    Checks whether the given node is subtype of any of the provided types.
+    Checks for nodes that contains only constants.
 
-    >>> import ast
-    >>> node = ast.parse('')  # ast.Module
-    >>> is_subtype_of_any(node, [ast.Str, ast.Name])
-    False
-
-    >>> is_subtype_of_any(node, [ast.Module])
-    True
-
-    >>> is_subtype_of_any(node, [])
-    False
-
+    If the node contains only literals it will be evaluated.
+    When node relies on some other names, it won't be evaluated.
     """
-    return any(isinstance(node, class_) for class_ in to_check)
+    try:
+        ast.literal_eval(node)
+    except ValueError:
+        return False
+    else:
+        return True

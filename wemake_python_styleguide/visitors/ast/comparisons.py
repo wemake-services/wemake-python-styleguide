@@ -3,40 +3,48 @@
 import ast
 from typing import ClassVar, Sequence
 
+from wemake_python_styleguide.logics.nodes import is_literal
+from wemake_python_styleguide.logics.variables import is_same_variable
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.consistency import (
     ComparisonOrderViolation,
     ConstantComparisonViolation,
     MultipleInComparisonViolation,
+    RedundantComparisonViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
-class ConstantComparisonVisitor(BaseNodeVisitor):
+class ComparisonSanityVisitor(BaseNodeVisitor):
     """Restricts the comparison of literals."""
 
-    def _check_is_literal(self, node: ast.AST) -> bool:
-        """
-        Checks for nodes that contains only constants.
-
-        If the node contains only literals it will be evaluted.
-        When node relies on some other names, it won't be evaluted.
-        """
-        try:
-            ast.literal_eval(node)
-        except ValueError:
-            return False
-        else:
-            return True
+    def _has_multiple_in_comparisons(self, node: ast.Compare) -> bool:
+        count = 0
+        for op in node.ops:
+            if isinstance(op, ast.In):
+                count += 1
+        return count > 1
 
     def _check_literal_compare(self, node: ast.Compare) -> None:
-        last_was_literal = self._check_is_literal(node.left)
+        last_was_literal = is_literal(node.left)
         for comparator in node.comparators:
-            next_is_literal = self._check_is_literal(comparator)
+            next_is_literal = is_literal(comparator)
             if last_was_literal and next_is_literal:
                 self.add_violation(ConstantComparisonViolation(node))
                 break
             last_was_literal = next_is_literal
+
+    def _check_redundant_compare(self, node: ast.Compare) -> None:
+        last_variable = node.left
+        for next_variable in node.comparators:
+            if is_same_variable(last_variable, next_variable):
+                self.add_violation(RedundantComparisonViolation(node))
+                break
+            last_variable = next_variable
+
+    def _check_multiple_in_comparisons(self, node: ast.Compare) -> None:
+        if self._has_multiple_in_comparisons(node):
+            self.add_violation(MultipleInComparisonViolation(node))
 
     def visit_Compare(self, node: ast.Compare) -> None:
         """
@@ -44,13 +52,17 @@ class ConstantComparisonVisitor(BaseNodeVisitor):
 
         Raises:
             ConstantComparisonViolation
+            MultipleInComparisonViolation
+            RedundantComparisonViolation
 
         """
         self._check_literal_compare(node)
+        self._check_redundant_compare(node)
+        self._check_multiple_in_comparisons(node)
         self.generic_visit(node)
 
 
-class WrongOrderVisitor(BaseNodeVisitor):
+class WrongComparisionOrderVisitor(BaseNodeVisitor):
     """Restricts comparision where argument doesn't come first."""
 
     _allowed_left_nodes: ClassVar[AnyNodes] = (
@@ -123,31 +135,4 @@ class WrongOrderVisitor(BaseNodeVisitor):
 
         """
         self._check_ordering(node)
-        self.generic_visit(node)
-
-
-# TODO(@sobolevn): refactor to be a single visitor
-class MultipleInVisitor(BaseNodeVisitor):
-    """Restricts comparision where multiple `in`s are used."""
-
-    def _has_multiple_in_comparisons(self, node: ast.Compare) -> bool:
-        count = 0
-        for op in node.ops:
-            if isinstance(op, ast.In):
-                count += 1
-        return count > 1
-
-    def _count_in_comparisons(self, node: ast.Compare) -> None:
-        if self._has_multiple_in_comparisons(node):
-            self.add_violation(MultipleInComparisonViolation(node))
-
-    def visit_Compare(self, node: ast.Compare) -> None:
-        """
-        Forbids comparisons including multiple 'in's in a statement.
-
-        Raise:
-            MultipleInComparisonViolation
-
-        """
-        self._count_in_comparisons(node)
         self.generic_visit(node)

@@ -17,7 +17,7 @@ from wemake_python_styleguide.violations.base import (
 )
 
 
-def _is_error_class(cls) -> bool:
+def _is_violation_class(cls) -> bool:
     base_classes = {
         ASTViolation,
         BaseViolation,
@@ -32,7 +32,7 @@ def _is_error_class(cls) -> bool:
     )
 
 
-def _load_all_error_classes():
+def _load_all_violation_classes():
     modules = [
         violations.naming,
         violations.complexity,
@@ -42,7 +42,7 @@ def _load_all_error_classes():
 
     classes = {}
     for module in modules:
-        classes_names_list = inspect.getmembers(module, _is_error_class)
+        classes_names_list = inspect.getmembers(module, _is_violation_class)
         only_classes = map(itemgetter(1), classes_names_list)
         classes.update({module: list(only_classes)})
     return classes
@@ -51,7 +51,7 @@ def _load_all_error_classes():
 @pytest.fixture(scope='session')
 def all_violations():
     """Loads all violations from the package."""
-    classes = _load_all_error_classes()
+    classes = _load_all_violation_classes()
     all_errors_container = []
     for module_classes in classes.values():
         all_errors_container.extend(module_classes)
@@ -61,7 +61,7 @@ def all_violations():
 @pytest.fixture(scope='session')
 def all_module_violations():
     """Loads all violations from the package."""
-    return _load_all_error_classes()
+    return _load_all_violation_classes()
 
 
 @pytest.fixture(scope='session')

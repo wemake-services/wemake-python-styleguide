@@ -3,11 +3,17 @@
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
-    ConstantComparisonViolation,
+    RedundantComparisonViolation,
 )
 from wemake_python_styleguide.visitors.ast.comparisons import (
     ComparisonSanityVisitor,
 )
+
+create_variables = """
+variable = 1
+another_variable = 2
+{0}
+"""
 
 if_with_is = 'if {0} is {1}: ...'
 if_with_is_not = 'if {0} is not {1}: ...'
@@ -49,11 +55,13 @@ assert_with_message = 'assert {0} == {1}, "message"'
     assert_with_message,
 ])
 @pytest.mark.parametrize('comparators', [
-    ('first_name', 'second_name'),
-    ('first_name', 1),
-    (1, 'first_name'),
+    ('variable', '"test"'),
+    ('variable', 'variable.call()'),
+    ('variable', 'len(variable)'),
+    ('variable', 'another_variable'),
+    ('variable', '222'),
 ])
-def test_non_literal(
+def test_not_redundant(
     assert_errors,
     parse_ast_tree,
     code,
@@ -61,7 +69,7 @@ def test_non_literal(
     default_options,
 ):
     """Testing that comparisons work well."""
-    tree = parse_ast_tree(code.format(*comparators))
+    tree = parse_ast_tree(create_variables.format(code.format(*comparators)))
 
     visitor = ComparisonSanityVisitor(default_options, tree=tree)
     visitor.run()
@@ -86,90 +94,34 @@ def test_non_literal(
     assert_with_message,
 ])
 @pytest.mark.parametrize('comparators', [
-    (1, 2),
-    ('"string1"', '"string2"'),
-    ('[1, 2, 3]', '(1, 2, 3)'),
-    ('{"key": 1}', '{"a", "b"}'),
+    ('variable', 'variable'),
+    ('another_variable', 'another_variable'),
 ])
-def test_literal(
+def test_redundant(
     assert_errors,
     parse_ast_tree,
     code,
     comparators,
     default_options,
 ):
-    """Testing that violations are when using literal comparisons."""
-    tree = parse_ast_tree(code.format(*comparators))
+    """Testing that violations are when comparing identical variable."""
+    tree = parse_ast_tree(create_variables.format(code.format(*comparators)))
 
     visitor = ComparisonSanityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [ConstantComparisonViolation])
+    assert_errors(visitor, [RedundantComparisonViolation])
 
 
-@pytest.mark.parametrize('code', [
-    if_with_chained_comparisons1,
-    if_with_chained_comparisons3,
-])
-@pytest.mark.parametrize('comparators', [
-    (1, 'first_name'),
-    (1, 1),
-])
-def test_literal_special1(
+def test_multiple_compare(
     assert_errors,
     parse_ast_tree,
-    code,
-    comparators,
     default_options,
 ):
-    """Testing that special cases do work and raise warnings."""
-    tree = parse_ast_tree(code.format(*comparators))
+    """Ensuring than multiple redundant compare returns a single violation."""
+    tree = parse_ast_tree('assert some == some == some')
 
     visitor = ComparisonSanityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [ConstantComparisonViolation])
-
-
-@pytest.mark.parametrize('code', [
-    if_with_chained_comparisons2,
-    if_with_chained_comparisons3,
-])
-@pytest.mark.parametrize('comparators', [
-    ('first_name', 1),
-    (1, 1),
-])
-def test_literal_special2(
-    assert_errors,
-    parse_ast_tree,
-    code,
-    comparators,
-    default_options,
-):
-    """Testing that special cases do work and raise warnings."""
-    tree = parse_ast_tree(code.format(*comparators))
-
-    visitor = ComparisonSanityVisitor(default_options, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [ConstantComparisonViolation])
-
-
-@pytest.mark.parametrize('code', [
-    if_with_chained_comparisons1,
-    if_with_chained_comparisons2,
-    if_with_chained_comparisons3,
-])
-def test_literal_special_without_errors(
-    assert_errors,
-    parse_ast_tree,
-    code,
-    default_options,
-):
-    """Testing that special cases do work and do not raise warnings."""
-    tree = parse_ast_tree(code.format('first_name', 'second_name'))
-
-    visitor = ComparisonSanityVisitor(default_options, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [])
+    assert_errors(visitor, [RedundantComparisonViolation])

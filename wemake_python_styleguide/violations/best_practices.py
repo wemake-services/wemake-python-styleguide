@@ -38,6 +38,7 @@ Summary
    NestedImportViolation
    RedundantForElseViolation
    ReassigningVariableToItselfViolation
+   RedundantFinallyViolation
 
 Comments
 --------
@@ -70,6 +71,7 @@ Design
 .. autoclass:: NestedImportViolation
 .. autoclass:: RedundantForElseViolation
 .. autoclass:: ReassigningVariableToItselfViolation
+.. autoclass:: RedundantFinallyViolation
 
 """
 
@@ -633,3 +635,37 @@ class ReassigningVariableToItselfViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found reassigning variable to itself'
     code = 437
+
+
+class RedundantFinallyViolation(ASTViolation):
+    """
+    Forbids to use ``finally`` in ``try`` block without ``except`` block.
+
+    Reasoning:
+        This rule will reduce complexity and improve readability.
+
+    Solution:
+        Refactor your ``try`` logic.
+        Replace the ``try-finally`` statement with a ``with`` statement.
+
+    Example::
+
+        # Correct:
+        with open("filename") as f:
+            f.write(...)
+
+        # Wrong:
+        try:
+            f = open("filename")
+            f.write(...)
+        finally:
+            f.close()
+
+    Note:
+        Returns Z438 as error code
+
+    """
+
+    #: Error message shown to the user.
+    error_template = 'Found `finally` in `try` block without `except`'
+    code = 438
