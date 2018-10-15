@@ -11,8 +11,7 @@ from wemake_python_styleguide.visitors.ast.conditionals import (
 
 if_statement = """
 variable = 1
-if {0}:
-    print('test')
+if {0}: ...
 """
 
 
