@@ -502,12 +502,12 @@ class RedundantComparisonViolation(ASTViolation):
 
 class NamedConstantConditionalViolation(ASTViolation):
     """
-    Forbids using if statements that use only constant boolean values.
+    Forbids using if statements that use only Named Constants.
 
     Reasoning:
-        When a constant boolean value is used in conditional
+        When a Named Constant is used in conditional
         it is typically an indication of a mistake, since
-        the boolean value of the comparison will always be the same.
+        the value of the comparison will always be the same.
 
     Solution:
         Remove the conditional and any associated dead code.
@@ -519,6 +519,8 @@ class NamedConstantConditionalViolation(ASTViolation):
 
         # Wrong:
         if True: ...
+        if False: ...
+        if None: ...
 
     Note:
         Returns Z313 as error code
@@ -526,5 +528,5 @@ class NamedConstantConditionalViolation(ASTViolation):
 
     should_use_text = False
     #: Error message shown to the user.
-    error_template = 'Conditional is always true or false'
+    error_template = 'Conditional always evaluates to same result'
     code = 313
