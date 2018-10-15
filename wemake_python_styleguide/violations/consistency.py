@@ -44,6 +44,7 @@ Summary
    ComparisonOrderViolation
    MultipleInComparisonViolation
    RedundantComparisonViolation
+   MissingSpaceBetweenKeywordAndParenViolation
 
 Consistency checks
 ------------------
@@ -61,6 +62,7 @@ Consistency checks
 .. autoclass:: ComparisonOrderViolation
 .. autoclass:: MultipleInComparisonViolation
 .. autoclass:: RedundantComparisonViolation
+.. autoclass:: MissingSpaceBetweenKeywordAndParenViolation
 
 """
 
@@ -496,3 +498,39 @@ class RedundantComparisonViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found comparison between same variable'
     code = 312
+
+
+class MissingSpaceBetweenKeywordAndParenViolation(TokenizeViolation):
+    """
+    Forbid opening parenthesis from following keyword without space in between.
+
+    Reasoning:
+        Some people use ``return`` and ``yield`` keywords as functions.
+        The same happened to good old ``print`` in Python2.
+    Solution:
+        Insert space symbol between keyword and open paren.
+
+    Example::
+
+        # Wrong:
+        def func():
+            a = 1
+            b = 2
+            del(a, b)
+            yield(1, 2, 3)
+
+        # Correct:
+        def func():
+            a = 1
+            del (a, b)
+            yield (1, 2, 3)
+
+    Note:
+        Returns Z313 as error code
+
+    """
+
+    should_use_text = False
+    #: Error message shown to the user.
+    error_template = 'Found paren right after a keyword'
+    code = 313

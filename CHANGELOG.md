@@ -27,6 +27,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - We not check the argument count in Lambda functions
 - Forbid `for` loops with unused `else`
 - Forbid `try` with `finally` without `except`
+- Forbid opening parenthesis from following keyword without space in between them
 
 ### Bugfixes
 
