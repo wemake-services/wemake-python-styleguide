@@ -14,55 +14,57 @@ These values can be changed in the ``setup.cfg`` file on a per-project bases,
 if you find them too strict or too permissive.
 """
 
+from wemake_python_styleguide.types import Final
+
 # General
 
 #: Minimum variable's name length:
-MIN_VARIABLE_LENGTH = 2
+MIN_VARIABLE_LENGTH: Final = 2
 
 #: Whether you control ones who use your code:
-I_CONTROL_CODE = True
+I_CONTROL_CODE: Final = True
 
 
 # Complexity
 
 #: Maximum number of `return` statements allowed in a single function:
-MAX_RETURNS = 5
+MAX_RETURNS: Final = 5
 
 #: Maximum number of local variables in a function:
-MAX_LOCAL_VARIABLES = 5
+MAX_LOCAL_VARIABLES: Final = 5
 
 #: Maximum number of expressions in a single function:
-MAX_EXPRESSIONS = 9
+MAX_EXPRESSIONS: Final = 9
 
 #: Maximum number of arguments for functions or method, `self` is not counted:
-MAX_ARGUMENTS = 5
+MAX_ARGUMENTS: Final = 5
 
 #: Maximum number of blocks to nest different structures:
-MAX_OFFSET_BLOCKS = 5
+MAX_OFFSET_BLOCKS: Final = 5
 
 #: Maximum number of `elif` blocks in a single `if` condition:
-MAX_ELIFS = 3
+MAX_ELIFS: Final = 3
 
 #: Maximum number of classes and functions in a single module:
-MAX_MODULE_MEMBERS = 7
+MAX_MODULE_MEMBERS: Final = 7
 
 #: Maximum number of methods in a single class:
-MAX_METHODS = 7
+MAX_METHODS: Final = 7
 
 #: Maximum line complexity:
-MAX_LINE_COMPLEXITY = 14  # 7 * 2, also almost guessed
+MAX_LINE_COMPLEXITY: Final = 14  # 7 * 2, also almost guessed
 
 #: Maximum median module Jones complexity:
-MAX_JONES_SCORE = 12  # this value was "guessed" based on existing source code
+MAX_JONES_SCORE: Final = 12  # this value was "guessed"
 
 #: Maximum number of imports in a single module:
-MAX_IMPORTS = 12
+MAX_IMPORTS: Final = 12
 
 #: Maximum number of conditions in a single ``if`` or ``while`` statement:
-MAX_CONDITIONS = 4
+MAX_CONDITIONS: Final = 4
 
 
 # Modules
 
 #: Minimum required module's name length:
-MIN_MODULE_NAME_LENGTH = 3
+MIN_MODULE_NAME_LENGTH: Final = 3

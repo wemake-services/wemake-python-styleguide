@@ -66,12 +66,14 @@ Consistency checks
 
 """
 
+from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.base import (
     ASTViolation,
     TokenizeViolation,
 )
 
 
+@final
 class LocalFolderImportViolation(ASTViolation):
     """
     Forbids to have imports relative to the current folder.
@@ -99,6 +101,7 @@ class LocalFolderImportViolation(ASTViolation):
     code = 300
 
 
+@final
 class DottedRawImportViolation(ASTViolation):
     """
     Forbids to use imports like ``import os.path``.
@@ -129,6 +132,7 @@ class DottedRawImportViolation(ASTViolation):
     code = 301
 
 
+@final
 class UnicodeStringViolation(TokenizeViolation):
     """
     Forbids to use ``u`` string prefix.
@@ -159,6 +163,7 @@ class UnicodeStringViolation(TokenizeViolation):
     error_template = 'Found unicode string prefix: {0}'
 
 
+@final
 class UnderscoredNumberViolation(TokenizeViolation):
     """
     Forbids to use underscores (``_``) in numbers.
@@ -195,6 +200,7 @@ class UnderscoredNumberViolation(TokenizeViolation):
     error_template = 'Found underscored number: {0}'
 
 
+@final
 class PartialFloatViolation(TokenizeViolation):
     """
     Forbids to use partial floats like ``.05`` or ``23.``.
@@ -228,6 +234,7 @@ class PartialFloatViolation(TokenizeViolation):
     error_template = 'Found partial float: {0}'
 
 
+@final
 class FormattedStringViolation(ASTViolation):
     """
     Forbids to use ``f`` strings.
@@ -266,6 +273,7 @@ class FormattedStringViolation(ASTViolation):
     code = 305
 
 
+@final
 class RequiredBaseClassViolation(ASTViolation):
     """
     Forbids to write classes without base classes.
@@ -296,6 +304,7 @@ class RequiredBaseClassViolation(ASTViolation):
     code = 306
 
 
+@final
 class MultipleIfsInComprehensionViolation(ASTViolation):
     """
     Forbids to have multiple ``if`` statements inside list comprehensions.
@@ -328,6 +337,7 @@ class MultipleIfsInComprehensionViolation(ASTViolation):
     code = 307
 
 
+@final
 class ConstantComparisonViolation(ASTViolation):
     """
     Forbids to have comparisons between two literals.
@@ -362,6 +372,7 @@ class ConstantComparisonViolation(ASTViolation):
     code = 308
 
 
+@final
 class ComparisonOrderViolation(ASTViolation):
     """
     Forbids comparision where argument doesn't come first.
@@ -394,6 +405,7 @@ class ComparisonOrderViolation(ASTViolation):
     code = 309
 
 
+@final
 class BadNumberSuffixViolation(TokenizeViolation):
     """
     Forbids to use capital ``X``, ``O``, ``B``, and ``E`` in numbers.
@@ -433,6 +445,7 @@ class BadNumberSuffixViolation(TokenizeViolation):
     code = 310
 
 
+@final
 class MultipleInComparisonViolation(ASTViolation):
     """
     Forbids comparision where multiple ``in`` checks.
@@ -465,6 +478,7 @@ class MultipleInComparisonViolation(ASTViolation):
     code = 311
 
 
+@final
 class RedundantComparisonViolation(ASTViolation):
     """
     Forbids to have comparisons between the same variable.
@@ -500,6 +514,7 @@ class RedundantComparisonViolation(ASTViolation):
     code = 312
 
 
+@final
 class MissingSpaceBetweenKeywordAndParenViolation(TokenizeViolation):
     """
     Forbid opening parenthesis from following keyword without space in between.

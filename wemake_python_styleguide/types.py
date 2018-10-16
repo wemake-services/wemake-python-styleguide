@@ -15,51 +15,33 @@ If any of the following statements is true, move the type to this file:
 """
 
 import ast
-from typing import TYPE_CHECKING, Tuple, Type, Union
+from typing import Tuple, Type, Union
 
-if TYPE_CHECKING:  # pragma: no cover
-    # TODO: use Final types to annotate all constants
-    from typing_extensions import Protocol  # noqa: Z435
+from typing_extensions import Final, Protocol, final  # noqa: F401
 
-    # This solves cycle imports problem:
-    from .visitors import base  # noqa: F401,Z300,Z435
-else:
-    # We do not need to do anything if type checker is not working:
-    Protocol = object
-
-#: Visitor type definition:
-VisitorClass = Type['base.BaseVisitor']
-
-#: In cases we need to work with both import types:
+#: In cases we need to work with both import types.
 AnyImport = Union[ast.Import, ast.ImportFrom]
 
-#: In cases we need to work with both function definitions:
+#: In cases we need to work with both function definitions.
 AnyFunctionDef = Union[ast.FunctionDef, ast.AsyncFunctionDef]
 
-#: In cases we need to work with all function definitions (including Lambda)
-AnyFunctionDefAndLambda = Union[
-    ast.FunctionDef,
-    ast.AsyncFunctionDef,
-    ast.Lambda,
-]
+#: In cases we need to work with all function definitions (including lambdas).
+AnyFunctionDefAndLambda = Union[AnyFunctionDef, ast.Lambda]
 
-#: Flake8 API format to return error messages:
+#: Flake8 API format to return error messages.
 CheckResult = Tuple[int, int, str, type]
 
-#: Tuple of AST node types for declarative syntax:
+#: Tuple of AST node types for declarative syntax.
 AnyNodes = Tuple[Type[ast.AST], ...]
 
 
 class ConfigurationOptions(Protocol):
     """
-    Provides structure for the options we use in our checker.
+    Provides structure for the options we use in our checker and visitors.
 
-    Then this protocol is passed to each individual visitor and used there.
+    Then this protocol is passed to each individual visitor.
     It uses structural sub-typing, and does not represent any kind of a real
     class or structure.
-
-    This class actually works only when running type check.
-    At other cases it is just an ``object``.
 
     See also:
         https://mypy.readthedocs.io/en/latest/protocols.html

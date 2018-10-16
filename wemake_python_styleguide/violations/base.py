@@ -35,6 +35,8 @@ import ast
 import tokenize
 from typing import ClassVar, Tuple, Union
 
+from wemake_python_styleguide.types import final
+
 #: General type for all possible nodes where error happens.
 ErrorNode = Union[
     ast.AST,
@@ -79,6 +81,7 @@ class BaseViolation(object):
         else:
             self._text = text
 
+    @final
     def _full_code(self) -> str:
         """
         Returns fully formatted code.
@@ -96,6 +99,7 @@ class BaseViolation(object):
         """
         return 0, 0
 
+    @final
     def message(self) -> str:
         """
         Returns error's formatted message with code and reason.
@@ -108,6 +112,7 @@ class BaseViolation(object):
             message = self.error_template
         return '{0} {1}'.format(self._full_code(), message)
 
+    @final
     def node_items(self) -> Tuple[int, int, str]:
         """Returns tuple to match ``flake8`` API format."""
         return (*self._location(), self.message())
@@ -118,6 +123,7 @@ class ASTViolation(BaseViolation):
 
     _node: ast.AST
 
+    @final
     def _location(self) -> Tuple[int, int]:
         line_number = getattr(self._node, 'lineno', 0)
         column_offset = getattr(self._node, 'col_offset', 0)
@@ -129,6 +135,7 @@ class TokenizeViolation(BaseViolation):
 
     _node: tokenize.TokenInfo
 
+    @final
     def _location(self) -> Tuple[int, int]:
         return self._node.start
 

@@ -35,7 +35,7 @@ import tokenize
 from typing import List, Sequence, Type
 
 from wemake_python_styleguide import constants
-from wemake_python_styleguide.types import ConfigurationOptions
+from wemake_python_styleguide.types import ConfigurationOptions, final
 from wemake_python_styleguide.violations.base import BaseViolation
 
 
@@ -74,6 +74,7 @@ class BaseVisitor(object):
         """
         return cls(options=checker.options, filename=checker.filename)
 
+    @final
     def add_violation(self, violation: BaseViolation) -> None:
         """Adds violation to the visitor."""
         self.violations.append(violation)
@@ -111,6 +112,7 @@ class BaseNodeVisitor(ast.NodeVisitor, BaseVisitor):
         super().__init__(options, **kwargs)
         self.tree = tree
 
+    @final
     @classmethod
     def from_checker(
         cls: Type['BaseNodeVisitor'],
@@ -131,6 +133,7 @@ class BaseNodeVisitor(ast.NodeVisitor, BaseVisitor):
         By default does nothing.
         """
 
+    @final
     def run(self) -> None:
         """Recursively visits all ``ast`` nodes. Then executes post hook."""
         self.visit(self.tree)
@@ -152,6 +155,7 @@ class BaseFilenameVisitor(BaseVisitor):
         """
         raise NotImplementedError('Should be defined in a subclass')
 
+    @final
     def run(self) -> None:
         """
         Checks module's filename.
@@ -183,6 +187,7 @@ class BaseTokenVisitor(BaseVisitor):
         super().__init__(options, **kwargs)
         self.file_tokens = file_tokens
 
+    @final
     @classmethod
     def from_checker(
         cls: Type['BaseTokenVisitor'],
@@ -215,6 +220,7 @@ class BaseTokenVisitor(BaseVisitor):
         if method is not None:
             method(token)
 
+    @final
     def run(self) -> None:
         """Visits all token types that have a handler method."""
         for token in self.file_tokens:

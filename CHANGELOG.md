@@ -17,6 +17,7 @@ to the project during `#hactoberfest`. List of awesome people:
 ### Features
 
 - Adds `flake8-print` as a dependency
+- Adds `typing-extensions` as a dependency
 - Forbids to use `quit` and `exit` functions
 - Forbids the comparison of two literals
 - Forbids the incorrect order comparison
@@ -47,6 +48,8 @@ to the project during `#hactoberfest`. List of awesome people:
 - Improves tests: now using stricter `noqa` checks
 - Improves tests: now testing that any name is allowed when using a variable
 - Improves types: now all class attributes are marked as `ClassVar`
+- Improves types: now we use `final` to indicate what should not be changed
+- Improves types: now we do not have any ugly import hacks
 
 
 ## 0.2.0 aka Revenge of the Async

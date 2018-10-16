@@ -2,6 +2,7 @@
 
 import ast
 
+from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.complexity import (
     TooDeepNestingViolation,
 )
@@ -9,6 +10,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 
+@final
 @alias('visit_line_expression', (
     'visit_Try',
     'visit_ExceptHandler',

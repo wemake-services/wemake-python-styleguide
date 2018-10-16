@@ -57,19 +57,24 @@ Checker API
 
 import ast
 import tokenize
-from typing import Generator, Sequence
+from typing import ClassVar, Generator, Sequence, Type
 
 from flake8.options.manager import OptionManager
 
-from wemake_python_styleguide import constants, types, version
+from wemake_python_styleguide import constants, types
+from wemake_python_styleguide import version as pkg_version
 from wemake_python_styleguide.options.config import Configuration
+from wemake_python_styleguide.visitors import base
 from wemake_python_styleguide.visitors.presets import (
     complexity,
     general,
     tokens,
 )
 
+VisitorClass = Type[base.BaseVisitor]
 
+
+@types.final
 class Checker(object):
     """
     Main checker class.
@@ -85,13 +90,13 @@ class Checker(object):
 
     """
 
-    name = version.pkg_name
-    version = version.pkg_version
+    name: ClassVar[str] = pkg_version.pkg_name
+    version: ClassVar[str] = pkg_version.pkg_version
 
     config = Configuration()
     options: types.ConfigurationOptions
 
-    visitors: Sequence[types.VisitorClass] = (
+    visitors: ClassVar[Sequence[VisitorClass]] = (
         *general.GENERAL_PRESET,
         *complexity.COMPLEXITY_PRESET,
         *tokens.TOKENS_PRESET,
@@ -146,7 +151,7 @@ class Checker(object):
 
     def _run_checks(
         self,
-        visitors: Sequence[types.VisitorClass],
+        visitors: Sequence[VisitorClass],
     ) -> Generator[types.CheckResult, None, None]:
         """
         Runs all passed visitors one by one.

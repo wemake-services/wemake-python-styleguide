@@ -148,12 +148,14 @@ Variable names
 
 """
 
+from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.base import (
     ASTViolation,
     SimpleViolation,
 )
 
 
+@final
 class WrongModuleNameViolation(SimpleViolation):
     """
     Forbids to use blacklisted module names.
@@ -190,6 +192,7 @@ class WrongModuleNameViolation(SimpleViolation):
     code = 100
 
 
+@final
 class WrongModuleMagicNameViolation(SimpleViolation):
     """
     Forbids to use any magic names except whitelisted ones.
@@ -222,6 +225,7 @@ class WrongModuleMagicNameViolation(SimpleViolation):
     code = 101
 
 
+@final
 class TooShortModuleNameViolation(SimpleViolation):
     """
     Forbids to use module name shorter than some breakpoint.
@@ -246,6 +250,7 @@ class TooShortModuleNameViolation(SimpleViolation):
     code = 102
 
 
+@final
 class WrongModuleNameUnderscoresViolation(SimpleViolation):
     """
     Forbids to use multiple underscores in a row in a module name.
@@ -279,6 +284,7 @@ class WrongModuleNameUnderscoresViolation(SimpleViolation):
     code = 103
 
 
+@final
 class WrongModuleNamePatternViolation(SimpleViolation):
     """
     Forbids to use module names that do not match our pattern.
@@ -315,8 +321,9 @@ class WrongModuleNamePatternViolation(SimpleViolation):
     code = 104
 
 
-# Variables
+# Variables:
 
+@final
 class WrongVariableNameViolation(ASTViolation):
     """
     Forbids to have blacklisted variable names.
@@ -353,6 +360,7 @@ class WrongVariableNameViolation(ASTViolation):
     code = 110
 
 
+@final
 class TooShortVariableNameViolation(ASTViolation):
     """
     Forbids to have too short variable names.
@@ -386,6 +394,7 @@ class TooShortVariableNameViolation(ASTViolation):
     code = 111
 
 
+@final
 class PrivateNameViolation(ASTViolation):
     """
     Forbids to have private name pattern.
@@ -420,6 +429,7 @@ class PrivateNameViolation(ASTViolation):
     code = 112
 
 
+@final
 class SameAliasImportViolation(ASTViolation):
     """
     Forbids to use the same alias as the original name in imports.
@@ -445,6 +455,7 @@ class SameAliasImportViolation(ASTViolation):
     code = 113
 
 
+@final
 class UnderScoredNumberNameViolation(SimpleViolation):
     """
     Forbids to have names with underscored numbers pattern.
@@ -480,6 +491,7 @@ class UnderScoredNumberNameViolation(SimpleViolation):
     code = 114
 
 
+@final
 class UpperCaseAttributeViolation(ASTViolation):
     """
     Forbids to use anything but snake_case for naming attributes on a class.

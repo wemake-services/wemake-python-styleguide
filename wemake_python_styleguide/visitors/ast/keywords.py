@@ -3,7 +3,7 @@
 import ast
 from typing import ClassVar
 
-from wemake_python_styleguide.types import AnyNodes
+from wemake_python_styleguide.types import AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
     RaiseNotImplementedViolation,
     RedundantFinallyViolation,
@@ -16,6 +16,7 @@ from wemake_python_styleguide.violations.consistency import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
+@final
 class WrongRaiseVisitor(BaseNodeVisitor):
     """Finds wrong ``raise`` keywords."""
 
@@ -44,6 +45,7 @@ class WrongRaiseVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
 
+@final
 class WrongKeywordVisitor(BaseNodeVisitor):
     """Finds wrong keywords."""
 
@@ -70,6 +72,7 @@ class WrongKeywordVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
 
+@final
 class WrongListComprehensionVisitor(BaseNodeVisitor):
     """Checks list comprehensions."""
 
@@ -92,6 +95,7 @@ class WrongListComprehensionVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
 
+@final
 class WrongForElseVisitor(BaseNodeVisitor):
     """Responsible for restricting else in for loops with break."""
 
@@ -111,6 +115,7 @@ class WrongForElseVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
 
+@final
 class WrongTryFinallyVisitor(BaseNodeVisitor):
     """Responsible for restricting finally in try blocks without except."""
 

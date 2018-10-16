@@ -8,7 +8,7 @@ from wemake_python_styleguide.constants import (
     VARIABLE_NAMES_BLACKLIST,
 )
 from wemake_python_styleguide.logics import variables
-from wemake_python_styleguide.types import AnyFunctionDef, AnyImport
+from wemake_python_styleguide.types import AnyFunctionDef, AnyImport, final
 from wemake_python_styleguide.violations.best_practices import (
     WrongModuleMetadataViolation,
 )
@@ -25,6 +25,7 @@ from wemake_python_styleguide.visitors.decorators import alias
 VariableDef = Union[ast.Name, ast.Attribute, ast.ExceptHandler]
 
 
+@final
 @alias('visit_any_import', (
     'visit_ImportFrom',
     'visit_Import',
@@ -140,6 +141,7 @@ class WrongNameVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
 
+@final
 class WrongModuleMetadataVisitor(BaseNodeVisitor):
     """Finds wrong metadata information of a module."""
 

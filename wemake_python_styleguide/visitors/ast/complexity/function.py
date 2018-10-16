@@ -10,6 +10,7 @@ from wemake_python_styleguide.types import (
     AnyFunctionDef,
     AnyFunctionDefAndLambda,
     AnyNodes,
+    final,
 )
 from wemake_python_styleguide.violations.complexity import (
     TooManyArgumentsViolation,
@@ -25,6 +26,7 @@ FunctionCounter = DefaultDict[AnyFunctionDef, int]
 FunctionCounterWithLambda = DefaultDict[AnyFunctionDefAndLambda, int]
 
 
+@final
 class _ComplexityCounter(object):
     """Helper class to encapsulate logic from the visitor."""
 
@@ -110,6 +112,7 @@ class _ComplexityCounter(object):
                 self._check_sub_node(node, sub_node)
 
 
+@final
 @alias('visit_any_function', (
     'visit_AsyncFunctionDef',
     'visit_FunctionDef',

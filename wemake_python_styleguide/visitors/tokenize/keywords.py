@@ -3,12 +3,14 @@
 import keyword
 import tokenize
 
+from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.consistency import (
     MissingSpaceBetweenKeywordAndParenViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
 
+@final
 class WrongKeywordTokenVisitor(BaseTokenVisitor):
     """Visits keywords and finds violations related to their usage."""
 

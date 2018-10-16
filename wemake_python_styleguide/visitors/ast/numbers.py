@@ -4,13 +4,14 @@ import ast
 from typing import ClassVar, Optional
 
 from wemake_python_styleguide.constants import MAGIC_NUMBERS_WHITELIST
-from wemake_python_styleguide.types import AnyNodes
+from wemake_python_styleguide.types import AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
     MagicNumberViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
+@final
 class MagicNumberVisitor(BaseNodeVisitor):
     """Checks magic numbers used in the code."""
 

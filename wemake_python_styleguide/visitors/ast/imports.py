@@ -5,7 +5,7 @@ from typing import Callable
 
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
 from wemake_python_styleguide.logics.imports import get_error_text
-from wemake_python_styleguide.types import AnyImport
+from wemake_python_styleguide.types import AnyImport, final
 from wemake_python_styleguide.violations.base import BaseViolation
 from wemake_python_styleguide.violations.best_practices import (
     FutureImportViolation,
@@ -21,6 +21,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 ErrorCallback = Callable[[BaseViolation], None]
 
 
+@final
 class _ImportsChecker(object):
     """Utility class to separate logic from the visitor."""
 
@@ -63,6 +64,7 @@ class _ImportsChecker(object):
                 )
 
 
+@final
 class WrongImportVisitor(BaseNodeVisitor):
     """Responsible for finding wrong imports."""
 

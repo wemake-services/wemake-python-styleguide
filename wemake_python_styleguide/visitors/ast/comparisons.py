@@ -5,7 +5,7 @@ from typing import ClassVar, Sequence
 
 from wemake_python_styleguide.logics.nodes import is_literal
 from wemake_python_styleguide.logics.variables import is_same_variable
-from wemake_python_styleguide.types import AnyNodes
+from wemake_python_styleguide.types import AnyNodes, final
 from wemake_python_styleguide.violations.consistency import (
     ComparisonOrderViolation,
     ConstantComparisonViolation,
@@ -15,6 +15,7 @@ from wemake_python_styleguide.violations.consistency import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
+@final
 class ComparisonSanityVisitor(BaseNodeVisitor):
     """Restricts the comparison of literals."""
 
@@ -62,6 +63,7 @@ class ComparisonSanityVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
 
+@final
 class WrongComparisionOrderVisitor(BaseNodeVisitor):
     """Restricts comparision where argument doesn't come first."""
 

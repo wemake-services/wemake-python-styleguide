@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from typing import Dict, Optional, Sequence, Union
+from typing import ClassVar, Dict, Optional, Sequence, Union
 
 import attr
 from flake8.options.manager import OptionManager
 
 from wemake_python_styleguide.options import defaults
+from wemake_python_styleguide.types import final
 
 ConfigValues = Dict[str, Union[str, int, bool]]
 
 
+@final
 @attr.attrs(frozen=True, auto_attribs=True, slots=True)
 class _Option(object):
     """Represents ``flake8`` option object."""
@@ -22,6 +24,7 @@ class _Option(object):
     action: str = 'store'
 
 
+@final
 class Configuration(object):
     """
     Provides configuration options for our plugin.
@@ -103,8 +106,7 @@ class Configuration(object):
 
     """
 
-    options: Sequence[_Option] = [
-
+    options: ClassVar[Sequence[_Option]] = [
         # Complexity:
 
         _Option(

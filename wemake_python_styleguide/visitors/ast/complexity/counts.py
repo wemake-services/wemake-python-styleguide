@@ -5,7 +5,7 @@ from collections import defaultdict
 from typing import DefaultDict, Union
 
 from wemake_python_styleguide.logics.functions import is_method
-from wemake_python_styleguide.types import AnyFunctionDef, AnyImport
+from wemake_python_styleguide.types import AnyFunctionDef, AnyImport, final
 from wemake_python_styleguide.violations.complexity import (
     TooManyConditionsViolation,
     TooManyImportsViolation,
@@ -19,6 +19,7 @@ ConditionNodes = Union[ast.If, ast.While, ast.IfExp]
 ModuleMembers = Union[ast.AsyncFunctionDef, ast.FunctionDef, ast.ClassDef]
 
 
+@final
 @alias('visit_module_members', (
     'visit_ClassDef',
     'visit_AsyncFunctionDef',
@@ -56,6 +57,7 @@ class ModuleMembersVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
 
+@final
 @alias('visit_any_import', (
     'visit_ImportFrom',
     'visit_Import',
@@ -86,6 +88,7 @@ class ImportMembersVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
 
+@final
 @alias('visit_any_function', (
     'visit_FunctionDef',
     'visit_AsyncFunctionDef',
@@ -122,6 +125,7 @@ class MethodMembersVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
 
+@final
 @alias('visit_condition', (
     'visit_While',
     'visit_IfExp',
