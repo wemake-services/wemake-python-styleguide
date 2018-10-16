@@ -19,6 +19,7 @@ import tokenize
 from typing import ClassVar
 from typing.re import Pattern
 
+from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.best_practices import (
     WrongDocCommentViolation,
     WrongMagicCommentViolation,
@@ -26,6 +27,7 @@ from wemake_python_styleguide.violations.best_practices import (
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
 
+@final
 class WrongCommentVisitor(BaseTokenVisitor):
     """Checks comment tokens."""
 

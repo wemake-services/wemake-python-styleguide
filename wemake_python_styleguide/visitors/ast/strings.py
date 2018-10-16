@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
+from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.consistency import (
     FormattedStringViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
+@final
 class WrongStringVisitor(BaseNodeVisitor):
     """Restricts to use ``f`` strings."""
 

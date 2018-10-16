@@ -9,8 +9,10 @@ It also contains some exceptions that we allow to use in our codebase.
 
 import re
 
+from wemake_python_styleguide.types import Final
+
 #: List of functions we forbid to use.
-FUNCTIONS_BLACKLIST = frozenset((
+FUNCTIONS_BLACKLIST: Final = frozenset((
     # Code generation:
     'eval',
     'exec',
@@ -46,7 +48,7 @@ FUNCTIONS_BLACKLIST = frozenset((
 ))
 
 #: List of module metadata we forbid to use.
-MODULE_METADATA_VARIABLES_BLACKLIST = frozenset((
+MODULE_METADATA_VARIABLES_BLACKLIST: Final = frozenset((
     '__author__',
     '__all__',
     '__version__',
@@ -54,7 +56,7 @@ MODULE_METADATA_VARIABLES_BLACKLIST = frozenset((
 ))
 
 #: List of variable names we forbid to use.
-VARIABLE_NAMES_BLACKLIST = frozenset((
+VARIABLE_NAMES_BLACKLIST: Final = frozenset((
     # Meaningless words:
     'data',
     'result',
@@ -90,7 +92,7 @@ VARIABLE_NAMES_BLACKLIST = frozenset((
 ))
 
 #: List of magic methods that are forbidden to use.
-MAGIC_METHODS_BLACKLIST = frozenset((
+MAGIC_METHODS_BLACKLIST: Final = frozenset((
     # Since we don't use `del`:
     '__del__',
     '__delitem__',
@@ -101,25 +103,25 @@ MAGIC_METHODS_BLACKLIST = frozenset((
 ))
 
 #: List of nested classes' names we allow to use.
-NESTED_CLASSES_WHITELIST = frozenset((
+NESTED_CLASSES_WHITELIST: Final = frozenset((
     'Meta',  # django forms, models, drf, etc
     'Params',  # factoryboy specific
 ))
 
 #: List of nested functions' names we allow to use.
-NESTED_FUNCTIONS_WHITELIST = frozenset((
+NESTED_FUNCTIONS_WHITELIST: Final = frozenset((
     'decorator',
     'factory',
 ))
 
 #: List of allowed ``__future__`` imports.
-FUTURE_IMPORTS_WHITELIST = frozenset((
+FUTURE_IMPORTS_WHITELIST: Final = frozenset((
     'annotations',
     'generator_stop',
 ))
 
 #: List of blacklisted module names.
-MODULE_NAMES_BLACKLIST = frozenset((
+MODULE_NAMES_BLACKLIST: Final = frozenset((
     'util',
     'utils',
     'utilities',
@@ -127,16 +129,16 @@ MODULE_NAMES_BLACKLIST = frozenset((
 ))
 
 #: List of allowed module magic names.
-MAGIC_MODULE_NAMES_WHITELIST = frozenset((
+MAGIC_MODULE_NAMES_WHITELIST: Final = frozenset((
     '__init__',
     '__main__',
 ))
 
 #: Regex pattern to name modules.
-MODULE_NAME_PATTERN = re.compile(r'^_?_?[a-z][a-z\d_]+[a-z\d](__)?$')
+MODULE_NAME_PATTERN: Final = re.compile(r'^_?_?[a-z][a-z\d_]+[a-z\d](__)?$')
 
 #: Common numbers that are allowed to be used without being called "magic".
-MAGIC_NUMBERS_WHITELIST = frozenset((
+MAGIC_NUMBERS_WHITELIST: Final = frozenset((
     0.5,
     100,
     1000,
@@ -150,14 +152,14 @@ MAGIC_NUMBERS_WHITELIST = frozenset((
 # They are not publicly documented since they are not used by the end user.
 
 # Used as a default filename, when it is not passed by flake8:
-STDIN = 'stdin'
+STDIN: Final = 'stdin'
 
 # Used as a special name for unused variables:
-UNUSED_VARIABLE = '_'
+UNUSED_VARIABLE: Final = '_'
 
 # Used to specify as a placeholder for `__init__`:
-INIT = '__init__'
+INIT: Final = '__init__'
 
 # Used to specify a pattern which checks variables and modules for underscored
 # numbers in their names:
-UNDERSCORED_NUMBER_PATTERN = re.compile(r'.*\D_\d(\D|$)')
+UNDERSCORED_NUMBER_PATTERN: Final = re.compile(r'.*\D_\d(\D|$)')

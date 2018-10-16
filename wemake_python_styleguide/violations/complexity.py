@@ -66,12 +66,14 @@ Structures complexity
 
 """
 
+from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.base import (
     ASTViolation,
     SimpleViolation,
 )
 
 
+@final
 class JonesScoreViolation(SimpleViolation):
     """
     Forbids to have modules with complex lines.
@@ -104,6 +106,7 @@ class JonesScoreViolation(SimpleViolation):
     code = 200
 
 
+@final
 class TooManyImportsViolation(SimpleViolation):
     """
     Forbids to have modules with too many imports.
@@ -142,6 +145,7 @@ class TooManyImportsViolation(SimpleViolation):
     code = 201
 
 
+@final
 class TooManyModuleMembersViolation(SimpleViolation):
     """
     Forbids to have many classes and functions in a single module.
@@ -173,6 +177,7 @@ class TooManyModuleMembersViolation(SimpleViolation):
 
 # Functions and classes:
 
+@final
 class TooManyLocalsViolation(ASTViolation):
     """
     Forbids to have too many local variables in the unit of code.
@@ -222,6 +227,7 @@ class TooManyLocalsViolation(ASTViolation):
     code = 210
 
 
+@final
 class TooManyArgumentsViolation(ASTViolation):
     """
     Forbids to have too many arguments for a function or method.
@@ -247,6 +253,7 @@ class TooManyArgumentsViolation(ASTViolation):
     code = 211
 
 
+@final
 class TooManyReturnsViolation(ASTViolation):
     """
     Forbids placing too many ``return`` statements into the function.
@@ -271,6 +278,7 @@ class TooManyReturnsViolation(ASTViolation):
     code = 212
 
 
+@final
 class TooManyExpressionsViolation(ASTViolation):
     """
     Forbids putting too many expressions in a unit of code.
@@ -294,6 +302,7 @@ class TooManyExpressionsViolation(ASTViolation):
     code = 213
 
 
+@final
 class TooManyMethodsViolation(ASTViolation):
     """
     Forbids to have many methods in a single class.
@@ -329,6 +338,7 @@ class TooManyMethodsViolation(ASTViolation):
 
 # Structures:
 
+@final
 class TooDeepNestingViolation(ASTViolation):
     """
     Forbids nesting blocks too deep.
@@ -354,6 +364,7 @@ class TooDeepNestingViolation(ASTViolation):
     code = 220
 
 
+@final
 class LineComplexityViolation(ASTViolation):
     """
     Forbids to have complex lines.
@@ -397,6 +408,7 @@ class LineComplexityViolation(ASTViolation):
     code = 221
 
 
+@final
 class TooManyConditionsViolation(ASTViolation):
     """
     Forbids to have conditions with too many logical operators.
@@ -433,6 +445,7 @@ class TooManyConditionsViolation(ASTViolation):
     code = 222
 
 
+@final
 class TooManyElifsViolation(ASTViolation):
     """
     Forbids to use many ``elif`` branches.

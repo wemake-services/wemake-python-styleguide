@@ -3,6 +3,7 @@
 import tokenize
 from typing import ClassVar, FrozenSet
 
+from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.consistency import (
     BadNumberSuffixViolation,
     PartialFloatViolation,
@@ -12,6 +13,7 @@ from wemake_python_styleguide.violations.consistency import (
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
 
+@final
 class WrongPrimitivesVisitor(BaseTokenVisitor):
     """Visits primitive types to find incorrect usages."""
 

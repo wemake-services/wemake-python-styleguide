@@ -11,3 +11,4 @@ tomlkit==0.4.5
 
 # Dependencies of our linter:
 flake8<3.6
+typing-extensions==3.6.6

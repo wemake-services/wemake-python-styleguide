@@ -4,7 +4,7 @@ import ast
 from typing import ClassVar, FrozenSet
 
 from wemake_python_styleguide.constants import MAGIC_METHODS_BLACKLIST
-from wemake_python_styleguide.types import AnyFunctionDef
+from wemake_python_styleguide.types import AnyFunctionDef, final
 from wemake_python_styleguide.violations.best_practices import (
     BadMagicMethodViolation,
     StaticMethodViolation,
@@ -16,6 +16,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 
+@final
 @alias('visit_any_function', (
     'visit_FunctionDef',
     'visit_AsyncFunctionDef',

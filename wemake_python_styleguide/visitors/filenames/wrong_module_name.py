@@ -2,6 +2,7 @@
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.logics import filenames
+from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.naming import (
     TooShortModuleNameViolation,
     UnderScoredNumberNameViolation,
@@ -13,6 +14,7 @@ from wemake_python_styleguide.violations.naming import (
 from wemake_python_styleguide.visitors.base import BaseFilenameVisitor
 
 
+@final
 class WrongModuleNameVisitor(BaseFilenameVisitor):
     """Checks that modules have correct names."""
 

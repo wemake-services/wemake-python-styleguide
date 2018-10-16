@@ -17,14 +17,15 @@ to the project during `#hactoberfest`. List of awesome people:
 ### Features
 
 - Adds `flake8-print` as a dependency
+- Adds `typing-extensions` as a dependency
 - Forbids to use `quit` and `exit` functions
 - Forbids the comparison of two literals
-- Forbids the incorrect order comparison
+- Forbids the incorrect order comparison, enforcing variable to come first
 - Forbids underscores before numbers in names
-- Forbids class level attributes whose name is not in snake_case
-- Forbids comparison of the same variable
-- Enforce consistent octal, binary, and hex numbers
-- We not check the argument count in Lambda functions
+- Forbids class level attributes whose name is not in `snake_case`
+- Forbids comparison of the same variables
+- Forbids inconsistent octal, binary, and hex numbers
+- Forbids too many arguments in `lambda` functions
 - Forbid `for` loops with unused `else`
 - Forbid `try` with `finally` without `except`
 - Forbit `if` statements with invalid conditionals
@@ -33,8 +34,8 @@ to the project during `#hactoberfest`. List of awesome people:
 ### Bugfixes
 
 - Fixes that `MultipleIfsInComprehensionViolation` was not enabled
-- Fixes flaky behaviour of test_module_names
-- Fixed `TooManyMethodsViolation` not displaying line number
+- Fixes flaky behaviour of `test_module_names` test package
+- Fixed `TooManyMethodsViolation` not displaying line number in output
 
 ### Misc
 
@@ -48,6 +49,8 @@ to the project during `#hactoberfest`. List of awesome people:
 - Improves tests: now using stricter `noqa` checks
 - Improves tests: now testing that any name is allowed when using a variable
 - Improves types: now all class attributes are marked as `ClassVar`
+- Improves types: now we use `final` to indicate what should not be changed
+- Improves types: now we do not have any ugly import hacks
 
 
 ## 0.2.0 aka Revenge of the Async
