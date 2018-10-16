@@ -5,7 +5,7 @@ from typing import ClassVar, Sequence
 
 from wemake_python_styleguide.logics.nodes import is_literal
 from wemake_python_styleguide.logics.variables import is_same_variable
-from wemake_python_styleguide.types import AnyNodes
+from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations.consistency import (
     ComparisonOrderViolation,
     ConstantComparisonViolation,
@@ -14,6 +14,7 @@ from wemake_python_styleguide.violations.consistency import (
     WrongConditionalViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
+from wemake_python_styleguide.visitors.decorators import alias
 
 
 class ComparisonSanityVisitor(BaseNodeVisitor):
@@ -139,6 +140,10 @@ class WrongComparisionOrderVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
 
+@alias('visit_any_if', (
+    'visit_If',
+    'visit_IfExp',
+))
 class WrongConditionalVisitor(BaseNodeVisitor):
     """Finds wrong conditional arguments."""
 
@@ -148,9 +153,10 @@ class WrongConditionalVisitor(BaseNodeVisitor):
         ast.Num,
         ast.NameConstant,
         ast.Str,
+        ast.Dict,
     )
 
-    def visit_If(self, node: ast.If) -> None:
+    def visit_any_if(self, node: AnyIf) -> None:
         """
         Ensures that if statements are using valid conditionals.
 
@@ -161,21 +167,6 @@ class WrongConditionalVisitor(BaseNodeVisitor):
         self._check_if_statement_conditional(node)
         self.generic_visit(node)
 
-    def _check_if_statement_conditional(self, node: ast.If) -> None:
-        if isinstance(node.test, self._forbidden_nodes):
-            self.add_violation(WrongConditionalViolation(node))
-
-    def visit_IfExp(self, node: ast.IfExp) -> None:
-        """
-        Ensures that if expressions are using valid conditionals.
-
-        Raises:
-            WrongConditionalViolation
-
-        """
-        self._check_if_exp_statement_conditional(node)
-        self.generic_visit(node)
-
-    def _check_if_exp_statement_conditional(self, node: ast.IfExp) -> None:
+    def _check_if_statement_conditional(self, node: AnyIf) -> None:
         if isinstance(node.test, self._forbidden_nodes):
             self.add_violation(WrongConditionalViolation(node))

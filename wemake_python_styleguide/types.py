@@ -43,6 +43,10 @@ AnyFunctionDefAndLambda = Union[
     ast.Lambda,
 ]
 
+#: In cases we need to work with both forms of if functions
+AnyIf = Union[ast.If, ast.IfExp]
+
+
 #: Flake8 API format to return error messages:
 CheckResult = Tuple[int, int, str, type]
 

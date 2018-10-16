@@ -61,6 +61,7 @@ def test_valid_conditional(
     '[variable]',
     '4',
     '"test"',
+    '{test : "1"}',
 ])
 def test_redundant(
     assert_errors,
@@ -69,7 +70,7 @@ def test_redundant(
     comparators,
     default_options,
 ):
-    """Testing that violations are when comparing identical variable."""
+    """Testing that violations are when using invalid conditional."""
     tree = parse_ast_tree(create_variable.format(code.format(comparators)))
 
     visitor = WrongConditionalVisitor(default_options, tree=tree)
