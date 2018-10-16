@@ -40,6 +40,20 @@ Editors
 - `sublime plugin <https://github.com/SublimeLinter/SublimeLinter-flake8>`_
 - `atom plugin <https://atom.io/packages/linter-flake8>`_
 
+Extras
+------
+
+There are some tools that are out of scope of this linter,
+however they are super cool. And should definitely be used!
+
+Things we highly recommend to improve your code quality:
+
+- `mypy <https://github.com/python/mypy>`_ runs type checks on your python code. Finds tons of issues. Makes your code better, improves you as a programmer. You must use, and tell your friends to use it too
+- `layer-linter <https://github.com/seddonym/layer_linter>`_ allows you to define application layers and ensure you do not break that contract. Absolutely must have
+- `xenon <https://github.com/rubik/xenon>`_ and `radon <https://github.com/rubik/radon>`_ allow you to automate some code metrics check
+- `cohesion <https://github.com/mschwager/cohesion>`_ tool to measure code cohesion, works for most of the times. We recommend to use it as a reporting tool
+- `vulture <https://github.com/jendrikseipp/vulture>`_ allows you to find unused code. Has some drawbacks, since there is too many magic in python code. But, it is still very useful tool for the refactoring
+
 Uninstall
 ---------
 

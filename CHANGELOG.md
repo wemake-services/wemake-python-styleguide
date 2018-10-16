@@ -20,12 +20,12 @@ to the project during `#hactoberfest`. List of awesome people:
 - Adds `typing-extensions` as a dependency
 - Forbids to use `quit` and `exit` functions
 - Forbids the comparison of two literals
-- Forbids the incorrect order comparison
+- Forbids the incorrect order comparison, enforcing variable to come first
 - Forbids underscores before numbers in names
-- Forbids class level attributes whose name is not in snake_case
-- Forbids comparison of the same variable
-- Enforce consistent octal, binary, and hex numbers
-- We not check the argument count in Lambda functions
+- Forbids class level attributes whose name is not in `snake_case`
+- Forbids comparison of the same variables
+- Forbids inconsistent octal, binary, and hex numbers
+- Forbids too many arguments in `lambda` functions
 - Forbid `for` loops with unused `else`
 - Forbid `try` with `finally` without `except`
 - Forbid opening parenthesis from following keyword without space in between them
@@ -33,8 +33,8 @@ to the project during `#hactoberfest`. List of awesome people:
 ### Bugfixes
 
 - Fixes that `MultipleIfsInComprehensionViolation` was not enabled
-- Fixes flaky behaviour of test_module_names
-- Fixed `TooManyMethodsViolation` not displaying line number
+- Fixes flaky behaviour of `test_module_names` test package
+- Fixed `TooManyMethodsViolation` not displaying line number in output
 
 ### Misc
 

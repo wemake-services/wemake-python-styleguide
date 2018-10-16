@@ -10,8 +10,8 @@ Defaults
 .. automodule:: wemake_python_styleguide.options.defaults
    :members:
 
-Third party plugins
--------------------
+Plugins
+-------
 
 It is also important to configure different plugins that we ship with
 this module.
@@ -39,3 +39,6 @@ You will need to update your configuration with the following lines:
       line_length = 80
 
 Otherwise, your ``isort`` will complain about your imports.
+
+We are working hard to remove any kind of configuration from this tool.
+Please, be calm!
