@@ -11,6 +11,7 @@ from wemake_python_styleguide.violations.consistency import (
     ConstantComparisonViolation,
     MultipleInComparisonViolation,
     RedundantComparisonViolation,
+    WrongConditionalViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
@@ -136,3 +137,45 @@ class WrongComparisionOrderVisitor(BaseNodeVisitor):
         """
         self._check_ordering(node)
         self.generic_visit(node)
+
+
+class WrongConditionalVisitor(BaseNodeVisitor):
+    """Finds wrong conditional arguments."""
+
+    _forbidden_nodes: ClassVar[AnyNodes] = (
+        ast.List,
+        ast.Set,
+        ast.Num,
+        ast.NameConstant,
+        ast.Str,
+    )
+
+    def visit_If(self, node: ast.If) -> None:
+        """
+        Ensures that if statements are using valid conditionals.
+
+        Raises:
+            WrongConditionalViolation
+
+        """
+        self._check_if_statement_conditional(node)
+        self.generic_visit(node)
+
+    def _check_if_statement_conditional(self, node: ast.If) -> None:
+        if isinstance(node.test, self._forbidden_nodes):
+            self.add_violation(WrongConditionalViolation(node))
+
+    def visit_IfExp(self, node: ast.IfExp) -> None:
+        """
+        Ensures that if expressions are using valid conditionals.
+
+        Raises:
+            WrongConditionalViolation
+
+        """
+        self._check_if_exp_statement_conditional(node)
+        self.generic_visit(node)
+
+    def _check_if_exp_statement_conditional(self, node: ast.IfExp) -> None:
+        if isinstance(node.test, self._forbidden_nodes):
+            self.add_violation(WrongConditionalViolation(node))

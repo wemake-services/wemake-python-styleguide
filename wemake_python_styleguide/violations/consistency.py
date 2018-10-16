@@ -44,7 +44,7 @@ Summary
    ComparisonOrderViolation
    MultipleInComparisonViolation
    RedundantComparisonViolation
-   NamedConstantConditionalViolation
+   WrongConditionalViolation
 
 
 Consistency checks
@@ -63,7 +63,7 @@ Consistency checks
 .. autoclass:: ComparisonOrderViolation
 .. autoclass:: MultipleInComparisonViolation
 .. autoclass:: RedundantComparisonViolation
-.. autoclass:: NamedConstantConditionalViolation
+.. autoclass:: WrongConditionalViolation
 
 """
 
@@ -500,14 +500,14 @@ class RedundantComparisonViolation(ASTViolation):
     code = 312
 
 
-class NamedConstantConditionalViolation(ASTViolation):
+class WrongConditionalViolation(ASTViolation):
     """
-    Forbids using if statements that use only Named Constants.
+    Forbids using `if` statements that use invalid conditionals.
 
     Reasoning:
-        When a Named Constant is used in conditional
+        When invalid conditional arguments are used
         it is typically an indication of a mistake, since
-        the value of the comparison will always be the same.
+        the value of the conditional result will always be the same.
 
     Solution:
         Remove the conditional and any associated dead code.
@@ -519,8 +519,6 @@ class NamedConstantConditionalViolation(ASTViolation):
 
         # Wrong:
         if True: ...
-        if False: ...
-        if None: ...
 
     Note:
         Returns Z313 as error code
