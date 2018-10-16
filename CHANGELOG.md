@@ -27,7 +27,8 @@ to the project during `#hactoberfest`. List of awesome people:
 - We not check the argument count in Lambda functions
 - Forbid `for` loops with unused `else`
 - Forbid `try` with `finally` without `except`
-- Forbit `if` statements with Named Constants e.g. `True`, `False`, `None`
+- Forbit `if` statements with invalid conditionals
+- Forbid opening parenthesis from following keyword without space in between them
 
 ### Bugfixes
 

@@ -45,7 +45,7 @@ Summary
    MultipleInComparisonViolation
    RedundantComparisonViolation
    WrongConditionalViolation
-
+   MissingSpaceBetweenKeywordAndParenViolation
 
 Consistency checks
 ------------------
@@ -64,7 +64,7 @@ Consistency checks
 .. autoclass:: MultipleInComparisonViolation
 .. autoclass:: RedundantComparisonViolation
 .. autoclass:: WrongConditionalViolation
-
+.. autoclass:: MissingSpaceBetweenKeywordAndParenViolation
 """
 
 from wemake_python_styleguide.violations.base import (
@@ -500,6 +500,41 @@ class RedundantComparisonViolation(ASTViolation):
     code = 312
 
 
+class MissingSpaceBetweenKeywordAndParenViolation(TokenizeViolation):
+    """
+    Forbid opening parenthesis from following keyword without space in between.
+
+    Reasoning:
+        Some people use ``return`` and ``yield`` keywords as functions.
+        The same happened to good old ``print`` in Python2.
+    Solution:
+        Insert space symbol between keyword and open paren.
+
+    Example::
+
+        # Wrong:
+        def func():
+            a = 1
+            b = 2
+            del(a, b)
+            yield(1, 2, 3)
+
+        # Correct:
+        def func():
+            a = 1
+            del (a, b)
+            yield (1, 2, 3)
+
+    Note:
+        Returns Z313 as error code
+    """
+
+    should_use_text = False
+    #: Error message shown to the user.
+    error_template = 'Found paren right after a keyword'
+    code = 313
+
+
 class WrongConditionalViolation(ASTViolation):
     """
     Forbids using `if` statements that use invalid conditionals.
@@ -521,10 +556,10 @@ class WrongConditionalViolation(ASTViolation):
         if True: ...
 
     Note:
-        Returns Z313 as error code
+        Returns Z314 as error code
     """
 
     should_use_text = False
     #: Error message shown to the user.
     error_template = 'Conditional always evaluates to same result'
-    code = 313
+    code = 314
