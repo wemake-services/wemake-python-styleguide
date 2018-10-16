@@ -28,7 +28,10 @@ AnyFunctionDef = Union[ast.FunctionDef, ast.AsyncFunctionDef]
 #: In cases we need to work with all function definitions (including lambdas).
 AnyFunctionDefAndLambda = Union[AnyFunctionDef, ast.Lambda]
 
-#: Flake8 API format to return error messages.
+#: In cases we need to work with both forms of if functions
+AnyIf = Union[ast.If, ast.IfExp]
+
+#: Flake8 API format to return error messages:
 CheckResult = Tuple[int, int, str, type]
 
 #: Tuple of AST node types for declarative syntax.

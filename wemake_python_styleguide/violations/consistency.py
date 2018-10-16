@@ -44,6 +44,7 @@ Summary
    ComparisonOrderViolation
    MultipleInComparisonViolation
    RedundantComparisonViolation
+   WrongConditionalViolation
    MissingSpaceBetweenKeywordAndParenViolation
 
 Consistency checks
@@ -62,8 +63,8 @@ Consistency checks
 .. autoclass:: ComparisonOrderViolation
 .. autoclass:: MultipleInComparisonViolation
 .. autoclass:: RedundantComparisonViolation
+.. autoclass:: WrongConditionalViolation
 .. autoclass:: MissingSpaceBetweenKeywordAndParenViolation
-
 """
 
 from wemake_python_styleguide.types import final
@@ -505,7 +506,6 @@ class RedundantComparisonViolation(ASTViolation):
 
     Note:
         Returns Z312 as error code
-
     """
 
     should_use_text = False
@@ -542,10 +542,39 @@ class MissingSpaceBetweenKeywordAndParenViolation(TokenizeViolation):
 
     Note:
         Returns Z313 as error code
-
     """
 
     should_use_text = False
     #: Error message shown to the user.
     error_template = 'Found paren right after a keyword'
     code = 313
+
+
+class WrongConditionalViolation(ASTViolation):
+    """
+    Forbids using `if` statements that use invalid conditionals.
+
+    Reasoning:
+        When invalid conditional arguments are used
+        it is typically an indication of a mistake, since
+        the value of the conditional result will always be the same.
+
+    Solution:
+        Remove the conditional and any associated dead code.
+
+    Example::
+
+        # Correct:
+        if value is True: ...
+
+        # Wrong:
+        if True: ...
+
+    Note:
+        Returns Z314 as error code
+    """
+
+    should_use_text = False
+    #: Error message shown to the user.
+    error_template = 'Conditional always evaluates to same result'
+    code = 314

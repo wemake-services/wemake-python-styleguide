@@ -28,6 +28,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - Forbids too many arguments in `lambda` functions
 - Forbid `for` loops with unused `else`
 - Forbid `try` with `finally` without `except`
+- Forbit `if` statements with invalid conditionals
 - Forbid opening parenthesis from following keyword without space in between them
 
 ### Bugfixes

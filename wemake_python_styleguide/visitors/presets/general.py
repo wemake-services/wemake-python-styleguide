@@ -37,6 +37,7 @@ GENERAL_PRESET = (
     numbers.MagicNumberVisitor,
     WrongStringVisitor,
 
+    comparisons.WrongConditionalVisitor,
     comparisons.ComparisonSanityVisitor,
     comparisons.WrongComparisionOrderVisitor,
 
