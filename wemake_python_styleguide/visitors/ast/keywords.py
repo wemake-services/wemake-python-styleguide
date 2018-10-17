@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import ClassVar
+from collections import defaultdict
+from typing import ClassVar, DefaultDict
 
 from wemake_python_styleguide.types import AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
@@ -10,10 +11,26 @@ from wemake_python_styleguide.violations.best_practices import (
     RedundantForElseViolation,
     WrongKeywordViolation,
 )
+from wemake_python_styleguide.violations.complexity import (
+    TooManyForsInComprehensionViolation,
+)
 from wemake_python_styleguide.violations.consistency import (
     MultipleIfsInComprehensionViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
+
+
+@final
+class _ComprehensionComplexityCounter(object):
+    """Helper class to encapsulate logic from the visitor."""
+
+    def __init__(self) -> None:
+        self.fors: DefaultDict[ast.ListComp, int] = defaultdict(int)
+
+    def check_fors(self, node: ast.comprehension) -> None:
+        parent = getattr(node, 'parent', node)
+        if isinstance(parent, ast.ListComp):
+            self.fors[parent] = len(parent.generators)
 
 
 @final
@@ -76,6 +93,11 @@ class WrongKeywordVisitor(BaseNodeVisitor):
 class WrongListComprehensionVisitor(BaseNodeVisitor):
     """Checks list comprehensions."""
 
+    def __init__(self, *args, **kwargs) -> None:
+        """Creates a counter for tracked metrics."""
+        super().__init__(*args, **kwargs)
+        self._counter = _ComprehensionComplexityCounter()
+
     def _check_ifs(self, node: ast.comprehension) -> None:
         if len(node.ifs) > 1:
             # We are trying to fix line number in the report,
@@ -83,15 +105,25 @@ class WrongListComprehensionVisitor(BaseNodeVisitor):
             parent = getattr(node, 'parent', node)
             self.add_violation(MultipleIfsInComprehensionViolation(parent))
 
+    def _check_fors(self) -> None:
+        for node, fors in self._counter.fors.items():
+            if fors > 2:
+                self.add_violation(TooManyForsInComprehensionViolation(node))
+
+    def _post_visit(self) -> None:
+        self._check_fors()
+
     def visit_comprehension(self, node: ast.comprehension) -> None:
         """
         Finds multiple ``if`` nodes inside the comprehension.
 
         Raises:
             MultipleIfsInComprehensionViolation,
+            TooManyForsInComprehensionViolation,
 
         """
         self._check_ifs(node)
+        self._counter.check_fors(node)
         self.generic_visit(node)
 
 

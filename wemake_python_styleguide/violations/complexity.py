@@ -39,6 +39,7 @@ Summary
    LineComplexityViolation
    TooManyConditionsViolation
    TooManyElifsViolation
+   TooManyForsInComprehensionViolation
 
 Module complexity
 -----------------
@@ -63,6 +64,7 @@ Structures complexity
 .. autoclass:: LineComplexityViolation
 .. autoclass:: TooManyConditionsViolation
 .. autoclass:: TooManyElifsViolation
+.. autoclass:: TooManyForsInComprehensionViolation
 
 """
 
@@ -471,3 +473,36 @@ class TooManyElifsViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found too many `elif` branches'
     code = 223
+
+
+@final
+class TooManyForsInComprehensionViolation(ASTViolation):
+    """
+    Forbids to have too many ``for`` statement within a comprehension.
+
+    Reasoning:
+        When reading through the complex comprehension you will fail
+        to understand it.
+
+    Solution:
+        We can reduce the complexity of a comprehension by reducing the
+        amount of ``for`` statements
+
+    Example::
+        # Wrong
+        test = [
+            target
+            for assignment in top_level_assigns
+            for target in assignment.targets
+            for _ in range(10)
+            if isinstance(target, ast.Name) and is_upper_case_name(target.id)
+        ]
+
+    Note:
+        Returns Z224 as error code
+
+    """
+
+    #: Error message shown to the user.
+    error_template = 'Found a comprehension with too many for statements: {0}'
+    code = 224

@@ -2,6 +2,9 @@
 
 import pytest
 
+from wemake_python_styleguide.violations.complexity import (
+    TooManyForsInComprehensionViolation,
+)
 from wemake_python_styleguide.violations.consistency import (
     MultipleIfsInComprehensionViolation,
 )
@@ -74,6 +77,16 @@ async def wrapper():
     return [xy async for xy in "abc"]
 """
 
+nested_loops = """
+nodes = [
+    target
+    for assignment in top_level_assigns
+    for target in assignment.targets
+    for _ in range(10)
+    if isinstance(target, ast.Name) and is_upper_case_name(target.id)
+]
+"""
+
 
 @pytest.mark.parametrize('code', [
     list_ifs_single,
@@ -126,3 +139,20 @@ def test_multiple_if_keywords_in_comprehension(
     visitor.run()
 
     assert_errors(visitor, [MultipleIfsInComprehensionViolation])
+
+
+@pytest.mark.parametrize('code', [
+    nested_loops,
+])
+def test_multiple_for_keywords_in_comprehension(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+):
+    """Testing that using multiple `for` keywords is restricted."""
+    tree = parse_ast_tree(code)
+    visitor = WrongListComprehensionVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [TooManyForsInComprehensionViolation])
