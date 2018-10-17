@@ -489,7 +489,7 @@ class TooManyForsInComprehensionViolation(ASTViolation):
         amount of ``for`` statements
 
     Example::
-
+        # Wrong
         test = [
             target
             for assignment in top_level_assigns
