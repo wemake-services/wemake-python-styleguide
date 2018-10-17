@@ -24,7 +24,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 VariableDef = Union[ast.Name, ast.Attribute, ast.ExceptHandler]
-AssignTarget = List[Union[ast.Name, ast.Tuple]]
+AssignTarget = List[ast.expr]
 AssignTargetNameList = List[Union[str, Tuple[str]]]
 
 
