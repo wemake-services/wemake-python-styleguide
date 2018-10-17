@@ -36,17 +36,17 @@ x, y = x, y
 """
 
 
-@pytest.mark.parametrize('fragment', [wrong_fragment,
-                                      wrong_fragment_double_assignment,
-                                      wrong_fragment_other_assignment,
-                                      wrong_fragment_tuple_assignment,
-                                      ],
-                         )
+@pytest.mark.parametrize('code', [
+    wrong_fragment,
+    wrong_fragment_double_assignment,
+    wrong_fragment_other_assignment,
+    wrong_fragment_tuple_assignment,
+])
 def test_self_variable_reassignment(
-    assert_errors, parse_ast_tree, fragment, default_options,
+    assert_errors, parse_ast_tree, code, default_options,
 ):
     """Testing that self variable reassignment is restricted."""
-    tree = parse_ast_tree(fragment)
+    tree = parse_ast_tree(code)
     visitor = WrongVariableAssignmentVisitor(default_options, tree=tree)
     visitor.run()
     assert_errors(visitor, [ReassigningVariableToItselfViolation])

@@ -667,5 +667,5 @@ class ReassigningVariableToItselfViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found reassigning variable to itself'
+    error_template = 'Found reassigning variable "{0}" to itself'
     code = 438
