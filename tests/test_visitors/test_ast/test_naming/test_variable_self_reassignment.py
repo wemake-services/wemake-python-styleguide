@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import pytest
+
 from wemake_python_styleguide.violations.best_practices import (
     ReassigningVariableToItselfViolation,
 )
@@ -17,12 +19,34 @@ test_variable = 5
 test_variable = 10
 """
 
+wrong_fragment_double_assignment = """
+test_variable = 5
+test_variable = test_variable = 10
+"""
 
+wrong_fragment_other_assignment = """
+test_variable = 5
+test_variable = other = test_variable = 5
+"""
+
+wrong_fragment_tuple_assignment = """
+x = 1
+y = 2
+x, y = x, y
+"""
+
+
+@pytest.mark.parametrize('fragment', [wrong_fragment,
+                                      wrong_fragment_double_assignment,
+                                      wrong_fragment_other_assignment,
+                                      wrong_fragment_tuple_assignment,
+                                      ],
+                         )
 def test_self_variable_reassignment(
-    assert_errors, parse_ast_tree, default_options,
+    assert_errors, parse_ast_tree, fragment, default_options,
 ):
     """Testing that self variable reassignment is restricted."""
-    tree = parse_ast_tree(wrong_fragment)
+    tree = parse_ast_tree(fragment)
     visitor = WrongVariableAssignmentVisitor(default_options, tree=tree)
     visitor.run()
     assert_errors(visitor, [ReassigningVariableToItselfViolation])

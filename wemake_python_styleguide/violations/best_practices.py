@@ -621,22 +621,6 @@ class RedundantForElseViolation(ASTViolation):
     code = 436
 
 
-class ReassigningVariableToItselfViolation(ASTViolation):
-    """
-    Forbids to assign variable to itself.
-
-    Reasoning:
-        There is no need to do that.
-
-    Note:
-        Returns Z437 as error code
-    """
-
-    #: Error message shown to the user.
-    error_template = 'Found reassigning variable to itself'
-    code = 437
-
-
 class RedundantFinallyViolation(ASTViolation):
     """
     Forbids to use ``finally`` in ``try`` block without ``except`` block.
@@ -662,10 +646,26 @@ class RedundantFinallyViolation(ASTViolation):
             f.close()
 
     Note:
-        Returns Z438 as error code
+        Returns Z437 as error code
 
     """
 
     #: Error message shown to the user.
     error_template = 'Found `finally` in `try` block without `except`'
+    code = 437
+
+
+class ReassigningVariableToItselfViolation(ASTViolation):
+    """
+    Forbids to assign variable to itself.
+
+    Reasoning:
+        There is no need to do that.
+
+    Note:
+        Returns Z438 as error code
+    """
+
+    #: Error message shown to the user.
+    error_template = 'Found reassigning variable to itself'
     code = 438

@@ -172,10 +172,24 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
     """Finds wrong variables assignments."""
 
     def _check_assignment(self, node: ast.Assign) -> None:
-        node_value_id = getattr(node.value, 'id', None)
-        for target_node in node.targets:
-            target_node_id = getattr(target_node, 'id', None)
-            if target_node_id == node_value_id:
+        target_names = [target.id for target in node.targets
+                        if isinstance(target, ast.Name)]
+        if target_names:
+            if getattr(node.value, 'id', None) in target_names or (
+                    len(target_names) != len(list(set(target_names)))):
+                self.add_violation(ReassigningVariableToItselfViolation(node))
+        else:
+            target_names = [getattr(target, 'elts', None) for target
+                            in node.targets if isinstance(target, ast.Tuple)]
+            for index in range(len(target_names)):
+                target_names[index] = [name.id for name in target_names[index]]
+            node_values = []
+            if isinstance(node.value, ast.Tuple):
+                node_values = [getattr(node_value, 'id', None) for node_value
+                               in node.value.elts]
+            if node_values in target_names or (len(target_names) !=
+                                               len(list(set(target_names)))
+                                               ):
                 self.add_violation(ReassigningVariableToItselfViolation(node))
 
     def visit_Assign(self, node: ast.Assign) -> None:
