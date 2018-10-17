@@ -176,7 +176,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
                         if isinstance(target, ast.Name)]
         if target_names:
             if getattr(node.value, 'id', None) in target_names or (
-                    len(target_names) != len(list(set(target_names)))):
+                    len(target_names) != len(set(target_names))):
                 self.add_violation(ReassigningVariableToItselfViolation(node))
         else:
             target_names = [getattr(target, 'elts', None) for target
@@ -188,7 +188,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
                 node_values = [getattr(node_value, 'id', None) for node_value
                                in node.value.elts]
             if node_values in target_names or (len(target_names) !=
-                                               len(list(set(target_names)))
+                                               len(set(target_names))
                                                ):
                 self.add_violation(ReassigningVariableToItselfViolation(node))
 
