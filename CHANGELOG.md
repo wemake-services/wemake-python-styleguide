@@ -29,6 +29,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - Forbid `for` loops with unused `else`
 - Forbid `try` with `finally` without `except`
 - Forbid opening parenthesis from following keyword without space in between them
+- Forbid the use of more than 2 `for` loops within a comprehension
 
 ### Bugfixes
 
