@@ -24,8 +24,8 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 VariableDef = Union[ast.Name, ast.Attribute, ast.ExceptHandler]
-AssignTarget = List[ast.expr]
-AssignTargetNameList = List[Union[str, Tuple[str]]]
+AssignTargets = List[ast.expr]
+AssignTargetsNameList = List[Union[str, Tuple[str]]]
 
 
 @alias('visit_any_import', (
@@ -173,7 +173,9 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
 class WrongVariableAssignmentVisitor(BaseNodeVisitor):
     """Finds wrong variables assignments."""
 
-    def create_target_names(self, target: AssignTarget) -> AssignTargetNameList:
+    def create_target_names(
+            self, target: AssignTargets,
+    ) -> AssignTargetsNameList:
         """Creates list with names of targets of assignment."""
         target_names = []
         for ast_object in target:
