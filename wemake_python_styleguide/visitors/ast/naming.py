@@ -173,7 +173,7 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
 class WrongVariableAssignmentVisitor(BaseNodeVisitor):
     """Finds wrong variables assignments."""
 
-    def create_target_names(
+    def _create_target_names(
             self, target: AssignTargets,
     ) -> AssignTargetsNameList:
         """Creates list with names of targets of assignment."""
@@ -190,7 +190,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
         return target_names
 
     def _check_assignment(self, node: ast.Assign) -> None:
-        target_names = self.create_target_names(node.targets)
+        target_names = self._create_target_names(node.targets)
 
         if isinstance(node.value, ast.Tuple):
             node_values = node.value.elts
