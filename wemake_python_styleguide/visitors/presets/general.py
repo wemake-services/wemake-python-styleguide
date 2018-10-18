@@ -6,7 +6,10 @@ from wemake_python_styleguide.visitors.ast import (
     naming,
     numbers,
 )
-from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
+from wemake_python_styleguide.visitors.ast.classes import (
+    WrongClassVisitor,
+    WrongParentClassListVisitor,
+)
 from wemake_python_styleguide.visitors.ast.functions import (
     WrongFunctionCallVisitor,
 )
@@ -44,6 +47,7 @@ GENERAL_PRESET = (
 
     # Classes:
     WrongClassVisitor,
+    WrongParentClassListVisitor,
 
     # Modules:
     WrongModuleNameVisitor,

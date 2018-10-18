@@ -14,6 +14,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - [@sathwikmatsa](https://github.com/sathwikmatsa)
 - [@tipabu](https://github.com/tipabu)
 - [@roxe322](https://github.com/roxe322)
+- [@geoc0ld](https://github.com/geoc0ld)
 
 ### Features
 
@@ -27,6 +28,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - Forbids comparison of the same variables
 - Forbids inconsistent octal, binary, and hex numbers
 - Forbids too many arguments in `lambda` functions
+- Forbid extra `object` in parent classes list
 - Forbid `for` loops with unused `else`
 - Forbid variables self reassignment
 - Forbid `try` with `finally` without `except`
