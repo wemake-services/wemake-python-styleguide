@@ -106,8 +106,8 @@ class WrongListComprehensionVisitor(BaseNodeVisitor):
             self.add_violation(MultipleIfsInComprehensionViolation(parent))
 
     def _check_fors(self) -> None:
-        for node, fors in self._counter.fors.items():
-            if fors > 2:
+        for node, for_count in self._counter.fors.items():
+            if for_count > 2:
                 self.add_violation(TooManyForsInComprehensionViolation(node))
 
     def _post_visit(self) -> None:
@@ -115,7 +115,7 @@ class WrongListComprehensionVisitor(BaseNodeVisitor):
 
     def visit_comprehension(self, node: ast.comprehension) -> None:
         """
-        Finds multiple ``if`` nodes inside the comprehension.
+        Finds multiple ``if`` and ``for`` nodes inside the comprehension.
 
         Raises:
             MultipleIfsInComprehensionViolation,

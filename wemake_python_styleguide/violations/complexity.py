@@ -486,11 +486,12 @@ class TooManyForsInComprehensionViolation(ASTViolation):
 
     Solution:
         We can reduce the complexity of a comprehension by reducing the
-        amount of ``for`` statements
+        amount of ``for`` statements. Refactor your code to use several
+        ``for`` loops, comprehensions, or different functions.
 
     Example::
-        # Wrong
-        test = [
+        # Wrong:
+        ast_nodes = [
             target
             for assignment in top_level_assigns
             for target in assignment.targets
@@ -503,6 +504,7 @@ class TooManyForsInComprehensionViolation(ASTViolation):
 
     """
 
+    should_use_text = False
     #: Error message shown to the user.
-    error_template = 'Found a comprehension with too many for statements: {0}'
+    error_template = 'Found a comprehension with too many `for` statements'
     code = 224

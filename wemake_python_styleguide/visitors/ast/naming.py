@@ -172,6 +172,7 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
 
+@final
 class WrongVariableAssignmentVisitor(BaseNodeVisitor):
     """Finds wrong variables assignments."""
 

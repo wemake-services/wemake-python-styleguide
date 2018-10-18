@@ -37,8 +37,8 @@ Summary
    BadMagicMethodViolation
    NestedImportViolation
    RedundantForElseViolation
-   ReassigningVariableToItselfViolation
    RedundantFinallyViolation
+   ReassigningVariableToItselfViolation
 
 Comments
 --------
@@ -70,8 +70,8 @@ Design
 .. autoclass:: BadMagicMethodViolation
 .. autoclass:: NestedImportViolation
 .. autoclass:: RedundantForElseViolation
-.. autoclass:: ReassigningVariableToItselfViolation
 .. autoclass:: RedundantFinallyViolation
+.. autoclass:: ReassigningVariableToItselfViolation
 
 """
 
@@ -673,12 +673,18 @@ class RedundantFinallyViolation(ASTViolation):
     code = 437
 
 
+@final
 class ReassigningVariableToItselfViolation(ASTViolation):
     """
     Forbids to assign variable to itself.
 
     Reasoning:
         There is no need to do that.
+        Generally it is an indication of some error or just dead code.
+
+    Example::
+
+        # Wrong:
 
     Note:
         Returns Z438 as error code
