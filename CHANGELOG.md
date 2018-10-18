@@ -13,6 +13,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - [@riyasyash](https://github.com/riyasyash)
 - [@sathwikmatsa](https://github.com/sathwikmatsa)
 - [@tipabu](https://github.com/tipabu)
+- [@roxe322](https://github.com/roxe322)
 
 ### Features
 
@@ -27,6 +28,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - Forbids inconsistent octal, binary, and hex numbers
 - Forbids too many arguments in `lambda` functions
 - Forbid `for` loops with unused `else`
+- Forbid variables self reassignment
 - Forbid `try` with `finally` without `except`
 - Forbit `if` statements with invalid conditionals
 - Forbid opening parenthesis from following keyword without space in between them

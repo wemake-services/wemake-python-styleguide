@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Union
+from typing import List, Tuple, Union
 
 from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
@@ -10,6 +10,7 @@ from wemake_python_styleguide.constants import (
 from wemake_python_styleguide.logics import variables
 from wemake_python_styleguide.types import AnyFunctionDef, AnyImport, final
 from wemake_python_styleguide.violations.best_practices import (
+    ReassigningVariableToItselfViolation,
     WrongModuleMetadataViolation,
 )
 from wemake_python_styleguide.violations.naming import (
@@ -23,6 +24,8 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 VariableDef = Union[ast.Name, ast.Attribute, ast.ExceptHandler]
+AssignTargets = List[ast.expr]
+AssignTargetsNameList = List[Union[str, Tuple[str]]]
 
 
 @final
@@ -166,4 +169,50 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
 
         """
         self._check_metadata(node)
+        self.generic_visit(node)
+
+
+class WrongVariableAssignmentVisitor(BaseNodeVisitor):
+    """Finds wrong variables assignments."""
+
+    def _create_target_names(
+            self, target: AssignTargets,
+    ) -> AssignTargetsNameList:
+        """Creates list with names of targets of assignment."""
+        target_names = []
+        for ast_object in target:
+            if isinstance(ast_object, ast.Name):
+                target_names.append(getattr(ast_object, 'id', None))
+            if isinstance(ast_object, ast.Tuple):
+                target_names.append(getattr(ast_object, 'elts', None))
+                for index, _ in enumerate(target_names):
+                    target_names[index] = tuple(
+                        name.id for name in target_names[index]
+                    )
+        return target_names
+
+    def _check_assignment(self, node: ast.Assign) -> None:
+        target_names = self._create_target_names(node.targets)
+
+        if isinstance(node.value, ast.Tuple):
+            node_values = node.value.elts
+            values_names = tuple(
+                getattr(node_value, 'id', None) for node_value in node_values
+            )
+
+        else:
+            values_names = getattr(node.value, 'id', None)
+        has_repeatable_values = len(target_names) != len(set(target_names))
+        if values_names in target_names or has_repeatable_values:
+            self.add_violation(ReassigningVariableToItselfViolation(node))
+
+    def visit_Assign(self, node: ast.Assign) -> None:
+        """
+        Used to check assignment variable to itself.
+
+        Raises:
+            ReassigningVariableToItselfViolation
+
+        """
+        self._check_assignment(node)
         self.generic_visit(node)
