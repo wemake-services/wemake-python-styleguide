@@ -684,7 +684,13 @@ class ReassigningVariableToItselfViolation(ASTViolation):
 
     Example::
 
+        # Correct:
+        some = some + 1
+        x_coord, y_coord = y_coord, x_coord
+
         # Wrong:
+        some = some
+        x_coord, y_coord = x_coord, y_coord
 
     Note:
         Returns Z438 as error code
