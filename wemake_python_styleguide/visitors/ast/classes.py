@@ -52,13 +52,9 @@ class WrongClassVisitor(BaseNodeVisitor):
         if len(node.bases) >= 2:
             for base_name in node.bases:
                 id_attr = getattr(base_name, 'id', None)
-                if id_attr is not None:
-                    self._check_object_method(base_name)
-
-    def _check_object_method(self, node: ast.Name) -> None:
-        if node.id == 'object':
-            self.add_violation(WrongParentClassListDef(node,
-                                                       text=node.id))
+                if id_attr is not None and id_attr == 'object':
+                    self.add_violation(WrongParentClassListDef(node,
+                                                               text=id_attr))
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """
