@@ -181,6 +181,12 @@ class Configuration(object):
             'Maximum number of conditions in a `if` or `while` node.',
         ),
 
+        _Option(
+            '--max-classes-number',
+            defaults.MAX_CLASSES_NUMBER,
+            'Maximum number of base classes',
+        ),
+
         # General:
 
         _Option(

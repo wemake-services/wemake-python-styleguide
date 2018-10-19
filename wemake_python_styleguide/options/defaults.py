@@ -63,6 +63,8 @@ MAX_IMPORTS: Final = 12
 #: Maximum number of conditions in a single ``if`` or ``while`` statement:
 MAX_CONDITIONS: Final = 4
 
+#: Maximum number of base classes:
+MAX_CLASSES_NUMBER: Final = 3
 
 # Modules
 

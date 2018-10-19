@@ -40,6 +40,7 @@ Summary
    TooManyConditionsViolation
    TooManyElifsViolation
    TooManyForsInComprehensionViolation
+   TooManyBaseClassesViolation
 
 Module complexity
 -----------------
@@ -47,6 +48,7 @@ Module complexity
 .. autoclass:: JonesScoreViolation
 .. autoclass:: TooManyImportsViolation
 .. autoclass:: TooManyModuleMembersViolation
+.. autoclass:: TooManyBaseClassesViolation
 
 Function and class complexity
 -----------------------------
@@ -507,3 +509,39 @@ class TooManyForsInComprehensionViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found a comprehension with too many `for` statements'
     code = 224
+
+
+class TooManyBaseClassesViolation(ASTViolation):
+    """
+    Restrict the maximum number of base classes.
+
+    Reasoning:
+        It is almost never possible to navigate
+        to the desired method of a parent class
+        when you need it with multiple mixin.
+        It is hard to understand mro and super calls.
+        Do not overuse this technique.
+
+    Solution:
+        Restrict the number of base classes.
+
+    Example::
+
+       # Correct:
+       class SomeClassName(FirstParentClass, SecondParentClass): ...
+
+       # Wrong:
+       class SomeClassName(FirstParentClass,
+                  SecondParentClass,
+                  ThirdParentClass,
+                  CustomClass,
+                  AddedClass):
+
+    Note:
+        Returns Z225 as error code
+    """
+
+    should_use_text = False
+    #: Error message shown to the user
+    error_template = 'Too many number of base classes'
+    code = 225
