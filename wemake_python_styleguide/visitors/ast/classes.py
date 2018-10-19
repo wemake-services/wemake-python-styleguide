@@ -11,6 +11,7 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.violations.consistency import (
     RequiredBaseClassViolation,
+    WrongParentClassListDef,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
@@ -46,15 +47,26 @@ class WrongClassVisitor(BaseNodeVisitor):
         if len(node.bases) == 0:
             self.add_violation(RequiredBaseClassViolation(node, text=node.name))
 
+    def _check_extra_object(self, node: ast.ClassDef) -> None:
+        """Check 'object' class in parent list."""
+        if len(node.bases) >= 2:
+            for base_name in node.bases:
+                id_attr = getattr(base_name, 'id', None)
+                if id_attr == 'object':
+                    self.add_violation(WrongParentClassListDef(node,
+                                                               text=id_attr))
+
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """
         Checking class definitions.
 
         Raises:
             RequiredBaseClassViolation
+            WrongParentClassListDef
 
         """
         self._check_base_class(node)
+        self._check_extra_object(node)
         self.generic_visit(node)
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:

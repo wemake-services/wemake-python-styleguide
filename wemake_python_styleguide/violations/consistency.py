@@ -46,6 +46,7 @@ Summary
    RedundantComparisonViolation
    WrongConditionalViolation
    MissingSpaceBetweenKeywordAndParenViolation
+   WrongParentClassListDef
 
 Consistency checks
 ------------------
@@ -65,6 +66,7 @@ Consistency checks
 .. autoclass:: RedundantComparisonViolation
 .. autoclass:: WrongConditionalViolation
 .. autoclass:: MissingSpaceBetweenKeywordAndParenViolation
+.. autoclass:: WrongParentClassListDef
 """
 
 from wemake_python_styleguide.types import final
@@ -578,3 +580,35 @@ class WrongConditionalViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Conditional always evaluates to same result'
     code = 314
+
+
+class WrongParentClassListDef(ASTViolation):
+    """
+    Forbid extra `object` in parent classes list.
+
+    Reasoning:
+        We should allow object only when
+        we explicitly use it as a single parent class.
+        When there is an other class or there are multiple
+        parents - we should not allow it for the consistency reasons.
+
+    Solution:
+        Remove extra 'object'.
+
+    Example::
+
+       # Correct:
+       class SomeClassName(object): ...
+       class SomeClassName(FirstParentClass, SecondParenClass): ...
+
+       # Wrong:
+       class SomeClassName(FirstParentClass, SecondParentClass, object): ...
+
+    Note:
+        Returns Z315 as error code
+    """
+
+    should_use_text = False
+    #: Error message shown to the user
+    error_template = 'Founded extra `object` in parent classes list'
+    code = 315
