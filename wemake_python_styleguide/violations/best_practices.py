@@ -39,6 +39,7 @@ Summary
    RedundantForElseViolation
    RedundantFinallyViolation
    ReassigningVariableToItselfViolation
+   BaseExceptionViolation
 
 Comments
 --------
@@ -59,6 +60,7 @@ Builtins
 .. autoclass:: WrongFunctionCallViolation
 .. autoclass:: FutureImportViolation
 .. autoclass:: RaiseNotImplementedViolation
+.. autoclass:: BaseExceptionViolation
 
 Design
 ------
@@ -390,6 +392,43 @@ class RaiseNotImplementedViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found raise NotImplemented'
     code = 423
+
+
+@final
+class BaseExceptionViolation(ASTViolation):
+    """
+    Forbids to use ``BaseException`` exception.
+
+    Reasoning:
+        We can silence system exit and keyboard interrupt with this exception
+        handler. It is almost the same as raw ``except:`` block.
+
+    Solution:
+        Handle ``Exception``, ``KeyboardInterrupt`` and ``SystemExit``
+        separately. Do not use the plain ``except:`` keyword.
+
+    Example::
+
+        # Correct:
+        except Exception as ex:
+            log(ex)
+
+        # Wrong:
+        except BaseException:
+            log(ex)
+
+    See Also:
+        https://help.semmle.com/wiki/pages/viewpage.action?pageId=1608527
+
+    Note:
+        Returns Z424 as error code
+
+    """
+
+    should_use_text = False
+    #: Error message shown to the user.
+    error_template = 'Found except BaseException'
+    code = 424
 
 
 # Design:
