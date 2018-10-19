@@ -96,6 +96,7 @@ Variables
 
 - Variables should use ``snake_case``
 - When some variable is unused it should be prefixed with an underscore
+- Variables should not contain more than one consecutive underscore
 
 Type aliases
 ~~~~~~~~~~~~
@@ -126,6 +127,7 @@ Summary
    SameAliasImportViolation
    UnderScoredNumberNameViolation
    UpperCaseAttributeViolation
+   ConsecutiveUnderscoresInNameViolation
 
 Module names
 ------------
@@ -145,6 +147,7 @@ Variable names
 .. autoclass:: SameAliasImportViolation
 .. autoclass:: UnderScoredNumberNameViolation
 .. autoclass:: UpperCaseAttributeViolations
+.. autoclass:: ConsecutiveUnderscoresInNameViolation
 
 """
 
@@ -521,3 +524,28 @@ class UpperCaseAttributeViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found upper-case constant in a class "{0}"'
     code = 115
+
+
+@final
+class ConsecutiveUnderscoresInNameViolation(ASTViolation):
+    """
+    Forbids to use more than one consecutive underscore in variable names.
+
+    Reasoning:
+        This is done to gain extra readability.
+        This naming rule already exist for module names.
+
+    Example::
+        # Correct:
+        some_value = 5
+        __magic__ = 5
+        # Wrong:
+        some__value = 5
+    Note:
+        Returns Z116 as error code
+
+    """
+
+    #: Error message shown to the user.
+    error_template = 'Found consecutive underscores in a variable "{0}"'
+    code = 116

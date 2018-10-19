@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-
-import ast
 from typing import Iterable, Optional
 
 from wemake_python_styleguide import constants
@@ -163,25 +161,42 @@ def is_variable_name_with_underscored_number(name: str) -> bool:
     return name is not None and pattern.match(name) is not None
 
 
-def is_same_variable(left: ast.AST, right: ast.AST) -> bool:
-    """Ensures that nodes are the same variable."""
-    if isinstance(left, ast.Name) and isinstance(right, ast.Name):
-        return left.id == right.id
+def is_variable_name_contains_consecutive_underscores(name: str) -> bool:
+    """
+    Checks if variable contains consecutive underscores in middle of name.
+
+    >>> is_variable_name_contains_consecutive_underscores('name')
+    False
+
+    >>> is_variable_name_contains_consecutive_underscores('__magic__')
+    False
+
+    >>> is_variable_name_contains_consecutive_underscores('__private')
+    False
+
+    >>> is_variable_name_contains_consecutive_underscores(None)
+    False
+
+    >>> is_variable_name_contains_consecutive_underscores('name')
+    False
+
+    >>> is_variable_name_contains_consecutive_underscores('some__value')
+    True
+
+    >>> is_variable_name_contains_consecutive_underscores('some_value__')
+    True
+
+    """
+    if name is None:
+        return False
+
+    if name.endswith('__') and name.startswith('__'):
+        return False
+
+    if name.startswith('__'):
+        return False
+
+    if '__' in name:
+        return True
+
     return False
-
-
-def get_assigned_name(node: ast.AST) -> Optional[str]:
-    """
-    Returns variable names for node that are just assigned.
-
-    Returns ``None`` for nodes that are used in a different manner.
-    """
-    if isinstance(node, ast.Name) and isinstance(node.ctx, ast.Store):
-        return node.id
-
-    if isinstance(node, ast.Attribute) and isinstance(node.ctx, ast.Store):
-        return node.attr
-
-    if isinstance(node, ast.ExceptHandler):
-        return getattr(node, 'name', None)
-    return None

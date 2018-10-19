@@ -7,13 +7,14 @@ from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
     VARIABLE_NAMES_BLACKLIST,
 )
-from wemake_python_styleguide.logics import variables
+from wemake_python_styleguide.logics.variables import name_checks, name_helpers
 from wemake_python_styleguide.types import AnyFunctionDef, AnyImport, final
 from wemake_python_styleguide.violations.best_practices import (
     ReassigningVariableToItselfViolation,
     WrongModuleMetadataViolation,
 )
 from wemake_python_styleguide.violations.naming import (
+    ConsecutiveUnderscoresInNameViolation,
     PrivateNameViolation,
     TooShortVariableNameViolation,
     UnderScoredNumberNameViolation,
@@ -46,18 +47,22 @@ class WrongNameVisitor(BaseNodeVisitor):
     """Performs checks based on variable names."""
 
     def _check_name(self, node: ast.AST, name: str) -> None:
-        if variables.is_wrong_variable_name(name, VARIABLE_NAMES_BLACKLIST):
+        if name_checks.is_wrong_variable_name(name, VARIABLE_NAMES_BLACKLIST):
             self.add_violation(WrongVariableNameViolation(node, text=name))
 
         min_length = self.options.min_variable_length
-        if variables.is_too_short_variable_name(name, min_length=min_length):
+        if name_checks.is_too_short_variable_name(name, min_length=min_length):
             self.add_violation(TooShortVariableNameViolation(node, text=name))
 
-        if variables.is_private_variable(name):
+        if name_checks.is_private_variable(name):
             self.add_violation(PrivateNameViolation(node, text=name))
 
-        if variables.is_variable_name_with_underscored_number(name):
+        if name_checks.is_variable_name_with_underscored_number(name):
             self.add_violation(UnderScoredNumberNameViolation())
+        if name_checks.is_variable_name_contains_consecutive_underscores(name):
+            self.add_violation(
+                ConsecutiveUnderscoresInNameViolation(node, text=name),
+            )
 
     def _check_function_signature(self, node: AnyFunctionDef) -> None:
         for arg in node.args.args:
@@ -82,7 +87,7 @@ class WrongNameVisitor(BaseNodeVisitor):
         for assignment in top_level_assigns:
             for target in assignment.targets:
                 name = getattr(target, 'id', None)
-                if variables.is_upper_case_name(name):
+                if name_checks.is_upper_case_name(name):
                     self.add_violation(
                         UpperCaseAttributeViolation(target, text=name),
                     )
@@ -138,7 +143,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             PrivateNameViolation
 
         """
-        variable_name = variables.get_assigned_name(node)
+        variable_name = name_helpers.get_assigned_name(node)
         if variable_name is not None:
             self._check_name(node, variable_name)
         self.generic_visit(node)
