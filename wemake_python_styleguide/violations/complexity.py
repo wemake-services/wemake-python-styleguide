@@ -518,8 +518,8 @@ class TooManyBaseClassesViolation(ASTViolation):
     Reasoning:
         It is almost never possible to navigate
         to the desired method of a parent class
-        when you need it with multiple mixin.
-        It is hard to understand mro and super calls.
+        when you need it with multiple mixins.
+        It is hard to understand 'mro' and 'super' calls.
         Do not overuse this technique.
 
     Solution:
@@ -531,11 +531,13 @@ class TooManyBaseClassesViolation(ASTViolation):
        class SomeClassName(FirstParentClass, SecondParentClass): ...
 
        # Wrong:
-       class SomeClassName(FirstParentClass,
-                  SecondParentClass,
-                  ThirdParentClass,
-                  CustomClass,
-                  AddedClass):
+       class SomeClassName(
+           FirstParentClass,
+           SecondParentClass,
+           ThirdParentClass,
+           CustomClass,
+           AddedClass
+        ): ...
 
     Note:
         Returns Z225 as error code

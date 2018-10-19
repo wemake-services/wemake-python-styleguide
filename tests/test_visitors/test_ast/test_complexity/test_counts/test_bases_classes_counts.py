@@ -8,9 +8,11 @@ from wemake_python_styleguide.violations.complexity import (
 from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
 
 correct_count = """
-   class CorrectClassName(FirstParentClass,
-              SecondParentClass,
-              ThirdParentClass): ...
+class CorrectClassName(
+    FirstParentClass,
+    SecondParentClass,
+    ThirdParentClass
+): ...
 """
 
 
@@ -30,11 +32,13 @@ def test_correct_count(
 
 
 too_many_count = """
-   class SomeClassName(FirstParentClass,
-              SecondParentClass,
-              ThirdParentClass,
-              CustomClass,
-              AddedClass): ...
+class SomeClassName(
+    FirstParentClass,
+    SecondParentClass,
+    ThirdParentClass,
+    CustomClass,
+    AddedClass
+): ...
 """
 
 
@@ -63,7 +67,7 @@ def test_bad_number_custom_option(
     """Testing of base classes number with custom options."""
     tree = parse_ast_tree(code)
 
-    options = options(max_classes_number=5)
+    options = options(max_base_classes=5)
     visitor = WrongClassVisitor(options, tree=tree)
     visitor.run()
 

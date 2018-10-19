@@ -61,7 +61,7 @@ class WrongClassVisitor(BaseNodeVisitor):
 
     def _check_base_classes_number(self, node: ast.ClassDef) -> None:
         """Check number of base classes."""
-        if len(node.bases) > self.options.max_classes_number:
+        if len(node.bases) > self.options.max_base_classes:
             self.add_violation(TooManyBaseClassesViolation(node,
                                                            text=node.name))
 

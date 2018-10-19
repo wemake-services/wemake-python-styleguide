@@ -182,8 +182,8 @@ class Configuration(object):
         ),
 
         _Option(
-            '--max-classes-number',
-            defaults.MAX_CLASSES_NUMBER,
+            '--max-base-classes',
+            defaults.MAX_BASE_CLASSES,
             'Maximum number of base classes',
         ),
 

@@ -64,7 +64,7 @@ MAX_IMPORTS: Final = 12
 MAX_CONDITIONS: Final = 4
 
 #: Maximum number of base classes:
-MAX_CLASSES_NUMBER: Final = 3
+MAX_BASE_CLASSES: Final = 3
 
 # Modules
 
