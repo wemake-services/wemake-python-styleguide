@@ -47,15 +47,30 @@ class WrongClassVisitor(BaseNodeVisitor):
         if len(node.bases) == 0:
             self.add_violation(RequiredBaseClassViolation(node, text=node.name))
 
+    def _check_extra_object(self, node: ast.ClassDef) -> None:
+        """Check 'object' class in parent list."""
+        if len(node.bases) >= 2:
+            for base_name in node.bases:
+                id_attr = getattr(base_name, 'id', None)
+                if id_attr is not None:
+                    self._check_object_method(base_name)
+
+    def _check_object_method(self, node: ast.Name) -> None:
+        if node.id == 'object':
+            self.add_violation(WrongParentClassListDef(node,
+                                                       text=node.id))
+
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """
         Checking class definitions.
 
         Raises:
             RequiredBaseClassViolation
+            WrongParentClassListDef
 
         """
         self._check_base_class(node)
+        self._check_extra_object(node)
         self.generic_visit(node)
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
@@ -70,20 +85,3 @@ class WrongClassVisitor(BaseNodeVisitor):
         self._check_decorators(node)
         self._check_magic_methods(node)
         self.generic_visit(node)
-
-
-class WrongParentClassListVisitor(BaseNodeVisitor):
-    """Check parent class list."""
-
-    def visit_ClassDef(self, node: ast.ClassDef) -> None:
-        """Check 'object' class in parent list."""
-        if len(node.bases) > 1:
-            for base_name in node.bases:
-                id_attr = getattr(base_name, 'id')
-                if id_attr is not None:
-                    self._check_node_name(base_name)
-
-    def _check_node_name(self, node: ast.Name) -> None:
-        if node.id == 'object':
-            self.add_violation(WrongParentClassListDef(node,
-                                                       text=node.id))

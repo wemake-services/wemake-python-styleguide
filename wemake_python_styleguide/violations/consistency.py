@@ -592,7 +592,6 @@ class WrongParentClassListDef(ASTViolation):
         When there is an other class or there are multiple
         parents - we should not allow it for the consistency reasons.
 
-
     Solution:
         Remove extra 'object'.
 
