@@ -77,7 +77,13 @@ class WrongParentClassListVisitor(BaseNodeVisitor):
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """Check 'object' class in parent list."""
-        for base_name in node.bases:
-            if base_name.id == 'object' and len(node.bases) != 1:
-                self.add_violation(WrongParentClassListDef(node,
-                                                           text=base_name.id))
+        if len(node.bases) > 1:
+            for base_name in node.bases:
+                id_attr = getattr(base_name, 'id')
+                if id_attr is not None:
+                    self._check_node_name(base_name)
+
+    def _check_node_name(self, node: ast.Name) -> None:
+        if node.id == 'object':
+            self.add_violation(WrongParentClassListDef(node,
+                                                       text=node.id))
