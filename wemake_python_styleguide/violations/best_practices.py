@@ -30,6 +30,7 @@ Summary
    WrongFunctionCallViolation
    FutureImportViolation
    RaiseNotImplementedViolation
+   BaseExceptionViolation
    NestedFunctionViolation
    NestedClassViolation
    MagicNumberViolation
@@ -39,7 +40,6 @@ Summary
    RedundantForElseViolation
    RedundantFinallyViolation
    ReassigningVariableToItselfViolation
-   BaseExceptionViolation
 
 Comments
 --------
@@ -404,20 +404,20 @@ class BaseExceptionViolation(ASTViolation):
         handler. It is almost the same as raw ``except:`` block.
 
     Solution:
-        Handle ``Exception``, ``KeyboardInterrupt`` and ``SystemExit``
-        separately. Do not use the plain ``except:`` keyword.
+        Handle ``Exception``, ``KeyboardInterrupt``,
+        ``GeneratorExit``, and ``SystemExit`` separately.
+        Do not use the plain ``except:`` keyword.
 
     Example::
 
         # Correct:
-        except Exception as ex:
-            log(ex)
+        except Exception as ex: ...
 
         # Wrong:
-        except BaseException:
-            log(ex)
+        except BaseException as ex: ...
 
     See Also:
+        https://docs.python.org/3/library/exceptions.html#exception-hierarchy
         https://help.semmle.com/wiki/pages/viewpage.action?pageId=1608527
 
     Note:
@@ -427,7 +427,7 @@ class BaseExceptionViolation(ASTViolation):
 
     should_use_text = False
     #: Error message shown to the user.
-    error_template = 'Found except BaseException'
+    error_template = 'Found except `BaseException`'
     code = 424
 
 
