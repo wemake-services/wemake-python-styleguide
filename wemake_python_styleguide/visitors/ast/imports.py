@@ -6,7 +6,7 @@ from typing import Callable
 
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
 from wemake_python_styleguide.logics import imports
-from wemake_python_styleguide.logics.variables.access import is_protected_variable
+from wemake_python_styleguide.logics.variables import access
 from wemake_python_styleguide.types import AnyImport, final
 from wemake_python_styleguide.violations.base import BaseViolation
 from wemake_python_styleguide.violations.best_practices import (
@@ -19,8 +19,8 @@ from wemake_python_styleguide.violations.consistency import (
 )
 from wemake_python_styleguide.violations.naming import (
     ProtectedModuleNameViolation,
+    SameAliasImportViolation,
 )
-from wemake_python_styleguide.violations.naming import SameAliasImportViolation
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 ErrorCallback = Callable[[BaseViolation], None]
@@ -72,7 +72,7 @@ class _ImportsChecker(object):
         text = imports.get_error_text(node)
         import_names = [alias.name for alias in node.names]
         for name in chain(imports.get_import_parts(node), import_names):
-            if is_protected_variable(name):
+            if access.is_protected_variable(name):
                 self.error_callback(
                     ProtectedModuleNameViolation(node, text=text),
                 )

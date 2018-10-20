@@ -7,9 +7,7 @@ from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
     VARIABLE_NAMES_BLACKLIST,
 )
-from wemake_python_styleguide.logics.variables.access import (
-    is_private_variable,
-)
+from wemake_python_styleguide.logics.variables import access
 from wemake_python_styleguide.logics.variables.name_nodes import (
     get_assigned_name,
 )
@@ -64,7 +62,7 @@ class WrongNameVisitor(BaseNodeVisitor):
         if is_too_short_variable_name(name, min_length=min_length):
             self.add_violation(TooShortVariableNameViolation(node, text=name))
 
-        if is_private_variable(name):
+        if access.is_private_variable(name):
             self.add_violation(PrivateNameViolation(node, text=name))
 
         if is_variable_name_with_underscored_number(name):
