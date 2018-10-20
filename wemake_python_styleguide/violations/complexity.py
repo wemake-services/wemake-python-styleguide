@@ -519,11 +519,13 @@ class TooManyBaseClassesViolation(ASTViolation):
         It is almost never possible to navigate
         to the desired method of a parent class
         when you need it with multiple mixins.
-        It is hard to understand 'mro' and 'super' calls.
+        It is hard to understand ``mro`` and ``super`` calls.
         Do not overuse this technique.
 
     Solution:
         Restrict the number of base classes.
+
+    This rule is configurable with ``--max_base_classes``.
 
     Example::
 
@@ -536,7 +538,7 @@ class TooManyBaseClassesViolation(ASTViolation):
            SecondParentClass,
            ThirdParentClass,
            CustomClass,
-           AddedClass
+           AddedClass,
         ): ...
 
     Note:

@@ -11,7 +11,7 @@ correct_count = """
 class CorrectClassName(
     FirstParentClass,
     SecondParentClass,
-    ThirdParentClass
+    ThirdParentClass,
 ): ...
 """
 
@@ -37,7 +37,7 @@ class SomeClassName(
     SecondParentClass,
     ThirdParentClass,
     CustomClass,
-    AddedClass
+    AddedClass,
 ): ...
 """
 
