@@ -40,6 +40,7 @@ Summary
    RedundantForElseViolation
    RedundantFinallyViolation
    ReassigningVariableToItselfViolation
+   YieldInsideInitViolation
 
 Comments
 --------

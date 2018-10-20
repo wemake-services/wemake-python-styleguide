@@ -75,7 +75,7 @@ class WrongClassVisitor(BaseNodeVisitor):
             )
 
     def _check_yield_inside_init(self, node: AnyFunctionDef) -> None:
-        """Check yield is not in the __init__"""
+        """Check yield is not in the __init__."""
         if node.name == '__init__':
             for inner_node in ast.iter_child_nodes(node):
                 if isinstance(inner_node, self._not_appropriate_for_init):

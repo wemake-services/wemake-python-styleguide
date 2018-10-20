@@ -2,11 +2,11 @@
 
 import pytest
 
-from wemake_python_styleguide.violations.best_practices import (
-    YieldInsideInitViolation,
-)
 from wemake_python_styleguide.visitors.ast.classes import (
     WrongClassVisitor,
+)
+from wemake_python_styleguide.violations.best_practices import (
+    YieldInsideInitViolation,
 )
 
 init_without_yield = """
@@ -41,6 +41,7 @@ class ModuleMembersVisitor(object):
 def test_init(
     assert_errors, parse_ast_tree, code, default_options,
 ):
+    """Testing that `__init__` without `yield` is prohibited"""
     tree = parse_ast_tree(code)
 
     visitor = WrongClassVisitor(default_options, tree=tree)
@@ -56,9 +57,10 @@ def test_init(
 def test_init(
     assert_errors, parse_ast_tree, code, default_options,
 ):
+    """Testing that `__init__` without `yield` is allowed."""
     tree = parse_ast_tree(code)
 
     visitor = WrongClassVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [YieldInsideInitViolation])
+    assert_errors(visitor, [])
