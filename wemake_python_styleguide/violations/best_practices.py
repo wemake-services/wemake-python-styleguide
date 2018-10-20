@@ -733,8 +733,40 @@ class ReassigningVariableToItselfViolation(ASTViolation):
 
     Note:
         Returns Z438 as error code
+
     """
 
     #: Error message shown to the user.
     error_template = 'Found reassigning variable "{0}" to itself'
     code = 438
+
+
+@final
+class YieldInsideInitViolation(ASTViolation):
+    """
+    Forbids to use ``yield`` inside of ``__init__``
+
+    Reasoning:
+        ``__init__`` should be used to initialize new objects.
+        It shouldn't create any new objects by yielding them
+
+    Example::
+         # Correct:
+        class ModuleMembersVisitor(object):
+            def __init__(self, *args, **kwargs):
+                self._public_items_count = 0
+
+        # Wrong:
+        class ModuleMembersVisitor(object):
+            def __init__(self, *args, **kwargs):
+                self._public_items_count = 0
+                yield 10
+
+    Note:
+        Returns Z439 as error code
+
+    """
+
+    #: Error message shown to the user.
+    error_template = 'Found `yield` inside `__init__`'
+    code = 439

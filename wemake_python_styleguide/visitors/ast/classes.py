@@ -4,10 +4,11 @@ import ast
 from typing import ClassVar, FrozenSet
 
 from wemake_python_styleguide.constants import MAGIC_METHODS_BLACKLIST
-from wemake_python_styleguide.types import AnyFunctionDef, final
+from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
     BadMagicMethodViolation,
     StaticMethodViolation,
+    YieldInsideInitViolation,
 )
 from wemake_python_styleguide.violations.complexity import (
     TooManyBaseClassesViolation,
@@ -35,6 +36,10 @@ class WrongClassVisitor(BaseNodeVisitor):
     _staticmethod_names: ClassVar[FrozenSet[str]] = frozenset((
         'staticmethod',
     ))
+
+    _not_appropriate_for_init: ClassVar[AnyNodes] = (
+        ast.Yield,
+    )
 
     def _check_decorators(self, node: AnyFunctionDef) -> None:
         for decorator in node.decorator_list:
@@ -66,8 +71,15 @@ class WrongClassVisitor(BaseNodeVisitor):
         """Check number of base classes."""
         if len(node.bases) > self.options.max_base_classes:
             self.add_violation(
-                TooManyBaseClassesViolation(node, ext=node.name),
+                TooManyBaseClassesViolation(node, text=node.name),
             )
+
+    def _check_yield_inside_init(self, node: AnyFunctionDef) -> None:
+        """Check yield is not in the __init__"""
+        if node.name == '__init__':
+            for inner_node in ast.iter_child_nodes(node):
+                if isinstance(inner_node, self._not_appropriate_for_init):
+                    self.add_violation(YieldInsideInitViolation())
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """
