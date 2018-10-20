@@ -130,6 +130,25 @@ def is_private_variable(name: Optional[str]) -> bool:
     )
 
 
+def is_protected_variable(name: str) -> bool:
+    """
+    Checks if variable has protected name pattern.
+
+    >>> is_protected_variable('_protected')
+    True
+
+    >>> is_protected_variable('__private')
+    False
+
+    >>> is_protected_variable('__magic__')
+    False
+
+    >>> is_protected_variable('common_variable')
+    False
+    """
+    return name.startswith('_') and not name.startswith('__')
+
+
 def is_variable_name_with_underscored_number(name: str) -> bool:
     """
     Checks for variable names with underscored number.

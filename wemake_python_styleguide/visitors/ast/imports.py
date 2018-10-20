@@ -5,6 +5,7 @@ from typing import Callable
 
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
 from wemake_python_styleguide.logics.imports import get_error_text
+from wemake_python_styleguide.logics.variables import is_protected_variable
 from wemake_python_styleguide.types import AnyImport, final
 from wemake_python_styleguide.violations.base import BaseViolation
 from wemake_python_styleguide.violations.best_practices import (
@@ -14,6 +15,9 @@ from wemake_python_styleguide.violations.best_practices import (
 from wemake_python_styleguide.violations.consistency import (
     DottedRawImportViolation,
     LocalFolderImportViolation,
+)
+from wemake_python_styleguide.violations.naming import (
+    ProtectedNameViolation,
 )
 from wemake_python_styleguide.violations.naming import SameAliasImportViolation
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -63,6 +67,14 @@ class _ImportsChecker(object):
                     SameAliasImportViolation(node, text=alias.name),
                 )
 
+    def check_protected_import(self, node: ast.ImportFrom) -> None:
+        for alias in node.names:
+            parts_protected = map(is_protected_variable, alias.module.split('.'))
+            if is_protected_variable(alias.name) or any(parts_protected):
+                self.error_callback(
+                    ProtectedNameViolation(node, text=alias.name)
+                )
+
 
 @final
 class WrongImportVisitor(BaseNodeVisitor):
@@ -103,4 +115,5 @@ class WrongImportVisitor(BaseNodeVisitor):
         self._checker.check_nested_import(node)
         self._checker.check_future_import(node)
         self._checker.check_alias(node)
+        self._checker.check_protected_import(node)
         self.generic_visit(node)

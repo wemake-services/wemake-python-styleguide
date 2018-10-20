@@ -521,3 +521,33 @@ class UpperCaseAttributeViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found upper-case constant in a class "{0}"'
     code = 115
+
+
+@final
+class ProtectedNameViolation(ASTViolation):
+    """
+    Forbids to import or import from protected module.
+
+    Reasoning:
+        Import starting with one underscore is found.
+
+    Solution:
+        Do not import from protected module.
+        Rename module name to be not protected.
+
+    Example::
+
+        # Correct:
+        from some.unprotected.module import FooClass
+
+        # Wrong:
+        from some._protected.module import BarClass
+        from some.module import _protected
+
+    Note:
+        Returns Z116 as error code
+    """
+
+    #: Error message shown to the user
+    error_template = 'Found protected module import "{0}"'
+    code = 116
