@@ -14,3 +14,9 @@ def get_error_text(node: AnyImport) -> str:
     if isinstance(node, ast.Import):
         return node.names[0].name
     return '.'
+
+
+def get_input_parts(node: ast.ImportFrom):
+    """Returns list of import module"""
+    module_path = getattr(node, 'module', '')
+    return module_path.split('.')

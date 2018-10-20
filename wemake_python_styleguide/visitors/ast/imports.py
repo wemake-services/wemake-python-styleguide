@@ -4,7 +4,10 @@ import ast
 from typing import Callable
 
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
-from wemake_python_styleguide.logics.imports import get_error_text
+from wemake_python_styleguide.logics.imports import (
+    get_error_text,
+    get_input_parts,
+)
 from wemake_python_styleguide.logics.variables import is_protected_variable
 from wemake_python_styleguide.types import AnyImport, final
 from wemake_python_styleguide.violations.base import BaseViolation
@@ -68,9 +71,13 @@ class _ImportsChecker(object):
                 )
 
     def check_protected_import(self, node: ast.ImportFrom) -> None:
+        parts_protected = any(map(is_protected_variable, get_input_parts(node)),)
+        if parts_protected:
+            self.error_callback(
+                ProtectedNameViolation(node, text=node.module)
+            )
         for alias in node.names:
-            parts_protected = map(is_protected_variable, alias.module.split('.'))
-            if is_protected_variable(alias.name) or any(parts_protected):
+            if is_protected_variable(alias.name):
                 self.error_callback(
                     ProtectedNameViolation(node, text=alias.name)
                 )
