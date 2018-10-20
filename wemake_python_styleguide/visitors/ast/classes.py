@@ -48,7 +48,9 @@ class WrongClassVisitor(BaseNodeVisitor):
 
     def _check_base_class(self, node: ast.ClassDef) -> None:
         if len(node.bases) == 0:
-            self.add_violation(RequiredBaseClassViolation(node, text=node.name))
+            self.add_violation(
+                RequiredBaseClassViolation(node, text=node.name),
+            )
 
     def _check_extra_object(self, node: ast.ClassDef) -> None:
         """Check 'object' class in parent list."""
@@ -63,8 +65,9 @@ class WrongClassVisitor(BaseNodeVisitor):
     def _check_base_classes_number(self, node: ast.ClassDef) -> None:
         """Check number of base classes."""
         if len(node.bases) > self.options.max_base_classes:
-            self.add_violation(TooManyBaseClassesViolation(node,
-                                                           text=node.name))
+            self.add_violation(
+                TooManyBaseClassesViolation(node, ext=node.name),
+            )
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """
