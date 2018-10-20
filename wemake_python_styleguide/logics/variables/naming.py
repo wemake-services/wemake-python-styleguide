@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import ast
 from typing import Iterable, Optional
 
 from wemake_python_styleguide import constants
@@ -105,50 +104,6 @@ def is_too_short_variable_name(
     return name != constants.UNUSED_VARIABLE and len(name) < min_length
 
 
-def is_private_variable(name: Optional[str]) -> bool:
-    """
-    Checks if variable has private name pattern.
-
-    >>> is_private_variable(None)
-    False
-
-    >>> is_private_variable('regular')
-    False
-
-    >>> is_private_variable('__private')
-    True
-
-    >>> is_private_variable('_protected')
-    False
-
-    >>> is_private_variable('__magic__')
-    False
-
-    """
-    return (
-        name is not None and name.startswith('__') and not name.endswith('__')
-    )
-
-
-def is_protected_variable(name: str) -> bool:
-    """
-    Checks if variable has protected name pattern.
-
-    >>> is_protected_variable('_protected')
-    True
-
-    >>> is_protected_variable('__private')
-    False
-
-    >>> is_protected_variable('__magic__')
-    False
-
-    >>> is_protected_variable('common_variable')
-    False
-    """
-    return name.startswith('_') and not name.startswith('__')
-
-
 def is_variable_name_with_underscored_number(name: str) -> bool:
     """
     Checks for variable names with underscored number.
@@ -180,27 +135,3 @@ def is_variable_name_with_underscored_number(name: str) -> bool:
     """
     pattern = constants.UNDERSCORED_NUMBER_PATTERN
     return name is not None and pattern.match(name) is not None
-
-
-def is_same_variable(left: ast.AST, right: ast.AST) -> bool:
-    """Ensures that nodes are the same variable."""
-    if isinstance(left, ast.Name) and isinstance(right, ast.Name):
-        return left.id == right.id
-    return False
-
-
-def get_assigned_name(node: ast.AST) -> Optional[str]:
-    """
-    Returns variable names for node that are just assigned.
-
-    Returns ``None`` for nodes that are used in a different manner.
-    """
-    if isinstance(node, ast.Name) and isinstance(node.ctx, ast.Store):
-        return node.id
-
-    if isinstance(node, ast.Attribute) and isinstance(node.ctx, ast.Store):
-        return node.attr
-
-    if isinstance(node, ast.ExceptHandler):
-        return getattr(node, 'name', None)
-    return None

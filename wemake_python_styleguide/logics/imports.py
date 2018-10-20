@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
+from typing import Iterable
 
 from wemake_python_styleguide.types import AnyImport
 
@@ -16,7 +17,7 @@ def get_error_text(node: AnyImport) -> str:
     return '.'
 
 
-def get_input_parts(node: ast.ImportFrom):
-    """Returns list of import module"""
-    module_path = getattr(node, 'module', '')
+def get_import_parts(node: ast.ImportFrom) -> Iterable[str]:
+    """Returns list of import modules."""
+    module_path = getattr(node, 'module', '') or ''
     return module_path.split('.')

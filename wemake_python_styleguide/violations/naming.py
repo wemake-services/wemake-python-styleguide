@@ -126,6 +126,7 @@ Summary
    SameAliasImportViolation
    UnderScoredNumberNameViolation
    UpperCaseAttributeViolation
+   ProtectedModuleNameViolation
 
 Module names
 ------------
@@ -135,6 +136,7 @@ Module names
 .. autoclass:: TooShortModuleNameViolation
 .. autoclass:: WrongModuleNameUnderscoresViolation
 .. autoclass:: WrongModuleNamePatternViolation
+.. autoclass:: ProtectedModuleNameViolation
 
 Variable names
 --------------
@@ -524,7 +526,7 @@ class UpperCaseAttributeViolation(ASTViolation):
 
 
 @final
-class ProtectedNameViolation(ASTViolation):
+class ProtectedModuleNameViolation(ASTViolation):
     """
     Forbids to import or import from protected module.
 

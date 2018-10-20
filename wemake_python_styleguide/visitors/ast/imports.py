@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import ast
+from itertools import chain
 from typing import Callable
 
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
-from wemake_python_styleguide.logics.imports import (
-    get_error_text,
-    get_input_parts,
-)
-from wemake_python_styleguide.logics.variables import is_protected_variable
+from wemake_python_styleguide.logics import imports
+from wemake_python_styleguide.logics.variables.access import is_protected_variable
 from wemake_python_styleguide.types import AnyImport, final
 from wemake_python_styleguide.violations.base import BaseViolation
 from wemake_python_styleguide.violations.best_practices import (
@@ -20,7 +18,7 @@ from wemake_python_styleguide.violations.consistency import (
     LocalFolderImportViolation,
 )
 from wemake_python_styleguide.violations.naming import (
-    ProtectedNameViolation,
+    ProtectedModuleNameViolation,
 )
 from wemake_python_styleguide.violations.naming import SameAliasImportViolation
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -36,13 +34,13 @@ class _ImportsChecker(object):
         self.error_callback = error_callback
 
     def check_nested_import(self, node: AnyImport) -> None:
-        text = get_error_text(node)
+        text = imports.get_error_text(node)
         parent = getattr(node, 'parent', None)
         if parent is not None and not isinstance(parent, ast.Module):
             self.error_callback(NestedImportViolation(node, text=text))
 
     def check_local_import(self, node: ast.ImportFrom) -> None:
-        text = get_error_text(node)
+        text = imports.get_error_text(node)
         if node.level != 0:
             self.error_callback(
                 LocalFolderImportViolation(node, text=text),
@@ -71,15 +69,12 @@ class _ImportsChecker(object):
                 )
 
     def check_protected_import(self, node: ast.ImportFrom) -> None:
-        parts_protected = any(map(is_protected_variable, get_input_parts(node)),)
-        if parts_protected:
-            self.error_callback(
-                ProtectedNameViolation(node, text=node.module)
-            )
-        for alias in node.names:
-            if is_protected_variable(alias.name):
+        text = imports.get_error_text(node)
+        import_names = [alias.name for alias in node.names]
+        for name in chain(imports.get_import_parts(node), import_names):
+            if is_protected_variable(name):
                 self.error_callback(
-                    ProtectedNameViolation(node, text=alias.name)
+                    ProtectedModuleNameViolation(node, text=text),
                 )
 
 
