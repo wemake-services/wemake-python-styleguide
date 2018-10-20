@@ -56,8 +56,9 @@ class WrongClassVisitor(BaseNodeVisitor):
             for base_name in node.bases:
                 id_attr = getattr(base_name, 'id', None)
                 if id_attr == 'object':
-                    self.add_violation(WrongParentClassListDef(node,
-                                                               text=id_attr))
+                    self.add_violation(
+                        WrongParentClassListDef(node, text=id_attr),
+                    )
 
     def _check_base_classes_number(self, node: ast.ClassDef) -> None:
         """Check number of base classes."""
