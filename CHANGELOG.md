@@ -42,6 +42,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - Fixes that `MultipleIfsInComprehensionViolation` was not enabled
 - Fixes flaky behaviour of `test_module_names` test package
 - Fixed `TooManyMethodsViolation` not displaying line number in output
+- Fixed `OffsetVisitor` due to python [bug](https://bugs.python.org/issue29205)
 
 ### Misc
 
