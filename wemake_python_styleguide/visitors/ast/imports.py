@@ -100,6 +100,7 @@ class WrongImportVisitor(BaseNodeVisitor):
         self._checker.check_nested_import(node)
         self._checker.check_dotted_raw_import(node)
         self._checker.check_alias(node)
+        self._checker.check_protected_import(node)
         self.generic_visit(node)
 
     def visit_ImportFrom(self, node: ast.ImportFrom) -> None:

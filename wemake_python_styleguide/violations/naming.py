@@ -136,7 +136,7 @@ Module names
 .. autoclass:: TooShortModuleNameViolation
 .. autoclass:: WrongModuleNameUnderscoresViolation
 .. autoclass:: WrongModuleNamePatternViolation
-.. autoclass:: ProtectedNameViolation
+.. autoclass:: ProtectedModuleViolation
 
 Variable names
 --------------
