@@ -18,7 +18,7 @@ from wemake_python_styleguide.violations.consistency import (
     LocalFolderImportViolation,
 )
 from wemake_python_styleguide.violations.naming import (
-    ProtectedModuleNameViolation,
+    ProtectedModuleViolation,
     SameAliasImportViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -68,13 +68,13 @@ class _ImportsChecker(object):
                     SameAliasImportViolation(node, text=alias.name),
                 )
 
-    def check_protected_import(self, node: ast.ImportFrom) -> None:
+    def check_protected_import(self, node: AnyImport) -> None:
         text = imports.get_error_text(node)
         import_names = [alias.name for alias in node.names]
         for name in chain(imports.get_import_parts(node), import_names):
             if access.is_protected_variable(name):
                 self.error_callback(
-                    ProtectedModuleNameViolation(node, text=text),
+                    ProtectedModuleViolation(node, text=text),
                 )
 
 

@@ -126,7 +126,7 @@ Summary
    SameAliasImportViolation
    UnderScoredNumberNameViolation
    UpperCaseAttributeViolation
-   ProtectedModuleNameViolation
+   ProtectedModuleViolation
 
 Module names
 ------------
@@ -136,7 +136,7 @@ Module names
 .. autoclass:: TooShortModuleNameViolation
 .. autoclass:: WrongModuleNameUnderscoresViolation
 .. autoclass:: WrongModuleNamePatternViolation
-.. autoclass:: ProtectedModuleNameViolation
+.. autoclass:: ProtectedNameViolation
 
 Variable names
 --------------
@@ -526,7 +526,7 @@ class UpperCaseAttributeViolation(ASTViolation):
 
 
 @final
-class ProtectedModuleNameViolation(ASTViolation):
+class ProtectedModuleViolation(ASTViolation):
     """
     Forbids to import or import from protected module.
 
@@ -540,7 +540,7 @@ class ProtectedModuleNameViolation(ASTViolation):
     Example::
 
         # Correct:
-        from some.unprotected.module import FooClass
+        from some.public.module import FooClass
 
         # Wrong:
         from some._protected.module import BarClass
