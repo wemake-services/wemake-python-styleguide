@@ -6,6 +6,7 @@ from typing import ClassVar, DefaultDict
 
 from wemake_python_styleguide.types import AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
+    BaseExceptionViolation,
     RaiseNotImplementedViolation,
     RedundantFinallyViolation,
     RedundantForElseViolation,
@@ -158,4 +159,31 @@ class WrongTryFinallyVisitor(BaseNodeVisitor):
     def visit_Try(self, node: ast.Try) -> None:
         """Used for find finally in try blocks without except."""
         self._check_for_needs_except(node)
+        self.generic_visit(node)
+
+
+@final
+class WrongExceptionTypeVisitor(BaseNodeVisitor):
+    """Finds usage of incorrect ``except`` exception types."""
+
+    _base_exception: ClassVar[str] = 'BaseException'
+
+    def _check_exception_type(self, node: ast.ExceptHandler) -> None:
+        exception_name = getattr(node, 'type', None)
+        if exception_name is None:
+            return
+
+        exception_id = getattr(exception_name, 'id', None)
+        if exception_id == self._base_exception:
+            self.add_violation(BaseExceptionViolation(node))
+
+    def visit_ExceptHandler(self, node: ast.ExceptHandler) -> None:
+        """
+        Checks all ``ExceptionHandler`` nodes.
+
+        Raises:
+            BaseExceptionViolation
+
+        """
+        self._check_exception_type(node)
         self.generic_visit(node)

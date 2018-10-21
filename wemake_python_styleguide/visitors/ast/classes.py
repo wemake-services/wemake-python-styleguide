@@ -9,6 +9,9 @@ from wemake_python_styleguide.violations.best_practices import (
     BadMagicMethodViolation,
     StaticMethodViolation,
 )
+from wemake_python_styleguide.violations.complexity import (
+    TooManyBaseClassesViolation,
+)
 from wemake_python_styleguide.violations.consistency import (
     RequiredBaseClassViolation,
     WrongParentClassListDef,
@@ -45,7 +48,9 @@ class WrongClassVisitor(BaseNodeVisitor):
 
     def _check_base_class(self, node: ast.ClassDef) -> None:
         if len(node.bases) == 0:
-            self.add_violation(RequiredBaseClassViolation(node, text=node.name))
+            self.add_violation(
+                RequiredBaseClassViolation(node, text=node.name),
+            )
 
     def _check_extra_object(self, node: ast.ClassDef) -> None:
         """Check 'object' class in parent list."""
@@ -53,8 +58,16 @@ class WrongClassVisitor(BaseNodeVisitor):
             for base_name in node.bases:
                 id_attr = getattr(base_name, 'id', None)
                 if id_attr == 'object':
-                    self.add_violation(WrongParentClassListDef(node,
-                                                               text=id_attr))
+                    self.add_violation(
+                        WrongParentClassListDef(node, text=id_attr),
+                    )
+
+    def _check_base_classes_number(self, node: ast.ClassDef) -> None:
+        """Check number of base classes."""
+        if len(node.bases) > self.options.max_base_classes:
+            self.add_violation(
+                TooManyBaseClassesViolation(node, text=node.name),
+            )
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """
@@ -67,6 +80,7 @@ class WrongClassVisitor(BaseNodeVisitor):
         """
         self._check_base_class(node)
         self._check_extra_object(node)
+        self._check_base_classes_number(node)
         self.generic_visit(node)
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
