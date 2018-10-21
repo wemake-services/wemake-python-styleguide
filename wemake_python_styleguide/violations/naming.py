@@ -536,11 +536,14 @@ class ConsecutiveUnderscoresInNameViolation(ASTViolation):
         This naming rule already exist for module names.
 
     Example::
+
         # Correct:
         some_value = 5
         __magic__ = 5
+
         # Wrong:
         some__value = 5
+
     Note:
         Returns Z116 as error code
 
