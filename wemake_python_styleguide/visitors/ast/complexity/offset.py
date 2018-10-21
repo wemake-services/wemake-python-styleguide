@@ -74,8 +74,6 @@ class OffsetVisitor(BaseNodeVisitor):
             TooDeepNestingViolation
 
         """
-        if node.col_offset % 4 != 0:
-            self._check_offset(node, 6)
-        else:
-            self._check_offset(node)
+        error = 6 if node.col_offset % 4 != 0 else 0
+        self._check_offset(node, error)
         self.generic_visit(node)
