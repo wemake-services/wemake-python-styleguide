@@ -36,6 +36,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - Forbid opening parenthesis from following keyword without space in between them
 - Forbid the use of more than 2 `for` loops within a comprehension
 - Restrict the maximum number of base classes aka mixins
+- Forbid importing protected names
 
 ### Bugfixes
 

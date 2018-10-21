@@ -137,6 +137,11 @@ MAGIC_MODULE_NAMES_WHITELIST: Final = frozenset((
 #: Regex pattern to name modules.
 MODULE_NAME_PATTERN: Final = re.compile(r'^_?_?[a-z][a-z\d_]+[a-z\d](__)?$')
 
+#: Regex pattern to protected modules.
+PROTECTED_MODULE_PATTERN: Final = re.compile(
+    r'(^|.*\.)_[a-z][a-z\d_]+[a-z\d](__)?',
+)
+
 #: Common numbers that are allowed to be used without being called "magic".
 MAGIC_NUMBERS_WHITELIST: Final = frozenset((
     0.5,

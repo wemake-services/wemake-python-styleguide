@@ -4,11 +4,15 @@ import ast
 from typing import Callable
 
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
-from wemake_python_styleguide.logics.imports import get_error_text
+from wemake_python_styleguide.logics.imports import (
+    get_error_text,
+    is_contain_protected_module,
+)
 from wemake_python_styleguide.types import AnyImport, final
 from wemake_python_styleguide.violations.base import BaseViolation
 from wemake_python_styleguide.violations.best_practices import (
     FutureImportViolation,
+    ImportProtectedModuleViolation,
     NestedImportViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
@@ -63,6 +67,20 @@ class _ImportsChecker(object):
                     SameAliasImportViolation(node, text=alias.name),
                 )
 
+    def check_protected_import(self, node: AnyImport) -> None:
+        for alias in node.names:
+            if is_contain_protected_module(alias.name):
+                self.error_callback(
+                    ImportProtectedModuleViolation(node, text=alias.name),
+                )
+
+    def check_protected_import_from(self, node: ast.ImportFrom) -> None:
+        if node.module is not None:
+            if is_contain_protected_module(node.module):
+                self.error_callback(
+                    ImportProtectedModuleViolation(node, text=node.module),
+                )
+
 
 @final
 class WrongImportVisitor(BaseNodeVisitor):
@@ -81,11 +99,13 @@ class WrongImportVisitor(BaseNodeVisitor):
             SameAliasImportViolation
             DottedRawImportViolation
             NestedImportViolation
+            ImportProtectedModuleViolation
 
         """
         self._checker.check_nested_import(node)
         self._checker.check_dotted_raw_import(node)
         self._checker.check_alias(node)
+        self._checker.check_protected_import(node)
         self.generic_visit(node)
 
     def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
@@ -97,10 +117,13 @@ class WrongImportVisitor(BaseNodeVisitor):
             NestedImportViolation
             LocalFolderImportViolation
             FutureImportViolation
+            ImportProtectedModuleViolation
 
         """
         self._checker.check_local_import(node)
         self._checker.check_nested_import(node)
         self._checker.check_future_import(node)
         self._checker.check_alias(node)
+        self._checker.check_protected_import(node)
+        self._checker.check_protected_import_from(node)
         self.generic_visit(node)

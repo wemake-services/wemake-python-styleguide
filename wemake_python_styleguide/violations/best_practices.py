@@ -40,6 +40,7 @@ Summary
    RedundantForElseViolation
    RedundantFinallyViolation
    ReassigningVariableToItselfViolation
+   ImportProtectedModuleViolation
 
 Comments
 --------
@@ -53,6 +54,7 @@ Modules
 .. autoclass:: WrongModuleMetadataViolation
 .. autoclass:: EmptyModuleViolation
 .. autoclass:: InitModuleHasLogicViolation
+.. autoclass:: ImportProtectedModuleViolation
 
 Builtins
 --------
@@ -738,3 +740,30 @@ class ReassigningVariableToItselfViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found reassigning variable "{0}" to itself'
     code = 438
+
+
+@final
+class ImportProtectedModuleViolation(ASTViolation):
+    """
+    Forbids to import protected modules.
+
+    Reasoning:
+        We should not use protected modules and names.
+        It is not guaranteed to work as we want it to work.
+
+    Solution:
+        Remove the imports that introduce using of the protected modules.
+
+    Example::
+
+        # Wrong:
+        from test import _protected
+        from test._protected import run
+
+    Note:
+        Returns Z439 as error code
+    """
+
+    #: Error message shown to the user.
+    error_template = 'Found import protected module "{0}"'
+    code = 439
