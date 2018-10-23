@@ -126,6 +126,7 @@ Summary
    SameAliasImportViolation
    UnderScoredNumberNameViolation
    UpperCaseAttributeViolation
+   UnicodeNameViolation
 
 Module names
 ------------
@@ -135,6 +136,7 @@ Module names
 .. autoclass:: TooShortModuleNameViolation
 .. autoclass:: WrongModuleNameUnderscoresViolation
 .. autoclass:: WrongModuleNamePatternViolation
+.. autoclass:: UnicodeNameViolation
 
 Variable names
 --------------
@@ -521,3 +523,32 @@ class UpperCaseAttributeViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found upper-case constant in a class "{0}"'
     code = 115
+
+
+@final
+class UnicodeNameViolation(ASTViolation):
+    """
+    Restrict unicode names.
+
+    Reasoning:
+       This should be forbidden for sanity and readability.
+
+    Solution:
+       Rename so that they contains only latin letters.
+
+    Example::
+
+         # Correct:
+         some_variable = 42
+
+         #Wrong:
+         переменная = 42
+
+    Note:
+        Returns Z116 as error code
+
+    """
+
+    #: Error message shown to the user.
+    error_template = 'Found unicode name "{0}"'
+    code = 116

@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import List, Tuple, Union
+import re
+from typing import ClassVar, List, Tuple, Union
+from typing.re import Pattern
 
 from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
@@ -17,6 +19,7 @@ from wemake_python_styleguide.violations.naming import (
     PrivateNameViolation,
     TooShortVariableNameViolation,
     UnderScoredNumberNameViolation,
+    UnicodeNameViolation,
     UpperCaseAttributeViolation,
     WrongVariableNameViolation,
 )
@@ -45,6 +48,8 @@ AssignTargetsNameList = List[Union[str, Tuple[str]]]
 class WrongNameVisitor(BaseNodeVisitor):
     """Performs checks based on variable names."""
 
+    unicode_check: ClassVar[Pattern] = re.compile(r'([a-zA-Z_0-9]+)')
+
     def _check_name(self, node: ast.AST, name: str) -> None:
         if variables.is_wrong_variable_name(name, VARIABLE_NAMES_BLACKLIST):
             self.add_violation(WrongVariableNameViolation(node, text=name))
@@ -58,6 +63,13 @@ class WrongNameVisitor(BaseNodeVisitor):
 
         if variables.is_variable_name_with_underscored_number(name):
             self.add_violation(UnderScoredNumberNameViolation())
+
+        """Check unicode symbols in name."""
+        matches = re.findall(self.unicode_check, name)
+        if not matches or len(matches[0]) < len(name):
+            self.add_violation(
+                UnicodeNameViolation(node, text=name),
+            )
 
     def _check_function_signature(self, node: AnyFunctionDef) -> None:
         for arg in node.args.args:
@@ -93,8 +105,10 @@ class WrongNameVisitor(BaseNodeVisitor):
 
         Raises:
             UpperCaseAttributeViolation
+            UnicodeNameViolation
 
         """
+        self._check_name(node, node.name)
         self._check_attribute_name(node)
         self.generic_visit(node)
 
@@ -106,6 +120,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             WrongVariableNameViolation
             TooShortVariableNameViolation
             PrivateNameViolation
+            UnicodeNameViolation
 
         """
         self._check_name(node, node.name)
@@ -136,6 +151,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             WrongVariableNameViolation
             TooShortVariableNameViolation
             PrivateNameViolation
+            UnicodeNameViolation
 
         """
         variable_name = variables.get_assigned_name(node)
