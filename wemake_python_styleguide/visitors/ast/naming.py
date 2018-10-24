@@ -135,6 +135,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             WrongVariableNameViolation
             TooShortVariableNameViolation
             PrivateNameViolation
+            UnicodeNameViolation
 
         """
         for alias_node in node.names:
