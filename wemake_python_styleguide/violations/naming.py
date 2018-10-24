@@ -121,7 +121,7 @@ Summary
    UpperCaseAttributeViolation
    ConsecutiveUnderscoresInNameViolation
    ReservedArgumentNameViolation
-
+   TooLongNameViolation
 
 Module names
 ------------
@@ -141,7 +141,7 @@ General names
 .. autoclass:: UpperCaseAttributeViolation
 .. autoclass:: ConsecutiveUnderscoresInNameViolation
 .. autoclass:: ReservedArgumentNameViolation
-
+.. autoclass:: TooLongNameViolation
 """
 
 from wemake_python_styleguide.types import final

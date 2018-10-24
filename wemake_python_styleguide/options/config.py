@@ -43,6 +43,9 @@ class Configuration(object):
     - ``min-name-length`` - minimum number of chars to define a valid
       variable and module name, defaults to
       :str:`wemake_python_styleguide.options.defaults.MIN_NAME_LENGTH`
+    - ``max-name-length`` - maximum number of chars to define a valid
+      variable name, defaults to
+      :str:`wemake_python_styleguide.options.defaults.MAX_NAME_LENGTH`
     - ``i-control-code`` - whether you control ones who use your code,
       more rules are enforced when you do control it, defaults to
       :str:`wemake_python_styleguide.options.defaults.I_CONTROL_CODE`
@@ -176,6 +179,12 @@ class Configuration(object):
             '--min-name-length',
             defaults.MIN_NAME_LENGTH,
             'Minimum required length of variable and module names.',
+        ),
+
+        _Option(
+            '--max-variable-length',
+            defaults.MAX_VARIABLE_LENGTH,
+            'Maximum required length of the variable name.',
         ),
 
         _Option(

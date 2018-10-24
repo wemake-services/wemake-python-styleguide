@@ -99,6 +99,7 @@ to the project during `#hactoberfest`. List of awesome people:
 
 ### Features
 
+- Adds `TooLongVariableNameViolation`
 - Adds `flake8-print` as a dependency
 - Adds `typing-extensions` as a dependency
 - Forbids to use `quit` and `exit` functions
