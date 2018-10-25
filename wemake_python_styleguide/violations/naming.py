@@ -184,6 +184,8 @@ class WrongModuleNameViolation(SimpleViolation):
         utils.py
         helpers.py
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z100 as error code
 
@@ -217,6 +219,8 @@ class WrongModuleMagicNameViolation(SimpleViolation):
         # Wrong:
         __version__.py
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z101 as error code
 
@@ -241,6 +245,8 @@ class TooShortModuleNameViolation(SimpleViolation):
         Rename the module.
 
     This rule is configurable with ``--min-module-name-length``.
+
+    .. versionadded:: 0.1.0
 
     Note:
         Returns Z102 as error code
@@ -275,6 +281,8 @@ class WrongModuleNameUnderscoresViolation(SimpleViolation):
         some__wrong__name.py
         my__module.py
         __fake__magic__.py
+
+    .. versionadded:: 0.1.0
 
     Note:
         Returns Z103 as error code
@@ -312,6 +320,8 @@ class WrongModuleNamePatternViolation(SimpleViolation):
         _some.py
         MyModule.py
         0001_migration.py
+
+    .. versionadded:: 0.1.0
 
     Note:
         Returns Z104 as error code
@@ -353,6 +363,8 @@ class WrongVariableNameViolation(ASTViolation):
         # Wrong:
         item = None
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z110 as error code
 
@@ -386,6 +398,8 @@ class TooShortVariableNameViolation(ASTViolation):
         # Wrong:
         x = 1
         y = 2
+
+    .. versionadded:: 0.1.0
 
     Note:
         Returns Z111 as error code
@@ -425,6 +439,8 @@ class PrivateNameViolation(ASTViolation):
     Note:
         Returns Z112 as error code
 
+    .. versionadded:: 0.1.0
+
     """
 
     #: Error message shown to the user.
@@ -447,6 +463,8 @@ class SameAliasImportViolation(ASTViolation):
 
         # Wrong:
         from os import path as path
+
+    .. versionadded:: 0.1.0
 
     Note:
         Returns Z113 as error code
@@ -484,6 +502,8 @@ class UnderScoredNumberNameViolation(SimpleViolation):
         # Wrong:
         star_wars_episode_2 = 'not so awesome'
 
+    .. versionadded:: 0.3.0
+
     Note:
         Returns Z114 as error code
 
@@ -515,6 +535,8 @@ class UpperCaseAttributeViolation(ASTViolation):
         # Wrong:
         class A(object):
             MY_CONSTANT = 42
+
+    .. versionadded:: 0.3.0
 
     Note:
         Returns Z115 as error code

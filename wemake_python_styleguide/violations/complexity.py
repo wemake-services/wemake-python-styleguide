@@ -99,6 +99,8 @@ class JonesScoreViolation(SimpleViolation):
 
     This rule is configurable with ``--max-module-score``.
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z200 as error code
 
@@ -139,6 +141,8 @@ class TooManyImportsViolation(SimpleViolation):
 
     This rule is configurable with ``--max-imports``.
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z201 as error code
 
@@ -167,6 +171,8 @@ class TooManyModuleMembersViolation(SimpleViolation):
     However, methods are counted separately on a per-class basis.
 
     This rule is configurable with ``--max-module-members``.
+
+    .. versionadded:: 0.1.0
 
     Note:
         Returns Z202 as error code
@@ -221,6 +227,8 @@ class TooManyLocalsViolation(ASTViolation):
 
     This rule is configurable with ``--max-local-variables``.
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z210 as error code
 
@@ -247,6 +255,8 @@ class TooManyArgumentsViolation(ASTViolation):
 
     This rule is configurable with ``--max-arguments``.
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z211 as error code
 
@@ -272,6 +282,8 @@ class TooManyReturnsViolation(ASTViolation):
 
     This rule is configurable with ``--max-returns``.
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z212 as error code
 
@@ -295,6 +307,8 @@ class TooManyExpressionsViolation(ASTViolation):
         Split function into several functions, refactor your API.
 
     This rule is configurable with ``--max-expressions``.
+
+    .. versionadded:: 0.1.0
 
     Note:
         Returns Z213 as error code
@@ -330,6 +344,8 @@ class TooManyMethodsViolation(ASTViolation):
 
     This rule is configurable with ``--max-methods``.
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z214 as error code
 
@@ -357,6 +373,8 @@ class TooDeepNestingViolation(ASTViolation):
         We can use new functions or different constructions.
 
     This rule is configurable with ``--max-offset-blocks``.
+
+    .. versionadded:: 0.1.0
 
     Note:
         Returns Z220 as error code
@@ -402,6 +420,8 @@ class LineComplexityViolation(ASTViolation):
 
     This rule is configurable with ``--max-line-complexity``.
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z221 as error code
 
@@ -439,6 +459,8 @@ class TooManyConditionsViolation(ASTViolation):
 
     This rule is configurable with ``--max-conditions``.
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z222 as error code
 
@@ -466,6 +488,8 @@ class TooManyElifsViolation(ASTViolation):
 
     This rule is configurable with ``--max-elifs``.
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z223 as error code
 
@@ -492,6 +516,7 @@ class TooManyForsInComprehensionViolation(ASTViolation):
         ``for`` loops, comprehensions, or different functions.
 
     Example::
+
         # Wrong:
         ast_nodes = [
             target
@@ -499,6 +524,8 @@ class TooManyForsInComprehensionViolation(ASTViolation):
             for target in assignment.targets
             for _ in range(10)
         ]
+
+    .. versionadded:: 0.3.0
 
     Note:
         Returns Z224 as error code
@@ -525,7 +552,7 @@ class TooManyBaseClassesViolation(ASTViolation):
     Solution:
         Restrict the number of base classes.
 
-    This rule is configurable with ``--max_base_classes``.
+    This rule is configurable with ``--max-base-classes``.
 
     Example::
 
@@ -540,6 +567,8 @@ class TooManyBaseClassesViolation(ASTViolation):
            CustomClass,
            AddedClass,
         ): ...
+
+    .. versionadded:: 0.3.0
 
     Note:
         Returns Z225 as error code

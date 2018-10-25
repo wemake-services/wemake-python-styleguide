@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
+from typing import Union
 
 from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.complexity import (
@@ -8,6 +9,8 @@ from wemake_python_styleguide.violations.complexity import (
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
+
+AsyncNodes = Union[ast.AsyncFunctionDef, ast.AsyncFor, ast.AsyncWith]
 
 
 @final
@@ -25,16 +28,20 @@ from wemake_python_styleguide.visitors.decorators import alias
     'visit_Break',
     'visit_Assign',
     'visit_Expr',
+    'visit_Await',
+    'visit_Pass',
+))
+@alias('visit_async_statement', (
     'visit_AsyncFor',
     'visit_AsyncWith',
-    'visit_Await',
+    'visit_AsyncFunctionDef',
 ))
 class OffsetVisitor(BaseNodeVisitor):
     """Checks offset values for several nodes."""
 
-    def _check_offset(self, node: ast.AST) -> None:
-        offset = getattr(node, 'col_offset', None)
-        if offset is not None and offset > self.options.max_offset_blocks * 4:
+    def _check_offset(self, node: ast.AST, error: int = 0) -> None:
+        offset = getattr(node, 'col_offset', 0) - error
+        if offset > self.options.max_offset_blocks * 4:
             self.add_violation(TooDeepNestingViolation(node))
 
     def visit_line_expression(self, node: ast.AST) -> None:
@@ -54,4 +61,24 @@ class OffsetVisitor(BaseNodeVisitor):
 
         """
         self._check_offset(node)
+        self.generic_visit(node)
+
+    def visit_async_statement(self, node: AsyncNodes):
+        """
+        Checks async definitions offset.
+
+        This is a temporary check for async-based expressions, because offset
+        for them isn't calculated properly. We can calculate right version
+        of offset with subscripting ``6`` (length of "async " part).
+
+        Read more:
+            https://bugs.python.org/issue29205
+            github.com/wemake-services/wemake-python-styleguide/issues/282
+
+        Raises:
+            TooDeepNestingViolation
+
+        """
+        error = 6 if node.col_offset % 4 != 0 else 0
+        self._check_offset(node, error=error)
         self.generic_visit(node)

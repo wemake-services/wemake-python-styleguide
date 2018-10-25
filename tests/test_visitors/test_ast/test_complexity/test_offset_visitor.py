@@ -122,3 +122,21 @@ def test_nested_offset_errors(
 
     errors = [TooDeepNestingViolation for _ in range(number_of_errors)]
     assert_errors(visitor, errors)
+
+
+def test_regression_282(assert_errors, parse_ast_tree, options):
+    """
+    Testing that issue-282 will not happen again.
+
+    See: https://github.com/wemake-services/wemake-python-styleguide/issues/282
+    """
+    tree = parse_ast_tree("""
+    async def no_offset():
+        ...
+    """)
+
+    option_values = options(max_offset_blocks=1)
+    visitor = OffsetVisitor(option_values, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
