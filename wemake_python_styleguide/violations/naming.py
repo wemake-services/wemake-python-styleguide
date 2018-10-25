@@ -568,6 +568,8 @@ class ProtectedModuleViolation(ASTViolation):
         from some._protected.module import BarClass
         from some.module import _protected
 
+    .. versionadded:: 0.3.0
+
     Note:
         Returns Z116 as error code
     """
