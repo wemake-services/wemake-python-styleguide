@@ -9,9 +9,8 @@ matrix:
       sudo: true
 
 install:
-  - pip install poetry
+  - pip install "poetry>=0.12"
   - poetry install
-  - poetry develop
 
 script:
   - poetry run mypy wemake_python_styleguide
