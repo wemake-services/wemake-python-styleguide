@@ -94,6 +94,8 @@ class LocalFolderImportViolation(ASTViolation):
         from .version import get_version
         from ..drivers import MySQLDriver
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z300 as error code
 
@@ -125,6 +127,8 @@ class DottedRawImportViolation(ASTViolation):
         # Wrong:
         import os.path
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z301 as error code
 
@@ -155,6 +159,8 @@ class UnicodeStringViolation(TokenizeViolation):
 
         # Wrong:
         nickname = u'sobolevn'
+
+    .. versionadded:: 0.1.0
 
     Note:
         Returns Z302 as error code
@@ -193,6 +199,8 @@ class UnderscoredNumberViolation(TokenizeViolation):
         phone = 8_83_134_43
         million = 100_00_00
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z303 as error code
 
@@ -226,6 +234,8 @@ class PartialFloatViolation(TokenizeViolation):
         # Wrong:
         half = .5
         ten_float = 10.
+
+    .. versionadded:: 0.1.0
 
     Note:
         Returns Z304 as error code
@@ -265,6 +275,8 @@ class FormattedStringViolation(ASTViolation):
         'Result is: {0}'.format(2 + 2)
         'Hey {user}! How are you?'.format(user='sobolevn')
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z305 as error code
 
@@ -297,6 +309,8 @@ class RequiredBaseClassViolation(ASTViolation):
         # Wrong:
         class Some: ...
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z306 as error code
 
@@ -328,6 +342,8 @@ class MultipleIfsInComprehensionViolation(ASTViolation):
 
         # Correct:
         nodes = [node for node in html if node not in ('b', 'i')]
+
+    .. versionadded:: 0.1.0
 
     Note:
         Returns Z307 as error code
@@ -364,6 +380,8 @@ class ConstantComparisonViolation(ASTViolation):
         # Correct:
         do_something_else()
 
+    .. versionadded:: 0.3.0
+
     Note:
         Returns Z308 as error code
 
@@ -396,6 +414,8 @@ class ComparisonOrderViolation(ASTViolation):
 
         # Wrong:
         if 3 < some_x:
+
+    .. versionadded:: 0.3.0
 
     Note:
         Returns Z309 as error code
@@ -438,6 +458,8 @@ class BadNumberSuffixViolation(TokenizeViolation):
         binary_number = 0B1001
         number_with_scientific_notation = 1.5E+10
 
+    .. versionadded:: 0.3.0
+
     Note:
         Returns Z310 as error code
 
@@ -469,6 +491,8 @@ class MultipleInComparisonViolation(ASTViolation):
         # Wrong:
         if item in bucket in master_list_of_buckets:
         if x_cord in line in square:
+
+    .. versionadded:: 0.3.0
 
     Note:
         Returns Z311 as error code
@@ -506,8 +530,11 @@ class RedundantComparisonViolation(ASTViolation):
         # Correct:
         do_something()
 
+    .. versionadded:: 0.3.0
+
     Note:
         Returns Z312 as error code
+
     """
 
     should_use_text = False
@@ -542,19 +569,22 @@ class MissingSpaceBetweenKeywordAndParenViolation(TokenizeViolation):
             del (a, b)
             yield (1, 2, 3)
 
+    .. versionadded:: 0.3.0
+
     Note:
         Returns Z313 as error code
+
     """
 
     should_use_text = False
     #: Error message shown to the user.
-    error_template = 'Found paren right after a keyword'
+    error_template = 'Found parens right after a keyword'
     code = 313
 
 
 class WrongConditionalViolation(ASTViolation):
     """
-    Forbids using `if` statements that use invalid conditionals.
+    Forbids using ``if`` statements that use invalid conditionals.
 
     Reasoning:
         When invalid conditional arguments are used
@@ -572,6 +602,8 @@ class WrongConditionalViolation(ASTViolation):
         # Wrong:
         if True: ...
 
+    .. versionadded:: 0.3.0
+
     Note:
         Returns Z314 as error code
     """
@@ -584,7 +616,7 @@ class WrongConditionalViolation(ASTViolation):
 
 class WrongParentClassListDef(ASTViolation):
     """
-    Forbid extra `object` in parent classes list.
+    Forbid extra ``object`` in parent classes list.
 
     Reasoning:
         We should allow object only when
@@ -599,10 +631,12 @@ class WrongParentClassListDef(ASTViolation):
 
        # Correct:
        class SomeClassName(object): ...
-       class SomeClassName(FirstParentClass, SecondParenClass): ...
+       class SomeClassName(FirstParentClass, SecondParentClass): ...
 
        # Wrong:
        class SomeClassName(FirstParentClass, SecondParentClass, object): ...
+
+    .. versionadded:: 0.3.0
 
     Note:
         Returns Z315 as error code

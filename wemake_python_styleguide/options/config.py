@@ -72,7 +72,7 @@ class Configuration(object):
       :str:`wemake_python_styleguide.options.defaults.MAX_OFFSET_BLOCKS`
     - ``max-elifs`` - maximum number of ``elif`` blocks, defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_ELIFS`
-    - `max-module-members` - maximum number of classes and functions
+    - ``max-module-members`` - maximum number of classes and functions
       in a single module, defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_MODULE_MEMBERS`
     - ``max-methods`` - maximum number of methods in a single class,
@@ -84,9 +84,15 @@ class Configuration(object):
     - ``max-jones-score`` - maximum Jones score for a module, which is equal
       to the median of all lines complexity sum, defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_JONES_SCORE`
+    - ``max-imports`` - maximum number of imports in a single module,
+      defaults to
+      :str:`wemake_python_styleguide.options.defaults.MAX_IMPORTS`
     - ``max-conditions`` - maximum number of boolean conditions
       in a single ``if`` or ``while`` node, defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_CONDITIONS`
+    - ``max-base-classes`` - maximum number of parent classes inside a class
+      definition, defaults to
+      :str:`wemake_python_styleguide.options.defaults.MAX_BASE_CLASSES`
 
     All options are configurable via ``flake8`` CLI:
 

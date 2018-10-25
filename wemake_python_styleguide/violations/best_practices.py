@@ -119,6 +119,8 @@ class WrongMagicCommentViolation(SimpleViolation):
         type = MyClass.get_type()  # noqa
         coordinate = 10  # type: int
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z400 as error code
 
@@ -153,6 +155,8 @@ class WrongDocCommentViolation(TokenizeViolation):
         # Wrong:
         #:
         NAMES_WHITELIST = ['feature', 'bug', 'research']
+
+    .. versionadded:: 0.1.0
 
     Note:
         Returns Z401 as error code
@@ -192,6 +196,8 @@ class WrongModuleMetadataViolation(ASTViolation):
         __author__ = 'Nikita Sobolev'
         __version__ = 0.1.2
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z410 as error code
 
@@ -215,6 +221,8 @@ class EmptyModuleViolation(ASTViolation):
 
         1. delete it
         2. drop some documentation in it, so you will explain why it is there
+
+    .. versionadded:: 0.1.0
 
     Note:
         Returns Z411 as error code
@@ -248,6 +256,8 @@ class InitModuleHasLogicViolation(ASTViolation):
 
     1. comments, since they are dropped before AST comes in play
     2. docs string, because sometimes it is required to state something
+
+    .. versionadded:: 0.1.0
 
     Note:
         Returns Z412 as error code
@@ -286,6 +296,8 @@ class WrongKeywordViolation(ASTViolation):
         nonlocal
         global
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z420 as error code
 
@@ -312,6 +324,8 @@ class WrongFunctionCallViolation(ASTViolation):
 
     See also:
         https://www.youtube.com/watch?v=YjHsOrOOSuI
+
+    .. versionadded:: 0.1.0
 
     Note:
         Returns Z421 as error code
@@ -348,6 +362,8 @@ class FutureImportViolation(ASTViolation):
         # Wrong:
         from __future__ import print_function
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z422 as error code
 
@@ -382,6 +398,8 @@ class RaiseNotImplementedViolation(ASTViolation):
 
     See Also:
         https://stackoverflow.com/a/44575926/4842742
+
+    .. versionadded:: 0.1.0
 
     Note:
         Returns Z423 as error code
@@ -419,6 +437,8 @@ class BaseExceptionViolation(ASTViolation):
     See Also:
         https://docs.python.org/3/library/exceptions.html#exception-hierarchy
         https://help.semmle.com/wiki/pages/viewpage.action?pageId=1608527
+
+    .. versionadded:: 0.3.0
 
     Note:
         Returns Z424 as error code
@@ -465,6 +485,8 @@ class NestedFunctionViolation(ASTViolation):
             def inner():
                 ...
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z430 as error code
 
@@ -504,6 +526,8 @@ class NestedClassViolation(ASTViolation):
         class Some(object):
             class Inner(object):
                 ...
+
+    .. versionadded:: 0.1.0
 
     Note:
         Returns Z431 as error code
@@ -552,6 +576,8 @@ class MagicNumberViolation(ASTViolation):
     See also:
         https://en.wikipedia.org/wiki/Magic_number_(programming)
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z432 as error code
 
@@ -573,6 +599,8 @@ class StaticMethodViolation(ASTViolation):
 
     Solution:
         Use instance methods, ``@classmethod``, or functions instead.
+
+    .. versionadded:: 0.1.0
 
     Note:
         Returns Z433 as error code
@@ -605,6 +633,8 @@ class BadMagicMethodViolation(ASTViolation):
 
     See also:
         https://www.youtube.com/watch?v=F6u5rhUQ6dU
+
+    .. versionadded:: 0.1.0
 
     Note:
         Returns Z434 as error code
@@ -644,6 +674,8 @@ class NestedImportViolation(ASTViolation):
     See also:
         https://github.com/seddonym/layer_linter
 
+    .. versionadded:: 0.1.0
+
     Note:
         Returns Z435 as error code
 
@@ -666,6 +698,8 @@ class RedundantForElseViolation(ASTViolation):
     Solution:
         Refactor your ``else`` case logic
         to be inside the ``for`` body.
+
+    .. versionadded:: 0.3.0
 
     Note:
         Returns Z436 as error code
@@ -702,6 +736,8 @@ class RedundantFinallyViolation(ASTViolation):
         finally:
             f.close()
 
+    .. versionadded:: 0.3.0
+
     Note:
         Returns Z437 as error code
 
@@ -730,6 +766,8 @@ class ReassigningVariableToItselfViolation(ASTViolation):
         # Wrong:
         some = some
         x_coord, y_coord = x_coord, y_coord
+
+    .. versionadded:: 0.3.0
 
     Note:
         Returns Z438 as error code
