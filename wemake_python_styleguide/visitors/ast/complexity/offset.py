@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
+from typing import Union
 
 from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.complexity import (
@@ -8,6 +9,8 @@ from wemake_python_styleguide.violations.complexity import (
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
+
+AsyncNodes = Union[ast.AsyncFunctionDef, ast.AsyncFor, ast.AsyncWith]
 
 
 @final
@@ -60,20 +63,22 @@ class OffsetVisitor(BaseNodeVisitor):
         self._check_offset(node)
         self.generic_visit(node)
 
-    def visit_async_statement(self, node: ast.AST):
+    def visit_async_statement(self, node: AsyncNodes):
         """
-        Checks async function definitions offset.
+        Checks async definitions offset.
 
-        This is temporary check for async-based expressions, because offset
+        This is a temporary check for async-based expressions, because offset
         for them isn't calculated properly. We can calculate right version
-        of offset with subscripting 6.
+        of offset with subscripting ``6`` (length of "async " part).
 
-        Read more: https://bugs.python.org/issue29205
+        Read more:
+            https://bugs.python.org/issue29205
+            github.com/wemake-services/wemake-python-styleguide/issues/282
 
         Raises:
             TooDeepNestingViolation
 
         """
         error = 6 if node.col_offset % 4 != 0 else 0
-        self._check_offset(node, error)
+        self._check_offset(node, error=error)
         self.generic_visit(node)
