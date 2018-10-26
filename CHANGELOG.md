@@ -37,6 +37,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - Forbid the use of more than 2 `for` loops within a comprehension
 - Forbid variable names with more than one consecutive underscore
 - Restrict the maximum number of base classes aka mixins
+- Forbid importing protected names
 
 ### Bugfixes
 

@@ -128,6 +128,8 @@ Summary
    UnderScoredNumberNameViolation
    UpperCaseAttributeViolation
    ConsecutiveUnderscoresInNameViolation
+   ProtectedModuleViolation
+
 
 Module names
 ------------
@@ -137,6 +139,7 @@ Module names
 .. autoclass:: TooShortModuleNameViolation
 .. autoclass:: WrongModuleNameUnderscoresViolation
 .. autoclass:: WrongModuleNamePatternViolation
+.. autoclass:: ProtectedModuleViolation
 
 Variable names
 --------------
@@ -556,7 +559,7 @@ class ConsecutiveUnderscoresInNameViolation(ASTViolation):
     Reasoning:
         This is done to gain extra readability.
         This naming rule already exist for module names.
-
+    
     Example::
 
         # Correct:
@@ -565,7 +568,9 @@ class ConsecutiveUnderscoresInNameViolation(ASTViolation):
 
         # Wrong:
         some__value = 5
-
+    
+    .. versionadded:: 0.3.0
+    
     Note:
         Returns Z116 as error code
 
@@ -573,4 +578,39 @@ class ConsecutiveUnderscoresInNameViolation(ASTViolation):
 
     #: Error message shown to the user.
     error_template = 'Found consecutive underscores in a variable "{0}"'
+    
     code = 116
+
+@final
+class ProtectedModuleViolation(ASTViolation):
+    """
+    Forbids to import or import from protected module.
+
+    Reasoning:
+        Import starting with one underscore is found.
+
+    Solution:
+        Do not import from protected module.
+        Rename module name to be not protected.
+
+        from some.public.module import FooClass
+    
+    Example::
+
+        # Correct:
+        from some.public.module import FooClass
+        
+        # Wrong:
+        from some._protected.module import BarClass
+        from some.module import _protected
+
+    .. versionadded:: 0.3.0
+
+    Note:
+        Returns Z117 as error code
+    """
+
+    #: Error message shown to the user
+    error_template = 'Found protected module import "{0}"'
+
+    code = 117
