@@ -15,8 +15,8 @@ To run our linter you will need to run ``flake8`` in any way you like:
     flake8 your_module.py
     flake8 your_package
 
-See `the official docs <https://github.com/tholo/pytest-flake8>`_
-for options and usage examples.
+See the ``flake8`` docs for `options <http://flake8.pycqa.org/en/latest/user/configuration.html>`_
+and `usage examples <http://flake8.pycqa.org/en/latest/user/invocation.html>`_.
 
 Golden rule is to run your linter on each commit locally and inside the CI.
 And to fail the build if there are any style violations.
@@ -31,17 +31,19 @@ So, you can disable some checks, that you are not ok with.
 
 There are three ways to ignore some specific violations:
 
-1. Inline ignore with ``# noqa: `` comment and comma separated violation codes
+1. Inline ignore with ``# noqa:`` comment and comma separated violation codes
 2. Command line argument ``--ignore`` with omma separated violation codes
 3. Configuration line inside ``setup.cfg`` or ``tox.ini``, `example <https://github.com/wemake-services/wemake-python-styleguide/blob/ab95b7d5b14b3985795aa98a70363466fffa3946/setup.cfg#L22-L32>`_
 
 You can ignore:
 
 1. Whole ``Z`` letter, this will completely turn off all our custom checks
-2. Some specific group (naming, complexity, consistency, best practices) with ``Z`` and the first number
+2. Some specific group (naming, complexity, consistency, best practices)
+   with ``Z`` and the first number
 3. Some specific violation with the full violation code
 
-Read more about ignoring violations in the `official docs <http://flake8.pycqa.org/en/latest/user/violations.html>`_.
+Read more about `ignoring violations <http://flake8.pycqa.org/en/latest/user/violations.html>`_
+in the official docs.
 
 Integrations
 ------------
