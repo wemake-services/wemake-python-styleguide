@@ -559,7 +559,7 @@ class ConsecutiveUnderscoresInNameViolation(ASTViolation):
     Reasoning:
         This is done to gain extra readability.
         This naming rule already exist for module names.
-    
+
     Example::
 
         # Correct:
@@ -568,9 +568,9 @@ class ConsecutiveUnderscoresInNameViolation(ASTViolation):
 
         # Wrong:
         some__value = 5
-    
+
     .. versionadded:: 0.3.0
-    
+
     Note:
         Returns Z116 as error code
 
@@ -578,8 +578,9 @@ class ConsecutiveUnderscoresInNameViolation(ASTViolation):
 
     #: Error message shown to the user.
     error_template = 'Found consecutive underscores in a variable "{0}"'
-    
+
     code = 116
+
 
 @final
 class ProtectedModuleViolation(ASTViolation):
@@ -593,13 +594,11 @@ class ProtectedModuleViolation(ASTViolation):
         Do not import from protected module.
         Rename module name to be not protected.
 
-        from some.public.module import FooClass
-    
     Example::
 
         # Correct:
         from some.public.module import FooClass
-        
+
         # Wrong:
         from some._protected.module import BarClass
         from some.module import _protected
