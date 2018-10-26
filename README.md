@@ -46,7 +46,7 @@ pip install wemake-python-styleguide
 
 You will also need to create a `setup.cfg` file with [the following contents](https://wemake-python-styleguide.readthedocs.io/en/latest/_pages/options/config.html#third-party-plugins).
 
-This file is required to configure our linter and 3rd party plugins it uses.
+This file is required to configure our linter and all 3rd party plugins it uses.
 However, this is a temporary solution.
 We are working at providing the required configuration for you in the future.
 
@@ -73,7 +73,7 @@ We are *not* planning to do the following things:
 0. Assume or check types, use `mypy` instead
 1. Reformat code, since we believe that developers should do that
 2. Check for `SyntaxError` or exceptions, write tests instead
-3. Appeal to everyone, this is **our** linter
+3. Appeal to everyone, this is **our** linter. But, you can [switch off](https://wemake-python-styleguide.readthedocs.io/en/latest/_pages/usage.html#ignoring-violations) any rules that you don't like
 
 
 ## Contributing

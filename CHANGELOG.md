@@ -51,6 +51,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - Updates `poetry` version
 - Refactoring: some general changes, including better names and APIs
 - Improves docs: now we have `versionadded` for each violation
+- Improves docs: now we explicitly state how some violations might be ignored
 - Improves tests: now we are testing options
 - Improves tests: now we have different `tests/` folder structure
 - Improves tests: now we are testing presets
