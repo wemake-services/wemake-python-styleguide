@@ -14,6 +14,7 @@ from wemake_python_styleguide.logics.variables.name_nodes import (
 from wemake_python_styleguide.logics.variables.naming import (
     is_too_short_variable_name,
     is_upper_case_name,
+    is_variable_name_contains_consecutive_underscores,
     is_variable_name_with_underscored_number,
     is_wrong_variable_name,
 )
@@ -23,6 +24,7 @@ from wemake_python_styleguide.violations.best_practices import (
     WrongModuleMetadataViolation,
 )
 from wemake_python_styleguide.violations.naming import (
+    ConsecutiveUnderscoresInNameViolation,
     PrivateNameViolation,
     TooShortVariableNameViolation,
     UnderScoredNumberNameViolation,
@@ -55,6 +57,7 @@ class WrongNameVisitor(BaseNodeVisitor):
     """Performs checks based on variable names."""
 
     def _check_name(self, node: ast.AST, name: str) -> None:
+
         if is_wrong_variable_name(name, VARIABLE_NAMES_BLACKLIST):
             self.add_violation(WrongVariableNameViolation(node, text=name))
 
@@ -67,6 +70,10 @@ class WrongNameVisitor(BaseNodeVisitor):
 
         if is_variable_name_with_underscored_number(name):
             self.add_violation(UnderScoredNumberNameViolation())
+        if is_variable_name_contains_consecutive_underscores(name):
+            self.add_violation(
+                ConsecutiveUnderscoresInNameViolation(node, text=name),
+            )
 
     def _check_function_signature(self, node: AnyFunctionDef) -> None:
         for arg in node.args.args:
@@ -148,6 +155,7 @@ class WrongNameVisitor(BaseNodeVisitor):
 
         """
         variable_name = get_assigned_name(node)
+
         if variable_name is not None:
             self._check_name(node, variable_name)
         self.generic_visit(node)

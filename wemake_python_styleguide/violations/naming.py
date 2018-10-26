@@ -96,6 +96,7 @@ Variables
 
 - Variables should use ``snake_case``
 - When some variable is unused it should be prefixed with an underscore
+- Variables should not contain more than one consecutive underscore
 
 Type aliases
 ~~~~~~~~~~~~
@@ -126,7 +127,9 @@ Summary
    SameAliasImportViolation
    UnderScoredNumberNameViolation
    UpperCaseAttributeViolation
+   ConsecutiveUnderscoresInNameViolation
    ProtectedModuleViolation
+
 
 Module names
 ------------
@@ -146,7 +149,8 @@ Variable names
 .. autoclass:: PrivateNameViolation
 .. autoclass:: SameAliasImportViolation
 .. autoclass:: UnderScoredNumberNameViolation
-.. autoclass:: UpperCaseAttributeViolation
+.. autoclass:: UpperCaseAttributeViolations
+.. autoclass:: ConsecutiveUnderscoresInNameViolation
 
 """
 
@@ -548,6 +552,37 @@ class UpperCaseAttributeViolation(ASTViolation):
 
 
 @final
+class ConsecutiveUnderscoresInNameViolation(ASTViolation):
+    """
+    Forbids to use more than one consecutive underscore in variable names.
+
+    Reasoning:
+        This is done to gain extra readability.
+        This naming rule already exist for module names.
+
+    Example::
+
+        # Correct:
+        some_value = 5
+        __magic__ = 5
+
+        # Wrong:
+        some__value = 5
+
+    .. versionadded:: 0.3.0
+
+    Note:
+        Returns Z116 as error code
+
+    """
+
+    #: Error message shown to the user.
+    error_template = 'Found consecutive underscores in a variable "{0}"'
+
+    code = 116
+
+
+@final
 class ProtectedModuleViolation(ASTViolation):
     """
     Forbids to import or import from protected module.
@@ -571,9 +606,10 @@ class ProtectedModuleViolation(ASTViolation):
     .. versionadded:: 0.3.0
 
     Note:
-        Returns Z116 as error code
+        Returns Z117 as error code
     """
 
     #: Error message shown to the user
     error_template = 'Found protected module import "{0}"'
-    code = 116
+
+    code = 117

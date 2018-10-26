@@ -104,6 +104,31 @@ def is_too_short_variable_name(
     return name != constants.UNUSED_VARIABLE and len(name) < min_length
 
 
+def is_private_variable(name: Optional[str]) -> bool:
+    """
+    Checks if variable has private name pattern.
+
+    >>> is_private_variable(None)
+    False
+
+    >>> is_private_variable('regular')
+    False
+
+    >>> is_private_variable('__private')
+    True
+
+    >>> is_private_variable('_protected')
+    False
+
+    >>> is_private_variable('__magic__')
+    False
+
+    """
+    return (
+        name is not None and name.startswith('__') and not name.endswith('__')
+    )
+
+
 def is_variable_name_with_underscored_number(name: str) -> bool:
     """
     Checks for variable names with underscored number.
@@ -135,3 +160,44 @@ def is_variable_name_with_underscored_number(name: str) -> bool:
     """
     pattern = constants.UNDERSCORED_NUMBER_PATTERN
     return name is not None and pattern.match(name) is not None
+
+
+def is_variable_name_contains_consecutive_underscores(name: str) -> bool:
+    """
+    Checks if variable contains consecutive underscores in middle of name.
+
+    >>> is_variable_name_contains_consecutive_underscores('name')
+    False
+
+    >>> is_variable_name_contains_consecutive_underscores('__magic__')
+    False
+
+    >>> is_variable_name_contains_consecutive_underscores('__private')
+    False
+
+    >>> is_variable_name_contains_consecutive_underscores(None)
+    False
+
+    >>> is_variable_name_contains_consecutive_underscores('name')
+    False
+
+    >>> is_variable_name_contains_consecutive_underscores('some__value')
+    True
+
+    >>> is_variable_name_contains_consecutive_underscores('some_value__')
+    True
+
+    """
+    if name is None:
+        return False
+
+    if name.endswith('__') and name.startswith('__'):
+        return False
+
+    if name.startswith('__'):
+        return False
+
+    if '__' in name:
+        return True
+
+    return False
