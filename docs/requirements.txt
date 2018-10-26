@@ -10,5 +10,5 @@ added-value==0.8
 tomlkit==0.4.6
 
 # Dependencies of our linter:
-flake8<3.6
+flake8==3.6.0
 typing-extensions==3.6.6
