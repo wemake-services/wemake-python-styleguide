@@ -20,7 +20,7 @@ def _assert_errors_count_in_output(output, errors):
 
 def test_noqa_fixture_disabled(absolute_path):
     """End-to-End test to check that all violations are present."""
-    errors = {
+    errors = {  # TODO: list all possible errors except complexity
         'Z110': 2,
         'Z111': 1,
         'Z112': 1,

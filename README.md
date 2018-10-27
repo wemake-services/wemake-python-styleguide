@@ -9,7 +9,7 @@
 
 ---
 
-Welcome to the most opinionated linter ever.
+Welcome to the most strict and opinionated python linter ever.
 
 `wemake-python-styleguide` is actually a `flake8` plugin
 with some other plugins as dependencies.

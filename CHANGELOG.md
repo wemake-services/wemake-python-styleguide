@@ -4,7 +4,7 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
-## WIP aka The Hacktoberfest Feast
+## 0.3.0 aka The Hacktoberfest Feast
 
 This release was made possible by awesome people who contributed
 to the project during `#hactoberfest`. List of awesome people:
@@ -15,6 +15,11 @@ to the project during `#hactoberfest`. List of awesome people:
 - [@tipabu](https://github.com/tipabu)
 - [@roxe322](https://github.com/roxe322)
 - [@geoc0ld](https://github.com/geoc0ld)
+- [@lensvol](https://github.com/lensvol)
+- [@SheldonNunes ](https://github.com/SheldonNunes)
+- [@tommbee](https://github.com/tommbee)
+- [@valignatev](https://github.com/valignatev)
+- [@vsmaxim](https://github.com/vsmaxim)
 
 ### Features
 

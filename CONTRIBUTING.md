@@ -24,11 +24,10 @@ Make sure that you are familiar with [our API](https://wemake-python-styleguide.
 
 We use `poetry` to manage the [dependencies](https://github.com/sdispater/poetry).
 
-To install them you would need to run two commands:
+To install them you would need to run `install` command:
 
 ```bash
 poetry install
-poetry develop
 ```
 
 To activate your `virtualenv` run `poetry shell`.
