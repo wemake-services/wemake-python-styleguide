@@ -13,7 +13,7 @@ def is_same_variable(left: ast.AST, right: ast.AST) -> bool:
 
 def get_assigned_name(node: ast.AST) -> Optional[str]:
     """
-    Returns variable names for node that are just assigned.
+    Returns variable names for node that is just assigned.
 
     Returns ``None`` for nodes that are used in a different manner.
     """

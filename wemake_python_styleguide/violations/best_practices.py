@@ -39,6 +39,8 @@ Summary
    RedundantFinallyViolation
    ReassigningVariableToItselfViolation
    YieldInsideInitViolation
+   ProtectedModuleViolation
+   ProtectedAttributeViolation
 
 Comments
 --------
@@ -74,6 +76,8 @@ Design
 .. autoclass:: RedundantFinallyViolation
 .. autoclass:: ReassigningVariableToItselfViolation
 .. autoclass:: YieldInsideInitViolation
+.. autoclass:: ProtectedModuleViolation
+.. autoclass:: ProtectedAttributeViolation
 
 """
 
@@ -689,15 +693,32 @@ class NestedImportViolation(ASTViolation):
 @final
 class RedundantForElseViolation(ASTViolation):
     """
-    Forbids to use ``else`` with ``break`` in ``for`` loop.
+    Forbids to use ``else`` without ``break`` in ``for`` loop.
 
     Reasoning:
+        When there's no ``break`` keyword in ``for`` body it means
+        that ``else`` will always be called.
         This rule will reduce complexity, improve readability,
         and protect from possible errors.
 
     Solution:
         Refactor your ``else`` case logic
         to be inside the ``for`` body.
+
+    Example::
+
+        # Correct:
+        for letter in 'abc':
+            if letter == 'b':
+                break
+        else:
+            print('"b" is not found')
+
+        # Wrong:
+        for letter in 'abc':
+            print(letter)
+        else:
+            print('"b" is not found')
 
     .. versionadded:: 0.3.0
 
@@ -707,7 +728,7 @@ class RedundantForElseViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found `else` in `for` loop with `break`'
+    error_template = 'Found `else` in `for` loop without `break`'
     code = 436
 
 
@@ -811,3 +832,84 @@ class YieldInsideInitViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found `yield` inside `__init__`'
     code = 439
+
+
+@final
+class ProtectedModuleViolation(ASTViolation):
+    """
+    Forbids to ``import`` protected modules.
+
+    Reasoning:
+        When importing protected modules we break a contract
+        that authors of this module enforce.
+        This way we are not respecting encapsulation and it may break
+        our code at any moment.
+
+    Solution:
+        Do not import anything from protected modules.
+        Respect the encapsulation.
+
+    Example::
+
+        # Correct:
+        from some.public.module import FooClass
+
+        # Wrong:
+        import _compat
+        from some._protected.module import BarClass
+        from some.module import _protected
+
+    .. versionadded:: 0.3.0
+
+    Note:
+        Returns Z440 as error code
+
+    """
+
+    #: Error message shown to the user.
+    error_template = 'Found protected module import "{0}"'
+    code = 440
+
+
+@final
+class ProtectedAttributeViolation(ASTViolation):
+    """
+    Forbids to use protected attributes and methods.
+
+    Reasoning:
+        When using protected attributes and method we break a contract
+        that authors of this class enforce.
+        This way we are not respecting encapsulation and it may break
+        our code at any moment.
+
+    Solution:
+        Do not use protected attributes and methods.
+        Respect the encapsulation.
+
+    Example::
+
+        # Correct:
+        self._protected = 1
+        cls._hidden_method()
+        some.public()
+
+        # Wrong:
+        print(some._protected)
+        instance._hidden()
+        self.container._internal = 10
+
+    Note, that it is possible to use protected attributes with ``self``
+    and ``cls`` as base names. We allow this so you can create and use
+    protected attributes and methods inside the class context.
+    This is how protected attributes should be used.
+
+    .. versionadded:: 0.3.0
+
+    Note:
+        Returns Z441 as error code
+
+    """
+
+    #: Error message shown to the user.
+    error_template = 'Found protected attribute usage "{0}"'
+    code = 441

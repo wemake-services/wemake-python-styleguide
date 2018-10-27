@@ -80,7 +80,7 @@ VARIABLE_NAMES_BLACKLIST: Final = frozenset((
     'objs',
     'some',
 
-    # Confusables:
+    # Confuseables:
     'no',
     'true',
     'false',
@@ -159,6 +159,9 @@ UNUSED_VARIABLE: Final = '_'
 
 # Used to specify as a placeholder for `__init__`:
 INIT: Final = '__init__'
+
+# Allowed magic number modulo:
+NON_MAGIC_MODULO: Final = 10
 
 # Used to specify a pattern which checks variables and modules for underscored
 # numbers in their names:

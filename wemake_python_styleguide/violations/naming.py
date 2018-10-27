@@ -22,11 +22,12 @@ General
 - Use names of an appropriate length: not too short, not too long
 - Protected members should use underscore as the first char
 - Private names are not allowed
+- Do not use consecutive underscores
 - When writing abbreviations in ``UpperCase``
   capitalize all letters: ``HTTPAddress``
 - When writting abbreviations in ``snake_case`` use lowercase: ``http_address``
 - When writting numbers in ``snake_case``
-  do not use extra ``_`` as in ``http2_protocol``
+  do not use extra ``_`` before numbers as in ``http2_protocol``
 
 Packages
 ~~~~~~~~
@@ -74,7 +75,7 @@ Method arguments
 - Python's ``*args`` and ``**kwargs`` should be default names
   when just passing these values to some other method/function
 - Unless you want to use these values in place, then name them explicitly
-- Keyword-only arguments might be separated from other arguments with ``*``
+- Keyword-only arguments must be separated from other arguments with ``*``
 
 Global (module level) variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -85,16 +86,15 @@ Global (module level) variables
 Variables
 ~~~~~~~~~
 
-- Variables should use ``snake_case``
+- Variables should use ``snake_case`` with no exceptions
 - When some variable is unused it should be prefixed with an underscore
-- Variables should not contain more than one consecutive underscore
 
 Type aliases
 ~~~~~~~~~~~~
 
 - Should use ``UpperCase`` as real classes
 - Should not contain word ``type`` in its name
-- Generic types should be called ``TT`` or ``KK`` or ``VV``
+- Generic types should be called ``TT`` or ``KT`` or ``VT``
 - Covariant and contravariant types
   should be marked with ``Cov`` and ``Contra`` suffixes
 - In this case one letter can be dropped: ``TCov`` and ``KContra``
@@ -119,7 +119,6 @@ Summary
    UnderScoredNumberNameViolation
    UpperCaseAttributeViolation
    ConsecutiveUnderscoresInNameViolation
-   ProtectedModuleViolation
 
 
 Module names
@@ -130,7 +129,6 @@ Module names
 .. autoclass:: TooShortModuleNameViolation
 .. autoclass:: WrongModuleNameUnderscoresViolation
 .. autoclass:: WrongModuleNamePatternViolation
-.. autoclass:: ProtectedModuleViolation
 
 Variable names
 --------------
@@ -571,36 +569,3 @@ class ConsecutiveUnderscoresInNameViolation(ASTViolation):
     error_template = 'Found consecutive underscores in a variable "{0}"'
 
     code = 116
-
-
-@final
-class ProtectedModuleViolation(ASTViolation):
-    """
-    Forbids to import or import from protected module.
-
-    Reasoning:
-        Import starting with one underscore is found.
-
-    Solution:
-        Do not import from protected module.
-        Rename module name to be not protected.
-
-    Example::
-
-        # Correct:
-        from some.public.module import FooClass
-
-        # Wrong:
-        from some._protected.module import BarClass
-        from some.module import _protected
-
-    .. versionadded:: 0.3.0
-
-    Note:
-        Returns Z117 as error code
-    """
-
-    #: Error message shown to the user
-    error_template = 'Found protected module import "{0}"'
-
-    code = 117

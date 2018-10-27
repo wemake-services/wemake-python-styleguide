@@ -19,6 +19,18 @@ class ModuleMembersVisitor(object):
         yield self
 """
 
+regular_method_with_yield = """
+class ModuleMembersVisitor(object):
+    def method(self, *args, **kwargs):
+        yield self
+"""
+
+iter_with_yield = """
+class ModuleMembersVisitor(object):
+    def __iter__(self, *args, **kwargs):
+        yield self
+"""
+
 async_init_without_yield = """
 class ModuleMembersVisitor(object):
     async def __init__(self, *args, **kwargs):
@@ -54,6 +66,8 @@ def test_init_generator(
 @pytest.mark.parametrize('code', [
     init_without_yield,
     async_init_without_yield,
+    regular_method_with_yield,
+    iter_with_yield,
 ])
 def test_init_regular(
     assert_errors,

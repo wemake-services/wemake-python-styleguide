@@ -111,9 +111,9 @@ def test_same_complexity(parse_ast_tree, default_options):
     simple_visitor.run()
     typed_visitor.run()
 
-    assert len(simple_visitor._lines) == 1
-    assert len(simple_visitor._lines[1]) == 3
-    assert len(simple_visitor._lines[1]) == len(typed_visitor._lines[1])
+    assert len(simple_visitor._lines) == 1  # noqa: Z441
+    assert len(simple_visitor._lines[1]) == 3  # noqa: Z441
+    assert len(typed_visitor._lines[1]) == 3  # noqa: Z441
 
 
 @pytest.mark.parametrize('code, complexity', [
@@ -127,8 +127,8 @@ def test_exact_complexity(parse_ast_tree, default_options, code, complexity):
     visitor = JonesComplexityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert len(visitor._lines) == 1
-    assert len(visitor._lines[1]) == complexity
+    assert len(visitor._lines) == 1  # noqa: Z441
+    assert len(visitor._lines[1]) == complexity  # noqa: Z441
 
 
 @pytest.mark.parametrize('code, number_of_lines', [
@@ -147,4 +147,4 @@ def test_that_some_nodes_are_ignored(
     visitor = JonesComplexityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert len(visitor._lines) == number_of_lines
+    assert len(visitor._lines) == number_of_lines  # noqa: Z441

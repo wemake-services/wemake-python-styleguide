@@ -38,6 +38,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - Forbids variable names with more than one consecutive underscore
 - Restricts the maximum number of base classes aka mixins
 - Forbids importing protected names
+- Forbids using protected methods and attributes
 - Forbids `yield` inside `__init__` method
 
 ### Bugfixes

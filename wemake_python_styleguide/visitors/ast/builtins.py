@@ -3,12 +3,31 @@
 import ast
 from typing import ClassVar, Optional
 
-from wemake_python_styleguide.constants import MAGIC_NUMBERS_WHITELIST
+from wemake_python_styleguide import constants
 from wemake_python_styleguide.types import AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
     MagicNumberViolation,
 )
+from wemake_python_styleguide.violations.consistency import (
+    FormattedStringViolation,
+)
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
+
+
+@final
+class WrongStringVisitor(BaseNodeVisitor):
+    """Restricts to use ``f`` strings."""
+
+    def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
+        """
+        Restricts to use ``f`` strings.
+
+        Raises:
+            FormattedStringViolation
+
+        """
+        self.add_violation(FormattedStringViolation(node))
+        self.generic_visit(node)
 
 
 @final
@@ -54,10 +73,10 @@ class MagicNumberVisitor(BaseNodeVisitor):
         if isinstance(parent, self._allowed_parents):
             return
 
-        if node.n in MAGIC_NUMBERS_WHITELIST:
+        if node.n in constants.MAGIC_NUMBERS_WHITELIST:
             return
 
-        if isinstance(node.n, int) and node.n <= 10:
+        if isinstance(node.n, int) and node.n <= constants.NON_MAGIC_MODULO:
             return
 
         self.add_violation(MagicNumberViolation(node, text=str(node.n)))

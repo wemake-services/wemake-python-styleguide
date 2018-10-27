@@ -2,7 +2,7 @@
 
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict
+from typing import ClassVar, DefaultDict, Optional, Union
 
 from wemake_python_styleguide.types import AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
@@ -19,6 +19,8 @@ from wemake_python_styleguide.violations.consistency import (
     MultipleIfsInComprehensionViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
+
+AnyLoop = Union[ast.For, ast.While]
 
 
 @final
@@ -130,20 +132,43 @@ class WrongListComprehensionVisitor(BaseNodeVisitor):
 
 @final
 class WrongForElseVisitor(BaseNodeVisitor):
-    """Responsible for restricting else in for loops with break."""
+    """Responsible for restricting `else` in `for` loops without `break`."""
+
+    def _does_loop_contain_node(
+        self,
+        loop: Optional[AnyLoop],
+        to_check: ast.Break,
+    ) -> bool:
+        if loop is None:
+            return False
+
+        for inner_node in ast.walk(loop):
+            if to_check is inner_node:
+                return True
+        return False
+
+    def _has_break(self, node: ast.For) -> bool:
+        closest_loop = None
+
+        for subnode in ast.walk(node):
+            if isinstance(subnode, (ast.For, ast.While)):
+                if subnode is not node:
+                    closest_loop = subnode
+
+            if isinstance(subnode, ast.Break):
+                is_nested_break = self._does_loop_contain_node(
+                    closest_loop, subnode,
+                )
+                if not is_nested_break:
+                    return True
+        return False
 
     def _check_for_needs_else(self, node: ast.For) -> None:
-        break_in_for_loop = False
-
-        for condition in ast.walk(node):
-            if isinstance(condition, ast.Break):
-                break_in_for_loop = True
-
-        if node.orelse and break_in_for_loop:
+        if node.orelse and not self._has_break(node):
             self.add_violation(RedundantForElseViolation(node=node))
 
     def visit_For(self, node: ast.For) -> None:
-        """Used for find else block in for loops with break."""
+        """Used for find `else` block in `for` loops without `break`."""
         self._check_for_needs_else(node)
         self.generic_visit(node)
 

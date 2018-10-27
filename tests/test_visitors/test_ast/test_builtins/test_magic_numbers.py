@@ -2,13 +2,11 @@
 
 import pytest
 
+from wemake_python_styleguide.constants import MAGIC_NUMBERS_WHITELIST
 from wemake_python_styleguide.violations.best_practices import (
     MagicNumberViolation,
 )
-from wemake_python_styleguide.visitors.ast.numbers import (
-    MAGIC_NUMBERS_WHITELIST,
-    MagicNumberVisitor,
-)
+from wemake_python_styleguide.visitors.ast.builtins import MagicNumberVisitor
 
 # Correct usages:
 

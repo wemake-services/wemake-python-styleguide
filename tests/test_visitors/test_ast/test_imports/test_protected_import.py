@@ -2,7 +2,9 @@
 
 import pytest
 
-from wemake_python_styleguide.violations.naming import ProtectedModuleViolation
+from wemake_python_styleguide.violations.best_practices import (
+    ProtectedModuleViolation,
+)
 from wemake_python_styleguide.visitors.ast.imports import WrongImportVisitor
 
 import_public = 'import public'
@@ -19,11 +21,18 @@ import_from_public_path = 'from public.path import something'
     import_from_public,
     import_from_public_path,
 ])
-def test_correct_import(assert_errors, parse_ast_tree, code, default_options):
+def test_correct_import(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+):
     """Testing that correct imports are allowed."""
     tree = parse_ast_tree(code)
+
     visitor = WrongImportVisitor(default_options, tree=tree)
     visitor.run()
+
     assert_errors(visitor, [])
 
 
@@ -32,9 +41,16 @@ def test_correct_import(assert_errors, parse_ast_tree, code, default_options):
     import_from_protected,
     import_from_protected_path,
 ])
-def test_incorrect_import(assert_errors, parse_ast_tree, code, default_options):
+def test_incorrect_import(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+):
     """Testing that imports from protected modules are restricted."""
     tree = parse_ast_tree(code)
+
     visitor = WrongImportVisitor(default_options, tree=tree)
     visitor.run()
+
     assert_errors(visitor, [ProtectedModuleViolation])

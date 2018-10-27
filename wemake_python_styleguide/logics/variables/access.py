@@ -1,14 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from typing import Optional
 
-
-def is_private_variable(name: Optional[str]) -> bool:
+def is_private_variable(name: str) -> bool:
     """
     Checks if variable has private name pattern.
-
-    >>> is_private_variable(None)
-    False
 
     >>> is_private_variable('regular')
     False
@@ -23,9 +18,7 @@ def is_private_variable(name: Optional[str]) -> bool:
     False
 
     """
-    return (
-        name is not None and name.startswith('__') and not name.endswith('__')
-    )
+    return name.startswith('__') and not name.endswith('__')
 
 
 def is_protected_variable(name: str) -> bool:

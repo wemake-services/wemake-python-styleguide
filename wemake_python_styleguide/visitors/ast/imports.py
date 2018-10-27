@@ -12,15 +12,13 @@ from wemake_python_styleguide.violations.base import BaseViolation
 from wemake_python_styleguide.violations.best_practices import (
     FutureImportViolation,
     NestedImportViolation,
+    ProtectedModuleViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
     DottedRawImportViolation,
     LocalFolderImportViolation,
 )
-from wemake_python_styleguide.violations.naming import (
-    ProtectedModuleViolation,
-    SameAliasImportViolation,
-)
+from wemake_python_styleguide.violations.naming import SameAliasImportViolation
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 ErrorCallback = Callable[[BaseViolation], None]

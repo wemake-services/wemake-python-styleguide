@@ -8,6 +8,7 @@ from __future__ import print_function  # noqa: Z422
 
 from .version import get_version  # noqa: Z300
 import sys as sys  # noqa: Z113
+from some import _protected  # noqa: Z440
 
 full_name = u'Nikita Sobolev'  # noqa: Z302
 phone_number = 555_123_999  # noqa:  Z303
@@ -29,9 +30,11 @@ hasattr(object, 'some')  # noqa: Z421
 value = 1  # noqa: Z110
 x = 2  # noqa: Z111
 __private = 3  # noqa: Z112
+consecutive__underscores = 4  # noqa: Z116
 __author__ = 'Nikita Sobolev'  # noqa: Z410
 
 nodes = [node for node in 'abc' if node != 'a' if node != 'b']  # noqa: Z307
+some._execute()  # noqa: Z441
 
 
 class BadClass:  # noqa: Z306
@@ -63,7 +66,7 @@ assert 2 > octal_number  # noqa: Z309
 assert hex_number == hex_number  # noqa: Z312
 
 for symbol in 'abc':  # noqa: Z436
-    break
+    ...
 else:
     ...
 

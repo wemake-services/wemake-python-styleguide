@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from typing import Iterable, Optional
+from typing import Iterable
 
 from wemake_python_styleguide import constants
-from wemake_python_styleguide.options.defaults import MIN_VARIABLE_LENGTH
+from wemake_python_styleguide.options import defaults
 
 
 def is_wrong_variable_name(name: str, to_check: Iterable[str]) -> bool:
@@ -40,7 +40,7 @@ def is_wrong_variable_name(name: str, to_check: Iterable[str]) -> bool:
     return False
 
 
-def is_upper_case_name(name: Optional[str]) -> bool:
+def is_upper_case_name(name: str) -> bool:
     """
     Checks that attribute name has no upper-case letters.
 
@@ -65,24 +65,18 @@ def is_upper_case_name(name: Optional[str]) -> bool:
     >>> is_upper_case_name('__variable_v2')
     False
 
-    >>> is_upper_case_name(None)
-    False
-
     """
-    return name is not None and any(character.isupper() for character in name)
+    return any(character.isupper() for character in name)
 
 
 def is_too_short_variable_name(
-    name: Optional[str],
-    min_length: int = MIN_VARIABLE_LENGTH,
+    name: str,
+    min_length: int = defaults.MIN_VARIABLE_LENGTH,
 ) -> bool:
     """
     Checks for too short variable names.
 
     >>> is_too_short_variable_name('test')
-    False
-
-    >>> is_too_short_variable_name(None)
     False
 
     >>> is_too_short_variable_name('o')
@@ -98,35 +92,7 @@ def is_too_short_variable_name(
     False
 
     """
-    if name is None:
-        return False
-
     return name != constants.UNUSED_VARIABLE and len(name) < min_length
-
-
-def is_private_variable(name: Optional[str]) -> bool:
-    """
-    Checks if variable has private name pattern.
-
-    >>> is_private_variable(None)
-    False
-
-    >>> is_private_variable('regular')
-    False
-
-    >>> is_private_variable('__private')
-    True
-
-    >>> is_private_variable('_protected')
-    False
-
-    >>> is_private_variable('__magic__')
-    False
-
-    """
-    return (
-        name is not None and name.startswith('__') and not name.endswith('__')
-    )
 
 
 def is_variable_name_with_underscored_number(name: str) -> bool:
@@ -134,9 +100,6 @@ def is_variable_name_with_underscored_number(name: str) -> bool:
     Checks for variable names with underscored number.
 
     >>> is_variable_name_with_underscored_number('star_wars_episode2')
-    False
-
-    >>> is_variable_name_with_underscored_number(None)
     False
 
     >>> is_variable_name_with_underscored_number('come2_me')
@@ -159,7 +122,7 @@ def is_variable_name_with_underscored_number(name: str) -> bool:
 
     """
     pattern = constants.UNDERSCORED_NUMBER_PATTERN
-    return name is not None and pattern.match(name) is not None
+    return pattern.match(name) is not None
 
 
 def is_variable_name_contains_consecutive_underscores(name: str) -> bool:
@@ -175,9 +138,6 @@ def is_variable_name_contains_consecutive_underscores(name: str) -> bool:
     >>> is_variable_name_contains_consecutive_underscores('__private')
     False
 
-    >>> is_variable_name_contains_consecutive_underscores(None)
-    False
-
     >>> is_variable_name_contains_consecutive_underscores('name')
     False
 
@@ -188,12 +148,6 @@ def is_variable_name_contains_consecutive_underscores(name: str) -> bool:
     True
 
     """
-    if name is None:
-        return False
-
-    if name.endswith('__') and name.startswith('__'):
-        return False
-
     if name.startswith('__'):
         return False
 
