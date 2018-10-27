@@ -3,15 +3,13 @@
 """
 These checks ensures that you follow the best practices.
 
-Note:
+The source for these best practices is hidden inside countless hours
+we have spent debugging software or reviewing it.
 
-    Explicit is better than implicit.
-    Simple is better than complex.
-    Complex is better than complicated.
-    Readability counts.
-    Special cases aren't special enough to break the rules.
-    In the face of ambiguity, refuse the temptation to guess.
-    There should be one-- and preferably only one --obvious way to do it.
+How do we find an inspiration for new rules?
+We find some ugly code during code reviews and audits.
+Then we forbid to use it forever.
+So, this error will never return to our codebase.
 
 .. currentmodule:: wemake_python_styleguide.violations.best_practices
 
@@ -40,6 +38,7 @@ Summary
    RedundantForElseViolation
    RedundantFinallyViolation
    ReassigningVariableToItselfViolation
+   YieldInsideInitViolation
 
 Comments
 --------
@@ -74,6 +73,7 @@ Design
 .. autoclass:: RedundantForElseViolation
 .. autoclass:: RedundantFinallyViolation
 .. autoclass:: ReassigningVariableToItselfViolation
+.. autoclass:: YieldInsideInitViolation
 
 """
 
@@ -776,3 +776,38 @@ class ReassigningVariableToItselfViolation(ASTViolation):
     #: Error message shown to the user.
     error_template = 'Found reassigning variable "{0}" to itself'
     code = 438
+
+
+@final
+class YieldInsideInitViolation(ASTViolation):
+    """
+    Forbids to use ``yield`` inside of ``__init__`` method.
+
+    Reasoning:
+        ``__init__`` should be used to initialize new objects.
+        It shouldn't ``yield`` anything, because it should return ``None``
+        by the convention.
+
+    Example::
+
+         # Correct:
+        class Example(object):
+            def __init__(self):
+                self._public_items_count = 0
+
+        # Wrong:
+        class Example(object):
+            def __init__(self):
+                yield 10
+
+    .. versionadded:: 0.3.0
+
+    Note:
+        Returns Z439 as error code
+
+    """
+
+    should_use_text = False
+    #: Error message shown to the user.
+    error_template = 'Found `yield` inside `__init__`'
+    code = 439

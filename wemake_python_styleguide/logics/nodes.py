@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
+from typing import Tuple, Type
 
 
 def is_literal(node: ast.AST) -> bool:
@@ -16,3 +17,11 @@ def is_literal(node: ast.AST) -> bool:
         return False
     else:
         return True
+
+
+def is_contained(node: ast.AST, to_check: Tuple[Type[ast.AST], ...]) -> bool:
+    """Checks whether node does contain given subnode types."""
+    for child in ast.walk(node):
+        if isinstance(child, to_check):
+            return True
+    return False

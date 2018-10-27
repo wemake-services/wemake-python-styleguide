@@ -4,7 +4,7 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
-## WIP
+## WIP aka The Hacktoberfest Feast
 
 This release was made possible by awesome people who contributed
 to the project during `#hactoberfest`. List of awesome people:
@@ -28,16 +28,17 @@ to the project during `#hactoberfest`. List of awesome people:
 - Forbids comparison of the same variables
 - Forbids inconsistent octal, binary, and hex numbers
 - Forbids too many arguments in `lambda` functions
-- Forbid extra `object` in parent classes list
-- Forbid `for` loops with unused `else`
-- Forbid variables self reassignment
-- Forbid `try` with `finally` without `except`
-- Forbid `if` statements with invalid conditionals
-- Forbid opening parenthesis from following keyword without space in between them
-- Forbid the use of more than 2 `for` loops within a comprehension
-- Forbid variable names with more than one consecutive underscore
-- Restrict the maximum number of base classes aka mixins
-- Forbid importing protected names
+- Forbids extra `object` in parent classes list
+- Forbids `for` loops with unused `else`
+- Forbids variables self reassignment
+- Forbids `try` with `finally` without `except`
+- Forbids `if` statements with invalid conditionals
+- Forbids opening parenthesis from following keyword without space in between them
+- Forbids the use of more than 2 `for` loops within a comprehension
+- Forbids variable names with more than one consecutive underscore
+- Restricts the maximum number of base classes aka mixins
+- Forbids importing protected names
+- Forbids `yield` inside `__init__` method
 
 ### Bugfixes
 

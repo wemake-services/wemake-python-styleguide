@@ -6,15 +6,6 @@ Naming is hard! It is in fact one of the two hardest problems.
 These checks are required to make your application easier to read
 and understand by multiple people over the long period of time.
 
-Note:
-
-    Beautiful is better than ugly.
-    Explicit is better than implicit.
-    Simple is better than complex.
-    Readability counts.
-    Namespaces are one honking great idea -- let's do more of those!
-
-
 Naming convention
 -----------------
 

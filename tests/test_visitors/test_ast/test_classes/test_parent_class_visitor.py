@@ -3,7 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
-    WrongParentClassListDef,
+    ObjectInBaseClassesListViolation,
 )
 from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
 
@@ -25,7 +25,7 @@ def test_wrong_class_definition_multiple_parent(
     visitor = WrongClassVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [WrongParentClassListDef])
+    assert_errors(visitor, [ObjectInBaseClassesListViolation])
 
 
 single_extra_object = 'class TestClassName(object): ...'

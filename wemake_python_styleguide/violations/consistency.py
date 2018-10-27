@@ -10,19 +10,6 @@ There are several ways to write the same number.
 We like our code to be consistent.
 It is easier to bare with your code base if you follow these rules.
 
-Note:
-
-    Beautiful is better than ugly.
-    Explicit is better than implicit.
-    Simple is better than complex.
-    Complex is better than complicated.
-    Flat is better than nested.
-    Sparse is better than dense.
-    Readability counts.
-    Special cases aren't special enough to break the rules.
-    In the face of ambiguity, refuse the temptation to guess.
-    There should be one-- and preferably only one --obvious way to do it.
-
 .. currentmodule:: wemake_python_styleguide.violations.consistency
 
 Summary
@@ -46,7 +33,7 @@ Summary
    RedundantComparisonViolation
    WrongConditionalViolation
    MissingSpaceBetweenKeywordAndParenViolation
-   WrongParentClassListDef
+   ObjectInBaseClassesListViolation
 
 Consistency checks
 ------------------
@@ -66,7 +53,8 @@ Consistency checks
 .. autoclass:: RedundantComparisonViolation
 .. autoclass:: WrongConditionalViolation
 .. autoclass:: MissingSpaceBetweenKeywordAndParenViolation
-.. autoclass:: WrongParentClassListDef
+.. autoclass:: ObjectInBaseClassesListViolation
+
 """
 
 from wemake_python_styleguide.types import final
@@ -606,6 +594,7 @@ class WrongConditionalViolation(ASTViolation):
 
     Note:
         Returns Z314 as error code
+
     """
 
     should_use_text = False
@@ -614,7 +603,7 @@ class WrongConditionalViolation(ASTViolation):
     code = 314
 
 
-class WrongParentClassListDef(ASTViolation):
+class ObjectInBaseClassesListViolation(ASTViolation):
     """
     Forbid extra ``object`` in parent classes list.
 
@@ -625,7 +614,7 @@ class WrongParentClassListDef(ASTViolation):
         parents - we should not allow it for the consistency reasons.
 
     Solution:
-        Remove extra 'object'.
+        Remove extra ``object`` parent class from the list.
 
     Example::
 
@@ -640,6 +629,7 @@ class WrongParentClassListDef(ASTViolation):
 
     Note:
         Returns Z315 as error code
+
     """
 
     should_use_text = False

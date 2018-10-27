@@ -16,8 +16,6 @@ Note:
 
     Simple is better than complex.
     Complex is better than complicated.
-    Flat is better than nested.
-    Namespaces are one honking great idea -- let's do more of those!
 
 .. currentmodule:: wemake_python_styleguide.violations.complexity
 
