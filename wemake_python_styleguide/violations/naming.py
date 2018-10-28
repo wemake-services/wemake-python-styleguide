@@ -423,13 +423,13 @@ class UnderscoredNumberNameViolation(MaybeASTViolation):
     functions, method, and classes.
     Please, note that putting an underscore that replaces ``-`` in some
     names between numbers is fine, example: ``ISO-123-456`` would became
-    ``iso_123_456``.
+    ``iso123_456``.
 
     Example::
 
         # Correct:
         star_wars_episode2 = 'awesome!'
-        iso_123_456 = 'some data'
+        iso123_456 = 'some data'
 
         # Wrong:
         star_wars_episode_2 = 'not so awesome'

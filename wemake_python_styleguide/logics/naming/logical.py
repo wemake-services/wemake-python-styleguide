@@ -111,21 +111,23 @@ def does_contain_underscored_number(name: str) -> bool:
     >>> does_contain_underscored_number('z1')
     False
 
+    >>> does_contain_underscored_number('iso123_456')
+    False
+
     >>> does_contain_underscored_number('star_wars_episode_2')
     True
 
     >>> does_contain_underscored_number('come_2_me')
     True
 
-    >>> does_contain_underscored_number('iso_123_456')
-    False
+    >>> does_contain_underscored_number('come_44_me')
+    True
 
-    >>> does_contain_underscored_number('iso123_456')
-    False
+    >>> does_contain_underscored_number('iso_123_456')
+    True
 
     """
-    pattern = constants.UNDERSCORED_NUMBER_PATTERN
-    return pattern.match(name) is not None
+    return constants.UNDERSCORED_NUMBER_PATTERN.match(name) is not None
 
 
 def does_contain_consecutive_underscores(name: str) -> bool:

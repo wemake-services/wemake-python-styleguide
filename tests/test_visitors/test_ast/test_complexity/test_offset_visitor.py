@@ -124,7 +124,7 @@ def test_nested_offset_errors(
     assert_errors(visitor, errors)
 
 
-def test_regression_282(assert_errors, parse_ast_tree, options):
+def test_regression282(assert_errors, parse_ast_tree, options):
     """
     Testing that issue-282 will not happen again.
 

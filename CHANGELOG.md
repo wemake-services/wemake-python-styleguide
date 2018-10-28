@@ -15,6 +15,7 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Bugfixes
 
+- Fixes `UNDERSCORED_NUMBER_PATTERN` to match names like `come_22_me`
 - Fixes `UpperCaseAttributeViolation` not being displayed in the docs
 - Fixes consistency checks being duplicated in the docs
 - Fixes `UnderscoredNumberNameViolation` showing incorrect line number
@@ -29,6 +30,7 @@ We used to have incremental versioning before `0.1.0`.
 - Refactoring: removed duplicate logic inside `logics/filenames.py`
 - Improves tests: now testing almost all violations inside `noqa.py`
 - Improves tests: now testing violations text
+- Improves tests: now all naming patters live in one fixture
 
 
 ## 0.3.0 aka The Hacktoberfest Feast

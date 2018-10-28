@@ -15,7 +15,7 @@ module_metadata = """
 """
 
 nested_metadata = """
-class ORM:
+class ORM(object):
     {0} = None
 """
 

@@ -14,7 +14,7 @@ from wemake_python_styleguide.visitors.filenames.module import (
     'my_module.py',
     '_prefixed.py',
     '_prefixed_with_number2.py',
-    'regression_123.py',
+    'regression123.py',
 ])
 def test_simple_filename(assert_errors, filename, default_options):
     """Testing that simple file names works well."""
