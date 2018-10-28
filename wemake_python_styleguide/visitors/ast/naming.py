@@ -17,7 +17,7 @@ from wemake_python_styleguide.violations.naming import (
     ConsecutiveUnderscoresInNameViolation,
     PrivateNameViolation,
     TooShortNameViolation,
-    UnderScoredNumberNameViolation,
+    UnderscoredNumberNameViolation,
     UpperCaseAttributeViolation,
     WrongVariableNameViolation,
 )
@@ -59,7 +59,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             self.add_violation(PrivateNameViolation(node, text=name))
 
         if logical.does_contain_underscored_number(name):
-            self.add_violation(UnderScoredNumberNameViolation(node, text=name))
+            self.add_violation(UnderscoredNumberNameViolation(node, text=name))
         if logical.does_contain_consecutive_underscores(name):
             self.add_violation(
                 ConsecutiveUnderscoresInNameViolation(node, text=name),
@@ -184,7 +184,8 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
     """Finds wrong variables assignments."""
 
     def _create_target_names(
-            self, target: AssignTargets,
+        self,
+        target: AssignTargets,
     ) -> AssignTargetsNameList:
         """Creates list with names of targets of assignment."""
         target_names = []

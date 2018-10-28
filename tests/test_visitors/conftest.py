@@ -17,3 +17,21 @@ def assert_errors():
             assert error.code == errors[index].code
 
     return factory
+
+
+@pytest.fixture(scope='session')
+def assert_error_text():
+    """Helper function to assert visitor violation's text."""
+    def factory(visitor: BaseVisitor, text: str):
+        assert len(visitor.violations) == 1
+
+        violation = visitor.violations[0]
+        assert violation.__class__.should_use_text, violation.__class__
+
+        reproduction = violation.__class__(
+            node=violation._node,  # noqa: Z441
+            text=text,
+        )
+        assert reproduction.message() == violation.message()
+
+    return factory

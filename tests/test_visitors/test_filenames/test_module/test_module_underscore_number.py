@@ -3,7 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.naming import (
-    UnderScoredNumberNameViolation,
+    UnderscoredNumberNameViolation,
 )
 from wemake_python_styleguide.visitors.filenames.module import (
     WrongModuleNameVisitor,
@@ -23,7 +23,7 @@ def test_filename_with_underscored_number(
     visitor = WrongModuleNameVisitor(default_options, filename=filename)
     visitor.run()
 
-    assert_errors(visitor, [UnderScoredNumberNameViolation])
+    assert_errors(visitor, [UnderscoredNumberNameViolation])
 
 
 @pytest.mark.parametrize('filename', [

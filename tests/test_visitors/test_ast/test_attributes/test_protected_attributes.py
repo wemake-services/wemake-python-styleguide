@@ -11,25 +11,26 @@ from wemake_python_styleguide.visitors.ast.attributes import (
 
 protected_attribute_assigned = 'some._protected = 1'
 protected_attribute_accessed = 'print(some._protected)'
-protected_method_called = 'some._method()'
-protected_method_called_params = 'some._method(12, 33)'
+protected_method_called = 'some._protected()'
+protected_method_called_params = 'some._protected(12, 33)'
+builtin_protected_call = 'True()._protected = 1'  # to make coverage happy
 
 protected_container_attribute = """
 class Test(object):
     def __init__(self):
-        self.container._print = 1
+        self.container._protected = 1
 """
 
 protected_container_method = """
 class Test(object):
     def __init__(self):
-        self.container._print()
+        self.container._protected()
 """
 
 protected_callable_attribute = """
 class Test(object):
     def __init__(self):
-        some()._print()
+        some()._protected()
 """
 
 # Correct:
@@ -43,27 +44,27 @@ magic_attribute_definition = 'Test.__dict__ = dict()'
 protected_self_attribute = """
 class Test(object):
     def __init__(self):
-        self._print = 1
+        self._protected = 1
 """
 
 protected_self_method = """
 class Test(object):
     def __init__(self):
-        self._print()
+        self._protected()
 """
 
 protected_cls_attribute = """
 class Test(object):
     @classmethod
     def method(cls):
-        cls._print = 'some'
+        cls._protected = 'some'
 """
 
 protected_cls_method = """
 class Test(object):
     @classmethod
     def method(cls):
-        cls._print()
+        cls._protected()
 """
 
 protected_attribute_definition = """
@@ -87,33 +88,34 @@ class Test(object):
 protected_super_attribute = """
 class Test(object):
     def __init__(self):
-        super()._print = 1
+        super()._protected = 1
 """
 
 protected_super_method = """
 class Test(object):
     def __init__(self):
-        super()._print()
+        super()._protected()
 """
 
 protected_super_cls_attribute = """
 class Test(object):
     @classmethod
     def method(cls):
-        super()._print = 'some'
+        super()._protected = 'some'
 """
 
 protected_super_cls_method = """
 class Test(object):
     @classmethod
     def method(cls):
-        super()._print()
+        super()._protected()
 """
 
 
 @pytest.mark.parametrize('code', [
     protected_attribute_assigned,
     protected_attribute_accessed,
+    builtin_protected_call,
     protected_method_called,
     protected_method_called_params,
     protected_container_attribute,
@@ -122,6 +124,7 @@ class Test(object):
 ])
 def test_protected_attribute_is_restricted(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
     code,
     default_options,
@@ -133,6 +136,7 @@ def test_protected_attribute_is_restricted(
     visitor.run()
 
     assert_errors(visitor, [ProtectedAttributeViolation])
+    assert_error_text(visitor, '_protected')
 
 
 @pytest.mark.parametrize('code', [

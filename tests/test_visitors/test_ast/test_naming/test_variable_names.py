@@ -5,9 +5,10 @@ import string
 import pytest
 
 from wemake_python_styleguide.violations.naming import (
+    ConsecutiveUnderscoresInNameViolation,
     PrivateNameViolation,
     TooShortNameViolation,
-    UnderScoredNumberNameViolation,
+    UnderscoredNumberNameViolation,
     WrongVariableNameViolation,
 )
 from wemake_python_styleguide.visitors.ast.naming import (
@@ -17,14 +18,6 @@ from wemake_python_styleguide.visitors.ast.naming import (
 
 variable_test = """
 {0} = 'test'
-"""
-
-underscore_variable_test1 = """
-_{0} = 'test'
-"""
-
-underscore_variable_test2 = """
-{0}_ = 'test'
 """
 
 for_variable_test = """
@@ -65,11 +58,10 @@ except Exception as {0}:
     with_variable_test,
     async_with_variable_test,
     exception_test,
-    underscore_variable_test1,
-    underscore_variable_test2,
 ])
 def test_wrong_variable_names(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
     bad_name,
     code,
@@ -82,6 +74,7 @@ def test_wrong_variable_names(
     visitor.run()
 
     assert_errors(visitor, [WrongVariableNameViolation])
+    assert_error_text(visitor, bad_name)
 
 
 @pytest.mark.parametrize('short_name', string.ascii_letters)
@@ -95,6 +88,7 @@ def test_wrong_variable_names(
 ])
 def test_too_short_variable_names(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
     short_name,
     code,
@@ -107,6 +101,7 @@ def test_too_short_variable_names(
     visitor.run()
 
     assert_errors(visitor, [TooShortNameViolation])
+    assert_error_text(visitor, short_name)
 
 
 @pytest.mark.parametrize('code', [
@@ -143,46 +138,26 @@ def test_too_short_variable_names_configured(
 ])
 def test_private_variable_names(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
     code,
     default_options,
 ):
     """Testing that variable can not have private names."""
-    tree = parse_ast_tree(code.format('__private_value'))
+    private_name = '__private_value'
+    tree = parse_ast_tree(code.format(private_name))
 
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [PrivateNameViolation])
+    assert_error_text(visitor, private_name)
 
 
-@pytest.mark.parametrize('correct_name', ['correct_name', 'xy', '_'])
-@pytest.mark.parametrize('code', [
-    variable_test,
-    for_variable_test,
-    async_for_variable_test,
-    with_variable_test,
-    async_with_variable_test,
-    exception_test,
-    underscore_variable_test1,
-    underscore_variable_test2,
+@pytest.mark.parametrize('underscored_name', [
+    'number_5',
+    'number_4_suffix',
 ])
-def test_correct_variable_name(
-    assert_errors,
-    parse_ast_tree,
-    code,
-    correct_name,
-    default_options,
-):
-    """Testing that variable can have normal names."""
-    tree = parse_ast_tree(code.format(correct_name))
-
-    visitor = WrongNameVisitor(default_options, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [])
-
-
 @pytest.mark.parametrize('code', [
     variable_test,
     for_variable_test,
@@ -193,19 +168,27 @@ def test_correct_variable_name(
 ])
 def test_underscored_number_in_variable_names(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
+    underscored_name,
     code,
     default_options,
 ):
     """Testing that variable can not have private names."""
-    tree = parse_ast_tree(code.format('number_2'))
+    tree = parse_ast_tree(code.format(underscored_name))
 
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [UnderScoredNumberNameViolation])
+    assert_errors(visitor, [UnderscoredNumberNameViolation])
+    assert_error_text(visitor, underscored_name)
 
 
+@pytest.mark.parametrize('underscored_name', [
+    'some__name',
+    'double__under__score',
+    'multiple___underscores',
+])
 @pytest.mark.parametrize('code', [
     variable_test,
     for_variable_test,
@@ -214,14 +197,49 @@ def test_underscored_number_in_variable_names(
     async_with_variable_test,
     exception_test,
 ])
-def test_underscored_number_not_in_variable_names(
+def test_consecutive_underscores_in_variable_name(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
+    underscored_name,
     code,
     default_options,
 ):
     """Testing that variable can not have private names."""
-    tree = parse_ast_tree(code.format('test34', 'test32_109'))
+    tree = parse_ast_tree(code.format(underscored_name))
+
+    visitor = WrongNameVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [ConsecutiveUnderscoresInNameViolation])
+    assert_error_text(visitor, underscored_name)
+
+
+@pytest.mark.parametrize('correct_name', [
+    'correct_name',
+    '_protected_name',
+    'xy',
+    '_',
+    'test34',
+    'test34_554',
+])
+@pytest.mark.parametrize('code', [
+    variable_test,
+    for_variable_test,
+    async_for_variable_test,
+    with_variable_test,
+    async_with_variable_test,
+    exception_test,
+])
+def test_correct_variable_name(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    correct_name,
+    default_options,
+):
+    """Testing that variable can have normal names."""
+    tree = parse_ast_tree(code.format(correct_name))
 
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()

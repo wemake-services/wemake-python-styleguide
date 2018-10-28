@@ -14,7 +14,7 @@ from wemake_python_styleguide.violations import naming
     ('x.py', naming.TooShortNameViolation),
     ('test__name.py', naming.ConsecutiveUnderscoresInNameViolation),
     ('123py.py', naming.WrongModuleNamePatternViolation),
-    ('version_1.py', naming.UnderScoredNumberNameViolation),
+    ('version_1.py', naming.UnderscoredNumberNameViolation),
     ('__private.py', naming.PrivateNameViolation),
 ])
 def test_module_names(filename, error, default_options):

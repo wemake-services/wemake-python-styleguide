@@ -114,7 +114,7 @@ Summary
    TooShortNameViolation
    PrivateNameViolation
    SameAliasImportViolation
-   UnderScoredNumberNameViolation
+   UnderscoredNumberNameViolation
    UpperCaseAttributeViolation
    ConsecutiveUnderscoresInNameViolation
 
@@ -133,7 +133,7 @@ General names
 .. autoclass:: TooShortNameViolation
 .. autoclass:: PrivateNameViolation
 .. autoclass:: SameAliasImportViolation
-.. autoclass:: UnderScoredNumberNameViolation
+.. autoclass:: UnderscoredNumberNameViolation
 .. autoclass:: UpperCaseAttributeViolation
 .. autoclass:: ConsecutiveUnderscoresInNameViolation
 
@@ -261,7 +261,7 @@ class WrongModuleNamePatternViolation(SimpleViolation):
     code = 102
 
 
-# Variables:
+# General names:
 
 @final
 class WrongVariableNameViolation(ASTViolation):
@@ -408,7 +408,7 @@ class SameAliasImportViolation(ASTViolation):
 
 
 @final
-class UnderScoredNumberNameViolation(MaybeASTViolation):
+class UnderscoredNumberNameViolation(MaybeASTViolation):
     """
     Forbids to have names with underscored numbers pattern.
 
@@ -435,6 +435,7 @@ class UnderScoredNumberNameViolation(MaybeASTViolation):
         star_wars_episode_2 = 'not so awesome'
 
     .. versionadded:: 0.3.0
+    .. versionchanged:: 0.4.0
 
     Note:
         Returns Z114 as error code

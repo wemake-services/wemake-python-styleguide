@@ -153,6 +153,7 @@ def test_magic_number_whitelist(
 ])
 def test_magic_number_warning(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
     code,
     number,
@@ -165,3 +166,4 @@ def test_magic_number_warning(
     visitor.run()
 
     assert_errors(visitor, [MagicNumberViolation])
+    assert_error_text(visitor, str(abs(number)))

@@ -20,6 +20,7 @@ Available base classes
    :nosignatures:
 
    ASTViolation
+   MaybeASTViolation
    TokenizeViolation
    SimpleViolation
 

@@ -17,16 +17,18 @@ We used to have incremental versioning before `0.1.0`.
 
 - Fixes `UpperCaseAttributeViolation` not being displayed in the docs
 - Fixes consistency checks being duplicated in the docs
-- Fixes `UnderScoredNumberNameViolation` showing incorrect line number
+- Fixes `UnderscoredNumberNameViolation` showing incorrect line number
 - Fixes `ProtectedAttributeViolation` to respect `super()` and `mcs`
 - Fixes `ProtectedAttributeViolation` to show correct text
+- Renames `UnderscoredNumberNameViolation` to `UnderscoredNumberNameViolation`
 
 ### Misc
 
-- Updates `flake8` version to `3.6`
-- Removes `pycodestyle` pinned version
-- Improves tests: now testing almost all violations inside `noqa.py`
+- Dependencies: updates `flake8` version to `3.6`
+- Dependencies: removes `pycodestyle` pinned version
 - Refactoring: removed duplicate logic inside `logics/filenames.py`
+- Improves tests: now testing almost all violations inside `noqa.py`
+- Improves tests: now testing violations text
 
 
 ## 0.3.0 aka The Hacktoberfest Feast

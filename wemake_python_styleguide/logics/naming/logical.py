@@ -120,6 +120,9 @@ def does_contain_underscored_number(name: str) -> bool:
     >>> does_contain_underscored_number('iso_123_456')
     False
 
+    >>> does_contain_underscored_number('iso123_456')
+    False
+
     """
     pattern = constants.UNDERSCORED_NUMBER_PATTERN
     return pattern.match(name) is not None

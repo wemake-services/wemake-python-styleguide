@@ -7,7 +7,7 @@ from wemake_python_styleguide.violations.naming import (
     ConsecutiveUnderscoresInNameViolation,
     PrivateNameViolation,
     TooShortNameViolation,
-    UnderScoredNumberNameViolation,
+    UnderscoredNumberNameViolation,
     WrongModuleMagicNameViolation,
     WrongModuleNamePatternViolation,
     WrongModuleNameViolation,
@@ -45,7 +45,7 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
             )
 
         if logical.does_contain_underscored_number(self.stem):
-            self.add_violation(UnderScoredNumberNameViolation(text=self.stem))
+            self.add_violation(UnderscoredNumberNameViolation(text=self.stem))
 
     def visit_filename(self) -> None:
         """
@@ -57,7 +57,7 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
             WrongModuleNameViolation
             WrongModuleNamePatternViolation
             WrongModuleNameUnderscoresViolation
-            UnderScoredNumberNameViolation
+            UnderscoredNumberNameViolation
 
         """
         self._check_module_name()
