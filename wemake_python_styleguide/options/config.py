@@ -40,18 +40,12 @@ class Configuration(object):
 
     Options for general checks:
 
-    - ``min-variable-length`` - minimum number of chars to define a valid
-      variable name, defaults to
-      :str:`wemake_python_styleguide.options.defaults.MIN_VARIABLE_LENGTH`
+    - ``min-name-length`` - minimum number of chars to define a valid
+      variable and module name, defaults to
+      :str:`wemake_python_styleguide.options.defaults.MIN_NAME_LENGTH`
     - ``i-control-code`` - whether you control ones who use your code,
       more rules are enforced when you do control it, defaults to
       :str:`wemake_python_styleguide.options.defaults.I_CONTROL_CODE`
-
-    Options for module names related checks:
-
-    - ``min-module-name-length`` - minimum required module's name length,
-      defaults to
-      :str:`wemake_python_styleguide.options.defaults.MIN_MODULE_NAME_LENGTH`
 
     Options for complexity related checks:
 
@@ -190,15 +184,15 @@ class Configuration(object):
         _Option(
             '--max-base-classes',
             defaults.MAX_BASE_CLASSES,
-            'Maximum number of base classes',
+            'Maximum number of base classes.',
         ),
 
         # General:
 
         _Option(
-            '--min-variable-length',
-            defaults.MIN_VARIABLE_LENGTH,
-            'Minimum required length of the variable name.',
+            '--min-name-length',
+            defaults.MIN_NAME_LENGTH,
+            'Minimum required length of variable and module names.',
         ),
 
         _Option(
@@ -207,14 +201,6 @@ class Configuration(object):
             'Whether you control ones who use your code.',
             action='store_true',
             type=None,
-        ),
-
-        # File names:
-
-        _Option(
-            '--min-module-name-length',
-            defaults.MIN_MODULE_NAME_LENGTH,
-            "Minimum required module's name length",
         ),
     ]
 

@@ -52,7 +52,7 @@ class ConfigurationOptions(Protocol):
     """
 
     # General:
-    min_variable_length: int
+    min_name_length: int
     i_control_code: bool
 
     # Complexity:
@@ -69,6 +69,3 @@ class ConfigurationOptions(Protocol):
     max_imports: int
     max_conditions: int
     max_base_classes: int
-
-    # File names:
-    min_module_name_length: int

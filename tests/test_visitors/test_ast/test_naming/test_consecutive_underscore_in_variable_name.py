@@ -24,6 +24,21 @@ for {0} in []:
     print()
 """
 
+function_test = """
+def {0}():
+    ...
+"""
+
+async_function_test = """
+async def {0}():
+    ...
+"""
+
+argument_test = """
+def some_function({0}):
+    ...
+"""
+
 async_for_variable_test = """
 async def container():
     async for {0} in []:
@@ -52,6 +67,9 @@ except Exception as {0}:
 @pytest.mark.parametrize('code', [
     variable_test,
     for_variable_test,
+    function_test,
+    async_for_variable_test,
+    argument_test,
     async_for_variable_test,
     with_variable_test,
     async_with_variable_test,

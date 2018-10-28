@@ -3,9 +3,10 @@
 import pytest
 
 from wemake_python_styleguide.violations.naming import (
-    WrongModuleNameUnderscoresViolation,
+    ConsecutiveUnderscoresInNameViolation,
+    PrivateNameViolation,
 )
-from wemake_python_styleguide.visitors.filenames.wrong_module_name import (
+from wemake_python_styleguide.visitors.filenames.module import (
     WrongModuleNameVisitor,
 )
 
@@ -25,12 +26,24 @@ def test_correct_filename(assert_errors, filename, default_options):
 
 
 @pytest.mark.parametrize('filename', [
-    '__compat.py',
+    'compat__.py',
     'some__typo.py',
 ])
-def test_length_option(assert_errors, filename, default_options):
+def test_underscore_filename(assert_errors, filename, default_options):
     """Ensures incorrect underscores are caught."""
     visitor = WrongModuleNameVisitor(default_options, filename=filename)
     visitor.run()
 
-    assert_errors(visitor, [WrongModuleNameUnderscoresViolation])
+    assert_errors(visitor, [ConsecutiveUnderscoresInNameViolation])
+
+
+@pytest.mark.parametrize('filename', [
+    '__private.py',
+    '__compat_name.py',
+])
+def test_private_filename(assert_errors, filename, default_options):
+    """Ensures that names with private names are caught."""
+    visitor = WrongModuleNameVisitor(default_options, filename=filename)
+    visitor.run()
+
+    assert_errors(visitor, [PrivateNameViolation])

@@ -6,7 +6,7 @@ import pytest
 
 from wemake_python_styleguide.violations.naming import (
     PrivateNameViolation,
-    TooShortVariableNameViolation,
+    TooShortNameViolation,
     UpperCaseAttributeViolation,
     WrongVariableNameViolation,
 )
@@ -58,7 +58,7 @@ def test_too_short_attribute_names(
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [TooShortVariableNameViolation])
+    assert_errors(visitor, [TooShortNameViolation])
 
 
 @pytest.mark.parametrize('code', [

@@ -3,10 +3,10 @@
 import pytest
 
 from wemake_python_styleguide.violations.naming import (
-    TooShortModuleNameViolation,
+    TooShortNameViolation,
     WrongModuleNamePatternViolation,
 )
-from wemake_python_styleguide.visitors.filenames.wrong_module_name import (
+from wemake_python_styleguide.visitors.filenames.module import (
     WrongModuleNameVisitor,
 )
 
@@ -23,15 +23,15 @@ def test_too_short_filename(assert_errors, filename, default_options):
     visitor.run()
 
     assert_errors(visitor, [
-        TooShortModuleNameViolation,
+        TooShortNameViolation,
         WrongModuleNamePatternViolation,
     ])
 
 
 def test_length_option(assert_errors, options):
-    """Ensures that option `--min-module-name-length` works."""
-    option_values = options(min_module_name_length=5)
+    """Ensures that option `--min-name-length` works."""
+    option_values = options(min_name_length=5)
     visitor = WrongModuleNameVisitor(option_values, filename='test.py')
     visitor.run()
 
-    assert_errors(visitor, [TooShortModuleNameViolation])
+    assert_errors(visitor, [TooShortNameViolation])

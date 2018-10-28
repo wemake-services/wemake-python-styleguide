@@ -12,6 +12,7 @@ from wemake_python_styleguide.options.config import Configuration
 from wemake_python_styleguide.violations.base import (
     ASTViolation,
     BaseViolation,
+    MaybeASTViolation,
     SimpleViolation,
     TokenizeViolation,
 )
@@ -23,6 +24,7 @@ def _is_violation_class(cls) -> bool:
         BaseViolation,
         SimpleViolation,
         TokenizeViolation,
+        MaybeASTViolation,
     }
 
     return (

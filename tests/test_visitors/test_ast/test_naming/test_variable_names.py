@@ -6,7 +6,7 @@ import pytest
 
 from wemake_python_styleguide.violations.naming import (
     PrivateNameViolation,
-    TooShortVariableNameViolation,
+    TooShortNameViolation,
     UnderScoredNumberNameViolation,
     WrongVariableNameViolation,
 )
@@ -106,7 +106,7 @@ def test_too_short_variable_names(
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [TooShortVariableNameViolation])
+    assert_errors(visitor, [TooShortNameViolation])
 
 
 @pytest.mark.parametrize('code', [
@@ -126,11 +126,11 @@ def test_too_short_variable_names_configured(
     """Testing that variable length can be configured."""
     tree = parse_ast_tree(code.format('kira'))
 
-    option_values = options(min_variable_length=5)
+    option_values = options(min_name_length=5)
     visitor = WrongNameVisitor(option_values, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [TooShortVariableNameViolation])
+    assert_errors(visitor, [TooShortNameViolation])
 
 
 @pytest.mark.parametrize('code', [

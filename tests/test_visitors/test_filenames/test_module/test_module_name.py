@@ -4,7 +4,7 @@ import pytest
 
 from wemake_python_styleguide.constants import MODULE_NAMES_BLACKLIST
 from wemake_python_styleguide.violations.naming import WrongModuleNameViolation
-from wemake_python_styleguide.visitors.filenames.wrong_module_name import (
+from wemake_python_styleguide.visitors.filenames.module import (
     WrongModuleNameVisitor,
 )
 

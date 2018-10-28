@@ -25,15 +25,15 @@ General
 - Do not use consecutive underscores
 - When writing abbreviations in ``UpperCase``
   capitalize all letters: ``HTTPAddress``
-- When writting abbreviations in ``snake_case`` use lowercase: ``http_address``
-- When writting numbers in ``snake_case``
+- When writing abbreviations in ``snake_case`` use lowercase: ``http_address``
+- When writing numbers in ``snake_case``
   do not use extra ``_`` before numbers as in ``http2_protocol``
 
 Packages
 ~~~~~~~~
 
 - Packages should use ``snake_case``
-- One word for a package is the most prefitable name
+- One word for a package is the most preferable name
 
 Modules
 ~~~~~~~
@@ -109,11 +109,9 @@ Summary
 
    WrongModuleNameViolation
    WrongModuleMagicNameViolation
-   TooShortModuleNameViolation
-   WrongModuleNameUnderscoresViolation
    WrongModuleNamePatternViolation
    WrongVariableNameViolation
-   TooShortVariableNameViolation
+   TooShortNameViolation
    PrivateNameViolation
    SameAliasImportViolation
    UnderScoredNumberNameViolation
@@ -126,15 +124,13 @@ Module names
 
 .. autoclass:: WrongModuleNameViolation
 .. autoclass:: WrongModuleMagicNameViolation
-.. autoclass:: TooShortModuleNameViolation
-.. autoclass:: WrongModuleNameUnderscoresViolation
 .. autoclass:: WrongModuleNamePatternViolation
 
-Variable names
---------------
+General names
+-------------
 
 .. autoclass:: WrongVariableNameViolation
-.. autoclass:: TooShortVariableNameViolation
+.. autoclass:: TooShortNameViolation
 .. autoclass:: PrivateNameViolation
 .. autoclass:: SameAliasImportViolation
 .. autoclass:: UnderScoredNumberNameViolation
@@ -146,6 +142,7 @@ Variable names
 from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.base import (
     ASTViolation,
+    MaybeASTViolation,
     SimpleViolation,
 )
 
@@ -225,77 +222,15 @@ class WrongModuleMagicNameViolation(SimpleViolation):
 
 
 @final
-class TooShortModuleNameViolation(SimpleViolation):
-    """
-    Forbids to use module name shorter than some breakpoint.
-
-    Reasoning:
-        Too short module names are not expressive enough.
-        We will have to open the code to find out what is going on there.
-
-    Solution:
-        Rename the module.
-
-    This rule is configurable with ``--min-module-name-length``.
-
-    .. versionadded:: 0.1.0
-
-    Note:
-        Returns Z102 as error code
-
-    """
-
-    should_use_text = False
-    #: Error message shown to the user.
-    error_template = 'Found too short module name'
-    code = 102
-
-
-@final
-class WrongModuleNameUnderscoresViolation(SimpleViolation):
-    """
-    Forbids to use multiple underscores in a row in a module name.
-
-    Reasoning:
-        It is hard to tell how many underscores are there: two or three?
-
-    Solution:
-        Keep just one underscore in a module name.
-
-    Example::
-
-        # Correct:
-        __init__.py
-        some_module_name.py
-        test.py
-
-        # Wrong:
-        some__wrong__name.py
-        my__module.py
-        __fake__magic__.py
-
-    .. versionadded:: 0.1.0
-
-    Note:
-        Returns Z103 as error code
-
-    """
-
-    should_use_text = False
-    #: Error message shown to the user.
-    error_template = 'Found repeating underscores in a module name'
-    code = 103
-
-
-@final
 class WrongModuleNamePatternViolation(SimpleViolation):
     """
     Forbids to use module names that do not match our pattern.
 
     Reasoning:
-        Just like the variable names - module names should be consistent.
+        Module names must be valid python identifiers.
+        And just like the variable names - module names should be consistent.
         Ideally, they should follow the same rules.
-        For ``python`` world it is common to use `snake_case` notation.
+        For ``python`` world it is common to use ``snake_case`` notation.
 
     We use
     :py:data:`~wemake_python_styleguide.constants.MODULE_NAME_PATTERN`
@@ -316,14 +251,14 @@ class WrongModuleNamePatternViolation(SimpleViolation):
     .. versionadded:: 0.1.0
 
     Note:
-        Returns Z104 as error code
+        Returns Z102 as error code
 
     """
 
     should_use_text = False
     #: Error message shown to the user.
     error_template = 'Found incorrect module name pattern'
-    code = 104
+    code = 102
 
 
 # Variables:
@@ -368,9 +303,9 @@ class WrongVariableNameViolation(ASTViolation):
 
 
 @final
-class TooShortVariableNameViolation(ASTViolation):
+class TooShortNameViolation(MaybeASTViolation):
     """
-    Forbids to have too short variable names.
+    Forbids to have too short variable or module names.
 
     Reasoning:
         It is hard to understand what the variable means and why it is used,
@@ -379,7 +314,9 @@ class TooShortVariableNameViolation(ASTViolation):
     Solution:
         Think of another name. Give more context to it.
 
-    This rule is configurable with ``--min-variable-length``.
+    This rule checks: modules, variables, attributes,
+    functions, methods, and classes.
+    This rule is configurable with ``--min-name-length``.
 
     Example::
 
@@ -392,6 +329,7 @@ class TooShortVariableNameViolation(ASTViolation):
         y = 2
 
     .. versionadded:: 0.1.0
+    .. versionchanged:: 0.4.0
 
     Note:
         Returns Z111 as error code
@@ -404,7 +342,7 @@ class TooShortVariableNameViolation(ASTViolation):
 
 
 @final
-class PrivateNameViolation(ASTViolation):
+class PrivateNameViolation(MaybeASTViolation):
     """
     Forbids to have private name pattern.
 
@@ -418,7 +356,7 @@ class PrivateNameViolation(ASTViolation):
         Think about your design, why do you want to make it private?
         Are there any other ways to achieve what you want?
 
-    This rule checks: variables, attributes, functions, and methods.
+    This rule checks: modules, variables, attributes, functions, and methods.
 
     Example::
 
@@ -432,6 +370,7 @@ class PrivateNameViolation(ASTViolation):
         Returns Z112 as error code
 
     .. versionadded:: 0.1.0
+    .. versionchanged:: 0.4.0
 
     """
 
@@ -469,7 +408,7 @@ class SameAliasImportViolation(ASTViolation):
 
 
 @final
-class UnderScoredNumberNameViolation(ASTViolation):
+class UnderScoredNumberNameViolation(MaybeASTViolation):
     """
     Forbids to have names with underscored numbers pattern.
 
@@ -480,7 +419,8 @@ class UnderScoredNumberNameViolation(ASTViolation):
         Do not put an underscore between text and numbers, that is confusing.
         Rename your variable or modules to not include underscored numbers.
 
-    This rule checks: variables, and modules.
+    This rule checks: modules, variables, attributes,
+    functions, method, and classes.
     Please, note that putting an underscore that replaces ``-`` in some
     names between numbers is fine, example: ``ISO-123-456`` would became
     ``iso_123_456``.
@@ -509,20 +449,22 @@ class UnderScoredNumberNameViolation(ASTViolation):
 @final
 class UpperCaseAttributeViolation(ASTViolation):
     """
-    Forbids to use anything but snake_case for naming attributes on a class.
+    Forbids to use anything but ``snake_case`` for naming class attributes.
 
     Reasoning:
         Constants with upper-case names belong on a module level.
 
     Solution:
         Move your constants to the module level.
-        Rename your variables so that they conform to "snake_case" convention.
+        Rename your variables so that they conform
+        to ``snake_case`` convention.
 
     Example::
 
         # Correct:
+        MY_MODULE_CONSTANT = 1
         class A(object):
-            my_constant = 42
+            my_attribute = 42
 
         # Wrong:
         class A(object):
@@ -541,7 +483,7 @@ class UpperCaseAttributeViolation(ASTViolation):
 
 
 @final
-class ConsecutiveUnderscoresInNameViolation(ASTViolation):
+class ConsecutiveUnderscoresInNameViolation(MaybeASTViolation):
     """
     Forbids to use more than one consecutive underscore in variable names.
 
@@ -558,7 +500,10 @@ class ConsecutiveUnderscoresInNameViolation(ASTViolation):
         # Wrong:
         some__value = 5
 
+    This rule checks: modules, variables, attributes, functions, and methods.
+
     .. versionadded:: 0.3.0
+    .. versionchanged:: 0.4.0
 
     Note:
         Returns Z116 as error code
@@ -567,5 +512,4 @@ class ConsecutiveUnderscoresInNameViolation(ASTViolation):
 
     #: Error message shown to the user.
     error_template = 'Found consecutive underscores in a variable "{0}"'
-
     code = 116

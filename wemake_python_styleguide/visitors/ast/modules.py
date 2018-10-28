@@ -3,7 +3,7 @@
 import ast
 
 from wemake_python_styleguide.constants import INIT
-from wemake_python_styleguide.logics.filenames import is_stem_in_list
+from wemake_python_styleguide.logics.filenames import get_stem
 from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.best_practices import (
     EmptyModuleViolation,
@@ -17,7 +17,7 @@ class EmptyModuleContentsVisitor(BaseNodeVisitor):
     """Restricts to have empty modules."""
 
     def _is_init(self) -> bool:
-        return is_stem_in_list(self.filename, [INIT])
+        return get_stem(self.filename) == INIT
 
     def _is_doc_string(self, node: ast.stmt) -> bool:
         """

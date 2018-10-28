@@ -11,10 +11,11 @@ from wemake_python_styleguide.violations import naming
 @pytest.mark.parametrize('filename, error', [
     ('__magic__.py', naming.WrongModuleMagicNameViolation),
     ('util.py', naming.WrongModuleNameViolation),
-    ('x.py', naming.TooShortModuleNameViolation),
-    ('test__name.py', naming.WrongModuleNameUnderscoresViolation),
+    ('x.py', naming.TooShortNameViolation),
+    ('test__name.py', naming.ConsecutiveUnderscoresInNameViolation),
     ('123py.py', naming.WrongModuleNamePatternViolation),
     ('version_1.py', naming.UnderScoredNumberNameViolation),
+    ('__private.py', naming.PrivateNameViolation),
 ])
 def test_module_names(filename, error, default_options):
     """Ensures that checker works with module names."""

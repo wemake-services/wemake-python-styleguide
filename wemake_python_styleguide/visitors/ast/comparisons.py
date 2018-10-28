@@ -3,10 +3,8 @@
 import ast
 from typing import ClassVar, Sequence
 
+from wemake_python_styleguide.logics.naming.name_nodes import is_same_variable
 from wemake_python_styleguide.logics.nodes import is_literal
-from wemake_python_styleguide.logics.variables.name_nodes import (
-    is_same_variable,
-)
 from wemake_python_styleguide.types import AnyIf, AnyNodes, final
 from wemake_python_styleguide.violations.consistency import (
     ComparisonOrderViolation,

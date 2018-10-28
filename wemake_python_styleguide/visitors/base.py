@@ -35,6 +35,7 @@ import tokenize
 from typing import List, Sequence, Type
 
 from wemake_python_styleguide import constants
+from wemake_python_styleguide.logics.filenames import get_stem
 from wemake_python_styleguide.types import ConfigurationOptions, final
 from wemake_python_styleguide.violations.base import BaseViolation
 
@@ -147,6 +148,8 @@ class BaseFilenameVisitor(BaseVisitor):
     Has ``visit_filename()`` method that should be defined in subclasses.
     """
 
+    stem: str
+
     def visit_filename(self) -> None:
         """
         Abstract method to check module file names.
@@ -165,6 +168,7 @@ class BaseFilenameVisitor(BaseVisitor):
         And do not have names.
         """
         if self.filename != constants.STDIN:
+            self.stem = get_stem(self.filename)
             self.visit_filename()
 
 

@@ -15,7 +15,7 @@ from wemake_python_styleguide.visitors.ast.imports import WrongImportVisitor
 from wemake_python_styleguide.visitors.ast.modules import (
     EmptyModuleContentsVisitor,
 )
-from wemake_python_styleguide.visitors.filenames.wrong_module_name import (
+from wemake_python_styleguide.visitors.filenames.module import (
     WrongModuleNameVisitor,
 )
 

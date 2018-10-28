@@ -3,8 +3,9 @@
 import pytest
 
 from wemake_python_styleguide.violations.naming import (
+    ConsecutiveUnderscoresInNameViolation,
     PrivateNameViolation,
-    TooShortVariableNameViolation,
+    TooShortNameViolation,
     WrongVariableNameViolation,
 )
 from wemake_python_styleguide.visitors.ast.naming import (
@@ -118,7 +119,7 @@ def test_wrong_function_arguments(
     visitor.run()
 
     assert_errors(visitor, [
-        TooShortVariableNameViolation,
+        TooShortNameViolation,
         WrongVariableNameViolation,
     ])
 
@@ -156,6 +157,42 @@ def test_private_function_arguments(
     assert_errors(visitor, [
         PrivateNameViolation,
         PrivateNameViolation,
+    ])
+
+
+@pytest.mark.parametrize('code', [
+    function_test,
+    async_function_test,
+    method_test,
+    async_method_test,
+    function_kwargs_test,
+    async_function_kwargs_test,
+    method_kwargs_test,
+    async_method_kwargs_test,
+    function_args_kwargs_test,
+    async_function_args_kwargs_test,
+    method_args_kwargs_test,
+    async_method_args_kwargs_test,
+    function_kwonly_test,
+    async_function_kwonly_test,
+    method_kwonly_test,
+    async_method_kwonly_test,
+])
+def test_underscored_function_arguments(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+):
+    """Testing that function can not have arguments with two underscores."""
+    tree = parse_ast_tree(code.format('underscore___name', 'other__name'))
+
+    visitor = WrongNameVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [
+        ConsecutiveUnderscoresInNameViolation,
+        ConsecutiveUnderscoresInNameViolation,
     ])
 
 

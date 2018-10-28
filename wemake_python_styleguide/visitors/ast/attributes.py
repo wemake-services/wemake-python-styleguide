@@ -3,7 +3,7 @@
 import ast
 from typing import ClassVar, FrozenSet
 
-from wemake_python_styleguide.logics.variables import access
+from wemake_python_styleguide.logics.naming import access
 from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.best_practices import (
     ProtectedAttributeViolation,
@@ -18,14 +18,28 @@ class WrongAttributeVisitor(BaseNodeVisitor):
     _allowed_to_use_protected: ClassVar[FrozenSet[str]] = frozenset((
         'self',
         'cls',
+        'mcs',
     ))
 
+    def _is_super_called(self, node: ast.Call) -> bool:
+        if isinstance(node.func, ast.Name):
+            if node.func.id == 'super':
+                return True
+        return False
+
     def _check_protected_attribute(self, node: ast.Attribute) -> None:
-        if access.is_protected_variable(node.attr):
+        if access.is_protected(node.attr):
             if isinstance(node.value, ast.Name):
                 if node.value.id in self._allowed_to_use_protected:
                     return
-            self.add_violation(ProtectedAttributeViolation(node))
+
+            if isinstance(node.value, ast.Call):
+                if self._is_super_called(node.value):
+                    return
+
+            self.add_violation(
+                ProtectedAttributeViolation(node, text=node.attr),
+            )
 
     def visit_Attribute(self, node: ast.Attribute) -> None:
         """

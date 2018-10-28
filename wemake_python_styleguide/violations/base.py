@@ -33,7 +33,7 @@ Violations API
 
 import ast
 import tokenize
-from typing import ClassVar, Tuple, Union
+from typing import ClassVar, Optional, Tuple, Union
 
 from wemake_python_styleguide.types import final
 
@@ -118,16 +118,35 @@ class BaseViolation(object):
         return (*self._location(), self.message())
 
 
-class ASTViolation(BaseViolation):
-    """Violation for ``ast`` based style visitors."""
+class _BaseASTViolation(BaseViolation):
+    """Used as a based type for all ``ast`` violations."""
 
-    _node: ast.AST
+    _node: Optional[ast.AST]
 
     @final
     def _location(self) -> Tuple[int, int]:
         line_number = getattr(self._node, 'lineno', 0)
         column_offset = getattr(self._node, 'col_offset', 0)
         return line_number, column_offset
+
+
+class ASTViolation(_BaseASTViolation):
+    """Violation for ``ast`` based style visitors."""
+
+    _node: ast.AST
+
+
+class MaybeASTViolation(_BaseASTViolation):
+    """
+    Violation for ``ast`` and modules visitors.
+
+    Is used for violations that share the same rule for nodes and module names.
+    Is wildly used for naming rules.
+    """
+
+    def __init__(self, node=None, text: str = None) -> None:
+        """Creates new instance of module violation without explicit node."""
+        super().__init__(node, text=text)
 
 
 class TokenizeViolation(BaseViolation):

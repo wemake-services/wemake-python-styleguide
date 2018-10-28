@@ -6,7 +6,7 @@ import pytest
 
 from wemake_python_styleguide.violations.naming import (
     PrivateNameViolation,
-    TooShortVariableNameViolation,
+    TooShortNameViolation,
     WrongVariableNameViolation,
 )
 from wemake_python_styleguide.visitors.ast.naming import (
@@ -54,7 +54,7 @@ def test_too_short_import_alias_names(
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [TooShortVariableNameViolation])
+    assert_errors(visitor, [TooShortNameViolation])
 
 
 @pytest.mark.parametrize('code', [

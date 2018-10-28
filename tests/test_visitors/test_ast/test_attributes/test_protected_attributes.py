@@ -26,10 +26,19 @@ class Test(object):
         self.container._print()
 """
 
+protected_callable_attribute = """
+class Test(object):
+    def __init__(self):
+        some()._print()
+"""
+
 # Correct:
 
 protected_name_definition = '_protected = 1'
 protected_name_attr_definition = '_protected.some = 1'
+magic_method_called = 'Test.__init__()'
+magic_attribute_accessed = 'Test.__dict__'
+magic_attribute_definition = 'Test.__dict__ = dict()'
 
 protected_self_attribute = """
 class Test(object):
@@ -62,6 +71,45 @@ class Test(object):
     _protected = 1
 """
 
+protected_method_definition = """
+class Test(object):
+    def _protected(self):
+        ...
+"""
+
+protected_classmethod_definition = """
+class Test(object):
+    @classmethod
+    def _protected(cls):
+        ...
+"""
+
+protected_super_attribute = """
+class Test(object):
+    def __init__(self):
+        super()._print = 1
+"""
+
+protected_super_method = """
+class Test(object):
+    def __init__(self):
+        super()._print()
+"""
+
+protected_super_cls_attribute = """
+class Test(object):
+    @classmethod
+    def method(cls):
+        super()._print = 'some'
+"""
+
+protected_super_cls_method = """
+class Test(object):
+    @classmethod
+    def method(cls):
+        super()._print()
+"""
+
 
 @pytest.mark.parametrize('code', [
     protected_attribute_assigned,
@@ -70,6 +118,7 @@ class Test(object):
     protected_method_called_params,
     protected_container_attribute,
     protected_container_method,
+    protected_callable_attribute,
 ])
 def test_protected_attribute_is_restricted(
     assert_errors,
@@ -88,12 +137,21 @@ def test_protected_attribute_is_restricted(
 
 @pytest.mark.parametrize('code', [
     protected_name_definition,
+    magic_attribute_accessed,
+    magic_method_called,
+    magic_attribute_definition,
     protected_name_attr_definition,
     protected_self_attribute,
     protected_self_method,
     protected_cls_attribute,
     protected_cls_method,
     protected_attribute_definition,
+    protected_method_definition,
+    protected_classmethod_definition,
+    protected_super_attribute,
+    protected_super_method,
+    protected_super_cls_attribute,
+    protected_super_cls_method,
 ])
 def test_protected_attribute_is_allowed(
     assert_errors,

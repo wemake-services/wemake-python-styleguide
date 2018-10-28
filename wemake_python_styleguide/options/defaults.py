@@ -19,7 +19,7 @@ from wemake_python_styleguide.types import Final
 # General
 
 #: Minimum variable's name length:
-MIN_VARIABLE_LENGTH: Final = 2
+MIN_NAME_LENGTH: Final = 2
 
 #: Whether you control ones who use your code:
 I_CONTROL_CODE: Final = True
@@ -65,8 +65,3 @@ MAX_CONDITIONS: Final = 4
 
 #: Maximum number of base classes:
 MAX_BASE_CLASSES: Final = 3
-
-# Modules
-
-#: Minimum required module's name length:
-MIN_MODULE_NAME_LENGTH: Final = 3
