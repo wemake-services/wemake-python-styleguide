@@ -27,7 +27,11 @@ function_with_expressions = """
     '',  # regular function
 ])
 def test_expressions_correct_count(
-    assert_errors, parse_ast_tree, code, default_options, mode,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+    mode,
 ):
     """Testing that expressions counted correctly."""
     tree = parse_ast_tree(code.format(mode))
@@ -46,7 +50,12 @@ def test_expressions_correct_count(
     '',  # regular function
 ])
 def test_expressions_wrong_count(
-    assert_errors, parse_ast_tree, options, code, mode,
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    options,
+    code,
+    mode,
 ):
     """Testing that many expressions raises a warning."""
     tree = parse_ast_tree(code.format(mode))
@@ -56,3 +65,4 @@ def test_expressions_wrong_count(
     visitor.run()
 
     assert_errors(visitor, [TooManyExpressionsViolation])
+    assert_error_text(visitor, '2')

@@ -20,10 +20,11 @@ def test_wrong_variable_name(
     parse_ast_tree,
     naming_template,
     default_options,
+    mode,
     wrong_name,
 ):
     """Ensures that wrong names are not allowed."""
-    tree = parse_ast_tree(naming_template.format(wrong_name))
+    tree = parse_ast_tree(mode(naming_template.format(wrong_name)))
 
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
@@ -38,10 +39,11 @@ def test_short_variable_name(
     parse_ast_tree,
     naming_template,
     default_options,
+    mode,
 ):
     """Ensures that short names are not allowed."""
     short_name = 'y'
-    tree = parse_ast_tree(naming_template.format(short_name))
+    tree = parse_ast_tree(mode(naming_template.format(short_name)))
 
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
@@ -56,10 +58,11 @@ def test_private_variable_name(
     parse_ast_tree,
     naming_template,
     default_options,
+    mode,
 ):
     """Ensures that private names are not allowed."""
     private_name = '__private'
-    tree = parse_ast_tree(naming_template.format(private_name))
+    tree = parse_ast_tree(mode(naming_template.format(private_name)))
 
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
@@ -79,10 +82,11 @@ def test_underscored_variable_name(
     parse_ast_tree,
     naming_template,
     default_options,
+    mode,
     underscored_name,
 ):
     """Ensures that underscored names are not allowed."""
-    tree = parse_ast_tree(naming_template.format(underscored_name))
+    tree = parse_ast_tree(mode(naming_template.format(underscored_name)))
 
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
@@ -101,10 +105,11 @@ def test_number_prefix_variable_name(
     parse_ast_tree,
     naming_template,
     default_options,
+    mode,
     number_suffix,
 ):
     """Ensures that number suffix names are not allowed."""
-    tree = parse_ast_tree(naming_template.format(number_suffix))
+    tree = parse_ast_tree(mode(naming_template.format(number_suffix)))
 
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
@@ -124,10 +129,11 @@ def test_naming_correct(
     parse_ast_tree,
     naming_template,
     default_options,
+    mode,
     correct_name,
 ):
     """Ensures that correct names are allowed."""
-    tree = parse_ast_tree(naming_template.format(correct_name))
+    tree = parse_ast_tree(mode(naming_template.format(correct_name)))
 
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()

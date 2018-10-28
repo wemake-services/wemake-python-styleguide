@@ -25,13 +25,13 @@ if True:
 """
 
 nested_method_import = """
-class Test:
+class Test(object):
     def with_import(self):
         import os
 """
 
 nested_method_from_import = """
-class Test:
+class Test(object):
     def with_import(self):
         from os import path
 """

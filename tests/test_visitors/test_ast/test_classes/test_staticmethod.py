@@ -13,25 +13,15 @@ class Example(object):
     def should_fail(): ...
 """
 
-async_decorated_method = """
-class Example(object):
-    @{0}
-    async def should_fail(): ...
-"""
 
-
-@pytest.mark.parametrize('code', [
-    decorated_method,
-    async_decorated_method,
-])
 def test_staticmethod_used(
     assert_errors,
     parse_ast_tree,
-    code,
     default_options,
+    mode,
 ):
     """Testing that some built-in functions are restricted as decorators."""
-    tree = parse_ast_tree(code.format('staticmethod'))
+    tree = parse_ast_tree(mode(decorated_method.format('staticmethod')))
 
     visitor = WrongClassVisitor(default_options, tree=tree)
     visitor.run()
@@ -39,10 +29,6 @@ def test_staticmethod_used(
     assert_errors(visitor, [StaticMethodViolation])
 
 
-@pytest.mark.parametrize('code', [
-    decorated_method,
-    async_decorated_method,
-])
 @pytest.mark.parametrize('decorator', [
     'classmethod',
     'custom',
@@ -52,11 +38,11 @@ def test_regular_decorator_used(
     assert_errors,
     parse_ast_tree,
     decorator,
-    code,
     default_options,
+    mode,
 ):
     """Testing that other decorators are allowed."""
-    tree = parse_ast_tree(code.format(decorator))
+    tree = parse_ast_tree(mode(decorated_method.format(decorator)))
 
     visitor = WrongClassVisitor(default_options, tree=tree)
     visitor.run()

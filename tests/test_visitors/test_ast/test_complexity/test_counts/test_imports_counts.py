@@ -25,7 +25,10 @@ from sys import version
     module_with_from_imports,
 ])
 def test_module_import_counts_normal(
-    assert_errors, parse_ast_tree, code, default_options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
 ):
     """Testing that imports in a module work well."""
     tree = parse_ast_tree(code)
@@ -41,7 +44,11 @@ def test_module_import_counts_normal(
     module_with_from_imports,
 ])
 def test_module_import_counts_violation(
-    assert_errors, parse_ast_tree, code, options,
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    code,
+    options,
 ):
     """Testing that violations are raised when reaching max value."""
     tree = parse_ast_tree(code)
@@ -51,3 +58,4 @@ def test_module_import_counts_violation(
     visitor.run()
 
     assert_errors(visitor, [TooManyImportsViolation])
+    assert_error_text(visitor, '2')

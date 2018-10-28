@@ -22,24 +22,24 @@ async def some_function():
 """
 
 line_inside_class = """
-class SomeClass():
+class SomeClass(object):
     field = 13 / 2
 """
 
 class_with_function = """
-class First:
+class First(object):
     def second():
         return 2 + 1
 """
 
 class_with_async_function = """
-class First:
+class First(object):
     async def second():
         return 2 + 1
 """
 
 class_with_usual_and_async_function = """
-class First:
+class First(object):
     async def second():
         return 2 + 1
 
@@ -134,9 +134,9 @@ def test_exact_complexity(parse_ast_tree, default_options, code, complexity):
 @pytest.mark.parametrize('code, number_of_lines', [
     (line_inside_function, 1),
     (line_inside_async_function, 1),
-    (class_with_async_function, 1),
-    (class_with_function, 1),
-    (class_with_usual_and_async_function, 2),
+    (class_with_async_function, 2),
+    (class_with_function, 2),
+    (class_with_usual_and_async_function, 3),
 ])
 def test_that_some_nodes_are_ignored(
     parse_ast_tree, default_options, code, assert_errors, number_of_lines,

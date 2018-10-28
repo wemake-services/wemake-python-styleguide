@@ -16,7 +16,10 @@ variable = 1
 
 if_statement = 'if {0}: ...'
 ternary = 'ternary = 0 if {0} else 1'
-if_statement_in_comprehension = '[x for x in [1, 2, 3] if {0}]'
+if_statement_in_comprehension = """
+def container():
+    [x for x in [1, 2, 3] if {0}]
+"""
 
 
 @pytest.mark.parametrize('code', [
@@ -39,9 +42,12 @@ def test_valid_conditional(
     code,
     comparators,
     default_options,
+    mode,
 ):
     """Testing that conditionals work well."""
-    tree = parse_ast_tree(create_variable.format(code.format(comparators)))
+    tree = parse_ast_tree(
+        mode(create_variable.format(code.format(comparators))),
+    )
 
     visitor = WrongConditionalVisitor(default_options, tree=tree)
     visitor.run()

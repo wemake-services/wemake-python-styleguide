@@ -145,13 +145,13 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
         for node, variables in self._counter.variables.items():
             if len(variables) > self.options.max_local_variables:
                 self.add_violation(
-                    TooManyLocalsViolation(node, text=node.name),
+                    TooManyLocalsViolation(node, text=str(len(variables))),
                 )
 
         for node, expressions in self._counter.expressions.items():
             if expressions > self.options.max_expressions:
                 self.add_violation(
-                    TooManyExpressionsViolation(node, text=node.name),
+                    TooManyExpressionsViolation(node, text=str(expressions)),
                 )
 
     def _check_function_signature(self) -> None:
@@ -164,7 +164,7 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
         for node, returns in self._counter.returns.items():
             if returns > self.options.max_returns:
                 self.add_violation(
-                    TooManyReturnsViolation(node, text=node.name),
+                    TooManyReturnsViolation(node, text=str(returns)),
                 )
 
     def _post_visit(self) -> None:

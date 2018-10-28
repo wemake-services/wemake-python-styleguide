@@ -133,6 +133,7 @@ def test_module_counts_normal(
 ])
 def test_module_counts_violation(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
     code,
     options,
@@ -145,6 +146,7 @@ def test_module_counts_violation(
     visitor.run()
 
     assert_errors(visitor, [TooManyModuleMembersViolation])
+    assert_error_text(visitor, '2')
 
 
 @pytest.mark.parametrize('code', [

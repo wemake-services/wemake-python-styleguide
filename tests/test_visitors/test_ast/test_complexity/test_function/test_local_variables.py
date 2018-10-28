@@ -83,7 +83,12 @@ def test_locals_correct_count(
     '',  # regular function
 ])
 def test_locals_wrong_count(
-    assert_errors, parse_ast_tree, options, code, mode,
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    options,
+    code,
+    mode,
 ):
     """
     Testing that local variables are counted correctly.
@@ -101,3 +106,4 @@ def test_locals_wrong_count(
     visitor.run()
 
     assert_errors(visitor, [TooManyLocalsViolation])
+    assert_error_text(visitor, '2')

@@ -43,7 +43,11 @@ class ModuleMembersVisitor(BaseNodeVisitor):
 
     def _post_visit(self) -> None:
         if self._public_items_count > self.options.max_module_members:
-            self.add_violation(TooManyModuleMembersViolation())
+            self.add_violation(
+                TooManyModuleMembersViolation(
+                    text=str(self._public_items_count),
+                ),
+            )
 
     def visit_module_members(self, node: ModuleMembers) -> None:
         """

@@ -128,9 +128,10 @@ def test_protected_attribute_is_restricted(
     parse_ast_tree,
     code,
     default_options,
+    mode,
 ):
     """Ensures that it is impossible to use protected attributes."""
-    tree = parse_ast_tree(code)
+    tree = parse_ast_tree(mode(code))
 
     visitor = WrongAttributeVisitor(default_options, tree=tree)
     visitor.run()
@@ -162,9 +163,10 @@ def test_protected_attribute_is_allowed(
     parse_ast_tree,
     code,
     default_options,
+    mode,
 ):
     """Ensures that it is possible to use protected attributes."""
-    tree = parse_ast_tree(code)
+    tree = parse_ast_tree(mode(code))
 
     visitor = WrongAttributeVisitor(default_options, tree=tree)
     visitor.run()

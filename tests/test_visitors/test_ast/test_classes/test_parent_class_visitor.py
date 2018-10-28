@@ -8,6 +8,8 @@ from wemake_python_styleguide.violations.consistency import (
 from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
 
 extra_object = 'class TestClassName(FirstName, SecondName, object): ...'
+single_extra_object = 'class TestClassName(object): ...'
+correct_list = 'class TestClassName(FirstTestClass, SecondTestClass): ...'
 
 
 @pytest.mark.parametrize('code', [
@@ -26,10 +28,6 @@ def test_wrong_class_definition_multiple_parent(
     visitor.run()
 
     assert_errors(visitor, [ObjectInBaseClassesListViolation])
-
-
-single_extra_object = 'class TestClassName(object): ...'
-correct_list = 'class TestClassName(FirstTestClass, SecondTestClass): ...'
 
 
 @pytest.mark.parametrize('code', [

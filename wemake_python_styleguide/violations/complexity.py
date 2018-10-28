@@ -177,9 +177,8 @@ class TooManyModuleMembersViolation(SimpleViolation):
 
     """
 
-    should_use_text = False
     #: Error message shown to the user.
-    error_template = 'Found too many module members'
+    error_template = 'Found too many module members: {0}'
     code = 202
 
 
@@ -233,7 +232,7 @@ class TooManyLocalsViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found too many local variables "{0}"'
+    error_template = 'Found too many local variables: {0}'
     code = 210
 
 
@@ -261,7 +260,7 @@ class TooManyArgumentsViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found too many arguments "{0}"'
+    error_template = 'Found too many arguments: {0}'
     code = 211
 
 

@@ -15,6 +15,16 @@ class CorrectClassName(
 ): ...
 """
 
+too_many_count = """
+class SomeClassName(
+    FirstParentClass,
+    SecondParentClass,
+    ThirdParentClass,
+    CustomClass,
+    AddedClass,
+): ...
+"""
+
 
 @pytest.mark.parametrize('code', [
     correct_count,
@@ -31,22 +41,14 @@ def test_correct_count(
     assert_errors(visitor, [])
 
 
-too_many_count = """
-class SomeClassName(
-    FirstParentClass,
-    SecondParentClass,
-    ThirdParentClass,
-    CustomClass,
-    AddedClass,
-): ...
-"""
-
-
 @pytest.mark.parametrize('code', [
     too_many_count,
 ])
 def test_bad_number_default_option(
-    assert_errors, parse_ast_tree, code, default_options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
 ):
     """Testing of base classes number with default options."""
     tree = parse_ast_tree(code)
@@ -62,7 +64,10 @@ def test_bad_number_default_option(
     correct_count,
 ])
 def test_bad_number_custom_option(
-    assert_errors, parse_ast_tree, code, options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    options,
 ):
     """Testing of base classes number with custom options."""
     tree = parse_ast_tree(code)
