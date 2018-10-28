@@ -3,7 +3,6 @@ category = "dev"
 description = "Sphinx \"added-value\" extension"
 name = "added-value"
 optional = false
-platform = "any"
 python-versions = "*"
 version = "0.8"
 
@@ -15,7 +14,6 @@ category = "dev"
 description = "A configurable sidebar-enabled Sphinx theme"
 name = "alabaster"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "0.7.12"
 
@@ -24,7 +22,6 @@ category = "dev"
 description = "Atomic file writes."
 name = "atomicwrites"
 optional = false
-platform = "*"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "1.2.1"
 
@@ -33,7 +30,6 @@ category = "main"
 description = "Classes Without Boilerplate"
 name = "attrs"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "18.2.0"
 
@@ -42,7 +38,6 @@ category = "dev"
 description = "Internationalization utilities"
 name = "babel"
 optional = false
-platform = "*"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "2.6.0"
 
@@ -54,7 +49,6 @@ category = "main"
 description = "Security oriented static analyser for python code."
 name = "bandit"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "1.5.1"
 
@@ -69,7 +63,6 @@ category = "dev"
 description = "Python package for providing Mozilla's CA Bundle."
 name = "certifi"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "2018.10.15"
 
@@ -78,28 +71,23 @@ category = "dev"
 description = "Universal encoding detector for Python 2 and 3"
 name = "chardet"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "3.0.4"
 
 [[package]]
 category = "dev"
 description = "Cross-platform colored terminal text."
+marker = "sys_platform == \"win32\""
 name = "colorama"
 optional = false
-platform = "*"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "0.4.0"
-
-[package.requirements]
-platform = "win32"
 
 [[package]]
 category = "dev"
 description = "Code coverage measurement for Python"
 name = "coverage"
 optional = false
-platform = "*"
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, <4"
 version = "4.5.1"
 
@@ -108,7 +96,6 @@ category = "dev"
 description = "Style checker for Sphinx (or other) RST documentation"
 name = "doc8"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "0.8.0"
 
@@ -124,7 +111,6 @@ category = "dev"
 description = "Docutils -- Python Documentation Utilities"
 name = "docutils"
 optional = false
-platform = "OS-independent"
 python-versions = "*"
 version = "0.14"
 
@@ -133,7 +119,6 @@ category = "main"
 description = "Removes commented-out code."
 name = "eradicate"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "0.2.1"
 
@@ -142,21 +127,20 @@ category = "main"
 description = "the modular source code checker: pep8, pyflakes and co"
 name = "flake8"
 optional = false
-platform = "*"
-python-versions = "*"
-version = "3.5.0"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "3.6.0"
 
 [package.dependencies]
 mccabe = ">=0.6.0,<0.7.0"
-pycodestyle = ">=2.0.0,<2.4.0"
-pyflakes = ">=1.5.0,<1.7.0"
+pycodestyle = ">=2.4.0,<2.5.0"
+pyflakes = ">=2.0.0,<2.1.0"
+setuptools = ">=30"
 
 [[package]]
 category = "main"
 description = "Automated security testing with bandit and flake8."
 name = "flake8-bandit"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "1.0.2"
 
@@ -170,7 +154,6 @@ category = "main"
 description = "Flake8 plugin to forbid backslashes for line breaks"
 name = "flake8-broken-line"
 optional = false
-platform = "*"
 python-versions = ">=3.6,<4.0"
 version = "0.1.0"
 
@@ -182,7 +165,6 @@ category = "main"
 description = "A plugin for flake8 finding likely bugs and design problems in your program. Contains warnings that don't belong in pyflakes and pycodestyle."
 name = "flake8-bugbear"
 optional = false
-platform = "*"
 python-versions = ">=3.5"
 version = "18.8.0"
 
@@ -195,7 +177,6 @@ category = "main"
 description = "Check for python builtins being used as variables or parameters."
 name = "flake8-builtins"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "1.4.1"
 
@@ -207,7 +188,6 @@ category = "main"
 description = "Adds coding magic comment checks to flake8"
 name = "flake8-coding"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "1.3.1"
 
@@ -219,7 +199,6 @@ category = "main"
 description = "Flake8 lint for trailing commas."
 name = "flake8-commas"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "2.0.0"
 
@@ -231,7 +210,6 @@ category = "main"
 description = "A flake8 plugin to help you write better list/set/dict comprehensions."
 name = "flake8-comprehensions"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "1.4.1"
 
@@ -243,7 +221,6 @@ category = "main"
 description = "ipdb/pdb statement checker plugin for flake8"
 name = "flake8-debugger"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "3.1.0"
 
@@ -256,7 +233,6 @@ category = "main"
 description = "Extension for flake8 which uses pydocstyle to check docstrings"
 name = "flake8-docstrings"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "1.3.0"
 
@@ -270,7 +246,6 @@ category = "main"
 description = "Flake8 plugin to find commented out code"
 name = "flake8-eradicate"
 optional = false
-platform = "*"
 python-versions = ">=3.6,<4.0"
 version = "0.1.1"
 
@@ -284,7 +259,6 @@ category = "main"
 description = "flake8 plugin that integrates isort ."
 name = "flake8-isort"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "2.5"
 
@@ -298,7 +272,6 @@ category = "main"
 description = "Flake8 extension to validate (lack of) logging format strings"
 name = "flake8-logging-format"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "0.5.0"
 
@@ -307,7 +280,6 @@ category = "main"
 description = "Checks for old string formatting."
 name = "flake8-pep3101"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "1.2.1"
 
@@ -319,7 +291,6 @@ category = "main"
 description = "Polyfill package for Flake8 plugins"
 name = "flake8-polyfill"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "1.0.2"
 
@@ -331,7 +302,6 @@ category = "main"
 description = "print statement checker plugin for flake8"
 name = "flake8-print"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "3.1.0"
 
@@ -345,7 +315,6 @@ category = "dev"
 description = "pytest assert checker plugin for flake8"
 name = "flake8-pytest"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "1.3"
 
@@ -357,7 +326,6 @@ category = "main"
 description = "Flake8 lint for quotes."
 name = "flake8-quotes"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "1.0.0"
 
@@ -369,7 +337,6 @@ category = "main"
 description = "string format checker, plugin for flake8"
 name = "flake8-string-format"
 optional = false
-platform = "UNKNOWN"
 python-versions = "*"
 version = "0.2.3"
 
@@ -381,7 +348,6 @@ category = "main"
 description = "Flake8 plugin to enforce consistent type annotation styles"
 name = "flake8-type-annotations"
 optional = false
-platform = "*"
 python-versions = ">=3.6,<4.0"
 version = "0.1.0"
 
@@ -393,7 +359,6 @@ category = "main"
 description = "Git Object Database"
 name = "gitdb2"
 optional = false
-platform = "*"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "2.0.5"
 
@@ -405,7 +370,6 @@ category = "main"
 description = "Python Git Library"
 name = "gitpython"
 optional = false
-platform = "*"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "2.1.11"
 
@@ -417,7 +381,6 @@ category = "dev"
 description = "Internationalized Domain Names in Applications (IDNA)"
 name = "idna"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "2.7"
 
@@ -426,7 +389,6 @@ category = "dev"
 description = "Getting image size from png/jpeg/jpeg2000/gif file"
 name = "imagesize"
 optional = false
-platform = "*"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "1.1.0"
 
@@ -435,7 +397,6 @@ category = "main"
 description = "A Python utility / library to sort Python imports."
 name = "isort"
 optional = false
-platform = "*"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "4.3.4"
 
@@ -444,7 +405,6 @@ category = "dev"
 description = "A small but fast and easy to use stand-alone template engine written in pure python."
 name = "jinja2"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "2.10"
 
@@ -456,7 +416,6 @@ category = "dev"
 description = "Markdown and reStructuredText in a single file."
 name = "m2r"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "0.2.1"
 
@@ -469,7 +428,6 @@ category = "dev"
 description = "Implements a XML/HTML/XHTML Markup safe string for Python"
 name = "markupsafe"
 optional = false
-platform = "UNKNOWN"
 python-versions = "*"
 version = "1.0"
 
@@ -478,7 +436,6 @@ category = "main"
 description = "McCabe checker, plugin for flake8"
 name = "mccabe"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "0.6.1"
 
@@ -487,7 +444,6 @@ category = "dev"
 description = "The fastest markdown parser in pure Python"
 name = "mistune"
 optional = false
-platform = "any"
 python-versions = "*"
 version = "0.8.4"
 
@@ -496,7 +452,6 @@ category = "dev"
 description = "More routines for operating on iterables, beyond itertools"
 name = "more-itertools"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "4.3.0"
 
@@ -508,7 +463,6 @@ category = "dev"
 description = "Optional static typing for Python"
 name = "mypy"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "0.641"
 
@@ -521,7 +475,6 @@ category = "dev"
 description = "Experimental type system extensions for programs checked with the mypy typechecker."
 name = "mypy-extensions"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "0.4.1"
 
@@ -530,7 +483,6 @@ category = "dev"
 description = "Core utilities for Python packages"
 name = "packaging"
 optional = false
-platform = "*"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "18.0"
 
@@ -543,16 +495,14 @@ category = "main"
 description = "Python Build Reasonableness"
 name = "pbr"
 optional = false
-platform = "*"
 python-versions = "*"
-version = "5.0.0"
+version = "5.1.0"
 
 [[package]]
 category = "main"
 description = "Check PEP-8 naming conventions, plugin for flake8"
 name = "pep8-naming"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "0.7.0"
 
@@ -564,7 +514,6 @@ category = "dev"
 description = "plugin and hook calling mechanisms for python"
 name = "pluggy"
 optional = false
-platform = "unix"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "0.8.0"
 
@@ -573,7 +522,6 @@ category = "dev"
 description = "A collection of helpful Python tools!"
 name = "pockets"
 optional = false
-platform = "any"
 python-versions = "*"
 version = "0.7.2"
 
@@ -585,7 +533,6 @@ category = "dev"
 description = "library with cross-python path, ini-parsing, io, code, log facilities"
 name = "py"
 optional = false
-platform = "unix"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "1.7.0"
 
@@ -594,16 +541,14 @@ category = "main"
 description = "Python style guide checker"
 name = "pycodestyle"
 optional = false
-platform = "*"
 python-versions = "*"
-version = "2.3.1"
+version = "2.4.0"
 
 [[package]]
 category = "main"
 description = "Python docstring style checker"
 name = "pydocstyle"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "3.0.0"
 
@@ -616,16 +561,14 @@ category = "main"
 description = "passive checker of Python programs"
 name = "pyflakes"
 optional = false
-platform = "*"
-python-versions = "*"
-version = "1.6.0"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "2.0.0"
 
 [[package]]
 category = "dev"
 description = "Pygments is a syntax highlighting package written in Python."
 name = "pygments"
 optional = false
-platform = "any"
 python-versions = "*"
 version = "2.2.0"
 
@@ -634,7 +577,6 @@ category = "dev"
 description = "Python parsing module"
 name = "pyparsing"
 optional = false
-platform = "*"
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 version = "2.2.2"
 
@@ -643,29 +585,24 @@ category = "dev"
 description = "pytest: simple powerful testing with Python"
 name = "pytest"
 optional = false
-platform = "unix"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "3.9.2"
+version = "3.9.3"
 
 [package.dependencies]
 atomicwrites = ">=1.0"
 attrs = ">=17.4.0"
+colorama = "*"
 more-itertools = ">=4.0.0"
 pluggy = ">=0.7"
 py = ">=1.5.0"
 setuptools = "*"
 six = ">=1.10.0"
 
-[package.dependencies.colorama]
-platform = "win32"
-version = "*"
-
 [[package]]
 category = "dev"
 description = "Pytest plugin for measuring coverage."
 name = "pytest-cov"
 optional = false
-platform = "*"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "2.6.0"
 
@@ -678,7 +615,6 @@ category = "dev"
 description = "pytest plugin to check FLAKE8 requirements"
 name = "pytest-flake8"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "1.0.2"
 
@@ -691,7 +627,6 @@ category = "dev"
 description = "py.test plugin to check import ordering using isort"
 name = "pytest-isort"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "0.2.1"
 
@@ -704,7 +639,6 @@ category = "dev"
 description = "Pytest plugin to randomly order tests and control random.seed."
 name = "pytest-randomly"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "1.2.3"
 
@@ -716,16 +650,14 @@ category = "dev"
 description = "World timezone definitions, modern and historical"
 name = "pytz"
 optional = false
-platform = "Independent"
 python-versions = "*"
-version = "2018.5"
+version = "2018.6"
 
 [[package]]
 category = "main"
 description = "YAML parser and emitter for Python"
 name = "pyyaml"
 optional = false
-platform = "Any"
 python-versions = "*"
 version = "3.13"
 
@@ -734,7 +666,6 @@ category = "dev"
 description = "Python HTTP for Humans."
 name = "requests"
 optional = false
-platform = "*"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "2.20.0"
 
@@ -749,7 +680,6 @@ category = "dev"
 description = "reStructuredText linter"
 name = "restructuredtext-lint"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "1.1.3"
 
@@ -761,7 +691,6 @@ category = "main"
 description = "Python 2 and 3 compatibility utilities"
 name = "six"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "1.11.0"
 
@@ -770,7 +699,6 @@ category = "main"
 description = "A pure Python implementation of a sliding window memory map manager"
 name = "smmap2"
 optional = false
-platform = "any"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "2.0.5"
 
@@ -779,7 +707,6 @@ category = "main"
 description = "This package provides 16 stemmer algorithms (15 + Poerter English stemmer) generated from Snowball algorithms."
 name = "snowballstemmer"
 optional = false
-platform = "UNKNOWN"
 python-versions = "*"
 version = "1.2.1"
 
@@ -788,7 +715,6 @@ category = "dev"
 description = "Python documentation generator"
 name = "sphinx"
 optional = false
-platform = "any"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "1.8.1"
 
@@ -797,6 +723,7 @@ Jinja2 = ">=2.3"
 Pygments = ">=2.0"
 alabaster = ">=0.7,<0.8"
 babel = ">=1.3,<2.0 || >2.0"
+colorama = ">=0.3.5"
 docutils = ">=0.11"
 imagesize = "*"
 packaging = "*"
@@ -806,16 +733,11 @@ six = ">=1.5"
 snowballstemmer = ">=1.1"
 sphinxcontrib-websupport = "*"
 
-[package.dependencies.colorama]
-platform = "win32"
-version = ">=0.3.5"
-
 [[package]]
 category = "dev"
 description = "Type hints (PEP 484) support for the Sphinx autodoc extension"
 name = "sphinx-autodoc-typehints"
 optional = false
-platform = "*"
 python-versions = "!=3.5.0, !=3.5.1"
 version = "1.3.0"
 
@@ -827,7 +749,6 @@ category = "dev"
 description = "Sphinx Readable Theme"
 name = "sphinx-readable-theme"
 optional = false
-platform = "UNKNOWN"
 python-versions = "*"
 version = "1.3.0"
 
@@ -836,7 +757,6 @@ category = "dev"
 description = "Sphinx \"napoleon\" extension."
 name = "sphinxcontrib-napoleon"
 optional = false
-platform = "any"
 python-versions = "*"
 version = "0.7"
 
@@ -849,7 +769,6 @@ category = "dev"
 description = "Sphinx API for Web Apps"
 name = "sphinxcontrib-websupport"
 optional = false
-platform = "any"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "1.1.0"
 
@@ -858,9 +777,8 @@ category = "main"
 description = "Manage dynamic plugins for Python applications"
 name = "stevedore"
 optional = false
-platform = "*"
 python-versions = "*"
-version = "1.29.0"
+version = "1.30.0"
 
 [package.dependencies]
 pbr = ">=2.0.0,<2.1.0 || >2.1.0"
@@ -871,7 +789,6 @@ category = "main"
 description = "A collection of helpers and mock objects for unit tests and doc tests."
 name = "testfixtures"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "6.3.0"
 
@@ -880,7 +797,6 @@ category = "dev"
 description = "Style preserving TOML library"
 name = "tomlkit"
 optional = false
-platform = "*"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "0.4.6"
 
@@ -889,7 +805,6 @@ category = "dev"
 description = "a fork of Python 2 and 3 ast modules with type comment support"
 name = "typed-ast"
 optional = false
-platform = "POSIX"
 python-versions = "*"
 version = "1.1.0"
 
@@ -898,7 +813,6 @@ category = "main"
 description = "Type Hints for Python"
 name = "typing"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "3.6.6"
 
@@ -907,7 +821,6 @@ category = "main"
 description = "Backported and Experimental Type Hints for Python 3.5+"
 name = "typing-extensions"
 optional = false
-platform = "*"
 python-versions = "*"
 version = "3.6.6"
 
@@ -919,13 +832,11 @@ category = "dev"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 name = "urllib3"
 optional = false
-platform = "*"
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4"
 version = "1.24"
 
 [metadata]
-content-hash = "e5ef32b17af84d5ee4bc6e48d79c7070db631a38be2ac4f8301ef309fd9e5e97"
-platform = "*"
+content-hash = "23ccaf9e7348896e1939b5a9eee4fa10c4ff470b758b734d6ba70b6b9ed6f9b8"
 python-versions = "^3.6 || ^3.7"
 
 [metadata.hashes]
@@ -938,11 +849,11 @@ bandit = ["6102b5d6afd9d966df5054e0bdfc2e73a24d0fea400ec25f2e54c134412158d7", "9
 certifi = ["339dc09518b07e2fa7eda5450740925974815557727d6bd35d319c1524a04a4c", "6d58c986d22b038c8c0df30d639f23a3e6d172a05c3583e766f4c0b785c0986a"]
 chardet = ["84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae", "fc323ffcaeaed0e0a02bf4d117757b98aed530d9ed4531e3e15460124c106691"]
 colorama = ["a3d89af5db9e9806a779a50296b5fdb466e281147c2c235e8225ecc6dbf7bbf3", "c9b54bebe91a6a803e0772c8561d53f2926bfeb17cd141fbabcb08424086595c"]
-coverage = ["03481e81d558d30d230bc12999e3edffe392d244349a90f4ef9b88425fac74ba", "0b136648de27201056c1869a6c0d4e23f464750fd9a9ba9750b8336a244429ed", "0bf8cbbd71adfff0ef1f3a1531e6402d13b7b01ac50a79c97ca15f030dba6306", "104ab3934abaf5be871a583541e8829d6c19ce7bde2923b2751e0d3ca44db60a", "10a46017fef60e16694a30627319f38a2b9b52e90182dddb6e37dcdab0f4bf95", "15b111b6a0f46ee1a485414a52a7ad1d703bdf984e9ed3c288a4414d3871dcbd", "198626739a79b09fa0a2f06e083ffd12eb55449b5f8bfdbeed1df4910b2ca640", "1c383d2ef13ade2acc636556fd544dba6e14fa30755f26812f54300e401f98f2", "23d341cdd4a0371820eb2b0bd6b88f5003a7438bbedb33688cd33b8eae59affd", "28b2191e7283f4f3568962e373b47ef7f0392993bb6660d079c62bd50fe9d162", "2a5b73210bad5279ddb558d9a2bfedc7f4bf6ad7f3c988641d83c40293deaec1", "2eb564bbf7816a9d68dd3369a510be3327f1c618d2357fa6b1216994c2e3d508", "337ded681dd2ef9ca04ef5d93cfc87e52e09db2594c296b4a0a3662cb1b41249", "3a2184c6d797a125dca8367878d3b9a178b6fdd05fdc2d35d758c3006a1cd694", "3c79a6f7b95751cdebcd9037e4d06f8d5a9b60e4ed0cd231342aa8ad7124882a", "3d72c20bd105022d29b14a7d628462ebdc61de2f303322c0212a054352f3b287", "3eb42bf89a6be7deb64116dd1cc4b08171734d721e7a7e57ad64cc4ef29ed2f1", "4635a184d0bbe537aa185a34193898eee409332a8ccb27eea36f262566585000", "56e448f051a201c5ebbaa86a5efd0ca90d327204d8b059ab25ad0f35fbfd79f1", "5a13ea7911ff5e1796b6d5e4fbbf6952381a611209b736d48e675c2756f3f74e", "69bf008a06b76619d3c3f3b1983f5145c75a305a0fea513aca094cae5c40a8f5", "6bc583dc18d5979dc0f6cec26a8603129de0304d5ae1f17e57a12834e7235062", "701cd6093d63e6b8ad7009d8a92425428bc4d6e7ab8d75efbb665c806c1d79ba", "7608a3dd5d73cb06c531b8925e0ef8d3de31fed2544a7de6c63960a1e73ea4bc", "76ecd006d1d8f739430ec50cc872889af1f9c1b6b8f48e29941814b09b0fd3cc", "7aa36d2b844a3e4a4b356708d79fd2c260281a7390d678a10b91ca595ddc9e99", "7d3f553904b0c5c016d1dad058a7554c7ac4c91a789fca496e7d8347ad040653", "7e1fe19bd6dce69d9fd159d8e4a80a8f52101380d5d3a4d374b6d3eae0e5de9c", "8c3cb8c35ec4d9506979b4cf90ee9918bc2e49f84189d9bf5c36c0c1119c6558", "9d6dd10d49e01571bf6e147d3b505141ffc093a06756c60b053a859cb2128b1f", "9e112fcbe0148a6fa4f0a02e8d58e94470fc6cb82a5481618fea901699bf34c4", "ac4fef68da01116a5c117eba4dd46f2e06847a497de5ed1d64bb99a5fda1ef91", "b8815995e050764c8610dbc82641807d196927c3dbed207f0a079833ffcf588d", "be6cfcd8053d13f5f5eeb284aa8a814220c3da1b0078fa859011c7fffd86dab9", "c1bb572fab8208c400adaf06a8133ac0712179a334c09224fb11393e920abcdd", "de4418dadaa1c01d497e539210cb6baa015965526ff5afc078c57ca69160108d", "e05cb4d9aad6233d67e0541caa7e511fa4047ed7750ec2510d466e806e0255d6", "e4d96c07229f58cb686120f168276e434660e4358cc9cf3b0464210b04913e77", "f05a636b4564104120111800021a92e43397bc12a5c72fed7036be8556e0029e", "f3f501f345f24383c0000395b26b726e46758b71393267aeae0bd36f8b3ade80", "f8a923a85cb099422ad5a2e345fe877bbc89a8a8b23235824a93488150e45f6e"]
+coverage = ["03481e81d558d30d230bc12999e3edffe392d244349a90f4ef9b88425fac74ba", "0b136648de27201056c1869a6c0d4e23f464750fd9a9ba9750b8336a244429ed", "104ab3934abaf5be871a583541e8829d6c19ce7bde2923b2751e0d3ca44db60a", "10a46017fef60e16694a30627319f38a2b9b52e90182dddb6e37dcdab0f4bf95", "15b111b6a0f46ee1a485414a52a7ad1d703bdf984e9ed3c288a4414d3871dcbd", "198626739a79b09fa0a2f06e083ffd12eb55449b5f8bfdbeed1df4910b2ca640", "1c383d2ef13ade2acc636556fd544dba6e14fa30755f26812f54300e401f98f2", "23d341cdd4a0371820eb2b0bd6b88f5003a7438bbedb33688cd33b8eae59affd", "28b2191e7283f4f3568962e373b47ef7f0392993bb6660d079c62bd50fe9d162", "2a5b73210bad5279ddb558d9a2bfedc7f4bf6ad7f3c988641d83c40293deaec1", "2eb564bbf7816a9d68dd3369a510be3327f1c618d2357fa6b1216994c2e3d508", "337ded681dd2ef9ca04ef5d93cfc87e52e09db2594c296b4a0a3662cb1b41249", "3a2184c6d797a125dca8367878d3b9a178b6fdd05fdc2d35d758c3006a1cd694", "3c79a6f7b95751cdebcd9037e4d06f8d5a9b60e4ed0cd231342aa8ad7124882a", "3d72c20bd105022d29b14a7d628462ebdc61de2f303322c0212a054352f3b287", "3eb42bf89a6be7deb64116dd1cc4b08171734d721e7a7e57ad64cc4ef29ed2f1", "4635a184d0bbe537aa185a34193898eee409332a8ccb27eea36f262566585000", "56e448f051a201c5ebbaa86a5efd0ca90d327204d8b059ab25ad0f35fbfd79f1", "5a13ea7911ff5e1796b6d5e4fbbf6952381a611209b736d48e675c2756f3f74e", "69bf008a06b76619d3c3f3b1983f5145c75a305a0fea513aca094cae5c40a8f5", "6bc583dc18d5979dc0f6cec26a8603129de0304d5ae1f17e57a12834e7235062", "701cd6093d63e6b8ad7009d8a92425428bc4d6e7ab8d75efbb665c806c1d79ba", "7608a3dd5d73cb06c531b8925e0ef8d3de31fed2544a7de6c63960a1e73ea4bc", "76ecd006d1d8f739430ec50cc872889af1f9c1b6b8f48e29941814b09b0fd3cc", "7aa36d2b844a3e4a4b356708d79fd2c260281a7390d678a10b91ca595ddc9e99", "7d3f553904b0c5c016d1dad058a7554c7ac4c91a789fca496e7d8347ad040653", "7e1fe19bd6dce69d9fd159d8e4a80a8f52101380d5d3a4d374b6d3eae0e5de9c", "8c3cb8c35ec4d9506979b4cf90ee9918bc2e49f84189d9bf5c36c0c1119c6558", "9d6dd10d49e01571bf6e147d3b505141ffc093a06756c60b053a859cb2128b1f", "9e112fcbe0148a6fa4f0a02e8d58e94470fc6cb82a5481618fea901699bf34c4", "ac4fef68da01116a5c117eba4dd46f2e06847a497de5ed1d64bb99a5fda1ef91", "b8815995e050764c8610dbc82641807d196927c3dbed207f0a079833ffcf588d", "be6cfcd8053d13f5f5eeb284aa8a814220c3da1b0078fa859011c7fffd86dab9", "c1bb572fab8208c400adaf06a8133ac0712179a334c09224fb11393e920abcdd", "de4418dadaa1c01d497e539210cb6baa015965526ff5afc078c57ca69160108d", "e05cb4d9aad6233d67e0541caa7e511fa4047ed7750ec2510d466e806e0255d6", "e4d96c07229f58cb686120f168276e434660e4358cc9cf3b0464210b04913e77", "f3f501f345f24383c0000395b26b726e46758b71393267aeae0bd36f8b3ade80", "f8a923a85cb099422ad5a2e345fe877bbc89a8a8b23235824a93488150e45f6e"]
 doc8 = ["2df89f9c1a5abfb98ab55d0175fed633cae0cf45025b8b1e0ee5ea772be28543", "d12f08aa77a4a65eb28752f4bc78f41f611f9412c4155e2b03f1f5d4a45efe04"]
 docutils = ["02aec4bd92ab067f6ff27a38a38a41173bf01bed8f89157768c1573f53e474a6", "51e64ef2ebfb29cae1faa133b3710143496eca21c530f3f71424d77687764274", "7a4bd47eaf6596e1295ecb11361139febe29b084a87bf005bf899f9a42edc3c6"]
 eradicate = ["f9af01c544ccd8f71bc2f7f3fa39dc363d842cfcb9c730a83676a59026ab5f24"]
-flake8 = ["7253265f7abd8b313e3892944044a365e3f4ac3fcdcfb4298f55ee9ddf188ba0", "c7841163e2b576d435799169b78703ad6ac1bbb0f199994fc05f700b2a90ea37"]
+flake8 = ["6a35f5b8761f45c5513e3405f110a86bea57982c3b75b766ce7b65217abe1670", "c01f8a3963b3571a8e6bd7a4063359aff90749e160778e03817cd9b71c9e07d2"]
 flake8-bandit = ["a66c7b42af9530d5e988851ccee02958a51a85d46f1f4609ecc3546948f809b8", "f7c3421fd9aebc63689c0693511e16dcad678fd4a0ce624b78ca91ae713eacdc"]
 flake8-broken-line = ["3eb823f48b4ec67735ebbe8e282319826c8e8be7dfc185c9e259228084c21de2", "84147d38a1562d011a8de0bb1de299a715f7dea1a7332bd6946db04a1e4c3ddd"]
 flake8-bugbear = ["07b6e769d7f4e168d590f7088eae40f6ddd9fa4952bed31602def65842682c83", "0ccf56975f4db1d69dc1cf3598c99d768ebf95d0cad27d76087954aa399b515a"]
@@ -976,22 +887,22 @@ more-itertools = ["c187a73da93e7a8acc0001572aebc7e3c69daf7bf6881a2cea10650bd4420
 mypy = ["8e071ec32cc226e948a34bbb3d196eb0fd96f3ac69b6843a5aff9bd4efa14455", "fb90c804b84cfd8133d3ddfbd630252694d11ccc1eb0166a1b2efb5da37ecab2"]
 mypy-extensions = ["37e0e956f41369209a3d5f34580150bcacfabaa57b33a15c0b25f4b5725e0812", "b16cabe759f55e3409a7d231ebd2841378fb0c27a5d1994719e340e4f429ac3e"]
 packaging = ["0886227f54515e592aaa2e5a553332c73962917f2831f1b0f9b9f4380a4b9807", "f95a1e147590f204328170981833854229bb2912ac3d5f89e2a8ccd2834800c9"]
-pbr = ["ab94783019179bf48f5784edc63f5bc8328ec5ff93f33591567f266d21ac7323", "bfcff1a3878eebf559392c2130a17f612a03f96a0d44c3559d9c1e62a4235a2d"]
+pbr = ["8fc938b1123902f5610b06756a31b1e6febf0d105ae393695b0c9d4244ed2910", "f20ec0abbf132471b68963bb34d9c78e603a5cf9e24473f14358e66551d47475"]
 pep8-naming = ["360308d2c5d2fff8031c1b284820fbdb27a63274c0c1a8ce884d631836da4bdd", "624258e0dd06ef32a9daf3c36cc925ff7314da7233209c5b01f7e5cdd3c34826"]
 pluggy = ["447ba94990e8014ee25ec853339faf7b0fc8050cdc3289d4d71f7f410fb90095", "bde19360a8ec4dfd8a20dcb811780a30998101f078fc7ded6162f0076f50508f"]
 pockets = ["109eb91588e9cf722de98c98d300e1c5896e877f5704dc61176fa09686ca635b", "21a2405543c439ac091453ed187f558cf5294d3f85f15310f214ad4de057e0af"]
 py = ["bf92637198836372b520efcba9e020c330123be8ce527e535d185ed4b6f45694", "e76826342cefe3c3d5f7e8ee4316b80d1dd8a300781612ddbc765c17ba25a6c6"]
-pycodestyle = ["682256a5b318149ca0d2a9185d365d8864a768a28db66a84a2ea946bcc426766", "6c4245ade1edfad79c3446fadfc96b0de2759662dc29d07d80a6f27ad1ca6ba9"]
+pycodestyle = ["74abc4e221d393ea5ce1f129ea6903209940c1ecd29e002e8c6933c2b21026e0", "cbc619d09254895b0d12c2c691e237b2e91e9b2ecf5e84c26b35400f93dcfb83", "cbfca99bd594a10f674d0cd97a3d802a1fdef635d4361e1a2658de47ed261e3a"]
 pydocstyle = ["2258f9b0df68b97bf3a6c29003edc5238ff8879f1efb6f1999988d934e432bd8", "5741c85e408f9e0ddf873611085e819b809fca90b619f5fd7f34bd4959da3dd4", "ed79d4ec5e92655eccc21eb0c6cf512e69512b4a97d215ace46d17e4990f2039"]
-pyflakes = ["08bd6a50edf8cffa9fa09a463063c425ecaaf10d1eb0335a7e8b1401aef89e6f", "8d616a382f243dbf19b54743f280b80198be0bca3a5396f1d2e1fca6223e8805"]
+pyflakes = ["9a7662ec724d0120012f6e29d6248ae3727d821bba522a0e6b356eff19126a49", "f661252913bc1dbe7fcfcbf0af0db3f42ab65aabd1a6ca68fe5d466bace94dae"]
 pygments = ["78f3f434bcc5d6ee09020f92ba487f95ba50f1e3ef83ae96b9d5ffa1bab25c5d", "dbae1046def0efb574852fab9e90209b23f556367b5a320c0bcb871c77c3e8cc"]
 pyparsing = ["bc6c7146b91af3f567cf6daeaec360bc07d45ffec4cf5353f4d7a208ce7ca30a", "d29593d8ebe7b57d6967b62494f8c72b03ac0262b1eed63826c6f788b3606401"]
-pytest = ["212be78a6fa5352c392738a49b18f74ae9aeec1040f47c81cadbfd8d1233c310", "6f6c1efc8d0ccc21f8f6c34d8330baca883cf109b66b3df954b0a117e5528fb4"]
+pytest = ["a9e5e8d7ab9d5b0747f37740276eb362e6a76275d76cebbb52c6049d93b475db", "bf47e8ed20d03764f963f0070ff1c8fda6e2671fc5dd562a4d3b7148ad60f5ca"]
 pytest-cov = ["513c425e931a0344944f84ea47f3956be0e416d95acbd897a44970c8d926d5d7", "e360f048b7dae3f2f2a9a4d067b2dd6b6a015d384d1577c994a43f3f7cbad762"]
 pytest-flake8 = ["4f30f5be3efb89755f38f11bdb2a5e22d19a6f5faa73428f703a3292a9572cd3", "c740ad6aa19e3958947d2118f70bed218caf1d2097039fb7318573a2a72f89a1"]
 pytest-isort = ["2221c0914dfca41914625a646f0d2d1d4c676861b9a7b26746a7fdd40aa2c59b", "c70d0f900f4647bb714f0843dd82d7f7b759904006de31254efdb72ce88e0c0e"]
 pytest-randomly = ["6db5e03d72b54052b9b379dc3cfa4749c19bfe4de161cf3eb24762049f4ce9be", "92ec6745d3ebdd690ecb598648748c9601f16f5afacf83ccef2b50d23e6edb7f"]
-pytz = ["a061aa0a9e06881eb8b3b2b43f05b9439d6583c206d0a6c340ff72a7b6669053", "ffb9ef1de172603304d9d2819af6f5ece76f2e85ec10692a524dd876e72bf277"]
+pytz = ["642253af8eae734d1509fc6ac9c1aee5e5b69d76392660889979b9870610a46b", "91e3ccf2c344ffaa6defba1ce7f38f97026943f675b7703f44789768e4cb0ece"]
 pyyaml = ["3d7da3009c0f3e783b2c873687652d83b1bbfd5c88e9813fb7e5b03c0dd3108b", "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf", "40c71b8e076d0550b2e6380bada1f1cd1017b882f7e16f09a65be98e017f211a", "558dd60b890ba8fd982e05941927a3911dc409a63dcb8b634feaa0cda69330d3", "a7c28b45d9f99102fa092bb213aa12e0aaf9a6a1f5e395d36166639c1f96c3a1", "aa7dd4a6a427aed7df6fb7f08a580d68d9b118d90310374716ae90b710280af1", "bc558586e6045763782014934bfaf39d48b8ae85a2713117d16c39864085c613", "d46d7982b62e0729ad0175a9bc7e10a566fc07b224d2c79fafb5e032727eaa04", "d5eef459e30b09f5a098b9cea68bebfeb268697f78d647bd255a085371ac7f3f", "e01d3203230e1786cd91ccfdc8f8454c8069c91bee3962ad93b87a4b2860f537", "e170a9e6fcfd19021dd29845af83bb79236068bf5fd4df3327c1be18182b2531"]
 requests = ["99dcfdaaeb17caf6e526f32b6a7b780461512ab3f1d992187801694cba42770c", "a84b8c9ab6239b578f22d1c21d51b696dcfe004032bb80ea832398d6909d7279"]
 restructuredtext-lint = ["c48ca9a84c312b262809f041fe47dcfaedc9ee4879b3e1f9532f745c182b4037"]
@@ -1003,7 +914,7 @@ sphinx-autodoc-typehints = ["1a9df6cb3ba72453ea4bfbe96ea887abc0d796b2ce9508c2189
 sphinx-readable-theme = ["f5fe65a2e112cb956b366df41e0fc894ff6b6f0e4a4814fcbff692566db47fc0"]
 sphinxcontrib-napoleon = ["407382beed396e9f2d7f3043fad6afda95719204a1e1a231ac865f40abcbfcf8", "711e41a3974bdf110a484aec4c1a556799eb0b3f3b897521a018ad7e2db13fef"]
 sphinxcontrib-websupport = ["68ca7ff70785cbe1e7bccc71a48b5b6d965d79ca50629606c7861a21b206d9dd", "9de47f375baf1ea07cdb3436ff39d7a9c76042c10a769c52353ec46e4e8fc3b9"]
-stevedore = ["1e153545aca7a6a49d8337acca4f41c212fbfa60bf864ecd056df0cafb9627e8", "c7eac1c0d95824c88b655273da5c17cdde6482b2739f47c30bf851dcc9d3c2c0"]
+stevedore = ["b92bc7add1a53fb76c634a178978d113330aaf2006f9498d9e2414b31fbfc104", "c58b7c231a9c4890cd3c2b5d2b23bd63fa807ff934d68579e3f6c3a1735e8a7c"]
 testfixtures = ["334497d26344e8c0c5d01b4d785a1c83464573151e6a5f7ab250eb7981d452ec", "53c06c1feb0bf378d63c54d1d96858978422d5a34793b39f0dcb0e44f8ec26f4"]
 tomlkit = ["27ddd2796855428a0316057884ec081a1c967c8d29c3d489fcfccd1bb2976ede", "8f857398aefa2c6a488c824f1e7f757e73a4f68246f1874f9df5eb53903231de"]
 typed-ast = ["0948004fa228ae071054f5208840a1e88747a357ec1101c17217bfe99b299d58", "10703d3cec8dcd9eef5a630a04056bbc898abc19bac5691612acba7d1325b66d", "1f6c4bd0bdc0f14246fd41262df7dfc018d65bb05f6e16390b7ea26ca454a291", "25d8feefe27eb0303b73545416b13d108c6067b846b543738a25ff304824ed9a", "29464a177d56e4e055b5f7b629935af7f49c196be47528cc94e0a7bf83fbc2b9", "2e214b72168ea0275efd6c884b114ab42e316de3ffa125b267e732ed2abda892", "3e0d5e48e3a23e9a4d1a9f698e32a542a4a288c871d33ed8df1b092a40f3a0f9", "519425deca5c2b2bdac49f77b2c5625781abbaf9a809d727d3a5596b30bb4ded", "57fe287f0cdd9ceaf69e7b71a2e94a24b5d268b35df251a88fef5cc241bf73aa", "668d0cec391d9aed1c6a388b0d5b97cd22e6073eaa5fbaa6d2946603b4871efe", "68ba70684990f59497680ff90d18e756a47bf4863c604098f10de9716b2c0bdd", "6de012d2b166fe7a4cdf505eee3aaa12192f7ba365beeefaca4ec10e31241a85", "79b91ebe5a28d349b6d0d323023350133e927b4de5b651a8aa2db69c761420c6", "8550177fa5d4c1f09b5e5f524411c44633c80ec69b24e0e98906dd761941ca46", "898f818399cafcdb93cbbe15fc83a33d05f18e29fb498ddc09b0214cdfc7cd51", "94b091dc0f19291adcb279a108f5d38de2430411068b219f41b343c03b28fb1f", "a26863198902cda15ab4503991e8cf1ca874219e0118cbf07c126bce7c4db129", "a8034021801bc0440f2e027c354b4eafd95891b573e12ff0418dec385c76785c", "bc978ac17468fe868ee589c795d06777f75496b1ed576d308002c8a5756fb9ea", "c05b41bc1deade9f90ddc5d988fe506208019ebba9f2578c622516fd201f5863", "c9b060bd1e5a26ab6e8267fd46fc9e02b54eb15fffb16d112d4c7b1c12987559", "edb04bdd45bfd76c8292c4d9654568efaedf76fe78eb246dde69bdb13b2dad87", "f19f2a4f547505fe9072e15f6f4ae714af51b5a681a97f187971f50c283193b6"]

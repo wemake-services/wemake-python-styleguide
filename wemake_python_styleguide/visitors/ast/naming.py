@@ -69,7 +69,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             self.add_violation(PrivateNameViolation(node, text=name))
 
         if is_variable_name_with_underscored_number(name):
-            self.add_violation(UnderScoredNumberNameViolation())
+            self.add_violation(UnderScoredNumberNameViolation(node))
         if is_variable_name_contains_consecutive_underscores(name):
             self.add_violation(
                 ConsecutiveUnderscoresInNameViolation(node, text=name),

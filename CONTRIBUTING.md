@@ -75,12 +75,13 @@ Before submitting your code please do the following steps:
 
 1. Run `pytest` to make sure everything was working before
 2. Add any changes you want
-3. Adds tests for the new changes
-4. Edit documentation if you have changed something significant
-5. Update `CHANGELOG.md` with a quick summary of your changes
-6. Run `pytest` again to make sure it is still working
-7. Run `mypy` to ensure that types are correct
-8. Run `doc8` to ensure that docs are correct
+3. Add tests for the new changes
+4. Add an integration test into `tests/fixtures/noqa.py`
+5. Edit documentation if you have changed something significant
+6. Update `CHANGELOG.md` with a quick summary of your changes
+7. Run `pytest` again to make sure it is still working
+8. Run `mypy` to ensure that types are correct
+9. Run `doc8` to ensure that docs are correct
 
 
 ## Other help

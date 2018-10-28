@@ -4,6 +4,21 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
+## WIP
+
+### Bugfixes
+
+- Fixes `UpperCaseAttributeViolation` not being displayed in the docs
+- Fixes consistency checks being duplicated in the docs
+- Fixes `UnderScoredNumberNameViolation` showing incorrect line number
+
+### Misc
+
+- Updates `flake8` version to `3.6`
+- Removes `pycodestyle` pinned version
+- Improves tests: now testing almost all
+
+
 ## 0.3.0 aka The Hacktoberfest Feast
 
 This release was made possible by awesome people who contributed

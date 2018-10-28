@@ -4,4 +4,4 @@ Consistency
 ===========
 
 .. automodule:: wemake_python_styleguide.violations.consistency
-   :members:
+   :no-members:

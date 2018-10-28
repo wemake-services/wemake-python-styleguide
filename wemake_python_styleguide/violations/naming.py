@@ -138,7 +138,7 @@ Variable names
 .. autoclass:: PrivateNameViolation
 .. autoclass:: SameAliasImportViolation
 .. autoclass:: UnderScoredNumberNameViolation
-.. autoclass:: UpperCaseAttributeViolations
+.. autoclass:: UpperCaseAttributeViolation
 .. autoclass:: ConsecutiveUnderscoresInNameViolation
 
 """
@@ -469,7 +469,7 @@ class SameAliasImportViolation(ASTViolation):
 
 
 @final
-class UnderScoredNumberNameViolation(SimpleViolation):
+class UnderScoredNumberNameViolation(ASTViolation):
     """
     Forbids to have names with underscored numbers pattern.
 

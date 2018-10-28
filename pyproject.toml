@@ -38,12 +38,9 @@ Z = "wemake_python_styleguide.checker:Checker"
 
 [tool.poetry.dependencies]
 python = "^3.6 || ^3.7"
-flake8 = "^3.5"
+flake8 = "^3.6"
 attrs = "^18.2"
 typing_extensions = "^3.6"
-
-# This is a fix for issue-118
-pycodestyle = "==2.3.1"
 
 flake8-builtins = "^1.4"
 flake8-commas = "^2.0"

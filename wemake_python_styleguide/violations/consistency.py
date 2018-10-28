@@ -31,8 +31,8 @@ Summary
    ComparisonOrderViolation
    MultipleInComparisonViolation
    RedundantComparisonViolation
-   WrongConditionalViolation
    MissingSpaceBetweenKeywordAndParenViolation
+   WrongConditionalViolation
    ObjectInBaseClassesListViolation
 
 Consistency checks
@@ -51,8 +51,8 @@ Consistency checks
 .. autoclass:: ComparisonOrderViolation
 .. autoclass:: MultipleInComparisonViolation
 .. autoclass:: RedundantComparisonViolation
-.. autoclass:: WrongConditionalViolation
 .. autoclass:: MissingSpaceBetweenKeywordAndParenViolation
+.. autoclass:: WrongConditionalViolation
 .. autoclass:: ObjectInBaseClassesListViolation
 
 """
