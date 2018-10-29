@@ -24,12 +24,10 @@ def _is_visitor_class(cls) -> bool:
         BaseTokenVisitor,
         BaseVisitor,
     }
+    if not inspect.isclass(cls):
+        return False
 
-    return (
-        inspect.isclass(cls) and
-        issubclass(cls, BaseVisitor) and
-        cls not in base_classes
-    )
+    return issubclass(cls, BaseVisitor) and cls not in base_classes
 
 
 def _import_module_by_path(path: str):

@@ -26,12 +26,10 @@ def _is_violation_class(cls) -> bool:
         TokenizeViolation,
         MaybeASTViolation,
     }
+    if not inspect.isclass(cls):
+        return False
 
-    return (
-        inspect.isclass(cls) and
-        issubclass(cls, BaseViolation) and
-        cls not in base_classes
-    )
+    return issubclass(cls, BaseViolation) and cls not in base_classes
 
 
 def _load_all_violation_classes():

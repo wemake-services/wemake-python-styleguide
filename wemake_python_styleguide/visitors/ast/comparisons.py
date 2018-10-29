@@ -96,10 +96,9 @@ class WrongComparisionOrderVisitor(BaseNodeVisitor):
         if isinstance(left, self._allowed_left_nodes):
             return True
         if isinstance(left, ast.BinOp):
-            return (
-                self._is_left_node_valid(left.left) or
-                self._is_left_node_valid(left.right)
-            )
+            left_node = self._is_left_node_valid(left.left)
+            right_node = self._is_left_node_valid(left.right)
+            return left_node or right_node
         return False
 
     def _has_wrong_nodes_on_the_right(
