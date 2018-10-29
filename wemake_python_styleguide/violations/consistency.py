@@ -454,7 +454,7 @@ class BadNumberSuffixViolation(TokenizeViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found underscored number: {0}'
+    error_template = 'Found bad number suffix: {0}'
     code = 310
 
 

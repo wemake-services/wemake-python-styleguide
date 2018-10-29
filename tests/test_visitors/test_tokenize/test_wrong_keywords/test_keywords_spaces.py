@@ -11,12 +11,24 @@ from wemake_python_styleguide.visitors.tokenize.keywords import (
     WrongKeywordTokenVisitor,
 )
 
-_multiline_error_function = """
+multiline_error_function = """
 def foo():
     yield(1, 2, 3)
 """
-_multiline_error_statement = """
+
+multiline_error_statement = """
 assert(
+    1, 2, 3,
+) in b,
+"""
+
+multiline_correct_function = """
+def foo():
+    yield (1, 2, 3)
+"""
+
+multiline_correct_statement = """
+assert (
     1, 2, 3,
 ) in b,
 """
@@ -42,8 +54,8 @@ assert(
     'except(ValueError, KeyError)',
     'elif(bar, baz)',
     'else(bar, baz)',
-    _multiline_error_function,
-    _multiline_error_statement,
+    multiline_error_function,
+    multiline_error_statement,
 ])
 def test_missing_space(
     parse_tokens,
@@ -51,24 +63,13 @@ def test_missing_space(
     default_options,
     code,
 ):
-    """Ensures that paren right after keyword raises a warning."""
+    """Ensures that parens right after keyword raise a warning."""
     file_tokens = parse_tokens(code)
 
     visitor = WrongKeywordTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [MissingSpaceBetweenKeywordAndParenViolation])
-
-
-_multiline_correct_function = """
-def foo():
-    yield (1, 2, 3)
-"""
-_multiline_correct_statement = """
-assert (
-    1, 2, 3,
-) in b,
-"""
 
 
 @pytest.mark.parametrize('code', [
@@ -88,10 +89,10 @@ assert (
     'except (ValueError, KeyError)',
     'elif (bar, baz)',
     'else (bar, baz)',
-    _multiline_correct_function,
-    _multiline_correct_statement,
+    multiline_correct_function,
+    multiline_correct_statement,
 ])
-def test_fine_when_space_in_between_keyword_and_paren(
+def test_fine_when_space_in_between_keyword_and_parens(
     parse_tokens,
     assert_errors,
     default_options,

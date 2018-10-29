@@ -104,9 +104,8 @@ class JonesScoreViolation(SimpleViolation):
 
     """
 
-    should_use_text = False
     #: Error message shown to the user.
-    error_template = 'Found module with high Jones Complexity score'
+    error_template = 'Found module with high Jones Complexity score: {0}'
     code = 200
 
 
@@ -287,7 +286,7 @@ class TooManyReturnsViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found too many return statements "{0}"'
+    error_template = 'Found too many return statements: {0}'
     code = 212
 
 
@@ -313,7 +312,7 @@ class TooManyExpressionsViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found too many expressions "{0}"'
+    error_template = 'Found too many expressions: {0}'
     code = 213
 
 
@@ -349,7 +348,7 @@ class TooManyMethodsViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found too many methods "{0}"'
+    error_template = 'Found too many methods: {0}'
     code = 214
 
 
@@ -379,7 +378,7 @@ class TooDeepNestingViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found too deep nesting "{0}"'
+    error_template = 'Found too deep nesting: {0}'
     code = 220
 
 
@@ -492,9 +491,8 @@ class TooManyElifsViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     #: Error message shown to the user.
-    error_template = 'Found too many `elif` branches'
+    error_template = 'Found too many `elif` branches: {0}'
     code = 223
 
 
@@ -571,7 +569,6 @@ class TooManyBaseClassesViolation(ASTViolation):
         Returns Z225 as error code
     """
 
-    should_use_text = False
     #: Error message shown to the user
-    error_template = 'Too many number of base classes'
+    error_template = 'Too many number of base classes: {0}'
     code = 225

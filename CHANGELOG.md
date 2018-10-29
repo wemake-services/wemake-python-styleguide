@@ -12,6 +12,8 @@ We used to have incremental versioning before `0.1.0`.
   for both variables and modules
 - *Breaking*: removes `--min-module-name-length` options
 - *Breaking*: renames `--min-variable-name-length` into `--min-name-length`
+- Dependencies: updates `flake8` version to `3.6`
+- Dependencies: removes `pycodestyle` pinned version
 
 ### Bugfixes
 
@@ -21,16 +23,19 @@ We used to have incremental versioning before `0.1.0`.
 - Fixes `UnderscoredNumberNameViolation` showing incorrect line number
 - Fixes `ProtectedAttributeViolation` to respect `super()` and `mcs`
 - Fixes `ProtectedAttributeViolation` to show correct text
+- Fixes `BadNumberSuffixViolation` to show correct text
+- Fixes `TooManyBaseClassesViolation` to show correct text
+- Fixes `TooManyElifsViolation` to show correct text
+- Fixes `TooDeepNestingViolation` to show correct text
+- Fixes `TooManyMethodsViolation` to show correct text
 - Renames `UnderscoredNumberNameViolation` to `UnderscoredNumberNameViolation`
 
 ### Misc
 
-- Dependencies: updates `flake8` version to `3.6`
-- Dependencies: removes `pycodestyle` pinned version
 - Refactoring: removed duplicate logic inside `logics/filenames.py`
 - Improves tests: now testing almost all violations inside `noqa.py`
 - Improves tests: now testing violations text
-- Improves tests: now all naming patters live in one fixture
+- Improves tests: now all common patters live in related `conftest.py`
 
 
 ## 0.3.0 aka The Hacktoberfest Feast

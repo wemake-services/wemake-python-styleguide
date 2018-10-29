@@ -46,6 +46,7 @@ def test_correct_count(
 ])
 def test_bad_number_default_option(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
     code,
     default_options,
@@ -57,6 +58,7 @@ def test_bad_number_default_option(
     visitor.run()
 
     assert_errors(visitor, [TooManyBaseClassesViolation])
+    assert_error_text(visitor, '5')
 
 
 @pytest.mark.parametrize('code', [

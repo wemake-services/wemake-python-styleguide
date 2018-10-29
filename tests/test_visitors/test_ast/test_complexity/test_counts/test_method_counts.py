@@ -86,7 +86,10 @@ class First(object):
     class_with_async_and_usual_class_methods,
 ])
 def test_method_counts_normal(
-    assert_errors, parse_ast_tree, code, default_options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
 ):
     """Testing that regular classes and functions work well."""
     tree = parse_ast_tree(code)
@@ -106,7 +109,11 @@ def test_method_counts_normal(
     class_with_async_and_usual_class_methods,
 ])
 def test_method_counts_violation(
-    assert_errors, parse_ast_tree, code, options,
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    code,
+    options,
 ):
     """Testing that violations are raised when reaching max value."""
     tree = parse_ast_tree(code)
@@ -116,3 +123,4 @@ def test_method_counts_violation(
     visitor.run()
 
     assert_errors(visitor, [TooManyMethodsViolation])
+    assert_error_text(visitor, '2')

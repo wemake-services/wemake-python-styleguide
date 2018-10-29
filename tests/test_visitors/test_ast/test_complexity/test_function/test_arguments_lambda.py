@@ -71,6 +71,7 @@ def test_correct_arguments_count_custom_option(
 ])
 def test_no_arguments_error(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
     code,
     options,
@@ -83,6 +84,7 @@ def test_no_arguments_error(
     visitor.run()
 
     assert_errors(visitor, [TooManyArgumentsViolation])
+    assert_error_text(visitor, '1')
 
 
 @pytest.mark.parametrize('code', [

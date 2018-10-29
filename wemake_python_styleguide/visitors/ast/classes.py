@@ -68,7 +68,7 @@ class WrongClassVisitor(BaseNodeVisitor):
 
         if len(node.bases) > self.options.max_base_classes:
             self.add_violation(
-                TooManyBaseClassesViolation(node, text=node.name),
+                TooManyBaseClassesViolation(node, text=str(len(node.bases))),
             )
 
     def _check_method_contents(self, node: types.AnyFunctionDef) -> None:

@@ -8,14 +8,14 @@ from wemake_python_styleguide.visitors.ast.complexity.function import (
 )
 
 function_with_locals = """
-{0}def function():
+def function():
     local_variable1 = 1
     local_variable2 = 2
     _ = None  # `_` is not counted
 """
 
 function_with_locals_redefinition = """
-{0}def function():
+def function():
     local_variable1 = 1
     local_variable2 = 2
 
@@ -24,16 +24,32 @@ function_with_locals_redefinition = """
 """
 
 function_with_locals_and_params = """
-{0}def function(param):
+def function(param):
     local_variable1 = 1
     param = param + 2
     param += 3
 """
 
 function_with_comprehension = """
-{0}def function():
+def function():
     variable1 = [node for node in parse()]
     variable2 = [xml for xml in variable1]
+"""
+
+function_with_nested = """
+def function():  # has two local vars
+    def factory():  # has one local var
+        variable1 = 1
+
+    variable2 = 2
+"""
+
+function_with_nested_and_params = """
+def function(param1):  # has two local vars
+    param1 = param1 + 1
+
+    def factory(param2):  # has one local var
+        param2 = param2 + 2
 """
 
 
@@ -42,10 +58,8 @@ function_with_comprehension = """
     function_with_locals_redefinition,
     function_with_locals_and_params,
     function_with_comprehension,
-])
-@pytest.mark.parametrize('mode', [
-    'async ',  # coroutine
-    '',  # regular function
+    function_with_nested,
+    function_with_nested_and_params,
 ])
 def test_locals_correct_count(
     assert_errors,
@@ -64,7 +78,7 @@ def test_locals_correct_count(
     See: https://github.com/wemake-services/wemake-python-styleguide/issues/247
     """
     option_values = options(max_local_variables=2)
-    tree = parse_ast_tree(code.format(mode))
+    tree = parse_ast_tree(mode(code))
 
     visitor = FunctionComplexityVisitor(option_values, tree=tree)
     visitor.run()
@@ -77,10 +91,8 @@ def test_locals_correct_count(
     function_with_locals_redefinition,
     function_with_locals_and_params,
     function_with_comprehension,
-])
-@pytest.mark.parametrize('mode', [
-    'async ',  # coroutine
-    '',  # regular function
+    function_with_nested,
+    function_with_nested_and_params,
 ])
 def test_locals_wrong_count(
     assert_errors,
@@ -100,7 +112,7 @@ def test_locals_wrong_count(
     See: https://github.com/wemake-services/wemake-python-styleguide/issues/247
     """
     option_values = options(max_local_variables=1)
-    tree = parse_ast_tree(code.format(mode))
+    tree = parse_ast_tree(mode(code))
 
     visitor = FunctionComplexityVisitor(option_values, tree=tree)
     visitor.run()

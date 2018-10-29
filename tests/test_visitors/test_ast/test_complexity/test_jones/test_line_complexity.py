@@ -79,13 +79,25 @@ def test_regular_nodes(assert_errors, parse_ast_tree, code, default_options):
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    line_simple,
-    line_inside_function,
-    line_inside_async_function,
-    line_inside_class,
+@pytest.mark.parametrize('code, complexity', [
+    (line_simple, 3),
+    (line_with_types, 3),
+    (line_with_comprehension, 6),
+    (line_with_math, 9),
+    (line_inside_function, 4),
+    (line_inside_async_function, 4),
+    (line_inside_class, 5),
+    (class_with_function, 4),
+    (class_with_async_function, 4),
 ])
-def test_complex_lines(assert_errors, parse_ast_tree, code, options):
+def test_complex_lines(
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    code,
+    complexity,
+    options,
+):
     """Testing that complex lines do raise violations."""
     tree = parse_ast_tree(code)
 
@@ -94,6 +106,7 @@ def test_complex_lines(assert_errors, parse_ast_tree, code, options):
     visitor.run()
 
     assert_errors(visitor, [LineComplexityViolation])
+    assert_error_text(visitor, str(complexity))
 
 
 def test_same_complexity(parse_ast_tree, default_options):

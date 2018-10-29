@@ -139,7 +139,9 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
     def _check_possible_switch(self) -> None:
         for node, elifs in self._counter.elifs.items():
             if elifs > self.options.max_elifs:
-                self.add_violation(TooManyElifsViolation(node))
+                self.add_violation(
+                    TooManyElifsViolation(node, text=str(elifs)),
+                )
 
     def _check_function_internals(self) -> None:
         for node, variables in self._counter.variables.items():

@@ -8,23 +8,29 @@ from wemake_python_styleguide.visitors.ast.complexity.function import (
 )
 
 function_without_expressions = """
-{0}def function(): ...
+def function():
+    return 1
 """
 
 function_with_expressions = """
-{0}def function():
-    print(12)
-    print(12 / 1)
+def function():
+    print(1)
+    print(2 / 1)
+"""
+
+function_with_nested_function_and_expressions = """
+def function():
+    print(1)
+
+    def factory():
+        print(2)
 """
 
 
 @pytest.mark.parametrize('code', [
     function_without_expressions,
     function_with_expressions,
-])
-@pytest.mark.parametrize('mode', [
-    'async ',  # coroutine
-    '',  # regular function
+    function_with_nested_function_and_expressions,
 ])
 def test_expressions_correct_count(
     assert_errors,
@@ -34,7 +40,7 @@ def test_expressions_correct_count(
     mode,
 ):
     """Testing that expressions counted correctly."""
-    tree = parse_ast_tree(code.format(mode))
+    tree = parse_ast_tree(mode(code))
 
     visitor = FunctionComplexityVisitor(default_options, tree=tree)
     visitor.run()
@@ -44,10 +50,7 @@ def test_expressions_correct_count(
 
 @pytest.mark.parametrize('code', [
     function_with_expressions,
-])
-@pytest.mark.parametrize('mode', [
-    'async ',  # coroutine
-    '',  # regular function
+    function_with_nested_function_and_expressions,
 ])
 def test_expressions_wrong_count(
     assert_errors,
@@ -58,7 +61,7 @@ def test_expressions_wrong_count(
     mode,
 ):
     """Testing that many expressions raises a warning."""
-    tree = parse_ast_tree(code.format(mode))
+    tree = parse_ast_tree(mode(code))
 
     option_values = options(max_expressions=1)
     visitor = FunctionComplexityVisitor(option_values, tree=tree)

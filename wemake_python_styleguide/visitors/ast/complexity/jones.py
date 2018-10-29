@@ -65,7 +65,7 @@ class JonesComplexityVisitor(BaseNodeVisitor):
         node_counts = [len(nodes) for nodes in self._lines.values()]
         total_count = median(node_counts) if node_counts else 0
         if total_count > self.options.max_jones_score:
-            self.add_violation(JonesScoreViolation())
+            self.add_violation(JonesScoreViolation(text=str(total_count)))
 
     def _maybe_ignore_child(self, node: ast.AST) -> bool:
         if isinstance(node, ast.AnnAssign):

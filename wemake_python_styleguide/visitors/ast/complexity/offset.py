@@ -42,7 +42,7 @@ class OffsetVisitor(BaseNodeVisitor):
     def _check_offset(self, node: ast.AST, error: int = 0) -> None:
         offset = getattr(node, 'col_offset', 0) - error
         if offset > self.options.max_offset_blocks * 4:
-            self.add_violation(TooDeepNestingViolation(node))
+            self.add_violation(TooDeepNestingViolation(node, text=str(offset)))
 
     def visit_line_expression(self, node: ast.AST) -> None:
         """
