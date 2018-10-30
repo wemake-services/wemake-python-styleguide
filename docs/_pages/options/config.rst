@@ -2,7 +2,7 @@ Config
 ======
 
 .. automodule:: wemake_python_styleguide.options.config
-   :members:
+   :no-members:
 
 Defaults
 --------

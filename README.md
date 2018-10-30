@@ -44,7 +44,7 @@ Namespaces are one honking great idea -- let's do more of those!
 pip install wemake-python-styleguide
 ```
 
-You will also need to create a `setup.cfg` file with [the following contents](https://wemake-python-styleguide.readthedocs.io/en/latest/_pages/options/config.html#third-party-plugins).
+You will also need to create a `setup.cfg` file with [the following contents](https://wemake-python-styleguide.readthedocs.io/en/latest/_pages/options/config.html#plugins).
 
 This file is required to configure our linter and all 3rd party plugins it uses.
 However, this is a temporary solution.

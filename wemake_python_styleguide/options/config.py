@@ -80,13 +80,13 @@ class Configuration(object):
       definition, defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_BASE_CLASSES`
 
-    All options are configurable via ``flake8`` CLI:
+    All options are configurable via ``flake8`` CLI.
 
     Example::
 
         flake8 --max-returns=2 --max-arguments=4
 
-    Or you can provide options in ``tox.ini`` or ``setup.cfg``:
+    Or you can provide options in ``tox.ini`` or ``setup.cfg``.
 
     Example::
 

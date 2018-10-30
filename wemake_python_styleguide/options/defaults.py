@@ -18,41 +18,41 @@ from wemake_python_styleguide.types import Final
 
 # General:
 
-#: Minimum variable's name length:
+#: Minimum variable's name length.
 MIN_NAME_LENGTH: Final = 2
 
-#: Whether you control ones who use your code:
+#: Whether you control ones who use your code.
 I_CONTROL_CODE: Final = True
 
 
 # Complexity:
 
-#: Maximum number of `return` statements allowed in a single function:
+#: Maximum number of `return` statements allowed in a single function.
 MAX_RETURNS: Final = 5
 
-#: Maximum number of local variables in a function:
+#: Maximum number of local variables in a function.
 MAX_LOCAL_VARIABLES: Final = 5
 
-#: Maximum number of expressions in a single function:
+#: Maximum number of expressions in a single function.
 MAX_EXPRESSIONS: Final = 9
 
-#: Maximum number of arguments for functions or method, `self` is not counted:
+#: Maximum number of arguments for functions or method, `self` is not counted.
 MAX_ARGUMENTS: Final = 5
 
-#: Maximum number of classes and functions in a single module:
+#: Maximum number of classes and functions in a single module.
 MAX_MODULE_MEMBERS: Final = 7
 
-#: Maximum number of methods in a single class:
+#: Maximum number of methods in a single class.
 MAX_METHODS: Final = 7
 
-#: Maximum line complexity:
+#: Maximum line complexity.
 MAX_LINE_COMPLEXITY: Final = 14  # 7 * 2, also almost guessed
 
-#: Maximum median module Jones complexity:
+#: Maximum median module Jones complexity.
 MAX_JONES_SCORE: Final = 12  # this value was "guessed"
 
-#: Maximum number of imports in a single module:
+#: Maximum number of imports in a single module.
 MAX_IMPORTS: Final = 12
 
-#: Maximum number of base classes:
+#: Maximum number of base classes.
 MAX_BASE_CLASSES: Final = 3
