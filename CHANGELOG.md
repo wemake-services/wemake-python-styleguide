@@ -4,7 +4,10 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
-## WIP
+## 0.4.0
+
+Development was focused around better test coverage and providing a better API
+for tests. We also now covering more cases and testing violation texts.
 
 ### Features
 
