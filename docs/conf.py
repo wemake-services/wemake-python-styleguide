@@ -69,7 +69,7 @@ extensions = [
     'added_value',
 ]
 
-autoclass_content = 'both'
+autoclass_content = 'class'
 autodoc_member_order = 'bysource'
 
 autodoc_mock_imports = [

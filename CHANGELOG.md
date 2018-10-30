@@ -38,6 +38,7 @@ We used to have incremental versioning before `0.1.0`.
 - Improves tests: now testing almost all violations inside `noqa.py`
 - Improves tests: now testing violations text
 - Improves tests: now all common patters live in related `conftest.py`
+- Improves docs: now all configuration options are listed in the violations
 
 
 ## 0.3.0 aka The Hacktoberfest Feast

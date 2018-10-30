@@ -316,7 +316,6 @@ class TooShortNameViolation(MaybeASTViolation):
 
     This rule checks: modules, variables, attributes,
     functions, methods, and classes.
-    This rule is configurable with ``--min-name-length``.
 
     Example::
 
@@ -327,6 +326,11 @@ class TooShortNameViolation(MaybeASTViolation):
         # Wrong:
         x = 1
         y = 2
+
+    Configuration:
+        This rule is configurable with ``--min-name-length``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_NAME_LENGTH`
 
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.4.0

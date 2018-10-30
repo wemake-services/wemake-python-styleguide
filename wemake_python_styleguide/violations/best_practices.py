@@ -261,6 +261,15 @@ class InitModuleHasLogicViolation(ASTViolation):
     1. comments, since they are dropped before AST comes in play
     2. docs string, because sometimes it is required to state something
 
+    It is also fine when you have different users that use your code.
+    And you do not want to break everything for them.
+    In this case this rule can be configured.
+
+    Configuration:
+        This rule is configurable with ``--i-control-code``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.I_CONTROL_CODE`
+
     .. versionadded:: 0.1.0
 
     Note:

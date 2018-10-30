@@ -92,12 +92,15 @@ class JonesScoreViolation(SimpleViolation):
     Solution:
         Refactor the module contents.
 
-    See also:
-        https://github.com/Miserlou/JonesComplexity
-
-    This rule is configurable with ``--max-module-score``.
+    Configuration:
+        This rule is configurable with ``--max-jones-score``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_JONES_SCORE`
 
     .. versionadded:: 0.1.0
+
+    See also:
+        https://github.com/Miserlou/JonesComplexity
 
     Note:
         Returns Z200 as error code
@@ -136,7 +139,9 @@ class TooManyImportsViolation(SimpleViolation):
     We do not make any differences between
     ``import`` and ``from ... import ...``.
 
-    This rule is configurable with ``--max-imports``.
+    Configuration:
+        This rule is configurable with ``--max-imports``.
+        Default: :str:`wemake_python_styleguide.options.defaults.MAX_IMPORTS`
 
     .. versionadded:: 0.1.0
 
@@ -167,7 +172,10 @@ class TooManyModuleMembersViolation(SimpleViolation):
     We also do not care about functions and classes being public or not.
     However, methods are counted separately on a per-class basis.
 
-    This rule is configurable with ``--max-module-members``.
+    Configuration:
+        This rule is configurable with ``--max-module-members``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_MODULE_MEMBERS`
 
     .. versionadded:: 0.1.0
 
@@ -221,7 +229,10 @@ class TooManyLocalsViolation(ASTViolation):
     Please, note that ``_`` is a special case. It is not counted as a local
     variable. Since by design it means: do not count me as a real variable.
 
-    This rule is configurable with ``--max-local-variables``.
+    Configuration:
+        This rule is configurable with ``--max-local-variables``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_LOCAL_VARIABLES`
 
     .. versionadded:: 0.1.0
 
@@ -249,7 +260,9 @@ class TooManyArgumentsViolation(ASTViolation):
         Split function into several functions.
         Then it will be easier to use them.
 
-    This rule is configurable with ``--max-arguments``.
+    Configuration:
+        This rule is configurable with ``--max-arguments``.
+        Default: :str:`wemake_python_styleguide.options.defaults.MAX_ARGUMENTS`
 
     .. versionadded:: 0.1.0
 
@@ -276,7 +289,9 @@ class TooManyReturnsViolation(ASTViolation):
     Solution:
         Change your design.
 
-    This rule is configurable with ``--max-returns``.
+    Configuration:
+        This rule is configurable with ``--max-returns``.
+        Default: :str:`wemake_python_styleguide.options.defaults.MAX_RETURNS`
 
     .. versionadded:: 0.1.0
 
@@ -302,7 +317,10 @@ class TooManyExpressionsViolation(ASTViolation):
     Solution:
         Split function into several functions, refactor your API.
 
-    This rule is configurable with ``--max-expressions``.
+    Configuration:
+        This rule is configurable with ``--max-expressions``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_EXPRESSIONS`
 
     .. versionadded:: 0.1.0
 
@@ -331,16 +349,20 @@ class TooManyMethodsViolation(ASTViolation):
         Split this class into several classes.
         Then use composition or inheritance to refactor your code.
         This will protect you from "God object" anti-pattern.
-        See: https://en.wikipedia.org/wiki/God_object
 
     We do not make any difference between instance and class methods.
     We also do not care about functions and classes being public or not.
     We also do not count inherited methods from parents.
     This rule does not count attributes of a class.
 
-    This rule is configurable with ``--max-methods``.
+    Configuration:
+        This rule is configurable with ``--max-methods``.
+        Default: :str:`wemake_python_styleguide.options.defaults.MAX_METHODS`
 
     .. versionadded:: 0.1.0
+
+    See also:
+        https://en.wikipedia.org/wiki/God_object
 
     Note:
         Returns Z214 as error code
@@ -368,7 +390,10 @@ class TooDeepNestingViolation(ASTViolation):
         We need to refactor our complex construction into simpler ones.
         We can use new functions or different constructions.
 
-    This rule is configurable with ``--max-offset-blocks``.
+    Configuration:
+        This rule is configurable with ``--max-offset-blocks``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_OFFSET_BLOCKS`
 
     .. versionadded:: 0.1.0
 
@@ -411,12 +436,15 @@ class LineComplexityViolation(ASTViolation):
         With this technique a single new node in a line might trigger a complex
         refactoring process including several modules.
 
-    See also:
-        https://github.com/Miserlou/JonesComplexity
-
-    This rule is configurable with ``--max-line-complexity``.
+    Configuration:
+        This rule is configurable with ``--max-line-complexity``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_LINE_COMPLEXITY`
 
     .. versionadded:: 0.1.0
+
+    See also:
+        https://github.com/Miserlou/JonesComplexity
 
     Note:
         Returns Z221 as error code
@@ -453,7 +481,10 @@ class TooManyConditionsViolation(ASTViolation):
         # The next line has 2 conditions:
         if x_coord > 1 and x_coord < 10: ...
 
-    This rule is configurable with ``--max-conditions``.
+    Configuration:
+        This rule is configurable with ``--max-conditions``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_CONDITIONS`
 
     .. versionadded:: 0.1.0
 
@@ -482,7 +513,9 @@ class TooManyElifsViolation(ASTViolation):
         For example, you can use some interface that
         just call a specific method without ``if``.
 
-    This rule is configurable with ``--max-elifs``.
+    Configuration:
+        This rule is configurable with ``--max-elifs``.
+        Default: :str:`wemake_python_styleguide.options.defaults.MAX_ELIFS`
 
     .. versionadded:: 0.1.0
 
@@ -547,8 +580,6 @@ class TooManyBaseClassesViolation(ASTViolation):
     Solution:
         Restrict the number of base classes.
 
-    This rule is configurable with ``--max-base-classes``.
-
     Example::
 
        # Correct:
@@ -562,6 +593,11 @@ class TooManyBaseClassesViolation(ASTViolation):
            CustomClass,
            AddedClass,
         ): ...
+
+    Configuration:
+        This rule is configurable with ``--max-base-classes``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_BASE_CLASSES`
 
     .. versionadded:: 0.3.0
 

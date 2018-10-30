@@ -78,7 +78,10 @@ We are *not* planning to do the following things:
 
 ## Contributing
 
+We warmly welcome any contributions!
+
 See ["Contributing" section](https://wemake-python-styleguide.readthedocs.io/en/latest/_pages/contributing.html) in the documentation if you want to contribute.
+
 You can also check which [issues need some help](https://github.com/wemake-services/wemake-python-styleguide/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) right now.
 
 
