@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from wemake_python_styleguide.visitors.ast.complexity import (
+    classes,
     counts,
     function,
     jones,
@@ -9,7 +10,7 @@ from wemake_python_styleguide.visitors.ast.complexity import (
 )
 
 #: Used to store all complexity related visitors to be later passed to checker:
-COMPLEXITY_PRESET = (  # TODO: remove this preset
+COMPLEXITY_PRESET = (
     function.FunctionComplexityVisitor,
     jones.JonesComplexityVisitor,
     nested.NestedComplexityVisitor,
@@ -18,4 +19,5 @@ COMPLEXITY_PRESET = (  # TODO: remove this preset
     counts.ModuleMembersVisitor,
     counts.MethodMembersVisitor,
     counts.ConditionsVisitor,
+    classes.ClassComplexityVisitor,
 )

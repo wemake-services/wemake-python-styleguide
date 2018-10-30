@@ -5,7 +5,9 @@ import pytest
 from wemake_python_styleguide.violations.complexity import (
     TooManyBaseClassesViolation,
 )
-from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
+from wemake_python_styleguide.visitors.ast.complexity.classes import (
+    ClassComplexityVisitor,
+)
 
 correct_count = """
 class CorrectClassName(
@@ -35,7 +37,7 @@ def test_correct_count(
     """Testing of correct base classes number."""
     tree = parse_ast_tree(code)
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = ClassComplexityVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -54,7 +56,7 @@ def test_bad_number_default_option(
     """Testing of base classes number with default options."""
     tree = parse_ast_tree(code)
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = ClassComplexityVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [TooManyBaseClassesViolation])
@@ -75,7 +77,7 @@ def test_bad_number_custom_option(
     tree = parse_ast_tree(code)
 
     options = options(max_base_classes=5)
-    visitor = WrongClassVisitor(options, tree=tree)
+    visitor = ClassComplexityVisitor(options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])

@@ -48,13 +48,35 @@ def test_not_redundant(
 def test_redundant(
     assert_errors,
     parse_ast_tree,
-    simple_conditions,  # TODO: use lazy fixture to test `in` conditions
+    simple_conditions,  # TODO: join with `test_redundant_with_in`
     comparators,
     default_options,
 ):
     """Testing that violations are when comparing identical variable."""
     tree = parse_ast_tree(
         create_variables.format(simple_conditions.format(*comparators)),
+    )
+
+    visitor = ComparisonSanityVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [RedundantComparisonViolation])
+
+
+@pytest.mark.parametrize('comparators', [
+    ('variable', 'variable'),
+    ('another_variable', 'another_variable'),
+])
+def test_redundant_with_in(  # TODO: join with `test_redundant`
+    assert_errors,
+    parse_ast_tree,
+    in_conditions,
+    comparators,
+    default_options,
+):
+    """Testing that violations are when comparing identical variable."""
+    tree = parse_ast_tree(
+        create_variables.format(in_conditions.format(*comparators)),
     )
 
     visitor = ComparisonSanityVisitor(default_options, tree=tree)

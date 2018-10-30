@@ -10,9 +10,6 @@ from wemake_python_styleguide.violations.best_practices import (
     StaticMethodViolation,
     YieldInsideInitViolation,
 )
-from wemake_python_styleguide.violations.complexity import (
-    TooManyBaseClassesViolation,
-)
 from wemake_python_styleguide.violations.consistency import (
     ObjectInBaseClassesListViolation,
     RequiredBaseClassViolation,
@@ -65,11 +62,6 @@ class WrongClassVisitor(BaseNodeVisitor):
                     self.add_violation(
                         ObjectInBaseClassesListViolation(node, text=id_attr),
                     )
-
-        if len(node.bases) > self.options.max_base_classes:
-            self.add_violation(
-                TooManyBaseClassesViolation(node, text=str(len(node.bases))),
-            )
 
     def _check_method_contents(self, node: types.AnyFunctionDef) -> None:
         if node.name == constants.INIT:

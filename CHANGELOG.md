@@ -18,7 +18,7 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Misc
 
-- Refactoring: moves different visitors from `complexity/` to the common folder
+- Refactoring: moves all complexity checks into `complexity/` folder
 
 
 ## 0.4.0
