@@ -18,11 +18,17 @@ future_import_alias = 'from __future__ import {0} as some_alias'
     future_import_alias,
 ])
 @pytest.mark.parametrize('to_import', [
-    'print_function'
+    'print_function',
     'custom_value',
+    'unicode_literals',
 ])
 def test_wrong_future_import(
-    assert_errors, parse_ast_tree, code, to_import, default_options,
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    code,
+    to_import,
+    default_options,
 ):
     """Testing that future imports are restricted."""
     tree = parse_ast_tree(code.format(to_import))
@@ -31,10 +37,13 @@ def test_wrong_future_import(
     visitor.run()
 
     assert_errors(visitor, [FutureImportViolation])
+    assert_error_text(visitor, to_import)
 
 
 def test_wrong_multiple_future_import(
-    assert_errors, parse_ast_tree, default_options,
+    assert_errors,
+    parse_ast_tree,
+    default_options,
 ):
     """Testing that multiple future imports are restricted."""
     tree = parse_ast_tree(

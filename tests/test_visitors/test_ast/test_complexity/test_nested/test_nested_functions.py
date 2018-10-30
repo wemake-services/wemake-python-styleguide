@@ -93,14 +93,22 @@ class Raw(object):
     nested_function_in_async_method,
     nested_async_function_in_async_method,
 ])
-def test_nested_function(assert_errors, parse_ast_tree, code, default_options):
+def test_nested_function(
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    code,
+    default_options,
+):
     """Testing that nested functions are restricted."""
-    tree = parse_ast_tree(code.format('nested'))
+    nested_name = 'nested'
+    tree = parse_ast_tree(code.format(nested_name))
 
     visitor = NestedComplexityVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [NestedFunctionViolation])
+    assert_error_text(visitor, nested_name)
 
 
 @pytest.mark.parametrize('whitelist_name', NESTED_FUNCTIONS_WHITELIST)
@@ -115,7 +123,11 @@ def test_nested_function(assert_errors, parse_ast_tree, code, default_options):
     nested_async_function_in_async_method,
 ])
 def test_whitelist_nested_functions(
-    assert_errors, parse_ast_tree, whitelist_name, code, default_options,
+    assert_errors,
+    parse_ast_tree,
+    whitelist_name,
+    code,
+    default_options,
 ):
     """Testing that it is possible to nest whitelisted functions."""
     tree = parse_ast_tree(code.format(whitelist_name))
@@ -133,7 +145,10 @@ def test_whitelist_nested_functions(
     lambda_in_async_method,
 ])
 def test_lambda_nested_functions(
-    assert_errors, parse_ast_tree, code, default_options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
 ):
     """Testing that it is possible to nest lambda inside functions."""
     tree = parse_ast_tree(code)
@@ -144,7 +159,12 @@ def test_lambda_nested_functions(
     assert_errors(visitor, [])
 
 
-def test_lambda_nested_lambdas(assert_errors, parse_ast_tree, default_options):
+def test_lambda_nested_lambdas(
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    default_options,
+):
     """
     Testing that it is restricted to nest lambdas.
 
@@ -159,3 +179,4 @@ def test_lambda_nested_lambdas(assert_errors, parse_ast_tree, default_options):
     visitor.run()
 
     assert_errors(visitor, [NestedFunctionViolation])
+    assert_error_text(visitor, 'lambda')

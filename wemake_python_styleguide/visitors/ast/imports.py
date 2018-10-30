@@ -32,17 +32,13 @@ class _ImportsChecker(object):
         self.error_callback = error_callback
 
     def check_nested_import(self, node: AnyImport) -> None:
-        text = imports.get_error_text(node)
         parent = getattr(node, 'parent', None)
         if parent is not None and not isinstance(parent, ast.Module):
-            self.error_callback(NestedImportViolation(node, text=text))
+            self.error_callback(NestedImportViolation(node))
 
     def check_local_import(self, node: ast.ImportFrom) -> None:
-        text = imports.get_error_text(node)
         if node.level != 0:
-            self.error_callback(
-                LocalFolderImportViolation(node, text=text),
-            )
+            self.error_callback(LocalFolderImportViolation(node))
 
     def check_future_import(self, node: ast.ImportFrom) -> None:
         if node.module == '__future__':
@@ -67,13 +63,10 @@ class _ImportsChecker(object):
                 )
 
     def check_protected_import(self, node: AnyImport) -> None:
-        text = imports.get_error_text(node)
         import_names = [alias.name for alias in node.names]
         for name in chain(imports.get_import_parts(node), import_names):
             if access.is_protected(name):
-                self.error_callback(
-                    ProtectedModuleViolation(node, text=text),
-                )
+                self.error_callback(ProtectedModuleViolation(node))
 
 
 @final

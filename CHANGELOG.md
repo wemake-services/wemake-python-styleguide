@@ -17,6 +17,7 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Bugfixes
 
+- Multiple fixes to error text formats to be more readable
 - Fixes `UNDERSCORED_NUMBER_PATTERN` to match names like `come_22_me`
 - Fixes `UpperCaseAttributeViolation` not being displayed in the docs
 - Fixes consistency checks being duplicated in the docs
@@ -28,6 +29,7 @@ We used to have incremental versioning before `0.1.0`.
 - Fixes `TooManyElifsViolation` to show correct text
 - Fixes `TooDeepNestingViolation` to show correct text
 - Fixes `TooManyMethodsViolation` to show correct text
+- Fixes `ReassigningVariableToItselfViolation` to show correct text
 - Renames `UnderscoredNumberNameViolation` to `UnderscoredNumberNameViolation`
 
 ### Misc

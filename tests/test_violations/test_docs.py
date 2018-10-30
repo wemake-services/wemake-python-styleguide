@@ -26,3 +26,15 @@ def test_violation_name(all_violations):
     for violation in all_violations:
         class_name = violation.__qualname__
         assert class_name.endswith('Violation'), class_name
+
+
+def test_violation_error_text(all_violations):
+    """Ensures that all violations have correctly format error text."""
+    for violation in all_violations:
+        if violation.should_use_text:
+            error_format = ': {0}'
+
+            assert error_format in violation.error_template
+            assert violation.error_template.endswith(error_format)
+        else:
+            assert '{0}' not in violation.error_template

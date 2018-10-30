@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "wemake-python-styleguide"
 version = "0.3.0"
-description = "The most strict and opinionated python linter ever"
+description = "The strictest and most opinionated python linter ever"
 
 license = "MIT"
 

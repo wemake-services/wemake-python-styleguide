@@ -7,8 +7,8 @@ from wemake_python_styleguide.violations.consistency import (
 )
 from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
 
-class_without_base = 'class WithoutBase: ...'
-class_with_empty_base = 'class EmptyBase(): ...'
+class_without_base = 'class Meta: ...'
+class_with_empty_base = 'class Meta(): ...'
 
 nested_class_without_base = """
 class Model(object):
@@ -22,7 +22,7 @@ class Model(object):
 
 # Correct:
 
-class_with_base = 'class Example({0}): ...'
+class_with_base = 'class Meta({0}): ...'
 
 nested_class_with_base = """
 class Model({0}):
@@ -38,6 +38,7 @@ class Model({0}):
 ])
 def test_wrong_base_class(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
     code,
     default_options,
@@ -49,6 +50,7 @@ def test_wrong_base_class(
     visitor.run()
 
     assert_errors(visitor, [RequiredBaseClassViolation])
+    assert_error_text(visitor, 'Meta')
 
 
 @pytest.mark.parametrize('code', [

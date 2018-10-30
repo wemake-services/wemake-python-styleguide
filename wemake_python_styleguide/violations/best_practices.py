@@ -208,7 +208,7 @@ class WrongModuleMetadataViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found wrong metadata variable {0}'
+    error_template = 'Found wrong metadata variable: {0}'
     code = 410
 
 
@@ -270,7 +270,7 @@ class InitModuleHasLogicViolation(ASTViolation):
 
     should_use_text = False
     #: Error message shown to the user.
-    error_template = 'Found `__init__` module with logic'
+    error_template = 'Found `__init__.py` module with logic'
     code = 412
 
 
@@ -308,7 +308,7 @@ class WrongKeywordViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found wrong keyword "{0}"'
+    error_template = 'Found wrong keyword: {0}'
     code = 420
 
 
@@ -337,7 +337,7 @@ class WrongFunctionCallViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found wrong function call "{0}"'
+    error_template = 'Found wrong function call: {0}'
     code = 421
 
 
@@ -374,7 +374,7 @@ class FutureImportViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found future import "{0}"'
+    error_template = 'Found future import: {0}'
     code = 422
 
 
@@ -497,7 +497,7 @@ class NestedFunctionViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found nested function "{0}"'
+    error_template = 'Found nested function: {0}'
     code = 430
 
 
@@ -539,7 +539,7 @@ class NestedClassViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found nested class "{0}"'
+    error_template = 'Found nested class: {0}'
     code = 431
 
 
@@ -646,7 +646,7 @@ class BadMagicMethodViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found using restricted magic method "{0}"'
+    error_template = 'Found using restricted magic method: {0}'
     code = 434
 
 
@@ -685,8 +685,9 @@ class NestedImportViolation(ASTViolation):
 
     """
 
+    should_use_text = False
     #: Error message shown to the user.
-    error_template = 'Found nested import "{0}"'
+    error_template = 'Found nested import'
     code = 435
 
 
@@ -714,11 +715,15 @@ class RedundantForElseViolation(ASTViolation):
         else:
             print('"b" is not found')
 
+        for letter in 'abc':
+            print(letter)
+        print('always called')
+
         # Wrong:
         for letter in 'abc':
             print(letter)
         else:
-            print('"b" is not found')
+            print('always called')
 
     .. versionadded:: 0.3.0
 
@@ -727,6 +732,7 @@ class RedundantForElseViolation(ASTViolation):
 
     """
 
+    should_use_text = False
     #: Error message shown to the user.
     error_template = 'Found `else` in `for` loop without `break`'
     code = 436
@@ -764,6 +770,7 @@ class RedundantFinallyViolation(ASTViolation):
 
     """
 
+    should_use_text = False
     #: Error message shown to the user.
     error_template = 'Found `finally` in `try` block without `except`'
     code = 437
@@ -794,8 +801,9 @@ class ReassigningVariableToItselfViolation(ASTViolation):
         Returns Z438 as error code
     """
 
+    should_use_text = False
     #: Error message shown to the user.
-    error_template = 'Found reassigning variable "{0}" to itself'
+    error_template = 'Found reassigning variable to itself'
     code = 438
 
 
@@ -830,14 +838,14 @@ class YieldInsideInitViolation(ASTViolation):
 
     should_use_text = False
     #: Error message shown to the user.
-    error_template = 'Found `yield` inside `__init__`'
+    error_template = 'Found `yield` inside `__init__` method'
     code = 439
 
 
 @final
 class ProtectedModuleViolation(ASTViolation):
     """
-    Forbids to ``import`` protected modules.
+    Forbids to import protected modules.
 
     Reasoning:
         When importing protected modules we break a contract
@@ -866,8 +874,9 @@ class ProtectedModuleViolation(ASTViolation):
 
     """
 
+    should_use_text = False
     #: Error message shown to the user.
-    error_template = 'Found protected module import "{0}"'
+    error_template = 'Found protected module import'
     code = 440
 
 
@@ -911,5 +920,5 @@ class ProtectedAttributeViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found protected attribute usage "{0}"'
+    error_template = 'Found protected attribute usage: {0}'
     code = 441

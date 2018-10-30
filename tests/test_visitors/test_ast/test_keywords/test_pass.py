@@ -46,11 +46,18 @@ except Exception:
     pass_condition,
     pass_exception,
 ])
-def test_pass_keyword(assert_errors, parse_ast_tree, code, default_options):
-    """Testing that pass keyword is restricted inside different definitions."""
+def test_pass_keyword(
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    code,
+    default_options,
+):
+    """Testing that `pass` keyword is restricted."""
     tree = parse_ast_tree(code)
 
     visitor = WrongKeywordVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [WrongKeywordViolation])
+    assert_error_text(visitor, 'pass')

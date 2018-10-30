@@ -17,6 +17,7 @@ class Example(object):
 @pytest.mark.parametrize('method', MAGIC_METHODS_BLACKLIST)
 def test_wrong_magic_used(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
     method,
     mode,
@@ -29,6 +30,7 @@ def test_wrong_magic_used(
     visitor.run()
 
     assert_errors(visitor, [BadMagicMethodViolation])
+    assert_error_text(visitor, method)
 
 
 @pytest.mark.parametrize('method', [

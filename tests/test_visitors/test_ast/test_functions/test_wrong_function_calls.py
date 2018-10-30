@@ -27,6 +27,7 @@ def proxy(*args, **kwargs):
 ])
 def test_wrong_function_called(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
     bad_function,
     code,
@@ -40,6 +41,7 @@ def test_wrong_function_called(
     visitor.run()
 
     assert_errors(visitor, [WrongFunctionCallViolation])
+    assert_error_text(visitor, bad_function)
 
 
 @pytest.mark.parametrize('good_function', [

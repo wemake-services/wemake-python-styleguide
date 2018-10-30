@@ -10,6 +10,13 @@ There are several ways to write the same number.
 We like our code to be consistent.
 It is easier to bare with your code base if you follow these rules.
 
+So, we choose a single way to do things.
+It does not mean that we choose the best way to do it.
+But, we value consistency more than being 100% right.
+And we are ready to suffer all trade-offs that might come.
+
+Once again, these rules are highly subjective. But, we love them.
+
 .. currentmodule:: wemake_python_styleguide.violations.consistency
 
 Summary
@@ -73,6 +80,9 @@ class LocalFolderImportViolation(ASTViolation):
         We should pick one style and stick to it.
         We have decided to use the explicit one.
 
+    Solution:
+        Refactor your imports to use the absolute path.
+
     Example::
 
         # Correct:
@@ -89,8 +99,9 @@ class LocalFolderImportViolation(ASTViolation):
 
     """
 
+    should_use_text = False
     #: Error message shown to the user.
-    error_template = 'Found local folder import "{0}"'
+    error_template = 'Found local folder import'
     code = 300
 
 
@@ -123,7 +134,7 @@ class DottedRawImportViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found dotted raw import "{0}"'
+    error_template = 'Found dotted raw import: {0}'
     code = 301
 
 
@@ -305,7 +316,7 @@ class RequiredBaseClassViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found class without a base class "{0}"'
+    error_template = 'Found class without a base class: {0}'
     code = 306
 
 

@@ -18,11 +18,6 @@ def function_name(param1, param2={0}):
     return param1 / param2
 """
 
-async_function_definition = """
-async def function_name(param1, param2={0}):
-    return param1 / param2
-"""
-
 list_definition = '[{0}]'
 dict_definition_key = '{{{0}: "value"}}'
 dict_definition_value = '{{"first": {0}}}'
@@ -53,12 +48,12 @@ class Test(object):
 """
 
 list_index = """
-some_list = [1, 2, 3]
+some_list = [10, 20, 30]
 some_list[{0}]
 """
 
 dict_key = """
-some_dict = {{1: 1, 2: 2}}
+some_dict = {{11: 12, 13: 14}}
 some_dict[{0}]
 """
 
@@ -67,7 +62,6 @@ some_dict[{0}]
     assignment,
     assignment_unary,
     function_definition,
-    async_function_definition,
     list_definition,
     dict_definition_key,
     dict_definition_value,
@@ -89,9 +83,10 @@ def test_magic_number(
     code,
     number,
     default_options,
+    mode,
 ):
     """Testing that there are no magic numbers in this code."""
-    tree = parse_ast_tree(code.format(number))
+    tree = parse_ast_tree(mode(code.format(number)))
 
     visitor = MagicNumberVisitor(default_options, tree=tree)
     visitor.run()
@@ -123,9 +118,10 @@ def test_magic_number_whitelist(
     code,
     number,
     default_options,
+    mode,
 ):
     """Testing that magic numbers in this code are whitelisted."""
-    tree = parse_ast_tree(code.format(number))
+    tree = parse_ast_tree(mode(code.format(number)))
 
     visitor = MagicNumberVisitor(default_options, tree=tree)
     visitor.run()
@@ -158,9 +154,10 @@ def test_magic_number_warning(
     code,
     number,
     default_options,
+    mode,
 ):
     """Testing that magic numbers in this code are warnings."""
-    tree = parse_ast_tree(code.format(number))
+    tree = parse_ast_tree(mode(code.format(number)))
 
     visitor = MagicNumberVisitor(default_options, tree=tree)
     visitor.run()

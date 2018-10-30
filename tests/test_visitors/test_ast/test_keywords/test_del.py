@@ -14,15 +14,27 @@ del x
 
 del_key = """
 temp_dict = {'a': 1}
-del a['a']
+del temp_dict['a']
+"""
+
+del_index = """
+temp_list = [1, 2, 3]
+del temp_list[0]
 """
 
 
 @pytest.mark.parametrize('code', [
     del_variable,
     del_key,
+    del_index,
 ])
-def test_del_keyword(assert_errors, parse_ast_tree, code, default_options):
+def test_del_keyword(
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    code,
+    default_options,
+):
     """Testing that `del` keyword is restricted."""
     tree = parse_ast_tree(code)
 
@@ -30,3 +42,4 @@ def test_del_keyword(assert_errors, parse_ast_tree, code, default_options):
     visitor.run()
 
     assert_errors(visitor, [WrongKeywordViolation])
+    assert_error_text(visitor, 'delete')

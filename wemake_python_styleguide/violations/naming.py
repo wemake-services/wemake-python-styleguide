@@ -444,7 +444,7 @@ class UnderscoredNumberNameViolation(MaybeASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found underscored name pattern "{0}"'
+    error_template = 'Found underscored name pattern: {0}'
     code = 114
 
 

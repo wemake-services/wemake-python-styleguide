@@ -34,18 +34,21 @@ def container():
 ])
 def test_nested_class(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
     code,
     default_options,
     mode,
 ):
     """Testing that nested classes are restricted."""
-    tree = parse_ast_tree(mode(code.format('NestedClass')))
+    nested_name = 'NestedClass'
+    tree = parse_ast_tree(mode(code.format(nested_name)))
 
     visitor = NestedComplexityVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [NestedClassViolation])
+    assert_error_text(visitor, nested_name)
 
 
 @pytest.mark.parametrize('whitelist_name', NESTED_CLASSES_WHITELIST)
@@ -79,6 +82,7 @@ def test_whitelist_nested_classes(
 ])
 def test_whitelist_nested_classes_in_functions(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
     whitelist_name,
     code,
@@ -92,6 +96,7 @@ def test_whitelist_nested_classes_in_functions(
     visitor.run()
 
     assert_errors(visitor, [NestedClassViolation])
+    assert_error_text(visitor, whitelist_name)
 
 
 def test_ordinary_class(

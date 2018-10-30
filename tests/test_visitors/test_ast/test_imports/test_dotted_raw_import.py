@@ -22,7 +22,12 @@ from_import_with_alias = 'from {0} import some_module as alias'
     'nested.dotted.path',
 ])
 def test_wrong_dotted_import(
-    assert_errors, parse_ast_tree, code, to_import, default_options,
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    code,
+    to_import,
+    default_options,
 ):
     """Testing that dotted raw imports are restricted."""
     tree = parse_ast_tree(code.format(to_import))
@@ -31,6 +36,7 @@ def test_wrong_dotted_import(
     visitor.run()
 
     assert_errors(visitor, [DottedRawImportViolation])
+    assert_error_text(visitor, to_import)
 
 
 @pytest.mark.parametrize('code', [
@@ -42,7 +48,11 @@ def test_wrong_dotted_import(
     'sys',
 ])
 def test_correct_flat_import(
-    assert_errors, parse_ast_tree, code, to_import, default_options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    to_import,
+    default_options,
 ):
     """Testing that flat raw imports are allowed."""
     tree = parse_ast_tree(code.format(to_import))
@@ -63,7 +73,11 @@ def test_correct_flat_import(
     'nested.dotted.path',
 ])
 def test_regular_from_import(
-    assert_errors, parse_ast_tree, code, to_import, default_options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    to_import,
+    default_options,
 ):
     """Testing that dotted `from` imports are allowed."""
     tree = parse_ast_tree(code.format(to_import))

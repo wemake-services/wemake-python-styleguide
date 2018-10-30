@@ -28,7 +28,10 @@ regular_nested_import = 'from some.package import Thing'
     grand_level_relative_import_sibling,
 ])
 def test_local_folder_import(
-    assert_errors, parse_ast_tree, code, default_options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
 ):
     """Testing that relative to local folder imports are restricted."""
     tree = parse_ast_tree(code)
