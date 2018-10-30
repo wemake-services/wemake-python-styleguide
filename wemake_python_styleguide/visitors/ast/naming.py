@@ -22,6 +22,15 @@ from wemake_python_styleguide.violations.best_practices import (
     ReassigningVariableToItselfViolation,
     WrongModuleMetadataViolation,
 )
+from wemake_python_styleguide.violations.naming import (
+    AnonymousVariableViolation,
+    ConsecutiveUnderscoresInNameViolation,
+    PrivateNameViolation,
+    TooShortNameViolation,
+    UnderscoredNumberNameViolation,
+    UpperCaseAttributeViolation,
+    WrongVariableNameViolation,
+)
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
@@ -77,11 +86,14 @@ class _NameValidator(object):
                 naming.WrongVariableNameViolation(node, text=name),
             )
 
-        if not is_first_argument:
-            if logical.is_wrong_name(name, SPECIAL_ARGUMENT_NAMES_WHITELIST):
-                self._error_callback(
-                    naming.ReservedArgumentNameViolation(node, text=name),
-                )
+        if logical.is_anonymous_variable(name):
+            self.add_violation(
+                AnonymousVariableViolation(node, text=name),
+            )
+
+    def _check_function_signature(self, node: AnyFunctionDef) -> None:
+        for arg in node.args.args:
+            self._check_name(node, arg.arg)
 
         self._ensure_length(node, name)
         self._ensure_underscores(node, name)
@@ -155,6 +167,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             WrongVariableNameViolation
             TooShortNameViolation
             PrivateNameViolation
+            AnonymousVariableViolation
 
         """
         self._validator.check_name(node, node.name)
@@ -182,6 +195,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             WrongVariableNameViolation
             TooShortNameViolation
             PrivateNameViolation
+            AnonymousVariableViolation
 
         """
         for alias_node in node.names:
@@ -198,6 +212,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             WrongVariableNameViolation
             TooShortNameViolation
             PrivateNameViolation
+            AnonymousVariableViolation
 
         """
         variable_name = name_nodes.get_assigned_name(node)

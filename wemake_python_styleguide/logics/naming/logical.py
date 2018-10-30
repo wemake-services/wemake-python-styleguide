@@ -160,3 +160,35 @@ def does_contain_consecutive_underscores(name: str) -> bool:
         return True
 
     return False
+
+
+def is_anonymous_variable(name: str) -> bool:
+    """
+    Checks if anonymous variable is used.
+
+    >>> is_anonymous_variable('variable')
+    False
+
+    >>> is_anonymous_variable('__magic__')
+    False
+
+    >>> is_anonymous_variable('__private')
+    False
+
+    >>> is_anonymous_variable('variable_x')
+    False
+
+    >>> is_anonymous_variable('some__value')
+    False
+
+    >>> is_anonymous_variable('some_value__')
+    False
+
+    >>> is_anonymous_variable('_')
+    True
+
+    """
+    if name == '_':
+        return True
+
+    return False
