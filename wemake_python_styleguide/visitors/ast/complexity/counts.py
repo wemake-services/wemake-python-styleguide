@@ -2,7 +2,7 @@
 
 import ast
 from collections import defaultdict
-from typing import DefaultDict, Union
+from typing import ClassVar, DefaultDict, Union
 
 from wemake_python_styleguide.logics.functions import is_method
 from wemake_python_styleguide.types import AnyFunctionDef, AnyImport, final
@@ -130,47 +130,29 @@ class MethodMembersVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_condition', (
-    'visit_While',
-    'visit_IfExp',
-    'visit_If',
-))
 class ConditionsVisitor(BaseNodeVisitor):
-    """Checks ``if`` and ``while`` statements for condition counts."""
+    """Checks booleans for condition counts."""
 
-    def __init__(self, *args, **kwargs) -> None:
-        """Creates a counter for tracked conditions."""
-        super().__init__(*args, **kwargs)
-        self._conditions: DefaultDict[ast.AST, int] = defaultdict(int)
+    #: Maximum number of conditions in a single ``if`` or ``while`` statement:
+    _max_conditions: ClassVar[int] = 4
 
-    def _check_conditions(self, node: ast.AST) -> None:
-        for condition in ast.walk(node):
-            if isinstance(condition, (ast.And, ast.Or)):
-                self._conditions[node] += 1
+    def _count_conditions(self, node: ast.BoolOp) -> int:
+        counter = 0
+        for condition in node.values:
+            if isinstance(condition, ast.BoolOp):
+                counter += self._count_conditions(condition)
+            else:
+                counter += 1
+        return counter
 
-    def _post_visit(self) -> None:
-        for node, count in self._conditions.items():
-            if count > self.options.max_conditions - 1:
-                self.add_violation(
-                    TooManyConditionsViolation(node, text=str(count)),
-                )
+    def _check_conditions(self, node: ast.BoolOp) -> None:
+        conditions_count = self._count_conditions(node)
+        if conditions_count > self._max_conditions:
+            self.add_violation(
+                TooManyConditionsViolation(node, text=str(conditions_count)),
+            )
 
-    def visit_comprehension(self, node: ast.comprehension) -> None:
-        """
-        Counts the number of conditions in list comprehensions.
-
-        Raises:
-            TooManyConditionsViolation
-
-        """
-        if node.ifs:
-            # We only check the first `if`, since it is forbidden
-            # to have more than one at a time
-            # by `MultipleIfsInComprehensionViolation`
-            self._check_conditions(node.ifs[0])
-        self.generic_visit(node)
-
-    def visit_condition(self, node: ConditionNodes) -> None:
+    def visit_BoolOp(self, node: ast.BoolOp) -> None:
         """
         Counts the number of conditions.
 
@@ -178,5 +160,5 @@ class ConditionsVisitor(BaseNodeVisitor):
             TooManyConditionsViolation
 
         """
-        self._check_conditions(node.test)
+        self._check_conditions(node)
         self.generic_visit(node)

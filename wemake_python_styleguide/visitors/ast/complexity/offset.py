@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Union
+from typing import ClassVar, Union
 
 from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.complexity import (
@@ -39,9 +39,12 @@ AsyncNodes = Union[ast.AsyncFunctionDef, ast.AsyncFor, ast.AsyncWith]
 class OffsetVisitor(BaseNodeVisitor):
     """Checks offset values for several nodes."""
 
+    #: Maximum number of blocks to nest different structures:
+    _max_offset_blocks: ClassVar[int] = 5
+
     def _check_offset(self, node: ast.AST, error: int = 0) -> None:
         offset = getattr(node, 'col_offset', 0) - error
-        if offset > self.options.max_offset_blocks * 4:
+        if offset > self._max_offset_blocks * 4:
             self.add_violation(TooDeepNestingViolation(node, text=str(offset)))
 
     def visit_line_expression(self, node: ast.AST) -> None:

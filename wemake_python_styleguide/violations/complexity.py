@@ -390,12 +390,8 @@ class TooDeepNestingViolation(ASTViolation):
         We need to refactor our complex construction into simpler ones.
         We can use new functions or different constructions.
 
-    Configuration:
-        This rule is configurable with ``--max-offset-blocks``.
-        Default:
-        :str:`wemake_python_styleguide.options.defaults.MAX_OFFSET_BLOCKS`
-
     .. versionadded:: 0.1.0
+    .. versionchanged:: 0.5.0
 
     Note:
         Returns Z220 as error code
@@ -471,22 +467,10 @@ class TooManyConditionsViolation(ASTViolation):
         creating new variables or creating nested ``if`` statements.
         Both of these actions will trigger other complexity checks.
 
-    We only check ``if`` and ``while`` nodes for this type of complexity.
-    We check ``if`` nodes inside list comprehensions and ternary expressions.
-
     We count ``and`` and ``or`` keywords as conditions.
 
-    Example::
-
-        # The next line has 2 conditions:
-        if x_coord > 1 and x_coord < 10: ...
-
-    Configuration:
-        This rule is configurable with ``--max-conditions``.
-        Default:
-        :str:`wemake_python_styleguide.options.defaults.MAX_CONDITIONS`
-
     .. versionadded:: 0.1.0
+    .. versionchanged:: 0.5.0
 
     Note:
         Returns Z222 as error code
@@ -512,12 +496,10 @@ class TooManyElifsViolation(ASTViolation):
         There are different design patters to use instead.
         For example, you can use some interface that
         just call a specific method without ``if``.
-
-    Configuration:
-        This rule is configurable with ``--max-elifs``.
-        Default: :str:`wemake_python_styleguide.options.defaults.MAX_ELIFS`
+        Or separate your ``if`` into multiple functions.
 
     .. versionadded:: 0.1.0
+    .. versionchanged:: 0.5.0
 
     Note:
         Returns Z223 as error code

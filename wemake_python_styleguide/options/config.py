@@ -61,11 +61,6 @@ class Configuration(object):
     - ``max-arguments`` - maximum allowed number of arguments in one function,
       defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_ARGUMENTS`
-    - ``max-offset-blocks`` - maximum number of block to nest expressions,
-      defaults to
-      :str:`wemake_python_styleguide.options.defaults.MAX_OFFSET_BLOCKS`
-    - ``max-elifs`` - maximum number of ``elif`` blocks, defaults to
-      :str:`wemake_python_styleguide.options.defaults.MAX_ELIFS`
     - ``max-module-members`` - maximum number of classes and functions
       in a single module, defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_MODULE_MEMBERS`
@@ -81,9 +76,6 @@ class Configuration(object):
     - ``max-imports`` - maximum number of imports in a single module,
       defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_IMPORTS`
-    - ``max-conditions`` - maximum number of boolean conditions
-      in a single ``if`` or ``while`` node, defaults to
-      :str:`wemake_python_styleguide.options.defaults.MAX_CONDITIONS`
     - ``max-base-classes`` - maximum number of parent classes inside a class
       definition, defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_BASE_CLASSES`
@@ -92,7 +84,7 @@ class Configuration(object):
 
     Example::
 
-        flake8 --max-returns=2 --max-elifs=2
+        flake8 --max-returns=2 --max-arguments=4
 
     Or you can provide options in ``tox.ini`` or ``setup.cfg``:
 
@@ -100,7 +92,7 @@ class Configuration(object):
 
         [flake8]
         max-returns = 2
-        max-elifs = 2
+        max-arguments = 4
 
     We use ``setup.cfg`` as a default way to provide configuration.
 
@@ -134,18 +126,6 @@ class Configuration(object):
         ),
 
         _Option(
-            '--max-offset-blocks',
-            defaults.MAX_OFFSET_BLOCKS,
-            'Maximum number of blocks to nest different structures.',
-        ),
-
-        _Option(
-            '--max-elifs',
-            defaults.MAX_ELIFS,
-            'Maximum number of `elif` blocks.',
-        ),
-
-        _Option(
             '--max-module-members',
             defaults.MAX_MODULE_MEMBERS,
             'Maximum number of classes and functions in a single module.',
@@ -173,12 +153,6 @@ class Configuration(object):
             '--max-imports',
             defaults.MAX_IMPORTS,
             'Maximum number of imports in a single module.',
-        ),
-
-        _Option(
-            '--max-conditions',
-            defaults.MAX_CONDITIONS,
-            'Maximum number of conditions in a `if` or `while` node.',
         ),
 
         _Option(

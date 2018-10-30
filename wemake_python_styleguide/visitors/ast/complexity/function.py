@@ -131,6 +131,9 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
 
     """
 
+    #: Maximum number of `elif` blocks in a single `if` condition:
+    _max_elifs: ClassVar[int] = 3
+
     def __init__(self, *args, **kwargs) -> None:
         """Creates a counter for tracked metrics."""
         super().__init__(*args, **kwargs)
@@ -138,7 +141,7 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
 
     def _check_possible_switch(self) -> None:
         for node, elifs in self._counter.elifs.items():
-            if elifs > self.options.max_elifs:
+            if elifs > self._max_elifs:
                 self.add_violation(
                     TooManyElifsViolation(node, text=str(elifs)),
                 )

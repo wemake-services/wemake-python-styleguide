@@ -3,6 +3,23 @@
 We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
+## WIP
+
+### Features
+
+- **Breaking**: removes `--max-conditions` and `--max-elifs` options
+- **Breaking**: removes `--max-offset-blocks`
+- **Breaking**: changes default `TooManyConditionsViolation` threshold to `4`
+
+## Bugfixes
+
+- Fixes `TooManyConditionsViolation` to work with any conditions, not just `if`s
+- Fixes `TooManyConditionsViolation` that did not count conditions correctly
+
+### Misc
+
+- Refactoring: moves different visitors from `complexity/` to the common folder
+
 
 ## 0.4.0
 
@@ -11,10 +28,10 @@ for tests. We also now covering more cases and testing violation texts.
 
 ### Features
 
-- *Breaking*: removes duplicating module name rules, now we use the same rules
+- **Breaking**: removes duplicating module name rules, now we use the same rules
   for both variables and modules
-- *Breaking*: removes `--min-module-name-length` options
-- *Breaking*: renames `--min-variable-name-length` into `--min-name-length`
+- **Breaking**: removes `--min-module-name-length` options
+- **Breaking**: renames `--min-variable-name-length` into `--min-name-length`
 - Dependencies: updates `flake8` version to `3.6`
 - Dependencies: removes `pycodestyle` pinned version
 

@@ -10,10 +10,6 @@ from wemake_python_styleguide.visitors.ast.comparisons import (
 )
 
 
-# TODO: use lazy fixtures to pass:
-# if_with_chained_comparisons1,
-# if_with_chained_comparisons2,
-# if_with_chained_comparisons3,
 @pytest.mark.parametrize('comparators', [
     ('first_name', 'second_name'),
     ('first_name', 'second_name + 1'),

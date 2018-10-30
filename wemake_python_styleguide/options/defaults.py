@@ -16,7 +16,7 @@ if you find them too strict or too permissive.
 
 from wemake_python_styleguide.types import Final
 
-# General
+# General:
 
 #: Minimum variable's name length:
 MIN_NAME_LENGTH: Final = 2
@@ -25,7 +25,7 @@ MIN_NAME_LENGTH: Final = 2
 I_CONTROL_CODE: Final = True
 
 
-# Complexity
+# Complexity:
 
 #: Maximum number of `return` statements allowed in a single function:
 MAX_RETURNS: Final = 5
@@ -38,12 +38,6 @@ MAX_EXPRESSIONS: Final = 9
 
 #: Maximum number of arguments for functions or method, `self` is not counted:
 MAX_ARGUMENTS: Final = 5
-
-#: Maximum number of blocks to nest different structures:
-MAX_OFFSET_BLOCKS: Final = 5
-
-#: Maximum number of `elif` blocks in a single `if` condition:
-MAX_ELIFS: Final = 3
 
 #: Maximum number of classes and functions in a single module:
 MAX_MODULE_MEMBERS: Final = 7
@@ -59,9 +53,6 @@ MAX_JONES_SCORE: Final = 12  # this value was "guessed"
 
 #: Maximum number of imports in a single module:
 MAX_IMPORTS: Final = 12
-
-#: Maximum number of conditions in a single ``if`` or ``while`` statement:
-MAX_CONDITIONS: Final = 4
 
 #: Maximum number of base classes:
 MAX_BASE_CLASSES: Final = 3

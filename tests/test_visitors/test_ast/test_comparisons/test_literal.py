@@ -57,7 +57,6 @@ def test_literal(
     assert_errors(visitor, [ConstantComparisonViolation])
 
 
-# TODO: refactor to use fixtures
 @pytest.mark.parametrize('code', [
     if_with_chained_comparisons1,
     if_with_chained_comparisons3,
@@ -82,7 +81,6 @@ def test_literal_special1(
     assert_errors(visitor, [ConstantComparisonViolation])
 
 
-# TODO: refactor to use fixtures
 @pytest.mark.parametrize('code', [
     if_with_chained_comparisons2,
     if_with_chained_comparisons3,
@@ -107,7 +105,6 @@ def test_literal_special2(
     assert_errors(visitor, [ConstantComparisonViolation])
 
 
-# TODO: refactor to use fixtures
 @pytest.mark.parametrize('code', [
     if_with_chained_comparisons1,
     if_with_chained_comparisons2,

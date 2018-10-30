@@ -60,12 +60,9 @@ class ConfigurationOptions(Protocol):
     max_local_variables: int
     max_returns: int
     max_expressions: int
-    max_offset_blocks: int
-    max_elifs: int
     max_module_members: int
     max_methods: int
     max_line_complexity: int
     max_jones_score: int
     max_imports: int
-    max_conditions: int
     max_base_classes: int

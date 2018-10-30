@@ -54,6 +54,16 @@ def container():
         continue
 """
 
+real_nested_values = """
+def container():
+    if some > 1:
+        if some > 2:
+            if some > 3:
+                if some > 4:
+                    if some > 5:
+                        print(some)
+"""
+
 
 @pytest.mark.parametrize('code', [
     nested_if,
@@ -90,18 +100,19 @@ def test_nested_offset(
     (nested_while, 1),
 ])
 def test_nested_offset_errors(
+    monkeypatch,
     assert_errors,
     parse_ast_tree,
     code,
     number_of_errors,
-    options,
+    default_options,
     mode,
 ):
     """Testing that nested expressions are restricted."""
     tree = parse_ast_tree(mode(code))
 
-    option_values = options(max_offset_blocks=1)
-    visitor = OffsetVisitor(option_values, tree=tree)
+    monkeypatch.setattr(OffsetVisitor, '_max_offset_blocks', 1)
+    visitor = OffsetVisitor(default_options, tree=tree)
     visitor.run()
 
     errors = [TooDeepNestingViolation for _ in range(number_of_errors)]
@@ -116,25 +127,48 @@ def test_nested_offset_errors(
     nested_while,
 ])
 def test_nested_offset_error_text(
+    monkeypatch,
     assert_errors,
     assert_error_text,
     parse_ast_tree,
     code,
-    options,
+    default_options,
     mode,
 ):
     """Testing that nested expressions are restricted."""
     tree = parse_ast_tree(mode(code))
 
-    option_values = options(max_offset_blocks=1)
-    visitor = OffsetVisitor(option_values, tree=tree)
+    monkeypatch.setattr(OffsetVisitor, '_max_offset_blocks', 1)
+    visitor = OffsetVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [TooDeepNestingViolation])
     assert_error_text(visitor, '8')
 
 
-def test_regression282(assert_errors, parse_ast_tree, options):
+def test_real_nesting_config(
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    default_options,
+    mode,
+):
+    """Ensures that real configuration works."""
+    tree = parse_ast_tree(mode(real_nested_values))
+
+    visitor = OffsetVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [TooDeepNestingViolation])
+    assert_error_text(visitor, '24')
+
+
+def test_regression282(
+    monkeypatch,
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+):
     """
     Testing that issue-282 will not happen again.
 
@@ -145,8 +179,8 @@ def test_regression282(assert_errors, parse_ast_tree, options):
         ...
     """)
 
-    option_values = options(max_offset_blocks=1)
-    visitor = OffsetVisitor(option_values, tree=tree)
+    monkeypatch.setattr(OffsetVisitor, '_max_offset_blocks', 1)
+    visitor = OffsetVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
