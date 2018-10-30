@@ -10,7 +10,7 @@ Naming convention
 -----------------
 
 Our naming convention tries to cover all possible cases.
-It is partially automated with this linter, but
+It is partially automated with this linter, but:
 
 - Some rules are still WIP
 - Some rules will never be automated, code reviews to the rescue!
@@ -21,7 +21,8 @@ General
 - Use clear names, do not use words that do not mean anything like ``obj``
 - Use names of an appropriate length: not too short, not too long
 - Protected members should use underscore as the first char
-- Private names are not allowed
+- Private names with two leading underscores are not allowed
+- If you need to explicitly state that variable is unused name it as ``_``
 - Do not use consecutive underscores
 - When writing abbreviations in ``UpperCase``
   capitalize all letters: ``HTTPAddress``
@@ -32,72 +33,71 @@ General
 Packages
 ~~~~~~~~
 
-- Packages should use ``snake_case``
+- Packages must use ``snake_case``
 - One word for a package is the most preferable name
 
 Modules
 ~~~~~~~
 
-- Modules should use ``snake_case``
-- Module names should not be too short
-- Module names should not overuse magic names
-- Module names should be valid Python variable names
+- Modules must use ``snake_case``
+- Module names must not overuse magic names
+- Module names must be valid Python identifiers
 
 Classes
 ~~~~~~~
 
-- Classes should use ``UpperCase``
+- Classes must use ``UpperCase``
 - Python's built-in classes, however are typically lowercase words
-- Exception classes should end with ``Error``
+- Exception classes must end with ``Error``
 
 Instance attributes
 ~~~~~~~~~~~~~~~~~~~
 
-- Instance attributes should use ``snake_case`` with no exceptions
+- Instance attributes must use ``snake_case`` with no exceptions
 
 Class attributes
 ~~~~~~~~~~~~~~~~
 
-- Class attributes should use ``snake_case``  with no exceptions
+- Class attributes must use ``snake_case``  with no exceptions
 
 Functions and methods
 ~~~~~~~~~~~~~~~~~~~~~
 
-- Functions and methods should use ``snake_case`` with no exceptions
+- Functions and methods must use ``snake_case`` with no exceptions
 
-Method arguments
-~~~~~~~~~~~~~~~~
+Method and function arguments
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Instance methods should have their first argument named ``self``
-- Class methods should have their first argument named ``cls``
-- Metaclass methods should have their first argument named ``mcs``
-- When argument is unused it should be prefixed with an underscore
+- Instance methods must have their first argument named ``self``
+- Class methods must have their first argument named ``cls``
+- Metaclass methods must have their first argument named ``mcs``
+- When argument is unused it must be prefixed with an underscore: ``_param``
 - Python's ``*args`` and ``**kwargs`` should be default names
-  when just passing these values to some other method/function
-- Unless you want to use these values in place, then name them explicitly
+  when just passing these values to some other method/function,
+  unless you want to use these values in place, then name them explicitly
 - Keyword-only arguments must be separated from other arguments with ``*``
 
 Global (module level) variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Global variables should use ``CONSTANT_CASE``
+- Global variables must use ``CONSTANT_CASE``
 - Unless other is required by the API, example: ``urlpatterns`` in Django
 
 Variables
 ~~~~~~~~~
 
-- Variables should use ``snake_case`` with no exceptions
-- When some variable is unused it should be prefixed with an underscore
+- Variables must use ``snake_case`` with no exceptions
+- When variable is unused it must be prefixed with an underscore: ``_user``
 
 Type aliases
 ~~~~~~~~~~~~
 
-- Should use ``UpperCase`` as real classes
-- Should not contain word ``type`` in its name
+- Must use ``UpperCase`` as real classes
+- Must not contain word ``type`` in its name
 - Generic types should be called ``TT`` or ``KT`` or ``VT``
 - Covariant and contravariant types
-  should be marked with ``Cov`` and ``Contra`` suffixes
-- In this case one letter can be dropped: ``TCov`` and ``KContra``
+  should be marked with ``Cov`` and ``Contra`` suffixes,
+  in this case one letter can be dropped: ``TCov`` and ``KContra``
 
 .. currentmodule:: wemake_python_styleguide.violations.naming
 
@@ -298,7 +298,7 @@ class WrongVariableNameViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found wrong variable name "{0}"'
+    error_template = 'Found wrong variable name: {0}'
     code = 110
 
 
@@ -337,7 +337,7 @@ class TooShortNameViolation(MaybeASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found too short name "{0}"'
+    error_template = 'Found too short name: {0}'
     code = 111
 
 
@@ -375,7 +375,7 @@ class PrivateNameViolation(MaybeASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found private name pattern "{0}"'
+    error_template = 'Found private name pattern: {0}'
     code = 112
 
 
@@ -403,7 +403,7 @@ class SameAliasImportViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found same alias import "{0}"'
+    error_template = 'Found same alias import: {0}'
     code = 113
 
 
@@ -433,6 +433,7 @@ class UnderscoredNumberNameViolation(MaybeASTViolation):
 
         # Wrong:
         star_wars_episode_2 = 'not so awesome'
+        iso_123_456 = 'some data'
 
     .. versionadded:: 0.3.0
     .. versionchanged:: 0.4.0
@@ -479,7 +480,7 @@ class UpperCaseAttributeViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found upper-case constant in a class "{0}"'
+    error_template = 'Found upper-case constant in a class: {0}'
     code = 115
 
 
@@ -512,5 +513,5 @@ class ConsecutiveUnderscoresInNameViolation(MaybeASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found consecutive underscores in a variable "{0}"'
+    error_template = 'Found consecutive underscores name: {0}'
     code = 116

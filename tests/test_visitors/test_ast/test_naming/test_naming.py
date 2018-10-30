@@ -98,6 +98,7 @@ def test_underscored_variable_name(
 @pytest.mark.parametrize('number_suffix', [
     'number_5',
     'between_45_letters',
+    'with_multiple_groups_4_5',
 ])
 def test_number_prefix_variable_name(
     assert_errors,

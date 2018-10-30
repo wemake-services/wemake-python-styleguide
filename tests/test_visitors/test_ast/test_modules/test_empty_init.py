@@ -42,7 +42,10 @@ except ImportError:
     module_with_comments,
 ])
 def test_init_without_logic(
-    assert_errors, parse_ast_tree, code, default_options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
 ):
     """Testing that `__init__` without logic is allowed."""
     tree = parse_ast_tree(code)
@@ -61,7 +64,10 @@ def test_init_without_logic(
     module_with_logic,
 ])
 def test_init_with_logic(
-    assert_errors, parse_ast_tree, code, default_options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
 ):
     """Testing that `__init__` with logic is restricted."""
     tree = parse_ast_tree(code)
@@ -80,7 +86,10 @@ def test_init_with_logic(
     module_with_logic,
 ])
 def test_init_with_logic_without_control(
-    assert_errors, parse_ast_tree, code, options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    options,
 ):
     """Testing that `__init__` with logic is restricted."""
     tree = parse_ast_tree(code)

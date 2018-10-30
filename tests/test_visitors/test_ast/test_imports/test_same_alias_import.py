@@ -14,15 +14,21 @@ from_import = 'from sys import os as {0}'
     from_import,
 ])
 def test_same_alias_import(
-    assert_errors, parse_ast_tree, code, default_options,
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    code,
+    default_options,
 ):
     """Testing that imports with the same aliases are restricted."""
-    tree = parse_ast_tree(code.format('os'))
+    same_alias = 'os'
+    tree = parse_ast_tree(code.format(same_alias))
 
     visitor = WrongImportVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [SameAliasImportViolation])
+    assert_error_text(visitor, same_alias)
 
 
 @pytest.mark.parametrize('code', [
@@ -35,7 +41,11 @@ def test_same_alias_import(
     'sys',
 ])
 def test_other_alias_name(
-    assert_errors, parse_ast_tree, code, to_import, default_options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    to_import,
+    default_options,
 ):
     """Testing that imports with other aliases are allowed."""
     tree = parse_ast_tree(code.format(to_import))

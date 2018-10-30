@@ -17,7 +17,10 @@ from wemake_python_styleguide.visitors.ast.modules import (
     'C:/path/package/module.py',
 ])
 def test_simple_filename(
-    assert_errors, parse_ast_tree, filename, default_options,
+    assert_errors,
+    parse_ast_tree,
+    filename,
+    default_options,
 ):
     """Testing that simple file names should not be empty."""
     tree = parse_ast_tree('')

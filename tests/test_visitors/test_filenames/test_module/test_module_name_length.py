@@ -28,10 +28,12 @@ def test_too_short_filename(assert_errors, filename, default_options):
     ])
 
 
-def test_length_option(assert_errors, options):
+def test_length_option(assert_errors, assert_error_text, options):
     """Ensures that option `--min-name-length` works."""
+    filename = 'test.py'
     option_values = options(min_name_length=5)
-    visitor = WrongModuleNameVisitor(option_values, filename='test.py')
+    visitor = WrongModuleNameVisitor(option_values, filename=filename)
     visitor.run()
 
     assert_errors(visitor, [TooShortNameViolation])
+    assert_error_text(visitor, filename.replace('.py', ''))

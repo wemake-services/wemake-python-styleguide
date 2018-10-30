@@ -31,7 +31,11 @@ def test_simple_filename(assert_errors, filename, default_options):
     'some_More.py',
     'wrong+char.py',
 ])
-def test_wrong_filename(assert_errors, filename, default_options):
+def test_wrong_filename(
+    assert_errors,
+    filename,
+    default_options,
+):
     """Testing that incorrect names are restricted."""
     visitor = WrongModuleNameVisitor(default_options, filename=filename)
     visitor.run()

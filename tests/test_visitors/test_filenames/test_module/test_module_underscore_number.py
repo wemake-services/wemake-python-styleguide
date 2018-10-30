@@ -16,6 +16,7 @@ from wemake_python_styleguide.visitors.filenames.module import (
 ])
 def test_filename_with_underscored_number(
     assert_errors,
+    assert_error_text,
     filename,
     default_options,
 ):
@@ -24,6 +25,7 @@ def test_filename_with_underscored_number(
     visitor.run()
 
     assert_errors(visitor, [UnderscoredNumberNameViolation])
+    assert_error_text(visitor, filename.replace('.py', ''))
 
 
 @pytest.mark.parametrize('filename', [

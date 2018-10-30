@@ -25,7 +25,11 @@ def test_correct_magic_filename(assert_errors, filename, default_options):
     '__custom__.py',
     '__some_extra__.py',
 ])
-def test_simple_filename(assert_errors, filename, default_options):
+def test_simple_filename(
+    assert_errors,
+    filename,
+    default_options,
+):
     """Testing that some file names are restricted."""
     visitor = WrongModuleNameVisitor(default_options, filename=filename)
     visitor.run()

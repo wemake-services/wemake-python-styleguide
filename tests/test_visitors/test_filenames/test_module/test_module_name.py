@@ -24,7 +24,11 @@ def test_simple_filename(assert_errors, filename, default_options):
 
 
 @pytest.mark.parametrize('filename', MODULE_NAMES_BLACKLIST)
-def test_restricted_filename(assert_errors, filename, default_options):
+def test_restricted_filename(
+    assert_errors,
+    filename,
+    default_options,
+):
     """Testing that some file names are restricted."""
     visitor = WrongModuleNameVisitor(default_options, filename=filename + '.py')
     visitor.run()
