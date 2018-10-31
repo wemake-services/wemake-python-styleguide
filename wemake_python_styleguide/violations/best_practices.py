@@ -125,13 +125,9 @@ class WrongMagicCommentViolation(SimpleViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z400 as error code
-
     """
 
     code = 400
-    #: Error message shown to the user.
     error_template = 'Found wrong magic comment: {0}'
 
 
@@ -162,14 +158,10 @@ class WrongDocCommentViolation(TokenizeViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z401 as error code
-
     """
 
     code = 401
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found wrong doc comment'
 
 
@@ -202,12 +194,8 @@ class WrongModuleMetadataViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z410 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found wrong metadata variable: {0}'
     code = 410
 
@@ -228,13 +216,9 @@ class EmptyModuleViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z411 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found empty module'
     code = 411
 
@@ -272,13 +256,9 @@ class InitModuleHasLogicViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z412 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found `__init__.py` module with logic'
     code = 412
 
@@ -311,12 +291,8 @@ class WrongKeywordViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z420 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found wrong keyword: {0}'
     code = 420
 
@@ -340,12 +316,8 @@ class WrongFunctionCallViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z421 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found wrong function call: {0}'
     code = 421
 
@@ -377,12 +349,8 @@ class FutureImportViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z422 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found future import: {0}'
     code = 422
 
@@ -409,18 +377,14 @@ class RaiseNotImplementedViolation(ASTViolation):
         # Wrong:
         raise NotImplemented
 
-    See Also:
-        https://stackoverflow.com/a/44575926/4842742
-
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z423 as error code
+    See Also:
+        https://stackoverflow.com/a/44575926/4842742
 
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found raise NotImplemented'
     code = 423
 
@@ -447,19 +411,15 @@ class BaseExceptionViolation(ASTViolation):
         # Wrong:
         except BaseException as ex: ...
 
+    .. versionadded:: 0.3.0
+
     See Also:
         https://docs.python.org/3/library/exceptions.html#exception-hierarchy
         https://help.semmle.com/wiki/pages/viewpage.action?pageId=1608527
 
-    .. versionadded:: 0.3.0
-
-    Note:
-        Returns Z424 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found except `BaseException`'
     code = 424
 
@@ -500,12 +460,8 @@ class NestedFunctionViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z430 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found nested function: {0}'
     code = 430
 
@@ -542,12 +498,8 @@ class NestedClassViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z431 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found nested class: {0}'
     code = 431
 
@@ -586,18 +538,14 @@ class MagicNumberViolation(ASTViolation):
     some other common numbers, that are defined in
     :py:data:`~wemake_python_styleguide.constants.MAGIC_NUMBERS_WHITELIST`
 
-    See also:
-        https://en.wikipedia.org/wiki/Magic_number_(programming)
-
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z432 as error code
+    See also:
+        https://en.wikipedia.org/wiki/Magic_number_(programming)
 
     """
 
     code = 432
-    #: Error message shown to the user.
     error_template = 'Found magic number: {0}'
 
 
@@ -615,13 +563,9 @@ class StaticMethodViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z433 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found using `@staticmethod`'
     code = 433
 
@@ -644,17 +588,13 @@ class BadMagicMethodViolation(ASTViolation):
     :py:data:`~wemake_python_styleguide.constants.MAGIC_METHODS_BLACKLIST`
     for the full blacklist of the magic methods.
 
+    .. versionadded:: 0.1.0
+
     See also:
         https://www.youtube.com/watch?v=F6u5rhUQ6dU
 
-    .. versionadded:: 0.1.0
-
-    Note:
-        Returns Z434 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found using restricted magic method: {0}'
     code = 434
 
@@ -684,18 +624,14 @@ class NestedImportViolation(ASTViolation):
         def some():
             from my_module import some_function
 
-    See also:
-        https://github.com/seddonym/layer_linter
-
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z435 as error code
+    See also:
+        https://github.com/seddonym/layer_linter
 
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found nested import'
     code = 435
 
@@ -736,13 +672,9 @@ class RedundantForElseViolation(ASTViolation):
 
     .. versionadded:: 0.3.0
 
-    Note:
-        Returns Z436 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found `else` in `for` loop without `break`'
     code = 436
 
@@ -774,13 +706,9 @@ class RedundantFinallyViolation(ASTViolation):
 
     .. versionadded:: 0.3.0
 
-    Note:
-        Returns Z437 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found `finally` in `try` block without `except`'
     code = 437
 
@@ -806,12 +734,9 @@ class ReassigningVariableToItselfViolation(ASTViolation):
 
     .. versionadded:: 0.3.0
 
-    Note:
-        Returns Z438 as error code
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found reassigning variable to itself'
     code = 438
 
@@ -840,13 +765,9 @@ class YieldInsideInitViolation(ASTViolation):
 
     .. versionadded:: 0.3.0
 
-    Note:
-        Returns Z439 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found `yield` inside `__init__` method'
     code = 439
 
@@ -878,13 +799,9 @@ class ProtectedModuleViolation(ASTViolation):
 
     .. versionadded:: 0.3.0
 
-    Note:
-        Returns Z440 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found protected module import'
     code = 440
 
@@ -923,11 +840,7 @@ class ProtectedAttributeViolation(ASTViolation):
 
     .. versionadded:: 0.3.0
 
-    Note:
-        Returns Z441 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found protected attribute usage: {0}'
     code = 441

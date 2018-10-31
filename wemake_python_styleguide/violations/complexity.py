@@ -102,12 +102,8 @@ class JonesScoreViolation(SimpleViolation):
     See also:
         https://github.com/Miserlou/JonesComplexity
 
-    Note:
-        Returns Z200 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found module with high Jones Complexity score: {0}'
     code = 200
 
@@ -145,12 +141,8 @@ class TooManyImportsViolation(SimpleViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z201 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found module with too many imports: {0}'
     code = 201
 
@@ -179,12 +171,8 @@ class TooManyModuleMembersViolation(SimpleViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z202 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found too many module members: {0}'
     code = 202
 
@@ -236,12 +224,8 @@ class TooManyLocalsViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z210 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found too many local variables: {0}'
     code = 210
 
@@ -266,12 +250,8 @@ class TooManyArgumentsViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z211 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found too many arguments: {0}'
     code = 211
 
@@ -295,12 +275,8 @@ class TooManyReturnsViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z212 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found too many return statements: {0}'
     code = 212
 
@@ -324,12 +300,8 @@ class TooManyExpressionsViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z213 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found too many expressions: {0}'
     code = 213
 
@@ -364,12 +336,8 @@ class TooManyMethodsViolation(ASTViolation):
     See also:
         https://en.wikipedia.org/wiki/God_object
 
-    Note:
-        Returns Z214 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found too many methods: {0}'
     code = 214
 
@@ -393,12 +361,8 @@ class TooDeepNestingViolation(ASTViolation):
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.5.0
 
-    Note:
-        Returns Z220 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found too deep nesting: {0}'
     code = 220
 
@@ -442,12 +406,8 @@ class LineComplexityViolation(ASTViolation):
     See also:
         https://github.com/Miserlou/JonesComplexity
 
-    Note:
-        Returns Z221 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found line with high Jones Complexity: {0}'
     code = 221
 
@@ -472,12 +432,8 @@ class TooManyConditionsViolation(ASTViolation):
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.5.0
 
-    Note:
-        Returns Z222 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found a condition with too much logic: {0}'
     code = 222
 
@@ -501,12 +457,8 @@ class TooManyElifsViolation(ASTViolation):
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.5.0
 
-    Note:
-        Returns Z223 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found too many `elif` branches: {0}'
     code = 223
 
@@ -537,13 +489,9 @@ class TooManyForsInComprehensionViolation(ASTViolation):
 
     .. versionadded:: 0.3.0
 
-    Note:
-        Returns Z224 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found a comprehension with too many `for` statements'
     code = 224
 
@@ -583,10 +531,7 @@ class TooManyBaseClassesViolation(ASTViolation):
 
     .. versionadded:: 0.3.0
 
-    Note:
-        Returns Z225 as error code
     """
 
-    #: Error message shown to the user
     error_template = 'Too many number of base classes: {0}'
     code = 225

@@ -76,8 +76,10 @@ autodoc_mock_imports = [
     'attr',
 ]
 
+autodoc_member_order = 'bysource'
 autodoc_default_flags = {
     'members': '',
+    'undoc-members': 'code,error_template',
     'exclude-members': '__dict__,__weakref__',
 }
 

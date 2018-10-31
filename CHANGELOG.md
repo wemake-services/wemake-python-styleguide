@@ -19,6 +19,7 @@ We used to have incremental versioning before `0.1.0`.
 ### Misc
 
 - Refactoring: moves all complexity checks into `complexity/` folder
+- Improves docs: we have removed magic comments and code duplication
 
 
 ## 0.4.0

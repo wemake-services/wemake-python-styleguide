@@ -93,14 +93,9 @@ class LocalFolderImportViolation(ASTViolation):
         from ..drivers import MySQLDriver
 
     .. versionadded:: 0.1.0
-
-    Note:
-        Returns Z300 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found local folder import'
     code = 300
 
@@ -127,13 +122,8 @@ class DottedRawImportViolation(ASTViolation):
         import os.path
 
     .. versionadded:: 0.1.0
-
-    Note:
-        Returns Z301 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found dotted raw import: {0}'
     code = 301
 
@@ -161,13 +151,9 @@ class UnicodeStringViolation(TokenizeViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z302 as error code
-
     """
 
     code = 302
-    #: Error message shown to the user.
     error_template = 'Found unicode string prefix: {0}'
 
 
@@ -200,13 +186,9 @@ class UnderscoredNumberViolation(TokenizeViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z303 as error code
-
     """
 
     code = 303
-    #: Error message shown to the user.
     error_template = 'Found underscored number: {0}'
 
 
@@ -236,13 +218,9 @@ class PartialFloatViolation(TokenizeViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z304 as error code
-
     """
 
     code = 304
-    #: Error message shown to the user.
     error_template = 'Found partial float: {0}'
 
 
@@ -276,13 +254,9 @@ class FormattedStringViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z305 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found `f` string'
     code = 305
 
@@ -310,12 +284,8 @@ class RequiredBaseClassViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z306 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found class without a base class: {0}'
     code = 306
 
@@ -344,13 +314,9 @@ class MultipleIfsInComprehensionViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z307 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found list comprehension with multiple `if`s'
     code = 307
 
@@ -381,13 +347,9 @@ class ConstantComparisonViolation(ASTViolation):
 
     .. versionadded:: 0.3.0
 
-    Note:
-        Returns Z308 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found constant comparison'
     code = 308
 
@@ -416,13 +378,9 @@ class ComparisonOrderViolation(ASTViolation):
 
     .. versionadded:: 0.3.0
 
-    Note:
-        Returns Z309 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found reversed comparison order'
     code = 309
 
@@ -459,12 +417,8 @@ class BadNumberSuffixViolation(TokenizeViolation):
 
     .. versionadded:: 0.3.0
 
-    Note:
-        Returns Z310 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found bad number suffix: {0}'
     code = 310
 
@@ -493,13 +447,9 @@ class MultipleInComparisonViolation(ASTViolation):
 
     .. versionadded:: 0.3.0
 
-    Note:
-        Returns Z311 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found multiple `in` comparisons'
     code = 311
 
@@ -531,13 +481,9 @@ class RedundantComparisonViolation(ASTViolation):
 
     .. versionadded:: 0.3.0
 
-    Note:
-        Returns Z312 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found comparison between same variable'
     code = 312
 
@@ -570,13 +516,9 @@ class MissingSpaceBetweenKeywordAndParenViolation(TokenizeViolation):
 
     .. versionadded:: 0.3.0
 
-    Note:
-        Returns Z313 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found parens right after a keyword'
     code = 313
 
@@ -603,13 +545,9 @@ class WrongConditionalViolation(ASTViolation):
 
     .. versionadded:: 0.3.0
 
-    Note:
-        Returns Z314 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Conditional always evaluates to same result'
     code = 314
 
@@ -638,12 +576,8 @@ class ObjectInBaseClassesListViolation(ASTViolation):
 
     .. versionadded:: 0.3.0
 
-    Note:
-        Returns Z315 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user
     error_template = 'Founded extra `object` in parent classes list'
     code = 315

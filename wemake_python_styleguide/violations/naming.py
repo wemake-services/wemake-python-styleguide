@@ -175,13 +175,9 @@ class WrongModuleNameViolation(SimpleViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z100 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found wrong module name'
     code = 100
 
@@ -210,13 +206,9 @@ class WrongModuleMagicNameViolation(SimpleViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z101 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found wrong module magic name'
     code = 101
 
@@ -250,13 +242,9 @@ class WrongModuleNamePatternViolation(SimpleViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z102 as error code
-
     """
 
     should_use_text = False
-    #: Error message shown to the user.
     error_template = 'Found incorrect module name pattern'
     code = 102
 
@@ -292,12 +280,8 @@ class WrongVariableNameViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z110 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found wrong variable name: {0}'
     code = 110
 
@@ -330,17 +314,13 @@ class TooShortNameViolation(MaybeASTViolation):
     Configuration:
         This rule is configurable with ``--min-name-length``.
         Default:
-        :str:`wemake_python_styleguide.options.defaults.MAX_NAME_LENGTH`
+        :str:`wemake_python_styleguide.options.defaults.MIN_NAME_LENGTH`
 
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.4.0
 
-    Note:
-        Returns Z111 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found too short name: {0}'
     code = 111
 
@@ -370,15 +350,11 @@ class PrivateNameViolation(MaybeASTViolation):
         # Wrong:
         def __collect_coverage(self): ...
 
-    Note:
-        Returns Z112 as error code
-
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.4.0
 
     """
 
-    #: Error message shown to the user.
     error_template = 'Found private name pattern: {0}'
     code = 112
 
@@ -401,12 +377,8 @@ class SameAliasImportViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
 
-    Note:
-        Returns Z113 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found same alias import: {0}'
     code = 113
 
@@ -442,12 +414,8 @@ class UnderscoredNumberNameViolation(MaybeASTViolation):
     .. versionadded:: 0.3.0
     .. versionchanged:: 0.4.0
 
-    Note:
-        Returns Z114 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found underscored name pattern: {0}'
     code = 114
 
@@ -478,12 +446,8 @@ class UpperCaseAttributeViolation(ASTViolation):
 
     .. versionadded:: 0.3.0
 
-    Note:
-        Returns Z115 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found upper-case constant in a class: {0}'
     code = 115
 
@@ -511,11 +475,7 @@ class ConsecutiveUnderscoresInNameViolation(MaybeASTViolation):
     .. versionadded:: 0.3.0
     .. versionchanged:: 0.4.0
 
-    Note:
-        Returns Z116 as error code
-
     """
 
-    #: Error message shown to the user.
     error_template = 'Found consecutive underscores name: {0}'
     code = 116
