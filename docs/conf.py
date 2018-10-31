@@ -146,6 +146,7 @@ html_sidebars = {
         'about.html',
         'navigation.html',
         'moreinfo.html',
+        'github.html',
         'searchbox.html',
     ]
 }
