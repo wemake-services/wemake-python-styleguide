@@ -201,7 +201,7 @@ class WrongModuleMetadataViolation(ASTViolation):
 
 
 @final
-class EmptyModuleViolation(ASTViolation):
+class EmptyModuleViolation(SimpleViolation):
     """
     Forbids to have empty modules.
 
@@ -224,7 +224,7 @@ class EmptyModuleViolation(ASTViolation):
 
 
 @final
-class InitModuleHasLogicViolation(ASTViolation):
+class InitModuleHasLogicViolation(SimpleViolation):
     """
     Forbids to have logic inside ``__init__`` module.
 

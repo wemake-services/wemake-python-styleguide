@@ -34,7 +34,7 @@ class EmptyModuleContentsVisitor(BaseNodeVisitor):
         if self._is_init():
             return
         if not node.body:
-            self.add_violation(EmptyModuleViolation(node))
+            self.add_violation(EmptyModuleViolation())
 
     def _check_init_contents(self, node: ast.Module) -> None:
         if not self._is_init() or not node.body:
@@ -44,11 +44,11 @@ class EmptyModuleContentsVisitor(BaseNodeVisitor):
             return
 
         if len(node.body) > 1:
-            self.add_violation(InitModuleHasLogicViolation(node))
+            self.add_violation(InitModuleHasLogicViolation())
             return
 
         if not self._is_doc_string(node.body[0]):
-            self.add_violation(InitModuleHasLogicViolation(node))
+            self.add_violation(InitModuleHasLogicViolation())
 
     def visit_Module(self, node: ast.Module) -> None:
         """

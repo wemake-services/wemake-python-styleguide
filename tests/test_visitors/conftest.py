@@ -4,6 +4,10 @@ from typing import Sequence
 
 import pytest
 
+from wemake_python_styleguide.violations.base import (
+    ASTViolation,
+    TokenizeViolation,
+)
 from wemake_python_styleguide.visitors.base import BaseVisitor
 
 
@@ -15,6 +19,8 @@ def assert_errors():
 
         for index, error in enumerate(visitor.violations):
             assert error.code == errors[index].code
+            if isinstance(error, (ASTViolation, TokenizeViolation)):
+                assert error._location() != (0, 0)  # noqa: Z441
 
     return factory
 
