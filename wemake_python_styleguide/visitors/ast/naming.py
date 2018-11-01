@@ -155,6 +155,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             WrongVariableNameViolation
             TooShortNameViolation
             PrivateNameViolation
+            TooLongNameViolation
 
         """
         self._validator.check_name(node, node.name)
@@ -182,6 +183,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             WrongVariableNameViolation
             TooShortNameViolation
             PrivateNameViolation
+            TooLongNameViolation
 
         """
         for alias_node in node.names:
@@ -198,6 +200,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             WrongVariableNameViolation
             TooShortNameViolation
             PrivateNameViolation
+            TooLongNameViolation
 
         """
         variable_name = name_nodes.get_assigned_name(node)

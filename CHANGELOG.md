@@ -47,6 +47,7 @@ for tests. We also now covering more cases and testing violation texts.
 
 ### Features
 
+- Adds `TooLongNameViolation`
 - **Breaking**: removes duplicating module name rules, now we use the same rules
   for both variables and modules
 - **Breaking**: removes `--min-module-name-length` options
@@ -99,7 +100,6 @@ to the project during `#hactoberfest`. List of awesome people:
 
 ### Features
 
-- Adds `TooLongVariableNameViolation`
 - Adds `flake8-print` as a dependency
 - Adds `typing-extensions` as a dependency
 - Forbids to use `quit` and `exit` functions

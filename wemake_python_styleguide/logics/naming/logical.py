@@ -160,3 +160,29 @@ def does_contain_consecutive_underscores(name: str) -> bool:
         return True
 
     return False
+
+
+def is_too_long_name(
+    name: str,
+    max_length: int = defaults.MAX_NAME_LENGTH,
+) -> bool:
+    """
+    Checks for too long variable names.
+
+    >>> is_too_long_name('test')
+    False
+
+    >>> is_too_long_name('this_is_twentynine_characters')
+    False
+
+    >>> is_too_long_name('this_name_is_significantly_longer_than_the_last')
+    True
+
+    >>> is_too_long_name('this_is_exactly_forty_one_characters_long')
+    True
+
+    >>> is_too_long_name('this_is_exactly_forty_one_characters_long', max_length=41)
+    False
+
+    """
+    return len(name) > max_length
