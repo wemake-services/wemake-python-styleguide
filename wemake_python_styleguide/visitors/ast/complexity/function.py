@@ -14,7 +14,6 @@ from wemake_python_styleguide.types import (
 )
 from wemake_python_styleguide.violations.complexity import (
     TooManyArgumentsViolation,
-    TooManyElifsViolation,
     TooManyExpressionsViolation,
     TooManyLocalsViolation,
     TooManyReturnsViolation,
@@ -36,7 +35,6 @@ class _ComplexityCounter(object):
 
     def __init__(self) -> None:
         self.arguments: FunctionCounterWithLambda = defaultdict(int)
-        self.elifs: FunctionCounter = defaultdict(int)
         self.returns: FunctionCounter = defaultdict(int)
         self.expressions: FunctionCounter = defaultdict(int)
         self.variables: DefaultDict[
@@ -65,14 +63,6 @@ class _ComplexityCounter(object):
 
             function_variables.append(variable.id)
 
-    def _update_elifs(self, node: AnyFunctionDef, sub_node: ast.If) -> None:
-        has_elif = any(
-            isinstance(if_node, ast.If) for if_node in sub_node.orelse
-        )
-
-        if has_elif:
-            self.elifs[node] += 1
-
     def _check_sub_node(self, node: AnyFunctionDef, sub_node) -> None:
         is_variable = isinstance(sub_node, ast.Name)
         context = getattr(sub_node, 'ctx', None)
@@ -83,8 +73,6 @@ class _ComplexityCounter(object):
             self.returns[node] += 1
         elif isinstance(sub_node, ast.Expr):
             self.expressions[node] += 1
-        elif isinstance(sub_node, ast.If):
-            self._update_elifs(node, sub_node)
 
     def check_arguments_count(self, node: AnyFunctionDefAndLambda) -> None:
         """Checks the number of the arguments in a function."""
@@ -127,24 +115,13 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
     2. Number of `return` statements
     3. Number of expressions
     4. Number of local variables
-    5. Number of `elif` branches
 
     """
-
-    #: Maximum number of `elif` blocks in a single `if` condition:
-    _max_elifs: ClassVar[int] = 3
 
     def __init__(self, *args, **kwargs) -> None:
         """Creates a counter for tracked metrics."""
         super().__init__(*args, **kwargs)
         self._counter = _ComplexityCounter()
-
-    def _check_possible_switch(self) -> None:
-        for node, elifs in self._counter.elifs.items():
-            if elifs > self._max_elifs:
-                self.add_violation(
-                    TooManyElifsViolation(node, text=str(elifs)),
-                )
 
     def _check_function_internals(self) -> None:
         for node, variables in self._counter.variables.items():
@@ -175,7 +152,6 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
     def _post_visit(self) -> None:
         self._check_function_signature()
         self._check_function_internals()
-        self._check_possible_switch()
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """
@@ -186,7 +162,6 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
             TooManyReturnsViolation
             TooManyLocalsViolation
             TooManyArgumentsViolation
-            TooManyElifsViolation
 
         """
         self._counter.check_arguments_count(node)

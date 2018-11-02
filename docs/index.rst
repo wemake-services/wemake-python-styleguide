@@ -5,24 +5,24 @@
   :caption: Userguide:
   :hidden:
 
-  _pages/usage.rst
-  _pages/violations/index.rst
-  _pages/constants.rst
-  _pages/options/config.rst
+  pages/usage.rst
+  pages/violations/index.rst
+  pages/constants.rst
+  pages/options/config.rst
 
 .. toctree::
   :maxdepth: 2
   :caption: API:
   :hidden:
 
-  _pages/api.rst
+  pages/api.rst
 
 .. toctree::
   :maxdepth: 1
   :caption: Changelog:
   :hidden:
 
-  _pages/changelog.rst
+  pages/changelog.rst
 
 
 Indices and tables

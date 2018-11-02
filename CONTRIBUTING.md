@@ -17,7 +17,7 @@ It is also recommended to take a look at these resources:
 
 ## API Reference
 
-Make sure that you are familiar with [our API](https://wemake-python-styleguide.readthedocs.io/en/latest/_pages/api.html).
+Make sure that you are familiar with [our API](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/api.html).
 
 
 ## Dependencies

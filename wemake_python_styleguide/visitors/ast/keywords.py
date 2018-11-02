@@ -4,9 +4,11 @@ import ast
 from collections import defaultdict
 from typing import ClassVar, DefaultDict, Optional, Union
 
+from wemake_python_styleguide.logics.nodes import is_contained
 from wemake_python_styleguide.types import AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
     BaseExceptionViolation,
+    LambdaInsideLoopViolation,
     RaiseNotImplementedViolation,
     RedundantFinallyViolation,
     RedundantForElseViolation,
@@ -21,19 +23,6 @@ from wemake_python_styleguide.violations.consistency import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 AnyLoop = Union[ast.For, ast.While]
-
-
-@final
-class _ComprehensionComplexityCounter(object):
-    """Helper class to encapsulate logic from the visitor."""
-
-    def __init__(self) -> None:
-        self.fors: DefaultDict[ast.ListComp, int] = defaultdict(int)
-
-    def check_fors(self, node: ast.comprehension) -> None:
-        parent = getattr(node, 'parent', node)
-        if isinstance(parent, ast.ListComp):
-            self.fors[parent] = len(parent.generators)
 
 
 @final
@@ -93,28 +82,32 @@ class WrongKeywordVisitor(BaseNodeVisitor):
 
 
 @final
-class WrongListComprehensionVisitor(BaseNodeVisitor):
-    """Checks list comprehensions."""
+class WrongComprehensionVisitor(BaseNodeVisitor):
+    """Checks comprehensions for correctness."""
+
+    _max_ifs: ClassVar[int] = 1
+    _max_fors: ClassVar[int] = 2
 
     def __init__(self, *args, **kwargs) -> None:
         """Creates a counter for tracked metrics."""
         super().__init__(*args, **kwargs)
-        self._counter = _ComprehensionComplexityCounter()
+        self._fors: DefaultDict[ast.AST, int] = defaultdict(int)
 
     def _check_ifs(self, node: ast.comprehension) -> None:
-        if len(node.ifs) > 1:
+        if len(node.ifs) > self._max_ifs:
             # We are trying to fix line number in the report,
             # since `comprehension` does not have this property.
             parent = getattr(node, 'parent', node)
             self.add_violation(MultipleIfsInComprehensionViolation(parent))
 
-    def _check_fors(self) -> None:
-        for node, for_count in self._counter.fors.items():
-            if for_count > 2:
-                self.add_violation(TooManyForsInComprehensionViolation(node))
+    def _check_fors(self, node: ast.comprehension) -> None:
+        parent = getattr(node, 'parent', node)
+        self._fors[parent] = len(parent.generators)
 
     def _post_visit(self) -> None:
-        self._check_fors()
+        for node, for_count in self._fors.items():
+            if for_count > self._max_fors:
+                self.add_violation(TooManyForsInComprehensionViolation(node))
 
     def visit_comprehension(self, node: ast.comprehension) -> None:
         """
@@ -126,13 +119,13 @@ class WrongListComprehensionVisitor(BaseNodeVisitor):
 
         """
         self._check_ifs(node)
-        self._counter.check_fors(node)
+        self._check_fors(node)
         self.generic_visit(node)
 
 
 @final
-class WrongForElseVisitor(BaseNodeVisitor):
-    """Responsible for restricting `else` in `for` loops without `break`."""
+class WrongLoopVisitor(BaseNodeVisitor):
+    """Responsible for examining loops."""
 
     def _does_loop_contain_node(
         self,
@@ -143,6 +136,7 @@ class WrongForElseVisitor(BaseNodeVisitor):
             return False
 
         for inner_node in ast.walk(loop):
+            # We are checking this specific node, not just any `break`:
             if to_check is inner_node:
                 return True
         return False
@@ -165,33 +159,47 @@ class WrongForElseVisitor(BaseNodeVisitor):
 
     def _check_for_needs_else(self, node: ast.For) -> None:
         if node.orelse and not self._has_break(node):
-            self.add_violation(RedundantForElseViolation(node=node))
+            self.add_violation(RedundantForElseViolation(node))
+
+    def _check_lambda_inside(self, node: AnyLoop) -> None:
+        for subnode in node.body:
+            if is_contained(subnode, (ast.Lambda,)):
+                self.add_violation(LambdaInsideLoopViolation(node))
 
     def visit_For(self, node: ast.For) -> None:
-        """Used for find `else` block in `for` loops without `break`."""
+        """
+        Checks ``for`` loops.
+
+        Raises:
+            RedundantForElseViolation
+            LambdaInsideLoopViolation
+
+        """
         self._check_for_needs_else(node)
+        self._check_lambda_inside(node)
+        self.generic_visit(node)
+
+    def visit_While(self, node: ast.While) -> None:
+        """
+        Checks ``while`` loops.
+
+        Raises:
+            LambdaInsideLoopViolation
+
+        """
+        self._check_lambda_inside(node)
         self.generic_visit(node)
 
 
 @final
-class WrongTryFinallyVisitor(BaseNodeVisitor):
-    """Responsible for restricting finally in try blocks without except."""
+class WrongTryExceptVisitor(BaseNodeVisitor):
+    """Responsible for examining ``try`` and friends."""
+
+    _base_exception: ClassVar[str] = 'BaseException'
 
     def _check_for_needs_except(self, node: ast.Try) -> None:
         if node.finalbody and not node.handlers:
-            self.add_violation(RedundantFinallyViolation(node=node))
-
-    def visit_Try(self, node: ast.Try) -> None:
-        """Used for find finally in try blocks without except."""
-        self._check_for_needs_except(node)
-        self.generic_visit(node)
-
-
-@final
-class WrongExceptionTypeVisitor(BaseNodeVisitor):
-    """Finds usage of incorrect ``except`` exception types."""
-
-    _base_exception: ClassVar[str] = 'BaseException'
+            self.add_violation(RedundantFinallyViolation(node))
 
     def _check_exception_type(self, node: ast.ExceptHandler) -> None:
         exception_name = getattr(node, 'type', None)
@@ -201,6 +209,17 @@ class WrongExceptionTypeVisitor(BaseNodeVisitor):
         exception_id = getattr(exception_name, 'id', None)
         if exception_id == self._base_exception:
             self.add_violation(BaseExceptionViolation(node))
+
+    def visit_Try(self, node: ast.Try) -> None:
+        """
+        Used for find finally in try blocks without except.
+
+        Raises:
+            RedundantFinallyViolation
+
+        """
+        self._check_for_needs_except(node)
+        self.generic_visit(node)
 
     def visit_ExceptHandler(self, node: ast.ExceptHandler) -> None:
         """

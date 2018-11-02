@@ -44,13 +44,13 @@ Namespaces are one honking great idea -- let's do more of those!
 pip install wemake-python-styleguide
 ```
 
-You will also need to create a `setup.cfg` file with [the following contents](https://wemake-python-styleguide.readthedocs.io/en/latest/_pages/options/config.html#plugins).
+You will also need to create a `setup.cfg` file with [the following contents](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/options/config.html#plugins).
 
 This file is required to configure our linter and all 3rd party plugins it uses.
 However, this is a temporary solution.
 We are working at providing the required configuration for you in the future.
 
-See ["Usage" section](https://wemake-python-styleguide.readthedocs.io/en/latest/_pages/usage.html)
+See ["Usage" section](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage.html)
 in the docs for examples and integrations.
 
 
@@ -63,7 +63,7 @@ We have several primary objectives:
 2. Enforce "There should be one-- and preferably only one --obvious way to do it" rule
 3. Create consistent coding and naming style
 
-You can find all error codes and plugins [in the docs](https://wemake-python-styleguide.readthedocs.io/en/latest/_pages/violations/index.html).
+You can find all error codes and plugins [in the docs](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/violations/index.html).
 
 
 ## What we are not
@@ -73,14 +73,14 @@ We are *not* planning to do the following things:
 0. Assume or check types, use `mypy` instead
 1. Reformat code, since we believe that developers should do that
 2. Check for `SyntaxError` or exceptions, write tests instead
-3. Appeal to everyone, this is **our** linter. But, you can [switch off](https://wemake-python-styleguide.readthedocs.io/en/latest/_pages/usage.html#ignoring-violations) any rules that you don't like
+3. Appeal to everyone, this is **our** linter. But, you can [switch off](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage.html#ignoring-violations) any rules that you don't like
 
 
 ## Contributing
 
 We warmly welcome any contributions!
 
-See ["Contributing" section](https://wemake-python-styleguide.readthedocs.io/en/latest/_pages/contributing.html) in the documentation if you want to contribute.
+See ["Contributing" section](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/contributing.html) in the documentation if you want to contribute.
 
 You can also check which [issues need some help](https://github.com/wemake-services/wemake-python-styleguide/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) right now.
 

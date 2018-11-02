@@ -10,16 +10,25 @@ We used to have incremental versioning before `0.1.0`.
 - **Breaking**: removes `--max-conditions` and `--max-elifs` options
 - **Breaking**: removes `--max-offset-blocks`
 - **Breaking**: changes default `TooManyConditionsViolation` threshold to `4`
+- **Breaking**: changes `TooManyBaseClassesViolation` code from ``225`` to ``215``
+- Forbids to use `lambda` inside loops
 
 ## Bugfixes
 
 - Fixes `TooManyConditionsViolation` to work with any conditions, not just `if`s
 - Fixes `TooManyConditionsViolation` that did not count conditions correctly
+- Fixes `TooManyForsInComprehensionViolation` to find all comprehension types
+- Fixes `TooManyElifsViolation` to check module level conditions
+- Fixes `TooManyBaseClassesViolation` docs location
 
 ### Misc
 
 - Refactoring: moves all complexity checks into `complexity/` folder
+- Refactoring: improves how different keyword visitors are coupled
 - Improves docs: we have removed magic comments and code duplication
+- Improves docs: now `_pages/` is named just `pages/`
+- Improves tests: now testing different keywords separately
+- Improves tests: now all violations must be contained in `test_noqa.py`
 
 
 ## 0.4.0

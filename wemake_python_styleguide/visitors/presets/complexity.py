@@ -19,5 +19,6 @@ COMPLEXITY_PRESET = (
     counts.ModuleMembersVisitor,
     counts.MethodMembersVisitor,
     counts.ConditionsVisitor,
+    counts.ElifVisitor,
     classes.ClassComplexityVisitor,
 )

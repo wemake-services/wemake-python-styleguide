@@ -41,6 +41,7 @@ Summary
    YieldInsideInitViolation
    ProtectedModuleViolation
    ProtectedAttributeViolation
+   LambdaInsideLoopViolation
 
 Comments
 --------
@@ -78,6 +79,7 @@ Design
 .. autoclass:: YieldInsideInitViolation
 .. autoclass:: ProtectedModuleViolation
 .. autoclass:: ProtectedAttributeViolation
+.. autoclass:: LambdaInsideLoopViolation
 
 """
 
@@ -844,3 +846,39 @@ class ProtectedAttributeViolation(ASTViolation):
 
     error_template = 'Found protected attribute usage: {0}'
     code = 441
+
+
+@final
+class LambdaInsideLoopViolation(ASTViolation):
+    """
+    Forbids to use ``lambda`` inside loops.
+
+    Reasoning:
+        It is error-prone to use ``lambda`` inside
+        ``for`` and ``while`` loops due to the famous late-binding.
+
+    Solution:
+        Use regular functions, factory functions, or ``partial`` functions.
+        Save yourself from possible confusion.
+
+    Example::
+
+        # Correct:
+        for index in range(10):
+            some.append(partial_function(index))
+
+        # Wrong:
+        for index in range(10):
+            some.append(lambda index=index: index * 10))
+            other.append(lambda: index * 10))
+
+    .. versionadded:: 0.5.0
+
+    See also:
+        https://docs.python-guide.org/writing/gotchas/#late-binding-closures
+
+    """
+
+    should_use_text = False
+    error_template = "Found `lambda` in loop's body"
+    code = 442

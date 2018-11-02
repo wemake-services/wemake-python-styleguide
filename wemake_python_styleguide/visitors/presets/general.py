@@ -24,10 +24,9 @@ GENERAL_PRESET = (
     # General:
     keywords.WrongRaiseVisitor,
     keywords.WrongKeywordVisitor,
-    keywords.WrongListComprehensionVisitor,
-    keywords.WrongForElseVisitor,
-    keywords.WrongTryFinallyVisitor,
-    keywords.WrongExceptionTypeVisitor,
+    keywords.WrongComprehensionVisitor,
+    keywords.WrongLoopVisitor,
+    keywords.WrongTryExceptVisitor,
 
     attributes.WrongAttributeVisitor,
 

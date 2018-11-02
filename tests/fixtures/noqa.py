@@ -1,12 +1,13 @@
-# -*- coding: utf-8 -*-
-
 """
 This file contains all possible violations.
+
+It is used for e2e tests.
 """
 
 from __future__ import print_function  # noqa: Z422
 
 from .version import get_version  # noqa: Z300
+import os.path  # noqa: Z301
 import sys as sys  # noqa: Z113
 from some import _protected  # noqa: Z440
 
@@ -35,6 +36,73 @@ consecutive__underscores = 4  # noqa: Z116
 __author__ = 'Nikita Sobolev'  # noqa: Z410
 
 some._execute()  # noqa: Z441
+
+
+def many_locals():  # noqa: Z210
+    arg1, arg2, arg3, arg4, arg5, arg6 = range(6)
+
+
+def many_arguments(arg1, arg2, arg3, arg4, arg5, arg6):  # noqa: Z211
+    ...
+
+
+def many_returns(xy):  # noqa: Z212
+    if xy > 1:
+        return 1
+    if xy > 2:
+        return 2
+    if xy > 3:
+        return 3
+    if xy > 4:
+        return 4
+    if xy > 5:
+        return 5
+    return 6
+
+
+def many_expressions(xy):  # noqa: Z213
+    print(xy)
+    print(xy)
+    print(xy)
+
+    print(xy)
+    print(xy)
+    print(xy)
+
+    print(xy)
+    print(xy)
+    print(xy)
+
+    print(xy)
+
+
+class ManyParents(dict, list, tuple, Exception):  # noqa: Z215
+    ...
+
+
+line = some.call(7 * 2, 3 / 4) / some.run(5 / some, 8 - 2 + 1)  # noqa: Z221
+if line and line > 2 and line > 3 and line > 4 and line > 5:  # noqa: Z221,Z222
+    ...
+
+if line:  # noqa: Z223
+    ...
+elif line > 1:
+    ...
+elif line > 2:
+    ...
+elif line > 3:
+    ...
+elif line > 4:
+    ...
+
+
+numbers = [
+    target  # noqa: Z224
+    for assignment in range(hex_number)
+    for target in range(assignment)
+    for _ in range(10)
+    if isinstance(target, int)
+]
 
 
 class BadClass:  # noqa: Z306
@@ -76,6 +144,7 @@ assert hex_number == hex_number  # noqa: Z312
 def test_function():
     return(123, 33)  # noqa: Z313
 
+
 if True:  # noqa: Z314
     ...
 
@@ -102,14 +171,11 @@ finally:
 
 nodes = nodes  # noqa: Z438
 
+
 class Example(object):
     def __init__(self):  # noqa: Z439
         yield 10
 
-numbers = [
-    target  # noqa: Z224
-    for assignment in range(hex_number)
-    for target in range(assignment)
-    for _ in range(10)
-    if isinstance(target, int)
-]
+
+for index in range(6):  # noqa: Z442
+    print(lambda: index)

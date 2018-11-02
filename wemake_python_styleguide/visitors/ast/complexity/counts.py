@@ -2,12 +2,13 @@
 
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, Union
+from typing import ClassVar, DefaultDict, List, Union
 
 from wemake_python_styleguide.logics.functions import is_method
 from wemake_python_styleguide.types import AnyFunctionDef, AnyImport, final
 from wemake_python_styleguide.violations.complexity import (
     TooManyConditionsViolation,
+    TooManyElifsViolation,
     TooManyImportsViolation,
     TooManyMethodsViolation,
     TooManyModuleMembersViolation,
@@ -161,4 +162,57 @@ class ConditionsVisitor(BaseNodeVisitor):
 
         """
         self._check_conditions(node)
+        self.generic_visit(node)
+
+
+@final
+class ElifVisitor(BaseNodeVisitor):
+    """Checks the number of ``elif`` cases inside conditions."""
+
+    #: Maximum number of `elif` blocks in a single `if` condition:
+    _max_elifs: ClassVar[int] = 3
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Creates internal ``elif`` counter."""
+        super().__init__(*args, **kwargs)
+        self._if_children: DefaultDict[ast.If, List[ast.If]] = defaultdict(list)
+
+    def _get_root_if_node(self, node: ast.If) -> ast.If:
+        for root, children in self._if_children.items():
+            if node in children:
+                return root
+
+        return node
+
+    def _update_if_child(self, root: ast.If, node: ast.If) -> None:
+        if node is not root:
+            self._if_children[root].append(node)
+        self._if_children[root].extend(node.orelse)  # type: ignore
+
+    def _check_elifs(self, node: ast.If) -> None:
+        has_elif = all(
+            isinstance(if_node, ast.If) for if_node in node.orelse
+        )
+
+        if has_elif:
+            root = self._get_root_if_node(node)
+            self._update_if_child(root, node)
+
+    def _post_visit(self):
+        for root, children in self._if_children.items():
+            real_children_length = len(set(children))
+            if real_children_length > self._max_elifs:
+                self.add_violation(
+                    TooManyElifsViolation(root, text=str(real_children_length)),
+                )
+
+    def visit_If(self, node: ast.If) -> None:
+        """
+        Checks condition not to reimplement switch.
+
+        Raises:
+            TooManyElifsViolation
+
+        """
+        self._check_elifs(node)
         self.generic_visit(node)

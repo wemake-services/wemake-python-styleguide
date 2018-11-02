@@ -5,7 +5,7 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     RedundantForElseViolation,
 )
-from wemake_python_styleguide.visitors.ast.keywords import WrongForElseVisitor
+from wemake_python_styleguide.visitors.ast.keywords import WrongLoopVisitor
 
 wrong_else_in_for_loop = """
 for x in '123':
@@ -120,7 +120,7 @@ def test_wrong_else_in_for_loop(
     """Violations are raised when else with break statement."""
     tree = parse_ast_tree(code)
 
-    visitor = WrongForElseVisitor(default_options, tree=tree)
+    visitor = WrongLoopVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [RedundantForElseViolation])
@@ -143,7 +143,7 @@ def test_correct_else_in_for_loop(
     """Violations are not raised when else without break statement."""
     tree = parse_ast_tree(code)
 
-    visitor = WrongForElseVisitor(default_options, tree=tree)
+    visitor = WrongLoopVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])

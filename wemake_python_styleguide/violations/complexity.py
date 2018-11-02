@@ -46,7 +46,6 @@ Module complexity
 .. autoclass:: JonesScoreViolation
 .. autoclass:: TooManyImportsViolation
 .. autoclass:: TooManyModuleMembersViolation
-.. autoclass:: TooManyBaseClassesViolation
 
 Function and class complexity
 -----------------------------
@@ -56,6 +55,7 @@ Function and class complexity
 .. autoclass:: TooManyReturnsViolation
 .. autoclass:: TooManyExpressionsViolation
 .. autoclass:: TooManyMethodsViolation
+.. autoclass:: TooManyBaseClassesViolation
 
 Structures complexity
 ---------------------
@@ -342,6 +342,48 @@ class TooManyMethodsViolation(ASTViolation):
     code = 214
 
 
+class TooManyBaseClassesViolation(ASTViolation):
+    """
+    Restrict the maximum number of base classes.
+
+    Reasoning:
+        It is almost never possible to navigate
+        to the desired method of a parent class
+        when you need it with multiple mixins.
+        It is hard to understand ``mro`` and ``super`` calls.
+        Do not overuse this technique.
+
+    Solution:
+        Restrict the number of base classes.
+
+    Example::
+
+       # Correct:
+       class SomeClassName(First, Second, Mixin): ...
+
+       # Wrong:
+       class SomeClassName(
+           FirstParentClass,
+           SecondParentClass,
+           ThirdParentClass,
+           CustomClass,
+           AddedClass,
+        ): ...
+
+    Configuration:
+        This rule is configurable with ``--max-base-classes``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_BASE_CLASSES`
+
+    .. versionadded:: 0.3.0
+    .. versionchanged:: 0.5.0
+
+    """
+
+    error_template = 'Too many base classes: {0}'
+    code = 215
+
+
 # Structures:
 
 @final
@@ -494,44 +536,3 @@ class TooManyForsInComprehensionViolation(ASTViolation):
     should_use_text = False
     error_template = 'Found a comprehension with too many `for` statements'
     code = 224
-
-
-class TooManyBaseClassesViolation(ASTViolation):
-    """
-    Restrict the maximum number of base classes.
-
-    Reasoning:
-        It is almost never possible to navigate
-        to the desired method of a parent class
-        when you need it with multiple mixins.
-        It is hard to understand ``mro`` and ``super`` calls.
-        Do not overuse this technique.
-
-    Solution:
-        Restrict the number of base classes.
-
-    Example::
-
-       # Correct:
-       class SomeClassName(FirstParentClass, SecondParentClass): ...
-
-       # Wrong:
-       class SomeClassName(
-           FirstParentClass,
-           SecondParentClass,
-           ThirdParentClass,
-           CustomClass,
-           AddedClass,
-        ): ...
-
-    Configuration:
-        This rule is configurable with ``--max-base-classes``.
-        Default:
-        :str:`wemake_python_styleguide.options.defaults.MAX_BASE_CLASSES`
-
-    .. versionadded:: 0.3.0
-
-    """
-
-    error_template = 'Too many number of base classes: {0}'
-    code = 225

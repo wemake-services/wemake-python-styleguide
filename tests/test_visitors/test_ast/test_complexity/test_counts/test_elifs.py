@@ -2,10 +2,71 @@
 
 import pytest
 
-from wemake_python_styleguide.visitors.ast.complexity.function import (
-    FunctionComplexityVisitor,
+from wemake_python_styleguide.visitors.ast.complexity.counts import (
+    ElifVisitor,
     TooManyElifsViolation,
 )
+
+module_with_one_elif = """
+if 1 > 2:
+    ...
+elif 2 > 3:
+    ...
+else:
+    ...
+"""
+
+module_with_two_elifs = """
+if 1 > 2:
+    ...
+elif 2 > 3:
+    ...
+elif 3 > 4:
+    ...
+else:
+    ...
+"""
+
+module_with_three_elifs = """
+if 1 > 2:
+    ...
+elif 2 > 3:
+    ...
+elif 3 > 4:
+    ...
+elif 4 > 5:
+    ...
+else:
+    ...
+"""
+
+module_with_elifs = """
+if 1 > 2:
+    ...
+elif 2 > 3:
+    ...
+elif 3 > 4:
+    ...
+elif 4 > 5:
+    ...
+elif 5 > 6:
+    ...
+else:
+    ...
+"""
+
+module_with_elifs_without_else = """
+if 1 > 2:
+    ...
+elif 2 > 3:
+    ...
+elif 3 > 4:
+    ...
+elif 4 > 5:
+    ...
+elif 5 > 6:
+    ...
+"""
 
 function_with_one_elif = """
 def test_module():
@@ -23,6 +84,8 @@ def test_module():
         ...
     elif 2 > 3:
         ...
+    elif 3 > 4:
+        ...
     else:
         ...
 """
@@ -32,6 +95,10 @@ def test_module():
     if 1 > 2:
         ...
     elif 2 > 3:
+        ...
+    elif 3 > 4:
+        ...
+    elif 4 > 5:
         ...
     else:
         ...
@@ -98,6 +165,9 @@ def with_ternary(some_value):
 
 
 @pytest.mark.parametrize('code', [
+    module_with_one_elif,
+    module_with_two_elifs,
+    module_with_three_elifs,
     function_with_one_elif,
     function_with_two_elifs,
     function_with_three_elifs,
@@ -116,13 +186,15 @@ def test_elif_correct_count(
     """Testing that all `if`/`elif`/`else` is allowed."""
     tree = parse_ast_tree(mode(code))
 
-    visitor = FunctionComplexityVisitor(default_options, tree=tree)
+    visitor = ElifVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
 
 
 @pytest.mark.parametrize('code', [
+    module_with_elifs,
+    module_with_elifs_without_else,
     function_with_elifs,
     function_with_elifs_without_else,
 ])
@@ -136,7 +208,7 @@ def test_elif_incorrect_count(
     """Testing that incorrect number of `elif` is restricted."""
     tree = parse_ast_tree(code)
 
-    visitor = FunctionComplexityVisitor(default_options, tree=tree)
+    visitor = ElifVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [TooManyElifsViolation])

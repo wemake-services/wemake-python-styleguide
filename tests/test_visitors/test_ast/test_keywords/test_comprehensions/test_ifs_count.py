@@ -2,14 +2,11 @@
 
 import pytest
 
-from wemake_python_styleguide.violations.complexity import (
-    TooManyForsInComprehensionViolation,
-)
 from wemake_python_styleguide.violations.consistency import (
     MultipleIfsInComprehensionViolation,
 )
 from wemake_python_styleguide.visitors.ast.keywords import (
-    WrongListComprehensionVisitor,
+    WrongComprehensionVisitor,
 )
 
 # Lists:
@@ -100,16 +97,6 @@ def container():
     nodes = {xy for xy in "abc"}
 """
 
-nested_loops = """
-def container():
-    nodes = [
-        target
-        for assignment in top_level_assigns
-        for target in assignment.targets
-        for _ in range(10)
-    ]
-"""
-
 
 @pytest.mark.parametrize('code', [
     list_ifs_single,
@@ -131,7 +118,7 @@ def test_if_keyword_in_comprehension(
     """Testing that using `if` keyword is allowed."""
     tree = parse_ast_tree(mode(code))
 
-    visitor = WrongListComprehensionVisitor(default_options, tree=tree)
+    visitor = WrongComprehensionVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -156,25 +143,7 @@ def test_multiple_if_keywords_in_comprehension(
 ):
     """Testing that using multiple `if` keywords is restricted."""
     tree = parse_ast_tree(mode(code))
-    visitor = WrongListComprehensionVisitor(default_options, tree=tree)
+    visitor = WrongComprehensionVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [MultipleIfsInComprehensionViolation])
-
-
-@pytest.mark.parametrize('code', [
-    nested_loops,
-])
-def test_multiple_for_keywords_in_comprehension(
-    assert_errors,
-    parse_ast_tree,
-    code,
-    default_options,
-    mode,
-):
-    """Testing that using multiple `for` keywords is restricted."""
-    tree = parse_ast_tree(mode(code))
-    visitor = WrongListComprehensionVisitor(default_options, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [TooManyForsInComprehensionViolation])

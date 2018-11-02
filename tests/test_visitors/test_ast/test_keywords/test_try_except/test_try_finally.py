@@ -5,9 +5,7 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     RedundantFinallyViolation,
 )
-from wemake_python_styleguide.visitors.ast.keywords import (
-    WrongTryFinallyVisitor,
-)
+from wemake_python_styleguide.visitors.ast.keywords import WrongTryExceptVisitor
 
 right_try_example = """
 try:
@@ -42,7 +40,7 @@ def test_wrong_finally(
     """Violations are raised when finally without except in try block."""
     tree = parse_ast_tree(code)
 
-    visitor = WrongTryFinallyVisitor(default_options, tree=tree)
+    visitor = WrongTryExceptVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [RedundantFinallyViolation])
@@ -58,7 +56,7 @@ def test_correct_finally(
     """Violations are not raised when finally with except in try block."""
     tree = parse_ast_tree(code)
 
-    visitor = WrongTryFinallyVisitor(default_options, tree=tree)
+    visitor = WrongTryExceptVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
