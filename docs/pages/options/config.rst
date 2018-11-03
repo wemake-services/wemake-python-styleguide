@@ -19,7 +19,7 @@ this module.
 .. code:: ini
 
     [flake8]
-    max-complexity = 7
+    max-complexity = 6
     max-line-length = 80
     enable-extensions = G
 
