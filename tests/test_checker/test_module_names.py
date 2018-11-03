@@ -16,8 +16,8 @@ from wemake_python_styleguide.violations import naming
     ('123py.py', naming.WrongModuleNamePatternViolation),
     ('version_1.py', naming.UnderscoredNumberNameViolation),
     ('__private.py', naming.PrivateNameViolation),
-    ('an_extremely_super_duper_unreasonably_long_name.py',
-    naming.TooLongNameViolation),
+    ('oh_no_not_an_extremely_super_duper_unreasonably_long_name.py',
+        naming.TooLongNameViolation),
 ])
 def test_module_names(filename, error, default_options):
     """Ensures that checker works with module names."""

@@ -22,7 +22,7 @@ from wemake_python_styleguide.types import Final
 MIN_NAME_LENGTH: Final = 2
 
 #: Maximum variable and module name length:
-MAX_NAME_LENGTH: Final = 40
+MAX_NAME_LENGTH: Final = 55
 
 #: Whether you control ones who use your code.
 I_CONTROL_CODE: Final = True

@@ -41,10 +41,10 @@ def test_length_option(assert_errors, assert_error_text, options):
 
 
 @pytest.mark.parametrize('filename', [
-    'super_long_name_that_needs_to_be_much_shorter.py',
-    'some/package/another_ridiculously_lengthly_name_that_wont_work.py',
-    '/root/please_do_not_ever_make_names_long_like_this.py',
-    'C:/hello_there_this_is_another_very_long_name.py',
+    'super_long_name_that_needs_to_be_much_shorter_to_fit_the_rule.py',
+    'package/another_ridiculously_lengthly_name_that_defies_this_rule.py',
+    '/root/please_do_not_ever_make_names_long_and_confusing_like_this.py',
+    'C:/hello_there_this_is_another_very_long_name_that_will_not_work.py',
 ])
 def test_too_long_filename(assert_errors, filename, default_options):
     """Testing that long file names are restricted."""
@@ -53,14 +53,14 @@ def test_too_long_filename(assert_errors, filename, default_options):
 
     assert_errors(visitor, [
         TooLongNameViolation,
-        WrongModuleNamePatternViolation,
     ])
 
 
-def test_length_option(assert_errors, assert_error_text, options):
+def test_max_length_option(assert_errors, assert_error_text, options):
     """Ensures that option `--max-name-length` works."""
-    filename = 'very_long_name_that_should_not_pass_this_test.py'
-    option_values = options(max_name_length=40)
+    max_length = 55
+    filename = 'very_long_name_that_should_not_pass_unless_changed_shorter.py'
+    option_values = options(max_name_length=max_length)
     visitor = WrongModuleNameVisitor(option_values, filename=filename)
     visitor.run()
 

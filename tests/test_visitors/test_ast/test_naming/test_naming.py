@@ -152,7 +152,7 @@ def test_long_variable_name(
     mode,
 ):
     """Ensures that long names are not allowed."""
-    long_name = 'incredibly_long_name_that_will__definitely_not_work'
+    long_name = 'incredibly_and_very_long_name_that_will_definitely_not_work'
     tree = parse_ast_tree(mode(naming_template.format(long_name)))
 
     visitor = WrongNameVisitor(default_options, tree=tree)
