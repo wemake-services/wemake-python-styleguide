@@ -79,6 +79,9 @@ class Configuration(object):
     - ``max-base-classes`` - maximum number of parent classes inside a class
       definition, defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_BASE_CLASSES`
+    - ``max-decorators`` - maximum number of decorators for single function
+      or class definition, defaults to
+      :str:`wemake_python_styleguide.options.defaults.MAX_DECORATORS`
 
     All options are configurable via ``flake8`` CLI.
 
@@ -159,6 +162,12 @@ class Configuration(object):
             '--max-base-classes',
             defaults.MAX_BASE_CLASSES,
             'Maximum number of base classes.',
+        ),
+
+        _Option(
+            '--max-decorators',
+            defaults.MAX_DECORATORS,
+            'Maximum number of decorators.',
         ),
 
         # General:

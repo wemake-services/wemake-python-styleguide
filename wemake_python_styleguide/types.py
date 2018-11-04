@@ -66,3 +66,4 @@ class ConfigurationOptions(Protocol):
     max_jones_score: int
     max_imports: int
     max_base_classes: int
+    max_decorators: int

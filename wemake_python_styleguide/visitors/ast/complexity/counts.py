@@ -8,6 +8,7 @@ from wemake_python_styleguide.logics.functions import is_method
 from wemake_python_styleguide.types import AnyFunctionDef, AnyImport, final
 from wemake_python_styleguide.violations.complexity import (
     TooManyConditionsViolation,
+    TooManyDecoratorsViolation,
     TooManyElifsViolation,
     TooManyImportsViolation,
     TooManyMethodsViolation,
@@ -42,6 +43,15 @@ class ModuleMembersVisitor(BaseNodeVisitor):
         if isinstance(parent, ast.Module) and not is_real_method:
             self._public_items_count += 1
 
+    def _check_decorators_count(self, node: ModuleMembers) -> None:
+        number_of_decorators = len(node.decorator_list)
+        if number_of_decorators > self.options.max_decorators:
+            self.add_violation(
+                TooManyDecoratorsViolation(
+                    node, text=str(number_of_decorators),
+                ),
+            )
+
     def _post_visit(self) -> None:
         if self._public_items_count > self.options.max_module_members:
             self.add_violation(
@@ -58,6 +68,7 @@ class ModuleMembersVisitor(BaseNodeVisitor):
             TooManyModuleMembersViolation
 
         """
+        self._check_decorators_count(node)
         self._check_members_count(node)
         self.generic_visit(node)
 

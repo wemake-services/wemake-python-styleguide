@@ -896,6 +896,7 @@ class UnusedArgumentViolation(ASTViolation):
     Reasoning:
         Having unused arguments is confusing. Why do we have them?
         Is it some kind of API we must stick to? Or is it just an error?
+        This rule is heavy related with :class:`UnusedArgumentIsUsedViolation`.
 
     Solution:
         There are two possible solutions.

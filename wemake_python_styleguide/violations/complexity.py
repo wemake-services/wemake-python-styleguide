@@ -33,12 +33,13 @@ Summary
    TooManyReturnsViolation
    TooManyExpressionsViolation
    TooManyMethodsViolation
+   TooManyBaseClassesViolation
+   TooManyDecoratorsViolation
    TooDeepNestingViolation
    LineComplexityViolation
    TooManyConditionsViolation
    TooManyElifsViolation
    TooManyForsInComprehensionViolation
-   TooManyBaseClassesViolation
 
 Module complexity
 -----------------
@@ -56,6 +57,7 @@ Function and class complexity
 .. autoclass:: TooManyExpressionsViolation
 .. autoclass:: TooManyMethodsViolation
 .. autoclass:: TooManyBaseClassesViolation
+.. autoclass:: TooManyDecoratorsViolation
 
 Structures complexity
 ---------------------
@@ -354,7 +356,8 @@ class TooManyBaseClassesViolation(ASTViolation):
         Do not overuse this technique.
 
     Solution:
-        Restrict the number of base classes.
+        Reduce the number of base classes.
+        Use composition over inheritance.
 
     Example::
 
@@ -378,10 +381,45 @@ class TooManyBaseClassesViolation(ASTViolation):
     .. versionadded:: 0.3.0
     .. versionchanged:: 0.5.0
 
+    See also:
+        https://en.wikipedia.org/wiki/Composition_over_inheritance
+
     """
 
     error_template = 'Too many base classes: {0}'
     code = 215
+
+
+class TooManyDecoratorsViolation(ASTViolation):
+    """
+    Restrict the maximum number of decorators.
+
+    Reasoning:
+        When you are using too many decorators it means that
+        you try to overuse the magic.
+        You have to ask youself: do I really know what happens inside
+        this decorator tree? Typically, the answer will be "no".
+
+    Solution:
+        Using too many decorators typically means that
+        you try to configure the behavior from outside of the class.
+        Do not do that too much.
+        Split functions or classes into multiple ones.
+        Use higher order decorators.
+
+    Configuration:
+        This rule is configurable with ``--max-decorators``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_DECORATORS`
+
+    This rule checks: functions, methods, and classes.
+
+    .. versionadded:: 0.5.0
+
+    """
+
+    error_template = 'Too many decorators: {0}'
+    code = 216
 
 
 # Structures:

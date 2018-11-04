@@ -56,3 +56,6 @@ MAX_IMPORTS: Final = 12
 
 #: Maximum number of base classes.
 MAX_BASE_CLASSES: Final = 3
+
+#: Maximum number of decorators.
+MAX_DECORATORS: Final = 5

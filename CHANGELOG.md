@@ -14,6 +14,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use `lambda` inside loops
 - Forbids to have unused arguments in functions and methods
 - Reserving names `self`, `cls`, and `mcs` for first arguments only
+- Forbids to use too many decorators
 
 ## Bugfixes
 
