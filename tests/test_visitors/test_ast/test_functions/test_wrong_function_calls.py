@@ -2,11 +2,11 @@
 
 import pytest
 
+from wemake_python_styleguide.constants import FUNCTIONS_BLACKLIST
 from wemake_python_styleguide.violations.best_practices import (
     WrongFunctionCallViolation,
 )
 from wemake_python_styleguide.visitors.ast.functions import (
-    FUNCTIONS_BLACKLIST,
     WrongFunctionCallVisitor,
 )
 

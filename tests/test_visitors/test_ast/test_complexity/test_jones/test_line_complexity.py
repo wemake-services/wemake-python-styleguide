@@ -152,7 +152,10 @@ def test_exact_complexity(parse_ast_tree, default_options, code, complexity):
     (class_with_usual_and_async_function, 3),
 ])
 def test_that_some_nodes_are_ignored(
-    parse_ast_tree, default_options, code, assert_errors, number_of_lines,
+    parse_ast_tree,
+    default_options,
+    code,
+    number_of_lines,
 ):
     """Ensures that complexity is counted correctly."""
     tree = parse_ast_tree(code)

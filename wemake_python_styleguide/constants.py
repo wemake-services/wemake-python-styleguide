@@ -91,6 +91,13 @@ VARIABLE_NAMES_BLACKLIST: Final = frozenset((
     'baz',
 ))
 
+#: List of special names that are used only as first argument in methods.
+SPECIAL_ARGUMENT_NAMES_WHITELIST: Final = frozenset((
+    'self',
+    'cls',
+    'mcs',
+))
+
 #: List of magic methods that are forbidden to use.
 MAGIC_METHODS_BLACKLIST: Final = frozenset((
     # Since we don't use `del`:

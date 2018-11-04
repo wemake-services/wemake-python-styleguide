@@ -4,13 +4,11 @@ from wemake_python_styleguide.visitors.ast import (
     attributes,
     builtins,
     comparisons,
+    functions,
     keywords,
     naming,
 )
 from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
-from wemake_python_styleguide.visitors.ast.functions import (
-    WrongFunctionCallVisitor,
-)
 from wemake_python_styleguide.visitors.ast.imports import WrongImportVisitor
 from wemake_python_styleguide.visitors.ast.modules import (
     EmptyModuleContentsVisitor,
@@ -30,7 +28,9 @@ GENERAL_PRESET = (
 
     attributes.WrongAttributeVisitor,
 
-    WrongFunctionCallVisitor,
+    functions.WrongFunctionCallVisitor,
+    functions.FunctionDefinitionVisitor,
+
     WrongImportVisitor,
 
     naming.WrongNameVisitor,

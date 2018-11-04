@@ -28,6 +28,8 @@ We know that people might not agree with 100% of our rules.
 But we still want to provide the best experience for all users.
 
 So, you can disable some checks, that you are not ok with.
+**Note**: you might accidentally break the consistency of this project,
+when you disable some checks. We **do not** officially recommend to do it.
 
 There are three ways to ignore some specific violations:
 

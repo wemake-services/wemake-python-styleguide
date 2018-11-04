@@ -25,4 +25,5 @@ def get_assigned_name(node: ast.AST) -> Optional[str]:
 
     if isinstance(node, ast.ExceptHandler):
         return getattr(node, 'name', None)
+
     return None

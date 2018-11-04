@@ -12,6 +12,8 @@ We used to have incremental versioning before `0.1.0`.
 - **Breaking**: changes default `TooManyConditionsViolation` threshold to `4`
 - **Breaking**: changes `TooManyBaseClassesViolation` code from ``225`` to ``215``
 - Forbids to use `lambda` inside loops
+- Forbids to have unused arguments in functions and methods
+- Reserving names `self`, `cls`, and `mcs` for first arguments only
 
 ## Bugfixes
 
@@ -20,6 +22,7 @@ We used to have incremental versioning before `0.1.0`.
 - Fixes `TooManyForsInComprehensionViolation` to find all comprehension types
 - Fixes `TooManyElifsViolation` to check module level conditions
 - Fixes `TooManyBaseClassesViolation` docs location
+- Now checking `lambda` argument names
 
 ### Misc
 

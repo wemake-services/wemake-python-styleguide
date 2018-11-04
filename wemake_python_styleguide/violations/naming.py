@@ -22,7 +22,7 @@ General
 - Use names of an appropriate length: not too short, not too long
 - Protected members should use underscore as the first char
 - Private names with two leading underscores are not allowed
-- If you need to explicitly state that variable is unused name it as ``_``
+- If you need to explicitly state that variable is unused, name it as ``_``
 - Do not use consecutive underscores
 - When writing abbreviations in ``UpperCase``
   capitalize all letters: ``HTTPAddress``
@@ -117,6 +117,7 @@ Summary
    UnderscoredNumberNameViolation
    UpperCaseAttributeViolation
    ConsecutiveUnderscoresInNameViolation
+   ReservedArgumentNameViolation
 
 
 Module names
@@ -136,6 +137,7 @@ General names
 .. autoclass:: UnderscoredNumberNameViolation
 .. autoclass:: UpperCaseAttributeViolation
 .. autoclass:: ConsecutiveUnderscoresInNameViolation
+.. autoclass:: ReservedArgumentNameViolation
 
 """
 
@@ -479,3 +481,32 @@ class ConsecutiveUnderscoresInNameViolation(MaybeASTViolation):
 
     error_template = 'Found consecutive underscores name: {0}'
     code = 116
+
+
+@final
+class ReservedArgumentNameViolation(ASTViolation):
+    """
+    Forbids to name your variables as ``self``, ``cls``, and ``mcs``.
+
+    Reasoning:
+        These names are special, they should only be used as first
+        arguments inside methods.
+
+    Example::
+
+        # Correct:
+        class Test(object):
+            def __init__(self):
+                ...
+
+        # Wrong:
+        cls = 5
+
+    This rule checks: functions and methods.
+
+    .. versionadded:: 0.5.0
+
+    """
+
+    error_template = 'Found name reserved for first argument: {0}'
+    code = 117

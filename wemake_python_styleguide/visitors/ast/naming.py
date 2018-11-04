@@ -1,25 +1,26 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import List, Tuple, Union
+from typing import Callable, List, Tuple, Union
 
 from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
+    SPECIAL_ARGUMENT_NAMES_WHITELIST,
     VARIABLE_NAMES_BLACKLIST,
 )
+from wemake_python_styleguide.logics import functions
 from wemake_python_styleguide.logics.naming import access, logical, name_nodes
-from wemake_python_styleguide.types import AnyFunctionDef, AnyImport, final
+from wemake_python_styleguide.types import (
+    AnyFunctionDef,
+    AnyFunctionDefAndLambda,
+    AnyImport,
+    ConfigurationOptions,
+    final,
+)
+from wemake_python_styleguide.violations import base, naming
 from wemake_python_styleguide.violations.best_practices import (
     ReassigningVariableToItselfViolation,
     WrongModuleMetadataViolation,
-)
-from wemake_python_styleguide.violations.naming import (
-    ConsecutiveUnderscoresInNameViolation,
-    PrivateNameViolation,
-    TooShortNameViolation,
-    UnderscoredNumberNameViolation,
-    UpperCaseAttributeViolation,
-    WrongVariableNameViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
@@ -27,6 +28,90 @@ from wemake_python_styleguide.visitors.decorators import alias
 VariableDef = Union[ast.Name, ast.Attribute, ast.ExceptHandler]
 AssignTargets = List[ast.expr]
 AssignTargetsNameList = List[Union[str, Tuple[str]]]
+
+
+class _NameValidator(object):
+    """Utility class to separate logic from the visitor."""
+
+    def __init__(
+        self,
+        error_callback: Callable[[base.BaseViolation], None],  # TODO: alias
+        options: ConfigurationOptions,
+    ) -> None:
+        """Creates new instance of a name validator."""
+        self._error_callback = error_callback
+        self._options = options
+
+    def _ensure_underscores(self, node: ast.AST, name: str):
+        if access.is_private(name):
+            self._error_callback(
+                naming.PrivateNameViolation(node, text=name),
+            )
+
+        if logical.does_contain_underscored_number(name):
+            self._error_callback(
+                naming.UnderscoredNumberNameViolation(node, text=name),
+            )
+
+        if logical.does_contain_consecutive_underscores(name):
+            self._error_callback(
+                naming.ConsecutiveUnderscoresInNameViolation(
+                    node, text=name,
+                ),
+            )
+
+    def _ensure_length(self, node: ast.AST, name: str) -> None:
+        # TODO: check too long names
+        min_length = self._options.min_name_length
+        if logical.is_too_short_name(name, min_length=min_length):
+            self._error_callback(naming.TooShortNameViolation(node, text=name))
+
+    def check_name(
+        self,
+        node: ast.AST,
+        name: str,
+        is_first_argument: bool = False,
+    ) -> None:
+        if logical.is_wrong_name(name, VARIABLE_NAMES_BLACKLIST):
+            self._error_callback(
+                naming.WrongVariableNameViolation(node, text=name),
+            )
+
+        if not is_first_argument:
+            if logical.is_wrong_name(name, SPECIAL_ARGUMENT_NAMES_WHITELIST):
+                self._error_callback(
+                    naming.ReservedArgumentNameViolation(node, text=name),
+                )
+
+        self._ensure_length(node, name)
+        self._ensure_underscores(node, name)
+
+    def check_function_signature(self, node: AnyFunctionDefAndLambda) -> None:
+        arguments = functions.get_all_arguments(node)
+        is_lambda = isinstance(node, ast.Lambda)
+        for arg in arguments:
+            should_check_argument = functions.is_first_argument(
+                node, arg.arg,
+            ) and not is_lambda
+
+            self.check_name(
+                node, arg.arg, is_first_argument=should_check_argument,
+            )
+
+    def check_attribute_name(self, node: ast.ClassDef) -> None:
+        top_level_assigns = [
+            sub_node
+            for sub_node in node.body
+            if isinstance(sub_node, ast.Assign)
+        ]
+
+        for assignment in top_level_assigns:
+            for target in assignment.targets:
+                name = getattr(target, 'id', None)
+                if logical.is_upper_case_name(name):
+                    self._error_callback(
+                        naming.UpperCaseAttributeViolation(target, text=name),
+                    )
 
 
 @final
@@ -46,52 +131,10 @@ AssignTargetsNameList = List[Union[str, Tuple[str]]]
 class WrongNameVisitor(BaseNodeVisitor):
     """Performs checks based on variable names."""
 
-    def _check_name(self, node: ast.AST, name: str) -> None:
-
-        if logical.is_wrong_name(name, VARIABLE_NAMES_BLACKLIST):
-            self.add_violation(WrongVariableNameViolation(node, text=name))
-
-        min_length = self.options.min_name_length
-        if logical.is_too_short_name(name, min_length=min_length):
-            self.add_violation(TooShortNameViolation(node, text=name))
-
-        if access.is_private(name):
-            self.add_violation(PrivateNameViolation(node, text=name))
-
-        if logical.does_contain_underscored_number(name):
-            self.add_violation(UnderscoredNumberNameViolation(node, text=name))
-        if logical.does_contain_consecutive_underscores(name):
-            self.add_violation(
-                ConsecutiveUnderscoresInNameViolation(node, text=name),
-            )
-
-    def _check_function_signature(self, node: AnyFunctionDef) -> None:
-        for arg in node.args.args:
-            self._check_name(node, arg.arg)
-
-        for arg in node.args.kwonlyargs:
-            self._check_name(node, arg.arg)
-
-        if node.args.vararg:
-            self._check_name(node, node.args.vararg.arg)
-
-        if node.args.kwarg:
-            self._check_name(node, node.args.kwarg.arg)
-
-    def _check_attribute_name(self, node: ast.ClassDef) -> None:
-        top_level_assigns = [
-            sub_node
-            for sub_node in node.body
-            if isinstance(sub_node, ast.Assign)
-        ]
-
-        for assignment in top_level_assigns:
-            for target in assignment.targets:
-                name = getattr(target, 'id', None)
-                if logical.is_upper_case_name(name):
-                    self.add_violation(
-                        UpperCaseAttributeViolation(target, text=name),
-                    )
+    def __init__(self, *args, **kwargs) -> None:
+        """Initializes new naming validator for this visitor."""
+        super().__init__(*args, **kwargs)
+        self._validator = _NameValidator(self.add_violation, self.options)
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """
@@ -101,7 +144,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             UpperCaseAttributeViolation
 
         """
-        self._check_attribute_name(node)
+        self._validator.check_attribute_name(node)
         self.generic_visit(node)
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
@@ -114,8 +157,21 @@ class WrongNameVisitor(BaseNodeVisitor):
             PrivateNameViolation
 
         """
-        self._check_name(node, node.name)
-        self._check_function_signature(node)
+        self._validator.check_name(node, node.name)
+        self._validator.check_function_signature(node)
+        self.generic_visit(node)
+
+    def visit_Lambda(self, node: ast.Lambda) -> None:
+        """
+        Used to find wrong parameters.
+
+        Raises:
+            WrongVariableNameViolation
+            TooShortNameViolation
+            PrivateNameViolation
+
+        """
+        self._validator.check_function_signature(node)
         self.generic_visit(node)
 
     def visit_any_import(self, node: AnyImport) -> None:
@@ -130,7 +186,7 @@ class WrongNameVisitor(BaseNodeVisitor):
         """
         for alias_node in node.names:
             if alias_node.asname:
-                self._check_name(node, alias_node.asname)
+                self._validator.check_name(node, alias_node.asname)
 
         self.generic_visit(node)
 
@@ -147,7 +203,7 @@ class WrongNameVisitor(BaseNodeVisitor):
         variable_name = name_nodes.get_assigned_name(node)
 
         if variable_name is not None:
-            self._check_name(node, variable_name)
+            self._validator.check_name(node, variable_name)
         self.generic_visit(node)
 
 

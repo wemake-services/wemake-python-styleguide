@@ -24,22 +24,22 @@ class Input(object):
 
 # Function arguments:
 
-function_argument = 'def test({0}): ...'
+function_argument = 'def test(arg, {0}): ...'
 
 method_argument = """
 class Input(object):
     def validate(self, {0}): ...
 """
 
-function_keyword_argument = 'def test({0}=None): ...'
+function_keyword_argument = 'def test(arg, {0}=None): ...'
 
 method_keyword_argument = """
 class Input(object):
     def validate(self, {0}=None): ...
 """
 
-function_args_argument = 'def test(*{0}): ...'
-function_kwargs_argument = 'def test(**{0}): ...'
+function_args_argument = 'def test(arg, *{0}): ...'
+function_kwargs_argument = 'def test(arg, **{0}): ...'
 
 method_args_argument = """
 class Input(object):
@@ -59,6 +59,8 @@ method_kwonly_argument = """
 class Input(object):
     def test(self, *, {0}=True): ...
 """
+
+lambda_argument = 'lambda {0}: ...'
 
 # Class attributes:
 
@@ -121,6 +123,7 @@ except Exception as {0}:
     method_kwargs_argument,
     function_kwonly_argument,
     method_kwonly_argument,
+    lambda_argument,
 
     # Class attributes:
     static_attribute,

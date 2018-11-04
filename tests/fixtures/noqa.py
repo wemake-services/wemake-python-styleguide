@@ -33,6 +33,7 @@ x = 2  # noqa: Z111
 __private = 3  # noqa: Z112
 star_wars_episode_7 = 'the worst episode ever'  # noqa: Z114
 consecutive__underscores = 4  # noqa: Z116
+cls = 5  # noqa: Z117
 __author__ = 'Nikita Sobolev'  # noqa: Z410
 
 some._execute()  # noqa: Z441
@@ -42,7 +43,7 @@ def many_locals():  # noqa: Z210
     arg1, arg2, arg3, arg4, arg5, arg6 = range(6)
 
 
-def many_arguments(arg1, arg2, arg3, arg4, arg5, arg6):  # noqa: Z211
+def many_arguments(_arg1, _arg2, _arg3, _arg4, _arg5, _arg6):  # noqa: Z211
     ...
 
 
@@ -116,7 +117,7 @@ class BadClass:  # noqa: Z306
     async def some_async_static():
         ...
 
-    def __del__(self, *args, **kwargs):  # noqa: Z434
+    def __del__(self, *_args, **_kwargs):  # noqa: Z434
         ...
 
     class Nested:  # noqa: Z306,Z431
@@ -179,3 +180,11 @@ class Example(object):
 
 for index in range(6):  # noqa: Z442
     print(lambda: index)
+
+
+def function(first, second):  # noqa: Z443
+    return first + 1
+
+
+def function(_first):  # noqa: Z444
+    return _first + 1

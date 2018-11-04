@@ -5,7 +5,7 @@ from collections import defaultdict
 from typing import ClassVar, DefaultDict, List
 
 from wemake_python_styleguide.constants import UNUSED_VARIABLE
-from wemake_python_styleguide.logics.functions import is_method
+from wemake_python_styleguide.logics import functions
 from wemake_python_styleguide.types import (
     AnyFunctionDef,
     AnyFunctionDefAndLambda,
@@ -76,18 +76,12 @@ class _ComplexityCounter(object):
 
     def check_arguments_count(self, node: AnyFunctionDefAndLambda) -> None:
         """Checks the number of the arguments in a function."""
-        counter = 0
         has_extra_arg = 0
-        if is_method(getattr(node, 'function_type', None)):
+        if functions.is_method(getattr(node, 'function_type', None)):
             has_extra_arg = 1
 
-        counter += len(node.args.args) + len(node.args.kwonlyargs)
-        if node.args.vararg:
-            counter += 1
-        if node.args.kwarg:
-            counter += 1
-
-        self.arguments[node] = counter - has_extra_arg
+        arguments = functions.get_all_arguments(node)
+        self.arguments[node] = len(arguments) - has_extra_arg
 
     def check_function_complexity(self, node: AnyFunctionDef) -> None:
         """

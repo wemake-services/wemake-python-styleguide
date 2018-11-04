@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from ast import Call
-from typing import Iterable, Optional
+from ast import Call, arg
+from typing import Iterable, List, Optional
+
+from wemake_python_styleguide.types import AnyFunctionDefAndLambda
 
 
 def given_function_called(node: Call, to_check: Iterable[str]) -> str:
@@ -49,3 +51,27 @@ def is_method(function_type: Optional[str]) -> bool:
 
     """
     return function_type in ['method', 'classmethod']
+
+
+def get_all_arguments(node: AnyFunctionDefAndLambda) -> List[arg]:
+    """Returns list of all arguments that exist in a function."""
+    names = [
+        *node.args.args,
+        *node.args.kwonlyargs,
+    ]
+
+    if node.args.vararg:
+        names.append(node.args.vararg)
+
+    if node.args.kwarg:
+        names.append(node.args.kwarg)
+
+    return names
+
+
+def is_first_argument(node: AnyFunctionDefAndLambda, name: str) -> bool:
+    """Tells whether an argument name is the logically first in function."""
+    if not node.args.args:
+        return False
+
+    return name == node.args.args[0].arg
