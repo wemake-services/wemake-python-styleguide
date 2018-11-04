@@ -140,4 +140,3 @@ def test_naming_correct(
     visitor.run()
 
     assert_errors(visitor, [])
-
