@@ -70,8 +70,16 @@ def parse_ast_tree():
         _maybe_set_function_type,
     ]
 
-    def factory(code: str) -> ast.AST:
-        tree = ast.parse(dedent(code))
+    def factory(code: str, do_compile: bool = True) -> ast.AST:
+        code_to_parse = dedent(code)
+
+        if do_compile:
+            # We need to compile to check some syntax features
+            # that are validated after the `ast` is processed:
+            # like double arguments or `break` outside of loops.
+            compile(code_to_parse, '<filename>', 'exec')  # noqa: Z421
+        tree = ast.parse(code_to_parse)
+
         for transform in transformation_pipeline:
             tree = transform(tree)
         return tree

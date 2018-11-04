@@ -19,7 +19,7 @@ future_import_alias = 'from __future__ import {0} as some_alias'
 ])
 @pytest.mark.parametrize('to_import', [
     'print_function',
-    'custom_value',
+    'with_statement',
     'unicode_literals',
 ])
 def test_wrong_future_import(
@@ -65,7 +65,7 @@ def test_correct_future_import(
     assert_errors, parse_ast_tree, code, to_import, default_options,
 ):
     """Testing that some future imports are not restricted."""
-    tree = parse_ast_tree(code.format(to_import))
+    tree = parse_ast_tree(code.format(to_import), do_compile=False)
 
     visitor = WrongImportVisitor(default_options, tree=tree)
     visitor.run()

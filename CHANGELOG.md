@@ -32,6 +32,7 @@ We used to have incremental versioning before `0.1.0`.
 - Improves docs: now `_pages/` is named just `pages/`
 - Improves tests: now testing different keywords separately
 - Improves tests: now all violations must be contained in `test_noqa.py`
+- Imporves tests: now we also run `compile()` on all `ast` examples
 
 
 ## 0.4.0

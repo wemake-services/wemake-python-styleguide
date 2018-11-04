@@ -8,8 +8,8 @@ from wemake_python_styleguide.violations.best_practices import (
 from wemake_python_styleguide.visitors.ast.keywords import WrongKeywordVisitor
 
 global_in_module = """
-some = 0
 global some
+some = 0
 """
 
 global_in_function = """
