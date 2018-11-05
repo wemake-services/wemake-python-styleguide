@@ -118,7 +118,7 @@ Summary
    UpperCaseAttributeViolation
    ConsecutiveUnderscoresInNameViolation
    ReservedArgumentNameViolation
-   AnonymousVariableViolation
+   AnonymousVariableUseViolation
 
 
 Module names
@@ -139,7 +139,7 @@ General names
 .. autoclass:: UpperCaseAttributeViolation
 .. autoclass:: ConsecutiveUnderscoresInNameViolation
 .. autoclass:: ReservedArgumentNameViolation
-.. autoclass:: AnonymousVariableViolation
+.. autoclass:: AnonymousVariableUseViolation
 
 """
 
@@ -494,7 +494,7 @@ class ReservedArgumentNameViolation(ASTViolation):
         These names are special, they should only be used as first
         arguments inside methods.
 
-        Example::
+    Example::
 
         # Correct:
         class Test(object):
@@ -509,18 +509,30 @@ class ReservedArgumentNameViolation(ASTViolation):
     .. versionadded:: 0.5.0
 
     """
-    
-class AnonymousVariableViolation(ASTViolation):
+
+    error_template = 'Found name reserved for first argument: {0}'
+    code = 117
+
+
+@final
+class AnonymousVariableUseViolation(ASTViolation):
     """
     Forbids to use ``_`` anonymous variable.
 
     Reasoning:
-        Anonymous variable should be avoided for better readability.
+        Use ``_`` anonymous variable only to discard values.
 
-    Solution:
-        Use a proper variable name.
+    Example::
 
+        # Correct:
+        key, _ = a_tuple
+        a_list = [random_fun() for _ in range(10)]
 
+        # Wrong:
+        print(_)
+        x = 42 * _
+
+    This rule checks: variables.
 
     .. versionadded:: 0.5.0
 
@@ -530,5 +542,5 @@ class AnonymousVariableViolation(ASTViolation):
     """
 
     #: Error message shown to the user.
-    error_template = 'Found anonymous variable: {0}'
+    error_template = 'Found using anonymous variable to store value: {0}'
     code = 119
