@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Callable, List, Tuple, Union
+import re
+from typing import Callable, ClassVar, List, Tuple, Union
+from typing.re import Pattern
 
 from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
@@ -32,6 +34,8 @@ AssignTargetsNameList = List[Union[str, Tuple[str]]]
 
 class _NameValidator(object):
     """Utility class to separate logic from the visitor."""
+
+    _unicode_pattern: ClassVar[Pattern] = re.compile(r'([a-zA-Z_0-9]+)')
 
     def __init__(
         self,
@@ -82,6 +86,11 @@ class _NameValidator(object):
                 self._error_callback(
                     naming.ReservedArgumentNameViolation(node, text=name),
                 )
+        matches = self._unicode_pattern.match(name)
+        if not matches or len(matches[0]) < len(name):
+            self._error_callback(
+                naming.UnicodeNameViolation(node, text=name),
+            )
 
         self._ensure_length(node, name)
         self._ensure_underscores(node, name)
@@ -142,9 +151,11 @@ class WrongNameVisitor(BaseNodeVisitor):
 
         Raises:
             UpperCaseAttributeViolation
+            UnicodeNameViolation
 
         """
         self._validator.check_attribute_name(node)
+        self._validator.check_name(node, node.name)
         self.generic_visit(node)
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
@@ -155,6 +166,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             WrongVariableNameViolation
             TooShortNameViolation
             PrivateNameViolation
+            UnicodeNameViolation
 
         """
         self._validator.check_name(node, node.name)
@@ -198,6 +210,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             WrongVariableNameViolation
             TooShortNameViolation
             PrivateNameViolation
+            UnicodeNameViolation
 
         """
         variable_name = name_nodes.get_assigned_name(node)

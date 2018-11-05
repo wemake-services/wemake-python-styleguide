@@ -49,6 +49,7 @@ for tests. We also now covering more cases and testing violation texts.
 - **Breaking**: renames `--min-variable-name-length` into `--min-name-length`
 - Dependencies: updates `flake8` version to `3.6`
 - Dependencies: removes `pycodestyle` pinned version
+- Restrict unicode names
 
 ### Bugfixes
 

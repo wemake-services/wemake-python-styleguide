@@ -118,6 +118,7 @@ Summary
    UpperCaseAttributeViolation
    ConsecutiveUnderscoresInNameViolation
    ReservedArgumentNameViolation
+   UnicodeNameViolation
 
 
 Module names
@@ -138,6 +139,7 @@ General names
 .. autoclass:: UpperCaseAttributeViolation
 .. autoclass:: ConsecutiveUnderscoresInNameViolation
 .. autoclass:: ReservedArgumentNameViolation
+.. autoclass:: UnicodeNameViolation
 
 """
 
@@ -510,3 +512,28 @@ class ReservedArgumentNameViolation(ASTViolation):
 
     error_template = 'Found name reserved for first argument: {0}'
     code = 117
+
+
+@final
+class UnicodeNameViolation(ASTViolation):
+    """
+     Restrict unicode names.
+
+    Reasoning:
+        This should be forbidden for sanity and readability.
+
+    Solution:
+        Rename so that they contains only latin letters.
+
+    Example::
+        # Correct:
+            some_variable = 42
+        #Wrong:
+            переменная = 42
+
+    .. versionadded:: 0.5.0
+
+    """
+
+    error_template = 'Found unicode name: {0}'
+    code = 118
