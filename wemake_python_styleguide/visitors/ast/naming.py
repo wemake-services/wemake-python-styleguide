@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
-import re
-from typing import Callable, ClassVar, List, Tuple, Union
-from typing.re import Pattern
+from typing import Callable, List, Tuple, Union
 
 from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
@@ -34,8 +32,6 @@ AssignTargetsNameList = List[Union[str, Tuple[str]]]
 
 class _NameValidator(object):
     """Utility class to separate logic from the visitor."""
-
-    _unicode_pattern: ClassVar[Pattern] = re.compile(r'([a-zA-Z_0-9]+)')
 
     def __init__(
         self,
@@ -86,8 +82,9 @@ class _NameValidator(object):
                 self._error_callback(
                     naming.ReservedArgumentNameViolation(node, text=name),
                 )
-        matches = self._unicode_pattern.match(name)
-        if not matches or len(matches[0]) < len(name):
+        try:
+            name.encode('ascii')
+        except UnicodeEncodeError:
             self._error_callback(
                 naming.UnicodeNameViolation(node, text=name),
             )

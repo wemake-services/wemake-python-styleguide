@@ -526,6 +526,7 @@ class UnicodeNameViolation(ASTViolation):
         Rename so that they contains only latin letters.
 
     Example::
+
         # Correct:
             some_variable = 42
         #Wrong:
