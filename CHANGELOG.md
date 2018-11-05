@@ -31,9 +31,11 @@ We used to have incremental versioning before `0.1.0`.
 - Refactoring: improves how different keyword visitors are coupled
 - Improves docs: we have removed magic comments and code duplication
 - Improves docs: now `_pages/` is named just `pages/`
+- Improves docs: now all violations are sorted correctly
 - Improves tests: now testing different keywords separately
 - Improves tests: now all violations must be contained in `test_noqa.py`
-- Imporves tests: now we also run `compile()` on all `ast` examples
+- Improves tests: now we also run `compile()` on all `ast` examples
+- Improves tests: now we are sure about correct order of violations
 
 
 ## 0.4.0

@@ -916,6 +916,16 @@ class UnusedArgumentViolation(ASTViolation):
         def function(first, second):
             return first + 10
 
+    Please, take a note that this rule can force your to break some
+    function's signature by changing the names. This can cause that
+    named arguments will not be able to resolve and everything will fail.
+
+    Use with caution:
+
+    1. use ``mypy`` to check function signatures
+    2. ignore this rule on a per-function bases when you need strong naming
+    3. remove unused arguments when you can
+
     This rule checks: functions, methods, and ``lambda`` functions.
     We also have an exception for special arguments like:
     ``self``, ``cls``, and ``mcs``.
