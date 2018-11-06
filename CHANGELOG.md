@@ -15,6 +15,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to have unused arguments in functions and methods
 - Reserving names `self`, `cls`, and `mcs` for first arguments only
 - Forbids to use too many decorators
+- Forbids use of ``_`` anonymous variable as regular variable
 
 ## Bugfixes
 

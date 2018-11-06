@@ -118,6 +118,7 @@ Summary
    UpperCaseAttributeViolation
    ConsecutiveUnderscoresInNameViolation
    ReservedArgumentNameViolation
+   AnonymousVariableUseViolation
 
 
 Module names
@@ -138,6 +139,7 @@ General names
 .. autoclass:: UpperCaseAttributeViolation
 .. autoclass:: ConsecutiveUnderscoresInNameViolation
 .. autoclass:: ReservedArgumentNameViolation
+.. autoclass:: AnonymousVariableUseViolation
 
 """
 
@@ -510,3 +512,35 @@ class ReservedArgumentNameViolation(ASTViolation):
 
     error_template = 'Found name reserved for first argument: {0}'
     code = 117
+
+
+@final
+class AnonymousVariableUseViolation(ASTViolation):
+    """
+    Forbids to use ``_`` anonymous variable.
+
+    Reasoning:
+        Use ``_`` anonymous variable only to discard values.
+
+    Example::
+
+        # Correct:
+        key, _ = a_tuple
+        a_list = [random_fun() for _ in range(10)]
+
+        # Wrong:
+        print(_)
+        x = 42 * _
+
+    This rule checks: variables.
+
+    .. versionadded:: 0.5.0
+
+    Note:
+        Returns Z119 as error code
+
+    """
+
+    #: Error message shown to the user.
+    error_template = 'Found using anonymous variable to store value: {0}'
+    code = 119

@@ -281,3 +281,24 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
         """
         self._check_assignment(node)
         self.generic_visit(node)
+
+
+@final
+class WrongVariableUseVisitor(BaseNodeVisitor):
+    """Finds wrong use of variables."""
+
+    def _check_variable_use(self, node: ast.Name) -> None:
+        """Add violation when the anonymous variable is used to load value."""
+        if node.id == '_' and isinstance(node.ctx, ast.Load):
+            self.add_violation(naming.AnonymousVariableUseViolation(node))
+
+    def visit_Name(self, node: ast.Name) -> None:
+        """
+        Check variable usage.
+
+        Raises:
+            AnonymousVariableUseViolation
+
+        """
+        self._check_variable_use(node)
+        self.generic_visit(node)
