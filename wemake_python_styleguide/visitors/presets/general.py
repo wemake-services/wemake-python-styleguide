@@ -36,6 +36,7 @@ GENERAL_PRESET = (
     naming.WrongNameVisitor,
     naming.WrongModuleMetadataVisitor,
     naming.WrongVariableAssignmentVisitor,
+    naming.WrongVariableUseVisitor,
 
     builtins.MagicNumberVisitor,
     builtins.WrongStringVisitor,

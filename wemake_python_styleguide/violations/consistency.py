@@ -34,8 +34,8 @@ Summary
    RequiredBaseClassViolation
    MultipleIfsInComprehensionViolation
    ConstantComparisonViolation
-   BadNumberSuffixViolation
    ComparisonOrderViolation
+   BadNumberSuffixViolation
    MultipleInComparisonViolation
    RedundantComparisonViolation
    MissingSpaceBetweenKeywordAndParenViolation
@@ -54,8 +54,8 @@ Consistency checks
 .. autoclass:: RequiredBaseClassViolation
 .. autoclass:: MultipleIfsInComprehensionViolation
 .. autoclass:: ConstantComparisonViolation
-.. autoclass:: BadNumberSuffixViolation
 .. autoclass:: ComparisonOrderViolation
+.. autoclass:: BadNumberSuffixViolation
 .. autoclass:: MultipleInComparisonViolation
 .. autoclass:: RedundantComparisonViolation
 .. autoclass:: MissingSpaceBetweenKeywordAndParenViolation

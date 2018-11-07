@@ -189,3 +189,6 @@ def function(first, second):  # noqa: Z443
 
 def function(_first):  # noqa: Z444
     return _first + 1
+
+_ = 1 + 6
+print(_ * 2)  # noqa: Z119
