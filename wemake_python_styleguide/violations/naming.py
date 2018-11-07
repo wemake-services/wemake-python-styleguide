@@ -516,3 +516,44 @@ class ReservedArgumentNameViolation(ASTViolation):
 
     error_template = 'Found name reserved for first argument: {0}'
     code = 117
+
+
+@final
+class TooLongNameViolation(MaybeASTViolation):
+    """
+    Forbids to have long short variable or module names.
+
+    Reasoning:
+        Too long names are unreadable.
+        It is better to use shorter alternative.
+        Long names also indicate that this variable is too complex,
+        maybe it may require some documentation.
+
+    Solution:
+        Think of another name. Give more context to it.
+
+    This rule checks: modules, variables, attributes,
+    functions, methods, and classes.
+
+    Example::
+
+        # Correct:
+        total_price = 25
+        average_age = 45
+
+        # Wrong:
+        final_price_after_fifteen_percent_sales_tax_and_gratuity = 30
+        total_age_of_all_participants_in_the_survey_divided_by_twelve = 2
+
+    Configuration:
+        This rule is configurable with ``--max-name-length``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_NAME_LENGTH`
+
+    .. versionadded:: 0.1.0
+    .. versionchanged:: 0.4.0
+
+    """
+
+    error_template = 'Found too long name: {0}'
+    code = 120

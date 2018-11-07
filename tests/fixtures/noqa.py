@@ -36,7 +36,7 @@ star_wars_episode_7 = 'the worst episode ever'  # noqa: Z114
 consecutive__underscores = 4  # noqa: Z116
 cls = 5  # noqa: Z117
 __author__ = 'Nikita Sobolev'  # noqa: Z410
-extremely_long_name_that_needs_to_be_shortened_to_work_fine = 2  # noqa: Z117
+extremely_long_name_that_needs_to_be_shortened_to_work_fine = 2  # noqa: Z120
 
 some._execute()  # noqa: Z441
 

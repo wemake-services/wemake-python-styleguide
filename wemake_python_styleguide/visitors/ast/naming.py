@@ -61,10 +61,13 @@ class _NameValidator(object):
             )
 
     def _ensure_length(self, node: ast.AST, name: str) -> None:
-        # TODO: check too long names
         min_length = self._options.min_name_length
         if logical.is_too_short_name(name, min_length=min_length):
             self._error_callback(naming.TooShortNameViolation(node, text=name))
+
+        max_length = self._options.max_name_length
+        if logical.is_too_long_name(name, max_length=max_length):
+            self._error_callback(naming.TooLongNameViolation(node, text=name))
 
     def check_name(
         self,
@@ -170,6 +173,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             WrongVariableNameViolation
             TooShortNameViolation
             PrivateNameViolation
+            TooLongNameViolation
 
         """
         self._validator.check_function_signature(node)

@@ -175,13 +175,16 @@ def is_too_long_name(
     >>> is_too_long_name('this_is_twentynine_characters')
     False
 
-    >>> is_too_long_name('this_name_is_significantly_longer_than_the_last_and_doesnt_work')
+    >>> test = "this_name_is_significantly_longer_than_the_last_and_doesnt_work"
+    >>> is_too_long_name(test)
     True
 
-    >>> is_too_long_name('ahoy_this_name_is_exactly_fifty_six_characters_in_length')
+    >>> test = "ahoy_this_name_is_exactly_fifty_six_characters_in_length"
+    >>> is_too_long_name(test)
     True
 
-    >>> is_too_long_name('ahoy_this_name_is_exactly_fifty_six_characters_in_length', max_length=56)
+    >>> test = "ahoy_this_name_is_exactly_fifty_six_characters_in_length"
+    >>> is_too_long_name(test, max_length=56)
     False
 
     """

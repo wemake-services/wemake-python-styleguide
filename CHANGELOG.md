@@ -7,6 +7,7 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
+- Adds `TooLongNameViolation`
 - **Breaking**: removes `--max-conditions` and `--max-elifs` options
 - **Breaking**: removes `--max-offset-blocks`
 - **Breaking**: changes default `TooManyConditionsViolation` threshold from `3` to `4`
@@ -47,7 +48,6 @@ for tests. We also now covering more cases and testing violation texts.
 
 ### Features
 
-- Adds `TooLongNameViolation`
 - **Breaking**: removes duplicating module name rules, now we use the same rules
   for both variables and modules
 - **Breaking**: removes `--min-module-name-length` options
