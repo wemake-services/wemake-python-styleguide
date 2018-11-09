@@ -23,6 +23,7 @@ We used to have incremental versioning before `0.1.0`.
 - Fixes `TooManyElifsViolation` to check module level conditions
 - Fixes `TooManyBaseClassesViolation` docs location
 - Fixes `WrongVariableNameViolation` not checking `lambda` argument names
+- Fixes `OffsetVisitor` incorrect `await` handling
 
 ### Misc
 

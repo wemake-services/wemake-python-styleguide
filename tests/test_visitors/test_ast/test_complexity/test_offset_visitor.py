@@ -64,6 +64,13 @@ def container():
                         print(some)
 """
 
+# Regression for #320:
+real_await_nested_values = """
+async def update_control():
+    current_control = await too_long_name_please_find_one({'line': 1,
+                                                           'point': 1})
+"""
+
 
 @pytest.mark.parametrize('code', [
     nested_if,
@@ -83,6 +90,25 @@ def test_nested_offset(
 ):
     """Testing that nested expression with default options works well."""
     tree = parse_ast_tree(mode(code))
+
+    visitor = OffsetVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+def test_nested_offset_regression320(
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+    mode,
+):
+    """
+    Testing that await works well with long lines.
+
+    See: https://github.com/wemake-services/wemake-python-styleguide/issues/320
+    """
+    tree = parse_ast_tree(real_await_nested_values)
 
     visitor = OffsetVisitor(default_options, tree=tree)
     visitor.run()
