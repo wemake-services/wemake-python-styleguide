@@ -102,6 +102,7 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
         'Z440': 1,
         'Z441': 1,
         'Z442': 1,
+        'Z443': 1,
     }
 
     process = subprocess.Popen(

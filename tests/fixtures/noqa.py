@@ -24,9 +24,10 @@ def some():  # noqa: Z110
 
     def nested(): ...  # noqa: Z430
 
+    raise NotImplemented  # noqa: Z423
+
 
 del {'a': 1}['a'] # noqa: Z420
-raise NotImplemented  # noqa: Z423
 hasattr(object, 'some')  # noqa: Z421
 value = 1  # noqa: Z110
 x = 2  # noqa: Z111
@@ -180,3 +181,8 @@ class Example(object):
 
 for index in range(6):  # noqa: Z442
     print(lambda: index)
+
+
+def function_with_unreachable():
+    raise ValueError()
+    print(1)  # noqa: Z443

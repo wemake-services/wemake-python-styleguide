@@ -14,6 +14,8 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use `lambda` inside loops
 - Reserving names `self`, `cls`, and `mcs` for first arguments only
 - Forbids to use too many decorators
+- Now `RedundantLoopElseViolation` also checks `while` loops
+- Forbids to have unreachable code
 
 ## Bugfixes
 

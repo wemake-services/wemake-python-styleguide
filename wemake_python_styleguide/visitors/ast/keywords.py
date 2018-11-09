@@ -11,7 +11,7 @@ from wemake_python_styleguide.violations.best_practices import (
     LambdaInsideLoopViolation,
     RaiseNotImplementedViolation,
     RedundantFinallyViolation,
-    RedundantForElseViolation,
+    RedundantLoopElseViolation,
     WrongKeywordViolation,
 )
 from wemake_python_styleguide.violations.complexity import (
@@ -21,6 +21,7 @@ from wemake_python_styleguide.violations.consistency import (
     MultipleIfsInComprehensionViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
+from wemake_python_styleguide.visitors.decorators import alias
 
 AnyLoop = Union[ast.For, ast.While]
 
@@ -124,6 +125,10 @@ class WrongComprehensionVisitor(BaseNodeVisitor):
 
 
 @final
+@alias('visit_any_loop', (
+    'visit_For',
+    'visit_While',
+))
 class WrongLoopVisitor(BaseNodeVisitor):
     """Responsible for examining loops."""
 
@@ -141,7 +146,7 @@ class WrongLoopVisitor(BaseNodeVisitor):
                 return True
         return False
 
-    def _has_break(self, node: ast.For) -> bool:
+    def _has_break(self, node: AnyLoop) -> bool:
         closest_loop = None
 
         for subnode in ast.walk(node):
@@ -157,37 +162,26 @@ class WrongLoopVisitor(BaseNodeVisitor):
                     return True
         return False
 
-    def _check_for_needs_else(self, node: ast.For) -> None:
+    def _check_loop_needs_else(self, node: AnyLoop) -> None:
         if node.orelse and not self._has_break(node):
-            self.add_violation(RedundantForElseViolation(node))
+            self.add_violation(RedundantLoopElseViolation(node))
 
-    def _check_lambda_inside(self, node: AnyLoop) -> None:
+    def _check_lambda_inside_loop(self, node: AnyLoop) -> None:
         for subnode in node.body:
             if is_contained(subnode, (ast.Lambda,)):
                 self.add_violation(LambdaInsideLoopViolation(node))
 
-    def visit_For(self, node: ast.For) -> None:
+    def visit_any_loop(self, node: AnyLoop) -> None:
         """
-        Checks ``for`` loops.
+        Checks ``for`` and ``while`` loops.
 
         Raises:
-            RedundantForElseViolation
+            RedundantLoopElseViolation
             LambdaInsideLoopViolation
 
         """
-        self._check_for_needs_else(node)
-        self._check_lambda_inside(node)
-        self.generic_visit(node)
-
-    def visit_While(self, node: ast.While) -> None:
-        """
-        Checks ``while`` loops.
-
-        Raises:
-            LambdaInsideLoopViolation
-
-        """
-        self._check_lambda_inside(node)
+        self._check_loop_needs_else(node)
+        self._check_lambda_inside_loop(node)
         self.generic_visit(node)
 
 
