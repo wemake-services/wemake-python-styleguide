@@ -42,8 +42,6 @@ Summary
    ProtectedModuleViolation
    ProtectedAttributeViolation
    LambdaInsideLoopViolation
-   UnusedArgumentViolation
-   UnusedArgumentIsUsedViolation
 
 Comments
 --------
@@ -82,8 +80,6 @@ Design
 .. autoclass:: ProtectedModuleViolation
 .. autoclass:: ProtectedAttributeViolation
 .. autoclass:: LambdaInsideLoopViolation
-.. autoclass:: UnusedArgumentViolation
-.. autoclass:: UnusedArgumentIsUsedViolation
 
 """
 
@@ -886,94 +882,3 @@ class LambdaInsideLoopViolation(ASTViolation):
     should_use_text = False
     error_template = "Found `lambda` in loop's body"
     code = 442
-
-
-@final
-class UnusedArgumentViolation(ASTViolation):
-    """
-    Forbids to have unused arguments in functions and methods.
-
-    Reasoning:
-        Having unused arguments is confusing. Why do we have them?
-        Is it some kind of API we must stick to? Or is it just an error?
-        This rule is heavy related with :class:`UnusedArgumentIsUsedViolation`.
-
-    Solution:
-        There are two possible solutions.
-        Firstly, try to remove this argument if you can.
-        Secondly, you can add a leading underscore to the argument's name.
-
-    Example::
-
-        # Correct:
-        def function(first):
-            return first + 10
-
-        def function(first, _second):
-            return first + 10
-
-        # Wrong:
-        def function(first, second):
-            return first + 10
-
-    Please, take a note that this rule can force your to break some
-    function's signature by changing the names. This can cause that
-    named arguments will not be able to resolve and everything will fail.
-
-    Use with caution:
-
-    1. use ``mypy`` to check function signatures
-    2. ignore this rule on a per-function bases when you need strong naming
-    3. remove unused arguments when you can
-
-    This rule checks: functions, methods, and ``lambda`` functions.
-    We also have an exception for special arguments like:
-    ``self``, ``cls``, and ``mcs``.
-    These arguments can be unused inside defined methods.
-
-    .. versionadded:: 0.5.0
-
-    """
-
-    error_template = 'Found unused argument: {0}'
-    code = 443
-
-
-@final
-class UnusedArgumentIsUsedViolation(ASTViolation):
-    """
-    Forbids to have use arguments that are marked as unused.
-
-    Reasoning:
-        Sometimes your start to use new logic in your functions,
-        and you start to use arguments that once were marked as unused.
-        But, you have not renamed them for some reason.
-        And now you have a lot of confusion: argument is marked as unused,
-        but you are using it. Why? What's going on?
-        This rule is heavy related with :class:`UnusedArgumentViolation`.
-
-    Solution:
-        Rename your argument to be a regular argument,
-        in other words: remove the leading underscore.
-
-    Example::
-
-        # Correct:
-        def function(first):
-            return first + 10
-
-        def function(first, _second):
-            return first + 10
-
-        # Wrong:
-        def function(first, _second):
-            return first + _second
-
-    This rule checks: functions, methods, and ``lambda`` functions.
-
-    .. versionadded:: 0.5.0
-
-    """
-
-    error_template = 'Found using argument marked as unused: {0}'
-    code = 444

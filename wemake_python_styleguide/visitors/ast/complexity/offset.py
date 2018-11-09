@@ -28,7 +28,6 @@ AsyncNodes = Union[ast.AsyncFunctionDef, ast.AsyncFor, ast.AsyncWith]
     'visit_Break',
     'visit_Assign',
     'visit_Expr',
-    'visit_Await',
     'visit_Pass',
 ))
 @alias('visit_async_statement', (

@@ -9,13 +9,11 @@ We used to have incremental versioning before `0.1.0`.
 
 - **Breaking**: removes `--max-conditions` and `--max-elifs` options
 - **Breaking**: removes `--max-offset-blocks`
-- **Breaking**: changes default `TooManyConditionsViolation` threshold to `4`
+- **Breaking**: changes default `TooManyConditionsViolation` threshold from `3` to `4`
 - **Breaking**: changes `TooManyBaseClassesViolation` code from ``225`` to ``215``
 - Forbids to use `lambda` inside loops
-- Forbids to have unused arguments in functions and methods
 - Reserving names `self`, `cls`, and `mcs` for first arguments only
 - Forbids to use too many decorators
-- Forbids use of ``_`` anonymous variable as regular variable
 
 ## Bugfixes
 
@@ -24,7 +22,8 @@ We used to have incremental versioning before `0.1.0`.
 - Fixes `TooManyForsInComprehensionViolation` to find all comprehension types
 - Fixes `TooManyElifsViolation` to check module level conditions
 - Fixes `TooManyBaseClassesViolation` docs location
-- Now checking `lambda` argument names
+- Fixes `WrongVariableNameViolation` not checking `lambda` argument names
+- Fixes `OffsetVisitor` incorrect `await` handling
 
 ### Misc
 

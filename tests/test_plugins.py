@@ -29,7 +29,7 @@ def test_noqa_fixture_disabled(absolute_path):
     assert output.count('C101') > 0  # flake8-coding
     assert output.count('C400') > 0  # flake8-comprehensions
     assert output.count('C819') > 0  # flake8-commas
-    assert output.count('D100') > 0  # flake8-docstring
+    assert output.count('D103') > 0  # flake8-docstring
     assert output.count('E225') > 0  # pycodestyle
     assert output.count('E800') > 0  # flake8-eradicate
     assert output.count('F401') > 0  # flake8

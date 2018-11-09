@@ -18,11 +18,15 @@ It is partially automated with this linter, but:
 General
 ~~~~~~~
 
+- Use only ``ASCII`` chars for names
+- Do not use tranliteration from any other languages, translate names instead
 - Use clear names, do not use words that do not mean anything like ``obj``
 - Use names of an appropriate length: not too short, not too long
 - Protected members should use underscore as the first char
 - Private names with two leading underscores are not allowed
-- If you need to explicitly state that variable is unused, name it as ``_``
+- If you need to explicitly state that variable is unused,
+  prefix it with ``_`` or just use ``_`` as a name
+- Do not use variables that are stated to be unused, rename them when using
 - Do not use consecutive underscores
 - When writing abbreviations in ``UpperCase``
   capitalize all letters: ``HTTPAddress``
@@ -71,7 +75,6 @@ Method and function arguments
 - Instance methods must have their first argument named ``self``
 - Class methods must have their first argument named ``cls``
 - Metaclass methods must have their first argument named ``mcs``
-- When argument is unused it must be prefixed with an underscore: ``_param``
 - Python's ``*args`` and ``**kwargs`` should be default names
   when just passing these values to some other method/function,
   unless you want to use these values in place, then name them explicitly
@@ -118,7 +121,6 @@ Summary
    UpperCaseAttributeViolation
    ConsecutiveUnderscoresInNameViolation
    ReservedArgumentNameViolation
-   AnonymousVariableUseViolation
    UnicodeNameViolation
 
 
@@ -140,7 +142,6 @@ General names
 .. autoclass:: UpperCaseAttributeViolation
 .. autoclass:: ConsecutiveUnderscoresInNameViolation
 .. autoclass:: ReservedArgumentNameViolation
-.. autoclass:: AnonymousVariableUseViolation
 .. autoclass:: UnicodeNameViolation
 
 """
@@ -505,8 +506,10 @@ class ReservedArgumentNameViolation(ASTViolation):
 
         # Wrong:
         cls = 5
+        lambda self: self + 12
 
     This rule checks: functions and methods.
+    Having any reserved names in ``lambda`` functions is not allowed.
 
     .. versionadded:: 0.5.0
 
@@ -522,17 +525,19 @@ class UnicodeNameViolation(ASTViolation):
      Restrict unicode names.
 
     Reasoning:
-        This should be forbidden for sanity and readability.
+        This should be forbidden for sanity, readability, and writability.
 
     Solution:
-        Rename so that they contains only latin letters.
+        Rename your entities so that they contain only ASCII symbols.
 
     Example::
 
         # Correct:
-            some_variable = 42
-        #Wrong:
+            some_variable = 'Text with russian: русский язык'
+        
+        # Wrong:
             переменная = 42
+            變量 = ''
 
     .. versionadded:: 0.5.0
 
@@ -540,35 +545,3 @@ class UnicodeNameViolation(ASTViolation):
 
     error_template = 'Found unicode name: {0}'
     code = 118
-
-
-@final
-class AnonymousVariableUseViolation(ASTViolation):
-    """
-    Forbids to use ``_`` anonymous variable.
-
-    Reasoning:
-        Use ``_`` anonymous variable only to discard values.
-
-    Example::
-
-        # Correct:
-        key, _ = a_tuple
-        a_list = [random_fun() for _ in range(10)]
-
-        # Wrong:
-        print(_)
-        x = 42 * _
-
-    This rule checks: variables.
-
-    .. versionadded:: 0.5.0
-
-    Note:
-        Returns Z119 as error code
-
-    """
-
-    #: Error message shown to the user.
-    error_template = 'Found using anonymous variable to store value: {0}'
-    code = 119
