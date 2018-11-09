@@ -180,14 +180,3 @@ class Example(object):
 
 for index in range(6):  # noqa: Z442
     print(lambda: index)
-
-
-def function(first, second):  # noqa: Z443
-    return first + 1
-
-
-def function(_first):  # noqa: Z444
-    return _first + 1
-
-_ = 1 + 6
-print(_ * 2)  # noqa: Z119

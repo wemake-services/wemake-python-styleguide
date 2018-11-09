@@ -29,14 +29,12 @@ GENERAL_PRESET = (
     attributes.WrongAttributeVisitor,
 
     functions.WrongFunctionCallVisitor,
-    functions.FunctionDefinitionVisitor,
 
     WrongImportVisitor,
 
     naming.WrongNameVisitor,
     naming.WrongModuleMetadataVisitor,
     naming.WrongVariableAssignmentVisitor,
-    naming.WrongVariableUseVisitor,
 
     builtins.MagicNumberVisitor,
     builtins.WrongStringVisitor,

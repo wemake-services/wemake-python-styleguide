@@ -4,13 +4,9 @@ import string
 
 import pytest
 
-from wemake_python_styleguide.violations.naming import (
-    AnonymousVariableUseViolation,
-)
 from wemake_python_styleguide.visitors.ast.naming import (
     VARIABLE_NAMES_BLACKLIST,
     WrongNameVisitor,
-    WrongVariableUseVisitor,
 )
 
 import_name = 'import {0}'
@@ -38,23 +34,6 @@ async def function():
 yielding_variable = """
 def function():
     yield {0}
-"""
-
-anonymous_variable_store_one = """
-_ = 4 + 5
-"""
-
-anonymous_variable_store_two = """
-_, var = 'foo', 'bar'
-"""
-
-anonymous_variable_store_load_one = """
-_ = 4 + 5
-print(_)
-"""
-
-anonymous_variable_store_load_two = """
-[_ for _ in range(5)]
 """
 
 
@@ -96,41 +75,3 @@ def test_wrong_variable_names(
     visitor.run()
 
     assert_errors(visitor, [])
-
-
-@pytest.mark.parametrize('code', [
-    anonymous_variable_store_one,
-    anonymous_variable_store_two,
-])
-def test_anonymous_variable_use_correct(
-    assert_errors,
-    parse_ast_tree,
-    default_options,
-    code,
-):
-    """Ensures that anonymous variables are used to discard values."""
-    tree = parse_ast_tree(code)
-
-    visitor = WrongVariableUseVisitor(default_options, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [])
-
-
-@pytest.mark.parametrize('code', [
-    anonymous_variable_store_load_one,
-    anonymous_variable_store_load_two,
-])
-def test_anonymous_variable_use_wrong(
-    assert_errors,
-    parse_ast_tree,
-    default_options,
-    code,
-):
-    """Ensures that anonymous variables are not used to store values."""
-    tree = parse_ast_tree(code)
-
-    visitor = WrongVariableUseVisitor(default_options, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [AnonymousVariableUseViolation])
