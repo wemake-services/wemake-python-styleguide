@@ -3,6 +3,13 @@
 We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
+## WIP
+
+### Misc
+
+- Fixes build failing on Windows
+
+
 ## 0.5.0
 
 ### Features

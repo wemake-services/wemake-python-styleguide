@@ -30,6 +30,7 @@ install:
 build: off
 
 test_script:
+  - "chcp 65001"  # fixing terminal encoding
   - "poetry run mypy wemake_python_styleguide"
   - "poetry run pytest"
   - "poetry run doc8 -q docs"
