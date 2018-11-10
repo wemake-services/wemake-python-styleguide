@@ -556,4 +556,4 @@ class TooLongNameViolation(MaybeASTViolation):
     """
 
     error_template = 'Found too long name: {0}'
-    code = 120
+    code = 118
