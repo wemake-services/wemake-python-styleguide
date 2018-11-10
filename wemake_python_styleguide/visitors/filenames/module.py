@@ -6,6 +6,7 @@ from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.naming import (
     ConsecutiveUnderscoresInNameViolation,
     PrivateNameViolation,
+    TooLongNameViolation,
     TooShortNameViolation,
     UnderscoredNumberNameViolation,
     WrongModuleMagicNameViolation,
@@ -35,6 +36,10 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
         if logical.is_too_short_name(self.stem, min_length=min_length):
             self.add_violation(TooShortNameViolation(text=self.stem))
 
+        max_length = self.options.max_name_length
+        if logical.is_too_long_name(self.stem, max_length=max_length):
+            self.add_violation(TooLongNameViolation(text=self.stem))
+
     def _check_module_name_pattern(self) -> None:
         if not constants.MODULE_NAME_PATTERN.match(self.stem):
             self.add_violation(WrongModuleNamePatternViolation())
@@ -58,6 +63,7 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
             WrongModuleNamePatternViolation
             WrongModuleNameUnderscoresViolation
             UnderscoredNumberNameViolation
+            TooLongNameViolation
 
         """
         self._check_module_name()

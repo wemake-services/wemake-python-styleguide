@@ -54,6 +54,7 @@ class ConfigurationOptions(Protocol):
     # General:
     min_name_length: int
     i_control_code: bool
+    max_name_length: int
 
     # Complexity:
     max_arguments: int
