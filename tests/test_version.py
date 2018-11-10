@@ -10,6 +10,7 @@ def test_call_flake8_version():
     output = subprocess.check_output(
         ['flake8', '--version'],
         stderr=subprocess.STDOUT,
+        universal_newlines=True,
     )
     output_text = output.decode('utf-8')
 

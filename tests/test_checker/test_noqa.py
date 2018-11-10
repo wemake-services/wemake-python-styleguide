@@ -120,6 +120,7 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
+        universal_newlines=True,
     )
     stdout, _ = process.communicate()
 
@@ -141,6 +142,7 @@ def test_noqa_fixture(absolute_path):
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
+        universal_newlines=True,
     )
     stdout, _ = process.communicate()
 

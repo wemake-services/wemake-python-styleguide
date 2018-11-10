@@ -20,6 +20,7 @@ def test_noqa_fixture_disabled(absolute_path):
         ['flake8', '--disable-noqa', filename],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
+        universal_newlines=True,
     )
     stdout, _ = process.communicate()
     output = stdout.decode('utf8')
