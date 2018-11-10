@@ -36,7 +36,6 @@ __private = 3  # noqa: Z112
 star_wars_episode_7 = 'the worst episode ever'  # noqa: Z114
 consecutive__underscores = 4  # noqa: Z116
 cls = 5  # noqa: Z117
-переменная = 42  # noqa: Z118
 __author__ = 'Nikita Sobolev'  # noqa: Z410
 extremely_long_name_that_needs_to_be_shortened_to_work_fine = 2  # noqa: Z118
 привет_по_русски = 'Hello, world!'  # noqa: Z119
