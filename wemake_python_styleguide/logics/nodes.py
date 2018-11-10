@@ -25,3 +25,15 @@ def is_contained(node: ast.AST, to_check: Tuple[Type[ast.AST], ...]) -> bool:
         if isinstance(child, to_check):
             return True
     return False
+
+
+def is_doc_string(node: ast.stmt) -> bool:
+    """
+    Tells whether or not the given node is a docstring.
+
+    We call docstrings any string nodes that are placed right after
+    function, class, or module definition.
+    """
+    if not isinstance(node, ast.Expr):
+        return False
+    return isinstance(node.value, ast.Str)

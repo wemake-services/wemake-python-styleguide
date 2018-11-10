@@ -35,13 +35,15 @@ Summary
    StaticMethodViolation
    BadMagicMethodViolation
    NestedImportViolation
-   RedundantForElseViolation
+   RedundantLoopElseViolation
    RedundantFinallyViolation
    ReassigningVariableToItselfViolation
    YieldInsideInitViolation
    ProtectedModuleViolation
    ProtectedAttributeViolation
    LambdaInsideLoopViolation
+   UnreachableCodeViolation
+   StatementHasNoEffectViolation
 
 Comments
 --------
@@ -73,13 +75,15 @@ Design
 .. autoclass:: StaticMethodViolation
 .. autoclass:: BadMagicMethodViolation
 .. autoclass:: NestedImportViolation
-.. autoclass:: RedundantForElseViolation
+.. autoclass:: RedundantLoopElseViolation
 .. autoclass:: RedundantFinallyViolation
 .. autoclass:: ReassigningVariableToItselfViolation
 .. autoclass:: YieldInsideInitViolation
 .. autoclass:: ProtectedModuleViolation
 .. autoclass:: ProtectedAttributeViolation
 .. autoclass:: LambdaInsideLoopViolation
+.. autoclass:: UnreachableCodeViolation
+.. autoclass:: StatementHasNoEffectViolation
 
 """
 
@@ -639,19 +643,21 @@ class NestedImportViolation(ASTViolation):
 
 
 @final
-class RedundantForElseViolation(ASTViolation):
+class RedundantLoopElseViolation(ASTViolation):
     """
-    Forbids to use ``else`` without ``break`` in ``for`` loop.
+    Forbids to use ``else`` without ``break`` in a loop.
+
+    We use the same logic for ``for`` and ``while`` loops.
 
     Reasoning:
-        When there's no ``break`` keyword in ``for`` body it means
+        When there's no ``break`` keyword in loop's body it means
         that ``else`` will always be called.
         This rule will reduce complexity, improve readability,
         and protect from possible errors.
 
     Solution:
-        Refactor your ``else`` case logic
-        to be inside the ``for`` body.
+        Refactor your ``else`` case logic to be inside the loop's body.
+        Or right after it.
 
     Example::
 
@@ -677,7 +683,7 @@ class RedundantForElseViolation(ASTViolation):
     """
 
     should_use_text = False
-    error_template = 'Found `else` in `for` loop without `break`'
+    error_template = 'Found `else` in a loop without `break`'
     code = 436
 
 
@@ -882,3 +888,81 @@ class LambdaInsideLoopViolation(ASTViolation):
     should_use_text = False
     error_template = "Found `lambda` in loop's body"
     code = 442
+
+
+class UnreachableCodeViolation(ASTViolation):
+    """
+    Forbids to have unreachable code.
+
+    What is unreachable code? It is some lines of code that
+    can not be executed by python's interpreter.
+
+    This is probably caused by ``return`` or ``raise`` statements.
+    However, we can not cover 100% of truly unreachable code by this rule.
+    This happens due to the dynamic nature of python.
+    For example, detecting that ``1 / some_value`` would sometimes raise
+    an exception is too complicated and is out of scope of this rule.
+
+    Reasoning:
+        Having dead code in your project is an indicator that you
+        do not care about your code base at all.
+        It dramatically reduces code quality and readability.
+        It also demotivates team members.
+
+    Solution:
+        Delete any unreachable code your have.
+        Or refactor it, if this happens by your mistake.
+
+    Example::
+
+        # Correct:
+        def some_function():
+            print('This line is reachable, all good')
+            return 5
+
+        # Wrong:
+        def some_function():
+            return 5
+            print('This line is unreachable')
+
+    .. versionadded:: 0.5.0
+
+    """
+
+    should_use_text = False
+    error_template = 'Found unreachable code'
+    code = 443
+
+
+class StatementHasNoEffectViolation(ASTViolation):
+    """
+    Forbids to have statements that do nothing.
+
+    Reasoning:
+        Statements that just access the value,
+        or expressions used as statements indicate that your code
+        contains dead lines. They just pollute your codebase and do nothing.
+
+    Solution:
+        Refactor your code in case it was a typo or error.
+        Or just delete this code.
+
+    Example::
+
+        # Correct:
+        def some_function():
+            price = 8 + 2
+            return price
+
+        # Wrong:
+        def some_function():
+            8 + 2
+            print
+
+    .. versionadded:: 0.5.0
+
+    """
+
+    should_use_text = False
+    error_template = 'Found statement that has no effect'
+    code = 444

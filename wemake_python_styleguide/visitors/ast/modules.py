@@ -4,6 +4,7 @@ import ast
 
 from wemake_python_styleguide.constants import INIT
 from wemake_python_styleguide.logics.filenames import get_stem
+from wemake_python_styleguide.logics.nodes import is_doc_string
 from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.best_practices import (
     EmptyModuleViolation,
@@ -18,17 +19,6 @@ class EmptyModuleContentsVisitor(BaseNodeVisitor):
 
     def _is_init(self) -> bool:
         return get_stem(self.filename) == INIT
-
-    def _is_doc_string(self, node: ast.stmt) -> bool:
-        """
-        Tells whether or not the given node is a docstring.
-
-        We call docstrings any string nodes that are placed right after
-        function, class, or module definition.
-        """
-        if not isinstance(node, ast.Expr):
-            return False
-        return isinstance(node.value, ast.Str)
 
     def _check_module_contents(self, node: ast.Module) -> None:
         if self._is_init():
@@ -47,7 +37,7 @@ class EmptyModuleContentsVisitor(BaseNodeVisitor):
             self.add_violation(InitModuleHasLogicViolation())
             return
 
-        if not self._is_doc_string(node.body[0]):
+        if not is_doc_string(node.body[0]):
             self.add_violation(InitModuleHasLogicViolation())
 
     def visit_Module(self, node: ast.Module) -> None:

@@ -121,8 +121,8 @@ Summary
    UpperCaseAttributeViolation
    ConsecutiveUnderscoresInNameViolation
    ReservedArgumentNameViolation
+   TooLongNameViolation
    UnicodeNameViolation
-
 
 Module names
 ------------
@@ -142,6 +142,7 @@ General names
 .. autoclass:: UpperCaseAttributeViolation
 .. autoclass:: ConsecutiveUnderscoresInNameViolation
 .. autoclass:: ReservedArgumentNameViolation
+.. autoclass:: TooLongNameViolation
 .. autoclass:: UnicodeNameViolation
 
 """
@@ -518,7 +519,47 @@ class ReservedArgumentNameViolation(ASTViolation):
     error_template = 'Found name reserved for first argument: {0}'
     code = 117
 
+    
+@final
+class TooLongNameViolation(MaybeASTViolation):
+    """
+    Forbids to have long short variable or module names.
 
+    Reasoning:
+        Too long names are unreadable.
+        It is better to use shorter alternative.
+        Long names also indicate that this variable is too complex,
+        maybe it may require some documentation.
+
+    Solution:
+        Think of another name. Give less context to it.
+
+    This rule checks: modules, variables, attributes,
+    functions, methods, and classes.
+
+    Example::
+
+        # Correct:
+        total_price = 25
+        average_age = 45
+
+        # Wrong:
+        final_price_after_fifteen_percent_sales_tax_and_gratuity = 30
+        total_age_of_all_participants_in_the_survey_divided_by_twelve = 2
+
+    Configuration:
+        This rule is configurable with ``--max-name-length``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_NAME_LENGTH`
+
+    .. versionadded:: 0.5.0
+
+    """
+
+    error_template = 'Found too long name: {0}'
+    code = 118
+
+    
 @final
 class UnicodeNameViolation(ASTViolation):
     """
@@ -529,19 +570,19 @@ class UnicodeNameViolation(ASTViolation):
 
     Solution:
         Rename your entities so that they contain only ASCII symbols.
-
+        
     Example::
-
+    
         # Correct:
-            some_variable = 'Text with russian: русский язык'
+        some_variable = 'Text with russian: русский язык'
         
         # Wrong:
-            переменная = 42
-            變量 = ''
-
+        переменная = 42
+        some_變量 = ''
+        
     .. versionadded:: 0.5.0
 
     """
-
+    
     error_template = 'Found unicode name: {0}'
-    code = 118
+    code = 119

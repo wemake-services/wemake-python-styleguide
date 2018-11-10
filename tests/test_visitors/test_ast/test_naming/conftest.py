@@ -77,7 +77,7 @@ class Test(object):
 
 # Variables:
 
-variable = """
+variable_def = """
 {0} = 'test'
 """
 
@@ -130,7 +130,7 @@ except Exception as {0}:
     instance_attribute,
 
     # Variables:
-    variable,
+    variable_def,
     for_variable,
     with_variable,
     exception,

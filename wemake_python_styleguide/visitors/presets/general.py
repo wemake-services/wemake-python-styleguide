@@ -7,6 +7,7 @@ from wemake_python_styleguide.visitors.ast import (
     functions,
     keywords,
     naming,
+    statements,
 )
 from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
 from wemake_python_styleguide.visitors.ast.imports import WrongImportVisitor
@@ -20,6 +21,7 @@ from wemake_python_styleguide.visitors.filenames.module import (
 #: Used to store all general visitors to be later passed to checker:
 GENERAL_PRESET = (
     # General:
+    statements.StatementsWithBodiesVisitor,
     keywords.WrongRaiseVisitor,
     keywords.WrongKeywordVisitor,
     keywords.WrongComprehensionVisitor,
