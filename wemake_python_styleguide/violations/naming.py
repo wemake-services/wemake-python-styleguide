@@ -561,7 +561,7 @@ class TooLongNameViolation(MaybeASTViolation):
 
 
 @final
-class UnicodeNameViolation(ASTViolation):
+class UnicodeNameViolation(MaybeASTViolation):
     """
     Restrict unicode names.
 
@@ -570,6 +570,9 @@ class UnicodeNameViolation(ASTViolation):
 
     Solution:
         Rename your entities so that they contain only ASCII symbols.
+
+    This rule checks: modules, variables, attributes,
+    functions, methods, and classes.
 
     Example::
 

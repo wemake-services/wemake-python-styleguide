@@ -30,11 +30,11 @@ def is_wrong_name(name: str, to_check: Iterable[str]) -> bool:
 
     """
     for name_to_check in to_check:
-        choices_to_check = [
+        choices_to_check = {
             name_to_check,
             '_{0}'.format(name_to_check),
             '{0}_'.format(name_to_check),
-        ]
+        }
         if name in choices_to_check:
             return True
     return False
@@ -74,7 +74,7 @@ def is_too_short_name(
     min_length: int = defaults.MIN_NAME_LENGTH,
 ) -> bool:
     """
-    Checks for too short variable names.
+    Checks for too short names.
 
     >>> is_too_short_name('test')
     False
@@ -100,7 +100,7 @@ def is_too_long_name(
     max_length: int = defaults.MAX_NAME_LENGTH,
 ) -> bool:
     """
-    Checks for too long variable names.
+    Checks for too long names.
 
     >>> is_too_long_name('test')
     False
@@ -123,7 +123,7 @@ def is_too_long_name(
 
 def does_contain_underscored_number(name: str) -> bool:
     """
-    Checks for variable names with underscored number.
+    Checks for names with underscored number.
 
     >>> does_contain_underscored_number('star_wars_episode2')
     False
@@ -158,7 +158,7 @@ def does_contain_underscored_number(name: str) -> bool:
 
 def does_contain_consecutive_underscores(name: str) -> bool:
     """
-    Checks if variable contains consecutive underscores in middle of name.
+    Checks if name contains consecutive underscores in middle of name.
 
     >>> does_contain_consecutive_underscores('name')
     False
@@ -186,3 +186,28 @@ def does_contain_consecutive_underscores(name: str) -> bool:
         return True
 
     return False
+
+
+def does_contain_unicode(name: str) -> bool:
+    """
+    Check if name contains unicode characters.
+
+    >>> does_contain_unicode('hello_world1')
+    False
+
+    >>> does_contain_unicode('')
+    False
+
+    >>> does_contain_unicode('привет_мир1')
+    True
+
+    >>> does_contain_unicode('russian_техт')
+    True
+
+    """
+    try:
+        name.encode('ascii')
+    except UnicodeEncodeError:
+        return True
+    else:
+        return False

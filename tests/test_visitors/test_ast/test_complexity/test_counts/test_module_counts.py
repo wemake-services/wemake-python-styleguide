@@ -22,14 +22,14 @@ class Second(object):
     def method(self): ...
 """
 
-module_with_function_and_class_and_async_method = """
+module_with_function_and_async_method = """
 def first(): ...
 
 class Second(object):
     async def method(self): ...
 """
 
-module_with_function_and_class_and_classmethod = """
+module_with_function_and_classmethod = """
 def first(): ...
 
 class Second(object):
@@ -98,8 +98,8 @@ empty_module = ''
     empty_module,
     module_with_function_and_class,
     module_with_function_and_class_and_method,
-    module_with_function_and_class_and_async_method,
-    module_with_function_and_class_and_classmethod,
+    module_with_function_and_async_method,
+    module_with_function_and_classmethod,
     module_with_async_function_and_class,
     module_with_methods,
     module_with_async_methods,
@@ -124,8 +124,8 @@ def test_module_counts_normal(
 @pytest.mark.parametrize('code', [
     module_with_function_and_class,
     module_with_function_and_class_and_method,
-    module_with_function_and_class_and_async_method,
-    module_with_function_and_class_and_classmethod,
+    module_with_function_and_async_method,
+    module_with_function_and_classmethod,
     module_with_async_function_and_class,
     module_with_methods,
     module_with_async_methods,

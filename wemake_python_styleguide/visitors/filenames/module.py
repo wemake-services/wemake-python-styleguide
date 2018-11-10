@@ -9,6 +9,7 @@ from wemake_python_styleguide.violations.naming import (
     TooLongNameViolation,
     TooShortNameViolation,
     UnderscoredNumberNameViolation,
+    UnicodeNameViolation,
     WrongModuleMagicNameViolation,
     WrongModuleNamePatternViolation,
     WrongModuleNameViolation,
@@ -30,6 +31,9 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
 
         if access.is_private(self.stem):
             self.add_violation(PrivateNameViolation(text=self.stem))
+
+        if logical.does_contain_unicode(self.stem):
+            self.add_violation(UnicodeNameViolation(text=self.stem))
 
     def _check_module_name_length(self) -> None:
         min_length = self.options.min_name_length

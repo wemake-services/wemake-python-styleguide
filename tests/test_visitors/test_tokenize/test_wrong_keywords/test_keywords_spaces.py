@@ -92,7 +92,7 @@ def test_missing_space(
     multiline_correct_function,
     multiline_correct_statement,
 ])
-def test_fine_when_space_in_between_keyword_and_parens(
+def test_space_between_keyword_and_parens(
     parse_tokens,
     assert_errors,
     default_options,

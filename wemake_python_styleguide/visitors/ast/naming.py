@@ -85,12 +85,9 @@ class _NameValidator(object):
                 self._error_callback(
                     naming.ReservedArgumentNameViolation(node, text=name),
                 )
-        try:
-            name.encode('ascii')
-        except UnicodeEncodeError:
-            self._error_callback(
-                naming.UnicodeNameViolation(node, text=name),
-            )
+
+        if logical.does_contain_unicode(name):
+            self._error_callback(naming.UnicodeNameViolation(node, text=name))
 
         self._ensure_length(node, name)
         self._ensure_underscores(node, name)

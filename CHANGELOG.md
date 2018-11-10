@@ -3,22 +3,24 @@
 We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
-## WIP
+## 0.5.0
 
 ### Features
 
-- Adds `TooLongNameViolation`
 - **Breaking**: removes `--max-conditions` and `--max-elifs` options
 - **Breaking**: removes `--max-offset-blocks`
 - **Breaking**: changes default `TooManyConditionsViolation` threshold from `3` to `4`
 - **Breaking**: changes `TooManyBaseClassesViolation` code from ``225`` to ``215``
 - Forbids to use `lambda` inside loops
-- Reserving names `self`, `cls`, and `mcs` for first arguments only
+- Forbids to use `self`, `cls`, and `mcs` except for first arguments only
 - Forbids to use too many decorators
-- Now `RedundantLoopElseViolation` also checks `while` loops
 - Forbids to have unreachable code
 - Forbids to have statements that have no effect
+- Forbids to have too long names for modules and variables
+- Forbids to have names with unicode for modules and variables
 - Add `variable` to the blacklisted names
+- Now `RedundantLoopElseViolation` also checks `while` loops
+
 
 ## Bugfixes
 

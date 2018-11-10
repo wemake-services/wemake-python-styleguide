@@ -13,13 +13,13 @@ def first(): ...
 def second(): ...
 """
 
-module_without_methods_with_async_functions = """
+module_with_async_functions = """
 async def first(): ...
 
 async def second(): ...
 """
 
-module_without_methods_with_async_and_usual_functions = """
+module_async_and_usual_functions = """
 def first(): ...
 
 async def second(): ...
@@ -76,8 +76,8 @@ class First(object):
 
 @pytest.mark.parametrize('code', [
     module_without_methods,
-    module_without_methods_with_async_functions,
-    module_without_methods_with_async_and_usual_functions,
+    module_with_async_functions,
+    module_async_and_usual_functions,
     class_with_methods,
     class_with_async_methods,
     class_with_async_and_usual_methods,
