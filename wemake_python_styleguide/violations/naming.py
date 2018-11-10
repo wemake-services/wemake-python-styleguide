@@ -519,7 +519,7 @@ class ReservedArgumentNameViolation(ASTViolation):
     error_template = 'Found name reserved for first argument: {0}'
     code = 117
 
-    
+
 @final
 class TooLongNameViolation(MaybeASTViolation):
     """
@@ -559,30 +559,30 @@ class TooLongNameViolation(MaybeASTViolation):
     error_template = 'Found too long name: {0}'
     code = 118
 
-    
+
 @final
 class UnicodeNameViolation(ASTViolation):
     """
-     Restrict unicode names.
+    Restrict unicode names.
 
     Reasoning:
         This should be forbidden for sanity, readability, and writability.
 
     Solution:
         Rename your entities so that they contain only ASCII symbols.
-        
+
     Example::
-    
+
         # Correct:
         some_variable = 'Text with russian: русский язык'
-        
+
         # Wrong:
         переменная = 42
         some_變量 = ''
-        
+
     .. versionadded:: 0.5.0
 
     """
-    
+
     error_template = 'Found unicode name: {0}'
     code = 119

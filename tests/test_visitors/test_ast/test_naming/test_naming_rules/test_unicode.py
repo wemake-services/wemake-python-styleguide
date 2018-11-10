@@ -5,16 +5,15 @@ import pytest
 from wemake_python_styleguide.violations.naming import UnicodeNameViolation
 from wemake_python_styleguide.visitors.ast.naming import WrongNameVisitor
 
-wrong_unicode_full_unicode_name = 'тестовое_имя'
-
-wrong_unicode_part_unicode_name = 'test_имя'
-
 
 @pytest.mark.parametrize('wrong_name', [
-    wrong_unicode_full_unicode_name,
-    wrong_unicode_part_unicode_name,
+    'тестовое_имя',
+    'test_имя',
+    'сос',  # written with identical to ASCII russian chars
+    'some_變量',
+    'имя2',
 ])
-def test_function_unicode(
+def test_wrong_unicode(
     assert_errors,
     assert_error_text,
     parse_ast_tree,

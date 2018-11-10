@@ -95,6 +95,32 @@ def is_too_short_name(
     return name != constants.UNUSED_VARIABLE and len(name) < min_length
 
 
+def is_too_long_name(
+    name: str,
+    max_length: int = defaults.MAX_NAME_LENGTH,
+) -> bool:
+    """
+    Checks for too long variable names.
+
+    >>> is_too_long_name('test')
+    False
+
+    >>> is_too_long_name('this_is_twentynine_characters')
+    False
+
+    >>> is_too_long_name('this_should_fail', max_length=10)
+    True
+
+    >>> is_too_long_name('this_is_thirty_characters_long', max_length=30)
+    False
+
+    >>> is_too_long_name('this_is_thirty_characters_long', max_length=29)
+    True
+
+    """
+    return len(name) > max_length
+
+
 def does_contain_underscored_number(name: str) -> bool:
     """
     Checks for variable names with underscored number.
@@ -160,29 +186,3 @@ def does_contain_consecutive_underscores(name: str) -> bool:
         return True
 
     return False
-
-
-def is_too_long_name(
-    name: str,
-    max_length: int = defaults.MAX_NAME_LENGTH,
-) -> bool:
-    """
-    Checks for too long variable names.
-
-    >>> is_too_long_name('test')
-    False
-
-    >>> is_too_long_name('this_is_twentynine_characters')
-    False
-
-    >>> is_too_long_name('this_should_fail', max_length=10)
-    True
-
-    >>> is_too_long_name('this_is_thirty_characters_long', max_length=30)
-    False
-
-    >>> is_too_long_name('this_is_thirty_characters_long', max_length=29)
-    True
-
-    """
-    return len(name) > max_length
