@@ -122,6 +122,7 @@ Summary
    ConsecutiveUnderscoresInNameViolation
    ReservedArgumentNameViolation
    TooLongNameViolation
+   UnicodeNameViolation
 
 Module names
 ------------
@@ -142,6 +143,7 @@ General names
 .. autoclass:: ConsecutiveUnderscoresInNameViolation
 .. autoclass:: ReservedArgumentNameViolation
 .. autoclass:: TooLongNameViolation
+.. autoclass:: UnicodeNameViolation
 
 """
 
@@ -530,7 +532,7 @@ class TooLongNameViolation(MaybeASTViolation):
         maybe it may require some documentation.
 
     Solution:
-        Think of another name. Give more context to it.
+        Think of another name. Give less context to it.
 
     This rule checks: modules, variables, attributes,
     functions, methods, and classes.
@@ -550,10 +552,37 @@ class TooLongNameViolation(MaybeASTViolation):
         Default:
         :str:`wemake_python_styleguide.options.defaults.MAX_NAME_LENGTH`
 
-    .. versionadded:: 0.1.0
-    .. versionchanged:: 0.4.0
+    .. versionadded:: 0.5.0
 
     """
 
     error_template = 'Found too long name: {0}'
     code = 118
+
+
+@final
+class UnicodeNameViolation(ASTViolation):
+    """
+    Restrict unicode names.
+
+    Reasoning:
+        This should be forbidden for sanity, readability, and writability.
+
+    Solution:
+        Rename your entities so that they contain only ASCII symbols.
+
+    Example::
+
+        # Correct:
+        some_variable = 'Text with russian: русский язык'
+
+        # Wrong:
+        переменная = 42
+        some_變量 = ''
+
+    .. versionadded:: 0.5.0
+
+    """
+
+    error_template = 'Found unicode name: {0}'
+    code = 119

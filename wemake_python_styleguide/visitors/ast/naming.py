@@ -85,6 +85,12 @@ class _NameValidator(object):
                 self._error_callback(
                     naming.ReservedArgumentNameViolation(node, text=name),
                 )
+        try:
+            name.encode('ascii')
+        except UnicodeEncodeError:
+            self._error_callback(
+                naming.UnicodeNameViolation(node, text=name),
+            )
 
         self._ensure_length(node, name)
         self._ensure_underscores(node, name)
@@ -145,9 +151,11 @@ class WrongNameVisitor(BaseNodeVisitor):
 
         Raises:
             UpperCaseAttributeViolation
+            UnicodeNameViolation
 
         """
         self._validator.check_attribute_name(node)
+        self._validator.check_name(node, node.name)
         self.generic_visit(node)
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
@@ -159,6 +167,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             TooShortNameViolation
             PrivateNameViolation
             TooLongNameViolation
+            UnicodeNameViolation
 
         """
         self._validator.check_name(node, node.name)
@@ -205,6 +214,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             TooShortNameViolation
             PrivateNameViolation
             TooLongNameViolation
+            UnicodeNameViolation
 
         """
         variable_name = name_nodes.get_assigned_name(node)
