@@ -3,7 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
-    UnreachableCodeViolation,
+    StatementHasNoEffectViolation,
 )
 from wemake_python_styleguide.visitors.ast.statements import (
     StatementsWithBodiesVisitor,
@@ -13,7 +13,6 @@ from wemake_python_styleguide.visitors.ast.statements import (
 
 module_template = """
 {0}
-{1}
 """
 
 # Simple conditions:
@@ -21,7 +20,6 @@ module_template = """
 if_template = """
 if some:
     {0}
-    {1}
 """
 
 if_elif_template = """
@@ -29,7 +27,6 @@ if some:
     print()
 elif not some:
     {0}
-    {1}
 """
 
 if_else_template = """
@@ -37,7 +34,6 @@ if some:
     print()
 else:
     {0}
-    {1}
 """
 
 # Loops:
@@ -45,7 +41,6 @@ else:
 for_template = """
 for some in []:
     {0}
-    {1}
 """
 
 for_else_template = """
@@ -53,13 +48,11 @@ for some in []:
     print()
 else:
     {0}
-    {1}
 """
 
 while_template = """
 while True:
     {0}
-    {1}
 """
 
 while_else_template = """
@@ -67,7 +60,6 @@ while True:
     print()
 else:
     {0}
-    {1}
 """
 
 # Exception handling:
@@ -75,7 +67,6 @@ else:
 try_template = """
 try:
     {0}
-    {1}
 except Exception:
     print()
 """
@@ -85,7 +76,6 @@ try:
     print()
 except Exception:
     {0}
-    {1}
 """
 
 try_else_template = """
@@ -95,7 +85,6 @@ except Exception:
     print()
 else:
     {0}
-    {1}
 """
 
 try_finally_template = """
@@ -103,7 +92,6 @@ try:
     print()
 finally:
     {0}
-    {1}
 """
 
 # Context managers:
@@ -111,7 +99,6 @@ finally:
 with_template = """
 with some:
     {0}
-    {1}
 """
 
 # Functions:
@@ -119,7 +106,6 @@ with some:
 function_template = """
 def function():
     {0}
-    {1}
 """
 
 # Classes:
@@ -127,7 +113,6 @@ def function():
 class_template = """
 class Test(object):
     {0}
-    {1}
 """
 
 # Async:
@@ -135,21 +120,18 @@ class Test(object):
 async_function_template = """
 async def function():
     {0}
-    {1}
 """
 
 async_with_template = """
 async def container():
     async with some:
         {0}
-        {1}
 """
 
 async_for_template = """
 async def container():
     async for some in []:
         {0}
-        {1}
 """
 
 async_for_else_template = """
@@ -158,7 +140,6 @@ async def container():
         print()
     else:
         {0}
-        {1}
 """
 
 
@@ -189,20 +170,28 @@ async def container():
     async_for_template,
     async_for_else_template,
 ])
-def test_regular_lines(
+@pytest.mark.parametrize('statement', [
+    'print',
+    'object.mro',
+    '3 > 4',
+    '1 + 2',
+    '-100',
+    '...',
+])
+def test_statement_with_no_effect(
     assert_errors,
-    assert_error_text,
     parse_ast_tree,
     code,
+    statement,
     default_options,
 ):
-    """Testing correct order of lines is allowed."""
-    tree = parse_ast_tree(code.format('print()', 'raise ValueError()'))
+    """Testing that unreachable code is detected."""
+    tree = parse_ast_tree(code.format(statement))
 
     visitor = StatementsWithBodiesVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [])
+    assert_errors(visitor, [StatementHasNoEffectViolation])
 
 
 @pytest.mark.parametrize('code', [
@@ -232,61 +221,136 @@ def test_regular_lines(
     async_for_template,
     async_for_else_template,
 ])
-def test_unreachable_code_raise(
+@pytest.mark.parametrize('statement', [
+    'some_name = 1 + 2',
+    'call()',
+    'object.mro()',
+    'del some',
+])
+def test_statement_with_regular_effect(
     assert_errors,
     parse_ast_tree,
     code,
+    statement,
     default_options,
 ):
-    """Testing that unreachable code is detected."""
-    tree = parse_ast_tree(code.format('raise ValueError()', 'print()'))
+    """Testing functions, methods, and assignment works."""
+    tree = parse_ast_tree(code.format(statement))
 
     visitor = StatementsWithBodiesVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [UnreachableCodeViolation])
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('code', [
+    function_template,
+])
+@pytest.mark.parametrize('statement', [
+    'return',
+    'yield',
+    'yield from some',
+])
+def test_statement_with_function_effect(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    statement,
+    default_options,
+):
+    """Testing that `return` and `yield` works."""
+    tree = parse_ast_tree(code.format(statement))
+
+    visitor = StatementsWithBodiesVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('code', [
+    async_function_template,
+])
+@pytest.mark.parametrize('statement', [
+    'await some',
+    'return',
+    'yield',
+])
+def test_statement_with_await_effect(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    statement,
+    default_options,
+):
+    """Testing that `await` works."""
+    tree = parse_ast_tree(code.format(statement))
+
+    visitor = StatementsWithBodiesVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
 
 
 @pytest.mark.parametrize('code', [
     function_template,
     async_function_template,
+    class_template,
+    module_template,
 ])
-def test_unreachable_code_return(
+@pytest.mark.parametrize('statement', [
+    '"docstring"',
+])
+def test_statement_with_docstring(
     assert_errors,
     parse_ast_tree,
     code,
+    statement,
     default_options,
 ):
-    """Testing that unreachable code is detected."""
-    tree = parse_ast_tree(code.format('return', 'print()'))
+    """Testing that docstring works."""
+    tree = parse_ast_tree(code.format(statement))
 
     visitor = StatementsWithBodiesVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [UnreachableCodeViolation])
+    assert_errors(visitor, [])
 
 
 @pytest.mark.parametrize('code', [
-    for_template,
-    while_template,
+    if_template,
+    if_elif_template,
+    if_else_template,
 
+    for_template,
+    for_else_template,
+    while_template,
+    while_else_template,
+
+    try_template,
+    try_except_template,
+    try_else_template,
+    try_finally_template,
+
+    with_template,
+
+    async_with_template,
     async_for_template,
+    async_for_else_template,
 ])
-@pytest.mark.parametrize('keyword', [
-    'break',
-    'continue',
+@pytest.mark.parametrize('statement', [
+    '"docstring"',
 ])
-def test_unreachable_code_in_loops(
+def test_statement_with_useless_docstring(
     assert_errors,
     parse_ast_tree,
     code,
-    keyword,
+    statement,
     default_options,
 ):
-    """Testing that unreachable code is detected."""
-    tree = parse_ast_tree(code.format(keyword, 'print()'))
+    """Testing that docstring works."""
+    tree = parse_ast_tree(code.format(statement))
 
     visitor = StatementsWithBodiesVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [UnreachableCodeViolation])
+    assert_errors(visitor, [StatementHasNoEffectViolation])

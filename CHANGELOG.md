@@ -16,6 +16,8 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use too many decorators
 - Now `RedundantLoopElseViolation` also checks `while` loops
 - Forbids to have unreachable code
+- Forbids to have statements that have no effect
+- Add `variable` to the blacklisted names
 
 ## Bugfixes
 

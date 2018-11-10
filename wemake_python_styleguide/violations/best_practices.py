@@ -43,6 +43,7 @@ Summary
    ProtectedAttributeViolation
    LambdaInsideLoopViolation
    UnreachableCodeViolation
+   StatementHasNoEffectViolation
 
 Comments
 --------
@@ -82,6 +83,7 @@ Design
 .. autoclass:: ProtectedAttributeViolation
 .. autoclass:: LambdaInsideLoopViolation
 .. autoclass:: UnreachableCodeViolation
+.. autoclass:: StatementHasNoEffectViolation
 
 """
 
@@ -930,3 +932,37 @@ class UnreachableCodeViolation(ASTViolation):
     should_use_text = False
     error_template = 'Found unreachable code'
     code = 443
+
+
+class StatementHasNoEffectViolation(ASTViolation):
+    """
+    Forbids to have statements that do nothing.
+
+    Reasoning:
+        Statements that just access the value,
+        or expressions used as statements indicate that your code
+        contains dead lines. They just pollute your codebase and do nothing.
+
+    Solution:
+        Refactor your code in case it was a typo or error.
+        Or just delete this code.
+
+    Example::
+
+        # Correct:
+        def some_function():
+            price = 8 + 2
+            return price
+
+        # Wrong:
+        def some_function():
+            8 + 2
+            print
+
+    .. versionadded:: 0.5.0
+
+    """
+
+    should_use_text = False
+    error_template = 'Found statement that has no effect'
+    code = 444

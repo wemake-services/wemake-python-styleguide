@@ -69,6 +69,7 @@ VARIABLE_NAMES_BLACKLIST: Final = frozenset((
     'vals',
     'var',
     'vars',
+    'variable',
     'content',
     'contents',
     'info',
