@@ -21,9 +21,9 @@ def test_noqa_fixture_disabled(absolute_path):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         universal_newlines=True,
+        encoding='utf8',
     )
-    stdout, _ = process.communicate()
-    output = stdout.decode('utf8')
+    output, _ = process.communicate()
 
     assert output.count('A001') > 0  # flake8-builtins
     assert output.count('B002') > 0  # flake8-bugbear

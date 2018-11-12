@@ -121,11 +121,12 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         universal_newlines=True,
+        encoding='utf8',
     )
     stdout, _ = process.communicate()
 
     _assert_errors_count_in_output(
-        stdout.decode('utf8'), errors, all_violations,
+        stdout, errors, all_violations,
     )
 
 
@@ -143,7 +144,8 @@ def test_noqa_fixture(absolute_path):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         universal_newlines=True,
+        encoding='utf8',
     )
     stdout, _ = process.communicate()
 
-    assert stdout.count(b'Z') == 0
+    assert stdout.count('Z') == 0
