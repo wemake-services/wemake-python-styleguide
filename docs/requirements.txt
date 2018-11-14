@@ -3,7 +3,7 @@
 
 sphinx==1.8.2
 sphinxcontrib-napoleon==0.7
-sphinx_autodoc_typehints==1.4.0
+sphinx_autodoc_typehints==1.5.0
 recommonmark==0.4.0
 m2r==0.2.1
 added-value==0.12.0
