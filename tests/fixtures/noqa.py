@@ -178,7 +178,10 @@ nodes = nodes  # noqa: Z438
 
 
 class Example(object):
+    """Correct class docstring."""
+
     def __init__(self):  # noqa: Z439
+        """Correct function docstring."""
         yield 10
 
 

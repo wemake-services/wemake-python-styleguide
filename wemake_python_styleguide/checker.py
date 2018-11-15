@@ -64,6 +64,7 @@ from flake8.options.manager import OptionManager
 from wemake_python_styleguide import constants, types
 from wemake_python_styleguide import version as pkg_version
 from wemake_python_styleguide.options.config import Configuration
+from wemake_python_styleguide.transformation.ast_tree import transform
 from wemake_python_styleguide.visitors import base
 from wemake_python_styleguide.visitors.presets import (
     complexity,
@@ -127,7 +128,7 @@ class Checker(object):
             http://flake8.pycqa.org/en/latest/plugin-development/index.html
 
         """
-        self.tree = tree
+        self.tree = transform(tree)
         self.filename = filename
         self.file_tokens = file_tokens
 

@@ -3,11 +3,12 @@
 We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
-## WIP
+## 0.5.1
 
-### Misc
+### Bugfixes
 
-- Fixes build failing on Windows
+- Fixes all possible error that happens 
+  because of unset `parent` and `function_type` nodes
 
 
 ## 0.5.0
