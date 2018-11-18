@@ -8,6 +8,7 @@ from wemake_python_styleguide.logics.functions import is_method
 from wemake_python_styleguide.types import AnyFunctionDef, AnyImport, final
 from wemake_python_styleguide.violations.complexity import (
     TooManyConditionsViolation,
+    TooManyContextManagerAssignmentsViolation,
     TooManyDecoratorsViolation,
     TooManyElifsViolation,
     TooManyImportsViolation,
@@ -226,4 +227,26 @@ class ElifVisitor(BaseNodeVisitor):
 
         """
         self._check_elifs(node)
+        self.generic_visit(node)
+
+
+@final
+class ContextManagerVisitor(BaseNodeVisitor):
+    """Checks context managers."""
+
+    def _check_target_assignment(self, node: ast.With):
+        if len(node.items) > 1:
+            self.add_violation(
+                TooManyContextManagerAssignmentsViolation(node),
+            )
+
+    def visit_With(self, node: ast.With) -> None:
+        """
+        Checks the number of assignments for context managers.
+
+        Raises:
+            TooManyContextManagerAssignmentsViolation
+
+        """
+        self._check_target_assignment(node)
         self.generic_visit(node)
