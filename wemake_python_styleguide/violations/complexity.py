@@ -40,7 +40,6 @@ Summary
    TooManyConditionsViolation
    TooManyElifsViolation
    TooManyForsInComprehensionViolation
-   TooManyContextManagerAssignmentsViolation
 
 Module complexity
 -----------------
@@ -68,7 +67,6 @@ Structures complexity
 .. autoclass:: TooManyConditionsViolation
 .. autoclass:: TooManyElifsViolation
 .. autoclass:: TooManyForsInComprehensionViolation
-.. autoclass:: TooManyContextManagerAssignmentsViolation
 
 """
 
@@ -576,31 +574,3 @@ class TooManyForsInComprehensionViolation(ASTViolation):
     should_use_text = False
     error_template = 'Found a comprehension with too many `for` statements'
     code = 224
-
-
-@final
-class TooManyContextManagerAssignmentsViolation(ASTViolation):
-    """
-    Forbid multiple assignment targets for context managers.
-
-    Reasoning:
-        Following "as" with another context manager looks like a tuple.
-        Emitted when a with statement component returns multiple values
-        and uses name binding with as only for a part of those values,
-        as in with ctx() as a, b.This can be misleading, since it's not
-        clear if the context manager returns a tupleor if the node
-        without a name binding is another context manager.
-
-    Example::
-
-        # Wrong:
-            with open('') as first, second:
-                ...
-
-    .. versionadded:: 0.5.1
-
-    """
-
-    should_use_text = False
-    error_template = 'Found context manager with too many assignments'
-    code = 225

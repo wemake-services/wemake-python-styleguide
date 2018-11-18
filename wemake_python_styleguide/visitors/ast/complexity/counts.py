@@ -8,12 +8,14 @@ from wemake_python_styleguide.logics.functions import is_method
 from wemake_python_styleguide.types import AnyFunctionDef, AnyImport, final
 from wemake_python_styleguide.violations.complexity import (
     TooManyConditionsViolation,
-    TooManyContextManagerAssignmentsViolation,
     TooManyDecoratorsViolation,
     TooManyElifsViolation,
     TooManyImportsViolation,
     TooManyMethodsViolation,
     TooManyModuleMembersViolation,
+)
+from wemake_python_styleguide.violations.consistency import (
+    TooManyContextManagerAssignmentsViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
