@@ -3,6 +3,12 @@
 We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
+## 0.6.0
+
+### Features
+
+- Forbid multiple assignment targets for context managers 
+
 ## 0.5.1
 
 ### Bugfixes
