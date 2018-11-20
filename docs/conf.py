@@ -55,12 +55,10 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
+    'sphinx.ext.napoleon',
 
     # Used to include .md files:
     'm2r',
-
-    # Used to write python docstrings in a readable way:
-    'sphinxcontrib.napoleon',
 
     # Used to insert typehints into the final docs:
     'sphinx_autodoc_typehints',
