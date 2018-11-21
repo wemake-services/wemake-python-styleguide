@@ -4,9 +4,12 @@ description = "Sphinx \"added-value\" extension"
 name = "added-value"
 optional = false
 python-versions = "*"
-version = "0.8"
+version = "0.13.0"
 
 [package.dependencies]
+docutils = "*"
+natsort = "*"
+six = "*"
 sphinx = "*"
 
 [[package]]
@@ -480,6 +483,14 @@ version = "0.4.1"
 
 [[package]]
 category = "dev"
+description = "Simple yet flexible natural sorting in Python."
+name = "natsort"
+optional = false
+python-versions = "*"
+version = "5.5.0"
+
+[[package]]
+category = "dev"
 description = "Core utilities for Python packages"
 name = "packaging"
 optional = false
@@ -813,11 +824,11 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4"
 version = "1.24.1"
 
 [metadata]
-content-hash = "b13f9cfc68d0dba8a159017040dc03523e36a19c6c93ae64b4f797aca61ffcab"
+content-hash = "ddd25aa207f91f1bbac6405f4015fbb6a43b96a6cdced67a999a86de8bc68192"
 python-versions = "^3.6 || ^3.7"
 
 [metadata.hashes]
-added-value = ["84f1dced8e72941718545e39ce141bafa95e7fda816a3b92113c45d27245acc6", "c10a1ca36daf0bddc7f6d5d52edc793b95dd5596f3443defc6dd52d26aa6d3d8"]
+added-value = ["133dd86bfbf5ebf4d81fba0634cc104171c39e68be614c0ab4b0fc8b91a5a5cb", "b8d57e14db77f7af004ab1d912d628fc6e4806e5cbbeb95650c5e41453427a6a"]
 alabaster = ["446438bdcca0e05bd45ea2de1668c1d9b032e1a9154c2c259092d77031ddd359", "a661d72d58e6ea8a57f7a86e37d86716863ee5e92788398526d58b26a4e4dc02"]
 atomicwrites = ["0312ad34fcad8fac3704d441f7b317e50af620823353ec657a53e981f92920c0", "ec9ae8adaae229e4f8446952d204a3e4b5fdd2d099f9be3aaf556120135fb3ee"]
 attrs = ["10cbf6e27dbce8c30807caf056c8eb50917e0eaafe86347671b57254006c3e69", "ca4be454458f9dec299268d472aaa5a11f67a4ff70093396e1ceae9c76cf4bbb"]
@@ -863,6 +874,7 @@ mistune = ["59a3429db53c50b5c6bcc8a07f8848cb00d7dc8bdb431a4ab41920d201d4756e", "
 more-itertools = ["c187a73da93e7a8acc0001572aebc7e3c69daf7bf6881a2cea10650bd4420092", "c476b5d3a34e12d40130bc2f935028b5f636df8f372dc2c1c01dc19681b2039e", "fcbfeaea0be121980e15bc97b3817b5202ca73d0eae185b4550cbfce2a3ebb3d"]
 mypy = ["8e071ec32cc226e948a34bbb3d196eb0fd96f3ac69b6843a5aff9bd4efa14455", "fb90c804b84cfd8133d3ddfbd630252694d11ccc1eb0166a1b2efb5da37ecab2"]
 mypy-extensions = ["37e0e956f41369209a3d5f34580150bcacfabaa57b33a15c0b25f4b5725e0812", "b16cabe759f55e3409a7d231ebd2841378fb0c27a5d1994719e340e4f429ac3e"]
+natsort = ["e1ad0618d3aa0cc43dfc3298ffcdbfeb47dfff1d875359dc81c72434ae8c62bf", "e29031f37aa264145d6ad9acdab335479ce3636806fc7aa70b7675a2b2198d09"]
 packaging = ["0886227f54515e592aaa2e5a553332c73962917f2831f1b0f9b9f4380a4b9807", "f95a1e147590f204328170981833854229bb2912ac3d5f89e2a8ccd2834800c9"]
 pbr = ["f59d71442f9ece3dffc17bc36575768e1ee9967756e6b6535f0ee1f0054c3d68", "f6d5b23f226a2ba58e14e49aa3b1bfaf814d0199144b95d78458212444de1387"]
 pep8-naming = ["360308d2c5d2fff8031c1b284820fbdb27a63274c0c1a8ce884d631836da4bdd", "624258e0dd06ef32a9daf3c36cc925ff7314da7233209c5b01f7e5cdd3c34826"]
