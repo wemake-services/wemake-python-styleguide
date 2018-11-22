@@ -21,6 +21,13 @@ Here we collect all the specific terms that are used in this project.
       Entry point and violation codes are defined in ``pyproject.toml``.
       This class runs all visitors that exist in our style guide.
 
+  transformation
+      A way we change existing nodes. We can add properties, fix errors,
+      delete or replace some nodes.
+
+      The reasons for these actions are: developer experience, simplicity,
+      consistency across different versions, bug-fixing.
+
    visitor
       An object that goes through set of ``ast``, ``tokenize``, or other
       nodes to find violation of our rules.

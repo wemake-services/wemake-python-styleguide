@@ -5,7 +5,7 @@ from textwrap import dedent
 
 import pytest
 
-from wemake_python_styleguide.transformation.ast_tree import transform
+from wemake_python_styleguide.transformations.ast_tree import transform
 
 
 @pytest.fixture(scope='session')

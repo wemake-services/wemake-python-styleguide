@@ -16,21 +16,20 @@ environment:
       PYTHON_ARCH: "64"
 
 install:
-  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%USERPROFILE%\\.poetry\\bin;%PATH%"
   - "python --version"
 
   # Upgrade to the latest version of pip to avoid it displaying warnings
   # about it being out of date.
   - "python -m pip install --disable-pip-version-check --user --upgrade pip"
 
-  # Setting up enviroment
-  - "pip install poetry"
+  # Setting up enviroment:
+  - "curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python"
   - "poetry install"
 
 build: off
 
 test_script:
-  - "chcp 65001"  # fixing terminal encoding
   - "poetry run mypy wemake_python_styleguide"
   - "poetry run pytest"
   - "poetry run doc8 -q docs"

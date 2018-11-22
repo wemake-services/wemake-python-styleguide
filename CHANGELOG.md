@@ -3,18 +3,29 @@
 We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
-## 0.6.0
+
+## WIP
 
 ### Features
 
-- Forbid multiple assignment targets for context managers 
+- Forbid multiple assignment targets for context managers
+
+### Bugfixes
+
+- Fixes tests failing on windows (@sobolevn hates windows!)
+
+### Misc
+
+- Improves docs: specifies what `transformation` is
+- Improves build: changes how CI installes `poetry`
+
 
 ## 0.5.1
 
 ### Bugfixes
 
-- Fixes all possible error that happens 
-  because of unset `parent` and `function_type` nodes
+- Fixes all possible errors that happen
+  because of unset `parent` and `function_type` properties
 
 
 ## 0.5.0

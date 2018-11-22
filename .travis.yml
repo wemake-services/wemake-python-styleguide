@@ -8,8 +8,12 @@ matrix:
       dist: xenial
       sudo: true
 
+
+before_install:
+  - curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+  - source "$HOME/.poetry/env"
+
 install:
-  - pip install poetry
   - poetry install
 
 script:

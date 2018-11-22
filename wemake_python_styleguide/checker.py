@@ -57,14 +57,14 @@ Checker API
 
 import ast
 import tokenize
-from typing import ClassVar, Generator, Sequence, Type
+from typing import ClassVar, Iterator, Sequence, Type
 
 from flake8.options.manager import OptionManager
 
 from wemake_python_styleguide import constants, types
 from wemake_python_styleguide import version as pkg_version
 from wemake_python_styleguide.options.config import Configuration
-from wemake_python_styleguide.transformation.ast_tree import transform
+from wemake_python_styleguide.transformations.ast_tree import transform
 from wemake_python_styleguide.visitors import base
 from wemake_python_styleguide.visitors.presets import (
     complexity,
@@ -153,7 +153,7 @@ class Checker(object):
     def _run_checks(
         self,
         visitors: Sequence[VisitorClass],
-    ) -> Generator[types.CheckResult, None, None]:
+    ) -> Iterator[types.CheckResult]:
         """
         Runs all passed visitors one by one.
 
@@ -168,7 +168,7 @@ class Checker(object):
             for error in visitor.violations:
                 yield (*error.node_items(), type(self))
 
-    def run(self) -> Generator[types.CheckResult, None, None]:
+    def run(self) -> Iterator[types.CheckResult]:
         """
         Runs the checker.
 
