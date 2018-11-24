@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from typing import Callable, Iterable
+from typing import Callable, Tuple
 
 
 def alias(
     original: str,
-    aliases: Iterable[str],
+    aliases: Tuple[str, ...],
 ) -> Callable[[type], type]:
     """
     Decorator to alias handlers.
