@@ -13,11 +13,15 @@ We used to have incremental versioning before `0.1.0`.
 ### Bugfixes
 
 - Fixes tests failing on windows (@sobolevn hates windows!)
+- Fixes bug when `@staticmethod` was treated as a module member
+- Fixes bug when some nodes were not checked with `TooDeepNestingViolation`
+- Fixes bug when it was possible to provide non-unique aliases
 
 ### Misc
 
+- Refactoring: now we fix `async` nodes offset in a special transformation
 - Improves docs: specifies what `transformation` is
-- Improves build: changes how CI installes `poetry`
+- Improves build: changes how CI installs `poetry`
 
 
 ## 0.5.1

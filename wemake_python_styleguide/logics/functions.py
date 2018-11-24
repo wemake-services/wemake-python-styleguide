@@ -46,11 +46,14 @@ def is_method(function_type: Optional[str]) -> bool:
     >>> is_method('classmethod')
     True
 
+    >>> is_method('staticmethod')
+    True
+
     >>> is_method('')
     False
 
     """
-    return function_type in ['method', 'classmethod']
+    return function_type in {'method', 'classmethod', 'staticmethod'}
 
 
 def get_all_arguments(node: AnyFunctionDefAndLambda) -> List[arg]:

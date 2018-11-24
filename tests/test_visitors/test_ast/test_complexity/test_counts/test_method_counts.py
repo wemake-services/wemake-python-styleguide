@@ -73,6 +73,24 @@ class First(object):
     async def method2(cls): ...
 """
 
+class_with_staticmethods = """
+class First(object):
+    @staticmethod
+    def method(cls): ...
+
+    @staticmethod
+    def method2(cls): ...
+"""
+
+class_with_async_staticmethods = """
+class First(object):
+    @staticmethod
+    async def method(cls): ...
+
+    @staticmethod
+    async def method2(cls): ...
+"""
+
 
 @pytest.mark.parametrize('code', [
     module_without_methods,
@@ -84,6 +102,8 @@ class First(object):
     class_with_class_methods,
     class_with_async_class_methods,
     class_with_async_and_usual_class_methods,
+    class_with_staticmethods,
+    class_with_async_staticmethods,
 ])
 def test_method_counts_normal(
     assert_errors,
@@ -107,6 +127,8 @@ def test_method_counts_normal(
     class_with_class_methods,
     class_with_async_class_methods,
     class_with_async_and_usual_class_methods,
+    class_with_staticmethods,
+    class_with_async_staticmethods,
 ])
 def test_method_counts_violation(
     assert_errors,

@@ -20,7 +20,8 @@ formatted_string = f'Hi, {full_name}'  # noqa: Z305
 def some():  # noqa: Z110
     from my_module import some_function  # noqa: Z435
 
-    class Nested(object): ...  # noqa: Z220, Z431, Z444
+    class Nested(object):  # noqa: Z431
+        ...  # noqa: Z444
 
     def nested():  # noqa: Z430
         anti_z444 = 1
@@ -83,6 +84,15 @@ def many_expressions(xy):  # noqa: Z213
 
 class ManyParents(dict, list, tuple, Exception):  # noqa: Z215
     anti_z444 = 1
+
+
+def test_function():
+    if xy > 1:
+        if xy > 2:
+            if xy > 3:
+                if xy > 4:
+                    if xy > 5:
+                        test(5)  # noqa: Z220
 
 
 line = some.call(7 * 2, 3 / 4) / some.run(5 / some, 8 - 2 + 1)  # noqa: Z221

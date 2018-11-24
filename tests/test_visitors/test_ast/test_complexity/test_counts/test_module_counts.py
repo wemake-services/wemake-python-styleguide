@@ -69,6 +69,16 @@ class Second(object):
     def method2(cls): ...
 """
 
+module_with_staticmethods = """
+class First(object):
+    @staticmethod
+    def method(cls): ...
+
+class Second(object):
+    @staticmethod
+    def method2(cls): ...
+"""
+
 # Single module member:
 
 module_with_single_function = """
@@ -103,6 +113,7 @@ empty_module = ''
     module_with_async_function_and_class,
     module_with_methods,
     module_with_async_methods,
+    module_with_staticmethods,
     module_with_classmethods,
     module_with_single_class,
 ])
@@ -130,6 +141,7 @@ def test_module_counts_normal(
     module_with_methods,
     module_with_async_methods,
     module_with_classmethods,
+    module_with_staticmethods,
 ])
 def test_module_counts_violation(
     assert_errors,

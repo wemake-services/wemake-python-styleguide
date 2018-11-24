@@ -101,7 +101,6 @@ def test_nested_offset_regression320(
     assert_errors,
     parse_ast_tree,
     default_options,
-    mode,
 ):
     """
     Testing that await works well with long lines.

@@ -47,6 +47,35 @@ def _set_function_type(tree: ast.AST) -> ast.AST:
     return tree
 
 
+def _fix_async_offset(tree: ast.AST) -> ast.AST:
+    """
+    Fixes ``col_offest`` values for async nodes.
+
+    This is a temporary check for async-based expressions, because offset
+    for them isn't calculated properly. We can calculate right version
+    of offset with subscripting ``6`` (length of "async " part).
+
+    Affected ``python`` versions:
+
+    - all versions below ``python3.6.7``
+
+    Read more:
+        https://bugs.python.org/issue29205
+        https://github.com/wemake-services/wemake-python-styleguide/issues/282
+
+    """
+    nodes_to_fix = (
+        ast.AsyncFor,
+        ast.AsyncWith,
+        ast.AsyncFunctionDef,
+    )
+    for node in ast.walk(tree):
+        if isinstance(node, nodes_to_fix):
+            error = 6 if node.col_offset % 4 != 0 else 0
+            node.col_offset = node.col_offset - error
+    return tree
+
+
 def transform(tree: ast.AST) -> ast.AST:
     """
     Mutates the given ``ast`` tree.
@@ -56,6 +85,7 @@ def transform(tree: ast.AST) -> ast.AST:
     pipeline = (
         _set_parent,
         _set_function_type,
+        _fix_async_offset,
     )
 
     for tranformation in pipeline:

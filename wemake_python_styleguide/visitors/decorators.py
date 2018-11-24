@@ -17,6 +17,9 @@ def alias(
     We can just create aliases like ``visit_Import = visit_ImportFrom``,
     but it looks verbose and ugly.
     """
+    if len(aliases) != len(set(aliases)):
+        raise ValueError('Found duplicate aliases')
+
     def decorator(cls: type) -> type:
         original_handler = getattr(cls, original)
         for alias in aliases:

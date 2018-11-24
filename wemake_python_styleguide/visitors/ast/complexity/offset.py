@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import ClassVar, Union
+from typing import ClassVar
 
 from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.complexity import (
@@ -10,14 +10,11 @@ from wemake_python_styleguide.violations.complexity import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
-AsyncNodes = Union[ast.AsyncFunctionDef, ast.AsyncFor, ast.AsyncWith]
-
 
 @final
 @alias('visit_line_expression', (
     'visit_Try',
     'visit_ExceptHandler',
-    'visit_Expr',
     'visit_For',
     'visit_With',
     'visit_While',
@@ -29,8 +26,8 @@ AsyncNodes = Union[ast.AsyncFunctionDef, ast.AsyncFor, ast.AsyncWith]
     'visit_Assign',
     'visit_Expr',
     'visit_Pass',
-))
-@alias('visit_async_statement', (
+    'visit_ClassDef',
+    'visit_FunctionDef',
     'visit_AsyncFor',
     'visit_AsyncWith',
     'visit_AsyncFunctionDef',
@@ -41,8 +38,8 @@ class OffsetVisitor(BaseNodeVisitor):
     #: Maximum number of blocks to nest different structures:
     _max_offset_blocks: ClassVar[int] = 5
 
-    def _check_offset(self, node: ast.AST, error: int = 0) -> None:
-        offset = getattr(node, 'col_offset', 0) - error
+    def _check_offset(self, node: ast.AST) -> None:
+        offset = getattr(node, 'col_offset', 0)
         if offset > self._max_offset_blocks * 4:
             self.add_violation(TooDeepNestingViolation(node, text=str(offset)))
 
@@ -63,24 +60,4 @@ class OffsetVisitor(BaseNodeVisitor):
 
         """
         self._check_offset(node)
-        self.generic_visit(node)
-
-    def visit_async_statement(self, node: AsyncNodes):
-        """
-        Checks async definitions offset.
-
-        This is a temporary check for async-based expressions, because offset
-        for them isn't calculated properly. We can calculate right version
-        of offset with subscripting ``6`` (length of "async " part).
-
-        Read more:
-            https://bugs.python.org/issue29205
-            github.com/wemake-services/wemake-python-styleguide/issues/282
-
-        Raises:
-            TooDeepNestingViolation
-
-        """
-        error = 6 if node.col_offset % 4 != 0 else 0
-        self._check_offset(node, error=error)
         self.generic_visit(node)
