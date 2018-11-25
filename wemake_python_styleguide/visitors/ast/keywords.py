@@ -18,12 +18,14 @@ from wemake_python_styleguide.violations.complexity import (
     TooManyForsInComprehensionViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
+    MultipleContextManagerAssignmentsViolation,
     MultipleIfsInComprehensionViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
-AnyLoop = Union[ast.For, ast.While]
+AnyLoop = Union[ast.For, ast.While, ast.AsyncFor]
+AnyWith = Union[ast.With, ast.AsyncWith]
 
 
 @final
@@ -128,6 +130,7 @@ class WrongComprehensionVisitor(BaseNodeVisitor):
 @alias('visit_any_loop', (
     'visit_For',
     'visit_While',
+    'visit_AsyncFor',
 ))
 class WrongLoopVisitor(BaseNodeVisitor):
     """Responsible for examining loops."""
@@ -150,7 +153,7 @@ class WrongLoopVisitor(BaseNodeVisitor):
         closest_loop = None
 
         for subnode in ast.walk(node):
-            if isinstance(subnode, (ast.For, ast.While)):
+            if isinstance(subnode, (ast.For, ast.AsyncFor, ast.While)):
                 if subnode is not node:
                     closest_loop = subnode
 
@@ -224,4 +227,30 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
 
         """
         self._check_exception_type(node)
+        self.generic_visit(node)
+
+
+@final
+@alias('visit_any_with', (
+    'visit_With',
+    'visit_AsyncWith',
+))
+class WrongContextManagerVisitor(BaseNodeVisitor):
+    """Checks context managers."""
+
+    def _check_target_assignment(self, node: AnyWith):
+        if len(node.items) > 1:
+            self.add_violation(
+                MultipleContextManagerAssignmentsViolation(node),
+            )
+
+    def visit_any_with(self, node: AnyWith) -> None:
+        """
+        Checks the number of assignments for context managers.
+
+        Raises:
+            MultipleContextManagerAssignmentsViolation
+
+        """
+        self._check_target_assignment(node)
         self.generic_visit(node)

@@ -8,7 +8,8 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
-- Forbid multiple assignment targets for context managers
+- Forbids multiple assignment targets for context managers
+- Forbids to use incorrect multi-line parameters
 
 ### Bugfixes
 
@@ -21,6 +22,7 @@ We used to have incremental versioning before `0.1.0`.
 
 - Refactoring: now we fix `async` nodes offset in a special transformation
 - Improves docs: specifies what `transformation` is
+- Improves docs: making contributing section in the `README` more friendly
 - Improves build: changes how CI installs `poetry`
 
 

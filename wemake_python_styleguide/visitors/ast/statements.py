@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import ClassVar, List, Union
+from typing import ClassVar, List, Optional, Sequence, Union
 
+from wemake_python_styleguide.logics.functions import get_all_arguments
 from wemake_python_styleguide.logics.nodes import is_doc_string
-from wemake_python_styleguide.types import AnyNodes, final
+from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
     StatementHasNoEffectViolation,
     UnreachableCodeViolation,
+)
+from wemake_python_styleguide.violations.consistency import (
+    ParametersIndentationViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
@@ -25,6 +29,13 @@ StatementWithBody = Union[
     ast.AsyncFunctionDef,
     ast.ClassDef,
     ast.Module,
+]
+
+AnyCollection = Union[
+    ast.List,
+    ast.Set,
+    ast.Dict,
+    ast.Tuple,
 ]
 
 
@@ -134,4 +145,93 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         if isinstance(node, ast.Try):
             self._check_internals(node.finalbody)
 
+        self.generic_visit(node)
+
+
+@final
+@alias('visit_collection', (
+    'visit_List',
+    'visit_Set',
+    'visit_Dict',
+    'visit_Tuple',
+))
+@alias('visit_any_function', (
+    'visit_FunctionDef',
+    'visit_AsyncFunctionDef',
+))
+class WrongParametersIndentationVisitor(BaseNodeVisitor):
+    """Ensures that all parameters indentation follow our rules."""
+
+    def _check_first_element(
+        self,
+        node: ast.AST,
+        statement: ast.AST,
+        extra_lines: int,
+    ) -> Optional[bool]:
+        # We treat first element differently,
+        # since it is impossible to say what kind of multi-line
+        # parameters styles will be used at this moment.
+        if statement.lineno == node.lineno and not extra_lines:
+            return False
+        return None
+
+    def _check_rest_elements(
+        self,
+        node: ast.AST,
+        statement: ast.AST,
+        previous_line: int,
+        multi_line_mode: Optional[bool],
+    ) -> Optional[bool]:
+        previous_has_break = previous_line != statement.lineno
+        if not previous_has_break and multi_line_mode:
+            self.add_violation(ParametersIndentationViolation(node))
+            return None
+        elif previous_has_break and multi_line_mode is False:
+            self.add_violation(ParametersIndentationViolation(node))
+            return None
+        return previous_has_break
+
+    def _check_indentation(
+        self,
+        node: ast.AST,
+        elements: Sequence[ast.AST],
+        extra_lines: int = 0,  # we need it due to wrong lineno in collections
+    ) -> None:
+        multi_line_mode: Optional[bool] = None
+        for index, statement in enumerate(elements):
+            if index == 0:
+                multi_line_mode = self._check_first_element(
+                    node,
+                    statement,
+                    extra_lines,
+                )
+            else:
+                multi_line_mode = self._check_rest_elements(
+                    node,
+                    statement,
+                    elements[index - 1].lineno,
+                    multi_line_mode,
+                )
+
+    def visit_collection(self, node: AnyCollection) -> None:
+        """Checks how collection items indentation."""
+        elements = node.keys if isinstance(node, ast.Dict) else node.elts
+        self._check_indentation(node, elements, extra_lines=1)
+        self.generic_visit(node)
+
+    def visit_Call(self, node: ast.Call) -> None:
+        """Checks call arguments indentation."""
+        all_args = [*node.args, *[kw.value for kw in node.keywords]]
+        self._check_indentation(node, all_args)
+        self.generic_visit(node)
+
+    def visit_any_function(self, node: AnyFunctionDef) -> None:
+        """Checks function parameters indentation."""
+        self._check_indentation(node, get_all_arguments(node))
+        self.generic_visit(node)
+
+    def visit_ClassDef(self, node: ast.ClassDef) -> None:
+        """Checks base classes indentation."""
+        all_args = [*node.bases, *[kw.value for kw in node.keywords]]
+        self._check_indentation(node, all_args)
         self.generic_visit(node)

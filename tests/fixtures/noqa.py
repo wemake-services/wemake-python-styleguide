@@ -168,6 +168,12 @@ class SomeClass(FirstParent, SecondParent, object):  # noqa: Z315
     anti_z444 = 1
 
 
+class SomeClass(FirstParent,  # noqa: Z317
+                SecondParent,
+                ThirdParent):
+    anti_z444 = 1
+
+
 try:
     anti_z444 = 1
 except BaseException:  # noqa: Z424

@@ -22,11 +22,14 @@ from wemake_python_styleguide.visitors.filenames.module import (
 GENERAL_PRESET = (
     # General:
     statements.StatementsWithBodiesVisitor,
+    statements.WrongParametersIndentationVisitor,
+
     keywords.WrongRaiseVisitor,
     keywords.WrongKeywordVisitor,
     keywords.WrongComprehensionVisitor,
     keywords.WrongLoopVisitor,
     keywords.WrongTryExceptVisitor,
+    keywords.WrongContextManagerVisitor,
 
     attributes.WrongAttributeVisitor,
 

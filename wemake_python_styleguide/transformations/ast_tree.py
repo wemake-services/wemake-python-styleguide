@@ -6,6 +6,8 @@ from pep8ext_naming import NamingChecker
 
 
 class _ClassVisitor(ast.NodeVisitor):
+    """Used to set method types inside classes."""
+
     def __init__(self, transformer: NamingChecker) -> None:
         super().__init__()
         self.transformer = transformer
@@ -76,6 +78,35 @@ def _fix_async_offset(tree: ast.AST) -> ast.AST:
     return tree
 
 
+def _adjust_line_number(tree: ast.AST) -> ast.AST:
+    """
+    Adjusts line number for some nodes.
+
+    They are set incorrectly for some collections.
+    It might be either a bug or a feature.
+
+    We do several checks here, to be sure that we won't get
+    an incorrect line number. But, we basically check if there's
+    a parent, so we can compare and adjust.
+
+    Example::
+
+        print((  # should start from here
+            1, 2, 3,  # actually starts from here
+        ))
+
+    """
+    affected = (ast.Tuple,)
+    for node in ast.walk(tree):
+        if isinstance(node, affected):
+            parent_lineno = getattr(
+                getattr(node, 'parent', None), 'lineno', None,
+            )
+            if parent_lineno and parent_lineno < node.lineno:
+                node.lineno = node.lineno - 1
+    return tree
+
+
 def transform(tree: ast.AST) -> ast.AST:
     """
     Mutates the given ``ast`` tree.
@@ -86,6 +117,7 @@ def transform(tree: ast.AST) -> ast.AST:
         _set_parent,
         _set_function_type,
         _fix_async_offset,
+        _adjust_line_number,
     )
 
     for tranformation in pipeline:

@@ -57,14 +57,19 @@ def is_method(function_type: Optional[str]) -> bool:
 
 
 def get_all_arguments(node: AnyFunctionDefAndLambda) -> List[arg]:
-    """Returns list of all arguments that exist in a function."""
+    """
+    Returns list of all arguments that exist in a function.
+
+    Respects the correct parameters order.
+    Positional args, *args, keyword-only, **kwargs.
+    """
     names = [
         *node.args.args,
         *node.args.kwonlyargs,
     ]
 
     if node.args.vararg:
-        names.append(node.args.vararg)
+        names.insert(len(node.args.args), node.args.vararg)
 
     if node.args.kwarg:
         names.append(node.args.kwarg)

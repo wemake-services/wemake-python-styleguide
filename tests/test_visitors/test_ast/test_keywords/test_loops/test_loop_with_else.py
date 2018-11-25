@@ -8,45 +8,50 @@ from wemake_python_styleguide.violations.best_practices import (
 from wemake_python_styleguide.visitors.ast.keywords import WrongLoopVisitor
 
 wrong_else_in_for_loop = """
-for x in '123':
-    ...
-else:
-    ...
+def wrapper():
+    for x in '123':
+        ...
+    else:
+        ...
 """
 
 wrong_nested_else_in_for_loop = """
-for letters in ['abc', 'zxc', 'rrd']:
-    for x in letters:
-        ...
-    else:
-        ...
+def wrapper():
+    for letters in ['abc', 'zxc', 'rrd']:
+        for x in letters:
+            ...
+        else:
+            ...
 """
 
 wrong_nested_for_with_break = """
-for letters in ['abc', 'zxc', 'rrd']:
-    for x in letters:
-        break
-else:
-    ...
+def wrapper():
+    for letters in ['abc', 'zxc', 'rrd']:
+        for x in letters:
+            break
+    else:
+        ...
 """
 
 wrong_nested_while_with_break = """
-for letters in ['abc', 'zxc', 'rrd']:
-    while 'a' in letters:
-        break
-else:
-    ...
+def wrapper():
+    for letters in ['abc', 'zxc', 'rrd']:
+        while 'a' in letters:
+            break
+    else:
+        ...
 """
 
 wrong_multiple_breaks = """
-for x in 'zzz':
-    for i in range(10):
-        if i > 1:
+def wrapper():
+    for x in 'zzz':
+        for i in range(10):
+            if i > 1:
+                break
+        else:
             break
     else:
-        break
-else:
-    ...
+        ...
 """
 
 wrong_while_without_break = """
@@ -59,50 +64,55 @@ else:
 # Correct:
 
 right_else_in_for_loop = """
-for x in '123':
-    break
-else:
-    ...
+def wrapper():
+    for x in '123':
+        break
+    else:
+        ...
 """
 
 right_multiple_breaks = """
-for x in 'xxx':
-    for i in range(10):
-        if i > 1:
-            break
-    break
-else:
-    ...
+def wrapper():
+    for x in 'xxx':
+        for i in range(10):
+            if i > 1:
+                break
+        break
+    else:
+        ...
 """
 
 right_multiple_nested_for_with_break = """
-for letters in ['abc', 'zxc', 'rrd']:
-    for x in letters:
-        break
+def wrapper():
+    for letters in ['abc', 'zxc', 'rrd']:
+        for x in letters:
+            break
 
-    for y in letters:
-        break
+        for y in letters:
+            break
 
-    while letters:
-        break
-else:
-    ...
+        while letters:
+            break
+    else:
+        ...
 """
 
 right_nested_break_in_for_loop = """
-for x in 'nnn':
-    if x == '1':
-        break
-else:
-    ...
+def wrapper():
+    for x in 'nnn':
+        if x == '1':
+            break
+    else:
+        ...
 """
 
 right_nested_if_else = """
-for x in '000':
-    if x:
-        ...
-    else:
-        ...
+def wrapper():
+    for x in '000':
+        if x:
+            ...
+        else:
+            ...
 """
 
 right_while_with_break = """
@@ -131,9 +141,10 @@ def test_wrong_else_in_for_loop(
     parse_ast_tree,
     code,
     default_options,
+    mode,
 ):
     """Violations are raised when else with break statement."""
-    tree = parse_ast_tree(code)
+    tree = parse_ast_tree(mode(code))
 
     visitor = WrongLoopVisitor(default_options, tree=tree)
     visitor.run()
@@ -155,9 +166,10 @@ def test_correct_else_in_for_loop(
     parse_ast_tree,
     code,
     default_options,
+    mode,
 ):
     """Violations are not raised when else without break statement."""
-    tree = parse_ast_tree(code)
+    tree = parse_ast_tree(mode(code))
 
     visitor = WrongLoopVisitor(default_options, tree=tree)
     visitor.run()

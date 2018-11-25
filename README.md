@@ -80,11 +80,6 @@ We are *not* planning to do the following things:
 
 We warmly welcome any contributions!
 
-See ["Contributing" section](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/contributing.html) in the documentation if you want to contribute.
-
-You can also check which [issues need some help](https://github.com/wemake-services/wemake-python-styleguide/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) right now.
-
-
-## License
-
-MIT. See [LICENSE](https://github.com/wemake-services/wemake-python-styleguide/blob/master/LICENSE) for more details.
+See ["Contributing"](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/contributing.html)
+section in the documentation if you want to contribute.
+You can start with [issues that need some help](https://github.com/wemake-services/wemake-python-styleguide/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) right now.

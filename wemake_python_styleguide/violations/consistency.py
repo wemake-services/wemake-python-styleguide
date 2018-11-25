@@ -41,7 +41,8 @@ Summary
    MissingSpaceBetweenKeywordAndParenViolation
    WrongConditionalViolation
    ObjectInBaseClassesListViolation
-   TooManyContextManagerAssignmentsViolation
+   MultipleContextManagerAssignmentsViolation
+   ParametersIndentationViolation
 
 Consistency checks
 ------------------
@@ -62,7 +63,8 @@ Consistency checks
 .. autoclass:: MissingSpaceBetweenKeywordAndParenViolation
 .. autoclass:: WrongConditionalViolation
 .. autoclass:: ObjectInBaseClassesListViolation
-.. autoclass:: TooManyContextManagerAssignmentsViolation
+.. autoclass:: MultipleContextManagerAssignmentsViolation
+.. autoclass:: ParametersIndentationViolation
 
 """
 
@@ -586,19 +588,26 @@ class ObjectInBaseClassesListViolation(ASTViolation):
 
 
 @final
-class TooManyContextManagerAssignmentsViolation(ASTViolation):
+class MultipleContextManagerAssignmentsViolation(ASTViolation):
     """
     Forbid multiple assignment targets for context managers.
 
     Reasoning:
-        Following "as" with another context manager looks like a tuple.
-        Emitted when a with statement component returns multiple values
-        and uses name binding with as only for a part of those values,
-        as in with ctx() as a, b.This can be misleading, since it's not
-        clear if the context manager returns a tupleor if the node
-        without a name binding is another context manager.
+        It is hard to distinguish whether ``as`` should unpack into
+        tuple, or we are just using two context managers.
+
+    Solution:
+        Use several context managers. Or explicit brackets.
 
     Example::
+
+        # Correct:
+        with open('') as first:
+            with second:
+                ...
+
+        with some_context as (first, second):
+            ...
 
         # Wrong:
         with open('') as first, second:
@@ -611,3 +620,73 @@ class TooManyContextManagerAssignmentsViolation(ASTViolation):
     should_use_text = False
     error_template = 'Found context manager with too many assignments'
     code = 316
+
+
+@final
+class ParametersIndentationViolation(ASTViolation):
+    """
+    Forbid to use incorrect parameters indentation.
+
+    Reasoning:
+        It is really easy to spoil your perfect, readable code with
+        incorrect multi-line parameters indentation.
+        Since, it is really easy to style them in any of 100 possible ways.
+        We enforce a strict rule about how it is possible to write these
+        multi-line parameters.
+
+    Solution:
+        Use consistent multi-line parameters indentation.
+
+    Example::
+
+        # Correct:
+        def my_function(arg1, arg2, arg3) -> None:
+            return None
+
+        print(1, 2, 3, 4, 5, 6)
+
+        def my_function(
+            arg1, arg2, arg3,
+        ) -> None:
+            return None
+
+        print(
+            1, 2, 3, 4, 5, 6,
+        )
+
+        def my_function(
+            arg1,
+            arg2,
+            arg3,
+        ) -> None:
+            return None
+
+        print(
+            first_variable,
+            2,
+            third_value,
+            4,
+            5,
+            last_item,
+        )
+
+        # Special case:
+
+        print('some text', 'description', [
+            first_variable,
+            second_variable,
+            third_variable,
+            last_item,
+        ], end='')
+
+    Everything else is considered a violation.
+    This rule checks: lists, sets, tuples, dicts, calls,
+    functions, methods, and classes.
+
+    .. versionadded:: 0.6.0
+
+    """
+
+    should_use_text = False
+    error_template = 'Found incorrect multi-line parameters'
+    code = 317
