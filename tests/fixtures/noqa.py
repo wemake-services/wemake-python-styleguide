@@ -179,6 +179,8 @@ try:
 except BaseException:  # noqa: Z424
     anti_z444 = 1
 
+call_with_positional_bool(True)  # noqa: Z425
+
 for symbol in 'abc':  # noqa: Z436
     anti_z444 = 1
 else:

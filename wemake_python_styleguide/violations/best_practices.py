@@ -29,6 +29,7 @@ Summary
    FutureImportViolation
    RaiseNotImplementedViolation
    BaseExceptionViolation
+   BooleanPositionalArgumentViolation
    NestedFunctionViolation
    NestedClassViolation
    MagicNumberViolation
@@ -65,6 +66,7 @@ Builtins
 .. autoclass:: FutureImportViolation
 .. autoclass:: RaiseNotImplementedViolation
 .. autoclass:: BaseExceptionViolation
+.. autoclass:: BooleanPositionalArgumentViolation
 
 Design
 ------
@@ -428,6 +430,39 @@ class BaseExceptionViolation(ASTViolation):
     should_use_text = False
     error_template = 'Found except `BaseException`'
     code = 424
+
+
+@final
+class BooleanPositionalArgumentViolation(ASTViolation):
+    """
+    Forbids to pass booleans as non-keyword parameters.
+
+    Reasoning:
+        Passing boolean as regular positional
+        parameters is very non-descriptive.
+        It is almost impossible to tell, what does this parameter means.
+        And you almost always have to look up the implementation to tell
+        what is going on.
+
+    Solution:
+        Pass booleans as keywords only.
+        This will help you to save extra context on what's going on.
+
+    Example::
+
+        # Correct:
+        UsersRepository.update(cache=True)
+
+        # Wrong:
+        UsersRepository.update(True)
+
+    .. versionadded:: 0.6.0
+
+    """
+
+    should_use_text = False
+    error_template = 'Found boolean non-keyword argument'
+    code = 425
 
 
 # Design:

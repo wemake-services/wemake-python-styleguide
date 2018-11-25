@@ -38,9 +38,9 @@ def test_violation_error_text(all_violations):
 
 def test_configuration(all_violations):
     """Ensures that all configuration options are listed in the docs."""
-    option_listed = dict.fromkeys([
-        option.long_option_name for option in Configuration.options
-    ], False)
+    option_listed = {
+        option.long_option_name: False for option in Configuration.options
+    }
 
     for violation in all_violations:
         for option in option_listed.keys():
