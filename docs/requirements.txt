@@ -5,7 +5,7 @@ sphinx==1.8.2
 sphinx_autodoc_typehints==1.5.1
 recommonmark==0.4.0
 m2r==0.2.1
-added-value==0.13.0
+added-value==0.14.0
 tomlkit==0.5.3
 
 # Dependencies of our linter:
