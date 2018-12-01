@@ -34,8 +34,8 @@ when you disable some checks. We **do not** officially recommend to do it.
 There are three ways to ignore some specific violations:
 
 1. Inline ignore with ``# noqa:`` comment and comma separated violation codes
-2. Command line argument ``--ignore`` with omma separated violation codes
-3. Configuration line inside ``setup.cfg`` or ``tox.ini``, `example <https://github.com/wemake-services/wemake-python-styleguide/blob/ab95b7d5b14b3985795aa98a70363466fffa3946/setup.cfg#L22-L32>`_
+2. Command line argument ``--ignore`` with comma separated violation codes
+3. Configuration line inside ``setup.cfg`` or ``tox.ini``, `example <https://github.com/wemake-services/wemake-python-styleguide/blob/master/setup.cfg#L23-L36>`_
 
 You can ignore:
 
@@ -43,6 +43,11 @@ You can ignore:
 2. Some specific group (naming, complexity, consistency, best practices)
    with ``Z`` and the first number
 3. Some specific violation with the full violation code
+
+We use `flake8-per-file-ignore <https://github.com/snoack/flake8-per-file-ignores>`_
+plugin, so it is possible to ignore violations on a per-file bases.
+It means, that you can have different set of violations
+ignored for different files.
 
 Read more about `ignoring violations <http://flake8.pycqa.org/en/latest/user/violations.html>`_
 in the official docs.

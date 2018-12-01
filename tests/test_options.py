@@ -14,4 +14,5 @@ def test_option_help():
     """Ensures that all options has help."""
     for option in Configuration.options:
         assert len(option.help) > 10
-        assert option.help.endswith('.')
+        assert '%default' in option.help
+        assert option.help.split(' Defaults to:')[0].endswith('.')
