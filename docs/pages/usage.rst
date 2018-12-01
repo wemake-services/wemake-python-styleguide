@@ -52,6 +52,24 @@ ignored for different files.
 Read more about `ignoring violations <http://flake8.pycqa.org/en/latest/user/violations.html>`_
 in the official docs.
 
+Legacy projects
+---------------
+
+Introducing this package to a legacy project is almost impossible.
+Due to strict quality and complexity rules.
+
+But, you still can do several things to integrate this linter step by step:
+
+1. Fix consistency, naming and best-practices violations,
+   they are the easiest to clean up.
+2. Per-file ignore complexity checks that are failing for your project.
+   Sometimes it is possible to rewrite several parts of your code,
+   but generally complexity rules are the hardest to fix.
+3. Use `boyscout rule <https://deviq.com/boy-scout-rule/>`_: always leave
+   your code better than you found it.
+
+You can also only lint `recently changed files <https://github.com/getsentry/raven-python/blob/master/hooks/pre-commit.flake8>`_.
+
 Integrations
 ------------
 

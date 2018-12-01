@@ -50,6 +50,15 @@ This file is required to configure our linter and all 3rd party plugins it uses.
 However, this is a temporary solution.
 We are working at providing the required configuration for you in the future.
 
+Running:
+
+```bash
+flake8 your_module.py
+```
+
+This app is still just good old `flake8`!
+And it won't change your existing workflow.
+
 See ["Usage" section](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage.html)
 in the docs for examples and integrations.
 
