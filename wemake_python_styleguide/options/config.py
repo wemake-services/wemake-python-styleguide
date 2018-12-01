@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import ClassVar, Dict, Optional, Sequence, Union
+from typing import ClassVar, Mapping, Optional, Sequence, Union
 
 import attr
 from flake8.options.manager import OptionManager
@@ -8,7 +8,8 @@ from flake8.options.manager import OptionManager
 from wemake_python_styleguide.options import defaults
 from wemake_python_styleguide.types import final
 
-ConfigValues = Dict[str, Union[str, int, bool]]
+#: Immutable config values passed from `flake8`.
+ConfigValues = Mapping[str, Union[str, int, bool]]
 
 
 @final
@@ -22,6 +23,10 @@ class _Option(object):
     type: Optional[str] = 'int'  # noqa: A003
     parse_from_config: bool = True
     action: str = 'store'
+
+    def __attrs_post_init__(self):
+        """Is called after regular init is done."""
+        object.__setattr__(self, 'help', self.help +' Defaults to: %default')
 
 
 @final

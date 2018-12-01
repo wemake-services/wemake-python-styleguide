@@ -17,6 +17,19 @@ class CorrectClassName(
 ): ...
 """
 
+correct_count_with_keywords = """
+class CorrectClassName(
+    FirstParentClass,
+    SecondParentClass,
+    ThirdParentClass,
+    first=1,
+    second=2,
+    third=3,
+    fourth=4,
+    fifth=5,
+): ...
+"""
+
 too_many_count = """
 class SomeClassName(
     FirstParentClass,
@@ -30,6 +43,7 @@ class SomeClassName(
 
 @pytest.mark.parametrize('code', [
     correct_count,
+    correct_count_with_keywords,
 ])
 def test_correct_count(
     assert_errors, parse_ast_tree, code, default_options,
@@ -66,6 +80,7 @@ def test_bad_number_default_option(
 @pytest.mark.parametrize('code', [
     too_many_count,
     correct_count,
+    correct_count_with_keywords,
 ])
 def test_bad_number_custom_option(
     assert_errors,

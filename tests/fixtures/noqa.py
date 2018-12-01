@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 This file contains all possible violations.
 

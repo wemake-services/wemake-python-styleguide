@@ -4,7 +4,7 @@ description = "Sphinx \"added-value\" extension"
 name = "added-value"
 optional = false
 python-versions = "*"
-version = "0.14.0"
+version = "0.14.1"
 
 [package.dependencies]
 docutils = "*"
@@ -291,6 +291,18 @@ flake8 = ">=3.0"
 
 [[package]]
 category = "main"
+description = "Ignore individual error codes per file with flake8"
+name = "flake8-per-file-ignores"
+optional = false
+python-versions = "*"
+version = "0.6"
+
+[package.dependencies]
+flake8 = ">=3"
+pathmatch = "*"
+
+[[package]]
+category = "main"
 description = "Polyfill package for Flake8 plugins"
 name = "flake8-polyfill"
 optional = false
@@ -312,17 +324,6 @@ version = "3.1.0"
 flake8 = ">=1.5"
 pycodestyle = "*"
 six = "*"
-
-[[package]]
-category = "dev"
-description = "pytest assert checker plugin for flake8"
-name = "flake8-pytest"
-optional = false
-python-versions = "*"
-version = "1.3"
-
-[package.dependencies]
-flake8 = "*"
 
 [[package]]
 category = "main"
@@ -500,6 +501,18 @@ version = "18.0"
 [package.dependencies]
 pyparsing = ">=2.0.2"
 six = "*"
+
+[[package]]
+category = "main"
+description = "Path matching utilities"
+name = "pathmatch"
+optional = false
+python-versions = "*"
+version = "0.2.1"
+
+[package.dependencies]
+six = ">=1.10.0"
+typing = ">=3.5.2"
 
 [[package]]
 category = "main"
@@ -824,11 +837,11 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4"
 version = "1.24.1"
 
 [metadata]
-content-hash = "6f1c839423b6796644e28ca3af7a9c806da21c3537bf76e772fb8583791dd385"
+content-hash = "0b80ce230584a165d2e7f0916050eb6e809c4af06cb379ca63ed16ae2dcfa70a"
 python-versions = "^3.6 || ^3.7"
 
 [metadata.hashes]
-added-value = ["0058895d3f2af7dae58c73ea963f2a55aa5d111194a3d5f223d707816e2d47be", "de43cd26dc059f01f6c52e3e7a14624f7a58ce0a20c603e8d1bcdc95e9673d4a"]
+added-value = ["f0b06f10c39523f0a4d96399b050936074b6e15c77181fcce9f8731f7bc3e6a1"]
 alabaster = ["446438bdcca0e05bd45ea2de1668c1d9b032e1a9154c2c259092d77031ddd359", "a661d72d58e6ea8a57f7a86e37d86716863ee5e92788398526d58b26a4e4dc02"]
 atomicwrites = ["0312ad34fcad8fac3704d441f7b317e50af620823353ec657a53e981f92920c0", "ec9ae8adaae229e4f8446952d204a3e4b5fdd2d099f9be3aaf556120135fb3ee"]
 attrs = ["10cbf6e27dbce8c30807caf056c8eb50917e0eaafe86347671b57254006c3e69", "ca4be454458f9dec299268d472aaa5a11f67a4ff70093396e1ceae9c76cf4bbb"]
@@ -855,9 +868,9 @@ flake8-eradicate = ["750e51d4180a253df468a0ebe6ab115a3cf766035269dbbd78589a1d1de
 flake8-isort = ["298d7904ac3a46274edf4ce66fd7e272c2a60c34c3cc999dea000608d64e5e6e", "5992850626ce96547b1f1c7e8a7f0ef49ab2be44eca2177934566437b636fa3c"]
 flake8-logging-format = ["464b68b602fb034335b91a21b8968560f29f10e0e0f2618f2a8e2bb0ea01232f"]
 flake8-pep3101 = ["493821d6bdd083794eb0691ebe5b68e5c520b622b269d60e54308fb97440e21a", "b661ab718df42b87743dde266ef5de4f9e900b56c67dbccd45d24cf527545553"]
+flake8-per-file-ignores = ["3c4b1d770fa509aaad997ca147bd3533b730c3f6c48290b69a4265072c465522", "4ee4f24cbea5e18e1fefdfccb043e819caf483d16d08e39cb6df5d18b0407275"]
 flake8-polyfill = ["12be6a34ee3ab795b19ca73505e7b55826d5f6ad7230d31b18e106400169b9e9", "e44b087597f6da52ec6393a709e7108b2905317d0c0b744cdca6208e670d8eda"]
 flake8-print = ["5010e6c138b63b62400da4b06afa33becc5e08bd1fcce9af3752445cf3342f54"]
-flake8-pytest = ["61686128a79e1513db575b2bcac351081d5a293811ddce2d5dfc25e8c762d33e", "b4d6703f7d7b646af1e2660809e795886dd349df11843613dbe6515efa82c0f3"]
 flake8-quotes = ["fd9127ad8bbcf3b546fa7871a5266fd8623ce765ebe3d5aa5eabb80c01212b26"]
 flake8-string-format = ["68ea72a1a5b75e7018cae44d14f32473c798cf73d75cbaed86c6a9a907b770b2", "774d56103d9242ed968897455ef49b7d6de272000cfa83de5814273a868832f1"]
 flake8-type-annotations = ["88775455792ad7bbd63a71bc94e8a077deb5608eacb5add7e5a7a648c7636426", "de64de5efef3277d7b6012e8618c37d35b21465fb16292e46e6eec5b87e47a8c"]
@@ -876,6 +889,7 @@ mypy = ["8e071ec32cc226e948a34bbb3d196eb0fd96f3ac69b6843a5aff9bd4efa14455", "fb9
 mypy-extensions = ["37e0e956f41369209a3d5f34580150bcacfabaa57b33a15c0b25f4b5725e0812", "b16cabe759f55e3409a7d231ebd2841378fb0c27a5d1994719e340e4f429ac3e"]
 natsort = ["e1ad0618d3aa0cc43dfc3298ffcdbfeb47dfff1d875359dc81c72434ae8c62bf", "e29031f37aa264145d6ad9acdab335479ce3636806fc7aa70b7675a2b2198d09"]
 packaging = ["0886227f54515e592aaa2e5a553332c73962917f2831f1b0f9b9f4380a4b9807", "f95a1e147590f204328170981833854229bb2912ac3d5f89e2a8ccd2834800c9"]
+pathmatch = ["b35db907d0532c66132e5bc8aaa20dbfae916441987c8f0abd53ac538376d9a7"]
 pbr = ["f59d71442f9ece3dffc17bc36575768e1ee9967756e6b6535f0ee1f0054c3d68", "f6d5b23f226a2ba58e14e49aa3b1bfaf814d0199144b95d78458212444de1387"]
 pep8-naming = ["360308d2c5d2fff8031c1b284820fbdb27a63274c0c1a8ce884d631836da4bdd", "624258e0dd06ef32a9daf3c36cc925ff7314da7233209c5b01f7e5cdd3c34826"]
 pluggy = ["447ba94990e8014ee25ec853339faf7b0fc8050cdc3289d4d71f7f410fb90095", "bde19360a8ec4dfd8a20dcb811780a30998101f078fc7ded6162f0076f50508f"]

@@ -38,7 +38,7 @@ def assert_error_text():
             node=violation._node,  # noqa: Z441
             text=text,
         )
-        assert reproduction.message() == violation.message()
+        assert reproduction.message() == violation.message()  # noqa: S101
 
     return factory
 

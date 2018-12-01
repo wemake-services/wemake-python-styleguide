@@ -8,6 +8,8 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
+- Adds `flake8-per-file-ignore` dependency
+- Adds default values to the `flake8 --help` output
 - Forbids multiple assignment targets for context managers
 - Forbids to use incorrect multi-line parameters
 - Forbids to use `bool` values as positional arguments
