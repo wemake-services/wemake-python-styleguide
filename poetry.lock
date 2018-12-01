@@ -263,7 +263,7 @@ description = "flake8 plugin that integrates isort ."
 name = "flake8-isort"
 optional = false
 python-versions = "*"
-version = "2.5"
+version = "2.6.0"
 
 [package.dependencies]
 flake8 = ">=3.2.1"
@@ -637,18 +637,6 @@ pytest = ">=3.5"
 
 [[package]]
 category = "dev"
-description = "py.test plugin to check import ordering using isort"
-name = "pytest-isort"
-optional = false
-python-versions = "*"
-version = "0.2.1"
-
-[package.dependencies]
-isort = ">=4.0"
-pytest = ">=3.0"
-
-[[package]]
-category = "dev"
 description = "Pytest plugin to randomly order tests and control random.seed."
 name = "pytest-randomly"
 optional = false
@@ -837,7 +825,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4"
 version = "1.24.1"
 
 [metadata]
-content-hash = "0b80ce230584a165d2e7f0916050eb6e809c4af06cb379ca63ed16ae2dcfa70a"
+content-hash = "a3447f4e506944dca0f984457d265ad34cb627129dadbc911a54a8b3256362aa"
 python-versions = "^3.6 || ^3.7"
 
 [metadata.hashes]
@@ -865,7 +853,7 @@ flake8-comprehensions = ["b83891fec0e680b07aa1fd92e53eb6993be29a0f3673a09badbe8d
 flake8-debugger = ["be4fb88de3ee8f6dd5053a2d347e2c0a2b54bab6733a2280bb20ebd3c4ca1d97"]
 flake8-docstrings = ["4e0ce1476b64e6291520e5570cf12b05016dd4e8ae454b8a8a9a48bc5f84e1cd", "8436396b5ecad51a122a2c99ba26e5b4e623bf6e913b0fea0cb6c2c4050f91eb"]
 flake8-eradicate = ["750e51d4180a253df468a0ebe6ab115a3cf766035269dbbd78589a1d1de7584e", "83dfeb5980ada63a73ccdfe64f233fc7ddf9ea702299b9f599dad9c2adc9036e"]
-flake8-isort = ["298d7904ac3a46274edf4ce66fd7e272c2a60c34c3cc999dea000608d64e5e6e", "5992850626ce96547b1f1c7e8a7f0ef49ab2be44eca2177934566437b636fa3c"]
+flake8-isort = ["3c107c405dd6e3dbdcccb2f84549d76d58a07120cd997a0560fab8b84c305f2a", "76d7dd6aec2762c608b442abebb0aaedb72fc75f9a075241a89e4784d8a39900"]
 flake8-logging-format = ["464b68b602fb034335b91a21b8968560f29f10e0e0f2618f2a8e2bb0ea01232f"]
 flake8-pep3101 = ["493821d6bdd083794eb0691ebe5b68e5c520b622b269d60e54308fb97440e21a", "b661ab718df42b87743dde266ef5de4f9e900b56c67dbccd45d24cf527545553"]
 flake8-per-file-ignores = ["3c4b1d770fa509aaad997ca147bd3533b730c3f6c48290b69a4265072c465522", "4ee4f24cbea5e18e1fefdfccb043e819caf483d16d08e39cb6df5d18b0407275"]
@@ -902,7 +890,6 @@ pyparsing = ["40856e74d4987de5d01761a22d1621ae1c7f8774585acae358aa5c5936c6c90b",
 pytest = ["3f193df1cfe1d1609d4c583838bea3d532b18d6160fd3f55c9447fdca30848ec", "e246cf173c01169b9617fc07264b7b1316e78d7a650055235d6d897bc80d9660"]
 pytest-cov = ["513c425e931a0344944f84ea47f3956be0e416d95acbd897a44970c8d926d5d7", "e360f048b7dae3f2f2a9a4d067b2dd6b6a015d384d1577c994a43f3f7cbad762"]
 pytest-flake8 = ["4f30f5be3efb89755f38f11bdb2a5e22d19a6f5faa73428f703a3292a9572cd3", "c740ad6aa19e3958947d2118f70bed218caf1d2097039fb7318573a2a72f89a1"]
-pytest-isort = ["2221c0914dfca41914625a646f0d2d1d4c676861b9a7b26746a7fdd40aa2c59b", "c70d0f900f4647bb714f0843dd82d7f7b759904006de31254efdb72ce88e0c0e"]
 pytest-randomly = ["6db5e03d72b54052b9b379dc3cfa4749c19bfe4de161cf3eb24762049f4ce9be", "92ec6745d3ebdd690ecb598648748c9601f16f5afacf83ccef2b50d23e6edb7f"]
 pytz = ["31cb35c89bd7d333cd32c5f278fca91b523b0834369e757f4c5641ea252236ca", "8e0f8568c118d3077b46be7d654cc8167fa916092e28320cde048e54bfc9f1e6"]
 pyyaml = ["3d7da3009c0f3e783b2c873687652d83b1bbfd5c88e9813fb7e5b03c0dd3108b", "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf", "40c71b8e076d0550b2e6380bada1f1cd1017b882f7e16f09a65be98e017f211a", "558dd60b890ba8fd982e05941927a3911dc409a63dcb8b634feaa0cda69330d3", "a7c28b45d9f99102fa092bb213aa12e0aaf9a6a1f5e395d36166639c1f96c3a1", "aa7dd4a6a427aed7df6fb7f08a580d68d9b118d90310374716ae90b710280af1", "bc558586e6045763782014934bfaf39d48b8ae85a2713117d16c39864085c613", "d46d7982b62e0729ad0175a9bc7e10a566fc07b224d2c79fafb5e032727eaa04", "d5eef459e30b09f5a098b9cea68bebfeb268697f78d647bd255a085371ac7f3f", "e01d3203230e1786cd91ccfdc8f8454c8069c91bee3962ad93b87a4b2860f537", "e170a9e6fcfd19021dd29845af83bb79236068bf5fd4df3327c1be18182b2531"]
