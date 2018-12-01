@@ -26,7 +26,7 @@ class _Option(object):
 
     def __attrs_post_init__(self):
         """Is called after regular init is done."""
-        object.__setattr__(self, 'help', self.help +' Defaults to: %default')
+        object.__setattr__(self, 'help', self.help + ' Defaults to: %default')
 
 
 @final
