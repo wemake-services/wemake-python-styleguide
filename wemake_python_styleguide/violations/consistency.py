@@ -43,6 +43,7 @@ Summary
    ObjectInBaseClassesListViolation
    MultipleContextManagerAssignmentsViolation
    ParametersIndentationViolation
+   ExtraIndentationViolation
 
 Consistency checks
 ------------------
@@ -65,6 +66,7 @@ Consistency checks
 .. autoclass:: ObjectInBaseClassesListViolation
 .. autoclass:: MultipleContextManagerAssignmentsViolation
 .. autoclass:: ParametersIndentationViolation
+.. autoclass:: ExtraIndentationViolation
 
 """
 
@@ -690,3 +692,37 @@ class ParametersIndentationViolation(ASTViolation):
     should_use_text = False
     error_template = 'Found incorrect multi-line parameters'
     code = 317
+
+
+@final
+class ExtraIndentationViolation(TokenizeViolation):
+    """
+    Forbid to use extra indentation.
+
+    Reasoning:
+        You can use extra indentation for lines of code.
+        Python allows you to do that in case you will keep the indentation
+        level equal for this specific node.
+        But, that's insane!
+
+    Solution:
+        We should stick to 4 spaces for an indentation block.
+        Each next block should be indented by just 4 extra spaces.
+
+    Example::
+
+        # Correct:
+        def test():
+            print('test')
+
+        # Wrong:
+        def test();
+                    print('test')
+
+    .. versionadded:: 0.6.0
+
+    """
+
+    should_use_text = False
+    error_template = 'Found extra indentation'
+    code = 318

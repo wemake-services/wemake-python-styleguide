@@ -13,6 +13,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids multiple assignment targets for context managers
 - Forbids to use incorrect multi-line parameters
 - Forbids to use `bool` values as positional arguments
+- Forbids to use extra indentation
 
 ### Bugfixes
 

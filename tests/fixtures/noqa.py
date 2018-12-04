@@ -41,6 +41,7 @@ consecutive__underscores = 4  # noqa: Z116
 cls = 5  # noqa: Z117
 __author__ = 'Nikita Sobolev'  # noqa: Z410
 extremely_long_name_that_needs_to_be_shortened_to_work_fine = 2  # noqa: Z118
+привет_по_русски = 'Hello, world!'  # noqa: Z119
 
 some._execute()  # noqa: Z441
 
@@ -170,9 +171,13 @@ class SomeClass(FirstParent, SecondParent, object):  # noqa: Z315
 
 
 class SomeClass(FirstParent,  # noqa: Z317
-                SecondParent,
+                SecondParent,  # noqa: Z318
                 ThirdParent):
     anti_z444 = 1
+
+
+if SomeClass:
+        print(SomeClass)  # noqa: Z318
 
 
 try:

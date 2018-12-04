@@ -168,9 +168,6 @@ class WrongParametersIndentationVisitor(BaseNodeVisitor):
         statement: ast.AST,
         extra_lines: int,
     ) -> Optional[bool]:
-        # We treat first element differently,
-        # since it is impossible to say what kind of multi-line
-        # parameters styles will be used at this moment.
         if statement.lineno == node.lineno and not extra_lines:
             return False
         return None
@@ -200,6 +197,9 @@ class WrongParametersIndentationVisitor(BaseNodeVisitor):
         multi_line_mode: Optional[bool] = None
         for index, statement in enumerate(elements):
             if index == 0:
+                # We treat first element differently,
+                # since it is impossible to say what kind of multi-line
+                # parameters styles will be used at this moment.
                 multi_line_mode = self._check_first_element(
                     node,
                     statement,

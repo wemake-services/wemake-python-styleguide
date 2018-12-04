@@ -90,6 +90,14 @@ class BaseVisitor(object):
         """
         raise NotImplementedError('Should be defined in a subclass')
 
+    def _post_visit(self) -> None:
+        """
+        Executed after all nodes have been visited.
+
+        This method is useful for counting statistics, etc.
+        By default does nothing.
+        """
+
 
 class BaseNodeVisitor(ast.NodeVisitor, BaseVisitor):
     """
@@ -125,14 +133,6 @@ class BaseNodeVisitor(ast.NodeVisitor, BaseVisitor):
             filename=checker.filename,
             tree=checker.tree,
         )
-
-    def _post_visit(self) -> None:
-        """
-        Executed after all nodes have been visited.
-
-        This method is useful for counting statistics, etc.
-        By default does nothing.
-        """
 
     @final
     def run(self) -> None:
@@ -170,6 +170,7 @@ class BaseFilenameVisitor(BaseVisitor):
         if self.filename != constants.STDIN:
             self.stem = get_stem(self.filename)
             self.visit_filename()
+            self._post_visit()
 
 
 class BaseTokenVisitor(BaseVisitor):
@@ -229,3 +230,4 @@ class BaseTokenVisitor(BaseVisitor):
         """Visits all token types that have a handler method."""
         for token in self.file_tokens:
             self.visit(token)
+        self._post_visit()
