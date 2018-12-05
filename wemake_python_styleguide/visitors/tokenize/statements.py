@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
 
 import tokenize
-from typing import Dict, Sequence
+from collections import defaultdict
+from typing import ClassVar, DefaultDict, Dict, List, Sequence, Tuple
 
+from wemake_python_styleguide.logics.tokens import only_contains
 from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.consistency import (
     ExtraIndentationViolation,
+    WrongBracketPositionViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
+
+TokenLines = DefaultDict[int, List[tokenize.TokenInfo]]
 
 
 @final
@@ -22,11 +27,11 @@ class ExtraIndentationVisitor(BaseTokenVisitor):
 
     """
 
-    _ignored_tokens = (
+    _ignored_tokens: ClassVar[Tuple[int, ...]] = (
         tokenize.NEWLINE,
     )
 
-    _ignored_previous_token = (
+    _ignored_previous_token: ClassVar[Tuple[int, ...]] = (
         tokenize.NL,
     )
 
@@ -76,5 +81,101 @@ class ExtraIndentationVisitor(BaseTokenVisitor):
             self._check_individual_line(lines, line, index)
 
     def visit(self, token: tokenize.TokenInfo) -> None:
-        """Goes through all nodes."""
+        """
+        Goes through all tokens to find wrong indentation.
+
+        Raises:
+            ExtraIndentationViolation
+
+        """
         self._check_extra_indentation(token)
+
+
+@final
+class BracketLocationVisitor(BaseTokenVisitor):
+    """
+    Finds closing brackets location.
+
+    We check that brackets can be on the same line or
+    brackets can be the only tokens on the line.
+
+    We track all kind of brackets: round, square, and curly.
+    """
+
+    # TODO: I am pretty sure we can tweak performance of this class.
+    # Try set() instead of tuple, optimize _post_visit(), etc
+    _opening_tokens: ClassVar[Tuple[int, ...]] = (
+        tokenize.LBRACE,
+        tokenize.LSQB,
+        tokenize.LPAR,
+    )
+
+    _closing_tokens: ClassVar[Tuple[int, ...]] = (
+        tokenize.RBRACE,
+        tokenize.RSQB,
+        tokenize.RPAR,
+    )
+
+    _allowed_empty_line_tokens: ClassVar[Tuple[int, ...]] = (
+        tokenize.NL,
+        tokenize.NEWLINE,
+        *_closing_tokens,
+    )
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Creates line tracking for tokens."""
+        super().__init__(*args, **kwargs)
+        self._lines: TokenLines = defaultdict(list)
+
+    def _get_reverse_bracket(
+        self,
+        bracket: tokenize.TokenInfo,
+    ) -> int:
+        index = self._closing_tokens.index(bracket.exact_type)
+        return self._opening_tokens[index]
+
+    def _annotate_brackets(
+        self,
+        tokens: List[tokenize.TokenInfo],
+    ) -> Dict[int, int]:
+        """Annotates each opening bracket with the nested level index."""
+        brackets = {bracket: 0 for bracket in self._opening_tokens}
+        for token in tokens:
+            if token.exact_type in self._opening_tokens:
+                brackets[token.exact_type] += 1
+            if token.exact_type in self._closing_tokens:
+                reverse_bracket = self._get_reverse_bracket(token)
+                if brackets[reverse_bracket] > 0:
+                    brackets[reverse_bracket] -= 1
+        return brackets
+
+    def _check_new_line(
+        self,
+        token: tokenize.TokenInfo,
+        tokens_before: List[tokenize.TokenInfo],
+    ) -> None:
+        if not only_contains(tokens_before, self._allowed_empty_line_tokens):
+            self.add_violation(WrongBracketPositionViolation(token))
+
+    def _check_individual_line(self, tokens: List[tokenize.TokenInfo]) -> None:
+        for index, token in enumerate(tokens):
+            if token.exact_type in self._closing_tokens:
+                tokens_before = tokens[:index]
+                annotated = self._annotate_brackets(tokens_before)
+                reverse_bracket = self._get_reverse_bracket(token)
+                if annotated[reverse_bracket] == 0:
+                    self._check_new_line(token, tokens_before)
+
+    def _post_visit(self) -> None:
+        for _, tokens in self._lines.items():
+            self._check_individual_line(tokens)
+
+    def visit(self, token: tokenize.TokenInfo) -> None:
+        """
+        Goes trough all tokens to separate them by line numbers.
+
+        Raises:
+            WrongBracketPositionViolation
+
+        """
+        self._lines[token.start[0]].append(token)

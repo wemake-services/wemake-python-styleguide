@@ -32,7 +32,7 @@ def second(args: Tuple[int, int]) -> None:
 
 correct_multiline_tuple = """
 some = (
-    1,
+    [1, 1, 1],
     2,
     3,
 )
@@ -40,7 +40,11 @@ some = (
 
 correct_multiline_dict = """
 some = {
-    1: 1,
+    1: [
+        1,
+        1,
+        1,
+    ],
     2: 2,
     3: 3,
 }
@@ -50,7 +54,7 @@ correct_multiline_call = """
 print(
     'a',
     object(),
-    [],
+    [2, 3],
 )
 """
 
@@ -77,7 +81,7 @@ def second(args: Tuple[int, int]) -> None:
 
 wrong_multiline_tuple = """
 some = (
-        1,
+        [1, 1, 1],
         2,
         3,
 )
@@ -85,7 +89,11 @@ some = (
 
 wrong_multiline_dict = """
 some = {
-        1: 1,
+        1: [
+            1,
+            1,
+            1,
+        ],
         2: 2,
         3: 3,
 }
@@ -95,7 +103,7 @@ wrong_multiline_call = """
 print(
             'a',
             object(),
-            [],
+            [2, 3],
 )
 """
 

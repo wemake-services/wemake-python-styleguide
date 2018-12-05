@@ -172,12 +172,16 @@ class SomeClass(FirstParent, SecondParent, object):  # noqa: Z315
 
 class SomeClass(FirstParent,  # noqa: Z317
                 SecondParent,  # noqa: Z318
-                ThirdParent):
+                ThirdParent):  # noqa: Z319
     anti_z444 = 1
 
 
 if SomeClass:
         print(SomeClass)  # noqa: Z318
+
+print(
+    1,
+    2)  # noqa: Z319
 
 
 try:

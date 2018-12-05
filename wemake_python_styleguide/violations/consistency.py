@@ -44,6 +44,7 @@ Summary
    MultipleContextManagerAssignmentsViolation
    ParametersIndentationViolation
    ExtraIndentationViolation
+   WrongBracketPositionViolation
 
 Consistency checks
 ------------------
@@ -67,6 +68,7 @@ Consistency checks
 .. autoclass:: MultipleContextManagerAssignmentsViolation
 .. autoclass:: ParametersIndentationViolation
 .. autoclass:: ExtraIndentationViolation
+.. autoclass:: WrongBracketPositionViolation
 
 """
 
@@ -716,7 +718,7 @@ class ExtraIndentationViolation(TokenizeViolation):
             print('test')
 
         # Wrong:
-        def test();
+        def test():
                     print('test')
 
     .. versionadded:: 0.6.0
@@ -726,3 +728,59 @@ class ExtraIndentationViolation(TokenizeViolation):
     should_use_text = False
     error_template = 'Found extra indentation'
     code = 318
+
+
+@final
+class WrongBracketPositionViolation(TokenizeViolation):
+    """
+    Forbid to use extra indentation.
+
+    Reasoning:
+        You can use extra indentation for lines of code.
+        Python allows you to do that in case you will keep the indentation
+        level equal for this specific node.
+        But, that's insane!
+
+    Solution:
+        Place bracket on the same line, when a single line expression.
+        Or place bracket on a new line when a multi-line expression.
+
+    Example::
+
+        # Correct:
+        print([
+            1, 2, 3,
+        ])
+
+        print(
+            1,
+            2,
+        )
+
+        def _annotate_brackets(
+            tokens: List[tokenize.TokenInfo],
+        ) -> TokenLines:
+            ...
+
+        # Wrong:
+        print([
+            1, 2, 3],
+        )
+
+        print(
+            1,
+            2)
+
+        def _annotate_brackets(
+            tokens: List[tokenize.TokenInfo]) -> TokenLines:
+            ...
+
+    We check round, square, and curly brackets.
+
+    .. versionadded:: 0.6.0
+
+    """
+
+    should_use_text = False
+    error_template = 'Found bracket in wrong position'
+    code = 319

@@ -13,4 +13,5 @@ TOKENS_PRESET = (
     keywords.WrongKeywordTokenVisitor,
     primitives.WrongPrimitivesVisitor,
     statements.ExtraIndentationVisitor,
+    statements.BracketLocationVisitor,
 )

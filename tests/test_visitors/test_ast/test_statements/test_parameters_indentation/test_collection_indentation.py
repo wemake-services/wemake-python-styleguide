@@ -14,6 +14,14 @@ correct_single_line_list = 'xy = [1, 2, 3]'
 correct_single_line_set = 'xy = {1, 2, 3}'
 correct_single_line_dict = 'xy = {"key": [1, 2], "other": {1, 2}, "w": (1, 2)}'
 
+correct_multiline_string = """
+xy = (
+    'first'
+    'second'
+    'last'
+)
+"""
+
 correct_multi_line_tuple = """
 xy = (
     1,
@@ -192,6 +200,7 @@ xy = {
 
 
 @pytest.mark.parametrize('code', [
+    correct_multiline_string,
     correct_single_line_tuple,
     correct_single_line_list,
     correct_single_line_set,
