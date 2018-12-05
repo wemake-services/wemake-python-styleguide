@@ -25,7 +25,7 @@ class WrongAnnotationVisitor(BaseNodeVisitor):
                 self.add_violation(MultilineFunctionAnnotationViolation(node))
                 return
 
-    def _check_return_annotation(self, node: ast.FunctionDef) -> None:
+    def _check_return_annotation(self, node: AnyFunctionDef) -> None:
         if not node.returns:
             return
 
