@@ -184,6 +184,16 @@ print(
     2)  # noqa: Z319
 
 
+def function(  # noqa: Z320
+    arg: Optional[  # noqa: Z320
+        str,
+    ]
+) -> Optional[
+    str,
+]:
+    anti_z444 = 1
+
+
 try:
     anti_z444 = 1
 except BaseException:  # noqa: Z424

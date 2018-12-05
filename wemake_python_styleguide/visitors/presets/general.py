@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from wemake_python_styleguide.visitors.ast import (
+    annotations,
     attributes,
     builtins,
     comparisons,
@@ -32,6 +33,7 @@ GENERAL_PRESET = (
     keywords.WrongContextManagerVisitor,
 
     attributes.WrongAttributeVisitor,
+    annotations.WrongAnnotationVisitor,
 
     functions.WrongFunctionCallVisitor,
 

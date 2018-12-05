@@ -135,7 +135,7 @@ class WrongComprehensionVisitor(BaseNodeVisitor):
 class WrongLoopVisitor(BaseNodeVisitor):
     """Responsible for examining loops."""
 
-    def _does_loop_contain_node(
+    def _does_loop_contain_node(  # TODO: move, reuse in annotations.py
         self,
         loop: Optional[AnyLoop],
         to_check: ast.Break,

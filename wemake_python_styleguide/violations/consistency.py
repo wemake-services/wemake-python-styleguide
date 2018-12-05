@@ -45,6 +45,7 @@ Summary
    ParametersIndentationViolation
    ExtraIndentationViolation
    WrongBracketPositionViolation
+   MultilineFunctionAnnotationViolation
 
 Consistency checks
 ------------------
@@ -69,6 +70,7 @@ Consistency checks
 .. autoclass:: ParametersIndentationViolation
 .. autoclass:: ExtraIndentationViolation
 .. autoclass:: WrongBracketPositionViolation
+.. autoclass:: MultilineFunctionAnnotationViolation
 
 """
 
@@ -562,7 +564,7 @@ class WrongConditionalViolation(ASTViolation):
 
 class ObjectInBaseClassesListViolation(ASTViolation):
     """
-    Forbid extra ``object`` in parent classes list.
+    Forbids extra ``object`` in parent classes list.
 
     Reasoning:
         We should allow object only when
@@ -594,7 +596,7 @@ class ObjectInBaseClassesListViolation(ASTViolation):
 @final
 class MultipleContextManagerAssignmentsViolation(ASTViolation):
     """
-    Forbid multiple assignment targets for context managers.
+    Forbids multiple assignment targets for context managers.
 
     Reasoning:
         It is hard to distinguish whether ``as`` should unpack into
@@ -629,7 +631,7 @@ class MultipleContextManagerAssignmentsViolation(ASTViolation):
 @final
 class ParametersIndentationViolation(ASTViolation):
     """
-    Forbid to use incorrect parameters indentation.
+    Forbids to use incorrect parameters indentation.
 
     Reasoning:
         It is really easy to spoil your perfect, readable code with
@@ -699,7 +701,7 @@ class ParametersIndentationViolation(ASTViolation):
 @final
 class ExtraIndentationViolation(TokenizeViolation):
     """
-    Forbid to use extra indentation.
+    Forbids to use extra indentation.
 
     Reasoning:
         You can use extra indentation for lines of code.
@@ -733,7 +735,7 @@ class ExtraIndentationViolation(TokenizeViolation):
 @final
 class WrongBracketPositionViolation(TokenizeViolation):
     """
-    Forbid to use extra indentation.
+    Forbids to use extra indentation.
 
     Reasoning:
         You can use extra indentation for lines of code.
@@ -784,3 +786,38 @@ class WrongBracketPositionViolation(TokenizeViolation):
     should_use_text = False
     error_template = 'Found bracket in wrong position'
     code = 319
+
+
+@final
+class MultilineFunctionAnnotationViolation(ASTViolation):
+    """
+    Forbids to use multi-line function type annotations.
+
+    Reasoning:
+        Functions with multi-line type annotations are unreadable.
+
+    Solution:
+        Use type annotations that fit into a single line to annotate functions.
+        If your annotation is too long, then use type aliases.
+
+    Example::
+
+        # Correct:
+        def create_list(length: int) -> List[int]:
+            ...
+
+        # Wrong:
+        def create_list(length: int) -> List[
+            int,
+        ]:
+            ...
+
+    This rule checks argument and return type annotations.
+
+    .. versionadded:: 0.6.0
+
+    """
+
+    should_use_text = False
+    error_template = 'Found multi-line function type annotation'
+    code = 320

@@ -14,6 +14,8 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use incorrect multi-line parameters
 - Forbids to use `bool` values as positional arguments
 - Forbids to use extra indentation
+- Forbids to use inconsistent brackets
+- Forbids to use multi-line function type annotations
 
 ### Bugfixes
 
