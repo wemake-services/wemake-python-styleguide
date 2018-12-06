@@ -19,7 +19,7 @@ General
 ~~~~~~~
 
 - Use only ``ASCII`` chars for names
-- Do not use tranliteration from any other languages, translate names instead
+- Do not use transliteration from any other languages, translate names instead
 - Use clear names, do not use words that do not mean anything like ``obj``
 - Use names of an appropriate length: not too short, not too long
 - Protected members should use underscore as the first char
