@@ -19,6 +19,14 @@ partial_number = .05  # noqa: Z304
 formatted_string = f'Hi, {full_name}'  # noqa: Z305
 
 
+def function_name(
+    value: int = 0,  # noqa: Z110
+):
+    # See:
+    # https://github.com/wemake-services/wemake-python-styleguide/issues/392
+    anti_z444 = 1
+
+
 def some():  # noqa: Z110
     from my_module import some_function  # noqa: Z435
 
@@ -178,6 +186,9 @@ class SomeClass(FirstParent,  # noqa: Z317
 
 if SomeClass:
         print(SomeClass)  # noqa: Z318
+
+some_set = {1
+           }  # noqa: Z318
 
 print(
     1,

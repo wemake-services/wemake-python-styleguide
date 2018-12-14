@@ -58,13 +58,11 @@ class BaseViolation(object):
     Attributes:
         error_template: message that will be shown to user after formatting.
         code: violation unique number. Used to identify the violation.
-        should_use_text: formatting option. Some do not require extra text.
 
     """
 
     error_template: ClassVar[str]
     code: ClassVar[int]
-    should_use_text: ClassVar[bool] = True
 
     def __init__(self, node: ErrorNode, text: str = None) -> None:
         """
@@ -107,11 +105,9 @@ class BaseViolation(object):
 
         Conditionally formats the ``error_template`` if it is required.
         """
-        if self.should_use_text:
-            message = self.error_template.format(self._text)
-        else:
-            message = self.error_template
-        return '{0} {1}'.format(self._full_code(), message)
+        return '{0} {1}'.format(
+            self._full_code(), self.error_template.format(self._text),
+        )
 
     @final
     def node_items(self) -> Tuple[int, int, str]:

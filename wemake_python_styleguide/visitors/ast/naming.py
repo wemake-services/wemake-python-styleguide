@@ -101,7 +101,7 @@ class _NameValidator(object):
             ) and not is_lambda
 
             self.check_name(
-                node, arg.arg, is_first_argument=should_check_argument,
+                arg, arg.arg, is_first_argument=should_check_argument,
             )
 
     def check_attribute_name(self, node: ast.ClassDef) -> None:

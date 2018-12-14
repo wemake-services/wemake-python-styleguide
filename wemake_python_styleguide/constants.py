@@ -80,6 +80,7 @@ VARIABLE_NAMES_BLACKLIST: Final = frozenset((
     'objects',
     'objs',
     'some',
+    'do',
 
     # Confuseables:
     'no',

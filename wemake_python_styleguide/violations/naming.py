@@ -185,7 +185,6 @@ class WrongModuleNameViolation(SimpleViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found wrong module name'
     code = 100
 
@@ -216,7 +215,6 @@ class WrongModuleMagicNameViolation(SimpleViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found wrong module magic name'
     code = 101
 
@@ -252,7 +250,6 @@ class WrongModuleNamePatternViolation(SimpleViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found incorrect module name pattern'
     code = 102
 

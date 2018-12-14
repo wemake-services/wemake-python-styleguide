@@ -2,7 +2,7 @@
 
 import tokenize
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, Dict, List, Sequence, Tuple
+from typing import ClassVar, DefaultDict, Dict, List, Sequence, Set, Tuple
 
 from wemake_python_styleguide.logics.tokens import only_contains
 from wemake_python_styleguide.types import final
@@ -13,6 +13,23 @@ from wemake_python_styleguide.violations.consistency import (
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
 TokenLines = DefaultDict[int, List[tokenize.TokenInfo]]
+
+MATCHING: Dict[int, int] = {
+    tokenize.LBRACE: tokenize.RBRACE,
+    tokenize.LSQB: tokenize.RSQB,
+    tokenize.LPAR: tokenize.RPAR,
+}
+
+ALLOWED_EMPTY_LINE_TOKENS: Set[int] = {
+    tokenize.NL,
+    tokenize.NEWLINE,
+    *MATCHING.values(),
+}
+
+
+def _get_reverse_bracket(bracket: tokenize.TokenInfo) -> int:
+    index = list(MATCHING.values()).index(bracket.exact_type)
+    return list(MATCHING.keys())[index]
 
 
 @final
@@ -102,69 +119,43 @@ class BracketLocationVisitor(BaseTokenVisitor):
     We track all kind of brackets: round, square, and curly.
     """
 
-    # TODO: I am pretty sure we can tweak performance of this class.
-    # Try set() instead of tuple, optimize _post_visit(), etc
-    _opening_tokens: ClassVar[Tuple[int, ...]] = (
-        tokenize.LBRACE,
-        tokenize.LSQB,
-        tokenize.LPAR,
-    )
-
-    _closing_tokens: ClassVar[Tuple[int, ...]] = (
-        tokenize.RBRACE,
-        tokenize.RSQB,
-        tokenize.RPAR,
-    )
-
-    _allowed_empty_line_tokens: ClassVar[Tuple[int, ...]] = (
-        tokenize.NL,
-        tokenize.NEWLINE,
-        *_closing_tokens,
-    )
-
     def __init__(self, *args, **kwargs) -> None:
         """Creates line tracking for tokens."""
         super().__init__(*args, **kwargs)
         self._lines: TokenLines = defaultdict(list)
-
-    def _get_reverse_bracket(
-        self,
-        bracket: tokenize.TokenInfo,
-    ) -> int:
-        index = self._closing_tokens.index(bracket.exact_type)
-        return self._opening_tokens[index]
 
     def _annotate_brackets(
         self,
         tokens: List[tokenize.TokenInfo],
     ) -> Dict[int, int]:
         """Annotates each opening bracket with the nested level index."""
-        brackets = {bracket: 0 for bracket in self._opening_tokens}
+        brackets = {bracket: 0 for bracket in MATCHING.keys()}
         for token in tokens:
-            if token.exact_type in self._opening_tokens:
+            if token.exact_type in MATCHING.keys():
                 brackets[token.exact_type] += 1
-            if token.exact_type in self._closing_tokens:
-                reverse_bracket = self._get_reverse_bracket(token)
+            if token.exact_type in MATCHING.values():
+                reverse_bracket = _get_reverse_bracket(token)
                 if brackets[reverse_bracket] > 0:
                     brackets[reverse_bracket] -= 1
         return brackets
 
-    def _check_new_line(
+    def _check_closing(
         self,
         token: tokenize.TokenInfo,
-        tokens_before: List[tokenize.TokenInfo],
+        index: int,
+        tokens: List[tokenize.TokenInfo],
     ) -> None:
-        if not only_contains(tokens_before, self._allowed_empty_line_tokens):
-            self.add_violation(WrongBracketPositionViolation(token))
+        tokens_before = tokens[:index]
+        annotated = self._annotate_brackets(tokens_before)
+        reverse_bracket = _get_reverse_bracket(token)
+        if annotated[reverse_bracket] == 0:
+            if not only_contains(tokens_before, ALLOWED_EMPTY_LINE_TOKENS):
+                self.add_violation(WrongBracketPositionViolation(token))
 
     def _check_individual_line(self, tokens: List[tokenize.TokenInfo]) -> None:
         for index, token in enumerate(tokens):
-            if token.exact_type in self._closing_tokens:
-                tokens_before = tokens[:index]
-                annotated = self._annotate_brackets(tokens_before)
-                reverse_bracket = self._get_reverse_bracket(token)
-                if annotated[reverse_bracket] == 0:
-                    self._check_new_line(token, tokens_before)
+            if token.exact_type in MATCHING.values():
+                self._check_closing(token, index, tokens)
 
     def _post_visit(self) -> None:
         for _, tokens in self._lines.items():

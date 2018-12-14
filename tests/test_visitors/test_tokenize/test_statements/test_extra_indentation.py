@@ -107,6 +107,11 @@ print(
 )
 """
 
+wrong_single_paren = """
+some_set = {1
+           }
+"""
+
 
 @pytest.mark.parametrize('code', [
     correct_function_with_docstring,
@@ -136,6 +141,7 @@ def test_correct_indentation(
     wrong_multiline_tuple,
     wrong_multiline_dict,
     wrong_multiline_call,
+    wrong_single_paren,
 ])
 def test_wrong_indentation(
     parse_tokens,

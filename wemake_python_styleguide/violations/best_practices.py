@@ -169,7 +169,6 @@ class WrongDocCommentViolation(TokenizeViolation):
     """
 
     code = 401
-    should_use_text = False
     error_template = 'Found wrong doc comment'
 
 
@@ -226,7 +225,6 @@ class EmptyModuleViolation(SimpleViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found empty module'
     code = 411
 
@@ -266,7 +264,6 @@ class InitModuleHasLogicViolation(SimpleViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found `__init__.py` module with logic'
     code = 412
 
@@ -392,7 +389,6 @@ class RaiseNotImplementedViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found raise NotImplemented'
     code = 423
 
@@ -427,7 +423,6 @@ class BaseExceptionViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found except `BaseException`'
     code = 424
 
@@ -460,7 +455,6 @@ class BooleanPositionalArgumentViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found boolean non-keyword argument'
     code = 425
 
@@ -606,7 +600,6 @@ class StaticMethodViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found using `@staticmethod`'
     code = 433
 
@@ -672,7 +665,6 @@ class NestedImportViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found nested import'
     code = 435
 
@@ -717,7 +709,6 @@ class RedundantLoopElseViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found `else` in a loop without `break`'
     code = 436
 
@@ -751,7 +742,6 @@ class RedundantFinallyViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found `finally` in `try` block without `except`'
     code = 437
 
@@ -779,7 +769,6 @@ class ReassigningVariableToItselfViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found reassigning variable to itself'
     code = 438
 
@@ -810,7 +799,6 @@ class YieldInsideInitViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found `yield` inside `__init__` method'
     code = 439
 
@@ -844,7 +832,6 @@ class ProtectedModuleViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found protected module import'
     code = 440
 
@@ -920,7 +907,6 @@ class LambdaInsideLoopViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = "Found `lambda` in loop's body"
     code = 442
 
@@ -964,7 +950,6 @@ class UnreachableCodeViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found unreachable code'
     code = 443
 
@@ -998,6 +983,5 @@ class StatementHasNoEffectViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found statement that has no effect'
     code = 444

@@ -571,6 +571,5 @@ class TooManyForsInComprehensionViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found a comprehension with too many `for` statements'
     code = 224

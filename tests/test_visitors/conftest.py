@@ -32,13 +32,16 @@ def assert_error_text():
         assert len(visitor.violations) == 1
 
         violation = visitor.violations[0]
-        assert violation.__class__.should_use_text, violation.__class__
+        error_format = ': {0}'
+
+        assert error_format in violation.error_template
+        assert violation.error_template.endswith(error_format)
 
         reproduction = violation.__class__(
             node=violation._node,  # noqa: Z441
             text=text,
         )
-        assert reproduction.message() == violation.message()  # noqa: S101
+        assert reproduction.message() == violation.message()
 
     return factory
 

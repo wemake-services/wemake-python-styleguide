@@ -10,6 +10,7 @@ We used to have incremental versioning before `0.1.0`.
 
 - Adds `flake8-per-file-ignore` dependency
 - Adds default values to the `flake8 --help` output
+- Adds `do` as a restricted variable name
 - Forbids multiple assignment targets for context managers
 - Forbids to use incorrect multi-line parameters
 - Forbids to use `bool` values as positional arguments
@@ -19,10 +20,12 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Bugfixes
 
-- Fixes tests failing on windows (@sobolevn hates windows!)
+- Fixes tests failing on windows (@sobolevn hates windows!),
+  but it still fails sometimes
 - Fixes bug when `@staticmethod` was treated as a module member
 - Fixes bug when some nodes were not checked with `TooDeepNestingViolation`
 - Fixes bug when it was possible to provide non-unique aliases
+- Fixes incorrect line number for incorrect parameter names
 
 ### Misc
 

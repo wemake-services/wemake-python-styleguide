@@ -105,7 +105,6 @@ class LocalFolderImportViolation(ASTViolation):
     .. versionadded:: 0.1.0
     """
 
-    should_use_text = False
     error_template = 'Found local folder import'
     code = 300
 
@@ -266,7 +265,6 @@ class FormattedStringViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found `f` string'
     code = 305
 
@@ -326,7 +324,6 @@ class MultipleIfsInComprehensionViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found list comprehension with multiple `if`s'
     code = 307
 
@@ -359,7 +356,6 @@ class ConstantComparisonViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found constant comparison'
     code = 308
 
@@ -390,7 +386,6 @@ class ComparisonOrderViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found reversed comparison order'
     code = 309
 
@@ -459,7 +454,6 @@ class MultipleInComparisonViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found multiple `in` comparisons'
     code = 311
 
@@ -493,7 +487,6 @@ class RedundantComparisonViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found comparison between same variable'
     code = 312
 
@@ -528,7 +521,6 @@ class MissingSpaceBetweenKeywordAndParenViolation(TokenizeViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found parens right after a keyword'
     code = 313
 
@@ -557,7 +549,6 @@ class WrongConditionalViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Conditional always evaluates to same result'
     code = 314
 
@@ -588,7 +579,6 @@ class ObjectInBaseClassesListViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Founded extra `object` in parent classes list'
     code = 315
 
@@ -623,7 +613,6 @@ class MultipleContextManagerAssignmentsViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found context manager with too many assignments'
     code = 316
 
@@ -693,7 +682,6 @@ class ParametersIndentationViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found incorrect multi-line parameters'
     code = 317
 
@@ -727,7 +715,6 @@ class ExtraIndentationViolation(TokenizeViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found extra indentation'
     code = 318
 
@@ -783,7 +770,6 @@ class WrongBracketPositionViolation(TokenizeViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found bracket in wrong position'
     code = 319
 
@@ -818,6 +804,5 @@ class MultilineFunctionAnnotationViolation(ASTViolation):
 
     """
 
-    should_use_text = False
     error_template = 'Found multi-line function type annotation'
     code = 320
