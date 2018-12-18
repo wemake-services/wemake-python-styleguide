@@ -81,6 +81,11 @@ variable_def = """
 {0} = 'test'
 """
 
+# See: https://github.com/wemake-services/wemake-python-styleguide/issues/405
+unpacking_variables = """
+first.attr, {0} = range(2)
+"""
+
 for_variable = """
 def container():
     for {0} in []:
@@ -131,6 +136,7 @@ except Exception as {0}:
 
     # Variables:
     variable_def,
+    unpacking_variables,
     for_variable,
     with_variable,
     exception,

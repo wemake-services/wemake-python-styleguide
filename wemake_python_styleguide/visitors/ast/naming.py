@@ -267,6 +267,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
                 for index, _ in enumerate(target_names):
                     target_names[index] = tuple(
                         name.id for name in target_names[index]
+                        if isinstance(name, ast.Name)
                     )
         return target_names
 

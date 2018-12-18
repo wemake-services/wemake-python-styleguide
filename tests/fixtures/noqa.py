@@ -252,8 +252,10 @@ async def function_with_unreachable():
 
 first = second = 2  # noqa: Z445
 
+index, nodes[0] = range(2)  # noqa: Z446
 
-try:  # noqa: Z446
+
+try:  # noqa: Z447
     anti_z444 = 1
 except ValueError:
     anti_z444 = 1

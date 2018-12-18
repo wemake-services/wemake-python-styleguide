@@ -19,6 +19,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use multi-line function type annotations
 - Forbids to use uppercase string modifiers
 - Forbids to use assign chains: now we only can use one assign per line
+- Forbids to use assign with unpacking for any nodes except `Name`
 - Forbids to have duplicate `except` blocks
 
 ### Bugfixes
@@ -30,6 +31,7 @@ We used to have incremental versioning before `0.1.0`.
 - Fixes bug when it was possible to provide non-unique aliases
 - Fixes incorrect line number for incorrect parameter names
 - Fixes bug when names like `__some__value__` were not treated as underscored
+- Fixes bug when assignment to anything rather than name was raising an error
 
 ### Misc
 

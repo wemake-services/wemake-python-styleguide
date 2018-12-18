@@ -46,6 +46,7 @@ Summary
    UnreachableCodeViolation
    StatementHasNoEffectViolation
    MultipleAssignmentsViolation
+   IncorrectUnpackingViolation
    DuplicateExceptionViolation
 
 Comments
@@ -89,6 +90,7 @@ Design
 .. autoclass:: UnreachableCodeViolation
 .. autoclass:: StatementHasNoEffectViolation
 .. autoclass:: MultipleAssignmentsViolation
+.. autoclass:: IncorrectUnpackingViolation
 .. autoclass:: DuplicateExceptionViolation
 
 """
@@ -915,6 +917,7 @@ class LambdaInsideLoopViolation(ASTViolation):
     code = 442
 
 
+@final
 class UnreachableCodeViolation(ASTViolation):
     """
     Forbids to have unreachable code.
@@ -958,6 +961,7 @@ class UnreachableCodeViolation(ASTViolation):
     code = 443
 
 
+@final
 class StatementHasNoEffectViolation(ASTViolation):
     """
     Forbids to have statements that do nothing.
@@ -991,6 +995,7 @@ class StatementHasNoEffectViolation(ASTViolation):
     code = 444
 
 
+@final
 class MultipleAssignmentsViolation(ASTViolation):
     """
     Forbids to have statements that do nothing.
@@ -1018,6 +1023,35 @@ class MultipleAssignmentsViolation(ASTViolation):
 
     error_template = 'Found multiple assign targets'
     code = 445
+
+
+@final
+class IncorrectUnpackingViolation(ASTViolation):
+    """
+    Forbids to have statements that do nothing.
+
+    Reasoning:
+        Having unpacking with side-effects is very dirty.
+        You might get in serious and very hard-to-debug troubles because of
+        this technique. So, do not use it.
+
+    Solution:
+        Use unpacking with only variables, not any other entities.
+
+    Example::
+
+        # Correct:
+        first, second = some()
+
+        # Wrong:
+        first, some_dict['alias'] = some()
+
+    .. versionadded:: 0.6.0
+
+    """
+
+    error_template = 'Found incorrect unpacking target'
+    code = 446
 
 
 @final
@@ -1054,4 +1088,4 @@ class DuplicateExceptionViolation(ASTViolation):
     """
 
     error_template = 'Found duplicate exception: {0}'
-    code = 446
+    code = 447

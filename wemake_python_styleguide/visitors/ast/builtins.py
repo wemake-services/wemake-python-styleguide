@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import ClassVar, Optional
+from typing import ClassVar, Iterable, Optional
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.types import AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
+    IncorrectUnpackingViolation,
     MagicNumberViolation,
     MultipleAssignmentsViolation,
 )
@@ -102,13 +103,54 @@ class WrongAssignmentVisitor(BaseNodeVisitor):
         if len(node.targets) > 1:
             self.add_violation(MultipleAssignmentsViolation(node))
 
+    def _check_unpacking_targets(
+        self,
+        node: ast.AST,
+        targets: Iterable[ast.AST],
+    ) -> None:
+        for target in targets:
+            if isinstance(target, ast.Starred):
+                target = target.value
+            if not isinstance(target, ast.Name):
+                self.add_violation(IncorrectUnpackingViolation(node))
+
+    def visit_With(self, node: ast.With) -> None:
+        """
+        Checks assignments inside context managers to be correct.
+
+        Raises:
+            IncorrectUnpackingViolation
+
+        """
+        for withitem in node.items:
+            if isinstance(withitem.optional_vars, ast.Tuple):
+                self._check_unpacking_targets(
+                    node, withitem.optional_vars.elts,
+                )
+        self.generic_visit(node)
+
+    def visit_For(self, node: ast.For) -> None:
+        """
+        Checks assignments inside ``for`` loops to be correct.
+
+        Raises:
+            IncorrectUnpackingViolation
+
+        """
+        if isinstance(node.target, ast.Tuple):
+            self._check_unpacking_targets(node, node.target.elts)
+        self.generic_visit(node)
+
     def visit_Assign(self, node: ast.Assign) -> None:
         """
-        Checks assingments to be correct.
+        Checks assignments to be correct.
 
         Raises:
             MultipleAssignmentsViolation
+            IncorrectUnpackingViolation
 
         """
         self._check_assign_targets(node)
+        if isinstance(node.targets[0], ast.Tuple):
+            self._check_unpacking_targets(node, node.targets[0].elts)
         self.generic_visit(node)
