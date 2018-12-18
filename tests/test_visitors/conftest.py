@@ -20,6 +20,7 @@ def assert_errors():
         for index, error in enumerate(visitor.violations):
             assert error.code == errors[index].code
             if isinstance(error, (ASTViolation, TokenizeViolation)):
+                assert error._node is not None  # noqa: Z441
                 assert error._location() != (0, 0)  # noqa: Z441
 
     return factory

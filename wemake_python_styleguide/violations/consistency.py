@@ -46,6 +46,7 @@ Summary
    ExtraIndentationViolation
    WrongBracketPositionViolation
    MultilineFunctionAnnotationViolation
+   UppercaseStringModifierViolation
 
 Consistency checks
 ------------------
@@ -71,6 +72,7 @@ Consistency checks
 .. autoclass:: ExtraIndentationViolation
 .. autoclass:: WrongBracketPositionViolation
 .. autoclass:: MultilineFunctionAnnotationViolation
+.. autoclass:: UppercaseStringModifierViolation
 
 """
 
@@ -806,3 +808,32 @@ class MultilineFunctionAnnotationViolation(ASTViolation):
 
     error_template = 'Found multi-line function type annotation'
     code = 320
+
+
+@final
+class UppercaseStringModifierViolation(TokenizeViolation):
+    """
+    Forbids to use uppercase string modifiers.
+
+    Reasoning:
+        String modifiers should be consistent.
+
+    Solution:
+        Use lowercase modifiers should be written in lowercase.
+
+    Example::
+
+        # Correct:
+        some_string = r'/regex/'
+        some_bytes = b'123'
+
+        # Wrong:
+        some_string = R'/regex/'
+        some_bytes = B'123'
+
+    .. versionadded:: 0.6.0
+
+    """
+
+    error_template = 'Found uppercase string modifier: {0}'
+    code = 321

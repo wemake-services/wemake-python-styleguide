@@ -7,6 +7,7 @@ from wemake_python_styleguide import constants
 from wemake_python_styleguide.types import AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
     MagicNumberViolation,
+    MultipleAssignmentsViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
     FormattedStringViolation,
@@ -90,4 +91,24 @@ class MagicNumberVisitor(BaseNodeVisitor):
 
         """
         self._check_is_magic(node)
+        self.generic_visit(node)
+
+
+@final
+class WrongAssignmentVisitor(BaseNodeVisitor):
+    """Visits all assign nodes."""
+
+    def _check_assign_targets(self, node: ast.Assign) -> None:
+        if len(node.targets) > 1:
+            self.add_violation(MultipleAssignmentsViolation(node))
+
+    def visit_Assign(self, node: ast.Assign) -> None:
+        """
+        Checks assingments to be correct.
+
+        Raises:
+            MultipleAssignmentsViolation
+
+        """
+        self._check_assign_targets(node)
         self.generic_visit(node)

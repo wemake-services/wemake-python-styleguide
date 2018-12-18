@@ -45,6 +45,7 @@ Summary
    LambdaInsideLoopViolation
    UnreachableCodeViolation
    StatementHasNoEffectViolation
+   MultipleAssignmentsViolation
 
 Comments
 --------
@@ -86,6 +87,7 @@ Design
 .. autoclass:: LambdaInsideLoopViolation
 .. autoclass:: UnreachableCodeViolation
 .. autoclass:: StatementHasNoEffectViolation
+.. autoclass:: MultipleAssignmentsViolation
 
 """
 
@@ -985,3 +987,32 @@ class StatementHasNoEffectViolation(ASTViolation):
 
     error_template = 'Found statement that has no effect'
     code = 444
+
+
+class MultipleAssignmentsViolation(ASTViolation):
+    """
+    Forbids to have statements that do nothing.
+
+    Reasoning:
+        Multiple assignments on the same line might not do what you think
+        they do. They can also grown pretty long. And you will not notice
+        the rising complexity of your code.
+
+    Solution:
+        Use separate lines for each assignment.
+
+    Example::
+
+        # Correct:
+        a = 1
+        b = 1
+
+        # Wrong:
+        a = b = 1
+
+    .. versionadded:: 0.6.0
+
+    """
+
+    error_template = 'Found multiple assign targets'
+    code = 445

@@ -205,6 +205,8 @@ def function(  # noqa: Z320
     anti_z444 = 1
 
 
+string_modifier = R'(s)'  # noqa: Z321
+
 try:
     anti_z444 = 1
 except BaseException:  # noqa: Z424
@@ -245,3 +247,5 @@ async def function_with_unreachable():
 
 
 1 + 2  # noqa: Z444
+
+first = second = 2  # noqa: Z445

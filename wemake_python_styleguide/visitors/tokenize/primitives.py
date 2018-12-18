@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import re
 import tokenize
 from typing import ClassVar, FrozenSet
 
@@ -9,6 +10,7 @@ from wemake_python_styleguide.violations.consistency import (
     PartialFloatViolation,
     UnderscoredNumberViolation,
     UnicodeStringViolation,
+    UppercaseStringModifierViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
@@ -19,6 +21,10 @@ class WrongPrimitivesVisitor(BaseTokenVisitor):
 
     _bad_number_suffixes: ClassVar[FrozenSet[str]] = frozenset((
         'X', 'O', 'B', 'E',
+    ))
+
+    _bad_string_modifiers: ClassVar[FrozenSet[str]] = frozenset((
+        'R', 'F', 'B',
     ))
 
     def _check_underscored_number(self, token: tokenize.TokenInfo) -> None:
@@ -37,19 +43,33 @@ class WrongPrimitivesVisitor(BaseTokenVisitor):
                 BadNumberSuffixViolation(token, text=token.string),
             )
 
+    def _check_string_modifiers(self, token: tokenize.TokenInfo) -> None:
+        if token.string.startswith('u'):
+            self.add_violation(
+                UnicodeStringViolation(token, text=token.string),
+            )
+
+        modifiers = re.split(r'[\'\"]', token.string)[0]
+        if modifiers:
+            for mod in self._bad_string_modifiers:
+                if mod in modifiers:
+                    self.add_violation(
+                        UppercaseStringModifierViolation(token, text=mod),
+                    )
+
     def visit_string(self, token: tokenize.TokenInfo) -> None:
         """
         Checks string declarations.
 
         ``u`` can only be the only prefix.
         You can not combine it with ``r``, ``b``, or ``f``.
+        Since it will raise a ``SyntaxError`` while parsing.
 
         Raises:
             UnicodeStringViolation
 
         """
-        if token.string.startswith('u'):
-            self.add_violation(UnicodeStringViolation(token, text=token.string))
+        self._check_string_modifiers(token)
 
     def visit_number(self, token: tokenize.TokenInfo) -> None:
         """

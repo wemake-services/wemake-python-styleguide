@@ -50,7 +50,7 @@ def _load_all_violation_classes():
 
 @pytest.fixture(scope='session')
 def all_violations():
-    """Loads all violations from the package."""
+    """Loads all violations from the package and creates a flat list."""
     classes = _load_all_violation_classes()
     all_errors_container = []
     for module_classes in classes.values():
