@@ -29,6 +29,7 @@ We used to have incremental versioning before `0.1.0`.
 - Fixes bug when some nodes were not checked with `TooDeepNestingViolation`
 - Fixes bug when it was possible to provide non-unique aliases
 - Fixes incorrect line number for incorrect parameter names
+- Fixes bug when names like `__some__value__` were not treated as underscored
 
 ### Misc
 

@@ -12,6 +12,7 @@ from wemake_python_styleguide.visitors.ast.naming import WrongNameVisitor
     'with__underscore',
     'mutliple__under__score',
     'triple___underscore',
+    '__magic__name__',
 ])
 def test_underscored_variable_name(
     assert_errors,

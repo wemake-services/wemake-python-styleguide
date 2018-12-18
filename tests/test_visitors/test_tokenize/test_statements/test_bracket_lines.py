@@ -11,6 +11,8 @@ from wemake_python_styleguide.visitors.tokenize.statements import (
 
 # Correct:
 
+correct_simple_variable = 'xy = [[], [], ()]'
+correct_simple_function_call = 'print([1, 2, 3], (1, 2))'
 correct_annotated_variable = 'xy: Optional[int] = some()'
 
 correct_function = """
@@ -118,6 +120,8 @@ some = [
 
 
 @pytest.mark.parametrize('code', [
+    correct_simple_variable,
+    correct_simple_function_call,
     correct_annotated_variable,
     correct_function,
     correct_multiline_function,

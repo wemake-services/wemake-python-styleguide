@@ -147,8 +147,7 @@ class BracketLocationVisitor(BaseTokenVisitor):
     ) -> None:
         tokens_before = tokens[:index]
         annotated = self._annotate_brackets(tokens_before)
-        reverse_bracket = _get_reverse_bracket(token)
-        if annotated[reverse_bracket] == 0:
+        if annotated[_get_reverse_bracket(token)] == 0:
             if not only_contains(tokens_before, ALLOWED_EMPTY_LINE_TOKENS):
                 self.add_violation(WrongBracketPositionViolation(token))
 

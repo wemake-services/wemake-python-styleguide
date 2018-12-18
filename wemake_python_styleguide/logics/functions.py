@@ -16,6 +16,7 @@ def given_function_called(node: Call, to_check: Iterable[str]) -> str:
     'print'
 
     """
+    # TODO: replace with `astor`
     function_name = getattr(node.func, 'id', None)
     function_value = getattr(node.func, 'value', None)
     function_inner_id = getattr(function_value, 'id', None)

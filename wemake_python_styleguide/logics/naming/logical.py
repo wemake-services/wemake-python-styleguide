@@ -3,6 +3,7 @@
 from typing import Iterable
 
 from wemake_python_styleguide import constants
+from wemake_python_styleguide.logics.naming import access
 from wemake_python_styleguide.options import defaults
 
 
@@ -175,17 +176,19 @@ def does_contain_consecutive_underscores(name: str) -> bool:
     >>> does_contain_consecutive_underscores('some__value')
     True
 
+    >>> does_contain_consecutive_underscores('__some__value__')
+    True
+
+    >>> does_contain_consecutive_underscores('__private__value')
+    True
+
     >>> does_contain_consecutive_underscores('some_value__')
     True
 
     """
-    if name.startswith('__'):
-        return False
-
-    if '__' in name:
-        return True
-
-    return False
+    if access.is_magic(name) or access.is_private(name):
+        return '__' in name.strip('_')
+    return '__' in name
 
 
 def does_contain_unicode(name: str) -> bool:
