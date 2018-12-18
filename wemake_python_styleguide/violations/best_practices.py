@@ -46,6 +46,7 @@ Summary
    UnreachableCodeViolation
    StatementHasNoEffectViolation
    MultipleAssignmentsViolation
+   DuplicateExceptionViolation
 
 Comments
 --------
@@ -88,6 +89,7 @@ Design
 .. autoclass:: UnreachableCodeViolation
 .. autoclass:: StatementHasNoEffectViolation
 .. autoclass:: MultipleAssignmentsViolation
+.. autoclass:: DuplicateExceptionViolation
 
 """
 
@@ -1016,3 +1018,40 @@ class MultipleAssignmentsViolation(ASTViolation):
 
     error_template = 'Found multiple assign targets'
     code = 445
+
+
+@final
+class DuplicateExceptionViolation(ASTViolation):
+    """
+    Forbids to have the same exception class in multiple ``except`` blocks.
+
+    Reasoning:
+        Having the same exception name in different blocks means
+        that something is not right: since only one branch will work.
+        Other one will always be ignored. So, that is clearly an error.
+
+    Solution:
+        Use unique exception handling rules.
+
+    Example::
+
+        # Correct:
+        try:
+            ...
+        except ValueError:
+            ...
+
+        # Wrong:
+        try:
+            ...
+        except ValueError:
+            ...
+        except ValueError:
+            ...
+
+    .. versionadded:: 0.6.0
+
+    """
+
+    error_template = 'Found duplicate exception: {0}'
+    code = 446

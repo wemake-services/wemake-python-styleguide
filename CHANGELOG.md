@@ -19,6 +19,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use multi-line function type annotations
 - Forbids to use uppercase string modifiers
 - Forbids to use assign chains: now we only can use one assign per line
+- Forbids to have duplicate `except` blocks
 
 ### Bugfixes
 

@@ -8,10 +8,12 @@ It is used for e2e tests.
 
 from __future__ import print_function  # noqa: Z422
 
-from .version import get_version  # noqa: Z300
 import os.path  # noqa: Z301
 import sys as sys  # noqa: Z113
+
 from some import _protected  # noqa: Z440
+
+from .version import get_version  # noqa: Z300
 
 full_name = u'Nikita Sobolev'  # noqa: Z302
 phone_number = 555_123_999  # noqa:  Z303
@@ -249,3 +251,11 @@ async def function_with_unreachable():
 1 + 2  # noqa: Z444
 
 first = second = 2  # noqa: Z445
+
+
+try:  # noqa: Z446
+    anti_z444 = 1
+except ValueError:
+    anti_z444 = 1
+except ValueError:
+    anti_z444 = 1

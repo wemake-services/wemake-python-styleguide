@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from collections import defaultdict
-from typing import ClassVar, DefaultDict, Optional, Union
+from collections import Counter, defaultdict
+from typing import ClassVar, DefaultDict, List, Optional, Union
+
+import astor
 
 from wemake_python_styleguide.logics.nodes import is_contained
 from wemake_python_styleguide.types import AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
     BaseExceptionViolation,
+    DuplicateExceptionViolation,
     LambdaInsideLoopViolation,
     RaiseNotImplementedViolation,
     RedundantFinallyViolation,
@@ -194,7 +197,7 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
 
     _base_exception: ClassVar[str] = 'BaseException'
 
-    def _check_for_needs_except(self, node: ast.Try) -> None:
+    def _check_if_needs_except(self, node: ast.Try) -> None:
         if node.finalbody and not node.handlers:
             self.add_violation(RedundantFinallyViolation(node))
 
@@ -207,15 +210,37 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
         if exception_id == self._base_exception:
             self.add_violation(BaseExceptionViolation(node))
 
+    def _check_duplicate_exceptions(self, node: ast.Try) -> None:
+        exceptions: List[str] = []
+        for exc_handler in node.handlers:
+            # There might be complex things hidden inside an exception type,
+            # so we want to get the string representation of it:
+            if isinstance(exc_handler.type, ast.Name):
+                exceptions.append(astor.to_source(exc_handler.type).strip())
+            elif isinstance(exc_handler.type, ast.Tuple):
+                exceptions.extend([
+                    astor.to_source(node).strip()
+                    for node in exc_handler.type.elts
+                ])
+
+        counts = Counter(exceptions)
+        for exc_name, count in counts.items():
+            if count > 1:
+                self.add_violation(
+                    DuplicateExceptionViolation(node, text=exc_name),
+                )
+
     def visit_Try(self, node: ast.Try) -> None:
         """
         Used for find finally in try blocks without except.
 
         Raises:
             RedundantFinallyViolation
+            DuplicateExceptionViolation
 
         """
-        self._check_for_needs_except(node)
+        self._check_if_needs_except(node)
+        self._check_duplicate_exceptions(node)
         self.generic_visit(node)
 
     def visit_ExceptHandler(self, node: ast.ExceptHandler) -> None:

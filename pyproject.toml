@@ -46,6 +46,7 @@ python = "^3.6 || ^3.7"
 flake8 = "^3.6"
 attrs = "^18.2"
 typing_extensions = "^3.6"
+astor = "^0.7.1"
 
 flake8-builtins = "^1.4"
 flake8-commas = "^2.0"

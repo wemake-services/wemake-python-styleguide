@@ -2,7 +2,10 @@
 
 import ast
 
-from wemake_python_styleguide.violations.base import ASTViolation, BaseViolation
+from wemake_python_styleguide.violations.base import (
+    ASTViolation,
+    BaseViolation,
+)
 
 
 def test_visitor_returns_location():

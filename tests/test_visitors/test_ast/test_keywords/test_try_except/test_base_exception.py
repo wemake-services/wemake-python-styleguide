@@ -5,7 +5,9 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     BaseExceptionViolation,
 )
-from wemake_python_styleguide.visitors.ast.keywords import WrongTryExceptVisitor
+from wemake_python_styleguide.visitors.ast.keywords import (
+    WrongTryExceptVisitor,
+)
 
 use_base_exception = """
 try:
@@ -33,7 +35,10 @@ except:
     use_base_exception,
 ])
 def test_use_base_exception(
-    assert_errors, parse_ast_tree, code, default_options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
 ):
     """Testing that `except BaseException:` is restricted."""
     tree = parse_ast_tree(code)
@@ -49,7 +54,10 @@ def test_use_base_exception(
     use_bare_except,
 ])
 def test_use_exception(
-    assert_errors, parse_ast_tree, code, default_options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
 ):
     """Testing that `except Exception:` and `except:` are allowed."""
     tree = parse_ast_tree(code)
