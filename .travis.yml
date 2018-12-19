@@ -20,6 +20,9 @@ script:
   - poetry run mypy wemake_python_styleguide
   - poetry run pytest
   - poetry run doc8 -q docs
+  - poetry check
+  - pip check
+  - safety check --bare --full-report
 
 after_success:
   - pip install coveralls
