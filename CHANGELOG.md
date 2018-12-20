@@ -9,10 +9,14 @@ We used to have incremental versioning before `0.1.0`.
 ### Features
 
 - Forbids to use `yield` inside comprehensions
+- Forbids to have single line triple-quoted string assignments
+- Forbids to have same items in `set` literals
 
 ### Misc
 
 - Adds `safety` and other dependency checks to CI process
+- Improves tests: now `tokenize` works differently inside tests
+- Improves tests: now testing more brackets cases aka "magic coverage bug"
 
 
 ## Version 0.6.0
