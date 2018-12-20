@@ -1,12 +1,18 @@
 # -*- coding: utf-8 -*-
 
-import re
 import tokenize
 from typing import ClassVar, FrozenSet
 
+from flake8_quotes.docstring_detection import get_docstring_tokens
+
+from wemake_python_styleguide.logics.tokens import (
+    has_triple_string_quotes,
+    split_prefixes,
+)
 from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.consistency import (
     BadNumberSuffixViolation,
+    IncorrectMultilineStringViolation,
     PartialFloatViolation,
     UnderscoredNumberViolation,
     UnicodeStringViolation,
@@ -49,7 +55,7 @@ class WrongPrimitivesVisitor(BaseTokenVisitor):
                 UnicodeStringViolation(token, text=token.string),
             )
 
-        modifiers = re.split(r'[\'\"]', token.string)[0]
+        modifiers, _ = split_prefixes(token)
         if modifiers:
             for mod in self._bad_string_modifiers:
                 if mod in modifiers:
@@ -84,3 +90,29 @@ class WrongPrimitivesVisitor(BaseTokenVisitor):
         self._check_underscored_number(token)
         self._check_partial_float(token)
         self._check_bad_number_suffixes(token)
+
+
+@final
+class MultilineStringVisitor(BaseTokenVisitor):
+    """Checks multiline strings."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Initializes new visitor and saves all docstrings."""
+        super().__init__(*args, **kwargs)
+        self._docstrings = get_docstring_tokens(self.file_tokens)
+
+    def _check_correct_multiline(self, token: tokenize.TokenInfo) -> None:
+        _, string_def = split_prefixes(token)
+        if has_triple_string_quotes(string_def):
+            if '\n' not in string_def and token not in self._docstrings:
+                self.add_violation(IncorrectMultilineStringViolation(token))
+
+    def visit_string(self, token: tokenize.TokenInfo) -> None:
+        """
+        Finds incorrect multiline string usages.
+
+        Raises:
+            IncorrectMultilineStringViolation
+
+        """
+        self._check_correct_multiline(token)

@@ -7,8 +7,7 @@ assignment = 'some_name = {0}'
 assignment_with_expression = 'some_sum = {0} + 123'
 default_param = 'def function(some={0}): ...'
 default_param_with_type = 'def function(some: int = {0}): ...'
-statement = '{0}'
-statement_with_expression = '{0} + other_var'
+statement_with_expression = 'other_var + {0}'
 
 
 @pytest.fixture(params=[
@@ -17,7 +16,6 @@ statement_with_expression = '{0} + other_var'
     assignment_with_expression,
     default_param,
     default_param_with_type,
-    statement,
     statement_with_expression,
 ])
 def primitives_usages(request):

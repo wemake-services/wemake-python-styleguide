@@ -10,8 +10,12 @@ from wemake_python_styleguide.visitors.tokenize import (
 #: Used to store all token related visitors to be later passed to checker:
 TOKENS_PRESET = (
     comments.WrongCommentVisitor,
+
     keywords.WrongKeywordTokenVisitor,
+
     primitives.WrongPrimitivesVisitor,
+    primitives.MultilineStringVisitor,
+
     statements.ExtraIndentationVisitor,
     statements.BracketLocationVisitor,
 )

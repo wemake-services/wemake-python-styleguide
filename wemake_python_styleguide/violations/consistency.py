@@ -47,6 +47,7 @@ Summary
    WrongBracketPositionViolation
    MultilineFunctionAnnotationViolation
    UppercaseStringModifierViolation
+   IncorrectMultilineStringViolation
 
 Consistency checks
 ------------------
@@ -73,6 +74,7 @@ Consistency checks
 .. autoclass:: WrongBracketPositionViolation
 .. autoclass:: MultilineFunctionAnnotationViolation
 .. autoclass:: UppercaseStringModifierViolation
+.. autoclass:: IncorrectMultilineStringViolation
 
 """
 
@@ -837,3 +839,39 @@ class UppercaseStringModifierViolation(TokenizeViolation):
 
     error_template = 'Found uppercase string modifier: {0}'
     code = 321
+
+
+@final
+class IncorrectMultilineStringViolation(TokenizeViolation):
+    '''
+    Forbids to use triple quotes for singleline strings.
+
+    Reasoning:
+        String quotes should be consistent.
+
+    Solution:
+        Use single quotes for singleline strings.
+        Triple quotes are only allowed for real multiline strings.
+
+    Example::
+
+        # Correct:
+        single_line = 'abc'
+        multiline = """
+            one
+            two
+        """
+
+        # Wrong:
+        some_string = """abc"""
+        some_bytes = b"""123"""
+
+    Docstrings are ignored from this rule.
+    You must use triple quotes strings for docstrings.
+
+    .. versionadded:: 0.7.0
+
+    '''
+
+    error_template = 'Found incorrect multi-line string'
+    code = 322

@@ -208,6 +208,7 @@ def function(  # noqa: Z320
 
 
 string_modifier = R'(s)'  # noqa: Z321
+multiline_string = """abc"""  # noqa: Z322
 
 try:
     anti_z444 = 1
