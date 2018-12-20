@@ -261,3 +261,5 @@ except ValueError:
     anti_z444 = 1
 except ValueError:
     anti_z444 = 1
+
+iters = list((yield letter) for letter in 'ab')  # noqa: Z448

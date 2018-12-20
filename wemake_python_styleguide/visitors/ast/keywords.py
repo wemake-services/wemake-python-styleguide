@@ -16,6 +16,7 @@ from wemake_python_styleguide.violations.best_practices import (
     RedundantFinallyViolation,
     RedundantLoopElseViolation,
     WrongKeywordViolation,
+    YieldInComprehensionViolation,
 )
 from wemake_python_styleguide.violations.complexity import (
     TooManyForsInComprehensionViolation,
@@ -29,6 +30,12 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 AnyLoop = Union[ast.For, ast.While, ast.AsyncFor]
 AnyWith = Union[ast.With, ast.AsyncWith]
+AnyComprehension = Union[
+    ast.ListComp,
+    ast.DictComp,
+    ast.SetComp,
+    ast.GeneratorExp,
+]
 
 
 @final
@@ -88,6 +95,12 @@ class WrongKeywordVisitor(BaseNodeVisitor):
 
 
 @final
+@alias('visit_any_comprehension', (
+    'visit_ListComp',
+    'visit_DictComp',
+    'visit_SetComp',
+    'visit_GeneratorExp',
+))
 class WrongComprehensionVisitor(BaseNodeVisitor):
     """Checks comprehensions for correctness."""
 
@@ -110,6 +123,11 @@ class WrongComprehensionVisitor(BaseNodeVisitor):
         parent = getattr(node, 'parent', node)
         self._fors[parent] = len(parent.generators)
 
+    def _check_contains_yield(self, node: AnyComprehension) -> None:
+        for sub_node in ast.walk(node):
+            if isinstance(sub_node, ast.Yield):
+                self.add_violation(YieldInComprehensionViolation(node))
+
     def _post_visit(self) -> None:
         for node, for_count in self._fors.items():
             if for_count > self._max_fors:
@@ -120,12 +138,23 @@ class WrongComprehensionVisitor(BaseNodeVisitor):
         Finds multiple ``if`` and ``for`` nodes inside the comprehension.
 
         Raises:
-            MultipleIfsInComprehensionViolation,
-            TooManyForsInComprehensionViolation,
+            MultipleIfsInComprehensionViolation
+            TooManyForsInComprehensionViolation
 
         """
         self._check_ifs(node)
         self._check_fors(node)
+        self.generic_visit(node)
+
+    def visit_any_comprehension(self, node: AnyComprehension) -> None:
+        """
+        Finds incorrect patterns inside comprehensions.
+
+        Raises:
+            YieldInComprehensionViolation
+
+        """
+        self._check_contains_yield(node)
         self.generic_visit(node)
 
 
