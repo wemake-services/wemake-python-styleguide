@@ -10,6 +10,6 @@ def only_contains(
 ) -> bool:
     """Determins that only tokens from the given list are contained."""
     for token in tokens:
-        if token.exact_type not in container:
+        if token.exact_type not in container:  # pragma: no cover
             return False
     return True

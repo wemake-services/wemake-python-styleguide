@@ -48,6 +48,7 @@ Summary
    MultipleAssignmentsViolation
    IncorrectUnpackingViolation
    DuplicateExceptionViolation
+   YieldInComprehensionViolation
 
 Comments
 --------
@@ -92,6 +93,7 @@ Design
 .. autoclass:: MultipleAssignmentsViolation
 .. autoclass:: IncorrectUnpackingViolation
 .. autoclass:: DuplicateExceptionViolation
+.. autoclass:: YieldInComprehensionViolation
 
 """
 
@@ -1089,3 +1091,38 @@ class DuplicateExceptionViolation(ASTViolation):
 
     error_template = 'Found duplicate exception: {0}'
     code = 447
+
+
+@final
+class YieldInComprehensionViolation(ASTViolation):
+    """
+    Forbids to have ``yield`` keyword inside comprehensions.
+
+    Reasoning:
+        Having the ``yield`` keyword inside comprehensions is error-prone.
+        You can shoot yourself in a foot by
+        an inaccurate usage of this feature.
+
+    Solution:
+        Use regular ``for`` loops with ``yield`` keywords.
+        Or create a separate generator function.
+
+    Example::
+
+        # Wrong:
+        >>> list((yield letter) for letter in 'ab')
+        ['a', None, 'b', None]
+
+        >>> list([(yield letter) for letter in 'ab'])
+        ['a', 'b']
+
+
+    See also:
+        https://github.com/satwikkansal/wtfPython#-yielding-none
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found `yield` inside comprehension'
+    code = 448

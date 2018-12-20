@@ -6,6 +6,10 @@ We used to have incremental versioning before `0.1.0`.
 
 ## WIP
 
+### Features
+
+- Forbids to use `yield` inside comprehensions
+
 ### Misc
 
 - Adds `safety` and other dependency checks to CI process
