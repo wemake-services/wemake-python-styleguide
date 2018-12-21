@@ -8,15 +8,22 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
+- Now raising a violation for every `bool` non-keyword argument
+  and showing better error message
 - Forbids to use `yield` inside comprehensions
 - Forbids to have single line triple-quoted string assignments
 - Forbids to have same items in `set` literals
 
+### Bugfixes
+
+- Fixes location of the `BooleanPositionalArgumentViolation`
+
 ### Misc
 
-- Adds `safety` and other dependency checks to CI process
+- Adds `safety` and other dependency checks to the CI process
 - Improves tests: now `tokenize` works differently inside tests
 - Improves tests: now testing more brackets cases aka "magic coverage bug"
+- Improves docs: adds new badge about our code style
 
 
 ## Version 0.6.1

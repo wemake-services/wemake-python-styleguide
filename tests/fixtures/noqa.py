@@ -264,3 +264,4 @@ except ValueError:
     anti_z444 = 1
 
 iters = list((yield letter) for letter in 'ab')  # noqa: Z448
+some_set = {1, 1}  # noqa: Z449

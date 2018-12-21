@@ -26,7 +26,10 @@ General
 - Private names with two leading underscores are not allowed
 - If you need to explicitly state that variable is unused,
   prefix it with ``_`` or just use ``_`` as a name
-- Do not use variables that are stated to be unused, rename them when using
+- Do not use variables that are stated to be unused,
+  rename them when actually using them
+- Whenever you want to name your variable similar to a keyword or builtin,
+  use trailing ``_``
 - Do not use consecutive underscores
 - When writing abbreviations in ``UpperCase``
   capitalize all letters: ``HTTPAddress``
