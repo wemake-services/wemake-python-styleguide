@@ -94,6 +94,7 @@ And you should share your accomplishment with others
 by including a badge to your `README` file.
 
 It looks like this:
+
 [![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
 
 ### Markdown
