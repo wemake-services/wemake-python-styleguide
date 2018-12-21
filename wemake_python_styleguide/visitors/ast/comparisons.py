@@ -6,6 +6,9 @@ from typing import ClassVar, Sequence
 from wemake_python_styleguide.logics.naming.name_nodes import is_same_variable
 from wemake_python_styleguide.logics.nodes import is_literal
 from wemake_python_styleguide.types import AnyIf, AnyNodes, final
+from wemake_python_styleguide.violations.best_practices import (
+    SimplifiableIfViolation,
+)
 from wemake_python_styleguide.violations.consistency import (
     ComparisonOrderViolation,
     ConstantComparisonViolation,
@@ -166,8 +169,20 @@ class WrongConditionalVisitor(BaseNodeVisitor):
 
         """
         self._check_if_statement_conditional(node)
+        if isinstance(node, ast.IfExp):
+            self._check_simplifiable_ifexpr(node)
         self.generic_visit(node)
 
     def _check_if_statement_conditional(self, node: AnyIf) -> None:
         if isinstance(node.test, self._forbidden_nodes):
             self.add_violation(WrongConditionalViolation(node))
+
+    def _check_simplifiable_ifexpr(self, node: ast.IfExp) -> None:
+        conditions = set()
+        if isinstance(node.body, ast.NameConstant):
+            conditions.add(node.body.value)
+        if isinstance(node.orelse, ast.NameConstant):
+            conditions.add(node.orelse.value)
+
+        if conditions == {True, False}:
+            self.add_violation(SimplifiableIfViolation(node))
