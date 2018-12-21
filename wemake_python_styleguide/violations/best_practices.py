@@ -8,7 +8,7 @@ we have spent debugging software or reviewing it.
 
 How do we find an inspiration for new rules?
 We find some ugly code during code reviews and audits.
-Then we forbid to use it forever.
+Then we forbid to use this bad code forever.
 So, this error will never return to our codebase.
 
 .. currentmodule:: wemake_python_styleguide.violations.best_practices
@@ -51,6 +51,7 @@ Summary
    YieldInComprehensionViolation
    NonUniqueItemsInSetViolation
    BaseExceptionSubclassViolation
+   SimplifiableIfViolation
 
 Comments
 --------
@@ -98,6 +99,7 @@ Design
 .. autoclass:: YieldInComprehensionViolation
 .. autoclass:: NonUniqueItemsInSetViolation
 .. autoclass:: BaseExceptionSubclassViolation
+.. autoclass:: SimplifiableIfViolation
 
 """
 
@@ -1203,3 +1205,37 @@ class BaseExceptionSubclassViolation(ASTViolation):
 
     error_template = 'Found exception inherited from `BaseException`'
     code = 450
+
+
+@final
+class SimplifiableIfViolation(ASTViolation):
+    """
+    Forbids to have simplifiable ``if`` conditions.
+
+    Reasoning:
+        This complex construction can cause frustration among other developers.
+        It is longer, more verbose, and more complex.
+
+    Solution:
+        Use ``bool()`` to convert test values to boolean values.
+        Or just leave it as it is in case
+        when your test already returns a boolean value.
+        Use can also use ``not`` keyword to switch boolean values.
+
+    Example::
+
+        # Correct:
+        my_bool = bool(some_call())
+        other_value = 8 if some_call() else None
+
+        # Wrong:
+        my_bool = True if some_call() else False
+
+    We only check ``if`` nodes where ``True`` and ``False`` values are used.
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found simplifiable `if` condition'
+    code = 451

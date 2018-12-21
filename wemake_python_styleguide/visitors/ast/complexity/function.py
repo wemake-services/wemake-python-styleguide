@@ -76,12 +76,7 @@ class _ComplexityCounter(object):
 
     def check_arguments_count(self, node: AnyFunctionDefAndLambda) -> None:
         """Checks the number of the arguments in a function."""
-        has_extra_arg = 0
-        if functions.is_method(getattr(node, 'function_type', None)):
-            has_extra_arg = 1
-
-        arguments = functions.get_all_arguments(node)
-        self.arguments[node] = len(arguments) - has_extra_arg
+        self.arguments[node] = len(functions.get_all_arguments(node))
 
     def check_function_complexity(self, node: AnyFunctionDef) -> None:
         """

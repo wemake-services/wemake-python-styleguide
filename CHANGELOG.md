@@ -10,10 +10,13 @@ We used to have incremental versioning before `0.1.0`.
 
 - Now raising a violation for every `bool` non-keyword argument
   and showing better error message
+- Changes how `max-arguments` are counted.
+  Now `self`, `cls`, and `mcs` count as real arguments
 - Forbids to use `yield` inside comprehensions
 - Forbids to have single line triple-quoted string assignments
 - Forbids to have same items in `set` literals
 - Forbids to subclass `BaseException`
+- Forbids to use simplifiable `if` expressions
 
 ### Bugfixes
 

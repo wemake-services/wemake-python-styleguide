@@ -269,3 +269,6 @@ some_set = {1, 1}  # noqa: Z449
 
 class MyBadException(BaseException):  # noqa: Z450
     anti_z444 = 1
+
+
+some_if_expr = True if some_set else False  # noqa: Z451

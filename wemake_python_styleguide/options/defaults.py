@@ -39,7 +39,7 @@ MAX_LOCAL_VARIABLES: Final = 5
 #: Maximum number of expressions in a single function.
 MAX_EXPRESSIONS: Final = 9
 
-#: Maximum number of arguments for functions or method, `self` is not counted.
+#: Maximum number of arguments for functions or methods.
 MAX_ARGUMENTS: Final = 5
 
 #: Maximum number of classes and functions in a single module.
