@@ -50,6 +50,7 @@ Summary
    DuplicateExceptionViolation
    YieldInComprehensionViolation
    NonUniqueItemsInSetViolation
+   BaseExceptionSubclassViolation
 
 Comments
 --------
@@ -96,6 +97,7 @@ Design
 .. autoclass:: DuplicateExceptionViolation
 .. autoclass:: YieldInComprehensionViolation
 .. autoclass:: NonUniqueItemsInSetViolation
+.. autoclass:: BaseExceptionSubclassViolation
 
 """
 
@@ -1166,3 +1168,38 @@ class NonUniqueItemsInSetViolation(ASTViolation):
 
     error_template = 'Found non-unique item in `set` literal: {0}'
     code = 449
+
+
+@final
+class BaseExceptionSubclassViolation(ASTViolation):
+    """
+    Forbids to have duplicate items in ``set`` literals.
+
+    Reasoning:
+        ``BaseException`` is a special case:
+        it is not designed to be extended by users.
+        A lot of your ``except Exception`` cases won't work.
+        That's incorrect and dangerous.
+
+    Solution:
+        Change the base class to ``Exception``.
+
+    Example::
+
+        # Correct:
+        class MyException(Exception):
+            ...
+
+        # Wrong:
+        class MyException(BaseException):
+            ...
+
+    See also:
+        https://docs.python.org/3/library/exceptions.html#exception-hierarchy
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found exception inherited from `BaseException`'
+    code = 450
