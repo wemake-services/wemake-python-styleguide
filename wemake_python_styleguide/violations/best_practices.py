@@ -49,6 +49,7 @@ Summary
    IncorrectUnpackingViolation
    DuplicateExceptionViolation
    YieldInComprehensionViolation
+   NonUniqueItemsInSetViolation
 
 Comments
 --------
@@ -94,6 +95,7 @@ Design
 .. autoclass:: IncorrectUnpackingViolation
 .. autoclass:: DuplicateExceptionViolation
 .. autoclass:: YieldInComprehensionViolation
+.. autoclass:: NonUniqueItemsInSetViolation
 
 """
 
@@ -463,7 +465,7 @@ class BooleanPositionalArgumentViolation(ASTViolation):
 
     """
 
-    error_template = 'Found boolean non-keyword argument'
+    error_template = 'Found boolean non-keyword argument: {0}'
     code = 425
 
 
@@ -1126,3 +1128,41 @@ class YieldInComprehensionViolation(ASTViolation):
 
     error_template = 'Found `yield` inside comprehension'
     code = 448
+
+
+@final
+class NonUniqueItemsInSetViolation(ASTViolation):
+    """
+    Forbids to have duplicate items in ``set`` literals.
+
+    Reasoning:
+        When you explicitly put duplicate items in ``set`` literals
+        it just does not make any sense. Since ``set`` can not contain
+        duplicate items and they will be removed anyway.
+
+    Solution:
+        Remove the duplicate items.
+
+    Example::
+
+        # Correct:
+        some_set = {'a', variable1}
+        some_set = {make_call(), make_call()}
+
+        # Wrong:
+        some_set = {'a', 'a', variable1, variable1}
+
+    Things that we consider duplicates: builtins and variables.
+    These nodes are not checked because they may return different results:
+
+    - function and method calls
+    - comprehensions
+    - attributes
+    - containers: lists, dicts, tuples, sets
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found non-unique item in `set` literal: {0}'
+    code = 449

@@ -46,6 +46,7 @@ GENERAL_PRESET = (
     builtins.MagicNumberVisitor,
     builtins.WrongStringVisitor,
     builtins.WrongAssignmentVisitor,
+    builtins.WrongCollectionVisitor,
 
     comparisons.WrongConditionalVisitor,
     comparisons.ComparisonSanityVisitor,

@@ -35,9 +35,10 @@ class WrongFunctionCallVisitor(BaseNodeVisitor):
                 # We do not check for `None` values here:
                 if arg.value is True or arg.value is False:
                     self.add_violation(
-                        BooleanPositionalArgumentViolation(node),
+                        BooleanPositionalArgumentViolation(
+                            arg, text=str(arg.value),
+                        ),
                     )
-                    break
 
     def visit_Call(self, node: ast.Call) -> None:
         """
