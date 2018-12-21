@@ -265,3 +265,7 @@ except ValueError:
 
 iters = list((yield letter) for letter in 'ab')  # noqa: Z448
 some_set = {1, 1}  # noqa: Z449
+
+
+class MyBadException(BaseException):  # noqa: Z450
+    anti_z444 = 1

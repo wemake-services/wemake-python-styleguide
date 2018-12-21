@@ -7,6 +7,7 @@ from wemake_python_styleguide import constants, types
 from wemake_python_styleguide.logics.nodes import is_contained
 from wemake_python_styleguide.violations.best_practices import (
     BadMagicMethodViolation,
+    BaseExceptionSubclassViolation,
     StaticMethodViolation,
     YieldInsideInitViolation,
 )
@@ -55,13 +56,14 @@ class WrongClassVisitor(BaseNodeVisitor):
                 RequiredBaseClassViolation(node, text=node.name),
             )
 
-        if len(node.bases) >= 2:
-            for base_name in node.bases:
-                id_attr = getattr(base_name, 'id', None)
-                if id_attr == 'object':
-                    self.add_violation(
-                        ObjectInBaseClassesListViolation(node, text=id_attr),
-                    )
+        for base_name in node.bases:
+            id_attr = getattr(base_name, 'id', None)
+            if id_attr == 'BaseException':
+                self.add_violation(BaseExceptionSubclassViolation(node))
+            elif id_attr == 'object' and len(node.bases) >= 2:
+                self.add_violation(
+                    ObjectInBaseClassesListViolation(node, text=id_attr),
+                )
 
     def _check_method_contents(self, node: types.AnyFunctionDef) -> None:
         if node.name == constants.INIT:

@@ -13,6 +13,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use `yield` inside comprehensions
 - Forbids to have single line triple-quoted string assignments
 - Forbids to have same items in `set` literals
+- Forbids to subclass `BaseException`
 
 ### Bugfixes
 
