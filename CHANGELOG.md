@@ -17,10 +17,15 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to have same items in `set` literals
 - Forbids to subclass `BaseException`
 - Forbids to use simplifiable `if` expressions
+- Forbids to use simplifiable `if` nodes
 
 ### Bugfixes
 
 - Fixes location of the `BooleanPositionalArgumentViolation`
+- Fixes argument count issue with `async` functions
+- Fixes `WrongConditionalVisitor` not detecting `tuple`s as constants
+- Fixes `WrongConditionalVisitor` not detecting negative numbers as constants
+- Fixes some magic number that were not detected, like `8.3`
 
 ### Misc
 

@@ -272,3 +272,8 @@ class MyBadException(BaseException):  # noqa: Z450
 
 
 some_if_expr = True if some_set else False  # noqa: Z451
+
+if some_if_expr:  # noqa: Z451
+    some_dict['x'] = True
+else:
+    some_dict['x'] = False

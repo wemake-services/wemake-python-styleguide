@@ -73,7 +73,6 @@ some_dict[{0}]
     -1,
     0,
     0.5,
-    8.3,
     10,
     1000,
 ])
@@ -141,11 +140,12 @@ def test_magic_number_whitelist(
     dict_key,
 ])
 @pytest.mark.parametrize('number', [
-    -0.3,
-    999,
-    10.0,
-    0.0,
-    -134,
+    '-0.3',
+    '999',
+    '10.0',
+    '0.0',
+    '--134',
+    '8.3',
 ])
 def test_magic_number_warning(
     assert_errors,
@@ -163,4 +163,4 @@ def test_magic_number_warning(
     visitor.run()
 
     assert_errors(visitor, [MagicNumberViolation])
-    assert_error_text(visitor, str(abs(number)))
+    assert_error_text(visitor, number.replace('-', ''))

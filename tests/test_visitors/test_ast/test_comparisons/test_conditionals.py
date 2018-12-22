@@ -63,11 +63,15 @@ def test_valid_conditional(
     'True',
     'False',
     'None',
-    '{variable}',
-    '[variable]',
     '4',
+    '-4.8',
+    '--0.0',
     '"test"',
+    '("string in brackets")',
     '{test : "1"}',
+    '{"set"}',
+    '("tuple",)',
+    '["list"]',
 ])
 def test_redundant(
     assert_errors,

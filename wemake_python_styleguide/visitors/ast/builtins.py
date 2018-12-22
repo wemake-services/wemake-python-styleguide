@@ -2,11 +2,15 @@
 
 import ast
 from collections import Counter
-from typing import ClassVar, Iterable, List, Optional
+from typing import ClassVar, Iterable, List
 
 import astor
 
 from wemake_python_styleguide import constants
+from wemake_python_styleguide.logics.operators import (
+    get_parent_ignoring_unary,
+    unwrap_unary_node,
+)
 from wemake_python_styleguide.types import AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
     IncorrectUnpackingViolation,
@@ -55,28 +59,8 @@ class MagicNumberVisitor(BaseNodeVisitor):
         ast.Tuple,
     )
 
-    _proxy_parents: ClassVar[AnyNodes] = (
-        ast.UnaryOp,
-    )
-
-    # TODO: reuse this method in other code
-    def _get_real_parent(self, node: Optional[ast.AST]) -> Optional[ast.AST]:
-        """
-        Returns real number's parent.
-
-        What can go wrong?
-
-        1. Number can be negative: ``x = -1``,
-          so ``1`` has ``UnaryOp`` as parent, but should return ``Assign``
-
-        """
-        parent = getattr(node, 'wps_parent', None)
-        if isinstance(parent, self._proxy_parents):
-            return self._get_real_parent(parent)
-        return parent
-
     def _check_is_magic(self, node: ast.Num) -> None:
-        parent = self._get_real_parent(node)
+        parent = get_parent_ignoring_unary(node)
         if isinstance(parent, self._allowed_parents):
             return
 
@@ -170,15 +154,7 @@ class WrongCollectionVisitor(BaseNodeVisitor):
         ast.Num,
         ast.NameConstant,
         ast.Name,
-
-        # Special cases:
-        ast.UnaryOp,
     )
-
-    def _get_operand(self, node: ast.UnaryOp) -> ast.AST:
-        if not isinstance(node.operand, ast.UnaryOp):
-            return node.operand
-        return self._get_operand(node.operand)
 
     def _report_set_elements(self, node: ast.Set, elements: List[str]) -> None:
         for element, count in Counter(elements).items():
@@ -190,15 +166,10 @@ class WrongCollectionVisitor(BaseNodeVisitor):
     def _check_set_elements(self, node: ast.Set) -> None:
         elements: List[str] = []
         for set_item in node.elts:
-            if isinstance(set_item, ast.UnaryOp):
-                operand = self._get_operand(set_item)
-                if not isinstance(operand, self._elements_in_sets):
-                    continue
-
-            if isinstance(set_item, self._elements_in_sets):
-                elements.append(
-                    astor.to_source(set_item).strip().strip('(').strip(')'),
-                )
+            real_set_item = unwrap_unary_node(set_item)
+            if isinstance(real_set_item, self._elements_in_sets):
+                source = astor.to_source(set_item)
+                elements.append(source.strip().strip('(').strip(')'))
         self._report_set_elements(node, elements)
 
     def visit_Set(self, node: ast.Set) -> None:
