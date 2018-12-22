@@ -5,7 +5,7 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     MethodWithoutArgumentsViolation,
 )
-from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
+from wemake_python_styleguide.visitors.ast.classes import WrongMethodVisitor
 
 method_inside_class = """
 class Example(object):
@@ -25,7 +25,7 @@ def test_method_without_arguments(
     """Testing that no arguments for method raises a violation."""
     tree = parse_ast_tree(mode(method_inside_class.format('')))
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongMethodVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [MethodWithoutArgumentsViolation])
@@ -41,7 +41,7 @@ def test_function_without_arguments(
     """Testing that no arguments for method raises a violation."""
     tree = parse_ast_tree(mode(regular_function.format('')))
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongMethodVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -71,7 +71,7 @@ def test_with_arguments(
     """Testing that other methods are working fine."""
     tree = parse_ast_tree(mode(code.format(arguments)))
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongMethodVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
