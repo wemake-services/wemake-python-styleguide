@@ -4,7 +4,7 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
-## WIP
+## WIP aka The Order
 
 ### Features
 
@@ -16,17 +16,20 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to have single line triple-quoted string assignments
 - Forbids to have same items in `set` literals
 - Forbids to subclass `BaseException`
-- Forbids to use simplifiable `if` expressions
-- Forbids to use simplifiable `if` nodes
+- Forbids to use simplifiable `if` expressions and nodes
 - Forbids to have incorrect nodes in `class` body
+- Forbids to have methods without any arguments
 
 ### Bugfixes
 
+- Fixes a lot of rules that were ignoring `Bytes` node as constant type
 - Fixes location of the `BooleanPositionalArgumentViolation`
 - Fixes argument count issue with `async` functions
-- Fixes `WrongConditionalVisitor` not detecting `tuple`s as constants
+- Fixes `WrongConditionalVisitor` not detecting `tuple` as constants
 - Fixes `WrongConditionalVisitor` not detecting negative numbers as constants
 - Fixes some magic number that were not detected, like `8.3`
+- Fixes error when regular functions named as blacklisted
+  magic methods were forbidden, now we check for methods only
 
 ### Misc
 

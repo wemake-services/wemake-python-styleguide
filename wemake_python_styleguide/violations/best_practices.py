@@ -53,6 +53,7 @@ Summary
    BaseExceptionSubclassViolation
    SimplifiableIfViolation
    IncorrectClassBodyContentViolation
+   MethodWithoutArgumentsViolation
 
 Comments
 --------
@@ -102,6 +103,7 @@ Design
 .. autoclass:: BaseExceptionSubclassViolation
 .. autoclass:: SimplifiableIfViolation
 .. autoclass:: IncorrectClassBodyContentViolation
+.. autoclass:: MethodWithoutArgumentsViolation
 
 """
 
@@ -1278,3 +1280,37 @@ class IncorrectClassBodyContentViolation(ASTViolation):
 
     error_template = 'Found incorrect node inside `class` body'
     code = 452
+
+
+@final
+class MethodWithoutArgumentsViolation(ASTViolation):
+    """
+    Forbids to have methods without any arguments.
+
+    Reasoning:
+        Methods withour arguments are allowed to be defined,
+        but almost impossible to use.
+        Furthermore, they don't have an access to ``self``,
+        so can not access the inner state of the object.
+        It might be an intentional design or just a typo.
+
+    Solution:
+        Move any methods with arguments to raw functions.
+        Or just add an argument if it is actually required.
+
+    Example::
+
+        # Correct:
+        class Test(object):
+            def method(self): ...
+
+        # Wrong:
+        class Test(object):
+            def method(): ...
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found method without arguments: {0}'
+    code = 453

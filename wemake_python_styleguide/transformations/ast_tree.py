@@ -10,6 +10,7 @@ from wemake_python_styleguide.transformations.ast.bugfixes import (
 )
 from wemake_python_styleguide.transformations.ast.enhancements import (
     set_if_chain,
+    set_node_context,
 )
 
 
@@ -79,6 +80,7 @@ def transform(tree: ast.AST) -> ast.AST:
         fix_line_number,
 
         # Enhancements, order is not important:
+        set_node_context,
         set_if_chain,
     )
 

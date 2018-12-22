@@ -23,10 +23,14 @@ set_literal_template = '{{{0}, {1}}}'
     'method.call()',
     '~method.call()',
     'some["key"]',
+    '[item1]',
+    '(9, variable)',
+    '{"key": some_value}',
+    '{some_value, some_other}',
     '[]',
     '(9, 0)',
-    '{"key": "value"}',
-    '{""}',
+    "{'key': 'some string value'}",
+    "{''}",
 ])
 def test_set_with_impure(
     assert_errors,
@@ -75,13 +79,14 @@ def test_set_with_pure_unique(
     set_literal_template,
 ])
 @pytest.mark.parametrize('element', [
-    # Strings are not checked due to strange astor representation bug
     '1',
     '-1',
     '--0.5',
     'variable_name',
     'True',
     'None',
+    "b'1a'",
+    '"""Docstring."""',  # other strings have a strage bug with multiple quotes
 ])
 def test_set_with_pure_duplicate(
     assert_errors,

@@ -4,11 +4,13 @@ import ast
 from typing import ClassVar, FrozenSet
 
 from wemake_python_styleguide import constants, types
-from wemake_python_styleguide.logics.nodes import is_contained
+from wemake_python_styleguide.logics.functions import get_all_arguments
+from wemake_python_styleguide.logics.nodes import is_contained, is_doc_string
 from wemake_python_styleguide.violations.best_practices import (
     BadMagicMethodViolation,
     BaseExceptionSubclassViolation,
     IncorrectClassBodyContentViolation,
+    MethodWithoutArgumentsViolation,
     StaticMethodViolation,
     YieldInsideInitViolation,
 )
@@ -56,12 +58,20 @@ class WrongClassVisitor(BaseNodeVisitor):
             if decorator_name in self._staticmethod_names:
                 self.add_violation(StaticMethodViolation(node))
 
-    def _check_magic_methods(self, node: types.AnyFunctionDef) -> None:
+    def _check_bound_methods(self, node: types.AnyFunctionDef) -> None:
+        node_context = getattr(node, 'context', None)
+        if not isinstance(node_context, ast.ClassDef):
+            return
+
+        if len(get_all_arguments(node)) == 0:
+            self.add_violation(
+                MethodWithoutArgumentsViolation(node, text=node.name),
+            )
+
         if node.name in constants.MAGIC_METHODS_BLACKLIST:
             self.add_violation(BadMagicMethodViolation(node, text=node.name))
 
     def _check_base_classes(self, node: ast.ClassDef) -> None:
-        """Check ``object`` class in parent classes list."""
         if len(node.bases) == 0:
             self.add_violation(
                 RequiredBaseClassViolation(node, text=node.name),
@@ -85,10 +95,8 @@ class WrongClassVisitor(BaseNodeVisitor):
         for sub_node in node.body:
             if isinstance(sub_node, self._allowed_body_nodes):
                 continue
-            if isinstance(sub_node, ast.Expr):
-                if isinstance(sub_node.value, ast.Str):
-                    # This means it is a docsting, we can ignore this node:
-                    continue
+            if is_doc_string(sub_node):
+                continue
             self.add_violation(IncorrectClassBodyContentViolation(sub_node))
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
@@ -113,9 +121,10 @@ class WrongClassVisitor(BaseNodeVisitor):
             StaticMethodViolation
             BadMagicMethodViolation
             YieldInsideInitViolation
+            MethodWithoutArgumentsViolation
 
         """
         self._check_decorators(node)
-        self._check_magic_methods(node)
+        self._check_bound_methods(node)
         self._check_method_contents(node)
         self.generic_visit(node)

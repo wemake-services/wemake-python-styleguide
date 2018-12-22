@@ -158,6 +158,7 @@ class WrongConditionalVisitor(BaseNodeVisitor):
         # Constants:
         ast.Num,
         ast.Str,
+        ast.Bytes,
         ast.NameConstant,
 
         # Collections:
