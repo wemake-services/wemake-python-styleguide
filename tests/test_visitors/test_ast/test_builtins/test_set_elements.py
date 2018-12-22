@@ -22,6 +22,11 @@ set_literal_template = '{{{0}, {1}}}'
     '--some.attribute',
     'method.call()',
     '~method.call()',
+    'some["key"]',
+    '[]',
+    '(9, 0)',
+    '{"key": "value"}',
+    '{""}',
 ])
 def test_set_with_impure(
     assert_errors,

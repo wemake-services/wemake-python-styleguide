@@ -1162,6 +1162,7 @@ class NonUniqueItemsInSetViolation(ASTViolation):
     - function and method calls
     - comprehensions
     - attributes
+    - subscribe operations
     - containers: lists, dicts, tuples, sets
 
     .. versionadded:: 0.7.0
