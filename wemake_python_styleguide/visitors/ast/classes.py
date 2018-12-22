@@ -9,6 +9,7 @@ from wemake_python_styleguide.logics.nodes import is_contained, is_doc_string
 from wemake_python_styleguide.violations.best_practices import (
     BadMagicMethodViolation,
     BaseExceptionSubclassViolation,
+    IncorrectBaseClassViolation,
     IncorrectClassBodyContentViolation,
     MethodWithoutArgumentsViolation,
     StaticMethodViolation,
@@ -78,6 +79,10 @@ class WrongClassVisitor(BaseNodeVisitor):
             )
 
         for base_name in node.bases:
+            if not isinstance(base_name, (ast.Name, ast.Attribute)):
+                self.add_violation(IncorrectBaseClassViolation(node))
+                continue
+
             id_attr = getattr(base_name, 'id', None)
             if id_attr == 'BaseException':
                 self.add_violation(BaseExceptionSubclassViolation(node))
