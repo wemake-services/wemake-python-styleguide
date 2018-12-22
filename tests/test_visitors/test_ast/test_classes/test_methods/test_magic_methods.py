@@ -6,7 +6,7 @@ from wemake_python_styleguide.constants import MAGIC_METHODS_BLACKLIST
 from wemake_python_styleguide.violations.best_practices import (
     BadMagicMethodViolation,
 )
-from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
+from wemake_python_styleguide.visitors.ast.classes import WrongMethodVisitor
 
 magic_method = """
 class Example(object):
@@ -28,7 +28,7 @@ def test_wrong_magic_used(
     """Testing that some magic methods are restricted."""
     tree = parse_ast_tree(mode(magic_method.format(method)))
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongMethodVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [BadMagicMethodViolation])
@@ -56,7 +56,7 @@ def test_regular_method_used(
     """Testing that other methods are working fine."""
     tree = parse_ast_tree(mode(code.format(method)))
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongMethodVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])

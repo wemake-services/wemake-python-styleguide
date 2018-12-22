@@ -55,6 +55,7 @@ Summary
    IncorrectClassBodyContentViolation
    MethodWithoutArgumentsViolation
    IncorrectBaseClassViolation
+   IncorrectSlotsViolation
 
 Comments
 --------
@@ -106,6 +107,7 @@ Design
 .. autoclass:: IncorrectClassBodyContentViolation
 .. autoclass:: MethodWithoutArgumentsViolation
 .. autoclass:: IncorrectBaseClassViolation
+.. autoclass:: IncorrectSlotsViolation
 
 """
 
@@ -1334,7 +1336,7 @@ class IncorrectBaseClassViolation(ASTViolation):
     Example::
 
         # Correct:
-        class Test(module.ObjectName, MixinName): ...
+        class Test(module.ObjectName, MixinName, keyword=True): ...
 
         # Wrong:
         class Test((lambda: object)()): ...
@@ -1345,3 +1347,41 @@ class IncorrectBaseClassViolation(ASTViolation):
 
     error_template = 'Found incorrect base class'
     code = 454
+
+
+@final
+class IncorrectSlotsViolation(ASTViolation):
+    """
+    Forbids to have incorrect ``__slots__`` definition.
+
+    Reasoning:
+        ``__slots__`` is a very special attribute.
+        It completely changes your class. So, we need to be careful with it.
+        We should not allow anything rather than tuples to define slots,
+        we also need to check that fields defined in ``__slots__`` are unique.
+
+    Solution:
+        Use tuples with unique elements to define ``__slots__`` attribute.
+
+    Example::
+
+        # Correct:
+        class Test(object):
+            __slots__ = ('field1', 'field2')
+
+        class Other(Test):
+            __slots__ = Test.__slots__ + ('child',)
+
+        # Wrong:
+        class Test(object):
+            __slots__ = ['field1', 'field2', 'field2']
+
+    Note, that we do ignore all complex expressions for this field.
+    So, we only check literals.
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found incorrect `__slots__` syntax'
+    code = 455

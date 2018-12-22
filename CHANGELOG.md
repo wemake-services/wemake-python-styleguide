@@ -20,6 +20,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to have incorrect nodes in `class` body
 - Forbids to have methods without any arguments
 - Forbids to have incorrect base classes nodes
+- Enforces consistent `__slots__` syntax
 
 ### Bugfixes
 
@@ -38,6 +39,8 @@ We used to have incremental versioning before `0.1.0`.
 - Improves tests: now `tokenize` works differently inside tests
 - Improves tests: now testing more brackets cases aka "magic coverage bug"
 - Improves docs: adds new badge about our code style
+- Refactoring: trying to use `astor` where possible to simplify the codebase
+- Refactoring: introduces some new `transformations`
 
 
 ## Version 0.6.1
