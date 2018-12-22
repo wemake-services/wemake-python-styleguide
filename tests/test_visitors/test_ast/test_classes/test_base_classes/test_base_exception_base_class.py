@@ -7,7 +7,10 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
 
-class_with_base = 'class Meta({0}): ...'
+class_with_base = """
+class Meta({0}):
+    '''Docs.'''
+"""
 
 
 @pytest.mark.parametrize('code', [

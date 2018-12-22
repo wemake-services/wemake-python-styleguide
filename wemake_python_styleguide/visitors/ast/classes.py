@@ -8,6 +8,7 @@ from wemake_python_styleguide.logics.nodes import is_contained
 from wemake_python_styleguide.violations.best_practices import (
     BadMagicMethodViolation,
     BaseExceptionSubclassViolation,
+    IncorrectClassBodyContentViolation,
     StaticMethodViolation,
     YieldInsideInitViolation,
 )
@@ -39,6 +40,16 @@ class WrongClassVisitor(BaseNodeVisitor):
         ast.Yield,
     )
 
+    _allowed_body_nodes: ClassVar[types.AnyNodes] = (
+        ast.FunctionDef,  # methods
+        ast.AsyncFunctionDef,
+
+        ast.ClassDef,  # we allow some nested classes
+
+        ast.Assign,  # attributes
+        ast.AnnAssign,  # type annotations
+    )
+
     def _check_decorators(self, node: types.AnyFunctionDef) -> None:
         for decorator in node.decorator_list:
             decorator_name = getattr(decorator, 'id', None)
@@ -50,7 +61,7 @@ class WrongClassVisitor(BaseNodeVisitor):
             self.add_violation(BadMagicMethodViolation(node, text=node.name))
 
     def _check_base_classes(self, node: ast.ClassDef) -> None:
-        """Check 'object' class in parent list."""
+        """Check ``object`` class in parent classes list."""
         if len(node.bases) == 0:
             self.add_violation(
                 RequiredBaseClassViolation(node, text=node.name),
@@ -70,6 +81,16 @@ class WrongClassVisitor(BaseNodeVisitor):
             if is_contained(node, self._not_appropriate_for_init):
                 self.add_violation(YieldInsideInitViolation(node))
 
+    def _check_wrong_body_nodes(self, node: ast.ClassDef) -> None:
+        for sub_node in node.body:
+            if isinstance(sub_node, self._allowed_body_nodes):
+                continue
+            if isinstance(sub_node, ast.Expr):
+                if isinstance(sub_node.value, ast.Str):
+                    # This means it is a docsting, we can ignore this node:
+                    continue
+            self.add_violation(IncorrectClassBodyContentViolation(sub_node))
+
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """
         Checking class definitions.
@@ -77,9 +98,11 @@ class WrongClassVisitor(BaseNodeVisitor):
         Raises:
             RequiredBaseClassViolation
             ObjectInBaseClassesListViolation
+            IncorrectClassBodyContentViolation
 
         """
         self._check_base_classes(node)
+        self._check_wrong_body_nodes(node)
         self.generic_visit(node)
 
     def visit_any_function(self, node: types.AnyFunctionDef) -> None:

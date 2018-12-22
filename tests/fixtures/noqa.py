@@ -33,7 +33,7 @@ def some():  # noqa: Z110
     from my_module import some_function  # noqa: Z435
 
     class Nested(object):  # noqa: Z431
-        ...  # noqa: Z444
+        ...  # noqa: Z444, Z452
 
     def nested():  # noqa: Z430
         anti_z444 = 1
@@ -277,3 +277,10 @@ if some_if_expr:  # noqa: Z451
     some_dict['x'] = True
 else:
     some_dict['x'] = False
+
+
+class ClassWithWrongContents(object):
+    """Doc."""
+
+    for _ in range(1):  # noqa: Z452
+        anti_z444 = 1

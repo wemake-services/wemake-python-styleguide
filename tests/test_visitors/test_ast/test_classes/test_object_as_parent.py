@@ -7,9 +7,20 @@ from wemake_python_styleguide.violations.consistency import (
 )
 from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
 
-extra_object = 'class TestClassName(FirstName, SecondName, object): ...'
-single_extra_object = 'class TestClassName(object): ...'
-correct_list = 'class TestClassName(FirstTestClass, SecondTestClass): ...'
+extra_object = """
+class TestClassName(FirstName, SecondName, object):
+    '''Docs.'''
+"""
+
+single_extra_object = """
+class TestClassName(object):
+    '''Docs.'''
+"""
+
+correct_list = """
+class TestClassName(FirstTestClass, SecondTestClass):
+    '''Docs.'''
+"""
 
 
 @pytest.mark.parametrize('code', [
