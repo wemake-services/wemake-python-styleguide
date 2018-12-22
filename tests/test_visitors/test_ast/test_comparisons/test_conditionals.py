@@ -16,6 +16,7 @@ variable = 1
 
 if_statement = 'if {0}: ...'
 ternary = 'ternary = 0 if {0} else 1'
+
 if_statement_in_comprehension = """
 def container():
     [x for x in [1, 2, 3] if {0}]
@@ -67,6 +68,7 @@ def test_valid_conditional(
     '-4.8',
     '--0.0',
     '"test"',
+    "b'bytes'",
     '("string in brackets")',
     '{test : "1"}',
     '{"set"}',

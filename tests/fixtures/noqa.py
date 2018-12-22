@@ -136,11 +136,11 @@ class BadClass:  # noqa: Z306
     UPPER_CASE_ATTRIBUTE = 12  # noqa: Z115
 
     @staticmethod  # noqa: Z433
-    def some_static():
+    def some_static(arg1):
         anti_z444 = 1
 
     @staticmethod  # noqa: Z433
-    async def some_async_static():
+    async def some_async_static(arg1):
         anti_z444 = 1
 
     def __del__(self, *_args, **_kwargs):  # noqa: Z434
@@ -283,4 +283,7 @@ class ClassWithWrongContents(object):
     """Doc."""
 
     for _ in range(1):  # noqa: Z452
+        anti_z444 = 1
+
+    def method_with_no_args():  # noqa: Z453
         anti_z444 = 1

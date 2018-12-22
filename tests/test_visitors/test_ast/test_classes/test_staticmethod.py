@@ -10,7 +10,7 @@ from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
 decorated_method = """
 class Example(object):
     @{0}
-    def should_fail(): ...
+    def should_fail(arg1): ...
 """
 
 

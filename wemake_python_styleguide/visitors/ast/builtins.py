@@ -151,6 +151,7 @@ class WrongCollectionVisitor(BaseNodeVisitor):
 
     _elements_in_sets: ClassVar[AnyNodes] = (
         ast.Str,
+        ast.Bytes,
         ast.Num,
         ast.NameConstant,
         ast.Name,
