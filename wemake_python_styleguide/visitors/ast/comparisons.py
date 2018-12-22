@@ -185,7 +185,7 @@ class WrongConditionalVisitor(BaseNodeVisitor):
 
     def _is_simplifiable_assign(
         self,
-        node_body: List[ast.AST],
+        node_body: List[ast.stmt],
     ) -> Optional[str]:
         wrong_length = len(node_body) != 1
         if wrong_length or not isinstance(node_body[0], ast.Assign):
