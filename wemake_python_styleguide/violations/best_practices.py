@@ -52,6 +52,7 @@ Summary
    NonUniqueItemsInSetViolation
    BaseExceptionSubclassViolation
    SimplifiableIfViolation
+   IncorrectClassBodyContentViolation
 
 Comments
 --------
@@ -100,6 +101,7 @@ Design
 .. autoclass:: NonUniqueItemsInSetViolation
 .. autoclass:: BaseExceptionSubclassViolation
 .. autoclass:: SimplifiableIfViolation
+.. autoclass:: IncorrectClassBodyContentViolation
 
 """
 
@@ -1233,6 +1235,7 @@ class SimplifiableIfViolation(ASTViolation):
         my_bool = True if some_call() else False
 
     We only check ``if`` nodes where ``True`` and ``False`` values are used.
+    We check both ``if`` nodes and ``if`` expressions.
 
     .. versionadded:: 0.7.0
 
@@ -1240,3 +1243,38 @@ class SimplifiableIfViolation(ASTViolation):
 
     error_template = 'Found simplifiable `if` condition'
     code = 451
+
+
+@final
+class IncorrectClassBodyContentViolation(ASTViolation):
+    """
+    Forbids to use incorrect nodes inside ``class`` definitions.
+
+    Reasoning:
+        Python allows us to have conditions, context managers,
+        and even infinite loops inside ``class`` definitions.
+        On the other hand, only methods, attributes, and docstrings make sense.
+        So, we discourage using anything except these nodes in class bodies.
+
+    Solution:
+        If you have complex logic inside your class definition,
+        most likely that you do something wrong.
+        There are different options to refactor this mess.
+        You can try metaclasses, decorators, builders, and other patterns.
+
+    Example::
+
+        # Wrong:
+        class Test(object):
+            for _ in range(10):
+                print('What?!')
+
+    We also allow some nested classes,
+    check out :class:`NestedClassViolation` for more information.
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found incorrect node inside `class` body'
+    code = 452

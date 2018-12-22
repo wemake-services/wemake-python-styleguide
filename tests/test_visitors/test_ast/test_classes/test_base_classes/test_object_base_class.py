@@ -7,26 +7,39 @@ from wemake_python_styleguide.violations.consistency import (
 )
 from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
 
-class_without_base = 'class Meta: ...'
-class_with_empty_base = 'class Meta(): ...'
+class_without_base = """
+class Meta:
+    '''Docs.'''
+"""
+
+class_with_empty_base = """
+    class Meta():
+        '''Docs.'''
+"""
 
 nested_class_without_base = """
 class Model(object):
-    class Meta: ...
+    class Meta:
+        '''Docs.'''
 """
 
 nested_class_with_empty_base = """
 class Model(object):
-    class Meta(): ...
+    class Meta():
+        '''Docs.'''
 """
 
 # Correct:
 
-class_with_base = 'class Meta({0}): ...'
+class_with_base = """
+class Meta({0}):
+    '''Docs.'''
+"""
 
 nested_class_with_base = """
 class Model({0}):
-    class Meta({0}): ...
+    class Meta({0}):
+        '''Docs.'''
 """
 
 
