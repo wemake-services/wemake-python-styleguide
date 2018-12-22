@@ -19,6 +19,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use simplifiable `if` expressions and nodes
 - Forbids to have incorrect nodes in `class` body
 - Forbids to have methods without any arguments
+- Forbids to have incorrect base classes nodes
 
 ### Bugfixes
 

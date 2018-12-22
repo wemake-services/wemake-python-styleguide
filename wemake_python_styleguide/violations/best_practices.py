@@ -54,6 +54,7 @@ Summary
    SimplifiableIfViolation
    IncorrectClassBodyContentViolation
    MethodWithoutArgumentsViolation
+   IncorrectBaseClassViolation
 
 Comments
 --------
@@ -104,6 +105,7 @@ Design
 .. autoclass:: SimplifiableIfViolation
 .. autoclass:: IncorrectClassBodyContentViolation
 .. autoclass:: MethodWithoutArgumentsViolation
+.. autoclass:: IncorrectBaseClassViolation
 
 """
 
@@ -1314,3 +1316,32 @@ class MethodWithoutArgumentsViolation(ASTViolation):
 
     error_template = 'Found method without arguments: {0}'
     code = 453
+
+
+@final
+class IncorrectBaseClassViolation(ASTViolation):
+    """
+    Forbids to have methods without any arguments.
+
+    Reasoning:
+        In Python you can specify anything in the base classes slot.
+        In runtime this expression will be evaluated and executed.
+        We need to prevent dirty hacks in this field.
+
+    Solution:
+        Use only raw names to set your base classes.
+
+    Example::
+
+        # Correct:
+        class Test(module.ObjectName, MixinName): ...
+
+        # Wrong:
+        class Test((lambda: object)()): ...
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found incorrect base class'
+    code = 454

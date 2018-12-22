@@ -279,7 +279,7 @@ else:
     some_dict['x'] = False
 
 
-class ClassWithWrongContents(object):
+class ClassWithWrongContents((lambda: object)()):  # noqa: Z454
     """Doc."""
 
     for _ in range(1):  # noqa: Z452
