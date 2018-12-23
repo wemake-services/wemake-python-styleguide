@@ -1377,7 +1377,7 @@ class IncorrectSlotsViolation(ASTViolation):
             __slots__ = ['field1', 'field2', 'field2']
 
     Note, that we do ignore all complex expressions for this field.
-    So, we only check literals.
+    So, we only check raw literals.
 
     .. versionadded:: 0.7.0
 

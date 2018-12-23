@@ -9,7 +9,12 @@ from wemake_python_styleguide.constants import (
     VARIABLE_NAMES_BLACKLIST,
 )
 from wemake_python_styleguide.logics import functions
-from wemake_python_styleguide.logics.naming import access, logical, name_nodes
+from wemake_python_styleguide.logics.naming import (
+    access,
+    builtins,
+    logical,
+    name_nodes,
+)
 from wemake_python_styleguide.types import (
     AnyFunctionDef,
     AnyFunctionDefAndLambda,
@@ -58,6 +63,11 @@ class _NameValidator(object):
                 naming.ConsecutiveUnderscoresInNameViolation(
                     node, text=name,
                 ),
+            )
+
+        if builtins.is_wrong_alias(name):
+            self._error_callback(
+                naming.TrailingUnderscoreViolation(node, text=name),
             )
 
     def _ensure_length(self, node: ast.AST, name: str) -> None:
@@ -149,6 +159,7 @@ class WrongNameVisitor(BaseNodeVisitor):
         Raises:
             UpperCaseAttributeViolation
             UnicodeNameViolation
+            TrailingUnderscoreViolation
 
         """
         self._validator.check_attribute_name(node)
@@ -165,6 +176,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             PrivateNameViolation
             TooLongNameViolation
             UnicodeNameViolation
+            TrailingUnderscoreViolation
 
         """
         self._validator.check_name(node, node.name)
@@ -180,6 +192,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             TooShortNameViolation
             PrivateNameViolation
             TooLongNameViolation
+            TrailingUnderscoreViolation
 
         """
         self._validator.check_function_signature(node)
@@ -194,6 +207,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             TooShortNameViolation
             PrivateNameViolation
             TooLongNameViolation
+            TrailingUnderscoreViolation
 
         """
         for alias_node in node.names:
@@ -212,6 +226,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             PrivateNameViolation
             TooLongNameViolation
             UnicodeNameViolation
+            TrailingUnderscoreViolation
 
         """
         variable_name = name_nodes.get_assigned_name(node)
@@ -279,7 +294,6 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
             values_names = tuple(
                 getattr(node_value, 'id', None) for node_value in node_values
             )
-
         else:
             values_names = getattr(node.value, 'id', None)
         has_repeatable_values = len(target_names) != len(set(target_names))

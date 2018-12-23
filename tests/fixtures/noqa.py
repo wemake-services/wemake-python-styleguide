@@ -52,6 +52,7 @@ cls = 5  # noqa: Z117
 __author__ = 'Nikita Sobolev'  # noqa: Z410
 extremely_long_name_that_needs_to_be_shortened_to_work_fine = 2  # noqa: Z118
 привет_по_русски = 'Hello, world!'  # noqa: Z119
+wrong_alias_ = 'some fake builtin alias'  # noqa: Z120
 
 some._execute()  # noqa: Z441
 

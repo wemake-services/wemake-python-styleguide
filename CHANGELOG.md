@@ -21,6 +21,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to have methods without any arguments
 - Forbids to have incorrect base classes nodes
 - Enforces consistent `__slots__` syntax
+- Forbids to use names with trailing `_` without a reason
 
 ### Bugfixes
 
