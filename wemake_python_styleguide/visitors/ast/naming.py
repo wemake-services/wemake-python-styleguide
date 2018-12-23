@@ -36,7 +36,7 @@ AssignTargetsNameList = List[Union[str, Tuple[str]]]
 
 
 class _NameValidator(object):
-    """Utility class to separate logic from the visitor."""
+    """Utility class to separate logic from the naming visitor."""
 
     def __init__(
         self,
