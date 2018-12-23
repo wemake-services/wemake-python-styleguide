@@ -4,7 +4,7 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
-## WIP aka The Order
+## WIP
 
 ### Features
 
@@ -30,7 +30,7 @@ We used to have incremental versioning before `0.1.0`.
 - Fixes argument count issue with `async` functions
 - Fixes `WrongConditionalVisitor` not detecting `tuple` as constants
 - Fixes `WrongConditionalVisitor` not detecting negative numbers as constants
-- Fixes some magic number that were not detected, like `8.3`
+- Fixes some magic number that were not detected based on their location
 - Fixes error when regular functions named as blacklisted
   magic methods were forbidden, now we check for methods only
 
@@ -42,6 +42,8 @@ We used to have incremental versioning before `0.1.0`.
 - Improves docs: adds new badge about our code style
 - Refactoring: trying to use `astor` where possible to simplify the codebase
 - Refactoring: introduces some new `transformations`
+- Improves tests: changes how `flake8` is executed, now it is twice as fast
+- Improves docs: now linting `conf.py` with `flake8`
 
 
 ## Version 0.6.1
@@ -55,7 +57,7 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
-- Adds `flake8-per-file-ignore` dependency
+- Adds `flake8-per-file-ignore` plugin dependency
 - Adds default values to the `flake8 --help` output
 - Adds `do` as a restricted variable name
 - Forbids multiple assignment targets for context managers

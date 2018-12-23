@@ -594,7 +594,7 @@ class UnicodeNameViolation(MaybeASTViolation):
 
 
 @final
-class TrailingUnderscoreViolation(MaybeASTViolation):
+class TrailingUnderscoreViolation(ASTViolation):
     """
     Forbids to use trailing ``_`` for names that do not need it.
 
@@ -605,10 +605,9 @@ class TrailingUnderscoreViolation(MaybeASTViolation):
         it just harms readability of your program.
 
     Solution:
-        Rename your variables to not contain trailing underscores.
+        Rename your variable not to contain trailing underscores.
 
-    This rule checks: modules, variables, attributes,
-    functions, methods, and classes.
+    This rule checks: variables, attributes, functions, methods, and classes.
 
     Example::
 

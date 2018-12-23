@@ -55,7 +55,13 @@ To run all tests:
 pytest
 ```
 
-This step is mandatory during the CI.
+To run linting:
+
+```bash
+flake8 wemake_python_styleguide tests docs
+```
+
+These steps are mandatory during the CI.
 
 
 ## Type checks

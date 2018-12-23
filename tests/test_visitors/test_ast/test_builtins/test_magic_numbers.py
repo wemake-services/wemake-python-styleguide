@@ -73,8 +73,9 @@ some_dict[{0}]
     -1,
     0,
     0.5,
+    8.3,
     10,
-    1000,
+    765,
 ])
 def test_magic_number(
     assert_errors,
