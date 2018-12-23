@@ -126,6 +126,7 @@ Summary
    ReservedArgumentNameViolation
    TooLongNameViolation
    UnicodeNameViolation
+   TrailingUnderscoreViolation
 
 Module names
 ------------
@@ -147,6 +148,7 @@ General names
 .. autoclass:: ReservedArgumentNameViolation
 .. autoclass:: TooLongNameViolation
 .. autoclass:: UnicodeNameViolation
+.. autoclass:: TrailingUnderscoreViolation
 
 """
 
@@ -563,7 +565,7 @@ class TooLongNameViolation(MaybeASTViolation):
 @final
 class UnicodeNameViolation(MaybeASTViolation):
     """
-    Restrict unicode names.
+    Forbids to use unicode names.
 
     Reasoning:
         This should be forbidden for sanity, readability, and writability.
@@ -589,3 +591,37 @@ class UnicodeNameViolation(MaybeASTViolation):
 
     error_template = 'Found unicode name: {0}'
     code = 119
+
+
+@final
+class TrailingUnderscoreViolation(MaybeASTViolation):
+    """
+    Forbids to use trailing ``_`` for names that do not need it.
+
+    Reasoning:
+        We use trailing underscore with a reason:
+        to indicate that this name shadows a builtin or keyword.
+        So, when overusing this feature for general names:
+        it just harms readability of your program.
+
+    Solution:
+        Rename your variables to not contain trailing underscores.
+
+    This rule checks: modules, variables, attributes,
+    functions, methods, and classes.
+
+    Example::
+
+        # Correct:
+        class_ = SomeClass
+        list_ = []
+
+        # Wrong:
+        some_variable_ = 1
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found regular name with trailing underscore: {0}'
+    code = 120
