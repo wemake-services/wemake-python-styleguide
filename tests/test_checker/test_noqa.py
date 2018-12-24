@@ -5,6 +5,9 @@ import subprocess
 from collections import Counter
 
 ERROR_PATTERN = re.compile(r'(Z\d{3})')
+IGNORED_VIOLATIONS = [
+    'Z202',  # since our test case is complex, that's fine
+]
 
 
 def _assert_errors_count_in_output(output, errors, all_violations):
@@ -126,13 +129,14 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
         'Z453': 1,
         'Z454': 1,
         'Z455': 1,
+        'Z456': 1,
     }
 
     process = subprocess.Popen(
         [
             'flake8',
             '--ignore',
-            'Z202',  # since our test case is complex, that's fine
+            ','.join(IGNORED_VIOLATIONS),
             '--disable-noqa',
             '--select',
             'Z',
@@ -156,7 +160,7 @@ def test_noqa_fixture(absolute_path):
         [
             'flake8',
             '--ignore',
-            'Z202',  # since our test case is complex, that's fine
+            ','.join(IGNORED_VIOLATIONS),
             '--select',
             'Z',
             absolute_path('fixtures', 'noqa.py'),
@@ -169,3 +173,23 @@ def test_noqa_fixture(absolute_path):
     stdout, _ = process.communicate()
 
     assert stdout.count('Z') == 0
+
+
+def test_noqa_fixture_without_ignore(absolute_path):
+    """End-to-End test to check that `noqa` works without ignores."""
+    process = subprocess.Popen(
+        [
+            'flake8',
+            '--select',
+            'Z',
+            absolute_path('fixtures', 'noqa.py'),
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        universal_newlines=True,
+        encoding='utf8',
+    )
+    stdout, _ = process.communicate()
+
+    for violation in IGNORED_VIOLATIONS:
+        assert stdout.count(violation) > 0
