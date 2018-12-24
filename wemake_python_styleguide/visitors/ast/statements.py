@@ -9,6 +9,9 @@ from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
     StatementHasNoEffectViolation,
     UnreachableCodeViolation,
+    VariableUsedOutsideOfForBlockViolation,
+    VariableUsedOutsideOfWithBlockViolation,
+    ASTViolation
 )
 from wemake_python_styleguide.violations.consistency import (
     ParametersIndentationViolation,
@@ -36,6 +39,22 @@ AnyCollection = Union[
     ast.Set,
     ast.Dict,
     ast.Tuple,
+]
+
+AnyForLoop = Union[
+    ast.AsyncFor,
+    ast.For
+]
+
+AnyWith = Union[
+    ast.AsyncWith,
+    ast.With,
+
+]
+
+AnyVariableDefyingStatement = Union[
+    AnyForLoop,
+    AnyWith
 ]
 
 
@@ -235,3 +254,67 @@ class WrongParametersIndentationVisitor(BaseNodeVisitor):
         all_args = [*node.bases, *[kw.value for kw in node.keywords]]
         self._check_indentation(node, all_args)
         self.generic_visit(node)
+
+
+@final
+@alias('visit_variable_defying_statement', (
+    'visit_With',
+    'visit_AsyncWith',
+    'visit_For',
+    'visit_AsyncFor',
+))
+class VariableUsedOutsideOfBlockVisitor(BaseNodeVisitor):
+    """
+    Responsible for detection of variable defined in `with` and `for` outside of it's body
+    """
+
+    def visit_variable_defying_statement(self, node: AnyVariableDefyingStatement) -> None:
+        """
+        Checks that variable is not used after statement body
+        """
+        node_reached = False
+        defined_names = self._extract_defined_variables(node)
+        if not defined_names:
+            return
+        for statement in node.context.body:
+            if node_reached:
+                self._check_statement(defined_names, statement, node)
+            if node == statement:
+                node_reached = True
+        self.generic_visit(node)
+
+    def _check_statement(self, names: List[str], statement: ast, original_node: AnyVariableDefyingStatement) -> bool:
+        """Checks if statement uses one of the names"""
+        for node in ast.walk(statement):
+            if not isinstance(node, ast.Name):
+                continue
+            else:
+                if node.id in names:
+                    violation_type = self._violation_type(original_node)
+                    self.add_violation(violation_type(node))
+
+    def _violation_type(self, node: AnyVariableDefyingStatement) -> ASTViolation:
+        if isinstance(node, (ast.AsyncFor, ast.For)):
+            return VariableUsedOutsideOfForBlockViolation
+        else:
+            return VariableUsedOutsideOfWithBlockViolation
+
+    def _extract_defined_variables(self, node: AnyVariableDefyingStatement) -> List[str]:
+        if isinstance(node, (ast.AsyncFor, ast.For)):
+            return self._extract_variable_names(node.target)
+        else:
+            defined_names = []
+            for with_item in node.items:
+                defined_names.extend(
+                    self._extract_variable_names(with_item.optional_vars))
+            return defined_names
+
+    def _extract_variable_names(self, node: Union[ast.Name, ast.Tuple, None]) -> List[str]:
+        if isinstance(node, ast.Name):
+            if node.id == "_":
+                return []
+            return node.id
+        elif isinstance(node, ast.Tuple):
+            return [target.id for target in node.elts if target.id != "_"]
+        else:
+            return []

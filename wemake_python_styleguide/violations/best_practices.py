@@ -1417,3 +1417,64 @@ class IncorrectSuperCallViolation(ASTViolation):
 
     error_template = 'Found incorrect `super()` call: {0}'
     code = 456
+
+
+@final
+class VariableUsedOutsideOfWithBlockViolation(ASTViolation):
+
+    """
+    Forbids using variable defined by ``with`` statement outside of `with` block
+
+    Reasoning:
+        ``with`` is used to close resources
+        and in most cases we don't need the resource after it's closed
+        The fact that we use it outside of the block is a sign of possible mistake
+    Solution:
+        Don't use variable defined by ``with`` statement outside of said ``with`` block
+
+    Example::
+
+        # Correct:
+        with a() as b:
+            print(b)
+        print("Hello world")
+
+        # Wrong:
+        with a() as b:
+            print("Hello world")
+        print(b)
+
+    """
+
+    error_template = 'Found usage of variable defined by `with` statement outside of `with` block: {0}'
+    code = 457
+
+
+@final
+class VariableUsedOutsideOfForBlockViolation(ASTViolation):
+
+    """
+    Forbids using variable defined by ``for`` statement outside of `for` block
+
+    Reasoning:
+        ``for`` is used to iterate over a collection
+        Usage of variable extracted from iterator after iteration is over is strange and non implicit
+    Solution:
+        Don't use variable defined by ``for`` statement outside of said ``for`` block
+
+    Example::
+
+        # Correct:
+        for a in range(10):
+            print(a)
+        print("Hello world")
+
+        # Wrong:
+        for a in range(10):
+            print("Hello world {}".format(a))
+        print("Counted up to {}".format(a))
+
+    """
+
+    error_template = 'Found usage of variable defined by `for` statement outside of `for` block: {0}'
+    code = 458

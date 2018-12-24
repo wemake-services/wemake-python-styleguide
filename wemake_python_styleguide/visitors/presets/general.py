@@ -22,6 +22,7 @@ from wemake_python_styleguide.visitors.filenames.module import (
 #: Used to store all general visitors to be later passed to checker:
 GENERAL_PRESET = (
     # General:
+    statements.VariableUsedOutsideOfBlockVisitor,
     statements.StatementsWithBodiesVisitor,
     statements.WrongParametersIndentationVisitor,
 
