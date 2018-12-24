@@ -7,8 +7,8 @@ from wemake_python_styleguide.logics import functions
 from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.best_practices import (
     BooleanPositionalArgumentViolation,
-    WrongFunctionCallViolation,
     IncorrectSuperCallViolation,
+    WrongFunctionCallViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
