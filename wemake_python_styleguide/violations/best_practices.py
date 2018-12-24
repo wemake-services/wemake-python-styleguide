@@ -56,6 +56,7 @@ Summary
    MethodWithoutArgumentsViolation
    IncorrectBaseClassViolation
    IncorrectSlotsViolation
+   IncorrectSuperCallViolation
 
 Comments
 --------
@@ -108,6 +109,7 @@ Design
 .. autoclass:: MethodWithoutArgumentsViolation
 .. autoclass:: IncorrectBaseClassViolation
 .. autoclass:: IncorrectSlotsViolation
+.. autoclass:: IncorrectSuperCallViolation
 
 """
 
@@ -1385,3 +1387,33 @@ class IncorrectSlotsViolation(ASTViolation):
 
     error_template = 'Found incorrect `__slots__` syntax'
     code = 455
+
+
+@final
+class IncorrectSuperCallViolation(ASTViolation):
+    """
+    Forbids to use ``super()`` with parameters or outside of methods.
+
+    Reasoning:
+        ``super()`` is a very special function.
+        It implicitly relies on the context where it is used
+        and parameters passed to it.
+        So, we should be very careful with parameters and context.
+
+    Solution:
+        Use ``super()`` without arguments and only inside methods.
+
+    Example::
+
+        # Correct:
+        super().__init__()
+
+        # Wrong:
+        super(ClassName, self).__init__()
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found incorrect `super()` call: {0}'
+    code = 456

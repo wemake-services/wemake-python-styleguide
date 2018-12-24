@@ -8,6 +8,7 @@ from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.best_practices import (
     BooleanPositionalArgumentViolation,
     WrongFunctionCallViolation,
+    IncorrectSuperCallViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
@@ -40,6 +41,28 @@ class WrongFunctionCallVisitor(BaseNodeVisitor):
                         ),
                     )
 
+    def _ensure_super_context(self, node: ast.Call) -> None:
+        parent_context = getattr(node, 'context', None)
+        if isinstance(parent_context, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            grand_context = getattr(parent_context, 'context', None)
+            if isinstance(grand_context, ast.ClassDef):
+                return
+        self.add_violation(
+            IncorrectSuperCallViolation(node, text='not inside method'),
+        )
+
+    def _ensure_super_arguments(self, node: ast.Call) -> None:
+        if len(node.args) > 0 or len(node.keywords) > 0:
+            self.add_violation(
+                IncorrectSuperCallViolation(node, text='remove arguments'),
+            )
+
+    def _check_super_call(self, node: ast.Call) -> None:
+        function_name = functions.given_function_called(node, ['super'])
+        if function_name:
+            self._ensure_super_context(node)
+            self._ensure_super_arguments(node)
+
     def visit_Call(self, node: ast.Call) -> None:
         """
         Used to find ``FUNCTIONS_BLACKLIST`` calls.
@@ -47,8 +70,10 @@ class WrongFunctionCallVisitor(BaseNodeVisitor):
         Raises:
             BooleanPositionalArgumentViolation
             WrongFunctionCallViolation
+            IncorrectSuperCallViolation
 
         """
         self._check_wrong_function_called(node)
         self._check_boolean_arguments(node)
+        self._check_super_call(node)
         self.generic_visit(node)

@@ -281,12 +281,10 @@ else:
 
 
 class ClassWithWrongContents((lambda: object)()):  # noqa: Z454
-    """Doc."""
-
     __slots__ = ['a', 'a']  # noqa: Z455
 
     for _ in range(1):  # noqa: Z452
         anti_z444 = 1
 
     def method_with_no_args():  # noqa: Z453
-        anti_z444 = 1
+        super(ClassWithWrongContents, self).method_with_no_args()  # noqa: Z456

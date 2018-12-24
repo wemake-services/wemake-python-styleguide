@@ -22,6 +22,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to have incorrect base classes nodes
 - Enforces consistent `__slots__` syntax
 - Forbids to use names with trailing `_` without a reason
+- Forbids to use `super()` with arguments or outside of methods
 
 ### Bugfixes
 
@@ -44,6 +45,7 @@ We used to have incremental versioning before `0.1.0`.
 - Refactoring: introduces some new `transformations`
 - Improves tests: changes how `flake8` is executed, now it is twice as fast
 - Improves docs: now linting `conf.py` with `flake8`
+- Improves tests: now we check that ignored violation are raised with `noqa`
 
 
 ## Version 0.6.1
