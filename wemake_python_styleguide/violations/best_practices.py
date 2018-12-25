@@ -57,6 +57,7 @@ Summary
    IncorrectBaseClassViolation
    IncorrectSlotsViolation
    IncorrectSuperCallViolation
+   VariableUsedOutsideOfBlockViolation
 
 Comments
 --------
@@ -110,6 +111,7 @@ Design
 .. autoclass:: IncorrectBaseClassViolation
 .. autoclass:: IncorrectSlotsViolation
 .. autoclass:: IncorrectSuperCallViolation
+.. autoclass:: VariableUsedOutsideOfBlockViolation
 
 """
 
@@ -1420,17 +1422,21 @@ class IncorrectSuperCallViolation(ASTViolation):
 
 
 @final
-class VariableUsedOutsideOfWithBlockViolation(ASTViolation):
-
+class VariableUsedOutsideOfBlockViolation(ASTViolation):
     """
-    Forbids using variable defined by ``with`` statement outside of `with` block
+    Forbids using variable defined by ``for`` or ``with`` outside of its block.
 
     Reasoning:
-        ``with`` is used to close resources
-        and in most cases we don't need the resource after it's closed
-        The fact that we use it outside of the block is a sign of possible mistake
+        ``with`` is used to close resources and in most cases we don't need the
+        resource after it's closed. The fact that we use it outside of the block
+        is a sign of possible mistake
+        ``for`` is used to iterate over a collection. Usage of variable
+        extracted from iterator after iteration is over is strange and not
+        implicit
+
     Solution:
-        Don't use variable defined by ``with`` statement outside of said ``with`` block
+        Don't use variable defined by ``for`` or ``with`` statement outside of
+        its block
 
     Example::
 
@@ -1439,42 +1445,24 @@ class VariableUsedOutsideOfWithBlockViolation(ASTViolation):
             print(b)
         print("Hello world")
 
-        # Wrong:
-        with a() as b:
-            print("Hello world")
-        print(b)
-
-    """
-
-    error_template = 'Found usage of variable defined by `with` statement outside of `with` block: {0}'
-    code = 457
-
-
-@final
-class VariableUsedOutsideOfForBlockViolation(ASTViolation):
-
-    """
-    Forbids using variable defined by ``for`` statement outside of `for` block
-
-    Reasoning:
-        ``for`` is used to iterate over a collection
-        Usage of variable extracted from iterator after iteration is over is strange and non implicit
-    Solution:
-        Don't use variable defined by ``for`` statement outside of said ``for`` block
-
-    Example::
-
         # Correct:
         for a in range(10):
             print(a)
         print("Hello world")
 
         # Wrong:
+        with a() as b:
+            print("Hello world")
+        print(b)
+
+        # Wrong:
         for a in range(10):
-            print("Hello world {}".format(a))
-        print("Counted up to {}".format(a))
+            print(a)
+        print("Max val is", a)
+
+    .. versionadded:: 0.7.0
 
     """
 
-    error_template = 'Found usage of variable defined by `for` statement outside of `for` block: {0}'
-    code = 458
+    error_template = 'Variable used outside of `for` or `with` block: {0}'
+    code = 457

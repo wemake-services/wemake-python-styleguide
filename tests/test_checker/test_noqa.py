@@ -130,6 +130,7 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
         'Z454': 1,
         'Z455': 1,
         'Z456': 1,
+        'Z457': 2,
     }
 
     process = subprocess.Popen(
@@ -171,7 +172,6 @@ def test_noqa_fixture(absolute_path):
         encoding='utf8',
     )
     stdout, _ = process.communicate()
-
     assert stdout.count('Z') == 0
 
 

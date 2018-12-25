@@ -254,7 +254,7 @@ async def function_with_unreachable():
 
 first = second = 2  # noqa: Z445
 
-index, nodes[0] = range(2)  # noqa: Z446
+index, nodes[0] = range(2)  # noqa: Z446, Z457
 
 
 try:  # noqa: Z447
@@ -279,7 +279,6 @@ if some_if_expr:  # noqa: Z451
 else:
     some_dict['x'] = False
 
-
 class ClassWithWrongContents((lambda: object)()):  # noqa: Z454
     __slots__ = ['a', 'a']  # noqa: Z455
 
@@ -288,3 +287,8 @@ class ClassWithWrongContents((lambda: object)()):  # noqa: Z454
 
     def method_with_no_args():  # noqa: Z453
         super(ClassWithWrongContents, self).method_with_no_args()  # noqa: Z456
+
+def some_name():
+    for iterator in range(1000):
+        handle(iterator)
+    print(iterator)  # noqa: Z457
