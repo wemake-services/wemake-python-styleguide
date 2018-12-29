@@ -1429,14 +1429,14 @@ class VariableUsedOutsideOfBlockViolation(ASTViolation):
     Reasoning:
         ``with`` is used to close resources and in most cases we don't need the
         resource after it's closed. The fact that we use it outside of the block
-        is a sign of possible mistake
+        is a sign of possible mistake.
         ``for`` is used to iterate over a collection. Usage of variable
         extracted from iterator after iteration is over is strange and not
-        implicit
+        implicit.
 
     Solution:
         Don't use variable defined by ``for`` or ``with`` statement outside of
-        its block
+        its block.
 
     Example::
 
@@ -1464,5 +1464,5 @@ class VariableUsedOutsideOfBlockViolation(ASTViolation):
 
     """
 
-    error_template = 'Variable used outside of `for` or `with` block: {0}'
+    error_template = 'Variable used outside of its defining block: {0}'
     code = 457
