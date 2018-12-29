@@ -11,15 +11,15 @@ from wemake_python_styleguide.visitors.ast.statements import (
 
 variable_used_outside_with = """
 def function():
-    with a.open() as x:
+    with foo.open() as bar:
         some_call()
-    print('This is not allowed'.format(x))
+    print('This is not allowed'.format(bar))
 """
 
 multiple_variables_defined_by_with = """
-with a.open(), b.open() as c, d.open() as (e, f):
+with foo.open(), bar.open() as baz, qux.open() as (quux, quuz):
     print("Hello")
-print(f)
+print(quuz)
 """
 
 variable_used_outside_for = """
@@ -29,23 +29,23 @@ total = ind + 1
 """
 
 multiple_variables_defined_by_for = """
-for (a, b, c, d) in call(1):
+for (foo, bar, baz, qux) in call(1):
     iterate()
-x = c/2
+total = baz / 2
 """
 
 valid_with_usage = """
-with a as (b, c):
-    print(b)
-print(a)
+with manager as (foo, bar):
+    print(bar)
+print(manager)
 """
 
 
 valid_for_usage = """
 counter = 0
-for a in range(100):
-    print(a)
-    counter = a
+for foo in range(100):
+    print(foo)
+    counter = foo
 print(counter)
 """
 
@@ -57,7 +57,7 @@ print(counter)
     (multiple_variables_defined_by_with, [VariableUsedOutsideOfBlockViolation]),
     (valid_for_usage, []),
     (valid_with_usage, []),
-    ])
+])
 def test_detect_violations(
     example,
     violation,
