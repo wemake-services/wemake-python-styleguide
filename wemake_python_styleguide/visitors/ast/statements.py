@@ -294,7 +294,6 @@ class VariableUsedOutsideOfBlockVisitor(BaseNodeVisitor):
                 )
             if node is statement:
                 node_reached = True
-        return
 
     def _check_statement_uses_forbidden_variables(
         self,
