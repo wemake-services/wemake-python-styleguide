@@ -50,6 +50,13 @@ We used to have incremental versioning before `0.1.0`.
 - Improves tests: now we check that ignored violation are raised with `noqa`
 
 
+## Version 0.6.2
+
+### Bugfixes
+
+- Fixes a [crash](https://github.com/wemake-services/wemake-python-styleguide/issues/423) with class attributes assignment
+
+
 ## Version 0.6.1
 
 ### Bugfixes

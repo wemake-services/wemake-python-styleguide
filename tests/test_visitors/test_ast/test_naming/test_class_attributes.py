@@ -12,6 +12,14 @@ class Test(object):
     {0} = None
 """
 
+regression423 = """
+class MyClass(object):
+    def action_method(self, request, object):
+        ...
+
+    action_method.label = 'Do action'
+"""
+
 
 @pytest.mark.parametrize('non_snake_case_name', [
     'Abc',
@@ -55,6 +63,24 @@ def test_snake_case_class_attributes(
 ):
     """Testing that attribute can not have too short names."""
     tree = parse_ast_tree(static_attribute.format(snake_case_name))
+
+    visitor = WrongNameVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+def test_regression423(
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+):
+    """
+    Tests that this issue-423 won't happen again.
+
+    See: https://github.com/wemake-services/wemake-python-styleguide/issues/423
+    """
+    tree = parse_ast_tree(regression423)
 
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
