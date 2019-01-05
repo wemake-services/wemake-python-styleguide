@@ -10,6 +10,7 @@ from wemake_python_styleguide.violations.complexity import (
     TooManyConditionsViolation,
     TooManyDecoratorsViolation,
     TooManyElifsViolation,
+    TooManyExceptCasesViolation,
     TooManyImportsViolation,
     TooManyMethodsViolation,
     TooManyModuleMembersViolation,
@@ -226,4 +227,24 @@ class ElifVisitor(BaseNodeVisitor):
 
         """
         self._check_elifs(node)
+        self.generic_visit(node)
+
+
+@final
+class TryExceptVisitor(BaseNodeVisitor):
+    """Visits all try/except nodes to ensure that they are not too complex."""
+
+    def _check_except_count(self, node: ast.Try) -> None:
+        if len(node.handlers) > self.options.max_except_cases:
+            self.add_violation(TooManyExceptCasesViolation(node))
+
+    def visit_Try(self, node: ast.Try) -> None:
+        """
+        Ensures that try/except is correct.
+
+        Raises:
+            TooManyExceptCasesViolation
+
+        """
+        self._check_except_count(node)
         self.generic_visit(node)

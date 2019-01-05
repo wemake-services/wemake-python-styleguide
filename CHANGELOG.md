@@ -23,6 +23,7 @@ We used to have incremental versioning before `0.1.0`.
 - Enforces consistent `__slots__` syntax
 - Forbids to use names with trailing `_` without a reason
 - Forbids to use `super()` with arguments or outside of methods
+- Forbids to have too many `except` cases
 
 ### Bugfixes
 
@@ -43,6 +44,7 @@ We used to have incremental versioning before `0.1.0`.
 - Improves docs: adds new badge about our code style
 - Refactoring: trying to use `astor` where possible to simplify the codebase
 - Refactoring: introduces some new `transformations`
+- Refactoring: now we do not have any magical text casts for violations
 - Improves tests: changes how `flake8` is executed, now it is twice as fast
 - Improves docs: now linting `conf.py` with `flake8`
 - Improves tests: now we check that ignored violation are raised with `noqa`

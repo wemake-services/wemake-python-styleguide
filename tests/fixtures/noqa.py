@@ -132,6 +132,17 @@ numbers = [
     if isinstance(target, int)
 ]
 
+try:  # noqa: Z225
+    do_some_bad()
+except ValueError:
+    print('value')
+except KeyError:
+    print('key')
+except IndexError as exc:
+    print('index', exc)
+except TypeError:
+    print('type')
+
 
 class BadClass:  # noqa: Z306
     UPPER_CASE_ATTRIBUTE = 12  # noqa: Z115

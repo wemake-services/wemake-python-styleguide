@@ -40,6 +40,7 @@ Summary
    TooManyConditionsViolation
    TooManyElifsViolation
    TooManyForsInComprehensionViolation
+   TooManyExceptCasesViolation
 
 Module complexity
 -----------------
@@ -67,6 +68,7 @@ Structures complexity
 .. autoclass:: TooManyConditionsViolation
 .. autoclass:: TooManyElifsViolation
 .. autoclass:: TooManyForsInComprehensionViolation
+.. autoclass:: TooManyExceptCasesViolation
 
 """
 
@@ -573,3 +575,31 @@ class TooManyForsInComprehensionViolation(ASTViolation):
 
     error_template = 'Found a comprehension with too many `for` statements'
     code = 224
+
+
+@final
+class TooManyExceptCasesViolation(ASTViolation):
+    """
+    Forbids to have too many ``except`` cases in a single ``try`` clause.
+
+    Reasoning:
+        Handling too many exceptions in a single place
+        is a good indicator of a bad design.
+        Since this way one controlling structure will become too complex.
+        And you will need to test a lot of paths your application might go.
+
+    Solution:
+        We can reduce the complexity of this case by spliting it into multiple
+        functions or using a decorator to handle different exceptions.
+
+    Configuration:
+        This rule is configurable with ``--max-except-cases``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_EXCEPT_CASES`
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found a too many `except` cases'
+    code = 225

@@ -74,12 +74,7 @@ class BaseViolation(object):
 
         """
         self._node = node
-
-        if text is None:
-            # TODO: why do we need this line?
-            self._text = node.__class__.__qualname__.lower()
-        else:
-            self._text = text
+        self._text = text
 
     @final
     def _full_code(self) -> str:
