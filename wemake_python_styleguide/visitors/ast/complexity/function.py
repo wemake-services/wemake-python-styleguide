@@ -57,7 +57,7 @@ class _ComplexityCounter(object):
             if variable_def.id == UNUSED_VARIABLE:
                 return
 
-            parent = getattr(variable_def, 'parent', None)
+            parent = getattr(variable_def, 'wps_parent', None)
             if isinstance(parent, self._not_contain_locals):
                 return
 

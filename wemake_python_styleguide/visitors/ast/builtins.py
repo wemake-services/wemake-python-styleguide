@@ -65,7 +65,7 @@ class MagicNumberVisitor(BaseNodeVisitor):
           so ``1`` has ``UnaryOp`` as parent, but should return ``Assign``
 
         """
-        parent = getattr(node, 'parent', None)
+        parent = getattr(node, 'wps_parent', None)
         if isinstance(parent, self._proxy_parents):
             return self._get_real_parent(parent)
         return parent

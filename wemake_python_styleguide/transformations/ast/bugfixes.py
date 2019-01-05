@@ -54,7 +54,7 @@ def fix_line_number(tree: ast.AST) -> ast.AST:
     for node in ast.walk(tree):
         if isinstance(node, affected):
             parent_lineno = getattr(
-                getattr(node, 'parent', None), 'lineno', None,
+                getattr(node, 'wps_parent', None), 'lineno', None,
             )
             if parent_lineno and parent_lineno < node.lineno:
                 node.lineno = node.lineno - 1

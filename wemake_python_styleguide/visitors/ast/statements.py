@@ -113,7 +113,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
             return
 
         if is_first and is_doc_string(node):
-            parent = getattr(node, 'parent', None)
+            parent = getattr(node, 'wps_parent', None)
             if isinstance(parent, self._have_doc_strings):
                 return
 

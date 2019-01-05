@@ -37,7 +37,7 @@ class ModuleMembersVisitor(BaseNodeVisitor):
 
     def _check_members_count(self, node: ModuleMembers) -> None:
         """This method increases the number of module members."""
-        parent = getattr(node, 'parent', None)
+        parent = getattr(node, 'wps_parent', None)
         is_real_method = is_method(getattr(node, 'function_type', None))
 
         if isinstance(parent, ast.Module) and not is_real_method:
@@ -118,7 +118,7 @@ class MethodMembersVisitor(BaseNodeVisitor):
         self._methods: DefaultDict[ast.ClassDef, int] = defaultdict(int)
 
     def _check_method(self, node: AnyFunctionDef) -> None:
-        parent = getattr(node, 'parent', None)
+        parent = getattr(node, 'wps_parent', None)
         if isinstance(parent, ast.ClassDef):
             self._methods[parent] += 1
 

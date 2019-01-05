@@ -226,7 +226,7 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
     """Finds wrong metadata information of a module."""
 
     def _check_metadata(self, node: ast.Assign) -> None:
-        node_parent = getattr(node, 'parent', None)
+        node_parent = getattr(node, 'wps_parent', None)
         if not isinstance(node_parent, ast.Module):
             return
 

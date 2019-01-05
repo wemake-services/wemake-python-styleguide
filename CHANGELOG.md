@@ -11,6 +11,13 @@ We used to have incremental versioning before `0.1.0`.
 - Adds `safety` and other dependency checks to CI process
 
 
+## Version 0.6.1
+
+### Bugfixes
+
+- Fixes a conflict between our plugin and `pyflakes`
+
+
 ## Version 0.6.0
 
 ### Features
