@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Callable, List, Tuple, Union
+from typing import Callable, List, Optional, Tuple, Union
 
 from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
@@ -113,8 +113,11 @@ class _NameValidator(object):
 
         for assignment in top_level_assigns:
             for target in assignment.targets:
-                name = getattr(target, 'id', None)
-                if logical.is_upper_case_name(name):
+                if not isinstance(target, ast.Name):
+                    continue
+
+                name: Optional[str] = getattr(target, 'id', None)
+                if name and logical.is_upper_case_name(name):
                     self._error_callback(
                         naming.UpperCaseAttributeViolation(target, text=name),
                     )
