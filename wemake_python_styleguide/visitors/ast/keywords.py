@@ -80,7 +80,11 @@ class WrongKeywordVisitor(BaseNodeVisitor):
 
     def _check_keyword(self, node: ast.AST) -> None:
         if isinstance(node, self._forbidden_keywords):
-            self.add_violation(WrongKeywordViolation(node))
+            self.add_violation(
+                WrongKeywordViolation(
+                    node, text=node.__class__.__qualname__.lower(),
+                ),
+            )
 
     def visit(self, node: ast.AST) -> None:
         """

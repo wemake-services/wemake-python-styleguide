@@ -90,6 +90,9 @@ class Configuration(object):
     - ``max-decorators`` - maximum number of decorators for single function
       or class definition, defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_DECORATORS`
+    - ``max-except-cases`` - maximum number of ``except`` cases in a single
+      ``try`` clause, defaults to
+      :str:`wemake_python_styleguide.options.defaults.MAX_EXCEPT_CASES`
 
     All options are configurable via ``flake8`` CLI.
 
@@ -176,6 +179,12 @@ class Configuration(object):
             '--max-decorators',
             defaults.MAX_DECORATORS,
             'Maximum number of decorators.',
+        ),
+
+        _Option(
+            '--max-except-cases',
+            defaults.MAX_EXCEPT_CASES,
+            'Maximum number of except cases.',
         ),
 
         # General:

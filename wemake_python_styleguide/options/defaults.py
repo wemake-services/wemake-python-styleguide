@@ -62,3 +62,6 @@ MAX_BASE_CLASSES: Final = 3
 
 #: Maximum number of decorators.
 MAX_DECORATORS: Final = 5
+
+#: Maximum number of ``except`` cases in a single ``try`` clause.
+MAX_EXCEPT_CASES: Final = 3
