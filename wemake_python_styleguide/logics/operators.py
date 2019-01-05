@@ -28,7 +28,7 @@ def get_parent_ignoring_unary(node: ast.AST) -> Optional[ast.AST]:
        so ``some`` has ``UnaryOp`` as parent, but should return ``Assign``
 
     """
-    parent = getattr(node, 'parent', None)
+    parent = getattr(node, 'wps_parent', None)
     if parent is None or not isinstance(parent, ast.UnaryOp):
         return parent
     return get_parent_ignoring_unary(parent)

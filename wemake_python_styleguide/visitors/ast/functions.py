@@ -42,9 +42,9 @@ class WrongFunctionCallVisitor(BaseNodeVisitor):
                     )
 
     def _ensure_super_context(self, node: ast.Call) -> None:
-        parent_context = getattr(node, 'context', None)
+        parent_context = getattr(node, 'wps_context', None)
         if isinstance(parent_context, (ast.FunctionDef, ast.AsyncFunctionDef)):
-            grand_context = getattr(parent_context, 'context', None)
+            grand_context = getattr(parent_context, 'wps_context', None)
             if isinstance(grand_context, ast.ClassDef):
                 return
         self.add_violation(

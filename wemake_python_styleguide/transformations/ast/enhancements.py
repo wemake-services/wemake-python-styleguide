@@ -29,8 +29,8 @@ def set_if_chain(tree: ast.AST) -> ast.AST:
         for child in ast.iter_child_nodes(statement):
             if isinstance(statement, ast.If) and isinstance(child, ast.If):
                 if child in statement.orelse:
-                    setattr(statement, 'chained', True)  # noqa: Z425
-                    setattr(child, 'chain', statement)
+                    setattr(statement, 'wps_chained', True)  # noqa: Z425
+                    setattr(child, 'wps_chain', statement)
     return tree
 
 
@@ -69,5 +69,5 @@ def set_node_context(tree: ast.AST) -> ast.AST:
             current_context = statement
 
         for child in ast.iter_child_nodes(statement):
-            setattr(child, 'context', current_context)
+            setattr(child, 'wps_context', current_context)
     return tree

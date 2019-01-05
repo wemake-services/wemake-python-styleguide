@@ -124,7 +124,7 @@ class WrongMethodVisitor(BaseNodeVisitor):
                 self.add_violation(StaticMethodViolation(node))
 
     def _check_bound_methods(self, node: types.AnyFunctionDef) -> None:
-        node_context = getattr(node, 'context', None)
+        node_context = getattr(node, 'wps_context', None)
         if not isinstance(node_context, ast.ClassDef):
             return
 
@@ -160,7 +160,7 @@ class WrongSlotsVisitor(BaseNodeVisitor):
             IncorrectSlotsViolation
 
         """
-        context = getattr(node, 'context', None)
+        context = getattr(node, 'wps_context', None)
         if isinstance(context, ast.ClassDef):
             self._check_slots(node)
         self.generic_visit(node)

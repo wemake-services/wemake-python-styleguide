@@ -6,7 +6,6 @@ from pyflakes.checker import Checker as PyFlakesChecker
 
 from wemake_python_styleguide.checker import Checker
 
-
 code_that_brakes = '''
 def current_session(
     telegram_id: int,
@@ -43,7 +42,7 @@ def test_regression112(default_options):
     """
     module = ast.parse(code_that_brakes)
     Checker.parse_options(default_options)
-    checker = Checker(tree=module, file_tokens=[], filename='custom.py')
+    Checker(tree=module, file_tokens=[], filename='custom.py')
 
     # It was failing on this line:
     # AttributeError: 'ExceptHandler' object has no attribute 'depth'

@@ -205,8 +205,8 @@ class WrongConditionalVisitor(BaseNodeVisitor):
             self.add_violation(WrongConditionalViolation(node))
 
     def _check_simplifiable_if(self, node: ast.If) -> None:
-        chain = getattr(node, 'chain', None)
-        chained = getattr(node, 'chained', None)
+        chain = getattr(node, 'wps_chain', None)
+        chained = getattr(node, 'wps_chained', None)
         if chain is None and chained is None:
             body_var = self._is_simplifiable_assign(node.body)
             else_var = self._is_simplifiable_assign(node.orelse)
