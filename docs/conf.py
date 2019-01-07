@@ -73,8 +73,9 @@ extensions = [
 autoclass_content = 'class'
 autodoc_member_order = 'bysource'
 
-autodoc_mock_imports = [
+autodoc_mock_imports = [  # TODO: remove after pip==19.0
     'attr',
+    'pep8ext_naming',
 ]
 
 autodoc_member_order = 'bysource'
