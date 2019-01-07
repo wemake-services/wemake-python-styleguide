@@ -77,6 +77,7 @@ autodoc_mock_imports = [  # TODO: remove after pip==19.0
     'astor',
     'pep8ext_naming',
     'flake8_builtins',
+    'flake8_quotes',
 ]
 
 autodoc_member_order = 'bysource'
