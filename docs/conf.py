@@ -74,7 +74,7 @@ autoclass_content = 'class'
 autodoc_member_order = 'bysource'
 
 autodoc_mock_imports = [  # TODO: remove after pip==19.0
-    'attr',
+    'astor',
     'pep8ext_naming',
 ]
 
