@@ -27,6 +27,8 @@ Available base classes
 Violation can not have more than one base class.
 Since it does not make sense to have two different node types at the same time.
 
+.. autoclasstree:: wemake_python_styleguide.violations.base
+
 Violations API
 --------------
 

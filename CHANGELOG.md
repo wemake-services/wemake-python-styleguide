@@ -48,6 +48,7 @@ We used to have incremental versioning before `0.1.0`.
 - Improves tests: changes how `flake8` is executed, now it is twice as fast
 - Improves docs: now linting `conf.py` with `flake8`
 - Improves tests: now we check that ignored violation are raised with `noqa`
+- Improves docs: we have added a special graph to show our architecure
 
 
 ## Version 0.6.2

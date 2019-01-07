@@ -22,6 +22,30 @@ where we specify all technical details about our workflow and tools.
 
 And finally you will need to go through the API reference.
 
+
+Overview
+--------
+
+This schema should give you a brief overview of what is happening inside
+our linter. This is a very simplified architecture that will help you
+to understand how all components are bound together.
+
+.. mermaid::
+   :caption: Architecture overview
+
+   sequenceDiagram
+      participant flake8
+      participant Checker
+      participant Transformation
+      participant Visitor
+      participant Violation
+
+      flake8->>Checker: flake8 runs our checker alongside with other plugins
+      Checker->>Transformation: Checker asks to perform different ast transformations before we actually start doing anything
+      Checker->>Visitor: Checker runs all visitors that are it is aware of
+      Visitor->>Violation: Visitors raise violations when they find bad code
+      Violation-->>flake8: Raised violations are shown to user by flake8
+
 Contributing
 ------------
 

@@ -126,7 +126,9 @@ class _NameValidator(object):
                 if not isinstance(target, ast.Name):
                     continue
 
+                # TODO: create `def get_parent(node: AST) -> Optional[AST]`
                 name: Optional[str] = getattr(target, 'id', None)
+                # TODO: use just name.id
                 if name and logical.is_upper_case_name(name):
                     self._error_callback(
                         naming.UpperCaseAttributeViolation(target, text=name),

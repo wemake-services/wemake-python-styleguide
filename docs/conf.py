@@ -65,6 +65,9 @@ extensions = [
 
     # Used to embed values from the source code into the docs:
     'added_value',
+
+    # Used to build graphs:
+    'sphinxcontrib.mermaid',
 ]
 
 autoclass_content = 'class'

@@ -25,6 +25,8 @@ Available base classes
 The decision relies on what parameters do you need for the task.
 It is highly unlikely that you will need two parameters at the same time.
 
+.. autoclasstree:: wemake_python_styleguide.visitors.base
+
 Visitors API
 ------------
 
