@@ -40,21 +40,11 @@ AnyCollection = Union[
     ast.Tuple,
 ]
 
-AnyForLoop = Union[
-    ast.AsyncFor,
-    ast.For,
-]
+AnyForLoop = Union[ast.AsyncFor, ast.For]
 
-AnyWith = Union[
-    ast.AsyncWith,
-    ast.With,
+AnyWith = Union[ast.AsyncWith, ast.With]
 
-]
-
-VariableDefyingStatement = Union[
-    AnyForLoop,
-    AnyWith,
-]
+VariableDefyingStatement = Union[AnyForLoop, AnyWith]
 
 
 @final
