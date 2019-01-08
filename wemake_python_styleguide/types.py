@@ -68,4 +68,3 @@ class ConfigurationOptions(Protocol):
     max_imports: int
     max_base_classes: int
     max_decorators: int
-    max_except_cases: int

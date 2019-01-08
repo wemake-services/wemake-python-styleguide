@@ -88,7 +88,8 @@ Before submitting your code please do the following steps:
 6. Update `CHANGELOG.md` with a quick summary of your changes
 7. Run `pytest` again to make sure it is still working
 8. Run `mypy` to ensure that types are correct
-9. Run `doc8` to ensure that docs are correct
+9. Run `flake8` to ensure that style is correct
+10. Run `doc8` to ensure that docs are correct
 
 
 ## Other help

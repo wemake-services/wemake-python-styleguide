@@ -146,7 +146,7 @@ class MethodMembersVisitor(BaseNodeVisitor):
 class ConditionsVisitor(BaseNodeVisitor):
     """Checks booleans for condition counts."""
 
-    #: Maximum number of conditions in a single ``if`` or ``while`` statement:
+    #: Maximum number of conditions in a single ``if`` or ``while`` statement.
     _max_conditions: ClassVar[int] = 4
 
     def _count_conditions(self, node: ast.BoolOp) -> int:
@@ -234,8 +234,11 @@ class ElifVisitor(BaseNodeVisitor):
 class TryExceptVisitor(BaseNodeVisitor):
     """Visits all try/except nodes to ensure that they are not too complex."""
 
+    #: Maximum number of ``except`` cases in a single ``try`` clause.
+    _max_except_cases: ClassVar[int] = 3
+
     def _check_except_count(self, node: ast.Try) -> None:
-        if len(node.handlers) > self.options.max_except_cases:
+        if len(node.handlers) > self._max_except_cases:
             self.add_violation(TooManyExceptCasesViolation(node))
 
     def visit_Try(self, node: ast.Try) -> None:

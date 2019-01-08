@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import pytest
+
 from wemake_python_styleguide.violations.complexity import (
     TooManyExceptCasesViolation,
 )
@@ -7,17 +9,40 @@ from wemake_python_styleguide.visitors.ast.complexity.counts import (
     TryExceptVisitor,
 )
 
+try_without_except = """
+try:
+    ...
+finally:
+    ...
+"""
+
+simple_try_except = """
+try:
+    ...
+except ValueError:
+    ...
+"""
+
+try_except_with_else = """
+try:
+    ...
+except ValueError:
+    ...
+else:
+    ...
+"""
+
 complex_try_except = """
 try:
-    do_some_bad_things()
+    ...
 except ValueError:
-    print('value')
+    ...
 except KeyError:
-    print('key')
+    ...
 except IndexError as exc:
-    print('index', exc)
+    ...
 except TypeError:
-    print('type')
+    ...
 """
 
 
@@ -35,16 +60,21 @@ def test_try_except_count_default(
     assert_errors(visitor, [TooManyExceptCasesViolation])
 
 
+@pytest.mark.parametrize('code', [
+    try_without_except,
+    simple_try_except,
+    try_except_with_else,
+])
 def test_try_except_count_custom_settings(
     assert_errors,
     parse_ast_tree,
-    options,
+    code,
+    default_options,
 ):
-    """Testing that default settings raise a warning."""
-    tree = parse_ast_tree(complex_try_except)
+    """Testing that correct patterns work."""
+    tree = parse_ast_tree(code)
 
-    option_values = options(max_except_cases=4)
-    visitor = TryExceptVisitor(option_values, tree=tree)
+    visitor = TryExceptVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
