@@ -10,6 +10,7 @@ from wemake_python_styleguide.visitors.tokenize import (
 #: Used to store all token related visitors to be later passed to checker:
 TOKENS_PRESET = (
     comments.WrongCommentVisitor,
+    comments.FileMagicCommentsVisitor,
 
     keywords.WrongKeywordTokenVisitor,
 

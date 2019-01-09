@@ -48,6 +48,7 @@ Summary
    MultilineFunctionAnnotationViolation
    UppercaseStringModifierViolation
    IncorrectMultilineStringViolation
+   EmptyLineAfterCodingViolation
 
 Consistency checks
 ------------------
@@ -75,6 +76,7 @@ Consistency checks
 .. autoclass:: MultilineFunctionAnnotationViolation
 .. autoclass:: UppercaseStringModifierViolation
 .. autoclass:: IncorrectMultilineStringViolation
+.. autoclass:: EmptyLineAfterCodingViolation
 
 """
 
@@ -107,6 +109,7 @@ class LocalFolderImportViolation(ASTViolation):
         from ..drivers import MySQLDriver
 
     .. versionadded:: 0.1.0
+
     """
 
     error_template = 'Found local folder import'
@@ -135,6 +138,7 @@ class DottedRawImportViolation(ASTViolation):
         import os.path
 
     .. versionadded:: 0.1.0
+
     """
 
     error_template = 'Found dotted raw import: {0}'
@@ -875,3 +879,35 @@ class IncorrectMultilineStringViolation(TokenizeViolation):
 
     error_template = 'Found incorrect multi-line string'
     code = 322
+
+
+@final
+class EmptyLineAfterCodingViolation(TokenizeViolation):
+    """
+    Enforces to have an extra empty line after the ``coding`` comment.
+
+    Reasoning:
+        This is done for pure consistency.
+
+    Solution:
+        Add an empty line between ``coding`` magic comment and your code.
+
+    Example::
+
+        # Correct:
+        # coding: utf-8
+
+        SOME_VAR = 1
+
+        # Wrong:
+        # coding: utf-8
+        SOME_VAR = 1
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = (
+        'Found missing empty line between `coding` magic comment and code'
+    )
+    code = 323

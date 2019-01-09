@@ -16,13 +16,16 @@ TokenInfo(
 
 import re
 import tokenize
-from typing import ClassVar
+from typing import ClassVar, FrozenSet
 from typing.re import Pattern
 
 from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.best_practices import (
     WrongDocCommentViolation,
     WrongMagicCommentViolation,
+)
+from wemake_python_styleguide.violations.consistency import (
+    EmptyLineAfterCodingViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
@@ -80,3 +83,60 @@ class WrongCommentVisitor(BaseTokenVisitor):
         self._check_noqa(token)
         self._check_typed_ast(token)
         self._check_empty_doc_comment(token)
+
+
+@final
+class FileMagicCommentsVisitor(BaseTokenVisitor):
+    """Checks comments for the whole file."""
+
+    _allowed_newlines: ClassVar[FrozenSet[int]] = frozenset((
+        tokenize.NL,
+        tokenize.NEWLINE,
+        tokenize.ENDMARKER,
+    ))
+
+    def _offset_for_comment_line(self, token: tokenize.TokenInfo) -> int:
+        if token.exact_type == tokenize.COMMENT:
+            return 2
+        return 0
+
+    def _check_empty_line_after_codding(
+        self,
+        token: tokenize.TokenInfo,
+    ) -> None:
+        """
+        Checks that we have a blank line after the magic comments.
+
+        PEP-263 says: a magic comment must be placed into the source
+        files either as first or second line in the file
+
+        See also:
+            https://www.python.org/dev/peps/pep-0263/
+
+        """
+        if token.start[0] == 1:
+            tokens = self.file_tokens[self.file_tokens.index(token):]
+            available_offset = 2  # comment + newline
+            for next_token in tokens:
+                if not available_offset:
+                    available_offset = self._offset_for_comment_line(
+                        next_token,
+                    )
+
+                if available_offset > 0:
+                    available_offset -= 1
+                    continue
+
+                if next_token.exact_type not in self._allowed_newlines:
+                    self.add_violation(EmptyLineAfterCodingViolation(token))
+                break
+
+    def visit_comment(self, token: tokenize.TokenInfo) -> None:
+        """
+        Checks special comments that are magic per each file.
+
+        Raises:
+            EmptyLineAfterCoddingViolation
+
+        """
+        self._check_empty_line_after_codding(token)
