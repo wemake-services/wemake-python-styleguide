@@ -21,6 +21,7 @@ Summary
 
    WrongMagicCommentViolation
    WrongDocCommentViolation
+   OveruseOfNoqaCommentViolation
    WrongModuleMetadataViolation
    EmptyModuleViolation
    InitModuleHasLogicViolation
@@ -63,6 +64,7 @@ Comments
 
 .. autoclass:: WrongMagicCommentViolation
 .. autoclass:: WrongDocCommentViolation
+.. autoclass:: OveruseOfNoqaCommentViolation
 
 Modules
 -------
@@ -194,6 +196,32 @@ class WrongDocCommentViolation(TokenizeViolation):
 
     code = 401
     error_template = 'Found wrong doc comment'
+
+
+@final
+class OveruseOfNoqaCommentViolation(SimpleViolation):
+    """
+    Forbids to use too many ``# noqa`` comments.
+
+    We check this count on a per-module basis.
+    We use :str:`wemake_python_styleguide.constants.MAX_NOQA_COMMENTS`
+    as a default value.
+
+    Reasoning:
+        Having too many ``# noqa`` comments with make your code
+        less readable and clearly indicates that there's something
+        wrong with it.
+
+    Solution:
+        Refactor your code to much the style.
+        Or use a config file to switch off some checks.
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found `noqa` comments overuse: {0}'
+    code = 402
 
 
 # Modules:

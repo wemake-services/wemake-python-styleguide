@@ -19,8 +19,10 @@ import tokenize
 from typing import ClassVar, FrozenSet
 from typing.re import Pattern
 
+from wemake_python_styleguide.constants import MAX_NOQA_COMMENTS
 from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.best_practices import (
+    OveruseOfNoqaCommentViolation,
     WrongDocCommentViolation,
     WrongMagicCommentViolation,
 )
@@ -34,20 +36,26 @@ from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 class WrongCommentVisitor(BaseTokenVisitor):
     """Checks comment tokens."""
 
-    noqa_check: ClassVar[Pattern] = re.compile(r'^noqa:?($|[A-Z\d\,\s]+)')
-    type_check: ClassVar[Pattern] = re.compile(
+    _noqa_check: ClassVar[Pattern] = re.compile(r'^noqa:?($|[A-Z\d\,\s]+)')
+    _type_check: ClassVar[Pattern] = re.compile(
         r'^type:\s?([\w\d\[\]\'\"\.]+)$',
     )
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Initializes a counter."""
+        super().__init__(*args, **kwargs)
+        self._noqa_count = 0
 
     def _get_comment_text(self, token: tokenize.TokenInfo) -> str:
         return token.string[1:].strip()
 
     def _check_noqa(self, token: tokenize.TokenInfo) -> None:
         comment_text = self._get_comment_text(token)
-        match = self.noqa_check.match(comment_text)
+        match = self._noqa_check.match(comment_text)
         if not match:
             return
 
+        self._noqa_count += 1
         excludes = match.groups()[0].strip()
         if not excludes:
             # We can not pass the actual line here,
@@ -56,7 +64,7 @@ class WrongCommentVisitor(BaseTokenVisitor):
 
     def _check_typed_ast(self, token: tokenize.TokenInfo) -> None:
         comment_text = self._get_comment_text(token)
-        match = self.type_check.match(comment_text)
+        match = self._type_check.match(comment_text)
         if not match:
             return
 
@@ -71,11 +79,18 @@ class WrongCommentVisitor(BaseTokenVisitor):
         if comment_text == ':':
             self.add_violation(WrongDocCommentViolation(token))
 
+    def _post_visit(self) -> None:
+        if self._noqa_count > MAX_NOQA_COMMENTS:
+            self.add_violation(
+                OveruseOfNoqaCommentViolation(text=str(self._noqa_count)),
+            )
+
     def visit_comment(self, token: tokenize.TokenInfo) -> None:
         """
         Performs comment checks.
 
         Raises:
+            OveruseOfNoqaCommentViolation
             WrongDocCommentViolation
             WrongMagicCommentViolation
 
@@ -115,9 +130,10 @@ class FileMagicCommentsVisitor(BaseTokenVisitor):
 
         """
         if token.start[0] == 1:
-            tokens = self.file_tokens[self.file_tokens.index(token):]
+            tokens = iter(self.file_tokens[self.file_tokens.index(token):])
             available_offset = 2  # comment + newline
-            for next_token in tokens:
+            while True:
+                next_token = next(tokens)
                 if not available_offset:
                     available_offset = self._offset_for_comment_line(
                         next_token,

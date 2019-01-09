@@ -7,6 +7,7 @@ from collections import Counter
 ERROR_PATTERN = re.compile(r'(Z\d{3})')
 IGNORED_VIOLATIONS = [
     'Z202',  # since our test case is complex, that's fine
+    'Z402',  # since we obviously use a lot of `noqa` comments
 ]
 
 
@@ -94,6 +95,7 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
 
         'Z400': 0,
         'Z401': 0,
+        'Z402': 0,
 
         'Z410': 1,
         'Z411': 0,

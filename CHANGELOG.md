@@ -25,6 +25,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use `super()` with arguments or outside of methods
 - Forbids to have too many `except` cases
 - Enforces to have an empty line after `coding` comment
+- Forbids to use too many `# noqa` comments
 
 ### Bugfixes
 
