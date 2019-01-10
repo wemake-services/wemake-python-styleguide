@@ -2,6 +2,8 @@
 
 import ast
 
+from wemake_python_styleguide.logics.nodes import get_parent
+
 
 def fix_async_offset(tree: ast.AST) -> ast.AST:
     """
@@ -53,9 +55,7 @@ def fix_line_number(tree: ast.AST) -> ast.AST:
     affected = (ast.Tuple,)
     for node in ast.walk(tree):
         if isinstance(node, affected):
-            parent_lineno = getattr(
-                getattr(node, 'wps_parent', None), 'lineno', None,
-            )
+            parent_lineno = getattr(get_parent(node), 'lineno', None)
             if parent_lineno and parent_lineno < node.lineno:
                 node.lineno = node.lineno - 1
     return tree

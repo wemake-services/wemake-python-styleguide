@@ -6,6 +6,7 @@ from typing import ClassVar, DefaultDict, List
 
 from wemake_python_styleguide.constants import UNUSED_VARIABLE
 from wemake_python_styleguide.logics import functions
+from wemake_python_styleguide.logics.nodes import get_parent
 from wemake_python_styleguide.types import (
     AnyFunctionDef,
     AnyFunctionDefAndLambda,
@@ -57,8 +58,7 @@ class _ComplexityCounter(object):
             if variable_def.id == UNUSED_VARIABLE:
                 return
 
-            parent = getattr(variable_def, 'wps_parent', None)
-            if isinstance(parent, self._not_contain_locals):
+            if isinstance(get_parent(variable_def), self._not_contain_locals):
                 return
 
             function_variables.append(variable_def.id)

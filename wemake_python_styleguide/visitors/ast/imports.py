@@ -5,7 +5,7 @@ from itertools import chain
 from typing import Callable
 
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
-from wemake_python_styleguide.logics import imports
+from wemake_python_styleguide.logics import imports, nodes
 from wemake_python_styleguide.logics.naming import access
 from wemake_python_styleguide.types import AnyImport, final
 from wemake_python_styleguide.violations.base import BaseViolation
@@ -32,7 +32,7 @@ class _ImportsValidator(object):
         self._error_callback = error_callback
 
     def check_nested_import(self, node: AnyImport) -> None:
-        parent = getattr(node, 'wps_parent', None)
+        parent = nodes.get_parent(node)
         if parent is not None and not isinstance(parent, ast.Module):
             self._error_callback(NestedImportViolation(node))
 

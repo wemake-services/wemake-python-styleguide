@@ -4,7 +4,7 @@ import ast
 from typing import ClassVar, List, Optional, Sequence, Union
 
 from wemake_python_styleguide.logics.functions import get_all_arguments
-from wemake_python_styleguide.logics.nodes import is_doc_string
+from wemake_python_styleguide.logics.nodes import get_parent, is_doc_string
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
     StatementHasNoEffectViolation,
@@ -113,8 +113,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
             return
 
         if is_first and is_doc_string(node):
-            parent = getattr(node, 'wps_parent', None)
-            if isinstance(parent, self._have_doc_strings):
+            if isinstance(get_parent(node), self._have_doc_strings):
                 return
 
         self.add_violation(StatementHasNoEffectViolation(node))

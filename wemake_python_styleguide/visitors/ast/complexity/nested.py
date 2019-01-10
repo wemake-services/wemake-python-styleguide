@@ -7,6 +7,7 @@ from wemake_python_styleguide.constants import (
     NESTED_CLASSES_WHITELIST,
     NESTED_FUNCTIONS_WHITELIST,
 )
+from wemake_python_styleguide.logics.nodes import get_parent
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
     NestedClassViolation,
@@ -37,14 +38,13 @@ class NestedComplexityVisitor(BaseNodeVisitor):
     )
 
     def _check_nested_function(self, node: AnyFunctionDef) -> None:
-        parent = getattr(node, 'wps_parent', None)
-        is_inside_function = isinstance(parent, self._function_nodes)
+        is_inside_function = isinstance(get_parent(node), self._function_nodes)
 
         if is_inside_function and node.name not in NESTED_FUNCTIONS_WHITELIST:
             self.add_violation(NestedFunctionViolation(node, text=node.name))
 
     def _check_nested_classes(self, node: ast.ClassDef) -> None:
-        parent = getattr(node, 'wps_parent', None)
+        parent = get_parent(node)
         is_inside_class = isinstance(parent, ast.ClassDef)
         is_inside_function = isinstance(parent, self._function_nodes)
 
@@ -54,8 +54,7 @@ class NestedComplexityVisitor(BaseNodeVisitor):
             self.add_violation(NestedClassViolation(node, text=node.name))
 
     def _check_nested_lambdas(self, node: ast.Lambda) -> None:
-        parent = getattr(node, 'wps_parent', None)
-        if isinstance(parent, ast.Lambda):
+        if isinstance(get_parent(node), ast.Lambda):
             self.add_violation(NestedFunctionViolation(node, text='lambda'))
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:

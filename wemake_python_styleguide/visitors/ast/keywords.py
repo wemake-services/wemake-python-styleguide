@@ -6,7 +6,7 @@ from typing import ClassVar, DefaultDict, List, Optional, Union
 
 import astor
 
-from wemake_python_styleguide.logics.nodes import is_contained
+from wemake_python_styleguide.logics.nodes import get_parent, is_contained
 from wemake_python_styleguide.types import AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
     BaseExceptionViolation,
@@ -120,12 +120,12 @@ class WrongComprehensionVisitor(BaseNodeVisitor):
         if len(node.ifs) > self._max_ifs:
             # We are trying to fix line number in the report,
             # since `comprehension` does not have this property.
-            parent = getattr(node, 'wps_parent', node)
+            parent = get_parent(node) or node
             self.add_violation(MultipleIfsInComprehensionViolation(parent))
 
     def _check_fors(self, node: ast.comprehension) -> None:
-        parent = getattr(node, 'wps_parent', node)
-        self._fors[parent] = len(parent.generators)
+        parent = get_parent(node) or node
+        self._fors[parent] = len(getattr(parent, 'generators', []))
 
     def _check_contains_yield(self, node: AnyComprehension) -> None:
         for sub_node in ast.walk(node):

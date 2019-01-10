@@ -5,6 +5,7 @@ from collections import defaultdict
 from typing import ClassVar, DefaultDict, List, Union
 
 from wemake_python_styleguide.logics.functions import is_method
+from wemake_python_styleguide.logics.nodes import get_parent
 from wemake_python_styleguide.types import AnyFunctionDef, AnyImport, final
 from wemake_python_styleguide.violations.complexity import (
     TooManyConditionsViolation,
@@ -38,10 +39,9 @@ class ModuleMembersVisitor(BaseNodeVisitor):
 
     def _check_members_count(self, node: ModuleMembers) -> None:
         """This method increases the number of module members."""
-        parent = getattr(node, 'wps_parent', None)
         is_real_method = is_method(getattr(node, 'function_type', None))
 
-        if isinstance(parent, ast.Module) and not is_real_method:
+        if isinstance(get_parent(node), ast.Module) and not is_real_method:
             self._public_items_count += 1
 
     def _check_decorators_count(self, node: ModuleMembers) -> None:
@@ -119,7 +119,7 @@ class MethodMembersVisitor(BaseNodeVisitor):
         self._methods: DefaultDict[ast.ClassDef, int] = defaultdict(int)
 
     def _check_method(self, node: AnyFunctionDef) -> None:
-        parent = getattr(node, 'wps_parent', None)
+        parent = get_parent(node)
         if isinstance(parent, ast.ClassDef):
             self._methods[parent] += 1
 

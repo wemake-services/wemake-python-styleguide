@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
+from typing import Optional
 
 from wemake_python_styleguide.types import AnyNodes
 
@@ -38,3 +39,8 @@ def is_doc_string(node: ast.stmt) -> bool:
     if not isinstance(node, ast.Expr):
         return False
     return isinstance(node.value, ast.Str)
+
+
+def get_parent(node: ast.AST) -> Optional[ast.AST]:
+    """Returns the parent node or ``None`` if node has no parent."""
+    return getattr(node, 'wps_parent', None)

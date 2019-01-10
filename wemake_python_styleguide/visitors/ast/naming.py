@@ -8,7 +8,7 @@ from wemake_python_styleguide.constants import (
     SPECIAL_ARGUMENT_NAMES_WHITELIST,
     VARIABLE_NAMES_BLACKLIST,
 )
-from wemake_python_styleguide.logics import functions
+from wemake_python_styleguide.logics import functions, nodes
 from wemake_python_styleguide.logics.naming import (
     access,
     builtins,
@@ -40,7 +40,7 @@ class _NameValidator(object):
 
     def __init__(
         self,
-        error_callback: Callable[[base.BaseViolation], None],  # TODO: alias
+        error_callback: Callable[[base.BaseViolation], None],
         options: ConfigurationOptions,
     ) -> None:
         """Creates new instance of a name validator."""
@@ -126,9 +126,7 @@ class _NameValidator(object):
                 if not isinstance(target, ast.Name):
                     continue
 
-                # TODO: create `def get_parent(node: AST) -> Optional[AST]`
                 name: Optional[str] = getattr(target, 'id', None)
-                # TODO: use just name.id
                 if name and logical.is_upper_case_name(name):
                     self._error_callback(
                         naming.UpperCaseAttributeViolation(target, text=name),
@@ -246,8 +244,7 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
     """Finds wrong metadata information of a module."""
 
     def _check_metadata(self, node: ast.Assign) -> None:
-        node_parent = getattr(node, 'wps_parent', None)
-        if not isinstance(node_parent, ast.Module):
+        if not isinstance(nodes.get_parent(node), ast.Module):
             return
 
         for target_node in node.targets:
