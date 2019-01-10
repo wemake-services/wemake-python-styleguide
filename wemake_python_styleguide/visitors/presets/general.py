@@ -36,6 +36,7 @@ GENERAL_PRESET = (
     annotations.WrongAnnotationVisitor,
 
     functions.WrongFunctionCallVisitor,
+    functions.FunctionDefinitionVisitor,
 
     WrongImportVisitor,
 

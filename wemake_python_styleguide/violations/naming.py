@@ -127,6 +127,7 @@ Summary
    TooLongNameViolation
    UnicodeNameViolation
    TrailingUnderscoreViolation
+   UnusedVariableIsUsedViolation
 
 Module names
 ------------
@@ -149,6 +150,7 @@ General names
 .. autoclass:: TooLongNameViolation
 .. autoclass:: UnicodeNameViolation
 .. autoclass:: TrailingUnderscoreViolation
+.. autoclass:: UnusedVariableIsUsedViolation
 
 """
 
@@ -624,3 +626,41 @@ class TrailingUnderscoreViolation(ASTViolation):
 
     error_template = 'Found regular name with trailing underscore: {0}'
     code = 120
+
+
+@final
+class UnusedVariableIsUsedViolation(ASTViolation):
+    """
+    Forbids to have use variables that are marked as unused.
+
+    Reasoning:
+        Sometimes your start to use new logic in your functions,
+        and you start to use variables that once were marked as unused.
+        But, you have not renamed them for some reason.
+        And now you have a lot of confusion: variable is marked as unused,
+        but you are using it. Why? What's going on?
+
+     Solution:
+        Rename your variable to be a regular variable
+        without a leading underscore.
+
+     Example::
+
+        # Correct:
+        def function():
+            first = 15
+            return first + 10
+
+        # Wrong:
+        def function():
+            _first = 15
+            return _first + 10
+
+    This rule checks: functions, methods, and ``lambda`` functions.
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found usage of a variable marked as unused: {0}'
+    code = 121

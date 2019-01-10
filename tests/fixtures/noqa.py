@@ -46,13 +46,17 @@ hasattr(object, 'some')  # noqa: Z421
 value = 1  # noqa: Z110
 x = 2  # noqa: Z111
 __private = 3  # noqa: Z112
-star_wars_episode_7 = 'the worst episode ever'  # noqa: Z114
+star_wars_episode_7 = 'the worst episode ever after 8'  # noqa: Z114
 consecutive__underscores = 4  # noqa: Z116
 cls = 5  # noqa: Z117
 __author__ = 'Nikita Sobolev'  # noqa: Z410
 extremely_long_name_that_needs_to_be_shortened_to_work_fine = 2  # noqa: Z118
 привет_по_русски = 'Hello, world!'  # noqa: Z119
 wrong_alias_ = 'some fake builtin alias'  # noqa: Z120
+
+def some_function():
+    _should_not_be_used = 1
+    print(_should_not_be_used)  # noqa: Z121
 
 some._execute()  # noqa: Z441
 
