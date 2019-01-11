@@ -23,6 +23,19 @@ where we specify all technical details about our workflow and tools.
 And finally you will need to go through the API reference.
 
 
+Philosophy
+----------
+
+1. Done is better than perfect
+2. False negatives over false positives
+3. If you can not sustain your promise - do not promise
+4. Code is written to be read
+5. Consistency over syntatic readability
+6. Consistent code is more readable than inconsistent
+7. Do not force people to chose, they will make mistakes
+8. Choice must be respected
+
+
 Overview
 --------
 

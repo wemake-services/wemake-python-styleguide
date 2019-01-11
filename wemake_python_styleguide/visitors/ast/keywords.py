@@ -124,8 +124,8 @@ class WrongComprehensionVisitor(BaseNodeVisitor):
             self.add_violation(MultipleIfsInComprehensionViolation(parent))
 
     def _check_fors(self, node: ast.comprehension) -> None:
-        parent = get_parent(node) or node
-        self._fors[parent] = len(getattr(parent, 'generators', []))
+        parent = get_parent(node)
+        self._fors[parent] = len(parent.generators)  # type: ignore
 
     def _check_contains_yield(self, node: AnyComprehension) -> None:
         for sub_node in ast.walk(node):

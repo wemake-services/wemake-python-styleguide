@@ -14,4 +14,4 @@ def _get_version(dist_name: str) -> str:  # pragma: no cover
 pkg_name = 'wemake-python-styleguide'
 
 #: We store the version number inside the `pyproject.toml`:
-pkg_version: str = _get_version(pkg_name)
+pkg_version = _get_version(pkg_name)
