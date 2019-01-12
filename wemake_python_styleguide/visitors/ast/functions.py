@@ -131,8 +131,7 @@ class FunctionDefinitionVisitor(BaseNodeVisitor):
     def _get_variable_name(self, node: LocalVariable) -> Optional[str]:
         if isinstance(node, ast.Name):
             return node.id
-        else:
-            return getattr(node, 'name', None)
+        return getattr(node, 'name', None)
 
     def _check_unused_variables(self, node: AnyFunctionDef) -> None:
         local_variables: Dict[str, List[LocalVariable]] = {}

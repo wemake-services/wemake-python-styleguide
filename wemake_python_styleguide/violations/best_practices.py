@@ -58,6 +58,7 @@ Summary
    IncorrectBaseClassViolation
    IncorrectSlotsViolation
    IncorrectSuperCallViolation
+   RedundantReturningElseViolation
 
 Comments
 --------
@@ -112,6 +113,7 @@ Design
 .. autoclass:: IncorrectBaseClassViolation
 .. autoclass:: IncorrectSlotsViolation
 .. autoclass:: IncorrectSuperCallViolation
+.. autoclass:: RedundantReturningElseViolation
 
 """
 
@@ -1445,3 +1447,44 @@ class IncorrectSuperCallViolation(ASTViolation):
 
     error_template = 'Found incorrect `super()` call: {0}'
     code = 456
+
+
+@final
+class RedundantReturningElseViolation(ASTViolation):
+    """
+    Forbids to use redundant ``else`` cases in returning functions.
+
+    We check single ``if`` statements that all contain
+    ``return`` or ``raise`` or ``break`` statements with this rule.
+    We do not check ``if`` statements with ``elif`` cases.
+
+    Reasoning:
+        Using extra ``else`` creates a situation when
+        the whole node could and should be dropped
+        without any changes in logic.
+        So, we prefer to have less code than more code.
+
+    Solution:
+        Removes redundant ``else`` case.
+
+    Example::
+
+        # Correct:
+        def some_function():
+            if some_call():
+                return 'yeap'
+            return 'nope'
+
+        # Wrong:
+        def some_function():
+            if some_call():
+                raise ValueError('yeap')
+            else:
+                raise ValueError('nope')
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found redundant returning `else` statement'
+    code = 457

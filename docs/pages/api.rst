@@ -27,13 +27,15 @@ Philosophy
 ----------
 
 1. Done is better than perfect
-2. False negatives over false positives
-3. If you can not sustain your promise - do not promise
-4. Code is written to be read
-5. Consistency over syntatic readability
-6. Consistent code is more readable than inconsistent
-7. Do not force people to chose, they will make mistakes
-8. Choice must be respected
+2. However, we pursuit perfect software
+3. False negatives over false positives
+4. If you can not sustain your promise - do not promise
+5. Code must be written for people to read,
+   and only incidentally for machines to execute
+6. Consistency over syntatic readability
+7. Consistent code is more readable than inconsistent
+8. Do not force people to choose, they will make mistakes
+9. Made choices must be respected
 
 
 Overview

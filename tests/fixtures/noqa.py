@@ -303,3 +303,10 @@ class ClassWithWrongContents((lambda: object)()):  # noqa: Z454
 
     def method_with_no_args():  # noqa: Z453
         super(ClassWithWrongContents, self).method_with_no_args()  # noqa: Z456
+
+
+def redundant_returning_else():
+    if some_set:  # noqa: Z457
+        return some_set
+    else:
+        return TypeError
