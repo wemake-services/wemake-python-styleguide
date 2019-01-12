@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Optional
+from typing import Optional, Union
 
 from wemake_python_styleguide.types import AnyNodes
 
@@ -21,7 +21,7 @@ def is_literal(node: ast.AST) -> bool:
         return True
 
 
-def is_contained(node: ast.AST, to_check: AnyNodes) -> bool:
+def is_contained(node: ast.AST, to_check: Union[AnyNodes, type]) -> bool:
     """Checks whether node does contain given subnode types."""
     for child in ast.walk(node):
         if isinstance(child, to_check):

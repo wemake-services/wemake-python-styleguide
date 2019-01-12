@@ -6,13 +6,14 @@ from typing import ClassVar, List, Type, Union
 
 import astor
 
-from wemake_python_styleguide.logics.nodes import get_parent
+from wemake_python_styleguide.logics.nodes import get_parent, is_contained
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
     BaseExceptionViolation,
     DuplicateExceptionViolation,
     RaiseNotImplementedViolation,
     RedundantFinallyViolation,
+    TryExceptMultipleReturnPathViolation,
     WrongKeywordViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
@@ -199,6 +200,26 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
                     DuplicateExceptionViolation(node, text=exc_name),
                 )
 
+    def _check_return_path(self, node: ast.Try) -> None:
+        try_has = any(
+            is_contained(line, ast.Return) for line in node.body
+        )
+        except_has = any(
+            is_contained(except_handler, ast.Return)
+            for except_handler in node.handlers
+        )
+        else_has = any(
+            is_contained(line, ast.Return) for line in node.orelse
+        )
+        finally_has = any(
+            is_contained(line, ast.Return) for line in node.finalbody
+        )
+
+        if finally_has and (try_has or except_has):
+            self.add_violation(TryExceptMultipleReturnPathViolation(node))
+        if else_has and try_has:
+            self.add_violation(TryExceptMultipleReturnPathViolation(node))
+
     def visit_Try(self, node: ast.Try) -> None:
         """
         Used for find finally in try blocks without except.
@@ -206,10 +227,12 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
         Raises:
             RedundantFinallyViolation
             DuplicateExceptionViolation
+            TryExceptMultipleReturnPathViolation
 
         """
         self._check_if_needs_except(node)
         self._check_duplicate_exceptions(node)
+        self._check_return_path(node)
         self.generic_visit(node)
 
     def visit_ExceptHandler(self, node: ast.ExceptHandler) -> None:

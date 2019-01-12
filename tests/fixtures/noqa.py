@@ -226,6 +226,19 @@ def function(  # noqa: Z320
 string_modifier = R'(s)'  # noqa: Z321
 multiline_string = """abc"""  # noqa: Z322
 
+
+def function_with_wrong_return():
+    if some:
+        print(some)
+    return  # noqa: Z324
+
+
+def function_with_wrong_yield():
+    if some:
+        yield  # noqa: Z325
+    yield 1
+
+
 try:
     anti_z444 = 1
 except BaseException:  # noqa: Z424
@@ -312,13 +325,10 @@ def redundant_returning_else():
         return TypeError
 
 
-def function_with_wrong_return():
-    if some:
-        print(some)
-    return  # noqa: Z324
-
-
-def function_with_wrong_yield():
-    if some:
-        yield  # noqa: Z325
-    yield 1
+def multiple_return_path():
+    try:  # noqa: Z458
+        return 1
+    except Exception:
+        return 2
+    else:
+        return 3

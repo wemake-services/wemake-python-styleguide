@@ -59,6 +59,7 @@ Summary
    IncorrectSlotsViolation
    IncorrectSuperCallViolation
    RedundantReturningElseViolation
+   TryExceptMultipleReturnPathViolation
 
 Comments
 --------
@@ -114,6 +115,7 @@ Design
 .. autoclass:: IncorrectSlotsViolation
 .. autoclass:: IncorrectSuperCallViolation
 .. autoclass:: RedundantReturningElseViolation
+.. autoclass:: TryExceptMultipleReturnPathViolation
 
 """
 
@@ -1465,7 +1467,7 @@ class RedundantReturningElseViolation(ASTViolation):
         So, we prefer to have less code than more code.
 
     Solution:
-        Removes redundant ``else`` case.
+        Remove redundant ``else`` case.
 
     Example::
 
@@ -1488,3 +1490,46 @@ class RedundantReturningElseViolation(ASTViolation):
 
     error_template = 'Found redundant returning `else` statement'
     code = 457
+
+
+@final
+class TryExceptMultipleReturnPathViolation(ASTViolation):
+    """
+    Forbids to use multiple ``return`` path with ``try`` / ``except`` case.
+
+    Reasoning:
+        The problem with ``return`` in ``else`` and ``finally``
+        is that it is impossible to say what value is going to be actually
+        returned without looking up the implementation details. Why?
+        Because ``return`` does not expect
+        that some other code will be executed after it.
+        But, ``finally`` is always executed, even after ``return``.
+        And ``else`` will not be executed when there are no exceptions
+        in ``try`` case and a ``return`` statement.
+
+    Solution:
+        Remove ``return`` from one of the cases.
+
+    Example::
+
+        # Wrong:
+        try:
+            return 1  # this line will never return
+        except Exception:
+            ...
+        finally:
+            return 2  # this line will actually return
+
+        try:
+            return 1  # this line will actually return
+        except ZeroDivisionError:
+            ...
+        else:
+            return 0  # this line will never return
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found `try`/`else`/`finally` with multiple return paths'
+    code = 458

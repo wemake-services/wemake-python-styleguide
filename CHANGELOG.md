@@ -29,6 +29,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use variables declared as unused
 - Forbids to use redundant `else` blocks
 - Forbids to use inconsistent `return` and `yield` statements
+- Forbids to use multiple `return` path in `try`/`expect`/`finally`
 
 ### Bugfixes
 
