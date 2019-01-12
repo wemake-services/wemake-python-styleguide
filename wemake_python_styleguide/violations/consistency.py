@@ -49,6 +49,8 @@ Summary
    UppercaseStringModifierViolation
    IncorrectMultilineStringViolation
    EmptyLineAfterCodingViolation
+   InconsistentReturnViolation
+   InconsistentYieldViolation
 
 Consistency checks
 ------------------
@@ -77,6 +79,8 @@ Consistency checks
 .. autoclass:: UppercaseStringModifierViolation
 .. autoclass:: IncorrectMultilineStringViolation
 .. autoclass:: EmptyLineAfterCodingViolation
+.. autoclass:: InconsistentReturnViolation
+.. autoclass:: InconsistentYieldViolation
 
 """
 
@@ -911,3 +915,92 @@ class EmptyLineAfterCodingViolation(TokenizeViolation):
         'Found missing empty line between `coding` magic comment and code'
     )
     code = 323
+
+
+@final
+class InconsistentReturnViolation(ASTViolation):
+    """
+    Enforces to have consistent ``return`` statements.
+
+    Rules are:
+    1. if any ``return`` has a value, all ``return`` nodes should have a value
+    2. do not place ``return`` without a value at the end of a function
+
+    This rule respects ``mypy`` style of placing ``return`` statements.
+    There should be no conflict with these two checks.
+
+    Reasoning:
+        This is done for pure consistency and readability of your code.
+        Eventually, this rule may also find some bugs in your code.
+
+    Solution:
+        Add or remove values from the ``return`` statements
+        to make them consistent.
+        Remove ``return`` statement from the function end.
+
+    Example::
+
+        # Correct:
+        def function():
+            if some:
+                return 2
+            return 1
+
+        # Wrong:
+        def function():
+            if some:
+                return
+            return 1
+
+        def function():
+            if some:
+                print(some)
+            return
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found inconsistent `return` statement'
+    code = 324
+
+
+@final
+class InconsistentYieldViolation(ASTViolation):
+    """
+    Enforces to have consistent ``yield`` statements.
+
+    Rules are:
+    1. if any ``yield`` has a value, all ``yield`` nodes should have a value
+
+    This rule respects ``mypy`` style of placing ``yield`` statements.
+    There should be no conflict with these two checks.
+
+    Reasoning:
+        This is done for pure consistency and readability of your code.
+        Eventually, this rule may also find some bugs in your code.
+
+    Solution:
+        Add or remove values from the ``yield`` statements
+        to make them consistent.
+
+    Example::
+
+        # Correct:
+        def function():
+            if some:
+                yield 2
+            yield 1
+
+        # Wrong:
+        def function():
+            if some:
+                yield
+            yield 1
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found inconsistent `yield` statement'
+    code = 325

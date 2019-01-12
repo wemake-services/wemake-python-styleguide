@@ -9,6 +9,7 @@ from wemake_python_styleguide.visitors.ast import (
     conditions,
     functions,
     keywords,
+    loops,
     naming,
     statements,
 )
@@ -28,10 +29,12 @@ GENERAL_PRESET = (
 
     keywords.WrongRaiseVisitor,
     keywords.WrongKeywordVisitor,
-    keywords.WrongComprehensionVisitor,
-    keywords.WrongLoopVisitor,
     keywords.WrongTryExceptVisitor,
     keywords.WrongContextManagerVisitor,
+    keywords.ConsistentReturningVisitor,
+
+    loops.WrongComprehensionVisitor,
+    loops.WrongLoopVisitor,
 
     attributes.WrongAttributeVisitor,
     annotations.WrongAnnotationVisitor,

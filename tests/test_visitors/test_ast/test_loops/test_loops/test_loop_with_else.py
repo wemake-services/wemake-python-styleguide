@@ -5,7 +5,7 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     RedundantLoopElseViolation,
 )
-from wemake_python_styleguide.visitors.ast.keywords import WrongLoopVisitor
+from wemake_python_styleguide.visitors.ast.loops import WrongLoopVisitor
 
 wrong_else_in_for_loop = """
 def wrapper():

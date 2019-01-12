@@ -2,10 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.visitors.ast.keywords import (
+from wemake_python_styleguide.violations.best_practices import (
     LambdaInsideLoopViolation,
-    WrongLoopVisitor,
 )
+from wemake_python_styleguide.visitors.ast.loops import WrongLoopVisitor
 
 lambda_inside_for_loop = """
 def wrapper():

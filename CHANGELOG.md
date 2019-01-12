@@ -27,6 +27,8 @@ We used to have incremental versioning before `0.1.0`.
 - Enforces to have an empty line after `coding` comment
 - Forbids to use too many `# noqa` comments
 - Forbids to use variables declared as unused
+- Forbids to use redundant `else` blocks
+- Forbids to use inconsistent `return` and `yield` statements
 
 ### Bugfixes
 

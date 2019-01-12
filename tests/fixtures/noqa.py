@@ -310,3 +310,15 @@ def redundant_returning_else():
         return some_set
     else:
         return TypeError
+
+
+def function_with_wrong_return():
+    if some:
+        print(some)
+    return  # noqa: Z324
+
+
+def function_with_wrong_yield():
+    if some:
+        yield  # noqa: Z325
+    yield 1

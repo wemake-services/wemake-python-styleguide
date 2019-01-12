@@ -5,7 +5,7 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     YieldInComprehensionViolation,
 )
-from wemake_python_styleguide.visitors.ast.keywords import (
+from wemake_python_styleguide.visitors.ast.loops import (
     WrongComprehensionVisitor,
 )
 

@@ -1,40 +1,32 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from collections import Counter, defaultdict
-from typing import ClassVar, DefaultDict, List, Optional, Union
+from collections import Counter
+from typing import ClassVar, List, Type, Union
 
 import astor
 
-from wemake_python_styleguide.logics.nodes import get_parent, is_contained
-from wemake_python_styleguide.types import AnyNodes, final
+from wemake_python_styleguide.logics.nodes import get_parent
+from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
     BaseExceptionViolation,
     DuplicateExceptionViolation,
-    LambdaInsideLoopViolation,
     RaiseNotImplementedViolation,
     RedundantFinallyViolation,
-    RedundantLoopElseViolation,
     WrongKeywordViolation,
-    YieldInComprehensionViolation,
-)
-from wemake_python_styleguide.violations.complexity import (
-    TooManyForsInComprehensionViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
+    InconsistentReturnViolation,
+    InconsistentYieldViolation,
     MultipleContextManagerAssignmentsViolation,
-    MultipleIfsInComprehensionViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
-AnyLoop = Union[ast.For, ast.While, ast.AsyncFor]
 AnyWith = Union[ast.With, ast.AsyncWith]
-AnyComprehension = Union[
-    ast.ListComp,
-    ast.DictComp,
-    ast.SetComp,
-    ast.GeneratorExp,
+ReturningViolations = Union[
+    Type[InconsistentReturnViolation],
+    Type[InconsistentYieldViolation],
 ]
 
 
@@ -68,6 +60,76 @@ class WrongRaiseVisitor(BaseNodeVisitor):
 
 
 @final
+@alias('visit_any_function', (
+    'visit_FunctionDef',
+    'visit_AsyncFunctionDef',
+))
+class ConsistentReturningVisitor(BaseNodeVisitor):
+    """Finds incorrect and inconsistent ``return`` and ``yield`` nodes."""
+
+    def _check_last_return_in_function(self, node: ast.Return) -> None:
+        parent = get_parent(node)
+        if not isinstance(parent, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            return
+
+        if node is parent.body[-1] and node.value is None:
+            self.add_violation(InconsistentReturnViolation(node))
+
+    def _iterate_returning_values(
+        self,
+        node: AnyFunctionDef,
+        returning_type,  # mypy is not ok with this type declaration
+        violation: ReturningViolations,
+    ):
+        has_values = False
+        for sub_node in ast.walk(node):
+            if isinstance(sub_node, returning_type) and sub_node.value:
+                has_values = True
+
+        for sub_node in ast.walk(node):
+            # We need to iterate over the body twice to be sure we
+            # have checked all the nodes in the body.
+            if not isinstance(sub_node, returning_type):
+                continue
+            if not sub_node.value and has_values:
+                self.add_violation(violation(sub_node))
+
+    def _check_return_values(self, node: AnyFunctionDef) -> None:
+        self._iterate_returning_values(
+            node, ast.Return, InconsistentReturnViolation,
+        )
+
+    def _check_yield_values(self, node: AnyFunctionDef) -> None:
+        self._iterate_returning_values(
+            node, ast.Yield, InconsistentYieldViolation,
+        )
+
+    def visit_Return(self, node: ast.Return) -> None:
+        """
+        Checks ``return`` statements for consistency.
+
+        Raises:
+            InconsistentReturnViolation
+
+        """
+        self._check_last_return_in_function(node)
+        self.generic_visit(node)
+
+    def visit_any_function(self, node: AnyFunctionDef) -> None:
+        """
+        Helper to get all ``return`` and ``yield`` nodes in a function at once.
+
+        Raises:
+            InconsistentReturnViolation
+            InconsistentYieldViolation
+
+        """
+        self._check_return_values(node)
+        self._check_yield_values(node)
+        self.generic_visit(node)
+
+
+@final
 class WrongKeywordVisitor(BaseNodeVisitor):
     """Finds wrong keywords."""
 
@@ -95,132 +157,6 @@ class WrongKeywordVisitor(BaseNodeVisitor):
 
         """
         self._check_keyword(node)
-        self.generic_visit(node)
-
-
-@final
-@alias('visit_any_comprehension', (
-    'visit_ListComp',
-    'visit_DictComp',
-    'visit_SetComp',
-    'visit_GeneratorExp',
-))
-class WrongComprehensionVisitor(BaseNodeVisitor):
-    """Checks comprehensions for correctness."""
-
-    _max_ifs: ClassVar[int] = 1
-    _max_fors: ClassVar[int] = 2
-
-    def __init__(self, *args, **kwargs) -> None:
-        """Creates a counter for tracked metrics."""
-        super().__init__(*args, **kwargs)
-        self._fors: DefaultDict[ast.AST, int] = defaultdict(int)
-
-    def _check_ifs(self, node: ast.comprehension) -> None:
-        if len(node.ifs) > self._max_ifs:
-            # We are trying to fix line number in the report,
-            # since `comprehension` does not have this property.
-            parent = get_parent(node) or node
-            self.add_violation(MultipleIfsInComprehensionViolation(parent))
-
-    def _check_fors(self, node: ast.comprehension) -> None:
-        parent = get_parent(node)
-        self._fors[parent] = len(parent.generators)  # type: ignore
-
-    def _check_contains_yield(self, node: AnyComprehension) -> None:
-        for sub_node in ast.walk(node):
-            if isinstance(sub_node, ast.Yield):
-                self.add_violation(YieldInComprehensionViolation(node))
-
-    def _post_visit(self) -> None:
-        for node, for_count in self._fors.items():
-            if for_count > self._max_fors:
-                self.add_violation(TooManyForsInComprehensionViolation(node))
-
-    def visit_comprehension(self, node: ast.comprehension) -> None:
-        """
-        Finds multiple ``if`` and ``for`` nodes inside the comprehension.
-
-        Raises:
-            MultipleIfsInComprehensionViolation
-            TooManyForsInComprehensionViolation
-
-        """
-        self._check_ifs(node)
-        self._check_fors(node)
-        self.generic_visit(node)
-
-    def visit_any_comprehension(self, node: AnyComprehension) -> None:
-        """
-        Finds incorrect patterns inside comprehensions.
-
-        Raises:
-            YieldInComprehensionViolation
-
-        """
-        self._check_contains_yield(node)
-        self.generic_visit(node)
-
-
-@final
-@alias('visit_any_loop', (
-    'visit_For',
-    'visit_While',
-    'visit_AsyncFor',
-))
-class WrongLoopVisitor(BaseNodeVisitor):
-    """Responsible for examining loops."""
-
-    def _does_loop_contain_node(  # TODO: move, reuse in annotations.py
-        self,
-        loop: Optional[AnyLoop],
-        to_check: ast.Break,
-    ) -> bool:
-        if loop is None:
-            return False
-
-        for inner_node in ast.walk(loop):
-            # We are checking this specific node, not just any `break`:
-            if to_check is inner_node:
-                return True
-        return False
-
-    def _has_break(self, node: AnyLoop) -> bool:
-        closest_loop = None
-
-        for subnode in ast.walk(node):
-            if isinstance(subnode, (ast.For, ast.AsyncFor, ast.While)):
-                if subnode is not node:
-                    closest_loop = subnode
-
-            if isinstance(subnode, ast.Break):
-                is_nested_break = self._does_loop_contain_node(
-                    closest_loop, subnode,
-                )
-                if not is_nested_break:
-                    return True
-        return False
-
-    def _check_loop_needs_else(self, node: AnyLoop) -> None:
-        if node.orelse and not self._has_break(node):
-            self.add_violation(RedundantLoopElseViolation(node))
-
-    def _check_lambda_inside_loop(self, node: AnyLoop) -> None:
-        for subnode in node.body:
-            if is_contained(subnode, (ast.Lambda,)):
-                self.add_violation(LambdaInsideLoopViolation(node))
-
-    def visit_any_loop(self, node: AnyLoop) -> None:
-        """
-        Checks ``for`` and ``while`` loops.
-
-        Raises:
-            RedundantLoopElseViolation
-            LambdaInsideLoopViolation
-
-        """
-        self._check_loop_needs_else(node)
-        self._check_lambda_inside_loop(node)
         self.generic_visit(node)
 
 
