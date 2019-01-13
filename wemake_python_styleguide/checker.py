@@ -49,9 +49,9 @@ Checker API
 -----------
 
 .. autoclass:: Checker
-   :members:
-   :special-members:
-   :exclude-members: __weakref__
+   :no-undoc-members:
+   :exclude-members: name, version, visitors, _run_checks
+   :special-members: __init__
 
 """
 

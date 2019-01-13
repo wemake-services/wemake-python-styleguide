@@ -89,7 +89,7 @@ We are *not* planning to do the following things:
 ## Show your style
 
 If you use our linter - it means that your code is awesome.
-You can be proud of yourself!
+You can be proud of it!
 And you should share your accomplishment with others
 by including a badge to your `README` file.
 

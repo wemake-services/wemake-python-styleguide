@@ -27,6 +27,21 @@ It is highly unlikely that you will need two parameters at the same time.
 
 .. autoclasstree:: wemake_python_styleguide.visitors.base
 
+Coventions
+~~~~~~~~~~
+
+Then you will have to write logic for your visitor.
+We follow these conventions:
+
+- Public visitor methods start with ``visit_``,
+  than comes the name of a token or node to be visited
+- All other methods and attributes should be protected
+- We try to separate as much logic from ``visit_`` methods as possible,
+  so they only route for callbacks that actually executes the checks
+- We place repeating logics into ``logics/`` package to be able to reuse it
+
+There are different example of visitors in this project already.
+
 Visitors API
 ------------
 

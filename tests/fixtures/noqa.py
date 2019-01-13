@@ -238,6 +238,7 @@ def function_with_wrong_yield():
         yield  # noqa: Z325
     yield 1
 
+bad_concatenation = 'a' 'b'  # noqa: Z326
 
 try:
     anti_z444 = 1

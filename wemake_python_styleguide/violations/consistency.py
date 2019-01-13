@@ -51,6 +51,7 @@ Summary
    EmptyLineAfterCodingViolation
    InconsistentReturnViolation
    InconsistentYieldViolation
+   ImplicitStringConcatenationViolation
 
 Consistency checks
 ------------------
@@ -81,6 +82,7 @@ Consistency checks
 .. autoclass:: EmptyLineAfterCodingViolation
 .. autoclass:: InconsistentReturnViolation
 .. autoclass:: InconsistentYieldViolation
+.. autoclass:: ImplicitStringConcatenationViolation
 
 """
 
@@ -1005,3 +1007,33 @@ class InconsistentYieldViolation(ASTViolation):
 
     error_template = 'Found inconsistent `yield` statement'
     code = 325
+
+
+@final
+class ImplicitStringConcatenationViolation(TokenizeViolation):
+    """
+    Forbids to use implicit string contacatenation.
+
+    Reasoning:
+        This is error-prone, since you can possible miss a comma
+        in a collection of string and get an implicit concatenation.
+        And because there are different and safe ways to do the same thing
+        it is better to use them instead.
+
+    Solution:
+        Use ``+`` or ``.format()`` to join strings.
+
+    Example::
+
+        # Correct:
+        text = 'first' + 'second'
+
+        # Wrong:
+        text = 'first' 'second'
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found implicit string concatenation'
+    code = 326

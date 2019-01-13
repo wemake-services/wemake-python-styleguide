@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations.consistency import (
     IncorrectMultilineStringViolation,
 )
 from wemake_python_styleguide.visitors.tokenize.primitives import (
-    MultilineStringVisitor,
+    WrongStringTokenVisitor,
 )
 
 multiline_single = """'''
@@ -73,7 +73,7 @@ def test_incorrect_multiline_strings(
     """Ensures that incorrect multiline strings are forbiden."""
     file_tokens = parse_tokens(mode(primitives_usages.format(primitive)))
 
-    visitor = MultilineStringVisitor(default_options, file_tokens=file_tokens)
+    visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [IncorrectMultilineStringViolation])
@@ -98,7 +98,7 @@ def test_correct_multiline_string(
     """Ensures that correct multiline strings are allowed."""
     file_tokens = parse_tokens(mode(primitives_usages.format(primitive)))
 
-    visitor = MultilineStringVisitor(default_options, file_tokens=file_tokens)
+    visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -130,7 +130,7 @@ def test_correct_multiline_docstrings(
     """Ensures that correct singleline and multiline docstrings are allowed."""
     file_tokens = parse_tokens(mode(code.format(primitive)))
 
-    visitor = MultilineStringVisitor(default_options, file_tokens=file_tokens)
+    visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [])

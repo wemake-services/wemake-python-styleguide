@@ -18,7 +18,7 @@ from_import_with_alias = 'from {0} import some_module as alias'
     regular_import_with_alias,
 ])
 @pytest.mark.parametrize('to_import', [
-    'dotted.path'
+    'dotted.path',
     'nested.dotted.path',
 ])
 def test_wrong_dotted_import(
@@ -69,7 +69,7 @@ def test_correct_flat_import(
 ])
 @pytest.mark.parametrize('to_import', [
     'regular',
-    'dotted.path'
+    'dotted.path',
     'nested.dotted.path',
 ])
 def test_regular_from_import(

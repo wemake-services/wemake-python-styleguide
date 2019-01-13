@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations.consistency import (
     UnderscoredNumberViolation,
 )
 from wemake_python_styleguide.visitors.tokenize.primitives import (
-    WrongPrimitivesVisitor,
+    WrongNumberTokenVisitor,
 )
 
 
@@ -30,7 +30,7 @@ def test_underscored_number(
     """Ensures that underscored numbers raise a warning."""
     file_tokens = parse_tokens(mode(primitives_usages.format(primitive)))
 
-    visitor = WrongPrimitivesVisitor(default_options, file_tokens=file_tokens)
+    visitor = WrongNumberTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [UnderscoredNumberViolation])
@@ -41,7 +41,7 @@ def test_underscored_number(
     '1000',
     '1000.0',
     '-333555',
-    '-333555.5'
+    '-333555.5',
     '"10_00"',
 ])
 def test_correct_number(
@@ -55,7 +55,7 @@ def test_correct_number(
     """Ensures that correct numbers are fine."""
     file_tokens = parse_tokens(mode(primitives_usages.format(primitive)))
 
-    visitor = WrongPrimitivesVisitor(default_options, file_tokens=file_tokens)
+    visitor = WrongNumberTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [])

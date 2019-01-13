@@ -78,7 +78,7 @@ This step is mandatory during the CI.
 
 ## Submitting your code
 
-We use [`trunk` based](https://trunkbaseddevelopment.com/)
+We use [trunk based](https://trunkbaseddevelopment.com/)
 development (we also sometimes call it `wemake-git-flow`).
 
 What the point of this method?
@@ -94,7 +94,7 @@ What the point of this method?
 So, this way we achieve an easy and scalable development process
 which frees us from merging hell and long-living branches.
 
-In this method the latest version of app is always in the `master` branch.
+In this method, the latest version of the app is always in the `master` branch.
 
 ### Making patches to older versions
 

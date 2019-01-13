@@ -30,6 +30,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use redundant `else` blocks
 - Forbids to use inconsistent `return` and `yield` statements
 - Forbids to use multiple `return` path in `try`/`expect`/`finally`
+- Forbids to use implicit string concatenation
 
 ### Bugfixes
 
@@ -41,6 +42,8 @@ We used to have incremental versioning before `0.1.0`.
 - Fixes some magic number that were not detected based on their location
 - Fixes error when regular functions named as blacklisted
   magic methods were forbidden, now we check for methods only
+- Fixes error when strings like `U'some'` was not triggering unicode violation
+- Fixes error when string like `U'some'` was not triggering modifier violation
 
 ### Misc
 
@@ -55,6 +58,7 @@ We used to have incremental versioning before `0.1.0`.
 - Improves docs: now linting `conf.py` with `flake8`
 - Improves tests: now we check that ignored violation are raised with `noqa`
 - Improves docs: we have added a special graph to show our architecure
+- Improves docs: we now have a clean page for `checker` without extra junk
 
 
 ## Version 0.6.2
@@ -450,7 +454,7 @@ There are no new features introduced.
 ### Bugfixes
 
 - Fixes `Option` class to have have incorrect `type` field, now using strings
-- Fixes that `WrongStringVisitor` was not activated
+- Fixes that `WrongStringTokenVisitor` was not activated
 
 ### Misc
 
