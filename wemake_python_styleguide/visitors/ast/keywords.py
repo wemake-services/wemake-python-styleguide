@@ -82,16 +82,15 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
         returning_type,  # mypy is not ok with this type declaration
         violation: ReturningViolations,
     ):
+        returns: List[ast.Return] = []
         has_values = False
         for sub_node in ast.walk(node):
-            if isinstance(sub_node, returning_type) and sub_node.value:
-                has_values = True
+            if isinstance(sub_node, returning_type):
+                if sub_node.value:
+                    has_values = True
+                returns.append(sub_node)
 
-        for sub_node in ast.walk(node):
-            # We need to iterate over the body twice to be sure we
-            # have checked all the nodes in the body.
-            if not isinstance(sub_node, returning_type):
-                continue
+        for sub_node in returns:
             if not sub_node.value and has_values:
                 self.add_violation(violation(sub_node))
 

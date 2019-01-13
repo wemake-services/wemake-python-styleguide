@@ -76,7 +76,36 @@ mypy wemake_python_styleguide
 This step is mandatory during the CI.
 
 
-## Before submitting
+## Submitting your code
+
+We use [`trunk` based](https://trunkbaseddevelopment.com/)
+development (we also sometimes call it `wemake-git-flow`).
+
+What the point of this method?
+
+1. We use protected `master` branch,
+   so the only way to push your code is via pull request
+2. We use issue branches: to implement a new feature or to fix a bug
+   create a new branch named `issue-$TASKNUMBER`
+3. Then create a pull request to `master` branch
+4. We use `git tag`s to make releases, so we can track what has changed
+   since the latest release
+
+So, this way we achieve an easy and scalable development process
+which frees us from merging hell and long-living branches.
+
+In this method the latest version of app is always in the `master` branch.
+
+### Making patches to older versions
+
+If you want to release a patch for an older version, that what you have to do:
+
+1. Check out the previous `git tag`
+2. Create a new branch relative to this tag
+3. Merge it into master, there might be some `rebase` and `cherry-pick`
+   involved during this operation
+
+### Before submitting
 
 Before submitting your code please do the following steps:
 

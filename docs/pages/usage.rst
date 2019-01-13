@@ -70,6 +70,11 @@ But, you still can do several things to integrate this linter step by step:
 
 You can also only lint `recently changed files <https://github.com/getsentry/raven-python/blob/master/hooks/pre-commit.flake8>`_.
 
+You can also use `--diff option <http://flake8.pycqa.org/en/latest/user/options.html#cmdoption-flake8-diff>`_
+of ``flake8`` to lint the latest changes only.
+This might have different errors,
+and this mode is not officially supported for now.
+
 Integrations
 ------------
 

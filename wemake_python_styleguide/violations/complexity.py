@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-These checks finds flaws in your application design.
+These checks find flaws in your application design.
 
 We try to stick to "the magical 7 ± 2 number" when counting things.
 https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two
@@ -189,7 +189,7 @@ class TooManyLocalsViolation(ASTViolation):
     Forbids to have too many local variables in the unit of code.
 
     Reasoning:
-        Having too many variables in a single function is bad thing.
+        Having too many variables in a single function is a bad thing.
         Soon, you will find troubles to understand what this variable means.
         It will also become hard to name new variables.
 
@@ -240,7 +240,7 @@ class TooManyArgumentsViolation(ASTViolation):
     Forbids to have too many arguments for a function or method.
 
     Reasoning:
-        This is an indicator of a bad design. When function requires many
+        This is an indicator of a bad design. When a function requires many
         arguments it shows that it is required to refactor this piece of code.
         It also indicates that function does too many things at once.
 
@@ -318,7 +318,7 @@ class TooManyMethodsViolation(ASTViolation):
     Reasoning:
         Having too many methods might lead to the "God object".
         This kind of objects can handle everything.
-        So, in the end your code becomes too hard to maintain and test.
+        So, in the end, your code becomes too hard to maintain and test.
 
     Solution:
         What to do if you have too many methods in a single class?
@@ -329,7 +329,7 @@ class TooManyMethodsViolation(ASTViolation):
     We do not make any difference between instance and class methods.
     We also do not care about functions and classes being public or not.
     We also do not count inherited methods from parents.
-    This rule does not count attributes of a class.
+    This rule does not count the attributes of a class.
 
     Configuration:
         This rule is configurable with ``--max-methods``.
@@ -399,7 +399,7 @@ class TooManyDecoratorsViolation(ASTViolation):
     Reasoning:
         When you are using too many decorators it means that
         you try to overuse the magic.
-        You have to ask youself: do I really know what happens inside
+        You have to ask yourself: do I really know what happens inside
         this decorator tree? Typically, the answer will be "no".
 
     Solution:
@@ -432,7 +432,7 @@ class TooDeepNestingViolation(ASTViolation):
     Forbids nesting blocks too deep.
 
     Reasoning:
-        If nesting is too deep that indicates usage of a complex logic
+        If nesting is too deep that indicates usage of complex logic
         and language constructions. This means that our design is not
         suited to handle such construction.
 
@@ -464,18 +464,18 @@ class LineComplexityViolation(ASTViolation):
 
     1. modules
     2. function and classes, since they are checked differently
-    3. type annotations, since they do not increase complexity
+    3. type annotations, since they do not increase the complexity
 
     Reasoning:
         Having a complex line indicates that you somehow managed to put too
         much logic inside a single line.
-        At some point in time you will no longer be able to understand
+        At some point in time, you will no longer be able to understand
         what this line means and what it does.
 
     Solution:
         Split a single line into several lines: by creating new variables,
         statements or functions. Note, this might trigger new complexity issues.
-        With this technique a single new node in a line might trigger a complex
+        With this technique, a single new node in a line might trigger a complex
         refactoring process including several modules.
 
     Configuration:
@@ -526,12 +526,12 @@ class TooManyElifsViolation(ASTViolation):
     Forbids to use many ``elif`` branches.
 
     Reasoning:
-        This rule is specifically important, because many ``elif``
+        This rule is specifically important because of many ``elif``
         branches indicate a complex flow in your design:
         you are reimplementing ``switch`` in python.
 
     Solution:
-        There are different design patters to use instead.
+        There are different design patterns to use instead.
         For example, you can use some interface that
         just call a specific method without ``if``.
         Or separate your ``if`` into multiple functions.
@@ -555,7 +555,7 @@ class TooManyForsInComprehensionViolation(ASTViolation):
         to understand it.
 
     Solution:
-        We can reduce the complexity of a comprehension by reducing the
+        We can reduce the complexity of comprehension by reducing the
         amount of ``for`` statements. Refactor your code to use several
         ``for`` loops, comprehensions, or different functions.
 
@@ -585,11 +585,11 @@ class TooManyExceptCasesViolation(ASTViolation):
     Reasoning:
         Handling too many exceptions in a single place
         is a good indicator of a bad design.
-        Since this way one controlling structure will become too complex.
+        Since this way, one controlling structure will become too complex.
         And you will need to test a lot of paths your application might go.
 
     Solution:
-        We can reduce the complexity of this case by spliting it into multiple
+        We can reduce the complexity of this case by splitting it into multiple
         functions or using a decorator to handle different exceptions.
 
     Configuration:

@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 """
-These checks ensures that you follow the best practices.
+These checks ensure that you follow the best practices.
 
 The source for these best practices is hidden inside countless hours
 we have spent debugging software or reviewing it.
 
-How do we find an inspiration for new rules?
+How do we find inspiration for new rules?
 We find some ugly code during code reviews and audits.
 Then we forbid to use this bad code forever.
 So, this error will never return to our codebase.
@@ -269,7 +269,7 @@ class EmptyModuleViolation(SimpleViolation):
     Forbids to have empty modules.
 
     Reasoning:
-        Why is it even there? Do not polute your project with empty files.
+        Why is it even there? Do not pollute your project with empty files.
 
     Solution:
         If you have an empty module there are two ways to handle that:
@@ -671,7 +671,7 @@ class BadMagicMethodViolation(ASTViolation):
         magic methods related to it.
 
     Solution:
-        Refactor you code to use custom methods instead.
+        Refactor your code to use custom methods instead.
         It will give more context to your app.
 
     See
@@ -695,8 +695,8 @@ class NestedImportViolation(ASTViolation):
     Forbids to have nested imports in functions.
 
     Reasoning:
-        Usually nested imports are used to fix the import cycle.
-        So, nested imports show that there's an issue with you design.
+        Usually, nested imports are used to fix the import cycle.
+        So, nested imports show that there's an issue with your design.
 
     Solution:
         You don't need nested imports, you need to refactor your code.
@@ -809,7 +809,7 @@ class ReassigningVariableToItselfViolation(ASTViolation):
 
     Reasoning:
         There is no need to do that.
-        Generally it is an indication of some error or just dead code.
+        Generally, it is an indication of some errors or just dead code.
 
     Example::
 
@@ -836,7 +836,7 @@ class YieldInsideInitViolation(ASTViolation):
 
     Reasoning:
         ``__init__`` should be used to initialize new objects.
-        It shouldn't ``yield`` anything, because it should return ``None``
+        It shouldn't ``yield`` anything because it should return ``None``
         by the convention.
 
     Example::
@@ -920,8 +920,8 @@ class ProtectedAttributeViolation(ASTViolation):
         self.container._internal = 10
 
     Note, that it is possible to use protected attributes with ``self``
-    and ``cls`` as base names. We allow this so you can create and use
-    protected attributes and methods inside the class context.
+    and ``cls`` as base names. We allow this so you can create and
+    use protected attributes and methods inside the class context.
     This is how protected attributes should be used.
 
     .. versionadded:: 0.3.0
@@ -973,13 +973,13 @@ class UnreachableCodeViolation(ASTViolation):
     Forbids to have unreachable code.
 
     What is unreachable code? It is some lines of code that
-    can not be executed by python's interpreter.
+    cannot be executed by python's interpreter.
 
     This is probably caused by ``return`` or ``raise`` statements.
     However, we can not cover 100% of truly unreachable code by this rule.
     This happens due to the dynamic nature of python.
     For example, detecting that ``1 / some_value`` would sometimes raise
-    an exception is too complicated and is out of scope of this rule.
+    an exception is too complicated and is out of the scope of this rule.
 
     Reasoning:
         Having dead code in your project is an indicator that you
@@ -988,7 +988,7 @@ class UnreachableCodeViolation(ASTViolation):
         It also demotivates team members.
 
     Solution:
-        Delete any unreachable code your have.
+        Delete any unreachable code you have.
         Or refactor it, if this happens by your mistake.
 
     Example::
@@ -1017,9 +1017,9 @@ class StatementHasNoEffectViolation(ASTViolation):
     Forbids to have statements that do nothing.
 
     Reasoning:
-        Statements that just access the value,
-        or expressions used as statements indicate that your code
-        contains dead lines. They just pollute your codebase and do nothing.
+        Statements that just access the value or expressions
+        used as statements indicate that your code
+        contains deadlines. They just pollute your codebase and do nothing.
 
     Solution:
         Refactor your code in case it was a typo or error.
