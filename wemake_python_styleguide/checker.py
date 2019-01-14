@@ -140,7 +140,8 @@ class Checker(object):
         """
         ``flake8`` api method to register new plugin options.
 
-        See :class:`.Configuration` docs for detailed options reference.
+        See :class:`wemake_python_styleguide.options.config.Configuration`
+        docs for detailed options reference.
 
         Arguments:
             parser: ``flake8`` option parser instance.
@@ -157,13 +158,7 @@ class Checker(object):
         self,
         visitors: Sequence[VisitorClass],
     ) -> Iterator[types.CheckResult]:
-        """
-        Runs all passed visitors one by one.
-
-        Yields:
-            Violations that were found by the passed visitors.
-
-        """
+        """Runs all passed visitors one by one."""
         for visitor_class in visitors:
             visitor = visitor_class.from_checker(self)
             visitor.run()
@@ -177,5 +172,9 @@ class Checker(object):
 
         This method is used by ``flake8`` API.
         It is executed after all configuration is parsed.
+
+        Yields:
+            Violations that were found by the passed visitors.
+
         """
         yield from self._run_checks(self.visitors)

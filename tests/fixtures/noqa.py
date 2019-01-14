@@ -240,6 +240,9 @@ def function_with_wrong_yield():
 
 bad_concatenation = 'a' 'b'  # noqa: Z326
 
+for literal in bad_concatenation:  # noqa: Z327
+    continue
+
 try:
     anti_z444 = 1
 except BaseException:  # noqa: Z424

@@ -2,7 +2,7 @@
 
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, Optional, Union
+from typing import ClassVar, DefaultDict, List, Optional, Union
 
 from typing_extensions import final
 
@@ -17,6 +17,7 @@ from wemake_python_styleguide.violations.complexity import (
 )
 from wemake_python_styleguide.violations.consistency import (
     MultipleIfsInComprehensionViolation,
+    UselessContinueViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
@@ -142,6 +143,17 @@ class WrongLoopVisitor(BaseNodeVisitor):
             if is_contained(subnode, (ast.Lambda,)):
                 self.add_violation(LambdaInsideLoopViolation(node))
 
+    def _check_useless_continue(self, node: AnyLoop) -> None:
+        nodes_at_line: DefaultDict[int, List[ast.AST]] = defaultdict(list)
+        for sub_node in ast.walk(node):
+            lineno = getattr(sub_node, 'lineno', None)
+            if lineno is not None:
+                nodes_at_line[lineno].append(sub_node)
+
+        last_line = nodes_at_line[sorted(nodes_at_line.keys())[-1]]
+        if any(isinstance(last, ast.Continue) for last in last_line):
+            self.add_violation(UselessContinueViolation(node))
+
     def visit_any_loop(self, node: AnyLoop) -> None:
         """
         Checks ``for`` and ``while`` loops.
@@ -153,4 +165,5 @@ class WrongLoopVisitor(BaseNodeVisitor):
         """
         self._check_loop_needs_else(node)
         self._check_lambda_inside_loop(node)
+        self._check_useless_continue(node)
         self.generic_visit(node)

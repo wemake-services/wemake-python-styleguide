@@ -52,6 +52,7 @@ Summary
    InconsistentReturnViolation
    InconsistentYieldViolation
    ImplicitStringConcatenationViolation
+   UselessContinueViolation
 
 Consistency checks
 ------------------
@@ -83,6 +84,7 @@ Consistency checks
 .. autoclass:: InconsistentReturnViolation
 .. autoclass:: InconsistentYieldViolation
 .. autoclass:: ImplicitStringConcatenationViolation
+.. autoclass:: UselessContinueViolation
 
 """
 
@@ -1037,3 +1039,37 @@ class ImplicitStringConcatenationViolation(TokenizeViolation):
 
     error_template = 'Found implicit string concatenation'
     code = 326
+
+
+@final
+class UselessContinueViolation(ASTViolation):
+    """
+    Forbids to use meaningless ``continue`` node in loops.
+
+    Reasoning:
+        Placing this keyword in the end of any loop won't make any difference
+        to your code. And we prefer not to have meaningless
+        constructs in our code.
+
+    Solution:
+        Remove useless ``continue`` node from the loop.
+
+    Example::
+
+        # Correct:
+        for number in [1, 2, 3]:
+            if number < 2:
+                continue
+            print(number)
+
+        # Wrong:
+        for number in [1, 2, 3]:
+            print(number)
+            continue
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found useless `continue` at the end of the loop'
+    code = 327
