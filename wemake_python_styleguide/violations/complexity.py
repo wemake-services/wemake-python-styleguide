@@ -592,11 +592,6 @@ class TooManyExceptCasesViolation(ASTViolation):
         We can reduce the complexity of this case by splitting it into multiple
         functions or using a decorator to handle different exceptions.
 
-    Configuration:
-        This rule is configurable with ``--max-except-cases``.
-        Default:
-        :str:`wemake_python_styleguide.options.defaults.MAX_EXCEPT_CASES`
-
     .. versionadded:: 0.7.0
 
     """

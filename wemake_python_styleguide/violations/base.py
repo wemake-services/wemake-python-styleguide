@@ -1,20 +1,16 @@
 # -*- coding: utf-8 -*-
 
 """
-Contains detailed information about violation and how to use them.
+Contains detailed technical information about :term:`violation` internals.
 
 .. _violations:
 
-Writing new violation
----------------------
-
-First of all, you have to select the correct base class for new violation.
-The main criteria is what logic will be used to find the flaw in your code.
+Violations API
+--------------
 
 .. currentmodule:: wemake_python_styleguide.violations.base
 
-Available base classes
-~~~~~~~~~~~~~~~~~~~~~~
+.. autoclasstree:: wemake_python_styleguide.violations.base
 
 .. autosummary::
    :nosignatures:
@@ -25,12 +21,21 @@ Available base classes
    SimpleViolation
 
 Violation can not have more than one base class.
-Since it does not make sense to have two different node types at the same time.
+See :ref:`tutorial` for more information about choosing a correct base class.
 
-.. autoclasstree:: wemake_python_styleguide.violations.base
+Conventions
+~~~~~~~~~~~
 
-Violations API
---------------
+- Each violation class name should end with "Violation"
+- Each violation must have a long docstring with full description
+- Each violation must have "Reasoning" and "Solution" sections
+- Each violation must have "versionadded" policy
+- Each violation should have an example with correct and wrong usages
+- If violation error template should have a parameter
+  it should be the last part of the text: ``: {0}``
+
+Reference
+~~~~~~~~~
 
 """
 

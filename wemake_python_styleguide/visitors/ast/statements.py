@@ -118,7 +118,11 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
 
         self.add_violation(StatementHasNoEffectViolation(node))
 
-    def _check_internals(self, body: List[ast.stmt]) -> None:
+    def _check_internals(
+        self,
+        node: StatementWithBody,
+        body: List[ast.stmt],
+    ) -> None:
         after_closing_node = False
         for index, statement in enumerate(body):
             if after_closing_node:
@@ -138,11 +142,11 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
             UnreachableCodeViolation
 
         """
-        self._check_internals(node.body)
+        self._check_internals(node, node.body)
         if isinstance(node, self._nodes_with_orelse):
-            self._check_internals(node.orelse)
+            self._check_internals(node, node.orelse)
         if isinstance(node, ast.Try):
-            self._check_internals(node.finalbody)
+            self._check_internals(node, node.finalbody)
 
         self.generic_visit(node)
 

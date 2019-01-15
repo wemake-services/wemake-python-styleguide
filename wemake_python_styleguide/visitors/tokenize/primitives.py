@@ -87,12 +87,11 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
             )
 
         modifiers, _ = split_prefixes(token)
-        if modifiers:
-            for mod in self._bad_string_modifiers:
-                if mod in modifiers:
-                    self.add_violation(
-                        UppercaseStringModifierViolation(token, text=mod),
-                    )
+        for mod in modifiers:
+            if mod in self._bad_string_modifiers:
+                self.add_violation(
+                    UppercaseStringModifierViolation(token, text=mod),
+                )
 
     def visit_string(self, token: tokenize.TokenInfo) -> None:
         """

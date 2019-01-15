@@ -55,6 +55,8 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
+
+    # Used to write beautiful docstrings:
     'sphinx.ext.napoleon',
 
     # Used to include .md files:

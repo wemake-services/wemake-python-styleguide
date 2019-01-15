@@ -20,7 +20,11 @@ where we define the terms for this project.
 Then move to the :ref:`contributing <contributing>` guide
 where we specify all technical details about our workflow and tools.
 
-And finally you will need to go through the API reference.
+Then you will be ready
+to dive into our :ref:`"Creating a new rule tutorial" <tutorial>`.
+
+And finally you will need to go through the API reference
+to cover specific technical questions you will encounter.
 
 
 Philosophy
@@ -32,8 +36,8 @@ Philosophy
 4. If you can not sustain your promise - do not promise
 5. Code must be written for people to read,
    and only incidentally for machines to execute
-6. Consistency over syntatic readability
-7. Consistent code is more readable than inconsistent
+6. Value consistency over syntax-ish readability
+7. Consistent code is more readable then inconsistent
 8. Do not force people to choose, they will make mistakes
 9. Made choices must be respected
 
@@ -66,16 +70,33 @@ Contributing
 
 .. toctree::
   :maxdepth: 2
+  :caption: This section will help you to know all
+    the tools and terms we are using.
 
   glossary.rst
   contributing.rst
+
+
+Creating a new rule
+-------------------
+
+.. toctree::
+  :maxdepth: 2
+  :caption: This tutorial will guide you through the whole process
+    of creating new rules for this linter.
+
+  tutorial.rst
+
 
 API Reference
 -------------
 
 .. toctree::
   :maxdepth: 2
+  :caption: Raw technical information with interface and types declarations,
+    featuring architecure and composition of classes.
 
   checker.rst
   visitors/base.rst
   violations/base.rst
+  types.rst

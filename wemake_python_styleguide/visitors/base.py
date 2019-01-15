@@ -1,19 +1,35 @@
 # -*- coding: utf-8 -*-
 
 """
-Contains detailed documentation about how to write a visitor.
+Contains detailed technical documentation about how to write a :term:`visitor`.
+
+See also:
+    Visitor is a well-known software engineering pattern:
+    https://en.wikipedia.org/wiki/Visitor_pattern
+
+Each visitor might work with one or many :term:`violations <violation>`.
+Multiple visitors might one with the same violation.
+
+.. mermaid::
+   :caption: Visitor relation with violations.
+
+    graph TD
+        V1[Visitor 1] --> EA[Violation A]
+        V1[Visitor 1] --> EB[Violation B]
+
+        V2[Visitor 2] --> EA[Violation A]
+        V2[Visitor 2] --> EC[Violation C]
+
+        V3[Visitor 3] --> EZ[Violation Z]
 
 .. _visitors:
 
-Creating new visitor
---------------------
-
-First of all, you have to decide what base class do you want to use?
+Visitors API
+------------
 
 .. currentmodule:: wemake_python_styleguide.visitors.base
 
-Available base classes
-~~~~~~~~~~~~~~~~~~~~~~
+.. autoclasstree:: wemake_python_styleguide.visitors.base
 
 .. autosummary::
    :nosignatures:
@@ -24,8 +40,7 @@ Available base classes
 
 The decision relies on what parameters do you need for the task.
 It is highly unlikely that you will need two parameters at the same time.
-
-.. autoclasstree:: wemake_python_styleguide.visitors.base
+See :ref:`tutorial` for more information about choosing a correct base class.
 
 Coventions
 ~~~~~~~~~~
@@ -42,8 +57,8 @@ We follow these conventions:
 
 There are different example of visitors in this project already.
 
-Visitors API
-------------
+Reference
+~~~~~~~~~
 
 """
 

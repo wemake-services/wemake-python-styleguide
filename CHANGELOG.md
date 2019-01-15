@@ -60,6 +60,7 @@ We used to have incremental versioning before `0.1.0`.
 - Improves tests: now we check that ignored violation are raised with `noqa`
 - Improves docs: we have added a special graph to show our architecure
 - Improves docs: we now have a clean page for `checker` without extra junk
+- Improves docs: we now have a tutorial for creating new rules
 
 
 ## Version 0.6.2

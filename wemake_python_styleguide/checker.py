@@ -3,47 +3,9 @@
 """
 Entry point to the app.
 
-Writing new plugin
-------------------
+Represents a :term:`checker` business entity.
 
-First of all, you have to decide:
-
-1. Are you writing a separate plugin and adding it as a dependency?
-2. Are you writing an built-in extension to this styleguide?
-
-How to make a decision?
-
-Will this plugin be useful to other developers without this styleguide?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-If so, it would be wise to create a separate ``flake8`` plugin.
-Then you can add newly created plugin as a dependency.
-Our rules do not make any sense without each other.
-
-Real world examples:
-
-- `flake8-eradicate <https://github.com/sobolevn/flake8-eradicate>`_
-
-Can this plugin be used with the existing checker?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-``flake8`` has a very strict API about plugins.
-Here are some problems that you may encounter:
-
-- Some plugins are called once per file, some are called once per line
-- Plugins should define clear ``violation code`` / ``checker`` relation
-- It is impossible to use the same letter violation codes for several checkers
-
-Real world examples:
-
-- `flake8-broken-line <https://github.com/sobolevn/flake8-broken-line>`_
-
-Writing new visitor
--------------------
-
-If you are still willing to write a builtin extension to our styleguide,
-you will have to write a :ref:`violation <violations>`
-and/or :ref:`visitor <visitors>`.
+.. _checker:
 
 Checker API
 -----------
