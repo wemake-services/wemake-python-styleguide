@@ -4,6 +4,27 @@
 Entry point to the app.
 
 Represents a :term:`checker` business entity.
+There's only a single checker instance
+that runs a lot of :term:`visitors <visitor>`.
+
+.. mermaid::
+   :caption: Checker relation with visitors.
+
+    graph TD
+        C1[Checker] --> V1[Visitor 1]
+        C1[Checker] --> V2[Visitor 2]
+        C1[Checker] --> VN[Visitor N]
+
+That's how all ``flake8`` plugins work:
+
+.. mermaid::
+   :caption: ``flake8`` API calls order.
+
+    graph LR
+        F1[flake8] --> F2[add_options]
+        F2         --> F3[parse_options]
+        F3         --> F4[__init__]
+        F4	       --> F5[run]
 
 .. _checker:
 
@@ -42,7 +63,8 @@ class Checker(object):
     """
     Main checker class.
 
-    It is an entry point to the whole app.
+    See also:
+        http://flake8.pycqa.org/en/latest/plugin-development/index.html
 
     Attributes:
         name: required by the ``flake8`` API, should match the package name.
@@ -88,9 +110,6 @@ class Checker(object):
                 to copy all ``ast`` information in terms of memory.
             file_tokens: ``tokenize.tokenize`` parsed file tokens.
             filename: module file name, might be empty if piping is used.
-
-        See also:
-            http://flake8.pycqa.org/en/latest/plugin-development/index.html
 
         """
         self.tree = transform(tree)

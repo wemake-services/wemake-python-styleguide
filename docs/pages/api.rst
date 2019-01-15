@@ -92,7 +92,7 @@ API Reference
 -------------
 
 .. toctree::
-  :maxdepth: 2
+  :maxdepth: 1
   :caption: Raw technical information with interface and types declarations,
     featuring architecure and composition of classes.
 
