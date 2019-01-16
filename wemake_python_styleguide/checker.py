@@ -69,9 +69,11 @@ class Checker(object):
     Attributes:
         name: required by the ``flake8`` API, should match the package name.
         version: required by the ``flake8`` API, defined in the packaging file.
-        config: custom configuration object used to provide and parse options.
-        options: option structure passed by ``flake8``.
-        visitors: sequence of visitors that we run with this checker.
+        config: custom configuration object used to provide and parse options:
+            :py:`wemake_python_styleguide.options.config.Configuration`.
+        options: option structure passed by ``flake8``:
+            :py:`wemake_python_styleguide.types.ConfigurationOptions`.
+        visitors: :term:`preset` of visitors that are run by this checker.
 
     """
 
