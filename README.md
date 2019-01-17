@@ -80,7 +80,7 @@ You can find all error codes and plugins [in the docs](https://wemake-python-sty
 
 We are *not* planning to do the following things:
 
-0. Assume or check types, use `mypy` instead
+0. Assume or check types, use [`mypy`](https://github.com/python/mypy) instead
 1. Reformat code, since we believe that developers should do that
 2. Check for `SyntaxError` or exceptions, write tests instead
 3. Appeal to everyone, this is **our** linter. But, you can [switch off](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage.html#ignoring-violations) any rules that you don't like

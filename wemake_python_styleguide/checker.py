@@ -61,7 +61,7 @@ VisitorClass = Type[base.BaseVisitor]
 @types.final
 class Checker(object):
     """
-    Main checker class.
+    Implementation of :term:`checker`.
 
     See also:
         http://flake8.pycqa.org/en/latest/plugin-development/index.html
@@ -70,9 +70,9 @@ class Checker(object):
         name: required by the ``flake8`` API, should match the package name.
         version: required by the ``flake8`` API, defined in the packaging file.
         config: custom configuration object used to provide and parse options:
-            :py:`wemake_python_styleguide.options.config.Configuration`.
+            :class:`wemake_python_styleguide.options.config.Configuration`.
         options: option structure passed by ``flake8``:
-            :py:`wemake_python_styleguide.types.ConfigurationOptions`.
+            :class:`wemake_python_styleguide.types.ConfigurationOptions`.
         visitors: :term:`preset` of visitors that are run by this checker.
 
     """

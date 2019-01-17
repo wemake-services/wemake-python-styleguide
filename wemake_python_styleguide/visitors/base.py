@@ -42,8 +42,8 @@ The decision relies on what parameters do you need for the task.
 It is highly unlikely that you will need two parameters at the same time.
 See :ref:`tutorial` for more information about choosing a correct base class.
 
-Coventions
-~~~~~~~~~~
+Conventions
+~~~~~~~~~~~
 
 Then you will have to write logic for your visitor.
 We follow these conventions:
@@ -64,12 +64,16 @@ Reference
 
 import ast
 import tokenize
-from typing import List, Sequence, Type
+from typing import TYPE_CHECKING, List, Sequence, Type
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.logics.filenames import get_stem
 from wemake_python_styleguide.types import ConfigurationOptions, final
 from wemake_python_styleguide.violations.base import BaseViolation
+
+if TYPE_CHECKING:
+    # Using this hack to remove circular imports
+    from wemake_python_styleguide.checker import Checker  # noqa: Z435
 
 
 class BaseVisitor(object):
@@ -79,7 +83,8 @@ class BaseVisitor(object):
     Attributes:
         options: contains the options objects passed and parsed by ``flake8``.
         filename: filename passed by ``flake8``, each visitor has a file name.
-        violations: list of violations for the specific visitor.
+        violations: list of :term:`violations <violation>`
+            for the specific visitor.
 
     """
 
@@ -94,12 +99,15 @@ class BaseVisitor(object):
         self.violations: List[BaseViolation] = []
 
     @classmethod
-    def from_checker(cls: Type['BaseVisitor'], checker) -> 'BaseVisitor':
+    def from_checker(
+        cls: Type['BaseVisitor'],
+        checker: 'Checker',
+    ) -> 'BaseVisitor':
         """
         Constructs visitor instance from the checker.
 
         Each unique visitor class should know how to construct itself
-        from the ``checker`` instance.
+        from the :term:`checker` instance.
 
         Generally speaking, each visitor class needs to eject required
         parameters from checker and then run
@@ -178,6 +186,10 @@ class BaseFilenameVisitor(BaseVisitor):
     Abstract base class that allows to visit and check module file names.
 
     Has ``visit_filename()`` method that should be defined in subclasses.
+
+    Attributes:
+        stem: the last part of the filename. Does not contain extension.
+
     """
 
     stem: str
@@ -247,6 +259,8 @@ class BaseTokenVisitor(BaseVisitor):
         since they might resolve in just ``OP`` name.
 
         Does nothing if handler for any token type is not defined.
+
+        Inspired by ``NodeVisitor`` class.
 
         See also:
             https://docs.python.org/3/library/tokenize.html

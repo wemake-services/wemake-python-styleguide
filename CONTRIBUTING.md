@@ -17,16 +17,17 @@ It is also recommended to take a look at these resources:
 - List of `flake8` [extensions](https://github.com/DmytroLitvinov/awesome-flake8-extensions)
 
 
-## API Reference
+## Developer's documentation
 
-Make sure that you are familiar with [our API](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/api.html).
+Make sure that you are familiar with [developer's documentation](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/api.html).
 
 That's a main starting point to the future development.
+You can jump start into the development of new rules by reading ["Creating a new rule tutorial"](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/tutorial.html).
 
 
 ## Dependencies
 
-We use `poetry` to manage the [dependencies](https://github.com/sdispater/poetry).
+We use [`poetry`](https://github.com/sdispater/poetry) to manage the dependencies.
 
 To install them you would need to run `install` command:
 
