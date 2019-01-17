@@ -71,8 +71,8 @@ from wemake_python_styleguide.logics.filenames import get_stem
 from wemake_python_styleguide.types import ConfigurationOptions, final
 from wemake_python_styleguide.violations.base import BaseViolation
 
-if TYPE_CHECKING:
-    # Using this hack to remove circular imports
+if TYPE_CHECKING:  # pragma: no cover
+    # Hack to remove circular imports:
     from wemake_python_styleguide.checker import Checker  # noqa: Z435
 
 
