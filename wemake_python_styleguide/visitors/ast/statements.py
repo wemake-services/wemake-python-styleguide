@@ -3,6 +3,7 @@
 import ast
 from typing import ClassVar, List, Optional, Sequence, Union
 
+from wemake_python_styleguide.logics.collections import normalize_dict_elements
 from wemake_python_styleguide.logics.functions import get_all_arguments
 from wemake_python_styleguide.logics.nodes import get_parent, is_doc_string
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, final
@@ -218,7 +219,10 @@ class WrongParametersIndentationVisitor(BaseNodeVisitor):
 
     def visit_collection(self, node: AnyCollection) -> None:
         """Checks how collection items indentation."""
-        elements = node.keys if isinstance(node, ast.Dict) else node.elts
+        if isinstance(node, ast.Dict):
+            elements = normalize_dict_elements(node)
+        else:
+            elements = node.elts
         self._check_indentation(node, elements, extra_lines=1)
         self.generic_visit(node)
 
