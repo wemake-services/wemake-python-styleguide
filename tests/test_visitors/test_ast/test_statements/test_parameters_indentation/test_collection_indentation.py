@@ -99,6 +99,18 @@ xy = {
 }
 """
 
+correct_simple_regression450 = """
+was_crashing = {**some_other_dict}
+"""
+
+correct_multiline_regression450 = """
+was_crashing = {
+    **some_other_dict,
+    **some_very_other_dict,
+    **third_dict,
+}
+"""
+
 
 # Wrong:
 
@@ -198,6 +210,13 @@ xy = {
 }
 """
 
+wrong_regression450 = """
+some_dict = {
+    **one,
+    **two, **three,
+}
+"""
+
 
 @pytest.mark.parametrize('code', [
     correct_multiline_string,
@@ -214,6 +233,10 @@ xy = {
     correct_next_line_set,
     correct_next_line_tuple,
     correct_nested_collections,
+
+    # Regressions:
+    correct_simple_regression450,
+    correct_multiline_regression450,
 ])
 def test_correct_collection_indentation(
     assert_errors,
@@ -247,6 +270,9 @@ def test_correct_collection_indentation(
     wrong_dict_indentation2,
     wrong_dict_indentation3,
     wrong_dict_indentation4,
+
+    # Regressions:
+    wrong_regression450,
 ])
 def test_wrong_collection_indentation(
     assert_errors,
