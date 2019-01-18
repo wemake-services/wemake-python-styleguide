@@ -11,19 +11,23 @@ you will need to get familiar with these APIs:
 
 It is also recommended to take a look at these resources:
 
+- Visual tool to explore [`python's ast`](https://python-ast-explorer.com/) (very useful!)
 - Missing `ast` [guide](https://greentreesnakes.readthedocs.io/en/latest/)
 - List of `python` [static analysis tools](https://github.com/vintasoftware/python-linters-and-code-analysis)
 - List of `flake8` [extensions](https://github.com/DmytroLitvinov/awesome-flake8-extensions)
 
 
-## API Reference
+## Developer's documentation
 
-Make sure that you are familiar with [our API](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/api.html).
+Make sure that you are familiar with [developer's documentation](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/api.html).
+
+That's a main starting point to the future development.
+You can jump start into the development of new rules by reading ["Creating a new rule tutorial"](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/tutorial.html).
 
 
 ## Dependencies
 
-We use `poetry` to manage the [dependencies](https://github.com/sdispater/poetry).
+We use [`poetry`](https://github.com/sdispater/poetry) to manage the dependencies.
 
 To install them you would need to run `install` command:
 
@@ -55,7 +59,13 @@ To run all tests:
 pytest
 ```
 
-This step is mandatory during the CI.
+To run linting:
+
+```bash
+flake8 wemake_python_styleguide tests docs
+```
+
+These steps are mandatory during the CI.
 
 
 ## Type checks
@@ -70,7 +80,36 @@ mypy wemake_python_styleguide
 This step is mandatory during the CI.
 
 
-## Before submitting
+## Submitting your code
+
+We use [trunk based](https://trunkbaseddevelopment.com/)
+development (we also sometimes call it `wemake-git-flow`).
+
+What the point of this method?
+
+1. We use protected `master` branch,
+   so the only way to push your code is via pull request
+2. We use issue branches: to implement a new feature or to fix a bug
+   create a new branch named `issue-$TASKNUMBER`
+3. Then create a pull request to `master` branch
+4. We use `git tag`s to make releases, so we can track what has changed
+   since the latest release
+
+So, this way we achieve an easy and scalable development process
+which frees us from merging hell and long-living branches.
+
+In this method, the latest version of the app is always in the `master` branch.
+
+### Making patches to older versions
+
+If you want to release a patch for an older version, that what you have to do:
+
+1. Check out the previous `git tag`
+2. Create a new branch relative to this tag
+3. Merge it into master, there might be some `rebase` and `cherry-pick`
+   involved during this operation
+
+### Before submitting
 
 Before submitting your code please do the following steps:
 
@@ -82,7 +121,8 @@ Before submitting your code please do the following steps:
 6. Update `CHANGELOG.md` with a quick summary of your changes
 7. Run `pytest` again to make sure it is still working
 8. Run `mypy` to ensure that types are correct
-9. Run `doc8` to ensure that docs are correct
+9. Run `flake8` to ensure that style is correct
+10. Run `doc8` to ensure that docs are correct
 
 
 ## Other help

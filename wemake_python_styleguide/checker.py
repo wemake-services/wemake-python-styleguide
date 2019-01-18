@@ -3,55 +3,38 @@
 """
 Entry point to the app.
 
-Writing new plugin
-------------------
+Represents a :term:`checker` business entity.
+There's only a single checker instance
+that runs a lot of :term:`visitors <visitor>`.
 
-First of all, you have to decide:
+.. mermaid::
+   :caption: Checker relation with visitors.
 
-1. Are you writing a separate plugin and adding it as a dependency?
-2. Are you writing an built-in extension to this styleguide?
+    graph TD
+        C1[Checker] --> V1[Visitor 1]
+        C1[Checker] --> V2[Visitor 2]
+        C1[Checker] --> VN[Visitor N]
 
-How to make a decision?
+That's how all ``flake8`` plugins work:
 
-Will this plugin be useful to other developers without this styleguide?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. mermaid::
+   :caption: ``flake8`` API calls order.
 
-If so, it would be wise to create a separate ``flake8`` plugin.
-Then you can add newly created plugin as a dependency.
-Our rules do not make any sense without each other.
+    graph LR
+        F1[flake8] --> F2[add_options]
+        F2         --> F3[parse_options]
+        F3         --> F4[__init__]
+        F4	       --> F5[run]
 
-Real world examples:
-
-- `flake8-eradicate <https://github.com/sobolevn/flake8-eradicate>`_
-
-Can this plugin be used with the existing checker?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-``flake8`` has a very strict API about plugins.
-Here are some problems that you may encounter:
-
-- Some plugins are called once per file, some are called once per line
-- Plugins should define clear ``violation code`` / ``checker`` relation
-- It is impossible to use the same letter violation codes for several checkers
-
-Real world examples:
-
-- `flake8-broken-line <https://github.com/sobolevn/flake8-broken-line>`_
-
-Writing new visitor
--------------------
-
-If you are still willing to write a builtin extension to our styleguide,
-you will have to write a :ref:`violation <violations>`
-and/or :ref:`visitor <visitors>`.
+.. _checker:
 
 Checker API
 -----------
 
 .. autoclass:: Checker
-   :members:
-   :special-members:
-   :exclude-members: __weakref__
+   :no-undoc-members:
+   :exclude-members: name, version, visitors, _run_checks
+   :special-members: __init__
 
 """
 
@@ -78,16 +61,19 @@ VisitorClass = Type[base.BaseVisitor]
 @types.final
 class Checker(object):
     """
-    Main checker class.
+    Implementation of :term:`checker`.
 
-    It is an entry point to the whole app.
+    See also:
+        http://flake8.pycqa.org/en/latest/plugin-development/index.html
 
     Attributes:
         name: required by the ``flake8`` API, should match the package name.
         version: required by the ``flake8`` API, defined in the packaging file.
-        config: custom configuration object used to provide and parse options.
-        options: option structure passed by ``flake8``.
-        visitors: sequence of visitors that we run with this checker.
+        config: custom configuration object used to provide and parse options:
+            :class:`wemake_python_styleguide.options.config.Configuration`.
+        options: option structure passed by ``flake8``:
+            :class:`wemake_python_styleguide.types.ConfigurationOptions`.
+        visitors: :term:`preset` of visitors that are run by this checker.
 
     """
 
@@ -120,12 +106,12 @@ class Checker(object):
         based on its parameters. This one is executed once per module.
 
         Parameters:
-            tree: ``ast`` parsed by ``flake8``. Differs from ``ast.parse``.
+            tree: ``ast`` parsed by ``flake8``.
+                Differs from ``ast.parse`` since it is mutated by multiple
+                ``flake8`` plugins. Why mutated? Since it is really expensive
+                to copy all ``ast`` information in terms of memory.
             file_tokens: ``tokenize.tokenize`` parsed file tokens.
             filename: module file name, might be empty if piping is used.
-
-        See also:
-            http://flake8.pycqa.org/en/latest/plugin-development/index.html
 
         """
         self.tree = transform(tree)
@@ -137,7 +123,8 @@ class Checker(object):
         """
         ``flake8`` api method to register new plugin options.
 
-        See :class:`.Configuration` docs for detailed options reference.
+        See :class:`wemake_python_styleguide.options.config.Configuration`
+        docs for detailed options reference.
 
         Arguments:
             parser: ``flake8`` option parser instance.
@@ -154,13 +141,7 @@ class Checker(object):
         self,
         visitors: Sequence[VisitorClass],
     ) -> Iterator[types.CheckResult]:
-        """
-        Runs all passed visitors one by one.
-
-        Yields:
-            Violations that were found by the passed visitors.
-
-        """
+        """Runs all passed visitors one by one."""
         for visitor_class in visitors:
             visitor = visitor_class.from_checker(self)
             visitor.run()
@@ -174,5 +155,9 @@ class Checker(object):
 
         This method is used by ``flake8`` API.
         It is executed after all configuration is parsed.
+
+        Yields:
+            Violations that were found by the passed visitors.
+
         """
         yield from self._run_checks(self.visitors)

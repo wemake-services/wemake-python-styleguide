@@ -5,6 +5,10 @@ import subprocess
 from collections import Counter
 
 ERROR_PATTERN = re.compile(r'(Z\d{3})')
+IGNORED_VIOLATIONS = [
+    'Z202',  # since our test case is complex, that's fine
+    'Z402',  # since we obviously use a lot of `noqa` comments
+]
 
 
 def _assert_errors_count_in_output(output, errors, all_violations):
@@ -43,6 +47,8 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
         'Z117': 1,
         'Z118': 1,
         'Z119': 1,
+        'Z120': 1,
+        'Z121': 1,
 
         'Z200': 0,
         'Z201': 0,
@@ -61,6 +67,7 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
         'Z222': 1,
         'Z223': 1,
         'Z224': 1,
+        'Z225': 1,
 
         'Z300': 1,
         'Z301': 1,
@@ -84,9 +91,16 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
         'Z319': 2,
         'Z320': 2,
         'Z321': 1,
+        'Z322': 1,
+        'Z323': 0,
+        'Z324': 1,
+        'Z325': 1,
+        'Z326': 1,
+        'Z327': 1,
 
         'Z400': 0,
         'Z401': 0,
+        'Z402': 0,
 
         'Z410': 1,
         'Z411': 0,
@@ -116,13 +130,24 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
         'Z445': 1,
         'Z446': 1,
         'Z447': 1,
+        'Z448': 1,
+        'Z449': 1,
+        'Z450': 1,
+        'Z451': 2,
+        'Z452': 2,
+        'Z453': 1,
+        'Z454': 1,
+        'Z455': 1,
+        'Z456': 1,
+        'Z457': 1,
+        'Z458': 1,
     }
 
     process = subprocess.Popen(
         [
             'flake8',
             '--ignore',
-            'Z202',  # since our test case is complex, that's fine
+            ','.join(IGNORED_VIOLATIONS),
             '--disable-noqa',
             '--select',
             'Z',
@@ -146,7 +171,7 @@ def test_noqa_fixture(absolute_path):
         [
             'flake8',
             '--ignore',
-            'Z202',  # since our test case is complex, that's fine
+            ','.join(IGNORED_VIOLATIONS),
             '--select',
             'Z',
             absolute_path('fixtures', 'noqa.py'),
@@ -159,3 +184,23 @@ def test_noqa_fixture(absolute_path):
     stdout, _ = process.communicate()
 
     assert stdout.count('Z') == 0
+
+
+def test_noqa_fixture_without_ignore(absolute_path):
+    """End-to-End test to check that `noqa` works without ignores."""
+    process = subprocess.Popen(
+        [
+            'flake8',
+            '--select',
+            'Z',
+            absolute_path('fixtures', 'noqa.py'),
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        universal_newlines=True,
+        encoding='utf8',
+    )
+    stdout, _ = process.communicate()
+
+    for violation in IGNORED_VIOLATIONS:
+        assert stdout.count(violation) > 0

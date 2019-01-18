@@ -1,32 +1,28 @@
 # -*- coding: utf-8 -*-
 
 from ast import Call, arg
-from typing import Iterable, List, Optional
+from typing import Container, List, Optional
+
+import astor
 
 from wemake_python_styleguide.types import AnyFunctionDefAndLambda
 
 
-def given_function_called(node: Call, to_check: Iterable[str]) -> str:
+def given_function_called(node: Call, to_check: Container[str]) -> str:
     """
-    Returns function name if it is called and contained in the `to_check`.
+    Returns function name if it is called and contained in the container.
 
     >>> import ast
-    >>> module = ast.parse('print("some value")')
+    >>> module = ast.parse('print(123, 456)')
     >>> given_function_called(module.body[0].value, ['print'])
     'print'
 
+    >>> given_function_called(module.body[0].value, ['adjust'])
+    ''
+
     """
-    # TODO: replace with `astor`
-    function_name = getattr(node.func, 'id', None)
-    function_value = getattr(node.func, 'value', None)
-    function_inner_id = getattr(function_value, 'id', None)
-    function_attr = getattr(node.func, 'attr', None)
-
-    is_restricted_function_attribute = (
-        function_inner_id in to_check and function_attr in to_check
-    )
-
-    if function_name in to_check or is_restricted_function_attribute:
+    function_name = astor.to_source(node.func).strip()
+    if function_name in to_check:
         return function_name
     return ''
 

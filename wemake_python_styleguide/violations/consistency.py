@@ -47,6 +47,12 @@ Summary
    WrongBracketPositionViolation
    MultilineFunctionAnnotationViolation
    UppercaseStringModifierViolation
+   IncorrectMultilineStringViolation
+   EmptyLineAfterCodingViolation
+   InconsistentReturnViolation
+   InconsistentYieldViolation
+   ImplicitStringConcatenationViolation
+   UselessContinueViolation
 
 Consistency checks
 ------------------
@@ -73,6 +79,12 @@ Consistency checks
 .. autoclass:: WrongBracketPositionViolation
 .. autoclass:: MultilineFunctionAnnotationViolation
 .. autoclass:: UppercaseStringModifierViolation
+.. autoclass:: IncorrectMultilineStringViolation
+.. autoclass:: EmptyLineAfterCodingViolation
+.. autoclass:: InconsistentReturnViolation
+.. autoclass:: InconsistentYieldViolation
+.. autoclass:: ImplicitStringConcatenationViolation
+.. autoclass:: UselessContinueViolation
 
 """
 
@@ -105,6 +117,7 @@ class LocalFolderImportViolation(ASTViolation):
         from ..drivers import MySQLDriver
 
     .. versionadded:: 0.1.0
+
     """
 
     error_template = 'Found local folder import'
@@ -133,6 +146,7 @@ class DottedRawImportViolation(ASTViolation):
         import os.path
 
     .. versionadded:: 0.1.0
+
     """
 
     error_template = 'Found dotted raw import: {0}'
@@ -178,7 +192,7 @@ class UnderscoredNumberViolation(TokenizeViolation):
         ``1_000``, ``10_00``, and ``100_0``.
         And it would be still the same number.
         Count how many ways there are to write bigger numbers.
-        Currently, it all depends on cultural habits of the author.
+        Currently, it all depends on the cultural habits of the author.
         We enforce a single way to write numbers: without the underscore.
 
     Solution:
@@ -241,7 +255,7 @@ class FormattedStringViolation(ASTViolation):
     Forbids to use ``f`` strings.
 
     Reasoning:
-        ``f`` strings looses context too often and they are hard to lint.
+        ``f`` strings loses context too often and they are hard to lint.
         Imagine that you have a string that breaks
         when you move it two lines above.
         That's not how a string should behave.
@@ -307,7 +321,7 @@ class MultipleIfsInComprehensionViolation(ASTViolation):
 
     Reasoning:
         It is very hard to read multiple ``if`` statements inside
-        a list comprehension. Since, it is even hard to tell all of them
+        a list comprehension. Since it is even hard to tell all of them
         should pass or fail.
 
     Solution:
@@ -337,7 +351,7 @@ class ConstantComparisonViolation(ASTViolation):
 
     Reasoning:
         When two constants are compared it is typically an indication of a
-        mistake, since the Boolean value of the comparison will always be
+        mistake, since the Boolean value of the comparison, will always be
         the same.
 
     Solution:
@@ -370,7 +384,7 @@ class ComparisonOrderViolation(ASTViolation):
     Reasoning:
         It is hard to read the code when
         you have to shuffle ordering of the arguments all the time.
-        Bring a consistency to the comparison!
+        Bring consistency to the comparison!
 
     Solution:
         Refactor your comparison expression, place the argument first.
@@ -496,11 +510,12 @@ class RedundantComparisonViolation(ASTViolation):
 @final
 class MissingSpaceBetweenKeywordAndParenViolation(TokenizeViolation):
     """
-    Forbid opening parenthesis from following keyword without space in between.
+    Enforces to separate parenthesis from the keywords with spaces.
 
     Reasoning:
         Some people use ``return`` and ``yield`` keywords as functions.
         The same happened to good old ``print`` in Python2.
+
     Solution:
         Insert space symbol between keyword and open paren.
 
@@ -562,7 +577,7 @@ class ObjectInBaseClassesListViolation(ASTViolation):
     Reasoning:
         We should allow object only when
         we explicitly use it as a single parent class.
-        When there is an other class or there are multiple
+        When there is another class or there are multiple
         parents - we should not allow it for the consistency reasons.
 
     Solution:
@@ -592,7 +607,7 @@ class MultipleContextManagerAssignmentsViolation(ASTViolation):
 
     Reasoning:
         It is hard to distinguish whether ``as`` should unpack into
-        tuple, or we are just using two context managers.
+        tuple or we are just using two context managers.
 
     Solution:
         Use several context managers. Or explicit brackets.
@@ -627,7 +642,7 @@ class ParametersIndentationViolation(ASTViolation):
     Reasoning:
         It is really easy to spoil your perfect, readable code with
         incorrect multi-line parameters indentation.
-        Since, it is really easy to style them in any of 100 possible ways.
+        Since it is really easy to style them in any of 100 possible ways.
         We enforce a strict rule about how it is possible to write these
         multi-line parameters.
 
@@ -734,7 +749,7 @@ class WrongBracketPositionViolation(TokenizeViolation):
 
     Solution:
         Place bracket on the same line, when a single line expression.
-        Or place bracket on a new line when a multi-line expression.
+        Or place the bracket on a new line when a multi-line expression.
 
     Example::
 
@@ -837,3 +852,224 @@ class UppercaseStringModifierViolation(TokenizeViolation):
 
     error_template = 'Found uppercase string modifier: {0}'
     code = 321
+
+
+@final
+class IncorrectMultilineStringViolation(TokenizeViolation):
+    '''
+    Forbids to use triple quotes for singleline strings.
+
+    Reasoning:
+        String quotes should be consistent.
+
+    Solution:
+        Use single quotes for single-line strings.
+        Triple quotes are only allowed for real multiline strings.
+
+    Example::
+
+        # Correct:
+        single_line = 'abc'
+        multiline = """
+            one
+            two
+        """
+
+        # Wrong:
+        some_string = """abc"""
+        some_bytes = b"""123"""
+
+    Docstrings are ignored from this rule.
+    You must use triple quotes strings for docstrings.
+
+    .. versionadded:: 0.7.0
+
+    '''
+
+    error_template = 'Found incorrect multi-line string'
+    code = 322
+
+
+@final
+class EmptyLineAfterCodingViolation(TokenizeViolation):
+    """
+    Enforces to have an extra empty line after the ``coding`` comment.
+
+    Reasoning:
+        This is done for pure consistency.
+
+    Solution:
+        Add an empty line between ``coding`` magic comment and your code.
+
+    Example::
+
+        # Correct:
+        # coding: utf-8
+
+        SOME_VAR = 1
+
+        # Wrong:
+        # coding: utf-8
+        SOME_VAR = 1
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = (
+        'Found missing empty line between `coding` magic comment and code'
+    )
+    code = 323
+
+
+@final
+class InconsistentReturnViolation(ASTViolation):
+    """
+    Enforces to have consistent ``return`` statements.
+
+    Rules are:
+    1. if any ``return`` has a value, all ``return`` nodes should have a value
+    2. do not place ``return`` without value at the end of a function
+
+    This rule respects ``mypy`` style of placing ``return`` statements.
+    There should be no conflict with these two checks.
+
+    Reasoning:
+        This is done for pure consistency and readability of your code.
+        Eventually, this rule may also find some bugs in your code.
+
+    Solution:
+        Add or remove values from the ``return`` statements
+        to make them consistent.
+        Remove ``return`` statement from the function end.
+
+    Example::
+
+        # Correct:
+        def function():
+            if some:
+                return 2
+            return 1
+
+        # Wrong:
+        def function():
+            if some:
+                return
+            return 1
+
+        def function():
+            if some:
+                print(some)
+            return
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found inconsistent `return` statement'
+    code = 324
+
+
+@final
+class InconsistentYieldViolation(ASTViolation):
+    """
+    Enforces to have consistent ``yield`` statements.
+
+    Rules are:
+    1. if any ``yield`` has a value, all ``yield`` nodes should have a value
+
+    This rule respects ``mypy`` style of placing ``yield`` statements.
+    There should be no conflict with these two checks.
+
+    Reasoning:
+        This is done for pure consistency and readability of your code.
+        Eventually, this rule may also find some bugs in your code.
+
+    Solution:
+        Add or remove values from the ``yield`` statements
+        to make them consistent.
+
+    Example::
+
+        # Correct:
+        def function():
+            if some:
+                yield 2
+            yield 1
+
+        # Wrong:
+        def function():
+            if some:
+                yield
+            yield 1
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found inconsistent `yield` statement'
+    code = 325
+
+
+@final
+class ImplicitStringConcatenationViolation(TokenizeViolation):
+    """
+    Forbids to use implicit string contacatenation.
+
+    Reasoning:
+        This is error-prone, since you can possible miss a comma
+        in a collection of string and get an implicit concatenation.
+        And because there are different and safe ways to do the same thing
+        it is better to use them instead.
+
+    Solution:
+        Use ``+`` or ``.format()`` to join strings.
+
+    Example::
+
+        # Correct:
+        text = 'first' + 'second'
+
+        # Wrong:
+        text = 'first' 'second'
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found implicit string concatenation'
+    code = 326
+
+
+@final
+class UselessContinueViolation(ASTViolation):
+    """
+    Forbids to use meaningless ``continue`` node in loops.
+
+    Reasoning:
+        Placing this keyword in the end of any loop won't make any difference
+        to your code. And we prefer not to have meaningless
+        constructs in our code.
+
+    Solution:
+        Remove useless ``continue`` node from the loop.
+
+    Example::
+
+        # Correct:
+        for number in [1, 2, 3]:
+            if number < 2:
+                continue
+            print(number)
+
+        # Wrong:
+        for number in [1, 2, 3]:
+            print(number)
+            continue
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found useless `continue` at the end of the loop'
+    code = 327

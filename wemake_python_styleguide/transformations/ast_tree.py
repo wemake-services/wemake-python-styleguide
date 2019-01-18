@@ -8,6 +8,10 @@ from wemake_python_styleguide.transformations.ast.bugfixes import (
     fix_async_offset,
     fix_line_number,
 )
+from wemake_python_styleguide.transformations.ast.enhancements import (
+    set_if_chain,
+    set_node_context,
+)
 
 
 class _ClassVisitor(ast.NodeVisitor):
@@ -62,15 +66,25 @@ def transform(tree: ast.AST) -> ast.AST:
     Mutates the given ``ast`` tree.
 
     Applies all possible tranformations.
+
+    Ordering:
+    - initial ones
+    - bugfixes
+    - enhancements
+
     """
     pipeline = (
-        # Should be the first ones:
+        # Initial, should be the first ones, ordering inside is important:
         _set_parent,
         _set_function_type,
 
-        # Order is not important:
+        # Bugfixes, order is not important:
         fix_async_offset,
         fix_line_number,
+
+        # Enhancements, order is not important:
+        set_node_context,
+        set_if_chain,
     )
 
     for tranformation in pipeline:

@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import ClassVar, Sequence
+from typing import ClassVar, List, Optional, Sequence
+
+import astor
 
 from wemake_python_styleguide.logics.naming.name_nodes import is_same_variable
 from wemake_python_styleguide.logics.nodes import is_literal
+from wemake_python_styleguide.logics.operators import unwrap_unary_node
 from wemake_python_styleguide.types import AnyIf, AnyNodes, final
+from wemake_python_styleguide.violations.best_practices import (
+    SimplifiableIfViolation,
+)
 from wemake_python_styleguide.violations.consistency import (
     ComparisonOrderViolation,
     ConstantComparisonViolation,
@@ -149,12 +155,17 @@ class WrongConditionalVisitor(BaseNodeVisitor):
     """Finds wrong conditional arguments."""
 
     _forbidden_nodes: ClassVar[AnyNodes] = (
+        # Constants:
+        ast.Num,
+        ast.Str,
+        ast.Bytes,
+        ast.NameConstant,
+
+        # Collections:
         ast.List,
         ast.Set,
-        ast.Num,
-        ast.NameConstant,
-        ast.Str,
         ast.Dict,
+        ast.Tuple,
     )
 
     def visit_any_if(self, node: AnyIf) -> None:
@@ -165,9 +176,49 @@ class WrongConditionalVisitor(BaseNodeVisitor):
             WrongConditionalViolation
 
         """
+        if isinstance(node, ast.If):
+            self._check_simplifiable_if(node)
+        else:
+            self._check_simplifiable_ifexpr(node)
+
         self._check_if_statement_conditional(node)
         self.generic_visit(node)
 
+    def _is_simplifiable_assign(
+        self,
+        node_body: List[ast.stmt],
+    ) -> Optional[str]:
+        wrong_length = len(node_body) != 1
+        if wrong_length or not isinstance(node_body[0], ast.Assign):
+            return None
+        if len(node_body[0].targets) != 1:
+            return None
+        if not isinstance(node_body[0].value, ast.NameConstant):
+            return None
+        if node_body[0].value.value is None:
+            return None
+        return astor.to_source(node_body[0].targets[0]).strip()
+
     def _check_if_statement_conditional(self, node: AnyIf) -> None:
-        if isinstance(node.test, self._forbidden_nodes):
+        real_node = unwrap_unary_node(node.test)
+        if isinstance(real_node, self._forbidden_nodes):
             self.add_violation(WrongConditionalViolation(node))
+
+    def _check_simplifiable_if(self, node: ast.If) -> None:
+        chain = getattr(node, 'wps_chain', None)
+        chained = getattr(node, 'wps_chained', None)
+        if chain is None and chained is None:
+            body_var = self._is_simplifiable_assign(node.body)
+            else_var = self._is_simplifiable_assign(node.orelse)
+            if body_var and body_var == else_var:
+                self.add_violation(SimplifiableIfViolation(node))
+
+    def _check_simplifiable_ifexpr(self, node: ast.IfExp) -> None:
+        conditions = set()
+        if isinstance(node.body, ast.NameConstant):
+            conditions.add(node.body.value)
+        if isinstance(node.orelse, ast.NameConstant):
+            conditions.add(node.orelse.value)
+
+        if conditions == {True, False}:
+            self.add_violation(SimplifiableIfViolation(node))

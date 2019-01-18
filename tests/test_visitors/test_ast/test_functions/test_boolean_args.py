@@ -79,4 +79,7 @@ def test_wrong_boolean_argument(
     visitor = WrongFunctionCallVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [BooleanPositionalArgumentViolation])
+    assert_errors(visitor, [
+        BooleanPositionalArgumentViolation,
+        BooleanPositionalArgumentViolation,
+    ])

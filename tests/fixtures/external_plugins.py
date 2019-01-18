@@ -4,9 +4,9 @@ import sys
 int = 12
 ++int
 
-some_list = list((node for node in 'abc'))
+extra_parens = list((node for node in 'abc'))
 some_tuple = (1, 2, )
-braking_pycodestyle=3
+breaking_pycodestyle=3
 
 # commented: str = 'comment'
 

@@ -156,6 +156,9 @@ MAGIC_NUMBERS_WHITELIST: Final = frozenset((
     60,  # seconds, minutes
 ))
 
+#: Maximum amount of ``# noqa`` comments per module.
+MAX_NOQA_COMMENTS: Final = 10
+
 
 # Internal variables
 # They are not publicly documented since they are not used by the end user.

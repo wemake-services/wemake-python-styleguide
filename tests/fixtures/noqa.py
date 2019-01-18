@@ -33,7 +33,7 @@ def some():  # noqa: Z110
     from my_module import some_function  # noqa: Z435
 
     class Nested(object):  # noqa: Z431
-        ...  # noqa: Z444
+        ...  # noqa: Z444, Z452
 
     def nested():  # noqa: Z430
         anti_z444 = 1
@@ -46,12 +46,17 @@ hasattr(object, 'some')  # noqa: Z421
 value = 1  # noqa: Z110
 x = 2  # noqa: Z111
 __private = 3  # noqa: Z112
-star_wars_episode_7 = 'the worst episode ever'  # noqa: Z114
+star_wars_episode_7 = 'the worst episode ever after 8'  # noqa: Z114
 consecutive__underscores = 4  # noqa: Z116
 cls = 5  # noqa: Z117
 __author__ = 'Nikita Sobolev'  # noqa: Z410
 extremely_long_name_that_needs_to_be_shortened_to_work_fine = 2  # noqa: Z118
 привет_по_русски = 'Hello, world!'  # noqa: Z119
+wrong_alias_ = 'some fake builtin alias'  # noqa: Z120
+
+def some_function():
+    _should_not_be_used = 1
+    print(_should_not_be_used)  # noqa: Z121
 
 some._execute()  # noqa: Z441
 
@@ -131,16 +136,27 @@ numbers = [
     if isinstance(target, int)
 ]
 
+try:  # noqa: Z225
+    do_some_bad()
+except ValueError:
+    print('value')
+except KeyError:
+    print('key')
+except IndexError as exc:
+    print('index', exc)
+except TypeError:
+    print('type')
+
 
 class BadClass:  # noqa: Z306
     UPPER_CASE_ATTRIBUTE = 12  # noqa: Z115
 
     @staticmethod  # noqa: Z433
-    def some_static():
+    def some_static(arg1):
         anti_z444 = 1
 
     @staticmethod  # noqa: Z433
-    async def some_async_static():
+    async def some_async_static(arg1):
         anti_z444 = 1
 
     def __del__(self, *_args, **_kwargs):  # noqa: Z434
@@ -208,6 +224,24 @@ def function(  # noqa: Z320
 
 
 string_modifier = R'(s)'  # noqa: Z321
+multiline_string = """abc"""  # noqa: Z322
+
+
+def function_with_wrong_return():
+    if some:
+        print(some)
+    return  # noqa: Z324
+
+
+def function_with_wrong_yield():
+    if some:
+        yield  # noqa: Z325
+    yield 1
+
+bad_concatenation = 'a' 'b'  # noqa: Z326
+
+for literal in bad_concatenation:  # noqa: Z327
+    continue
 
 try:
     anti_z444 = 1
@@ -261,3 +295,44 @@ except ValueError:
     anti_z444 = 1
 except ValueError:
     anti_z444 = 1
+
+iters = list((yield letter) for letter in 'ab')  # noqa: Z448
+some_set = {1, 1}  # noqa: Z449
+
+
+class MyBadException(BaseException):  # noqa: Z450
+    anti_z444 = 1
+
+
+some_if_expr = True if some_set else False  # noqa: Z451
+
+if some_if_expr:  # noqa: Z451
+    some_dict['x'] = True
+else:
+    some_dict['x'] = False
+
+
+class ClassWithWrongContents((lambda: object)()):  # noqa: Z454
+    __slots__ = ['a', 'a']  # noqa: Z455
+
+    for _ in range(1):  # noqa: Z452
+        anti_z444 = 1
+
+    def method_with_no_args():  # noqa: Z453
+        super(ClassWithWrongContents, self).method_with_no_args()  # noqa: Z456
+
+
+def redundant_returning_else():
+    if some_set:  # noqa: Z457
+        return some_set
+    else:
+        return TypeError
+
+
+def multiple_return_path():
+    try:  # noqa: Z458
+        return 1
+    except Exception:
+        return 2
+    else:
+        return 3

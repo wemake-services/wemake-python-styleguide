@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations.consistency import (
     BadNumberSuffixViolation,
 )
 from wemake_python_styleguide.visitors.tokenize.primitives import (
-    WrongPrimitivesVisitor,
+    WrongNumberTokenVisitor,
 )
 
 
@@ -32,7 +32,7 @@ def test_bad_number_suffixes(
     """Ensures that numbers with suffix not in lowercase raise a warning."""
     file_tokens = parse_tokens(mode(primitives_usages.format(number)))
 
-    visitor = WrongPrimitivesVisitor(default_options, file_tokens=file_tokens)
+    visitor = WrongNumberTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [BadNumberSuffixViolation])
@@ -60,7 +60,7 @@ def test_correct_number_suffixes(
     """Ensures that correct numbers are fine."""
     file_tokens = parse_tokens(mode(primitives_usages.format(number)))
 
-    visitor = WrongPrimitivesVisitor(default_options, file_tokens=file_tokens)
+    visitor = WrongNumberTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -91,7 +91,7 @@ def test_similar_strings(
     """Ensures that strings are fine."""
     file_tokens = parse_tokens(mode(code.format(number)))
 
-    visitor = WrongPrimitivesVisitor(default_options, file_tokens=file_tokens)
+    visitor = WrongNumberTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [])

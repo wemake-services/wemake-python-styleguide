@@ -75,7 +75,9 @@ some_dict[{0}]
     0.5,
     8.3,
     10,
-    1000,
+    765,
+    '0x20',
+    '0o12',
 ])
 def test_magic_number(
     assert_errors,
@@ -141,11 +143,12 @@ def test_magic_number_whitelist(
     dict_key,
 ])
 @pytest.mark.parametrize('number', [
-    -0.3,
-    999,
-    10.0,
-    0.0,
-    -134,
+    '-0.3',
+    '999',
+    '10.0',
+    '0.0',
+    '--134',
+    '8.3',
 ])
 def test_magic_number_warning(
     assert_errors,
@@ -163,4 +166,38 @@ def test_magic_number_warning(
     visitor.run()
 
     assert_errors(visitor, [MagicNumberViolation])
-    assert_error_text(visitor, str(abs(number)))
+    assert_error_text(visitor, number.replace('-', ''))
+
+
+@pytest.mark.parametrize('code', [
+    assignment_binop,
+    function_call,
+    function_call_named,
+    expression,
+    inside_function,
+    inside_class,
+    inside_method,
+    list_index,
+    dict_key,
+])
+@pytest.mark.parametrize('number', [
+    '0b1111',
+    '0x20',
+    '-0o15',
+])
+def test_magic_number_octal_warning(
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    code,
+    number,
+    default_options,
+    mode,
+):
+    """Testing that magic numbers in this code are warnings."""
+    tree = parse_ast_tree(mode(code.format(number)))
+
+    visitor = MagicNumberVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [MagicNumberViolation])

@@ -1,14 +1,22 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import ClassVar, Iterable, Optional
+from collections import Counter
+from typing import ClassVar, Iterable, List
+
+import astor
 
 from wemake_python_styleguide import constants
+from wemake_python_styleguide.logics.operators import (
+    get_parent_ignoring_unary,
+    unwrap_unary_node,
+)
 from wemake_python_styleguide.types import AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
     IncorrectUnpackingViolation,
     MagicNumberViolation,
     MultipleAssignmentsViolation,
+    NonUniqueItemsInSetViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
     FormattedStringViolation,
@@ -51,27 +59,8 @@ class MagicNumberVisitor(BaseNodeVisitor):
         ast.Tuple,
     )
 
-    _proxy_parents: ClassVar[AnyNodes] = (
-        ast.UnaryOp,
-    )
-
-    def _get_real_parent(self, node: Optional[ast.AST]) -> Optional[ast.AST]:
-        """
-        Returns real number's parent.
-
-        What can go wrong?
-
-        1. Number can be negative: ``x = -1``,
-          so ``1`` has ``UnaryOp`` as parent, but should return ``Assign``
-
-        """
-        parent = getattr(node, 'wps_parent', None)
-        if isinstance(parent, self._proxy_parents):
-            return self._get_real_parent(parent)
-        return parent
-
     def _check_is_magic(self, node: ast.Num) -> None:
-        parent = self._get_real_parent(node)
+        parent = get_parent_ignoring_unary(node)
         if isinstance(parent, self._allowed_parents):
             return
 
@@ -153,4 +142,44 @@ class WrongAssignmentVisitor(BaseNodeVisitor):
         self._check_assign_targets(node)
         if isinstance(node.targets[0], ast.Tuple):
             self._check_unpacking_targets(node, node.targets[0].elts)
+        self.generic_visit(node)
+
+
+@final
+class WrongCollectionVisitor(BaseNodeVisitor):
+    """Ensures that collection definitions are correct."""
+
+    _elements_in_sets: ClassVar[AnyNodes] = (
+        ast.Str,
+        ast.Bytes,
+        ast.Num,
+        ast.NameConstant,
+        ast.Name,
+    )
+
+    def _report_set_elements(self, node: ast.Set, elements: List[str]) -> None:
+        for element, count in Counter(elements).items():
+            if count > 1:
+                self.add_violation(
+                    NonUniqueItemsInSetViolation(node, text=element),
+                )
+
+    def _check_set_elements(self, node: ast.Set) -> None:
+        elements: List[str] = []
+        for set_item in node.elts:
+            real_set_item = unwrap_unary_node(set_item)
+            if isinstance(real_set_item, self._elements_in_sets):
+                source = astor.to_source(set_item)
+                elements.append(source.strip().strip('(').strip(')'))
+        self._report_set_elements(node, elements)
+
+    def visit_Set(self, node: ast.Set) -> None:
+        """
+        Ensures that set literals do not have any duplicate items.
+
+        Raises:
+            NonUniqueItemsInSetViolation
+
+        """
+        self._check_set_elements(node)
         self.generic_visit(node)

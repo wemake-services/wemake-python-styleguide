@@ -6,6 +6,7 @@
 [![Python Version](https://img.shields.io/pypi/pyversions/wemake-python-styleguide.svg)](https://pypi.org/project/wemake-python-styleguide/)
 [![Documentation Status](https://readthedocs.org/projects/wemake-python-styleguide/badge/?version=latest)](https://wemake-python-styleguide.readthedocs.io/en/latest/?badge=latest)
 [![Dependencies Status](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen.svg)](https://github.com/wemake-services/wemake-python-styleguide/pulls?utf8=%E2%9C%93&q=is%3Apr%20author%3Aapp%2Fdependabot)
+[![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
 
 ---
 
@@ -69,8 +70,8 @@ We have several primary objectives:
 
 0. Enforce `python3.6+` usage
 1. Significantly reduce complexity of your code and make it more maintainable
-2. Enforce "There should be one-- and preferably only one --obvious way to do it" rule
-3. Create consistent coding and naming style
+2. Enforce "There should be one-- and preferably only one --obvious way to do it" rule to coding and naming styles
+3. Protect developers from possible errors and enforce best practices
 
 You can find all error codes and plugins [in the docs](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/violations/index.html).
 
@@ -79,15 +80,40 @@ You can find all error codes and plugins [in the docs](https://wemake-python-sty
 
 We are *not* planning to do the following things:
 
-0. Assume or check types, use `mypy` instead
+0. Assume or check types, use [`mypy`](https://github.com/python/mypy) instead
 1. Reformat code, since we believe that developers should do that
 2. Check for `SyntaxError` or exceptions, write tests instead
 3. Appeal to everyone, this is **our** linter. But, you can [switch off](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage.html#ignoring-violations) any rules that you don't like
 
 
+## Show your style
+
+If you use our linter - it means that your code is awesome.
+You can be proud of it!
+And you should share your accomplishment with others
+by including a badge to your `README` file.
+
+It looks like this:
+
+[![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
+
+### Markdown
+
+```
+[![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
+```
+
+### Restructured text
+
+```
+.. image:: https://img.shields.io/badge/style-wemake-000000.svg
+    :target: https://github.com/wemake-services/wemake-python-styleguide
+```
+
+
 ## Contributing
 
-We warmly welcome any contributions!
+We warmly welcome all contributions!
 
 See ["Contributing"](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/contributing.html)
 section in the documentation if you want to contribute.

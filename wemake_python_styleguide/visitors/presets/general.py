@@ -4,13 +4,15 @@ from wemake_python_styleguide.visitors.ast import (
     annotations,
     attributes,
     builtins,
+    classes,
     comparisons,
+    conditions,
     functions,
     keywords,
+    loops,
     naming,
     statements,
 )
-from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
 from wemake_python_styleguide.visitors.ast.imports import WrongImportVisitor
 from wemake_python_styleguide.visitors.ast.modules import (
     EmptyModuleContentsVisitor,
@@ -27,15 +29,18 @@ GENERAL_PRESET = (
 
     keywords.WrongRaiseVisitor,
     keywords.WrongKeywordVisitor,
-    keywords.WrongComprehensionVisitor,
-    keywords.WrongLoopVisitor,
     keywords.WrongTryExceptVisitor,
     keywords.WrongContextManagerVisitor,
+    keywords.ConsistentReturningVisitor,
+
+    loops.WrongComprehensionVisitor,
+    loops.WrongLoopVisitor,
 
     attributes.WrongAttributeVisitor,
     annotations.WrongAnnotationVisitor,
 
     functions.WrongFunctionCallVisitor,
+    functions.FunctionDefinitionVisitor,
 
     WrongImportVisitor,
 
@@ -46,13 +51,18 @@ GENERAL_PRESET = (
     builtins.MagicNumberVisitor,
     builtins.WrongStringVisitor,
     builtins.WrongAssignmentVisitor,
+    builtins.WrongCollectionVisitor,
 
     comparisons.WrongConditionalVisitor,
     comparisons.ComparisonSanityVisitor,
     comparisons.WrongComparisionOrderVisitor,
 
+    conditions.IfStatementVisitor,
+
     # Classes:
-    WrongClassVisitor,
+    classes.WrongClassVisitor,
+    classes.WrongMethodVisitor,
+    classes.WrongSlotsVisitor,
 
     # Modules:
     WrongModuleNameVisitor,

@@ -6,9 +6,68 @@ We used to have incremental versioning before `0.1.0`.
 
 ## WIP
 
+### Features
+
+- Now raising a violation for every `bool` non-keyword argument
+  and showing better error message
+- Changes how `max-arguments` are counted.
+  Now `self`, `cls`, and `mcs` count as real arguments
+- Forbids to use `yield` inside comprehensions
+- Forbids to have single line triple-quoted string assignments
+- Forbids to have same items in `set` literals
+- Forbids to subclass `BaseException`
+- Forbids to use simplifiable `if` expressions and nodes
+- Forbids to have incorrect nodes in `class` body
+- Forbids to have methods without any arguments
+- Forbids to have incorrect base classes nodes
+- Enforces consistent `__slots__` syntax
+- Forbids to use names with trailing `_` without a reason
+- Forbids to use `super()` with arguments or outside of methods
+- Forbids to have too many `except` cases
+- Enforces to have an empty line after `coding` comment
+- Forbids to use too many `# noqa` comments
+- Forbids to use variables declared as unused
+- Forbids to use redundant `else` blocks
+- Forbids to use inconsistent `return` and `yield` statements
+- Forbids to use multiple `return` path in `try`/`expect`/`finally`
+- Forbids to use implicit string concatenation
+- Forbids to use useless `continue` nodes inside the loops
+
+### Bugfixes
+
+- Fixes a lot of rules that were ignoring `Bytes` node as constant type
+- Fixes location of the `BooleanPositionalArgumentViolation`
+- Fixes argument count issue with `async` functions
+- Fixes `WrongConditionalVisitor` not detecting `tuple` as constants
+- Fixes `WrongConditionalVisitor` not detecting negative numbers as constants
+- Fixes some magic number that were not detected based on their location
+- Fixes error when regular functions named as blacklisted
+  magic methods were forbidden, now we check for methods only
+- Fixes error when strings like `U'some'` was not triggering unicode violation
+- Fixes error when string like `U'some'` was not triggering modifier violation
+
 ### Misc
 
-- Adds `safety` and other dependency checks to CI process
+- Adds `safety` and other dependency checks to the CI process
+- Improves tests: now `tokenize` works differently inside tests
+- Improves tests: now testing more brackets cases aka "magic coverage bug"
+- Improves docs: adds new badge about our code style
+- Refactoring: trying to use `astor` where possible to simplify the codebase
+- Refactoring: introduces some new `transformations`
+- Refactoring: now we do not have any magical text casts for violations
+- Improves tests: changes how `flake8` is executed, now it is twice as fast
+- Improves docs: now linting `conf.py` with `flake8`
+- Improves tests: now we check that ignored violation are raised with `noqa`
+- Improves docs: we have added a special graph to show our architecure
+- Improves docs: we now have a clean page for `checker` without extra junk
+- Improves docs: we now have a tutorial for creating new rules
+
+
+## Version 0.6.2
+
+### Bugfixes
+
+- Fixes a [crash](https://github.com/wemake-services/wemake-python-styleguide/issues/423) with class attributes assignment
 
 
 ## Version 0.6.3
@@ -36,7 +95,7 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
-- Adds `flake8-per-file-ignore` dependency
+- Adds `flake8-per-file-ignore` plugin dependency
 - Adds default values to the `flake8 --help` output
 - Adds `do` as a restricted variable name
 - Forbids multiple assignment targets for context managers
@@ -411,7 +470,7 @@ There are no new features introduced.
 ### Bugfixes
 
 - Fixes `Option` class to have have incorrect `type` field, now using strings
-- Fixes that `WrongStringVisitor` was not activated
+- Fixes that `WrongStringTokenVisitor` was not activated
 
 ### Misc
 

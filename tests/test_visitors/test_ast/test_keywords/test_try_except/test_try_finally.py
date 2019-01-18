@@ -32,6 +32,17 @@ finally:
     ...
 """
 
+check_finally_with_except_else = """
+try:
+    ...
+except Exception:
+    ...
+else:
+    ...
+finally:
+    ...
+"""
+
 
 @pytest.mark.parametrize('code', [
     wrong_try_example,
@@ -54,6 +65,7 @@ def test_wrong_finally(
 @pytest.mark.parametrize('code', [
     right_try_example,
     check_finally_with_except,
+    check_finally_with_except_else,
 ])
 def test_correct_finally(
     assert_errors,

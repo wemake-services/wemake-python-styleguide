@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations.consistency import (
     PartialFloatViolation,
 )
 from wemake_python_styleguide.visitors.tokenize.primitives import (
-    WrongPrimitivesVisitor,
+    WrongNumberTokenVisitor,
 )
 
 
@@ -30,7 +30,7 @@ def test_partial_float(
     """Ensures that partial floats raise a warning."""
     file_tokens = parse_tokens(mode(primitives_usages.format(primitive)))
 
-    visitor = WrongPrimitivesVisitor(default_options, file_tokens=file_tokens)
+    visitor = WrongNumberTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [PartialFloatViolation])
@@ -54,7 +54,7 @@ def test_correct_float(
     """Ensures that correct floats are fine."""
     file_tokens = parse_tokens(mode(primitives_usages.format(primitive)))
 
-    visitor = WrongPrimitivesVisitor(default_options, file_tokens=file_tokens)
+    visitor = WrongNumberTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [])

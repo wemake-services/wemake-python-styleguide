@@ -5,7 +5,7 @@ from typing import ClassVar, List, Optional, Sequence, Union
 
 from wemake_python_styleguide.logics.collections import normalize_dict_elements
 from wemake_python_styleguide.logics.functions import get_all_arguments
-from wemake_python_styleguide.logics.nodes import is_doc_string
+from wemake_python_styleguide.logics.nodes import get_parent, is_doc_string
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
     StatementHasNoEffectViolation,
@@ -114,13 +114,16 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
             return
 
         if is_first and is_doc_string(node):
-            parent = getattr(node, 'wps_parent', None)
-            if isinstance(parent, self._have_doc_strings):
+            if isinstance(get_parent(node), self._have_doc_strings):
                 return
 
         self.add_violation(StatementHasNoEffectViolation(node))
 
-    def _check_internals(self, body: List[ast.stmt]) -> None:
+    def _check_internals(
+        self,
+        node: StatementWithBody,
+        body: List[ast.stmt],
+    ) -> None:
         after_closing_node = False
         for index, statement in enumerate(body):
             if after_closing_node:
@@ -140,11 +143,11 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
             UnreachableCodeViolation
 
         """
-        self._check_internals(node.body)
+        self._check_internals(node, node.body)
         if isinstance(node, self._nodes_with_orelse):
-            self._check_internals(node.orelse)
+            self._check_internals(node, node.orelse)
         if isinstance(node, ast.Try):
-            self._check_internals(node.finalbody)
+            self._check_internals(node, node.finalbody)
 
         self.generic_visit(node)
 

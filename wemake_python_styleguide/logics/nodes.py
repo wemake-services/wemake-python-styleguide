@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Tuple, Type
+from typing import Optional, Union
+
+from wemake_python_styleguide.types import AnyNodes
 
 
 def is_literal(node: ast.AST) -> bool:
@@ -19,7 +21,7 @@ def is_literal(node: ast.AST) -> bool:
         return True
 
 
-def is_contained(node: ast.AST, to_check: Tuple[Type[ast.AST], ...]) -> bool:
+def is_contained(node: ast.AST, to_check: Union[AnyNodes, type]) -> bool:
     """Checks whether node does contain given subnode types."""
     for child in ast.walk(node):
         if isinstance(child, to_check):
@@ -37,3 +39,8 @@ def is_doc_string(node: ast.stmt) -> bool:
     if not isinstance(node, ast.Expr):
         return False
     return isinstance(node.value, ast.Str)
+
+
+def get_parent(node: ast.AST) -> Optional[ast.AST]:
+    """Returns the parent node or ``None`` if node has no parent."""
+    return getattr(node, 'wps_parent', None)

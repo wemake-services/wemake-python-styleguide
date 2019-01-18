@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 """
-These checks ensures that you follow the best practices.
+These checks ensure that you follow the best practices.
 
 The source for these best practices is hidden inside countless hours
 we have spent debugging software or reviewing it.
 
-How do we find an inspiration for new rules?
+How do we find inspiration for new rules?
 We find some ugly code during code reviews and audits.
-Then we forbid to use it forever.
+Then we forbid to use this bad code forever.
 So, this error will never return to our codebase.
 
 .. currentmodule:: wemake_python_styleguide.violations.best_practices
@@ -21,6 +21,7 @@ Summary
 
    WrongMagicCommentViolation
    WrongDocCommentViolation
+   OveruseOfNoqaCommentViolation
    WrongModuleMetadataViolation
    EmptyModuleViolation
    InitModuleHasLogicViolation
@@ -48,12 +49,24 @@ Summary
    MultipleAssignmentsViolation
    IncorrectUnpackingViolation
    DuplicateExceptionViolation
+   YieldInComprehensionViolation
+   NonUniqueItemsInSetViolation
+   BaseExceptionSubclassViolation
+   SimplifiableIfViolation
+   IncorrectClassBodyContentViolation
+   MethodWithoutArgumentsViolation
+   IncorrectBaseClassViolation
+   IncorrectSlotsViolation
+   IncorrectSuperCallViolation
+   RedundantReturningElseViolation
+   TryExceptMultipleReturnPathViolation
 
 Comments
 --------
 
 .. autoclass:: WrongMagicCommentViolation
 .. autoclass:: WrongDocCommentViolation
+.. autoclass:: OveruseOfNoqaCommentViolation
 
 Modules
 -------
@@ -92,6 +105,17 @@ Design
 .. autoclass:: MultipleAssignmentsViolation
 .. autoclass:: IncorrectUnpackingViolation
 .. autoclass:: DuplicateExceptionViolation
+.. autoclass:: YieldInComprehensionViolation
+.. autoclass:: NonUniqueItemsInSetViolation
+.. autoclass:: BaseExceptionSubclassViolation
+.. autoclass:: SimplifiableIfViolation
+.. autoclass:: IncorrectClassBodyContentViolation
+.. autoclass:: MethodWithoutArgumentsViolation
+.. autoclass:: IncorrectBaseClassViolation
+.. autoclass:: IncorrectSlotsViolation
+.. autoclass:: IncorrectSuperCallViolation
+.. autoclass:: RedundantReturningElseViolation
+.. autoclass:: TryExceptMultipleReturnPathViolation
 
 """
 
@@ -178,6 +202,32 @@ class WrongDocCommentViolation(TokenizeViolation):
     error_template = 'Found wrong doc comment'
 
 
+@final
+class OveruseOfNoqaCommentViolation(SimpleViolation):
+    """
+    Forbids to use too many ``# noqa`` comments.
+
+    We check this count on a per-module basis.
+    We use :str:`wemake_python_styleguide.constants.MAX_NOQA_COMMENTS`
+    as a default value.
+
+    Reasoning:
+        Having too many ``# noqa`` comments with make your code
+        less readable and clearly indicates that there's something
+        wrong with it.
+
+    Solution:
+        Refactor your code to much the style.
+        Or use a config file to switch off some checks.
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found `noqa` comments overuse: {0}'
+    code = 402
+
+
 # Modules:
 
 @final
@@ -219,7 +269,7 @@ class EmptyModuleViolation(SimpleViolation):
     Forbids to have empty modules.
 
     Reasoning:
-        Why is it even there? Do not polute your project with empty files.
+        Why is it even there? Do not pollute your project with empty files.
 
     Solution:
         If you have an empty module there are two ways to handle that:
@@ -461,7 +511,7 @@ class BooleanPositionalArgumentViolation(ASTViolation):
 
     """
 
-    error_template = 'Found boolean non-keyword argument'
+    error_template = 'Found boolean non-keyword argument: {0}'
     code = 425
 
 
@@ -621,7 +671,7 @@ class BadMagicMethodViolation(ASTViolation):
         magic methods related to it.
 
     Solution:
-        Refactor you code to use custom methods instead.
+        Refactor your code to use custom methods instead.
         It will give more context to your app.
 
     See
@@ -645,8 +695,8 @@ class NestedImportViolation(ASTViolation):
     Forbids to have nested imports in functions.
 
     Reasoning:
-        Usually nested imports are used to fix the import cycle.
-        So, nested imports show that there's an issue with you design.
+        Usually, nested imports are used to fix the import cycle.
+        So, nested imports show that there's an issue with your design.
 
     Solution:
         You don't need nested imports, you need to refactor your code.
@@ -759,7 +809,7 @@ class ReassigningVariableToItselfViolation(ASTViolation):
 
     Reasoning:
         There is no need to do that.
-        Generally it is an indication of some error or just dead code.
+        Generally, it is an indication of some errors or just dead code.
 
     Example::
 
@@ -786,7 +836,7 @@ class YieldInsideInitViolation(ASTViolation):
 
     Reasoning:
         ``__init__`` should be used to initialize new objects.
-        It shouldn't ``yield`` anything, because it should return ``None``
+        It shouldn't ``yield`` anything because it should return ``None``
         by the convention.
 
     Example::
@@ -870,8 +920,8 @@ class ProtectedAttributeViolation(ASTViolation):
         self.container._internal = 10
 
     Note, that it is possible to use protected attributes with ``self``
-    and ``cls`` as base names. We allow this so you can create and use
-    protected attributes and methods inside the class context.
+    and ``cls`` as base names. We allow this so you can create and
+    use protected attributes and methods inside the class context.
     This is how protected attributes should be used.
 
     .. versionadded:: 0.3.0
@@ -923,13 +973,13 @@ class UnreachableCodeViolation(ASTViolation):
     Forbids to have unreachable code.
 
     What is unreachable code? It is some lines of code that
-    can not be executed by python's interpreter.
+    cannot be executed by python's interpreter.
 
     This is probably caused by ``return`` or ``raise`` statements.
     However, we can not cover 100% of truly unreachable code by this rule.
     This happens due to the dynamic nature of python.
     For example, detecting that ``1 / some_value`` would sometimes raise
-    an exception is too complicated and is out of scope of this rule.
+    an exception is too complicated and is out of the scope of this rule.
 
     Reasoning:
         Having dead code in your project is an indicator that you
@@ -938,7 +988,7 @@ class UnreachableCodeViolation(ASTViolation):
         It also demotivates team members.
 
     Solution:
-        Delete any unreachable code your have.
+        Delete any unreachable code you have.
         Or refactor it, if this happens by your mistake.
 
     Example::
@@ -967,9 +1017,9 @@ class StatementHasNoEffectViolation(ASTViolation):
     Forbids to have statements that do nothing.
 
     Reasoning:
-        Statements that just access the value,
-        or expressions used as statements indicate that your code
-        contains dead lines. They just pollute your codebase and do nothing.
+        Statements that just access the value or expressions
+        used as statements indicate that your code
+        contains deadlines. They just pollute your codebase and do nothing.
 
     Solution:
         Refactor your code in case it was a typo or error.
@@ -1089,3 +1139,397 @@ class DuplicateExceptionViolation(ASTViolation):
 
     error_template = 'Found duplicate exception: {0}'
     code = 447
+
+
+@final
+class YieldInComprehensionViolation(ASTViolation):
+    """
+    Forbids to have ``yield`` keyword inside comprehensions.
+
+    Reasoning:
+        Having the ``yield`` keyword inside comprehensions is error-prone.
+        You can shoot yourself in a foot by
+        an inaccurate usage of this feature.
+
+    Solution:
+        Use regular ``for`` loops with ``yield`` keywords.
+        Or create a separate generator function.
+
+    Example::
+
+        # Wrong:
+        >>> list((yield letter) for letter in 'ab')
+        ['a', None, 'b', None]
+
+        >>> list([(yield letter) for letter in 'ab'])
+        ['a', 'b']
+
+
+    See also:
+        https://github.com/satwikkansal/wtfPython#-yielding-none
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found `yield` inside comprehension'
+    code = 448
+
+
+@final
+class NonUniqueItemsInSetViolation(ASTViolation):
+    """
+    Forbids to have duplicate items in ``set`` literals.
+
+    Reasoning:
+        When you explicitly put duplicate items in ``set`` literals
+        it just does not make any sense. Since ``set`` can not contain
+        duplicate items and they will be removed anyway.
+
+    Solution:
+        Remove the duplicate items.
+
+    Example::
+
+        # Correct:
+        some_set = {'a', variable1}
+        some_set = {make_call(), make_call()}
+
+        # Wrong:
+        some_set = {'a', 'a', variable1, variable1}
+
+    Things that we consider duplicates: builtins and variables.
+    These nodes are not checked because they may return different results:
+
+    - function and method calls
+    - comprehensions
+    - attributes
+    - subscribe operations
+    - containers: lists, dicts, tuples, sets
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found non-unique item in `set` literal: {0}'
+    code = 449
+
+
+@final
+class BaseExceptionSubclassViolation(ASTViolation):
+    """
+    Forbids to have duplicate items in ``set`` literals.
+
+    Reasoning:
+        ``BaseException`` is a special case:
+        it is not designed to be extended by users.
+        A lot of your ``except Exception`` cases won't work.
+        That's incorrect and dangerous.
+
+    Solution:
+        Change the base class to ``Exception``.
+
+    Example::
+
+        # Correct:
+        class MyException(Exception):
+            ...
+
+        # Wrong:
+        class MyException(BaseException):
+            ...
+
+    See also:
+        https://docs.python.org/3/library/exceptions.html#exception-hierarchy
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found exception inherited from `BaseException`'
+    code = 450
+
+
+@final
+class SimplifiableIfViolation(ASTViolation):
+    """
+    Forbids to have simplifiable ``if`` conditions.
+
+    Reasoning:
+        This complex construction can cause frustration among other developers.
+        It is longer, more verbose, and more complex.
+
+    Solution:
+        Use ``bool()`` to convert test values to boolean values.
+        Or just leave it as it is in case
+        when your test already returns a boolean value.
+        Use can also use ``not`` keyword to switch boolean values.
+
+    Example::
+
+        # Correct:
+        my_bool = bool(some_call())
+        other_value = 8 if some_call() else None
+
+        # Wrong:
+        my_bool = True if some_call() else False
+
+    We only check ``if`` nodes where ``True`` and ``False`` values are used.
+    We check both ``if`` nodes and ``if`` expressions.
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found simplifiable `if` condition'
+    code = 451
+
+
+@final
+class IncorrectClassBodyContentViolation(ASTViolation):
+    """
+    Forbids to use incorrect nodes inside ``class`` definitions.
+
+    Reasoning:
+        Python allows us to have conditions, context managers,
+        and even infinite loops inside ``class`` definitions.
+        On the other hand, only methods, attributes, and docstrings make sense.
+        So, we discourage using anything except these nodes in class bodies.
+
+    Solution:
+        If you have complex logic inside your class definition,
+        most likely that you do something wrong.
+        There are different options to refactor this mess.
+        You can try metaclasses, decorators, builders, and other patterns.
+
+    Example::
+
+        # Wrong:
+        class Test(object):
+            for _ in range(10):
+                print('What?!')
+
+    We also allow some nested classes,
+    check out :class:`NestedClassViolation` for more information.
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found incorrect node inside `class` body'
+    code = 452
+
+
+@final
+class MethodWithoutArgumentsViolation(ASTViolation):
+    """
+    Forbids to have methods without any arguments.
+
+    Reasoning:
+        Methods withour arguments are allowed to be defined,
+        but almost impossible to use.
+        Furthermore, they don't have an access to ``self``,
+        so can not access the inner state of the object.
+        It might be an intentional design or just a typo.
+
+    Solution:
+        Move any methods with arguments to raw functions.
+        Or just add an argument if it is actually required.
+
+    Example::
+
+        # Correct:
+        class Test(object):
+            def method(self): ...
+
+        # Wrong:
+        class Test(object):
+            def method(): ...
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found method without arguments: {0}'
+    code = 453
+
+
+@final
+class IncorrectBaseClassViolation(ASTViolation):
+    """
+    Forbids to have methods without any arguments.
+
+    Reasoning:
+        In Python you can specify anything in the base classes slot.
+        In runtime this expression will be evaluated and executed.
+        We need to prevent dirty hacks in this field.
+
+    Solution:
+        Use only raw names to set your base classes.
+
+    Example::
+
+        # Correct:
+        class Test(module.ObjectName, MixinName, keyword=True): ...
+
+        # Wrong:
+        class Test((lambda: object)()): ...
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found incorrect base class'
+    code = 454
+
+
+@final
+class IncorrectSlotsViolation(ASTViolation):
+    """
+    Forbids to have incorrect ``__slots__`` definition.
+
+    Reasoning:
+        ``__slots__`` is a very special attribute.
+        It completely changes your class. So, we need to be careful with it.
+        We should not allow anything rather than tuples to define slots,
+        we also need to check that fields defined in ``__slots__`` are unique.
+
+    Solution:
+        Use tuples with unique elements to define ``__slots__`` attribute.
+
+    Example::
+
+        # Correct:
+        class Test(object):
+            __slots__ = ('field1', 'field2')
+
+        class Other(Test):
+            __slots__ = Test.__slots__ + ('child',)
+
+        # Wrong:
+        class Test(object):
+            __slots__ = ['field1', 'field2', 'field2']
+
+    Note, that we do ignore all complex expressions for this field.
+    So, we only check raw literals.
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found incorrect `__slots__` syntax'
+    code = 455
+
+
+@final
+class IncorrectSuperCallViolation(ASTViolation):
+    """
+    Forbids to use ``super()`` with parameters or outside of methods.
+
+    Reasoning:
+        ``super()`` is a very special function.
+        It implicitly relies on the context where it is used
+        and parameters passed to it.
+        So, we should be very careful with parameters and context.
+
+    Solution:
+        Use ``super()`` without arguments and only inside methods.
+
+    Example::
+
+        # Correct:
+        super().__init__()
+
+        # Wrong:
+        super(ClassName, self).__init__()
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found incorrect `super()` call: {0}'
+    code = 456
+
+
+@final
+class RedundantReturningElseViolation(ASTViolation):
+    """
+    Forbids to use redundant ``else`` cases in returning functions.
+
+    We check single ``if`` statements that all contain
+    ``return`` or ``raise`` or ``break`` statements with this rule.
+    We do not check ``if`` statements with ``elif`` cases.
+
+    Reasoning:
+        Using extra ``else`` creates a situation when
+        the whole node could and should be dropped
+        without any changes in logic.
+        So, we prefer to have less code than more code.
+
+    Solution:
+        Remove redundant ``else`` case.
+
+    Example::
+
+        # Correct:
+        def some_function():
+            if some_call():
+                return 'yeap'
+            return 'nope'
+
+        # Wrong:
+        def some_function():
+            if some_call():
+                raise ValueError('yeap')
+            else:
+                raise ValueError('nope')
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found redundant returning `else` statement'
+    code = 457
+
+
+@final
+class TryExceptMultipleReturnPathViolation(ASTViolation):
+    """
+    Forbids to use multiple ``return`` path with ``try`` / ``except`` case.
+
+    Reasoning:
+        The problem with ``return`` in ``else`` and ``finally``
+        is that it is impossible to say what value is going to be actually
+        returned without looking up the implementation details. Why?
+        Because ``return`` does not expect
+        that some other code will be executed after it.
+        But, ``finally`` is always executed, even after ``return``.
+        And ``else`` will not be executed when there are no exceptions
+        in ``try`` case and a ``return`` statement.
+
+    Solution:
+        Remove ``return`` from one of the cases.
+
+    Example::
+
+        # Wrong:
+        try:
+            return 1  # this line will never return
+        except Exception:
+            ...
+        finally:
+            return 2  # this line will actually return
+
+        try:
+            return 1  # this line will actually return
+        except ZeroDivisionError:
+            ...
+        else:
+            return 0  # this line will never return
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found `try`/`else`/`finally` with multiple return paths'
+    code = 458

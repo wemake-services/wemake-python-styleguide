@@ -24,10 +24,8 @@ from wemake_python_styleguide.violations import naming
 ])
 def test_module_names(filename, error, default_options):
     """Ensures that checker works with module names."""
-    module = ast.parse('')
     Checker.parse_options(default_options)
-    checker = Checker(tree=module, file_tokens=[], filename=filename)
-    _, _, error_text, _ = next(checker.run())
-    error_code = int(error_text[1:4])
+    checker = Checker(tree=ast.parse(''), file_tokens=[], filename=filename)
+    _line, _col, error_text, _type = next(checker.run())
 
-    assert error_code == error.code
+    assert int(error_text[1:4]) == error.code

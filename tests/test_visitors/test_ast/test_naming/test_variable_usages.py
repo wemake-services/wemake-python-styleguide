@@ -45,6 +45,8 @@ def function():
     'some__underscores',
     'camelCase',
     'UPPER_case',
+    'юникод',
+    'wrong_alias_',
 ])
 @pytest.mark.parametrize('code', [
     import_name,

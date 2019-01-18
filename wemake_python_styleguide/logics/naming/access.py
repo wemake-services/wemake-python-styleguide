@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from wemake_python_styleguide.constants import UNUSED_VARIABLE
+
 
 def is_magic(name: str) -> bool:
     """
@@ -12,6 +14,9 @@ def is_magic(name: str) -> bool:
     False
 
     >>> is_magic('cli')
+    False
+
+    >>> is_magic('_')
     False
 
     >>> is_magic('__version__')
@@ -40,6 +45,9 @@ def is_private(name: str) -> bool:
     >>> is_private('__magic__')
     False
 
+    >>> is_private('_')
+    False
+
     """
     return name.startswith('__') and not is_magic(name)
 
@@ -60,8 +68,14 @@ def is_protected(name: str) -> bool:
     >>> is_protected('common_variable')
     False
 
+    >>> is_protected('_')
+    False
+
     """
     if not name.startswith('_'):
+        return False
+
+    if name == UNUSED_VARIABLE:
         return False
 
     return not is_private(name) and not is_magic(name)

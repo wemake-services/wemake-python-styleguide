@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations.consistency import (
     UppercaseStringModifierViolation,
 )
 from wemake_python_styleguide.visitors.tokenize.primitives import (
-    WrongPrimitivesVisitor,
+    WrongStringTokenVisitor,
 )
 
 
@@ -37,7 +37,7 @@ def test_correct_prefix(
     string = primitive.format(modifier)
     file_tokens = parse_tokens(mode(primitives_usages.format(string)))
 
-    visitor = WrongPrimitivesVisitor(default_options, file_tokens=file_tokens)
+    visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -68,7 +68,7 @@ def test_uppercase_prefix(
     string = primitive.format(modifier)
     file_tokens = parse_tokens(mode(primitives_usages.format(string)))
 
-    visitor = WrongPrimitivesVisitor(default_options, file_tokens=file_tokens)
+    visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [UppercaseStringModifierViolation])
@@ -100,7 +100,7 @@ def test_uppercase_prefix_multiple(
     string = primitive.format(modifier)
     file_tokens = parse_tokens(mode(primitives_usages.format(string)))
 
-    visitor = WrongPrimitivesVisitor(default_options, file_tokens=file_tokens)
+    visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [

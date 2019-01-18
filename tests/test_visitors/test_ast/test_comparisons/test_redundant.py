@@ -19,6 +19,7 @@ another_variable = 2
 @pytest.mark.parametrize('comparators', [
     ('variable', '"test"'),
     ('variable', 'variable.call()'),
+    ('variable', 'variable.attr'),
     ('variable', 'len(variable)'),
     ('variable', 'another_variable'),
     ('variable', '222'),

@@ -36,6 +36,12 @@ print([
 ])
 """
 
+correct_multiline_list = """
+some = [[
+    1, 2, 3,
+]]
+"""
+
 correct_multiline_tuple = """
 some = (
     [1, 1, 1],
@@ -126,6 +132,7 @@ some = [
     correct_function,
     correct_multiline_function,
     correct_multiline_call,
+    correct_multiline_list,
     correct_multiline_tuple,
     correct_multiline_dict,
     correct_multiline_call,

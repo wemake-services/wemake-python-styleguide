@@ -5,11 +5,13 @@ from collections import defaultdict
 from typing import ClassVar, DefaultDict, List, Union
 
 from wemake_python_styleguide.logics.functions import is_method
+from wemake_python_styleguide.logics.nodes import get_parent
 from wemake_python_styleguide.types import AnyFunctionDef, AnyImport, final
 from wemake_python_styleguide.violations.complexity import (
     TooManyConditionsViolation,
     TooManyDecoratorsViolation,
     TooManyElifsViolation,
+    TooManyExceptCasesViolation,
     TooManyImportsViolation,
     TooManyMethodsViolation,
     TooManyModuleMembersViolation,
@@ -37,10 +39,9 @@ class ModuleMembersVisitor(BaseNodeVisitor):
 
     def _check_members_count(self, node: ModuleMembers) -> None:
         """This method increases the number of module members."""
-        parent = getattr(node, 'wps_parent', None)
         is_real_method = is_method(getattr(node, 'function_type', None))
 
-        if isinstance(parent, ast.Module) and not is_real_method:
+        if isinstance(get_parent(node), ast.Module) and not is_real_method:
             self._public_items_count += 1
 
     def _check_decorators_count(self, node: ModuleMembers) -> None:
@@ -118,7 +119,7 @@ class MethodMembersVisitor(BaseNodeVisitor):
         self._methods: DefaultDict[ast.ClassDef, int] = defaultdict(int)
 
     def _check_method(self, node: AnyFunctionDef) -> None:
-        parent = getattr(node, 'wps_parent', None)
+        parent = get_parent(node)
         if isinstance(parent, ast.ClassDef):
             self._methods[parent] += 1
 
@@ -145,7 +146,7 @@ class MethodMembersVisitor(BaseNodeVisitor):
 class ConditionsVisitor(BaseNodeVisitor):
     """Checks booleans for condition counts."""
 
-    #: Maximum number of conditions in a single ``if`` or ``while`` statement:
+    #: Maximum number of conditions in a single ``if`` or ``while`` statement.
     _max_conditions: ClassVar[int] = 4
 
     def _count_conditions(self, node: ast.BoolOp) -> int:
@@ -226,4 +227,27 @@ class ElifVisitor(BaseNodeVisitor):
 
         """
         self._check_elifs(node)
+        self.generic_visit(node)
+
+
+@final
+class TryExceptVisitor(BaseNodeVisitor):
+    """Visits all try/except nodes to ensure that they are not too complex."""
+
+    #: Maximum number of ``except`` cases in a single ``try`` clause.
+    _max_except_cases: ClassVar[int] = 3
+
+    def _check_except_count(self, node: ast.Try) -> None:
+        if len(node.handlers) > self._max_except_cases:
+            self.add_violation(TooManyExceptCasesViolation(node))
+
+    def visit_Try(self, node: ast.Try) -> None:
+        """
+        Ensures that try/except is correct.
+
+        Raises:
+            TooManyExceptCasesViolation
+
+        """
+        self._check_except_count(node)
         self.generic_visit(node)

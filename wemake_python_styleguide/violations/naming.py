@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Naming is hard! It is in fact one of the two hardest problems.
+Naming is hard! It is, in fact, one of the two hardest problems.
 
 These checks are required to make your application easier to read
 and understand by multiple people over the long period of time.
@@ -24,9 +24,12 @@ General
 - Use names of an appropriate length: not too short, not too long
 - Protected members should use underscore as the first char
 - Private names with two leading underscores are not allowed
-- If you need to explicitly state that variable is unused,
+- If you need to explicitly state that the variable is unused,
   prefix it with ``_`` or just use ``_`` as a name
-- Do not use variables that are stated to be unused, rename them when using
+- Do not use variables that are stated to be unused,
+  rename them when actually using them
+- Whenever you want to name your variable similar to a keyword or builtin,
+  use trailing ``_``
 - Do not use consecutive underscores
 - When writing abbreviations in ``UpperCase``
   capitalize all letters: ``HTTPAddress``
@@ -51,7 +54,7 @@ Classes
 ~~~~~~~
 
 - Classes must use ``UpperCase``
-- Python's built-in classes, however are typically lowercase words
+- Python's built-in classes, however, are typically lowercase words
 - Exception classes must end with ``Error``
 
 Instance attributes
@@ -90,7 +93,7 @@ Variables
 ~~~~~~~~~
 
 - Variables must use ``snake_case`` with no exceptions
-- When variable is unused it must be prefixed with an underscore: ``_user``
+- When a variable is unused it must be prefixed with an underscore: ``_user``
 
 Type aliases
 ~~~~~~~~~~~~
@@ -100,7 +103,7 @@ Type aliases
 - Generic types should be called ``TT`` or ``KT`` or ``VT``
 - Covariant and contravariant types
   should be marked with ``Cov`` and ``Contra`` suffixes,
-  in this case one letter can be dropped: ``TCov`` and ``KContra``
+  in this case, one letter can be dropped: ``TCov`` and ``KContra``
 
 .. currentmodule:: wemake_python_styleguide.violations.naming
 
@@ -123,6 +126,8 @@ Summary
    ReservedArgumentNameViolation
    TooLongNameViolation
    UnicodeNameViolation
+   TrailingUnderscoreViolation
+   UnusedVariableIsUsedViolation
 
 Module names
 ------------
@@ -144,6 +149,8 @@ General names
 .. autoclass:: ReservedArgumentNameViolation
 .. autoclass:: TooLongNameViolation
 .. autoclass:: UnicodeNameViolation
+.. autoclass:: TrailingUnderscoreViolation
+.. autoclass:: UnusedVariableIsUsedViolation
 
 """
 
@@ -196,7 +203,7 @@ class WrongModuleMagicNameViolation(SimpleViolation):
 
     Reasoning:
         Do not fall in love with magic. There's no good reason to use
-        magic names, when you can use regular names.
+        magic names when you can use regular names.
 
     See
     :py:data:`~wemake_python_styleguide.constants.MAGIC_MODULE_NAMES_WHITELIST`
@@ -267,7 +274,7 @@ class WrongVariableNameViolation(ASTViolation):
         All names that we forbid to use could be improved.
 
     Solution:
-        Try to use more specific name instead.
+        Try to use a more specific name instead.
         If you really want to use any of the names from the list,
         add a prefix or suffix to it. It will serve you well.
 
@@ -298,7 +305,7 @@ class TooShortNameViolation(MaybeASTViolation):
 
     Reasoning:
         It is hard to understand what the variable means and why it is used,
-        if it's name is too short.
+        if its name is too short.
 
     Solution:
         Think of another name. Give more context to it.
@@ -398,12 +405,12 @@ class UnderscoredNumberNameViolation(MaybeASTViolation):
 
     Solution:
         Do not put an underscore between text and numbers, that is confusing.
-        Rename your variable or modules to not include underscored numbers.
+        Rename your variable or modules do not include underscored numbers.
 
     This rule checks: modules, variables, attributes,
     functions, method, and classes.
     Please, note that putting an underscore that replaces ``-`` in some
-    names between numbers is fine, example: ``ISO-123-456`` would became
+    names between numbers are fine, example: ``ISO-123-456`` would become
     ``iso123_456``.
 
     Example::
@@ -464,7 +471,7 @@ class ConsecutiveUnderscoresInNameViolation(MaybeASTViolation):
 
     Reasoning:
         This is done to gain extra readability.
-        This naming rule already exist for module names.
+        This naming rule already exists for module names.
 
     Example::
 
@@ -524,7 +531,7 @@ class TooLongNameViolation(MaybeASTViolation):
 
     Reasoning:
         Too long names are unreadable.
-        It is better to use shorter alternative.
+        It is better to use a shorter alternative.
         Long names also indicate that this variable is too complex,
         maybe it may require some documentation.
 
@@ -560,7 +567,7 @@ class TooLongNameViolation(MaybeASTViolation):
 @final
 class UnicodeNameViolation(MaybeASTViolation):
     """
-    Restrict unicode names.
+    Forbids to use unicode names.
 
     Reasoning:
         This should be forbidden for sanity, readability, and writability.
@@ -586,3 +593,74 @@ class UnicodeNameViolation(MaybeASTViolation):
 
     error_template = 'Found unicode name: {0}'
     code = 119
+
+
+@final
+class TrailingUnderscoreViolation(ASTViolation):
+    """
+    Forbids to use trailing ``_`` for names that do not need it.
+
+    Reasoning:
+        We use trailing underscore for a reason:
+        to indicate that this name shadows a built-in or keyword.
+        So, when overusing this feature for general names:
+        it just harms readability of your program.
+
+    Solution:
+        Rename your variable not to contain trailing underscores.
+
+    This rule checks: variables, attributes, functions, methods, and classes.
+
+    Example::
+
+        # Correct:
+        class_ = SomeClass
+        list_ = []
+
+        # Wrong:
+        some_variable_ = 1
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found regular name with trailing underscore: {0}'
+    code = 120
+
+
+@final
+class UnusedVariableIsUsedViolation(ASTViolation):
+    """
+    Forbids to have use variables that are marked as unused.
+
+    Reasoning:
+        Sometimes you start to use new logic in your functions,
+        and you start to use variables that once were marked as unused.
+        But, you have not renamed them for some reason.
+        And now you have a lot of confusion: the variable is marked as unused,
+        but you are using it. Why? What's going on?
+
+     Solution:
+        Rename your variable to be a regular variable
+        without a leading underscore.
+
+     Example::
+
+        # Correct:
+        def function():
+            first = 15
+            return first + 10
+
+        # Wrong:
+        def function():
+            _first = 15
+            return _first + 10
+
+    This rule checks: functions, methods, and ``lambda`` functions.
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found usage of a variable marked as unused: {0}'
+    code = 121

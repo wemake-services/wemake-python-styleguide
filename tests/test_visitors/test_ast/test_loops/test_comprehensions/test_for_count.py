@@ -2,8 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.visitors.ast.keywords import (
+from wemake_python_styleguide.violations.complexity import (
     TooManyForsInComprehensionViolation,
+)
+from wemake_python_styleguide.visitors.ast.loops import (
     WrongComprehensionVisitor,
 )
 

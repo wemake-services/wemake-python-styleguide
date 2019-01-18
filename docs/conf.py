@@ -14,23 +14,24 @@
 
 import os
 import sys
+
+import tomlkit
+
 sys.path.insert(0, os.path.abspath('..'))
 
 
 # -- Project information -----------------------------------------------------
 
 def _get_project_meta():
-    import tomlkit
-
     with open('../pyproject.toml') as pyproject:
-        contents = pyproject.read()
+        file_contents = pyproject.read()
 
-    return tomlkit.parse(contents)['tool']['poetry']
+    return tomlkit.parse(file_contents)['tool']['poetry']
 
 
 pkg_meta = _get_project_meta()
 project = pkg_meta['name']
-copyright = '2018, wemake.services'
+copyright = '2018, wemake.services'  # noqa: A001
 author = 'wemake.services'
 
 # The short X.Y version
@@ -42,8 +43,7 @@ release = version
 # -- General configuration ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
-#
-# needs_sphinx = '1.0'
+needs_sphinx = '1.8'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -55,6 +55,8 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
+
+    # Used to write beautiful docstrings:
     'sphinx.ext.napoleon',
 
     # Used to include .md files:
@@ -65,13 +67,19 @@ extensions = [
 
     # Used to embed values from the source code into the docs:
     'added_value',
+
+    # Used to build graphs:
+    'sphinxcontrib.mermaid',
 ]
 
 autoclass_content = 'class'
 autodoc_member_order = 'bysource'
 
-autodoc_mock_imports = [
-    'attr',
+autodoc_mock_imports = [  # TODO: remove after pip==19.0
+    'astor',
+    'pep8ext_naming',
+    'flake8_builtins',
+    'flake8_quotes',
 ]
 
 autodoc_member_order = 'bysource'
@@ -80,6 +88,10 @@ autodoc_default_flags = {
     'undoc-members': 'code,error_template',
     'exclude-members': '__dict__,__weakref__',
 }
+
+# Set `typing.TYPE_CHECKING` to `True`:
+# https://pypi.org/project/sphinx-autodoc-typehints/
+set_type_checking_flag = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -146,7 +158,7 @@ html_sidebars = {
         'moreinfo.html',
         'github.html',
         'searchbox.html',
-    ]
+    ],
 }
 
 
@@ -158,23 +170,7 @@ htmlhelp_basename = 'wemake-python-styleguidedoc'
 
 # -- Options for LaTeX output ------------------------------------------------
 
-latex_elements = {
-    # The paper size ('letterpaper' or 'a4paper').
-    #
-    # 'papersize': 'letterpaper',
-
-    # The font size ('10pt', '11pt' or '12pt').
-    #
-    # 'pointsize': '10pt',
-
-    # Additional stuff for the LaTeX preamble.
-    #
-    # 'preamble': '',
-
-    # Latex figure (float) alignment
-    #
-    # 'figure_align': 'htbp',
-}
+latex_elements = {}
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
@@ -201,7 +197,7 @@ man_pages = [
         'wemake-python-styleguide Documentation',
         [author],
         1,
-    )
+    ),
 ]
 
 
