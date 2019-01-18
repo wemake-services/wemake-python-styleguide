@@ -590,11 +590,12 @@ class TooManyExceptCasesViolation(ASTViolation):
 
     Solution:
         We can reduce the complexity of this case by splitting it into multiple
-        functions or using a decorator to handle different exceptions.
+        ``try`` cases, functions or using a decorator
+        to handle different exceptions.
 
     .. versionadded:: 0.7.0
 
     """
 
-    error_template = 'Found a too many `except` cases'
+    error_template = 'Found too many `except` cases'
     code = 225

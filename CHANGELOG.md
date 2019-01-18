@@ -32,6 +32,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use multiple `return` path in `try`/`expect`/`finally`
 - Forbids to use implicit string concatenation
 - Forbids to use useless `continue` nodes inside the loops
+- Forbids to use useless nodes
 
 ### Bugfixes
 

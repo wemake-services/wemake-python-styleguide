@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import ClassVar, List, Optional, Sequence, Union
+from typing import ClassVar, Mapping, Optional, Sequence, Union
 
 from wemake_python_styleguide.logics.collections import normalize_dict_elements
 from wemake_python_styleguide.logics.functions import get_all_arguments
@@ -13,6 +13,7 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.violations.consistency import (
     ParametersIndentationViolation,
+    UselessNodeViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
@@ -76,7 +77,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         ast.Module,
     )
 
-    # Not typed, since `mypy` will complain about `isinstance` calls.
+    # FIXME: not typed, `mypy` will complain about `isinstance` calls
     _nodes_with_orelse = (
         ast.If,
         ast.For,
@@ -105,6 +106,48 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         ast.Assert,
     )
 
+    # Useless nodes:
+    _generally_useless_body: ClassVar[AnyNodes] = (
+        ast.Break,
+        ast.Continue,
+        ast.Pass,
+        ast.Ellipsis,
+    )
+    _loop_useless_body: ClassVar[AnyNodes] = (
+        ast.Return,
+        ast.Raise,
+    )
+
+    _useless_combination: ClassVar[Mapping[str, AnyNodes]] = {
+        'For': _generally_useless_body + _loop_useless_body,
+        'AsyncFor': _generally_useless_body + _loop_useless_body,
+        'While': _generally_useless_body + _loop_useless_body,
+        'Try': _generally_useless_body + (ast.Raise,),
+        'With': _generally_useless_body,
+        'AsyncWith': _generally_useless_body,
+    }
+
+    def _check_useless_node(
+        self,
+        node: StatementWithBody,
+        body: Sequence[ast.stmt],
+    ) -> None:
+        if len(body) != 1:
+            return
+
+        forbiden = self._useless_combination.get(
+            node.__class__.__qualname__, None,
+        )
+
+        if not forbiden or not isinstance(body[0], forbiden):
+            return
+
+        self.add_violation(
+            UselessNodeViolation(
+                node, text=node.__class__.__qualname__.lower(),
+            ),
+        )
+
     def _check_expression(
         self,
         node: ast.Expr,
@@ -119,11 +162,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
 
         self.add_violation(StatementHasNoEffectViolation(node))
 
-    def _check_internals(
-        self,
-        node: StatementWithBody,
-        body: List[ast.stmt],
-    ) -> None:
+    def _check_internals(self, body: Sequence[ast.stmt]) -> None:
         after_closing_node = False
         for index, statement in enumerate(body):
             if after_closing_node:
@@ -143,12 +182,13 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
             UnreachableCodeViolation
 
         """
-        self._check_internals(node, node.body)
+        self._check_internals(node.body)
         if isinstance(node, self._nodes_with_orelse):
-            self._check_internals(node, node.orelse)
+            self._check_internals(node.orelse)
         if isinstance(node, ast.Try):
-            self._check_internals(node, node.finalbody)
+            self._check_internals(node.finalbody)
 
+        self._check_useless_node(node, node.body)
         self.generic_visit(node)
 
 

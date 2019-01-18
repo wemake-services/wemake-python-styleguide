@@ -53,6 +53,7 @@ Summary
    InconsistentYieldViolation
    ImplicitStringConcatenationViolation
    UselessContinueViolation
+   UselessNodeViolation
 
 Consistency checks
 ------------------
@@ -85,6 +86,7 @@ Consistency checks
 .. autoclass:: InconsistentYieldViolation
 .. autoclass:: ImplicitStringConcatenationViolation
 .. autoclass:: UselessContinueViolation
+.. autoclass:: UselessNodeViolation
 
 """
 
@@ -1073,3 +1075,31 @@ class UselessContinueViolation(ASTViolation):
 
     error_template = 'Found useless `continue` at the end of the loop'
     code = 327
+
+
+@final
+class UselessNodeViolation(ASTViolation):
+    """
+    Forbids to use meaningless nodes.
+
+    Reasoning:
+        Some nodes might be completely useless. They will literally do nothing.
+        Sometimes they are hard to find, because this situation can be caused
+        by a recent refactoring or just by acedent.
+        This might be also an overuse of syntax.
+
+    Solution:
+        Remove node or make sure it makes any sense.
+
+    Example::
+
+        # Wrong:
+        for number in [1, 2, 3]:
+            break
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found useless node: {0}'
+    code = 328

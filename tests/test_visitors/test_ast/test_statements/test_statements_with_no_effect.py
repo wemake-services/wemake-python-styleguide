@@ -176,7 +176,6 @@ async def container():
     '3 > 4',
     '1 + 2',
     '-100',
-    '...',
 ])
 def test_statement_with_no_effect(
     assert_errors,
@@ -226,7 +225,6 @@ def test_statement_with_no_effect(
     'call()',
     'object.mro()',
     'del some',
-    'raise TypeError()',
 ])
 def test_statement_with_regular_effect(
     assert_errors,
@@ -251,6 +249,7 @@ def test_statement_with_regular_effect(
     'return',
     'yield',
     'yield from some',
+    'raise TypeError()',
 ])
 def test_statement_with_function_effect(
     assert_errors,
@@ -275,6 +274,7 @@ def test_statement_with_function_effect(
     'await some',
     'return',
     'yield',
+    'raise TypeError()',
 ])
 def test_statement_with_await_effect(
     assert_errors,

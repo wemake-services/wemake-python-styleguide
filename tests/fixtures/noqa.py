@@ -41,7 +41,7 @@ def some():  # noqa: Z110
     raise NotImplemented  # noqa: Z423
 
 
-del {'a': 1}['a'] # noqa: Z420
+del {'a': 1}['a']  # noqa: Z420
 hasattr(object, 'some')  # noqa: Z421
 value = 1  # noqa: Z110
 x = 2  # noqa: Z111
@@ -240,8 +240,11 @@ def function_with_wrong_yield():
 
 bad_concatenation = 'a' 'b'  # noqa: Z326
 
-for literal in bad_concatenation:  # noqa: Z327
+for literal in bad_concatenation:  # noqa: Z327, Z328
     continue
+
+with open(literal):  # noqa: Z328
+    pass  # noqa: Z420
 
 try:
     anti_z444 = 1
