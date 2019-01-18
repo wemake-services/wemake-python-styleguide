@@ -246,6 +246,12 @@ for literal in bad_concatenation:  # noqa: Z327, Z328
 with open(literal):  # noqa: Z328
     pass  # noqa: Z420
 
+
+try:
+    anti_z444 = 1
+except Exception as ex:  # noqa: Z329
+    raise ex
+
 try:
     anti_z444 = 1
 except BaseException:  # noqa: Z424

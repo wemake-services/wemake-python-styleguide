@@ -11,23 +11,23 @@ from wemake_python_styleguide.visitors.ast.keywords import (
 
 use_base_exception = """
 try:
-    execute()
+    ...
 except BaseException:
-    raise
+    ...
 """
 
 use_except_exception = """
 try:
-    1 / 0
+    ...
 except Exception:
-    raise
+    ...
 """
 
 use_bare_except = """
 try:
-    1 / 0
+    ...
 except:
-    raise
+    ...
 """
 
 

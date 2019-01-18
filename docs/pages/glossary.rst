@@ -11,7 +11,7 @@ Here we collect all the specific terms that are used in this project.
   rule
     Some decision that we have made regarding our ``python`` code.
 
-    Rules can say how we do thing or how we do not do things.
+    Rules can say how we do things or how we do not do things.
     Each rule is represented with a :term:`violation`.
 
   plugin

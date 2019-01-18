@@ -54,6 +54,7 @@ Summary
    ImplicitStringConcatenationViolation
    UselessContinueViolation
    UselessNodeViolation
+   UselessExceptCaseViolation
 
 Consistency checks
 ------------------
@@ -87,6 +88,7 @@ Consistency checks
 .. autoclass:: ImplicitStringConcatenationViolation
 .. autoclass:: UselessContinueViolation
 .. autoclass:: UselessNodeViolation
+.. autoclass:: UselessExceptCaseViolation
 
 """
 
@@ -1103,3 +1105,39 @@ class UselessNodeViolation(ASTViolation):
 
     error_template = 'Found useless node: {0}'
     code = 328
+
+
+class UselessExceptCaseViolation(ASTViolation):
+    """
+    Forbids to use meaningless ``except`` cases.
+
+    Reasoning:
+        Using ``except`` cases that just reraise the same exception
+        is error-prone. You can increase your stacktrace,
+        silence some potential exceptions, and screw things up.
+        It also does not make any sense to do so.
+
+    Solution:
+        Remove ``except`` case or make sure it makes any sense.
+
+    Example::
+
+        # Correct:
+        try:
+            ...
+        except IndexError:
+            sentry.log()
+            raise ValueError()
+
+        # Wrong:
+        try:
+            ...
+        except TypeError:
+            raise
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found useless `except` case'
+    code = 329

@@ -99,6 +99,7 @@ def test_useless_loop_nodes(
 ])
 def test_useless_try_nodes(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
     code,
     statement,
@@ -112,6 +113,7 @@ def test_useless_try_nodes(
     visitor.run()
 
     assert_errors(visitor, [UselessNodeViolation])
+    assert_error_text(visitor, 'try')
 
 
 @pytest.mark.parametrize('code', [

@@ -20,6 +20,7 @@ from wemake_python_styleguide.violations.consistency import (
     InconsistentReturnViolation,
     InconsistentYieldViolation,
     MultipleContextManagerAssignmentsViolation,
+    UselessExceptCaseViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
@@ -219,6 +220,23 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
         if else_has and try_has:
             self.add_violation(TryExceptMultipleReturnPathViolation(node))
 
+    def _check_useless_except(self, node: ast.ExceptHandler) -> None:
+        if len(node.body) != 1:
+            return
+
+        body = node.body[0]
+        if not isinstance(body, ast.Raise):
+            return
+
+        if isinstance(body.exc, ast.Call):
+            return
+
+        if isinstance(body.exc, ast.Name) and node.name:
+            if body.exc.id != node.name:
+                return
+
+        self.add_violation(UselessExceptCaseViolation(node))
+
     def visit_Try(self, node: ast.Try) -> None:
         """
         Used for find finally in try blocks without except.
@@ -240,8 +258,10 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
 
         Raises:
             BaseExceptionViolation
+            UselessExceptCaseViolation
 
         """
+        self._check_useless_except(node)
         self._check_exception_type(node)
         self.generic_visit(node)
 
