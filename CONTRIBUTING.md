@@ -68,6 +68,19 @@ flake8 wemake_python_styleguide tests docs
 These steps are mandatory during the CI.
 
 
+## Architecture
+
+We use [`layer-lint`](https://layer-linter.readthedocs.io/en/latest/usage.html)
+to enforce strict layered architecture.
+
+```bash
+layer-lint wemake_python_styleguide
+```
+
+All contracts must be valid for each commit.
+This step is mandatory during the CI.
+
+
 ## Type checks
 
 We use `mypy` to run type checks on our code.
@@ -122,7 +135,8 @@ Before submitting your code please do the following steps:
 7. Run `pytest` again to make sure it is still working
 8. Run `mypy` to ensure that types are correct
 9. Run `flake8` to ensure that style is correct
-10. Run `doc8` to ensure that docs are correct
+10. Run `layer-lint` to ensure that architecture contracts are correct
+11. Run `doc8` to ensure that docs are correct
 
 
 ## Other help

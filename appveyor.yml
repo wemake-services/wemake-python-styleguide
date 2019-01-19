@@ -32,6 +32,7 @@ build: off
 test_script:
   - "poetry run flake8 wemake_python_styleguide tests docs"
   - "poetry run mypy wemake_python_styleguide"
+  - "poetry run layer-lint --quiet wemake_python_styleguide"
   - "poetry run pytest"
   - "poetry run doc8 -q docs"
   - "poetry check"

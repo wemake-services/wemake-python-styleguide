@@ -64,16 +64,12 @@ Reference
 
 import ast
 import tokenize
-from typing import TYPE_CHECKING, List, Sequence, Type
+from typing import List, Sequence, Type
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.logics.filenames import get_stem
 from wemake_python_styleguide.types import ConfigurationOptions, final
 from wemake_python_styleguide.violations.base import BaseViolation
-
-if TYPE_CHECKING:  # pragma: no cover
-    # Hack to remove circular imports:
-    from wemake_python_styleguide.checker import Checker  # noqa: Z435
 
 
 class BaseVisitor(object):
@@ -101,7 +97,7 @@ class BaseVisitor(object):
     @classmethod
     def from_checker(
         cls: Type['BaseVisitor'],
-        checker: 'Checker',
+        checker,
     ) -> 'BaseVisitor':
         """
         Constructs visitor instance from the checker.

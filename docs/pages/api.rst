@@ -50,7 +50,7 @@ our linter. This is a very simplified architecture that will help you
 to understand how all components are bound together.
 
 .. mermaid::
-   :caption: Architecture overview
+   :caption: Architecture overview.
 
    sequenceDiagram
       participant flake8
@@ -64,6 +64,11 @@ to understand how all components are bound together.
       Checker->>Visitor: Checker runs all visitors that are it is aware of
       Visitor->>Violation: Visitors raise violations when they find bad code
       Violation-->>flake8: Raised violations are shown to user by flake8
+
+We use a layered architecture that follows this contract:
+
+.. literalinclude :: ../../layers.yml
+   :language: yaml
 
 Contributing
 ------------

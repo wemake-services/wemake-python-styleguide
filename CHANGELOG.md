@@ -64,20 +64,15 @@ We used to have incremental versioning before `0.1.0`.
 - Improves docs: we have added a special graph to show our architecure
 - Improves docs: we now have a clean page for `checker` without extra junk
 - Improves docs: we now have a tutorial for creating new rules
-
-
-## Version 0.6.2
-
-### Bugfixes
-
-- Fixes a [crash](https://github.com/wemake-services/wemake-python-styleguide/issues/423) with class attributes assignment
+- Refactoring: moves `presets` package to the root
+- Improves tests: we now lint our layered architecure with `layer-lint`
 
 
 ## Version 0.6.3
 
 ### Bugfixes
 
-- Fixes a [crash](https://github.com/wemake-services/wemake-python-styleguide/issues/450) with `dict`s with just values and no keys
+- Fixes an [issue-450](https://github.com/wemake-services/wemake-python-styleguide/issues/450) with `dict`s with just values and no keys
 
 
 ## Version 0.6.2

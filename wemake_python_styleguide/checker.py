@@ -49,11 +49,11 @@ from wemake_python_styleguide import version as pkg_version
 from wemake_python_styleguide.options.config import Configuration
 from wemake_python_styleguide.transformations.ast_tree import transform
 from wemake_python_styleguide.visitors import base
-from wemake_python_styleguide.visitors.presets import (
+from wemake_python_styleguide.presets import (
     complexity,
     general,
-    tokens,
 )
+from wemake_python_styleguide.presets import tokens
 
 VisitorClass = Type[base.BaseVisitor]
 
