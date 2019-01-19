@@ -47,13 +47,9 @@ from flake8.options.manager import OptionManager
 from wemake_python_styleguide import constants, types
 from wemake_python_styleguide import version as pkg_version
 from wemake_python_styleguide.options.config import Configuration
+from wemake_python_styleguide.presets import complexity, general, tokens
 from wemake_python_styleguide.transformations.ast_tree import transform
 from wemake_python_styleguide.visitors import base
-from wemake_python_styleguide.presets import (
-    complexity,
-    general,
-)
-from wemake_python_styleguide.presets import tokens
 
 VisitorClass = Type[base.BaseVisitor]
 
