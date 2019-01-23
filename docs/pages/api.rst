@@ -61,7 +61,7 @@ to understand how all components are bound together.
 
       flake8->>Checker: flake8 runs our checker alongside with other plugins
       Checker->>Transformation: Checker asks to perform different ast transformations before we actually start doing anything
-      Checker->>Visitor: Checker runs all visitors that are it is aware of
+      Checker->>Visitor: Checker runs all visitors that it is aware of
       Visitor->>Violation: Visitors raise violations when they find bad code
       Violation-->>flake8: Raised violations are shown to user by flake8
 

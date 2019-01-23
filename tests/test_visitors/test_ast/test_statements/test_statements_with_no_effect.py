@@ -225,6 +225,7 @@ def test_statement_with_no_effect(
     'call()',
     'object.mro()',
     'del some',
+    'some_var: int',
 ])
 def test_statement_with_regular_effect(
     assert_errors,

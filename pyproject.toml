@@ -5,7 +5,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "wemake-python-styleguide"
-version = "0.6.3"
+version = "0.7.0"
 description = "The strictest and most opinionated python linter ever"
 
 license = "MIT"
