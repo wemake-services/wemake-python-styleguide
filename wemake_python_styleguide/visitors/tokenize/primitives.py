@@ -18,6 +18,7 @@ from wemake_python_styleguide.violations.consistency import (
     UnderscoredNumberViolation,
     UnicodeStringViolation,
     UppercaseStringModifierViolation,
+    NumberWithMeaninglessZeroViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
@@ -29,6 +30,8 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
     _bad_number_suffixes: ClassVar[FrozenSet[str]] = frozenset((
         'X', 'O', 'B', 'E',
     ))
+
+    _bad_number_prefixes = ('0b0', '0x0', '0o0')
 
     def _check_underscored_number(self, token: tokenize.TokenInfo) -> None:
         if '_' in token.string:
@@ -46,6 +49,13 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
                 BadNumberSuffixViolation(token, text=token.string),
             )
 
+    def _check_meaningless_zeros(self, token: tokenize.TokenInfo) -> None:
+        if any(token.string.lower().startswith(prefix) for prefix
+               in self._bad_number_prefixes):
+            self.add_violation(
+                NumberWithMeaninglessZeroViolation(token, text=token.string),
+            )
+
     def visit_number(self, token: tokenize.TokenInfo) -> None:
         """
         Checks number declarations.
@@ -54,11 +64,13 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
             UnderscoredNumberViolation
             PartialFloatViolation
             BadNumberSuffixViolation
+            NumberWithMeaninglessZeroViolation
 
         """
         self._check_underscored_number(token)
         self._check_partial_float(token)
         self._check_bad_number_suffixes(token)
+        self._check_meaningless_zeros(token)
 
 
 @final
