@@ -66,7 +66,7 @@ flake8-type-annotations = "^0.1"
 flake8-broken-line = "^0.1"
 flake8-print = "^3.1"
 flake8-per-file-ignores = "^0.7"
-pep8-naming = "^0.7"
+pep8-naming = ">=0.7,<0.9"
 
 [tool.poetry.dev-dependencies]
 pytest-cov = "^2.6"
