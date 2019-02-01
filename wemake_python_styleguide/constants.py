@@ -29,7 +29,7 @@ FUNCTIONS_BLACKLIST: Final = frozenset((
     'dir',
 
     # IO:
-    'input',
+    'input',  # print is handled via `flake8-print`
 
     # Attribute access:
     'hasattr',
