@@ -49,6 +49,7 @@ GENERAL_PRESET = (
     naming.WrongVariableAssignmentVisitor,
 
     builtins.MagicNumberVisitor,
+    builtins.UselessOperatorsVisitor,
     builtins.WrongStringVisitor,
     builtins.WrongAssignmentVisitor,
     builtins.WrongCollectionVisitor,
