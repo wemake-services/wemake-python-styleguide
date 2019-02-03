@@ -11,7 +11,8 @@ from wemake_python_styleguide.visitors.ast.builtins import (
 
 # Usages:
 assignment = 'constant = {0}'
-assignment_unary = 'constant = -{0}'
+assignment_addition = 'constant = x + {0}'
+assignment_increment = 'constant += {0}'
 
 function_definition = """
 def function_name(param1, param2={0}):
@@ -26,7 +27,8 @@ tuple_definition = '({0}, )'
 
 usages = [
     assignment,
-    assignment_unary,
+    assignment_addition,
+    assignment_increment,
     function_definition,
     list_definition,
     dict_definition_key,
@@ -39,12 +41,10 @@ usages = [
 @pytest.mark.parametrize('code', usages)
 @pytest.mark.parametrize('number', [
    '+5',
-   '+0.5',
-   '+0x20',
-   '+0o12',
-   '++5',
    '-+5',
-   '~+8',
+   '+-5',
+   '~+5',
+   '+~5',
 ])
 def test_plus_sign_before_numbers(
     assert_errors,
@@ -66,10 +66,8 @@ def test_plus_sign_before_numbers(
 @pytest.mark.parametrize('code', usages)
 @pytest.mark.parametrize('number', [
    '5',
-   '-0.5',
-   '+-0x20',
-   '++-0o12',
-   '+~0.5',
+   '-5',
+   '~5',
 ])
 def test_plus_sign_before_numbers_valid(
     assert_errors,

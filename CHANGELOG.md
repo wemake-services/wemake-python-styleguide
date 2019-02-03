@@ -4,6 +4,15 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
+## 0.8.0
+
+
+### Features
+
+- Forbids to use redundant `+` operator before numbers
+
+
+
 ## 0.7.0
 
 ### Features
@@ -35,7 +44,6 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to have useless nodes
 - Forbids to have useless `raise` statements
 - Adds `params` and `parameters` to black-listed names
-- Forbids to use redundant `+` operator before numbers
 
 
 ### Bugfixes

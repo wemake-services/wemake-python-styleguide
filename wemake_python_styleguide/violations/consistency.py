@@ -1150,9 +1150,7 @@ class UselessOperatorsViolation(ASTViolation):
     Forbids the use of unnecessary operators in your code.
 
     You can write: ``5.4`` and ``+5.4``. There's no need to use the second
-    version. We can write things like ``dt = ---6``.
-    But, we need to force ``-6`` for numbers. More rare occurences of
-    operators are ``~~~42`` and ``not not bar``.
+    version.
 
     Reasoning:
          This is done for consistency reasons.
@@ -1168,7 +1166,7 @@ class UselessOperatorsViolation(ASTViolation):
         # Wrong:
         profit = +3.33
 
-    .. versionadded:: 0.7.0
+    .. versionadded:: 0.8.0
 
     """
 

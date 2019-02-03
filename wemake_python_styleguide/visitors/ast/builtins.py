@@ -7,8 +7,8 @@ from typing import ClassVar, Iterable, List
 import astor
 
 from wemake_python_styleguide import constants
-from wemake_python_styleguide.logics.nodes import get_parent
 from wemake_python_styleguide.logics.operators import (
+    count_unary_operator,
     get_parent_ignoring_unary,
     unwrap_unary_node,
 )
@@ -91,10 +91,7 @@ class UselessOperatorsVisitor(BaseNodeVisitor):
     """Checks operators used in the code."""
 
     def _check_plus_sign(self, node: ast.Num) -> None:
-        parent = get_parent(node)
-        if not isinstance(parent, ast.UnaryOp):
-            return
-        if not isinstance(parent.op, ast.UAdd):
+        if not count_unary_operator(node, ast.UAdd) > 0:
             return
         self.add_violation(UselessOperatorsViolation(node, text=str(node.n)))
 

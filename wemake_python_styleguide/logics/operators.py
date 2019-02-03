@@ -4,6 +4,7 @@ import ast
 from typing import Optional
 
 from wemake_python_styleguide.logics.nodes import get_parent
+from wemake_python_styleguide.types import AnyUnaryOp
 
 
 def unwrap_unary_node(node: ast.AST) -> ast.AST:
@@ -34,3 +35,17 @@ def get_parent_ignoring_unary(node: ast.AST) -> Optional[ast.AST]:
     if parent is None or not isinstance(parent, ast.UnaryOp):
         return parent
     return get_parent_ignoring_unary(parent)
+
+
+def count_unary_operator(
+    node: ast.AST,
+    operator: AnyUnaryOp,
+    amount: int = 0,
+) -> int:
+    """Returns amount of unary operators matching input."""
+    parent = get_parent(node)
+    if parent is None or not isinstance(parent, ast.UnaryOp):
+        return amount
+    if isinstance(parent.op, operator):
+        return count_unary_operator(parent, operator, amount+1)
+    return count_unary_operator(parent, operator, amount)
