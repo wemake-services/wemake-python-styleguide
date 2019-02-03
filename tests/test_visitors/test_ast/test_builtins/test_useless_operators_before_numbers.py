@@ -2,11 +2,11 @@
 
 import pytest
 
-from wemake_python_styleguide.visitors.ast.builtins import (
-    UselessOperatorsVisitor,
-)
 from wemake_python_styleguide.violations.consistency import (
     UselessOperatorsViolation,
+)
+from wemake_python_styleguide.visitors.ast.builtins import (
+    UselessOperatorsVisitor,
 )
 
 # Usages:
