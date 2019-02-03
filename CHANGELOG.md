@@ -12,7 +12,6 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use redundant `+` operator before numbers
 
 
-
 ## 0.7.0
 
 ### Features
