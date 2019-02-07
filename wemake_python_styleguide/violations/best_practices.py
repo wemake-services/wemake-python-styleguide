@@ -1533,3 +1533,35 @@ class TryExceptMultipleReturnPathViolation(ASTViolation):
 
     error_template = 'Found `try`/`else`/`finally` with multiple return paths'
     code = 458
+
+
+@final
+class ComplexDefaultValuesViolation(ASTViolation):
+    """
+    Forbids to use anything that is not a ``ast.Name`` or ``ast.Attribute`` as
+    a default value.
+
+    Reasoning:
+        It can be tricky. Nothing stops you from making database calls or http
+        requests in such expressions. It is also not readable for us.
+
+    Solution:
+        Move the expression out from default value.
+
+    Example::
+
+        # Correct:
+        SHOULD_USE_DOCTEST = 'PYFLAKES_DOCTEST' in os.environ
+        def __init__(self, tree, filename='(none)', builtins=None,
+                         withDoctest=SHOULD_USE_DOCTEST, tokens=()):
+
+        # Wrong:
+        def __init__(self, tree, filename='(none)', builtins=None,
+                 withDoctest='PYFLAKES_DOCTEST' in os.environ, tokens=()):
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    error_template = 'Found complex default value'
+    code = 459

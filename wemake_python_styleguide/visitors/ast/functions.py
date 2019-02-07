@@ -159,3 +159,6 @@ class FunctionDefinitionVisitor(BaseNodeVisitor):
         """
         self._check_unused_variables(node)
         self.generic_visit(node)
+
+    def _check_argument_default_values(self, node: AnyFunctionDef) -> None:
+        pass
