@@ -12,6 +12,7 @@ from wemake_python_styleguide.logics.naming import access
 from wemake_python_styleguide.types import AnyFunctionDef, final
 from wemake_python_styleguide.violations.best_practices import (
     BooleanPositionalArgumentViolation,
+    ComplexDefaultValuesViolation,
     IncorrectSuperCallViolation,
     WrongFunctionCallViolation,
 )
@@ -149,6 +150,22 @@ class FunctionDefinitionVisitor(BaseNodeVisitor):
                 )
         self._check_used_variables(local_variables)
 
+    def _check_argument_default_values(self, node: AnyFunctionDef) -> None:
+
+        for arg in node.args.defaults:
+            if not isinstance(arg, (
+                ast.Name,
+                ast.Attribute,
+                ast.Str,
+                ast.NameConstant,
+                ast.Tuple,
+                ast.Bytes,
+                ast.Num,
+            )):
+                self.add_violation(
+                    ComplexDefaultValuesViolation(node, text='Test text'),
+                )
+
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """
         Checks regular, lambda, and async functions.
@@ -159,6 +176,4 @@ class FunctionDefinitionVisitor(BaseNodeVisitor):
         """
         self._check_unused_variables(node)
         self.generic_visit(node)
-
-    def _check_argument_default_values(self, node: AnyFunctionDef) -> None:
-        pass
+        self._check_argument_default_values(node)
