@@ -48,8 +48,7 @@ def test_base_class_expression(
     'One, Two',
     'One, keyword=None',
 
-    # Regressions
-    # See: issue-459
+    # Regressions, see: issue-459
     'Generic[ValueType]',
     'Monad[ValueType, ErrorType]',
     'Generic[Some], metaclass=abc.ABCMeta',
