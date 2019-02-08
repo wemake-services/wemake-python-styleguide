@@ -43,6 +43,12 @@ class WrongClassVisitor(BaseNodeVisitor):
         ast.AnnAssign,  # type annotations
     )
 
+    _allowed_base_classes_nodes: ClassVar[types.AnyNodes] = (
+        ast.Name,
+        ast.Attribute,
+        ast.Subscript,
+    )
+
     def _check_base_classes(self, node: ast.ClassDef) -> None:
         if len(node.bases) == 0:
             self.add_violation(
@@ -50,7 +56,7 @@ class WrongClassVisitor(BaseNodeVisitor):
             )
 
         for base_name in node.bases:
-            if not isinstance(base_name, (ast.Name, ast.Attribute)):
+            if not isinstance(base_name, self._allowed_base_classes_nodes):
                 self.add_violation(IncorrectBaseClassViolation(node))
                 continue
 

@@ -18,7 +18,6 @@ class Meta({0}):
 ])
 @pytest.mark.parametrize('base', [
     '(lambda: object)()',
-    'some_dict["key"]',
     'method.call()',
     '-Name',
     '[1, 2, 3]',
@@ -48,6 +47,13 @@ def test_base_class_expression(
     'Deep.Nested.Attr',
     'One, Two',
     'One, keyword=None',
+
+    # Regressions
+    # See: issue-459
+    'Generic[ValueType]',
+    'Monad[ValueType, ErrorType]',
+    'Generic[Some], metaclass=abc.ABCMeta',
+    'Generic["TextType"]',
 ])
 def test_correct_base_classes(
     assert_errors,

@@ -5,7 +5,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "wemake-python-styleguide"
-version = "0.7.0"
+version = "0.7.1"
 description = "The strictest and most opinionated python linter ever"
 
 license = "MIT"
@@ -42,8 +42,8 @@ classifiers = [
 Z = "wemake_python_styleguide.checker:Checker"
 
 [tool.poetry.dependencies]
-python = "^3.6 || ^3.7"
-flake8 = "^3.6"
+python = "^3.6"
+flake8 = "~3.6"
 attrs = "^18.2"
 typing_extensions = "^3.6"
 astor = "^0.7.1"

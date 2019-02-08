@@ -157,6 +157,10 @@ class WrongMagicCommentViolation(SimpleViolation):
         coordinate: int = 10
         some.int_field = 'text'  # type: ignore
 
+        number: int
+        for number in some_untyped_iterable():
+            ...
+
         # Wrong:
         type = MyClass.get_type()  # noqa
         coordinate = 10  # type: int
@@ -1365,17 +1369,19 @@ class IncorrectBaseClassViolation(ASTViolation):
         We need to prevent dirty hacks in this field.
 
     Solution:
-        Use only raw names to set your base classes.
+        Use only attributes, names, and types to be your base classes.
 
     Example::
 
         # Correct:
         class Test(module.ObjectName, MixinName, keyword=True): ...
+        class GenericClass(Generic[ValueType]): ...
 
         # Wrong:
         class Test((lambda: object)()): ...
 
     .. versionadded:: 0.7.0
+    .. versionchanged:: 0.7.1
 
     """
 

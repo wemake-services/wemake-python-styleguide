@@ -13,8 +13,8 @@ class Meta:
 """
 
 class_with_empty_base = """
-    class Meta():
-        '''Docs.'''
+class Meta():
+    '''Docs.'''
 """
 
 nested_class_without_base = """
