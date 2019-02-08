@@ -60,6 +60,7 @@ Summary
    IncorrectSuperCallViolation
    RedundantReturningElseViolation
    TryExceptMultipleReturnPathViolation
+   ComplexDefaultValuesViolation
 
 Comments
 --------
@@ -116,6 +117,7 @@ Design
 .. autoclass:: IncorrectSuperCallViolation
 .. autoclass:: RedundantReturningElseViolation
 .. autoclass:: TryExceptMultipleReturnPathViolation
+.. autoclass:: ComplexDefaultValuesViolation
 
 """
 
@@ -1538,7 +1540,8 @@ class TryExceptMultipleReturnPathViolation(ASTViolation):
 @final
 class ComplexDefaultValuesViolation(ASTViolation):
     """
-    Forbids to use anything that is not a ``ast.Name`` or ``ast.Attribute`` as
+    Forbids to use anything that is not a `ast.Name`, `ast.Attribute`,
+    `ast.Str`, `ast.NameConstant`, `ast.Tuple`, `ast.Bytes` or `ast.Num` as
     a default value.
 
     Reasoning:

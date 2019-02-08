@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Dict, List, Optional, Union
+from typing import ClassVar, Dict, List, Optional, Union
 
 from wemake_python_styleguide.constants import (
     FUNCTIONS_BLACKLIST,
@@ -9,7 +9,7 @@ from wemake_python_styleguide.constants import (
 )
 from wemake_python_styleguide.logics import functions
 from wemake_python_styleguide.logics.naming import access
-from wemake_python_styleguide.types import AnyFunctionDef, final
+from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
     BooleanPositionalArgumentViolation,
     ComplexDefaultValuesViolation,
@@ -99,6 +99,16 @@ class WrongFunctionCallVisitor(BaseNodeVisitor):
 class FunctionDefinitionVisitor(BaseNodeVisitor):
     """Responsible for checking function internals."""
 
+    _allowed_default_value_types: ClassVar[AnyNodes] = (
+        ast.Name,
+        ast.Attribute,
+        ast.Str,
+        ast.NameConstant,
+        ast.Tuple,
+        ast.Bytes,
+        ast.Num,
+    )
+
     def _check_used_variables(
         self,
         local_variables: Dict[str, List[LocalVariable]],
@@ -153,15 +163,7 @@ class FunctionDefinitionVisitor(BaseNodeVisitor):
     def _check_argument_default_values(self, node: AnyFunctionDef) -> None:
 
         for arg in node.args.defaults:
-            if not isinstance(arg, (
-                ast.Name,
-                ast.Attribute,
-                ast.Str,
-                ast.NameConstant,
-                ast.Tuple,
-                ast.Bytes,
-                ast.Num,
-            )):
+            if not isinstance(arg, self._allowed_default_value_types):
                 self.add_violation(
                     ComplexDefaultValuesViolation(node, text='Test text'),
                 )
@@ -174,6 +176,6 @@ class FunctionDefinitionVisitor(BaseNodeVisitor):
             UnusedVariableIsUsedViolation
 
         """
+        self._check_argument_default_values(node)
         self._check_unused_variables(node)
         self.generic_visit(node)
-        self._check_argument_default_values(node)
