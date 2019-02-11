@@ -1540,9 +1540,11 @@ class TryExceptMultipleReturnPathViolation(ASTViolation):
 @final
 class ComplexDefaultValuesViolation(ASTViolation):
     """
-    Forbids to use anything that is not a ``ast.Name``, ``ast.Attribute``,
-    ``ast.Str``, ``ast.NameConstant``, ``ast.Tuple``, ``ast.Bytes`` or ``ast.Num`` as
-    a default value.
+    Forbids to use complex defaults.
+
+     Anything that is not a ``ast.Name``, ``ast.Attribute``, ``ast.Str``,
+     ``ast.NameConstant``, ``ast.Tuple``, ``ast.Bytes`` or ``ast.Num`` should
+     be moved out from defaults.
 
     Reasoning:
         It can be tricky. Nothing stops you from making database calls or http
