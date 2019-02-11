@@ -1540,8 +1540,8 @@ class TryExceptMultipleReturnPathViolation(ASTViolation):
 @final
 class ComplexDefaultValuesViolation(ASTViolation):
     """
-    Forbids to use anything that is not a `ast.Name`, `ast.Attribute`,
-    `ast.Str`, `ast.NameConstant`, `ast.Tuple`, `ast.Bytes` or `ast.Num` as
+    Forbids to use anything that is not a ``ast.Name``, ``ast.Attribute``,
+    ``ast.Str``, ``ast.NameConstant``, ``ast.Tuple``, ``ast.Bytes`` or ``ast.Num`` as
     a default value.
 
     Reasoning:
