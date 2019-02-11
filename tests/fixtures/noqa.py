@@ -345,3 +345,11 @@ def multiple_return_path():
         return 2
     else:
         return 3
+
+
+def bad_default_values(
+    bad,
+    defaults=(),
+    shall='notpass',
+):
+    return True  # noqa: Z459
