@@ -348,8 +348,9 @@ def multiple_return_path():
 
 
 def bad_default_values(
-    bad,
-    defaults=(),
-    shall='notpass',
+    self,
+    filename='(none)',
+    builtins=None,
+    withDoctest='PYFLAKES_DOCTEST' in os.environ,
 ):
-    return True  # noqa: Z459
+    return True # noqa: Z459
