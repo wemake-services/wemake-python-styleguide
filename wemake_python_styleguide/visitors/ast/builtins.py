@@ -95,6 +95,21 @@ class UselessOperatorsVisitor(BaseNodeVisitor):
             return
         self.add_violation(UselessOperatorsViolation(node, text=str(node.n)))
 
+    def _check_minus_sign(self, node: ast.Num) -> None:
+        if not count_unary_operator(node, ast.USub) > 1:
+            return
+        self.add_violation(UselessOperatorsViolation(node, text=str(node.n)))
+
+    def _check_tilde_sign(self, node: ast.Num) -> None:
+        if not count_unary_operator(node, ast.Invert) > 1:
+            return
+        self.add_violation(UselessOperatorsViolation(node, text=str(node.n)))
+
+    def _check_not(self, node: ast.Num) -> None:
+        if not count_unary_operator(node, ast.Not) > 1:
+            return
+        self.add_violation(UselessOperatorsViolation(node, text=str(node.n)))
+
     def visit_Num(self, node: ast.Num) -> None:
         """
         Checks numbers unnecessary operators inside the code.
@@ -104,8 +119,9 @@ class UselessOperatorsVisitor(BaseNodeVisitor):
 
         """
         self._check_plus_sign(node)
-        # TODO: Add forbid to use multiple negations for numbers,
-        # see issue 435 self.generic_visit(node)
+        self._check_minus_sign(node)
+        self._check_tilde_sign(node)
+        self._check_not(node)
         self.generic_visit(node)
 
 
