@@ -1150,7 +1150,8 @@ class UselessOperatorsViolation(ASTViolation):
     Forbids the use of unnecessary operators in your code.
 
     You can write: ``5.4`` and ``+5.4``. There's no need to use the second
-    version.
+    version. Similarly ``--5.4``, ``---5.4``, ``not not foo``, and ``~~42``
+    contain unnecessary operators.
 
     Reasoning:
          This is done for consistency reasons.
@@ -1162,9 +1163,16 @@ class UselessOperatorsViolation(ASTViolation):
 
         # Correct:
         profit = 3.33
+        profit = -3.33
+        inverse = ~5
+        complement = not foo
 
         # Wrong:
         profit = +3.33
+        profit = --3.33
+        profit = ---3.33
+        number = ~~42
+        bar = not not foo
 
     .. versionadded:: 0.8.0
 

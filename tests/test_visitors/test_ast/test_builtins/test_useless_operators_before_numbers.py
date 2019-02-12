@@ -45,6 +45,11 @@ usages = [
    '+-5',
    '~+5',
    '+~5',
+   '--5',
+   '---5',
+   '~~5',
+   '~~~5',
+   '(not not 5)',
 ])
 def test_plus_sign_before_numbers(
     assert_errors,
@@ -68,6 +73,7 @@ def test_plus_sign_before_numbers(
    '5',
    '-5',
    '~5',
+   '(not 5)',
 ])
 def test_plus_sign_before_numbers_valid(
     assert_errors,

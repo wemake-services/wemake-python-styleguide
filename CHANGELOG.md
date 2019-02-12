@@ -10,7 +10,7 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
-- Forbids to use redundant `+` operator before numbers
+- Forbids to use redundant `+`, `~`, `not`, and `-` operators before numbers
 - Forbids to use complex default values
 
 
