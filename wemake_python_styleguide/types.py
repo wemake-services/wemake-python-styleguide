@@ -60,6 +60,14 @@ CheckResult = Tuple[int, int, str, type]
 #: Tuple of AST node types for declarative syntax.
 AnyNodes = Tuple[Type[ast.AST], ...]
 
+#: In cases we need to work with all unary operators
+AnyUnaryOp = Union[
+    Type[ast.Invert],
+    Type[ast.Not],
+    Type[ast.UAdd],
+    Type[ast.USub],
+]
+
 
 class ConfigurationOptions(Protocol):
     """

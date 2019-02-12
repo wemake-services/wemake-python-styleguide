@@ -55,6 +55,7 @@ Summary
    UselessContinueViolation
    UselessNodeViolation
    UselessExceptCaseViolation
+   UselessOperatorsViolation
 
 Consistency checks
 ------------------
@@ -89,6 +90,7 @@ Consistency checks
 .. autoclass:: UselessContinueViolation
 .. autoclass:: UselessNodeViolation
 .. autoclass:: UselessExceptCaseViolation
+.. autoclass:: UselessOperatorsViolation
 
 """
 
@@ -1141,3 +1143,32 @@ class UselessExceptCaseViolation(ASTViolation):
 
     error_template = 'Found useless `except` case'
     code = 329
+
+
+class UselessOperatorsViolation(ASTViolation):
+    """
+    Forbids the use of unnecessary operators in your code.
+
+    You can write: ``5.4`` and ``+5.4``. There's no need to use the second
+    version.
+
+    Reasoning:
+         This is done for consistency reasons.
+
+    Solution:
+        Ommit unnecessary operators.
+
+    Example::
+
+        # Correct:
+        profit = 3.33
+
+        # Wrong:
+        profit = +3.33
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    code = 330
+    error_template = 'Found unnecessary operator: {0}'

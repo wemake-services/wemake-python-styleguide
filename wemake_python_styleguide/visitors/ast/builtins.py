@@ -8,6 +8,7 @@ import astor
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.logics.operators import (
+    count_unary_operator,
     get_parent_ignoring_unary,
     unwrap_unary_node,
 )
@@ -20,6 +21,7 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.violations.consistency import (
     FormattedStringViolation,
+    UselessOperatorsViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
@@ -81,6 +83,29 @@ class MagicNumberVisitor(BaseNodeVisitor):
 
         """
         self._check_is_magic(node)
+        self.generic_visit(node)
+
+
+@final
+class UselessOperatorsVisitor(BaseNodeVisitor):
+    """Checks operators used in the code."""
+
+    def _check_plus_sign(self, node: ast.Num) -> None:
+        if not count_unary_operator(node, ast.UAdd) > 0:
+            return
+        self.add_violation(UselessOperatorsViolation(node, text=str(node.n)))
+
+    def visit_Num(self, node: ast.Num) -> None:
+        """
+        Checks numbers unnecessary operators inside the code.
+
+        Raises:
+            UselessOperatorsViolation
+
+        """
+        self._check_plus_sign(node)
+        # TODO: Add forbid to use multiple negations for numbers,
+        # see issue 435 self.generic_visit(node)
         self.generic_visit(node)
 
 
