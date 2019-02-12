@@ -42,7 +42,7 @@ def test_comparison_variables(
 
 @pytest.mark.parametrize('comparators', [
     ('"string constant"', 'container'),
-    (1, 'second_name'),
+    ('container', '"string constant"'),
 ])
 def test_comparison_variables_in_special_case(
     assert_errors,

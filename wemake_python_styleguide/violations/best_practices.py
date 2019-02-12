@@ -60,6 +60,7 @@ Summary
    IncorrectSuperCallViolation
    RedundantReturningElseViolation
    TryExceptMultipleReturnPathViolation
+   ComplexDefaultValuesViolation
 
 Comments
 --------
@@ -116,6 +117,7 @@ Design
 .. autoclass:: IncorrectSuperCallViolation
 .. autoclass:: RedundantReturningElseViolation
 .. autoclass:: TryExceptMultipleReturnPathViolation
+.. autoclass:: ComplexDefaultValuesViolation
 
 """
 
@@ -156,6 +158,10 @@ class WrongMagicCommentViolation(SimpleViolation):
         type = MyClass.get_type()  # noqa: A001
         coordinate: int = 10
         some.int_field = 'text'  # type: ignore
+
+        number: int
+        for number in some_untyped_iterable():
+            ...
 
         # Wrong:
         type = MyClass.get_type()  # noqa
@@ -1365,17 +1371,19 @@ class IncorrectBaseClassViolation(ASTViolation):
         We need to prevent dirty hacks in this field.
 
     Solution:
-        Use only raw names to set your base classes.
+        Use only attributes, names, and types to be your base classes.
 
     Example::
 
         # Correct:
         class Test(module.ObjectName, MixinName, keyword=True): ...
+        class GenericClass(Generic[ValueType]): ...
 
         # Wrong:
         class Test((lambda: object)()): ...
 
     .. versionadded:: 0.7.0
+    .. versionchanged:: 0.7.1
 
     """
 
@@ -1533,3 +1541,38 @@ class TryExceptMultipleReturnPathViolation(ASTViolation):
 
     error_template = 'Found `try`/`else`/`finally` with multiple return paths'
     code = 458
+
+
+@final
+class ComplexDefaultValuesViolation(ASTViolation):
+    """
+    Forbids to use complex defaults.
+
+     Anything that is not a ``ast.Name``, ``ast.Attribute``, ``ast.Str``,
+     ``ast.NameConstant``, ``ast.Tuple``, ``ast.Bytes`` or ``ast.Num`` should
+     be moved out from defaults.
+
+    Reasoning:
+        It can be tricky. Nothing stops you from making database calls or http
+        requests in such expressions. It is also not readable for us.
+
+    Solution:
+        Move the expression out from default value.
+
+    Example::
+
+        # Correct:
+        SHOULD_USE_DOCTEST = 'PYFLAKES_DOCTEST' in os.environ
+        def __init__(self, tree, filename='(none)', builtins=None,
+                         withDoctest=SHOULD_USE_DOCTEST, tokens=()):
+
+        # Wrong:
+        def __init__(self, tree, filename='(none)', builtins=None,
+                 withDoctest='PYFLAKES_DOCTEST' in os.environ, tokens=()):
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    error_template = 'Found complex default value'
+    code = 459

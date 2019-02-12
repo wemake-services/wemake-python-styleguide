@@ -4,12 +4,26 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
+
 ## 0.8.0
 
 
 ### Features
 
 - Forbids to use redundant `+` operator before numbers
+- Forbids to use complex default values
+
+
+## 0.7.1
+
+### Bugfixes
+
+- Allows `Generic[SomeType]` to be a valid superclass
+- Forces to use `flake8` version `3.6` instead of `3.7`
+
+### Misc
+
+- Improves docs about using `# type: some` comment in `for` loops
 
 
 ## 0.7.0

@@ -346,3 +346,12 @@ def multiple_return_path():
         return 2
     else:
         return 3
+
+
+def bad_default_values( # noqa: Z459
+    self,
+    filename='(none)',
+    builtins=None,
+    withDoctest='PYFLAKES_DOCTEST' in os.environ,
+):
+    return True
