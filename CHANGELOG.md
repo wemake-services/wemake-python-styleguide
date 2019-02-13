@@ -10,8 +10,13 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
+- Updates `flake8` to `3.7+`
 - Forbids to use redundant `+`, `~`, `not`, and `-` operators before numbers
 - Forbids to use complex default values
+
+### Misc
+
+- Removes `flake8-per-file-ignores` plugin, since `flake8` now handles it
 
 
 ## 0.7.1

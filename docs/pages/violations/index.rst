@@ -31,7 +31,6 @@ flake8-bandit             `S100 - S710 <https://github.com/tylerwince/flake8-ban
 flake8-print              `T001 <https://github.com/jbkahn/flake8-print>`_
 flake8-debugger           `T100 <https://github.com/JBKahn/flake8-debugger/blob/master/flake8_debugger.py>`_
 flake8-type-annotations   `T800 - T801 <https://github.com/sobolevn/flake8-type-annotations#error-codes>`_
-flake8-per-file-ignore    `X100 <https://github.com/snoack/flake8-per-file-ignores>`_
 wemake-python-styleguide  Z, defined here
 ========================  ======
 

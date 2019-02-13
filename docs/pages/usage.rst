@@ -44,8 +44,8 @@ You can ignore:
    with ``Z`` and the first number
 3. Some specific violation with the full violation code
 
-We use `flake8-per-file-ignore <https://github.com/snoack/flake8-per-file-ignores>`_
-plugin, so it is possible to ignore violations on a per-file bases.
+Use `per-file-ignores <https://flake8.pycqa.org/en/latest/user/options.html?highlight=per-file-ignores#cmdoption-flake8-per-file-ignores>`_
+option, so it is possible to ignore violations on a per-file bases.
 It means, that you can have different set of violations
 ignored for different files.
 
