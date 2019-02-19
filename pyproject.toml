@@ -43,7 +43,7 @@ Z = "wemake_python_styleguide.checker:Checker"
 
 [tool.poetry.dependencies]
 python = "^3.6"
-flake8 = "~3.6"
+flake8 = ">=3.6,<3.8"
 attrs = "^18.2"
 typing_extensions = "^3.6"
 astor = "^0.7.1"
