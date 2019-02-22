@@ -35,11 +35,16 @@ def test_del_keyword(
     code,
     default_options,
 ):
-    """Testing that `del` keyword is restricted."""
+    """
+    Testing that `del` keyword is restricted.
+
+    Regression:
+    https://github.com/wemake-services/wemake-python-styleguide/issues/493
+    """
     tree = parse_ast_tree(code)
 
     visitor = WrongKeywordVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [WrongKeywordViolation])
-    assert_error_text(visitor, 'delete')
+    assert_error_text(visitor, 'del')

@@ -902,7 +902,25 @@ class EmptyLineAfterCodingViolation(TokenizeViolation):
     Enforces to have an extra empty line after the ``coding`` comment.
 
     Reasoning:
+        Since we use
+        `flake8-coding <https://github.com/tk0miya/flake8-coding>`_
+        as a part of our linter
+        we care about extra space after this coding comment.
         This is done for pure consistency.
+
+        Why should we even care about this magic coding comment?
+        For several reasons.
+
+        First, explicit encoding is always better that an implicit one,
+        different countries still use some non utf-8 encodings as a default.
+        But, people might override it with other encodings in a comment.
+        Do you know how much pain it can cause to you?
+
+        We still know that ``python3`` uses ``utf-8`` inside.
+
+        Second, some tools break because of this incorrect encoding comment.
+        Including, ``django``, ``flake8``, and ``tokenize`` core module.
+        It is very hard to notice these things when they happen.
 
     Solution:
         Add an empty line between ``coding`` magic comment and your code.

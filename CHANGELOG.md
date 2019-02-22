@@ -14,9 +14,16 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use redundant `+`, `~`, `not`, and `-` operators before numbers
 - Forbids to use complex default values
 
+### Bugfixes
+
+- Fixes problems with empty lines after magic comments, see [#492](https://github.com/wemake-services/wemake-python-styleguide/issues/492)
+- Fixes error message for `del` keyword
+
 ### Misc
 
 - Removes `flake8-per-file-ignores` plugin, since `flake8` now handles it
+- Improves docs for `WrongKeywordViolation`
+- Improves docs for `EmptyLineAfterCodingViolation`
 
 
 ## 0.7.1

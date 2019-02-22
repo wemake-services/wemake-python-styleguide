@@ -335,26 +335,30 @@ class InitModuleHasLogicViolation(SimpleViolation):
 @final
 class WrongKeywordViolation(ASTViolation):
     """
-    Forbids to use some keywords from ``python``.
+    Forbids to use some ``python`` keywords.
 
     Reasoning:
-        We believe that some keywords are anti-patterns.
-        They promote bad-practices like ``global`` and ``pass``,
-        or just not user-friendly like ``del``.
+        Using some keywords generally gives you more pain that relieve.
+
+        ``del`` keyword is not composable with other functions,
+        you cannot pass it as a regular function.
+        It is also quite error-prone due to ``__del__`` magic method complexity
+        and that ``del`` is actually used to nullify variables and delete them
+        from the execution scope.
+        Moreover, it has a lot of substitutions. You won't miss it!
+
+        ``pass`` keyword is just useless by design. There's no usecase for it.
+        Because it does literally nothing.
+
+        ``global`` and ``nonlocal`` promote bad-practices of having an external
+        mutable state somewhere. This solution does not scale.
+        And leads to multiple possible mistakes in the future.
 
     Solution:
         Solutions differ from keyword to keyword.
         ``pass`` should be replaced with docstring or ``contextlib.suppress``.
         ``del`` should be replaced with specialized methods like ``.pop()``.
         ``global`` and ``nonlocal`` usages should be refactored.
-
-    Example::
-
-        # Wrong:
-        pass
-        del
-        nonlocal
-        global
 
     .. versionadded:: 0.1.0
 
