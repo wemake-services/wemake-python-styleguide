@@ -61,6 +61,8 @@ Summary
    RedundantReturningElseViolation
    TryExceptMultipleReturnPathViolation
    ComplexDefaultValuesViolation
+   LoopVariableDefinitionViolation
+   ContextManagerVariableDefinitionViolation
 
 Comments
 --------
@@ -118,6 +120,8 @@ Design
 .. autoclass:: RedundantReturningElseViolation
 .. autoclass:: TryExceptMultipleReturnPathViolation
 .. autoclass:: ComplexDefaultValuesViolation
+.. autoclass:: LoopVariableDefinitionViolation
+.. autoclass:: ContextManagerVariableDefinitionViolation
 
 """
 
@@ -1552,9 +1556,9 @@ class ComplexDefaultValuesViolation(ASTViolation):
     """
     Forbids to use complex defaults.
 
-     Anything that is not a ``ast.Name``, ``ast.Attribute``, ``ast.Str``,
-     ``ast.NameConstant``, ``ast.Tuple``, ``ast.Bytes`` or ``ast.Num`` should
-     be moved out from defaults.
+    Anything that is not a ``ast.Name``, ``ast.Attribute``, ``ast.Str``,
+    ``ast.NameConstant``, ``ast.Tuple``, ``ast.Bytes`` or ``ast.Num`` should
+    be moved out from defaults.
 
     Reasoning:
         It can be tricky. Nothing stops you from making database calls or http
@@ -1567,12 +1571,10 @@ class ComplexDefaultValuesViolation(ASTViolation):
 
         # Correct:
         SHOULD_USE_DOCTEST = 'PYFLAKES_DOCTEST' in os.environ
-        def __init__(self, tree, filename='(none)', builtins=None,
-                         withDoctest=SHOULD_USE_DOCTEST, tokens=()):
+        def __init__(self, withDoctest=SHOULD_USE_DOCTEST):
 
         # Wrong:
-        def __init__(self, tree, filename='(none)', builtins=None,
-                 withDoctest='PYFLAKES_DOCTEST' in os.environ, tokens=()):
+        def __init__(self, withDoctest='PYFLAKES_DOCTEST' in os.environ):
 
     .. versionadded:: 0.8.0
 
@@ -1580,3 +1582,64 @@ class ComplexDefaultValuesViolation(ASTViolation):
 
     error_template = 'Found complex default value'
     code = 459
+
+
+@final
+class LoopVariableDefinitionViolation(ASTViolation):
+    """
+    Forbids to use anything rather than ``ast.Name`` to define loop variables.
+
+    Reasoning:
+        When defining a ``for`` loop with attributes, indexes, calls,
+        or any other nodes it does dirty things inside.
+
+    Solution:
+        Use regular ``ast.Name`` variables.
+        Or tuple of ``ast.Name`` variables.
+
+    Example::
+
+        # Correct:
+        for person in database.people():
+            ...
+
+        # Wrong:
+        for context['pepson'] in database.people():
+            ...
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    error_template = 'Found wrong `for` loop variable definition'
+    code = 460
+
+
+@final
+class ContextManagerVariableDefinitionViolation(ASTViolation):
+    """
+    Forbids to use anything rather than ``ast.Name`` to define contexts.
+
+    Reasoning:
+        When defining a ``with`` context managers with attributes,
+        indexes, calls, or any other nodes it does dirty things inside.
+
+    Solution:
+        Use regular ``ast.Name`` variables.
+
+    Example::
+
+        # Correct:
+        with open('README.md') as readme:
+            ...
+
+        # Wrong:
+        with open('README.md') as files['readme']:
+            ...
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    error_template = 'Found wrong context manager variable definition'
+    code = 461
