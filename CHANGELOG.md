@@ -11,6 +11,7 @@ We used to have incremental versioning before `0.1.0`.
 ### Features
 
 - Updates `flake8` to `3.7+`
+- Adds `flake8-annotations-complexity` as a dependency, forbids complex annotations
 - Forbids to use redundant `+`, `~`, `not`, and `-` operators before numbers
 - Forbids to use complex default values
 - Forbids to use anything rather than names in `for` loop vars definitions
