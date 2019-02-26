@@ -48,6 +48,17 @@ class IfStatementVisitor(BaseNodeVisitor):
 
 @final
 class NegatedConditionVisitor(BaseNodeVisitor):
-    pass
+    print('Finally got it!!!!!!')
+    _returning_nodes: ClassVar[AnyNodes] = (
+        ast.Break,
+        ast.Raise,
+        ast.Return,
+    )
 
+    def _check_negates(self, node: ast.If) -> None:
+        print(node)
+        print('Ta-ta-ta-ta')
 
+    def visit_if(self, node: ast.If) -> None:
+        self._check_negates(node)
+        self.generic_visit(node)

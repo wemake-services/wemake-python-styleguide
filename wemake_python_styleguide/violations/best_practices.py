@@ -61,6 +61,7 @@ Summary
    RedundantReturningElseViolation
    TryExceptMultipleReturnPathViolation
    ComplexDefaultValuesViolation
+   NegatedConditionsViolation
 
 Comments
 --------
@@ -118,6 +119,7 @@ Design
 .. autoclass:: RedundantReturningElseViolation
 .. autoclass:: TryExceptMultipleReturnPathViolation
 .. autoclass:: ComplexDefaultValuesViolation
+.. autoclass:: NegatedConditionsViolation
 
 """
 

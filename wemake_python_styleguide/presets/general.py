@@ -59,6 +59,7 @@ GENERAL_PRESET = (
     comparisons.WrongComparisionOrderVisitor,
 
     conditions.IfStatementVisitor,
+    # conditions.NegatedConditionsViolation,
 
     # Classes:
     classes.WrongClassVisitor,
