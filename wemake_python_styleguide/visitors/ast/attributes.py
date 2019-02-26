@@ -6,6 +6,7 @@ from typing import ClassVar, FrozenSet
 from wemake_python_styleguide.logics.naming import access
 from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.best_practices import (
+    DirectMagicAttributeAccessViolation,
     ProtectedAttributeViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -21,25 +22,40 @@ class WrongAttributeVisitor(BaseNodeVisitor):
         'mcs',
     ))
 
+    _allowed_magic_attributes: ClassVar[FrozenSet[str]] = frozenset((
+        '__class__',
+        '__name__',
+        '__qualname__',
+        '__doc__',
+    ))
+
     def _is_super_called(self, node: ast.Call) -> bool:
         if isinstance(node.func, ast.Name):
             if node.func.id == 'super':
                 return True
         return False
 
+    def _ensure_attribute_type(self, node: ast.Attribute, exception) -> None:
+        if isinstance(node.value, ast.Name):
+            if node.value.id in self._allowed_to_use_protected:
+                return
+
+        if isinstance(node.value, ast.Call):
+            if self._is_super_called(node.value):
+                return
+
+        self.add_violation(exception(node, text=node.attr))
+
     def _check_protected_attribute(self, node: ast.Attribute) -> None:
         if access.is_protected(node.attr):
-            if isinstance(node.value, ast.Name):
-                if node.value.id in self._allowed_to_use_protected:
-                    return
+            self._ensure_attribute_type(node, ProtectedAttributeViolation)
 
-            if isinstance(node.value, ast.Call):
-                if self._is_super_called(node.value):
-                    return
-
-            self.add_violation(
-                ProtectedAttributeViolation(node, text=node.attr),
-            )
+    def _check_magic_attribute(self, node: ast.Attribute) -> None:
+        if access.is_magic(node.attr):
+            if node.attr not in self._allowed_magic_attributes:
+                self._ensure_attribute_type(
+                    node, DirectMagicAttributeAccessViolation,
+                )
 
     def visit_Attribute(self, node: ast.Attribute) -> None:
         """
@@ -47,7 +63,9 @@ class WrongAttributeVisitor(BaseNodeVisitor):
 
         Raises:
             ProtectedAttributeViolation
+            DirectMagicAttributeAccessViolation
 
         """
         self._check_protected_attribute(node)
+        self._check_magic_attribute(node)
         self.generic_visit(node)

@@ -63,6 +63,7 @@ Summary
    ComplexDefaultValuesViolation
    LoopVariableDefinitionViolation
    ContextManagerVariableDefinitionViolation
+   DirectMagicAttributeAccessViolation
 
 Comments
 --------
@@ -122,6 +123,7 @@ Design
 .. autoclass:: ComplexDefaultValuesViolation
 .. autoclass:: LoopVariableDefinitionViolation
 .. autoclass:: ContextManagerVariableDefinitionViolation
+.. autoclass:: DirectMagicAttributeAccessViolation
 
 """
 
@@ -927,14 +929,16 @@ class ProtectedAttributeViolation(ASTViolation):
         self._protected = 1
         cls._hidden_method()
         some.public()
+        super()._protected()
 
         # Wrong:
         print(some._protected)
         instance._hidden()
         self.container._internal = 10
 
-    Note, that it is possible to use protected attributes with ``self``
-    and ``cls`` as base names. We allow this so you can create and
+    Note, that it is possible to use protected attributes with
+    ``self``, ``cls``, and ``super()`` as base names.
+    We allow this so you can create and
     use protected attributes and methods inside the class context.
     This is how protected attributes should be used.
 
@@ -1643,3 +1647,37 @@ class ContextManagerVariableDefinitionViolation(ASTViolation):
 
     error_template = 'Found wrong context manager variable definition'
     code = 461
+
+
+@final
+class DirectMagicAttributeAccessViolation(ASTViolation):
+    """
+    Forbids to use direct magic attributes and methods.
+
+    Reasoning:
+        When using direct magic attributes or method
+        it means that you are doing something wrong.
+        Magic methods are not suited to be directly called or accessed.
+
+    Solution:
+        Use special syntax constructs that will call underlying magic methods.
+
+    Example::
+
+        # Correct:
+        super().__init__()
+
+        # Wrong:
+        2..__truediv__(2)
+        d.__delitem__('a')
+
+    Note, that it is possible to use direct magic attributes with
+    ``self``, ``cls``, and ``super()`` as base names.
+    We allow this because a lot of internal logic relies on these methods.
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    error_template = 'Found direct magic attribute usage: {0}'
+    code = 462

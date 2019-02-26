@@ -17,6 +17,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use anything rather than names in `for` loop vars definitions
 - Forbids to use anything rather than names in `with` block vars definitions
 - Forbids to use anything rather than names in comprehension vars definitions
+- Forbids to use direct magic attributes access
 
 ### Bugfixes
 
@@ -28,6 +29,7 @@ We used to have incremental versioning before `0.1.0`.
 - Removes `flake8-per-file-ignores` plugin, since `flake8` now handles it
 - Improves docs for `WrongKeywordViolation`
 - Improves docs for `EmptyLineAfterCodingViolation`
+- Improves docs for `ProtectedAttributeViolation`
 - Adds docs about `.pyi` files
 
 

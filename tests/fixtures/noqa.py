@@ -362,3 +362,6 @@ for nodes[0] in [1, 2, 3]:  # noqa: Z460
 
 with open('some') as MyBadException.custom:  # noqa: Z461
     anti_z444 = 1
+
+
+anti_z444.__truediv__(1)  # noqa: Z462
