@@ -1576,3 +1576,47 @@ class ComplexDefaultValuesViolation(ASTViolation):
 
     error_template = 'Found complex default value'
     code = 459
+
+
+@final
+class NegatedConditionsViolation(ASTViolation):
+    """
+    Forbids to use negated conditions with `else` clause.
+
+    Reasoning:
+        Such expressions are hard to read and tends to have a better naming.
+        Better naming simplifies readability and understanding things that
+        happens. As long as understanding things is simple it's hard to make
+        a mistake or easy to find the one.
+
+    Solution:
+        Move actions from the negated `if` condition to the `else` condition.
+
+    Example::
+
+        # Correct:
+        if some:
+             ...
+        else:
+             ...
+
+        if some == 9:
+             ...
+        else:
+             ...
+
+        # Wrong:
+        if not some:
+             ...
+        else:
+             ...
+
+        if some != 9:
+             ...
+        else:
+             ...
+
+    """
+
+    error_template = 'Found negated condition'
+    code = 460

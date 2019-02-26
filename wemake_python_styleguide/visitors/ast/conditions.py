@@ -6,6 +6,7 @@ from typing import ClassVar
 from wemake_python_styleguide.types import AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
     RedundantReturningElseViolation,
+    NegatedConditionsViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
@@ -43,3 +44,10 @@ class IfStatementVisitor(BaseNodeVisitor):
         """
         self._check_redundant_else(node)
         self.generic_visit(node)
+
+
+@final
+class NegatedConditionVisitor(BaseNodeVisitor):
+    pass
+
+
