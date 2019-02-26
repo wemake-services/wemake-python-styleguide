@@ -176,7 +176,7 @@ description = "the modular source code checker: pep8, pyflakes and co"
 name = "flake8"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "3.7.6"
+version = "3.7.7"
 
 [package.dependencies]
 entrypoints = ">=0.3.0,<0.4.0"
@@ -908,7 +908,7 @@ docutils = ["02aec4bd92ab067f6ff27a38a38a41173bf01bed8f89157768c1573f53e474a6", 
 dparse = ["00a5fdfa900629e5159bf3600d44905b333f4059a3366f28e0dbd13eeab17b19", "cef95156fa0adedaf042cd42f9990974bec76f25dfeca4dc01f381a243d5aa5b"]
 entrypoints = ["589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19", "c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451"]
 eradicate = ["4ffda82aae6fd49dfffa777a857cb758d77502a1f2e0f54c9ac5155a39d2d01a"]
-flake8 = ["6d8c66a65635d46d54de59b027a1dda40abbe2275b3164b634835ac9c13fd048", "6eab21c6e34df2c05416faa40d0c59963008fff29b6f0ccfe8fa28152ab3e383"]
+flake8 = ["859996073f341f2670741b51ec1e67a01da142831aa1fdc6242dbf88dffbe661", "a796a115208f5c03b18f332f7c11729812c8c3ded6c46319c59b53efd3819da8"]
 flake8-annotations-complexity = ["bcb7873aab623986f3daedc968ddf9eff9e08ccece7008cbc8a28253d732b846"]
 flake8-bandit = ["5eac24fa9fef532e4e4ce599c5b3c5248c5cc435d2927537b529b0a7bcb72467", "be5840923ccf06cac6a8893a2f0abc17f03b6b9fdb5284d796f722b69c8f840b"]
 flake8-broken-line = ["3eb823f48b4ec67735ebbe8e282319826c8e8be7dfc185c9e259228084c21de2", "84147d38a1562d011a8de0bb1de299a715f7dea1a7332bd6946db04a1e4c3ddd"]
