@@ -22,9 +22,12 @@ else:
 
 @pytest.mark.parametrize('code', [
     'not some',
+    '-some',
     'some != 1',
     'some',
     'some == 0',
+    'some != other',
+    'some > 1',
 ])
 def test_negated_simple_conditions(
     code,
@@ -44,6 +47,7 @@ def test_negated_simple_conditions(
 @pytest.mark.parametrize('code', [
     'not some',
     'some != 1',
+    'some != other',
 ])
 def test_wrong_negated_complex_conditions(
     code,
@@ -62,7 +66,11 @@ def test_wrong_negated_complex_conditions(
 
 @pytest.mark.parametrize('code', [
     'some',
+    '-some',
+    '~some',
     'some == 0',
+    'some > -1',
+    'some < other',
 ])
 def test_correctly_negated_complex_conditions(
     code,
