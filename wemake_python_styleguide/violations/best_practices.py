@@ -1684,7 +1684,7 @@ class DirectMagicAttributeAccessViolation(ASTViolation):
     error_template = 'Found direct magic attribute usage: {0}'
     code = 462
 
-    
+
 @final
 class NegatedConditionsViolation(ASTViolation):
     """
@@ -1694,7 +1694,8 @@ class NegatedConditionsViolation(ASTViolation):
         It easier to read and name regular conditions. Not negated ones.
 
     Solution:
-        Move actions from the negated ``if`` condition to the ``else`` condition.
+        Move actions from the negated ``if`` condition to the ``else``
+        condition.
 
     Example::
 
