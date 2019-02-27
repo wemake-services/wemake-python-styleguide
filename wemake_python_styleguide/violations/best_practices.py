@@ -1717,6 +1717,8 @@ class NegatedConditionsViolation(ASTViolation):
         else:
              ...
 
+    .. versionadded:: 0.8.0
+
     """
 
     error_template = 'Found negated condition'
