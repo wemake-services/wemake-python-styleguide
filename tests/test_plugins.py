@@ -51,5 +51,4 @@ def test_noqa_fixture_disabled(absolute_path):
     assert output.count('S101') > 0  # flake8-bandit
     assert output.count('T001') > 0  # flake8-print
     assert output.count('T100') > 0  # flake8-debugger
-    assert output.count('T800') > 0  # flake8-type-annotations
     assert output.count('TAE002') > 0  # flake8-annotations-complexity

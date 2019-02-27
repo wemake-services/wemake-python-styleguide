@@ -5,7 +5,7 @@ We used to have incremental versioning before `0.1.0`.
 
 
 
-## 0.8.0
+## WIP (0.8.0)
 
 
 ### Features
@@ -27,6 +27,7 @@ We used to have incremental versioning before `0.1.0`.
 ### Misc
 
 - Removes `flake8-per-file-ignores` plugin, since `flake8` now handles it
+- Removes `flake8-type-annotations` plugin, since `flake8` now handles it
 - Improves docs for `WrongKeywordViolation`
 - Improves docs for `EmptyLineAfterCodingViolation`
 - Improves docs for `ProtectedAttributeViolation`
