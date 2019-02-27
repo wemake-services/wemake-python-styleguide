@@ -22,6 +22,7 @@ Summary
    WrongMagicCommentViolation
    WrongDocCommentViolation
    OveruseOfNoqaCommentViolation
+   OveruseOfNoCoverCommentViolation
    WrongModuleMetadataViolation
    EmptyModuleViolation
    InitModuleHasLogicViolation
@@ -72,6 +73,7 @@ Comments
 .. autoclass:: WrongMagicCommentViolation
 .. autoclass:: WrongDocCommentViolation
 .. autoclass:: OveruseOfNoqaCommentViolation
+.. autoclass:: OveruseOfNoCoverCommentViolation
 
 Modules
 -------
@@ -221,17 +223,17 @@ class OveruseOfNoqaCommentViolation(SimpleViolation):
     """
     Forbids to use too many ``# noqa`` comments.
 
-    We check this count on a per-module basis.
+    We count it on a per-module basis.
     We use :str:`wemake_python_styleguide.constants.MAX_NOQA_COMMENTS`
     as a default value.
 
     Reasoning:
-        Having too many ``# noqa`` comments with make your code
+        Having too many ``# noqa`` comments make your code
         less readable and clearly indicates that there's something
         wrong with it.
 
     Solution:
-        Refactor your code to much the style.
+        Refactor your code to match our style.
         Or use a config file to switch off some checks.
 
     .. versionadded:: 0.7.0
@@ -240,6 +242,33 @@ class OveruseOfNoqaCommentViolation(SimpleViolation):
 
     error_template = 'Found `noqa` comments overuse: {0}'
     code = 402
+
+
+@final
+class OveruseOfNoCoverCommentViolation(SimpleViolation):
+    """
+    Forbids to use too many ``# pragma: no cover`` comments.
+
+    We count it on a per-module basis.
+    We use :str:`wemake_python_styleguide.constants.MAX_NO_COVER_COMMENTS`
+    as a default value.
+
+    Reasoning:
+        Having too many ``# pragma: no cover`` comments
+        clearly indicates that there's something wrong with it.
+        Moreover, it makes your tests useless, since they do not cover
+        a big partion of your code.
+
+    Solution:
+        Refactor your code to much the style.
+        Or use a config file to switch off some checks.
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    error_template = 'Found `noqa` comments overuse: {0}'
+    code = 403
 
 
 # Modules:

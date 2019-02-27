@@ -19,9 +19,14 @@ import tokenize
 from typing import ClassVar, FrozenSet
 from typing.re import Pattern
 
-from wemake_python_styleguide.constants import MAX_NOQA_COMMENTS
+from wemake_python_styleguide.constants import (
+    MAX_NO_COVER_COMMENTS,
+    MAX_NOQA_COMMENTS,
+)
+from wemake_python_styleguide.logics.tokens import get_comment_text
 from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.best_practices import (
+    OveruseOfNoCoverCommentViolation,
     OveruseOfNoqaCommentViolation,
     WrongDocCommentViolation,
     WrongMagicCommentViolation,
@@ -36,6 +41,7 @@ from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 class WrongCommentVisitor(BaseTokenVisitor):
     """Checks comment tokens."""
 
+    _no_cover: ClassVar[Pattern] = re.compile(r'^pragma:\s+no\s+cover')
     _noqa_check: ClassVar[Pattern] = re.compile(r'^noqa:?($|[A-Z\d\,\s]+)')
     _type_check: ClassVar[Pattern] = re.compile(
         r'^type:\s?([\w\d\[\]\'\"\.]+)$',
@@ -45,12 +51,10 @@ class WrongCommentVisitor(BaseTokenVisitor):
         """Initializes a counter."""
         super().__init__(*args, **kwargs)
         self._noqa_count = 0
-
-    def _get_comment_text(self, token: tokenize.TokenInfo) -> str:
-        return token.string[1:].strip()
+        self._no_cover_count = 0
 
     def _check_noqa(self, token: tokenize.TokenInfo) -> None:
-        comment_text = self._get_comment_text(token)
+        comment_text = get_comment_text(token)
         match = self._noqa_check.match(comment_text)
         if not match:
             return
@@ -63,7 +67,7 @@ class WrongCommentVisitor(BaseTokenVisitor):
             self.add_violation(WrongMagicCommentViolation(text=comment_text))
 
     def _check_typed_ast(self, token: tokenize.TokenInfo) -> None:
-        comment_text = self._get_comment_text(token)
+        comment_text = get_comment_text(token)
         match = self._type_check.match(comment_text)
         if not match:
             return
@@ -75,14 +79,27 @@ class WrongCommentVisitor(BaseTokenVisitor):
             )
 
     def _check_empty_doc_comment(self, token: tokenize.TokenInfo) -> None:
-        comment_text = self._get_comment_text(token)
-        if comment_text == ':':
+        if get_comment_text(token) == ':':
             self.add_violation(WrongDocCommentViolation(token))
+
+    def _check_cover_comments(self, token: tokenize.TokenInfo) -> None:
+        comment_text = get_comment_text(token)
+        match = self._no_cover.match(comment_text)
+        if not match:
+            return
+
+        self._no_cover_count += 1
 
     def _post_visit(self) -> None:
         if self._noqa_count > MAX_NOQA_COMMENTS:
             self.add_violation(
                 OveruseOfNoqaCommentViolation(text=str(self._noqa_count)),
+            )
+        if self._no_cover_count > MAX_NO_COVER_COMMENTS:
+            self.add_violation(
+                OveruseOfNoCoverCommentViolation(
+                    text=str(self._no_cover_count),
+                ),
             )
 
     def visit_comment(self, token: tokenize.TokenInfo) -> None:
@@ -98,6 +115,7 @@ class WrongCommentVisitor(BaseTokenVisitor):
         self._check_noqa(token)
         self._check_typed_ast(token)
         self._check_empty_doc_comment(token)
+        self._check_cover_comments(token)
 
 
 @final

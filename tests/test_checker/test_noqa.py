@@ -104,6 +104,7 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
         'Z400': 0,
         'Z401': 0,
         'Z402': 0,
+        'Z403': 0,
 
         'Z410': 1,
         'Z411': 0,

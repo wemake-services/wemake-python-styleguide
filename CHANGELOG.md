@@ -18,6 +18,8 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use anything rather than names in `with` block vars definitions
 - Forbids to use anything rather than names in comprehension vars definitions
 - Forbids to use direct magic attributes access
+- Forbids to use negated conditions
+- Forbids to use too many `# pragma: no cover` comments
 
 ### Bugfixes
 
