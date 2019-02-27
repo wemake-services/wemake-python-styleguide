@@ -32,11 +32,9 @@ class IfStatementVisitor(BaseNodeVisitor):
         ):
             self.add_violation(NegatedConditionsViolation(node))
 
-        if isinstance(node.test, ast.Compare) and any(isinstance(
-            elem,
-            ast.NotEq,
-        ) for elem in node.test.ops
-                                                      ):
+        if isinstance(node.test, ast.Compare) and any(
+            isinstance(elem, ast.NotEq) for elem in node.test.ops
+        ):
             self.add_violation(NegatedConditionsViolation(node))
 
     def _check_redundant_else(self, node: ast.If) -> None:
