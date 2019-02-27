@@ -7,7 +7,8 @@
   :caption: Userguide:
   :hidden:
 
-  pages/usage.rst
+  pages/usage/setup.rst
+  pages/usage/integrations.rst
   pages/violations/index.rst
   pages/constants.rst
   pages/options/config.rst

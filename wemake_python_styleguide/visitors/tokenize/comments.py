@@ -129,7 +129,7 @@ class FileMagicCommentsVisitor(BaseTokenVisitor):
             https://www.python.org/dev/peps/pep-0263/
 
         """
-        if token.start[0] == 1:
+        if token.start == (1, 0):
             tokens = iter(self.file_tokens[self.file_tokens.index(token):])
             available_offset = 2  # comment + newline
             while True:

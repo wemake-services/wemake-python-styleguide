@@ -30,6 +30,15 @@ nonempty_module_with_multiple_comments = """#!/usr/bin/python
 SOME_VAR = 1
 """
 
+nonempty_without_codding_comment = """import os
+
+print(os.path.join('a', 'b'))
+"""
+
+nonempty_without_codding_regression492 = """from api import Post  # noqa: F401
+from api.models.publications import Publication  # noqa: F401
+"""
+
 # Wrong:
 
 wrong_module_with_coding = """# -*- coding: utf-8 -*-
@@ -43,6 +52,8 @@ SOME_VAR = 1
     nonempty_module_with_coding,
     nonempty_module,
     nonempty_module_with_multiple_comments,
+    nonempty_without_codding_comment,
+    nonempty_without_codding_regression492,
 ])
 def test_correct_comments(
     parse_tokens,

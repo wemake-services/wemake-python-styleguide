@@ -37,9 +37,6 @@ class Test(object):
 
 protected_name_definition = '_protected = 1'
 protected_name_attr_definition = '_protected.some = 1'
-magic_method_called = 'Test.__init__()'
-magic_attribute_accessed = 'Test.__dict__'
-magic_attribute_definition = 'Test.__dict__ = dict()'
 
 protected_self_attribute = """
 class Test(object):
@@ -142,9 +139,6 @@ def test_protected_attribute_is_restricted(
 
 @pytest.mark.parametrize('code', [
     protected_name_definition,
-    magic_attribute_accessed,
-    magic_method_called,
-    magic_attribute_definition,
     protected_name_attr_definition,
     protected_self_attribute,
     protected_self_method,

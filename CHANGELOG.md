@@ -5,13 +5,33 @@ We used to have incremental versioning before `0.1.0`.
 
 
 
-## 0.8.0
+## WIP (0.8.0)
 
 
 ### Features
 
+- Updates `flake8` to `3.7+`
+- Adds `flake8-annotations-complexity` as a dependency, forbids complex annotations
 - Forbids to use redundant `+`, `~`, `not`, and `-` operators before numbers
 - Forbids to use complex default values
+- Forbids to use anything rather than names in `for` loop vars definitions
+- Forbids to use anything rather than names in `with` block vars definitions
+- Forbids to use anything rather than names in comprehension vars definitions
+- Forbids to use direct magic attributes access
+
+### Bugfixes
+
+- Fixes problems with empty lines after magic comments, see [#492](https://github.com/wemake-services/wemake-python-styleguide/issues/492)
+- Fixes error message for `del` keyword
+
+### Misc
+
+- Removes `flake8-per-file-ignores` plugin, since `flake8` now handles it
+- Removes `flake8-type-annotations` plugin, since `flake8` now handles it
+- Improves docs for `WrongKeywordViolation`
+- Improves docs for `EmptyLineAfterCodingViolation`
+- Improves docs for `ProtectedAttributeViolation`
+- Adds docs about `.pyi` files
 
 
 ## 0.7.1

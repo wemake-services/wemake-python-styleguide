@@ -348,10 +348,20 @@ def multiple_return_path():
         return 3
 
 
-def bad_default_values( # noqa: Z459
+def bad_default_values(  # noqa: Z459
     self,
     filename='(none)',
     builtins=None,
     withDoctest='PYFLAKES_DOCTEST' in os.environ,
 ):
     return True
+
+
+for nodes[0] in [1, 2, 3]:  # noqa: Z460
+    anti_z444 = 1
+
+with open('some') as MyBadException.custom:  # noqa: Z461
+    anti_z444 = 1
+
+
+anti_z444.__truediv__(1)  # noqa: Z462

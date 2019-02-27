@@ -7,9 +7,13 @@ from typing import ClassVar, List, Type, Union
 import astor
 
 from wemake_python_styleguide.logics.nodes import get_parent, is_contained
+from wemake_python_styleguide.logics.variables import (
+    is_valid_block_variable_definition,
+)
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
     BaseExceptionViolation,
+    ContextManagerVariableDefinitionViolation,
     DuplicateExceptionViolation,
     RaiseNotImplementedViolation,
     RedundantFinallyViolation,
@@ -143,11 +147,11 @@ class WrongKeywordVisitor(BaseNodeVisitor):
 
     def _check_keyword(self, node: ast.AST) -> None:
         if isinstance(node, self._forbidden_keywords):
-            self.add_violation(
-                WrongKeywordViolation(
-                    node, text=node.__class__.__qualname__.lower(),
-                ),
-            )
+            if isinstance(node, ast.Delete):
+                message = 'del'
+            else:
+                message = node.__class__.__qualname__.lower()
+            self.add_violation(WrongKeywordViolation(node, text=message))
 
     def visit(self, node: ast.AST) -> None:
         """
@@ -279,6 +283,26 @@ class WrongContextManagerVisitor(BaseNodeVisitor):
             self.add_violation(
                 MultipleContextManagerAssignmentsViolation(node),
             )
+
+    def _check_variable_definitions(self, node: ast.withitem) -> None:
+        if node.optional_vars is None:
+            return
+
+        if not is_valid_block_variable_definition(node.optional_vars):
+            self.add_violation(
+                ContextManagerVariableDefinitionViolation(get_parent(node)),
+            )
+
+    def visit_withitem(self, node: ast.withitem) -> None:
+        """
+        Checks that all variables inside context managers defined correctly.
+
+        Raises:
+            ContextManagerVariableDefinitionViolation
+
+        """
+        self._check_variable_definitions(node)
+        self.generic_visit(node)
 
     def visit_any_with(self, node: AnyWith) -> None:
         """

@@ -35,6 +35,7 @@ GENERAL_PRESET = (
 
     loops.WrongComprehensionVisitor,
     loops.WrongLoopVisitor,
+    loops.WrongLoopDefinitionVisitor,
 
     attributes.WrongAttributeVisitor,
     annotations.WrongAnnotationVisitor,

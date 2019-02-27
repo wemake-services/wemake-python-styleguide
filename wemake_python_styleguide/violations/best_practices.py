@@ -61,6 +61,9 @@ Summary
    RedundantReturningElseViolation
    TryExceptMultipleReturnPathViolation
    ComplexDefaultValuesViolation
+   LoopVariableDefinitionViolation
+   ContextManagerVariableDefinitionViolation
+   DirectMagicAttributeAccessViolation
    NegatedConditionsViolation
 
 Comments
@@ -119,6 +122,9 @@ Design
 .. autoclass:: RedundantReturningElseViolation
 .. autoclass:: TryExceptMultipleReturnPathViolation
 .. autoclass:: ComplexDefaultValuesViolation
+.. autoclass:: LoopVariableDefinitionViolation
+.. autoclass:: ContextManagerVariableDefinitionViolation
+.. autoclass:: DirectMagicAttributeAccessViolation
 .. autoclass:: NegatedConditionsViolation
 
 """
@@ -337,26 +343,30 @@ class InitModuleHasLogicViolation(SimpleViolation):
 @final
 class WrongKeywordViolation(ASTViolation):
     """
-    Forbids to use some keywords from ``python``.
+    Forbids to use some ``python`` keywords.
 
     Reasoning:
-        We believe that some keywords are anti-patterns.
-        They promote bad-practices like ``global`` and ``pass``,
-        or just not user-friendly like ``del``.
+        Using some keywords generally gives you more pain that relieve.
+
+        ``del`` keyword is not composable with other functions,
+        you cannot pass it as a regular function.
+        It is also quite error-prone due to ``__del__`` magic method complexity
+        and that ``del`` is actually used to nullify variables and delete them
+        from the execution scope.
+        Moreover, it has a lot of substitutions. You won't miss it!
+
+        ``pass`` keyword is just useless by design. There's no usecase for it.
+        Because it does literally nothing.
+
+        ``global`` and ``nonlocal`` promote bad-practices of having an external
+        mutable state somewhere. This solution does not scale.
+        And leads to multiple possible mistakes in the future.
 
     Solution:
         Solutions differ from keyword to keyword.
         ``pass`` should be replaced with docstring or ``contextlib.suppress``.
         ``del`` should be replaced with specialized methods like ``.pop()``.
         ``global`` and ``nonlocal`` usages should be refactored.
-
-    Example::
-
-        # Wrong:
-        pass
-        del
-        nonlocal
-        global
 
     .. versionadded:: 0.1.0
 
@@ -921,14 +931,16 @@ class ProtectedAttributeViolation(ASTViolation):
         self._protected = 1
         cls._hidden_method()
         some.public()
+        super()._protected()
 
         # Wrong:
         print(some._protected)
         instance._hidden()
         self.container._internal = 10
 
-    Note, that it is possible to use protected attributes with ``self``
-    and ``cls`` as base names. We allow this so you can create and
+    Note, that it is possible to use protected attributes with
+    ``self``, ``cls``, and ``super()`` as base names.
+    We allow this so you can create and
     use protected attributes and methods inside the class context.
     This is how protected attributes should be used.
 
@@ -1550,9 +1562,9 @@ class ComplexDefaultValuesViolation(ASTViolation):
     """
     Forbids to use complex defaults.
 
-     Anything that is not a ``ast.Name``, ``ast.Attribute``, ``ast.Str``,
-     ``ast.NameConstant``, ``ast.Tuple``, ``ast.Bytes`` or ``ast.Num`` should
-     be moved out from defaults.
+    Anything that is not a ``ast.Name``, ``ast.Attribute``, ``ast.Str``,
+    ``ast.NameConstant``, ``ast.Tuple``, ``ast.Bytes`` or ``ast.Num`` should
+    be moved out from defaults.
 
     Reasoning:
         It can be tricky. Nothing stops you from making database calls or http
@@ -1565,12 +1577,10 @@ class ComplexDefaultValuesViolation(ASTViolation):
 
         # Correct:
         SHOULD_USE_DOCTEST = 'PYFLAKES_DOCTEST' in os.environ
-        def __init__(self, tree, filename='(none)', builtins=None,
-                         withDoctest=SHOULD_USE_DOCTEST, tokens=()):
+        def __init__(self, withDoctest=SHOULD_USE_DOCTEST):
 
         # Wrong:
-        def __init__(self, tree, filename='(none)', builtins=None,
-                 withDoctest='PYFLAKES_DOCTEST' in os.environ, tokens=()):
+        def __init__(self, withDoctest='PYFLAKES_DOCTEST' in os.environ):
 
     .. versionadded:: 0.8.0
 
@@ -1581,30 +1591,119 @@ class ComplexDefaultValuesViolation(ASTViolation):
 
 
 @final
-class NegatedConditionsViolation(ASTViolation):
+class LoopVariableDefinitionViolation(ASTViolation):
     """
-    Forbids to use negated conditions with `else` clause.
+    Forbids to use anything rather than ``ast.Name`` to define loop variables.
 
     Reasoning:
-        Such expressions are hard to read and tends to have a better naming.
-        Better naming simplifies readability and understanding things that
-        happens. As long as understanding things is simple it's hard to make
-        a mistake or easy to find the one.
+        When defining a ``for`` loop with attributes, indexes, calls,
+        or any other nodes it does dirty things inside.
 
     Solution:
-        Move actions from the negated `if` condition to the `else` condition.
+        Use regular ``ast.Name`` variables.
+        Or tuple of ``ast.Name`` variables.
 
     Example::
 
         # Correct:
+        for person in database.people():
+            ...
+
+        # Wrong:
+        for context['pepson'] in database.people():
+            ...
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    error_template = 'Found wrong `for` loop variable definition'
+    code = 460
+
+
+@final
+class ContextManagerVariableDefinitionViolation(ASTViolation):
+    """
+    Forbids to use anything rather than ``ast.Name`` to define contexts.
+
+    Reasoning:
+        When defining a ``with`` context managers with attributes,
+        indexes, calls, or any other nodes it does dirty things inside.
+
+    Solution:
+        Use regular ``ast.Name`` variables.
+
+    Example::
+
+        # Correct:
+        with open('README.md') as readme:
+            ...
+
+        # Wrong:
+        with open('README.md') as files['readme']:
+            ...
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    error_template = 'Found wrong context manager variable definition'
+    code = 461
+
+
+@final
+class DirectMagicAttributeAccessViolation(ASTViolation):
+    """
+    Forbids to use direct magic attributes and methods.
+
+    Reasoning:
+        When using direct magic attributes or method
+        it means that you are doing something wrong.
+        Magic methods are not suited to be directly called or accessed.
+
+    Solution:
+        Use special syntax constructs that will call underlying magic methods.
+
+    Example::
+
+        # Correct:
+        super().__init__()
+
+        # Wrong:
+        2..__truediv__(2)
+        d.__delitem__('a')
+
+    Note, that it is possible to use direct magic attributes with
+    ``self``, ``cls``, and ``super()`` as base names.
+    We allow this because a lot of internal logic relies on these methods.
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    error_template = 'Found direct magic attribute usage: {0}'
+    code = 462
+
+    
+@final
+class NegatedConditionsViolation(ASTViolation):
+    """
+    Forbids to use negated conditions together with ``else`` clause.
+
+    Reasoning:
+        It easier to read and name regular conditions. Not negated ones.
+
+    Solution:
+        Move actions from the negated ``if`` condition to the ``else`` condition.
+
+    Example::
+
         if some:
              ...
         else:
              ...
 
-        if some == 9:
-             ...
-        else:
+        if not some:
              ...
 
         # Wrong:
@@ -1621,4 +1720,4 @@ class NegatedConditionsViolation(ASTViolation):
     """
 
     error_template = 'Found negated condition'
-    code = 460
+    code = 463

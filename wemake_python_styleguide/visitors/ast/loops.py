@@ -7,8 +7,12 @@ from typing import ClassVar, DefaultDict, List, Optional, Union
 from typing_extensions import final
 
 from wemake_python_styleguide.logics.nodes import get_parent, is_contained
+from wemake_python_styleguide.logics.variables import (
+    is_valid_block_variable_definition,
+)
 from wemake_python_styleguide.violations.best_practices import (
     LambdaInsideLoopViolation,
+    LoopVariableDefinitionViolation,
     RedundantLoopElseViolation,
     YieldInComprehensionViolation,
 )
@@ -22,6 +26,7 @@ from wemake_python_styleguide.violations.consistency import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
+AnyForLoop = Union[ast.For, ast.AsyncFor]
 AnyLoop = Union[ast.For, ast.While, ast.AsyncFor]
 AnyComprehension = Union[
     ast.ListComp,
@@ -167,3 +172,38 @@ class WrongLoopVisitor(BaseNodeVisitor):
         self._check_lambda_inside_loop(node)
         self._check_useless_continue(node)
         self.generic_visit(node)
+
+
+@final
+@alias('visit_any_for_loop', (
+    'visit_For',
+    'visit_AsyncFor',
+))
+class WrongLoopDefinitionVisitor(BaseNodeVisitor):
+    """Responsible for ``for`` loops and comprehensions definitions."""
+
+    def visit_any_for_loop(self, node: AnyForLoop) -> None:
+        """
+        Ensures that ``for`` loop definitions are correct.
+
+        Raises:
+            LoopVariableDefinitionViolation
+
+        """
+        self._check_variable_definitions(node.target)
+        self.generic_visit(node)
+
+    def visit_comprehension(self, node: ast.comprehension) -> None:
+        """
+        Ensures that comprehension definitions are correct.
+
+        Raises:
+            LoopVariableDefinitionViolation
+
+        """
+        self._check_variable_definitions(node.target)
+        self.generic_visit(node)
+
+    def _check_variable_definitions(self, node: ast.AST) -> None:
+        if not is_valid_block_variable_definition(node):
+            self.add_violation(LoopVariableDefinitionViolation(node))
