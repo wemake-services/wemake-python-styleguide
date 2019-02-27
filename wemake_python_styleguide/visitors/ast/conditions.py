@@ -22,6 +22,16 @@ class IfStatementVisitor(BaseNodeVisitor):
         ast.Return,
     )
 
+    def _check_negates(self, node: ast.If) -> None:
+        if not node.orelse:
+            return
+
+        if isinstance(node.test, ast.UnaryOp) and isinstance(node.test.op, ast.Not):
+            self.add_violation(NegatedConditionsViolation(node))
+
+        if isinstance(node.test, ast.Compare) and any(isinstance(elem, ast.NotEq) for elem in node.test.ops):
+            self.add_violation(NegatedConditionsViolation(node))
+
     def _check_redundant_else(self, node: ast.If) -> None:
         if not node.orelse:
             return
@@ -40,25 +50,8 @@ class IfStatementVisitor(BaseNodeVisitor):
 
         Raises:
             RedundantReturningElseViolation
-
+            NegatedConditionsViolation
         """
         self._check_redundant_else(node)
-        self.generic_visit(node)
-
-
-@final
-class NegatedConditionVisitor(BaseNodeVisitor):
-    print('Finally got it!!!!!!')
-    _returning_nodes: ClassVar[AnyNodes] = (
-        ast.Break,
-        ast.Raise,
-        ast.Return,
-    )
-
-    def _check_negates(self, node: ast.If) -> None:
-        print(node)
-        print('Ta-ta-ta-ta')
-
-    def visit_if(self, node: ast.If) -> None:
         self._check_negates(node)
         self.generic_visit(node)
