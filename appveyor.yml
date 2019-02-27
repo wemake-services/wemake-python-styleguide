@@ -36,8 +36,8 @@ test_script:
   - "poetry run pytest"
   - "poetry run doc8 -q docs"
   - "poetry check"
-  - "pip check"
-  - "safety check --bare --full-report"
+  - "poetry run pip check"
+  - "poetry run safety check --bare --full-report"
 
 notifications:
   - provider: Email
