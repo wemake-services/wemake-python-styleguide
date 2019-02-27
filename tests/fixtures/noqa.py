@@ -365,3 +365,8 @@ with open('some') as MyBadException.custom:  # noqa: Z461
 
 
 anti_z444.__truediv__(1)  # noqa: Z462
+
+if not some: # noqa: Z463
+    print('False')
+else:
+    print('Incorrect')

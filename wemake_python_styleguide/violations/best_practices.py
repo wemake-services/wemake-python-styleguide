@@ -64,6 +64,7 @@ Summary
    LoopVariableDefinitionViolation
    ContextManagerVariableDefinitionViolation
    DirectMagicAttributeAccessViolation
+   NegatedConditionsViolation
 
 Comments
 --------
@@ -124,6 +125,7 @@ Design
 .. autoclass:: LoopVariableDefinitionViolation
 .. autoclass:: ContextManagerVariableDefinitionViolation
 .. autoclass:: DirectMagicAttributeAccessViolation
+.. autoclass:: NegatedConditionsViolation
 
 """
 
@@ -1681,3 +1683,44 @@ class DirectMagicAttributeAccessViolation(ASTViolation):
 
     error_template = 'Found direct magic attribute usage: {0}'
     code = 462
+
+
+@final
+class NegatedConditionsViolation(ASTViolation):
+    """
+    Forbids to use negated conditions together with ``else`` clause.
+
+    Reasoning:
+        It easier to read and name regular conditions. Not negated ones.
+
+    Solution:
+        Move actions from the negated ``if`` condition to the ``else``
+        condition.
+
+    Example::
+
+        if some:
+             ...
+        else:
+             ...
+
+        if not some:
+             ...
+
+        # Wrong:
+        if not some:
+             ...
+        else:
+             ...
+
+        if some != 9:
+             ...
+        else:
+             ...
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    error_template = 'Found negated condition'
+    code = 463

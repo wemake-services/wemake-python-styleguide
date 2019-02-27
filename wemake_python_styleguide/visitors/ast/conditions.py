@@ -5,6 +5,7 @@ from typing import ClassVar
 
 from wemake_python_styleguide.types import AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
+    NegatedConditionsViolation,
     RedundantReturningElseViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -20,6 +21,21 @@ class IfStatementVisitor(BaseNodeVisitor):
         ast.Raise,
         ast.Return,
     )
+
+    def _check_negated_conditions(self, node: ast.If) -> None:
+        if not node.orelse:
+            return
+
+        if isinstance(node.test, ast.UnaryOp) and isinstance(
+            node.test.op,
+            ast.Not,
+        ):
+            self.add_violation(NegatedConditionsViolation(node))
+
+        if isinstance(node.test, ast.Compare) and any(
+            isinstance(elem, ast.NotEq) for elem in node.test.ops
+        ):
+            self.add_violation(NegatedConditionsViolation(node))
 
     def _check_redundant_else(self, node: ast.If) -> None:
         if not node.orelse:
@@ -39,7 +55,9 @@ class IfStatementVisitor(BaseNodeVisitor):
 
         Raises:
             RedundantReturningElseViolation
+            NegatedConditionsViolation
 
         """
+        self._check_negated_conditions(node)
         self._check_redundant_else(node)
         self.generic_visit(node)

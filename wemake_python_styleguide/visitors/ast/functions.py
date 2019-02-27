@@ -174,6 +174,7 @@ class FunctionDefinitionVisitor(BaseNodeVisitor):
 
         Raises:
             UnusedVariableIsUsedViolation
+            ComplexDefaultValuesViolation
 
         """
         self._check_argument_default_values(node)
