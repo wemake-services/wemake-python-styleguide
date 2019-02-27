@@ -1699,7 +1699,7 @@ class NegatedConditionsViolation(ASTViolation):
 
     Example::
 
-        if some:
+        if some == 1:
              ...
         else:
              ...
@@ -1709,11 +1709,6 @@ class NegatedConditionsViolation(ASTViolation):
 
         # Wrong:
         if not some:
-             ...
-        else:
-             ...
-
-        if some != 9:
              ...
         else:
              ...
