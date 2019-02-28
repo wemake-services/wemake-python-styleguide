@@ -3,77 +3,63 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
-    RedundantFinallyViolation,
+    BaseExceptionViolation,
 )
-from wemake_python_styleguide.visitors.ast.keywords import (
+from wemake_python_styleguide.visitors.ast.exceptions import (
     WrongTryExceptVisitor,
 )
 
-right_try_example = """
+use_base_exception = """
 try:
     ...
-except:
+except BaseException:
     ...
 """
 
-wrong_try_example = """
-try:
-    ...
-finally:
-    ...
-"""
-
-check_finally_with_except = """
-try:
-    ...
-except:
-    ...
-finally:
-    ...
-"""
-
-check_finally_with_except_else = """
+use_except_exception = """
 try:
     ...
 except Exception:
     ...
-else:
+"""
+
+use_bare_except = """
+try:
     ...
-finally:
+except:
     ...
 """
 
 
 @pytest.mark.parametrize('code', [
-    wrong_try_example,
+    use_base_exception,
 ])
-def test_wrong_finally(
+def test_use_base_exception(
     assert_errors,
     parse_ast_tree,
     code,
     default_options,
 ):
-    """Violations are raised when finally without except in try block."""
+    """Testing that `except BaseException:` is restricted."""
     tree = parse_ast_tree(code)
 
     visitor = WrongTryExceptVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [RedundantFinallyViolation])
+    assert_errors(visitor, [BaseExceptionViolation])
 
 
 @pytest.mark.parametrize('code', [
-    right_try_example,
-    check_finally_with_except,
-    check_finally_with_except_else,
+    use_except_exception,
+    use_bare_except,
 ])
-def test_correct_finally(
+def test_use_exception(
     assert_errors,
     parse_ast_tree,
     code,
     default_options,
 ):
-    """Violations are not raised when finally with except in try block."""
+    """Testing that `except Exception:` and `except:` are allowed."""
     tree = parse_ast_tree(code)
 
     visitor = WrongTryExceptVisitor(default_options, tree=tree)

@@ -5,7 +5,7 @@ import pytest
 from wemake_python_styleguide.violations.consistency import (
     UselessExceptCaseViolation,
 )
-from wemake_python_styleguide.visitors.ast.keywords import (
+from wemake_python_styleguide.visitors.ast.exceptions import (
     WrongTryExceptVisitor,
 )
 

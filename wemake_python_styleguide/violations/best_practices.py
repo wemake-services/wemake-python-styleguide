@@ -66,6 +66,7 @@ Summary
    ContextManagerVariableDefinitionViolation
    DirectMagicAttributeAccessViolation
    NegatedConditionsViolation
+   NestedTryViolation
 
 Comments
 --------
@@ -128,6 +129,7 @@ Design
 .. autoclass:: ContextManagerVariableDefinitionViolation
 .. autoclass:: DirectMagicAttributeAccessViolation
 .. autoclass:: NegatedConditionsViolation
+.. autoclass:: NestedTryViolation
 
 """
 
@@ -1728,6 +1730,7 @@ class NegatedConditionsViolation(ASTViolation):
 
     Example::
 
+        # Correct:
         if some == 1:
              ...
         else:
@@ -1748,3 +1751,51 @@ class NegatedConditionsViolation(ASTViolation):
 
     error_template = 'Found negated condition'
     code = 463
+
+
+@final
+class NestedTryViolation(ASTViolation):
+    """
+    Forbids to use nested ``try`` blocks.
+
+    Notice, we check all possible slots for ``try`` block:
+    1. the ``try`` block itself
+    2. all ``except`` cases
+    3. ``else`` case
+    4. and ``finally`` case
+
+    Reasoning:
+        Nesting ``try`` blocks indicates
+        that something really bad happens to your logic.
+        Why does it require two separate exception handlers?
+        It is a perfect case to refactor your code.
+
+    Solution:
+        Collapse two exception handlers together.
+        Or create a separate function that will handle this second nested case.
+
+    Example::
+
+        # Wrong:
+        try:
+            try:
+                ...
+            except SomeException:
+                ...
+        except SomeOtherException:
+            ...
+
+        try:
+            ...
+        except SomeOtherException:
+            try:
+                ...
+            except SomeException:
+                ...
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    error_template = 'Found nested `try` block'
+    code = 464

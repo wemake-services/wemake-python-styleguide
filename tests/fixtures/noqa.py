@@ -370,3 +370,11 @@ if not some: # noqa: Z463
     print('False')
 else:
     print('Incorrect')
+
+try:
+    try:  # noqa: Z464
+        anti_z444 = 1
+    except ValueError:
+        raise TypeError('Second')
+except TypeError:
+    print('WTF?')
