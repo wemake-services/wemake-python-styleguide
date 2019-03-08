@@ -4,7 +4,7 @@ description = "Sphinx \"added-value\" extension"
 name = "added-value"
 optional = false
 python-versions = "*"
-version = "0.14.1"
+version = "0.14.2"
 
 [package.dependencies]
 docutils = "*"
@@ -879,7 +879,7 @@ content-hash = "c5c3d277168ec8cb57c4415479cfe772ecf389e350f1271137122b4ad779c9e6
 python-versions = "^3.6"
 
 [metadata.hashes]
-added-value = ["f0b06f10c39523f0a4d96399b050936074b6e15c77181fcce9f8731f7bc3e6a1"]
+added-value = ["8c886aee74635cec15beb64c28a90ae664526f331c1a4941e4d6ab98af232028", "b25fcb86f9bfad9a40adf4d344322690e312741556c7b75681bc948380a251e6"]
 alabaster = ["446438bdcca0e05bd45ea2de1668c1d9b032e1a9154c2c259092d77031ddd359", "a661d72d58e6ea8a57f7a86e37d86716863ee5e92788398526d58b26a4e4dc02"]
 astor = ["95c30d87a6c2cf89aa628b87398466840f0ad8652f88eb173125a6df8533fb8d", "fb503b9e2fdd05609fbf557b916b4a7824171203701660f0c55bbf5a7a68713e"]
 atomicwrites = ["03472c30eb2c5d1ba9227e4c2ca66ab8287fbfbbda3888aa93dc2e28fc6811b4", "75a9445bac02d8d058d5e1fe689654ba5a6556a1dfd8ce6ec55a0ed79866cfa6"]
