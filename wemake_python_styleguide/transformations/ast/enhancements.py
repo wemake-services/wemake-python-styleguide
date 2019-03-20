@@ -74,7 +74,7 @@ def set_node_context(tree: ast.AST) -> ast.AST:
 
 def _find_context(
     node: ast.AST,
-    contexts: Tuple[Type[ast.AST]],
+    contexts: Tuple[Type[ast.AST], ...],
 ) -> Optional[ast.AST]:
     """
     We changed how we find and assign contexts in 0.8.1 version.
