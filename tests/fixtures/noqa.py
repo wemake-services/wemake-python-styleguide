@@ -373,7 +373,7 @@ else:
 
 try:
     try:  # noqa: Z464
-        anti_z444 = 1
+        antii_z444 = 1
     except ValueError:
         raise TypeError('Second')
 except TypeError:
