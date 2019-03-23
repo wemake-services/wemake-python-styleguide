@@ -378,3 +378,9 @@ try:
         raise TypeError('Second')
 except TypeError:
     print('WTF?')
+
+if some and other: # noqa: Z465
+    print('and')
+
+if some or other: # noqa: Z465
+    print('or')
