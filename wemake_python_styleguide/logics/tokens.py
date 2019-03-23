@@ -12,10 +12,12 @@ def split_prefixes(token: tokenize.TokenInfo) -> Tuple[str, str]:
 
 def has_triple_string_quotes(string_contents: str) -> bool:
     """Tells whether string token is written as inside triple quotes."""
-    if string_contents.startswith('"""') and string_contents.endswith('"""'):
-        return True
-    elif string_contents.startswith("'''") and string_contents.endswith("'''"):
-        return True
+    if string_contents.startswith('"""'):
+        if string_contents.endswith('"""'):
+            return True
+    elif string_contents.startswith("'''"):
+        if string_contents.endswith("'''"):
+            return True
     return False
 
 
