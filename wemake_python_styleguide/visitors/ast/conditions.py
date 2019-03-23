@@ -5,6 +5,7 @@ from typing import ClassVar
 
 from wemake_python_styleguide.types import AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
+    MultilineConditionsViolation,
     NegatedConditionsViolation,
     RedundantReturningElseViolation,
 )
@@ -33,6 +34,18 @@ class IfStatementVisitor(BaseNodeVisitor):
             if any(isinstance(elem, ast.NotEq) for elem in node.test.ops):
                 self.add_violation(NegatedConditionsViolation(node))
 
+    def _check_multiline_conditions(self, node: ast.If) -> None:
+        """Checks multiline conditions ``if`` statement nodes."""
+        if not node.orelse:
+            return
+
+        if isinstance(node.test, ast.BoolOp):
+            if isinstance(node.test.op, ast.And):
+                self.add_violation(MultilineConditionsViolation(node))
+
+            if isinstance(node.test.op, ast.Or):
+                self.add_violation(MultilineConditionsViolation(node))
+
     def _check_redundant_else(self, node: ast.If) -> None:
         if not node.orelse:
             return
@@ -52,8 +65,10 @@ class IfStatementVisitor(BaseNodeVisitor):
         Raises:
             RedundantReturningElseViolation
             NegatedConditionsViolation
+            MultilineConditionsViolation
 
         """
         self._check_negated_conditions(node)
         self._check_redundant_else(node)
+        self._check_multiline_conditions(node)
         self.generic_visit(node)

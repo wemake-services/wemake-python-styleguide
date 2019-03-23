@@ -224,12 +224,14 @@ class WrongParametersIndentationVisitor(BaseNodeVisitor):
         multi_line_mode: Optional[bool],
     ) -> Optional[bool]:
         previous_has_break = previous_line != statement.lineno
-        if not previous_has_break and multi_line_mode:
-            self.add_violation(ParametersIndentationViolation(node))
-            return None
-        elif previous_has_break and multi_line_mode is False:
-            self.add_violation(ParametersIndentationViolation(node))
-            return None
+        if previous_has_break:
+            if multi_line_mode is False:
+                self.add_violation(ParametersIndentationViolation(node))
+                return None
+        else:
+            if multi_line_mode:
+                self.add_violation(ParametersIndentationViolation(node))
+                return None
         return previous_has_break
 
     def _check_indentation(
