@@ -1813,8 +1813,7 @@ class MultilineConditionsViolation(ASTViolation):
         And it decreases readability of the code.
 
     Solution:
-        Divide multiline conditions to some ``if`` condition.
-        Or using variables.
+        Divide multiline conditions to some ``if`` condition. Or use variables.
 
     Example::
 
