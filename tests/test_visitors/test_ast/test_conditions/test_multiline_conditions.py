@@ -55,6 +55,11 @@ if (some_func(k) and some) or other in (1,2,3):
     ...
 """
 
+correct_conditions4 = """
+if one:
+    if two:
+         ...
+"""
 
 @pytest.mark.parametrize('code', [
     incorrect_conditions1,
@@ -81,6 +86,7 @@ def test_incorrect_multiline_conditions(
     correct_conditions1,
     correct_conditions2,
     correct_conditions3,
+    correct_conditions4,
 ])
 def test_correct_multiline_conditions(
     assert_errors,
