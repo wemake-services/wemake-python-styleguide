@@ -379,8 +379,8 @@ try:
 except TypeError:
     print('WTF?')
 
-if some and other: # noqa: Z465
-    print('and')
+if some and (  # noqa: Z465
+    anti_z444 == 1
+):
+    anti_z444 = 'some text'
 
-if some or other: # noqa: Z465
-    print('or')
