@@ -310,7 +310,7 @@ python-versions = ">=3.6,<4.0"
 version = "0.2.0"
 
 [package.dependencies]
-attrs = ">=18.2.0,<19.0.0"
+attrs = ">=18.2.0,<19.1.0"
 eradicate = ">=0.2.1,<1.1.0"
 flake8 = ">=3.5,<4.0"
 
