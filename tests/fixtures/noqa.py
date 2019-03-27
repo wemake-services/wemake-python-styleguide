@@ -383,6 +383,3 @@ if some and (  # noqa: Z465
     anti_z444 == 1
 ):
     anti_z444 = 'some text'
-
-if (some_function(some) and some) or anti_z444 in (1,2,3):  # noqa: Z465
-    anti_z444 = 'some text'
