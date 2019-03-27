@@ -67,6 +67,7 @@ Summary
    DirectMagicAttributeAccessViolation
    NegatedConditionsViolation
    NestedTryViolation
+   MultilineConditionsViolation
 
 Comments
 --------
@@ -130,6 +131,7 @@ Design
 .. autoclass:: DirectMagicAttributeAccessViolation
 .. autoclass:: NegatedConditionsViolation
 .. autoclass:: NestedTryViolation
+.. autoclass:: MultilineConditionsViolation
 
 """
 
@@ -1799,3 +1801,38 @@ class NestedTryViolation(ASTViolation):
 
     error_template = 'Found nested `try` block'
     code = 464
+
+
+@final
+class MultilineConditionsViolation(ASTViolation):
+    """
+    Forbid multiline conditions.
+
+    Reasoning:
+        This way of writing conditions hides the inner complexity this line has.
+        And it decreases readability of the code.
+
+    Solution:
+        Divide multiline conditions to some ``if`` condition.
+
+    Example::
+
+        # Correct:
+        if isinstance(node.test, ast.UnaryOp):
+            if isinstance(node.test.op, ast.Not):
+                ...
+
+
+        # Wrong:
+        if isinstance(node.test, ast.UnaryOp) and isinstance(
+            node.test.op,
+            ast.Not,
+        ):
+        ...
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    error_template = 'Found multiline conditions'
+    code = 465
