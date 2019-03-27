@@ -61,6 +61,7 @@ if one:
          ...
 """
 
+
 @pytest.mark.parametrize('code', [
     incorrect_conditions1,
     incorrect_conditions2,
