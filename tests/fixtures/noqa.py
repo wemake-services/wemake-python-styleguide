@@ -383,3 +383,35 @@ if some and (  # noqa: Z465
     anti_z444 == 1
 ):
     anti_z444 = 'some text'
+
+
+if some or (  # noqa: Z465
+    anti_z444 == 1
+):
+    anti_z444 = 'some text'
+
+
+if some and some_function(  # noqa: Z465
+    'other',
+):
+    anti_z444 = 'some text'
+
+if some or some_function(  # noqa: Z465
+    'other',
+):
+    anti_z444 = 'some text'
+
+if redundant_returning_else(  # noqa: Z465
+    long_parameter_name='long_variable_name',
+):
+    anti_z444 = 'some text'
+
+
+if some and some_if_expr or anti_z444:  # noqa: Z465
+    anti_z444 = 'some text'
+
+if some_function(some) and (some or anti_z444):
+    anti_z444 = 'some text'
+
+if (some_function(some) and some) or anti_z444 in (1,2,3):  # noqa: Z465
+    anti_z444 = 'some text'
