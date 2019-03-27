@@ -1814,6 +1814,7 @@ class MultilineConditionsViolation(ASTViolation):
 
     Solution:
         Divide multiline conditions to some ``if`` condition.
+        Or using variables.
 
     Example::
 
@@ -1830,7 +1831,7 @@ class MultilineConditionsViolation(ASTViolation):
         ):
         ...
 
-    .. versionadded:: 0.8.0
+    .. versionadded:: 0.9.0
 
     """
 
