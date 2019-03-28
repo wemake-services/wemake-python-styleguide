@@ -378,3 +378,8 @@ try:
         raise TypeError('Second')
 except TypeError:
     print('WTF?')
+
+if some and (  # noqa: Z465
+    anti_z444 == 1
+):
+    anti_z444 = 'some text'
