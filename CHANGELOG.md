@@ -3,6 +3,15 @@
 We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
+## 0.9.0
+
+### Features
+
+- Forbid to use multiline conditions
+
+### Bugfixes
+
+- Fixes problem with missing _allowed_left_nodes
 
 ## 0.8.1
 
