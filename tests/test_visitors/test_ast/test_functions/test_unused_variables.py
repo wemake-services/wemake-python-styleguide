@@ -62,7 +62,6 @@ def logo_and_user():
     logo, _ = some_tuple()
 """
 
-
 # Wrong:
 
 wrong_function = """
@@ -85,11 +84,13 @@ class Test(object):
         _some = calling()
         print(_some)
 """
-wrong_using_unsedVariable = """
+
+wrong_using_unsedvariable = """
 def logo_and_user():
     user, _ = some_tuple()
     print(_)
 """
+
 
 @pytest.mark.parametrize('code', [
     correct_module,
@@ -120,7 +121,7 @@ def test_correct_variables(
     wrong_function,
     wrong_function_with_exception,
     wrong_method,
-    wrong_using_unsedVariable,
+    wrong_using_unsedvariable,
 ])
 def test_wrong_super_call(
     assert_errors,
