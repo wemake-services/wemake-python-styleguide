@@ -128,7 +128,7 @@ class FunctionDefinitionVisitor(BaseNodeVisitor):
     ) -> None:
         if var_name in local_variables:
             if var_name == UNUSED_VARIABLE:
-                if isinstance(sub_node.ctx, ast.Store):
+                if isinstance(getattr(sub_node, 'ctx', None), ast.Store):
                     return
             local_variables[var_name].append(sub_node)
             return
