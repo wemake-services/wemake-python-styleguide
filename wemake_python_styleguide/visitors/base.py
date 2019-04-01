@@ -1,19 +1,35 @@
 # -*- coding: utf-8 -*-
 
 """
-Contains detailed documentation about how to write a visitor.
+Contains detailed technical documentation about how to write a :term:`visitor`.
+
+See also:
+    Visitor is a well-known software engineering pattern:
+    https://en.wikipedia.org/wiki/Visitor_pattern
+
+Each visitor might work with one or many :term:`violations <violation>`.
+Multiple visitors might one with the same violation.
+
+.. mermaid::
+   :caption: Visitor relation with violations.
+
+    graph TD
+        V1[Visitor 1] --> EA[Violation A]
+        V1[Visitor 1] --> EB[Violation B]
+
+        V2[Visitor 2] --> EA[Violation A]
+        V2[Visitor 2] --> EC[Violation C]
+
+        V3[Visitor 3] --> EZ[Violation Z]
 
 .. _visitors:
 
-Creating new visitor
---------------------
-
-First of all, you have to decide what base class do you want to use?
+Visitors API
+------------
 
 .. currentmodule:: wemake_python_styleguide.visitors.base
 
-Available base classes
-~~~~~~~~~~~~~~~~~~~~~~
+.. autoclasstree:: wemake_python_styleguide.visitors.base
 
 .. autosummary::
    :nosignatures:
@@ -24,11 +40,10 @@ Available base classes
 
 The decision relies on what parameters do you need for the task.
 It is highly unlikely that you will need two parameters at the same time.
+See :ref:`tutorial` for more information about choosing a correct base class.
 
-.. autoclasstree:: wemake_python_styleguide.visitors.base
-
-Coventions
-~~~~~~~~~~
+Conventions
+~~~~~~~~~~~
 
 Then you will have to write logic for your visitor.
 We follow these conventions:
@@ -42,8 +57,8 @@ We follow these conventions:
 
 There are different example of visitors in this project already.
 
-Visitors API
-------------
+Reference
+~~~~~~~~~
 
 """
 
@@ -64,7 +79,8 @@ class BaseVisitor(object):
     Attributes:
         options: contains the options objects passed and parsed by ``flake8``.
         filename: filename passed by ``flake8``, each visitor has a file name.
-        violations: list of violations for the specific visitor.
+        violations: list of :term:`violations <violation>`
+            for the specific visitor.
 
     """
 
@@ -79,12 +95,15 @@ class BaseVisitor(object):
         self.violations: List[BaseViolation] = []
 
     @classmethod
-    def from_checker(cls: Type['BaseVisitor'], checker) -> 'BaseVisitor':
+    def from_checker(
+        cls: Type['BaseVisitor'],
+        checker,
+    ) -> 'BaseVisitor':
         """
         Constructs visitor instance from the checker.
 
         Each unique visitor class should know how to construct itself
-        from the ``checker`` instance.
+        from the :term:`checker` instance.
 
         Generally speaking, each visitor class needs to eject required
         parameters from checker and then run
@@ -163,6 +182,10 @@ class BaseFilenameVisitor(BaseVisitor):
     Abstract base class that allows to visit and check module file names.
 
     Has ``visit_filename()`` method that should be defined in subclasses.
+
+    Attributes:
+        stem: the last part of the filename. Does not contain extension.
+
     """
 
     stem: str
@@ -232,6 +255,8 @@ class BaseTokenVisitor(BaseVisitor):
         since they might resolve in just ``OP`` name.
 
         Does nothing if handler for any token type is not defined.
+
+        Inspired by ``NodeVisitor`` class.
 
         See also:
             https://docs.python.org/3/library/tokenize.html

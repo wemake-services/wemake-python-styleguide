@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
+from typing import Optional, Tuple, Type
 
 
 def set_if_chain(tree: ast.AST) -> ast.AST:
@@ -55,6 +56,8 @@ def set_node_context(tree: ast.AST) -> ast.AST:
     - :py:class:`ast.ClassDef`
     - :py:class:`ast.FunctionDef` and :py:class:`ast.AsyncFunctionDef`
 
+    .. versionchanged:: 0.8.1
+
     """
     contexts = (
         ast.Module,
@@ -63,11 +66,26 @@ def set_node_context(tree: ast.AST) -> ast.AST:
         ast.AsyncFunctionDef,
     )
 
-    current_context = None
     for statement in ast.walk(tree):
-        if isinstance(statement, contexts):
-            current_context = statement
-
-        for child in ast.iter_child_nodes(statement):
-            setattr(child, 'wps_context', current_context)
+        current_context = _find_context(statement, contexts)
+        setattr(statement, 'wps_context', current_context)
     return tree
+
+
+def _find_context(
+    node: ast.AST,
+    contexts: Tuple[Type[ast.AST], ...],
+) -> Optional[ast.AST]:
+    """
+    We changed how we find and assign contexts in 0.8.1 version.
+
+    It happened because of the bug #520
+    See: https://github.com/wemake-services/wemake-python-styleguide/issues/520
+    """
+    parent = getattr(node, 'wps_parent', None)
+    if parent is None:
+        return None
+    elif isinstance(parent, contexts):
+        return parent
+    else:
+        return _find_context(parent, contexts)

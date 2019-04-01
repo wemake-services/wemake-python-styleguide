@@ -42,7 +42,7 @@ def _import_module_by_path(path: str):
 
 
 def _visitors_paths():
-    base_path = Path('wemake_python_styleguide', 'visitors')
+    base_path = Path('wemake_python_styleguide')
     excluded_paths = list(Path(base_path, 'presets').glob('**/*.py'))
     return [
         path for path in

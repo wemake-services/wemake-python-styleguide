@@ -23,6 +23,7 @@ from wemake_python_styleguide.visitors.ast.comparisons import (
     ('first_name + second_name', 1),
     ('error.code', 'errors[index].code'),
     (1, 2),
+    ('returned_item["id"]', 'office.id'),
 ])
 def test_comparison_variables(
     assert_errors,
@@ -42,7 +43,7 @@ def test_comparison_variables(
 
 @pytest.mark.parametrize('comparators', [
     ('"string constant"', 'container'),
-    (1, 'second_name'),
+    ('container', '"string constant"'),
 ])
 def test_comparison_variables_in_special_case(
     assert_errors,

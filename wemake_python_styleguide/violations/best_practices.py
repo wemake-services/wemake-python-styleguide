@@ -22,6 +22,7 @@ Summary
    WrongMagicCommentViolation
    WrongDocCommentViolation
    OveruseOfNoqaCommentViolation
+   OveruseOfNoCoverCommentViolation
    WrongModuleMetadataViolation
    EmptyModuleViolation
    InitModuleHasLogicViolation
@@ -60,6 +61,13 @@ Summary
    IncorrectSuperCallViolation
    RedundantReturningElseViolation
    TryExceptMultipleReturnPathViolation
+   ComplexDefaultValuesViolation
+   LoopVariableDefinitionViolation
+   ContextManagerVariableDefinitionViolation
+   DirectMagicAttributeAccessViolation
+   NegatedConditionsViolation
+   NestedTryViolation
+   MultilineConditionsViolation
 
 Comments
 --------
@@ -67,6 +75,7 @@ Comments
 .. autoclass:: WrongMagicCommentViolation
 .. autoclass:: WrongDocCommentViolation
 .. autoclass:: OveruseOfNoqaCommentViolation
+.. autoclass:: OveruseOfNoCoverCommentViolation
 
 Modules
 -------
@@ -116,6 +125,13 @@ Design
 .. autoclass:: IncorrectSuperCallViolation
 .. autoclass:: RedundantReturningElseViolation
 .. autoclass:: TryExceptMultipleReturnPathViolation
+.. autoclass:: ComplexDefaultValuesViolation
+.. autoclass:: LoopVariableDefinitionViolation
+.. autoclass:: ContextManagerVariableDefinitionViolation
+.. autoclass:: DirectMagicAttributeAccessViolation
+.. autoclass:: NegatedConditionsViolation
+.. autoclass:: NestedTryViolation
+.. autoclass:: MultilineConditionsViolation
 
 """
 
@@ -156,6 +172,10 @@ class WrongMagicCommentViolation(SimpleViolation):
         type = MyClass.get_type()  # noqa: A001
         coordinate: int = 10
         some.int_field = 'text'  # type: ignore
+
+        number: int
+        for number in some_untyped_iterable():
+            ...
 
         # Wrong:
         type = MyClass.get_type()  # noqa
@@ -207,17 +227,17 @@ class OveruseOfNoqaCommentViolation(SimpleViolation):
     """
     Forbids to use too many ``# noqa`` comments.
 
-    We check this count on a per-module basis.
+    We count it on a per-module basis.
     We use :str:`wemake_python_styleguide.constants.MAX_NOQA_COMMENTS`
     as a default value.
 
     Reasoning:
-        Having too many ``# noqa`` comments with make your code
+        Having too many ``# noqa`` comments make your code
         less readable and clearly indicates that there's something
         wrong with it.
 
     Solution:
-        Refactor your code to much the style.
+        Refactor your code to match our style.
         Or use a config file to switch off some checks.
 
     .. versionadded:: 0.7.0
@@ -226,6 +246,33 @@ class OveruseOfNoqaCommentViolation(SimpleViolation):
 
     error_template = 'Found `noqa` comments overuse: {0}'
     code = 402
+
+
+@final
+class OveruseOfNoCoverCommentViolation(SimpleViolation):
+    """
+    Forbids to use too many ``# pragma: no cover`` comments.
+
+    We count it on a per-module basis.
+    We use :str:`wemake_python_styleguide.constants.MAX_NO_COVER_COMMENTS`
+    as a default value.
+
+    Reasoning:
+        Having too many ``# pragma: no cover`` comments
+        clearly indicates that there's something wrong with it.
+        Moreover, it makes your tests useless, since they do not cover
+        a big partion of your code.
+
+    Solution:
+        Refactor your code to much the style.
+        Or use a config file to switch off some checks.
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    error_template = 'Found `noqa` comments overuse: {0}'
+    code = 403
 
 
 # Modules:
@@ -329,26 +376,30 @@ class InitModuleHasLogicViolation(SimpleViolation):
 @final
 class WrongKeywordViolation(ASTViolation):
     """
-    Forbids to use some keywords from ``python``.
+    Forbids to use some ``python`` keywords.
 
     Reasoning:
-        We believe that some keywords are anti-patterns.
-        They promote bad-practices like ``global`` and ``pass``,
-        or just not user-friendly like ``del``.
+        Using some keywords generally gives you more pain that relieve.
+
+        ``del`` keyword is not composable with other functions,
+        you cannot pass it as a regular function.
+        It is also quite error-prone due to ``__del__`` magic method complexity
+        and that ``del`` is actually used to nullify variables and delete them
+        from the execution scope.
+        Moreover, it has a lot of substitutions. You won't miss it!
+
+        ``pass`` keyword is just useless by design. There's no usecase for it.
+        Because it does literally nothing.
+
+        ``global`` and ``nonlocal`` promote bad-practices of having an external
+        mutable state somewhere. This solution does not scale.
+        And leads to multiple possible mistakes in the future.
 
     Solution:
         Solutions differ from keyword to keyword.
         ``pass`` should be replaced with docstring or ``contextlib.suppress``.
         ``del`` should be replaced with specialized methods like ``.pop()``.
         ``global`` and ``nonlocal`` usages should be refactored.
-
-    Example::
-
-        # Wrong:
-        pass
-        del
-        nonlocal
-        global
 
     .. versionadded:: 0.1.0
 
@@ -913,14 +964,16 @@ class ProtectedAttributeViolation(ASTViolation):
         self._protected = 1
         cls._hidden_method()
         some.public()
+        super()._protected()
 
         # Wrong:
         print(some._protected)
         instance._hidden()
         self.container._internal = 10
 
-    Note, that it is possible to use protected attributes with ``self``
-    and ``cls`` as base names. We allow this so you can create and
+    Note, that it is possible to use protected attributes with
+    ``self``, ``cls``, and ``super()`` as base names.
+    We allow this so you can create and
     use protected attributes and methods inside the class context.
     This is how protected attributes should be used.
 
@@ -1365,17 +1418,19 @@ class IncorrectBaseClassViolation(ASTViolation):
         We need to prevent dirty hacks in this field.
 
     Solution:
-        Use only raw names to set your base classes.
+        Use only attributes, names, and types to be your base classes.
 
     Example::
 
         # Correct:
         class Test(module.ObjectName, MixinName, keyword=True): ...
+        class GenericClass(Generic[ValueType]): ...
 
         # Wrong:
         class Test((lambda: object)()): ...
 
     .. versionadded:: 0.7.0
+    .. versionchanged:: 0.7.1
 
     """
 
@@ -1533,3 +1588,251 @@ class TryExceptMultipleReturnPathViolation(ASTViolation):
 
     error_template = 'Found `try`/`else`/`finally` with multiple return paths'
     code = 458
+
+
+@final
+class ComplexDefaultValuesViolation(ASTViolation):
+    """
+    Forbids to use complex defaults.
+
+    Anything that is not a ``ast.Name``, ``ast.Attribute``, ``ast.Str``,
+    ``ast.NameConstant``, ``ast.Tuple``, ``ast.Bytes`` or ``ast.Num`` should
+    be moved out from defaults.
+
+    Reasoning:
+        It can be tricky. Nothing stops you from making database calls or http
+        requests in such expressions. It is also not readable for us.
+
+    Solution:
+        Move the expression out from default value.
+
+    Example::
+
+        # Correct:
+        SHOULD_USE_DOCTEST = 'PYFLAKES_DOCTEST' in os.environ
+        def __init__(self, withDoctest=SHOULD_USE_DOCTEST):
+
+        # Wrong:
+        def __init__(self, withDoctest='PYFLAKES_DOCTEST' in os.environ):
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    error_template = 'Found complex default value'
+    code = 459
+
+
+@final
+class LoopVariableDefinitionViolation(ASTViolation):
+    """
+    Forbids to use anything rather than ``ast.Name`` to define loop variables.
+
+    Reasoning:
+        When defining a ``for`` loop with attributes, indexes, calls,
+        or any other nodes it does dirty things inside.
+
+    Solution:
+        Use regular ``ast.Name`` variables.
+        Or tuple of ``ast.Name`` variables.
+
+    Example::
+
+        # Correct:
+        for person in database.people():
+            ...
+
+        # Wrong:
+        for context['pepson'] in database.people():
+            ...
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    error_template = 'Found wrong `for` loop variable definition'
+    code = 460
+
+
+@final
+class ContextManagerVariableDefinitionViolation(ASTViolation):
+    """
+    Forbids to use anything rather than ``ast.Name`` to define contexts.
+
+    Reasoning:
+        When defining a ``with`` context managers with attributes,
+        indexes, calls, or any other nodes it does dirty things inside.
+
+    Solution:
+        Use regular ``ast.Name`` variables.
+
+    Example::
+
+        # Correct:
+        with open('README.md') as readme:
+            ...
+
+        # Wrong:
+        with open('README.md') as files['readme']:
+            ...
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    error_template = 'Found wrong context manager variable definition'
+    code = 461
+
+
+@final
+class DirectMagicAttributeAccessViolation(ASTViolation):
+    """
+    Forbids to use direct magic attributes and methods.
+
+    Reasoning:
+        When using direct magic attributes or method
+        it means that you are doing something wrong.
+        Magic methods are not suited to be directly called or accessed.
+
+    Solution:
+        Use special syntax constructs that will call underlying magic methods.
+
+    Example::
+
+        # Correct:
+        super().__init__()
+
+        # Wrong:
+        2..__truediv__(2)
+        d.__delitem__('a')
+
+    Note, that it is possible to use direct magic attributes with
+    ``self``, ``cls``, and ``super()`` as base names.
+    We allow this because a lot of internal logic relies on these methods.
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    error_template = 'Found direct magic attribute usage: {0}'
+    code = 462
+
+
+@final
+class NegatedConditionsViolation(ASTViolation):
+    """
+    Forbids to use negated conditions together with ``else`` clause.
+
+    Reasoning:
+        It easier to read and name regular conditions. Not negated ones.
+
+    Solution:
+        Move actions from the negated ``if`` condition to the ``else``
+        condition.
+
+    Example::
+
+        # Correct:
+        if some == 1:
+             ...
+        else:
+             ...
+
+        if not some:
+             ...
+
+        # Wrong:
+        if not some:
+             ...
+        else:
+             ...
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    error_template = 'Found negated condition'
+    code = 463
+
+
+@final
+class NestedTryViolation(ASTViolation):
+    """
+    Forbids to use nested ``try`` blocks.
+
+    Notice, we check all possible slots for ``try`` block:
+    1. the ``try`` block itself
+    2. all ``except`` cases
+    3. ``else`` case
+    4. and ``finally`` case
+
+    Reasoning:
+        Nesting ``try`` blocks indicates
+        that something really bad happens to your logic.
+        Why does it require two separate exception handlers?
+        It is a perfect case to refactor your code.
+
+    Solution:
+        Collapse two exception handlers together.
+        Or create a separate function that will handle this second nested case.
+
+    Example::
+
+        # Wrong:
+        try:
+            try:
+                ...
+            except SomeException:
+                ...
+        except SomeOtherException:
+            ...
+
+        try:
+            ...
+        except SomeOtherException:
+            try:
+                ...
+            except SomeException:
+                ...
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    error_template = 'Found nested `try` block'
+    code = 464
+
+
+@final
+class MultilineConditionsViolation(ASTViolation):
+    """
+    Forbid multiline conditions.
+
+    Reasoning:
+        This way of writing conditions hides the inner complexity this line has.
+        And it decreases readability of the code.
+
+    Solution:
+        Divide multiline conditions to some ``if`` condition. Or use variables.
+
+    Example::
+
+        # Correct:
+        if isinstance(node.test, ast.UnaryOp):
+            if isinstance(node.test.op, ast.Not):
+                ...
+
+
+        # Wrong:
+        if isinstance(node.test, ast.UnaryOp) and isinstance(
+            node.test.op,
+            ast.Not,
+        ):
+        ...
+
+    .. versionadded:: 0.9.0
+
+    """
+
+    error_template = 'Found multiline conditions'
+    code = 465

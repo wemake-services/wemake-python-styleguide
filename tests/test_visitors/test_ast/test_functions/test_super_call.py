@@ -17,6 +17,21 @@ class Example(object):
         super().some_method(arg1)
 """
 
+# There are no violations in this example.
+# See: https://github.com/wemake-services/wemake-python-styleguide/issues/520
+correct_regression520 = """
+class Test:
+    def __init__(self):
+        super().__init__()
+
+
+def another():
+    def func():
+        return 1
+
+    return func
+"""
+
 # Wrong:
 
 super_call_in_module = """
@@ -44,14 +59,19 @@ class Example(object):
 """
 
 
+@pytest.mark.parametrize('code', [
+    correct_super_call,
+    correct_regression520,
+])
 def test_correct_super_call(
     assert_errors,
     parse_ast_tree,
     default_options,
+    code,
     mode,
 ):
     """Testing that calling `super` in method is fine."""
-    tree = parse_ast_tree(mode(correct_super_call))
+    tree = parse_ast_tree(mode(code))
 
     visitor = WrongFunctionCallVisitor(default_options, tree=tree)
     visitor.run()

@@ -1,3 +1,5 @@
+
+
 .. mdinclude:: ../README.md
 
 .. toctree::
@@ -5,14 +7,15 @@
   :caption: Userguide:
   :hidden:
 
-  pages/usage.rst
+  pages/usage/setup.rst
+  pages/usage/integrations.rst
   pages/violations/index.rst
   pages/constants.rst
   pages/options/config.rst
 
 .. toctree::
   :maxdepth: 2
-  :caption: API:
+  :caption: Developer's guide:
   :hidden:
 
   pages/api.rst

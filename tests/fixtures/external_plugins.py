@@ -1,5 +1,6 @@
 from sys import *
 import sys
+from typing import List, Union, Dict
 
 int = 12
 ++int
@@ -32,3 +33,8 @@ multiline_string = 'some\
 string'
 
 print('test')
+
+def complex_annotation(
+    first: List[Union[List[str], Dict[str, Dict[str, str]]]],
+):
+    ...

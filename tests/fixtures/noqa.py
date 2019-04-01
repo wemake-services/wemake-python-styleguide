@@ -41,7 +41,7 @@ def some():  # noqa: Z110
     raise NotImplemented  # noqa: Z423
 
 
-del {'a': 1}['a'] # noqa: Z420
+del {'a': 1}['a']  # noqa: Z420
 hasattr(object, 'some')  # noqa: Z421
 value = 1  # noqa: Z110
 x = 2  # noqa: Z111
@@ -177,6 +177,7 @@ hex_number = 0XFF  # noqa: Z310
 octal_number = 0O11  # noqa: Z310
 binary_number = 0B1001  # noqa: Z310
 number_with_scientific_notation = 1.5E+10  # noqa: Z310
+number_with_useless_plus = +5  # noqa: Z330
 
 if '6' in nodes in '6':  # noqa: Z311
     anti_z444 = 1
@@ -240,8 +241,17 @@ def function_with_wrong_yield():
 
 bad_concatenation = 'a' 'b'  # noqa: Z326
 
-for literal in bad_concatenation:  # noqa: Z327
+for literal in bad_concatenation:  # noqa: Z327, Z328
     continue
+
+with open(literal):  # noqa: Z328
+    pass  # noqa: Z420
+
+
+try:
+    anti_z444 = 1
+except Exception as ex:  # noqa: Z329
+    raise ex
 
 try:
     anti_z444 = 1
@@ -336,3 +346,40 @@ def multiple_return_path():
         return 2
     else:
         return 3
+
+
+def bad_default_values(  # noqa: Z459
+    self,
+    filename='(none)',
+    builtins=None,
+    withDoctest='PYFLAKES_DOCTEST' in os.environ,
+):
+    return True
+
+
+for nodes[0] in [1, 2, 3]:  # noqa: Z460
+    anti_z444 = 1
+
+with open('some') as MyBadException.custom:  # noqa: Z461
+    anti_z444 = 1
+
+
+anti_z444.__truediv__(1)  # noqa: Z462
+
+if not some: # noqa: Z463
+    print('False')
+else:
+    print('Incorrect')
+
+try:
+    try:  # noqa: Z464
+        anti_z444 = 1
+    except ValueError:
+        raise TypeError('Second')
+except TypeError:
+    print('WTF?')
+
+if some and (  # noqa: Z465
+    anti_z444 == 1
+):
+    anti_z444 = 'some text'

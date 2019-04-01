@@ -1,19 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from collections import Counter
 from typing import ClassVar, List, Type, Union
 
-import astor
-
-from wemake_python_styleguide.logics.nodes import get_parent, is_contained
+from wemake_python_styleguide.logics.nodes import get_parent
+from wemake_python_styleguide.logics.variables import (
+    is_valid_block_variable_definition,
+)
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, final
 from wemake_python_styleguide.violations.best_practices import (
-    BaseExceptionViolation,
-    DuplicateExceptionViolation,
+    ContextManagerVariableDefinitionViolation,
     RaiseNotImplementedViolation,
-    RedundantFinallyViolation,
-    TryExceptMultipleReturnPathViolation,
     WrongKeywordViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
@@ -142,11 +139,11 @@ class WrongKeywordVisitor(BaseNodeVisitor):
 
     def _check_keyword(self, node: ast.AST) -> None:
         if isinstance(node, self._forbidden_keywords):
-            self.add_violation(
-                WrongKeywordViolation(
-                    node, text=node.__class__.__qualname__.lower(),
-                ),
-            )
+            if isinstance(node, ast.Delete):
+                message = 'del'
+            else:
+                message = node.__class__.__qualname__.lower()
+            self.add_violation(WrongKeywordViolation(node, text=message))
 
     def visit(self, node: ast.AST) -> None:
         """
@@ -157,92 +154,6 @@ class WrongKeywordVisitor(BaseNodeVisitor):
 
         """
         self._check_keyword(node)
-        self.generic_visit(node)
-
-
-@final
-class WrongTryExceptVisitor(BaseNodeVisitor):
-    """Responsible for examining ``try`` and friends."""
-
-    _base_exception: ClassVar[str] = 'BaseException'
-
-    def _check_if_needs_except(self, node: ast.Try) -> None:
-        if node.finalbody and not node.handlers:
-            self.add_violation(RedundantFinallyViolation(node))
-
-    def _check_exception_type(self, node: ast.ExceptHandler) -> None:
-        exception_name = getattr(node, 'type', None)
-        if exception_name is None:
-            return
-
-        exception_id = getattr(exception_name, 'id', None)
-        if exception_id == self._base_exception:
-            self.add_violation(BaseExceptionViolation(node))
-
-    def _check_duplicate_exceptions(self, node: ast.Try) -> None:
-        exceptions: List[str] = []
-        for exc_handler in node.handlers:
-            # There might be complex things hidden inside an exception type,
-            # so we want to get the string representation of it:
-            if isinstance(exc_handler.type, ast.Name):
-                exceptions.append(astor.to_source(exc_handler.type).strip())
-            elif isinstance(exc_handler.type, ast.Tuple):
-                exceptions.extend([
-                    astor.to_source(node).strip()
-                    for node in exc_handler.type.elts
-                ])
-
-        counts = Counter(exceptions)
-        for exc_name, count in counts.items():
-            if count > 1:
-                self.add_violation(
-                    DuplicateExceptionViolation(node, text=exc_name),
-                )
-
-    def _check_return_path(self, node: ast.Try) -> None:
-        try_has = any(
-            is_contained(line, ast.Return) for line in node.body
-        )
-        except_has = any(
-            is_contained(except_handler, ast.Return)
-            for except_handler in node.handlers
-        )
-        else_has = any(
-            is_contained(line, ast.Return) for line in node.orelse
-        )
-        finally_has = any(
-            is_contained(line, ast.Return) for line in node.finalbody
-        )
-
-        if finally_has and (try_has or except_has):
-            self.add_violation(TryExceptMultipleReturnPathViolation(node))
-        if else_has and try_has:
-            self.add_violation(TryExceptMultipleReturnPathViolation(node))
-
-    def visit_Try(self, node: ast.Try) -> None:
-        """
-        Used for find finally in try blocks without except.
-
-        Raises:
-            RedundantFinallyViolation
-            DuplicateExceptionViolation
-            TryExceptMultipleReturnPathViolation
-
-        """
-        self._check_if_needs_except(node)
-        self._check_duplicate_exceptions(node)
-        self._check_return_path(node)
-        self.generic_visit(node)
-
-    def visit_ExceptHandler(self, node: ast.ExceptHandler) -> None:
-        """
-        Checks all ``ExceptionHandler`` nodes.
-
-        Raises:
-            BaseExceptionViolation
-
-        """
-        self._check_exception_type(node)
         self.generic_visit(node)
 
 
@@ -259,6 +170,26 @@ class WrongContextManagerVisitor(BaseNodeVisitor):
             self.add_violation(
                 MultipleContextManagerAssignmentsViolation(node),
             )
+
+    def _check_variable_definitions(self, node: ast.withitem) -> None:
+        if node.optional_vars is None:
+            return
+
+        if not is_valid_block_variable_definition(node.optional_vars):
+            self.add_violation(
+                ContextManagerVariableDefinitionViolation(get_parent(node)),
+            )
+
+    def visit_withitem(self, node: ast.withitem) -> None:
+        """
+        Checks that all variables inside context managers defined correctly.
+
+        Raises:
+            ContextManagerVariableDefinitionViolation
+
+        """
+        self._check_variable_definitions(node)
+        self.generic_visit(node)
 
     def visit_any_with(self, node: AnyWith) -> None:
         """

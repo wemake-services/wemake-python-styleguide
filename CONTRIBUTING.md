@@ -11,19 +11,23 @@ you will need to get familiar with these APIs:
 
 It is also recommended to take a look at these resources:
 
+- Visual tool to explore [`python's ast`](https://python-ast-explorer.com/) (very useful!)
 - Missing `ast` [guide](https://greentreesnakes.readthedocs.io/en/latest/)
 - List of `python` [static analysis tools](https://github.com/vintasoftware/python-linters-and-code-analysis)
 - List of `flake8` [extensions](https://github.com/DmytroLitvinov/awesome-flake8-extensions)
 
 
-## API Reference
+## Developer's documentation
 
-Make sure that you are familiar with [our API](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/api.html).
+Make sure that you are familiar with [developer's documentation](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/api.html).
+
+That's a main starting point to the future development.
+You can jump start into the development of new rules by reading ["Creating a new rule tutorial"](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/tutorial.html).
 
 
 ## Dependencies
 
-We use `poetry` to manage the [dependencies](https://github.com/sdispater/poetry).
+We use [`poetry`](https://github.com/sdispater/poetry) to manage the dependencies.
 
 To install them you would need to run `install` command:
 
@@ -62,6 +66,19 @@ flake8 wemake_python_styleguide tests docs
 ```
 
 These steps are mandatory during the CI.
+
+
+## Architecture
+
+We use [`layer-lint`](https://layer-linter.readthedocs.io/en/latest/usage.html)
+to enforce strict layered architecture.
+
+```bash
+layer-lint wemake_python_styleguide
+```
+
+All contracts must be valid for each commit.
+This step is mandatory during the CI.
 
 
 ## Type checks
@@ -118,7 +135,8 @@ Before submitting your code please do the following steps:
 7. Run `pytest` again to make sure it is still working
 8. Run `mypy` to ensure that types are correct
 9. Run `flake8` to ensure that style is correct
-10. Run `doc8` to ensure that docs are correct
+10. Run `layer-lint` to ensure that architecture contracts are correct
+11. Run `doc8` to ensure that docs are correct
 
 
 ## Other help

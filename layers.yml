@@ -1,0 +1,11 @@
+Linting process:
+  containers:
+    - wemake_python_styleguide
+  layers:
+    - checker
+    - transformations
+    - presets
+    - visitors
+    - violations
+    - logics
+    - options

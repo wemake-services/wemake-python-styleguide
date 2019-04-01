@@ -54,6 +54,9 @@ Summary
    ImplicitStringConcatenationViolation
    UselessContinueViolation
    NumberWithMeaninglessZeroViolation
+   UselessNodeViolation
+   UselessExceptCaseViolation
+   UselessOperatorsViolation
 
 Consistency checks
 ------------------
@@ -87,6 +90,9 @@ Consistency checks
 .. autoclass:: ImplicitStringConcatenationViolation
 .. autoclass:: UselessContinueViolation
 .. autoclass:: NumberWithMeaninglessZeroViolation
+.. autoclass:: UselessNodeViolation
+.. autoclass:: UselessExceptCaseViolation
+.. autoclass:: UselessOperatorsViolation
 
 """
 
@@ -898,7 +904,25 @@ class EmptyLineAfterCodingViolation(TokenizeViolation):
     Enforces to have an extra empty line after the ``coding`` comment.
 
     Reasoning:
+        Since we use
+        `flake8-coding <https://github.com/tk0miya/flake8-coding>`_
+        as a part of our linter
+        we care about extra space after this coding comment.
         This is done for pure consistency.
+
+        Why should we even care about this magic coding comment?
+        For several reasons.
+
+        First, explicit encoding is always better that an implicit one,
+        different countries still use some non utf-8 encodings as a default.
+        But, people might override it with other encodings in a comment.
+        Do you know how much pain it can cause to you?
+
+        We still know that ``python3`` uses ``utf-8`` inside.
+
+        Second, some tools break because of this incorrect encoding comment.
+        Including, ``django``, ``flake8``, and ``tokenize`` core module.
+        It is very hard to notice these things when they happen.
 
     Solution:
         Add an empty line between ``coding`` magic comment and your code.
@@ -1106,3 +1130,104 @@ class NumberWithMeaninglessZeroViolation(TokenizeViolation):
 
     error_template = 'Found meaningless zeros after the number system element'
     code = 328
+
+
+@final
+class UselessNodeViolation(ASTViolation):
+    """
+    Forbids to use meaningless nodes.
+
+    Reasoning:
+        Some nodes might be completely useless. They will literally do nothing.
+        Sometimes they are hard to find, because this situation can be caused
+        by a recent refactoring or just by acedent.
+        This might be also an overuse of syntax.
+
+    Solution:
+        Remove node or make sure it makes any sense.
+
+    Example::
+
+        # Wrong:
+        for number in [1, 2, 3]:
+            break
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found useless node: {0}'
+    code = 328
+
+
+class UselessExceptCaseViolation(ASTViolation):
+    """
+    Forbids to use meaningless ``except`` cases.
+
+    Reasoning:
+        Using ``except`` cases that just reraise the same exception
+        is error-prone. You can increase your stacktrace,
+        silence some potential exceptions, and screw things up.
+        It also does not make any sense to do so.
+
+    Solution:
+        Remove ``except`` case or make sure it makes any sense.
+
+    Example::
+
+        # Correct:
+        try:
+            ...
+        except IndexError:
+            sentry.log()
+            raise ValueError()
+
+        # Wrong:
+        try:
+            ...
+        except TypeError:
+            raise
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    error_template = 'Found useless `except` case'
+    code = 329
+
+
+class UselessOperatorsViolation(ASTViolation):
+    """
+    Forbids the use of unnecessary operators in your code.
+
+    You can write: ``5.4`` and ``+5.4``. There's no need to use the second
+    version. Similarly ``--5.4``, ``---5.4``, ``not not foo``, and ``~~42``
+    contain unnecessary operators.
+
+    Reasoning:
+         This is done for consistency reasons.
+
+    Solution:
+        Ommit unnecessary operators.
+
+    Example::
+
+        # Correct:
+        profit = 3.33
+        profit = -3.33
+        inverse = ~5
+        complement = not foo
+
+        # Wrong:
+        profit = +3.33
+        profit = --3.33
+        profit = ---3.33
+        number = ~~42
+        bar = not not foo
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    code = 330
+    error_template = 'Found unnecessary operator: {0}'

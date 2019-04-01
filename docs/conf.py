@@ -55,6 +55,8 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
+
+    # Used to write beautiful docstrings:
     'sphinx.ext.napoleon',
 
     # Used to include .md files:
@@ -86,6 +88,10 @@ autodoc_default_flags = {
     'undoc-members': 'code,error_template',
     'exclude-members': '__dict__,__weakref__',
 }
+
+# Set `typing.TYPE_CHECKING` to `True`:
+# https://pypi.org/project/sphinx-autodoc-typehints/
+set_type_checking_flag = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

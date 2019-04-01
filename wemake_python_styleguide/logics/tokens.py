@@ -28,3 +28,8 @@ def only_contains(
         if token.exact_type not in container:
             return False
     return True
+
+
+def get_comment_text(token: tokenize.TokenInfo) -> str:
+    """Returns comment without `#` char from comment tokens."""
+    return token.string[1:].strip()

@@ -79,6 +79,7 @@ class WrongComparisionOrderVisitor(BaseNodeVisitor):
         ast.Name,
         ast.Call,
         ast.Attribute,
+        ast.Subscript,
     )
 
     _special_cases: ClassVar[AnyNodes] = (

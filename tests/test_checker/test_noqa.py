@@ -97,15 +97,19 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
         'Z325': 1,
         'Z326': 1,
         'Z327': 1,
+        'Z328': 2,
+        'Z329': 1,
+        'Z330': 1,
 
         'Z400': 0,
         'Z401': 0,
         'Z402': 0,
+        'Z403': 0,
 
         'Z410': 1,
         'Z411': 0,
         'Z412': 0,
-        'Z420': 1,
+        'Z420': 2,
         'Z421': 1,
         'Z422': 1,
         'Z423': 1,
@@ -141,6 +145,13 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
         'Z456': 1,
         'Z457': 1,
         'Z458': 1,
+        'Z459': 1,
+        'Z460': 1,
+        'Z461': 1,
+        'Z462': 1,
+        'Z463': 1,
+        'Z464': 1,
+        'Z465': 1,
     }
 
     process = subprocess.Popen(
@@ -149,6 +160,7 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
             '--ignore',
             ','.join(IGNORED_VIOLATIONS),
             '--disable-noqa',
+            '--isolated',
             '--select',
             'Z',
             absolute_path('fixtures', 'noqa.py'),
@@ -172,6 +184,7 @@ def test_noqa_fixture(absolute_path):
             'flake8',
             '--ignore',
             ','.join(IGNORED_VIOLATIONS),
+            '--isolated',
             '--select',
             'Z',
             absolute_path('fixtures', 'noqa.py'),
@@ -191,6 +204,7 @@ def test_noqa_fixture_without_ignore(absolute_path):
     process = subprocess.Popen(
         [
             'flake8',
+            '--isolated',
             '--select',
             'Z',
             absolute_path('fixtures', 'noqa.py'),

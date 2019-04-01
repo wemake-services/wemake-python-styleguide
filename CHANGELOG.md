@@ -3,8 +3,68 @@
 We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
+## 0.9.0
 
-## WIP
+### Features
+
+- Forbid to use multiline conditions
+
+### Bugfixes
+
+- Fixes problem with missing _allowed_left_nodes
+- Fixes problem false positive for Z121 when using `_` for unused var names
+
+## 0.8.1
+
+### Bugfixes
+
+- Fixes how `wps_context` is calculated, so `super()` calls are now working
+
+
+## 0.8.0
+
+### Features
+
+- Updates `flake8` to `3.7+`
+- Adds `flake8-annotations-complexity` as a dependency, forbids complex annotations
+- Forbids to use redundant `+`, `~`, `not`, and `-` operators before numbers
+- Forbids to use complex default values
+- Forbids to use anything rather than names in `for` loop vars definitions
+- Forbids to use anything rather than names in `with` block vars definitions
+- Forbids to use anything rather than names in comprehension vars definitions
+- Forbids to use direct magic attributes access
+- Forbids to use negated conditions
+- Forbids to use too many `# pragma: no cover` comments
+- Forbids to use nested `try` blocks
+
+### Bugfixes
+
+- Fixes problems with empty lines after magic comments, see [#492](https://github.com/wemake-services/wemake-python-styleguide/issues/492)
+- Fixes error message for `del` keyword: it is now just `'del'` not `'delete'`
+
+### Misc
+
+- Removes `flake8-per-file-ignores` plugin, since `flake8` now handles it
+- Removes `flake8-type-annotations` plugin, since `flake8` now handles it
+- Improves docs for `WrongKeywordViolation`
+- Improves docs for `EmptyLineAfterCodingViolation`
+- Improves docs for `ProtectedAttributeViolation`
+- Adds docs about `.pyi` files
+
+
+## 0.7.1
+
+### Bugfixes
+
+- Allows `Generic[SomeType]` to be a valid superclass
+- Forces to use `flake8` version `3.6` instead of `3.7`
+
+### Misc
+
+- Improves docs about using `# type: some` comment in `for` loops
+
+
+## 0.7.0
 
 ### Features
 
@@ -31,7 +91,11 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use inconsistent `return` and `yield` statements
 - Forbids to use multiple `return` path in `try`/`expect`/`finally`
 - Forbids to use implicit string concatenation
-- Forbids to use useless `continue` nodes inside the loops
+- Forbids to have useless `continue` nodes inside the loops
+- Forbids to have useless nodes
+- Forbids to have useless `raise` statements
+- Adds `params` and `parameters` to black-listed names
+
 
 ### Bugfixes
 
@@ -60,6 +124,16 @@ We used to have incremental versioning before `0.1.0`.
 - Improves tests: now we check that ignored violation are raised with `noqa`
 - Improves docs: we have added a special graph to show our architecure
 - Improves docs: we now have a clean page for `checker` without extra junk
+- Improves docs: we now have a tutorial for creating new rules
+- Refactoring: moves `presets` package to the root
+- Improves tests: we now lint our layered architecure with `layer-lint`
+
+
+## Version 0.6.3
+
+### Bugfixes
+
+- Fixes an [issue-450](https://github.com/wemake-services/wemake-python-styleguide/issues/450) with `dict`s with just values and no keys
 
 
 ## Version 0.6.2

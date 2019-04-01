@@ -7,6 +7,7 @@ from wemake_python_styleguide.visitors.ast import (
     classes,
     comparisons,
     conditions,
+    exceptions,
     functions,
     keywords,
     loops,
@@ -29,18 +30,21 @@ GENERAL_PRESET = (
 
     keywords.WrongRaiseVisitor,
     keywords.WrongKeywordVisitor,
-    keywords.WrongTryExceptVisitor,
     keywords.WrongContextManagerVisitor,
     keywords.ConsistentReturningVisitor,
 
     loops.WrongComprehensionVisitor,
     loops.WrongLoopVisitor,
+    loops.WrongLoopDefinitionVisitor,
 
     attributes.WrongAttributeVisitor,
     annotations.WrongAnnotationVisitor,
 
     functions.WrongFunctionCallVisitor,
     functions.FunctionDefinitionVisitor,
+
+    exceptions.WrongTryExceptVisitor,
+    exceptions.NestedTryBlocksVisitor,
 
     WrongImportVisitor,
 
@@ -49,6 +53,7 @@ GENERAL_PRESET = (
     naming.WrongVariableAssignmentVisitor,
 
     builtins.MagicNumberVisitor,
+    builtins.UselessOperatorsVisitor,
     builtins.WrongStringVisitor,
     builtins.WrongAssignmentVisitor,
     builtins.WrongCollectionVisitor,

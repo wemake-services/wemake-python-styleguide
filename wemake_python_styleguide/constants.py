@@ -29,7 +29,7 @@ FUNCTIONS_BLACKLIST: Final = frozenset((
     'dir',
 
     # IO:
-    'input',
+    'input',  # print is handled via `flake8-print`
 
     # Attribute access:
     'hasattr',
@@ -81,6 +81,8 @@ VARIABLE_NAMES_BLACKLIST: Final = frozenset((
     'objs',
     'some',
     'do',
+    'params',
+    'parameters',
 
     # Confuseables:
     'no',
@@ -158,6 +160,9 @@ MAGIC_NUMBERS_WHITELIST: Final = frozenset((
 
 #: Maximum amount of ``# noqa`` comments per module.
 MAX_NOQA_COMMENTS: Final = 10
+
+#: Maximum amount of ``# pragma: no cover`` comments per module.
+MAX_NO_COVER_COMMENTS: Final = 5
 
 
 # Internal variables

@@ -2,17 +2,17 @@
 # to generate documentation.
 # TODO: remove after pip==19.0
 
-sphinx==1.8.3
+sphinx==2.0.0
 sphinx_autodoc_typehints==1.6.0
 sphinxcontrib-mermaid==0.3.1
 recommonmark==0.5.0
 m2r==0.2.1
-added-value==0.14.0
+added-value==0.14.2
 tomlkit==0.5.3
 
 # Dependencies of our linter that should be documented,
 # other dependencies are just ignored or
 # goes to `autodoc_mock_imports` in `conf.py`:
-flake8==3.6.0
+flake8==3.7.7
 typing-extensions==3.7.2
-attrs==18.2.0
+attrs==19.1.0
