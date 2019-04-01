@@ -53,10 +53,10 @@ Summary
    InconsistentYieldViolation
    ImplicitStringConcatenationViolation
    UselessContinueViolation
-   NumberWithMeaninglessZeroViolation
    UselessNodeViolation
    UselessExceptCaseViolation
    UselessOperatorsViolation
+   NumberWithMeaninglessZeroViolation
 
 Consistency checks
 ------------------
@@ -89,10 +89,10 @@ Consistency checks
 .. autoclass:: InconsistentYieldViolation
 .. autoclass:: ImplicitStringConcatenationViolation
 .. autoclass:: UselessContinueViolation
-.. autoclass:: NumberWithMeaninglessZeroViolation
 .. autoclass:: UselessNodeViolation
 .. autoclass:: UselessExceptCaseViolation
 .. autoclass:: UselessOperatorsViolation
+.. autoclass:: NumberWithMeaninglessZeroViolation
 
 """
 
@@ -1102,37 +1102,6 @@ class UselessContinueViolation(ASTViolation):
 
 
 @final
-class NumberWithMeaninglessZeroViolation(TokenizeViolation):
-    """
-    Enforce consistent octal, hex, and binary numbers.
-
-    Reasoning:
-        Numbers should be consistent.
-
-    Solution:
-        Remove meaningless zeros from the number.
-
-    Example::
-
-        # Correct:
-        0b1
-        0x1
-        0o5
-
-        # Wrong:
-        0b0001
-        0x001
-        0o05
-
-    .. versionadded:: 0.8.0
-
-    """
-
-    error_template = 'Found meaningless zeros after the number system element'
-    code = 328
-
-
-@final
 class UselessNodeViolation(ASTViolation):
     """
     Forbids to use meaningless nodes.
@@ -1229,5 +1198,38 @@ class UselessOperatorsViolation(ASTViolation):
 
     """
 
-    code = 330
     error_template = 'Found unnecessary operator: {0}'
+    code = 330
+
+
+@final
+class NumberWithMeaninglessZeroViolation(TokenizeViolation):
+    """
+    Enforce consistent octal, hex, and binary numbers.
+
+    Reasoning:
+        Numbers should be consistent.
+
+    Solution:
+        Remove meaningless zeros from the number.
+
+    Example::
+
+        # Correct:
+        0b1
+        0x1
+        0o5
+
+        # Wrong:
+        0b0001
+        0x001
+        0o05
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    error_template = (
+        'Found meaningless zeros after the number system element: {0}'
+    )
+    code = 331
