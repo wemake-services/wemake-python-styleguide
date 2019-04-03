@@ -60,7 +60,7 @@ flake8 your_module.py
 This app is still just good old `flake8`!
 And it won't change your existing workflow.
 
-See ["Usage" section](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage.html)
+See ["Usage" section](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage/setup.html)
 in the docs for examples and integrations.
 
 
