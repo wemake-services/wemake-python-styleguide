@@ -12,6 +12,7 @@ We used to have incremental versioning before `0.1.0`.
 ### Bugfixes
 
 - Fixes problem with missing _allowed_left_nodes
+- Fixes problem false positive for Z121 when using `_` for unused var names
 
 ## 0.8.1
 
