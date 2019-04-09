@@ -14,6 +14,7 @@ from wemake_python_styleguide.violations.best_practices import (
     WrongKeywordViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
+    InconsistentReturnVariablesViolation,
     InconsistentReturnViolation,
     InconsistentYieldViolation,
     MultipleContextManagerAssignmentsViolation,
@@ -73,6 +74,25 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
         if node is parent.body[-1] and node.value is None:
             self.add_violation(InconsistentReturnViolation(node))
 
+    def _check_variables_used_only_in_return(
+        self,
+        node: AnyFunctionDef,
+    ) -> None:
+        variable_name = ''
+        return_variable_id = ''
+        if len(node.body) > 1:
+            penult_expression = node.body[-2]
+            return_expression = node.body[-1]
+            if isinstance(penult_expression, ast.Assign):
+                variable_name = getattr(penult_expression.targets[0], 'id', '')
+            if isinstance(return_expression, ast.Return):
+                return_variable_id = getattr(return_expression.value, 'id', '')
+            if variable_name != '' and return_variable_id != '':
+                if variable_name == return_variable_id:
+                    self.add_violation(
+                        InconsistentReturnVariablesViolation(node),
+                    )
+
     def _iterate_returning_values(
         self,
         node: AnyFunctionDef,
@@ -121,6 +141,7 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
             InconsistentYieldViolation
 
         """
+        self._check_variables_used_only_in_return(node)
         self._check_return_values(node)
         self._check_yield_values(node)
         self.generic_visit(node)
