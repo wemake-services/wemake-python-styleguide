@@ -67,7 +67,7 @@ def test_wrong_return_variable(
     correct_example3,
     correct_example4,
 ])
-def test_correct_return_statements(
+def test_correct_return_variable(
     assert_errors,
     parse_ast_tree,
     code,
