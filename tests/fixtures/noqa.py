@@ -51,7 +51,7 @@ consecutive__underscores = 4  # noqa: Z116
 cls = 5  # noqa: Z117
 __author__ = 'Nikita Sobolev'  # noqa: Z410
 extremely_long_name_that_needs_to_be_shortened_to_work_fine = 2  # noqa: Z118
-привет_по_русски = 'Hello, world!'  # noqa: Z119
+# привет_по_русски = 'Hello, world!'  # noqa: Z119
 wrong_alias_ = 'some fake builtin alias'  # noqa: Z120
 
 def some_function():
@@ -383,3 +383,7 @@ if some and (  # noqa: Z465
     anti_z444 == 1
 ):
     anti_z444 = 'some text'
+
+def some_function():  # noqa: Z331
+    some_value = 1
+    return some_value
