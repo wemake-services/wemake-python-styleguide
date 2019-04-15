@@ -8,6 +8,7 @@ We used to have incremental versioning before `0.1.0`.
 ### Features
 
 - Forbid to use multiline conditions
+- Updates `flake8-bugbear` to `19.3+`
 
 ### Bugfixes
 
