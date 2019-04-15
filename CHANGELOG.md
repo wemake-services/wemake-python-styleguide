@@ -8,6 +8,8 @@ We used to have incremental versioning before `0.1.0`.
 ### Features
 
 - Forbid to use multiline conditions
+- Forbid local variables that are only used in `return` statements
+- Updates `flake8-bugbear` to `19.3+`
 
 ### Bugfixes
 
@@ -689,3 +691,4 @@ There are no new features introduced.
 ## Version 0.0.1
 
 - Initial release
+>>>>>>> master
