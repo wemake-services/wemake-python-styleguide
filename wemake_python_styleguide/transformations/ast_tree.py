@@ -43,7 +43,7 @@ def _set_parent(tree: ast.AST) -> ast.AST:
     """
     for statement in ast.walk(tree):
         for child in ast.iter_child_nodes(statement):
-            setattr(child, 'wps_parent', statement)
+            setattr(child, 'wps_parent', statement)  # noqa: B010
     return tree
 
 
