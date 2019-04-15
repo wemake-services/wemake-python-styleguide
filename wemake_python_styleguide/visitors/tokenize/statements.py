@@ -64,10 +64,8 @@ class ExtraIndentationVisitor(BaseTokenVisitor):
 
     def _get_token_offset(self, token: tokenize.TokenInfo) -> int:
         if token.exact_type == tokenize.INDENT:
-            offset = token.end[1]
-        else:
-            offset = token.start[1]
-        return offset
+            return token.end[1]
+        return token.start[1]
 
     def _check_individual_line(
         self,
