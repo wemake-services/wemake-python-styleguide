@@ -217,10 +217,10 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
         for sub_node in node:
             if isinstance(sub_node, ast.Assign):
                 if isinstance(sub_node.targets[0], ast.Name):
-                    assign.append(getattr(sub_node.targets[0], 'id'))
+                    assign.append(sub_node.targets[0].id)
             if isinstance(sub_node, ast.AnnAssign):
                 if isinstance(sub_node.target, ast.Name):
-                    assign.append(getattr(sub_node.target, 'id'))
+                    assign.append(sub_node.target.id)
         return assign
 
     def _get_name_nodes_variable(self, node: List[ast.AST]):
@@ -231,7 +231,7 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
                     names.setdefault(sub_node.id, []).append(sub_node)
             if isinstance(sub_node, ast.AugAssign):
                 if isinstance(sub_node.target, ast.Name):
-                    variable_name = getattr(sub_node.target, 'id')
+                    variable_name = sub_node.target.id
                     names.setdefault(variable_name, []).append(sub_node.target)
         return names
 
@@ -242,7 +242,7 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
                 if not getattr(sub_node.value, 'id', None):
                     continue
                 if isinstance(sub_node.value, ast.Name):
-                    variable_name = getattr(sub_node.value, 'id')
+                    variable_name = sub_node.value.id
                     returns.setdefault(variable_name, []).append(sub_node.value)
         return returns
 
