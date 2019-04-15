@@ -11,7 +11,7 @@ you will need to get familiar with these APIs:
 
 It is also recommended to take a look at these resources:
 
-- Visual tool to explore [`python's ast`](https://python-ast-explorer.com/) (very useful!)
+- Visual tool to explore [python's ast](https://python-ast-explorer.com/) (very useful!)
 - Missing `ast` [guide](https://greentreesnakes.readthedocs.io/en/latest/)
 - List of `python` [static analysis tools](https://github.com/vintasoftware/python-linters-and-code-analysis)
 - List of `flake8` [extensions](https://github.com/DmytroLitvinov/awesome-flake8-extensions)
@@ -27,7 +27,7 @@ You can jump start into the development of new rules by reading ["Creating a new
 
 ## Dependencies
 
-We use [`poetry`](https://github.com/sdispater/poetry) to manage the dependencies.
+We use [poetry](https://github.com/sdispater/poetry) to manage the dependencies.
 
 To install them you would need to run `install` command:
 
@@ -70,7 +70,7 @@ These steps are mandatory during the CI.
 
 ## Architecture
 
-We use [`layer-lint`](https://layer-linter.readthedocs.io/en/latest/usage.html)
+We use [layer-lint](https://layer-linter.readthedocs.io/en/latest/usage.html)
 to enforce strict layered architecture.
 
 ```bash
