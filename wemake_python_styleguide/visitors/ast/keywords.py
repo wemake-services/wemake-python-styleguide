@@ -239,8 +239,6 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
         returns: Dict[str, List[ast.Name]] = {}
         for sub_node in node:
             if isinstance(sub_node, ast.Return):
-                if not getattr(sub_node.value, 'id', None):
-                    continue
                 if isinstance(sub_node.value, ast.Name):
                     variable_name = sub_node.value.id
                     returns.setdefault(variable_name, []).append(sub_node.value)
