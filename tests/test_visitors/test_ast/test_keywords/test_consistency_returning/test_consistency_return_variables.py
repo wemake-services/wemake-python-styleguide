@@ -30,6 +30,38 @@ def some_function():
      return name, some_value
 """
 
+correct_example4 = """
+def some_function():
+     some_value = 1
+     some_value += 1
+     return some_value
+"""
+
+correct_example5 = """
+def some_function():
+     some_value = []
+     some_value.append(1)
+     return some_value
+"""
+
+correct_example6 = """
+def foo():
+   x, _ = some_tuple
+   return x
+"""
+
+correct_example7 = """
+def foo():
+   x.id += some_tuple
+   return x.id
+"""
+
+correct_example8 = """
+def foo():
+   x[0]:int = s[0]
+   return x[0]
+"""
+
 wrong_example1 = """
 def function():
      some_value = 1
@@ -40,6 +72,12 @@ wrong_example2 = """
 def some_function():
      some_value = 1
      name = last_name + first_name
+     return some_value
+"""
+
+wrong_example3 = """
+def some_function():
+     some_value:int = 1
      return some_value
 """
 
@@ -58,6 +96,7 @@ def some():
 @pytest.mark.parametrize('code', [
     wrong_example1,
     wrong_example2,
+    wrong_example3,
 ])
 def test_wrong_return_variable(
     assert_errors,
@@ -78,6 +117,11 @@ def test_wrong_return_variable(
     correct_example1,
     correct_example2,
     correct_example3,
+    correct_example4,
+    correct_example5,
+    correct_example6,
+    correct_example7,
+    correct_example8,
 ])
 def test_correct_return_statements(
     assert_errors,
