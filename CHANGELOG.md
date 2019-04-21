@@ -10,6 +10,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbid to use multiline conditions
 - Forbid local variables that are only used in `return` statements
 - Updates `flake8-bugbear` to `19.3+`
+- Updates `flake8-quotes` to `2.0.0`
 
 ### Bugfixes
 
