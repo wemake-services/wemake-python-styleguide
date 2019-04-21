@@ -18,30 +18,30 @@ def some_function():
 
 correct_example2 = """
 def some_function():
-     some_value = 1
-     other_value = 2
-     return some_value + other_value
-     """
+    some_value = 1
+    other_value = 2
+    return some_value + other_value
+"""
 
 correct_example3 = """
 def some_function():
-     some_value = 1
-     name = last_name + some_value
-     return name, some_value
+    some_value = 1
+    name = last_name + some_value
+    return name, some_value
 """
 
 correct_example4 = """
 def some_function():
-     some_value = 1
-     some_value += 1
-     return some_value
+    some_value = 1
+    some_value += 1
+    return some_value
 """
 
 correct_example5 = """
 def some_function():
-     some_value = []
-     some_value.append(1)
-     return some_value
+    some_value = []
+    some_value.append(1)
+    return some_value
 """
 
 correct_example6 = """
@@ -58,7 +58,7 @@ def foo():
 
 correct_example8 = """
 def foo():
-   x[0]:int = s[0]
+   x[0]: int = s[0]
    return x[0]
 """
 
@@ -77,7 +77,7 @@ def some_function():
 
 wrong_example3 = """
 def some_function():
-     some_value:int = 1
+     some_value: int = 1
      return some_value
 """
 
