@@ -1205,7 +1205,7 @@ class UselessOperatorsViolation(ASTViolation):
 @final
 class InconsistentReturnVariableViolation(ASTViolation):
     """
-    Forbid local variables that are only used in `return` statements.
+    Forbid local variable that are only used in ``return`` statements.
 
     Reasoning:
         This is done for consistency and more readable source code.
@@ -1230,6 +1230,6 @@ class InconsistentReturnVariableViolation(ASTViolation):
     """
 
     error_template = (
-        'Found local variables that are only used in `return` statements'
+        'Found local variable that are only used in `return` statements'
     )
     code = 331
