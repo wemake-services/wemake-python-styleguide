@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
+from collections import defaultdict
 from typing import ClassVar, Dict, List, Type, Union
 
 from wemake_python_styleguide.logics.nodes import get_parent
@@ -212,7 +213,15 @@ class WrongContextManagerVisitor(BaseNodeVisitor):
 class ConsistentReturningVariableVisitor(BaseNodeVisitor):
     """Finds variables that are only used in `return` statements."""
 
-    def _get_assign_node_variables(self, node: List[ast.AST]):
+    _checking_nodes: ClassVar[AnyNodes] = (
+        ast.Assign,
+        ast.AnnAssign,
+        ast.AugAssign,
+        ast.Return,
+        ast.Name,
+    )
+
+    def _get_assign_node_variables(self, node: List[ast.AST]) -> List[str]:
         assign = []
         for sub_node in node:
             if isinstance(sub_node, ast.Assign):
@@ -223,41 +232,37 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
                     assign.append(sub_node.target.id)
         return assign
 
-    def _get_name_nodes_variable(self, node: List[ast.AST]):
-        names: Dict[str, List[ast.Name]] = {}
+    def _get_name_nodes_variable(
+        self,
+        node: List[ast.AST],
+    ) -> Dict[str, List[ast.Name]]:
+        names: Dict[str, List[ast.Name]] = defaultdict(list)
         for sub_node in node:
             if isinstance(sub_node, ast.Name):
                 if isinstance(sub_node.ctx, ast.Load):
-                    names.setdefault(sub_node.id, []).append(sub_node)
+                    names[sub_node.id].append(sub_node)
             if isinstance(sub_node, ast.AugAssign):
                 if isinstance(sub_node.target, ast.Name):
                     variable_name = sub_node.target.id
-                    names.setdefault(variable_name, []).append(sub_node.target)
+                    names[variable_name].append(sub_node.target)
         return names
 
-    def _get_return_node_variables(self, node: List[ast.AST]):
-        returns: Dict[str, List[ast.Name]] = {}
+    def _get_return_node_variables(
+        self,
+        node: List[ast.AST],
+    ) -> Dict[str, List[ast.Name]]:
+        returns: Dict[str, List[ast.Name]] = defaultdict(list)
         for sub_node in node:
             if isinstance(sub_node, ast.Return):
                 if isinstance(sub_node.value, ast.Name):
                     variable_name = sub_node.value.id
-                    returns.setdefault(variable_name, []).append(sub_node.value)
+                    returns[variable_name].append(sub_node.value)
         return returns
 
     def _check_variables_for_return(self, node: AnyFunctionDef) -> None:
         nodes = list(
             filter(
-                lambda sub_node:
-                isinstance(
-                    sub_node,
-                    (
-                        ast.Assign,
-                        ast.AnnAssign,
-                        ast.AugAssign,
-                        ast.Return,
-                        ast.Name,
-                    ),
-                ),
+                lambda sub_node: isinstance(sub_node, self._checking_nodes),
                 ast.walk(node),
             ),
         )
