@@ -179,7 +179,8 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         Visits statement's body internals.
 
         Raises:
-            UnreachableCodeViolation
+            UnreachableCodeViolation,
+            UselessNodeViolation
 
         """
         self._check_internals(node.body)

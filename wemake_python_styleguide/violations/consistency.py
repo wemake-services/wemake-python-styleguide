@@ -56,6 +56,7 @@ Summary
    UselessNodeViolation
    UselessExceptCaseViolation
    UselessOperatorsViolation
+   InconsistentReturnVariableViolation
 
 Consistency checks
 ------------------
@@ -91,6 +92,7 @@ Consistency checks
 .. autoclass:: UselessNodeViolation
 .. autoclass:: UselessExceptCaseViolation
 .. autoclass:: UselessOperatorsViolation
+.. autoclass:: InconsistentReturnVariableViolation
 
 """
 
@@ -1198,3 +1200,36 @@ class UselessOperatorsViolation(ASTViolation):
 
     code = 330
     error_template = 'Found unnecessary operator: {0}'
+
+
+@final
+class InconsistentReturnVariableViolation(ASTViolation):
+    """
+    Forbid local variable that are only used in ``return`` statements.
+
+    Reasoning:
+        This is done for consistency and more readable source code.
+
+    Solution:
+        Forbid to use local variables that are only used in `return` statements
+
+    Example::
+
+        # Correct:
+        def some_function():
+            return 1
+
+        # Wrong:
+        def some_function():
+            some_value = 1
+            return some_value
+
+
+    .. versionadded:: 0.9.0
+
+    """
+
+    error_template = (
+        'Found local variable that are only used in `return` statements'
+    )
+    code = 331

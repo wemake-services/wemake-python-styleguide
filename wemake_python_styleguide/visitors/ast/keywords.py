@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import ClassVar, List, Type, Union
+from collections import defaultdict
+from typing import ClassVar, Dict, List, Type, Union
 
 from wemake_python_styleguide.logics.nodes import get_parent
 from wemake_python_styleguide.logics.variables import (
@@ -14,6 +15,7 @@ from wemake_python_styleguide.violations.best_practices import (
     WrongKeywordViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
+    InconsistentReturnVariableViolation,
     InconsistentReturnViolation,
     InconsistentYieldViolation,
     MultipleContextManagerAssignmentsViolation,
@@ -200,4 +202,87 @@ class WrongContextManagerVisitor(BaseNodeVisitor):
 
         """
         self._check_target_assignment(node)
+        self.generic_visit(node)
+
+
+@final
+@alias('visit_return_variable', (
+    'visit_AsyncFunctionDef',
+    'visit_FunctionDef',
+))
+class ConsistentReturningVariableVisitor(BaseNodeVisitor):
+    """Finds variables that are only used in `return` statements."""
+
+    _checking_nodes: ClassVar[AnyNodes] = (
+        ast.Assign,
+        ast.AnnAssign,
+        ast.AugAssign,
+        ast.Return,
+        ast.Name,
+    )
+
+    def _get_assign_node_variables(self, node: List[ast.AST]) -> List[str]:
+        assign = []
+        for sub_node in node:
+            if isinstance(sub_node, ast.Assign):
+                if isinstance(sub_node.targets[0], ast.Name):
+                    assign.append(sub_node.targets[0].id)
+            if isinstance(sub_node, ast.AnnAssign):
+                if isinstance(sub_node.target, ast.Name):
+                    assign.append(sub_node.target.id)
+        return assign
+
+    def _get_name_nodes_variable(
+        self,
+        node: List[ast.AST],
+    ) -> Dict[str, List[ast.Name]]:
+        names: Dict[str, List[ast.Name]] = defaultdict(list)
+        for sub_node in node:
+            if isinstance(sub_node, ast.Name):
+                if isinstance(sub_node.ctx, ast.Load):
+                    names[sub_node.id].append(sub_node)
+            if isinstance(sub_node, ast.AugAssign):
+                if isinstance(sub_node.target, ast.Name):
+                    variable_name = sub_node.target.id
+                    names[variable_name].append(sub_node.target)
+        return names
+
+    def _get_return_node_variables(
+        self,
+        node: List[ast.AST],
+    ) -> Dict[str, List[ast.Name]]:
+        returns: Dict[str, List[ast.Name]] = defaultdict(list)
+        for sub_node in node:
+            if isinstance(sub_node, ast.Return):
+                if isinstance(sub_node.value, ast.Name):
+                    variable_name = sub_node.value.id
+                    returns[variable_name].append(sub_node.value)
+        return returns
+
+    def _check_variables_for_return(self, node: AnyFunctionDef) -> None:
+        nodes = list(
+            filter(
+                lambda sub_node: isinstance(sub_node, self._checking_nodes),
+                ast.walk(node),
+            ),
+        )
+        assign = self._get_assign_node_variables(nodes)
+        names = self._get_name_nodes_variable(nodes)
+        returns = self._get_return_node_variables(nodes)
+
+        returns = {name: returns[name] for name in returns if name in assign}
+
+        for variable_name in returns:
+            if not set(names[variable_name]) - set(returns[variable_name]):
+                self.add_violation(InconsistentReturnVariableViolation(node))
+
+    def visit_return_variable(self, node: AnyFunctionDef) -> None:
+        """
+        Helper to get all ``return`` variables in a function at once.
+
+        Raises:
+            InconsistentReturnVariableViolation
+
+        """
+        self._check_variables_for_return(node)
         self.generic_visit(node)

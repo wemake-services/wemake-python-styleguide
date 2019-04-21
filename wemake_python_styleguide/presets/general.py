@@ -32,6 +32,7 @@ GENERAL_PRESET = (
     keywords.WrongKeywordVisitor,
     keywords.WrongContextManagerVisitor,
     keywords.ConsistentReturningVisitor,
+    keywords.ConsistentReturningVariableVisitor,
 
     loops.WrongComprehensionVisitor,
     loops.WrongLoopVisitor,
