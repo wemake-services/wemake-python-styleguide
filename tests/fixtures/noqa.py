@@ -383,3 +383,7 @@ if some and (  # noqa: Z465
     anti_z444 == 1
 ):
     anti_z444 = 'some text'
+
+def some_function():  # noqa: Z331
+    some_value = 1
+    return some_value
