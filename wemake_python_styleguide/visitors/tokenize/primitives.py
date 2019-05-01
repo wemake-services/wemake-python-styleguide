@@ -14,6 +14,7 @@ from wemake_python_styleguide.violations.consistency import (
     BadNumberSuffixViolation,
     ImplicitStringConcatenationViolation,
     IncorrectMultilineStringViolation,
+    NumberWithMeaninglessZeroViolation,
     PartialFloatViolation,
     UnderscoredNumberViolation,
     UnicodeStringViolation,
@@ -30,11 +31,30 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
         'X', 'O', 'B', 'E',
     ))
 
+    _bad_number_prefixes = ('0b0', '0x0', '0o0', 'e0')
+
     def _check_underscored_number(self, token: tokenize.TokenInfo) -> None:
         if '_' in token.string:
             self.add_violation(
                 UnderscoredNumberViolation(token, text=token.string),
             )
+
+    def _check_meaningless_zeros(self, token: tokenize.TokenInfo) -> None:
+        token_string = token.string.lower()
+        token_start_pos = token_string.find('e')
+        token_start_pos = token_start_pos if token_start_pos >= 0 else 0
+        for prefix in self._bad_number_prefixes:
+            if token_string[token_start_pos:].startswith(prefix):
+                count_digits = len(token_string[2:])
+                if prefix != 'e0' and count_digits & (count_digits - 1) == 0:
+                    continue
+
+                self.add_violation(
+                    NumberWithMeaninglessZeroViolation(
+                        token,
+                        text=token.string,
+                    ),
+                )
 
     def _check_partial_float(self, token: tokenize.TokenInfo) -> None:
         if token.string.startswith('.') or token.string.endswith('.'):
@@ -54,11 +74,13 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
             UnderscoredNumberViolation
             PartialFloatViolation
             BadNumberSuffixViolation
+            NumberWithMeaninglessZeroViolation
 
         """
         self._check_underscored_number(token)
         self._check_partial_float(token)
         self._check_bad_number_suffixes(token)
+        self._check_meaningless_zeros(token)
 
 
 @final

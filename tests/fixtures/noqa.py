@@ -387,3 +387,5 @@ if some and (  # noqa: Z465
 def some_function():  # noqa: Z331
     some_value = 1
     return some_value
+
+test_noqa332 = 0b0000001  # noqa: Z332

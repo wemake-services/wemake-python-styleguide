@@ -57,6 +57,7 @@ Summary
    UselessExceptCaseViolation
    UselessOperatorsViolation
    InconsistentReturnVariableViolation
+   NumberWithMeaninglessZeroViolation
 
 Consistency checks
 ------------------
@@ -93,6 +94,7 @@ Consistency checks
 .. autoclass:: UselessExceptCaseViolation
 .. autoclass:: UselessOperatorsViolation
 .. autoclass:: InconsistentReturnVariableViolation
+.. autoclass:: NumberWithMeaninglessZeroViolation
 
 """
 
@@ -1233,3 +1235,47 @@ class InconsistentReturnVariableViolation(ASTViolation):
         'Found local variable that are only used in `return` statements'
     )
     code = 331
+
+
+@final
+class NumberWithMeaninglessZeroViolation(TokenizeViolation):
+    """
+    Enforce consistent octal, hex, and binary numbers.
+
+    Reasoning:
+        We need consistency to make our code readable.
+        And equal numbers might be written in almost infinite ways.
+
+    Solution:
+        Remove meaningless zeros from the number.
+
+    Example::
+
+        # Correct:
+        0b1
+        0b01
+        0b0001
+        0x1
+        0x01
+        0x0001
+        0o1
+        0o01
+        0o0001
+        1e1
+
+        # Wrong:
+        0b001
+        0x001
+        0o001
+        1e01
+
+
+    .. versionadded:: 0.9.0
+
+    """
+
+    error_template = (
+        'Found meaningless zeros in a number: {0}'
+    )
+
+    code = 332
