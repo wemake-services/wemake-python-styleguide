@@ -46,6 +46,7 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
         for prefix in self._bad_number_prefixes:
             if token_string[token_start_pos:].startswith(prefix):
                 count_digits = len(token_string[2:])
+                # checking that literals have 2**n digits
                 if prefix != 'e0' and count_digits & (count_digits - 1) == 0:
                     continue
 

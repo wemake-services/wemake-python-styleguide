@@ -1246,6 +1246,15 @@ class NumberWithMeaninglessZeroViolation(TokenizeViolation):
         We need consistency to make our code readable.
         And equal numbers might be written in almost infinite ways.
 
+        Binary literals should have 2n digits.
+        Binary literals are very useful in hardware related, so readable bit
+        order and positioning are very important!
+
+        Hexadecimal literals should have 2n digits.
+        Hexadecimal literals use for colors in RGB(A)
+
+        And octal number should have 2n digits.
+
     Solution:
         Remove meaningless zeros from the number.
 
