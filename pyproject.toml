@@ -68,7 +68,7 @@ flake8-annotations-complexity = ">=0.0.1,<0.0.3"
 pep8-naming = ">=0.7,<0.9"
 
 [tool.poetry.dev-dependencies]
-pytest-cov = "^2.6"
+pytest-cov = "^2.7"
 pytest-randomly = "^3.0"
 pytest = "^4.4"
 mypy = "^0.701"
