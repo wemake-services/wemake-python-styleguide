@@ -21,6 +21,12 @@ partial_number = .05  # noqa: Z304
 formatted_string = f'Hi, {full_name}'  # noqa: Z305
 
 
+def __getattr__():  # noqa: Z413
+    # See:
+    # https://github.com/wemake-services/wemake-python-styleguide/issues/461
+    anti_z444 = 1
+
+
 def function_name(
     value: int = 0,  # noqa: Z110
 ):

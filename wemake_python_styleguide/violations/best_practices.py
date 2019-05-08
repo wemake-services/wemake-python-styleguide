@@ -26,6 +26,7 @@ Summary
    WrongModuleMetadataViolation
    EmptyModuleViolation
    InitModuleHasLogicViolation
+   BadMagicModuleFunctionViolation
    WrongKeywordViolation
    WrongFunctionCallViolation
    FutureImportViolation
@@ -83,6 +84,7 @@ Modules
 .. autoclass:: WrongModuleMetadataViolation
 .. autoclass:: EmptyModuleViolation
 .. autoclass:: InitModuleHasLogicViolation
+.. autoclass:: BadMagicModuleFunctionViolation
 
 Builtins
 --------
@@ -369,6 +371,31 @@ class InitModuleHasLogicViolation(SimpleViolation):
 
     error_template = 'Found `__init__.py` module with logic'
     code = 412
+
+
+@final
+class BadMagicModuleFunctionViolation(ASTViolation):
+    """
+    Forbids to use ``__getaddr__`` and ``__dir__`` module magic methods.
+
+    Reasoning:
+        It does not bring any features,
+        only making it harder to understand what is going on.
+
+    Solution:
+        Refactor your code to use custom methods instead.
+
+    Configuration:
+        This rule is configurable with ``--i-control-code``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.I_CONTROL_CODE`
+
+    .. versionadded:: 0.9.0
+
+    """
+
+    error_template = 'Found bad magic module function: {0}'
+    code = 413
 
 
 # Modules:

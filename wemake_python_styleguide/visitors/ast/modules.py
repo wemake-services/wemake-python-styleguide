@@ -2,11 +2,15 @@
 
 import ast
 
-from wemake_python_styleguide.constants import INIT
+from wemake_python_styleguide.constants import (
+    INIT,
+    MAGIC_MODULE_NAMES_BLACKLIST,
+)
 from wemake_python_styleguide.logics.filenames import get_stem
 from wemake_python_styleguide.logics.nodes import is_doc_string
 from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.best_practices import (
+    BadMagicModuleFunctionViolation,
     EmptyModuleViolation,
     InitModuleHasLogicViolation,
 )
@@ -56,4 +60,28 @@ class EmptyModuleContentsVisitor(BaseNodeVisitor):
         """
         self._check_init_contents(node)
         self._check_module_contents(node)
+        self.generic_visit(node)
+
+
+@final
+class MagicModuleFunctionsVisitor(BaseNodeVisitor):
+    """Restricts to use magic module functions."""
+
+    def _check_magic_module_functions(self, node: ast.FunctionDef) -> None:
+        if node.name in MAGIC_MODULE_NAMES_BLACKLIST:
+            self.add_violation(
+                BadMagicModuleFunctionViolation(node, text=node.name),
+            )
+
+    def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
+        """
+        Checks that module hasn't magic module functions.
+
+        All this functions are defined in ``MAGIC_MODULE_NAMES_BLACKLIST``
+
+        Raises:
+            BadMagicModuleFunctionViolation
+
+        """
+        self._check_magic_module_functions(node)
         self.generic_visit(node)

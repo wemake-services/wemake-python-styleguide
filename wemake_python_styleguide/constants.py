@@ -145,6 +145,12 @@ MAGIC_MODULE_NAMES_WHITELIST: Final = frozenset((
     '__main__',
 ))
 
+#: List of bad magic module functions.
+MAGIC_MODULE_NAMES_BLACKLIST: Final = frozenset((
+    '__getattr__',
+    '__dir__',
+))
+
 #: Regex pattern to name modules.
 MODULE_NAME_PATTERN: Final = re.compile(r'^_?_?[a-z][a-z\d_]+[a-z\d](__)?$')
 
