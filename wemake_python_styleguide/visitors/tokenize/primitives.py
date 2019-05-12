@@ -62,10 +62,11 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
             self.add_violation(PartialFloatViolation(token, text=token.string))
 
     def _check_bad_number_suffixes(self, token: tokenize.TokenInfo) -> None:
-        if any(char in token.string for char in self._bad_number_suffixes):
-            self.add_violation(
-                BadNumberSuffixViolation(token, text=token.string),
-            )
+        for char in self._bad_number_suffixes:
+            if char in token.string and '0x' not in token.string:
+                self.add_violation(
+                    BadNumberSuffixViolation(token, text=token.string),
+                )
 
     def visit_number(self, token: tokenize.TokenInfo) -> None:
         """

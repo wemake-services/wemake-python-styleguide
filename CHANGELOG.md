@@ -17,6 +17,7 @@ We used to have incremental versioning before `0.1.0`.
 
 - Fixes problem with missing _allowed_left_nodes
 - Fixes problem false positive for Z121 when using `_` for unused var names
+- Fixes problem false positive Z310 for `0xE`, see [issue #557](https://github.com/wemake-services/wemake-python-styleguide/issues/557)
 
 ## 0.8.1
 

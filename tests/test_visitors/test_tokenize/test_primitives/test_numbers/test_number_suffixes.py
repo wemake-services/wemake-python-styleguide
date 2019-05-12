@@ -41,6 +41,8 @@ def test_bad_number_suffixes(
 
 @pytest.mark.parametrize('number', [
     '0xFF',
+    '0xE',
+    '0xB',
     '1.5e+10',
     '0o11',
     '0b1001',
