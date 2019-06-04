@@ -70,7 +70,7 @@ pep8-naming = ">=0.7,<0.9"
 [tool.poetry.dev-dependencies]
 pytest-cov = "^2.7"
 pytest-randomly = "^3.0"
-pytest = "^4.5"
+pytest = "^4.6"
 mypy = "^0.701"
 sphinx = "^2.1"
 sphinx-autodoc-typehints = "^1.6"
