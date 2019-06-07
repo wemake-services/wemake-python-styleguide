@@ -1128,7 +1128,7 @@ class StatementHasNoEffectViolation(ASTViolation):
 @final
 class MultipleAssignmentsViolation(ASTViolation):
     """
-    Forbids to have statements that do nothing.
+    Forbids to have multiple assignments on the same line.
 
     Reasoning:
         Multiple assignments on the same line might not do what you think
