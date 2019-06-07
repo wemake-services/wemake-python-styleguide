@@ -1158,7 +1158,7 @@ class MultipleAssignmentsViolation(ASTViolation):
 @final
 class IncorrectUnpackingViolation(ASTViolation):
     """
-    Forbids to have statements that do nothing.
+    Forbids to have tuple unpacking with side-effects.
 
     Reasoning:
         Having unpacking with side-effects is very dirty.
