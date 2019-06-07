@@ -1406,7 +1406,7 @@ class MethodWithoutArgumentsViolation(ASTViolation):
     Forbids to have methods without any arguments.
 
     Reasoning:
-        Methods withour arguments are allowed to be defined,
+        Methods without arguments are allowed to be defined,
         but almost impossible to use.
         Furthermore, they don't have an access to ``self``,
         so can not access the inner state of the object.
@@ -1437,7 +1437,7 @@ class MethodWithoutArgumentsViolation(ASTViolation):
 @final
 class IncorrectBaseClassViolation(ASTViolation):
     """
-    Forbids to have methods without any arguments.
+    Forbids to have anything else than a class as a base class.
 
     Reasoning:
         In Python you can specify anything in the base classes slot.
