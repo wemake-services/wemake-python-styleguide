@@ -39,15 +39,18 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
                 UnderscoredNumberViolation(token, text=token.string),
             )
 
+    def _is2n_digits(self, token_length: int) -> bool:
+        # checking that literals have 2**n digits
+        return token_length & (token_length - 1) == 0
+
     def _check_meaningless_zeros(self, token: tokenize.TokenInfo) -> None:
         token_string = token.string.lower()
         token_start_pos = token_string.find('e')
         token_start_pos = token_start_pos if token_start_pos >= 0 else 0
         for prefix in self._bad_number_prefixes:
             if token_string[token_start_pos:].startswith(prefix):
-                count_digits = len(token_string[2:])
-                # checking that literals have 2**n digits
-                if prefix != 'e0' and count_digits & (count_digits - 1) == 0:
+                is2n_digits = self._is2n_digits(len(token_string[2:]))
+                if prefix != 'e0' and is2n_digits:
                     continue
 
                 self.add_violation(
