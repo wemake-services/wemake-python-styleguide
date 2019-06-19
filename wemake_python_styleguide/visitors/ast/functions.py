@@ -107,7 +107,7 @@ class FunctionDefinitionVisitor(BaseNodeVisitor):
         ast.Tuple,
         ast.Bytes,
         ast.Num,
-        ast.Ellipsis
+        ast.Ellipsis,
     )
 
     def _check_used_variables(

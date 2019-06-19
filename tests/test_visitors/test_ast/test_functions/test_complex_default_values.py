@@ -9,7 +9,6 @@ from wemake_python_styleguide.visitors.ast.functions import (
     FunctionDefinitionVisitor,
 )
 
-
 function_with_ellipse_default = """
 def __init__(self, inner_value: None = ...) -> None:
     ...
