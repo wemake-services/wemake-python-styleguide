@@ -9,6 +9,13 @@ from wemake_python_styleguide.visitors.ast.functions import (
     FunctionDefinitionVisitor,
 )
 
+
+function_with_ellipse_default = """
+def __init__(self, inner_value: None = ...) -> None:
+    ...
+"""
+
+
 function_with_defaults = """
 def __init__(
     self,
@@ -60,6 +67,22 @@ def test_correct_function_defaults(
 ):
     """Testing that correct function defaults passes validation."""
     tree = parse_ast_tree(mode(function_with_defaults.format(good_default)))
+
+    visitor = FunctionDefinitionVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+def test_ellipse_correct_default(
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    default_options,
+    mode,
+):
+    """Testing that ellipse is accepted as a correct default value."""
+    tree = parse_ast_tree(mode(function_with_ellipse_default))
 
     visitor = FunctionDefinitionVisitor(default_options, tree=tree)
     visitor.run()
