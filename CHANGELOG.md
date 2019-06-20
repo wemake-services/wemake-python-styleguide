@@ -21,6 +21,8 @@ and lots of bug fixes.
 - Fixes false positive for compare ordering with `await`
 - Fixes problem with missing `_allowed_left_nodes`
 - Fixes problem false positive for `Z121` when using `_` for unused var names
+- Fixes false positive for negative number in default values
+- Fixes error text for `ComplexDefaultValuesViolation`
 - Fixes problem with false positive for `Z459`
   when a default value is an `Ellipsis`
 
@@ -35,6 +37,7 @@ and lots of bug fixes.
 - Adds big "Star" button
 - Multiple dependencies update
 - Better `exclude` rule for `flake8` check
+- Removed warnings from `pytest`
 
 
 ## 0.8.1

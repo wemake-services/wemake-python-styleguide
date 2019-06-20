@@ -9,7 +9,7 @@ from wemake_python_styleguide.constants import (
     FUNCTIONS_BLACKLIST,
     UNUSED_VARIABLE,
 )
-from wemake_python_styleguide.logics import functions
+from wemake_python_styleguide.logics import functions, operators
 from wemake_python_styleguide.logics.naming import access
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
@@ -167,12 +167,10 @@ class FunctionDefinitionVisitor(BaseNodeVisitor):
         self._check_used_variables(local_variables)
 
     def _check_argument_default_values(self, node: AnyFunctionDef) -> None:
-
         for arg in node.args.defaults:
-            if not isinstance(arg, self._allowed_default_value_types):
-                self.add_violation(
-                    ComplexDefaultValuesViolation(node, text='Test text'),
-                )
+            real_arg = operators.unwrap_unary_node(arg)
+            if not isinstance(real_arg, self._allowed_default_value_types):
+                self.add_violation(ComplexDefaultValuesViolation(node))
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """

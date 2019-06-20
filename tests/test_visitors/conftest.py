@@ -72,4 +72,4 @@ def regular_wrapper():
 @pytest.fixture(params=['async_wrapper', 'regular_wrapper'])
 def mode(request):
     """Fixture that returns either `async` or regular functions."""
-    return request.getfuncargvalue(request.param)
+    return request.getfixturevalue(request.param)

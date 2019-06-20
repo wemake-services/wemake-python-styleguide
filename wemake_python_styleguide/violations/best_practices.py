@@ -1638,10 +1638,10 @@ class ComplexDefaultValuesViolation(ASTViolation):
 
         # Correct:
         SHOULD_USE_DOCTEST = 'PYFLAKES_DOCTEST' in os.environ
-        def __init__(self, withDoctest=SHOULD_USE_DOCTEST):
+        def __init__(self, with_doctest=SHOULD_USE_DOCTEST):
 
         # Wrong:
-        def __init__(self, withDoctest='PYFLAKES_DOCTEST' in os.environ):
+        def __init__(self, with_doctest='PYFLAKES_DOCTEST' in os.environ):
 
     .. versionadded:: 0.8.0
 

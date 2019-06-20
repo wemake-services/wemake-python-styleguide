@@ -25,6 +25,8 @@ def container():
 """
 
 
+# We ignore `DeprecationWarning: 'yield' inside generator expression` here
+@pytest.mark.filterwarnings('ignore:DeprecationWarning')
 @pytest.mark.parametrize('code', [
     list_comprehension,
     generator_expression,
