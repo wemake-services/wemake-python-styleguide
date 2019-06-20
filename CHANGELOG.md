@@ -3,6 +3,7 @@
 We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
+
 ## 0.9.0
 
 This is mostly a supporting release with several new features
@@ -10,9 +11,9 @@ and lots of bug fixes.
 
 ### Features
 
-- Forbid to use magic module methods `__getattr__` and `__dir__`
-- Forbid to use multiline conditions
-- Forbid local variables that are only used in `return` statements
+- Forbids to use magic module methods `__getattr__` and `__dir__`
+- Forbids to use multiline conditions
+- Forbids local variables that are only used in `return` statements
 
 ### Bugfixes
 
