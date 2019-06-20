@@ -1623,8 +1623,8 @@ class ComplexDefaultValuesViolation(ASTViolation):
     Forbids to use complex defaults.
 
     Anything that is not a ``ast.Name``, ``ast.Attribute``, ``ast.Str``,
-    ``ast.NameConstant``, ``ast.Tuple``, ``ast.Bytes`` or ``ast.Num`` should
-    be moved out from defaults.
+    ``ast.NameConstant``, ``ast.Tuple``, ``ast.Bytes``, ``ast.Num``
+    or ``ast.Ellipsis`` should be moved out from defaults.
 
     Reasoning:
         It can be tricky. Nothing stops you from making database calls or http

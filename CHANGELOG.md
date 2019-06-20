@@ -17,6 +17,7 @@ We used to have incremental versioning before `0.1.0`.
 
 - Fixes problem with missing _allowed_left_nodes
 - Fixes problem false positive for Z121 when using `_` for unused var names
+- Fixes problem with false positive for Z459 when a default value is an ellipsis.
 
 ## 0.8.1
 
