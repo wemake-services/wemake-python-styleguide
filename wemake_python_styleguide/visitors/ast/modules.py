@@ -8,6 +8,7 @@ from typing_extensions import final
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.logics.filenames import get_stem
 from wemake_python_styleguide.logics.nodes import get_context, is_doc_string
+from wemake_python_styleguide.logics.naming.constants import is_constant
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     BadMagicModuleFunctionViolation,
@@ -104,8 +105,12 @@ class ModuleConstantsVisitor(BaseNodeVisitor):
         context = get_context(node)
         if not isinstance(context, ast.Module):
             return
-        if isinstance(node.value, self._mutable_nodes):
-            self.add_violation(MutableModuleConstantViolation(node))
+        for target in node.targets:
+            if not isinstance(target, ast.Name) or not is_constant(target.id):
+                continue
+
+            if isinstance(node.value, self._mutable_nodes):
+                self.add_violation(MutableModuleConstantViolation(target))
 
     def visit_Assign(self, node: ast.Assign) -> None:
         """

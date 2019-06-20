@@ -389,4 +389,4 @@ if some and (  # noqa: Z465
 ):
     anti_z444 = 'some text'
 
-constant = []  # noqa: Z466
+CONSTANT = []  # noqa: Z466
