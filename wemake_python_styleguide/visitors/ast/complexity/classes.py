@@ -2,12 +2,15 @@
 
 import ast
 
+from typing_extensions import final
+
 from wemake_python_styleguide.violations.complexity import (
     TooManyBaseClassesViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
+@final
 class ClassComplexityVisitor(BaseNodeVisitor):
     """Checks class complexity."""
 

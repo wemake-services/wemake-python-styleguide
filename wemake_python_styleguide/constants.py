@@ -9,7 +9,7 @@ It also contains some exceptions that we allow to use in our codebase.
 
 import re
 
-from wemake_python_styleguide.types import Final
+from typing_extensions import Final
 
 #: List of functions we forbid to use.
 FUNCTIONS_BLACKLIST: Final = frozenset((
@@ -152,7 +152,7 @@ MAGIC_MODULE_NAMES_BLACKLIST: Final = frozenset((
 ))
 
 #: Regex pattern to name modules.
-MODULE_NAME_PATTERN: Final = re.compile(r'^_?_?[a-z][a-z\d_]+[a-z\d](__)?$')
+MODULE_NAME_PATTERN: Final = re.compile(r'^_?_?[a-z][a-z\d_]*[a-z\d](__)?$')
 
 #: Common numbers that are allowed to be used without being called "magic".
 MAGIC_NUMBERS_WHITELIST: Final = frozenset((
@@ -164,10 +164,10 @@ MAGIC_NUMBERS_WHITELIST: Final = frozenset((
     60,  # seconds, minutes
 ))
 
-#: Maximum amount of ``# noqa`` comments per module.
+#: Maximum amount of ``noqa`` comments per module.
 MAX_NOQA_COMMENTS: Final = 10
 
-#: Maximum amount of ``# pragma: no cover`` comments per module.
+#: Maximum amount of ``pragma`` no-cover comments per module.
 MAX_NO_COVER_COMMENTS: Final = 5
 
 

@@ -3,12 +3,14 @@
 import ast
 from typing import ClassVar
 
+from typing_extensions import final
+
 from wemake_python_styleguide.constants import (
     NESTED_CLASSES_WHITELIST,
     NESTED_FUNCTIONS_WHITELIST,
 )
 from wemake_python_styleguide.logics.nodes import get_parent
-from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, final
+from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     NestedClassViolation,
     NestedFunctionViolation,

@@ -43,6 +43,7 @@ import tokenize
 from typing import ClassVar, Iterator, Sequence, Type
 
 from flake8.options.manager import OptionManager
+from typing_extensions import final
 
 from wemake_python_styleguide import constants, types
 from wemake_python_styleguide import version as pkg_version
@@ -54,7 +55,7 @@ from wemake_python_styleguide.visitors import base
 VisitorClass = Type[base.BaseVisitor]
 
 
-@types.final
+@final
 class Checker(object):
     """
     Implementation of :term:`checker`.

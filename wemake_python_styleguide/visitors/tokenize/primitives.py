@@ -4,12 +4,12 @@ import tokenize
 from typing import ClassVar, FrozenSet, Optional
 
 from flake8_quotes.docstring_detection import get_docstring_tokens
+from typing_extensions import final
 
 from wemake_python_styleguide.logics.tokens import (
     has_triple_string_quotes,
     split_prefixes,
 )
-from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.consistency import (
     BadNumberSuffixViolation,
     ImplicitStringConcatenationViolation,
@@ -27,7 +27,14 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
     """Visits number tokens to find incorrect usages."""
 
     _bad_number_suffixes: ClassVar[FrozenSet[str]] = frozenset((
-        'X', 'O', 'B', 'E',
+        '0X', '0O', '0B',
+    ))
+
+    # The thing is that `E` can be used as both a number and a suffix.
+    # See:
+    # https://github.com/wemake-services/wemake-python-styleguide/issues/557
+    _possibly_bad_number_suffixes = frozenset((
+        'E',
     ))
 
     def _check_underscored_number(self, token: tokenize.TokenInfo) -> None:
@@ -45,6 +52,20 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
             self.add_violation(
                 BadNumberSuffixViolation(token, text=token.string),
             )
+        else:
+            # Now we handle possible suffixes:
+            contains_correct_suffix = any(
+                char.lower() in token.string
+                for char in self._bad_number_suffixes
+            )
+            contains_e = any(
+                char in token.string
+                for char in self._possibly_bad_number_suffixes
+            )
+            if not contains_correct_suffix and contains_e:
+                self.add_violation(
+                    BadNumberSuffixViolation(token, text=token.string),
+                )
 
     def visit_number(self, token: tokenize.TokenInfo) -> None:
         """

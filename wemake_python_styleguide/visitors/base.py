@@ -66,9 +66,11 @@ import ast
 import tokenize
 from typing import List, Sequence, Type
 
+from typing_extensions import final
+
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.logics.filenames import get_stem
-from wemake_python_styleguide.types import ConfigurationOptions, final
+from wemake_python_styleguide.types import ConfigurationOptions
 from wemake_python_styleguide.violations.base import BaseViolation
 
 

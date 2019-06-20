@@ -40,7 +40,7 @@ Reference
 import ast
 from typing import Tuple, Type, Union
 
-from typing_extensions import Final, Protocol, final  # noqa: F401
+from typing_extensions import Protocol
 
 #: In cases we need to work with both import types.
 AnyImport = Union[ast.Import, ast.ImportFrom]

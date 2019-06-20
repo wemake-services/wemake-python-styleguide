@@ -3,7 +3,8 @@
 import ast
 from typing import ClassVar
 
-from wemake_python_styleguide.types import final
+from typing_extensions import final
+
 from wemake_python_styleguide.violations.complexity import (
     TooDeepNestingViolation,
 )

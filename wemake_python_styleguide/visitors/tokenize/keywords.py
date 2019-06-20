@@ -3,7 +3,8 @@
 import keyword
 import tokenize
 
-from wemake_python_styleguide.types import final
+from typing_extensions import final
+
 from wemake_python_styleguide.violations.consistency import (
     MissingSpaceBetweenKeywordAndParenViolation,
 )

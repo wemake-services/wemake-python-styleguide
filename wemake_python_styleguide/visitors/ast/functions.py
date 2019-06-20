@@ -3,13 +3,15 @@
 import ast
 from typing import ClassVar, Dict, List, Optional, Union
 
+from typing_extensions import final
+
 from wemake_python_styleguide.constants import (
     FUNCTIONS_BLACKLIST,
     UNUSED_VARIABLE,
 )
 from wemake_python_styleguide.logics import functions
 from wemake_python_styleguide.logics.naming import access
-from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, final
+from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     BooleanPositionalArgumentViolation,
     ComplexDefaultValuesViolation,

@@ -43,7 +43,7 @@ import ast
 import tokenize
 from typing import ClassVar, Optional, Tuple, Union
 
-from wemake_python_styleguide.types import final
+from typing_extensions import final
 
 #: General type for all possible nodes where error happens.
 ErrorNode = Union[
@@ -71,7 +71,7 @@ class BaseViolation(object):
     error_template: ClassVar[str]
     code: ClassVar[int]
 
-    def __init__(self, node: ErrorNode, text: str = None) -> None:
+    def __init__(self, node: ErrorNode, text: Optional[str] = None) -> None:
         """
         Creates new instance of abstract violation.
 
@@ -144,7 +144,7 @@ class MaybeASTViolation(_BaseASTViolation):
     Is wildly used for naming rules.
     """
 
-    def __init__(self, node=None, text: str = None) -> None:
+    def __init__(self, node=None, text: Optional[str] = None) -> None:
         """Creates new instance of module violation without explicit node."""
         super().__init__(node, text=text)
 
@@ -164,6 +164,6 @@ class SimpleViolation(BaseViolation):
 
     _node: None
 
-    def __init__(self, node=None, text: str = None) -> None:
+    def __init__(self, node=None, text: Optional[str] = None) -> None:
         """Creates new instance of simple style violation."""
         super().__init__(node, text=text)

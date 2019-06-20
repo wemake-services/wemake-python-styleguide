@@ -3,6 +3,8 @@
 import ast
 from typing import Callable, List, Optional, Tuple, Union
 
+from typing_extensions import final
+
 from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
     SPECIAL_ARGUMENT_NAMES_WHITELIST,
@@ -20,7 +22,6 @@ from wemake_python_styleguide.types import (
     AnyFunctionDefAndLambda,
     AnyImport,
     ConfigurationOptions,
-    final,
 )
 from wemake_python_styleguide.violations import base, naming
 from wemake_python_styleguide.violations.best_practices import (

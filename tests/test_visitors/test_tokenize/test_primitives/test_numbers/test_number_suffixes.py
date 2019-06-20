@@ -48,6 +48,11 @@ def test_bad_number_suffixes(
     '-3e+10',
     '-0o11',
     '-0b1111',
+
+    # Regression for 557:
+    # https://github.com/wemake-services/wemake-python-styleguide/issues/557
+    '0xE',
+    '-0xB',
 ])
 def test_correct_number_suffixes(
     parse_tokens,

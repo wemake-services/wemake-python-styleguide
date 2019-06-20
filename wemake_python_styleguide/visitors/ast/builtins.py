@@ -5,6 +5,7 @@ from collections import Counter
 from typing import ClassVar, Iterable, List
 
 import astor
+from typing_extensions import final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.logics.operators import (
@@ -12,7 +13,7 @@ from wemake_python_styleguide.logics.operators import (
     get_parent_ignoring_unary,
     unwrap_unary_node,
 )
-from wemake_python_styleguide.types import AnyNodes, final
+from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     IncorrectUnpackingViolation,
     MagicNumberViolation,

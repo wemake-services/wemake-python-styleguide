@@ -2,13 +2,14 @@
 
 import ast
 
+from typing_extensions import final
+
 from wemake_python_styleguide.constants import (
     INIT,
     MAGIC_MODULE_NAMES_BLACKLIST,
 )
 from wemake_python_styleguide.logics.filenames import get_stem
 from wemake_python_styleguide.logics.nodes import is_doc_string
-from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.best_practices import (
     BadMagicModuleFunctionViolation,
     EmptyModuleViolation,

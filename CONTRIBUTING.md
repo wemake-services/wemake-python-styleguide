@@ -62,7 +62,7 @@ pytest
 To run linting:
 
 ```bash
-flake8 wemake_python_styleguide tests docs
+flake8 .
 ```
 
 These steps are mandatory during the CI.

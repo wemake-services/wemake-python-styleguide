@@ -5,19 +5,37 @@ We used to have incremental versioning before `0.1.0`.
 
 ## 0.9.0
 
+This is mostly a supporting release with several new features
+and lots of bug fixes.
+
 ### Features
 
-- Forbid to use magic module methods `__getattr__` and `__dir__` 
+- Forbid to use magic module methods `__getattr__` and `__dir__`
 - Forbid to use multiline conditions
 - Forbid local variables that are only used in `return` statements
-- Updates `flake8-bugbear` to `19.3+`
-- Updates `flake8-quotes` to `2.0.0`
 
 ### Bugfixes
 
-- Fixes problem with missing _allowed_left_nodes
-- Fixes problem false positive for Z121 when using `_` for unused var names
-- Fixes problem with false positive for Z459 when a default value is an ellipsis.
+- Fixes module names for modules like `io.py`
+- Fixes false positive `Z310` for numbers like `0xE`
+- Fixes false positive for compare ordering with `await`
+- Fixes problem with missing `_allowed_left_nodes`
+- Fixes problem false positive for `Z121` when using `_` for unused var names
+- Fixes problem with false positive for `Z459`
+  when a default value is an `Ellipsis`
+
+### Misc
+
+- Adds `py.typed` file in case someone will import our code,
+  now it will have types
+- Adds several missing `@final` decorators
+- Enforces typing support
+- Refactors how `typing_extensions` package is used
+- Adds docs about `black`
+- Adds big "Star" button
+- Multiple dependencies update
+- Better `exclude` rule for `flake8` check
+
 
 ## 0.8.1
 

@@ -96,7 +96,8 @@ Consistency checks
 
 """
 
-from wemake_python_styleguide.types import final
+from typing_extensions import final
+
 from wemake_python_styleguide.violations.base import (
     ASTViolation,
     TokenizeViolation,
@@ -550,6 +551,7 @@ class MissingSpaceBetweenKeywordAndParenViolation(TokenizeViolation):
     code = 313
 
 
+@final
 class WrongConditionalViolation(ASTViolation):
     """
     Forbids using ``if`` statements that use invalid conditionals.
@@ -578,6 +580,7 @@ class WrongConditionalViolation(ASTViolation):
     code = 314
 
 
+@final
 class ObjectInBaseClassesListViolation(ASTViolation):
     """
     Forbids extra ``object`` in parent classes list.
@@ -1129,6 +1132,7 @@ class UselessNodeViolation(ASTViolation):
     code = 328
 
 
+@final
 class UselessExceptCaseViolation(ASTViolation):
     """
     Forbids to use meaningless ``except`` cases.
@@ -1165,6 +1169,7 @@ class UselessExceptCaseViolation(ASTViolation):
     code = 329
 
 
+@final
 class UselessOperatorsViolation(ASTViolation):
     """
     Forbids the use of unnecessary operators in your code.

@@ -4,10 +4,12 @@ import ast
 from itertools import chain
 from typing import Callable
 
+from typing_extensions import final
+
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
 from wemake_python_styleguide.logics import imports, nodes
 from wemake_python_styleguide.logics.naming import access
-from wemake_python_styleguide.types import AnyImport, final
+from wemake_python_styleguide.types import AnyImport
 from wemake_python_styleguide.violations.base import BaseViolation
 from wemake_python_styleguide.violations.best_practices import (
     FutureImportViolation,

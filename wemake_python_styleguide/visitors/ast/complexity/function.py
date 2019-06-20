@@ -4,6 +4,8 @@ import ast
 from collections import defaultdict
 from typing import ClassVar, DefaultDict, List
 
+from typing_extensions import final
+
 from wemake_python_styleguide.constants import UNUSED_VARIABLE
 from wemake_python_styleguide.logics import functions
 from wemake_python_styleguide.logics.nodes import get_parent
@@ -11,7 +13,6 @@ from wemake_python_styleguide.types import (
     AnyFunctionDef,
     AnyFunctionDefAndLambda,
     AnyNodes,
-    final,
 )
 from wemake_python_styleguide.violations.complexity import (
     TooManyArgumentsViolation,

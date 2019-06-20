@@ -14,7 +14,8 @@ from collections import defaultdict
 from statistics import median
 from typing import DefaultDict, List
 
-from wemake_python_styleguide.types import final
+from typing_extensions import final
+
 from wemake_python_styleguide.violations.complexity import (
     JonesScoreViolation,
     LineComplexityViolation,

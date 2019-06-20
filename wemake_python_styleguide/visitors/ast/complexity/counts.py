@@ -4,9 +4,11 @@ import ast
 from collections import defaultdict
 from typing import ClassVar, DefaultDict, List, Union
 
+from typing_extensions import final
+
 from wemake_python_styleguide.logics.functions import is_method
 from wemake_python_styleguide.logics.nodes import get_parent
-from wemake_python_styleguide.types import AnyFunctionDef, AnyImport, final
+from wemake_python_styleguide.types import AnyFunctionDef, AnyImport
 from wemake_python_styleguide.violations.complexity import (
     TooManyConditionsViolation,
     TooManyDecoratorsViolation,

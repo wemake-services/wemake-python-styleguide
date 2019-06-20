@@ -48,3 +48,30 @@ Use ``*.pyi`` glob to list ignored violations:
 
 You can look at the `returns <https://github.com/dry-python/returns>`_
 project as an example.
+
+black
+-----
+
+Is not compatible to ``black``. Let's go deeper and see why.
+
+``black`` is a very simple tool to do just a one thing:
+reformat some basic stuff in your code like quotes, commas, and line length.
+
+It is not a linter, but an auto-formatter. And quite an opinionated one!
+It is actually not compatible with ``PEP8`` and ``flake8``
+(`docs <https://black.readthedocs.io/en/stable/the_black_code_style.html?highlight=flake8>`_),
+that's why it is not compatible with ``wemake-python-styleguide`` either.
+The difference between a linter and auto-formatter is huge:
+
+- auto-formatters pretties your code a little bit
+- linters force you to write beautiful and correct code
+
+For example, auto-formatters won't tell you that your code is too complex.
+When your linter will (in case it is a good linter).
+
+We in ``wemake.services`` believe that these kind of tools are not required,
+because a good linter will just not let your badly formated code pass the CI,
+so there would be no junk to reformat!
+All code is perfectly formated all the time.
+
+Rely on strict linters, not auto-formatters.

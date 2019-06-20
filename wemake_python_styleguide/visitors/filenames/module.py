@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
+from typing_extensions import final
+
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.logics.naming import access, logical
-from wemake_python_styleguide.types import final
 from wemake_python_styleguide.violations.naming import (
     ConsecutiveUnderscoresInNameViolation,
     PrivateNameViolation,
@@ -39,15 +40,14 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
         min_length = self.options.min_name_length
         if logical.is_too_short_name(self.stem, min_length=min_length):
             self.add_violation(TooShortNameViolation(text=self.stem))
+        elif not constants.MODULE_NAME_PATTERN.match(self.stem):
+            self.add_violation(WrongModuleNamePatternViolation())
 
         max_length = self.options.max_name_length
         if logical.is_too_long_name(self.stem, max_length=max_length):
             self.add_violation(TooLongNameViolation(text=self.stem))
 
     def _check_module_name_pattern(self) -> None:
-        if not constants.MODULE_NAME_PATTERN.match(self.stem):
-            self.add_violation(WrongModuleNamePatternViolation())
-
         if logical.does_contain_consecutive_underscores(self.stem):
             self.add_violation(
                 ConsecutiveUnderscoresInNameViolation(text=self.stem),

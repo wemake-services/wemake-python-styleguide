@@ -4,11 +4,12 @@ import ast
 from typing import ClassVar, List, Optional, Sequence
 
 import astor
+from typing_extensions import final
 
 from wemake_python_styleguide.logics.naming.name_nodes import is_same_variable
 from wemake_python_styleguide.logics.nodes import is_literal
 from wemake_python_styleguide.logics.operators import unwrap_unary_node
-from wemake_python_styleguide.types import AnyIf, AnyNodes, final
+from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     SimplifiableIfViolation,
 )
@@ -80,6 +81,7 @@ class WrongComparisionOrderVisitor(BaseNodeVisitor):
         ast.Call,
         ast.Attribute,
         ast.Subscript,
+        ast.Await,
     )
 
     _special_cases: ClassVar[AnyNodes] = (
@@ -148,6 +150,7 @@ class WrongComparisionOrderVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
 
+@final
 @alias('visit_any_if', (
     'visit_If',
     'visit_IfExp',

@@ -5,7 +5,6 @@ import pytest
 from wemake_python_styleguide.violations.naming import (
     TooLongNameViolation,
     TooShortNameViolation,
-    WrongModuleNamePatternViolation,
 )
 from wemake_python_styleguide.visitors.filenames.module import (
     WrongModuleNameVisitor,
@@ -23,10 +22,21 @@ def test_too_short_filename(assert_errors, filename, default_options):
     visitor = WrongModuleNameVisitor(default_options, filename=filename)
     visitor.run()
 
-    assert_errors(visitor, [
-        TooShortNameViolation,
-        WrongModuleNamePatternViolation,
-    ])
+    assert_errors(visitor, [TooShortNameViolation])
+
+
+@pytest.mark.parametrize('filename', [
+    # Regression for 596:
+    # See:
+    # https://github.com/wemake-services/wemake-python-styleguide/issues/596
+    'io.py',
+])
+def test_normal_module_name(assert_errors, filename, default_options):
+    """Testing that short file names are restricted."""
+    visitor = WrongModuleNameVisitor(default_options, filename=filename)
+    visitor.run()
+
+    assert_errors(visitor, [])
 
 
 def test_length_option(assert_errors, assert_error_text, options):
@@ -51,9 +61,7 @@ def test_too_long_filename(assert_errors, filename, default_options):
     visitor = WrongModuleNameVisitor(default_options, filename=filename)
     visitor.run()
 
-    assert_errors(visitor, [
-        TooLongNameViolation,
-    ])
+    assert_errors(visitor, [TooLongNameViolation])
 
 
 def test_max_length_option(assert_errors, assert_error_text, options):

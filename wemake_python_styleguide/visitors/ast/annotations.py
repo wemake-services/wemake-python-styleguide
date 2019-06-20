@@ -2,7 +2,9 @@
 
 import ast
 
-from wemake_python_styleguide.types import AnyFunctionDef, final
+from typing_extensions import final
+
+from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations.consistency import (
     MultilineFunctionAnnotationViolation,
 )

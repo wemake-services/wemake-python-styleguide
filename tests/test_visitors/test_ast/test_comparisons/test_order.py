@@ -9,6 +9,11 @@ from wemake_python_styleguide.visitors.ast.comparisons import (
     WrongComparisionOrderVisitor,
 )
 
+regression577 = """
+async def function():
+    assert await _coroutine(1) == Success(1)
+"""
+
 
 @pytest.mark.parametrize('comparators', [
     ('first_name', 'second_name'),
@@ -112,3 +117,21 @@ def test_comparison_wrong_order_multiple(
         ComparisonOrderViolation,
         ComparisonOrderViolation,
     ])
+
+
+def test_comparison_wrong_order_regression577(
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+):
+    """
+    Ensures that `await` can be used in a comparision.
+
+    See: https://github.com/wemake-services/wemake-python-styleguide/issues/577
+    """
+    tree = parse_ast_tree(regression577)
+
+    visitor = WrongComparisionOrderVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])

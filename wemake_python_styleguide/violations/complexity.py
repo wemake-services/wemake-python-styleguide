@@ -72,7 +72,8 @@ Structures complexity
 
 """
 
-from wemake_python_styleguide.types import final
+from typing_extensions import final
+
 from wemake_python_styleguide.violations.base import (
     ASTViolation,
     SimpleViolation,
@@ -346,6 +347,7 @@ class TooManyMethodsViolation(ASTViolation):
     code = 214
 
 
+@final
 class TooManyBaseClassesViolation(ASTViolation):
     """
     Restrict the maximum number of base classes.
@@ -392,6 +394,7 @@ class TooManyBaseClassesViolation(ASTViolation):
     code = 215
 
 
+@final
 class TooManyDecoratorsViolation(ASTViolation):
     """
     Restrict the maximum number of decorators.

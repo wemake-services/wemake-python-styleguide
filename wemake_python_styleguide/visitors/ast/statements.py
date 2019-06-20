@@ -3,10 +3,12 @@
 import ast
 from typing import ClassVar, Mapping, Optional, Sequence, Union
 
+from typing_extensions import final
+
 from wemake_python_styleguide.logics.collections import normalize_dict_elements
 from wemake_python_styleguide.logics.functions import get_all_arguments
 from wemake_python_styleguide.logics.nodes import get_parent, is_doc_string
-from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, final
+from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     StatementHasNoEffectViolation,
     UnreachableCodeViolation,

@@ -4,11 +4,13 @@ import ast
 from collections import defaultdict
 from typing import ClassVar, Dict, List, Type, Union
 
+from typing_extensions import final
+
 from wemake_python_styleguide.logics.nodes import get_parent
 from wemake_python_styleguide.logics.variables import (
     is_valid_block_variable_definition,
 )
-from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, final
+from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     ContextManagerVariableDefinitionViolation,
     RaiseNotImplementedViolation,
