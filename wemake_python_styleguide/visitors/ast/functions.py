@@ -9,7 +9,7 @@ from wemake_python_styleguide.constants import (
     FUNCTIONS_BLACKLIST,
     UNUSED_VARIABLE,
 )
-from wemake_python_styleguide.logics import functions, operators
+from wemake_python_styleguide.logics import functions, nodes, operators
 from wemake_python_styleguide.logics.naming import access
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
@@ -59,6 +59,7 @@ class WrongFunctionCallVisitor(BaseNodeVisitor):
         parent_context = getattr(node, 'wps_context', None)
         if isinstance(parent_context, (ast.FunctionDef, ast.AsyncFunctionDef)):
             grand_context = getattr(parent_context, 'wps_context', None)
+            grand_context = nodes.get_context(parent_context)
             if isinstance(grand_context, ast.ClassDef):
                 return
         self.add_violation(

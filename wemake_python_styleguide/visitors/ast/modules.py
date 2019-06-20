@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
 import ast
+from typing import ClassVar
 
 from typing_extensions import final
 
-from wemake_python_styleguide.constants import (
-    INIT,
-    MAGIC_MODULE_NAMES_BLACKLIST,
-)
+from wemake_python_styleguide import constants
 from wemake_python_styleguide.logics.filenames import get_stem
-from wemake_python_styleguide.logics.nodes import is_doc_string
+from wemake_python_styleguide.logics.nodes import get_context, is_doc_string
+from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     BadMagicModuleFunctionViolation,
     EmptyModuleViolation,
     InitModuleHasLogicViolation,
+    MutableModuleConstantViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
@@ -23,7 +23,7 @@ class EmptyModuleContentsVisitor(BaseNodeVisitor):
     """Restricts to have empty modules."""
 
     def _is_init(self) -> bool:
-        return get_stem(self.filename) == INIT
+        return get_stem(self.filename) == constants.INIT
 
     def _check_module_contents(self, node: ast.Module) -> None:
         if self._is_init():
@@ -69,7 +69,7 @@ class MagicModuleFunctionsVisitor(BaseNodeVisitor):
     """Restricts to use magic module functions."""
 
     def _check_magic_module_functions(self, node: ast.FunctionDef) -> None:
-        if node.name in MAGIC_MODULE_NAMES_BLACKLIST:
+        if node.name in constants.MAGIC_MODULE_NAMES_BLACKLIST:
             self.add_violation(
                 BadMagicModuleFunctionViolation(node, text=node.name),
             )
@@ -85,4 +85,35 @@ class MagicModuleFunctionsVisitor(BaseNodeVisitor):
 
         """
         self._check_magic_module_functions(node)
+        self.generic_visit(node)
+
+
+@final
+class ModuleConstantsVisitor(BaseNodeVisitor):
+    """Finds incorrect module constants."""
+
+    _mutable_nodes: ClassVar[AnyNodes] = (
+        ast.Dict,
+        ast.List,
+        ast.Set,
+        ast.DictComp,
+        ast.ListComp,
+    )
+
+    def _check_mutable_constant(self, node: ast.Assign) -> None:
+        context = get_context(node)
+        if not isinstance(context, ast.Module):
+            return
+        if isinstance(node.value, self._mutable_nodes):
+            self.add_violation(MutableModuleConstantViolation(node))
+
+    def visit_Assign(self, node: ast.Assign) -> None:
+        """
+        Checks that module's cannot have incorrect constants.
+
+        Raises:
+            MutableModuleConstantViolation
+
+        """
+        self._check_mutable_constant(node)
         self.generic_visit(node)

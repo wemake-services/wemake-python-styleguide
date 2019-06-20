@@ -4,6 +4,13 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
+## WIP
+
+### Features
+
+- Forbids to use module level mutable constants
+
+
 ## 0.9.0
 
 This is mostly a supporting release with several new features

@@ -8,7 +8,11 @@ from typing_extensions import final
 
 from wemake_python_styleguide import constants, types
 from wemake_python_styleguide.logics.functions import get_all_arguments
-from wemake_python_styleguide.logics.nodes import is_contained, is_doc_string
+from wemake_python_styleguide.logics.nodes import (
+    get_context,
+    is_contained,
+    is_doc_string,
+)
 from wemake_python_styleguide.violations.best_practices import (
     BadMagicMethodViolation,
     BaseExceptionSubclassViolation,
@@ -132,7 +136,7 @@ class WrongMethodVisitor(BaseNodeVisitor):
                 self.add_violation(StaticMethodViolation(node))
 
     def _check_bound_methods(self, node: types.AnyFunctionDef) -> None:
-        node_context = getattr(node, 'wps_context', None)
+        node_context = get_context(node)
         if not isinstance(node_context, ast.ClassDef):
             return
 
@@ -168,9 +172,7 @@ class WrongSlotsVisitor(BaseNodeVisitor):
             IncorrectSlotsViolation
 
         """
-        context = getattr(node, 'wps_context', None)
-        if isinstance(context, ast.ClassDef):
-            self._check_slots(node)
+        self._check_slots(node)
         self.generic_visit(node)
 
     def _contains_slots_assign(self, node: ast.Assign) -> bool:
@@ -197,6 +199,10 @@ class WrongSlotsVisitor(BaseNodeVisitor):
                 return
 
     def _check_slots(self, node: ast.Assign) -> None:
+        context = get_context(node)
+        if not isinstance(context, ast.ClassDef):
+            return
+
         if not self._contains_slots_assign(node):
             return
 

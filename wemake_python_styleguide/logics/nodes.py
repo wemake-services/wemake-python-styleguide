@@ -44,3 +44,8 @@ def is_doc_string(node: ast.stmt) -> bool:
 def get_parent(node: ast.AST) -> Optional[ast.AST]:
     """Returns the parent node or ``None`` if node has no parent."""
     return getattr(node, 'wps_parent', None)
+
+
+def get_context(node: ast.AST) -> Optional[ast.AST]:
+    """Returns the context or ``None`` if node has no context."""
+    return getattr(node, 'wps_context', None)

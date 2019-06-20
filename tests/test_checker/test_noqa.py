@@ -5,10 +5,10 @@ import subprocess
 from collections import Counter
 
 ERROR_PATTERN = re.compile(r'(Z\d{3})')
-IGNORED_VIOLATIONS = [
+IGNORED_VIOLATIONS = (
     'Z202',  # since our test case is complex, that's fine
     'Z402',  # since we obviously use a lot of `noqa` comments
-]
+)
 
 
 def _assert_errors_count_in_output(output, errors, all_violations):
@@ -154,6 +154,7 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
         'Z463': 1,
         'Z464': 1,
         'Z465': 1,
+        'Z466': 1,
     }
 
     process = subprocess.Popen(

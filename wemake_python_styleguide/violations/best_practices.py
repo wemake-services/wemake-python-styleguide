@@ -69,6 +69,7 @@ Summary
    NegatedConditionsViolation
    NestedTryViolation
    MultilineConditionsViolation
+   MutableModuleConstantViolation
 
 Comments
 --------
@@ -134,6 +135,7 @@ Design
 .. autoclass:: NegatedConditionsViolation
 .. autoclass:: NestedTryViolation
 .. autoclass:: MultilineConditionsViolation
+.. autoclass:: MutableModuleConstantViolation
 
 """
 
@@ -1856,7 +1858,7 @@ class MultilineConditionsViolation(ASTViolation):
             node.test.op,
             ast.Not,
         ):
-        ...
+            ...
 
     .. versionadded:: 0.9.0
 
@@ -1864,3 +1866,36 @@ class MultilineConditionsViolation(ASTViolation):
 
     error_template = 'Found multiline conditions'
     code = 465
+
+
+@final
+class MutableModuleConstantViolation(ASTViolation):
+    """
+    Forbid multiline conditions.
+
+    Reasoning:
+        This way of writing conditions hides the inner complexity this line has.
+        And it decreases readability of the code.
+
+    Solution:
+        Divide multiline conditions to some ``if`` condition. Or use variables.
+
+    Example::
+
+        # Correct:
+        import types
+        CONST1 = frozenset((1, 2, 3))
+        CONST2 = (1, 2, 3)
+        CONST3 = types.MappingProxyType({'key': 'value'})
+
+        # Wrong:
+        CONST1 = {1, 2, 3}
+        CONST2 = [1, 2, 3]
+        CONST3 = {'key': 'value'}
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found mutable module constant'
+    code = 466
