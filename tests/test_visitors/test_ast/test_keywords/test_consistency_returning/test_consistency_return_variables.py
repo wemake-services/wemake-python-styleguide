@@ -81,6 +81,15 @@ def some_function():
      return some_value
 """
 
+# Regression to 598
+# See: https://github.com/wemake-services/wemake-python-styleguide/issues/598
+wrong_example4 = """
+def foo():
+   function_result = function(*args, **kwargs)
+   print('Done, result is logged')  # we obviously need this line
+   return function_result
+"""
+
 double_wrong_example1 = """
 def some():
    if something() == 1:
@@ -97,6 +106,7 @@ def some():
     wrong_example1,
     wrong_example2,
     wrong_example3,
+    wrong_example4,
 ])
 def test_wrong_return_variable(
     assert_errors,

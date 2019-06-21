@@ -10,9 +10,9 @@ def test_invalid_options(absolute_path):
             'flake8',
             '--isolated',
             '--select',
+            'Z',
             '--max-imports',
             '-5',  # should be positive
-            'Z',
             absolute_path('fixtures', 'noqa.py'),
         ],
         stdout=subprocess.PIPE,
@@ -20,6 +20,7 @@ def test_invalid_options(absolute_path):
         universal_newlines=True,
         encoding='utf8',
     )
-    process.communicate()
+    _, stderr = process.communicate()
 
-    assert process.returncode == 2
+    assert process.returncode == 1
+    assert 'ValueError' in stderr
