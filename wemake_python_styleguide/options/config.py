@@ -13,7 +13,7 @@ ConfigValues = Mapping[str, Union[str, int, bool]]
 
 
 @final
-@attr.attrs(frozen=True, auto_attribs=True, slots=True)
+@attr.dataclass(frozen=True, slots=True)
 class _Option(object):
     """Represents ``flake8`` option object."""
 
@@ -91,6 +91,9 @@ class Configuration(object):
       :str:`wemake_python_styleguide.options.defaults.MAX_BASE_CLASSES`
     - ``max-decorators`` - maximum number of decorators for single function
       or class definition, defaults to
+      :str:`wemake_python_styleguide.options.defaults.MAX_DECORATORS`
+    - ``max-string-usages`` - maximum number of repeated string constants
+      in your modules, defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_DECORATORS`
 
     All options are configurable via ``flake8`` CLI.
@@ -178,6 +181,12 @@ class Configuration(object):
             '--max-decorators',
             defaults.MAX_DECORATORS,
             'Maximum number of decorators.',
+        ),
+
+        _Option(
+            '--max-string-usages',
+            defaults.MAX_STRING_USAGES,
+            'Maximum number of string constant usages.',
         ),
 
         # General:

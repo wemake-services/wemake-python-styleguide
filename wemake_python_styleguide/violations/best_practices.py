@@ -1871,14 +1871,16 @@ class MultilineConditionsViolation(ASTViolation):
 @final
 class MutableModuleConstantViolation(ASTViolation):
     """
-    Forbid multiline conditions.
+    Forbid mutable constants on a module level.
 
     Reasoning:
-        This way of writing conditions hides the inner complexity this line has.
-        And it decreases readability of the code.
+        Constants should be immutable.
 
     Solution:
-        Divide multiline conditions to some ``if`` condition. Or use variables.
+        Use immutable types for constants.
+
+    We only treat ``ast.Set``, ``ast.Dict``, ``ast.List``, and comprehensions
+    as mutable things. All other nodes are still fine.
 
     Example::
 

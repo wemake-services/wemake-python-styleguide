@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from wemake_python_styleguide.constants import UNUSED_VARIABLE
-
 
 def is_constant(name: str) -> bool:
     """

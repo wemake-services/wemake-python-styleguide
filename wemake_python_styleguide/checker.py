@@ -48,6 +48,7 @@ from typing_extensions import final
 from wemake_python_styleguide import constants, types
 from wemake_python_styleguide import version as pkg_version
 from wemake_python_styleguide.options.config import Configuration
+from wemake_python_styleguide.options.validation import validate_options
 from wemake_python_styleguide.presets import complexity, general, tokens
 from wemake_python_styleguide.transformations.ast_tree import transform
 from wemake_python_styleguide.visitors import base
@@ -132,7 +133,7 @@ class Checker(object):
     @classmethod
     def parse_options(cls, options: types.ConfigurationOptions) -> None:
         """Parses registered options for providing them to each visitor."""
-        cls.options = options
+        cls.options = validate_options(options)
 
     def _run_checks(
         self,

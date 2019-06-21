@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from collections import Counter
-from typing import ClassVar, Iterable, List
+from collections import Counter, defaultdict
+from typing import ClassVar, DefaultDict, Iterable, List
 
 import astor
 from typing_extensions import final
@@ -20,6 +20,9 @@ from wemake_python_styleguide.violations.best_practices import (
     MultipleAssignmentsViolation,
     NonUniqueItemsInSetViolation,
 )
+from wemake_python_styleguide.violations.complexity import (
+    OverusedStringViolation,
+)
 from wemake_python_styleguide.violations.consistency import (
     FormattedStringViolation,
     UselessOperatorsViolation,
@@ -29,7 +32,31 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 @final
 class WrongStringVisitor(BaseNodeVisitor):
-    """Restricts to use ``f`` strings."""
+    """Restricts several string usages."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Inits the counter for constants."""
+        super().__init__(*args, **kwargs)
+        self._string_constants: DefaultDict[str, int] = defaultdict(int)
+
+    def _check_string_constant(self, node: ast.Str) -> None:
+        self._string_constants[node.s] += 1
+
+    def _post_visit(self) -> None:
+        for string, usage_count in self._string_constants.items():
+            if usage_count > self.options.max_string_usages:
+                self.add_violation(OverusedStringViolation(text=string))
+
+    def visit_Str(self, node: ast.Str) -> None:
+        """
+        Restricts to over-use string constants.
+
+        Raises:
+            OverusedStringViolation
+
+        """
+        self._check_string_constant(node)
+        self.generic_visit(node)
 
     def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
         """

@@ -54,7 +54,7 @@ def test_wrong_constant_type_used(
     '[x for x in "123"]',
     '{x: x for x in "123"}',
 ])
-def test_wrong_constant_type_used(
+def test_correct_non_constant(
     assert_errors,
     parse_ast_tree,
     default_options,
