@@ -58,7 +58,7 @@ def get_all_arguments(node: AnyFunctionDefAndLambda) -> List[arg]:
     Returns list of all arguments that exist in a function.
 
     Respects the correct parameters order.
-    Positional args, *args, keyword-only, **kwargs.
+    Positional args, ``*args``, keyword-only, ``**kwargs``.
     """
     names = [
         *node.args.args,

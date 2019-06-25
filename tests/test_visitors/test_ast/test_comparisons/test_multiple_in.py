@@ -36,7 +36,7 @@ def test_comparison_with_in(
     comparators,
     default_options,
 ):
-    """Comparisons work well for single `in`."""
+    """Comparisons work well for single ``in``."""
     tree = parse_ast_tree(code.format(*comparators))
 
     visitor = ComparisonSanityVisitor(default_options, tree=tree)
@@ -62,7 +62,7 @@ def test_comparison_with_multiple_in(
     comparators,
     default_options,
 ):
-    """Comparisons raise for multiple `in`s."""
+    """Comparisons raise for multiple ``in`` cases."""
     tree = parse_ast_tree(code.format(*comparators))
 
     visitor = ComparisonSanityVisitor(default_options, tree=tree)

@@ -68,9 +68,11 @@ class Checker(object):
         name: required by the ``flake8`` API, should match the package name.
         version: required by the ``flake8`` API, defined in the packaging file.
         config: custom configuration object used to provide and parse options:
-            :class:`wemake_python_styleguide.options.config.Configuration`.
+        :class:`wemake_python_styleguide.options.config.Configuration`.
+
         options: option structure passed by ``flake8``:
-            :class:`wemake_python_styleguide.types.ConfigurationOptions`.
+        :class:`wemake_python_styleguide.types.ConfigurationOptions`.
+
         visitors: :term:`preset` of visitors that are run by this checker.
 
     """
@@ -108,6 +110,7 @@ class Checker(object):
                 Differs from ``ast.parse`` since it is mutated by multiple
                 ``flake8`` plugins. Why mutated? Since it is really expensive
                 to copy all ``ast`` information in terms of memory.
+
             file_tokens: ``tokenize.tokenize`` parsed file tokens.
             filename: module file name, might be empty if piping is used.
 

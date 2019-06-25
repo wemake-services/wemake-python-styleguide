@@ -12,6 +12,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use module level mutable constants
 - Forbids to over-use strings
 - Forbids to use `breakpoint` function
+- Adds `flake8-rst-docstrings` as a dependency
 
 
 ## 0.9.0

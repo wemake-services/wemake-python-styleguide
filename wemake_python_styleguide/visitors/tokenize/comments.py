@@ -5,13 +5,17 @@ Disallows to use incorrect magic comments.
 
 That's how a basic ``comment`` type token looks like:
 
-TokenInfo(
-    type=57 (COMMENT),
-    string='# noqa: Z100',
-    start=(1, 4),
-    end=(1, 16),
-    line="u'' # noqa: Z100\n",
-)
+.. code:: python
+
+    TokenInfo(
+        type=57 (COMMENT),
+        string='# noqa: Z100',
+        start=(1, 4),
+        end=(1, 16),
+        line="u'' # noqa: Z100\n",
+    )
+
+All comments have the same type.
 """
 
 import re
