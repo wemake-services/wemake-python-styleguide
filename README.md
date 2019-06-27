@@ -55,6 +55,7 @@ in the docs for examples and integrations.
 | Finds bugs?                |   ❌   |    ✅   |    ✅   |             ✅            |
 | Finds complex code?        |   ❌   |    ✅   |    ✅   |             ✅            |
 | Has a lot of strict rules? |   ❌   |    🤔   |    ❌   |             ✅            |
+| Has a lot of plugins?      |   ❌   |    ❌   |    ✅   |             ✅            |
 
 We have several primary objectives:
 
