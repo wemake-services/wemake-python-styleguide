@@ -16,7 +16,7 @@ Welcome to the strictest and most opinionated python linter ever.
 </p>
 
 `wemake-python-styleguide` is actually a [flake8](http://flake8.pycqa.org/en/latest/)
-plugin with some other plugins as dependencies.
+plugin with [some other plugins](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/violations/index.html#external-plugins) as dependencies.
 
 ## Installation
 

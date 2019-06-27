@@ -5,6 +5,10 @@ Here we have all violation codes listed for this plugin and its dependencies.
 Our violation codes are using ``Z`` letter.
 Other codes are coming from other tools.
 
+
+External plugins
+----------------
+
 All codes are sorted alphabetically and by numerical codes.
 
 =============================  ======
@@ -35,10 +39,12 @@ flake8-rst-docstrings          `RST201 - RST499 <https://github.com/peterjc/flak
 wemake-python-styleguide       Z, defined here
 =============================  ======
 
-Our own codes:
+
+Our own codes
+-------------
 
 ============== ======
-Plugin         Codes
+Type           Codes
 -------------- ------
 Naming         :ref:`Z100 - Z199 <naming>`
 Complexity     :ref:`Z200 - Z299 <complexity>`
