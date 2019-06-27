@@ -13,13 +13,13 @@
 
 Welcome to the strictest and most opinionated python linter ever.
 
-`wemake-python-styleguide` is actually a [flake8](http://flake8.pycqa.org/en/latest/)
-plugin with some other plugins as dependencies.
-
 <p align="center">
   <img src="https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/logo.png"
        alt="wemake-python-styleguide logo">
 </p>
+
+`wemake-python-styleguide` is actually a [flake8](http://flake8.pycqa.org/en/latest/)
+plugin with some other plugins as dependencies.
 
 ## Installation
 
@@ -54,7 +54,7 @@ in the docs for examples and integrations.
 | Formats code?              |   ✅   |    ❌   |    ❌   |             ❌            |
 | Finds bugs?                |   ❌   |    ✅   |    ✅   |             ✅            |
 | Finds complex code?        |   ❌   |    ✅   |    ✅   |             ✅            |
-| Has a lot of strict rules? |   ❌   |    ❌   |    ❌   |             ✅            |
+| Has a lot of strict rules? |   ❌   |    🤔   |    ❌   |             ✅            |
 
 We have several primary objectives:
 
