@@ -4,7 +4,7 @@
 [![Python Version](https://img.shields.io/pypi/pyversions/wemake-python-styleguide.svg)](https://pypi.org/project/wemake-python-styleguide/)
 [![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
 
-[![Build Status](https://travis-ci.org/wemake-services/wemake-python-styleguide.svg?branch=master)](https://travis-ci.org/wemake-services/wemake-python-styleguide) 
+[![Build Status](https://travis-ci.org/wemake-services/wemake-python-styleguide.svg?branch=master)](https://travis-ci.org/wemake-services/wemake-python-styleguide)
 [![Coverage](https://coveralls.io/repos/github/wemake-services/wemake-python-styleguide/badge.svg?branch=master)](https://coveralls.io/github/wemake-services/wemake-python-styleguide?branch=master)
 [![Documentation Status](https://readthedocs.org/projects/wemake-python-styleguide/badge/?version=latest)](https://wemake-python-styleguide.readthedocs.io/en/latest/?badge=latest)
 [![Dependencies Status](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen.svg)](https://github.com/wemake-services/wemake-python-styleguide/pulls?utf8=%E2%9C%93&q=is%3Apr%20author%3Aapp%2Fdependabot)
@@ -13,32 +13,13 @@
 
 Welcome to the strictest and most opinionated python linter ever.
 
-`wemake-python-styleguide` is actually a `flake8` plugin
-with some other plugins as dependencies.
+`wemake-python-styleguide` is actually a [flake8](http://flake8.pycqa.org/en/latest/)
+plugin with some other plugins as dependencies.
 
-```text
-The Zen of Python, by Tim Peters
-
-Beautiful is better than ugly.
-Explicit is better than implicit.
-Simple is better than complex.
-Complex is better than complicated.
-Flat is better than nested.
-Sparse is better than dense.
-Readability counts.
-Special cases aren't special enough to break the rules.
-Although practicality beats purity.
-Errors should never pass silently.
-Unless explicitly silenced.
-In the face of ambiguity, refuse the temptation to guess.
-There should be one-- and preferably only one-- obvious way to do it.
-Although that way may not be obvious at first unless you're Dutch.
-Now is better than never.
-Although never is often better than *right* now.
-If the implementation is hard to explain, it's a bad idea.
-If the implementation is easy to explain, it may be a good idea.
-Namespaces are one honking great idea -- let's do more of those!
-```
+<p align="center">
+  <img src="https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/logo.png"
+       alt="wemake-python-styleguide logo">
+</p>
 
 ## Installation
 
@@ -52,7 +33,8 @@ This file is required to configure our linter and all 3rd party plugins it uses.
 However, this is a temporary solution.
 We are working at providing the required configuration for you in the future.
 
-Running:
+
+## Running
 
 ```bash
 flake8 your_module.py
@@ -67,11 +49,18 @@ in the docs for examples and integrations.
 
 ## What we are about
 
+|                            | black | pylint | flake8 | wemake-python-styleguide |
+|----------------------------|-------|--------|--------|--------------------------|
+| Formats code?              |   ✅   |    ❌   |    ❌   |             ❌            |
+| Finds bugs?                |   ❌   |    ✅   |    ✅   |             ✅            |
+| Finds complex code?        |   ❌   |    ✅   |    ✅   |             ✅            |
+| Has a lot of strict rules? |   ❌   |    ❌   |    ❌   |             ✅            |
+
 We have several primary objectives:
 
 0. Enforce `python3.6+` usage
 1. Significantly reduce complexity of your code and make it more maintainable
-2. Enforce "There should be one-- and preferably only one --obvious way to do it" rule to coding and naming styles
+2. Enforce "There should be one -- and preferably only one -- obvious way to do it" rule to coding and naming styles
 3. Protect developers from possible errors and enforce best practices
 
 You can find all error codes and plugins [in the docs](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/violations/index.html).
@@ -100,13 +89,13 @@ It looks like this:
 
 ### Markdown
 
-```
+```md
 [![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
 ```
 
 ### Restructured text
 
-```
+```rst
 .. image:: https://img.shields.io/badge/style-wemake-000000.svg
     :target: https://github.com/wemake-services/wemake-python-styleguide
 ```
