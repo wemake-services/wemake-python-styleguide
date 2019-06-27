@@ -79,9 +79,7 @@ We are *not* planning to do the following things:
 If you use our linter - it means that your code is awesome.
 You can be proud of it!
 And you should share your accomplishment with others
-by including a badge to your `README` file.
-
-It looks like this:
+by including a badge to your `README` file. It looks like this:
 
 [![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
 
@@ -105,4 +103,5 @@ We warmly welcome all contributions!
 
 See ["Contributing"](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/contributing.html)
 section in the documentation if you want to contribute.
-You can start with [issues that need some help](https://github.com/wemake-services/wemake-python-styleguide/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) right now.
+You can start with [issues that need some help](https://github.com/wemake-services/wemake-python-styleguide/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
+right now.
