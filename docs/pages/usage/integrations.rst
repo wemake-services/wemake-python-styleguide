@@ -1,8 +1,11 @@
 Integrations
 ============
 
-We leverage all the existing ``flake8`` infrastructure.
+We leverage all the existing ``flake8``
+`infrastructure <https://github.com/DmytroLitvinov/awesome-flake8-extensions>`_
+and tools.
 There are different integrations for your workflow.
+
 
 Hooks
 -----
@@ -10,12 +13,17 @@ Hooks
 - `pytest-flake8 <https://github.com/tholo/pytest-flake8>`_ to run style checks alongside with tests
 - `pre-commit <https://pre-commit.com/>`_ to run ``flake8`` before all commits locally
 
+
 Editors
 -------
 
 - `vscode plugin <https://code.visualstudio.com/docs/python/linting>`_
 - `sublime plugin <https://github.com/SublimeLinter/SublimeLinter-flake8>`_
 - `atom plugin <https://atom.io/packages/linter-flake8>`_
+- `vim plugin <https://github.com/nvie/vim-flake8>`_
+- `emacs plugin <https://github.com/flycheck/flycheck>`_
+- `pycharm plugin <https://plugins.jetbrains.com/plugin/11563-flake8-support>`_
+
 
 Extras
 ------
@@ -30,6 +38,7 @@ Things we highly recommend to improve your code quality:
 - `xenon <https://github.com/rubik/xenon>`_ and `radon <https://github.com/rubik/radon>`_ allow you to automate some code metrics check
 - `cohesion <https://github.com/mschwager/cohesion>`_ tool to measure code cohesion, works for most of the times. We recommend to use it as a reporting tool
 - `vulture <https://github.com/jendrikseipp/vulture>`_ allows you to find unused code. Has some drawbacks, since there is too many magic in python code. But, it is still very useful tool for the refactoring
+
 
 Stubs
 -----
@@ -48,6 +57,7 @@ Use ``*.pyi`` glob to list ignored violations:
 
 You can look at the `returns <https://github.com/dry-python/returns>`_
 project as an example.
+
 
 pylint
 ------
