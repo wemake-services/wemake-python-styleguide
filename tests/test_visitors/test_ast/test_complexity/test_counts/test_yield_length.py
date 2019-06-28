@@ -3,11 +3,17 @@
 import pytest
 
 from wemake_python_styleguide.visitors.ast.complexity.counts import (
-    YieldTupleVisitor,
     TooLongYieldTupleViolation,
+    YieldTupleVisitor,
 )
 
-# Single module member:
+single_yield = """
+def function_name():
+    i = 0
+    while True:
+        yield i
+        i = i + 1
+"""
 
 short_yield = """
 def function_name():
@@ -25,6 +31,7 @@ def function_name(foo, bar, baz):
 
 
 @pytest.mark.parametrize('code', [
+    single_yield,
     short_yield,
 ])
 def test_module_counts_normal(

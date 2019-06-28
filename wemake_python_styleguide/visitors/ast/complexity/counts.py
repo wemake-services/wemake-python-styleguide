@@ -7,7 +7,6 @@ from typing import ClassVar, DefaultDict, List, Union
 from typing_extensions import final
 
 from wemake_python_styleguide.constants import MAX_LEN_YIELD_TUPLE
-
 from wemake_python_styleguide.logics.functions import is_method
 from wemake_python_styleguide.logics.nodes import get_parent
 from wemake_python_styleguide.types import AnyFunctionDef, AnyImport
@@ -268,13 +267,16 @@ class YieldTupleVisitor(BaseNodeVisitor):
 
     def _check_yield_values(self, node: AnyFunctionDef) -> None:
         for sub_node in ast.walk(node):
-            if isinstance(sub_node, ast.Yield):
-                if sub_node.value and isinstance(sub_node.value, ast.Tuple):
-                    yield_list = [x for x in sub_node.value.elts]
-                    if len(yield_list) > MAX_LEN_YIELD_TUPLE:
-                        self.add_violation(
-                            TooLongYieldTupleViolation(sub_node, text=len(yield_list))
-                        )
+            if isinstance(sub_node, ast.Yield) and sub_node.value:
+                if not isinstance(sub_node.value, ast.Tuple):
+                    continue
+                yield_list = [tup_item for tup_item in sub_node.value.elts]
+                if len(yield_list) > MAX_LEN_YIELD_TUPLE:
+                    self.add_violation(
+                        TooLongYieldTupleViolation(
+                            sub_node, text=str(len(yield_list)),
+                        ),
+                    )
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """
