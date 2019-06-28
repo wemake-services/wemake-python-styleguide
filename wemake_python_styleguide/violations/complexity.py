@@ -42,6 +42,8 @@ Summary
    TooManyForsInComprehensionViolation
    TooManyExceptCasesViolation
    OverusedStringViolation
+   TooLongYieldTupleViolation
+
 
 Module complexity
 -----------------
@@ -71,6 +73,7 @@ Structures complexity
 .. autoclass:: TooManyForsInComprehensionViolation
 .. autoclass:: TooManyExceptCasesViolation
 .. autoclass:: OverusedStringViolation
+.. autoclass:: TooLongYieldTupleViolation
 
 """
 
@@ -632,3 +635,22 @@ class OverusedStringViolation(MaybeASTViolation):
 
     error_template = 'Found string constant over-use: {0}'
     code = 226
+
+
+@final
+class TooLongYieldTupleViolation(ASTViolation):
+    """
+    Forbids to yield too long tuples.
+
+    Reasoning:
+         Long yield tuples complicate generator using.
+         This rule helps to reduce complication.
+
+    Solution:
+        Use lists of similar type or wrapper objects.
+
+    .. versionadded:: 0.10.0
+    """
+
+    error_template = 'Found too long yield tuple: {0}'
+    code = 227

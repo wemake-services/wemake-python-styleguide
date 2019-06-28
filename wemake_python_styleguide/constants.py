@@ -171,6 +171,9 @@ MAX_NOQA_COMMENTS: Final = 10
 #: Maximum amount of ``pragma`` no-cover comments per module.
 MAX_NO_COVER_COMMENTS: Final = 5
 
+#: Maximum length of ``yield`` ``tuple`` expressions.
+MAX_LEN_YIELD_TUPLE: Final = 5
+
 
 # Internal variables
 # They are not publicly documented since they are not used by the end user.

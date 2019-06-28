@@ -27,6 +27,20 @@ def __getattr__():  # noqa: Z413
     anti_z444 = 1
 
 
+def foo_func(limit=10):
+    # See:
+    # https://github.com/wemake-services/wemake-python-styleguide/issues/601
+    counter = 0
+    c1_in = 0
+    c2_in = 0
+    c1_out = 0
+    c2_out = 0
+
+    while counter < limit:
+        yield c1_in, c2_in, limit, c1_out, c2_out, counter  # noqa: Z227
+        counter += 1
+
+
 def function_name(
     value: int = 0,  # noqa: Z110
 ):

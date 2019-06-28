@@ -25,6 +25,7 @@ COMPLEXITY_PRESET = (
     counts.ConditionsVisitor,
     counts.ElifVisitor,
     counts.TryExceptVisitor,
+    counts.YieldTupleVisitor,
 
     classes.ClassComplexityVisitor,
 )
