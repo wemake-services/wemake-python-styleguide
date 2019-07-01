@@ -258,27 +258,20 @@ class TryExceptVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_any_function', (
-    'visit_FunctionDef',
-    'visit_AsyncFunctionDef',
-))
 class YieldTupleVisitor(BaseNodeVisitor):
     """Finds too long ``tuples`` in ``yield`` expressions."""
 
-    def _check_yield_values(self, node: AnyFunctionDef) -> None:
-        for sub_node in ast.walk(node):
-            if isinstance(sub_node, ast.Yield) and sub_node.value:
-                if not isinstance(sub_node.value, ast.Tuple):
-                    continue
-                yield_list = [tup_item for tup_item in sub_node.value.elts]
-                if len(yield_list) > MAX_LEN_YIELD_TUPLE:
-                    self.add_violation(
-                        TooLongYieldTupleViolation(
-                            sub_node, text=str(len(yield_list)),
-                        ),
-                    )
+    def _check_yield_values(self, node: ast.Yield) -> None:
+        if isinstance(node.value, ast.Tuple):
+            yield_list = [tup_item for tup_item in node.value.elts]
+            if len(yield_list) > MAX_LEN_YIELD_TUPLE:
+                self.add_violation(
+                    TooLongYieldTupleViolation(
+                        node, text=str(len(yield_list)),
+                    ),
+                )
 
-    def visit_any_function(self, node: AnyFunctionDef) -> None:
+    def visit_Yield(self, node: ast.Yield) -> None:
         """
         Helper to get all ``yield`` nodes in a function at once.
 
