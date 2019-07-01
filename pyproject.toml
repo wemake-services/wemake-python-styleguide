@@ -71,7 +71,7 @@ flake8-rst-docstrings = "^0.0.10"
 [tool.poetry.dev-dependencies]
 pytest-cov = "^2.7"
 pytest-randomly = "^3.0"
-pytest = "^4.6"
+pytest = "^5.0"
 mypy = "^0.711"
 sphinx = "^2.1"
 sphinx-autodoc-typehints = "^1.6"
