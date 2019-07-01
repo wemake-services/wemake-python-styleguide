@@ -34,7 +34,7 @@ def function_name(foo, bar, baz):
     single_yield,
     short_yield,
 ])
-def test_module_counts_normal(
+def test_yield_length_normal(
     assert_errors,
     parse_ast_tree,
     code,
@@ -52,7 +52,7 @@ def test_module_counts_normal(
 @pytest.mark.parametrize('code', [
     long_yield,
 ])
-def test_module_counts_violation(
+def test_yield_length_violation(
     assert_errors,
     assert_error_text,
     parse_ast_tree,
