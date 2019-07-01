@@ -6,10 +6,12 @@ from typing import ClassVar, DefaultDict, List, Union
 
 from typing_extensions import final
 
+from wemake_python_styleguide.constants import MAX_LEN_YIELD_TUPLE
 from wemake_python_styleguide.logics.functions import is_method
 from wemake_python_styleguide.logics.nodes import get_parent
 from wemake_python_styleguide.types import AnyFunctionDef, AnyImport
 from wemake_python_styleguide.violations.complexity import (
+    TooLongYieldTupleViolation,
     TooManyConditionsViolation,
     TooManyDecoratorsViolation,
     TooManyElifsViolation,
@@ -252,4 +254,30 @@ class TryExceptVisitor(BaseNodeVisitor):
 
         """
         self._check_except_count(node)
+        self.generic_visit(node)
+
+
+@final
+class YieldTupleVisitor(BaseNodeVisitor):
+    """Finds too long ``tuples`` in ``yield`` expressions."""
+
+    def _check_yield_values(self, node: ast.Yield) -> None:
+        if isinstance(node.value, ast.Tuple):
+            yield_list = [tup_item for tup_item in node.value.elts]
+            if len(yield_list) > MAX_LEN_YIELD_TUPLE:
+                self.add_violation(
+                    TooLongYieldTupleViolation(
+                        node, text=str(len(yield_list)),
+                    ),
+                )
+
+    def visit_Yield(self, node: ast.Yield) -> None:
+        """
+        Helper to get all ``yield`` nodes in a function at once.
+
+        Raises:
+            TooLongYieldTupleViolation
+
+        """
+        self._check_yield_values(node)
         self.generic_visit(node)

@@ -27,6 +27,13 @@ def __getattr__():  # noqa: Z413
     anti_z444 = 1
 
 
+def foo_func():
+    # See:
+    # https://github.com/wemake-services/wemake-python-styleguide/issues/601
+
+    yield (1, 2, 3, 4, 5, 6)  # noqa: Z227
+
+
 def function_name(
     value: int = 0,  # noqa: Z110
 ):
