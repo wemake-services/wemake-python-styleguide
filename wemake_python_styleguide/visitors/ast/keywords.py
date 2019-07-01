@@ -261,6 +261,18 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
                     returns[variable_name].append(sub_node.value)
         return returns
 
+    def _get_return_nodes(
+        self,
+        node: List[ast.AST],
+    ) -> Dict[str, ast.Return]:
+        return_sub_nodes: Dict[str, ast.Return] = defaultdict()
+        for sub_node in node:
+            if isinstance(sub_node, ast.Return):
+                if isinstance(sub_node.value, ast.Name):
+                    variable_name = sub_node.value.id
+                    return_sub_nodes[variable_name] = sub_node
+        return return_sub_nodes
+
     def _check_variables_for_return(self, node: AnyFunctionDef) -> None:
         nodes = list(
             filter(
@@ -271,12 +283,20 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
         assign = self._get_assign_node_variables(nodes)
         names = self._get_name_nodes_variable(nodes)
         returns = self._get_return_node_variables(nodes)
+        return_sub_nodes = self._get_return_nodes(nodes)
 
         returns = {name: returns[name] for name in returns if name in assign}
 
+        self._check_for_violations(names, return_sub_nodes, returns)
+
+    def _check_for_violations(self, names, return_sub_nodes, returns) -> None:
         for variable_name in returns:
             if not set(names[variable_name]) - set(returns[variable_name]):
-                self.add_violation(InconsistentReturnVariableViolation(node))
+                self.add_violation(
+                    InconsistentReturnVariableViolation(
+                        return_sub_nodes[variable_name],
+                    ),
+                )
 
     def visit_return_variable(self, node: AnyFunctionDef) -> None:
         """

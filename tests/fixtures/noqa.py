@@ -262,9 +262,9 @@ try:
 except Exception as ex:  # noqa: Z329
     raise ex
 
-def some_function():  # noqa: Z331
+def some_function():
     some_value = 1
-    return some_value
+    return some_value  # noqa: Z331
 
 try:
     anti_z444 = 1
