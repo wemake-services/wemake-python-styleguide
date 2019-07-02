@@ -2,7 +2,7 @@
 
 import ast
 from collections import defaultdict
-from typing import ClassVar, Dict, List, Type, Union
+from typing import ClassVar, Dict, List, Tuple, Type, Union
 
 from typing_extensions import final
 
@@ -26,6 +26,10 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 AnyWith = Union[ast.With, ast.AsyncWith]
+NamesAndReturns = Tuple[
+    Dict[str, List[ast.Name]],
+    Dict[str, ast.Return],
+]
 ReturningViolations = Union[
     Type[InconsistentReturnViolation],
     Type[InconsistentYieldViolation],
@@ -252,14 +256,16 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
     def _get_return_node_variables(
         self,
         node: List[ast.AST],
-    ) -> Dict[str, List[ast.Name]]:
+    ) -> NamesAndReturns:
         returns: Dict[str, List[ast.Name]] = defaultdict(list)
+        return_sub_nodes: Dict[str, ast.Return] = defaultdict()
         for sub_node in node:
             if isinstance(sub_node, ast.Return):
                 if isinstance(sub_node.value, ast.Name):
                     variable_name = sub_node.value.id
                     returns[variable_name].append(sub_node.value)
-        return returns
+                    return_sub_nodes[variable_name] = sub_node
+        return returns, return_sub_nodes
 
     def _check_variables_for_return(self, node: AnyFunctionDef) -> None:
         nodes = list(
@@ -270,13 +276,20 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
         )
         assign = self._get_assign_node_variables(nodes)
         names = self._get_name_nodes_variable(nodes)
-        returns = self._get_return_node_variables(nodes)
+        returns, return_sub_nodes = self._get_return_node_variables(nodes)
 
         returns = {name: returns[name] for name in returns if name in assign}
 
+        self._check_for_violations(names, return_sub_nodes, returns)
+
+    def _check_for_violations(self, names, return_sub_nodes, returns) -> None:
         for variable_name in returns:
             if not set(names[variable_name]) - set(returns[variable_name]):
-                self.add_violation(InconsistentReturnVariableViolation(node))
+                self.add_violation(
+                    InconsistentReturnVariableViolation(
+                        return_sub_nodes[variable_name],
+                    ),
+                )
 
     def visit_return_variable(self, node: AnyFunctionDef) -> None:
         """

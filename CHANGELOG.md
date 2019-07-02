@@ -15,6 +15,10 @@ We used to have incremental versioning before `0.1.0`.
 - Adds `flake8-rst-docstrings` as a dependency
 - Limits yield tuple lengths
 
+### Bugfixes
+
+- Fixes incorrect line number for `Z331`
+
 
 ## 0.9.0
 
