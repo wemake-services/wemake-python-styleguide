@@ -116,6 +116,16 @@ class ManyParents(dict, list, tuple, Exception):  # noqa: Z215
     anti_z444 = 1
 
 
+async def too_many_awaits():  # noqa: Z217
+    await test_function()
+    await test_function()
+    await test_function()
+    await test_function()
+    await test_function()
+    await test_function()
+    await test_function()
+
+
 def test_function():
     if xy > 1:
         if xy > 2:

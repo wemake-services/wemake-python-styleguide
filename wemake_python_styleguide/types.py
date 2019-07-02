@@ -100,3 +100,4 @@ class ConfigurationOptions(Protocol):
     max_base_classes: int
     max_decorators: int
     max_string_usages: int
+    max_awaits: int

@@ -35,6 +35,7 @@ Summary
    TooManyMethodsViolation
    TooManyBaseClassesViolation
    TooManyDecoratorsViolation
+   TooManyAwaitsViolation
    TooDeepNestingViolation
    LineComplexityViolation
    TooManyConditionsViolation
@@ -62,6 +63,7 @@ Function and class complexity
 .. autoclass:: TooManyMethodsViolation
 .. autoclass:: TooManyBaseClassesViolation
 .. autoclass:: TooManyDecoratorsViolation
+.. autoclass:: TooManyAwaitsViolation
 
 Structures complexity
 ---------------------
@@ -278,7 +280,7 @@ class TooManyReturnsViolation(ASTViolation):
         hard to change and keep everything inside your head at once.
 
     Solution:
-        Change your design.
+        Change your design. Split functions into multiple ones.
 
     Configuration:
         This rule is configurable with ``--max-returns``.
@@ -431,6 +433,31 @@ class TooManyDecoratorsViolation(ASTViolation):
 
     error_template = 'Too many decorators: {0}'
     code = 216
+
+
+@final
+class TooManyAwaitsViolation(ASTViolation):
+    """
+    Forbids placing too many ``await`` expressions into the function.
+
+    Reasoning:
+        When there are too many ``await`` keywords,
+        functions are starting to get really complex.
+        It is hard to tell where are we and what is going on.
+
+    Solution:
+        Change your design. Split functions into multiple ones.
+
+    Configuration:
+        This rule is configurable with ``--max-awaits``.
+        Default: :str:`wemake_python_styleguide.options.defaults.MAX_AWAITS`
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found too many await expressions: {0}'
+    code = 217
 
 
 # Structures:
@@ -643,13 +670,14 @@ class TooLongYieldTupleViolation(ASTViolation):
     Forbids to yield too long tuples.
 
     Reasoning:
-         Long yield tuples complicate generator using.
-         This rule helps to reduce complication.
+        Long yield tuples complicate generator using.
+        This rule helps to reduce complication.
 
     Solution:
         Use lists of similar type or wrapper objects.
 
     .. versionadded:: 0.10.0
+
     """
 
     error_template = 'Found too long yield tuple: {0}'

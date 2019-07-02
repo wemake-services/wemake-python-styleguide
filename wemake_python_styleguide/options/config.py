@@ -95,6 +95,9 @@ class Configuration(object):
     - ``max-string-usages`` - maximum number of repeated string constants
       in your modules, defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_DECORATORS`
+    - ``max-awaits`` - maximum allowed number of ``await``
+      expressions in one function, defaults to
+      :str:`wemake_python_styleguide.options.defaults.MAX_await`
 
     All options are configurable via ``flake8`` CLI.
 
@@ -187,6 +190,12 @@ class Configuration(object):
             '--max-string-usages',
             defaults.MAX_STRING_USAGES,
             'Maximum number of string constant usages.',
+        ),
+
+        _Option(
+            '--max-awaits',
+            defaults.MAX_AWAITS,
+            'Maximum allowed number of await statements in one function.',
         ),
 
         # General:

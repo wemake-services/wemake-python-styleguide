@@ -2,7 +2,7 @@
 
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, List
+from typing import ClassVar, DefaultDict, List, Tuple, Type, Union
 
 from typing_extensions import final
 
@@ -14,8 +14,10 @@ from wemake_python_styleguide.types import (
     AnyFunctionDefAndLambda,
     AnyNodes,
 )
+from wemake_python_styleguide.violations.base import BaseViolation
 from wemake_python_styleguide.violations.complexity import (
     TooManyArgumentsViolation,
+    TooManyAwaitsViolation,
     TooManyExpressionsViolation,
     TooManyLocalsViolation,
     TooManyReturnsViolation,
@@ -25,6 +27,8 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 FunctionCounter = DefaultDict[AnyFunctionDef, int]
 FunctionCounterWithLambda = DefaultDict[AnyFunctionDefAndLambda, int]
+AnyFunctionCounter = Union[FunctionCounter, FunctionCounterWithLambda]
+CheckRule = Tuple[AnyFunctionCounter, int, Type[BaseViolation]]
 
 
 @final
@@ -37,6 +41,7 @@ class _ComplexityCounter(object):
 
     def __init__(self) -> None:
         self.arguments: FunctionCounterWithLambda = defaultdict(int)
+        self.awaits: FunctionCounter = defaultdict(int)
         self.returns: FunctionCounter = defaultdict(int)
         self.expressions: FunctionCounter = defaultdict(int)
         self.variables: DefaultDict[
@@ -74,6 +79,8 @@ class _ComplexityCounter(object):
             self.returns[node] += 1
         elif isinstance(sub_node, ast.Expr):
             self.expressions[node] += 1
+        elif isinstance(sub_node, ast.Await):
+            self.awaits[node] += 1
 
     def check_arguments_count(self, node: AnyFunctionDefAndLambda) -> None:
         """Checks the number of the arguments in a function."""
@@ -127,17 +134,29 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
                 )
 
     def _check_function_signature(self) -> None:
-        for node, arguments in self._counter.arguments.items():
-            if arguments > self.options.max_arguments:
-                self.add_violation(
-                    TooManyArgumentsViolation(node, text=str(arguments)),
-                )
+        for counter, limit, violation in self._function_checks():
+            for node, count_result in counter.items():
+                if count_result > limit:
+                    self.add_violation(violation(node, text=str(count_result)))
 
-        for node, returns in self._counter.returns.items():
-            if returns > self.options.max_returns:
-                self.add_violation(
-                    TooManyReturnsViolation(node, text=str(returns)),
-                )
+    def _function_checks(self) -> List[CheckRule]:
+        return [
+            (
+                self._counter.arguments,
+                self.options.max_arguments,
+                TooManyArgumentsViolation,
+            ),
+            (
+                self._counter.returns,
+                self.options.max_returns,
+                TooManyReturnsViolation,
+            ),
+            (
+                self._counter.awaits,
+                self.options.max_awaits,
+                TooManyAwaitsViolation,
+            ),
+        ]
 
     def _post_visit(self) -> None:
         self._check_function_signature()
@@ -152,6 +171,7 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
             TooManyReturnsViolation
             TooManyLocalsViolation
             TooManyArgumentsViolation
+            TooManyAwaitsViolation
 
         """
         self._counter.check_arguments_count(node)

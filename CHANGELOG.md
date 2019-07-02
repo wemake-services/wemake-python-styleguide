@@ -14,6 +14,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use `breakpoint` function
 - Adds `flake8-rst-docstrings` as a dependency
 - Limits yield tuple lengths
+- Forbids to have too many `await` statements
 
 ### Bugfixes
 
