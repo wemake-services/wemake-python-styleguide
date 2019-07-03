@@ -112,7 +112,7 @@ def many_expressions(xy):  # noqa: Z213
     print(xy)
 
 
-class ManyParents(dict, list, tuple, Exception):  # noqa: Z215
+class ManyParents(First, Second, Third, Exception):  # noqa: Z215
     anti_z444 = 1
 
 
@@ -282,6 +282,11 @@ except BaseException:  # noqa: Z424
     anti_z444 = 1
 
 call_with_positional_bool(True)  # noqa: Z425
+
+
+class MyInt(int):  # noqa: Z426
+    """My custom int subclass."""
+
 
 for symbol in 'abc':  # noqa: Z436
     anti_z444 = 1

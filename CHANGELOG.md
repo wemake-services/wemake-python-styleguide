@@ -15,6 +15,7 @@ We used to have incremental versioning before `0.1.0`.
 - Adds `flake8-rst-docstrings` as a dependency
 - Limits yield tuple lengths
 - Forbids to have too many `await` statements
+- Forbids to subclass lowercase `builtins`
 
 ### Bugfixes
 

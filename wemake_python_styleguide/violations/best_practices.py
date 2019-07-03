@@ -33,6 +33,7 @@ Summary
    RaiseNotImplementedViolation
    BaseExceptionViolation
    BooleanPositionalArgumentViolation
+   BuiltinSubclassViolation
    NestedFunctionViolation
    NestedClassViolation
    MagicNumberViolation
@@ -95,6 +96,7 @@ Builtins
 .. autoclass:: RaiseNotImplementedViolation
 .. autoclass:: BaseExceptionViolation
 .. autoclass:: BooleanPositionalArgumentViolation
+.. autoclass:: BuiltinSubclassViolation
 
 Design
 ------
@@ -594,6 +596,43 @@ class BooleanPositionalArgumentViolation(ASTViolation):
 
     error_template = 'Found boolean non-keyword argument: {0}'
     code = 425
+
+
+@final
+class BuiltinSubclassViolation(ASTViolation):
+    """
+    Forbids to subclass lowercase builtins.
+
+    We forbid to subclass builtins like ``int``, ``str``, ``bool``, etc.
+    We allow to subclass ``object`` and ``type``, warnings, and exceptions.
+
+    See
+    :py:data:`~wemake_python_styleguide.constants.ALLOWED_BUILTIN_CLASSES`
+    for the whole list of whitelisted names.
+
+    Reasoning:
+        It is almost never a good idea (unless you do something sneaky)
+        to subclass primitive builtins.
+
+    Solution:
+        Use custom objects around some wrapper.
+        Use magic methods to emulate the desired behaviour.
+
+    Example::
+
+        # Correct:
+        class Some(object): ...
+        class MyValueException(ValueError): ...
+
+        # Wrong:
+        class MyInt(int): ...
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found subclassing a builtin: {0}'
+    code = 426
 
 
 # Design:

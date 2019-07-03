@@ -120,6 +120,12 @@ NESTED_CLASSES_WHITELIST: Final = frozenset((
     'Params',  # factoryboy specific
 ))
 
+#: List of builtin classes that are allowed to subclass.
+ALLOWED_BUILTIN_CLASSES: Final = frozenset((
+    'type',
+    'object',
+))
+
 #: List of nested functions' names we allow to use.
 NESTED_FUNCTIONS_WHITELIST: Final = frozenset((
     'decorator',

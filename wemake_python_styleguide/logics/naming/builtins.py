@@ -18,6 +18,29 @@ ALL_BUILTINS = frozenset((
 ))
 
 
+def is_builtin_name(variable_name: str) -> bool:
+    """
+    Tells whether a variable name is builtin or not.
+
+    >>> is_builtin_name('str')
+    True
+
+    >>> is_builtin_name('_')
+    False
+
+    >>> is_builtin_name('custom')
+    False
+
+    >>> is_builtin_name('Exception')
+    True
+
+    >>> is_builtin_name('async')
+    True
+
+    """
+    return variable_name in ALL_BUILTINS
+
+
 def is_wrong_alias(variable_name: str) -> bool:
     """
     Tells whether a variable is wrong builtins alias or not.
@@ -56,4 +79,4 @@ def is_wrong_alias(variable_name: str) -> bool:
     if variable_name == UNUSED_VARIABLE or not variable_name.endswith('_'):
         return False
 
-    return variable_name[:-1] not in ALL_BUILTINS
+    return not is_builtin_name(variable_name[:-1])

@@ -7,6 +7,7 @@ from typing import ClassVar, FrozenSet, List
 from typing_extensions import final
 
 from wemake_python_styleguide import constants, types
+from wemake_python_styleguide.logics.classes import is_forbidden_super_class
 from wemake_python_styleguide.logics.functions import get_all_arguments
 from wemake_python_styleguide.logics.nodes import (
     get_context,
@@ -16,6 +17,7 @@ from wemake_python_styleguide.logics.nodes import (
 from wemake_python_styleguide.violations.best_practices import (
     BadMagicMethodViolation,
     BaseExceptionSubclassViolation,
+    BuiltinSubclassViolation,
     IncorrectBaseClassViolation,
     IncorrectClassBodyContentViolation,
     IncorrectSlotsViolation,
@@ -55,12 +57,13 @@ class WrongClassVisitor(BaseNodeVisitor):
         ast.Subscript,
     )
 
-    def _check_base_classes(self, node: ast.ClassDef) -> None:
+    def _check_base_classes_count(self, node: ast.ClassDef) -> None:
         if len(node.bases) == 0:
             self.add_violation(
                 RequiredBaseClassViolation(node, text=node.name),
             )
 
+    def _check_base_classes(self, node: ast.ClassDef) -> None:
         for base_name in node.bases:
             if not isinstance(base_name, self._allowed_base_classes_nodes):
                 self.add_violation(IncorrectBaseClassViolation(node))
@@ -72,6 +75,10 @@ class WrongClassVisitor(BaseNodeVisitor):
             elif id_attr == 'object' and len(node.bases) >= 2:
                 self.add_violation(
                     ObjectInBaseClassesListViolation(node, text=id_attr),
+                )
+            elif is_forbidden_super_class(id_attr):
+                self.add_violation(
+                    BuiltinSubclassViolation(node, text=id_attr),
                 )
 
     def _check_wrong_body_nodes(self, node: ast.ClassDef) -> None:
@@ -90,8 +97,10 @@ class WrongClassVisitor(BaseNodeVisitor):
             RequiredBaseClassViolation
             ObjectInBaseClassesListViolation
             IncorrectClassBodyContentViolation
+            BuiltinSubclassViolation
 
         """
+        self._check_base_classes_count(node)
         self._check_base_classes(node)
         self._check_wrong_body_nodes(node)
         self.generic_visit(node)
