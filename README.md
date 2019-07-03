@@ -1,6 +1,7 @@
 # wemake-python-styleguide
 
 [![wemake.services](https://img.shields.io/badge/%20-wemake.services-green.svg?label=%20&logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC%2FxhBQAAAAFzUkdCAK7OHOkAAAAbUExURQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP%2F%2F%2F5TvxDIAAAAIdFJOUwAjRA8xXANAL%2Bv0SAAAADNJREFUGNNjYCAIOJjRBdBFWMkVQeGzcHAwksJnAPPZGOGAASzPzAEHEGVsLExQwE7YswCb7AFZSF3bbAAAAABJRU5ErkJggg%3D%3D)](https://wemake.services)
+[![Support](https://opencollective.com/wemake-python-styleguide/tiers/sponsor/badge.svg?label=sponsor&color=brightgreen)](https://opencollective.com/wemake-python-styleguide)
 [![Build Status](https://travis-ci.org/wemake-services/wemake-python-styleguide.svg?branch=master)](https://travis-ci.org/wemake-services/wemake-python-styleguide)
 [![Coverage](https://coveralls.io/repos/github/wemake-services/wemake-python-styleguide/badge.svg?branch=master)](https://coveralls.io/github/wemake-services/wemake-python-styleguide?branch=master)
 [![Documentation Status](https://readthedocs.org/projects/wemake-python-styleguide/badge/?version=latest)](https://wemake-python-styleguide.readthedocs.io/en/latest/?badge=latest)
@@ -71,7 +72,7 @@ We are *not* planning to do the following things:
 0. Assume or check types, use `mypy` instead
 1. Reformat code, since we believe that developers should do that
 2. Check for `SyntaxError` or exceptions, write tests instead
-3. Appeal to everyone, this is **our** linter. But, you can [switch off](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage/setup.html#ignoring-violations) any rules that you don't like
+3. Appeal to everyone. But, you can [switch off](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage/setup.html#ignoring-violations) any rules that you don't like
 
 
 ## Show your style
@@ -99,9 +100,5 @@ by including a badge to your `README` file. It looks like this:
 
 ## Contributing
 
-We warmly welcome all contributions!
-
-See ["Contributing"](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/contributing.html)
-section in the documentation if you want to contribute.
-You can start with [issues that need some help](https://github.com/wemake-services/wemake-python-styleguide/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
+We **warmly welcome** all contributions! See ["Contributing"](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/contributing.html) section in the documentation if you want to contribute. You can start with [issues that need some help](https://github.com/wemake-services/wemake-python-styleguide/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
 right now.
