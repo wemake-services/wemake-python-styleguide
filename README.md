@@ -1,7 +1,7 @@
 # wemake-python-styleguide
 
 [![wemake.services](https://img.shields.io/badge/%20-wemake.services-green.svg?label=%20&logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC%2FxhBQAAAAFzUkdCAK7OHOkAAAAbUExURQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP%2F%2F%2F5TvxDIAAAAIdFJOUwAjRA8xXANAL%2Bv0SAAAADNJREFUGNNjYCAIOJjRBdBFWMkVQeGzcHAwksJnAPPZGOGAASzPzAEHEGVsLExQwE7YswCb7AFZSF3bbAAAAABJRU5ErkJggg%3D%3D)](https://wemake.services)
-[![Support](https://opencollective.com/wemake-python-styleguide/tiers/sponsor/badge.svg?label=sponsor&color=brightgreen)](https://opencollective.com/wemake-python-styleguide)
+[![Supporters](https://img.shields.io/opencollective/all/wemake-python-styleguide.svg?color=gold&label=supporters)](https://opencollective.com/wemake-python-styleguide)
 [![Build Status](https://travis-ci.org/wemake-services/wemake-python-styleguide.svg?branch=master)](https://travis-ci.org/wemake-services/wemake-python-styleguide)
 [![Coverage](https://coveralls.io/repos/github/wemake-services/wemake-python-styleguide/badge.svg?branch=master)](https://coveralls.io/github/wemake-services/wemake-python-styleguide?branch=master)
 [![Documentation Status](https://readthedocs.org/projects/wemake-python-styleguide/badge/?version=latest)](https://wemake-python-styleguide.readthedocs.io/en/latest/?badge=latest)
@@ -82,9 +82,11 @@ all our tools open-source by default, so the community can benefit from it.
 If you use our tools and they make your life easier and your business more stable,
 you can return us a favour by supporting the work we do.
 
-### Sponsors
+[![Gold Tier](https://opencollective.com/wemake-python-styleguide/tiers/gold-sponsor.svg?width=890)](https://opencollective.com/wemake-python-styleguide)
 
-[![Became a sponsor](https://opencollective.com/wemake-python-styleguide/tiers/sponsor.svg?width=890)](https://opencollective.com/wemake-python-styleguide)
+[![Silver Tier](https://opencollective.com/wemake-python-styleguide/tiers/gold-sponsor.svg?width=890&avatarHeight=45)](https://opencollective.com/wemake-python-styleguide)
+
+[![Bronze Tier](https://opencollective.com/wemake-python-styleguide/tiers/gold-sponsor.svg?width=890&avatarHeight=35)](https://opencollective.com/wemake-python-styleguide)
 
 
 ## Show your style
