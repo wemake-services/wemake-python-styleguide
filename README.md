@@ -75,6 +75,18 @@ We are *not* planning to do the following things:
 3. Appeal to everyone. But, you can [switch off](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage/setup.html#ignoring-violations) any rules that you don't like
 
 
+## Supporting us
+
+We in [wemake.services](https://wemake.services) make
+all our tools open-source by default, so the community can benefit from it.
+If you use our tools and they make your life easier and your business more stable,
+you can return us a favour by supporting the work we do.
+
+### Sponsors
+
+[![Became a sponsor](https://opencollective.com/wemake-python-styleguide/tiers/sponsor.svg?width=890)](https://opencollective.com/wemake-python-styleguide)
+
+
 ## Show your style
 
 If you use our linter - it means that your code is awesome.
@@ -94,11 +106,15 @@ by including a badge to your `README` file. It looks like this:
 
 ```rst
 .. image:: https://img.shields.io/badge/style-wemake-000000.svg
-    :target: https://github.com/wemake-services/wemake-python-styleguide
+   :target: https://github.com/wemake-services/wemake-python-styleguide
 ```
 
 
 ## Contributing
 
-We **warmly welcome** all contributions! See ["Contributing"](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/contributing.html) section in the documentation if you want to contribute. You can start with [issues that need some help](https://github.com/wemake-services/wemake-python-styleguide/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
+We **warmly welcome** all contributions!
+
+[![List of contributors](https://opencollective.com/wemake-python-styleguide/contributors.svg?width=890&button=0)](https://github.com/wemake-services/wemake-python-styleguide/graphs/contributors)
+
+See ["Contributing"](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/contributing.html) section in the documentation if you want to contribute. You can start with [issues that need some help](https://github.com/wemake-services/wemake-python-styleguide/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
 right now.
