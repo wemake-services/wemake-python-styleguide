@@ -5,7 +5,7 @@ test_patterns = [
 ]
 
 exclude_patterns = [
-  
+  'tests/fixtures/*'
 ]
 
 [[analyzers]]
