@@ -12,7 +12,7 @@ Hooks
 
 - `pytest-flake8 <https://github.com/tholo/pytest-flake8>`_ to run style checks alongside with tests
 - `pre-commit <https://pre-commit.com/>`_ to run ``flake8`` before all commits locally
-- `pronto-flake8 <https://github.com/scoremedia/pronto-flake8>`_ to run inline-comment 
+- `pronto-flake8 <https://github.com/scoremedia/pronto-flake8>`_ to run inline-comment
   violations during code-review inside your CI
 
 
