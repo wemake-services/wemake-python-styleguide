@@ -119,22 +119,22 @@ class UselessOperatorsVisitor(BaseNodeVisitor):
     """Checks operators used in the code."""
 
     def _check_plus_sign(self, node: ast.Num) -> None:
-        if not count_unary_operator(node, ast.UAdd) > 0:
+        if count_unary_operator(node, ast.UAdd) <= 0:
             return
         self.add_violation(UselessOperatorsViolation(node, text=str(node.n)))
 
     def _check_minus_sign(self, node: ast.Num) -> None:
-        if not count_unary_operator(node, ast.USub) > 1:
+        if count_unary_operator(node, ast.USub) <= 1:
             return
         self.add_violation(UselessOperatorsViolation(node, text=str(node.n)))
 
     def _check_tilde_sign(self, node: ast.Num) -> None:
-        if not count_unary_operator(node, ast.Invert) > 1:
+        if count_unary_operator(node, ast.Invert) <= 1:
             return
         self.add_violation(UselessOperatorsViolation(node, text=str(node.n)))
 
     def _check_not(self, node: ast.Num) -> None:
-        if not count_unary_operator(node, ast.Not) > 1:
+        if count_unary_operator(node, ast.Not) <= 1:
             return
         self.add_violation(UselessOperatorsViolation(node, text=str(node.n)))
 

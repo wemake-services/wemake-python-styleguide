@@ -59,7 +59,7 @@ class ExtraIndentationVisitor(BaseTokenVisitor):
         self._offsets: Dict[int, tokenize.TokenInfo] = {}
 
     def _check_extra_indentation(self, token: tokenize.TokenInfo) -> None:
-        lineno, offset = token.start
+        lineno, _offset = token.start
         if lineno not in self._offsets:
             self._offsets[lineno] = token
 
@@ -128,7 +128,7 @@ class BracketLocationVisitor(BaseTokenVisitor):
         tokens: List[tokenize.TokenInfo],
     ) -> Dict[int, int]:
         """Annotates each opening bracket with the nested level index."""
-        brackets = {bracket: 0 for bracket in MATCHING.keys()}
+        brackets = {bracket: 0 for bracket in MATCHING}
         for token in tokens:
             if token.exact_type in MATCHING.keys():
                 brackets[token.exact_type] += 1

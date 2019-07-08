@@ -58,7 +58,7 @@ class WrongClassVisitor(BaseNodeVisitor):
     )
 
     def _check_base_classes_count(self, node: ast.ClassDef) -> None:
-        if len(node.bases) == 0:
+        if not node.bases:
             self.add_violation(
                 RequiredBaseClassViolation(node, text=node.name),
             )
@@ -149,7 +149,7 @@ class WrongMethodVisitor(BaseNodeVisitor):
         if not isinstance(node_context, ast.ClassDef):
             return
 
-        if len(get_all_arguments(node)) == 0:
+        if not get_all_arguments(node):
             self.add_violation(
                 MethodWithoutArgumentsViolation(node, text=node.name),
             )

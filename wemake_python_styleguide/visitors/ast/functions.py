@@ -67,7 +67,7 @@ class WrongFunctionCallVisitor(BaseNodeVisitor):
         )
 
     def _ensure_super_arguments(self, node: ast.Call) -> None:
-        if len(node.args) > 0 or len(node.keywords) > 0:
+        if node.args or node.keywords:
             self.add_violation(
                 IncorrectSuperCallViolation(node, text='remove arguments'),
             )

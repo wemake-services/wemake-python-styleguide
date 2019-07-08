@@ -187,7 +187,6 @@ def test_magic_number_warning(
 ])
 def test_magic_number_octal_warning(
     assert_errors,
-    assert_error_text,
     parse_ast_tree,
     code,
     number,
