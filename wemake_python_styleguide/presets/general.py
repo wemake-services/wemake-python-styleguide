@@ -61,6 +61,7 @@ GENERAL_PRESET = (
     compares.WrongConditionalVisitor,
     compares.CompareSanityVisitor,
     compares.WrongComparisionOrderVisitor,
+    compares.UnaryCompareVisitor,
 
     conditions.IfStatementVisitor,
     conditions.BooleanConditionVisitor,

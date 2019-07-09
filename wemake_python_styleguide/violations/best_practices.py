@@ -74,6 +74,7 @@ Summary
    UselessLambdaViolation
    UselessLenCompareViolation
    SameElementsInConditionViolation
+   NotOperatorWithCompareViolation
 
 Comments
 --------
@@ -144,6 +145,7 @@ Design
 .. autoclass:: UselessLambdaViolation
 .. autoclass:: UselessLenCompareViolation
 .. autoclass:: SameElementsInConditionViolation
+.. autoclass:: NotOperatorWithCompareViolation
 
 """
 
@@ -2041,3 +2043,33 @@ class SameElementsInConditionViolation(ASTViolation):
 
     error_template = 'Found duplicate logical condition'
     code = 469
+
+
+@final
+class NotOperatorWithCompareViolation(ASTViolation):
+    """
+    Forbids to use ``not`` with compare expressions.
+
+    Reasoning:
+        This version of ``not`` operator is unreadable.
+
+    Solution:
+        Refactor the expression without ``not`` operator.
+        Change the compare signs.
+
+    Example::
+
+        # Correct:
+        if x <= 5:
+            ...
+
+        # Wrong:
+        if not x > 5:
+            ...
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found incorrect `not` with compare usage'
+    code = 470

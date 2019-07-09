@@ -19,6 +19,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to have useless `lambda`s
 - Forbids to use `len(sized) > 0` style checks
 - Forbids to use repeatable conditions: `flag or flag`
+- Forbids to write conditions like `not some > 1`
 
 ### Bugfixes
 

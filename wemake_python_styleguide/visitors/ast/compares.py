@@ -12,6 +12,7 @@ from wemake_python_styleguide.logic.nodes import is_literal
 from wemake_python_styleguide.logic.operators import unwrap_unary_node
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
+    NotOperatorWithCompareViolation,
     SimplifiableIfViolation,
     UselessLenCompareViolation,
 )
@@ -250,3 +251,26 @@ class WrongConditionalVisitor(BaseNodeVisitor):
 
         if conditions == {True, False}:
             self.add_violation(SimplifiableIfViolation(node))
+
+
+@final
+class UnaryCompareVisitor(BaseNodeVisitor):
+    """Checks that unary compare operators are used correctly."""
+
+    def _check_incorrect_not(self, node: ast.UnaryOp) -> None:
+        if not isinstance(node.op, ast.Not):
+            return
+
+        if isinstance(node.operand, ast.Compare):
+            self.add_violation(NotOperatorWithCompareViolation(node))
+
+    def visit_UnaryOp(self, node: ast.UnaryOp) -> None:
+        """
+        Finds bad `not` usages.
+
+        Raises:
+            NotOperatorWithCompareViolation
+
+        """
+        self._check_incorrect_not(node)
+        self.generic_visit(node)

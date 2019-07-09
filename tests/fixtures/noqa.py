@@ -420,3 +420,6 @@ if len(numbers) > 0:  # noqa: Z468
 
 if numbers and numbers:  # noqa: Z469
     print('duplicate boolop')
+
+if not numbers == []:  # noqa: Z470
+    print('bad compare with not')
