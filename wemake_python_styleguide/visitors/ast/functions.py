@@ -217,7 +217,7 @@ class UselessLambdaDefinitionVisitor(BaseNodeVisitor):
                     vararg_name = ar.value.id
                 else:  # We can judge on things like `*[]`
                     return False
-        if vararg_name and node.args.vararg and vararg_name:
+        if vararg_name and node.args.vararg:
             return node.args.vararg.arg == vararg_name
         return node.args.vararg == vararg_name
 

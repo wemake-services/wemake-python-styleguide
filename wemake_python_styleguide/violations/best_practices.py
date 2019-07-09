@@ -73,6 +73,7 @@ Summary
    MutableModuleConstantViolation
    UselessLambdaViolation
    UselessLenCompareViolation
+   SameElementsInConditionViolation
 
 Comments
 --------
@@ -142,6 +143,7 @@ Design
 .. autoclass:: MutableModuleConstantViolation
 .. autoclass:: UselessLambdaViolation
 .. autoclass:: UselessLenCompareViolation
+.. autoclass:: SameElementsInConditionViolation
 
 """
 
@@ -1996,6 +1998,7 @@ class UselessLenCompareViolation(ASTViolation):
 
         # Correct:
         if some_array or not other_array or len(third_array) == 1:
+            ...
 
         # Wrong:
         if len(some_array) > 0 or len(other_array) < 1:
@@ -2007,3 +2010,34 @@ class UselessLenCompareViolation(ASTViolation):
 
     error_template = 'Found useless `len()` compare'
     code = 468
+
+
+@final
+class SameElementsInConditionViolation(ASTViolation):
+    """
+    Forbids to use the same logical conditions in one expression.
+
+    Reasoning:
+        Using the same name in logical condition more that once
+        indicates that you are either making a logical mistake,
+        or just over-complicating your design.
+
+    Solution:
+        Remove the duplicating condition.
+
+    Example::
+
+        # Correct:
+        if some_value or other_value:
+            ...
+
+        # Wrong:
+        if some_value or some_value:
+            ...
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found duplicate logical condition'
+    code = 469

@@ -417,3 +417,6 @@ numbers = map(lambda string: int(string), ['1'])  # noqa: Z467
 
 if len(numbers) > 0:  # noqa: Z468
     print('len!')
+
+if numbers and numbers:  # noqa: Z469
+    print('duplicate boolop')

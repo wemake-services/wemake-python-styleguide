@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import ClassVar
+from typing import ClassVar, List
 
+import astor
 from typing_extensions import final
 
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     MultilineConditionsViolation,
     NegatedConditionsViolation,
+    SameElementsInConditionViolation,
     UselessReturningElseViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -70,4 +72,44 @@ class IfStatementVisitor(BaseNodeVisitor):
         self._check_negated_conditions(node)
         self._check_useless_else(node)
         self._check_multiline_conditions(node)
+        self.generic_visit(node)
+
+
+@final
+class BooleanConditionVisitor(BaseNodeVisitor):
+    """Ensures that boolean conditions are correct."""
+
+    def _get_all_names(
+        self,
+        node: ast.BoolOp,
+    ) -> List[str]:
+        # That's an ugly hack to make sure that we do not visit
+        # one chained `BoolOp` elements twice. Sorry!
+        node._wps_visited = True  # type: ignore  # noqa: Z441
+
+        names = []
+        for operand in node.values:
+            if isinstance(operand, ast.BoolOp):
+                names.extend(self._get_all_names(operand))
+            else:
+                names.append(astor.to_source(operand))
+        return names
+
+    def _check_same_elements(self, node: ast.BoolOp) -> None:
+        if getattr(node, '_wps_visited', False):  # noqa: Z425
+            return  # We do not visit nested `BoolOp`s twice.
+
+        operands = self._get_all_names(node)
+        if len(set(operands)) != len(operands):
+            self.add_violation(SameElementsInConditionViolation(node))
+
+    def visit_BoolOp(self, node: ast.BoolOp) -> None:
+        """
+        Checks that ``and`` and ``or`` conditions are correct.
+
+        Raises:
+            SameElementsInConditionViolation
+
+        """
+        self._check_same_elements(node)
         self.generic_visit(node)
