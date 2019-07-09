@@ -7,9 +7,9 @@ from typing import ClassVar, FrozenSet, List
 from typing_extensions import final
 
 from wemake_python_styleguide import constants, types
-from wemake_python_styleguide.logics.classes import is_forbidden_super_class
-from wemake_python_styleguide.logics.functions import get_all_arguments
-from wemake_python_styleguide.logics.nodes import (
+from wemake_python_styleguide.logic.classes import is_forbidden_super_class
+from wemake_python_styleguide.logic.functions import get_all_arguments
+from wemake_python_styleguide.logic.nodes import (
     get_context,
     is_contained,
     is_doc_string,

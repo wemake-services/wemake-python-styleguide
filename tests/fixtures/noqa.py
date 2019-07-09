@@ -412,3 +412,5 @@ if some and (  # noqa: Z465
     anti_z444 = 'some text'
 
 CONSTANT = []  # noqa: Z466
+
+numbers = map(lambda string: int(string), ['1'])  # noqa: Z467

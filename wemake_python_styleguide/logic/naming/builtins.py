@@ -5,7 +5,7 @@ import keyword
 from flake8_builtins import BUILTINS
 
 from wemake_python_styleguide.constants import UNUSED_VARIABLE
-from wemake_python_styleguide.logics.naming.access import is_magic
+from wemake_python_styleguide.logic.naming.access import is_magic
 
 ALL_BUILTINS = frozenset((
     *keyword.kwlist,

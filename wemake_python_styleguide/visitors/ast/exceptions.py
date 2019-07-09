@@ -7,7 +7,7 @@ from typing import ClassVar, List
 import astor
 from typing_extensions import final
 
-from wemake_python_styleguide.logics.nodes import is_contained
+from wemake_python_styleguide.logic.nodes import is_contained
 from wemake_python_styleguide.violations.best_practices import (
     BaseExceptionViolation,
     DuplicateExceptionViolation,

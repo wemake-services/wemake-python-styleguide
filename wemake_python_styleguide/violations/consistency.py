@@ -1182,7 +1182,7 @@ class UselessOperatorsViolation(ASTViolation):
          This is done for consistency reasons.
 
     Solution:
-        Ommit unnecessary operators.
+        Omit unnecessary operators.
 
     Example::
 
@@ -1210,13 +1210,13 @@ class UselessOperatorsViolation(ASTViolation):
 @final
 class InconsistentReturnVariableViolation(ASTViolation):
     """
-    Forbid local variable that are only used in ``return`` statements.
+    Forbids local variable that are only used in ``return`` statements.
 
     Reasoning:
         This is done for consistency and more readable source code.
 
     Solution:
-        Forbid to use local variables that are only used in `return` statements
+        Return the expression itself, instead of creating a temporary variable.
 
     Example::
 

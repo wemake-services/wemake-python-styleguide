@@ -6,9 +6,9 @@ from typing import ClassVar, List, Optional, Sequence
 import astor
 from typing_extensions import final
 
-from wemake_python_styleguide.logics.naming.name_nodes import is_same_variable
-from wemake_python_styleguide.logics.nodes import is_literal
-from wemake_python_styleguide.logics.operators import unwrap_unary_node
+from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
+from wemake_python_styleguide.logic.nodes import is_literal
+from wemake_python_styleguide.logic.operators import unwrap_unary_node
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     SimplifiableIfViolation,

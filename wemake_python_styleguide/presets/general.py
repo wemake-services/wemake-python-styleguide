@@ -41,6 +41,7 @@ GENERAL_PRESET = (
 
     functions.WrongFunctionCallVisitor,
     functions.FunctionDefinitionVisitor,
+    functions.UselessLambdaDefinitionVisitor,
 
     exceptions.WrongTryExceptVisitor,
     exceptions.NestedTryBlocksVisitor,

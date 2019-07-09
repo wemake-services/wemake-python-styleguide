@@ -6,7 +6,7 @@ from typing import ClassVar, DefaultDict, Dict, List, Sequence, Set, Tuple
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logics.tokens import only_contains
+from wemake_python_styleguide.logic.tokens import only_contains
 from wemake_python_styleguide.violations.consistency import (
     ExtraIndentationViolation,
     WrongBracketPositionViolation,

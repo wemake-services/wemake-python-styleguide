@@ -16,10 +16,15 @@ We used to have incremental versioning before `0.1.0`.
 - Limits yield tuple lengths
 - Forbids to have too many `await` statements
 - Forbids to subclass lowercase `builtins`
+- Forbids to have useless `lambda`s
 
 ### Bugfixes
 
 - Fixes incorrect line number for `Z331`
+
+### Misc
+
+- Renames `logics/` to `logic/` since it is grammatically correct
 
 
 ## 0.9.0

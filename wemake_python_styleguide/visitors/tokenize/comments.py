@@ -29,7 +29,7 @@ from wemake_python_styleguide.constants import (
     MAX_NO_COVER_COMMENTS,
     MAX_NOQA_COMMENTS,
 )
-from wemake_python_styleguide.logics.tokens import get_comment_text
+from wemake_python_styleguide.logic.tokens import get_comment_text
 from wemake_python_styleguide.violations.best_practices import (
     OveruseOfNoCoverCommentViolation,
     OveruseOfNoqaCommentViolation,

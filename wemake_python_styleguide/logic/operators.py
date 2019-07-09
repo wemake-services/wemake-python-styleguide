@@ -3,7 +3,7 @@
 import ast
 from typing import Optional
 
-from wemake_python_styleguide.logics.nodes import get_parent
+from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.types import AnyUnaryOp
 
 

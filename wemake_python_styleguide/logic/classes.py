@@ -3,7 +3,7 @@
 from typing import Optional
 
 from wemake_python_styleguide.constants import ALLOWED_BUILTIN_CLASSES
-from wemake_python_styleguide.logics.naming.builtins import is_builtin_name
+from wemake_python_styleguide.logic.naming.builtins import is_builtin_name
 
 
 def is_forbidden_super_class(class_name: Optional[str]) -> bool:

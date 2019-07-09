@@ -3,7 +3,7 @@
 from typing import Iterable
 
 from wemake_python_styleguide import constants
-from wemake_python_styleguide.logics.naming import access
+from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.options import defaults
 
 

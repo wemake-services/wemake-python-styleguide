@@ -71,6 +71,7 @@ Summary
    NestedTryViolation
    MultilineConditionsViolation
    MutableModuleConstantViolation
+   UselessLambdaViolation
 
 Comments
 --------
@@ -138,6 +139,7 @@ Design
 .. autoclass:: NestedTryViolation
 .. autoclass:: MultilineConditionsViolation
 .. autoclass:: MutableModuleConstantViolation
+.. autoclass:: UselessLambdaViolation
 
 """
 
@@ -1875,7 +1877,7 @@ class NestedTryViolation(ASTViolation):
 @final
 class MultilineConditionsViolation(ASTViolation):
     """
-    Forbid multiline conditions.
+    Forbids multiline conditions.
 
     Reasoning:
         This way of writing conditions hides the inner complexity this line has.
@@ -1910,7 +1912,7 @@ class MultilineConditionsViolation(ASTViolation):
 @final
 class MutableModuleConstantViolation(ASTViolation):
     """
-    Forbid mutable constants on a module level.
+    Forbids mutable constants on a module level.
 
     Reasoning:
         Constants should be immutable.
@@ -1940,3 +1942,33 @@ class MutableModuleConstantViolation(ASTViolation):
 
     error_template = 'Found mutable module constant'
     code = 466
+
+
+@final
+class UselessLambdaViolation(ASTViolation):
+    """
+    Forbids to define useless proxy ``lambda`` expressions.
+
+    Reasoning:
+        Sometimes developers tend to overuse ``lambda`` expressions
+        and they wrap code that can be passed as is, without extra wrapping.
+        The code without extra ``lambda`` is easier
+        to read and is more performant.
+
+    Solution:
+        Remove wrapping ``lambda`` declaration, use just the internal function.
+
+    Example::
+
+        # Correct:
+        numbers = map(int, ['1', '2'])
+
+        # Wrong:
+        numbers = map(lambda string: int(string), ['1', '2'])
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found useless lambda declaration'
+    code = 467

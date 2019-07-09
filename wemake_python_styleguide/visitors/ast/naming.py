@@ -10,8 +10,8 @@ from wemake_python_styleguide.constants import (
     SPECIAL_ARGUMENT_NAMES_WHITELIST,
     VARIABLE_NAMES_BLACKLIST,
 )
-from wemake_python_styleguide.logics import functions, nodes
-from wemake_python_styleguide.logics.naming import (
+from wemake_python_styleguide.logic import functions, nodes
+from wemake_python_styleguide.logic.naming import (
     access,
     builtins,
     logical,

@@ -8,7 +8,7 @@ import astor
 from typing_extensions import final
 
 from wemake_python_styleguide import constants
-from wemake_python_styleguide.logics.operators import (
+from wemake_python_styleguide.logic.operators import (
     count_unary_operator,
     get_parent_ignoring_unary,
     unwrap_unary_node,

@@ -6,8 +6,8 @@ from typing import ClassVar, Dict, List, Tuple, Type, Union
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logics.nodes import get_parent
-from wemake_python_styleguide.logics.variables import (
+from wemake_python_styleguide.logic.nodes import get_parent
+from wemake_python_styleguide.logic.variables import (
     is_valid_block_variable_definition,
 )
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes

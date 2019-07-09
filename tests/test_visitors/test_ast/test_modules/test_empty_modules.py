@@ -12,7 +12,7 @@ from wemake_python_styleguide.visitors.ast.modules import (
 
 @pytest.mark.parametrize('filename', [
     'empty.py',
-    '/home/user/logics.py',
+    '/home/user/logic.py',
     'partial/views.py',
     'C:/path/package/module.py',
 ])

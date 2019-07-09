@@ -6,9 +6,9 @@ from typing import ClassVar
 from typing_extensions import final
 
 from wemake_python_styleguide import constants
-from wemake_python_styleguide.logics.filenames import get_stem
-from wemake_python_styleguide.logics.naming.constants import is_constant
-from wemake_python_styleguide.logics.nodes import get_context, is_doc_string
+from wemake_python_styleguide.logic.filenames import get_stem
+from wemake_python_styleguide.logic.naming.constants import is_constant
+from wemake_python_styleguide.logic.nodes import get_context, is_doc_string
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     BadMagicModuleFunctionViolation,
