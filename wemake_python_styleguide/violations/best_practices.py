@@ -40,8 +40,8 @@ Summary
    StaticMethodViolation
    BadMagicMethodViolation
    NestedImportViolation
-   RedundantLoopElseViolation
-   RedundantFinallyViolation
+   UselessLoopElseViolation
+   UselessFinallyViolation
    ReassigningVariableToItselfViolation
    YieldInsideInitViolation
    ProtectedModuleViolation
@@ -61,7 +61,7 @@ Summary
    IncorrectBaseClassViolation
    IncorrectSlotsViolation
    IncorrectSuperCallViolation
-   RedundantReturningElseViolation
+   UselessReturningElseViolation
    TryExceptMultipleReturnPathViolation
    ComplexDefaultValuesViolation
    LoopVariableDefinitionViolation
@@ -72,6 +72,7 @@ Summary
    MultilineConditionsViolation
    MutableModuleConstantViolation
    UselessLambdaViolation
+   UselessLenCompareViolation
 
 Comments
 --------
@@ -108,8 +109,8 @@ Design
 .. autoclass:: StaticMethodViolation
 .. autoclass:: BadMagicMethodViolation
 .. autoclass:: NestedImportViolation
-.. autoclass:: RedundantLoopElseViolation
-.. autoclass:: RedundantFinallyViolation
+.. autoclass:: UselessLoopElseViolation
+.. autoclass:: UselessFinallyViolation
 .. autoclass:: ReassigningVariableToItselfViolation
 .. autoclass:: YieldInsideInitViolation
 .. autoclass:: ProtectedModuleViolation
@@ -129,7 +130,7 @@ Design
 .. autoclass:: IncorrectBaseClassViolation
 .. autoclass:: IncorrectSlotsViolation
 .. autoclass:: IncorrectSuperCallViolation
-.. autoclass:: RedundantReturningElseViolation
+.. autoclass:: UselessReturningElseViolation
 .. autoclass:: TryExceptMultipleReturnPathViolation
 .. autoclass:: ComplexDefaultValuesViolation
 .. autoclass:: LoopVariableDefinitionViolation
@@ -140,6 +141,7 @@ Design
 .. autoclass:: MultilineConditionsViolation
 .. autoclass:: MutableModuleConstantViolation
 .. autoclass:: UselessLambdaViolation
+.. autoclass:: UselessLenCompareViolation
 
 """
 
@@ -848,7 +850,7 @@ class NestedImportViolation(ASTViolation):
 
 
 @final
-class RedundantLoopElseViolation(ASTViolation):
+class UselessLoopElseViolation(ASTViolation):
     """
     Forbids to use ``else`` without ``break`` in a loop.
 
@@ -892,7 +894,7 @@ class RedundantLoopElseViolation(ASTViolation):
 
 
 @final
-class RedundantFinallyViolation(ASTViolation):
+class UselessFinallyViolation(ASTViolation):
     """
     Forbids to use ``finally`` in ``try`` block without ``except`` block.
 
@@ -1578,9 +1580,9 @@ class IncorrectSuperCallViolation(ASTViolation):
 
 
 @final
-class RedundantReturningElseViolation(ASTViolation):
+class UselessReturningElseViolation(ASTViolation):
     """
-    Forbids to use redundant ``else`` cases in returning functions.
+    Forbids to use useless ``else`` cases in returning functions.
 
     We check single ``if`` statements that all contain
     ``return`` or ``raise`` or ``break`` statements with this rule.
@@ -1593,7 +1595,7 @@ class RedundantReturningElseViolation(ASTViolation):
         So, we prefer to have less code than more code.
 
     Solution:
-        Remove redundant ``else`` case.
+        Remove useless ``else`` case.
 
     Example::
 
@@ -1614,7 +1616,7 @@ class RedundantReturningElseViolation(ASTViolation):
 
     """
 
-    error_template = 'Found redundant returning `else` statement'
+    error_template = 'Found useless returning `else` statement'
     code = 457
 
 
@@ -1972,3 +1974,36 @@ class UselessLambdaViolation(ASTViolation):
 
     error_template = 'Found useless lambda declaration'
     code = 467
+
+
+@final
+class UselessLenCompareViolation(ASTViolation):
+    """
+    Forbids to have unpythonic zero-length compare.
+
+    Note, that we allow to check arbitrary length, like ``len(arr) == 3``.
+
+    Reasoning:
+        Python's structures like dicts, lists, sets, and tuples
+        all have ``__bool__`` method to checks their length.
+        So, there's no point in wrapping them into ``len(...)``
+        and checking that it is bigger that ``0`` or less then ``1``, etc.
+
+    Solution:
+        Remove extra ``len()`` call.
+
+    Example::
+
+        # Correct:
+        if some_array or not other_array or len(third_array) == 1:
+
+        # Wrong:
+        if len(some_array) > 0 or len(other_array) < 1:
+            ...
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found useless `len()` compare'
+    code = 468

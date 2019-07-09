@@ -33,11 +33,11 @@ Summary
    FormattedStringViolation
    RequiredBaseClassViolation
    MultipleIfsInComprehensionViolation
-   ConstantComparisonViolation
-   ComparisonOrderViolation
+   ConstantCompareViolation
+   CompareOrderViolation
    BadNumberSuffixViolation
-   MultipleInComparisonViolation
-   RedundantComparisonViolation
+   MultipleInCompareViolation
+   UselessCompareViolation
    MissingSpaceBetweenKeywordAndParenViolation
    WrongConditionalViolation
    ObjectInBaseClassesListViolation
@@ -69,11 +69,11 @@ Consistency checks
 .. autoclass:: FormattedStringViolation
 .. autoclass:: RequiredBaseClassViolation
 .. autoclass:: MultipleIfsInComprehensionViolation
-.. autoclass:: ConstantComparisonViolation
-.. autoclass:: ComparisonOrderViolation
+.. autoclass:: ConstantCompareViolation
+.. autoclass:: CompareOrderViolation
 .. autoclass:: BadNumberSuffixViolation
-.. autoclass:: MultipleInComparisonViolation
-.. autoclass:: RedundantComparisonViolation
+.. autoclass:: MultipleInCompareViolation
+.. autoclass:: UselessCompareViolation
 .. autoclass:: MissingSpaceBetweenKeywordAndParenViolation
 .. autoclass:: WrongConditionalViolation
 .. autoclass:: ObjectInBaseClassesListViolation
@@ -354,17 +354,17 @@ class MultipleIfsInComprehensionViolation(ASTViolation):
 
 
 @final
-class ConstantComparisonViolation(ASTViolation):
+class ConstantCompareViolation(ASTViolation):
     """
-    Forbids to have comparisons between two literals.
+    Forbids to have compares between two literals.
 
     Reasoning:
         When two constants are compared it is typically an indication of a
-        mistake, since the Boolean value of the comparison, will always be
+        mistake, since the Boolean value of the compare, will always be
         the same.
 
     Solution:
-        Remove the constant comparison and any associated dead code.
+        Remove the constant compare and any associated dead code.
 
     Example::
 
@@ -381,22 +381,22 @@ class ConstantComparisonViolation(ASTViolation):
 
     """
 
-    error_template = 'Found constant comparison'
+    error_template = 'Found constant compare'
     code = 308
 
 
 @final
-class ComparisonOrderViolation(ASTViolation):
+class CompareOrderViolation(ASTViolation):
     """
     Forbids comparision where argument doesn't come first.
 
     Reasoning:
         It is hard to read the code when
         you have to shuffle ordering of the arguments all the time.
-        Bring consistency to the comparison!
+        Bring consistency to the compare!
 
     Solution:
-        Refactor your comparison expression, place the argument first.
+        Refactor your compare expression, place the argument first.
 
     Example::
 
@@ -411,7 +411,7 @@ class ComparisonOrderViolation(ASTViolation):
 
     """
 
-    error_template = 'Found reversed comparison order'
+    error_template = 'Found reversed compare order'
     code = 309
 
 
@@ -454,7 +454,7 @@ class BadNumberSuffixViolation(TokenizeViolation):
 
 
 @final
-class MultipleInComparisonViolation(ASTViolation):
+class MultipleInCompareViolation(ASTViolation):
     """
     Forbids comparision where multiple ``in`` checks.
 
@@ -462,7 +462,7 @@ class MultipleInComparisonViolation(ASTViolation):
         Using multiple ``in`` is unreadable.
 
     Solution:
-        Refactor your comparison expression to use several ``and`` conditions
+        Refactor your compare expression to use several ``and`` conditions
         or separate ``if`` statements in case it is appropriate.
 
     Example::
@@ -479,22 +479,22 @@ class MultipleInComparisonViolation(ASTViolation):
 
     """
 
-    error_template = 'Found multiple `in` comparisons'
+    error_template = 'Found multiple `in` compares'
     code = 311
 
 
 @final
-class RedundantComparisonViolation(ASTViolation):
+class UselessCompareViolation(ASTViolation):
     """
-    Forbids to have comparisons between the same variable.
+    Forbids to have compares between the same variable.
 
     Reasoning:
         When the same variables are compared it is typically an indication
-        of a mistake, since the Boolean value of the comparison will always be
+        of a mistake, since the Boolean value of the compare will always be
         the same.
 
     Solution:
-        Remove the same variable comparison and any associated dead code.
+        Remove the same variable compare and any associated dead code.
 
     Example::
 
@@ -512,7 +512,7 @@ class RedundantComparisonViolation(ASTViolation):
 
     """
 
-    error_template = 'Found comparison between same variable'
+    error_template = 'Found compare between same variable'
     code = 312
 
 

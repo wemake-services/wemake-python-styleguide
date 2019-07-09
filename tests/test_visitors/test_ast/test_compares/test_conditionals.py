@@ -5,7 +5,7 @@ import pytest
 from wemake_python_styleguide.violations.consistency import (
     WrongConditionalViolation,
 )
-from wemake_python_styleguide.visitors.ast.comparisons import (
+from wemake_python_styleguide.visitors.ast.compares import (
     WrongConditionalVisitor,
 )
 
@@ -75,7 +75,7 @@ def test_valid_conditional(
     '("tuple",)',
     '["list"]',
 ])
-def test_redundant(
+def test_useless(
     assert_errors,
     parse_ast_tree,
     code,

@@ -3,7 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
-    RedundantFinallyViolation,
+    UselessFinallyViolation,
 )
 from wemake_python_styleguide.visitors.ast.exceptions import (
     WrongTryExceptVisitor,
@@ -59,7 +59,7 @@ def test_wrong_finally(
     visitor = WrongTryExceptVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [RedundantFinallyViolation])
+    assert_errors(visitor, [UselessFinallyViolation])
 
 
 @pytest.mark.parametrize('code', [

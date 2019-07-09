@@ -3,14 +3,12 @@
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
-    MultipleInComparisonViolation,
+    MultipleInCompareViolation,
 )
-from wemake_python_styleguide.visitors.ast.comparisons import (
-    ComparisonSanityVisitor,
-)
+from wemake_python_styleguide.visitors.ast.compares import CompareSanityVisitor
 
-if_with_multiple_in_comparisons = 'if {0} in {1} in {2}: ...'
-if_without_multiple_in_comparisons = 'if {0} in {1}: ...'
+if_with_multiple_in_compares = 'if {0} in {1} in {2}: ...'
+if_without_multiple_in_compares = 'if {0} in {1}: ...'
 
 ternary = 'ternary = 0 if {0} in {1} else 1'
 ternary_with_multiple_in = 'ternary = 0 if {0} in {1} in {2} else 1'
@@ -20,7 +18,7 @@ while_with_multiple_in = 'while {0} in {1} in {2}: ...'
 
 
 @pytest.mark.parametrize('code', [
-    if_without_multiple_in_comparisons,
+    if_without_multiple_in_compares,
     ternary,
     while_construct,
 ])
@@ -29,24 +27,24 @@ while_with_multiple_in = 'while {0} in {1} in {2}: ...'
     ('status', [True]),
     ('letter', ['a', 'b']),
 ])
-def test_comparison_with_in(
+def test_compare_with_in(
     assert_errors,
     parse_ast_tree,
     code,
     comparators,
     default_options,
 ):
-    """Comparisons work well for single ``in``."""
+    """Compares work well for single ``in``."""
     tree = parse_ast_tree(code.format(*comparators))
 
-    visitor = ComparisonSanityVisitor(default_options, tree=tree)
+    visitor = CompareSanityVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
 
 
 @pytest.mark.parametrize('code', [
-    if_with_multiple_in_comparisons,
+    if_with_multiple_in_compares,
     ternary_with_multiple_in,
     while_with_multiple_in,
 ])
@@ -55,17 +53,17 @@ def test_comparison_with_in(
     ('output', 'status', [True]),
     ('letter', 'line', 'book'),
 ])
-def test_comparison_with_multiple_in(
+def test_compare_with_multiple_in(
     assert_errors,
     parse_ast_tree,
     code,
     comparators,
     default_options,
 ):
-    """Comparisons raise for multiple ``in`` cases."""
+    """Compares raise for multiple ``in`` cases."""
     tree = parse_ast_tree(code.format(*comparators))
 
-    visitor = ComparisonSanityVisitor(default_options, tree=tree)
+    visitor = CompareSanityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [MultipleInComparisonViolation])
+    assert_errors(visitor, [MultipleInCompareViolation])

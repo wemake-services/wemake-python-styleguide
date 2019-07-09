@@ -5,7 +5,7 @@ from wemake_python_styleguide.visitors.ast import (
     attributes,
     builtins,
     classes,
-    comparisons,
+    compares,
     conditions,
     exceptions,
     functions,
@@ -58,9 +58,9 @@ GENERAL_PRESET = (
     builtins.WrongAssignmentVisitor,
     builtins.WrongCollectionVisitor,
 
-    comparisons.WrongConditionalVisitor,
-    comparisons.ComparisonSanityVisitor,
-    comparisons.WrongComparisionOrderVisitor,
+    compares.WrongConditionalVisitor,
+    compares.CompareSanityVisitor,
+    compares.WrongComparisionOrderVisitor,
 
     conditions.IfStatementVisitor,
 

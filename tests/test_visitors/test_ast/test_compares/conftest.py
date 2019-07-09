@@ -12,9 +12,9 @@ if_with_lt = 'if {0} < {1}: ...'
 if_with_gte = 'if {0} >= {1}: ...'
 if_with_lte = 'if {0} <= {1}: ...'
 
-if_with_chained_comparisons1 = 'if 0 < {0} < {1}: ...'
-if_with_chained_comparisons2 = 'if {0} > {1} > 0: ...'
-if_with_chained_comparisons3 = 'if -1 > {0} > {1} > 0: ...'
+if_with_chained_compares1 = 'if 0 < {0} < {1}: ...'
+if_with_chained_compares2 = 'if {0} > {1} > 0: ...'
+if_with_chained_compares3 = 'if -1 > {0} > {1} > 0: ...'
 
 if_with_in = 'if {0} in {1}: ...'
 if_with_not_in = 'if {0} not in {1}: ...'

@@ -5,7 +5,7 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     SimplifiableIfViolation,
 )
-from wemake_python_styleguide.visitors.ast.comparisons import (
+from wemake_python_styleguide.visitors.ast.compares import (
     WrongConditionalVisitor,
 )
 

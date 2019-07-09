@@ -12,8 +12,8 @@ from wemake_python_styleguide.violations.best_practices import (
     BaseExceptionViolation,
     DuplicateExceptionViolation,
     NestedTryViolation,
-    RedundantFinallyViolation,
     TryExceptMultipleReturnPathViolation,
+    UselessFinallyViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
     UselessExceptCaseViolation,
@@ -29,7 +29,7 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
 
     def _check_if_needs_except(self, node: ast.Try) -> None:
         if node.finalbody and not node.handlers:
-            self.add_violation(RedundantFinallyViolation(node))
+            self.add_violation(UselessFinallyViolation(node))
 
     def _check_exception_type(self, node: ast.ExceptHandler) -> None:
         exception_name = getattr(node, 'type', None)
@@ -102,7 +102,7 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
         Used for find finally in try blocks without except.
 
         Raises:
-            RedundantFinallyViolation
+            UselessFinallyViolation
             DuplicateExceptionViolation
             TryExceptMultipleReturnPathViolation
 

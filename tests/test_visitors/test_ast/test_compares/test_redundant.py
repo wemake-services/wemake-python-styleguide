@@ -3,11 +3,9 @@
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
-    RedundantComparisonViolation,
+    UselessCompareViolation,
 )
-from wemake_python_styleguide.visitors.ast.comparisons import (
-    ComparisonSanityVisitor,
-)
+from wemake_python_styleguide.visitors.ast.compares import CompareSanityVisitor
 
 create_variables = """
 variable = 1
@@ -24,19 +22,19 @@ another_variable = 2
     ('variable', 'another_variable'),
     ('variable', '222'),
 ])
-def test_not_redundant(
+def test_not_useless(
     assert_errors,
     parse_ast_tree,
     simple_conditions,
     comparators,
     default_options,
 ):
-    """Testing that comparisons work well."""
+    """Testing that compares work well."""
     tree = parse_ast_tree(
         create_variables.format(simple_conditions.format(*comparators)),
     )
 
-    visitor = ComparisonSanityVisitor(default_options, tree=tree)
+    visitor = CompareSanityVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -46,10 +44,10 @@ def test_not_redundant(
     ('variable', 'variable'),
     ('another_variable', 'another_variable'),
 ])
-def test_redundant(
+def test_useless(
     assert_errors,
     parse_ast_tree,
-    simple_conditions,  # TODO: join with `test_redundant_with_in`
+    simple_conditions,  # TODO: join with `test_useless_with_in`
     comparators,
     default_options,
 ):
@@ -58,17 +56,17 @@ def test_redundant(
         create_variables.format(simple_conditions.format(*comparators)),
     )
 
-    visitor = ComparisonSanityVisitor(default_options, tree=tree)
+    visitor = CompareSanityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [RedundantComparisonViolation])
+    assert_errors(visitor, [UselessCompareViolation])
 
 
 @pytest.mark.parametrize('comparators', [
     ('variable', 'variable'),
     ('another_variable', 'another_variable'),
 ])
-def test_redundant_with_in(  # TODO: join with `test_redundant`
+def test_useless_with_in(  # TODO: join with `test_useless`
     assert_errors,
     parse_ast_tree,
     in_conditions,
@@ -80,10 +78,10 @@ def test_redundant_with_in(  # TODO: join with `test_redundant`
         create_variables.format(in_conditions.format(*comparators)),
     )
 
-    visitor = ComparisonSanityVisitor(default_options, tree=tree)
+    visitor = CompareSanityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [RedundantComparisonViolation])
+    assert_errors(visitor, [UselessCompareViolation])
 
 
 def test_multiple_compare(
@@ -91,10 +89,10 @@ def test_multiple_compare(
     parse_ast_tree,
     default_options,
 ):
-    """Ensuring than multiple redundant compare returns a single violation."""
+    """Ensuring than multiple useless compare returns a single violation."""
     tree = parse_ast_tree('assert some == some == some')
 
-    visitor = ComparisonSanityVisitor(default_options, tree=tree)
+    visitor = CompareSanityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [RedundantComparisonViolation])
+    assert_errors(visitor, [UselessCompareViolation])

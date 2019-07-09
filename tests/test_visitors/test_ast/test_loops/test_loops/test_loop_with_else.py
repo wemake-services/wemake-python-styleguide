@@ -3,7 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
-    RedundantLoopElseViolation,
+    UselessLoopElseViolation,
 )
 from wemake_python_styleguide.visitors.ast.loops import WrongLoopVisitor
 
@@ -149,7 +149,7 @@ def test_wrong_else_in_for_loop(
     visitor = WrongLoopVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [RedundantLoopElseViolation])
+    assert_errors(visitor, [UselessLoopElseViolation])
 
 
 @pytest.mark.parametrize('code', [

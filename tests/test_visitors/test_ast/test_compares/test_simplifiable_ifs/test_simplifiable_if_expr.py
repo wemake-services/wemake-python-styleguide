@@ -5,7 +5,7 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     SimplifiableIfViolation,
 )
-from wemake_python_styleguide.visitors.ast.comparisons import (
+from wemake_python_styleguide.visitors.ast.compares import (
     WrongConditionalVisitor,
 )
 
@@ -26,7 +26,7 @@ def test_not_simplifiable_exp(
     comparators,
     default_options,
 ):
-    """Testing that comparisons work well."""
+    """Testing that compares work well."""
     tree = parse_ast_tree(if_expression.format(*comparators))
 
     visitor = WrongConditionalVisitor(default_options, tree=tree)
@@ -45,7 +45,7 @@ def test_simplifiable_exp(
     comparators,
     default_options,
 ):
-    """Testing that comparisons can be simplified."""
+    """Testing that compares can be simplified."""
     tree = parse_ast_tree(if_expression.format(*comparators))
 
     visitor = WrongConditionalVisitor(default_options, tree=tree)

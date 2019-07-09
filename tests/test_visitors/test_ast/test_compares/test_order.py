@@ -3,9 +3,9 @@
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
-    ComparisonOrderViolation,
+    CompareOrderViolation,
 )
-from wemake_python_styleguide.visitors.ast.comparisons import (
+from wemake_python_styleguide.visitors.ast.compares import (
     WrongComparisionOrderVisitor,
 )
 
@@ -30,14 +30,14 @@ async def function():
     (1, 2),
     ('returned_item["id"]', 'office.id'),
 ])
-def test_comparison_variables(
+def test_compare_variables(
     assert_errors,
     parse_ast_tree,
     simple_conditions,
     comparators,
     default_options,
 ):
-    """Comparisons work well for left variables."""
+    """Compares work well for left variables."""
     tree = parse_ast_tree(simple_conditions.format(*comparators))
 
     visitor = WrongComparisionOrderVisitor(default_options, tree=tree)
@@ -50,7 +50,7 @@ def test_comparison_variables(
     ('"string constant"', 'container'),
     ('container', '"string constant"'),
 ])
-def test_comparison_variables_in_special_case(
+def test_compare_variables_in_special_case(
     assert_errors,
     parse_ast_tree,
     in_conditions,
@@ -75,20 +75,20 @@ def test_comparison_variables_in_special_case(
     (1, 'first_name + 10'),
     (1, 'first_name + second_name'),
 ])
-def test_comparison_wrong_order(
+def test_compare_wrong_order(
     assert_errors,
     parse_ast_tree,
     simple_conditions,
     comparators,
     default_options,
 ):
-    """Comparisons raise for left constants."""
+    """Compares raise for left constants."""
     tree = parse_ast_tree(simple_conditions.format(*comparators))
 
     visitor = WrongComparisionOrderVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [ComparisonOrderViolation])
+    assert_errors(visitor, [CompareOrderViolation])
 
 
 @pytest.mark.parametrize('comparators', [
@@ -99,13 +99,13 @@ def test_comparison_wrong_order(
     (1, 'first_name + 10'),
     (1, 'first_name + second_name'),
 ])
-def test_comparison_wrong_order_multiple(
+def test_compare_wrong_order_multiple(
     assert_errors,
     parse_ast_tree,
     comparators,
     default_options,
 ):
-    """Comparisons raise multiple issues for left constants."""
+    """Compares raise multiple issues for left constants."""
     tree = parse_ast_tree(
         'if {0} > {1} and {0} < {1}: ...'.format(*comparators),
     )
@@ -114,12 +114,12 @@ def test_comparison_wrong_order_multiple(
     visitor.run()
 
     assert_errors(visitor, [
-        ComparisonOrderViolation,
-        ComparisonOrderViolation,
+        CompareOrderViolation,
+        CompareOrderViolation,
     ])
 
 
-def test_comparison_wrong_order_regression577(
+def test_compare_wrong_order_regression577(
     assert_errors,
     parse_ast_tree,
     default_options,

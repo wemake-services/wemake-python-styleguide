@@ -6,69 +6,88 @@ from typing import ClassVar, List, Optional, Sequence
 import astor
 from typing_extensions import final
 
+from wemake_python_styleguide.logic.functions import given_function_called
 from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
 from wemake_python_styleguide.logic.nodes import is_literal
 from wemake_python_styleguide.logic.operators import unwrap_unary_node
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     SimplifiableIfViolation,
+    UselessLenCompareViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
-    ComparisonOrderViolation,
-    ConstantComparisonViolation,
-    MultipleInComparisonViolation,
-    RedundantComparisonViolation,
+    CompareOrderViolation,
+    ConstantCompareViolation,
+    MultipleInCompareViolation,
+    UselessCompareViolation,
     WrongConditionalViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 
-@final
-class ComparisonSanityVisitor(BaseNodeVisitor):
-    """Restricts the comparison of literals."""
+def _is_correct_len(sign: ast.cmpop, comparator: ast.AST) -> bool:
+    """This is a helper function to tell what calls to ``len()`` are valid."""
+    if isinstance(comparator, ast.Num):
+        if comparator.n == 0:
+            return False
+        if comparator.n == 1:
+            return not isinstance(sign, (ast.GtE, ast.Lt))
+    return True
 
-    def _has_multiple_in_comparisons(self, node: ast.Compare) -> bool:
-        count = 0
-        for op in node.ops:
-            if isinstance(op, ast.In):
-                count += 1
-        return count > 1
+
+@final
+class CompareSanityVisitor(BaseNodeVisitor):
+    """Restricts the incorrect compares."""
 
     def _check_literal_compare(self, node: ast.Compare) -> None:
         last_was_literal = is_literal(node.left)
         for comparator in node.comparators:
             next_is_literal = is_literal(comparator)
             if last_was_literal and next_is_literal:
-                self.add_violation(ConstantComparisonViolation(node))
+                self.add_violation(ConstantCompareViolation(node))
                 break
             last_was_literal = next_is_literal
 
-    def _check_redundant_compare(self, node: ast.Compare) -> None:
+    def _check_useless_compare(self, node: ast.Compare) -> None:
         last_variable = node.left
         for next_variable in node.comparators:
             if is_same_variable(last_variable, next_variable):
-                self.add_violation(RedundantComparisonViolation(node))
+                self.add_violation(UselessCompareViolation(node))
                 break
             last_variable = next_variable
 
-    def _check_multiple_in_comparisons(self, node: ast.Compare) -> None:
-        if self._has_multiple_in_comparisons(node):
-            self.add_violation(MultipleInComparisonViolation(node))
+    def _check_multiple_in_compare(self, node: ast.Compare) -> None:
+        count = sum(1 for op in node.ops if isinstance(op, ast.In))
+        if count > 1:
+            self.add_violation(MultipleInCompareViolation(node))
+
+    def _check_unpythonic_compare(self, node: ast.Compare) -> None:
+        all_nodes = [node.left, *node.comparators]
+
+        for index, compare in enumerate(all_nodes):
+            if not isinstance(compare, ast.Call):
+                continue
+            if given_function_called(compare, {'len'}):
+                ps = index - len(all_nodes) + 1
+                if not _is_correct_len(node.ops[ps], node.comparators[ps]):
+                    self.add_violation(UselessLenCompareViolation(node))
 
     def visit_Compare(self, node: ast.Compare) -> None:
         """
         Ensures that compares are written correctly.
 
         Raises:
-            ConstantComparisonViolation
-            MultipleInComparisonViolation
-            RedundantComparisonViolation
+            ConstantCompareViolation
+            MultipleInCompareViolation
+            UselessCompareViolation
+            UselessLenCompareViolation
 
         """
         self._check_literal_compare(node)
-        self._check_redundant_compare(node)
-        self._check_multiple_in_comparisons(node)
+        self._check_useless_compare(node)
+        self._check_multiple_in_compare(node)
+        self._check_unpythonic_compare(node)
         self.generic_visit(node)
 
 
@@ -94,7 +113,11 @@ class WrongComparisionOrderVisitor(BaseNodeVisitor):
         Operators ``in`` and ``not in`` are special cases.
 
         Why? Because it is perfectly fine to use something like:
-        ``if 'key' in some_dict: ...``
+
+        .. code:: python
+
+            if 'key' in some_dict: ...
+
         This should not be an issue.
 
         When there are multiple special operators it is still a separate issue.
@@ -136,14 +159,14 @@ class WrongComparisionOrderVisitor(BaseNodeVisitor):
         if not self._has_wrong_nodes_on_the_right(node.comparators):
             return
 
-        self.add_violation(ComparisonOrderViolation(node))
+        self.add_violation(CompareOrderViolation(node))
 
     def visit_Compare(self, node: ast.Compare) -> None:
         """
         Forbids comparision where argument doesn't come first.
 
         Raises:
-            ComparisonOrderViolation
+            CompareOrderViolation
 
         """
         self._check_ordering(node)

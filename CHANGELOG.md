@@ -8,15 +8,17 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
+- Adds `flake8-rst-docstrings` as a dependency
 - Validates options that are passed with `flake8`
 - Forbids to use module level mutable constants
 - Forbids to over-use strings
 - Forbids to use `breakpoint` function
-- Adds `flake8-rst-docstrings` as a dependency
 - Limits yield tuple lengths
 - Forbids to have too many `await` statements
 - Forbids to subclass lowercase `builtins`
 - Forbids to have useless `lambda`s
+- Forbids to use `len(sized) > 0` style checks
+- Forbids to use repeatable conditions: `flag or flag`
 
 ### Bugfixes
 
@@ -25,6 +27,8 @@ We used to have incremental versioning before `0.1.0`.
 ### Misc
 
 - Renames `logics/` to `logic/` since it is grammatically correct
+- Renames `Redundant` to `Useless`
+- Renames `Comparison` to `Compare`
 
 
 ## 0.9.0

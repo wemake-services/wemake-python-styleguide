@@ -359,7 +359,7 @@ class ClassWithWrongContents((lambda: object)()):  # noqa: Z454
         self.some_set = {1, 1}  # noqa: Z449
 
 
-def redundant_returning_else():
+def useless_returning_else():
     if some_set:  # noqa: Z457
         return some_set
     else:
@@ -414,3 +414,6 @@ if some and (  # noqa: Z465
 CONSTANT = []  # noqa: Z466
 
 numbers = map(lambda string: int(string), ['1'])  # noqa: Z467
+
+if len(numbers) > 0:  # noqa: Z468
+    print('len!')

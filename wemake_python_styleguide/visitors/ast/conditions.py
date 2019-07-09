@@ -9,7 +9,7 @@ from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     MultilineConditionsViolation,
     NegatedConditionsViolation,
-    RedundantReturningElseViolation,
+    UselessReturningElseViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
@@ -45,7 +45,7 @@ class IfStatementVisitor(BaseNodeVisitor):
                 self.add_violation(MultilineConditionsViolation(node))
                 break
 
-    def _check_redundant_else(self, node: ast.If) -> None:
+    def _check_useless_else(self, node: ast.If) -> None:
         if not node.orelse:
             return
 
@@ -55,19 +55,19 @@ class IfStatementVisitor(BaseNodeVisitor):
             return
 
         if any(isinstance(line, self._returning_nodes) for line in node.body):
-            self.add_violation(RedundantReturningElseViolation(node))
+            self.add_violation(UselessReturningElseViolation(node))
 
     def visit_If(self, node: ast.If) -> None:
         """
         Checks ``if`` nodes.
 
         Raises:
-            RedundantReturningElseViolation
+            UselessReturningElseViolation
             NegatedConditionsViolation
             MultilineConditionsViolation
 
         """
         self._check_negated_conditions(node)
-        self._check_redundant_else(node)
+        self._check_useless_else(node)
         self._check_multiline_conditions(node)
         self.generic_visit(node)
