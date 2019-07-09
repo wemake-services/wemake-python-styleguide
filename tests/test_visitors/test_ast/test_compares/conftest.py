@@ -55,3 +55,20 @@ def simple_conditions(request):
 def in_conditions(request):
     """Fixture that returns simple conditionals."""
     return request.param
+
+
+@pytest.fixture()
+def not_in_wrapper():
+    """Fixture to replace all `in` operators to `not in` operators."""
+    def factory(template: str) -> str:
+        return template.replace(
+            ' in ',
+            ' not in ',
+        )
+    return factory
+
+
+@pytest.fixture(params=['not_in_wrapper', 'regular_wrapper'])
+def in_not_in(request):
+    """Fixture that returns either `not in` or `in` operators."""
+    return request.getfixturevalue(request.param)

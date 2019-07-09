@@ -469,13 +469,14 @@ class MultipleInCompareViolation(ASTViolation):
 
         # Correct:
         if item in bucket and bucket in master_list_of_buckets:
-        if x_coord in line and line in square:
+        if x_coord not in line and line not in square:
 
         # Wrong:
         if item in bucket in master_list_of_buckets:
-        if x_cord in line in square:
+        if x_cord not in line not in square:
 
     .. versionadded:: 0.3.0
+    .. versionchanged:: 0.10.0
 
     """
 

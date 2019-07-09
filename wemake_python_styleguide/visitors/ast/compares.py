@@ -12,6 +12,7 @@ from wemake_python_styleguide.logic.nodes import is_literal
 from wemake_python_styleguide.logic.operators import unwrap_unary_node
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
+    HeterogenousCompareViolation,
     NotOperatorWithCompareViolation,
     SimplifiableIfViolation,
     UselessLenCompareViolation,
@@ -60,7 +61,8 @@ class CompareSanityVisitor(BaseNodeVisitor):
             last_variable = next_variable
 
     def _check_multiple_in_compare(self, node: ast.Compare) -> None:
-        count = sum(1 for op in node.ops if isinstance(op, ast.In))
+        wrong_nodes = (ast.In, ast.NotIn)
+        count = sum(1 for op in node.ops if isinstance(op, wrong_nodes))
         if count > 1:
             self.add_violation(MultipleInCompareViolation(node))
 
@@ -75,6 +77,26 @@ class CompareSanityVisitor(BaseNodeVisitor):
                 if not _is_correct_len(node.ops[ps], node.comparators[ps]):
                     self.add_violation(UselessLenCompareViolation(node))
 
+    def _check_heterogenous_operators(self, node: ast.Compare) -> None:
+        if len(node.ops) == 1:
+            return
+
+        similar_operators = {
+            ast.Gt: (ast.Gt, ast.GtE),
+            ast.GtE: (ast.Gt, ast.GtE),
+            ast.Lt: (ast.Lt, ast.LtE),
+            ast.LtE: (ast.Lt, ast.LtE),
+        }
+        prototype = similar_operators.get(
+            node.ops[0].__class__,
+            node.ops[0].__class__,
+        )
+
+        for op in node.ops:
+            if not isinstance(op, prototype):
+                self.add_violation(HeterogenousCompareViolation(node))
+                break
+
     def visit_Compare(self, node: ast.Compare) -> None:
         """
         Ensures that compares are written correctly.
@@ -84,12 +106,14 @@ class CompareSanityVisitor(BaseNodeVisitor):
             MultipleInCompareViolation
             UselessCompareViolation
             UselessLenCompareViolation
+            HeterogenousCompareViolation
 
         """
         self._check_literal_compare(node)
         self._check_useless_compare(node)
         self._check_multiple_in_compare(node)
         self._check_unpythonic_compare(node)
+        self._check_heterogenous_operators(node)
         self.generic_visit(node)
 
 

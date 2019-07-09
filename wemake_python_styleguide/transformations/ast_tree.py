@@ -3,6 +3,7 @@
 import ast
 
 from pep8ext_naming import NamingChecker
+from typing_extensions import final
 
 from wemake_python_styleguide.transformations.ast.bugfixes import (
     fix_async_offset,
@@ -14,6 +15,7 @@ from wemake_python_styleguide.transformations.ast.enhancements import (
 )
 
 
+@final
 class _ClassVisitor(ast.NodeVisitor):
     """Used to set method types inside classes."""
 

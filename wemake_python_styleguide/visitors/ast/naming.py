@@ -40,6 +40,7 @@ def _get_name_from_node(node: ast.expr) -> Optional[str]:
     return getattr(node, 'id', None)
 
 
+@final
 class _NameValidator(object):
     """Utility class to separate logic from the naming visitor."""
 

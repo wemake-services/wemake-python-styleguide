@@ -75,6 +75,7 @@ Summary
    UselessLenCompareViolation
    SameElementsInConditionViolation
    NotOperatorWithCompareViolation
+   HeterogenousCompareViolation
 
 Comments
 --------
@@ -146,6 +147,7 @@ Design
 .. autoclass:: UselessLenCompareViolation
 .. autoclass:: SameElementsInConditionViolation
 .. autoclass:: NotOperatorWithCompareViolation
+.. autoclass:: HeterogenousCompareViolation
 
 """
 
@@ -2073,3 +2075,42 @@ class NotOperatorWithCompareViolation(ASTViolation):
 
     error_template = 'Found incorrect `not` with compare usage'
     code = 470
+
+
+@final
+class HeterogenousCompareViolation(ASTViolation):
+    """
+    Forbids to heterogenous operators in one compare.
+
+    Note, that we allow to mix ``>`` with ``>=``
+    and ``<`` with ``<=`` operators.
+
+    Reasoning:
+        This is hard to read and understand.
+
+    Solution:
+        Refactor the expression to have separate parts
+        joined with ``and`` boolean operator.
+
+    Example::
+
+        # Correct:
+        if x == y == z:
+            ...
+
+        if x > y >= z:
+            ...
+
+        # Wrong:
+        if x > y == 5:
+            ...
+
+        if x == y != z:
+            ...
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found heterogenous compare'
+    code = 471

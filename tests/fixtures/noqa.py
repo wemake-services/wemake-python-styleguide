@@ -423,3 +423,6 @@ if numbers and numbers:  # noqa: Z469
 
 if not numbers == []:  # noqa: Z470
     print('bad compare with not')
+
+if numbers == CONSTANT != []:  # noqa: Z471
+    print('HeterogenousCompareViolation')
