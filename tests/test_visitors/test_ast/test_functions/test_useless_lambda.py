@@ -11,31 +11,6 @@ from wemake_python_styleguide.visitors.ast.functions import (
 
 template = '{0}: {1}'
 
-valid_calls = (
-    '[]',
-    'method',
-    'obj.attr',
-    'obj.call()',
-    'obj.call(x)',
-    'method(argument_with_different_name)',
-    'method(1)',
-    'method(x=9)',
-    'method(y, x)',
-    'method(x=y, y=x)',
-    'method(x=x, y=1)',
-    'method(x, *z)',
-    'method(*y)',
-    'method(x, **y)',
-    'method(**z)',
-    'method(*args)',
-    'method(**kwargs)',
-    'method(x, *args, **kwargs)',
-    'method(*args, **kwargs)',
-    'method(*())',
-    'method(**{{}})',
-    'method(x, *[], **{{}})',
-)
-
 
 @pytest.mark.parametrize('lambda_def, call_def', [
     ('lambda', 'method()'),
@@ -43,6 +18,7 @@ valid_calls = (
     ('lambda x, y', 'method(x, y)'),
     ('lambda *, x, y', 'method(x=x, y=y)'),  # order 1
     ('lambda *, x, y', 'method(y=y, x=x)'),  # order 2
+    ('lambda x, *, y', 'method(x, y=y)'),
     ('lambda x, *y', 'method(x, *y)'),
     ('lambda x, **z', 'method(x, **z)'),
     ('lambda x, *y, **z', 'method(x, *y, **z)'),
@@ -62,12 +38,50 @@ def test_incorrect_lambda_definition(
 
     assert_errors(visitor, [UselessLambdaViolation])
 
+valid_calls = (
+    '[]',
+    'method',
+    'obj.attr',
+    'obj.call()',
+    'obj.call(x)',
+    'method(argument_with_different_name)',
+    'method(1)',
+    'method(x=9)',
+    'method(y, x)',
+    'method(x.attr, y.attr)',
+    'method(x=x)',
+    'method(x=x.attr, y=y.attr)',
+    'method(x=y, y=x)',
+    'method(y=x, x=y)',
+    'method(x=x, y=1)',
+    'method(x=x, y=y, z=z)',
+    'method(x=x, y=y, *args)',
+    'method(x=x, y=y, **kwargs)',
+    'method(x=x, y=y, z=1)',
+    'method(a, x=x, y=y)',
+    'method(x, *z)',
+    'method(*y)',
+    'method(x, **y)',
+    'method(**z)',
+    'method(*args)',
+    'method(**kwargs)',
+    'method(x, *args, **kwargs)',
+    'method(*args, **kwargs)',
+    'method(*())',
+    'method(**{{}})',
+    'method(x, *[], **{{}})',
+)
+
 
 @pytest.mark.parametrize('lambda_def', [
     'lambda x',
+    'lambda x=1',
     'lambda *, x=1',
     'lambda x, y',
+    'lambda x, *, y',
+    'lambda y, *, x',
     'lambda *, x, y',
+    'lambda *, y, x',
     'lambda x, *y',
     'lambda x, **z',
     'lambda x, *y, **z',

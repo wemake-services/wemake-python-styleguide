@@ -4,7 +4,7 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
-## WIP
+## 0.10.0 aka The Great Compare
 
 ### Features
 
@@ -20,7 +20,9 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use `len(sized) > 0` style checks
 - Forbids to use repeatable conditions: `flag or flag`
 - Forbids to write conditions like `not some > 1`
-- Forbids to use complex unwrapping compares like `x == x > 0`
+- Forbids to use heterogenous compares like `x == x > 0`
+- Forbids to use complex compare with several items (`>= 3`)
+- Forbids to have class variables that are shadowed by instance variables
 
 ### Bugfixes
 
@@ -32,6 +34,7 @@ We used to have incremental versioning before `0.1.0`.
 - Renames `logics/` to `logic/` since it is grammatically correct
 - Renames `Redundant` to `Useless`
 - Renames `Comparison` to `Compare`
+- Refactors `UselessOperatorsVisitor`
 
 
 ## 0.9.0

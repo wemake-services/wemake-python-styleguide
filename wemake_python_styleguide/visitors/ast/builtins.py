@@ -2,7 +2,7 @@
 
 import ast
 from collections import Counter, defaultdict
-from typing import ClassVar, DefaultDict, Iterable, List
+from typing import ClassVar, DefaultDict, Iterable, List, Mapping, Type
 
 import astor
 from typing_extensions import final
@@ -28,6 +28,8 @@ from wemake_python_styleguide.violations.consistency import (
     UselessOperatorsViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
+
+_MappingNodeCount = Mapping[Type[ast.AST], int]
 
 
 @final
@@ -118,25 +120,19 @@ class MagicNumberVisitor(BaseNodeVisitor):
 class UselessOperatorsVisitor(BaseNodeVisitor):
     """Checks operators used in the code."""
 
-    def _check_plus_sign(self, node: ast.Num) -> None:
-        if count_unary_operator(node, ast.UAdd) <= 0:
-            return
-        self.add_violation(UselessOperatorsViolation(node, text=str(node.n)))
+    _limits: ClassVar[_MappingNodeCount] = {
+        ast.UAdd: 0,
+        ast.Invert: 1,
+        ast.Not: 1,
+        ast.USub: 1,
+    }
 
-    def _check_minus_sign(self, node: ast.Num) -> None:
-        if count_unary_operator(node, ast.USub) <= 1:
-            return
-        self.add_violation(UselessOperatorsViolation(node, text=str(node.n)))
-
-    def _check_tilde_sign(self, node: ast.Num) -> None:
-        if count_unary_operator(node, ast.Invert) <= 1:
-            return
-        self.add_violation(UselessOperatorsViolation(node, text=str(node.n)))
-
-    def _check_not(self, node: ast.Num) -> None:
-        if count_unary_operator(node, ast.Not) <= 1:
-            return
-        self.add_violation(UselessOperatorsViolation(node, text=str(node.n)))
+    def _check_operator_count(self, node: ast.Num) -> None:
+        for node_type, limit in self._limits.items():
+            if not count_unary_operator(node, node_type) <= limit:
+                self.add_violation(
+                    UselessOperatorsViolation(node, text=str(node.n)),
+                )
 
     def visit_Num(self, node: ast.Num) -> None:
         """
@@ -146,10 +142,7 @@ class UselessOperatorsVisitor(BaseNodeVisitor):
             UselessOperatorsViolation
 
         """
-        self._check_plus_sign(node)
-        self._check_minus_sign(node)
-        self._check_tilde_sign(node)
-        self._check_not(node)
+        self._check_operator_count(node)
         self.generic_visit(node)
 
 

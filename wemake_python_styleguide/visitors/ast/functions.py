@@ -253,7 +253,7 @@ class UselessLambdaDefinitionVisitor(BaseNodeVisitor):
 
             if lambda_arg and not call_arg:
                 return False
-        return bool(real_kw_args) == bool(node.args.kwonlyargs)
+        return len(real_kw_args) == len(node.args.kwonlyargs)
 
     def _check_useless_lambda(self, node: ast.Lambda) -> None:
         if not isinstance(node.body, ast.Call):

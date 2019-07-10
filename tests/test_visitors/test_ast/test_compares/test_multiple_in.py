@@ -2,6 +2,9 @@
 
 import pytest
 
+from wemake_python_styleguide.violations.best_practices import (
+    HeterogenousCompareViolation,
+)
 from wemake_python_styleguide.violations.consistency import (
     MultipleInCompareViolation,
 )
@@ -69,3 +72,20 @@ def test_compare_with_multiple_in(
     visitor.run()
 
     assert_errors(visitor, [MultipleInCompareViolation])
+
+
+def test_compare_with_mixed_in(
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+):
+    """Compares raise for multiple ``in`` and ``not in`` cases."""
+    tree = parse_ast_tree('x in a not in b')
+
+    visitor = CompareSanityVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [
+        MultipleInCompareViolation,
+        HeterogenousCompareViolation,
+    ])
