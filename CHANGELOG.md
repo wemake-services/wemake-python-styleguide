@@ -38,6 +38,7 @@ We used to have incremental versioning before `0.1.0`.
 - Renames `Comparison` to `Compare`
 - Refactors `UselessOperatorsVisitor`
 - Adds `compat/` package, getting ready for `python3.8`
+- Adds `Makefile`
 
 
 ## 0.9.0

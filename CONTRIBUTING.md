@@ -47,6 +47,11 @@ you will have to do several things:
 3. Add a test that the plugin is working to `tests/test_plugins.py`
 
 
+## One magic command
+
+Run `make test` to run everything we have!
+
+
 ## Tests
 
 We use `pytest` and `flake8` for quality control.
@@ -138,6 +143,8 @@ Before submitting your code please do the following steps:
 10. Run `layer-lint` to ensure that architecture contracts are correct
 11. Run `doc8` to ensure that docs are correct
 
+You can run everything at once with `make test`,
+see our `Makefile` for more details.
 
 ## Other help
 

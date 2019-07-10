@@ -31,6 +31,8 @@ three_similar_compare = 'x > y > z > c'
 three_close_compare = 'x < y > z >= c'
 three_compare = 'x == attr.prop != method <= 1'
 mixed_long_equals = 'x != y == z != c'
+long_only_equals = 'x == y == z == c == extra'
+long_only_non_equals = 'x != y != z != c != extra'
 
 
 @pytest.mark.parametrize('code', [
@@ -65,6 +67,8 @@ def test_module_compare_counts_normal(
     three_compare,
     three_close_compare,
     mixed_long_equals,
+    long_only_equals,
+    long_only_non_equals,
 ])
 def test_module_compare_counts_violation(
     monkeypatch,
