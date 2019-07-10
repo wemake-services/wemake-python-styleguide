@@ -18,6 +18,13 @@ else:
     {2} = {3}
 """
 
+simple_if_typed_template = """
+if some_value:
+    {0}: int = {1}
+else:
+    {2}: str = {3}
+"""
+
 # Wrong:
 
 complex_if_template = """
@@ -50,6 +57,13 @@ elif other:
     {2} = {3}
 """
 
+near_elif_typed_template = """
+if some_value:
+    {0}: int = {1}
+elif other:
+    {2}: str = {3}
+"""
+
 single_if_template = """
 if some_value:
     {0} = {1}
@@ -62,6 +76,7 @@ if some_value:
     nested_if_template,
     near_if_template,
     near_elif_template,
+    near_elif_typed_template,
     single_if_template,
 ])
 @pytest.mark.parametrize('comparators', [
@@ -89,6 +104,7 @@ def test_not_simplifiable_node(
 
 @pytest.mark.parametrize('code', [
     simple_if_template,
+    simple_if_typed_template,
 ])
 @pytest.mark.parametrize('comparators', [
     ('variable', 'True', 'variable', 'False'),
@@ -114,6 +130,7 @@ def test_simplifiable_node(
 
 @pytest.mark.parametrize('code', [
     simple_if_template,
+    simple_if_typed_template,
     complex_if_template,
 ])
 @pytest.mark.parametrize('comparators', [
@@ -122,9 +139,34 @@ def test_simplifiable_node(
     ('variable1[0]', 'True', 'variable2[0]', 'False'),
     ('variable[0]', 'True', 'variable[1]', 'False'),
     ('variable.attr1', 'False', 'variable.attr2', 'True'),
-    ('variable1 = variable2', 'True', 'variable1 = variable2', 'False'),
 ])
 def test_not_simplifiable_node_bad_values(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    comparators,
+    default_options,
+):
+    """Testing that simplifiable nodes work well with incorrect patterns."""
+    tree = parse_ast_tree(code.format(*comparators))
+
+    visitor = WrongConditionalVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('code', [
+    simple_if_template,
+    complex_if_template,
+])
+@pytest.mark.parametrize('comparators', [
+    ('variable1 = variable2', 'True', 'variable1 = variable2', 'False'),
+    ('variable2 = variable1', 'True', 'variable1 = variable2', 'False'),
+    ('variable1 = variable2', 'True', 'variable2 = variable1', 'False'),
+    ('variable1 = variable2', 'False', 'variable1 = variable2', 'True'),
+])
+def test_not_simplifiable_node_multiple(
     assert_errors,
     parse_ast_tree,
     code,

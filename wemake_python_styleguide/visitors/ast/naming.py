@@ -5,6 +5,8 @@ from typing import Callable, List, Optional, Tuple, Union
 
 from typing_extensions import final
 
+from wemake_python_styleguide.compat.aliases import AssignNodes
+from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
     SPECIAL_ARGUMENT_NAMES_WHITELIST,
@@ -18,6 +20,7 @@ from wemake_python_styleguide.logic.naming import (
     name_nodes,
 )
 from wemake_python_styleguide.types import (
+    AnyAssign,
     AnyFunctionDef,
     AnyFunctionDefAndLambda,
     AnyImport,
@@ -124,11 +127,11 @@ class _NameValidator(object):
         top_level_assigns = [
             sub_node
             for sub_node in node.body
-            if isinstance(sub_node, ast.Assign)
+            if isinstance(sub_node, AssignNodes)
         ]
 
         for assignment in top_level_assigns:
-            for target in assignment.targets:
+            for target in get_assign_targets(assignment):
                 if not isinstance(target, ast.Name):
                     continue
 
@@ -246,21 +249,26 @@ class WrongNameVisitor(BaseNodeVisitor):
 
 
 @final
+@alias('visit_any_assign', (
+    'visit_Assign',
+    'visit_AnnAssign',
+))
 class WrongModuleMetadataVisitor(BaseNodeVisitor):
     """Finds wrong metadata information of a module."""
 
-    def _check_metadata(self, node: ast.Assign) -> None:
+    def _check_metadata(self, node: AnyAssign) -> None:
         if not isinstance(nodes.get_parent(node), ast.Module):
             return
 
-        for target_node in node.targets:
+        targets = get_assign_targets(node)
+        for target_node in targets:
             target_node_id = _get_name_from_node(target_node)
             if target_node_id in MODULE_METADATA_VARIABLES_BLACKLIST:
                 self.add_violation(
                     WrongModuleMetadataViolation(node, text=target_node_id),
                 )
 
-    def visit_Assign(self, node: ast.Assign) -> None:
+    def visit_any_assign(self, node: AnyAssign) -> None:
         """
         Used to find the bad metadata variable names.
 
@@ -273,6 +281,10 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
 
 
 @final
+@alias('visit_any_assign', (
+    'visit_Assign',
+    'visit_AnnAssign',
+))
 class WrongVariableAssignmentVisitor(BaseNodeVisitor):
     """Finds wrong variables assignments."""
 
@@ -294,8 +306,10 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
                     )
         return target_names
 
-    def _check_assignment(self, node: ast.Assign) -> None:
-        target_names = self._create_target_names(node.targets)
+    def _check_assignment(self, node: AnyAssign) -> None:
+        target_names = self._create_target_names(
+            get_assign_targets(node),
+        )
 
         if isinstance(node.value, ast.Tuple):
             node_values = node.value.elts
@@ -308,7 +322,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
         if values_names in target_names or has_repeatable_values:
             self.add_violation(ReassigningVariableToItselfViolation(node))
 
-    def visit_Assign(self, node: ast.Assign) -> None:
+    def visit_any_assign(self, node: AnyAssign) -> None:
         """
         Used to check assignment variable to itself.
 

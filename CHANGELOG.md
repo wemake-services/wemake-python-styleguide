@@ -28,6 +28,7 @@ We used to have incremental versioning before `0.1.0`.
 
 - Fixes incorrect line number for `Z331`
 - Fixes that `Z311` was not raising for multiple `not in` cases
+- Fixes a bunch of bugs for rules working with `Assign` and not `AnnAssign`
 
 ### Misc
 
@@ -35,6 +36,7 @@ We used to have incremental versioning before `0.1.0`.
 - Renames `Redundant` to `Useless`
 - Renames `Comparison` to `Compare`
 - Refactors `UselessOperatorsVisitor`
+- Adds `compat/` package, getting ready for `python3.8`
 
 
 ## 0.9.0

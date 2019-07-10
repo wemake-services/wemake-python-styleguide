@@ -42,10 +42,13 @@ def test_regression112(default_options):
     """
     module = ast.parse(code_that_brakes)
     Checker.parse_options(default_options)
+
+    # Now we create modifications to the tree:
     Checker(tree=module, file_tokens=[], filename='custom.py')
 
     # It was failing on this line:
     # AttributeError: 'ExceptHandler' object has no attribute 'depth'
     flakes = PyFlakesChecker(module)
 
+    assert module.wps_context is None  # augmentation happened!
     assert flakes.root

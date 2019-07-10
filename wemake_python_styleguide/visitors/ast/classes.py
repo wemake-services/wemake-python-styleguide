@@ -2,11 +2,13 @@
 
 import ast
 from collections import Counter
-from typing import ClassVar, FrozenSet, List
+from typing import ClassVar, Container, FrozenSet, List, Tuple
 
 from typing_extensions import final
 
 from wemake_python_styleguide import constants, types
+from wemake_python_styleguide.compat.aliases import AssignNodes
+from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.logic.classes import is_forbidden_super_class
 from wemake_python_styleguide.logic.functions import get_all_arguments
 from wemake_python_styleguide.logic.nodes import (
@@ -14,6 +16,7 @@ from wemake_python_styleguide.logic.nodes import (
     is_contained,
     is_doc_string,
 )
+from wemake_python_styleguide.types import AnyAssign
 from wemake_python_styleguide.violations.best_practices import (
     BadMagicMethodViolation,
     BaseExceptionSubclassViolation,
@@ -22,6 +25,7 @@ from wemake_python_styleguide.violations.best_practices import (
     IncorrectClassBodyContentViolation,
     IncorrectSlotsViolation,
     MethodWithoutArgumentsViolation,
+    ShadowedClassAttributeViolation,
     StaticMethodViolation,
     YieldInsideInitViolation,
 )
@@ -164,6 +168,10 @@ class WrongMethodVisitor(BaseNodeVisitor):
 
 
 @final
+@alias('visit_any_assign', (
+    'visit_Assign',
+    'visit_AnnAssign',
+))
 class WrongSlotsVisitor(BaseNodeVisitor):
     """Visits class attributes."""
 
@@ -173,7 +181,7 @@ class WrongSlotsVisitor(BaseNodeVisitor):
         ast.Set,
     )
 
-    def visit_Assign(self, node: ast.Assign) -> None:
+    def visit_any_assign(self, node: AnyAssign) -> None:
         """
         Checks all assigns that have correct context.
 
@@ -184,15 +192,17 @@ class WrongSlotsVisitor(BaseNodeVisitor):
         self._check_slots(node)
         self.generic_visit(node)
 
-    def _contains_slots_assign(self, node: ast.Assign) -> bool:
-        for target in node.targets:
+    def _contains_slots_assign(self, node: AnyAssign) -> bool:
+        targets = get_assign_targets(node)
+
+        for target in targets:
             if isinstance(target, ast.Name) and target.id == '__slots__':
                 return True
         return False
 
     def _count_slots_items(
         self,
-        node: ast.Assign,
+        node: AnyAssign,
         elements: ast.Tuple,
     ) -> None:
         fields: List[str] = []
@@ -207,9 +217,8 @@ class WrongSlotsVisitor(BaseNodeVisitor):
                 self.add_violation(IncorrectSlotsViolation(node))
                 return
 
-    def _check_slots(self, node: ast.Assign) -> None:
-        context = get_context(node)
-        if not isinstance(context, ast.ClassDef):
+    def _check_slots(self, node: AnyAssign) -> None:
+        if not isinstance(get_context(node), ast.ClassDef):
             return
 
         if not self._contains_slots_assign(node):
@@ -221,3 +230,58 @@ class WrongSlotsVisitor(BaseNodeVisitor):
 
         if isinstance(node.value, ast.Tuple):
             self._count_slots_items(node, node.value)
+
+
+@final
+class ClassAttributeVisitor(BaseNodeVisitor):
+    """Finds incorrect class attributes."""
+
+    # TODO: can be moved to logic, if is used anywhere else
+    def _flat_assign_names(self, nodes: List[AnyAssign]) -> Container[str]:
+        flat_assigns = []
+        for attribute in nodes:
+            targets = get_assign_targets(attribute)
+            flat_assigns.extend([
+                at.id for at in targets
+                if isinstance(at, ast.Name)
+            ])
+        return set(flat_assigns)
+
+    def _get_attributes(
+        self,
+        node: ast.ClassDef,
+    ) -> Tuple[List[AnyAssign], List[ast.Attribute]]:
+        class_attributes = []
+        instance_attributes = []
+
+        for child in ast.walk(node):
+            if isinstance(child, ast.Attribute):
+                if isinstance(child.ctx, ast.Store):
+                    instance_attributes.append(child)
+            if isinstance(child, AssignNodes) and get_context(child) == node:
+                if child.value is not None:  # Not: `a: int`
+                    class_attributes.append(child)
+        return class_attributes, instance_attributes
+
+    def _check_attributes_shadowing(self, node: ast.ClassDef) -> None:
+        class_attributes, instance_attributes = self._get_attributes(node)
+        class_attribute_names = self._flat_assign_names(class_attributes)
+
+        for instance_attr in instance_attributes:
+            if instance_attr.attr in class_attribute_names:
+                self.add_violation(
+                    ShadowedClassAttributeViolation(
+                        instance_attr, text=instance_attr.attr,
+                    ),
+                )
+
+    def visit_ClassDef(self, node: ast.ClassDef) -> None:
+        """
+        Checks that class attributes are correct.
+
+        Raises:
+            ShadowedClassAttributeViolation
+
+        """
+        self._check_attributes_shadowing(node)
+        self.generic_visit(node)

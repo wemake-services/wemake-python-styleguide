@@ -9,7 +9,7 @@ from wemake_python_styleguide import constants
 from wemake_python_styleguide.logic.filenames import get_stem
 from wemake_python_styleguide.logic.naming.constants import is_constant
 from wemake_python_styleguide.logic.nodes import get_context, is_doc_string
-from wemake_python_styleguide.types import AnyNodes
+from wemake_python_styleguide.types import AnyAssign, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     BadMagicModuleFunctionViolation,
     EmptyModuleViolation,
@@ -17,6 +17,7 @@ from wemake_python_styleguide.violations.best_practices import (
     MutableModuleConstantViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
+from wemake_python_styleguide.visitors.decorators import alias
 
 
 @final
@@ -90,6 +91,10 @@ class MagicModuleFunctionsVisitor(BaseNodeVisitor):
 
 
 @final
+@alias('visit_any_assign', (
+    'visit_Assign',
+    'visit_AnnAssign',
+))
 class ModuleConstantsVisitor(BaseNodeVisitor):
     """Finds incorrect module constants."""
 
@@ -99,20 +104,26 @@ class ModuleConstantsVisitor(BaseNodeVisitor):
         ast.Set,
         ast.DictComp,
         ast.ListComp,
+        ast.SetComp,
     )
 
-    def _check_mutable_constant(self, node: ast.Assign) -> None:
-        context = get_context(node)
-        if not isinstance(context, ast.Module):
+    def _check_mutable_constant(self, node: AnyAssign) -> None:
+        if not isinstance(get_context(node), ast.Module):
             return
-        for target in node.targets:
+
+        if isinstance(node, ast.AnnAssign):
+            targets = [node.target]
+        else:
+            targets = node.targets
+
+        for target in targets:
             if not isinstance(target, ast.Name) or not is_constant(target.id):
                 continue
 
             if isinstance(node.value, self._mutable_nodes):
                 self.add_violation(MutableModuleConstantViolation(target))
 
-    def visit_Assign(self, node: ast.Assign) -> None:
+    def visit_any_assign(self, node: AnyAssign) -> None:
         """
         Checks that module's cannot have incorrect constants.
 

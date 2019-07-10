@@ -2,7 +2,7 @@
 
 import ast
 from collections import Counter, defaultdict
-from typing import ClassVar, DefaultDict, Iterable, List, Mapping, Type
+from typing import ClassVar, DefaultDict, Iterable, List, Mapping
 
 import astor
 from typing_extensions import final
@@ -13,7 +13,7 @@ from wemake_python_styleguide.logic.operators import (
     get_parent_ignoring_unary,
     unwrap_unary_node,
 )
-from wemake_python_styleguide.types import AnyNodes
+from wemake_python_styleguide.types import AnyNodes, AnyUnaryOp
 from wemake_python_styleguide.violations.best_practices import (
     IncorrectUnpackingViolation,
     MagicNumberViolation,
@@ -28,8 +28,6 @@ from wemake_python_styleguide.violations.consistency import (
     UselessOperatorsViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
-
-_MappingNodeCount = Mapping[Type[ast.AST], int]
 
 
 @final
@@ -78,6 +76,7 @@ class MagicNumberVisitor(BaseNodeVisitor):
 
     _allowed_parents: ClassVar[AnyNodes] = (
         ast.Assign,
+        ast.AnnAssign,
 
         # Constructor usages:
         ast.FunctionDef,
@@ -120,7 +119,7 @@ class MagicNumberVisitor(BaseNodeVisitor):
 class UselessOperatorsVisitor(BaseNodeVisitor):
     """Checks operators used in the code."""
 
-    _limits: ClassVar[_MappingNodeCount] = {
+    _limits: ClassVar[Mapping[AnyUnaryOp, int]] = {
         ast.UAdd: 0,
         ast.Invert: 1,
         ast.Not: 1,
@@ -129,7 +128,7 @@ class UselessOperatorsVisitor(BaseNodeVisitor):
 
     def _check_operator_count(self, node: ast.Num) -> None:
         for node_type, limit in self._limits.items():
-            if not count_unary_operator(node, node_type) <= limit:
+            if count_unary_operator(node, node_type) > limit:
                 self.add_violation(
                     UselessOperatorsViolation(node, text=str(node.n)),
                 )

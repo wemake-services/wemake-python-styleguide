@@ -38,6 +38,7 @@ def test_incorrect_lambda_definition(
 
     assert_errors(visitor, [UselessLambdaViolation])
 
+
 valid_calls = (
     '[]',
     'method',

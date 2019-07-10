@@ -12,6 +12,11 @@ class Test(object):
     {0} = None
 """
 
+static_typed_attribute = """
+class Test(object):
+    {0}: int = None
+"""
+
 regression423 = """
 class MyClass(object):
     def action_method(self, request, object):
@@ -21,6 +26,10 @@ class MyClass(object):
 """
 
 
+@pytest.mark.parametrize('code', [
+    static_attribute,
+    static_typed_attribute,
+])
 @pytest.mark.parametrize('non_snake_case_name', [
     'Abc',
     'A_CONSTANT',
@@ -35,10 +44,11 @@ def test_upper_case_class_attributes(
     assert_error_text,
     parse_ast_tree,
     non_snake_case_name,
+    code,
     default_options,
 ):
     """Testing that attribute can not have too short names."""
-    tree = parse_ast_tree(static_attribute.format(non_snake_case_name))
+    tree = parse_ast_tree(code.format(non_snake_case_name))
 
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
@@ -47,6 +57,10 @@ def test_upper_case_class_attributes(
     assert_error_text(visitor, non_snake_case_name)
 
 
+@pytest.mark.parametrize('code', [
+    static_attribute,
+    static_typed_attribute,
+])
 @pytest.mark.parametrize('snake_case_name', [
     'abc',
     'a_variable',
@@ -59,10 +73,11 @@ def test_snake_case_class_attributes(
     assert_errors,
     parse_ast_tree,
     snake_case_name,
+    code,
     default_options,
 ):
     """Testing that attribute can not have too short names."""
-    tree = parse_ast_tree(static_attribute.format(snake_case_name))
+    tree = parse_ast_tree(code.format(snake_case_name))
 
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()

@@ -1,8 +1,18 @@
 # -*- coding: utf-8 -*-
 
 import tokenize
+import types
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, Dict, List, Sequence, Set, Tuple
+from typing import (
+    ClassVar,
+    DefaultDict,
+    Dict,
+    FrozenSet,
+    List,
+    Mapping,
+    Sequence,
+    Tuple,
+)
 
 from typing_extensions import final
 
@@ -15,17 +25,17 @@ from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
 TokenLines = DefaultDict[int, List[tokenize.TokenInfo]]
 
-MATCHING: Dict[int, int] = {
+MATCHING: Mapping[int, int] = types.MappingProxyType({
     tokenize.LBRACE: tokenize.RBRACE,
     tokenize.LSQB: tokenize.RSQB,
     tokenize.LPAR: tokenize.RPAR,
-}
+})
 
-ALLOWED_EMPTY_LINE_TOKENS: Set[int] = {
+ALLOWED_EMPTY_LINE_TOKENS: FrozenSet[int] = frozenset((
     tokenize.NL,
     tokenize.NEWLINE,
     *MATCHING.values(),
-}
+))
 
 
 def _get_reverse_bracket(bracket: tokenize.TokenInfo) -> int:

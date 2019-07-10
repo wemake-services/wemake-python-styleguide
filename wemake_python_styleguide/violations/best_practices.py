@@ -34,6 +34,7 @@ Summary
    BaseExceptionViolation
    BooleanPositionalArgumentViolation
    BuiltinSubclassViolation
+   ShadowedClassAttributeViolation
    NestedFunctionViolation
    NestedClassViolation
    MagicNumberViolation
@@ -102,6 +103,7 @@ Builtins
 .. autoclass:: BaseExceptionViolation
 .. autoclass:: BooleanPositionalArgumentViolation
 .. autoclass:: BuiltinSubclassViolation
+.. autoclass:: ShadowedClassAttributeViolation
 
 Design
 ------
@@ -643,6 +645,53 @@ class BuiltinSubclassViolation(ASTViolation):
 
     error_template = 'Found subclassing a builtin: {0}'
     code = 426
+
+
+@final
+class ShadowedClassAttributeViolation(ASTViolation):
+    """
+    Forbids to shadow class level attributes with instance level attributes.
+
+    Reasoning:
+        This way you will have two attributes inside your ``__mro__`` chain:
+        one from instance and one from class. It might cause errors.
+        Needless to say, that this is just pointless to do so.
+
+    Solution:
+        Use either class attributes or instance attributes.
+        Use ``ClassVar`` type on fields that are declared as class attributes.
+
+    Note, that we cannot find shadowed attributes that are defined
+    in parent classes. That's where ``ClassVar`` is required for ``mypy``
+    to check it for you.
+
+    Example::
+
+        # Correct:
+        from typing import ClassVar
+
+        class First(object):
+            field: ClassVar[int] = 1
+
+        class Second(object):
+            field: int
+
+            def __init__(self) -> None:
+                self.field = 1
+
+        # Wrong:
+        class Some(object):
+            field = 1
+
+            def __init__(self) -> None:
+                self.field = 1
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found shadowed class attribute: {0}'
+    code = 427
 
 
 # Design:
@@ -1941,7 +1990,7 @@ class MutableModuleConstantViolation(ASTViolation):
 
         # Wrong:
         CONST1 = {1, 2, 3}
-        CONST2 = [1, 2, 3]
+        CONST2 = [x for x in some()]
         CONST3 = {'key': 'value'}
 
     .. versionadded:: 0.10.0

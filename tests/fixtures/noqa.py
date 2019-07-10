@@ -288,6 +288,17 @@ class MyInt(int):  # noqa: Z426
     """My custom int subclass."""
 
 
+class ShadowsAttribute(object):
+    """Redefines attr from class."""
+
+    first: int
+    second = 1
+
+    def __init__(self) -> None:
+        self.first = 1
+        self.second = 2  # noqa: Z427
+
+
 for symbol in 'abc':  # noqa: Z436
     anti_z444 = 1
 else:

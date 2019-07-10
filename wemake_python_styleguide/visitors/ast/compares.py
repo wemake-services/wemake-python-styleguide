@@ -6,6 +6,8 @@ from typing import ClassVar, List, Optional, Sequence
 import astor
 from typing_extensions import final
 
+from wemake_python_styleguide.compat.aliases import AssignNodes
+from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.logic.functions import given_function_called
 from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
 from wemake_python_styleguide.logic.nodes import is_literal
@@ -242,15 +244,18 @@ class WrongConditionalVisitor(BaseNodeVisitor):
         node_body: List[ast.stmt],
     ) -> Optional[str]:
         wrong_length = len(node_body) != 1
-        if wrong_length or not isinstance(node_body[0], ast.Assign):
-            return None
-        if len(node_body[0].targets) != 1:
+        if wrong_length or not isinstance(node_body[0], AssignNodes):
             return None
         if not isinstance(node_body[0].value, ast.NameConstant):
             return None
         if node_body[0].value.value is None:
             return None
-        return astor.to_source(node_body[0].targets[0]).strip()
+
+        targets = get_assign_targets(node_body[0])
+        if len(targets) != 1:
+            return None
+
+        return astor.to_source(targets[0]).strip()
 
     def _check_if_statement_conditional(self, node: AnyIf) -> None:
         real_node = unwrap_unary_node(node.test)

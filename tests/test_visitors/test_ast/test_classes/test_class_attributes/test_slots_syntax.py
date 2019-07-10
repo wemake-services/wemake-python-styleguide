@@ -12,7 +12,16 @@ class ClassWithSlots(object):
     __slots__ = {0}
 """
 
+class_body_typed_template = """
+class ClassWithSlots(object):
+    __slots__: tuple = {0}
+"""
 
+
+@pytest.mark.parametrize('template', [
+    class_body_template,
+    class_body_typed_template,
+])
 @pytest.mark.parametrize('code', [
     '[]',
     '("a", "a")',
@@ -26,9 +35,10 @@ def test_incorrect_slots(
     parse_ast_tree,
     default_options,
     code,
+    template,
 ):
     """Testing that incorrect slots are prohibited."""
-    tree = parse_ast_tree(class_body_template.format(code))
+    tree = parse_ast_tree(template.format(code))
 
     visitor = WrongSlotsVisitor(default_options, tree=tree)
     visitor.run()
@@ -36,6 +46,10 @@ def test_incorrect_slots(
     assert_errors(visitor, [IncorrectSlotsViolation])
 
 
+@pytest.mark.parametrize('template', [
+    class_body_template,
+    class_body_typed_template,
+])
 @pytest.mark.parametrize('code', [
     '()',
     '("a",)',
@@ -50,9 +64,10 @@ def test_correct_slots(
     parse_ast_tree,
     default_options,
     code,
+    template,
 ):
     """Testing that correct slots are allowed."""
-    tree = parse_ast_tree(class_body_template.format(code))
+    tree = parse_ast_tree(template.format(code))
 
     visitor = WrongSlotsVisitor(default_options, tree=tree)
     visitor.run()
