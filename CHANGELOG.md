@@ -8,6 +8,7 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
+- Adds `flake8-executable` as a dependency
 - Adds `flake8-rst-docstrings` as a dependency
 - Validates options that are passed with `flake8`
 - Forbids to use module level mutable constants

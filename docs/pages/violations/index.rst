@@ -36,6 +36,7 @@ flake8-print                   `T001 <https://github.com/jbkahn/flake8-print>`_
 flake8-debugger                `T100 <https://github.com/JBKahn/flake8-debugger/blob/master/flake8_debugger.py>`_
 flake8-annotations-complexity  `TAE002 <https://github.com/best-doctor/flake8-annotations-complexity>`_
 flake8-rst-docstrings          `RST201 - RST499 <https://github.com/peterjc/flake8-rst-docstrings>`_
+flake8-executable              `EXE001 - EXE005 <https://github.com/xuhdev/flake8-executable>`_
 wemake-python-styleguide       Z, defined here
 =============================  ======
 
