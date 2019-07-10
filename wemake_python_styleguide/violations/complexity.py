@@ -44,6 +44,7 @@ Summary
    TooManyExceptCasesViolation
    OverusedStringViolation
    TooLongYieldTupleViolation
+   TooLongCompareViolation
 
 
 Module complexity
@@ -76,6 +77,7 @@ Structures complexity
 .. autoclass:: TooManyExceptCasesViolation
 .. autoclass:: OverusedStringViolation
 .. autoclass:: TooLongYieldTupleViolation
+.. autoclass:: TooLongCompareViolation
 
 """
 
@@ -682,3 +684,24 @@ class TooLongYieldTupleViolation(ASTViolation):
 
     error_template = 'Found too long yield tuple: {0}'
     code = 227
+
+
+@final
+class TooLongCompareViolation(ASTViolation):
+    """
+    Forbids to have too long compare expressions.
+
+    Reasoning:
+        To long compare expressions indicate
+        that there's something wrong going on in the code.
+        Compares should not be longer than 3 or 4 items.
+
+    Solution:
+        Use several conditions, seprate variables, or functions.
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found too long compare'
+    code = 228

@@ -34,6 +34,9 @@ def foo_func():
     yield (1, 2, 3, 4, 5, 6)  # noqa: Z227
 
 
+print(x > 2 > y > 4)  # noqa: Z228
+
+
 def function_name(
     value: int = 0,  # noqa: Z110
 ):

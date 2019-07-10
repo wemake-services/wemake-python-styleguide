@@ -95,26 +95,27 @@ regular_assigns = """
     class_attribute_annotated,
     class_attribute_logic,
 ])
-@pytest.mark.parametrize('field1, field2', [
-    ('field1', 'field1'),
-    ('_field1', '_field1'),
-    ('__field1', '__field1'),
+@pytest.mark.parametrize('field_name', [
+    'field1',
+    '_field1',
+    '__field1',
 ])
 def test_incorrect_fields(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
     default_options,
     code,
-    field1,
-    field2,
+    field_name,
 ):
     """Testing that incorrect fields are prohibited."""
-    tree = parse_ast_tree(code.format(field1, field2))
+    tree = parse_ast_tree(code.format(field_name, field_name))
 
     visitor = ClassAttributeVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [ShadowedClassAttributeViolation])
+    assert_error_text(visitor, field_name)
 
 
 @pytest.mark.parametrize('code', [
