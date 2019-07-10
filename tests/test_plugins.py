@@ -54,3 +54,4 @@ def test_noqa_fixture_disabled(absolute_path):
     assert output.count('T100') > 0  # flake8-debugger
     assert output.count('TAE002') > 0  # flake8-annotations-complexity
     assert output.count('RST299') > 0  # flake8-rst-docstrings
+    assert output.count('EXE003') > 0  # flake8-executable
