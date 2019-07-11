@@ -6,11 +6,13 @@ from typing import ClassVar, List
 import astor
 from typing_extensions import final
 
-from wemake_python_styleguide.types import AnyNodes
+from wemake_python_styleguide.logic.functions import given_function_called
+from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     MultilineConditionsViolation,
     NegatedConditionsViolation,
     SameElementsInConditionViolation,
+    UselessLenCompareViolation,
     UselessReturningElseViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -59,6 +61,11 @@ class IfStatementVisitor(BaseNodeVisitor):
         if any(isinstance(line, self._returning_nodes) for line in node.body):
             self.add_violation(UselessReturningElseViolation(node))
 
+    def _check_useless_len(self, node: AnyIf) -> None:
+        if isinstance(node.test, ast.Call):
+            if given_function_called(node.test, {'len'}):
+                self.add_violation(UselessLenCompareViolation(node))
+
     def visit_If(self, node: ast.If) -> None:
         """
         Checks ``if`` nodes.
@@ -67,11 +74,24 @@ class IfStatementVisitor(BaseNodeVisitor):
             UselessReturningElseViolation
             NegatedConditionsViolation
             MultilineConditionsViolation
+            UselessLenCompareViolation
 
         """
         self._check_negated_conditions(node)
         self._check_useless_else(node)
         self._check_multiline_conditions(node)
+        self._check_useless_len(node)
+        self.generic_visit(node)
+
+    def visit_IfExp(self, node: ast.IfExp) -> None:
+        """
+        Checks ``if`` expressions.
+
+        Raises:
+            UselessLenCompareViolation
+
+        """
+        self._check_useless_len(node)
         self.generic_visit(node)
 
 
