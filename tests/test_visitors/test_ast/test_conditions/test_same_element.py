@@ -5,6 +5,9 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     SameElementsInConditionViolation,
 )
+from wemake_python_styleguide.violations.consistency import (
+    ImplicitTernaryViolation,
+)
 from wemake_python_styleguide.visitors.ast.conditions import (
     BooleanConditionVisitor,
 )
@@ -64,4 +67,8 @@ def test_duplicate_element(
     visitor = BooleanConditionVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [SameElementsInConditionViolation])
+    assert_errors(
+        visitor,
+        [SameElementsInConditionViolation],
+        ImplicitTernaryViolation,
+    )

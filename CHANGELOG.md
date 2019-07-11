@@ -29,6 +29,7 @@ consistency, complexity, and general feel from your code.
 - Forbids to use complex compare with several items (`>= 3`)
 - Forbids to have class variables that are shadowed by instance variables
 - Forbids to use ternary expressions inside `if` conditions
+- Forces to use ternary instead of `... and ... or ...` expression
 
 ### Bugfixes
 
@@ -41,6 +42,7 @@ consistency, complexity, and general feel from your code.
 - Renames `logics/` to `logic/` since it is grammatically correct
 - Renames `Redundant` to `Useless`
 - Renames `Comparison` to `Compare`
+- Renames `WrongConditionalViolation` to `ConstantConditionViolation`
 - Refactors `UselessOperatorsVisitor`
 - Adds `compat/` package, getting ready for `python3.8`
 - Adds `Makefile`

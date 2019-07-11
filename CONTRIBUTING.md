@@ -166,7 +166,9 @@ You can also consider donations to the project:
 - https://opencollective.com/wemake-python-styleguide
 - https://issuehunt.io/r/wemake-services/wemake-python-styleguide
 
-We already have: [![Supporters](https://img.shields.io/opencollective/all/wemake-python-styleguide.svg?color=gold&label=supporters)](https://opencollective.com/wemake-python-styleguide)
+Number of current supporters:
+
+[![Supporters](https://img.shields.io/opencollective/all/wemake-python-styleguide.svg?color=gold&label=supporters)](https://opencollective.com/wemake-python-styleguide)
 
 
 ## List of contributors

@@ -279,6 +279,8 @@ def some_function():
     some_value = 1
     return some_value  # noqa: Z331
 
+some_cond = cond() and 1 or None  # noqa: Z332
+
 try:
     anti_z444 = 1
 except BaseException:  # noqa: Z424

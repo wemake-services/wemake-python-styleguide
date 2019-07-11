@@ -3,7 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
-    WrongConditionalViolation,
+    ConstantConditionViolation,
 )
 from wemake_python_styleguide.visitors.ast.compares import (
     WrongConditionalVisitor,
@@ -88,4 +88,4 @@ def test_useless(
     visitor = WrongConditionalVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [WrongConditionalViolation])
+    assert_errors(visitor, [ConstantConditionViolation])

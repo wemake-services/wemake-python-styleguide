@@ -39,7 +39,7 @@ Summary
    MultipleInCompareViolation
    UselessCompareViolation
    MissingSpaceBetweenKeywordAndParenViolation
-   WrongConditionalViolation
+   ConstantConditionViolation
    ObjectInBaseClassesListViolation
    MultipleContextManagerAssignmentsViolation
    ParametersIndentationViolation
@@ -57,6 +57,7 @@ Summary
    UselessExceptCaseViolation
    UselessOperatorsViolation
    InconsistentReturnVariableViolation
+   ImplicitTernaryViolation
 
 Consistency checks
 ------------------
@@ -75,7 +76,7 @@ Consistency checks
 .. autoclass:: MultipleInCompareViolation
 .. autoclass:: UselessCompareViolation
 .. autoclass:: MissingSpaceBetweenKeywordAndParenViolation
-.. autoclass:: WrongConditionalViolation
+.. autoclass:: ConstantConditionViolation
 .. autoclass:: ObjectInBaseClassesListViolation
 .. autoclass:: MultipleContextManagerAssignmentsViolation
 .. autoclass:: ParametersIndentationViolation
@@ -93,6 +94,7 @@ Consistency checks
 .. autoclass:: UselessExceptCaseViolation
 .. autoclass:: UselessOperatorsViolation
 .. autoclass:: InconsistentReturnVariableViolation
+.. autoclass:: ImplicitTernaryViolation
 
 """
 
@@ -553,7 +555,7 @@ class MissingSpaceBetweenKeywordAndParenViolation(TokenizeViolation):
 
 
 @final
-class WrongConditionalViolation(ASTViolation):
+class ConstantConditionViolation(ASTViolation):
     """
     Forbids using ``if`` statements that use invalid conditionals.
 
@@ -1180,7 +1182,7 @@ class UselessOperatorsViolation(ASTViolation):
     contain unnecessary operators.
 
     Reasoning:
-         This is done for consistency reasons.
+        This is done for consistency reasons.
 
     Solution:
         Omit unnecessary operators.
@@ -1239,3 +1241,32 @@ class InconsistentReturnVariableViolation(ASTViolation):
         'Found local variable that are only used in `return` statements'
     )
     code = 331
+
+
+@final
+class ImplicitTernaryViolation(ASTViolation):
+    """
+    Forbids to have implicit ternary expressions.
+
+    Reasoning:
+        This is done for consistency and readability reasons.
+        We believe that explicit ternary is better for readability.
+        This also allows you to identify hidden conditionals in your code.
+
+    Solution:
+        Refactor to use explicit ternary, or ``if`` condition.
+
+    Example::
+
+        # Correct:
+        some = one if cond() else two
+
+        # Wrong:
+        some = cond() and one or two
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    code = 332
+    error_template = 'Found implicit ternary expression'

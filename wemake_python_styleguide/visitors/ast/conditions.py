@@ -7,6 +7,7 @@ import astor
 from typing_extensions import final
 
 from wemake_python_styleguide.logic.functions import given_function_called
+from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     MultilineConditionsViolation,
@@ -14,6 +15,9 @@ from wemake_python_styleguide.violations.best_practices import (
     SameElementsInConditionViolation,
     UselessLenCompareViolation,
     UselessReturningElseViolation,
+)
+from wemake_python_styleguide.violations.consistency import (
+    ImplicitTernaryViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
@@ -123,13 +127,37 @@ class BooleanConditionVisitor(BaseNodeVisitor):
         if len(set(operands)) != len(operands):
             self.add_violation(SameElementsInConditionViolation(node))
 
+    def _check_possible_ternary(self, node: ast.BoolOp) -> None:
+        if isinstance(get_parent(node), ast.BoolOp):
+            return
+
+        if not isinstance(node.op, ast.Or):
+            return
+
+        if len(node.values) != 2:
+            return
+
+        if not isinstance(node.values[0], ast.BoolOp):
+            return
+
+        is_implicit_ternary = (
+            len(node.values[0].values) == 2 and
+            not isinstance(node.values[1], ast.BoolOp) and
+            isinstance(node.values[0].op, ast.And) and
+            not isinstance(node.values[0].values[1], ast.BoolOp)
+        )
+        if is_implicit_ternary:
+            self.add_violation(ImplicitTernaryViolation(node))
+
     def visit_BoolOp(self, node: ast.BoolOp) -> None:
         """
         Checks that ``and`` and ``or`` conditions are correct.
 
         Raises:
             SameElementsInConditionViolation
+            ImplicitTernaryViolation
 
         """
+        self._check_possible_ternary(node)
         self._check_same_elements(node)
         self.generic_visit(node)

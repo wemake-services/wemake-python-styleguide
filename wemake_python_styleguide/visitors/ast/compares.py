@@ -23,9 +23,9 @@ from wemake_python_styleguide.violations.best_practices import (
 from wemake_python_styleguide.violations.consistency import (
     CompareOrderViolation,
     ConstantCompareViolation,
+    ConstantConditionViolation,
     MultipleInCompareViolation,
     UselessCompareViolation,
-    WrongConditionalViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
@@ -234,10 +234,12 @@ class WrongConditionalVisitor(BaseNodeVisitor):
 
     def visit_any_if(self, node: AnyIf) -> None:
         """
-        Ensures that if statements are using valid conditionals.
+        Ensures that ``if`` nodes are using valid conditionals.
 
         Raises:
-            WrongConditionalViolation
+            ConstantConditionViolation
+            SimplifiableIfViolation
+            IncorrectlyNestedTernaryViolation
 
         """
         if isinstance(node, ast.If):
@@ -246,7 +248,7 @@ class WrongConditionalVisitor(BaseNodeVisitor):
             self._check_simplifiable_ifexpr(node)
             self._check_nested_ifexpr(node)
 
-        self._check_if_statement_conditional(node)
+        self._check_constant_condition(node)
         self.generic_visit(node)
 
     def _is_simplifiable_assign(
@@ -267,10 +269,10 @@ class WrongConditionalVisitor(BaseNodeVisitor):
 
         return astor.to_source(targets[0]).strip()
 
-    def _check_if_statement_conditional(self, node: AnyIf) -> None:
+    def _check_constant_condition(self, node: AnyIf) -> None:
         real_node = unwrap_unary_node(node.test)
         if isinstance(real_node, self._forbidden_nodes):
-            self.add_violation(WrongConditionalViolation(node))
+            self.add_violation(ConstantConditionViolation(node))
 
     def _check_simplifiable_if(self, node: ast.If) -> None:
         chain = getattr(node, 'wps_chain', None)

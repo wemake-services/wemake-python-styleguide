@@ -33,6 +33,7 @@ wrong_binop6 = '(a if b else c) * x / y'
 wrong_unary1 = '+(a if b else c)'
 wrong_unary2 = '-(a if b else c)'
 wrong_unary3 = '~(a if b else c)'
+wrong_unary4 = 'not (a if b else c)'
 
 wrong_if = 'if a if b else c: ...'
 
@@ -48,6 +49,7 @@ if x:
 correct_unary1 = '-a if b else c'
 correct_unary2 = 'a if -b else c'
 correct_unary3 = 'a if b else -c'
+correct_unary4 = 'not a if b else c'
 
 correct_binop1 = 'a + x if b else c'
 correct_binop2 = 'a if b + x else c'
@@ -68,6 +70,7 @@ correct_compare3 = 'a if b else c < x'
     correct_unary1,
     correct_unary2,
     correct_unary3,
+    correct_unary4,
 
     correct_binop1,
     correct_binop2,
@@ -121,6 +124,7 @@ def test_non_nested_ternary(
     wrong_unary1,
     wrong_unary2,
     wrong_unary3,
+    wrong_unary4,
 
     wrong_if,
 ])
