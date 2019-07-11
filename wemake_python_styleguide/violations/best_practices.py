@@ -77,6 +77,7 @@ Summary
    SameElementsInConditionViolation
    NotOperatorWithCompareViolation
    HeterogenousCompareViolation
+   IncorrectlyNestedTernaryViolation
 
 Comments
 --------
@@ -150,6 +151,7 @@ Design
 .. autoclass:: SameElementsInConditionViolation
 .. autoclass:: NotOperatorWithCompareViolation
 .. autoclass:: HeterogenousCompareViolation
+.. autoclass:: IncorrectlyNestedTernaryViolation
 
 """
 
@@ -2163,3 +2165,39 @@ class HeterogenousCompareViolation(ASTViolation):
 
     error_template = 'Found heterogenous compare'
     code = 471
+
+
+@final
+class IncorrectlyNestedTernaryViolation(ASTViolation):
+    """
+    Forbids to nest ternary expressions in some places.
+
+    Note, that we restrict to nest ternary expressions inside:
+
+    - ``if`` conditions
+    - boolean and binary operations like ``and`` or ``+``
+    - unary operators
+
+    Reasoning:
+        Nesting ternary in random places can lead to very hard
+        debug and testing problems.
+
+    Solution:
+        Refactor the ternary expression to be either a new variable,
+        or nested ``if`` statement, or a new function.
+
+    Example::
+
+        # Correct:
+        some = x if cond() else y
+
+        # Wrong:
+        if x if cond() else y:
+            ...
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found incorrectly nested ternary'
+    code = 472

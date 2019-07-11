@@ -439,4 +439,4 @@ if not numbers == []:  # noqa: Z470
     print('bad compare with not')
 
 if numbers == CONSTANT != []:  # noqa: Z471
-    print('HeterogenousCompareViolation')
+    print(1 + (1 if number else 2))  # noqa: Z472

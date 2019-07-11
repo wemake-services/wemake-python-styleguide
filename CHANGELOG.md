@@ -6,6 +6,10 @@ We used to have incremental versioning before `0.1.0`.
 
 ## 0.10.0 aka The Great Compare
 
+This release is mostly targeted at writing better compares and conditions.
+We introduce a lot of new rules related to this topic improving:
+consistency, complexity, and general feel from your code.
+
 ### Features
 
 - Adds `flake8-executable` as a dependency
@@ -18,12 +22,13 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to have too many `await` statements
 - Forbids to subclass lowercase `builtins`
 - Forbids to have useless `lambda`s
-- Forbids to use `len(sized) > 0` style checks
+- Forbids to use `len(sized) > 0` and `if len(sized)` style checks
 - Forbids to use repeatable conditions: `flag or flag`
 - Forbids to write conditions like `not some > 1`
 - Forbids to use heterogenous compares like `x == x > 0`
 - Forbids to use complex compare with several items (`>= 3`)
 - Forbids to have class variables that are shadowed by instance variables
+- Forbids to use ternary expressions inside `if` conditions
 
 ### Bugfixes
 

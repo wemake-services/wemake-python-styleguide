@@ -98,6 +98,14 @@ mypy wemake_python_styleguide
 This step is mandatory during the CI.
 
 
+## Helpers
+
+We also have several helpers to make your development work easier:
+
+- `./scripts/parse.py` is used to visualize `ast` nodes in other python modules,
+  usage: `python ./scripts/parse.py my_module.py`
+
+
 ## Submitting your code
 
 We use [trunk based](https://trunkbaseddevelopment.com/)
@@ -146,9 +154,23 @@ Before submitting your code please do the following steps:
 You can run everything at once with `make test`,
 see our `Makefile` for more details.
 
+
 ## Other help
 
 You can contribute by spreading a word about this library.
 It would also be a huge contribution to write
 a short article on how you are using this project.
 You can also share your best practices with us.
+
+You can also consider donations to the project:
+- https://opencollective.com/wemake-python-styleguide
+- https://issuehunt.io/r/wemake-services/wemake-python-styleguide
+
+We already have: [![Supporters](https://img.shields.io/opencollective/all/wemake-python-styleguide.svg?color=gold&label=supporters)](https://opencollective.com/wemake-python-styleguide)
+
+
+## List of contributors
+
+Here are the awesome people who contributed to our project:
+
+[![List of contributors](https://opencollective.com/wemake-python-styleguide/contributors.svg?width=890&button=0)](https://github.com/wemake-services/wemake-python-styleguide/graphs/contributors)

@@ -10,11 +10,12 @@ from wemake_python_styleguide.compat.aliases import AssignNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.logic.functions import given_function_called
 from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
-from wemake_python_styleguide.logic.nodes import is_literal
+from wemake_python_styleguide.logic.nodes import get_parent, is_literal
 from wemake_python_styleguide.logic.operators import unwrap_unary_node
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     HeterogenousCompareViolation,
+    IncorrectlyNestedTernaryViolation,
     NotOperatorWithCompareViolation,
     SimplifiableIfViolation,
     UselessLenCompareViolation,
@@ -223,6 +224,14 @@ class WrongConditionalVisitor(BaseNodeVisitor):
         ast.Tuple,
     )
 
+    _forbidden_expression_parents: ClassVar[AnyNodes] = (
+        ast.If,
+        ast.BoolOp,
+        ast.BinOp,
+        ast.UnaryOp,
+        ast.Compare,
+    )
+
     def visit_any_if(self, node: AnyIf) -> None:
         """
         Ensures that if statements are using valid conditionals.
@@ -235,6 +244,7 @@ class WrongConditionalVisitor(BaseNodeVisitor):
             self._check_simplifiable_if(node)
         else:
             self._check_simplifiable_ifexpr(node)
+            self._check_nested_ifexpr(node)
 
         self._check_if_statement_conditional(node)
         self.generic_visit(node)
@@ -280,6 +290,10 @@ class WrongConditionalVisitor(BaseNodeVisitor):
 
         if conditions == {True, False}:
             self.add_violation(SimplifiableIfViolation(node))
+
+    def _check_nested_ifexpr(self, node: ast.IfExp) -> None:
+        if isinstance(get_parent(node), self._forbidden_expression_parents):
+            self.add_violation(IncorrectlyNestedTernaryViolation(node))
 
 
 @final
