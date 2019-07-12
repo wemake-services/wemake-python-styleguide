@@ -17,10 +17,20 @@ def assert_errors():
     def factory(
         visitor: BaseVisitor,
         errors: Sequence[str],
+        ignored_types=None,
     ):
-        assert len(errors) == len(visitor.violations)
+        if ignored_types:
+            real_errors = [
+                error
+                for error in visitor.violations
+                if not isinstance(error, ignored_types)
+            ]
+        else:
+            real_errors = visitor.violations
 
-        for index, error in enumerate(visitor.violations):
+        assert len(errors) == len(real_errors)
+
+        for index, error in enumerate(real_errors):
             assert error.code == errors[index].code
             if isinstance(error, (ASTViolation, TokenizeViolation)):
                 assert error._node is not None  # noqa: Z441

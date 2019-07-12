@@ -21,7 +21,8 @@ from wemake_python_styleguide.visitors.ast.compares import CompareSanityVisitor
     'len(some) >= 1',
     'len(some) >= +1',
     'len(some) < 1',
-    '0 > len(some) >= 1',
+    '0 < len(some) < 1',
+    'call() < 1 <= len(some)',
 ])
 def test_useless_len_call(
     assert_errors,

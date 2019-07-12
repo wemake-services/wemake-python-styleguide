@@ -45,10 +45,6 @@ def test_heterogenous_compare(
     'x == y == z',
     'z != y != x',
     'call() == other.prop',
-    'x > y >= z',
-    'x > y > z',
-    'x < y <= z',
-    'x < y < z',
     'x in y',
     'x not in y',
 ])

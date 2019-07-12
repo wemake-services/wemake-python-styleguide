@@ -28,6 +28,7 @@ from wemake_python_styleguide.violations.consistency import (
     ConstantCompareViolation,
     ConstantConditionViolation,
     MultipleInCompareViolation,
+    ReversedComplexCompareViolation,
     UselessCompareViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -94,6 +95,19 @@ class CompareSanityVisitor(BaseNodeVisitor):
                 self.add_violation(HeterogenousCompareViolation(node))
                 break
 
+    def _check_reversed_complex_compare(self, node: ast.Compare) -> None:
+        if len(node.ops) != 2:
+            return
+
+        is_less = all(
+            isinstance(op, (ast.Gt, ast.GtE))
+            for op in node.ops
+        )
+        if not is_less:
+            return
+
+        self.add_violation(ReversedComplexCompareViolation(node))
+
     def visit_Compare(self, node: ast.Compare) -> None:
         """
         Ensures that compares are written correctly.
@@ -104,6 +118,7 @@ class CompareSanityVisitor(BaseNodeVisitor):
             UselessCompareViolation
             UselessLenCompareViolation
             HeterogenousCompareViolation
+            ReversedComplexCompareViolation
 
         """
         self._check_literal_compare(node)
@@ -111,6 +126,7 @@ class CompareSanityVisitor(BaseNodeVisitor):
         self._check_multiple_in_compare(node)
         self._check_unpythonic_compare(node)
         self._check_heterogenous_operators(node)
+        self._check_reversed_complex_compare(node)
         self.generic_visit(node)
 
 

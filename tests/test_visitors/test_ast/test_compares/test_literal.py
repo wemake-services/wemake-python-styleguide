@@ -4,6 +4,7 @@ import pytest
 
 from wemake_python_styleguide.violations.consistency import (
     ConstantCompareViolation,
+    ReversedComplexCompareViolation,
 )
 from wemake_python_styleguide.visitors.ast.compares import CompareSanityVisitor
 
@@ -100,7 +101,11 @@ def test_literal_special2(
     visitor = CompareSanityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [ConstantCompareViolation])
+    assert_errors(
+        visitor,
+        [ConstantCompareViolation],
+        ReversedComplexCompareViolation,
+    )
 
 
 @pytest.mark.parametrize('code', [
@@ -120,4 +125,4 @@ def test_literal_special_without_errors(
     visitor = CompareSanityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [])
+    assert_errors(visitor, [], ReversedComplexCompareViolation)

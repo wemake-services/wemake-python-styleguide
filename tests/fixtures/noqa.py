@@ -194,7 +194,7 @@ class BadClass:  # noqa: Z306
 
 magic_numbers = 13.2 + 50  # noqa: Z432
 
-assert 1 > 1 > hex_number  # noqa: Z308
+assert 1 < 1 < hex_number  # noqa: Z308
 assert 2 > octal_number  # noqa: Z309
 
 hex_number = 0XFF  # noqa: Z310
@@ -282,6 +282,8 @@ def some_function():
 some_cond = cond() and 1 or None  # noqa: Z332
 
 print(one > two and two > three)  # noqa: Z333
+
+print(biggesst > middle >= smallest)  # noqa: Z334
 
 try:
     anti_z444 = 1
