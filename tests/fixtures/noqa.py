@@ -449,3 +449,5 @@ if not numbers == []:  # noqa: Z470
 
 if numbers == CONSTANT != []:  # noqa: Z471
     print(1 + (1 if number else 2))  # noqa: Z472
+
+print(numbers in [])  # noqa: Z473

@@ -25,7 +25,7 @@ def normalize_dict_elements(node: ast.Dict) -> Sequence[ast.AST]:
     elements: List[ast.AST] = []
     for dict_key, dict_value in zip(node.keys, node.values):
         if dict_key is None:
-            elements.append(dict_value)
+            elements.append(dict_value)  # type: ignore
         else:
             elements.append(dict_key)
     return elements

@@ -46,6 +46,9 @@ in the docs for examples and integrations.
 
 ## What we are about
 
+The ultimate goal of this project is
+to make all people write **exactly** the same `python` code.
+
 |                            | black | pylint | flake8 | wemake-python-styleguide |
 |----------------------------|-------|--------|--------|--------------------------|
 | Formats code?              |   ✅   |    ❌   |    ❌   |             ❌            |

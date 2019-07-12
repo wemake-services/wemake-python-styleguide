@@ -27,8 +27,8 @@ while_with_multiple_in = 'while {0} in {1} in {2}: ...'
 ])
 @pytest.mark.parametrize('comparators', [
     ('x_coord', '6'),
-    ('status', [True]),
-    ('letter', ['a', 'b']),
+    ('status', {True}),
+    ('letter', {'a', 'b'}),
 ])
 def test_compare_with_in(
     assert_errors,
@@ -54,7 +54,7 @@ def test_compare_with_in(
 ])
 @pytest.mark.parametrize('comparators', [
     ('line', 'sqaure', 'shape'),
-    ('output', 'status', [True]),
+    ('output', 'status', {True}),
     ('letter', 'line', 'book'),
 ])
 def test_compare_with_multiple_in(

@@ -22,6 +22,7 @@ from wemake_python_styleguide.violations.best_practices import (
     NotOperatorWithCompareViolation,
     SimplifiableIfViolation,
     UselessLenCompareViolation,
+    WrongInCompareTypeViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
     CompareOrderViolation,
@@ -50,6 +51,15 @@ def _is_correct_len(sign: ast.cmpop, comparator: ast.AST) -> bool:
 class CompareSanityVisitor(BaseNodeVisitor):
     """Restricts the incorrect compares."""
 
+    _wrong_in_comparators: ClassVar[AnyNodes] = (
+        ast.List,
+        ast.ListComp,
+        ast.Dict,
+        ast.DictComp,
+        ast.Tuple,
+        ast.GeneratorExp,
+    )
+
     def _check_literal_compare(self, node: ast.Compare) -> None:
         last_was_literal = nodes.is_literal(node.left)
         for comparator in node.comparators:
@@ -67,11 +77,19 @@ class CompareSanityVisitor(BaseNodeVisitor):
                 break
             last_variable = next_variable
 
-    def _check_multiple_in_compare(self, node: ast.Compare) -> None:
-        wrong_nodes = (ast.In, ast.NotIn)
-        count = sum(1 for op in node.ops if isinstance(op, wrong_nodes))
+    def _check_in_compare(self, node: ast.Compare) -> None:
+        in_nodes = (ast.In, ast.NotIn)
+        count = sum(1 for op in node.ops if isinstance(op, in_nodes))
         if count > 1:
             self.add_violation(MultipleInCompareViolation(node))
+
+        for op, comp in zip(node.ops, node.comparators):
+            if not isinstance(op, in_nodes):
+                continue
+            if not isinstance(comp, self._wrong_in_comparators):
+                continue
+
+            self.add_violation(WrongInCompareTypeViolation(comp))
 
     def _check_unpythonic_compare(self, node: ast.Compare) -> None:
         all_nodes = [node.left, *node.comparators]
@@ -119,11 +137,12 @@ class CompareSanityVisitor(BaseNodeVisitor):
             UselessLenCompareViolation
             HeterogenousCompareViolation
             ReversedComplexCompareViolation
+            WrongInCompareTypeViolation
 
         """
         self._check_literal_compare(node)
         self._check_useless_compare(node)
-        self._check_multiple_in_compare(node)
+        self._check_in_compare(node)
         self._check_unpythonic_compare(node)
         self._check_heterogenous_operators(node)
         self._check_reversed_complex_compare(node)

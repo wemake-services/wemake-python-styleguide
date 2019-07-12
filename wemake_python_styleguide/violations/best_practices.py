@@ -78,6 +78,7 @@ Summary
    NotOperatorWithCompareViolation
    HeterogenousCompareViolation
    IncorrectlyNestedTernaryViolation
+   WrongInCompareTypeViolation
 
 Comments
 --------
@@ -152,6 +153,7 @@ Design
 .. autoclass:: NotOperatorWithCompareViolation
 .. autoclass:: HeterogenousCompareViolation
 .. autoclass:: IncorrectlyNestedTernaryViolation
+.. autoclass:: WrongInCompareTypeViolation
 
 """
 
@@ -2201,3 +2203,39 @@ class IncorrectlyNestedTernaryViolation(ASTViolation):
 
     error_template = 'Found incorrectly nested ternary'
     code = 472
+
+
+@final
+class WrongInCompareTypeViolation(ASTViolation):
+    """
+    Forbids to use ``in`` with static containers except ``set`` nodes.
+
+    We enforce people to use sets as a static containers.
+    You can also use variables, calls, methods, etc.
+    Dynamic values are not checked.
+
+    Reasoning:
+        Using static ``list``, ``tuple``, or ``dict`` elements
+        to check that some element is inside the container is a bad practice.
+        Because we need to iterate all over the container to find the element.
+        Sets are the best suit for this task.
+        Moreover, it makes your code consistent.
+
+    Solution:
+        Use ``set`` elements or comprehensions to check that something
+        is contained in a container.
+
+    Example::
+
+        # Correct:
+        print(needle in {'one', 'two'})
+
+        # Wrong:
+        print(needle in ['one', 'two'])
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found `in` used with a non-set container'
+    code = 473

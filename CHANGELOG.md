@@ -50,6 +50,7 @@ consistency, complexity, and general feel from your code.
 - Refactors `UselessOperatorsVisitor`
 - Adds `compat/` package, getting ready for `python3.8`
 - Adds `Makefile`
+- A lot of minor dependency updates
 
 
 ## 0.9.1
