@@ -4,6 +4,13 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
+## 0.9.1
+
+### Bugfixes
+
+- Fixes issue with `pydocstyle>=4` by glueing its version to `pydocstyle<4`
+
+
 ## 0.9.0
 
 This is mostly a supporting release with several new features
