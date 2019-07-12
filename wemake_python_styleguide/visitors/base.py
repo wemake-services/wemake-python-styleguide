@@ -53,7 +53,7 @@ We follow these conventions:
 - All other methods and attributes should be protected
 - We try to separate as much logic from ``visit_`` methods as possible,
   so they only route for callbacks that actually executes the checks
-- We place repeating logics into ``logics/`` package to be able to reuse it
+- We place repeating logic into ``logic/`` package to be able to reuse it
 
 There are different example of visitors in this project already.
 
@@ -69,7 +69,7 @@ from typing import List, Sequence, Type
 from typing_extensions import final
 
 from wemake_python_styleguide import constants
-from wemake_python_styleguide.logics.filenames import get_stem
+from wemake_python_styleguide.logic.filenames import get_stem
 from wemake_python_styleguide.types import ConfigurationOptions
 from wemake_python_styleguide.violations.base import BaseViolation
 
@@ -82,7 +82,7 @@ class BaseVisitor(object):
         options: contains the options objects passed and parsed by ``flake8``.
         filename: filename passed by ``flake8``, each visitor has a file name.
         violations: list of :term:`violations <violation>`
-            for the specific visitor.
+        for the specific visitor.
 
     """
 

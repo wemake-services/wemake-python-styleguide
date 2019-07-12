@@ -1,14 +1,20 @@
 Integrations
 ============
 
-We leverage all the existing ``flake8`` infrastructure.
+We leverage all the existing ``flake8``
+`infrastructure <https://github.com/DmytroLitvinov/awesome-flake8-extensions>`_
+and tools.
 There are different integrations for your workflow.
+
 
 Hooks
 -----
 
 - `pytest-flake8 <https://github.com/tholo/pytest-flake8>`_ to run style checks alongside with tests
 - `pre-commit <https://pre-commit.com/>`_ to run ``flake8`` before all commits locally
+- `pronto-flake8 <https://github.com/scoremedia/pronto-flake8>`_ to run inline-comment
+  violations during code-review inside your CI
+
 
 Editors
 -------
@@ -16,6 +22,10 @@ Editors
 - `vscode plugin <https://code.visualstudio.com/docs/python/linting>`_
 - `sublime plugin <https://github.com/SublimeLinter/SublimeLinter-flake8>`_
 - `atom plugin <https://atom.io/packages/linter-flake8>`_
+- `vim plugin <https://github.com/nvie/vim-flake8>`_
+- `emacs plugin <https://github.com/flycheck/flycheck>`_
+- `pycharm plugin <https://plugins.jetbrains.com/plugin/11563-flake8-support>`_
+
 
 Extras
 ------
@@ -31,6 +41,7 @@ Things we highly recommend to improve your code quality:
 - `cohesion <https://github.com/mschwager/cohesion>`_ tool to measure code cohesion, works for most of the times. We recommend to use it as a reporting tool
 - `vulture <https://github.com/jendrikseipp/vulture>`_ allows you to find unused code. Has some drawbacks, since there is too many magic in python code. But, it is still very useful tool for the refactoring
 
+
 Stubs
 -----
 
@@ -44,10 +55,30 @@ Use ``*.pyi`` glob to list ignored violations:
 .. code:: cfg
 
   per-file-ignores =
-    *.pyi Z444, Z452
+    *.pyi: Z444, Z452
 
 You can look at the `returns <https://github.com/dry-python/returns>`_
 project as an example.
+
+
+pylint
+------
+
+We are not related to the ``pylint`` project.
+Yes, we know that it is awesome. But, it has some drawbacks:
+
+1. It makes a lot of type assertions. And does it incorrectly.
+   Since we use ``mypy`` there is no sense in this feature.
+   Without this feature a lot
+   of other ``pylint`` features looses its point as well
+2. There are less exisitng plugins for ``pylint`` than for ``flake8``
+3. It uses custom ``ast`` parser and library, which can be problematic
+4. It is not strict enough for us.
+   So, we will have to write our own plugin no matter what platform we use
+
+However, it is important to mention
+that ``pylint`` is less radical and more classic in its rules.
+
 
 black
 -----

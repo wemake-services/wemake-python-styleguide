@@ -43,8 +43,13 @@ If you are adding a `flake8` plugin dependency (not dev-dependency),
 you will have to do several things:
 
 1. Install plugin with `poetry`
-2. Add docs about the error code to the `errors/index.rst`
+2. Add docs about the error code to the `pages/violations/index.rst`
 3. Add a test that the plugin is working to `tests/test_plugins.py`
+
+
+## One magic command
+
+Run `make test` to run everything we have!
 
 
 ## Tests
@@ -93,6 +98,14 @@ mypy wemake_python_styleguide
 This step is mandatory during the CI.
 
 
+## Helpers
+
+We also have several helpers to make your development work easier:
+
+- `./scripts/parse.py` is used to visualize `ast` nodes in other python modules,
+  usage: `python ./scripts/parse.py my_module.py`
+
+
 ## Submitting your code
 
 We use [trunk based](https://trunkbaseddevelopment.com/)
@@ -113,15 +126,6 @@ which frees us from merging hell and long-living branches.
 
 In this method, the latest version of the app is always in the `master` branch.
 
-### Making patches to older versions
-
-If you want to release a patch for an older version, that what you have to do:
-
-1. Check out the previous `git tag`
-2. Create a new branch relative to this tag
-3. Merge it into master, there might be some `rebase` and `cherry-pick`
-   involved during this operation
-
 ### Before submitting
 
 Before submitting your code please do the following steps:
@@ -138,6 +142,26 @@ Before submitting your code please do the following steps:
 10. Run `layer-lint` to ensure that architecture contracts are correct
 11. Run `doc8` to ensure that docs are correct
 
+You can run everything at once with `make test`,
+see our `Makefile` for more details.
+
+
+## Notes for maintainers
+
+This section is intended for maintainers only.
+If you are not a maintainer (or do not know what it means),
+just skip it. You are not going to miss anything useful.
+
+### Making patches to older versions
+
+If you want to release a patch for an older version, that what you have to do:
+
+1. Check out the previous `tag`
+2. Create a new branch relative to this tag:
+   `git checkout $TAG_NAME; git checkout -b $RELEASE_NAME`
+3. Merge it into master, there might be some `rebase` and `cherry-pick`
+   involved during this operation
+
 
 ## Other help
 
@@ -145,3 +169,18 @@ You can contribute by spreading a word about this library.
 It would also be a huge contribution to write
 a short article on how you are using this project.
 You can also share your best practices with us.
+
+You can also consider donations to the project:
+- https://opencollective.com/wemake-python-styleguide
+- https://issuehunt.io/r/wemake-services/wemake-python-styleguide
+
+Number of current supporters:
+
+[![Supporters](https://img.shields.io/opencollective/all/wemake-python-styleguide.svg?color=gold&label=supporters)](https://opencollective.com/wemake-python-styleguide)
+
+
+## List of contributors
+
+Here are the awesome people who contributed to our project:
+
+[![List of contributors](https://opencollective.com/wemake-python-styleguide/contributors.svg?width=890&button=0)](https://github.com/wemake-services/wemake-python-styleguide/graphs/contributors)

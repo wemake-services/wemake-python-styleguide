@@ -33,14 +33,16 @@ Summary
    RaiseNotImplementedViolation
    BaseExceptionViolation
    BooleanPositionalArgumentViolation
+   BuiltinSubclassViolation
+   ShadowedClassAttributeViolation
    NestedFunctionViolation
    NestedClassViolation
    MagicNumberViolation
    StaticMethodViolation
    BadMagicMethodViolation
    NestedImportViolation
-   RedundantLoopElseViolation
-   RedundantFinallyViolation
+   UselessLoopElseViolation
+   UselessFinallyViolation
    ReassigningVariableToItselfViolation
    YieldInsideInitViolation
    ProtectedModuleViolation
@@ -60,15 +62,22 @@ Summary
    IncorrectBaseClassViolation
    IncorrectSlotsViolation
    IncorrectSuperCallViolation
-   RedundantReturningElseViolation
+   UselessReturningElseViolation
    TryExceptMultipleReturnPathViolation
-   ComplexDefaultValuesViolation
+   ComplexDefaultValueViolation
    LoopVariableDefinitionViolation
    ContextManagerVariableDefinitionViolation
    DirectMagicAttributeAccessViolation
    NegatedConditionsViolation
    NestedTryViolation
    MultilineConditionsViolation
+   MutableModuleConstantViolation
+   UselessLambdaViolation
+   UselessLenCompareViolation
+   SameElementsInConditionViolation
+   NotOperatorWithCompareViolation
+   HeterogenousCompareViolation
+   IncorrectlyNestedTernaryViolation
 
 Comments
 --------
@@ -94,6 +103,8 @@ Builtins
 .. autoclass:: RaiseNotImplementedViolation
 .. autoclass:: BaseExceptionViolation
 .. autoclass:: BooleanPositionalArgumentViolation
+.. autoclass:: BuiltinSubclassViolation
+.. autoclass:: ShadowedClassAttributeViolation
 
 Design
 ------
@@ -104,8 +115,8 @@ Design
 .. autoclass:: StaticMethodViolation
 .. autoclass:: BadMagicMethodViolation
 .. autoclass:: NestedImportViolation
-.. autoclass:: RedundantLoopElseViolation
-.. autoclass:: RedundantFinallyViolation
+.. autoclass:: UselessLoopElseViolation
+.. autoclass:: UselessFinallyViolation
 .. autoclass:: ReassigningVariableToItselfViolation
 .. autoclass:: YieldInsideInitViolation
 .. autoclass:: ProtectedModuleViolation
@@ -125,15 +136,22 @@ Design
 .. autoclass:: IncorrectBaseClassViolation
 .. autoclass:: IncorrectSlotsViolation
 .. autoclass:: IncorrectSuperCallViolation
-.. autoclass:: RedundantReturningElseViolation
+.. autoclass:: UselessReturningElseViolation
 .. autoclass:: TryExceptMultipleReturnPathViolation
-.. autoclass:: ComplexDefaultValuesViolation
+.. autoclass:: ComplexDefaultValueViolation
 .. autoclass:: LoopVariableDefinitionViolation
 .. autoclass:: ContextManagerVariableDefinitionViolation
 .. autoclass:: DirectMagicAttributeAccessViolation
 .. autoclass:: NegatedConditionsViolation
 .. autoclass:: NestedTryViolation
 .. autoclass:: MultilineConditionsViolation
+.. autoclass:: MutableModuleConstantViolation
+.. autoclass:: UselessLambdaViolation
+.. autoclass:: UselessLenCompareViolation
+.. autoclass:: SameElementsInConditionViolation
+.. autoclass:: NotOperatorWithCompareViolation
+.. autoclass:: HeterogenousCompareViolation
+.. autoclass:: IncorrectlyNestedTernaryViolation
 
 """
 
@@ -594,6 +612,90 @@ class BooleanPositionalArgumentViolation(ASTViolation):
     code = 425
 
 
+@final
+class BuiltinSubclassViolation(ASTViolation):
+    """
+    Forbids to subclass lowercase builtins.
+
+    We forbid to subclass builtins like ``int``, ``str``, ``bool``, etc.
+    We allow to subclass ``object`` and ``type``, warnings, and exceptions.
+
+    See
+    :py:data:`~wemake_python_styleguide.constants.ALLOWED_BUILTIN_CLASSES`
+    for the whole list of whitelisted names.
+
+    Reasoning:
+        It is almost never a good idea (unless you do something sneaky)
+        to subclass primitive builtins.
+
+    Solution:
+        Use custom objects around some wrapper.
+        Use magic methods to emulate the desired behaviour.
+
+    Example::
+
+        # Correct:
+        class Some(object): ...
+        class MyValueException(ValueError): ...
+
+        # Wrong:
+        class MyInt(int): ...
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found subclassing a builtin: {0}'
+    code = 426
+
+
+@final
+class ShadowedClassAttributeViolation(ASTViolation):
+    """
+    Forbids to shadow class level attributes with instance level attributes.
+
+    Reasoning:
+        This way you will have two attributes inside your ``__mro__`` chain:
+        one from instance and one from class. It might cause errors.
+        Needless to say, that this is just pointless to do so.
+
+    Solution:
+        Use either class attributes or instance attributes.
+        Use ``ClassVar`` type on fields that are declared as class attributes.
+
+    Note, that we cannot find shadowed attributes that are defined
+    in parent classes. That's where ``ClassVar`` is required for ``mypy``
+    to check it for you.
+
+    Example::
+
+        # Correct:
+        from typing import ClassVar
+
+        class First(object):
+            field: ClassVar[int] = 1
+
+        class Second(object):
+            field: int
+
+            def __init__(self) -> None:
+                self.field = 1
+
+        # Wrong:
+        class Some(object):
+            field = 1
+
+            def __init__(self) -> None:
+                self.field = 1
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found shadowed class attribute: {0}'
+    code = 427
+
+
 # Design:
 
 @final
@@ -805,7 +907,7 @@ class NestedImportViolation(ASTViolation):
 
 
 @final
-class RedundantLoopElseViolation(ASTViolation):
+class UselessLoopElseViolation(ASTViolation):
     """
     Forbids to use ``else`` without ``break`` in a loop.
 
@@ -849,7 +951,7 @@ class RedundantLoopElseViolation(ASTViolation):
 
 
 @final
-class RedundantFinallyViolation(ASTViolation):
+class UselessFinallyViolation(ASTViolation):
     """
     Forbids to use ``finally`` in ``try`` block without ``except`` block.
 
@@ -1535,9 +1637,9 @@ class IncorrectSuperCallViolation(ASTViolation):
 
 
 @final
-class RedundantReturningElseViolation(ASTViolation):
+class UselessReturningElseViolation(ASTViolation):
     """
-    Forbids to use redundant ``else`` cases in returning functions.
+    Forbids to use useless ``else`` cases in returning functions.
 
     We check single ``if`` statements that all contain
     ``return`` or ``raise`` or ``break`` statements with this rule.
@@ -1550,7 +1652,7 @@ class RedundantReturningElseViolation(ASTViolation):
         So, we prefer to have less code than more code.
 
     Solution:
-        Remove redundant ``else`` case.
+        Remove useless ``else`` case.
 
     Example::
 
@@ -1571,7 +1673,7 @@ class RedundantReturningElseViolation(ASTViolation):
 
     """
 
-    error_template = 'Found redundant returning `else` statement'
+    error_template = 'Found useless returning `else` statement'
     code = 457
 
 
@@ -1619,7 +1721,7 @@ class TryExceptMultipleReturnPathViolation(ASTViolation):
 
 
 @final
-class ComplexDefaultValuesViolation(ASTViolation):
+class ComplexDefaultValueViolation(ASTViolation):
     """
     Forbids to use complex defaults.
 
@@ -1834,7 +1936,7 @@ class NestedTryViolation(ASTViolation):
 @final
 class MultilineConditionsViolation(ASTViolation):
     """
-    Forbid multiline conditions.
+    Forbids multiline conditions.
 
     Reasoning:
         This way of writing conditions hides the inner complexity this line has.
@@ -1856,7 +1958,7 @@ class MultilineConditionsViolation(ASTViolation):
             node.test.op,
             ast.Not,
         ):
-        ...
+            ...
 
     .. versionadded:: 0.9.0
 
@@ -1864,3 +1966,238 @@ class MultilineConditionsViolation(ASTViolation):
 
     error_template = 'Found multiline conditions'
     code = 465
+
+
+@final
+class MutableModuleConstantViolation(ASTViolation):
+    """
+    Forbids mutable constants on a module level.
+
+    Reasoning:
+        Constants should be immutable.
+
+    Solution:
+        Use immutable types for constants.
+
+    We only treat ``ast.Set``, ``ast.Dict``, ``ast.List``, and comprehensions
+    as mutable things. All other nodes are still fine.
+
+    Example::
+
+        # Correct:
+        import types
+        CONST1 = frozenset((1, 2, 3))
+        CONST2 = (1, 2, 3)
+        CONST3 = types.MappingProxyType({'key': 'value'})
+
+        # Wrong:
+        CONST1 = {1, 2, 3}
+        CONST2 = [x for x in some()]
+        CONST3 = {'key': 'value'}
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found mutable module constant'
+    code = 466
+
+
+@final
+class UselessLambdaViolation(ASTViolation):
+    """
+    Forbids to define useless proxy ``lambda`` expressions.
+
+    Reasoning:
+        Sometimes developers tend to overuse ``lambda`` expressions
+        and they wrap code that can be passed as is, without extra wrapping.
+        The code without extra ``lambda`` is easier
+        to read and is more performant.
+
+    Solution:
+        Remove wrapping ``lambda`` declaration, use just the internal function.
+
+    Example::
+
+        # Correct:
+        numbers = map(int, ['1', '2'])
+
+        # Wrong:
+        numbers = map(lambda string: int(string), ['1', '2'])
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found useless lambda declaration'
+    code = 467
+
+
+@final
+class UselessLenCompareViolation(ASTViolation):
+    """
+    Forbids to have unpythonic zero-length compare.
+
+    Note, that we allow to check arbitrary length, like ``len(arr) == 3``.
+
+    Reasoning:
+        Python's structures like dicts, lists, sets, and tuples
+        all have ``__bool__`` method to checks their length.
+        So, there's no point in wrapping them into ``len(...)``
+        and checking that it is bigger that ``0`` or less then ``1``, etc.
+
+    Solution:
+        Remove extra ``len()`` call.
+
+    Example::
+
+        # Correct:
+        if some_array or not other_array or len(third_array) == 1:
+            ...
+
+        # Wrong:
+        if len(some_array) > 0 or len(other_array) < 1:
+            ...
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found useless `len()` compare'
+    code = 468
+
+
+@final
+class SameElementsInConditionViolation(ASTViolation):
+    """
+    Forbids to use the same logical conditions in one expression.
+
+    Reasoning:
+        Using the same name in logical condition more that once
+        indicates that you are either making a logical mistake,
+        or just over-complicating your design.
+
+    Solution:
+        Remove the duplicating condition.
+
+    Example::
+
+        # Correct:
+        if some_value or other_value:
+            ...
+
+        # Wrong:
+        if some_value or some_value:
+            ...
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found duplicate logical condition'
+    code = 469
+
+
+@final
+class NotOperatorWithCompareViolation(ASTViolation):
+    """
+    Forbids to use ``not`` with compare expressions.
+
+    Reasoning:
+        This version of ``not`` operator is unreadable.
+
+    Solution:
+        Refactor the expression without ``not`` operator.
+        Change the compare signs.
+
+    Example::
+
+        # Correct:
+        if x <= 5:
+            ...
+
+        # Wrong:
+        if not x > 5:
+            ...
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found incorrect `not` with compare usage'
+    code = 470
+
+
+@final
+class HeterogenousCompareViolation(ASTViolation):
+    """
+    Forbids to heterogenous operators in one compare.
+
+    Note, that we allow to mix ``>`` with ``>=``
+    and ``<`` with ``<=`` operators.
+
+    Reasoning:
+        This is hard to read and understand.
+
+    Solution:
+        Refactor the expression to have separate parts
+        joined with ``and`` boolean operator.
+
+    Example::
+
+        # Correct:
+        if x == y == z:
+            ...
+
+        if x > y >= z:
+            ...
+
+        # Wrong:
+        if x > y == 5:
+            ...
+
+        if x == y != z:
+            ...
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found heterogenous compare'
+    code = 471
+
+
+@final
+class IncorrectlyNestedTernaryViolation(ASTViolation):
+    """
+    Forbids to nest ternary expressions in some places.
+
+    Note, that we restrict to nest ternary expressions inside:
+
+    - ``if`` conditions
+    - boolean and binary operations like ``and`` or ``+``
+    - unary operators
+
+    Reasoning:
+        Nesting ternary in random places can lead to very hard
+        debug and testing problems.
+
+    Solution:
+        Refactor the ternary expression to be either a new variable,
+        or nested ``if`` statement, or a new function.
+
+    Example::
+
+        # Correct:
+        some = x if cond() else y
+
+        # Wrong:
+        if x if cond() else y:
+            ...
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found incorrectly nested ternary'
+    code = 472

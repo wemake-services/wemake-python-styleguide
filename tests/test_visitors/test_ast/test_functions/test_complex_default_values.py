@@ -3,7 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
-    ComplexDefaultValuesViolation,
+    ComplexDefaultValueViolation,
 )
 from wemake_python_styleguide.visitors.ast.functions import (
     FunctionDefinitionVisitor,
@@ -23,19 +23,18 @@ def function(self, with_default={0}):
 ])
 def test_wrong_function_defaults(
     assert_errors,
-    assert_error_text,
     parse_ast_tree,
     default_options,
     code,
     mode,
 ):
     """Testing that wrong function defaults are forbidden."""
-    tree = parse_ast_tree(function_with_defaults.format(code))
+    tree = parse_ast_tree(mode(function_with_defaults.format(code)))
 
     visitor = FunctionDefinitionVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [ComplexDefaultValuesViolation])
+    assert_errors(visitor, [ComplexDefaultValueViolation])
 
 
 @pytest.mark.parametrize('code', [
@@ -50,7 +49,6 @@ def test_wrong_function_defaults(
 ])
 def test_correct_function_defaults(
     assert_errors,
-    assert_error_text,
     parse_ast_tree,
     default_options,
     code,

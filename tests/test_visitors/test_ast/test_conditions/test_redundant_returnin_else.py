@@ -3,7 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
-    RedundantReturningElseViolation,
+    UselessReturningElseViolation,
 )
 from wemake_python_styleguide.visitors.ast.conditions import IfStatementVisitor
 
@@ -58,7 +58,7 @@ def test_else_that_can_be_removed_in_function(
     visitor = IfStatementVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [RedundantReturningElseViolation])
+    assert_errors(visitor, [UselessReturningElseViolation])
 
 
 @pytest.mark.parametrize('template', [
@@ -83,7 +83,7 @@ def test_else_that_can_be_removed_in_loop(
     visitor = IfStatementVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [RedundantReturningElseViolation])
+    assert_errors(visitor, [UselessReturningElseViolation])
 
 
 @pytest.mark.parametrize('code', [
@@ -101,7 +101,7 @@ def test_else_that_can_be_removed_in_module(
     visitor = IfStatementVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [RedundantReturningElseViolation])
+    assert_errors(visitor, [UselessReturningElseViolation])
 
 
 @pytest.mark.parametrize('template', [

@@ -73,7 +73,6 @@ def test_wrong_base_class(
 @pytest.mark.parametrize('base', [
     'type',
     'object',
-    'dict',
     'CustomClass',
     'Multiple, Classes, Mixins',
     'Custom, keyword=1',

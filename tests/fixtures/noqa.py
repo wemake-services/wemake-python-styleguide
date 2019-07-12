@@ -27,6 +27,16 @@ def __getattr__():  # noqa: Z413
     anti_z444 = 1
 
 
+def foo_func():
+    # See:
+    # https://github.com/wemake-services/wemake-python-styleguide/issues/601
+
+    yield (1, 2, 3, 4, 5, 6)  # noqa: Z227
+
+
+print(x > 2 > y > 4)  # noqa: Z228
+
+
 def function_name(
     value: int = 0,  # noqa: Z110
 ):
@@ -105,8 +115,18 @@ def many_expressions(xy):  # noqa: Z213
     print(xy)
 
 
-class ManyParents(dict, list, tuple, Exception):  # noqa: Z215
+class ManyParents(First, Second, Third, Exception):  # noqa: Z215
     anti_z444 = 1
+
+
+async def too_many_awaits():  # noqa: Z217
+    await test_function()
+    await test_function()
+    await test_function()
+    await test_function()
+    await test_function()
+    await test_function()
+    await test_function()
 
 
 def test_function():
@@ -134,14 +154,6 @@ elif line > 4:
     anti_z444 = 1
 
 
-numbers = [
-    target  # noqa: Z224
-    for assignment in range(hex_number)
-    for target in range(assignment)
-    for _ in range(10)
-    if isinstance(target, int)
-]
-
 try:  # noqa: Z225
     do_some_bad()
 except ValueError:
@@ -159,11 +171,19 @@ class BadClass:  # noqa: Z306
 
     @staticmethod  # noqa: Z433
     def some_static(arg1):
-        anti_z444 = 1
+        return [
+            target  # noqa: Z224
+            for assignment in range(hex_number)
+            for target in range(assignment)
+            for _ in range(10)
+            if isinstance(target, int)
+        ]
 
     @staticmethod  # noqa: Z433
     async def some_async_static(arg1):
-        anti_z444 = 1
+        return [
+            node for node in 'abc' if node != 'a' if node != 'b'  # noqa: Z307
+        ]
 
     def __del__(self, *_args, **_kwargs):  # noqa: Z434
         anti_z444 = 1
@@ -174,9 +194,7 @@ class BadClass:  # noqa: Z306
 
 magic_numbers = 13.2 + 50  # noqa: Z432
 
-nodes = [node for node in 'abc' if node != 'a' if node != 'b']  # noqa: Z307
-
-assert 1 > 1 > hex_number  # noqa: Z308
+assert 1 < 1 < hex_number  # noqa: Z308
 assert 2 > octal_number  # noqa: Z309
 
 hex_number = 0XFF  # noqa: Z310
@@ -212,9 +230,6 @@ class SomeClass(FirstParent,  # noqa: Z317
 if SomeClass:
         print(SomeClass)  # noqa: Z318
 
-some_set = {1
-           }  # noqa: Z318
-
 print(
     1,
     2)  # noqa: Z319
@@ -227,7 +242,8 @@ def function(  # noqa: Z320
 ) -> Optional[
     str,
 ]:
-    anti_z444 = 1
+    some_set = {1
+               }  # noqa: Z318
 
 
 string_modifier = R'(s)'  # noqa: Z321
@@ -259,6 +275,16 @@ try:
 except Exception as ex:  # noqa: Z329
     raise ex
 
+def some_function():
+    some_value = 1
+    return some_value  # noqa: Z331
+
+some_cond = cond() and 1 or None  # noqa: Z332
+
+print(one > two and two > three)  # noqa: Z333
+
+print(biggesst > middle >= smallest)  # noqa: Z334
+
 try:
     anti_z444 = 1
 except BaseException:  # noqa: Z424
@@ -266,11 +292,26 @@ except BaseException:  # noqa: Z424
 
 call_with_positional_bool(True)  # noqa: Z425
 
+
+class MyInt(int):  # noqa: Z426
+    """My custom int subclass."""
+
+
+class ShadowsAttribute(object):
+    """Redefines attr from class."""
+
+    first: int
+    second = 1
+
+    def __init__(self) -> None:
+        self.first = 1
+        self.second = 2  # noqa: Z427
+
+
 for symbol in 'abc':  # noqa: Z436
     anti_z444 = 1
 else:
     anti_z444 = 1
-
 
 try:  # noqa: Z437
     anti_z444 = 1
@@ -313,7 +354,6 @@ except ValueError:
     anti_z444 = 1
 
 iters = list((yield letter) for letter in 'ab')  # noqa: Z448
-some_set = {1, 1}  # noqa: Z449
 
 
 class MyBadException(BaseException):  # noqa: Z450
@@ -336,9 +376,10 @@ class ClassWithWrongContents((lambda: object)()):  # noqa: Z454
 
     def method_with_no_args():  # noqa: Z453
         super(ClassWithWrongContents, self).method_with_no_args()  # noqa: Z456
+        self.some_set = {1, 1}  # noqa: Z449
 
 
-def redundant_returning_else():
+def useless_returning_else():
     if some_set:  # noqa: Z457
         return some_set
     else:
@@ -390,6 +431,18 @@ if some and (  # noqa: Z465
 ):
     anti_z444 = 'some text'
 
-def some_function():  # noqa: Z331
-    some_value = 1
-    return some_value
+CONSTANT = []  # noqa: Z466
+
+numbers = map(lambda string: int(string), ['1'])  # noqa: Z467
+
+if len(numbers) > 0:  # noqa: Z468
+    print('len!')
+
+if numbers and numbers:  # noqa: Z469
+    print('duplicate boolop')
+
+if not numbers == []:  # noqa: Z470
+    print('bad compare with not')
+
+if numbers == CONSTANT != []:  # noqa: Z471
+    print(1 + (1 if number else 2))  # noqa: Z472

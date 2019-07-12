@@ -40,7 +40,7 @@ Reference
 import ast
 from typing import Tuple, Type, Union
 
-from typing_extensions import Protocol
+from typing_extensions import Protocol, final
 
 #: In cases we need to work with both import types.
 AnyImport = Union[ast.Import, ast.ImportFrom]
@@ -51,16 +51,16 @@ AnyFunctionDef = Union[ast.FunctionDef, ast.AsyncFunctionDef]
 #: In cases we need to work with all function definitions (including lambdas).
 AnyFunctionDefAndLambda = Union[AnyFunctionDef, ast.Lambda]
 
-#: In cases we need to work with both forms of if functions
+#: In cases we need to work with both forms of if functions.
 AnyIf = Union[ast.If, ast.IfExp]
 
-#: Flake8 API format to return error messages:
+#: Flake8 API format to return error messages.
 CheckResult = Tuple[int, int, str, type]
 
 #: Tuple of AST node types for declarative syntax.
 AnyNodes = Tuple[Type[ast.AST], ...]
 
-#: In cases we need to work with all unary operators
+#: In cases we need to work with all unary operators.
 AnyUnaryOp = Union[
     Type[ast.Invert],
     Type[ast.Not],
@@ -68,7 +68,11 @@ AnyUnaryOp = Union[
     Type[ast.USub],
 ]
 
+#: When we search for assign elements, we also need typed assign.
+AnyAssign = Union[ast.Assign, ast.AnnAssign]
 
+
+@final
 class ConfigurationOptions(Protocol):
     """
     Provides structure for the options we use in our checker and visitors.
@@ -99,3 +103,5 @@ class ConfigurationOptions(Protocol):
     max_imports: int
     max_base_classes: int
     max_decorators: int
+    max_string_usages: int
+    max_awaits: int

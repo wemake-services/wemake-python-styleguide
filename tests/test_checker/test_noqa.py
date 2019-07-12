@@ -5,10 +5,11 @@ import subprocess
 from collections import Counter
 
 ERROR_PATTERN = re.compile(r'(Z\d{3})')
-IGNORED_VIOLATIONS = [
+IGNORED_VIOLATIONS = (
     'Z202',  # since our test case is complex, that's fine
+    'Z226',  # we have a lot of ugly strings inside,
     'Z402',  # since we obviously use a lot of `noqa` comments
-]
+)
 
 
 def _assert_errors_count_in_output(output, errors, all_violations):
@@ -33,6 +34,8 @@ def _assert_errors_count_in_output(output, errors, all_violations):
 def test_noqa_fixture_disabled(absolute_path, all_violations):
     """End-to-End test to check that all violations are present."""
     errors = {
+        # TODO: make `1` the default value, so we won't have to
+        # list all violations here, only ones with different values.
         'Z100': 0,
         'Z101': 0,
         'Z102': 0,
@@ -61,6 +64,7 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
         'Z214': 0,
         'Z215': 1,
         'Z216': 0,
+        'Z217': 1,
 
         'Z220': 1,
         'Z221': 2,
@@ -68,6 +72,9 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
         'Z223': 1,
         'Z224': 1,
         'Z225': 1,
+        'Z226': 0,
+        'Z227': 1,
+        'Z228': 1,
 
         'Z300': 1,
         'Z301': 1,
@@ -101,6 +108,9 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
         'Z329': 1,
         'Z330': 1,
         'Z331': 1,
+        'Z332': 1,
+        'Z333': 1,
+        'Z334': 1,
 
         'Z400': 0,
         'Z401': 0,
@@ -111,12 +121,15 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
         'Z411': 0,
         'Z412': 0,
         'Z413': 1,
+
         'Z420': 2,
         'Z421': 1,
         'Z422': 1,
         'Z423': 1,
         'Z424': 1,
         'Z425': 1,
+        'Z426': 1,
+        'Z427': 1,
 
         'Z430': 1,
         'Z431': 2,
@@ -154,6 +167,13 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
         'Z463': 1,
         'Z464': 1,
         'Z465': 1,
+        'Z466': 1,
+        'Z467': 1,
+        'Z468': 1,
+        'Z469': 1,
+        'Z470': 1,
+        'Z471': 1,
+        'Z472': 1,
     }
 
     process = subprocess.Popen(

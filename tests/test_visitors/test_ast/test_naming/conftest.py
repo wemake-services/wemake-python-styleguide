@@ -15,7 +15,6 @@ from os import path as {0}
 # Function names:
 
 function_name = 'def {0}(): ...'
-async_function_name = 'async def {0}(): ...'
 
 method_name = """
 class Input(object):
@@ -69,16 +68,31 @@ class Test:
     {0} = None
 """
 
+static_typed_attribute = """
+class Test:
+    {0}: int = None
+"""
+
 instance_attribute = """
 class Test(object):
     def __init__(self):
         self.{0} = 123
 """
 
+instance_typed_attribute = """
+class Test(object):
+    def __init__(self):
+        self.{0}: int = 123
+"""
+
 # Variables:
 
 variable_def = """
 {0} = 'test'
+"""
+
+variable_typed_def = """
+{0}: str = 'test'
 """
 
 # See: https://github.com/wemake-services/wemake-python-styleguide/issues/405
@@ -113,7 +127,7 @@ except Exception as {0}:
     import_alias,
     from_import_alias,
 
-    # Function names:
+    # Function names (we generate async functions by default with `mode`):
     function_name,
     method_name,
 
@@ -132,10 +146,13 @@ except Exception as {0}:
 
     # Class attributes:
     static_attribute,
+    static_typed_attribute,
     instance_attribute,
+    instance_typed_attribute,
 
     # Variables:
     variable_def,
+    variable_typed_def,
     unpacking_variables,
     for_variable,
     with_variable,

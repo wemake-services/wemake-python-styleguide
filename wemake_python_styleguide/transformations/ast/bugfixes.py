@@ -2,7 +2,7 @@
 
 import ast
 
-from wemake_python_styleguide.logics.nodes import get_parent
+from wemake_python_styleguide.logic.nodes import get_parent
 
 
 def fix_async_offset(tree: ast.AST) -> ast.AST:

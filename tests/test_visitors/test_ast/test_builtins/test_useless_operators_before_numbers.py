@@ -25,7 +25,7 @@ dict_definition_value = '{{"first": {0}}}'
 set_definition = '{{"first", {0}, "other"}}'
 tuple_definition = '({0}, )'
 
-usages = [
+usages = (
     assignment,
     assignment_addition,
     assignment_increment,
@@ -35,7 +35,7 @@ usages = [
     dict_definition_value,
     set_definition,
     tuple_definition,
-]
+)
 
 
 @pytest.mark.parametrize('code', usages)

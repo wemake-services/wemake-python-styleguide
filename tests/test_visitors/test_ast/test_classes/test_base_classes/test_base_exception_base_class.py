@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import pytest
-
 from wemake_python_styleguide.violations.best_practices import (
     BaseExceptionSubclassViolation,
 )
@@ -13,13 +11,9 @@ class Meta({0}):
 """
 
 
-@pytest.mark.parametrize('code', [
-    class_with_base,
-])
 def test_base_exception_subclass(
     assert_errors,
     parse_ast_tree,
-    code,
     default_options,
 ):
     """Testing that it is not possible to subclass `BaseException`."""

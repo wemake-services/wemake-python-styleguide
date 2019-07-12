@@ -25,7 +25,6 @@ def test_long_variable_name(
 
 def test_long_variable_name_config(
     assert_errors,
-    assert_error_text,
     parse_ast_tree,
     naming_template,
     options,

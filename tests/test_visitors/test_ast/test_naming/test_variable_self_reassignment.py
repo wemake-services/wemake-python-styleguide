@@ -19,6 +19,16 @@ test_variable = 5
 test_variable = 10
 """
 
+wrong_typed_fragment = """
+test_variable: int = 5
+test_variable: int = test_variable
+"""
+
+right_typed_fragment = """
+test_variable: int = 5
+test_variable: int = 10
+"""
+
 right_fragment_tuple_assignment = """
 x = 1
 y = 2
@@ -30,14 +40,30 @@ test_variable = 5
 test_variable = test_variable = 10
 """
 
+wrong_fragment_double_typed_assignment = """
+test_variable: int = 5
+test_variable = test_variable = 10
+"""
+
 wrong_fragment_other_assignment = """
 test_variable = 5
+test_variable = other = test_variable = 5
+"""
+
+wrong_fragment_typed_other_assignment = """
+test_variable: int = 5
 test_variable = other = test_variable = 5
 """
 
 wrong_fragment_tuple_assignment = """
 x = 1
 y = 2
+x, y = x, y
+"""
+
+wrong_fragment_typed_tuple_assignment = """
+x: int = 1
+y: int = 2
 x, y = x, y
 """
 
@@ -48,13 +74,25 @@ z = 3
 x, y, z = x, y, z
 """
 
+wrong_fragment_typed_multiple_assignment = """
+x: int = 1
+y: int = 2
+z = 3
+x, y, z = x, y, z
+"""
+
 
 @pytest.mark.parametrize('code', [
     wrong_fragment,
+    wrong_typed_fragment,
     wrong_fragment_double_assignment,
+    wrong_fragment_double_typed_assignment,
     wrong_fragment_other_assignment,
+    wrong_fragment_typed_other_assignment,
     wrong_fragment_tuple_assignment,
+    wrong_fragment_typed_tuple_assignment,
     wrong_fragment_multiple_tuple_assignment,
+    wrong_fragment_typed_multiple_assignment,
 ])
 def test_self_variable_reassignment(
     assert_errors,
@@ -73,6 +111,7 @@ def test_self_variable_reassignment(
 
 @pytest.mark.parametrize('code', [
     right_fragment,
+    right_typed_fragment,
     right_fragment_tuple_assignment,
 ])
 def test_correct_variable_reassignment(

@@ -1,24 +1,27 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from collections import Counter
-from typing import ClassVar, Iterable, List
+from collections import Counter, defaultdict
+from typing import ClassVar, DefaultDict, Iterable, List, Mapping
 
 import astor
 from typing_extensions import final
 
 from wemake_python_styleguide import constants
-from wemake_python_styleguide.logics.operators import (
+from wemake_python_styleguide.logic.operators import (
     count_unary_operator,
     get_parent_ignoring_unary,
     unwrap_unary_node,
 )
-from wemake_python_styleguide.types import AnyNodes
+from wemake_python_styleguide.types import AnyNodes, AnyUnaryOp
 from wemake_python_styleguide.violations.best_practices import (
     IncorrectUnpackingViolation,
     MagicNumberViolation,
     MultipleAssignmentsViolation,
     NonUniqueItemsInSetViolation,
+)
+from wemake_python_styleguide.violations.complexity import (
+    OverusedStringViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
     FormattedStringViolation,
@@ -29,7 +32,31 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 @final
 class WrongStringVisitor(BaseNodeVisitor):
-    """Restricts to use ``f`` strings."""
+    """Restricts several string usages."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Inits the counter for constants."""
+        super().__init__(*args, **kwargs)
+        self._string_constants: DefaultDict[str, int] = defaultdict(int)
+
+    def _check_string_constant(self, node: ast.Str) -> None:
+        self._string_constants[node.s] += 1
+
+    def _post_visit(self) -> None:
+        for string, usage_count in self._string_constants.items():
+            if usage_count > self.options.max_string_usages:
+                self.add_violation(OverusedStringViolation(text=string))
+
+    def visit_Str(self, node: ast.Str) -> None:
+        """
+        Restricts to over-use string constants.
+
+        Raises:
+            OverusedStringViolation
+
+        """
+        self._check_string_constant(node)
+        self.generic_visit(node)
 
     def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
         """
@@ -49,6 +76,7 @@ class MagicNumberVisitor(BaseNodeVisitor):
 
     _allowed_parents: ClassVar[AnyNodes] = (
         ast.Assign,
+        ast.AnnAssign,
 
         # Constructor usages:
         ast.FunctionDef,
@@ -91,25 +119,19 @@ class MagicNumberVisitor(BaseNodeVisitor):
 class UselessOperatorsVisitor(BaseNodeVisitor):
     """Checks operators used in the code."""
 
-    def _check_plus_sign(self, node: ast.Num) -> None:
-        if not count_unary_operator(node, ast.UAdd) > 0:
-            return
-        self.add_violation(UselessOperatorsViolation(node, text=str(node.n)))
+    _limits: ClassVar[Mapping[AnyUnaryOp, int]] = {
+        ast.UAdd: 0,
+        ast.Invert: 1,
+        ast.Not: 1,
+        ast.USub: 1,
+    }
 
-    def _check_minus_sign(self, node: ast.Num) -> None:
-        if not count_unary_operator(node, ast.USub) > 1:
-            return
-        self.add_violation(UselessOperatorsViolation(node, text=str(node.n)))
-
-    def _check_tilde_sign(self, node: ast.Num) -> None:
-        if not count_unary_operator(node, ast.Invert) > 1:
-            return
-        self.add_violation(UselessOperatorsViolation(node, text=str(node.n)))
-
-    def _check_not(self, node: ast.Num) -> None:
-        if not count_unary_operator(node, ast.Not) > 1:
-            return
-        self.add_violation(UselessOperatorsViolation(node, text=str(node.n)))
+    def _check_operator_count(self, node: ast.Num) -> None:
+        for node_type, limit in self._limits.items():
+            if count_unary_operator(node, node_type) > limit:
+                self.add_violation(
+                    UselessOperatorsViolation(node, text=str(node.n)),
+                )
 
     def visit_Num(self, node: ast.Num) -> None:
         """
@@ -119,10 +141,7 @@ class UselessOperatorsVisitor(BaseNodeVisitor):
             UselessOperatorsViolation
 
         """
-        self._check_plus_sign(node)
-        self._check_minus_sign(node)
-        self._check_tilde_sign(node)
-        self._check_not(node)
+        self._check_operator_count(node)
         self.generic_visit(node)
 
 

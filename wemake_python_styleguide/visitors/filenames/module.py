@@ -3,7 +3,7 @@
 from typing_extensions import final
 
 from wemake_python_styleguide import constants
-from wemake_python_styleguide.logics.naming import access, logical
+from wemake_python_styleguide.logic.naming import access, logical
 from wemake_python_styleguide.violations.naming import (
     ConsecutiveUnderscoresInNameViolation,
     PrivateNameViolation,

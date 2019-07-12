@@ -133,7 +133,6 @@ def test_correct_exceptions(
 ])
 def test_duplicate_exceptions(
     assert_errors,
-    assert_error_text,
     parse_ast_tree,
     code,
     default_options,

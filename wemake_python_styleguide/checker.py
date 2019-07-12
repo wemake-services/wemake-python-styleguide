@@ -48,6 +48,7 @@ from typing_extensions import final
 from wemake_python_styleguide import constants, types
 from wemake_python_styleguide import version as pkg_version
 from wemake_python_styleguide.options.config import Configuration
+from wemake_python_styleguide.options.validation import validate_options
 from wemake_python_styleguide.presets import complexity, general, tokens
 from wemake_python_styleguide.transformations.ast_tree import transform
 from wemake_python_styleguide.visitors import base
@@ -67,9 +68,11 @@ class Checker(object):
         name: required by the ``flake8`` API, should match the package name.
         version: required by the ``flake8`` API, defined in the packaging file.
         config: custom configuration object used to provide and parse options:
-            :class:`wemake_python_styleguide.options.config.Configuration`.
+        :class:`wemake_python_styleguide.options.config.Configuration`.
+
         options: option structure passed by ``flake8``:
-            :class:`wemake_python_styleguide.types.ConfigurationOptions`.
+        :class:`wemake_python_styleguide.types.ConfigurationOptions`.
+
         visitors: :term:`preset` of visitors that are run by this checker.
 
     """
@@ -107,6 +110,7 @@ class Checker(object):
                 Differs from ``ast.parse`` since it is mutated by multiple
                 ``flake8`` plugins. Why mutated? Since it is really expensive
                 to copy all ``ast`` information in terms of memory.
+
             file_tokens: ``tokenize.tokenize`` parsed file tokens.
             filename: module file name, might be empty if piping is used.
 
@@ -132,7 +136,7 @@ class Checker(object):
     @classmethod
     def parse_options(cls, options: types.ConfigurationOptions) -> None:
         """Parses registered options for providing them to each visitor."""
-        cls.options = options
+        cls.options = validate_options(options)
 
     def _run_checks(
         self,

@@ -4,6 +4,54 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
+## 0.10.0 aka The Great Compare
+
+This release is mostly targeted at writing better compares and conditions.
+We introduce a lot of new rules related to this topic improving:
+consistency, complexity, and general feel from your code.
+
+### Features
+
+- Adds `flake8-executable` as a dependency
+- Adds `flake8-rst-docstrings` as a dependency
+- Validates options that are passed with `flake8`
+- Forbids to use module level mutable constants
+- Forbids to over-use strings
+- Forbids to use `breakpoint` function
+- Limits yield tuple lengths
+- Forbids to have too many `await` statements
+- Forbids to subclass lowercase `builtins`
+- Forbids to have useless `lambda`s
+- Forbids to use `len(sized) > 0` and `if len(sized)` style checks
+- Forbids to use repeatable conditions: `flag or flag`
+- Forbids to write conditions like `not some > 1`
+- Forbids to use heterogenous compares like `x == x > 0`
+- Forbids to use complex compare with several items (`>= 3`)
+- Forbids to have class variables that are shadowed by instance variables
+- Forbids to use ternary expressions inside `if` conditions
+- Forces to use ternary instead of `... and ... or ...` expression
+- Forces to use `a > b > c` instead of `a > b and b > c`
+- Forces to use `c < b < a` instead of `a > b > c`
+- Forbids to use explicit `in []` and `in ()`, use sets or variables instead
+
+### Bugfixes
+
+- Fixes incorrect line number for `Z331`
+- Fixes that `Z311` was not raising for multiple `not in` cases
+- Fixes a bunch of bugs for rules working with `Assign` and not `AnnAssign`
+
+### Misc
+
+- Renames `logics/` to `logic/` since it is grammatically correct
+- Renames `Redundant` to `Useless`
+- Renames `Comparison` to `Compare`
+- Renames `WrongConditionalViolation` to `ConstantConditionViolation`
+- Renames `ComplexDefaultValuesViolation` to `ComplexDefaultValueViolation`
+- Refactors `UselessOperatorsVisitor`
+- Adds `compat/` package, getting ready for `python3.8`
+- Adds `Makefile`
+
+
 ## 0.9.1
 
 ### Bugfixes
@@ -30,7 +78,7 @@ and lots of bug fixes.
 - Fixes problem with missing `_allowed_left_nodes`
 - Fixes problem false positive for `Z121` when using `_` for unused var names
 - Fixes false positive for negative number in default values
-- Fixes error text for `ComplexDefaultValuesViolation`
+- Fixes error text for `ComplexDefaultValueViolation`
 - Fixes problem with false positive for `Z459`
   when a default value is an `Ellipsis`
 

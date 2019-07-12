@@ -6,10 +6,13 @@ from typing import ClassVar, DefaultDict, List, Union
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logics.functions import is_method
-from wemake_python_styleguide.logics.nodes import get_parent
+from wemake_python_styleguide.constants import MAX_LEN_YIELD_TUPLE
+from wemake_python_styleguide.logic.functions import is_method
+from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.types import AnyFunctionDef, AnyImport
 from wemake_python_styleguide.violations.complexity import (
+    TooLongCompareViolation,
+    TooLongYieldTupleViolation,
     TooManyConditionsViolation,
     TooManyDecoratorsViolation,
     TooManyElifsViolation,
@@ -151,6 +154,9 @@ class ConditionsVisitor(BaseNodeVisitor):
     #: Maximum number of conditions in a single ``if`` or ``while`` statement.
     _max_conditions: ClassVar[int] = 4
 
+    #: Maximum number of compare nodes in a single expression.
+    _max_compares: ClassVar[int] = 2
+
     def _count_conditions(self, node: ast.BoolOp) -> int:
         counter = 0
         for condition in node.values:
@@ -167,6 +173,20 @@ class ConditionsVisitor(BaseNodeVisitor):
                 TooManyConditionsViolation(node, text=str(conditions_count)),
             )
 
+    def _check_compares(self, node: ast.Compare) -> None:
+        is_all_equals = all(isinstance(op, ast.Eq) for op in node.ops)
+        is_all_notequals = all(isinstance(op, ast.NotEq) for op in node.ops)
+        can_be_longer = is_all_notequals or is_all_equals
+
+        treshold = self._max_compares
+        if can_be_longer:
+            treshold += 1
+
+        if len(node.ops) > treshold:
+            self.add_violation(
+                TooLongCompareViolation(node, text=str(len(node.ops))),
+            )
+
     def visit_BoolOp(self, node: ast.BoolOp) -> None:
         """
         Counts the number of conditions.
@@ -176,6 +196,17 @@ class ConditionsVisitor(BaseNodeVisitor):
 
         """
         self._check_conditions(node)
+        self.generic_visit(node)
+
+    def visit_Compare(self, node: ast.Compare) -> None:
+        """
+        Counts the number of compare parts.
+
+        Raises:
+            TooLongCompareViolation
+
+        """
+        self._check_compares(node)
         self.generic_visit(node)
 
 
@@ -252,4 +283,30 @@ class TryExceptVisitor(BaseNodeVisitor):
 
         """
         self._check_except_count(node)
+        self.generic_visit(node)
+
+
+@final
+class YieldTupleVisitor(BaseNodeVisitor):
+    """Finds too long ``tuples`` in ``yield`` expressions."""
+
+    def _check_yield_values(self, node: ast.Yield) -> None:
+        if isinstance(node.value, ast.Tuple):
+            yield_list = [tup_item for tup_item in node.value.elts]
+            if len(yield_list) > MAX_LEN_YIELD_TUPLE:
+                self.add_violation(
+                    TooLongYieldTupleViolation(
+                        node, text=str(len(yield_list)),
+                    ),
+                )
+
+    def visit_Yield(self, node: ast.Yield) -> None:
+        """
+        Helper to get all ``yield`` nodes in a function at once.
+
+        Raises:
+            TooLongYieldTupleViolation
+
+        """
+        self._check_yield_values(node)
         self.generic_visit(node)

@@ -191,7 +191,6 @@ async def container():
 ])
 def test_regular_lines(
     assert_errors,
-    assert_error_text,
     parse_ast_tree,
     code,
     default_options,

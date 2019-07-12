@@ -18,3 +18,13 @@ Why do you think this is a good idea?
 
 Please, include some strong points and considerations.
 -->
+
+<!--
+
+  Love wemake-python-styleguide? ❤️
+  Do you want your features to be implemented faster?
+
+  Please consider supporting our collective:
+👉  https://opencollective.com/wemake-python-styleguide/donate
+
+-->

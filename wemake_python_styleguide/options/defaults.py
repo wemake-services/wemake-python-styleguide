@@ -62,3 +62,9 @@ MAX_BASE_CLASSES: Final = 3
 
 #: Maximum number of decorators.
 MAX_DECORATORS: Final = 5
+
+#: Maximum number of same string usage in code.
+MAX_STRING_USAGES: Final = 3
+
+#: Maximum number of ``await`` expressions for functions or methods.
+MAX_AWAITS = 5  # the same as returns

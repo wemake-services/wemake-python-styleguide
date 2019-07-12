@@ -33,13 +33,13 @@ Summary
    FormattedStringViolation
    RequiredBaseClassViolation
    MultipleIfsInComprehensionViolation
-   ConstantComparisonViolation
-   ComparisonOrderViolation
+   ConstantCompareViolation
+   CompareOrderViolation
    BadNumberSuffixViolation
-   MultipleInComparisonViolation
-   RedundantComparisonViolation
+   MultipleInCompareViolation
+   UselessCompareViolation
    MissingSpaceBetweenKeywordAndParenViolation
-   WrongConditionalViolation
+   ConstantConditionViolation
    ObjectInBaseClassesListViolation
    MultipleContextManagerAssignmentsViolation
    ParametersIndentationViolation
@@ -57,6 +57,9 @@ Summary
    UselessExceptCaseViolation
    UselessOperatorsViolation
    InconsistentReturnVariableViolation
+   ImplicitTernaryViolation
+   ImplicitComplexCompareViolation
+   ReversedComplexCompareViolation
 
 Consistency checks
 ------------------
@@ -69,13 +72,13 @@ Consistency checks
 .. autoclass:: FormattedStringViolation
 .. autoclass:: RequiredBaseClassViolation
 .. autoclass:: MultipleIfsInComprehensionViolation
-.. autoclass:: ConstantComparisonViolation
-.. autoclass:: ComparisonOrderViolation
+.. autoclass:: ConstantCompareViolation
+.. autoclass:: CompareOrderViolation
 .. autoclass:: BadNumberSuffixViolation
-.. autoclass:: MultipleInComparisonViolation
-.. autoclass:: RedundantComparisonViolation
+.. autoclass:: MultipleInCompareViolation
+.. autoclass:: UselessCompareViolation
 .. autoclass:: MissingSpaceBetweenKeywordAndParenViolation
-.. autoclass:: WrongConditionalViolation
+.. autoclass:: ConstantConditionViolation
 .. autoclass:: ObjectInBaseClassesListViolation
 .. autoclass:: MultipleContextManagerAssignmentsViolation
 .. autoclass:: ParametersIndentationViolation
@@ -93,6 +96,9 @@ Consistency checks
 .. autoclass:: UselessExceptCaseViolation
 .. autoclass:: UselessOperatorsViolation
 .. autoclass:: InconsistentReturnVariableViolation
+.. autoclass:: ImplicitTernaryViolation
+.. autoclass:: ImplicitComplexCompareViolation
+.. autoclass:: ReversedComplexCompareViolation
 
 """
 
@@ -354,17 +360,17 @@ class MultipleIfsInComprehensionViolation(ASTViolation):
 
 
 @final
-class ConstantComparisonViolation(ASTViolation):
+class ConstantCompareViolation(ASTViolation):
     """
-    Forbids to have comparisons between two literals.
+    Forbids to have compares between two literals.
 
     Reasoning:
         When two constants are compared it is typically an indication of a
-        mistake, since the Boolean value of the comparison, will always be
+        mistake, since the Boolean value of the compare, will always be
         the same.
 
     Solution:
-        Remove the constant comparison and any associated dead code.
+        Remove the constant compare and any associated dead code.
 
     Example::
 
@@ -381,22 +387,22 @@ class ConstantComparisonViolation(ASTViolation):
 
     """
 
-    error_template = 'Found constant comparison'
+    error_template = 'Found constant compare'
     code = 308
 
 
 @final
-class ComparisonOrderViolation(ASTViolation):
+class CompareOrderViolation(ASTViolation):
     """
     Forbids comparision where argument doesn't come first.
 
     Reasoning:
         It is hard to read the code when
         you have to shuffle ordering of the arguments all the time.
-        Bring consistency to the comparison!
+        Bring consistency to the compare!
 
     Solution:
-        Refactor your comparison expression, place the argument first.
+        Refactor your compare expression, place the argument first.
 
     Example::
 
@@ -411,7 +417,7 @@ class ComparisonOrderViolation(ASTViolation):
 
     """
 
-    error_template = 'Found reversed comparison order'
+    error_template = 'Found reversed compare order'
     code = 309
 
 
@@ -454,7 +460,7 @@ class BadNumberSuffixViolation(TokenizeViolation):
 
 
 @final
-class MultipleInComparisonViolation(ASTViolation):
+class MultipleInCompareViolation(ASTViolation):
     """
     Forbids comparision where multiple ``in`` checks.
 
@@ -462,39 +468,40 @@ class MultipleInComparisonViolation(ASTViolation):
         Using multiple ``in`` is unreadable.
 
     Solution:
-        Refactor your comparison expression to use several ``and`` conditions
+        Refactor your compare expression to use several ``and`` conditions
         or separate ``if`` statements in case it is appropriate.
 
     Example::
 
         # Correct:
         if item in bucket and bucket in master_list_of_buckets:
-        if x_coord in line and line in square:
+        if x_coord not in line and line not in square:
 
         # Wrong:
         if item in bucket in master_list_of_buckets:
-        if x_cord in line in square:
+        if x_cord not in line not in square:
 
     .. versionadded:: 0.3.0
+    .. versionchanged:: 0.10.0
 
     """
 
-    error_template = 'Found multiple `in` comparisons'
+    error_template = 'Found multiple `in` compares'
     code = 311
 
 
 @final
-class RedundantComparisonViolation(ASTViolation):
+class UselessCompareViolation(ASTViolation):
     """
-    Forbids to have comparisons between the same variable.
+    Forbids to have compares between the same variable.
 
     Reasoning:
         When the same variables are compared it is typically an indication
-        of a mistake, since the Boolean value of the comparison will always be
+        of a mistake, since the Boolean value of the compare will always be
         the same.
 
     Solution:
-        Remove the same variable comparison and any associated dead code.
+        Remove the same variable compare and any associated dead code.
 
     Example::
 
@@ -512,7 +519,7 @@ class RedundantComparisonViolation(ASTViolation):
 
     """
 
-    error_template = 'Found comparison between same variable'
+    error_template = 'Found compare between same variable'
     code = 312
 
 
@@ -552,7 +559,7 @@ class MissingSpaceBetweenKeywordAndParenViolation(TokenizeViolation):
 
 
 @final
-class WrongConditionalViolation(ASTViolation):
+class ConstantConditionViolation(ASTViolation):
     """
     Forbids using ``if`` statements that use invalid conditionals.
 
@@ -1179,10 +1186,10 @@ class UselessOperatorsViolation(ASTViolation):
     contain unnecessary operators.
 
     Reasoning:
-         This is done for consistency reasons.
+        This is done for consistency reasons.
 
     Solution:
-        Ommit unnecessary operators.
+        Omit unnecessary operators.
 
     Example::
 
@@ -1210,13 +1217,13 @@ class UselessOperatorsViolation(ASTViolation):
 @final
 class InconsistentReturnVariableViolation(ASTViolation):
     """
-    Forbid local variable that are only used in ``return`` statements.
+    Forbids local variable that are only used in ``return`` statements.
 
     Reasoning:
         This is done for consistency and more readable source code.
 
     Solution:
-        Forbid to use local variables that are only used in `return` statements
+        Return the expression itself, instead of creating a temporary variable.
 
     Example::
 
@@ -1238,3 +1245,96 @@ class InconsistentReturnVariableViolation(ASTViolation):
         'Found local variable that are only used in `return` statements'
     )
     code = 331
+
+
+@final
+class ImplicitTernaryViolation(ASTViolation):
+    """
+    Forbids to have implicit ternary expressions.
+
+    Reasoning:
+        This is done for consistency and readability reasons.
+        We believe that explicit ternary is better for readability.
+        This also allows you to identify hidden conditionals in your code.
+
+    Solution:
+        Refactor to use explicit ternary, or ``if`` condition.
+
+    Example::
+
+        # Correct:
+        some = one if cond() else two
+
+        # Wrong:
+        some = cond() and one or two
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    code = 332
+    error_template = 'Found implicit ternary expression'
+
+
+@final
+class ImplicitComplexCompareViolation(ASTViolation):
+    """
+    Forbids to have implicit complex compare expressions.
+
+    Reasoning:
+        Two compares in python that are joined with ``and`` operator
+        mean that you indeed have a complex compare with tree operators.
+
+    Solution:
+        Refactor your compare without ``and`` but with the third operator.
+        Notice, that you migth have to change the ordering.
+
+    Example::
+
+        # Correct:
+        if three < two < one:
+            ...
+
+        # Wrong:
+        if one > two and two > three:
+            ...
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    code = 333
+    error_template = 'Found implicit complex compare'
+
+
+@final
+class ReversedComplexCompareViolation(ASTViolation):
+    """
+    Forbids to have reversed order complex compare expressions.
+
+    Reasoning:
+        Compares where comparators start from the lowest element
+        are easier to read than one that start from the biggest one.
+        It is also possible to write the same expression
+        in two separate way, which is incosistent.
+
+    Solution:
+        Reverse the order, so the smallest element comes the first
+        and the biggest one comes the last.
+
+    Example::
+
+        # Correct:
+        if three < two < one:
+            ...
+
+        # Wrong:
+        if one > two > three:
+            ...
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    code = 334
+    error_template = 'Found reversed complex compare'

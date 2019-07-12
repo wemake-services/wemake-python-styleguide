@@ -5,19 +5,22 @@ from typing import Callable, List, Optional, Tuple, Union
 
 from typing_extensions import final
 
+from wemake_python_styleguide.compat.aliases import AssignNodes
+from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
     SPECIAL_ARGUMENT_NAMES_WHITELIST,
     VARIABLE_NAMES_BLACKLIST,
 )
-from wemake_python_styleguide.logics import functions, nodes
-from wemake_python_styleguide.logics.naming import (
+from wemake_python_styleguide.logic import functions, nodes
+from wemake_python_styleguide.logic.naming import (
     access,
     builtins,
     logical,
     name_nodes,
 )
 from wemake_python_styleguide.types import (
+    AnyAssign,
     AnyFunctionDef,
     AnyFunctionDefAndLambda,
     AnyImport,
@@ -36,6 +39,11 @@ AssignTargets = List[ast.expr]
 AssignTargetsNameList = List[Union[str, Tuple[str]]]
 
 
+def _get_name_from_node(node: ast.expr) -> Optional[str]:
+    return getattr(node, 'id', None)
+
+
+@final
 class _NameValidator(object):
     """Utility class to separate logic from the naming visitor."""
 
@@ -119,15 +127,15 @@ class _NameValidator(object):
         top_level_assigns = [
             sub_node
             for sub_node in node.body
-            if isinstance(sub_node, ast.Assign)
+            if isinstance(sub_node, AssignNodes)
         ]
 
         for assignment in top_level_assigns:
-            for target in assignment.targets:
+            for target in get_assign_targets(assignment):
                 if not isinstance(target, ast.Name):
                     continue
 
-                name: Optional[str] = getattr(target, 'id', None)
+                name = _get_name_from_node(target)
                 if name and logical.is_upper_case_name(name):
                     self._error_callback(
                         naming.UpperCaseAttributeViolation(target, text=name),
@@ -241,21 +249,26 @@ class WrongNameVisitor(BaseNodeVisitor):
 
 
 @final
+@alias('visit_any_assign', (
+    'visit_Assign',
+    'visit_AnnAssign',
+))
 class WrongModuleMetadataVisitor(BaseNodeVisitor):
     """Finds wrong metadata information of a module."""
 
-    def _check_metadata(self, node: ast.Assign) -> None:
+    def _check_metadata(self, node: AnyAssign) -> None:
         if not isinstance(nodes.get_parent(node), ast.Module):
             return
 
-        for target_node in node.targets:
-            target_node_id = getattr(target_node, 'id', None)
+        targets = get_assign_targets(node)
+        for target_node in targets:
+            target_node_id = _get_name_from_node(target_node)
             if target_node_id in MODULE_METADATA_VARIABLES_BLACKLIST:
                 self.add_violation(
                     WrongModuleMetadataViolation(node, text=target_node_id),
                 )
 
-    def visit_Assign(self, node: ast.Assign) -> None:
+    def visit_any_assign(self, node: AnyAssign) -> None:
         """
         Used to find the bad metadata variable names.
 
@@ -268,6 +281,10 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
 
 
 @final
+@alias('visit_any_assign', (
+    'visit_Assign',
+    'visit_AnnAssign',
+))
 class WrongVariableAssignmentVisitor(BaseNodeVisitor):
     """Finds wrong variables assignments."""
 
@@ -289,21 +306,23 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
                     )
         return target_names
 
-    def _check_assignment(self, node: ast.Assign) -> None:
-        target_names = self._create_target_names(node.targets)
+    def _check_assignment(self, node: AnyAssign) -> None:
+        target_names = self._create_target_names(
+            get_assign_targets(node),
+        )
 
         if isinstance(node.value, ast.Tuple):
             node_values = node.value.elts
             values_names = tuple(
-                getattr(node_value, 'id', None) for node_value in node_values
+                _get_name_from_node(node_value) for node_value in node_values
             )
         else:
-            values_names = getattr(node.value, 'id', None)
+            values_names = _get_name_from_node(node.value)  # type: ignore
         has_repeatable_values = len(target_names) != len(set(target_names))
         if values_names in target_names or has_repeatable_values:
             self.add_violation(ReassigningVariableToItselfViolation(node))
 
-    def visit_Assign(self, node: ast.Assign) -> None:
+    def visit_any_assign(self, node: AnyAssign) -> None:
         """
         Used to check assignment variable to itself.
 

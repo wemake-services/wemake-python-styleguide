@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 from sys import *
 import sys
 from typing import List, Union, Dict
@@ -26,6 +27,7 @@ logger.info(
 
 
 def function_name(plugin: str ='flake8') ->str:
+    """Test `wrong`rst code."""
     return plugin
 
 

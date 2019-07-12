@@ -13,9 +13,6 @@ class Meta({0}):
 """
 
 
-@pytest.mark.parametrize('code', [
-    class_with_base,
-])
 @pytest.mark.parametrize('base', [
     '(lambda: object)()',
     'method.call()',
@@ -25,7 +22,6 @@ class Meta({0}):
 def test_base_class_expression(
     assert_errors,
     parse_ast_tree,
-    code,
     base,
     default_options,
 ):
@@ -38,9 +34,6 @@ def test_base_class_expression(
     assert_errors(visitor, [IncorrectBaseClassViolation])
 
 
-@pytest.mark.parametrize('code', [
-    class_with_base,
-])
 @pytest.mark.parametrize('base', [
     'RawName',
     'Name.Attribute',
@@ -57,7 +50,6 @@ def test_base_class_expression(
 def test_correct_base_classes(
     assert_errors,
     parse_ast_tree,
-    code,
     base,
     default_options,
 ):

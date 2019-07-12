@@ -11,10 +11,16 @@ from wemake_python_styleguide.visitors.ast.builtins import MagicNumberVisitor
 # Correct usages:
 
 assignment = 'constant = {0}'
+assignment_typed = 'constant: int = {0}'
 assignment_unary = 'constant = -{0}'
 
 function_definition = """
 def function_name(param1, param2={0}):
+    return param1 / param2
+"""
+
+function_definition_typed = """
+def function_name(param1, param2: int = {0}):
     return param1 / param2
 """
 
@@ -27,6 +33,7 @@ tuple_definition = '({0}, )'
 # Incorrect usages:
 
 assignment_binop = 'final = {0} + 1'
+assignment_binop_typed = 'final: int = {0} + 1'
 function_call = 'print({0})'
 function_call_named = 'print(end={0})'
 expression = '{0}'
@@ -39,6 +46,11 @@ def wrapper():
 inside_class = """
 class Test(object):
     class_field = SOME_CONST - {0}
+"""
+
+inside_class_typed = """
+class Test(object):
+    class_field: int = SOME_CONST - {0}
 """
 
 inside_method = """
@@ -60,8 +72,10 @@ some_dict[{0}]
 
 @pytest.mark.parametrize('code', [
     assignment,
+    assignment_typed,
     assignment_unary,
     function_definition,
+    function_definition_typed,
     list_definition,
     dict_definition_key,
     dict_definition_value,
@@ -98,11 +112,13 @@ def test_magic_number(
 
 @pytest.mark.parametrize('code', [
     assignment_binop,
+    assignment_binop_typed,
     function_call,
     function_call_named,
     expression,
     inside_function,
     inside_class,
+    inside_class_typed,
     inside_method,
     list_index,
     dict_key,
@@ -133,11 +149,13 @@ def test_magic_number_whitelist(
 
 @pytest.mark.parametrize('code', [
     assignment_binop,
+    assignment_binop_typed,
     function_call,
     function_call_named,
     expression,
     inside_function,
     inside_class,
+    inside_class_typed,
     inside_method,
     list_index,
     dict_key,
@@ -171,11 +189,13 @@ def test_magic_number_warning(
 
 @pytest.mark.parametrize('code', [
     assignment_binop,
+    assignment_binop_typed,
     function_call,
     function_call_named,
     expression,
     inside_function,
     inside_class,
+    inside_class_typed,
     inside_method,
     list_index,
     dict_key,
@@ -187,7 +207,6 @@ def test_magic_number_warning(
 ])
 def test_magic_number_octal_warning(
     assert_errors,
-    assert_error_text,
     parse_ast_tree,
     code,
     number,

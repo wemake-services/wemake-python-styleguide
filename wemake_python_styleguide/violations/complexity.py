@@ -35,12 +35,17 @@ Summary
    TooManyMethodsViolation
    TooManyBaseClassesViolation
    TooManyDecoratorsViolation
+   TooManyAwaitsViolation
    TooDeepNestingViolation
    LineComplexityViolation
    TooManyConditionsViolation
    TooManyElifsViolation
    TooManyForsInComprehensionViolation
    TooManyExceptCasesViolation
+   OverusedStringViolation
+   TooLongYieldTupleViolation
+   TooLongCompareViolation
+
 
 Module complexity
 -----------------
@@ -59,6 +64,7 @@ Function and class complexity
 .. autoclass:: TooManyMethodsViolation
 .. autoclass:: TooManyBaseClassesViolation
 .. autoclass:: TooManyDecoratorsViolation
+.. autoclass:: TooManyAwaitsViolation
 
 Structures complexity
 ---------------------
@@ -69,6 +75,9 @@ Structures complexity
 .. autoclass:: TooManyElifsViolation
 .. autoclass:: TooManyForsInComprehensionViolation
 .. autoclass:: TooManyExceptCasesViolation
+.. autoclass:: OverusedStringViolation
+.. autoclass:: TooLongYieldTupleViolation
+.. autoclass:: TooLongCompareViolation
 
 """
 
@@ -76,6 +85,7 @@ from typing_extensions import final
 
 from wemake_python_styleguide.violations.base import (
     ASTViolation,
+    MaybeASTViolation,
     SimpleViolation,
 )
 
@@ -272,7 +282,7 @@ class TooManyReturnsViolation(ASTViolation):
         hard to change and keep everything inside your head at once.
 
     Solution:
-        Change your design.
+        Change your design. Split functions into multiple ones.
 
     Configuration:
         This rule is configurable with ``--max-returns``.
@@ -425,6 +435,31 @@ class TooManyDecoratorsViolation(ASTViolation):
 
     error_template = 'Too many decorators: {0}'
     code = 216
+
+
+@final
+class TooManyAwaitsViolation(ASTViolation):
+    """
+    Forbids placing too many ``await`` expressions into the function.
+
+    Reasoning:
+        When there are too many ``await`` keywords,
+        functions are starting to get really complex.
+        It is hard to tell where are we and what is going on.
+
+    Solution:
+        Change your design. Split functions into multiple ones.
+
+    Configuration:
+        This rule is configurable with ``--max-awaits``.
+        Default: :str:`wemake_python_styleguide.options.defaults.MAX_AWAITS`
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found too many await expressions: {0}'
+    code = 217
 
 
 # Structures:
@@ -602,3 +637,71 @@ class TooManyExceptCasesViolation(ASTViolation):
 
     error_template = 'Found too many `except` cases'
     code = 225
+
+
+@final
+class OverusedStringViolation(MaybeASTViolation):
+    """
+    Forbids to over-use string constants.
+
+    Reasoning:
+        When some string is used more than several time in your code,
+        it probably means that this string is a meaningful constant.
+        And should be treated like one.
+
+    Solution:
+        Deduplicate you string usages
+        by defining new functions or constants.
+
+    Configuration:
+        This rule is configurable with ``--max-string-usages``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_STRING_USAGES`
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found string constant over-use: {0}'
+    code = 226
+
+
+@final
+class TooLongYieldTupleViolation(ASTViolation):
+    """
+    Forbids to yield too long tuples.
+
+    Reasoning:
+        Long yield tuples complicate generator using.
+        This rule helps to reduce complication.
+
+    Solution:
+        Use lists of similar type or wrapper objects.
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found too long yield tuple: {0}'
+    code = 227
+
+
+@final
+class TooLongCompareViolation(ASTViolation):
+    """
+    Forbids to have too long compare expressions.
+
+    Reasoning:
+        To long compare expressions indicate
+        that there's something wrong going on in the code.
+        Compares should not be longer than 3 or 4 items.
+
+    Solution:
+        Use several conditions, seprate variables, or functions.
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found too long compare'
+    code = 228

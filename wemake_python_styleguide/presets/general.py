@@ -5,19 +5,16 @@ from wemake_python_styleguide.visitors.ast import (
     attributes,
     builtins,
     classes,
-    comparisons,
+    compares,
     conditions,
     exceptions,
     functions,
+    imports,
     keywords,
     loops,
+    modules,
     naming,
     statements,
-)
-from wemake_python_styleguide.visitors.ast.imports import WrongImportVisitor
-from wemake_python_styleguide.visitors.ast.modules import (
-    EmptyModuleContentsVisitor,
-    MagicModuleFunctionsVisitor,
 )
 from wemake_python_styleguide.visitors.filenames.module import (
     WrongModuleNameVisitor,
@@ -44,11 +41,12 @@ GENERAL_PRESET = (
 
     functions.WrongFunctionCallVisitor,
     functions.FunctionDefinitionVisitor,
+    functions.UselessLambdaDefinitionVisitor,
 
     exceptions.WrongTryExceptVisitor,
     exceptions.NestedTryBlocksVisitor,
 
-    WrongImportVisitor,
+    imports.WrongImportVisitor,
 
     naming.WrongNameVisitor,
     naming.WrongModuleMetadataVisitor,
@@ -60,19 +58,23 @@ GENERAL_PRESET = (
     builtins.WrongAssignmentVisitor,
     builtins.WrongCollectionVisitor,
 
-    comparisons.WrongConditionalVisitor,
-    comparisons.ComparisonSanityVisitor,
-    comparisons.WrongComparisionOrderVisitor,
+    compares.WrongConditionalVisitor,
+    compares.CompareSanityVisitor,
+    compares.WrongComparisionOrderVisitor,
+    compares.UnaryCompareVisitor,
 
     conditions.IfStatementVisitor,
+    conditions.BooleanConditionVisitor,
 
     # Classes:
     classes.WrongClassVisitor,
     classes.WrongMethodVisitor,
     classes.WrongSlotsVisitor,
+    classes.ClassAttributeVisitor,
 
     # Modules:
     WrongModuleNameVisitor,
-    EmptyModuleContentsVisitor,
-    MagicModuleFunctionsVisitor,
+    modules.EmptyModuleContentsVisitor,
+    modules.MagicModuleFunctionsVisitor,
+    modules.ModuleConstantsVisitor,
 )

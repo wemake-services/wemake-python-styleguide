@@ -6,14 +6,14 @@ from typing import ClassVar, DefaultDict, List, Optional, Union
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logics.nodes import get_parent, is_contained
-from wemake_python_styleguide.logics.variables import (
+from wemake_python_styleguide.logic.nodes import get_parent, is_contained
+from wemake_python_styleguide.logic.variables import (
     is_valid_block_variable_definition,
 )
 from wemake_python_styleguide.violations.best_practices import (
     LambdaInsideLoopViolation,
     LoopVariableDefinitionViolation,
-    RedundantLoopElseViolation,
+    UselessLoopElseViolation,
     YieldInComprehensionViolation,
 )
 from wemake_python_styleguide.violations.complexity import (
@@ -141,7 +141,7 @@ class WrongLoopVisitor(BaseNodeVisitor):
 
     def _check_loop_needs_else(self, node: AnyLoop) -> None:
         if node.orelse and not self._has_break(node):
-            self.add_violation(RedundantLoopElseViolation(node))
+            self.add_violation(UselessLoopElseViolation(node))
 
     def _check_lambda_inside_loop(self, node: AnyLoop) -> None:
         for subnode in node.body:
@@ -164,7 +164,7 @@ class WrongLoopVisitor(BaseNodeVisitor):
         Checks ``for`` and ``while`` loops.
 
         Raises:
-            RedundantLoopElseViolation
+            UselessLoopElseViolation
             LambdaInsideLoopViolation
 
         """

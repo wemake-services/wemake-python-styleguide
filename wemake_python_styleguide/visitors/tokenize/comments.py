@@ -5,13 +5,17 @@ Disallows to use incorrect magic comments.
 
 That's how a basic ``comment`` type token looks like:
 
-TokenInfo(
-    type=57 (COMMENT),
-    string='# noqa: Z100',
-    start=(1, 4),
-    end=(1, 16),
-    line="u'' # noqa: Z100\n",
-)
+.. code:: python
+
+    TokenInfo(
+        type=57 (COMMENT),
+        string='# noqa: Z100',
+        start=(1, 4),
+        end=(1, 16),
+        line="u'' # noqa: Z100\n",
+    )
+
+All comments have the same type.
 """
 
 import re
@@ -25,7 +29,7 @@ from wemake_python_styleguide.constants import (
     MAX_NO_COVER_COMMENTS,
     MAX_NOQA_COMMENTS,
 )
-from wemake_python_styleguide.logics.tokens import get_comment_text
+from wemake_python_styleguide.logic.tokens import get_comment_text
 from wemake_python_styleguide.violations.best_practices import (
     OveruseOfNoCoverCommentViolation,
     OveruseOfNoqaCommentViolation,

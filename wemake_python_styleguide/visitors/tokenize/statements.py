@@ -1,12 +1,22 @@
 # -*- coding: utf-8 -*-
 
 import tokenize
+import types
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, Dict, List, Sequence, Set, Tuple
+from typing import (
+    ClassVar,
+    DefaultDict,
+    Dict,
+    FrozenSet,
+    List,
+    Mapping,
+    Sequence,
+    Tuple,
+)
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logics.tokens import only_contains
+from wemake_python_styleguide.logic.tokens import only_contains
 from wemake_python_styleguide.violations.consistency import (
     ExtraIndentationViolation,
     WrongBracketPositionViolation,
@@ -15,17 +25,17 @@ from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
 TokenLines = DefaultDict[int, List[tokenize.TokenInfo]]
 
-MATCHING: Dict[int, int] = {
+MATCHING: Mapping[int, int] = types.MappingProxyType({
     tokenize.LBRACE: tokenize.RBRACE,
     tokenize.LSQB: tokenize.RSQB,
     tokenize.LPAR: tokenize.RPAR,
-}
+})
 
-ALLOWED_EMPTY_LINE_TOKENS: Set[int] = {
+ALLOWED_EMPTY_LINE_TOKENS: FrozenSet[int] = frozenset((
     tokenize.NL,
     tokenize.NEWLINE,
     *MATCHING.values(),
-}
+))
 
 
 def _get_reverse_bracket(bracket: tokenize.TokenInfo) -> int:
@@ -59,7 +69,7 @@ class ExtraIndentationVisitor(BaseTokenVisitor):
         self._offsets: Dict[int, tokenize.TokenInfo] = {}
 
     def _check_extra_indentation(self, token: tokenize.TokenInfo) -> None:
-        lineno, offset = token.start
+        lineno, _offset = token.start
         if lineno not in self._offsets:
             self._offsets[lineno] = token
 
@@ -128,7 +138,7 @@ class BracketLocationVisitor(BaseTokenVisitor):
         tokens: List[tokenize.TokenInfo],
     ) -> Dict[int, int]:
         """Annotates each opening bracket with the nested level index."""
-        brackets = {bracket: 0 for bracket in MATCHING.keys()}
+        brackets = {bracket: 0 for bracket in MATCHING}
         for token in tokens:
             if token.exact_type in MATCHING.keys():
                 brackets[token.exact_type] += 1

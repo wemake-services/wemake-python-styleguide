@@ -30,6 +30,7 @@ FUNCTIONS_BLACKLIST: Final = frozenset((
 
     # IO:
     'input',  # print is handled via `flake8-print`
+    'breakpoint',
 
     # Attribute access:
     'hasattr',
@@ -119,6 +120,12 @@ NESTED_CLASSES_WHITELIST: Final = frozenset((
     'Params',  # factoryboy specific
 ))
 
+#: List of builtin classes that are allowed to subclass.
+ALLOWED_BUILTIN_CLASSES: Final = frozenset((
+    'type',
+    'object',
+))
+
 #: List of nested functions' names we allow to use.
 NESTED_FUNCTIONS_WHITELIST: Final = frozenset((
     'decorator',
@@ -169,6 +176,9 @@ MAX_NOQA_COMMENTS: Final = 10
 
 #: Maximum amount of ``pragma`` no-cover comments per module.
 MAX_NO_COVER_COMMENTS: Final = 5
+
+#: Maximum length of ``yield`` ``tuple`` expressions.
+MAX_LEN_YIELD_TUPLE: Final = 5
 
 
 # Internal variables

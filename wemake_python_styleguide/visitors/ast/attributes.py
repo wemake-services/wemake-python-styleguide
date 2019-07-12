@@ -5,7 +5,7 @@ from typing import ClassVar, FrozenSet
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logics.naming import access
+from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.violations.best_practices import (
     DirectMagicAttributeAccessViolation,
     ProtectedAttributeViolation,
