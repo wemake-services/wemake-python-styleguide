@@ -6,6 +6,7 @@ from typing import ClassVar, List
 import astor
 from typing_extensions import final
 
+from wemake_python_styleguide.logic.compares import CompareBounds
 from wemake_python_styleguide.logic.functions import given_function_called
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.types import AnyIf, AnyNodes
@@ -17,6 +18,7 @@ from wemake_python_styleguide.violations.best_practices import (
     UselessReturningElseViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
+    ImplicitComplexCompareViolation,
     ImplicitTernaryViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -127,7 +129,7 @@ class BooleanConditionVisitor(BaseNodeVisitor):
         if len(set(operands)) != len(operands):
             self.add_violation(SameElementsInConditionViolation(node))
 
-    def _check_possible_ternary(self, node: ast.BoolOp) -> None:
+    def _check_implicit_ternary(self, node: ast.BoolOp) -> None:
         if isinstance(get_parent(node), ast.BoolOp):
             return
 
@@ -149,6 +151,13 @@ class BooleanConditionVisitor(BaseNodeVisitor):
         if is_implicit_ternary:
             self.add_violation(ImplicitTernaryViolation(node))
 
+    def _check_implicit_complex_compare(self, node: ast.BoolOp) -> None:
+        if not isinstance(node.op, ast.And):
+            return
+
+        if not CompareBounds(node).is_valid():
+            self.add_violation(ImplicitComplexCompareViolation(node))
+
     def visit_BoolOp(self, node: ast.BoolOp) -> None:
         """
         Checks that ``and`` and ``or`` conditions are correct.
@@ -156,8 +165,10 @@ class BooleanConditionVisitor(BaseNodeVisitor):
         Raises:
             SameElementsInConditionViolation
             ImplicitTernaryViolation
+            ImplicitComplexCompareViolation
 
         """
-        self._check_possible_ternary(node)
+        self._check_implicit_ternary(node)
+        self._check_implicit_complex_compare(node)
         self._check_same_elements(node)
         self.generic_visit(node)

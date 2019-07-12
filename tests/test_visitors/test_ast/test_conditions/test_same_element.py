@@ -44,8 +44,6 @@ def test_regular_conditions(
     'name or name',
     'name and name',
 
-    'name and proxy or name',
-    '(name and proxy) or name',
     'name and (proxy or name)',
 
     'name and proxy and name',
@@ -67,8 +65,26 @@ def test_duplicate_element(
     visitor = BooleanConditionVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(
-        visitor,
-        [SameElementsInConditionViolation],
+    assert_errors(visitor, [SameElementsInConditionViolation])
+
+
+@pytest.mark.parametrize('code', [
+    'name and proxy or name',
+    '(name and proxy) or name',
+])
+def test_duplicate_element_and_ternary(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+):
+    """Testing that duplicates raise two violations."""
+    tree = parse_ast_tree(code)
+
+    visitor = BooleanConditionVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [
         ImplicitTernaryViolation,
-    )
+        SameElementsInConditionViolation,
+    ])

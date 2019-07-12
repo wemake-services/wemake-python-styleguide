@@ -10,3 +10,5 @@ Linting process:
     - logic
     - compat
     - options
+    - constants
+    - types

@@ -58,6 +58,7 @@ Summary
    UselessOperatorsViolation
    InconsistentReturnVariableViolation
    ImplicitTernaryViolation
+   ImplicitComplexCompareViolation
 
 Consistency checks
 ------------------
@@ -95,6 +96,7 @@ Consistency checks
 .. autoclass:: UselessOperatorsViolation
 .. autoclass:: InconsistentReturnVariableViolation
 .. autoclass:: ImplicitTernaryViolation
+.. autoclass:: ImplicitComplexCompareViolation
 
 """
 
@@ -1270,3 +1272,34 @@ class ImplicitTernaryViolation(ASTViolation):
 
     code = 332
     error_template = 'Found implicit ternary expression'
+
+
+@final
+class ImplicitComplexCompareViolation(ASTViolation):
+    """
+    Forbids to have implicit complex compare expressions.
+
+    Reasoning:
+        Two compares in python that are joined with ``and`` operator
+        mean that you indeed have a complex compare with tree operators.
+
+    Solution:
+        Refactor your compare without ``and`` but with the third operator.
+        Notice, that you migth have to change the ordering.
+
+    Example::
+
+        # Correct:
+        if three < two < one:
+            ...
+
+        # Wrong:
+        if one > two and two > three:
+            ...
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    code = 333
+    error_template = 'Found implicit complex compare'

@@ -15,7 +15,7 @@ from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     BooleanPositionalArgumentViolation,
-    ComplexDefaultValuesViolation,
+    ComplexDefaultValueViolation,
     IncorrectSuperCallViolation,
     UselessLambdaViolation,
     WrongFunctionCallViolation,
@@ -173,7 +173,7 @@ class FunctionDefinitionVisitor(BaseNodeVisitor):
         for arg in node.args.defaults:
             real_arg = operators.unwrap_unary_node(arg)
             if not isinstance(real_arg, self._allowed_default_value_types):
-                self.add_violation(ComplexDefaultValuesViolation(node))
+                self.add_violation(ComplexDefaultValueViolation(node))
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """
@@ -181,7 +181,7 @@ class FunctionDefinitionVisitor(BaseNodeVisitor):
 
         Raises:
             UnusedVariableIsUsedViolation
-            ComplexDefaultValuesViolation
+            ComplexDefaultValueViolation
 
         """
         self._check_argument_default_values(node)

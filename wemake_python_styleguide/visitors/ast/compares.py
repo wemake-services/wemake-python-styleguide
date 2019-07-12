@@ -8,10 +8,13 @@ from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import AssignNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
-from wemake_python_styleguide.logic.functions import given_function_called
+from wemake_python_styleguide.logic import (
+    compares,
+    functions,
+    nodes,
+    operators,
+)
 from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
-from wemake_python_styleguide.logic.nodes import get_parent, is_literal
-from wemake_python_styleguide.logic.operators import unwrap_unary_node
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     HeterogenousCompareViolation,
@@ -47,9 +50,9 @@ class CompareSanityVisitor(BaseNodeVisitor):
     """Restricts the incorrect compares."""
 
     def _check_literal_compare(self, node: ast.Compare) -> None:
-        last_was_literal = is_literal(node.left)
+        last_was_literal = nodes.is_literal(node.left)
         for comparator in node.comparators:
-            next_is_literal = is_literal(comparator)
+            next_is_literal = nodes.is_literal(comparator)
             if last_was_literal and next_is_literal:
                 self.add_violation(ConstantCompareViolation(node))
                 break
@@ -75,7 +78,7 @@ class CompareSanityVisitor(BaseNodeVisitor):
         for index, compare in enumerate(all_nodes):
             if not isinstance(compare, ast.Call):
                 continue
-            if given_function_called(compare, {'len'}):
+            if functions.given_function_called(compare, {'len'}):
                 ps = index - len(all_nodes) + 1
                 if not _is_correct_len(node.ops[ps], node.comparators[ps]):
                     self.add_violation(UselessLenCompareViolation(node))
@@ -84,16 +87,7 @@ class CompareSanityVisitor(BaseNodeVisitor):
         if len(node.ops) == 1:
             return
 
-        similar_operators = {
-            ast.Gt: (ast.Gt, ast.GtE),
-            ast.GtE: (ast.Gt, ast.GtE),
-            ast.Lt: (ast.Lt, ast.LtE),
-            ast.LtE: (ast.Lt, ast.LtE),
-        }
-        prototype = similar_operators.get(
-            node.ops[0].__class__,
-            node.ops[0].__class__,
-        )
+        prototype = compares.get_similar_operators(node.ops[0])
 
         for op in node.ops:
             if not isinstance(op, prototype):
@@ -270,7 +264,7 @@ class WrongConditionalVisitor(BaseNodeVisitor):
         return astor.to_source(targets[0]).strip()
 
     def _check_constant_condition(self, node: AnyIf) -> None:
-        real_node = unwrap_unary_node(node.test)
+        real_node = operators.unwrap_unary_node(node.test)
         if isinstance(real_node, self._forbidden_nodes):
             self.add_violation(ConstantConditionViolation(node))
 
@@ -294,7 +288,8 @@ class WrongConditionalVisitor(BaseNodeVisitor):
             self.add_violation(SimplifiableIfViolation(node))
 
     def _check_nested_ifexpr(self, node: ast.IfExp) -> None:
-        if isinstance(get_parent(node), self._forbidden_expression_parents):
+        parent = nodes.get_parent(node)
+        if isinstance(parent, self._forbidden_expression_parents):
             self.add_violation(IncorrectlyNestedTernaryViolation(node))
 
 

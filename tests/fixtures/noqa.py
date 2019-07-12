@@ -281,6 +281,8 @@ def some_function():
 
 some_cond = cond() and 1 or None  # noqa: Z332
 
+print(one > two and two > three)  # noqa: Z333
+
 try:
     anti_z444 = 1
 except BaseException:  # noqa: Z424

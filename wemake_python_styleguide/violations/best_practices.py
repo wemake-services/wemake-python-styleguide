@@ -64,7 +64,7 @@ Summary
    IncorrectSuperCallViolation
    UselessReturningElseViolation
    TryExceptMultipleReturnPathViolation
-   ComplexDefaultValuesViolation
+   ComplexDefaultValueViolation
    LoopVariableDefinitionViolation
    ContextManagerVariableDefinitionViolation
    DirectMagicAttributeAccessViolation
@@ -138,7 +138,7 @@ Design
 .. autoclass:: IncorrectSuperCallViolation
 .. autoclass:: UselessReturningElseViolation
 .. autoclass:: TryExceptMultipleReturnPathViolation
-.. autoclass:: ComplexDefaultValuesViolation
+.. autoclass:: ComplexDefaultValueViolation
 .. autoclass:: LoopVariableDefinitionViolation
 .. autoclass:: ContextManagerVariableDefinitionViolation
 .. autoclass:: DirectMagicAttributeAccessViolation
@@ -1721,7 +1721,7 @@ class TryExceptMultipleReturnPathViolation(ASTViolation):
 
 
 @final
-class ComplexDefaultValuesViolation(ASTViolation):
+class ComplexDefaultValueViolation(ASTViolation):
     """
     Forbids to use complex defaults.
 
