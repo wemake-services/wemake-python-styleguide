@@ -126,15 +126,6 @@ which frees us from merging hell and long-living branches.
 
 In this method, the latest version of the app is always in the `master` branch.
 
-### Making patches to older versions
-
-If you want to release a patch for an older version, that what you have to do:
-
-1. Check out the previous `git tag`
-2. Create a new branch relative to this tag
-3. Merge it into master, there might be some `rebase` and `cherry-pick`
-   involved during this operation
-
 ### Before submitting
 
 Before submitting your code please do the following steps:
@@ -153,6 +144,23 @@ Before submitting your code please do the following steps:
 
 You can run everything at once with `make test`,
 see our `Makefile` for more details.
+
+
+## Notes for maintainers
+
+This section is intended for maintainers only.
+If you are not a maintainer (or do not know what it means),
+just skip it. You are not going to miss anything useful.
+
+### Making patches to older versions
+
+If you want to release a patch for an older version, that what you have to do:
+
+1. Check out the previous `tag`
+2. Create a new branch relative to this tag:
+   `git checkout $TAG_NAME; git checkout -b $RELEASE_NAME`
+3. Merge it into master, there might be some `rebase` and `cherry-pick`
+   involved during this operation
 
 
 ## Other help
