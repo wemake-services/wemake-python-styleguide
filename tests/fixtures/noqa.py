@@ -285,6 +285,9 @@ print(one > two and two > three)  # noqa: Z333
 
 print(biggesst > middle >= smallest)  # noqa: Z334
 
+for index in [1, 2]:  # noqa: Z335
+    print(index)
+
 try:
     anti_z444 = 1
 except BaseException:  # noqa: Z424
@@ -404,7 +407,7 @@ def bad_default_values(  # noqa: Z459
     return True
 
 
-for nodes[0] in [1, 2, 3]:  # noqa: Z460
+for nodes[0] in (1, 2, 3):  # noqa: Z460
     anti_z444 = 1
 
 with open('some') as MyBadException.custom:  # noqa: Z461

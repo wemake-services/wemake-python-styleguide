@@ -60,6 +60,7 @@ Summary
    ImplicitTernaryViolation
    ImplicitComplexCompareViolation
    ReversedComplexCompareViolation
+   IncorectLoopIterTypeViolation
 
 Consistency checks
 ------------------
@@ -99,6 +100,7 @@ Consistency checks
 .. autoclass:: ImplicitTernaryViolation
 .. autoclass:: ImplicitComplexCompareViolation
 .. autoclass:: ReversedComplexCompareViolation
+.. autoclass:: IncorectLoopIterTypeViolation
 
 """
 
@@ -1338,3 +1340,35 @@ class ReversedComplexCompareViolation(ASTViolation):
 
     code = 334
     error_template = 'Found reversed complex compare'
+
+
+@final
+class IncorectLoopIterTypeViolation(ASTViolation):
+    """
+    Forbids to use lists and dicts as ``for`` loop iter targets.
+
+    Reasoning:
+        Compares where comparators start from the lowest element
+        are easier to read than one that start from the biggest one.
+        It is also possible to write the same expression
+        in two separate way, which is incosistent.
+
+    Solution:
+        Use tuples to create explicit iterables for ``for`` loops.
+
+    Example::
+
+        # Correct:
+        for person in ('Kim', 'Nick'):
+            ...
+
+        # Wrong:
+        for person in ['Kim', 'Nick']:
+            ...
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    code = 335
+    error_template = 'Found incorrect `for` loop iter type'

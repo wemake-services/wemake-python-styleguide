@@ -34,8 +34,6 @@ def _assert_errors_count_in_output(output, errors, all_violations):
 def test_noqa_fixture_disabled(absolute_path, all_violations):
     """End-to-End test to check that all violations are present."""
     errors = {
-        # TODO: make `1` the default value, so we won't have to
-        # list all violations here, only ones with different values.
         'Z100': 0,
         'Z101': 0,
         'Z102': 0,
@@ -111,6 +109,7 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
         'Z332': 1,
         'Z333': 1,
         'Z334': 1,
+        'Z335': 1,
 
         'Z400': 0,
         'Z401': 0,

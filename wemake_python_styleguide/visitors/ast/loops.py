@@ -10,6 +10,7 @@ from wemake_python_styleguide.logic.nodes import get_parent, is_contained
 from wemake_python_styleguide.logic.variables import (
     is_valid_block_variable_definition,
 )
+from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     LambdaInsideLoopViolation,
     LoopVariableDefinitionViolation,
@@ -20,6 +21,7 @@ from wemake_python_styleguide.violations.complexity import (
     TooManyForsInComprehensionViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
+    IncorectLoopIterTypeViolation,
     MultipleIfsInComprehensionViolation,
     UselessContinueViolation,
 )
@@ -182,15 +184,26 @@ class WrongLoopVisitor(BaseNodeVisitor):
 class WrongLoopDefinitionVisitor(BaseNodeVisitor):
     """Responsible for ``for`` loops and comprehensions definitions."""
 
+    _forbidden_for_iters: ClassVar[AnyNodes] = (
+        ast.List,
+        ast.ListComp,
+        ast.Dict,
+        ast.DictComp,
+        ast.Set,
+        ast.SetComp,
+    )
+
     def visit_any_for_loop(self, node: AnyForLoop) -> None:
         """
         Ensures that ``for`` loop definitions are correct.
 
         Raises:
             LoopVariableDefinitionViolation
+            IncorectLoopIterTypeViolation
 
         """
         self._check_variable_definitions(node.target)
+        self._check_explicit_iter_type(node)
         self.generic_visit(node)
 
     def visit_comprehension(self, node: ast.comprehension) -> None:
@@ -207,3 +220,7 @@ class WrongLoopDefinitionVisitor(BaseNodeVisitor):
     def _check_variable_definitions(self, node: ast.AST) -> None:
         if not is_valid_block_variable_definition(node):
             self.add_violation(LoopVariableDefinitionViolation(node))
+
+    def _check_explicit_iter_type(self, node: AnyForLoop) -> None:
+        if isinstance(node.iter, self._forbidden_for_iters):
+            self.add_violation(IncorectLoopIterTypeViolation(node))
