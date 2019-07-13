@@ -10,6 +10,9 @@ This release is mostly targeted at writing better compares and conditions.
 We introduce a lot of new rules related to this topic improving:
 consistency, complexity, and general feel from your code.
 
+In this release we have ported a lot of existing `pylint` rules,
+big cudos to the developers of this wonderful tool.
+
 ### Features
 
 - Adds `flake8-executable` as a dependency
