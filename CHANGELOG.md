@@ -33,7 +33,7 @@ big cudos to the developers of this wonderful tool.
 - Forbids to have class variables that are shadowed by instance variables
 - Forbids to use ternary expressions inside `if` conditions
 - Forces to use ternary instead of `... and ... or ...` expression
-- Forces to use `a > b > c` instead of `a > b and b > c`
+- Forces to use `c < b < a` instead of `a > b and b > c`
 - Forces to use `c < b < a` instead of `a > b > c`
 - Forbids to use explicit `in []` and `in ()`, use sets or variables instead
 

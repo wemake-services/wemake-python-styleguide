@@ -25,6 +25,7 @@ Editors
 - `vim plugin <https://github.com/nvie/vim-flake8>`_
 - `emacs plugin <https://github.com/flycheck/flycheck>`_
 - `pycharm plugin <https://plugins.jetbrains.com/plugin/11563-flake8-support>`_
+- `wing plugin <https://github.com/grahamu/flake8panel>`_
 
 
 Extras
