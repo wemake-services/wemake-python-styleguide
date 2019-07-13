@@ -61,6 +61,7 @@ Summary
    ImplicitComplexCompareViolation
    ReversedComplexCompareViolation
    IncorectLoopIterTypeViolation
+   ImplicitInConditionViolation
 
 Consistency checks
 ------------------
@@ -101,6 +102,7 @@ Consistency checks
 .. autoclass:: ImplicitComplexCompareViolation
 .. autoclass:: ReversedComplexCompareViolation
 .. autoclass:: IncorectLoopIterTypeViolation
+.. autoclass:: ImplicitInConditionViolation
 
 """
 
@@ -1372,3 +1374,35 @@ class IncorectLoopIterTypeViolation(ASTViolation):
 
     code = 335
     error_template = 'Found incorrect `for` loop iter type'
+
+
+@final
+class ImplicitInConditionViolation(ASTViolation):
+    """
+    Forbids to use multiple equality compare with the same variable name.
+
+    Reasoning:
+        Using double+ equality compare with ``or``
+        or double+ non-equality compare with ``and``
+        indicates that you have implicit ``in`` or ``not in`` condition.
+        It is just hidden from you.
+
+    Solution:
+        Refactor compares to use ``in`` or ``not in`` clauses.
+
+    Example::
+
+        # Correct:
+        print(some in {'first', 'second'})
+        print(some not in {'first', 'second'})
+
+        # Wrong:
+        print(some == 'first' or some == 'second')
+        print(some != 'first' and some != 'second')
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    code = 336
+    error_template = 'Found implicit `in` condition'

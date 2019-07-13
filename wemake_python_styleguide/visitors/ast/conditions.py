@@ -2,7 +2,8 @@
 
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, List
+from functools import reduce
+from typing import ClassVar, DefaultDict, Dict, List, Set, Type
 
 import astor
 from typing_extensions import final
@@ -21,6 +22,7 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.violations.consistency import (
     ImplicitComplexCompareViolation,
+    ImplicitInConditionViolation,
     ImplicitTernaryViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -39,12 +41,18 @@ def _duplicated_isinstance_call(node: ast.BoolOp) -> List[str]:
         isinstance_object = astor.to_source(call.args[0]).strip()
         counter[isinstance_object] += 1
 
-    # Remove all keys which not duplicated:
     return [
         node_name
         for node_name, count in counter.items()
         if count > 1
     ]
+
+
+def _get_duplicate_names(variables: List[Set[str]]):
+    return reduce(
+        lambda acc, element: acc.intersection(element),
+        variables,
+    )
 
 
 @final
@@ -159,6 +167,72 @@ class BooleanConditionVisitor(BaseNodeVisitor):
         if len(set(operands)) != len(operands):
             self.add_violation(SameElementsInConditionViolation(node))
 
+    def _check_isinstance_calls(self, node: ast.BoolOp) -> None:
+        if not isinstance(node.op, ast.Or):
+            return
+
+        for var_name in _duplicated_isinstance_call(node):
+            self.add_violation(
+                UnmergedIsinstanceCallsViolation(node, text=var_name),
+            )
+
+    def visit_BoolOp(self, node: ast.BoolOp) -> None:
+        """
+        Checks that ``and`` and ``or`` conditions are correct.
+
+        Raises:
+            SameElementsInConditionViolation
+            UnmergedIsinstanceCallsViolation
+
+        """
+        self._check_same_elements(node)
+        self._check_isinstance_calls(node)
+        self.generic_visit(node)
+
+
+@final
+class ImplicitBoolPatternsVisitor(BaseNodeVisitor):
+    """Is used to find implicit patterns that are formed by boolops."""
+
+    def visit_BoolOp(self, node: ast.BoolOp) -> None:
+        """
+        Checks that ``and`` and ``or`` do not form implicit anti-patterns.
+
+        Raises:
+            ImplicitTernaryViolation
+            ImplicitComplexCompareViolation
+            ImplicitInConditionViolation
+
+        """
+        self._check_implicit_in(node)
+        self._check_implicit_ternary(node)
+        self._check_implicit_complex_compare(node)
+        self.generic_visit(node)
+
+    def _check_implicit_in(self, node: ast.BoolOp) -> None:
+        allowed_ops: Dict[Type[ast.boolop], Type[ast.cmpop]] = {
+            ast.And: ast.NotEq,
+            ast.Or: ast.Eq,
+        }
+
+        for compare in node.values:
+            if not isinstance(compare, ast.Compare) or len(compare.ops) != 1:
+                return
+
+            if not isinstance(compare.ops[0], allowed_ops[node.op.__class__]):
+                return
+
+        variables: List[Set[str]] = [
+            {astor.to_source(compare.left)}
+            for compare in node.values
+            if isinstance(compare, ast.Compare)  # mypy needs this
+        ]
+
+        for duplicate in _get_duplicate_names(variables):
+            self.add_violation(
+                ImplicitInConditionViolation(node, text=duplicate),
+            )
+
     def _check_implicit_ternary(self, node: ast.BoolOp) -> None:
         if isinstance(get_parent(node), ast.BoolOp):
             return
@@ -187,29 +261,3 @@ class BooleanConditionVisitor(BaseNodeVisitor):
 
         if not CompareBounds(node).is_valid():
             self.add_violation(ImplicitComplexCompareViolation(node))
-
-    def _check_isinstance_calls(self, node: ast.BoolOp) -> None:
-        if not isinstance(node.op, ast.Or):
-            return
-
-        for var_name in _duplicated_isinstance_call(node):
-            self.add_violation(
-                UnmergedIsinstanceCallsViolation(node, text=var_name),
-            )
-
-    def visit_BoolOp(self, node: ast.BoolOp) -> None:
-        """
-        Checks that ``and`` and ``or`` conditions are correct.
-
-        Raises:
-            SameElementsInConditionViolation
-            ImplicitTernaryViolation
-            ImplicitComplexCompareViolation
-            UnmergedIsinstanceCallsViolation
-
-        """
-        self._check_implicit_ternary(node)
-        self._check_implicit_complex_compare(node)
-        self._check_same_elements(node)
-        self._check_isinstance_calls(node)
-        self.generic_visit(node)

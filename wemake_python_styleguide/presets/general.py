@@ -65,6 +65,7 @@ GENERAL_PRESET = (
 
     conditions.IfStatementVisitor,
     conditions.BooleanConditionVisitor,
+    conditions.ImplicitBoolPatternsVisitor,
 
     # Classes:
     classes.WrongClassVisitor,

@@ -288,6 +288,8 @@ print(biggesst > middle >= smallest)  # noqa: Z334
 for index in [1, 2]:  # noqa: Z335
     print(index)
 
+print(one == 'a' or one == 'b')  # noqa: Z336
+
 try:
     anti_z444 = 1
 except BaseException:  # noqa: Z424

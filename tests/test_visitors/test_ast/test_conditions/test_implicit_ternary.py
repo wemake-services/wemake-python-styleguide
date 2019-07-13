@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations.consistency import (
     ImplicitTernaryViolation,
 )
 from wemake_python_styleguide.visitors.ast.conditions import (
-    BooleanConditionVisitor,
+    ImplicitBoolPatternsVisitor,
 )
 
 # Correct:
@@ -49,7 +49,7 @@ def test_implicit_ternary(
     """Testing implicit ternary."""
     tree = parse_ast_tree(code.format(first, second))
 
-    visitor = BooleanConditionVisitor(default_options, tree=tree)
+    visitor = ImplicitBoolPatternsVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [ImplicitTernaryViolation])
@@ -85,7 +85,7 @@ def test_regular_compare_not_ternary(
     """Testing regular compares and not ternaries."""
     tree = parse_ast_tree(code.format(first, second))
 
-    visitor = BooleanConditionVisitor(default_options, tree=tree)
+    visitor = ImplicitBoolPatternsVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])

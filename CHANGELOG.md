@@ -39,6 +39,8 @@ big cudos to the developers of this wonderful tool.
 - Forces to write `isinstance(some, (A, B))`
   instead of `isinstance(some, A) or isinstance(some, B)`
 - Forbids to use `isinstance(some (A,))`
+- Forces to merge `a == b or a == c` into `a in {b, c}` and
+  to merge `a != b and a != c` into `a not in {b, c}`
 
 ### Bugfixes
 

@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations.consistency import (
     ImplicitComplexCompareViolation,
 )
 from wemake_python_styleguide.visitors.ast.conditions import (
-    BooleanConditionVisitor,
+    ImplicitBoolPatternsVisitor,
 )
 
 # Wrong:
@@ -87,7 +87,7 @@ def test_implicit_complex_compare(
     """Testing implicit complex compare."""
     tree = parse_ast_tree(code.format(*comparators))
 
-    visitor = BooleanConditionVisitor(default_options, tree=tree)
+    visitor = ImplicitBoolPatternsVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [ImplicitComplexCompareViolation])
@@ -126,7 +126,7 @@ def test_implicit_complex_compare_reversed(
     """Testing implicit complex compare."""
     tree = parse_ast_tree(code.format(*comparators))
 
-    visitor = BooleanConditionVisitor(default_options, tree=tree)
+    visitor = ImplicitBoolPatternsVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [ImplicitComplexCompareViolation])
@@ -166,7 +166,7 @@ def test_compare_wrong_values(
     """Testing implicit complex compare."""
     tree = parse_ast_tree(code.format(*comparators))
 
-    visitor = BooleanConditionVisitor(default_options, tree=tree)
+    visitor = ImplicitBoolPatternsVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -206,7 +206,7 @@ def test_regular_compare(
     """Testing implicit complex compare."""
     tree = parse_ast_tree(code.format(*comparators))
 
-    visitor = BooleanConditionVisitor(default_options, tree=tree)
+    visitor = ImplicitBoolPatternsVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -228,7 +228,7 @@ def test_regular_short_compare(
     """Testing implicit complex compare."""
     tree = parse_ast_tree(code)
 
-    visitor = BooleanConditionVisitor(default_options, tree=tree)
+    visitor = ImplicitBoolPatternsVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
