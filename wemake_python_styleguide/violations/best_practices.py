@@ -79,6 +79,8 @@ Summary
    HeterogenousCompareViolation
    IncorrectlyNestedTernaryViolation
    WrongInCompareTypeViolation
+   UnmergedIsinstanceCallsViolation
+   WrongIsinstanceWithTupleViolation
 
 Comments
 --------
@@ -154,6 +156,8 @@ Design
 .. autoclass:: HeterogenousCompareViolation
 .. autoclass:: IncorrectlyNestedTernaryViolation
 .. autoclass:: WrongInCompareTypeViolation
+.. autoclass:: UnmergedIsinstanceCallsViolation
+.. autoclass:: WrongIsinstanceWithTupleViolation
 
 """
 
@@ -2239,3 +2243,67 @@ class WrongInCompareTypeViolation(ASTViolation):
 
     error_template = 'Found `in` used with a non-set container'
     code = 473
+
+
+@final
+class UnmergedIsinstanceCallsViolation(ASTViolation):
+    """
+    Forbids to multiple ``isinstance`` calls with the same variable.
+
+    Reasoning:
+        The best practice is to use ``isinstance`` with tuple
+        as the second argument, instead of multiple conditions
+        joined with ``or``.
+
+    Solution:
+        Use tuple of types as the second argument.
+
+    Example::
+
+        # Correct:
+        isinstance(some, (int, float))
+
+        # Wrong:
+        isinstance(some, int) or isinstance(some, float)
+
+    See: https://docs.python.org/3/library/functions.html#isinstance
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = (
+        'Found separate `isinstance` calls that can be merged for: {0}'
+    )
+    code = 474
+
+
+@final
+class WrongIsinstanceWithTupleViolation(ASTViolation):
+    """
+    Forbids to multiple ``isinstance`` calls with tuples of a single item.
+
+    Reasoning:
+        There's no need to use tuples with single elements.
+        You can use single variables or tuples with multiple elements.
+
+    Solution:
+        Use tuples with multiple elements or a single varaible.
+
+    Example::
+
+        # Correct:
+        isinstance(some, (int, float))
+        isisntance(some, int)
+
+        # Wrong:
+        isinstance(some, (int, ))
+
+    See: https://docs.python.org/3/library/functions.html#isinstance
+
+    .. versionadded:: 0.10.0
+
+    """
+
+    error_template = 'Found `isinstance` call with a single element tuple'
+    code = 475

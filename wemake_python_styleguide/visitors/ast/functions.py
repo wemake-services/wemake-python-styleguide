@@ -19,6 +19,7 @@ from wemake_python_styleguide.violations.best_practices import (
     IncorrectSuperCallViolation,
     UselessLambdaViolation,
     WrongFunctionCallViolation,
+    WrongIsinstanceWithTupleViolation,
 )
 from wemake_python_styleguide.violations.naming import (
     UnusedVariableIsUsedViolation,
@@ -58,9 +59,8 @@ class WrongFunctionCallVisitor(BaseNodeVisitor):
                     )
 
     def _ensure_super_context(self, node: ast.Call) -> None:
-        parent_context = getattr(node, 'wps_context', None)
+        parent_context = nodes.get_context(node)
         if isinstance(parent_context, (ast.FunctionDef, ast.AsyncFunctionDef)):
-            grand_context = getattr(parent_context, 'wps_context', None)
             grand_context = nodes.get_context(parent_context)
             if isinstance(grand_context, ast.ClassDef):
                 return
@@ -75,10 +75,19 @@ class WrongFunctionCallVisitor(BaseNodeVisitor):
             )
 
     def _check_super_call(self, node: ast.Call) -> None:
-        function_name = functions.given_function_called(node, ['super'])
+        function_name = functions.given_function_called(node, {'super'})
         if function_name:
             self._ensure_super_context(node)
             self._ensure_super_arguments(node)
+
+    def _check_isinstance_call(self, node: ast.Call) -> None:
+        function_name = functions.given_function_called(node, {'isinstance'})
+        if not function_name or len(node.args) != 2:
+            return
+
+        if isinstance(node.args[1], ast.Tuple):
+            if len(node.args[1].elts) == 1:
+                self.add_violation(WrongIsinstanceWithTupleViolation(node))
 
     def visit_Call(self, node: ast.Call) -> None:
         """
@@ -88,11 +97,13 @@ class WrongFunctionCallVisitor(BaseNodeVisitor):
             BooleanPositionalArgumentViolation
             WrongFunctionCallViolation
             IncorrectSuperCallViolation
+            WrongIsinstanceWithTupleViolation
 
         """
         self._check_wrong_function_called(node)
         self._check_boolean_arguments(node)
         self._check_super_call(node)
+        self._check_isinstance_call(node)
         self.generic_visit(node)
 
 

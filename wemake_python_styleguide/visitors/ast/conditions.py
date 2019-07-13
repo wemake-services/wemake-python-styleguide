@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import ClassVar, List
+from collections import defaultdict
+from typing import ClassVar, DefaultDict, List
 
 import astor
 from typing_extensions import final
@@ -14,6 +15,7 @@ from wemake_python_styleguide.violations.best_practices import (
     MultilineConditionsViolation,
     NegatedConditionsViolation,
     SameElementsInConditionViolation,
+    UnmergedIsinstanceCallsViolation,
     UselessLenCompareViolation,
     UselessReturningElseViolation,
 )
@@ -22,6 +24,27 @@ from wemake_python_styleguide.violations.consistency import (
     ImplicitTernaryViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
+
+
+def _duplicated_isinstance_call(node: ast.BoolOp) -> List[str]:
+    counter: DefaultDict[str, int] = defaultdict(int)
+
+    for call in node.values:
+        if not isinstance(call, ast.Call) or len(call.args) != 2:
+            continue
+
+        if not given_function_called(call, {'isinstance'}):
+            continue
+
+        isinstance_object = astor.to_source(call.args[0]).strip()
+        counter[isinstance_object] += 1
+
+    # Remove all keys which not duplicated:
+    return [
+        node_name
+        for node_name, count in counter.items()
+        if count > 1
+    ]
 
 
 @final
@@ -33,6 +56,7 @@ class IfStatementVisitor(BaseNodeVisitor):
         ast.Break,
         ast.Raise,
         ast.Return,
+        ast.Continue,
     )
 
     def _check_negated_conditions(self, node: ast.If) -> None:
@@ -105,13 +129,19 @@ class IfStatementVisitor(BaseNodeVisitor):
 class BooleanConditionVisitor(BaseNodeVisitor):
     """Ensures that boolean conditions are correct."""
 
+    def __init__(self, *args, **kwargs) -> None:
+        """We need to store some bool nodes not to visit them twice."""
+        super().__init__(*args, **kwargs)
+        self._same_nodes: List[ast.BoolOp] = []
+        self._isinstance_calls: List[ast.BoolOp] = []
+
     def _get_all_names(
         self,
         node: ast.BoolOp,
     ) -> List[str]:
-        # That's an ugly hack to make sure that we do not visit
-        # one chained `BoolOp` elements twice. Sorry!
-        node._wps_visited = True  # type: ignore  # noqa: Z441
+        # We need to make sure that we do not visit
+        # one chained `BoolOp` elements twice:
+        self._same_nodes.append(node)
 
         names = []
         for operand in node.values:
@@ -122,7 +152,7 @@ class BooleanConditionVisitor(BaseNodeVisitor):
         return names
 
     def _check_same_elements(self, node: ast.BoolOp) -> None:
-        if getattr(node, '_wps_visited', False):  # noqa: Z425
+        if node in self._same_nodes:
             return  # We do not visit nested `BoolOp`s twice.
 
         operands = self._get_all_names(node)
@@ -158,6 +188,15 @@ class BooleanConditionVisitor(BaseNodeVisitor):
         if not CompareBounds(node).is_valid():
             self.add_violation(ImplicitComplexCompareViolation(node))
 
+    def _check_isinstance_calls(self, node: ast.BoolOp) -> None:
+        if not isinstance(node.op, ast.Or):
+            return
+
+        for var_name in _duplicated_isinstance_call(node):
+            self.add_violation(
+                UnmergedIsinstanceCallsViolation(node, text=var_name),
+            )
+
     def visit_BoolOp(self, node: ast.BoolOp) -> None:
         """
         Checks that ``and`` and ``or`` conditions are correct.
@@ -166,9 +205,11 @@ class BooleanConditionVisitor(BaseNodeVisitor):
             SameElementsInConditionViolation
             ImplicitTernaryViolation
             ImplicitComplexCompareViolation
+            UnmergedIsinstanceCallsViolation
 
         """
         self._check_implicit_ternary(node)
         self._check_implicit_complex_compare(node)
         self._check_same_elements(node)
+        self._check_isinstance_calls(node)
         self.generic_visit(node)

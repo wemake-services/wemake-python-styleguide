@@ -68,6 +68,7 @@ def test_else_that_can_be_removed_in_function(
 @pytest.mark.parametrize('code', [
     'break',
     'raise ValueError()',
+    'continue',
 ])
 def test_else_that_can_be_removed_in_loop(
     assert_errors,

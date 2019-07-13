@@ -46,6 +46,6 @@ def count_unary_operator(
     parent = get_parent(node)
     if parent is None or not isinstance(parent, ast.UnaryOp):
         return amount
-    if isinstance(parent.op, (operator,)):
+    if isinstance(parent.op, operator):
         return count_unary_operator(parent, operator, amount + 1)
     return count_unary_operator(parent, operator, amount)

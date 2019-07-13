@@ -451,3 +451,7 @@ if numbers == CONSTANT != []:  # noqa: Z471
     print(1 + (1 if number else 2))  # noqa: Z472
 
 print(numbers in [])  # noqa: Z473
+
+print(isinstance(number, int) or isinstance(number, (float, str)))  # noqa: 474
+
+print(isinstance(numbers, (int,)))  # noqa: Z475

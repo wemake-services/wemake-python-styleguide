@@ -36,12 +36,16 @@ big cudos to the developers of this wonderful tool.
 - Forces to use `c < b < a` instead of `a > b and b > c`
 - Forces to use `c < b < a` instead of `a > b > c`
 - Forbids to use explicit `in []` and `in ()`, use sets or variables instead
+- Forces to write `isinstance(some, (A, B))`
+  instead of `isinstance(some, A) or isinstance(some, B)`
+- Forbids to use `isinstance(some (A,))`
 
 ### Bugfixes
 
 - Fixes incorrect line number for `Z331`
 - Fixes that `Z311` was not raising for multiple `not in` cases
 - Fixes a bunch of bugs for rules working with `Assign` and not `AnnAssign`
+- Fixes that `continue` was not triggering `UselessReturningElseViolation`
 
 ### Misc
 
