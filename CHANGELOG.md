@@ -306,7 +306,7 @@ and lots of bug fixes.
 - Now `RedundantLoopElseViolation` also checks `while` loops
 
 
-## Bugfixes
+### Bugfixes
 
 - Fixes `TooManyConditionsViolation` to work with any conditions, not just `if`s
 - Fixes `TooManyConditionsViolation` that did not count conditions correctly
