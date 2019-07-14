@@ -58,7 +58,7 @@ MAX_JONES_SCORE: Final = 12  # this value was "guessed"
 MAX_IMPORTS: Final = 12
 
 #: Maximum number of imported names in a single module.
-MAX_IMPORTED_NAMES: Final = 50
+MAX_IMPORTED_NAMES: Final = 50  # this value was "guessed"
 
 #: Maximum number of base classes.
 MAX_BASE_CLASSES: Final = 3
