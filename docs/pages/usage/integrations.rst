@@ -10,10 +10,12 @@ There are different integrations for your workflow.
 Hooks
 -----
 
-- `pytest-flake8 <https://github.com/tholo/pytest-flake8>`_ to run style checks alongside with tests
-- `pre-commit <https://pre-commit.com/>`_ to run ``flake8`` before all commits locally
-- `pronto-flake8 <https://github.com/scoremedia/pronto-flake8>`_ to run inline-comment
-  violations during code-review inside your CI
+- `pytest-flake8 <https://github.com/tholo/pytest-flake8>`_ to run style checks
+  alongside with tests
+- `pre-commit <https://pre-commit.com/>`_ to run ``flake8``
+  before all commits locally
+- `pronto-flake8 <https://github.com/scoremedia/pronto-flake8>`_ to post
+  inline-comments with violations during code-review inside your CI
 
 
 Editors
@@ -81,8 +83,8 @@ However, it is important to mention
 that ``pylint`` is less radical and more classic in its rules.
 
 
-Autoformatters
---------------
+Auto-formatters
+---------------
 
 Autoformatters are very simple tools to do just a one thing:
 reformat some basic stuff in your code like quotes, commas, and line length.

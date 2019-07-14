@@ -10,6 +10,8 @@ We used to have incremental versioning before `0.1.0`.
 
 - Adds `--show-source` to the default recommended configuration
 - Adds better docs about auto-formatters
+- Adds `autopep8` to CI to make sure that `wps` is compatible with it
+- Ensures that `--diff` mode works for `flake8`
 
 
 ## 0.10.0 aka The Great Compare
