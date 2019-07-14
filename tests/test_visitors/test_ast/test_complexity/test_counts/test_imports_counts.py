@@ -2,6 +2,9 @@
 
 import pytest
 
+from wemake_python_styleguide.violations.complexity import (
+    TooManyImportedNamesViolation,
+)
 from wemake_python_styleguide.visitors.ast.complexity.counts import (
     ImportMembersVisitor,
     TooManyImportsViolation,
@@ -58,4 +61,26 @@ def test_module_import_counts_violation(
     visitor.run()
 
     assert_errors(visitor, [TooManyImportsViolation])
+    assert_error_text(visitor, '2')
+
+
+@pytest.mark.parametrize('code', [
+    module_with_regular_imports,
+    module_with_from_imports,
+])
+def test_module_imported_names_counts_violation(
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    code,
+    options,
+):
+    """Testing that violations are raised when reaching max value."""
+    tree = parse_ast_tree(code)
+
+    option_values = options(max_imported_names=1)
+    visitor = ImportMembersVisitor(option_values, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [TooManyImportedNamesViolation])
     assert_error_text(visitor, '2')

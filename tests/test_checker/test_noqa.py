@@ -33,6 +33,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'Z200': 0,
     'Z201': 0,
     'Z202': 0,
+    'Z203': 0,
 
     'Z210': 1,
     'Z211': 1,

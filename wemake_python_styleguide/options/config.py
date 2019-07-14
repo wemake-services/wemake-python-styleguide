@@ -86,6 +86,9 @@ class Configuration(object):
     - ``max-imports`` - maximum number of imports in a single module,
       defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_IMPORTS`
+    - ``max-imported-names`` - maximum number of imported names
+      in a single module, defaults to
+      :str:`wemake_python_styleguide.options.defaults.MAX_IMPORTED_NAMES`
     - ``max-base-classes`` - maximum number of parent classes inside a class
       definition, defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_BASE_CLASSES`
@@ -172,6 +175,12 @@ class Configuration(object):
             '--max-imports',
             defaults.MAX_IMPORTS,
             'Maximum number of imports in a single module.',
+        ),
+
+        _Option(
+            '--max-imported-names',
+            defaults.MAX_IMPORTED_NAMES,
+            'Maximum number of imported names in a single module.',
         ),
 
         _Option(

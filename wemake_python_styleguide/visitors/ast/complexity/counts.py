@@ -17,6 +17,7 @@ from wemake_python_styleguide.violations.complexity import (
     TooManyDecoratorsViolation,
     TooManyElifsViolation,
     TooManyExceptCasesViolation,
+    TooManyImportedNamesViolation,
     TooManyImportsViolation,
     TooManyMethodsViolation,
     TooManyModuleMembersViolation,
@@ -91,12 +92,26 @@ class ImportMembersVisitor(BaseNodeVisitor):
         """Creates a counter for tracked metrics."""
         super().__init__(*args, **kwargs)
         self._imports_count = 0
+        self._imported_names_count = 0
 
-    def _post_visit(self) -> None:
+    def _check_imports_count(self) -> None:
         if self._imports_count > self.options.max_imports:
             self.add_violation(
                 TooManyImportsViolation(text=str(self._imports_count)),
             )
+
+    def _check_imported_names_count(self) -> None:
+        if self._imported_names_count > self.options.max_imported_names:
+            violation = TooManyImportedNamesViolation(
+                text=str(self._imported_names_count),
+            )
+            self.add_violation(
+                violation,
+            )
+
+    def _post_visit(self) -> None:
+        self._check_imports_count()
+        self._check_imported_names_count()
 
     def visit_any_import(self, node: AnyImport) -> None:
         """
@@ -104,9 +119,11 @@ class ImportMembersVisitor(BaseNodeVisitor):
 
         Raises:
             TooManyImportsViolation
+            TooManyImportedNamesViolation
 
         """
         self._imports_count += 1
+        self._imported_names_count += len(node.names)
         self.generic_visit(node)
 
 
