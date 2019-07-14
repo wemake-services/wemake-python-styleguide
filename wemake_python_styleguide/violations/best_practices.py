@@ -57,6 +57,7 @@ Summary
    YieldInsideInitViolation
    ProtectedModuleViolation
    ProtectedAttributeViolation
+   StopIterationInsideGeneratorViolation
 
 Best practices
 --------------
@@ -99,6 +100,7 @@ Best practices
 .. autoclass:: YieldInsideInitViolation
 .. autoclass:: ProtectedModuleViolation
 .. autoclass:: ProtectedAttributeViolation
+.. autoclass:: StopIterationInsideGeneratorViolation
 
 """
 
@@ -1446,3 +1448,39 @@ class ProtectedAttributeViolation(ASTViolation):
     error_template = 'Found protected attribute usage: {0}'
     code = 437
     previous_codes = {441}
+
+
+@final
+class StopIterationInsideGeneratorViolation(ASTViolation):
+    """
+    Forbids to raise ``StopIteration`` inside generators.
+
+    Reasoning:
+        ``StopIteration`` should not be raised explicitly in generators.
+
+    Solution:
+        Use return statement to get out of a generator.
+
+    Example::
+
+        # Correct:
+        def some_generator():
+            if some_value:
+                return
+            yield 1
+
+        # Wrong:
+        def some_generator():
+            if some_value:
+                raise StopIteration
+            yield 1
+
+    See also:
+        https://docs.python.org/3/library/exceptions.html#StopIteration
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found `StopIteration` raising inside generator'
+    code = 438

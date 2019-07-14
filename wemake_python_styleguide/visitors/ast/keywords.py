@@ -7,7 +7,11 @@ from typing import ClassVar, Dict, List, Tuple, Type, Union
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
-from wemake_python_styleguide.logic.nodes import get_context, get_parent
+from wemake_python_styleguide.logic.nodes import (
+    get_context,
+    get_exception_name,
+    get_parent,
+)
 from wemake_python_styleguide.logic.variables import (
     is_valid_block_variable_definition,
 )
@@ -42,15 +46,7 @@ class WrongRaiseVisitor(BaseNodeVisitor):
     """Finds wrong ``raise`` keywords."""
 
     def _check_exception_type(self, node: ast.Raise) -> None:
-        exception = getattr(node, 'exc', None)
-        if exception is None:
-            return
-
-        exception_func = getattr(exception, 'func', None)
-        if exception_func:
-            exception = exception_func
-
-        exception_name = getattr(exception, 'id', None)
+        exception_name = get_exception_name(node)
         if exception_name == 'NotImplemented':
             self.add_violation(RaiseNotImplementedViolation(node))
 
