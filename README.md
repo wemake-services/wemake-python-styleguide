@@ -52,8 +52,8 @@ to make all people write **exactly** the same `python` code.
 |                            | black | pylint | flake8 | wemake-python-styleguide |
 |----------------------------|-------|--------|--------|--------------------------|
 | Formats code?              |   ✅   |    ❌   |    ❌   |             ❌            |
-| Finds bugs?                |   ❌   |    ✅   |    ✅   |             ✅            |
-| Finds complex code?        |   ❌   |    ✅   |    ✅   |             ✅            |
+| Finds bugs?                |   ❌   |    ✅   |    🤔   |             ✅            |
+| Finds complex code?        |   ❌   |    ✅   |    🤔   |             ✅            |
 | Has a lot of strict rules? |   ❌   |    🤔   |    ❌   |             ✅            |
 | Has a lot of plugins?      |   ❌   |    ❌   |    ✅   |             ✅            |
 
