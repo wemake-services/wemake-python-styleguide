@@ -80,9 +80,9 @@ We are *not* planning to do the following things:
 ## Supporting us
 
 We in [wemake.services](https://wemake.services) make
-all our tools open-source by default, so the community can benefit from it.
-If you use our tools and they make your life easier and your business more stable,
-you can return us a favour by supporting the work we do.
+all our tools open-source by default, so the community can benefit from them.
+If you use our tools and they make your life easier and brings business value,
+you can return us a favor by supporting the work we do.
 
 [![Gold Tier](https://opencollective.com/wemake-python-styleguide/tiers/gold-sponsor.svg?width=890)](https://opencollective.com/wemake-python-styleguide)
 
@@ -120,5 +120,7 @@ We **warmly welcome** all contributions!
 
 [![List of contributors](https://opencollective.com/wemake-python-styleguide/contributors.svg?width=890&button=0)](https://github.com/wemake-services/wemake-python-styleguide/graphs/contributors)
 
-See ["Contributing"](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/contributing.html) section in the documentation if you want to contribute. You can start with [issues that need some help](https://github.com/wemake-services/wemake-python-styleguide/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
+See ["Contributing"](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/contributing.html) section in the documentation if you want to contribute.
+
+You can start with [issues that need some help](https://github.com/wemake-services/wemake-python-styleguide/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
 right now.
