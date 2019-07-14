@@ -4,6 +4,13 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
+## 0.11.0 WIP
+
+### Misc
+
+- Adds `--show-source` to the default recommended configuration
+
+
 ## 0.10.0 aka The Great Compare
 
 This release is mostly targeted at writing better compares and conditions.

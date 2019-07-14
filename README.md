@@ -73,7 +73,7 @@ We are *not* planning to do the following things:
 
 0. Assume or check types, use `mypy` instead
 1. Reformat code, since we believe that developers should do that
-2. Check for `SyntaxError` or exceptions, write tests instead
+2. Check for `SyntaxError` or logical bugs, write tests instead
 3. Appeal to everyone. But, you can [switch off](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage/setup.html#ignoring-violations) any rules that you don't like
 
 
