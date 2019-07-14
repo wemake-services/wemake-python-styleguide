@@ -1,5 +1,9 @@
 SHELL:=/usr/bin/env bash
 
+.PHONY: check-format
+check-format:
+	autopep8 -r . --diff --exclude=./tests/fixtures/** --exit-code
+
 .PHONY: lint
 lint:
 	mypy wemake_python_styleguide
@@ -18,4 +22,4 @@ package:
 	poetry run safety check --bare --full-report
 
 .PHONY: test
-test: lint unit package
+test: lint check-format unit package

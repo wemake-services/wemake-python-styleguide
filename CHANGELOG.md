@@ -9,6 +9,7 @@ We used to have incremental versioning before `0.1.0`.
 ### Misc
 
 - Adds `--show-source` to the default recommended configuration
+- Adds better docs about auto-formatters
 
 
 ## 0.10.0 aka The Great Compare
