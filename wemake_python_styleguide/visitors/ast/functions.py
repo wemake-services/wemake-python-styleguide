@@ -190,12 +190,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
                 self.add_violation(ComplexDefaultValueViolation(node))
 
     def _check_generator(self, node: AnyFunctionDef) -> None:
-        is_generator = any(
-            nodes.is_contained(body_item, (ast.Yield, ast.YieldFrom))
-            for body_item in node.body
-        )
-
-        if not is_generator:
+        if not functions.is_generator(node):
             return
 
         for sub_node in nodes.get_subnodes_by_type(node, ast.Raise):

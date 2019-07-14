@@ -51,13 +51,13 @@ def get_context(node: ast.AST) -> Optional[ast.AST]:
     return getattr(node, 'wps_context', None)
 
 
-SUBNODE_TYPE = TypeVar('SUBNODE_TYPE')
+SubnodeType = TypeVar('SubnodeType')
 
 
 def get_subnodes_by_type(
     node: ast.AST,
-    subnodes_type: Type[SUBNODE_TYPE],
-) -> Iterator[SUBNODE_TYPE]:
+    subnodes_type: Type[SubnodeType],
+) -> Iterator[SubnodeType]:
     """Returns the list of subnodes of given node with given subnode type."""
     for child in ast.walk(node):
         if isinstance(child, subnodes_type):

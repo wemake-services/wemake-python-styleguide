@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from ast import Call, arg
+from ast import Call, Yield, YieldFrom, arg
 from typing import Container, List, Optional
 
 import astor
 
-from wemake_python_styleguide.types import AnyFunctionDefAndLambda
+from wemake_python_styleguide.logic.nodes import is_contained
+from wemake_python_styleguide.types import (
+    AnyFunctionDef,
+    AnyFunctionDefAndLambda,
+)
 
 
 def given_function_called(node: Call, to_check: Container[str]) -> str:
@@ -80,3 +84,11 @@ def is_first_argument(node: AnyFunctionDefAndLambda, name: str) -> bool:
         return False
 
     return name == node.args.args[0].arg
+
+
+def is_generator(node: AnyFunctionDef) -> bool:
+    """Tells whether a given function is a generator."""
+    for body_item in node.body:
+        if is_contained(node=body_item, to_check=(Yield, YieldFrom)):
+            return True
+    return False
