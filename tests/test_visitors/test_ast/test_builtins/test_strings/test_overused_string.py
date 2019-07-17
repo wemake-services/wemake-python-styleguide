@@ -12,7 +12,7 @@ third[{0}]
 'new' + {0}
 """
 
-string_value = '"same-string"'
+string_values = ['"same-string"', "''"]
 
 
 def test_string_overuse_settings(
@@ -37,10 +37,11 @@ def test_string_overuse(
     default_options,
 ):
     """Ensures that over-used strings raise violations."""
-    tree = parse_ast_tree(string_actions.format(string_value))
+    for string_val in string_values:
+        tree = parse_ast_tree(string_actions.format(string_val))
 
-    visitor = WrongStringVisitor(default_options, tree=tree)
-    visitor.run()
+        visitor = WrongStringVisitor(default_options, tree=tree)
+        visitor.run()
 
-    assert_errors(visitor, [OverusedStringViolation])
-    assert_error_text(visitor, string_value.replace('"', ''))
+        assert_errors(visitor, [OverusedStringViolation])
+        assert_error_text(visitor, string_val.replace('"', ''))
