@@ -6,6 +6,11 @@ We used to have incremental versioning before `0.1.0`.
 
 ## 0.11.0 WIP
 
+### Features
+
+- **Breaking**: replaces `Z` error code to `WPS` code
+- Adds new `wemake` formatter (using it now by default)
+
 ### Misc
 
 - Adds `--show-source` to the default recommended configuration
