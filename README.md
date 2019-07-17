@@ -40,6 +40,11 @@ flake8 your_module.py
 This app is still just good old `flake8`!
 And it won't change your existing workflow.
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/running.png"
+       alt="invocation resuts">
+</p>
+
 See ["Usage" section](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage/setup.html)
 in the docs for examples and integrations.
 

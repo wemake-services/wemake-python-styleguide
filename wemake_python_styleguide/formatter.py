@@ -119,6 +119,7 @@ That's how all ``flake8`` formatters work:
 """
 
 from collections import defaultdict
+from typing import DefaultDict, List
 
 from flake8.formatting.base import BaseFormatter
 from flake8.statistics import Statistics
@@ -149,7 +150,7 @@ class WemakeFormatter(BaseFormatter):
         """Called after the original ``init`` is used to set extra fields."""
         self._lexer = PythonLexer()
         self._formatter = TerminalFormatter()
-        self._proccessed_filenames = []
+        self._proccessed_filenames: List[str] = []
 
     def handle(self, error: Violation) -> None:  # noqa: Z110
         """Processes each :term:`violation` to print it and all related."""
@@ -258,8 +259,11 @@ def _underline(text: str) -> str:
 
 # Helpers:
 
-def _count_per_filename(statistics: Statistics, error_code: str):
-    filenames = defaultdict(int)
+def _count_per_filename(
+    statistics: Statistics,
+    error_code: str,
+) -> DefaultDict[str, int]:
+    filenames: DefaultDict[str, int] = defaultdict(int)
     stats_for_error_code = statistics.statistics_for(error_code)
 
     for stat in stats_for_error_code:
