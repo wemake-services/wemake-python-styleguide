@@ -107,11 +107,17 @@ That's how all ``flake8`` formatters work:
    :caption: ``flake8`` formatting API calls order.
 
     graph LR
-        F1[flake8] --> F2[after_init]
-        F2         --> F3[handle]
-        F3         --> F4[format]
-        F3	       --> F5[show_source]
-        F3	       --> F6[show_statistic]
+        F2[start]  --> F3[after_init]
+        F3         --> F4[start]
+        F4         --> F5[beggining]
+        F5         --> F6[handle]
+        F6         --> F7[format]
+        F6	       --> F8[show_source]
+        F6	       --> F9[show_statistic]
+        F7         --> F10[finished]
+        F8         --> F10[finished]
+        F9         --> F10[finished]
+        F10        --> F11[stop]
 
 .. autoclass:: WemakeFormatter
    :no-undoc-members:
@@ -119,7 +125,7 @@ That's how all ``flake8`` formatters work:
 """
 
 from collections import defaultdict
-from typing import DefaultDict, List
+from typing import ClassVar, DefaultDict, List
 
 from flake8.formatting.base import BaseFormatter
 from flake8.statistics import Statistics
@@ -127,9 +133,17 @@ from flake8.style_guide import Violation
 from pygments import highlight
 from pygments.formatters import TerminalFormatter
 from pygments.lexers import PythonLexer
+from typing_extensions import Final
+
+from wemake_python_styleguide.version import pkg_version
+
+#: That url is generated and hosted by Sphinx.
+DOCS_URL_TEMPLATE: Final = (
+    'https://wemake-python-stylegui.de/en/{0}/pages/violations/'
+)
 
 
-class WemakeFormatter(BaseFormatter):
+class WemakeFormatter(BaseFormatter):  # noqa: Z214
     """
     We need to format our style :term:`violations <violation>` beatifully.
 
@@ -144,13 +158,18 @@ class WemakeFormatter(BaseFormatter):
 
     """
 
+    _doc_url: ClassVar[str] = DOCS_URL_TEMPLATE.format(pkg_version)
+
     # API:
 
     def after_init(self):
         """Called after the original ``init`` is used to set extra fields."""
         self._lexer = PythonLexer()
         self._formatter = TerminalFormatter()
+
+        # Logic:
         self._proccessed_filenames: List[str] = []
+        self._error_count = 0
 
     def handle(self, error: Violation) -> None:  # noqa: Z110
         """Processes each :term:`violation` to print it and all related."""
@@ -159,6 +178,7 @@ class WemakeFormatter(BaseFormatter):
             self._proccessed_filenames.append(error.filename)
 
         super().handle(error)
+        self._error_count += 1
 
     def format(self, error: Violation) -> str:  # noqa: A003
         """Called to format each individual :term:`violation`."""
@@ -218,6 +238,12 @@ class WemakeFormatter(BaseFormatter):
 
         self._write(self.newline)
         self._write(_underline(_bold('All errors: {0}'.format(all_errors))))
+
+    def stop(self) -> None:
+        """Runs once per app when the formatting ends."""
+        if self._error_count:
+            message = '{0}Full list of violations and explanations: {1}'
+            self._write(message.format(self.newline, self._doc_url))
 
     # Our own methods:
 

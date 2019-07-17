@@ -61,3 +61,34 @@ def test_formatter(snapshot, cli_options, output):
     stdout, _ = process.communicate()
 
     snapshot.assert_match(stdout, 'formatter_{0}'.format(output))
+
+
+@pytest.mark.parametrize('cli_options, output', [
+    ([], 'regular'),
+    (['--statistic'], 'regular_statistic'),
+    (['--show-source'], 'with_source'),
+    (['--show-source', '--statistic'], 'with_source_statistic'),
+    (['--statistic', '--show-source'], 'statistic_with_source'),
+])
+def test_formatter_correct(snapshot, cli_options, output):
+    """All correct code should not raise any violations and no output."""
+    filename = './tests/fixtures/correct.py'
+
+    process = subprocess.Popen(
+        [
+            'flake8',
+            '--disable-noqa',
+            '--isolated',
+            '--format',
+            'wemake',
+            *cli_options,
+            filename,
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        universal_newlines=True,
+        encoding='utf8',
+    )
+    stdout, _ = process.communicate()
+
+    snapshot.assert_match(stdout, 'formatter_correct_{0}'.format(output))
