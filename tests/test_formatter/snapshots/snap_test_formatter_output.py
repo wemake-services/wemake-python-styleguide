@@ -9,16 +9,16 @@ snapshots = Snapshot()
 
 snapshots['test_formatter[cli_options0-regular] formatter_regular'] = '''
 \x1b[4m\x1b[1m./tests/fixtures/formatter1.py\x1b[0m\x1b[0m
-  WPS111 1:1      Found too short name: s
-  WPS110 1:7      Found wrong variable name: handle
-  WPS432 2:21     Found magic number: 200
-  WPS303 2:21     Found underscored number: 2_00
+  1:1      WPS111 Found too short name: s
+  1:7      WPS110 Found wrong variable name: handle
+  2:21     WPS432 Found magic number: 200
+  2:21     WPS303 Found underscored number: 2_00
 
 \x1b[4m\x1b[1m./tests/fixtures/formatter2.py\x1b[0m\x1b[0m
-  WPS110 1:1      Found wrong variable name: data
-  WPS110 1:10     Found wrong variable name: param
-  WPS441 2:12     Found protected attribute usage: _protected
-  WPS303 2:31     Found underscored number: 10_00
+  1:1      WPS110 Found wrong variable name: data
+  1:10     WPS110 Found wrong variable name: param
+  2:12     WPS437 Found protected attribute usage: _protected
+  2:31     WPS303 Found underscored number: 10_00
 
 Full list of violations and explanations:
 https://wemake-python-stylegui.de/en/0.10.0/pages/violations/
@@ -27,37 +27,37 @@ https://wemake-python-stylegui.de/en/0.10.0/pages/violations/
 snapshots['test_formatter[cli_options4-statistic_with_source] formatter_statistic_with_source'] = '''
 \x1b[4m\x1b[1m./tests/fixtures/formatter1.py\x1b[0m\x1b[0m
 
-  WPS111 1:1      Found too short name: s
+  1:1      WPS111 Found too short name: s
   \x1b[34mdef\x1b[39;49;00m \x1b[32ms\x1b[39;49;00m(handle: \x1b[36mint\x1b[39;49;00m) -> \x1b[36mint\x1b[39;49;00m:
   ^
 
-  WPS110 1:7      Found wrong variable name: handle
+  1:7      WPS110 Found wrong variable name: handle
   \x1b[34mdef\x1b[39;49;00m \x1b[32ms\x1b[39;49;00m(handle: \x1b[36mint\x1b[39;49;00m) -> \x1b[36mint\x1b[39;49;00m:
         ^
 
-  WPS432 2:21     Found magic number: 200
+  2:21     WPS432 Found magic number: 200
   \x1b[34mreturn\x1b[39;49;00m handle + \x1b[34m2\x1b[39;49;00m_00
                   ^
 
-  WPS303 2:21     Found underscored number: 2_00
+  2:21     WPS303 Found underscored number: 2_00
   \x1b[34mreturn\x1b[39;49;00m handle + \x1b[34m2\x1b[39;49;00m_00
                   ^
 
 \x1b[4m\x1b[1m./tests/fixtures/formatter2.py\x1b[0m\x1b[0m
 
-  WPS110 1:1      Found wrong variable name: data
+  1:1      WPS110 Found wrong variable name: data
   \x1b[34mdef\x1b[39;49;00m \x1b[32mdata\x1b[39;49;00m(param) -> \x1b[36mint\x1b[39;49;00m:
   ^
 
-  WPS110 1:10     Found wrong variable name: param
+  1:10     WPS110 Found wrong variable name: param
   \x1b[34mdef\x1b[39;49;00m \x1b[32mdata\x1b[39;49;00m(param) -> \x1b[36mint\x1b[39;49;00m:
            ^
 
-  WPS441 2:12     Found protected attribute usage: _protected
+  2:12     WPS437 Found protected attribute usage: _protected
   \x1b[34mreturn\x1b[39;49;00m param._protected + \x1b[34m10\x1b[39;49;00m_00
          ^
 
-  WPS303 2:31     Found underscored number: 10_00
+  2:31     WPS303 Found underscored number: 10_00
   \x1b[34mreturn\x1b[39;49;00m param._protected + \x1b[34m10\x1b[39;49;00m_00
                             ^
 
@@ -79,7 +79,7 @@ snapshots['test_formatter[cli_options4-statistic_with_source] formatter_statisti
   1     ./tests/fixtures/formatter1.py
 \x1b[4mTotal: 1\x1b[0m
 
-\x1b[1mWPS441\x1b[0m: Found protected attribute usage: _protected
+\x1b[1mWPS437\x1b[0m: Found protected attribute usage: _protected
   1     ./tests/fixtures/formatter2.py
 \x1b[4mTotal: 1\x1b[0m
 
@@ -93,37 +93,37 @@ https://wemake-python-stylegui.de/en/0.10.0/pages/violations/
 snapshots['test_formatter[cli_options3-with_source_statistic] formatter_with_source_statistic'] = '''
 \x1b[4m\x1b[1m./tests/fixtures/formatter1.py\x1b[0m\x1b[0m
 
-  WPS111 1:1      Found too short name: s
+  1:1      WPS111 Found too short name: s
   \x1b[34mdef\x1b[39;49;00m \x1b[32ms\x1b[39;49;00m(handle: \x1b[36mint\x1b[39;49;00m) -> \x1b[36mint\x1b[39;49;00m:
   ^
 
-  WPS110 1:7      Found wrong variable name: handle
+  1:7      WPS110 Found wrong variable name: handle
   \x1b[34mdef\x1b[39;49;00m \x1b[32ms\x1b[39;49;00m(handle: \x1b[36mint\x1b[39;49;00m) -> \x1b[36mint\x1b[39;49;00m:
         ^
 
-  WPS432 2:21     Found magic number: 200
+  2:21     WPS432 Found magic number: 200
   \x1b[34mreturn\x1b[39;49;00m handle + \x1b[34m2\x1b[39;49;00m_00
                   ^
 
-  WPS303 2:21     Found underscored number: 2_00
+  2:21     WPS303 Found underscored number: 2_00
   \x1b[34mreturn\x1b[39;49;00m handle + \x1b[34m2\x1b[39;49;00m_00
                   ^
 
 \x1b[4m\x1b[1m./tests/fixtures/formatter2.py\x1b[0m\x1b[0m
 
-  WPS110 1:1      Found wrong variable name: data
+  1:1      WPS110 Found wrong variable name: data
   \x1b[34mdef\x1b[39;49;00m \x1b[32mdata\x1b[39;49;00m(param) -> \x1b[36mint\x1b[39;49;00m:
   ^
 
-  WPS110 1:10     Found wrong variable name: param
+  1:10     WPS110 Found wrong variable name: param
   \x1b[34mdef\x1b[39;49;00m \x1b[32mdata\x1b[39;49;00m(param) -> \x1b[36mint\x1b[39;49;00m:
            ^
 
-  WPS441 2:12     Found protected attribute usage: _protected
+  2:12     WPS437 Found protected attribute usage: _protected
   \x1b[34mreturn\x1b[39;49;00m param._protected + \x1b[34m10\x1b[39;49;00m_00
          ^
 
-  WPS303 2:31     Found underscored number: 10_00
+  2:31     WPS303 Found underscored number: 10_00
   \x1b[34mreturn\x1b[39;49;00m param._protected + \x1b[34m10\x1b[39;49;00m_00
                             ^
 
@@ -145,7 +145,7 @@ snapshots['test_formatter[cli_options3-with_source_statistic] formatter_with_sou
   1     ./tests/fixtures/formatter1.py
 \x1b[4mTotal: 1\x1b[0m
 
-\x1b[1mWPS441\x1b[0m: Found protected attribute usage: _protected
+\x1b[1mWPS437\x1b[0m: Found protected attribute usage: _protected
   1     ./tests/fixtures/formatter2.py
 \x1b[4mTotal: 1\x1b[0m
 
@@ -159,37 +159,37 @@ https://wemake-python-stylegui.de/en/0.10.0/pages/violations/
 snapshots['test_formatter[cli_options2-with_source] formatter_with_source'] = '''
 \x1b[4m\x1b[1m./tests/fixtures/formatter1.py\x1b[0m\x1b[0m
 
-  WPS111 1:1      Found too short name: s
+  1:1      WPS111 Found too short name: s
   \x1b[34mdef\x1b[39;49;00m \x1b[32ms\x1b[39;49;00m(handle: \x1b[36mint\x1b[39;49;00m) -> \x1b[36mint\x1b[39;49;00m:
   ^
 
-  WPS110 1:7      Found wrong variable name: handle
+  1:7      WPS110 Found wrong variable name: handle
   \x1b[34mdef\x1b[39;49;00m \x1b[32ms\x1b[39;49;00m(handle: \x1b[36mint\x1b[39;49;00m) -> \x1b[36mint\x1b[39;49;00m:
         ^
 
-  WPS432 2:21     Found magic number: 200
+  2:21     WPS432 Found magic number: 200
   \x1b[34mreturn\x1b[39;49;00m handle + \x1b[34m2\x1b[39;49;00m_00
                   ^
 
-  WPS303 2:21     Found underscored number: 2_00
+  2:21     WPS303 Found underscored number: 2_00
   \x1b[34mreturn\x1b[39;49;00m handle + \x1b[34m2\x1b[39;49;00m_00
                   ^
 
 \x1b[4m\x1b[1m./tests/fixtures/formatter2.py\x1b[0m\x1b[0m
 
-  WPS110 1:1      Found wrong variable name: data
+  1:1      WPS110 Found wrong variable name: data
   \x1b[34mdef\x1b[39;49;00m \x1b[32mdata\x1b[39;49;00m(param) -> \x1b[36mint\x1b[39;49;00m:
   ^
 
-  WPS110 1:10     Found wrong variable name: param
+  1:10     WPS110 Found wrong variable name: param
   \x1b[34mdef\x1b[39;49;00m \x1b[32mdata\x1b[39;49;00m(param) -> \x1b[36mint\x1b[39;49;00m:
            ^
 
-  WPS441 2:12     Found protected attribute usage: _protected
+  2:12     WPS437 Found protected attribute usage: _protected
   \x1b[34mreturn\x1b[39;49;00m param._protected + \x1b[34m10\x1b[39;49;00m_00
          ^
 
-  WPS303 2:31     Found underscored number: 10_00
+  2:31     WPS303 Found underscored number: 10_00
   \x1b[34mreturn\x1b[39;49;00m param._protected + \x1b[34m10\x1b[39;49;00m_00
                             ^
 
@@ -199,16 +199,16 @@ https://wemake-python-stylegui.de/en/0.10.0/pages/violations/
 
 snapshots['test_formatter[cli_options1-regular_statistic] formatter_regular_statistic'] = '''
 \x1b[4m\x1b[1m./tests/fixtures/formatter1.py\x1b[0m\x1b[0m
-  WPS111 1:1      Found too short name: s
-  WPS110 1:7      Found wrong variable name: handle
-  WPS432 2:21     Found magic number: 200
-  WPS303 2:21     Found underscored number: 2_00
+  1:1      WPS111 Found too short name: s
+  1:7      WPS110 Found wrong variable name: handle
+  2:21     WPS432 Found magic number: 200
+  2:21     WPS303 Found underscored number: 2_00
 
 \x1b[4m\x1b[1m./tests/fixtures/formatter2.py\x1b[0m\x1b[0m
-  WPS110 1:1      Found wrong variable name: data
-  WPS110 1:10     Found wrong variable name: param
-  WPS441 2:12     Found protected attribute usage: _protected
-  WPS303 2:31     Found underscored number: 10_00
+  1:1      WPS110 Found wrong variable name: data
+  1:10     WPS110 Found wrong variable name: param
+  2:12     WPS437 Found protected attribute usage: _protected
+  2:31     WPS303 Found underscored number: 10_00
 
 \x1b[1mWPS110\x1b[0m: Found wrong variable name: handle
   1     ./tests/fixtures/formatter1.py
@@ -228,7 +228,7 @@ snapshots['test_formatter[cli_options1-regular_statistic] formatter_regular_stat
   1     ./tests/fixtures/formatter1.py
 \x1b[4mTotal: 1\x1b[0m
 
-\x1b[1mWPS441\x1b[0m: Found protected attribute usage: _protected
+\x1b[1mWPS437\x1b[0m: Found protected attribute usage: _protected
   1     ./tests/fixtures/formatter2.py
 \x1b[4mTotal: 1\x1b[0m
 

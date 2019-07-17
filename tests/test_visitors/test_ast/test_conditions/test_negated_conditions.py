@@ -2,7 +2,7 @@
 
 import pytest
 
-from wemake_python_styleguide.violations.best_practices import (
+from wemake_python_styleguide.violations.refactoring import (
     NegatedConditionsViolation,
 )
 from wemake_python_styleguide.visitors.ast.conditions import IfStatementVisitor

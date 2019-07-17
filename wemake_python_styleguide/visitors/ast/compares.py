@@ -18,11 +18,6 @@ from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     HeterogenousCompareViolation,
-    NestedTernaryViolation,
-    NotOperatorWithCompareViolation,
-    SimplifiableIfViolation,
-    UselessLenCompareViolation,
-    WrongInCompareTypeViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
     CompareOrderViolation,
@@ -31,6 +26,13 @@ from wemake_python_styleguide.violations.consistency import (
     MultipleInCompareViolation,
     ReversedComplexCompareViolation,
     UselessCompareViolation,
+)
+from wemake_python_styleguide.violations.refactoring import (
+    NestedTernaryViolation,
+    NotOperatorWithCompareViolation,
+    SimplifiableIfViolation,
+    UselessLenCompareViolation,
+    WrongInCompareTypeViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias

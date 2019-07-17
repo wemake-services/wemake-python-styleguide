@@ -2,9 +2,7 @@
 
 import pytest
 
-from wemake_python_styleguide.violations.best_practices import (
-    WrongSuperCallViolation,
-)
+from wemake_python_styleguide.violations.oop import WrongSuperCallViolation
 from wemake_python_styleguide.visitors.ast.functions import (
     WrongFunctionCallVisitor,
 )

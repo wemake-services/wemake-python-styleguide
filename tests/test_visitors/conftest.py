@@ -33,8 +33,8 @@ def assert_errors():
         for index, error in enumerate(real_errors):
             assert error.code == errors[index].code
             if isinstance(error, (ASTViolation, TokenizeViolation)):
-                assert error._node is not None  # noqa: WPS441
-                assert error._location() != (0, 0)  # noqa: WPS441
+                assert error._node is not None  # noqa: WPS437
+                assert error._location() != (0, 0)  # noqa: WPS437
 
     return factory
 
@@ -52,7 +52,7 @@ def assert_error_text():
         assert violation.error_template.endswith(error_format)
 
         reproduction = violation.__class__(
-            node=violation._node,  # noqa: WPS441
+            node=violation._node,  # noqa: WPS437
             text=text,
         )
         assert reproduction.message() == violation.message()

@@ -18,4 +18,4 @@ def test_visitor_returns_location():
 
 def test_checker_default_location():
     """Ensures that `BaseViolation` returns correct location."""
-    assert BaseViolation(None)._location() == (0, 0)  # noqa: WPS441
+    assert BaseViolation(None)._location() == (0, 0)  # noqa: WPS437

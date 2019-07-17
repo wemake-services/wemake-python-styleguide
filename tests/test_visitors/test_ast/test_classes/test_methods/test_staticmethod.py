@@ -2,9 +2,7 @@
 
 import pytest
 
-from wemake_python_styleguide.violations.best_practices import (
-    StaticMethodViolation,
-)
+from wemake_python_styleguide.violations.oop import StaticMethodViolation
 from wemake_python_styleguide.visitors.ast.classes import WrongMethodVisitor
 
 decorated_method = """

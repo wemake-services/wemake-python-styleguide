@@ -11,7 +11,7 @@ from __future__ import print_function  # noqa: WPS422
 import os.path  # noqa: WPS301
 import sys as sys  # noqa: WPS113
 
-from some import _protected  # noqa: WPS440
+from some import _protected  # noqa: WPS436
 
 from .version import get_version  # noqa: WPS300
 
@@ -46,10 +46,10 @@ def function_name(
 
 
 def some():  # noqa: WPS110
-    from my_module import some_function  # noqa: WPS435
+    from my_module import some_function  # noqa: WPS433
 
     class Nested(object):  # noqa: WPS431
-        ...  # noqa: WPS444, WPS452
+        ...  # noqa: WPS428, WPS604
 
     def nested():  # noqa: WPS430
         anti_z444 = 1
@@ -74,7 +74,7 @@ def some_function():
     _should_not_be_used = 1
     print(_should_not_be_used)  # noqa: WPS121
 
-some._execute()  # noqa: WPS441
+some._execute()  # noqa: WPS437
 
 
 def many_locals():  # noqa: WPS210
@@ -169,7 +169,7 @@ except TypeError:
 class BadClass:  # noqa: WPS306
     UPPER_CASE_ATTRIBUTE = 12  # noqa: WPS115
 
-    @staticmethod  # noqa: WPS433
+    @staticmethod  # noqa: WPS602
     def some_static(arg1):
         return [
             target  # noqa: WPS224
@@ -179,13 +179,13 @@ class BadClass:  # noqa: WPS306
             if isinstance(target, int)
         ]
 
-    @staticmethod  # noqa: WPS433
+    @staticmethod  # noqa: WPS602
     async def some_async_static(arg1):
         return [
             node for node in 'abc' if node != 'a' if node != 'b'  # noqa: WPS307
         ]
 
-    def __del__(self, *_args, **_kwargs):  # noqa: WPS434
+    def __del__(self, *_args, **_kwargs):  # noqa: WPS603
         anti_z444 = 1
 
     class Nested:  # noqa: WPS306,WPS431
@@ -298,7 +298,7 @@ except BaseException:  # noqa: WPS424
 call_with_positional_bool(True)  # noqa: WPS425
 
 
-class MyInt(int):  # noqa: WPS426
+class MyInt(int):  # noqa: WPS600
     """My custom int subclass."""
 
 
@@ -310,89 +310,89 @@ class ShadowsAttribute(object):
 
     def __init__(self) -> None:
         self.first = 1
-        self.second = 2  # noqa: WPS427
+        self.second = 2  # noqa: WPS601
 
 
-for symbol in 'abc':  # noqa: WPS436
+for symbol in 'abc':  # noqa: WPS500
     anti_z444 = 1
 else:
     anti_z444 = 1
 
-try:  # noqa: WPS437
+try:  # noqa: WPS501
     anti_z444 = 1
 finally:
     anti_z444 = 1
 
-nodes = nodes  # noqa: WPS438
+nodes = nodes  # noqa: WPS434
 
 
 class Example(object):
     """Correct class docstring."""
 
-    def __init__(self):  # noqa: WPS439
+    def __init__(self):  # noqa: WPS435
         """Correct function docstring."""
         yield 10
 
 
-for index in range(6):  # noqa: WPS442
+for index in range(6):  # noqa: WPS426
     print(lambda: index)
 
 
 async def function_with_unreachable():
     await test_function()
     raise ValueError()
-    print(1)  # noqa: WPS443
+    print(1)  # noqa: WPS427
 
 
-1 + 2  # noqa: WPS444
+1 + 2  # noqa: WPS428
 
-first = second = 2  # noqa: WPS445
+first = second = 2  # noqa: WPS429
 
-index, nodes[0] = range(2)  # noqa: WPS446
+index, nodes[0] = range(2)  # noqa: WPS414
 
 
-try:  # noqa: WPS447
+try:  # noqa: WPS415
     anti_z444 = 1
 except ValueError:
     anti_z444 = 1
 except ValueError:
     anti_z444 = 1
 
-iters = list((yield letter) for letter in 'ab')  # noqa: WPS448
+iters = list((yield letter) for letter in 'ab')  # noqa: WPS416
 
 
-class MyBadException(BaseException):  # noqa: WPS450
+class MyBadException(BaseException):  # noqa: WPS418
     anti_z444 = 1
 
 
-some_if_expr = True if some_set else False  # noqa: WPS451
+some_if_expr = True if some_set else False  # noqa: WPS502
 
-if some_if_expr:  # noqa: WPS451
+if some_if_expr:  # noqa: WPS502
     some_dict['x'] = True
 else:
     some_dict['x'] = False
 
 
-class ClassWithWrongContents((lambda: object)()):  # noqa: WPS454
-    __slots__ = ['a', 'a']  # noqa: WPS455
+class ClassWithWrongContents((lambda: object)()):  # noqa: WPS606
+    __slots__ = ['a', 'a']  # noqa: WPS607
 
-    for _ in range(1):  # noqa: WPS452
+    for _ in range(1):  # noqa: WPS604
         anti_z444 = 1
 
-    def method_with_no_args():  # noqa: WPS453
-        super(ClassWithWrongContents, self).method_with_no_args()  # noqa: WPS456
-        self.some_set = {1, 1}  # noqa: WPS449
+    def method_with_no_args():  # noqa: WPS605
+        super(ClassWithWrongContents, self).method_with_no_args()  # noqa: WPS608
+        self.some_set = {1, 1}  # noqa: WPS417
 
 
 def useless_returning_else():
-    if some_set:  # noqa: WPS457
+    if some_set:  # noqa: WPS503
         return some_set
     else:
         return TypeError
 
 
 def multiple_return_path():
-    try:  # noqa: WPS458
+    try:  # noqa: WPS419
         return 1
     except Exception:
         return 2
@@ -400,7 +400,7 @@ def multiple_return_path():
         return 3
 
 
-def bad_default_values(  # noqa: WPS459
+def bad_default_values(  # noqa: WPS404
     self,
     filename='(none)',
     builtins=None,
@@ -409,51 +409,51 @@ def bad_default_values(  # noqa: WPS459
     return True
 
 
-for nodes[0] in (1, 2, 3):  # noqa: WPS460
+for nodes[0] in (1, 2, 3):  # noqa: WPS405
     anti_z444 = 1
 
-with open('some') as MyBadException.custom:  # noqa: WPS461
+with open('some') as MyBadException.custom:  # noqa: WPS406
     anti_z444 = 1
 
 
-anti_z444.__truediv__(1)  # noqa: WPS462
+anti_z444.__truediv__(1)  # noqa: WPS609
 
-if not some: # noqa: WPS463
+if not some: # noqa: WPS504
     print('False')
 else:
     print('Wrong')
 
 try:
-    try:  # noqa: WPS464
+    try:  # noqa: WPS505
         anti_z444 = 1
     except ValueError:
         raise TypeError('Second')
 except TypeError:
     print('WTF?')
 
-if some and (  # noqa: WPS465
+if some and (  # noqa: WPS337
     anti_z444 == 1
 ):
     anti_z444 = 'some text'
 
-CONSTANT = []  # noqa: WPS466
+CONSTANT = []  # noqa: WPS407
 
-numbers = map(lambda string: int(string), ['1'])  # noqa: WPS467
+numbers = map(lambda string: int(string), ['1'])  # noqa: WPS506
 
-if len(numbers) > 0:  # noqa: WPS468
+if len(numbers) > 0:  # noqa: WPS507
     print('len!')
 
-if numbers and numbers:  # noqa: WPS469
+if numbers and numbers:  # noqa: WPS408
     print('duplicate boolop')
 
-if not numbers == []:  # noqa: WPS470
+if not numbers == []:  # noqa: WPS508
     print('bad compare with not')
 
-if numbers == CONSTANT != []:  # noqa: WPS471
-    print(1 + (1 if number else 2))  # noqa: WPS472
+if numbers == CONSTANT != []:  # noqa: WPS409
+    print(1 + (1 if number else 2))  # noqa: WPS509
 
-print(numbers in [])  # noqa: WPS473
+print(numbers in [])  # noqa: WPS510
 
 print(isinstance(number, int) or isinstance(number, (float, str)))  # noqa: 474
 
-print(isinstance(numbers, (int,)))  # noqa: WPS475
+print(isinstance(numbers, (int,)))  # noqa: WPS512

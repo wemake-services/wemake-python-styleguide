@@ -38,6 +38,8 @@ def _load_all_violation_classes():
         violations.complexity,
         violations.consistency,
         violations.best_practices,
+        violations.refactoring,
+        violations.oop,
     ]
 
     classes = {}

@@ -51,6 +51,8 @@ Naming         :ref:`WPS100 - WPS199 <naming>`
 Complexity     :ref:`WPS200 - WPS299 <complexity>`
 Consistency    :ref:`WPS300 - WPS399 <consistency>`
 Best practices :ref:`WPS400 - WPS499 <best-practices>`
+Refactoring    :ref:`WPS500 - WPS599 <refactoring>`
+OOP            :ref:`WPS600 - WPS699 <oop>`
 ============== ======
 
 .. toctree::
@@ -62,3 +64,5 @@ Best practices :ref:`WPS400 - WPS499 <best-practices>`
   complexity.rst
   consistency.rst
   best_practices.rst
+  refactoring.rst
+  oop.rst

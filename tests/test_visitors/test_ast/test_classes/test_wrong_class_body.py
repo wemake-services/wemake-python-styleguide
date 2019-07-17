@@ -2,7 +2,7 @@
 
 import pytest
 
-from wemake_python_styleguide.violations.best_practices import (
+from wemake_python_styleguide.violations.oop import (
     WrongClassBodyContentViolation,
 )
 from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor

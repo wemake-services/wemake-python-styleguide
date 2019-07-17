@@ -2,9 +2,7 @@
 
 import pytest
 
-from wemake_python_styleguide.violations.best_practices import (
-    BuiltinSubclassViolation,
-)
+from wemake_python_styleguide.violations.oop import BuiltinSubclassViolation
 from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
 
 class_with_base = """

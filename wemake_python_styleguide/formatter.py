@@ -182,7 +182,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
 
     def format(self, error: Violation) -> str:  # noqa: A003
         """Called to format each individual :term:`violation`."""
-        return '{newline}  {code:<5} {row_col:<8} {text}'.format(
+        return '{newline}  {row_col:<8} {code:<5} {text}'.format(
             newline=self.newline if self._should_show_source(error) else '',
             code=error.code,
             text=error.text,

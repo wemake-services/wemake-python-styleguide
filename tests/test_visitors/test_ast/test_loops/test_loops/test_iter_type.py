@@ -3,7 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
-    IncorectLoopIterTypeViolation,
+    WrongLoopIterTypeViolation,
 )
 from wemake_python_styleguide.visitors.ast.loops import (
     WrongLoopDefinitionVisitor,
@@ -39,7 +39,7 @@ def test_iter_incorrect_type(
     visitor = WrongLoopDefinitionVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [IncorectLoopIterTypeViolation])
+    assert_errors(visitor, [WrongLoopIterTypeViolation])
 
 
 @pytest.mark.parametrize('code', [

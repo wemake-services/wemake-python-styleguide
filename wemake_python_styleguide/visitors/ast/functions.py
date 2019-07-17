@@ -16,13 +16,15 @@ from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     BooleanPositionalArgumentViolation,
     ComplexDefaultValueViolation,
-    UselessLambdaViolation,
     WrongFunctionCallViolation,
-    WrongIsinstanceWithTupleViolation,
-    WrongSuperCallViolation,
 )
 from wemake_python_styleguide.violations.naming import (
     UnusedVariableIsUsedViolation,
+)
+from wemake_python_styleguide.violations.oop import WrongSuperCallViolation
+from wemake_python_styleguide.violations.refactoring import (
+    UselessLambdaViolation,
+    WrongIsinstanceWithTupleViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
