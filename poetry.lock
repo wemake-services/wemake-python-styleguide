@@ -332,7 +332,7 @@ description = "A Flake8 plugin for checking executable permissions and shebangs.
 name = "flake8-executable"
 optional = false
 python-versions = ">=3.6"
-version = "2.0.2"
+version = "2.0.3"
 
 [package.dependencies]
 flake8 = ">=3.0.0"
@@ -741,7 +741,7 @@ category = "main"
 description = "YAML parser and emitter for Python"
 name = "pyyaml"
 optional = false
-python-versions = "*"
+python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "4.2b4"
 
 [[package]]
@@ -1017,7 +1017,7 @@ flake8-comprehensions = ["35f826956e87f230415cde9c3b8b454e785736cf5ff0be551c441b
 flake8-debugger = ["be4fb88de3ee8f6dd5053a2d347e2c0a2b54bab6733a2280bb20ebd3c4ca1d97"]
 flake8-docstrings = ["4e0ce1476b64e6291520e5570cf12b05016dd4e8ae454b8a8a9a48bc5f84e1cd", "8436396b5ecad51a122a2c99ba26e5b4e623bf6e913b0fea0cb6c2c4050f91eb"]
 flake8-eradicate = ["0953cd3bcae4bfd04d45075234e0b5fd465ff50ecc56cdcaf0027da751632127", "c762fbb5c3e3694c9ba656d38477b2dcca6599b8baeee4984d05d655591a6f83"]
-flake8-executable = ["10f001e615924dd679ca406eeb06a35990138f4af18da863828cba181f7d9dbd", "91e0d3dd415a7f5284053c516ba30d7ddeb264e851b2a78923327fc41234fb62"]
+flake8-executable = ["968618c475a23a538ced9b957a741b818d37610838f99f6abcea249e4de7c9ec", "a636ff78b14b63b1245d1c4d509db2f6ea0f2e27a86ee7eb848f3827bef7e16d"]
 flake8-isort = ["1e67b6b90a9b980ac3ff73782087752d406ce0a729ed928b92797f9fa188917e", "81a8495eefed3f2f63f26cd2d766c7b1191e923a15b9106e6233724056572c68"]
 flake8-logging-format = ["ca5f2b7fc31c3474a0aa77d227e022890f641a025f0ba664418797d979a779f8"]
 flake8-pep3101 = ["493821d6bdd083794eb0691ebe5b68e5c520b622b269d60e54308fb97440e21a", "b661ab718df42b87743dde266ef5de4f9e900b56c67dbccd45d24cf527545553"]
