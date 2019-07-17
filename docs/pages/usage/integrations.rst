@@ -62,7 +62,7 @@ Use ``*.pyi`` glob to list ignored violations:
 .. code:: cfg
 
   per-file-ignores =
-    *.pyi: Z444, Z452
+    *.pyi: WPS444, WPS452
 
 You can look at the `returns <https://github.com/dry-python/returns>`_
 project as an example.

@@ -34,7 +34,7 @@ def test_formatter(snapshot, cli_options, output):
     """
     End-to-End test to that formatting works well.
 
-    We only use ``Z`` because other violations order is unpredictable.
+    We only use ``WPS`` because other violations order is unpredictable.
     Since ``flake8`` plugins work in parallel.
     """
     filename1 = './tests/fixtures/formatter1.py'
@@ -46,7 +46,7 @@ def test_formatter(snapshot, cli_options, output):
             '--disable-noqa',
             '--isolated',
             '--select',
-            'Z',
+            'WPS',
             '--format',
             'wemake',
             *cli_options,

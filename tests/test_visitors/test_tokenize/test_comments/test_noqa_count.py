@@ -11,12 +11,12 @@ from wemake_python_styleguide.visitors.tokenize.comments import (
 
 
 @pytest.mark.parametrize('code', [
-    'wallet = 10  # noqa: Z002,Z114',
-    'wallet = 10  # noqa:Z002, Z114',
-    'wallet = 10  # noqa: Z002, Z114',
-    'wallet = 10  # noqa: Z002',
-    'wallet = 1000# noqa: Z002',
-    'wallet = 1000# noqa:  Z002  ',
+    'wallet = 10  # noqa: WPS002,WPS114',
+    'wallet = 10  # noqa:WPS002, WPS114',
+    'wallet = 10  # noqa: WPS002, WPS114',
+    'wallet = 10  # noqa: WPS002',
+    'wallet = 1000# noqa: WPS002',
+    'wallet = 1000# noqa:  WPS002  ',
 ])
 def test_noqa_overuse(
     parse_tokens,

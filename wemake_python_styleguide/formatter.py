@@ -143,7 +143,7 @@ DOCS_URL_TEMPLATE: Final = (
 )
 
 
-class WemakeFormatter(BaseFormatter):  # noqa: Z214
+class WemakeFormatter(BaseFormatter):  # noqa: WPS214
     """
     We need to format our style :term:`violations <violation>` beatifully.
 
@@ -171,7 +171,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: Z214
         self._proccessed_filenames: List[str] = []
         self._error_count = 0
 
-    def handle(self, error: Violation) -> None:  # noqa: Z110
+    def handle(self, error: Violation) -> None:  # noqa: WPS110
         """Processes each :term:`violation` to print it and all related."""
         if error.filename not in self._proccessed_filenames:
             self._print_header(error.filename)
@@ -208,7 +208,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: Z214
             pointer=' ' * (error.column_number - 1 - adjust),
         )
 
-    def show_statistics(self, statistics: Statistics) -> None:  # noqa: Z210
+    def show_statistics(self, statistics: Statistics) -> None:  # noqa: WPS210
         """Called when ``--statistic`` option is passed."""
         all_errors = 0
         for error_code in statistics.error_codes():

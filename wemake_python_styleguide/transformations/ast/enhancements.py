@@ -30,7 +30,7 @@ def set_if_chain(tree: ast.AST) -> ast.AST:
         for child in ast.iter_child_nodes(statement):
             if isinstance(statement, ast.If) and isinstance(child, ast.If):
                 if child in statement.orelse:
-                    setattr(statement, 'wps_chained', True)  # noqa: Z425
+                    setattr(statement, 'wps_chained', True)  # noqa: WPS425
                     setattr(child, 'wps_chain', statement)  # noqa: B010
     return tree
 

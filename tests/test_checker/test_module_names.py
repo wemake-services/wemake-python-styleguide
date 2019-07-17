@@ -28,4 +28,4 @@ def test_module_names(filename, error, default_options):
     checker = Checker(tree=ast.parse(''), file_tokens=[], filename=filename)
     _line, _col, error_text, _type = next(checker.run())
 
-    assert int(error_text[1:4]) == error.code
+    assert int(error_text[3:6]) == error.code

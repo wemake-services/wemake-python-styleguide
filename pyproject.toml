@@ -39,7 +39,7 @@ classifiers = [
 ]
 
 [tool.poetry.plugins."flake8.extension"]
-Z = "wemake_python_styleguide.checker:Checker"
+WPS = "wemake_python_styleguide.checker:Checker"
 
 [tool.poetry.plugins."flake8.report"]
 wemake = "wemake_python_styleguide.formatter:WemakeFormatter"

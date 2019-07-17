@@ -39,9 +39,9 @@ There are three ways to ignore some specific violations:
 
 You can ignore:
 
-1. Whole ``Z`` letter, this will completely turn off all our custom checks
+1. Whole ``WPS`` letters, this will completely turn off all our custom checks
 2. Some specific group (naming, complexity, consistency, best practices)
-   with ``Z`` and the first number
+   with ``WPS`` and the first number of this group
 3. Some specific violation with the full violation code
 
 Use `per-file-ignores <https://flake8.pycqa.org/en/latest/user/options.html?highlight=per-file-ignores#cmdoption-flake8-per-file-ignores>`_
