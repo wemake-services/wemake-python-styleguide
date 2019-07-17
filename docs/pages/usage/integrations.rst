@@ -125,7 +125,7 @@ for ``wemake-python-styleguide`` users.
 
 Is officially supported in way
 that all code written inside ``wemake-python-styleguide`` is tested
-to be valid ``autopep8`` code. But, **not the way around**.
+to be valid ``autopep8`` code. But, **not the other way around**.
 
 Since ``wemake-python-styleguide`` is the strictest linter
 it cannot be pleased by outputs of ``autopep8`` in 100% of cases all by itself.
@@ -144,7 +144,7 @@ We already use it to validate that your imports are correct.
 We recommend to use ``isort`` and officially
 and support it in a way that all
 valid ``wemake-python-styleguide`` code is valid ``isort`` code.
-But, **not the way around**.
+But, **not the other way around**.
 
 You might be required to refactor your code manually after ``isort``
 reformat to make ``wemake-python-styleguide`` happy.
