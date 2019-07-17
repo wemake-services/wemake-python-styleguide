@@ -242,7 +242,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: Z214
     def stop(self) -> None:
         """Runs once per app when the formatting ends."""
         if self._error_count:
-            message = '{0}Full list of violations and explanations: {1}'
+            message = '{0}Full list of violations and explanations:{0}{1}'
             self._write(message.format(self.newline, self._doc_url))
 
     # Our own methods:
