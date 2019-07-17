@@ -15,7 +15,7 @@ single_assignment = 'constant = 1'
 tuple_assignment = 'first, second = (1, 2)'
 spread_assignment = 'first, *_, second = [1, 2, 4, 3]'
 
-# Incorrect usages:
+# Wrong usages:
 
 two_assignment = 'first = second = 1'
 three_assignment = 'first = second = third'

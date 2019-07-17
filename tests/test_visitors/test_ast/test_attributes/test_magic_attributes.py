@@ -7,7 +7,7 @@ from wemake_python_styleguide.visitors.ast.attributes import (
     WrongAttributeVisitor,
 )
 
-# Incorrect:
+# Wrong:
 
 magic_attribute_assigned = 'some.__magic__ = 1'
 magic_attribute_accessed = 'print(some.__magic__)'

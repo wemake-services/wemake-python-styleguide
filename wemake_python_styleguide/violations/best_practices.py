@@ -51,17 +51,17 @@ Summary
    UnreachableCodeViolation
    StatementHasNoEffectViolation
    MultipleAssignmentsViolation
-   IncorrectUnpackingViolation
+   WrongUnpackingViolation
    DuplicateExceptionViolation
    YieldInComprehensionViolation
    NonUniqueItemsInSetViolation
    BaseExceptionSubclassViolation
    SimplifiableIfViolation
-   IncorrectClassBodyContentViolation
+   WrongClassBodyContentViolation
    MethodWithoutArgumentsViolation
-   IncorrectBaseClassViolation
-   IncorrectSlotsViolation
-   IncorrectSuperCallViolation
+   WrongBaseClassViolation
+   WrongSlotsViolation
+   WrongSuperCallViolation
    UselessReturningElseViolation
    TryExceptMultipleReturnPathViolation
    ComplexDefaultValueViolation
@@ -77,7 +77,7 @@ Summary
    SameElementsInConditionViolation
    NotOperatorWithCompareViolation
    HeterogenousCompareViolation
-   IncorrectlyNestedTernaryViolation
+   NestedTernaryViolation
    WrongInCompareTypeViolation
    UnmergedIsinstanceCallsViolation
    WrongIsinstanceWithTupleViolation
@@ -128,17 +128,17 @@ Design
 .. autoclass:: UnreachableCodeViolation
 .. autoclass:: StatementHasNoEffectViolation
 .. autoclass:: MultipleAssignmentsViolation
-.. autoclass:: IncorrectUnpackingViolation
+.. autoclass:: WrongUnpackingViolation
 .. autoclass:: DuplicateExceptionViolation
 .. autoclass:: YieldInComprehensionViolation
 .. autoclass:: NonUniqueItemsInSetViolation
 .. autoclass:: BaseExceptionSubclassViolation
 .. autoclass:: SimplifiableIfViolation
-.. autoclass:: IncorrectClassBodyContentViolation
+.. autoclass:: WrongClassBodyContentViolation
 .. autoclass:: MethodWithoutArgumentsViolation
-.. autoclass:: IncorrectBaseClassViolation
-.. autoclass:: IncorrectSlotsViolation
-.. autoclass:: IncorrectSuperCallViolation
+.. autoclass:: WrongBaseClassViolation
+.. autoclass:: WrongSlotsViolation
+.. autoclass:: WrongSuperCallViolation
 .. autoclass:: UselessReturningElseViolation
 .. autoclass:: TryExceptMultipleReturnPathViolation
 .. autoclass:: ComplexDefaultValueViolation
@@ -154,7 +154,7 @@ Design
 .. autoclass:: SameElementsInConditionViolation
 .. autoclass:: NotOperatorWithCompareViolation
 .. autoclass:: HeterogenousCompareViolation
-.. autoclass:: IncorrectlyNestedTernaryViolation
+.. autoclass:: NestedTernaryViolation
 .. autoclass:: WrongInCompareTypeViolation
 .. autoclass:: UnmergedIsinstanceCallsViolation
 .. autoclass:: WrongIsinstanceWithTupleViolation
@@ -1265,7 +1265,7 @@ class MultipleAssignmentsViolation(ASTViolation):
 
 
 @final
-class IncorrectUnpackingViolation(ASTViolation):
+class WrongUnpackingViolation(ASTViolation):
     """
     Forbids to have tuple unpacking with side-effects.
 
@@ -1475,7 +1475,7 @@ class SimplifiableIfViolation(ASTViolation):
 
 
 @final
-class IncorrectClassBodyContentViolation(ASTViolation):
+class WrongClassBodyContentViolation(ASTViolation):
     """
     Forbids to use incorrect nodes inside ``class`` definitions.
 
@@ -1544,7 +1544,7 @@ class MethodWithoutArgumentsViolation(ASTViolation):
 
 
 @final
-class IncorrectBaseClassViolation(ASTViolation):
+class WrongBaseClassViolation(ASTViolation):
     """
     Forbids to have anything else than a class as a base class.
 
@@ -1575,7 +1575,7 @@ class IncorrectBaseClassViolation(ASTViolation):
 
 
 @final
-class IncorrectSlotsViolation(ASTViolation):
+class WrongSlotsViolation(ASTViolation):
     """
     Forbids to have incorrect ``__slots__`` definition.
 
@@ -1613,7 +1613,7 @@ class IncorrectSlotsViolation(ASTViolation):
 
 
 @final
-class IncorrectSuperCallViolation(ASTViolation):
+class WrongSuperCallViolation(ASTViolation):
     """
     Forbids to use ``super()`` with parameters or outside of methods.
 
@@ -2174,7 +2174,7 @@ class HeterogenousCompareViolation(ASTViolation):
 
 
 @final
-class IncorrectlyNestedTernaryViolation(ASTViolation):
+class NestedTernaryViolation(ASTViolation):
     """
     Forbids to nest ternary expressions in some places.
 

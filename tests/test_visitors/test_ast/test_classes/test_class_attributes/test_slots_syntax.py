@@ -3,7 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
-    IncorrectSlotsViolation,
+    WrongSlotsViolation,
 )
 from wemake_python_styleguide.visitors.ast.classes import WrongSlotsVisitor
 
@@ -43,7 +43,7 @@ def test_incorrect_slots(
     visitor = WrongSlotsVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [IncorrectSlotsViolation])
+    assert_errors(visitor, [WrongSlotsViolation])
 
 
 @pytest.mark.parametrize('template', [

@@ -3,7 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
-    IncorrectlyNestedTernaryViolation,
+    NestedTernaryViolation,
 )
 from wemake_python_styleguide.visitors.ast.compares import (
     WrongConditionalVisitor,
@@ -140,4 +140,4 @@ def test_nested_ternary(
     visitor = WrongConditionalVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [IncorrectlyNestedTernaryViolation])
+    assert_errors(visitor, [NestedTernaryViolation])

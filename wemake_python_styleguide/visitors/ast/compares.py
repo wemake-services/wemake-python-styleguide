@@ -18,7 +18,7 @@ from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     HeterogenousCompareViolation,
-    IncorrectlyNestedTernaryViolation,
+    NestedTernaryViolation,
     NotOperatorWithCompareViolation,
     SimplifiableIfViolation,
     UselessLenCompareViolation,
@@ -268,7 +268,7 @@ class WrongConditionalVisitor(BaseNodeVisitor):
         Raises:
             ConstantConditionViolation
             SimplifiableIfViolation
-            IncorrectlyNestedTernaryViolation
+            NestedTernaryViolation
 
         """
         if isinstance(node, ast.If):
@@ -325,7 +325,7 @@ class WrongConditionalVisitor(BaseNodeVisitor):
     def _check_nested_ifexpr(self, node: ast.IfExp) -> None:
         parent = nodes.get_parent(node)
         if isinstance(parent, self._forbidden_expression_parents):
-            self.add_violation(IncorrectlyNestedTernaryViolation(node))
+            self.add_violation(NestedTernaryViolation(node))
 
 
 @final

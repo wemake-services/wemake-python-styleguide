@@ -30,7 +30,7 @@ dict_definition_value = '{{"first": {0}}}'
 set_definition = '{{"first", {0}, "other"}}'
 tuple_definition = '({0}, )'
 
-# Incorrect usages:
+# Wrong usages:
 
 assignment_binop = 'final = {0} + 1'
 assignment_binop_typed = 'final: int = {0} + 1'

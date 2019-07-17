@@ -3,7 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
-    IncorrectClassBodyContentViolation,
+    WrongClassBodyContentViolation,
 )
 from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
 
@@ -35,7 +35,7 @@ def test_incorrect_body_items(
     visitor = WrongClassVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [IncorrectClassBodyContentViolation])
+    assert_errors(visitor, [WrongClassBodyContentViolation])
 
 
 @pytest.mark.parametrize('code', [

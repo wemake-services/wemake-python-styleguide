@@ -56,7 +56,7 @@ class WrongClassVisitor(base.BaseNodeVisitor):
     def _check_base_classes(self, node: ast.ClassDef) -> None:
         for base_name in node.bases:
             if not isinstance(base_name, self._allowed_base_classes_nodes):
-                self.add_violation(bp.IncorrectBaseClassViolation(node))
+                self.add_violation(bp.WrongBaseClassViolation(node))
                 continue
 
             id_attr = getattr(base_name, 'id', None)
@@ -77,7 +77,7 @@ class WrongClassVisitor(base.BaseNodeVisitor):
                 continue
             if is_doc_string(sub_node):
                 continue
-            self.add_violation(bp.IncorrectClassBodyContentViolation(sub_node))
+            self.add_violation(bp.WrongClassBodyContentViolation(sub_node))
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """
@@ -86,7 +86,7 @@ class WrongClassVisitor(base.BaseNodeVisitor):
         Raises:
             RequiredBaseClassViolation
             ObjectInBaseClassesListViolation
-            IncorrectClassBodyContentViolation
+            WrongClassBodyContentViolation
             BuiltinSubclassViolation
 
         """
@@ -174,7 +174,7 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
         Checks all assigns that have correct context.
 
         Raises:
-            IncorrectSlotsViolation
+            WrongSlotsViolation
 
         """
         self._check_slots(node)
@@ -196,13 +196,13 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
         fields: List[str] = []
         for tuple_item in elements.elts:
             if not isinstance(tuple_item, ast.Str):
-                self.add_violation(bp.IncorrectSlotsViolation(node))
+                self.add_violation(bp.WrongSlotsViolation(node))
                 return
             fields.append(tuple_item.s)
 
         for _, counter in Counter(fields).items():
             if counter > 1:
-                self.add_violation(bp.IncorrectSlotsViolation(node))
+                self.add_violation(bp.WrongSlotsViolation(node))
                 return
 
     def _check_slots(self, node: types.AnyAssign) -> None:
@@ -213,7 +213,7 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
             return
 
         if isinstance(node.value, self._blacklisted_slots_nodes):
-            self.add_violation(bp.IncorrectSlotsViolation(node))
+            self.add_violation(bp.WrongSlotsViolation(node))
             return
 
         if isinstance(node.value, ast.Tuple):

@@ -47,7 +47,7 @@ Summary
    WrongBracketPositionViolation
    MultilineFunctionAnnotationViolation
    UppercaseStringModifierViolation
-   IncorrectMultilineStringViolation
+   WrongMultilineStringViolation
    EmptyLineAfterCodingViolation
    InconsistentReturnViolation
    InconsistentYieldViolation
@@ -88,7 +88,7 @@ Consistency checks
 .. autoclass:: WrongBracketPositionViolation
 .. autoclass:: MultilineFunctionAnnotationViolation
 .. autoclass:: UppercaseStringModifierViolation
-.. autoclass:: IncorrectMultilineStringViolation
+.. autoclass:: WrongMultilineStringViolation
 .. autoclass:: EmptyLineAfterCodingViolation
 .. autoclass:: InconsistentReturnViolation
 .. autoclass:: InconsistentYieldViolation
@@ -877,7 +877,7 @@ class UppercaseStringModifierViolation(TokenizeViolation):
 
 
 @final
-class IncorrectMultilineStringViolation(TokenizeViolation):
+class WrongMultilineStringViolation(TokenizeViolation):
     '''
     Forbids to use triple quotes for singleline strings.
 

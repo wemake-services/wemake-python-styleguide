@@ -16,10 +16,10 @@ from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     BooleanPositionalArgumentViolation,
     ComplexDefaultValueViolation,
-    IncorrectSuperCallViolation,
     UselessLambdaViolation,
     WrongFunctionCallViolation,
     WrongIsinstanceWithTupleViolation,
+    WrongSuperCallViolation,
 )
 from wemake_python_styleguide.violations.naming import (
     UnusedVariableIsUsedViolation,
@@ -65,13 +65,13 @@ class WrongFunctionCallVisitor(BaseNodeVisitor):
             if isinstance(grand_context, ast.ClassDef):
                 return
         self.add_violation(
-            IncorrectSuperCallViolation(node, text='not inside method'),
+            WrongSuperCallViolation(node, text='not inside method'),
         )
 
     def _ensure_super_arguments(self, node: ast.Call) -> None:
         if node.args or node.keywords:
             self.add_violation(
-                IncorrectSuperCallViolation(node, text='remove arguments'),
+                WrongSuperCallViolation(node, text='remove arguments'),
             )
 
     def _check_super_call(self, node: ast.Call) -> None:
@@ -96,7 +96,7 @@ class WrongFunctionCallVisitor(BaseNodeVisitor):
         Raises:
             BooleanPositionalArgumentViolation
             WrongFunctionCallViolation
-            IncorrectSuperCallViolation
+            WrongSuperCallViolation
             WrongIsinstanceWithTupleViolation
 
         """

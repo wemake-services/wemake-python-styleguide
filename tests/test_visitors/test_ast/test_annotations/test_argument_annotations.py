@@ -32,7 +32,7 @@ def function(
 ): ...
 """
 
-# Incorrect:
+# Wrong:
 
 wrong_multiline_arguments = """
 def function(

@@ -421,7 +421,7 @@ anti_z444.__truediv__(1)  # noqa: Z462
 if not some: # noqa: Z463
     print('False')
 else:
-    print('Incorrect')
+    print('Wrong')
 
 try:
     try:  # noqa: Z464

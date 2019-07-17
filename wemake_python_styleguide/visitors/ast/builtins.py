@@ -15,10 +15,10 @@ from wemake_python_styleguide.logic.operators import (
 )
 from wemake_python_styleguide.types import AnyNodes, AnyUnaryOp
 from wemake_python_styleguide.violations.best_practices import (
-    IncorrectUnpackingViolation,
     MagicNumberViolation,
     MultipleAssignmentsViolation,
     NonUniqueItemsInSetViolation,
+    WrongUnpackingViolation,
 )
 from wemake_python_styleguide.violations.complexity import (
     OverusedStringViolation,
@@ -162,14 +162,14 @@ class WrongAssignmentVisitor(BaseNodeVisitor):
             if isinstance(target, ast.Starred):
                 target = target.value
             if not isinstance(target, ast.Name):
-                self.add_violation(IncorrectUnpackingViolation(node))
+                self.add_violation(WrongUnpackingViolation(node))
 
     def visit_With(self, node: ast.With) -> None:
         """
         Checks assignments inside context managers to be correct.
 
         Raises:
-            IncorrectUnpackingViolation
+            WrongUnpackingViolation
 
         """
         for withitem in node.items:
@@ -184,7 +184,7 @@ class WrongAssignmentVisitor(BaseNodeVisitor):
         Checks assignments inside ``for`` loops to be correct.
 
         Raises:
-            IncorrectUnpackingViolation
+            WrongUnpackingViolation
 
         """
         if isinstance(node.target, ast.Tuple):
@@ -197,7 +197,7 @@ class WrongAssignmentVisitor(BaseNodeVisitor):
 
         Raises:
             MultipleAssignmentsViolation
-            IncorrectUnpackingViolation
+            WrongUnpackingViolation
 
         """
         self._check_assign_targets(node)
