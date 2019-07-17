@@ -21,6 +21,10 @@ Hooks
 Editors
 -------
 
+Note, that some editors might need to disable our own :ref:`formatter`
+and set the `default formatter <https://flake8.pycqa.org/en/latest/internal/formatters.html>`_
+with ``format = default`` in your configuration.
+
 - `vscode plugin <https://code.visualstudio.com/docs/python/linting>`_
 - `sublime plugin <https://github.com/SublimeLinter/SublimeLinter-flake8>`_
 - `atom plugin <https://atom.io/packages/linter-flake8>`_
