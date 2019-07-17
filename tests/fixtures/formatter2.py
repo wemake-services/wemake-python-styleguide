@@ -1,2 +1,2 @@
-def some_function(param:int) ->int:
-    return param+1
+def data(param) -> int:
+    return param._protected + 10_00

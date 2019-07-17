@@ -8,6 +8,8 @@ So, no unit tests for formatter, only e2e ones.
 We use ``snapshottest`` to render and assert equality of the output:
 https://github.com/syrusakbary/snapshottest
 
+To update snapshots use ``--snapshot-update`` flag, when running ``pytest``.
+
 Warning::
 
     Files inside ``./snapshots`` are auto generated!
@@ -17,15 +19,10 @@ Warning::
 
 
 import subprocess
-import sys
 
 import pytest
 
 
-@pytest.mark.skipif(
-    sys.version_info < (3, 7),
-    reason='Ordering of errors is different on different python versions',
-)
 @pytest.mark.parametrize('cli_options, output', [
     ([], 'regular'),
     (['--statistic'], 'regular_statistic'),
@@ -34,7 +31,12 @@ import pytest
     (['--statistic', '--show-source'], 'statistic_with_source'),
 ])
 def test_formatter(snapshot, cli_options, output):
-    """End-to-End test to that formatting works well."""
+    """
+    End-to-End test to that formatting works well.
+
+    We only use ``Z`` because other violations order is unpredictable.
+    Since ``flake8`` plugins work in parallel.
+    """
     filename1 = './tests/fixtures/formatter1.py'
     filename2 = './tests/fixtures/formatter2.py'
 
@@ -43,6 +45,8 @@ def test_formatter(snapshot, cli_options, output):
             'flake8',
             '--disable-noqa',
             '--isolated',
+            '--select',
+            'Z',
             '--format',
             'wemake',
             *cli_options,

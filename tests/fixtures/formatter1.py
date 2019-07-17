@@ -1,3 +1,2 @@
-def some_other_function(handle: int)->int:
-    """This one has a docstring."""
-    return handle +2
+def s(handle: int) -> int:
+    return handle + 2_00
