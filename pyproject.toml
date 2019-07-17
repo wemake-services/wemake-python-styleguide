@@ -41,6 +41,9 @@ classifiers = [
 [tool.poetry.plugins."flake8.extension"]
 Z = "wemake_python_styleguide.checker:Checker"
 
+[tool.poetry.plugins."flake8.report"]
+wemake = "wemake_python_styleguide.formatter:WemakeFormatter"
+
 [tool.poetry.dependencies]
 python = "^3.6"
 flake8 = "^3.7"

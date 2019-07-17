@@ -12,6 +12,7 @@
   pages/violations/index.rst
   pages/constants.rst
   pages/options/config.rst
+  pages/formatter.rst
 
 .. toctree::
   :maxdepth: 2
