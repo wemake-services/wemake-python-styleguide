@@ -17,10 +17,12 @@ Warning::
 
 
 import subprocess
+import sys
 
 import pytest
 
 
+@pytest.mark.skipif(sys.version_info < (3, 7))
 @pytest.mark.parametrize('cli_options, output', [
     ([], 'regular'),
     (['--statistic'], 'regular_statistic'),

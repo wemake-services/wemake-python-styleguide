@@ -21,7 +21,7 @@ Hooks
 Editors
 -------
 
-Note, that some editors might need to disable our own :ref:`formatter`
+Note, that some editors might need to disable our own :ref:`formatter <formatter>`
 and set the `default formatter <https://flake8.pycqa.org/en/latest/internal/formatters.html>`_
 with ``format = default`` in your configuration.
 
