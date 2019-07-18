@@ -101,6 +101,7 @@ class ConfigurationOptions(Protocol):
     max_line_complexity: int
     max_jones_score: int
     max_imports: int
+    max_imported_names: int
     max_base_classes: int
     max_decorators: int
     max_string_usages: int

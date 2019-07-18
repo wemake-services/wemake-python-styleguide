@@ -45,6 +45,7 @@ Summary
    OverusedStringViolation
    TooLongYieldTupleViolation
    TooLongCompareViolation
+   TooManyImportedNamesViolation
 
 
 Module complexity
@@ -53,6 +54,7 @@ Module complexity
 .. autoclass:: JonesScoreViolation
 .. autoclass:: TooManyImportsViolation
 .. autoclass:: TooManyModuleMembersViolation
+.. autoclass:: TooManyImportedNamesViolation
 
 Function and class complexity
 -----------------------------
@@ -190,6 +192,54 @@ class TooManyModuleMembersViolation(SimpleViolation):
 
     error_template = 'Found too many module members: {0}'
     code = 202
+
+
+@final
+class TooManyImportedNamesViolation(SimpleViolation):
+    """
+    Forbids to have modules with too many imported names.
+
+    Namespaces are one honking great idea -- let's do more of those!
+
+    Reasoning:
+        Having too many imported names without prefixes is quite expensive.
+        You have to memorize all the source locations of the imports.
+        And sometimes it is hard to remember what kind of functions and classes
+        are already injected into your context.
+
+        It is also a questionable design if a single module has a lot of
+        imports. Why a single module has so many dependencies?
+        So, it becomes too coupled.
+
+    Solution:
+        Refactor the imports to import a common namespace. Something like
+        ``from package import module`` and then
+        use it like ``module.function()``.
+
+        Or refactor your code and split the complex module into several ones.
+
+    Example::
+
+        # Correct:
+        import module  # 1 imported name
+
+        # Wrong:
+        from module import func1, func2, ..., funcN  # N imported names
+
+    We do not make any differences between
+    ``import`` and ``from ... import ...``.
+
+    Configuration:
+        This rule is configurable with ``--max-imported-names``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_IMPORTED_NAMES`
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found module with too many imported names: {0}'
+    code = 203
 
 
 # Functions and classes:
