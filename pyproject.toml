@@ -5,7 +5,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "wemake-python-styleguide"
-version = "0.10.0"
+version = "0.11.0"
 description = "The strictest and most opinionated python linter ever"
 
 license = "MIT"
@@ -22,10 +22,12 @@ homepage = "https://wemake-python-styleguide.readthedocs.io"
 keywords = [
   "flake8",
   "flake8-plugin",
+  "flake8-formatter",
   "linter",
   "wemake.services",
   "styleguide",
-  "code quality"
+  "code quality",
+  "pycqa"
 ]
 
 classifiers = [
