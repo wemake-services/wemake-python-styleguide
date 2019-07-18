@@ -4,6 +4,13 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
+## 0.11.1
+
+### Bugfixes
+
+- Now using `pygments` as a direct dependency
+
+
 ## 0.11.0 aka The New Violation Codes
 
 We had a really big problem: all violations inside `best_practices`
