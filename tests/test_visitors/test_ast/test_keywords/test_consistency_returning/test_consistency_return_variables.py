@@ -163,7 +163,7 @@ def some():
     wrong_example5,
     wrong_example6,
     wrong_example7,
-    wrong_example8
+    wrong_example8,
 ])
 def test_wrong_return_variable(
     assert_errors,

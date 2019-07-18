@@ -307,11 +307,11 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
                 self.add_violation(
                     InconsistentReturnVariableViolation(last),
                 )
-            elif isinstance(last.value, ast.NameConstant) and (last.value.value is None):
-                self.add_violation(
-                    InconsistentReturnVariableViolation(last),
-                )
-
+            elif isinstance(last.value, ast.NameConstant):
+                if (last.value.value is None):
+                    self.add_violation(
+                        InconsistentReturnVariableViolation(last),
+                    )
 
     def visit_return_variable(self, node: AnyFunctionDef) -> None:
         """
