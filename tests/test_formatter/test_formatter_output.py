@@ -22,6 +22,20 @@ import subprocess
 
 import pytest
 
+from wemake_python_styleguide.formatter import WemakeFormatter
+from wemake_python_styleguide.version import pkg_version
+
+
+def _safe_output(output: str) -> str:
+    """
+    Removes version specific things from console output.
+
+    So our formatter will be tested on all versions correctly.
+    """
+    current_version_url = WemakeFormatter._doc_url  # noqa: WPS437
+    general_version_url = current_version_url.replace(pkg_version, 'xx.xx')
+    return output.replace(current_version_url, general_version_url)
+
 
 @pytest.mark.parametrize('cli_options, output', [
     ([], 'regular'),
@@ -60,7 +74,10 @@ def test_formatter(snapshot, cli_options, output):
     )
     stdout, _ = process.communicate()
 
-    snapshot.assert_match(stdout, 'formatter_{0}'.format(output))
+    snapshot.assert_match(
+        _safe_output(stdout),
+        'formatter_{0}'.format(output),
+    )
 
 
 @pytest.mark.parametrize('cli_options, output', [
@@ -70,7 +87,7 @@ def test_formatter(snapshot, cli_options, output):
     (['--show-source', '--statistic'], 'with_source_statistic'),
     (['--statistic', '--show-source'], 'statistic_with_source'),
 ])
-def test_formatter_correct(snapshot, cli_options, output):
+def test_formatter_correct(snapshot, monkeypatch, cli_options, output):
     """All correct code should not raise any violations and no output."""
     filename = './tests/fixtures/correct.py'
 
@@ -91,4 +108,7 @@ def test_formatter_correct(snapshot, cli_options, output):
     )
     stdout, _ = process.communicate()
 
-    snapshot.assert_match(stdout, 'formatter_correct_{0}'.format(output))
+    snapshot.assert_match(
+        _safe_output(stdout),
+        'formatter_correct_{0}'.format(output),
+    )
