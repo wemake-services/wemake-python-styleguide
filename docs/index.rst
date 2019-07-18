@@ -9,6 +9,7 @@
 
   pages/usage/setup.rst
   pages/usage/integrations.rst
+  pages/usage/legacy.rst
   pages/violations/index.rst
   pages/constants.rst
   pages/options/config.rst
