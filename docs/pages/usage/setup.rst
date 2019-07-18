@@ -26,14 +26,18 @@ To run our linter you will need to run ``flake8`` in any way you like:
 
 .. code:: bash
 
-  flake8 your_module.py
-  flake8 your_package
+  flake8 .  # runs on all python files in the current directory (recommended)
+  flake8 your_module.py  # runs on a single file
+  flake8 your_package  # runs on a single your_package
 
 See the ``flake8`` docs for `options <http://flake8.pycqa.org/en/latest/user/configuration.html>`_
 and `usage examples <http://flake8.pycqa.org/en/latest/user/invocation.html>`_.
 
 Golden rule is to run your linter on each commit locally and inside the CI.
 And to fail the build if there are any style violations.
+
+Check out how we do it in our ``django`` and ``gitlab-ci`` template:
+https://github.com/wemake-services/wemake-django-template
 
 
 Ignoring violations
@@ -44,7 +48,9 @@ But we still want to provide the best experience for all users.
 
 So, you can disable some checks, that you are not ok with.
 **Note**: you might accidentally break the consistency of this project,
-when you disable some checks. We **do not** officially recommend to do it.
+when you disable some checks.
+`Report <https://github.com/wemake-services/wemake-python-styleguide/issues>`_
+these cases.
 
 There are three ways to ignore some specific violations:
 

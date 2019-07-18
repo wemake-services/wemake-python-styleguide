@@ -2,6 +2,8 @@ Migration guide to 0.11
 =======================
 
 In this version we have changed several violation codes.
+We have also changed ``Z`` code to ``WPS`` code.
+It looks way more clear what ``WPS`` means.
 
 Here's the full list:
 
