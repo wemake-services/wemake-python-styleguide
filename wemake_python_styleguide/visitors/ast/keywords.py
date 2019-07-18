@@ -308,7 +308,7 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
                     InconsistentReturnVariableViolation(last),
                 )
             elif isinstance(last.value, ast.NameConstant):
-                if (last.value.value is None):
+                if last.value.value is None:
                     self.add_violation(
                         InconsistentReturnVariableViolation(last),
                     )
