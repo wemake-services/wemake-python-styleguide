@@ -28,6 +28,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS119': 1,
     'WPS120': 1,
     'WPS121': 1,
+
     'WPS200': 0,
     'WPS201': 0,
     'WPS202': 0,
@@ -48,6 +49,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS226': 0,
     'WPS227': 1,
     'WPS228': 1,
+
     'WPS300': 1,
     'WPS301': 1,
     'WPS302': 1,
@@ -86,6 +88,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS335': 1,
     'WPS336': 1,
     'WPS337': 1,
+
     'WPS400': 0,
     'WPS401': 0,
     'WPS402': 0,
@@ -124,6 +127,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS435': 1,
     'WPS436': 1,
     'WPS437': 1,
+
     'WPS500': 1,
     'WPS501': 1,
     'WPS502': 2,
@@ -137,6 +141,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS510': 1,
     'WPS511': 1,
     'WPS512': 1,
+
     'WPS600': 1,
     'WPS601': 1,
     'WPS602': 2,
@@ -189,6 +194,7 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
     stdout, _ = process.communicate()
 
     _assert_errors_count_in_output(stdout, SHOULD_BE_RAISED, all_violations)
+    assert len(SHOULD_BE_RAISED) == len(all_violations)
 
 
 def test_noqa_fixture(absolute_path):

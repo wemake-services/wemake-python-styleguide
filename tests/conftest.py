@@ -7,7 +7,14 @@ from operator import itemgetter
 
 import pytest
 
-from wemake_python_styleguide import violations
+from wemake_python_styleguide.violations import (
+    best_practices,
+    consistency,
+    complexity,
+    naming,
+    refactoring,
+    oop,
+)
 from wemake_python_styleguide.options.config import Configuration
 from wemake_python_styleguide.violations.base import (
     ASTViolation,
@@ -34,12 +41,12 @@ def _is_violation_class(cls) -> bool:
 
 def _load_all_violation_classes():
     modules = [
-        violations.naming,
-        violations.complexity,
-        violations.consistency,
-        violations.best_practices,
-        violations.refactoring,
-        violations.oop,
+        naming,
+        complexity,
+        consistency,
+        best_practices,
+        refactoring,
+        oop,
     ]
 
     classes = {}
