@@ -127,7 +127,7 @@ except Exception as {0}:
     import_alias,
     from_import_alias,
 
-    # Function names (we generate async functions by default with `mode`):
+    # Function names, we don't use async function because we generate them:
     function_name,
     method_name,
 

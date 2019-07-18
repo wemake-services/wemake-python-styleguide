@@ -12,6 +12,11 @@ We used to have incremental versioning before `0.1.0`.
   configured by `--max-imported-names` option which is 50 by default
 - Forbids to raise `StopIteration` inside generators
 
+### Bugfixes
+
+- Bumps `flake8-eradicate` version
+  and solves `attrs` incompatible versions issue
+
 
 ## 0.11.1
 

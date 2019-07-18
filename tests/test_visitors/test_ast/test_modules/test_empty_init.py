@@ -17,7 +17,7 @@ module_with_docstring = """
 module_with_comments = """
 # Some comment about what is going on.
 # Commented code:
-# print('hi')
+# print('hi')  # noqa: E800
 """
 
 module_with_one_import = 'from some_module import other'
