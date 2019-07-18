@@ -457,3 +457,21 @@ print(numbers in [])  # noqa: WPS510
 print(isinstance(number, int) or isinstance(number, (float, str)))  # noqa: 474
 
 print(isinstance(numbers, (int,)))  # noqa: WPS512
+
+def sync_gen():
+    yield
+    raise StopIteration  # noqa: WPS438
+
+async def async_gen():
+    yield
+    raise StopIteration  # noqa: WPS438
+
+
+class CheckStopIteration(object):
+    def sync_gen(self):
+        yield
+        raise StopIteration()  # noqa: WPS438
+
+    async def async_gen(self):
+        yield
+        raise StopIteration()  # noqa: WPS438

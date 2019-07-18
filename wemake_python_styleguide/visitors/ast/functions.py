@@ -17,6 +17,7 @@ from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     BooleanPositionalArgumentViolation,
     ComplexDefaultValueViolation,
+    StopIterationInsideGeneratorViolation,
     WrongFunctionCallViolation,
 )
 from wemake_python_styleguide.violations.naming import (
@@ -188,6 +189,16 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
             if not isinstance(real_arg, self._allowed_default_value_types):
                 self.add_violation(ComplexDefaultValueViolation(node))
 
+    def _check_generator(self, node: AnyFunctionDef) -> None:
+        if not functions.is_generator(node):
+            return
+
+        for sub_node in nodes.get_subnodes_by_type(node, ast.Raise):
+            if nodes.get_exception_name(sub_node) == 'StopIteration':
+                self.add_violation(
+                    StopIterationInsideGeneratorViolation(sub_node),
+                )
+
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """
         Checks regular, lambda, and async functions.
@@ -195,10 +206,12 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
         Raises:
             UnusedVariableIsUsedViolation
             ComplexDefaultValueViolation
+            StopIterationInsideGeneratorViolation
 
         """
         self._check_argument_default_values(node)
         self._check_unused_variables(node)
+        self._check_generator(node)
         self.generic_visit(node)
 
 

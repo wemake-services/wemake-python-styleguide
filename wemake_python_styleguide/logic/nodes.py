@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Optional, Union
+from typing import Iterator, Optional, Type, TypeVar, Union
 
 from wemake_python_styleguide.types import AnyNodes
 
@@ -49,3 +49,29 @@ def get_parent(node: ast.AST) -> Optional[ast.AST]:
 def get_context(node: ast.AST) -> Optional[ast.AST]:
     """Returns the context or ``None`` if node has no context."""
     return getattr(node, 'wps_context', None)
+
+
+SubnodeType = TypeVar('SubnodeType')
+
+
+def get_subnodes_by_type(
+    node: ast.AST,
+    subnodes_type: Type[SubnodeType],
+) -> Iterator[SubnodeType]:
+    """Returns the list of subnodes of given node with given subnode type."""
+    for child in ast.walk(node):
+        if isinstance(child, subnodes_type):
+            yield child
+
+
+def get_exception_name(node: ast.Raise) -> Optional[str]:
+    """Returns the exception name or ``None`` if node has not it."""
+    exception = getattr(node, 'exc', None)
+    if exception is None:
+        return None
+
+    exception_func = getattr(exception, 'func', None)
+    if exception_func:
+        exception = exception_func
+
+    return getattr(exception, 'id', None)
