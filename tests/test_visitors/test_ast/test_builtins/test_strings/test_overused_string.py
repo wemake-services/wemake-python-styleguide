@@ -41,7 +41,7 @@ def test_string_overuse_settings(
 ])
 @pytest.mark.parametrize('string_value', [
     '"same-string"',
-    "''"
+    "''",
 ])
 def test_string_overuse(
     assert_errors,
