@@ -41,7 +41,7 @@ Reference
 
 import ast
 import tokenize
-from typing import ClassVar, Optional, Tuple, Union
+from typing import ClassVar, Optional, Set, Tuple, Union
 
 from typing_extensions import final
 
@@ -70,6 +70,7 @@ class BaseViolation(object):
 
     error_template: ClassVar[str]
     code: ClassVar[int]
+    previous_codes: ClassVar[Set[int]]
 
     def __init__(self, node: ErrorNode, text: Optional[str] = None) -> None:
         """
@@ -89,9 +90,9 @@ class BaseViolation(object):
         Returns fully formatted code.
 
         Adds violation letter to the numbers.
-        Also ensures that codes like ``3`` will be represented as ``Z003``.
+        Also ensures that codes like ``3`` will be represented as ``WPS003``.
         """
-        return 'Z' + str(self.code).zfill(3)
+        return 'WPS' + str(self.code).zfill(3)
 
     def _location(self) -> Tuple[int, int]:
         """

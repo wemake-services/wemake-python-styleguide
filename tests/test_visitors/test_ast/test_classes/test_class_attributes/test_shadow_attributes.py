@@ -2,7 +2,7 @@
 
 import pytest
 
-from wemake_python_styleguide.violations.best_practices import (
+from wemake_python_styleguide.violations.oop import (
     ShadowedClassAttributeViolation,
 )
 from wemake_python_styleguide.visitors.ast.classes import ClassAttributeVisitor

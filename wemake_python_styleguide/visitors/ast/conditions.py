@@ -13,17 +13,19 @@ from wemake_python_styleguide.logic.functions import given_function_called
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
-    MultilineConditionsViolation,
-    NegatedConditionsViolation,
     SameElementsInConditionViolation,
-    UnmergedIsinstanceCallsViolation,
-    UselessLenCompareViolation,
-    UselessReturningElseViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
     ImplicitComplexCompareViolation,
     ImplicitInConditionViolation,
     ImplicitTernaryViolation,
+    MultilineConditionsViolation,
+)
+from wemake_python_styleguide.violations.refactoring import (
+    NegatedConditionsViolation,
+    UnmergedIsinstanceCallsViolation,
+    UselessLenCompareViolation,
+    UselessReturningElseViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 

@@ -16,6 +16,7 @@ from typing import DefaultDict, List
 
 from typing_extensions import final
 
+from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.violations.complexity import (
     JonesScoreViolation,
     LineComplexityViolation,
@@ -38,9 +39,8 @@ class JonesComplexityVisitor(BaseNodeVisitor):
     """
 
     _ignored_nodes = (
-        ast.FunctionDef,
         ast.ClassDef,
-        ast.AsyncFunctionDef,
+        *FunctionNodes,
     )
 
     def __init__(self, *args, **kwargs) -> None:

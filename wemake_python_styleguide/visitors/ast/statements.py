@@ -5,6 +5,7 @@ from typing import ClassVar, Mapping, Optional, Sequence, Union
 
 from typing_extensions import final
 
+from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic.collections import normalize_dict_elements
 from wemake_python_styleguide.logic.functions import get_all_arguments
 from wemake_python_styleguide.logic.nodes import get_parent, is_doc_string
@@ -29,8 +30,7 @@ StatementWithBody = Union[
     ast.AsyncWith,
     ast.Try,
     ast.ExceptHandler,
-    ast.FunctionDef,
-    ast.AsyncFunctionDef,
+    AnyFunctionDef,
     ast.ClassDef,
     ast.Module,
 ]
@@ -73,8 +73,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
     )
 
     _have_doc_strings: ClassVar[AnyNodes] = (
-        ast.FunctionDef,
-        ast.AsyncFunctionDef,
+        *FunctionNodes,
         ast.ClassDef,
         ast.Module,
     )

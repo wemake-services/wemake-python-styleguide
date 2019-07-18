@@ -9,10 +9,10 @@ That's how a basic ``comment`` type token looks like:
 
     TokenInfo(
         type=57 (COMMENT),
-        string='# noqa: Z100',
+        string='# noqa: WPS100',
         start=(1, 4),
         end=(1, 16),
-        line="u'' # noqa: Z100\n",
+        line="u'' # noqa: WPS100\n",
     )
 
 All comments have the same type.
@@ -47,7 +47,7 @@ class WrongCommentVisitor(BaseTokenVisitor):
     """Checks comment tokens."""
 
     _no_cover: ClassVar[Pattern] = re.compile(r'^pragma:\s+no\s+cover')
-    _noqa_check: ClassVar[Pattern] = re.compile(r'^noqa:?($|[A-Z\d\,\s]+)')
+    _noqa_check: ClassVar[Pattern] = re.compile(r'^noqa:?($|[A-WPS\d\,\s]+)')
     _type_check: ClassVar[Pattern] = re.compile(
         r'^type:\s?([\w\d\[\]\'\"\.]+)$',
     )

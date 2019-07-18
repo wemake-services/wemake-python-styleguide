@@ -11,12 +11,14 @@ from wemake_python_styleguide.logic.nodes import is_contained
 from wemake_python_styleguide.violations.best_practices import (
     BaseExceptionViolation,
     DuplicateExceptionViolation,
-    NestedTryViolation,
     TryExceptMultipleReturnPathViolation,
-    UselessFinallyViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
     UselessExceptCaseViolation,
+)
+from wemake_python_styleguide.violations.refactoring import (
+    NestedTryViolation,
+    UselessFinallyViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 

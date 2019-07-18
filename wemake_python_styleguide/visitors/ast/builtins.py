@@ -8,6 +8,8 @@ import astor
 from typing_extensions import final
 
 from wemake_python_styleguide import constants
+from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.operators import (
     count_unary_operator,
     get_parent_ignoring_unary,
@@ -15,10 +17,10 @@ from wemake_python_styleguide.logic.operators import (
 )
 from wemake_python_styleguide.types import AnyNodes, AnyUnaryOp
 from wemake_python_styleguide.violations.best_practices import (
-    IncorrectUnpackingViolation,
     MagicNumberViolation,
     MultipleAssignmentsViolation,
     NonUniqueItemsInSetViolation,
+    WrongUnpackingViolation,
 )
 from wemake_python_styleguide.violations.complexity import (
     OverusedStringViolation,
@@ -40,12 +42,26 @@ class WrongStringVisitor(BaseNodeVisitor):
         self._string_constants: DefaultDict[str, int] = defaultdict(int)
 
     def _check_string_constant(self, node: ast.Str) -> None:
+        annotations = (
+            ast.arg,
+            ast.AnnAssign,
+        )
+
+        parent = get_parent(node)
+        if isinstance(parent, annotations) and parent.annotation == node:
+            return  # it is argument or variable annotation
+
+        if isinstance(parent, FunctionNodes) and parent.returns == node:
+            return  # it is return annotation
+
         self._string_constants[node.s] += 1
 
     def _post_visit(self) -> None:
         for string, usage_count in self._string_constants.items():
             if usage_count > self.options.max_string_usages:
-                self.add_violation(OverusedStringViolation(text=string))
+                self.add_violation(
+                    OverusedStringViolation(text=string or "''"),
+                )
 
     def visit_Str(self, node: ast.Str) -> None:
         """
@@ -79,8 +95,7 @@ class MagicNumberVisitor(BaseNodeVisitor):
         ast.AnnAssign,
 
         # Constructor usages:
-        ast.FunctionDef,
-        ast.AsyncFunctionDef,
+        *FunctionNodes,
         ast.arguments,
 
         # Primitives:
@@ -162,14 +177,14 @@ class WrongAssignmentVisitor(BaseNodeVisitor):
             if isinstance(target, ast.Starred):
                 target = target.value
             if not isinstance(target, ast.Name):
-                self.add_violation(IncorrectUnpackingViolation(node))
+                self.add_violation(WrongUnpackingViolation(node))
 
     def visit_With(self, node: ast.With) -> None:
         """
         Checks assignments inside context managers to be correct.
 
         Raises:
-            IncorrectUnpackingViolation
+            WrongUnpackingViolation
 
         """
         for withitem in node.items:
@@ -184,7 +199,7 @@ class WrongAssignmentVisitor(BaseNodeVisitor):
         Checks assignments inside ``for`` loops to be correct.
 
         Raises:
-            IncorrectUnpackingViolation
+            WrongUnpackingViolation
 
         """
         if isinstance(node.target, ast.Tuple):
@@ -197,7 +212,7 @@ class WrongAssignmentVisitor(BaseNodeVisitor):
 
         Raises:
             MultipleAssignmentsViolation
-            IncorrectUnpackingViolation
+            WrongUnpackingViolation
 
         """
         self._check_assign_targets(node)

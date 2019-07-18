@@ -21,6 +21,10 @@ Hooks
 Editors
 -------
 
+Note, that some editors might need to disable our own :ref:`formatter <formatter>`
+and set the `default formatter <https://flake8.pycqa.org/en/latest/internal/formatters.html>`_
+with ``format = default`` in your configuration.
+
 - `vscode plugin <https://code.visualstudio.com/docs/python/linting>`_
 - `sublime plugin <https://github.com/SublimeLinter/SublimeLinter-flake8>`_
 - `atom plugin <https://atom.io/packages/linter-flake8>`_
@@ -58,7 +62,7 @@ Use ``*.pyi`` glob to list ignored violations:
 .. code:: cfg
 
   per-file-ignores =
-    *.pyi: Z444, Z452
+    *.pyi: WPS428, WPS604
 
 You can look at the `returns <https://github.com/dry-python/returns>`_
 project as an example.
@@ -121,12 +125,41 @@ for ``wemake-python-styleguide`` users.
 
 Is officially supported in way
 that all code written inside ``wemake-python-styleguide`` is tested
-to be valid ``autopep8`` code. But, **not the way around**.
+to be valid ``autopep8`` code. But, **not the other way around**.
 
 Since ``wemake-python-styleguide`` is the strictest linter
 it cannot be pleased by outputs of ``autopep8`` in 100% of cases all by itself.
 Most likely, you will need to refactor a little bit more manually (brainly!)
 to please ``wemake-python-styleguide`` after ``autopep8`` formatting is done.
+
+There are also plugins for IDEs to run ``autopep8`` on safe:
+
+- https://code.visualstudio.com/docs/python/editing
+
+isort
+~~~~~
+
+``isort`` is a great tool to sort your imports.
+We already use it to validate that your imports are correct.
+We recommend to use ``isort`` and officially
+and support it in a way that all
+valid ``wemake-python-styleguide`` code is valid ``isort`` code.
+But, **not the other way around**.
+
+You might be required to refactor your code manually after ``isort``
+reformat to make ``wemake-python-styleguide`` happy.
+
+``isort`` can also `be invoked <https://github.com/timothycrosley/isort#using-isort>`_
+as a command line tool to fix all your import problems for you.
+
+We recommend to run ``isort`` after ``autopep8``. They are also compatible.
+
+There are also plugins for IDEs to run ``isort`` on safe:
+
+- https://github.com/timothycrosley/isort/wiki/isort-Plugins
+- https://code.visualstudio.com/docs/python/editing
+
+You can find the configuration we use in ``setup.cfg`` in this repository.
 
 yapf
 ~~~~

@@ -3,6 +3,8 @@
 import ast
 from typing import Optional, Tuple, Type
 
+from wemake_python_styleguide.compat.aliases import FunctionNodes
+
 
 def set_if_chain(tree: ast.AST) -> ast.AST:
     """
@@ -30,7 +32,7 @@ def set_if_chain(tree: ast.AST) -> ast.AST:
         for child in ast.iter_child_nodes(statement):
             if isinstance(statement, ast.If) and isinstance(child, ast.If):
                 if child in statement.orelse:
-                    setattr(statement, 'wps_chained', True)  # noqa: Z425
+                    setattr(statement, 'wps_chained', True)  # noqa: WPS425
                     setattr(child, 'wps_chain', statement)  # noqa: B010
     return tree
 
@@ -62,8 +64,7 @@ def set_node_context(tree: ast.AST) -> ast.AST:
     contexts = (
         ast.Module,
         ast.ClassDef,
-        ast.FunctionDef,
-        ast.AsyncFunctionDef,
+        *FunctionNodes,
     )
 
     for statement in ast.walk(tree):

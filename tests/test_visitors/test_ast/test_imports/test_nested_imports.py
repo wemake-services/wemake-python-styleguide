@@ -7,7 +7,7 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors.ast.imports import WrongImportVisitor
 
-# Incorrect imports:
+# Wrong imports:
 
 nested_function_import = """
 def function():

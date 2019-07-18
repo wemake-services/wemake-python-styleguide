@@ -11,14 +11,51 @@ We used to have incremental versioning before `0.1.0`.
 configured by `--max-imported-names` option which is 50 by default
 
 
-## 0.11.0 WIP
+## 0.11.1
+
+### Bugfixes
+
+- Now using `pygments` as a direct dependency
+
+
+## 0.11.0 aka The New Violation Codes
+
+We had a really big problem: all violations inside `best_practices`
+was messed up together with no clear structure.
+
+We had to fix it before it is too late.
+So, we broke existing error codes.
+And now we can promise not to do it ever again.
+
+We also have this [nice migration guide](https://wemake-python-stylegui.de/en/latest/pages/changelog/migration_to_0_11.html)
+for you to rename your violations with a script.
+
+### Features
+
+- **Breaking**: replaces `Z` error code to `WPS` code
+- **Breaking**: creates new violation group `refactoring.py`
+- **Breaking**: creates new violation group `oop.py`
+- **Breaking**: moving a lot of violations
+  from `best_practices` to `refactoring`, `oop`, and `consistency`
+- Adds new `wemake` formatter (using it now by default)
+
+### Bugfixes
+
+- Fixes error message of `OverusedStringViolation` for empty strings
+- Now does not count string annotations as strings for `OverusedStringViolation`
+- Fixes `InconsistentReturnVariableViolation` was raised twice
 
 ### Misc
 
+- Adds migration guide to `0.11`
+- Improves legacy guide
 - Adds `--show-source` to the default recommended configuration
 - Adds better docs about auto-formatters
 - Adds `autopep8` to CI to make sure that `wps` is compatible with it
 - Ensures that `--diff` mode works for `flake8`
+- Renames `Incorrect` to `Wrong` where possible
+- Renames `IncorrectlyNestedTernaryViolation` to `NestedTernaryViolation`
+- Renames `IncorectLoopIterTypeViolation` to `WrongLoopIterTypeViolation`
 
 
 ## 0.10.0 aka The Great Compare

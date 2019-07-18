@@ -32,6 +32,12 @@ Here we collect all the specific terms that are used in this project.
 
     Technical documentation about the :ref:`checker` is available.
 
+  formatter
+    A class compatible with ``flake8`` used to show results to users.
+
+    Each formatter operates with none
+    or multiple :term:`violations <violation>`.
+
   transformation
     A way we change existing ``ast`` nodes.
 

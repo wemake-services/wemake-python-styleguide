@@ -6,6 +6,7 @@ from typing import ClassVar, Dict, List, Optional, Union
 
 from typing_extensions import final
 
+from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.constants import (
     FUNCTIONS_BLACKLIST,
     UNUSED_VARIABLE,
@@ -16,22 +17,23 @@ from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     BooleanPositionalArgumentViolation,
     ComplexDefaultValueViolation,
-    IncorrectSuperCallViolation,
-    UselessLambdaViolation,
     WrongFunctionCallViolation,
-    WrongIsinstanceWithTupleViolation,
 )
 from wemake_python_styleguide.violations.naming import (
     UnusedVariableIsUsedViolation,
 )
-from wemake_python_styleguide.visitors.base import BaseNodeVisitor
-from wemake_python_styleguide.visitors.decorators import alias
+from wemake_python_styleguide.violations.oop import WrongSuperCallViolation
+from wemake_python_styleguide.violations.refactoring import (
+    UselessLambdaViolation,
+    WrongIsinstanceWithTupleViolation,
+)
+from wemake_python_styleguide.visitors import base, decorators
 
 LocalVariable = Union[ast.Name, ast.ExceptHandler]
 
 
 @final
-class WrongFunctionCallVisitor(BaseNodeVisitor):
+class WrongFunctionCallVisitor(base.BaseNodeVisitor):
     """
     Responsible for restricting some dangerous function calls.
 
@@ -60,18 +62,18 @@ class WrongFunctionCallVisitor(BaseNodeVisitor):
 
     def _ensure_super_context(self, node: ast.Call) -> None:
         parent_context = nodes.get_context(node)
-        if isinstance(parent_context, (ast.FunctionDef, ast.AsyncFunctionDef)):
+        if isinstance(parent_context, FunctionNodes):
             grand_context = nodes.get_context(parent_context)
             if isinstance(grand_context, ast.ClassDef):
                 return
         self.add_violation(
-            IncorrectSuperCallViolation(node, text='not inside method'),
+            WrongSuperCallViolation(node, text='not inside method'),
         )
 
     def _ensure_super_arguments(self, node: ast.Call) -> None:
         if node.args or node.keywords:
             self.add_violation(
-                IncorrectSuperCallViolation(node, text='remove arguments'),
+                WrongSuperCallViolation(node, text='remove arguments'),
             )
 
     def _check_super_call(self, node: ast.Call) -> None:
@@ -96,7 +98,7 @@ class WrongFunctionCallVisitor(BaseNodeVisitor):
         Raises:
             BooleanPositionalArgumentViolation
             WrongFunctionCallViolation
-            IncorrectSuperCallViolation
+            WrongSuperCallViolation
             WrongIsinstanceWithTupleViolation
 
         """
@@ -108,11 +110,11 @@ class WrongFunctionCallVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_any_function', (
+@decorators.alias('visit_any_function', (
     'visit_AsyncFunctionDef',
     'visit_FunctionDef',
 ))
-class FunctionDefinitionVisitor(BaseNodeVisitor):
+class FunctionDefinitionVisitor(base.BaseNodeVisitor):
     """Responsible for checking function internals."""
 
     _allowed_default_value_types: ClassVar[AnyNodes] = (
@@ -201,7 +203,7 @@ class FunctionDefinitionVisitor(BaseNodeVisitor):
 
 
 @final
-class UselessLambdaDefinitionVisitor(BaseNodeVisitor):
+class UselessLambdaDefinitionVisitor(base.BaseNodeVisitor):
     """This visitor is used specifically for ``lambda`` functions."""
 
     def _have_same_kwarg(self, node: ast.Lambda, call: ast.Call) -> bool:

@@ -14,16 +14,18 @@ from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     LambdaInsideLoopViolation,
     LoopVariableDefinitionViolation,
-    UselessLoopElseViolation,
     YieldInComprehensionViolation,
 )
 from wemake_python_styleguide.violations.complexity import (
     TooManyForsInComprehensionViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
-    IncorectLoopIterTypeViolation,
     MultipleIfsInComprehensionViolation,
     UselessContinueViolation,
+    WrongLoopIterTypeViolation,
+)
+from wemake_python_styleguide.violations.refactoring import (
+    UselessLoopElseViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
@@ -199,7 +201,7 @@ class WrongLoopDefinitionVisitor(BaseNodeVisitor):
 
         Raises:
             LoopVariableDefinitionViolation
-            IncorectLoopIterTypeViolation
+            WrongLoopIterTypeViolation
 
         """
         self._check_variable_definitions(node.target)
@@ -223,4 +225,4 @@ class WrongLoopDefinitionVisitor(BaseNodeVisitor):
 
     def _check_explicit_iter_type(self, node: AnyForLoop) -> None:
         if isinstance(node.iter, self._forbidden_for_iters):
-            self.add_violation(IncorectLoopIterTypeViolation(node))
+            self.add_violation(WrongLoopIterTypeViolation(node))

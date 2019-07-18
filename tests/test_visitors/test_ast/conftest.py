@@ -31,7 +31,7 @@ def parse_ast_tree():
             # We need to compile to check some syntax features
             # that are validated after the `ast` is processed:
             # like double arguments or `break` outside of loops.
-            compile(code_to_parse, '<filename>', 'exec')  # noqa: Z421
+            compile(code_to_parse, '<filename>', 'exec')  # noqa: WPS421
         return transform(ast.parse(code_to_parse))
 
     return factory

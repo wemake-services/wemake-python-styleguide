@@ -5,7 +5,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "wemake-python-styleguide"
-version = "0.10.0"
+version = "0.11.1"
 description = "The strictest and most opinionated python linter ever"
 
 license = "MIT"
@@ -22,10 +22,12 @@ homepage = "https://wemake-python-styleguide.readthedocs.io"
 keywords = [
   "flake8",
   "flake8-plugin",
+  "flake8-formatter",
   "linter",
   "wemake.services",
   "styleguide",
-  "code quality"
+  "code quality",
+  "pycqa"
 ]
 
 classifiers = [
@@ -39,7 +41,10 @@ classifiers = [
 ]
 
 [tool.poetry.plugins."flake8.extension"]
-Z = "wemake_python_styleguide.checker:Checker"
+WPS = "wemake_python_styleguide.checker:Checker"
+
+[tool.poetry.plugins."flake8.report"]
+wemake = "wemake_python_styleguide.formatter:WemakeFormatter"
 
 [tool.poetry.dependencies]
 python = "^3.6"
@@ -47,6 +52,7 @@ flake8 = "^3.7"
 attrs = "*"
 typing_extensions = "^3.6"
 astor = ">=0.7.1,<0.9.0"
+pygments = "^2.4"
 
 flake8-builtins = "^1.4"
 flake8-commas = "^2.0"
@@ -75,6 +81,7 @@ pep8-naming = "^0.8.2"
 pytest-cov = "^2.7"
 pytest-randomly = "^3.0"
 pytest = "^5.0"
+snapshottest = "^0.5.1"
 mypy = "^0.720"
 sphinx = "^2.1"
 sphinx-autodoc-typehints = "^1.6"

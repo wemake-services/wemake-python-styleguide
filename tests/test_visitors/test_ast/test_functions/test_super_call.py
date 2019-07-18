@@ -2,9 +2,7 @@
 
 import pytest
 
-from wemake_python_styleguide.violations.best_practices import (
-    IncorrectSuperCallViolation,
-)
+from wemake_python_styleguide.violations.oop import WrongSuperCallViolation
 from wemake_python_styleguide.visitors.ast.functions import (
     WrongFunctionCallVisitor,
 )
@@ -97,7 +95,7 @@ def test_wrong_super_call(
     visitor = WrongFunctionCallVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [IncorrectSuperCallViolation])
+    assert_errors(visitor, [WrongSuperCallViolation])
 
 
 @pytest.mark.parametrize('code', [
@@ -118,6 +116,6 @@ def test_double_wrong_super_call(
     visitor.run()
 
     assert_errors(visitor, [
-        IncorrectSuperCallViolation,
-        IncorrectSuperCallViolation,
+        WrongSuperCallViolation,
+        WrongSuperCallViolation,
     ])

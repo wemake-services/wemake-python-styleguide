@@ -47,7 +47,7 @@ Summary
    WrongBracketPositionViolation
    MultilineFunctionAnnotationViolation
    UppercaseStringModifierViolation
-   IncorrectMultilineStringViolation
+   WrongMultilineStringViolation
    EmptyLineAfterCodingViolation
    InconsistentReturnViolation
    InconsistentYieldViolation
@@ -60,8 +60,9 @@ Summary
    ImplicitTernaryViolation
    ImplicitComplexCompareViolation
    ReversedComplexCompareViolation
-   IncorectLoopIterTypeViolation
+   WrongLoopIterTypeViolation
    ImplicitInConditionViolation
+   MultilineConditionsViolation
 
 Consistency checks
 ------------------
@@ -88,7 +89,7 @@ Consistency checks
 .. autoclass:: WrongBracketPositionViolation
 .. autoclass:: MultilineFunctionAnnotationViolation
 .. autoclass:: UppercaseStringModifierViolation
-.. autoclass:: IncorrectMultilineStringViolation
+.. autoclass:: WrongMultilineStringViolation
 .. autoclass:: EmptyLineAfterCodingViolation
 .. autoclass:: InconsistentReturnViolation
 .. autoclass:: InconsistentYieldViolation
@@ -101,8 +102,9 @@ Consistency checks
 .. autoclass:: ImplicitTernaryViolation
 .. autoclass:: ImplicitComplexCompareViolation
 .. autoclass:: ReversedComplexCompareViolation
-.. autoclass:: IncorectLoopIterTypeViolation
+.. autoclass:: WrongLoopIterTypeViolation
 .. autoclass:: ImplicitInConditionViolation
+.. autoclass:: MultilineConditionsViolation
 
 """
 
@@ -877,7 +879,7 @@ class UppercaseStringModifierViolation(TokenizeViolation):
 
 
 @final
-class IncorrectMultilineStringViolation(TokenizeViolation):
+class WrongMultilineStringViolation(TokenizeViolation):
     '''
     Forbids to use triple quotes for singleline strings.
 
@@ -1345,7 +1347,7 @@ class ReversedComplexCompareViolation(ASTViolation):
 
 
 @final
-class IncorectLoopIterTypeViolation(ASTViolation):
+class WrongLoopIterTypeViolation(ASTViolation):
     """
     Forbids to use lists and dicts as ``for`` loop iter targets.
 
@@ -1406,3 +1408,40 @@ class ImplicitInConditionViolation(ASTViolation):
 
     code = 336
     error_template = 'Found implicit `in` condition'
+
+
+@final
+class MultilineConditionsViolation(ASTViolation):
+    """
+    Forbids multiline conditions.
+
+    Reasoning:
+        This way of writing conditions hides the inner complexity this line has.
+        And it decreases readability of the code.
+
+    Solution:
+        Divide multiline conditions to some ``if`` condition. Or use variables.
+
+    Example::
+
+        # Correct:
+        if isinstance(node.test, ast.UnaryOp):
+            if isinstance(node.test.op, ast.Not):
+                ...
+
+
+        # Wrong:
+        if isinstance(node.test, ast.UnaryOp) and isinstance(
+            node.test.op,
+            ast.Not,
+        ):
+            ...
+
+    .. versionadded:: 0.9.0
+    .. versionchanged:: 0.11.0
+
+    """
+
+    error_template = 'Found multiline conditions'
+    code = 337
+    previous_codes = {465}

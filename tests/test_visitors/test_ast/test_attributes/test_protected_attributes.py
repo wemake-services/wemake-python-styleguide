@@ -7,7 +7,7 @@ from wemake_python_styleguide.visitors.ast.attributes import (
     WrongAttributeVisitor,
 )
 
-# Incorrect:
+# Wrong:
 
 protected_attribute_assigned = 'some._protected = 1'
 protected_attribute_accessed = 'print(some._protected)'

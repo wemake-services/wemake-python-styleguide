@@ -3,7 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
-    IncorrectUnpackingViolation,
+    WrongUnpackingViolation,
 )
 from wemake_python_styleguide.visitors.ast.builtins import (
     WrongAssignmentVisitor,
@@ -124,4 +124,4 @@ def test_multiple_assignments(
     visitor = WrongAssignmentVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [IncorrectUnpackingViolation])
+    assert_errors(visitor, [WrongUnpackingViolation])

@@ -82,6 +82,7 @@ VARIABLE_NAMES_BLACKLIST: Final = frozenset((
     'objs',
     'some',
     'do',
+    'param',
     'params',
     'parameters',
 

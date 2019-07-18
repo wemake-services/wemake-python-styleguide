@@ -13,11 +13,11 @@ from wemake_python_styleguide.logic.tokens import (
 from wemake_python_styleguide.violations.consistency import (
     BadNumberSuffixViolation,
     ImplicitStringConcatenationViolation,
-    IncorrectMultilineStringViolation,
     PartialFloatViolation,
     UnderscoredNumberViolation,
     UnicodeStringViolation,
     UppercaseStringModifierViolation,
+    WrongMultilineStringViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
@@ -99,7 +99,7 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         _, string_def = split_prefixes(token)
         if has_triple_string_quotes(string_def):
             if '\n' not in string_def and token not in self._docstrings:
-                self.add_violation(IncorrectMultilineStringViolation(token))
+                self.add_violation(WrongMultilineStringViolation(token))
 
     def _check_string_modifiers(self, token: tokenize.TokenInfo) -> None:
         if token.string.lower().startswith('u'):
@@ -124,7 +124,7 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
 
         Raises:
             UnicodeStringViolation
-            IncorrectMultilineStringViolation
+            WrongMultilineStringViolation
 
         """
         self._check_correct_multiline(token)

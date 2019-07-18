@@ -10,7 +10,7 @@ def test_invalid_options(absolute_path):
             'flake8',
             '--isolated',
             '--select',
-            'Z',
+            'WPS',
             '--max-imports',
             '-5',  # should be positive
             absolute_path('fixtures', 'noqa.py'),

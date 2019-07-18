@@ -62,6 +62,8 @@ def foo():
    return x[0]
 """
 
+# Wrong:
+
 wrong_example1 = """
 def function():
      some_value = 1
@@ -82,12 +84,23 @@ def some_function():
 """
 
 # Regression to 598
-# See: https://github.com/wemake-services/wemake-python-styleguide/issues/598
+# https://github.com/wemake-services/wemake-python-styleguide/issues/598
 wrong_example4 = """
 def foo():
    function_result = function(*args, **kwargs)
    print('Done, result is logged')  # we obviously need this line
    return function_result
+"""
+
+# Regression to 674
+# https://github.com/wemake-services/wemake-python-styleguide/issues/674
+wrong_example5 = """
+def report_progress(function):
+    def decorator(*args, **kwargs):
+        function_result = function(*args, **kwargs)
+        print('done!')
+        return function_result
+    return decorator
 """
 
 double_wrong_example1 = """
@@ -107,6 +120,7 @@ def some():
     wrong_example2,
     wrong_example3,
     wrong_example4,
+    wrong_example5,
 ])
 def test_wrong_return_variable(
     assert_errors,

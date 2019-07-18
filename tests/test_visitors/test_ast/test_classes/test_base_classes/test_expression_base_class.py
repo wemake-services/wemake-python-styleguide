@@ -2,9 +2,7 @@
 
 import pytest
 
-from wemake_python_styleguide.violations.best_practices import (
-    IncorrectBaseClassViolation,
-)
+from wemake_python_styleguide.violations.oop import WrongBaseClassViolation
 from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
 
 class_with_base = """
@@ -31,7 +29,7 @@ def test_base_class_expression(
     visitor = WrongClassVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [IncorrectBaseClassViolation])
+    assert_errors(visitor, [WrongBaseClassViolation])
 
 
 @pytest.mark.parametrize('base', [

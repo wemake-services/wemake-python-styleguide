@@ -2,7 +2,7 @@ Violations
 ==========
 
 Here we have all violation codes listed for this plugin and its dependencies.
-Our violation codes are using ``Z`` letter.
+Our violation codes are using ``WPS`` letter.
 Other codes are coming from other tools.
 
 
@@ -37,7 +37,7 @@ flake8-debugger                `T100 <https://github.com/JBKahn/flake8-debugger/
 flake8-annotations-complexity  `TAE002 <https://github.com/best-doctor/flake8-annotations-complexity>`_
 flake8-rst-docstrings          `RST201 - RST499 <https://github.com/peterjc/flake8-rst-docstrings>`_
 flake8-executable              `EXE001 - EXE005 <https://github.com/xuhdev/flake8-executable>`_
-wemake-python-styleguide       Z, defined here
+wemake-python-styleguide       WPS, defined here
 =============================  ======
 
 
@@ -47,10 +47,12 @@ Our own codes
 ============== ======
 Type           Codes
 -------------- ------
-Naming         :ref:`Z100 - Z199 <naming>`
-Complexity     :ref:`Z200 - Z299 <complexity>`
-Consistency    :ref:`Z300 - Z399 <consistency>`
-Best practices :ref:`Z400 - Z499 <best-practices>`
+Naming         :ref:`WPS100 - WPS199 <naming>`
+Complexity     :ref:`WPS200 - WPS299 <complexity>`
+Consistency    :ref:`WPS300 - WPS399 <consistency>`
+Best practices :ref:`WPS400 - WPS499 <best-practices>`
+Refactoring    :ref:`WPS500 - WPS599 <refactoring>`
+OOP            :ref:`WPS600 - WPS699 <oop>`
 ============== ======
 
 .. toctree::
@@ -62,3 +64,5 @@ Best practices :ref:`Z400 - Z499 <best-practices>`
   complexity.rst
   consistency.rst
   best_practices.rst
+  refactoring.rst
+  oop.rst

@@ -3,7 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
-    IncorrectMultilineStringViolation,
+    WrongMultilineStringViolation,
 )
 from wemake_python_styleguide.visitors.tokenize.primitives import (
     WrongStringTokenVisitor,
@@ -76,7 +76,7 @@ def test_incorrect_multiline_strings(
     visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
-    assert_errors(visitor, [IncorrectMultilineStringViolation])
+    assert_errors(visitor, [WrongMultilineStringViolation])
 
 
 @pytest.mark.parametrize('primitive', [

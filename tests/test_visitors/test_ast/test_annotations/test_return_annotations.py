@@ -27,7 +27,7 @@ def function(
 ) -> Optional[Union[int, str]]: ...
 """
 
-# Incorrect:
+# Wrong:
 
 wrong_multiline_return1 = """
 def function(

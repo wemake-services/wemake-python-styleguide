@@ -36,7 +36,8 @@ You will need to update your configuration with the following lines:
       multi_line_output = 3
       include_trailing_comma = true
       default_section = FIRSTPARTY
-      line_length = 80
+      # Is the same as 80 in flake8:
+      line_length = 79
 
 Otherwise, your ``isort`` will complain about your imports.
 

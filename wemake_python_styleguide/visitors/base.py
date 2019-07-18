@@ -20,7 +20,7 @@ Multiple visitors might one with the same violation.
         V2[Visitor 2] --> EA[Violation A]
         V2[Visitor 2] --> EC[Violation C]
 
-        V3[Visitor 3] --> EZ[Violation Z]
+        V3[Visitor 3] --> EZ[Violation WPS]
 
 .. _visitors:
 

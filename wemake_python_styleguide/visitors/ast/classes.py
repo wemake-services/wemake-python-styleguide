@@ -7,7 +7,7 @@ from typing import ClassVar, Container, FrozenSet, List, Tuple
 from typing_extensions import final
 
 from wemake_python_styleguide import constants, types
-from wemake_python_styleguide.compat.aliases import AssignNodes
+from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.logic import classes, functions
 from wemake_python_styleguide.logic.nodes import (
@@ -16,6 +16,7 @@ from wemake_python_styleguide.logic.nodes import (
     is_doc_string,
 )
 from wemake_python_styleguide.violations import best_practices as bp
+from wemake_python_styleguide.violations import oop
 from wemake_python_styleguide.violations.consistency import (
     ObjectInBaseClassesListViolation,
     RequiredBaseClassViolation,
@@ -32,8 +33,7 @@ class WrongClassVisitor(base.BaseNodeVisitor):
     """
 
     _allowed_body_nodes: ClassVar[types.AnyNodes] = (
-        ast.FunctionDef,  # methods
-        ast.AsyncFunctionDef,
+        *FunctionNodes,
 
         ast.ClassDef,  # we allow some nested classes
 
@@ -56,7 +56,7 @@ class WrongClassVisitor(base.BaseNodeVisitor):
     def _check_base_classes(self, node: ast.ClassDef) -> None:
         for base_name in node.bases:
             if not isinstance(base_name, self._allowed_base_classes_nodes):
-                self.add_violation(bp.IncorrectBaseClassViolation(node))
+                self.add_violation(oop.WrongBaseClassViolation(node))
                 continue
 
             id_attr = getattr(base_name, 'id', None)
@@ -68,7 +68,7 @@ class WrongClassVisitor(base.BaseNodeVisitor):
                 )
             elif classes.is_forbidden_super_class(id_attr):
                 self.add_violation(
-                    bp.BuiltinSubclassViolation(node, text=id_attr),
+                    oop.BuiltinSubclassViolation(node, text=id_attr),
                 )
 
     def _check_wrong_body_nodes(self, node: ast.ClassDef) -> None:
@@ -77,7 +77,7 @@ class WrongClassVisitor(base.BaseNodeVisitor):
                 continue
             if is_doc_string(sub_node):
                 continue
-            self.add_violation(bp.IncorrectClassBodyContentViolation(sub_node))
+            self.add_violation(oop.WrongClassBodyContentViolation(sub_node))
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """
@@ -86,7 +86,7 @@ class WrongClassVisitor(base.BaseNodeVisitor):
         Raises:
             RequiredBaseClassViolation
             ObjectInBaseClassesListViolation
-            IncorrectClassBodyContentViolation
+            WrongClassBodyContentViolation
             BuiltinSubclassViolation
 
         """
@@ -132,7 +132,7 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         for decorator in node.decorator_list:
             decorator_name = getattr(decorator, 'id', None)
             if decorator_name in self._staticmethod_names:
-                self.add_violation(bp.StaticMethodViolation(node))
+                self.add_violation(oop.StaticMethodViolation(node))
 
     def _check_bound_methods(self, node: types.AnyFunctionDef) -> None:
         node_context = get_context(node)
@@ -141,12 +141,12 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
 
         if not functions.get_all_arguments(node):
             self.add_violation(
-                bp.MethodWithoutArgumentsViolation(node, text=node.name),
+                oop.MethodWithoutArgumentsViolation(node, text=node.name),
             )
 
         if node.name in constants.MAGIC_METHODS_BLACKLIST:
             self.add_violation(
-                bp.BadMagicMethodViolation(node, text=node.name),
+                oop.BadMagicMethodViolation(node, text=node.name),
             )
 
     def _check_method_contents(self, node: types.AnyFunctionDef) -> None:
@@ -174,7 +174,7 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
         Checks all assigns that have correct context.
 
         Raises:
-            IncorrectSlotsViolation
+            WrongSlotsViolation
 
         """
         self._check_slots(node)
@@ -196,13 +196,13 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
         fields: List[str] = []
         for tuple_item in elements.elts:
             if not isinstance(tuple_item, ast.Str):
-                self.add_violation(bp.IncorrectSlotsViolation(node))
+                self.add_violation(oop.WrongSlotsViolation(node))
                 return
             fields.append(tuple_item.s)
 
         for _, counter in Counter(fields).items():
             if counter > 1:
-                self.add_violation(bp.IncorrectSlotsViolation(node))
+                self.add_violation(oop.WrongSlotsViolation(node))
                 return
 
     def _check_slots(self, node: types.AnyAssign) -> None:
@@ -213,7 +213,7 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
             return
 
         if isinstance(node.value, self._blacklisted_slots_nodes):
-            self.add_violation(bp.IncorrectSlotsViolation(node))
+            self.add_violation(oop.WrongSlotsViolation(node))
             return
 
         if isinstance(node.value, ast.Tuple):
@@ -261,7 +261,7 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
         for instance_attr in instance_attributes:
             if instance_attr.attr in class_attribute_names:
                 self.add_violation(
-                    bp.ShadowedClassAttributeViolation(
+                    oop.ShadowedClassAttributeViolation(
                         instance_attr, text=instance_attr.attr,
                     ),
                 )

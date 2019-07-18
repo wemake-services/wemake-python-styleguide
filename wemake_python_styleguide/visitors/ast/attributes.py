@@ -7,8 +7,10 @@ from typing_extensions import final
 
 from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.violations.best_practices import (
-    DirectMagicAttributeAccessViolation,
     ProtectedAttributeViolation,
+)
+from wemake_python_styleguide.violations.oop import (
+    DirectMagicAttributeAccessViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
