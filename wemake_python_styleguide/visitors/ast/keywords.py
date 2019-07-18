@@ -6,6 +6,7 @@ from typing import ClassVar, Dict, List, Tuple, Type, Union
 
 from typing_extensions import final
 
+from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.variables import (
     is_valid_block_variable_definition,
@@ -75,7 +76,7 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
 
     def _check_last_return_in_function(self, node: ast.Return) -> None:
         parent = get_parent(node)
-        if not isinstance(parent, (ast.FunctionDef, ast.AsyncFunctionDef)):
+        if not isinstance(parent, FunctionNodes):
             return
 
         if node is parent.body[-1] and node.value is None:

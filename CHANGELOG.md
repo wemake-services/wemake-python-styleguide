@@ -28,6 +28,7 @@ for you to rename your violations with a script.
 ### Bugfixes
 
 - Fixes error message of `OverusedStringViolation` for empty strings
+- Now does not count string annotations as strings for `OverusedStringViolation`
 
 ### Misc
 

@@ -7,7 +7,7 @@ from typing import ClassVar, Container, FrozenSet, List, Tuple
 from typing_extensions import final
 
 from wemake_python_styleguide import constants, types
-from wemake_python_styleguide.compat.aliases import AssignNodes
+from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.logic import classes, functions
 from wemake_python_styleguide.logic.nodes import (
@@ -33,8 +33,7 @@ class WrongClassVisitor(base.BaseNodeVisitor):
     """
 
     _allowed_body_nodes: ClassVar[types.AnyNodes] = (
-        ast.FunctionDef,  # methods
-        ast.AsyncFunctionDef,
+        *FunctionNodes,
 
         ast.ClassDef,  # we allow some nested classes
 

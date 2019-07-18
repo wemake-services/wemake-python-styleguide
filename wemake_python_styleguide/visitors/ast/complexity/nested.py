@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import ClassVar
 
 from typing_extensions import final
 
+from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.constants import (
     NESTED_CLASSES_WHITELIST,
     NESTED_FUNCTIONS_WHITELIST,
 )
 from wemake_python_styleguide.logic.nodes import get_parent
-from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
+from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations.best_practices import (
     NestedClassViolation,
     NestedFunctionViolation,
@@ -34,13 +34,8 @@ class NestedComplexityVisitor(BaseNodeVisitor):
     We allow to nest function inside classes, that's called methods.
     """
 
-    _function_nodes: ClassVar[AnyNodes] = (
-        ast.FunctionDef,
-        ast.AsyncFunctionDef,
-    )
-
     def _check_nested_function(self, node: AnyFunctionDef) -> None:
-        is_inside_function = isinstance(get_parent(node), self._function_nodes)
+        is_inside_function = isinstance(get_parent(node), FunctionNodes)
 
         if is_inside_function and node.name not in NESTED_FUNCTIONS_WHITELIST:
             self.add_violation(NestedFunctionViolation(node, text=node.name))
@@ -48,7 +43,7 @@ class NestedComplexityVisitor(BaseNodeVisitor):
     def _check_nested_classes(self, node: ast.ClassDef) -> None:
         parent = get_parent(node)
         is_inside_class = isinstance(parent, ast.ClassDef)
-        is_inside_function = isinstance(parent, self._function_nodes)
+        is_inside_function = isinstance(parent, FunctionNodes)
 
         if is_inside_class and node.name not in NESTED_CLASSES_WHITELIST:
             self.add_violation(NestedClassViolation(node, text=node.name))

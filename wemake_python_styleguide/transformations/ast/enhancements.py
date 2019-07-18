@@ -3,6 +3,8 @@
 import ast
 from typing import Optional, Tuple, Type
 
+from wemake_python_styleguide.compat.aliases import FunctionNodes
+
 
 def set_if_chain(tree: ast.AST) -> ast.AST:
     """
@@ -62,8 +64,7 @@ def set_node_context(tree: ast.AST) -> ast.AST:
     contexts = (
         ast.Module,
         ast.ClassDef,
-        ast.FunctionDef,
-        ast.AsyncFunctionDef,
+        *FunctionNodes,
     )
 
     for statement in ast.walk(tree):

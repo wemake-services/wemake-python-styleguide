@@ -8,6 +8,8 @@ import astor
 from typing_extensions import final
 
 from wemake_python_styleguide import constants
+from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.operators import (
     count_unary_operator,
     get_parent_ignoring_unary,
@@ -40,12 +42,26 @@ class WrongStringVisitor(BaseNodeVisitor):
         self._string_constants: DefaultDict[str, int] = defaultdict(int)
 
     def _check_string_constant(self, node: ast.Str) -> None:
+        annotations = (
+            ast.arg,
+            ast.AnnAssign,
+        )
+
+        parent = get_parent(node)
+        if isinstance(parent, annotations) and parent.annotation == node:
+            return  # it is argument or variable annotation
+
+        if isinstance(parent, FunctionNodes) and parent.returns == node:
+            return  # it is return annotation
+
         self._string_constants[node.s] += 1
 
     def _post_visit(self) -> None:
         for string, usage_count in self._string_constants.items():
             if usage_count > self.options.max_string_usages:
-                self.add_violation(OverusedStringViolation(text=string or "''"))
+                self.add_violation(
+                    OverusedStringViolation(text=string or "''"),
+                )
 
     def visit_Str(self, node: ast.Str) -> None:
         """
@@ -79,8 +95,7 @@ class MagicNumberVisitor(BaseNodeVisitor):
         ast.AnnAssign,
 
         # Constructor usages:
-        ast.FunctionDef,
-        ast.AsyncFunctionDef,
+        *FunctionNodes,
         ast.arguments,
 
         # Primitives:

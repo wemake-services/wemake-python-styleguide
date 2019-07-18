@@ -25,7 +25,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 ConditionNodes = Union[ast.If, ast.While, ast.IfExp]
-ModuleMembers = Union[ast.AsyncFunctionDef, ast.FunctionDef, ast.ClassDef]
+ModuleMembers = Union[AnyFunctionDef, ast.ClassDef]
 
 
 @final
