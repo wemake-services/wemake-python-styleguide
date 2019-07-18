@@ -7,7 +7,7 @@ from typing import ClassVar, Dict, List, Tuple, Type, Union
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
-from wemake_python_styleguide.logic.nodes import get_parent
+from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.variables import (
     is_valid_block_variable_definition,
 )
@@ -268,10 +268,19 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
                     return_sub_nodes[variable_name] = sub_node
         return returns, return_sub_nodes
 
+    def _is_correct_return_node(
+        self,
+        node: AnyFunctionDef,
+        sub_node: ast.AST,
+    ) -> bool:
+        if get_context(sub_node) != node:
+            return False
+        return isinstance(sub_node, self._checking_nodes)
+
     def _check_variables_for_return(self, node: AnyFunctionDef) -> None:
         nodes = list(
             filter(
-                lambda sub_node: isinstance(sub_node, self._checking_nodes),
+                lambda sub: self._is_correct_return_node(node, sub),
                 ast.walk(node),
             ),
         )
