@@ -11,7 +11,6 @@
   pages/usage/integrations.rst
   pages/usage/legacy.rst
   pages/violations/index.rst
-  pages/constants.rst
   pages/options/config.rst
   pages/formatter.rst
 

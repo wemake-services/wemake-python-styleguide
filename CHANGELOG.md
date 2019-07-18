@@ -33,7 +33,8 @@ for you to rename your violations with a script.
 
 ### Misc
 
-- Adds migration guide
+- Adds migration guide to `0.11`
+- Improves legacy guide
 - Adds `--show-source` to the default recommended configuration
 - Adds better docs about auto-formatters
 - Adds `autopep8` to CI to make sure that `wps` is compatible with it

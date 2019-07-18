@@ -106,3 +106,4 @@ API Reference
   visitors/base.rst
   violations/base.rst
   types.rst
+  constants.rst

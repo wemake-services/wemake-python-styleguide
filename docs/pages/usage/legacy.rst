@@ -67,7 +67,6 @@ Changes as diff
 Now, when we made the required change, let's see the diff.
 
 .. image:: https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/diff.png
-   :target: https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/diff.png
 
 That's where ``--diff`` option is helpful. Let's use it!
 
@@ -83,7 +82,6 @@ command itself or any other ``diff`` producers.
 That's what is going to be reported:
 
 .. image:: https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/legacy.png
-   :target: https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/legacy.png
 
 See? We only count things that were changed.
 And all other violations are ignored.
