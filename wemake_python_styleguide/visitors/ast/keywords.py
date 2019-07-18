@@ -285,7 +285,8 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
         returns, return_sub_nodes = self._get_return_node_variables(nodes)
 
         returns = {name: returns[name] for name in returns if name in assign}
-
+        if not return_sub_nodes:
+            self._check_return_at_the_end(node)
         self._check_for_violations(names, return_sub_nodes, returns)
 
     def _check_for_violations(self, names, return_sub_nodes, returns) -> None:
@@ -296,6 +297,21 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
                         return_sub_nodes[variable_name],
                     ),
                 )
+
+    def _check_return_at_the_end(self, node):
+        if len(node.body) <= 1:
+            return
+        last = node.body[-1]
+        if isinstance(last, ast.Return):
+            if last.value is None:
+                self.add_violation(
+                    InconsistentReturnVariableViolation(last),
+                )
+            elif isinstance(last.value, ast.NameConstant) and (last.value.value is None):
+                self.add_violation(
+                    InconsistentReturnVariableViolation(last),
+                )
+
 
     def visit_return_variable(self, node: AnyFunctionDef) -> None:
         """

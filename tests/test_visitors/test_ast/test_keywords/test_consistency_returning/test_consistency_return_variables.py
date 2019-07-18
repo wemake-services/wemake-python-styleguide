@@ -62,6 +62,26 @@ def foo():
    return x[0]
 """
 
+correct_example9 = """
+def test():
+     print('test')
+"""
+
+correct_example10 = """
+def test(some):
+     if some:
+          return
+     print('test')
+"""
+
+correct_example11 = """
+def test(some):
+     if some:
+          return some
+     print('test')
+     return None
+"""
+
 # Wrong:
 
 wrong_example1 = """
@@ -103,6 +123,26 @@ def report_progress(function):
     return decorator
 """
 
+wrong_example6 = """
+def test():
+     print('test')
+     return None
+"""
+
+wrong_example7 = """
+def test():
+     print('test')
+     return
+"""
+
+wrong_example8 = """
+def test(some):
+     if some:
+          return
+     print('test')
+     return
+"""
+
 double_wrong_example1 = """
 def some():
    if something() == 1:
@@ -121,6 +161,9 @@ def some():
     wrong_example3,
     wrong_example4,
     wrong_example5,
+    wrong_example6,
+    wrong_example7,
+    wrong_example8
 ])
 def test_wrong_return_variable(
     assert_errors,
@@ -146,6 +189,9 @@ def test_wrong_return_variable(
     correct_example6,
     correct_example7,
     correct_example8,
+    correct_example9,
+    correct_example10,
+    correct_example11,
 ])
 def test_correct_return_statements(
     assert_errors,
