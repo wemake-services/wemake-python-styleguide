@@ -298,7 +298,7 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
                     ),
                 )
 
-    def _check_return_at_the_end(self, node):
+    def _check_return_at_the_end(self, node) -> None:
         if len(node.body) <= 1:
             return
         last = node.body[-1]
