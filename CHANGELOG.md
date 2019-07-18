@@ -22,7 +22,7 @@ for you to rename your violations with a script.
 - **Breaking**: creates new violation group `refactoring.py`
 - **Breaking**: creates new violation group `oop.py`
 - **Breaking**: moving a lot of violations
-  from `best_practices` to `refactoring` and `consistency`
+  from `best_practices` to `refactoring`, `oop`, and `consistency`
 - Adds new `wemake` formatter (using it now by default)
 
 ### Bugfixes

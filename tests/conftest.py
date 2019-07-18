@@ -7,15 +7,15 @@ from operator import itemgetter
 
 import pytest
 
+from wemake_python_styleguide.options.config import Configuration
 from wemake_python_styleguide.violations import (
     best_practices,
-    consistency,
     complexity,
+    consistency,
     naming,
-    refactoring,
     oop,
+    refactoring,
 )
-from wemake_python_styleguide.options.config import Configuration
 from wemake_python_styleguide.violations.base import (
     ASTViolation,
     BaseViolation,
