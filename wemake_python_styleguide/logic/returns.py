@@ -1,14 +1,18 @@
+# -*- coding: utf-8 -*-
+
 import ast
 from collections import defaultdict
 from typing import Dict, List, Tuple
 
 NamesAndReturns = Tuple[
     Dict[str, List[ast.Name]],
-    Dict[str, ast.Return]
+    Dict[str, ast.Return],
 ]
 
 
 def get_assign_node_variables(node: List[ast.AST]) -> List[str]:
+    """Gets the List of assign ids of the nodes."""
+
     assign = []
     for sub_node in node:
         if isinstance(sub_node, ast.Assign):
@@ -21,6 +25,8 @@ def get_assign_node_variables(node: List[ast.AST]) -> List[str]:
 
 
 def get_name_nodes_variable(node: List[ast.AST]) -> Dict[str, List[ast.Name]]:
+    """Gets the List of names of the nodes."""
+
     names: Dict[str, List[ast.Name]] = defaultdict(list)
     for sub_node in node:
         if isinstance(sub_node, ast.Name):
@@ -34,6 +40,8 @@ def get_name_nodes_variable(node: List[ast.AST]) -> Dict[str, List[ast.Name]]:
 
 
 def get_return_node_variables(node: List[ast.AST]) -> NamesAndReturns:
+    """Gets the return values and the return sub nodes in the code."""
+
     returns: Dict[str, List[ast.Name]] = defaultdict(list)
     return_sub_nodes: Dict[str, ast.Return] = defaultdict()
     for sub_node in node:

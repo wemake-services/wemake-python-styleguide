@@ -11,6 +11,7 @@ from wemake_python_styleguide.logic.nodes import (
     get_exception_name,
     get_parent,
 )
+
 from wemake_python_styleguide.logic.variables import (
     is_valid_block_variable_definition,
 )
