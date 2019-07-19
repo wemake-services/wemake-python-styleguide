@@ -128,6 +128,24 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         'AsyncWith': _generally_useless_body,
     }
 
+    def visit_statement_with_body(self, node: StatementWithBody) -> None:
+        """
+        Visits statement's body internals.
+
+        Raises:
+            UnreachableCodeViolation,
+            UselessNodeViolation
+
+        """
+        self._check_internals(node.body)
+        if isinstance(node, self._nodes_with_orelse):
+            self._check_internals(node.orelse)
+        if isinstance(node, ast.Try):
+            self._check_internals(node.finalbody)
+
+        self._check_useless_node(node, node.body)
+        self.generic_visit(node)
+
     def _check_useless_node(
         self,
         node: StatementWithBody,
@@ -175,24 +193,6 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
             if isinstance(statement, ast.Expr):
                 self._check_expression(statement, is_first=index == 0)
 
-    def visit_statement_with_body(self, node: StatementWithBody) -> None:
-        """
-        Visits statement's body internals.
-
-        Raises:
-            UnreachableCodeViolation,
-            UselessNodeViolation
-
-        """
-        self._check_internals(node.body)
-        if isinstance(node, self._nodes_with_orelse):
-            self._check_internals(node.orelse)
-        if isinstance(node, ast.Try):
-            self._check_internals(node.finalbody)
-
-        self._check_useless_node(node, node.body)
-        self.generic_visit(node)
-
 
 @final
 @alias('visit_collection', (
@@ -207,6 +207,32 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
 ))
 class WrongParametersIndentationVisitor(BaseNodeVisitor):
     """Ensures that all parameters indentation follow our rules."""
+
+    def visit_collection(self, node: AnyCollection) -> None:
+        """Checks how collection items indentation."""
+        if isinstance(node, ast.Dict):
+            elements = normalize_dict_elements(node)
+        else:
+            elements = node.elts
+        self._check_indentation(node, elements, extra_lines=1)
+        self.generic_visit(node)
+
+    def visit_Call(self, node: ast.Call) -> None:
+        """Checks call arguments indentation."""
+        all_args = [*node.args, *[kw.value for kw in node.keywords]]
+        self._check_indentation(node, all_args)
+        self.generic_visit(node)
+
+    def visit_any_function(self, node: AnyFunctionDef) -> None:
+        """Checks function parameters indentation."""
+        self._check_indentation(node, get_all_arguments(node))
+        self.generic_visit(node)
+
+    def visit_ClassDef(self, node: ast.ClassDef) -> None:
+        """Checks base classes indentation."""
+        all_args = [*node.bases, *[kw.value for kw in node.keywords]]
+        self._check_indentation(node, all_args)
+        self.generic_visit(node)
 
     def _check_first_element(
         self,
@@ -258,29 +284,3 @@ class WrongParametersIndentationVisitor(BaseNodeVisitor):
                     elements[index - 1].lineno,
                     multi_line_mode,
                 )
-
-    def visit_collection(self, node: AnyCollection) -> None:
-        """Checks how collection items indentation."""
-        if isinstance(node, ast.Dict):
-            elements = normalize_dict_elements(node)
-        else:
-            elements = node.elts
-        self._check_indentation(node, elements, extra_lines=1)
-        self.generic_visit(node)
-
-    def visit_Call(self, node: ast.Call) -> None:
-        """Checks call arguments indentation."""
-        all_args = [*node.args, *[kw.value for kw in node.keywords]]
-        self._check_indentation(node, all_args)
-        self.generic_visit(node)
-
-    def visit_any_function(self, node: AnyFunctionDef) -> None:
-        """Checks function parameters indentation."""
-        self._check_indentation(node, get_all_arguments(node))
-        self.generic_visit(node)
-
-    def visit_ClassDef(self, node: ast.ClassDef) -> None:
-        """Checks base classes indentation."""
-        all_args = [*node.bases, *[kw.value for kw in node.keywords]]
-        self._check_indentation(node, all_args)
-        self.generic_visit(node)

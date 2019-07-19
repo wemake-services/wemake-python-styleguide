@@ -41,6 +41,23 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
     All these functions are defined in ``FUNCTIONS_BLACKLIST``.
     """
 
+    def visit_Call(self, node: ast.Call) -> None:
+        """
+        Used to find ``FUNCTIONS_BLACKLIST`` calls.
+
+        Raises:
+            BooleanPositionalArgumentViolation
+            WrongFunctionCallViolation
+            WrongSuperCallViolation
+            WrongIsinstanceWithTupleViolation
+
+        """
+        self._check_wrong_function_called(node)
+        self._check_boolean_arguments(node)
+        self._check_super_call(node)
+        self._check_isinstance_call(node)
+        self.generic_visit(node)
+
     def _check_wrong_function_called(self, node: ast.Call) -> None:
         function_name = functions.given_function_called(
             node, FUNCTIONS_BLACKLIST,
@@ -92,23 +109,6 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
             if len(node.args[1].elts) == 1:
                 self.add_violation(WrongIsinstanceWithTupleViolation(node))
 
-    def visit_Call(self, node: ast.Call) -> None:
-        """
-        Used to find ``FUNCTIONS_BLACKLIST`` calls.
-
-        Raises:
-            BooleanPositionalArgumentViolation
-            WrongFunctionCallViolation
-            WrongSuperCallViolation
-            WrongIsinstanceWithTupleViolation
-
-        """
-        self._check_wrong_function_called(node)
-        self._check_boolean_arguments(node)
-        self._check_super_call(node)
-        self._check_isinstance_call(node)
-        self.generic_visit(node)
-
 
 @final
 @decorators.alias('visit_any_function', (
@@ -128,6 +128,21 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
         ast.Num,
         ast.Ellipsis,
     )
+
+    def visit_any_function(self, node: AnyFunctionDef) -> None:
+        """
+        Checks regular, lambda, and async functions.
+
+        Raises:
+            UnusedVariableIsUsedViolation
+            ComplexDefaultValueViolation
+            StopIterationInsideGeneratorViolation
+
+        """
+        self._check_argument_default_values(node)
+        self._check_unused_variables(node)
+        self._check_generator(node)
+        self.generic_visit(node)
 
     def _check_used_variables(
         self,
@@ -199,25 +214,21 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
                     StopIterationInsideGeneratorViolation(sub_node),
                 )
 
-    def visit_any_function(self, node: AnyFunctionDef) -> None:
-        """
-        Checks regular, lambda, and async functions.
-
-        Raises:
-            UnusedVariableIsUsedViolation
-            ComplexDefaultValueViolation
-            StopIterationInsideGeneratorViolation
-
-        """
-        self._check_argument_default_values(node)
-        self._check_unused_variables(node)
-        self._check_generator(node)
-        self.generic_visit(node)
-
 
 @final
 class UselessLambdaDefinitionVisitor(base.BaseNodeVisitor):
     """This visitor is used specifically for ``lambda`` functions."""
+
+    def visit_Lambda(self, node: ast.Lambda) -> None:
+        """
+        Checks if ``lambda`` functions are defined correctly.
+
+        Raises:
+            UselessLambdaViolation
+
+        """
+        self._check_useless_lambda(node)
+        self.generic_visit(node)
 
     def _have_same_kwarg(self, node: ast.Lambda, call: ast.Call) -> bool:
         kwarg_name: Optional[str] = None
@@ -306,14 +317,3 @@ class UselessLambdaDefinitionVisitor(base.BaseNodeVisitor):
             return
 
         self.add_violation(UselessLambdaViolation(node))
-
-    def visit_Lambda(self, node: ast.Lambda) -> None:
-        """
-        Checks if ``lambda`` functions are defined correctly.
-
-        Raises:
-            UselessLambdaViolation
-
-        """
-        self._check_useless_lambda(node)
-        self.generic_visit(node)

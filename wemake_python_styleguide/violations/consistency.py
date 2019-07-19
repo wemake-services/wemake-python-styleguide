@@ -63,6 +63,7 @@ Summary
    WrongLoopIterTypeViolation
    ImplicitInConditionViolation
    MultilineConditionsViolation
+   WrongMethodOrderViolation
 
 Consistency checks
 ------------------
@@ -105,6 +106,7 @@ Consistency checks
 .. autoclass:: WrongLoopIterTypeViolation
 .. autoclass:: ImplicitInConditionViolation
 .. autoclass:: MultilineConditionsViolation
+.. autoclass:: WrongMethodOrderViolation
 
 """
 
@@ -1445,3 +1447,34 @@ class MultilineConditionsViolation(ASTViolation):
     error_template = 'Found multiline conditions'
     code = 337
     previous_codes = {465}
+
+
+@final
+class WrongMethodOrderViolation(ASTViolation):
+    """
+    Forbids to have incorrect order of methods inside a class.
+
+    We follow the same ordering:
+
+    - ``__new__``
+    - ``__init__``
+    - public and megic methods
+    - protected methods
+    - private methods (we discourage to use them)
+
+    We follow "Newspaper order" when the most important things come the first.
+
+    Reasoning:
+        It is hard to read classes which API declarations is bloated with
+        implementation details. We need to see the important stuff first,
+        then we can go deeper in case we are interested.
+
+    Solution:
+        Reorder methods inside your class to match our format.
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found incorrect order of methods in a class'
+    code = 338

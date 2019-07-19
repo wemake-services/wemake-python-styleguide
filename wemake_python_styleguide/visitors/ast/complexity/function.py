@@ -48,6 +48,20 @@ class _ComplexityCounter(object):
             AnyFunctionDef, List[str],
         ] = defaultdict(list)
 
+    def check_arguments_count(self, node: AnyFunctionDefAndLambda) -> None:
+        """Checks the number of the arguments in a function."""
+        self.arguments[node] = len(functions.get_all_arguments(node))
+
+    def check_function_complexity(self, node: AnyFunctionDef) -> None:
+        """
+        In this function we iterate all the internal body's node.
+
+        We check different complexity metrics based on these internals.
+        """
+        for body_item in node.body:
+            for sub_node in ast.walk(body_item):
+                self._check_sub_node(node, sub_node)
+
     def _update_variables(
         self,
         function: AnyFunctionDef,
@@ -82,20 +96,6 @@ class _ComplexityCounter(object):
         elif isinstance(sub_node, ast.Await):
             self.awaits[node] += 1
 
-    def check_arguments_count(self, node: AnyFunctionDefAndLambda) -> None:
-        """Checks the number of the arguments in a function."""
-        self.arguments[node] = len(functions.get_all_arguments(node))
-
-    def check_function_complexity(self, node: AnyFunctionDef) -> None:
-        """
-        In this function we iterate all the internal body's node.
-
-        We check different complexity metrics based on these internals.
-        """
-        for body_item in node.body:
-            for sub_node in ast.walk(body_item):
-                self._check_sub_node(node, sub_node)
-
 
 @final
 @alias('visit_any_function', (
@@ -119,6 +119,33 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
         """Creates a counter for tracked metrics."""
         super().__init__(*args, **kwargs)
         self._counter = _ComplexityCounter()
+
+    def visit_any_function(self, node: AnyFunctionDef) -> None:
+        """
+        Checks function's internal complexity.
+
+        Raises:
+            TooManyExpressionsViolation
+            TooManyReturnsViolation
+            TooManyLocalsViolation
+            TooManyArgumentsViolation
+            TooManyAwaitsViolation
+
+        """
+        self._counter.check_arguments_count(node)
+        self._counter.check_function_complexity(node)
+        self.generic_visit(node)
+
+    def visit_Lambda(self, node: ast.Lambda) -> None:
+        """
+        Checks lambda function's internal complexity.
+
+        Raises:
+            TooManyArgumentsViolation
+
+        """
+        self._counter.check_arguments_count(node)
+        self.generic_visit(node)
 
     def _check_function_internals(self) -> None:
         for node, variables in self._counter.variables.items():
@@ -161,30 +188,3 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
     def _post_visit(self) -> None:
         self._check_function_signature()
         self._check_function_internals()
-
-    def visit_any_function(self, node: AnyFunctionDef) -> None:
-        """
-        Checks function's internal complexity.
-
-        Raises:
-            TooManyExpressionsViolation
-            TooManyReturnsViolation
-            TooManyLocalsViolation
-            TooManyArgumentsViolation
-            TooManyAwaitsViolation
-
-        """
-        self._counter.check_arguments_count(node)
-        self._counter.check_function_complexity(node)
-        self.generic_visit(node)
-
-    def visit_Lambda(self, node: ast.Lambda) -> None:
-        """
-        Checks lambda function's internal complexity.
-
-        Raises:
-            TooManyArgumentsViolation
-
-        """
-        self._counter.check_arguments_count(node)
-        self.generic_visit(node)

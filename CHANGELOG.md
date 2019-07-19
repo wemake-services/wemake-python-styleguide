@@ -11,6 +11,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to have modules with too many imported names
   configured by `--max-imported-names` option which is 50 by default
 - Forbids to raise `StopIteration` inside generators
+- Forbids to have incorrect method order inside classes
 
 ### Bugfixes
 

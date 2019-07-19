@@ -32,6 +32,19 @@ class WrongAttributeVisitor(BaseNodeVisitor):
         '__doc__',
     ))
 
+    def visit_Attribute(self, node: ast.Attribute) -> None:
+        """
+        Checks the `Attribute` node.
+
+        Raises:
+            ProtectedAttributeViolation
+            DirectMagicAttributeAccessViolation
+
+        """
+        self._check_protected_attribute(node)
+        self._check_magic_attribute(node)
+        self.generic_visit(node)
+
     def _is_super_called(self, node: ast.Call) -> bool:
         if isinstance(node.func, ast.Name):
             if node.func.id == 'super':
@@ -59,16 +72,3 @@ class WrongAttributeVisitor(BaseNodeVisitor):
                 self._ensure_attribute_type(
                     node, DirectMagicAttributeAccessViolation,
                 )
-
-    def visit_Attribute(self, node: ast.Attribute) -> None:
-        """
-        Checks the `Attribute` node.
-
-        Raises:
-            ProtectedAttributeViolation
-            DirectMagicAttributeAccessViolation
-
-        """
-        self._check_protected_attribute(node)
-        self._check_magic_attribute(node)
-        self.generic_visit(node)

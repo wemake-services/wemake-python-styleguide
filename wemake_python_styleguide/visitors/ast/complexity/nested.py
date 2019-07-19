@@ -34,26 +34,6 @@ class NestedComplexityVisitor(BaseNodeVisitor):
     We allow to nest function inside classes, that's called methods.
     """
 
-    def _check_nested_function(self, node: AnyFunctionDef) -> None:
-        is_inside_function = isinstance(get_parent(node), FunctionNodes)
-
-        if is_inside_function and node.name not in NESTED_FUNCTIONS_WHITELIST:
-            self.add_violation(NestedFunctionViolation(node, text=node.name))
-
-    def _check_nested_classes(self, node: ast.ClassDef) -> None:
-        parent = get_parent(node)
-        is_inside_class = isinstance(parent, ast.ClassDef)
-        is_inside_function = isinstance(parent, FunctionNodes)
-
-        if is_inside_class and node.name not in NESTED_CLASSES_WHITELIST:
-            self.add_violation(NestedClassViolation(node, text=node.name))
-        elif is_inside_function:
-            self.add_violation(NestedClassViolation(node, text=node.name))
-
-    def _check_nested_lambdas(self, node: ast.Lambda) -> None:
-        if isinstance(get_parent(node), ast.Lambda):
-            self.add_violation(NestedFunctionViolation(node, text='lambda'))
-
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """
         Used to find nested classes in other classes and functions.
@@ -90,3 +70,23 @@ class NestedComplexityVisitor(BaseNodeVisitor):
         """
         self._check_nested_lambdas(node)
         self.generic_visit(node)
+
+    def _check_nested_function(self, node: AnyFunctionDef) -> None:
+        is_inside_function = isinstance(get_parent(node), FunctionNodes)
+
+        if is_inside_function and node.name not in NESTED_FUNCTIONS_WHITELIST:
+            self.add_violation(NestedFunctionViolation(node, text=node.name))
+
+    def _check_nested_classes(self, node: ast.ClassDef) -> None:
+        parent = get_parent(node)
+        is_inside_class = isinstance(parent, ast.ClassDef)
+        is_inside_function = isinstance(parent, FunctionNodes)
+
+        if is_inside_class and node.name not in NESTED_CLASSES_WHITELIST:
+            self.add_violation(NestedClassViolation(node, text=node.name))
+        elif is_inside_function:
+            self.add_violation(NestedClassViolation(node, text=node.name))
+
+    def _check_nested_lambdas(self, node: ast.Lambda) -> None:
+        if isinstance(get_parent(node), ast.Lambda):
+            self.add_violation(NestedFunctionViolation(node, text='lambda'))

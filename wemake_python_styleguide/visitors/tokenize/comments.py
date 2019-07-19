@@ -58,6 +58,21 @@ class WrongCommentVisitor(BaseTokenVisitor):
         self._noqa_count = 0
         self._no_cover_count = 0
 
+    def visit_comment(self, token: tokenize.TokenInfo) -> None:
+        """
+        Performs comment checks.
+
+        Raises:
+            OveruseOfNoqaCommentViolation
+            WrongDocCommentViolation
+            WrongMagicCommentViolation
+
+        """
+        self._check_noqa(token)
+        self._check_typed_ast(token)
+        self._check_empty_doc_comment(token)
+        self._check_cover_comments(token)
+
     def _check_noqa(self, token: tokenize.TokenInfo) -> None:
         comment_text = get_comment_text(token)
         match = self._noqa_check.match(comment_text)
@@ -107,21 +122,6 @@ class WrongCommentVisitor(BaseTokenVisitor):
                 ),
             )
 
-    def visit_comment(self, token: tokenize.TokenInfo) -> None:
-        """
-        Performs comment checks.
-
-        Raises:
-            OveruseOfNoqaCommentViolation
-            WrongDocCommentViolation
-            WrongMagicCommentViolation
-
-        """
-        self._check_noqa(token)
-        self._check_typed_ast(token)
-        self._check_empty_doc_comment(token)
-        self._check_cover_comments(token)
-
 
 @final
 class FileMagicCommentsVisitor(BaseTokenVisitor):
@@ -132,6 +132,16 @@ class FileMagicCommentsVisitor(BaseTokenVisitor):
         tokenize.NEWLINE,
         tokenize.ENDMARKER,
     ))
+
+    def visit_comment(self, token: tokenize.TokenInfo) -> None:
+        """
+        Checks special comments that are magic per each file.
+
+        Raises:
+            EmptyLineAfterCoddingViolation
+
+        """
+        self._check_empty_line_after_codding(token)
 
     def _offset_for_comment_line(self, token: tokenize.TokenInfo) -> int:
         if token.exact_type == tokenize.COMMENT:
@@ -169,13 +179,3 @@ class FileMagicCommentsVisitor(BaseTokenVisitor):
                 if next_token.exact_type not in self._allowed_newlines:
                     self.add_violation(EmptyLineAfterCodingViolation(token))
                 break
-
-    def visit_comment(self, token: tokenize.TokenInfo) -> None:
-        """
-        Checks special comments that are magic per each file.
-
-        Raises:
-            EmptyLineAfterCoddingViolation
-
-        """
-        self._check_empty_line_after_codding(token)

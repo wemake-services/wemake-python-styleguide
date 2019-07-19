@@ -29,6 +29,34 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
 
     _base_exception: ClassVar[str] = 'BaseException'
 
+    def visit_Try(self, node: ast.Try) -> None:
+        """
+        Used for find finally in try blocks without except.
+
+        Raises:
+            UselessFinallyViolation
+            DuplicateExceptionViolation
+            TryExceptMultipleReturnPathViolation
+
+        """
+        self._check_if_needs_except(node)
+        self._check_duplicate_exceptions(node)
+        self._check_return_path(node)
+        self.generic_visit(node)
+
+    def visit_ExceptHandler(self, node: ast.ExceptHandler) -> None:
+        """
+        Checks all ``ExceptionHandler`` nodes.
+
+        Raises:
+            BaseExceptionViolation
+            UselessExceptCaseViolation
+
+        """
+        self._check_useless_except(node)
+        self._check_exception_type(node)
+        self.generic_visit(node)
+
     def _check_if_needs_except(self, node: ast.Try) -> None:
         if node.finalbody and not node.handlers:
             self.add_violation(UselessFinallyViolation(node))
@@ -98,34 +126,6 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
                 return
 
         self.add_violation(UselessExceptCaseViolation(node))
-
-    def visit_Try(self, node: ast.Try) -> None:
-        """
-        Used for find finally in try blocks without except.
-
-        Raises:
-            UselessFinallyViolation
-            DuplicateExceptionViolation
-            TryExceptMultipleReturnPathViolation
-
-        """
-        self._check_if_needs_except(node)
-        self._check_duplicate_exceptions(node)
-        self._check_return_path(node)
-        self.generic_visit(node)
-
-    def visit_ExceptHandler(self, node: ast.ExceptHandler) -> None:
-        """
-        Checks all ``ExceptionHandler`` nodes.
-
-        Raises:
-            BaseExceptionViolation
-            UselessExceptCaseViolation
-
-        """
-        self._check_useless_except(node)
-        self._check_exception_type(node)
-        self.generic_visit(node)
 
 
 @final

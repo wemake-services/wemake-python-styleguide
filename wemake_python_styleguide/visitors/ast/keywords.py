@@ -45,11 +45,6 @@ ReturningViolations = Union[
 class WrongRaiseVisitor(BaseNodeVisitor):
     """Finds wrong ``raise`` keywords."""
 
-    def _check_exception_type(self, node: ast.Raise) -> None:
-        exception_name = get_exception_name(node)
-        if exception_name == 'NotImplemented':
-            self.add_violation(RaiseNotImplementedViolation(node))
-
     def visit_Raise(self, node: ast.Raise) -> None:
         """
         Checks how ``raise`` keyword is used.
@@ -61,6 +56,11 @@ class WrongRaiseVisitor(BaseNodeVisitor):
         self._check_exception_type(node)
         self.generic_visit(node)
 
+    def _check_exception_type(self, node: ast.Raise) -> None:
+        exception_name = get_exception_name(node)
+        if exception_name == 'NotImplemented':
+            self.add_violation(RaiseNotImplementedViolation(node))
+
 
 @final
 @alias('visit_any_function', (
@@ -69,6 +69,30 @@ class WrongRaiseVisitor(BaseNodeVisitor):
 ))
 class ConsistentReturningVisitor(BaseNodeVisitor):
     """Finds incorrect and inconsistent ``return`` and ``yield`` nodes."""
+
+    def visit_Return(self, node: ast.Return) -> None:
+        """
+        Checks ``return`` statements for consistency.
+
+        Raises:
+            InconsistentReturnViolation
+
+        """
+        self._check_last_return_in_function(node)
+        self.generic_visit(node)
+
+    def visit_any_function(self, node: AnyFunctionDef) -> None:
+        """
+        Helper to get all ``return`` and ``yield`` nodes in a function at once.
+
+        Raises:
+            InconsistentReturnViolation
+            InconsistentYieldViolation
+
+        """
+        self._check_return_values(node)
+        self._check_yield_values(node)
+        self.generic_visit(node)
 
     def _check_last_return_in_function(self, node: ast.Return) -> None:
         parent = get_parent(node)
@@ -106,30 +130,6 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
             node, ast.Yield, InconsistentYieldViolation,
         )
 
-    def visit_Return(self, node: ast.Return) -> None:
-        """
-        Checks ``return`` statements for consistency.
-
-        Raises:
-            InconsistentReturnViolation
-
-        """
-        self._check_last_return_in_function(node)
-        self.generic_visit(node)
-
-    def visit_any_function(self, node: AnyFunctionDef) -> None:
-        """
-        Helper to get all ``return`` and ``yield`` nodes in a function at once.
-
-        Raises:
-            InconsistentReturnViolation
-            InconsistentYieldViolation
-
-        """
-        self._check_return_values(node)
-        self._check_yield_values(node)
-        self.generic_visit(node)
-
 
 @final
 class WrongKeywordVisitor(BaseNodeVisitor):
@@ -142,14 +142,6 @@ class WrongKeywordVisitor(BaseNodeVisitor):
         ast.Nonlocal,
     )
 
-    def _check_keyword(self, node: ast.AST) -> None:
-        if isinstance(node, self._forbidden_keywords):
-            if isinstance(node, ast.Delete):
-                message = 'del'
-            else:
-                message = node.__class__.__qualname__.lower()
-            self.add_violation(WrongKeywordViolation(node, text=message))
-
     def visit(self, node: ast.AST) -> None:
         """
         Used to find wrong keywords.
@@ -161,6 +153,14 @@ class WrongKeywordVisitor(BaseNodeVisitor):
         self._check_keyword(node)
         self.generic_visit(node)
 
+    def _check_keyword(self, node: ast.AST) -> None:
+        if isinstance(node, self._forbidden_keywords):
+            if isinstance(node, ast.Delete):
+                message = 'del'
+            else:
+                message = node.__class__.__qualname__.lower()
+            self.add_violation(WrongKeywordViolation(node, text=message))
+
 
 @final
 @alias('visit_any_with', (
@@ -169,21 +169,6 @@ class WrongKeywordVisitor(BaseNodeVisitor):
 ))
 class WrongContextManagerVisitor(BaseNodeVisitor):
     """Checks context managers."""
-
-    def _check_target_assignment(self, node: AnyWith):
-        if len(node.items) > 1:
-            self.add_violation(
-                MultipleContextManagerAssignmentsViolation(node),
-            )
-
-    def _check_variable_definitions(self, node: ast.withitem) -> None:
-        if node.optional_vars is None:
-            return
-
-        if not is_valid_block_variable_definition(node.optional_vars):
-            self.add_violation(
-                ContextManagerVariableDefinitionViolation(get_parent(node)),
-            )
 
     def visit_withitem(self, node: ast.withitem) -> None:
         """
@@ -207,6 +192,21 @@ class WrongContextManagerVisitor(BaseNodeVisitor):
         self._check_target_assignment(node)
         self.generic_visit(node)
 
+    def _check_target_assignment(self, node: AnyWith):
+        if len(node.items) > 1:
+            self.add_violation(
+                MultipleContextManagerAssignmentsViolation(node),
+            )
+
+    def _check_variable_definitions(self, node: ast.withitem) -> None:
+        if node.optional_vars is None:
+            return
+
+        if not is_valid_block_variable_definition(node.optional_vars):
+            self.add_violation(
+                ContextManagerVariableDefinitionViolation(get_parent(node)),
+            )
+
 
 @final
 @alias('visit_return_variable', (
@@ -223,6 +223,17 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
         ast.Return,
         ast.Name,
     )
+
+    def visit_return_variable(self, node: AnyFunctionDef) -> None:
+        """
+        Helper to get all ``return`` variables in a function at once.
+
+        Raises:
+            InconsistentReturnVariableViolation
+
+        """
+        self._check_variables_for_return(node)
+        self.generic_visit(node)
 
     def _get_assign_node_variables(self, node: List[ast.AST]) -> List[str]:
         assign = []
@@ -296,14 +307,3 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
                         return_sub_nodes[variable_name],
                     ),
                 )
-
-    def visit_return_variable(self, node: AnyFunctionDef) -> None:
-        """
-        Helper to get all ``return`` variables in a function at once.
-
-        Raises:
-            InconsistentReturnVariableViolation
-
-        """
-        self._check_variables_for_return(node)
-        self.generic_visit(node)

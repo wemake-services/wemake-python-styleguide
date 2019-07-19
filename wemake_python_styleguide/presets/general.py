@@ -72,6 +72,7 @@ GENERAL_PRESET = (
     classes.WrongMethodVisitor,
     classes.WrongSlotsVisitor,
     classes.ClassAttributeVisitor,
+    classes.ClassMethodOrderVisitor,
 
     # Modules:
     WrongModuleNameVisitor,

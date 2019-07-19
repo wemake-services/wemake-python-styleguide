@@ -138,18 +138,6 @@ class Checker(object):
         """Parses registered options for providing them to each visitor."""
         cls.options = validate_options(options)
 
-    def _run_checks(
-        self,
-        visitors: Sequence[VisitorClass],
-    ) -> Iterator[types.CheckResult]:
-        """Runs all passed visitors one by one."""
-        for visitor_class in visitors:
-            visitor = visitor_class.from_checker(self)
-            visitor.run()
-
-            for error in visitor.violations:
-                yield (*error.node_items(), type(self))
-
     def run(self) -> Iterator[types.CheckResult]:
         """
         Runs the checker.
@@ -162,3 +150,15 @@ class Checker(object):
 
         """
         yield from self._run_checks(self.visitors)
+
+    def _run_checks(
+        self,
+        visitors: Sequence[VisitorClass],
+    ) -> Iterator[types.CheckResult]:
+        """Runs all passed visitors one by one."""
+        for visitor_class in visitors:
+            visitor = visitor_class.from_checker(self)
+            visitor.run()
+
+            for error in visitor.violations:
+                yield (*error.node_items(), type(self))

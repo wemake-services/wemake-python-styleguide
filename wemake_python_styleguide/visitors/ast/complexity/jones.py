@@ -49,6 +49,25 @@ class JonesComplexityVisitor(BaseNodeVisitor):
         self._lines: DefaultDict[int, List[ast.AST]] = defaultdict(list)
         self._to_ignore: List[ast.AST] = []
 
+    def visit(self, node: ast.AST) -> None:
+        """
+        Visits all nodes, sums the number of nodes per line.
+
+        Then calculates the median value of all line results.
+
+        Raises:
+            JonesScoreViolation
+            LineComplexityViolation
+
+        """
+        line_number = getattr(node, 'lineno', None)
+        is_ignored = isinstance(node, self._ignored_nodes)
+        if line_number is not None and not is_ignored:
+            if not self._maybe_ignore_child(node):
+                self._lines[line_number].append(node)
+
+        self.generic_visit(node)
+
     def _post_visit(self) -> None:
         """
         Triggers after the whole module was processed.
@@ -73,22 +92,3 @@ class JonesComplexityVisitor(BaseNodeVisitor):
             self._to_ignore.append(node.annotation)
 
         return node in self._to_ignore
-
-    def visit(self, node: ast.AST) -> None:
-        """
-        Visits all nodes, sums the number of nodes per line.
-
-        Then calculates the median value of all line results.
-
-        Raises:
-            JonesScoreViolation
-            LineComplexityViolation
-
-        """
-        line_number = getattr(node, 'lineno', None)
-        is_ignored = isinstance(node, self._ignored_nodes)
-        if line_number is not None and not is_ignored:
-            if not self._maybe_ignore_child(node):
-                self._lines[line_number].append(node)
-
-        self.generic_visit(node)

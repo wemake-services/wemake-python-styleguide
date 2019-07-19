@@ -68,6 +68,16 @@ class ExtraIndentationVisitor(BaseTokenVisitor):
         super().__init__(*args, **kwargs)
         self._offsets: Dict[int, tokenize.TokenInfo] = {}
 
+    def visit(self, token: tokenize.TokenInfo) -> None:
+        """
+        Goes through all tokens to find wrong indentation.
+
+        Raises:
+            ExtraIndentationViolation
+
+        """
+        self._check_extra_indentation(token)
+
     def _check_extra_indentation(self, token: tokenize.TokenInfo) -> None:
         lineno, _offset = token.start
         if lineno not in self._offsets:
@@ -106,16 +116,6 @@ class ExtraIndentationVisitor(BaseTokenVisitor):
                 continue
             self._check_individual_line(lines, line, index)
 
-    def visit(self, token: tokenize.TokenInfo) -> None:
-        """
-        Goes through all tokens to find wrong indentation.
-
-        Raises:
-            ExtraIndentationViolation
-
-        """
-        self._check_extra_indentation(token)
-
 
 @final
 class BracketLocationVisitor(BaseTokenVisitor):
@@ -132,6 +132,16 @@ class BracketLocationVisitor(BaseTokenVisitor):
         """Creates line tracking for tokens."""
         super().__init__(*args, **kwargs)
         self._lines: TokenLines = defaultdict(list)
+
+    def visit(self, token: tokenize.TokenInfo) -> None:
+        """
+        Goes trough all tokens to separate them by line numbers.
+
+        Raises:
+            WrongBracketPositionViolation
+
+        """
+        self._lines[token.start[0]].append(token)
 
     def _annotate_brackets(
         self,
@@ -168,13 +178,3 @@ class BracketLocationVisitor(BaseTokenVisitor):
     def _post_visit(self) -> None:
         for _, tokens in self._lines.items():
             self._check_individual_line(tokens)
-
-    def visit(self, token: tokenize.TokenInfo) -> None:
-        """
-        Goes trough all tokens to separate them by line numbers.
-
-        Raises:
-            WrongBracketPositionViolation
-
-        """
-        self._lines[token.start[0]].append(token)

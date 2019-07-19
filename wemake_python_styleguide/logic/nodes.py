@@ -5,6 +5,8 @@ from typing import Iterator, Optional, Type, TypeVar, Union
 
 from wemake_python_styleguide.types import AnyNodes
 
+_SubnodeType = TypeVar('_SubnodeType')
+
 
 def is_literal(node: ast.AST) -> bool:
     """
@@ -51,13 +53,10 @@ def get_context(node: ast.AST) -> Optional[ast.AST]:
     return getattr(node, 'wps_context', None)
 
 
-SubnodeType = TypeVar('SubnodeType')
-
-
 def get_subnodes_by_type(
     node: ast.AST,
-    subnodes_type: Type[SubnodeType],
-) -> Iterator[SubnodeType]:
+    subnodes_type: Type[_SubnodeType],
+) -> Iterator[_SubnodeType]:
     """Returns the list of subnodes of given node with given subnode type."""
     for child in ast.walk(node):
         if isinstance(child, subnodes_type):

@@ -62,6 +62,28 @@ class CompareSanityVisitor(BaseNodeVisitor):
         ast.GeneratorExp,
     )
 
+    def visit_Compare(self, node: ast.Compare) -> None:
+        """
+        Ensures that compares are written correctly.
+
+        Raises:
+            ConstantCompareViolation
+            MultipleInCompareViolation
+            UselessCompareViolation
+            UselessLenCompareViolation
+            HeterogenousCompareViolation
+            ReversedComplexCompareViolation
+            WrongInCompareTypeViolation
+
+        """
+        self._check_literal_compare(node)
+        self._check_useless_compare(node)
+        self._check_in_compare(node)
+        self._check_unpythonic_compare(node)
+        self._check_heterogenous_operators(node)
+        self._check_reversed_complex_compare(node)
+        self.generic_visit(node)
+
     def _check_literal_compare(self, node: ast.Compare) -> None:
         last_was_literal = nodes.is_literal(node.left)
         for comparator in node.comparators:
@@ -128,28 +150,6 @@ class CompareSanityVisitor(BaseNodeVisitor):
 
         self.add_violation(ReversedComplexCompareViolation(node))
 
-    def visit_Compare(self, node: ast.Compare) -> None:
-        """
-        Ensures that compares are written correctly.
-
-        Raises:
-            ConstantCompareViolation
-            MultipleInCompareViolation
-            UselessCompareViolation
-            UselessLenCompareViolation
-            HeterogenousCompareViolation
-            ReversedComplexCompareViolation
-            WrongInCompareTypeViolation
-
-        """
-        self._check_literal_compare(node)
-        self._check_useless_compare(node)
-        self._check_in_compare(node)
-        self._check_unpythonic_compare(node)
-        self._check_heterogenous_operators(node)
-        self._check_reversed_complex_compare(node)
-        self.generic_visit(node)
-
 
 @final
 class WrongComparisionOrderVisitor(BaseNodeVisitor):
@@ -167,6 +167,17 @@ class WrongComparisionOrderVisitor(BaseNodeVisitor):
         ast.In,
         ast.NotIn,
     )
+
+    def visit_Compare(self, node: ast.Compare) -> None:
+        """
+        Forbids comparision where argument doesn't come first.
+
+        Raises:
+            CompareOrderViolation
+
+        """
+        self._check_ordering(node)
+        self.generic_visit(node)
 
     def _is_special_case(self, node: ast.Compare) -> bool:
         """
@@ -220,17 +231,6 @@ class WrongComparisionOrderVisitor(BaseNodeVisitor):
             return
 
         self.add_violation(CompareOrderViolation(node))
-
-    def visit_Compare(self, node: ast.Compare) -> None:
-        """
-        Forbids comparision where argument doesn't come first.
-
-        Raises:
-            CompareOrderViolation
-
-        """
-        self._check_ordering(node)
-        self.generic_visit(node)
 
 
 @final
@@ -334,13 +334,6 @@ class WrongConditionalVisitor(BaseNodeVisitor):
 class UnaryCompareVisitor(BaseNodeVisitor):
     """Checks that unary compare operators are used correctly."""
 
-    def _check_incorrect_not(self, node: ast.UnaryOp) -> None:
-        if not isinstance(node.op, ast.Not):
-            return
-
-        if isinstance(node.operand, ast.Compare):
-            self.add_violation(NotOperatorWithCompareViolation(node))
-
     def visit_UnaryOp(self, node: ast.UnaryOp) -> None:
         """
         Finds bad `not` usages.
@@ -351,3 +344,10 @@ class UnaryCompareVisitor(BaseNodeVisitor):
         """
         self._check_incorrect_not(node)
         self.generic_visit(node)
+
+    def _check_incorrect_not(self, node: ast.UnaryOp) -> None:
+        if not isinstance(node.op, ast.Not):
+            return
+
+        if isinstance(node.operand, ast.Compare):
+            self.add_violation(NotOperatorWithCompareViolation(node))

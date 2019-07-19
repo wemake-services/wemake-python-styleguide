@@ -14,12 +14,6 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 class ClassComplexityVisitor(BaseNodeVisitor):
     """Checks class complexity."""
 
-    def _check_base_classes(self, node: ast.ClassDef) -> None:
-        if len(node.bases) > self.options.max_base_classes:
-            self.add_violation(
-                TooManyBaseClassesViolation(node, text=str(len(node.bases))),
-            )
-
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """
         Checking class definitions.
@@ -30,3 +24,9 @@ class ClassComplexityVisitor(BaseNodeVisitor):
         """
         self._check_base_classes(node)
         self.generic_visit(node)
+
+    def _check_base_classes(self, node: ast.ClassDef) -> None:
+        if len(node.bases) > self.options.max_base_classes:
+            self.add_violation(
+                TooManyBaseClassesViolation(node, text=str(len(node.bases))),
+            )

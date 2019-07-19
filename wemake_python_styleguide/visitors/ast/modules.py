@@ -24,6 +24,24 @@ from wemake_python_styleguide.visitors.decorators import alias
 class EmptyModuleContentsVisitor(BaseNodeVisitor):
     """Restricts to have empty modules."""
 
+    def visit_Module(self, node: ast.Module) -> None:
+        """
+        Checks that module has something other than module definition.
+
+        We have completely different rules
+        for ``__init__.py`` and regular files.
+        Since, we believe that ``__init__.py`` must be empty.
+        But, other files must have contents.
+
+        Raises:
+            EmptyModuleViolation
+            InitModuleHasLogicViolation
+
+        """
+        self._check_init_contents(node)
+        self._check_module_contents(node)
+        self.generic_visit(node)
+
     def _is_init(self) -> bool:
         return get_stem(self.filename) == constants.INIT
 
@@ -47,34 +65,10 @@ class EmptyModuleContentsVisitor(BaseNodeVisitor):
         if not is_doc_string(node.body[0]):
             self.add_violation(InitModuleHasLogicViolation())
 
-    def visit_Module(self, node: ast.Module) -> None:
-        """
-        Checks that module has something other than module definition.
-
-        We have completely different rules
-        for ``__init__.py`` and regular files.
-        Since, we believe that ``__init__.py`` must be empty.
-        But, other files must have contents.
-
-        Raises:
-            EmptyModuleViolation
-            InitModuleHasLogicViolation
-
-        """
-        self._check_init_contents(node)
-        self._check_module_contents(node)
-        self.generic_visit(node)
-
 
 @final
 class MagicModuleFunctionsVisitor(BaseNodeVisitor):
     """Restricts to use magic module functions."""
-
-    def _check_magic_module_functions(self, node: ast.FunctionDef) -> None:
-        if node.name in constants.MAGIC_MODULE_NAMES_BLACKLIST:
-            self.add_violation(
-                BadMagicModuleFunctionViolation(node, text=node.name),
-            )
 
     def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
         """
@@ -88,6 +82,12 @@ class MagicModuleFunctionsVisitor(BaseNodeVisitor):
         """
         self._check_magic_module_functions(node)
         self.generic_visit(node)
+
+    def _check_magic_module_functions(self, node: ast.FunctionDef) -> None:
+        if node.name in constants.MAGIC_MODULE_NAMES_BLACKLIST:
+            self.add_violation(
+                BadMagicModuleFunctionViolation(node, text=node.name),
+            )
 
 
 @final
@@ -107,6 +107,17 @@ class ModuleConstantsVisitor(BaseNodeVisitor):
         ast.SetComp,
     )
 
+    def visit_any_assign(self, node: AnyAssign) -> None:
+        """
+        Checks that module's cannot have incorrect constants.
+
+        Raises:
+            MutableModuleConstantViolation
+
+        """
+        self._check_mutable_constant(node)
+        self.generic_visit(node)
+
     def _check_mutable_constant(self, node: AnyAssign) -> None:
         if not isinstance(get_context(node), ast.Module):
             return
@@ -122,14 +133,3 @@ class ModuleConstantsVisitor(BaseNodeVisitor):
 
             if isinstance(node.value, self._mutable_nodes):
                 self.add_violation(MutableModuleConstantViolation(target))
-
-    def visit_any_assign(self, node: AnyAssign) -> None:
-        """
-        Checks that module's cannot have incorrect constants.
-
-        Raises:
-            MutableModuleConstantViolation
-
-        """
-        self._check_mutable_constant(node)
-        self.generic_visit(node)

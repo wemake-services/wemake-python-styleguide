@@ -85,6 +85,22 @@ class BaseViolation(object):
         self._text = text
 
     @final
+    def message(self) -> str:
+        """
+        Returns error's formatted message with code and reason.
+
+        Conditionally formats the ``error_template`` if it is required.
+        """
+        return '{0} {1}'.format(
+            self._full_code(), self.error_template.format(self._text),
+        )
+
+    @final
+    def node_items(self) -> Tuple[int, int, str]:
+        """Returns tuple to match ``flake8`` API format."""
+        return (*self._location(), self.message())
+
+    @final
     def _full_code(self) -> str:
         """
         Returns fully formatted code.
@@ -101,22 +117,6 @@ class BaseViolation(object):
         Default location is in the so-called "file beginning".
         """
         return 0, 0
-
-    @final
-    def message(self) -> str:
-        """
-        Returns error's formatted message with code and reason.
-
-        Conditionally formats the ``error_template`` if it is required.
-        """
-        return '{0} {1}'.format(
-            self._full_code(), self.error_template.format(self._text),
-        )
-
-    @final
-    def node_items(self) -> Tuple[int, int, str]:
-        """Returns tuple to match ``flake8`` API format."""
-        return (*self._location(), self.message())
 
 
 class _BaseASTViolation(BaseViolation):

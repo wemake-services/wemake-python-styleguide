@@ -37,6 +37,20 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
         'E',
     ))
 
+    def visit_number(self, token: tokenize.TokenInfo) -> None:
+        """
+        Checks number declarations.
+
+        Raises:
+            UnderscoredNumberViolation
+            PartialFloatViolation
+            BadNumberSuffixViolation
+
+        """
+        self._check_underscored_number(token)
+        self._check_partial_float(token)
+        self._check_bad_number_suffixes(token)
+
     def _check_underscored_number(self, token: tokenize.TokenInfo) -> None:
         if '_' in token.string:
             self.add_violation(
@@ -67,20 +81,6 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
                     BadNumberSuffixViolation(token, text=token.string),
                 )
 
-    def visit_number(self, token: tokenize.TokenInfo) -> None:
-        """
-        Checks number declarations.
-
-        Raises:
-            UnderscoredNumberViolation
-            PartialFloatViolation
-            BadNumberSuffixViolation
-
-        """
-        self._check_underscored_number(token)
-        self._check_partial_float(token)
-        self._check_bad_number_suffixes(token)
-
 
 @final
 class WrongStringTokenVisitor(BaseTokenVisitor):
@@ -94,6 +94,22 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         """Initializes new visitor and saves all docstrings."""
         super().__init__(*args, **kwargs)
         self._docstrings = get_docstring_tokens(self.file_tokens)
+
+    def visit_string(self, token: tokenize.TokenInfo) -> None:
+        """
+        Finds incorrect string usages.
+
+        ``u`` can only be the only prefix.
+        You can not combine it with ``r``, ``b``, or ``f``.
+        Since it will raise a ``SyntaxError`` while parsing.
+
+        Raises:
+            UnicodeStringViolation
+            WrongMultilineStringViolation
+
+        """
+        self._check_correct_multiline(token)
+        self._check_string_modifiers(token)
 
     def _check_correct_multiline(self, token: tokenize.TokenInfo) -> None:
         _, string_def = split_prefixes(token)
@@ -114,22 +130,6 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
                     UppercaseStringModifierViolation(token, text=mod),
                 )
 
-    def visit_string(self, token: tokenize.TokenInfo) -> None:
-        """
-        Finds incorrect string usages.
-
-        ``u`` can only be the only prefix.
-        You can not combine it with ``r``, ``b``, or ``f``.
-        Since it will raise a ``SyntaxError`` while parsing.
-
-        Raises:
-            UnicodeStringViolation
-            WrongMultilineStringViolation
-
-        """
-        self._check_correct_multiline(token)
-        self._check_string_modifiers(token)
-
 
 @final
 class WrongStringConcatenationVisitor(BaseTokenVisitor):
@@ -146,6 +146,16 @@ class WrongStringConcatenationVisitor(BaseTokenVisitor):
         super().__init__(*args, **kwargs)
         self._previous_token: Optional[tokenize.TokenInfo] = None
 
+    def visit(self, token: tokenize.TokenInfo) -> None:
+        """
+        Ensures that all string are concatenated as we allow.
+
+        Raises:
+            ImplicitStringConcatenationViolation
+
+        """
+        self._check_concatenation(token)
+
     def _check_concatenation(self, token: tokenize.TokenInfo) -> None:
         if token.exact_type in self._ignored_tokens:
             return
@@ -156,13 +166,3 @@ class WrongStringConcatenationVisitor(BaseTokenVisitor):
             self._previous_token = token
         else:
             self._previous_token = None
-
-    def visit(self, token: tokenize.TokenInfo) -> None:
-        """
-        Ensures that all string are concatenated as we allow.
-
-        Raises:
-            ImplicitStringConcatenationViolation
-
-        """
-        self._check_concatenation(token)

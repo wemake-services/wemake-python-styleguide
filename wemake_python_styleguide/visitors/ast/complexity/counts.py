@@ -43,6 +43,18 @@ class ModuleMembersVisitor(BaseNodeVisitor):
         super().__init__(*args, **kwargs)
         self._public_items_count = 0
 
+    def visit_module_members(self, node: ModuleMembers) -> None:
+        """
+        Counts the number of ModuleMembers in a single module.
+
+        Raises:
+            TooManyModuleMembersViolation
+
+        """
+        self._check_decorators_count(node)
+        self._check_members_count(node)
+        self.generic_visit(node)
+
     def _check_members_count(self, node: ModuleMembers) -> None:
         """This method increases the number of module members."""
         is_real_method = is_method(getattr(node, 'function_type', None))
@@ -67,18 +79,6 @@ class ModuleMembersVisitor(BaseNodeVisitor):
                 ),
             )
 
-    def visit_module_members(self, node: ModuleMembers) -> None:
-        """
-        Counts the number of ModuleMembers in a single module.
-
-        Raises:
-            TooManyModuleMembersViolation
-
-        """
-        self._check_decorators_count(node)
-        self._check_members_count(node)
-        self.generic_visit(node)
-
 
 @final
 @alias('visit_any_import', (
@@ -93,6 +93,19 @@ class ImportMembersVisitor(BaseNodeVisitor):
         super().__init__(*args, **kwargs)
         self._imports_count = 0
         self._imported_names_count = 0
+
+    def visit_any_import(self, node: AnyImport) -> None:
+        """
+        Counts the number of ``import`` and ``from ... import ...``.
+
+        Raises:
+            TooManyImportsViolation
+            TooManyImportedNamesViolation
+
+        """
+        self._imports_count += 1
+        self._imported_names_count += len(node.names)
+        self.generic_visit(node)
 
     def _check_imports_count(self) -> None:
         if self._imports_count > self.options.max_imports:
@@ -113,19 +126,6 @@ class ImportMembersVisitor(BaseNodeVisitor):
         self._check_imports_count()
         self._check_imported_names_count()
 
-    def visit_any_import(self, node: AnyImport) -> None:
-        """
-        Counts the number of ``import`` and ``from ... import ...``.
-
-        Raises:
-            TooManyImportsViolation
-            TooManyImportedNamesViolation
-
-        """
-        self._imports_count += 1
-        self._imported_names_count += len(node.names)
-        self.generic_visit(node)
-
 
 @final
 @alias('visit_any_function', (
@@ -140,6 +140,17 @@ class MethodMembersVisitor(BaseNodeVisitor):
         super().__init__(*args, **kwargs)
         self._methods: DefaultDict[ast.ClassDef, int] = defaultdict(int)
 
+    def visit_any_function(self, node: AnyFunctionDef) -> None:
+        """
+        Counts the number of methods in a single class.
+
+        Raises:
+            TooManyMethodsViolation
+
+        """
+        self._check_method(node)
+        self.generic_visit(node)
+
     def _check_method(self, node: AnyFunctionDef) -> None:
         parent = get_parent(node)
         if isinstance(parent, ast.ClassDef):
@@ -152,17 +163,6 @@ class MethodMembersVisitor(BaseNodeVisitor):
                     TooManyMethodsViolation(node, text=str(count)),
                 )
 
-    def visit_any_function(self, node: AnyFunctionDef) -> None:
-        """
-        Counts the number of methods in a single class.
-
-        Raises:
-            TooManyMethodsViolation
-
-        """
-        self._check_method(node)
-        self.generic_visit(node)
-
 
 @final
 class ConditionsVisitor(BaseNodeVisitor):
@@ -173,6 +173,28 @@ class ConditionsVisitor(BaseNodeVisitor):
 
     #: Maximum number of compare nodes in a single expression.
     _max_compares: ClassVar[int] = 2
+
+    def visit_BoolOp(self, node: ast.BoolOp) -> None:
+        """
+        Counts the number of conditions.
+
+        Raises:
+            TooManyConditionsViolation
+
+        """
+        self._check_conditions(node)
+        self.generic_visit(node)
+
+    def visit_Compare(self, node: ast.Compare) -> None:
+        """
+        Counts the number of compare parts.
+
+        Raises:
+            TooLongCompareViolation
+
+        """
+        self._check_compares(node)
+        self.generic_visit(node)
 
     def _count_conditions(self, node: ast.BoolOp) -> int:
         counter = 0
@@ -204,28 +226,6 @@ class ConditionsVisitor(BaseNodeVisitor):
                 TooLongCompareViolation(node, text=str(len(node.ops))),
             )
 
-    def visit_BoolOp(self, node: ast.BoolOp) -> None:
-        """
-        Counts the number of conditions.
-
-        Raises:
-            TooManyConditionsViolation
-
-        """
-        self._check_conditions(node)
-        self.generic_visit(node)
-
-    def visit_Compare(self, node: ast.Compare) -> None:
-        """
-        Counts the number of compare parts.
-
-        Raises:
-            TooLongCompareViolation
-
-        """
-        self._check_compares(node)
-        self.generic_visit(node)
-
 
 @final
 class ElifVisitor(BaseNodeVisitor):
@@ -237,7 +237,20 @@ class ElifVisitor(BaseNodeVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Creates internal ``elif`` counter."""
         super().__init__(*args, **kwargs)
-        self._if_children: DefaultDict[ast.If, List[ast.If]] = defaultdict(list)
+        self._if_children: DefaultDict[ast.If, List[ast.If]] = defaultdict(
+            list,
+        )
+
+    def visit_If(self, node: ast.If) -> None:
+        """
+        Checks condition not to reimplement switch.
+
+        Raises:
+            TooManyElifsViolation
+
+        """
+        self._check_elifs(node)
+        self.generic_visit(node)
 
     def _get_root_if_node(self, node: ast.If) -> ast.If:
         for root, children in self._if_children.items():
@@ -268,17 +281,6 @@ class ElifVisitor(BaseNodeVisitor):
                     TooManyElifsViolation(root, text=str(real_children_length)),
                 )
 
-    def visit_If(self, node: ast.If) -> None:
-        """
-        Checks condition not to reimplement switch.
-
-        Raises:
-            TooManyElifsViolation
-
-        """
-        self._check_elifs(node)
-        self.generic_visit(node)
-
 
 @final
 class TryExceptVisitor(BaseNodeVisitor):
@@ -286,10 +288,6 @@ class TryExceptVisitor(BaseNodeVisitor):
 
     #: Maximum number of ``except`` cases in a single ``try`` clause.
     _max_except_cases: ClassVar[int] = 3
-
-    def _check_except_count(self, node: ast.Try) -> None:
-        if len(node.handlers) > self._max_except_cases:
-            self.add_violation(TooManyExceptCasesViolation(node))
 
     def visit_Try(self, node: ast.Try) -> None:
         """
@@ -302,20 +300,14 @@ class TryExceptVisitor(BaseNodeVisitor):
         self._check_except_count(node)
         self.generic_visit(node)
 
+    def _check_except_count(self, node: ast.Try) -> None:
+        if len(node.handlers) > self._max_except_cases:
+            self.add_violation(TooManyExceptCasesViolation(node))
+
 
 @final
 class YieldTupleVisitor(BaseNodeVisitor):
     """Finds too long ``tuples`` in ``yield`` expressions."""
-
-    def _check_yield_values(self, node: ast.Yield) -> None:
-        if isinstance(node.value, ast.Tuple):
-            yield_list = [tup_item for tup_item in node.value.elts]
-            if len(yield_list) > MAX_LEN_YIELD_TUPLE:
-                self.add_violation(
-                    TooLongYieldTupleViolation(
-                        node, text=str(len(yield_list)),
-                    ),
-                )
 
     def visit_Yield(self, node: ast.Yield) -> None:
         """
@@ -327,3 +319,13 @@ class YieldTupleVisitor(BaseNodeVisitor):
         """
         self._check_yield_values(node)
         self.generic_visit(node)
+
+    def _check_yield_values(self, node: ast.Yield) -> None:
+        if isinstance(node.value, ast.Tuple):
+            yield_list = [tup_item for tup_item in node.value.elts]
+            if len(yield_list) > MAX_LEN_YIELD_TUPLE:
+                self.add_violation(
+                    TooLongYieldTupleViolation(
+                        node, text=str(len(yield_list)),
+                    ),
+                )

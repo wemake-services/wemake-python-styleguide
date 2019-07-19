@@ -41,28 +41,6 @@ class WrongStringVisitor(BaseNodeVisitor):
         super().__init__(*args, **kwargs)
         self._string_constants: DefaultDict[str, int] = defaultdict(int)
 
-    def _check_string_constant(self, node: ast.Str) -> None:
-        annotations = (
-            ast.arg,
-            ast.AnnAssign,
-        )
-
-        parent = get_parent(node)
-        if isinstance(parent, annotations) and parent.annotation == node:
-            return  # it is argument or variable annotation
-
-        if isinstance(parent, FunctionNodes) and parent.returns == node:
-            return  # it is return annotation
-
-        self._string_constants[node.s] += 1
-
-    def _post_visit(self) -> None:
-        for string, usage_count in self._string_constants.items():
-            if usage_count > self.options.max_string_usages:
-                self.add_violation(
-                    OverusedStringViolation(text=string or "''"),
-                )
-
     def visit_Str(self, node: ast.Str) -> None:
         """
         Restricts to over-use string constants.
@@ -85,6 +63,28 @@ class WrongStringVisitor(BaseNodeVisitor):
         self.add_violation(FormattedStringViolation(node))
         self.generic_visit(node)
 
+    def _check_string_constant(self, node: ast.Str) -> None:
+        annotations = (
+            ast.arg,
+            ast.AnnAssign,
+        )
+
+        parent = get_parent(node)
+        if isinstance(parent, annotations) and parent.annotation == node:
+            return  # it is argument or variable annotation
+
+        if isinstance(parent, FunctionNodes) and parent.returns == node:
+            return  # it is return annotation
+
+        self._string_constants[node.s] += 1
+
+    def _post_visit(self) -> None:
+        for string, usage_count in self._string_constants.items():
+            if usage_count > self.options.max_string_usages:
+                self.add_violation(
+                    OverusedStringViolation(text=string or "''"),
+                )
+
 
 @final
 class MagicNumberVisitor(BaseNodeVisitor):
@@ -105,6 +105,17 @@ class MagicNumberVisitor(BaseNodeVisitor):
         ast.Tuple,
     )
 
+    def visit_Num(self, node: ast.Num) -> None:
+        """
+        Checks numbers not to be magic constants inside the code.
+
+        Raises:
+            MagicNumberViolation
+
+        """
+        self._check_is_magic(node)
+        self.generic_visit(node)
+
     def _check_is_magic(self, node: ast.Num) -> None:
         parent = get_parent_ignoring_unary(node)
         if isinstance(parent, self._allowed_parents):
@@ -118,17 +129,6 @@ class MagicNumberVisitor(BaseNodeVisitor):
 
         self.add_violation(MagicNumberViolation(node, text=str(node.n)))
 
-    def visit_Num(self, node: ast.Num) -> None:
-        """
-        Checks numbers not to be magic constants inside the code.
-
-        Raises:
-            MagicNumberViolation
-
-        """
-        self._check_is_magic(node)
-        self.generic_visit(node)
-
 
 @final
 class UselessOperatorsVisitor(BaseNodeVisitor):
@@ -141,13 +141,6 @@ class UselessOperatorsVisitor(BaseNodeVisitor):
         ast.USub: 1,
     }
 
-    def _check_operator_count(self, node: ast.Num) -> None:
-        for node_type, limit in self._limits.items():
-            if count_unary_operator(node, node_type) > limit:
-                self.add_violation(
-                    UselessOperatorsViolation(node, text=str(node.n)),
-                )
-
     def visit_Num(self, node: ast.Num) -> None:
         """
         Checks numbers unnecessary operators inside the code.
@@ -159,25 +152,17 @@ class UselessOperatorsVisitor(BaseNodeVisitor):
         self._check_operator_count(node)
         self.generic_visit(node)
 
+    def _check_operator_count(self, node: ast.Num) -> None:
+        for node_type, limit in self._limits.items():
+            if count_unary_operator(node, node_type) > limit:
+                self.add_violation(
+                    UselessOperatorsViolation(node, text=str(node.n)),
+                )
+
 
 @final
 class WrongAssignmentVisitor(BaseNodeVisitor):
     """Visits all assign nodes."""
-
-    def _check_assign_targets(self, node: ast.Assign) -> None:
-        if len(node.targets) > 1:
-            self.add_violation(MultipleAssignmentsViolation(node))
-
-    def _check_unpacking_targets(
-        self,
-        node: ast.AST,
-        targets: Iterable[ast.AST],
-    ) -> None:
-        for target in targets:
-            if isinstance(target, ast.Starred):
-                target = target.value
-            if not isinstance(target, ast.Name):
-                self.add_violation(WrongUnpackingViolation(node))
 
     def visit_With(self, node: ast.With) -> None:
         """
@@ -220,6 +205,21 @@ class WrongAssignmentVisitor(BaseNodeVisitor):
             self._check_unpacking_targets(node, node.targets[0].elts)
         self.generic_visit(node)
 
+    def _check_assign_targets(self, node: ast.Assign) -> None:
+        if len(node.targets) > 1:
+            self.add_violation(MultipleAssignmentsViolation(node))
+
+    def _check_unpacking_targets(
+        self,
+        node: ast.AST,
+        targets: Iterable[ast.AST],
+    ) -> None:
+        for target in targets:
+            if isinstance(target, ast.Starred):
+                target = target.value
+            if not isinstance(target, ast.Name):
+                self.add_violation(WrongUnpackingViolation(node))
+
 
 @final
 class WrongCollectionVisitor(BaseNodeVisitor):
@@ -232,6 +232,17 @@ class WrongCollectionVisitor(BaseNodeVisitor):
         ast.NameConstant,
         ast.Name,
     )
+
+    def visit_Set(self, node: ast.Set) -> None:
+        """
+        Ensures that set literals do not have any duplicate items.
+
+        Raises:
+            NonUniqueItemsInSetViolation
+
+        """
+        self._check_set_elements(node)
+        self.generic_visit(node)
 
     def _report_set_elements(self, node: ast.Set, elements: List[str]) -> None:
         for element, count in Counter(elements).items():
@@ -248,14 +259,3 @@ class WrongCollectionVisitor(BaseNodeVisitor):
                 source = astor.to_source(set_item)
                 elements.append(source.strip().strip('(').strip(')'))
         self._report_set_elements(node, elements)
-
-    def visit_Set(self, node: ast.Set) -> None:
-        """
-        Ensures that set literals do not have any duplicate items.
-
-        Raises:
-            NonUniqueItemsInSetViolation
-
-        """
-        self._check_set_elements(node)
-        self.generic_visit(node)

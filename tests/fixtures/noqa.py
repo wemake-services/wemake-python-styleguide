@@ -436,6 +436,15 @@ if some and (  # noqa: WPS337
 ):
     anti_z444 = 'some text'
 
+
+class WrongMethodOrder(object):  # noqa: WPS338
+    def _protected(self):
+        return self
+
+    def public(self):
+        return self
+
+
 CONSTANT = []  # noqa: WPS407
 
 numbers = map(lambda string: int(string), ['1'])  # noqa: WPS506

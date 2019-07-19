@@ -69,6 +69,34 @@ class IfStatementVisitor(BaseNodeVisitor):
         ast.Continue,
     )
 
+    def visit_If(self, node: ast.If) -> None:
+        """
+        Checks ``if`` nodes.
+
+        Raises:
+            UselessReturningElseViolation
+            NegatedConditionsViolation
+            MultilineConditionsViolation
+            UselessLenCompareViolation
+
+        """
+        self._check_negated_conditions(node)
+        self._check_useless_else(node)
+        self._check_multiline_conditions(node)
+        self._check_useless_len(node)
+        self.generic_visit(node)
+
+    def visit_IfExp(self, node: ast.IfExp) -> None:
+        """
+        Checks ``if`` expressions.
+
+        Raises:
+            UselessLenCompareViolation
+
+        """
+        self._check_useless_len(node)
+        self.generic_visit(node)
+
     def _check_negated_conditions(self, node: ast.If) -> None:
         if not node.orelse:
             return
@@ -106,34 +134,6 @@ class IfStatementVisitor(BaseNodeVisitor):
             if given_function_called(node.test, {'len'}):
                 self.add_violation(UselessLenCompareViolation(node))
 
-    def visit_If(self, node: ast.If) -> None:
-        """
-        Checks ``if`` nodes.
-
-        Raises:
-            UselessReturningElseViolation
-            NegatedConditionsViolation
-            MultilineConditionsViolation
-            UselessLenCompareViolation
-
-        """
-        self._check_negated_conditions(node)
-        self._check_useless_else(node)
-        self._check_multiline_conditions(node)
-        self._check_useless_len(node)
-        self.generic_visit(node)
-
-    def visit_IfExp(self, node: ast.IfExp) -> None:
-        """
-        Checks ``if`` expressions.
-
-        Raises:
-            UselessLenCompareViolation
-
-        """
-        self._check_useless_len(node)
-        self.generic_visit(node)
-
 
 @final
 class BooleanConditionVisitor(BaseNodeVisitor):
@@ -144,6 +144,19 @@ class BooleanConditionVisitor(BaseNodeVisitor):
         super().__init__(*args, **kwargs)
         self._same_nodes: List[ast.BoolOp] = []
         self._isinstance_calls: List[ast.BoolOp] = []
+
+    def visit_BoolOp(self, node: ast.BoolOp) -> None:
+        """
+        Checks that ``and`` and ``or`` conditions are correct.
+
+        Raises:
+            SameElementsInConditionViolation
+            UnmergedIsinstanceCallsViolation
+
+        """
+        self._check_same_elements(node)
+        self._check_isinstance_calls(node)
+        self.generic_visit(node)
 
     def _get_all_names(
         self,
@@ -177,19 +190,6 @@ class BooleanConditionVisitor(BaseNodeVisitor):
             self.add_violation(
                 UnmergedIsinstanceCallsViolation(node, text=var_name),
             )
-
-    def visit_BoolOp(self, node: ast.BoolOp) -> None:
-        """
-        Checks that ``and`` and ``or`` conditions are correct.
-
-        Raises:
-            SameElementsInConditionViolation
-            UnmergedIsinstanceCallsViolation
-
-        """
-        self._check_same_elements(node)
-        self._check_isinstance_calls(node)
-        self.generic_visit(node)
 
 
 @final

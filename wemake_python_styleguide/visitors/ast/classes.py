@@ -10,17 +10,14 @@ from wemake_python_styleguide import constants, types
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.logic import classes, functions
+from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.logic.nodes import (
     get_context,
     is_contained,
     is_doc_string,
 )
 from wemake_python_styleguide.violations import best_practices as bp
-from wemake_python_styleguide.violations import oop
-from wemake_python_styleguide.violations.consistency import (
-    ObjectInBaseClassesListViolation,
-    RequiredBaseClassViolation,
-)
+from wemake_python_styleguide.violations import consistency, oop
 from wemake_python_styleguide.visitors import base, decorators
 
 
@@ -47,38 +44,6 @@ class WrongClassVisitor(base.BaseNodeVisitor):
         ast.Subscript,
     )
 
-    def _check_base_classes_count(self, node: ast.ClassDef) -> None:
-        if not node.bases:
-            self.add_violation(
-                RequiredBaseClassViolation(node, text=node.name),
-            )
-
-    def _check_base_classes(self, node: ast.ClassDef) -> None:
-        for base_name in node.bases:
-            if not isinstance(base_name, self._allowed_base_classes_nodes):
-                self.add_violation(oop.WrongBaseClassViolation(node))
-                continue
-
-            id_attr = getattr(base_name, 'id', None)
-            if id_attr == 'BaseException':
-                self.add_violation(bp.BaseExceptionSubclassViolation(node))
-            elif id_attr == 'object' and len(node.bases) >= 2:
-                self.add_violation(
-                    ObjectInBaseClassesListViolation(node, text=id_attr),
-                )
-            elif classes.is_forbidden_super_class(id_attr):
-                self.add_violation(
-                    oop.BuiltinSubclassViolation(node, text=id_attr),
-                )
-
-    def _check_wrong_body_nodes(self, node: ast.ClassDef) -> None:
-        for sub_node in node.body:
-            if isinstance(sub_node, self._allowed_body_nodes):
-                continue
-            if is_doc_string(sub_node):
-                continue
-            self.add_violation(oop.WrongClassBodyContentViolation(sub_node))
-
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """
         Checking class definitions.
@@ -94,6 +59,40 @@ class WrongClassVisitor(base.BaseNodeVisitor):
         self._check_base_classes(node)
         self._check_wrong_body_nodes(node)
         self.generic_visit(node)
+
+    def _check_base_classes_count(self, node: ast.ClassDef) -> None:
+        if not node.bases:
+            self.add_violation(
+                consistency.RequiredBaseClassViolation(node, text=node.name),
+            )
+
+    def _check_base_classes(self, node: ast.ClassDef) -> None:
+        for base_name in node.bases:
+            if not isinstance(base_name, self._allowed_base_classes_nodes):
+                self.add_violation(oop.WrongBaseClassViolation(node))
+                continue
+
+            id_attr = getattr(base_name, 'id', None)
+            if id_attr == 'BaseException':
+                self.add_violation(bp.BaseExceptionSubclassViolation(node))
+            elif id_attr == 'object' and len(node.bases) >= 2:
+                self.add_violation(
+                    consistency.ObjectInBaseClassesListViolation(
+                        node, text=id_attr,
+                    ),
+                )
+            elif classes.is_forbidden_super_class(id_attr):
+                self.add_violation(
+                    oop.BuiltinSubclassViolation(node, text=id_attr),
+                )
+
+    def _check_wrong_body_nodes(self, node: ast.ClassDef) -> None:
+        for sub_node in node.body:
+            if isinstance(sub_node, self._allowed_body_nodes):
+                continue
+            if is_doc_string(sub_node):
+                continue
+            self.add_violation(oop.WrongClassBodyContentViolation(sub_node))
 
 
 @final
@@ -224,6 +223,17 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
 class ClassAttributeVisitor(base.BaseNodeVisitor):
     """Finds incorrect class attributes."""
 
+    def visit_ClassDef(self, node: ast.ClassDef) -> None:
+        """
+        Checks that class attributes are correct.
+
+        Raises:
+            ShadowedClassAttributeViolation
+
+        """
+        self._check_attributes_shadowing(node)
+        self.generic_visit(node)
+
     # TODO: can be moved to logic, if is used anywhere else
     def _flat_assign_names(
         self,
@@ -262,17 +272,48 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
             if instance_attr.attr in class_attribute_names:
                 self.add_violation(
                     oop.ShadowedClassAttributeViolation(
-                        instance_attr, text=instance_attr.attr,
+                        instance_attr,
+                        text=instance_attr.attr,
                     ),
                 )
 
+
+@final
+class ClassMethodOrderVisitor(base.BaseNodeVisitor):
+    """Checks that all methods inside the class are ordered correctly."""
+
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """
-        Checks that class attributes are correct.
+        Ensures that class has correct method order.
 
         Raises:
-            ShadowedClassAttributeViolation
+            WrongMethodOrderViolation
 
         """
-        self._check_attributes_shadowing(node)
+        self._check_method_order(node)
         self.generic_visit(node)
+
+    def _check_method_order(self, node: ast.ClassDef) -> None:
+        method_nodes: List[str] = []
+
+        for subnode in ast.walk(node):
+            if isinstance(subnode, FunctionNodes):
+                if get_context(subnode) == node:
+                    method_nodes.append(subnode.name)
+
+        ideal = sorted(method_nodes, key=self._ideal_order, reverse=True)
+        for existing_order, ideal_order in zip(method_nodes, ideal):
+            if existing_order != ideal_order:
+                self.add_violation(consistency.WrongMethodOrderViolation(node))
+                return
+
+    def _ideal_order(self, first: str) -> int:
+        if first == '__new__':
+            return 4
+        if first == '__init__':
+            return 3
+        if access.is_protected(first):
+            return 1
+        if access.is_private(first):
+            return 0
+        return 2  # public and magic methods
