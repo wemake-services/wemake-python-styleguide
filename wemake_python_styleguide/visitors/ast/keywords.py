@@ -11,7 +11,11 @@ from wemake_python_styleguide.logic.nodes import (
     get_exception_name,
     get_parent,
 )
-
+from wemake_python_styleguide.logic.returns import (
+    get_assign_node_variables,
+    get_name_nodes_variable,
+    get_return_node_variables,
+)
 from wemake_python_styleguide.logic.variables import (
     is_valid_block_variable_definition,
 )
@@ -29,11 +33,6 @@ from wemake_python_styleguide.violations.consistency import (
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
-from wemake_python_styleguide.logic.returns import (
-    get_assign_node_variables,
-    get_name_nodes_variable,
-    get_return_node_variables,
-)
 
 AnyWith = Union[ast.With, ast.AsyncWith]
 ReturningViolations = Union[
