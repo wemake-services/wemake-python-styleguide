@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from collections import defaultdict
-from typing import ClassVar, Dict, List, Tuple, Type, Union
+from typing import ClassVar, List, Type, Union
 
 from typing_extensions import final
 
@@ -29,12 +28,13 @@ from wemake_python_styleguide.violations.consistency import (
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
+from wemake_python_styleguide.logic.returns import (
+    get_assign_node_variables,
+    get_name_nodes_variable,
+    get_return_node_variables,
+)
 
 AnyWith = Union[ast.With, ast.AsyncWith]
-NamesAndReturns = Tuple[
-    Dict[str, List[ast.Name]],
-    Dict[str, ast.Return],
-]
 ReturningViolations = Union[
     Type[InconsistentReturnViolation],
     Type[InconsistentYieldViolation],
@@ -208,43 +208,6 @@ class WrongContextManagerVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
 
-def _get_assign_node_variables(node: List[ast.AST]) -> List[str]:
-    assign = []
-    for sub_node in node:
-        if isinstance(sub_node, ast.Assign):
-            if isinstance(sub_node.targets[0], ast.Name):
-                assign.append(sub_node.targets[0].id)
-        if isinstance(sub_node, ast.AnnAssign):
-            if isinstance(sub_node.target, ast.Name):
-                assign.append(sub_node.target.id)
-    return assign
-
-
-def _get_name_nodes_variable(node: List[ast.AST]) -> Dict[str, List[ast.Name]]:
-    names: Dict[str, List[ast.Name]] = defaultdict(list)
-    for sub_node in node:
-        if isinstance(sub_node, ast.Name):
-            if isinstance(sub_node.ctx, ast.Load):
-                names[sub_node.id].append(sub_node)
-        if isinstance(sub_node, ast.AugAssign):
-            if isinstance(sub_node.target, ast.Name):
-                variable_name = sub_node.target.id
-                names[variable_name].append(sub_node.target)
-    return names
-
-
-def _get_return_node_variables(node: List[ast.AST]) -> NamesAndReturns:
-    returns: Dict[str, List[ast.Name]] = defaultdict(list)
-    return_sub_nodes: Dict[str, ast.Return] = defaultdict()
-    for sub_node in node:
-        if isinstance(sub_node, ast.Return):
-            if isinstance(sub_node.value, ast.Name):
-                variable_name = sub_node.value.id
-                returns[variable_name].append(sub_node.value)
-                return_sub_nodes[variable_name] = sub_node
-    return returns, return_sub_nodes
-
-
 @final
 @alias('visit_return_variable', (
     'visit_AsyncFunctionDef',
@@ -277,9 +240,9 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
                 ast.walk(node),
             ),
         )
-        assign = _get_assign_node_variables(nodes)
-        names = _get_name_nodes_variable(nodes)
-        returns, return_sub_nodes = _get_return_node_variables(nodes)
+        assign = get_assign_node_variables(nodes)
+        names = get_name_nodes_variable(nodes)
+        returns, return_sub_nodes = get_return_node_variables(nodes)
 
         returns = {name: returns[name] for name in returns if name in assign}
         if not return_sub_nodes:
