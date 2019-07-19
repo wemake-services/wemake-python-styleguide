@@ -19,6 +19,7 @@ That's how all ``flake8`` formatters work:
         F7         --> F10[finished]
         F8         --> F10[finished]
         F9         --> F10[finished]
+        F10       -.-> F5
         F10        --> F11[stop]
 
 .. autoclass:: WemakeFormatter
