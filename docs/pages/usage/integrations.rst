@@ -120,7 +120,7 @@ we have made some reasearch to help you!
 autopep8
 ~~~~~~~~
 
-`autopep8 <https://github.com/google/yapf>`_ is the best choice
+`autopep8 <https://github.com/hhatto/autopep8>`_ is the best choice
 for ``wemake-python-styleguide`` users.
 
 Is officially supported in way
