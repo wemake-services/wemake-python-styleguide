@@ -36,10 +36,9 @@ def test_init_generator(
     assert_errors,
     parse_ast_tree,
     default_options,
-    mode,
 ):
-    """Testing that `__init__` without `yield` is prohibited."""
-    tree = parse_ast_tree(mode(init_with_yield))
+    """Testing that `__init__` with `yield` is prohibited."""
+    tree = parse_ast_tree(init_with_yield)
 
     visitor = WrongMethodVisitor(default_options, tree=tree)
     visitor.run()
@@ -49,17 +48,34 @@ def test_init_generator(
 
 @pytest.mark.parametrize('code', [
     init_without_yield,
-    regular_method_with_yield,
     iter_with_yield,
 ])
-def test_init_regular(
+def test_magic_methods_regular(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+):
+    """Testing that `__init__` without `yield` is allowed."""
+    tree = parse_ast_tree(code)
+
+    visitor = WrongMethodVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('code', [
+    regular_method_with_yield,
+])
+def test_regular_method(
     assert_errors,
     parse_ast_tree,
     code,
     default_options,
     mode,
 ):
-    """Testing that `__init__` without `yield` is allowed."""
+    """Testing that regular method with `yield` is allowed."""
     tree = parse_ast_tree(mode(code))
 
     visitor = WrongMethodVisitor(default_options, tree=tree)

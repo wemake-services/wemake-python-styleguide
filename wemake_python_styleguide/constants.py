@@ -115,6 +115,13 @@ MAGIC_METHODS_BLACKLIST: Final = frozenset((
     '__delattr__',  # since we don't use `delattr()`
 ))
 
+#: List of magic methods that are allowed to be async.
+ASYNC_MAGIC_METHODS_WHITELIST: Final = frozenset((
+    '__anext__',
+    '__aenter__',
+    '__aexit__',
+))
+
 #: List of nested classes' names we allow to use.
 NESTED_CLASSES_WHITELIST: Final = frozenset((
     'Meta',  # django forms, models, drf, etc
