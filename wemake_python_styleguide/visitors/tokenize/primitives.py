@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import re
 import tokenize
 from typing import ClassVar, FrozenSet, Optional
+from typing.re import Pattern
 
 from flake8_quotes.docstring_detection import get_docstring_tokens
 from typing_extensions import final
@@ -13,6 +15,7 @@ from wemake_python_styleguide.logic.tokens import (
 from wemake_python_styleguide.violations.consistency import (
     BadNumberSuffixViolation,
     ImplicitStringConcatenationViolation,
+    NumberWithMeaninglessZeroViolation,
     PartialFloatViolation,
     UnderscoredNumberViolation,
     UnicodeStringViolation,
@@ -26,16 +29,13 @@ from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 class WrongNumberTokenVisitor(BaseTokenVisitor):
     """Visits number tokens to find incorrect usages."""
 
-    _bad_number_suffixes: ClassVar[FrozenSet[str]] = frozenset((
-        '0X', '0O', '0B',
-    ))
+    _bad_number_suffixes: ClassVar[Pattern] = re.compile(
+        r'^[0-9\.]+[BOXE]',
+    )
 
-    # The thing is that `E` can be used as both a number and a suffix.
-    # See:
-    # https://github.com/wemake-services/wemake-python-styleguide/issues/557
-    _possibly_bad_number_suffixes = frozenset((
-        'E',
-    ))
+    _bad_number_patterns: ClassVar[Pattern] = re.compile(
+        r'^[0-9\.]+([box]|e\+?\-?)0[0-9]+',
+    )
 
     def visit_number(self, token: tokenize.TokenInfo) -> None:
         """
@@ -45,7 +45,10 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
             UnderscoredNumberViolation
             PartialFloatViolation
             BadNumberSuffixViolation
+            NumberWithMeaninglessZeroViolation
 
+        Regressions:
+        https://github.com/wemake-services/wemake-python-styleguide/issues/557
         """
         self._check_underscored_number(token)
         self._check_partial_float(token)
@@ -62,24 +65,16 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
             self.add_violation(PartialFloatViolation(token, text=token.string))
 
     def _check_bad_number_suffixes(self, token: tokenize.TokenInfo) -> None:
-        if any(char in token.string for char in self._bad_number_suffixes):
+        if self._bad_number_suffixes.match(token.string):
             self.add_violation(
                 BadNumberSuffixViolation(token, text=token.string),
             )
-        else:
-            # Now we handle possible suffixes:
-            contains_correct_suffix = any(
-                char.lower() in token.string
-                for char in self._bad_number_suffixes
+        if self._bad_number_patterns.match(token.string):
+            self.add_violation(
+                NumberWithMeaninglessZeroViolation(token, text=token.string),
             )
-            contains_e = any(
-                char in token.string
-                for char in self._possibly_bad_number_suffixes
-            )
-            if not contains_correct_suffix and contains_e:
-                self.add_violation(
-                    BadNumberSuffixViolation(token, text=token.string),
-                )
+        # TODO: enforce 0xE over 0xe
+        # TODO: forbid to use 1e+1: use 1e1
 
 
 @final

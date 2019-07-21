@@ -13,11 +13,17 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to raise `StopIteration` inside generators
 - Forbids to have incorrect method order inside classes
 - Forbids to make some magic methods async
+- Forbids to use meaningless zeros
 
 ### Bugfixes
 
 - Bumps `flake8-eradicate` version
   and solves `attrs` incompatible versions issue
+
+### Misc
+
+- Adds `bellybutton` to the list of linters
+- Improves tests for binary, octal, hex, and expanetional numbers
 
 
 ## 0.11.1

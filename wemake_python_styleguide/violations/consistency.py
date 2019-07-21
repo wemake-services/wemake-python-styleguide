@@ -64,6 +64,7 @@ Summary
    ImplicitInConditionViolation
    MultilineConditionsViolation
    WrongMethodOrderViolation
+   NumberWithMeaninglessZeroViolation
 
 Consistency checks
 ------------------
@@ -107,6 +108,7 @@ Consistency checks
 .. autoclass:: ImplicitInConditionViolation
 .. autoclass:: MultilineConditionsViolation
 .. autoclass:: WrongMethodOrderViolation
+.. autoclass:: NumberWithMeaninglessZeroViolation
 
 """
 
@@ -1478,3 +1480,38 @@ class WrongMethodOrderViolation(ASTViolation):
 
     error_template = 'Found incorrect order of methods in a class'
     code = 338
+
+
+@final
+class NumberWithMeaninglessZeroViolation(TokenizeViolation):
+    """
+    Forbids to use meaningless zeros.
+
+    We discorauge using meaningless zeros in
+    binary, octal, hex, and expanentional numbers.
+
+    Reasoning:
+        There are ~infinitive ways to write these numbers
+        by adding meaningless leading zeros to the number itself.
+        ``0b1`` is the same as ``0b01`` and ``0b001``.
+        How a language can be called consistent
+        if you can write numbers in a infinite ways?
+        It hurts readability and understanding of your programms.
+
+    Solution:
+        Remove meaningless leading zeros.
+
+    Example::
+
+        # Correct:
+        numbers = [0b1, 0o2, 0x5, 10e10]
+
+        # Wrong:
+        numbers = [0b00000001, 0o0002, 0x05, 10e010]
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found number with meaningless zeros: {0}'
+    code = 339

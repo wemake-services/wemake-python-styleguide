@@ -694,6 +694,9 @@ class OverusedStringViolation(MaybeASTViolation):
     """
     Forbids to over-use string constants.
 
+    We allow to use strings without any restrictions as annotations for
+    variables, arguments, return values, and class attributes.
+
     Reasoning:
         When some string is used more than several time in your code,
         it probably means that this string is a meaningful constant.

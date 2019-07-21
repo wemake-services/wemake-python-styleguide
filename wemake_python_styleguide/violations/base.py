@@ -65,6 +65,7 @@ class BaseViolation(object):
     Attributes:
         error_template: message that will be shown to user after formatting.
         code: violation unique number. Used to identify the violation.
+        previous_codes: just a documentation thing to track changes in time.
 
     """
 

@@ -448,6 +448,8 @@ class WrongMethodOrder(object):  # noqa: WPS338
         return self
 
 
+leading_zero = 1.2e01  # noqa: WPS339
+
 CONSTANT = []  # noqa: WPS407
 
 numbers = map(lambda string: int(string), ['1'])  # noqa: WPS506
