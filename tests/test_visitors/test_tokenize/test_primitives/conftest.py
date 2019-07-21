@@ -21,3 +21,37 @@ statement_with_expression = 'other_var + {0}'
 def primitives_usages(request):
     """Fixture to return possible cases of promitives use cases."""
     return request.param
+
+
+@pytest.fixture()
+def regular_number_wrapper():
+    """Fixture to return regular numbers without modifications."""
+    def factory(template: str) -> str:
+        return template
+    return factory
+
+
+@pytest.fixture()
+def negative_number_wrapper():
+    """Fixture to return negative numbers."""
+    def factory(template: str) -> str:
+        return '-{0}'.format(template)
+    return factory
+
+
+@pytest.fixture()
+def positive_number_wrapper():
+    """Fixture to return positive numbers with explicit ``+``."""
+    def factory(template: str) -> str:
+        return '+{0}'.format(template)
+    return factory
+
+
+@pytest.fixture(params=[
+    'regular_number_wrapper',
+    'negative_number_wrapper',
+    'positive_number_wrapper',
+])
+def number_sign(request):
+    """Fixture that returns regular, negative, and positive numbers."""
+    return request.getfixturevalue(request.param)

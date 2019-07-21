@@ -66,6 +66,7 @@ Summary
    WrongMethodOrderViolation
    NumberWithMeaninglessZeroViolation
    PositiveExponentViolation
+   WrongHexNumberCaseViolation
 
 Consistency checks
 ------------------
@@ -111,6 +112,7 @@ Consistency checks
 .. autoclass:: WrongMethodOrderViolation
 .. autoclass:: NumberWithMeaninglessZeroViolation
 .. autoclass:: PositiveExponentViolation
+.. autoclass:: WrongHexNumberCaseViolation
 
 """
 
@@ -1546,3 +1548,31 @@ class PositiveExponentViolation(TokenizeViolation):
 
     error_template = 'Found exponent number with positive exponent: {0}'
     code = 340
+
+
+@final
+class WrongHexNumberCaseViolation(TokenizeViolation):
+    """
+    Forbids use lower-case letters as hex numbers.
+
+    Reasoning:
+        One can write ``0xA`` and ``0xa`` which is inconsistent.
+        This rule enforces upper-case letters in hex numbers.
+
+    Solution:
+        Use upper-case letters in hex numbers.
+
+    Example::
+
+        # Correct:
+        number = 0xABCDEF
+
+        # Wrong:
+        number = 0xabcdef
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found wrong hex number case: {0}'
+    code = 341

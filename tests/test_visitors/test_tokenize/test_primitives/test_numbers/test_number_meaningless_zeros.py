@@ -29,42 +29,6 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
 
     '0b0001',
     '0b01',
-
-    '-0.10',
-    '-21.5400',
-
-    '-0x01',
-    '-0x00A',
-
-    '-0e00',
-    '-0e01',
-    '-1.5e-010',
-
-    '-0o01',
-    '-0o00007',
-
-    '-0b0001',
-    '-0b01',
-
-    '+0.10',
-    '+21.5400',
-
-    '+0x01',
-    '+0x00A',
-
-    '+0e00',
-    '+0e01',
-    '+1.5e010',
-    '+1.5e-010',
-
-    '-0o01',
-    '-0o00007',
-
-    '-0b0001',
-    '-0b01',
-    '--0b0001',
-    '++0b01',
-    '-+0b0001',
 ])
 def test_meaningless_zeros(
     parse_tokens,
@@ -73,10 +37,13 @@ def test_meaningless_zeros(
     default_options,
     primitives_usages,
     number,
+    number_sign,
     mode,
 ):
     """Ensures that numbers with suffix not in lowercase raise a warning."""
-    file_tokens = parse_tokens(mode(primitives_usages.format(number)))
+    file_tokens = parse_tokens(
+        mode(primitives_usages.format(number_sign(number))),
+    )
 
     visitor = WrongNumberTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
@@ -97,10 +64,13 @@ def test_meaningless_zeros_and_case(
     default_options,
     primitives_usages,
     number,
+    number_sign,
     mode,
 ):
     """Ensures that numbers raise two violations."""
-    file_tokens = parse_tokens(mode(primitives_usages.format(number)))
+    file_tokens = parse_tokens(
+        mode(primitives_usages.format(number_sign(number))),
+    )
 
     visitor = WrongNumberTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
@@ -112,7 +82,7 @@ def test_meaningless_zeros_and_case(
 
 
 @pytest.mark.parametrize('number', [
-    '-1',
+    '1',
     '1234567890',
 
     '0.0',
@@ -136,50 +106,6 @@ def test_meaningless_zeros_and_case(
     '0b0',
     '0b1',
     '0b100000',
-
-    '-0.0',
-    '-0.5',
-    '-25.05',
-    '-10.001',
-
-    '-0x0',
-    '-0x10',
-    '-0xA00',
-
-    '-0e0',
-    '-0e10',
-    '-1.5e10',
-    '-1.5e-100',
-
-    '-0o0',
-    '-0o1',
-    '0o7000',
-
-    '-0b0',
-    '-0b1',
-    '-0b100000',
-
-    '+0.0',
-    '+0.5',
-    '+25.05',
-    '+10.001',
-
-    '+0x0',
-    '+0x10',
-    '+0xA00',
-
-    '+0e0',
-    '+0e10',
-    '+1.5e10',
-    '+1.5e-100',
-
-    '+0o0',
-    '+0o1',
-    '+0o7000',
-
-    '+0b0',
-    '+0b1',
-    '+0b100000',
 ])
 def test_correct_zeros(
     parse_tokens,
@@ -187,10 +113,13 @@ def test_correct_zeros(
     default_options,
     primitives_usages,
     number,
+    number_sign,
     mode,
 ):
     """Ensures that correct numbers are fine."""
-    file_tokens = parse_tokens(mode(primitives_usages.format(number)))
+    file_tokens = parse_tokens(
+        mode(primitives_usages.format(number_sign(number))),
+    )
 
     visitor = WrongNumberTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
@@ -207,18 +136,6 @@ def test_correct_zeros(
     '1.5e01',
     '0o011',
     '0b01001',
-
-    '-0.300',
-    '-0x0FF',
-    '-1.5e01',
-    '-0o011',
-    '-0b01001',
-
-    '+0.300',
-    '+0x0FF',
-    '+1.5e01',
-    '+0o011',
-    '+0b01001',
 ])
 def test_similar_strings(
     parse_tokens,
@@ -226,10 +143,11 @@ def test_similar_strings(
     default_options,
     code,
     number,
+    number_sign,
     mode,
 ):
     """Ensures that strings are fine."""
-    file_tokens = parse_tokens(mode(code.format(number)))
+    file_tokens = parse_tokens(mode(code.format(number_sign(number))))
 
     visitor = WrongNumberTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()

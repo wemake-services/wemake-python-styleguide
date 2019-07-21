@@ -450,6 +450,7 @@ class WrongMethodOrder(object):  # noqa: WPS338
 
 leading_zero = 1.2e01  # noqa: WPS339
 positive_exponent = 1.1e+1  # noqa: WPS340
+wrong_hex = 0xabc  # noqa: WPS341
 
 CONSTANT = []  # noqa: WPS407
 

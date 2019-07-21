@@ -14,26 +14,10 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
     '0X1',
     '0X1A',
     '0XFF',
-    '0Xe',
+    '0XE',
     '1.5E10',
     '0O11',
     '0B1001',
-
-    '-0X1',
-    '-0X1A',
-    '-0XFF',
-    '-0Xe',
-    '-1.5E10',
-    '-0O11',
-    '-0B1001',
-
-    '+0X1',
-    '+0X1A',
-    '+0XFF',
-    '+0Xe',
-    '+1.5E10',
-    '+0O11',
-    '+0B1001',
 ])
 def test_bad_number_suffixes(
     parse_tokens,
@@ -42,10 +26,13 @@ def test_bad_number_suffixes(
     default_options,
     primitives_usages,
     number,
+    number_sign,
     mode,
 ):
     """Ensures that numbers with suffix not in lowercase raise a warning."""
-    file_tokens = parse_tokens(mode(primitives_usages.format(number)))
+    file_tokens = parse_tokens(
+        mode(primitives_usages.format(number_sign(number))),
+    )
 
     visitor = WrongNumberTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
@@ -55,7 +42,7 @@ def test_bad_number_suffixes(
 
 
 @pytest.mark.parametrize('number', [
-    '-1',
+    '1',
     '29',
 
     '0xFF',
@@ -63,26 +50,11 @@ def test_bad_number_suffixes(
     '0o11',
     '0b1001',
 
-    '-0xAF',
-    '-3e10',
-    '-0o11',
-    '-0b1111',
-
-    '+0xFF',
-    '+1.5e10',
-    '+0o11',
-    '+0b1001',
-
     # Regression for 557:
     # https://github.com/wemake-services/wemake-python-styleguide/issues/557
     '0xE',
-    '0xe',
-    '-0xE',
-    '-0xe',
-    '-0xB',
-    '+0xE',
-    '+0xe',
-    '+0xEE',
+    '0xB',
+    '0xEE',
     '0xEEE',
     '0x1E',
     '0xE1',
@@ -93,10 +65,13 @@ def test_correct_number_suffixes(
     default_options,
     primitives_usages,
     number,
+    number_sign,
     mode,
 ):
     """Ensures that correct numbers are fine."""
-    file_tokens = parse_tokens(mode(primitives_usages.format(number)))
+    file_tokens = parse_tokens(
+        mode(primitives_usages.format(number_sign(number))),
+    )
 
     visitor = WrongNumberTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
@@ -110,22 +85,13 @@ def test_correct_number_suffixes(
     'as_string = "{0}"',
 ])
 @pytest.mark.parametrize('number', [
+    '1',
     '1234567890',
 
     '0xFF',
     '1.5e10',
     '0o11',
     '0b1001',
-
-    '-0xAF',
-    '-3e10',
-    '-0o11',
-    '-0b1111',
-
-    '+0xAF',
-    '+1.3e10',
-    '+0o11',
-    '+0b1111',
 ])
 def test_similar_strings(
     parse_tokens,
@@ -133,10 +99,11 @@ def test_similar_strings(
     default_options,
     code,
     number,
+    number_sign,
     mode,
 ):
     """Ensures that strings are fine."""
-    file_tokens = parse_tokens(mode(code.format(number)))
+    file_tokens = parse_tokens(mode(code.format(number_sign(number))))
 
     visitor = WrongNumberTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()

@@ -21,6 +21,7 @@ from wemake_python_styleguide.violations.consistency import (
     UnderscoredNumberViolation,
     UnicodeStringViolation,
     UppercaseStringModifierViolation,
+    WrongHexNumberCaseViolation,
     WrongMultilineStringViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
@@ -44,6 +45,10 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
     _positive_exponent_pattens: ClassVar[Pattern] = re.compile(
         r'^[0-9\.]+e\+', re.IGNORECASE,
     )
+
+    _bad_hex_numbers: ClassVar[FrozenSet[str]] = frozenset((
+        'a', 'b', 'c', 'd', 'e', 'f',
+    ))
 
     def visit_number(self, token: tokenize.TokenInfo) -> None:
         """
@@ -91,7 +96,16 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
             self.add_violation(
                 PositiveExponentViolation(token, text=token.string),
             )
-        # TODO: enforce 0xE over 0xe
+
+        if token.string.startswith('0x') or token.string.startswith('0X'):
+            has_wrong_hex_numbers = any(
+                char in self._bad_hex_numbers
+                for char in token.string
+            )
+            if has_wrong_hex_numbers:
+                self.add_violation(
+                    WrongHexNumberCaseViolation(token, text=token.string),
+                )
 
 
 @final
