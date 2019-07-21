@@ -120,6 +120,7 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
             BadMagicMethodViolation
             YieldInsideInitViolation
             MethodWithoutArgumentsViolation
+            AsyncMagicMethodViolation
 
         """
         self._check_decorators(node)
@@ -147,6 +148,13 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
             self.add_violation(
                 oop.BadMagicMethodViolation(node, text=node.name),
             )
+
+        is_async = isinstance(node, ast.AsyncFunctionDef)
+        if is_async and access.is_magic(node.name):
+            if node.name not in constants.ASYNC_MAGIC_METHODS_WHITELIST:
+                self.add_violation(
+                    oop.AsyncMagicMethodViolation(node, text=node.name),
+                )
 
     def _check_method_contents(self, node: types.AnyFunctionDef) -> None:
         if node.name == constants.INIT:

@@ -20,11 +20,10 @@ def test_wrong_magic_used(
     assert_error_text,
     parse_ast_tree,
     method,
-    mode,
     default_options,
 ):
     """Testing that some magic methods are restricted."""
-    tree = parse_ast_tree(mode(magic_method.format(method)))
+    tree = parse_ast_tree(magic_method.format(method))
 
     visitor = WrongMethodVisitor(default_options, tree=tree)
     visitor.run()
@@ -40,6 +39,28 @@ def test_wrong_magic_used(
 @pytest.mark.parametrize('method', [
     '__add__',
     '__init__',
+])
+def test_correct_magic_method_used(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    method,
+    default_options,
+):
+    """Testing that some magic methods are working fine."""
+    tree = parse_ast_tree(code.format(method))
+
+    visitor = WrongMethodVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('code', [
+    magic_method,
+    regular_function,
+])
+@pytest.mark.parametrize('method', [
     'next',
     'regular',
 ])

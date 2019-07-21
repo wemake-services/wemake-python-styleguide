@@ -24,6 +24,7 @@ Summary
    WrongSlotsViolation
    WrongSuperCallViolation
    DirectMagicAttributeAccessViolation
+   AsyncMagicMethodViolation
 
 Respect your objects
 --------------------
@@ -38,6 +39,7 @@ Respect your objects
 .. autoclass:: WrongSlotsViolation
 .. autoclass:: WrongSuperCallViolation
 .. autoclass:: DirectMagicAttributeAccessViolation
+.. autoclass:: AsyncMagicMethodViolation
 
 """
 
@@ -399,3 +401,45 @@ class DirectMagicAttributeAccessViolation(ASTViolation):
     error_template = 'Found direct magic attribute usage: {0}'
     code = 609
     previous_codes = {462}
+
+
+@final
+class AsyncMagicMethodViolation(ASTViolation):
+    """
+    Forbids to make some magic methods async.
+
+    We forbid to make ``__init__``, ``__eq__``, ``__lt__``, etc async.
+    We allow to make ``__anext__``, ``__aenter__``, ``__aexit__`` async.
+
+    See
+    :py:data:`~wemake_python_styleguide.constants.ASYNC_MAGIC_METHODS_WHITELIST`
+    for the whole list of whitelisted async magic methods.
+
+    Reasoning:
+        Defining the magic methods as async which are not supposed
+        to be async would not work as expected.
+
+    Solution:
+        Do not make this magic method async.
+
+    Example::
+
+        # Correct:
+        class Test(object):
+            def __lt__(self, other): ...
+
+        # Wrong:
+        class Test(object):
+            async def __lt__(self, other): ...
+
+
+    .. versionadded:: 0.12.0
+
+
+    See also:
+        https://docs.python.org/3/reference/datamodel.html
+
+    """
+
+    error_template = 'Found forbidden async magic method usage: {0}'
+    code = 610

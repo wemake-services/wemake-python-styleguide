@@ -12,6 +12,7 @@ We used to have incremental versioning before `0.1.0`.
   configured by `--max-imported-names` option which is 50 by default
 - Forbids to raise `StopIteration` inside generators
 - Forbids to have incorrect method order inside classes
+- Forbids to make some magic methods async
 
 ### Bugfixes
 

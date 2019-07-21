@@ -191,6 +191,9 @@ class BadClass:  # noqa: WPS306
     class Nested:  # noqa: WPS306,WPS431
         anti_z444 = 1
 
+    async def __eq__(self, other):  # noqa: WPS610
+        anti_z444 = 3
+
 
 magic_numbers = 13.2 + 50  # noqa: WPS432
 
