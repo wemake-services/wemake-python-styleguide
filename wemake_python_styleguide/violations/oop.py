@@ -408,8 +408,8 @@ class AsyncMagicMethodViolation(ASTViolation):
     """
     Forbids to make some magic methods async.
 
-    We forbid to make __init__, __eq__, __lt__, etc async.
-    We allow to make __anext__, __aenter__, __aexit__ async.
+    We forbid to make ``__init__``, ``__eq__``, ``__lt__``, etc async.
+    We allow to make ``__anext__``, ``__aenter__``, ``__aexit__`` async.
 
     See
     :py:data:`~wemake_python_styleguide.constants.ASYNC_MAGIC_METHODS_WHITELIST`
