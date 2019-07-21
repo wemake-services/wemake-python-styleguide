@@ -17,6 +17,7 @@ from wemake_python_styleguide.violations.consistency import (
     ImplicitStringConcatenationViolation,
     NumberWithMeaninglessZeroViolation,
     PartialFloatViolation,
+    PositiveExponentViolation,
     UnderscoredNumberViolation,
     UnicodeStringViolation,
     UppercaseStringModifierViolation,
@@ -33,8 +34,15 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
         r'^[0-9\.]+[BOXE]',
     )
 
-    _bad_number_patterns: ClassVar[Pattern] = re.compile(
-        r'^[0-9\.]+([box]|e\+?\-?)0[0-9]+',
+    _leading_zero_pattern: ClassVar[Pattern] = re.compile(
+        r'^[0-9\.]+([box]|e\+?\-?)0.+', re.IGNORECASE,
+    )
+    _leading_zero_float_pattern: ClassVar[Pattern] = re.compile(
+        r'^[0-9]*\.[0-9]+0+$',
+    )
+
+    _positive_exponent_pattens: ClassVar[Pattern] = re.compile(
+        r'^[0-9\.]+e\+', re.IGNORECASE,
     )
 
     def visit_number(self, token: tokenize.TokenInfo) -> None:
@@ -46,9 +54,11 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
             PartialFloatViolation
             BadNumberSuffixViolation
             NumberWithMeaninglessZeroViolation
+            PositiveExponentViolation
 
         Regressions:
         https://github.com/wemake-services/wemake-python-styleguide/issues/557
+
         """
         self._check_underscored_number(token)
         self._check_partial_float(token)
@@ -69,12 +79,19 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
             self.add_violation(
                 BadNumberSuffixViolation(token, text=token.string),
             )
-        if self._bad_number_patterns.match(token.string):
+
+        float_zeros = self._leading_zero_float_pattern.match(token.string)
+        other_zeros = self._leading_zero_pattern.match(token.string)
+        if float_zeros or other_zeros:
             self.add_violation(
                 NumberWithMeaninglessZeroViolation(token, text=token.string),
             )
+
+        if self._positive_exponent_pattens.match(token.string):
+            self.add_violation(
+                PositiveExponentViolation(token, text=token.string),
+            )
         # TODO: enforce 0xE over 0xe
-        # TODO: forbid to use 1e+1: use 1e1
 
 
 @final

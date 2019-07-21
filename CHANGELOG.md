@@ -6,6 +6,8 @@ We used to have incremental versioning before `0.1.0`.
 
 ## 0.12.0 WIP
 
+In this release we had a little focus on numbers and how to spell them.
+
 ### Features
 
 - Forbids to have modules with too many imported names
@@ -13,7 +15,10 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to raise `StopIteration` inside generators
 - Forbids to have incorrect method order inside classes
 - Forbids to make some magic methods async
-- Forbids to use meaningless zeros
+- Forbids to use meaningless zeros in float, binary, octal, hex,
+  and expanentional numbers
+- Enforces to use `1e10` instead of `1e+10`
+- Enforces to use big letters for hex numbers: `0xAB` instead of `0xab`
 
 ### Bugfixes
 

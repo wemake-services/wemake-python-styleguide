@@ -15,7 +15,7 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
     '0X1A',
     '0XFF',
     '0Xe',
-    '1.5E+10',
+    '1.5E10',
     '0O11',
     '0B1001',
 
@@ -23,7 +23,7 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
     '-0X1A',
     '-0XFF',
     '-0Xe',
-    '-1.5E+10',
+    '-1.5E10',
     '-0O11',
     '-0B1001',
 
@@ -31,7 +31,7 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
     '+0X1A',
     '+0XFF',
     '+0Xe',
-    '+1.5E+10',
+    '+1.5E10',
     '+0O11',
     '+0B1001',
 ])
@@ -55,18 +55,21 @@ def test_bad_number_suffixes(
 
 
 @pytest.mark.parametrize('number', [
+    '-1',
+    '29',
+
     '0xFF',
-    '1.5e+10',
+    '1.5e10',
     '0o11',
     '0b1001',
 
     '-0xAF',
-    '-3e+10',
+    '-3e10',
     '-0o11',
     '-0b1111',
 
     '+0xFF',
-    '+1.5e+10',
+    '+1.5e10',
     '+0o11',
     '+0b1001',
 
@@ -107,18 +110,20 @@ def test_correct_number_suffixes(
     'as_string = "{0}"',
 ])
 @pytest.mark.parametrize('number', [
+    '1234567890',
+
     '0xFF',
-    '1.5e+10',
+    '1.5e10',
     '0o11',
     '0b1001',
 
     '-0xAF',
-    '-3e+10',
+    '-3e10',
     '-0o11',
     '-0b1111',
 
     '+0xAF',
-    '+1.3e+10',
+    '+1.3e10',
     '+0o11',
     '+0b1111',
 ])

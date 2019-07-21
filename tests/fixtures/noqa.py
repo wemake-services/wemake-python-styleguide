@@ -203,7 +203,7 @@ assert 2 > octal_number  # noqa: WPS309
 hex_number = 0XFF  # noqa: WPS310
 octal_number = 0O11  # noqa: WPS310
 binary_number = 0B1001  # noqa: WPS310
-number_with_scientific_notation = 1.5E+10  # noqa: WPS310
+number_with_scientific_notation = 1.5E-10  # noqa: WPS310
 number_with_useless_plus = +5  # noqa: WPS330
 
 if '6' in nodes in '6':  # noqa: WPS311
@@ -449,6 +449,7 @@ class WrongMethodOrder(object):  # noqa: WPS338
 
 
 leading_zero = 1.2e01  # noqa: WPS339
+positive_exponent = 1.1e+1  # noqa: WPS340
 
 CONSTANT = []  # noqa: WPS407
 
