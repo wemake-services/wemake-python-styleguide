@@ -8,6 +8,7 @@ import astor
 from typing_extensions import final
 
 from wemake_python_styleguide.logic.nodes import is_contained
+from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     BaseExceptionViolation,
     DuplicateExceptionViolation,
@@ -28,6 +29,11 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
     """Responsible for examining ``try`` and friends."""
 
     _base_exception: ClassVar[str] = 'BaseException'
+    _bad_returning_nodes: ClassVar[AnyNodes] = (
+        ast.Return,
+        ast.Raise,
+        ast.Break,
+    )
 
     def visit_Try(self, node: ast.Try) -> None:
         """
@@ -83,30 +89,33 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
                     for node in exc_handler.type.elts
                 ])
 
-        counts = Counter(exceptions)
-        for exc_name, count in counts.items():
+        for exc_name, count in Counter(exceptions).items():
             if count > 1:
                 self.add_violation(
                     DuplicateExceptionViolation(node, text=exc_name),
                 )
 
     def _check_return_path(self, node: ast.Try) -> None:
-        try_has = any(
-            is_contained(line, ast.Return) for line in node.body
+        try_has = any(  # TODO: also check ast.Break
+            is_contained(line, self._bad_returning_nodes)
+            for line in node.body
         )
         except_has = any(
-            is_contained(except_handler, ast.Return)
+            is_contained(except_handler, self._bad_returning_nodes)
             for except_handler in node.handlers
         )
         else_has = any(
-            is_contained(line, ast.Return) for line in node.orelse
+            is_contained(line, self._bad_returning_nodes)
+            for line in node.orelse
         )
         finally_has = any(
-            is_contained(line, ast.Return) for line in node.finalbody
+            is_contained(line, self._bad_returning_nodes)
+            for line in node.finalbody
         )
 
-        if finally_has and (try_has or except_has):
+        if finally_has and (try_has or except_has or else_has):
             self.add_violation(TryExceptMultipleReturnPathViolation(node))
+            return
         if else_has and try_has:
             self.add_violation(TryExceptMultipleReturnPathViolation(node))
 

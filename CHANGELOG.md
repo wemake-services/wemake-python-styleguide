@@ -6,7 +6,11 @@ We used to have incremental versioning before `0.1.0`.
 
 ## 0.12.0 WIP
 
-In this release we had a little focus on numbers and how to spell them.
+In this release we had a little focus on:
+
+1. Strings and numbers and how to write them
+2. OOP features
+3. Blocks and code structure, including overused parts
 
 ### Features
 
@@ -24,6 +28,10 @@ In this release we had a little focus on numbers and how to spell them.
 
 - Bumps `flake8-eradicate` version
   and solves `attrs` incompatible versions issue
+- Fixes `TryExceptMultipleReturnPathViolation` not tracking `else` and `finally`
+  returns at the same time
+- Fixes how `TryExceptMultipleReturnPathViolation` works:
+  now handles `break` and `raise` statements as well
 
 ### Misc
 

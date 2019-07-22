@@ -763,7 +763,9 @@ class BaseExceptionSubclassViolation(ASTViolation):
 @final
 class TryExceptMultipleReturnPathViolation(ASTViolation):
     """
-    Forbids to use multiple ``return`` path with ``try`` / ``except`` case.
+    Forbids to use multiple returning paths with ``try`` / ``except`` case.
+
+    Note, that we check for any ``return``, ``break``, or ``raise`` nodes.
 
     Reasoning:
         The problem with ``return`` in ``else`` and ``finally``
@@ -779,6 +781,14 @@ class TryExceptMultipleReturnPathViolation(ASTViolation):
         Remove ``return`` from one of the cases.
 
     Example::
+
+        # Correct:
+        try:
+            return 1
+        except YourException:
+            ...
+        finally:
+            clear_things_up()
 
         # Wrong:
         try:
@@ -797,6 +807,7 @@ class TryExceptMultipleReturnPathViolation(ASTViolation):
 
     .. versionadded:: 0.7.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.12.0
 
     """
 
