@@ -451,6 +451,7 @@ class WrongMethodOrder(object):  # noqa: WPS338
 leading_zero = 1.2e01  # noqa: WPS339
 positive_exponent = 1.1e+1  # noqa: WPS340
 wrong_hex = 0xabc  # noqa: WPS341
+wrong_escape_raw_string = '\\n'  # noqa: WPS342
 
 CONSTANT = []  # noqa: WPS407
 
@@ -491,3 +492,5 @@ class CheckStopIteration(object):
     async def async_gen(self):
         yield
         raise StopIteration()  # noqa: WPS438
+
+bad_unicode = b'\u1'  # noqa: WPS439

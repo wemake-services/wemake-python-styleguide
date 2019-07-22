@@ -58,6 +58,7 @@ Summary
    ProtectedModuleViolation
    ProtectedAttributeViolation
    StopIterationInsideGeneratorViolation
+   WrongUnicodeEscapeViolation
 
 Best practices
 --------------
@@ -101,6 +102,7 @@ Best practices
 .. autoclass:: ProtectedModuleViolation
 .. autoclass:: ProtectedAttributeViolation
 .. autoclass:: StopIterationInsideGeneratorViolation
+.. autoclass:: WrongUnicodeEscapeViolation
 
 """
 
@@ -1495,3 +1497,32 @@ class StopIterationInsideGeneratorViolation(ASTViolation):
 
     error_template = 'Found `StopIteration` raising inside generator'
     code = 438
+
+
+@final
+class WrongUnicodeEscapeViolation(TokenizeViolation):
+    r"""
+    Forbids to use unicode escape sequences in binary strings.
+
+    Reasoning:
+        Binary strings do not work with unicode.
+        Having unicode escape characters in there means
+        that you have an error in your code.
+
+    Solution:
+        Use regular strings when escaping unicode strings.
+
+    Example::
+
+        # Correct:
+        escaped = '\u0041'  # equals to 'A'
+
+        # Wrong:
+        escaped = b'\u0040'  # equals to b'\\u0040'
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found unicode escape in a binary string: {0}'
+    code = 439

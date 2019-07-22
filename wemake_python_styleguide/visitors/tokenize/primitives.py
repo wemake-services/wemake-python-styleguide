@@ -12,8 +12,12 @@ from wemake_python_styleguide.logic.tokens import (
     has_triple_string_quotes,
     split_prefixes,
 )
+from wemake_python_styleguide.violations.best_practices import (
+    WrongUnicodeEscapeViolation,
+)
 from wemake_python_styleguide.violations.consistency import (
     BadNumberSuffixViolation,
+    ImplicitRawStringViolation,
     ImplicitStringConcatenationViolation,
     NumberWithMeaninglessZeroViolation,
     PartialFloatViolation,
@@ -25,6 +29,12 @@ from wemake_python_styleguide.violations.consistency import (
     WrongMultilineStringViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
+
+
+def _replace_braces(string: str) -> str:
+    if string.startswith('"'):
+        return string.lstrip('"').rstrip('"')
+    return string.lstrip("'").rstrip("'")
 
 
 @final
@@ -116,6 +126,12 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         'R', 'F', 'B', 'U',
     ))
 
+    _unicode_escapes: ClassVar[FrozenSet[str]] = frozenset((
+        'u', 'U', 'N',
+    ))
+
+    _implicit_raw_strigns: ClassVar[Pattern] = re.compile(r'\\{2}.+')
+
     def __init__(self, *args, **kwargs) -> None:
         """Initializes new visitor and saves all docstrings."""
         super().__init__(*args, **kwargs)
@@ -132,10 +148,14 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         Raises:
             UnicodeStringViolation
             WrongMultilineStringViolation
+            ImplicitRawStringViolation
+            WrongUnicodeEscapeViolation
 
         """
         self._check_correct_multiline(token)
         self._check_string_modifiers(token)
+        self._check_implicit_raw_string(token)
+        self._check_wrong_unicode_escape(token)
 
     def _check_correct_multiline(self, token: tokenize.TokenInfo) -> None:
         _, string_def = split_prefixes(token)
@@ -144,17 +164,49 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
                 self.add_violation(WrongMultilineStringViolation(token))
 
     def _check_string_modifiers(self, token: tokenize.TokenInfo) -> None:
-        if token.string.lower().startswith('u'):
+        modifiers, _ = split_prefixes(token)
+
+        if 'u' in modifiers.lower():
             self.add_violation(
                 UnicodeStringViolation(token, text=token.string),
             )
 
-        modifiers, _ = split_prefixes(token)
         for mod in modifiers:
             if mod in self._bad_string_modifiers:
                 self.add_violation(
                     UppercaseStringModifierViolation(token, text=mod),
                 )
+
+    def _check_implicit_raw_string(self, token: tokenize.TokenInfo) -> None:
+        modifiers, string_def = split_prefixes(token)
+        if 'r' in modifiers.lower():
+            return
+
+        if self._implicit_raw_strigns.search(_replace_braces(string_def)):
+            self.add_violation(
+                ImplicitRawStringViolation(token, text=token.string),
+            )
+
+    def _check_wrong_unicode_escape(self, token: tokenize.TokenInfo) -> None:
+        # See: http://docs.python.org/reference/lexical_analysis.html
+        modifiers, string_body = split_prefixes(token)
+
+        index = 0
+        while True:
+            index = string_body.find('\\', index)
+            if index == -1:
+                break
+
+            next_char = string_body[index + 1]
+            if 'b' in modifiers.lower() and next_char in self._unicode_escapes:
+                self.add_violation(
+                    WrongUnicodeEscapeViolation(token, text=token.string),
+                )
+
+            # Whether it was a valid escape or not, backslash followed by
+            # another character can always be consumed whole: the second
+            # character can never be the start of a new backslash escape.
+            index += 2
 
 
 @final

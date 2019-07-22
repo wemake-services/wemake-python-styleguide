@@ -5,7 +5,18 @@ from typing import Container, Iterable, Tuple
 
 
 def split_prefixes(token: tokenize.TokenInfo) -> Tuple[str, str]:
-    """Splits string token by prefixes and the quoted content."""
+    """
+    Splits string token by prefixes and the quoted content.
+
+    Returns the tuple of modifiers and untouched string contents.
+
+    >>> import tokenize
+    >>> import token
+    >>> token = tokenize.TokenInfo(token.STRING, "Br'test'", 1, 9, "Br'test'")
+    >>> split_prefixes(token)
+    ('Br', "'test'")
+
+    """
     split = token.string.split(token.string[-1])
     return split[0], token.string.replace(split[0], '', 1)
 

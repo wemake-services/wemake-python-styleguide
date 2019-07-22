@@ -67,6 +67,7 @@ Summary
    NumberWithMeaninglessZeroViolation
    PositiveExponentViolation
    WrongHexNumberCaseViolation
+   ImplicitRawStringViolation
 
 Consistency checks
 ------------------
@@ -113,6 +114,7 @@ Consistency checks
 .. autoclass:: NumberWithMeaninglessZeroViolation
 .. autoclass:: PositiveExponentViolation
 .. autoclass:: WrongHexNumberCaseViolation
+.. autoclass:: ImplicitRawStringViolation
 
 """
 
@@ -1576,3 +1578,32 @@ class WrongHexNumberCaseViolation(TokenizeViolation):
 
     error_template = 'Found wrong hex number case: {0}'
     code = 341
+
+
+@final
+class ImplicitRawStringViolation(TokenizeViolation):
+    r"""
+    Forbids use ``\\`` escape sequences inside regular strings.
+
+    Reasoning:
+        It is hard to read escape sequencse inside regular strings,
+        because they use ``\\`` double backslash for a single character escape.
+
+    Solution:
+        Use raw strings ``r''`` to rewrite
+        the escape sequence with a ``\`` single backslash.
+
+    Example::
+
+        # Correct:
+        escaped = [r'\n', '\n']
+
+        # Wrong:
+        escaped = '\\n'
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found implicit raw string: {0}'
+    code = 342
