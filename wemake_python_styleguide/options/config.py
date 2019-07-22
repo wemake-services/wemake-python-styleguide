@@ -100,7 +100,10 @@ class Configuration(object):
       :str:`wemake_python_styleguide.options.defaults.MAX_DECORATORS`
     - ``max-awaits`` - maximum allowed number of ``await``
       expressions in one function, defaults to
-      :str:`wemake_python_styleguide.options.defaults.MAX_await`
+      :str:`wemake_python_styleguide.options.defaults.MAX_AWAITS`
+    - ``max-try-body-length`` - maximum amount of ``try`` node body length,
+      defaults to
+      :str:`wemake_python_styleguide.options.defaults.MAX_TRY_BODY_LENGTH`
 
     All options are configurable via ``flake8`` CLI.
 
@@ -205,6 +208,12 @@ class Configuration(object):
             '--max-awaits',
             defaults.MAX_AWAITS,
             'Maximum allowed number of await statements in one function.',
+        ),
+
+        _Option(
+            '--max-try-body-length',
+            defaults.MAX_TRY_BODY_LENGTH,
+            'Maximum amount of try block node body length.',
         ),
 
         # General:

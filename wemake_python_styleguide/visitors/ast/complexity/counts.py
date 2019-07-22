@@ -12,6 +12,7 @@ from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.types import AnyFunctionDef, AnyImport
 from wemake_python_styleguide.violations.complexity import (
     TooLongCompareViolation,
+    TooLongTryBodyViolation,
     TooLongYieldTupleViolation,
     TooManyConditionsViolation,
     TooManyDecoratorsViolation,
@@ -295,14 +296,22 @@ class TryExceptVisitor(BaseNodeVisitor):
 
         Raises:
             TooManyExceptCasesViolation
+            TooLongTryBodyViolation
 
         """
         self._check_except_count(node)
+        self._check_try_body_length(node)
         self.generic_visit(node)
 
     def _check_except_count(self, node: ast.Try) -> None:
         if len(node.handlers) > self._max_except_cases:
             self.add_violation(TooManyExceptCasesViolation(node))
+
+    def _check_try_body_length(self, node: ast.Try) -> None:
+        if len(node.body) > self.options.max_try_body_length:
+            self.add_violation(
+                TooLongTryBodyViolation(node, text=str(len(node.body))),
+            )
 
 
 @final

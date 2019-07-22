@@ -36,6 +36,13 @@ def foo_func():
 
 print(x > 2 > y > 4)  # noqa: WPS228
 
+try:  # noqa: WPS229
+    print(1)
+    print(2)
+    print(3)
+except AnyError:
+    print('nope')
+
 
 def function_name(
     value: int = 0,  # noqa: WPS110

@@ -28,6 +28,7 @@ Summary
    JonesScoreViolation
    TooManyImportsViolation
    TooManyModuleMembersViolation
+   TooManyImportedNamesViolation
    TooManyLocalsViolation
    TooManyArgumentsViolation
    TooManyReturnsViolation
@@ -45,7 +46,7 @@ Summary
    OverusedStringViolation
    TooLongYieldTupleViolation
    TooLongCompareViolation
-   TooManyImportedNamesViolation
+   TooLongTryBodyViolation
 
 
 Module complexity
@@ -80,6 +81,7 @@ Structures complexity
 .. autoclass:: OverusedStringViolation
 .. autoclass:: TooLongYieldTupleViolation
 .. autoclass:: TooLongCompareViolation
+.. autoclass:: TooLongTryBodyViolation
 
 """
 
@@ -758,3 +760,32 @@ class TooLongCompareViolation(ASTViolation):
 
     error_template = 'Found too long compare'
     code = 228
+
+
+@final
+class TooLongTryBodyViolation(ASTViolation):
+    """
+    Forbids to have ``try`` blocks with too long bodies.
+
+    Reasoning:
+        Having too many statements inside your ``try`` block
+        can lead to situations when some different statement
+        raises an exception and you are not aware of it
+        since it is not expected.
+
+    Solution:
+        Move things out of the ``try`` block or create new functions.
+        The less lines you have in your ``try`` block - the safer
+        you are from accidental errors.
+
+    Configuration:
+        This rule is configurable with ``--max-try-body-length``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_TRY_BODY_LENGTH`
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found too long ``try`` body length: {0}'
+    code = 229

@@ -70,4 +70,7 @@ MAX_DECORATORS: Final = 5
 MAX_STRING_USAGES: Final = 3
 
 #: Maximum number of ``await`` expressions for functions or methods.
-MAX_AWAITS = 5  # the same as returns
+MAX_AWAITS: Final = 5  # the same as returns
+
+#: Maximum amount of ``try`` node body length.
+MAX_TRY_BODY_LENGTH: Final = 2

@@ -106,3 +106,4 @@ class ConfigurationOptions(Protocol):
     max_decorators: int
     max_string_usages: int
     max_awaits: int
+    max_try_body_length: int

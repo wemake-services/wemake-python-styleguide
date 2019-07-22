@@ -32,6 +32,19 @@ else:
     ...
 """
 
+try_except_else_finally = """
+try:
+    ...
+except ValueError:
+    ...
+else:
+    ...
+finally:
+    ...
+"""
+
+# Wrong:
+
 complex_try_except = """
 try:
     ...
@@ -64,6 +77,7 @@ def test_try_except_count_default(
     try_without_except,
     simple_try_except,
     try_except_with_else,
+    try_except_else_finally,
 ])
 def test_try_except_count_custom_settings(
     assert_errors,
