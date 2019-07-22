@@ -28,6 +28,7 @@ Summary
    WrongInCompareTypeViolation
    UnmergedIsinstanceCallsViolation
    WrongIsinstanceWithTupleViolation
+   ImplicitElifViolation
 
 Refactoring opportunities
 -------------------------
@@ -45,12 +46,16 @@ Refactoring opportunities
 .. autoclass:: WrongInCompareTypeViolation
 .. autoclass:: UnmergedIsinstanceCallsViolation
 .. autoclass:: WrongIsinstanceWithTupleViolation
+.. autoclass:: ImplicitElifViolation
 
 """
 
 from typing_extensions import final
 
-from wemake_python_styleguide.violations.base import ASTViolation
+from wemake_python_styleguide.violations.base import (
+    ASTViolation,
+    TokenizeViolation,
+)
 
 
 @final
@@ -546,3 +551,38 @@ class WrongIsinstanceWithTupleViolation(ASTViolation):
     error_template = 'Found `isinstance` call with a single element tuple'
     code = 512
     previous_codes = {475}
+
+
+@final
+class ImplicitElifViolation(TokenizeViolation):
+    """
+    Forbids to have implicit ``elif`` conditions.
+
+    Reasoning:
+        Nested ``if`` in ``else`` cases are bad
+        for readability because of the nesting level.
+
+    Solution:
+        Use ``elif`` on the same level.
+
+    Example::
+
+        # Correct:
+        if some:
+            ...
+        elif other:
+            ...
+
+        # Wrong:
+        if some:
+            ...
+        else:
+            if other:
+                ...
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found implicit `elif` condition'
+    code = 513

@@ -25,6 +25,7 @@ In this release we had a little focus on:
 - Enforces to use big letters for hex numbers: `0xAB` instead of `0xab`
 - Enforces to use `r'\n'` instead of `'\\n'`
 - Forbids to have unicode escape characters inside binary strings
+- Forbids to use `else if` instead of `elif`
 
 ### Bugfixes
 

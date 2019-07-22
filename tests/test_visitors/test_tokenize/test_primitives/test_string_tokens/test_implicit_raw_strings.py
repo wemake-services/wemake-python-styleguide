@@ -18,6 +18,8 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
     r"'\\\\'",
     r"'some \\ escaped'",
     r"b'\\a'",
+    r'"""\\1"""',
+    r"'''\\ '''",
 ])
 def test_implicit_raw_string(
     parse_tokens,
@@ -42,6 +44,8 @@ def test_implicit_raw_string(
     r"r'some \\ escaped'",
     r"r'some \n escaped'",
     r"br'\\a'",
+    r'r"""\\text"""',
+    r"r'''\\ '''",
 ])
 def test_explicit_raw_string(
     parse_tokens,

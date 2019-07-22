@@ -104,6 +104,8 @@ We also have several helpers to make your development work easier:
 
 - `./scripts/parse.py` is used to visualize `ast` nodes in other python modules,
   usage: `python ./scripts/parse.py my_module.py`
+- `./scripts/tokens.py` is used to visualize tokens in other python modules,
+  usage: `python ./scripts/tokens.py my_module.py`
 
 
 ## Submitting your code

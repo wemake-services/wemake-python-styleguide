@@ -475,6 +475,12 @@ print(isinstance(number, int) or isinstance(number, (float, str)))  # noqa: 474
 
 print(isinstance(numbers, (int,)))  # noqa: WPS512
 
+if numbers:
+    print('first')
+else:
+    if numbers:  # noqa: WPS513
+        print('other')
+
 def sync_gen():
     yield
     raise StopIteration  # noqa: WPS438

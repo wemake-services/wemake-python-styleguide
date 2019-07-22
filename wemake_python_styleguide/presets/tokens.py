@@ -2,6 +2,7 @@
 
 from wemake_python_styleguide.visitors.tokenize import (
     comments,
+    conditions,
     keywords,
     primitives,
     statements,
@@ -20,4 +21,6 @@ TOKENS_PRESET = (
 
     statements.ExtraIndentationVisitor,
     statements.BracketLocationVisitor,
+
+    conditions.IfElseVisitor,
 )

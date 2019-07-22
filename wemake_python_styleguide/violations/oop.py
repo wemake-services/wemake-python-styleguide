@@ -432,12 +432,10 @@ class AsyncMagicMethodViolation(ASTViolation):
         class Test(object):
             async def __lt__(self, other): ...
 
-
-    .. versionadded:: 0.12.0
-
-
     See also:
         https://docs.python.org/3/reference/datamodel.html
+
+    .. versionadded:: 0.12.0
 
     """
 
