@@ -2,7 +2,7 @@
 
 import ast
 from collections import Counter
-from typing import ClassVar, List
+from typing import ClassVar, List, Tuple
 
 import astor
 from typing_extensions import final
@@ -24,21 +24,24 @@ from wemake_python_styleguide.violations.refactoring import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
-def _find_returing_nodes(node: ast.Try) -> Tuple[bool, bool, bool, bool]:
+def _find_returing_nodes(
+    node: ast.Try,
+    bad_returning_nodes: AnyNodes,
+) -> Tuple[bool, bool, bool, bool]:
     try_has = any(  # TODO: also check ast.Break
-        is_contained(line, self._bad_returning_nodes)
+        is_contained(line, bad_returning_nodes)
         for line in node.body
     )
     except_has = any(
-        is_contained(except_handler, self._bad_returning_nodes)
+        is_contained(except_handler, bad_returning_nodes)
         for except_handler in node.handlers
     )
     else_has = any(
-        is_contained(line, self._bad_returning_nodes)
+        is_contained(line, bad_returning_nodes)
         for line in node.orelse
     )
     finally_has = any(
-        is_contained(line, self._bad_returning_nodes)
+        is_contained(line, bad_returning_nodes)
         for line in node.finalbody
     )
     return try_has, except_has, else_has, finally_has
@@ -116,7 +119,9 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
                 )
 
     def _check_return_path(self, node: ast.Try) -> None:
-        try_has, except_has, else_has, finally_has = _find_returing_nodes(node)
+        try_has, except_has, else_has, finally_has = _find_returing_nodes(
+            node, self._bad_returning_nodes,
+        )
 
         if finally_has and (try_has or except_has or else_has):
             self.add_violation(TryExceptMultipleReturnPathViolation(node))
