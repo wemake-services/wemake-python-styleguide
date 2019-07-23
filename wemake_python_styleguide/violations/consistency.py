@@ -1372,12 +1372,12 @@ class WrongLoopIterTypeViolation(ASTViolation):
     Reasoning:
         Using lists, dicts, and sets do not make much sense.
         You can use tuples instead.
-        Using comperehensions implicitly create a two level loops,
+        Using comprehensions implicitly create a two level loops,
         that are hard to read and deal with.
 
     Solution:
         Use tuples to create explicit iterables for ``for`` loops.
-        In case you are using a comperehension, create a new variable.
+        In case you are using a comprehension, create a new variable.
 
     Example::
 
