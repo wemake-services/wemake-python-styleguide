@@ -314,7 +314,7 @@ class WrongSlotsViolation(ASTViolation):
 
     Solution:
         Use tuples with unique elements to define ``__slots__`` attribute.
-        Use ``snake_case`` to define attributes in ``__slots__`.
+        Use ``snake_case`` to define attributes in ``__slots__``.
 
     Example::
 
