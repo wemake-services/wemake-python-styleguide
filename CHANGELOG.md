@@ -26,6 +26,7 @@ In this release we had a little focus on:
 - Enforces to use `r'\n'` instead of `'\\n'`
 - Forbids to have unicode escape characters inside binary strings
 - Forbids to use `else if` instead of `elif`
+- Forbids to have too long `try` bodies
 
 ### Bugfixes
 
@@ -40,6 +41,7 @@ In this release we had a little focus on:
 
 - Adds `bellybutton` to the list of linters
 - Improves tests for binary, octal, hex, and expanetional numbers
+- Adds `xenon --max-absolute A --max-modules A --max-average A server` check
 
 
 ## 0.11.1

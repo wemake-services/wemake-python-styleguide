@@ -143,6 +143,7 @@ Before submitting your code please do the following steps:
 9. Run `flake8` to ensure that style is correct
 10. Run `layer-lint` to ensure that architecture contracts are correct
 11. Run `doc8` to ensure that docs are correct
+12. Run `xenon` to ensure that code quality is `A` (good enough)
 
 You can run everything at once with `make test`,
 see our `Makefile` for more details.
