@@ -40,6 +40,7 @@ Checker API
 
 import ast
 import tokenize
+import traceback
 from typing import ClassVar, Iterator, Sequence, Type
 
 from flake8.options.manager import OptionManager
@@ -158,7 +159,14 @@ class Checker(object):
         """Runs all passed visitors one by one."""
         for visitor_class in visitors:
             visitor = visitor_class.from_checker(self)
-            visitor.run()
+
+            try:
+                visitor.run()
+            except Exception:  # pragma: no cover
+                # In case we fail misserably, we want users to see at
+                # least something! Full stack trace
+                # and some rules that still work.
+                print(traceback.format_exc())  # noqa: T001
 
             for error in visitor.violations:
                 yield (*error.node_items(), type(self))

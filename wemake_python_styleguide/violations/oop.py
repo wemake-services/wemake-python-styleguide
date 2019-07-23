@@ -300,6 +300,12 @@ class WrongSlotsViolation(ASTViolation):
     """
     Forbids to have incorrect ``__slots__`` definition.
 
+    Things that this rule checks:
+
+    - That ``__slots__`` is a tuple, name, attribute, binop, or call
+    - That ``__slots__`` do not have duplicates
+    - That ``__slots__`` do not have empty strings or uppercase strings
+
     Reasoning:
         ``__slots__`` is a very special attribute.
         It completely changes your class. So, we need to be careful with it.
@@ -308,6 +314,7 @@ class WrongSlotsViolation(ASTViolation):
 
     Solution:
         Use tuples with unique elements to define ``__slots__`` attribute.
+        Use ``snake_case`` to define attributes in ``__slots__`.
 
     Example::
 
@@ -327,6 +334,7 @@ class WrongSlotsViolation(ASTViolation):
 
     .. versionadded:: 0.7.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.12.0
 
     """
 

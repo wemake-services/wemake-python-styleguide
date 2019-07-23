@@ -170,10 +170,12 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
 class WrongSlotsVisitor(base.BaseNodeVisitor):
     """Visits class attributes."""
 
-    _blacklisted_slots_nodes: ClassVar[types.AnyNodes] = (
-        ast.Dict,
-        ast.List,
-        ast.Set,
+    _whitelisted_slots_nodes: ClassVar[types.AnyNodes] = (
+        ast.Tuple,
+        ast.Attribute,
+        ast.Name,
+        ast.Call,
+        ast.BinOp,
     )
 
     def visit_any_assign(self, node: types.AnyAssign) -> None:
@@ -188,9 +190,7 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _contains_slots_assign(self, node: types.AnyAssign) -> bool:
-        targets = get_assign_targets(node)
-
-        for target in targets:
+        for target in get_assign_targets(node):
             if isinstance(target, ast.Name) and target.id == '__slots__':
                 return True
         return False
@@ -207,8 +207,8 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
                 return
             fields.append(tuple_item.s)
 
-        for _, counter in Counter(fields).items():
-            if counter > 1:
+        for slot, counter in Counter(fields).items():
+            if not slot or not slot.islower() or counter > 1:
                 self.add_violation(oop.WrongSlotsViolation(node))
                 return
 
@@ -219,7 +219,7 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
         if not self._contains_slots_assign(node):
             return
 
-        if isinstance(node.value, self._blacklisted_slots_nodes):
+        if not isinstance(node.value, self._whitelisted_slots_nodes):
             self.add_violation(oop.WrongSlotsViolation(node))
             return
 
@@ -317,11 +317,11 @@ class ClassMethodOrderVisitor(base.BaseNodeVisitor):
 
     def _ideal_order(self, first: str) -> int:
         if first == '__new__':
-            return 4
+            return 4  # highest priority
         if first == '__init__':
             return 3
         if access.is_protected(first):
             return 1
         if access.is_private(first):
-            return 0
+            return 0  # lowest priority
         return 2  # public and magic methods

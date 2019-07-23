@@ -38,12 +38,15 @@ In this release we had a little focus on:
   now handles `break` and `raise` statements as well
 - Fixes `WrongLoopIterTypeViolation` not triggering
   for generator expressions and empty tuples
+- Fixes `WrongSlotsViolation` not triggering
+  for comprehensions and inccorect `__slots__` names and types
 
 ### Misc
 
 - Adds `bellybutton` to the list of linters
 - Improves tests for binary, octal, hex, and expanetional numbers
 - Adds `xenon --max-absolute A --max-modules A --max-average A server` check
+- Now handles exceptions in our own code, hope to never see them!
 
 
 ## 0.11.1

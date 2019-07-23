@@ -15,19 +15,53 @@ class ClassWithSlots(object):
     __slots__: tuple = {0}
 """
 
+not_a_slot = """
+class ClassWithoutSlots(object):
+    some_other = {0}
+"""
+
+wrong_slots = (
+    '[]',
+    '["field", "other"]',
+    '[x for x in some()]',
+    '("",)',
+    '("A",)',
+    '("MyTest",)',
+    '(x for x in some())',
+    '("a", "a")',  # duplicate
+    '(1,)',
+    '(variable,)',
+    '{"name"}',
+    '{elem for elem in some_set()}',
+    '{1, 2}',
+    '("just string")',
+    '"string"',
+    '1',
+    '1.2',
+    '-1',
+    'None',
+    'False',
+)
+
+correct_slots = (
+    '()',
+    '("a",)',
+    '("a", "b")',
+    'SomeOther.__slots__',
+    'SomeOther.__slots__ + ("child",)',
+    'SomeOther.__slots__ + {"child"}',
+    'some_call()',
+    'some.attr',
+    'some.method()',
+    'Class.method(10, 10, "a")',
+)
+
 
 @pytest.mark.parametrize('template', [
     class_body_template,
     class_body_typed_template,
 ])
-@pytest.mark.parametrize('code', [
-    '[]',
-    '("a", "a")',
-    '(1,)',
-    '(variable,)',
-    '{"name"}',
-    '{1, 2}',
-])
+@pytest.mark.parametrize('code', wrong_slots)
 def test_incorrect_slots(
     assert_errors,
     parse_ast_tree,
@@ -48,15 +82,7 @@ def test_incorrect_slots(
     class_body_template,
     class_body_typed_template,
 ])
-@pytest.mark.parametrize('code', [
-    '()',
-    '("a",)',
-    '("a", "b")',
-    'SomeOther.__slots__',
-    'SomeOther.__slots__ + ("child",)',
-    'SomeOther.__slots__ + {"child"}',
-    'some_call()',
-])
+@pytest.mark.parametrize('code', correct_slots)
 def test_correct_slots(
     assert_errors,
     parse_ast_tree,
@@ -65,6 +91,26 @@ def test_correct_slots(
     template,
 ):
     """Testing that correct slots are allowed."""
+    tree = parse_ast_tree(template.format(code))
+
+    visitor = WrongSlotsVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('template', [
+    not_a_slot,
+])
+@pytest.mark.parametrize('code', wrong_slots + correct_slots)
+def test_not_slots(
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+    code,
+    template,
+):
+    """Testing that not slots are correct."""
     tree = parse_ast_tree(template.format(code))
 
     visitor = WrongSlotsVisitor(default_options, tree=tree)
