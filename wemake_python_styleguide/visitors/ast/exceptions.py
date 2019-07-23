@@ -24,6 +24,26 @@ from wemake_python_styleguide.violations.refactoring import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
+def _find_returing_nodes(node: ast.Try) -> Tuple[bool, bool, bool, bool]:
+    try_has = any(  # TODO: also check ast.Break
+        is_contained(line, self._bad_returning_nodes)
+        for line in node.body
+    )
+    except_has = any(
+        is_contained(except_handler, self._bad_returning_nodes)
+        for except_handler in node.handlers
+    )
+    else_has = any(
+        is_contained(line, self._bad_returning_nodes)
+        for line in node.orelse
+    )
+    finally_has = any(
+        is_contained(line, self._bad_returning_nodes)
+        for line in node.finalbody
+    )
+    return try_has, except_has, else_has, finally_has
+
+
 @final
 class WrongTryExceptVisitor(BaseNodeVisitor):
     """Responsible for examining ``try`` and friends."""
@@ -96,22 +116,7 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
                 )
 
     def _check_return_path(self, node: ast.Try) -> None:
-        try_has = any(  # TODO: also check ast.Break
-            is_contained(line, self._bad_returning_nodes)
-            for line in node.body
-        )
-        except_has = any(
-            is_contained(except_handler, self._bad_returning_nodes)
-            for except_handler in node.handlers
-        )
-        else_has = any(
-            is_contained(line, self._bad_returning_nodes)
-            for line in node.orelse
-        )
-        finally_has = any(
-            is_contained(line, self._bad_returning_nodes)
-            for line in node.finalbody
-        )
+        try_has, except_has, else_has, finally_has = _find_returing_nodes(node)
 
         if finally_has and (try_has or except_has or else_has):
             self.add_violation(TryExceptMultipleReturnPathViolation(node))

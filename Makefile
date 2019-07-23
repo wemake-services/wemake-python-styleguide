@@ -5,7 +5,7 @@ lint:
 	mypy wemake_python_styleguide
 	flake8 .
 	autopep8 -r . --diff --exclude=./tests/fixtures/** --exit-code
-	xenon --max-absolute A --max-modules A --max-average A server
+	xenon --max-absolute B --max-modules A --max-average A .
 	layer-lint --quiet wemake_python_styleguide
 	poetry run doc8 -q docs
 
