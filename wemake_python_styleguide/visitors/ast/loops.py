@@ -193,6 +193,7 @@ class WrongLoopDefinitionVisitor(BaseNodeVisitor):
         ast.DictComp,
         ast.Set,
         ast.SetComp,
+        ast.GeneratorExp,
     )
 
     def visit_any_for_loop(self, node: AnyForLoop) -> None:
@@ -224,5 +225,7 @@ class WrongLoopDefinitionVisitor(BaseNodeVisitor):
             self.add_violation(LoopVariableDefinitionViolation(node))
 
     def _check_explicit_iter_type(self, node: AnyForLoop) -> None:
-        if isinstance(node.iter, self._forbidden_for_iters):
+        is_wrong = isinstance(node.iter, self._forbidden_for_iters)
+        is_empty = isinstance(node.iter, ast.Tuple) and not node.iter.elts
+        if is_wrong or is_empty:
             self.add_violation(WrongLoopIterTypeViolation(node))

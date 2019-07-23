@@ -36,6 +36,8 @@ In this release we had a little focus on:
   returns at the same time
 - Fixes how `TryExceptMultipleReturnPathViolation` works:
   now handles `break` and `raise` statements as well
+- Fixes `WrongLoopIterTypeViolation` not triggering
+  for generator expressions and empty tuples
 
 ### Misc
 

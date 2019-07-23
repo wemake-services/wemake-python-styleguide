@@ -1359,16 +1359,25 @@ class ReversedComplexCompareViolation(ASTViolation):
 @final
 class WrongLoopIterTypeViolation(ASTViolation):
     """
-    Forbids to use lists and dicts as ``for`` loop iter targets.
+    Forbids to use wrong ``for`` loop iter targets.
+
+    We forbid to use:
+
+    - Lists and list comprehensions
+    - Sets and set comprehensions
+    - Dicts and dict comprehensions
+    - Generator expressions
+    - Empty tuples
 
     Reasoning:
-        Compares where comparators start from the lowest element
-        are easier to read than one that start from the biggest one.
-        It is also possible to write the same expression
-        in two separate way, which is incosistent.
+        Using lists, dicts, and sets do not make much sense.
+        You can use tuples instead.
+        Using comperehensions implicitly create a two level loops,
+        that are hard to read and deal with.
 
     Solution:
         Use tuples to create explicit iterables for ``for`` loops.
+        In case you are using a comperehension, create a new variable.
 
     Example::
 
@@ -1381,6 +1390,7 @@ class WrongLoopIterTypeViolation(ASTViolation):
             ...
 
     .. versionadded:: 0.10.0
+    .. versionchanged:: 0.12.0
 
     """
 

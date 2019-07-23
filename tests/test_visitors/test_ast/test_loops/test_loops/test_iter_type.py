@@ -17,6 +17,7 @@ def function():
 
 
 @pytest.mark.parametrize('code', [
+    '()',
     '[]',
     '[1, 2, 3]',
     '[elem for elem in call()]',
@@ -25,6 +26,7 @@ def function():
     '{"key": value for value in call()}',
     '{1, 2, 3}',
     '{set_item for set_item in call()}',
+    '(elem for elem in call())',
 ])
 def test_iter_incorrect_type(
     assert_errors,
@@ -43,7 +45,6 @@ def test_iter_incorrect_type(
 
 
 @pytest.mark.parametrize('code', [
-    '()',
     '(1, 2, 3)',
     'name',
     'call()',
