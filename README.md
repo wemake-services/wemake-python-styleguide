@@ -54,13 +54,14 @@ in the docs for examples and integrations.
 The ultimate goal of this project is
 to make all people write **exactly** the same `python` code.
 
-|                            | black | pylint | flake8 | wemake-python-styleguide |
-|----------------------------|-------|--------|--------|--------------------------|
-| Formats code?              |   ✅   |    ❌   |    ❌   |             ❌            |
-| Finds bugs?                |   ❌   |    ✅   |    🤔   |             ✅            |
-| Finds complex code?        |   ❌   |    ✅   |    🤔   |             ✅            |
-| Has a lot of strict rules? |   ❌   |    🤔   |    ❌   |             ✅            |
-| Has a lot of plugins?      |   ❌   |    ❌   |    ✅   |             ✅            |
+|                            | black | mypy | pylint | flake8 | wemake-python-styleguide |
+|----------------------------|-------|------|--------|--------|--------------------------|
+| Formats code?              |   ✅   |   ❌   |    ❌   |    ❌   |             ❌            |
+| Finds style issues?        |   ✅   |   ❌   |    ✅   |    ✅   |             ✅            |
+| Finds bugs?                |   ❌   |   ✅   |    ✅   |    🤔   |             ✅            |
+| Finds complex code?        |   ❌   |   ❌   |    ✅   |    🤔   |             ✅            |
+| Has a lot of strict rules? |   ❌   |   ❌   |    🤔   |    ❌   |             ✅            |
+| Has a lot of plugins?      |   ❌   |   ❌   |    ❌   |    ✅   |             ✅            |
 
 We have several primary objectives:
 
@@ -76,7 +77,7 @@ You can find all error codes and plugins [in the docs](https://wemake-python-sty
 
 We are *not* planning to do the following things:
 
-0. Assume or check types, use `mypy` instead
+0. Assume or check types, use `mypy` together with our linter
 1. Reformat code, since we believe that developers should do that
 2. Check for `SyntaxError` or logical bugs, write tests instead
 3. Appeal to everyone. But, you can [switch off](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage/setup.html#ignoring-violations) any rules that you don't like

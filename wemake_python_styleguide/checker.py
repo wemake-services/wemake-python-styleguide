@@ -81,10 +81,10 @@ class Checker(object):
     name: ClassVar[str] = pkg_version.pkg_name
     version: ClassVar[str] = pkg_version.pkg_version
 
-    config = Configuration()
     options: types.ConfigurationOptions
+    config = Configuration()
 
-    visitors: ClassVar[Sequence[VisitorClass]] = (
+    _visitors: ClassVar[Sequence[VisitorClass]] = (
         *general.GENERAL_PRESET,
         *complexity.COMPLEXITY_PRESET,
         *tokens.TOKENS_PRESET,
@@ -150,7 +150,7 @@ class Checker(object):
             Violations that were found by the passed visitors.
 
         """
-        yield from self._run_checks(self.visitors)
+        yield from self._run_checks(self._visitors)
 
     def _run_checks(
         self,
@@ -162,7 +162,7 @@ class Checker(object):
 
             try:
                 visitor.run()
-            except Exception:  # pragma: no cover
+            except Exception:
                 # In case we fail misserably, we want users to see at
                 # least something! Full stack trace
                 # and some rules that still work.

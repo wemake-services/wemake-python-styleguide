@@ -40,6 +40,8 @@ In this release we had a little focus on:
   for generator expressions and empty tuples
 - Fixes `WrongSlotsViolation` not triggering
   for comprehensions and inccorect `__slots__` names and types
+- Fixes `NestedClassViolation` and `NestedFunctionViolation` not reporting
+  when placed deeply inside other nodes
 
 ### Misc
 
@@ -47,6 +49,8 @@ In this release we had a little focus on:
 - Improves tests for binary, octal, hex, and expanetional numbers
 - Adds `xenon --max-absolute A --max-modules A --max-average A server` check
 - Now handles exceptions in our own code, hope to never see them!
+- Now uses `coverage` checks in deepsource
+- Now `@alias` checks that all aliases are valid
 
 
 ## 0.11.1

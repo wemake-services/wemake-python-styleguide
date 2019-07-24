@@ -8,7 +8,8 @@ from typing_extensions import final
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic.collections import normalize_dict_elements
 from wemake_python_styleguide.logic.functions import get_all_arguments
-from wemake_python_styleguide.logic.nodes import get_parent, is_doc_string
+from wemake_python_styleguide.logic.nodes import get_parent
+from wemake_python_styleguide.logic.strings import is_doc_string
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     StatementHasNoEffectViolation,

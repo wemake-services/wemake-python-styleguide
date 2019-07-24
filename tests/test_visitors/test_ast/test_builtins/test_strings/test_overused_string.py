@@ -118,7 +118,6 @@ def test_string_overuse(
 ])
 def test_string_type_annotations(
     assert_errors,
-    assert_error_text,
     parse_ast_tree,
     options,
     strings,

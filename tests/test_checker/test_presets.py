@@ -64,7 +64,10 @@ def all_visitors():
 
 def test_all_visitors_contained_in_checker(all_visitors):
     """Ensures that all visitors are contained in a checker."""
-    checker_visitors = {klass.__qualname__ for klass in Checker.visitors}
+    checker_visitors = {
+        klass.__qualname__
+        for klass in Checker._visitors  # noqa: WPS437
+    }
 
     for visitor in all_visitors:
         assert visitor.__qualname__ in checker_visitors

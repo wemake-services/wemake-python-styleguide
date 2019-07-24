@@ -72,7 +72,6 @@ def test_correct_float(
 def test_double_incorrect_float(
     parse_tokens,
     assert_errors,
-    assert_error_text,
     default_options,
     primitives_usages,
     primitive,

@@ -11,7 +11,13 @@ from wemake_python_styleguide.constants import (
     FUNCTIONS_BLACKLIST,
     UNUSED_VARIABLE,
 )
-from wemake_python_styleguide.logic import functions, nodes, operators
+from wemake_python_styleguide.logic import (
+    exceptions,
+    functions,
+    nodes,
+    operators,
+    walk,
+)
 from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
@@ -208,8 +214,8 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
         if not functions.is_generator(node):
             return
 
-        for sub_node in nodes.get_subnodes_by_type(node, ast.Raise):
-            if nodes.get_exception_name(sub_node) == 'StopIteration':
+        for sub_node in walk.get_subnodes_by_type(node, ast.Raise):
+            if exceptions.get_exception_name(sub_node) == 'StopIteration':
                 self.add_violation(
                     StopIterationInsideGeneratorViolation(sub_node),
                 )

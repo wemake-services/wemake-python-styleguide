@@ -37,6 +37,7 @@ flake8-debugger                `T100 <https://github.com/JBKahn/flake8-debugger/
 flake8-annotations-complexity  `TAE002 <https://github.com/best-doctor/flake8-annotations-complexity>`_
 flake8-rst-docstrings          `RST201 - RST499 <https://github.com/peterjc/flake8-rst-docstrings>`_
 flake8-executable              `EXE001 - EXE005 <https://github.com/xuhdev/flake8-executable>`_
+radon                          `R701 <https://radon.readthedocs.io/en/latest/flake8.html>`_
 wemake-python-styleguide       WPS, defined here
 =============================  ======
 

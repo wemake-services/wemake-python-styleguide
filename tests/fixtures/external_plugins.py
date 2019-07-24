@@ -38,7 +38,15 @@ string'
 
 print('test')
 
+
 def complex_annotation(
     first: List[Union[List[str], Dict[str, Dict[str, str]]]],
 ):
     ...
+
+
+def radon_check(for_data):
+    for first in for_data:
+        for second in for_data:
+            for third in for_data:
+                assert first == second == third

@@ -9,13 +9,14 @@ from typing_extensions import final
 from wemake_python_styleguide import constants, types
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
-from wemake_python_styleguide.logic import classes, functions
-from wemake_python_styleguide.logic.naming import access
-from wemake_python_styleguide.logic.nodes import (
-    get_context,
-    is_contained,
-    is_doc_string,
+from wemake_python_styleguide.logic import (
+    classes,
+    functions,
+    nodes,
+    strings,
+    walk,
 )
+from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.violations import best_practices as bp
 from wemake_python_styleguide.violations import consistency, oop
 from wemake_python_styleguide.visitors import base, decorators
@@ -90,7 +91,7 @@ class WrongClassVisitor(base.BaseNodeVisitor):
         for sub_node in node.body:
             if isinstance(sub_node, self._allowed_body_nodes):
                 continue
-            if is_doc_string(sub_node):
+            if strings.is_doc_string(sub_node):
                 continue
             self.add_violation(oop.WrongClassBodyContentViolation(sub_node))
 
@@ -135,7 +136,7 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
                 self.add_violation(oop.StaticMethodViolation(node))
 
     def _check_bound_methods(self, node: types.AnyFunctionDef) -> None:
-        node_context = get_context(node)
+        node_context = nodes.get_context(node)
         if not isinstance(node_context, ast.ClassDef):
             return
 
@@ -158,7 +159,7 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
 
     def _check_method_contents(self, node: types.AnyFunctionDef) -> None:
         if node.name == constants.INIT:
-            if is_contained(node, self._not_appropriate_for_init):
+            if walk.is_contained(node, self._not_appropriate_for_init):
                 self.add_violation(bp.YieldInsideInitViolation(node))
 
 
@@ -213,7 +214,7 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
                 return
 
     def _check_slots(self, node: types.AnyAssign) -> None:
-        if not isinstance(get_context(node), ast.ClassDef):
+        if not isinstance(nodes.get_context(node), ast.ClassDef):
             return
 
         if not self._contains_slots_assign(node):
@@ -267,9 +268,11 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
             if isinstance(child, ast.Attribute):
                 if isinstance(child.ctx, ast.Store):
                     instance_attributes.append(child)
-            if isinstance(child, AssignNodes) and get_context(child) == node:
-                if child.value is not None:  # Not: `a: int`
+
+            if isinstance(child, AssignNodes):
+                if nodes.get_context(child) == node and child.value:
                     class_attributes.append(child)
+
         return class_attributes, instance_attributes
 
     def _check_attributes_shadowing(self, node: ast.ClassDef) -> None:
@@ -306,7 +309,7 @@ class ClassMethodOrderVisitor(base.BaseNodeVisitor):
 
         for subnode in ast.walk(node):
             if isinstance(subnode, FunctionNodes):
-                if get_context(subnode) == node:
+                if nodes.get_context(subnode) == node:
                     method_nodes.append(subnode.name)
 
         ideal = sorted(method_nodes, key=self._ideal_order, reverse=True)

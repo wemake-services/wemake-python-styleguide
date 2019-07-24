@@ -71,7 +71,6 @@ def test_hex_correct_case(
 def test_hex_double_wrong_case(
     parse_tokens,
     assert_errors,
-    assert_error_text,
     default_options,
     hex_char,
     number,

@@ -5,7 +5,7 @@ from typing import Container, List, Optional
 
 import astor
 
-from wemake_python_styleguide.logic.nodes import is_contained
+from wemake_python_styleguide.logic.walk import is_contained
 from wemake_python_styleguide.types import (
     AnyFunctionDef,
     AnyFunctionDefAndLambda,

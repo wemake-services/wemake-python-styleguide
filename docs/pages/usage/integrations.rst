@@ -180,7 +180,7 @@ please, let us know!
 black
 ~~~~~
 
-``wemake-python-styleguide`` is not compatible to ``black``.
+``wemake-python-styleguide`` is not compatible with ``black``.
 Let's go deeper and see why.
 
 ``black`` itself is actually not compatible with ``PEP8`` and ``flake8``

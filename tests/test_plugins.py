@@ -37,6 +37,7 @@ def _assert_plugin_output(output):
     assert output.count('TAE002') > 0  # flake8-annotations-complexity
     assert output.count('RST299') > 0  # flake8-rst-docstrings
     assert output.count('EXE003') > 0  # flake8-executable
+    assert output.count('R701') > 0  # radon
 
 
 def test_external_plugins(absolute_path):
@@ -47,6 +48,8 @@ def test_external_plugins(absolute_path):
             'flake8',
             '--disable-noqa',
             '--isolated',
+            '--radon-max-cc',  # without this line radon will not trigger
+            '1',
             '--enable-extensions',
             'G',
             filename,
@@ -81,6 +84,8 @@ def test_external_plugins_diff(absolute_path):
             'flake8',
             '--disable-noqa',
             '--isolated',
+            '--radon-max-cc',
+            '1',
             '--enable-extensions',
             'G',
             '--diff',  # is required to test diffs! ;)

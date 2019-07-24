@@ -9,7 +9,8 @@ from wemake_python_styleguide.constants import (
     NESTED_CLASSES_WHITELIST,
     NESTED_FUNCTIONS_WHITELIST,
 )
-from wemake_python_styleguide.logic.nodes import get_parent
+from wemake_python_styleguide.logic.nodes import get_context, get_parent
+from wemake_python_styleguide.logic.walk import is_child_of
 from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations.best_practices import (
     NestedClassViolation,
@@ -72,21 +73,28 @@ class NestedComplexityVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_nested_function(self, node: AnyFunctionDef) -> None:
-        is_inside_function = isinstance(get_parent(node), FunctionNodes)
+        is_inside_function = isinstance(get_context(node), FunctionNodes)
 
-        if is_inside_function and node.name not in NESTED_FUNCTIONS_WHITELIST:
+        is_direct = isinstance(get_parent(node), FunctionNodes)
+        is_bad = is_direct and node.name not in NESTED_FUNCTIONS_WHITELIST
+
+        if is_bad or (is_inside_function and not is_direct):
             self.add_violation(NestedFunctionViolation(node, text=node.name))
 
     def _check_nested_classes(self, node: ast.ClassDef) -> None:
-        parent = get_parent(node)
-        is_inside_class = isinstance(parent, ast.ClassDef)
-        is_inside_function = isinstance(parent, FunctionNodes)
+        parent_context = get_context(node)
 
-        if is_inside_class and node.name not in NESTED_CLASSES_WHITELIST:
-            self.add_violation(NestedClassViolation(node, text=node.name))
-        elif is_inside_function:
+        is_inside_class = isinstance(parent_context, ast.ClassDef)
+        is_bad = is_inside_class and node.name not in NESTED_CLASSES_WHITELIST
+
+        is_inside_function = isinstance(parent_context, FunctionNodes)
+
+        if is_bad or is_inside_function:
             self.add_violation(NestedClassViolation(node, text=node.name))
 
     def _check_nested_lambdas(self, node: ast.Lambda) -> None:
-        if isinstance(get_parent(node), ast.Lambda):
+        is_direct = isinstance(get_context(node), ast.Lambda)
+        is_deep = is_child_of(node, ast.Lambda)
+
+        if is_direct or is_deep:
             self.add_violation(NestedFunctionViolation(node, text='lambda'))

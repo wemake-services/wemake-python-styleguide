@@ -87,7 +87,7 @@ def test_formatter(snapshot, cli_options, output):
     (['--show-source', '--statistic'], 'with_source_statistic'),
     (['--statistic', '--show-source'], 'statistic_with_source'),
 ])
-def test_formatter_correct(snapshot, monkeypatch, cli_options, output):
+def test_formatter_correct(snapshot, cli_options, output):
     """All correct code should not raise any violations and no output."""
     filename = './tests/fixtures/correct.py'
 

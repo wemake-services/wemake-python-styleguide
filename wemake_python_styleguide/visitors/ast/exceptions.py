@@ -7,7 +7,7 @@ from typing import ClassVar, List, Tuple
 import astor
 from typing_extensions import final
 
-from wemake_python_styleguide.logic.nodes import is_contained
+from wemake_python_styleguide.logic.walk import is_contained
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     BaseExceptionViolation,

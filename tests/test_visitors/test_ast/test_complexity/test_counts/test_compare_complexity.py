@@ -71,7 +71,6 @@ def test_module_compare_counts_normal(
     long_only_non_equals,
 ])
 def test_module_compare_counts_violation(
-    monkeypatch,
     assert_errors,
     parse_ast_tree,
     code,

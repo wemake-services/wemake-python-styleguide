@@ -17,8 +17,12 @@ install: poetry install
 script: make test
 
 after_success:
+  # Send coverage to coveralls:
   - pip install coveralls
   - coveralls
+  # Send coverage to deepsource:
+  - curl https://deepsource.io/cli | sh
+  - ./bin/deepsource report --analyzer test-coverage --key python --value-file ./coverage.xml
 
 notifications:
   email:
