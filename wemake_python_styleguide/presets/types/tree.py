@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from typing_extensions import Final
+
+from wemake_python_styleguide.presets.topics import complexity
 from wemake_python_styleguide.visitors.ast import (
     annotations,
     attributes,
@@ -16,12 +19,9 @@ from wemake_python_styleguide.visitors.ast import (
     naming,
     statements,
 )
-from wemake_python_styleguide.visitors.filenames.module import (
-    WrongModuleNameVisitor,
-)
 
 #: Used to store all general visitors to be later passed to checker:
-GENERAL_PRESET = (
+PRESET: Final = (
     # General:
     statements.StatementsWithBodiesVisitor,
     statements.WrongParametersIndentationVisitor,
@@ -75,8 +75,10 @@ GENERAL_PRESET = (
     classes.ClassMethodOrderVisitor,
 
     # Modules:
-    WrongModuleNameVisitor,
     modules.EmptyModuleContentsVisitor,
     modules.MagicModuleFunctionsVisitor,
     modules.ModuleConstantsVisitor,
+
+    # Complexity:
+    *complexity.PRESET,
 )

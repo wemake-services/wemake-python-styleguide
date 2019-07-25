@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from typing_extensions import Final
+
 from wemake_python_styleguide.visitors.ast.complexity import (
     classes,
     counts,
@@ -10,7 +12,7 @@ from wemake_python_styleguide.visitors.ast.complexity import (
 )
 
 #: Used to store all complexity related visitors to be later passed to checker:
-COMPLEXITY_PRESET = (
+PRESET: Final = (
     function.FunctionComplexityVisitor,
 
     jones.JonesComplexityVisitor,

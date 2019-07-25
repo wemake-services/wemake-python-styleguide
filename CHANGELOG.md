@@ -14,6 +14,8 @@ In this release we had a little focus on:
 
 ### Features
 
+- Adds `xenon` as a dependency, it also checks for cyclomatic complexity,
+  but uses more advanced algorithm with better results
 - Forbids to have modules with too many imported names
   configured by `--max-imported-names` option which is 50 by default
 - Forbids to raise `StopIteration` inside generators
@@ -51,6 +53,7 @@ In this release we had a little focus on:
 - Now handles exceptions in our own code, hope to never see them!
 - Now uses `coverage` checks in deepsource
 - Now `@alias` checks that all aliases are valid
+- Changes how presets are defined
 
 
 ## 0.11.1

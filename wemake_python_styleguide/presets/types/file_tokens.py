@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from typing_extensions import Final
+
 from wemake_python_styleguide.visitors.tokenize import (
     comments,
     conditions,
@@ -9,7 +11,7 @@ from wemake_python_styleguide.visitors.tokenize import (
 )
 
 #: Used to store all token related visitors to be later passed to checker:
-TOKENS_PRESET = (
+PRESET: Final = (
     comments.WrongCommentVisitor,
     comments.FileMagicCommentsVisitor,
 
