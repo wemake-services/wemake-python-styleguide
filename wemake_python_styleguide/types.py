@@ -54,6 +54,12 @@ AnyFunctionDefAndLambda = Union[AnyFunctionDef, ast.Lambda]
 #: In cases we need to work with both forms of if functions.
 AnyIf = Union[ast.If, ast.IfExp]
 
+#: In cases we need to work with both sync and async loops.
+AnyFor = Union[ast.For, ast.AsyncFor]
+
+#: In cases we need to work with both sync and async context managers.
+AnyWith = Union[ast.With, ast.AsyncWith]
+
 #: Flake8 API format to return error messages.
 CheckResult = Tuple[int, int, str, type]
 

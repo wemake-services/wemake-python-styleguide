@@ -12,7 +12,7 @@ from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.variables import (
     is_valid_block_variable_definition,
 )
-from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
+from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, AnyWith
 from wemake_python_styleguide.violations.best_practices import (
     ContextManagerVariableDefinitionViolation,
     RaiseNotImplementedViolation,
@@ -27,7 +27,6 @@ from wemake_python_styleguide.violations.consistency import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
-AnyWith = Union[ast.With, ast.AsyncWith]
 NamesAndReturns = Tuple[
     Dict[str, List[ast.Name]],
     Dict[str, ast.Return],

@@ -302,7 +302,7 @@ class LoopVariableDefinitionViolation(ASTViolation):
             ...
 
         # Wrong:
-        for context['pepson'] in database.people():
+        for context['person'] in database.people():
             ...
 
     .. versionadded:: 0.8.0

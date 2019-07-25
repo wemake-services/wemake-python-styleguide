@@ -18,33 +18,59 @@ spread_assignment1 = '{0}, *second = [1, 2, 3]'
 spread_assignment2 = 'first, *{0} = [1, 2, 3]'
 
 for_assignment = """
-for {0} in []:
-    ...
+def wrapper():
+    for {0} in []:
+        ...
 """
 
 for_unpacking1 = """
-for {0}, second in enumerate([]):
-    ...
+def wrapper():
+    for {0}, second in enumerate([]):
+        ...
 """
 
 for_unpacking2 = """
-for first, {0} in enumerate([]):
-    ...
+def wrapper():
+    for first, {0} in enumerate([]):
+        ...
+"""
+
+list_comprehension = """
+def wrapper():
+    comp = [1 for first, {0} in enumerate([])]
+"""
+
+dict_comprehension = """
+def wrapper():
+    comp = {{'1': 1 for first, {0} in enumerate([])}}
+"""
+
+set_comprehension = """
+def wrapper():
+    comp = {{1 for {0}, second in enumerate([])}}
+"""
+
+generator_expression = """
+def wrapper():
+    comp = (1 for first, {0} in enumerate([]))
 """
 
 with_assignment = """
-with some() as {0}:
-    ...
+def wrapper():
+    with some() as {0}:
+        ...
 """
 
 with_unpacking1 = """
-with some() as ({0}, second):
-    ...
+def wrapper():
+    with some() as ({0}, second):
+        ...
 """
 
 with_unpacking2 = """
-with some() as (first, {0}):
-    ...
+def wrapper():
+    with some() as (first, {0}):
+        ...
 """
 
 
@@ -57,6 +83,10 @@ with some() as (first, {0}):
     for_assignment,
     for_unpacking1,
     for_unpacking2,
+    list_comprehension,
+    dict_comprehension,
+    set_comprehension,
+    generator_expression,
     with_assignment,
     with_unpacking1,
     with_unpacking2,
@@ -66,9 +96,10 @@ def test_correct_unpacking(
     parse_ast_tree,
     code,
     default_options,
+    mode,
 ):
     """Testing that correct assignments work."""
-    tree = parse_ast_tree(code.format('some_name'))
+    tree = parse_ast_tree(mode(code.format('some_name')))
 
     visitor = WrongAssignmentVisitor(default_options, tree=tree)
     visitor.run()
@@ -86,9 +117,10 @@ def test_correct_assignment(
     parse_ast_tree,
     assignment,
     default_options,
+    mode,
 ):
     """Testing that correct assignments work."""
-    tree = parse_ast_tree(single_assignment.format(assignment))
+    tree = parse_ast_tree(mode(single_assignment.format(assignment)))
 
     visitor = WrongAssignmentVisitor(default_options, tree=tree)
     visitor.run()
@@ -103,13 +135,20 @@ def test_correct_assignment(
     spread_assignment2,
     for_unpacking1,
     for_unpacking2,
+    list_comprehension,
+    dict_comprehension,
+    set_comprehension,
+    generator_expression,
     with_unpacking1,
     with_unpacking2,
 ])
 @pytest.mark.parametrize('assignment', [
     'some[0]',
     'some["key"]',
+    'some[obj]',
     'some.attr',
+    'some[0]["key"]',
+    'some["key"][0]',
 ])
 def test_multiple_assignments(
     assert_errors,
@@ -117,9 +156,10 @@ def test_multiple_assignments(
     code,
     assignment,
     default_options,
+    mode,
 ):
     """Testing that multiple assignments are restricted."""
-    tree = parse_ast_tree(code.format(assignment))
+    tree = parse_ast_tree(mode(code.format(assignment)))
 
     visitor = WrongAssignmentVisitor(default_options, tree=tree)
     visitor.run()

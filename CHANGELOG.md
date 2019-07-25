@@ -29,6 +29,7 @@ In this release we had a little focus on:
 - Forbids to have unicode escape characters inside binary strings
 - Forbids to use `else if` instead of `elif`
 - Forbids to have too long `try` bodies
+- Forbids to use existing variables for new block definitions
 
 ### Bugfixes
 
@@ -44,6 +45,9 @@ In this release we had a little focus on:
   for comprehensions and inccorect `__slots__` names and types
 - Fixes `NestedClassViolation` and `NestedFunctionViolation` not reporting
   when placed deeply inside other nodes
+- Fixes when `WrongUnpackingViolation` was not raised
+  for `async for` and `async with` nodes
+- Fixes when `WrongUnpackingViolation` was not raised for comprehensions
 
 ### Misc
 

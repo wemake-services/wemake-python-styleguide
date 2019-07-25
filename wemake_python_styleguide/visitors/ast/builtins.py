@@ -15,7 +15,12 @@ from wemake_python_styleguide.logic.operators import (
     get_parent_ignoring_unary,
     unwrap_unary_node,
 )
-from wemake_python_styleguide.types import AnyNodes, AnyUnaryOp
+from wemake_python_styleguide.types import (
+    AnyFor,
+    AnyNodes,
+    AnyUnaryOp,
+    AnyWith,
+)
 from wemake_python_styleguide.violations.best_practices import (
     MagicNumberViolation,
     MultipleAssignmentsViolation,
@@ -30,6 +35,7 @@ from wemake_python_styleguide.violations.consistency import (
     UselessOperatorsViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
+from wemake_python_styleguide.visitors.decorators import alias
 
 
 @final
@@ -161,10 +167,18 @@ class UselessOperatorsVisitor(BaseNodeVisitor):
 
 
 @final
+@alias('visit_any_for', (
+    'visit_For',
+    'visit_AsyncFor',
+))
+@alias('visit_any_with', (
+    'visit_With',
+    'visit_AsyncWith',
+))
 class WrongAssignmentVisitor(BaseNodeVisitor):
     """Visits all assign nodes."""
 
-    def visit_With(self, node: ast.With) -> None:
+    def visit_any_with(self, node: AnyWith) -> None:
         """
         Checks assignments inside context managers to be correct.
 
@@ -179,7 +193,19 @@ class WrongAssignmentVisitor(BaseNodeVisitor):
                 )
         self.generic_visit(node)
 
-    def visit_For(self, node: ast.For) -> None:
+    def visit_comprehension(self, node: ast.comprehension) -> None:
+        """
+        Checks comprehensions for the correct assignments.
+
+        Raises:
+            WrongUnpackingViolation
+
+        """
+        if isinstance(node.target, ast.Tuple):
+            self._check_unpacking_targets(node.target, node.target.elts)
+        self.generic_visit(node)
+
+    def visit_any_for(self, node: AnyFor) -> None:
         """
         Checks assignments inside ``for`` loops to be correct.
 

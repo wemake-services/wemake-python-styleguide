@@ -5,12 +5,17 @@ from typing import ClassVar, Mapping, Optional, Sequence, Union
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.compat.aliases import ForNodes, FunctionNodes
 from wemake_python_styleguide.logic.collections import normalize_dict_elements
 from wemake_python_styleguide.logic.functions import get_all_arguments
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.strings import is_doc_string
-from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
+from wemake_python_styleguide.types import (
+    AnyFor,
+    AnyFunctionDef,
+    AnyNodes,
+    AnyWith,
+)
 from wemake_python_styleguide.violations.best_practices import (
     StatementHasNoEffectViolation,
     UnreachableCodeViolation,
@@ -24,11 +29,9 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 StatementWithBody = Union[
     ast.If,
-    ast.For,
-    ast.AsyncFor,
+    AnyFor,
     ast.While,
-    ast.With,
-    ast.AsyncWith,
+    AnyWith,
     ast.Try,
     ast.ExceptHandler,
     AnyFunctionDef,
@@ -79,11 +82,9 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         ast.Module,
     )
 
-    # FIXME: not typed, `mypy` will complain about `isinstance` calls
     _nodes_with_orelse = (
         ast.If,
-        ast.For,
-        ast.AsyncFor,
+        *ForNodes,
         ast.While,
         ast.Try,
     )

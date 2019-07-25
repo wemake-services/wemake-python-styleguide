@@ -15,5 +15,11 @@ from typing_extensions import Final
 #: We need this tuple to easily check that this is a real assign node.
 AssignNodes: Final = (ast.Assign, ast.AnnAssign)
 
-#: We need this tuple since `async def` now has its own ast class.
+#: We need this tuple since ``async def`` now has its own ast class.
 FunctionNodes: Final = (ast.FunctionDef, ast.AsyncFunctionDef)
+
+#: We need this tuple since ``ast.AsyncFor``` was introduced.
+ForNodes: Final = (ast.For, ast.AsyncFor)
+
+#: We need this tuple since ``ast.AsyncWith`` was introduced.
+WithNodes: Final = (ast.With, ast.AsyncWith)

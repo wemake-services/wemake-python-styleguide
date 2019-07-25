@@ -6,12 +6,13 @@ from typing import ClassVar, DefaultDict, List, Optional, Union
 
 from typing_extensions import final
 
+from wemake_python_styleguide.compat.aliases import ForNodes
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.variables import (
     is_valid_block_variable_definition,
 )
 from wemake_python_styleguide.logic.walk import is_contained
-from wemake_python_styleguide.types import AnyNodes
+from wemake_python_styleguide.types import AnyFor, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     LambdaInsideLoopViolation,
     LoopVariableDefinitionViolation,
@@ -31,8 +32,7 @@ from wemake_python_styleguide.violations.refactoring import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
-AnyForLoop = Union[ast.For, ast.AsyncFor]
-AnyLoop = Union[ast.For, ast.While, ast.AsyncFor]
+AnyLoop = Union[AnyFor, ast.While]
 AnyComprehension = Union[
     ast.ListComp,
     ast.DictComp,
@@ -146,7 +146,7 @@ class WrongLoopVisitor(BaseNodeVisitor):
         closest_loop = None
 
         for subnode in ast.walk(node):
-            if isinstance(subnode, (ast.For, ast.AsyncFor, ast.While)):
+            if isinstance(subnode, (*ForNodes, ast.While)):
                 if subnode is not node:
                     closest_loop = subnode
 
@@ -197,7 +197,7 @@ class WrongLoopDefinitionVisitor(BaseNodeVisitor):
         ast.GeneratorExp,
     )
 
-    def visit_any_for_loop(self, node: AnyForLoop) -> None:
+    def visit_any_for_loop(self, node: AnyFor) -> None:
         """
         Ensures that ``for`` loop definitions are correct.
 
@@ -225,7 +225,7 @@ class WrongLoopDefinitionVisitor(BaseNodeVisitor):
         if not is_valid_block_variable_definition(node):
             self.add_violation(LoopVariableDefinitionViolation(node))
 
-    def _check_explicit_iter_type(self, node: AnyForLoop) -> None:
+    def _check_explicit_iter_type(self, node: AnyFor) -> None:
         is_wrong = isinstance(node.iter, self._forbidden_for_iters)
         is_empty = isinstance(node.iter, ast.Tuple) and not node.iter.elts
         if is_wrong or is_empty:
