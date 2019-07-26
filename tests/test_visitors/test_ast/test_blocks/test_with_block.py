@@ -105,10 +105,8 @@ def test_with_block_overlap(
 ])
 def test_with_block_usage(
     assert_errors,
-    assert_error_text,
     parse_ast_tree,
     with_statement,
-    assign_statement,
     context,
     variable_name,
     default_options,

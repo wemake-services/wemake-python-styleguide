@@ -27,16 +27,17 @@ def test_violation_name(all_violations):
 def test_configuration(all_violations):
     """Ensures that all configuration options are listed in the docs."""
     option_listed = {
-        option.long_option_name: False for option in Configuration.options
+        option.long_option_name: False
+        for option in Configuration.options
     }
 
     for violation in all_violations:
-        for option in option_listed.keys():
-            if option in violation.__doc__:
-                option_listed[option] = True
+        for listed in option_listed:
+            if listed in violation.__doc__:
+                option_listed[listed] = True
 
                 assert 'Configuration:' in violation.__doc__
                 assert 'Default:' in violation.__doc__
 
-    for option, is_listed in option_listed.items():
-        assert is_listed, option
+    for option_item, is_listed in option_listed.items():
+        assert is_listed, option_item

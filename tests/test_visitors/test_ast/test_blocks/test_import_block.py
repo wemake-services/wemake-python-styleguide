@@ -88,7 +88,6 @@ def test_import_block_overlap(
 ])
 def test_import_block_usage(
     assert_errors,
-    assert_error_text,
     parse_ast_tree,
     import_statement,
     context,

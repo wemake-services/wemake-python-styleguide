@@ -1579,5 +1579,5 @@ class BlockAndLocalOverlapViolation(ASTViolation):
 
     """
 
-    error_template = 'Found block and local variable overlap: {0}'
+    error_template = 'Found block variables overlap: {0}'
     code = 440

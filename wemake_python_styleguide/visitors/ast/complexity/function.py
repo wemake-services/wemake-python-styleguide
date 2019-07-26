@@ -148,16 +148,19 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_function_internals(self) -> None:
-        for node, variables in self._counter.variables.items():
+        for var_node, variables in self._counter.variables.items():
             if len(variables) > self.options.max_local_variables:
                 self.add_violation(
-                    TooManyLocalsViolation(node, text=str(len(variables))),
+                    TooManyLocalsViolation(var_node, text=str(len(variables))),
                 )
 
-        for node, expressions in self._counter.expressions.items():
+        for exp_node, expressions in self._counter.expressions.items():
             if expressions > self.options.max_expressions:
                 self.add_violation(
-                    TooManyExpressionsViolation(node, text=str(expressions)),
+                    TooManyExpressionsViolation(
+                        exp_node,
+                        text=str(expressions),
+                    ),
                 )
 
     def _check_function_signature(self) -> None:

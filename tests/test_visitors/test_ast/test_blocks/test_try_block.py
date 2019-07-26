@@ -153,10 +153,8 @@ def test_except_block_overlap(
 ])
 def test_except_block_usage(
     assert_errors,
-    assert_error_text,
     parse_ast_tree,
     except_statement,
-    assign_statement,
     context,
     variable_name,
     default_options,

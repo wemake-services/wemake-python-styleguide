@@ -66,7 +66,8 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
             BlockAndLocalOverlapViolation
 
         """
-        self._scope(node, {node.name}, is_local=False)
+        names = {node.name} if node.name else set()
+        self._scope(node, names, is_local=False)
         self.generic_visit(node)
 
     def visit_any_for(self, node: AnyFor) -> None:
@@ -106,7 +107,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
         """
         if node.optional_vars:
             self._scope(
-                node,
+                cast(ast.AST, get_parent(node)),
                 _extract_names(node.optional_vars),
                 is_local=False,
             )
@@ -137,7 +138,6 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
         names: Set[str],
         *,
         is_local: bool,
-        is_usage: bool = False,
     ) -> None:
         scope = _Scope(node)
         shadow = scope.shadowing(names, is_local=is_local)
@@ -187,7 +187,7 @@ class _Scope(object):
         if not is_local:
             # Why do we care to update the scope for block variables?
             # Because, block variables cannot shadow
-            scope = self._get_scope(is_local=True)
+            scope = self._get_scope(is_local=is_local)
             current_names = current_names.union(scope[self._context])
 
         return set(current_names).intersection(names)

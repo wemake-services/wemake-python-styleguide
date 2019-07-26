@@ -53,7 +53,7 @@ def function_name(
 
 
 def some():  # noqa: WPS110
-    from my_module import some_function  # noqa: WPS433
+    from my_module import some_import  # noqa: WPS433
 
     class Nested(object):  # noqa: WPS431
         ...  # noqa: WPS428, WPS604
@@ -219,7 +219,7 @@ if '6' in nodes in '6':  # noqa: WPS311
 assert hex_number == hex_number  # noqa: WPS312
 
 
-async def test_function():
+async def test_async_function():
     return(123, 33)  # noqa: WPS313
 
 
@@ -227,7 +227,7 @@ if True:  # noqa: WPS314
     anti_z444 = 1
 
 
-class SomeClass(FirstParent, SecondParent, object):  # noqa: WPS315
+class SomeTestClass(FirstParent, SecondParent, object):  # noqa: WPS315
     anti_z444 = 1
 
 
@@ -285,7 +285,7 @@ try:
 except Exception as ex:  # noqa: WPS329
     raise ex
 
-def some_function():
+def some_other_function():
     some_value = 1
     return some_value  # noqa: WPS331
 
@@ -344,8 +344,8 @@ class Example(object):
         yield 10
 
 
-for index in range(6):  # noqa: WPS426
-    print(lambda: index)
+for loop_index in range(6):  # noqa: WPS426
+    print(lambda: loop_index)
 
 
 async def function_with_unreachable():

@@ -112,9 +112,9 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
                     has_values = True
                 returns.append(sub_node)
 
-        for sub_node in returns:
-            if not sub_node.value and has_values:
-                self.add_violation(violation(sub_node))
+        for return_node in returns:
+            if not return_node.value and has_values:
+                self.add_violation(violation(return_node))
 
     def _check_return_values(self, node: AnyFunctionDef) -> None:
         self._iterate_returning_values(
