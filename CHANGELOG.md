@@ -29,7 +29,7 @@ In this release we had a little focus on:
 - Forbids to have unicode escape characters inside binary strings
 - Forbids to use `else if` instead of `elif`
 - Forbids to have too long `try` bodies
-- Forbids to use existing variables for new block definitions
+- Forbids to overlap local and block variables
 
 ### Bugfixes
 
@@ -58,6 +58,7 @@ In this release we had a little focus on:
 - Now uses `coverage` checks in deepsource
 - Now `@alias` checks that all aliases are valid
 - Changes how presets are defined
+- Improves how `DirectMagicAttributeAccessViolation` is tested
 
 
 ## 0.11.1

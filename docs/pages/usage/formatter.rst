@@ -97,12 +97,3 @@ do you have and where you have them:
 We do not include ``show-statistic`` in our default configuration.
 It should be only called when user needs to find how many violations
 there are and what files do contain them.
-
-
-.. _formatter:
-
-Formatter API
--------------
-
-.. automodule:: wemake_python_styleguide.formatter
-   :no-members:

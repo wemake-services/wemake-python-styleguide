@@ -6,6 +6,7 @@ from wemake_python_styleguide.presets.topics import complexity
 from wemake_python_styleguide.visitors.ast import (
     annotations,
     attributes,
+    blocks,
     builtins,
     classes,
     compares,
@@ -78,6 +79,9 @@ PRESET: Final = (
     modules.EmptyModuleContentsVisitor,
     modules.MagicModuleFunctionsVisitor,
     modules.ModuleConstantsVisitor,
+
+    # Blocks:
+    blocks.BlockVariableVisitor,
 
     # Complexity:
     *complexity.PRESET,

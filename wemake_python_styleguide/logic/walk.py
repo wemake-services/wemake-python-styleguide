@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Iterator, Type, TypeVar, Union
+from typing import Iterator, Optional, Type, TypeVar, Union
 
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.types import AnyNodes
@@ -21,14 +21,23 @@ def is_contained(
     return False
 
 
-def is_child_of(node: ast.AST, parents: _IsInstanceContainer) -> bool:
-    """Checks whether node is inside a given set of parents or not."""
+def get_closest_parent(
+    node: ast.AST,
+    parents: _IsInstanceContainer,
+) -> Optional[ast.AST]:
+    """Returns the closes parent of a node."""
     parent = get_parent(node)
     if parent is None:
-        return False
+        return None
     if isinstance(parent, parents):
-        return True
-    return is_child_of(parent, parents)
+        return parent
+    return get_closest_parent(parent, parents)
+
+
+def is_child_of(node: ast.AST, parents: _IsInstanceContainer) -> bool:
+    """Checks whether node is inside a given set of parents or not."""
+    closest_parent = get_closest_parent(node, parents)
+    return closest_parent is not None
 
 
 def get_subnodes_by_type(

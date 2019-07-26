@@ -19,10 +19,10 @@ It is also recommended to take a look at these resources:
 
 ## Developer's documentation
 
-Make sure that you are familiar with [developer's documentation](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/api.html).
+Make sure that you are familiar with [developer's documentation](https://wemake-python-stylegui.de/en/latest/pages/api.html).
 
 That's a main starting point to the future development.
-You can jump start into the development of new rules by reading ["Creating a new rule tutorial"](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/tutorial.html).
+You can jump start into the development of new rules by reading ["Creating a new rule tutorial"](https://wemake-python-stylegui.de/en/latest/pages/api/tutorial.html).
 
 
 ## Dependencies
@@ -43,7 +43,7 @@ If you are adding a `flake8` plugin dependency (not dev-dependency),
 you will have to do several things:
 
 1. Install plugin with `poetry`
-2. Add docs about the error code to the `pages/violations/index.rst`
+2. Add docs about the error code to the `pages/usage/violations/index.rst`
 3. Add a test that the plugin is working to `tests/test_plugins.py`
 
 

@@ -77,6 +77,13 @@ AnyUnaryOp = Union[
 #: When we search for assign elements, we also need typed assign.
 AnyAssign = Union[ast.Assign, ast.AnnAssign]
 
+#: That's how we define context of operations.
+ContextNodes = Union[
+    ast.Module,
+    ast.ClassDef,
+    AnyFunctionDef,
+]
+
 
 @final
 class ConfigurationOptions(Protocol):

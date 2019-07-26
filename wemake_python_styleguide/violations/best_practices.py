@@ -59,6 +59,7 @@ Summary
    ProtectedAttributeViolation
    StopIterationInsideGeneratorViolation
    WrongUnicodeEscapeViolation
+   BlockAndLocalOverlapViolation
 
 Best practices
 --------------
@@ -103,6 +104,7 @@ Best practices
 .. autoclass:: ProtectedAttributeViolation
 .. autoclass:: StopIterationInsideGeneratorViolation
 .. autoclass:: WrongUnicodeEscapeViolation
+.. autoclass:: BlockAndLocalOverlapViolation
 
 """
 
@@ -294,6 +296,7 @@ class LoopVariableDefinitionViolation(ASTViolation):
     Solution:
         Use regular ``ast.Name`` variables.
         Or tuple of ``ast.Name`` variables.
+        Star names are also fine.
 
     Example::
 
@@ -326,6 +329,8 @@ class ContextManagerVariableDefinitionViolation(ASTViolation):
 
     Solution:
         Use regular ``ast.Name`` variables.
+        Or tuple of ``ast.Name`` variables.
+        Star names are also fine.
 
     Example::
 
@@ -1526,3 +1531,53 @@ class WrongUnicodeEscapeViolation(TokenizeViolation):
 
     error_template = 'Found unicode escape in a binary string: {0}'
     code = 439
+
+
+@final
+class BlockAndLocalOverlapViolation(ASTViolation):
+    """
+    Forbids to local and block variables to overlap.
+
+    What we call local variables:
+
+    1. Assigns and annotations
+    2. Function arguments (they are local to the function body)
+
+    What we call block variables:
+
+    1. Imports
+    2. Functions and async functions definitions
+    3. Classes, methods, and async methods definitions
+    4. For and async for loops variables
+    5. Except block exception aliases
+
+    We allow local variables to overlap theirselfs,
+    we forbid block varibals to overlap theirselfs.
+
+    Reasoning:
+        A lot of complex errors might happen when
+        you shadow local varibales with block variables
+        or when you shadow block variables with local variables.
+
+    Solution:
+        Use names that do not overlap.
+
+    Example::
+
+        # Correct:
+        my_value = 1
+        my_value = my_value + 1
+
+        # Wrong:
+        import my_value
+        my_value = 1  # overlaps with import
+
+    See also:
+        https://github.com/satwikkansal/wtfPython#-explanation-20
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found block and local variable overlap: {0}'
+    code = 440

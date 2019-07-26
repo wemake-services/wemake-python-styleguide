@@ -24,15 +24,22 @@ def container():
     nodes = {{0 for {0} in some}}
 """
 
+dict_comprehension = """
+def container():
+    nodes = {{0: 1 for {0} in some}}
+"""
+
 
 @pytest.mark.parametrize('code', [
     list_comprehension,
     generator_expression,
     set_comprehension,
+    dict_comprehension,
 ])
 @pytest.mark.parametrize('definition', [
     'xy.attr',
     'xy["key"]',
+    'xy[0]',
     '(xy[0], y)',
     '(y, xy.attr)',
 ])
@@ -57,10 +64,13 @@ def test_wrong_definitions_in_comprehension(
     list_comprehension,
     generator_expression,
     set_comprehension,
+    dict_comprehension,
 ])
 @pytest.mark.parametrize('definition', [
     'xy',
     '(y, xy)',
+    '(first, *star)',
+    '(first, second, *star)',
 ])
 def test_comprehension_without_bad_definitions(
     assert_errors,

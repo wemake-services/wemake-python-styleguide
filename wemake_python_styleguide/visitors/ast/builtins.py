@@ -242,7 +242,7 @@ class WrongAssignmentVisitor(BaseNodeVisitor):
     ) -> None:
         for target in targets:
             if isinstance(target, ast.Starred):
-                target = target.value
+                target = target.value  # noqa: WPS440
             if not isinstance(target, ast.Name):
                 self.add_violation(WrongUnpackingViolation(node))
 

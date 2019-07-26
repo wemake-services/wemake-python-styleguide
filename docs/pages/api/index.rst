@@ -68,7 +68,7 @@ to understand how all components are bound together.
 We use a `layered architecture <https://layer-linter.readthedocs.io/en/stable/concepts.html>`_
 that follows this contract:
 
-.. literalinclude :: ../../layers.yml
+.. literalinclude :: ../../../layers.yml
    :language: yaml
 
 Contributing
@@ -103,7 +103,9 @@ API Reference
     featuring architecure and composition of classes.
 
   checker.rst
-  visitors/base.rst
-  violations/base.rst
+  visitors.rst
+  violations.rst
+  tranformations.rst
   types.rst
   constants.rst
+  formatter.rst

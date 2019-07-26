@@ -3,6 +3,8 @@
 import ast
 from typing import Optional
 
+from wemake_python_styleguide.types import ContextNodes
+
 
 def is_literal(node: ast.AST) -> bool:
     """
@@ -24,6 +26,6 @@ def get_parent(node: ast.AST) -> Optional[ast.AST]:
     return getattr(node, 'wps_parent', None)
 
 
-def get_context(node: ast.AST) -> Optional[ast.AST]:
+def get_context(node: ast.AST) -> Optional[ContextNodes]:
     """Returns the context or ``None`` if node has no context."""
     return getattr(node, 'wps_context', None)

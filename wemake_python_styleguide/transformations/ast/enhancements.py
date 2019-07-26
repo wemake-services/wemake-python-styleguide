@@ -4,6 +4,7 @@ import ast
 from typing import Optional, Tuple, Type
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.types import ContextNodes
 
 
 def set_if_chain(tree: ast.AST) -> ast.AST:
@@ -44,7 +45,9 @@ def set_node_context(tree: ast.AST) -> ast.AST:
     What we call "a context"?
     Context is where exactly this node belongs on a global level.
 
-    Example::
+    Example:
+
+    .. code:: python
 
         if some_value > 2:
             test = 'passed'
@@ -61,7 +64,7 @@ def set_node_context(tree: ast.AST) -> ast.AST:
     .. versionchanged:: 0.8.1
 
     """
-    contexts = (
+    contexts: Tuple[Type[ContextNodes], ...] = (
         ast.Module,
         ast.ClassDef,
         *FunctionNodes,

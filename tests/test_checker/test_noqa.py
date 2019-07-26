@@ -1,5 +1,18 @@
 # -*- coding: utf-8 -*-
 
+"""
+Integration tests definition.
+
+These are integration tests for several things:
+
+1. that violation is active and enabled
+2. that violation is raised for the bad code
+3. that line number where violation is raised is correct
+4. that `noqa` works
+
+Docs: https://wemake-python-stylegui.de/en/latest/pages/api/contributing.html
+"""
+
 import re
 import subprocess
 import types
@@ -137,6 +150,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS437': 1,
     'WPS438': 4,
     'WPS439': 1,
+    'WPS440': 1,
 
     'WPS500': 1,
     'WPS501': 1,

@@ -358,7 +358,7 @@ async def function_with_unreachable():
 
 first = second = 2  # noqa: WPS429
 
-index, nodes[0] = range(2)  # noqa: WPS414
+first, nodes[0] = range(2)  # noqa: WPS414
 
 
 try:  # noqa: WPS415
@@ -507,3 +507,5 @@ class CheckStopIteration(object):
         raise StopIteration()  # noqa: WPS438
 
 bad_unicode = b'\u1'  # noqa: WPS439
+
+CheckStopIteration = 1  # noqa: WPS440

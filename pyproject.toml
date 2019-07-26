@@ -17,7 +17,7 @@ authors = [
 readme = "README.md"
 
 repository = "https://github.com/wemake-services/wemake-python-styleguide"
-homepage = "https://wemake-python-styleguide.readthedocs.io"
+homepage = "https://wemake-python-stylegui.de"
 
 keywords = [
   "flake8",
@@ -85,8 +85,9 @@ pytest = "^5.0"
 snapshottest = "^0.5.1"
 mypy = "^0.720"
 sphinx = "^2.1"
-sphinx-autodoc-typehints = "^1.7"
+sphinx-autodoc-typehints = "<1.7"
 sphinxcontrib-mermaid = "^0.3"
+docutils = "<0.15"
 doc8 = "^0.8"
 m2r = "^0.2"
 added-value = "^0.14"

@@ -42,6 +42,8 @@ def test_context_manager_wrong_definitions(
 @pytest.mark.parametrize('code', [
     'xy',
     '(valid1, valid2)',
+    '(valid, *star)',
+    '(first, second, *star)',
 ])
 def test_context_manager_correct_definitions(
     assert_errors,

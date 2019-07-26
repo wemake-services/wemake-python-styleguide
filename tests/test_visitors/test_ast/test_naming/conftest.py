@@ -73,6 +73,11 @@ class Test:
     {0}: int = None
 """
 
+static_typed_annotation = """
+class Test:
+    {0}: int
+"""
+
 instance_attribute = """
 class Test(object):
     def __init__(self):
@@ -93,6 +98,10 @@ variable_def = """
 
 variable_typed_def = """
 {0}: str = 'test'
+"""
+
+variable_typed = """
+{0}: str
 """
 
 # See: https://github.com/wemake-services/wemake-python-styleguide/issues/405
@@ -147,12 +156,14 @@ except Exception as {0}:
     # Class attributes:
     static_attribute,
     static_typed_attribute,
+    static_typed_annotation,
     instance_attribute,
     instance_typed_attribute,
 
     # Variables:
     variable_def,
     variable_typed_def,
+    variable_typed,
     unpacking_variables,
     for_variable,
     with_variable,

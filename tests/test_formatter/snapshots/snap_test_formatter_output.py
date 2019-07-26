@@ -47,7 +47,7 @@ snapshots['test_formatter[cli_options2-with_source] formatter_with_source'] = ''
                             ^
 
 Full list of violations and explanations:
-https://wemake-python-stylegui.de/en/xx.xx/pages/violations/
+https://wemake-python-stylegui.de/en/xx.xx/pages/usage/violations/
 '''
 
 snapshots['test_formatter_correct[cli_options4-statistic_with_source] formatter_correct_statistic_with_source'] = '''
@@ -128,7 +128,7 @@ snapshots['test_formatter[cli_options3-with_source_statistic] formatter_with_sou
 \x1b[4m\x1b[1mAll errors: 8\x1b[0m\x1b[0m
 
 Full list of violations and explanations:
-https://wemake-python-stylegui.de/en/xx.xx/pages/violations/
+https://wemake-python-stylegui.de/en/xx.xx/pages/usage/violations/
 '''
 
 snapshots['test_formatter[cli_options4-statistic_with_source] formatter_statistic_with_source'] = '''
@@ -194,7 +194,7 @@ snapshots['test_formatter[cli_options4-statistic_with_source] formatter_statisti
 \x1b[4m\x1b[1mAll errors: 8\x1b[0m\x1b[0m
 
 Full list of violations and explanations:
-https://wemake-python-stylegui.de/en/xx.xx/pages/violations/
+https://wemake-python-stylegui.de/en/xx.xx/pages/usage/violations/
 '''
 
 snapshots['test_formatter[cli_options0-regular] formatter_regular'] = '''
@@ -211,7 +211,7 @@ snapshots['test_formatter[cli_options0-regular] formatter_regular'] = '''
   2:31     WPS303 Found underscored number: 10_00
 
 Full list of violations and explanations:
-https://wemake-python-stylegui.de/en/xx.xx/pages/violations/
+https://wemake-python-stylegui.de/en/xx.xx/pages/usage/violations/
 '''
 
 snapshots['test_formatter[cli_options1-regular_statistic] formatter_regular_statistic'] = '''
@@ -253,7 +253,7 @@ snapshots['test_formatter[cli_options1-regular_statistic] formatter_regular_stat
 \x1b[4m\x1b[1mAll errors: 8\x1b[0m\x1b[0m
 
 Full list of violations and explanations:
-https://wemake-python-stylegui.de/en/xx.xx/pages/violations/
+https://wemake-python-stylegui.de/en/xx.xx/pages/usage/violations/
 '''
 
 snapshots['test_formatter_correct[cli_options2-with_source] formatter_correct_with_source'] = ''
