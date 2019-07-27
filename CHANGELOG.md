@@ -37,6 +37,7 @@ In this release we had a little focus on:
   in favor of `(..., *value)`
 - Forbids to have explicit unhashable types in sets and dicts
 - Enforces `j` prefix over `J` for complex numbers
+- Forbids to define useless overwritten methods
 
 ### Bugfixes
 

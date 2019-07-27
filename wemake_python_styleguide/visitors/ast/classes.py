@@ -17,6 +17,7 @@ from wemake_python_styleguide.logic import (
     strings,
     walk,
 )
+from wemake_python_styleguide.logic.arguments import function_args, super_args
 from wemake_python_styleguide.logic.naming import access, name_nodes
 from wemake_python_styleguide.violations import best_practices as bp
 from wemake_python_styleguide.violations import consistency, oop
@@ -123,6 +124,7 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
             YieldInsideInitViolation
             MethodWithoutArgumentsViolation
             AsyncMagicMethodViolation
+            UselessOverwrittenMethodViolation
 
         """
         self._check_decorators(node)
@@ -158,10 +160,61 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
                     oop.AsyncMagicMethodViolation(node, text=node.name),
                 )
 
+        self._check_useless_overwritten_methods(
+            node,
+            class_name=node_context.name,
+        )
+
     def _check_method_contents(self, node: types.AnyFunctionDef) -> None:
         if node.name == constants.INIT:
             if walk.is_contained(node, self._not_appropriate_for_init):
                 self.add_violation(bp.YieldInsideInitViolation(node))
+
+    def _get_call_stmt_of_useless_method(
+        self,
+        node: types.AnyFunctionDef,
+    ) -> Optional[ast.Call]:
+        # consider next body as possible candidate of useless method:
+        # 1) Optional[docstring]
+        # 2) return statement with call
+        statements_number = len(node.body)
+        if statements_number > 2 or statements_number == 0:
+            return None
+        if statements_number == 2:
+            if not strings.is_doc_string(node.body[0]):
+                return None
+        return_stmt = node.body[-1]
+        if not isinstance(return_stmt, ast.Return):
+            return None
+        call_stmt = return_stmt.value
+        if not isinstance(call_stmt, ast.Call):
+            return None
+        return call_stmt
+
+    def _check_useless_overwritten_methods(
+        self,
+        node: types.AnyFunctionDef,
+        class_name: str,
+    ) -> None:
+        if node.decorator_list:
+            # any decorator can change logic
+            # and make this overwrite useful
+            return
+        call_stmt = self._get_call_stmt_of_useless_method(node)
+        if call_stmt is None or not isinstance(call_stmt.func, ast.Attribute):
+            return
+        attribute = call_stmt.func
+        defined_method_name = node.name
+        called_method_name = attribute.attr
+        if defined_method_name != called_method_name:
+            return
+        if super_args.is_ordinary_super_call(attribute.value, class_name):
+            if function_args.is_call_matched_by_arguments(node, call_stmt):
+                self.add_violation(
+                    oop.UselessOverwrittenMethodViolation(
+                        node, text=defined_method_name,
+                    ),
+                )
 
 
 @final
