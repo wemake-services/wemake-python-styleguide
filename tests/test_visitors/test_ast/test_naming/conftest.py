@@ -51,6 +51,10 @@ class Input(object):
 """
 
 function_kwonly_argument = """
+def test(*, {0}): ...
+"""
+
+function_kwonly_default_argument = """
 def test(*, {0}=True): ...
 """
 
@@ -109,15 +113,31 @@ unpacking_variables = """
 first.attr, {0} = range(2)
 """
 
+unpacking_star_variables = """
+first, *{0} = range(2)
+"""
+
 for_variable = """
 def container():
     for {0} in []:
         ...
 """
 
+for_star_variable = """
+def container():
+    for index, *{0} in []:
+        ...
+"""
+
 with_variable = """
 def container():
     with open('test.py') as {0}:
+        ...
+"""
+
+with_star_variable = """
+def container():
+    with open('test.py') as (first, *{0}):
         ...
 """
 
@@ -129,7 +149,7 @@ except Exception as {0}:
 """
 
 
-# Fixture itself:
+# Fixtures:
 
 @pytest.fixture(params=[
     # Imports:
@@ -150,6 +170,7 @@ except Exception as {0}:
     method_args_argument,
     method_kwargs_argument,
     function_kwonly_argument,
+    function_kwonly_default_argument,
     method_kwonly_argument,
     lambda_argument,
 
@@ -165,8 +186,11 @@ except Exception as {0}:
     variable_typed_def,
     variable_typed,
     unpacking_variables,
+    unpacking_star_variables,
     for_variable,
+    for_star_variable,
     with_variable,
+    with_star_variable,
     exception,
 ])
 def naming_template(request):

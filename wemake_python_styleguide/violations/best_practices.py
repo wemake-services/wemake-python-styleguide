@@ -1352,7 +1352,7 @@ class ReassigningVariableToItselfViolation(ASTViolation):
 
     """
 
-    error_template = 'Found reassigning variable to itself'
+    error_template = 'Found reassigning variable to itself: {0}'
     code = 434
     previous_codes = {438}
 

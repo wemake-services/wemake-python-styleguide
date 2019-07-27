@@ -25,23 +25,21 @@ def test_short_variable_name(
     assert_error_text(visitor, short_name)
 
 
-@pytest.mark.parametrize('correct_name', [
-    'snake_case',
-    '_protected_or_unused',
-    'with_number5',
-])
-def test_naming_correct(
+def test_naming_length_settings(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
     naming_template,
     options,
-    correct_name,
+    mode,
 ):
     """Ensures that correct names are allowed."""
-    tree = parse_ast_tree(naming_template.format(correct_name))
+    short_name = 'xy'
+    tree = parse_ast_tree(mode(naming_template.format(short_name)))
 
     option_values = options(min_name_length=3)
     visitor = WrongNameVisitor(option_values, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [])
+    assert_errors(visitor, [TooShortNameViolation])
+    assert_error_text(visitor, short_name)

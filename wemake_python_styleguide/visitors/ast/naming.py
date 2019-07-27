@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Callable, List, Optional, Tuple, Union
+import itertools
+from collections import Counter
+from typing import Callable, List, Tuple, Union
 
 from typing_extensions import final
 
@@ -39,10 +41,6 @@ AssignTargets = List[ast.expr]
 AssignTargetsNameList = List[Union[str, Tuple[str]]]
 
 
-def _get_name_from_node(node: ast.expr) -> Optional[str]:
-    return getattr(node, 'id', None)
-
-
 @final
 class _NameValidator(object):
     """Utility class to separate logic from the naming visitor."""
@@ -60,6 +58,7 @@ class _NameValidator(object):
         self,
         node: ast.AST,
         name: str,
+        *,
         is_first_argument: bool = False,
     ) -> None:
         if logical.is_wrong_name(name, VARIABLE_NAMES_BLACKLIST):
@@ -103,11 +102,12 @@ class _NameValidator(object):
                 if not isinstance(target, ast.Name):
                     continue
 
-                name = _get_name_from_node(target)
-                if name and logical.is_upper_case_name(name):
-                    self._error_callback(
-                        naming.UpperCaseAttributeViolation(target, text=name),
-                    )
+                if not target.id or not logical.is_upper_case_name(target.id):
+                    continue
+
+                self._error_callback(
+                    naming.UpperCaseAttributeViolation(target, text=target.id),
+                )
 
     def _ensure_underscores(self, node: ast.AST, name: str):
         if access.is_private(name):
@@ -273,10 +273,12 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
 
         targets = get_assign_targets(node)
         for target_node in targets:
-            target_node_id = _get_name_from_node(target_node)
-            if target_node_id in MODULE_METADATA_VARIABLES_BLACKLIST:
+            if not isinstance(target_node, ast.Name):
+                continue
+
+            if target_node.id in MODULE_METADATA_VARIABLES_BLACKLIST:
                 self.add_violation(
-                    WrongModuleMetadataViolation(node, text=target_node_id),
+                    WrongModuleMetadataViolation(node, text=target_node.id),
                 )
 
 
@@ -296,39 +298,34 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
             ReassigningVariableToItselfViolation
 
         """
-        self._check_assignment(node)
+        names = list(itertools.chain.from_iterable((
+            name_nodes.get_variables_from_node(target)
+            for target in get_assign_targets(node)
+        )))
+
+        self._check_reassignment(node, names)
+        self._check_unique_assignment(node, names)
         self.generic_visit(node)
 
-    def _create_target_names(
+    def _check_reassignment(
         self,
-        target: AssignTargets,
-    ) -> AssignTargetsNameList:
-        """Creates list with names of targets of assignment."""
-        target_names = []
-        for ast_object in target:
-            if isinstance(ast_object, ast.Name):
-                target_names.append(getattr(ast_object, 'id', None))
-            if isinstance(ast_object, ast.Tuple):
-                target_names.append(getattr(ast_object, 'elts', None))
-                for index, _ in enumerate(target_names):
-                    target_names[index] = tuple(
-                        name.id for name in target_names[index]
-                        if isinstance(name, ast.Name)
-                    )
-        return target_names
+        node: AnyAssign,
+        names: List[str],
+    ) -> None:
+        var_values = name_nodes.get_variables_from_node(node.value)
+        for var_name, var_value in itertools.zip_longest(names, var_values):
+            if var_name == var_value:
+                self.add_violation(
+                    ReassigningVariableToItselfViolation(node, text=var_name),
+                )
 
-    def _check_assignment(self, node: AnyAssign) -> None:
-        target_names = self._create_target_names(
-            get_assign_targets(node),
-        )
-
-        if isinstance(node.value, ast.Tuple):
-            node_values = node.value.elts
-            values_names = tuple(
-                _get_name_from_node(node_value) for node_value in node_values
-            )
-        else:
-            values_names = _get_name_from_node(node.value)  # type: ignore
-        has_repeatable_values = len(target_names) != len(set(target_names))
-        if values_names in target_names or has_repeatable_values:
-            self.add_violation(ReassigningVariableToItselfViolation(node))
+    def _check_unique_assignment(
+        self,
+        node: AnyAssign,
+        names: List[str],
+    ) -> None:
+        for used_name, count in Counter(names).items():
+            if count > 1:
+                self.add_violation(
+                    ReassigningVariableToItselfViolation(node, text=used_name),
+                )

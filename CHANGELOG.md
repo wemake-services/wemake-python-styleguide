@@ -48,6 +48,8 @@ In this release we had a little focus on:
 - Fixes when `WrongUnpackingViolation` was not raised
   for `async for` and `async with` nodes
 - Fixes when `WrongUnpackingViolation` was not raised for comprehensions
+- Fixes that `x, y, z = x, z, y` was not recognized
+  as `ReassigningVariableToItselfViolation`
 
 ### Misc
 
@@ -59,6 +61,8 @@ In this release we had a little focus on:
 - Now `@alias` checks that all aliases are valid
 - Changes how presets are defined
 - Improves how `DirectMagicAttributeAccessViolation` is tested
+- Refactors a lot of tests to tests `ast.Starred`
+- Refactors a lot of tests to have less tests with the same logical coverage
 
 
 ## 0.11.1

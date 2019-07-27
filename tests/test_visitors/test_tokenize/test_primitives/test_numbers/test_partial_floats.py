@@ -64,10 +64,6 @@ def test_correct_float(
 @pytest.mark.parametrize('primitive', [
     '.0500',
     '.00',
-    '+.0500',
-    '+.00',
-    '-.0500',
-    '-.00',
 ])
 def test_double_incorrect_float(
     parse_tokens,
@@ -75,10 +71,13 @@ def test_double_incorrect_float(
     default_options,
     primitives_usages,
     primitive,
+    number_sign,
     mode,
 ):
     """Ensures that partial floats raise a warning."""
-    file_tokens = parse_tokens(mode(primitives_usages.format(primitive)))
+    file_tokens = parse_tokens(
+        mode(primitives_usages.format(number_sign(primitive))),
+    )
 
     visitor = WrongNumberTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()

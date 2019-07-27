@@ -3,11 +3,14 @@
 import ast
 import itertools
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, List, Optional, Set, Union, cast
+from typing import ClassVar, DefaultDict, Set, Union, cast
 
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.functions import get_assign_targets
+from wemake_python_styleguide.logic.naming.name_nodes import (
+    get_variables_from_node,
+)
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.types import (
     AnyAssign,
@@ -197,23 +200,4 @@ class _Scope(object):
 
 
 def _extract_names(node: ast.AST) -> Set[str]:
-    names: List[str] = []
-    naive_attempt = _extract_name(node)
-
-    if naive_attempt:
-        names.append(naive_attempt)
-    elif isinstance(node, ast.Tuple):
-        for subnode in node.elts:
-            extracted_name = _extract_name(subnode)
-            if extracted_name:
-                names.append(extracted_name)
-
-    return set(names)
-
-
-def _extract_name(node: ast.AST) -> Optional[str]:
-    if isinstance(node, ast.Starred):
-        node = node.value
-    if isinstance(node, ast.Name) and isinstance(node.ctx, ast.Store):
-        return node.id
-    return None
+    return set(get_variables_from_node(node))

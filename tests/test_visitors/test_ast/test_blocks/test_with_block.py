@@ -139,8 +139,7 @@ def test_with_block_usage(
     with_template4,
 ])
 @pytest.mark.parametrize('first_name, second_name', [
-    ('unique_name', 'unique_name1'),
-    ('unique_name', '_unique_name'),
+    ('unique_name', 'unique'),
 ])
 def test_with_block_correct(
     assert_errors,

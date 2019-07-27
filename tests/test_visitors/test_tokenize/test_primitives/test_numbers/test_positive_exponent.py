@@ -14,19 +14,13 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
 
 @pytest.mark.parametrize('number', [
     '1.5e+10',
-    '1e+1',
     '0e+0',
-    '10e+10',
 
     '-1.5e+10',
-    '-1e+1',
-    '-0e+0',
     '-10e+10',
 
-    '+1.5e+10',
     '+1e+1',
-    '+0e+0',
-    '+10e+10',
+    '+1.0e+10',
 ])
 def test_positive_exponent(
     parse_tokens,
@@ -48,39 +42,24 @@ def test_positive_exponent(
 
 
 @pytest.mark.parametrize('number', [
-    '-1',
     '1234567890',
     '0xE',
-    '0xEE',
 
     '1.5e10',
-    '1e1',
     '0e0',
-    '10e10',
-
-    '1.5e-10',
     '1e-1',
-    '0e-0',
     '10e-10',
 
     '-1.5e10',
     '-1e1',
-    '-0e0',
-    '-10e10',
 
-    '+1.5e10',
-    '+1e1',
     '+0e0',
     '+10e10',
 
     '-1.5e-10',
-    '-1e-1',
     '-0e-0',
-    '-10e-10',
 
-    '+1.5e-10',
     '+1e-1',
-    '+0e-0',
     '+10e-10',
 ])
 def test_correct_exponent(

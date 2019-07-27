@@ -8,10 +8,9 @@ from wemake_python_styleguide.visitors.ast.naming import WrongNameVisitor
 
 @pytest.mark.parametrize('wrong_name', [
     'тестовое_имя',
-    'test_имя',
+    'test_имя2',
     'сос',  # written with identical to ASCII russian chars
     'some_變量',
-    'имя2',
 ])
 def test_wrong_unicode(
     assert_errors,

@@ -15,20 +15,15 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
     '0.10',
     '21.5400',
 
-    '0x01',
-    '0x0B',
     '0x00A',
 
-    '0e00',
     '0e01',
     '1.5e010',
     '1.5e-010',
 
-    '0o01',
     '0o00007',
 
     '0b0001',
-    '0b01',
 ])
 def test_meaningless_zeros(
     parse_tokens,
@@ -82,29 +77,22 @@ def test_meaningless_zeros_and_case(
 
 
 @pytest.mark.parametrize('number', [
-    '1',
     '1234567890',
 
     '0.0',
-    '0.5',
-    '25.05',
-    '10.001',
+    '20.05',
 
     '0x0',
-    '0x10',
     '0xA00',
 
     '0e0',
-    '0e10',
     '1.5e10',
     '1.5e-100',
 
     '0o0',
-    '0o1',
-    '0o7000',
+    '0o10',
 
     '0b0',
-    '0b1',
     '0b100000',
 ])
 def test_correct_zeros(
@@ -120,34 +108,6 @@ def test_correct_zeros(
     file_tokens = parse_tokens(
         mode(primitives_usages.format(number_sign(number))),
     )
-
-    visitor = WrongNumberTokenVisitor(default_options, file_tokens=file_tokens)
-    visitor.run()
-
-    assert_errors(visitor, [])
-
-
-@pytest.mark.parametrize('code', [
-    'as_string = "{0}"',
-])
-@pytest.mark.parametrize('number', [
-    '0.300',
-    '0x0FF',
-    '1.5e01',
-    '0o011',
-    '0b01001',
-])
-def test_similar_strings(
-    parse_tokens,
-    assert_errors,
-    default_options,
-    code,
-    number,
-    number_sign,
-    mode,
-):
-    """Ensures that strings are fine."""
-    file_tokens = parse_tokens(mode(code.format(number_sign(number))))
 
     visitor = WrongNumberTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()

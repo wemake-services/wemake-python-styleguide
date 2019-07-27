@@ -159,7 +159,6 @@ def test_function_block_usage(
 ])
 @pytest.mark.parametrize('first_name, second_name', [
     ('unique_name', 'unique_name1'),
-    ('unique_name', '_unique_name'),
 ])
 def test_function_block_correct(
     assert_errors,

@@ -13,15 +13,8 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
 hex_number_templates = [
     '0x{0}',
     '0xA{0}',
-    '0x{0}D',
-    '0x1{0}',
-    '0x{0}1',
-    '0xA{0}C',
-    '0x1{0}2',
-    '0x1{0}C',
-    '0x{0}C1',
-    '0x{0}CC',
-    '0x11{0}',
+    '0x{0}2',
+    '0xB{0}1',
 ]
 
 

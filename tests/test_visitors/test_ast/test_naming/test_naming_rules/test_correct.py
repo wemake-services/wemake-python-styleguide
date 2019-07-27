@@ -7,9 +7,8 @@ from wemake_python_styleguide.visitors.ast.naming import WrongNameVisitor
 
 @pytest.mark.parametrize('correct_name', [
     'snake_case',
-    '_protected_or_unused',
+    '_protected',
     'with_number5',
-    'xy',
 ])
 def test_naming_correct(
     assert_errors,

@@ -11,10 +11,9 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
 
 
 @pytest.mark.parametrize('primitive', [
-    '10_00',
     '333_555',
     '3_3.3',
-    '1_000_000',
+    '+1_000_000',
     '-5_000',
     '-1_000.0',
 ])
@@ -34,7 +33,7 @@ def test_underscored_number(
     visitor.run()
 
     assert_errors(visitor, [UnderscoredNumberViolation])
-    assert_error_text(visitor, primitive.replace('-', ''))
+    assert_error_text(visitor, primitive.lstrip('-').lstrip('+'))
 
 
 @pytest.mark.parametrize('primitive', [
