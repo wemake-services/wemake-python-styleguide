@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import ast
-import itertools
 from collections import defaultdict
 from typing import ClassVar, DefaultDict, Set, Union, cast
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.logic.naming.name_nodes import (
+    flat_variable_names,
     get_variables_from_node,
 )
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
@@ -127,10 +126,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
         if isinstance(node, ast.arg):
             names = {node.arg}
         else:
-            names = set(itertools.chain.from_iterable((
-                _extract_names(target)
-                for target in get_assign_targets(node)
-            )))
+            names = set(flat_variable_names([node]))
 
         self._scope(node, names, is_local=True)
         self.generic_visit(node)

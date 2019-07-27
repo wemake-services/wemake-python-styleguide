@@ -2,7 +2,7 @@
 
 import ast
 from collections import Counter
-from typing import ClassVar, Container, FrozenSet, List, Optional, Tuple
+from typing import ClassVar, FrozenSet, List, Optional, Tuple
 
 import astor
 from typing_extensions import final
@@ -17,7 +17,7 @@ from wemake_python_styleguide.logic import (
     strings,
     walk,
 )
-from wemake_python_styleguide.logic.naming import access
+from wemake_python_styleguide.logic.naming import access, name_nodes
 from wemake_python_styleguide.violations import best_practices as bp
 from wemake_python_styleguide.violations import consistency, oop
 from wemake_python_styleguide.visitors import base, decorators
@@ -254,20 +254,6 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
         self._check_attributes_shadowing(node)
         self.generic_visit(node)
 
-    # TODO: can be moved to logic, if is used anywhere else
-    def _flat_assign_names(
-        self,
-        nodes: List[types.AnyAssign],
-    ) -> Container[str]:
-        flat_assigns = []
-        for attribute in nodes:
-            targets = get_assign_targets(attribute)
-            flat_assigns.extend([
-                at.id for at in targets
-                if isinstance(at, ast.Name)
-            ])
-        return set(flat_assigns)
-
     def _get_attributes(
         self,
         node: ast.ClassDef,
@@ -288,7 +274,9 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
 
     def _check_attributes_shadowing(self, node: ast.ClassDef) -> None:
         class_attributes, instance_attributes = self._get_attributes(node)
-        class_attribute_names = self._flat_assign_names(class_attributes)
+        class_attribute_names = set(
+            name_nodes.flat_variable_names(class_attributes),
+        )
 
         for instance_attr in instance_attributes:
             if instance_attr.attr in class_attribute_names:

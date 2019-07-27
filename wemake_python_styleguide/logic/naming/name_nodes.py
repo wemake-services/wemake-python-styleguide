@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import List, Optional
+import itertools
+from typing import Iterable, List, Optional
+
+from wemake_python_styleguide.compat.functions import get_assign_targets
+from wemake_python_styleguide.types import AnyAssign
 
 
 def is_same_variable(left: ast.AST, right: ast.AST) -> bool:
@@ -27,6 +31,15 @@ def get_assigned_name(node: ast.AST) -> Optional[str]:
         return getattr(node, 'name', None)
 
     return None
+
+
+def flat_variable_names(nodes: Iterable[AnyAssign]) -> Iterable[str]:
+    """Returns flat variable names from several nodes."""
+    return itertools.chain.from_iterable((
+        get_variables_from_node(target)
+        for node in nodes
+        for target in get_assign_targets(node)
+    ))
 
 
 def get_variables_from_node(node: ast.AST) -> List[str]:
