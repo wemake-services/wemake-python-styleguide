@@ -2,8 +2,9 @@
 
 import ast
 from collections import Counter
-from typing import ClassVar, Container, FrozenSet, List, Tuple
+from typing import ClassVar, Container, FrozenSet, List, Optional, Tuple
 
+import astor
 from typing_extensions import final
 
 from wemake_python_styleguide import constants, types
@@ -176,7 +177,6 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
         ast.Attribute,
         ast.Name,
         ast.Call,
-        ast.BinOp,
     )
 
     def visit_any_assign(self, node: types.AnyAssign) -> None:
@@ -203,13 +203,14 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
     ) -> None:
         fields: List[str] = []
         for tuple_item in elements.elts:
-            if not isinstance(tuple_item, ast.Str):
+            slot_name = self._slot_item_name(tuple_item)
+            if not slot_name:
                 self.add_violation(oop.WrongSlotsViolation(node))
                 return
-            fields.append(tuple_item.s)
+            fields.append(slot_name)
 
         for slot, counter in Counter(fields).items():
-            if not slot or not slot.islower() or counter > 1:
+            if not self._is_correct_slot(slot) or counter > 1:
                 self.add_violation(oop.WrongSlotsViolation(node))
                 return
 
@@ -226,6 +227,16 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
 
         if isinstance(node.value, ast.Tuple):
             self._count_slots_items(node, node.value)
+
+    def _slot_item_name(self, node: ast.AST) -> Optional[str]:
+        if isinstance(node, ast.Str):
+            return node.s
+        if isinstance(node, ast.Starred):
+            return astor.to_source(node).strip()
+        return None
+
+    def _is_correct_slot(self, slot: str) -> bool:
+        return slot and (slot.startswith('*') or slot.islower())
 
 
 @final

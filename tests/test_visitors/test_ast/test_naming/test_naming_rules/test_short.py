@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import pytest
-
 from wemake_python_styleguide.violations.naming import TooShortNameViolation
 from wemake_python_styleguide.visitors.ast.naming import WrongNameVisitor
 

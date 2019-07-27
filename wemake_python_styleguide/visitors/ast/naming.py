@@ -312,6 +312,9 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
         node: AnyAssign,
         names: List[str],
     ) -> None:
+        if not node.value:
+            return
+
         var_values = name_nodes.get_variables_from_node(node.value)
         for var_name, var_value in itertools.zip_longest(names, var_values):
             if var_name == var_value:

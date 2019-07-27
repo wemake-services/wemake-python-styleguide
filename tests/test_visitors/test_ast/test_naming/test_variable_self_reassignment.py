@@ -21,6 +21,11 @@ test_variable: int = 5
 test_variable: int = 10
 """
 
+right_just_types = """
+first_type: int
+second_type: first_type
+"""
+
 right_fragment_tuple_assignment = """
 x = 1
 y = 2
@@ -207,6 +212,7 @@ def test_self_variable_reassignment_triple(
 @pytest.mark.parametrize('code', [
     right_fragment,
     right_typed_fragment,
+    right_just_types,
     right_fragment_tuple_assignment,
     right_fragment_triple_tuple_assignment,
     right_star_assignment1,

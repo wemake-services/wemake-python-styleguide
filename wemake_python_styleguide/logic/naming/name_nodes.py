@@ -32,19 +32,19 @@ def get_assigned_name(node: ast.AST) -> Optional[str]:
 def get_variables_from_node(node: ast.AST) -> List[str]:
     """Gets the assigned names from the list of nodes."""
     names: List[str] = []
-    naive_attempt = _extract_name(node)
+    naive_attempt = extract_name(node)
 
     if naive_attempt:
         names.append(naive_attempt)
     elif isinstance(node, ast.Tuple):
         for subnode in node.elts:
-            extracted_name = _extract_name(subnode)
+            extracted_name = extract_name(subnode)
             if extracted_name:
                 names.append(extracted_name)
     return names
 
 
-def _extract_name(node: ast.AST) -> Optional[str]:
+def extract_name(node: ast.AST) -> Optional[str]:
     """
     Utility to extract names for several types of nodes.
 

@@ -42,6 +42,7 @@ def test_wrong_definition_loop(
 @pytest.mark.parametrize('definition', [
     'xy',
     '(valid1, valid2)',
+    'valid1, *valid2',
 ])
 def test_correct_definition_loop(
     assert_errors,

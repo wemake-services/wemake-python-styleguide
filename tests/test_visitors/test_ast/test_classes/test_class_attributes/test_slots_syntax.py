@@ -41,15 +41,21 @@ wrong_slots = (
     '-1',
     'None',
     'False',
+    'SomeOther.__slots__ + ("child",)',
+    'SomeOther.__slots__ + {"child"}',
+    '(*some, *some)',
+    '(*some.attr, *some.attr)',
+    '(*call(), *call())',
 )
 
 correct_slots = (
     '()',
     '("a",)',
     '("a", "b")',
+    '("a", *other)',
+    '(*Test.Parent, "field")',
+    '(*first, *second)',
     'SomeOther.__slots__',
-    'SomeOther.__slots__ + ("child",)',
-    'SomeOther.__slots__ + {"child"}',
     'some_call()',
     'some.attr',
     'some.method()',

@@ -2,7 +2,6 @@
 
 import pytest
 
-from wemake_python_styleguide.constants import VARIABLE_NAMES_BLACKLIST
 from wemake_python_styleguide.violations.naming import (
     WrongVariableNameViolation,
 )

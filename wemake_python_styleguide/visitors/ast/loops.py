@@ -180,7 +180,7 @@ class WrongLoopVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_any_for_loop', (
+@alias('visit_any_for', (
     'visit_For',
     'visit_AsyncFor',
 ))
@@ -197,7 +197,7 @@ class WrongLoopDefinitionVisitor(BaseNodeVisitor):
         ast.GeneratorExp,
     )
 
-    def visit_any_for_loop(self, node: AnyFor) -> None:
+    def visit_any_for(self, node: AnyFor) -> None:
         """
         Ensures that ``for`` loop definitions are correct.
 

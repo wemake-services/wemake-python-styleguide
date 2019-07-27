@@ -30,6 +30,8 @@ In this release we had a little focus on:
 - Forbids to use `else if` instead of `elif`
 - Forbids to have too long `try` bodies
 - Forbids to overlap local and block variables
+- Changes how `WrongSlotsViolation` works, not `(...) + value` is restricted
+  in favor of `(..., *value)`
 
 ### Bugfixes
 

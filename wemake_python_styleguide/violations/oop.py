@@ -302,7 +302,7 @@ class WrongSlotsViolation(ASTViolation):
 
     Things that this rule checks:
 
-    - That ``__slots__`` is a tuple, name, attribute, binop, or call
+    - That ``__slots__`` is a tuple, name, attribute, star, or call
     - That ``__slots__`` do not have duplicates
     - That ``__slots__`` do not have empty strings or uppercase strings
 
@@ -323,7 +323,7 @@ class WrongSlotsViolation(ASTViolation):
             __slots__ = ('field1', 'field2')
 
         class Other(Test):
-            __slots__ = Test.__slots__ + ('child',)
+            __slots__ = (*Test.__slots__, 'child')
 
         # Wrong:
         class Test(object):
