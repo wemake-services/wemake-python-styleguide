@@ -236,7 +236,7 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
         return None
 
     def _is_correct_slot(self, slot: str) -> bool:
-        return slot and (slot.startswith('*') or slot.islower())
+        return bool(slot) and (slot.startswith('*') or slot.islower())
 
 
 @final
