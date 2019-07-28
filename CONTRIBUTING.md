@@ -75,13 +75,14 @@ These steps are mandatory during the CI.
 
 ## Architecture
 
-We use [layer-lint](https://layer-linter.readthedocs.io/en/latest/usage.html)
+We use [import-linter](https://import-linter.readthedocs.io)
 to enforce strict layered architecture.
 
 ```bash
-layer-lint wemake_python_styleguide
+lint-imports
 ```
 
+See `.importlinter` file for contracts definition.
 All contracts must be valid for each commit.
 This step is mandatory during the CI.
 
@@ -141,7 +142,7 @@ Before submitting your code please do the following steps:
 7. Run `pytest` again to make sure it is still working
 8. Run `mypy` to ensure that types are correct
 9. Run `flake8` to ensure that style is correct
-10. Run `layer-lint` to ensure that architecture contracts are correct
+10. Run `lint-imports` to ensure that architecture contracts are correct
 11. Run `doc8` to ensure that docs are correct
 12. Run `xenon` to ensure that code quality is `A` (good enough)
 

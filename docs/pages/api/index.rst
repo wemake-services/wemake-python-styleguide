@@ -68,8 +68,8 @@ to understand how all components are bound together.
 We use a `layered architecture <https://layer-linter.readthedocs.io/en/stable/concepts.html>`_
 that follows this contract:
 
-.. literalinclude :: ../../../layers.yml
-   :language: yaml
+.. literalinclude :: ../../../.importlinter
+   :language: ini
 
 Contributing
 ------------
