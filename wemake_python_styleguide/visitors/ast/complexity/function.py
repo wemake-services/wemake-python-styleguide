@@ -85,9 +85,7 @@ class _ComplexityCounter(object):
 
     def _check_sub_node(self, node: AnyFunctionDef, sub_node) -> None:
         is_variable = isinstance(sub_node, ast.Name)
-        context = getattr(sub_node, 'ctx', None)
-
-        if is_variable and isinstance(context, ast.Store):
+        if is_variable and isinstance(sub_node.ctx, ast.Store):
             self._update_variables(node, sub_node)
         elif isinstance(sub_node, ast.Return):
             self.returns[node] += 1

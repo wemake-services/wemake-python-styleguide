@@ -28,13 +28,32 @@ def get_assigned_name(node: ast.AST) -> Optional[str]:
         return node.attr
 
     if isinstance(node, ast.ExceptHandler):
-        return getattr(node, 'name', None)
+        return node.name
 
     return None
 
 
 def flat_variable_names(nodes: Iterable[AnyAssign]) -> Iterable[str]:
-    """Returns flat variable names from several nodes."""
+    """
+    Returns flat variable names from several nodes.
+
+    Use this function when you need to get list of string variable names
+    from assign nodes.
+
+    Here's an example:
+
+    >>> import ast
+    >>> tree = ast.parse('x: int = 0')
+    >>> node = tree.body[0]
+    >>> list(flat_variable_names([node]))
+    ['x']
+
+    >>> tree = ast.parse('z = y = 0')
+    >>> node = tree.body[0]
+    >>> list(flat_variable_names([node]))
+    ['z', 'y']
+
+    """
     return itertools.chain.from_iterable((
         get_variables_from_node(target)
         for node in nodes
@@ -43,7 +62,15 @@ def flat_variable_names(nodes: Iterable[AnyAssign]) -> Iterable[str]:
 
 
 def get_variables_from_node(node: ast.AST) -> List[str]:
-    """Gets the assigned names from the list of nodes."""
+    """
+    Gets the assigned names from the list of nodes.
+
+    Can be used with any nodes that operate with ``ast.Name`` or ``ast.Tuple``
+    as targets for the assignment.
+
+    Can be used with nodes like ``ast.Assign``, ``ast.Tuple``, ``ast.For``,
+    ``ast.With``, etc.
+    """
     names: List[str] = []
     naive_attempt = extract_name(node)
 
@@ -61,7 +88,19 @@ def extract_name(node: ast.AST) -> Optional[str]:
     """
     Utility to extract names for several types of nodes.
 
-    Should not be used direclty, use safer :py:`~get_assign_names` function.
+    Is used to get name from node in case it is ``ast.Name``.
+
+    Should not be used direclty with assigns,
+    use safer :py:`~get_assign_names` function.
+
+    Example:
+
+    >>> import ast
+    >>> tree = ast.parse('a')
+    >>> node = tree.body[0].value
+    >>> extract_name(node)
+    'a'
+
     """
     if isinstance(node, ast.Starred):
         node = node.value

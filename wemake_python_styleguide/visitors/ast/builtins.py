@@ -9,6 +9,7 @@ from typing_extensions import final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.logic.naming.name_nodes import extract_name
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.operators import (
     count_unary_operator,
@@ -34,12 +35,11 @@ from wemake_python_styleguide.violations.consistency import (
     FormattedStringViolation,
     UselessOperatorsViolation,
 )
-from wemake_python_styleguide.visitors.base import BaseNodeVisitor
-from wemake_python_styleguide.visitors.decorators import alias
+from wemake_python_styleguide.visitors import base, decorators
 
 
 @final
-class WrongStringVisitor(BaseNodeVisitor):
+class WrongStringVisitor(base.BaseNodeVisitor):
     """Restricts several string usages."""
 
     def __init__(self, *args, **kwargs) -> None:
@@ -93,7 +93,7 @@ class WrongStringVisitor(BaseNodeVisitor):
 
 
 @final
-class MagicNumberVisitor(BaseNodeVisitor):
+class MagicNumberVisitor(base.BaseNodeVisitor):
     """Checks magic numbers used in the code."""
 
     _allowed_parents: ClassVar[AnyNodes] = (
@@ -137,7 +137,7 @@ class MagicNumberVisitor(BaseNodeVisitor):
 
 
 @final
-class UselessOperatorsVisitor(BaseNodeVisitor):
+class UselessOperatorsVisitor(base.BaseNodeVisitor):
     """Checks operators used in the code."""
 
     _limits: ClassVar[Mapping[AnyUnaryOp, int]] = {
@@ -167,15 +167,15 @@ class UselessOperatorsVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_any_for', (
+@decorators.alias('visit_any_for', (
     'visit_For',
     'visit_AsyncFor',
 ))
-@alias('visit_any_with', (
+@decorators.alias('visit_any_with', (
     'visit_With',
     'visit_AsyncWith',
 ))
-class WrongAssignmentVisitor(BaseNodeVisitor):
+class WrongAssignmentVisitor(base.BaseNodeVisitor):
     """Visits all assign nodes."""
 
     def visit_any_with(self, node: AnyWith) -> None:
@@ -241,14 +241,13 @@ class WrongAssignmentVisitor(BaseNodeVisitor):
         targets: Iterable[ast.AST],
     ) -> None:
         for target in targets:
-            if isinstance(target, ast.Starred):
-                target = target.value  # noqa: WPS440
-            if not isinstance(target, ast.Name):
+            target_name = extract_name(target)
+            if target_name is None:  # it means, that non name node was used
                 self.add_violation(WrongUnpackingViolation(node))
 
 
 @final
-class WrongCollectionVisitor(BaseNodeVisitor):
+class WrongCollectionVisitor(base.BaseNodeVisitor):
     """Ensures that collection definitions are correct."""
 
     _elements_in_sets: ClassVar[AnyNodes] = (

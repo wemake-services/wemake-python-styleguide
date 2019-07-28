@@ -91,7 +91,7 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
             self.add_violation(UselessFinallyViolation(node))
 
     def _check_exception_type(self, node: ast.ExceptHandler) -> None:
-        exception_name = getattr(node, 'type', None)
+        exception_name = node.type
         if exception_name is None:
             return
 

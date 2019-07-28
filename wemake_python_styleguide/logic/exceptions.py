@@ -6,7 +6,7 @@ from typing import Optional
 
 def get_exception_name(node: ast.Raise) -> Optional[str]:
     """Returns the exception name or ``None`` if node has not it."""
-    exception = getattr(node, 'exc', None)
+    exception = node.exc
     if exception is None:
         return None
 

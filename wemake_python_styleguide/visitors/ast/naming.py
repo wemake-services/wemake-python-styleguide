@@ -298,10 +298,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
             ReassigningVariableToItselfViolation
 
         """
-        names = list(itertools.chain.from_iterable((
-            name_nodes.get_variables_from_node(target)
-            for target in get_assign_targets(node)
-        )))
+        names = list(name_nodes.flat_variable_names([node]))
 
         self._check_reassignment(node, names)
         self._check_unique_assignment(node, names)
