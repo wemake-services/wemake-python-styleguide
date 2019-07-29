@@ -46,14 +46,14 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
     )
 
     _leading_zero_pattern: ClassVar[Pattern] = re.compile(
-        r'^[0-9\.]+([box]|e\+?\-?)0.+', re.IGNORECASE,
+        r'^[0-9\.]+([box]|e\+?\-?)0.+', re.IGNORECASE | re.ASCII,
     )
     _leading_zero_float_pattern: ClassVar[Pattern] = re.compile(
         r'^[0-9]*\.[0-9]+0+$',
     )
 
     _positive_exponent_pattens: ClassVar[Pattern] = re.compile(
-        r'^[0-9\.]+e\+', re.IGNORECASE,
+        r'^[0-9\.]+e\+', re.IGNORECASE | re.ASCII,
     )
 
     _bad_hex_numbers: ClassVar[FrozenSet[str]] = frozenset((

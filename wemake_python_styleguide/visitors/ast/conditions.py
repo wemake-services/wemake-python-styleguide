@@ -217,6 +217,8 @@ class ImplicitBoolPatternsVisitor(BaseNodeVisitor):
             ast.Or: ast.Eq,
         }
 
+        variables: List[Set[str]] = []
+
         for compare in node.values:
             if not isinstance(compare, ast.Compare) or len(compare.ops) != 1:
                 return
@@ -224,11 +226,7 @@ class ImplicitBoolPatternsVisitor(BaseNodeVisitor):
             if not isinstance(compare.ops[0], allowed_ops[node.op.__class__]):
                 return
 
-        variables: List[Set[str]] = [
-            {astor.to_source(compare.left)}
-            for compare in node.values
-            if isinstance(compare, ast.Compare)  # mypy needs this
-        ]
+            variables.append({astor.to_source(compare.left)})
 
         for duplicate in _get_duplicate_names(variables):
             self.add_violation(

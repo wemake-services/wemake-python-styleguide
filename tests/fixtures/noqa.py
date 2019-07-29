@@ -276,7 +276,7 @@ bad_concatenation = 'a' 'b'  # noqa: WPS326
 for literal in bad_concatenation:  # noqa: WPS327, WPS328
     continue
 
-with open(literal):  # noqa: WPS328
+with open(bad_concatenation):  # noqa: WPS328
     pass  # noqa: WPS420
 
 
@@ -509,3 +509,5 @@ class CheckStopIteration(object):
 bad_unicode = b'\u1'  # noqa: WPS439
 
 CheckStopIteration = 1  # noqa: WPS440
+
+print(literal)  # noqa: WPS441

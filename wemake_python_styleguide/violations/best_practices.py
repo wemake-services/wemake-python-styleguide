@@ -60,6 +60,7 @@ Summary
    StopIterationInsideGeneratorViolation
    WrongUnicodeEscapeViolation
    BlockAndLocalOverlapViolation
+   ControlVarUsedAfterBlockViolation
 
 Best practices
 --------------
@@ -105,6 +106,7 @@ Best practices
 .. autoclass:: StopIterationInsideGeneratorViolation
 .. autoclass:: WrongUnicodeEscapeViolation
 .. autoclass:: BlockAndLocalOverlapViolation
+.. autoclass:: ControlVarUsedAfterBlockViolation
 
 """
 
@@ -1581,3 +1583,45 @@ class BlockAndLocalOverlapViolation(ASTViolation):
 
     error_template = 'Found block variables overlap: {0}'
     code = 440
+
+
+@final
+class ControlVarUsedAfterBlockViolation(ASTViolation):
+    """
+    Forbids to use control variables after the block body.
+
+    What we call block control variables:
+
+    1. ``for`` loop unpacked variables
+    2. ``with`` context variables
+    3. ``except`` exception names
+
+    Reasoning:
+        Variables leaking from the blocks can damage your logic.
+        It might not contain what you think they contain.
+
+    Solution:
+        Use names inside the scope they are defined.
+        Create new functions to return values in case
+        you need to use block variables: when searching for a value, etc.
+
+    Example::
+
+        # Correct:
+        for my_item in collection:
+            print(my_item)
+
+        # Wrong:
+        for my_item in collection:
+            ...
+        print(my_item)
+
+    See also:
+        https://github.com/satwikkansal/wtfPython#-explanation-32
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found control variable used after block: {0}'
+    code = 441

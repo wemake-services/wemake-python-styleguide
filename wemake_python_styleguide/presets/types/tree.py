@@ -82,6 +82,7 @@ PRESET: Final = (
 
     # Blocks:
     blocks.BlockVariableVisitor,
+    blocks.AfterBlockVariablesVisitor,
 
     # Complexity:
     *complexity.PRESET,

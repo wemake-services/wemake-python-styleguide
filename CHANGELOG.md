@@ -30,6 +30,7 @@ In this release we had a little focus on:
 - Forbids to use `else if` instead of `elif`
 - Forbids to have too long `try` bodies
 - Forbids to overlap local and block variables
+- Forbids to use block variables after the block definitions
 - Changes how `WrongSlotsViolation` works, not `(...) + value` is restricted
   in favor of `(..., *value)`
 
@@ -43,6 +44,10 @@ In this release we had a little focus on:
   now handles `break` and `raise` statements as well
 - Fixes `WrongLoopIterTypeViolation` not triggering
   for generator expressions and empty tuples
+- Fixes `WrongLoopIterTypeViolation` not triggering
+  for numbers (including negative), booleans, `None`
+- Fixes `WrongLoopIterTypeViolation` position
+- Fixes `WrongLoopIterTypeViolation` not triggering for compehensions
 - Fixes `WrongSlotsViolation` not triggering
   for comprehensions and inccorect `__slots__` names and types
 - Fixes `NestedClassViolation` and `NestedFunctionViolation` not reporting

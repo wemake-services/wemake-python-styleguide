@@ -14,7 +14,11 @@ def is_contained(
     node: ast.AST,
     to_check: _IsInstanceContainer,
 ) -> bool:
-    """Checks whether node does contain given subnode types."""
+    """
+    Checks whether node does contain given subnode types.
+
+    Goes down by the tree to check all children.
+    """
     for child in ast.walk(node):
         if isinstance(child, to_check):
             return True
@@ -25,19 +29,41 @@ def get_closest_parent(
     node: ast.AST,
     parents: _IsInstanceContainer,
 ) -> Optional[ast.AST]:
-    """Returns the closes parent of a node."""
+    """Returns the closes parent of a node of requested types."""
     parent = get_parent(node)
-    if parent is None:
-        return None
-    if isinstance(parent, parents):
-        return parent
-    return get_closest_parent(parent, parents)
+    while True:
+        if parent is None:
+            return None
+        if isinstance(parent, parents):
+            return parent
+        parent = get_parent(parent)
 
 
 def is_child_of(node: ast.AST, parents: _IsInstanceContainer) -> bool:
-    """Checks whether node is inside a given set of parents or not."""
+    """
+    Checks whether node is inside a given set of parents or not.
+
+    Goes up by the tree of ``node`` to check all parents.
+    Works with general types.
+    """
     closest_parent = get_closest_parent(node, parents)
     return closest_parent is not None
+
+
+def is_contained_by(node: ast.AST, container: ast.AST) -> bool:
+    """
+    Tells you if a node is contained by a given node.
+
+    Goes up by the tree of ``node`` to check all parents.
+    Works with specific instances.
+    """
+    parent = get_parent(node)
+    while True:
+        if parent is None:
+            return False
+        if parent == container:
+            return True
+        parent = get_parent(parent)
 
 
 def get_subnodes_by_type(

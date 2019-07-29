@@ -7,6 +7,8 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors.ast.blocks import BlockVariableVisitor
 
+# Wrong:
+
 import_and_class1 = """
 import overlap
 
@@ -49,6 +51,26 @@ def context():
         ...
 """
 
+loop_and_loop = """
+def context():
+    for overlap in some():
+        ...
+
+    for overlap in other():
+        ...
+"""
+
+# Correct:
+
+unused_variables_overlap = """
+def context():
+    for first, _ in some():
+        ...
+
+    for _, second in other():
+        ...
+"""
+
 
 @pytest.mark.parametrize('code', [
     import_and_class1,
@@ -57,6 +79,7 @@ def context():
     import_and_function2,
     import_and_try,
     loop_and_with,
+    loop_and_loop,
 ])
 def test_block_overlap(
     assert_errors,
@@ -66,7 +89,7 @@ def test_block_overlap(
     code,
     mode,
 ):
-    """Testing that overlaps between blocks are forbiden.."""
+    """Testing that overlaps between blocks are forbiden."""
     tree = parse_ast_tree(mode(code))
 
     visitor = BlockVariableVisitor(default_options, tree=tree)
@@ -74,3 +97,22 @@ def test_block_overlap(
 
     assert_errors(visitor, [BlockAndLocalOverlapViolation])
     assert_error_text(visitor, 'overlap')
+
+
+@pytest.mark.parametrize('code', [
+    unused_variables_overlap,
+])
+def test_block_unused_overlap(
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+    code,
+    mode,
+):
+    """Testing that overlaps between unused vars are ok."""
+    tree = parse_ast_tree(mode(code))
+
+    visitor = BlockVariableVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])

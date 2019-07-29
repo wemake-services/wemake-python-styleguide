@@ -7,62 +7,112 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors.ast.blocks import BlockVariableVisitor
 
-# Loops:
+# Exception handling:
 
-for_loop1 = 'for {0} in some():'
-for_loop2 = 'for {0}, second in some():'
-for_loop3 = 'for first, *{0} in some():'
+except_block1 = 'except Exception as {0}:'
+except_block2 = 'except (TypeError, ValueError) as {0}:'
 
 # Wrong usages:
 
-for_template1 = """
+try_template1 = """
+try:
+    {1}
+{0}
+    ...
+"""
+
+try_template2 = """
+try:
+    ...
+{0}
+    {1}
+"""
+
+try_template3 = """
+try:
+    ...
+{0}
+    ...
+{1}
+"""
+
+try_template4 = """
 def function():
+    try:
+        {1}
+    {0}
+        ...
+"""
+
+try_template5 = """
+def function():
+    try:
+        ...
+    {0}
+        {1}
+"""
+
+try_template6 = """
+def function():
+    try:
+        ...
     {0}
         ...
     {1}
 """
 
-for_template2 = """
-def function():
-    {0}
-        {1}
-"""
-
-for_template3 = """
+try_template7 = """
 class Test(object):
     def method(self):
+        try:
+            {1}
+        {0}
+            ...
+"""
+
+try_template8 = """
+class Test(object):
+    def method(self):
+        try:
+            ...
+        {0}
+            {1}
+"""
+
+try_template9 = """
+class Test(object):
+    def method(self):
+        try:
+            ...
         {0}
             ...
         {1}
 """
 
-for_template4 = """
-class Test(object):
-    def method(self):
-        {0}
-            {1}
-"""
 
-
-@pytest.mark.parametrize('for_statement', [
-    for_loop1,
-    for_loop2,
-    for_loop3,
+@pytest.mark.parametrize('except_statement', [
+    except_block1,
+    except_block2,
 ])
 @pytest.mark.parametrize('context', [
-    for_template1,
-    for_template2,
-    for_template3,
-    for_template4,
+    try_template1,
+    try_template2,
+    try_template3,
+    try_template4,
+    try_template5,
+    try_template6,
+    try_template7,
+    try_template8,
+    try_template9,
 ])
 @pytest.mark.parametrize('variable_name', [
     'should_raise',
 ])
-def test_for_block_overlap(
+def test_except_block_overlap(
     assert_errors,
     assert_error_text,
     parse_ast_tree,
-    for_statement,
+    except_statement,
     assign_statement,
     context,
     variable_name,
@@ -71,7 +121,7 @@ def test_for_block_overlap(
 ):
     """Ensures that overlaping variables exist."""
     code = context.format(
-        for_statement.format(variable_name),
+        except_statement.format(variable_name),
         assign_statement.format(variable_name),
     )
     tree = parse_ast_tree(mode(code))
@@ -83,24 +133,28 @@ def test_for_block_overlap(
     assert_error_text(visitor, variable_name)
 
 
-@pytest.mark.parametrize('for_statement', [
-    for_loop1,
-    for_loop2,
-    for_loop3,
+@pytest.mark.parametrize('except_statement', [
+    except_block1,
+    except_block2,
 ])
 @pytest.mark.parametrize('context', [
-    for_template1,
-    for_template2,
-    for_template3,
-    for_template4,
+    try_template1,
+    try_template2,
+    try_template3,
+    try_template4,
+    try_template5,
+    try_template6,
+    try_template7,
+    try_template8,
+    try_template9,
 ])
 @pytest.mark.parametrize('variable_name', [
     'should_raise',
 ])
-def test_for_block_usage(
+def test_except_block_usage(
     assert_errors,
     parse_ast_tree,
-    for_statement,
+    except_statement,
     context,
     variable_name,
     default_options,
@@ -108,7 +162,7 @@ def test_for_block_usage(
 ):
     """Ensures using variables is fine."""
     code = context.format(
-        for_statement.format(variable_name),
+        except_statement.format(variable_name),
         'print({0})'.format(variable_name),
     )
     tree = parse_ast_tree(mode(code))
@@ -119,24 +173,29 @@ def test_for_block_usage(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('for_statement', [
-    for_loop1,
-    for_loop2,
-    for_loop3,
+@pytest.mark.parametrize('except_statement', [
+    except_block1,
+    except_block2,
 ])
 @pytest.mark.parametrize('context', [
-    for_template1,
-    for_template2,
-    for_template3,
-    for_template4,
+    try_template1,
+    try_template2,
+    try_template3,
+    try_template4,
+    try_template5,
+    try_template6,
+    try_template7,
+    try_template8,
+    try_template9,
 ])
 @pytest.mark.parametrize('first_name, second_name', [
-    ('unique_name', 'other_name'),
+    ('unique_name', 'unique_name2'),
+    ('_', '_'),
 ])
-def test_for_block_correct(
+def test_except_block_correct(
     assert_errors,
     parse_ast_tree,
-    for_statement,
+    except_statement,
     assign_statement,
     context,
     first_name,
@@ -146,7 +205,7 @@ def test_for_block_correct(
 ):
     """Ensures that different variables do not overlap."""
     code = context.format(
-        for_statement.format(first_name),
+        except_statement.format(first_name),
         assign_statement.format(second_name),
     )
     tree = parse_ast_tree(mode(code))

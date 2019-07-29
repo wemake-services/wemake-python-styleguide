@@ -143,7 +143,7 @@ def test_class_block_usage(
 ])
 @pytest.mark.parametrize('first_name, second_name', [
     ('unique_name', 'unique_name1'),
-    ('unique_name', '_unique_name'),
+    ('_', '_'),
 ])
 def test_class_block_correct(
     assert_errors,
@@ -178,7 +178,7 @@ def test_class_block_correct(
 ])
 @pytest.mark.parametrize('first_name, second_name', [
     ('unique_name', 'unique_name1'),
-    ('unique_name', '_unique_name'),
+    ('_', '_'),
 ])
 def test_class_internal_block_correct(
     assert_errors,
