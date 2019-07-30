@@ -3,17 +3,29 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
-    NonUniqueItemsInSetViolation,
+    NonUniqueItemsInHashViolation,
 )
 from wemake_python_styleguide.visitors.ast.builtins import (
     WrongCollectionVisitor,
 )
 
 set_literal_template = '{{{0}, {1}}}'
+nested_set_template = """
+{{
+    *{{
+        {0},
+        {1},
+    }},
+}}
+"""
+
+dict_literal_template = '{{ {0}: 1, {1}: 2 }}'
 
 
 @pytest.mark.parametrize('code', [
     set_literal_template,
+    nested_set_template,
+    dict_literal_template,
 ])
 @pytest.mark.parametrize('element', [
     'call()',
@@ -23,14 +35,10 @@ set_literal_template = '{{{0}, {1}}}'
     'method.call()',
     '~method.call()',
     'some["key"]',
-    '[item.call()]',
     '(9, function())',
-    '{"key": some_value.attr}',
-    '{some_value.attr, some_other}',
-    '*[item2["access"]]',
     '1 + 2',  # no addition will be performed
 ])
-def test_set_with_impure(
+def test_collection_with_impure(
     assert_errors,
     parse_ast_tree,
     code,
@@ -48,6 +56,8 @@ def test_set_with_impure(
 
 @pytest.mark.parametrize('code', [
     set_literal_template,
+    nested_set_template,
+    dict_literal_template,
 ])
 @pytest.mark.parametrize('element', [
     '1',
@@ -78,6 +88,8 @@ def test_set_with_pure_unique(
 
 @pytest.mark.parametrize('code', [
     set_literal_template,
+    nested_set_template,
+    dict_literal_template,
 ])
 @pytest.mark.parametrize('element', [
     '1',
@@ -88,15 +100,34 @@ def test_set_with_pure_unique(
     'None',
     "b'1a'",
     '"string."',
-    '[]',
-    '[name, name2]',
     '(9, "0")',
-    "{'key': value}",
-    "{'', '1', True}",
-    '*[1, 2, 3, None]',
-    '*()',
     '3 + 1j',
     '-3 - 1j',
+])
+def test_collection_with_pure_duplicate(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    element,
+    default_options,
+):
+    """Testing that pure elements can not be contained multiple times."""
+    tree = parse_ast_tree(code.format(element, element))
+
+    visitor = WrongCollectionVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [NonUniqueItemsInHashViolation])
+
+
+@pytest.mark.parametrize('code', [
+    set_literal_template,
+    nested_set_template,
+])
+@pytest.mark.parametrize('element', [
+    '*[1, 2, 3, None]',
+    '*()',
+    '*{True, False, None}',
 ])
 def test_set_with_pure_duplicate(
     assert_errors,
@@ -111,11 +142,12 @@ def test_set_with_pure_duplicate(
     visitor = WrongCollectionVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [NonUniqueItemsInSetViolation])
+    assert_errors(visitor, [NonUniqueItemsInHashViolation])
 
 
 @pytest.mark.parametrize('code', [
     set_literal_template,
+    nested_set_template,
 ])
 @pytest.mark.parametrize('first, second', [
     ('1', 'True'),
@@ -139,4 +171,4 @@ def test_set_with_similar_values(
     visitor = WrongCollectionVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [NonUniqueItemsInSetViolation])
+    assert_errors(visitor, [NonUniqueItemsInHashViolation])

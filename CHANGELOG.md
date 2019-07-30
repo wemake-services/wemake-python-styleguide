@@ -33,6 +33,7 @@ In this release we had a little focus on:
 - Forbids to use block variables after the block definitions
 - Changes how `WrongSlotsViolation` works, not `(...) + value` is restricted
   in favor of `(..., *value)`
+- Forbids to have explicit unhashable types in sets and dicts
 
 ### Bugfixes
 

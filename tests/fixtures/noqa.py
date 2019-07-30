@@ -511,3 +511,5 @@ bad_unicode = b'\u1'  # noqa: WPS439
 CheckStopIteration = 1  # noqa: WPS440
 
 print(literal)  # noqa: WPS441
+
+unhashable = {[]}  # noqa: WPS442

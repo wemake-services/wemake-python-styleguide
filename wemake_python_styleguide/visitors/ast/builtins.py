@@ -3,7 +3,15 @@
 import ast
 from collections import Counter, Hashable, defaultdict
 from contextlib import suppress
-from typing import ClassVar, DefaultDict, Iterable, List, Mapping
+from typing import (
+    ClassVar,
+    DefaultDict,
+    Iterable,
+    List,
+    Mapping,
+    Sequence,
+    Union,
+)
 
 import astor
 from typing_extensions import final
@@ -28,7 +36,8 @@ from wemake_python_styleguide.violations import complexity, consistency
 from wemake_python_styleguide.violations.best_practices import (
     MagicNumberViolation,
     MultipleAssignmentsViolation,
-    NonUniqueItemsInSetViolation,
+    NonUniqueItemsInHashViolation,
+    UnhashableTypeInHashViolation,
     WrongUnpackingViolation,
 )
 from wemake_python_styleguide.visitors import base, decorators
@@ -256,6 +265,16 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
         ast.Name,
     )
 
+    _unhashable_types: ClassVar[AnyNodes] = (
+        ast.List,
+        ast.ListComp,
+        ast.Set,
+        ast.SetComp,
+        ast.Dict,
+        ast.DictComp,
+        ast.GeneratorExp,
+    )
+
     _elements_to_eval: ClassVar[AnyNodes] = (
         ast.Num,
         ast.Str,
@@ -278,22 +297,75 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
         Ensures that set literals do not have any duplicate items.
 
         Raises:
-            NonUniqueItemsInSetViolation
+            NonUniqueItemsInHashViolation
+            UnhashableTypeInHashViolation
 
         """
-        self._check_set_elements(node)
+        self._check_set_elements(node, node.elts)
+        self._check_unhashable_elements(node, node.elts)
         self.generic_visit(node)
+
+    def visit_Dict(self, node: ast.Dict) -> None:
+        """
+        Ensures that dict literals do not have any duplicate keys.
+
+        Raises:
+            NonUniqueItemsInHashViolation
+            UnhashableTypeInHashViolation
+
+        """
+        self._check_set_elements(node, node.keys)
+        self._check_unhashable_elements(node, node.keys)
+        self.generic_visit(node)
+
+    def _check_unhashable_elements(
+        self,
+        node: ast.AST,
+        keys_or_elts: Sequence[ast.AST],
+    ) -> None:
+        for set_item in keys_or_elts:
+            if isinstance(set_item, self._unhashable_types):
+                self.add_violation(UnhashableTypeInHashViolation(set_item))
+
+    def _check_set_elements(
+        self,
+        node: Union[ast.Set, ast.Dict],
+        keys_or_elts: Sequence[ast.AST],
+    ) -> None:
+        elements: List[str] = []
+        element_values = []
+
+        for set_item in keys_or_elts:
+            real_item = unwrap_unary_node(set_item)
+            if isinstance(real_item, self._elements_in_sets):
+                # Similar look:
+                source = astor.to_source(set_item)
+                elements.append(source.strip().strip('(').strip(')'))
+
+            real_item = unwrap_starred_node(real_item)
+
+            # Non-constant nodes raise ValueError,
+            # unhashables raise TypeError:
+            with suppress(ValueError, TypeError):
+                # Similar value:
+                real_item = safe_eval.literal_eval_with_names(
+                    real_item,
+                ) if isinstance(
+                    real_item, self._elements_to_eval,
+                ) else set_item
+                element_values.append(real_item)
+        self._report_set_elements(node, elements, element_values)
 
     def _report_set_elements(
         self,
-        node: ast.Set,
+        node: Union[ast.Set, ast.Dict],
         elements: List[str],
         element_values,
     ) -> None:
         for look_element, look_count in Counter(elements).items():
             if look_count > 1:
                 self.add_violation(
-                    NonUniqueItemsInSetViolation(node, text=look_element),
+                    NonUniqueItemsInHashViolation(node, text=look_element),
                 )
                 return
 
@@ -308,28 +380,5 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
 
             if value_counts[real_value] > 1:
                 self.add_violation(
-                    NonUniqueItemsInSetViolation(node, text=value_element),
+                    NonUniqueItemsInHashViolation(node, text=value_element),
                 )
-
-    def _check_set_elements(self, node: ast.Set) -> None:
-        elements: List[str] = []
-        element_values = []
-
-        for set_item in node.elts:
-            real_item = unwrap_unary_node(set_item)
-            if isinstance(real_item, self._elements_in_sets):
-                # Similar look:
-                source = astor.to_source(set_item)
-                elements.append(source.strip().strip('(').strip(')'))
-
-            real_item = unwrap_starred_node(real_item)
-
-            # Similar value:
-            with suppress(ValueError):  # non-constant nodes raise it
-                real_item = safe_eval.literal_eval_with_names(
-                    real_item,
-                ) if isinstance(
-                    real_item, self._elements_to_eval,
-                ) else set_item
-                element_values.append(real_item)
-        self._report_set_elements(node, elements, element_values)

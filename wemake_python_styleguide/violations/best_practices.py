@@ -36,7 +36,7 @@ Summary
    WrongUnpackingViolation
    DuplicateExceptionViolation
    YieldInComprehensionViolation
-   NonUniqueItemsInSetViolation
+   NonUniqueItemsInHashViolation
    BaseExceptionSubclassViolation
    TryExceptMultipleReturnPathViolation
    WrongKeywordViolation
@@ -61,6 +61,7 @@ Summary
    WrongUnicodeEscapeViolation
    BlockAndLocalOverlapViolation
    ControlVarUsedAfterBlockViolation
+   UnhashableTypeInHashViolation
 
 Best practices
 --------------
@@ -82,7 +83,7 @@ Best practices
 .. autoclass:: WrongUnpackingViolation
 .. autoclass:: DuplicateExceptionViolation
 .. autoclass:: YieldInComprehensionViolation
-.. autoclass:: NonUniqueItemsInSetViolation
+.. autoclass:: NonUniqueItemsInHashViolation
 .. autoclass:: BaseExceptionSubclassViolation
 .. autoclass:: TryExceptMultipleReturnPathViolation
 .. autoclass:: WrongKeywordViolation
@@ -107,6 +108,7 @@ Best practices
 .. autoclass:: WrongUnicodeEscapeViolation
 .. autoclass:: BlockAndLocalOverlapViolation
 .. autoclass:: ControlVarUsedAfterBlockViolation
+.. autoclass:: UnhashableTypeInHashViolation
 
 """
 
@@ -692,17 +694,18 @@ class YieldInComprehensionViolation(ASTViolation):
 
 
 @final
-class NonUniqueItemsInSetViolation(ASTViolation):
+class NonUniqueItemsInHashViolation(ASTViolation):
     """
-    Forbids to have duplicate items in ``set`` literals.
+    Forbids to have duplicate items in hashes.
 
     Reasoning:
-        When you explicitly put duplicate items in ``set`` literals
-        it just does not make any sense. Since ``set`` can not contain
+        When you explicitly put duplicate items
+        in ``set`` literals or in ``dict`` keys
+        it just does not make any sense. Since hashes cannot contain
         duplicate items and they will be removed anyway.
 
     Solution:
-        Remove the duplicate items.
+        Remove duplicate items.
 
     Example::
 
@@ -720,14 +723,14 @@ class NonUniqueItemsInSetViolation(ASTViolation):
     - comprehensions
     - attributes
     - subscribe operations
-    - containers: lists, dicts, tuples, sets
 
     .. versionadded:: 0.7.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.12.0
 
     """
 
-    error_template = 'Found non-unique item in `set` literal: {0}'
+    error_template = 'Found non-unique item in hash: {0}'
     code = 417
     previous_codes = {449}
 
@@ -1625,3 +1628,30 @@ class ControlVarUsedAfterBlockViolation(ASTViolation):
 
     error_template = 'Found control variable used after block: {0}'
     code = 441
+
+
+@final
+class UnhashableTypeInHashViolation(ASTViolation):
+    """
+    Forbids to use exlicit unhashable types as set items and dict keys.
+
+    Reasoning:
+        This will resolve in ``TypeError`` in runtime.
+
+    Solution:
+        Use hashable types to define set items and dict keys.
+
+    Example::
+
+        # Correct:
+        my_dict = {1: {}, (1, 2): [], (2, 3): {1, 2}}
+
+        # Wrong:
+        my_dict = {[1, 2]: [], {2, 3}: {1, 2}}
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found unhashable item'
+    code = 442
