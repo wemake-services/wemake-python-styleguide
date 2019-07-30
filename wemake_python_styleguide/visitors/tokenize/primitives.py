@@ -16,6 +16,7 @@ from wemake_python_styleguide.violations.best_practices import (
     WrongUnicodeEscapeViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
+    BadComplexNumberSuffixViolation,
     BadNumberSuffixViolation,
     ImplicitRawStringViolation,
     ImplicitStringConcatenationViolation,
@@ -60,6 +61,8 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
         'a', 'b', 'c', 'd', 'e', 'f',
     ))
 
+    _bad_complex_suffix: ClassVar[str] = 'J'
+
     def visit_number(self, token: tokenize.TokenInfo) -> None:
         """
         Checks number declarations.
@@ -75,9 +78,19 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
         https://github.com/wemake-services/wemake-python-styleguide/issues/557
 
         """
+        self._check_complex_suffix(token)
         self._check_underscored_number(token)
         self._check_partial_float(token)
         self._check_bad_number_suffixes(token)
+
+    def _check_complex_suffix(self, token: tokenize.TokenInfo) -> None:
+        if self._bad_complex_suffix in token.string:
+            self.add_violation(
+                BadComplexNumberSuffixViolation(
+                    token,
+                    text=self._bad_complex_suffix,
+                ),
+            )
 
     def _check_underscored_number(self, token: tokenize.TokenInfo) -> None:
         if '_' in token.string:

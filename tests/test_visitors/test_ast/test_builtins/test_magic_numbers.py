@@ -92,6 +92,9 @@ some_dict[{0}]
     765,
     '0x20',
     '0o12',
+    '0b1',
+    '1e1',
+    '1j',
 ])
 def test_magic_number(
     assert_errors,

@@ -8,9 +8,11 @@ We used to have incremental versioning before `0.1.0`.
 
 In this release we had a little focus on:
 
+0. Primitives and how to use them
 1. Strings and numbers and how to write them
 2. OOP features
-3. Blocks and code structure, including overused parts
+3. Blocks and code structure,
+   including overused expressions and overlaping variables
 
 ### Features
 
@@ -34,6 +36,7 @@ In this release we had a little focus on:
 - Changes how `WrongSlotsViolation` works, not `(...) + value` is restricted
   in favor of `(..., *value)`
 - Forbids to have explicit unhashable types in sets and dicts
+- Enforces `j` prefix over `J` for complex numbers
 
 ### Bugfixes
 
@@ -62,6 +65,8 @@ In this release we had a little focus on:
 - Fixes that `{(1, 2), (1, 2)}` was not recognised as a set with duplicates
 - Fixes that `{*(1, 2), *(1, 2)}` was not recognised as a set with duplicates
 - Fixes that `{1: 1, True: 1}` was not recognised as a dict with duplicates
+- Fixes that `compex` numbers were always treated like magic,
+  now `1j` is allowed
 
 ### Misc
 

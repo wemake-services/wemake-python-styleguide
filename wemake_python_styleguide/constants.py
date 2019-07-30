@@ -177,6 +177,8 @@ MAGIC_NUMBERS_WHITELIST: Final = frozenset((
     1024,  # bytes
     24,  # hours
     60,  # seconds, minutes
+
+    1j,  # imaginary part of a complex number
 ))
 
 #: Maximum amount of ``noqa`` comments per module.

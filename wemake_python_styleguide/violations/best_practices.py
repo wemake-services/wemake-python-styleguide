@@ -1602,6 +1602,9 @@ class ControlVarUsedAfterBlockViolation(ASTViolation):
     Reasoning:
         Variables leaking from the blocks can damage your logic.
         It might not contain what you think they contain.
+        Some variables even might be deleted right after the block,
+        just like in ``except Exception as exc:``
+        where ``exc`` won't be in scope after ``except`` body.
 
     Solution:
         Use names inside the scope they are defined.

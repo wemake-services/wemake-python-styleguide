@@ -459,6 +459,7 @@ leading_zero = 1.2e01  # noqa: WPS339
 positive_exponent = 1.1e+1  # noqa: WPS340
 wrong_hex = 0xabc  # noqa: WPS341
 wrong_escape_raw_string = '\\n'  # noqa: WPS342
+bad_complex = 1J  # noqa: WPS343
 
 CONSTANT = []  # noqa: WPS407
 

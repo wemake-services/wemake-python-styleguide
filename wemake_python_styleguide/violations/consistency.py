@@ -68,6 +68,7 @@ Summary
    PositiveExponentViolation
    WrongHexNumberCaseViolation
    ImplicitRawStringViolation
+   BadComplexNumberSuffixViolation
 
 Consistency checks
 ------------------
@@ -115,6 +116,7 @@ Consistency checks
 .. autoclass:: PositiveExponentViolation
 .. autoclass:: WrongHexNumberCaseViolation
 .. autoclass:: ImplicitRawStringViolation
+.. autoclass:: BadComplexNumberSuffixViolation
 
 """
 
@@ -1593,7 +1595,7 @@ class WrongHexNumberCaseViolation(TokenizeViolation):
 @final
 class ImplicitRawStringViolation(TokenizeViolation):
     r"""
-    Forbids use ``\\`` escape sequences inside regular strings.
+    Forbids to use ``\\`` escape sequences inside regular strings.
 
     Reasoning:
         It is hard to read escape sequencse inside regular strings,
@@ -1617,3 +1619,30 @@ class ImplicitRawStringViolation(TokenizeViolation):
 
     error_template = 'Found implicit raw string: {0}'
     code = 342
+
+
+@final
+class BadComplexNumberSuffixViolation(TokenizeViolation):
+    """
+    Forbids to use uppercase complex number suffix.
+
+    Reasoning:
+        Numbers should be consistent.
+
+    Solution:
+        Use lowercase suffix for imaginary part.
+
+    Example::
+
+        # Correct:
+        complex_number = 1j
+
+        # Wrong:
+        complex_number = 1J
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found wrong complex number suffix: {0}'
+    code = 343
