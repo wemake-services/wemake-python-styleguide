@@ -1,24 +1,34 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Optional
+from typing import Dict, Optional
+
+
+def get_keyword_args_by_names(
+    call: ast.Call,
+    *names: str,
+) -> Dict[str, ast.expr]:
+    """Returns keywords of ``call`` by specified ``names``."""
+    keyword_args = {}
+    for keyword in call.keywords:
+        if keyword.arg in names:
+            keyword_args[keyword.arg] = keyword.value
+    return keyword_args
 
 
 def is_super_called_with(call: ast.Call, type_: str, object_: str) -> bool:
     """Tells whether super ``call`` was done with ``type_`` and ``object_``."""
-    arg1: Optional[ast.expr] = None
-    arg2: Optional[ast.expr] = None
+    arg1: Optional[ast.expr]
+    arg2: Optional[ast.expr]
     if len(call.args) == 2:
         #: super(Test, self)
         arg1 = call.args[0]
         arg2 = call.args[1]
     elif len(call.keywords) == 2:
         #: super(t=Test, obj=self)
-        for keyword in call.keywords:
-            if keyword.arg == 't':
-                arg1 = keyword.value
-            elif keyword.arg == 'obj':
-                arg2 = keyword.value
+        keyword_args = get_keyword_args_by_names(call, 't', 'obj')
+        arg1 = keyword_args.get('t')
+        arg2 = keyword_args.get('obj')
     else:
         #: super(Test, obj=self)
         arg1 = call.args[0]
@@ -26,6 +36,15 @@ def is_super_called_with(call: ast.Call, type_: str, object_: str) -> bool:
     is_expected_type = isinstance(arg1, ast.Name) and arg1.id == type_
     is_expected_object = isinstance(arg2, ast.Name) and arg2.id == object_
     return is_expected_type and is_expected_object
+
+
+def get_super_call(node: ast.AST) -> Optional[ast.Call]:
+    """Returns given ``node`` if it represents ``super`` ``ast.Call``."""
+    if not isinstance(node, ast.Call):
+        return None
+    if not isinstance(node.func, ast.Name) or node.func.id != 'super':
+        return None
+    return node
 
 
 def is_ordinary_super_call(node: ast.AST, class_name: str) -> bool:
@@ -45,16 +64,14 @@ def is_ordinary_super_call(node: ast.AST, class_name: str) -> bool:
     Any other combination of arguments is considered as unordinary by
     this function.
     """
-    if not isinstance(node, ast.Call):
+    call = get_super_call(node)
+    if call is None:
         return False
-    if not isinstance(node.func, ast.Name) or node.func.id != 'super':
-        return False
-    if not node.args and not node.keywords:
+    args_number = len(call.args) + len(call.keywords)
+    if args_number == 0:
         return True
-    if len(node.args) + len(node.keywords) != 2:
-        return False
-    return is_super_called_with(
-        node,
+    return args_number == 2 and is_super_called_with(
+        call,
         type_=class_name,
         object_='self',
     )
