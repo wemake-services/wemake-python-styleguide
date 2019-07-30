@@ -468,12 +468,9 @@ class UselessOverwrittenMethodViolation(ASTViolation):
 
     Example::
 
-        class Base(object):
-            def method(self, argument): ...
-
         # Correct:
         class Test(Base):
-            pass
+            ...
 
         # Wrong:
         class Test(object):

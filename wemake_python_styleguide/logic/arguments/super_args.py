@@ -21,16 +21,16 @@ def is_super_called_with(call: ast.Call, type_: str, object_: str) -> bool:
     arg1: Optional[ast.expr]
     arg2: Optional[ast.expr]
     if len(call.args) == 2:
-        #: super(Test, self)
+        # branch for super(Test, self)
         arg1 = call.args[0]
         arg2 = call.args[1]
     elif len(call.keywords) == 2:
-        #: super(t=Test, obj=self)
+        # branch for super(t=Test, obj=self)
         keyword_args = get_keyword_args_by_names(call, 't', 'obj')
         arg1 = keyword_args.get('t')
         arg2 = keyword_args.get('obj')
     else:
-        #: super(Test, obj=self)
+        # branch for super(Test, obj=self)
         arg1 = call.args[0]
         arg2 = call.keywords[0].value
     is_expected_type = isinstance(arg1, ast.Name) and arg1.id == type_

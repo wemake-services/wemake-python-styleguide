@@ -180,12 +180,15 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         statements_number = len(node.body)
         if statements_number > 2 or statements_number == 0:
             return None
+
         if statements_number == 2:
             if not strings.is_doc_string(node.body[0]):
                 return None
+
         return_stmt = node.body[-1]
         if not isinstance(return_stmt, ast.Return):
             return None
+
         call_stmt = return_stmt.value
         if not isinstance(call_stmt, ast.Call):
             return None
@@ -200,21 +203,27 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
             # any decorator can change logic
             # and make this overwrite useful
             return
+
         call_stmt = self._get_call_stmt_of_useless_method(node)
         if call_stmt is None or not isinstance(call_stmt.func, ast.Attribute):
             return
+
         attribute = call_stmt.func
         defined_method_name = node.name
-        called_method_name = attribute.attr
-        if defined_method_name != called_method_name:
+        if defined_method_name != attribute.attr:
             return
-        if super_args.is_ordinary_super_call(attribute.value, class_name):
-            if function_args.is_call_matched_by_arguments(node, call_stmt):
-                self.add_violation(
-                    oop.UselessOverwrittenMethodViolation(
-                        node, text=defined_method_name,
-                    ),
-                )
+
+        if not super_args.is_ordinary_super_call(attribute.value, class_name):
+            return
+
+        if not function_args.is_call_matched_by_arguments(node, call_stmt):
+            return
+
+        self.add_violation(
+            oop.UselessOverwrittenMethodViolation(
+                node, text=defined_method_name,
+            ),
+        )
 
 
 @final
