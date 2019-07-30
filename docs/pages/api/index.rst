@@ -81,6 +81,7 @@ Contributing
 
   glossary.rst
   contributing.rst
+  debugging.rst
 
 
 Creating a new rule
