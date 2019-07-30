@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from collections import Counter, defaultdict
+from collections import Counter, Hashable, defaultdict
+from contextlib import suppress
 from typing import ClassVar, DefaultDict, Iterable, List, Mapping
 
 import astor
@@ -9,11 +10,12 @@ from typing_extensions import final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.logic import nodes, safe_eval
 from wemake_python_styleguide.logic.naming.name_nodes import extract_name
-from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.operators import (
     count_unary_operator,
     get_parent_ignoring_unary,
+    unwrap_starred_node,
     unwrap_unary_node,
 )
 from wemake_python_styleguide.types import (
@@ -22,18 +24,12 @@ from wemake_python_styleguide.types import (
     AnyUnaryOp,
     AnyWith,
 )
+from wemake_python_styleguide.violations import complexity, consistency
 from wemake_python_styleguide.violations.best_practices import (
     MagicNumberViolation,
     MultipleAssignmentsViolation,
     NonUniqueItemsInSetViolation,
     WrongUnpackingViolation,
-)
-from wemake_python_styleguide.violations.complexity import (
-    OverusedStringViolation,
-)
-from wemake_python_styleguide.violations.consistency import (
-    FormattedStringViolation,
-    UselessOperatorsViolation,
 )
 from wemake_python_styleguide.visitors import base, decorators
 
@@ -66,7 +62,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
             FormattedStringViolation
 
         """
-        self.add_violation(FormattedStringViolation(node))
+        self.add_violation(consistency.FormattedStringViolation(node))
         self.generic_visit(node)
 
     def _check_string_constant(self, node: ast.Str) -> None:
@@ -75,7 +71,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
             ast.AnnAssign,
         )
 
-        parent = get_parent(node)
+        parent = nodes.get_parent(node)
         if isinstance(parent, annotations) and parent.annotation == node:
             return  # it is argument or variable annotation
 
@@ -88,7 +84,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         for string, usage_count in self._string_constants.items():
             if usage_count > self.options.max_string_usages:
                 self.add_violation(
-                    OverusedStringViolation(text=string or "''"),
+                    complexity.OverusedStringViolation(text=string or "''"),
                 )
 
 
@@ -162,7 +158,9 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         for node_type, limit in self._limits.items():
             if count_unary_operator(node, node_type) > limit:
                 self.add_violation(
-                    UselessOperatorsViolation(node, text=str(node.n)),
+                    consistency.UselessOperatorsViolation(
+                        node, text=str(node.n),
+                    ),
                 )
 
 
@@ -258,6 +256,23 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
         ast.Name,
     )
 
+    _elements_to_eval: ClassVar[AnyNodes] = (
+        ast.Num,
+        ast.Str,
+        ast.Bytes,
+        ast.NameConstant,
+        ast.Tuple,
+        ast.List,
+        ast.Set,
+        ast.Dict,
+        # Since python3.8 `BinOp` only works for complex numbers:
+        # https://github.com/python/cpython/pull/4035/files
+        # https://bugs.python.org/issue31778
+        ast.BinOp,
+        # Only our custom `eval` function can eval names safely:
+        ast.Name,
+    )
+
     def visit_Set(self, node: ast.Set) -> None:
         """
         Ensures that set literals do not have any duplicate items.
@@ -269,18 +284,52 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
         self._check_set_elements(node)
         self.generic_visit(node)
 
-    def _report_set_elements(self, node: ast.Set, elements: List[str]) -> None:
-        for element, count in Counter(elements).items():
-            if count > 1:
+    def _report_set_elements(
+        self,
+        node: ast.Set,
+        elements: List[str],
+        element_values,
+    ) -> None:
+        for look_element, look_count in Counter(elements).items():
+            if look_count > 1:
                 self.add_violation(
-                    NonUniqueItemsInSetViolation(node, text=element),
+                    NonUniqueItemsInSetViolation(node, text=look_element),
+                )
+                return
+
+        value_counts: DefaultDict[Hashable, int] = defaultdict(int)
+        for value_element in element_values:
+            real_value = value_element if isinstance(
+                # Lists, sets, and dicst are not hashable:
+                value_element, Hashable,
+            ) else str(value_element)
+
+            value_counts[real_value] += 1
+
+            if value_counts[real_value] > 1:
+                self.add_violation(
+                    NonUniqueItemsInSetViolation(node, text=value_element),
                 )
 
     def _check_set_elements(self, node: ast.Set) -> None:
         elements: List[str] = []
+        element_values = []
+
         for set_item in node.elts:
-            real_set_item = unwrap_unary_node(set_item)
-            if isinstance(real_set_item, self._elements_in_sets):
+            real_item = unwrap_unary_node(set_item)
+            if isinstance(real_item, self._elements_in_sets):
+                # Similar look:
                 source = astor.to_source(set_item)
                 elements.append(source.strip().strip('(').strip(')'))
-        self._report_set_elements(node, elements)
+
+            real_item = unwrap_starred_node(real_item)
+
+            # Similar value:
+            with suppress(ValueError):  # non-constant nodes raise it
+                real_item = safe_eval.literal_eval_with_names(
+                    real_item,
+                ) if isinstance(
+                    real_item, self._elements_to_eval,
+                ) else set_item
+                element_values.append(real_item)
+        self._report_set_elements(node, elements, element_values)

@@ -19,6 +19,13 @@ def unwrap_unary_node(node: ast.AST) -> ast.AST:
     return unwrap_unary_node(node.operand)
 
 
+def unwrap_starred_node(node: ast.AST) -> ast.AST:
+    """Unwraps the unary ``*`` starred node."""
+    if isinstance(node, ast.Starred):
+        return node.value
+    return node
+
+
 def get_parent_ignoring_unary(node: ast.AST) -> Optional[ast.AST]:
     """
     Returns real parent ignoring proxy unary parent level.

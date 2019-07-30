@@ -23,14 +23,12 @@ set_literal_template = '{{{0}, {1}}}'
     'method.call()',
     '~method.call()',
     'some["key"]',
-    '[item1]',
-    '(9, variable)',
-    '{"key": some_value}',
-    '{some_value, some_other}',
-    '[]',
-    '(9, 0)',
-    "{'key': 'some string value'}",
-    "{''}",
+    '[item.call()]',
+    '(9, function())',
+    '{"key": some_value.attr}',
+    '{some_value.attr, some_other}',
+    '*[item2["access"]]',
+    '1 + 2',  # no addition will be performed
 ])
 def test_set_with_impure(
     assert_errors,
@@ -58,6 +56,9 @@ def test_set_with_impure(
     'variable_name',
     'True',
     'None',
+    'some.attr',
+    'some.method()',
+    'some["key"]',
 ])
 def test_set_with_pure_unique(
     assert_errors,
@@ -86,11 +87,19 @@ def test_set_with_pure_unique(
     'True',
     'None',
     "b'1a'",
-    '"""Docstring."""',  # other strings have a strage bug with multiple quotes
+    '"string."',
+    '[]',
+    '[name, name2]',
+    '(9, "0")',
+    "{'key': value}",
+    "{'', '1', True}",
+    '*[1, 2, 3, None]',
+    '*()',
+    '3 + 1j',
+    '-3 - 1j',
 ])
 def test_set_with_pure_duplicate(
     assert_errors,
-    assert_error_text,
     parse_ast_tree,
     code,
     element,
@@ -103,4 +112,31 @@ def test_set_with_pure_duplicate(
     visitor.run()
 
     assert_errors(visitor, [NonUniqueItemsInSetViolation])
-    assert_error_text(visitor, element)
+
+
+@pytest.mark.parametrize('code', [
+    set_literal_template,
+])
+@pytest.mark.parametrize('first, second', [
+    ('1', 'True'),
+    ('1', '1.0'),
+    ('-1', '-1.0'),
+    ('1.0', 'True'),
+    ('-0', '-False'),
+    ('0.0', 'False'),
+])
+def test_set_with_similar_values(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    first,
+    second,
+    default_options,
+):
+    """Testing that same values are reported."""
+    tree = parse_ast_tree(code.format(first, second))
+
+    visitor = WrongCollectionVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [NonUniqueItemsInSetViolation])

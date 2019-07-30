@@ -57,12 +57,16 @@ In this release we had a little focus on:
 - Fixes when `WrongUnpackingViolation` was not raised for comprehensions
 - Fixes that `x, y, z = x, z, y` was not recognized
   as `ReassigningVariableToItselfViolation`
+- Fixes that `{1, True, 1.0}` was not recognised as a set with duplicates
+- Fixes that `{(1, 2), (1, 2)}` was not recognised as a set with duplicates
+- Fixes that `{*(1, 2), *(1, 2)}` was not recognised as a set with duplicates
+- Fixes that `{1: 1, True: 1}` was not recognised as a dict with duplicates
 
 ### Misc
 
 - Adds `bellybutton` to the list of linters
 - Improves tests for binary, octal, hex, and expanetional numbers
-- Adds `xenon --max-absolute A --max-modules A --max-average A server` check
+- Adds new `xenon` CI check
 - Now handles exceptions in our own code, hope to never see them!
 - Now uses `coverage` checks in deepsource
 - Now `@alias` checks that all aliases are valid

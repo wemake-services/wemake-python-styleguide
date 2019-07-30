@@ -5,7 +5,11 @@ lint:
 	mypy wemake_python_styleguide
 	flake8 .
 	autopep8 -r . --diff --exclude=./tests/fixtures/** --exit-code
-	xenon --max-absolute B --max-modules A --max-average A wemake_python_styleguide
+
+	# We run `xenon` on a subset of files, since some of them are ports from
+	# other libs, builtins, etc. And we do not have a control over them.
+	xenon --max-absolute B --max-modules A --max-average A wemake_python_styleguide --exclude=wemake_python_styleguide/logic/safe_eval.py
+
 	lint-imports
 	poetry run doc8 -q docs
 

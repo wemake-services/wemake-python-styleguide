@@ -73,6 +73,23 @@ ignore_imports =
   wemake_python_styleguide.options.config -> flake8
 
 
+[importlinter:contract:subapi-restrictions]
+name = Forbids to import anything from our sub-API packages
+type = forbidden
+
+source_modules =
+  wemake_python_styleguide.visitors
+  wemake_python_styleguide.violations
+  wemake_python_styleguide.compat
+  wemake_python_styleguide.logic
+
+forbidden_modules =
+  # Our sub-API parts:
+  wemake_python_styleguide.options
+  wemake_python_styleguide.transformations
+  wemake_python_styleguide.presets
+
+
 [importlinter:contract:tests-restrictions]
 name = Explicit import restrictions for tests
 type = forbidden
