@@ -29,6 +29,7 @@ Summary
    TooManyImportsViolation
    TooManyModuleMembersViolation
    TooManyImportedNamesViolation
+   OverusedExpressionViolation
    TooManyLocalsViolation
    TooManyArgumentsViolation
    TooManyReturnsViolation
@@ -56,6 +57,7 @@ Module complexity
 .. autoclass:: TooManyImportsViolation
 .. autoclass:: TooManyModuleMembersViolation
 .. autoclass:: TooManyImportedNamesViolation
+.. autoclass:: OverusedExpressionViolation
 
 Function and class complexity
 -----------------------------
@@ -242,6 +244,35 @@ class TooManyImportedNamesViolation(SimpleViolation):
 
     error_template = 'Found module with too many imported names: {0}'
     code = 203
+
+
+@final
+class OverusedExpressionViolation(ASTViolation):
+    """
+    Forbids to have overused expressions in a module, function or method.
+
+    Reasoning:
+        Overusing expression lead to losing the parts that can and should
+        be refactored into methods and properties of objects.
+
+    Solution:
+        Refactor expressions to be attribute, method, or a new variable.
+
+    Configuration:
+        This rule is configurable with ``--max-module-expressions``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_MODULE_EXPRESSIONS`
+
+        And with ``--max-function-expressions``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_FUNCTION_EXPRESSIONS`
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found overused expression: {0}'
+    code = 204
 
 
 # Functions and classes:

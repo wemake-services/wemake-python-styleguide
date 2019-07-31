@@ -120,3 +120,5 @@ class ConfigurationOptions(Protocol):
     max_string_usages: int
     max_awaits: int
     max_try_body_length: int
+    max_module_expressions: int
+    max_function_expressions: int

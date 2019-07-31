@@ -104,6 +104,12 @@ class Configuration(object):
     - ``max-try-body-length`` - maximum amount of ``try`` node body length,
       defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_TRY_BODY_LENGTH`
+    - ``max-module-expressions`` - maximum amount of expression
+      usages in a module, defaults
+      :str:`wemake_python_styleguide.options.defaults.MAX_MODULE_EXPRESSIONS`
+    - ``max-function-expressions`` - maximum amount of expression
+      usages in a function or method, defaults
+      :str:`wemake_python_styleguide.options.defaults.MAX_FUNCTION_EXPRESSIONS`
 
     All options are configurable via ``flake8`` CLI.
 
@@ -214,6 +220,18 @@ class Configuration(object):
             '--max-try-body-length',
             defaults.MAX_TRY_BODY_LENGTH,
             'Maximum amount of try block node body length.',
+        ),
+
+        _Option(
+            '--max-module-expressions',
+            defaults.MAX_MODULE_EXPRESSIONS,
+            'Maximum amount of expression usages in a module.',
+        ),
+
+        _Option(
+            '--max-function-expressions',
+            defaults.MAX_FUNCTION_EXPRESSIONS,
+            'Maximum amount of expression usages in a function or method.',
         ),
 
         # General:

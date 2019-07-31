@@ -5,7 +5,9 @@ import pytest
 from wemake_python_styleguide.violations.complexity import (
     OverusedStringViolation,
 )
-from wemake_python_styleguide.visitors.ast.builtins import WrongStringVisitor
+from wemake_python_styleguide.visitors.ast.complexity.overuses import (
+    StringOveruseVisitor,
+)
 
 string_actions = """
 first = {0}
@@ -14,12 +16,27 @@ third[{0}]
 'new' + {0}
 """
 
-string_function_type_annotations = """
+string_function_type_annotations1 = """
 def first(
     arg1: {0},
     arg2: {0},
     arg3: {0},
+    arg4: {0},
 ) -> {0}:
+    ...
+"""
+
+string_function_type_annotations2 = """
+def func1() -> {0}:
+    ...
+
+def func2() -> {0}:
+    ...
+
+def func3() -> {0}:
+    ...
+
+def func4() -> {0}:
     ...
 """
 
@@ -31,14 +48,30 @@ class SomeClass(object):
     fourth: {0}
 """
 
-string_method_type_annotations = """
+string_method_type_annotations1 = """
 class SomeClass(object):
     def first(
         self,
         arg1: {0},
         arg2: {0},
         arg3: {0},
+        arg4: {0},
     ) -> {0}:
+        ...
+"""
+
+string_method_type_annotations2 = """
+class SomeClass(object):
+    def method1(self) -> {0}:
+        ...
+
+    def method2(self) -> {0}:
+        ...
+
+    def method3(self) -> {0}:
+        ...
+
+    def method4(self) -> {0}:
         ...
 """
 
@@ -52,9 +85,11 @@ fourth: {0}
 
 @pytest.mark.parametrize('strings', [
     string_actions,
-    string_function_type_annotations,
+    string_function_type_annotations1,
+    string_function_type_annotations2,
     string_class_type_annotations,
-    string_method_type_annotations,
+    string_method_type_annotations1,
+    string_method_type_annotations2,
     string_variable_type_annotations,
 ])
 @pytest.mark.parametrize('string_value', [
@@ -73,7 +108,7 @@ def test_string_overuse_settings(
     tree = parse_ast_tree(mode(strings.format(string_value)))
 
     option_values = options(max_string_usages=4)
-    visitor = WrongStringVisitor(option_values, tree=tree)
+    visitor = StringOveruseVisitor(option_values, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -99,7 +134,7 @@ def test_string_overuse(
     """Ensures that over-used strings raise violations."""
     tree = parse_ast_tree(strings.format(string_value))
 
-    visitor = WrongStringVisitor(default_options, tree=tree)
+    visitor = StringOveruseVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [OverusedStringViolation])
@@ -107,9 +142,11 @@ def test_string_overuse(
 
 
 @pytest.mark.parametrize('strings', [
-    string_function_type_annotations,
+    string_function_type_annotations1,
+    string_function_type_annotations2,
     string_class_type_annotations,
-    string_method_type_annotations,
+    string_method_type_annotations1,
+    string_method_type_annotations2,
     string_variable_type_annotations,
 ])
 @pytest.mark.parametrize('string_value', [
@@ -128,7 +165,7 @@ def test_string_type_annotations(
     tree = parse_ast_tree(mode(strings.format(string_value)))
 
     option_values = options(max_string_usages=0)
-    visitor = WrongStringVisitor(option_values, tree=tree)
+    visitor = StringOveruseVisitor(option_values, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])

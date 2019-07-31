@@ -12,7 +12,8 @@ In this release we had a little focus on:
 1. Strings and numbers and how to write them
 2. OOP features
 3. Blocks and code structure,
-   including overused expressions and overlaping variables
+   including variable scoping and overlaping variables
+4. Overused expressions and new complexity metrics
 
 ### Features
 
@@ -36,7 +37,8 @@ In this release we had a little focus on:
 - Changes how `WrongSlotsViolation` works, not `(...) + value` is restricted
   in favor of `(..., *value)`
 - Forbids to have explicit unhashable types in sets and dicts
-- Enforces `j` prefix over `J` for complex numbers
+- Enforces `j` prefix over `J` for `complex` numbers
+- Forbids overused expressions 
 
 ### Bugfixes
 
@@ -53,7 +55,9 @@ In this release we had a little focus on:
 - Fixes `WrongLoopIterTypeViolation` position
 - Fixes `WrongLoopIterTypeViolation` not triggering for compehensions
 - Fixes `WrongSlotsViolation` not triggering
-  for comprehensions and inccorect `__slots__` names and types
+  for comprehensions and incorrect `__slots__` names and types
+- Fixes `WrongSlotsViolation` not triggering
+  for invalid `python` identifiers like `__slots__ = ('123_slot',)`
 - Fixes `NestedClassViolation` and `NestedFunctionViolation` not reporting
   when placed deeply inside other nodes
 - Fixes when `WrongUnpackingViolation` was not raised
@@ -65,7 +69,7 @@ In this release we had a little focus on:
 - Fixes that `{(1, 2), (1, 2)}` was not recognised as a set with duplicates
 - Fixes that `{*(1, 2), *(1, 2)}` was not recognised as a set with duplicates
 - Fixes that `{1: 1, True: 1}` was not recognised as a dict with duplicates
-- Fixes that `compex` numbers were always treated like magic,
+- Fixes that `complex` numbers were always treated like magic,
   now `1j` is allowed
 
 ### Misc

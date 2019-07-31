@@ -21,6 +21,7 @@ from collections import Counter
 ERROR_PATTERN = re.compile(r'(WPS\d{3})')
 IGNORED_VIOLATIONS = (
     'WPS202',  # since our test case is complex, that's fine
+    'WPS204',  # our tests have a lot of overused expressions
     'WPS226',  # we have a lot of ugly strings inside,
     'WPS402',  # since we obviously use a lot of `noqa` comments
 )
@@ -46,6 +47,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS201': 0,
     'WPS202': 0,
     'WPS203': 0,
+    'WPS204': 0,
 
     'WPS210': 1,
     'WPS211': 1,
@@ -287,6 +289,8 @@ def test_noqa_fixture_diff(absolute_path, all_violations):
     output = subprocess.check_output(
         [
             'flake8',
+            '--ignore',
+            ','.join(IGNORED_VIOLATIONS),
             '--disable-noqa',
             '--isolated',
             '--diff',  # is required to test diffs! ;)
