@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from collections import Counter
-from typing import ClassVar, FrozenSet, List, Optional, Tuple
+from collections import defaultdict
+from typing import ClassVar, DefaultDict, FrozenSet, List, Optional, Tuple
 
 import astor
 from typing_extensions import final
@@ -201,16 +201,17 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
         node: types.AnyAssign,
         elements: ast.Tuple,
     ) -> None:
-        fields: List[str] = []
+        fields: DefaultDict[str, List[ast.AST]] = defaultdict(list)
+
         for tuple_item in elements.elts:
             slot_name = self._slot_item_name(tuple_item)
             if not slot_name:
-                self.add_violation(oop.WrongSlotsViolation(node))
+                self.add_violation(oop.WrongSlotsViolation(tuple_item))
                 return
-            fields.append(slot_name)
+            fields[slot_name].append(tuple_item)
 
-        for slot, counter in Counter(fields).items():
-            if not self._is_correct_slot(slot) or counter > 1:
+        for slots in fields.values():
+            if not self._are_correct_slots(slots) or len(slots) > 1:
                 self.add_violation(oop.WrongSlotsViolation(node))
                 return
 
@@ -235,8 +236,12 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
             return astor.to_source(node).strip()
         return None
 
-    def _is_correct_slot(self, slot: str) -> bool:
-        return bool(slot) and (slot.startswith('*') or slot.islower())
+    def _are_correct_slots(self, slots: List[ast.AST]) -> bool:
+        return all(
+            slot.s.isidentifier()
+            for slot in slots
+            if isinstance(slot, ast.Str)
+        )
 
 
 @final

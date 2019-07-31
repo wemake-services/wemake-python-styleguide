@@ -304,7 +304,7 @@ class WrongSlotsViolation(ASTViolation):
 
     - That ``__slots__`` is a tuple, name, attribute, star, or call
     - That ``__slots__`` do not have duplicates
-    - That ``__slots__`` do not have empty strings or uppercase strings
+    - That ``__slots__`` do not have empty strings or invalid python names
 
     Reasoning:
         ``__slots__`` is a very special attribute.

@@ -25,8 +25,6 @@ wrong_slots = (
     '["field", "other"]',
     '[x for x in some()]',
     '("",)',
-    '("A",)',
-    '("MyTest",)',
     '(x for x in some())',
     '("a", "a")',  # duplicate
     '(1,)',
@@ -46,13 +44,18 @@ wrong_slots = (
     '(*some, *some)',
     '(*some.attr, *some.attr)',
     '(*call(), *call())',
+    '("123",)',
+    '("1_var",)',
+    '("*notvalid",)',
+    '("*a", *a)',
 )
 
 correct_slots = (
     '()',
-    '("a",)',
-    '("a", "b")',
+    '("A",)',
+    '("a", "b1")',
     '("a", *other)',
+    '("a", *a)',
     '(*Test.Parent, "field")',
     '(*first, *second)',
     'SomeOther.__slots__',
