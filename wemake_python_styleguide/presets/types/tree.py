@@ -26,6 +26,7 @@ PRESET: Final = (
     # General:
     statements.StatementsWithBodiesVisitor,
     statements.WrongParametersIndentationVisitor,
+    statements.PointlessStarredVisitor,
 
     keywords.WrongRaiseVisitor,
     keywords.WrongKeywordVisitor,

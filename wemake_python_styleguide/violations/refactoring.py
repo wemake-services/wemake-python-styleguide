@@ -29,6 +29,7 @@ Summary
    UnmergedIsinstanceCallsViolation
    WrongIsinstanceWithTupleViolation
    ImplicitElifViolation
+   PointlessStarredViolation
 
 Refactoring opportunities
 -------------------------
@@ -47,6 +48,7 @@ Refactoring opportunities
 .. autoclass:: UnmergedIsinstanceCallsViolation
 .. autoclass:: WrongIsinstanceWithTupleViolation
 .. autoclass:: ImplicitElifViolation
+.. autoclass:: PointlessStarredViolation
 
 """
 
@@ -586,3 +588,12 @@ class ImplicitElifViolation(TokenizeViolation):
 
     error_template = 'Found implicit `elif` condition'
     code = 513
+
+
+@final
+class PointlessStarredViolation(ASTViolation):
+    """
+
+    """
+    error_template = 'Found pointless * using'
+    code = 514

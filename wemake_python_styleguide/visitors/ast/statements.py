@@ -24,6 +24,7 @@ from wemake_python_styleguide.violations.consistency import (
     ParametersIndentationViolation,
     UselessNodeViolation,
 )
+from wemake_python_styleguide.violations.refactoring import PointlessStarredViolation
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
@@ -286,3 +287,32 @@ class WrongParametersIndentationVisitor(BaseNodeVisitor):
                     elements[index - 1].lineno,
                     multi_line_mode,
                 )
+
+
+class PointlessStarredVisitor(BaseNodeVisitor):
+    """Responsible for absence of useless starred expressions."""
+
+    def visit_Call(self, node: ast.Call) -> None:
+        """Checks function parameters indentation."""
+        all_args = [*node.args, *[kw.value for kw in node.keywords]]
+        self._check_expr(node, all_args)
+        self.generic_visit(node)
+
+    def _check_starred(self, node: ast.Starred) -> Optional[bool]:
+        obj = node.value
+        if isinstance(obj, ast.Dict) and len(obj.keys) == 0:
+            self.add_violation(PointlessStarredViolation(node))
+        elif isinstance(obj, ast.List) and len(obj.elts) == 0:
+            self.add_violation(PointlessStarredViolation(node))
+        elif isinstance(obj, ast.Tuple) and len(obj.elts) == 0:
+            self.add_violation(PointlessStarredViolation(node))
+        return None
+
+    def _check_expr(
+        self,
+        node: ast.AST,
+        elements: Sequence[ast.AST],
+    ) -> None:
+        for index, statement in enumerate(elements):
+            if isinstance(statement, ast.Starred):
+                self._check_starred(statement)
