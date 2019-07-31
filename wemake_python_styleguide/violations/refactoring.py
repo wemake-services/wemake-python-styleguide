@@ -593,7 +593,20 @@ class ImplicitElifViolation(TokenizeViolation):
 @final
 class PointlessStarredViolation(ASTViolation):
     """
+    Forbids to have useless starred expressions.
 
+    Reasoning:
+       This kind of calls is just pointless.
+
+    Solution:
+       Forbid to use ``*[]``, ``*()``, and ``**{}`` in calls.
+
+    Example:
+
+        # Wrong:
+        print(*[], **{})
+
+    .. versionadded:: 0.12.0
     """
-    error_template = 'Found pointless * using'
+    error_template = 'Found pointless starred expression'
     code = 514

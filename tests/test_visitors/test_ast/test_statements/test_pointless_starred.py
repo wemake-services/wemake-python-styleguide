@@ -14,13 +14,13 @@ from wemake_python_styleguide.visitors.ast.statements import (
     'print(*[])',
     'print(*())',
     'print(*{})',
-    'print(*[1], **{})'
+    'print(*[1], **{})',
 ])
 def test_pointless_starred(
     assert_errors,
     parse_ast_tree,
     default_options,
-    code
+    code,
 ):
     """Testing that pointless starred expression is detected."""
     tree = parse_ast_tree(code)
@@ -40,7 +40,7 @@ def test_useful_starred(
     assert_errors,
     parse_ast_tree,
     default_options,
-    code
+    code,
 ):
     """Testing that pointless starred expression is missing."""
     tree = parse_ast_tree(code)

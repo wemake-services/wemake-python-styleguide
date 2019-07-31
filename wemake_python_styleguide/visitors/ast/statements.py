@@ -24,7 +24,9 @@ from wemake_python_styleguide.violations.consistency import (
     ParametersIndentationViolation,
     UselessNodeViolation,
 )
-from wemake_python_styleguide.violations.refactoring import PointlessStarredViolation
+from wemake_python_styleguide.violations.refactoring import (
+    PointlessStarredViolation,
+)
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
@@ -299,12 +301,12 @@ class PointlessStarredVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_starred(self, node: ast.Starred) -> Optional[bool]:
-        obj = node.value
-        if isinstance(obj, ast.Dict) and len(obj.keys) == 0:
+        starred_obj = node.value
+        if isinstance(starred_obj, ast.Dict) and not starred_obj.keys:
             self.add_violation(PointlessStarredViolation(node))
-        elif isinstance(obj, ast.List) and len(obj.elts) == 0:
+        elif isinstance(starred_obj, ast.List) and not starred_obj.elts:
             self.add_violation(PointlessStarredViolation(node))
-        elif isinstance(obj, ast.Tuple) and len(obj.elts) == 0:
+        elif isinstance(starred_obj, ast.Tuple) and not starred_obj.elts:
             self.add_violation(PointlessStarredViolation(node))
         return None
 
@@ -313,6 +315,6 @@ class PointlessStarredVisitor(BaseNodeVisitor):
         node: ast.AST,
         elements: Sequence[ast.AST],
     ) -> None:
-        for index, statement in enumerate(elements):
+        for statement in elements:
             if isinstance(statement, ast.Starred):
                 self._check_starred(statement)
