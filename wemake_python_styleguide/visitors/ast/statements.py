@@ -291,6 +291,7 @@ class WrongParametersIndentationVisitor(BaseNodeVisitor):
                 )
 
 
+@final
 class PointlessStarredVisitor(BaseNodeVisitor):
     """Responsible for absence of useless starred expressions."""
 
