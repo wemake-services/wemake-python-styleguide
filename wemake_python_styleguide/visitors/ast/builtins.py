@@ -41,6 +41,7 @@ from wemake_python_styleguide.violations.best_practices import (
 from wemake_python_styleguide.visitors import base, decorators
 
 _MeaninglessOperators = Mapping[int, Tuple[Type[ast.operator], ...]]
+_OperatorLimits = Mapping[Type[ast.unaryop], int]
 
 
 @final
@@ -107,7 +108,7 @@ class MagicNumberVisitor(base.BaseNodeVisitor):
 class UselessOperatorsVisitor(base.BaseNodeVisitor):
     """Checks operators used in the code."""
 
-    _limits: ClassVar[Mapping[Type[ast.unaryop], int]] = {
+    _limits: ClassVar[_OperatorLimits] = {
         ast.UAdd: 0,
         ast.Invert: 1,
         ast.Not: 1,
