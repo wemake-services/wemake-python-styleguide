@@ -37,6 +37,8 @@ In this release we had a little focus on:
 - Changes how `WrongSlotsViolation` works, now `(...) + value` is restricted
   in favor of `(..., *value)`
 - Forbids to have explicit unhashable types in sets and dicts
+- Enforces `j` prefix over `J` for complex numbers
+- Forbids to define useless overwritten methods
 - Enforces `j` prefix over `J` for `complex` numbers
 - Forbids overused expressions
 - Forbids explicit `0` division

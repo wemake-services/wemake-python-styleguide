@@ -25,6 +25,7 @@ Summary
    WrongSuperCallViolation
    DirectMagicAttributeAccessViolation
    AsyncMagicMethodViolation
+   UselessOverwrittenMethodViolation
 
 Respect your objects
 --------------------
@@ -40,6 +41,7 @@ Respect your objects
 .. autoclass:: WrongSuperCallViolation
 .. autoclass:: DirectMagicAttributeAccessViolation
 .. autoclass:: AsyncMagicMethodViolation
+.. autoclass:: UselessOverwrittenMethodViolation
 
 """
 
@@ -449,3 +451,36 @@ class AsyncMagicMethodViolation(ASTViolation):
 
     error_template = 'Found forbidden async magic method usage: {0}'
     code = 610
+
+
+@final
+class UselessOverwrittenMethodViolation(ASTViolation):
+    """
+    Forbids to have useless overwritten methods.
+
+    Reasoning:
+        Overwriting method without any changes
+        does not have any positive impact.
+
+    Solution:
+        Do not overwrite method in case you do not want
+        to do any changes inside it.
+
+    Example::
+
+        # Correct:
+        class Test(Base):
+            ...
+
+        # Wrong:
+        class Test(object):
+            def method(self, argument):
+                return super().method(argument)
+
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found useless overwritten method: {0}'
+    code = 611

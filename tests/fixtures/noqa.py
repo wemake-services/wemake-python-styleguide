@@ -343,6 +343,9 @@ class Example(object):
         """Correct function docstring."""
         yield 10
 
+    def __eq__(self, object_: object) -> bool:  # noqa: WPS611
+        return super().__eq__(object_)
+
 
 for loop_index in range(6):  # noqa: WPS426
     print(lambda: loop_index)
