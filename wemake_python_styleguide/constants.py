@@ -171,6 +171,7 @@ MODULE_NAME_PATTERN: Final = re.compile(r'^_?_?[a-z][a-z\d_]*[a-z\d](__)?$')
 
 #: Common numbers that are allowed to be used without being called "magic".
 MAGIC_NUMBERS_WHITELIST: Final = frozenset((
+    0,  # both int and float
     0.5,
     100,
     1000,

@@ -74,3 +74,9 @@ MAX_AWAITS: Final = 5  # the same as returns
 
 #: Maximum amount of ``try`` node body length.
 MAX_TRY_BODY_LENGTH: Final = 2
+
+#: Maximum amount of same expressions per module.
+MAX_MODULE_EXPRESSIONS: Final = 6
+
+#: Maximum amount of same expressions per function.
+MAX_FUNCTION_EXPRESSIONS: Final = 4

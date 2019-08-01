@@ -69,6 +69,7 @@ Summary
    WrongHexNumberCaseViolation
    ImplicitRawStringViolation
    BadComplexNumberSuffixViolation
+   ZeroDivisionViolation
 
 Consistency checks
 ------------------
@@ -117,6 +118,7 @@ Consistency checks
 .. autoclass:: WrongHexNumberCaseViolation
 .. autoclass:: ImplicitRawStringViolation
 .. autoclass:: BadComplexNumberSuffixViolation
+.. autoclass:: ZeroDivisionViolation
 
 """
 
@@ -1646,3 +1648,33 @@ class BadComplexNumberSuffixViolation(TokenizeViolation):
 
     error_template = 'Found wrong complex number suffix: {0}'
     code = 343
+
+
+@final
+class ZeroDivisionViolation(ASTViolation):
+    """
+    Forbids to explicitly divide by zero.
+
+    Reasoning:
+        This will just throw ``ZeroDivisoionError``
+        in case that's what you need: just throw it.
+        No need to use undefined meth behaviours.
+        Or it might be just a typo / mistake, then fix it.
+
+    Solution:
+        Use ``ZeroDivisoionError`` or fix your number not to be ``0``.
+
+    Example::
+
+        # Correct:
+        raise ZeroDivisoionError()
+
+        # Wrong:
+        1 / 0
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found explicit zero division'
+    code = 344

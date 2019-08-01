@@ -96,6 +96,6 @@ def test_external_plugins_diff(absolute_path):
         universal_newlines=True,
         encoding='utf8',
     )
-    process.wait()
+    process.communicate()
 
     _assert_plugin_output(output)

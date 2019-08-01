@@ -8,11 +8,12 @@ We used to have incremental versioning before `0.1.0`.
 
 In this release we had a little focus on:
 
-0. Primitives and how to use them
+0. Primitives and constants and how to use them
 1. Strings and numbers and how to write them
 2. OOP features
 3. Blocks and code structure,
-   including overused expressions and overlaping variables
+   including variable scoping and overlaping variables
+4. Overused expressions and new complexity metrics
 
 ### Features
 
@@ -33,11 +34,14 @@ In this release we had a little focus on:
 - Forbids to have too long `try` bodies
 - Forbids to overlap local and block variables
 - Forbids to use block variables after the block definitions
-- Changes how `WrongSlotsViolation` works, not `(...) + value` is restricted
+- Changes how `WrongSlotsViolation` works, now `(...) + value` is restricted
   in favor of `(..., *value)`
 - Forbids to have explicit unhashable types in sets and dicts
 - Enforces `j` prefix over `J` for complex numbers
 - Forbids to define useless overwritten methods
+- Enforces `j` prefix over `J` for `complex` numbers
+- Forbids overused expressions
+- Forbids explicit `0` division
 
 ### Bugfixes
 
@@ -54,7 +58,9 @@ In this release we had a little focus on:
 - Fixes `WrongLoopIterTypeViolation` position
 - Fixes `WrongLoopIterTypeViolation` not triggering for compehensions
 - Fixes `WrongSlotsViolation` not triggering
-  for comprehensions and inccorect `__slots__` names and types
+  for comprehensions and incorrect `__slots__` names and types
+- Fixes `WrongSlotsViolation` not triggering
+  for invalid `python` identifiers like `__slots__ = ('123_slot',)`
 - Fixes `NestedClassViolation` and `NestedFunctionViolation` not reporting
   when placed deeply inside other nodes
 - Fixes when `WrongUnpackingViolation` was not raised
@@ -66,8 +72,9 @@ In this release we had a little focus on:
 - Fixes that `{(1, 2), (1, 2)}` was not recognised as a set with duplicates
 - Fixes that `{*(1, 2), *(1, 2)}` was not recognised as a set with duplicates
 - Fixes that `{1: 1, True: 1}` was not recognised as a dict with duplicates
-- Fixes that `compex` numbers were always treated like magic,
+- Fixes that `complex` numbers were always treated like magic,
   now `1j` is allowed
+- Fixes that `0.0` was treated as a magic number
 
 ### Misc
 

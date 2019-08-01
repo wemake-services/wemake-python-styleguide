@@ -18,7 +18,7 @@ from typing_extensions import final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import FunctionNodes
-from wemake_python_styleguide.logic import nodes, safe_eval
+from wemake_python_styleguide.logic import safe_eval
 from wemake_python_styleguide.logic.naming.name_nodes import extract_name
 from wemake_python_styleguide.logic.operators import (
     count_unary_operator,
@@ -32,7 +32,7 @@ from wemake_python_styleguide.types import (
     AnyUnaryOp,
     AnyWith,
 )
-from wemake_python_styleguide.violations import complexity, consistency
+from wemake_python_styleguide.violations import consistency
 from wemake_python_styleguide.violations.best_practices import (
     MagicNumberViolation,
     MultipleAssignmentsViolation,
@@ -47,22 +47,6 @@ from wemake_python_styleguide.visitors import base, decorators
 class WrongStringVisitor(base.BaseNodeVisitor):
     """Restricts several string usages."""
 
-    def __init__(self, *args, **kwargs) -> None:
-        """Inits the counter for constants."""
-        super().__init__(*args, **kwargs)
-        self._string_constants: DefaultDict[str, int] = defaultdict(int)
-
-    def visit_Str(self, node: ast.Str) -> None:
-        """
-        Restricts to over-use string constants.
-
-        Raises:
-            OverusedStringViolation
-
-        """
-        self._check_string_constant(node)
-        self.generic_visit(node)
-
     def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
         """
         Restricts to use ``f`` strings.
@@ -73,28 +57,6 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         """
         self.add_violation(consistency.FormattedStringViolation(node))
         self.generic_visit(node)
-
-    def _check_string_constant(self, node: ast.Str) -> None:
-        annotations = (
-            ast.arg,
-            ast.AnnAssign,
-        )
-
-        parent = nodes.get_parent(node)
-        if isinstance(parent, annotations) and parent.annotation == node:
-            return  # it is argument or variable annotation
-
-        if isinstance(parent, FunctionNodes) and parent.returns == node:
-            return  # it is return annotation
-
-        self._string_constants[node.s] += 1
-
-    def _post_visit(self) -> None:
-        for string, usage_count in self._string_constants.items():
-            if usage_count > self.options.max_string_usages:
-                self.add_violation(
-                    complexity.OverusedStringViolation(text=string or "''"),
-                )
 
 
 @final
@@ -163,6 +125,28 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         self._check_operator_count(node)
         self.generic_visit(node)
 
+    def visit_BinOp(self, node: ast.BinOp) -> None:
+        """
+        Visits binary operators.
+
+        Raises:
+            ZeroDivisionViolation
+
+        """
+        self._check_zero_division(node.op, node.right)
+        self.generic_visit(node)
+
+    def visit_AugAssign(self, node: ast.AugAssign) -> None:
+        """
+        Visits augmented assigns.
+
+        Raises:
+            ZeroDivisionViolation
+
+        """
+        self._check_zero_division(node.op, node.value)
+        self.generic_visit(node)
+
     def _check_operator_count(self, node: ast.Num) -> None:
         for node_type, limit in self._limits.items():
             if count_unary_operator(node, node_type) > limit:
@@ -171,6 +155,17 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
                         node, text=str(node.n),
                     ),
                 )
+
+    def _check_zero_division(self, op: ast.operator, number: ast.AST) -> None:
+        number = unwrap_unary_node(number)
+
+        is_zero_division = (
+            isinstance(op, ast.Div) and
+            isinstance(number, ast.Num) and
+            number.n == 0
+        )
+        if is_zero_division:
+            self.add_violation(consistency.ZeroDivisionViolation(number))
 
 
 @final
