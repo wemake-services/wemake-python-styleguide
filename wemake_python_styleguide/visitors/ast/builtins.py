@@ -125,6 +125,28 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         self._check_operator_count(node)
         self.generic_visit(node)
 
+    def visit_BinOp(self, node: ast.BinOp) -> None:
+        """
+        Visits binary operators.
+
+        Raises:
+            ZeroDivisionViolation
+
+        """
+        self._check_zero_division(node.op, node.right)
+        self.generic_visit(node)
+
+    def visit_AugAssign(self, node: ast.AugAssign) -> None:
+        """
+        Visits augmented assigns.
+
+        Raises:
+            ZeroDivisionViolation
+
+        """
+        self._check_zero_division(node.op, node.value)
+        self.generic_visit(node)
+
     def _check_operator_count(self, node: ast.Num) -> None:
         for node_type, limit in self._limits.items():
             if count_unary_operator(node, node_type) > limit:
@@ -133,6 +155,17 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
                         node, text=str(node.n),
                     ),
                 )
+
+    def _check_zero_division(self, op: ast.operator, number: ast.AST) -> None:
+        number = unwrap_unary_node(number)
+
+        is_zero_division = (
+            isinstance(op, ast.Div) and
+            isinstance(number, ast.Num) and
+            number.n == 0
+        )
+        if is_zero_division:
+            self.add_violation(consistency.ZeroDivisionViolation(number))
 
 
 @final

@@ -39,6 +39,7 @@ In this release we had a little focus on:
 - Forbids to have explicit unhashable types in sets and dicts
 - Enforces `j` prefix over `J` for `complex` numbers
 - Forbids overused expressions
+- Forbids explicit `0` division
 
 ### Bugfixes
 
@@ -71,6 +72,7 @@ In this release we had a little focus on:
 - Fixes that `{1: 1, True: 1}` was not recognised as a dict with duplicates
 - Fixes that `complex` numbers were always treated like magic,
   now `1j` is allowed
+- Fixes that `0.0` was treated as a magic number
 
 ### Misc
 
