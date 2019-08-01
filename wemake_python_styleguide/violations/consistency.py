@@ -70,6 +70,7 @@ Summary
    ImplicitRawStringViolation
    BadComplexNumberSuffixViolation
    ZeroDivisionViolation
+   MeaninglessNumberOperationViolation
 
 Consistency checks
 ------------------
@@ -119,6 +120,7 @@ Consistency checks
 .. autoclass:: ImplicitRawStringViolation
 .. autoclass:: BadComplexNumberSuffixViolation
 .. autoclass:: ZeroDivisionViolation
+.. autoclass:: MeaninglessNumberOperationViolation
 
 """
 
@@ -1678,3 +1680,38 @@ class ZeroDivisionViolation(ASTViolation):
 
     error_template = 'Found explicit zero division'
     code = 344
+
+
+@final
+class MeaninglessNumberOperationViolation(ASTViolation):
+    """
+    Forbids to use meaningless math opeartions with ``0`` and ``1``.
+
+    Reasoning:
+        Adding and substracting zero does not change the value.
+        There's no need to do that.
+        Multipling by zero is also redundunt:
+        it can be replaced with explicit ``0`` assign.
+        Multiplying and dividing by ``1`` is also meaningless.
+
+    Solution:
+        Remove useless zero operaionts.
+
+    Example::
+
+        # Correct:
+        number = 1
+        zero = 0
+        one = 1
+
+        # Wrong:
+        number = 1 + 0 * 1
+        zero = some * 0 / 1
+        one = some ** 0 ** 1
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found meaningless number operation'
+    code = 345

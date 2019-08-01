@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Optional
+from typing import Optional, Type
 
 from wemake_python_styleguide.logic.nodes import get_parent
-from wemake_python_styleguide.types import AnyUnaryOp
 
 
 def unwrap_unary_node(node: ast.AST) -> ast.AST:
@@ -48,7 +47,7 @@ def get_parent_ignoring_unary(node: ast.AST) -> Optional[ast.AST]:
 
 def count_unary_operator(
     node: ast.AST,
-    operator: AnyUnaryOp,
+    operator: Type[ast.unaryop],
     amount: int = 0,
 ) -> int:
     """Returns amount of unary operators matching input."""

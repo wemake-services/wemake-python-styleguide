@@ -145,7 +145,7 @@ def test_function():
                         test(5)  # noqa: WPS220
 
 
-line = some.call(7 * 2, 3 / 4) / some.run(5 / some, 8 - 2 + 1)  # noqa: WPS221
+line = some.call(7 * 2, 3 / 4) / some.run(5 / some, 8 - 2 + 6)  # noqa: WPS221
 if line and line > 2 and line > 3 and line > 4 and line > 5:  # noqa: WPS221,WPS222
     anti_z444 = 1
 
@@ -464,6 +464,7 @@ wrong_hex = 0xabc  # noqa: WPS341
 wrong_escape_raw_string = '\\n'  # noqa: WPS342
 bad_complex = 1J  # noqa: WPS343
 zero_div = bad_complex / 0.0  # noqa: WPS344
+mult_one = zero_div * 1  # noqa: WPS345
 
 CONSTANT = []  # noqa: WPS407
 

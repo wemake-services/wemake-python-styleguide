@@ -41,7 +41,8 @@ In this release we had a little focus on:
 - Forbids to define useless overwritten methods
 - Enforces `j` prefix over `J` for `complex` numbers
 - Forbids overused expressions
-- Forbids explicit `0` division
+- Forbids explicit `0` division, multiply, addition, and substraction
+- Fordids to multiply or divide by `1`
 
 ### Bugfixes
 

@@ -9,7 +9,10 @@ from typing import (
     Iterable,
     List,
     Mapping,
+    Optional,
     Sequence,
+    Tuple,
+    Type,
     Union,
 )
 
@@ -18,7 +21,7 @@ from typing_extensions import final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import FunctionNodes
-from wemake_python_styleguide.logic import safe_eval
+from wemake_python_styleguide.logic import safe_eval, walk
 from wemake_python_styleguide.logic.naming.name_nodes import extract_name
 from wemake_python_styleguide.logic.operators import (
     count_unary_operator,
@@ -26,12 +29,7 @@ from wemake_python_styleguide.logic.operators import (
     unwrap_starred_node,
     unwrap_unary_node,
 )
-from wemake_python_styleguide.types import (
-    AnyFor,
-    AnyNodes,
-    AnyUnaryOp,
-    AnyWith,
-)
+from wemake_python_styleguide.types import AnyFor, AnyNodes, AnyWith
 from wemake_python_styleguide.violations import consistency
 from wemake_python_styleguide.violations.best_practices import (
     MagicNumberViolation,
@@ -41,6 +39,8 @@ from wemake_python_styleguide.violations.best_practices import (
     WrongUnpackingViolation,
 )
 from wemake_python_styleguide.visitors import base, decorators
+
+_MeaninglessOperators = Mapping[int, Tuple[Type[ast.operator], ...]]
 
 
 @final
@@ -107,11 +107,19 @@ class MagicNumberVisitor(base.BaseNodeVisitor):
 class UselessOperatorsVisitor(base.BaseNodeVisitor):
     """Checks operators used in the code."""
 
-    _limits: ClassVar[Mapping[AnyUnaryOp, int]] = {
+    _limits: ClassVar[Mapping[Type[ast.unaryop], int]] = {
         ast.UAdd: 0,
         ast.Invert: 1,
         ast.Not: 1,
         ast.USub: 1,
+    }
+
+    _meaningless_operations: ClassVar[_MeaninglessOperators] = {
+        # ast.Div is not in the list,
+        # since we have a special violation for it.
+        0: (ast.Mult, ast.Add, ast.Sub, ast.Pow),
+        # `1` and `-1` are different, `-1` is allowed.
+        1: (ast.Div, ast.Mult, ast.Pow),
     }
 
     def visit_Num(self, node: ast.Num) -> None:
@@ -134,6 +142,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
 
         """
         self._check_zero_division(node.op, node.right)
+        self._check_useless_math_operator(node.op, node.left, node.right)
         self.generic_visit(node)
 
     def visit_AugAssign(self, node: ast.AugAssign) -> None:
@@ -145,6 +154,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
 
         """
         self._check_zero_division(node.op, node.value)
+        self._check_useless_math_operator(node.op, node.value)
         self.generic_visit(node)
 
     def _check_operator_count(self, node: ast.Num) -> None:
@@ -166,6 +176,40 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         )
         if is_zero_division:
             self.add_violation(consistency.ZeroDivisionViolation(number))
+
+    def _check_useless_math_operator(
+        self,
+        op: ast.operator,
+        left: ast.AST,
+        right: Optional[ast.AST] = None,
+    ) -> None:
+        non_negative_numbers = self._get_non_negative_nodes(left, right)
+
+        for number in non_negative_numbers:
+            forbidden = self._meaningless_operations.get(number.n, None)
+            if forbidden and isinstance(op, forbidden):
+                self.add_violation(
+                    consistency.MeaninglessNumberOperationViolation(number),
+                )
+
+    def _get_non_negative_nodes(
+        self,
+        left: ast.AST,
+        right: Optional[ast.AST] = None,
+    ):
+        non_negative_numbers = []
+        for node in filter(None, (left, right)):
+            real_node = unwrap_unary_node(node)
+            if not isinstance(real_node, ast.Num):
+                continue
+
+            if real_node.n not in self._meaningless_operations:
+                continue
+
+            if real_node.n == 1 and walk.is_contained(node, ast.USub):
+                continue
+            non_negative_numbers.append(real_node)
+        return non_negative_numbers
 
 
 @final
