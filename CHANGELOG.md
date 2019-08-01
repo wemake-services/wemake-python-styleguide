@@ -8,7 +8,7 @@ We used to have incremental versioning before `0.1.0`.
 
 In this release we had a little focus on:
 
-0. Primitives and how to use them
+0. Primitives and constants and how to use them
 1. Strings and numbers and how to write them
 2. OOP features
 3. Blocks and code structure,
@@ -34,11 +34,11 @@ In this release we had a little focus on:
 - Forbids to have too long `try` bodies
 - Forbids to overlap local and block variables
 - Forbids to use block variables after the block definitions
-- Changes how `WrongSlotsViolation` works, not `(...) + value` is restricted
+- Changes how `WrongSlotsViolation` works, now `(...) + value` is restricted
   in favor of `(..., *value)`
 - Forbids to have explicit unhashable types in sets and dicts
 - Enforces `j` prefix over `J` for `complex` numbers
-- Forbids overused expressions 
+- Forbids overused expressions
 
 ### Bugfixes
 

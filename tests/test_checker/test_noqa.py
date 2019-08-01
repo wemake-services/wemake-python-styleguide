@@ -301,6 +301,6 @@ def test_noqa_fixture_diff(absolute_path, all_violations):
         universal_newlines=True,
         encoding='utf8',
     )
-    process.wait()
+    process.communicate()
 
     _assert_errors_count_in_output(output, SHOULD_BE_RAISED, all_violations)
