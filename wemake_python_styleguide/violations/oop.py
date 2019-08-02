@@ -269,6 +269,8 @@ class WrongBaseClassViolation(ASTViolation):
     """
     Forbids to have anything else than a class as a base class.
 
+    We only check base classes and not keywords. They can be anything you need.
+
     Reasoning:
         In Python you can specify anything in the base classes slot.
         In runtime this expression will be evaluated and executed.
@@ -276,6 +278,8 @@ class WrongBaseClassViolation(ASTViolation):
 
     Solution:
         Use only attributes, names, and types to be your base classes.
+        Use ``annotation`` future import in case
+        you use strings in base classes.
 
     Example::
 
@@ -289,6 +293,7 @@ class WrongBaseClassViolation(ASTViolation):
     .. versionadded:: 0.7.0
     .. versionchanged:: 0.7.1
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.12.0
 
     """
 

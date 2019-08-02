@@ -21,20 +21,20 @@ class Useless(object):
         {statement}
 """
 
-TestMethodArgs = NamedTuple('TestMethodArgs', definition=str, invocation=str)
+_MethodArgs = NamedTuple('_MethodArgs', definition=str, invocation=str)
 
 
-valid_method_args: List[TestMethodArgs] = [
-    TestMethodArgs('', ''),
-    TestMethodArgs('a', 'a'),
-    TestMethodArgs('a, b', 'a, b'),
-    TestMethodArgs('a, *, b', 'a, b=b'),
-    TestMethodArgs('*, a, b', 'a=a, b=b'),
-    TestMethodArgs('*, a, b', 'b=b, a=a'),
-    TestMethodArgs('a, *args', 'a, *args'),
-    TestMethodArgs('a, *args, **kwargs', 'a, *args, **kwargs'),
-    TestMethodArgs('*, a, **kwargs', 'a=a, **kwargs'),
-    TestMethodArgs('*, a, **kwargs', '**kwargs, a=a'),
+valid_method_args: List[_MethodArgs] = [
+    _MethodArgs('', ''),
+    _MethodArgs('a', 'a'),
+    _MethodArgs('a, b', 'a, b'),
+    _MethodArgs('a, *, b', 'a, b=b'),
+    _MethodArgs('*, a, b', 'a=a, b=b'),
+    _MethodArgs('*, a, b', 'b=b, a=a'),
+    _MethodArgs('a, *args', 'a, *args'),
+    _MethodArgs('a, *args, **kwargs', 'a, *args, **kwargs'),
+    _MethodArgs('*, a, **kwargs', 'a=a, **kwargs'),
+    _MethodArgs('*, a, **kwargs', '**kwargs, a=a'),
 ]
 
 valid_statements = [
@@ -51,37 +51,37 @@ valid_super_args = (
 )
 
 
-invalid_method_args: List[TestMethodArgs] = [
-    TestMethodArgs('', 'a=1'),
-    TestMethodArgs('', '1'),
-    TestMethodArgs('a', ''),
-    TestMethodArgs('a', 'a, 1'),
-    TestMethodArgs('a, b', 'a'),
-    TestMethodArgs('a, b', 'b, a=1'),
-    TestMethodArgs('a, b', 'a, b, 1'),
-    TestMethodArgs('a, b', 'a, b=1'),
-    TestMethodArgs('a, *, b', 'a'),
-    TestMethodArgs('a, *, b', '1, b'),
-    TestMethodArgs('a, *, b', 'a, b=1'),
-    TestMethodArgs('a, *, b', 'a=1, b=b'),
-    TestMethodArgs('a, *, b', 'a, b=b, c=1'),
-    TestMethodArgs('*, a, b', 'a=1, b=b'),
-    TestMethodArgs('*, a, b', 'a=a, b=1'),
-    TestMethodArgs('*, a, b', 'b=1, a=a'),
-    TestMethodArgs('*, a, b', 'b=b, a=1'),
-    TestMethodArgs('a, *args', 'a'),
-    TestMethodArgs('a, *args', 'a, 1, *args'),
-    TestMethodArgs('a, *args', '1, *args'),
-    TestMethodArgs('a, *args', 'a=1, *args'),
-    TestMethodArgs('a, *args, **kwargs', 'a'),
-    TestMethodArgs('a, *args, **kwargs', 'a, *args'),
-    TestMethodArgs('a, *args, **kwargs', 'a, 1, *args, **kwargs'),
-    TestMethodArgs('a, *args, **kwargs', '1, *args, **kwargs'),
-    TestMethodArgs('a, *args, **kwargs', 'a, *args, b=1, **kwargs'),
-    TestMethodArgs('a, *args, **kwargs', 'a=1, *args, **kwargs'),
-    TestMethodArgs('*, a, **kwargs', 'a=a'),
-    TestMethodArgs('*, a, **kwargs', '**kwargs'),
-    TestMethodArgs('*, a, **kwargs', 'a=a, b=1, **kwargs'),
+invalid_method_args: List[_MethodArgs] = [
+    _MethodArgs('', 'a=1'),
+    _MethodArgs('', '1'),
+    _MethodArgs('a', ''),
+    _MethodArgs('a', 'a, 1'),
+    _MethodArgs('a, b', 'a'),
+    _MethodArgs('a, b', 'b, a=1'),
+    _MethodArgs('a, b', 'a, b, 1'),
+    _MethodArgs('a, b', 'a, b=1'),
+    _MethodArgs('a, *, b', 'a'),
+    _MethodArgs('a, *, b', '1, b'),
+    _MethodArgs('a, *, b', 'a, b=1'),
+    _MethodArgs('a, *, b', 'a=1, b=b'),
+    _MethodArgs('a, *, b', 'a, b=b, c=1'),
+    _MethodArgs('*, a, b', 'a=1, b=b'),
+    _MethodArgs('*, a, b', 'a=a, b=1'),
+    _MethodArgs('*, a, b', 'b=1, a=a'),
+    _MethodArgs('*, a, b', 'b=b, a=1'),
+    _MethodArgs('a, *args', 'a'),
+    _MethodArgs('a, *args', 'a, 1, *args'),
+    _MethodArgs('a, *args', '1, *args'),
+    _MethodArgs('a, *args', 'a=1, *args'),
+    _MethodArgs('a, *args, **kwargs', 'a'),
+    _MethodArgs('a, *args, **kwargs', 'a, *args'),
+    _MethodArgs('a, *args, **kwargs', 'a, 1, *args, **kwargs'),
+    _MethodArgs('a, *args, **kwargs', '1, *args, **kwargs'),
+    _MethodArgs('a, *args, **kwargs', 'a, *args, b=1, **kwargs'),
+    _MethodArgs('a, *args, **kwargs', 'a=1, *args, **kwargs'),
+    _MethodArgs('*, a, **kwargs', 'a=a'),
+    _MethodArgs('*, a, **kwargs', '**kwargs'),
+    _MethodArgs('*, a, **kwargs', 'a=a, b=1, **kwargs'),
 ]
 
 invalid_statements = [

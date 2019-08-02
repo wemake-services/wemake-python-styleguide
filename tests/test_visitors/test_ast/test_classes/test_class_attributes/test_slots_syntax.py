@@ -62,7 +62,11 @@ correct_slots = (
     'some_call()',
     'some.attr',
     'some.method()',
+    'some.method().attr',
     'Class.method(10, 10, "a")',
+    'some[ast]',
+    'some.attr[0].method()',
+    'some[0].attr',
 )
 
 

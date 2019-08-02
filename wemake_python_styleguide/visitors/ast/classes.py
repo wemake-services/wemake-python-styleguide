@@ -14,6 +14,7 @@ from wemake_python_styleguide.logic import (
     classes,
     functions,
     nodes,
+    prop_access,
     strings,
     walk,
 )
@@ -34,17 +35,8 @@ class WrongClassVisitor(base.BaseNodeVisitor):
 
     _allowed_body_nodes: ClassVar[types.AnyNodes] = (
         *FunctionNodes,
-
         ast.ClassDef,  # we allow some nested classes
-
-        ast.Assign,  # attributes
-        ast.AnnAssign,  # type annotations
-    )
-
-    _allowed_base_classes_nodes: ClassVar[types.AnyNodes] = (
-        ast.Name,
-        ast.Attribute,
-        ast.Subscript,
+        *AssignNodes,  # fields and annotations
     )
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
@@ -54,6 +46,7 @@ class WrongClassVisitor(base.BaseNodeVisitor):
         Raises:
             RequiredBaseClassViolation
             ObjectInBaseClassesListViolation
+            WrongBaseClassViolation
             WrongClassBodyContentViolation
             BuiltinSubclassViolation
 
@@ -71,8 +64,8 @@ class WrongClassVisitor(base.BaseNodeVisitor):
 
     def _check_base_classes(self, node: ast.ClassDef) -> None:
         for base_name in node.bases:
-            if not isinstance(base_name, self._allowed_base_classes_nodes):
-                self.add_violation(oop.WrongBaseClassViolation(node))
+            if not self._is_correct_base_class(base_name):
+                self.add_violation(oop.WrongBaseClassViolation(base_name))
                 continue
 
             id_attr = getattr(base_name, 'id', None)
@@ -96,6 +89,27 @@ class WrongClassVisitor(base.BaseNodeVisitor):
             if strings.is_doc_string(sub_node):
                 continue
             self.add_violation(oop.WrongClassBodyContentViolation(sub_node))
+
+    def _is_correct_base_class(self, base: ast.AST) -> bool:
+        if isinstance(base, ast.Name):
+            return True
+        elif isinstance(base, ast.Attribute):
+            return all(
+                isinstance(sub_node, (ast.Name, ast.Attribute))
+                for sub_node in prop_access.parts(base)
+            )
+        elif isinstance(base, ast.Subscript):
+            parts = list(prop_access.parts(base))
+            subscripts = list(filter(
+                lambda part: isinstance(part, ast.Subscript), parts,
+            ))
+            correct_items = all(
+                isinstance(sub_node, (ast.Name, ast.Attribute, ast.Subscript))
+                for sub_node in parts
+            )
+
+            return len(subscripts) == 1 and correct_items
+        return False
 
 
 @final
@@ -237,6 +251,7 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
     _whitelisted_slots_nodes: ClassVar[types.AnyNodes] = (
         ast.Tuple,
         ast.Attribute,
+        ast.Subscript,
         ast.Name,
         ast.Call,
     )

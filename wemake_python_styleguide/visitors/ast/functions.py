@@ -15,6 +15,7 @@ from wemake_python_styleguide.logic import (
     functions,
     nodes,
     operators,
+    prop_access,
     walk,
 )
 from wemake_python_styleguide.logic.arguments import function_args
@@ -168,7 +169,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
         local_variables: Dict[str, List[LocalVariable]],
     ) -> None:
         if var_name in local_variables:
-            if var_name == UNUSED_VARIABLE:
+            if var_name == UNUSED_VARIABLE:  # TODO: disallow to `_` at all
                 if isinstance(getattr(sub_node, 'ctx', None), ast.Store):
                     return
             local_variables[var_name].append(sub_node)
@@ -207,8 +208,14 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
     def _check_argument_default_values(self, node: AnyFunctionDef) -> None:
         for arg in node.args.defaults:
             real_arg = operators.unwrap_unary_node(arg)
-            if not isinstance(real_arg, self._allowed_default_value_types):
-                self.add_violation(ComplexDefaultValueViolation(node))
+            parts = prop_access.parts(real_arg) if isinstance(
+                real_arg, ast.Attribute,
+            ) else [real_arg]
+
+            for part in parts:
+                if not isinstance(part, self._allowed_default_value_types):
+                    self.add_violation(ComplexDefaultValueViolation(arg))
+                    return
 
     def _check_generator(self, node: AnyFunctionDef) -> None:
         if not functions.is_generator(node):

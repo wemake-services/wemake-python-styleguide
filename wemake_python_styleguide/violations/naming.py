@@ -634,6 +634,9 @@ class UnusedVariableIsUsedViolation(ASTViolation):
     """
     Forbids to have use variables that are marked as unused.
 
+    We discourage using ``_`` at all and variables that start with ``_``
+    only inside functions and methods as local variables.
+
     Reasoning:
         Sometimes you start to use new logic in your functions,
         and you start to use variables that once were marked as unused.
@@ -660,6 +663,7 @@ class UnusedVariableIsUsedViolation(ASTViolation):
     This rule checks: functions, methods, and ``lambda`` functions.
 
     .. versionadded:: 0.7.0
+    .. versionchanged:: 0.12.0
 
     """
 

@@ -76,7 +76,7 @@ MAX_AWAITS: Final = 5  # the same as returns
 MAX_TRY_BODY_LENGTH: Final = 2
 
 #: Maximum amount of same expressions per module.
-MAX_MODULE_EXPRESSIONS: Final = 7
+MAX_MODULE_EXPRESSIONS: Final = 7  # the same as module elements
 
 #: Maximum amount of same expressions per function.
 MAX_FUNCTION_EXPRESSIONS: Final = 4

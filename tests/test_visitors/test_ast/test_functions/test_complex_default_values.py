@@ -18,8 +18,18 @@ def function(self, with_default={0}):
 @pytest.mark.parametrize('code', [
     "'PYFLAKES_DOCTEST' in os.environ",
     'call()',
+    'call().attr',
+    '-call()',
+    '+call()',
     'index[1]',
+    'index["s"]',
+    'index[name][name]',
+    'index[1].attr',
+    '-index[1].attr',
+    'index[1].attr.call().sub',
     'compare == 1',
+    'var + 2',
+    'a and b',
 ])
 def test_wrong_function_defaults(
     assert_errors,
@@ -43,8 +53,14 @@ def test_wrong_function_defaults(
     '1',
     '-0',
     'variable',
+    '-variable',
+    'module.attr',
+    '-module.attr',
     '(1, 2)',
+    '()',
     'None',
+    'True',
+    'False',
     '...',
 ])
 def test_correct_function_defaults(

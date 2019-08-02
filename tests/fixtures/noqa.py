@@ -413,11 +413,11 @@ def multiple_return_path():
         return 3
 
 
-def bad_default_values(  # noqa: WPS404
+def bad_default_values(
     self,
     filename='(none)',
     builtins=None,
-    withDoctest='PYFLAKES_DOCTEST' in os.environ,
+    withDoctest='PYFLAKES_DOCTEST' in os.environ,  # noqa: WPS404
 ):
     return True
 

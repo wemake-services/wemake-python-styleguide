@@ -62,6 +62,7 @@ In this release we had a little focus on:
   for comprehensions and incorrect `__slots__` names and types
 - Fixes `WrongSlotsViolation` not triggering
   for invalid `python` identifiers like `__slots__ = ('123_slot',)`
+- Fixes `WrongSlotsViolation` triggering for subscripts
 - Fixes `NestedClassViolation` and `NestedFunctionViolation` not reporting
   when placed deeply inside other nodes
 - Fixes when `WrongUnpackingViolation` was not raised
@@ -76,6 +77,11 @@ In this release we had a little focus on:
 - Fixes that `complex` numbers were always treated like magic,
   now `1j` is allowed
 - Fixes that `0.0` was treated as a magic number
+- Fixes that it was possible to use `_` in module body
+- Fixes `WrongBaseClassViolation` not triggering
+  for nested nodes like `class Test(call().length):`
+- Fixes `ComplexDefaultValueViolation` not triggering
+  for nested nodes like `def func(arg=call().attr)`
 
 ### Misc
 
