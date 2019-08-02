@@ -6,10 +6,7 @@ from typing import ClassVar, Dict, List, Optional, Union
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
-from wemake_python_styleguide.constants import (
-    FUNCTIONS_BLACKLIST,
-    UNUSED_VARIABLE,
-)
+from wemake_python_styleguide.constants import FUNCTIONS_BLACKLIST
 from wemake_python_styleguide.logic import (
     exceptions,
     functions,
@@ -157,7 +154,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
     ) -> None:
         for varname, usages in local_variables.items():
             for node in usages:
-                if access.is_protected(varname) or varname == UNUSED_VARIABLE:
+                if access.is_protected(varname):
                     self.add_violation(
                         UnusedVariableIsUsedViolation(node, text=varname),
                     )
@@ -169,9 +166,10 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
         local_variables: Dict[str, List[LocalVariable]],
     ) -> None:
         if var_name in local_variables:
-            if var_name == UNUSED_VARIABLE:  # TODO: disallow to `_` at all
-                if isinstance(getattr(sub_node, 'ctx', None), ast.Store):
-                    return
+            if access.is_unused(var_name):
+                # We check unused variable usage in a different place:
+                # see `visitors/ast/naming.py`
+                return
             local_variables[var_name].append(sub_node)
             return
 

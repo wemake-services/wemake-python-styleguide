@@ -92,7 +92,7 @@ def is_too_short_name(
     False
 
     """
-    return name != constants.UNUSED_VARIABLE and len(name) < min_length
+    return not access.is_unused(name) and len(name) < min_length
 
 
 def is_too_long_name(

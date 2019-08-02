@@ -4,8 +4,7 @@ import keyword
 
 from flake8_builtins import BUILTINS
 
-from wemake_python_styleguide.constants import UNUSED_VARIABLE
-from wemake_python_styleguide.logic.naming.access import is_magic
+from wemake_python_styleguide.logic.naming.access import is_magic, is_unused
 
 ALL_BUILTINS = frozenset((
     *keyword.kwlist,
@@ -76,7 +75,7 @@ def is_wrong_alias(variable_name: str) -> bool:
     if is_magic(variable_name):
         return False
 
-    if variable_name == UNUSED_VARIABLE or not variable_name.endswith('_'):
+    if is_unused(variable_name) or not variable_name.endswith('_'):
         return False
 
     return not is_builtin_name(variable_name[:-1])

@@ -2,7 +2,13 @@
 
 import pytest
 
-from wemake_python_styleguide.visitors.ast.naming import WrongNameVisitor
+from wemake_python_styleguide.violations.naming import (
+    UnusedVariableIsUsedViolation,
+)
+from wemake_python_styleguide.visitors.ast.naming import (
+    WrongNameVisitor,
+    WrongVariableUsageVisitor,
+)
 
 annotation = 'some_var: {0}'
 annotation_value = 'some_var: {0} = None'
@@ -54,6 +60,7 @@ inheriting_variables = 'class ValidName({0}): ...'
     'UPPER_case',
     'юникод',
     'wrong_alias_',
+    '_',  # this is a different visitor
 ])
 @pytest.mark.parametrize('code', [
     annotation,
@@ -78,7 +85,7 @@ inheriting_variables = 'class ValidName({0}): ...'
     yielding_variable,
     inheriting_variables,
 ])
-def test_wrong_variable_names(
+def test_correct_variable_usage(
     assert_errors,
     parse_ast_tree,
     bad_name,
@@ -92,3 +99,41 @@ def test_wrong_variable_names(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('bad_name', [
+    '_',
+    '__',
+])
+@pytest.mark.parametrize('code', [
+    annotation,
+    annotation_value,
+    assigned,
+    assigned_attribute,
+    calling_function,
+    calling_star_function,
+    called_function,
+    calling_method,
+    accessed_attribute,
+    key_access,
+    list_definition,
+    raising_variable,
+    returning_variable,
+    awaiting_variable,
+    yielding_variable,
+    inheriting_variables,
+])
+def test_wrong_variable_usage(
+    assert_errors,
+    parse_ast_tree,
+    bad_name,
+    code,
+    default_options,
+):
+    """Testing that any variable cannot be used if it is marked as unused."""
+    tree = parse_ast_tree(code.format(bad_name))
+
+    visitor = WrongVariableUsageVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [UnusedVariableIsUsedViolation])

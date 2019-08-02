@@ -6,8 +6,8 @@ from typing import ClassVar, DefaultDict, List, Tuple, Type, Union
 
 from typing_extensions import final
 
-from wemake_python_styleguide.constants import UNUSED_VARIABLE
 from wemake_python_styleguide.logic import functions
+from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.types import (
     AnyFunctionDef,
@@ -75,7 +75,7 @@ class _ComplexityCounter(object):
         """
         function_variables = self.variables[function]
         if variable_def.id not in function_variables:
-            if variable_def.id == UNUSED_VARIABLE:
+            if access.is_unused(variable_def.id):
                 return
 
             if isinstance(get_parent(variable_def), self._not_contain_locals):

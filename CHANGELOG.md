@@ -43,6 +43,7 @@ In this release we had a little focus on:
 - Forbids overused expressions
 - Forbids explicit `0` division, multiply, addition, and substraction
 - Fordids to multiply or divide by `1`
+- Forbids to use variable names like `__` and `_____`
 
 ### Bugfixes
 

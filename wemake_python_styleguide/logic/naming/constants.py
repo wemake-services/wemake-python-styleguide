@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from wemake_python_styleguide.constants import UNUSED_VARIABLE
+from wemake_python_styleguide.logic.naming.access import is_unused
 
 
 def is_constant(name: str) -> bool:
@@ -23,7 +23,7 @@ def is_constant(name: str) -> bool:
     False
 
     """
-    if name == UNUSED_VARIABLE:
+    if is_unused(name):
         return False
 
     return all(

@@ -62,12 +62,21 @@ def context():
 
 # Correct:
 
-unused_variables_overlap = """
+unused_variables_overlap1 = """
 def context():
     for first, _ in some():
         ...
 
     for _, second in other():
+        ...
+"""
+
+unused_variables_overlap2 = """
+def context():
+    for first, __ in some():
+        ...
+
+    for __, second in other():
         ...
 """
 
@@ -100,7 +109,8 @@ def test_block_overlap(
 
 
 @pytest.mark.parametrize('code', [
-    unused_variables_overlap,
+    unused_variables_overlap1,
+    unused_variables_overlap2,
 ])
 def test_block_unused_overlap(
     assert_errors,

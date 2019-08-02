@@ -329,3 +329,30 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
                 self.add_violation(
                     ReassigningVariableToItselfViolation(node, text=used_name),
                 )
+
+
+@final
+class WrongVariableUsageVisitor(BaseNodeVisitor):
+    """Checks how variables are used."""
+
+    def visit_Name(self, node: ast.Name) -> None:
+        """
+        Checks that we cannot use ``_`` anywhere.
+
+        Raises:
+            UnusedVariableIsUsedViolation
+
+        """
+        self._check_variable_used(node)
+        self.generic_visit(node)
+
+    def _check_variable_used(self, node: ast.Name) -> None:
+        if not isinstance(node.ctx, ast.Load):
+            return
+
+        if not access.is_unused(node.id):
+            return
+
+        self.add_violation(
+            naming.UnusedVariableIsUsedViolation(node, text=node.id),
+        )

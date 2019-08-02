@@ -7,7 +7,7 @@ from typing import ClassVar, DefaultDict, List, Set, Union, cast
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import ForNodes, WithNodes
-from wemake_python_styleguide.constants import UNUSED_VARIABLE
+from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.logic.naming.name_nodes import (
     flat_variable_names,
     get_variables_from_node,
@@ -261,11 +261,10 @@ class _Scope(object):
     ) -> None:
         """Adds a set of names to the specified scope."""
         scope = self._get_scope(is_local=is_local)
-        scope[self._context] = scope[self._context].union(
-            names,
-        ).difference({
-            # We allow to reuse explicit `_` variable:
-            UNUSED_VARIABLE,
+        scope[self._context] = scope[self._context].union({
+            var_name  # we allow to reuse explicit `_` variable
+            for var_name in names
+            if not access.is_unused(var_name)
         })
 
     def shadowing(
