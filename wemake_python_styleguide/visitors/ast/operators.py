@@ -11,6 +11,9 @@ from wemake_python_styleguide.logic.operators import (
     unwrap_unary_node,
 )
 from wemake_python_styleguide.violations import consistency
+from wemake_python_styleguide.violations.best_practices import (
+    ListMultiplyViolation,
+)
 from wemake_python_styleguide.visitors import base
 
 _MeaninglessOperators = Mapping[int, Tuple[Type[ast.operator], ...]]
@@ -139,6 +142,7 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
 
         """
         self._check_negation(node.op, node.right)
+        self._check_list_multiply(node)
         self.generic_visit(node)
 
     def visit_AugAssign(self, node: ast.AugAssign) -> None:
@@ -162,3 +166,11 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
             self.add_violation(
                 consistency.OpeationSignNegationViolation(right),
             )
+
+    def _check_list_multiply(self, node: ast.BinOp) -> None:
+        is_list_multiply = (
+            isinstance(node.op, ast.Mult) and
+            isinstance(node.left, (ast.List, ast.ListComp))
+        )
+        if is_list_multiply:
+            self.add_violation(ListMultiplyViolation(node.left))

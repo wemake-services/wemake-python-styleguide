@@ -62,6 +62,7 @@ Summary
    BlockAndLocalOverlapViolation
    ControlVarUsedAfterBlockViolation
    UnhashableTypeInHashViolation
+   ListMultiplyViolation
 
 Best practices
 --------------
@@ -109,6 +110,7 @@ Best practices
 .. autoclass:: BlockAndLocalOverlapViolation
 .. autoclass:: ControlVarUsedAfterBlockViolation
 .. autoclass:: UnhashableTypeInHashViolation
+.. autoclass:: ListMultiplyViolation
 
 """
 
@@ -1658,3 +1660,32 @@ class UnhashableTypeInHashViolation(ASTViolation):
 
     error_template = 'Found unhashable item'
     code = 442
+
+
+@final
+class ListMultiplyViolation(ASTViolation):
+    """
+    Forbids to multiply lists.
+
+    Reasoning:
+        When you multiply lists - it does not create new values,
+        it creates references to the existing value.
+        It is not what people mean in 99.9% of cases.
+
+    Solution:
+        Use list comprehension or loop instead.
+
+    Example::
+
+        # Wrong:
+        my_list = [1, 2, 3] * 3
+
+    See also:
+        https://github.com/satwikkansal/wtfPython#-explanation-8
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found list multiply'
+    code = 443

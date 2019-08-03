@@ -44,6 +44,7 @@ In this release we had a little focus on:
 - Forbids explicit `0` division, multiply, addition, and substraction
 - Fordids to multiply or divide by `1`
 - Forbids to use expressions like `x + -2` or `y - -1`
+- Forbids to multiply lists
 - Forbids to use variable names like `__` and `_____`
 - Forbids to define unused variables explicitly
 
