@@ -28,6 +28,8 @@ General
   prefix it with ``_`` or just use ``_`` as a name
 - Do not use variables that are stated to be unused,
   rename them when actually using them
+- Do not define unused variables unless you are unpacking other values as well
+- Do not use multiple underscores to create unused variables
 - Whenever you want to name your variable similar to a keyword or builtin,
   use trailing ``_``
 - Do not use consecutive underscores
@@ -128,6 +130,7 @@ Summary
    UnicodeNameViolation
    TrailingUnderscoreViolation
    UnusedVariableIsUsedViolation
+   UnusedVariableIsDefinedViolation
 
 Module names
 ------------
@@ -151,6 +154,7 @@ General names
 .. autoclass:: UnicodeNameViolation
 .. autoclass:: TrailingUnderscoreViolation
 .. autoclass:: UnusedVariableIsUsedViolation
+.. autoclass:: UnusedVariableIsDefinedViolation
 
 """
 
@@ -669,3 +673,39 @@ class UnusedVariableIsUsedViolation(ASTViolation):
 
     error_template = 'Found usage of a variable marked as unused: {0}'
     code = 121
+
+
+@final
+class UnusedVariableIsDefinedViolation(ASTViolation):
+    """
+    Forbids to define explicit unused variables.
+
+    Reasoning:
+        While it is ok to define unused variables when you have to,
+        like when unpacking a tuple, it is totally not ok to define explicit
+        unusued variables in cases like assignment, function return,
+        exception handling, or context managers.
+        Why do you need this explicitly unused variables?
+
+    Solution:
+        Remove all unused variables definition.
+
+    Example::
+
+        # Correct:
+        my_function()
+        first, _second = some_tuple()
+        print(first)
+
+        # Wrong:
+        _ = my_function()
+        _first, _second = some_tuple()
+
+    This rule checks: assigns, context managers, except clauses.
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found all unused variables definition: {0}'
+    code = 122

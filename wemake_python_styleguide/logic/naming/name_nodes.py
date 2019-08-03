@@ -78,9 +78,9 @@ def get_variables_from_node(node: ast.AST) -> List[str]:
         names.append(naive_attempt)
     elif isinstance(node, ast.Tuple):
         for subnode in node.elts:
-            extracted_name = extract_name(subnode)
+            extracted_name = get_variables_from_node(subnode)
             if extracted_name:
-                names.append(extracted_name)
+                names.extend(extracted_name)
     return names
 
 

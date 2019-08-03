@@ -51,12 +51,21 @@ def context():
         ...
 """
 
-loop_and_loop = """
+loop_and_loop1 = """
 def context():
     for overlap in some():
         ...
 
     for overlap in other():
+        ...
+"""
+
+loop_and_loop2 = """
+def context():
+    for overlap, attr.wrong in some():
+        ...
+
+    for other.wrong, overlap in other():
         ...
 """
 
@@ -80,6 +89,15 @@ def context():
         ...
 """
 
+unused_variables_overlap3 = """
+def context():
+    for first.wrong, __ in some():
+        ...
+
+    for __, second.wrong in other():
+        ...
+"""
+
 
 @pytest.mark.parametrize('code', [
     import_and_class1,
@@ -88,7 +106,8 @@ def context():
     import_and_function2,
     import_and_try,
     loop_and_with,
-    loop_and_loop,
+    loop_and_loop1,
+    loop_and_loop2,
 ])
 def test_block_overlap(
     assert_errors,
@@ -111,6 +130,7 @@ def test_block_overlap(
 @pytest.mark.parametrize('code', [
     unused_variables_overlap1,
     unused_variables_overlap2,
+    unused_variables_overlap3,
 ])
 def test_block_unused_overlap(
     assert_errors,

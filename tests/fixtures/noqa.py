@@ -78,7 +78,7 @@ extremely_long_name_that_needs_to_be_shortened_to_work_fine = 2  # noqa: WPS118
 wrong_alias_ = 'some fake builtin alias'  # noqa: WPS120
 
 def some_function():
-    _should_not_be_used = 1
+    _should_not_be_used = 1  # noqa: WPS122
     print(_should_not_be_used)  # noqa: WPS121
 
 some._execute()  # noqa: WPS437
@@ -189,7 +189,7 @@ class BadClass:  # noqa: WPS306
     @staticmethod  # noqa: WPS602
     async def some_async_static(arg1):
         return [
-            node for node in 'abc' if node != 'a' if node != 'b'  # noqa: WPS307
+            node for node in 'ab' if node != 'a' if node != 'b'  # noqa: WPS307
         ]
 
     def __del__(self, *_args, **_kwargs):  # noqa: WPS603
@@ -415,8 +415,6 @@ def multiple_return_path():
 
 def bad_default_values(
     self,
-    filename='(none)',
-    builtins=None,
     withDoctest='PYFLAKES_DOCTEST' in os.environ,  # noqa: WPS404
 ):
     return True
