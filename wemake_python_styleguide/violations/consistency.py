@@ -71,6 +71,7 @@ Summary
    BadComplexNumberSuffixViolation
    ZeroDivisionViolation
    MeaninglessNumberOperationViolation
+   OpeationSignNegationViolation
 
 Consistency checks
 ------------------
@@ -121,6 +122,7 @@ Consistency checks
 .. autoclass:: BadComplexNumberSuffixViolation
 .. autoclass:: ZeroDivisionViolation
 .. autoclass:: MeaninglessNumberOperationViolation
+.. autoclass:: OpeationSignNegationViolation
 
 """
 
@@ -1710,3 +1712,38 @@ class MeaninglessNumberOperationViolation(ASTViolation):
 
     error_template = 'Found meaningless number operation'
     code = 345
+
+
+@final
+class OpeationSignNegationViolation(ASTViolation):
+    """
+    Forbids to have double minus operations.
+
+    Reasoning:
+        Having two operations is harder than having just one.
+        Two negations are harder than one positive expression.
+        Two negations equal to one positive expression.
+        Positive and negative equal to one negative.
+
+    Solution:
+        Replace double minus operation to a single one with plus.
+        Replace 'plus-minus' operation to a single one with minus.
+
+    Example::
+
+        # Correct:
+        number = 3 + 1
+        number += 6
+        number -= 2
+
+        # Wrong:
+        number = 3 - -1
+        number -= -6
+        number += -2
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found wrong operation sign'
+    code = 346

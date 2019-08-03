@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations.consistency import (
     MeaninglessNumberOperationViolation,
     ZeroDivisionViolation,
 )
-from wemake_python_styleguide.visitors.ast.builtins import (
+from wemake_python_styleguide.visitors.ast.operators import (
     UselessOperatorsVisitor,
 )
 

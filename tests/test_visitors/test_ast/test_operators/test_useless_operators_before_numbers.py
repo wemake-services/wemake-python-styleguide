@@ -5,7 +5,7 @@ import pytest
 from wemake_python_styleguide.violations.consistency import (
     UselessOperatorsViolation,
 )
-from wemake_python_styleguide.visitors.ast.builtins import (
+from wemake_python_styleguide.visitors.ast.operators import (
     UselessOperatorsVisitor,
 )
 

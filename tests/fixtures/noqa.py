@@ -465,6 +465,7 @@ wrong_escape_raw_string = '\\n'  # noqa: WPS342
 bad_complex = 1J  # noqa: WPS343
 zero_div = bad_complex / 0.0  # noqa: WPS344
 mult_one = zero_div * 1  # noqa: WPS345
+mult_one -= -1  # noqa: WPS346
 
 CONSTANT = []  # noqa: WPS407
 

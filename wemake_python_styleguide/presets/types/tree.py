@@ -18,6 +18,7 @@ from wemake_python_styleguide.visitors.ast import (
     loops,
     modules,
     naming,
+    operators,
     statements,
 )
 
@@ -55,10 +56,12 @@ PRESET: Final = (
     naming.WrongVariableUsageVisitor,
 
     builtins.MagicNumberVisitor,
-    builtins.UselessOperatorsVisitor,
     builtins.WrongStringVisitor,
     builtins.WrongAssignmentVisitor,
     builtins.WrongCollectionVisitor,
+
+    operators.UselessOperatorsVisitor,
+    operators.WrongMathOperatorVisitor,
 
     compares.WrongConditionalVisitor,
     compares.CompareSanityVisitor,
