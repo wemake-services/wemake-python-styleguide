@@ -72,6 +72,8 @@ def is_upper_case_name(name: str) -> bool:
 def is_too_short_name(
     name: str,
     min_length: int,
+    *,
+    trim: bool = True,
 ) -> bool:
     """
     Checks for too short names.
@@ -91,8 +93,29 @@ def is_too_short_name(
     >>> is_too_short_name('z', min_length=1)
     False
 
+    >>> is_too_short_name('_z', min_length=2, trim=True)
+    True
+
+    >>> is_too_short_name('z_', min_length=2, trim=True)
+    True
+
+    >>> is_too_short_name('z_', min_length=2, trim=False)
+    False
+
+    >>> is_too_short_name('__z', min_length=2, trim=True)
+    True
+
+    >>> is_too_short_name('xy', min_length=2, trim=True)
+    False
+
     """
-    return not access.is_unused(name) and len(name) < min_length
+    if access.is_unused(name):
+        return False
+
+    if trim:
+        name = name.strip('_')  # TODO: test
+
+    return len(name) < min_length
 
 
 def is_too_long_name(

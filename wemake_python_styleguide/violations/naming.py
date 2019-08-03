@@ -318,6 +318,8 @@ class TooShortNameViolation(MaybeASTViolation):
     This rule checks: modules, variables, attributes,
     functions, methods, and classes.
 
+    We do not count trailing and leading underscores when calculating length.
+
     Example::
 
         # Correct:
@@ -335,6 +337,7 @@ class TooShortNameViolation(MaybeASTViolation):
 
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.4.0
+    .. versionchanged:: 0.12.0
 
     """
 
