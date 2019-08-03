@@ -13,7 +13,6 @@ You can also find interesting reading about "Cognitive complexity":
 https://www.sonarsource.com/docs/CognitiveComplexity.pdf
 
 Note:
-
     Simple is better than complex.
     Complex is better than complicated.
 

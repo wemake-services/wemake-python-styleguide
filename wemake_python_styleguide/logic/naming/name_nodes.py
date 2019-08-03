@@ -94,7 +94,6 @@ def extract_name(node: ast.AST) -> Optional[str]:
     use safer :py:`~get_assign_names` function.
 
     Example:
-
     >>> import ast
     >>> tree = ast.parse('a')
     >>> node = tree.body[0].value

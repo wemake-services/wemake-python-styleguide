@@ -47,7 +47,6 @@ def set_node_context(tree: ast.AST) -> ast.AST:
     Context is where exactly this node belongs on a global level.
 
     Example:
-
     .. code:: python
 
         if some_value > 2:

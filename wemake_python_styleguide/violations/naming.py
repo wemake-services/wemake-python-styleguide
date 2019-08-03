@@ -29,7 +29,7 @@ General
 - Do not use variables that are stated to be unused,
   rename them when actually using them
 - Do not define unused variables unless you are unpacking other values as well
-- Do not use multiple underscores to create unused variables
+- Do not use multiple underscores (``__``) to create unused variables
 - Whenever you want to name your variable similar to a keyword or builtin,
   use trailing ``_``
 - Do not use consecutive underscores
@@ -131,6 +131,7 @@ Summary
    TrailingUnderscoreViolation
    UnusedVariableIsUsedViolation
    UnusedVariableIsDefinedViolation
+   WrongUnusedVariableNameViolation
 
 Module names
 ------------
@@ -155,6 +156,7 @@ General names
 .. autoclass:: TrailingUnderscoreViolation
 .. autoclass:: UnusedVariableIsUsedViolation
 .. autoclass:: UnusedVariableIsDefinedViolation
+.. autoclass:: WrongUnusedVariableNameViolation
 
 """
 
@@ -712,3 +714,34 @@ class UnusedVariableIsDefinedViolation(ASTViolation):
 
     error_template = 'Found all unused variables definition: {0}'
     code = 122
+
+
+@final
+class WrongUnusedVariableNameViolation(ASTViolation):
+    """
+    Forbids to define unused variables with multiple underscores.
+
+    Reasoning:
+        We only use ``_`` as a special definition for an unused variable.
+        Other variables are hard to read. It is unclear why would one use it.
+
+    Solution:
+        Rename unused variables to ``_``
+        or give it some more context with an explicit name: ``_context``.
+
+    Example::
+
+        # Correct:
+        some_element, _next_element, _ = some_tuple()
+        some_element, _, _ = some_tuple()
+        some_element, _ = some_tuple()
+
+        # Wrong:
+        some_element, _, __  = some_tuple()
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found wrong unused variable name: {0}'
+    code = 123

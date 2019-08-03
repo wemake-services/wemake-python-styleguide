@@ -1015,11 +1015,6 @@ class InconsistentReturnViolation(ASTViolation):
                 return
             return 1
 
-        def function():
-            if some:
-                print(some)
-            return
-
     .. versionadded:: 0.7.0
 
     """

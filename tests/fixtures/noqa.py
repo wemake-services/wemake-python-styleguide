@@ -81,6 +81,8 @@ def some_function():
     _should_not_be_used = 1  # noqa: WPS122
     print(_should_not_be_used)  # noqa: WPS121
 
+used, __ = 1, 2  # noqa: WPS123
+
 some._execute()  # noqa: WPS437
 
 

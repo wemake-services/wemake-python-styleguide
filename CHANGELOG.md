@@ -84,7 +84,6 @@ In this release we had a little focus on:
   for nested nodes like `class Test(call().length):`
 - Fixes `ComplexDefaultValueViolation` not triggering
   for nested nodes like `def func(arg=call().attr)`
-- Fixes that code `a, *(b, c) = 1, 2, 3` was breaking the linter
 - Fixes `TooShortNameViolation` was not triggering for `_x` and `x_`
 
 ### Misc

@@ -132,6 +132,11 @@ class _NameValidator(object):
                 naming.TrailingUnderscoreViolation(node, text=name),
             )
 
+        if access.is_unused(name) and len(name) > 1:
+            self._error_callback(
+                naming.WrongUnusedVariableNameViolation(node, text=name),
+            )
+
     def _ensure_length(self, node: ast.AST, name: str) -> None:
         min_length = self._options.min_name_length
         if logical.is_too_short_name(name, min_length=min_length):
