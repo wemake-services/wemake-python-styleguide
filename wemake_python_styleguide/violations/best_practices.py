@@ -61,6 +61,7 @@ Summary
    WrongUnicodeEscapeViolation
    BlockAndLocalOverlapViolation
    ControlVarUsedAfterBlockViolation
+   OuterScopeShadowingViolation
    UnhashableTypeInHashViolation
    ListMultiplyViolation
 
@@ -109,6 +110,7 @@ Best practices
 .. autoclass:: WrongUnicodeEscapeViolation
 .. autoclass:: BlockAndLocalOverlapViolation
 .. autoclass:: ControlVarUsedAfterBlockViolation
+.. autoclass:: OuterScopeShadowingViolation
 .. autoclass:: UnhashableTypeInHashViolation
 .. autoclass:: ListMultiplyViolation
 
@@ -1636,6 +1638,44 @@ class ControlVarUsedAfterBlockViolation(ASTViolation):
 
 
 @final
+class OuterScopeShadowingViolation(ASTViolation):
+    """
+    Forbids to shadow variables from outer scopes.
+
+    We check function, method, and module scopes.
+    While we do not check class scope. Because class level constants
+    are not available via regular name,
+    and they are scope to ``ClassName.var_name``.
+
+    Reasoning:
+        Shadowing can lead you to a big pile of strage and unexpected bugs.
+
+    Solution:
+        Use different names and do not allow scoping.
+
+    Example::
+
+        # Correct:
+        def test(): ...
+
+        def other():
+            test1 = 1
+
+        # Wrong:
+        def test(): ...
+
+        def other():
+            test = 1  # shadows `test()` function
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found outer scope names shadowing: {0}'
+    code = 442
+
+
+@final
 class UnhashableTypeInHashViolation(ASTViolation):
     """
     Forbids to use exlicit unhashable types as set items and dict keys.
@@ -1659,7 +1699,7 @@ class UnhashableTypeInHashViolation(ASTViolation):
     """
 
     error_template = 'Found unhashable item'
-    code = 442
+    code = 443
 
 
 @final
@@ -1688,4 +1728,4 @@ class ListMultiplyViolation(ASTViolation):
     """
 
     error_template = 'Found list multiply'
-    code = 443
+    code = 444

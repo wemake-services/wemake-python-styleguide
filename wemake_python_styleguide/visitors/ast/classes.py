@@ -90,16 +90,16 @@ class WrongClassVisitor(base.BaseNodeVisitor):
                 continue
             self.add_violation(oop.WrongClassBodyContentViolation(sub_node))
 
-    def _is_correct_base_class(self, base: ast.AST) -> bool:
-        if isinstance(base, ast.Name):
+    def _is_correct_base_class(self, base_class: ast.AST) -> bool:
+        if isinstance(base_class, ast.Name):
             return True
-        elif isinstance(base, ast.Attribute):
+        elif isinstance(base_class, ast.Attribute):
             return all(
                 isinstance(sub_node, (ast.Name, ast.Attribute))
-                for sub_node in prop_access.parts(base)
+                for sub_node in prop_access.parts(base_class)
             )
-        elif isinstance(base, ast.Subscript):
-            parts = list(prop_access.parts(base))
+        elif isinstance(base_class, ast.Subscript):
+            parts = list(prop_access.parts(base_class))
             subscripts = list(filter(
                 lambda part: isinstance(part, ast.Subscript), parts,
             ))

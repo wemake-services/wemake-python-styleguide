@@ -221,7 +221,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
 
         """
         self._check_set_elements(node, node.elts)
-        self._check_unhashable_elements(node, node.elts)
+        self._check_unhashable_elements(node.elts)
         self.generic_visit(node)
 
     def visit_Dict(self, node: ast.Dict) -> None:
@@ -234,12 +234,11 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
 
         """
         self._check_set_elements(node, node.keys)
-        self._check_unhashable_elements(node, node.keys)
+        self._check_unhashable_elements(node.keys)
         self.generic_visit(node)
 
     def _check_unhashable_elements(
         self,
-        node: ast.AST,
         keys_or_elts: Sequence[ast.AST],
     ) -> None:
         for set_item in keys_or_elts:

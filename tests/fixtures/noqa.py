@@ -195,13 +195,13 @@ class BadClass:  # noqa: WPS306
         ]
 
     def __del__(self, *_args, **_kwargs):  # noqa: WPS603
-        anti_z444 = 1
+        anti_z444 = 1  # noqa: WPS442
 
     class Nested:  # noqa: WPS306,WPS431
         anti_z444 = 1
 
     async def __eq__(self, other):  # noqa: WPS610
-        anti_z444 = 3
+        anti_z444 = 3  # noqa: WPS442
 
 
 magic_numbers = 13.2 + 50  # noqa: WPS432
@@ -519,5 +519,5 @@ CheckStopIteration = 1  # noqa: WPS440
 
 print(literal)  # noqa: WPS441
 
-unhashable = {[]}  # noqa: WPS442
-unhashable = [] * 2  # noqa: WPS443
+unhashable = {[]}  # noqa: WPS443
+unhashable = [] * 2  # noqa: WPS444

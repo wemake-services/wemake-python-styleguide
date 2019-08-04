@@ -28,10 +28,12 @@ def alias(
                 original,
             ))
 
-        for alias in aliases:
-            if getattr(cls, alias, None):
-                raise AttributeError('Alias {0} already exists'.format(alias))
-            setattr(cls, alias, original_handler)
+        for method_alias in aliases:
+            if getattr(cls, method_alias, None):
+                raise AttributeError(
+                    'Alias {0} already exists'.format(method_alias),
+                )
+            setattr(cls, method_alias, original_handler)
 
         return cls
     return decorator

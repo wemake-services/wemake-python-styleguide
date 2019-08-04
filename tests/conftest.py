@@ -102,6 +102,6 @@ def options():
 
 
 @pytest.fixture(scope='session')
-def default_options(options):
+def default_options(options):  # noqa: WPS442
     """Returns the default options."""
     return options()
