@@ -38,6 +38,7 @@ Summary
    TooManyDecoratorsViolation
    TooManyAwaitsViolation
    TooManyAssertsViolation
+   TooDeepAccessViolation
    TooDeepNestingViolation
    LineComplexityViolation
    TooManyConditionsViolation
@@ -48,7 +49,6 @@ Summary
    TooLongYieldTupleViolation
    TooLongCompareViolation
    TooLongTryBodyViolation
-
 
 Module complexity
 -----------------
@@ -71,6 +71,7 @@ Function and class complexity
 .. autoclass:: TooManyDecoratorsViolation
 .. autoclass:: TooManyAwaitsViolation
 .. autoclass:: TooManyAssertsViolation
+.. autoclass:: TooDeepAccessViolation
 
 Structures complexity
 ---------------------
@@ -570,6 +571,32 @@ class TooManyAssertsViolation(ASTViolation):
 
     error_template = 'Found too many `assert` statements: {0}'
     code = 218
+
+
+@final
+class TooDeepAccessViolation(ASTViolation):
+    """
+    Forbids to have expressions with too deep access level.
+
+    Reasoning:
+        Having too deep access level indicates a bad design
+        and overcomplicated data without proper API.
+
+    Solution:
+        Split the expression into variables, functions or classes.
+        Refactor the API for your data layout.
+
+    Configuration:
+        This rule is configurable with ``--max-access-level``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.max_access_level`
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found too deep access level: {0}'
+    code = 219
 
 
 # Structures:

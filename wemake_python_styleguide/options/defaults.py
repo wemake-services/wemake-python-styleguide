@@ -83,3 +83,6 @@ MAX_FUNCTION_EXPRESSIONS: Final = 4
 
 #: Maximum number of ``assert`` statements in a function.
 MAX_ASSERTS: Final = 5
+
+#: Maximum number of access level in one expression.
+MAX_ACCESS_LEVEL: Final = 4
