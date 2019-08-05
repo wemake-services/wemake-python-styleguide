@@ -58,6 +58,7 @@ In this release we had a little focus on:
 - Forbids to use ``while False:``  and other false-constants
 - Forbids to use ``open()`` outside of ``with``
 - Forbids to use ``type()`` for compares
+- Forbids to have consecutive expressions with too deep access level
 
 ### Bugfixes
 

@@ -50,7 +50,7 @@ def test_access_incorrect(
     options,
     mode,
 ):
-    """Testing that violations are raised when reaching too long access."""
+    """Testing that violations are raised when reaching too deep access."""
     tree = parse_ast_tree(mode(code))
 
     option_values = options(max_access_level=2)

@@ -39,16 +39,16 @@ def parts(node: AnyAccess) -> Iterable[ast.AST]:
 
 def accesses(node: AnyAccess) -> Iterable[AnyAccess]:
     """
-    Returns all attribute and subscript accesses.
+    Returns consecutive attribute and subscript accesses.
 
-    We get all parts from it except ``obj`` name.
+    We get all parts from it except ``obj: ast.Name``.
 
     .. code:: python
 
       obj.attr.other[0].field
 
     """
-    for part in parts(node):
+    for part in parts(node):  # pragma: no cover, can't complete the loop
         if not isinstance(part, (ast.Attribute, ast.Subscript)):
             return
         yield part

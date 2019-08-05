@@ -255,7 +255,7 @@ class Configuration(object):
         _Option(
             '--max-access-level',
             defaults.MAX_ACCESS_LEVEL,
-            'Maximum number of access level in one expression.',
+            'Maximum number of access level in an expression.',
         ),
 
         # General:

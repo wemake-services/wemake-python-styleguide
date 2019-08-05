@@ -50,6 +50,7 @@ Summary
    TooLongCompareViolation
    TooLongTryBodyViolation
 
+
 Module complexity
 -----------------
 
@@ -576,7 +577,12 @@ class TooManyAssertsViolation(ASTViolation):
 @final
 class TooDeepAccessViolation(ASTViolation):
     """
-    Forbids to have expressions with too deep access level.
+    Forbids to have consecutive expressions with too deep access level.
+
+    We consider these expressions as accesses:
+
+        ``ast.Subscript``
+        ``ast.Attribute``
 
     Reasoning:
         Having too deep access level indicates a bad design
@@ -585,6 +591,19 @@ class TooDeepAccessViolation(ASTViolation):
     Solution:
         Split the expression into variables, functions or classes.
         Refactor the API for your data layout.
+
+    Example::
+
+        # correct: access level — 4
+        self.attr.inner.wrapper[1]
+
+        # wrong: access level — 5
+        self.attr.inner.wrapper.method.call()
+
+        # obj has access level of 2: `.attr`, `.call`
+        # `call()` has access level of 5:
+        # `.other`, `[0]`, `.field`, `.type`, `.boom`
+        obj.attr.call().other[0].field.type.boom
 
     Configuration:
         This rule is configurable with ``--max-access-level``.
