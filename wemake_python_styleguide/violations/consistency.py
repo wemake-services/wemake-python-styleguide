@@ -1425,7 +1425,7 @@ class ExplicitStringConcatViolation(ASTViolation):
         # Wrong:
         x = 'a' + 'b: ' + some_data
 
-    .. versionchanged:: 0.12.0
+    .. versionadded:: 0.12.0
 
     """
 
