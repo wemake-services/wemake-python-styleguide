@@ -129,13 +129,22 @@ class ManyParents(First, Second, Third, Exception):  # noqa: WPS215
 
 
 async def too_many_awaits():  # noqa: WPS217
-    await test_function()
-    await test_function()
-    await test_function()
-    await test_function()
-    await test_function()
-    await test_function()
-    await test_function()
+    await test_function(1)
+    await test_function(2)
+    await test_function(3)
+    await test_function(4)
+    await test_function(5)
+    await test_function(6)
+    await test_function(7)
+
+
+async def too_many_asserts():  # noqa: WPS218
+    assert test_function(1)
+    assert test_function(2)
+    assert test_function(3)
+    assert test_function(4)
+    assert test_function(5)
+    assert test_function(6)
 
 
 def test_function():

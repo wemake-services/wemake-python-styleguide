@@ -56,6 +56,7 @@ class _ValidatedOptions(object):
     max_try_body_length: int = attr.ib(validator=[_min_max(min=1)])
     max_module_expressions: int = attr.ib(validator=[_min_max(min=1)])
     max_function_expressions: int = attr.ib(validator=[_min_max(min=1)])
+    max_asserts: int = attr.ib(validator=[_min_max(min=1)])
 
 
 def validate_options(options: ConfigurationOptions) -> _ValidatedOptions:

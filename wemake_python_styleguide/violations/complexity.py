@@ -37,6 +37,7 @@ Summary
    TooManyBaseClassesViolation
    TooManyDecoratorsViolation
    TooManyAwaitsViolation
+   TooManyAssertsViolation
    TooDeepNestingViolation
    LineComplexityViolation
    TooManyConditionsViolation
@@ -69,6 +70,7 @@ Function and class complexity
 .. autoclass:: TooManyBaseClassesViolation
 .. autoclass:: TooManyDecoratorsViolation
 .. autoclass:: TooManyAwaitsViolation
+.. autoclass:: TooManyAssertsViolation
 
 Structures complexity
 ---------------------
@@ -522,7 +524,7 @@ class TooManyDecoratorsViolation(ASTViolation):
 @final
 class TooManyAwaitsViolation(ASTViolation):
     """
-    Forbids placing too many ``await`` expressions into the function.
+    Forbids placing too many ``await`` expressions into a function.
 
     Reasoning:
         When there are too many ``await`` keywords,
@@ -542,6 +544,32 @@ class TooManyAwaitsViolation(ASTViolation):
 
     error_template = 'Found too many await expressions: {0}'
     code = 217
+
+
+@final
+class TooManyAssertsViolation(ASTViolation):
+    """
+    Forbids placing too many ``asseert`` statements into a function.
+
+    Reasoning:
+        When there are too many ``assert`` keywords,
+        functions are starting to get really complex.
+        It might indicate that your tests or contracts are too big.
+
+    Solution:
+        Create rich ``assert`` statements, use higher-level contracts,
+        or create special guard functions.
+
+    Configuration:
+        This rule is configurable with ``--max-asserts``.
+        Default: :str:`wemake_python_styleguide.options.defaults.MAX_ASSERTS`
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found too many `assert` statements: {0}'
+    code = 218
 
 
 # Structures:

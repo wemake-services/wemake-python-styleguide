@@ -104,12 +104,15 @@ class Configuration(object):
     - ``max-try-body-length`` - maximum amount of ``try`` node body length,
       defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_TRY_BODY_LENGTH`
-    - ``max-module-expressions`` - maximum amount of expression
-      usages in a module, defaults
+    - ``max-module-expressions`` - maximum number of expression
+      usages in a module, defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_MODULE_EXPRESSIONS`
-    - ``max-function-expressions`` - maximum amount of expression
-      usages in a function or method, defaults
+    - ``max-function-expressions`` - maximum number of expression
+      usages in a function or method, defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_FUNCTION_EXPRESSIONS`
+    - ``max-asserts`` - maximum number of ``assert`` statements in a function,
+      default to
+      :str:`wemake_python_styleguide.options.defaults.MAX_ASSERTS`
 
     All options are configurable via ``flake8`` CLI.
 
@@ -213,7 +216,7 @@ class Configuration(object):
         _Option(
             '--max-awaits',
             defaults.MAX_AWAITS,
-            'Maximum allowed number of await statements in one function.',
+            'Maximum allowed number of await expressions in one function.',
         ),
 
         _Option(
@@ -232,6 +235,12 @@ class Configuration(object):
             '--max-function-expressions',
             defaults.MAX_FUNCTION_EXPRESSIONS,
             'Maximum amount of expression usages in a function or method.',
+        ),
+
+        _Option(
+            '--max-asserts',
+            defaults.MAX_ASSERTS,
+            'Maximum allowed number of assert statements in one function.',
         ),
 
         # General:

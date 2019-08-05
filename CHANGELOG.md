@@ -48,6 +48,7 @@ In this release we had a little focus on:
 - Forbids to use variable names like `__` and `_____`
 - Forbids to define unused variables explicitly
 - Forbids to shadow outer scope variables
+- Forbids to have too many `assert` statements in a function
 
 ### Bugfixes
 

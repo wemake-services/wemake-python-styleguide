@@ -80,3 +80,6 @@ MAX_MODULE_EXPRESSIONS: Final = 7  # the same as module elements
 
 #: Maximum amount of same expressions per function.
 MAX_FUNCTION_EXPRESSIONS: Final = 4
+
+#: Maximum number of ``assert`` statements in a function.
+MAX_ASSERTS: Final = 5

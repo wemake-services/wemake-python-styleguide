@@ -2,7 +2,7 @@
 
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, List, Tuple, Type, Union
+from typing import ClassVar, DefaultDict, Dict, List, Tuple, Type, Union
 
 from typing_extensions import final
 
@@ -17,6 +17,7 @@ from wemake_python_styleguide.types import (
 from wemake_python_styleguide.violations.base import BaseViolation
 from wemake_python_styleguide.violations.complexity import (
     TooManyArgumentsViolation,
+    TooManyAssertsViolation,
     TooManyAwaitsViolation,
     TooManyExpressionsViolation,
     TooManyLocalsViolation,
@@ -25,10 +26,14 @@ from wemake_python_styleguide.violations.complexity import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
-FunctionCounter = DefaultDict[AnyFunctionDef, int]
-FunctionCounterWithLambda = DefaultDict[AnyFunctionDefAndLambda, int]
-AnyFunctionCounter = Union[FunctionCounter, FunctionCounterWithLambda]
-CheckRule = Tuple[AnyFunctionCounter, int, Type[BaseViolation]]
+_FunctionCounter = DefaultDict[AnyFunctionDef, int]
+_FunctionCounterWithLambda = DefaultDict[AnyFunctionDefAndLambda, int]
+_AnyFunctionCounter = Union[_FunctionCounter, _FunctionCounterWithLambda]
+_CheckRule = Tuple[_AnyFunctionCounter, int, Type[BaseViolation]]
+_NodeTypeHandler = Dict[
+    Union[type, Tuple[type, ...]],
+    _FunctionCounter,
+]
 
 
 @final
@@ -40,13 +45,14 @@ class _ComplexityCounter(object):
     )
 
     def __init__(self) -> None:
-        self.arguments: FunctionCounterWithLambda = defaultdict(int)
-        self.awaits: FunctionCounter = defaultdict(int)
-        self.returns: FunctionCounter = defaultdict(int)
-        self.expressions: FunctionCounter = defaultdict(int)
-        self.variables: DefaultDict[
-            AnyFunctionDef, List[str],
-        ] = defaultdict(list)
+        self.awaits: _FunctionCounter = defaultdict(int)  # noqa: WPS204
+        self.arguments: _FunctionCounterWithLambda = defaultdict(int)
+        self.asserts: _FunctionCounter = defaultdict(int)
+        self.returns: _FunctionCounter = defaultdict(int)
+        self.expressions: _FunctionCounter = defaultdict(int)
+        self.variables: DefaultDict[AnyFunctionDef, List[str]] = defaultdict(
+            list,
+        )
 
     def check_arguments_count(self, node: AnyFunctionDefAndLambda) -> None:
         """Checks the number of the arguments in a function."""
@@ -83,16 +89,25 @@ class _ComplexityCounter(object):
 
             function_variables.append(variable_def.id)
 
-    def _check_sub_node(self, node: AnyFunctionDef, sub_node) -> None:
-        is_variable = isinstance(sub_node, ast.Name)
-        if is_variable and isinstance(sub_node.ctx, ast.Store):
-            self._update_variables(node, sub_node)
-        elif isinstance(sub_node, ast.Return):
-            self.returns[node] += 1
-        elif isinstance(sub_node, ast.Expr):
-            self.expressions[node] += 1
-        elif isinstance(sub_node, ast.Await):
-            self.awaits[node] += 1
+    def _check_sub_node(
+        self,
+        node: AnyFunctionDef,
+        sub_node: ast.AST,
+    ) -> None:
+        if isinstance(sub_node, ast.Name):
+            if isinstance(sub_node.ctx, ast.Store):
+                self._update_variables(node, sub_node)
+
+        error_counters: _NodeTypeHandler = {
+            ast.Return: self.returns,
+            ast.Expr: self.expressions,
+            ast.Await: self.awaits,
+            ast.Assert: self.asserts,
+        }
+
+        for types, counter in error_counters.items():
+            if isinstance(sub_node, types):
+                counter[node] += 1
 
 
 @final
@@ -167,7 +182,7 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
                 if count_result > limit:
                     self.add_violation(violation(node, text=str(count_result)))
 
-    def _function_checks(self) -> List[CheckRule]:
+    def _function_checks(self) -> List[_CheckRule]:
         return [
             (
                 self._counter.arguments,
@@ -183,6 +198,11 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
                 self._counter.awaits,
                 self.options.max_awaits,
                 TooManyAwaitsViolation,
+            ),
+            (
+                self._counter.asserts,
+                self.options.max_asserts,
+                TooManyAssertsViolation,
             ),
         ]
 
