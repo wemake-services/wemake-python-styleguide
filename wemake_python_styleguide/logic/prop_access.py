@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Iterable, Optional, Union
+from typing import Iterable, Optional
+
+from wemake_python_styleguide.types import AnyAccess
 
 
 def _chained_item(iterator: ast.AST) -> Optional[ast.AST]:
@@ -12,7 +14,7 @@ def _chained_item(iterator: ast.AST) -> Optional[ast.AST]:
     return None
 
 
-def parts(node: Union[ast.Attribute, ast.Subscript]) -> Iterable[ast.AST]:
+def parts(node: AnyAccess) -> Iterable[ast.AST]:
     """
     Returns all ``.`` separated elements for attributes and subscripts.
 
@@ -33,3 +35,20 @@ def parts(node: Union[ast.Attribute, ast.Subscript]) -> Iterable[ast.AST]:
         if chained_item is None:
             return
         iterator = chained_item
+
+
+def accesses(node: AnyAccess) -> Iterable[AnyAccess]:
+    """
+    Returns all attribute and subscript accesses.
+
+    We get all parts from it except ``obj`` name.
+
+    .. code:: python
+
+      obj.attr.other[0].field
+
+    """
+    for part in parts(node):
+        if not isinstance(part, (ast.Attribute, ast.Subscript)):
+            return
+        yield part
