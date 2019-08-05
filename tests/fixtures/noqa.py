@@ -309,7 +309,9 @@ print(biggesst > middle >= smallest)  # noqa: WPS334
 for index in [1, 2]:  # noqa: WPS335
     print(index)
 
-print(one == 'a' or one == 'b')  # noqa: WPS336
+string_concat = 'a' + 'b'  # noqa: WPS336
+
+print(one == 'a' or one == 'b')  # noqa: WPS514
 
 try:
     anti_z444 = 1

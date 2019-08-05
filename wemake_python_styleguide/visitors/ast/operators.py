@@ -10,6 +10,7 @@ from wemake_python_styleguide.logic.operators import (
     count_unary_operator,
     unwrap_unary_node,
 )
+from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations import consistency
 from wemake_python_styleguide.violations.best_practices import (
     ListMultiplyViolation,
@@ -133,6 +134,17 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
 class WrongMathOperatorVisitor(base.BaseNodeVisitor):
     """Checks that there are not wrong math operations."""
 
+    _string_nodes: ClassVar[AnyNodes] = (
+        ast.Str,
+        ast.Bytes,
+        ast.JoinedStr,
+    )
+
+    _list_nodes: ClassVar[AnyNodes] = (
+        ast.List,
+        ast.ListComp,
+    )
+
     def visit_BinOp(self, node: ast.BinOp) -> None:
         """
         Visits binary operations.
@@ -143,6 +155,7 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
         """
         self._check_negation(node.op, node.right)
         self._check_list_multiply(node)
+        self._check_string_concat(node.left, node.op, node.right)
         self.generic_visit(node)
 
     def visit_AugAssign(self, node: ast.AugAssign) -> None:
@@ -154,6 +167,7 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
 
         """
         self._check_negation(node.op, node.value)
+        self._check_string_concat(node.value, node.op)
         self.generic_visit(node)
 
     def _check_negation(self, op: ast.operator, right: ast.AST) -> None:
@@ -164,13 +178,35 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
         )
         if is_double_minus:
             self.add_violation(
-                consistency.OpeationSignNegationViolation(right),
+                consistency.OperationSignNegationViolation(right),
             )
 
     def _check_list_multiply(self, node: ast.BinOp) -> None:
         is_list_multiply = (
             isinstance(node.op, ast.Mult) and
-            isinstance(node.left, (ast.List, ast.ListComp))
+            isinstance(node.left, self._list_nodes)
         )
         if is_list_multiply:
             self.add_violation(ListMultiplyViolation(node.left))
+
+    def _check_string_concat(
+        self,
+        left: ast.AST,
+        op: ast.operator,
+        right: Optional[ast.AST] = None,
+    ) -> None:
+        if not isinstance(op, ast.Add):
+            return
+
+        left_line = getattr(left, 'lineno', 0)
+        if left_line != getattr(right, 'lineno', left_line):
+            # By default we treat nodes that do not have lineno
+            # as nodes on the same line.
+            return
+
+        for node in (left, right):
+            if isinstance(node, self._string_nodes):
+                self.add_violation(
+                    consistency.ExplicitStringConcatViolation(node),
+                )
+                return

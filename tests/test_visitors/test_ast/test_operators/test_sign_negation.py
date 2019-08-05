@@ -3,7 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
-    OpeationSignNegationViolation,
+    OperationSignNegationViolation,
 )
 from wemake_python_styleguide.visitors.ast.operators import (
     WrongMathOperatorVisitor,
@@ -57,7 +57,7 @@ def test_minus_minus_operation(
     visitor = WrongMathOperatorVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [OpeationSignNegationViolation])
+    assert_errors(visitor, [OperationSignNegationViolation])
 
 
 @pytest.mark.parametrize('expression', [

@@ -32,7 +32,7 @@ def _convert_num(node: AST):
     elif isinstance(node, Name):
         # We return string names as is, see how we return strings:
         return node.id
-    raise ValueError('malformed node or string: ' + repr(node))
+    raise ValueError('malformed node or string: {0!r}'.format(node))
 
 
 def _convert_signed_num(node: AST):

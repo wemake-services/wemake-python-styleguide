@@ -29,6 +29,7 @@ Summary
    UnmergedIsinstanceCallsViolation
    WrongIsinstanceWithTupleViolation
    ImplicitElifViolation
+   ImplicitInConditionViolation
 
 Refactoring opportunities
 -------------------------
@@ -47,6 +48,7 @@ Refactoring opportunities
 .. autoclass:: UnmergedIsinstanceCallsViolation
 .. autoclass:: WrongIsinstanceWithTupleViolation
 .. autoclass:: ImplicitElifViolation
+.. autoclass:: ImplicitInConditionViolation
 
 """
 
@@ -586,3 +588,37 @@ class ImplicitElifViolation(TokenizeViolation):
 
     error_template = 'Found implicit `elif` condition'
     code = 513
+
+
+@final
+class ImplicitInConditionViolation(ASTViolation):
+    """
+    Forbids to use multiple equality compare with the same variable name.
+
+    Reasoning:
+        Using double+ equality compare with ``or``
+        or double+ non-equality compare with ``and``
+        indicates that you have implicit ``in`` or ``not in`` condition.
+        It is just hidden from you.
+
+    Solution:
+        Refactor compares to use ``in`` or ``not in`` clauses.
+
+    Example::
+
+        # Correct:
+        print(some in {'first', 'second'})
+        print(some not in {'first', 'second'})
+
+        # Wrong:
+        print(some == 'first' or some == 'second')
+        print(some != 'first' and some != 'second')
+
+    .. versionadded:: 0.10.0
+    .. versionchanged:: 0.12.0
+
+    """
+
+    code = 514
+    error_template = 'Found implicit `in` condition'
+    previous_codes = {336}

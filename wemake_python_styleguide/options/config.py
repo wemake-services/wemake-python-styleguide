@@ -18,7 +18,7 @@ class _Option(object):
     """Represents ``flake8`` option object."""
 
     long_option_name: str
-    default: int  # noqa: E704
+    default: int
     help: str
     type: Optional[str] = 'int'  # noqa: A003
     parse_from_config: bool = True
@@ -27,7 +27,7 @@ class _Option(object):
     def __attrs_post_init__(self):
         """Is called after regular init is done."""
         object.__setattr__(  # noqa: WPS609
-            self, 'help', self.help + ' Defaults to: %default',
+            self, 'help', ' '.join((self.help, 'Defaults to: %default')),
         )
 
 

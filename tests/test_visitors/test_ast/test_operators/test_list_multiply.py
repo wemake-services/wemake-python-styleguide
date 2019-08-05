@@ -17,6 +17,7 @@ usage_template = 'constant = {0}'
     '[1] * 2',
     '[1, 2] * 0',
     '[x for x in ()] * 1.1',
+    '[[] * 2 for x in some]',
 ])
 def test_list_mult_operation(
     assert_errors,
@@ -37,6 +38,8 @@ def test_list_mult_operation(
     '1 * 2',
     '() * 1',
     '[1, 2] + [3, 4]',
+    '[x * 1 for x in some]',
+    '[x * 1 for x in some] + [2 * x for x in some]',
 ])
 def test_correct_list_operation(
     assert_errors,

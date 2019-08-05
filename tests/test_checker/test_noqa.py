@@ -179,6 +179,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS511': 1,
     'WPS512': 1,
     'WPS513': 1,
+    'WPS514': 1,
 
     'WPS600': 1,
     'WPS601': 1,
@@ -201,7 +202,7 @@ def _assert_errors_count_in_output(output, errors, all_violations):
     )
 
     for violation in all_violations:
-        key = 'WPS' + str(violation.code).zfill(3)
+        key = 'WPS{0}'.format(str(violation.code).zfill(3))
         assert key in errors, 'Unlisted #noqa violation'
 
     for found_error, found_count in found_errors.items():

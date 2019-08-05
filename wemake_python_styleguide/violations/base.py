@@ -109,7 +109,7 @@ class BaseViolation(object):
         Adds violation letter to the numbers.
         Also ensures that codes like ``3`` will be represented as ``WPS003``.
         """
-        return 'WPS' + str(self.code).zfill(3)
+        return 'WPS{0}'.format(str(self.code).zfill(3))
 
     def _location(self) -> Tuple[int, int]:
         """

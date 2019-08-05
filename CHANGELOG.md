@@ -17,6 +17,8 @@ In this release we had a little focus on:
 
 ### Features
 
+- **Breaking**: moves `ImplicitInConditionViolation` from `WPS336` to `WPS514`
+- **Breaking**: now `ExplicitStringConcatViolation` uses `WPS336`
 - Adds `xenon` as a dependency, it also checks for cyclomatic complexity,
   but uses more advanced algorithm with better results
 - Forbids to have modules with too many imported names
@@ -37,18 +39,18 @@ In this release we had a little focus on:
 - Changes how `WrongSlotsViolation` works, now `(...) + value` is restricted
   in favor of `(..., *value)`
 - Forbids to have explicit unhashable types in sets and dicts
-- Enforces `j` prefix over `J` for complex numbers
 - Forbids to define useless overwritten methods
 - Enforces `j` prefix over `J` for `complex` numbers
 - Forbids overused expressions
-- Forbids explicit `0` division, multiply, addition, and substraction
-- Fordids to multiply or divide by `1`
-- Forbids to use expressions like `x + -2` or `y - -1`
-- Forbids to multiply lists
+- Forbids explicit `0` division, multiply, pow, addition, and substraction
+- Fordids to pow, multiply, or divide by `1`
+- Forbids to use expressions like `x + -2`, or `y - -1`, or `z -= -1`
+- Forbids to multiply lists like `[0] * 2`
 - Forbids to use variable names like `__` and `_____`
-- Forbids to define unused variables explicitly
-- Forbids to shadow outer scope variables
+- Forbids to define unused variables explicitly: `_unused = 2`
+- Forbids to shadow outer scope variables with local ones
 - Forbids to have too many `assert` statements in a function
+- Forbids to have explicit string contact: `'a' + some_data`, use `.format()`
 
 ### Bugfixes
 

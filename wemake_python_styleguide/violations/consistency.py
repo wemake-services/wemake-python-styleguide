@@ -61,7 +61,7 @@ Summary
    ImplicitComplexCompareViolation
    ReversedComplexCompareViolation
    WrongLoopIterTypeViolation
-   ImplicitInConditionViolation
+   ExplicitStringConcatViolation
    MultilineConditionsViolation
    WrongMethodOrderViolation
    NumberWithMeaninglessZeroViolation
@@ -71,7 +71,7 @@ Summary
    BadComplexNumberSuffixViolation
    ZeroDivisionViolation
    MeaninglessNumberOperationViolation
-   OpeationSignNegationViolation
+   OperationSignNegationViolation
 
 Consistency checks
 ------------------
@@ -112,7 +112,7 @@ Consistency checks
 .. autoclass:: ImplicitComplexCompareViolation
 .. autoclass:: ReversedComplexCompareViolation
 .. autoclass:: WrongLoopIterTypeViolation
-.. autoclass:: ImplicitInConditionViolation
+.. autoclass:: ExplicitStringConcatViolation
 .. autoclass:: MultilineConditionsViolation
 .. autoclass:: WrongMethodOrderViolation
 .. autoclass:: NumberWithMeaninglessZeroViolation
@@ -122,7 +122,7 @@ Consistency checks
 .. autoclass:: BadComplexNumberSuffixViolation
 .. autoclass:: ZeroDivisionViolation
 .. autoclass:: MeaninglessNumberOperationViolation
-.. autoclass:: OpeationSignNegationViolation
+.. autoclass:: OperationSignNegationViolation
 
 """
 
@@ -1402,35 +1402,35 @@ class WrongLoopIterTypeViolation(ASTViolation):
 
 
 @final
-class ImplicitInConditionViolation(ASTViolation):
+class ExplicitStringConcatViolation(ASTViolation):
     """
-    Forbids to use multiple equality compare with the same variable name.
+    Forbids explicit string concat in favour of ``.format`` method.
+
+    However, we still allow multiline string concat
+    as a way to write long stirngs that does not fit the 80-chars rule.
 
     Reasoning:
-        Using double+ equality compare with ``or``
-        or double+ non-equality compare with ``and``
-        indicates that you have implicit ``in`` or ``not in`` condition.
-        It is just hidden from you.
+        When formating strings one must use ``.format``
+        and not any other formatting methods like ``%``, ``+``, or ``f``.
+        This is done for consistency reasons.
 
     Solution:
-        Refactor compares to use ``in`` or ``not in`` clauses.
+        Join strings together if you can, or use ``.format`` method.
 
     Example::
 
         # Correct:
-        print(some in {'first', 'second'})
-        print(some not in {'first', 'second'})
+        x = 'ab: {0}'.format(some_data)
 
         # Wrong:
-        print(some == 'first' or some == 'second')
-        print(some != 'first' and some != 'second')
+        x = 'a' + 'b: ' + some_data
 
-    .. versionadded:: 0.10.0
+    .. versionchanged:: 0.12.0
 
     """
 
     code = 336
-    error_template = 'Found implicit `in` condition'
+    error_template = 'Found explicit string concat'
 
 
 @final
@@ -1715,7 +1715,7 @@ class MeaninglessNumberOperationViolation(ASTViolation):
 
 
 @final
-class OpeationSignNegationViolation(ASTViolation):
+class OperationSignNegationViolation(ASTViolation):
     """
     Forbids to have double minus operations.
 

@@ -17,11 +17,11 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.violations.consistency import (
     ImplicitComplexCompareViolation,
-    ImplicitInConditionViolation,
     ImplicitTernaryViolation,
     MultilineConditionsViolation,
 )
 from wemake_python_styleguide.violations.refactoring import (
+    ImplicitInConditionViolation,
     NegatedConditionsViolation,
     UnmergedIsinstanceCallsViolation,
     UselessLenCompareViolation,
