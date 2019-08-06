@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import ast
-
 import pytest
 
 from wemake_python_styleguide.violations.complexity import (
