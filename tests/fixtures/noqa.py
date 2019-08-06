@@ -146,7 +146,7 @@ async def too_many_asserts():  # noqa: WPS218
     assert test_function(5)
     assert test_function(6)
 
-some.other[0].field.type.boom  # noqa: WPS219,WPS428
+deep_access = some.other[0].field.type.boom  # noqa: WPS219
 
 def test_function():
     if xy > 1:

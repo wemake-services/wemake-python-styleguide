@@ -579,10 +579,13 @@ class TooDeepAccessViolation(ASTViolation):
     """
     Forbids to have consecutive expressions with too deep access level.
 
-    We consider these expressions as accesses:
+    We consider only these expressions as accesses:
 
-        ``ast.Subscript``
-        ``ast.Attribute``
+        - ``ast.Subscript``
+        - ``ast.Attribute``
+
+    We do not treat ``ast.Call`` as an access, since there are
+    a lot of call-based APIs like Django ORM.
 
     Reasoning:
         Having too deep access level indicates a bad design
@@ -594,13 +597,17 @@ class TooDeepAccessViolation(ASTViolation):
 
     Example::
 
-        # correct: access level — 4
+        # Correct: access level — 4
         self.attr.inner.wrapper[1]
 
-        # wrong: access level — 5
+        # Correct: access level — 1
+        manager.filter().exclude().annotate().values().first()
+
+        # Wrong: access level — 5
         self.attr.inner.wrapper.method.call()
 
-        # obj has access level of 2: `.attr`, `.call`
+        # Wrong: access level — 5
+        # `obj` has access level of 2: `.attr`, `.call`
         # `call()` has access level of 5:
         # `.other`, `[0]`, `.field`, `.type`, `.boom`
         obj.attr.call().other[0].field.type.boom

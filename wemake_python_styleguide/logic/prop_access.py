@@ -48,7 +48,7 @@ def accesses(node: AnyAccess) -> Iterable[AnyAccess]:
       obj.attr.other[0].field
 
     """
-    for part in parts(node):  # pragma: no cover, can't complete the loop
+    for part in parts(node):
         if not isinstance(part, (ast.Attribute, ast.Subscript)):
-            return
+            break
         yield part
