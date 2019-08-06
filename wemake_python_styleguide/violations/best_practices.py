@@ -54,7 +54,7 @@ Summary
    MagicNumberViolation
    NestedImportViolation
    ReassigningVariableToItselfViolation
-   YieldInsideInitViolation
+   ListMultiplyViolation
    ProtectedModuleViolation
    ProtectedAttributeViolation
    StopIterationInsideGeneratorViolation
@@ -63,7 +63,6 @@ Summary
    ControlVarUsedAfterBlockViolation
    OuterScopeShadowingViolation
    UnhashableTypeInHashViolation
-   ListMultiplyViolation
 
 Best practices
 --------------
@@ -103,7 +102,7 @@ Best practices
 .. autoclass:: MagicNumberViolation
 .. autoclass:: NestedImportViolation
 .. autoclass:: ReassigningVariableToItselfViolation
-.. autoclass:: YieldInsideInitViolation
+.. autoclass:: ListMultiplyViolation
 .. autoclass:: ProtectedModuleViolation
 .. autoclass:: ProtectedAttributeViolation
 .. autoclass:: StopIterationInsideGeneratorViolation
@@ -112,7 +111,6 @@ Best practices
 .. autoclass:: ControlVarUsedAfterBlockViolation
 .. autoclass:: OuterScopeShadowingViolation
 .. autoclass:: UnhashableTypeInHashViolation
-.. autoclass:: ListMultiplyViolation
 
 """
 
@@ -1367,35 +1365,32 @@ class ReassigningVariableToItselfViolation(ASTViolation):
 
 
 @final
-class YieldInsideInitViolation(ASTViolation):
+class ListMultiplyViolation(ASTViolation):
     """
-    Forbids to use ``yield`` inside of ``__init__`` method.
+    Forbids to multiply lists.
 
     Reasoning:
-        ``__init__`` should be used to initialize new objects.
-        It shouldn't ``yield`` anything because it should return ``None``
-        by the convention.
+        When you multiply lists - it does not create new values,
+        it creates references to the existing value.
+        It is not what people mean in 99.9% of cases.
+
+    Solution:
+        Use list comprehension or loop instead.
 
     Example::
 
-         # Correct:
-        class Example(object):
-            def __init__(self):
-                self._public_items_count = 0
-
         # Wrong:
-        class Example(object):
-            def __init__(self):
-                yield 10
+        my_list = [1, 2, 3] * 3
 
-    .. versionadded:: 0.3.0
-    .. versionchanged:: 0.11.0
+    See also:
+        https://github.com/satwikkansal/wtfPython#-explanation-8
+
+    .. versionadded:: 0.12.0
 
     """
 
-    error_template = 'Found `yield` inside `__init__` method'
+    error_template = 'Found list multiply'
     code = 435
-    previous_codes = {439}
 
 
 @final
@@ -1700,32 +1695,3 @@ class UnhashableTypeInHashViolation(ASTViolation):
 
     error_template = 'Found unhashable item'
     code = 443
-
-
-@final
-class ListMultiplyViolation(ASTViolation):
-    """
-    Forbids to multiply lists.
-
-    Reasoning:
-        When you multiply lists - it does not create new values,
-        it creates references to the existing value.
-        It is not what people mean in 99.9% of cases.
-
-    Solution:
-        Use list comprehension or loop instead.
-
-    Example::
-
-        # Wrong:
-        my_list = [1, 2, 3] * 3
-
-    See also:
-        https://github.com/satwikkansal/wtfPython#-explanation-8
-
-    .. versionadded:: 0.12.0
-
-    """
-
-    error_template = 'Found list multiply'
-    code = 444

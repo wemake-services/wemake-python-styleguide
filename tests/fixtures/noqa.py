@@ -352,11 +352,11 @@ nodes = nodes  # noqa: WPS434
 class Example(object):
     """Correct class docstring."""
 
-    def __init__(self):  # noqa: WPS435
+    def __init__(self):  # noqa: WPS611
         """Correct function docstring."""
         yield 10
 
-    def __eq__(self, object_: object) -> bool:  # noqa: WPS611
+    def __eq__(self, object_: object) -> bool:  # noqa: WPS612
         return super().__eq__(object_)
 
 
@@ -531,4 +531,4 @@ CheckStopIteration = 1  # noqa: WPS440
 print(literal)  # noqa: WPS441
 
 unhashable = {[]}  # noqa: WPS443
-unhashable = [] * 2  # noqa: WPS444
+unhashable = [] * 2  # noqa: WPS435

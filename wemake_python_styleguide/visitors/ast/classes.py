@@ -124,10 +124,6 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         'staticmethod',
     ))
 
-    _not_appropriate_for_init: ClassVar[types.AnyNodes] = (
-        ast.Yield,
-    )
-
     def visit_any_function(self, node: types.AnyFunctionDef) -> None:
         """
         Checking class methods: async and regular.
@@ -135,7 +131,7 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         Raises:
             StaticMethodViolation
             BadMagicMethodViolation
-            YieldInsideInitViolation
+            YieldMagicMethodViolation
             MethodWithoutArgumentsViolation
             AsyncMagicMethodViolation
             UselessOverwrittenMethodViolation
@@ -169,7 +165,7 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
 
         is_async = isinstance(node, ast.AsyncFunctionDef)
         if is_async and access.is_magic(node.name):
-            if node.name not in constants.ASYNC_MAGIC_METHODS_WHITELIST:
+            if node.name in constants.ASYNC_MAGIC_METHODS_BLACKLIST:
                 self.add_violation(
                     oop.AsyncMagicMethodViolation(node, text=node.name),
                 )
@@ -180,9 +176,9 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         )
 
     def _check_method_contents(self, node: types.AnyFunctionDef) -> None:
-        if node.name == constants.INIT:
-            if walk.is_contained(node, self._not_appropriate_for_init):
-                self.add_violation(bp.YieldInsideInitViolation(node))
+        if node.name in constants.YIELD_MAGIC_METHODS_BLACKLIST:
+            if walk.is_contained(node, (ast.Yield, ast.YieldFrom)):
+                self.add_violation(oop.YieldMagicMethodViolation(node))
 
     def _get_call_stmt_of_useless_method(
         self,

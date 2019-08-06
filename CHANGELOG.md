@@ -19,6 +19,7 @@ In this release we had a little focus on:
 
 - **Breaking**: moves `ImplicitInConditionViolation` from `WPS336` to `WPS514`
 - **Breaking**: now `ExplicitStringConcatViolation` uses `WPS336`
+- **Breaking**: moves `YieldMagicMethodViolation` from `WPS435` to `WPS611`
 - Adds `xenon` as a dependency, it also checks for cyclomatic complexity,
   but uses more advanced algorithm with better results
 - Forbids to have modules with too many imported names
@@ -51,11 +52,15 @@ In this release we had a little focus on:
 - Forbids to shadow outer scope variables with local ones
 - Forbids to have too many `assert` statements in a function
 - Forbids to have explicit string contact: `'a' + some_data`, use `.format()`
+- Now `YieldInsideInitViolation` is named `YieldMagicMethodViolation`
+  and it also checks different magic methods in a class
 
 ### Bugfixes
 
 - Bumps `flake8-eradicate` version
   and solves `attrs` incompatible versions issue
+- Bumps `flake8-dosctrings` veresion
+  and solved `pydocstyle` issue
 - Fixes `TryExceptMultipleReturnPathViolation` not tracking `else` and `finally`
   returns at the same time
 - Fixes how `TryExceptMultipleReturnPathViolation` works:
@@ -91,6 +96,8 @@ In this release we had a little focus on:
 - Fixes `ComplexDefaultValueViolation` not triggering
   for nested nodes like `def func(arg=call().attr)`
 - Fixes `TooShortNameViolation` was not triggering for `_x` and `x_`
+- Fixes that some magic method were allowed to be generators
+- Fixes that some magic method were allowed to contain `yield from`
 
 ### Misc
 
