@@ -35,20 +35,3 @@ def parts(node: AnyAccess) -> Iterable[ast.AST]:
         if chained_item is None:
             return
         iterator = chained_item
-
-
-def accesses(node: AnyAccess) -> Iterable[AnyAccess]:
-    """
-    Returns consecutive attribute and subscript accesses.
-
-    We get all parts from it except ``obj: ast.Name``.
-
-    .. code:: python
-
-      obj.attr.other[0].field
-
-    """
-    for part in parts(node):
-        if not isinstance(part, (ast.Attribute, ast.Subscript)):
-            break
-        yield part

@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Set
+from itertools import takewhile
+from typing import Set, cast
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic.prop_access import accesses
+from wemake_python_styleguide.logic.prop_access import parts
 from wemake_python_styleguide.types import AnyAccess
 from wemake_python_styleguide.violations.complexity import (
     TooDeepAccessViolation,
@@ -44,13 +45,19 @@ class AccessVisitor(BaseNodeVisitor):
         self._check_consecutive_access_number(node)
         self.generic_visit(node)
 
+    def _is_any_access(self, node: ast.AST) -> bool:
+        return isinstance(node, (ast.Attribute, ast.Subscript))
+
     def _check_consecutive_access_number(self, node: AnyAccess) -> None:
         if node in self._visited_accesses:
             return
 
-        access_chain = set(accesses(node))
-        self._visited_accesses.update(access_chain)
-        access_number = len(access_chain)
+        consecutive_access = cast(Set[AnyAccess], set(takewhile(
+            self._is_any_access, parts(node),
+        )))
+
+        self._visited_accesses.update(consecutive_access)
+        access_number = len(consecutive_access)
 
         if access_number > self.options.max_access_level:
             self.add_violation(
