@@ -18,6 +18,9 @@ mixed_with_calls_access = 'self.attr[0]().wrapper[0][0].bar().foo[0]()'
 # correct expressions
 call_chain = 'manager.filter().exclude().annotate().values().first()'
 
+# incorrect expressions
+deep_access = 'self.some.other.attr().first.second.third.fourth.boom'
+
 
 @pytest.mark.parametrize('code', [
     subscript_access,
@@ -43,17 +46,19 @@ def test_correct_accesss(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    subscript_access,
-    attribute_access,
-    mixed_access,
-    mixed_with_calls_access,
+@pytest.mark.parametrize('code, access_level', [
+    (subscript_access, 4),
+    (attribute_access, 4),
+    (mixed_access, 4),
+    (mixed_with_calls_access, 4),
+    (deep_access, 5),
 ])
 def test_incorrect_access(
     assert_errors,
     assert_error_text,
     parse_ast_tree,
     code,
+    access_level,
     options,
     mode,
 ):
@@ -65,4 +70,4 @@ def test_incorrect_access(
     visitor.run()
 
     assert_errors(visitor, [TooDeepAccessViolation])
-    assert_error_text(visitor, '4')
+    assert_error_text(visitor, str(access_level))
