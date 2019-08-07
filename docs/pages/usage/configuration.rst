@@ -8,20 +8,15 @@ that you are familiar with ``flake8``
 By default we encourage everyone to use ``setup.cfg`` to store all
 the configuration to all ``python`` projects.
 
-Options
--------
-
 .. autoclass:: wemake_python_styleguide.options.config.Configuration
    :no-members:
 
-Defaults
---------
+.. rubric:: Defaults
 
 .. automodule:: wemake_python_styleguide.options.defaults
    :members:
 
-Plugins
--------
+.. rubric:: Plugins
 
 It is also important to configure different plugins that we ship with
 this module.

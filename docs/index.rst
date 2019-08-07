@@ -16,7 +16,7 @@
 
 .. toctree::
   :maxdepth: 1
-  :caption: Integrations
+  :caption: Integrations:
   :hidden:
 
   pages/usage/integrations/index.rst
