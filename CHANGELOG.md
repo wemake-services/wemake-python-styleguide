@@ -57,6 +57,7 @@ In this release we had a little focus on:
 - Forbids to use ``assert False`` and other false-constants
 - Forbids to use ``while False:``  and other false-constants
 - Forbids to use ``open()`` outside of ``with``
+- Forbids to use ``type()`` for compares
 
 ### Bugfixes
 

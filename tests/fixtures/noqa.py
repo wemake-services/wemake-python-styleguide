@@ -313,6 +313,7 @@ string_concat = 'a' + 'b'  # noqa: WPS336
 
 print(one == 'a' or one == 'b')  # noqa: WPS514
 file_obj = open('filaname.py')  # noqa: WPS515
+print(type(file_obj) == int)  # noqa: WPS516
 
 try:
     anti_z444 = 1

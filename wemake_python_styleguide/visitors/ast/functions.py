@@ -30,6 +30,7 @@ from wemake_python_styleguide.violations.naming import (
 from wemake_python_styleguide.violations.oop import WrongSuperCallViolation
 from wemake_python_styleguide.violations.refactoring import (
     OpenWithoutContextManagerViolation,
+    TypeCompareViolation,
     UselessLambdaViolation,
     WrongIsinstanceWithTupleViolation,
 )
@@ -128,6 +129,7 @@ class WrongFunctionCallContextVisitior(base.BaseNodeVisitor):
 
         """
         self._check_open_call_context(node)
+        self._check_type_compare(node)
         self.generic_visit(node)
 
     def _check_open_call_context(self, node: ast.Call) -> None:
@@ -140,6 +142,14 @@ class WrongFunctionCallContextVisitior(base.BaseNodeVisitor):
             return
 
         self.add_violation(OpenWithoutContextManagerViolation(node))
+
+    def _check_type_compare(self, node: ast.Call) -> None:
+        function_name = functions.given_function_called(node, {'type'})
+        if not function_name:
+            return
+
+        if isinstance(nodes.get_parent(node), ast.Compare):
+            self.add_violation(TypeCompareViolation(node))
 
 
 @final

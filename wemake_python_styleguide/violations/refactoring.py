@@ -31,6 +31,7 @@ Summary
    ImplicitElifViolation
    ImplicitInConditionViolation
    OpenWithoutContextManagerViolation
+   TypeCompareViolation
 
 Refactoring opportunities
 -------------------------
@@ -51,6 +52,7 @@ Refactoring opportunities
 .. autoclass:: ImplicitElifViolation
 .. autoclass:: ImplicitInConditionViolation
 .. autoclass:: OpenWithoutContextManagerViolation
+.. autoclass:: TypeCompareViolation
 
 """
 
@@ -654,4 +656,34 @@ class OpenWithoutContextManagerViolation(ASTViolation):
     """
 
     code = 515
-    error_template = 'Found open() used without a context manager'
+    error_template = 'Found `open()` used without a context manager'
+
+
+@final
+class TypeCompareViolation(ASTViolation):
+    """
+    Forbids to compare types with ``type()`` function.
+
+    Reasoning:
+        When you compare types with ``type()`` function call
+        it means that you break polymorphism and dissallow child classes
+        of a node to work here. That's incorrect.
+
+    Solution:
+        Use ``isinstance`` to compare types.
+
+    Example::
+
+        # Correct:
+        print(something, type(something))
+
+        # Wrong:
+        if type(something) == int:
+            ...
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    code = 516
+    error_template = 'Found `type()` used to compare types'

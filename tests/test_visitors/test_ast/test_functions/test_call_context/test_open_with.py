@@ -87,7 +87,8 @@ def test_open_inside_context_manager(
 ])
 @pytest.mark.parametrize('call', [
     'close()',
-    'some.attr',
+    'open.attr',
+    'open.attr()',
     'obj.open()',
 ])
 def test_regular_functions(
