@@ -30,6 +30,7 @@ Summary
    WrongIsinstanceWithTupleViolation
    ImplicitElifViolation
    ImplicitInConditionViolation
+   OpenWithoutContextManagerViolation
 
 Refactoring opportunities
 -------------------------
@@ -49,6 +50,7 @@ Refactoring opportunities
 .. autoclass:: WrongIsinstanceWithTupleViolation
 .. autoclass:: ImplicitElifViolation
 .. autoclass:: ImplicitInConditionViolation
+.. autoclass:: OpenWithoutContextManagerViolation
 
 """
 
@@ -622,3 +624,34 @@ class ImplicitInConditionViolation(ASTViolation):
     code = 514
     error_template = 'Found implicit `in` condition'
     previous_codes = {336}
+
+
+@final
+class OpenWithoutContextManagerViolation(ASTViolation):
+    """
+    Forbids to use ``open()`` with a context manager.
+
+    Reasoning:
+        When you ``open()`` something, you need to close it.
+        When using a context manager - it is automatically done for you.
+        When not using it - you might find yourself in a situation
+        when file is not closed and is not accessable anymore.
+
+    Solution:
+        Refactor ``open()`` call to use ``with``.
+
+    Example::
+
+        # Correct:
+        with open(filename) as file_obj:
+            ...
+
+        # Wrong:
+        file_obj = open(filename)
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    code = 515
+    error_template = 'Found open() used without a context manager'

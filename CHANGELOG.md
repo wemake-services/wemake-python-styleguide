@@ -56,6 +56,7 @@ In this release we had a little focus on:
   and it also checks different magic methods in a class
 - Forbids to use ``assert False`` and other false-constants
 - Forbids to use ``while False:``  and other false-constants
+- Forbids to use ``open()`` outside of ``with``
 
 ### Bugfixes
 

@@ -29,6 +29,7 @@ from wemake_python_styleguide.violations.naming import (
 )
 from wemake_python_styleguide.violations.oop import WrongSuperCallViolation
 from wemake_python_styleguide.violations.refactoring import (
+    OpenWithoutContextManagerViolation,
     UselessLambdaViolation,
     WrongIsinstanceWithTupleViolation,
 )
@@ -112,6 +113,33 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
         if isinstance(node.args[1], ast.Tuple):
             if len(node.args[1].elts) == 1:
                 self.add_violation(WrongIsinstanceWithTupleViolation(node))
+
+
+@final
+class WrongFunctionCallContextVisitior(base.BaseNodeVisitor):
+    """Ensure that we call several functions in the correct context."""
+
+    def visit_Call(self, node: ast.Call) -> None:
+        """
+        Visits function calls to find wrong contexts.
+
+        Raises:
+            OpenWithoutContextManagerViolation
+
+        """
+        self._check_open_call_context(node)
+        self.generic_visit(node)
+
+    def _check_open_call_context(self, node: ast.Call) -> None:
+        function_name = functions.given_function_called(node, {'open'})
+        if not function_name:
+            return
+
+        if isinstance(nodes.get_parent(node), ast.withitem):
+            # We do not care about `with` or `async with` - both are fine.
+            return
+
+        self.add_violation(OpenWithoutContextManagerViolation(node))
 
 
 @final

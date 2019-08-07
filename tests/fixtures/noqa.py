@@ -312,6 +312,7 @@ for index in [1, 2]:  # noqa: WPS335
 string_concat = 'a' + 'b'  # noqa: WPS336
 
 print(one == 'a' or one == 'b')  # noqa: WPS514
+file_obj = open('filaname.py')  # noqa: WPS515
 
 try:
     anti_z444 = 1
