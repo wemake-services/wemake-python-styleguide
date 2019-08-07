@@ -1,7 +1,17 @@
-Config
-======
+Configuration
+=============
 
-.. automodule:: wemake_python_styleguide.options.config
+Before going any further, make sure
+that you are familiar with ``flake8``
+`configuration process <https://flake8.pycqa.org/en/latest/user/configuration.html>`_.
+
+By default we encourage everyone to use ``setup.cfg`` to store all
+the configuration to all ``python`` projects.
+
+Options
+-------
+
+.. autoclass:: wemake_python_styleguide.options.config.Configuration
    :no-members:
 
 Defaults
@@ -18,10 +28,11 @@ this module.
 
 .. code:: ini
 
-    [flake8]
-    max-complexity = 6
-    max-line-length = 80
-    enable-extensions = G
+  # Insude `setup.cfg`:
+  [flake8]
+  max-complexity = 6
+  max-line-length = 80
+  enable-extensions = G
 
 Place this configuration inside ``setup.cfg`` file.
 Our repository `contains <https://github.com/wemake-services/wemake-python-styleguide/blob/master/setup.cfg>`_
@@ -32,12 +43,13 @@ You will need to update your configuration with the following lines:
 
 .. code:: ini
 
-      [isort]
-      multi_line_output = 3
-      include_trailing_comma = true
-      default_section = FIRSTPARTY
-      # Is the same as 80 in flake8:
-      line_length = 79
+  # Insude `setup.cfg`:
+  [isort]
+  multi_line_output = 3
+  include_trailing_comma = true
+  default_section = FIRSTPARTY
+  # Is the same as 80 in flake8:
+  line_length = 79
 
 Otherwise, your ``isort`` will complain about your imports.
 

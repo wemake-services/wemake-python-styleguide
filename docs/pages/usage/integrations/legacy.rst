@@ -1,5 +1,5 @@
 Legacy projects
-===============
+---------------
 
 Introducing this package to a legacy project is going to be a challenge.
 Due to our strict quality, consistency, and complexity rules.

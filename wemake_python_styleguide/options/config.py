@@ -116,19 +116,25 @@ class Configuration(object):
 
     All options are configurable via ``flake8`` CLI.
 
-    Example::
+    .. code:: ini
 
-        flake8 --max-returns=2 --max-arguments=4
+      flake8 --max-returns=2 --max-arguments=4
 
-    Or you can provide options in ``tox.ini`` or ``setup.cfg``.
+    Or you can provide options in ``setup.cfg`` or similar supported files.
 
-    Example::
+    .. code:: ini
 
-        [flake8]
-        max-returns = 2
-        max-arguments = 4
+      [flake8]
+      max-returns = 2
+      max-arguments = 4
 
     We use ``setup.cfg`` as a default way to provide configuration.
+
+    You can also show all options that ``flake8`` supports by running:
+
+    .. code:: bash
+
+       flake8 --help
 
     """
 

@@ -116,6 +116,7 @@ In this release we had a little focus on:
 - Refactors a lot of tests to tests `ast.Starred`
 - Refactors a lot of tests to have less tests with the same logical coverage
 - We now use `import-linter` instead of `layer-linter`
+- Adds docs about CI integration
 
 
 ## 0.11.1
