@@ -54,6 +54,8 @@ In this release we had a little focus on:
 - Forbids to have explicit string contact: `'a' + some_data`, use `.format()`
 - Now `YieldInsideInitViolation` is named `YieldMagicMethodViolation`
   and it also checks different magic methods in a class
+- Forbids to use ``assert False`` and other false-constants
+- Forbids to use ``while False:``  and other false-constants
 
 ### Bugfixes
 

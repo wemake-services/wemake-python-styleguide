@@ -531,4 +531,5 @@ CheckStopIteration = 1  # noqa: WPS440
 print(literal)  # noqa: WPS441
 
 unhashable = {[]}  # noqa: WPS443
+assert []  # noqa: WPS444
 unhashable = [] * 2  # noqa: WPS435

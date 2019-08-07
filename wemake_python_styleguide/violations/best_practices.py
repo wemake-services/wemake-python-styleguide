@@ -63,6 +63,7 @@ Summary
    ControlVarUsedAfterBlockViolation
    OuterScopeShadowingViolation
    UnhashableTypeInHashViolation
+   WrongKeywordConditionViolation
 
 Best practices
 --------------
@@ -111,6 +112,7 @@ Best practices
 .. autoclass:: ControlVarUsedAfterBlockViolation
 .. autoclass:: OuterScopeShadowingViolation
 .. autoclass:: UnhashableTypeInHashViolation
+.. autoclass:: WrongKeywordConditionViolation
 
 """
 
@@ -1695,3 +1697,44 @@ class UnhashableTypeInHashViolation(ASTViolation):
 
     error_template = 'Found unhashable item'
     code = 443
+
+
+@final
+class WrongKeywordConditionViolation(ASTViolation):
+    """
+    Forbids to use exlicit falsly-evaluated conditions with several keywords.
+
+    We check:
+
+    - ``ast.While``
+    - ``ast.Assert``
+
+    We only check constants. We do not check variables, attributes, calls, etc.
+
+    Reasoning:
+        Some conditions clearly tell us that this node won't work correctly.
+        So, we need to check that we can fix that.
+
+    Solution:
+        Remove the unreachable node, or change the condition item.
+
+    Example::
+
+        # Correct:
+        assert some_variable
+
+        while True:
+            ...
+
+        # Wrong:
+        assert []
+
+        while False:
+            ...
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found wrong keyword condition: {0}'
+    code = 444

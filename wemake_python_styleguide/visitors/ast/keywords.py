@@ -2,6 +2,7 @@
 
 import ast
 from collections import defaultdict
+from contextlib import suppress
 from typing import ClassVar, Dict, List, Tuple, Type, Union
 
 from typing_extensions import final
@@ -16,6 +17,7 @@ from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, AnyWith
 from wemake_python_styleguide.violations.best_practices import (
     ContextManagerVariableDefinitionViolation,
     RaiseNotImplementedViolation,
+    WrongKeywordConditionViolation,
     WrongKeywordViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
@@ -301,5 +303,43 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
                 self.add_violation(
                     InconsistentReturnVariableViolation(
                         return_sub_nodes[variable_name],
+                    ),
+                )
+
+
+@final
+class ConstantKeywordVisitor(BaseNodeVisitor):
+    """Visits keyword definitions to detect contant conditions."""
+
+    def visit_While(self, node: ast.While) -> None:
+        """
+        Visits ``while`` keyword and tests that loop will execute.
+
+        Raises:
+            WrongKeywordConditionViolation
+
+        """
+        self._check_condition(node.test)
+        self.generic_visit(node)
+
+    def visit_Assert(self, node: ast.Assert) -> None:
+        """
+        Visits ``assert`` keyword and tests that condition is correct.
+
+        Raises:
+            WrongKeywordConditionViolation
+
+        """
+        self._check_condition(node.test)
+        self.generic_visit(node)
+
+    def _check_condition(self, condition: ast.AST) -> None:
+        with suppress(ValueError):
+            constant = ast.literal_eval(condition)
+            if not bool(constant):
+                self.add_violation(
+                    WrongKeywordConditionViolation(
+                        condition,
+                        text=str(constant) if constant != '' else '""',
                     ),
                 )
