@@ -294,28 +294,29 @@ class WrongParametersIndentationVisitor(BaseNodeVisitor):
 @final
 class PointlessStarredVisitor(BaseNodeVisitor):
     """Responsible for absence of useless starred expressions."""
+    _pointless_star_nodes: ClassVar[AnyNodes] = (
+        ast.Dict,
+        ast.List,
+        ast.Set,
+        ast.Tuple,
+    )
 
     def visit_Call(self, node: ast.Call) -> None:
-        """Checks function parameters indentation."""
-        all_args = [*node.args, *[kw.value for kw in node.keywords]]
-        self._check_expr(node, all_args)
+        """Checks useless call arguments"""
+        self._find_starred_empty_args(node.args)
+        self._find_double_starred_empty_dict(node.keywords)
         self.generic_visit(node)
 
-    def _check_starred(self, node: ast.Starred) -> Optional[bool]:
-        starred_obj = node.value
-        if isinstance(starred_obj, ast.Dict) and not starred_obj.keys:
-            self.add_violation(PointlessStarredViolation(node))
-        elif isinstance(starred_obj, ast.List) and not starred_obj.elts:
-            self.add_violation(PointlessStarredViolation(node))
-        elif isinstance(starred_obj, ast.Tuple) and not starred_obj.elts:
-            self.add_violation(PointlessStarredViolation(node))
-        return None
+    def _find_starred_empty_args(self, args: Sequence[ast.AST]) -> None:
+        for node in args:
+            if isinstance(node, ast.Starred):
+                if isinstance(node.value, self._pointless_star_nodes):
+                    if hasattr(node.value, 'keys') and not node.value.keys:
+                        self.add_violation(PointlessStarredViolation(node))
+                    elif hasattr(node.value, 'elts') and not node.value.elts:
+                        self.add_violation(PointlessStarredViolation(node))
 
-    def _check_expr(
-        self,
-        node: ast.AST,
-        elements: Sequence[ast.AST],
-    ) -> None:
-        for statement in elements:
-            if isinstance(statement, ast.Starred):
-                self._check_starred(statement)
+    def _find_double_starred_empty_dict(self, keywords: Sequence[ast.keyword]) -> None:
+        for keyword in keywords:
+            if keyword.arg is None and not keyword.value.keys:
+                self.add_violation(PointlessStarredViolation(keyword.value))

@@ -5,15 +5,12 @@ import pytest
 from wemake_python_styleguide.violations.refactoring import (
     PointlessStarredViolation,
 )
-from wemake_python_styleguide.visitors.ast.statements import (
-    PointlessStarredVisitor,
-)
-
-
 @pytest.mark.parametrize('code', [
     'print(*[])',
     'print(*())',
     'print(*{})',
+    'print(**{})',
+    'print(*[], **{"1": 1})',
     'print(*[1], **{})',
 ])
 def test_pointless_starred(
@@ -29,6 +26,11 @@ def test_pointless_starred(
     visitor.run()
 
     assert_errors(visitor, [PointlessStarredViolation])
+
+
+from wemake_python_styleguide.visitors.ast.statements import (
+    PointlessStarredVisitor,
+)
 
 
 @pytest.mark.parametrize('code', [
