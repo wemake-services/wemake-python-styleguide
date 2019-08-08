@@ -596,17 +596,26 @@ class PointlessStarredViolation(ASTViolation):
     Forbids to have useless starred expressions.
 
     Reasoning:
-       This kind of calls is just pointless.
+        Using starred expression with constants is useless.
+        This piece of code can be rewritten to be flat.
+        Eg.: print(*[1, 2, 3]) is print(1, 2, 3)
 
     Solution:
-       Forbid to use ``*[]``, ``*()``, and ``**{}`` in calls.
+       Refactor your code not to use starred expressions
+       with ``list``, ``dict``, ``tuple``, and ``set`` constants.
+       Use regular argument passing instead.
 
-    Example:
+    Example::
+
+        # Correct:
+        my_list = [1, 2, 3, *other_iterable]
 
         # Wrong:
-        print(*[], **{})
+        print(*[1, 2], **{})
 
     .. versionadded:: 0.12.0
+
     """
+
     error_template = 'Found pointless starred expression'
     code = 514
