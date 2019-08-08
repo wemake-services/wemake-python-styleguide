@@ -113,6 +113,9 @@ class Configuration(object):
     - ``max-asserts`` - maximum number of ``assert`` statements in a function,
       default to
       :str:`wemake_python_styleguide.options.defaults.MAX_ASSERTS`
+    - ``max-access-level`` - maximum number of access level in an expression,
+      defaults to
+      :str:`wemake_python_styleguide.options.defaults.MAX_ACCESS_LEVEL`
 
     All options are configurable via ``flake8`` CLI.
 
@@ -247,6 +250,12 @@ class Configuration(object):
             '--max-asserts',
             defaults.MAX_ASSERTS,
             'Maximum allowed number of assert statements in one function.',
+        ),
+
+        _Option(
+            '--max-access-level',
+            defaults.MAX_ACCESS_LEVEL,
+            'Maximum number of access level in an expression.',
         ),
 
         # General:

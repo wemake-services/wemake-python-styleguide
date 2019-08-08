@@ -3,6 +3,7 @@
 from typing_extensions import Final
 
 from wemake_python_styleguide.visitors.ast.complexity import (
+    access,
     classes,
     counts,
     function,
@@ -34,4 +35,6 @@ PRESET: Final = (
 
     overuses.StringOveruseVisitor,
     overuses.ExpressionOveruseVisitor,
+
+    access.AccessVisitor,
 )

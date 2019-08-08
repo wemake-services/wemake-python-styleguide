@@ -38,6 +38,7 @@ Summary
    TooManyDecoratorsViolation
    TooManyAwaitsViolation
    TooManyAssertsViolation
+   TooDeepAccessViolation
    TooDeepNestingViolation
    LineComplexityViolation
    TooManyConditionsViolation
@@ -71,6 +72,7 @@ Function and class complexity
 .. autoclass:: TooManyDecoratorsViolation
 .. autoclass:: TooManyAwaitsViolation
 .. autoclass:: TooManyAssertsViolation
+.. autoclass:: TooDeepAccessViolation
 
 Structures complexity
 ---------------------
@@ -570,6 +572,57 @@ class TooManyAssertsViolation(ASTViolation):
 
     error_template = 'Found too many `assert` statements: {0}'
     code = 218
+
+
+@final
+class TooDeepAccessViolation(ASTViolation):
+    """
+    Forbids to have consecutive expressions with too deep access level.
+
+    We consider only these expressions as accesses:
+
+        - ``ast.Subscript``
+        - ``ast.Attribute``
+
+    We do not treat ``ast.Call`` as an access, since there are
+    a lot of call-based APIs like Django ORM.
+
+    Reasoning:
+        Having too deep access level indicates a bad design
+        and overcomplicated data without proper API.
+
+    Solution:
+        Split the expression into variables, functions or classes.
+        Refactor the API for your data layout.
+
+    Example::
+
+        # Correct: access level — 4
+        self.attr.inner.wrapper[1]
+
+        # Correct: access level — 1
+        manager.filter().exclude().annotate().values().first()
+
+        # Wrong: access level — 5
+        self.attr.inner.wrapper.method.call()
+
+        # Wrong: access level — 5
+        # `obj` has access level of 2: `.attr`, `.call`
+        # `call()` has access level of 5:
+        # `.other`, `[0]`, `.field`, `.type`, `.boom`
+        obj.attr.call().other[0].field.type.boom
+
+    Configuration:
+        This rule is configurable with ``--max-access-level``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.max_access_level`
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found too deep access level: {0}'
+    code = 219
 
 
 # Structures:

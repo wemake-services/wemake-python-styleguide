@@ -76,6 +76,12 @@ ContextNodes = Union[
     AnyFunctionDef,
 ]
 
+#: In cases we need to work with both access types.
+AnyAccess = Union[
+    ast.Attribute,
+    ast.Subscript,
+]
+
 
 @final
 class ConfigurationOptions(Protocol):
@@ -115,3 +121,4 @@ class ConfigurationOptions(Protocol):
     max_module_expressions: int
     max_function_expressions: int
     max_asserts: int
+    max_access_level: int
