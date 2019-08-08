@@ -49,6 +49,7 @@ Summary
    TooLongYieldTupleViolation
    TooLongCompareViolation
    TooLongTryBodyViolation
+   TooManyPublicAttributesViolation
 
 
 Module complexity
@@ -83,6 +84,7 @@ Structure complexity
 .. autoclass:: TooLongYieldTupleViolation
 .. autoclass:: TooLongCompareViolation
 .. autoclass:: TooLongTryBodyViolation
+.. autoclass:: TooManyPublicAttributesViolation
 
 """
 
