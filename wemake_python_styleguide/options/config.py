@@ -116,6 +116,9 @@ class Configuration(object):
     - ``max-access-level`` - maximum number of access level in an expression,
       defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_ACCESS_LEVEL`
+    - ``max-attributes`` - maximum number of public instance attributes,
+      defaults to
+      :str:`wemake_python_styleguide.options.defaults.MAX_ATTRIBUTES`
 
     All options are configurable via ``flake8`` CLI.
 
@@ -256,6 +259,12 @@ class Configuration(object):
             '--max-access-level',
             defaults.MAX_ACCESS_LEVEL,
             'Maximum number of access level in an expression.',
+        ),
+
+        _Option(
+            '--max-attributes',
+            defaults.MAX_ATTRIBUTES,
+            'Maximum number of public instance attributes.',
         ),
 
         # General:

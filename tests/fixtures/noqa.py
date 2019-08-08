@@ -44,6 +44,17 @@ except AnyError:
     print('nope')
 
 
+class TooManyPublicAtts(object):  # noqa: WPS230
+    def __init__(self):
+        self.first = 1
+        self.second = 2
+        self.third = 3
+        self.fourth = 4
+        self.fifth = 5
+        self.sixth = 6
+        self.boom = 7
+
+
 def function_name(
     value: int = 0,  # noqa: WPS110
 ):

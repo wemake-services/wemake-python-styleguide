@@ -122,3 +122,4 @@ class ConfigurationOptions(Protocol):
     max_function_expressions: int
     max_asserts: int
     max_access_level: int
+    max_attributes: int

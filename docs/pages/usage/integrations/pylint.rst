@@ -25,3 +25,10 @@ The difference is in:
 - Python versions, because ``pylint`` covers more versions
 - ``wemake-python-styleguide`` is stricter and finds more
   violatons than ``pylint``
+
+We also run ``pylint`` on the ``wemake-python-styleguide`` source code
+with the help of `deepsource.io <https://deepsource.io/gh/wemake-services/wemake-python-styleguide>`_
+and keep the errors count at 0.
+
+.. image:: https://static.deepsource.io/deepsource-badge-light.svg
+    :target: https://deepsource.io/gh/wemake-services/wemake-python-styleguide/?ref=repository-badge

@@ -98,3 +98,31 @@ def is_protected(name: str) -> bool:
         return False
 
     return not is_private(name) and not is_magic(name)
+
+
+def is_public(name: str) -> bool:
+    """
+    Tells if this name is public.
+
+    >>> is_public('public')
+    True
+
+    >>> is_public('_')
+    False
+
+    >>> is_public('_protected')
+    False
+
+    >>> is_public('__private')
+    False
+
+    >>> is_public('__magic__')
+    False
+
+    """
+    return (
+        not is_protected(name) and
+        not is_private(name) and
+        not is_magic(name) and
+        not is_unused(name)
+    )

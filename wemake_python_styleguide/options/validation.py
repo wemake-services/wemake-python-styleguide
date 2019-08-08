@@ -58,6 +58,7 @@ class _ValidatedOptions(object):
     max_function_expressions: int = attr.ib(validator=[_min_max(min=1)])
     max_asserts: int = attr.ib(validator=[_min_max(min=1)])
     max_access_level: int = attr.ib(validator=[_min_max(min=1)])
+    max_attributes: int = attr.ib(validator=[_min_max(min=1)])
 
 
 def validate_options(options: ConfigurationOptions) -> _ValidatedOptions:

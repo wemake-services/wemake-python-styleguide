@@ -46,7 +46,10 @@ class SomeClassName(
     correct_count_with_keywords,
 ])
 def test_correct_count(
-    assert_errors, parse_ast_tree, code, default_options,
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
 ):
     """Testing of correct base classes number."""
     tree = parse_ast_tree(code)

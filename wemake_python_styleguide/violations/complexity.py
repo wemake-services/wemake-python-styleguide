@@ -60,8 +60,8 @@ Module complexity
 .. autoclass:: TooManyImportedNamesViolation
 .. autoclass:: OverusedExpressionViolation
 
-Function and class complexity
------------------------------
+Structure complexity
+--------------------
 
 .. autoclass:: TooManyLocalsViolation
 .. autoclass:: TooManyArgumentsViolation
@@ -73,10 +73,6 @@ Function and class complexity
 .. autoclass:: TooManyAwaitsViolation
 .. autoclass:: TooManyAssertsViolation
 .. autoclass:: TooDeepAccessViolation
-
-Structures complexity
----------------------
-
 .. autoclass:: TooDeepNestingViolation
 .. autoclass:: LineComplexityViolation
 .. autoclass:: TooManyConditionsViolation
@@ -581,11 +577,11 @@ class TooDeepAccessViolation(ASTViolation):
 
     We consider only these expressions as accesses:
 
-        - ``ast.Subscript``
-        - ``ast.Attribute``
+    - ``ast.Subscript``
+    - ``ast.Attribute``
 
     We do not treat ``ast.Call`` as an access, since there are
-    a lot of call-based APIs like Django ORM.
+    a lot of call-based APIs like Django ORM, builder patterns, etc.
 
     Reasoning:
         Having too deep access level indicates a bad design
@@ -597,17 +593,18 @@ class TooDeepAccessViolation(ASTViolation):
 
     Example::
 
-        # Correct: access level — 4
+        # Correct: access level = 4
         self.attr.inner.wrapper[1]
 
-        # Correct: access level — 1
+        # Correct: access level = 1
         manager.filter().exclude().annotate().values().first()
 
-        # Wrong: access level — 5
+        # Wrong: access level = 5
         self.attr.inner.wrapper.method.call()
 
-        # Wrong: access level — 5
-        # `obj` has access level of 2: `.attr`, `.call`
+        # Wrong: access level = 5
+        # `obj` has access level of 2:
+        # `.attr`, `.call`
         # `call()` has access level of 5:
         # `.other`, `[0]`, `.field`, `.type`, `.boom`
         obj.attr.call().other[0].field.type.boom
@@ -624,8 +621,6 @@ class TooDeepAccessViolation(ASTViolation):
     error_template = 'Found too deep access level: {0}'
     code = 219
 
-
-# Structures:
 
 @final
 class TooDeepNestingViolation(ASTViolation):
@@ -900,3 +895,41 @@ class TooLongTryBodyViolation(ASTViolation):
 
     error_template = 'Found too long ``try`` body length: {0}'
     code = 229
+
+
+@final
+class TooManyPublicAttributesViolation(ASTViolation):
+    """
+    Forbids to have ``try`` blocks with too long bodies.
+
+    We only check static definitions in a form of ``self.public = ...``.
+    We do not count parent attributes.
+    We do not count properties.
+    We do not count annotations.
+    We do not count class attributes.
+
+    Reasoning:
+        Having too many public instance attributes means
+        that your class is too complex in terms of coupling.
+        Other classes and functions will rely on these concrete fields
+        instead of better abstraction layers.
+
+    Solution:
+        Make some attributes protected.
+        Split this class into several ones.
+        If class is a Data Transder Object, then use ``@dataclass`` decorator.
+
+    Configuration:
+        This rule is configurable with ``--max-attributes``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_ATTRIBUTES`
+
+    See also:
+        https://en.wikipedia.org/wiki/Coupling_(computer_programming)
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found too many public instance attributes'
+    code = 230
