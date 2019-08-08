@@ -5,6 +5,11 @@ import pytest
 from wemake_python_styleguide.violations.refactoring import (
     PointlessStarredViolation,
 )
+from wemake_python_styleguide.visitors.ast.statements import (
+    PointlessStarredVisitor,
+)
+
+
 @pytest.mark.parametrize('code', [
     'print(*[])',
     'print(*())',
@@ -26,28 +31,3 @@ def test_pointless_starred(
     visitor.run()
 
     assert_errors(visitor, [PointlessStarredViolation])
-
-
-from wemake_python_styleguide.visitors.ast.statements import (
-    PointlessStarredVisitor,
-)
-
-
-@pytest.mark.parametrize('code', [
-    'print(*[1, 2, 3])',
-    'print(*(1, 2, 3))',
-    'print(*{"1": 2})',
-])
-def test_useful_starred(
-    assert_errors,
-    parse_ast_tree,
-    default_options,
-    code,
-):
-    """Testing that pointless starred expression is missing."""
-    tree = parse_ast_tree(code)
-
-    visitor = PointlessStarredVisitor(default_options, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [])

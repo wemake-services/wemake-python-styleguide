@@ -307,7 +307,10 @@ class PointlessStarredVisitor(BaseNodeVisitor):
         self._find_double_starred_empty_dict(node.keywords)
         self.generic_visit(node)
 
-    def _find_starred_empty_args(self, args: Sequence[ast.AST]) -> None:
+    def _find_starred_empty_args(
+        self,
+        args: Sequence[ast.AST]
+    ) -> None:
         for node in args:
             if isinstance(node, ast.Starred):
                 if isinstance(node.value, self._pointless_star_nodes):
@@ -316,7 +319,10 @@ class PointlessStarredVisitor(BaseNodeVisitor):
                     elif hasattr(node.value, 'elts') and not node.value.elts:
                         self.add_violation(PointlessStarredViolation(node))
 
-    def _find_double_starred_empty_dict(self, keywords: Sequence[ast.keyword]) -> None:
+    def _find_double_starred_empty_dict(
+        self,
+        keywords: Sequence[ast.keyword]
+    ) -> None:
         for keyword in keywords:
             if keyword.arg is None and not keyword.value.keys:
                 self.add_violation(PointlessStarredViolation(keyword.value))
