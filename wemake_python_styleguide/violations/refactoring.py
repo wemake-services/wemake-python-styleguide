@@ -29,10 +29,10 @@ Summary
    UnmergedIsinstanceCallsViolation
    WrongIsinstanceWithTupleViolation
    ImplicitElifViolation
-   PointlessStarredViolation
    ImplicitInConditionViolation
    OpenWithoutContextManagerViolation
    TypeCompareViolation
+   PointlessStarredViolation
 
 Refactoring opportunities
 -------------------------
@@ -51,10 +51,10 @@ Refactoring opportunities
 .. autoclass:: UnmergedIsinstanceCallsViolation
 .. autoclass:: WrongIsinstanceWithTupleViolation
 .. autoclass:: ImplicitElifViolation
-.. autoclass:: PointlessStarredViolation
 .. autoclass:: ImplicitInConditionViolation
 .. autoclass:: OpenWithoutContextManagerViolation
 .. autoclass:: TypeCompareViolation
+.. autoclass:: PointlessStarredViolation
 
 """
 
@@ -597,37 +597,6 @@ class ImplicitElifViolation(TokenizeViolation):
 
 
 @final
-class PointlessStarredViolation(ASTViolation):
-    """
-    Forbids to have useless starred expressions.
-
-    Reasoning:
-        Using starred expression with constants is useless.
-        This piece of code can be rewritten to be flat.
-        Eg.: print(*[1, 2, 3]) is print(1, 2, 3)
-
-    Solution:
-       Refactor your code not to use starred expressions
-       with ``list``, ``dict``, ``tuple``, and ``set`` constants.
-       Use regular argument passing instead.
-
-    Example::
-
-        # Correct:
-        my_list = [1, 2, 3, *other_iterable]
-
-        # Wrong:
-        print(*[1, 2], **{})
-
-    .. versionadded:: 0.12.0
-
-    """
-
-    error_template = 'Found pointless starred expression'
-    code = 514
-
-
-@final
 class ImplicitInConditionViolation(ASTViolation):
     """
     Forbids to use multiple equality compare with the same variable name.
@@ -721,3 +690,34 @@ class TypeCompareViolation(ASTViolation):
 
     code = 516
     error_template = 'Found `type()` used to compare types'
+
+
+@final
+class PointlessStarredViolation(ASTViolation):
+    """
+    Forbids to have useless starred expressions.
+
+    Reasoning:
+        Using starred expression with constants is useless.
+        This piece of code can be rewritten to be flat.
+        Eg.: print(*[1, 2, 3]) is print(1, 2, 3)
+
+    Solution:
+       Refactor your code not to use starred expressions
+       with ``list``, ``dict``, ``tuple``, and ``set`` constants.
+       Use regular argument passing instead.
+
+    Example::
+
+        # Correct:
+        my_list = [1, 2, 3, *other_iterable]
+
+        # Wrong:
+        print(*[1, 2], **{})
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found pointless starred expression'
+    code = 517
