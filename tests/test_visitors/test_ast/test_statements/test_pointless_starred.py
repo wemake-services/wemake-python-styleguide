@@ -53,7 +53,10 @@ def test_pointless_starred_arg_and_keyword(
     visitor = PointlessStarredVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [PointlessStarredViolation, PointlessStarredViolation])
+    assert_errors(
+        visitor,
+        [PointlessStarredViolation, PointlessStarredViolation]
+    )
 
 
 @pytest.mark.parametrize('code', [
