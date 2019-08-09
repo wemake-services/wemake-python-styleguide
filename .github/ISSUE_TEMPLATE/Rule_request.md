@@ -1,6 +1,7 @@
 ---
 name: Rule request
 about: Request a new rule to be checked
+labels: 'rule request'
 ---
 
 # Rule request
