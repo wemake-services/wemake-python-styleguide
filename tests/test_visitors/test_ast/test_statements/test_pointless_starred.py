@@ -38,7 +38,7 @@ def test_pointless_starred_arg(
 @pytest.mark.parametrize('code', [
     'print(*[], **{})',  # noqa: P103
     'print(*[], **{"1": 1})',  # noqa: P103
-    'print(*[1], **{})',
+    'print(*[1], **{})',  # noqa: P103
     'print(*[1], **{"end": " "})',
 ])
 def test_pointless_starred_arg_and_keyword(
@@ -73,7 +73,6 @@ def test_useful_starred_arg_and_keyword(
     code,
 ):
     """Testing that pointless starred expression is detected."""
-
     tree = parse_ast_tree(code)
 
     visitor = PointlessStarredVisitor(default_options, tree=tree)

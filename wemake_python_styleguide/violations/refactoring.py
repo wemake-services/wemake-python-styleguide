@@ -700,12 +700,12 @@ class PointlessStarredViolation(ASTViolation):
     Reasoning:
         Using starred expression with constants is useless.
         This piece of code can be rewritten to be flat.
-        Eg.: print(*[1, 2, 3]) is print(1, 2, 3)
+        Eg.: print(*[1, 2, 3]) is print(1, 2, 3).
 
     Solution:
-       Refactor your code not to use starred expressions
-       with ``list``, ``dict``, ``tuple``, and ``set`` constants.
-       Use regular argument passing instead.
+        Refactor your code not to use starred expressions
+        with ``list``, ``dict``, ``tuple``, and ``set`` constants.
+        Use regular argument passing instead.
 
     Example::
 
