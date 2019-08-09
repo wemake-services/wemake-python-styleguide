@@ -294,6 +294,7 @@ class WrongParametersIndentationVisitor(BaseNodeVisitor):
 @final
 class PointlessStarredVisitor(BaseNodeVisitor):
     """Responsible for absence of useless starred expressions."""
+
     _pointless_star_nodes: ClassVar[AnyNodes] = (
         ast.Dict,
         ast.List,
@@ -302,7 +303,7 @@ class PointlessStarredVisitor(BaseNodeVisitor):
     )
 
     def visit_Call(self, node: ast.Call) -> None:
-        """Checks useless call arguments"""
+        """Checks useless call arguments."""
         self._check_starred_args(node.args)
         self._check_double_starred_dict(node.keywords)
         self.generic_visit(node)
@@ -312,7 +313,7 @@ class PointlessStarredVisitor(BaseNodeVisitor):
 
     def _check_starred_args(
         self,
-        args: Sequence[ast.AST]
+        args: Sequence[ast.AST],
     ) -> None:
         for node in args:
             if isinstance(node, ast.Starred):
@@ -321,7 +322,7 @@ class PointlessStarredVisitor(BaseNodeVisitor):
 
     def _check_double_starred_dict(
         self,
-        keywords: Sequence[ast.keyword]
+        keywords: Sequence[ast.keyword],
     ) -> None:
         for keyword in keywords:
             if keyword.arg is None and self._is_pointless_star(keyword.value):

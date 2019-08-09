@@ -719,5 +719,5 @@ class PointlessStarredViolation(ASTViolation):
 
     """
 
-    error_template = 'Found pointless starred expression'
     code = 517
+    error_template = 'Found pointless starred expression'
