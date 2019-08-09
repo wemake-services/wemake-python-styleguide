@@ -303,26 +303,23 @@ class PointlessStarredVisitor(BaseNodeVisitor):
 
     def visit_Call(self, node: ast.Call) -> None:
         """Checks useless call arguments"""
-        self._check_starred_empty_args(node.args)
-        self._check_double_starred_empty_dict(node.keywords)
+        self._check_starred_args(node.args)
+        self._check_double_starred_dict(node.keywords)
         self.generic_visit(node)
 
-    def _check_starred_empty_args(
+    def _check_starred_args(
         self,
         args: Sequence[ast.AST]
     ) -> None:
         for node in args:
             if isinstance(node, ast.Starred):
                 if isinstance(node.value, self._pointless_star_nodes):
-                    if hasattr(node.value, 'keys') and not node.value.keys:
-                        self.add_violation(PointlessStarredViolation(node))
-                    elif hasattr(node.value, 'elts') and not node.value.elts:
-                        self.add_violation(PointlessStarredViolation(node))
+                    self.add_violation(PointlessStarredViolation(node))
 
-    def _check_double_starred_empty_dict(
+    def _check_double_starred_dict(
         self,
         keywords: Sequence[ast.keyword]
     ) -> None:
         for keyword in keywords:
-            if keyword.arg is None and not keyword.value.keys:
+            if keyword.arg is None and isinstance(keyword.value, ast.Dict):
                 self.add_violation(PointlessStarredViolation(keyword.value))
