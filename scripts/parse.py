@@ -20,7 +20,8 @@ def _main(filename: str) -> None:
         file_contents = file_to_read.read()
 
     for node in ast.walk(ast.parse(file_contents)):
-        print(node, vars(node))  # noqa: T001, WPS421
+        print(ast.dump(node, include_attributes=True))  # noqa: T001
+        print()  # noqa: T001
 
 
 if __name__ == '__main__':

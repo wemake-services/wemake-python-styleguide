@@ -28,6 +28,8 @@ General
   prefix it with ``_`` or just use ``_`` as a name
 - Do not use variables that are stated to be unused,
   rename them when actually using them
+- Do not define unused variables unless you are unpacking other values as well
+- Do not use multiple underscores (``__``) to create unused variables
 - Whenever you want to name your variable similar to a keyword or builtin,
   use trailing ``_``
 - Do not use consecutive underscores
@@ -128,6 +130,8 @@ Summary
    UnicodeNameViolation
    TrailingUnderscoreViolation
    UnusedVariableIsUsedViolation
+   UnusedVariableIsDefinedViolation
+   WrongUnusedVariableNameViolation
 
 Module names
 ------------
@@ -151,6 +155,8 @@ General names
 .. autoclass:: UnicodeNameViolation
 .. autoclass:: TrailingUnderscoreViolation
 .. autoclass:: UnusedVariableIsUsedViolation
+.. autoclass:: UnusedVariableIsDefinedViolation
+.. autoclass:: WrongUnusedVariableNameViolation
 
 """
 
@@ -314,6 +320,8 @@ class TooShortNameViolation(MaybeASTViolation):
     This rule checks: modules, variables, attributes,
     functions, methods, and classes.
 
+    We do not count trailing and leading underscores when calculating length.
+
     Example::
 
         # Correct:
@@ -331,6 +339,7 @@ class TooShortNameViolation(MaybeASTViolation):
 
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.4.0
+    .. versionchanged:: 0.12.0
 
     """
 
@@ -634,6 +643,9 @@ class UnusedVariableIsUsedViolation(ASTViolation):
     """
     Forbids to have use variables that are marked as unused.
 
+    We discourage using ``_`` at all and variables that start with ``_``
+    only inside functions and methods as local variables.
+
     Reasoning:
         Sometimes you start to use new logic in your functions,
         and you start to use variables that once were marked as unused.
@@ -660,8 +672,76 @@ class UnusedVariableIsUsedViolation(ASTViolation):
     This rule checks: functions, methods, and ``lambda`` functions.
 
     .. versionadded:: 0.7.0
+    .. versionchanged:: 0.12.0
 
     """
 
     error_template = 'Found usage of a variable marked as unused: {0}'
     code = 121
+
+
+@final
+class UnusedVariableIsDefinedViolation(ASTViolation):
+    """
+    Forbids to define explicit unused variables.
+
+    Reasoning:
+        While it is ok to define unused variables when you have to,
+        like when unpacking a tuple, it is totally not ok to define explicit
+        unusued variables in cases like assignment, function return,
+        exception handling, or context managers.
+        Why do you need this explicitly unused variables?
+
+    Solution:
+        Remove all unused variables definition.
+
+    Example::
+
+        # Correct:
+        my_function()
+        first, _second = some_tuple()
+        print(first)
+
+        # Wrong:
+        _ = my_function()
+        _first, _second = some_tuple()
+
+    This rule checks: assigns, context managers, except clauses.
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found all unused variables definition: {0}'
+    code = 122
+
+
+@final
+class WrongUnusedVariableNameViolation(ASTViolation):
+    """
+    Forbids to define unused variables with multiple underscores.
+
+    Reasoning:
+        We only use ``_`` as a special definition for an unused variable.
+        Other variables are hard to read. It is unclear why would one use it.
+
+    Solution:
+        Rename unused variables to ``_``
+        or give it some more context with an explicit name: ``_context``.
+
+    Example::
+
+        # Correct:
+        some_element, _next_element, _ = some_tuple()
+        some_element, _, _ = some_tuple()
+        some_element, _ = some_tuple()
+
+        # Wrong:
+        some_element, _, __  = some_tuple()
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found wrong unused variable name: {0}'
+    code = 123

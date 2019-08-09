@@ -30,6 +30,9 @@ Summary
    WrongIsinstanceWithTupleViolation
    ImplicitElifViolation
    PointlessStarredViolation
+   ImplicitInConditionViolation
+   OpenWithoutContextManagerViolation
+   TypeCompareViolation
 
 Refactoring opportunities
 -------------------------
@@ -49,6 +52,9 @@ Refactoring opportunities
 .. autoclass:: WrongIsinstanceWithTupleViolation
 .. autoclass:: ImplicitElifViolation
 .. autoclass:: PointlessStarredViolation
+.. autoclass:: ImplicitInConditionViolation
+.. autoclass:: OpenWithoutContextManagerViolation
+.. autoclass:: TypeCompareViolation
 
 """
 
@@ -604,7 +610,7 @@ class PointlessStarredViolation(ASTViolation):
        Refactor your code not to use starred expressions
        with ``list``, ``dict``, ``tuple``, and ``set`` constants.
        Use regular argument passing instead.
-
+    
     Example::
 
         # Correct:
@@ -616,6 +622,101 @@ class PointlessStarredViolation(ASTViolation):
     .. versionadded:: 0.12.0
 
     """
-
+    
     error_template = 'Found pointless starred expression'
     code = 514
+
+@final
+class ImplicitInConditionViolation(ASTViolation):
+    """
+    Forbids to use multiple equality compare with the same variable name.
+
+    Reasoning:
+        Using double+ equality compare with ``or``
+        or double+ non-equality compare with ``and``
+        indicates that you have implicit ``in`` or ``not in`` condition.
+        It is just hidden from you.
+
+    Solution:
+        Refactor compares to use ``in`` or ``not in`` clauses.
+
+
+    Example::
+
+        # Correct:
+        print(some in {'first', 'second'})
+        print(some not in {'first', 'second'})
+
+        # Wrong:
+        print(some == 'first' or some == 'second')
+        print(some != 'first' and some != 'second')
+
+    .. versionadded:: 0.10.0
+    .. versionchanged:: 0.12.0
+
+    """
+
+    code = 514
+    error_template = 'Found implicit `in` condition'
+    previous_codes = {336}
+
+
+@final
+class OpenWithoutContextManagerViolation(ASTViolation):
+    """
+    Forbids to use ``open()`` with a context manager.
+
+    Reasoning:
+        When you ``open()`` something, you need to close it.
+        When using a context manager - it is automatically done for you.
+        When not using it - you might find yourself in a situation
+        when file is not closed and is not accessable anymore.
+
+    Solution:
+        Refactor ``open()`` call to use ``with``.
+
+    Example::
+
+        # Correct:
+        with open(filename) as file_obj:
+            ...
+
+        # Wrong:
+        file_obj = open(filename)
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    code = 515
+    error_template = 'Found `open()` used without a context manager'
+
+
+@final
+class TypeCompareViolation(ASTViolation):
+    """
+    Forbids to compare types with ``type()`` function.
+
+    Reasoning:
+        When you compare types with ``type()`` function call
+        it means that you break polymorphism and dissallow child classes
+        of a node to work here. That's incorrect.
+
+    Solution:
+        Use ``isinstance`` to compare types.
+
+    Example::
+
+        # Correct:
+        print(something, type(something))
+
+        # Wrong:
+        if type(something) == int:
+            ...
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    code = 516
+    error_template = 'Found `type()` used to compare types'

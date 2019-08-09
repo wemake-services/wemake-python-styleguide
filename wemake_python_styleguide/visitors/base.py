@@ -265,7 +265,7 @@ class BaseTokenVisitor(BaseVisitor):
 
         """
         token_type = tokenize.tok_name[token.exact_type].lower()
-        method = getattr(self, 'visit_' + token_type, None)
+        method = getattr(self, 'visit_{0}'.format(token_type), None)
         if method is not None:
             method(token)
 

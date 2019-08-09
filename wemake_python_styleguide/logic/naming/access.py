@@ -1,6 +1,25 @@
 # -*- coding: utf-8 -*-
 
-from wemake_python_styleguide.constants import UNUSED_VARIABLE
+from wemake_python_styleguide.constants import UNUSED_VARIABLE_REGEX
+
+
+def is_unused(name: str) -> bool:
+    """
+    Checks whether the given ``name`` is unused.
+
+    >>> is_unused('_')
+    True
+
+    >>> is_unused('___')
+    True
+
+    >>> is_unused('_protected')
+    False
+
+    >>> is_unused('__private')
+    False
+    """
+    return UNUSED_VARIABLE_REGEX.match(name) is not None
 
 
 def is_magic(name: str) -> bool:
@@ -75,7 +94,35 @@ def is_protected(name: str) -> bool:
     if not name.startswith('_'):
         return False
 
-    if name == UNUSED_VARIABLE:
+    if is_unused(name):
         return False
 
     return not is_private(name) and not is_magic(name)
+
+
+def is_public(name: str) -> bool:
+    """
+    Tells if this name is public.
+
+    >>> is_public('public')
+    True
+
+    >>> is_public('_')
+    False
+
+    >>> is_public('_protected')
+    False
+
+    >>> is_public('__private')
+    False
+
+    >>> is_public('__magic__')
+    False
+
+    """
+    return (
+        not is_protected(name) and
+        not is_private(name) and
+        not is_magic(name) and
+        not is_unused(name)
+    )

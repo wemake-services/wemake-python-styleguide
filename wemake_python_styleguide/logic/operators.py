@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Optional
+from typing import Optional, Type
 
 from wemake_python_styleguide.logic.nodes import get_parent
-from wemake_python_styleguide.types import AnyUnaryOp
 
 
 def unwrap_unary_node(node: ast.AST) -> ast.AST:
@@ -14,9 +13,17 @@ def unwrap_unary_node(node: ast.AST) -> ast.AST:
     It recursively unwraps any level of unary operators.
     Returns the node itself if it is not wrapped in unary operator.
     """
-    if not isinstance(node, ast.UnaryOp):
-        return node
-    return unwrap_unary_node(node.operand)
+    while True:
+        if not isinstance(node, ast.UnaryOp):
+            return node
+        node = node.operand
+
+
+def unwrap_starred_node(node: ast.AST) -> ast.AST:
+    """Unwraps the unary ``*`` starred node."""
+    if isinstance(node, ast.Starred):
+        return node.value
+    return node
 
 
 def get_parent_ignoring_unary(node: ast.AST) -> Optional[ast.AST]:
@@ -31,15 +38,16 @@ def get_parent_ignoring_unary(node: ast.AST) -> Optional[ast.AST]:
        so ``some`` has ``UnaryOp`` as parent, but should return ``Assign``
 
     """
-    parent = get_parent(node)
-    if parent is None or not isinstance(parent, ast.UnaryOp):
-        return parent
-    return get_parent_ignoring_unary(parent)
+    while True:
+        parent = get_parent(node)
+        if parent is None or not isinstance(parent, ast.UnaryOp):
+            return parent
+        node = parent
 
 
 def count_unary_operator(
     node: ast.AST,
-    operator: AnyUnaryOp,
+    operator: Type[ast.unaryop],
     amount: int = 0,
 ) -> int:
     """Returns amount of unary operators matching input."""

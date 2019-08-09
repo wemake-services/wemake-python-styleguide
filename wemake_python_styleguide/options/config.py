@@ -18,7 +18,7 @@ class _Option(object):
     """Represents ``flake8`` option object."""
 
     long_option_name: str
-    default: int  # noqa: E704
+    default: int
     help: str
     type: Optional[str] = 'int'  # noqa: A003
     parse_from_config: bool = True
@@ -27,7 +27,7 @@ class _Option(object):
     def __attrs_post_init__(self):
         """Is called after regular init is done."""
         object.__setattr__(  # noqa: WPS609
-            self, 'help', self.help + ' Defaults to: %default',
+            self, 'help', ' '.join((self.help, 'Defaults to: %default')),
         )
 
 
@@ -104,22 +104,43 @@ class Configuration(object):
     - ``max-try-body-length`` - maximum amount of ``try`` node body length,
       defaults to
       :str:`wemake_python_styleguide.options.defaults.MAX_TRY_BODY_LENGTH`
+    - ``max-module-expressions`` - maximum number of expression
+      usages in a module, defaults to
+      :str:`wemake_python_styleguide.options.defaults.MAX_MODULE_EXPRESSIONS`
+    - ``max-function-expressions`` - maximum number of expression
+      usages in a function or method, defaults to
+      :str:`wemake_python_styleguide.options.defaults.MAX_FUNCTION_EXPRESSIONS`
+    - ``max-asserts`` - maximum number of ``assert`` statements in a function,
+      default to
+      :str:`wemake_python_styleguide.options.defaults.MAX_ASSERTS`
+    - ``max-access-level`` - maximum number of access level in an expression,
+      defaults to
+      :str:`wemake_python_styleguide.options.defaults.MAX_ACCESS_LEVEL`
+    - ``max-attributes`` - maximum number of public instance attributes,
+      defaults to
+      :str:`wemake_python_styleguide.options.defaults.MAX_ATTRIBUTES`
 
     All options are configurable via ``flake8`` CLI.
 
-    Example::
+    .. code:: ini
 
-        flake8 --max-returns=2 --max-arguments=4
+      flake8 --max-returns=2 --max-arguments=4
 
-    Or you can provide options in ``tox.ini`` or ``setup.cfg``.
+    Or you can provide options in ``setup.cfg`` or similar supported files.
 
-    Example::
+    .. code:: ini
 
-        [flake8]
-        max-returns = 2
-        max-arguments = 4
+      [flake8]
+      max-returns = 2
+      max-arguments = 4
 
     We use ``setup.cfg`` as a default way to provide configuration.
+
+    You can also show all options that ``flake8`` supports by running:
+
+    .. code:: bash
+
+       flake8 --help
 
     """
 
@@ -207,13 +228,43 @@ class Configuration(object):
         _Option(
             '--max-awaits',
             defaults.MAX_AWAITS,
-            'Maximum allowed number of await statements in one function.',
+            'Maximum allowed number of await expressions in one function.',
         ),
 
         _Option(
             '--max-try-body-length',
             defaults.MAX_TRY_BODY_LENGTH,
             'Maximum amount of try block node body length.',
+        ),
+
+        _Option(
+            '--max-module-expressions',
+            defaults.MAX_MODULE_EXPRESSIONS,
+            'Maximum amount of expression usages in a module.',
+        ),
+
+        _Option(
+            '--max-function-expressions',
+            defaults.MAX_FUNCTION_EXPRESSIONS,
+            'Maximum amount of expression usages in a function or method.',
+        ),
+
+        _Option(
+            '--max-asserts',
+            defaults.MAX_ASSERTS,
+            'Maximum allowed number of assert statements in one function.',
+        ),
+
+        _Option(
+            '--max-access-level',
+            defaults.MAX_ACCESS_LEVEL,
+            'Maximum number of access level in an expression.',
+        ),
+
+        _Option(
+            '--max-attributes',
+            defaults.MAX_ATTRIBUTES,
+            'Maximum number of public instance attributes.',
         ),
 
         # General:

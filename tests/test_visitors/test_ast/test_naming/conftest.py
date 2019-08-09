@@ -151,7 +151,7 @@ except Exception as {0}:
 
 # Fixtures:
 
-@pytest.fixture(params=[
+_ALL_FIXTURES = frozenset((
     # Imports:
     import_alias,
     from_import_alias,
@@ -192,7 +192,50 @@ except Exception as {0}:
     with_variable,
     with_star_variable,
     exception,
-])
+))
+
+_SUITABLE_FOR_UNUSED_TUPLE = frozenset((
+    unpacking_variables,
+    variable_def,
+    with_variable,
+))
+
+_SUITABLE_FOR_UNUSED = _SUITABLE_FOR_UNUSED_TUPLE | frozenset((
+    variable_typed_def,
+    variable_typed,
+    exception,
+))
+
+
+@pytest.fixture(params=_ALL_FIXTURES)
 def naming_template(request):
     """Parametrized fixture that contains all possible naming templates."""
+    return request.param
+
+
+@pytest.fixture(params=_SUITABLE_FOR_UNUSED)
+def forbidden_unused_template(request):
+    """Returns template that can be used to define wrong unused variables."""
+    return request.param
+
+
+@pytest.fixture(params=_SUITABLE_FOR_UNUSED_TUPLE)
+def forbidden_tuple_unused_template(request):
+    """Returns template that can be used to define wrong unused tuples."""
+    return request.param
+
+
+@pytest.fixture(params=_SUITABLE_FOR_UNUSED | {
+    static_attribute,
+    static_typed_attribute,
+    static_typed_annotation,
+})
+def forbidden_raw_unused_template(request):
+    """Returns template that can be used to define wrong unused tuples."""
+    return request.param
+
+
+@pytest.fixture(params=_ALL_FIXTURES - _SUITABLE_FOR_UNUSED)
+def allowed_unused_template(request):
+    """Returns template that can define unused variables."""
     return request.param

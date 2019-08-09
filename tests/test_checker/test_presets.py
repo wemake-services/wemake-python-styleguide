@@ -62,7 +62,7 @@ def all_visitors():
     return set(visitors)
 
 
-def test_all_visitors_contained_in_checker(all_visitors):
+def test_all_visitors_contained_in_checker(all_visitors):  # noqa: WPS442
     """Ensures that all visitors are contained in a checker."""
     checker_visitors = {
         klass.__qualname__

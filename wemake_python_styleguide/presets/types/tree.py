@@ -18,6 +18,7 @@ from wemake_python_styleguide.visitors.ast import (
     loops,
     modules,
     naming,
+    operators,
     statements,
 )
 
@@ -33,6 +34,7 @@ PRESET: Final = (
     keywords.WrongContextManagerVisitor,
     keywords.ConsistentReturningVisitor,
     keywords.ConsistentReturningVariableVisitor,
+    keywords.ConstantKeywordVisitor,
 
     loops.WrongComprehensionVisitor,
     loops.WrongLoopVisitor,
@@ -44,6 +46,7 @@ PRESET: Final = (
     functions.WrongFunctionCallVisitor,
     functions.FunctionDefinitionVisitor,
     functions.UselessLambdaDefinitionVisitor,
+    functions.WrongFunctionCallContextVisitior,
 
     exceptions.WrongTryExceptVisitor,
     exceptions.NestedTryBlocksVisitor,
@@ -53,12 +56,15 @@ PRESET: Final = (
     naming.WrongNameVisitor,
     naming.WrongModuleMetadataVisitor,
     naming.WrongVariableAssignmentVisitor,
+    naming.WrongVariableUsageVisitor,
 
     builtins.MagicNumberVisitor,
-    builtins.UselessOperatorsVisitor,
     builtins.WrongStringVisitor,
     builtins.WrongAssignmentVisitor,
     builtins.WrongCollectionVisitor,
+
+    operators.UselessOperatorsVisitor,
+    operators.WrongMathOperatorVisitor,
 
     compares.WrongConditionalVisitor,
     compares.CompareSanityVisitor,
@@ -83,6 +89,7 @@ PRESET: Final = (
 
     # Blocks:
     blocks.BlockVariableVisitor,
+    blocks.AfterBlockVariablesVisitor,
 
     # Complexity:
     *complexity.PRESET,

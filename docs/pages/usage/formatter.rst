@@ -7,8 +7,7 @@ Tries to be beatiful, compact, and informative.
 Improves the default formatter used by ``flake8``.
 
 
-Usage
------
+.. rubric:: Usage
 
 To activate this formatter one will need to run:
 
@@ -34,8 +33,7 @@ There are other formatters out there as well.
 They can be installed as plugins.
 
 
-Showing source code
--------------------
+.. rubric:: Showing source code
 
 You can also (and we recommend to) enable ``--show-source`` option.
 It can be passed as a command line argument or set in ``setup.cfg``:
@@ -62,8 +60,7 @@ It helps to visially identify the problems in your code and fix it faster.
 We include ``show-shource = True`` into our default configuration.
 
 
-Showing statistic
------------------
+.. rubric:: Showing statistic
 
 You can also show the statitics about problems inside your code.
 

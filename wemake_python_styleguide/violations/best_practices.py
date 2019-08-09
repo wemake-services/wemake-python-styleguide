@@ -36,7 +36,7 @@ Summary
    WrongUnpackingViolation
    DuplicateExceptionViolation
    YieldInComprehensionViolation
-   NonUniqueItemsInSetViolation
+   NonUniqueItemsInHashViolation
    BaseExceptionSubclassViolation
    TryExceptMultipleReturnPathViolation
    WrongKeywordViolation
@@ -54,12 +54,16 @@ Summary
    MagicNumberViolation
    NestedImportViolation
    ReassigningVariableToItselfViolation
-   YieldInsideInitViolation
+   ListMultiplyViolation
    ProtectedModuleViolation
    ProtectedAttributeViolation
    StopIterationInsideGeneratorViolation
    WrongUnicodeEscapeViolation
    BlockAndLocalOverlapViolation
+   ControlVarUsedAfterBlockViolation
+   OuterScopeShadowingViolation
+   UnhashableTypeInHashViolation
+   WrongKeywordConditionViolation
 
 Best practices
 --------------
@@ -81,7 +85,7 @@ Best practices
 .. autoclass:: WrongUnpackingViolation
 .. autoclass:: DuplicateExceptionViolation
 .. autoclass:: YieldInComprehensionViolation
-.. autoclass:: NonUniqueItemsInSetViolation
+.. autoclass:: NonUniqueItemsInHashViolation
 .. autoclass:: BaseExceptionSubclassViolation
 .. autoclass:: TryExceptMultipleReturnPathViolation
 .. autoclass:: WrongKeywordViolation
@@ -99,12 +103,16 @@ Best practices
 .. autoclass:: MagicNumberViolation
 .. autoclass:: NestedImportViolation
 .. autoclass:: ReassigningVariableToItselfViolation
-.. autoclass:: YieldInsideInitViolation
+.. autoclass:: ListMultiplyViolation
 .. autoclass:: ProtectedModuleViolation
 .. autoclass:: ProtectedAttributeViolation
 .. autoclass:: StopIterationInsideGeneratorViolation
 .. autoclass:: WrongUnicodeEscapeViolation
 .. autoclass:: BlockAndLocalOverlapViolation
+.. autoclass:: ControlVarUsedAfterBlockViolation
+.. autoclass:: OuterScopeShadowingViolation
+.. autoclass:: UnhashableTypeInHashViolation
+.. autoclass:: WrongKeywordConditionViolation
 
 """
 
@@ -690,17 +698,18 @@ class YieldInComprehensionViolation(ASTViolation):
 
 
 @final
-class NonUniqueItemsInSetViolation(ASTViolation):
+class NonUniqueItemsInHashViolation(ASTViolation):
     """
-    Forbids to have duplicate items in ``set`` literals.
+    Forbids to have duplicate items in hashes.
 
     Reasoning:
-        When you explicitly put duplicate items in ``set`` literals
-        it just does not make any sense. Since ``set`` can not contain
+        When you explicitly put duplicate items
+        in ``set`` literals or in ``dict`` keys
+        it just does not make any sense. Since hashes cannot contain
         duplicate items and they will be removed anyway.
 
     Solution:
-        Remove the duplicate items.
+        Remove duplicate items.
 
     Example::
 
@@ -718,14 +727,14 @@ class NonUniqueItemsInSetViolation(ASTViolation):
     - comprehensions
     - attributes
     - subscribe operations
-    - containers: lists, dicts, tuples, sets
 
     .. versionadded:: 0.7.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.12.0
 
     """
 
-    error_template = 'Found non-unique item in `set` literal: {0}'
+    error_template = 'Found non-unique item in hash: {0}'
     code = 417
     previous_codes = {449}
 
@@ -1358,35 +1367,32 @@ class ReassigningVariableToItselfViolation(ASTViolation):
 
 
 @final
-class YieldInsideInitViolation(ASTViolation):
+class ListMultiplyViolation(ASTViolation):
     """
-    Forbids to use ``yield`` inside of ``__init__`` method.
+    Forbids to multiply lists.
 
     Reasoning:
-        ``__init__`` should be used to initialize new objects.
-        It shouldn't ``yield`` anything because it should return ``None``
-        by the convention.
+        When you multiply lists - it does not create new values,
+        it creates references to the existing value.
+        It is not what people mean in 99.9% of cases.
+
+    Solution:
+        Use list comprehension or loop instead.
 
     Example::
 
-         # Correct:
-        class Example(object):
-            def __init__(self):
-                self._public_items_count = 0
-
         # Wrong:
-        class Example(object):
-            def __init__(self):
-                yield 10
+        my_list = [1, 2, 3] * 3
 
-    .. versionadded:: 0.3.0
-    .. versionchanged:: 0.11.0
+    See also:
+        https://github.com/satwikkansal/wtfPython#-explanation-8
+
+    .. versionadded:: 0.12.0
 
     """
 
-    error_template = 'Found `yield` inside `__init__` method'
+    error_template = 'Found list multiply'
     code = 435
-    previous_codes = {439}
 
 
 @final
@@ -1581,3 +1587,154 @@ class BlockAndLocalOverlapViolation(ASTViolation):
 
     error_template = 'Found block variables overlap: {0}'
     code = 440
+
+
+@final
+class ControlVarUsedAfterBlockViolation(ASTViolation):
+    """
+    Forbids to use control variables after the block body.
+
+    What we call block control variables:
+
+    1. ``for`` loop unpacked variables
+    2. ``with`` context variables
+    3. ``except`` exception names
+
+    Reasoning:
+        Variables leaking from the blocks can damage your logic.
+        It might not contain what you think they contain.
+        Some variables even might be deleted right after the block,
+        just like in ``except Exception as exc:``
+        where ``exc`` won't be in scope after ``except`` body.
+
+    Solution:
+        Use names inside the scope they are defined.
+        Create new functions to return values in case
+        you need to use block variables: when searching for a value, etc.
+
+    Example::
+
+        # Correct:
+        for my_item in collection:
+            print(my_item)
+
+        # Wrong:
+        for my_item in collection:
+            ...
+        print(my_item)
+
+    See also:
+        https://github.com/satwikkansal/wtfPython#-explanation-32
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found control variable used after block: {0}'
+    code = 441
+
+
+@final
+class OuterScopeShadowingViolation(ASTViolation):
+    """
+    Forbids to shadow variables from outer scopes.
+
+    We check function, method, and module scopes.
+    While we do not check class scope. Because class level constants
+    are not available via regular name,
+    and they are scope to ``ClassName.var_name``.
+
+    Reasoning:
+        Shadowing can lead you to a big pile of strage and unexpected bugs.
+
+    Solution:
+        Use different names and do not allow scoping.
+
+    Example::
+
+        # Correct:
+        def test(): ...
+
+        def other():
+            test1 = 1
+
+        # Wrong:
+        def test(): ...
+
+        def other():
+            test = 1  # shadows `test()` function
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found outer scope names shadowing: {0}'
+    code = 442
+
+
+@final
+class UnhashableTypeInHashViolation(ASTViolation):
+    """
+    Forbids to use exlicit unhashable types as set items and dict keys.
+
+    Reasoning:
+        This will resolve in ``TypeError`` in runtime.
+
+    Solution:
+        Use hashable types to define set items and dict keys.
+
+    Example::
+
+        # Correct:
+        my_dict = {1: {}, (1, 2): [], (2, 3): {1, 2}}
+
+        # Wrong:
+        my_dict = {[1, 2]: [], {2, 3}: {1, 2}}
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found unhashable item'
+    code = 443
+
+
+@final
+class WrongKeywordConditionViolation(ASTViolation):
+    """
+    Forbids to use exlicit falsly-evaluated conditions with several keywords.
+
+    We check:
+
+    - ``ast.While``
+    - ``ast.Assert``
+
+    We only check constants. We do not check variables, attributes, calls, etc.
+
+    Reasoning:
+        Some conditions clearly tell us that this node won't work correctly.
+        So, we need to check that we can fix that.
+
+    Solution:
+        Remove the unreachable node, or change the condition item.
+
+    Example::
+
+        # Correct:
+        assert some_variable
+
+        while True:
+            ...
+
+        # Wrong:
+        assert []
+
+        while False:
+            ...
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found wrong keyword condition: {0}'
+    code = 444

@@ -31,46 +31,61 @@ I_CONTROL_CODE: Final = True
 # Complexity:
 
 #: Maximum number of `return` statements allowed in a single function.
-MAX_RETURNS: Final = 5
+MAX_RETURNS: Final = 5  # 7-2
 
 #: Maximum number of local variables in a function.
-MAX_LOCAL_VARIABLES: Final = 5
+MAX_LOCAL_VARIABLES: Final = 5  # 7-2
 
 #: Maximum number of expressions in a single function.
-MAX_EXPRESSIONS: Final = 9
+MAX_EXPRESSIONS: Final = 9  # 7+2
 
 #: Maximum number of arguments for functions or methods.
-MAX_ARGUMENTS: Final = 5
+MAX_ARGUMENTS: Final = 5  # 7-2
 
 #: Maximum number of classes and functions in a single module.
-MAX_MODULE_MEMBERS: Final = 7
+MAX_MODULE_MEMBERS: Final = 7  # 7
 
 #: Maximum number of methods in a single class.
-MAX_METHODS: Final = 7
+MAX_METHODS: Final = 7  # the same as module members
 
 #: Maximum line complexity.
 MAX_LINE_COMPLEXITY: Final = 14  # 7 * 2, also almost guessed
 
 #: Maximum median module Jones complexity.
-MAX_JONES_SCORE: Final = 12  # this value was "guessed"
+MAX_JONES_SCORE: Final = 12  # guessed
 
 #: Maximum number of imports in a single module.
-MAX_IMPORTS: Final = 12
+MAX_IMPORTS: Final = 12  # guessed
 
 #: Maximum number of imported names in a single module.
-MAX_IMPORTED_NAMES: Final = 50  # this value was "guessed"
+MAX_IMPORTED_NAMES: Final = 50  # guessed
 
 #: Maximum number of base classes.
-MAX_BASE_CLASSES: Final = 3
+MAX_BASE_CLASSES: Final = 3  # guessed
 
 #: Maximum number of decorators.
-MAX_DECORATORS: Final = 5
+MAX_DECORATORS: Final = 5  # 7-2
 
 #: Maximum number of same string usage in code.
-MAX_STRING_USAGES: Final = 3
+MAX_STRING_USAGES: Final = 3  # guessed
 
 #: Maximum number of ``await`` expressions for functions or methods.
 MAX_AWAITS: Final = 5  # the same as returns
 
 #: Maximum amount of ``try`` node body length.
-MAX_TRY_BODY_LENGTH: Final = 2
+MAX_TRY_BODY_LENGTH: Final = 2  # best practice
+
+#: Maximum amount of same expressions per module.
+MAX_MODULE_EXPRESSIONS: Final = 7  # the same as module elements
+
+#: Maximum amount of same expressions per function.
+MAX_FUNCTION_EXPRESSIONS: Final = 4  # guessed
+
+#: Maximum number of ``assert`` statements in a function.
+MAX_ASSERTS: Final = 5  # 7-2
+
+#: Maximum number of access level in an expression.
+MAX_ACCESS_LEVEL: Final = 4  # guessed
+
+#: Maximum number of public attributes in a single class.
+MAX_ATTRIBUTES: Final = 6  # guessed

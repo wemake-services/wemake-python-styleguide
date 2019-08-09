@@ -29,7 +29,7 @@ class Test(object):
 """
 
 correct_function = """
-def some_function():
+def _some_function():
     first, _second, _ = some_tuple()
     print(first)
 """
@@ -56,17 +56,29 @@ def some_function():
         ...
 """
 
-correct_func_with_re_store_unused_variable = """
+correct_func_with_re_store_unused_variable1 = """
 def logo_and_user():
     user, _ = some_tuple()
     logo, _ = some_tuple()
 """
 
+correct_func_with_re_store_unused_variable2 = """
+def logo_and_user():
+    user, __ = some_tuple()
+    logo, __ = some_tuple()
+"""
+
 # Wrong:
 
-wrong_function = """
+wrong_function1 = """
 def some_function():
     _some = calling()
+    print(_some)
+"""
+
+wrong_function2 = """
+def some_function():
+    first, _some = calling()
     print(_some)
 """
 
@@ -78,17 +90,17 @@ def some_function():
         print(_exc)
 """
 
+wrong_function_with_with = """
+def some_function():
+    with some() as _ex:
+        print(_ex)
+"""
+
 wrong_method = """
 class Test(object):
     def some_method(self):
         _some = calling()
         print(_some)
-"""
-
-wrong_using_unsedvariable = """
-def logo_and_user():
-    user, _ = some_tuple()
-    print(_)
 """
 
 
@@ -99,7 +111,8 @@ def logo_and_user():
     correct_function_with_for,
     correct_function_with_exception,
     correct_function_with_unnamed_exception,
-    correct_func_with_re_store_unused_variable,
+    correct_func_with_re_store_unused_variable1,
+    correct_func_with_re_store_unused_variable2,
 ])
 def test_correct_variables(
     assert_errors,
@@ -118,10 +131,11 @@ def test_correct_variables(
 
 
 @pytest.mark.parametrize('code', [
-    wrong_function,
+    wrong_function1,
+    wrong_function2,
     wrong_function_with_exception,
+    wrong_function_with_with,
     wrong_method,
-    wrong_using_unsedvariable,
 ])
 def test_wrong_super_call(
     assert_errors,

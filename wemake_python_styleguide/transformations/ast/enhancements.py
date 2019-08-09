@@ -4,6 +4,7 @@ import ast
 from typing import Optional, Tuple, Type
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.types import ContextNodes
 
 
@@ -46,7 +47,6 @@ def set_node_context(tree: ast.AST) -> ast.AST:
     Context is where exactly this node belongs on a global level.
 
     Example:
-
     .. code:: python
 
         if some_value > 2:
@@ -86,7 +86,7 @@ def _find_context(
     It happened because of the bug #520
     See: https://github.com/wemake-services/wemake-python-styleguide/issues/520
     """
-    parent = getattr(node, 'wps_parent', None)
+    parent = get_parent(node)
     if parent is None:
         return None
     elif isinstance(parent, contexts):

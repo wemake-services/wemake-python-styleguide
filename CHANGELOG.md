@@ -8,12 +8,18 @@ We used to have incremental versioning before `0.1.0`.
 
 In this release we had a little focus on:
 
+0. Primitives and constants and how to use them
 1. Strings and numbers and how to write them
 2. OOP features
-3. Blocks and code structure, including overused parts
+3. Blocks and code structure,
+   including variable scoping and overlaping variables
+4. Overused expressions and new complexity metrics
 
 ### Features
 
+- **Breaking**: moves `ImplicitInConditionViolation` from `WPS336` to `WPS514`
+- **Breaking**: now `ExplicitStringConcatViolation` uses `WPS336`
+- **Breaking**: moves `YieldMagicMethodViolation` from `WPS435` to `WPS611`
 - Adds `xenon` as a dependency, it also checks for cyclomatic complexity,
   but uses more advanced algorithm with better results
 - Forbids to have modules with too many imported names
@@ -30,21 +36,52 @@ In this release we had a little focus on:
 - Forbids to use `else if` instead of `elif`
 - Forbids to have too long `try` bodies
 - Forbids to overlap local and block variables
-- Changes how `WrongSlotsViolation` works, not `(...) + value` is restricted
+- Forbids to use block variables after the block definitions
+- Changes how `WrongSlotsViolation` works, now `(...) + value` is restricted
   in favor of `(..., *value)`
+- Forbids to have explicit unhashable types in sets and dicts
+- Forbids to define useless overwritten methods
+- Enforces `j` prefix over `J` for `complex` numbers
+- Forbids overused expressions
+- Forbids explicit `0` division, multiply, pow, addition, and substraction
+- Fordids to pow, multiply, or divide by `1`
+- Forbids to use expressions like `x + -2`, or `y - -1`, or `z -= -1`
+- Forbids to multiply lists like `[0] * 2`
+- Forbids to use variable names like `__` and `_____`
+- Forbids to define unused variables explicitly: `_unused = 2`
+- Forbids to shadow outer scope variables with local ones
+- Forbids to have too many `assert` statements in a function
+- Forbids to have explicit string contact: `'a' + some_data`, use `.format()`
+- Now `YieldInsideInitViolation` is named `YieldMagicMethodViolation`
+  and it also checks different magic methods in a class
+- Forbids to use ``assert False`` and other false-constants
+- Forbids to use ``while False:``  and other false-constants
+- Forbids to use ``open()`` outside of ``with``
+- Forbids to use ``type()`` for compares
+- Forbids to have consecutive expressions with too deep access level
+- Forbids to have too many public instance attributes
 
 ### Bugfixes
 
 - Bumps `flake8-eradicate` version
   and solves `attrs` incompatible versions issue
+- Bumps `flake8-dosctrings` veresion
+  and solved `pydocstyle` issue
 - Fixes `TryExceptMultipleReturnPathViolation` not tracking `else` and `finally`
   returns at the same time
 - Fixes how `TryExceptMultipleReturnPathViolation` works:
   now handles `break` and `raise` statements as well
 - Fixes `WrongLoopIterTypeViolation` not triggering
   for generator expressions and empty tuples
+- Fixes `WrongLoopIterTypeViolation` not triggering
+  for numbers (including negative), booleans, `None`
+- Fixes `WrongLoopIterTypeViolation` position
+- Fixes `WrongLoopIterTypeViolation` not triggering for compehensions
 - Fixes `WrongSlotsViolation` not triggering
-  for comprehensions and inccorect `__slots__` names and types
+  for comprehensions and incorrect `__slots__` names and types
+- Fixes `WrongSlotsViolation` not triggering
+  for invalid `python` identifiers like `__slots__ = ('123_slot',)`
+- Fixes `WrongSlotsViolation` triggering for subscripts
 - Fixes `NestedClassViolation` and `NestedFunctionViolation` not reporting
   when placed deeply inside other nodes
 - Fixes when `WrongUnpackingViolation` was not raised
@@ -52,12 +89,27 @@ In this release we had a little focus on:
 - Fixes when `WrongUnpackingViolation` was not raised for comprehensions
 - Fixes that `x, y, z = x, z, y` was not recognized
   as `ReassigningVariableToItselfViolation`
+- Fixes that `{1, True, 1.0}` was not recognised as a set with duplicates
+- Fixes that `{(1, 2), (1, 2)}` was not recognised as a set with duplicates
+- Fixes that `{*(1, 2), *(1, 2)}` was not recognised as a set with duplicates
+- Fixes that `{1: 1, True: 1}` was not recognised as a dict with duplicates
+- Fixes that `complex` numbers were always treated like magic,
+  now `1j` is allowed
+- Fixes that `0.0` was treated as a magic number
+- Fixes that it was possible to use `_` in module body
+- Fixes `WrongBaseClassViolation` not triggering
+  for nested nodes like `class Test(call().length):`
+- Fixes `ComplexDefaultValueViolation` not triggering
+  for nested nodes like `def func(arg=call().attr)`
+- Fixes `TooShortNameViolation` was not triggering for `_x` and `x_`
+- Fixes that some magic method were allowed to be generators
+- Fixes that some magic method were allowed to contain `yield from`
 
 ### Misc
 
 - Adds `bellybutton` to the list of linters
 - Improves tests for binary, octal, hex, and expanetional numbers
-- Adds `xenon --max-absolute A --max-modules A --max-average A server` check
+- Adds new `xenon` CI check
 - Now handles exceptions in our own code, hope to never see them!
 - Now uses `coverage` checks in deepsource
 - Now `@alias` checks that all aliases are valid
@@ -65,6 +117,8 @@ In this release we had a little focus on:
 - Improves how `DirectMagicAttributeAccessViolation` is tested
 - Refactors a lot of tests to tests `ast.Starred`
 - Refactors a lot of tests to have less tests with the same logical coverage
+- We now use `import-linter` instead of `layer-linter`
+- Adds docs about CI integration
 
 
 ## 0.11.1

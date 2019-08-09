@@ -1,62 +1,37 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from collections import Counter, defaultdict
-from typing import ClassVar, DefaultDict, Iterable, List, Mapping
+from collections import Counter, Hashable, defaultdict
+from contextlib import suppress
+from typing import ClassVar, DefaultDict, Iterable, List, Sequence, Union
 
 import astor
 from typing_extensions import final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import FunctionNodes
-from wemake_python_styleguide.logic.nodes import get_parent
+from wemake_python_styleguide.logic import safe_eval
+from wemake_python_styleguide.logic.naming.name_nodes import extract_name
 from wemake_python_styleguide.logic.operators import (
-    count_unary_operator,
     get_parent_ignoring_unary,
+    unwrap_starred_node,
     unwrap_unary_node,
 )
-from wemake_python_styleguide.types import (
-    AnyFor,
-    AnyNodes,
-    AnyUnaryOp,
-    AnyWith,
-)
+from wemake_python_styleguide.types import AnyFor, AnyNodes, AnyWith
+from wemake_python_styleguide.violations import consistency
 from wemake_python_styleguide.violations.best_practices import (
     MagicNumberViolation,
     MultipleAssignmentsViolation,
-    NonUniqueItemsInSetViolation,
+    NonUniqueItemsInHashViolation,
+    UnhashableTypeInHashViolation,
     WrongUnpackingViolation,
 )
-from wemake_python_styleguide.violations.complexity import (
-    OverusedStringViolation,
-)
-from wemake_python_styleguide.violations.consistency import (
-    FormattedStringViolation,
-    UselessOperatorsViolation,
-)
-from wemake_python_styleguide.visitors.base import BaseNodeVisitor
-from wemake_python_styleguide.visitors.decorators import alias
+from wemake_python_styleguide.visitors import base, decorators
 
 
 @final
-class WrongStringVisitor(BaseNodeVisitor):
+class WrongStringVisitor(base.BaseNodeVisitor):
     """Restricts several string usages."""
-
-    def __init__(self, *args, **kwargs) -> None:
-        """Inits the counter for constants."""
-        super().__init__(*args, **kwargs)
-        self._string_constants: DefaultDict[str, int] = defaultdict(int)
-
-    def visit_Str(self, node: ast.Str) -> None:
-        """
-        Restricts to over-use string constants.
-
-        Raises:
-            OverusedStringViolation
-
-        """
-        self._check_string_constant(node)
-        self.generic_visit(node)
 
     def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
         """
@@ -66,34 +41,12 @@ class WrongStringVisitor(BaseNodeVisitor):
             FormattedStringViolation
 
         """
-        self.add_violation(FormattedStringViolation(node))
+        self.add_violation(consistency.FormattedStringViolation(node))
         self.generic_visit(node)
-
-    def _check_string_constant(self, node: ast.Str) -> None:
-        annotations = (
-            ast.arg,
-            ast.AnnAssign,
-        )
-
-        parent = get_parent(node)
-        if isinstance(parent, annotations) and parent.annotation == node:
-            return  # it is argument or variable annotation
-
-        if isinstance(parent, FunctionNodes) and parent.returns == node:
-            return  # it is return annotation
-
-        self._string_constants[node.s] += 1
-
-    def _post_visit(self) -> None:
-        for string, usage_count in self._string_constants.items():
-            if usage_count > self.options.max_string_usages:
-                self.add_violation(
-                    OverusedStringViolation(text=string or "''"),
-                )
 
 
 @final
-class MagicNumberVisitor(BaseNodeVisitor):
+class MagicNumberVisitor(base.BaseNodeVisitor):
     """Checks magic numbers used in the code."""
 
     _allowed_parents: ClassVar[AnyNodes] = (
@@ -137,45 +90,15 @@ class MagicNumberVisitor(BaseNodeVisitor):
 
 
 @final
-class UselessOperatorsVisitor(BaseNodeVisitor):
-    """Checks operators used in the code."""
-
-    _limits: ClassVar[Mapping[AnyUnaryOp, int]] = {
-        ast.UAdd: 0,
-        ast.Invert: 1,
-        ast.Not: 1,
-        ast.USub: 1,
-    }
-
-    def visit_Num(self, node: ast.Num) -> None:
-        """
-        Checks numbers unnecessary operators inside the code.
-
-        Raises:
-            UselessOperatorsViolation
-
-        """
-        self._check_operator_count(node)
-        self.generic_visit(node)
-
-    def _check_operator_count(self, node: ast.Num) -> None:
-        for node_type, limit in self._limits.items():
-            if count_unary_operator(node, node_type) > limit:
-                self.add_violation(
-                    UselessOperatorsViolation(node, text=str(node.n)),
-                )
-
-
-@final
-@alias('visit_any_for', (
+@decorators.alias('visit_any_for', (
     'visit_For',
     'visit_AsyncFor',
 ))
-@alias('visit_any_with', (
+@decorators.alias('visit_any_with', (
     'visit_With',
     'visit_AsyncWith',
 ))
-class WrongAssignmentVisitor(BaseNodeVisitor):
+class WrongAssignmentVisitor(base.BaseNodeVisitor):
     """Visits all assign nodes."""
 
     def visit_any_with(self, node: AnyWith) -> None:
@@ -221,6 +144,9 @@ class WrongAssignmentVisitor(BaseNodeVisitor):
         """
         Checks assignments to be correct.
 
+        We do not check ``AnnAssign`` here,
+        because it does not have problems that we check.
+
         Raises:
             MultipleAssignmentsViolation
             WrongUnpackingViolation
@@ -241,14 +167,13 @@ class WrongAssignmentVisitor(BaseNodeVisitor):
         targets: Iterable[ast.AST],
     ) -> None:
         for target in targets:
-            if isinstance(target, ast.Starred):
-                target = target.value  # noqa: WPS440
-            if not isinstance(target, ast.Name):
+            target_name = extract_name(target)
+            if target_name is None:  # it means, that non name node was used
                 self.add_violation(WrongUnpackingViolation(node))
 
 
 @final
-class WrongCollectionVisitor(BaseNodeVisitor):
+class WrongCollectionVisitor(base.BaseNodeVisitor):
     """Ensures that collection definitions are correct."""
 
     _elements_in_sets: ClassVar[AnyNodes] = (
@@ -259,29 +184,119 @@ class WrongCollectionVisitor(BaseNodeVisitor):
         ast.Name,
     )
 
+    _unhashable_types: ClassVar[AnyNodes] = (
+        ast.List,
+        ast.ListComp,
+        ast.Set,
+        ast.SetComp,
+        ast.Dict,
+        ast.DictComp,
+        ast.GeneratorExp,
+    )
+
+    _elements_to_eval: ClassVar[AnyNodes] = (
+        ast.Num,
+        ast.Str,
+        ast.Bytes,
+        ast.NameConstant,
+        ast.Tuple,
+        ast.List,
+        ast.Set,
+        ast.Dict,
+        # Since python3.8 `BinOp` only works for complex numbers:
+        # https://github.com/python/cpython/pull/4035/files
+        # https://bugs.python.org/issue31778
+        ast.BinOp,
+        # Only our custom `eval` function can eval names safely:
+        ast.Name,
+    )
+
     def visit_Set(self, node: ast.Set) -> None:
         """
         Ensures that set literals do not have any duplicate items.
 
         Raises:
-            NonUniqueItemsInSetViolation
+            NonUniqueItemsInHashViolation
+            UnhashableTypeInHashViolation
 
         """
-        self._check_set_elements(node)
+        self._check_set_elements(node, node.elts)
+        self._check_unhashable_elements(node.elts)
         self.generic_visit(node)
 
-    def _report_set_elements(self, node: ast.Set, elements: List[str]) -> None:
-        for element, count in Counter(elements).items():
-            if count > 1:
-                self.add_violation(
-                    NonUniqueItemsInSetViolation(node, text=element),
-                )
+    def visit_Dict(self, node: ast.Dict) -> None:
+        """
+        Ensures that dict literals do not have any duplicate keys.
 
-    def _check_set_elements(self, node: ast.Set) -> None:
+        Raises:
+            NonUniqueItemsInHashViolation
+            UnhashableTypeInHashViolation
+
+        """
+        self._check_set_elements(node, node.keys)
+        self._check_unhashable_elements(node.keys)
+        self.generic_visit(node)
+
+    def _check_unhashable_elements(
+        self,
+        keys_or_elts: Sequence[ast.AST],
+    ) -> None:
+        for set_item in keys_or_elts:
+            if isinstance(set_item, self._unhashable_types):
+                self.add_violation(UnhashableTypeInHashViolation(set_item))
+
+    def _check_set_elements(
+        self,
+        node: Union[ast.Set, ast.Dict],
+        keys_or_elts: Sequence[ast.AST],
+    ) -> None:
         elements: List[str] = []
-        for set_item in node.elts:
-            real_set_item = unwrap_unary_node(set_item)
-            if isinstance(real_set_item, self._elements_in_sets):
+        element_values = []
+
+        for set_item in keys_or_elts:
+            real_item = unwrap_unary_node(set_item)
+            if isinstance(real_item, self._elements_in_sets):
+                # Similar look:
                 source = astor.to_source(set_item)
                 elements.append(source.strip().strip('(').strip(')'))
-        self._report_set_elements(node, elements)
+
+            real_item = unwrap_starred_node(real_item)
+
+            # Non-constant nodes raise ValueError,
+            # unhashables raise TypeError:
+            with suppress(ValueError, TypeError):
+                # Similar value:
+                real_item = safe_eval.literal_eval_with_names(
+                    real_item,
+                ) if isinstance(
+                    real_item, self._elements_to_eval,
+                ) else set_item
+                element_values.append(real_item)
+        self._report_set_elements(node, elements, element_values)
+
+    def _report_set_elements(
+        self,
+        node: Union[ast.Set, ast.Dict],
+        elements: List[str],
+        element_values,
+    ) -> None:
+        for look_element, look_count in Counter(elements).items():
+            if look_count > 1:
+                self.add_violation(
+                    NonUniqueItemsInHashViolation(node, text=look_element),
+                )
+                return
+
+        value_counts: DefaultDict[Hashable, int] = defaultdict(int)
+        for value_element in element_values:
+            real_value = value_element if isinstance(
+                # Lists, sets, and dicst are not hashable:
+                value_element, Hashable,
+            ) else str(value_element)
+
+            value_counts[real_value] += 1
+
+            if value_counts[real_value] > 1:
+                self.add_violation(
+                    NonUniqueItemsInHashViolation(node, text=value_element),
+                )

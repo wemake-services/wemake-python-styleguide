@@ -61,13 +61,17 @@ Summary
    ImplicitComplexCompareViolation
    ReversedComplexCompareViolation
    WrongLoopIterTypeViolation
-   ImplicitInConditionViolation
+   ExplicitStringConcatViolation
    MultilineConditionsViolation
    WrongMethodOrderViolation
    NumberWithMeaninglessZeroViolation
    PositiveExponentViolation
    WrongHexNumberCaseViolation
    ImplicitRawStringViolation
+   BadComplexNumberSuffixViolation
+   ZeroDivisionViolation
+   MeaninglessNumberOperationViolation
+   OperationSignNegationViolation
 
 Consistency checks
 ------------------
@@ -108,13 +112,17 @@ Consistency checks
 .. autoclass:: ImplicitComplexCompareViolation
 .. autoclass:: ReversedComplexCompareViolation
 .. autoclass:: WrongLoopIterTypeViolation
-.. autoclass:: ImplicitInConditionViolation
+.. autoclass:: ExplicitStringConcatViolation
 .. autoclass:: MultilineConditionsViolation
 .. autoclass:: WrongMethodOrderViolation
 .. autoclass:: NumberWithMeaninglessZeroViolation
 .. autoclass:: PositiveExponentViolation
 .. autoclass:: WrongHexNumberCaseViolation
 .. autoclass:: ImplicitRawStringViolation
+.. autoclass:: BadComplexNumberSuffixViolation
+.. autoclass:: ZeroDivisionViolation
+.. autoclass:: MeaninglessNumberOperationViolation
+.. autoclass:: OperationSignNegationViolation
 
 """
 
@@ -1009,11 +1017,6 @@ class InconsistentReturnViolation(ASTViolation):
                 return
             return 1
 
-        def function():
-            if some:
-                print(some)
-            return
-
     .. versionadded:: 0.7.0
 
     """
@@ -1399,35 +1402,35 @@ class WrongLoopIterTypeViolation(ASTViolation):
 
 
 @final
-class ImplicitInConditionViolation(ASTViolation):
+class ExplicitStringConcatViolation(ASTViolation):
     """
-    Forbids to use multiple equality compare with the same variable name.
+    Forbids explicit string concat in favour of ``.format`` method.
+
+    However, we still allow multiline string concat
+    as a way to write long stirngs that does not fit the 80-chars rule.
 
     Reasoning:
-        Using double+ equality compare with ``or``
-        or double+ non-equality compare with ``and``
-        indicates that you have implicit ``in`` or ``not in`` condition.
-        It is just hidden from you.
+        When formating strings one must use ``.format``
+        and not any other formatting methods like ``%``, ``+``, or ``f``.
+        This is done for consistency reasons.
 
     Solution:
-        Refactor compares to use ``in`` or ``not in`` clauses.
+        Join strings together if you can, or use ``.format`` method.
 
     Example::
 
         # Correct:
-        print(some in {'first', 'second'})
-        print(some not in {'first', 'second'})
+        x = 'ab: {0}'.format(some_data)
 
         # Wrong:
-        print(some == 'first' or some == 'second')
-        print(some != 'first' and some != 'second')
+        x = 'a' + 'b: ' + some_data
 
-    .. versionadded:: 0.10.0
+    .. versionadded:: 0.12.0
 
     """
 
     code = 336
-    error_template = 'Found implicit `in` condition'
+    error_template = 'Found explicit string concat'
 
 
 @final
@@ -1593,7 +1596,7 @@ class WrongHexNumberCaseViolation(TokenizeViolation):
 @final
 class ImplicitRawStringViolation(TokenizeViolation):
     r"""
-    Forbids use ``\\`` escape sequences inside regular strings.
+    Forbids to use ``\\`` escape sequences inside regular strings.
 
     Reasoning:
         It is hard to read escape sequencse inside regular strings,
@@ -1617,3 +1620,130 @@ class ImplicitRawStringViolation(TokenizeViolation):
 
     error_template = 'Found implicit raw string: {0}'
     code = 342
+
+
+@final
+class BadComplexNumberSuffixViolation(TokenizeViolation):
+    """
+    Forbids to use uppercase complex number suffix.
+
+    Reasoning:
+        Numbers should be consistent.
+
+    Solution:
+        Use lowercase suffix for imaginary part.
+
+    Example::
+
+        # Correct:
+        complex_number = 1j
+
+        # Wrong:
+        complex_number = 1J
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found wrong complex number suffix: {0}'
+    code = 343
+
+
+@final
+class ZeroDivisionViolation(ASTViolation):
+    """
+    Forbids to explicitly divide by zero.
+
+    Reasoning:
+        This will just throw ``ZeroDivisoionError``
+        in case that's what you need: just throw it.
+        No need to use undefined meth behaviours.
+        Or it might be just a typo / mistake, then fix it.
+
+    Solution:
+        Use ``ZeroDivisoionError`` or fix your number not to be ``0``.
+
+    Example::
+
+        # Correct:
+        raise ZeroDivisoionError()
+
+        # Wrong:
+        1 / 0
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found explicit zero division'
+    code = 344
+
+
+@final
+class MeaninglessNumberOperationViolation(ASTViolation):
+    """
+    Forbids to use meaningless math opeartions with ``0`` and ``1``.
+
+    Reasoning:
+        Adding and substracting zero does not change the value.
+        There's no need to do that.
+        Multipling by zero is also redundunt:
+        it can be replaced with explicit ``0`` assign.
+        Multiplying and dividing by ``1`` is also meaningless.
+
+    Solution:
+        Remove useless zero operaionts.
+
+    Example::
+
+        # Correct:
+        number = 1
+        zero = 0
+        one = 1
+
+        # Wrong:
+        number = 1 + 0 * 1
+        zero = some * 0 / 1
+        one = some ** 0 ** 1
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found meaningless number operation'
+    code = 345
+
+
+@final
+class OperationSignNegationViolation(ASTViolation):
+    """
+    Forbids to have double minus operations.
+
+    Reasoning:
+        Having two operations is harder than having just one.
+        Two negations are harder than one positive expression.
+        Two negations equal to one positive expression.
+        Positive and negative equal to one negative.
+
+    Solution:
+        Replace double minus operation to a single one with plus.
+        Replace 'plus-minus' operation to a single one with minus.
+
+    Example::
+
+        # Correct:
+        number = 3 + 1
+        number += 6
+        number -= 2
+
+        # Wrong:
+        number = 3 - -1
+        number -= -6
+        number += -2
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found wrong operation sign'
+    code = 346

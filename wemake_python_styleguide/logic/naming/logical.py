@@ -4,7 +4,6 @@ from typing import Iterable
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.logic.naming import access
-from wemake_python_styleguide.options import defaults
 
 
 def is_wrong_name(name: str, to_check: Iterable[str]) -> bool:
@@ -72,51 +71,71 @@ def is_upper_case_name(name: str) -> bool:
 
 def is_too_short_name(
     name: str,
-    min_length: int = defaults.MIN_NAME_LENGTH,
+    min_length: int,
+    *,
+    trim: bool = True,
 ) -> bool:
     """
     Checks for too short names.
 
-    >>> is_too_short_name('test')
+    >>> is_too_short_name('test', min_length=2)
     False
 
-    >>> is_too_short_name('o')
+    >>> is_too_short_name('o', min_length=2)
     True
 
-    >>> is_too_short_name('_')
+    >>> is_too_short_name('_', min_length=2)
     False
 
-    >>> is_too_short_name('z1')
+    >>> is_too_short_name('z1', min_length=2)
     False
 
     >>> is_too_short_name('z', min_length=1)
     False
 
+    >>> is_too_short_name('_z', min_length=2, trim=True)
+    True
+
+    >>> is_too_short_name('z_', min_length=2, trim=True)
+    True
+
+    >>> is_too_short_name('z_', min_length=2, trim=False)
+    False
+
+    >>> is_too_short_name('__z', min_length=2, trim=True)
+    True
+
+    >>> is_too_short_name('xy', min_length=2, trim=True)
+    False
+
     """
-    return name != constants.UNUSED_VARIABLE and len(name) < min_length
+    if access.is_unused(name):
+        return False
+
+    if trim:
+        name = name.strip('_')  # TODO: test
+
+    return len(name) < min_length
 
 
 def is_too_long_name(
     name: str,
-    max_length: int = defaults.MAX_NAME_LENGTH,
+    max_length: int,
 ) -> bool:
     """
     Checks for too long names.
 
-    >>> is_too_long_name('test')
+    >>> is_too_long_name('test', max_length=4)
     False
 
-    >>> is_too_long_name('this_is_twentynine_characters')
+    >>> is_too_long_name('_', max_length=4)
     False
 
-    >>> is_too_long_name('this_should_fail', max_length=10)
+    >>> is_too_long_name('test', max_length=3)
     True
 
-    >>> is_too_long_name('this_is_thirty_characters_long', max_length=30)
+    >>> is_too_long_name('this_is_twentynine_characters', max_length=29)
     False
-
-    >>> is_too_long_name('this_is_thirty_characters_long', max_length=29)
-    True
 
     """
     return len(name) > max_length

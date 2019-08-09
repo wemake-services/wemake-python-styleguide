@@ -66,14 +66,6 @@ CheckResult = Tuple[int, int, str, type]
 #: Tuple of AST node types for declarative syntax.
 AnyNodes = Tuple[Type[ast.AST], ...]
 
-#: In cases we need to work with all unary operators.
-AnyUnaryOp = Union[
-    Type[ast.Invert],
-    Type[ast.Not],
-    Type[ast.UAdd],
-    Type[ast.USub],
-]
-
 #: When we search for assign elements, we also need typed assign.
 AnyAssign = Union[ast.Assign, ast.AnnAssign]
 
@@ -82,6 +74,12 @@ ContextNodes = Union[
     ast.Module,
     ast.ClassDef,
     AnyFunctionDef,
+]
+
+#: In cases we need to work with both access types.
+AnyAccess = Union[
+    ast.Attribute,
+    ast.Subscript,
 ]
 
 
@@ -120,3 +118,8 @@ class ConfigurationOptions(Protocol):
     max_string_usages: int
     max_awaits: int
     max_try_body_length: int
+    max_module_expressions: int
+    max_function_expressions: int
+    max_asserts: int
+    max_access_level: int
+    max_attributes: int

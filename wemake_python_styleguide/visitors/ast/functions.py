@@ -1,23 +1,21 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from itertools import zip_longest
 from typing import ClassVar, Dict, List, Optional, Union
 
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
-from wemake_python_styleguide.constants import (
-    FUNCTIONS_BLACKLIST,
-    UNUSED_VARIABLE,
-)
+from wemake_python_styleguide.constants import FUNCTIONS_BLACKLIST
 from wemake_python_styleguide.logic import (
     exceptions,
     functions,
     nodes,
     operators,
+    prop_access,
     walk,
 )
+from wemake_python_styleguide.logic.arguments import function_args
 from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
@@ -31,6 +29,8 @@ from wemake_python_styleguide.violations.naming import (
 )
 from wemake_python_styleguide.violations.oop import WrongSuperCallViolation
 from wemake_python_styleguide.violations.refactoring import (
+    OpenWithoutContextManagerViolation,
+    TypeCompareViolation,
     UselessLambdaViolation,
     WrongIsinstanceWithTupleViolation,
 )
@@ -117,6 +117,42 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
 
 
 @final
+class WrongFunctionCallContextVisitior(base.BaseNodeVisitor):
+    """Ensure that we call several functions in the correct context."""
+
+    def visit_Call(self, node: ast.Call) -> None:
+        """
+        Visits function calls to find wrong contexts.
+
+        Raises:
+            OpenWithoutContextManagerViolation
+
+        """
+        self._check_open_call_context(node)
+        self._check_type_compare(node)
+        self.generic_visit(node)
+
+    def _check_open_call_context(self, node: ast.Call) -> None:
+        function_name = functions.given_function_called(node, {'open'})
+        if not function_name:
+            return
+
+        if isinstance(nodes.get_parent(node), ast.withitem):
+            # We do not care about `with` or `async with` - both are fine.
+            return
+
+        self.add_violation(OpenWithoutContextManagerViolation(node))
+
+    def _check_type_compare(self, node: ast.Call) -> None:
+        function_name = functions.given_function_called(node, {'type'})
+        if not function_name:
+            return
+
+        if isinstance(nodes.get_parent(node), ast.Compare):
+            self.add_violation(TypeCompareViolation(node))
+
+
+@final
 @decorators.alias('visit_any_function', (
     'visit_AsyncFunctionDef',
     'visit_FunctionDef',
@@ -156,7 +192,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
     ) -> None:
         for varname, usages in local_variables.items():
             for node in usages:
-                if access.is_protected(varname) or varname == UNUSED_VARIABLE:
+                if access.is_protected(varname):
                     self.add_violation(
                         UnusedVariableIsUsedViolation(node, text=varname),
                     )
@@ -168,9 +204,10 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
         local_variables: Dict[str, List[LocalVariable]],
     ) -> None:
         if var_name in local_variables:
-            if var_name == UNUSED_VARIABLE:
-                if isinstance(getattr(sub_node, 'ctx', None), ast.Store):
-                    return
+            if access.is_unused(var_name):
+                # We check unused variable usage in a different place:
+                # see `visitors/ast/naming.py`
+                return
             local_variables[var_name].append(sub_node)
             return
 
@@ -207,8 +244,14 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
     def _check_argument_default_values(self, node: AnyFunctionDef) -> None:
         for arg in node.args.defaults:
             real_arg = operators.unwrap_unary_node(arg)
-            if not isinstance(real_arg, self._allowed_default_value_types):
-                self.add_violation(ComplexDefaultValueViolation(node))
+            parts = prop_access.parts(real_arg) if isinstance(
+                real_arg, ast.Attribute,
+            ) else [real_arg]
+
+            for part in parts:
+                if not isinstance(part, self._allowed_default_value_types):
+                    self.add_violation(ComplexDefaultValueViolation(arg))
+                    return
 
     def _check_generator(self, node: AnyFunctionDef) -> None:
         if not functions.is_generator(node):
@@ -236,68 +279,6 @@ class UselessLambdaDefinitionVisitor(base.BaseNodeVisitor):
         self._check_useless_lambda(node)
         self.generic_visit(node)
 
-    def _have_same_kwarg(self, node: ast.Lambda, call: ast.Call) -> bool:
-        kwarg_name: Optional[str] = None
-        for keyword in call.keywords:
-            # `a=1` vs `**kwargs`:
-            # {'arg': 'a', 'value': <_ast.Num object at 0x1027882b0>}
-            # {'arg': None, 'value': <_ast.Name object at 0x102788320>}
-            if keyword.arg is None:
-                if isinstance(keyword.value, ast.Name):
-                    kwarg_name = keyword.value.id
-                else:  # We can judge on things like `**{}`
-                    return False
-        if node.args.kwarg and kwarg_name:
-            return node.args.kwarg.arg == kwarg_name
-        return node.args.kwarg == kwarg_name
-
-    def _have_same_vararg(self, node: ast.Lambda, call: ast.Call) -> bool:
-        vararg_name: Optional[str] = None
-        for ar in call.args:
-            # 'args': [<_ast.Starred object at 0x10d77a3c8>]
-            if isinstance(ar, ast.Starred):
-                if isinstance(ar.value, ast.Name):
-                    vararg_name = ar.value.id
-                else:  # We can judge on things like `*[]`
-                    return False
-        if vararg_name and node.args.vararg:
-            return node.args.vararg.arg == vararg_name
-        return node.args.vararg == vararg_name
-
-    def _have_same_args(self, node: ast.Lambda, call: ast.Call) -> bool:
-        paired_arguments = zip_longest(call.args, node.args.args)
-        for call_arg, lambda_arg in paired_arguments:
-            if isinstance(call_arg, ast.Starred):
-                if isinstance(lambda_arg, ast.arg):
-                    return False
-            elif isinstance(call_arg, ast.Name):
-                if not lambda_arg or call_arg.id != lambda_arg.arg:
-                    return False
-            else:
-                return False
-        return True
-
-    def _have_same_kw_args(self, node: ast.Lambda, call: ast.Call) -> bool:
-        prepared_kw_args = {
-            kw.arg: kw
-            for kw in call.keywords
-            if isinstance(kw.value, ast.Name) and kw.arg == kw.value.id
-        }
-
-        real_kw_args = [
-            # We need to remove ** args from here:
-            kw for kw in call.keywords
-            if not (isinstance(kw.value, ast.Name) and kw.arg is None)
-        ]
-
-        for lambda_arg in node.args.kwonlyargs:
-            lambda_arg_name = getattr(lambda_arg, 'arg', None)
-            call_arg = prepared_kw_args.get(lambda_arg_name)
-
-            if lambda_arg and not call_arg:
-                return False
-        return len(real_kw_args) == len(node.args.kwonlyargs)
-
     def _check_useless_lambda(self, node: ast.Lambda) -> None:
         if not isinstance(node.body, ast.Call):
             return
@@ -312,14 +293,7 @@ class UselessLambdaDefinitionVisitor(base.BaseNodeVisitor):
             # `kw_defaults` can have [None, ...] items.
             return
 
-        same_vararg = self._have_same_vararg(node, node.body)
-        same_kwarg = self._have_same_kwarg(node, node.body)
-        if not same_vararg or not same_kwarg:
-            return
-
-        same_args = self._have_same_args(node, node.body)
-        same_kw_args = self._have_same_kw_args(node, node.body)
-        if not same_args or not same_kw_args:
+        if not function_args.is_call_matched_by_arguments(node, node.body):
             return
 
         self.add_violation(UselessLambdaViolation(node))

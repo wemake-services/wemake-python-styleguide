@@ -25,7 +25,7 @@ def _min_max(
 
 
 @final
-@attr.dataclass(frozen=True, slots=True)
+@attr.dataclass(slots=True)
 class _ValidatedOptions(object):
     """
     Here we write all the required structured validation for the options.
@@ -48,12 +48,20 @@ class _ValidatedOptions(object):
     max_line_complexity: int = attr.ib(validator=[_min_max(min=1)])
     max_jones_score: int = attr.ib(validator=[_min_max(min=1)])
     max_imports: int = attr.ib(validator=[_min_max(min=1)])
+    max_imported_names: int = attr.ib(validator=[_min_max(min=1)])
     max_base_classes: int = attr.ib(validator=[_min_max(min=1)])
     max_decorators: int = attr.ib(validator=[_min_max(min=1)])
     max_string_usages: int = attr.ib(validator=[_min_max(min=1)])
+    max_awaits: int = attr.ib(validator=[_min_max(min=1)])
+    max_try_body_length: int = attr.ib(validator=[_min_max(min=1)])
+    max_module_expressions: int = attr.ib(validator=[_min_max(min=1)])
+    max_function_expressions: int = attr.ib(validator=[_min_max(min=1)])
+    max_asserts: int = attr.ib(validator=[_min_max(min=1)])
+    max_access_level: int = attr.ib(validator=[_min_max(min=1)])
+    max_attributes: int = attr.ib(validator=[_min_max(min=1)])
 
 
-def validate_options(options: ConfigurationOptions) -> ConfigurationOptions:
+def validate_options(options: ConfigurationOptions) -> _ValidatedOptions:
     """Validates all options from ``flake8``, uses a subset of them."""
     fields_to_validate = [
         field.name
@@ -63,5 +71,4 @@ def validate_options(options: ConfigurationOptions) -> ConfigurationOptions:
         field: getattr(options, field, None)
         for field in fields_to_validate
     }
-    _ValidatedOptions(**options_subset)  # raises TypeError
-    return options
+    return _ValidatedOptions(**options_subset)  # raises TypeError

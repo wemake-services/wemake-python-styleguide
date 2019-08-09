@@ -65,11 +65,11 @@ to understand how all components are bound together.
       Visitor->>Violation: Visitors raise violations when they find bad code
       Violation-->>flake8: Raised violations are shown to user by flake8
 
-We use a `layered architecture <https://layer-linter.readthedocs.io/en/stable/concepts.html>`_
+We use a `layered architecture <https://import-linter.readthedocs.io/>`_
 that follows this contract:
 
-.. literalinclude :: ../../../layers.yml
-   :language: yaml
+.. literalinclude :: ../../../.importlinter
+   :language: ini
 
 Contributing
 ------------
@@ -81,6 +81,7 @@ Contributing
 
   glossary.rst
   contributing.rst
+  debugging.rst
 
 
 Creating a new rule

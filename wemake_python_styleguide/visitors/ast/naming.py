@@ -3,7 +3,7 @@
 import ast
 import itertools
 from collections import Counter
-from typing import Callable, List, Tuple, Union
+from typing import Callable, Iterable, List, Optional, Tuple, Union, cast
 
 from typing_extensions import final
 
@@ -130,6 +130,11 @@ class _NameValidator(object):
         if builtins.is_wrong_alias(name):
             self._error_callback(
                 naming.TrailingUnderscoreViolation(node, text=name),
+            )
+
+        if access.is_unused(name) and len(name) > 1:
+            self._error_callback(
+                naming.WrongUnusedVariableNameViolation(node, text=name),
             )
 
     def _ensure_length(self, node: ast.AST, name: str) -> None:
@@ -298,10 +303,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
             ReassigningVariableToItselfViolation
 
         """
-        names = list(itertools.chain.from_iterable((
-            name_nodes.get_variables_from_node(target)
-            for target in get_assign_targets(node)
-        )))
+        names = list(name_nodes.flat_variable_names([node]))
 
         self._check_reassignment(node, names)
         self._check_unique_assignment(node, names)
@@ -332,3 +334,112 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
                 self.add_violation(
                     ReassigningVariableToItselfViolation(node, text=used_name),
                 )
+
+
+@final
+@alias('visit_any_assign', (
+    'visit_Assign',
+    'visit_AnnAssign',
+))
+class WrongVariableUsageVisitor(BaseNodeVisitor):
+    """Checks how variables are used."""
+
+    def visit_Name(self, node: ast.Name) -> None:
+        """
+        Checks that we cannot use ``_`` anywhere.
+
+        Raises:
+            UnusedVariableIsUsedViolation
+
+        """
+        self._check_variable_used(
+            node,
+            node.id,
+            is_created=isinstance(node.ctx, ast.Store),
+        )
+        self.generic_visit(node)
+
+    def visit_any_assign(self, node: AnyAssign) -> None:
+        """
+        Checks that we cannot assign explicit unused variables.
+
+        We do not check assignes inside modules and classes,
+        since there ``_`` prefixed variable means
+        that it is protected, not unused.
+
+        Raises:
+            UnusedVariableIsDefinedViolation
+
+        """
+        is_inside_class_or_module = isinstance(
+            nodes.get_context(node),
+            (ast.ClassDef, ast.Module),
+        )
+        self._check_assign_unused(
+            node,
+            name_nodes.flat_variable_names([node]),
+            is_local=not is_inside_class_or_module,
+        )
+        self.generic_visit(node)
+
+    def visit_ExceptHandler(self, node: ast.ExceptHandler) -> None:
+        """
+        Checks that we cannot create explicit unused exceptions.
+
+        Raises:
+            UnusedVariableIsDefinedViolation
+
+        """
+        if node.name:
+            self._check_assign_unused(node, [node.name])
+        self.generic_visit(node)
+
+    def visit_withitem(self, node: ast.withitem) -> None:
+        """
+        Checks that we cannot create explicit unused context variables.
+
+        Raises:
+            UnusedVariableIsDefinedViolation
+
+        """
+        if node.optional_vars:
+            self._check_assign_unused(
+                cast(ast.AST, nodes.get_parent(node)),
+                name_nodes.get_variables_from_node(node.optional_vars),
+            )
+        self.generic_visit(node)
+
+    def _check_variable_used(
+        self,
+        node: ast.AST,
+        assigned_name: Optional[str],
+        *,
+        is_created: bool,
+    ) -> None:
+        if not assigned_name or not access.is_unused(assigned_name):
+            return
+
+        if not is_created:
+            self.add_violation(
+                naming.UnusedVariableIsUsedViolation(node, text=assigned_name),
+            )
+
+    def _check_assign_unused(
+        self,
+        node: ast.AST,
+        all_names: Iterable[str],
+        *,
+        is_local: bool = True,
+    ) -> None:
+        all_names = list(all_names)  # we are using it twice
+        all_unused = all(
+            is_local if access.is_protected(vn) else access.is_unused(vn)
+            for vn in all_names
+        )
+
+        if all_names and all_unused:
+            self.add_violation(
+                naming.UnusedVariableIsDefinedViolation(
+                    node, text=', '.join(all_names),
+                ),
+            )

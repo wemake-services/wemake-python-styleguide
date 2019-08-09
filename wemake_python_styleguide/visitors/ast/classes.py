@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from collections import Counter
-from typing import ClassVar, FrozenSet, List, Optional, Tuple
+from collections import defaultdict
+from typing import ClassVar, DefaultDict, FrozenSet, List, Optional, Tuple
 
 import astor
 from typing_extensions import final
@@ -14,9 +14,11 @@ from wemake_python_styleguide.logic import (
     classes,
     functions,
     nodes,
+    prop_access,
     strings,
     walk,
 )
+from wemake_python_styleguide.logic.arguments import function_args, super_args
 from wemake_python_styleguide.logic.naming import access, name_nodes
 from wemake_python_styleguide.violations import best_practices as bp
 from wemake_python_styleguide.violations import consistency, oop
@@ -33,17 +35,8 @@ class WrongClassVisitor(base.BaseNodeVisitor):
 
     _allowed_body_nodes: ClassVar[types.AnyNodes] = (
         *FunctionNodes,
-
         ast.ClassDef,  # we allow some nested classes
-
-        ast.Assign,  # attributes
-        ast.AnnAssign,  # type annotations
-    )
-
-    _allowed_base_classes_nodes: ClassVar[types.AnyNodes] = (
-        ast.Name,
-        ast.Attribute,
-        ast.Subscript,
+        *AssignNodes,  # fields and annotations
     )
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
@@ -53,6 +46,7 @@ class WrongClassVisitor(base.BaseNodeVisitor):
         Raises:
             RequiredBaseClassViolation
             ObjectInBaseClassesListViolation
+            WrongBaseClassViolation
             WrongClassBodyContentViolation
             BuiltinSubclassViolation
 
@@ -70,8 +64,8 @@ class WrongClassVisitor(base.BaseNodeVisitor):
 
     def _check_base_classes(self, node: ast.ClassDef) -> None:
         for base_name in node.bases:
-            if not isinstance(base_name, self._allowed_base_classes_nodes):
-                self.add_violation(oop.WrongBaseClassViolation(node))
+            if not self._is_correct_base_class(base_name):
+                self.add_violation(oop.WrongBaseClassViolation(base_name))
                 continue
 
             id_attr = getattr(base_name, 'id', None)
@@ -96,6 +90,27 @@ class WrongClassVisitor(base.BaseNodeVisitor):
                 continue
             self.add_violation(oop.WrongClassBodyContentViolation(sub_node))
 
+    def _is_correct_base_class(self, base_class: ast.AST) -> bool:
+        if isinstance(base_class, ast.Name):
+            return True
+        elif isinstance(base_class, ast.Attribute):
+            return all(
+                isinstance(sub_node, (ast.Name, ast.Attribute))
+                for sub_node in prop_access.parts(base_class)
+            )
+        elif isinstance(base_class, ast.Subscript):
+            parts = list(prop_access.parts(base_class))
+            subscripts = list(filter(
+                lambda part: isinstance(part, ast.Subscript), parts,
+            ))
+            correct_items = all(
+                isinstance(sub_node, (ast.Name, ast.Attribute, ast.Subscript))
+                for sub_node in parts
+            )
+
+            return len(subscripts) == 1 and correct_items
+        return False
+
 
 @final
 @decorators.alias('visit_any_function', (
@@ -109,10 +124,6 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         'staticmethod',
     ))
 
-    _not_appropriate_for_init: ClassVar[types.AnyNodes] = (
-        ast.Yield,
-    )
-
     def visit_any_function(self, node: types.AnyFunctionDef) -> None:
         """
         Checking class methods: async and regular.
@@ -120,9 +131,10 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         Raises:
             StaticMethodViolation
             BadMagicMethodViolation
-            YieldInsideInitViolation
+            YieldMagicMethodViolation
             MethodWithoutArgumentsViolation
             AsyncMagicMethodViolation
+            UselessOverwrittenMethodViolation
 
         """
         self._check_decorators(node)
@@ -153,15 +165,75 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
 
         is_async = isinstance(node, ast.AsyncFunctionDef)
         if is_async and access.is_magic(node.name):
-            if node.name not in constants.ASYNC_MAGIC_METHODS_WHITELIST:
+            if node.name in constants.ASYNC_MAGIC_METHODS_BLACKLIST:
                 self.add_violation(
                     oop.AsyncMagicMethodViolation(node, text=node.name),
                 )
 
+        self._check_useless_overwritten_methods(
+            node,
+            class_name=node_context.name,
+        )
+
     def _check_method_contents(self, node: types.AnyFunctionDef) -> None:
-        if node.name == constants.INIT:
-            if walk.is_contained(node, self._not_appropriate_for_init):
-                self.add_violation(bp.YieldInsideInitViolation(node))
+        if node.name in constants.YIELD_MAGIC_METHODS_BLACKLIST:
+            if walk.is_contained(node, (ast.Yield, ast.YieldFrom)):
+                self.add_violation(oop.YieldMagicMethodViolation(node))
+
+    def _get_call_stmt_of_useless_method(
+        self,
+        node: types.AnyFunctionDef,
+    ) -> Optional[ast.Call]:
+        # consider next body as possible candidate of useless method:
+        # 1) Optional[docstring]
+        # 2) return statement with call
+        statements_number = len(node.body)
+        if statements_number > 2 or statements_number == 0:
+            return None
+
+        if statements_number == 2:
+            if not strings.is_doc_string(node.body[0]):
+                return None
+
+        return_stmt = node.body[-1]
+        if not isinstance(return_stmt, ast.Return):
+            return None
+
+        call_stmt = return_stmt.value
+        if not isinstance(call_stmt, ast.Call):
+            return None
+        return call_stmt
+
+    def _check_useless_overwritten_methods(
+        self,
+        node: types.AnyFunctionDef,
+        class_name: str,
+    ) -> None:
+        if node.decorator_list:
+            # any decorator can change logic
+            # and make this overwrite useful
+            return
+
+        call_stmt = self._get_call_stmt_of_useless_method(node)
+        if call_stmt is None or not isinstance(call_stmt.func, ast.Attribute):
+            return
+
+        attribute = call_stmt.func
+        defined_method_name = node.name
+        if defined_method_name != attribute.attr:
+            return
+
+        if not super_args.is_ordinary_super_call(attribute.value, class_name):
+            return
+
+        if not function_args.is_call_matched_by_arguments(node, call_stmt):
+            return
+
+        self.add_violation(
+            oop.UselessOverwrittenMethodViolation(
+                node, text=defined_method_name,
+            ),
+        )
 
 
 @final
@@ -175,6 +247,7 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
     _whitelisted_slots_nodes: ClassVar[types.AnyNodes] = (
         ast.Tuple,
         ast.Attribute,
+        ast.Subscript,
         ast.Name,
         ast.Call,
     )
@@ -201,16 +274,17 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
         node: types.AnyAssign,
         elements: ast.Tuple,
     ) -> None:
-        fields: List[str] = []
+        fields: DefaultDict[str, List[ast.AST]] = defaultdict(list)
+
         for tuple_item in elements.elts:
             slot_name = self._slot_item_name(tuple_item)
             if not slot_name:
-                self.add_violation(oop.WrongSlotsViolation(node))
+                self.add_violation(oop.WrongSlotsViolation(tuple_item))
                 return
-            fields.append(slot_name)
+            fields[slot_name].append(tuple_item)
 
-        for slot, counter in Counter(fields).items():
-            if not self._is_correct_slot(slot) or counter > 1:
+        for slots in fields.values():
+            if not self._are_correct_slots(slots) or len(slots) > 1:
                 self.add_violation(oop.WrongSlotsViolation(node))
                 return
 
@@ -235,8 +309,12 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
             return astor.to_source(node).strip()
         return None
 
-    def _is_correct_slot(self, slot: str) -> bool:
-        return bool(slot) and (slot.startswith('*') or slot.islower())
+    def _are_correct_slots(self, slots: List[ast.AST]) -> bool:
+        return all(
+            slot.s.isidentifier()
+            for slot in slots
+            if isinstance(slot, ast.Str)
+        )
 
 
 @final

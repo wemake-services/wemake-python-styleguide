@@ -50,7 +50,9 @@ from wemake_python_styleguide import constants, types
 from wemake_python_styleguide import version as pkg_version
 from wemake_python_styleguide.options.config import Configuration
 from wemake_python_styleguide.options.validation import validate_options
-from wemake_python_styleguide.presets.types import file_tokens, filename, tree
+from wemake_python_styleguide.presets.types import file_tokens as tokens_preset
+from wemake_python_styleguide.presets.types import filename as filename_preset
+from wemake_python_styleguide.presets.types import tree as tree_preset
 from wemake_python_styleguide.transformations.ast_tree import transform
 from wemake_python_styleguide.visitors import base
 
@@ -85,9 +87,9 @@ class Checker(object):
     config = Configuration()
 
     _visitors: ClassVar[Sequence[VisitorClass]] = (
-        *filename.PRESET,
-        *tree.PRESET,
-        *file_tokens.PRESET,
+        *filename_preset.PRESET,
+        *tree_preset.PRESET,
+        *tokens_preset.PRESET,
     )
 
     def __init__(

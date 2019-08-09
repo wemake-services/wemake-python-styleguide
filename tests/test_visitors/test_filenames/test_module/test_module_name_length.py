@@ -13,6 +13,8 @@ from wemake_python_styleguide.visitors.filenames.module import (
 
 @pytest.mark.parametrize('filename', [
     'a.py',
+    'relative/_a.py',
+    'C:/a_.py',
     'some/package/z.py',
     '/root/x.py',
     'C:/f.py',

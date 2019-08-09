@@ -2,7 +2,6 @@
 
 import pytest
 
-from wemake_python_styleguide.constants import ASYNC_MAGIC_METHODS_WHITELIST
 from wemake_python_styleguide.violations.oop import AsyncMagicMethodViolation
 from wemake_python_styleguide.visitors.ast.classes import WrongMethodVisitor
 
@@ -21,7 +20,6 @@ class Example(object):
     '__init__',
     '__eq__',
     '__lt__',
-    '__next__',
     '__enter__',
     '__exit__',
 ])
@@ -42,15 +40,25 @@ def test_wrong_async_magic_used(
     assert_error_text(visitor, method)
 
 
-@pytest.mark.parametrize('method', ASYNC_MAGIC_METHODS_WHITELIST)
+@pytest.mark.parametrize('code', [
+    sync_method,
+    async_method,
+])
+@pytest.mark.parametrize('method', [
+    '__anext__',
+    '__aenter__',
+    '__aexit__',
+    '__custom__',
+])
 def test_correct_async_magic_used(
     assert_errors,
     parse_ast_tree,
     method,
+    code,
     default_options,
 ):
     """Testing that some async magic methods are working fine."""
-    tree = parse_ast_tree(async_method.format(method))
+    tree = parse_ast_tree(code.format(method))
 
     visitor = WrongMethodVisitor(default_options, tree=tree)
     visitor.run()
@@ -58,17 +66,14 @@ def test_correct_async_magic_used(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize(
-    'method',
-    ASYNC_MAGIC_METHODS_WHITELIST | {
-        '__init__',
-        '__eq__',
-        '__lt__',
-        '__next__',
-        '__enter__',
-        '__exit__',
-    },
-)
+@pytest.mark.parametrize('method', [
+    '__init__',
+    '__eq__',
+    '__lt__',
+    '__next__',
+    '__enter__',
+    '__exit__',
+])
 def test_sync_magic_used(
     assert_errors,
     parse_ast_tree,
@@ -87,6 +92,7 @@ def test_sync_magic_used(
 @pytest.mark.parametrize('method', [
     'next',
     'regular',
+    '__custom__',
 ])
 def test_regular_method_used(
     assert_errors,

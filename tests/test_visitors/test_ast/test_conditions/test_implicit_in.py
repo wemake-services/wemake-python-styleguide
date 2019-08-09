@@ -2,7 +2,7 @@
 
 import pytest
 
-from wemake_python_styleguide.violations.consistency import (
+from wemake_python_styleguide.violations.refactoring import (
     ImplicitInConditionViolation,
 )
 from wemake_python_styleguide.visitors.ast.conditions import (

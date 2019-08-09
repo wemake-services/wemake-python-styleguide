@@ -12,32 +12,37 @@ It is not our responsibility.
 
 import subprocess
 
+PLUGINS = (
+    'B002',  # flake8-bugbear
+    'C101',  # flake8-coding
+    'A001',  # flake8-builtins
+    'C400',  # flake8-comprehensions
+    'C819',  # flake8-commas
+    'D103',  # flake8-docstring
+    'E225',  # pycodestyle
+    'E800',  # flake8-eradicate
+    'F401',  # flake8
+    'G001',  # flake8-logging-format
+    'I001',  # flake8-isort
+    'N400',  # flake8-broken-line
+    'N802',  # pep8-naming
+    'P101',  # flake8-string-format
+    'Q000',  # flake8-quotes
+    'Q003',  # flake8-quotes
+    'R701',  # radon
+    'S001',  # flake8-pep3101
+    'S101',  # flake8-bandit
+    'T001',  # flake8-print
+    'T100',  # flake8-debugger
+    'TAE002',  # flake8-annotations-complexity
+    'RST299',  # flake8-rst-docstrings
+    'EXE003',  # flake8-executable
+)
+
 
 def _assert_plugin_output(output):
-    assert output.count('A001') > 0  # flake8-builtins
-    assert output.count('B002') > 0  # flake8-bugbear
-    assert output.count('C101') > 0  # flake8-coding
-    assert output.count('C400') > 0  # flake8-comprehensions
-    assert output.count('C819') > 0  # flake8-commas
-    assert output.count('D103') > 0  # flake8-docstring
-    assert output.count('E225') > 0  # pycodestyle
-    assert output.count('E800') > 0  # flake8-eradicate
-    assert output.count('F401') > 0  # flake8
-    assert output.count('G001') > 0  # flake8-logging-format
-    assert output.count('I001') > 0  # flake8-isort
-    assert output.count('N400') > 0  # flake8-broken-line
-    assert output.count('N802') > 0  # pep8-naming
-    assert output.count('P101') > 0  # flake8-string-format
-    assert output.count('Q000') > 0  # flake8-quotes
-    assert output.count('Q003') > 0  # flake8-quotes
-    assert output.count('S001') > 0  # flake8-pep3101
-    assert output.count('S101') > 0  # flake8-bandit
-    assert output.count('T001') > 0  # flake8-print
-    assert output.count('T100') > 0  # flake8-debugger
-    assert output.count('TAE002') > 0  # flake8-annotations-complexity
-    assert output.count('RST299') > 0  # flake8-rst-docstrings
-    assert output.count('EXE003') > 0  # flake8-executable
-    assert output.count('R701') > 0  # radon
+    for plugin_code in PLUGINS:
+        assert output.count(plugin_code) > 0
 
 
 def test_external_plugins(absolute_path):
@@ -96,6 +101,6 @@ def test_external_plugins_diff(absolute_path):
         universal_newlines=True,
         encoding='utf8',
     )
-    process.wait()
+    process.communicate()
 
     _assert_plugin_output(output)

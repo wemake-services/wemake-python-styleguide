@@ -16,6 +16,16 @@ class Meta({0}):
     'method.call()',
     '-Name',
     '[1, 2, 3]',
+    '(First, Second)',
+    'None',
+    'Call().attr',
+    'dict[1].attr',
+    'dict[1].attr()',
+    'Generic[TextType][Nested]',
+    'Generic["TextType"][Nested]',
+    'Call()[x]',
+    '[12][0]',
+    '[].len',
 ])
 def test_base_class_expression(
     assert_errors,
@@ -42,8 +52,16 @@ def test_base_class_expression(
     # Regressions, see: issue-459
     'Generic[ValueType]',
     'Monad[ValueType, ErrorType]',
+    'Monad[ValueType, None]',
     'Generic[Some], metaclass=abc.ABCMeta',
-    'Generic["TextType"]',
+    'types.Generic[X]',
+    'Generic[ast.AST]',
+    'Generic[Optional[int]]',
+    'Generic[Literal[1]]',
+
+    # Might be removed later:
+    'Generic[1]',  # int
+    'Generic["X"]',  # str
 ])
 def test_correct_base_classes(
     assert_errors,

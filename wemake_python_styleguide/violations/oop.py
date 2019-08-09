@@ -25,6 +25,8 @@ Summary
    WrongSuperCallViolation
    DirectMagicAttributeAccessViolation
    AsyncMagicMethodViolation
+   YieldMagicMethodViolation
+   UselessOverwrittenMethodViolation
 
 Respect your objects
 --------------------
@@ -40,6 +42,8 @@ Respect your objects
 .. autoclass:: WrongSuperCallViolation
 .. autoclass:: DirectMagicAttributeAccessViolation
 .. autoclass:: AsyncMagicMethodViolation
+.. autoclass:: YieldMagicMethodViolation
+.. autoclass:: UselessOverwrittenMethodViolation
 
 """
 
@@ -267,6 +271,8 @@ class WrongBaseClassViolation(ASTViolation):
     """
     Forbids to have anything else than a class as a base class.
 
+    We only check base classes and not keywords. They can be anything you need.
+
     Reasoning:
         In Python you can specify anything in the base classes slot.
         In runtime this expression will be evaluated and executed.
@@ -274,6 +280,8 @@ class WrongBaseClassViolation(ASTViolation):
 
     Solution:
         Use only attributes, names, and types to be your base classes.
+        Use ``annotation`` future import in case
+        you use strings in base classes.
 
     Example::
 
@@ -287,6 +295,7 @@ class WrongBaseClassViolation(ASTViolation):
     .. versionadded:: 0.7.0
     .. versionchanged:: 0.7.1
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.12.0
 
     """
 
@@ -304,7 +313,7 @@ class WrongSlotsViolation(ASTViolation):
 
     - That ``__slots__`` is a tuple, name, attribute, star, or call
     - That ``__slots__`` do not have duplicates
-    - That ``__slots__`` do not have empty strings or uppercase strings
+    - That ``__slots__`` do not have empty strings or invalid python names
 
     Reasoning:
         ``__slots__`` is a very special attribute.
@@ -416,12 +425,12 @@ class AsyncMagicMethodViolation(ASTViolation):
     """
     Forbids to make some magic methods async.
 
-    We forbid to make ``__init__``, ``__eq__``, ``__lt__``, etc async.
     We allow to make ``__anext__``, ``__aenter__``, ``__aexit__`` async.
+    We also allow custom magic methods to be async.
 
     See
-    :py:data:`~wemake_python_styleguide.constants.ASYNC_MAGIC_METHODS_WHITELIST`
-    for the whole list of whitelisted async magic methods.
+    :py:data:`~wemake_python_styleguide.constants.ASYNC_MAGIC_METHODS_BLACKLIST`
+    for the whole list of blacklisted async magic methods.
 
     Reasoning:
         Defining the magic methods as async which are not supposed
@@ -447,5 +456,83 @@ class AsyncMagicMethodViolation(ASTViolation):
 
     """
 
-    error_template = 'Found forbidden async magic method usage: {0}'
+    error_template = 'Found forbidden `async` magic method usage: {0}'
     code = 610
+
+
+@final
+class YieldMagicMethodViolation(ASTViolation):
+    """
+    Forbids to use ``yield`` inside of several magic methods.
+
+    We allow to make ``__iter__`` a generator.
+    See
+    :py:data:`~wemake_python_styleguide.constants.YIELD_MAGIC_METHODS_BLACKLIST`
+    for the whole list of blacklisted generator magic methods.
+
+    Reasoning:
+        Python's datamodel is strict.
+        You cannot make generators from random magic methods.
+        This rule enforces it.
+
+    Solution:
+        Remove ``yield`` from a magic method
+        or rename it to be a custom method.
+
+    Example::
+
+         # Correct:
+        class Example(object):
+            def __init__(self):
+                ...
+
+        # Wrong:
+        class Example(object):
+            def __init__(self):
+                yield 10
+
+    See also:
+        https://docs.python.org/3/reference/datamodel.html
+
+    .. versionadded:: 0.3.0
+    .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.12.0
+
+    """
+
+    error_template = 'Found forbidden `yield` magic method usage'
+    code = 611
+    previous_codes = {439, 435}
+
+
+@final
+class UselessOverwrittenMethodViolation(ASTViolation):
+    """
+    Forbids to have useless overwritten methods.
+
+    Reasoning:
+        Overwriting method without any changes
+        does not have any positive impact.
+
+    Solution:
+        Do not overwrite method in case you do not want
+        to do any changes inside it.
+
+    Example::
+
+        # Correct:
+        class Test(Base):
+            ...
+
+        # Wrong:
+        class Test(object):
+            def method(self, argument):
+                return super().method(argument)
+
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    error_template = 'Found useless overwritten method: {0}'
+    code = 612

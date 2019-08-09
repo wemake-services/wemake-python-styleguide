@@ -44,6 +44,17 @@ except AnyError:
     print('nope')
 
 
+class TooManyPublicAtts(object):  # noqa: WPS230
+    def __init__(self):
+        self.first = 1
+        self.second = 2
+        self.third = 3
+        self.fourth = 4
+        self.fifth = 5
+        self.sixth = 6
+        self.boom = 7
+
+
 def function_name(
     value: int = 0,  # noqa: WPS110
 ):
@@ -78,8 +89,10 @@ extremely_long_name_that_needs_to_be_shortened_to_work_fine = 2  # noqa: WPS118
 wrong_alias_ = 'some fake builtin alias'  # noqa: WPS120
 
 def some_function():
-    _should_not_be_used = 1
+    _should_not_be_used = 1  # noqa: WPS122
     print(_should_not_be_used)  # noqa: WPS121
+
+used, __ = 1, 2  # noqa: WPS123
 
 some._execute()  # noqa: WPS437
 
@@ -127,14 +140,24 @@ class ManyParents(First, Second, Third, Exception):  # noqa: WPS215
 
 
 async def too_many_awaits():  # noqa: WPS217
-    await test_function()
-    await test_function()
-    await test_function()
-    await test_function()
-    await test_function()
-    await test_function()
-    await test_function()
+    await test_function(1)
+    await test_function(2)
+    await test_function(3)
+    await test_function(4)
+    await test_function(5)
+    await test_function(6)
+    await test_function(7)
 
+
+async def too_many_asserts():  # noqa: WPS218
+    assert test_function(1)
+    assert test_function(2)
+    assert test_function(3)
+    assert test_function(4)
+    assert test_function(5)
+    assert test_function(6)
+
+deep_access = some.other[0].field.type.boom  # noqa: WPS219
 
 def test_function():
     if xy > 1:
@@ -145,7 +168,7 @@ def test_function():
                         test(5)  # noqa: WPS220
 
 
-line = some.call(7 * 2, 3 / 4) / some.run(5 / some, 8 - 2 + 1)  # noqa: WPS221
+line = some.call(7 * 2, 3 / 4) / some.run(5 / some, 8 - 2 + 6)  # noqa: WPS221
 if line and line > 2 and line > 3 and line > 4 and line > 5:  # noqa: WPS221,WPS222
     anti_z444 = 1
 
@@ -189,17 +212,17 @@ class BadClass:  # noqa: WPS306
     @staticmethod  # noqa: WPS602
     async def some_async_static(arg1):
         return [
-            node for node in 'abc' if node != 'a' if node != 'b'  # noqa: WPS307
+            node for node in 'ab' if node != 'a' if node != 'b'  # noqa: WPS307
         ]
 
     def __del__(self, *_args, **_kwargs):  # noqa: WPS603
-        anti_z444 = 1
+        anti_z444 = 1  # noqa: WPS442
 
     class Nested:  # noqa: WPS306,WPS431
         anti_z444 = 1
 
     async def __eq__(self, other):  # noqa: WPS610
-        anti_z444 = 3
+        anti_z444 = 3  # noqa: WPS442
 
 
 magic_numbers = 13.2 + 50  # noqa: WPS432
@@ -276,7 +299,7 @@ bad_concatenation = 'a' 'b'  # noqa: WPS326
 for literal in bad_concatenation:  # noqa: WPS327, WPS328
     continue
 
-with open(literal):  # noqa: WPS328
+with open(bad_concatenation):  # noqa: WPS328
     pass  # noqa: WPS420
 
 
@@ -298,7 +321,11 @@ print(biggesst > middle >= smallest)  # noqa: WPS334
 for index in [1, 2]:  # noqa: WPS335
     print(index)
 
-print(one == 'a' or one == 'b')  # noqa: WPS336
+string_concat = 'a' + 'b'  # noqa: WPS336
+
+print(one == 'a' or one == 'b')  # noqa: WPS514
+file_obj = open('filaname.py')  # noqa: WPS515
+print(type(file_obj) == int)  # noqa: WPS516
 
 try:
     anti_z444 = 1
@@ -339,9 +366,12 @@ nodes = nodes  # noqa: WPS434
 class Example(object):
     """Correct class docstring."""
 
-    def __init__(self):  # noqa: WPS435
+    def __init__(self):  # noqa: WPS611
         """Correct function docstring."""
         yield 10
+
+    def __eq__(self, object_: object) -> bool:  # noqa: WPS612
+        return super().__eq__(object_)
 
 
 for loop_index in range(6):  # noqa: WPS426
@@ -410,11 +440,9 @@ def multiple_return_path():
         return 3
 
 
-def bad_default_values(  # noqa: WPS404
+def bad_default_values(
     self,
-    filename='(none)',
-    builtins=None,
-    withDoctest='PYFLAKES_DOCTEST' in os.environ,
+    withDoctest='PYFLAKES_DOCTEST' in os.environ,  # noqa: WPS404
 ):
     return True
 
@@ -459,6 +487,10 @@ leading_zero = 1.2e01  # noqa: WPS339
 positive_exponent = 1.1e+1  # noqa: WPS340
 wrong_hex = 0xabc  # noqa: WPS341
 wrong_escape_raw_string = '\\n'  # noqa: WPS342
+bad_complex = 1J  # noqa: WPS343
+zero_div = bad_complex / 0.0  # noqa: WPS344
+mult_one = zero_div * 1  # noqa: WPS345
+mult_one -= -1  # noqa: WPS346
 
 CONSTANT = []  # noqa: WPS407
 
@@ -509,3 +541,9 @@ class CheckStopIteration(object):
 bad_unicode = b'\u1'  # noqa: WPS439
 
 CheckStopIteration = 1  # noqa: WPS440
+
+print(literal)  # noqa: WPS441
+
+unhashable = {[]}  # noqa: WPS443
+assert []  # noqa: WPS444
+unhashable = [] * 2  # noqa: WPS435
