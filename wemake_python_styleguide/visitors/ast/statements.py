@@ -307,7 +307,7 @@ class PointlessStarredVisitor(BaseNodeVisitor):
         self._check_double_starred_dict(node.keywords)
         self.generic_visit(node)
 
-    def _is_pointless_star(self, node):
+    def _is_pointless_star(self, node: ast.AST) -> bool:
         return isinstance(node, self._pointless_star_nodes)
 
     def _check_starred_args(
