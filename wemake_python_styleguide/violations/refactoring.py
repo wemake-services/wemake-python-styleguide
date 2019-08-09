@@ -610,7 +610,7 @@ class PointlessStarredViolation(ASTViolation):
        Refactor your code not to use starred expressions
        with ``list``, ``dict``, ``tuple``, and ``set`` constants.
        Use regular argument passing instead.
-    
+
     Example::
 
         # Correct:
@@ -622,9 +622,10 @@ class PointlessStarredViolation(ASTViolation):
     .. versionadded:: 0.12.0
 
     """
-    
+
     error_template = 'Found pointless starred expression'
     code = 514
+
 
 @final
 class ImplicitInConditionViolation(ASTViolation):
