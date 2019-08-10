@@ -8,6 +8,7 @@ from typing import ClassVar, Dict, List, Tuple, Type, Union
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.logic import walk
 from wemake_python_styleguide.logic.exceptions import get_exception_name
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.variables import (
@@ -97,8 +98,20 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
         if not isinstance(parent, FunctionNodes):
             return
 
-        if node is parent.body[-1] and node.value is None:
-            self.add_violation(InconsistentReturnViolation(node))
+        returns = len(list(filter(
+            lambda return_node: return_node.value is not None,
+            walk.get_subnodes_by_type(parent, ast.Return),
+        )))
+
+        if node is parent.body[-1]:
+            last_value_return = (
+                len(parent.body) > 1 and
+                returns < 2 and
+                isinstance(node.value, ast.NameConstant) and
+                node.value.value is None
+            )
+            if node.value is None or last_value_return:
+                self.add_violation(InconsistentReturnViolation(node))
 
     def _iterate_returning_values(
         self,

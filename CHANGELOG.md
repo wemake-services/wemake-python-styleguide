@@ -107,6 +107,7 @@ In this release we had a little focus on:
 - Fixes bug when some correct `noqa:` comments were reported as incorrect
 - Fixes bug when some `else: return` were not reported as incorrect
 - Fixes bug when `WPS507` sometimes were raising `ValueError`
+- Fixes bug when `return None` was not recognized as inconsistent
 
 ### Misc
 

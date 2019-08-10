@@ -13,7 +13,7 @@ from wemake_python_styleguide.visitors.ast.keywords import (
 
 correct_example1 = """
 def function():
-    return None
+    ...
 """
 
 correct_example2 = """
@@ -38,6 +38,34 @@ def function():
     print()
 """
 
+correct_example5 = """
+def function():
+    if some:
+        return 1
+    return False
+"""
+
+correct_example6 = """
+def function():
+    return True
+"""
+
+correct_example7 = """
+def function():
+    if some:
+        return 1
+
+    if other:
+        return 2
+    print()
+    return 3
+"""
+
+correct_example8 = """
+def function():
+    return None  # single `return None` statement
+"""
+
 # Wrong:
 
 wrong_example1 = """
@@ -47,8 +75,7 @@ def function():
 
 wrong_example2 = """
 def function():
-    if some:
-        return
+    print(1)
     return None
 """
 
@@ -63,7 +90,14 @@ def function():
     return
 """
 
-double_wrong_return = """
+double_wrong_return1 = """
+def function():
+    if some:
+        return
+    return None
+"""
+
+double_wrong_return2 = """
 def function():
     if some:
         return None
@@ -93,14 +127,19 @@ def test_wrong_return_statement(
     assert_errors(visitor, [InconsistentReturnViolation])
 
 
+@pytest.mark.parametrize('code', [
+    double_wrong_return1,
+    double_wrong_return2,
+])
 def test_douple_wrong_return_statement(
     assert_errors,
     parse_ast_tree,
     default_options,
+    code,
     mode,
 ):
     """Testing double incorrect `return` statements."""
-    tree = parse_ast_tree(mode(double_wrong_return))
+    tree = parse_ast_tree(mode(code))
 
     visitor = ConsistentReturningVisitor(default_options, tree=tree)
     visitor.run()
@@ -116,6 +155,9 @@ def test_douple_wrong_return_statement(
     correct_example2,
     correct_example3,
     correct_example4,
+    correct_example5,
+    correct_example6,
+    correct_example7,
 ])
 def test_correct_return_statements(
     assert_errors,
