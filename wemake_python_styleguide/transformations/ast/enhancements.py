@@ -31,11 +31,14 @@ def set_if_chain(tree: ast.AST) -> ast.AST:
     actually working with nodes. So, we need a simple way to separate them.
     """
     for statement in ast.walk(tree):
+        if not isinstance(statement, ast.If):
+            continue
+
         for child in ast.iter_child_nodes(statement):
-            if isinstance(statement, ast.If) and isinstance(child, ast.If):
+            if isinstance(child, ast.If):
                 if child in statement.orelse:
-                    setattr(statement, 'wps_chained', True)  # noqa: WPS425
-                    setattr(child, 'wps_chain', statement)  # noqa: B010
+                    setattr(statement, 'wps_if_chained', True)  # noqa: WPS425
+                    setattr(child, 'wps_if_chain', statement)  # noqa: B010
     return tree
 
 
@@ -91,5 +94,4 @@ def _find_context(
         return None
     elif isinstance(parent, contexts):
         return parent
-    else:
-        return _find_context(parent, contexts)
+    return _find_context(parent, contexts)

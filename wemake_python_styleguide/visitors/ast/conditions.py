@@ -3,11 +3,19 @@
 import ast
 from collections import defaultdict
 from functools import reduce
-from typing import ClassVar, DefaultDict, Dict, List, Set, Type
+from typing import (
+    ClassVar,
+    DefaultDict,
+    Dict,
+    List,
+    Set,
+    Type,
+)
 
 import astor
 from typing_extensions import final
 
+from wemake_python_styleguide.logic import ifs
 from wemake_python_styleguide.logic.compares import CompareBounds
 from wemake_python_styleguide.logic.functions import given_function_called
 from wemake_python_styleguide.logic.nodes import get_parent
@@ -69,6 +77,11 @@ class IfStatementVisitor(BaseNodeVisitor):
         ast.Continue,
     )
 
+    def __init__(self, *args, **kwargs) -> None:
+        """We need to store visited ``if`` not to dublicate violations."""
+        super().__init__(*args, **kwargs)
+        self._visited_ifs: Set[ast.If] = set()
+
     def visit_If(self, node: ast.If) -> None:
         """
         Checks ``if`` nodes.
@@ -118,16 +131,31 @@ class IfStatementVisitor(BaseNodeVisitor):
                 break
 
     def _check_useless_else(self, node: ast.If) -> None:
-        if not node.orelse:
-            return
+        real_ifs = []
+        for chained_if in ifs.chain(node):
+            if isinstance(chained_if, ast.If):
+                if chained_if in self._visited_ifs:
+                    return
 
-        next_chain = getattr(node, 'wps_chain', None)  # TODO: move into utils
-        has_previous_chain = getattr(node, 'wps_chained', None)
-        if next_chain or has_previous_chain:
-            return
+                self._visited_ifs.update({chained_if})
+                real_ifs.append(chained_if)
+                continue
 
-        if any(isinstance(line, self._returning_nodes) for line in node.body):
-            self.add_violation(UselessReturningElseViolation(node))
+            previous_has_returns = all(
+                ifs.has_nodes(
+                    self._returning_nodes,
+                    real_if.body,
+                )
+                for real_if in real_ifs
+            )
+            current_has_returns = ifs.has_nodes(
+                self._returning_nodes, chained_if,
+            )
+
+            if previous_has_returns and current_has_returns:
+                self.add_violation(
+                    UselessReturningElseViolation(chained_if[0]),
+                )
 
     def _check_useless_len(self, node: AnyIf) -> None:
         if isinstance(node.test, ast.Call):

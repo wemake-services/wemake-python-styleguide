@@ -113,7 +113,7 @@ def is_too_short_name(
         return False
 
     if trim:
-        name = name.strip('_')  # TODO: test
+        name = name.strip('_')
 
     return len(name) < min_length
 

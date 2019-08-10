@@ -11,6 +11,7 @@ from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.logic import (
     compares,
     functions,
+    ifs,
     nodes,
     operators,
 )
@@ -306,9 +307,7 @@ class WrongConditionalVisitor(BaseNodeVisitor):
             self.add_violation(ConstantConditionViolation(node))
 
     def _check_simplifiable_if(self, node: ast.If) -> None:
-        chain = getattr(node, 'wps_chain', None)
-        chained = getattr(node, 'wps_chained', None)
-        if chain is None and chained is None:
+        if not ifs.has_elif(node) and not ifs.root_if(node):
             body_var = self._is_simplifiable_assign(node.body)
             else_var = self._is_simplifiable_assign(node.orelse)
             if body_var and body_var == else_var:

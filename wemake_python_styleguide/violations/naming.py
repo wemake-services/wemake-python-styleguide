@@ -68,6 +68,7 @@ Class attributes
 ~~~~~~~~~~~~~~~~
 
 - Class attributes must use ``snake_case``  with no exceptions
+- Enum fields also must use ``snamek_case``
 
 Functions and methods
 ~~~~~~~~~~~~~~~~~~~~~

@@ -104,6 +104,8 @@ In this release we had a little focus on:
 - Fixes `TooShortNameViolation` was not triggering for `_x` and `x_`
 - Fixes that some magic method were allowed to be generators
 - Fixes that some magic method were allowed to contain `yield from`
+- Fixes bug when some correct `noqa:` comments were reported as incorrect
+- Fixes bug when some `else: return` were not reported as incorrect
 
 ### Misc
 
@@ -120,6 +122,8 @@ In this release we had a little focus on:
 - We now use `import-linter` instead of `layer-linter`
 - Adds docs about CI integration
 - Now wheels are not universal
+- Updates docs about `snake_case` in `Enum` fields
+- Updates docs about `WPS400` and incorrect line number
 
 
 ## 0.11.1
