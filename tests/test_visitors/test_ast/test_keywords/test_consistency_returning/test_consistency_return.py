@@ -66,6 +66,13 @@ def function():
     return None  # single `return None` statement
 """
 
+correct_example9 = """
+def function():
+    def factory():
+        return 1
+    return None  # single `return None` statement if this context
+"""
+
 # Wrong:
 
 wrong_example1 = """
@@ -158,6 +165,8 @@ def test_douple_wrong_return_statement(
     correct_example5,
     correct_example6,
     correct_example7,
+    correct_example8,
+    correct_example9,
 ])
 def test_correct_return_statements(
     assert_errors,
