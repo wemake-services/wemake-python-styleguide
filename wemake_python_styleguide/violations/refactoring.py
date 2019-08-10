@@ -700,7 +700,7 @@ class PointlessStarredViolation(ASTViolation):
     Reasoning:
         Using starred expression with constants is useless.
         This piece of code can be rewritten to be flat.
-        Eg.: print(*[1, 2, 3]) is print(1, 2, 3).
+        Eg.: ``print(*[1, 2, 3])`` is ``print(1, 2, 3)``.
 
     Solution:
         Refactor your code not to use starred expressions
@@ -713,7 +713,7 @@ class PointlessStarredViolation(ASTViolation):
         my_list = [1, 2, 3, *other_iterable]
 
         # Wrong:
-        print(*[1, 2], **{})
+        print(*[1, 2, 3], **{{}})
 
     .. versionadded:: 0.12.0
 
