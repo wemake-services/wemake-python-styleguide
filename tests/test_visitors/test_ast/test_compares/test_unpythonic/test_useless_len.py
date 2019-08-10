@@ -15,12 +15,14 @@ from wemake_python_styleguide.visitors.ast.compares import CompareSanityVisitor
     'len(some) <= 0',
     'len(some) < 0',
     'len(some) < -0',
+    'len(some) < +0',
     'len(some) == 0',
     'len(some) == +0',
     'len(some) == -0',
     'len(some) >= 1',
     'len(some) >= +1',
-    'len(some) < 1',
+    'len(some()) < 1',
+    'len(-some()) < 1',
     '0 < len(some) < 1',
     'call() < 1 <= len(some)',
 ])
@@ -54,6 +56,9 @@ def test_useless_len_call(
     'len(some) < 4',
     'len(some) == 10',
     'len(some) != 6',
+    'ye >= len(str(emax))',
+    '8 < len(call())',
+    'len(str(abs(yc*xe))) <= -ye',
 ])
 def test_correct_len_call(
     assert_errors,

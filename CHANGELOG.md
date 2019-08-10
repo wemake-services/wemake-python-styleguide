@@ -106,6 +106,7 @@ In this release we had a little focus on:
 - Fixes that some magic method were allowed to contain `yield from`
 - Fixes bug when some correct `noqa:` comments were reported as incorrect
 - Fixes bug when some `else: return` were not reported as incorrect
+- Fixes bug when `WPS507` sometimes were raising `ValueError`
 
 ### Misc
 

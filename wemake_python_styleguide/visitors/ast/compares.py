@@ -41,7 +41,7 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 def _is_correct_len(sign: ast.cmpop, comparator: ast.AST) -> bool:
     """This is a helper function to tell what calls to ``len()`` are valid."""
-    if isinstance(comparator, (ast.Num, ast.UnaryOp)):
+    if isinstance(operators.unwrap_unary_node(comparator), ast.Num):
         numeric_value = ast.literal_eval(comparator)
         if numeric_value == 0:
             return False

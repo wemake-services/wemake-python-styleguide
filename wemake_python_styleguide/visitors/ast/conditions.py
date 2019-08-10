@@ -3,14 +3,7 @@
 import ast
 from collections import defaultdict
 from functools import reduce
-from typing import (
-    ClassVar,
-    DefaultDict,
-    Dict,
-    List,
-    Set,
-    Type,
-)
+from typing import ClassVar, DefaultDict, Dict, List, Set, Type
 
 import astor
 from typing_extensions import final
