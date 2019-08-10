@@ -5,9 +5,10 @@ import types
 from collections import defaultdict
 from typing import DefaultDict, Mapping, Set, Tuple, Type, Union
 
-import astor
 import attr
 from typing_extensions import Final, final
+
+from wemake_python_styleguide.logic import source
 
 
 @final
@@ -95,13 +96,10 @@ class CompareBounds(object):
                 self._mutate(
                     comparison_node,
                     operator,
-                    self._get_operand_name(operand),
+                    source.node_to_string(operand),
                     operand is left_operand,
                 )
             left_operand = right_operand
-
-    def _get_operand_name(self, operand: ast.AST) -> str:
-        return astor.to_source(operand)
 
     def _mutate(
         self,

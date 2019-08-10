@@ -4,9 +4,9 @@ import ast
 from collections import Counter
 from typing import ClassVar, List, Tuple
 
-import astor
 from typing_extensions import final
 
+from wemake_python_styleguide.logic import source
 from wemake_python_styleguide.logic.walk import is_contained
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
@@ -105,10 +105,10 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
             # There might be complex things hidden inside an exception type,
             # so we want to get the string representation of it:
             if isinstance(exc_handler.type, ast.Name):
-                exceptions.append(astor.to_source(exc_handler.type).strip())
+                exceptions.append(source.node_to_string(exc_handler.type))
             elif isinstance(exc_handler.type, ast.Tuple):
                 exceptions.extend([
-                    astor.to_source(node).strip()
+                    source.node_to_string(node)
                     for node in exc_handler.type.elts
                 ])
 

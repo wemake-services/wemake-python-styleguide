@@ -3,7 +3,6 @@
 import ast
 from typing import ClassVar, List, Optional, Sequence
 
-import astor
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import AssignNodes
@@ -14,6 +13,7 @@ from wemake_python_styleguide.logic import (
     ifs,
     nodes,
     operators,
+    source,
 )
 from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
 from wemake_python_styleguide.types import AnyIf, AnyNodes
@@ -299,7 +299,7 @@ class WrongConditionalVisitor(BaseNodeVisitor):
         if len(targets) != 1:
             return None
 
-        return astor.to_source(targets[0]).strip()
+        return source.node_to_string(targets[0])
 
     def _check_constant_condition(self, node: AnyIf) -> None:
         real_node = operators.unwrap_unary_node(node.test)

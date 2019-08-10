@@ -103,15 +103,14 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
             walk.get_subnodes_by_type(parent, ast.Return),
         )))
 
-        if node is parent.body[-1]:
-            last_value_return = (
-                len(parent.body) > 1 and
-                returns < 2 and
-                isinstance(node.value, ast.NameConstant) and
-                node.value.value is None
-            )
-            if node.value is None or last_value_return:
-                self.add_violation(InconsistentReturnViolation(node))
+        last_value_return = (
+            len(parent.body) > 1 and
+            returns < 2 and
+            isinstance(node.value, ast.NameConstant) and
+            node.value.value is None
+        )
+        if node.value is None or last_value_return:
+            self.add_violation(InconsistentReturnViolation(node))
 
     def _iterate_returning_values(
         self,

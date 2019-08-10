@@ -4,7 +4,6 @@ import ast
 from collections import defaultdict
 from typing import ClassVar, DefaultDict, FrozenSet, List, Optional, Tuple
 
-import astor
 from typing_extensions import final
 
 from wemake_python_styleguide import constants, types
@@ -15,6 +14,7 @@ from wemake_python_styleguide.logic import (
     functions,
     nodes,
     prop_access,
+    source,
     strings,
     walk,
 )
@@ -306,7 +306,7 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
         if isinstance(node, ast.Str):
             return node.s
         if isinstance(node, ast.Starred):
-            return astor.to_source(node).strip()
+            return source.node_to_string(node)
         return None
 
     def _are_correct_slots(self, slots: List[ast.AST]) -> bool:

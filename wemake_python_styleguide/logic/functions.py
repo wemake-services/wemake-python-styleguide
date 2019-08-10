@@ -3,8 +3,7 @@
 from ast import Call, Yield, YieldFrom, arg
 from typing import Container, List, Optional
 
-import astor
-
+from wemake_python_styleguide.logic import source
 from wemake_python_styleguide.logic.walk import is_contained
 from wemake_python_styleguide.types import (
     AnyFunctionDef,
@@ -25,7 +24,7 @@ def given_function_called(node: Call, to_check: Container[str]) -> str:
     ''
 
     """
-    function_name = astor.to_source(node.func).strip()
+    function_name = source.node_to_string(node.func)
     if function_name in to_check:
         return function_name
     return ''

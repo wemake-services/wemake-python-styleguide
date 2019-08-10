@@ -5,10 +5,9 @@ from collections import defaultdict
 from functools import reduce
 from typing import ClassVar, DefaultDict, Dict, List, Set, Type
 
-import astor
 from typing_extensions import final
 
-from wemake_python_styleguide.logic import ifs
+from wemake_python_styleguide.logic import ifs, source
 from wemake_python_styleguide.logic.compares import CompareBounds
 from wemake_python_styleguide.logic.functions import given_function_called
 from wemake_python_styleguide.logic.nodes import get_parent
@@ -41,7 +40,7 @@ def _duplicated_isinstance_call(node: ast.BoolOp) -> List[str]:
         if not given_function_called(call, {'isinstance'}):
             continue
 
-        isinstance_object = astor.to_source(call.args[0]).strip()
+        isinstance_object = source.node_to_string(call.args[0])
         counter[isinstance_object] += 1
 
     return [
@@ -192,7 +191,7 @@ class BooleanConditionVisitor(BaseNodeVisitor):
             if isinstance(operand, ast.BoolOp):
                 names.extend(self._get_all_names(operand))
             else:
-                names.append(astor.to_source(operand))
+                names.append(source.node_to_string(operand))
         return names
 
     def _check_same_elements(self, node: ast.BoolOp) -> None:
@@ -247,7 +246,7 @@ class ImplicitBoolPatternsVisitor(BaseNodeVisitor):
             if not isinstance(compare.ops[0], allowed_ops[node.op.__class__]):
                 return
 
-            variables.append({astor.to_source(compare.left)})
+            variables.append({source.node_to_string(compare.left)})
 
         for duplicate in _get_duplicate_names(variables):
             self.add_violation(

@@ -5,12 +5,11 @@ from collections import Counter, Hashable, defaultdict
 from contextlib import suppress
 from typing import ClassVar, DefaultDict, Iterable, List, Sequence, Union
 
-import astor
 from typing_extensions import final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import FunctionNodes
-from wemake_python_styleguide.logic import safe_eval
+from wemake_python_styleguide.logic import safe_eval, source
 from wemake_python_styleguide.logic.naming.name_nodes import extract_name
 from wemake_python_styleguide.logic.operators import (
     get_parent_ignoring_unary,
@@ -257,8 +256,8 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
             real_item = unwrap_unary_node(set_item)
             if isinstance(real_item, self._elements_in_sets):
                 # Similar look:
-                source = astor.to_source(set_item)
-                elements.append(source.strip().strip('(').strip(')'))
+                node_repr = source.node_to_string(set_item)
+                elements.append(node_repr.strip().strip('(').strip(')'))
 
             real_item = unwrap_starred_node(real_item)
 
