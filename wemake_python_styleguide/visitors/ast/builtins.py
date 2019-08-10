@@ -265,12 +265,13 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
             # unhashables raise TypeError:
             with suppress(ValueError, TypeError):
                 # Similar value:
-                real_item = safe_eval.literal_eval_with_names(
-                    real_item,
-                ) if isinstance(
-                    real_item, self._elements_to_eval,
-                ) else set_item
-                element_values.append(real_item)
+                element_values.append(
+                    safe_eval.literal_eval_with_names(
+                        real_item,
+                    ) if isinstance(
+                        real_item, self._elements_to_eval,
+                    ) else set_item,
+                )
         self._report_set_elements(node, elements, element_values)
 
     def _report_set_elements(

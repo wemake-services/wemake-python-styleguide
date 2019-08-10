@@ -18,7 +18,7 @@ from ast import (
     UnaryOp,
     USub,
 )
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 from wemake_python_styleguide.compat.nodes import Constant
 
@@ -65,7 +65,7 @@ def _convert_iterable(node: Union[Tuple, List, Set, Dict]):
     ))
 
 
-def literal_eval_with_names(node: AST):
+def literal_eval_with_names(node: AST) -> Optional[Any]:
     """
     Safely evaluate constants and ``ast.Name`` nodes.
 
