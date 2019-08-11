@@ -32,6 +32,7 @@ Summary
    ImplicitInConditionViolation
    OpenWithoutContextManagerViolation
    TypeCompareViolation
+   PointlessStarredViolation
 
 Refactoring opportunities
 -------------------------
@@ -53,6 +54,7 @@ Refactoring opportunities
 .. autoclass:: ImplicitInConditionViolation
 .. autoclass:: OpenWithoutContextManagerViolation
 .. autoclass:: TypeCompareViolation
+.. autoclass:: PointlessStarredViolation
 
 """
 
@@ -608,6 +610,7 @@ class ImplicitInConditionViolation(ASTViolation):
     Solution:
         Refactor compares to use ``in`` or ``not in`` clauses.
 
+
     Example::
 
         # Correct:
@@ -687,3 +690,34 @@ class TypeCompareViolation(ASTViolation):
 
     code = 516
     error_template = 'Found `type()` used to compare types'
+
+
+@final
+class PointlessStarredViolation(ASTViolation):
+    """
+    Forbids to have useless starred expressions.
+
+    Reasoning:
+        Using starred expression with constants is useless.
+        This piece of code can be rewritten to be flat.
+        Eg.: ``print(*[1, 2, 3])`` is ``print(1, 2, 3)``.
+
+    Solution:
+        Refactor your code not to use starred expressions
+        with ``list``, ``dict``, ``tuple``, and ``set`` constants.
+        Use regular argument passing instead.
+
+    Example::
+
+        # Correct:
+        my_list = [1, 2, 3, *other_iterable]
+
+        # Wrong:
+        print(*[1, 2, 3], **{{}})
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    code = 517
+    error_template = 'Found pointless starred expression'

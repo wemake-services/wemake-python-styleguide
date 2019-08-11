@@ -24,6 +24,9 @@ from wemake_python_styleguide.violations.consistency import (
     ParametersIndentationViolation,
     UselessNodeViolation,
 )
+from wemake_python_styleguide.violations.refactoring import (
+    PointlessStarredViolation,
+)
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
@@ -286,3 +289,41 @@ class WrongParametersIndentationVisitor(BaseNodeVisitor):
                     elements[index - 1].lineno,
                     multi_line_mode,
                 )
+
+
+@final
+class PointlessStarredVisitor(BaseNodeVisitor):
+    """Responsible for absence of useless starred expressions."""
+
+    _pointless_star_nodes: ClassVar[AnyNodes] = (
+        ast.Dict,
+        ast.List,
+        ast.Set,
+        ast.Tuple,
+    )
+
+    def visit_Call(self, node: ast.Call) -> None:
+        """Checks useless call arguments."""
+        self._check_starred_args(node.args)
+        self._check_double_starred_dict(node.keywords)
+        self.generic_visit(node)
+
+    def _is_pointless_star(self, node: ast.AST) -> bool:
+        return isinstance(node, self._pointless_star_nodes)
+
+    def _check_starred_args(
+        self,
+        args: Sequence[ast.AST],
+    ) -> None:
+        for node in args:
+            if isinstance(node, ast.Starred):
+                if self._is_pointless_star(node.value):
+                    self.add_violation(PointlessStarredViolation(node))
+
+    def _check_double_starred_dict(
+        self,
+        keywords: Sequence[ast.keyword],
+    ) -> None:
+        for keyword in keywords:
+            if keyword.arg is None and self._is_pointless_star(keyword.value):
+                self.add_violation(PointlessStarredViolation(keyword.value))
