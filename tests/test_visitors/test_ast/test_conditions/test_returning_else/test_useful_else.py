@@ -23,8 +23,7 @@ def function():
         return None
     elif other_condition:
         return None
-    else:
-        return None
+    return None
 """
 
 correct_example4 = """
@@ -56,9 +55,9 @@ def function():
         if other:
             raise TypeError()
         elif other is None:
-            return None
+            ...
         else:
-            return other
+            ...
     else:
         raise ValueError()
 """
@@ -72,6 +71,68 @@ def function():
         raise ValueError()
 """
 
+correct_example8 = """
+def function():
+    if some_condition:
+        ...
+    elif other_condition:
+        ...
+    else:
+        return None
+"""
+
+correct_example9 = """
+def function():
+    if some_condition:
+        return None
+    elif other_condition:
+        return None
+    else:
+        print(1)
+        print(2)
+        if nested:
+            return 1
+"""
+
+correct_example10 = """
+def function():
+    if some_condition:
+        return None
+    elif other_condition:
+        return None
+    raise ValueError()
+"""
+
+correct_example11 = """
+def function():
+    if some_condition:
+        return None
+    elif other_condition:
+        ...
+    else:
+        raise ValueError()
+"""
+
+correct_example12 = """
+def function():
+    if some_condition:
+        ...
+    elif other_condition:
+        return None
+    else:
+        raise ValueError()
+"""
+
+correct_example13 = """
+def function():
+    for test in some:
+        if some_condition:
+            continue
+        elif other_condition:
+            break
+        raise ValueError()
+"""
+
 
 @pytest.mark.parametrize('code', [
     correct_example1,
@@ -81,6 +142,12 @@ def function():
     correct_example5,
     correct_example6,
     correct_example7,
+    correct_example8,
+    correct_example9,
+    correct_example10,
+    correct_example11,
+    correct_example12,
+    correct_example13,
 ])
 def test_else_that_can_not_be_removed(
     assert_errors,

@@ -83,3 +83,6 @@ Example:
 
 Read more about `ignoring violations <http://flake8.pycqa.org/en/latest/user/violations.html>`_
 in the official docs.
+
+To find unused ``noqa`` comments you can use ``pre-commit``
+and `yesqa <https://github.com/asottile/yesqa>`_ plugin.

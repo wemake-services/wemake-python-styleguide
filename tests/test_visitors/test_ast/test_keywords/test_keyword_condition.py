@@ -61,7 +61,6 @@ def test_false_condition_keywords(
     '0.1',
     '"0"',
     '[None]',
-    '(0,)',
     '{1, 2, 3}',
     '{name: "0"}',
     'True',

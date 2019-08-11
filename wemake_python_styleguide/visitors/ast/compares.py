@@ -3,7 +3,6 @@
 import ast
 from typing import ClassVar, List, Optional, Sequence
 
-import astor
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import AssignNodes
@@ -11,8 +10,10 @@ from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.logic import (
     compares,
     functions,
+    ifs,
     nodes,
     operators,
+    source,
 )
 from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
 from wemake_python_styleguide.types import AnyIf, AnyNodes
@@ -40,7 +41,7 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 def _is_correct_len(sign: ast.cmpop, comparator: ast.AST) -> bool:
     """This is a helper function to tell what calls to ``len()`` are valid."""
-    if isinstance(comparator, (ast.Num, ast.UnaryOp)):
+    if isinstance(operators.unwrap_unary_node(comparator), ast.Num):
         numeric_value = ast.literal_eval(comparator)
         if numeric_value == 0:
             return False
@@ -298,7 +299,7 @@ class WrongConditionalVisitor(BaseNodeVisitor):
         if len(targets) != 1:
             return None
 
-        return astor.to_source(targets[0]).strip()
+        return source.node_to_string(targets[0])
 
     def _check_constant_condition(self, node: AnyIf) -> None:
         real_node = operators.unwrap_unary_node(node.test)
@@ -306,9 +307,7 @@ class WrongConditionalVisitor(BaseNodeVisitor):
             self.add_violation(ConstantConditionViolation(node))
 
     def _check_simplifiable_if(self, node: ast.If) -> None:
-        chain = getattr(node, 'wps_chain', None)
-        chained = getattr(node, 'wps_chained', None)
-        if chain is None and chained is None:
+        if not ifs.has_elif(node) and not ifs.root_if(node):
             body_var = self._is_simplifiable_assign(node.body)
             else_var = self._is_simplifiable_assign(node.orelse)
             if body_var and body_var == else_var:

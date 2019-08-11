@@ -4,12 +4,11 @@ import ast
 from collections import defaultdict
 from typing import ClassVar, DefaultDict, List, Union
 
-import astor
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.constants import SPECIAL_ARGUMENT_NAMES_WHITELIST
-from wemake_python_styleguide.logic import nodes, walk
+from wemake_python_styleguide.logic import nodes, source, walk
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations import complexity
 from wemake_python_styleguide.visitors import base
@@ -122,7 +121,7 @@ class ExpressionOveruseVisitor(base.BaseNodeVisitor):
         if any(ignore(node) for ignore in ignore_predicates):
             return
 
-        source_code = astor.to_source(node).strip()
+        source_code = source.node_to_string(node)
         self._module_expressions[source_code].append(node)
 
         maybe_function = walk.get_closest_parent(node, FunctionNodes)
@@ -175,12 +174,12 @@ class ExpressionOveruseVisitor(base.BaseNodeVisitor):
                 )
 
         for function_contexts in self._function_expressions.values():
-            for source, function_nodes in function_contexts.items():
+            for src, function_nodes in function_contexts.items():
                 if len(function_nodes) > self.options.max_function_expressions:
                     self.add_violation(
                         complexity.OverusedExpressionViolation(
                             function_nodes[0],
-                            text=self._msg.format(source, len(function_nodes)),
+                            text=self._msg.format(src, len(function_nodes)),
                         ),
                     )
 

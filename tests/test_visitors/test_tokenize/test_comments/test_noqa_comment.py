@@ -11,11 +11,11 @@ from wemake_python_styleguide.visitors.tokenize.comments import (
 
 
 @pytest.mark.parametrize('code', [
-    'x = 10_00  # noqa: WPS002,WPS114',
-    'x = 10_00  # noqa:WPS002, WPS114',
-    'x = 10_00  # noqa: WPS002, WPS114',
-    'wallet = 10_00  # noqa: WPS002',
-    'x = 1000  # noqa: WPS002',
+    'x = 10_00  # noqa: WPS002,Z114',
+    'x = 10_00  # noqa:A002, U114',
+    'x = 10_00  # noqa: J002, WPS114',
+    'wallet = 10_00  # noqa: CPP002',
+    'x = 1000  # noqa: DJ002',
     'x = 1000  # noqa:  WPS002  ',
     'print(12 + 3)  # regular comment',
     'print(12 + 3)  #',

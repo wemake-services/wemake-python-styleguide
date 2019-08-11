@@ -5,9 +5,9 @@ from collections import defaultdict
 from functools import reduce
 from typing import ClassVar, DefaultDict, Dict, List, Set, Type
 
-import astor
 from typing_extensions import final
 
+from wemake_python_styleguide.logic import ifs, source
 from wemake_python_styleguide.logic.compares import CompareBounds
 from wemake_python_styleguide.logic.functions import given_function_called
 from wemake_python_styleguide.logic.nodes import get_parent
@@ -40,7 +40,7 @@ def _duplicated_isinstance_call(node: ast.BoolOp) -> List[str]:
         if not given_function_called(call, {'isinstance'}):
             continue
 
-        isinstance_object = astor.to_source(call.args[0]).strip()
+        isinstance_object = source.node_to_string(call.args[0])
         counter[isinstance_object] += 1
 
     return [
@@ -68,6 +68,11 @@ class IfStatementVisitor(BaseNodeVisitor):
         ast.Return,
         ast.Continue,
     )
+
+    def __init__(self, *args, **kwargs) -> None:
+        """We need to store visited ``if`` not to dublicate violations."""
+        super().__init__(*args, **kwargs)
+        self._visited_ifs: Set[ast.If] = set()
 
     def visit_If(self, node: ast.If) -> None:
         """
@@ -118,16 +123,31 @@ class IfStatementVisitor(BaseNodeVisitor):
                 break
 
     def _check_useless_else(self, node: ast.If) -> None:
-        if not node.orelse:
-            return
+        real_ifs = []
+        for chained_if in ifs.chain(node):
+            if isinstance(chained_if, ast.If):
+                if chained_if in self._visited_ifs:
+                    return
 
-        next_chain = getattr(node, 'wps_chain', None)  # TODO: move into utils
-        has_previous_chain = getattr(node, 'wps_chained', None)
-        if next_chain or has_previous_chain:
-            return
+                self._visited_ifs.update({chained_if})
+                real_ifs.append(chained_if)
+                continue
 
-        if any(isinstance(line, self._returning_nodes) for line in node.body):
-            self.add_violation(UselessReturningElseViolation(node))
+            previous_has_returns = all(
+                ifs.has_nodes(
+                    self._returning_nodes,
+                    real_if.body,
+                )
+                for real_if in real_ifs
+            )
+            current_has_returns = ifs.has_nodes(
+                self._returning_nodes, chained_if,
+            )
+
+            if previous_has_returns and current_has_returns:
+                self.add_violation(
+                    UselessReturningElseViolation(chained_if[0]),
+                )
 
     def _check_useless_len(self, node: AnyIf) -> None:
         if isinstance(node.test, ast.Call):
@@ -171,7 +191,7 @@ class BooleanConditionVisitor(BaseNodeVisitor):
             if isinstance(operand, ast.BoolOp):
                 names.extend(self._get_all_names(operand))
             else:
-                names.append(astor.to_source(operand))
+                names.append(source.node_to_string(operand))
         return names
 
     def _check_same_elements(self, node: ast.BoolOp) -> None:
@@ -226,7 +246,7 @@ class ImplicitBoolPatternsVisitor(BaseNodeVisitor):
             if not isinstance(compare.ops[0], allowed_ops[node.op.__class__]):
                 return
 
-            variables.append({astor.to_source(compare.left)})
+            variables.append({source.node_to_string(compare.left)})
 
         for duplicate in _get_duplicate_names(variables):
             self.add_violation(

@@ -48,6 +48,9 @@ def some():
     'self[0] = 1',
     'self._protected = 1',
     'self.__private = 1',
+    'self._protected = self.public',
+    'cls.public = 1',
+    'mcs.public = 1',
 ])
 def test_correct_attributes(
     assert_errors,

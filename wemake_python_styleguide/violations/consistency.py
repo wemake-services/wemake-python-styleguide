@@ -781,13 +781,11 @@ class ExtraIndentationViolation(TokenizeViolation):
 @final
 class WrongBracketPositionViolation(TokenizeViolation):
     """
-    Forbids to use extra indentation.
+    Forbids to have brackets in the wrong position.
 
     Reasoning:
-        You can use extra indentation for lines of code.
-        Python allows you to do that in case you will keep the indentation
-        level equal for this specific node.
-        But, that's insane!
+        You can do bizzare things with bracket positioning in python.
+        We require all brackets to be consistent.
 
     Solution:
         Place bracket on the same line, when a single line expression.

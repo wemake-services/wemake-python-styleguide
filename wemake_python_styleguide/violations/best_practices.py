@@ -135,6 +135,9 @@ class WrongMagicCommentViolation(SimpleViolation):
     1. ``# noqa`` comment without specified violations
     2. ``# type: some_type`` comments to specify a type for ``typed_ast``
 
+    This violation is reported at the top of the module,
+    so it cannot be locally ignored.
+
     Reasoning:
         We cover several different use-cases in a single rule.
         ``# noqa`` comment is restricted because it can hide other violations.
@@ -211,7 +214,7 @@ class OveruseOfNoqaCommentViolation(SimpleViolation):
 
     We count it on a per-module basis.
     We use :str:`wemake_python_styleguide.constants.MAX_NOQA_COMMENTS`
-    as a default value.
+    as a hard limit.
 
     Reasoning:
         Having too many ``# noqa`` comments make your code
