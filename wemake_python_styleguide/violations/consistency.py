@@ -345,6 +345,9 @@ class RequiredBaseClassViolation(ASTViolation):
         # Wrong:
         class Some: ...
 
+    See also:
+        https://google.github.io/styleguide/pyguide.html#39-classes
+
     .. versionadded:: 0.1.0
 
     """

@@ -34,7 +34,8 @@ In this release we had a little focus on:
 - Enforces to use `r'\n'` instead of `'\\n'`
 - Forbids to have unicode escape characters inside binary strings
 - Forbids to use `else if` instead of `elif`
-- Forbids to have too long `try` bodies
+- Forbids to have too long `try` bodies,
+  basically `try` bodies with more than one statement
 - Forbids to overlap local and block variables
 - Forbids to use block variables after the block definitions
 - Changes how `WrongSlotsViolation` works, now `(...) + value` is restricted
@@ -113,6 +114,7 @@ In this release we had a little focus on:
 ### Misc
 
 - Adds `bellybutton` to the list of linters
+- Documents how to use `nitpick` to sync the configuration
 - Improves tests for binary, octal, hex, and expanetional numbers
 - Adds new `xenon` CI check
 - Now handles exceptions in our own code, hope to never see them!

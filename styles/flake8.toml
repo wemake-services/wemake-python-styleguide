@@ -1,0 +1,2 @@
+["setup.cfg".flake8]
+enable-extensions = "G"
