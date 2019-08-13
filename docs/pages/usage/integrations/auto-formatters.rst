@@ -47,6 +47,12 @@ There are also plugins for IDEs to run ``autopep8`` on safe:
 
 - https://code.visualstudio.com/docs/python/editing
 
+There's also an awesome tool `unify <https://github.com/myint/unify>`_
+that wraps ``autopep8``,
+`autoflake <https://github.com/myint/autoflake>`_,
+`docformatter <https://github.com/myint/docformatter>`_,
+and `unify <https://github.com/myint/unify>`_.
+
 isort
 ~~~~~
 
@@ -80,7 +86,7 @@ to use `add-trailing-comma <https://github.com/asottile/add-trailing-comma>`_
 to format your enumerations, calls, and multiline definitions beautifully.
 
 It is compatible to ``wemake-python-styleguide``.
-With ``autopep8`` and ``add-trailing-comma``
+With ``pyformat``, ``isort``, and ``add-trailing-comma``
 you will get more features as in ``black``.
 
 yapf
