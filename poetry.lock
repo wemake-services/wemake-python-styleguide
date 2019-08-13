@@ -311,8 +311,8 @@ category = "main"
 description = "A flake8 plugin to help you write better list/set/dict comprehensions."
 name = "flake8-comprehensions"
 optional = false
-python-versions = ">=3.4"
-version = "2.1.0"
+python-versions = ">=3.5"
+version = "2.2.0"
 
 [package.dependencies]
 flake8 = "!=3.2.0"
@@ -1239,7 +1239,7 @@ flake8-bugbear = ["d8c466ea79d5020cb20bf9f11cf349026e09517a42264f313d3f6fddb83e0
 flake8-builtins = ["8d806360767947c0035feada4ddef3ede32f0a586ef457e62d811b8456ad9a51", "cd7b1b7fec4905386a3643b59f9ca8e305768da14a49a7efb31fe9364f33cd04"]
 flake8-coding = ["79704112c44d09d4ab6c8965e76a20c3f7073d52146db60303bce777d9612260", "b8f4d5157a8f74670e6cfea732c3d9f4291a4e994c8701d2c55f787c6e6cb741"]
 flake8-commas = ["d3005899466f51380387df7151fb59afec666a0f4f4a2c6a8995b975de0f44b7", "ee2141a3495ef9789a3894ed8802d03eff1eaaf98ce6d8653a7c573ef101935e"]
-flake8-comprehensions = ["35f826956e87f230415cde9c3b8b454e785736cf5ff0be551c441b41b937f699", "f0b61d983d608790abf3664830d68efd3412265c2d10f6a4ba1a353274dbeb64"]
+flake8-comprehensions = ["7b174ded3d7e73edf587e942458b6c1a7c3456d512d9c435deae367236b9562c", "e36fc12bd3833e0b34fe0639b7a817d32c86238987f532078c57eafdc7a8a219"]
 flake8-debugger = ["be4fb88de3ee8f6dd5053a2d347e2c0a2b54bab6733a2280bb20ebd3c4ca1d97"]
 flake8-docstrings = ["3ad372b641f4c8e70c7465f067aed4ff8bf1e9347fce14f9eb71ed816db36257", "d8d72ccd5807c1ab9ff1466cb9bece0c4d94b8669e9bc4f472abc80dbc5d399e"]
 flake8-eradicate = ["86804c682f9805a689379307939f350140fe9c015c3e600baff37fb23f7f21cc", "cc2c3300a6643f8347988cc828478c347975f7bf9c8fc1f8a7027da41ab9bdbd"]
