@@ -115,7 +115,7 @@ def test_nested_offset_regression320(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code, number_of_errors', [
+@pytest.mark.parametrize(('code', 'number_of_errors'), [
     (nested_if, 1),
     (nested_if2, 1),
     (nested_for, 1),

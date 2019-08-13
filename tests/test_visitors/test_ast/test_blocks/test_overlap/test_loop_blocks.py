@@ -130,7 +130,7 @@ def test_for_block_usage(
     for_template3,
     for_template4,
 ])
-@pytest.mark.parametrize('first_name, second_name', [
+@pytest.mark.parametrize(('first_name', 'second_name'), [
     ('unique_name', 'other_name'),
     ('_', '_'),
 ])

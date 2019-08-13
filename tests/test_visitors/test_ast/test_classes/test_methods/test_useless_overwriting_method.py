@@ -307,14 +307,14 @@ def test_useful_due_to_invalid_method_args(
 @pytest.mark.parametrize('code', [
     regular_method_short,
 ])
-@pytest.mark.parametrize('args,statement', (
+@pytest.mark.parametrize(('args', 'statement'), [
     ('self', '""""""'),
     ('self', 'return 1'),
     ('self', 'return Useless.function()'),
     ('self', 'return Useless().function()'),
     ('self', 'return Useless()().function()'),
     ('this', 'return super().function()'),
-))
+])
 def test_useful_due_to_incorrect_main_statement(
     assert_errors,
     parse_ast_tree,

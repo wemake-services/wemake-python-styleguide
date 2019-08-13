@@ -46,7 +46,7 @@ def test_correct_accesss(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code, access_level', [
+@pytest.mark.parametrize(('code', 'access_level'), [
     (subscript_access, 4),
     (attribute_access, 4),
     (mixed_access, 4),

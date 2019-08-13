@@ -79,7 +79,7 @@ def test_regular_nodes(assert_errors, parse_ast_tree, code, default_options):
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code, complexity', [
+@pytest.mark.parametrize(('code', 'complexity'), [
     (line_simple, 3),
     (line_with_types, 3),
     (line_with_comprehension, 6),
@@ -129,7 +129,7 @@ def test_same_complexity(parse_ast_tree, default_options):
     assert len(typed_visitor._lines[1]) == 3  # noqa: WPS437
 
 
-@pytest.mark.parametrize('code, complexity', [
+@pytest.mark.parametrize(('code', 'complexity'), [
     (line_with_comprehension, 6),
     (line_with_math, 9),
 ])
@@ -144,7 +144,7 @@ def test_exact_complexity(parse_ast_tree, default_options, code, complexity):
     assert len(visitor._lines[1]) == complexity  # noqa: WPS437
 
 
-@pytest.mark.parametrize('code, number_of_lines', [
+@pytest.mark.parametrize(('code', 'number_of_lines'), [
     (line_inside_function, 1),
     (line_inside_async_function, 1),
     (class_with_async_function, 2),

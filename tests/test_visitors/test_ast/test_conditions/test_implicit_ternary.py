@@ -31,7 +31,7 @@ possible_ternary = 'cond() and {0} or {1}'
 @pytest.mark.parametrize('code', [
     possible_ternary,
 ])
-@pytest.mark.parametrize('first, second', [
+@pytest.mark.parametrize(('first', 'second'), [
     ('one.attr', 'two'),
     ('None', 'value()'),
     ('value.method()', 'None'),
@@ -67,7 +67,7 @@ def test_implicit_ternary(
     not_ternary9,
     ternary,
 ])
-@pytest.mark.parametrize('first, second', [
+@pytest.mark.parametrize(('first', 'second'), [
     ('one.attr', 'two'),
     ('None', 'value()'),
     ('value.method()', 'None'),

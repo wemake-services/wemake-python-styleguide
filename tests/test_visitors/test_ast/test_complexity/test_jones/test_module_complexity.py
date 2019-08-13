@@ -52,7 +52,7 @@ def test_module_score(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code, score', [
+@pytest.mark.parametrize(('code', 'score'), [
     (module_without_nodes, 0),
     (module_with_nodes, 8.5),
     (module_with_function, 6),

@@ -119,7 +119,7 @@ def test_import_block_usage(
     import_template2,
     import_template3,
 ])
-@pytest.mark.parametrize('first_name, second_name', [
+@pytest.mark.parametrize(('first_name', 'second_name'), [
     ('unique_name', '_unique_name'),
     ('_', '_'),
 ])

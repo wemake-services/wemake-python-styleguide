@@ -12,7 +12,7 @@ from wemake_python_styleguide.visitors.ast.functions import (
 template = '{0}: {1}'
 
 
-@pytest.mark.parametrize('lambda_def, call_def', [
+@pytest.mark.parametrize(('lambda_def', 'call_def'), [
     ('lambda', 'method()'),
     ('lambda x', 'method(x)'),
     ('lambda x, y', 'method(x, y)'),
@@ -91,10 +91,10 @@ valid_calls = (
     'lambda **only_z',
     'lambda x=1',
 ])
-@pytest.mark.parametrize('inner_def', (
+@pytest.mark.parametrize('inner_def', [
     *valid_calls,
     'method()',
-))
+])
 def test_correct_lambda_definition(
     assert_errors,
     parse_ast_tree,

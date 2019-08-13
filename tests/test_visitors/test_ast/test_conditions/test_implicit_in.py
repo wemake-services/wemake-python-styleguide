@@ -26,7 +26,7 @@ noteq_and = '{0} != some1 and {1} != some2'
     eq_or,
     noteq_and,
 ])
-@pytest.mark.parametrize('first, second', [
+@pytest.mark.parametrize(('first', 'second'), [
     ('first', 'second'),
     ('one.attr', 'one'),
     ('first', 'first()'),
@@ -54,7 +54,7 @@ def test_different_in_values(
     eq_and,
     noteq_or,
 ])
-@pytest.mark.parametrize('first, second', [
+@pytest.mark.parametrize(('first', 'second'), [
     ('first', 'first'),
     ('one.attr', 'one.attr'),
     ('first()', 'first()'),
@@ -81,7 +81,7 @@ def test_safe_patterns_in_values(
     eq_or,
     noteq_and,
 ])
-@pytest.mark.parametrize('first, second', [
+@pytest.mark.parametrize(('first', 'second'), [
     ('first', 'first'),
     ('one.attr', 'one.attr'),
     ('first()', 'first()'),

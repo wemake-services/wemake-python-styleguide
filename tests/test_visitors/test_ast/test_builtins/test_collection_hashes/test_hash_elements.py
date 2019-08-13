@@ -149,7 +149,7 @@ def test_set_with_pure_duplicate(
     set_literal_template,
     nested_set_template,
 ])
-@pytest.mark.parametrize('first, second', [
+@pytest.mark.parametrize(('first', 'second'), [
     ('1', 'True'),
     ('1', '1.0'),
     ('-1', '-1.0'),

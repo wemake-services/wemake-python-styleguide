@@ -141,7 +141,7 @@ def test_class_block_usage(
 @pytest.mark.parametrize('context', [
     class_template1,
 ])
-@pytest.mark.parametrize('first_name, second_name', [
+@pytest.mark.parametrize(('first_name', 'second_name'), [
     ('unique_name', 'unique_name1'),
     ('_', '_'),
 ])
@@ -176,7 +176,7 @@ def test_class_block_correct(
 @pytest.mark.parametrize('context', [
     class_template2,
 ])
-@pytest.mark.parametrize('first_name, second_name', [
+@pytest.mark.parametrize(('first_name', 'second_name'), [
     ('unique_name', 'unique_name1'),
     ('_', '_'),
 ])

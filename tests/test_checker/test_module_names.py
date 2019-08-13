@@ -8,7 +8,7 @@ from wemake_python_styleguide.checker import Checker
 from wemake_python_styleguide.violations import naming
 
 
-@pytest.mark.parametrize('filename, error', [
+@pytest.mark.parametrize(('filename', 'error'), [
     ('__magic__.py', naming.WrongModuleMagicNameViolation),
     ('util.py', naming.WrongModuleNameViolation),
     ('x.py', naming.TooShortNameViolation),

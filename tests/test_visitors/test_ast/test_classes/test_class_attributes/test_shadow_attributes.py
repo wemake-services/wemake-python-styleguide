@@ -130,7 +130,7 @@ def test_incorrect_fields(
     class_attribute_regular_assign,
     regular_assigns,
 ])
-@pytest.mark.parametrize('field1, field2', [
+@pytest.mark.parametrize(('field1', 'field2'), [
     ('field1', 'field2'),
     ('_field1', '_field2'),
     ('__field1', '__field2'),
@@ -160,7 +160,7 @@ def test_correct_fields(
     class_complex_attribute,
     class_complex_attribute_annotated,
 ])
-@pytest.mark.parametrize('field1, field2', [
+@pytest.mark.parametrize(('field1', 'field2'), [
     ('field1', 'field1'),
     ('_field1', '_field1'),
     ('__field1', '__field1'),

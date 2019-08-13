@@ -25,7 +25,7 @@ class Test(object):
 """
 
 
-@pytest.mark.parametrize('context, indentation', [
+@pytest.mark.parametrize(('context', 'indentation'), [
     (function_context, 4),
     (method_context, 8),
 ])
@@ -59,7 +59,7 @@ def test_unused_variable_definition(
     assert_errors(visitor, [UnusedVariableIsDefinedViolation])
 
 
-@pytest.mark.parametrize('context, indentation', [
+@pytest.mark.parametrize(('context', 'indentation'), [
     (function_context, 4),
     (method_context, 8),
 ])
@@ -91,7 +91,7 @@ def test_unused_variable_tuple_definition(
     assert_errors(visitor, [UnusedVariableIsDefinedViolation])
 
 
-@pytest.mark.parametrize('context, indentation', [
+@pytest.mark.parametrize(('context', 'indentation'), [
     (module_context, 0),
     (function_context, 4),
     (method_context, 8),
@@ -126,7 +126,7 @@ def test_used_variable_tuple_definition(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('context, indentation', [
+@pytest.mark.parametrize(('context', 'indentation'), [
     (module_context, 0),
     (function_context, 4),
     (method_context, 8),
@@ -160,7 +160,7 @@ def test_unused_variable_definition_allowed(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('context, indentation', [
+@pytest.mark.parametrize(('context', 'indentation'), [
     (module_context, 0),
     (function_context, 4),
     (method_context, 8),
@@ -194,7 +194,7 @@ def test_raw_unused_variable_definition(
     assert_errors(visitor, [UnusedVariableIsDefinedViolation])
 
 
-@pytest.mark.parametrize('context, indentation', [
+@pytest.mark.parametrize(('context', 'indentation'), [
     (module_context, 0),
     (function_context, 4),
     (method_context, 8),

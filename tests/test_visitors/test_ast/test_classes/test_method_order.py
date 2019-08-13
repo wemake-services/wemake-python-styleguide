@@ -77,7 +77,7 @@ def test_correct_method_order(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('first, second', [
+@pytest.mark.parametrize(('first', 'second'), [
     ('__init__', '__new__'),
 
     ('public', '__new__'),

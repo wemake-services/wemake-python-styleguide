@@ -37,7 +37,7 @@ def _safe_output(output: str) -> str:
     return output.replace(current_version_url, general_version_url)
 
 
-@pytest.mark.parametrize('cli_options, output', [
+@pytest.mark.parametrize(('cli_options', 'output'), [
     ([], 'regular'),
     (['--statistic'], 'regular_statistic'),
     (['--show-source'], 'with_source'),
@@ -80,7 +80,7 @@ def test_formatter(snapshot, cli_options, output):
     )
 
 
-@pytest.mark.parametrize('cli_options, output', [
+@pytest.mark.parametrize(('cli_options', 'output'), [
     ([], 'regular'),
     (['--statistic'], 'regular_statistic'),
     (['--show-source'], 'with_source'),

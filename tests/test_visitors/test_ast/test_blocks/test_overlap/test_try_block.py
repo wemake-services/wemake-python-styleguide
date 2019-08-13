@@ -188,7 +188,7 @@ def test_except_block_usage(
     try_template8,
     try_template9,
 ])
-@pytest.mark.parametrize('first_name, second_name', [
+@pytest.mark.parametrize(('first_name', 'second_name'), [
     ('unique_name', 'unique_name2'),
     ('_', '_'),
 ])

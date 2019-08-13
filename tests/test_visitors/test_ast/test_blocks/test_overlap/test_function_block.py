@@ -157,7 +157,7 @@ def test_function_block_usage(
     method_template1,
     method_template2,
 ])
-@pytest.mark.parametrize('first_name, second_name', [
+@pytest.mark.parametrize(('first_name', 'second_name'), [
     ('unique_name', 'unique_name1'),
     ('_', '_'),
 ])
