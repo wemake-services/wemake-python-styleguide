@@ -1,4 +1,4 @@
-# Default style file for nitpick
+# `wemake` style file for nitpick
 # https://raw.githubusercontent.com/andreoliwa/nitpick/v0.18.0/nitpick-style.toml
 
 [nitpick]
@@ -6,6 +6,10 @@ minimum_version = "0.10.0"
 
 [nitpick.styles]
 include = [
-  "styles/flake8.toml",
-  "styles/isort.toml"
+  "flake8.toml",
+  "isort.toml",
+  "mypy.toml",
+  "poetry.toml",
+  "absent-files.toml",
+  "styleguide.toml"
 ]

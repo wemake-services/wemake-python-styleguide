@@ -1,3 +1,5 @@
+# Included into base-preset.
+
 ["setup.cfg".flake8]
 enable-extensions = "G"
 radon-show-closures = true

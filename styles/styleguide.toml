@@ -1,0 +1,13 @@
+["setup.cfg".flake8]
+format = "wemake"
+show-source = True
+
+# Plugins:
+accept-encodings = "utf-8"
+max-complexity = 6
+max-line-length = 80
+radon-max-cc = 10
+
+["setup.cfg".isort]
+default_section = "FIRSTPARTY"
+line_length = 79

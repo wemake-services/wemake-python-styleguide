@@ -56,3 +56,7 @@ and also run ``nitpick`` on our own configuration on each build.
 We only put the essential configuration in the default preset.
 It is limited to the best-practices and configuration correctness.
 It is not limited to stylistic choices or complexity settings.
+
+We also offer the full setup of our own internal project
+with our custom `styles/nitpick-style-wemake.toml preset <https://github.com/wemake-services/wemake-python-styleguide/tree/master/styles/nitpick-style-wemake.toml>`_.
+It includes all preferences and practices specific to our internal projects.

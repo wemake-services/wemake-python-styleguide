@@ -1,0 +1,2 @@
+[nitpick.files."pyproject.toml"]
+missing_message = "Install poetry and run 'poetry init' to create it"

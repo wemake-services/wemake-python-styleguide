@@ -113,7 +113,8 @@ In this release we had a little focus on:
 
 ### Misc
 
-- Adds `bellybutton` to the list of linters
+- Adds `styles/` directory with style presets for tools we use and recommend
+- Adds `bellybutton` to the list of other linters
 - Documents how to use `nitpick` to sync the configuration
 - Improves tests for binary, octal, hex, and expanetional numbers
 - Adds new `xenon` CI check

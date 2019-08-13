@@ -1,0 +1,10 @@
+[nitpick.files.absent]
+"requirements.txt" = "Install poetry, run 'poetry init' to create pyproject.toml, and move dependencies to it"
+"Pipfile" = "Use pyproject.toml instead"
+"Pipfile.lock" = "Use pyproject.toml instead"
+
+".isort.cfg" = "Move values to setup.cfg, section [isort]"
+".flake8" = "Move values to setup.cfg, section [flake8]"
+"mypy.ini" = "Move values to setup.cfg, section [mypy]"
+
+".pyup.yml" = "Configure .travis.yml with safety instead: https://github.com/pyupio/safety#using-safety-with-a-ci-service"
