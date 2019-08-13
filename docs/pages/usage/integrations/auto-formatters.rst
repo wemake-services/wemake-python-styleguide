@@ -47,7 +47,7 @@ There are also plugins for IDEs to run ``autopep8`` on safe:
 
 - https://code.visualstudio.com/docs/python/editing
 
-There's also an awesome tool `unify <https://github.com/myint/unify>`_
+There's also an awesome tool `pyformat <https://github.com/myint/pyformat>`_
 that wraps ``autopep8``,
 `autoflake <https://github.com/myint/autoflake>`_,
 `docformatter <https://github.com/myint/docformatter>`_,
