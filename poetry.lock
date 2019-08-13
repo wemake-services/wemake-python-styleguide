@@ -757,7 +757,7 @@ description = "Flake8 plugin to enforce the same lint configuration (flake8, iso
 name = "nitpick"
 optional = false
 python-versions = ">=3.5,<4.0"
-version = "0.18.0"
+version = "0.19.0"
 
 [package.dependencies]
 attrs = "*"
@@ -766,7 +766,7 @@ dictdiffer = "*"
 flake8 = ">=3.0.0"
 jmespath = "*"
 marshmallow = "*"
-marshmallow-polyfield = "*"
+marshmallow-polyfield = ">=5.7,<6.0"
 python-slugify = "*"
 requests = "*"
 "ruamel.yaml" = "*"
@@ -1338,7 +1338,7 @@ python-versions = ">=2.7"
 version = "0.5.2"
 
 [metadata]
-content-hash = "1796f1e14fcabe777e77df4f4e0b81cd453afbe849492db2ce7e865ea50b77f6"
+content-hash = "ea40d5845da4d1e6522300fd7f6eaca41b0e70beab31fe65e965eafedfc90f6d"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -1414,7 +1414,7 @@ mypy = ["0107bff4f46a289f0e4081d59b77cef1c48ea43da5a0dbf0005d54748b26df2a", "079
 mypy-extensions = ["37e0e956f41369209a3d5f34580150bcacfabaa57b33a15c0b25f4b5725e0812", "b16cabe759f55e3409a7d231ebd2841378fb0c27a5d1994719e340e4f429ac3e"]
 natsort = ["83a8c36b1b2321705d4d7814a7aaf91d0e1bcb7bff119a6ebfe5c9ce3b332d0e", "ff3effb5618232866de8d26e5af4081a4daa9bb0dfed49ac65170e28e45f2776"]
 networkx = ["8311ddef63cf5c5c5e7c1d0212dd141d9a1fe3f474915281b73597ed5f1d4e3d"]
-nitpick = ["ae7ffdf8369d731292dfb57cb1c5a75b10263c1b8881784e6eba07028bf51569", "c296eb25f8d905dbcfe9ac3f7d9c266c6b1cd5d285c23772dc1e49c5e1d1a650"]
+nitpick = ["bc2ac027ba4fbcc968aed056e3613c3d9d35736993c638df869f7e5f4357416f", "d8507632c4d23421ccba8720a21c86091b5bc1306ce5303a39822bb83f458736"]
 packaging = ["a7ac867b97fdc07ee80a8058fe4435ccd274ecc3b0ed61d852d7d53055528cf9", "c491ca87294da7cc01902edbe30a5bc6c4c28172b5138ab4e4aa1b9d7bfaeafe"]
 parso = ["63854233e1fadb5da97f2744b6b24346d2750b85965e7e399bec1620232797dc", "666b0ee4a7a1220f65d367617f2cd3ffddff3e205f3f16a0284df30e774c2a9c"]
 pbr = ["56e52299170b9492513c64be44736d27a512fa7e606f21942160b68ce510b4bc", "9b321c204a88d8ab5082699469f52cc94c5da45c51f114113d01b3d993c24cdf"]

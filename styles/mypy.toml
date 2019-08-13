@@ -1,10 +1,10 @@
 ["setup.cfg".mypy]
-check_untyped_defs = True
-ignore_errors = False
-ignore_missing_imports = True
-strict_optional = True
-no_implicit_optional = True
-warn_unused_ignores = True
-warn_redundant_casts = True
-warn_unused_configs = True
-warn_unreachable = True
+check_untyped_defs = true
+ignore_errors = false
+ignore_missing_imports = true
+strict_optional = true
+no_implicit_optional = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_unreachable = true

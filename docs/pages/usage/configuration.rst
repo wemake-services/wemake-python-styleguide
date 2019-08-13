@@ -50,3 +50,10 @@ Otherwise, your ``isort`` will complain about your imports.
 
 We are working hard to remove any kind of configuration from this tool.
 Please, be calm!
+
+.. rubric:: Sharing the same configuration accross multiple projects
+
+If you need to make sure that all projects share the same configuration
+you might be interested in :ref:`nitpick` tool to lint your config.
+We highly recommend to use ``nitpick`` together
+with ``wemake-python-styleguide``.
