@@ -33,6 +33,7 @@ Summary
    OpenWithoutContextManagerViolation
    TypeCompareViolation
    PointlessStarredViolation
+   ImplicitEnumerateViolation
 
 Refactoring opportunities
 -------------------------
@@ -55,6 +56,7 @@ Refactoring opportunities
 .. autoclass:: OpenWithoutContextManagerViolation
 .. autoclass:: TypeCompareViolation
 .. autoclass:: PointlessStarredViolation
+.. autoclass:: ImplicitEnumerateViolation
 
 """
 
@@ -721,3 +723,33 @@ class PointlessStarredViolation(ASTViolation):
 
     code = 517
     error_template = 'Found pointless starred expression'
+
+
+@final
+class ImplicitEnumerateViolation(ASTViolation):
+    """
+    Forbids to have implicit ``enumerate`` calls.
+
+    Reasoning:
+        Using ``range(len(...))`` is not pythonic.
+        Python uses collection iterators, not index-based loops.
+
+    Solution:
+        Use ``enumerate(...)`` instead of ``range(len(...))``.
+
+    Example::
+
+        # Correct:
+        for index, person in enumerate(people):
+            ...
+
+        # Wrong:
+        for index in range(len(people)):
+            ...
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    code = 518
+    error_template = 'Found implicit enumerate call'

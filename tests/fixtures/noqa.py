@@ -327,6 +327,11 @@ print(one == 'a' or one == 'b')  # noqa: WPS514
 file_obj = open('filaname.py')  # noqa: WPS515
 print(type(file_obj) == int)  # noqa: WPS516
 
+print(*[])  # noqa: WPS517
+
+for range_len in range(len(file_obj)):  # noqa: WPS518
+    print(range_len)
+
 try:
     anti_z444 = 1
 except BaseException:  # noqa: WPS424

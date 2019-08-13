@@ -29,6 +29,7 @@ from wemake_python_styleguide.violations.naming import (
 )
 from wemake_python_styleguide.violations.oop import WrongSuperCallViolation
 from wemake_python_styleguide.violations.refactoring import (
+    ImplicitEnumerateViolation,
     OpenWithoutContextManagerViolation,
     TypeCompareViolation,
     UselessLambdaViolation,
@@ -130,6 +131,7 @@ class WrongFunctionCallContextVisitior(base.BaseNodeVisitor):
         """
         self._check_open_call_context(node)
         self._check_type_compare(node)
+        self._check_range_len(node)
         self.generic_visit(node)
 
     def _check_open_call_context(self, node: ast.Call) -> None:
@@ -150,6 +152,24 @@ class WrongFunctionCallContextVisitior(base.BaseNodeVisitor):
 
         if isinstance(nodes.get_parent(node), ast.Compare):
             self.add_violation(TypeCompareViolation(node))
+
+    def _check_range_len(self, node: ast.Call) -> None:
+        function_name = functions.given_function_called(node, {'range'})
+        if not function_name:
+            return
+
+        is_one_argument_range = (
+            len(node.args) == 1 and
+            isinstance(node.args[0], ast.Call) and
+            functions.given_function_called(node.args[0], {'len'})
+        )
+        is_two_arguments_range = (
+            len(node.args) in {2, 3} and
+            isinstance(node.args[1], ast.Call) and
+            functions.given_function_called(node.args[1], {'len'})
+        )
+        if is_one_argument_range or is_two_arguments_range:
+            self.add_violation(ImplicitEnumerateViolation(node))
 
 
 @final

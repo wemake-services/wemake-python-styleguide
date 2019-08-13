@@ -62,6 +62,7 @@ In this release we had a little focus on:
 - Forbids to have consecutive expressions with too deep access level
 - Forbids to have too many public instance attributes
 - Forbids to use pointless star operations: `print(*[])`
+- Forbids to use `range(len(some))`, use `enumerate(some)` instead
 
 ### Bugfixes
 
