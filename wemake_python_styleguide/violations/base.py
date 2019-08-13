@@ -75,11 +75,11 @@ class BaseViolation(object):
 
     def __init__(self, node: ErrorNode, text: Optional[str] = None) -> None:
         """
-        Creates new instance of abstract violation.
+        Creates a new instance of an abstract violation.
 
-        Parameters:
-            node: violation was raised by this node. If applied.
-            text: extra text to format the final message. If applied.
+        Arguments:
+            node: violation was raised by this node. If applicable.
+            text: extra text to format the final message. If applicable.
 
         """
         self._node = node

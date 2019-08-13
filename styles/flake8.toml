@@ -1,0 +1,4 @@
+["setup.cfg".flake8]
+enable-extensions = "G"
+radon-show-closures = true
+radon-no-assert = true

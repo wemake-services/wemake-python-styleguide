@@ -23,7 +23,7 @@ this module.
 
 .. code:: ini
 
-  # Insude `setup.cfg`:
+  # Inside `setup.cfg`:
   [flake8]
   max-complexity = 6
   max-line-length = 80
@@ -38,7 +38,7 @@ You will need to update your configuration with the following lines:
 
 .. code:: ini
 
-  # Insude `setup.cfg`:
+  # Inside `setup.cfg`:
   [isort]
   multi_line_output = 3
   include_trailing_comma = true
@@ -50,3 +50,11 @@ Otherwise, your ``isort`` will complain about your imports.
 
 We are working hard to remove any kind of configuration from this tool.
 Please, be calm!
+
+Sharable configurations
+~~~~~~~~~~~~~~~~~~~~~~~
+
+If you need to make sure that all projects share the same configuration
+you might be interested in :ref:`nitpick` tool to lint your config.
+We highly recommend to use ``nitpick`` together
+with ``wemake-python-styleguide``.

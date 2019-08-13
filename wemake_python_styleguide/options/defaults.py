@@ -73,7 +73,7 @@ MAX_STRING_USAGES: Final = 3  # guessed
 MAX_AWAITS: Final = 5  # the same as returns
 
 #: Maximum amount of ``try`` node body length.
-MAX_TRY_BODY_LENGTH: Final = 2  # best practice
+MAX_TRY_BODY_LENGTH: Final = 1  # best practice
 
 #: Maximum amount of same expressions per module.
 MAX_MODULE_EXPRESSIONS: Final = 7  # the same as module elements

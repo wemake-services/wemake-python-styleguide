@@ -614,7 +614,7 @@ class TooDeepAccessViolation(ASTViolation):
     Configuration:
         This rule is configurable with ``--max-access-level``.
         Default:
-        :str:`wemake_python_styleguide.options.defaults.max_access_level`
+        :str:`wemake_python_styleguide.options.defaults.MAX_ACCESS_LEVEL`
 
     .. versionadded:: 0.12.0
 
