@@ -5,7 +5,7 @@ flakehell
 
 .. image:: https://raw.githubusercontent.com/life4/flakehell/master/assets/logo.png
 
-`flakehell <https://github.com/life4/flakehell>`_ is a legacy-first
+``flakehell`` is a `legacy-first <https://github.com/life4/flakehell>`_
 wrapper around ``flake8`` linter to make it awesome.
 
 What does it mean? It means, that it adds some useful
