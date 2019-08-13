@@ -16,6 +16,12 @@ Installation
 We also recommend to use `poetry <https://github.com/sdispater/poetry>`_
 instead of a default ``pip``.
 
+You might want to also intsall optional tools
+that pairs nicely with ``wemake-python-styleguide``:
+
+- :ref:`flakehell` wrapper for legacy code
+- :ref:`nitpick` for configuration presets and linting
+
 
 .. _usage:
 
