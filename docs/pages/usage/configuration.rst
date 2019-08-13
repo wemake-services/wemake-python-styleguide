@@ -23,7 +23,7 @@ this module.
 
 .. code:: ini
 
-  # Insude `setup.cfg`:
+  # Inside `setup.cfg`:
   [flake8]
   max-complexity = 6
   max-line-length = 80
@@ -38,7 +38,7 @@ You will need to update your configuration with the following lines:
 
 .. code:: ini
 
-  # Insude `setup.cfg`:
+  # Inside `setup.cfg`:
   [isort]
   multi_line_output = 3
   include_trailing_comma = true
