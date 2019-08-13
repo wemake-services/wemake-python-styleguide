@@ -1,6 +1,6 @@
 ["setup.cfg".flake8]
 format = "wemake"
-show-source = True
+show-source = true
 
 # Plugins:
 accept-encodings = "utf-8"
