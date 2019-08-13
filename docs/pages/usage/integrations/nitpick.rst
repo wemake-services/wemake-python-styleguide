@@ -14,7 +14,7 @@ That's how it works. It is a two steps process.
 Styleguide repository
 ~~~~~~~~~~~~~~~~~~~~~
 
-You create a `set of files <https://github.com/wemake-services/wemake-python-styleguide/tree/master/scripts>`_ where you describe what configuration must be contained for each tool you use. You also create a master `nitpick-style.toml <https://github.com/wemake-services/wemake-python-styleguide/blob/master/nitpick-style.toml>`_ where you list all the styles in a single place
+You create a `set of files <https://github.com/wemake-services/wemake-python-styleguide/tree/master/styles>`_ where you describe what configuration must be contained for each tool you use. You also create a master `nitpick-style.toml <https://github.com/wemake-services/wemake-python-styleguide/blob/master/nitpick-style.toml>`_ where you list all the styles in a single place
 
 Project repository
 ~~~~~~~~~~~~~~~~~~
