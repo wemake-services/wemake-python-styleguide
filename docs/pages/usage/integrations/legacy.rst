@@ -17,6 +17,11 @@ But, you still can do several things to integrate this linter step by step:
 To make sure "boyscout rule" works we offically support ``--diff`` mode.
 The main idea of it is simple: we only lint things that we touch.
 
+We also support :ref:`flakehell-legacy` (external tool)
+to create a ``baseline`` of your currect violations
+and start to lint only new one from this point.
+
+Choose what suits you best.
 
 Existing legacy
 ~~~~~~~~~~~~~~~

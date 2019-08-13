@@ -116,6 +116,7 @@ In this release we had a little focus on:
 - Adds `styles/` directory with style presets for tools we use and recommend
 - Adds `bellybutton` to the list of other linters
 - Documents how to use `nitpick` to sync the configuration
+- Documents how to use `flakehell` to create `baseline`s for legacy integrations
 - Improves tests for binary, octal, hex, and expanetional numbers
 - Adds new `xenon` CI check
 - Now handles exceptions in our own code, hope to never see them!
