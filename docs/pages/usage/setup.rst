@@ -20,7 +20,7 @@ You might want to also intsall optional tools
 that pairs nicely with ``wemake-python-styleguide``:
 
 - :ref:`flakehell` for easy integration into a **legacy** codebase
-- :ref:`nitpick` for sharing configuration across multiple projects
+- :ref:`nitpick` for sharing and validating configuration across multiple projects
 
 
 .. _usage:

@@ -24,7 +24,12 @@ plugin with [some other plugins](https://wemake-python-stylegui.de/en/latest/pag
 pip install wemake-python-styleguide
 ```
 
-You will also need to create a `setup.cfg` file with ).
+You will also need to create a `setup.cfg` file with the [configuration](https://wemake-python-stylegui.de/en/latest/pages/usage/configuration.html).
+
+We highly recommend to also use:
+
+- [flakehell](https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/flakehell.html) for easy integration into a **legacy** codebase
+- [nitpick](https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/nitpick.html) for sharing and validating configuration across multiple projects
 
 
 ## Running

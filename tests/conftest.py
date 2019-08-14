@@ -88,7 +88,7 @@ def options():
     """Returns the options builder."""
     default_values = {
         option.long_option_name[2:].replace('-', '_'): option.default
-        for option in Configuration.options
+        for option in Configuration._options  # noqa: WPS437
     }
 
     Options = namedtuple('options', default_values.keys())

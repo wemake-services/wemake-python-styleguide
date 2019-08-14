@@ -28,7 +28,7 @@ def test_configuration(all_violations):
     """Ensures that all configuration options are listed in the docs."""
     option_listed = {
         option.long_option_name: False
-        for option in Configuration.options
+        for option in Configuration._options  # noqa: WPS437
     }
 
     for violation in all_violations:
