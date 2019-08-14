@@ -35,6 +35,7 @@ from wemake_python_styleguide.violations.refactoring import (
     SimplifiableIfViolation,
     UselessLenCompareViolation,
     WrongInCompareTypeViolation,
+    WrongIsCompareViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
@@ -157,10 +158,20 @@ class CompareSanityVisitor(BaseNodeVisitor):
 class WrongConstantCompareVisitor(BaseNodeVisitor):
     """Restricts incorrect compares with constants."""
 
-    _constant_types: ClassVar[AnyNodes] = (
+    _forbidden_for_is: ClassVar[AnyNodes] = (
         ast.List,
+        ast.ListComp,
         ast.Dict,
+        ast.DictComp,
         ast.Tuple,
+        ast.GeneratorExp,
+        ast.Set,
+        ast.SetComp,
+
+        # We allow `ast.NameConstant`
+        ast.Num,
+        ast.Bytes,
+        ast.Str,
     )
 
     def visit_Compare(self, node: ast.Compare) -> None:
@@ -171,15 +182,16 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
             FalsyConstantCompareViolation
 
         """
-        self._check_falsy_constant(node)
+        self._check_constant(node.ops[0], node.left)
+        self._check_is_constant_comprare(node.ops[0], node.left)
+
+        for op, comparator in zip(node.ops, node.comparators):
+            self._check_constant(op, comparator)
+            self._check_is_constant_comprare(op, comparator)
+
         self.generic_visit(node)
 
-    def _check_falsy_constant(self, node: ast.Compare) -> None:
-        self._detect_constant(node.ops[0], node.left)
-        for op, comparator in zip(node.ops, node.comparators):
-            self._detect_constant(op, comparator)
-
-    def _detect_constant(self, op: ast.cmpop, comparator: ast.expr) -> None:
+    def _check_constant(self, op: ast.cmpop, comparator: ast.expr) -> None:
         if not isinstance(op, (ast.Eq, ast.NotEq, ast.Is, ast.IsNot)):
             return
 
@@ -192,6 +204,18 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
 
         if not length:
             self.add_violation(FalsyConstantCompareViolation(comparator))
+
+    def _check_is_constant_comprare(
+        self,
+        op: ast.cmpop,
+        comparator: ast.expr,
+    ) -> None:
+        if not isinstance(op, (ast.Is, ast.IsNot)):
+            return
+
+        unwrapped = operators.unwrap_unary_node(comparator)
+        if isinstance(unwrapped, self._forbidden_for_is):
+            self.add_violation(WrongIsCompareViolation(comparator))
 
 
 @final

@@ -36,6 +36,7 @@ Summary
    ImplicitEnumerateViolation
    ImplicitSumViolation
    FalsyConstantCompareViolation
+   WrongIsCompareViolation
 
 Refactoring opportunities
 -------------------------
@@ -61,6 +62,7 @@ Refactoring opportunities
 .. autoclass:: ImplicitEnumerateViolation
 .. autoclass:: ImplicitSumViolation
 .. autoclass:: FalsyConstantCompareViolation
+.. autoclass:: WrongIsCompareViolation
 
 """
 
@@ -840,3 +842,40 @@ class FalsyConstantCompareViolation(ASTViolation):
 
     code = 520
     error_template = 'Found compare with falsy constant'
+
+
+@final
+class WrongIsCompareViolation(ASTViolation):
+    """
+    Forbids to compare values with constants using ``is`` or ``is not``.
+
+    However, we allow to compare with ``None`` and booleans.
+
+    Reasoning:
+        ``is`` compares might not do what you want them to do.
+        Firstly, they check for the same object, not equality.
+        Secondly, they behave unexpectedly even
+        with the simple values like ``257``.
+
+    Solution:
+        Use ``==`` to compare with constants.
+
+    Example::
+
+        # Correct:
+        if my_check == [1, 2, 3]:
+            ...
+
+        # Wrong:
+        if my_check is [1, 2, 3]:
+            ...
+
+    See also:
+        https://stackoverflow.com/a/33130014/4842742
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    code = 521
+    error_template = 'Found wrong `is` compare'

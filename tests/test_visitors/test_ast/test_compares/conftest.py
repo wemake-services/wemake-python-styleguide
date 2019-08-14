@@ -33,10 +33,12 @@ while_construct = 'while {0} > {1}: ...'
 
 # Actual fixtures:
 
-EQUAL_COMPARES = frozenset((
+IS_COMPARES = frozenset((
     if_with_is,
     if_with_is_not,
+))
 
+EQUAL_COMPARES = frozenset((
     if_with_eq,
     if_with_not_eq,
 
@@ -55,9 +57,15 @@ OTHER_COMPARES = frozenset((
 ))
 
 
-@pytest.fixture(params=EQUAL_COMPARES | OTHER_COMPARES)
+@pytest.fixture(params=IS_COMPARES | EQUAL_COMPARES | OTHER_COMPARES)
 def simple_conditions(request):
     """Fixture that returns simple conditionals."""
+    return request.param
+
+
+@pytest.fixture(params=IS_COMPARES)
+def is_conditions(request):
+    """Fixture that returns `is` and `is not` conditionals."""
     return request.param
 
 
@@ -69,7 +77,7 @@ def eq_conditions(request):
 
 @pytest.fixture(params=OTHER_COMPARES)
 def other_conditions(request):
-    """Fixture that returns `eq` and `not eq` conditionals."""
+    """Fixture that returns other compare conditionals."""
     return request.param
 
 

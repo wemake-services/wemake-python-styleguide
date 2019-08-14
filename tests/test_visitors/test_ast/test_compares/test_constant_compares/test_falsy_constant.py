@@ -4,6 +4,7 @@ import pytest
 
 from wemake_python_styleguide.violations.refactoring import (
     FalsyConstantCompareViolation,
+    WrongIsCompareViolation,
 )
 from wemake_python_styleguide.visitors.ast.compares import (
     WrongConstantCompareVisitor,
@@ -34,6 +35,26 @@ def test_falsy_constant(
     visitor.run()
 
     assert_errors(visitor, [FalsyConstantCompareViolation])
+
+
+@pytest.mark.parametrize('comparators', wrong_comparators)
+def test_falsy_constant_is(
+    assert_errors,
+    parse_ast_tree,
+    comparators,
+    is_conditions,
+    default_options,
+):
+    """Testing that compares with falsy contants are not allowed."""
+    tree = parse_ast_tree(is_conditions.format(*comparators))
+
+    visitor = WrongConstantCompareVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [
+        FalsyConstantCompareViolation,
+        WrongIsCompareViolation,
+    ])
 
 
 @pytest.mark.parametrize('comparators', wrong_comparators)
@@ -86,4 +107,4 @@ def test_correct_constant_compare(
     visitor = WrongConstantCompareVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [])
+    assert_errors(visitor, [], (WrongIsCompareViolation,))

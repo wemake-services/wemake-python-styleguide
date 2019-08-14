@@ -337,6 +337,7 @@ for sum_item in file_obj:  # noqa: WPS519
     sum_container += sum_item
 
 print(sum_container == [])  # noqa: WPS520
+print(sum_container is 0)  # noqa: WPS521
 
 try:
     anti_z444 = 1
