@@ -27,6 +27,7 @@ wrong_comparators = (
     ('some', '-0.1'),
     ('some', '""'),
     ('some', '"abc"'),
+    ('some', 'b"bytes"'),
 
     ('some', '(1, 2)'),
     ('[]', 'some'),

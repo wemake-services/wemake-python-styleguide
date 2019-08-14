@@ -86,6 +86,7 @@ def test_falsy_constant_not_eq(
     ('some', '1'),
     ('some', '""'),
     ('some', '"a"'),
+    ('some', 'b"bytes"'),
     ('some', 'other'),
     ('some', 'other()'),
     ('some', 'other.attr'),
