@@ -4,7 +4,19 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
-## 0.12.0 WIP
+## 0.12.1
+
+### Bugfixes
+
+- Changes `radon` and `pydocstyle` versions for better resolution
+
+### Misc
+
+- Improves `README.md` with `flakehell` and `nitpick` mentions
+- Improves docs all accross the project
+
+
+## 0.12.0
 
 In this release we had a little focus on:
 

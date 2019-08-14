@@ -18,17 +18,13 @@ Welcome to the strictest and most opinionated python linter ever.
 `wemake-python-styleguide` is actually a [flake8](http://flake8.pycqa.org/en/latest/)
 plugin with [some other plugins](https://wemake-python-stylegui.de/en/latest/pages/usage/violations/index.html#external-plugins) as dependencies.
 
-## Installation
+## Quickstart
 
 ```bash
 pip install wemake-python-styleguide
 ```
 
-You will also need to create a `setup.cfg` file with [the following contents](https://wemake-python-stylegui.de/en/latest/pages/usage/config.html#plugins).
-
-This file is required to configure our linter and all 3rd party plugins it uses.
-However, this is a temporary solution.
-We are working at providing the required configuration for you in the future.
+You will also need to create a `setup.cfg` file with ).
 
 
 ## Running

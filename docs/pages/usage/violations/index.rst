@@ -1,13 +1,26 @@
 Violations
-==========
+----------
 
 Here we have all violation codes listed for this plugin and its dependencies.
-Our violation codes are using ``WPS`` letter.
+Our violation codes are using ``WPS`` letters.
 Other codes are coming from other tools.
 
 
-External plugins
-----------------
+.. rubric:: Our own codes
+
+============== ======
+Type           Codes
+-------------- ------
+Naming         :ref:`WPS100 - WPS199 <naming>`
+Complexity     :ref:`WPS200 - WPS299 <complexity>`
+Consistency    :ref:`WPS300 - WPS399 <consistency>`
+Best practices :ref:`WPS400 - WPS499 <best-practices>`
+Refactoring    :ref:`WPS500 - WPS599 <refactoring>`
+OOP            :ref:`WPS600 - WPS699 <oop>`
+============== ======
+
+
+.. rubric:: External plugins
 
 All codes are sorted alphabetically and by numerical codes.
 
@@ -41,23 +54,8 @@ flake8-executable              `EXE001 - EXE005 <https://github.com/xuhdev/flake
 wemake-python-styleguide       WPS, defined here
 =============================  ======
 
-
-Our own codes
--------------
-
-============== ======
-Type           Codes
--------------- ------
-Naming         :ref:`WPS100 - WPS199 <naming>`
-Complexity     :ref:`WPS200 - WPS299 <complexity>`
-Consistency    :ref:`WPS300 - WPS399 <consistency>`
-Best practices :ref:`WPS400 - WPS499 <best-practices>`
-Refactoring    :ref:`WPS500 - WPS599 <refactoring>`
-OOP            :ref:`WPS600 - WPS699 <oop>`
-============== ======
-
 .. toctree::
-  :maxdepth: 1
+  :maxdepth: 0
   :caption: Violation types:
   :hidden:
 

@@ -2,7 +2,7 @@ Stubs
 -----
 
 If you are using stub ``.pyi`` files
-and `flake8-pyi <https://github.com/ambv/flake8-pyi>`_ extensions
+and `flake8-pyi <https://github.com/ambv/flake8-pyi>`_ extension
 you might need to ignore several violations that are bundled with this linter.
 
 You can still do it on per-file bases as usual.

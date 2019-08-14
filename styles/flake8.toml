@@ -1,6 +1,17 @@
-# Included into base-preset.
+# `nitpick` specific configuration.
+# `nitpick` ensures that you have the same configuration
+# in your own project.
+
+# Make sure to install it with:
+# `pip install nitpick`
+
+# See:
+# https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/nitpick
+
+# This file is included into base-preset.
 
 ["setup.cfg".flake8]
+# These values should be placed inside `setup.cfg` in your repo:
 enable-extensions = "G"
 radon-show-closures = true
 radon-no-assert = true

@@ -1,3 +1,5 @@
+.. _legacy:
+
 Legacy projects
 ---------------
 
@@ -117,3 +119,7 @@ And you are forced to improve things you write.
 
 At some point in time, you will have 100% perfect code.
 Good linters and constant refactoring is the key to the success.
+
+.. rubric:: Further reading
+
+- :ref:`Creating baselines for legacy projects <flakehell>`

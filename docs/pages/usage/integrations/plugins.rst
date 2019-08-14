@@ -1,4 +1,4 @@
-Plugins and Hooks
+Plugins and hooks
 -----------------
 
 We leverage all the existing ``flake8``
