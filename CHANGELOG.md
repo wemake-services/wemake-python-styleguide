@@ -64,6 +64,7 @@ In this release we had a little focus on:
 - Forbids to use pointless star operations: `print(*[])`
 - Forbids to use `range(len(some))`, use `enumerate(some)` instead
 - Forbids to use implicit `sum()` calls and replace them with loops
+- Forbids to compare with the falsy constants like `if some == []:`
 
 ### Bugfixes
 

@@ -35,6 +35,7 @@ Summary
    PointlessStarredViolation
    ImplicitEnumerateViolation
    ImplicitSumViolation
+   FalsyConstantCompareViolation
 
 Refactoring opportunities
 -------------------------
@@ -59,6 +60,7 @@ Refactoring opportunities
 .. autoclass:: PointlessStarredViolation
 .. autoclass:: ImplicitEnumerateViolation
 .. autoclass:: ImplicitSumViolation
+.. autoclass:: FalsyConstantCompareViolation
 
 """
 
@@ -798,3 +800,43 @@ class ImplicitSumViolation(ASTViolation):
 
     code = 519
     error_template = 'Found implicit `sum()` call'
+
+
+@final
+class FalsyConstantCompareViolation(ASTViolation):
+    """
+    Forbids to compare with explicit falsy constants.
+
+    We allow to compare with falsy numbers, strings, booleans, ``None``.
+    We disallow complex constants like tuple, dicts, and lists.
+
+    Reasoning:
+        When comparing ``something`` with explicit falsy constants
+        what we really mean is ``not something``.
+
+    Solution:
+        Use ``not`` with your variable.
+        Fix your data types.
+
+    Example::
+
+        # Correct:
+        if not my_check:
+            ...
+
+        if some_other is None:
+            ...
+
+        if some_num == 0:
+            ...
+
+        # Wrong:
+        if my_check == []:
+            ...
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    code = 520
+    error_template = 'Found compare with falsy constant'

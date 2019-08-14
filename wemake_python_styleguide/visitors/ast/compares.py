@@ -29,6 +29,7 @@ from wemake_python_styleguide.violations.consistency import (
     UselessCompareViolation,
 )
 from wemake_python_styleguide.violations.refactoring import (
+    FalsyConstantCompareViolation,
     NestedTernaryViolation,
     NotOperatorWithCompareViolation,
     SimplifiableIfViolation,
@@ -150,6 +151,47 @@ class CompareSanityVisitor(BaseNodeVisitor):
             return
 
         self.add_violation(ReversedComplexCompareViolation(node))
+
+
+@final
+class WrongConstantCompareVisitor(BaseNodeVisitor):
+    """Restricts incorrect compares with constants."""
+
+    _constant_types: ClassVar[AnyNodes] = (
+        ast.List,
+        ast.Dict,
+        ast.Tuple,
+    )
+
+    def visit_Compare(self, node: ast.Compare) -> None:
+        """
+        Visits compare with constants.
+
+        Raises:
+            FalsyConstantCompareViolation
+
+        """
+        self._check_falsy_constant(node)
+        self.generic_visit(node)
+
+    def _check_falsy_constant(self, node: ast.Compare) -> None:
+        self._detect_constant(node.ops[0], node.left)
+        for op, comparator in zip(node.ops, node.comparators):
+            self._detect_constant(op, comparator)
+
+    def _detect_constant(self, op: ast.cmpop, comparator: ast.expr) -> None:
+        if not isinstance(op, (ast.Eq, ast.NotEq, ast.Is, ast.IsNot)):
+            return
+
+        if not isinstance(comparator, (ast.List, ast.Dict, ast.Tuple)):
+            return
+
+        length = len(comparator.keys) if isinstance(
+            comparator, ast.Dict,
+        ) else len(comparator.elts)
+
+        if not length:
+            self.add_violation(FalsyConstantCompareViolation(comparator))
 
 
 @final

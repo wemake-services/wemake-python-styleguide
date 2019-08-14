@@ -336,6 +336,8 @@ sum_container = 0
 for sum_item in file_obj:  # noqa: WPS519
     sum_container += sum_item
 
+print(sum_container == [])  # noqa: WPS520
+
 try:
     anti_z444 = 1
 except BaseException:  # noqa: WPS424
@@ -511,10 +513,10 @@ if len(numbers) > 0:  # noqa: WPS507
 if numbers and numbers:  # noqa: WPS408
     print('duplicate boolop')
 
-if not numbers == []:  # noqa: WPS508
+if not numbers == [1]:  # noqa: WPS508
     print('bad compare with not')
 
-if numbers == CONSTANT != []:  # noqa: WPS409
+if numbers == CONSTANT != [2]:  # noqa: WPS409
     print(1 + (1 if number else 2))  # noqa: WPS509
 
 print(numbers in [])  # noqa: WPS510
