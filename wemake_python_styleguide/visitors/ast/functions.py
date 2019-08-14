@@ -127,6 +127,8 @@ class WrongFunctionCallContextVisitior(base.BaseNodeVisitor):
 
         Raises:
             OpenWithoutContextManagerViolation
+            TypeCompareViolation
+            ImplicitEnumerateViolation
 
         """
         self._check_open_call_context(node)

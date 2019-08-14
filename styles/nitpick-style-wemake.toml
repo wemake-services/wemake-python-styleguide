@@ -6,10 +6,10 @@ minimum_version = "0.10.0"
 
 [nitpick.styles]
 include = [
+  "file-structure.toml",
   "flake8.toml",
   "isort.toml",
   "mypy.toml",
   "poetry.toml",
-  "absent-files.toml",
   "styleguide.toml"
 ]

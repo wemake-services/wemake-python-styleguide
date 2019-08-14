@@ -28,6 +28,7 @@ from wemake_python_styleguide.violations.consistency import (
     WrongLoopIterTypeViolation,
 )
 from wemake_python_styleguide.violations.refactoring import (
+    ImplicitSumViolation,
     UselessLoopElseViolation,
 )
 from wemake_python_styleguide.visitors import base, decorators
@@ -206,10 +207,12 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
         Raises:
             LoopVariableDefinitionViolation
             WrongLoopIterTypeViolation
+            ImplicitSumViolation
 
         """
         self._check_variable_definitions(node.target)
         self._check_explicit_iter_type(node)
+        self._check_implicit_sum(node)
         self.generic_visit(node)
 
     def visit_comprehension(self, node: ast.comprehension) -> None:
@@ -233,8 +236,17 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
         node: Union[AnyFor, ast.comprehension],
     ) -> None:
         node_iter = unwrap_unary_node(node.iter)
-
         is_wrong = isinstance(node_iter, self._forbidden_for_iters)
         is_empty = isinstance(node_iter, ast.Tuple) and not node_iter.elts
         if is_wrong or is_empty:
             self.add_violation(WrongLoopIterTypeViolation(node_iter))
+
+    def _check_implicit_sum(self, node: AnyFor) -> None:
+        is_implicit_sum = (
+            len(node.body) == 1 and
+            isinstance(node.body[0], ast.AugAssign) and
+            isinstance(node.body[0].op, ast.Add) and
+            isinstance(node.body[0].target, ast.Name)
+        )
+        if is_implicit_sum:
+            self.add_violation(ImplicitSumViolation(node))

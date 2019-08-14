@@ -332,6 +332,10 @@ print(*[])  # noqa: WPS517
 for range_len in range(len(file_obj)):  # noqa: WPS518
     print(range_len)
 
+sum_container = 0
+for sum_item in file_obj:  # noqa: WPS519
+    sum_container += sum_item
+
 try:
     anti_z444 = 1
 except BaseException:  # noqa: WPS424

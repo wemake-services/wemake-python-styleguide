@@ -63,6 +63,7 @@ In this release we had a little focus on:
 - Forbids to have too many public instance attributes
 - Forbids to use pointless star operations: `print(*[])`
 - Forbids to use `range(len(some))`, use `enumerate(some)` instead
+- Forbids to use implicit `sum()` calls and replace them with loops
 
 ### Bugfixes
 

@@ -34,6 +34,7 @@ Summary
    TypeCompareViolation
    PointlessStarredViolation
    ImplicitEnumerateViolation
+   ImplicitSumViolation
 
 Refactoring opportunities
 -------------------------
@@ -57,6 +58,7 @@ Refactoring opportunities
 .. autoclass:: TypeCompareViolation
 .. autoclass:: PointlessStarredViolation
 .. autoclass:: ImplicitEnumerateViolation
+.. autoclass:: ImplicitSumViolation
 
 """
 
@@ -728,7 +730,7 @@ class PointlessStarredViolation(ASTViolation):
 @final
 class ImplicitEnumerateViolation(ASTViolation):
     """
-    Forbids to have implicit ``enumerate`` calls.
+    Forbids to have implicit ``enumerate()`` calls.
 
     Reasoning:
         Using ``range(len(...))`` is not pythonic.
@@ -747,9 +749,52 @@ class ImplicitEnumerateViolation(ASTViolation):
         for index in range(len(people)):
             ...
 
+    See also:
+        https://docs.python.org/3/library/functions.html#enumerate
+
     .. versionadded:: 0.12.0
 
     """
 
     code = 518
-    error_template = 'Found implicit enumerate call'
+    error_template = 'Found implicit `enumerate()` call'
+
+
+@final
+class ImplicitSumViolation(ASTViolation):
+    """
+    Forbids to have implicit ``sum()`` calls.
+
+    When summing types different from numbers, you might need to provide
+    the second argument to the ``sum`` function: ``sum([[1], [2], [3]], [])``
+
+    You might also use ``str.join`` to join iterable of strings.
+
+    Reasoning:
+        Using ``for`` loops with ``+=`` assign inside indicates
+        that you iteratively sum things inside your collection.
+        That's what ``sum()`` builtin function does.
+
+    Solution:
+        Use ``sum(...)`` instead of a loop with ``+=`` operation.
+
+    Example::
+
+        # Correct:
+        sum_result = sum(get_elements())
+
+        # Wrong:
+        sum_result = 0
+        for to_sum in get_elements():
+            sum_result += to_sum
+
+    See also:
+        https://docs.python.org/3/library/functions.html#sum
+        https://docs.python.org/3/library/stdtypes.html#str.join
+
+    .. versionadded:: 0.12.0
+
+    """
+
+    code = 519
+    error_template = 'Found implicit `sum()` call'

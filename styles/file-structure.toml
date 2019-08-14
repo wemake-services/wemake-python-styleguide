@@ -8,3 +8,10 @@
 "mypy.ini" = "Move values to setup.cfg, section [mypy]"
 
 ".pyup.yml" = "Configure .travis.yml with safety instead: https://github.com/pyupio/safety#using-safety-with-a-ci-service"
+
+
+[nitpick.files.present]
+".editorconfig" = "A project should have an editor configuration"
+"CHANGELOG.md" = "A project should have `CHANGELOG.md`"
+"README.md" = "A project should have `README.md`"
+".gitignore" = "A project should have `.gitignore` file"
