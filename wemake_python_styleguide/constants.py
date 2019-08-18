@@ -46,6 +46,9 @@ FUNCTIONS_BLACKLIST: Final = frozenset((
 
     # OOP:
     'staticmethod',
+
+    # Mypy:
+    'reveal_type',
 ))
 
 #: List of module metadata we forbid to use.
