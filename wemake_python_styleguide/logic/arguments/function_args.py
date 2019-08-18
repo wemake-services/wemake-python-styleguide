@@ -29,7 +29,7 @@ def has_same_vararg(
             return False
     if vararg_name and node.args.vararg:
         return node.args.vararg.arg == vararg_name
-    return node.args.vararg == vararg_name
+    return node.args.vararg == vararg_name  # both None
 
 
 def has_same_kwarg(node: types.AnyFunctionDefAndLambda, call: ast.Call) -> bool:

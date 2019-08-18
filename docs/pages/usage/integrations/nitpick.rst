@@ -14,7 +14,7 @@ That's how it works. It is a two steps process.
 Styleguide repository
 ~~~~~~~~~~~~~~~~~~~~~
 
-You create a `set of files <https://github.com/wemake-services/wemake-python-styleguide/tree/master/styles>`_ where you describe what configuration must be contained for each tool you use. You also create a master `nitpick-style.toml <https://github.com/wemake-services/wemake-python-styleguide/blob/master/nitpick-style.toml>`_ where you list all the styles in a single place
+You create a `set of files <https://github.com/wemake-services/wemake-python-styleguide/tree/master/styles>`_ where you describe what configuration must be contained for each tool you use. You also create a master `nitpick-style.toml <https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/nitpick-style.toml>`_ where you list all the styles in a single place
 
 Project repository
 ~~~~~~~~~~~~~~~~~~
@@ -25,7 +25,7 @@ super ``nitpick-style.toml`` file inside your ``pyproject.toml``:
 .. code:: toml
 
   [tool.nitpick]
-  style = "https://github.com/wemake-services/wemake-python-styleguide/blob/master/nitpick-style.toml"
+  style = "https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/styles/nitpick-style.toml"
 
 Now when you will run ``flake8`` your configuration will be also linted.
 And by "linted" we mean that it will check that all required keys
@@ -40,8 +40,8 @@ You can also include only some configs if you don't use some tools for example:
 
   [tool.nitpick]
   style = [
-    "https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/flake8.toml",
-    "https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/isort.toml"
+    "https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/styles/flake8.toml",
+    "https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/styles/isort.toml"
   ]
 
 This way you can include only some parts of the global preset.
@@ -60,3 +60,10 @@ It is not limited to stylistic choices or complexity settings.
 We also offer the full setup of our own internal project
 with our custom `styles/nitpick-style-wemake.toml preset <https://github.com/wemake-services/wemake-python-styleguide/tree/master/styles/nitpick-style-wemake.toml>`_.
 It includes all preferences and practices specific to our internal projects.
+
+.. code:: toml
+
+  [tool.nitpick]
+  style = "https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/styles/nitpick-style-wemake.toml"
+
+Use it if you want the same configuration.
