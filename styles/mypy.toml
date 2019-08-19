@@ -5,6 +5,7 @@ ignore_errors = false
 ignore_missing_imports = true
 implicit_reexport = false
 strict_optional = true
+strict_equality = true
 no_implicit_optional = true
 warn_unused_ignores = true
 warn_redundant_casts = true

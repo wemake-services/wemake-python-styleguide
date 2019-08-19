@@ -20,6 +20,7 @@ nested_set_template = """
 """
 
 dict_literal_template = '{{ {0}: 1, {1}: 2 }}'
+regression769 = '{{ **{0}, **{1} }}'
 
 
 @pytest.mark.parametrize('code', [
@@ -58,6 +59,7 @@ def test_collection_with_impure(
     set_literal_template,
     nested_set_template,
     dict_literal_template,
+    regression769,
 ])
 @pytest.mark.parametrize('element', [
     '1',

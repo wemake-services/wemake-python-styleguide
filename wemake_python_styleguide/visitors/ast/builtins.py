@@ -3,7 +3,15 @@
 import ast
 from collections import Counter, Hashable, defaultdict
 from contextlib import suppress
-from typing import ClassVar, DefaultDict, Iterable, List, Sequence, Union
+from typing import (
+    ClassVar,
+    DefaultDict,
+    Iterable,
+    List,
+    Optional,
+    Sequence,
+    Union,
+)
 
 from typing_extensions import final
 
@@ -247,12 +255,15 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
     def _check_set_elements(
         self,
         node: Union[ast.Set, ast.Dict],
-        keys_or_elts: Sequence[ast.AST],
+        keys_or_elts: Sequence[Optional[ast.AST]],
     ) -> None:
         elements: List[str] = []
         element_values = []
 
         for set_item in keys_or_elts:
+            if set_item is None:
+                continue   # happens for `{**a}`
+
             real_item = unwrap_unary_node(set_item)
             if isinstance(real_item, self._elements_in_sets):
                 # Similar look:
@@ -290,7 +301,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
         value_counts: DefaultDict[Hashable, int] = defaultdict(int)
         for value_element in element_values:
             real_value = value_element if isinstance(
-                # Lists, sets, and dicst are not hashable:
+                # Lists, sets, and dicts are not hashable:
                 value_element, Hashable,
             ) else str(value_element)
 

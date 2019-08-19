@@ -4,11 +4,21 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
-## 0.12.1
+## 0.12.2 WIP
 
 ### Features
 
 - Adds `reveal_type` to the list of forbidden functions
+
+### Bugfixes
+
+- Fixes that `{**a, **b}` was reported as duplicate hash items
+
+
+## 0.12.1
+
+### Features
+
 - Tweaks `nitpick` configuration
 
 ### Bugfixes
@@ -20,7 +30,7 @@ We used to have incremental versioning before `0.1.0`.
 
 - Improves `README.md` with `flakehell` and `nitpick` mentions
 - Improves docs all accross the project
-- 
+-
 
 
 ## 0.12.0
