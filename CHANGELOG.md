@@ -4,7 +4,10 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
-## 0.12.2 WIP
+## 0.12.3 WIP
+
+
+## 0.12.2
 
 ### Features
 
@@ -32,7 +35,6 @@ We used to have incremental versioning before `0.1.0`.
 
 - Improves `README.md` with `flakehell` and `nitpick` mentions
 - Improves docs all accross the project
--
 
 
 ## 0.12.0
