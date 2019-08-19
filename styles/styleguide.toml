@@ -8,6 +8,13 @@ max-complexity = 6
 max-line-length = 80
 radon-max-cc = 10
 
+# Violations:
+ignore = "D100,D104,D401,W504,RST303,RST304"
+
 ["setup.cfg".isort]
 default_section = "FIRSTPARTY"
 line_length = 79
+
+
+[nitpick.files."setup.cfg"]
+comma_separated_values = ["flake8.ignore"]
