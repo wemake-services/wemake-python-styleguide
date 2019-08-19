@@ -16,7 +16,7 @@ features to the core ``flake8`` with the new command line utility:
   pip install flakehell  # however we recommend to use `poetry`
   flakehell lint  # accepts the same arguments, does the same as `flake8`
 
-The most exiting feature for us is ``baseline`` generation.
+The most exciting feature for us is ``baseline`` generation.
 
 .. _flakehell-legacy:
 
