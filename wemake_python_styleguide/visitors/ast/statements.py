@@ -308,9 +308,6 @@ class PointlessStarredVisitor(BaseNodeVisitor):
         self._check_double_starred_dict(node.keywords)
         self.generic_visit(node)
 
-    def _is_pointless_star(self, node: ast.AST) -> bool:
-        return isinstance(node, self._pointless_star_nodes)
-
     def _check_starred_args(
         self,
         args: Sequence[ast.AST],
@@ -325,5 +322,22 @@ class PointlessStarredVisitor(BaseNodeVisitor):
         keywords: Sequence[ast.keyword],
     ) -> None:
         for keyword in keywords:
-            if keyword.arg is None and self._is_pointless_star(keyword.value):
+            if keyword.arg is not None:
+                continue
+
+            complex_keys = self._has_non_string_keys(keyword)
+            pointless_args = self._is_pointless_star(keyword.value)
+            if not complex_keys and pointless_args:
                 self.add_violation(PointlessStarredViolation(keyword.value))
+
+    def _is_pointless_star(self, node: ast.AST) -> bool:
+        return isinstance(node, self._pointless_star_nodes)
+
+    def _has_non_string_keys(self, node: ast.keyword) -> bool:
+        if not isinstance(node.value, ast.Dict):
+            return True
+
+        for key_node in node.value.keys:
+            if not isinstance(key_node, ast.Str):
+                return True
+        return False

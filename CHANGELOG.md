@@ -9,6 +9,8 @@ We used to have incremental versioning before `0.1.0`.
 ### Features
 
 - Adds `reveal_type` to the list of forbidden functions
+- `WPS517` now allows to use non-string keys inside `**{}`,
+  so this is allowed: `Users.objects.get(**{User.USERNAME_FIELD: username})`
 
 ### Bugfixes
 

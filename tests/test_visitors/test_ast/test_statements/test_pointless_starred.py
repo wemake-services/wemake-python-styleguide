@@ -60,11 +60,18 @@ def test_pointless_starred_arg_and_keyword(
 
 
 @pytest.mark.parametrize('code', [
-    """
-    _list = [1, 2]
-    _dict = {"end": " "}
-    print(*_list, **_dict)
-    """,
+    '_list = [1, 2]',
+    '_dict = {"end": " "}',
+    'print(*_list, **_dict)',
+
+    # regression767
+    # See:
+    # https://github.com/wemake-services/wemake-python-styleguide/issues/767
+    'filter(**{User.USERNAME_FIELD: username})',  # noqa: P103
+    'filter(**{"a": 1, b: 2})',
+    'filter(**{"a": 1, call(): 2})',
+    'filter(**{"a": 1, b.method(): 2})',
+    'filter(**{b["a"]: 2})',
 ])
 def test_useful_starred_arg_and_keyword(
     assert_errors,
