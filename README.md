@@ -93,9 +93,9 @@ you can return us a favor by supporting the work we do.
 
 [![Gold Tier](https://opencollective.com/wemake-python-styleguide/tiers/gold-sponsor.svg?width=890)](https://opencollective.com/wemake-python-styleguide)
 
-[![Silver Tier](https://opencollective.com/wemake-python-styleguide/tiers/gold-sponsor.svg?width=890&avatarHeight=45&button=0)](https://opencollective.com/wemake-python-styleguide)
+[![Silver Tier](https://opencollective.com/wemake-python-styleguide/tiers/silver-sponsor.svg?width=890&avatarHeight=45&button=0)](https://opencollective.com/wemake-python-styleguide)
 
-[![Bronze Tier](https://opencollective.com/wemake-python-styleguide/tiers/gold-sponsor.svg?width=890&avatarHeight=35&button=0)](https://opencollective.com/wemake-python-styleguide)
+[![Bronze Tier](https://opencollective.com/wemake-python-styleguide/tiers/bronze-sponsor.svg?width=890&avatarHeight=35&button=0)](https://opencollective.com/wemake-python-styleguide)
 
 
 ## Show your style
