@@ -101,6 +101,9 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         left: ast.AST,
         right: Optional[ast.AST] = None,
     ) -> None:
+        if isinstance(left, ast.Num) and right:
+            if left.n == 1:
+                left = None
         non_negative_numbers = self._get_non_negative_nodes(left, right)
 
         for number in non_negative_numbers:
