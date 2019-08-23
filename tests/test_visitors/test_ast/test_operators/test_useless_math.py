@@ -164,3 +164,23 @@ def test_useful_math(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('expression', [
+    '1 / other',
+    '1 / 11',
+    '1 / 1.1',
+])
+def test_one_to_divide(
+    assert_errors,
+    parse_ast_tree,
+    expression,
+    default_options,
+):
+    """Testing that `1 / any number` is the correct expression."""
+    tree = parse_ast_tree(expression)
+
+    visitor = UselessOperatorsVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
