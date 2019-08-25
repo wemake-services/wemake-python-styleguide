@@ -100,7 +100,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
         formated_line = error.physical_line.lstrip()
         adjust = len(error.physical_line) - len(formated_line)
 
-        code = highlight(
+        code = _highlight(
             formated_line,
             self._lexer,
             self._formatter,
@@ -184,6 +184,22 @@ def _underline(text: str) -> str:
 
     """
     return '\033[4m{0}\033[0m'.format(text)
+
+
+def _highlight(source: str, lexer, formatter) -> str:
+    """
+    Highlights source code. Might fail.
+
+    See also:
+        https://github.com/wemake-services/wemake-python-styleguide/issues/794
+
+    """
+    try:
+        return highlight(source, lexer, formatter)
+    except Exception:  # pragma: no cover
+        # Might fail on some systems, when colors are set incorrectly,
+        # or not available at all. In this case code will be just text.
+        return source
 
 
 # Helpers:

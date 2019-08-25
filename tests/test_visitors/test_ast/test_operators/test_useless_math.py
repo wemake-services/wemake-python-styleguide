@@ -63,6 +63,7 @@ def test_zero_div(
     '**= -0.0',
     '+= 0e0',
     '-= -0b0',
+    '%= 0',
 
     '* 0',
     '** -0.0',
@@ -71,7 +72,9 @@ def test_zero_div(
 
     '*= 1',
     '**= 1.0',
+    '/= 1',
     '/= 0o1',
+    '%= 1',
 
     '* 0b1',
     '** 1',
@@ -118,6 +121,7 @@ def test_meaningless_math(
     '-= var',
     '/= var',
     '+= var',
+    '%= var',
 ])
 def test_correct_zero_div(
     assert_errors,
@@ -170,6 +174,7 @@ def test_useful_math(
     '1 / other',
     '1 / 11',
     '1 / 1.1',
+    '1.0 / number',
 ])
 def test_one_to_divide(
     assert_errors,

@@ -17,7 +17,7 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors import base
 
-_MeaninglessOperators = Mapping[int, Tuple[Type[ast.operator], ...]]
+_MeaninglessOperators = Mapping[complex, Tuple[Type[ast.operator], ...]]
 _OperatorLimits = Mapping[Type[ast.unaryop], int]
 
 
@@ -35,9 +35,14 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
     _meaningless_operations: ClassVar[_MeaninglessOperators] = {
         # ast.Div is not in the list,
         # since we have a special violation for it.
-        0: (ast.Mult, ast.Add, ast.Sub, ast.Pow),
+        0: (ast.Mult, ast.Add, ast.Sub, ast.Pow, ast.Mod),
         # `1` and `-1` are different, `-1` is allowed.
-        1: (ast.Div, ast.Mult, ast.Pow),
+        1: (ast.Div, ast.Mult, ast.Pow, ast.Mod),
+    }
+
+    #: Used to ignore some special cases like `1 / x`:
+    _left_special_cases: ClassVar[_MeaninglessOperators] = {
+        1: (ast.Div,),
     }
 
     def visit_Num(self, node: ast.Num) -> None:
@@ -98,12 +103,13 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
     def _check_useless_math_operator(
         self,
         op: ast.operator,
-        left: ast.AST,
+        left: Optional[ast.AST],
         right: Optional[ast.AST] = None,
     ) -> None:
-        if isinstance(left, ast.Num) and right:
-            if left.n == 1:
+        if isinstance(left, ast.Num) and left.n in self._left_special_cases:
+            if right and isinstance(op, self._left_special_cases[left.n]):
                 left = None
+
         non_negative_numbers = self._get_non_negative_nodes(left, right)
 
         for number in non_negative_numbers:
@@ -115,7 +121,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
 
     def _get_non_negative_nodes(
         self,
-        left: ast.AST,
+        left: Optional[ast.AST],
         right: Optional[ast.AST] = None,
     ):
         non_negative_numbers = []

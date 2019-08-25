@@ -4,7 +4,13 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
-## 0.12.3 WIP
+## 0.12.3
+
+### Bugfixes
+
+- Fixes that formatting was failing sometimes when colours were not available
+- Fixes that `1 / number` was not allowed
+- Fixes that `%` operator was allowed for `0` and `1`
 
 
 ## 0.12.2
