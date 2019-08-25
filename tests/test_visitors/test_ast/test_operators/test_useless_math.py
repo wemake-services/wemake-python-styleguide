@@ -164,3 +164,44 @@ def test_useful_math(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('expression', [
+    '1 / other',
+    '1 / 11',
+    '1 / 1.1',
+])
+def test_one_to_divide(
+    assert_errors,
+    parse_ast_tree,
+    expression,
+    default_options,
+):
+    """Testing that `1 / any number` is the correct expression."""
+    tree = parse_ast_tree(expression)
+
+    visitor = UselessOperatorsVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('expression', [
+    '1 / 1',
+    '2 / 1',
+    '3.3 / 1',
+    'other / 1',
+])
+def test_divide_by_one(
+    assert_errors,
+    parse_ast_tree,
+    expression,
+    default_options,
+):
+    """Testing an error when we divide by one."""
+    tree = parse_ast_tree(expression)
+
+    visitor = UselessOperatorsVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [MeaninglessNumberOperationViolation])
