@@ -3,7 +3,7 @@
 # https://raw.githubusercontent.com/andreoliwa/nitpick/v0.18.0/nitpick-style.toml
 
 [nitpick]
-minimum_version = "0.10.0"
+minimum_version = "0.20.0"
 
 [nitpick.styles]
 include = [
