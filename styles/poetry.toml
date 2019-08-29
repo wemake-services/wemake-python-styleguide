@@ -1,2 +1,5 @@
-[nitpick.files."pyproject.toml"]
-missing_message = "Install poetry and run 'poetry init' to create it"
+[nitpick.files.present]
+"pyproject.toml" = "Install poetry and run 'poetry init' to create it"
+
+["pyproject.toml".build-system]
+build-backend = "poetry.masonry.api"
