@@ -9,7 +9,7 @@ We used to have incremental versioning before `0.1.0`.
 ### Bugfixes
 
 - Fixes bug with `nitpick` colors and new files API
-- Updates `flake8-docstrings` that 
+- Updates `flake8-docstrings`
 
 
 ## 0.12.3
