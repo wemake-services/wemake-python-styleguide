@@ -26,6 +26,7 @@ from wemake_python_styleguide.violations.consistency import (
 )
 from wemake_python_styleguide.violations.refactoring import (
     PointlessStarredViolation,
+    WrongNamedKeywordViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
@@ -339,5 +340,35 @@ class PointlessStarredVisitor(BaseNodeVisitor):
 
         for key_node in node.value.keys:
             if not isinstance(key_node, ast.Str):
+                return True
+        return False
+
+
+@final
+class WrongNamedKeywordVisitor(BaseNodeVisitor):
+    """Responsible for absence of wrong keywords."""
+
+    def visit_Call(self, node: ast.Call) -> None:
+        """Checks useless call arguments."""
+        self._check_double_starred_dict(node.keywords)
+        self.generic_visit(node)
+
+    def _check_double_starred_dict(
+        self,
+        keywords: Sequence[ast.keyword],
+    ) -> None:
+        for keyword in keywords:
+            if keyword.arg is not None:
+                continue
+
+            if self._has_wrong_keys(keyword):
+                self.add_violation(WrongNamedKeywordViolation(keyword.value))
+
+    def _has_wrong_keys(self, node: ast.keyword) -> bool:
+        if not isinstance(node.value, ast.Dict):
+            return False
+
+        for key_node in node.value.keys:
+            if isinstance(key_node, ast.Str) and not str.isidentifier(key_node.s):
                 return True
         return False
