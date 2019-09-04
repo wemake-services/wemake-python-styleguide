@@ -897,10 +897,10 @@ class WrongNamedKeywordViolation(ASTViolation):
     Example::
 
         # Correct:
-        print(**{'end': '\n'})
+        print(**{'end': '|'})
 
         # Wrong:
-        print(**{'3end': '\n'})
+        print(**{'3end': '|'})
 
     .. versionadded:: 0.13.0
 

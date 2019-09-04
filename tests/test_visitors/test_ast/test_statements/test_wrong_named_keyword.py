@@ -13,7 +13,7 @@ from wemake_python_styleguide.visitors.ast.statements import (
 @pytest.mark.parametrize('code', [
     'print(**{"@": "2"})',
     'print(**{"2ab": "2"})',
-    'print(end="\\n", **{"2ab": "2"})',
+    'print(end="|", **{"2ab": "2"})',
 ])
 def test_wrong_starred_keyword(
     assert_errors,

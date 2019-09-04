@@ -369,6 +369,7 @@ class WrongNamedKeywordVisitor(BaseNodeVisitor):
             return False
 
         for key_node in node.value.keys:
-            if isinstance(key_node, ast.Str) and not str.isidentifier(key_node.s):
-                return True
+            if isinstance(key_node, ast.Str):
+                if not str.isidentifier(key_node.s):
+                    return True
         return False
