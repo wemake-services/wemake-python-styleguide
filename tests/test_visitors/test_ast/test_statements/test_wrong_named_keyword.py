@@ -2,7 +2,7 @@
 
 import pytest
 
-from wemake_python_styleguide.violations.refactoring import (
+from wemake_python_styleguide.violations.best_practices import (
     WrongNamedKeywordViolation,
 )
 from wemake_python_styleguide.visitors.ast.statements import (
@@ -13,6 +13,15 @@ from wemake_python_styleguide.visitors.ast.statements import (
 @pytest.mark.parametrize('code', [
     'print(**{"@": "2"})',
     'print(**{"2ab": "2"})',
+    'print(**{"!": "2"})',
+    'print(**{"&a": "2"})',
+    'print(**{"()": "2"})',
+    'print(**{"-b": "2"})',
+    'print(**{"+1": "2"})',
+    'print(**{"#FFF": "2"})',
+    'print(**{"some.value": "2"})',
+    'print(**{"Username[FIELD]": "2"})',
+    'print(**{"call()": "2"})',
     'print(end="|", **{"2ab": "2"})',
 ])
 def test_wrong_starred_keyword(
@@ -38,6 +47,8 @@ def test_wrong_starred_keyword(
     'filter(**{User.USERNAME_FIELD: username})',  # noqa: P103
     'filter(**{"a2": 1, _: 2})',
     'filter(**{"a": 1, b: 2})',
+    'filter(**{"_a": 1, b: 2})',
+    'filter(**{"a_": 1, b: 2})',
     'filter(**{"a": 1, call(): 2})',
     'filter(**{"a": 1, b.method(): 2})',
     'filter(**{b["a"]: 2})',

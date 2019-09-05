@@ -19,6 +19,7 @@ from wemake_python_styleguide.types import (
 from wemake_python_styleguide.violations.best_practices import (
     StatementHasNoEffectViolation,
     UnreachableCodeViolation,
+    WrongNamedKeywordViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
     ParametersIndentationViolation,
@@ -26,7 +27,6 @@ from wemake_python_styleguide.violations.consistency import (
 )
 from wemake_python_styleguide.violations.refactoring import (
     PointlessStarredViolation,
-    WrongNamedKeywordViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias

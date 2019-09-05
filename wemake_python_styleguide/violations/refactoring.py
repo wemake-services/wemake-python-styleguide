@@ -37,7 +37,6 @@ Summary
    ImplicitSumViolation
    FalsyConstantCompareViolation
    WrongIsCompareViolation
-   WrongNamedKeywordViolation
 
 Refactoring opportunities
 -------------------------
@@ -64,7 +63,6 @@ Refactoring opportunities
 .. autoclass:: ImplicitSumViolation
 .. autoclass:: FalsyConstantCompareViolation
 .. autoclass:: WrongIsCompareViolation
-.. autoclass:: WrongNamedKeywordViolation
 
 """
 
@@ -881,30 +879,3 @@ class WrongIsCompareViolation(ASTViolation):
 
     code = 521
     error_template = 'Found wrong `is` compare'
-
-
-class WrongNamedKeywordViolation(ASTViolation):
-    """
-    Forbids to have wrong named keywords in starred dicts.
-
-    Reasoning:
-        Using wrong keywords in starred dict.
-        Eg.: ``print(**{'@': 1})``.
-
-    Solution:
-        Don't use incorrect identifiers for keywords.
-
-    Example::
-
-        # Correct:
-        print(**{'end': '|'})
-
-        # Wrong:
-        print(**{'3end': '|'})
-
-    .. versionadded:: 0.13.0
-
-    """
-
-    code = 522
-    error_template = 'Found wrong named keyword in starred dict'
