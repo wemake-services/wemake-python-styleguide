@@ -78,7 +78,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
 
     """
 
-    _overload_exceptions = frozenset({'overload', 'typing.overload'})
+    _overload_exceptions = frozenset(('overload', 'typing.overload'))
 
     # Blocks:
 
