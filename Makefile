@@ -21,3 +21,8 @@ package:
 
 .PHONY: test
 test: lint unit package
+
+.PHONY: clean
+clean:
+	rm -rf htmlcov .coverage coverage.xml 2> clean.log
+	rm clean.log

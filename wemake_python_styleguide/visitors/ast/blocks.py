@@ -6,11 +6,7 @@ from typing import ClassVar, DefaultDict, List, Set, Union, cast
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import (
-    ForNodes,
-    FunctionNodes,
-    WithNodes,
-)
+from wemake_python_styleguide.compat.aliases import ForNodes, WithNodes
 from wemake_python_styleguide.logic.naming.name_nodes import (
     flat_variable_names,
 )
@@ -19,8 +15,8 @@ from wemake_python_styleguide.logic.scopes import (
     BlockScope,
     OuterScope,
     extract_names,
+    is_function_overload,
 )
-from wemake_python_styleguide.logic.source import node_to_string
 from wemake_python_styleguide.logic.walk import is_contained_by
 from wemake_python_styleguide.types import (
     AnyAssign,
@@ -77,8 +73,6 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
     Please, do not modify. This is fragile and complex.
 
     """
-
-    _overload_exceptions = frozenset(('overload', 'typing.overload'))
 
     # Blocks:
 
@@ -158,13 +152,6 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
 
     # Utils:
 
-    def _is_function_overload(self, node: ast.AST):
-        if isinstance(node, FunctionNodes):
-            for decorator in node.decorator_list:
-                if node_to_string(decorator) in self._overload_exceptions:
-                    return True
-        return False
-
     def _scope(
         self,
         node: ast.AST,
@@ -179,7 +166,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
             self.add_violation(
                 BlockAndLocalOverlapViolation(node, text=', '.join(shadow)),
             )
-        if not self._is_function_overload(node):
+        if not is_function_overload(node):
             scope.add_to_scope(names, is_local=is_local)
 
     def _outer_scope(self, node: ast.AST, names: Set[str]) -> None:
