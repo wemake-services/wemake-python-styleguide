@@ -6,7 +6,11 @@ from typing import ClassVar, DefaultDict, List, Set, Union, cast
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import ForNodes, WithNodes
+from wemake_python_styleguide.compat.aliases import (
+    ForNodes,
+    WithNodes,
+    FunctionNodes
+)
 from wemake_python_styleguide.logic.naming.name_nodes import (
     flat_variable_names,
 )
@@ -16,6 +20,7 @@ from wemake_python_styleguide.logic.scopes import (
     OuterScope,
     extract_names,
 )
+from wemake_python_styleguide.logic.source import node_to_string
 from wemake_python_styleguide.logic.walk import is_contained_by
 from wemake_python_styleguide.types import (
     AnyAssign,
@@ -73,7 +78,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
 
     """
 
-    _ast_func = (ast.FunctionDef, ast.AsyncFunctionDef)
+    _overload_exceptions = {'overload', 'typing.overload'}
 
     # Blocks:
 
@@ -154,22 +159,10 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
     # Utils:
 
     def _is_function_overload(self, node: ast.AST):
-        if isinstance(node, self._ast_func):
-            _scope = BlockScope(node)
+        if isinstance(node, FunctionNodes):
             for decorator in node.decorator_list:
-                if (
-                    isinstance(decorator, ast.Attribute) and
-                    decorator.attr == 'overload'
-                ):
-                    _imported_from_typing = _scope.is_imported_from(
-                        decorator.value.id,
-                        'typing',
-                    )
-                    return (
-                        decorator.value.id == 'typing' or
-                        _imported_from_typing
-                    )
-                return _scope.is_imported_from('overload', 'typing')
+                if node_to_string(decorator) in self._overload_exceptions:
+                    return True
         return False
 
     def _scope(

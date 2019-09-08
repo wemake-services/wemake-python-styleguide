@@ -87,18 +87,6 @@ class BlockScope(_BaseScope):
     def _get_scope(self, *, is_local: bool = False) -> _ContextStore:
         return self._local_scopes if is_local else self._block_scopes
 
-    def is_imported_from(self, func_name: str, module_name: str) -> bool:
-        for node in self._context.body:
-            if isinstance(node, ast.ImportFrom):
-                if node.module == module_name:
-                    for imported_obj in node.names:
-                        if imported_obj.name == func_name:
-                            return True
-            elif isinstance(node, ast.Import):
-                for alias in node.names:
-                    if alias.asname == func_name and alias.name == module_name:
-                        return True
-        return False
 
 @final
 class OuterScope(_BaseScope):

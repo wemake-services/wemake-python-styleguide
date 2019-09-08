@@ -199,19 +199,9 @@ overload_template = """
 
 @pytest.mark.parametrize('import_overload', [
     """
-from typing import overload
 @overload
     """,
     """
-from typing import overload as ovrld
-@ovrld
-""",
-    """
-import typing as tp
-@tp.overload
-    """,
-    """
-import typing
 @typing.overload
     """,
 ])
@@ -237,30 +227,13 @@ def test_function_overload(
 
 @pytest.mark.parametrize('decorator_tempate', [
     """
-import typing
 @typing.func
     """,
     """
-from module import func as fc
-@fc
+@module.overload
     """,
     """
-from typing import func
-@func
-    """,
-    """
-from module import overload
-@overload
-    """,
-    """
-def decorate(func):
-    return None
 @decorate
-    """,
-    """
-def overload(func):
-    return None
-@overload
     """,
 ])
 def test_no_function_overload(
