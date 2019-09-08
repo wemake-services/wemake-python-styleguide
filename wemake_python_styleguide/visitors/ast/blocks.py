@@ -9,7 +9,7 @@ from typing_extensions import final
 from wemake_python_styleguide.compat.aliases import (
     ForNodes,
     WithNodes,
-    FunctionNodes
+    FunctionNodes,
 )
 from wemake_python_styleguide.logic.naming.name_nodes import (
     flat_variable_names,
@@ -78,7 +78,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
 
     """
 
-    _overload_exceptions = {'overload', 'typing.overload'}
+    _overload_exceptions = frozenset({'overload', 'typing.overload'})
 
     # Blocks:
 

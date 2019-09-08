@@ -213,9 +213,7 @@ def test_function_overload(
     import_overload,
     mode,
 ):
-    """
-    Ensures that overload from typing do not overlap.
-    """
+    """Ensures that overload from typing do not overlap."""
     code = overload_template.format(import_overload, pipeline)
     tree = parse_ast_tree(mode(code))
 
@@ -225,7 +223,7 @@ def test_function_overload(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('decorator_tempate', [
+@pytest.mark.parametrize('decorator_template', [
     """
 @typing.func
     """,
@@ -241,16 +239,14 @@ def test_no_function_overload(
     assert_error_text,
     parse_ast_tree,
     default_options,
-    decorator_tempate,
+    decorator_template,
     mode,
 ):
-    """
-    Ensures that not overload from typing do overlap.
-    """
-    code = overload_template.format(decorator_tempate, pipeline)
+    """Ensures that not overload from typing do overlap."""
+    code = overload_template.format(decorator_template, pipeline)
     tree = parse_ast_tree(mode(code))
 
     visitor = BlockVariableVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [BlockAndLocalOverlapViolation, ])
+    assert_errors(visitor, [BlockAndLocalOverlapViolation])
