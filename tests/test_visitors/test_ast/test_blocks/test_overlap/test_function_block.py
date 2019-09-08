@@ -183,3 +183,60 @@ def test_function_block_correct(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+pipeline = """
+def pipeline(function):
+    return
+"""
+
+overload_template = """
+{0}
+{1}
+{1}
+"""
+
+
+@pytest.mark.parametrize('import_overload', [
+    '@overload',
+    '@typing.overload',
+])
+def test_function_overload(
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    default_options,
+    import_overload,
+    mode,
+):
+    """Ensures that overload from typing do not overlap."""
+    code = overload_template.format(import_overload, pipeline)
+    tree = parse_ast_tree(mode(code))
+
+    visitor = BlockVariableVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('decorator_template', [
+    '@typing.func',
+    '@module.overload',
+    '@decorate',
+])
+def test_no_function_overload(
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    default_options,
+    decorator_template,
+    mode,
+):
+    """Ensures that not overload from typing do overlap."""
+    code = overload_template.format(decorator_template, pipeline)
+    tree = parse_ast_tree(mode(code))
+
+    visitor = BlockVariableVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [BlockAndLocalOverlapViolation])

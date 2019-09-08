@@ -15,6 +15,7 @@ from wemake_python_styleguide.logic.scopes import (
     BlockScope,
     OuterScope,
     extract_names,
+    is_function_overload,
 )
 from wemake_python_styleguide.logic.walk import is_contained_by
 from wemake_python_styleguide.types import (
@@ -165,8 +166,8 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
             self.add_violation(
                 BlockAndLocalOverlapViolation(node, text=', '.join(shadow)),
             )
-
-        scope.add_to_scope(names, is_local=is_local)
+        if not is_function_overload(node):
+            scope.add_to_scope(names, is_local=is_local)
 
     def _outer_scope(self, node: ast.AST, names: Set[str]) -> None:
         scope = OuterScope(node)
