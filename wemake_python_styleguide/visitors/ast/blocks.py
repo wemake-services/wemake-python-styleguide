@@ -73,6 +73,8 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
 
     """
 
+    _ast_func = (ast.FunctionDef, ast.AsyncFunctionDef)
+
     # Blocks:
 
     def visit_named_nodes(self, node: AnyFunctionDef) -> None:
@@ -151,6 +153,25 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
 
     # Utils:
 
+    def _is_function_overload(self, node: ast.AST):
+        if isinstance(node, self._ast_func):
+            _scope = BlockScope(node)
+            for decorator in node.decorator_list:
+                if (
+                    isinstance(decorator, ast.Attribute) and
+                    decorator.attr == 'overload'
+                ):
+                    _imported_from_typing = _scope.is_imported_from(
+                        decorator.value.id,
+                        'typing',
+                    )
+                    return (
+                        decorator.value.id == 'typing' or
+                        _imported_from_typing
+                    )
+                return _scope.is_imported_from('overload', 'typing')
+        return False
+
     def _scope(
         self,
         node: ast.AST,
@@ -165,8 +186,8 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
             self.add_violation(
                 BlockAndLocalOverlapViolation(node, text=', '.join(shadow)),
             )
-
-        scope.add_to_scope(names, is_local=is_local)
+        if not self._is_function_overload(node):
+            scope.add_to_scope(names, is_local=is_local)
 
     def _outer_scope(self, node: ast.AST, names: Set[str]) -> None:
         scope = OuterScope(node)

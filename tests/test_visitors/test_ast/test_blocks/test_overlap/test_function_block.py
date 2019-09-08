@@ -183,3 +183,101 @@ def test_function_block_correct(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+pipeline = """
+def pipeline(function):
+    return
+"""
+
+overload_template = """
+{0}
+{1}
+{1}
+"""
+
+
+@pytest.mark.parametrize('import_overload', [
+    """
+from typing import overload
+@overload
+    """,
+    """
+from typing import overload as ovrld
+@ovrld
+""",
+    """
+import typing as tp
+@tp.overload
+    """,
+    """
+import typing
+@typing.overload
+    """,
+])
+def test_function_overload(
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    default_options,
+    import_overload,
+    mode,
+):
+    """
+    He he he.
+    """
+    code = overload_template.format(import_overload, pipeline)
+    tree = parse_ast_tree(mode(code))
+
+    visitor = BlockVariableVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('decorator_tempate', [
+    """
+import typing
+@typing.func
+    """,
+    """
+from module import func as fc
+@fc
+    """,
+    """
+from typing import func
+@func
+    """,
+    """
+from module import overload
+@overload
+    """,
+    """
+def decorate(func):
+    return None
+@decorate
+    """,
+    """
+def overload(func):
+    return None
+@overload
+    """,
+])
+def test_no_function_overload(
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    default_options,
+    decorator_tempate,
+    mode,
+):
+    """
+    He he he.
+    """
+    code = overload_template.format(decorator_tempate, pipeline)
+    tree = parse_ast_tree(mode(code))
+
+    visitor = BlockVariableVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [BlockAndLocalOverlapViolation, ])
