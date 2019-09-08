@@ -224,7 +224,7 @@ def test_function_overload(
     mode,
 ):
     """
-    He he he.
+    Ensures that overload from typing do not overlap.
     """
     code = overload_template.format(import_overload, pipeline)
     tree = parse_ast_tree(mode(code))
@@ -272,7 +272,7 @@ def test_no_function_overload(
     mode,
 ):
     """
-    He he he.
+    Ensures that not overload from typing do overlap.
     """
     code = overload_template.format(decorator_tempate, pipeline)
     tree = parse_ast_tree(mode(code))
