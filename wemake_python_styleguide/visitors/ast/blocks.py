@@ -8,8 +8,8 @@ from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import (
     ForNodes,
-    WithNodes,
     FunctionNodes,
+    WithNodes,
 )
 from wemake_python_styleguide.logic.naming.name_nodes import (
     flat_variable_names,
