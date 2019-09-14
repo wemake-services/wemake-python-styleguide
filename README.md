@@ -1,6 +1,6 @@
 # wemake-python-styleguide
 
-[![wemake.services](https://img.shields.io/badge/%20-wemake.services-green.svg?label=%20&logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC%2FxhBQAAAAFzUkdCAK7OHOkAAAAbUExURQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP%2F%2F%2F5TvxDIAAAAIdFJOUwAjRA8xXANAL%2Bv0SAAAADNJREFUGNNjYCAIOJjRBdBFWMkVQeGzcHAwksJnAPPZGOGAASzPzAEHEGVsLExQwE7YswCb7AFZSF3bbAAAAABJRU5ErkJggg%3D%3D)](https://wemake.services)
+[![Financial Contributors on Open Collective](https://opencollective.com/wemake-python-styleguide/all/badge.svg?label=financial+contributors)](https://opencollective.com/wemake-python-styleguide) [![wemake.services](https://img.shields.io/badge/%20-wemake.services-green.svg?label=%20&logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC%2FxhBQAAAAFzUkdCAK7OHOkAAAAbUExURQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP%2F%2F%2F5TvxDIAAAAIdFJOUwAjRA8xXANAL%2Bv0SAAAADNJREFUGNNjYCAIOJjRBdBFWMkVQeGzcHAwksJnAPPZGOGAASzPzAEHEGVsLExQwE7YswCb7AFZSF3bbAAAAABJRU5ErkJggg%3D%3D)](https://wemake.services)
 [![Supporters](https://img.shields.io/opencollective/all/wemake-python-styleguide.svg?color=gold&label=supporters)](https://opencollective.com/wemake-python-styleguide)
 [![Build Status](https://travis-ci.org/wemake-services/wemake-python-styleguide.svg?branch=master)](https://travis-ci.org/wemake-services/wemake-python-styleguide)
 [![Coverage](https://coveralls.io/repos/github/wemake-services/wemake-python-styleguide/badge.svg?branch=master)](https://coveralls.io/github/wemake-services/wemake-python-styleguide?branch=master)
@@ -131,3 +131,33 @@ See ["Contributing"](https://wemake-python-stylegui.de/en/latest/pages/contribut
 
 You can start with [issues that need some help](https://github.com/wemake-services/wemake-python-styleguide/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
 right now.
+
+## Contributors
+
+### Code Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/wemake-services/wemake-python-styleguide/graphs/contributors"><img src="https://opencollective.com/wemake-python-styleguide/contributors.svg?width=890&button=false" /></a>
+
+### Financial Contributors
+
+Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/wemake-python-styleguide/contribute)]
+
+#### Individuals
+
+<a href="https://opencollective.com/wemake-python-styleguide"><img src="https://opencollective.com/wemake-python-styleguide/individuals.svg?width=890"></a>
+
+#### Organizations
+
+Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/wemake-python-styleguide/contribute)]
+
+<a href="https://opencollective.com/wemake-python-styleguide/organization/0/website"><img src="https://opencollective.com/wemake-python-styleguide/organization/0/avatar.svg"></a>
+<a href="https://opencollective.com/wemake-python-styleguide/organization/1/website"><img src="https://opencollective.com/wemake-python-styleguide/organization/1/avatar.svg"></a>
+<a href="https://opencollective.com/wemake-python-styleguide/organization/2/website"><img src="https://opencollective.com/wemake-python-styleguide/organization/2/avatar.svg"></a>
+<a href="https://opencollective.com/wemake-python-styleguide/organization/3/website"><img src="https://opencollective.com/wemake-python-styleguide/organization/3/avatar.svg"></a>
+<a href="https://opencollective.com/wemake-python-styleguide/organization/4/website"><img src="https://opencollective.com/wemake-python-styleguide/organization/4/avatar.svg"></a>
+<a href="https://opencollective.com/wemake-python-styleguide/organization/5/website"><img src="https://opencollective.com/wemake-python-styleguide/organization/5/avatar.svg"></a>
+<a href="https://opencollective.com/wemake-python-styleguide/organization/6/website"><img src="https://opencollective.com/wemake-python-styleguide/organization/6/avatar.svg"></a>
+<a href="https://opencollective.com/wemake-python-styleguide/organization/7/website"><img src="https://opencollective.com/wemake-python-styleguide/organization/7/avatar.svg"></a>
+<a href="https://opencollective.com/wemake-python-styleguide/organization/8/website"><img src="https://opencollective.com/wemake-python-styleguide/organization/8/avatar.svg"></a>
+<a href="https://opencollective.com/wemake-python-styleguide/organization/9/website"><img src="https://opencollective.com/wemake-python-styleguide/organization/9/avatar.svg"></a>
