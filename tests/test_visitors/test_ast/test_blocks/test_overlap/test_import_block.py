@@ -61,7 +61,6 @@ def test_import_block_overlap(
         import_statement.format(variable_name),
         assign_statement.format(variable_name),
     )
-    print(code)
     tree = parse_ast_tree(mode(code))
 
     visitor = BlockVariableVisitor(default_options, tree=tree)
