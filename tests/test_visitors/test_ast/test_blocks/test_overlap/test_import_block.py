@@ -36,8 +36,6 @@ class Test(object):
 @pytest.mark.parametrize('import_statement', [
     import_block,
     import_block_as,
-    from_import_block,
-    from_import_block_as,
 ])
 @pytest.mark.parametrize('context', [
     import_template1,
@@ -63,6 +61,7 @@ def test_import_block_overlap(
         import_statement.format(variable_name),
         assign_statement.format(variable_name),
     )
+    print(code)
     tree = parse_ast_tree(mode(code))
 
     visitor = BlockVariableVisitor(default_options, tree=tree)
@@ -138,6 +137,41 @@ def test_import_block_correct(
     code = context.format(
         import_statement.format(first_name),
         assign_statement.format(second_name),
+    )
+    tree = parse_ast_tree(mode(code))
+
+    visitor = BlockVariableVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('import_statement', [
+    from_import_block,
+    from_import_block_as,
+])
+@pytest.mark.parametrize('context', [
+    import_template1,
+    import_template2,
+    import_template3,
+])
+@pytest.mark.parametrize('variable_name', [
+    'should_raise',
+])
+def test_import_block_no_overlap(
+    assert_errors,
+    parse_ast_tree,
+    import_statement,
+    assign_statement,
+    context,
+    variable_name,
+    default_options,
+    mode,
+):
+    """Ensures that overlaping variables exist no."""
+    code = context.format(
+        import_statement.format(variable_name),
+        assign_statement.format(variable_name),
     )
     tree = parse_ast_tree(mode(code))
 

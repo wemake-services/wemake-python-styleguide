@@ -143,3 +143,48 @@ def is_function_overload(node: ast.AST) -> bool:
             if node_to_string(decorator) in _overload_exceptions:
                 return True
     return False
+
+
+def _is_var_imported_from(
+    node: ast.AST,
+) -> bool:
+    """Check that name imported from module."""
+    ctx = get_context(node)
+    if ctx and isinstance(node, ast.Name):
+        for part in ctx.body:
+            if isinstance(part, ast.ImportFrom):
+                imported_names = {
+                    imported.asname
+                    if imported.asname else imported.name
+                    for imported in part.names
+                }
+                if node.id in imported_names:
+                    return True
+    return False
+
+
+def _is_tuple_have_imported_name(node: ast.AST) -> bool:
+    if isinstance(node, ast.Tuple):
+        assigned_vars = [
+            el.value
+            if isinstance(el, ast.Starred)
+            else el
+            for el in node.elts
+        ]
+        return any(
+            (_is_var_imported_from(assigned) for assigned in assigned_vars),
+        )
+    return False
+
+
+def is_imported_var_assigned(node: ast.AST) -> bool:
+    """Check that imported variable is assigned."""
+    if isinstance(node, ast.Assign):
+        for assigned_var in node.targets:
+            if _is_var_imported_from(assigned_var):
+                return True
+            elif _is_tuple_have_imported_name(assigned_var):
+                return True
+    elif isinstance(node, ast.AnnAssign):
+        return _is_var_imported_from(node.target)
+    return False
