@@ -36,6 +36,8 @@ class Test(object):
 @pytest.mark.parametrize('import_statement', [
     import_block,
     import_block_as,
+    from_import_block,
+    from_import_block_as,
 ])
 @pytest.mark.parametrize('context', [
     import_template1,
@@ -146,6 +148,8 @@ def test_import_block_correct(
 
 
 @pytest.mark.parametrize('import_statement', [
+    import_block,
+    import_block_as,
     from_import_block,
     from_import_block_as,
 ])
@@ -154,23 +158,43 @@ def test_import_block_correct(
     import_template2,
     import_template3,
 ])
-@pytest.mark.parametrize('variable_name', [
-    'should_raise',
+@pytest.mark.parametrize('extended_assign_stmt', [
+    '{0} = func({0})',
+    '{0} = {0}(arg)',
+    '{0} = {0} + 1',
+    '{0} = {0}.attr',
+    '{0} = {0}["key"]',
+    '{0} = d[{0}]',
+    '{0} = d[{0}:1]',
+    '{0}: type = func({0})',
+    '{0}: type = {0}(arg)',
+    '{0}: type = {0} + 1',
+    '{0}: type = {0}.attr',
+    '{0}: type = {0}["key"]',
+    '{0}: type = d[{0}]',
+    '{0}, {1} = {0}({1})',
+    '{0}, {1} = {0} * {1}',
+    '{0}, {1} = ({1}, {0})',
+    '{1}, *{0} = ({1}, {0})',
+])
+@pytest.mark.parametrize(('first_name', 'second_name'), [
+    ('no_raise', 'used'),
 ])
 def test_import_block_no_overlap(
     assert_errors,
     parse_ast_tree,
-    import_statement,
-    assign_statement,
-    context,
-    variable_name,
     default_options,
     mode,
+    import_statement,
+    context,
+    extended_assign_stmt,
+    first_name,
+    second_name,
 ):
     """Ensures that overlaping variables exist no."""
     code = context.format(
-        import_statement.format(variable_name),
-        assign_statement.format(variable_name),
+        import_statement.format(first_name, second_name),
+        extended_assign_stmt.format(first_name, second_name),
     )
     tree = parse_ast_tree(mode(code))
 

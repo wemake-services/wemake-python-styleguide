@@ -8,6 +8,10 @@ from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic.naming import access, name_nodes
+from wemake_python_styleguide.logic.naming.name_nodes import (
+    flat_variable_names,
+    get_variables_from_node,
+)
 from wemake_python_styleguide.logic.nodes import get_context
 from wemake_python_styleguide.logic.source import node_to_string
 from wemake_python_styleguide.types import ContextNodes
@@ -145,46 +149,37 @@ def is_function_overload(node: ast.AST) -> bool:
     return False
 
 
-def _is_var_imported_from(
-    node: ast.AST,
-) -> bool:
-    """Check that name imported from module."""
-    ctx = get_context(node)
-    if ctx and isinstance(node, ast.Name):
-        for part in ctx.body:
-            if isinstance(part, ast.ImportFrom):
-                imported_names = {
-                    imported.asname
-                    if imported.asname else imported.name
-                    for imported in part.names
-                }
-                if node.id in imported_names:
-                    return True
-    return False
-
-
-def _is_tuple_have_imported_name(node: ast.AST) -> bool:
-    if isinstance(node, ast.Tuple):
-        assigned_vars = [
-            el.value
-            if isinstance(el, ast.Starred)
-            else el
-            for el in node.elts
-        ]
-        return any(
-            (_is_var_imported_from(assigned) for assigned in assigned_vars),
-        )
-    return False
+def _get_variables_from_complex_node(node: ast.AST) -> Set[str]:
+    names = set(get_variables_from_node(node))
+    if isinstance(node, ast.Attribute):
+        names.add(node.attr)
+        names.update(_get_variables_from_complex_node(node.value))
+    elif isinstance(node, ast.BinOp):
+        names.update(_get_variables_from_complex_node(node.left))
+        names.update(_get_variables_from_complex_node(node.right))
+    elif isinstance(node, ast.Call):
+        names.update(_get_variables_from_complex_node(node.func))
+        for subnode in node.args:
+            names.update(_get_variables_from_complex_node(subnode))
+    elif isinstance(node, ast.Index):
+        names.update(_get_variables_from_complex_node(node.value))
+    elif isinstance(node, ast.Slice):
+        names.update(_get_variables_from_complex_node(node.lower))
+        names.update(_get_variables_from_complex_node(node.upper))
+    elif isinstance(node, ast.Subscript):
+        names.update(_get_variables_from_complex_node(node.value))
+        names.update(_get_variables_from_complex_node(node.slice))
+    return names
 
 
 def is_imported_var_assigned(node: ast.AST) -> bool:
     """Check that imported variable is assigned."""
+    assigned_vars: Set[str] = set()
+    value_names: Set[str] = set()
     if isinstance(node, ast.Assign):
-        for assigned_var in node.targets:
-            if _is_var_imported_from(assigned_var):
-                return True
-            elif _is_tuple_have_imported_name(assigned_var):
-                return True
+        assigned_vars.update(flat_variable_names([node]))
+        value_names.update(_get_variables_from_complex_node(node.value))
     elif isinstance(node, ast.AnnAssign):
-        return _is_var_imported_from(node.target)
-    return False
+        assigned_vars = set(flat_variable_names([node]))
+        value_names = _get_variables_from_complex_node(node.value)
+    return bool(assigned_vars.intersection(value_names))
