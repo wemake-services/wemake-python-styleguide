@@ -174,12 +174,10 @@ def _get_variables_from_complex_node(node: ast.AST) -> Set[str]:
 
 def is_imported_var_assigned(node: ast.AST) -> bool:
     """Check that imported variable is assigned."""
-    assigned_vars: Set[str] = set()
+    assigned_vars = set(flat_variable_names([node]))
     value_names: Set[str] = set()
     if isinstance(node, ast.Assign):
-        assigned_vars.update(flat_variable_names([node]))
         value_names.update(_get_variables_from_complex_node(node.value))
     elif isinstance(node, ast.AnnAssign):
-        assigned_vars = set(flat_variable_names([node]))
-        value_names = _get_variables_from_complex_node(node.value)
+        value_names.update(_get_variables_from_complex_node(node.value))
     return bool(assigned_vars.intersection(value_names))
