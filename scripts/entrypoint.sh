@@ -2,6 +2,9 @@
 set -e
 
 # Runs flake8:
+which flake8
+flake8 --help
+flake8 .
 output=$(flake8 "$1")
 
 # Outputs the result to the console:
