@@ -2,7 +2,16 @@
 
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, List, Set, Union, cast
+from typing import (
+    Callable,
+    ClassVar,
+    DefaultDict,
+    List,
+    Set,
+    Tuple,
+    Union,
+    cast,
+)
 
 from typing_extensions import final
 
@@ -16,6 +25,7 @@ from wemake_python_styleguide.logic.scopes import (
     OuterScope,
     extract_names,
     is_function_overload,
+    is_same_value_reuse,
 )
 from wemake_python_styleguide.logic.walk import is_contained_by
 from wemake_python_styleguide.types import (
@@ -38,6 +48,10 @@ _BlockVariables = DefaultDict[
     ast.AST,
     DefaultDict[str, List[ast.AST]],
 ]
+
+#: That's how we filter some overlaps that do happen in Python:
+_ScopePredicate = Callable[[ast.AST, Set[str]], bool]
+_NamePredicate = Callable[[ast.AST], bool]
 
 
 @final
@@ -73,6 +87,14 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
     Please, do not modify. This is fragile and complex.
 
     """
+
+    _naming_predicates: Tuple[_NamePredicate, ...] = (
+        is_function_overload,
+    )
+
+    _scope_predicates: Tuple[_ScopePredicate, ...] = (
+        is_same_value_reuse,
+    )
 
     # Blocks:
 
@@ -162,11 +184,21 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
         scope = BlockScope(node)
         shadow = scope.shadowing(names, is_local=is_local)
 
-        if shadow:
+        ignored_scope = any(
+            predicate(node, names)
+            for predicate in self._scope_predicates
+        )
+        ignored_name = any(
+            predicate(node)
+            for predicate in self._naming_predicates
+        )
+
+        if shadow and not ignored_scope:
             self.add_violation(
                 BlockAndLocalOverlapViolation(node, text=', '.join(shadow)),
             )
-        if not is_function_overload(node):
+
+        if not ignored_name:
             scope.add_to_scope(names, is_local=is_local)
 
     def _outer_scope(self, node: ast.AST, names: Set[str]) -> None:

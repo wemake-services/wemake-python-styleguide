@@ -8,6 +8,7 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Bugfixes
 
+- We now ignore `@overload` from `BlockAndLocalOverlapViolation`
 - Now expressions that reuse block variables are not treated as violations,
   example: `my_var = do_some(my_var)`
 
@@ -15,6 +16,7 @@ We used to have incremental versioning before `0.1.0`.
 
 - Adds Github Action and docs how to use it
 - Adds local Github Action that uses itself for testing
+- Adds official Docker image and docs about it
 
 
 ## 0.12.4

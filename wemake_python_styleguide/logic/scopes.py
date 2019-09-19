@@ -6,7 +6,7 @@ from typing import ClassVar, DefaultDict, Set, cast
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
 from wemake_python_styleguide.logic.naming import access, name_nodes
 from wemake_python_styleguide.logic.nodes import get_context
 from wemake_python_styleguide.logic.source import node_to_string
@@ -14,6 +14,9 @@ from wemake_python_styleguide.types import ContextNodes
 
 #: That's how we represent scopes that are bound to contexts.
 _ContextStore = DefaultDict[ContextNodes, Set[str]]
+
+#: That's what we expect from `@overload` decorator:
+_overload_exceptions = frozenset(('overload', 'typing.overload'))
 
 
 class _BaseScope(object):
@@ -133,13 +136,23 @@ def extract_names(node: ast.AST) -> Set[str]:
     return set(name_nodes.get_variables_from_node(node))
 
 
-_overload_exceptions = frozenset(('overload', 'typing.overload'))
-
-
 def is_function_overload(node: ast.AST) -> bool:
     """Check that function decorated with `typing.overload`."""
     if isinstance(node, FunctionNodes):
         for decorator in node.decorator_list:
             if node_to_string(decorator) in _overload_exceptions:
                 return True
+    return False
+
+
+def is_same_value_reuse(node: ast.AST, names: Set[str]) -> bool:
+    """Checks if the given names are reused by the given node."""
+    if isinstance(node, AssignNodes) and node.value:
+        used_names = {
+            name_node.id
+            for name_node in ast.walk(node.value)
+            if isinstance(name_node, ast.Name)
+        }
+        if not names.difference(used_names):
+            return True
     return False
