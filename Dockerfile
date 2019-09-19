@@ -9,6 +9,9 @@
 
 FROM python:3.7-alpine
 
+LABEL maintainer="sobolevn@wemake.services"
+LABEL vendor="wemake.services"
+
 ENV WPS_VERSION='0.12.5'
 
 RUN apk add --no-cache bash
