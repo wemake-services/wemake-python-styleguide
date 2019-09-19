@@ -156,6 +156,19 @@ This section is intended for maintainers only.
 If you are not a maintainer (or do not know what it means),
 just skip it. You are not going to miss anything useful.
 
+### Releasing a new version
+
+Releasing a new version requires several steps:
+
+1. Ensure that `CHANGELOG.md` is up-to-date and contains all changes
+2. Bump version in `pyproject.toml`
+3. Bump version in `Dockerfile` that is used for Github Action
+4. Run `git commit -a -m 'Version x.y.z release' && git tag -a x.y.x -m 'Version x.y.z' && git push && git push --tags`
+5. Run `poetry publish --build`
+6. Edit Github Release and mark that new action version is released
+
+Done! New version is released.
+
 ### Making patches to older versions
 
 If you want to release a patch for an older version, that what you have to do:

@@ -1,0 +1,24 @@
+# This is a definition file for a Github Action.
+# See: https://help.github.com/en/articles/creating-a-docker-container-action
+
+# We also define metadata here:
+# See: https://help.github.com/en/articles/metadata-syntax-for-github-actions
+
+name: 'wemake-python-styleguide'
+description: 'Runs wemake-python-styleguide as a Github Action'
+branding:
+  icon: 'check'
+  color: 'green'
+inputs:
+  path:
+    description: 'Path or space-separated list of paths to lint'
+    required: false
+    default: '.'
+outputs:
+  output:
+    description: 'The output of wemake-python-styleguide run'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.path }}
