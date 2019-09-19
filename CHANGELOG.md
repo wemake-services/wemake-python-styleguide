@@ -4,6 +4,19 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
+## 0.12.5
+
+### Bugfixes
+
+- Now expressions that reuse block variables are not treated as violations,
+  example: `my_var = do_some(my_var)`
+
+### Misc
+
+- Adds Github Action and docs how to use it
+- Adds local Github Action that uses itself for testing
+
+
 ## 0.12.4
 
 ### Bugfixes
