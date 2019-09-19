@@ -19,4 +19,4 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - uses: wemake-services/wemake-python-styleguide
+    - uses: wemake-services/wemake-python-styleguide@master
