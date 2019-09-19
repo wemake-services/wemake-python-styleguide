@@ -7,6 +7,7 @@
   nitpick.rst
   legacy.rst
   flakehell.rst
+  docker.rst
   ci.rst
   stubs.rst
   pylint.rst

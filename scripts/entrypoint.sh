@@ -7,8 +7,10 @@ echo "Linting path: $1"
 output=$(flake8 "$1")
 
 echo "$PWD"
+cat .editorconfig
 cat setup.cfg
 which flake8
+isort --check
 
 # Sets the output variable for Github Action API:
 # See: https://help.github.com/en/articles/development-tools-for-github-action
