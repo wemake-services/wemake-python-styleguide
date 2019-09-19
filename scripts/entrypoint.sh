@@ -6,9 +6,15 @@ echo "Linting path: $1"
 # Runs flake8:
 output=$(flake8 "$1")
 
+echo "$PWD"
+cat setup.cfg
+which flake8
+
 # Sets the output variable for Github Action API:
 # See: https://help.github.com/en/articles/development-tools-for-github-action
-::set-output name=output::$output
+echo ::set-output name=output::$output
+echo '================================'
+echo
 
 # Fail the build in case there's any output (means there are violations):
 if [[ "$output" ]]; then
