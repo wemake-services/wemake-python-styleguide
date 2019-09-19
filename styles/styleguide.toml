@@ -12,7 +12,6 @@ radon-max-cc = 10
 ignore = "D100,D104,D401,W504,RST303,RST304"
 
 ["setup.cfg".isort]
-default_section = "FIRSTPARTY"
 line_length = 79
 
 

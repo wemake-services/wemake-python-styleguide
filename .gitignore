@@ -199,3 +199,4 @@ fabric.properties
 ### Custom ###
 # Used for testing:
 ex.py
+setup.py
