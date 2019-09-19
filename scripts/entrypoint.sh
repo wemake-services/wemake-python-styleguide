@@ -7,7 +7,8 @@ echo "Linting path: $1"
 output=$(flake8 "$1")
 
 # Sets the output variable for Github Action API:
-echo ::set-output name=output::$output
+# See: https://help.github.com/en/articles/development-tools-for-github-action
+::set-output name=output::$output
 
 # Fail the build in case there's any output (means there are violations):
 if [[ "$output" ]]; then
