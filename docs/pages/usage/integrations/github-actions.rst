@@ -7,7 +7,7 @@ Github Actions
 
 Good news: we ship pre-built Github Action with this project.
 
-You can use it from the Github Marketplace:
+You can use it from the `Github Marketplace <https://github.com/marketplace/actions/wemake-python-styleguide>`_:
 
 .. code:: yaml
 
