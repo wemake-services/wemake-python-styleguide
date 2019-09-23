@@ -1234,9 +1234,10 @@ class NestedClassViolation(ASTViolation):
         If you are nesting classes inside a function for parametrization,
         then you will probably need to use different design (or metaclasses).
 
-    See
-    :py:data:`~wemake_python_styleguide.constants.NESTED_CLASSES_WHITELIST`
-    for the full list of whitelisted names.
+    Configuration:
+        This rule is configurable with ``--nested-classes-whitelist``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.NESTED_CLASSES_WHITELIST`
 
     Example::
 
@@ -1250,6 +1251,7 @@ class NestedClassViolation(ASTViolation):
                 ...
 
     .. versionadded:: 0.1.0
+    .. versionchanged:: 0.13.0
 
     """
 

@@ -2,11 +2,11 @@
 
 import pytest
 
+from wemake_python_styleguide.options.defaults import NESTED_CLASSES_WHITELIST
 from wemake_python_styleguide.violations.best_practices import (
     NestedClassViolation,
 )
 from wemake_python_styleguide.visitors.ast.complexity.nested import (
-    NESTED_CLASSES_WHITELIST,
     NestedComplexityVisitor,
 )
 
@@ -142,6 +142,34 @@ def test_whitelist_nested_classes(
     tree = parse_ast_tree(mode(code.format(whitelist_name)))
 
     visitor = NestedComplexityVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('whitelist_name', [
+    *NESTED_CLASSES_WHITELIST,
+    'NestedClass',
+])
+@pytest.mark.parametrize('code', [
+    nested_class_in_class,
+])
+def test_custom_whitelist_nested_classes(
+    assert_errors,
+    parse_ast_tree,
+    whitelist_name,
+    code,
+    options,
+    mode,
+):
+    """Testing that it is possible to nest custom whitelisted classes."""
+    tree = parse_ast_tree(mode(code.format(whitelist_name)))
+
+    option_values = options(
+        nested_classes_whitelist=[*NESTED_CLASSES_WHITELIST, 'NestedClass'],
+    )
+
+    visitor = NestedComplexityVisitor(option_values, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])

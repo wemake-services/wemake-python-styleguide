@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Optional
+from typing import List, Optional
 
 import attr
 from typing_extensions import final
@@ -59,6 +59,7 @@ class _ValidatedOptions(object):
     max_asserts: int = attr.ib(validator=[_min_max(min=1)])
     max_access_level: int = attr.ib(validator=[_min_max(min=1)])
     max_attributes: int = attr.ib(validator=[_min_max(min=1)])
+    nested_classes_whitelist: List[str]
 
 
 def validate_options(options: ConfigurationOptions) -> _ValidatedOptions:
