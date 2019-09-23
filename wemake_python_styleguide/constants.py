@@ -246,12 +246,6 @@ ASYNC_MAGIC_METHODS_BLACKLIST: Final = ALL_MAGIC_METHODS.difference({
     '__aexit__',
 })
 
-#: List of nested classes' names we allow to use.
-NESTED_CLASSES_WHITELIST: Final = frozenset((
-    'Meta',  # django forms, models, drf, etc
-    'Params',  # factoryboy specific
-))
-
 #: List of builtin classes that are allowed to subclass.
 ALLOWED_BUILTIN_CLASSES: Final = frozenset((
     'type',

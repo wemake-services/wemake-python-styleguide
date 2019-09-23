@@ -27,7 +27,6 @@ MAX_NAME_LENGTH: Final = 45
 #: Whether you control ones who use your code.
 I_CONTROL_CODE: Final = True
 
-
 # Complexity:
 
 #: Maximum number of `return` statements allowed in a single function.
@@ -89,3 +88,9 @@ MAX_ACCESS_LEVEL: Final = 4  # guessed
 
 #: Maximum number of public attributes in a single class.
 MAX_ATTRIBUTES: Final = 6  # guessed
+
+#: List of nested classes' names we allow to use.
+NESTED_CLASSES_WHITELIST: Final = frozenset((
+    'Meta',  # django forms, models, drf, etc
+    'Params',  # factoryboy specific
+))

@@ -106,10 +106,13 @@ You can also show all options that ``flake8`` supports by running:
 - ``max-attributes`` - maximum number of public instance attributes,
     defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_ATTRIBUTES`
+- ``nested-classes-whitelist`` - list of nested classes' names we allow to use,
+    defaults to
+    :str:`wemake_python_styleguide.options.defaults.NESTED_CLASSES_WHITELIST`
 
 """
 
-from typing import ClassVar, Mapping, Optional, Sequence, Union
+from typing import ClassVar, FrozenSet, Mapping, Optional, Sequence, Union
 
 import attr
 from flake8.options.manager import OptionManager
@@ -117,8 +120,11 @@ from typing_extensions import final
 
 from wemake_python_styleguide.options import defaults
 
+ConfigValuesTypes = Union[str, int, bool, FrozenSet[str]]
+
 #: Immutable config values passed from `flake8`.
-ConfigValues = Mapping[str, Union[str, int, bool]]
+# TODO: why do we need this type? (it is not used anywhere...)
+ConfigValues = Mapping[str, ConfigValuesTypes]
 
 
 @final
@@ -127,11 +133,12 @@ class _Option(object):
     """Represents ``flake8`` option object."""
 
     long_option_name: str
-    default: int
+    default: ConfigValuesTypes
     help: str
     type: Optional[str] = 'int'  # noqa: A003
     parse_from_config: bool = True
     action: str = 'store'
+    comma_separated_list: bool = False
 
     def __attrs_post_init__(self):
         """Is called after regular init is done."""
@@ -287,6 +294,14 @@ class Configuration(object):
             'Whether you control ones who use your code.',
             action='store_true',
             type=None,
+        ),
+
+        _Option(
+            '--nested-classes-whitelist',
+            defaults.NESTED_CLASSES_WHITELIST,
+            'List of nested classes names we allow to use.',
+            type='string',
+            comma_separated_list=True,
         ),
     ]
 

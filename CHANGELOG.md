@@ -4,6 +4,12 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
+## 0.13.0
+
+### Features
+
+- `WPS431` now allow customize whitelist via  `nested-classes-whitelist` setting
+
 ## 0.12.5
 
 ### Bugfixes
