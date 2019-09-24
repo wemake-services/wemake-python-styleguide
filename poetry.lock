@@ -768,7 +768,7 @@ description = "Flake8 plugin to enforce the same lint configuration (flake8, iso
 name = "nitpick"
 optional = false
 python-versions = ">=3.5,<4.0"
-version = "0.21.0"
+version = "0.21.1"
 
 [package.dependencies]
 attrs = "*"
@@ -1356,7 +1356,7 @@ version = "0.6.0"
 more-itertools = "*"
 
 [metadata]
-content-hash = "95b5e0002ed1da6d59a290972e9d05e6dbbd9a099ec4cf257916a7fdbc19766c"
+content-hash = "3de6b170e8564613cd61f0db40d77115ba5a962ed74318974d6a369b7580c490"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -1433,7 +1433,7 @@ mypy = ["0107bff4f46a289f0e4081d59b77cef1c48ea43da5a0dbf0005d54748b26df2a", "079
 mypy-extensions = ["37e0e956f41369209a3d5f34580150bcacfabaa57b33a15c0b25f4b5725e0812", "b16cabe759f55e3409a7d231ebd2841378fb0c27a5d1994719e340e4f429ac3e"]
 natsort = ["83a8c36b1b2321705d4d7814a7aaf91d0e1bcb7bff119a6ebfe5c9ce3b332d0e", "ff3effb5618232866de8d26e5af4081a4daa9bb0dfed49ac65170e28e45f2776"]
 networkx = ["8311ddef63cf5c5c5e7c1d0212dd141d9a1fe3f474915281b73597ed5f1d4e3d"]
-nitpick = ["0a001da305ecb8223e20f6e9c4e36eb0a59c998f4f083f3d6f0109964a0846f9", "467cad9c373f092cdebee5425f1153b76afa86a500d9d1294307efca52801697"]
+nitpick = ["fb2f5f6e5c1ae8f351b0f9c01bafe68c35d87480e9bac7064cf7d15491d70db9", "ff451b41fbfe50ecda0522756a5628d6861c8c4f25c183d65bcd4efede0c8c95"]
 packaging = ["a7ac867b97fdc07ee80a8058fe4435ccd274ecc3b0ed61d852d7d53055528cf9", "c491ca87294da7cc01902edbe30a5bc6c4c28172b5138ab4e4aa1b9d7bfaeafe"]
 parso = ["63854233e1fadb5da97f2744b6b24346d2750b85965e7e399bec1620232797dc", "666b0ee4a7a1220f65d367617f2cd3ffddff3e205f3f16a0284df30e774c2a9c"]
 pbr = ["56e52299170b9492513c64be44736d27a512fa7e606f21942160b68ce510b4bc", "9b321c204a88d8ab5082699469f52cc94c5da45c51f114113d01b3d993c24cdf"]
