@@ -38,7 +38,7 @@ Reference
 """
 
 import ast
-from typing import Tuple, Type, Union
+from typing import List, Tuple, Type, Union
 
 from typing_extensions import Protocol, final
 
@@ -123,3 +123,4 @@ class ConfigurationOptions(Protocol):
     max_asserts: int
     max_access_level: int
     max_attributes: int
+    nested_classes_whitelist: List[str]

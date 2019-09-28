@@ -5,10 +5,7 @@ import ast
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
-from wemake_python_styleguide.constants import (
-    NESTED_CLASSES_WHITELIST,
-    NESTED_FUNCTIONS_WHITELIST,
-)
+from wemake_python_styleguide.constants import NESTED_FUNCTIONS_WHITELIST
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.walk import is_child_of
 from wemake_python_styleguide.types import AnyFunctionDef
@@ -85,7 +82,9 @@ class NestedComplexityVisitor(BaseNodeVisitor):
         parent_context = get_context(node)
 
         is_inside_class = isinstance(parent_context, ast.ClassDef)
-        is_bad = is_inside_class and node.name not in NESTED_CLASSES_WHITELIST
+        is_whitelisted = node.name in self.options.nested_classes_whitelist
+
+        is_bad = is_inside_class and not is_whitelisted
 
         is_inside_function = isinstance(parent_context, FunctionNodes)
 
