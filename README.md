@@ -128,7 +128,7 @@ We **warmly welcome** all contributions!
 
 [![List of contributors](https://opencollective.com/wemake-python-styleguide/contributors.svg?width=890&button=0)](https://github.com/wemake-services/wemake-python-styleguide/graphs/contributors)
 
-See ["Contributing"](https://wemake-python-stylegui.de/en/latest/pages/contributing.html) section in the documentation if you want to contribute.
+See ["Contributing"](https://wemake-python-stylegui.de/en/latest/pages/api/index.html#contributing) section in the documentation if you want to contribute.
 
 You can start with [issues that need some help](https://github.com/wemake-services/wemake-python-styleguide/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
 right now.
