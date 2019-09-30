@@ -355,7 +355,7 @@ description = "Flake8 plugin to find commented out code"
 name = "flake8-eradicate"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "0.2.1"
+version = "0.2.2"
 
 [package.dependencies]
 attrs = ">=18.2,<20.0"
@@ -1394,7 +1394,7 @@ flake8-commas = ["d3005899466f51380387df7151fb59afec666a0f4f4a2c6a8995b975de0f44
 flake8-comprehensions = ["7b174ded3d7e73edf587e942458b6c1a7c3456d512d9c435deae367236b9562c", "e36fc12bd3833e0b34fe0639b7a817d32c86238987f532078c57eafdc7a8a219"]
 flake8-debugger = ["be4fb88de3ee8f6dd5053a2d347e2c0a2b54bab6733a2280bb20ebd3c4ca1d97"]
 flake8-docstrings = ["1666dd069c9c457ee57e80af3c1a6b37b00cc1801c6fde88e455131bb2e186cd", "9c0db5a79a1affd70fdf53b8765c8a26bf968e59e0252d7f2fc546b41c0cda06"]
-flake8-eradicate = ["86804c682f9805a689379307939f350140fe9c015c3e600baff37fb23f7f21cc", "cc2c3300a6643f8347988cc828478c347975f7bf9c8fc1f8a7027da41ab9bdbd"]
+flake8-eradicate = ["3c18fe2d14c2e310c38d089f325e28680cd99fa676e7cd3725e498bfd4f52e5d", "f4270cc2584a73fb87bdcce044a198248e72d0253162a8a12333b2c427a18f51"]
 flake8-executable = ["968618c475a23a538ced9b957a741b818d37610838f99f6abcea249e4de7c9ec", "a636ff78b14b63b1245d1c4d509db2f6ea0f2e27a86ee7eb848f3827bef7e16d"]
 flake8-isort = ["1e67b6b90a9b980ac3ff73782087752d406ce0a729ed928b92797f9fa188917e", "81a8495eefed3f2f63f26cd2d766c7b1191e923a15b9106e6233724056572c68"]
 flake8-logging-format = ["ca5f2b7fc31c3474a0aa77d227e022890f641a025f0ba664418797d979a779f8"]
