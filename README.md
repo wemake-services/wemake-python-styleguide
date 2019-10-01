@@ -12,8 +12,10 @@
 Welcome to the strictest and most opinionated python linter ever.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/logo.png"
-       alt="wemake-python-styleguide logo">
+  <a href="https://wemake-python-stylegui.de">
+    <img src="https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/logo.png"
+         alt="wemake-python-styleguide logo">
+  </a>
 </p>
 
 `wemake-python-styleguide` is actually a [flake8](http://flake8.pycqa.org/en/latest/)
