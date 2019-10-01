@@ -64,6 +64,7 @@ Summary
    OuterScopeShadowingViolation
    UnhashableTypeInHashViolation
    WrongKeywordConditionViolation
+   WrongNamedKeywordViolation
 
 Best practices
 --------------
@@ -113,6 +114,7 @@ Best practices
 .. autoclass:: OuterScopeShadowingViolation
 .. autoclass:: UnhashableTypeInHashViolation
 .. autoclass:: WrongKeywordConditionViolation
+.. autoclass:: WrongNamedKeywordViolation
 
 """
 
@@ -1743,3 +1745,30 @@ class WrongKeywordConditionViolation(ASTViolation):
 
     error_template = 'Found wrong keyword condition: {0}'
     code = 444
+
+
+class WrongNamedKeywordViolation(ASTViolation):
+    """
+    Forbids to have wrong named keywords in starred dicts.
+
+    Reasoning:
+        Using wrong keywords in starred dict.
+        Eg.: ``print(**{'@': 1})``.
+
+    Solution:
+        Don't use incorrect identifiers for keywords.
+
+    Example::
+
+        # Correct:
+        print(**{'end': '|'})
+
+        # Wrong:
+        print(**{'3end': '|'})
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    code = 445
+    error_template = 'Found wrong named keyword in starred dict'
