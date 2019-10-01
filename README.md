@@ -24,7 +24,7 @@ plugin with [some other plugins](https://wemake-python-stylegui.de/en/latest/pag
 ## Quickstart
 
 ```bash
-pip install wemake-python-styleguide
+pip install wemake-python-styleguide2
 ```
 
 You will also need to create a `setup.cfg` file with the [configuration](https://wemake-python-stylegui.de/en/latest/pages/usage/configuration.html).
