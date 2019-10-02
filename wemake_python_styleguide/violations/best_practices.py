@@ -65,6 +65,7 @@ Summary
    UnhashableTypeInHashViolation
    WrongKeywordConditionViolation
    WrongNamedKeywordViolation
+   ImplicitPrimitiveViolation
 
 Best practices
 --------------
@@ -115,6 +116,7 @@ Best practices
 .. autoclass:: UnhashableTypeInHashViolation
 .. autoclass:: WrongKeywordConditionViolation
 .. autoclass:: WrongNamedKeywordViolation
+.. autoclass:: ImplicitPrimitiveViolation
 
 """
 
@@ -1747,6 +1749,7 @@ class WrongKeywordConditionViolation(ASTViolation):
     code = 444
 
 
+@final
 class WrongNamedKeywordViolation(ASTViolation):
     """
     Forbids to have wrong named keywords in starred dicts.
@@ -1772,3 +1775,33 @@ class WrongNamedKeywordViolation(ASTViolation):
 
     code = 445
     error_template = 'Found wrong named keyword in starred dict'
+
+
+@final
+class ImplicitPrimitiveViolation(ASTViolation):
+    """
+    Forbids to use implicit primitives in a form of ``lambda`` functions.
+
+    Reasoning:
+        When you use ``lambda`` that returns a primitive value
+        and takes no arguments, it means that
+        you should use a primitive type instead.
+
+    Solution:
+        Replace ``lambda`` with ``int``, ``float``,
+        ``list``, or any other primitive.
+
+    Example::
+
+        # Correct:
+        defaultdict(int)
+
+        # Wrong:
+        defaultdict(lambda: 0)
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    code = 446
+    error_template = 'Found implicit primitive in a form of `lambda`'

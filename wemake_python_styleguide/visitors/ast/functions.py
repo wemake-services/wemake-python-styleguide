@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
+from contextlib import suppress
 from typing import ClassVar, Dict, List, Optional, Union
 
 from typing_extensions import final
@@ -21,6 +22,7 @@ from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     BooleanPositionalArgumentViolation,
     ComplexDefaultValueViolation,
+    ImplicitPrimitiveViolation,
     StopIterationInsideGeneratorViolation,
     WrongFunctionCallViolation,
 )
@@ -290,16 +292,39 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
 class UselessLambdaDefinitionVisitor(base.BaseNodeVisitor):
     """This visitor is used specifically for ``lambda`` functions."""
 
+    # We contain unhashable types here, so we use a tuple:
+    _primitive_values = (
+        0,
+        False,
+        '',
+        b'',
+        [],
+        {},
+    ) + ((), )  # TODO: there's a bug in WPS317
+
     def visit_Lambda(self, node: ast.Lambda) -> None:
         """
         Checks if ``lambda`` functions are defined correctly.
 
         Raises:
             UselessLambdaViolation
+            ImplicitPrimitiveViolation
 
         """
         self._check_useless_lambda(node)
+        self._check_implicit_primitive(node)
         self.generic_visit(node)
+
+    def _check_implicit_primitive(self, node: ast.Lambda) -> None:
+        arguments = functions.get_all_arguments(node)
+        if arguments:
+            # We return from this check, since `lambda` has some arguments.
+            return
+
+        with suppress(ValueError):
+            return_value = ast.literal_eval(node.body)
+            if return_value in self._primitive_values:
+                self.add_violation(ImplicitPrimitiveViolation(node))
 
     def _check_useless_lambda(self, node: ast.Lambda) -> None:
         if not isinstance(node.body, ast.Call):

@@ -328,6 +328,7 @@ file_obj = open('filaname.py')  # noqa: WPS515
 print(type(file_obj) == int)  # noqa: WPS516
 
 print(*[], **{'@': 1})  # noqa: WPS517, WPS445
+print(lambda: 0)  # noqa: WPS446
 
 for range_len in range(len(file_obj)):  # noqa: WPS518
     print(range_len)

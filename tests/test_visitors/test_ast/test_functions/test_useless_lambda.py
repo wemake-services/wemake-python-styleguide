@@ -40,7 +40,7 @@ def test_incorrect_lambda_definition(
 
 
 valid_calls = (
-    '[]',
+    '[1, 2, 3]',
     'method',
     'obj.attr',
     'obj.call()',

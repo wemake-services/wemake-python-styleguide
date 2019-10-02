@@ -9,6 +9,9 @@ We used to have incremental versioning before `0.1.0`.
 ### Features
 
 - `WPS431` now allow customize whitelist via `nested-classes-whitelist` setting
+- Forbids to have invalid strings like `**{'@': 1}`
+- Forbids to use implicit primitive values in a form of `lambda`
+
 
 ## 0.12.5
 
