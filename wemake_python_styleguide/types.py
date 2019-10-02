@@ -123,4 +123,4 @@ class ConfigurationOptions(Protocol):
     max_asserts: int
     max_access_level: int
     max_attributes: int
-    nested_classes_whitelist: List[str]
+    nested_classes_whitelist: List[str]  # flake8 passes lists

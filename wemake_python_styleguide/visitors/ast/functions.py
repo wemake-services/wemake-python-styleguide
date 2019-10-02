@@ -292,16 +292,6 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
 class UselessLambdaDefinitionVisitor(base.BaseNodeVisitor):
     """This visitor is used specifically for ``lambda`` functions."""
 
-    # We contain unhashable types here, so we use a tuple:
-    _primitive_values = (
-        0,
-        False,
-        '',
-        b'',
-        [],
-        {},
-    ) + ((), )  # TODO: there's a bug in WPS317
-
     def visit_Lambda(self, node: ast.Lambda) -> None:
         """
         Checks if ``lambda`` functions are defined correctly.
@@ -323,7 +313,7 @@ class UselessLambdaDefinitionVisitor(base.BaseNodeVisitor):
 
         with suppress(ValueError):
             return_value = ast.literal_eval(node.body)
-            if return_value in self._primitive_values:
+            if return_value is not None and not return_value:
                 self.add_violation(ImplicitPrimitiveViolation(node))
 
     def _check_useless_lambda(self, node: ast.Lambda) -> None:
