@@ -3,7 +3,7 @@
 import ast
 
 try:  # pragma: no cover
-    from ast import Constant as Constant  # type: ignore # noqa: WPS433, WPS113
+    from ast import Constant as Constant  # noqa: WPS433, WPS113
 except ImportError:  # pragma: no cover
     class Constant(ast.AST):  # type: ignore  # noqa: WPS440
         """
