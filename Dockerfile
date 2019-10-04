@@ -1,4 +1,9 @@
+# ========================================
+# =               Warning!               =
+# ========================================
 # This is Github Action docker-based image.
+# It is not intended for local development!
+#
 # It can still be used as a raw image for your own containers.
 # See `action.yml` in case you want to learn more about Github Actions.
 # See it live:
@@ -16,7 +21,6 @@ ENV WPS_VERSION='0.12.5'
 
 RUN apk add --no-cache bash
 RUN pip install "wemake-python-styleguide==$WPS_VERSION"
-RUN python --version && pip --version && flake8 --version
 
 COPY ./scripts/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
