@@ -72,7 +72,6 @@ Summary
    ZeroDivisionViolation
    MeaninglessNumberOperationViolation
    OperationSignNegationViolation
-   LiteralNoneViolation
 
 Consistency checks
 ------------------
@@ -124,7 +123,6 @@ Consistency checks
 .. autoclass:: ZeroDivisionViolation
 .. autoclass:: MeaninglessNumberOperationViolation
 .. autoclass:: OperationSignNegationViolation
-.. autoclass:: LiteralNoneViolation
 
 """
 
@@ -1750,34 +1748,3 @@ class OperationSignNegationViolation(ASTViolation):
 
     error_template = 'Found wrong operation sign'
     code = 346
-
-
-@final
-class LiteralNoneViolation(ASTViolation):
-    """
-    Forbids to use ``Literal[None]`` typing annotation.
-
-    Reasoning:
-        Literal[None] is just the same as None.
-        There's no need to use the first version.
-        It is not type related, it is a consistency rule.
-
-    Solution:
-        Replace ``Literal[None]`` with ``None``.
-
-    Example::
-
-        # Correct:
-        def func(empty: None):
-            '''Empty function.'''
-
-        # Wrong:
-        def func(empty: Literal[None]):
-            '''Empty function.'''
-
-    .. versionadded:: 0.13.0
-
-    """
-
-    code = 347
-    error_template = 'Found useless `Literal[None]` typing annotation'

@@ -2,10 +2,8 @@
 
 import pytest
 
-from wemake_python_styleguide.violations.consistency import (
-    LiteralNoneViolation,
-)
 from wemake_python_styleguide.visitors.ast.annotations import (
+    LiteralNoneViolation,
     MultilineFunctionAnnotationViolation,
     WrongAnnotationVisitor,
 )

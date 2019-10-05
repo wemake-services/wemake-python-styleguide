@@ -6,8 +6,10 @@ from typing import cast
 from typing_extensions import final
 
 from wemake_python_styleguide.types import AnyFunctionDef
-from wemake_python_styleguide.violations.consistency import (
+from wemake_python_styleguide.violations.annotations import (
     LiteralNoneViolation,
+)
+from wemake_python_styleguide.violations.consistency import (
     MultilineFunctionAnnotationViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
