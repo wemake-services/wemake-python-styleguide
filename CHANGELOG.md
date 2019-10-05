@@ -4,6 +4,13 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
+## 0.13.1
+
+### Features
+
+- Forbids using `Literal[None]` in function annotations
+
+
 ## 0.13.0
 
 ### Features

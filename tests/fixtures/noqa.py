@@ -560,3 +560,10 @@ print(literal)  # noqa: WPS441
 unhashable = {[]}  # noqa: WPS443
 assert []  # noqa: WPS444
 unhashable = [] * 2  # noqa: WPS435
+
+
+def literal_none_func(arg: Literal[None]):  # noqa: WPS347
+    '''Literal[None]'''
+
+def literal_none_return_func() -> Literal[None]:  # noqa: WPS347
+    '''Literal[None]'''

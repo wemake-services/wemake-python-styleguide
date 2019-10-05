@@ -2,6 +2,9 @@
 
 import pytest
 
+from wemake_python_styleguide.violations.consistency import (
+    LiteralNoneViolation,
+)
 from wemake_python_styleguide.visitors.ast.annotations import (
     MultilineFunctionAnnotationViolation,
     WrongAnnotationVisitor,
@@ -32,6 +35,14 @@ def function(
 ): ...
 """
 
+correct_literal_annotation = """
+def function(arg: Literal[True]) -> Literal["foo"]: ...
+"""
+
+correct_arg_none_annotation = """
+def function(empty_arg: None): ...
+"""
+
 # Wrong:
 
 wrong_multiline_arguments = """
@@ -50,6 +61,34 @@ def function(
     ],
 ): ...
 """
+
+wrong_arg_none_annotation = """
+def function(empty_arg: Literal[None]): ...
+"""
+
+wrong_embedded_arg_none_annotation = """
+def function(empty_arg: Union[Literal[None], Optional[int]]): ...
+"""
+
+
+@pytest.mark.parametrize('code', [
+    wrong_arg_none_annotation,
+    wrong_embedded_arg_none_annotation,
+])
+def test_forbidden_literal_none_annotation(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+    mode,
+):
+    """Ensures that using incorrect argument annotations is forbiden."""
+    tree = parse_ast_tree(mode(code))
+
+    visitor = WrongAnnotationVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [LiteralNoneViolation])
 
 
 @pytest.mark.parametrize('code', [
@@ -78,6 +117,8 @@ def test_wrong_argument_annotation(
     correct_simple_argument,
     correct_compound_argument,
     correct_multiline_arguments,
+    correct_arg_none_annotation,
+    correct_literal_annotation,
 ])
 def test_correct_argument_annotation(
     assert_errors,
