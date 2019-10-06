@@ -19,6 +19,7 @@ from wemake_python_styleguide.violations.best_practices import (
 from wemake_python_styleguide.violations.consistency import (
     DottedRawImportViolation,
     LocalFolderImportViolation,
+    VagueImportViolation,
 )
 from wemake_python_styleguide.violations.naming import SameAliasImportViolation
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -29,6 +30,20 @@ ErrorCallback = Callable[[BaseViolation], None]  # TODO: alias and move
 @final
 class _ImportsValidator(object):
     """Utility class to separate logic from the visitor."""
+
+    _vague_imports_blacklist = {
+        'load',
+        'loads',
+        'dump',
+        'dumps',
+        'parse',
+        'safe_load',
+        'safe_dump',
+        'load_all',
+        'dump_all',
+        'safe_load_all',
+        'safe_dump_all',
+    }
 
     def __init__(self, error_callback: ErrorCallback) -> None:
         self._error_callback = error_callback
@@ -62,6 +77,16 @@ class _ImportsValidator(object):
             if alias.asname == alias.name:
                 self._error_callback(
                     SameAliasImportViolation(node, text=alias.name),
+                )
+
+            blacklisted = alias.name in self._vague_imports_blacklist
+            too_short = len(alias.name) == 1
+            starts_with_from = alias.name.startswith('from_')
+            starts_with_to = alias.name.startswith('to_')
+
+            if blacklisted or too_short or starts_with_from or starts_with_to:
+                self._error_callback(
+                    VagueImportViolation(node, text=alias.name),
                 )
 
     def check_protected_import(self, node: AnyImport) -> None:

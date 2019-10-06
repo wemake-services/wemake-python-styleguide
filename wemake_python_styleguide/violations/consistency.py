@@ -72,6 +72,7 @@ Summary
    ZeroDivisionViolation
    MeaninglessNumberOperationViolation
    OperationSignNegationViolation
+   VagueImportViolation
 
 Consistency checks
 ------------------
@@ -123,6 +124,7 @@ Consistency checks
 .. autoclass:: ZeroDivisionViolation
 .. autoclass:: MeaninglessNumberOperationViolation
 .. autoclass:: OperationSignNegationViolation
+.. autoclass:: VagueImportViolation
 
 """
 
@@ -1748,3 +1750,37 @@ class OperationSignNegationViolation(ASTViolation):
 
     error_template = 'Found wrong operation sign'
     code = 346
+
+
+@final
+class VagueImportViolation(ASTViolation):
+    """
+    Forbids imports that outside of the module may cause confusion.
+
+    Reasoning:
+        When you see datetime.* in the code, you know that it's from datetime.
+        When you see BaseView in a Django project, you know where it is from.
+        When you see loads, it can be anything: yaml, toml, json ...
+
+    Example::
+
+        # Correct:
+        import json
+
+        ...
+
+        json.loads(content)
+
+        # Wrong:
+        from json import loads
+
+        ...
+
+        loads(content)
+
+    .. versionadded:: 0.1.0
+
+    """
+
+    error_template = 'Found vague import that may cause confusion: {0}'
+    code = 347
