@@ -5,9 +5,7 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     ApproximateConstantViolation,
 )
-from wemake_python_styleguide.visitors.ast.builtins import (
-    WrongNumberVisitor,
-)
+from wemake_python_styleguide.visitors.ast.builtins import WrongNumberVisitor
 
 
 @pytest.mark.parametrize('variable_name,variable_value', [

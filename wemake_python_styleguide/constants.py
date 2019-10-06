@@ -316,7 +316,7 @@ APPROXIMATE_CONSTANTS: Final = frozenset((
     3.1415,
     6.28,
     6.282,
-    6.2830,
+    6.283,
     2.71,
     2.718,
     2.72,
