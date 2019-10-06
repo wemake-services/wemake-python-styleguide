@@ -12,7 +12,7 @@ def test_all_unique_violation_codes(all_violations):
 
 def test_all_violations_correct_numbers(all_module_violations):
     """Ensures that all violations has correct violation code numbers."""
-    assert len(all_module_violations) == 6
+    assert len(all_module_violations) == 7
 
     for index, module in enumerate(all_module_violations.keys()):
         classes = all_module_violations[module]
