@@ -309,6 +309,19 @@ MAX_NO_COVER_COMMENTS: Final = 5
 #: Maximum length of ``yield`` ``tuple`` expressions.
 MAX_LEN_YIELD_TUPLE: Final = 5
 
+#: Approximate constants which real values should be imported from math module.
+APPROXIMATE_CONSTANTS: Final = frozenset((
+    3.14,
+    3.141,
+    3.1415,
+    6.28,
+    6.282,
+    6.2830,
+    2.71,
+    2.718,
+    2.72,
+))
+
 
 # Internal variables
 # They are not publicly documented since they are not used by the end user.

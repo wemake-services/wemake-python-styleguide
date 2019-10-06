@@ -560,3 +560,5 @@ print(literal)  # noqa: WPS441
 unhashable = {[]}  # noqa: WPS443
 assert []  # noqa: WPS444
 unhashable = [] * 2  # noqa: WPS435
+
+pi = 3.14 # noqa: WPS447

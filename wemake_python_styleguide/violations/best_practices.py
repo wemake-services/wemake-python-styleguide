@@ -66,6 +66,7 @@ Summary
    WrongKeywordConditionViolation
    WrongNamedKeywordViolation
    ImplicitPrimitiveViolation
+   ApproximateConstantViolation
 
 Best practices
 --------------
@@ -117,6 +118,7 @@ Best practices
 .. autoclass:: WrongKeywordConditionViolation
 .. autoclass:: WrongNamedKeywordViolation
 .. autoclass:: ImplicitPrimitiveViolation
+.. autoclass:: ApproximateConstantViolation
 
 """
 
@@ -1805,3 +1807,34 @@ class ImplicitPrimitiveViolation(ASTViolation):
 
     code = 446
     error_template = 'Found implicit primitive in a form of `lambda`'
+
+
+@final
+class ApproximateConstantViolation(ASTViolation):
+    """
+    Forbids to use approximate constants.
+
+    Reasoning:
+        These constants are already defined.
+        No need to write them again, use existing values.
+
+    Solution:
+        Use constants from math module.
+
+    Example::
+
+        # Correct:
+        from math import pi
+
+        # Wrong:
+        pi = 3.14
+
+    See also:
+        https://docs.python.org/3/library/math.html#constants
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    code = 447
+    error_template = 'Found approximate constant {0}'

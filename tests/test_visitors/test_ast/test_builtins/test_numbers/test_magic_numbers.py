@@ -6,7 +6,7 @@ from wemake_python_styleguide.constants import MAGIC_NUMBERS_WHITELIST
 from wemake_python_styleguide.violations.best_practices import (
     MagicNumberViolation,
 )
-from wemake_python_styleguide.visitors.ast.builtins import MagicNumberVisitor
+from wemake_python_styleguide.visitors.ast.builtins import WrongNumberVisitor
 
 # Correct usages:
 
@@ -108,7 +108,7 @@ def test_magic_number(
     """Testing that there are no magic numbers in this code."""
     tree = parse_ast_tree(mode(code.format(number)))
 
-    visitor = MagicNumberVisitor(default_options, tree=tree)
+    visitor = WrongNumberVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -146,7 +146,7 @@ def test_magic_number_whitelist(
     """Testing that magic numbers in this code are whitelisted."""
     tree = parse_ast_tree(mode(code.format(number)))
 
-    visitor = MagicNumberVisitor(default_options, tree=tree)
+    visitor = WrongNumberVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -184,7 +184,7 @@ def test_magic_number_warning(
     """Testing that magic numbers in this code are warnings."""
     tree = parse_ast_tree(mode(code.format(number)))
 
-    visitor = MagicNumberVisitor(default_options, tree=tree)
+    visitor = WrongNumberVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [MagicNumberViolation])
@@ -220,7 +220,7 @@ def test_magic_number_octal_warning(
     """Testing that magic numbers in this code are warnings."""
     tree = parse_ast_tree(mode(code.format(number)))
 
-    visitor = MagicNumberVisitor(default_options, tree=tree)
+    visitor = WrongNumberVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [MagicNumberViolation])
