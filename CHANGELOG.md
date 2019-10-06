@@ -9,6 +9,7 @@ We used to have incremental versioning before `0.1.0`.
 ### Features
 
 - Forbids using `Literal[None]` in function annotations
+- Forbids use of vague import names (e.g. `from json import loads`)
 
 ### Bugfixes
 
