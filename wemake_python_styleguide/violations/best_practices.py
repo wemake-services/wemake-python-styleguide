@@ -1837,4 +1837,4 @@ class ApproximateConstantViolation(ASTViolation):
     """
 
     code = 447
-    error_template = 'Found approximate constant {0}'
+    error_template = 'Found approximate constant: {0}'
