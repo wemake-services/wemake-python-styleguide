@@ -9,7 +9,10 @@ We used to have incremental versioning before `0.1.0`.
 ### Features
 
 - Forbids using `Literal[None]` in function annotations
-- Fixes 
+
+### Bugfixes
+
+- Fixes **ImplicitElifViolation** false positives on a specific edge cases.
 
 
 ## 0.13.0

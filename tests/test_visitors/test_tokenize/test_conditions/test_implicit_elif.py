@@ -46,7 +46,8 @@ else:
         ...
 """
 
-# False positives
+# False positives, triggered by other constructs with `else` clause
+# (see https://github.com/wemake-services/wemake-python-styleguide/issues/835)
 
 for_else = """
 for a in b:
@@ -68,6 +69,12 @@ else:
 
 embedded_else = """
 ... if ... else ...
+"""
+
+technically_correct_token_stream = """
+    42
+        a
+    else
 """
 
 
@@ -113,6 +120,7 @@ def test_implicit_elif_statements(
     for_else,
     try_except_else,
     embedded_else,
+    technically_correct_token_stream,
 ])
 def test_false_positives_are_ignored(
     code,

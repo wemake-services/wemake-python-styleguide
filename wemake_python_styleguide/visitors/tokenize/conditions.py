@@ -57,7 +57,7 @@ class IfElseVisitor(BaseTokenVisitor):
         """
         self._check_implicit_elif(token)
 
-    def _check_else_belongs_to_if(self, start_index: int) -> bool:
+    def _does_else_belong_to_if(self, start_index: int) -> bool:
         previous_token = self.file_tokens[start_index - 1]
 
         if previous_token.type != tokenize.DEDENT:
@@ -74,7 +74,7 @@ class IfElseVisitor(BaseTokenVisitor):
             if token.start[1] == previous_token.start[1]:
                 return token.string in {'if', 'elif'}
 
-        return False  # pragma: no cover
+        return False
 
     def _check_implicit_elif(self, token: tokenize.TokenInfo) -> None:
         if token.string != 'else':
@@ -84,7 +84,7 @@ class IfElseVisitor(BaseTokenVisitor):
 
         # `else` token can belong also to `for` and `try/except` statement,
         # which can trigger false positive for that violation.
-        if not self._check_else_belongs_to_if(index):
+        if not self._does_else_belong_to_if(index):
             return
 
         # There's a bug in coverage, I am not sure how to make it work.
