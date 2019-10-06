@@ -8,7 +8,7 @@ from wemake_python_styleguide.violations.best_practices import (
 from wemake_python_styleguide.visitors.ast.builtins import WrongNumberVisitor
 
 
-@pytest.mark.parametrize('variable_name,variable_value', [
+@pytest.mark.parametrize(('variable_name', 'variable_value'), [
     ('pi', '3.14'),
     ('tau', '6.28'),
     ('e', '2.718'),
