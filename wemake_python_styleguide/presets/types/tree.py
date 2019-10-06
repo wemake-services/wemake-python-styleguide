@@ -43,6 +43,7 @@ PRESET: Final = (
 
     attributes.WrongAttributeVisitor,
     annotations.WrongAnnotationVisitor,
+    annotations.WrongNestedAnnotationVisitor,
 
     functions.WrongFunctionCallVisitor,
     functions.FunctionDefinitionVisitor,

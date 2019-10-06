@@ -5,7 +5,9 @@ import pytest
 from wemake_python_styleguide.visitors.ast.annotations import (
     LiteralNoneViolation,
     MultilineFunctionAnnotationViolation,
+    NestedAnnotationsViolation,
     WrongAnnotationVisitor,
+    WrongNestedAnnotationVisitor,
 )
 
 # Correct:
@@ -41,6 +43,26 @@ correct_arg_none_annotation = """
 def function(empty_arg: None): ...
 """
 
+correct_unnested_literal_annotation = """
+def function(arg: Literal[1, 2, 3]): ...
+"""
+
+correct_unnested_union_annotation = """
+def function(arg: Union[int, str, float]): ...
+"""
+
+correct_unnested_combined_annotation = """
+def function(arg: Union[str, Literal[1]]): ...
+"""
+
+correct_unnested_annotated_annotation = """
+def function(arg: Annotated[int]): ...
+"""
+
+correct_unnested_prefixed_literal_annotation = """
+def function(arg: typing.Literal[1, 2, 3]): ...
+"""
+
 # Wrong:
 
 wrong_multiline_arguments = """
@@ -67,6 +89,85 @@ def function(empty_arg: Literal[None]): ...
 wrong_embedded_arg_none_annotation = """
 def function(empty_arg: Union[Literal[None], Optional[int]]): ...
 """
+
+wrong_nested_literal_annotation = """
+def function(arg: Literal[Literal[1, 2], 3]): ...
+"""
+
+wrong_nested_union_annotation = """
+def function(arg: Union[Union[int, str], float]): ...
+"""
+
+wrong_nested_annotated_annotation = """
+def function(arg: Annotated[Annotated[int, str], float]): ...
+"""
+
+wrong_deep_nested_literal_annotation = """
+def function(arg: Literal[Literal[Literal[1]]]): ...
+"""
+
+wrong_deep_nested_union_annotation = """
+def function(arg: Union[Union[Union[int]]]): ...
+"""
+
+wrong_deep_nested_annotated_annotation = """
+def function(arg: Annotated[Annotated[Annotated[int]]]): ...
+"""
+
+wrong_nested_prefixed_literal_annotation = """
+def function(arg: typing.Literal[typing.Literal[1]]): ...
+"""
+
+wrong_deep_nested_prefixed_literal_annotation = """
+def function(arg: typing.Literal[typing.Literal[typing.Literal[1]]]): ...
+"""
+
+
+@pytest.mark.parametrize('code', [
+    wrong_nested_literal_annotation,
+    wrong_nested_union_annotation,
+    wrong_nested_annotated_annotation,
+    wrong_nested_prefixed_literal_annotation,
+])
+def test_forbidden_nested_annotations(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+    mode,
+):
+    """Ensures that using nested ``Literal`` and ``Union`` is forbidden."""
+    tree = parse_ast_tree(mode(code))
+
+    visitor = WrongNestedAnnotationVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [NestedAnnotationsViolation])
+
+
+@pytest.mark.parametrize('code', [
+    wrong_deep_nested_literal_annotation,
+    wrong_deep_nested_union_annotation,
+    wrong_deep_nested_annotated_annotation,
+    wrong_deep_nested_prefixed_literal_annotation,
+])
+def test_forbidden_deep_nested_annotations(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+    mode,
+):
+    """Ensures that using nested ``Literal`` and ``Union`` is forbidden."""
+    tree = parse_ast_tree(mode(code))
+
+    visitor = WrongNestedAnnotationVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [
+        NestedAnnotationsViolation,
+        NestedAnnotationsViolation,
+    ])
 
 
 @pytest.mark.parametrize('code', [
@@ -129,6 +230,29 @@ def test_correct_argument_annotation(
     tree = parse_ast_tree(mode(code))
 
     visitor = WrongAnnotationVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('code', [
+    correct_unnested_union_annotation,
+    correct_unnested_literal_annotation,
+    correct_unnested_annotated_annotation,
+    correct_unnested_combined_annotation,
+    correct_unnested_prefixed_literal_annotation,
+])
+def test_correct_unnested_argument_annotation(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+    mode,
+):
+    """Ensures that it is possible to use correct type annotations."""
+    tree = parse_ast_tree(mode(code))
+
+    visitor = WrongNestedAnnotationVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])

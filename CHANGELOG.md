@@ -9,6 +9,8 @@ We used to have incremental versioning before `0.1.0`.
 ### Features
 
 - Forbids using `Literal[None]` in function annotations
+- Forbids using nested `typing.Literal`, `typing.Union` and `typing.Annotated`
+<<<<<<< HEAD
 - Forbids use of vague import names (e.g. `from json import loads`)
 - Make ``OveruseOfNoqaCommentViolation`` configurable (`--max-noqa-comments`)
 
@@ -16,6 +18,9 @@ We used to have incremental versioning before `0.1.0`.
 
 - Fixes ``ImplicitElifViolation`` false positives on a specific edge cases.
 
+=======
+- Forbids using nested `typing.Literal`, `typing.Union` and `typing.Annotated`
+>>>>>>> Forbid nested Literal, Union and Annotated (#837)
 
 ## 0.13.0
 
