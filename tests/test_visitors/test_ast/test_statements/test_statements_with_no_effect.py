@@ -3,6 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
+    MisRefactoredAssignmentViolation,
     StatementHasNoEffectViolation,
 )
 from wemake_python_styleguide.visitors.ast.statements import (
@@ -191,6 +192,29 @@ def test_statement_with_no_effect(
     visitor.run()
 
     assert_errors(visitor, [StatementHasNoEffectViolation])
+
+
+@pytest.mark.parametrize('code', [
+    module_template,
+
+])
+@pytest.mark.parametrize('statement', [
+    'x += x + 2',
+])
+def test_misrefactored_assignment(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    statement,
+    default_options,
+):
+    """Testing that unreachable code is detected."""
+    tree = parse_ast_tree(code.format(statement))
+
+    visitor = StatementsWithBodiesVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [MisRefactoredAssignmentViolation])
 
 
 @pytest.mark.parametrize('code', [

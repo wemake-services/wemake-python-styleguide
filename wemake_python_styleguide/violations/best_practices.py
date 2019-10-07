@@ -65,6 +65,7 @@ Summary
    UnhashableTypeInHashViolation
    WrongKeywordConditionViolation
    WrongNamedKeywordViolation
+   MisRefactoredAssignmentViolation
 
 Best practices
 --------------
@@ -115,6 +116,7 @@ Best practices
 .. autoclass:: UnhashableTypeInHashViolation
 .. autoclass:: WrongKeywordConditionViolation
 .. autoclass:: WrongNamedKeywordViolation
+.. autoclass:: MisRefactoredAssignmentViolation
 
 """
 
@@ -1772,3 +1774,39 @@ class WrongNamedKeywordViolation(ASTViolation):
 
     code = 445
     error_template = 'Found wrong named keyword in starred dict'
+
+
+@final
+class MisRefactoredAssignmentViolation(ASTViolation):
+    """
+    Forbids to have statements that do nothing.
+
+    Reasoning:
+        Statements that just access the value or expressions
+        used as statements indicate that your code
+        contains deadlines. They just pollute your codebase and do nothing.
+
+    Solution:
+        Refactor your code in case it was a typo or error.
+        Or just delete this code.
+
+    Example::
+
+        # Correct:
+        def some_function():
+            price = 8 + 2
+            return price
+
+        # Wrong:
+        def some_function():
+            8 + 2
+            print
+
+    .. versionadded:: 0.5.0
+    .. versionchanged:: 0.11.0
+
+    """
+
+    error_template = 'Found self assignment  with refactored assignment'
+    code = 446
+    previous_codes = {445}
