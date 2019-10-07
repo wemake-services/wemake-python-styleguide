@@ -331,6 +331,8 @@ UNDERSCORED_NUMBER_PATTERN: Final = re.compile(r'.+\D\_\d+(\D|$)')
 
 # List of vague method names that may cause confusion if imported as is:
 VAGUE_IMPORTS_BLACKLIST = frozenset([
+    'read',
+    'write',
     'load',
     'loads',
     'dump',
