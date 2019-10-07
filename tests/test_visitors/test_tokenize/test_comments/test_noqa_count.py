@@ -49,3 +49,18 @@ def test_noqa_overuse_is_configurable(
     visitor.run()
 
     assert_errors(visitor, [OveruseOfNoqaCommentViolation])
+
+
+def test_noqa_comments_can_be_forbidden(
+    parse_tokens,
+    assert_errors,
+    options,
+):
+    """Ensures that `noqa` comments can be turned off completely."""
+    file_tokens = parse_tokens('wallet = 10  # noqa: WPS002, WPS114')
+
+    options = options(max_noqa_comments=0)
+    visitor = WrongCommentVisitor(options, file_tokens=file_tokens)
+    visitor.run()
+
+    assert_errors(visitor, [OveruseOfNoqaCommentViolation])
