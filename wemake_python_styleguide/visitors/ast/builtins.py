@@ -100,7 +100,7 @@ class WrongNumberVisitor(base.BaseNodeVisitor):
 
     def _check_is_approximate_constant(self, node: ast.Num) -> None:
         for constant in constants.APPROXIMATE_CONSTANTS:
-            if abs(constant - node.n) < (1 / 1000 * 4):
+            if abs(constant - node.n) < constants.MATH_CONSTANTS_MAX_DIFF:
                 self.add_violation(
                     ApproximateConstantViolation(node, text=str(node.n)),
                 )

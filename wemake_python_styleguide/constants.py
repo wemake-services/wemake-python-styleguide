@@ -316,7 +316,7 @@ APPROXIMATE_CONSTANTS: Final = frozenset((
     math.e,
     math.tau,
 ))
-
+MATH_CONSTANTS_MAX_DIFF = 0.01
 
 # Internal variables
 # They are not publicly documented since they are not used by the end user.
