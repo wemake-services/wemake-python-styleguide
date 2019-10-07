@@ -66,15 +66,18 @@ class _ImportsValidator(object):
                     SameAliasImportViolation(node, text=alias.name),
                 )
 
-            blacklisted = alias.name in constants.VAGUE_IMPORTS_BLACKLIST
-            too_short = len(alias.name) == 1
-            starts_with_from = alias.name.startswith('from_')
-            starts_with_to = alias.name.startswith('to_')
+            for name in (alias.name, alias.asname):
+                if name is None:
+                    continue
 
-            if blacklisted or too_short or starts_with_from or starts_with_to:
-                self._error_callback(
-                    VagueImportViolation(node, text=alias.name),
-                )
+                blacklisted = name in constants.VAGUE_IMPORTS_BLACKLIST
+                with_from = name.startswith('from_')
+                with_to = name.startswith('to_')
+
+                if blacklisted or with_from or with_to or len(name) == 1:
+                    self._error_callback(
+                        VagueImportViolation(node, text=alias.name),
+                    )
 
     def check_protected_import(self, node: AnyImport) -> None:
         import_names = [alias.name for alias in node.names]
