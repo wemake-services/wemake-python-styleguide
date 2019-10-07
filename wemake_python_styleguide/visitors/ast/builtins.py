@@ -99,14 +99,6 @@ class WrongNumberVisitor(base.BaseNodeVisitor):
         self.add_violation(MagicNumberViolation(node, text=str(node.n)))
 
     def _check_is_approximate_constant(self, node: ast.Num) -> None:
-        parent = get_parent_ignoring_unary(node)
-        allowed_parents = tuple(
-            set(self._allowed_parents) - {ast.AnnAssign, ast.Assign},
-        )
-
-        if isinstance(parent, allowed_parents):
-            return
-
         if node.n in constants.APPROXIMATE_CONSTANTS:
             self.add_violation(
                 ApproximateConstantViolation(node, text=str(node.n)),
