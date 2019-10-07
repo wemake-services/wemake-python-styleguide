@@ -99,10 +99,11 @@ class WrongNumberVisitor(base.BaseNodeVisitor):
         self.add_violation(MagicNumberViolation(node, text=str(node.n)))
 
     def _check_is_approximate_constant(self, node: ast.Num) -> None:
-        if node.n in constants.APPROXIMATE_CONSTANTS:
-            self.add_violation(
-                ApproximateConstantViolation(node, text=str(node.n)),
-            )
+        for constant in constants.APPROXIMATE_CONSTANTS:
+            if abs(constant - node.n) < 0.004:
+                self.add_violation(
+                    ApproximateConstantViolation(node, text=str(node.n)),
+                )
 
 
 @final
