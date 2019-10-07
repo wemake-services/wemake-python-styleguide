@@ -1758,9 +1758,9 @@ class VagueImportViolation(ASTViolation):
     Forbids imports that outside of the module may cause confusion.
 
     Reasoning:
-        When you see datetime.* in the code, you know that it's from datetime.
-        When you see BaseView in a Django project, you know where it is from.
-        When you see loads, it can be anything: yaml, toml, json ...
+        See ``datetime.*`` in code? You know that it's from datetime.
+        See ``BaseView`` in a Django project? You know where it is from.
+        See ``loads``? It can be anything: ``yaml``, ``toml``, ``json`` ...
 
     Example::
 
@@ -1778,7 +1778,7 @@ class VagueImportViolation(ASTViolation):
 
         loads(content)
 
-    .. versionadded:: 0.1.0
+    .. versionadded:: 0.13.0
 
     """
 
