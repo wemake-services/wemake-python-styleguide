@@ -517,11 +517,11 @@ gitdb2 = ">=2.0.0"
 
 [[package]]
 category = "dev"
-description = "Builds a graph of a Python project's internal and external dependencies."
+description = "Builds a queryable graph of the imports within one or more Python packages."
 name = "grimp"
 optional = false
 python-versions = "*"
-version = "1.0b12"
+version = "1.0b13"
 
 [package.dependencies]
 networkx = ">=2.1,<3"
@@ -544,15 +544,15 @@ version = "1.1.0"
 
 [[package]]
 category = "dev"
-description = "Enforces rules for the internal and external imports within your Python project."
+description = "Enforces rules for the imports within and between Python packages."
 name = "import-linter"
 optional = false
 python-versions = "*"
-version = "1.0b4"
+version = "1.0b5"
 
 [package.dependencies]
 click = ">=6,<8"
-grimp = "1.0b12"
+grimp = "1.0b13"
 
 [[package]]
 category = "dev"
@@ -1359,7 +1359,7 @@ version = "0.6.0"
 more-itertools = "*"
 
 [metadata]
-content-hash = "bdfde5e5dc49fb4ae55527ac99f0a8a431b5a9c4026981a21d075b4dde95b851"
+content-hash = "6bd2d8041ae699e420b47c964adacd05be44010a9840afd65637346181c68714"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -1412,10 +1412,10 @@ flake8-rst-docstrings = ["a2fa35c6ef978422234afae8c345f23ff721571d43f2895e29817e
 flake8-string-format = ["68ea72a1a5b75e7018cae44d14f32473c798cf73d75cbaed86c6a9a907b770b2", "774d56103d9242ed968897455ef49b7d6de272000cfa83de5814273a868832f1"]
 gitdb2 = ["1b6df1433567a51a4a9c1a5a0de977aa351a405cc56d7d35f3388bad1f630350", "96bbb507d765a7f51eb802554a9cfe194a174582f772e0d89f4e87288c288b7b"]
 gitpython = ["947cc75913e7b6da108458136607e2ee0e40c20be1e12d4284e7c6c12956c276", "d2f4945f8260f6981d724f5957bc076398ada55cb5d25aaee10108bcdc894100"]
-grimp = ["e8a5e004362b70d37a154e9daba5b1232ed58201e04630fe5d3e8839d72acefd"]
+grimp = ["b7e4caf348b7ab9fbc24642484dc8041472e2e04fdcac1b214ced289de346b6b"]
 idna = ["c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407", "ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c"]
 imagesize = ["3f349de3eb99145973fefb7dbe38554414e5c30abd0c8e4b970a7c9d09f3a1d8", "f3832918bc3c66617f92e35f5d70729187676313caa60c187eb0f28b8fe5e3b5"]
-import-linter = ["1dadd9ca39414f3e76ea0ff9cced10b15bf294451a6ab0aba02aa87ec712d5b9"]
+import-linter = ["10218c3386c4446ef12f0dc4524342295b17fcd1efbbe26f5298999585a56f45"]
 importlib-metadata = ["aa18d7378b00b40847790e7c27e11673d7fed219354109d0e7b9e5b25dc3ad26", "d5f18a79777f3aa179c145737780282e27b508fc8fd688cb17c7a813e8bd39af"]
 ipdb = ["473fdd798a099765f093231a8b1fabfa95b0b682fce12de0c74b61a4b4d8ee57"]
 ipython = ["c4ab005921641e40a68e405e286e7a1fcc464497e14d81b6914b4fd95e5dee9b", "dd76831f065f17bddd7eaa5c781f5ea32de5ef217592cf019e34043b56895aa1"]
