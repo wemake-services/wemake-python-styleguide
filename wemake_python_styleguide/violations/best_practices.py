@@ -229,6 +229,11 @@ class OveruseOfNoqaCommentViolation(SimpleViolation):
         Refactor your code to match our style.
         Or use a config file to switch off some checks.
 
+    Configuration:
+        This rule is configurable with ``--max-noqa-comments``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_NOQA_COMMENTS`
+
     .. versionadded:: 0.7.0
 
     """

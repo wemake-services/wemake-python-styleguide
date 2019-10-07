@@ -110,6 +110,12 @@ You can also show all options that ``flake8`` supports by running:
     defaults to
     :str:`wemake_python_styleguide.options.defaults.NESTED_CLASSES_WHITELIST`
 
+.. rubric:: Comments options:
+
+- ``max-noqa-comments`` - maximum number of `noqa` allowed in a module,
+    defaults to
+    :str:`wemake_python_styleguide.options.defaults.MAX_NOQA_COMMENTS`
+
 """
 
 from typing import ClassVar, FrozenSet, Mapping, Optional, Sequence, Union
@@ -302,6 +308,12 @@ class Configuration(object):
             'List of nested classes names we allow to use.',
             type='string',
             comma_separated_list=True,
+        ),
+
+        _Option(
+            '--max-noqa-comments',
+            defaults.MAX_NOQA_COMMENTS,
+            'Maximum amount of `noqa` comments per module.',
         ),
     ]
 

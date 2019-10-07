@@ -60,6 +60,7 @@ class _ValidatedOptions(object):
     max_access_level: int = attr.ib(validator=[_min_max(min=1)])
     max_attributes: int = attr.ib(validator=[_min_max(min=1)])
     nested_classes_whitelist: List[str]
+    max_noqa_comments: int = attr.ib(validator=[_min_max(min=1, max=10)])
 
 
 def validate_options(options: ConfigurationOptions) -> _ValidatedOptions:

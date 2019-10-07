@@ -300,9 +300,6 @@ MAGIC_NUMBERS_WHITELIST: Final = frozenset((
     1j,  # imaginary part of a complex number
 ))
 
-#: Maximum amount of ``noqa`` comments per module.
-MAX_NOQA_COMMENTS: Final = 10
-
 #: Maximum amount of ``pragma`` no-cover comments per module.
 MAX_NO_COVER_COMMENTS: Final = 5
 
