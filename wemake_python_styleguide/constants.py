@@ -7,7 +7,7 @@ It contains lists of keywords and built-in functions we discourage to use.
 It also contains some exceptions that we allow to use in our codebase.
 """
 
-from math import e, floor, pi, tau
+from math import e, pi, tau
 import re
 
 from typing_extensions import Final
