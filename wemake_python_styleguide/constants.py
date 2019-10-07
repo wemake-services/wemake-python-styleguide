@@ -328,3 +328,20 @@ NON_MAGIC_MODULO: Final = 10
 # Used to specify a pattern which checks variables and modules for underscored
 # numbers in their names:
 UNDERSCORED_NUMBER_PATTERN: Final = re.compile(r'.+\D\_\d+(\D|$)')
+
+# List of vague method names that may cause confusion if imported as is:
+VAGUE_IMPORTS_BLACKLIST = frozenset([
+    'read',
+    'write',
+    'load',
+    'loads',
+    'dump',
+    'dumps',
+    'parse',
+    'safe_load',
+    'safe_dump',
+    'load_all',
+    'dump_all',
+    'safe_load_all',
+    'safe_dump_all',
+])

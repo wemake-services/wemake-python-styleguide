@@ -565,5 +565,11 @@ unhashable = [] * 2  # noqa: WPS435
 def literal_none_func(arg: Literal[None]):  # noqa: WPS701
     '''Literal[None]'''
 
+
 def literal_none_return_func() -> Literal[None]:  # noqa: WPS701
     '''Literal[None]'''
+
+
+from json import loads  # noqa: WPS347
+from some_module import a  # noqa: WPS347
+from text import from_file  # noqa: WPS347
