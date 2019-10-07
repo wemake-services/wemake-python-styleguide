@@ -10,11 +10,11 @@ We used to have incremental versioning before `0.1.0`.
 
 - Forbids using `Literal[None]` in function annotations
 - Forbids use of vague import names (e.g. `from json import loads`)
-- Make **OveruseOfNoqaCommentViolation** configurable (`--max-noqa-comments`)
+- Make ``OveruseOfNoqaCommentViolation`` configurable (`--max-noqa-comments`)
 
 ### Bugfixes
 
-- Fixes **ImplicitElifViolation** false positives on a specific edge cases.
+- Fixes ``ImplicitElifViolation`` false positives on a specific edge cases.
 
 
 ## 0.13.0
