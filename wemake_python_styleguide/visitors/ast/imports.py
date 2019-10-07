@@ -6,6 +6,7 @@ from typing import Callable
 
 from typing_extensions import final
 
+from wemake_python_styleguide import constants
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
 from wemake_python_styleguide.logic import imports, nodes
 from wemake_python_styleguide.logic.naming import access
@@ -30,20 +31,6 @@ ErrorCallback = Callable[[BaseViolation], None]  # TODO: alias and move
 @final
 class _ImportsValidator(object):
     """Utility class to separate logic from the visitor."""
-
-    _vague_imports_blacklist = {
-        'load',
-        'loads',
-        'dump',
-        'dumps',
-        'parse',
-        'safe_load',
-        'safe_dump',
-        'load_all',
-        'dump_all',
-        'safe_load_all',
-        'safe_dump_all',
-    }
 
     def __init__(self, error_callback: ErrorCallback) -> None:
         self._error_callback = error_callback
@@ -79,7 +66,7 @@ class _ImportsValidator(object):
                     SameAliasImportViolation(node, text=alias.name),
                 )
 
-            blacklisted = alias.name in self._vague_imports_blacklist
+            blacklisted = alias.name in constants.VAGUE_IMPORTS_BLACKLIST
             too_short = len(alias.name) == 1
             starts_with_from = alias.name.startswith('from_')
             starts_with_to = alias.name.startswith('to_')
