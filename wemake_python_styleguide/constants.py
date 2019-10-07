@@ -7,6 +7,7 @@ It contains lists of keywords and built-in functions we discourage to use.
 It also contains some exceptions that we allow to use in our codebase.
 """
 
+from math import e, floor, pi, tau
 import re
 
 from typing_extensions import Final
@@ -311,15 +312,15 @@ MAX_LEN_YIELD_TUPLE: Final = 5
 
 #: Approximate constants which real values should be imported from math module.
 APPROXIMATE_CONSTANTS: Final = frozenset((
-    3.14,
-    3.141,
-    3.1415,
-    6.28,
-    6.282,
-    6.283,
-    2.71,
-    2.718,
-    2.72,
+   round(pi, 2),
+   round(pi, 3),
+   round(pi, 4),
+   round(e, 2),
+   round(e, 3),
+   round(e, 4),
+   round(tau, 2),
+   round(tau, 3),
+   round(tau, 4),
 ))
 
 

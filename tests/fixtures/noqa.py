@@ -330,6 +330,8 @@ print(type(file_obj) == int)  # noqa: WPS516
 print(*[], **{'@': 1})  # noqa: WPS517, WPS445
 print(lambda: 0)  # noqa: WPS446
 
+pi = 3.14 # noqa: WPS447
+
 for range_len in range(len(file_obj)):  # noqa: WPS518
     print(range_len)
 
@@ -566,5 +568,3 @@ def literal_none_func(arg: Literal[None]):  # noqa: WPS701
 
 def literal_none_return_func() -> Literal[None]:  # noqa: WPS701
     '''Literal[None]'''
-
-pi = 3.14 # noqa: WPS447
