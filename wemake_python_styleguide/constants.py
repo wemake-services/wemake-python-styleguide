@@ -316,6 +316,7 @@ APPROXIMATE_CONSTANTS: Final = frozenset((
     math.e,
     math.tau,
 ))
+#: Maximum difference between Num and constant to conclude it is approximate.
 MATH_CONSTANTS_MAX_DIFF = 0.005
 
 # Internal variables
