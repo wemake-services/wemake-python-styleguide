@@ -7,6 +7,7 @@ It contains lists of keywords and built-in functions we discourage to use.
 It also contains some exceptions that we allow to use in our codebase.
 """
 
+import math
 import re
 
 from typing_extensions import Final
@@ -306,6 +307,15 @@ MAX_NO_COVER_COMMENTS: Final = 5
 #: Maximum length of ``yield`` ``tuple`` expressions.
 MAX_LEN_YIELD_TUPLE: Final = 5
 
+#: Approximate constants which real values should be imported from math module.
+APPROXIMATE_CONSTANTS: Final = frozenset((
+    math.pi,
+    math.e,
+    math.tau,
+))
+
+#: Maximum difference between Num and constant to conclude it is approximate.
+MATH_CONSTANTS_MAX_DIFF: Final = 0.005
 
 # Internal variables
 # They are not publicly documented since they are not used by the end user.

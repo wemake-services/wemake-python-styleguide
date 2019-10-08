@@ -59,7 +59,7 @@ PRESET: Final = (
     naming.WrongVariableAssignmentVisitor,
     naming.WrongVariableUsageVisitor,
 
-    builtins.MagicNumberVisitor,
+    builtins.WrongNumberVisitor,
     builtins.WrongStringVisitor,
     builtins.WrongAssignmentVisitor,
     builtins.WrongCollectionVisitor,

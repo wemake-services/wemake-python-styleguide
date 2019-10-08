@@ -27,6 +27,7 @@ from wemake_python_styleguide.logic.operators import (
 from wemake_python_styleguide.types import AnyFor, AnyNodes, AnyWith
 from wemake_python_styleguide.violations import consistency
 from wemake_python_styleguide.violations.best_practices import (
+    ApproximateConstantViolation,
     MagicNumberViolation,
     MultipleAssignmentsViolation,
     NonUniqueItemsInHashViolation,
@@ -53,8 +54,8 @@ class WrongStringVisitor(base.BaseNodeVisitor):
 
 
 @final
-class MagicNumberVisitor(base.BaseNodeVisitor):
-    """Checks magic numbers used in the code."""
+class WrongNumberVisitor(base.BaseNodeVisitor):
+    """Checks wrong numbers used in the code."""
 
     _allowed_parents: ClassVar[AnyNodes] = (
         ast.Assign,
@@ -73,13 +74,15 @@ class MagicNumberVisitor(base.BaseNodeVisitor):
 
     def visit_Num(self, node: ast.Num) -> None:
         """
-        Checks numbers not to be magic constants inside the code.
+        Checks wrong constants inside the code.
 
         Raises:
             MagicNumberViolation
+            ApproximateConstantViolation
 
         """
         self._check_is_magic(node)
+        self._check_is_approximate_constant(node)
         self.generic_visit(node)
 
     def _check_is_magic(self, node: ast.Num) -> None:
@@ -94,6 +97,13 @@ class MagicNumberVisitor(base.BaseNodeVisitor):
             return
 
         self.add_violation(MagicNumberViolation(node, text=str(node.n)))
+
+    def _check_is_approximate_constant(self, node: ast.Num) -> None:
+        for constant in constants.APPROXIMATE_CONSTANTS:
+            if abs(constant - node.n) < constants.MATH_CONSTANTS_MAX_DIFF:
+                self.add_violation(
+                    ApproximateConstantViolation(node, text=str(node.n)),
+                )
 
 
 @final
