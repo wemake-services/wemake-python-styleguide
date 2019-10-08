@@ -570,7 +570,6 @@ def literal_none_return_func() -> Literal[None]:  # noqa: WPS701
     '''Literal[None]'''
 
 
-=======
 def nested_annotation_func(arg: Literal[Literal[1, 2], 3]): # noqa: WPS702
     '''Literal[Literal[1, 2], 3]'''
 
@@ -578,8 +577,6 @@ def nested_annotation_func(arg: Literal[Literal[1, 2], 3]): # noqa: WPS702
 def nested_annotation_return_func() -> Union[str, Union[int, float]]: # noqa: WPS702
     '''Union[str, Union[int, float]]'''
 
->>>>>>> Forbid nested Literal, Union and Annotated (#837)
-<<<<<<< HEAD
 
 from json import loads  # noqa: WPS347
 from some_module import a  # noqa: WPS347
