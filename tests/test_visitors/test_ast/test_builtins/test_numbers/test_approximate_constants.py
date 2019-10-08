@@ -32,7 +32,7 @@ def test_violation_on_approximate_constants(
 
 
 @pytest.mark.parametrize('variable_value', [
-    3.15, 100, 6.29, 2.73
+    3.15, 100, 6.29, 2.73,
 ])
 def test_no_violations_on_right_constants(
     assert_errors,
