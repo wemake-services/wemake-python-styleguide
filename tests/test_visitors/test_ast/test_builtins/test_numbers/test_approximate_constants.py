@@ -29,3 +29,20 @@ def test_violation_on_approximate_constants(
     visitor.run()
 
     assert_errors(visitor, [ApproximateConstantViolation])
+
+
+@pytest.mark.parametrize('variable_value', [
+    3.15, 100, 6.29, 2.73
+])
+def test_no_violations_on_right_constants(
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+    variable_value,
+):
+    """Ensures that usage of simple numbers allowed."""
+    tree = parse_ast_tree('a = {0}'.format(variable_value))
+    visitor = WrongNumberVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
