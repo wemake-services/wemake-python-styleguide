@@ -1820,19 +1820,27 @@ class ApproximateConstantViolation(ASTViolation):
     Forbids to use approximate constants.
 
     Reasoning:
-        These constants are already defined.
+        Some constants are already defined.
         No need to write them again, use existing values.
+        We just compare numbers as strings and raise this violation
+        when they start with the same chars.
 
     Solution:
-        Use constants from math module.
+        Use pre-defined constants.
 
     Example::
 
         # Correct:
         from math import pi
+        random_number = 3.15
+        too_short = 3.1
 
         # Wrong:
         pi = 3.14
+
+    See
+    :py:data:`~wemake_python_styleguide.constants.MATH_APPROXIMATE_CONSTANTS`
+    for full list of math constants that we check for.
 
     See also:
         https://docs.python.org/3/library/math.html#constants
