@@ -563,19 +563,19 @@ unhashable = [] * 2  # noqa: WPS435
 
 
 def literal_none_func(arg: Literal[None]):  # noqa: WPS701
-    '''Literal[None]'''
+    """Literal[None]"""
 
 
 def literal_none_return_func() -> Literal[None]:  # noqa: WPS701
-    '''Literal[None]'''
+    """Literal[None]"""
 
 
 def nested_annotation_func(arg: Literal[Literal[1, 2], 3]): # noqa: WPS702
-    '''Literal[Literal[1, 2], 3]'''
+    """Literal[Literal[1, 2], 3]"""
 
 
 def nested_annotation_return_func() -> Union[str, Union[int, float]]: # noqa: WPS702
-    '''Union[str, Union[int, float]]'''
+    """Union[str, Union[int, float]]"""
 
 
 from json import loads  # noqa: WPS347

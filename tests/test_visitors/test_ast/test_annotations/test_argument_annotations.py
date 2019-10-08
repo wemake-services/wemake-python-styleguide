@@ -63,6 +63,10 @@ correct_unnested_prefixed_literal_annotation = """
 def function(arg: typing.Literal[1, 2, 3]): ...
 """
 
+correct_unnested_combined_prefixed_annotation = """
+def function(arg: typing.Union[Literal[1]]): ...
+"""
+
 # Wrong:
 
 wrong_multiline_arguments = """
@@ -122,11 +126,16 @@ wrong_deep_nested_prefixed_literal_annotation = """
 def function(arg: typing.Literal[typing.Literal[typing.Literal[1]]]): ...
 """
 
+wrong_nested_combined_annotation = """
+def function(arg: typing.Union[Union[int], str]): ...
+"""
+
 
 @pytest.mark.parametrize('code', [
     wrong_nested_literal_annotation,
     wrong_nested_union_annotation,
     wrong_nested_annotated_annotation,
+    wrong_nested_combined_annotation,
     wrong_nested_prefixed_literal_annotation,
 ])
 def test_forbidden_nested_annotations(
@@ -241,6 +250,7 @@ def test_correct_argument_annotation(
     correct_unnested_annotated_annotation,
     correct_unnested_combined_annotation,
     correct_unnested_prefixed_literal_annotation,
+    correct_unnested_combined_prefixed_annotation,
 ])
 def test_correct_unnested_argument_annotation(
     assert_errors,

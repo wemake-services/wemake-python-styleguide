@@ -54,6 +54,10 @@ correct_unnested_prefixed_literal_return = """
 def function() -> typing.Literal[1, 2, 3]: ...
 """
 
+correct_unnested_combined_literal_return = """
+def function() -> Union[typing.Literal[2, 3], int]: ...
+"""
+
 # Wrong:
 
 wrong_nested_literal_return = """
@@ -118,11 +122,15 @@ def function(
 """
 
 wrong_nested_prefixed_literal_return = """
-def function(arg: typing.Literal[typing.Literal[1]]): ...
+def function() -> typing.Literal[typing.Literal[1]]: ...
 """
 
 wrong_deep_nested_prefixed_literal_return = """
-def function(arg: typing.Literal[typing.Literal[typing.Literal[1]]]): ...
+def function() -> typing.Literal[typing.Literal[typing.Literal[1]]]: ...
+"""
+
+wrong_nested_combined_union_return = """
+def function() -> typing.Union[Union[1]]: ...
 """
 
 
@@ -171,6 +179,7 @@ def test_wrong_literal_none_return_annotation(
     wrong_nested_literal_return,
     wrong_nested_union_return,
     wrong_nested_prefixed_literal_return,
+    wrong_nested_combined_union_return,
     wrong_nested_annotated_return,
 ])
 def test_wrong_nested_return_annotations(
