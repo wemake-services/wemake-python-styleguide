@@ -25,10 +25,7 @@ from typing.re import Pattern
 
 from typing_extensions import final
 
-from wemake_python_styleguide.constants import (
-    MAX_NO_COVER_COMMENTS,
-    MAX_NOQA_COMMENTS,
-)
+from wemake_python_styleguide.constants import MAX_NO_COVER_COMMENTS
 from wemake_python_styleguide.logic.tokens import get_comment_text
 from wemake_python_styleguide.violations.best_practices import (
     OveruseOfNoCoverCommentViolation,
@@ -111,7 +108,7 @@ class WrongCommentVisitor(BaseTokenVisitor):
         self._no_cover_count += 1
 
     def _post_visit(self) -> None:
-        if self._noqa_count > MAX_NOQA_COMMENTS:
+        if self._noqa_count > self.options.max_noqa_comments:
             self.add_violation(
                 OveruseOfNoqaCommentViolation(text=str(self._noqa_count)),
             )

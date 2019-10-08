@@ -94,3 +94,6 @@ NESTED_CLASSES_WHITELIST: Final = frozenset((
     'Meta',  # django forms, models, drf, etc
     'Params',  # factoryboy specific
 ))
+
+#: Maximum amount of ``noqa`` comments per module.
+MAX_NOQA_COMMENTS: Final = 10
