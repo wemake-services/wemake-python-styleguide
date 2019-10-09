@@ -3,7 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
-    MisRefactoredAssignmentViolation,
+    MisrefactoredAssignmentViolation,
     StatementHasNoEffectViolation,
 )
 from wemake_python_styleguide.visitors.ast.statements import (
@@ -214,7 +214,7 @@ def test_misrefactored_assignment(
     visitor = StatementsWithBodiesVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [MisRefactoredAssignmentViolation])
+    assert_errors(visitor, [MisrefactoredAssignmentViolation])
 
 
 @pytest.mark.parametrize('code', [

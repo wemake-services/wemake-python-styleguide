@@ -17,6 +17,7 @@ Consistency    :ref:`WPS300 - WPS399 <consistency>`
 Best practices :ref:`WPS400 - WPS499 <best-practices>`
 Refactoring    :ref:`WPS500 - WPS599 <refactoring>`
 OOP            :ref:`WPS600 - WPS699 <oop>`
+Annotations    :ref:`WPS700 - WPS799 <annotations>`
 ============== ======
 
 

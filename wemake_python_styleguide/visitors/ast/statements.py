@@ -18,7 +18,7 @@ from wemake_python_styleguide.types import (
     AnyWith,
 )
 from wemake_python_styleguide.violations.best_practices import (
-    MisRefactoredAssignmentViolation,
+    MisrefactoredAssignmentViolation,
     StatementHasNoEffectViolation,
     UnreachableCodeViolation,
     WrongNamedKeywordViolation,
@@ -204,7 +204,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
 
         if isinstance(node.value, self._blocked_self_assignment):
             if is_same_variable(node.target, node_value):
-                self.add_violation(MisRefactoredAssignmentViolation(node))
+                self.add_violation(MisrefactoredAssignmentViolation(node))
 
     def _check_internals(self, body: Sequence[ast.stmt]) -> None:
 

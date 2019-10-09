@@ -43,6 +43,7 @@ PRESET: Final = (
 
     attributes.WrongAttributeVisitor,
     annotations.WrongAnnotationVisitor,
+    annotations.WrongNestedAnnotationVisitor,
 
     functions.WrongFunctionCallVisitor,
     functions.FunctionDefinitionVisitor,
@@ -59,7 +60,7 @@ PRESET: Final = (
     naming.WrongVariableAssignmentVisitor,
     naming.WrongVariableUsageVisitor,
 
-    builtins.MagicNumberVisitor,
+    builtins.WrongNumberVisitor,
     builtins.WrongStringVisitor,
     builtins.WrongAssignmentVisitor,
     builtins.WrongCollectionVisitor,

@@ -328,6 +328,9 @@ file_obj = open('filaname.py')  # noqa: WPS515
 print(type(file_obj) == int)  # noqa: WPS516
 
 print(*[], **{'@': 1})  # noqa: WPS517, WPS445
+print(lambda: 0)  # noqa: WPS446
+
+pi = 3.14 # noqa: WPS447
 
 xterm += xterm + 1  # noqa: WPS446
 
@@ -561,3 +564,23 @@ print(literal)  # noqa: WPS441
 unhashable = {[]}  # noqa: WPS443
 assert []  # noqa: WPS444
 unhashable = [] * 2  # noqa: WPS435
+
+def literal_none_func(arg: Literal[None]):  # noqa: WPS701
+    """Literal[None]"""
+
+
+def literal_none_return_func() -> Literal[None]:  # noqa: WPS701
+    """Literal[None]"""
+
+
+def nested_annotation_func(arg: Literal[Literal[1, 2], 3]): # noqa: WPS702
+    """Literal[Literal[1, 2], 3]"""
+
+
+def nested_annotation_return_func() -> Union[str, Union[int, float]]: # noqa: WPS702
+    """Union[str, Union[int, float]]"""
+
+
+from json import loads  # noqa: WPS347
+from some_module import a  # noqa: WPS347
+from text import from_file  # noqa: WPS347

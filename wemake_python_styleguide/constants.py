@@ -7,6 +7,7 @@ It contains lists of keywords and built-in functions we discourage to use.
 It also contains some exceptions that we allow to use in our codebase.
 """
 
+import math
 import re
 
 from typing_extensions import Final
@@ -300,15 +301,18 @@ MAGIC_NUMBERS_WHITELIST: Final = frozenset((
     1j,  # imaginary part of a complex number
 ))
 
-#: Maximum amount of ``noqa`` comments per module.
-MAX_NOQA_COMMENTS: Final = 10
-
 #: Maximum amount of ``pragma`` no-cover comments per module.
 MAX_NO_COVER_COMMENTS: Final = 5
 
 #: Maximum length of ``yield`` ``tuple`` expressions.
 MAX_LEN_YIELD_TUPLE: Final = 5
 
+#: Approximate constants which real values should be imported from math module.
+MATH_APPROXIMATE_CONSTANTS: Final = frozenset((
+    math.pi,
+    math.e,
+    math.tau,
+))
 
 # Internal variables
 # They are not publicly documented since they are not used by the end user.
@@ -328,3 +332,20 @@ NON_MAGIC_MODULO: Final = 10
 # Used to specify a pattern which checks variables and modules for underscored
 # numbers in their names:
 UNDERSCORED_NUMBER_PATTERN: Final = re.compile(r'.+\D\_\d+(\D|$)')
+
+# List of vague method names that may cause confusion if imported as is:
+VAGUE_IMPORTS_BLACKLIST = frozenset([
+    'read',
+    'write',
+    'load',
+    'loads',
+    'dump',
+    'dumps',
+    'parse',
+    'safe_load',
+    'safe_dump',
+    'load_all',
+    'dump_all',
+    'safe_load_all',
+    'safe_dump_all',
+])

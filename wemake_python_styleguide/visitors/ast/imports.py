@@ -6,6 +6,7 @@ from typing import Callable
 
 from typing_extensions import final
 
+from wemake_python_styleguide import constants
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
 from wemake_python_styleguide.logic import imports, nodes
 from wemake_python_styleguide.logic.naming import access
@@ -19,6 +20,7 @@ from wemake_python_styleguide.violations.best_practices import (
 from wemake_python_styleguide.violations.consistency import (
     DottedRawImportViolation,
     LocalFolderImportViolation,
+    VagueImportViolation,
 )
 from wemake_python_styleguide.violations.naming import SameAliasImportViolation
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -63,6 +65,19 @@ class _ImportsValidator(object):
                 self._error_callback(
                     SameAliasImportViolation(node, text=alias.name),
                 )
+
+            for name in (alias.name, alias.asname):
+                if name is None:
+                    continue
+
+                blacklisted = name in constants.VAGUE_IMPORTS_BLACKLIST
+                with_from = name.startswith('from_')
+                with_to = name.startswith('to_')
+
+                if blacklisted or with_from or with_to or len(name) == 1:
+                    self._error_callback(
+                        VagueImportViolation(node, text=alias.name),
+                    )
 
     def check_protected_import(self, node: AnyImport) -> None:
         import_names = [alias.name for alias in node.names]
