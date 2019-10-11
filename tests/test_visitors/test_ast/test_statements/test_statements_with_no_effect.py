@@ -196,7 +196,6 @@ def test_statement_with_no_effect(
 
 @pytest.mark.parametrize('code', [
     module_template,
-
 ])
 @pytest.mark.parametrize('statement', [
     'x += x + 2',
