@@ -249,6 +249,9 @@ def test_misrefactored_assignment(
     'object.mro()',
     'del some',
     'some_var: int',
+    'x += 2',
+    'x += y + 2',
+    'x += check(2)',
 ])
 def test_statement_with_regular_effect(
     assert_errors,

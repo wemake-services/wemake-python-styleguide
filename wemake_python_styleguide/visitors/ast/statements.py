@@ -197,10 +197,9 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         self,
         node: ast.AugAssign,
     ) -> None:
-        node_value: ast.Name
+        node_value: ast.expr
         if isinstance(node.value, ast.BinOp):
-            if isinstance(node.value.left, ast.Name):
-                node_value = node.value.left
+            node_value = node.value.left
 
         if isinstance(node.value, self._blocked_self_assignment):
             if is_same_variable(node.target, node_value):
