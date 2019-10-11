@@ -68,6 +68,7 @@ Summary
    MisrefactoredAssignmentViolation
    ImplicitPrimitiveViolation
    ApproximateConstantViolation
+
 Best practices
 --------------
 
