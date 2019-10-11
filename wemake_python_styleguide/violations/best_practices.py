@@ -1875,8 +1875,6 @@ class MisrefactoredAssignmentViolation(ASTViolation):
     :py:data:`~wemake_python_styleguide.constants.MATH_APPROXIMATE_CONSTANTS`
     for full list of math constants that we check for.
 
-    .. versionadded:: 0.13.0
-
     """
 
     error_template = 'Found self assignment  with refactored assignment'
