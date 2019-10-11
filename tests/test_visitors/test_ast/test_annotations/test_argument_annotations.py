@@ -6,6 +6,7 @@ from wemake_python_styleguide.visitors.ast.annotations import (
     LiteralNoneViolation,
     MultilineFunctionAnnotationViolation,
     NestedAnnotationsViolation,
+    UnionNoneViolation,
     WrongAnnotationVisitor,
     WrongNestedAnnotationVisitor,
 )
@@ -65,6 +66,22 @@ def function(arg: typing.Literal[1, 2, 3]): ...
 
 correct_unnested_combined_prefixed_annotation = """
 def function(arg: typing.Union[Literal[1]]): ...
+"""
+
+correct_arg_union_none_annotation = """
+def function(empty_arg: Union[int, float, None]): ...
+"""
+
+correct_arg_embedded_union_none_annotation = """
+def function(empty_arg: Union[Union[int, float, None], float]): ...
+"""
+
+correct_arg_union_annotation = """
+def function(empty_arg: Union[True, float]): ...
+"""
+
+correct_arg_union_annotation_one_argument = """
+def function(empty_arg: Union[float]): ...
 """
 
 # Wrong:
@@ -128,6 +145,14 @@ def function(arg: typing.Literal[typing.Literal[typing.Literal[1]]]): ...
 
 wrong_nested_combined_annotation = """
 def function(arg: typing.Union[Union[int], str]): ...
+"""
+
+wrong_arg_union_with_none_annotation = """
+def function(empty_arg: Union[int, None]): ...
+"""
+
+wrong_embedded_arg_union_with_none_annotation = """
+def function(empty_arg: Union[Union[int, None], Optional[int]]): ...
 """
 
 
@@ -227,6 +252,10 @@ def test_wrong_argument_annotation(
     correct_multiline_arguments,
     correct_arg_none_annotation,
     correct_literal_annotation,
+    correct_arg_union_none_annotation,
+    correct_arg_embedded_union_none_annotation,
+    correct_arg_union_annotation,
+    correct_arg_union_annotation_one_argument,
 ])
 def test_correct_argument_annotation(
     assert_errors,
@@ -266,3 +295,23 @@ def test_correct_unnested_argument_annotation(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('code', [
+    wrong_arg_union_with_none_annotation,
+    wrong_embedded_arg_union_with_none_annotation,
+])
+def test_wrong_union_none_annotation(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+    mode,
+):
+    """Ensures that using incorrect argument annotations is forbiden."""
+    tree = parse_ast_tree(mode(code))
+
+    visitor = WrongAnnotationVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [UnionNoneViolation])

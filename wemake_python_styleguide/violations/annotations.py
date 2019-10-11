@@ -18,12 +18,14 @@ Summary
 
    LiteralNoneViolation
    NestedAnnotationsViolation
+   UnionNoneViolation
 
 Annotation checks
 ------------------
 
 .. autoclass:: LiteralNoneViolation
 .. autoclass:: NestedAnnotationsViolation
+.. autoclass:: UnionNoneViolation
 
 """
 
@@ -91,3 +93,34 @@ class NestedAnnotationsViolation(ASTViolation):
 
     error_template = 'Found redundant nested typing annotation'
     code = 702
+
+
+@final
+class UnionNoneViolation(ASTViolation):
+    """
+    Forbids to use ``Union[T, None]`` typing annotation.
+
+    Reasoning:
+        ``Union[T, None]`` is just the same as ``Optional[T]``.
+        There's no need to use the first version.
+        It is not type related, it is a consistency rule.
+
+    Solution:
+        Replace ``Union[T, None]`` with ``Optional[T]``.
+
+    Example::
+
+        # Correct:
+        def func(empty: Optional[int]):
+            '''Empty function.'''
+
+        # Wrong:
+        def func(empty: Union[int, None]):
+            '''Empty function.'''
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    code = 703
+    error_template = 'Found useless `Union[T, None]` typing annotation'

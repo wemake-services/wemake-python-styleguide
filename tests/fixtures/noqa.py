@@ -579,6 +579,19 @@ def nested_annotation_return_func() -> Union[str, Union[int, float]]: # noqa: WP
     """Union[str, Union[int, float]]"""
 
 
+def union_with_none_func(arg: Union[int, None]):  # noqa: WPS703
+    """Union[T, None]"""
+
+
+def union_with_none_return_func() -> Union[int, None]:  # noqa: WPS703
+    """Union[T, None]"""
+
+variable_union_with_none: Union[int, None] = 0  # noqa: WPS703
+
+class VariableUnionWithNone(object):
+    variable_union_with_none: Union[int, None] = 0  # noqa: WPS703
+
+
 from json import loads  # noqa: WPS347
 from some_module import a  # noqa: WPS347
 from text import from_file  # noqa: WPS347

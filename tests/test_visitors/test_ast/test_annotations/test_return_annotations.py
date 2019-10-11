@@ -6,6 +6,7 @@ from wemake_python_styleguide.visitors.ast.annotations import (
     LiteralNoneViolation,
     MultilineFunctionAnnotationViolation,
     NestedAnnotationsViolation,
+    UnionNoneViolation,
     WrongAnnotationVisitor,
     WrongNestedAnnotationVisitor,
 )
@@ -35,7 +36,7 @@ def function(arg) -> None: ...
 """
 
 correct_embedded_return_none_annotation = """
-def function(arg) -> Union[None, Optional[int]]: ...
+def function(arg) -> Union[None, Optional[int], Optional[float]]: ...
 """
 
 correct_unnested_literal_return = """
@@ -56,6 +57,22 @@ def function() -> typing.Literal[1, 2, 3]: ...
 
 correct_unnested_combined_literal_return = """
 def function() -> Union[typing.Literal[2, 3], int]: ...
+"""
+
+correct_union_with_none_return = """
+def function() -> Union[int, float, None]: ...
+"""
+
+correct_embedded_union_with_none_return = """
+def function() -> Union[Union[int, float, None], float]: ...
+"""
+
+correct_union_return = """
+def function() -> Union[True, float]: ...
+"""
+
+correct_union_return_one_argument = """
+def function() -> Union[int]: ...
 """
 
 # Wrong:
@@ -131,6 +148,14 @@ def function() -> typing.Literal[typing.Literal[typing.Literal[1]]]: ...
 
 wrong_nested_combined_union_return = """
 def function() -> typing.Union[Union[1]]: ...
+"""
+
+wrong_union_with_none_return = """
+def function() -> Union[None, int]: ...
+"""
+
+wrong_embedded_union_with_none_return = """
+def function() -> Union[Union[None, int], float]: ...
 """
 
 
@@ -230,6 +255,10 @@ def test_wrong_deep_nested_return_annotations(
     correct_multiline_return,
     correct_embedded_return_none_annotation,
     correct_return_none_annotation,
+    correct_union_with_none_return,
+    correct_embedded_union_with_none_return,
+    correct_union_return,
+    correct_union_return_one_argument,
 ])
 def test_correct_return_annotation(
     assert_errors,
@@ -267,3 +296,23 @@ def test_correct_unnested_annotation(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('code', [
+    wrong_union_with_none_return,
+    wrong_embedded_union_with_none_return,
+])
+def test_wrong_union_with_none_return_annotation(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+    mode,
+):
+    """Ensures that using incorrect return annotations is forbiden."""
+    tree = parse_ast_tree(mode(code))
+
+    visitor = WrongAnnotationVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [UnionNoneViolation])

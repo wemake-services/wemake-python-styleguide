@@ -1,20 +1,68 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import ClassVar, FrozenSet, cast
+from typing import Callable, ClassVar, FrozenSet, cast
 
 from typing_extensions import final
 
-from wemake_python_styleguide.types import AnyFunctionDef
+from wemake_python_styleguide.types import AnyFunctionDef, ConfigurationOptions
+from wemake_python_styleguide.violations import base
 from wemake_python_styleguide.violations.annotations import (
     LiteralNoneViolation,
     NestedAnnotationsViolation,
+    UnionNoneViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
     MultilineFunctionAnnotationViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
+
+
+@final
+class _AnnotationValidator(object):
+    """Utility class to separate logic from the annotation visitor."""
+
+    def __init__(
+        self,
+        error_callback: Callable[[base.BaseViolation], None],
+        options: ConfigurationOptions,
+    ) -> None:
+        """Creates new instance of a annotation validator."""
+        self._error_callback = error_callback
+        self._options = options
+
+    def check_for_literal_none(self, node: ast.Subscript) -> None:
+        annotation_name = cast(ast.Name, node.value)
+        slice_index = cast(ast.Index, node.slice)
+
+        if annotation_name.id != 'Literal':
+            return
+
+        if self._check_slice_for_none(slice_index.value):
+            self._error_callback(LiteralNoneViolation(node))
+
+    def check_for_union_none(self, node: ast.Subscript) -> None:
+        if node.value.id != 'Union':
+            return
+
+        slice_args = node.slice.value
+
+        if not isinstance(slice_args, ast.Tuple):
+            return
+
+        if len(slice_args.elts) != 2:
+            return
+
+        for slice_arg in slice_args.elts:
+            if self._check_slice_for_none(slice_arg):
+                self._error_callback(UnionNoneViolation(node))
+                return
+
+    def _check_slice_for_none(self, slice_arg) -> bool:
+        if isinstance(slice_arg, ast.NameConstant):
+            return slice_arg.value is None
+        return False
 
 
 @final
@@ -102,8 +150,27 @@ class WrongNestedAnnotationVisitor(BaseNodeVisitor):
     'visit_FunctionDef',
     'visit_AsyncFunctionDef',
 ))
+@alias('visit_variable', (
+    'visit_AnnAssign',
+))
 class WrongAnnotationVisitor(BaseNodeVisitor):
     """Ensures that annotations are used correctly."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Initializes new annotation validator for this visitor."""
+        super().__init__(*args, **kwargs)
+        self._validator = _AnnotationValidator(self.add_violation, self.options)
+
+    def visit_variable(self, node: ast.AnnAssign) -> None:
+        """
+        Checks wrong annotations of assigned.
+
+        Raises:
+            UnionNoneViolation
+
+        """
+        self._check_variable_annotation(node)
+        self.generic_visit(node)
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """
@@ -112,6 +179,7 @@ class WrongAnnotationVisitor(BaseNodeVisitor):
         Raises:
             MultilineFunctionAnnotationViolation
             LiteralNoneAnnotation
+            UnionNoneViolation
 
         """
         self._check_return_annotation(node)
@@ -124,23 +192,11 @@ class WrongAnnotationVisitor(BaseNodeVisitor):
         Raises:
             MultilineFunctionAnnotationViolation
             LiteralNoneAnnotation
+            UnionNoneViolation
 
         """
         self._check_arg_annotation(node)
         self.generic_visit(node)
-
-    def _check_for_literal_none(self, node: ast.Subscript) -> None:
-        annotation_name = cast(ast.Name, node.value)
-        slice_index = cast(ast.Index, node.slice)
-
-        if annotation_name.id != 'Literal':
-            return
-
-        if not isinstance(slice_index.value, ast.NameConstant):
-            return
-
-        if slice_index.value.value is None:
-            self.add_violation(LiteralNoneViolation(node))
 
     def _check_arg_annotation(self, node: ast.arg) -> None:
         for sub_node in ast.walk(node):
@@ -150,7 +206,8 @@ class WrongAnnotationVisitor(BaseNodeVisitor):
                 return
 
             if isinstance(sub_node, ast.Subscript):
-                self._check_for_literal_none(sub_node)
+                self._validator.check_for_literal_none(sub_node)
+                self._validator.check_for_union_none(sub_node)
 
     def _check_return_annotation(self, node: AnyFunctionDef) -> None:
         if not node.returns:
@@ -163,4 +220,10 @@ class WrongAnnotationVisitor(BaseNodeVisitor):
                 return
 
             if isinstance(sub_node, ast.Subscript):
-                self._check_for_literal_none(sub_node)
+                self._validator.check_for_literal_none(sub_node)
+                self._validator.check_for_union_none(sub_node)
+
+    def _check_variable_annotation(self, node: ast.AnnAssign) -> None:
+        for sub_node in ast.walk(node):
+            if isinstance(sub_node, ast.Subscript):
+                self._validator.check_for_union_none(sub_node)
