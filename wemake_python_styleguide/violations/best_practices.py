@@ -118,7 +118,9 @@ Best practices
 .. autoclass:: UnhashableTypeInHashViolation
 .. autoclass:: WrongKeywordConditionViolation
 .. autoclass:: WrongNamedKeywordViolation
-.. autoclass:: MisRefactoredAssignmentViolation
+.. autoclass:: ImplicitPrimitiveViolation
+.. autoclass:: ApproximateConstantViolation
+.. autoclass:: MisrefactoredAssignmentViolation
 """
 
 from typing_extensions import final
@@ -1874,6 +1876,8 @@ class MisrefactoredAssignmentViolation(ASTViolation):
     See
     :py:data:`~wemake_python_styleguide.constants.MATH_APPROXIMATE_CONSTANTS`
     for full list of math constants that we check for.
+
+    .. versionadded:: 0.13.0
 
     """
 
