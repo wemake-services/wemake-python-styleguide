@@ -12,6 +12,8 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids using nested `typing.Literal`, `typing.Union` and `typing.Annotated`
 - Forbids use of vague import names (e.g. `from json import loads`)
 - Make ``OveruseOfNoqaCommentViolation`` configurable (`--max-noqa-comments`)
+- Improves tests: we now ensure that each violation with previous codes also 
+  has corresponding versions changed in their documentation
 
 ### Bugfixes
 
