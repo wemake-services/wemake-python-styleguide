@@ -1879,4 +1879,3 @@ class MisrefactoredAssignmentViolation(ASTViolation):
 
     error_template = 'Found self assignment  with refactored assignment'
     code = 448
-    previous_codes = {447}
