@@ -65,9 +65,9 @@ Summary
    UnhashableTypeInHashViolation
    WrongKeywordConditionViolation
    WrongNamedKeywordViolation
-   MisrefactoredAssignmentViolation
    ImplicitPrimitiveViolation
    ApproximateConstantViolation
+   MisrefactoredAssignmentViolation
 
 Best practices
 --------------
@@ -1855,33 +1855,25 @@ class ApproximateConstantViolation(ASTViolation):
 @final
 class MisrefactoredAssignmentViolation(ASTViolation):
     """
-    Forbids to use approximate constants.
+    Forbids to use mis refactored self assignment.
 
     Reasoning:
-        Some constants are already defined.
-        No need to write them again, use existing values.
-        We just compare numbers as strings and raise this violation
-        when they start with the same chars.
+        self assignment need not have the same operand on the right hand side
 
     Solution:
-        Use pre-defined constants.
+        Raise violation if same operand is found on both sides
 
     Example::
 
         # Correct:
-        from math import pi
-        random_number = 3.15
-        too_short = 3.1
+        test += 1
 
         # Wrong:
-        pi = 3.14
+        test += test +1
 
     See
     :py:data:`~wemake_python_styleguide.constants.MATH_APPROXIMATE_CONSTANTS`
     for full list of math constants that we check for.
-
-    See also:
-        https://docs.python.org/3/library/math.html#constants
 
     .. versionadded:: 0.13.0
 
