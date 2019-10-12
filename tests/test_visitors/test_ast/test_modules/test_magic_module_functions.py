@@ -30,8 +30,8 @@ def test_wrong_magic_used(
     visitor.run()
 
     assert_errors(visitor, [])
-    
-      
+
+
 @pytest.mark.parametrize('function_names', MAGIC_MODULE_NAMES_BLACKLIST)
 def test_right_magic_used(
     assert_errors,
@@ -42,8 +42,8 @@ def test_right_magic_used(
     """Testing that some magic methods are restricted."""
     tree = parse_ast_tree(regular_function.format(function_names))
     option_values = options(i_control_code=True)
-    
-    visitor = MagicModuleFunctionsVisitor(options_values, tree=tree)
+
+    visitor = MagicModuleFunctionsVisitor(option_values, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [BadMagicModuleFunctionViolation])
