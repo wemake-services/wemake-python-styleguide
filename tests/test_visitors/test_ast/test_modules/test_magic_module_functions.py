@@ -20,13 +20,14 @@ def {0}(name):
 def test_wrong_magic_used(
     assert_errors,
     parse_ast_tree,
-    default_options,
+    options,
     function_names,
 ):
-    """Testing that some magic methods are restricted."""
+    """Testing that some magic methods are not restricted with logic is restricted."""
     tree = parse_ast_tree(regular_function.format(function_names))
+    option_values = options(i_control_code=False)
 
-    visitor = MagicModuleFunctionsVisitor(default_options, tree=tree)
+    visitor = MagicModuleFunctionsVisitor(option_values, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
