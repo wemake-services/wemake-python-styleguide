@@ -23,7 +23,7 @@ def test_wrong_magic_used(
     options,
     function_names,
 ):
-    """Testing that some magic methods are not restricted with logic is restricted."""
+    """Testing magic methods with logic is restricted."""
     tree = parse_ast_tree(regular_function.format(function_names))
     option_values = options(i_control_code=False)
 
