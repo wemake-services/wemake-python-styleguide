@@ -5,9 +5,7 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     InitModuleHasLogicViolation,
 )
-from wemake_python_styleguide.visitors.ast.modules import (
-    EmptyModuleContentsVisitor,
-)
+
 
 empty_module = ''
 module_with_docstring = """
@@ -103,26 +101,3 @@ def test_init_with_logic_without_control(
     visitor.run()
 
     assert_errors(visitor, [])
-@pytest.mark.parametrize('code', [
-    module_with_imports,
-    module_with_one_import,
-    module_with_logic,
-])
-def test_init_with_logic_with_control(
-    assert_errors,
-    parse_ast_tree,
-    code,
-    options,
-):
-    """Testing that `__init__` with logic is not restricted."""
-    tree = parse_ast_tree(code)
-
-    option_values = options(i_control_code=True)
-    visitor = EmptyModuleContentsVisitor(
-        option_values,
-        tree=tree,
-        filename='__init__.py',
-    )
-    visitor.run()
-
-    assert_errors(visitor, [BadMagicModuleFunctionViolation])
