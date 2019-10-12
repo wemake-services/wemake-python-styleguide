@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import List, Sequence
+from functools import partial
+from typing import Any, Iterable, List, Sequence, Tuple, Type
 
 
 def normalize_dict_elements(node: ast.Dict) -> Sequence[ast.AST]:
@@ -29,3 +30,33 @@ def normalize_dict_elements(node: ast.Dict) -> Sequence[ast.AST]:
         else:
             elements.append(dict_key)
     return elements
+
+
+def sequence_of_node(
+    node_type: Tuple[Type[ast.stmt]],
+    sequence: Sequence[ast.stmt],
+) -> Iterable[Sequence[ast.stmt]]:
+    """Find sequence of node by type."""
+    is_desired_type = partial(
+        lambda types, input_: isinstance(input_, types), node_type,
+    )
+
+    sequence = iter(sequence)
+    previous_node = next(sequence, None)
+    node_sequence = []
+
+    while previous_node is not None:
+        current_node = next(sequence, None)
+
+        if all(map(is_desired_type, (previous_node, current_node))):
+            node_sequence.append(previous_node)
+        elif node_sequence:
+            yield [*node_sequence, previous_node]
+            node_sequence = []
+
+        previous_node = current_node
+
+
+def first(sequence: Iterable[Any], default: Any = None) -> Any:
+    """Get first variable from sequence or default."""
+    return next(iter(sequence), default)

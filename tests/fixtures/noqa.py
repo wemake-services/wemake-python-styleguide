@@ -582,3 +582,7 @@ def nested_annotation_return_func() -> Union[str, Union[int, float]]: # noqa: WP
 from json import loads  # noqa: WPS347
 from some_module import a  # noqa: WPS347
 from text import from_file  # noqa: WPS347
+
+
+swap_a = swap_b
+swap_b = swap_a  # noqa: WPS448

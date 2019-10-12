@@ -67,6 +67,7 @@ Summary
    WrongNamedKeywordViolation
    ImplicitPrimitiveViolation
    ApproximateConstantViolation
+   AlmostSwappedViolation
 
 Best practices
 --------------
@@ -119,6 +120,7 @@ Best practices
 .. autoclass:: WrongNamedKeywordViolation
 .. autoclass:: ImplicitPrimitiveViolation
 .. autoclass:: ApproximateConstantViolation
+.. autoclass:: AlmostSwappedViolation
 
 """
 
@@ -1851,3 +1853,37 @@ class ApproximateConstantViolation(ASTViolation):
 
     code = 447
     error_template = 'Found approximate constant: {0}'
+
+
+@final
+class AlmostSwappedViolation(ASTViolation):
+    """
+    Forbids unpythonic swap variables.
+
+    We check for a = b; b = a sequences.
+
+    Reasoning:
+        This looks like a failed attempt to swap.
+
+    Solution:
+        Use standard way to swap two variables.
+
+    Example::
+
+        # Correct:
+        a, b = b, a
+
+        # Wrong:
+        a = b
+        b = a
+
+        temp = a
+        a = b
+        b = temp
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found incorrectly swapped variables: {0}'
+    code = 448
