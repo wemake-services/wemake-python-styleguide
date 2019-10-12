@@ -85,10 +85,11 @@ class MagicModuleFunctionsVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_magic_module_functions(self, node: ast.FunctionDef) -> None:
-        if node.name in constants.MAGIC_MODULE_NAMES_BLACKLIST:
-            self.add_violation(
-                BadMagicModuleFunctionViolation(node, text=node.name),
-            )
+        if not self.options.i_control_code:
+            if node.name in constants.MAGIC_MODULE_NAMES_BLACKLIST:
+                self.add_violation(
+                    BadMagicModuleFunctionViolation(node, text=node.name),
+                )
 
 
 @final
