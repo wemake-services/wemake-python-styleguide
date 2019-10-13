@@ -1799,23 +1799,11 @@ class RedundantSubscriptViolation(ASTViolation):
     Example::
 
         # Correct:
-        x[5]
+        array[:7]
 
         ...
 
-        x[3:7]
-
-        ...
-
-        x[3:7:2]
-
-        ...
-
-        x[3:]
-
-        ...
-
-        x[:7]
+        array[3:]
 
         # Wrong:
         x[0:7]
@@ -1826,7 +1814,7 @@ class RedundantSubscriptViolation(ASTViolation):
 
         ...
 
-        x[3:7:None]
+        x[3:7:1]
 
 
     .. versionadded:: 0.13.0

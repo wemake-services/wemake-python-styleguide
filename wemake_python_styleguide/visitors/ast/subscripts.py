@@ -30,19 +30,19 @@ class SubscriptVisitor(base.BaseNodeVisitor):
         lower_ok = (
             (node.slice.lower is None) or (
                 not self._is_zero(node.slice.lower) and
-                not self._is_None(node.slice.lower)
+                not self._is_none(node.slice.lower)
             )
         )
 
         upper_ok = (
             (node.slice.upper is None) or
-            not self._is_None(node.slice.upper)
+            not self._is_none(node.slice.upper)
         )
 
         step_ok = (
             (node.slice.step is None) or (
                 not self._is_one(node.slice.step) and
-                not self._is_None(node.slice.step)
+                not self._is_none(node.slice.step)
             )
         )
 
@@ -53,7 +53,7 @@ class SubscriptVisitor(base.BaseNodeVisitor):
                 ),
             )
 
-    def _is_None(self, component_value: ast.expr) -> bool:
+    def _is_none(self, component_value: ast.expr) -> bool:
         return (
             isinstance(component_value, ast.NameConstant) and
             component_value.value is None
