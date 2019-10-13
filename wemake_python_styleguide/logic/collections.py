@@ -46,7 +46,7 @@ def normalize_dict_elements(node: ast.Dict) -> Sequence[ast.AST]:
 
 
 def sequence_of_node(
-    node_types: Tuple[Type[_NodeType]],
+    node_types: Tuple[Type[_NodeType], ...],
     sequence: Sequence[ast.stmt],
 ) -> Iterable[Sequence[_NodeType]]:
     """Find sequence of node by type."""
