@@ -2,7 +2,7 @@
 
 import ast
 from collections import deque
-from typing import ClassVar, Mapping, Optional, Sequence, Union, cast
+from typing import ClassVar, Deque, Mapping, Optional, Sequence, Set, Union
 
 from typing_extensions import final
 
@@ -54,6 +54,8 @@ AnyCollection = Union[
     ast.Dict,
     ast.Tuple,
 ]
+
+DequeType = Set[Optional[str]]
 
 
 @final
@@ -163,44 +165,39 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         body: Sequence[ast.stmt],
     ) -> None:
         for assigns in sequence_of_node((ast.Assign,), body):
-            self._almost_swapped(
-                cast(Sequence[ast.Assign], assigns),
-            )
+            self._almost_swapped(assigns)
 
     def _almost_swapped(self, assigns: Sequence[ast.Assign]) -> None:
-        queue = deque()
+        queue: Deque[DequeType] = deque(maxlen=2)
 
         for assign in assigns:
-            current_var = (
+            current_var = {
                 first(name_nodes.flat_variable_names([assign])),
                 first(name_nodes.get_variables_from_node(assign.value)),
-            )
+            }
 
-            previous_var = queue.popleft() if queue else (None, None)
+            previous_var = queue.popleft() if queue else set()
 
             if not all(map(bool, current_var)):
+                queue.clear()
                 continue
 
-            if previous_var[:2] == current_var[::-1]:
-                first_var = (
-                    previous_var[2]
-                    if len(previous_var) == 3
-                    else previous_var[0]
-                )
+            if current_var == previous_var:
+                previous_var = queue.popleft() if queue else previous_var
 
                 self.add_violation(
                     AlmostSwappedViolation(
                         assign,
                         text='Could be written as: {0}, {1} = {1}, {0}'.format(
-                            first_var,
-                            current_var[0],
+                            previous_var.pop(),
+                            previous_var.pop(),
                         ),
                     ),
                 )
                 continue
 
-            if previous_var[1] == current_var[0]:
-                current_var = previous_var[0], current_var[1], previous_var[1]
+            if len(previous_var & current_var) == 1:
+                queue.append(previous_var ^ current_var)
 
             queue.append(current_var)
 

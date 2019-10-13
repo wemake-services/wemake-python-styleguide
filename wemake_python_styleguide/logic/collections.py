@@ -2,7 +2,20 @@
 
 import ast
 from functools import partial
-from typing import Any, Iterable, List, Sequence, Tuple, Type
+from typing import (
+    Iterable,
+    List,
+    Optional,
+    Sequence,
+    Tuple,
+    Type,
+    TypeVar,
+    Union,
+    cast,
+)
+
+_NodeType = TypeVar('_NodeType')
+_DefaultType = TypeVar('_DefaultType')
 
 
 def normalize_dict_elements(node: ast.Dict) -> Sequence[ast.AST]:
@@ -33,30 +46,33 @@ def normalize_dict_elements(node: ast.Dict) -> Sequence[ast.AST]:
 
 
 def sequence_of_node(
-    node_type: Tuple[Type[ast.stmt]],
+    node_types: Tuple[Type[_NodeType]],
     sequence: Sequence[ast.stmt],
-) -> Iterable[Sequence[ast.stmt]]:
+) -> Iterable[Sequence[_NodeType]]:
     """Find sequence of node by type."""
     is_desired_type = partial(
-        lambda types, input_: isinstance(input_, types), node_type,
+        lambda types, node: isinstance(node, types), node_types,
     )
 
-    sequence = iter(sequence)
-    previous_node = next(sequence, None)
-    node_sequence = []
+    sequence_iterator = iter(sequence)
+    previous_node = next(sequence_iterator, None)
+    node_sequence: List[_NodeType] = []
 
     while previous_node is not None:
-        current_node = next(sequence, None)
+        current_node = next(sequence_iterator, None)
 
         if all(map(is_desired_type, (previous_node, current_node))):
-            node_sequence.append(previous_node)
+            node_sequence.append(cast(_NodeType, previous_node))
         elif node_sequence:
-            yield [*node_sequence, previous_node]
+            yield [*node_sequence, cast(_NodeType, previous_node)]
             node_sequence = []
 
         previous_node = current_node
 
 
-def first(sequence: Iterable[Any], default: Any = None) -> Any:
+def first(
+    sequence: Iterable[_NodeType],
+    default: Optional[_DefaultType] = None,
+) -> Union[_NodeType, _DefaultType, None]:
     """Get first variable from sequence or default."""
     return next(iter(sequence), default)

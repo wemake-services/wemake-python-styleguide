@@ -1860,7 +1860,7 @@ class AlmostSwappedViolation(ASTViolation):
     """
     Forbids unpythonic swap variables.
 
-    We check for a = b; b = a sequences.
+    We check for ``a = b; b = a`` sequences.
 
     Reasoning:
         This looks like a failed attempt to swap.
