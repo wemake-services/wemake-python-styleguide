@@ -9,7 +9,7 @@ Here you can find:
 4. How our internal API looks like
 
 This information will also be helpful
-if you would like to create our own ``flake8`` plugin.
+if you would like to create your own ``flake8`` plugin.
 
 How to read this documentation
 ------------------------------

@@ -43,6 +43,9 @@ You can also show all options that ``flake8`` supports by running:
 - ``i-control-code`` - whether you control ones who use your code,
     more rules are enforced when you do control it, defaults to
     :str:`wemake_python_styleguide.options.defaults.I_CONTROL_CODE`
+- ``max-noqa-comments`` - maximum number of `noqa` allowed in a module,
+    defaults to
+    :str:`wemake_python_styleguide.options.defaults.MAX_NOQA_COMMENTS`
 
 .. rubric:: Complexity options
 
@@ -302,6 +305,12 @@ class Configuration(object):
             'List of nested classes names we allow to use.',
             type='string',
             comma_separated_list=True,
+        ),
+
+        _Option(
+            '--max-noqa-comments',
+            defaults.MAX_NOQA_COMMENTS,
+            'Maximum amount of `noqa` comments per module.',
         ),
     ]
 

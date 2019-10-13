@@ -64,6 +64,9 @@ Summary
    OuterScopeShadowingViolation
    UnhashableTypeInHashViolation
    WrongKeywordConditionViolation
+   WrongNamedKeywordViolation
+   ImplicitPrimitiveViolation
+   ApproximateConstantViolation
 
 Best practices
 --------------
@@ -113,6 +116,9 @@ Best practices
 .. autoclass:: OuterScopeShadowingViolation
 .. autoclass:: UnhashableTypeInHashViolation
 .. autoclass:: WrongKeywordConditionViolation
+.. autoclass:: WrongNamedKeywordViolation
+.. autoclass:: ImplicitPrimitiveViolation
+.. autoclass:: ApproximateConstantViolation
 
 """
 
@@ -224,6 +230,11 @@ class OveruseOfNoqaCommentViolation(SimpleViolation):
     Solution:
         Refactor your code to match our style.
         Or use a config file to switch off some checks.
+
+    Configuration:
+        This rule is configurable with ``--max-noqa-comments``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_NOQA_COMMENTS`
 
     .. versionadded:: 0.7.0
 
@@ -1743,3 +1754,100 @@ class WrongKeywordConditionViolation(ASTViolation):
 
     error_template = 'Found wrong keyword condition: {0}'
     code = 444
+
+
+@final
+class WrongNamedKeywordViolation(ASTViolation):
+    """
+    Forbids to have wrong named keywords in starred dicts.
+
+    Reasoning:
+        Using wrong keywords in starred dict.
+        Eg.: ``print(**{'@': 1})``.
+
+    Solution:
+        Don't use incorrect identifiers for keywords.
+
+    Example::
+
+        # Correct:
+        print(**{'end': '|'})
+
+        # Wrong:
+        print(**{'3end': '|'})
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    code = 445
+    error_template = 'Found wrong named keyword in starred dict'
+
+
+@final
+class ImplicitPrimitiveViolation(ASTViolation):
+    """
+    Forbids to use implicit primitives in a form of ``lambda`` functions.
+
+    Reasoning:
+        When you use ``lambda`` that returns a primitive value
+        and takes no arguments, it means that
+        you should use a primitive type instead.
+
+    Solution:
+        Replace ``lambda`` with ``int``, ``float``,
+        ``list``, or any other primitive.
+
+    Example::
+
+        # Correct:
+        defaultdict(int)
+
+        # Wrong:
+        defaultdict(lambda: 0)
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    code = 446
+    error_template = 'Found implicit primitive in a form of `lambda`'
+
+
+@final
+class ApproximateConstantViolation(ASTViolation):
+    """
+    Forbids to use approximate constants.
+
+    Reasoning:
+        Some constants are already defined.
+        No need to write them again, use existing values.
+        We just compare numbers as strings and raise this violation
+        when they start with the same chars.
+
+    Solution:
+        Use pre-defined constants.
+
+    Example::
+
+        # Correct:
+        from math import pi
+        random_number = 3.15
+        too_short = 3.1
+
+        # Wrong:
+        pi = 3.14
+
+    See
+    :py:data:`~wemake_python_styleguide.constants.MATH_APPROXIMATE_CONSTANTS`
+    for full list of math constants that we check for.
+
+    See also:
+        https://docs.python.org/3/library/math.html#constants
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    code = 447
+    error_template = 'Found approximate constant: {0}'

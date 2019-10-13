@@ -1,11 +1,9 @@
 dist: xenial
 language: python
 
-matrix:
-  fast_finish: true
-  include:
-    - python: 3.6
-    - python: 3.7
+python:
+  - 3.6
+  - 3.7
 
 before_install:
   - pip freeze | xargs pip uninstall -y
@@ -19,9 +17,6 @@ after_success:
   # Send coverage to coveralls:
   - pip install coveralls
   - coveralls
-  # Send coverage to deepsource:
-  - curl https://deepsource.io/cli | sh
-  - ./bin/deepsource report --analyzer test-coverage --key python --value-file ./coverage.xml
 
 notifications:
   email:
