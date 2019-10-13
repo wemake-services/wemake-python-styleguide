@@ -73,6 +73,7 @@ Summary
    MeaninglessNumberOperationViolation
    OperationSignNegationViolation
    VagueImportViolation
+   RedundantSubscriptViolation
 
 Consistency checks
 ------------------
@@ -125,6 +126,7 @@ Consistency checks
 .. autoclass:: MeaninglessNumberOperationViolation
 .. autoclass:: OperationSignNegationViolation
 .. autoclass:: VagueImportViolation
+.. autoclass:: RedundantSubscriptViolation
 
 """
 
@@ -1784,3 +1786,52 @@ class VagueImportViolation(ASTViolation):
 
     error_template = 'Found vague import that may cause confusion: {0}'
     code = 347
+
+
+@final
+class RedundantSubscriptViolation(ASTViolation):
+    """
+    Forbids the use of redundant components in a subscript's slice.
+
+    Reasoning:
+        We do it for consistency reasons.
+
+    Example::
+
+        # Correct:
+        x[5]
+
+        ...
+
+        x[3:7]
+
+        ...
+
+        x[3:7:2]
+
+        ...
+
+        x[3:]
+
+        ...
+
+        x[:7]
+
+        # Wrong:
+        x[0:7]
+
+        ...
+
+        x[3:None]
+
+        ...
+
+        x[3:7:None]
+
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found redundant subscript slice: {0}'
+    code = 348
