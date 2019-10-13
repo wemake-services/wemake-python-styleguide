@@ -1885,5 +1885,5 @@ class AlmostSwappedViolation(ASTViolation):
 
     """
 
-    error_template = 'Found incorrectly swapped variables: {0}'
+    error_template = 'Found incorrectly swapped variables'
     code = 448

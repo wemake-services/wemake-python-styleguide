@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from collections import deque
-from typing import ClassVar, Deque, Mapping, Optional, Sequence, Set, Union
+from typing import ClassVar, Mapping, Optional, Sequence, Set, Union
 
 from typing_extensions import final
 
@@ -54,8 +53,6 @@ AnyCollection = Union[
     ast.Dict,
     ast.Tuple,
 ]
-
-DequeType = Set[Optional[str]]
 
 
 @final
@@ -168,7 +165,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
             self._almost_swapped(assigns)
 
     def _almost_swapped(self, assigns: Sequence[ast.Assign]) -> None:
-        queue: Deque[DequeType] = deque(maxlen=2)
+        previous_var: Set[Optional[str]] = set()
 
         for assign in assigns:
             current_var = {
@@ -176,30 +173,17 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
                 first(name_nodes.get_variables_from_node(assign.value)),
             }
 
-            previous_var = queue.popleft() if queue else set()
-
             if not all(map(bool, current_var)):
-                queue.clear()
+                previous_var.clear()
                 continue
 
             if current_var == previous_var:
-                previous_var = queue.popleft() if queue else previous_var
-
-                self.add_violation(
-                    AlmostSwappedViolation(
-                        assign,
-                        text='Could be written as: {0}, {1} = {1}, {0}'.format(
-                            previous_var.pop(),
-                            previous_var.pop(),
-                        ),
-                    ),
-                )
-                continue
+                self.add_violation(AlmostSwappedViolation(assign))
 
             if len(previous_var & current_var) == 1:
-                queue.append(previous_var ^ current_var)
+                current_var ^= previous_var
 
-            queue.append(current_var)
+            previous_var = current_var
 
     def _check_useless_node(
         self,
