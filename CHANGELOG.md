@@ -16,7 +16,7 @@ We used to have incremental versioning before `0.1.0`.
 ### Bugfixes
 
 - Fixes ``ImplicitElifViolation`` false positives on a specific edge cases.
-- Fixes I_CONTROL_CODE setting for BadMagicModuleFunctionViolation.
+- Fixes ``I_CONTROL_CODE setting`` for ``BadMagicModuleFunctionViolation``.
 
 ## 0.13.0
 
