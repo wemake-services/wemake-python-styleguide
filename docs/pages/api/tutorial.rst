@@ -31,7 +31,7 @@ Writing new plugin
 First of all, you have to decide:
 
 1. Are you writing a separate plugin and adding it as a dependency?
-2. Are you writing an built-in extension to this styleguide?
+2. Are you writing a built-in extension to this styleguide?
 
 How to make a decision?
 
