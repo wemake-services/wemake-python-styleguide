@@ -8,25 +8,22 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
-- Forbids using `Literal[None]` in function annotations
-- Forbids using nested `typing.Literal`, `typing.Union` and `typing.Annotated`
-- Forbids use of vague import names (e.g. `from json import loads`)
-- Make ``OveruseOfNoqaCommentViolation`` configurable (`--max-noqa-comments`)
-
-### Bugfixes
-
-- Fixes ``ImplicitElifViolation`` false positives on a specific edge cases.
-
-## 0.13.0
-
-### Features
-
 - Improves Github Action stability
 - `WPS431` now allow customize whitelist via `nested-classes-whitelist` setting
 - Forbids to have invalid strings like `**{'@': 1}`
 - Forbids to use implicit primitive values in a form of `lambda`
 - Forbids to use approximate math constants
+- Forbids using `Literal[None]` in function annotations
+- Forbids using nested `typing.Literal`, `typing.Union` and `typing.Annotated`
+- Forbids use of vague import names (e.g. `from json import loads`)
+- Make ``OveruseOfNoqaCommentViolation`` configurable (`--max-noqa-comments`)
+- Forbid incorrectly swapped variables
 - Forbids to use `+=` with list arguments
+
+### Bugfixes
+
+- Fixes ``ImplicitElifViolation`` false positives on a specific edge cases
+- Fixes ``I_CONTROL_CODE setting`` for ``BadMagicModuleFunctionViolation``
 
 
 ## 0.12.5
