@@ -26,6 +26,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to have invalid strings like `**{'@': 1}`
 - Forbids to use implicit primitive values in a form of `lambda`
 - Forbids to use approximate math constants
+- Forbids to use `+=` with list arguments
 
 
 ## 0.12.5
