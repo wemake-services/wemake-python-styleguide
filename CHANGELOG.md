@@ -18,11 +18,12 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids use of vague import names (e.g. `from json import loads`)
 - Make ``OveruseOfNoqaCommentViolation`` configurable (`--max-noqa-comments`)
 - Forbid incorrectly swapped variables
+- Forbids to use `+=` with list arguments
 
 ### Bugfixes
 
-- Fixes ``ImplicitElifViolation`` false positives on a specific edge cases.
-- Fixes ``I_CONTROL_CODE setting`` for ``BadMagicModuleFunctionViolation``.
+- Fixes ``ImplicitElifViolation`` false positives on a specific edge cases
+- Fixes ``I_CONTROL_CODE setting`` for ``BadMagicModuleFunctionViolation``
 
 
 ## 0.12.5
