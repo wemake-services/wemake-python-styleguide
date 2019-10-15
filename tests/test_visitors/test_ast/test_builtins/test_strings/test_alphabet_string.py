@@ -7,15 +7,14 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors.ast.builtins import WrongStringVisitor
 
-BOTHCASES_ALPH = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'  # noqa: WPS449
-UPPERCASE_ALPH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'  # noqa: WPS449
-LOWERCASE_ALPH = 'abcdefghijklmnopqrstuvwxyz'  # noqa: WPS449
 GOOD_STRING1 = 'aBcDeFGHiJKLMNOPQRSTUVWXYZ'
 GOOD_STRING2 = 'aBNOhQtYZ'
 
 
 @pytest.mark.parametrize('code', [
-    BOTHCASES_ALPH, UPPERCASE_ALPH, LOWERCASE_ALPH,
+    'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+    'abcdefghijklmnopqrstuvwxyz',
 ])
 def test_alphabet_as_string_violation(
     assert_errors, parse_ast_tree, code, default_options,
