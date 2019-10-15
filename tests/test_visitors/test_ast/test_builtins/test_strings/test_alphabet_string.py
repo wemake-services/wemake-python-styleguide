@@ -33,7 +33,6 @@ def test_alphabet_as_string_no_violation(
     assert_errors, parse_ast_tree, code, default_options,
 ):
     """Testing that regular strings work well."""
-
     tree = parse_ast_tree(code)
     visitor = WrongStringVisitor(default_options, tree=tree)
     visitor.run()
