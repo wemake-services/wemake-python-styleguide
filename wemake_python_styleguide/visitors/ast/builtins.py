@@ -62,7 +62,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
             AlphabetAsStringViolation
 
         """
-        if node.s in set(ascii_letters, ascii_lowercase, ascii_uppercase):
+        if node.s in set([ascii_letters, ascii_lowercase, ascii_uppercase]):
             self.add_violation(AlphabetAsStringViolation(node))
         self.generic_visit(node)
 
