@@ -25,7 +25,8 @@ We used to have incremental versioning before `0.1.0`.
 
 - Fixes ``ImplicitElifViolation`` false positives on a specific edge cases
 - Fixes ``I_CONTROL_CODE setting`` for ``BadMagicModuleFunctionViolation``
-- Fixes compatibility with flake8 3.8.x
+- Fixes compatibility with flake8 `3.8.x`
+- Fixes that `not not True` was not detected as `WPS330`
 
 
 ## 0.12.5

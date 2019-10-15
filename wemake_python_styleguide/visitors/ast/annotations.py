@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import ClassVar, FrozenSet, cast
+from typing import ClassVar, FrozenSet
 
 from typing_extensions import final
 
@@ -66,19 +66,14 @@ class WrongNestedAnnotationVisitor(BaseNodeVisitor):
         return ''
 
     def _check_nested_annotation(self, node: ast.Subscript) -> None:
-        node_annotation = self._get_annotation(node)
-
-        if node_annotation not in self._flat_types:
+        an = self._get_annotation(node)
+        if an not in self._flat_types or not isinstance(node.slice, ast.Index):
             return
 
-        slice_index = cast(ast.Index, node.slice)
-        slice_args = slice_index.value
-
-        if self._same_subscript(node, slice_args):
+        if self._same_subscript(node, node.slice.value):
             self.add_violation(NestedAnnotationsViolation(node))
-            return
-        if isinstance(slice_args, ast.Tuple):
-            for arg in slice_args.elts:
+        elif isinstance(node.slice.value, ast.Tuple):
+            for arg in node.slice.value.elts:
                 if self._same_subscript(node, arg):
                     self.add_violation(NestedAnnotationsViolation(node))
                     return
@@ -130,16 +125,19 @@ class WrongAnnotationVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_for_literal_none(self, node: ast.Subscript) -> None:
-        annotation_name = cast(ast.Name, node.value)
-        slice_index = cast(ast.Index, node.slice)
-
-        if annotation_name.id != 'Literal':
+        if not isinstance(node.value, ast.Name):
             return
 
-        if not isinstance(slice_index.value, ast.NameConstant):
+        if not isinstance(node.slice, ast.Index):
             return
 
-        if slice_index.value.value is None:
+        if node.value.id != 'Literal':
+            return
+
+        if not isinstance(node.slice.value, ast.NameConstant):
+            return
+
+        if node.slice.value.value is None:
             self.add_violation(LiteralNoneViolation(node))
 
     def _check_arg_annotation(self, node: ast.arg) -> None:
