@@ -54,7 +54,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         self.add_violation(consistency.FormattedStringViolation(node))
         self.generic_visit(node)
 
-    def visit_Alphabet(self, node: ast.Str) -> None:
+    def visit_Str(self, node: ast.Str) -> None:
         """
         Forbid to use alphabet as a string.
 
@@ -62,6 +62,9 @@ class WrongStringVisitor(base.BaseNodeVisitor):
             AlphabetAsStringViolation
 
         """
+        self._check_is_alphatbet(node)
+
+    def _check_is_alphatbet(self, node: ast.Str) -> None:
         if node.s in {ascii_letters, ascii_lowercase, ascii_uppercase}:
             self.add_violation(AlphabetAsStringViolation(node))
         self.generic_visit(node)
