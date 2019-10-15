@@ -127,8 +127,8 @@ Consistency checks
 .. autoclass:: MeaninglessNumberOperationViolation
 .. autoclass:: OperationSignNegationViolation
 .. autoclass:: VagueImportViolation
-.. autoclass:: RedundantSubscriptViolation
 .. autoclass:: AdditionAssignmentOnListViolation
+.. autoclass:: RedundantSubscriptViolation
 
 """
 
