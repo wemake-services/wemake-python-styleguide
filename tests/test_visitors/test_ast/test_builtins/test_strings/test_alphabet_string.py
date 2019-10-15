@@ -7,9 +7,9 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors.ast.builtins import WrongStringVisitor
 
-BOTHCASES_ALPH = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-UPPERCASE_ALPH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-LOWERCASE_ALPH = 'abcdefghijklmnopqrstuvwxyz'
+BOTHCASES_ALPH = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'  # noqa: WPS449
+UPPERCASE_ALPH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'  # noqa: WPS449
+LOWERCASE_ALPH = 'abcdefghijklmnopqrstuvwxyz'  # noqa: WPS449
 GOOD_STRING1 = 'aBcDeFGHiJKLMNOPQRSTUVWXYZ'
 GOOD_STRING2 = 'aBNOhQtYZ'
 
