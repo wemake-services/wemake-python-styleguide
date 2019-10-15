@@ -73,6 +73,7 @@ Summary
    MeaninglessNumberOperationViolation
    OperationSignNegationViolation
    VagueImportViolation
+   AdditionAssignmentOnListViolation
 
 Consistency checks
 ------------------
@@ -125,6 +126,7 @@ Consistency checks
 .. autoclass:: MeaninglessNumberOperationViolation
 .. autoclass:: OperationSignNegationViolation
 .. autoclass:: VagueImportViolation
+.. autoclass:: AdditionAssignmentOnListViolation
 
 """
 
@@ -1784,3 +1786,28 @@ class VagueImportViolation(ASTViolation):
 
     error_template = 'Found vague import that may cause confusion: {0}'
     code = 347
+
+
+@final
+class AdditionAssignmentOnListViolation(ASTViolation):
+    """
+    Forbids usage of += with list arguments.
+
+    Reasoning:
+        ``+=`` works like ``extend()`` method.
+        Why not just use ``extend()`` instead of ``+=`` to be consistent.
+
+    Example::
+
+        # Correct:
+        some_list.extend([1, 2, 3])
+
+        # Wrong:
+        some_list += [1, 2, 3]
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found addition assignment with list argument'
+    code = 348

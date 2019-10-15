@@ -79,11 +79,11 @@ class NestedAnnotationsViolation(ASTViolation):
     Example::
         # Correct:
         Literal[1, 2, 3, "foo", 5, None]
-        Union[Union[int, str], float]
+        Union[int, str, float]
 
         # Wrong:
         Literal[Literal[Literal[1, 2, 3], "foo"], 5, None]
-        Union[int, str, float]
+        Union[Union[int, str], float]
 
     .. versionadded:: 0.13.0
 
