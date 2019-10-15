@@ -587,3 +587,5 @@ some_list += [1, 2, 3, 4]  # noqa: WPS348
 
 swap_a = swap_b
 swap_b = swap_a  # noqa: WPS448
+
+print(constant[0:7])  # noqa: WPS349
