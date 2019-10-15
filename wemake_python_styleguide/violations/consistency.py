@@ -1826,21 +1826,11 @@ class RedundantSubscriptViolation(ASTViolation):
 
         # Correct:
         array[:7]
-
-        ...
-
         array[3:]
 
         # Wrong:
-        array[0:7]
-
-        ...
-
-        array[3:None]
-
-        ...
-
-        array[3:7:1]
+        x[0:7]
+        x[3:None]
 
     .. versionadded:: 0.13.0
 
