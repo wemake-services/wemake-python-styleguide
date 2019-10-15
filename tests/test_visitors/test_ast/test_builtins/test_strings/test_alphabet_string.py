@@ -15,7 +15,7 @@ GOOD_STRING2 = 'aBNOhQtYZ'
 
 
 @pytest.mark.parametrize('code', [
-    ALPH, UPPER, LOWER
+    ALPH, UPPER, LOWER,
 ])
 def test_alphabet_as_string_violation(
     assert_errors, parse_ast_tree, code, default_options,
