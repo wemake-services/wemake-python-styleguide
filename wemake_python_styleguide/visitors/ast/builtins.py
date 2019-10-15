@@ -33,8 +33,10 @@ from wemake_python_styleguide.violations.best_practices import (
     NonUniqueItemsInHashViolation,
     UnhashableTypeInHashViolation,
     WrongUnpackingViolation,
+    AlphabetAsStringViolation
 )
 from wemake_python_styleguide.visitors import base, decorators
+import string
 
 
 @final
@@ -50,6 +52,18 @@ class WrongStringVisitor(base.BaseNodeVisitor):
 
         """
         self.add_violation(consistency.FormattedStringViolation(node))
+        self.generic_visit(node)
+
+    def visit_Alphabet(self, node: ast.Str) -> None:
+        """
+        Forbid to use alphabet as a string
+
+        Raises:
+            AlphabetAsStringViolation
+
+        """
+        if node.s == string.ascii_letters or node.s == string.ascii_lowercase or node.s == string.ascii_uppercase:
+            self.add_violation(AlphabetAsStringViolation(node))
         self.generic_visit(node)
 
 

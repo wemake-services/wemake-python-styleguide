@@ -66,6 +66,7 @@ Summary
    WrongKeywordConditionViolation
    WrongNamedKeywordViolation
    ApproximateConstantViolation
+   AlphabetAsStringViolation
 
 Best practices
 --------------
@@ -117,6 +118,7 @@ Best practices
 .. autoclass:: WrongKeywordConditionViolation
 .. autoclass:: WrongNamedKeywordViolation
 .. autoclass:: ApproximateConstantViolation
+.. autoclass:: AlphabetAsStringViolation
 
 """
 
@@ -1819,3 +1821,37 @@ class ApproximateConstantViolation(ASTViolation):
 
     code = 446
     error_template = 'Found approximate constant: {0}'
+
+
+@final
+class AlphabetAsStringViolation(ASTViolation):
+    """
+    Forbid to use alphabet as a string
+
+    Reasoning:
+        Some constants are already defined.
+        No need to write them again, use existing values.
+        We just compare strings and raise this violation
+        when they have exactly the same chars.
+
+    Solution:
+        Use pre-defined constants.
+
+    Example::
+
+        # Correct:
+        import string
+        UPPERCASE_ALPH = string.ascii_uppercase
+        LOWERCASE_ALPH = string.ascii_lowercase
+
+        # Wrong:
+        GUESS_MY_NAME = "abcde...WXYZ"
+        UPPERCASE_ALPH = "ABCD...WXYZ"
+        LOWERCASE_ALPH = "abcd...wxyz"
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found alphabet as strings'
+    code = 447
