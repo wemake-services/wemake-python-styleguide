@@ -67,7 +67,7 @@ def test_all_visitors_contained_in_checker(all_visitors):  # noqa: WPS442
     checker_visitors = {
         klass.__qualname__
         for klass in Checker._visitors  # noqa: WPS437
-        if not visitor.__qualname__.startswith('_')
+        if not klass.__qualname__.startswith('_')
     }
 
     for visitor in all_visitors:
