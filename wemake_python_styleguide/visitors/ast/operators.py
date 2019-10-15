@@ -177,6 +177,11 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
         """
         self._check_negation(node.op, node.value)
         self._check_string_concat(node.value, node.op)
+        self._check_addition_assignment_on_list(
+            node.target,
+            node.op,
+            node.value,
+        )
         self.generic_visit(node)
 
     def _check_negation(self, op: ast.operator, right: ast.AST) -> None:
@@ -219,3 +224,18 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
                     consistency.ExplicitStringConcatViolation(node),
                 )
                 return
+
+    def _check_addition_assignment_on_list(
+        self,
+        left: ast.AST,
+        op: ast.operator,
+        right: ast.AST,
+    ):
+        is_addition_assignment_on_list = (
+            isinstance(op, ast.Add) and
+            isinstance(right, ast.List)
+        )
+        if is_addition_assignment_on_list:
+            self.add_violation(
+                consistency.AdditionAssignmentOnListViolation(right),
+            )

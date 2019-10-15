@@ -583,6 +583,9 @@ from json import loads  # noqa: WPS347
 from some_module import a  # noqa: WPS347
 from text import from_file  # noqa: WPS347
 
-constant[0:7]  # noqa: WPS348,WPS428
-constant[3:None]  # noqa: WPS348,WPS428
-constant[3:7:1]  # noqa: WPS348,WPS428
+some_list += [1, 2, 3, 4]  # noqa: WPS348
+
+swap_a = swap_b
+swap_b = swap_a  # noqa: WPS448
+
+print(constant[0:7])  # noqa: WPS349
