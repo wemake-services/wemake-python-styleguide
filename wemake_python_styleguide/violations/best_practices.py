@@ -1826,7 +1826,7 @@ class ApproximateConstantViolation(ASTViolation):
 @final
 class AlphabetAsStringViolation(ASTViolation):
     """
-    Forbid to use alphabet as a string
+    Forbid to use alphabet as a string.
 
     Reasoning:
         Some constants are already defined.
