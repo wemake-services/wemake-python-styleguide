@@ -70,6 +70,9 @@ def test_all_visitors_contained_in_checker(all_visitors):  # noqa: WPS442
     }
 
     for visitor in all_visitors:
+        if visitor.__qualname__.startswith('_'):
+            continue
+
         assert visitor.__qualname__ in checker_visitors
 
     assert len(all_visitors) == len(checker_visitors)
