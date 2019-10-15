@@ -15,7 +15,7 @@ GOOD_STRING2 = 'aBNOhQtYZ'
     'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
     'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
     'abcdefghijklmnopqrstuvwxyz',
-])
+])  # noqa: WPS449
 def test_alphabet_as_string_violation(
     assert_errors, parse_ast_tree, code, default_options,
 ):
