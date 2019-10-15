@@ -16,3 +16,11 @@ def test_option_help():
         assert len(option.help) > 10
         assert '%default' in option.help
         assert option.help.split(' Defaults to:')[0].endswith('.')
+
+
+def test_option_asdict_no_none():
+    """Ensure that `None` is not returned from `asdict_no_none()`."""
+    opt = config._Option(  # noqa: WPS437
+        '--foo', default=False, action='store_true', type=None, help='',
+    )
+    assert 'type' not in opt.asdict_no_none()
