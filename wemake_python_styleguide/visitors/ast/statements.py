@@ -19,7 +19,6 @@ from wemake_python_styleguide.types import (
     AnyNodes,
     AnyWith,
 )
-
 from wemake_python_styleguide.violations.best_practices import (
     AlmostSwappedViolation,
     MisrefactoredAssignmentViolation,

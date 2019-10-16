@@ -332,7 +332,7 @@ print(lambda: 0)  # noqa: WPS446
 
 pi = 3.14 # noqa: WPS447
 
-xterm += xterm + 1  # noqa: WPS448
+xterm += xterm + 1  # noqa: WPS449
 
 for range_len in range(len(file_obj)):  # noqa: WPS518
     print(range_len)

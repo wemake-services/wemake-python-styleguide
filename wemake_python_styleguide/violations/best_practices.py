@@ -1861,21 +1861,30 @@ class ApproximateConstantViolation(ASTViolation):
 class AlmostSwappedViolation(ASTViolation):
     """
     Forbids unpythonic swap variables.
+
     We check for ``a = b; b = a`` sequences.
+
     Reasoning:
         This looks like a failed attempt to swap.
+
     Solution:
         Use standard way to swap two variables.
+
     Example::
+
         # Correct:
         a, b = b, a
+
         # Wrong:
         a = b
         b = a
+
         temp = a
         a = b
         b = temp
+
     .. versionadded:: 0.13.0
+
     """
 
     error_template = 'Found incorrectly swapped variables'
@@ -1897,6 +1906,7 @@ class MisrefactoredAssignmentViolation(ASTViolation):
 
         # Correct:
         test += 1
+        test *= 2
 
         # Wrong:
         test += test + 1
