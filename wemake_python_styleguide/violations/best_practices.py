@@ -1899,7 +1899,7 @@ class MisrefactoredAssignmentViolation(ASTViolation):
         test += 1
 
         # Wrong:
-        test += test +1
+        test += test + 1
 
     See
     :py:data:`~wemake_python_styleguide.constants.MATH_APPROXIMATE_CONSTANTS`

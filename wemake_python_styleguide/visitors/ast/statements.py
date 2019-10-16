@@ -6,11 +6,6 @@ from typing import ClassVar, Mapping, Optional, Sequence, Set, Union
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import ForNodes, FunctionNodes
-from wemake_python_styleguide.logic.collections import normalize_dict_elements
-from wemake_python_styleguide.logic.functions import get_all_arguments
-from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
-from wemake_python_styleguide.logic.nodes import get_parent
-from wemake_python_styleguide.logic.strings import is_doc_string
 from wemake_python_styleguide.logic import functions, nodes, strings
 from wemake_python_styleguide.logic.collections import (
     first,
@@ -24,6 +19,7 @@ from wemake_python_styleguide.types import (
     AnyNodes,
     AnyWith,
 )
+
 from wemake_python_styleguide.violations.best_practices import (
     AlmostSwappedViolation,
     MisrefactoredAssignmentViolation,
@@ -239,7 +235,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
             node_value = node.value.left
 
         if isinstance(node.value, self._blocked_self_assignment):
-            if is_same_variable(node.target, node_value):
+            if name_nodes.is_same_variable(node.target, node_value):
                 self.add_violation(MisrefactoredAssignmentViolation(node))
 
     def _check_internals(self, body: Sequence[ast.stmt]) -> None:
