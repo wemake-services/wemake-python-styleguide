@@ -8,26 +8,27 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
+- Improves Github Action stability
+- `WPS431` now allow customize whitelist via `nested-classes-whitelist` setting
+- Forbids to have invalid strings like `**{'@': 1}`
+- Forbids to use implicit primitive values in a form of `lambda`
+- Forbids to use approximate math constants
 - Forbids using `Literal[None]` in function annotations
 - Forbids using nested `typing.Literal`, `typing.Union` and `typing.Annotated`
 - Forbids use of vague import names (e.g. `from json import loads`)
 - Make ``OveruseOfNoqaCommentViolation`` configurable (`--max-noqa-comments`)
 - Improves tests: we now ensure that each violation with previous codes also 
   has corresponding versions changed in their documentation
+- Forbid incorrectly swapped variables
+- Forbids to use `+=` with list arguments
+- Forbids to use redundant subscripts (e.g., `[0:7]` or `[3:None]`)
 
 ### Bugfixes
 
-- Fixes ``ImplicitElifViolation`` false positives on a specific edge cases.
-
-## 0.13.0
-
-### Features
-
-- Improves Github Action stability
-- `WPS431` now allow customize whitelist via `nested-classes-whitelist` setting
-- Forbids to have invalid strings like `**{'@': 1}`
-- Forbids to use implicit primitive values in a form of `lambda`
-- Forbids to use approximate math constants
+- Fixes ``ImplicitElifViolation`` false positives on a specific edge cases
+- Fixes ``I_CONTROL_CODE setting`` for ``BadMagicModuleFunctionViolation``
+- Fixes compatibility with flake8 `3.8.x`
+- Fixes that `not not True` was not detected as `WPS330`
 
 
 ## 0.12.5

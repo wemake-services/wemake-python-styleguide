@@ -115,7 +115,15 @@ You can also show all options that ``flake8`` supports by running:
 
 """
 
-from typing import ClassVar, FrozenSet, Mapping, Optional, Sequence, Union
+from typing import (
+    ClassVar,
+    Dict,
+    FrozenSet,
+    Mapping,
+    Optional,
+    Sequence,
+    Union,
+)
 
 import attr
 from flake8.options.manager import OptionManager
@@ -148,6 +156,10 @@ class _Option(object):
         object.__setattr__(  # noqa: WPS609
             self, 'help', ' '.join((self.help, 'Defaults to: %default')),
         )
+
+    def asdict_no_none(self) -> Dict[str, ConfigValuesTypes]:
+        dct = attr.asdict(self)
+        return {key: opt for key, opt in dct.items() if opt is not None}
 
 
 @final
@@ -317,4 +329,4 @@ class Configuration(object):
     def register_options(self, parser: OptionManager) -> None:
         """Registers options for our plugin."""
         for option in self._options:
-            parser.add_option(**attr.asdict(option))
+            parser.add_option(**option.asdict_no_none())

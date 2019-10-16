@@ -87,7 +87,7 @@ We are *not* planning to do the following things:
 3. Appeal to everyone. But, you can [switch off](https://wemake-python-stylegui.de/en/latest/pages/usage/setup.html#ignoring-violations) any rules that you don't like
 
 
-## Supporting us
+## Supporting us :tada:
 
 We in [wemake.services](https://wemake.services) make
 all our tools open-source by default, so the community can benefit from them.
@@ -101,7 +101,7 @@ you can return us a favor by supporting the work we do.
 [![Bronze Tier](https://opencollective.com/wemake-python-styleguide/tiers/bronze-sponsor.svg?width=890&avatarHeight=35&button=0)](https://opencollective.com/wemake-python-styleguide)
 
 
-## Show your style
+## Show your style :sunglasses:
 
 If you use our linter - it means that your code is awesome.
 You can be proud of it!

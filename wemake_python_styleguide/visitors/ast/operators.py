@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import ClassVar, Mapping, Optional, Tuple, Type
+from typing import ClassVar, Mapping, Optional, Tuple, Type, Union
 
 from typing_extensions import final
 
@@ -15,13 +15,18 @@ from wemake_python_styleguide.violations import consistency
 from wemake_python_styleguide.violations.best_practices import (
     ListMultiplyViolation,
 )
-from wemake_python_styleguide.visitors import base
+from wemake_python_styleguide.visitors import base, decorators
 
 _MeaninglessOperators = Mapping[complex, Tuple[Type[ast.operator], ...]]
 _OperatorLimits = Mapping[Type[ast.unaryop], int]
+_NumbersAndConstants = Union[ast.Num, ast.NameConstant]
 
 
 @final
+@decorators.alias('visit_numbers_and_constants', (
+    'visit_Num',
+    'visit_NameConstant',
+))
 class UselessOperatorsVisitor(base.BaseNodeVisitor):
     """Checks operators used in the code."""
 
@@ -45,7 +50,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         1: (ast.Div,),
     }
 
-    def visit_Num(self, node: ast.Num) -> None:
+    def visit_numbers_and_constants(self, node: _NumbersAndConstants) -> None:
         """
         Checks numbers unnecessary operators inside the code.
 
@@ -80,13 +85,12 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         self._check_useless_math_operator(node.op, node.value)
         self.generic_visit(node)
 
-    def _check_operator_count(self, node: ast.Num) -> None:
+    def _check_operator_count(self, node: _NumbersAndConstants) -> None:
         for node_type, limit in self._limits.items():
             if count_unary_operator(node, node_type) > limit:
+                text = str(node.n) if isinstance(node, ast.Num) else node.value
                 self.add_violation(
-                    consistency.UselessOperatorsViolation(
-                        node, text=str(node.n),
-                    ),
+                    consistency.UselessOperatorsViolation(node, text=text),
                 )
 
     def _check_zero_division(self, op: ast.operator, number: ast.AST) -> None:
@@ -177,6 +181,11 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
         """
         self._check_negation(node.op, node.value)
         self._check_string_concat(node.value, node.op)
+        self._check_addition_assignment_on_list(
+            node.target,
+            node.op,
+            node.value,
+        )
         self.generic_visit(node)
 
     def _check_negation(self, op: ast.operator, right: ast.AST) -> None:
@@ -219,3 +228,18 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
                     consistency.ExplicitStringConcatViolation(node),
                 )
                 return
+
+    def _check_addition_assignment_on_list(
+        self,
+        left: ast.AST,
+        op: ast.operator,
+        right: ast.AST,
+    ):
+        is_addition_assignment_on_list = (
+            isinstance(op, ast.Add) and
+            isinstance(right, ast.List)
+        )
+        if is_addition_assignment_on_list:
+            self.add_violation(
+                consistency.AdditionAssignmentOnListViolation(right),
+            )
