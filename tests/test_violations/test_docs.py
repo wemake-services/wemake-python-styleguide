@@ -24,14 +24,14 @@ def test_violation_name(all_violations):
         assert class_name.endswith('Violation'), class_name
 
 
-def test_number_of_previous_codes_and_versionchanged(all_violations):
-    """Ensures that all violations with the previous codes attribute
-    also have the same or greater number of ..versionchanged markers"""
+def test_previous_codes_versionchanged(all_violations):
+    """Tests that we put both in case violation changes."""
     for violation in all_violations:
-        previous_codes = getattr(violation,'previous_codes', None)
+        previous_codes = getattr(violation, 'previous_codes', None)
         if previous_codes is not None:
-            num_of_previous_codes = len(violation.previous_codes)
-            assert violation.__doc__.count('.. versionchanged::') >= num_of_previous_codes
+            assert violation.__doc__.count(
+                '.. versionchanged::',
+            ) >= len(violation.previous_codes)
 
 
 def test_configuration(all_violations):
