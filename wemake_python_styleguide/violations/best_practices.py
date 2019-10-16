@@ -67,11 +67,8 @@ Summary
    WrongNamedKeywordViolation
    ImplicitPrimitiveViolation
    ApproximateConstantViolation
-<<<<<<< HEAD
-   MisrefactoredAssignmentViolation
-=======
    AlmostSwappedViolation
->>>>>>> f666dd2dbccdcec6c6d137616293f5acdb51eb54
+   MisrefactoredAssignmentViolation
 
 Best practices
 --------------
@@ -124,12 +121,9 @@ Best practices
 .. autoclass:: WrongNamedKeywordViolation
 .. autoclass:: ImplicitPrimitiveViolation
 .. autoclass:: ApproximateConstantViolation
-<<<<<<< HEAD
-.. autoclass:: MisrefactoredAssignmentViolation
-=======
 .. autoclass:: AlmostSwappedViolation
+.. autoclass:: MisrefactoredAssignmentViolation
 
->>>>>>> f666dd2dbccdcec6c6d137616293f5acdb51eb54
 """
 
 from typing_extensions import final
