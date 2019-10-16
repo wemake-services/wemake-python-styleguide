@@ -73,6 +73,8 @@ Summary
    MeaninglessNumberOperationViolation
    OperationSignNegationViolation
    VagueImportViolation
+   AdditionAssignmentOnListViolation
+   RedundantSubscriptViolation
 
 Consistency checks
 ------------------
@@ -125,6 +127,8 @@ Consistency checks
 .. autoclass:: MeaninglessNumberOperationViolation
 .. autoclass:: OperationSignNegationViolation
 .. autoclass:: VagueImportViolation
+.. autoclass:: AdditionAssignmentOnListViolation
+.. autoclass:: RedundantSubscriptViolation
 
 """
 
@@ -1784,3 +1788,53 @@ class VagueImportViolation(ASTViolation):
 
     error_template = 'Found vague import that may cause confusion: {0}'
     code = 347
+
+
+class AdditionAssignmentOnListViolation(ASTViolation):
+    """
+    Forbids usage of += with list arguments.
+
+    Reasoning:
+        ``+=`` works like ``extend()`` method.
+        Why not just use ``extend()`` instead of ``+=`` to be consistent.
+
+    Example::
+
+        # Correct:
+        some_list.extend([1, 2, 3])
+
+        # Wrong:
+        some_list += [1, 2, 3]
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found addition assignment with list argument'
+    code = 348
+
+
+@final
+class RedundantSubscriptViolation(ASTViolation):
+    """
+    Forbids the use of redundant components in a subscript's slice.
+
+    Reasoning:
+        We do it for consistency reasons.
+
+    Example::
+
+        # Correct:
+        array[:7]
+        array[3:]
+
+        # Wrong:
+        x[0:7]
+        x[3:None]
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found redundant subscript slice: {0}'
+    code = 349

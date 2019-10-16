@@ -67,7 +67,11 @@ Summary
    WrongNamedKeywordViolation
    ImplicitPrimitiveViolation
    ApproximateConstantViolation
+<<<<<<< HEAD
    MisrefactoredAssignmentViolation
+=======
+   AlmostSwappedViolation
+>>>>>>> f666dd2dbccdcec6c6d137616293f5acdb51eb54
 
 Best practices
 --------------
@@ -120,7 +124,12 @@ Best practices
 .. autoclass:: WrongNamedKeywordViolation
 .. autoclass:: ImplicitPrimitiveViolation
 .. autoclass:: ApproximateConstantViolation
+<<<<<<< HEAD
 .. autoclass:: MisrefactoredAssignmentViolation
+=======
+.. autoclass:: AlmostSwappedViolation
+
+>>>>>>> f666dd2dbccdcec6c6d137616293f5acdb51eb54
 """
 
 from typing_extensions import final
@@ -1855,6 +1864,31 @@ class ApproximateConstantViolation(ASTViolation):
 
 
 @final
+class AlmostSwappedViolation(ASTViolation):
+    """
+    Forbids unpythonic swap variables.
+    We check for ``a = b; b = a`` sequences.
+    Reasoning:
+        This looks like a failed attempt to swap.
+    Solution:
+        Use standard way to swap two variables.
+    Example::
+        # Correct:
+        a, b = b, a
+        # Wrong:
+        a = b
+        b = a
+        temp = a
+        a = b
+        b = temp
+    .. versionadded:: 0.13.0
+    """
+
+    error_template = 'Found incorrectly swapped variables'
+    code = 448
+
+
+@final
 class MisrefactoredAssignmentViolation(ASTViolation):
     """
     Forbids to use mis refactored self assignment.
@@ -1882,4 +1916,4 @@ class MisrefactoredAssignmentViolation(ASTViolation):
     """
 
     error_template = 'Found self assignment  with refactored assignment'
-    code = 448
+    code = 449

@@ -24,6 +24,16 @@ def test_violation_name(all_violations):
         assert class_name.endswith('Violation'), class_name
 
 
+def test_previous_codes_versionchanged(all_violations):
+    """Tests that we put both in case violation changes."""
+    for violation in all_violations:
+        previous_codes = getattr(violation, 'previous_codes', None)
+        if previous_codes is not None:
+            assert violation.__doc__.count(
+                '.. versionchanged::',
+            ) >= len(violation.previous_codes)
+
+
 def test_configuration(all_violations):
     """Ensures that all configuration options are listed in the docs."""
     option_listed = {
