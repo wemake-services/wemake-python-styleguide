@@ -199,6 +199,9 @@ def test_statement_with_no_effect(
 ])
 @pytest.mark.parametrize('statement', [
     'x += x + 2',
+    'x -= x - 1',
+    'x *= x * 1',
+    'x /= x / 1',
 ])
 def test_misrefactored_assignment(
     assert_errors,
@@ -252,6 +255,22 @@ def test_misrefactored_assignment(
     'x += 2',
     'x += y + 2',
     'x += check(2)',
+    'x -= 1',
+    'x *= 1',
+    'x **= 1',
+    'x /= 1',
+    'x ^= 1',
+    'x %= 1',
+    'x >>= 1',
+    'x <<= 1',
+    'x &= 1',
+    'x |= 1',
+    'x -= test(x)',
+    'x -= x.attr("a")',
+    'x -= test(x)',
+    'x -= x.method()',
+    'x -= x.attr + 1',
+    'x -= test(x) + 1',
 ])
 def test_statement_with_regular_effect(
     assert_errors,
