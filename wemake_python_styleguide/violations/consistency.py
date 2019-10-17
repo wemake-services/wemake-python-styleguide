@@ -75,6 +75,7 @@ Summary
    VagueImportViolation
    AdditionAssignmentOnListViolation
    RedundantSubscriptViolation
+   MultilineLoopViolation
 
 Consistency checks
 ------------------
@@ -129,6 +130,7 @@ Consistency checks
 .. autoclass:: VagueImportViolation
 .. autoclass:: AdditionAssignmentOnListViolation
 .. autoclass:: RedundantSubscriptViolation
+.. autoclass:: MultilineLoopViolation
 
 """
 
@@ -1838,3 +1840,31 @@ class RedundantSubscriptViolation(ASTViolation):
 
     error_template = 'Found redundant subscript slice: {0}'
     code = 349
+
+
+@final
+class MultilineLoopViolation(ASTViolation):
+    """
+    Forbids multiline loops.
+
+    Reasoning:
+        Decreased the readability of the code.
+
+    Example::
+
+        #Correct
+
+        for num in SomeFunc(arg1, arg2):
+            ...
+
+        #Wrong
+        for num in range(arg1,
+        arg2):
+            ...
+
+    .. versionadded :: 0.13.0
+
+    """
+
+    error_template = 'Forbids multiline loops'
+    code = 350
