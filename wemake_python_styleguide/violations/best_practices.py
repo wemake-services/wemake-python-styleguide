@@ -1894,7 +1894,7 @@ class AlmostSwappedViolation(ASTViolation):
 @final
 class MisrefactoredAssignmentViolation(ASTViolation):
     """
-    Forbids to use mis refactored self assignment.
+    Forbids to use misrefactored self assignment.
 
     Reasoning:
         Self assignment does not need to have the same operand
