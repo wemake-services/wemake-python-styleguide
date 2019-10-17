@@ -332,6 +332,8 @@ print(lambda: 0)  # noqa: WPS446
 
 pi = 3.14 # noqa: WPS447
 
+xterm += xterm + 1  # noqa: WPS449
+
 for range_len in range(len(file_obj)):  # noqa: WPS518
     print(range_len)
 
@@ -587,3 +589,5 @@ some_list += [1, 2, 3, 4]  # noqa: WPS348
 
 swap_a = swap_b
 swap_b = swap_a  # noqa: WPS448
+
+print(constant[0:7])  # noqa: WPS349

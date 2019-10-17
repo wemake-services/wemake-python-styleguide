@@ -68,6 +68,7 @@ Summary
    ImplicitPrimitiveViolation
    ApproximateConstantViolation
    AlmostSwappedViolation
+   MisrefactoredAssignmentViolation
 
 Best practices
 --------------
@@ -121,6 +122,7 @@ Best practices
 .. autoclass:: ImplicitPrimitiveViolation
 .. autoclass:: ApproximateConstantViolation
 .. autoclass:: AlmostSwappedViolation
+.. autoclass:: MisrefactoredAssignmentViolation
 
 """
 
@@ -1887,3 +1889,36 @@ class AlmostSwappedViolation(ASTViolation):
 
     error_template = 'Found incorrectly swapped variables'
     code = 448
+
+
+@final
+class MisrefactoredAssignmentViolation(ASTViolation):
+    """
+    Forbids to use misrefactored self assignment.
+
+    Reasoning:
+        Self assignment does not need to have the same operand
+        on the left hand side and on the right hand side.
+
+    Solution:
+        Refactor you code to use multiple self assignments or fix your code.
+
+    Example::
+
+        # Correct:
+        test += 1
+        test *= 2
+
+        # Wrong:
+        test += test + 1
+
+    See
+    :py:data:`~wemake_python_styleguide.constants.MATH_APPROXIMATE_CONSTANTS`
+    for full list of math constants that we check for.
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found self assignment  with refactored assignment'
+    code = 449

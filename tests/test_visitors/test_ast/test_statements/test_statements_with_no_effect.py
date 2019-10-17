@@ -3,6 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
+    MisrefactoredAssignmentViolation,
     StatementHasNoEffectViolation,
 )
 from wemake_python_styleguide.visitors.ast.statements import (
@@ -195,6 +196,38 @@ def test_statement_with_no_effect(
 
 @pytest.mark.parametrize('code', [
     module_template,
+])
+@pytest.mark.parametrize('statement', [
+    'x += x + 2',
+    'x -= x - 1',
+    'x *= x * 1',
+    'x /= x / 1',
+    'x **= x ** 1',
+    'x ^= x ^ 1',
+    'x %= x % 1',
+    'x >>= x >> 1',
+    'x <<= x << 1',
+    'x &= x & 1',
+    'x |= x | 1',
+])
+def test_misrefactored_assignment(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    statement,
+    default_options,
+):
+    """Testing that unreachable code is detected."""
+    tree = parse_ast_tree(code.format(statement))
+
+    visitor = StatementsWithBodiesVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [MisrefactoredAssignmentViolation])
+
+
+@pytest.mark.parametrize('code', [
+    module_template,
 
     if_template,
     if_elif_template,
@@ -226,6 +259,26 @@ def test_statement_with_no_effect(
     'object.mro()',
     'del some',
     'some_var: int',
+    'x += 2',
+    'x += y + 2',
+    'x += check(2)',
+    'x -= 1',
+    'x *= 1',
+    'x **= 1',
+    'x /= 1',
+    'x ^= 1',
+    'x %= 1',
+    'x >>= 1',
+    'x <<= 1',
+    'x &= 1',
+    'x |= 1',
+    'x -= test(x)',
+    'x -= x.attr("a")',
+    'x -= test(x)',
+    'x -= x.method()',
+    'x -= x.attr + 1',
+    'x -= test(x) + 1',
+    'x = 2 + x',
 ])
 def test_statement_with_regular_effect(
     assert_errors,
