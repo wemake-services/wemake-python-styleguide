@@ -278,7 +278,7 @@ def test_misrefactored_assignment(
     'x -= x.method()',
     'x -= x.attr + 1',
     'x -= test(x) + 1',
-    'x = 2 + x'
+    'x = 2 + x',
 ])
 def test_statement_with_regular_effect(
     assert_errors,
