@@ -22,6 +22,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbid incorrectly swapped variables
 - Forbids to use `+=` with list arguments
 - Forbids to use redundant subscripts (e.g., `[0:7]` or `[3:None]`)
+- Allow `super()` as a valid overused expression
 
 ### Bugfixes
 
