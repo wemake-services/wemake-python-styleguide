@@ -191,6 +191,5 @@ def _is_class_context(node: ast.AST) -> bool:
 
 def _is_super_call(node: ast.AST) -> bool:
     if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
-        if node.func.id == 'super':
-            return True
+        return node.func.id == 'super'
     return False

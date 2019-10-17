@@ -184,9 +184,10 @@ def test_class_expression_use(
     method_context1,
     method_context2,
     method_context3,
+    module_context,
 ])
 @pytest.mark.parametrize('expression', ignored_expressions)
-def test_func_ignored_expressions(
+def test_ignored_expressions(
     assert_errors,
     parse_ast_tree,
     options,
@@ -198,27 +199,6 @@ def test_func_ignored_expressions(
     tree = parse_ast_tree(mode(code.format(expression, expression)))
 
     option_values = options(max_function_expressions=1)
-    visitor = ExpressionOveruseVisitor(option_values, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [])
-
-
-@pytest.mark.parametrize('code', [
-    module_context,
-])
-@pytest.mark.parametrize('expression', ignored_expressions)
-def test_module_ignored_expressions(
-    assert_errors,
-    parse_ast_tree,
-    options,
-    expression,
-    code,
-):
-    """Ensures that ignored expressions does not raise violations."""
-    tree = parse_ast_tree(code.format(expression, expression))
-
-    option_values = options(max_module_expressions=1)
     visitor = ExpressionOveruseVisitor(option_values, tree=tree)
     visitor.run()
 
