@@ -1852,12 +1852,12 @@ class MultilineLoopViolation(ASTViolation):
 
     Example::
 
-        #Correct
+        # Correct
 
         for num in SomeFunc(arg1, arg2):
             ...
 
-        #Wrong
+        # Wrong
         for num in range(arg1,
         arg2):
             ...
