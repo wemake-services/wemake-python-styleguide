@@ -74,7 +74,7 @@ class Context(object):
 
 # Expressions:
 
-expressions = (
+violating_expressions = (
     # Nodes:
     'assert 1',
     'a and b',
@@ -98,6 +98,10 @@ expressions = (
     'x: types.List[Set[int]] = call()',  # call is raising
 )
 
+ignored_expressions = (
+    'super()',
+)
+
 
 @pytest.mark.parametrize('code', [
     function_context1,
@@ -108,7 +112,7 @@ expressions = (
     method_context2,
     method_context3,
 ])
-@pytest.mark.parametrize('expression', expressions)
+@pytest.mark.parametrize('expression', violating_expressions)
 def test_func_expression_overuse(
     assert_errors,
     parse_ast_tree,
@@ -130,7 +134,7 @@ def test_func_expression_overuse(
 @pytest.mark.parametrize('code', [
     module_context,
 ])
-@pytest.mark.parametrize('expression', expressions)
+@pytest.mark.parametrize('expression', violating_expressions)
 def test_module_expression_overuse(
     assert_errors,
     parse_ast_tree,
@@ -151,7 +155,7 @@ def test_module_expression_overuse(
 @pytest.mark.parametrize('code', [
     class_context,
 ])
-@pytest.mark.parametrize('expression', expressions)
+@pytest.mark.parametrize('expression', violating_expressions)
 def test_class_expression_use(
     assert_errors,
     parse_ast_tree,
@@ -166,6 +170,35 @@ def test_class_expression_use(
         max_module_expressions=1,
         max_function_expressions=1,
     )
+    visitor = ExpressionOveruseVisitor(option_values, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('code', [
+    function_context1,
+    function_context2,
+    function_context3,
+    function_context4,
+    method_context1,
+    method_context2,
+    method_context3,
+    module_context,
+])
+@pytest.mark.parametrize('expression', ignored_expressions)
+def test_ignored_expressions(
+    assert_errors,
+    parse_ast_tree,
+    options,
+    expression,
+    code,
+    mode,
+):
+    """Ensures that ignored expressions does not raise violations."""
+    tree = parse_ast_tree(mode(code.format(expression, expression)))
+
+    option_values = options(max_function_expressions=1)
     visitor = ExpressionOveruseVisitor(option_values, tree=tree)
     visitor.run()
 
