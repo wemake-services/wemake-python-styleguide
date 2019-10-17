@@ -1897,10 +1897,10 @@ class MisrefactoredAssignmentViolation(ASTViolation):
     Forbids to use mis refactored self assignment.
 
     Reasoning:
-        self assignment need not have the same operand on the right hand side
+        Self assignment does not need to have the same operand on the left hand side and on the right hand side.
 
     Solution:
-        Raise violation if same operand is found on both sides
+        Refactor you code to use multiple self assignments or fix your code.
 
     Example::
 
