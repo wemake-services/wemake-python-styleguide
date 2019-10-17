@@ -1255,6 +1255,18 @@ version = "1.3"
 
 [[package]]
 category = "dev"
+description = "Visualize Python token stream produced by tokenize module."
+name = "tokelor"
+optional = false
+python-versions = ">=3.6,<4.0"
+version = "0.1.3"
+
+[package.dependencies]
+click = ">=7.0,<8.0"
+colorama = "0.3.9"
+
+[[package]]
+category = "dev"
 description = "Python Library for Tom's Obvious, Minimal Language"
 name = "toml"
 optional = false
@@ -1360,7 +1372,7 @@ version = "0.6.0"
 more-itertools = "*"
 
 [metadata]
-content-hash = "b44308dbba2c5602f4d0ee88337f6e05482ff37e681b7795077d702f74048a2f"
+content-hash = "bea36d3d06aff0c3cfc180dd4f1968e4f381832fad4fd65a250217c60bc85f51"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -1483,6 +1495,7 @@ stevedore = ["01d9f4beecf0fbd070ddb18e5efb10567801ba7ef3ddab0074f54e3cd4e91730",
 termcolor = ["1d6d69ce66211143803fbc56652b41d73b4a400a2891d7bf7a1cdf4c02de613b"]
 testfixtures = ["665a298976c8d77f311b65c46f16b7cda7229a47dff5ad7c822e5b3371a439e2", "9d230c5c80746f9f86a16a1f751a5cf5d8e317d4cc48243a19fb180d22303bce"]
 text-unidecode = ["1311f10e8b895935241623731c2ba64f4c455287888b18189350b67134a822e8", "bad6603bb14d279193107714b288be206cac565dfa49aa5b105294dd5c4aab93"]
+tokelor = ["8d7c512e07e23156747f32ec59514ee4076fbcd3d333bbbc6738607e12329737", "da91f156b7c93ddfcf9deb1769e5b2e6db7050956594e72c1812d82bf3a2a982"]
 toml = ["229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c", "235682dd292d5899d361a811df37e04a8828a5b1da3115886b73cf81ebc9100e", "f1db651f9657708513243e61e6cc67d101a39bad662eaa9b5546f789338e07a3"]
 tomlkit = ["32c10cc16ded7e4101c79f269910658cc2a0be5913f1252121c3cd603051c269", "96e6369288571799a3052c1ef93b9de440e1ab751aa045f435b55e9d3bcd0690"]
 traitlets = ["9c4bd2d267b7153df9152698efb1050a5d84982d3384a37b2c1f7723ba3e7835", "c6cb5e6f57c5a9bdaa40fa71ce7b4af30298fbab9ece9815b5d995ab6217c7d9"]
