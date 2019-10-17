@@ -31,6 +31,9 @@ We used to have incremental versioning before `0.1.0`.
 - Fixes that `not not True` was not detected as `WPS330`
 - Fixes addition of ``MisrefactoredAssignmentViolation`` check
 
+### Misc
+
+- Replace `scripts/tokens.py` with an external tool.
 
 ## 0.12.5
 

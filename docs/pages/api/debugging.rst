@@ -7,17 +7,16 @@ there are several ways to debug things.
 Viewing module contents
 -----------------------
 
-You can use ``./scripts`` folder with python scripts
-to reveal the internals of python files:
+To reveal internals of the Python files, you can use following options:
 
-1. ``./scripts/parse.py`` will show you
-   pretty-printed ``ast`` contents of a module
-2. ``./scripts/tokens.py`` will show you tokens that module consists off
+* ``./scripts/parse.py`` will show you pretty-printed ``ast`` contents
+  of a module
+* ``tokelor`` will show you tokens that module consists off
 
 We recommend to create a simple file with just the part that does not work.
 We usually call this file ``ex.py`` and remove it before the actual commit.
 
-It might not be enough to find some complex cases.
+It might not be enough to find some complex cases, but it helps.
 
 Test-driven development
 -----------------------
