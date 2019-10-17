@@ -21,6 +21,7 @@ from wemake_python_styleguide.types import (
 )
 from wemake_python_styleguide.violations.best_practices import (
     AlmostSwappedViolation,
+    MisrefactoredAssignmentViolation,
     StatementHasNoEffectViolation,
     UnreachableCodeViolation,
     WrongNamedKeywordViolation,
@@ -88,6 +89,10 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         *FunctionNodes,
         ast.ClassDef,
         ast.Module,
+    )
+
+    _blocked_self_assignment: ClassVar[AnyNodes] = (
+        ast.BinOp,
     )
 
     _nodes_with_orelse = (
@@ -220,7 +225,20 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
 
         self.add_violation(StatementHasNoEffectViolation(node))
 
+    def _check_self_misrefactored_assignment(
+        self,
+        node: ast.AugAssign,
+    ) -> None:
+        node_value: ast.expr
+        if isinstance(node.value, ast.BinOp):
+            node_value = node.value.left
+
+        if isinstance(node.value, self._blocked_self_assignment):
+            if name_nodes.is_same_variable(node.target, node_value):
+                self.add_violation(MisrefactoredAssignmentViolation(node))
+
     def _check_internals(self, body: Sequence[ast.stmt]) -> None:
+
         after_closing_node = False
         for index, statement in enumerate(body):
             if after_closing_node:
@@ -231,6 +249,9 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
 
             if isinstance(statement, ast.Expr):
                 self._check_expression(statement, is_first=index == 0)
+
+            if isinstance(statement, ast.AugAssign):
+                self._check_self_misrefactored_assignment(statement)
 
 
 @final
