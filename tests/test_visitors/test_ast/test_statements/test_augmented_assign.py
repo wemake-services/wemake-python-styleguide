@@ -23,22 +23,9 @@ OPERATIONS = frozenset([
     '<<',
 ])
 
-augmented_assign = """
-a {0}= b
-"""
-
-no_augmented_assign = """
-a = a {0} b
-"""
-
-complex_no_augmented_assign = """
-a = a {0} b + c
-a = (a {0} b) - c
-"""
-
 
 @pytest.mark.parametrize('code', [
-    augmented_assign,
+    'a {0}= b',
 ])
 @pytest.mark.parametrize('operation', [
     *OPERATIONS,
@@ -61,7 +48,7 @@ def test_augmented_assign(
 
 
 @pytest.mark.parametrize('code', [
-    no_augmented_assign,
+    'a = a {0} b',
 ])
 @pytest.mark.parametrize('operation', [
     *OPERATIONS,
@@ -84,12 +71,15 @@ def test_no_augmented_assign(
 
 
 @pytest.mark.parametrize('code', [
-    complex_no_augmented_assign,
+    'a = a {0} b + c',
+    'a = b {0} a + c',
+    'a = (a {0} b) - c',
+    'a = b {0} c',
 ])
 @pytest.mark.parametrize('operation', [
     *OPERATIONS,
 ])
-def test_skip_complex_no_augmented_assign(
+def test_non_checkable_assign(
     assert_errors,
     parse_ast_tree,
     code,
