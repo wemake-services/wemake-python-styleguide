@@ -593,3 +593,19 @@ swap_b = swap_a  # noqa: WPS448
 print(constant[0:7])  # noqa: WPS349
 
 var_a = var_a + var_b  # noqa: WPS350
+
+class ParentClass(object):
+    @property
+    def some_var(self):
+        return self._some_var
+
+    def some_method(self):
+        return ''
+
+class ChildClass(ParentClass):
+    @property
+    def some_var(self):
+        return super().other_var # noqa: WPS613
+
+    def some_method(self):
+        super().some_other_method() # noqa: WPS613

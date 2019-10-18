@@ -2,7 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.violations.oop import WrongSuperCallViolation
+from wemake_python_styleguide.violations.oop import (
+    WrongSuperCallContextViolation,
+    WrongSuperCallViolation,
+)
 from wemake_python_styleguide.visitors.ast.functions import (
     WrongFunctionCallVisitor,
 )
@@ -13,6 +16,20 @@ correct_super_call = """
 class Example(object):
     def some_method(self, arg1):
         super().some_method(arg1)
+"""
+
+
+super_call_with_correct_method = """
+class Example(Parent):
+    def some_method(self):
+        super().some_method()
+"""
+
+super_call_with_correct_property = """
+class Example(Parent):
+    @property
+    def x(self):
+        return super().x
 """
 
 # There are no violations in this example.
@@ -56,9 +73,24 @@ class Example(object):
         super(Example, self).some_method(arg1)
 """
 
+super_call_with_wrong_method = """
+class Example(Parent):
+    def some_method(self):
+        super().other_method()
+"""
+
+super_call_with_wrong_property = """
+class Example(Parent):
+    @property
+    def x(self):
+        return super().y
+"""
+
 
 @pytest.mark.parametrize('code', [
     correct_super_call,
+    super_call_with_correct_method,
+    super_call_with_correct_property,
     correct_regression520,
 ])
 def test_correct_super_call(
@@ -118,4 +150,26 @@ def test_double_wrong_super_call(
     assert_errors(visitor, [
         WrongSuperCallViolation,
         WrongSuperCallViolation,
+    ])
+
+
+@pytest.mark.parametrize('code', [
+    super_call_with_wrong_method,
+    super_call_with_wrong_property,
+])
+def test_wrong_context_super_call(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+    mode,
+):
+    """Testing that calling `super` has limitations."""
+    tree = parse_ast_tree(mode(code))
+
+    visitor = WrongFunctionCallVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [
+        WrongSuperCallContextViolation,
     ])

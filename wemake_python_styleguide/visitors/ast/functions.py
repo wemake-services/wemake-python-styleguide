@@ -29,7 +29,10 @@ from wemake_python_styleguide.violations.best_practices import (
 from wemake_python_styleguide.violations.naming import (
     UnusedVariableIsUsedViolation,
 )
-from wemake_python_styleguide.violations.oop import WrongSuperCallViolation
+from wemake_python_styleguide.violations.oop import (
+    WrongSuperCallContextViolation,
+    WrongSuperCallViolation,
+)
 from wemake_python_styleguide.violations.refactoring import (
     ImplicitEnumerateViolation,
     OpenWithoutContextManagerViolation,
@@ -59,6 +62,7 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
             WrongFunctionCallViolation
             WrongSuperCallViolation
             WrongIsinstanceWithTupleViolation
+            WrongSuperCallContextViolation
 
         """
         self._check_wrong_function_called(node)
@@ -89,6 +93,16 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
 
     def _ensure_super_context(self, node: ast.Call) -> None:
         parent_context = nodes.get_context(node)
+        parent_node = nodes.get_parent(node)
+
+        attr = getattr(parent_node, 'attr', None)
+        parent_name = getattr(parent_context, 'name', None)
+
+        if attr and parent_name and attr != parent_name:
+            self.add_violation(
+                WrongSuperCallContextViolation(node, text='wrong context'),
+            )
+
         if isinstance(parent_context, FunctionNodes):
             grand_context = nodes.get_context(parent_context)
             if isinstance(grand_context, ast.ClassDef):

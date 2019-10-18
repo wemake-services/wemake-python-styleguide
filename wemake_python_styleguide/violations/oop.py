@@ -27,6 +27,7 @@ Summary
    AsyncMagicMethodViolation
    YieldMagicMethodViolation
    UselessOverwrittenMethodViolation
+   WrongSuperCallContextViolation
 
 Respect your objects
 --------------------
@@ -44,6 +45,7 @@ Respect your objects
 .. autoclass:: AsyncMagicMethodViolation
 .. autoclass:: YieldMagicMethodViolation
 .. autoclass:: UselessOverwrittenMethodViolation
+.. autoclass:: WrongSuperCallContextViolation
 
 """
 
@@ -536,3 +538,39 @@ class UselessOverwrittenMethodViolation(ASTViolation):
 
     error_template = 'Found useless overwritten method: {0}'
     code = 612
+
+
+@final
+class WrongSuperCallContextViolation(ASTViolation):
+    """
+    Forbids to use ``super()`` with incorrect methods or properties access.
+
+    Reasoning:
+        Can only use ``super()`` method that matches the following context.
+        super().some() and super().some in Child.some(),
+        and super().prop and super().prop() in Child.prop
+
+    Solution:
+        Use ``super()`` methods and properties with the correct context.
+
+    Example::
+
+        # Correct:
+        class Child(Parent):
+            def some_method(self):
+            original = super().some_method()
+            ...
+
+        # Wrong:
+        class Child(Parent):
+            def some_method(self):
+            other = super().other_method()
+            ...
+
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found incorrect `super()` call context: {0}'
+    code = 613
