@@ -75,6 +75,7 @@ def test_no_augmented_assign(
     'a = b {0} a + c',
     'a = (a {0} b) - c',
     'a = b {0} c',
+    'a = b {0} a',
 ])
 @pytest.mark.parametrize('operation', [
     *OPERATIONS,
