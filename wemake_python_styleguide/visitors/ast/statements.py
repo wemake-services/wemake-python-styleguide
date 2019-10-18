@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import ClassVar, Mapping, Optional, Sequence, Set, Union
+from typing import ClassVar, Mapping, Optional, Sequence, Set, Union, cast
 
 from typing_extensions import final
 
@@ -27,6 +27,7 @@ from wemake_python_styleguide.violations.best_practices import (
     WrongNamedKeywordViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
+    AugmentedAssignPatternViolation,
     ParametersIndentationViolation,
     UselessNodeViolation,
 )
@@ -427,3 +428,32 @@ class WrongNamedKeywordVisitor(BaseNodeVisitor):
                 if not str.isidentifier(key_node.s):
                     return True
         return False
+
+
+@final
+class AssignmentPatternsVisitor(BaseNodeVisitor):
+    """Responsible for checking assignment patterns."""
+
+    def visit_Assign(self, node: ast.Assign) -> None:
+        """Checks assignment patterns."""
+        self._check_augmented_assign_pattern(node)
+        self.generic_visit(node)
+
+    def _check_augmented_assign_pattern(
+        self,
+        node: ast.Assign,
+    ) -> None:
+        is_checkable = (
+            len(node.targets) == 1 and
+            isinstance(node.value, ast.BinOp) and
+            isinstance(node.value.right, ast.Name) and
+            isinstance(node.value.left, ast.Name)
+        )
+
+        if not is_checkable:
+            return
+
+        bin_op = cast(ast.BinOp, node.value)
+
+        if name_nodes.is_same_variable(node.targets[0], bin_op.left):
+            self.add_violation(AugmentedAssignPatternViolation(node))
