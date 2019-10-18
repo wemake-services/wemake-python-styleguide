@@ -79,7 +79,7 @@ def test_no_augmented_assign(
 @pytest.mark.parametrize('operation', [
     *OPERATIONS,
 ])
-def test_non_checkable_assign(
+def test_no_checkable_assign(
     assert_errors,
     parse_ast_tree,
     code,
