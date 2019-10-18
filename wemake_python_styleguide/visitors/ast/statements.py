@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import ClassVar, Mapping, Optional, Sequence, Set, Union, cast
+from typing import ClassVar, Mapping, Optional, Sequence, Set, Union
 
 from typing_extensions import final
 
@@ -443,9 +443,11 @@ class AssignmentPatternsVisitor(BaseNodeVisitor):
         self,
         node: ast.Assign,
     ) -> None:
+        if not isinstance(node.value, ast.BinOp):
+            return
+
         is_checkable = (
             len(node.targets) == 1 and
-            isinstance(node.value, ast.BinOp) and
             isinstance(node.value.right, ast.Name) and
             isinstance(node.value.left, ast.Name)
         )
@@ -453,7 +455,5 @@ class AssignmentPatternsVisitor(BaseNodeVisitor):
         if not is_checkable:
             return
 
-        bin_op = cast(ast.BinOp, node.value)
-
-        if name_nodes.is_same_variable(node.targets[0], bin_op.left):
+        if name_nodes.is_same_variable(node.targets[0], node.value.left):
             self.add_violation(AugmentedAssignPatternViolation(node))

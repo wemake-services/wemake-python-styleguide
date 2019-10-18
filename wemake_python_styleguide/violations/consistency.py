@@ -1850,7 +1850,7 @@ class AugmentedAssignPatternViolation(ASTViolation):
 
     Reasoning:
         ``a += b`` is short and correct version of ``a = a + b``.
-        Why not use short version?
+        Why not using the short version?
 
     Example::
 

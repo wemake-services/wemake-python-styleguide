@@ -9,7 +9,7 @@ from wemake_python_styleguide.visitors.ast.statements import (
     AssignmentPatternsVisitor,
 )
 
-OPERATIONS = frozenset([
+OPERATIONS = frozenset((
     '+',
     '-',
     '*',
@@ -21,7 +21,7 @@ OPERATIONS = frozenset([
     '^',
     '>>',
     '<<',
-])
+))
 
 
 @pytest.mark.parametrize('code', [
