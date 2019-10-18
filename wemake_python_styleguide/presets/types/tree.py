@@ -30,6 +30,7 @@ PRESET: Final = (
     statements.WrongParametersIndentationVisitor,
     statements.PointlessStarredVisitor,
     statements.WrongNamedKeywordVisitor,
+    statements.AssignmentPatternsVisitor,
 
     keywords.WrongRaiseVisitor,
     keywords.WrongKeywordVisitor,

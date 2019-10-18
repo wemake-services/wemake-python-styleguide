@@ -75,6 +75,7 @@ Summary
    VagueImportViolation
    AdditionAssignmentOnListViolation
    RedundantSubscriptViolation
+   AugmentedAssignPatternViolation
 
 Consistency checks
 ------------------
@@ -129,6 +130,7 @@ Consistency checks
 .. autoclass:: VagueImportViolation
 .. autoclass:: AdditionAssignmentOnListViolation
 .. autoclass:: RedundantSubscriptViolation
+.. autoclass:: AugmentedAssignPatternViolation
 
 """
 
@@ -1790,6 +1792,7 @@ class VagueImportViolation(ASTViolation):
     code = 347
 
 
+@final
 class AdditionAssignmentOnListViolation(ASTViolation):
     """
     Forbids usage of += with list arguments.
@@ -1838,3 +1841,28 @@ class RedundantSubscriptViolation(ASTViolation):
 
     error_template = 'Found redundant subscript slice: {0}'
     code = 349
+
+
+@final
+class AugmentedAssignPatternViolation(ASTViolation):
+    """
+    Enforce using augmented assign pattern.
+
+    Reasoning:
+        ``a += b`` is short and correct version of ``a = a + b``.
+        Why not using the short version?
+
+    Example::
+
+        # Correct:
+        a += b
+
+        # Wrong:
+        a = a + b
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found usable augmented assign pattern'
+    code = 350

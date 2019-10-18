@@ -591,3 +591,5 @@ swap_a = swap_b
 swap_b = swap_a  # noqa: WPS448
 
 print(constant[0:7])  # noqa: WPS349
+
+var_a = var_a + var_b  # noqa: WPS350
