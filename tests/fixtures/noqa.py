@@ -573,11 +573,11 @@ def literal_none_return_func() -> Literal[None]:  # noqa: WPS701
     """Literal[None]"""
 
 
-def nested_annotation_func(arg: Literal[Literal[1, 2], 3]): # noqa: WPS702
+def nested_annotation_func(arg: Literal[Literal[1, 2], 3]):  # noqa: WPS702
     """Literal[Literal[1, 2], 3]"""
 
 
-def nested_annotation_return_func() -> Union[str, Union[int, float]]: # noqa: WPS702
+def nested_annotation_return_func() -> Union[str, Union[int, float]]:  # noqa: WPS702
     """Union[str, Union[int, float]]"""
 
 

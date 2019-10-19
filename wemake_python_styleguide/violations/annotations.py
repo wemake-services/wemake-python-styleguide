@@ -79,6 +79,7 @@ class NestedAnnotationsViolation(ASTViolation):
         Flatten consecutively nested ``typing.Literal`` and ``typing.Union``.
 
     Example::
+
         # Correct:
         Literal[1, 2, 3, "foo", 5, None]
         Union[int, str, float]
