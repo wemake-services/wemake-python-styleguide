@@ -1876,25 +1876,19 @@ class UnnecessaryLiteralsViolation(ASTViolation):
     Forbids the use of unnecessary literals in your code.
 
     Reasoning:
-        There should be one-- and preferably only one --obvious way to do it.
+        We discourage using primitive calls to get default type values.
+        There are better ways to get these values.
+
+    Solution:
+        Use direct default values of the given type
 
     Example::
 
         # Correct:
-        0
-        0.0
-        ''
-        b''
-        False
-        0j
+        default = 0
 
         # Wrong:
-        int()
-        float()
-        str()
-        bytes()
-        bool()
-        complex()
+        default = int()
 
     .. versionadded:: 0.13.0
 
