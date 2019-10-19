@@ -572,3 +572,5 @@ swap_b = swap_a  # noqa: WPS523
 print(constant[0:7])  # noqa: WPS349
 var_a = var_a + var_b  # noqa: WPS350
 LOWERCASE_ALPH = "abcdefghijklmnopqrstuvwxyz" # noqa: WPS447
+
+int()  # noqa: WPS351

@@ -76,6 +76,7 @@ Summary
    AdditionAssignmentOnListViolation
    RedundantSubscriptViolation
    AugmentedAssignPatternViolation
+   UnnecessaryLiteralsViolation
 
 Consistency checks
 ------------------
@@ -131,6 +132,7 @@ Consistency checks
 .. autoclass:: AdditionAssignmentOnListViolation
 .. autoclass:: RedundantSubscriptViolation
 .. autoclass:: AugmentedAssignPatternViolation
+.. autoclass:: UnnecessaryLiteralsViolation
 
 """
 
@@ -1866,3 +1868,37 @@ class AugmentedAssignPatternViolation(ASTViolation):
 
     error_template = 'Found usable augmented assign pattern'
     code = 350
+
+
+@final
+class UnnecessaryLiteralsViolation(ASTViolation):
+    """
+    Forbids the use of unnecessary literals in your code.
+
+    Reasoning:
+        There should be one-- and preferably only one --obvious way to do it.
+
+    Example::
+
+        # Correct:
+        0
+        0.0
+        ''
+        b''
+        False
+        0j
+
+        # Wrong:
+        int()
+        float()
+        str()
+        bytes()
+        bool()
+        complex()
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found unnecessary literals.'
+    code = 351

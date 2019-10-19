@@ -349,3 +349,13 @@ VAGUE_IMPORTS_BLACKLIST = frozenset([
     'safe_load_all',
     'safe_dump_all',
 ])
+
+#: List of literals without arguments we forbid to use.
+LITERALS_BLACKLIST: Final = frozenset((
+    'int',
+    'float',
+    'str',
+    'bytes',
+    'bool',
+    'complex',
+))
