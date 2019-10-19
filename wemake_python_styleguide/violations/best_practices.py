@@ -66,7 +66,7 @@ Summary
    WrongKeywordConditionViolation
    WrongNamedKeywordViolation
    ApproximateConstantViolation
-   AlphabetAsStringViolation
+   StringConstantRedefinedViolation
 
 Best practices
 --------------
@@ -118,7 +118,7 @@ Best practices
 .. autoclass:: WrongKeywordConditionViolation
 .. autoclass:: WrongNamedKeywordViolation
 .. autoclass:: ApproximateConstantViolation
-.. autoclass:: AlphabetAsStringViolation
+.. autoclass:: StringConstantRedefinedViolation
 
 """
 
@@ -1824,7 +1824,7 @@ class ApproximateConstantViolation(ASTViolation):
 
 
 @final
-class AlphabetAsStringViolation(ASTViolation):
+class StringConstantRedefinedViolation(ASTViolation):
     """
     Forbid to use alphabet as a string.
 
@@ -1853,5 +1853,5 @@ class AlphabetAsStringViolation(ASTViolation):
 
     """
 
-    error_template = 'Found alphabet as strings'
+    error_template = 'Found alphabet as strings: {0}'
     code = 447

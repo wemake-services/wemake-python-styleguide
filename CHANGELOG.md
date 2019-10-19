@@ -11,6 +11,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to have invalid strings like `**{'@': 1}`
 - Forbids to use implicit primitive values in a form of `lambda`
 - Forbids to use approximate math constants
+- Forbids to redefine string constants
 - Forbids using `Literal[None]` in function annotations
 - Forbids using nested `typing.Literal`, `typing.Union` and `typing.Annotated`
 - Forbids use of vague import names (e.g. `from json import loads`)
@@ -23,7 +24,6 @@ We used to have incremental versioning before `0.1.0`.
 - Allows `super()` as a valid overused expression
 - `WPS350` enforces using augmented assign pattern
 - Forbids to use `Optional[Union[...]]` in annotations
-- Forbid to use alphabet as a string
 
 ### Bugfixes
 

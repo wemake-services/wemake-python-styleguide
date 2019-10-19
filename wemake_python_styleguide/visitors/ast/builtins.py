@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import ast
+import string
 from collections import Counter, Hashable, defaultdict
 from contextlib import suppress
-from string import ascii_letters, ascii_lowercase, ascii_uppercase
 from typing import (
     ClassVar,
     DefaultDict,
+    FrozenSet,
     Iterable,
     List,
     Optional,
@@ -28,11 +29,11 @@ from wemake_python_styleguide.logic.operators import (
 from wemake_python_styleguide.types import AnyFor, AnyNodes, AnyWith
 from wemake_python_styleguide.violations import consistency
 from wemake_python_styleguide.violations.best_practices import (
-    AlphabetAsStringViolation,
     ApproximateConstantViolation,
     MagicNumberViolation,
     MultipleAssignmentsViolation,
     NonUniqueItemsInHashViolation,
+    StringConstantRedefinedViolation,
     UnhashableTypeInHashViolation,
     WrongUnpackingViolation,
 )
@@ -42,6 +43,20 @@ from wemake_python_styleguide.visitors import base, decorators
 @final
 class WrongStringVisitor(base.BaseNodeVisitor):
     """Restricts several string usages."""
+
+    _string_constants: FrozenSet[str] = frozenset((
+        string.ascii_letters,
+        string.ascii_lowercase,
+        string.ascii_uppercase,
+
+        string.digits,
+        string.octdigits,
+        string.hexdigits,
+
+        string.printable,
+        string.whitespace,
+        string.punctuation,
+    ))
 
     def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
         """
@@ -59,15 +74,17 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         Forbid to use alphabet as a string.
 
         Raises:
-            AlphabetAsStringViolation
+            StringConstantRedefinedViolation
 
         """
         self._check_is_alphatbet(node)
+        self.generic_visit(node)
 
     def _check_is_alphatbet(self, node: ast.Str) -> None:
-        if node.s in {ascii_letters, ascii_lowercase, ascii_uppercase}:
-            self.add_violation(AlphabetAsStringViolation(node))
-        self.generic_visit(node)
+        if node.s in self._string_constants:
+            self.add_violation(
+                StringConstantRedefinedViolation(node, text=node.s),
+            )
 
 
 @final
