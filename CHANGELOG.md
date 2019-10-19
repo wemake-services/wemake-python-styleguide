@@ -8,7 +8,6 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
-- Improves Github Action stability
 - `WPS431` now allow customize whitelist via `nested-classes-whitelist` setting
 - Forbids to have invalid strings like `**{'@': 1}`
 - Forbids to use implicit primitive values in a form of `lambda`
@@ -16,28 +15,32 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids using `Literal[None]` in function annotations
 - Forbids using nested `typing.Literal`, `typing.Union` and `typing.Annotated`
 - Forbids use of vague import names (e.g. `from json import loads`)
-- Make ``OveruseOfNoqaCommentViolation`` configurable (`--max-noqa-comments`)
-- Improves tests: we now ensure that each violation with previous codes also 
+- Makes `OveruseOfNoqaCommentViolation` configurable via `--max-noqa-comments`
+- Improves tests: we now ensure that each violation with previous codes also
   has corresponding versions changed in their documentation
 - Forbid incorrectly swapped variables
 - Forbids to use `+=` with list arguments
 - Forbids to use redundant subscripts (e.g., `[0:7]` or `[3:None]`)
-- Allow `super()` as a valid overused expression
-- `WPS350` enforce using augmented assign pattern
-- Forbids to use `Optional[Union]` in function annotations 
+- Allows `super()` as a valid overused expression
+- `WPS350` enforces using augmented assign pattern
+- Forbids to use `Optional[Union[...]]` in annotations
 
 ### Bugfixes
 
-- Fixes ``ImplicitElifViolation`` false positives on a specific edge cases
-- Fixes ``I_CONTROL_CODE setting`` for ``BadMagicModuleFunctionViolation``
+- Fixes `ImplicitElifViolation` false positives on a specific edge cases
+- Fixes `I_CONTROL_CODE setting` for `BadMagicModuleFunctionViolation`
 - Fixes compatibility with flake8 `3.8.x`
 - Fixes that `not not True` was not detected as `WPS330`
-- Fixes addition of ``MisrefactoredAssignmentViolation`` check
-- Fixes ``WrongMagicCommentViolation`` not catching certain wrong comments
+- Fixes addition of `MisrefactoredAssignmentViolation` check
+- Fixes `WrongMagicCommentViolation` not catching certain wrong comments
 
 ### Misc
 
-- Replace `scripts/tokens.py` with an external tool.
+- Improves Github Action stability
+- Replace `scripts/tokens.py` with an external tool
+- Improves violation code testing
+- Improves testing of `.. versionchanged` and `previous_codes` properties
+
 
 ## 0.12.5
 
@@ -152,10 +155,10 @@ In this release we had a little focus on:
 - Forbids to have explicit string contact: `'a' + some_data`, use `.format()`
 - Now `YieldInsideInitViolation` is named `YieldMagicMethodViolation`
   and it also checks different magic methods in a class
-- Forbids to use ``assert False`` and other false-constants
-- Forbids to use ``while False:``  and other false-constants
-- Forbids to use ``open()`` outside of ``with``
-- Forbids to use ``type()`` for compares
+- Forbids to use `assert False` and other false-constants
+- Forbids to use `while False:`  and other false-constants
+- Forbids to use `open()` outside of `with`
+- Forbids to use `type()` for compares
 - Forbids to have consecutive expressions with too deep access level
 - Forbids to have too many public instance attributes
 - Forbids to use pointless star operations: `print(*[])`
@@ -438,7 +441,7 @@ and lots of bug fixes.
 
 - Now raising a violation for every `bool` non-keyword argument
   and showing better error message
-- Changes how `max-arguments` are counted.
+- Changes how `max-arguments` are counted
   Now `self`, `cls`, and `mcs` count as real arguments
 - Forbids to use `yield` inside comprehensions
 - Forbids to have single line triple-quoted string assignments
@@ -570,7 +573,7 @@ and lots of bug fixes.
 - **Breaking**: removes `--max-conditions` and `--max-elifs` options
 - **Breaking**: removes `--max-offset-blocks`
 - **Breaking**: changes default `TooManyConditionsViolation` threshold from `3` to `4`
-- **Breaking**: changes `TooManyBaseClassesViolation` code from ``225`` to ``215``
+- **Breaking**: changes `TooManyBaseClassesViolation` code from `225` to `215`
 - Forbids to use `lambda` inside loops
 - Forbids to use `self`, `cls`, and `mcs` except for first arguments only
 - Forbids to use too many decorators

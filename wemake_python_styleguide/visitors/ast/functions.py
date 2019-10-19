@@ -22,7 +22,6 @@ from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     BooleanPositionalArgumentViolation,
     ComplexDefaultValueViolation,
-    ImplicitPrimitiveViolation,
     StopIterationInsideGeneratorViolation,
     WrongFunctionCallViolation,
 )
@@ -32,6 +31,7 @@ from wemake_python_styleguide.violations.naming import (
 from wemake_python_styleguide.violations.oop import WrongSuperCallViolation
 from wemake_python_styleguide.violations.refactoring import (
     ImplicitEnumerateViolation,
+    ImplicitPrimitiveViolation,
     OpenWithoutContextManagerViolation,
     TypeCompareViolation,
     UselessLambdaViolation,

@@ -2,7 +2,7 @@
 
 import pytest
 
-from wemake_python_styleguide.violations.best_practices import (
+from wemake_python_styleguide.violations.refactoring import (
     ImplicitPrimitiveViolation,
 )
 from wemake_python_styleguide.visitors.ast.functions import (

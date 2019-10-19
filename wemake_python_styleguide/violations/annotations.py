@@ -61,7 +61,7 @@ class LiteralNoneViolation(ASTViolation):
 
     """
 
-    code = 701
+    code = 700
     error_template = 'Found useless `Literal[None]` typing annotation'
 
 
@@ -93,7 +93,7 @@ class NestedAnnotationsViolation(ASTViolation):
     """
 
     error_template = 'Found redundant nested typing annotation'
-    code = 702
+    code = 701
 
 
 @final
@@ -121,4 +121,4 @@ class UnionNestedInOptionalViolation(ASTViolation):
     """
 
     error_template = 'Found typing annotation with `Union` nested in `Optional`'
-    code = 704
+    code = 702
