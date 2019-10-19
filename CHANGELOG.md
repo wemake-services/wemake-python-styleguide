@@ -24,6 +24,7 @@ We used to have incremental versioning before `0.1.0`.
 - Allows `super()` as a valid overused expression
 - `WPS350` enforces using augmented assign pattern
 - Forbids to use `Optional[Union[...]]` in annotations
+- Forbids unnecessary literals
 
 ### Bugfixes
 
