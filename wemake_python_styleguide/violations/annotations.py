@@ -18,12 +18,14 @@ Summary
 
    LiteralNoneViolation
    NestedAnnotationsViolation
+   UnionNestedInOptionalViolation
 
 Annotation checks
 ------------------
 
 .. autoclass:: LiteralNoneViolation
 .. autoclass:: NestedAnnotationsViolation
+.. autoclass:: UnionNestedInOptionalViolation
 
 """
 
@@ -91,3 +93,31 @@ class NestedAnnotationsViolation(ASTViolation):
 
     error_template = 'Found redundant nested typing annotation'
     code = 702
+
+
+@final
+class UnionNestedInOptionalViolation(ASTViolation):
+    """
+    Forbids to use ``Optional[Union[int, str]]`` annotation.
+
+    Reasoning:
+        Optional[Union[int, str]] equals to Union[int, str, None].
+        Use Union[int, str, None] version for consistency.
+
+    Solution:
+        Replace ``Optional[Union[int, str]]`` with ``Union[int, str, None]``.
+
+    Example::
+
+        # Correct:
+        Union[int, str, None]
+
+        # Wrong:
+        Optional[Union[int, str]]
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found typing annotation with `Union` nested in `Optional`'
+    code = 704
