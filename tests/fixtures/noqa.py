@@ -594,14 +594,6 @@ print(constant[0:7])  # noqa: WPS349
 
 var_a = var_a + var_b  # noqa: WPS350
 
-class ParentClass(object):
-    @property
-    def some_var(self):
-        return self._some_var
-
-    def some_method(self):
-        return ''
-
 class ChildClass(ParentClass):
     @property
     def some_var(self):

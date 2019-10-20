@@ -27,7 +27,7 @@ Summary
    AsyncMagicMethodViolation
    YieldMagicMethodViolation
    UselessOverwrittenMethodViolation
-   WrongSuperCallContextViolation
+   WrongSuperCallAccessViolation
 
 Respect your objects
 --------------------
@@ -45,7 +45,7 @@ Respect your objects
 .. autoclass:: AsyncMagicMethodViolation
 .. autoclass:: YieldMagicMethodViolation
 .. autoclass:: UselessOverwrittenMethodViolation
-.. autoclass:: WrongSuperCallContextViolation
+.. autoclass:: WrongSuperCallAccessViolation
 
 """
 
@@ -541,14 +541,14 @@ class UselessOverwrittenMethodViolation(ASTViolation):
 
 
 @final
-class WrongSuperCallContextViolation(ASTViolation):
+class WrongSuperCallAccessViolation(ASTViolation):
     """
     Forbids to use ``super()`` with incorrect methods or properties access.
 
     Reasoning:
         Can only use ``super()`` method that matches the following context.
-        super().some() and super().some in Child.some(),
-        and super().prop and super().prop() in Child.prop
+        ``super().some()`` and ``super().some`` in ``Child.some()``,
+        and ``super().prop`` and ``super().prop()`` in ``Child.prop``
 
     Solution:
         Use ``super()`` methods and properties with the correct context.
@@ -558,14 +558,12 @@ class WrongSuperCallContextViolation(ASTViolation):
         # Correct:
         class Child(Parent):
             def some_method(self):
-            original = super().some_method()
-            ...
+                original = super().some_method()
 
         # Wrong:
         class Child(Parent):
             def some_method(self):
-            other = super().other_method()
-            ...
+                other = super().other_method()
 
 
     .. versionadded:: 0.13.0

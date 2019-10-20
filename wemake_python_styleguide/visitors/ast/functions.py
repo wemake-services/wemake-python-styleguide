@@ -30,7 +30,7 @@ from wemake_python_styleguide.violations.naming import (
     UnusedVariableIsUsedViolation,
 )
 from wemake_python_styleguide.violations.oop import (
-    WrongSuperCallContextViolation,
+    WrongSuperCallAccessViolation,
     WrongSuperCallViolation,
 )
 from wemake_python_styleguide.violations.refactoring import (
@@ -60,9 +60,9 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
         Raises:
             BooleanPositionalArgumentViolation
             WrongFunctionCallViolation
-            WrongSuperCallViolation
             WrongIsinstanceWithTupleViolation
-            WrongSuperCallContextViolation
+            WrongSuperCallAccessViolation
+            WrongSuperCallViolation
 
         """
         self._check_wrong_function_called(node)
@@ -100,7 +100,10 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
 
         if attr and parent_name and attr != parent_name:
             self.add_violation(
-                WrongSuperCallContextViolation(node, text='wrong context'),
+                WrongSuperCallAccessViolation(
+                    node,
+                    text='super call with incorrect method or property access',
+                ),
             )
 
         if isinstance(parent_context, FunctionNodes):
