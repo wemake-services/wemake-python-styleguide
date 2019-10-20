@@ -20,8 +20,6 @@ from wemake_python_styleguide.types import (
     AnyWith,
 )
 from wemake_python_styleguide.violations.best_practices import (
-    AlmostSwappedViolation,
-    MisrefactoredAssignmentViolation,
     StatementHasNoEffectViolation,
     UnreachableCodeViolation,
     WrongNamedKeywordViolation,
@@ -32,6 +30,8 @@ from wemake_python_styleguide.violations.consistency import (
     UselessNodeViolation,
 )
 from wemake_python_styleguide.violations.refactoring import (
+    AlmostSwappedViolation,
+    MisrefactoredAssignmentViolation,
     PointlessStarredViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor

@@ -44,7 +44,7 @@ class WrongCommentVisitor(BaseTokenVisitor):
     """Checks comment tokens."""
 
     _no_cover: ClassVar[Pattern] = re.compile(r'^pragma:\s+no\s+cover')
-    _noqa_check: ClassVar[Pattern] = re.compile(r'^noqa:?($|[A-Z\d\,\s]+)')
+    _noqa_check: ClassVar[Pattern] = re.compile(r'^(noqa:?)($|[A-Z\d\,\s]+)')
     _type_check: ClassVar[Pattern] = re.compile(
         r'^type:\s?([\w\d\[\]\'\"\.]+)$',
     )
@@ -77,8 +77,10 @@ class WrongCommentVisitor(BaseTokenVisitor):
             return
 
         self._noqa_count += 1
-        excludes = match.groups()[0].strip()
-        if not excludes:
+        excludes = match.groups()[1].strip()
+        prefix = match.groups()[0].strip()
+
+        if not excludes or prefix[-1] != ':':
             # We cannot pass the actual line here,
             # since it will be ignored due to `# noqa` comment:
             self.add_violation(WrongMagicCommentViolation(text=comment_text))
