@@ -37,6 +37,7 @@ Summary
    ImplicitSumViolation
    FalsyConstantCompareViolation
    WrongIsCompareViolation
+   SlowInComprehensionViolation
 
 Refactoring opportunities
 -------------------------
@@ -63,6 +64,7 @@ Refactoring opportunities
 .. autoclass:: ImplicitSumViolation
 .. autoclass:: FalsyConstantCompareViolation
 .. autoclass:: WrongIsCompareViolation
+.. autoclass:: SlowInComprehensionViolation
 
 """
 
@@ -879,3 +881,40 @@ class WrongIsCompareViolation(ASTViolation):
 
     code = 521
     error_template = 'Found wrong `is` compare'
+
+
+
+@final
+class SlowInComprehensionViolation(ASTViolation):
+    """
+    Forbids to use ``a in b`` in value part of list comprehensions.
+
+    Reasoning:
+        Using ``a in b`` in comprehensions slows down the code.
+
+    Solution:
+        Write ``1`` or ``True`` and then use ``if a in b``.
+
+    Example::
+
+        #Correct:
+        sum(1 for a in elements if a in b)
+
+        len([1 for a in elements if a > 0])
+
+        #Wrong:
+        sum(a > 0 for a in elements)
+
+        sum(True for a in elements if a > 0)
+
+        s = 0
+        for a in elements:
+          if a > 0:
+            s += 1
+
+    ..versionadded:: 0.13.0
+
+    """
+
+    code = 522
+    error_template = "Found wrong practice in comprehension"
