@@ -65,8 +65,8 @@ Summary
    UnhashableTypeInHashViolation
    WrongKeywordConditionViolation
    WrongNamedKeywordViolation
-   ImplicitPrimitiveViolation
    ApproximateConstantViolation
+   StringConstantRedefinedViolation
 
 Best practices
 --------------
@@ -117,8 +117,8 @@ Best practices
 .. autoclass:: UnhashableTypeInHashViolation
 .. autoclass:: WrongKeywordConditionViolation
 .. autoclass:: WrongNamedKeywordViolation
-.. autoclass:: ImplicitPrimitiveViolation
 .. autoclass:: ApproximateConstantViolation
+.. autoclass:: StringConstantRedefinedViolation
 
 """
 
@@ -1785,36 +1785,6 @@ class WrongNamedKeywordViolation(ASTViolation):
 
 
 @final
-class ImplicitPrimitiveViolation(ASTViolation):
-    """
-    Forbids to use implicit primitives in a form of ``lambda`` functions.
-
-    Reasoning:
-        When you use ``lambda`` that returns a primitive value
-        and takes no arguments, it means that
-        you should use a primitive type instead.
-
-    Solution:
-        Replace ``lambda`` with ``int``, ``float``,
-        ``list``, or any other primitive.
-
-    Example::
-
-        # Correct:
-        defaultdict(int)
-
-        # Wrong:
-        defaultdict(lambda: 0)
-
-    .. versionadded:: 0.13.0
-
-    """
-
-    code = 446
-    error_template = 'Found implicit primitive in a form of `lambda`'
-
-
-@final
 class ApproximateConstantViolation(ASTViolation):
     """
     Forbids to use approximate constants.
@@ -1849,5 +1819,39 @@ class ApproximateConstantViolation(ASTViolation):
 
     """
 
-    code = 447
+    code = 446
     error_template = 'Found approximate constant: {0}'
+
+
+@final
+class StringConstantRedefinedViolation(ASTViolation):
+    """
+    Forbid to use alphabet as a string.
+
+    Reasoning:
+        Some constants are already defined.
+        No need to write them again, use existing values.
+        We just compare strings and raise this violation
+        when they have exactly the same chars.
+
+    Solution:
+        Use pre-defined constants.
+
+    Example::
+
+        # Correct:
+        import string
+        UPPERCASE_ALPH = string.ascii_uppercase
+        LOWERCASE_ALPH = string.ascii_lowercase
+
+        # Wrong:
+        GUESS_MY_NAME = "abcde...WXYZ"
+        UPPERCASE_ALPH = "ABCD...WXYZ"
+        LOWERCASE_ALPH = "abcd...wxyz"
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found alphabet as strings: {0}'
+    code = 447

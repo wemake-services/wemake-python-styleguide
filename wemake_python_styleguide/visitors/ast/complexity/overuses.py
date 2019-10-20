@@ -117,6 +117,7 @@ class ExpressionOveruseVisitor(base.BaseNodeVisitor):
             # DSL to be created: like django-orm, attrs, and dataclasses.
             # And these DSLs are built using attributes and calls.
             _is_class_context,
+            _is_super_call,
         ]
         if any(ignore(node) for ignore in ignore_predicates):
             return
@@ -186,3 +187,9 @@ class ExpressionOveruseVisitor(base.BaseNodeVisitor):
 
 def _is_class_context(node: ast.AST) -> bool:
     return isinstance(nodes.get_context(node), ast.ClassDef)
+
+
+def _is_super_call(node: ast.AST) -> bool:
+    if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
+        return node.func.id == 'super'
+    return False

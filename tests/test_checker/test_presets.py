@@ -24,7 +24,7 @@ def _is_visitor_class(cls) -> bool:
         BaseTokenVisitor,
         BaseVisitor,
     }
-    if not inspect.isclass(cls):
+    if not inspect.isclass(cls) or cls.__qualname__.startswith('_'):
         return False
 
     return issubclass(cls, BaseVisitor) and cls not in base_classes
@@ -67,6 +67,7 @@ def test_all_visitors_contained_in_checker(all_visitors):  # noqa: WPS442
     checker_visitors = {
         klass.__qualname__
         for klass in Checker._visitors  # noqa: WPS437
+        if not klass.__qualname__.startswith('_')
     }
 
     for visitor in all_visitors:

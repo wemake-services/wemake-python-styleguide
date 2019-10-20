@@ -16,6 +16,9 @@ Note:
     Simple is better than complex.
     Complex is better than complicated.
 
+See also:
+    https://sobolevn.me/2019/10/complexity-waterfall
+
 .. currentmodule:: wemake_python_styleguide.violations.complexity
 
 Summary

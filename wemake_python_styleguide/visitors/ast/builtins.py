@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import ast
+import string
 from collections import Counter, Hashable, defaultdict
 from contextlib import suppress
 from typing import (
     ClassVar,
     DefaultDict,
+    FrozenSet,
     Iterable,
     List,
     Optional,
@@ -31,6 +33,7 @@ from wemake_python_styleguide.violations.best_practices import (
     MagicNumberViolation,
     MultipleAssignmentsViolation,
     NonUniqueItemsInHashViolation,
+    StringConstantRedefinedViolation,
     UnhashableTypeInHashViolation,
     WrongUnpackingViolation,
 )
@@ -40,6 +43,20 @@ from wemake_python_styleguide.visitors import base, decorators
 @final
 class WrongStringVisitor(base.BaseNodeVisitor):
     """Restricts several string usages."""
+
+    _string_constants: FrozenSet[str] = frozenset((
+        string.ascii_letters,
+        string.ascii_lowercase,
+        string.ascii_uppercase,
+
+        string.digits,
+        string.octdigits,
+        string.hexdigits,
+
+        string.printable,
+        string.whitespace,
+        string.punctuation,
+    ))
 
     def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
         """
@@ -51,6 +68,23 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         """
         self.add_violation(consistency.FormattedStringViolation(node))
         self.generic_visit(node)
+
+    def visit_Str(self, node: ast.Str) -> None:
+        """
+        Forbid to use alphabet as a string.
+
+        Raises:
+            StringConstantRedefinedViolation
+
+        """
+        self._check_is_alphatbet(node)
+        self.generic_visit(node)
+
+    def _check_is_alphatbet(self, node: ast.Str) -> None:
+        if node.s in self._string_constants:
+            self.add_violation(
+                StringConstantRedefinedViolation(node, text=node.s),
+            )
 
 
 @final

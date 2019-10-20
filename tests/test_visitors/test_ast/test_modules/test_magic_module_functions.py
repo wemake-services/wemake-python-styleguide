@@ -20,6 +20,23 @@ def {0}(name):
 def test_wrong_magic_used(
     assert_errors,
     parse_ast_tree,
+    options,
+    function_names,
+):
+    """Testing magic methods with logic is restricted."""
+    tree = parse_ast_tree(regular_function.format(function_names))
+    option_values = options(i_control_code=False)
+
+    visitor = MagicModuleFunctionsVisitor(option_values, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('function_names', MAGIC_MODULE_NAMES_BLACKLIST)
+def test_right_magic_used(
+    assert_errors,
+    parse_ast_tree,
     default_options,
     function_names,
 ):

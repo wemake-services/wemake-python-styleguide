@@ -73,6 +73,10 @@ Summary
    MeaninglessNumberOperationViolation
    OperationSignNegationViolation
    VagueImportViolation
+   AdditionAssignmentOnListViolation
+   RedundantSubscriptViolation
+   AugmentedAssignPatternViolation
+   UnnecessaryLiteralsViolation
 
 Consistency checks
 ------------------
@@ -125,6 +129,10 @@ Consistency checks
 .. autoclass:: MeaninglessNumberOperationViolation
 .. autoclass:: OperationSignNegationViolation
 .. autoclass:: VagueImportViolation
+.. autoclass:: AdditionAssignmentOnListViolation
+.. autoclass:: RedundantSubscriptViolation
+.. autoclass:: AugmentedAssignPatternViolation
+.. autoclass:: UnnecessaryLiteralsViolation
 
 """
 
@@ -423,7 +431,7 @@ class ConstantCompareViolation(ASTViolation):
 @final
 class CompareOrderViolation(ASTViolation):
     """
-    Forbids comparision where argument doesn't come first.
+    Forbids comparison where argument doesn't come first.
 
     Reasoning:
         It is hard to read the code when
@@ -464,7 +472,7 @@ class BadNumberSuffixViolation(TokenizeViolation):
 
     Solution:
         Octal, hex, binary and scientific notation suffixes in numbers
-        should be written lowercase.
+        should be written in lowercase.
 
     Example::
 
@@ -491,7 +499,7 @@ class BadNumberSuffixViolation(TokenizeViolation):
 @final
 class MultipleInCompareViolation(ASTViolation):
     """
-    Forbids comparision where multiple ``in`` checks.
+    Forbids comparison where multiple ``in`` checks.
 
     Reasoning:
         Using multiple ``in`` is unreadable.
@@ -793,8 +801,8 @@ class WrongBracketPositionViolation(TokenizeViolation):
         We require all brackets to be consistent.
 
     Solution:
-        Place bracket on the same line, when a single line expression.
-        Or place the bracket on a new line when a multi-line expression.
+        Place bracket on the same line, in case of a single line expression.
+        Or place the bracket on a new line in case of a multi-line expression.
 
     Example::
 
@@ -879,7 +887,7 @@ class UppercaseStringModifierViolation(TokenizeViolation):
         String modifiers should be consistent.
 
     Solution:
-        Use lowercase modifiers should be written in lowercase.
+        Use lowercase modifiers.
 
     Example::
 
@@ -1072,10 +1080,10 @@ class InconsistentYieldViolation(ASTViolation):
 @final
 class ImplicitStringConcatenationViolation(TokenizeViolation):
     """
-    Forbids to use implicit string contacatenation.
+    Forbids to use implicit string concatenation.
 
     Reasoning:
-        This is error-prone, since you can possible miss a comma
+        This is error-prone, since you can possibly miss a comma
         in a collection of string and get an implicit concatenation.
         And because there are different and safe ways to do the same thing
         it is better to use them instead.
@@ -1145,7 +1153,7 @@ class UselessNodeViolation(ASTViolation):
         This might be also an overuse of syntax.
 
     Solution:
-        Remove node or make sure it makes any sense.
+        Remove node or make sure it makes sense.
 
     Example::
 
@@ -1173,7 +1181,7 @@ class UselessExceptCaseViolation(ASTViolation):
         It also does not make any sense to do so.
 
     Solution:
-        Remove ``except`` case or make sure it makes any sense.
+        Remove ``except`` case or make sure it makes sense.
 
     Example::
 
@@ -1309,7 +1317,7 @@ class ImplicitComplexCompareViolation(ASTViolation):
 
     Solution:
         Refactor your compare without ``and`` but with the third operator.
-        Notice, that you migth have to change the ordering.
+        Notice, that you might have to change the ordering.
 
     Example::
 
@@ -1410,7 +1418,7 @@ class ExplicitStringConcatViolation(ASTViolation):
     Forbids explicit string concat in favour of ``.format`` method.
 
     However, we still allow multiline string concat
-    as a way to write long stirngs that does not fit the 80-chars rule.
+    as a way to write long strings that does not fit the 80-chars rule.
 
     Reasoning:
         When formating strings one must use ``.format``
@@ -1484,7 +1492,7 @@ class WrongMethodOrderViolation(ASTViolation):
     - ``__init__``
     - public and megic methods
     - protected methods
-    - private methods (we discourage to use them)
+    - private methods (we discourage using them)
 
     We follow "Newspaper order" when the most important things come the first.
 
@@ -1510,14 +1518,14 @@ class NumberWithMeaninglessZeroViolation(TokenizeViolation):
     Forbids to use meaningless zeros.
 
     We discorauge using meaningless zeros in
-    float, binary, octal, hex, and expanentional numbers.
+    float, binary, octal, hex, and exponential numbers.
 
     Reasoning:
-        There are ~infinitive ways to write these numbers
+        There are ~infinite ways to write these numbers
         by adding meaningless leading zeros to the number itself.
         ``0b1`` is the same as ``0b01`` and ``0b001``.
         How a language can be called consistent
-        if you can write numbers in a infinite ways?
+        if you can write numbers in an infinite ways?
         It hurts readability and understanding of your code.
 
     Solution:
@@ -1571,14 +1579,14 @@ class PositiveExponentViolation(TokenizeViolation):
 @final
 class WrongHexNumberCaseViolation(TokenizeViolation):
     """
-    Forbids use lower-case letters as hex numbers.
+    Forbids to use letters as hex numbers.
 
     Reasoning:
         One can write ``0xA`` and ``0xa`` which is inconsistent.
         This rule enforces upper-case letters in hex numbers.
 
     Solution:
-        Use upper-case letters in hex numbers.
+        Use uppercase letters in hex numbers.
 
     Example::
 
@@ -1658,18 +1666,18 @@ class ZeroDivisionViolation(ASTViolation):
     Forbids to explicitly divide by zero.
 
     Reasoning:
-        This will just throw ``ZeroDivisoionError``
+        This will just throw ``ZeroDivisionError``
         in case that's what you need: just throw it.
         No need to use undefined meth behaviours.
         Or it might be just a typo / mistake, then fix it.
 
     Solution:
-        Use ``ZeroDivisoionError`` or fix your number not to be ``0``.
+        Use ``ZeroDivisionError`` or fix your number not to be ``0``.
 
     Example::
 
         # Correct:
-        raise ZeroDivisoionError()
+        raise ZeroDivisionError()
 
         # Wrong:
         1 / 0
@@ -1685,17 +1693,17 @@ class ZeroDivisionViolation(ASTViolation):
 @final
 class MeaninglessNumberOperationViolation(ASTViolation):
     """
-    Forbids to use meaningless math opeartions with ``0`` and ``1``.
+    Forbids to use meaningless math operations with ``0`` and ``1``.
 
     Reasoning:
         Adding and substracting zero does not change the value.
         There's no need to do that.
-        Multipling by zero is also redundunt:
+        Multipling by zero is also redundant:
         it can be replaced with explicit ``0`` assign.
         Multiplying and dividing by ``1`` is also meaningless.
 
     Solution:
-        Remove useless zero operaionts.
+        Remove useless zero operations.
 
     Example::
 
@@ -1755,7 +1763,7 @@ class OperationSignNegationViolation(ASTViolation):
 @final
 class VagueImportViolation(ASTViolation):
     """
-    Forbids imports that outside of the module may cause confusion.
+    Forbids imports that may cause confusion outside of the module.
 
     Reasoning:
         See ``datetime.*`` in code? You know that it's from datetime.
@@ -1784,3 +1792,107 @@ class VagueImportViolation(ASTViolation):
 
     error_template = 'Found vague import that may cause confusion: {0}'
     code = 347
+
+
+@final
+class AdditionAssignmentOnListViolation(ASTViolation):
+    """
+    Forbids usage of += with list arguments.
+
+    Reasoning:
+        ``+=`` works like ``extend()`` method.
+        Why not just use ``extend()`` instead of ``+=`` to be consistent.
+
+    Example::
+
+        # Correct:
+        some_list.extend([1, 2, 3])
+
+        # Wrong:
+        some_list += [1, 2, 3]
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found addition assignment with list argument'
+    code = 348
+
+
+@final
+class RedundantSubscriptViolation(ASTViolation):
+    """
+    Forbids the use of redundant components in a subscript's slice.
+
+    Reasoning:
+        We do it for consistency reasons.
+
+    Example::
+
+        # Correct:
+        array[:7]
+        array[3:]
+
+        # Wrong:
+        x[0:7]
+        x[3:None]
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found redundant subscript slice: {0}'
+    code = 349
+
+
+@final
+class AugmentedAssignPatternViolation(ASTViolation):
+    """
+    Enforce using augmented assign pattern.
+
+    Reasoning:
+        ``a += b`` is short and correct version of ``a = a + b``.
+        Why not using the short version?
+
+    Example::
+
+        # Correct:
+        a += b
+
+        # Wrong:
+        a = a + b
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found usable augmented assign pattern'
+    code = 350
+
+
+@final
+class UnnecessaryLiteralsViolation(ASTViolation):
+    """
+    Forbids the use of unnecessary literals in your code.
+
+    Reasoning:
+        We discourage using primitive calls to get default type values.
+        There are better ways to get these values.
+
+    Solution:
+        Use direct default values of the given type
+
+    Example::
+
+        # Correct:
+        default = 0
+
+        # Wrong:
+        default = int()
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found unnecessary literals.'
+    code = 351

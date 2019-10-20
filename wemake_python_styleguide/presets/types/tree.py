@@ -20,6 +20,7 @@ from wemake_python_styleguide.visitors.ast import (
     naming,
     operators,
     statements,
+    subscripts,
 )
 
 #: Used to store all general visitors to be later passed to checker:
@@ -29,6 +30,7 @@ PRESET: Final = (
     statements.WrongParametersIndentationVisitor,
     statements.PointlessStarredVisitor,
     statements.WrongNamedKeywordVisitor,
+    statements.AssignmentPatternsVisitor,
 
     keywords.WrongRaiseVisitor,
     keywords.WrongKeywordVisitor,
@@ -43,12 +45,13 @@ PRESET: Final = (
 
     attributes.WrongAttributeVisitor,
     annotations.WrongAnnotationVisitor,
-    annotations.WrongNestedAnnotationVisitor,
+    annotations.SemanticAnnotationVisitor,
 
     functions.WrongFunctionCallVisitor,
     functions.FunctionDefinitionVisitor,
     functions.UselessLambdaDefinitionVisitor,
     functions.WrongFunctionCallContextVisitior,
+    functions.UnnecessaryLiteralsVisitor,
 
     exceptions.WrongTryExceptVisitor,
     exceptions.NestedTryBlocksVisitor,
@@ -96,4 +99,7 @@ PRESET: Final = (
 
     # Complexity:
     *complexity.PRESET,
+
+    # Subscripts:
+    subscripts.SubscriptVisitor,
 )

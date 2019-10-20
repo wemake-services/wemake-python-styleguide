@@ -11,7 +11,7 @@ you will need to get familiar with these APIs:
 
 It is also recommended to take a look at these resources:
 
-- Visual tool to explore [python's ast](https://python-ast-explorer.com/) (very useful!)
+- Visual tool to explore [python's ast](https://python-ast-explorer.com/) (very useful, but outdated!)
 - Missing `ast` [guide](https://greentreesnakes.readthedocs.io/en/latest/)
 - List of `python` [static analysis tools](https://github.com/vintasoftware/python-linters-and-code-analysis)
 - List of `flake8` [extensions](https://github.com/DmytroLitvinov/awesome-flake8-extensions)
@@ -188,8 +188,8 @@ a short article on how you are using this project.
 You can also share your best practices with us.
 
 You can also consider donations to the project:
-- https://opencollective.com/wemake-python-styleguide
-- https://issuehunt.io/r/wemake-services/wemake-python-styleguide
+- <https://opencollective.com/wemake-python-styleguide>
+- <https://issuehunt.io/r/wemake-services/wemake-python-styleguide>
 
 Number of current supporters:
 

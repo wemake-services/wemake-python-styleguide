@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import ClassVar, Mapping, Optional, Sequence, Union
+from typing import ClassVar, Mapping, Optional, Sequence, Set, Union
 
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import ForNodes, FunctionNodes
-from wemake_python_styleguide.logic.collections import normalize_dict_elements
-from wemake_python_styleguide.logic.functions import get_all_arguments
-from wemake_python_styleguide.logic.nodes import get_parent
-from wemake_python_styleguide.logic.strings import is_doc_string
+from wemake_python_styleguide.logic import functions, nodes, strings
+from wemake_python_styleguide.logic.collections import (
+    first,
+    normalize_dict_elements,
+    sequence_of_node,
+)
+from wemake_python_styleguide.logic.naming import name_nodes
 from wemake_python_styleguide.types import (
     AnyFor,
     AnyFunctionDef,
@@ -22,10 +25,13 @@ from wemake_python_styleguide.violations.best_practices import (
     WrongNamedKeywordViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
+    AugmentedAssignPatternViolation,
     ParametersIndentationViolation,
     UselessNodeViolation,
 )
 from wemake_python_styleguide.violations.refactoring import (
+    AlmostSwappedViolation,
+    MisrefactoredAssignmentViolation,
     PointlessStarredViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -84,6 +90,10 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         *FunctionNodes,
         ast.ClassDef,
         ast.Module,
+    )
+
+    _blocked_self_assignment: ClassVar[AnyNodes] = (
+        ast.BinOp,
     )
 
     _nodes_with_orelse = (
@@ -149,8 +159,37 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         if isinstance(node, ast.Try):
             self._check_internals(node.finalbody)
 
+        self._check_swapped_variables(node.body)
         self._check_useless_node(node, node.body)
         self.generic_visit(node)
+
+    def _check_swapped_variables(
+        self,
+        body: Sequence[ast.stmt],
+    ) -> None:
+        for assigns in sequence_of_node((ast.Assign,), body):
+            self._almost_swapped(assigns)
+
+    def _almost_swapped(self, assigns: Sequence[ast.Assign]) -> None:
+        previous_var: Set[Optional[str]] = set()
+
+        for assign in assigns:
+            current_var = {
+                first(name_nodes.flat_variable_names([assign])),
+                first(name_nodes.get_variables_from_node(assign.value)),
+            }
+
+            if not all(map(bool, current_var)):
+                previous_var.clear()
+                continue
+
+            if current_var == previous_var:
+                self.add_violation(AlmostSwappedViolation(assign))
+
+            if len(previous_var & current_var) == 1:
+                current_var ^= previous_var
+
+            previous_var = current_var
 
     def _check_useless_node(
         self,
@@ -181,13 +220,26 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         if isinstance(node.value, self._have_effect):
             return
 
-        if is_first and is_doc_string(node):
-            if isinstance(get_parent(node), self._have_doc_strings):
+        if is_first and strings.is_doc_string(node):
+            if isinstance(nodes.get_parent(node), self._have_doc_strings):
                 return
 
         self.add_violation(StatementHasNoEffectViolation(node))
 
+    def _check_self_misrefactored_assignment(
+        self,
+        node: ast.AugAssign,
+    ) -> None:
+        node_value: ast.expr
+        if isinstance(node.value, ast.BinOp):
+            node_value = node.value.left
+
+        if isinstance(node.value, self._blocked_self_assignment):
+            if name_nodes.is_same_variable(node.target, node_value):
+                self.add_violation(MisrefactoredAssignmentViolation(node))
+
     def _check_internals(self, body: Sequence[ast.stmt]) -> None:
+
         after_closing_node = False
         for index, statement in enumerate(body):
             if after_closing_node:
@@ -198,6 +250,9 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
 
             if isinstance(statement, ast.Expr):
                 self._check_expression(statement, is_first=index == 0)
+
+            if isinstance(statement, ast.AugAssign):
+                self._check_self_misrefactored_assignment(statement)
 
 
 @final
@@ -231,7 +286,7 @@ class WrongParametersIndentationVisitor(BaseNodeVisitor):
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """Checks function parameters indentation."""
-        self._check_indentation(node, get_all_arguments(node))
+        self._check_indentation(node, functions.get_all_arguments(node))
         self.generic_visit(node)
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
@@ -373,3 +428,32 @@ class WrongNamedKeywordVisitor(BaseNodeVisitor):
                 if not str.isidentifier(key_node.s):
                     return True
         return False
+
+
+@final
+class AssignmentPatternsVisitor(BaseNodeVisitor):
+    """Responsible for checking assignment patterns."""
+
+    def visit_Assign(self, node: ast.Assign) -> None:
+        """Checks assignment patterns."""
+        self._check_augmented_assign_pattern(node)
+        self.generic_visit(node)
+
+    def _check_augmented_assign_pattern(
+        self,
+        node: ast.Assign,
+    ) -> None:
+        if not isinstance(node.value, ast.BinOp):
+            return
+
+        is_checkable = (
+            len(node.targets) == 1 and
+            isinstance(node.value.right, ast.Name) and
+            isinstance(node.value.left, ast.Name)
+        )
+
+        if not is_checkable:
+            return
+
+        if name_nodes.is_same_variable(node.targets[0], node.value.left):
+            self.add_violation(AugmentedAssignPatternViolation(node))
