@@ -22,6 +22,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use `+=` with list arguments
 - Forbids to use redundant subscripts (e.g., `[0:7]` or `[3:None]`)
 - Allows `super()` as a valid overused expression
+- Forbids to use `super()` with other methods and properties
 - `WPS350` enforces using augmented assign pattern
 - Forbids to use `Optional[Union[...]]` in annotations
 - Forbids unnecessary literals
