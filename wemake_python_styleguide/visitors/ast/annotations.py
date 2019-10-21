@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import ClassVar, FrozenSet, Optional
+from typing import ClassVar, FrozenSet, Union
 
 from typing_extensions import final
 
@@ -30,6 +30,11 @@ class _GenericAnnotationVisitor(BaseNodeVisitor):
         'typing.',
         'typing_extensions.',
     ))
+
+    def visit_Assign(self, node: ast.Assign) -> None:
+        """Checks assignment patterns."""
+        self._check_annotation(node)
+        self.generic_visit(node)
 
     @final
     def visit_AnnAssign(self, node: ast.AnnAssign) -> None:
@@ -75,7 +80,9 @@ class _GenericAnnotationVisitor(BaseNodeVisitor):
             full_annotation = full_annotation.replace(prefix, '')
         return full_annotation
 
-    def _check_annotation(self, annotation: Optional[ast.expr]) -> None:
+    def _check_annotation(
+        self, annotation: Union[ast.expr, ast.Assign, None],
+    ) -> None:
         """The only method that need to me implemented in child visitors."""
 
 
@@ -89,7 +96,9 @@ class SemanticAnnotationVisitor(_GenericAnnotationVisitor):
         'Annotated',
     ))
 
-    def _check_annotation(self, annotation: Optional[ast.expr]) -> None:
+    def _check_annotation(
+        self, annotation: Union[ast.expr, ast.Assign, None],
+    ) -> None:
         if not annotation:
             return
 
@@ -97,18 +106,24 @@ class SemanticAnnotationVisitor(_GenericAnnotationVisitor):
         self._check_literal_none(annotation)
         self._check_union_nested_in_optional(annotation)
 
-    def _check_nested_annotations(self, annotation: ast.expr) -> None:
+    def _check_nested_annotations(
+        self, annotation: Union[ast.expr, ast.Assign],
+    ) -> None:
         annotation_string = self._get_annotation(annotation)
         for flat_type in self._flat_types:
             if annotation_string.count(flat_type) > 1:
                 self.add_violation(NestedAnnotationsViolation(annotation))
 
-    def _check_literal_none(self, annotation: ast.expr) -> None:
+    def _check_literal_none(
+        self, annotation: Union[ast.expr, ast.Assign],
+    ) -> None:
         annotation_string = self._get_annotation(annotation)
         if 'Literal[None]' in annotation_string:
             self.add_violation(LiteralNoneViolation(annotation))
 
-    def _check_union_nested_in_optional(self, annotation: ast.expr) -> None:
+    def _check_union_nested_in_optional(
+        self, annotation: Union[ast.expr, ast.Assign],
+    ) -> None:
         annotation_string = self._get_annotation(annotation)
         if 'Optional[Union[' in annotation_string:
             self.add_violation(UnionNestedInOptionalViolation(annotation))

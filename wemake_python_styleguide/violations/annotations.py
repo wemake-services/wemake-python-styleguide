@@ -62,7 +62,7 @@ class LiteralNoneViolation(ASTViolation):
     """
 
     code = 700
-    error_template = 'Found useless `Literal[None]` typing annotation'
+    error_template = 'Found useless `Literal[None]` typing annotation'  # noqa: WPS700,E501
 
 
 @final
