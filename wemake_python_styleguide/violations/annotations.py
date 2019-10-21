@@ -54,6 +54,8 @@ class LiteralNoneViolation(ASTViolation):
             '''Empty function.'''
 
         # Wrong:
+        NONE_ALIAS = Literal[None]
+
         def func(empty: Literal[None]):
             '''Empty function.'''
 
@@ -87,6 +89,7 @@ class NestedAnnotationsViolation(ASTViolation):
         # Wrong:
         Literal[Literal[Literal[1, 2, 3], "foo"], 5, None]
         Union[Union[int, str], float]
+        NONE_ALIAS = Union[Union[int, str]
 
     .. versionadded:: 0.13.0
 
@@ -115,6 +118,7 @@ class UnionNestedInOptionalViolation(ASTViolation):
 
         # Wrong:
         Optional[Union[int, str]]
+        NONE_ALIAS = Optional[Union[int, str]]
 
     .. versionadded:: 0.13.0
 
