@@ -76,6 +76,7 @@ Summary
    AdditionAssignmentOnListViolation
    RedundantSubscriptViolation
    AugmentedAssignPatternViolation
+   UnnecessaryLiteralsViolation
 
 Consistency checks
 ------------------
@@ -131,6 +132,7 @@ Consistency checks
 .. autoclass:: AdditionAssignmentOnListViolation
 .. autoclass:: RedundantSubscriptViolation
 .. autoclass:: AugmentedAssignPatternViolation
+.. autoclass:: UnnecessaryLiteralsViolation
 
 """
 
@@ -1866,3 +1868,31 @@ class AugmentedAssignPatternViolation(ASTViolation):
 
     error_template = 'Found usable augmented assign pattern'
     code = 350
+
+
+@final
+class UnnecessaryLiteralsViolation(ASTViolation):
+    """
+    Forbids the use of unnecessary literals in your code.
+
+    Reasoning:
+        We discourage using primitive calls to get default type values.
+        There are better ways to get these values.
+
+    Solution:
+        Use direct default values of the given type
+
+    Example::
+
+        # Correct:
+        default = 0
+
+        # Wrong:
+        default = int()
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found unnecessary literals.'
+    code = 351

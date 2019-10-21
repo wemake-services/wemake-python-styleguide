@@ -51,6 +51,7 @@ PRESET: Final = (
     functions.FunctionDefinitionVisitor,
     functions.UselessLambdaDefinitionVisitor,
     functions.WrongFunctionCallContextVisitior,
+    functions.UnnecessaryLiteralsVisitor,
 
     exceptions.WrongTryExceptVisitor,
     exceptions.NestedTryBlocksVisitor,

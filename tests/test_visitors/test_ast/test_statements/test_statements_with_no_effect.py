@@ -3,8 +3,10 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
-    MisrefactoredAssignmentViolation,
     StatementHasNoEffectViolation,
+)
+from wemake_python_styleguide.violations.refactoring import (
+    MisrefactoredAssignmentViolation,
 )
 from wemake_python_styleguide.visitors.ast.statements import (
     StatementsWithBodiesVisitor,

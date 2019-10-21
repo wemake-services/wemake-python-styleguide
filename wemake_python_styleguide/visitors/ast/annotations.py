@@ -10,6 +10,7 @@ from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations.annotations import (
     LiteralNoneViolation,
     NestedAnnotationsViolation,
+    UnionNestedInOptionalViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
     MultilineFunctionAnnotationViolation,
@@ -94,6 +95,7 @@ class SemanticAnnotationVisitor(_GenericAnnotationVisitor):
 
         self._check_nested_annotations(annotation)
         self._check_literal_none(annotation)
+        self._check_union_nested_in_optional(annotation)
 
     def _check_nested_annotations(self, annotation: ast.expr) -> None:
         annotation_string = self._get_annotation(annotation)
@@ -105,6 +107,11 @@ class SemanticAnnotationVisitor(_GenericAnnotationVisitor):
         annotation_string = self._get_annotation(annotation)
         if 'Literal[None]' in annotation_string:
             self.add_violation(LiteralNoneViolation(annotation))
+
+    def _check_union_nested_in_optional(self, annotation: ast.expr) -> None:
+        annotation_string = self._get_annotation(annotation)
+        if 'Optional[Union[' in annotation_string:
+            self.add_violation(UnionNestedInOptionalViolation(annotation))
 
 
 @final

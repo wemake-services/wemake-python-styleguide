@@ -328,11 +328,9 @@ file_obj = open('filaname.py')  # noqa: WPS515
 print(type(file_obj) == int)  # noqa: WPS516
 
 print(*[], **{'@': 1})  # noqa: WPS517, WPS445
-print(lambda: 0)  # noqa: WPS446
-
-pi = 3.14 # noqa: WPS447
-
-xterm += xterm + 1  # noqa: WPS449
+pi = 3.14 # noqa: WPS446
+print(lambda: 0)  # noqa: WPS522
+xterm += xterm + 1  # noqa: WPS524
 
 for range_len in range(len(file_obj)):  # noqa: WPS518
     print(range_len)
@@ -526,9 +524,7 @@ if numbers == CONSTANT != [2]:  # noqa: WPS409
     print(1 + (1 if number else 2))  # noqa: WPS509
 
 print(numbers in [])  # noqa: WPS510
-
 print(isinstance(number, int) or isinstance(number, (float, str)))  # noqa: 474
-
 print(isinstance(numbers, (int,)))  # noqa: WPS512
 
 if numbers:
@@ -556,40 +552,30 @@ class CheckStopIteration(object):
         raise StopIteration()  # noqa: WPS438
 
 bad_unicode = b'\u1'  # noqa: WPS439
-
 CheckStopIteration = 1  # noqa: WPS440
-
 print(literal)  # noqa: WPS441
-
 unhashable = {[]}  # noqa: WPS443
 assert []  # noqa: WPS444
 unhashable = [] * 2  # noqa: WPS435
 
-def literal_none_func(arg: Literal[None]):  # noqa: WPS701
-    """Literal[None]"""
-
-
-def literal_none_return_func() -> Literal[None]:  # noqa: WPS701
-    """Literal[None]"""
-
-
-def nested_annotation_func(arg: Literal[Literal[1, 2], 3]): # noqa: WPS702
-    """Literal[Literal[1, 2], 3]"""
-
-
-def nested_annotation_return_func() -> Union[str, Union[int, float]]: # noqa: WPS702
-    """Union[str, Union[int, float]]"""
-
+type1: Literal[None]  # noqa: WPS700
+type2: Union[str, Union[int, float]]  # noqa: WPS701
+arg: Optional[Union[str, int]]  # noqa: WPS702
 
 from json import loads  # noqa: WPS347
-from some_module import a  # noqa: WPS347
-from text import from_file  # noqa: WPS347
 
 some_list += [1, 2, 3, 4]  # noqa: WPS348
 
 swap_a = swap_b
-swap_b = swap_a  # noqa: WPS448
+swap_b = swap_a  # noqa: WPS523
 
 print(constant[0:7])  # noqa: WPS349
-
 var_a = var_a + var_b  # noqa: WPS350
+
+class ChildClass(ParentClass):
+    def some_method(self):
+        super().some_other_method() # noqa: WPS613
+
+LOWERCASE_ALPH = "abcdefghijklmnopqrstuvwxyz" # noqa: WPS447
+
+int()  # noqa: WPS351

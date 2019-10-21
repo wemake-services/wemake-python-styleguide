@@ -3,7 +3,7 @@
 import inspect
 import os
 from collections import namedtuple
-from operator import itemgetter
+from operator import attrgetter, itemgetter
 
 import pytest
 
@@ -55,7 +55,11 @@ def _load_all_violation_classes():
     for module in modules:
         classes_names_list = inspect.getmembers(module, _is_violation_class)
         only_classes = map(itemgetter(1), classes_names_list)
-        classes.update({module: list(only_classes)})
+        classes.update({
+            module: list(
+                sorted(only_classes, key=attrgetter('code')),
+            ),
+        })
     return classes
 
 

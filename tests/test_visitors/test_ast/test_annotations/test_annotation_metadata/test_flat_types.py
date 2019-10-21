@@ -7,6 +7,7 @@ from wemake_python_styleguide.violations.annotations import (
 )
 from wemake_python_styleguide.visitors.ast.annotations import (
     SemanticAnnotationVisitor,
+    UnionNestedInOptionalViolation,
 )
 
 
@@ -95,6 +96,53 @@ def test_correct_nested_annotations(
     mode,
 ):
     """Ensures that using correct annotations is ok."""
+    tree = parse_ast_tree(mode(annotation_template.format(code)))
+
+    visitor = SemanticAnnotationVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('code', [
+    'Optional[Union[int, str]]',
+    'Optional[Optional[Optional[Union[int, str]]]]',
+    'typing.Optional[typing.Union[int, float]]',
+    'typing.Optional[typing.Optional[typing.Optional[typing.Union[int, str]]]]',
+])
+def test_wrong_union_nested_in_optional(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    annotation_template,
+    default_options,
+    mode,
+):
+    """Ensures that `Union` nested in `Optional` annotations are forbidden."""
+    tree = parse_ast_tree(mode(annotation_template.format(code)))
+
+    visitor = SemanticAnnotationVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [UnionNestedInOptionalViolation])
+
+
+@pytest.mark.parametrize('code', [
+    'Optional[str]',
+    'typing.Optional[int]',
+    'Union[int, str, None]',
+    'typing.Union[int, float, None]',
+    'Optional[Any]',
+])
+def test_correct_optional_without_nested_union(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    annotation_template,
+    default_options,
+    mode,
+):
+    """Ensures that `Optional` without nested `Union` is ok."""
     tree = parse_ast_tree(mode(annotation_template.format(code)))
 
     visitor = SemanticAnnotationVisitor(default_options, tree=tree)

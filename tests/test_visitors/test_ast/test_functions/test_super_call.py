@@ -2,10 +2,21 @@
 
 import pytest
 
-from wemake_python_styleguide.violations.oop import WrongSuperCallViolation
+from wemake_python_styleguide.violations.oop import (
+    WrongSuperCallAccessViolation,
+    WrongSuperCallViolation,
+)
 from wemake_python_styleguide.visitors.ast.functions import (
     WrongFunctionCallVisitor,
 )
+
+# Template for super call with method and property tests
+
+super_call_with_access = """
+class Example(Parent):
+    def some_thing(self):
+        super({0}).{1}
+"""
 
 # Correct:
 
@@ -117,5 +128,66 @@ def test_double_wrong_super_call(
 
     assert_errors(visitor, [
         WrongSuperCallViolation,
+        WrongSuperCallViolation,
+    ])
+
+
+@pytest.mark.parametrize('code', [
+    super_call_with_access,
+])
+@pytest.mark.parametrize(('arg', 'prop'), [
+    ('', 'other()'),
+    ('', 'other'),
+    ('', 'other.nested'),
+    ('', 'other.method()'),
+    ('', 'other["key"]'),
+])
+def test_wrong_access_super_call_with_no_args(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    arg,
+    prop,
+    default_options,
+    mode,
+):
+    """Testing that calling `super` with incorrect access is restricted."""
+    tree = parse_ast_tree(mode(code.format(arg, prop)))
+
+    visitor = WrongFunctionCallVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [
+        WrongSuperCallAccessViolation,
+    ])
+
+
+@pytest.mark.parametrize('code', [
+    super_call_with_access,
+])
+@pytest.mark.parametrize(('arg', 'prop'), [
+    ('Class, self', 'other()'),
+    ('Class, self', 'other'),
+    ('Class, self', 'other.nested'),
+    ('Class, self', 'other.method()'),
+    ('Class, self', 'other["key"]'),
+])
+def test_wrong_access_super_call_with_args(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    arg,
+    prop,
+    default_options,
+    mode,
+):
+    """Testing that calling `super` with incorrect access is restricted."""
+    tree = parse_ast_tree(mode(code.format(arg, prop)))
+
+    visitor = WrongFunctionCallVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [
+        WrongSuperCallAccessViolation,
         WrongSuperCallViolation,
     ])

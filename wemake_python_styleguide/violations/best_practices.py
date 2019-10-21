@@ -65,10 +65,8 @@ Summary
    UnhashableTypeInHashViolation
    WrongKeywordConditionViolation
    WrongNamedKeywordViolation
-   ImplicitPrimitiveViolation
    ApproximateConstantViolation
-   AlmostSwappedViolation
-   MisrefactoredAssignmentViolation
+   StringConstantRedefinedViolation
 
 Best practices
 --------------
@@ -119,10 +117,8 @@ Best practices
 .. autoclass:: UnhashableTypeInHashViolation
 .. autoclass:: WrongKeywordConditionViolation
 .. autoclass:: WrongNamedKeywordViolation
-.. autoclass:: ImplicitPrimitiveViolation
 .. autoclass:: ApproximateConstantViolation
-.. autoclass:: AlmostSwappedViolation
-.. autoclass:: MisrefactoredAssignmentViolation
+.. autoclass:: StringConstantRedefinedViolation
 
 """
 
@@ -1789,36 +1785,6 @@ class WrongNamedKeywordViolation(ASTViolation):
 
 
 @final
-class ImplicitPrimitiveViolation(ASTViolation):
-    """
-    Forbids to use implicit primitives in a form of ``lambda`` functions.
-
-    Reasoning:
-        When you use ``lambda`` that returns a primitive value
-        and takes no arguments, it means that
-        you should use a primitive type instead.
-
-    Solution:
-        Replace ``lambda`` with ``int``, ``float``,
-        ``list``, or any other primitive.
-
-    Example::
-
-        # Correct:
-        defaultdict(int)
-
-        # Wrong:
-        defaultdict(lambda: 0)
-
-    .. versionadded:: 0.13.0
-
-    """
-
-    code = 446
-    error_template = 'Found implicit primitive in a form of `lambda`'
-
-
-@final
 class ApproximateConstantViolation(ASTViolation):
     """
     Forbids to use approximate constants.
@@ -1853,72 +1819,39 @@ class ApproximateConstantViolation(ASTViolation):
 
     """
 
-    code = 447
+    code = 446
     error_template = 'Found approximate constant: {0}'
 
 
 @final
-class AlmostSwappedViolation(ASTViolation):
+class StringConstantRedefinedViolation(ASTViolation):
     """
-    Forbids unpythonic swap variables.
-
-    We check for ``a = b; b = a`` sequences.
+    Forbid to use alphabet as a string.
 
     Reasoning:
-        This looks like a failed attempt to swap.
+        Some constants are already defined.
+        No need to write them again, use existing values.
+        We just compare strings and raise this violation
+        when they have exactly the same chars.
 
     Solution:
-        Use standard way to swap two variables.
+        Use pre-defined constants.
 
     Example::
 
         # Correct:
-        a, b = b, a
+        import string
+        UPPERCASE_ALPH = string.ascii_uppercase
+        LOWERCASE_ALPH = string.ascii_lowercase
 
         # Wrong:
-        a = b
-        b = a
-
-        temp = a
-        a = b
-        b = temp
+        GUESS_MY_NAME = "abcde...WXYZ"
+        UPPERCASE_ALPH = "ABCD...WXYZ"
+        LOWERCASE_ALPH = "abcd...wxyz"
 
     .. versionadded:: 0.13.0
 
     """
 
-    error_template = 'Found incorrectly swapped variables'
-    code = 448
-
-
-@final
-class MisrefactoredAssignmentViolation(ASTViolation):
-    """
-    Forbids to use misrefactored self assignment.
-
-    Reasoning:
-        Self assignment does not need to have the same operand
-        on the left hand side and on the right hand side.
-
-    Solution:
-        Refactor you code to use multiple self assignments or fix your code.
-
-    Example::
-
-        # Correct:
-        test += 1
-        test *= 2
-
-        # Wrong:
-        test += test + 1
-
-    See
-    :py:data:`~wemake_python_styleguide.constants.MATH_APPROXIMATE_CONSTANTS`
-    for full list of math constants that we check for.
-
-    .. versionadded:: 0.13.0
-
-    """
-
-    error_template = 'Found self assignment  with refactored assignment'
-    code = 449
+    error_template = 'Found alphabet as strings: {0}'
+    code = 447
