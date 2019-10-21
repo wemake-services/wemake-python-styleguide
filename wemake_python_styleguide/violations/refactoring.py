@@ -982,3 +982,34 @@ class MisrefactoredAssignmentViolation(ASTViolation):
 
     error_template = 'Found self assignment  with refactored assignment'
     code = 524
+
+
+@final
+class CompareInWithSingleItemContainerViolation(ASTViolation):
+    """
+    Forbids comparison where ``in`` is compared with single item collection.
+
+    Reasoning:
+        Self assignment does not need to have the same operand
+        on the left hand side and on the right hand side.
+
+    Solution:
+        Refactor you code to use multiple self assignments or fix your code.
+
+    Example::
+
+        # Correct:
+        a == 's'
+
+        # Wrong:
+        a in {'s'}
+        a in ['s']
+        a in ('s',)
+        a in 's'
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found wrong "in" compare with single item container'
+    code = 525

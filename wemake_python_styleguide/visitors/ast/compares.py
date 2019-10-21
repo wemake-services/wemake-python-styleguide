@@ -29,6 +29,7 @@ from wemake_python_styleguide.violations.consistency import (
     UselessCompareViolation,
 )
 from wemake_python_styleguide.violations.refactoring import (
+    CompareInWithSingleItemContainerViolation,
     FalsyConstantCompareViolation,
     NestedTernaryViolation,
     NotOperatorWithCompareViolation,
@@ -77,6 +78,7 @@ class CompareSanityVisitor(BaseNodeVisitor):
             HeterogenousCompareViolation
             ReversedComplexCompareViolation
             WrongInCompareTypeViolation
+            CompareInWithSingleItemContainerViolation
 
         """
         self._check_literal_compare(node)
@@ -106,6 +108,8 @@ class CompareSanityVisitor(BaseNodeVisitor):
 
     def _check_in_compare(self, node: ast.Compare) -> None:
         in_nodes = (ast.In, ast.NotIn)
+        in_containers = (ast.List, ast.Tuple, ast.Set)
+
         count = sum(1 for op in node.ops if isinstance(op, in_nodes))
         if count > 1:
             self.add_violation(MultipleInCompareViolation(node))
@@ -113,9 +117,18 @@ class CompareSanityVisitor(BaseNodeVisitor):
         for op, comp in zip(node.ops, node.comparators):
             if not isinstance(op, in_nodes):
                 continue
+
+            if isinstance(comp, in_containers) and len(comp.elts) == 1:
+                self.add_violation(
+                    CompareInWithSingleItemContainerViolation(comp),
+                )
+            elif isinstance(comp, ast.Str) and len(comp.s) == 1:
+                self.add_violation(
+                    CompareInWithSingleItemContainerViolation(comp),
+                )
+
             if not isinstance(comp, self._wrong_in_comparators):
                 continue
-
             self.add_violation(WrongInCompareTypeViolation(comp))
 
     def _check_unpythonic_compare(self, node: ast.Compare) -> None:
