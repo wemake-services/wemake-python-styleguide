@@ -21,7 +21,7 @@ partial_number = .05  # noqa: WPS304
 formatted_string = f'Hi, {full_name}'  # noqa: WPS305
 
 
-def __getaddr__():  # noqa: WPS413
+def __getattr__():  # noqa: WPS413
     # See:
     # https://github.com/wemake-services/wemake-python-styleguide/issues/461
     anti_z444 = 1

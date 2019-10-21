@@ -281,7 +281,7 @@ MAGIC_MODULE_NAMES_WHITELIST: Final = frozenset((
 
 #: List of bad magic module functions.
 MAGIC_MODULE_NAMES_BLACKLIST: Final = frozenset((
-    '__getaddr__',
+    '__getattr__',
     '__dir__',
 ))
 
