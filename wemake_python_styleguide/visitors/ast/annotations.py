@@ -118,7 +118,11 @@ class SemanticAnnotationVisitor(_GenericAnnotationVisitor):
         self, annotation: Union[ast.expr, ast.Assign],
     ) -> None:
         annotation_string = self._get_annotation(annotation)
-        if 'Literal[None]' in annotation_string:
+        assign_string = (
+            isinstance(annotation, ast.Assign) and
+            isinstance(annotation.value, ast.Str)
+        )
+        if not assign_string and 'Literal[None]' in annotation_string:
             self.add_violation(LiteralNoneViolation(annotation))
 
     def _check_union_nested_in_optional(
