@@ -236,7 +236,7 @@ binary_number = 0B1001  # noqa: WPS310
 number_with_scientific_notation = 1.5E-10  # noqa: WPS310
 number_with_useless_plus = +5  # noqa: WPS330
 
-if '6' in nodes in '6':  # noqa: WPS311
+if '6' in nodes in '6':  # noqa: WPS311, WPS525
     anti_z444 = 1
 
 assert hex_number == hex_number  # noqa: WPS312
@@ -579,3 +579,6 @@ class ChildClass(ParentClass):
 LOWERCASE_ALPH = "abcdefghijklmnopqrstuvwxyz" # noqa: WPS447
 
 int()  # noqa: WPS351
+
+if a in {1}:  # noqa: WPS525
+    print('bad!')
