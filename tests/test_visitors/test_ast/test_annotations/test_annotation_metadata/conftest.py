@@ -10,14 +10,16 @@ def function(arg: {0}):
 function_arg_alias_template = """
 Type_Alias = {0}
 
-def function(arg: type_alias):
+def function(arg: Type_Alias):
     ...
 """
 
 function_arg_multiple_alias_template = """
-Type_Alias, Another_Alias = {0}, str
+a, Another_Alias = {0}, str
+b = c = {0}
+d, e = {0}, {0}
 
-def function(arg: type_alias):
+def function(arg: Union[a, b, c, d, e]):
     ...
 """
 
