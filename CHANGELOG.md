@@ -26,6 +26,7 @@ We used to have incremental versioning before `0.1.0`.
 - `WPS350` enforces using augmented assign pattern
 - Forbids to use `Optional[Union[...]]` in annotations
 - Forbids unnecessary literals
+- `WPS525` forbids comparisons where `in` is compared with single item container
 
 ### Bugfixes
 
@@ -35,6 +36,7 @@ We used to have incremental versioning before `0.1.0`.
 - Fixes that `not not True` was not detected as `WPS330`
 - Fixes addition of `MisrefactoredAssignmentViolation` check
 - Fixes `WrongMagicCommentViolation` not catching certain wrong comments
+- Fixes `BadMagicModuleFunctionViolation` false positives on class-level methods
 
 ### Misc
 

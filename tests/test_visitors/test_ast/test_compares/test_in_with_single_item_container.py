@@ -3,10 +3,12 @@
 import pytest
 
 from wemake_python_styleguide.violations.refactoring import (
-    CompareInWithSingleItemContainerViolation,
+    InCompareWithSingleItemContainerViolation,
     WrongInCompareTypeViolation,
 )
-from wemake_python_styleguide.visitors.ast.compares import CompareSanityVisitor
+from wemake_python_styleguide.visitors.ast.compares import (
+    InCompareSanityVisitor,
+)
 
 
 @pytest.mark.parametrize('code', [
@@ -25,12 +27,12 @@ def test_single_item_container(
     """Compares forbid ``in`` with single item containers."""
     tree = parse_ast_tree(code)
 
-    visitor = CompareSanityVisitor(default_options, tree=tree)
+    visitor = InCompareSanityVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(
         visitor,
-        [CompareInWithSingleItemContainerViolation],
+        [InCompareWithSingleItemContainerViolation],
         ignored_types=(WrongInCompareTypeViolation,),
     )
 
@@ -51,7 +53,7 @@ def test_multi_item_contrainer(
     """Compares allow ``in`` with multi items containers."""
     tree = parse_ast_tree(code)
 
-    visitor = CompareSanityVisitor(default_options, tree=tree)
+    visitor = InCompareSanityVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(

@@ -2,13 +2,15 @@
 
 import pytest
 
-from wemake_python_styleguide.violations.best_practices import (
-    HeterogenousCompareViolation,
-)
 from wemake_python_styleguide.violations.consistency import (
     MultipleInCompareViolation,
 )
-from wemake_python_styleguide.visitors.ast.compares import CompareSanityVisitor
+from wemake_python_styleguide.violations.refactoring import (
+    InCompareWithSingleItemContainerViolation,
+)
+from wemake_python_styleguide.visitors.ast.compares import (
+    InCompareSanityVisitor,
+)
 
 if_with_multiple_in_compares = 'if {0} in {1} in {2}: ...'
 if_without_multiple_in_compares = 'if {0} in {1}: ...'
@@ -41,10 +43,14 @@ def test_compare_with_in(
     """Compares work well for single ``in``."""
     tree = parse_ast_tree(in_not_in(code.format(*comparators)))
 
-    visitor = CompareSanityVisitor(default_options, tree=tree)
+    visitor = InCompareSanityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [])
+    assert_errors(
+        visitor,
+        [],
+        ignored_types=(InCompareWithSingleItemContainerViolation,),
+    )
 
 
 @pytest.mark.parametrize('code', [
@@ -68,10 +74,14 @@ def test_compare_with_multiple_in(
     """Compares raise for multiple ``in`` cases."""
     tree = parse_ast_tree(in_not_in(code.format(*comparators)))
 
-    visitor = CompareSanityVisitor(default_options, tree=tree)
+    visitor = InCompareSanityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [MultipleInCompareViolation])
+    assert_errors(
+        visitor,
+        [MultipleInCompareViolation],
+        ignored_types=(InCompareWithSingleItemContainerViolation,),
+    )
 
 
 def test_compare_with_mixed_in(
@@ -82,10 +92,7 @@ def test_compare_with_mixed_in(
     """Compares raise for multiple ``in`` and ``not in`` cases."""
     tree = parse_ast_tree('x in a not in b')
 
-    visitor = CompareSanityVisitor(default_options, tree=tree)
+    visitor = InCompareSanityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [
-        MultipleInCompareViolation,
-        HeterogenousCompareViolation,
-    ])
+    assert_errors(visitor, [MultipleInCompareViolation])

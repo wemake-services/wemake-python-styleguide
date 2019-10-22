@@ -40,6 +40,7 @@ Summary
    ImplicitPrimitiveViolation
    AlmostSwappedViolation
    MisrefactoredAssignmentViolation
+   InCompareWithSingleItemContainerViolation
 
 Refactoring opportunities
 -------------------------
@@ -69,6 +70,7 @@ Refactoring opportunities
 .. autoclass:: ImplicitPrimitiveViolation
 .. autoclass:: AlmostSwappedViolation
 .. autoclass:: MisrefactoredAssignmentViolation
+.. autoclass:: InCompareWithSingleItemContainerViolation
 
 """
 
@@ -985,16 +987,16 @@ class MisrefactoredAssignmentViolation(ASTViolation):
 
 
 @final
-class CompareInWithSingleItemContainerViolation(ASTViolation):
+class InCompareWithSingleItemContainerViolation(ASTViolation):
     """
-    Forbids comparison where ``in`` is compared with single item collection.
+    Forbids comparisons where ``in`` is compared with single item container.
 
     Reasoning:
-        Self assignment does not need to have the same operand
-        on the left hand side and on the right hand side.
+        ``in`` comparison with a container which contains only one item looks
+        like some overhead and unneeded complexity.
 
     Solution:
-        Refactor you code to use multiple self assignments or fix your code.
+        Refactor your code to use ``==`` instead ``in``.
 
     Example::
 

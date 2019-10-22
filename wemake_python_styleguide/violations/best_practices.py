@@ -582,7 +582,7 @@ class InitModuleHasLogicViolation(SimpleViolation):
 @final
 class BadMagicModuleFunctionViolation(ASTViolation):
     """
-    Forbids to use ``__getaddr__`` and ``__dir__`` module magic methods.
+    Forbids to use ``__getattr__`` and ``__dir__`` module magic methods.
 
     Reasoning:
         It does not bring any features,
