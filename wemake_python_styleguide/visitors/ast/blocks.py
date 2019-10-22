@@ -25,6 +25,7 @@ from wemake_python_styleguide.logic.scopes import (
     OuterScope,
     extract_names,
     is_function_overload,
+    is_property_setter,
     is_same_value_reuse,
 )
 from wemake_python_styleguide.logic.walk import is_contained_by
@@ -90,10 +91,12 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
 
     _naming_predicates: Tuple[_NamePredicate, ...] = (
         is_function_overload,
+        is_property_setter,
     )
 
     _scope_predicates: Tuple[_ScopePredicate, ...] = (
         is_same_value_reuse,
+        is_property_setter,
     )
 
     # Blocks:
