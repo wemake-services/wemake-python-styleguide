@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations.consistency import (
     UselessExceptCaseViolation,
 )
 from wemake_python_styleguide.visitors.ast.exceptions import (
-    WrongTryExceptVisitor,
+    WrongExceptHandlerVisitor,
 )
 
 right_empty_bare_except = """
@@ -84,7 +84,7 @@ def test_useless_except_case(
     """Violations are raised when using wrong except case."""
     tree = parse_ast_tree(code)
 
-    visitor = WrongTryExceptVisitor(default_options, tree=tree)
+    visitor = WrongExceptHandlerVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [UselessExceptCaseViolation])
@@ -106,7 +106,7 @@ def test_correct_except_case(
     """Violations are not raised when using correct except case."""
     tree = parse_ast_tree(code)
 
-    visitor = WrongTryExceptVisitor(default_options, tree=tree)
+    visitor = WrongExceptHandlerVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])

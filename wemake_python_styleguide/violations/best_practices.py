@@ -67,6 +67,7 @@ Summary
    WrongNamedKeywordViolation
    ApproximateConstantViolation
    StringConstantRedefinedViolation
+   IncorrectExceptOrderViolation
 
 Best practices
 --------------
@@ -119,6 +120,7 @@ Best practices
 .. autoclass:: WrongNamedKeywordViolation
 .. autoclass:: ApproximateConstantViolation
 .. autoclass:: StringConstantRedefinedViolation
+.. autoclass:: IncorrectExceptOrderViolation
 
 """
 
@@ -1855,3 +1857,41 @@ class StringConstantRedefinedViolation(ASTViolation):
 
     error_template = 'Found alphabet as strings: {0}'
     code = 447
+
+
+@final
+class IncorrectExceptOrderViolation(ASTViolation):
+    """
+    Forbids the use incorrect order of ``except``.
+
+    Reasoning:
+        Using ``except Exception`` in incorrect order is error-prone.
+        It will make other ``except`` unreachable.
+
+    Solution:
+        Use ``except Exception`` after other ``except`` blocks.
+
+    Example::
+
+        # Correct:
+        try:
+            ...
+        except ValueError:
+            ...
+        except Exception:
+            ...
+
+        # Wrong:
+        try:
+            ...
+        except Exception:
+            ...
+        except ValueError:
+            ...
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found incorrect exception order'
+    code = 448

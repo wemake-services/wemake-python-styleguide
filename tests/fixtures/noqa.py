@@ -579,3 +579,10 @@ class ChildClass(ParentClass):
 LOWERCASE_ALPH = "abcdefghijklmnopqrstuvwxyz" # noqa: WPS447
 
 int()  # noqa: WPS351
+
+try: # noqa: WPS448
+    anti_z444 = 1
+except Exception:
+    anti_z444 = 1
+except ValueError:
+    anti_z444 = 1
