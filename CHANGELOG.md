@@ -27,6 +27,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use `Optional[Union[...]]` in annotations
 - Forbids unnecessary literals
 - `WPS525` forbids comparisons where `in` is compared with single item container
+- Fixes `BlockVariableVisitor` false positives on a properties
 
 ### Bugfixes
 

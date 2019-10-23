@@ -1005,9 +1005,6 @@ class InCompareWithSingleItemContainerViolation(ASTViolation):
 
         # Wrong:
         a in {'s'}
-        a in ['s']
-        a in ('s',)
-        a in 's'
 
     .. versionadded:: 0.13.0
 

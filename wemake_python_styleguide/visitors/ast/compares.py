@@ -397,7 +397,7 @@ class UnaryCompareVisitor(BaseNodeVisitor):
 class InCompareSanityVisitor(BaseNodeVisitor):
     """Restricts the incorrect ``in`` compares."""
 
-    in_nodes: ClassVar[AnyNodes] = (
+    _in_nodes: ClassVar[AnyNodes] = (
         ast.In,
         ast.NotIn,
     )
@@ -426,24 +426,28 @@ class InCompareSanityVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_multiply_compares(self, node: ast.Compare) -> None:
-        count = sum(1 for op in node.ops if isinstance(op, self.in_nodes))
+        count = sum(1 for op in node.ops if isinstance(op, self._in_nodes))
         if count > 1:
             self.add_violation(MultipleInCompareViolation(node))
 
     def _check_comparators(self, node: ast.Compare) -> None:
         for op, comp in zip(node.ops, node.comparators):
-            if not isinstance(op, self.in_nodes):
+            if not isinstance(op, self._in_nodes):
                 continue
 
             self._check_single_item_container(comp)
             self._check_wrong_comparators(comp)
 
     def _check_single_item_container(self, node: ast.AST) -> None:
-        in_containers = (ast.List, ast.Tuple, ast.Set)
+        is_lists_violated = (
+            isinstance(node, (ast.List, ast.Tuple, ast.Set)) and
+            len(node.elts) == 1
+        )
 
-        if isinstance(node, in_containers) and len(node.elts) == 1:
-            self.add_violation(InCompareWithSingleItemContainerViolation(node))
-        elif isinstance(node, ast.Str) and len(node.s) == 1:
+        is_str_violated = isinstance(node, ast.Str) and len(node.s) == 1
+        is_dict_violated = isinstance(node, ast.Dict) and len(node.keys) == 1
+
+        if is_lists_violated or is_str_violated or is_dict_violated:
             self.add_violation(InCompareWithSingleItemContainerViolation(node))
 
     def _check_wrong_comparators(self, node: ast.AST) -> None:

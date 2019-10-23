@@ -3,6 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.refactoring import (
+    InCompareWithSingleItemContainerViolation,
     WrongInCompareTypeViolation,
 )
 from wemake_python_styleguide.visitors.ast.compares import (
@@ -41,7 +42,11 @@ def test_compare_with_wrong_type(
     visitor = InCompareSanityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [WrongInCompareTypeViolation])
+    assert_errors(
+        visitor,
+        [WrongInCompareTypeViolation],
+        ignored_types=(InCompareWithSingleItemContainerViolation,),
+    )
 
 
 @pytest.mark.parametrize('code', [
