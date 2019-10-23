@@ -40,6 +40,7 @@ Summary
    ImplicitPrimitiveViolation
    AlmostSwappedViolation
    MisrefactoredAssignmentViolation
+   InCompareWithSingleItemContainerViolation
 
 Refactoring opportunities
 -------------------------
@@ -69,6 +70,7 @@ Refactoring opportunities
 .. autoclass:: ImplicitPrimitiveViolation
 .. autoclass:: AlmostSwappedViolation
 .. autoclass:: MisrefactoredAssignmentViolation
+.. autoclass:: InCompareWithSingleItemContainerViolation
 
 """
 
@@ -982,3 +984,31 @@ class MisrefactoredAssignmentViolation(ASTViolation):
 
     error_template = 'Found self assignment  with refactored assignment'
     code = 524
+
+
+@final
+class InCompareWithSingleItemContainerViolation(ASTViolation):
+    """
+    Forbids comparisons where ``in`` is compared with single item container.
+
+    Reasoning:
+        ``in`` comparison with a container which contains only one item looks
+        like overhead and unneeded complexity.
+
+    Solution:
+        Refactor your code to use ``==`` instead ``in``.
+
+    Example::
+
+        # Correct:
+        a == 's'
+
+        # Wrong:
+        a in {'s'}
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found wrong "in" compare with single item container'
+    code = 525
