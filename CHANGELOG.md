@@ -27,6 +27,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use `Optional[Union[...]]` in annotations
 - Forbids unnecessary literals
 - Fixes `BlockVariableVisitor` false positives on a properties
+- Forbids wrong annotations in assignment
 
 ### Bugfixes
 

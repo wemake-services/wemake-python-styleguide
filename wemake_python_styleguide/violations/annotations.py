@@ -54,6 +54,8 @@ class LiteralNoneViolation(ASTViolation):
             '''Empty function.'''
 
         # Wrong:
+        NONE_ALIAS = Literal[None]
+
         def func(empty: Literal[None]):
             '''Empty function.'''
 
