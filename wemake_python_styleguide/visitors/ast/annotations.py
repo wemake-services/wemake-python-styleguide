@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import ast
+import re
 from typing import ClassVar, FrozenSet, Union
+from typing.re import Pattern
 
 from typing_extensions import final
 
@@ -90,10 +92,12 @@ class _GenericAnnotationVisitor(BaseNodeVisitor):
 class SemanticAnnotationVisitor(_GenericAnnotationVisitor):
     """Ensures that nested annotations are used correctly."""
 
-    _flat_types: ClassVar[FrozenSet[str]] = frozenset((
-        'Literal',
-        'Union',
-        'Annotated',
+    # matches nested annotation like Literal[Literal[]],
+    # but not neighbors like Literal[], Literal[]
+    _flat_types: ClassVar[FrozenSet[Pattern]] = frozenset((
+        re.compile(r'^.*Literal\[[^\]]*Literal'),
+        re.compile(r'^.*Union\[[^\]]*Union'),
+        re.compile(r'^.*Annotated\[[^\]]*Annotated'),
     ))
 
     def _check_annotation(
@@ -111,7 +115,7 @@ class SemanticAnnotationVisitor(_GenericAnnotationVisitor):
     ) -> None:
         annotation_string = self._get_annotation(annotation)
         for flat_type in self._flat_types:
-            if annotation_string.count(flat_type) > 1:
+            if flat_type.search(annotation_string):
                 self.add_violation(NestedAnnotationsViolation(annotation))
 
     def _check_literal_none(

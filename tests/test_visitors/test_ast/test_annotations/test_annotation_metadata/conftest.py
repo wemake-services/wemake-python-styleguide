@@ -7,22 +7,6 @@ def function(arg: {0}):
     ...
 """
 
-function_arg_alias_template = """
-Type_Alias = {0}
-
-def function(arg: Type_Alias):
-    ...
-"""
-
-function_arg_multiple_alias_template = """
-a, Another_Alias = {0}, str
-b = c = {0}
-d, e = {0}, {0}
-
-def function(arg: Union[a, b, c, d, e]):
-    ...
-"""
-
 function_return_template = """
 def function(arg) -> {0}:
     ...
@@ -37,13 +21,27 @@ variable_template = """
 variable: {0} = some()
 """
 
+annotation_alias_template1 = """
+a = {0}
+"""
+
+annotation_alias_template2 = """
+b = c = {0}
+"""
+
+annotation_alias_template3 = """
+d, e = {0}, {0}
+"""
+
 
 @pytest.fixture(params=[
     function_arg_template,
-    function_arg_alias_template,
     function_return_template,
     class_field_template,
     variable_template,
+    annotation_alias_template1,
+    annotation_alias_template2,
+    annotation_alias_template3,
 ])
 def annotation_template(request):
     """Returns all possible annotation places."""
