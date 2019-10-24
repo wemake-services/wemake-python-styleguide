@@ -580,5 +580,10 @@ LOWERCASE_ALPH = "abcdefghijklmnopqrstuvwxyz" # noqa: WPS447
 
 int()  # noqa: WPS351
 
+for wrong_loop in call(  # noqa: WPS352
+    1, 2, 3,
+):
+    print('bad loop')
+
 if a in {1}:  # noqa: WPS525
     print('bad!')

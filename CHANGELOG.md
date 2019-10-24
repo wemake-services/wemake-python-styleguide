@@ -29,6 +29,7 @@ We used to have incremental versioning before `0.1.0`.
 - `WPS525` forbids comparisons where `in` is compared with single item container
 - Fixes `BlockVariableVisitor` false positives on a properties
 - Forbids wrong annotations in assignment
+- Forbids using multiline `for` and `while` statements
 
 ### Bugfixes
 

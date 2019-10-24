@@ -77,6 +77,7 @@ Summary
    RedundantSubscriptViolation
    AugmentedAssignPatternViolation
    UnnecessaryLiteralsViolation
+   MultilineLoopViolation
 
 Consistency checks
 ------------------
@@ -133,6 +134,7 @@ Consistency checks
 .. autoclass:: RedundantSubscriptViolation
 .. autoclass:: AugmentedAssignPatternViolation
 .. autoclass:: UnnecessaryLiteralsViolation
+.. autoclass:: MultilineLoopViolation
 
 """
 
@@ -1904,3 +1906,37 @@ class UnnecessaryLiteralsViolation(ASTViolation):
 
     error_template = 'Found unnecessary literals.'
     code = 351
+
+
+@final
+class MultilineLoopViolation(ASTViolation):
+    """
+    Forbids multiline loops.
+
+    Reasoning:
+        It decreased the readability of the code.
+
+    Solution:
+        Use single line loops and create new variables
+        in case you need to fit too many logic inside the loop definition.
+
+    Example::
+
+        # Correct
+
+        for num in some_function(arg1, arg2):
+            ...
+
+        # Wrong
+        for num in range(
+            arg1,
+            arg2,
+        ):
+            ...
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Forbids multiline loops'
+    code = 352
