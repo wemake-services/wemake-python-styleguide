@@ -193,7 +193,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         for sub_node in ast.walk(node_to_check):
             sub_lineno = getattr(sub_node, 'lineno', None)
             if sub_lineno is not None and sub_lineno > start_lineno:
-                self.add_violation(MultilineLoopViolation)
+                self.add_violation(MultilineLoopViolation(node))
                 break
 
 

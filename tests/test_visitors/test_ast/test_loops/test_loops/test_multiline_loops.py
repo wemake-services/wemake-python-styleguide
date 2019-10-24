@@ -16,8 +16,8 @@ def wrapper():
 
 incorrect_loop2 = """
 def wrapper():
-    for x in [1,
-    2,3,4]:
+    for x in (1,
+    2, 3, 4):
         ...
 """
 
@@ -29,14 +29,13 @@ while some_func(1,
 
 correct_loop1 = """
 def wrapper():
-    for x in [1,2,3,4]:
+    for x in (1, 2, 3, 4):
         ...
 """
 
 correct_loop2 = """
 def wrapper():
-    for x in [1,2,3,4]:
-        ...
+    for x in (1, 2, 3, 4):
         ...
     return
 """
@@ -61,8 +60,10 @@ def test_incorrect_multiline_loops(
 ):
     """Testing multiline loops."""
     tree = parse_ast_tree(mode(code))
+
     visitor = WrongLoopVisitor(default_options, tree=tree)
     visitor.run()
+
     assert_errors(visitor, [MultilineLoopViolation])
 
 
@@ -80,6 +81,8 @@ def test_correct_multiline_loops(
 ):
     """Testing multiline loops."""
     tree = parse_ast_tree(mode(code))
+
     visitor = WrongLoopVisitor(default_options, tree=tree)
     visitor.run()
+
     assert_errors(visitor, [])
