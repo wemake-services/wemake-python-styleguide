@@ -1934,7 +1934,7 @@ class MultilineLoopViolation(ASTViolation):
         ):
             ...
 
-    .. versionadded :: 0.13.0
+    .. versionadded:: 0.13.0
 
     """
 
