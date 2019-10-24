@@ -783,6 +783,14 @@ class ExtraIndentationViolation(TokenizeViolation):
         def test():
                     print('test')
 
+    This rule is consistent with the "Vertical Hanging Indent" option for
+    ``multi_line_output`` setting of ``isort``. To avoid conflicting rules,
+    you should set ``multi_line_output = 3`` in the ``isort`` settings.
+
+    See also:
+        https://github.com/timothycrosley/isort#multi-line-output-modes
+        https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/isort.toml
+
     .. versionadded:: 0.6.0
 
     """

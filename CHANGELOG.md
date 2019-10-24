@@ -46,6 +46,7 @@ We used to have incremental versioning before `0.1.0`.
 - Replace `scripts/tokens.py` with an external tool
 - Improves violation code testing
 - Improves testing of `.. versionchanged` and `previous_codes` properties
+- Reference `isort` settings requirement for compliance with WSP318 in docstring
 
 
 ## 0.12.5
