@@ -1907,7 +1907,7 @@ class UnnecessaryLiteralsViolation(ASTViolation):
     error_template = 'Found unnecessary literals.'
     code = 351
 
-    
+
 @final
 class MultilineLoopViolation(ASTViolation):
     """
@@ -1915,9 +1915,9 @@ class MultilineLoopViolation(ASTViolation):
 
     Reasoning:
         It decreased the readability of the code.
-    
+
     Solution:
-        Use single line loops and create new variables 
+        Use single line loops and create new variables
         in case you need to fit too many logic inside the loop definition.
 
     Example::
@@ -1928,8 +1928,10 @@ class MultilineLoopViolation(ASTViolation):
             ...
 
         # Wrong
-        for num in range(arg1,
-        arg2):
+        for num in range(
+            arg1,
+            arg2,
+        ):
             ...
 
     .. versionadded :: 0.13.0
@@ -1938,4 +1940,3 @@ class MultilineLoopViolation(ASTViolation):
 
     error_template = 'Forbids multiline loops'
     code = 352
-
