@@ -37,6 +37,10 @@ Summary
    ImplicitSumViolation
    FalsyConstantCompareViolation
    WrongIsCompareViolation
+   ImplicitPrimitiveViolation
+   AlmostSwappedViolation
+   MisrefactoredAssignmentViolation
+   InCompareWithSingleItemContainerViolation
 
 Refactoring opportunities
 -------------------------
@@ -63,6 +67,10 @@ Refactoring opportunities
 .. autoclass:: ImplicitSumViolation
 .. autoclass:: FalsyConstantCompareViolation
 .. autoclass:: WrongIsCompareViolation
+.. autoclass:: ImplicitPrimitiveViolation
+.. autoclass:: AlmostSwappedViolation
+.. autoclass:: MisrefactoredAssignmentViolation
+.. autoclass:: InCompareWithSingleItemContainerViolation
 
 """
 
@@ -879,3 +887,128 @@ class WrongIsCompareViolation(ASTViolation):
 
     code = 521
     error_template = 'Found wrong `is` compare'
+
+
+@final
+class ImplicitPrimitiveViolation(ASTViolation):
+    """
+    Forbids to use implicit primitives in a form of ``lambda`` functions.
+
+    Reasoning:
+        When you use ``lambda`` that returns a primitive value
+        and takes no arguments, it means that
+        you should use a primitive type instead.
+
+    Solution:
+        Replace ``lambda`` with ``int``, ``float``,
+        ``list``, or any other primitive.
+
+    Example::
+
+        # Correct:
+        defaultdict(int)
+
+        # Wrong:
+        defaultdict(lambda: 0)
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    code = 522
+    error_template = 'Found implicit primitive in a form of `lambda`'
+
+
+@final
+class AlmostSwappedViolation(ASTViolation):
+    """
+    Forbids unpythonic swap variables.
+
+    We check for ``a = b; b = a`` sequences.
+
+    Reasoning:
+        This looks like a failed attempt to swap.
+
+    Solution:
+        Use standard way to swap two variables.
+
+    Example::
+
+        # Correct:
+        a, b = b, a
+
+        # Wrong:
+        a = b
+        b = a
+
+        temp = a
+        a = b
+        b = temp
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found incorrectly swapped variables'
+    code = 523
+
+
+@final
+class MisrefactoredAssignmentViolation(ASTViolation):
+    """
+    Forbids to use misrefactored self assignment.
+
+    Reasoning:
+        Self assignment does not need to have the same operand
+        on the left hand side and on the right hand side.
+
+    Solution:
+        Refactor you code to use multiple self assignments or fix your code.
+
+    Example::
+
+        # Correct:
+        test += 1
+        test *= 2
+
+        # Wrong:
+        test += test + 1
+
+    See
+    :py:data:`~wemake_python_styleguide.constants.MATH_APPROXIMATE_CONSTANTS`
+    for full list of math constants that we check for.
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found self assignment  with refactored assignment'
+    code = 524
+
+
+@final
+class InCompareWithSingleItemContainerViolation(ASTViolation):
+    """
+    Forbids comparisons where ``in`` is compared with single item container.
+
+    Reasoning:
+        ``in`` comparison with a container which contains only one item looks
+        like overhead and unneeded complexity.
+
+    Solution:
+        Refactor your code to use ``==`` instead ``in``.
+
+    Example::
+
+        # Correct:
+        a == 's'
+
+        # Wrong:
+        a in {'s'}
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found wrong "in" compare with single item container'
+    code = 525

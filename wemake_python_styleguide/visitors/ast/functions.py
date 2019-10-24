@@ -7,7 +7,10 @@ from typing import ClassVar, Dict, List, Optional, Union
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
-from wemake_python_styleguide.constants import FUNCTIONS_BLACKLIST
+from wemake_python_styleguide.constants import (
+    FUNCTIONS_BLACKLIST,
+    LITERALS_BLACKLIST,
+)
 from wemake_python_styleguide.logic import (
     exceptions,
     functions,
@@ -19,19 +22,20 @@ from wemake_python_styleguide.logic import (
 from wemake_python_styleguide.logic.arguments import function_args
 from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
+from wemake_python_styleguide.violations import consistency, naming
 from wemake_python_styleguide.violations.best_practices import (
     BooleanPositionalArgumentViolation,
     ComplexDefaultValueViolation,
-    ImplicitPrimitiveViolation,
     StopIterationInsideGeneratorViolation,
     WrongFunctionCallViolation,
 )
-from wemake_python_styleguide.violations.naming import (
-    UnusedVariableIsUsedViolation,
+from wemake_python_styleguide.violations.oop import (
+    WrongSuperCallAccessViolation,
+    WrongSuperCallViolation,
 )
-from wemake_python_styleguide.violations.oop import WrongSuperCallViolation
 from wemake_python_styleguide.violations.refactoring import (
     ImplicitEnumerateViolation,
+    ImplicitPrimitiveViolation,
     OpenWithoutContextManagerViolation,
     TypeCompareViolation,
     UselessLambdaViolation,
@@ -57,8 +61,9 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
         Raises:
             BooleanPositionalArgumentViolation
             WrongFunctionCallViolation
-            WrongSuperCallViolation
             WrongIsinstanceWithTupleViolation
+            WrongSuperCallAccessViolation
+            WrongSuperCallViolation
 
         """
         self._check_wrong_function_called(node)
@@ -89,6 +94,19 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
 
     def _ensure_super_context(self, node: ast.Call) -> None:
         parent_context = nodes.get_context(node)
+        parent_node = nodes.get_parent(node)
+
+        attr = getattr(parent_node, 'attr', None)
+        parent_name = getattr(parent_context, 'name', None)
+
+        if attr and parent_name and attr != parent_name:
+            self.add_violation(
+                WrongSuperCallAccessViolation(
+                    node,
+                    text='super call with incorrect method or property access',
+                ),
+            )
+
         if isinstance(parent_context, FunctionNodes):
             grand_context = nodes.get_context(parent_context)
             if isinstance(grand_context, ast.ClassDef):
@@ -218,7 +236,10 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
             for node in usages:
                 if access.is_protected(varname):
                     self.add_violation(
-                        UnusedVariableIsUsedViolation(node, text=varname),
+                        naming.UnusedVariableIsUsedViolation(
+                            node,
+                            text=varname,
+                        ),
                     )
 
     def _maybe_update_variable(
@@ -334,3 +355,30 @@ class UselessLambdaDefinitionVisitor(base.BaseNodeVisitor):
             return
 
         self.add_violation(UselessLambdaViolation(node))
+
+
+@final
+class UnnecessaryLiteralsVisitor(base.BaseNodeVisitor):
+    """
+    Responsible for restricting some literals.
+
+    All these literals are defined in ``LITERALS_BLACKLIST``.
+    """
+
+    def visit_Call(self, node: ast.Call) -> None:
+        """
+        Used to find ``LITERALS_BLACKLIST`` without args calls.
+
+        Raises:
+            UnnecessaryLiteralsViolation
+
+        """
+        self._check_unnecessary_literals(node)
+        self.generic_visit(node)
+
+    def _check_unnecessary_literals(self, node: ast.Call) -> None:
+        function_name = functions.given_function_called(
+            node, LITERALS_BLACKLIST,
+        )
+        if function_name and not node.args:
+            self.add_violation(consistency.UnnecessaryLiteralsViolation(node))

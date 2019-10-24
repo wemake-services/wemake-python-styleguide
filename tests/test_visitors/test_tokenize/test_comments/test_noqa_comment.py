@@ -38,6 +38,7 @@ def test_correct_comments(
 
 
 @pytest.mark.parametrize('code', [
+    'x = 10_00 # noqa WPS002',
     'x = 10_00  # noqa',
     'x = 10_00  #   noqa   ',
     'x = 10_00 #noqa',

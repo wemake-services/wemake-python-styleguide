@@ -240,3 +240,30 @@ def test_no_function_overload(
     visitor.run()
 
     assert_errors(visitor, [BlockAndLocalOverlapViolation])
+
+
+method_setter_template = """
+class Test(object):
+    @property
+    def {0}():
+        ...
+    @{0}.setter
+    def {0}():
+        {0} = ...
+"""
+
+
+def test_property_setter(
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+    mode,
+):
+    """Ensures that property setter do not overlap."""
+    code = method_setter_template.format('func')
+    tree = parse_ast_tree(mode(code))
+
+    visitor = BlockVariableVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])

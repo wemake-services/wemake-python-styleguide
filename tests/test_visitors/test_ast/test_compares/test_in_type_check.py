@@ -3,9 +3,12 @@
 import pytest
 
 from wemake_python_styleguide.violations.refactoring import (
+    InCompareWithSingleItemContainerViolation,
     WrongInCompareTypeViolation,
 )
-from wemake_python_styleguide.visitors.ast.compares import CompareSanityVisitor
+from wemake_python_styleguide.visitors.ast.compares import (
+    InCompareSanityVisitor,
+)
 
 in_template = 'some in {0}'
 not_in_template = 'some not in {0}'
@@ -36,10 +39,14 @@ def test_compare_with_wrong_type(
     """Compares raise a violation for ``in`` with wrong types."""
     tree = parse_ast_tree(code.format(comparator))
 
-    visitor = CompareSanityVisitor(default_options, tree=tree)
+    visitor = InCompareSanityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [WrongInCompareTypeViolation])
+    assert_errors(
+        visitor,
+        [WrongInCompareTypeViolation],
+        ignored_types=(InCompareWithSingleItemContainerViolation,),
+    )
 
 
 @pytest.mark.parametrize('code', [
@@ -64,7 +71,7 @@ def test_compare_with_correct_type(
     """Compares work correctly for ``in`` with correct types."""
     tree = parse_ast_tree(code.format(comparator))
 
-    visitor = CompareSanityVisitor(default_options, tree=tree)
+    visitor = InCompareSanityVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])

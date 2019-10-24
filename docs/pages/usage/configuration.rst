@@ -40,7 +40,7 @@ file is available with the core settings for ``flake8``.
 We also use ``flake8-isort`` to style our imports.
 You will need to update your configuration with the following lines:
 Otherwise, your ``isort`` will complain about your imports.
-Our `isort.toml <https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/flake8.toml>`_
+Our `isort.toml <https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/isort.toml>`_
 file is available with the core settings for ``isort``.
 
 All recommended settings can be found in our `styleguide.toml <https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/styleguide.toml>`_.
