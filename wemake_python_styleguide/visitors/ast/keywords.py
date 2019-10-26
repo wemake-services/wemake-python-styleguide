@@ -121,6 +121,8 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
         returns: List[ast.Return] = []
         has_values = False
         for sub_node in ast.walk(node):
+            if get_context(sub_node) != node:
+                continue
             if isinstance(sub_node, returning_type):
                 if sub_node.value:
                     has_values = True
