@@ -88,6 +88,7 @@ PRESET: Final = (
     classes.WrongSlotsVisitor,
     classes.ClassAttributeVisitor,
     classes.ClassMethodOrderVisitor,
+    classes.ClassMutableAttributeVisitor,
 
     # Modules:
     modules.EmptyModuleContentsVisitor,

@@ -405,3 +405,54 @@ class ClassMethodOrderVisitor(base.BaseNodeVisitor):
         if access.is_private(first):
             return 0  # lowest priority
         return 2  # public and magic methods
+
+
+@final
+@decorators.alias('visit_any_assign', (
+    'visit_Assign',
+    'visit_AnnAssign',
+))
+class ClassMutableAttributeVisitor(base.BaseNodeVisitor):
+    """Visits class attributes."""
+
+    _mutable_nodes: ClassVar[types.AnyNodes] = (
+        ast.Dict,
+        ast.List,
+        ast.DictComp,
+        ast.ListComp,
+    )
+
+    def visit_any_assign(self, node: types.AnyAssign) -> None:
+        """
+        Checks that class attributes are immutable.
+
+        Raises:
+            MutableClassAttributesViolation
+
+        """
+        if isinstance(nodes.get_context(node), ast.ClassDef):
+            self._check_mutable_attributes(node)
+        self.generic_visit(node)
+
+    def _check_mutable_attributes(self, node: types.AnyAssign) -> None:
+        if isinstance(node, ast.AnnAssign):
+            targets = [node.target]
+        else:
+            targets = node.targets
+
+        for target in targets:
+            if isinstance(target, ast.Name) and target.id == '__slots__':
+                continue
+
+            if self._is_mutable_attribute(node.value):
+                self.add_violation(bp.MutableClassAttributesViolation(target))
+
+    def _is_mutable_attribute(self, node: Optional[ast.expr]) -> bool:
+        if isinstance(node, self._mutable_nodes):
+            return True
+
+        if isinstance(node, ast.Call):
+            if functions.given_function_called(node, {'dict', 'list'}):
+                return True
+
+        return False

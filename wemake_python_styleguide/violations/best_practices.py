@@ -67,6 +67,7 @@ Summary
    WrongNamedKeywordViolation
    ApproximateConstantViolation
    StringConstantRedefinedViolation
+   MutableClassAttributesViolation
 
 Best practices
 --------------
@@ -119,6 +120,7 @@ Best practices
 .. autoclass:: WrongNamedKeywordViolation
 .. autoclass:: ApproximateConstantViolation
 .. autoclass:: StringConstantRedefinedViolation
+.. autoclass:: MutableClassAttributesViolation
 
 """
 
@@ -1855,3 +1857,38 @@ class StringConstantRedefinedViolation(ASTViolation):
 
     error_template = 'Found alphabet as strings: {0}'
     code = 447
+
+
+@final
+class MutableClassAttributesViolation(ASTViolation):
+    """
+    Forbids mutable class attributes.
+
+    Reasoning:
+        Class attributes should be immutable.
+
+    Solution:
+        Use immutable types for class attributes.
+
+    Example::
+
+        # Correct:
+        class Test(object):
+            field = ('field1',)
+
+        class Test(object):
+            field = 1
+
+        # Wrong:
+        class Test(object):
+            field = []
+
+        class Test(object):
+            field = dict()
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found mutable class attributes.'
+    code = 448

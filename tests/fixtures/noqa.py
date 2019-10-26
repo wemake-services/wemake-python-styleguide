@@ -431,6 +431,8 @@ else:
 class ClassWithWrongContents((lambda: object)()):  # noqa: WPS606
     __slots__ = ['a', 'a']  # noqa: WPS607
 
+    mapping = list()  # noqa: WPS448
+
     for _ in range(1):  # noqa: WPS604
         anti_z444 = 1
 

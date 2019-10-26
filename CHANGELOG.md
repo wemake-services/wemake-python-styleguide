@@ -31,6 +31,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids wrong annotations in assignment
 - Forbids using multiline `for` and `while` statements
 - `WPS113` now can be tweaked with `I_CONTROL_CODE` setting
+- Forbids mutable class fields
 
 ### Bugfixes
 

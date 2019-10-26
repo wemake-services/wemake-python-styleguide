@@ -166,7 +166,7 @@ class _Option(object):
 class Configuration(object):
     """Simple configuration store with all options."""
 
-    _options: ClassVar[Sequence[_Option]] = [
+    _options: ClassVar[Sequence[_Option]] = (
         # Complexity:
 
         _Option(
@@ -324,7 +324,7 @@ class Configuration(object):
             defaults.MAX_NOQA_COMMENTS,
             'Maximum amount of `noqa` comments per module.',
         ),
-    ]
+    )
 
     def register_options(self, parser: OptionManager) -> None:
         """Registers options for our plugin."""

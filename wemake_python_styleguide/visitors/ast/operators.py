@@ -30,14 +30,14 @@ _NumbersAndConstants = Union[ast.Num, ast.NameConstant]
 class UselessOperatorsVisitor(base.BaseNodeVisitor):
     """Checks operators used in the code."""
 
-    _limits: ClassVar[_OperatorLimits] = {
+    _limits: ClassVar[_OperatorLimits] = {  # noqa: WPS448
         ast.UAdd: 0,
         ast.Invert: 1,
         ast.Not: 1,
         ast.USub: 1,
     }
 
-    _meaningless_operations: ClassVar[_MeaninglessOperators] = {
+    _meaningless_operations: ClassVar[_MeaninglessOperators] = {  # noqa: WPS448
         # ast.Div is not in the list,
         # since we have a special violation for it.
         0: (ast.Mult, ast.Add, ast.Sub, ast.Pow, ast.Mod),
@@ -46,7 +46,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
     }
 
     #: Used to ignore some special cases like `1 / x`:
-    _left_special_cases: ClassVar[_MeaninglessOperators] = {
+    _left_special_cases: ClassVar[_MeaninglessOperators] = {  # noqa: WPS448
         1: (ast.Div,),
     }
 

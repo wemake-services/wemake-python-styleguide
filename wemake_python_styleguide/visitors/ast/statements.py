@@ -135,7 +135,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         ast.Raise,
     )
 
-    _useless_combination: ClassVar[Mapping[str, AnyNodes]] = {
+    _useless_combination: ClassVar[Mapping[str, AnyNodes]] = {  # noqa: WPS448
         'For': _generally_useless_body + _loop_useless_body,
         'AsyncFor': _generally_useless_body + _loop_useless_body,
         'While': _generally_useless_body + _loop_useless_body,
