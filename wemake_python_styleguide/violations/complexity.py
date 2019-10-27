@@ -53,6 +53,7 @@ Summary
    TooLongCompareViolation
    TooLongTryBodyViolation
    TooManyPublicAttributesViolation
+   TooLongCallChainViolation
 
 
 Module complexity
@@ -88,6 +89,7 @@ Structure complexity
 .. autoclass:: TooLongCompareViolation
 .. autoclass:: TooLongTryBodyViolation
 .. autoclass:: TooManyPublicAttributesViolation
+.. autoclass:: TooLongCallChainViolation
 
 """
 
@@ -938,3 +940,29 @@ class TooManyPublicAttributesViolation(ASTViolation):
 
     error_template = 'Found too many public instance attributes'
     code = 230
+
+
+@final
+class TooLongCallChainViolation(ASTViolation):
+    """
+    Forbids too long call chains.
+
+    Reasoning:
+        Too long call chains are overcomplicated and
+        indicators of bad API design.
+
+    Solution:
+        Split the expression into variables, functions or classes.
+        Refactor the API to allow higher-level access to functions.
+
+    Configuration:
+        This rule is configurable with ``--max-call-level``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_CALL_LEVEL`
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found too lang call chain length: {0}'
+    code = 231

@@ -112,6 +112,8 @@ You can also show all options that ``flake8`` supports by running:
 - ``nested-classes-whitelist`` - list of nested classes' names we allow to use,
     defaults to
     :str:`wemake_python_styleguide.options.defaults.NESTED_CLASSES_WHITELIST`
+- ``max-call-level`` - maximum number of call chains, defaults to
+    :str:`wemake_python_styleguide.options.defaults.MAX_CALL_LEVEL`
 
 """
 
@@ -323,6 +325,12 @@ class Configuration(object):
             '--max-noqa-comments',
             defaults.MAX_NOQA_COMMENTS,
             'Maximum amount of `noqa` comments per module.',
+        ),
+
+        _Option(
+            '--max-call-level',
+            defaults.MAX_CALL_LEVEL,
+            'Maximum number of call chains.',
         ),
     ]
 

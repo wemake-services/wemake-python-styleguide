@@ -50,6 +50,10 @@ We used to have incremental versioning before `0.1.0`.
 - Improves violation code testing
 - Improves testing of `.. versionchanged` and `previous_codes` properties
 - Reference `isort` settings requirement for compliance with WSP318 in docstring
+- `WPS431` now allow customize whitelist via `nested-classes-whitelist` setting
+- Forbids to have invalid strings like `**{'@': 1}`
+- Forbids to use implicit primitive values in a form of `lambda`
+- Forbids too long call chains like `foo(a)(b)(c)(d)`
 
 
 ## 0.12.5

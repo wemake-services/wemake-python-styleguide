@@ -64,6 +64,7 @@ class _ValidatedOptions(object):
     max_noqa_comments: int = attr.ib(
         validator=[_min_max(min=1, max=defaults.MAX_NOQA_COMMENTS)],
     )
+    max_call_level: int = attr.ib(validator=[_min_max(min=1)])
 
 
 def validate_options(options: ConfigurationOptions) -> _ValidatedOptions:

@@ -89,6 +89,9 @@ MAX_ACCESS_LEVEL: Final = 4  # guessed
 #: Maximum number of public attributes in a single class.
 MAX_ATTRIBUTES: Final = 6  # guessed
 
+#: Maximum number of call chains.
+MAX_CALL_LEVEL: Final = 2
+
 #: List of nested classes' names we allow to use.
 NESTED_CLASSES_WHITELIST: Final = frozenset((
     'Meta',  # django forms, models, drf, etc
