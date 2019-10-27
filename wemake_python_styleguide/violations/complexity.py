@@ -55,6 +55,7 @@ Summary
    TooManyPublicAttributesViolation
    CognitiveComplexityViolation
    CognitiveModuleComplexityViolation
+   TooLongCallChainViolation
 
 
 Module complexity
@@ -92,6 +93,7 @@ Structure complexity
 .. autoclass:: TooManyPublicAttributesViolation
 .. autoclass:: CognitiveComplexityViolation
 .. autoclass:: CognitiveModuleComplexityViolation
+.. autoclass:: TooLongCallChainViolation
 
 """
 
@@ -1004,3 +1006,29 @@ class CognitiveModuleComplexityViolation(SimpleViolation):
 
     error_template = 'Found too high module cognitive complexity: {0}'
     code = 232
+
+
+@final
+class TooLongCallChainViolation(ASTViolation):
+    """
+    Forbids too long call chains.
+
+    Reasoning:
+        Too long call chains are overcomplicated and
+        indicators of bad API design.
+
+    Solution:
+        Split the expression into variables, functions or classes.
+        Refactor the API to allow higher-level access to functions.
+
+    Configuration:
+        This rule is configurable with ``--max-call-level``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_CALL_LEVEL`
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found too lang call chain length: {0}'
+    code = 233
