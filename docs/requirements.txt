@@ -14,5 +14,5 @@ docutils==0.14
 # other dependencies are just ignored or
 # goes to `autodoc_mock_imports` in `conf.py`:
 flake8==3.7.8
-typing-extensions==3.7.4
+typing-extensions==3.7.4.1
 attrs==19.3.0
