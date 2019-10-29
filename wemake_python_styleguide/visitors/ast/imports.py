@@ -10,7 +10,7 @@ from wemake_python_styleguide import constants
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
 from wemake_python_styleguide.logic import imports, nodes
 from wemake_python_styleguide.logic.naming import access
-from wemake_python_styleguide.types import AnyImport
+from wemake_python_styleguide.types import AnyImport, ConfigurationOptions
 from wemake_python_styleguide.violations.base import BaseViolation
 from wemake_python_styleguide.violations.best_practices import (
     FutureImportViolation,
@@ -32,8 +32,13 @@ ErrorCallback = Callable[[BaseViolation], None]  # TODO: alias and move
 class _ImportsValidator(object):
     """Utility class to separate logic from the visitor."""
 
-    def __init__(self, error_callback: ErrorCallback) -> None:
+    def __init__(
+        self,
+        error_callback: ErrorCallback,
+        options: ConfigurationOptions,
+    ) -> None:
         self._error_callback = error_callback
+        self._options = options
 
     def check_nested_import(self, node: AnyImport) -> None:
         parent = nodes.get_parent(node)
@@ -61,7 +66,7 @@ class _ImportsValidator(object):
 
     def check_alias(self, node: AnyImport) -> None:
         for alias in node.names:
-            if alias.asname == alias.name:
+            if alias.asname == alias.name and not self._options.i_control_code:
                 self._error_callback(
                     SameAliasImportViolation(node, text=alias.name),
                 )
@@ -93,7 +98,7 @@ class WrongImportVisitor(BaseNodeVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Creates a checker for tracked violations."""
         super().__init__(*args, **kwargs)
-        self._validator = _ImportsValidator(self.add_violation)
+        self._validator = _ImportsValidator(self.add_violation, self.options)
 
     def visit_Import(self, node: ast.Import) -> None:
         """
