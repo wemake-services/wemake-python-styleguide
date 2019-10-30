@@ -143,8 +143,6 @@ class BlankLineVisitor(BaseTokenVisitor):
         self._lines[token.start[0]].append(token)
 
     def _check_if_line_is_blank(self, tokens: List[tokenize.TokenInfo]) -> None:
-        if tokens is None:
-            return
         if len(tokens) > 1:
             return
         if tokens[0].exact_type in ALLOWED_EMPTY_LINE_TOKENS:
@@ -162,12 +160,14 @@ class BlankLineVisitor(BaseTokenVisitor):
         if self._check_is_open_brace(tokens[-2]):
             my_line = tokens[-2].start[0]
             next_line_tokens = self._lines.get(my_line + 1)
-            self._check_if_line_is_blank(next_line_tokens)
+            if next_line_tokens is not None:
+                self._check_if_line_is_blank(next_line_tokens)
 
         if self._check_is_close_brace(tokens[0]):
             my_line = tokens[1].start[0]
             prev_line_tokens = self._lines.get(my_line - 1)
-            self._check_if_line_is_blank(prev_line_tokens)
+            if prev_line_tokens is not None:
+                self._check_if_line_is_blank(prev_line_tokens)
 
     def _post_visit(self) -> None:
         for _, tokens in self._lines.items():

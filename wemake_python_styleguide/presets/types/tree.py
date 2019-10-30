@@ -30,6 +30,7 @@ PRESET: Final = (
     statements.WrongParametersIndentationVisitor,
     statements.PointlessStarredVisitor,
     statements.WrongNamedKeywordVisitor,
+    statements.AssignmentPatternsVisitor,
 
     keywords.WrongRaiseVisitor,
     keywords.WrongKeywordVisitor,
@@ -50,6 +51,7 @@ PRESET: Final = (
     functions.FunctionDefinitionVisitor,
     functions.UselessLambdaDefinitionVisitor,
     functions.WrongFunctionCallContextVisitior,
+    functions.UnnecessaryLiteralsVisitor,
 
     exceptions.WrongTryExceptVisitor,
     exceptions.NestedTryBlocksVisitor,
@@ -74,6 +76,7 @@ PRESET: Final = (
     compares.WrongComparisionOrderVisitor,
     compares.UnaryCompareVisitor,
     compares.WrongConstantCompareVisitor,
+    compares.InCompareSanityVisitor,
 
     conditions.IfStatementVisitor,
     conditions.BooleanConditionVisitor,

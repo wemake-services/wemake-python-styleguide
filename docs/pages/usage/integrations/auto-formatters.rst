@@ -119,7 +119,7 @@ Here are the violations that ``black`` produces:
   that almost no one uses in the ``python`` world
 - Trailing commas: ``black`` strips trailing commas and this makes
   adding new code harder to review, since your ``git diff`` is poluted
-  by a comma change, the sad thing that tailing commas as a best-practice
+  by a comma change, the sad thing that trailing commas as a best-practice
   are quite popular in ``python`` code
 - Line length. Violating rules by 10%-15% is not ok.
   You either violate them or not. ``black`` violates line-length rules.

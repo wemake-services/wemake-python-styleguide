@@ -33,7 +33,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS110': 3,
     'WPS111': 1,
     'WPS112': 1,
-    'WPS113': 1,
+    'WPS113': 0,
     'WPS114': 1,
     'WPS115': 1,
     'WPS116': 1,
@@ -120,9 +120,12 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS344': 1,
     'WPS345': 1,
     'WPS346': 1,
-    'WPS347': 3,
+    'WPS347': 1,
     'WPS348': 1,
     'WPS349': 1,
+    'WPS350': 1,
+    'WPS351': 1,
+    'WPS352': 1,
 
     'WPS400': 0,
     'WPS401': 0,
@@ -172,7 +175,6 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS445': 1,
     'WPS446': 1,
     'WPS447': 1,
-    'WPS448': 1,
 
     'WPS500': 1,
     'WPS501': 1,
@@ -196,6 +198,10 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS519': 1,
     'WPS520': 1,
     'WPS521': 1,
+    'WPS522': 1,
+    'WPS523': 1,
+    'WPS524': 1,
+    'WPS525': 2,
 
     'WPS600': 1,
     'WPS601': 1,
@@ -210,9 +216,11 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS610': 1,
     'WPS611': 1,
     'WPS612': 1,
+    'WPS613': 1,
 
-    'WPS701': 2,
-    'WPS702': 2,
+    'WPS700': 1,
+    'WPS701': 1,
+    'WPS702': 1,
 })
 
 
@@ -227,7 +235,7 @@ def _assert_errors_count_in_output(output, errors, all_violations):
 
     for found_error, found_count in found_errors.items():
         assert found_error in errors, 'Violation without a #noqa count'
-        assert found_count == errors.get(found_error)
+        assert found_count == errors.get(found_error), found_error
 
     assert set(
         filter(lambda key: errors[key] != 0, errors),
