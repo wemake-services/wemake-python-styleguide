@@ -23,6 +23,7 @@ IGNORED_VIOLATIONS = (
     'WPS202',  # since our test case is complex, that's fine
     'WPS204',  # our tests have a lot of overused expressions
     'WPS226',  # we have a lot of ugly strings inside,
+    'WPS353',  # disabled `noqa`comments prevent line from being "blank"
     'WPS402',  # since we obviously use a lot of `noqa` comments
 )
 
@@ -126,7 +127,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS350': 1,
     'WPS351': 1,
     'WPS352': 1,
-    'WPS353': 2,
+    'WPS353': 0,
 
     'WPS400': 0,
     'WPS401': 0,

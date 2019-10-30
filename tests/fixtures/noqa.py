@@ -589,14 +589,6 @@ if a in {1}:  # noqa: WPS525
     print('bad!')
 
 arr = [
-        # noqa: WPS353
-    1,
-    2
-]
 
-
-arr2 = [
-    1,
-    2
-        # noqa: WPS353
+    1
 ]
