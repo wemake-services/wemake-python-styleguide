@@ -23,6 +23,7 @@ PRESET: Final = (
 
     statements.ExtraIndentationVisitor,
     statements.BracketLocationVisitor,
+    statements.BlankLineVisitor,
 
     conditions.IfElseVisitor,
 )

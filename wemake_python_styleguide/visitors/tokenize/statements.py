@@ -19,6 +19,7 @@ from typing_extensions import final
 from wemake_python_styleguide.logic.tokens import only_contains
 from wemake_python_styleguide.violations.consistency import (
     ExtraIndentationViolation,
+    UselessBlankLineViolation,
     WrongBracketPositionViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
@@ -115,6 +116,62 @@ class ExtraIndentationVisitor(BaseTokenVisitor):
             if index == 0 or line != lines[index - 1] + 1:
                 continue
             self._check_individual_line(lines, line, index)
+
+
+@final
+class BlankLineVisitor(BaseTokenVisitor):
+    """
+    Finds blank lines location.
+
+    We check that blank lines don't occur directly
+    before or after a bracket (round, square, or curly).
+    """
+
+    def __init__(self, *arg, **kargs) -> None:
+        """Creates line tracking for tokens."""
+        super().__init__(*arg, **kargs)
+        self._lines: TokenLines = defaultdict(list)
+
+    def visit(self, token: tokenize.TokenInfo) -> None:
+        """
+        Goes through all tokens to separate them by line numbers.
+
+        Raises:
+            UselessBlankLineViolation
+
+        """
+        self._lines[token.start[0]].append(token)
+
+    def _check_if_line_is_blank(self, tokens: List[tokenize.TokenInfo]) -> None:
+        if tokens is None:
+            return
+        if len(tokens) > 1:
+            return
+        if tokens[0].exact_type in ALLOWED_EMPTY_LINE_TOKENS:
+            self.add_violation(UselessBlankLineViolation(tokens[0]))
+
+    def _check_is_open_brace(self, token: tokenize.TokenInfo) -> None:
+        return token.exact_type in MATCHING.keys()
+
+    def _check_is_close_brace(self, token: tokenize.TokenInfo) -> None:
+        return token.exact_type in MATCHING.values()
+
+    def _check_individual_line(self, tokens: List[tokenize.TokenInfo]) -> None:
+        if len(tokens) < 2:
+            return
+        if self._check_is_open_brace(tokens[-2]):
+            my_line = tokens[-2].start[0]
+            next_line_tokens = self._lines.get(my_line + 1)
+            self._check_if_line_is_blank(next_line_tokens)
+
+        if self._check_is_close_brace(tokens[0]):
+            my_line = tokens[1].start[0]
+            prev_line_tokens = self._lines.get(my_line - 1)
+            self._check_if_line_is_blank(prev_line_tokens)
+
+    def _post_visit(self) -> None:
+        for _, tokens in self._lines.items():
+            self._check_individual_line(tokens)
 
 
 @final

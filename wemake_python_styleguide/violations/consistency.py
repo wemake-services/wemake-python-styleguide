@@ -75,6 +75,7 @@ Summary
    VagueImportViolation
    AdditionAssignmentOnListViolation
    RedundantSubscriptViolation
+   UselessBlankLineViolation
 
 Consistency checks
 ------------------
@@ -129,6 +130,7 @@ Consistency checks
 .. autoclass:: VagueImportViolation
 .. autoclass:: AdditionAssignmentOnListViolation
 .. autoclass:: RedundantSubscriptViolation
+.. autoclass:: UselessBlankLineViolation
 
 """
 
@@ -1838,3 +1840,34 @@ class RedundantSubscriptViolation(ASTViolation):
 
     error_template = 'Found redundant subscript slice: {0}'
     code = 349
+
+
+@final
+class UselessBlankLineViolation(TokenizeViolation):
+    """
+    Forbids useless blank lines in between brackets.
+
+    Reasoning:
+        We do this for consistency.
+
+    Example::
+
+        # Correct:
+        arr = [
+            1,
+            2
+        ]
+
+        # Wrong:
+        arr = [
+
+            1,
+            2
+        ]
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found an unnecessary blank line'
+    code = 350
