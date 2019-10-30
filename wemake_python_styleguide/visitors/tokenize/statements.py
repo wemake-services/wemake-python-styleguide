@@ -148,10 +148,10 @@ class BlankLineVisitor(BaseTokenVisitor):
         if tokens[0].exact_type in ALLOWED_EMPTY_LINE_TOKENS:
             self.add_violation(UselessBlankLineViolation(tokens[0]))
 
-    def _check_is_open_brace(self, token: tokenize.TokenInfo) -> None:
+    def _check_is_open_brace(self, token: tokenize.TokenInfo) -> bool:
         return token.exact_type in MATCHING.keys()
 
-    def _check_is_close_brace(self, token: tokenize.TokenInfo) -> None:
+    def _check_is_close_brace(self, token: tokenize.TokenInfo) -> bool:
         return token.exact_type in MATCHING.values()
 
     def _check_individual_line(self, tokens: List[tokenize.TokenInfo]) -> None:
@@ -162,7 +162,6 @@ class BlankLineVisitor(BaseTokenVisitor):
             next_line_tokens = self._lines.get(my_line + 1)
             if next_line_tokens is not None:
                 self._check_if_line_is_blank(next_line_tokens)
-
         if self._check_is_close_brace(tokens[0]):
             my_line = tokens[1].start[0]
             prev_line_tokens = self._lines.get(my_line - 1)
