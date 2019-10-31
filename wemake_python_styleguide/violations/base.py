@@ -41,7 +41,7 @@ Reference
 
 import ast
 import tokenize
-from typing import ClassVar, Optional, Set, Tuple, Union
+from typing import ClassVar, FrozenSet, Optional, Tuple, Union
 
 from typing_extensions import final
 
@@ -71,7 +71,7 @@ class BaseViolation(object):
 
     error_template: ClassVar[str]
     code: ClassVar[int]
-    previous_codes: ClassVar[Set[int]]
+    previous_codes: ClassVar[FrozenSet[int]]
 
     def __init__(self, node: ErrorNode, text: Optional[str] = None) -> None:
         """

@@ -418,8 +418,10 @@ class ClassMutableAttributeVisitor(base.BaseNodeVisitor):
     _mutable_nodes: ClassVar[types.AnyNodes] = (
         ast.Dict,
         ast.List,
+        ast.Set,
         ast.DictComp,
         ast.ListComp,
+        ast.SetComp,
     )
 
     def visit_any_assign(self, node: types.AnyAssign) -> None:
@@ -452,7 +454,7 @@ class ClassMutableAttributeVisitor(base.BaseNodeVisitor):
             return True
 
         if isinstance(node, ast.Call):
-            if functions.given_function_called(node, {'dict', 'list'}):
+            if functions.given_function_called(node, {'dict', 'list', 'set'}):
                 return True
 
         return False

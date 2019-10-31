@@ -305,7 +305,7 @@ class ComplexDefaultValueViolation(ASTViolation):
 
     error_template = 'Found complex default value'
     code = 404
-    previous_codes = {459}
+    previous_codes = frozenset({459})
 
 
 @final
@@ -339,7 +339,7 @@ class LoopVariableDefinitionViolation(ASTViolation):
 
     error_template = 'Found wrong `for` loop variable definition'
     code = 405
-    previous_codes = {460}
+    previous_codes = frozenset({460})
 
 
 @final
@@ -373,7 +373,7 @@ class ContextManagerVariableDefinitionViolation(ASTViolation):
 
     error_template = 'Found wrong context manager variable definition'
     code = 406
-    previous_codes = {461}
+    previous_codes = frozenset({461})
 
 
 @final
@@ -410,7 +410,7 @@ class MutableModuleConstantViolation(ASTViolation):
 
     error_template = 'Found mutable module constant'
     code = 407
-    previous_codes = {466}
+    previous_codes = frozenset({466})
 
 
 @final
@@ -443,7 +443,7 @@ class SameElementsInConditionViolation(ASTViolation):
 
     error_template = 'Found duplicate logical condition'
     code = 408
-    previous_codes = {469}
+    previous_codes = frozenset({469})
 
 
 @final
@@ -484,7 +484,7 @@ class HeterogenousCompareViolation(ASTViolation):
 
     error_template = 'Found heterogenous compare'
     code = 409
-    previous_codes = {471}
+    previous_codes = frozenset({471})
 
 
 @final
@@ -634,7 +634,7 @@ class WrongUnpackingViolation(ASTViolation):
 
     error_template = 'Found incorrect unpacking target'
     code = 414
-    previous_codes = {446}
+    previous_codes = frozenset({446})
 
 
 @final
@@ -673,7 +673,7 @@ class DuplicateExceptionViolation(ASTViolation):
 
     error_template = 'Found duplicate exception: {0}'
     code = 415
-    previous_codes = {447}
+    previous_codes = frozenset({447})
 
 
 @final
@@ -710,7 +710,7 @@ class YieldInComprehensionViolation(ASTViolation):
 
     error_template = 'Found `yield` inside comprehension'
     code = 416
-    previous_codes = {448}
+    previous_codes = frozenset({448})
 
 
 @final
@@ -752,7 +752,7 @@ class NonUniqueItemsInHashViolation(ASTViolation):
 
     error_template = 'Found non-unique item in hash: {0}'
     code = 417
-    previous_codes = {449}
+    previous_codes = frozenset({449})
 
 
 @final
@@ -789,7 +789,7 @@ class BaseExceptionSubclassViolation(ASTViolation):
 
     error_template = 'Found exception inherited from `BaseException`'
     code = 418
-    previous_codes = {450}
+    previous_codes = frozenset({450})
 
 
 @final
@@ -845,7 +845,7 @@ class TryExceptMultipleReturnPathViolation(ASTViolation):
 
     error_template = 'Found `try`/`else`/`finally` with multiple return paths'
     code = 419
-    previous_codes = {458}
+    previous_codes = frozenset({458})
 
 
 @final
@@ -1075,7 +1075,7 @@ class LambdaInsideLoopViolation(ASTViolation):
 
     error_template = "Found `lambda` in loop's body"
     code = 426
-    previous_codes = {442}
+    previous_codes = frozenset({442})
 
 
 @final
@@ -1121,7 +1121,7 @@ class UnreachableCodeViolation(ASTViolation):
 
     error_template = 'Found unreachable code'
     code = 427
-    previous_codes = {443}
+    previous_codes = frozenset({443})
 
 
 @final
@@ -1157,7 +1157,7 @@ class StatementHasNoEffectViolation(ASTViolation):
 
     error_template = 'Found statement that has no effect'
     code = 428
-    previous_codes = {444}
+    previous_codes = frozenset({444})
 
 
 @final
@@ -1189,7 +1189,7 @@ class MultipleAssignmentsViolation(ASTViolation):
 
     error_template = 'Found multiple assign targets'
     code = 429
-    previous_codes = {445}
+    previous_codes = frozenset({445})
 
 
 @final
@@ -1352,7 +1352,7 @@ class NestedImportViolation(ASTViolation):
 
     error_template = 'Found nested import'
     code = 433
-    previous_codes = {435}
+    previous_codes = frozenset({435})
 
 
 @final
@@ -1381,7 +1381,7 @@ class ReassigningVariableToItselfViolation(ASTViolation):
 
     error_template = 'Found reassigning variable to itself: {0}'
     code = 434
-    previous_codes = {438}
+    previous_codes = frozenset({438})
 
 
 @final
@@ -1445,7 +1445,7 @@ class ProtectedModuleViolation(ASTViolation):
 
     error_template = 'Found protected module import'
     code = 436
-    previous_codes = {440}
+    previous_codes = frozenset({440})
 
 
 @final
@@ -1489,7 +1489,7 @@ class ProtectedAttributeViolation(ASTViolation):
 
     error_template = 'Found protected attribute usage: {0}'
     code = 437
-    previous_codes = {441}
+    previous_codes = frozenset({441})
 
 
 @final
@@ -1874,17 +1874,11 @@ class MutableClassAttributesViolation(ASTViolation):
 
         # Correct:
         class Test(object):
-            field = ('field1',)
-
-        class Test(object):
-            field = 1
+            field = ('value1',)
 
         # Wrong:
         class Test(object):
-            field = []
-
-        class Test(object):
-            field = dict()
+            field = ['value1',]
 
     .. versionadded:: 0.13.0
 

@@ -16,9 +16,14 @@ class ClassWithAttr(object):
 
 mutable_assign = (
     '[]',
-    '{"key": value}',
     'list()',
+    '[i for i in item]',
+    '{"key": value}',
     'dict()',
+    '{key: value for key, value in data.items()}',
+    '{item}',
+    'set()',
+    '{item for item in items}',
 )
 
 immutable_assign = (

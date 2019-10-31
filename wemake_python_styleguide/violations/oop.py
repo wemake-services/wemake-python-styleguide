@@ -90,7 +90,7 @@ class BuiltinSubclassViolation(ASTViolation):
 
     error_template = 'Found subclassing a builtin: {0}'
     code = 600
-    previous_codes = {426}
+    previous_codes = frozenset({426})
 
 
 @final
@@ -139,7 +139,7 @@ class ShadowedClassAttributeViolation(ASTViolation):
 
     error_template = 'Found shadowed class attribute: {0}'
     code = 601
-    previous_codes = {427}
+    previous_codes = frozenset({427})
 
 
 @final
@@ -161,7 +161,7 @@ class StaticMethodViolation(ASTViolation):
 
     error_template = 'Found using `@staticmethod`'
     code = 602
-    previous_codes = {433}
+    previous_codes = frozenset({433})
 
 
 @final
@@ -192,7 +192,7 @@ class BadMagicMethodViolation(ASTViolation):
 
     error_template = 'Found using restricted magic method: {0}'
     code = 603
-    previous_codes = {434}
+    previous_codes = frozenset({434})
 
 
 @final
@@ -229,7 +229,7 @@ class WrongClassBodyContentViolation(ASTViolation):
 
     error_template = 'Found incorrect node inside `class` body'
     code = 604
-    previous_codes = {452}
+    previous_codes = frozenset({452})
 
 
 @final
@@ -265,7 +265,7 @@ class MethodWithoutArgumentsViolation(ASTViolation):
 
     error_template = 'Found method without arguments: {0}'
     code = 605
-    previous_codes = {453}
+    previous_codes = frozenset({453})
 
 
 @final
@@ -303,7 +303,7 @@ class WrongBaseClassViolation(ASTViolation):
 
     error_template = 'Found incorrect base class'
     code = 606
-    previous_codes = {454}
+    previous_codes = frozenset({454})
 
 
 @final
@@ -351,7 +351,7 @@ class WrongSlotsViolation(ASTViolation):
 
     error_template = 'Found incorrect `__slots__` syntax'
     code = 607
-    previous_codes = {455}
+    previous_codes = frozenset({455})
 
 
 @final
@@ -383,7 +383,7 @@ class WrongSuperCallViolation(ASTViolation):
 
     error_template = 'Found incorrect `super()` call: {0}'
     code = 608
-    previous_codes = {456}
+    previous_codes = frozenset({456})
 
 
 @final
@@ -419,7 +419,7 @@ class DirectMagicAttributeAccessViolation(ASTViolation):
 
     error_template = 'Found direct magic attribute usage: {0}'
     code = 609
-    previous_codes = {462}
+    previous_codes = frozenset({462})
 
 
 @final
@@ -504,7 +504,7 @@ class YieldMagicMethodViolation(ASTViolation):
 
     error_template = 'Found forbidden `yield` magic method usage'
     code = 611
-    previous_codes = {439, 435}
+    previous_codes = frozenset({439, 435})
 
 
 @final
