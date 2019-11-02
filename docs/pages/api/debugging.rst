@@ -7,14 +7,13 @@ there are several ways to debug things.
 Viewing module contents
 -----------------------
 
-To reveal internals of the Python files, you can use following options:
-
-* ``./scripts/parse.py`` will show you pretty-printed ``ast`` contents
-  of a module
-* ``tokelor`` will show you tokens that module consists off
-
 We recommend to create a simple file with just the part that does not work.
 We usually call this file ``ex.py`` and remove it before the actual commit.
+
+To reveal internals of this Python source code, you can use following options:
+
+* ``astboom < ex.py`` will show you pretty-printed ``ast`` contents
+* ``tokelor ex.py`` will show you pretty-printed token stream
 
 It might not be enough to find some complex cases, but it helps.
 

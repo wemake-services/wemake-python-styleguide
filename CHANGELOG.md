@@ -46,7 +46,7 @@ We used to have incremental versioning before `0.1.0`.
 ### Misc
 
 - Improves Github Action stability
-- Replace `scripts/tokens.py` with an external tool
+- Replace `scripts/tokens.py` and `scripts/parse.py` with external tools
 - Improves violation code testing
 - Improves testing of `.. versionchanged` and `previous_codes` properties
 - Reference `isort` settings requirement for compliance with WSP318 in docstring
