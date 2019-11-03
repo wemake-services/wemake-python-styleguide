@@ -1864,12 +1864,14 @@ class IncorrectExceptOrderViolation(ASTViolation):
     """
     Forbids the use incorrect order of ``except``.
 
+    Note, we only check for built-in exceptions.
+
     Reasoning:
-        Using ``except Exception`` in incorrect order is error-prone.
-        It will make other ``except`` unreachable.
+        Using incorrect order of exceptions is error-prone, since
+        you end up with some unreachable exception clauses.
 
     Solution:
-        Use ``except Exception`` after other ``except`` blocks.
+        Use correct order of exceptions.
 
     Example::
 
@@ -1888,6 +1890,9 @@ class IncorrectExceptOrderViolation(ASTViolation):
             ...
         except ValueError:
             ...
+
+    See also:
+        https://docs.python.org/3/library/exceptions.html#exception-hierarchy
 
     .. versionadded:: 0.13.0
 

@@ -2,7 +2,8 @@
 
 import ast
 from collections import Counter
-from typing import ClassVar, List, Tuple
+from inspect import getmro
+from typing import ClassVar, Dict, List, Set, Tuple
 
 from typing_extensions import final
 
@@ -46,6 +47,35 @@ def _find_returing_nodes(
         for line in node.finalbody
     )
     return try_has, except_has, else_has, finally_has
+
+
+def _traverse_exception(
+    cls,
+    builtin_exceptions=None,
+) -> Dict[str, Tuple[str]]:
+    """
+    Orinigal code: see below.
+
+    https://github.com/thg-consulting/inspectortiger/blob/
+    6b9736b22528493cd41d0bf92f9fdcdd6c7cd129/inspectortiger/plugins/misc.py#L66
+    """
+    builtin_exceptions = builtin_exceptions or {}
+
+    if cls.__name__ not in builtin_exceptions:
+        builtin_exceptions[cls.__name__] = ()
+
+    for exc in cls.__subclasses__():
+        builtin_exceptions[exc.__name__] = tuple(
+            base.__name__
+            for base in getmro(exc)
+            if (
+                issubclass(base, BaseException) and
+                base.__name__ != exc.__name__
+            )
+        )
+        _traverse_exception(exc, builtin_exceptions)
+
+    return builtin_exceptions.copy()
 
 
 @final
@@ -101,12 +131,18 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
             self.add_violation(TryExceptMultipleReturnPathViolation(node))
 
     def _check_exception_order(self, node: ast.Try) -> None:
+        built_in_exceptions = _traverse_exception(BaseException)
         exceptions_list: List[str] = exceptions.get_all_exception_names(node)
-        if 'Exception' not in exceptions_list:
-            return
+        seen: Set[str] = set()
 
-        if exceptions_list[-1] != self._except_exception:
-            self.add_violation(IncorrectExceptOrderViolation(node))
+        for exception in exceptions_list:
+            bases = built_in_exceptions.get(exception)
+
+            if bases is not None:
+                if any(base in seen for base in bases):
+                    self.add_violation(IncorrectExceptOrderViolation(node))
+                else:
+                    seen.add(exception)
 
 
 @final
