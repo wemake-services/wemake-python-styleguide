@@ -7,6 +7,7 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
+- Adds cognitive complexity metric, introduced by `cognitive_complexity`
 - `WPS431` now allow customize whitelist via `nested-classes-whitelist` setting
 - Forbids to have invalid strings like `**{'@': 1}`
 - Forbids to use implicit primitive values in a form of `lambda`
@@ -35,7 +36,7 @@ We used to have incremental versioning before `0.1.0`.
 ### Bugfixes
 
 - Fixes `ImplicitElifViolation` false positives on a specific edge cases
-- Fixes `I_CONTROL_CODE setting` for `BadMagicModuleFunctionViolation`
+- Fixes `i-control-code` setting for `BadMagicModuleFunctionViolation`
 - Fixes compatibility with flake8 `3.8.x`
 - Fixes that `not not True` was not detected as `WPS330`
 - Fixes addition of `MisrefactoredAssignmentViolation` check
@@ -49,7 +50,7 @@ We used to have incremental versioning before `0.1.0`.
 - Replace `scripts/tokens.py` and `scripts/parse.py` with external tools
 - Improves violation code testing
 - Improves testing of `.. versionchanged` and `previous_codes` properties
-- Reference `isort` settings requirement for compliance with WSP318 in docstring
+- Reference `isort` settings requirement for compliance with `WSP318` in docstring
 
 
 ## 0.12.5

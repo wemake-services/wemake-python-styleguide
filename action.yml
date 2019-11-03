@@ -9,11 +9,13 @@ description: 'Runs wemake-python-styleguide as a Github Action'
 branding:
   icon: 'check'
   color: 'green'
+
 inputs:
   path:
     description: 'Path or space-separated list of paths to lint'
     required: false
     default: '.'
+  
 outputs:
   output:
     description: 'The output of wemake-python-styleguide run'

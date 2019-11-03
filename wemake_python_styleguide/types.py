@@ -101,6 +101,8 @@ class ConfigurationOptions(Protocol):
     min_name_length: int
     i_control_code: bool
     max_name_length: int
+    max_noqa_comments: int
+    nested_classes_whitelist: List[str]
 
     # Complexity:
     max_arguments: int
@@ -123,7 +125,5 @@ class ConfigurationOptions(Protocol):
     max_asserts: int
     max_access_level: int
     max_attributes: int
-    nested_classes_whitelist: List[str]  # flake8 passes lists
-
-    # Comments
-    max_noqa_comments: int
+    max_cognitive_score: int
+    max_cognitive_average: int

@@ -159,7 +159,7 @@ async def too_many_asserts():  # noqa: WPS218
 
 deep_access = some.other[0].field.type.boom  # noqa: WPS219
 
-def test_function():
+def test_function():  # noqa: WPS231
     if xy > 1:
         if xy > 2:
             if xy > 3:

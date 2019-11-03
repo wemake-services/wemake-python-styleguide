@@ -6,7 +6,7 @@ from typing import ClassVar, DefaultDict, Dict, List, Tuple, Type, Union
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic import functions
+from wemake_python_styleguide.logic import complexity, functions
 from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.types import (
@@ -16,6 +16,8 @@ from wemake_python_styleguide.types import (
 )
 from wemake_python_styleguide.violations.base import BaseViolation
 from wemake_python_styleguide.violations.complexity import (
+    CognitiveComplexityViolation,
+    CognitiveModuleComplexityViolation,
     TooManyArgumentsViolation,
     TooManyAssertsViolation,
     TooManyAwaitsViolation,
@@ -209,3 +211,50 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
     def _post_visit(self) -> None:
         self._check_function_signature()
         self._check_function_internals()
+
+
+@final
+@alias('visit_any_function', (
+    'visit_AsyncFunctionDef',
+    'visit_FunctionDef',
+))
+class CognitiveComplexityVisitor(BaseNodeVisitor):
+    """Used to count cognitive score and average module complexity."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        """We use to save all functions' complexity here."""
+        super().__init__(*args, **kwargs)
+        self._functions: DefaultDict[AnyFunctionDef, int] = defaultdict(int)
+
+    def visit_any_function(self, node: AnyFunctionDef) -> None:
+        """
+        Counts cognitive complexity.
+
+        Raises:
+            CognitiveComplexityViolation
+            CognitiveModuleComplexityViolation
+
+        """
+        self._functions[node] = complexity.cognitive_score(node)
+        self.generic_visit(node)
+
+    def _post_visit(self) -> None:
+        if not self._functions:
+            return  # module can be empty
+
+        total = 0
+        for function, score in self._functions.items():
+            total += score
+
+            if score > self.options.max_cognitive_score:
+                self.add_violation(
+                    CognitiveComplexityViolation(function, text=str(score)),
+                )
+
+        average = total / len(self._functions)
+        if average > self.options.max_cognitive_average:
+            self.add_violation(
+                CognitiveModuleComplexityViolation(
+                    text=str(round(average, 1)),
+                ),
+            )

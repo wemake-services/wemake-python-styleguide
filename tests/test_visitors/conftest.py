@@ -42,8 +42,9 @@ def assert_errors():
 @pytest.fixture(scope='session')
 def assert_error_text():
     """Helper function to assert visitor violation's text."""
-    def factory(visitor: BaseVisitor, text: str):
-        assert len(visitor.violations) == 1
+    def factory(visitor: BaseVisitor, text: str, multiple: bool = False):
+        if not multiple:
+            assert len(visitor.violations) == 1
 
         violation = visitor.violations[0]
         error_format = ': {0}'

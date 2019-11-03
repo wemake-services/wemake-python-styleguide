@@ -66,6 +66,7 @@ forbidden_modules =
   mccabe
   radon
   astor
+  cognitive_complexity
 
 ignore_imports =
   # These modules must import from flake8 to provide required API:
@@ -74,6 +75,7 @@ ignore_imports =
   wemake_python_styleguide.options.config -> flake8
   wemake_python_styleguide.formatter -> pygments
   wemake_python_styleguide.logic.source -> astor
+  wemake_python_styleguide.logic.complexity -> cognitive_complexity
 
 
 [importlinter:contract:subapi-restrictions]

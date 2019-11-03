@@ -8,7 +8,7 @@ from typing import ClassVar, Dict, List, Tuple, Type, Union
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
-from wemake_python_styleguide.logic import walk
+from wemake_python_styleguide.logic import keywords, walk
 from wemake_python_styleguide.logic.exceptions import get_exception_name
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.variables import (
@@ -118,16 +118,11 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
         returning_type,  # mypy is not ok with this type declaration
         violation: ReturningViolations,
     ):
-        returns: List[ast.Return] = []
-        has_values = False
-        for sub_node in ast.walk(node):
-            context_node = get_context(sub_node)
-            if isinstance(sub_node, returning_type) and context_node == node:
-                if sub_node.value:
-                    has_values = True
-                returns.append(sub_node)
+        return_nodes, has_values = keywords.returning_nodes(
+            node, returning_type,
+        )
 
-        for return_node in returns:
+        for return_node in return_nodes:
             if not return_node.value and has_values:
                 self.add_violation(violation(return_node))
 
@@ -306,11 +301,20 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
         names = self._get_name_nodes_variable(nodes)
         returns, return_sub_nodes = self._get_return_node_variables(nodes)
 
-        returns = {name: returns[name] for name in returns if name in assign}
+        returns = {
+            name: returns[name]
+            for name in returns
+            if name in assign
+        }
 
         self._check_for_violations(names, return_sub_nodes, returns)
 
-    def _check_for_violations(self, names, return_sub_nodes, returns) -> None:
+    def _check_for_violations(
+        self,
+        names: Dict[str, List[ast.Name]],
+        return_sub_nodes: Dict[str, ast.Return],
+        returns: Dict[str, List[ast.Name]],
+    ) -> None:
         for variable_name in returns:
             if not set(names[variable_name]) - set(returns[variable_name]):
                 self.add_violation(

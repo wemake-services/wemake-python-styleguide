@@ -65,7 +65,7 @@ def _convert_iterable(node: Union[Tuple, List, Set, Dict]):
     ))
 
 
-def literal_eval_with_names(node: AST) -> Optional[Any]:
+def literal_eval_with_names(node: AST) -> Optional[Any]:  # noqa: WPS231
     """
     Safely evaluate constants and ``ast.Name`` nodes.
 
@@ -76,6 +76,9 @@ def literal_eval_with_names(node: AST) -> Optional[Any]:
     Modified to treat ``ast.Name`` nodes as constants.
 
     See: :py:`ast.literal_eval` source.
+
+    We intentionally ignore complexity violation here,
+    becase we try to stay as close to the original source as possible.
     """
     if isinstance(node, (Constant, NameConstant)):
         return node.value
