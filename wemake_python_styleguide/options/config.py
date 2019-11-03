@@ -112,8 +112,12 @@ You can also show all options that ``flake8`` supports by running:
 - ``max-attributes`` - maximum number of public instance attributes,
     defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_ATTRIBUTES`
-
--
+- ``max-cognitive-score`` - maximum amount of cognitive complexity
+    per function, defaults to
+    :str:`wemake_python_styleguide.options.defaults.MAX_COGNITIVE_SCORE`
+- ``max-cognitive-average`` - maximum amount of cognitive complexity
+    per module, defaults to
+    :str:`wemake_python_styleguide.options.defaults.MAX_COGNITIVE_AVERAGE`
 
 """
 

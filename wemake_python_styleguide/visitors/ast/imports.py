@@ -132,5 +132,6 @@ class WrongImportVisitor(BaseNodeVisitor):
         self._validator.check_from_import(node)
         self._validator.check_nested_import(node)
         self._validator.check_alias(node)
+        self._validator.check_same_alias(node)
         self._validator.check_protected_import(node)
         self.generic_visit(node)
