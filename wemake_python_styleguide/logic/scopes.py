@@ -18,6 +18,9 @@ _ContextStore = DefaultDict[ContextNodes, Set[str]]
 #: That's what we expect from `@overload` decorator:
 _overload_exceptions = frozenset(('overload', 'typing.overload'))
 
+#: That's what we expect from `@property` decorator:
+_property_exceptions = frozenset(('property', '.setter'))
+
 
 class _BaseScope(object):
     """Base class for scope operations."""
@@ -141,6 +144,15 @@ def is_function_overload(node: ast.AST) -> bool:
     if isinstance(node, FunctionNodes):
         for decorator in node.decorator_list:
             if node_to_string(decorator) in _overload_exceptions:
+                return True
+    return False
+
+
+def is_property_setter(node: ast.AST, _=None):
+    """Check that function decorated with `property.setter`."""
+    if isinstance(node, FunctionNodes):
+        for decorator in node.decorator_list:
+            if node_to_string(decorator) in _property_exceptions:
                 return True
     return False
 

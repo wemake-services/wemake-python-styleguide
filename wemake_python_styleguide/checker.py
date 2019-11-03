@@ -152,14 +152,7 @@ class Checker(object):
             Violations that were found by the passed visitors.
 
         """
-        yield from self._run_checks(self._visitors)
-
-    def _run_checks(
-        self,
-        visitors: Sequence[VisitorClass],
-    ) -> Iterator[types.CheckResult]:
-        """Runs all passed visitors one by one."""
-        for visitor_class in visitors:
+        for visitor_class in self._visitors:
             visitor = visitor_class.from_checker(self)
 
             try:

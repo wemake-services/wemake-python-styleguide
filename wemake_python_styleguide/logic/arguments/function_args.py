@@ -49,16 +49,18 @@ def has_same_kwarg(node: types.AnyFunctionDefAndLambda, call: ast.Call) -> bool:
     return node.args.kwarg == kwarg_name  # type: ignore
 
 
-def has_same_args(node: types.AnyFunctionDefAndLambda, call: ast.Call) -> bool:
+def has_same_args(  # noqa: WPS231
+    node: types.AnyFunctionDefAndLambda,
+    call: ast.Call,
+) -> bool:
     """Tells whether ``call`` has the same positional args as ``node``."""
     node_args = method_args.get_args_without_special_argument(node)
     paired_arguments = zip_longest(call.args, node_args)
     for call_arg, func_arg in paired_arguments:
-        if isinstance(call_arg, ast.Starred):
+        if isinstance(call_arg, ast.Starred) and isinstance(func_arg, ast.arg):
             # nevertheless `*args` is vararg ensure there is no
             # plain arg defined on corresponding position
-            if isinstance(func_arg, ast.arg):
-                return False
+            return False
         elif isinstance(call_arg, ast.Name):
             # for each found call arg there should be not null
             # same func arg defined on the same position

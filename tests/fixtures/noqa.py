@@ -159,7 +159,7 @@ async def too_many_asserts():  # noqa: WPS218
 
 deep_access = some.other[0].field.type.boom  # noqa: WPS219
 
-def test_function():
+def test_function():  # noqa: WPS231
     if xy > 1:
         if xy > 2:
             if xy > 3:
@@ -236,7 +236,7 @@ binary_number = 0B1001  # noqa: WPS310
 number_with_scientific_notation = 1.5E-10  # noqa: WPS310
 number_with_useless_plus = +5  # noqa: WPS330
 
-if '6' in nodes in '6':  # noqa: WPS311
+if '6' in nodes in '6':  # noqa: WPS311, WPS525
     anti_z444 = 1
 
 assert hex_number == hex_number  # noqa: WPS312
@@ -579,6 +579,14 @@ class ChildClass(ParentClass):
 LOWERCASE_ALPH = "abcdefghijklmnopqrstuvwxyz" # noqa: WPS447
 
 int()  # noqa: WPS351
+
+for wrong_loop in call(  # noqa: WPS352
+    1, 2, 3,
+):
+    print('bad loop')
+
+if a in {1}:  # noqa: WPS525
+    print('bad!')
 
 try: # noqa: WPS448
     anti_z444 = 1

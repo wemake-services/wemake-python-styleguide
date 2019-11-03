@@ -97,6 +97,13 @@ def function():
     return
 """
 
+wrong_example4 = """
+def function():
+    def decorator():
+        return
+    return decorator
+"""
+
 double_wrong_return1 = """
 def function():
     if some:
@@ -117,6 +124,7 @@ def function():
     wrong_example1,
     wrong_example2,
     wrong_example3,
+    wrong_example4,
 ])
 def test_wrong_return_statement(
     assert_errors,

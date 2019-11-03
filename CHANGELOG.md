@@ -7,6 +7,7 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
+- Adds cognitive complexity metric, introduced by `cognitive_complexity`
 - `WPS431` now allow customize whitelist via `nested-classes-whitelist` setting
 - Forbids to have invalid strings like `**{'@': 1}`
 - Forbids to use implicit primitive values in a form of `lambda`
@@ -26,24 +27,31 @@ We used to have incremental versioning before `0.1.0`.
 - `WPS350` enforces using augmented assign pattern
 - Forbids to use `Optional[Union[...]]` in annotations
 - Forbids unnecessary literals
+- `WPS525` forbids comparisons where `in` is compared with single item container
+- Fixes `BlockVariableVisitor` false positives on a properties
+- Forbids wrong annotations in assignment
+- Forbids using multiline `for` and `while` statements
+- `WPS113` now can be tweaked with `I_CONTROL_CODE` setting
 - Forbids incorrect exception order
 
 ### Bugfixes
 
 - Fixes `ImplicitElifViolation` false positives on a specific edge cases
-- Fixes `I_CONTROL_CODE setting` for `BadMagicModuleFunctionViolation`
+- Fixes `i-control-code` setting for `BadMagicModuleFunctionViolation`
 - Fixes compatibility with flake8 `3.8.x`
 - Fixes that `not not True` was not detected as `WPS330`
 - Fixes addition of `MisrefactoredAssignmentViolation` check
 - Fixes `WrongMagicCommentViolation` not catching certain wrong comments
 - Fixes `BadMagicModuleFunctionViolation` false positives on class-level methods
+- Fixes `InconsistentReturnViolation` false positives on nested functions
 
 ### Misc
 
 - Improves Github Action stability
-- Replace `scripts/tokens.py` with an external tool
+- Replace `scripts/tokens.py` and `scripts/parse.py` with external tools
 - Improves violation code testing
 - Improves testing of `.. versionchanged` and `previous_codes` properties
+- Reference `isort` settings requirement for compliance with `WSP318` in docstring
 
 
 ## 0.12.5

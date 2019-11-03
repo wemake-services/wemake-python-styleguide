@@ -33,7 +33,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS110': 3,
     'WPS111': 1,
     'WPS112': 1,
-    'WPS113': 1,
+    'WPS113': 0,
     'WPS114': 1,
     'WPS115': 1,
     'WPS116': 1,
@@ -72,6 +72,8 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS228': 1,
     'WPS229': 1,
     'WPS230': 1,
+    'WPS231': 1,
+    'WPS232': 0,
 
     'WPS300': 1,
     'WPS301': 1,
@@ -125,6 +127,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS349': 1,
     'WPS350': 1,
     'WPS351': 1,
+    'WPS352': 1,
 
     'WPS400': 0,
     'WPS401': 0,
@@ -201,6 +204,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS522': 1,
     'WPS523': 1,
     'WPS524': 1,
+    'WPS525': 2,
 
     'WPS600': 1,
     'WPS601': 1,

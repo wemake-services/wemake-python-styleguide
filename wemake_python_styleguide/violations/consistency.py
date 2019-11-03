@@ -77,6 +77,7 @@ Summary
    RedundantSubscriptViolation
    AugmentedAssignPatternViolation
    UnnecessaryLiteralsViolation
+   MultilineLoopViolation
 
 Consistency checks
 ------------------
@@ -133,6 +134,7 @@ Consistency checks
 .. autoclass:: RedundantSubscriptViolation
 .. autoclass:: AugmentedAssignPatternViolation
 .. autoclass:: UnnecessaryLiteralsViolation
+.. autoclass:: MultilineLoopViolation
 
 """
 
@@ -782,6 +784,14 @@ class ExtraIndentationViolation(TokenizeViolation):
         # Wrong:
         def test():
                     print('test')
+
+    This rule is consistent with the "Vertical Hanging Indent" option for
+    ``multi_line_output`` setting of ``isort``. To avoid conflicting rules,
+    you should set ``multi_line_output = 3`` in the ``isort`` settings.
+
+    See also:
+        https://github.com/timothycrosley/isort#multi-line-output-modes
+        https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/isort.toml
 
     .. versionadded:: 0.6.0
 
@@ -1768,22 +1778,20 @@ class VagueImportViolation(ASTViolation):
     Reasoning:
         See ``datetime.*`` in code? You know that it's from datetime.
         See ``BaseView`` in a Django project? You know where it is from.
-        See ``loads``? It can be anything: ``yaml``, ``toml``, ``json`` ...
+        See ``loads``? It can be anything: ``yaml``, ``toml``, ``json``, etc.
+
+    See
+    :py:data:`~wemake_python_styleguide.constants.VAGUE_IMPORTS_BLACKLIST`
+    for the full list of bad import names.
 
     Example::
 
         # Correct:
         import json
-
-        ...
-
         json.loads(content)
 
         # Wrong:
         from json import loads
-
-        ...
-
         loads(content)
 
     .. versionadded:: 0.13.0
@@ -1896,3 +1904,37 @@ class UnnecessaryLiteralsViolation(ASTViolation):
 
     error_template = 'Found unnecessary literals.'
     code = 351
+
+
+@final
+class MultilineLoopViolation(ASTViolation):
+    """
+    Forbids multiline loops.
+
+    Reasoning:
+        It decreased the readability of the code.
+
+    Solution:
+        Use single line loops and create new variables
+        in case you need to fit too many logic inside the loop definition.
+
+    Example::
+
+        # Correct
+
+        for num in some_function(arg1, arg2):
+            ...
+
+        # Wrong
+        for num in range(
+            arg1,
+            arg2,
+        ):
+            ...
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Forbids multiline loops'
+    code = 352
