@@ -57,10 +57,11 @@ def has_same_args(  # noqa: WPS231
     node_args = method_args.get_args_without_special_argument(node)
     paired_arguments = zip_longest(call.args, node_args)
     for call_arg, func_arg in paired_arguments:
-        if isinstance(call_arg, ast.Starred) and isinstance(func_arg, ast.arg):
+        if isinstance(call_arg, ast.Starred):
             # nevertheless `*args` is vararg ensure there is no
             # plain arg defined on corresponding position
-            return False
+            if isinstance(func_arg, ast.arg):
+                return False
         elif isinstance(call_arg, ast.Name):
             # for each found call arg there should be not null
             # same func arg defined on the same position

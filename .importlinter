@@ -73,6 +73,7 @@ ignore_imports =
   wemake_python_styleguide.checker -> flake8
   wemake_python_styleguide.formatter -> flake8
   wemake_python_styleguide.options.config -> flake8
+  # We disallow direct imports of our dependencies from anywhere, except:
   wemake_python_styleguide.formatter -> pygments
   wemake_python_styleguide.logic.source -> astor
   wemake_python_styleguide.logic.complexity -> cognitive_complexity
