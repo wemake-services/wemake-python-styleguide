@@ -197,6 +197,7 @@ class Configuration(object):
             action='store_false',
             type=None,
             dest='i_control_code',
+            parse_from_config=False,
         ),
 
         _Option(
