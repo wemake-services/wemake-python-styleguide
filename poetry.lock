@@ -1034,7 +1034,7 @@ category = "main"
 description = "YAML parser and emitter for Python"
 name = "pyyaml"
 optional = false
-python-versions = "*"
+python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "4.2b4"
 
 [[package]]
@@ -1190,7 +1190,7 @@ description = "Type hints (PEP 484) support for the Sphinx autodoc extension"
 name = "sphinx-autodoc-typehints"
 optional = false
 python-versions = ">=3.5.2"
-version = "1.9.0"
+version = "1.10.0"
 
 [package.dependencies]
 Sphinx = ">=2.1"
@@ -1395,7 +1395,7 @@ version = "0.6.0"
 more-itertools = "*"
 
 [metadata]
-content-hash = "853e5591b5819cfd042bf4cb036620d94094354677875f054489d3cce519d6ea"
+content-hash = "3b46c4c62280dac457665d01d49faddf6e17fe2800e9b5dd656de3e119a54247"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -1509,7 +1509,7 @@ snapshottest = ["2cc7157e77674ea8ebeb2351466ff50cd4b5ad8e213adc06df9c16a75ab5baf
 snowballstemmer = ["209f257d7533fdb3cb73bdbd24f436239ca3b2fa67d56f6ff88e86be08cc5ef0", "df3bac3df4c2c01363f3dd2cfa78cce2840a79b9f1c2d2de9ce8d31683992f52"]
 sortedcontainers = ["974e9a32f56b17c1bac2aebd9dcf197f3eb9cd30553c5852a3187ad162e1a03a", "d9e96492dd51fae31e60837736b38fe42a187b5404c16606ff7ee7cd582d4c60"]
 sphinx = ["31088dfb95359384b1005619827eaee3056243798c62724fd3fa4b84ee4d71bd", "52286a0b9d7caa31efee301ec4300dbdab23c3b05da1c9024b4e84896fb73d79"]
-sphinx-autodoc-typehints = ["0dfd26be5b81049ce81b644913a06a12795ded2791adc0a4e13420eb9a832852", "81bfdf4fbb9e248f10a6bc3f931bf80e85e95a185530e1a862db9269efd72cf9"]
+sphinx-autodoc-typehints = ["592b2b8122ff569e62b9015fefcadd341bfe77a2186f5acfaed3c7a363ac2487", "8715a3904f8f1e700bed79aa71b2fc7a22ef1ddaa9c44775b22930ca55b0e278"]
 sphinxcontrib-applehelp = ["edaa0ab2b2bc74403149cb0209d6775c96de797dfd5b5e2a71981309efab3897", "fb8dee85af95e5c30c91f10e7eb3c8967308518e0f7488a2828ef7bc191d0d5d"]
 sphinxcontrib-devhelp = ["6c64b077937330a9128a4da74586e8c2130262f014689b4b89e2d08ee7294a34", "9512ecb00a2b0821a146736b39f7aeb90759834b07e81e8cc23a9c70bacb9981"]
 sphinxcontrib-htmlhelp = ["4670f99f8951bd78cd4ad2ab962f798f5618b17675c35c5ac3b2132a14ea8422", "d4fd39a65a625c9df86d7fa8a2d9f3cd8299a3a4b15db63b50aac9e161d8eff7"]
