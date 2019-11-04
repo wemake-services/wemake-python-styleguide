@@ -587,3 +587,8 @@ for wrong_loop in call(  # noqa: WPS352
 
 if a in {1}:  # noqa: WPS525
     print('bad!')
+
+
+def implicit_yield_from():
+    for wrong_yield in call():  # noqa: WPS526
+        yield wrong_yield

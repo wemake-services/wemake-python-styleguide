@@ -41,6 +41,7 @@ Summary
    AlmostSwappedViolation
    MisrefactoredAssignmentViolation
    InCompareWithSingleItemContainerViolation
+   ImplicitYieldFromViolation
 
 Refactoring opportunities
 -------------------------
@@ -71,6 +72,7 @@ Refactoring opportunities
 .. autoclass:: AlmostSwappedViolation
 .. autoclass:: MisrefactoredAssignmentViolation
 .. autoclass:: InCompareWithSingleItemContainerViolation
+.. autoclass:: ImplicitYieldFromViolation
 
 """
 
@@ -1012,3 +1014,35 @@ class InCompareWithSingleItemContainerViolation(ASTViolation):
 
     error_template = 'Found wrong "in" compare with single item container'
     code = 525
+
+
+@final
+class ImplicitYieldFromViolation(ASTViolation):
+    """
+    Forbids to use ``yield`` inside ``for`` loop instead of ``yield from``.
+
+    Reasoning:
+        It is known that ``yield from`` is a semantically identical
+        to a ``for`` loop with a ``yield`` inside.
+        But, it is way more readable.
+
+    Solution:
+        Use ``yield from`` some iterable directly
+        instead iterating over it inside a loop
+        and ``yield`` it one by one.
+
+    Example::
+
+        # Correct:
+        yield from some()
+
+        # Wrong:
+        for item in some():
+            yield item
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found implicit `yield from` usage'
+    code = 526

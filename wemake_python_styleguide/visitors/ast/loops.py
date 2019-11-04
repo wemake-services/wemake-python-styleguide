@@ -30,6 +30,7 @@ from wemake_python_styleguide.violations.consistency import (
 )
 from wemake_python_styleguide.violations.refactoring import (
     ImplicitSumViolation,
+    ImplicitYieldFromViolation,
     UselessLoopElseViolation,
 )
 from wemake_python_styleguide.visitors import base, decorators
@@ -230,6 +231,7 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
         self._check_variable_definitions(node.target)
         self._check_explicit_iter_type(node)
         self._check_implicit_sum(node)
+        self._check_implicit_yield_from(node)
         self.generic_visit(node)
 
     def visit_comprehension(self, node: ast.comprehension) -> None:
@@ -267,3 +269,12 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
         )
         if is_implicit_sum:
             self.add_violation(ImplicitSumViolation(node))
+
+    def _check_implicit_yield_from(self, node: AnyFor) -> None:
+        is_implicit_yield_from = (
+            len(node.body) == 1 and
+            isinstance(node.body[0], ast.Expr) and
+            isinstance(node.body[0].value, ast.Yield)
+        )
+        if is_implicit_yield_from:
+            self.add_violation(ImplicitYieldFromViolation(node))
