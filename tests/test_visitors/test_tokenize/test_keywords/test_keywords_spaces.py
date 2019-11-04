@@ -7,7 +7,7 @@ import pytest
 from wemake_python_styleguide.violations.consistency import (
     MissingSpaceBetweenKeywordAndParenViolation,
 )
-from wemake_python_styleguide.visitors.tokenize.keywords import (
+from wemake_python_styleguide.visitors.tokenize.syntax import (
     WrongKeywordTokenVisitor,
 )
 

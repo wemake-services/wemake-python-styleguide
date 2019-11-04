@@ -42,13 +42,18 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         # since we have a special violation for it.
         0: (ast.Mult, ast.Add, ast.Sub, ast.Pow, ast.Mod),
         # `1` and `-1` are different, `-1` is allowed.
-        1: (ast.Div, ast.Mult, ast.Pow, ast.Mod),
+        1: (ast.Div, ast.FloorDiv, ast.Mult, ast.Pow, ast.Mod),
     }
 
     #: Used to ignore some special cases like `1 / x`:
     _left_special_cases: ClassVar[_MeaninglessOperators] = {
-        1: (ast.Div,),
+        1: (ast.Div, ast.FloorDiv),
     }
+
+    _zero_divisors: ClassVar[AnyNodes] = (
+        ast.Div,
+        ast.FloorDiv,
+    )
 
     def visit_numbers_and_constants(self, node: _NumbersAndConstants) -> None:
         """
@@ -97,7 +102,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         number = unwrap_unary_node(number)
 
         is_zero_division = (
-            isinstance(op, ast.Div) and
+            isinstance(op, self._zero_divisors) and
             isinstance(number, ast.Num) and
             number.n == 0
         )
