@@ -61,9 +61,11 @@ wemake-python-styleguide       WPS, defined here
   :caption: Violation types:
   :hidden:
 
+  system.rst
   naming.rst
   complexity.rst
   consistency.rst
   best_practices.rst
   refactoring.rst
   oop.rst
+  annotations.rst
