@@ -356,12 +356,6 @@ class Configuration(object):
             defaults.MAX_CALL_LEVEL,
             'Maximum number of call chains.',
         ),
-
-        _Option(
-            '--max-call-level',
-            defaults.MAX_CALL_LEVEL,
-            'Maximum number of call chains.',
-        ),
     ]
 
     def register_options(self, parser: OptionManager) -> None:
