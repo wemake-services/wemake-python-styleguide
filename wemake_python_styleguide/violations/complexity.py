@@ -53,8 +53,11 @@ Summary
    TooLongCompareViolation
    TooLongTryBodyViolation
    TooManyPublicAttributesViolation
+<<<<<<< HEAD
    CognitiveComplexityViolation
    CognitiveModuleComplexityViolation
+=======
+>>>>>>> afa977b26b1d7bddccedd637035421014db12192
    TooLongCallChainViolation
 
 
@@ -91,8 +94,11 @@ Structure complexity
 .. autoclass:: TooLongCompareViolation
 .. autoclass:: TooLongTryBodyViolation
 .. autoclass:: TooManyPublicAttributesViolation
+<<<<<<< HEAD
 .. autoclass:: CognitiveComplexityViolation
 .. autoclass:: CognitiveModuleComplexityViolation
+=======
+>>>>>>> afa977b26b1d7bddccedd637035421014db12192
 .. autoclass:: TooLongCallChainViolation
 
 """
@@ -950,29 +956,23 @@ class TooManyPublicAttributesViolation(ASTViolation):
 class CognitiveComplexityViolation(ASTViolation):
     """
     Forbids to have functions with too high cognitive complexity.
-
     Reasoning:
         People are not great at reading and iterpretating code in their heads.
         That's why code with a lot of nested loops,
         conditions, exceptions handlers,
         and context managers is hard to read and understand.
-
     Solution:
         Rewrite your code to be simplier.
         Use flat structures and conditions, remove nested loops.
-
     Configuration:
         This rule is configurable with ``--max-cognitive-score``.
         Default:
         :str:`wemake_python_styleguide.options.defaults.MAX_COGNITIVE_SCORE`
-
     See also:
         https://en.wikipedia.org/wiki/Cognitive_complexity
         https://pypi.org/project/cognitive-complexity/
         https://github.com/Melevir/flake8-cognitive-complexity
-
     .. versionadded:: 0.13.0
-
     """
 
     error_template = 'Found too high function cognitive complexity: {0}'
@@ -983,25 +983,19 @@ class CognitiveComplexityViolation(ASTViolation):
 class CognitiveModuleComplexityViolation(SimpleViolation):
     """
     Forbids to have modules with too high average cognitive complexity.
-
     Reasoning:
         Modules with lots of functions might hide cognitive complexity
         inside many small and relatevely simple functions.
-
     Solution:
         Rewrite your code to be simplier.
         Or use several modules.
-
     Configuration:
         This rule is configurable with ``--max-cognitive-average``.
         Default:
         :str:`wemake_python_styleguide.options.defaults.MAX_COGNITIVE_AVERAGE`
-
     See also:
         https://en.wikipedia.org/wiki/Cognitive_complexity
-
     .. versionadded:: 0.13.0
-
     """
 
     error_template = 'Found too high module cognitive complexity: {0}'
