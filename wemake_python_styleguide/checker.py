@@ -161,6 +161,8 @@ class Checker(object):
                 # In case we fail misserably, we want users to see at
                 # least something! Full stack trace
                 # and some rules that still work.
+                # TODO: we can turn this into internal error / violation
+                # So, the exit code will be correct.
                 print(traceback.format_exc())  # noqa: T001
 
             for error in visitor.violations:

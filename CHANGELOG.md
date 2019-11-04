@@ -43,6 +43,7 @@ We used to have incremental versioning before `0.1.0`.
 - Fixes `WrongMagicCommentViolation` not catching certain wrong comments
 - Fixes `BadMagicModuleFunctionViolation` false positives on class-level methods
 - Fixes `InconsistentReturnViolation` false positives on nested functions
+- Fixes that `--i-dont-control-code` was not present in command line options
 
 ### Misc
 
