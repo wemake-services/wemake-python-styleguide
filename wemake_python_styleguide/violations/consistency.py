@@ -1500,14 +1500,14 @@ class WrongMethodOrderViolation(ASTViolation):
 
     - ``__new__``
     - ``__init__``
-    - public and megic methods
+    - public and magic methods
     - protected methods
     - private methods (we discourage using them)
 
-    We follow "Newspaper order" when the most important things come the first.
+    We follow "Newspaper order" where the most important things come first.
 
     Reasoning:
-        It is hard to read classes which API declarations is bloated with
+        It is hard to read classes where API declarations are bloated with
         implementation details. We need to see the important stuff first,
         then we can go deeper in case we are interested.
 
