@@ -4,6 +4,7 @@ import ast
 from contextlib import suppress
 
 from wemake_python_styleguide.checker import Checker
+from wemake_python_styleguide.violations.system import InternalErrorViolation
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
@@ -22,7 +23,8 @@ def test_exception_handling(
     checker._visitors = [_BrokenVisitor]  # noqa: WPS437
 
     with suppress(StopIteration):
-        next(checker.run())
+        violation = next(checker.run())
+        assert violation[2][7:] == InternalErrorViolation.error_template
 
     captured = capsys.readouterr()
     assert 'ValueError: Message from visitor' in captured.out

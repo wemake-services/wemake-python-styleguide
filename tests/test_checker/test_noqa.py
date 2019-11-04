@@ -27,6 +27,8 @@ IGNORED_VIOLATIONS = (
 )
 
 SHOULD_BE_RAISED = types.MappingProxyType({
+    'WPS000': 0,
+
     'WPS100': 0,
     'WPS101': 0,
     'WPS102': 0,

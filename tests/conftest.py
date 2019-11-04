@@ -16,6 +16,7 @@ from wemake_python_styleguide.violations import (
     naming,
     oop,
     refactoring,
+    system,
 )
 from wemake_python_styleguide.violations.base import (
     ASTViolation,
@@ -42,6 +43,7 @@ def _is_violation_class(cls) -> bool:
 
 def _load_all_violation_classes():
     modules = [
+        system,
         naming,
         complexity,
         consistency,

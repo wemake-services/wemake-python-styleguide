@@ -29,6 +29,7 @@ name = Independence contract for violations (all shall be free!)
 type = independence
 
 modules =
+  wemake_python_styleguide.violations.system
   wemake_python_styleguide.violations.naming
   wemake_python_styleguide.violations.complexity
   wemake_python_styleguide.violations.consistency

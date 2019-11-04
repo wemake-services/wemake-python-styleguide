@@ -54,6 +54,7 @@ from wemake_python_styleguide.presets.types import file_tokens as tokens_preset
 from wemake_python_styleguide.presets.types import filename as filename_preset
 from wemake_python_styleguide.presets.types import tree as tree_preset
 from wemake_python_styleguide.transformations.ast_tree import transform
+from wemake_python_styleguide.violations import system
 from wemake_python_styleguide.visitors import base
 
 VisitorClass = Type[base.BaseVisitor]
@@ -161,9 +162,10 @@ class Checker(object):
                 # In case we fail misserably, we want users to see at
                 # least something! Full stack trace
                 # and some rules that still work.
-                # TODO: we can turn this into internal error / violation
-                # So, the exit code will be correct.
                 print(traceback.format_exc())  # noqa: T001
+                visitor.add_violation(system.InternalErrorViolation())
 
-            for error in visitor.violations:
-                yield (*error.node_items(), type(self))
+            yield from (
+                (*error.node_items(), type(self))
+                for error in visitor.violations
+            )
