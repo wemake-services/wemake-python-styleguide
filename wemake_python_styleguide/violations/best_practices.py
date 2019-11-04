@@ -567,7 +567,8 @@ class InitModuleHasLogicViolation(SimpleViolation):
     In this case this rule can be configured.
 
     Configuration:
-        This rule is configurable with ``--i-control-code``.
+        This rule is configurable with ``--i-control-code``
+        and ``--i-dont-control-code``.
         Default:
         :str:`wemake_python_styleguide.options.defaults.I_CONTROL_CODE`
 
@@ -592,7 +593,8 @@ class BadMagicModuleFunctionViolation(ASTViolation):
         Refactor your code to use custom methods instead.
 
     Configuration:
-        This rule is configurable with ``--i-control-code``.
+        This rule is configurable with ``--i-control-code``
+        and ``--i-dont-control-code``.
         Default:
         :str:`wemake_python_styleguide.options.defaults.I_CONTROL_CODE`
 
