@@ -564,7 +564,10 @@ arg: Optional[Union[str, int]]  # noqa: WPS702
 
 from json import loads  # noqa: WPS347
 
-some_list += [1, 2, 3, 4]  # noqa: WPS348
+some_model = (
+    MyModel.objects.filter(...)
+        .exclude(...)  # noqa: WPS348
+)
 
 swap_a = swap_b
 swap_b = swap_a  # noqa: WPS523
