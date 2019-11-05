@@ -40,9 +40,27 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
     _meaningless_operations: ClassVar[_MeaninglessOperators] = {
         # ast.Div is not in the list,
         # since we have a special violation for it.
-        0: (ast.Mult, ast.Add, ast.Sub, ast.Pow, ast.Mod),
+        0: (
+            ast.Mult,
+            ast.Add,
+            ast.Sub,
+            ast.Pow,
+            ast.Mod,
+
+            ast.BitAnd,
+            ast.BitOr,
+            ast.BitXor,
+            ast.RShift,
+            ast.LShift,
+        ),
         # `1` and `-1` are different, `-1` is allowed.
-        1: (ast.Div, ast.FloorDiv, ast.Mult, ast.Pow, ast.Mod),
+        1: (
+            ast.Div,
+            ast.FloorDiv,
+            ast.Mult,
+            ast.Pow,
+            ast.Mod,
+        ),
     }
 
     #: Used to ignore some special cases like `1 / x`:

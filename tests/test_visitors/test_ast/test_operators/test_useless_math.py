@@ -61,6 +61,7 @@ def test_zero_div(
 
 
 @pytest.mark.parametrize('expression', [
+    # Math ops:
     '*= 0',
     '**= -0.0',
     '+= 0e0',
@@ -84,6 +85,19 @@ def test_zero_div(
 
     '* other / 1.0',
     '* 1 * other',
+
+    # Boolean ops:
+    '>> 0',
+    '<< 0',
+    '| 0b0',
+    '^ 0x0',
+    '& -0o0',
+
+    '>>= 0',
+    '<<= 0',
+    '|= 0b0',
+    '^= 0x0',
+    '&= -0o0',
 ])
 def test_meaningless_math(
     assert_errors,
@@ -142,6 +156,7 @@ def test_correct_zero_div(
 
 
 @pytest.mark.parametrize('expression', [
+    # Math ops:
     '*= -1',
     '*= 10',
     '+= 1e2',
@@ -157,6 +172,19 @@ def test_correct_zero_div(
 
     '* other / 1.5',
     '* -1 * other',
+
+    # Boolean ops:
+    '>> 10',
+    '<< 1',
+    '| 0b1',
+    '^ 2',
+    '& -1',
+
+    '>>= 10',
+    '<<= 1',
+    '|= 0b1',
+    '^= 0x1',
+    '&= -0o1',
 ])
 def test_useful_math(
     assert_errors,

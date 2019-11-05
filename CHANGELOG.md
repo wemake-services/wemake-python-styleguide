@@ -31,6 +31,7 @@ We used to have incremental versioning before `0.1.0`.
 - Adds `WPS000` that indicates internal errors
 - Forbids to use implicit `yield from`
 - Forbids to start lines with `.`
+- Enforces better `&`, `|`, `>>`, `<<`, `^` operators usage
 
 ### Bugfixes
 
