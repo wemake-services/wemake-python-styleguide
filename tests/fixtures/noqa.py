@@ -591,3 +591,10 @@ if a in {1}:  # noqa: WPS525
 def implicit_yield_from():
     for wrong_yield in call():  # noqa: WPS526
         yield wrong_yield
+
+try: # noqa: WPS448
+    anti_z444 = 1
+except Exception:
+    anti_z444 = 1
+except ValueError:
+    anti_z444 = 1

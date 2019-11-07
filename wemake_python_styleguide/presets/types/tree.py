@@ -54,6 +54,7 @@ PRESET: Final = (
 
     exceptions.WrongTryExceptVisitor,
     exceptions.NestedTryBlocksVisitor,
+    exceptions.WrongExceptHandlerVisitor,
 
     imports.WrongImportVisitor,
 

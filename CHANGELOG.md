@@ -29,6 +29,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use implicit `yield from`
 - Forbids to start lines with `.`
 - Enforces better `&`, `|`, `>>`, `<<`, `^` operators usage
+- Forbids incorrect exception order
 
 ### Bugfixes
 
