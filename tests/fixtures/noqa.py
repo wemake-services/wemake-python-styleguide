@@ -558,13 +558,12 @@ unhashable = {[]}  # noqa: WPS443
 assert []  # noqa: WPS444
 unhashable = [] * 2  # noqa: WPS435
 
-type1: Literal[None]  # noqa: WPS700
-type2: Union[str, Union[int, float]]  # noqa: WPS701
-arg: Optional[Union[str, int]]  # noqa: WPS702
-
 from json import loads  # noqa: WPS347
 
-some_list += [1, 2, 3, 4]  # noqa: WPS348
+some_model = (
+    MyModel.objects.filter(...)
+        .exclude(...)  # noqa: WPS348
+)
 
 swap_a = swap_b
 swap_b = swap_a  # noqa: WPS523
@@ -588,9 +587,14 @@ for wrong_loop in call(  # noqa: WPS352
 if a in {1}:  # noqa: WPS525
     print('bad!')
 
+
+def implicit_yield_from():
+    for wrong_yield in call():  # noqa: WPS526
+
 try: # noqa: WPS448
     anti_z444 = 1
 except Exception:
     anti_z444 = 1
 except ValueError:
     anti_z444 = 1
+        yield wrong_yield

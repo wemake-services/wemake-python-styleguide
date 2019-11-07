@@ -73,7 +73,7 @@ Summary
    MeaninglessNumberOperationViolation
    OperationSignNegationViolation
    VagueImportViolation
-   AdditionAssignmentOnListViolation
+   LineStartsWithDotViolation
    RedundantSubscriptViolation
    AugmentedAssignPatternViolation
    UnnecessaryLiteralsViolation
@@ -130,7 +130,7 @@ Consistency checks
 .. autoclass:: MeaninglessNumberOperationViolation
 .. autoclass:: OperationSignNegationViolation
 .. autoclass:: VagueImportViolation
-.. autoclass:: AdditionAssignmentOnListViolation
+.. autoclass:: LineStartsWithDotViolation
 .. autoclass:: RedundantSubscriptViolation
 .. autoclass:: AugmentedAssignPatternViolation
 .. autoclass:: UnnecessaryLiteralsViolation
@@ -1500,14 +1500,14 @@ class WrongMethodOrderViolation(ASTViolation):
 
     - ``__new__``
     - ``__init__``
-    - public and megic methods
+    - public and magic methods
     - protected methods
     - private methods (we discourage using them)
 
-    We follow "Newspaper order" when the most important things come the first.
+    We follow "Newspaper order" where the most important things come first.
 
     Reasoning:
-        It is hard to read classes which API declarations is bloated with
+        It is hard to read classes where API declarations are bloated with
         implementation details. We need to see the important stuff first,
         then we can go deeper in case we are interested.
 
@@ -1803,27 +1803,41 @@ class VagueImportViolation(ASTViolation):
 
 
 @final
-class AdditionAssignmentOnListViolation(ASTViolation):
+class LineStartsWithDotViolation(TokenizeViolation):
     """
-    Forbids usage of += with list arguments.
+    Forbids to start lines with a dot.
 
     Reasoning:
-        ``+=`` works like ``extend()`` method.
-        Why not just use ``extend()`` instead of ``+=`` to be consistent.
+        We enforce strict consitency rules about how to break lines.
+        We also enforce strict rules about multi-line parameters.
+        Starting new lines with the dot means that this rule is broken.
+
+    Solution:
+        Use ``()`` to break lines in a complex expression.
 
     Example::
 
         # Correct:
-        some_list.extend([1, 2, 3])
+        some = MyModel.objects.filter(
+            ...,
+        ).exclude(
+            ...,
+        ).annotate(
+            ...,
+        )
 
-        # Wrong:
-        some_list += [1, 2, 3]
+        # Wrong
+        some = (
+            MyModel.objects.filter(...)
+                .exclude(...)
+                .annotate(...)
+        )
 
     .. versionadded:: 0.13.0
 
     """
 
-    error_template = 'Found addition assignment with list argument'
+    error_template = 'Found a line that starts with a dot'
     code = 348
 
 
@@ -1902,7 +1916,7 @@ class UnnecessaryLiteralsViolation(ASTViolation):
 
     """
 
-    error_template = 'Found unnecessary literals.'
+    error_template = 'Found unnecessary literals'
     code = 351
 
 
@@ -1920,12 +1934,11 @@ class MultilineLoopViolation(ASTViolation):
 
     Example::
 
-        # Correct
-
+        # Correct:
         for num in some_function(arg1, arg2):
             ...
 
-        # Wrong
+        # Wrong:
         for num in range(
             arg1,
             arg2,
@@ -1936,5 +1949,5 @@ class MultilineLoopViolation(ASTViolation):
 
     """
 
-    error_template = 'Forbids multiline loops'
+    error_template = 'Found multiline loop'
     code = 352

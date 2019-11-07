@@ -79,7 +79,7 @@ flake8-rst-docstrings = "^0.0.11"
 flake8-executable = "^2.0"
 pep8-naming = "^0.8.2"
 radon = '^2.4'
-cognitive_complexity = "^0.0.1"
+cognitive_complexity = ">=0.0.1,<0.0.5"
 
 [tool.poetry.dev-dependencies]
 nitpick = "^0.21.1"
@@ -93,7 +93,7 @@ snapshottest = "^0.5.1"
 mypy = "^0.740"
 docutils = "^0.13"
 sphinx = "^2.2"
-sphinx-autodoc-typehints = "<1.10"
+sphinx-autodoc-typehints = "<1.11"
 sphinxcontrib-mermaid = "^0.3"
 doc8 = "^0.8"
 m2r = "^0.2"

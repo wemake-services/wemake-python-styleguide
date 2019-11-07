@@ -3,7 +3,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.refactoring import (
-    ImplicitSumViolation,
+    ImplicitYieldFromViolation,
 )
 from wemake_python_styleguide.visitors.ast.loops import (
     WrongLoopDefinitionVisitor,
@@ -20,17 +20,12 @@ def function():
     for_loop_template,
 ])
 @pytest.mark.parametrize('code', [
-    'value += index',
-    'value += 1',
-    'value += index.prop',
-    'value += index[key]',
-    'value += index.method()',
-
-    'other += 1',
-    'index += value',
-    'value += "str"',
+    'yield',
+    'yield None',
+    'yield index',
+    'yield 10',
 ])
-def test_implicit_sum(
+def test_implicit_yield_from(
     assert_errors,
     parse_ast_tree,
     code,
@@ -38,27 +33,25 @@ def test_implicit_sum(
     default_options,
     mode,
 ):
-    """Ensures that implicit ``sum()`` calls are not allowed."""
+    """Ensures that implicit ``yield from`` are not allowed."""
     tree = parse_ast_tree(mode(template.format(code)))
 
     visitor = WrongLoopDefinitionVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [ImplicitSumViolation])
+    assert_errors(visitor, [ImplicitYieldFromViolation])
 
 
 @pytest.mark.parametrize('template', [
     for_loop_template,
 ])
 @pytest.mark.parametrize('code', [
-    'sum(some)',
-    'value -= 1',
     'print(index)',
-    'index += value\n        print(index)',  # two nodes in a body
-    'obj.attr += 1',
-    'obj[key] += index',
+    'yield index\n        print(index)',
+    'return index',
+    'call(index)',
 ])
-def test_regular_loops(
+def test_correct_for_loop(
     assert_errors,
     parse_ast_tree,
     code,
@@ -66,8 +59,30 @@ def test_regular_loops(
     default_options,
     mode,
 ):
-    """Ensures that correct ``sum()`` calls are allowed."""
+    """Ensures that correct ``for`` loops are allowed."""
     tree = parse_ast_tree(mode(template.format(code)))
+
+    visitor = WrongLoopDefinitionVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('template', [
+    for_loop_template,
+])
+@pytest.mark.parametrize('code', [
+    'yield from index',
+])
+def test_correct_sync_for_loop(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    template,
+    default_options,
+):
+    """Ensures that correct ``for`` loops are allowed."""
+    tree = parse_ast_tree(template.format(code))
 
     visitor = WrongLoopDefinitionVisitor(default_options, tree=tree)
     visitor.run()
