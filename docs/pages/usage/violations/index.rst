@@ -11,6 +11,7 @@ Other codes are coming from other tools.
 ============== ======
 Type           Codes
 -------------- ------
+System         :ref:`WPS000 - WPS099 <system>`
 Naming         :ref:`WPS100 - WPS199 <naming>`
 Complexity     :ref:`WPS200 - WPS299 <complexity>`
 Consistency    :ref:`WPS300 - WPS399 <consistency>`
@@ -60,9 +61,11 @@ wemake-python-styleguide       WPS, defined here
   :caption: Violation types:
   :hidden:
 
+  system.rst
   naming.rst
   complexity.rst
   consistency.rst
   best_practices.rst
   refactoring.rst
   oop.rst
+  annotations.rst

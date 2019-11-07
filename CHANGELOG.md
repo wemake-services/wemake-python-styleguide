@@ -7,19 +7,17 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
+- Adds cognitive complexity metric, introduced by `cognitive_complexity`
 - `WPS431` now allow customize whitelist via `nested-classes-whitelist` setting
-- Forbids to have invalid strings like `**{'@': 1}`
-- Forbids to use implicit primitive values in a form of `lambda`
+- Forbids to have invalid strings in stared expressions like `**{'@': 1}`
+- Forbids to use implicit primitive values in a form of `lambda: 0`
 - Forbids to use approximate math constants
 - Forbids to redefine string constants
 - Forbids using `Literal[None]` in function annotations
 - Forbids using nested `typing.Literal`, `typing.Union` and `typing.Annotated`
 - Forbids use of vague import names (e.g. `from json import loads`)
 - Makes `OveruseOfNoqaCommentViolation` configurable via `--max-noqa-comments`
-- Improves tests: we now ensure that each violation with previous codes also
-  has corresponding versions changed in their documentation
 - Forbid incorrectly swapped variables
-- Forbids to use `+=` with list arguments
 - Forbids to use redundant subscripts (e.g., `[0:7]` or `[3:None]`)
 - Allows `super()` as a valid overused expression
 - Forbids to use `super()` with other methods and properties
@@ -27,30 +25,38 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use `Optional[Union[...]]` in annotations
 - Forbids unnecessary literals
 - `WPS525` forbids comparisons where `in` is compared with single item container
-- Fixes `BlockVariableVisitor` false positives on a properties
 - Forbids wrong annotations in assignment
 - Forbids using multiline `for` and `while` statements
 - `WPS113` now can be tweaked with `I_CONTROL_CODE` setting
+- Adds `WPS000` that indicates internal errors
+- Forbids to use implicit `yield from`
+- Forbids to start lines with `.`
+- Enforces better `&`, `|`, `>>`, `<<`, `^` operators usage
 - Forbids useless blank lines in multiline bracket expressions 
 
 ### Bugfixes
 
 - Fixes `ImplicitElifViolation` false positives on a specific edge cases
-- Fixes `I_CONTROL_CODE setting` for `BadMagicModuleFunctionViolation`
+- Fixes `i-control-code` setting for `BadMagicModuleFunctionViolation`
 - Fixes compatibility with flake8 `3.8.x`
 - Fixes that `not not True` was not detected as `WPS330`
 - Fixes addition of `MisrefactoredAssignmentViolation` check
 - Fixes `WrongMagicCommentViolation` not catching certain wrong comments
 - Fixes `BadMagicModuleFunctionViolation` false positives on class-level methods
 - Fixes `InconsistentReturnViolation` false positives on nested functions
+- Fixes that `--i-dont-control-code` was not present in command line options
+- Fixes `BlockVariableVisitor` false positives on a properties
+- Fixes that `//` was not recognised as a math operation
 
 ### Misc
 
 - Improves Github Action stability
-- Replace `scripts/tokens.py` with an external tool
+- Replace `scripts/tokens.py` and `scripts/parse.py` with external tools
 - Improves violation code testing
 - Improves testing of `.. versionchanged` and `previous_codes` properties
-- Reference `isort` settings requirement for compliance with WSP318 in docstring
+- Reference `isort` settings requirement for compliance with `WSP318` in docstring
+- Improves tests: we now ensure that each violation with previous codes also
+  has corresponding versions changed in their documentation
 
 
 ## 0.12.5

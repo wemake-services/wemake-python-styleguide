@@ -68,19 +68,27 @@ class WrongClassVisitor(base.BaseNodeVisitor):
                 self.add_violation(oop.WrongBaseClassViolation(base_name))
                 continue
 
-            id_attr = getattr(base_name, 'id', None)
-            if id_attr == 'BaseException':
-                self.add_violation(bp.BaseExceptionSubclassViolation(node))
-            elif id_attr == 'object' and len(node.bases) >= 2:
-                self.add_violation(
-                    consistency.ObjectInBaseClassesListViolation(
-                        node, text=id_attr,
-                    ),
-                )
-            elif classes.is_forbidden_super_class(id_attr):
-                self.add_violation(
-                    oop.BuiltinSubclassViolation(node, text=id_attr),
-                )
+            self._check_base_classes_rules(node, base_name)
+
+    def _check_base_classes_rules(
+        self,
+        node: ast.ClassDef,
+        base_name: ast.expr,
+    ) -> None:
+        id_attr = getattr(base_name, 'id', None)
+
+        if id_attr == 'BaseException':
+            self.add_violation(bp.BaseExceptionSubclassViolation(node))
+        elif id_attr == 'object' and len(node.bases) >= 2:
+            self.add_violation(
+                consistency.ObjectInBaseClassesListViolation(
+                    node, text=id_attr,
+                ),
+            )
+        elif classes.is_forbidden_super_class(id_attr):
+            self.add_violation(
+                oop.BuiltinSubclassViolation(node, text=id_attr),
+            )
 
     def _check_wrong_body_nodes(self, node: ast.ClassDef) -> None:
         for sub_node in node.body:
@@ -339,14 +347,17 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
         class_attributes = []
         instance_attributes = []
 
-        for child in ast.walk(node):
-            if isinstance(child, ast.Attribute):
-                if isinstance(child.ctx, ast.Store):
-                    instance_attributes.append(child)
+        for nd in ast.walk(node):
+            if isinstance(nd, ast.Attribute) and isinstance(nd.ctx, ast.Store):
+                instance_attributes.append(nd)
+                continue
 
-            if isinstance(child, AssignNodes):
-                if nodes.get_context(child) == node and child.value:
-                    class_attributes.append(child)
+            has_assign = (
+                nodes.get_context(nd) == node and
+                getattr(nd, 'value', None)
+            )
+            if isinstance(nd, AssignNodes) and has_assign:
+                class_attributes.append(nd)
 
         return class_attributes, instance_attributes
 

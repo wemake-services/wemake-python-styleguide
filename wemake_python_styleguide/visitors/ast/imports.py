@@ -45,11 +45,10 @@ class _ImportsValidator(object):
         if parent is not None and not isinstance(parent, ast.Module):
             self._error_callback(NestedImportViolation(node))
 
-    def check_local_import(self, node: ast.ImportFrom) -> None:
+    def check_from_import(self, node: ast.ImportFrom) -> None:
         if node.level != 0:
             self._error_callback(LocalFolderImportViolation(node))
 
-    def check_future_import(self, node: ast.ImportFrom) -> None:
         if node.module == '__future__':
             for alias in node.names:
                 if alias.name not in FUTURE_IMPORTS_WHITELIST:
@@ -66,11 +65,6 @@ class _ImportsValidator(object):
 
     def check_alias(self, node: AnyImport) -> None:
         for alias in node.names:
-            if alias.asname == alias.name and not self._options.i_control_code:
-                self._error_callback(
-                    SameAliasImportViolation(node, text=alias.name),
-                )
-
             for name in (alias.name, alias.asname):
                 if name is None:
                     continue
@@ -83,6 +77,13 @@ class _ImportsValidator(object):
                     self._error_callback(
                         VagueImportViolation(node, text=alias.name),
                     )
+
+    def check_same_alias(self, node: AnyImport) -> None:
+        for alias in node.names:
+            if alias.asname == alias.name and not self._options.i_control_code:
+                self._error_callback(
+                    SameAliasImportViolation(node, text=alias.name),
+                )
 
     def check_protected_import(self, node: AnyImport) -> None:
         import_names = [alias.name for alias in node.names]
@@ -113,6 +114,7 @@ class WrongImportVisitor(BaseNodeVisitor):
         self._validator.check_nested_import(node)
         self._validator.check_dotted_raw_import(node)
         self._validator.check_alias(node)
+        self._validator.check_same_alias(node)
         self._validator.check_protected_import(node)
         self.generic_visit(node)
 
@@ -127,9 +129,9 @@ class WrongImportVisitor(BaseNodeVisitor):
             FutureImportViolation
 
         """
-        self._validator.check_local_import(node)
+        self._validator.check_from_import(node)
         self._validator.check_nested_import(node)
-        self._validator.check_future_import(node)
         self._validator.check_alias(node)
+        self._validator.check_same_alias(node)
         self._validator.check_protected_import(node)
         self.generic_visit(node)

@@ -7,7 +7,7 @@ import pytest
 from wemake_python_styleguide.violations.consistency import (
     MissingSpaceBetweenKeywordAndParenViolation,
 )
-from wemake_python_styleguide.visitors.tokenize.keywords import (
+from wemake_python_styleguide.visitors.tokenize.syntax import (
     WrongKeywordTokenVisitor,
 )
 
@@ -66,7 +66,9 @@ def test_missing_space(
     """Ensures that parens right after keyword raise a warning."""
     file_tokens = parse_tokens(code)
 
-    visitor = WrongKeywordTokenVisitor(default_options, file_tokens=file_tokens)
+    visitor = WrongKeywordTokenVisitor(
+        default_options, file_tokens=file_tokens,
+    )
     visitor.run()
 
     assert_errors(visitor, [MissingSpaceBetweenKeywordAndParenViolation])
@@ -101,7 +103,9 @@ def test_space_between_keyword_and_parens(
     """Ensures that there's no violation if space in between."""
     file_tokens = parse_tokens(code)
 
-    visitor = WrongKeywordTokenVisitor(default_options, file_tokens=file_tokens)
+    visitor = WrongKeywordTokenVisitor(
+        default_options, file_tokens=file_tokens,
+    )
     visitor.run()
 
     assert_errors(visitor, [])

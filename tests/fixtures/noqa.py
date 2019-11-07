@@ -159,7 +159,7 @@ async def too_many_asserts():  # noqa: WPS218
 
 deep_access = some.other[0].field.type.boom  # noqa: WPS219
 
-def test_function():
+def test_function():  # noqa: WPS231
     if xy > 1:
         if xy > 2:
             if xy > 3:
@@ -564,7 +564,10 @@ arg: Optional[Union[str, int]]  # noqa: WPS702
 
 from json import loads  # noqa: WPS347
 
-some_list += [1, 2, 3, 4]  # noqa: WPS348
+some_model = (
+    MyModel.objects.filter(...)
+        .exclude(...)  # noqa: WPS348
+)
 
 swap_a = swap_b
 swap_b = swap_a  # noqa: WPS523
@@ -592,3 +595,7 @@ arr = [
 
     1
 ]
+
+def implicit_yield_from():
+    for wrong_yield in call():  # noqa: WPS526
+        yield wrong_yield
