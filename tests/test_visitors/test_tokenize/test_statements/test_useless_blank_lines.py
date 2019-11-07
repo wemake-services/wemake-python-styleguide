@@ -35,6 +35,24 @@ arr = (
 )
 """
 
+correct_comment_start_of_list = """
+arr = [
+    #comment
+    1,
+
+    2,
+]
+"""
+
+correct_comment_in_middle_of_list = """
+arr = [
+    1,
+
+    #comment
+    2,
+]
+"""
+
 # Wrong:
 
 wrong_blank_line_at_start_list = """
@@ -89,6 +107,8 @@ arr = (
     correct_blank_line_in_middle_list,
     correct_blank_line_in_middle_dict,
     correct_blank_line_in_middle_parens,
+    correct_comment_start_of_list,
+    correct_comment_in_middle_of_list,
 ])
 def test_correct_blank_lines(
     parse_tokens,

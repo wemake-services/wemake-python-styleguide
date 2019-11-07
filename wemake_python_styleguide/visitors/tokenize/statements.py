@@ -128,14 +128,15 @@ class BlankLineVisitor(BaseTokenVisitor):
     before or after a bracket (round, square, or curly).
     """
 
+    _violating_tokens: FrozenSet[int] = frozenset({
+        tokenize.NL,
+        tokenize.NEWLINE,
+    })
+
     def __init__(self, *arg, **kargs) -> None:
         """Creates line tracking for tokens."""
         super().__init__(*arg, **kargs)
         self._lines: TokenLines = defaultdict(list)
-        self._violating_tokens: FrozenSet[int] = frozenset({
-            tokenize.NL,
-            tokenize.NEWLINE,
-        })
 
     def visit(self, token: tokenize.TokenInfo) -> None:
         """

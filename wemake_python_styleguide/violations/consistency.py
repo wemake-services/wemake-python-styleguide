@@ -1950,6 +1950,9 @@ class UselessBlankLineViolation(TokenizeViolation):
     Reasoning:
         We do this for consistency.
 
+    Solution:
+        Remove blank lines from the start and from the end of a collection
+
     Example::
 
         # Correct:
