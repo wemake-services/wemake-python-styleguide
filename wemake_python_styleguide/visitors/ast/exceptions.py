@@ -2,8 +2,7 @@
 
 import ast
 from collections import Counter
-from inspect import getmro
-from typing import ClassVar, Dict, List, Set, Tuple
+from typing import ClassVar, List, Set, Tuple
 
 from typing_extensions import final
 
@@ -47,35 +46,6 @@ def _find_returing_nodes(
         for line in node.finalbody
     )
     return try_has, except_has, else_has, finally_has
-
-
-def _traverse_exception(
-    cls,
-    builtin_exceptions=None,
-) -> Dict[str, Tuple[str]]:
-    """
-    Orinigal code: see below.
-
-    https://github.com/thg-consulting/inspectortiger/blob/
-    6b9736b22528493cd41d0bf92f9fdcdd6c7cd129/inspectortiger/plugins/misc.py#L66
-    """
-    builtin_exceptions = builtin_exceptions or {}
-
-    if cls.__name__ not in builtin_exceptions:
-        builtin_exceptions[cls.__name__] = ()
-
-    for exc in cls.__subclasses__():
-        builtin_exceptions[exc.__name__] = tuple(
-            base.__name__
-            for base in getmro(exc)
-            if (
-                issubclass(base, BaseException) and
-                base.__name__ != exc.__name__
-            )
-        )
-        _traverse_exception(exc, builtin_exceptions)
-
-    return builtin_exceptions.copy()
 
 
 @final
@@ -131,8 +101,8 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
             self.add_violation(TryExceptMultipleReturnPathViolation(node))
 
     def _check_exception_order(self, node: ast.Try) -> None:
-        built_in_exceptions = _traverse_exception(BaseException)
-        exceptions_list: List[str] = exceptions.get_all_exception_names(node)
+        built_in_exceptions = exceptions.traverse_exception(BaseException)
+        exceptions_list = exceptions.get_all_exception_names(node)
         seen: Set[str] = set()
 
         for exception in exceptions_list:

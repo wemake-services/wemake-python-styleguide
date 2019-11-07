@@ -1894,7 +1894,7 @@ class IncorrectExceptOrderViolation(ASTViolation):
             ...
 
     See also:
-        https://docs.python.org/3/library/exceptions.html#exception-hierarchy
+        https://bit.ly/36MHlzw
 
     .. versionadded:: 0.13.0
 

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import List, Optional
+from inspect import getmro
+from typing import Dict, List, Optional, Tuple
 
 from wemake_python_styleguide.logic import source
 
@@ -33,3 +34,34 @@ def get_all_exception_names(node: ast.Try) -> List[str]:
                 for node in exc_handler.type.elts
             ])
     return exceptions
+
+
+def traverse_exception(
+    cls,
+    builtin_exceptions=None,
+) -> Dict[str, Tuple[str]]:
+    """
+    Returns a dictionary of built-in exceptions hierarchy.
+
+    The return dictionary has exception name as the key and
+    all its subclasses as the value.
+
+    Original code: https://bit.ly/36HVPk2
+    """
+    builtin_exceptions = builtin_exceptions or {}
+
+    if cls.__name__ not in builtin_exceptions:
+        builtin_exceptions[cls.__name__] = ()
+
+    for exc in cls.__subclasses__():
+        builtin_exceptions[exc.__name__] = tuple(
+            base.__name__
+            for base in getmro(exc)
+            if (
+                issubclass(base, BaseException) and
+                base.__name__ != exc.__name__
+            )
+        )
+        traverse_exception(exc, builtin_exceptions)
+
+    return builtin_exceptions
