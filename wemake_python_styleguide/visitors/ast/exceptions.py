@@ -2,7 +2,7 @@
 
 import ast
 from collections import Counter
-from typing import ClassVar, List, Set, Tuple
+from typing import ClassVar, Set, Tuple
 
 from typing_extensions import final
 
@@ -57,7 +57,6 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
         ast.Raise,
         ast.Break,
     )
-    _except_exception: ClassVar[str] = 'Exception'
 
     def visit_Try(self, node: ast.Try) -> None:
         """
@@ -81,7 +80,7 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
             self.add_violation(UselessFinallyViolation(node))
 
     def _check_duplicate_exceptions(self, node: ast.Try) -> None:
-        exceptions_list: List[str] = exceptions.get_all_exception_names(node)
+        exceptions_list = exceptions.get_all_exception_names(node)
 
         for exc_name, count in Counter(exceptions_list).items():
             if count > 1:
