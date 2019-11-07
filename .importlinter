@@ -36,7 +36,6 @@ modules =
   wemake_python_styleguide.violations.best_practices
   wemake_python_styleguide.violations.refactoring
   wemake_python_styleguide.violations.oop
-  wemake_python_styleguide.violations.annotations
 
 
 [importlinter:contract:flake8-independence]
@@ -68,6 +67,8 @@ forbidden_modules =
   radon
   astor
   cognitive_complexity
+  astboom
+  tokelor
 
 ignore_imports =
   # These modules must import from flake8 to provide required API:

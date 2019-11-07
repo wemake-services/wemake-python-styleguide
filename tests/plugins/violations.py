@@ -6,7 +6,6 @@ from operator import attrgetter, itemgetter
 import pytest
 
 from wemake_python_styleguide.violations import (
-    annotations,
     best_practices,
     complexity,
     consistency,
@@ -47,7 +46,6 @@ def _load_all_violation_classes():
         best_practices,
         refactoring,
         oop,
-        annotations,
     ]
 
     classes = {}

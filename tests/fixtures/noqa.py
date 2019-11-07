@@ -558,10 +558,6 @@ unhashable = {[]}  # noqa: WPS443
 assert []  # noqa: WPS444
 unhashable = [] * 2  # noqa: WPS435
 
-type1: Literal[None]  # noqa: WPS700
-type2: Union[str, Union[int, float]]  # noqa: WPS701
-arg: Optional[Union[str, int]]  # noqa: WPS702
-
 from json import loads  # noqa: WPS347
 
 some_model = (

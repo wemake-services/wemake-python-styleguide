@@ -7,7 +7,7 @@ import pytest
 
 from wemake_python_styleguide.options.config import Configuration
 
-pytest_plugins = ['violation_fixtures']
+pytest_plugins = ['plugins.violations']
 
 
 @pytest.fixture(scope='session')

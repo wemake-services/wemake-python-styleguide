@@ -13,8 +13,6 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use implicit primitive values in a form of `lambda: 0`
 - Forbids to use approximate math constants
 - Forbids to redefine string constants
-- Forbids using `Literal[None]` in function annotations
-- Forbids using nested `typing.Literal`, `typing.Union` and `typing.Annotated`
 - Forbids use of vague import names (e.g. `from json import loads`)
 - Makes `OveruseOfNoqaCommentViolation` configurable via `--max-noqa-comments`
 - Forbid incorrectly swapped variables
@@ -22,7 +20,6 @@ We used to have incremental versioning before `0.1.0`.
 - Allows `super()` as a valid overused expression
 - Forbids to use `super()` with other methods and properties
 - `WPS350` enforces using augmented assign pattern
-- Forbids to use `Optional[Union[...]]` in annotations
 - Forbids unnecessary literals
 - `WPS525` forbids comparisons where `in` is compared with single item container
 - Forbids wrong annotations in assignment

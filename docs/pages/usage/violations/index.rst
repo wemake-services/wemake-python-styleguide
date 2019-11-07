@@ -68,4 +68,3 @@ wemake-python-styleguide       WPS, defined here
   best_practices.rst
   refactoring.rst
   oop.rst
-  annotations.rst
