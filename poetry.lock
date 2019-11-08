@@ -43,7 +43,7 @@ description = "Visualize Python AST in console."
 name = "astboom"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "0.1.1"
+version = "0.2.0"
 
 [package.dependencies]
 asciitree = ">=0.3.3,<0.4.0"
@@ -1395,7 +1395,7 @@ version = "0.6.0"
 more-itertools = "*"
 
 [metadata]
-content-hash = "792ba3e464920922dd244a4771608eef1bfa7b39189a0314a60954ed44046b17"
+content-hash = "0b5e233ca7415d9d63129e44a06b8d3953e0f921dc148a7a7dbc4b9c08dde5c9"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -1403,7 +1403,7 @@ added-value = ["8c886aee74635cec15beb64c28a90ae664526f331c1a4941e4d6ab98af232028
 alabaster = ["446438bdcca0e05bd45ea2de1668c1d9b032e1a9154c2c259092d77031ddd359", "a661d72d58e6ea8a57f7a86e37d86716863ee5e92788398526d58b26a4e4dc02"]
 appnope = ["5b26757dc6f79a3b7dc9fab95359328d5747fcb2409d331ea66d0272b90ab2a0", "8b995ffe925347a2138d7ac0fe77155e4311a0ea6d6da4f5128fe4b3cbe5ed71"]
 asciitree = ["4aa4b9b649f85e3fcb343363d97564aa1fb62e249677f2e18a96765145cc0f6e"]
-astboom = ["d6454320ecb64891d20d40e881dc5c301b7d2de5bf57063b1b0c2bffdd22a247", "ebada58a45dfee967e97526f3decada89d01f6819d440166d329a6b7c6106c2e"]
+astboom = ["70485d9981742f7eb5acbeba7cd8a885d0f83a8a5fffe25d17f5a93f2d536c40", "93f9bcdeec4b0fc569b9f7e467e9767f4f0784d97a8b1c73cacdb3b2ef3bc9bb"]
 astor = ["0e41295809baf43ae8303350e031aff81ae52189b6f881f36d623fa8b2f1960e", "37a6eed8b371f1228db08234ed7f6cfdc7817a3ed3824797e20cbb11dc2a7862"]
 atomicwrites = ["03472c30eb2c5d1ba9227e4c2ca66ab8287fbfbbda3888aa93dc2e28fc6811b4", "75a9445bac02d8d058d5e1fe689654ba5a6556a1dfd8ce6ec55a0ed79866cfa6"]
 attrs = ["08a96c641c3a74e44eb59afb61a24f2cb9f4d7188748e76ba4bb5edfa3cb7d1c", "f7b7ce16570fe9965acd6d30101a28f62fb4a7f9e926b3bbc9b61f8b04247e72"]
