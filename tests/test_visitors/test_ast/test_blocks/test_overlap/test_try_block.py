@@ -196,7 +196,7 @@ def test_except_block_correct(
     assert_errors,
     parse_ast_tree,
     except_statement,
-    assign_statement,
+    assign_and_annotation_statement,
     context,
     first_name,
     second_name,
@@ -206,7 +206,7 @@ def test_except_block_correct(
     """Ensures that different variables do not overlap."""
     code = context.format(
         except_statement.format(first_name),
-        assign_statement.format(second_name),
+        assign_and_annotation_statement.format(second_name),
     )
     tree = parse_ast_tree(mode(code))
 
