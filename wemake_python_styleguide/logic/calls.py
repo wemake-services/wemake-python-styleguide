@@ -5,13 +5,9 @@ from typing import Iterable, Optional
 
 
 def _chained_item(iterator: ast.AST) -> Optional[ast.Call]:
-    if isinstance(iterator, ast.Call):
-        for child in ast.iter_child_nodes(iterator):
-            if isinstance(child, ast.Call):
-                return iterator
-    elif (isinstance(iterator, ast.Expr) and
-            isinstance(iterator.value, ast.Call)):
-        return iterator.value
+    children = list(ast.iter_child_nodes(iterator))
+    if isinstance(children[0], ast.Call):
+        return children[0]
     return None
 
 

@@ -45,7 +45,7 @@ class CallChainsVisitor(BaseNodeVisitor):
         ))
 
         self._visited_calls.update(consecutive_calls)
-        num_of_calls = len(self._visited_calls)
+        num_of_calls = len(consecutive_calls)
 
         if num_of_calls > self.options.max_call_level:
             self.add_violation(

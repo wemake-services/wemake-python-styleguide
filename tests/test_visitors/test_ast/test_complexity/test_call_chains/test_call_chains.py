@@ -16,13 +16,13 @@ deep_call_chain = 'foo(a)(b)(c)(d)'
 call_chain = 'bar(a)(b)'
 
 # border expression
-border_call_chain = 'baz(a)(b)(c)'
+long_call_chain = 'baz(a)(b)(c)'
 
 
 @pytest.mark.parametrize('code', [
     deep_call_chain,
     call_chain,
-    border_call_chain,
+    long_call_chain,
 ])
 def test_correct_cases(
     assert_errors,
@@ -44,7 +44,7 @@ def test_correct_cases(
 @pytest.mark.parametrize(('code', 'call_level'), [
     (call_chain, 2),
     (deep_call_chain, 4),
-    (border_call_chain, 3),
+    (long_call_chain, 3),
 ])
 def test_incorrect_cases(
     assert_errors,
@@ -58,7 +58,7 @@ def test_incorrect_cases(
     """Testing that violations are raised when using a too long call chain."""
     tree = parse_ast_tree(mode(code))
 
-    option_values = options(max_call_level=3)
+    option_values = options(max_call_level=2)
     visitor = CallChainsVisitor(option_values, tree=tree)
     visitor.run()
 

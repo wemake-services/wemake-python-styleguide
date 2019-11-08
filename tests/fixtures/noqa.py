@@ -588,7 +588,7 @@ for wrong_loop in call(  # noqa: WPS352
 if a in {1}:  # noqa: WPS525
     print('bad!')
 
-too_long_call_chain = deep_func(a)(b)(c)(d)  # noqa: WPS231
+deep_func(a)(b)(c)(d)  # noqa: WPS233
 
 from json import loads  # noqa: WPS347
 from some_module import a  # noqa: WPS347
