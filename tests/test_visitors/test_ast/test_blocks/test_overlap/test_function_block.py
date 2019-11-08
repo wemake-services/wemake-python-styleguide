@@ -95,7 +95,7 @@ def test_method_block_overlap(
     assert_errors,
     parse_ast_tree,
     function_statement,
-    assign_statement,
+    assign_and_annotation_statement,
     context,
     variable_name,
     default_options,
@@ -104,7 +104,7 @@ def test_method_block_overlap(
     """Ensures that overlaping variables exist."""
     code = context.format(
         function_statement.format(variable_name),
-        assign_statement.format(variable_name),
+        assign_and_annotation_statement.format(variable_name),
     )
     tree = parse_ast_tree(mode(code))
 
@@ -165,7 +165,7 @@ def test_function_block_correct(
     assert_errors,
     parse_ast_tree,
     function_statement,
-    assign_statement,
+    assign_and_annotation_statement,
     context,
     first_name,
     second_name,
@@ -175,7 +175,7 @@ def test_function_block_correct(
     """Ensures that different variables do not overlap."""
     code = context.format(
         function_statement.format(first_name),
-        assign_statement.format(second_name),
+        assign_and_annotation_statement.format(second_name),
     )
     tree = parse_ast_tree(mode(code))
 

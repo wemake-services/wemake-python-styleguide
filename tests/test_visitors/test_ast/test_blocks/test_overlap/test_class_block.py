@@ -46,7 +46,7 @@ def test_class_block_overlap(
     assert_error_text,
     parse_ast_tree,
     class_statement,
-    assign_statement,
+    assign_and_annotation_statement,
     context,
     variable_name,
     default_options,
@@ -54,7 +54,7 @@ def test_class_block_overlap(
     """Ensures that overlaping variables exist."""
     code = context.format(
         class_statement.format(variable_name),
-        assign_statement.format(variable_name),
+        assign_and_annotation_statement.format(variable_name),
     )
     tree = parse_ast_tree(code)
 
@@ -149,7 +149,7 @@ def test_class_block_correct(
     assert_errors,
     parse_ast_tree,
     class_statement,
-    assign_statement,
+    assign_and_annotation_statement,
     context,
     first_name,
     second_name,
@@ -158,7 +158,7 @@ def test_class_block_correct(
     """Ensures that different variables do not overlap."""
     code = context.format(
         class_statement.format(first_name),
-        assign_statement.format(second_name),
+        assign_and_annotation_statement.format(second_name),
     )
     tree = parse_ast_tree(code)
 
@@ -184,7 +184,7 @@ def test_class_internal_block_correct(
     assert_errors,
     parse_ast_tree,
     class_statement,
-    assign_statement,
+    assign_and_annotation_statement,
     context,
     first_name,
     second_name,
@@ -193,7 +193,7 @@ def test_class_internal_block_correct(
     """Ensures that different variables do not overlap."""
     code = context.format(
         class_statement.format('SomeUniqueClassName'),
-        assign_statement.format(second_name),
+        assign_and_annotation_statement.format(second_name),
         first_name,
     )
     tree = parse_ast_tree(code)

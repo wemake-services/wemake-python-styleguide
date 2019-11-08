@@ -44,6 +44,7 @@ We used to have incremental versioning before `0.1.0`.
 - Fixes that `--i-dont-control-code` was not present in command line options
 - Fixes `BlockVariableVisitor` false positives on a properties
 - Fixes that `//` was not recognised as a math operation
+- Fixes false positive `BlockAndLocalOverlapViolation` on annotations without value assign
 
 ### Misc
 
