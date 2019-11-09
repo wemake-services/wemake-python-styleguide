@@ -359,3 +359,9 @@ NON_MAGIC_MODULO: Final = 10
 # Used to specify a pattern which checks variables and modules for underscored
 # numbers in their names:
 UNDERSCORED_NUMBER_PATTERN: Final = re.compile(r'.+\D\_\d+(\D|$)')
+
+# List of functions in which parameters must be of type tuple instead
+# another iterables
+TUPLE_ARGUMENTS_METHODS = frozenset((
+    'frozenset',
+))

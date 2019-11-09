@@ -31,6 +31,7 @@ PRESET: Final = (
     statements.PointlessStarredVisitor,
     statements.WrongNamedKeywordVisitor,
     statements.AssignmentPatternsVisitor,
+    statements.WrongMethodParametersVisitor,
 
     keywords.WrongRaiseVisitor,
     keywords.WrongKeywordVisitor,
