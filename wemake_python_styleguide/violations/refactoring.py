@@ -42,6 +42,7 @@ Summary
    MisrefactoredAssignmentViolation
    InCompareWithSingleItemContainerViolation
    ImplicitYieldFromViolation
+   ForceTupleArgumentsViolation
 
 Refactoring opportunities
 -------------------------
@@ -73,6 +74,7 @@ Refactoring opportunities
 .. autoclass:: MisrefactoredAssignmentViolation
 .. autoclass:: InCompareWithSingleItemContainerViolation
 .. autoclass:: ImplicitYieldFromViolation
+.. autoclass:: ForceTupleArgumentsViolation
 
 """
 
@@ -1046,3 +1048,35 @@ class ImplicitYieldFromViolation(ASTViolation):
 
     error_template = 'Found implicit `yield from` usage'
     code = 526
+
+
+@final
+class ForceTupleArgumentsViolation(ASTViolation):
+    """
+    Force using tuples as method arguments.
+
+    Reasoning:
+        For some methods, it is better to use tuples instead of another
+        iterable (list, sets,...) as arguments
+
+    Solution:
+        Use tuples as arguments
+
+    Example::
+
+        # Correct:
+        a = frozenset((2,))
+
+        # Wrong:
+        a = frozenset([2])
+
+    See
+    :py:data:`~wemake_python_styleguide.constants.TUPLE_ARGUMENTS_METHODS`
+    for full list of methods that we check for.
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found missing using tuples as method arguments'
+    code = 527
