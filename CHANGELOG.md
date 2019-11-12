@@ -30,7 +30,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to start lines with `.`
 - Enforces better `&`, `|`, `>>`, `<<`, `^` operators usage
 - Forbids incorrect exception order
-- `WPS527` force using tuples as method arguments
+- Enforces tuples usage with frozenset constructor
 
 ### Bugfixes
 
