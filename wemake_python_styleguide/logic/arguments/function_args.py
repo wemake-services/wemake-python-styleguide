@@ -2,17 +2,22 @@
 
 import ast
 from itertools import zip_longest
-from typing import Dict, Iterator, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
-from wemake_python_styleguide import types
-from wemake_python_styleguide.logic.arguments import method_args
+from wemake_python_styleguide import constants, types
+from wemake_python_styleguide.logic.arguments.call_args import get_starred_args
 
 
-def get_starred_args(call: ast.Call) -> Iterator[ast.Starred]:
-    """Gets ``ast.Starred`` arguments from ``ast.Call``."""
-    for argument in call.args:
-        if isinstance(argument, ast.Starred):
-            yield argument
+def get_args_without_special_argument(
+    node: types.AnyFunctionDefAndLambda,
+) -> List[ast.arg]:
+    """Gets ``node`` arguments excluding ``self``, ``cls``, ``mcs``."""
+    node_args = node.args.args
+    if not node_args or isinstance(node, ast.Lambda):
+        return node_args
+    if node_args[0].arg not in constants.SPECIAL_ARGUMENT_NAMES_WHITELIST:
+        return node_args
+    return node_args[1:]
 
 
 def has_same_vararg(
@@ -32,7 +37,10 @@ def has_same_vararg(
     return node.args.vararg == vararg_name  # type: ignore
 
 
-def has_same_kwarg(node: types.AnyFunctionDefAndLambda, call: ast.Call) -> bool:
+def has_same_kwarg(
+    node: types.AnyFunctionDefAndLambda,
+    call: ast.Call,
+) -> bool:
     """Tells whether ``call`` has the same kwargs as ``node``."""
     kwarg_name: Optional[str] = None
     null_arg_keywords = filter(lambda key: key.arg is None, call.keywords)
@@ -54,7 +62,7 @@ def has_same_args(  # noqa: WPS231
     call: ast.Call,
 ) -> bool:
     """Tells whether ``call`` has the same positional args as ``node``."""
-    node_args = method_args.get_args_without_special_argument(node)
+    node_args = get_args_without_special_argument(node)
     paired_arguments = zip_longest(call.args, node_args)
     for call_arg, func_arg in paired_arguments:
         if isinstance(call_arg, ast.Starred):

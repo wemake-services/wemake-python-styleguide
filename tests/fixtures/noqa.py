@@ -598,3 +598,6 @@ except Exception:
     anti_z444 = 1
 except ValueError:
     anti_z444 = 1
+
+
+bad_frozenset = frozenset([1]) # noqa: WPS527

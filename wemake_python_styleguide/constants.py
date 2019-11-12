@@ -341,6 +341,11 @@ LITERALS_BLACKLIST: Final = frozenset((
     'complex',
 ))
 
+#: List of functions in which arguments must be tuples.
+TUPLE_ARGUMENTS_METHODS = frozenset((
+    'frozenset',
+))
+
 # Internal variables
 # They are not publicly documented since they are not used by the end user.
 
