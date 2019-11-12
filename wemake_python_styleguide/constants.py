@@ -341,8 +341,7 @@ LITERALS_BLACKLIST: Final = frozenset((
     'complex',
 ))
 
-#: List of methods in which arguments must be of type tuple
-# instead lists, sets.
+#: List of functions in which arguments must be tuples.
 TUPLE_ARGUMENTS_METHODS = frozenset((
     'frozenset',
 ))
