@@ -33,8 +33,8 @@ from wemake_python_styleguide.violations.consistency import (
 )
 from wemake_python_styleguide.violations.refactoring import (
     AlmostSwappedViolation,
-    ForceTupleArgumentsViolation,
     MisrefactoredAssignmentViolation,
+    NotATupleArgumentViolation,
     PointlessStarredViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -468,20 +468,19 @@ class WrongMethodParametersVisitor(BaseNodeVisitor):
 
     _no_tuples_collections: ClassVar[AnyNodes] = (
         ast.List,
+        ast.ListComp,
         ast.Set,
+        ast.SetComp,
     )
 
     def visit_Call(self, node: ast.Call) -> None:
-        """Checks call arguments indentation."""
-        all_args = call_args.get_all_args(node)
-
-        self._check_tuple_parameters_types(node, all_args)
+        """Checks call parameters."""
+        self._check_tuple_parameters_types(node)
         self.generic_visit(node)
 
     def _check_tuple_parameters_types(
         self,
         node: ast.Call,
-        args: Sequence[ast.AST],
     ) -> None:
         is_checkable = (
             isinstance(node.func, ast.Name) and
@@ -491,7 +490,8 @@ class WrongMethodParametersVisitor(BaseNodeVisitor):
         if not is_checkable:
             return
 
-        for arg in args:
+        all_args = call_args.get_all_args(node)
+        for arg in all_args:
             if isinstance(arg, self._no_tuples_collections):
-                self.add_violation(ForceTupleArgumentsViolation(node))
+                self.add_violation(NotATupleArgumentViolation(node))
                 break

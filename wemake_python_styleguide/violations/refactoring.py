@@ -42,7 +42,7 @@ Summary
    MisrefactoredAssignmentViolation
    InCompareWithSingleItemContainerViolation
    ImplicitYieldFromViolation
-   ForceTupleArgumentsViolation
+   NotATupleArgumentViolation
 
 Refactoring opportunities
 -------------------------
@@ -74,7 +74,7 @@ Refactoring opportunities
 .. autoclass:: MisrefactoredAssignmentViolation
 .. autoclass:: InCompareWithSingleItemContainerViolation
 .. autoclass:: ImplicitYieldFromViolation
-.. autoclass:: ForceTupleArgumentsViolation
+.. autoclass:: NotATupleArgumentViolation
 
 """
 
@@ -1051,7 +1051,7 @@ class ImplicitYieldFromViolation(ASTViolation):
 
 
 @final
-class ForceTupleArgumentsViolation(ASTViolation):
+class NotATupleArgumentViolation(ASTViolation):
     """
     Force using tuples as method arguments.
 
@@ -1078,5 +1078,5 @@ class ForceTupleArgumentsViolation(ASTViolation):
 
     """
 
-    error_template = 'Found missing using tuples as method arguments'
+    error_template = 'Found not a tuple used as an argument'
     code = 527

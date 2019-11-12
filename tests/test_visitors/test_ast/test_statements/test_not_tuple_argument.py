@@ -4,7 +4,7 @@ import pytest
 
 from wemake_python_styleguide.constants import TUPLE_ARGUMENTS_METHODS
 from wemake_python_styleguide.violations.refactoring import (
-    ForceTupleArgumentsViolation,
+    NotATupleArgumentViolation,
 )
 from wemake_python_styleguide.visitors.ast.statements import (
     WrongMethodParametersVisitor,
@@ -12,7 +12,9 @@ from wemake_python_styleguide.visitors.ast.statements import (
 
 
 @pytest.mark.parametrize('code', [
+    'a = {0}(())',
     'a = {0}((1,))',
+    'a = {0}((1, 2, 3))',
     'a = {0}((1,), b)',
 ])
 @pytest.mark.parametrize('method', [
@@ -36,31 +38,33 @@ def test_passed(
 
 
 @pytest.mark.parametrize('code', [
-    'a = {0}([1])',
-    'a = {0}([1], 1)',
-    'a = {0}([1], b)',
-    'a = {0}([1], b, c)',
-    'a = {0}([1], b, [2])',
-    'a = {0}({{1}})',
+    'a = {0}([])',
+    'a = {0}({1}1{2})',
+    'a = {0}({1}1, 2, 3{2})',
+    'a = {0}({1}1{2}, b)',
+    'a = {0}({1}1{2}, b, c)',
+    'a = {0}({1}1{2}, b, {1}2{2})',
+    'a = {0}({1}x for x in some{2})',
 ])
 @pytest.mark.parametrize('method', [
     *TUPLE_ARGUMENTS_METHODS,
 ])
+@pytest.mark.parametrize('braces', ['[]', '{}'])  # noqa: P103
 def test_no_passed(
     assert_errors,
     parse_ast_tree,
     code,
     method,
+    braces,
     default_options,
-    mode,
 ):
     """Ensures that non-tuples arguments are violated."""
-    tree = parse_ast_tree(mode(code.format(method)))
+    tree = parse_ast_tree(code.format(method, braces[0], braces[1]))
 
     visitor = WrongMethodParametersVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [ForceTupleArgumentsViolation])
+    assert_errors(visitor, [NotATupleArgumentViolation])
 
 
 @pytest.mark.parametrize('code', [
