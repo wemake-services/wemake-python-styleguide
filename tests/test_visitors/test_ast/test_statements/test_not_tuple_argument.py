@@ -28,10 +28,9 @@ def test_passed(
     code,
     method,
     default_options,
-    mode,
 ):
     """Ensures that tuples arguments are passed."""
-    tree = parse_ast_tree(mode(code.format(method)))
+    tree = parse_ast_tree(code.format(method))
 
     visitor = WrongMethodArgumentsVisitor(default_options, tree=tree)
     visitor.run()
@@ -81,10 +80,9 @@ def test_no_checkable(
     code,
     method,
     default_options,
-    mode,
 ):
     """Ensures that non checkable situations are skipped."""
-    tree = parse_ast_tree(mode(code.format(method)))
+    tree = parse_ast_tree(code.format(method))
 
     visitor = WrongMethodArgumentsVisitor(default_options, tree=tree)
     visitor.run()
