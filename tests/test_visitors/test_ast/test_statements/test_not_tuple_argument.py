@@ -16,6 +16,8 @@ from wemake_python_styleguide.visitors.ast.statements import (
     'a = {0}((1,))',
     'a = {0}((1, 2, 3))',
     'a = {0}((1,), b)',
+    'a = {0}((x for x in some))',
+    'a = {0}((x for x in some), b)',
 ])
 @pytest.mark.parametrize('method', [
     *TUPLE_ARGUMENTS_METHODS,
