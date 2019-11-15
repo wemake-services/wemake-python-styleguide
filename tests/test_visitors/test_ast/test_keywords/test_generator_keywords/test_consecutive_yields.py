@@ -104,8 +104,6 @@ def some():
     conditional_yield2,
     seprated_yield1,
     seprated_yield2,
-    yield_with_yield_from1,
-    yield_with_yield_from2,
 ])
 def test_yield_correct(
     assert_errors,
@@ -116,6 +114,25 @@ def test_yield_correct(
 ):
     """Ensure that `yield` can be used correctly."""
     tree = parse_ast_tree(mode(code))
+
+    visitor = GeneratorKeywordsVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('code', [
+    yield_with_yield_from1,
+    yield_with_yield_from2,
+])
+def test_yield_correct_sync(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+):
+    """Ensure that `yield` can be used correctly."""
+    tree = parse_ast_tree(code)
 
     visitor = GeneratorKeywordsVisitor(default_options, tree=tree)
     visitor.run()

@@ -163,7 +163,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
                 message=statistic.message,
             ),
         )
-        for filename, error_count in error_by_file:
+        for filename, error_count in error_by_file.items():
             self._write(
                 '  {error_count:<5} {filename}'.format(
                     error_count=error_count,
