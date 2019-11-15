@@ -1729,7 +1729,8 @@ class WrongKeywordConditionViolation(ASTViolation):
     - ``ast.While``
     - ``ast.Assert``
 
-    We only check constants. We do not check variables, attributes, calls, etc.
+    We do not check variables, attributes, calls, bool and bin operators, etc.
+    We disallow constants and some expressions.
 
     Reasoning:
         Some conditions clearly tell us that this node won't work correctly.
@@ -1753,10 +1754,11 @@ class WrongKeywordConditionViolation(ASTViolation):
             ...
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 0.13.0
 
     """
 
-    error_template = 'Found wrong keyword condition: {0}'
+    error_template = 'Found wrong keyword condition'
     code = 444
 
 

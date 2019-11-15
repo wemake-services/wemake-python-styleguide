@@ -2,13 +2,12 @@
 
 import ast
 from collections import defaultdict
-from contextlib import suppress
 from typing import ClassVar, Dict, List, Tuple, Type, Union
 
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
-from wemake_python_styleguide.logic import keywords, walk
+from wemake_python_styleguide.logic import keywords, operators, walk
 from wemake_python_styleguide.logic.exceptions import get_exception_name
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.variables import (
@@ -328,6 +327,26 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
 class ConstantKeywordVisitor(BaseNodeVisitor):
     """Visits keyword definitions to detect contant conditions."""
 
+    _forbidden_nodes: ClassVar[AnyNodes] = (
+        ast.NameConstant,
+
+        ast.List,
+        ast.Tuple,
+        ast.Set,
+        ast.Dict,
+
+        ast.ListComp,
+        ast.GeneratorExp,
+        ast.SetComp,
+        ast.DictComp,
+
+        ast.Str,
+        ast.Num,
+        ast.Bytes,
+
+        ast.IfExp,
+    )
+
     def visit_While(self, node: ast.While) -> None:
         """
         Visits ``while`` keyword and tests that loop will execute.
@@ -336,7 +355,7 @@ class ConstantKeywordVisitor(BaseNodeVisitor):
             WrongKeywordConditionViolation
 
         """
-        self._check_condition(node.test)
+        self._check_condition(node, node.test)
         self.generic_visit(node)
 
     def visit_Assert(self, node: ast.Assert) -> None:
@@ -347,16 +366,14 @@ class ConstantKeywordVisitor(BaseNodeVisitor):
             WrongKeywordConditionViolation
 
         """
-        self._check_condition(node.test)
+        self._check_condition(node, node.test)
         self.generic_visit(node)
 
-    def _check_condition(self, condition: ast.AST) -> None:
-        with suppress(ValueError):
-            constant = ast.literal_eval(condition)
-            if not bool(constant):
-                self.add_violation(
-                    WrongKeywordConditionViolation(
-                        condition,
-                        text=str(constant) if constant != '' else '""',
-                    ),
-                )
+    def _check_condition(self, node: ast.AST, condition: ast.AST) -> None:
+        real_node = operators.unwrap_unary_node(condition)
+        if isinstance(real_node, ast.NameConstant) and real_node.value is True:
+            if isinstance(node, ast.While):
+                return  # We should allow `while True:`
+
+        if isinstance(real_node, self._forbidden_nodes):
+            self.add_violation(WrongKeywordConditionViolation(condition))

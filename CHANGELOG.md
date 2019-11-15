@@ -31,6 +31,7 @@ We used to have incremental versioning before `0.1.0`.
 - Enforces better `&`, `|`, `>>`, `<<`, `^` operators usage
 - Forbids incorrect exception order
 - Enforces tuples usage with frozenset constructor
+- Changes how `WPS444` works, now we use stricter logic for `while` and `assert`
 
 ### Bugfixes
 
