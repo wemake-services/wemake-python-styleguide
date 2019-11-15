@@ -614,3 +614,6 @@ def consecutive_yields():
 
 for loop_var in loop_iter:  # noqa: WPS528
     print(loop_iter[loop_var])
+
+if 'key' in some_dict:
+    print(some_dict['key'])  # noqa: WPS529

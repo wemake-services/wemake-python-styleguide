@@ -13,6 +13,7 @@ from wemake_python_styleguide.logic import (
     ifs,
     nodes,
     operators,
+    slices,
     source,
 )
 from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable

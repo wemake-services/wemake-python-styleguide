@@ -35,11 +35,12 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use `yield from` with incorrect types
 - Forbids to use consecutive `yield` expressions
 - Enforces to use `.items()` in loops
+- Enforces using `.get()` over `key in dict` checks
 
 ### Bugfixes
 
 - Fixes `ImplicitElifViolation` false positives on a specific edge cases
-- Fixes `i-control-code` setting for `BadMagicModuleFunctionViolation`
+- Fixes `--i-control-code` setting for `BadMagicModuleFunctionViolation`
 - Fixes compatibility with flake8 `3.8.x`
 - Fixes that `not not True` was not detected as `WPS330`
 - Fixes addition of `MisrefactoredAssignmentViolation` check

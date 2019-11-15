@@ -248,18 +248,18 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
         var_name: str,
         local_variables: Dict[str, List[LocalVariable]],
     ) -> None:
-        if var_name in local_variables:
+        defs = local_variables.get(var_name)
+        if defs is not None:
             if access.is_unused(var_name):
                 # We check unused variable usage in a different place:
                 # see `visitors/ast/naming.py`
                 return
-            local_variables[var_name].append(sub_node)
+            defs.append(sub_node)
             return
 
-        is_name_def = isinstance(
-            sub_node, ast.Name,
-        ) and isinstance(
-            sub_node.ctx, ast.Store,
+        is_name_def = (
+            isinstance(sub_node, ast.Name) and
+            isinstance(sub_node.ctx, ast.Store)
         )
 
         if is_name_def or isinstance(sub_node, ast.ExceptHandler):

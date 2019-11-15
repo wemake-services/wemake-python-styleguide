@@ -101,9 +101,9 @@ PRESET: Final = (
     blocks.BlockVariableVisitor,
     blocks.AfterBlockVariablesVisitor,
 
+    subscripts.SubscriptVisitor,
+    subscripts.ImplicitDictGetVisitor,
+
     # Complexity:
     *complexity.PRESET,
-
-    # Subscripts:
-    subscripts.SubscriptVisitor,
 )

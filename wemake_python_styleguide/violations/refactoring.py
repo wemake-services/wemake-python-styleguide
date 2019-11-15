@@ -1114,3 +1114,36 @@ class ImplicitItemsIteratorViolation(ASTViolation):
 
     error_template = 'Found implicit `.items()` usage'
     code = 528
+
+
+@final
+class ImplicitDictGetViolation(ASTViolation):
+    """
+    Forbids to use implicit ``.get()`` dict method.
+
+    Reasoning:
+        When using ``in`` with a dict key it is hard to keep the code clean.
+        It is more convinient to use ``.get()`` and check for ``None`` later.
+
+    Solution:
+        Use ``.get()`` with the key you need.
+        Check for ``None`` in case you need it,
+        or just act with the default value of the same type.
+
+    Example::
+
+        # Correct:
+        value = collection.get(key)
+        if value is not None:
+            print(value)
+
+        # Wrong:
+        if key in collection:
+            print(collection[key])
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found implicit `.get()` dict usage'
+    code = 529

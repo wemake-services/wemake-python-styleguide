@@ -8,7 +8,13 @@ from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import AssignNodes, ForNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
-from wemake_python_styleguide.logic import nodes, operators, source, walk
+from wemake_python_styleguide.logic import (
+    nodes,
+    operators,
+    slices,
+    source,
+    walk,
+)
 from wemake_python_styleguide.logic.variables import (
     is_valid_block_variable_definition,
 )
@@ -304,7 +310,7 @@ class SyncForLoopVisitor(base.BaseNodeVisitor):
                 if self._is_assigned_target(sub):
                     continue
 
-                if self._is_same_slice(iterable, target, sub):
+                if slices.is_same_slice(iterable, target, sub):
                     self.add_violation(ImplicitItemsIteratorViolation(node))
                     break
 
@@ -313,15 +319,3 @@ class SyncForLoopVisitor(base.BaseNodeVisitor):
         if not isinstance(parent, AssignNodes):
             return False
         return any(node == target for target in get_assign_targets(parent))
-
-    def _is_same_slice(
-        self,
-        iterable: str,
-        target: str,
-        node: ast.Subscript,
-    ) -> bool:
-        return (
-            source.node_to_string(node.value) == iterable and
-            isinstance(node.slice, ast.Index) and  # mypy is unhappy
-            source.node_to_string(node.slice.value) == target
-        )

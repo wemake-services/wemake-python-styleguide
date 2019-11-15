@@ -3,10 +3,10 @@
 import ast
 from typing import Union
 
-VarDefinition = Union[ast.AST, ast.expr]
+_VarDefinition = Union[ast.AST, ast.expr]
 
 
-def _is_valid_single(node: VarDefinition) -> bool:
+def _is_valid_single(node: _VarDefinition) -> bool:
     if isinstance(node, ast.Name):
         return True
     if isinstance(node, ast.Starred) and isinstance(node.value, ast.Name):
@@ -14,7 +14,7 @@ def _is_valid_single(node: VarDefinition) -> bool:
     return False
 
 
-def is_valid_block_variable_definition(node: VarDefinition) -> bool:
+def is_valid_block_variable_definition(node: _VarDefinition) -> bool:
     """Is used to check either block variables are correctly defined."""
     if isinstance(node, ast.Tuple):
         for var_definition in node.elts:

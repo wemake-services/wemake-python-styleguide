@@ -4,7 +4,8 @@ import ast
 
 from typing_extensions import final
 
-from wemake_python_styleguide.violations import consistency
+from wemake_python_styleguide.logic import source, slices
+from wemake_python_styleguide.violations import consistency, refactoring
 from wemake_python_styleguide.visitors import base
 
 
@@ -64,3 +65,35 @@ class SubscriptVisitor(base.BaseNodeVisitor):
 
     def _is_one(self, component_value: ast.expr) -> bool:
         return isinstance(component_value, ast.Num) and component_value.n == 1
+
+
+@final
+class ImplicitDictGetVisitor(base.BaseNodeVisitor):
+    """Checks for correct `.get` usage in code."""
+
+    def visit_If(self, node: ast.If) -> None:
+        """
+        Checks the compares.
+
+        Raises:
+            ImplicitDictGetViolation
+
+        """
+        self._check_implicit_get(node)
+        self.generic_visit(node)
+
+    def _check_implicit_get(self, node: ast.If) -> None:
+        if not isinstance(node.test, ast.Compare):
+            return
+        if not isinstance(node.test.ops[0], ast.In):
+            return
+
+        checked_key = source.node_to_string(node.test.left)
+        checked_collection = source.node_to_string(node.test.comparators[0])
+
+        for sub in ast.walk(node):
+            if not isinstance(sub, ast.Subscript):
+                continue
+
+            if slices.is_same_slice(checked_collection, checked_key, sub):
+                self.add_violation(refactoring.ImplicitDictGetViolation(sub))
