@@ -78,6 +78,7 @@ Summary
    AugmentedAssignPatternViolation
    UnnecessaryLiteralsViolation
    MultilineLoopViolation
+   IncorrectYieldFromTargetViolation
 
 Consistency checks
 ------------------
@@ -135,6 +136,7 @@ Consistency checks
 .. autoclass:: AugmentedAssignPatternViolation
 .. autoclass:: UnnecessaryLiteralsViolation
 .. autoclass:: MultilineLoopViolation
+.. autoclass:: IncorrectYieldFromTargetViolation
 
 """
 
@@ -1951,3 +1953,37 @@ class MultilineLoopViolation(ASTViolation):
 
     error_template = 'Found multiline loop'
     code = 352
+
+
+@final
+class IncorrectYieldFromTargetViolation(ASTViolation):
+    """
+    Forbids to use ``yield from`` with several nodes.
+
+    We allow to ``yield from`` tuples,
+    names, attributes, calls, and subscripts.
+
+    Reasoning:
+        We enforce consitency when yielding values
+        from tuple instead of any other types.
+        It also might be an error when you try to ``yield from`` something
+        that is not iterable.
+
+    Solution:
+        Use allowed node types with ``yield from``.
+
+    Example::
+
+        # Correct:
+        yield from (1, 2, 3)
+        yield from some
+
+        # Wrong:
+        yield from [1, 2, 3]
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found incorrect `yield from` target'
+    code = 353

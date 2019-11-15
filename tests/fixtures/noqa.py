@@ -601,3 +601,7 @@ except ValueError:
 
 
 bad_frozenset = frozenset([1]) # noqa: WPS527
+
+
+def wrong_yield_from():
+    yield from []  # noqa: WPS353

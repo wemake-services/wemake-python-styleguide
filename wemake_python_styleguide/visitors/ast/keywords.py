@@ -24,6 +24,7 @@ from wemake_python_styleguide.violations.consistency import (
     InconsistentReturnVariableViolation,
     InconsistentReturnViolation,
     InconsistentYieldViolation,
+    IncorrectYieldFromTargetViolation,
     MultipleContextManagerAssignmentsViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -211,6 +212,42 @@ class WrongContextManagerVisitor(BaseNodeVisitor):
             self.add_violation(
                 ContextManagerVariableDefinitionViolation(get_parent(node)),
             )
+
+
+@final
+class GeneratorKeywordsVisitor(BaseNodeVisitor):
+    """Checks how generators are defined and used."""
+
+    _allowed_nodes: ClassVar[AnyNodes] = (
+        ast.Name,
+        ast.Call,
+        ast.Attribute,
+        ast.Subscript,
+
+        ast.Tuple,
+        ast.GeneratorExp,
+    )
+
+    def visit_YieldFrom(self, node: ast.YieldFrom) -> None:
+        """
+        Visits `yield from` nodes.
+
+        Raises:
+            IncorrectYieldFromTargetViolation
+
+        """
+        self._check_yield_from_type(node)
+        self._check_yield_from_empty(node)
+        self.generic_visit(node)
+
+    def _check_yield_from_type(self, node: ast.YieldFrom) -> None:
+        if not isinstance(node.value, self._allowed_nodes):
+            self.add_violation(IncorrectYieldFromTargetViolation(node))
+
+    def _check_yield_from_empty(self, node: ast.YieldFrom) -> None:
+        if isinstance(node.value, ast.Tuple):
+            if not node.value.elts:
+                self.add_violation(IncorrectYieldFromTargetViolation(node))
 
 
 @final
