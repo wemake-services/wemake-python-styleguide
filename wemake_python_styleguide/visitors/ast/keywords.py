@@ -392,8 +392,8 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
         return_sub_nodes: Dict[str, ast.Return],
         returns: Dict[str, List[ast.Name]],
     ) -> None:
-        for variable_name in returns:
-            if not set(names[variable_name]) - set(returns[variable_name]):
+        for variable_name, return_nodes in returns.items():
+            if not set(names[variable_name]) - set(return_nodes):
                 self.add_violation(
                     InconsistentReturnVariableViolation(
                         return_sub_nodes[variable_name],

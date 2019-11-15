@@ -111,10 +111,11 @@ def test_yield_correct(
     assert_errors,
     parse_ast_tree,
     code,
+    mode,
     default_options,
 ):
     """Ensure that `yield` can be used correctly."""
-    tree = parse_ast_tree(code)
+    tree = parse_ast_tree(mode(code))
 
     visitor = GeneratorKeywordsVisitor(default_options, tree=tree)
     visitor.run()
@@ -133,10 +134,11 @@ def test_yield_inccorect(
     assert_errors,
     parse_ast_tree,
     code,
+    mode,
     default_options,
 ):
     """Ensure that `yield` cannot follow the same node."""
-    tree = parse_ast_tree(code)
+    tree = parse_ast_tree(mode(code))
 
     visitor = GeneratorKeywordsVisitor(default_options, tree=tree)
     visitor.run()

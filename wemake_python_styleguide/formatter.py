@@ -123,21 +123,12 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
             all_errors += count
             error_by_file = _count_per_filename(statistics, error_code)
 
-            self._write(
-                '{newline}{error_code}: {message}'.format(
-                    newline=self.newline,
-                    error_code=_bold(error_code),
-                    message=statistic.message,
-                ),
+            self._print_violation_per_file(
+                statistic,
+                error_code,
+                count,
+                error_by_file,
             )
-            for filename in error_by_file:
-                self._write(
-                    '  {error_count:<5} {filename}'.format(
-                        error_count=error_by_file[filename],
-                        filename=filename,
-                    ),
-                )
-            self._write(_underline('Total: {0}'.format(count)))
 
         self._write(self.newline)
         self._write(_underline(_bold('All errors: {0}'.format(all_errors))))
@@ -157,6 +148,29 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
                 newline=self.newline,
             ),
         )
+
+    def _print_violation_per_file(
+        self,
+        statistic: Statistics,
+        error_code: str,
+        count: int,
+        error_by_file: DefaultDict[str, int],
+    ):
+        self._write(
+            '{newline}{error_code}: {message}'.format(
+                newline=self.newline,
+                error_code=_bold(error_code),
+                message=statistic.message,
+            ),
+        )
+        for filename, error_count in error_by_file:
+            self._write(
+                '  {error_count:<5} {filename}'.format(
+                    error_count=error_count,
+                    filename=filename,
+                ),
+            )
+        self._write(_underline('Total: {0}'.format(count)))
 
     def _should_show_source(self, error: Violation) -> bool:
         return self.options.show_source and error.physical_line is not None

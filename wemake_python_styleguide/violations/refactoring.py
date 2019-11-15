@@ -43,6 +43,7 @@ Summary
    InCompareWithSingleItemContainerViolation
    ImplicitYieldFromViolation
    NotATupleArgumentViolation
+   ImplicitItemsIteratorViolation
 
 Refactoring opportunities
 -------------------------
@@ -75,6 +76,7 @@ Refactoring opportunities
 .. autoclass:: InCompareWithSingleItemContainerViolation
 .. autoclass:: ImplicitYieldFromViolation
 .. autoclass:: NotATupleArgumentViolation
+.. autoclass:: ImplicitItemsIteratorViolation
 
 """
 
@@ -1053,14 +1055,14 @@ class ImplicitYieldFromViolation(ASTViolation):
 @final
 class NotATupleArgumentViolation(ASTViolation):
     """
-    Force using tuples as method arguments.
+    Forces using tuples as arguments for some functions.
 
     Reasoning:
-        For some methods, it is better to use tuples instead of another
-        iterable (list, sets,...) as arguments
+        For some functions, it is better to use tuples instead of another
+        iterable types (list, sets,...) as arguments.
 
     Solution:
-        Use tuples as arguments
+        Use tuples as arguments.
 
     Example::
 
@@ -1080,3 +1082,35 @@ class NotATupleArgumentViolation(ASTViolation):
 
     error_template = 'Found not a tuple used as an argument'
     code = 527
+
+
+@final
+class ImplicitItemsIteratorViolation(ASTViolation):
+    """
+    Forbids to use implicit ``.items()`` iterator.
+
+    Reasoning:
+        When iterating over collection it is easy to forget
+        to use ``.items()`` when you need to access both keys and values.
+        So, when you access the iterable with the key inside a ``for`` loop,
+        that's a sign to refactor your code.
+
+    Solution:
+        Use ``.items()`` with direct keys and values when you need them.
+
+    Example::
+
+        # Correct:
+        for some_key, some_value in collection.items():
+            print(some_key, some_value)
+
+        # Wrong:
+        for some_key in collection:
+            print(some_key, collection[some_key])
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found implicit `.items()` usage'
+    code = 528

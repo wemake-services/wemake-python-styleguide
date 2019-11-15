@@ -610,3 +610,7 @@ def wrong_yield_from():
 def consecutive_yields():
     yield 1
     yield 2  # noqa: WPS354
+
+
+for loop_var in loop_iter:  # noqa: WPS528
+    print(loop_iter[loop_var])

@@ -6,13 +6,12 @@ from typing import ClassVar, DefaultDict, List, Optional, Union
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import ForNodes
-from wemake_python_styleguide.logic.nodes import get_parent
-from wemake_python_styleguide.logic.operators import unwrap_unary_node
+from wemake_python_styleguide.compat.aliases import AssignNodes, ForNodes
+from wemake_python_styleguide.compat.functions import get_assign_targets
+from wemake_python_styleguide.logic import nodes, operators, source, walk
 from wemake_python_styleguide.logic.variables import (
     is_valid_block_variable_definition,
 )
-from wemake_python_styleguide.logic.walk import is_contained
 from wemake_python_styleguide.types import AnyFor, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     LambdaInsideLoopViolation,
@@ -29,6 +28,7 @@ from wemake_python_styleguide.violations.consistency import (
     WrongLoopIterTypeViolation,
 )
 from wemake_python_styleguide.violations.refactoring import (
+    ImplicitItemsIteratorViolation,
     ImplicitSumViolation,
     ImplicitYieldFromViolation,
     UselessLoopElseViolation,
@@ -90,11 +90,11 @@ class WrongComprehensionVisitor(base.BaseNodeVisitor):
         if len(node.ifs) > self._max_ifs:
             # We are trying to fix line number in the report,
             # since `comprehension` does not have this property.
-            parent = get_parent(node) or node
+            parent = nodes.get_parent(node) or node
             self.add_violation(MultipleIfsInComprehensionViolation(parent))
 
     def _check_fors(self, node: ast.comprehension) -> None:
-        parent = get_parent(node)
+        parent = nodes.get_parent(node)
         self._fors[parent] = len(parent.generators)  # type: ignore
 
     def _check_contains_yield(self, node: _AnyComprehension) -> None:
@@ -169,7 +169,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
 
     def _check_lambda_inside_loop(self, node: _AnyLoop) -> None:
         for subnode in node.body:
-            if is_contained(subnode, (ast.Lambda,)):
+            if walk.is_contained(subnode, (ast.Lambda,)):
                 self.add_violation(LambdaInsideLoopViolation(node))
 
     def _check_useless_continue(self, node: _AnyLoop) -> None:
@@ -254,7 +254,7 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
         self,
         node: Union[AnyFor, ast.comprehension],
     ) -> None:
-        node_iter = unwrap_unary_node(node.iter)
+        node_iter = operators.unwrap_unary_node(node.iter)
         is_wrong = isinstance(node_iter, self._forbidden_for_iters)
         is_empty = isinstance(node_iter, ast.Tuple) and not node_iter.elts
         if is_wrong or is_empty:
@@ -278,3 +278,50 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
         )
         if is_implicit_yield_from:
             self.add_violation(ImplicitYieldFromViolation(node))
+
+
+@final
+class SyncForLoopVisitor(base.BaseNodeVisitor):
+    """We use this visitor to check just sync ``for`` loops."""
+
+    def visit_For(self, node: ast.For) -> None:
+        """
+        Checks for hidden patterns in sync loops.
+
+        Raises:
+            ImplicitItemsIteratorViolation
+
+        """
+        self._check_implicit_items(node)
+        self.generic_visit(node)
+
+    def _check_implicit_items(self, node: ast.For) -> None:
+        iterable = source.node_to_string(node.iter)
+        target = source.node_to_string(node.target)
+
+        for sub in ast.walk(node):
+            if isinstance(sub, ast.Subscript):
+                if self._is_assigned_target(sub):
+                    continue
+
+                if self._is_same_slice(iterable, target, sub):
+                    self.add_violation(ImplicitItemsIteratorViolation(node))
+                    break
+
+    def _is_assigned_target(self, node: ast.Subscript) -> bool:
+        parent = nodes.get_parent(node)
+        if not isinstance(parent, AssignNodes):
+            return False
+        return any(node == target for target in get_assign_targets(parent))
+
+    def _is_same_slice(
+        self,
+        iterable: str,
+        target: str,
+        node: ast.Subscript,
+    ) -> bool:
+        return (
+            source.node_to_string(node.value) == iterable and
+            isinstance(node.slice, ast.Index) and  # mypy is unhappy
+            source.node_to_string(node.slice.value) == target
+        )
