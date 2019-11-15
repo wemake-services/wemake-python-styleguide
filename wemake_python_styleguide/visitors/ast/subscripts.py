@@ -4,7 +4,7 @@ import ast
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic import source, slices
+from wemake_python_styleguide.logic import slices, source
 from wemake_python_styleguide.violations import consistency, refactoring
 from wemake_python_styleguide.visitors import base
 
