@@ -605,3 +605,8 @@ bad_frozenset = frozenset([1]) # noqa: WPS527
 
 def wrong_yield_from():
     yield from []  # noqa: WPS353
+
+
+def consecutive_yields():
+    yield 1
+    yield 2  # noqa: WPS354

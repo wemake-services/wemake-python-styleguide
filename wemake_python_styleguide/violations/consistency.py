@@ -79,6 +79,7 @@ Summary
    UnnecessaryLiteralsViolation
    MultilineLoopViolation
    IncorrectYieldFromTargetViolation
+   ConsecutiveYieldsViolation
 
 Consistency checks
 ------------------
@@ -137,6 +138,7 @@ Consistency checks
 .. autoclass:: UnnecessaryLiteralsViolation
 .. autoclass:: MultilineLoopViolation
 .. autoclass:: IncorrectYieldFromTargetViolation
+.. autoclass:: ConsecutiveYieldsViolation
 
 """
 
@@ -1987,3 +1989,26 @@ class IncorrectYieldFromTargetViolation(ASTViolation):
 
     error_template = 'Found incorrect `yield from` target'
     code = 353
+
+
+@final
+class ConsecutiveYieldsViolation(ASTViolation):
+    """
+    Forbids to have consecutive ``yield`` expressions.
+
+    We raise this violation when we find at least
+    two consecutive ``yield`` expressions.
+
+    Reasoning:
+        One can write multiple ``yield`` nodes in a row.
+        That's incosistent. Because we have ``yield from`` form.
+
+    Solution:
+        It can be easily changed to ``yield from (...)`` format.
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found consecutive `yield` expressions'
+    code = 354

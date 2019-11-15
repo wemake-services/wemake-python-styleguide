@@ -33,6 +33,7 @@ We used to have incremental versioning before `0.1.0`.
 - Enforces tuples usage with frozenset constructor
 - Changes how `WPS444` works, now we use stricter logic for `while` and `assert`
 - Forbids to use `yield from` with incorrect types
+- Forbids to use consecutive `yield` expressions
 
 ### Bugfixes
 
