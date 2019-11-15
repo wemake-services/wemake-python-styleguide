@@ -53,9 +53,7 @@ def _load_all_violation_classes():
         classes_names_list = inspect.getmembers(module, _is_violation_class)
         only_classes = map(itemgetter(1), classes_names_list)
         classes.update({
-            module: list(
-                sorted(only_classes, key=attrgetter('code')),
-            ),
+            module: sorted(only_classes, key=attrgetter('code')),
         })
     return classes
 
