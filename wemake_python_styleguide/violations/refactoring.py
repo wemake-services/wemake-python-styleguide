@@ -44,6 +44,7 @@ Summary
    ImplicitYieldFromViolation
    NotATupleArgumentViolation
    ImplicitItemsIteratorViolation
+   ImplicitDictGetViolation
 
 Refactoring opportunities
 -------------------------
@@ -77,6 +78,7 @@ Refactoring opportunities
 .. autoclass:: ImplicitYieldFromViolation
 .. autoclass:: NotATupleArgumentViolation
 .. autoclass:: ImplicitItemsIteratorViolation
+.. autoclass:: ImplicitDictGetViolation
 
 """
 
