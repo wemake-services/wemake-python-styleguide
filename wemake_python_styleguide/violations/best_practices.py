@@ -438,6 +438,7 @@ class SameElementsInConditionViolation(ASTViolation):
 
     .. versionadded:: 0.10.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.13.0
 
     """
 

@@ -47,6 +47,7 @@ We used to have incremental versioning before `0.1.0`.
 - Fixes `BlockVariableVisitor` false positives on a properties
 - Fixes that `//` was not recognised as a math operation
 - Fixes false positive `BlockAndLocalOverlapViolation` on annotations without value assign
+- Fixes bug when `x and not x` was not detected as the similar conditions by `WPS408`
 
 ### Misc
 
