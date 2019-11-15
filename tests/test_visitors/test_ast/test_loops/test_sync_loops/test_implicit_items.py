@@ -29,6 +29,10 @@ for {0} in {1}:
     ('index', 'some', 'some[index]'),
     ('index', 'some', 'print(some[index])'),
     ('index', 'some', 'some[index].call()'),
+    ('index', 'some', 'test = some[index]'),
+    ('index', 'some', 'test: int = some[index]'),
+    ('index', 'some', 'test, value = some[index]'),
+    ('index', 'some', 'test = value = some[index]'),
 
     ('index', 'some.attr', 'some.attr[index]'),
     ('index', 'some[0]', 'some[0][index]'),
