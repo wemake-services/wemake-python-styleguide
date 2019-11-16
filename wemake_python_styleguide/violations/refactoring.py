@@ -45,6 +45,7 @@ Summary
    NotATupleArgumentViolation
    ImplicitItemsIteratorViolation
    ImplicitDictGetViolation
+   ImplicitNegativeIndexViolation
 
 Refactoring opportunities
 -------------------------
@@ -79,6 +80,7 @@ Refactoring opportunities
 .. autoclass:: NotATupleArgumentViolation
 .. autoclass:: ImplicitItemsIteratorViolation
 .. autoclass:: ImplicitDictGetViolation
+.. autoclass:: ImplicitNegativeIndexViolation
 
 """
 
@@ -1149,3 +1151,32 @@ class ImplicitDictGetViolation(ASTViolation):
 
     error_template = 'Found implicit `.get()` dict usage'
     code = 529
+
+
+@final
+class ImplicitNegativeIndexViolation(ASTViolation):
+    """
+    Forbids to use implicit negative indexes.
+
+    Reasoning:
+        There's no need in getting the length of an iterable
+        and then having a negative offset,
+        when you can specify negative indexes in the first place.
+
+    Solution:
+        Use negative indexes.
+
+    Example::
+
+        # Correct:
+        some_list[-1]
+
+        # Wrong:
+        some_list[len(some_list) - 1]
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found implicit negative index'
+    code = 530

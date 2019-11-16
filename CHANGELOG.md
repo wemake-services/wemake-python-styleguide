@@ -38,6 +38,7 @@ We used to have incremental versioning before `0.1.0`.
 - Enforces to use `.items()` in loops
 - Enforces using `.get()` over `key in dict` checks
 - Forbids to use and declare `float` keys in arrays and dictionaries
+- Forbids to use `a[len(a) - 1]` because it is just `a[-1]`
 
 ### Bugfixes
 
