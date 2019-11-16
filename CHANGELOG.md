@@ -7,7 +7,8 @@ We used to have incremental versioning before `0.1.0`.
 
 ### Features
 
-- Adds cognitive complexity metric, introduced by `cognitive_complexity`
+- Adds cognitive complexity metric, introduced by [`cognitive_complexity`](https://github.com/Melevir/cognitive_complexity)
+- Adds docstrings linter [`darglint`](https://github.com/terrencepreilly/darglint)
 - `WPS431` now allow customize whitelist via `nested-classes-whitelist` setting
 - Forbids to have invalid strings in stared expressions like `**{'@': 1}`
 - Forbids to use implicit primitive values in a form of `lambda: 0`

@@ -41,7 +41,8 @@ You can also include only some configs if you don't use some tools for example:
   [tool.nitpick]
   style = [
     "https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/styles/flake8.toml",
-    "https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/styles/isort.toml"
+    "https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/styles/isort.toml",
+    "https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/styles/darglint.toml"
   ]
 
 This way you can include only some parts of the global preset.

@@ -8,5 +8,6 @@ minimum_version = "0.21.0"
 [nitpick.styles]
 include = [
   "flake8.toml",
-  "isort.toml"
+  "isort.toml",
+  "darglint.toml"
 ]

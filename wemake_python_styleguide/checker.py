@@ -110,11 +110,7 @@ class Checker(object):
         based on its parameters. This one is executed once per module.
 
         Arguments:
-            tree: ``ast`` parsed by ``flake8``. Differs from ``ast.parse``
-                since it is mutated by multiple ``flake8`` plugins.
-                Why mutated? Since it is really expensive
-                to copy all ``ast`` information in terms of memory.
-
+            tree: ``ast`` tree parsed by ``flake8``.
             file_tokens: ``tokenize.tokenize`` parsed file tokens.
             filename: module file name, might be empty if piping is used.
 
