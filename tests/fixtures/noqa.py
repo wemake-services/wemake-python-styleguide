@@ -617,3 +617,4 @@ for loop_var in loop_iter:  # noqa: WPS528
 
 if 'key' in some_dict:
     print(some_dict['key'])  # noqa: WPS529
+    print(other_dict[1.0])  # noqa: WPS449

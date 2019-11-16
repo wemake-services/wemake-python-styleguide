@@ -4,8 +4,12 @@ import ast
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic import slices, source
-from wemake_python_styleguide.violations import consistency, refactoring
+from wemake_python_styleguide.logic import operators, slices, source
+from wemake_python_styleguide.violations import (
+    best_practices,
+    consistency,
+    refactoring,
+)
 from wemake_python_styleguide.visitors import base
 
 
@@ -97,3 +101,35 @@ class ImplicitDictGetVisitor(base.BaseNodeVisitor):
 
             if slices.is_same_slice(checked_collection, checked_key, sub):
                 self.add_violation(refactoring.ImplicitDictGetViolation(sub))
+
+
+@final
+class CorrectKeyVisitor(base.BaseNodeVisitor):
+    """Checks for correct `.get` usage in code."""
+
+    def visit_Subscript(self, node: ast.Subscript) -> None:
+        """
+        Checks that key usage is correct, without any errors.
+
+        Raises:
+            FloatKeyViolation
+
+        """
+        self._check_float_key(node)
+        self.generic_visit(node)
+
+    def _check_float_key(self, node: ast.Subscript) -> None:
+        is_float_key = (
+            isinstance(node.slice, ast.Index) and
+            self._is_float_key(node.slice)
+        )
+
+        if is_float_key:
+            self.add_violation(best_practices.FloatKeyViolation(node))
+
+    def _is_float_key(self, node: ast.Index) -> bool:
+        real_node = operators.unwrap_unary_node(node.value)
+        return (
+            isinstance(real_node, ast.Num) and
+            isinstance(real_node.n, float)
+        )

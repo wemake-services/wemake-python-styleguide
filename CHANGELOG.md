@@ -36,6 +36,7 @@ We used to have incremental versioning before `0.1.0`.
 - Forbids to use consecutive `yield` expressions
 - Enforces to use `.items()` in loops
 - Enforces using `.get()` over `key in dict` checks
+- Forbids to use and declare `float` keys in arrays and dictionaries
 
 ### Bugfixes
 
@@ -52,6 +53,7 @@ We used to have incremental versioning before `0.1.0`.
 - Fixes that `//` was not recognised as a math operation
 - Fixes false positive `BlockAndLocalOverlapViolation` on annotations without value assign
 - Fixes bug when `x and not x` was not detected as the similar conditions by `WPS408`
+- Fixed that `1.0` and `0.1` were treated as magic numbers
 
 ### Misc
 

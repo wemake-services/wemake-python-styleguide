@@ -68,6 +68,7 @@ Summary
    ApproximateConstantViolation
    StringConstantRedefinedViolation
    IncorrectExceptOrderViolation
+   FloatKeyViolation
 
 Best practices
 --------------
@@ -121,6 +122,7 @@ Best practices
 .. autoclass:: ApproximateConstantViolation
 .. autoclass:: StringConstantRedefinedViolation
 .. autoclass:: IncorrectExceptOrderViolation
+.. autoclass:: FloatKeyViolation
 
 """
 
@@ -1867,9 +1869,11 @@ class StringConstantRedefinedViolation(ASTViolation):
 @final
 class IncorrectExceptOrderViolation(ASTViolation):
     """
-    Forbids the use incorrect order of ``except``.
+    Forbids the use of incorrect order of ``except``.
 
     Note, we only check for built-in exceptions.
+    Because we cannot statically identify
+    the inheritance order of custom ones.
 
     Reasoning:
         Using incorrect order of exceptions is error-prone, since
@@ -1905,3 +1909,35 @@ class IncorrectExceptOrderViolation(ASTViolation):
 
     error_template = 'Found incorrect exception order'
     code = 448
+
+
+@final
+class FloatKeyViolation(ASTViolation):
+    """
+    Forbids to define and use ``float`` keys.
+
+    Reasoning:
+        ``float`` is a very ugly data type.
+        It has a lot of "precision" errors.
+        When we use ``float`` as keys we can hit this wall.
+        We also cannot use ``float`` keys with lists by design.
+
+    Solution:
+        Use other data types: integers, decimals, or use fuzzy logic.
+
+    Example::
+
+        # Correct:
+        some = {1: 'a'}
+        some[1]
+
+        # Wrong:
+        some = {1.0: 'a'}
+        some[1.0]
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found float used as a key'
+    code = 449

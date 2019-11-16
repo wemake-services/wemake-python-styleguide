@@ -29,7 +29,7 @@ def _convert_num(node: AST):
             return node.value
     elif isinstance(node, Num):
         return node.n
-    elif isinstance(node, Name):
+    elif isinstance(node, Name):  # That's what is modified from the original
         # We return string names as is, see how we return strings:
         return node.id
     raise ValueError('malformed node or string: {0!r}'.format(node))

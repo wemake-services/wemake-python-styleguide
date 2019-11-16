@@ -30,6 +30,7 @@ from wemake_python_styleguide.types import AnyFor, AnyNodes, AnyWith
 from wemake_python_styleguide.violations import consistency
 from wemake_python_styleguide.violations.best_practices import (
     ApproximateConstantViolation,
+    FloatKeyViolation,
     MagicNumberViolation,
     MultipleAssignmentsViolation,
     NonUniqueItemsInHashViolation,
@@ -290,10 +291,12 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
         Raises:
             NonUniqueItemsInHashViolation
             UnhashableTypeInHashViolation
+            FloatKeyViolation
 
         """
         self._check_set_elements(node, node.keys)
         self._check_unhashable_elements(node.keys)
+        self._check_float_keys(node.keys)
         self.generic_visit(node)
 
     def _check_unhashable_elements(
@@ -336,6 +339,19 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
                     ) else set_item,
                 )
         self._report_set_elements(node, elements, element_values)
+
+    def _check_float_keys(self, keys: Sequence[Optional[ast.AST]]) -> None:
+        for dict_key in keys:
+            if dict_key is None:
+                continue
+
+            real_key = unwrap_unary_node(dict_key)
+            is_float_key = (
+                isinstance(real_key, ast.Num) and
+                isinstance(real_key.n, float)
+            )
+            if is_float_key:
+                self.add_violation(FloatKeyViolation(dict_key))
 
     def _report_set_elements(
         self,

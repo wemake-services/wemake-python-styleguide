@@ -103,6 +103,7 @@ PRESET: Final = (
 
     subscripts.SubscriptVisitor,
     subscripts.ImplicitDictGetVisitor,
+    subscripts.CorrectKeyVisitor,
 
     # Complexity:
     *complexity.PRESET,
