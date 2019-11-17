@@ -1,7 +1,24 @@
 # -*- coding: utf-8 -*-
 
 import tokenize
-from typing import Container, Iterable, Tuple
+import types
+from typing import Container, FrozenSet, Iterable, List, Mapping, Tuple
+
+MATCHING: Mapping[int, int] = types.MappingProxyType({
+    tokenize.LBRACE: tokenize.RBRACE,
+    tokenize.LSQB: tokenize.RSQB,
+    tokenize.LPAR: tokenize.RPAR,
+})
+
+NEWLINES: FrozenSet[int] = frozenset((
+    tokenize.NL,
+    tokenize.NEWLINE,
+))
+
+ALLOWED_EMPTY_LINE_TOKENS: FrozenSet[int] = frozenset((
+    *NEWLINES,
+    *MATCHING.values(),
+))
 
 
 def split_prefixes(token: tokenize.TokenInfo) -> Tuple[str, str]:
@@ -44,3 +61,26 @@ def only_contains(
 def get_comment_text(token: tokenize.TokenInfo) -> str:
     """Returns comment without `#` char from comment tokens."""
     return token.string[1:].strip()
+
+
+def get_reverse_bracket(bracket: tokenize.TokenInfo) -> int:
+    """
+    Returns the reverse closing bracket for an openning token.
+
+    >>> import tokenize
+    >>> import token
+    >>> bracket = tokenize.TokenInfo(token.RPAR, ")", 6, 7, "(a, b)")
+    >>> get_reverse_bracket(bracket) == token.LPAR
+    True
+
+    """
+    index = list(MATCHING.values()).index(bracket.exact_type)
+    return list(MATCHING.keys())[index]
+
+
+def last_bracket(tokens: List[tokenize.TokenInfo], index: int) -> bool:
+    """Tells whether the given index is the last bracket token in line."""
+    return only_contains(
+        tokens[index + 1:],
+        NEWLINES.union({tokenize.COMMENT}),
+    )

@@ -80,6 +80,7 @@ Summary
    MultilineLoopViolation
    IncorrectYieldFromTargetViolation
    ConsecutiveYieldsViolation
+   BracketBlankLineViolation
 
 Consistency checks
 ------------------
@@ -139,6 +140,7 @@ Consistency checks
 .. autoclass:: MultilineLoopViolation
 .. autoclass:: IncorrectYieldFromTargetViolation
 .. autoclass:: ConsecutiveYieldsViolation
+.. autoclass:: BracketBlankLineViolation
 
 """
 
@@ -2012,3 +2014,36 @@ class ConsecutiveYieldsViolation(ASTViolation):
 
     error_template = 'Found consecutive `yield` expressions'
     code = 354
+
+
+@final
+class BracketBlankLineViolation(TokenizeViolation):
+    """
+    Forbids useless blank lines before and after brackets.
+
+    Reasoning:
+        We do this for consistency.
+
+    Solution:
+        Remove blank lines from the start and from the end of a collection.
+
+    Example::
+
+        # Correct:
+        arr = [
+            1,
+            2
+        ]
+
+        # Wrong:
+        arr = [
+            1,
+            2
+        ]
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found an unnecessary blank line before a bracket'
+    code = 355

@@ -620,3 +620,8 @@ if 'key' in some_dict:
     print(some_sized[len(some_sized) - 2])  # noqa: WPS530
 
 deep_func(a)(b)(c)(d)  # noqa: WPS233
+
+extra_new_line = [  # noqa: WPS355
+
+    'wrong',
+]
