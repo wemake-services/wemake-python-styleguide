@@ -110,4 +110,4 @@ MAX_COGNITIVE_SCORE: Final = 12  # based on this code statistics
 MAX_COGNITIVE_AVERAGE: Final = 8  # based on this code statistics
 
 #: Maximum number of call chains.
-MAX_CALL_LEVEL: Final = 2
+MAX_CALL_LEVEL: Final = 3

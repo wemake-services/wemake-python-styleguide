@@ -58,7 +58,7 @@ def test_incorrect_cases(
     """Testing that violations are raised when using a too long call chain."""
     tree = parse_ast_tree(mode(code))
 
-    option_values = options(max_call_level=2)
+    option_values = options(max_call_level=1)
     visitor = CallChainsVisitor(option_values, tree=tree)
     visitor.run()
 
