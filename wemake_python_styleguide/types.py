@@ -127,3 +127,4 @@ class ConfigurationOptions(Protocol):
     max_attributes: int
     max_cognitive_score: int
     max_cognitive_average: int
+    max_call_level: int

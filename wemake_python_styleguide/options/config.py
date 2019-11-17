@@ -123,6 +123,9 @@ You can also show all options that ``flake8`` supports by running:
 - ``max-cognitive-average`` - maximum amount of cognitive complexity
     per module, defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_COGNITIVE_AVERAGE`
+    :str:`wemake_python_styleguide.options.defaults.NESTED_CLASSES_WHITELIST`
+- ``max-call-level`` - maximum number of call chains, defaults to
+    :str:`wemake_python_styleguide.options.defaults.MAX_CALL_LEVEL`
 
 """
 
@@ -346,6 +349,12 @@ class Configuration(object):
             '--max-cognitive-average',
             defaults.MAX_COGNITIVE_AVERAGE,
             'Maximum amount of average cognitive complexity per module.',
+        ),
+
+        _Option(
+            '--max-call-level',
+            defaults.MAX_CALL_LEVEL,
+            'Maximum number of call chains.',
         ),
     ]
 
