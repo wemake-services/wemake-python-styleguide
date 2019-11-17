@@ -587,7 +587,6 @@ for wrong_loop in call(  # noqa: WPS352
 if a in {1}:  # noqa: WPS525
     print('bad!')
 
-
 def implicit_yield_from():
     for wrong_yield in call():  # noqa: WPS526
         yield wrong_yield
@@ -619,3 +618,5 @@ if 'key' in some_dict:
     print(some_dict['key'])  # noqa: WPS529
     print(other_dict[1.0])  # noqa: WPS449
     print(some_sized[len(some_sized) - 2])  # noqa: WPS530
+
+deep_func(a)(b)(c)(d)  # noqa: WPS233
