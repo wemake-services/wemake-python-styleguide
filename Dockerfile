@@ -17,7 +17,7 @@ FROM python:3.7-alpine
 LABEL maintainer="sobolevn@wemake.services"
 LABEL vendor="wemake.services"
 
-ENV WPS_VERSION='0.12.5'
+ENV WPS_VERSION='0.13.0'
 
 RUN apk add --no-cache bash
 RUN pip install "wemake-python-styleguide==$WPS_VERSION"

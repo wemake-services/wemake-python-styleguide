@@ -3,12 +3,22 @@
 We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
-## 0.13.0 WIP
+## 0.13.1 WIP
+
+
+## 0.13.0 aka The Lintoberfest
+
+This is a huge release that was created during the Hactoberfest season.
+It was impossible without the huge help from [our awesome contributors](https://github.com/wemake-services/wemake-python-styleguide/graphs/contributors?from=2019-06-01&to=2019-11-18&type=c). Thanks a lot to everyone!
+
+This release is not focused on any particular area.
+It features a lot of new rules from different categories.
 
 ### Features
 
 - Adds cognitive complexity metric, introduced by [`cognitive_complexity`](https://github.com/Melevir/cognitive_complexity)
 - Adds docstrings linter [`darglint`](https://github.com/terrencepreilly/darglint)
+- Updates `pep8-naming` and `flake8-comprehensions`
 - `WPS431` now allow customize whitelist via `nested-classes-whitelist` setting
 - Forbids to have invalid strings in stared expressions like `**{'@': 1}`
 - Forbids to use implicit primitive values in a form of `lambda: 0`
