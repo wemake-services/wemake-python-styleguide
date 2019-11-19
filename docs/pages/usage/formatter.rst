@@ -41,7 +41,7 @@ It can be passed as a command line argument or set in ``setup.cfg``:
 .. code:: ini
 
   [flake8]
-  show-shource = True
+  show-source = True
 
 It will change how your reports are formatted,
 and will show the exact problem with your code:
@@ -57,7 +57,7 @@ and will show the exact problem with your code:
                               ^
 
 It helps to visially identify the problems in your code and fix it faster.
-We include ``show-shource = True`` into our default configuration.
+We include ``show-source = True`` into our default configuration.
 
 
 .. rubric:: Showing statistic
