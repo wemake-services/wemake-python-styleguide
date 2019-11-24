@@ -5,6 +5,11 @@ We used to have incremental versioning before `0.1.0`.
 
 ## 0.13.1 WIP
 
+### Bufixes
+
+- Fixes that `_` was marked as invalid by `VagueImportViolation`
+- Fixes that docs for `VagueImportViolation` were misleading
+
 
 ## 0.13.0 aka The Lintoberfest
 

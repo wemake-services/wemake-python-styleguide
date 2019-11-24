@@ -1781,10 +1781,16 @@ class VagueImportViolation(ASTViolation):
     """
     Forbids imports that may cause confusion outside of the module.
 
+    Names that we forbid to import:
+    - Common names like ``dumps`` and ``loads``
+    - Names starting with ``to_`` and ``from_``
+    - Too short names like ``Q`` or ``F``, but we are fine with ``_``
+
     Reasoning:
         See ``datetime.*`` in code? You know that it's from datetime.
         See ``BaseView`` in a Django project? You know where it is from.
         See ``loads``? It can be anything: ``yaml``, ``toml``, ``json``, etc.
+        We are also enforcing consitency with our naming too-short rules here.
 
     See
     :py:data:`~wemake_python_styleguide.constants.VAGUE_IMPORTS_BLACKLIST`

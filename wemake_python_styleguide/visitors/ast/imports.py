@@ -6,7 +6,6 @@ from typing import Callable
 
 from typing_extensions import final
 
-from wemake_python_styleguide import constants
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
 from wemake_python_styleguide.logic import imports, nodes
 from wemake_python_styleguide.logic.naming import access
@@ -69,11 +68,7 @@ class _ImportsValidator(object):
                 if name is None:
                     continue
 
-                blacklisted = name in constants.VAGUE_IMPORTS_BLACKLIST
-                with_from = name.startswith('from_')
-                with_to = name.startswith('to_')
-
-                if blacklisted or with_from or with_to or len(name) == 1:
+                if imports.is_vague_import(name):
                     self._error_callback(
                         VagueImportViolation(node, text=alias.name),
                     )
