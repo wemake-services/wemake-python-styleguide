@@ -2038,13 +2038,15 @@ class BracketBlankLineViolation(TokenizeViolation):
         # Correct:
         arr = [
             1,
-            2
+            2,
         ]
 
         # Wrong:
         arr = [
+
             1,
-            2
+            2,
+
         ]
 
     .. versionadded:: 0.13.0
