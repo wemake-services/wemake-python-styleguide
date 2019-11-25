@@ -754,6 +754,13 @@ class ParametersIndentationViolation(ASTViolation):
             last_item,
         ], end='')
 
+        # Correct complex case:
+
+        @pytest.mark.parametrize(('boolean_arg', 'string_arg'), [
+             (True, "string"),
+             (False, "another string"),
+        ])
+
     Everything else is considered a violation.
     This rule checks: lists, sets, tuples, dicts, calls,
     functions, methods, and classes.
