@@ -24,7 +24,8 @@ ENV WPS_VERSION='0.13.0'
 
 RUN apk add --no-cache bash wget
 RUN pip install "wemake-python-styleguide==$WPS_VERSION" \
-  wget -O - -q 'https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh' | sh -s -- -b /usr/local/bin/ v0.9.13
+  && wget -O - -q 'https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh' \
+  | sh -s -- -b /usr/local/bin/ v0.9.13
 
 COPY ./scripts/action-config.cfg /
 COPY ./scripts/entrypoint.sh /
