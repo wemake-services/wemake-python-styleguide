@@ -16,4 +16,4 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: 'wps'
-      uses: ${{ GITHUB_WORKSPACE }}
+      uses: './.'
