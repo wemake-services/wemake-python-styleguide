@@ -17,3 +17,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: 'wps'
       uses: './.'
+      with:
+        reporter: 'github-pr-review'
+      env:
+        GITHUB_TOKEN: ${{ secrets.github_token }}
