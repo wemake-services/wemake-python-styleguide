@@ -15,8 +15,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: 'wps'
-      uses: './.'
+    - uses: wemake-services/wemake-python-styleguide@master
       with:
         reporter: 'github-pr-review'
       env:

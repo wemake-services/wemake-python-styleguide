@@ -9,6 +9,7 @@ echo
 # Runs flake8, possibly with reviewdog:
 if [ "$INPUT_REPORTER" == 'terminal' ]; then
   output=$(flake8 "$INPUT_PATH")
+  status="$?"
 elif [ "$INPUT_REPORTER" == 'github-pr-review' ] ||
      [ "$INPUT_REPORTER" == 'github-pr-check' ]; then
   # We will need this token for `reviewdog` to work:
@@ -17,8 +18,12 @@ elif [ "$INPUT_REPORTER" == 'github-pr-review' ] ||
   # Running special version of `flake8` to mathc the `reviewdog` format:
   output=$(flake8 "$INPUT_PATH" --append-config='/action-config.cfg')
   echo "$output" | reviewdog -f=pep8 -reporter="$INPUT_REPORTER" -level=error
+  # `reviewdog` does not fail with any status code, so we have to get dirty:
+  status=$(test "$output" = '')
+else
+  output="Invalid reporter specified: $INPUT_REPORTER"
+  status=1
 fi
-status="$?"
 
 # Sets the output variable for Github Action API:
 # See: https://help.github.com/en/articles/development-tools-for-github-action
