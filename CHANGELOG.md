@@ -3,6 +3,7 @@
 We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
+
 ## 0.13.1 WIP
 
 ### Bufixes
@@ -11,6 +12,10 @@ We used to have incremental versioning before `0.1.0`.
 - Fixes that docs for `VagueImportViolation` were misleading
 - Fixes invalid docs for `BracketBlankLineViolation` #1020
 - Add more complex example to `ParametersIndentationViolation` #1021
+
+### Misc
+
+- Now our GitHub Action can be used to leave PR review comments
 
 
 ## 0.13.0 aka The Lintoberfest

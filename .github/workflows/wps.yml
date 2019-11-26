@@ -15,4 +15,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - uses: wemake-services/wemake-python-styleguide@master
+    - uses: .
+      with:
+        reporter: 'github-pr-review'
+      env:
+        GITHUB_TOKEN: ${{ secrets.github_token }}

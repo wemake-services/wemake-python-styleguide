@@ -7,6 +7,7 @@
 [![Github Action](https://github.com/wemake-services/wemake-python-styleguide/workflows/wps/badge.svg)](https://github.com/wemake-services/wemake-python-styleguide/actions)
 [![Python Version](https://img.shields.io/pypi/pyversions/wemake-python-styleguide.svg)](https://pypi.org/project/wemake-python-styleguide/)
 [![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
+
 ---
 
 Welcome to the strictest and most opinionated python linter ever.
@@ -51,6 +52,9 @@ And it won't change your existing workflow.
 
 See ["Usage" section](https://wemake-python-stylegui.de/en/latest/pages/usage/setup.html)
 in the docs for examples and integrations.
+
+We also support [Github Actions](https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/github-actions.html) as first class-citizens.
+[Try it out](https://github.com/marketplace/actions/wemake-python-styleguide)!
 
 
 ## What we are about

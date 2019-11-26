@@ -4,11 +4,14 @@
 # This is Github Action docker-based image.
 # It is not intended for local development!
 #
+# You can find docs about how to setup your own Github Action here:
+# https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/github-actions.html
+#
 # It can still be used as a raw image for your own containers.
 # See `action.yml` in case you want to learn more about Github Actions.
 # See it live:
 # https://github.com/wemake-services/wemake-python-styleguide/actions
-
+#
 # This image is also available on Dockerhub:
 # https://hub.docker.com/r/wemakeservices/wemake-python-styleguide
 
@@ -19,9 +22,11 @@ LABEL vendor="wemake.services"
 
 ENV WPS_VERSION='0.13.0'
 
-RUN apk add --no-cache bash
-RUN pip install "wemake-python-styleguide==$WPS_VERSION"
+RUN apk add --no-cache bash wget
+RUN pip install "wemake-python-styleguide==$WPS_VERSION" \
+  wget -O - -q 'https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh' | sh -s -- -b /usr/local/bin/ v0.9.13
 
+COPY ./scripts/action-config.cfg /
 COPY ./scripts/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

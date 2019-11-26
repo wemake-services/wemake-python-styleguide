@@ -1,12 +1,22 @@
 #!/bin/bash
 
+# Setting up:
+export REVIEWDOG_GITHUB_API_TOKEN="$GITHUB_TOKEN"
+
 # Diagnostic output for the passed path:
-echo "Linting path: $1"
+flake8 --version
+echo "Linting path: $INPUT_PATH"
 echo '================================='
 echo
 
-# Runs flake8:
-output=$(flake8 "$1")
+# Runs flake8, possibly with reviewdog:
+if [ "$INPUT_REPORTER" == 'terminal' ]; then
+  output=$(flake8 "$INPUT_PATH")
+elif [ "$INPUT_REPORTER" == 'github-pr-review' ] ||
+     [ "$INPUT_REPORTER" == 'github-pr-check' ]; then
+  output=$(flake8 "$INPUT_PATH" --append-config='/action-config.cfg')
+  echo "$output" | reviewdog -f='pep8' -reporter="$INPUT_REPORTER"
+fi
 status="$?"
 
 # Sets the output variable for Github Action API:

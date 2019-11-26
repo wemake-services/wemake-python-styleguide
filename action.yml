@@ -15,7 +15,11 @@ inputs:
     description: 'Path or space-separated list of paths to lint'
     required: false
     default: '.'
-  
+  reporter:
+    description: 'How would you like the results to be displayed?'
+    required: false
+    default: 'terminal'
+
 outputs:
   output:
     description: 'The output of wemake-python-styleguide run'
@@ -24,3 +28,4 @@ runs:
   image: 'Dockerfile'
   args:
     - ${{ inputs.path }}
+    - ${{ inputs.reporter }}
