@@ -16,7 +16,3 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - uses: '.'
-      with:
-        reporter: 'github-pr-review'
-      env:
-        GITHUB_TOKEN: ${{ secrets.github_token }}
