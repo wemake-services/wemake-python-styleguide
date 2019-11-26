@@ -22,6 +22,8 @@ and PR summary review starting from ``0.13.1`` version.
 Inputs
 ~~~~~~
 
+.. rubric:: reporter
+
 We support three reporting options:
 
 - ``terminal`` (default one) when we just dump the output into Action's logs.
@@ -29,7 +31,14 @@ We support three reporting options:
 - ``github-pr-review`` (recommended) when we use `inline comments <https://github.com/reviewdog/reviewdog#reporter-github-pullrequest-review-comment--reportergithub-pr-review>`_ inside code reviews
 - ``github-pr-check`` when we use `Github Checks <https://github.com/reviewdog/reviewdog#reporter-github-checks--reportergithub-pr-check>`_ for the output
 
-That's how it can be setup:
+Take a note that ``github-pr-review`` and ``github-pr-check`` requires
+``GITHUB_TOKEN`` environment variable to be set.
+
+Default reporter looks like so:
+
+.. image:: https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/terminal.png
+
+For example, that's how ``github-pr-reviews`` can be set up:
 
 .. code:: yaml
 
@@ -43,6 +52,8 @@ That's how it can be setup:
 That's how the result will look like:
 
 .. image:: https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/reviewdog.png
+
+.. rubric:: path
 
 We also support custom ``path`` to be specified:
 
