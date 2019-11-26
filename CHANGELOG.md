@@ -4,6 +4,13 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
+## 0.13.2 WIP
+
+### Bugfixes
+
+- Fixes that Github Action was failing for wrong status code
+
+
 ## 0.13.1
 
 ### Bufixes
