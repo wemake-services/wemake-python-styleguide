@@ -40,6 +40,10 @@ That's how it can be setup:
     env:
       GITHUB_TOKEN: ${{ secrets.github_token }}
 
+That's how the result will look like:
+
+.. image:: https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/reviewdog.png
+
 We also support custom ``path`` to be specified:
 
 .. code:: yaml
