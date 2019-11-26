@@ -16,4 +16,4 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: 'wps'
-      uses: '/home/runner/work/wemake-python-styleguide/wemake-python-styleguide'
+      uses: ${{ GITHUB_WORKSPACE }}
