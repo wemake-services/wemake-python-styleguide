@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Setting up:
-export REVIEWDOG_GITHUB_API_TOKEN="$GITHUB_TOKEN"
-
 # Diagnostic output for the passed path:
 flake8 --version
 echo "Linting path: $INPUT_PATH"
@@ -14,6 +11,10 @@ if [ "$INPUT_REPORTER" == 'terminal' ]; then
   output=$(flake8 "$INPUT_PATH")
 elif [ "$INPUT_REPORTER" == 'github-pr-review' ] ||
      [ "$INPUT_REPORTER" == 'github-pr-check' ]; then
+  # We will need this token for `reviewdog` to work:
+  export REVIEWDOG_GITHUB_API_TOKEN="$GITHUB_TOKEN"
+
+  # Running special version of `flake8` to mathc the `reviewdog` format:
   output=$(flake8 "$INPUT_PATH" --append-config='/action-config.cfg')
   echo "$output" | reviewdog -f='pep8' -reporter="$INPUT_REPORTER"
 fi

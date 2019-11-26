@@ -22,7 +22,7 @@ LABEL vendor="wemake.services"
 
 ENV WPS_VERSION='0.13.0'
 
-RUN apk add --no-cache bash wget
+RUN apk add --no-cache bash git wget
 RUN pip install "wemake-python-styleguide==$WPS_VERSION" \
   # Installing reviewdog to optionally comment on pull requests:
   && wget -O - -q 'https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh' \
