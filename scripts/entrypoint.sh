@@ -16,7 +16,7 @@ elif [ "$INPUT_REPORTER" == 'github-pr-review' ] ||
 
   # Running special version of `flake8` to mathc the `reviewdog` format:
   output=$(flake8 "$INPUT_PATH" --append-config='/action-config.cfg')
-  echo "$output" | reviewdog -f='pep8' -reporter="$INPUT_REPORTER"
+  echo "$output" | reviewdog -f=pep8 -reporter="$INPUT_REPORTER" -level=error
 fi
 status="$?"
 
