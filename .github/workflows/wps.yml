@@ -16,4 +16,4 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: 'wps'
-      uses: './action.yml'
+      uses: '/home/runner/work/wemake-python-styleguide/wemake-python-styleguide'
