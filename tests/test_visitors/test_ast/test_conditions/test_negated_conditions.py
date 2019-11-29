@@ -68,7 +68,7 @@ def test_negated_complex_elif_conditions(
     parse_ast_tree,
     default_options,
 ):
-    """Testing simple conditions."""
+    """Testing complex conditions without else expression."""
     tree = parse_ast_tree(complex_elif_conditions.format(code))
 
     visitor = IfStatementVisitor(default_options, tree=tree)
