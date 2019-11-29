@@ -12,8 +12,17 @@ if {0}:
     ...
 """
 
+complex_elif_conditions = """
+if {0}:
+    ...
+elif ...:
+    ...
+"""
+
 complex_conditions = """
 if {0}:
+    ...
+elif ...:
     ...
 else:
     ...
@@ -37,6 +46,30 @@ def test_negated_simple_conditions(
 ):
     """Testing simple conditions."""
     tree = parse_ast_tree(simple_conditions.format(code))
+
+    visitor = IfStatementVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('code', [
+    'not some',
+    '-some',
+    'some != 1',
+    'some',
+    'some == 0',
+    'some != other',
+    'some > 1',
+])
+def test_negated_complex_elif_conditions(
+    code,
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+):
+    """Testing simple conditions."""
+    tree = parse_ast_tree(complex_elif_conditions.format(code))
 
     visitor = IfStatementVisitor(default_options, tree=tree)
     visitor.run()
