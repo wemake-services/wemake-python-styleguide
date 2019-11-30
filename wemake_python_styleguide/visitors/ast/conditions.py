@@ -103,7 +103,7 @@ class IfStatementVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_negated_conditions(self, node: ast.If) -> None:
-        if not self._has_else_expr(node):
+        if not ifs.has_else(node):
             return
 
         if isinstance(node.test, ast.UnaryOp):
@@ -153,16 +153,6 @@ class IfStatementVisitor(BaseNodeVisitor):
         if isinstance(node.test, ast.Call):
             if given_function_called(node.test, {'len'}):
                 self.add_violation(UselessLenCompareViolation(node))
-
-    def _has_else_expr(self, node: ast.If) -> bool:
-        """Check ``if`` node has ``else`` expression."""
-        try:
-            child_node = node.orelse[0]
-        except IndexError:
-            return False
-        if isinstance(child_node, ast.If):
-            return self._has_else_expr(child_node)
-        return True
 
 
 @final
