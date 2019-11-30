@@ -9,6 +9,7 @@ We used to have incremental versioning before `0.1.0`.
 ### Bugfixes
 
 - Fixes that Github Action was failing for wrong status code
+- Small typo in the documentation for pylint fixed
 - Fixes `NegatedConditionsViolation` false positive on absent `else` in combination with `elif` #1036
 
 
