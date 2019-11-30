@@ -34,6 +34,7 @@ for {0} in {1}:
     ('index', 'some', 'test: int = some[index]'),
     ('index', 'some', 'test, value = some[index]'),
     ('index', 'some', 'test = value = some[index]'),
+    ('index', 'some', 'some[index] = some[index]'),
 
     ('index', 'some.attr', 'some.attr[index]'),
     ('index', 'some[0]', 'some[0][index]'),
@@ -66,12 +67,20 @@ def test_implicit_forloop_items(
 
 
 @pytest.mark.parametrize(('target', 'iterable', 'expression'), [
+    # Correct exmpressions:
     ('index', 'some_other', 'some[index]'),
     ('index_other', 'some', 'print(some[index])'),
     ('index', 'some', 'some.index.call()'),
-    ('index', 'some', 'some[index] = True'),
     ('index', 'call(1, 2)', 'call(1)[index]'),
 
+    # Assignments:
+    ('index', 'some', 'some[index] = True'),
+    ('index', 'some', 'some[index] += [1, 2, 3]'),
+    ('index', 'some', 'some[index] *= 2'),
+    ('index', 'some', 'some[index] -= index'),
+    ('index', 'some', 'some[index] @= some[other]'),
+
+    # Using `items`:
     ('key, value', 'some.items()', 'some[index]'),
     ('key, value', 'some.items()', 'print(key, value, some)'),
 ])

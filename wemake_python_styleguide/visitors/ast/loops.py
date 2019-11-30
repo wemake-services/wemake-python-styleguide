@@ -316,6 +316,6 @@ class SyncForLoopVisitor(base.BaseNodeVisitor):
 
     def _is_assigned_target(self, node: ast.Subscript) -> bool:
         parent = nodes.get_parent(node)
-        if not isinstance(parent, AssignNodes):
+        if not isinstance(parent, (*AssignNodes, ast.AugAssign)):
             return False
         return any(node == target for target in get_assign_targets(parent))
