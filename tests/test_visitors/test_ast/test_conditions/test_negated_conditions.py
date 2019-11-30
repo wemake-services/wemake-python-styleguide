@@ -22,6 +22,13 @@ elif ...:
 complex_conditions = """
 if {0}:
     ...
+else:
+    ...
+"""
+
+complex_elif_else_conditions = """
+if {0}:
+    ...
 elif ...:
     ...
 else:
@@ -77,6 +84,10 @@ def test_negated_complex_elif_conditions(
     assert_errors(visitor, [])
 
 
+@pytest.mark.parametrize('template', [
+    complex_conditions,
+    complex_elif_else_conditions,
+])
 @pytest.mark.parametrize('code', [
     'not some',
     'some != 1',
@@ -84,12 +95,13 @@ def test_negated_complex_elif_conditions(
 ])
 def test_wrong_negated_complex_conditions(
     code,
+    template,
     assert_errors,
     parse_ast_tree,
     default_options,
 ):
     """Testing complex conditions with nagated ``if`` condition."""
-    tree = parse_ast_tree(complex_conditions.format(code))
+    tree = parse_ast_tree(template.format(code))
 
     visitor = IfStatementVisitor(default_options, tree=tree)
     visitor.run()
@@ -97,6 +109,10 @@ def test_wrong_negated_complex_conditions(
     assert_errors(visitor, [NegatedConditionsViolation])
 
 
+@pytest.mark.parametrize('template', [
+    complex_conditions,
+    complex_elif_else_conditions,
+])
 @pytest.mark.parametrize('code', [
     'some',
     '-some',
@@ -107,12 +123,13 @@ def test_wrong_negated_complex_conditions(
 ])
 def test_correctly_negated_complex_conditions(
     code,
+    template,
     assert_errors,
     parse_ast_tree,
     default_options,
 ):
     """Testing correctly negated complex conditions."""
-    tree = parse_ast_tree(complex_conditions.format(code))
+    tree = parse_ast_tree(template.format(code))
 
     visitor = IfStatementVisitor(default_options, tree=tree)
     visitor.run()
