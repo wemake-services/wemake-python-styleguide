@@ -40,6 +40,8 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors import base, decorators
 
+_HahItems = Sequence[Optional[ast.AST]]
+
 
 @final
 class WrongStringVisitor(base.BaseNodeVisitor):
@@ -299,9 +301,22 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
         self._check_float_keys(node.keys)
         self.generic_visit(node)
 
+    def _check_float_keys(self, keys: _HahItems) -> None:
+        for dict_key in keys:
+            if dict_key is None:
+                continue
+
+            real_key = unwrap_unary_node(dict_key)
+            is_float_key = (
+                isinstance(real_key, ast.Num) and
+                isinstance(real_key.n, float)
+            )
+            if is_float_key:
+                self.add_violation(FloatKeyViolation(dict_key))
+
     def _check_unhashable_elements(
         self,
-        keys_or_elts: Sequence[ast.AST],
+        keys_or_elts: _HahItems,
     ) -> None:
         for set_item in keys_or_elts:
             if isinstance(set_item, self._unhashable_types):
@@ -310,7 +325,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
     def _check_set_elements(
         self,
         node: Union[ast.Set, ast.Dict],
-        keys_or_elts: Sequence[Optional[ast.AST]],
+        keys_or_elts: _HahItems,
     ) -> None:
         elements: List[str] = []
         element_values = []
@@ -339,19 +354,6 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
                     ) else set_item,
                 )
         self._report_set_elements(node, elements, element_values)
-
-    def _check_float_keys(self, keys: Sequence[Optional[ast.AST]]) -> None:
-        for dict_key in keys:
-            if dict_key is None:
-                continue
-
-            real_key = unwrap_unary_node(dict_key)
-            is_float_key = (
-                isinstance(real_key, ast.Num) and
-                isinstance(real_key.n, float)
-            )
-            if is_float_key:
-                self.add_violation(FloatKeyViolation(dict_key))
 
     def _report_set_elements(
         self,

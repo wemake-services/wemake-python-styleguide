@@ -23,7 +23,7 @@ from typing import Any, Optional, Union
 from wemake_python_styleguide.compat.nodes import Constant
 
 
-def _convert_num(node: AST):
+def _convert_num(node: Optional[AST]):
     if isinstance(node, Constant):  # pragma: no cover
         if isinstance(node.value, (int, float, complex)):
             return node.value
@@ -35,7 +35,7 @@ def _convert_num(node: AST):
     raise ValueError('malformed node or string: {0!r}'.format(node))
 
 
-def _convert_signed_num(node: AST):
+def _convert_signed_num(node: Optional[AST]):
     if isinstance(node, UnaryOp) and isinstance(node.op, (UAdd, USub)):
         operand = _convert_num(node.operand)
         return +operand if isinstance(node.op, UAdd) else -operand
@@ -65,7 +65,9 @@ def _convert_iterable(node: Union[Tuple, List, Set, Dict]):
     ))
 
 
-def literal_eval_with_names(node: AST) -> Optional[Any]:  # noqa: WPS231
+def literal_eval_with_names(  # noqa: WPS231
+    node: Optional[AST],
+) -> Any:
     """
     Safely evaluate constants and ``ast.Name`` nodes.
 
