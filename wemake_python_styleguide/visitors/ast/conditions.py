@@ -103,7 +103,7 @@ class IfStatementVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_negated_conditions(self, node: ast.If) -> None:
-        if not node.orelse:
+        if not ifs.has_else(node):
             return
 
         if isinstance(node.test, ast.UnaryOp):
