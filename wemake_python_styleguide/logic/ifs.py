@@ -15,7 +15,7 @@ def has_elif(node: ast.If) -> bool:
 
 def has_else(node: ast.If) -> bool:
     """Tells if this node or ``if`` chain ends with an ``else`` expression."""
-    last_elem: List[ast.stmt] = tuple(chain(node))[-1]
+    last_elem = tuple(chain(node))[-1]
     return bool(last_elem)
 
 
