@@ -1,8 +1,10 @@
 #!/bin/bash
 
 # Diagnostic output for the passed path:
-flake8 --version
+echo "Using reported: $INPUT_REPORTER"
 echo "Linting path: $INPUT_PATH"
+echo 'flake8 --version:'
+flake8 --version
 echo '================================='
 echo
 
