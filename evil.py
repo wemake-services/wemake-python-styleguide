@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # 1, Space invaders!
+# Credits: https://twitter.com/raymondh/status/1131103570856632321
 
 x = 1
 x -=- x
