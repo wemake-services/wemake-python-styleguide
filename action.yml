@@ -25,7 +25,7 @@ outputs:
     description: 'The output of wemake-python-styleguide run'
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: './scripts/Dockerfile'
   args:
     - ${{ inputs.path }}
     - ${{ inputs.reporter }}
