@@ -29,7 +29,10 @@ that run ``flake8`` on different occasions:
 - `pre-commit <https://pre-commit.com/>`_ to run ``flake8``
   before all commits locally
 
-  - Note that since the default ``flake8`` used by ``pre-commit`` does not have ``wemake`` plugin, we have to ask ``pre-commit`` to run local ``flake8`` that is installed via ``wemake``. A sample config for ``.pre-commit-config.yaml``:
+  - Note that since the default ``flake8`` used by ``pre-commit`` does not have
+    ``wemake`` plugin, we have to ask ``pre-commit`` to run local ``flake8``
+    that is installed via ``wemake``. A sample config for
+    ``.pre-commit-config.yaml``:
 
   .. code:: yaml
 
@@ -48,7 +51,9 @@ that run ``flake8`` on different occasions:
   inline-comments with violations during code-review inside your CI
 - Directly modify git pre-commit hook without third party app or service.
 
-  - Open ``<your_local_repo>/.git/hooks/pre-commit.sample`` (git runs this script after one calls ``git commit``. If this script exits with code 1, commit would fail)
+  - Open ``<your_local_repo>/.git/hooks/pre-commit.sample`` (git runs this
+    script after one calls ``git commit``. If this script exits with code 1,
+    commit would fail)
   - Add the following code **before** the one checking for whitespace errors.
 
   .. code:: bash
