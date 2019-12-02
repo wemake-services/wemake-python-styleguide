@@ -13,6 +13,7 @@ We used to have incremental versioning before `0.1.0`.
 - Fixes `NegatedConditionsViolation` false positive on absent
   `else` in combination with `elif`
 - Fixes `WPS528` false positive on augmented assigns
+- Fixes that `reviewdog` was not able to create more than `30` comments per PR
 
 
 ## 0.13.1
