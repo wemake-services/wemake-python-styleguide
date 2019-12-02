@@ -25,7 +25,7 @@ outputs:
 
 runs:
   using: 'docker'
-  image: './scripts/Dockerfile'
+  image: 'Dockerfile'
   args:
     - ${{ inputs.path }}
     - ${{ inputs.reporter }}
