@@ -181,7 +181,7 @@ class IfStatementVisitor(BaseNodeVisitor):
                     UselessReturningElseViolation(chained_if[0]),
                 )
 
-    def _check_useless_len(self, node: AnyIf) -> None:
+    def _check_useless_len(self, node: ast.If) -> None:
         if isinstance(node.test, ast.Call):
             if given_function_called(node.test, {'len'}):
                 self.add_violation(UselessLenCompareViolation(node))

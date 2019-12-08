@@ -84,6 +84,7 @@ PRESET: Final = (
     conditions.IfStatementVisitor,
     conditions.BooleanConditionVisitor,
     conditions.ImplicitBoolPatternsVisitor,
+    conditions.IfExpressionVisitor,
 
     # Classes:
     classes.WrongClassVisitor,
