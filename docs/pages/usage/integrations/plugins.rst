@@ -17,6 +17,7 @@ because they are, well, specific:
 - `flake8-scrapy <https://github.com/stummjr/flake8-scrapy>`_
 - `pandas-vet <https://github.com/deppen8/pandas-vet>`_
 - `flake8-SQL <https://pypi.org/project/flake8-SQL/>`_
+- `flake8-annotations <https://github.com/python-discord/flake8-annotations>`_
 
 Hooks
 ~~~~~
