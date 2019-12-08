@@ -837,6 +837,7 @@ to the project during `#hactoberfest`. List of awesome people:
 
 - Improves `CONTRIBUTING.md`
 - Moves issues templates to `.github/` folder
+- Update error thrown on `RedundantSubscriptViolation`
 
 ## Version 0.0.14
 
