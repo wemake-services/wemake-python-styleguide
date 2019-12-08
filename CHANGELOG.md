@@ -14,6 +14,7 @@ We used to have incremental versioning before `0.1.0`.
   `else` in combination with `elif`
 - Fixes `WPS528` false positive on augmented assigns
 - Fixes that `reviewdog` was not able to create more than `30` comments per PR
+- Checks for negated predicates in if expressions in addition to just if statements
 
 
 ## 0.13.1
