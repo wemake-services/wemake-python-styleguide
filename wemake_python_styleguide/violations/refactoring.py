@@ -256,7 +256,7 @@ class UselessReturningElseViolation(ASTViolation):
 @final
 class NegatedConditionsViolation(ASTViolation):
     """
-    Forbids to use negated conditions together with ``else`` clause.
+    Forbids to use negated conditions together with ``else`` clause in if statements, and in all if expressions.
 
     Reasoning:
         It easier to read and name regular conditions. Not negated ones.
@@ -266,7 +266,7 @@ class NegatedConditionsViolation(ASTViolation):
         condition.
 
     Example::
-
+        # If Statements
         # Correct:
         if some == 1:
              ...
@@ -286,6 +286,14 @@ class NegatedConditionsViolation(ASTViolation):
              ...
         else:
              ...
+
+        # If Expressions
+        # Correct:
+        ... if some == 1 else ...
+
+        # Wrong:
+        ... if not some else ...
+
 
     .. versionadded:: 0.8.0
     .. versionchanged:: 0.11.0

@@ -101,6 +101,15 @@ class IfStatementVisitor(BaseNodeVisitor):
         """
         self._check_useless_len(node)
         self.generic_visit(node)
+        self._check_if_exp_negated_conditions(node)
+
+    def _check_if_exp_negated_conditions(self, node: ast.IfExp) -> None:
+        if isinstance(node.test, ast.UnaryOp):
+            if isinstance(node.test.op, ast.Not):
+                self.add_violation(NegatedConditionsViolation(node))
+        elif isinstance(node.test, ast.Compare):
+            if any(isinstance(elem, ast.NotEq) for elem in node.test.ops):
+                self.add_violation(NegatedConditionsViolation(node))
 
     def _check_negated_conditions(self, node: ast.If) -> None:
         if not ifs.has_else(node):

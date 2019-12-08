@@ -35,6 +35,10 @@ else:
     ...
 """
 
+simple_if_exp = """
+... if {0} else ...
+"""
+
 
 @pytest.mark.parametrize('code', [
     'not some',
@@ -87,6 +91,7 @@ def test_negated_complex_elif_conditions(
 @pytest.mark.parametrize('template', [
     complex_conditions,
     complex_elif_else_conditions,
+    simple_if_exp,
 ])
 @pytest.mark.parametrize('code', [
     'not some',
@@ -112,6 +117,7 @@ def test_wrong_negated_complex_conditions(
 @pytest.mark.parametrize('template', [
     complex_conditions,
     complex_elif_else_conditions,
+    simple_if_exp,
 ])
 @pytest.mark.parametrize('code', [
     'some',
