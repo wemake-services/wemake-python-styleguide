@@ -5,7 +5,10 @@ import pytest
 from wemake_python_styleguide.violations.refactoring import (
     NegatedConditionsViolation,
 )
-from wemake_python_styleguide.visitors.ast.conditions import IfStatementVisitor
+from wemake_python_styleguide.visitors.ast.conditions import (
+    IfExpressionVisitor,
+    IfStatementVisitor,
+)
 
 simple_conditions = """
 if {0}:
@@ -35,9 +38,7 @@ else:
     ...
 """
 
-simple_if_exp = """
-... if {0} else ...
-"""
+simple_if_exp = 'a if {0} else b'
 
 
 @pytest.mark.parametrize('code', [
@@ -91,10 +92,10 @@ def test_negated_complex_elif_conditions(
 @pytest.mark.parametrize('template', [
     complex_conditions,
     complex_elif_else_conditions,
-    simple_if_exp,
 ])
 @pytest.mark.parametrize('code', [
     'not some',
+    'not not some',
     'some != 1',
     'some != other',
 ])
@@ -117,7 +118,6 @@ def test_wrong_negated_complex_conditions(
 @pytest.mark.parametrize('template', [
     complex_conditions,
     complex_elif_else_conditions,
-    simple_if_exp,
 ])
 @pytest.mark.parametrize('code', [
     'some',
@@ -141,3 +141,55 @@ def test_correctly_negated_complex_conditions(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('template', [
+    simple_if_exp,
+])
+@pytest.mark.parametrize('code', [
+    'some',
+    '-some',
+    '~some',
+    'some == 0',
+    'some > -1',
+    'some < other',
+])
+def test_correctly_negated_if_exp_conditions(
+    code,
+    template,
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+):
+    """Testing correctly negated if exp predicates."""
+    tree = parse_ast_tree(template.format(code))
+
+    visitor = IfExpressionVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('template', [
+    simple_if_exp,
+])
+@pytest.mark.parametrize('code', [
+    'not not some',
+    'not some',
+    'some != 1',
+    'some != other',
+])
+def test_wrong_negated_if_exp_conditions(
+    code,
+    template,
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+):
+    """Testing if exps with negated predicates."""
+    tree = parse_ast_tree(template.format(code))
+
+    visitor = IfExpressionVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [NegatedConditionsViolation])

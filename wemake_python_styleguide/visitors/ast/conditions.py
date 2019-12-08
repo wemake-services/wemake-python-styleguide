@@ -58,6 +58,49 @@ def _get_duplicate_names(variables: List[Set[str]]):
 
 
 @final
+class IfExpressionVisitor(BaseNodeVisitor):
+    """Checks style issues related to ternary if expressions."""
+
+    #: Nodes that break or return the execution flow.
+    _returning_nodes: ClassVar[AnyNodes] = (
+        ast.Break,
+        ast.Raise,
+        ast.Return,
+        ast.Continue,
+    )
+
+    def __init__(self, *args, **kwargs) -> None:
+        """We need to store visited ``if`` not to dublicate violations."""
+        super().__init__(*args, **kwargs)
+        self._visited_ifs: Set[ast.IfExp] = set()
+
+    def visit_IfExp(self, node: ast.IfExp) -> None:
+        """
+        Checks ``if`` expressions.
+
+        Raises:
+            UselessLenCompareViolation
+
+        """
+        self._check_useless_len(node)
+        self.generic_visit(node)
+        self._check_negated_conditions(node)
+
+    def _check_useless_len(self, node: AnyIf) -> None:
+        if isinstance(node.test, ast.Call):
+            if given_function_called(node.test, {'len'}):
+                self.add_violation(UselessLenCompareViolation(node))
+
+    def _check_negated_conditions(self, node: ast.IfExp) -> None:
+        if isinstance(node.test, ast.UnaryOp):
+            if isinstance(node.test.op, ast.Not):
+                self.add_violation(NegatedConditionsViolation(node))
+        elif isinstance(node.test, ast.Compare):
+            if any(isinstance(elem, ast.NotEq) for elem in node.test.ops):
+                self.add_violation(NegatedConditionsViolation(node))
+
+
+@final
 class IfStatementVisitor(BaseNodeVisitor):
     """Checks single and consecutive ``if`` statement nodes."""
 
@@ -90,26 +133,6 @@ class IfStatementVisitor(BaseNodeVisitor):
         self._check_multiline_conditions(node)
         self._check_useless_len(node)
         self.generic_visit(node)
-
-    def visit_IfExp(self, node: ast.IfExp) -> None:
-        """
-        Checks ``if`` expressions.
-
-        Raises:
-            UselessLenCompareViolation
-
-        """
-        self._check_useless_len(node)
-        self.generic_visit(node)
-        self._check_if_exp_negated_conditions(node)
-
-    def _check_if_exp_negated_conditions(self, node: ast.IfExp) -> None:
-        if isinstance(node.test, ast.UnaryOp):
-            if isinstance(node.test.op, ast.Not):
-                self.add_violation(NegatedConditionsViolation(node))
-        elif isinstance(node.test, ast.Compare):
-            if any(isinstance(elem, ast.NotEq) for elem in node.test.ops):
-                self.add_violation(NegatedConditionsViolation(node))
 
     def _check_negated_conditions(self, node: ast.If) -> None:
         if not ifs.has_else(node):
