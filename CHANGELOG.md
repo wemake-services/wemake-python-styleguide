@@ -860,6 +860,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - Adds `flake8-eradicate` plugin
 - Adds `flake8-print` plugin for development
 - Removes `delegate` concept from the codebase
+- Add additional yield from example to violations documentation
 
 ## Version 0.0.13 aka The Jones Complexity
 
