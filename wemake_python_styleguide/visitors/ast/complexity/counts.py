@@ -1,24 +1,45 @@
 import ast
 from collections import defaultdict
+<<<<<<< HEAD
 from typing import DefaultDict, List, Union
+=======
+from functools import reduce
+from typing import ClassVar, DefaultDict, List, Union
+>>>>>>> fix styling and linting errors
 
 from typing_extensions import final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.logic.nodes import get_parent
+<<<<<<< HEAD
 from wemake_python_styleguide.logic.tree.functions import is_method
 from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations import complexity
+=======
+from wemake_python_styleguide.types import AnyFunctionDef, AnyImport
+from wemake_python_styleguide.violations.best_practices import (
+    MethodDecoratorUsedForFunctionViolation,
+)
+from wemake_python_styleguide.violations.complexity import (
+    TooLongCompareViolation,
+    TooLongTryBodyViolation,
+    TooLongYieldTupleViolation,
+    TooManyConditionsViolation,
+    TooManyDecoratorsViolation,
+    TooManyElifsViolation,
+    TooManyExceptCasesViolation,
+    TooManyImportedNamesViolation,
+    TooManyImportsViolation,
+    TooManyMethodsViolation,
+    TooManyModuleMembersViolation,
+)
+>>>>>>> fix styling and linting errors
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 _ConditionNodes = Union[ast.If, ast.While, ast.IfExp]
 _ModuleMembers = Union[AnyFunctionDef, ast.ClassDef]
 
-from functools import reduce
-from wemake_python_styleguide.violations.best_practices import (
-    MethodDecoratorUsedForFunctionViolation,
-)
 
 @final
 @alias('visit_module_members', (
@@ -68,12 +89,22 @@ class ModuleMembersVisitor(BaseNodeVisitor):
     def _check_method_decorators(self, node: ModuleMembers) -> None:
         parent_is_class = isinstance(get_parent(node), ast.ClassDef)
 
-        # Find decorators that are of ast.Name and ignore ast.Call
-        filtered_decorators = list(filter(lambda dec: isinstance(dec, ast.Name), node.decorator_list))
         # Check whether filtered decorators are method decorators
-        is_method_decorator = list(map(lambda dec: dec.id in ['classmethod', 'staticmethod', 'property'], filtered_decorators))
+        is_method_decorator = []
+        for decorator in node.decorator_list:
+            if isinstance(decorator, ast.Name):
+                is_method_decorator.append(
+                    decorator.id in {'classmethod', 'staticmethod', 'property'},
+                )
+
         # Check for presence of method deecorators
-        has_method_decorators = reduce(lambda x,y:x or y, is_method_decorator, False)
+        has_method_decorators = (
+            reduce(
+                lambda boolean1, boolean2: boolean1 or boolean2,
+                is_method_decorator,
+                0,
+            )
+        )
 
         if has_method_decorators and not parent_is_class:
             self.add_violation(

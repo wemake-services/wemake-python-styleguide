@@ -1,7 +1,12 @@
 import pytest
 
+<<<<<<< HEAD
 from wemake_python_styleguide.violations.complexity import (
     TooManyDecoratorsViolation,
+=======
+from wemake_python_styleguide.violations.best_practices import (
+    MethodDecoratorUsedForFunctionViolation,
+>>>>>>> fix styling and linting errors
 )
 from wemake_python_styleguide.visitors.ast.complexity.counts import (
     ModuleMembersVisitor,
