@@ -1,11 +1,8 @@
 import ast
+import operator
 from collections import defaultdict
-<<<<<<< HEAD
-from typing import DefaultDict, List, Union
-=======
 from functools import reduce
 from typing import ClassVar, DefaultDict, List, Union
->>>>>>> fix styling and linting errors
 
 from typing_extensions import final
 
@@ -17,9 +14,6 @@ from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations import complexity
 =======
 from wemake_python_styleguide.types import AnyFunctionDef, AnyImport
-from wemake_python_styleguide.violations.best_practices import (
-    MethodDecoratorUsedForFunctionViolation,
-)
 from wemake_python_styleguide.violations.complexity import (
     TooLongCompareViolation,
     TooLongTryBodyViolation,
@@ -33,7 +27,13 @@ from wemake_python_styleguide.violations.complexity import (
     TooManyMethodsViolation,
     TooManyModuleMembersViolation,
 )
+<<<<<<< HEAD
 >>>>>>> fix styling and linting errors
+=======
+from wemake_python_styleguide.violations.oop import (
+    MethodDecoratorUsedForFunctionViolation,
+)
+>>>>>>> make requested changes
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
@@ -49,6 +49,12 @@ _ModuleMembers = Union[AnyFunctionDef, ast.ClassDef]
 ))
 class ModuleMembersVisitor(BaseNodeVisitor):
     """Counts classes and functions in a module."""
+
+    descriptor_decorator = frozenset((
+        'classmethod',
+        'staticmethod',
+        'property',
+    ))
 
     def __init__(self, *args, **kwargs) -> None:
         """Creates a counter for tracked metrics."""
@@ -89,20 +95,23 @@ class ModuleMembersVisitor(BaseNodeVisitor):
     def _check_method_decorators(self, node: ModuleMembers) -> None:
         parent_is_class = isinstance(get_parent(node), ast.ClassDef)
 
+        if parent_is_class:
+            return   # classes can contain descriptors
+
         # Check whether filtered decorators are method decorators
-        is_method_decorator = []
+        method_decorators = []
         for decorator in node.decorator_list:
             if isinstance(decorator, ast.Name):
-                is_method_decorator.append(
-                    decorator.id in {'classmethod', 'staticmethod', 'property'},
+                method_decorators.append(
+                    decorator.id in ModuleMembersVisitor.descriptor_decorator,
                 )
 
         # Check for presence of method deecorators
         has_method_decorators = (
             reduce(
-                lambda boolean1, boolean2: boolean1 or boolean2,
-                is_method_decorator,
-                0,
+                lambda boolean1, boolean2: operator.or_(boolean1, boolean2),
+                method_decorators,
+                False,
             )
         )
 

@@ -26,6 +26,7 @@ Summary
    YieldMagicMethodViolation
    UselessOverwrittenMethodViolation
    WrongSuperCallAccessViolation
+   MethodDecoratorUsedForFunctionViolation
 
 Respect your objects
 --------------------
@@ -44,6 +45,7 @@ Respect your objects
 .. autoclass:: YieldMagicMethodViolation
 .. autoclass:: UselessOverwrittenMethodViolation
 .. autoclass:: WrongSuperCallAccessViolation
+.. autoclass:: MethodDecoratorUsedForFunctionViolation
 
 """
 
@@ -575,3 +577,40 @@ class WrongSuperCallAccessViolation(ASTViolation):
         'Found incorrect `super()` call context: incorrect name access'
     )
     code = 613
+
+
+@final
+class MethodDecoratorUsedForFunctionViolation(ASTViolation):
+    """
+    Forbids descriptors in regular functions.
+
+    Forbids using `@staticmethod`, ``@classmethod`` and ``@property`` for
+    functions not in class.
+
+    Reasoning:
+        Descriptors like @staticmethod, @classmethod and @property do magic
+        only as methods. We would want to warn users if the descriptors are
+        used on regular functions.
+
+    Solution:
+        Do not use @staticmethod, @classmethod and @property on regular
+        functions or wrap the functions into a Class.
+
+    Example::
+
+        # Correct:
+        Class TestClass(Object):
+            @property
+            def myMethod():
+                ...
+
+        # Wrong:
+        @property
+        def myFunction():
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Method decorators should not be used for functions'
+    code = 614

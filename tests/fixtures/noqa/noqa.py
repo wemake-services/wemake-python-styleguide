@@ -109,6 +109,7 @@ class TooManyPublicAtts(object):  # noqa: WPS230
         self.boom = 7
 
 
+@property # noqa: WPS614
 def function_name(
     value: int = 0,  # noqa: WPS110
 ):

@@ -219,6 +219,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS447': 1,
     'WPS448': 1,
     'WPS449': 1,
+<<<<<<< HEAD
     'WPS450': 1,
     'WPS451': 0,  # defined in version specific table.
     'WPS452': 1,  # also defined in version specific table.
@@ -226,6 +227,8 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS454': 1,
     'WPS455': 1,
     'WPS456': 1,
+=======
+>>>>>>> make requested changes
 
     'WPS500': 1,
     'WPS501': 1,
@@ -274,6 +277,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS611': 1,
     'WPS612': 1,
     'WPS613': 1,
+    'WPS614': 1,
 })
 
 # Violations which may be tweaked by `i_control_code` option:

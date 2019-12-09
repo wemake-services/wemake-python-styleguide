@@ -66,7 +66,6 @@ Summary
    StringConstantRedefinedViolation
    IncorrectExceptOrderViolation
    FloatKeyViolation
-<<<<<<< HEAD
    ProtectedModuleMemberViolation
    PositionalOnlyArgumentsViolation
    LoopControlFinallyViolation
@@ -74,9 +73,7 @@ Summary
    BaseExceptionRaiseViolation
    NonTrivialExceptViolation
    FloatingNanViolation
-=======
    MethodDecoratorUsedForFunctionViolation
->>>>>>> Warn about descriptors not in methods
 
 Best practices
 --------------
@@ -1969,6 +1966,7 @@ class FloatKeyViolation(ASTViolation):
 
     error_template = 'Found float used as a key'
     code = 449
+<<<<<<< HEAD
 
 
 @final
@@ -2251,3 +2249,5 @@ class FloatingNanViolation(ASTViolation):
 
     error_template = 'Found "NaN" as argument to float()'
     code = 456
+=======
+>>>>>>> make requested changes
