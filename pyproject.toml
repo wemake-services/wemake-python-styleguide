@@ -83,7 +83,7 @@ radon = '^2.4'
 darglint = "^1.1"
 
 [tool.poetry.dev-dependencies]
-nitpick = "^0.21.1"
+nitpick = "^0.21.3"
 flake8-pytest-style = "^0.1.3"
 flake8-pytest = "^1.3"
 
