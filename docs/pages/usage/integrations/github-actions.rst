@@ -12,7 +12,7 @@ You can use it from the `Github Marketplace <https://github.com/marketplace/acti
 .. code:: yaml
 
   - name: wemake-python-styleguide
-    uses: wemake-python-styleguide@latest
+    uses: wemake-services/wemake-python-styleguide
 
 You can also specify any version
 starting from ``0.12.5`` instead of the ``latest`` tag.
@@ -43,7 +43,7 @@ For example, that's how ``github-pr-reviews`` can be set up:
 .. code:: yaml
 
   - name: wemake-python-styleguide
-    uses: wemake-python-styleguide@latest
+    uses: wemake-services/wemake-python-styleguide
     with:
       reporter: 'github-pr-review'
     env:
@@ -60,7 +60,7 @@ We also support custom ``path`` to be specified:
 .. code:: yaml
 
   - name: wemake-python-styleguide
-    uses: wemake-python-styleguide@latest
+    uses: wemake-services/wemake-python-styleguide
     with:
       path: './your/custom/path'
 
@@ -73,6 +73,6 @@ pass the output of ``wemake-python-styleguide`` to somewhere else.
 .. code:: yaml
 
   - name: wemake-python-styleguide
-    uses: wemake-python-styleguide@latest
+    uses: wemake-services/wemake-python-styleguide
   - name: Custom Action
     runs: echo "{{ steps.wemake-python-styleguide.outputs.output }}"

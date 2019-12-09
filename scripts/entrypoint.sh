@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Diagnostic output for the passed path:
-echo "Using reported: $INPUT_REPORTER"
+# Diagnostic output:
+echo "Using reporter: $INPUT_REPORTER"
 echo "Linting path: $INPUT_PATH"
 echo 'flake8 --version:'
 flake8 --version
@@ -23,7 +23,7 @@ elif [ "$INPUT_REPORTER" == 'github-pr-review' ] ||
   # `reviewdog` does not fail with any status code, so we have to get dirty:
   status=$(test "$output" = ''; echo $?)
 else
-  output="Invalid reporter specified: $INPUT_REPORTER"
+  output="Invalid action reporter specified: $INPUT_REPORTER"
   status=1
 fi
 
@@ -34,7 +34,7 @@ echo '================================='
 echo
 
 # Fail the build in case status code is not 0:
-if [[ "$status" != 0 ]]; then
+if [ "$status" != 0 ]; then
   echo "$output"
   echo "Process failed with the status code: $status"
   exit "$status"

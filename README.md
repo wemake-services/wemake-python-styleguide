@@ -62,14 +62,14 @@ We also support [Github Actions](https://wemake-python-stylegui.de/en/latest/pag
 The ultimate goal of this project is
 to make all people write **exactly** the same `python` code.
 
-|                            | black | mypy | pylint | flake8 | wemake-python-styleguide |
-|----------------------------|-------|------|--------|--------|--------------------------|
-| Formats code?              |   ✅   |   ❌   |    ❌   |    ❌   |             ❌            |
-| Finds style issues?        |   ✅   |   ❌   |    ✅   |    ✅   |             ✅            |
-| Finds bugs?                |   ❌   |   ✅   |    ✅   |    🤔   |             ✅            |
-| Finds complex code?        |   ❌   |   ❌   |    ✅   |    🤔   |             ✅            |
-| Has a lot of strict rules? |   ❌   |   ❌   |    🤔   |    ❌   |             ✅            |
-| Has a lot of plugins?      |   ❌   |   ❌   |    ❌   |    ✅   |             ✅            |
+|                            | flake8 | pylint | black | mypy | wemake-python-styleguide |
+|----------------------------|--------|--------|-------|------|--------------------------|
+| Formats code?              |   ❌   |   ❌   |   ✅  |  ❌  |            ❌           |
+| Finds style issues?        |   🤔   |   ✅   |   🤔  |  ❌  |            ✅           |
+| Finds bugs?                |   🤔   |   ✅   |   ❌  |  ✅  |            ✅           |
+| Finds complex code?        |   ❌   |   🤔   |   ❌  |  ❌  |            ✅           |
+| Has a lot of strict rules? |   ❌   |   🤔   |   ❌  |  ❌  |            ✅           |
+| Has a lot of plugins?      |   ✅   |   ❌   |   ❌  |  🤔  |            ✅           |
 
 We have several primary objectives:
 
