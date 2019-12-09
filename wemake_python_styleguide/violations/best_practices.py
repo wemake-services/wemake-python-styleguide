@@ -66,6 +66,7 @@ Summary
    StringConstantRedefinedViolation
    IncorrectExceptOrderViolation
    FloatKeyViolation
+<<<<<<< HEAD
    ProtectedModuleMemberViolation
    PositionalOnlyArgumentsViolation
    LoopControlFinallyViolation
@@ -73,6 +74,9 @@ Summary
    BaseExceptionRaiseViolation
    NonTrivialExceptViolation
    FloatingNanViolation
+=======
+   MethodDecoratorUsedForFunctionViolation
+>>>>>>> Warn about descriptors not in methods
 
 Best practices
 --------------
