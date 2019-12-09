@@ -1882,7 +1882,7 @@ class RedundantSubscriptViolation(ASTViolation):
 
     """
 
-    error_template = 'Found redundant subscript slice: {0}'
+    error_template = 'Found redundant subscript slice'
     code = 349
 
 
