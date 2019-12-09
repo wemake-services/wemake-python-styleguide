@@ -269,7 +269,6 @@ class NegatedConditionsViolation(ASTViolation):
 
     Example::
 
-        # If Statements
         # Correct:
         if some == 1:
             ...
@@ -284,16 +283,15 @@ class NegatedConditionsViolation(ASTViolation):
         elif other:
             ...
 
+        a if some == 1 else b
+
         # Wrong:
         if not some:
             ...
         else:
             ...
 
-        # If Expressions
-        # Correct:
-        a if some == 1 else b
-
+        a if some != 1 else b
 
     .. versionadded:: 0.8.0
     .. versionchanged:: 0.11.0
