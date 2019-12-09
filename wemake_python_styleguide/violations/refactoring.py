@@ -1049,20 +1049,14 @@ class ImplicitYieldFromViolation(ASTViolation):
         # Correct:
         yield from some()
 
-        # Wrong:
-        for item in some():
-            yield item
-
-        # Correct:
         yield from (
             value[index:index + chunk_size]
             for index in range(0, len(value), chunk_size)
         )
 
         # Wrong:
-        def chunks(value, chunk_size):
-            for index in range(0, len(value), chunk_size):
-                yield value[index:index + chunk_size]
+        for index in chunk:
+            yield index
 
     .. versionadded:: 0.13.0
 
