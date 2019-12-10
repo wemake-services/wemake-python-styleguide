@@ -107,12 +107,11 @@ class ModuleMembersVisitor(BaseNodeVisitor):
                 )
 
         # Check for presence of method decorators
-        default_param = False
         has_method_decorators = (
             reduce(
                 lambda boolean1, boolean2: operator.or_(boolean1, boolean2),
                 method_decorators,
-                default_param,
+                False,  # noqa: WPS425
             )
         )
 
