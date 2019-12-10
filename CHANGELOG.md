@@ -4,16 +4,24 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
-## 0.13.2 WIP
+## 0.13.3 WIP
+
+
+## 0.13.2
 
 ### Bugfixes
 
 - Fixes that Github Action was failing for wrong status code
-- Small typo in the documentation for pylint fixed
 - Fixes `NegatedConditionsViolation` false positive on absent
   `else` in combination with `elif`
 - Fixes `WPS528` false positive on augmented assigns
+- Fixes incorrect message for `WPS349`
 - Fixes that `reviewdog` was not able to create more than `30` comments per PR
+
+### Misc
+
+- `pylint` docs fixed
+- Fixes docs about implicit `yield` violation
 
 
 ## 0.13.1

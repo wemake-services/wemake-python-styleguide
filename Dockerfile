@@ -20,7 +20,7 @@ FROM python:3.7-alpine
 LABEL maintainer="sobolevn@wemake.services"
 LABEL vendor="wemake.services"
 
-ENV WPS_VERSION='0.13.1'
+ENV WPS_VERSION='0.13.2'
 ENV REVIEWDOG_VERSION='v0.9.14'
 
 RUN apk add --no-cache bash git wget
@@ -29,7 +29,10 @@ RUN pip install "wemake-python-styleguide==$WPS_VERSION" \
   && wget -O - -q 'https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh' \
   | sh -s -- -b /usr/local/bin/ "$REVIEWDOG_VERSION"
 
+# Custom configuration for this action:
 COPY ./scripts/action-config.cfg /
+
+# Entrypoint:
 COPY ./scripts/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
