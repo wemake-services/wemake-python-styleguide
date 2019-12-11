@@ -23,9 +23,10 @@ class SubscriptVisitor(base.BaseNodeVisitor):
 
         Raises:
             RedundantSubscriptViolation
-
+            UndescriptiveSliceOperationViolation
         """
         self._check_redundant_subscript(node)
+        self._check_undescriptive_slice_operation(node)
         self.generic_visit(node)
 
     def _check_redundant_subscript(self, node: ast.Subscript) -> None:
@@ -58,6 +59,40 @@ class SubscriptVisitor(base.BaseNodeVisitor):
                 ),
             )
 
+    def _check_undescriptive_slice_operation(self, node: ast.Subscript) -> None:
+        if not isinstance(node.slice, ast.Slice):
+            return
+
+        # items[::-1] instead of items.reverse()
+        is_reverse = (
+            (node.slice.lower is None) and
+            (node.slice.upper is None) and (
+                (node.slice.step is not None) and
+                (self._is_neg_one(node.slice.step))
+            )
+        )
+
+        # items[:] instead of items.copy()
+        is_copy = (
+            (node.slice.lower is None) and
+            (node.slice.upper is None) and
+            (node.slice.step is None)
+        )
+
+        # # items[:-1] instead of items.pop()
+        # is_pop = (
+        #     (node.slice.lower is None) and
+        #     (node.slice.step is None) and (
+        #         (node.slice.upper is not None)
+        #         (self._is_neg_one(node.slice.upper))
+        #     )
+        # )
+
+        if is_reverse or is_copy:
+            self.add_violation(
+                best_practices.UndescriptiveSliceOperationViolation(node)
+            )
+
     def _is_none(self, component_value: ast.expr) -> bool:
         return (
             isinstance(component_value, ast.NameConstant) and
@@ -70,6 +105,14 @@ class SubscriptVisitor(base.BaseNodeVisitor):
     def _is_one(self, component_value: ast.expr) -> bool:
         return isinstance(component_value, ast.Num) and component_value.n == 1
 
+    def _is_neg_one(self, component_value: ast.expr) -> bool:
+        return (
+            (isinstance(component_value, ast.UnaryOp)) and (
+                isinstance(component_value.op, ast.USub) and
+                isinstance(component_value.operand, ast.Num) and
+                component_value.operand.n == 1
+            )
+        )
 
 @final
 class ImplicitDictGetVisitor(base.BaseNodeVisitor):
