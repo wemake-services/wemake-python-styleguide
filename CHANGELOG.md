@@ -82,6 +82,7 @@ It features a lot of new rules from different categories.
 - Forbids to use and declare `float` keys in arrays and dictionaries
 - Forbids to use `a[len(a) - 1]` because it is just `a[-1]`
 - Forbids too long call chains like `foo(a)(b)(c)(d)`
+- Enforces stricter slice operation usage
 
 ### Bugfixes
 

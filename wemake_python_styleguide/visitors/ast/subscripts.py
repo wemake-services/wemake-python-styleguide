@@ -79,18 +79,9 @@ class SubscriptVisitor(base.BaseNodeVisitor):
             (node.slice.step is None)
         )
 
-        # # items[:-1] instead of items.pop()
-        # is_pop = (
-        #     (node.slice.lower is None) and
-        #     (node.slice.step is None) and (
-        #         (node.slice.upper is not None)
-        #         (self._is_neg_one(node.slice.upper))
-        #     )
-        # )
-
         if is_reverse or is_copy:
             self.add_violation(
-                best_practices.UndescriptiveSliceOperationViolation(node)
+                best_practices.UndescriptiveSliceOperationViolation(node),
             )
 
     def _is_none(self, component_value: ast.expr) -> bool:
@@ -113,6 +104,7 @@ class SubscriptVisitor(base.BaseNodeVisitor):
                 component_value.operand.n == 1
             )
         )
+
 
 @final
 class ImplicitDictGetVisitor(base.BaseNodeVisitor):

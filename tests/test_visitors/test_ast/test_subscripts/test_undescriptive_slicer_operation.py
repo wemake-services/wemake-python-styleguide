@@ -9,6 +9,7 @@ from wemake_python_styleguide.visitors.ast.subscripts import SubscriptVisitor
 
 usage_template = 'constant[{0}]'
 
+
 @pytest.mark.parametrize('expression', [
     '::-1',
     ':',
@@ -21,8 +22,6 @@ def test_undescriptive_slice_operation(
     default_options,
 ):
     """Testing that undescriptive slice operations are forbidden."""
-    print(expression)
-    print(usage_template.format(expression))
     tree = parse_ast_tree(usage_template.format(expression))
 
     visitor = SubscriptVisitor(default_options, tree=tree)

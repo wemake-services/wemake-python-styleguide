@@ -1944,11 +1944,11 @@ class FloatKeyViolation(ASTViolation):
     error_template = 'Found float used as a key'
     code = 449
 
+
 @final
 class UndescriptiveSliceOperationViolation(ASTViolation):
     """
-    Forbids use of arcane slice operations that have more descriptive
-    alternatives.
+    Forbids use of arcane slice operations with more descriptive alternatives.
 
     Reasoning:
         We do this to make code more readable.
@@ -1967,5 +1967,6 @@ class UndescriptiveSliceOperationViolation(ASTViolation):
     .. versionadded:: 0.13.0
 
     """
+
     error_template = 'Found undescriptive slice operation'
     code = 500
