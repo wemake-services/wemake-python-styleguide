@@ -2,7 +2,7 @@
 
 import pytest
 
-from wemake_python_styleguide.violations.best_practices import (
+from wemake_python_styleguide.violations.refactoring import (
     UndescriptiveSliceOperationViolation,
 )
 from wemake_python_styleguide.visitors.ast.subscripts import SubscriptVisitor
@@ -31,18 +31,13 @@ def test_undescriptive_slice_operation(
 
 
 @pytest.mark.parametrize('expression', [
-    '1:2',
-    '::3',
-    '4',
+    '3:',
+    '3::2',
+    ':7',
+    ':7:2',
     '3:7',
     '3:7:2',
-    '3:',
-    ':7',
-    '3::2',
-    '5:7:',
-    ':7:2',
-    '3::',
-    ':7:',
+    '::3',
 ])
 def test_good_slice_operation(
     assert_errors,

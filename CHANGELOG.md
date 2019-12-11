@@ -3,6 +3,11 @@
 We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
+## 0.15.0
+
+### Features
+- Enforces stricter slice operation usage
+
 
 ## 0.13.3 WIP
 
@@ -26,7 +31,7 @@ We used to have incremental versioning before `0.1.0`.
 
 ## 0.13.1
 
-### Bufixes
+### Bugfixes
 
 - Fixes that `_` was marked as invalid by `VagueImportViolation`
 - Fixes that docs for `VagueImportViolation` were misleading
@@ -82,7 +87,6 @@ It features a lot of new rules from different categories.
 - Forbids to use and declare `float` keys in arrays and dictionaries
 - Forbids to use `a[len(a) - 1]` because it is just `a[-1]`
 - Forbids too long call chains like `foo(a)(b)(c)(d)`
-- Enforces stricter slice operation usage
 
 ### Bugfixes
 

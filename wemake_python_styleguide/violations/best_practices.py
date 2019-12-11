@@ -69,7 +69,6 @@ Summary
    StringConstantRedefinedViolation
    IncorrectExceptOrderViolation
    FloatKeyViolation
-   UndescriptiveSliceOperationViolation
 
 Best practices
 --------------
@@ -124,7 +123,6 @@ Best practices
 .. autoclass:: StringConstantRedefinedViolation
 .. autoclass:: IncorrectExceptOrderViolation
 .. autoclass:: FloatKeyViolation
-.. autoclass:: UndescriptiveSliceOperationViolation
 
 """
 
@@ -1943,30 +1941,3 @@ class FloatKeyViolation(ASTViolation):
 
     error_template = 'Found float used as a key'
     code = 449
-
-
-@final
-class UndescriptiveSliceOperationViolation(ASTViolation):
-    """
-    Forbids use of arcane slice operations with more descriptive alternatives.
-
-    Reasoning:
-        We do this to make code more readable.
-
-    Solution:
-        Replace arcane slice operations with descriptive list functions.
-
-    Example::
-
-        # Correct:
-        items.reverse()
-
-        # Wrong:
-        items[::-1]
-
-    .. versionadded:: 0.13.0
-
-    """
-
-    error_template = 'Found undescriptive slice operation'
-    code = 500

@@ -24,6 +24,7 @@ class SubscriptVisitor(base.BaseNodeVisitor):
         Raises:
             RedundantSubscriptViolation
             UndescriptiveSliceOperationViolation
+
         """
         self._check_redundant_subscript(node)
         self._check_undescriptive_slice_operation(node)
@@ -81,7 +82,7 @@ class SubscriptVisitor(base.BaseNodeVisitor):
 
         if is_reverse or is_copy:
             self.add_violation(
-                best_practices.UndescriptiveSliceOperationViolation(node),
+                refactoring.UndescriptiveSliceOperationViolation(node),
             )
 
     def _is_none(self, component_value: ast.expr) -> bool:

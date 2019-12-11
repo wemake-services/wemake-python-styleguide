@@ -46,6 +46,7 @@ Summary
    ImplicitItemsIteratorViolation
    ImplicitDictGetViolation
    ImplicitNegativeIndexViolation
+   UndescriptiveSliceOperationViolation
 
 Refactoring opportunities
 -------------------------
@@ -81,6 +82,7 @@ Refactoring opportunities
 .. autoclass:: ImplicitItemsIteratorViolation
 .. autoclass:: ImplicitDictGetViolation
 .. autoclass:: ImplicitNegativeIndexViolation
+.. autoclass:: UndescriptiveSliceOperationViolation
 
 """
 
@@ -1190,3 +1192,30 @@ class ImplicitNegativeIndexViolation(ASTViolation):
 
     error_template = 'Found implicit negative index'
     code = 530
+
+
+@final
+class UndescriptiveSliceOperationViolation(ASTViolation):
+    """
+    Forbids use of arcane slice operations with more descriptive alternatives.
+
+    Reasoning:
+        We do this to make code more readable.
+
+    Solution:
+        Replace arcane slice operations with descriptive list functions.
+
+    Example::
+
+        # Correct:
+        items.reverse()
+
+        # Wrong:
+        items[::-1]
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found undescriptive slice operation'
+    code = 531
