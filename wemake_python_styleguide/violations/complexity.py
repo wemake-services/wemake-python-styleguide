@@ -1032,3 +1032,21 @@ class TooLongCallChainViolation(ASTViolation):
 
     error_template = 'Found too lang call chain length: {0}'
     code = 233
+
+
+@final
+class ForbiddenPositionalOnlyArgsViolation(ASTViolation):
+    """
+    Forbids positional-only arguments.
+
+    Reasoning:
+        Positional-only arguments are syntax sugar and are generally not
+        a useful feature.
+
+    Solution:
+        Use keyword only arguments.
+
+    """
+
+    error_template = 'Found positional-only arguments: {0}'
+    code = 234

@@ -382,3 +382,28 @@ class UnnecessaryLiteralsVisitor(base.BaseNodeVisitor):
         )
         if function_name and not node.args:
             self.add_violation(consistency.UnnecessaryLiteralsViolation(node))
+
+
+@final
+class ForbiddenPositionalOnlyArgsVisitor(base.BaseNodeVisitor):
+    """Responsible for forbidding usage of positional-only arguments."""
+
+    def visit_Call(self, node: ast.Call) -> None:
+        """
+        Used to find positional-only arg calls.
+
+        Raises:
+            ForbiddenPositionalOnlyArgsViolation
+
+        """
+        self._check_positional_only_args(node)
+        self.generic_visit(node)
+
+    def _check_positional_only_args(self, node: ast.Call) -> None:
+        args_list = source.node_to_string(node.func.args)
+        # Raise error if there are any args in the function call
+        # because args are where positional arguments can be found.
+        # Keyword arguments (the correct method) can be found in
+        # node.func.keywords
+        if args_list:
+            self.add_violation(complexity.ForbiddenPositionalOnlyArgsViolation(node))
