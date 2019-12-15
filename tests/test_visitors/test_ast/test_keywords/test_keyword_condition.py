@@ -39,7 +39,6 @@ assert_with_message_template = 'assert {0}, "message"'
     '1',
     '0.1',
     '"0"',
-    '(1, 2)',
     '[None]',
     '{1, 2, 3}',
     '{name: "0"}',
