@@ -9,6 +9,7 @@ We used to have incremental versioning before `0.1.0`.
 ### Misc
 
 - Updates `radon` version
+- Updates `poetry` version to `1.0`
 
 
 ## 0.13.2

@@ -1,5 +1,5 @@
 [build-system]
-requires = ["poetry>=0.12"]
+requires = ["poetry>=1.0"]
 build-backend = "poetry.masonry.api"
 
 
@@ -9,7 +9,7 @@ style = "styles/nitpick-style-wemake.toml"
 
 [tool.poetry]
 name = "wemake-python-styleguide"
-version = "0.13.2"
+version = "0.13.3"
 description = "The strictest and most opinionated python linter ever"
 
 license = "MIT"
