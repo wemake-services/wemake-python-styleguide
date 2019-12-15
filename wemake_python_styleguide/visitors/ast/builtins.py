@@ -40,14 +40,14 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors import base, decorators
 
-_HahItems = Sequence[Optional[ast.AST]]
+_HashItems = Sequence[Optional[ast.AST]]
 
 
 @final
 class WrongStringVisitor(base.BaseNodeVisitor):
     """Restricts several string usages."""
 
-    _string_constants: FrozenSet[str] = frozenset((
+    _string_constants: ClassVar[FrozenSet[str]] = frozenset((
         string.ascii_letters,
         string.ascii_lowercase,
         string.ascii_uppercase,
@@ -301,7 +301,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
         self._check_float_keys(node.keys)
         self.generic_visit(node)
 
-    def _check_float_keys(self, keys: _HahItems) -> None:
+    def _check_float_keys(self, keys: _HashItems) -> None:
         for dict_key in keys:
             if dict_key is None:
                 continue
@@ -316,7 +316,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
 
     def _check_unhashable_elements(
         self,
-        keys_or_elts: _HahItems,
+        keys_or_elts: _HashItems,
     ) -> None:
         for set_item in keys_or_elts:
             if isinstance(set_item, self._unhashable_types):
@@ -325,7 +325,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
     def _check_set_elements(
         self,
         node: Union[ast.Set, ast.Dict],
-        keys_or_elts: _HahItems,
+        keys_or_elts: _HashItems,
     ) -> None:
         elements: List[str] = []
         element_values = []

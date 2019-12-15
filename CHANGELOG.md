@@ -4,6 +4,14 @@ We follow Semantic Versions since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 
+## 0.13.4 WIP
+
+### Misc
+
+- Updates `flake8-pep3101`
+- Several small refactoring sessions
+
+
 ## 0.13.3
 
 ### Misc

@@ -30,7 +30,7 @@ _NumbersAndConstants = Union[ast.Num, ast.NameConstant]
 class UselessOperatorsVisitor(base.BaseNodeVisitor):
     """Checks operators used in the code."""
 
-    _limits: ClassVar[_OperatorLimits] = {
+    _unary_limits: ClassVar[_OperatorLimits] = {
         ast.UAdd: 0,
         ast.Invert: 1,
         ast.Not: 1,
@@ -109,7 +109,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_operator_count(self, node: _NumbersAndConstants) -> None:
-        for node_type, limit in self._limits.items():
+        for node_type, limit in self._unary_limits.items():
             if count_unary_operator(node, node_type) > limit:
                 text = str(node.n) if isinstance(node, ast.Num) else node.value
                 self.add_violation(

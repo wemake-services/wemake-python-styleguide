@@ -89,7 +89,7 @@ class BaseVisitor(object):
     def __init__(
         self,
         options: ConfigurationOptions,
-        filename: str = constants.STDIN,
+        filename: str,
     ) -> None:
         """Creates base visitor instance."""
         self.options = options
