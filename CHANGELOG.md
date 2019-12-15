@@ -6,6 +6,10 @@ We used to have incremental versioning before `0.1.0`.
 
 ## 0.13.4 WIP
 
+### Bugfixes
+
+- Fixes supported python versions in PyPI to be `3.6` and `3.7`
+
 ### Misc
 
 - Updates `flake8-pep3101`
