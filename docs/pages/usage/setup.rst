@@ -44,7 +44,7 @@ Golden rule is to run your linter on each commit locally and inside the CI.
 And to fail the build if there are any style violations.
 
 Check out how we do it in our different templates:
-- ``django`` and ``gitlab-ci`: https://github.com/wemake-services/wemake-django-template
+- ``django`` and ``gitlab-ci``: https://github.com/wemake-services/wemake-django-template
 - ``python`` package and ``travis``: https://github.com/wemake-services/wemake-python-package
 
 .. rubric:: Further reading
