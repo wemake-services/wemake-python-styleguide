@@ -29,13 +29,13 @@ name = Independence contract for violations (all shall be free!)
 type = independence
 
 modules =
+  wemake_python_styleguide.violations.system
   wemake_python_styleguide.violations.naming
   wemake_python_styleguide.violations.complexity
   wemake_python_styleguide.violations.consistency
   wemake_python_styleguide.violations.best_practices
   wemake_python_styleguide.violations.refactoring
   wemake_python_styleguide.violations.oop
-  wemake_python_styleguide.violations.annotations
 
 
 [importlinter:contract:flake8-independence]
@@ -66,14 +66,19 @@ forbidden_modules =
   mccabe
   radon
   astor
+  cognitive_complexity
+  astboom
+  tokelor
 
 ignore_imports =
   # These modules must import from flake8 to provide required API:
   wemake_python_styleguide.checker -> flake8
   wemake_python_styleguide.formatter -> flake8
   wemake_python_styleguide.options.config -> flake8
+  # We disallow direct imports of our dependencies from anywhere, except:
   wemake_python_styleguide.formatter -> pygments
   wemake_python_styleguide.logic.source -> astor
+  wemake_python_styleguide.logic.complexity -> cognitive_complexity
 
 
 [importlinter:contract:subapi-restrictions]

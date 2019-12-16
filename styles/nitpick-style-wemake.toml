@@ -9,6 +9,7 @@ include = [
   "file-structure.toml",
   "flake8.toml",
   "isort.toml",
+  "darglint.toml",
   "mypy.toml",
   "poetry.toml",
   "styleguide.toml"

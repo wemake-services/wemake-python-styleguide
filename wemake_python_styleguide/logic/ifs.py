@@ -13,6 +13,12 @@ def has_elif(node: ast.If) -> bool:
     return getattr(node, 'wps_if_chain', False)  # noqa: WPS425
 
 
+def has_else(node: ast.If) -> bool:
+    """Tells if this node or ``if`` chain ends with an ``else`` expression."""
+    last_elem = tuple(chain(node))[-1]
+    return bool(last_elem)
+
+
 def root_if(node: ast.If) -> Optional[ast.If]:
     """Returns the previous ``if`` node in the chain if it exists."""
     return getattr(node, 'wps_if_chained', None)

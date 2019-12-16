@@ -331,10 +331,9 @@ class YieldTupleVisitor(BaseNodeVisitor):
 
     def _check_yield_values(self, node: ast.Yield) -> None:
         if isinstance(node.value, ast.Tuple):
-            yield_list = [tup_item for tup_item in node.value.elts]
-            if len(yield_list) > MAX_LEN_YIELD_TUPLE:
+            if len(node.value.elts) > MAX_LEN_YIELD_TUPLE:
                 self.add_violation(
                     TooLongYieldTupleViolation(
-                        node, text=str(len(yield_list)),
+                        node, text=str(len(node.value.elts)),
                     ),
                 )

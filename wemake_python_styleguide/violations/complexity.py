@@ -53,6 +53,9 @@ Summary
    TooLongCompareViolation
    TooLongTryBodyViolation
    TooManyPublicAttributesViolation
+   CognitiveComplexityViolation
+   CognitiveModuleComplexityViolation
+   TooLongCallChainViolation
 
 
 Module complexity
@@ -88,6 +91,9 @@ Structure complexity
 .. autoclass:: TooLongCompareViolation
 .. autoclass:: TooLongTryBodyViolation
 .. autoclass:: TooManyPublicAttributesViolation
+.. autoclass:: CognitiveComplexityViolation
+.. autoclass:: CognitiveModuleComplexityViolation
+.. autoclass:: TooLongCallChainViolation
 
 """
 
@@ -938,3 +944,91 @@ class TooManyPublicAttributesViolation(ASTViolation):
 
     error_template = 'Found too many public instance attributes'
     code = 230
+
+
+@final
+class CognitiveComplexityViolation(ASTViolation):
+    """
+    Forbids to have functions with too high cognitive complexity.
+
+    Reasoning:
+        People are not great at reading and iterpretating code in their heads.
+        That's why code with a lot of nested loops,
+        conditions, exceptions handlers,
+        and context managers is hard to read and understand.
+
+    Solution:
+        Rewrite your code to be simplier.
+        Use flat structures and conditions, remove nested loops.
+
+    Configuration:
+        This rule is configurable with ``--max-cognitive-score``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_COGNITIVE_SCORE`
+
+    See also:
+        https://en.wikipedia.org/wiki/Cognitive_complexity
+        https://pypi.org/project/cognitive-complexity/
+        https://github.com/Melevir/flake8-cognitive-complexity
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found too high function cognitive complexity: {0}'
+    code = 231
+
+
+@final
+class CognitiveModuleComplexityViolation(SimpleViolation):
+    """
+    Forbids to have modules with too high average cognitive complexity.
+
+    Reasoning:
+        Modules with lots of functions might hide cognitive complexity
+        inside many small and relatevely simple functions.
+
+    Solution:
+        Rewrite your code to be simplier.
+        Or use several modules.
+
+    Configuration:
+        This rule is configurable with ``--max-cognitive-average``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_COGNITIVE_AVERAGE`
+
+    See also:
+        https://en.wikipedia.org/wiki/Cognitive_complexity
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found too high module cognitive complexity: {0}'
+    code = 232
+
+
+@final
+class TooLongCallChainViolation(ASTViolation):
+    """
+    Forbids too long call chains.
+
+    Reasoning:
+        Too long call chains are overcomplicated and
+        indicators of bad API design.
+
+    Solution:
+        Split the expression into variables, functions or classes.
+        Refactor the API to allow higher-level access to functions.
+
+    Configuration:
+        This rule is configurable with ``--max-call-level``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_CALL_LEVEL`
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found too lang call chain length: {0}'
+    code = 233

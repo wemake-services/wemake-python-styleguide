@@ -5,8 +5,10 @@ from typing import ClassVar, Mapping, Optional, Sequence, Set, Union
 
 from typing_extensions import final
 
+from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import ForNodes, FunctionNodes
 from wemake_python_styleguide.logic import functions, nodes, strings
+from wemake_python_styleguide.logic.arguments import call_args
 from wemake_python_styleguide.logic.collections import (
     first,
     normalize_dict_elements,
@@ -32,6 +34,7 @@ from wemake_python_styleguide.violations.consistency import (
 from wemake_python_styleguide.violations.refactoring import (
     AlmostSwappedViolation,
     MisrefactoredAssignmentViolation,
+    NotATupleArgumentViolation,
     PointlessStarredViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -280,7 +283,7 @@ class WrongParametersIndentationVisitor(BaseNodeVisitor):
 
     def visit_Call(self, node: ast.Call) -> None:
         """Checks call arguments indentation."""
-        all_args = [*node.args, *[kw.value for kw in node.keywords]]
+        all_args = call_args.get_all_args(node)
         self._check_indentation(node, all_args)
         self.generic_visit(node)
 
@@ -457,3 +460,38 @@ class AssignmentPatternsVisitor(BaseNodeVisitor):
 
         if name_nodes.is_same_variable(node.targets[0], node.value.left):
             self.add_violation(AugmentedAssignPatternViolation(node))
+
+
+@final
+class WrongMethodArgumentsVisitor(BaseNodeVisitor):
+    """Ensures that all arguments follow our rules."""
+
+    _no_tuples_collections: ClassVar[AnyNodes] = (
+        ast.List,
+        ast.ListComp,
+        ast.Set,
+        ast.SetComp,
+    )
+
+    def visit_Call(self, node: ast.Call) -> None:
+        """Checks call arguments."""
+        self._check_tuple_arguments_types(node)
+        self.generic_visit(node)
+
+    def _check_tuple_arguments_types(
+        self,
+        node: ast.Call,
+    ) -> None:
+        is_checkable = (
+            isinstance(node.func, ast.Name) and
+            node.func.id in constants.TUPLE_ARGUMENTS_METHODS
+        )
+
+        if not is_checkable:
+            return
+
+        all_args = call_args.get_all_args(node)
+        for arg in all_args:
+            if isinstance(arg, self._no_tuples_collections):
+                self.add_violation(NotATupleArgumentViolation(node))
+                break

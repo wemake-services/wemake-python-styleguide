@@ -29,7 +29,10 @@ from wemake_python_styleguide.violations.best_practices import (
     StopIterationInsideGeneratorViolation,
     WrongFunctionCallViolation,
 )
-from wemake_python_styleguide.violations.oop import WrongSuperCallViolation
+from wemake_python_styleguide.violations.oop import (
+    WrongSuperCallAccessViolation,
+    WrongSuperCallViolation,
+)
 from wemake_python_styleguide.violations.refactoring import (
     ImplicitEnumerateViolation,
     ImplicitPrimitiveViolation,
@@ -58,8 +61,9 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
         Raises:
             BooleanPositionalArgumentViolation
             WrongFunctionCallViolation
-            WrongSuperCallViolation
             WrongIsinstanceWithTupleViolation
+            WrongSuperCallAccessViolation
+            WrongSuperCallViolation
 
         """
         self._check_wrong_function_called(node)
@@ -90,6 +94,19 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
 
     def _ensure_super_context(self, node: ast.Call) -> None:
         parent_context = nodes.get_context(node)
+        parent_node = nodes.get_parent(node)
+
+        attr = getattr(parent_node, 'attr', None)
+        parent_name = getattr(parent_context, 'name', None)
+
+        if attr and parent_name and attr != parent_name:
+            self.add_violation(
+                WrongSuperCallAccessViolation(
+                    node,
+                    text='super call with incorrect method or property access',
+                ),
+            )
+
         if isinstance(parent_context, FunctionNodes):
             grand_context = nodes.get_context(parent_context)
             if isinstance(grand_context, ast.ClassDef):
@@ -231,18 +248,18 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
         var_name: str,
         local_variables: Dict[str, List[LocalVariable]],
     ) -> None:
-        if var_name in local_variables:
+        defs = local_variables.get(var_name)
+        if defs is not None:
             if access.is_unused(var_name):
                 # We check unused variable usage in a different place:
                 # see `visitors/ast/naming.py`
                 return
-            local_variables[var_name].append(sub_node)
+            defs.append(sub_node)
             return
 
-        is_name_def = isinstance(
-            sub_node, ast.Name,
-        ) and isinstance(
-            sub_node.ctx, ast.Store,
+        is_name_def = (
+            isinstance(sub_node, ast.Name) and
+            isinstance(sub_node.ctx, ast.Store)
         )
 
         if is_name_def or isinstance(sub_node, ast.ExceptHandler):

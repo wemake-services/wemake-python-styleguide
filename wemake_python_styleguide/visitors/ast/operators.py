@@ -30,7 +30,7 @@ _NumbersAndConstants = Union[ast.Num, ast.NameConstant]
 class UselessOperatorsVisitor(base.BaseNodeVisitor):
     """Checks operators used in the code."""
 
-    _limits: ClassVar[_OperatorLimits] = {
+    _unary_limits: ClassVar[_OperatorLimits] = {
         ast.UAdd: 0,
         ast.Invert: 1,
         ast.Not: 1,
@@ -40,15 +40,38 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
     _meaningless_operations: ClassVar[_MeaninglessOperators] = {
         # ast.Div is not in the list,
         # since we have a special violation for it.
-        0: (ast.Mult, ast.Add, ast.Sub, ast.Pow, ast.Mod),
+        0: (
+            ast.Mult,
+            ast.Add,
+            ast.Sub,
+            ast.Pow,
+            ast.Mod,
+
+            ast.BitAnd,
+            ast.BitOr,
+            ast.BitXor,
+            ast.RShift,
+            ast.LShift,
+        ),
         # `1` and `-1` are different, `-1` is allowed.
-        1: (ast.Div, ast.Mult, ast.Pow, ast.Mod),
+        1: (
+            ast.Div,
+            ast.FloorDiv,
+            ast.Mult,
+            ast.Pow,
+            ast.Mod,
+        ),
     }
 
     #: Used to ignore some special cases like `1 / x`:
     _left_special_cases: ClassVar[_MeaninglessOperators] = {
-        1: (ast.Div,),
+        1: (ast.Div, ast.FloorDiv),
     }
+
+    _zero_divisors: ClassVar[AnyNodes] = (
+        ast.Div,
+        ast.FloorDiv,
+    )
 
     def visit_numbers_and_constants(self, node: _NumbersAndConstants) -> None:
         """
@@ -86,7 +109,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_operator_count(self, node: _NumbersAndConstants) -> None:
-        for node_type, limit in self._limits.items():
+        for node_type, limit in self._unary_limits.items():
             if count_unary_operator(node, node_type) > limit:
                 text = str(node.n) if isinstance(node, ast.Num) else node.value
                 self.add_violation(
@@ -97,7 +120,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         number = unwrap_unary_node(number)
 
         is_zero_division = (
-            isinstance(op, ast.Div) and
+            isinstance(op, self._zero_divisors) and
             isinstance(number, ast.Num) and
             number.n == 0
         )
@@ -181,11 +204,6 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
         """
         self._check_negation(node.op, node.value)
         self._check_string_concat(node.value, node.op)
-        self._check_addition_assignment_on_list(
-            node.target,
-            node.op,
-            node.value,
-        )
         self.generic_visit(node)
 
     def _check_negation(self, op: ast.operator, right: ast.AST) -> None:
@@ -228,18 +246,3 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
                     consistency.ExplicitStringConcatViolation(node),
                 )
                 return
-
-    def _check_addition_assignment_on_list(
-        self,
-        left: ast.AST,
-        op: ast.operator,
-        right: ast.AST,
-    ):
-        is_addition_assignment_on_list = (
-            isinstance(op, ast.Add) and
-            isinstance(right, ast.List)
-        )
-        if is_addition_assignment_on_list:
-            self.add_violation(
-                consistency.AdditionAssignmentOnListViolation(right),
-            )

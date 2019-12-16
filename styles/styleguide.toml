@@ -9,7 +9,7 @@ max-line-length = 80
 radon-max-cc = 10
 
 # Violations:
-ignore = "D100,D104,D401,W504,RST303,RST304"
+ignore = "D100,D104,D401,W504,RST303,RST304,DAR103,DAR203"
 
 ["setup.cfg".isort]
 line_length = 79

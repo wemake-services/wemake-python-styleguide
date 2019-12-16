@@ -4,6 +4,7 @@ from typing_extensions import Final
 
 from wemake_python_styleguide.visitors.ast.complexity import (
     access,
+    calls,
     classes,
     counts,
     function,
@@ -16,6 +17,7 @@ from wemake_python_styleguide.visitors.ast.complexity import (
 #: Used to store all complexity related visitors to be later passed to checker:
 PRESET: Final = (
     function.FunctionComplexityVisitor,
+    function.CognitiveComplexityVisitor,
 
     jones.JonesComplexityVisitor,
 
@@ -37,4 +39,6 @@ PRESET: Final = (
     overuses.ExpressionOveruseVisitor,
 
     access.AccessVisitor,
+
+    calls.CallChainsVisitor,
 )

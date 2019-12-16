@@ -26,16 +26,30 @@ assert_with_message_template = 'assert {0}, "message"'
 @pytest.mark.parametrize('condition', [
     '0',
     '0.0',
+    '+0',
+    '-1',
+    '--2.1',
     '""',
+    'b""',
     '[]',
     '()',
     '{}',  # noqa: P103
     'False',
     'None',
+    '1',
+    '0.1',
+    '"0"',
+    '[None]',
+    '{1, 2, 3}',
+    '{name: "0"}',
+    '(a for a in some())',
+    '[a for a in some()]',
+    '{1 for a in some()}',
+    '{"a": a for a in some()}',
+    'some if x else other',
 ])
 def test_false_condition_keywords(
     assert_errors,
-    assert_error_text,
     parse_ast_tree,
     code,
     condition,
@@ -48,7 +62,29 @@ def test_false_condition_keywords(
     visitor.run()
 
     assert_errors(visitor, [WrongKeywordConditionViolation])
-    assert_error_text(visitor, condition)
+
+
+@pytest.mark.parametrize('code', [
+    assert_template,
+    assert_with_message_template,
+])
+@pytest.mark.parametrize('condition', [
+    'True',
+])
+def test_false_assert_condition_keywords(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    condition,
+    default_options,
+):
+    """Testing that false coniditions in keywords are restricted."""
+    tree = parse_ast_tree(code.format(condition))
+
+    visitor = ConstantKeywordVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [WrongKeywordConditionViolation])
 
 
 @pytest.mark.parametrize('code', [
@@ -57,24 +93,40 @@ def test_false_condition_keywords(
     assert_with_message_template,
 ])
 @pytest.mark.parametrize('condition', [
-    '1',
-    '0.1',
-    '"0"',
-    '[None]',
-    '{1, 2, 3}',
-    '{name: "0"}',
-    'True',
-
     'call()',
     'name',
+    '-name',
     'attr.value',
     'attr[index]',
     'method.call()',
     'value in other',
     'value + 1',
-    'set()',
+    'x > 1',
+    'x + 1 > 1 and y < 1',
 ])
 def test_true_condition_keywords(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    condition,
+    default_options,
+):
+    """Testing that true coniditions in keywords are allowed."""
+    tree = parse_ast_tree(code.format(condition))
+
+    visitor = ConstantKeywordVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('code', [
+    while_template,
+])
+@pytest.mark.parametrize('condition', [
+    'True',
+])
+def test_true_while_condition_keywords(
     assert_errors,
     parse_ast_tree,
     code,

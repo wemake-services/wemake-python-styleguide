@@ -28,7 +28,7 @@ def function(arg: Optional[int]): ...
 correct_multiline_arguments = """
 def function(
     arg1: str,
-    arg2: Optional[Union[int, str]],
+    arg2: Union[int, str, None],
 ): ...
 """
 

@@ -64,7 +64,7 @@ def test_collection_with_impure(
 @pytest.mark.parametrize('element', [
     '1',
     '-1',
-    '0.5',
+    '1 - b',
     'variable_name',
     'True',
     'None',
@@ -96,7 +96,6 @@ def test_set_with_pure_unique(
 @pytest.mark.parametrize('element', [
     '1',
     '-1',
-    '--0.5',
     'variable_name',
     'True',
     'None',

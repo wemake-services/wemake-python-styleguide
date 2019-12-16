@@ -24,7 +24,7 @@ formatted_string = f'Hi, {full_name}'  # noqa: WPS305
 def __getattr__():  # noqa: WPS413
     # See:
     # https://github.com/wemake-services/wemake-python-styleguide/issues/461
-    anti_z444 = 1
+    anti_wps428 = 1
 
 
 def foo_func():
@@ -60,7 +60,7 @@ def function_name(
 ):
     # See:
     # https://github.com/wemake-services/wemake-python-styleguide/issues/392
-    anti_z444 = 1
+    anti_wps428 = 1
 
 
 def some():  # noqa: WPS110
@@ -70,7 +70,7 @@ def some():  # noqa: WPS110
         ...  # noqa: WPS428, WPS604
 
     def nested():  # noqa: WPS430
-        anti_z444 = 1
+        anti_wps428 = 1
 
     raise NotImplemented  # noqa: WPS423
 
@@ -102,7 +102,7 @@ def many_locals():  # noqa: WPS210
 
 
 def many_arguments(_arg1, _arg2, _arg3, _arg4, _arg5, _arg6):  # noqa: WPS211
-    anti_z444 = 1
+    anti_wps428 = 1
 
 
 def many_returns(xy):  # noqa: WPS212
@@ -136,7 +136,7 @@ def many_expressions(xy):  # noqa: WPS213
 
 
 class ManyParents(First, Second, Third, Exception):  # noqa: WPS215
-    anti_z444 = 1
+    anti_wps428 = 1
 
 
 async def too_many_awaits():  # noqa: WPS217
@@ -159,7 +159,7 @@ async def too_many_asserts():  # noqa: WPS218
 
 deep_access = some.other[0].field.type.boom  # noqa: WPS219
 
-def test_function():
+def test_function():  # noqa: WPS231
     if xy > 1:
         if xy > 2:
             if xy > 3:
@@ -170,18 +170,18 @@ def test_function():
 
 line = some.call(7 * 2, 3 / 4) / some.run(5 / some, 8 - 2 + 6)  # noqa: WPS221
 if line and line > 2 and line > 3 and line > 4 and line > 5:  # noqa: WPS221,WPS222
-    anti_z444 = 1
+    anti_wps428 = 1
 
 if line:  # noqa: WPS223
-    anti_z444 = 1
+    anti_wps428 = 1
 elif line > 1:
-    anti_z444 = 1
+    anti_wps428 = 1
 elif line > 2:
-    anti_z444 = 1
+    anti_wps428 = 1
 elif line > 3:
-    anti_z444 = 1
+    anti_wps428 = 1
 elif line > 4:
-    anti_z444 = 1
+    anti_wps428 = 1
 
 
 try:  # noqa: WPS225
@@ -216,13 +216,13 @@ class BadClass:  # noqa: WPS306
         ]
 
     def __del__(self, *_args, **_kwargs):  # noqa: WPS603
-        anti_z444 = 1  # noqa: WPS442
+        anti_wps428 = 1  # noqa: WPS442
 
     class Nested:  # noqa: WPS306,WPS431
-        anti_z444 = 1
+        anti_wps428 = 1
 
     async def __eq__(self, other):  # noqa: WPS610
-        anti_z444 = 3  # noqa: WPS442
+        anti_wps428 = 3  # noqa: WPS442
 
 
 magic_numbers = 13.2 + 50  # noqa: WPS432
@@ -236,8 +236,8 @@ binary_number = 0B1001  # noqa: WPS310
 number_with_scientific_notation = 1.5E-10  # noqa: WPS310
 number_with_useless_plus = +5  # noqa: WPS330
 
-if '6' in nodes in '6':  # noqa: WPS311
-    anti_z444 = 1
+if '6' in nodes in '6':  # noqa: WPS311, WPS525
+    anti_wps428 = 1
 
 assert hex_number == hex_number  # noqa: WPS312
 
@@ -247,17 +247,17 @@ async def test_async_function():
 
 
 if True:  # noqa: WPS314
-    anti_z444 = 1
+    anti_wps428 = 1
 
 
 class SomeTestClass(FirstParent, SecondParent, object):  # noqa: WPS315
-    anti_z444 = 1
+    anti_wps428 = 1
 
 
 class SomeClass(FirstParent,  # noqa: WPS317
                 SecondParent,  # noqa: WPS318
                 ThirdParent):  # noqa: WPS319
-    anti_z444 = 1
+    anti_wps428 = 1
 
 
 if SomeClass:
@@ -304,7 +304,7 @@ with open(bad_concatenation):  # noqa: WPS328
 
 
 try:
-    anti_z444 = 1
+    anti_wps428 = 1
 except Exception as ex:  # noqa: WPS329
     raise ex
 
@@ -343,9 +343,9 @@ print(sum_container == [])  # noqa: WPS520
 print(sum_container is 0)  # noqa: WPS521
 
 try:
-    anti_z444 = 1
+    anti_wps428 = 1
 except BaseException:  # noqa: WPS424
-    anti_z444 = 1
+    anti_wps428 = 1
 
 call_with_positional_bool(True)  # noqa: WPS425
 
@@ -366,14 +366,14 @@ class ShadowsAttribute(object):
 
 
 for symbol in 'abc':  # noqa: WPS500
-    anti_z444 = 1
+    anti_wps428 = 1
 else:
-    anti_z444 = 1
+    anti_wps428 = 1
 
 try:  # noqa: WPS501
-    anti_z444 = 1
+    anti_wps428 = 1
 finally:
-    anti_z444 = 1
+    anti_wps428 = 1
 
 nodes = nodes  # noqa: WPS434
 
@@ -407,17 +407,17 @@ first, nodes[0] = range(2)  # noqa: WPS414
 
 
 try:  # noqa: WPS415
-    anti_z444 = 1
+    anti_wps428 = 1
 except ValueError:
-    anti_z444 = 1
+    anti_wps428 = 1
 except ValueError:
-    anti_z444 = 1
+    anti_wps428 = 1
 
 iters = list((yield letter) for letter in 'ab')  # noqa: WPS416
 
 
 class MyBadException(BaseException):  # noqa: WPS418
-    anti_z444 = 1
+    anti_wps428 = 1
 
 
 some_if_expr = True if some_set else False  # noqa: WPS502
@@ -432,7 +432,7 @@ class ClassWithWrongContents((lambda: object)()):  # noqa: WPS606
     __slots__ = ['a', 'a']  # noqa: WPS607
 
     for _ in range(1):  # noqa: WPS604
-        anti_z444 = 1
+        anti_wps428 = 1
 
     def method_with_no_args():  # noqa: WPS605
         super(ClassWithWrongContents, self).method_with_no_args()  # noqa: WPS608
@@ -463,13 +463,13 @@ def bad_default_values(
 
 
 for nodes[0] in (1, 2, 3):  # noqa: WPS405
-    anti_z444 = 1
+    anti_wps428 = 1
 
 with open('some') as MyBadException.custom:  # noqa: WPS406
-    anti_z444 = 1
+    anti_wps428 = 1
 
 
-anti_z444.__truediv__(1)  # noqa: WPS609
+anti_wps428.__truediv__(1)  # noqa: WPS609
 
 if not some: # noqa: WPS504
     print('False')
@@ -478,16 +478,16 @@ else:
 
 try:
     try:  # noqa: WPS505
-        anti_z444 = 1
+        anti_wps428 = 1
     except ValueError:
         raise TypeError('Second')
 except TypeError:
     print('WTF?')
 
 if some and (  # noqa: WPS337
-    anti_z444 == 1
+    anti_wps428 == 1
 ):
-    anti_z444 = 'some text'
+    anti_wps428 = 'some text'
 
 
 class WrongMethodOrder(object):  # noqa: WPS338
@@ -558,19 +558,70 @@ unhashable = {[]}  # noqa: WPS443
 assert []  # noqa: WPS444
 unhashable = [] * 2  # noqa: WPS435
 
-type1: Literal[None]  # noqa: WPS700
-type2: Union[str, Union[int, float]]  # noqa: WPS701
-arg: Optional[Union[str, int]]  # noqa: WPS702
-
 from json import loads  # noqa: WPS347
 
-some_list += [1, 2, 3, 4]  # noqa: WPS348
+some_model = (
+    MyModel.objects.filter(...)
+        .exclude(...)  # noqa: WPS348
+)
 
 swap_a = swap_b
 swap_b = swap_a  # noqa: WPS523
 
 print(constant[0:7])  # noqa: WPS349
 var_a = var_a + var_b  # noqa: WPS350
+
+class ChildClass(ParentClass):
+    def some_method(self):
+        super().some_other_method() # noqa: WPS613
+
 LOWERCASE_ALPH = "abcdefghijklmnopqrstuvwxyz" # noqa: WPS447
 
 int()  # noqa: WPS351
+
+for wrong_loop in call(  # noqa: WPS352
+    1, 2, 3,
+):
+    print('bad loop')
+
+if a in {1}:  # noqa: WPS525
+    print('bad!')
+
+def implicit_yield_from():
+    for wrong_yield in call():  # noqa: WPS526
+        yield wrong_yield
+
+try: # noqa: WPS448
+    anti_wps428 = 1
+except Exception:
+    anti_wps428 = 1
+except ValueError:
+    anti_wps428 = 1
+
+
+bad_frozenset = frozenset([1]) # noqa: WPS527
+
+
+def wrong_yield_from():
+    yield from []  # noqa: WPS353
+
+
+def consecutive_yields():
+    yield 1
+    yield 2  # noqa: WPS354
+
+
+for loop_var in loop_iter:  # noqa: WPS528
+    print(loop_iter[loop_var])
+
+if 'key' in some_dict:
+    print(some_dict['key'])  # noqa: WPS529
+    print(other_dict[1.0])  # noqa: WPS449
+    print(some_sized[len(some_sized) - 2])  # noqa: WPS530
+
+deep_func(a)(b)(c)(d)  # noqa: WPS233
+
+extra_new_line = [  # noqa: WPS355
+
+    'wrong',
+]

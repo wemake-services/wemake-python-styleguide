@@ -1,46 +1,27 @@
 # -*- coding: utf-8 -*-
 
 import tokenize
-import types
 from collections import defaultdict
-from typing import (
-    ClassVar,
-    DefaultDict,
-    Dict,
-    FrozenSet,
-    List,
-    Mapping,
-    Sequence,
-    Tuple,
-)
+from typing import ClassVar, DefaultDict, Dict, List, Sequence, Tuple
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic.tokens import only_contains
+from wemake_python_styleguide.logic.tokens import (
+    ALLOWED_EMPTY_LINE_TOKENS,
+    MATCHING,
+    NEWLINES,
+    get_reverse_bracket,
+    last_bracket,
+    only_contains,
+)
 from wemake_python_styleguide.violations.consistency import (
+    BracketBlankLineViolation,
     ExtraIndentationViolation,
     WrongBracketPositionViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
 TokenLines = DefaultDict[int, List[tokenize.TokenInfo]]
-
-MATCHING: Mapping[int, int] = types.MappingProxyType({
-    tokenize.LBRACE: tokenize.RBRACE,
-    tokenize.LSQB: tokenize.RSQB,
-    tokenize.LPAR: tokenize.RPAR,
-})
-
-ALLOWED_EMPTY_LINE_TOKENS: FrozenSet[int] = frozenset((
-    tokenize.NL,
-    tokenize.NEWLINE,
-    *MATCHING.values(),
-))
-
-
-def _get_reverse_bracket(bracket: tokenize.TokenInfo) -> int:
-    index = list(MATCHING.values()).index(bracket.exact_type)
-    return list(MATCHING.keys())[index]
 
 
 @final
@@ -153,7 +134,7 @@ class BracketLocationVisitor(BaseTokenVisitor):
             if token.exact_type in MATCHING.keys():
                 brackets[token.exact_type] += 1
             if token.exact_type in MATCHING.values():
-                reverse_bracket = _get_reverse_bracket(token)
+                reverse_bracket = get_reverse_bracket(token)
                 if brackets[reverse_bracket] > 0:
                     brackets[reverse_bracket] -= 1
         return brackets
@@ -166,7 +147,7 @@ class BracketLocationVisitor(BaseTokenVisitor):
     ) -> None:
         tokens_before = tokens[:index]
         annotated = self._annotate_brackets(tokens_before)
-        if annotated[_get_reverse_bracket(token)] == 0:
+        if annotated[get_reverse_bracket(token)] == 0:
             if not only_contains(tokens_before, ALLOWED_EMPTY_LINE_TOKENS):
                 self.add_violation(WrongBracketPositionViolation(token))
 
@@ -174,7 +155,21 @@ class BracketLocationVisitor(BaseTokenVisitor):
         for index, token in enumerate(tokens):
             if token.exact_type in MATCHING.values():
                 self._check_closing(token, index, tokens)
+                if index == 0:
+                    self._check_empty_line_wrap(token, delta=-1)
+            elif token.exact_type in MATCHING and last_bracket(tokens, index):
+                self._check_empty_line_wrap(token, delta=1)
+
+    def _check_empty_line_wrap(
+        self,
+        token: tokenize.TokenInfo,
+        *,
+        delta: int,
+    ) -> None:
+        tokens = self._lines.get(token.start[0] + delta)
+        if tokens is not None and only_contains(tokens, NEWLINES):
+            self.add_violation(BracketBlankLineViolation(token))
 
     def _post_visit(self) -> None:
-        for _, tokens in self._lines.items():
+        for tokens in self._lines.values():
             self._check_individual_line(tokens)

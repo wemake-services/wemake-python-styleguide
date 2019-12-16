@@ -67,6 +67,8 @@ Summary
    WrongNamedKeywordViolation
    ApproximateConstantViolation
    StringConstantRedefinedViolation
+   IncorrectExceptOrderViolation
+   FloatKeyViolation
 
 Best practices
 --------------
@@ -119,6 +121,8 @@ Best practices
 .. autoclass:: WrongNamedKeywordViolation
 .. autoclass:: ApproximateConstantViolation
 .. autoclass:: StringConstantRedefinedViolation
+.. autoclass:: IncorrectExceptOrderViolation
+.. autoclass:: FloatKeyViolation
 
 """
 
@@ -436,6 +440,7 @@ class SameElementsInConditionViolation(ASTViolation):
 
     .. versionadded:: 0.10.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.13.0
 
     """
 
@@ -567,7 +572,8 @@ class InitModuleHasLogicViolation(SimpleViolation):
     In this case this rule can be configured.
 
     Configuration:
-        This rule is configurable with ``--i-control-code``.
+        This rule is configurable with ``--i-control-code``
+        and ``--i-dont-control-code``.
         Default:
         :str:`wemake_python_styleguide.options.defaults.I_CONTROL_CODE`
 
@@ -582,7 +588,7 @@ class InitModuleHasLogicViolation(SimpleViolation):
 @final
 class BadMagicModuleFunctionViolation(ASTViolation):
     """
-    Forbids to use ``__getaddr__`` and ``__dir__`` module magic methods.
+    Forbids to use ``__getattr__`` and ``__dir__`` module magic methods.
 
     Reasoning:
         It does not bring any features,
@@ -592,7 +598,8 @@ class BadMagicModuleFunctionViolation(ASTViolation):
         Refactor your code to use custom methods instead.
 
     Configuration:
-        This rule is configurable with ``--i-control-code``.
+        This rule is configurable with ``--i-control-code``
+        and ``--i-dont-control-code``.
         Default:
         :str:`wemake_python_styleguide.options.defaults.I_CONTROL_CODE`
 
@@ -1725,7 +1732,8 @@ class WrongKeywordConditionViolation(ASTViolation):
     - ``ast.While``
     - ``ast.Assert``
 
-    We only check constants. We do not check variables, attributes, calls, etc.
+    We do not check variables, attributes, calls, bool and bin operators, etc.
+    We disallow constants and some expressions.
 
     Reasoning:
         Some conditions clearly tell us that this node won't work correctly.
@@ -1749,10 +1757,11 @@ class WrongKeywordConditionViolation(ASTViolation):
             ...
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 0.13.0
 
     """
 
-    error_template = 'Found wrong keyword condition: {0}'
+    error_template = 'Found wrong keyword condition'
     code = 444
 
 
@@ -1855,3 +1864,80 @@ class StringConstantRedefinedViolation(ASTViolation):
 
     error_template = 'Found alphabet as strings: {0}'
     code = 447
+
+
+@final
+class IncorrectExceptOrderViolation(ASTViolation):
+    """
+    Forbids the use of incorrect order of ``except``.
+
+    Note, we only check for built-in exceptions.
+    Because we cannot statically identify
+    the inheritance order of custom ones.
+
+    Reasoning:
+        Using incorrect order of exceptions is error-prone, since
+        you end up with some unreachable exception clauses.
+
+    Solution:
+        Use correct order of exceptions.
+
+    Example::
+
+        # Correct:
+        try:
+            ...
+        except ValueError:
+            ...
+        except Exception:
+            ...
+
+        # Wrong:
+        try:
+            ...
+        except Exception:
+            ...
+        except ValueError:
+            ...
+
+    See also:
+        https://bit.ly/36MHlzw
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found incorrect exception order'
+    code = 448
+
+
+@final
+class FloatKeyViolation(ASTViolation):
+    """
+    Forbids to define and use ``float`` keys.
+
+    Reasoning:
+        ``float`` is a very ugly data type.
+        It has a lot of "precision" errors.
+        When we use ``float`` as keys we can hit this wall.
+        We also cannot use ``float`` keys with lists by design.
+
+    Solution:
+        Use other data types: integers, decimals, or use fuzzy logic.
+
+    Example::
+
+        # Correct:
+        some = {1: 'a'}
+        some[1]
+
+        # Wrong:
+        some = {1.0: 'a'}
+        some[1.0]
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found float used as a key'
+    code = 449

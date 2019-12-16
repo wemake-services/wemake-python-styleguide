@@ -7,17 +7,17 @@ from wemake_python_styleguide.violations.consistency import (
 )
 from wemake_python_styleguide.visitors.ast.subscripts import SubscriptVisitor
 
-usage_template = 'constant{0}'
+usage_template = 'constant[{0}]'
 
 
 @pytest.mark.parametrize('expression', [
-    '[0:7]',
-    '[0:7:1]',
-    '[None:7]',
-    '[3:None]',
-    '[3:None:2]',
-    '[3:7:None]',
-    '[3:7:1]',
+    '0:7',
+    '0:7:1',
+    'None:7',
+    '3:None',
+    '3:None:2',
+    '3:7:None',
+    '3:7:1',
 ])
 def test_redundant_subscript(
     assert_errors,
@@ -35,19 +35,19 @@ def test_redundant_subscript(
 
 
 @pytest.mark.parametrize('expression', [
-    '[5]',
-    '[3:7]',
-    '[3:7:2]',
-    '[3:]',
-    '[:7]',
-    '[3::2]',
-    '[3:7:]',
-    '[:7:2]',
-    '[3::]',
-    '[:7:]',
-    '[::2]',
-    '[:]',
-    '[::]',
+    '5',
+    '3:7',
+    '3:7:2',
+    '3:',
+    ':7',
+    '3::2',
+    '3:7:',
+    ':7:2',
+    '3::',
+    ':7:',
+    '::2',
+    ':',
+    '::',
 ])
 def test_correct_subscripts(
     assert_errors,

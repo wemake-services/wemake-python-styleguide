@@ -87,6 +87,9 @@ def is_too_short_name(
     >>> is_too_short_name('_', min_length=2)
     False
 
+    >>> is_too_short_name('_', min_length=1)
+    False
+
     >>> is_too_short_name('z1', min_length=2)
     False
 

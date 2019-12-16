@@ -49,6 +49,15 @@ def test_regular_conditions(
 
     'name and name and name',
     'name or name or name',
+
+    # Regression tests, see:
+    # https://github.com/wemake-services/wemake-python-styleguide/issues/1004
+    'name or not name',
+    'not name or name',
+    'not name or not name',
+    '+name and -name',
+    '~name and name',
+    'name and -name and not not name',
 ])
 def test_duplicate_element(
     assert_errors,

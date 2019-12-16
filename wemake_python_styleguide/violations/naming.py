@@ -398,7 +398,14 @@ class SameAliasImportViolation(ASTViolation):
         # Wrong:
         from os import path as path
 
+    Configuration:
+        This rule is configurable with ``--i-control-code``
+        and ``--i-dont-control-code``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.I_CONTROL_CODE`
+
     .. versionadded:: 0.1.0
+    .. versionchanged:: 0.13.0
 
     """
 

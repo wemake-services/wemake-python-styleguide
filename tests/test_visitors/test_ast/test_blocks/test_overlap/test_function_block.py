@@ -95,7 +95,7 @@ def test_method_block_overlap(
     assert_errors,
     parse_ast_tree,
     function_statement,
-    assign_statement,
+    assign_and_annotation_statement,
     context,
     variable_name,
     default_options,
@@ -104,7 +104,7 @@ def test_method_block_overlap(
     """Ensures that overlaping variables exist."""
     code = context.format(
         function_statement.format(variable_name),
-        assign_statement.format(variable_name),
+        assign_and_annotation_statement.format(variable_name),
     )
     tree = parse_ast_tree(mode(code))
 
@@ -165,7 +165,7 @@ def test_function_block_correct(
     assert_errors,
     parse_ast_tree,
     function_statement,
-    assign_statement,
+    assign_and_annotation_statement,
     context,
     first_name,
     second_name,
@@ -175,7 +175,7 @@ def test_function_block_correct(
     """Ensures that different variables do not overlap."""
     code = context.format(
         function_statement.format(first_name),
-        assign_statement.format(second_name),
+        assign_and_annotation_statement.format(second_name),
     )
     tree = parse_ast_tree(mode(code))
 
@@ -240,3 +240,30 @@ def test_no_function_overload(
     visitor.run()
 
     assert_errors(visitor, [BlockAndLocalOverlapViolation])
+
+
+method_setter_template = """
+class Test(object):
+    @property
+    def {0}():
+        ...
+    @{0}.setter
+    def {0}():
+        {0} = ...
+"""
+
+
+def test_property_setter(
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+    mode,
+):
+    """Ensures that property setter do not overlap."""
+    code = method_setter_template.format('func')
+    tree = parse_ast_tree(mode(code))
+
+    visitor = BlockVariableVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])

@@ -291,7 +291,9 @@ MODULE_NAME_PATTERN: Final = re.compile(r'^_?_?[a-z][a-z\d_]*[a-z\d](__)?$')
 #: Common numbers that are allowed to be used without being called "magic".
 MAGIC_NUMBERS_WHITELIST: Final = frozenset((
     0,  # both int and float
+    0.1,
     0.5,
+    1.0,
     100,
     1000,
     1024,  # bytes
@@ -314,6 +316,38 @@ MATH_APPROXIMATE_CONSTANTS: Final = frozenset((
     math.tau,
 ))
 
+#: List of vague method names that may cause confusion if imported as is:
+VAGUE_IMPORTS_BLACKLIST = frozenset((
+    'read',
+    'write',
+    'load',
+    'loads',
+    'dump',
+    'dumps',
+    'parse',
+    'safe_load',
+    'safe_dump',
+    'load_all',
+    'dump_all',
+    'safe_load_all',
+    'safe_dump_all',
+))
+
+#: List of literals without arguments we forbid to use.
+LITERALS_BLACKLIST: Final = frozenset((
+    'int',
+    'float',
+    'str',
+    'bytes',
+    'bool',
+    'complex',
+))
+
+#: List of functions in which arguments must be tuples.
+TUPLE_ARGUMENTS_METHODS = frozenset((
+    'frozenset',
+))
+
 # Internal variables
 # They are not publicly documented since they are not used by the end user.
 
@@ -332,30 +366,3 @@ NON_MAGIC_MODULO: Final = 10
 # Used to specify a pattern which checks variables and modules for underscored
 # numbers in their names:
 UNDERSCORED_NUMBER_PATTERN: Final = re.compile(r'.+\D\_\d+(\D|$)')
-
-# List of vague method names that may cause confusion if imported as is:
-VAGUE_IMPORTS_BLACKLIST = frozenset([
-    'read',
-    'write',
-    'load',
-    'loads',
-    'dump',
-    'dumps',
-    'parse',
-    'safe_load',
-    'safe_dump',
-    'load_all',
-    'dump_all',
-    'safe_load_all',
-    'safe_dump_all',
-])
-
-#: List of literals without arguments we forbid to use.
-LITERALS_BLACKLIST: Final = frozenset((
-    'int',
-    'float',
-    'str',
-    'bytes',
-    'bool',
-    'complex',
-))

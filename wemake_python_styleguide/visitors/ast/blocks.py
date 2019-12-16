@@ -20,12 +20,16 @@ from wemake_python_styleguide.logic.naming.name_nodes import (
     flat_variable_names,
 )
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
+from wemake_python_styleguide.logic.scope_predicates import (
+    is_function_overload,
+    is_no_value_annotation,
+    is_property_setter,
+    is_same_value_reuse,
+)
 from wemake_python_styleguide.logic.scopes import (
     BlockScope,
     OuterScope,
     extract_names,
-    is_function_overload,
-    is_same_value_reuse,
 )
 from wemake_python_styleguide.logic.walk import is_contained_by
 from wemake_python_styleguide.types import (
@@ -90,10 +94,13 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
 
     _naming_predicates: Tuple[_NamePredicate, ...] = (
         is_function_overload,
+        is_property_setter,
+        is_no_value_annotation,
     )
 
     _scope_predicates: Tuple[_ScopePredicate, ...] = (
         is_same_value_reuse,
+        is_property_setter,
     )
 
     # Blocks:

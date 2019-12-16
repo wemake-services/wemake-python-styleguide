@@ -1,46 +1,131 @@
 # Version history
 
-We follow Semantic Versions since the `0.1.0` release.
+We follow [Semantic Versions](https://semver.org/) since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
-## 0.13.0 WIP
+
+## 0.13.4 WIP
+
+### Bugfixes
+
+- Fixes supported python versions in PyPI to be `3.6` and `3.7`
+
+### Misc
+
+- Updates `flake8-pep3101`
+- Several small refactoring sessions
+
+
+## 0.13.3
+
+### Misc
+
+- Updates `radon` version
+- Updates `poetry` version to `1.0`
+
+
+## 0.13.2
+
+### Bugfixes
+
+- Fixes that Github Action was failing for wrong status code
+- Fixes `NegatedConditionsViolation` false positive on absent
+  `else` in combination with `elif`
+- Fixes `WPS528` false positive on augmented assigns
+- Fixes incorrect message for `WPS349`
+- Fixes that `reviewdog` was not able to create more than `30` comments per PR
+
+### Misc
+
+- `pylint` docs fixed
+- Fixes docs about implicit `yield` violation
+
+
+## 0.13.1
+
+### Bufixes
+
+- Fixes that `_` was marked as invalid by `VagueImportViolation`
+- Fixes that docs for `VagueImportViolation` were misleading
+- Fixes invalid docs for `BracketBlankLineViolation` #1020
+- Add more complex example to `ParametersIndentationViolation` #1021
+
+### Misc
+
+- Now our GitHub Action can be used to leave PR review comments
+
+
+## 0.13.0 aka The Lintoberfest
+
+This is a huge release that was created during the Hactoberfest season.
+It was impossible without the huge help from [our awesome contributors](https://github.com/wemake-services/wemake-python-styleguide/graphs/contributors?from=2019-06-01&to=2019-11-18&type=c). Thanks a lot to everyone!
+
+This release is not focused on any particular area.
+It features a lot of new rules from different categories.
 
 ### Features
 
+- Adds cognitive complexity metric, introduced by [`cognitive_complexity`](https://github.com/Melevir/cognitive_complexity)
+- Adds docstrings linter [`darglint`](https://github.com/terrencepreilly/darglint)
+- Updates `pep8-naming` and `flake8-comprehensions`
 - `WPS431` now allow customize whitelist via `nested-classes-whitelist` setting
-- Forbids to have invalid strings like `**{'@': 1}`
-- Forbids to use implicit primitive values in a form of `lambda`
+- Forbids to have invalid strings in stared expressions like `**{'@': 1}`
+- Forbids to use implicit primitive values in a form of `lambda: 0`
 - Forbids to use approximate math constants
 - Forbids to redefine string constants
-- Forbids using `Literal[None]` in function annotations
-- Forbids using nested `typing.Literal`, `typing.Union` and `typing.Annotated`
 - Forbids use of vague import names (e.g. `from json import loads`)
 - Makes `OveruseOfNoqaCommentViolation` configurable via `--max-noqa-comments`
-- Improves tests: we now ensure that each violation with previous codes also
-  has corresponding versions changed in their documentation
 - Forbid incorrectly swapped variables
-- Forbids to use `+=` with list arguments
 - Forbids to use redundant subscripts (e.g., `[0:7]` or `[3:None]`)
 - Allows `super()` as a valid overused expression
+- Forbids to use `super()` with other methods and properties
 - `WPS350` enforces using augmented assign pattern
-- Forbids to use `Optional[Union[...]]` in annotations
 - Forbids unnecessary literals
+- `WPS525` forbids comparisons where `in` is compared with single item container
+- Forbids wrong annotations in assignment
+- Forbids using multiline `for` and `while` statements
+- `WPS113` now can be tweaked with `I_CONTROL_CODE` setting
+- Adds `WPS000` that indicates internal errors
+- Forbids to use implicit `yield from`
+- Forbids to start lines with `.`
+- Enforces better `&`, `|`, `>>`, `<<`, `^` operators usage
+- Forbids incorrect exception order
+- Enforces tuples usage with frozenset constructor
+- Changes how `WPS444` works, now we use stricter logic for `while` and `assert`
+- Forbids to use `yield from` with incorrect types
+- Forbids to use consecutive `yield` expressions
+- Enforces to use `.items()` in loops
+- Enforces using `.get()` over `key in dict` checks
+- Forbids to use and declare `float` keys in arrays and dictionaries
+- Forbids to use `a[len(a) - 1]` because it is just `a[-1]`
+- Forbids too long call chains like `foo(a)(b)(c)(d)`
 
 ### Bugfixes
 
 - Fixes `ImplicitElifViolation` false positives on a specific edge cases
-- Fixes `I_CONTROL_CODE setting` for `BadMagicModuleFunctionViolation`
+- Fixes `--i-control-code` setting for `BadMagicModuleFunctionViolation`
 - Fixes compatibility with flake8 `3.8.x`
 - Fixes that `not not True` was not detected as `WPS330`
 - Fixes addition of `MisrefactoredAssignmentViolation` check
 - Fixes `WrongMagicCommentViolation` not catching certain wrong comments
+- Fixes `BadMagicModuleFunctionViolation` false positives on class-level methods
+- Fixes `InconsistentReturnViolation` false positives on nested functions
+- Fixes that `--i-dont-control-code` was not present in command line options
+- Fixes `BlockVariableVisitor` false positives on a properties
+- Fixes that `//` was not recognised as a math operation
+- Fixes false positive `BlockAndLocalOverlapViolation` on annotations without value assign
+- Fixes bug when `x and not x` was not detected as the similar conditions by `WPS408`
+- Fixed that `1.0` and `0.1` were treated as magic numbers
 
 ### Misc
 
 - Improves Github Action stability
-- Replace `scripts/tokens.py` with an external tool
+- Replace `scripts/tokens.py` and `scripts/parse.py` with external tools
 - Improves violation code testing
 - Improves testing of `.. versionchanged` and `previous_codes` properties
+- Reference `isort` settings requirement for compliance with `WSP318` in docstring
+- Improves tests: we now ensure that each violation with previous codes also
+  has corresponding versions changed in their documentation
 
 
 ## 0.12.5
@@ -57,12 +142,14 @@ We used to have incremental versioning before `0.1.0`.
 - Adds local Github Action that uses itself for testing
 - Adds official Docker image and docs about it
 
+
 ## 0.12.4
 
 ### Bugfixes
 
 - Fixes bug with `nitpick` colors and new files API
 - Updates `flake8-docstrings`
+
 
 ## 0.12.3
 
@@ -71,6 +158,7 @@ We used to have incremental versioning before `0.1.0`.
 - Fixes that formatting was failing sometimes when colours were not available
 - Fixes that `1 / number` was not allowed
 - Fixes that `%` operator was allowed for `0` and `1`
+
 
 ## 0.12.2
 
@@ -83,6 +171,7 @@ We used to have incremental versioning before `0.1.0`.
 ### Bugfixes
 
 - Fixes that `{**a, **b}` was reported as duplicate hash items
+
 
 ## 0.12.1
 
@@ -99,6 +188,7 @@ We used to have incremental versioning before `0.1.0`.
 
 - Improves `README.md` with `flakehell` and `nitpick` mentions
 - Improves docs all accross the project
+
 
 ## 0.12.0
 
@@ -231,11 +321,13 @@ In this release we had a little focus on:
 - Updates docs about `snake_case` in `Enum` fields
 - Updates docs about `WPS400` and incorrect line number
 
+
 ## 0.11.1
 
 ### Bugfixes
 
 - Now using `pygments` as a direct dependency
+
 
 ## 0.11.0 aka The New Violation Codes
 
@@ -275,6 +367,7 @@ for you to rename your violations with a script.
 - Renames `Incorrect` to `Wrong` where possible
 - Renames `IncorrectlyNestedTernaryViolation` to `NestedTernaryViolation`
 - Renames `IncorectLoopIterTypeViolation` to `WrongLoopIterTypeViolation`
+
 
 ## 0.10.0 aka The Great Compare
 
@@ -333,11 +426,13 @@ big cudos to the developers of this wonderful tool.
 - Adds `Makefile`
 - A lot of minor dependency updates
 
+
 ## 0.9.1
 
 ### Bugfixes
 
 - Fixes issue with `pydocstyle>=4` by glueing its version to `pydocstyle<4`
+
 
 ## 0.9.0
 
@@ -375,11 +470,13 @@ and lots of bug fixes.
 - Better `exclude` rule for `flake8` check
 - Removed warnings from `pytest`
 
+
 ## 0.8.1
 
 ### Bugfixes
 
 - Fixes how `wps_context` is calculated, so `super()` calls are now working
+
 
 ## 0.8.0
 
@@ -411,6 +508,7 @@ and lots of bug fixes.
 - Improves docs for `ProtectedAttributeViolation`
 - Adds docs about `.pyi` files
 
+
 ## 0.7.1
 
 ### Bugfixes
@@ -421,6 +519,7 @@ and lots of bug fixes.
 ### Misc
 
 - Improves docs about using `# type: some` comment in `for` loops
+
 
 ## 0.7.0
 
@@ -485,11 +584,13 @@ and lots of bug fixes.
 - Refactoring: moves `presets` package to the root
 - Improves tests: we now lint our layered architecure with `layer-lint`
 
+
 ## Version 0.6.3
 
 ### Bugfixes
 
 - Fixes an [issue-450](https://github.com/wemake-services/wemake-python-styleguide/issues/450) with `dict`s with just values and no keys
+
 
 ## Version 0.6.2
 
@@ -497,11 +598,13 @@ and lots of bug fixes.
 
 - Fixes a [crash](https://github.com/wemake-services/wemake-python-styleguide/issues/423) with class attributes assignment
 
+
 ## Version 0.6.1
 
 ### Bugfixes
 
 - Fixes a conflict between our plugin and `pyflakes`
+
 
 ## Version 0.6.0
 
@@ -539,12 +642,14 @@ and lots of bug fixes.
 - Improves docs: making contributing section in the `README` more friendly
 - Improves build: changes how CI installs `poetry`
 
+
 ## 0.5.1
 
 ### Bugfixes
 
 - Fixes all possible errors that happen
   because of unset `parent` and `function_type` properties
+
 
 ## 0.5.0
 
@@ -626,6 +731,7 @@ for tests. We also now covering more cases and testing violation texts.
 - Improves tests: now all common patters live in related `conftest.py`
 - Improves docs: now all configuration options are listed in the violations
 
+
 ## 0.3.0 aka The Hacktoberfest Feast
 
 This release was made possible by awesome people who contributed
@@ -694,6 +800,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - Improves types: now we use `final` to indicate what should not be changed
 - Improves types: now we do not have any ugly import hacks
 
+
 ## 0.2.0 aka Revenge of the Async
 
 This release was made possible by awesome people who contributed
@@ -725,6 +832,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - Improves docs: adds naming convention to the `naming.py`
 - Improves docs: multiple typos, bugs, and issues fixes
 - Improves tests: now we are testing `async` comprehensions
+
 
 ## Version 0.1.0
 
@@ -765,6 +873,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - Improves docs: now error pages are split
 - Improves docs: now all `flake8` plugin dependencies are documented
 
+
 ## Version 0.0.15
 
 ### Features
@@ -777,6 +886,8 @@ to the project during `#hactoberfest`. List of awesome people:
 
 - Improves `CONTRIBUTING.md`
 - Moves issues templates to `.github/` folder
+- Update error thrown on `RedundantSubscriptViolation`
+
 
 ## Version 0.0.14
 
@@ -801,6 +912,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - Adds `flake8-print` plugin for development
 - Removes `delegate` concept from the codebase
 
+
 ## Version 0.0.13 aka The Jones Complexity
 
 ### Features
@@ -812,6 +924,7 @@ to the project during `#hactoberfest`. List of awesome people:
 
 - Improves docs: adds detailed installation instructions
 - Removes `flake8-blind-except` plugin
+
 
 ## Version 0.0.12
 
@@ -834,6 +947,7 @@ We have **changed** the error codes for general checks.
 - Improves docs: now docs include `CHANGELOG.md`
 - Improves docs: now we have templates for `bug` and `rule-request`
 - Replaced `pytest-isort` with `flake8-isort`
+
 
 ## Version 0.0.11
 
@@ -876,6 +990,7 @@ There are no new features introduced.
 - Now each error has a link to the corresponding constant (if any)
 - Improved docs with links to the corresponding configuration flags
 
+
 ## Version 0.0.9
 
 This is just a supporting release.
@@ -890,6 +1005,7 @@ There are no new features introduced.
 
 - Errors are now tested
 - Complexity tests are refactored
+
 
 ## Version 0.0.8 aka The Complex Complexity
 
@@ -914,6 +1030,7 @@ There are no new features introduced.
 
 - Improved type support for options parsing
 
+
 ## Version 0.0.7
 
 ### Features
@@ -933,6 +1050,7 @@ There are no new features introduced.
 - Tests now cover nested classes' explicit bases
 - Tests now cover nested classes and functions `noqa` comment
 
+
 ## Version 0.0.6
 
 ### Features
@@ -950,6 +1068,7 @@ There are no new features introduced.
 - Improved typing support
 - Added new documentation sections
 
+
 ## Version 0.0.5
 
 ### Features
@@ -961,6 +1080,7 @@ There are no new features introduced.
 ### Misc
 
 - We have added a `CONTRIBUTING.md` file to help new contributors
+
 
 ## Version 0.0.4
 
@@ -976,6 +1096,7 @@ There are no new features introduced.
 - We now have a whitelist for `__future__` imports
 - Imports are now have its own subgroup `Z10`
 - General rules now start from `Z11`
+
 
 ## Version 0.0.3
 
@@ -996,6 +1117,7 @@ There are no new features introduced.
 - Fixes issue with missing `parent`s :batman:
 - Fixes issue with `_$NAME` patterns being ignored
 
+
 ## Version 0.0.2
 
 ### Features
@@ -1015,6 +1137,7 @@ There are no new features introduced.
 
 - Adds `poetry` as the main project tool
 - Adds `shpinx` as a documentation tool
+
 
 ## Version 0.0.1
 

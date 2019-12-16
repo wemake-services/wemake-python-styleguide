@@ -11,7 +11,6 @@ from wemake_python_styleguide.visitors.ast.loops import (
 
 for_loop_template = """
 def function():
-    value = 0
     for index in some:
         {0}
 """

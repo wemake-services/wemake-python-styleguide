@@ -50,3 +50,14 @@ def radon_check(for_data):
         for second in for_data:
             for third in for_data:
                 assert first == second == third
+
+
+def darglint_check(arg):
+    """
+    Used to trigger DAR101.
+
+    Returns:
+        Just a value to trigger the check.
+
+    """
+    return 'check trigger'

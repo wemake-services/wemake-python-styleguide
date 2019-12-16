@@ -7,7 +7,7 @@ from typing import ClassVar, DefaultDict, Dict, List, Set, Type
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic import ifs, source
+from wemake_python_styleguide.logic import ifs, operators, source
 from wemake_python_styleguide.logic.compares import CompareBounds
 from wemake_python_styleguide.logic.functions import given_function_called
 from wemake_python_styleguide.logic.nodes import get_parent
@@ -103,7 +103,7 @@ class IfStatementVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_negated_conditions(self, node: ast.If) -> None:
-        if not node.orelse:
+        if not ifs.has_else(node):
             return
 
         if isinstance(node.test, ast.UnaryOp):
@@ -191,7 +191,11 @@ class BooleanConditionVisitor(BaseNodeVisitor):
             if isinstance(operand, ast.BoolOp):
                 names.extend(self._get_all_names(operand))
             else:
-                names.append(source.node_to_string(operand))
+                names.append(
+                    source.node_to_string(
+                        operators.unwrap_unary_node(operand),
+                    ),
+                )
         return names
 
     def _check_same_elements(self, node: ast.BoolOp) -> None:

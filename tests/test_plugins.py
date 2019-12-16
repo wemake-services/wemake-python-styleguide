@@ -35,8 +35,9 @@ PLUGINS = (
     'T001',  # flake8-print
     'T100',  # flake8-debugger
     'TAE002',  # flake8-annotations-complexity
-    'RST299',  # flake8-rst-docstrings
+    'RST215',  # flake8-rst-docstrings
     'EXE003',  # flake8-executable
+    'DAR101',  # darglint
 )
 
 

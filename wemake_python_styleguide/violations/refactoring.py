@@ -40,6 +40,12 @@ Summary
    ImplicitPrimitiveViolation
    AlmostSwappedViolation
    MisrefactoredAssignmentViolation
+   InCompareWithSingleItemContainerViolation
+   ImplicitYieldFromViolation
+   NotATupleArgumentViolation
+   ImplicitItemsIteratorViolation
+   ImplicitDictGetViolation
+   ImplicitNegativeIndexViolation
    SlowInComprehensionViolation
 
 Refactoring opportunities
@@ -70,7 +76,14 @@ Refactoring opportunities
 .. autoclass:: ImplicitPrimitiveViolation
 .. autoclass:: AlmostSwappedViolation
 .. autoclass:: MisrefactoredAssignmentViolation
+.. autoclass:: InCompareWithSingleItemContainerViolation
+.. autoclass:: ImplicitYieldFromViolation
+.. autoclass:: NotATupleArgumentViolation
+.. autoclass:: ImplicitItemsIteratorViolation
+.. autoclass:: ImplicitDictGetViolation
+.. autoclass:: ImplicitNegativeIndexViolation
 .. autoclass:: SlowInComprehensionViolation
+
 
 """
 
@@ -265,6 +278,11 @@ class NegatedConditionsViolation(ASTViolation):
 
         if not some:
              ...
+
+        if not some:
+            ...
+        elif other:
+            ...
 
         # Wrong:
         if not some:
@@ -986,6 +1004,196 @@ class MisrefactoredAssignmentViolation(ASTViolation):
     code = 524
 
 @final
+class InCompareWithSingleItemContainerViolation(ASTViolation):
+    """
+    Forbids comparisons where ``in`` is compared with single item container.
+
+    Reasoning:
+        ``in`` comparison with a container which contains only one item looks
+        like overhead and unneeded complexity.
+
+    Solution:
+        Refactor your code to use ``==`` instead ``in``.
+
+    Example::
+
+        # Correct:
+        a == 's'
+
+        # Wrong:
+        a in {'s'}
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found wrong "in" compare with single item container'
+    code = 525
+
+
+@final
+class ImplicitYieldFromViolation(ASTViolation):
+    """
+    Forbids to use ``yield`` inside ``for`` loop instead of ``yield from``.
+
+    Reasoning:
+        It is known that ``yield from`` is a semantically identical
+        to a ``for`` loop with a ``yield`` inside.
+        But, it is way more readable.
+
+    Solution:
+        Use ``yield from`` some iterable directly
+        instead iterating over it inside a loop
+        and ``yield`` it one by one.
+
+    Example::
+
+        # Correct:
+        yield from some()
+
+        yield from (
+            value[index:index + chunk_size]
+            for index in range(0, len(value), chunk_size)
+        )
+
+        # Wrong:
+        for index in chunk:
+            yield index
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found implicit `yield from` usage'
+    code = 526
+
+
+@final
+class NotATupleArgumentViolation(ASTViolation):
+    """
+    Forces using tuples as arguments for some functions.
+
+    Reasoning:
+        For some functions, it is better to use tuples instead of another
+        iterable types (list, sets,...) as arguments.
+
+    Solution:
+        Use tuples as arguments.
+
+    Example::
+
+        # Correct:
+        a = frozenset((2,))
+
+        # Wrong:
+        a = frozenset([2])
+
+    See
+    :py:data:`~wemake_python_styleguide.constants.TUPLE_ARGUMENTS_METHODS`
+    for full list of methods that we check for.
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found not a tuple used as an argument'
+    code = 527
+
+
+@final
+class ImplicitItemsIteratorViolation(ASTViolation):
+    """
+    Forbids to use implicit ``.items()`` iterator.
+
+    Reasoning:
+        When iterating over collection it is easy to forget
+        to use ``.items()`` when you need to access both keys and values.
+        So, when you access the iterable with the key inside a ``for`` loop,
+        that's a sign to refactor your code.
+
+    Solution:
+        Use ``.items()`` with direct keys and values when you need them.
+
+    Example::
+
+        # Correct:
+        for some_key, some_value in collection.items():
+            print(some_key, some_value)
+
+        # Wrong:
+        for some_key in collection:
+            print(some_key, collection[some_key])
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found implicit `.items()` usage'
+    code = 528
+
+
+@final
+class ImplicitDictGetViolation(ASTViolation):
+    """
+    Forbids to use implicit ``.get()`` dict method.
+
+    Reasoning:
+        When using ``in`` with a dict key it is hard to keep the code clean.
+        It is more convinient to use ``.get()`` and check for ``None`` later.
+
+    Solution:
+        Use ``.get()`` with the key you need.
+        Check for ``None`` in case you need it,
+        or just act with the default value of the same type.
+
+    Example::
+
+        # Correct:
+        value = collection.get(key)
+        if value is not None:
+            print(value)
+
+        # Wrong:
+        if key in collection:
+            print(collection[key])
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found implicit `.get()` dict usage'
+    code = 529
+
+
+@final
+class ImplicitNegativeIndexViolation(ASTViolation):
+    """
+    Forbids to use implicit negative indexes.
+
+    Reasoning:
+        There's no need in getting the length of an iterable
+        and then having a negative offset,
+        when you can specify negative indexes in the first place.
+
+    Solution:
+        Use negative indexes.
+
+    Example::
+
+        # Correct:
+        some_list[-1]
+
+        # Wrong:
+        some_list[len(some_list) - 1]
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found implicit negative index'
+    code = 530
+
+@final
 class SlowInComprehensionViolation(ASTViolation):
     """
     Forbids to use ``a in b`` in value part of list comprehensions.
@@ -1019,4 +1227,4 @@ class SlowInComprehensionViolation(ASTViolation):
 
     code = 525
     error_template = "Found wrong practice in comprehension"
-    
+   

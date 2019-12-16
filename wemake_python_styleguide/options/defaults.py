@@ -16,7 +16,9 @@ if you find them too strict or too permissive.
 
 from typing_extensions import Final
 
+# ========
 # General:
+# ========
 
 #: Minimum variable's name length.
 MIN_NAME_LENGTH: Final = 2
@@ -27,7 +29,19 @@ MAX_NAME_LENGTH: Final = 45
 #: Whether you control ones who use your code.
 I_CONTROL_CODE: Final = True
 
+#: Maximum amount of ``noqa`` comments per module.
+MAX_NOQA_COMMENTS: Final = 10  # guessed
+
+#: List of nested classes' names we allow to use.
+NESTED_CLASSES_WHITELIST: Final = frozenset((
+    'Meta',  # django forms, models, drf, etc
+    'Params',  # factoryboy specific
+))
+
+
+# ===========
 # Complexity:
+# ===========
 
 #: Maximum number of `return` statements allowed in a single function.
 MAX_RETURNS: Final = 5  # 7-2
@@ -89,11 +103,11 @@ MAX_ACCESS_LEVEL: Final = 4  # guessed
 #: Maximum number of public attributes in a single class.
 MAX_ATTRIBUTES: Final = 6  # guessed
 
-#: List of nested classes' names we allow to use.
-NESTED_CLASSES_WHITELIST: Final = frozenset((
-    'Meta',  # django forms, models, drf, etc
-    'Params',  # factoryboy specific
-))
+#: Maximum amount of cognitive complexity per function.
+MAX_COGNITIVE_SCORE: Final = 12  # based on this code statistics
 
-#: Maximum amount of ``noqa`` comments per module.
-MAX_NOQA_COMMENTS: Final = 10
+#: Maximum amount of average cognitive complexity per module.
+MAX_COGNITIVE_AVERAGE: Final = 8  # based on this code statistics
+
+#: Maximum number of call chains.
+MAX_CALL_LEVEL: Final = 3

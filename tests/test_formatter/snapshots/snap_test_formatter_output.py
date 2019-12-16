@@ -21,11 +21,11 @@ snapshots['test_formatter[cli_options2-with_source] formatter_with_source'] = ''
         ^
 
   2:21     WPS432 Found magic number: 200
-  \x1b[34mreturn\x1b[39;49;00m handle + \x1b[34m2\x1b[39;49;00m_00
+  \x1b[34mreturn\x1b[39;49;00m handle + \x1b[34m2_00\x1b[39;49;00m
                   ^
 
   2:21     WPS303 Found underscored number: 2_00
-  \x1b[34mreturn\x1b[39;49;00m handle + \x1b[34m2\x1b[39;49;00m_00
+  \x1b[34mreturn\x1b[39;49;00m handle + \x1b[34m2_00\x1b[39;49;00m
                   ^
 
 \x1b[4m\x1b[1m./tests/fixtures/formatter2.py\x1b[0m\x1b[0m
@@ -39,11 +39,11 @@ snapshots['test_formatter[cli_options2-with_source] formatter_with_source'] = ''
            ^
 
   2:12     WPS437 Found protected attribute usage: _protected
-  \x1b[34mreturn\x1b[39;49;00m param._protected + \x1b[34m10\x1b[39;49;00m_00
+  \x1b[34mreturn\x1b[39;49;00m param._protected + \x1b[34m10_00\x1b[39;49;00m
          ^
 
   2:31     WPS303 Found underscored number: 10_00
-  \x1b[34mreturn\x1b[39;49;00m param._protected + \x1b[34m10\x1b[39;49;00m_00
+  \x1b[34mreturn\x1b[39;49;00m param._protected + \x1b[34m10_00\x1b[39;49;00m
                             ^
 
 Full list of violations and explanations:
@@ -77,11 +77,11 @@ snapshots['test_formatter[cli_options3-with_source_statistic] formatter_with_sou
         ^
 
   2:21     WPS432 Found magic number: 200
-  \x1b[34mreturn\x1b[39;49;00m handle + \x1b[34m2\x1b[39;49;00m_00
+  \x1b[34mreturn\x1b[39;49;00m handle + \x1b[34m2_00\x1b[39;49;00m
                   ^
 
   2:21     WPS303 Found underscored number: 2_00
-  \x1b[34mreturn\x1b[39;49;00m handle + \x1b[34m2\x1b[39;49;00m_00
+  \x1b[34mreturn\x1b[39;49;00m handle + \x1b[34m2_00\x1b[39;49;00m
                   ^
 
 \x1b[4m\x1b[1m./tests/fixtures/formatter2.py\x1b[0m\x1b[0m
@@ -95,11 +95,11 @@ snapshots['test_formatter[cli_options3-with_source_statistic] formatter_with_sou
            ^
 
   2:12     WPS437 Found protected attribute usage: _protected
-  \x1b[34mreturn\x1b[39;49;00m param._protected + \x1b[34m10\x1b[39;49;00m_00
+  \x1b[34mreturn\x1b[39;49;00m param._protected + \x1b[34m10_00\x1b[39;49;00m
          ^
 
   2:31     WPS303 Found underscored number: 10_00
-  \x1b[34mreturn\x1b[39;49;00m param._protected + \x1b[34m10\x1b[39;49;00m_00
+  \x1b[34mreturn\x1b[39;49;00m param._protected + \x1b[34m10_00\x1b[39;49;00m
                             ^
 
 \x1b[1mWPS110\x1b[0m: Found wrong variable name: handle
@@ -143,11 +143,11 @@ snapshots['test_formatter[cli_options4-statistic_with_source] formatter_statisti
         ^
 
   2:21     WPS432 Found magic number: 200
-  \x1b[34mreturn\x1b[39;49;00m handle + \x1b[34m2\x1b[39;49;00m_00
+  \x1b[34mreturn\x1b[39;49;00m handle + \x1b[34m2_00\x1b[39;49;00m
                   ^
 
   2:21     WPS303 Found underscored number: 2_00
-  \x1b[34mreturn\x1b[39;49;00m handle + \x1b[34m2\x1b[39;49;00m_00
+  \x1b[34mreturn\x1b[39;49;00m handle + \x1b[34m2_00\x1b[39;49;00m
                   ^
 
 \x1b[4m\x1b[1m./tests/fixtures/formatter2.py\x1b[0m\x1b[0m
@@ -161,11 +161,11 @@ snapshots['test_formatter[cli_options4-statistic_with_source] formatter_statisti
            ^
 
   2:12     WPS437 Found protected attribute usage: _protected
-  \x1b[34mreturn\x1b[39;49;00m param._protected + \x1b[34m10\x1b[39;49;00m_00
+  \x1b[34mreturn\x1b[39;49;00m param._protected + \x1b[34m10_00\x1b[39;49;00m
          ^
 
   2:31     WPS303 Found underscored number: 10_00
-  \x1b[34mreturn\x1b[39;49;00m param._protected + \x1b[34m10\x1b[39;49;00m_00
+  \x1b[34mreturn\x1b[39;49;00m param._protected + \x1b[34m10_00\x1b[39;49;00m
                             ^
 
 \x1b[1mWPS110\x1b[0m: Found wrong variable name: handle

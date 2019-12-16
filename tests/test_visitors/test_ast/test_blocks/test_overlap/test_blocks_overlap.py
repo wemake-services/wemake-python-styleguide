@@ -98,6 +98,13 @@ def context():
         ...
 """
 
+annotation_overlap = """
+def context():
+    conn: Connection
+    with db.get_conn() as conn:
+        ...
+"""
+
 
 @pytest.mark.parametrize('code', [
     import_and_class1,
@@ -131,15 +138,16 @@ def test_block_overlap(
     unused_variables_overlap1,
     unused_variables_overlap2,
     unused_variables_overlap3,
+    annotation_overlap,
 ])
-def test_block_unused_overlap(
+def test_block_correct_overlap(
     assert_errors,
     parse_ast_tree,
     default_options,
     code,
     mode,
 ):
-    """Testing that overlaps between unused vars are ok."""
+    """Testing that correct overlaps are ok."""
     tree = parse_ast_tree(mode(code))
 
     visitor = BlockVariableVisitor(default_options, tree=tree)

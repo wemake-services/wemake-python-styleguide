@@ -11,13 +11,13 @@ Other codes are coming from other tools.
 ============== ======
 Type           Codes
 -------------- ------
+System         :ref:`WPS000 - WPS099 <system>`
 Naming         :ref:`WPS100 - WPS199 <naming>`
 Complexity     :ref:`WPS200 - WPS299 <complexity>`
 Consistency    :ref:`WPS300 - WPS399 <consistency>`
 Best practices :ref:`WPS400 - WPS499 <best-practices>`
 Refactoring    :ref:`WPS500 - WPS599 <refactoring>`
 OOP            :ref:`WPS600 - WPS699 <oop>`
-Annotations    :ref:`WPS700 - WPS799 <annotations>`
 ============== ======
 
 
@@ -52,6 +52,7 @@ flake8-debugger                `T100 <https://github.com/JBKahn/flake8-debugger/
 flake8-annotations-complexity  `TAE002 <https://github.com/best-doctor/flake8-annotations-complexity>`_
 flake8-rst-docstrings          `RST201 - RST499 <https://github.com/peterjc/flake8-rst-docstrings>`_
 flake8-executable              `EXE001 - EXE005 <https://github.com/xuhdev/flake8-executable>`_
+darglint                       `DAR001 - DAR501 <https://github.com/terrencepreilly/darglint#error-codes>`_
 wemake-python-styleguide       WPS, defined here
 =============================  ======
 
@@ -60,6 +61,7 @@ wemake-python-styleguide       WPS, defined here
   :caption: Violation types:
   :hidden:
 
+  system.rst
   naming.rst
   complexity.rst
   consistency.rst

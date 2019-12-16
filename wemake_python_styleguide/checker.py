@@ -54,6 +54,7 @@ from wemake_python_styleguide.presets.types import file_tokens as tokens_preset
 from wemake_python_styleguide.presets.types import filename as filename_preset
 from wemake_python_styleguide.presets.types import tree as tree_preset
 from wemake_python_styleguide.transformations.ast_tree import transform
+from wemake_python_styleguide.violations import system
 from wemake_python_styleguide.visitors import base
 
 VisitorClass = Type[base.BaseVisitor]
@@ -109,11 +110,7 @@ class Checker(object):
         based on its parameters. This one is executed once per module.
 
         Arguments:
-            tree: ``ast`` parsed by ``flake8``. Differs from ``ast.parse``
-                since it is mutated by multiple ``flake8`` plugins.
-                Why mutated? Since it is really expensive
-                to copy all ``ast`` information in terms of memory.
-
+            tree: ``ast`` tree parsed by ``flake8``.
             file_tokens: ``tokenize.tokenize`` parsed file tokens.
             filename: module file name, might be empty if piping is used.
 
@@ -152,14 +149,7 @@ class Checker(object):
             Violations that were found by the passed visitors.
 
         """
-        yield from self._run_checks(self._visitors)
-
-    def _run_checks(
-        self,
-        visitors: Sequence[VisitorClass],
-    ) -> Iterator[types.CheckResult]:
-        """Runs all passed visitors one by one."""
-        for visitor_class in visitors:
+        for visitor_class in self._visitors:
             visitor = visitor_class.from_checker(self)
 
             try:
@@ -169,6 +159,9 @@ class Checker(object):
                 # least something! Full stack trace
                 # and some rules that still work.
                 print(traceback.format_exc())  # noqa: T001
+                visitor.add_violation(system.InternalErrorViolation())
 
-            for error in visitor.violations:
-                yield (*error.node_items(), type(self))
+            yield from (
+                (*error.node_items(), type(self))
+                for error in visitor.violations
+            )

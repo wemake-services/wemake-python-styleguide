@@ -24,6 +24,12 @@ def test_violation_name(all_violations):
         assert class_name.endswith('Violation'), class_name
 
 
+def test_violation_template_ending(all_violations):
+    """Ensures that all violation templates do not end with a dot."""
+    for violation in all_violations:
+        assert not violation.error_template.endswith('.'), violation
+
+
 def test_previous_codes_versionchanged(all_violations):
     """Tests that we put both in case violation changes."""
     for violation in all_violations:

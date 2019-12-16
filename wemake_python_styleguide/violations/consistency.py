@@ -73,10 +73,14 @@ Summary
    MeaninglessNumberOperationViolation
    OperationSignNegationViolation
    VagueImportViolation
-   AdditionAssignmentOnListViolation
+   LineStartsWithDotViolation
    RedundantSubscriptViolation
    AugmentedAssignPatternViolation
    UnnecessaryLiteralsViolation
+   MultilineLoopViolation
+   IncorrectYieldFromTargetViolation
+   ConsecutiveYieldsViolation
+   BracketBlankLineViolation
 
 Consistency checks
 ------------------
@@ -129,10 +133,14 @@ Consistency checks
 .. autoclass:: MeaninglessNumberOperationViolation
 .. autoclass:: OperationSignNegationViolation
 .. autoclass:: VagueImportViolation
-.. autoclass:: AdditionAssignmentOnListViolation
+.. autoclass:: LineStartsWithDotViolation
 .. autoclass:: RedundantSubscriptViolation
 .. autoclass:: AugmentedAssignPatternViolation
 .. autoclass:: UnnecessaryLiteralsViolation
+.. autoclass:: MultilineLoopViolation
+.. autoclass:: IncorrectYieldFromTargetViolation
+.. autoclass:: ConsecutiveYieldsViolation
+.. autoclass:: BracketBlankLineViolation
 
 """
 
@@ -746,6 +754,13 @@ class ParametersIndentationViolation(ASTViolation):
             last_item,
         ], end='')
 
+        # Correct complex case:
+
+        @pytest.mark.parametrize(('boolean_arg', 'string_arg'), [
+             (True, "string"),
+             (False, "another string"),
+        ])
+
     Everything else is considered a violation.
     This rule checks: lists, sets, tuples, dicts, calls,
     functions, methods, and classes.
@@ -782,6 +797,14 @@ class ExtraIndentationViolation(TokenizeViolation):
         # Wrong:
         def test():
                     print('test')
+
+    This rule is consistent with the "Vertical Hanging Indent" option for
+    ``multi_line_output`` setting of ``isort``. To avoid conflicting rules,
+    you should set ``multi_line_output = 3`` in the ``isort`` settings.
+
+    See also:
+        https://github.com/timothycrosley/isort#multi-line-output-modes
+        https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/isort.toml
 
     .. versionadded:: 0.6.0
 
@@ -1490,14 +1513,14 @@ class WrongMethodOrderViolation(ASTViolation):
 
     - ``__new__``
     - ``__init__``
-    - public and megic methods
+    - public and magic methods
     - protected methods
     - private methods (we discourage using them)
 
-    We follow "Newspaper order" when the most important things come the first.
+    We follow "Newspaper order" where the most important things come first.
 
     Reasoning:
-        It is hard to read classes which API declarations is bloated with
+        It is hard to read classes where API declarations are bloated with
         implementation details. We need to see the important stuff first,
         then we can go deeper in case we are interested.
 
@@ -1765,25 +1788,29 @@ class VagueImportViolation(ASTViolation):
     """
     Forbids imports that may cause confusion outside of the module.
 
+    Names that we forbid to import:
+    - Common names like ``dumps`` and ``loads``
+    - Names starting with ``to_`` and ``from_``
+    - Too short names like ``Q`` or ``F``, but we are fine with ``_``
+
     Reasoning:
         See ``datetime.*`` in code? You know that it's from datetime.
         See ``BaseView`` in a Django project? You know where it is from.
-        See ``loads``? It can be anything: ``yaml``, ``toml``, ``json`` ...
+        See ``loads``? It can be anything: ``yaml``, ``toml``, ``json``, etc.
+        We are also enforcing consitency with our naming too-short rules here.
+
+    See
+    :py:data:`~wemake_python_styleguide.constants.VAGUE_IMPORTS_BLACKLIST`
+    for the full list of bad import names.
 
     Example::
 
         # Correct:
         import json
-
-        ...
-
         json.loads(content)
 
         # Wrong:
         from json import loads
-
-        ...
-
         loads(content)
 
     .. versionadded:: 0.13.0
@@ -1795,27 +1822,41 @@ class VagueImportViolation(ASTViolation):
 
 
 @final
-class AdditionAssignmentOnListViolation(ASTViolation):
+class LineStartsWithDotViolation(TokenizeViolation):
     """
-    Forbids usage of += with list arguments.
+    Forbids to start lines with a dot.
 
     Reasoning:
-        ``+=`` works like ``extend()`` method.
-        Why not just use ``extend()`` instead of ``+=`` to be consistent.
+        We enforce strict consitency rules about how to break lines.
+        We also enforce strict rules about multi-line parameters.
+        Starting new lines with the dot means that this rule is broken.
+
+    Solution:
+        Use ``()`` to break lines in a complex expression.
 
     Example::
 
         # Correct:
-        some_list.extend([1, 2, 3])
+        some = MyModel.objects.filter(
+            ...,
+        ).exclude(
+            ...,
+        ).annotate(
+            ...,
+        )
 
-        # Wrong:
-        some_list += [1, 2, 3]
+        # Wrong
+        some = (
+            MyModel.objects.filter(...)
+                .exclude(...)
+                .annotate(...)
+        )
 
     .. versionadded:: 0.13.0
 
     """
 
-    error_template = 'Found addition assignment with list argument'
+    error_template = 'Found a line that starts with a dot'
     code = 348
 
 
@@ -1841,7 +1882,7 @@ class RedundantSubscriptViolation(ASTViolation):
 
     """
 
-    error_template = 'Found redundant subscript slice: {0}'
+    error_template = 'Found redundant subscript slice'
     code = 349
 
 
@@ -1894,5 +1935,130 @@ class UnnecessaryLiteralsViolation(ASTViolation):
 
     """
 
-    error_template = 'Found unnecessary literals.'
+    error_template = 'Found unnecessary literals'
     code = 351
+
+
+@final
+class MultilineLoopViolation(ASTViolation):
+    """
+    Forbids multiline loops.
+
+    Reasoning:
+        It decreased the readability of the code.
+
+    Solution:
+        Use single line loops and create new variables
+        in case you need to fit too many logic inside the loop definition.
+
+    Example::
+
+        # Correct:
+        for num in some_function(arg1, arg2):
+            ...
+
+        # Wrong:
+        for num in range(
+            arg1,
+            arg2,
+        ):
+            ...
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found multiline loop'
+    code = 352
+
+
+@final
+class IncorrectYieldFromTargetViolation(ASTViolation):
+    """
+    Forbids to use ``yield from`` with several nodes.
+
+    We allow to ``yield from`` tuples,
+    names, attributes, calls, and subscripts.
+
+    Reasoning:
+        We enforce consitency when yielding values
+        from tuple instead of any other types.
+        It also might be an error when you try to ``yield from`` something
+        that is not iterable.
+
+    Solution:
+        Use allowed node types with ``yield from``.
+
+    Example::
+
+        # Correct:
+        yield from (1, 2, 3)
+        yield from some
+
+        # Wrong:
+        yield from [1, 2, 3]
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found incorrect `yield from` target'
+    code = 353
+
+
+@final
+class ConsecutiveYieldsViolation(ASTViolation):
+    """
+    Forbids to have consecutive ``yield`` expressions.
+
+    We raise this violation when we find at least
+    two consecutive ``yield`` expressions.
+
+    Reasoning:
+        One can write multiple ``yield`` nodes in a row.
+        That's incosistent. Because we have ``yield from`` form.
+
+    Solution:
+        It can be easily changed to ``yield from (...)`` format.
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found consecutive `yield` expressions'
+    code = 354
+
+
+@final
+class BracketBlankLineViolation(TokenizeViolation):
+    """
+    Forbids useless blank lines before and after brackets.
+
+    Reasoning:
+        We do this for consistency.
+
+    Solution:
+        Remove blank lines from the start and from the end of a collection.
+
+    Example::
+
+        # Correct:
+        arr = [
+            1,
+            2,
+        ]
+
+        # Wrong:
+        arr = [
+
+            1,
+            2,
+
+        ]
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Found an unnecessary blank line before a bracket'
+    code = 355

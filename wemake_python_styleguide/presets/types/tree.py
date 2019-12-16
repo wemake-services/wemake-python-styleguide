@@ -31,6 +31,7 @@ PRESET: Final = (
     statements.PointlessStarredVisitor,
     statements.WrongNamedKeywordVisitor,
     statements.AssignmentPatternsVisitor,
+    statements.WrongMethodArgumentsVisitor,
 
     keywords.WrongRaiseVisitor,
     keywords.WrongKeywordVisitor,
@@ -38,14 +39,15 @@ PRESET: Final = (
     keywords.ConsistentReturningVisitor,
     keywords.ConsistentReturningVariableVisitor,
     keywords.ConstantKeywordVisitor,
+    keywords.GeneratorKeywordsVisitor,
 
     loops.WrongComprehensionVisitor,
     loops.WrongLoopVisitor,
     loops.WrongLoopDefinitionVisitor,
+    loops.SyncForLoopVisitor,
 
     attributes.WrongAttributeVisitor,
     annotations.WrongAnnotationVisitor,
-    annotations.SemanticAnnotationVisitor,
 
     functions.WrongFunctionCallVisitor,
     functions.FunctionDefinitionVisitor,
@@ -55,6 +57,7 @@ PRESET: Final = (
 
     exceptions.WrongTryExceptVisitor,
     exceptions.NestedTryBlocksVisitor,
+    exceptions.WrongExceptHandlerVisitor,
 
     imports.WrongImportVisitor,
 
@@ -76,6 +79,7 @@ PRESET: Final = (
     compares.WrongComparisionOrderVisitor,
     compares.UnaryCompareVisitor,
     compares.WrongConstantCompareVisitor,
+    compares.InCompareSanityVisitor,
 
     conditions.IfStatementVisitor,
     conditions.BooleanConditionVisitor,
@@ -97,9 +101,10 @@ PRESET: Final = (
     blocks.BlockVariableVisitor,
     blocks.AfterBlockVariablesVisitor,
 
+    subscripts.SubscriptVisitor,
+    subscripts.ImplicitDictGetVisitor,
+    subscripts.CorrectKeyVisitor,
+
     # Complexity:
     *complexity.PRESET,
-
-    # Subscripts:
-    subscripts.SubscriptVisitor,
 )

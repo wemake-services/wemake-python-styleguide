@@ -30,6 +30,7 @@ from wemake_python_styleguide.types import AnyFor, AnyNodes, AnyWith
 from wemake_python_styleguide.violations import consistency
 from wemake_python_styleguide.violations.best_practices import (
     ApproximateConstantViolation,
+    FloatKeyViolation,
     MagicNumberViolation,
     MultipleAssignmentsViolation,
     NonUniqueItemsInHashViolation,
@@ -39,12 +40,14 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors import base, decorators
 
+_HashItems = Sequence[Optional[ast.AST]]
+
 
 @final
 class WrongStringVisitor(base.BaseNodeVisitor):
     """Restricts several string usages."""
 
-    _string_constants: FrozenSet[str] = frozenset((
+    _string_constants: ClassVar[FrozenSet[str]] = frozenset((
         string.ascii_letters,
         string.ascii_lowercase,
         string.ascii_uppercase,
@@ -290,15 +293,30 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
         Raises:
             NonUniqueItemsInHashViolation
             UnhashableTypeInHashViolation
+            FloatKeyViolation
 
         """
         self._check_set_elements(node, node.keys)
         self._check_unhashable_elements(node.keys)
+        self._check_float_keys(node.keys)
         self.generic_visit(node)
+
+    def _check_float_keys(self, keys: _HashItems) -> None:
+        for dict_key in keys:
+            if dict_key is None:
+                continue
+
+            real_key = unwrap_unary_node(dict_key)
+            is_float_key = (
+                isinstance(real_key, ast.Num) and
+                isinstance(real_key.n, float)
+            )
+            if is_float_key:
+                self.add_violation(FloatKeyViolation(dict_key))
 
     def _check_unhashable_elements(
         self,
-        keys_or_elts: Sequence[ast.AST],
+        keys_or_elts: _HashItems,
     ) -> None:
         for set_item in keys_or_elts:
             if isinstance(set_item, self._unhashable_types):
@@ -307,7 +325,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
     def _check_set_elements(
         self,
         node: Union[ast.Set, ast.Dict],
-        keys_or_elts: Sequence[Optional[ast.AST]],
+        keys_or_elts: _HashItems,
     ) -> None:
         elements: List[str] = []
         element_values = []

@@ -27,13 +27,15 @@ IGNORED_VIOLATIONS = (
 )
 
 SHOULD_BE_RAISED = types.MappingProxyType({
+    'WPS000': 0,
+
     'WPS100': 0,
     'WPS101': 0,
     'WPS102': 0,
     'WPS110': 3,
     'WPS111': 1,
     'WPS112': 1,
-    'WPS113': 1,
+    'WPS113': 0,
     'WPS114': 1,
     'WPS115': 1,
     'WPS116': 1,
@@ -72,6 +74,9 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS228': 1,
     'WPS229': 1,
     'WPS230': 1,
+    'WPS231': 1,
+    'WPS232': 0,
+    'WPS233': 1,
 
     'WPS300': 1,
     'WPS301': 1,
@@ -125,6 +130,10 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS349': 1,
     'WPS350': 1,
     'WPS351': 1,
+    'WPS352': 1,
+    'WPS353': 1,
+    'WPS354': 1,
+    'WPS355': 1,
 
     'WPS400': 0,
     'WPS401': 0,
@@ -174,6 +183,8 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS445': 1,
     'WPS446': 1,
     'WPS447': 1,
+    'WPS448': 1,
+    'WPS449': 1,
 
     'WPS500': 1,
     'WPS501': 1,
@@ -200,6 +211,12 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS522': 1,
     'WPS523': 1,
     'WPS524': 1,
+    'WPS525': 2,
+    'WPS526': 1,
+    'WPS527': 1,
+    'WPS528': 1,
+    'WPS529': 1,
+    'WPS530': 1,
 
     'WPS600': 1,
     'WPS601': 1,
@@ -214,10 +231,15 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS610': 1,
     'WPS611': 1,
     'WPS612': 1,
+    'WPS613': 1,
+})
 
-    'WPS700': 1,
-    'WPS701': 1,
-    'WPS702': 1,
+# Violations which may be tweaked by `i_control_code` option
+SHOULD_BE_RAISED_NO_CONTROL = types.MappingProxyType({
+    'WPS113': 1,
+
+    'WPS412': 0,
+    'WPS413': 0,
 })
 
 
@@ -261,6 +283,36 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
 
     _assert_errors_count_in_output(stdout, SHOULD_BE_RAISED, all_violations)
     assert len(SHOULD_BE_RAISED) == len(all_violations)
+
+
+def test_noqa_fixture_disabled_no_control(
+    absolute_path,
+    all_controlled_violations,
+):
+    """End-to-End test to check rules controlled by `i_control_code` option."""
+    process = subprocess.Popen(
+        [
+            'flake8',
+            '--i-dont-control-code',
+            '--disable-noqa',
+            '--isolated',
+            '--select',
+            'WPS',
+            absolute_path('fixtures', 'noqa_controlled.py'),
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        universal_newlines=True,
+        encoding='utf8',
+    )
+    stdout, _ = process.communicate()
+
+    _assert_errors_count_in_output(
+        stdout,
+        SHOULD_BE_RAISED_NO_CONTROL,
+        all_controlled_violations,
+    )
+    assert len(SHOULD_BE_RAISED_NO_CONTROL) == len(all_controlled_violations)
 
 
 def test_noqa_fixture(absolute_path):

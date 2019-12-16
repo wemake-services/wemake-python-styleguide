@@ -109,6 +109,7 @@ class Test(object):
 """
 
 
+@pytest.mark.filterwarnings('ignore::SyntaxWarning')
 @pytest.mark.parametrize('code', [
     protected_attribute_assigned,
     protected_attribute_accessed,

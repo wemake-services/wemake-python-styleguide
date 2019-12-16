@@ -15,7 +15,7 @@ def test_all_violations_correct_numbers(all_module_violations):
     assert len(all_module_violations) == 7
 
     for index, module in enumerate(all_module_violations.keys()):
-        code_number = (index + 1) * 100
+        code_number = index * 100
         for violation_class in all_module_violations[module]:
             assert (
                 code_number <= violation_class.code <= code_number + 100 - 1
@@ -29,7 +29,7 @@ def test_violations_start_zero(all_module_violations):
             violation_class.code
             for violation_class in all_module_violations[module]
         )
-        assert starting_code == (index + 1) * 100
+        assert starting_code == index * 100
 
 
 def test_no_holes(all_module_violations):

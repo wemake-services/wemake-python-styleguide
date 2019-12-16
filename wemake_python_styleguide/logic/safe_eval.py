@@ -23,19 +23,19 @@ from typing import Any, Optional, Union
 from wemake_python_styleguide.compat.nodes import Constant
 
 
-def _convert_num(node: AST):
+def _convert_num(node: Optional[AST]):
     if isinstance(node, Constant):  # pragma: no cover
         if isinstance(node.value, (int, float, complex)):
             return node.value
     elif isinstance(node, Num):
         return node.n
-    elif isinstance(node, Name):
+    elif isinstance(node, Name):  # That's what is modified from the original
         # We return string names as is, see how we return strings:
         return node.id
     raise ValueError('malformed node or string: {0!r}'.format(node))
 
 
-def _convert_signed_num(node: AST):
+def _convert_signed_num(node: Optional[AST]):
     if isinstance(node, UnaryOp) and isinstance(node.op, (UAdd, USub)):
         operand = _convert_num(node.operand)
         return +operand if isinstance(node.op, UAdd) else -operand
@@ -65,7 +65,9 @@ def _convert_iterable(node: Union[Tuple, List, Set, Dict]):
     ))
 
 
-def literal_eval_with_names(node: AST) -> Optional[Any]:
+def literal_eval_with_names(  # noqa: WPS231
+    node: Optional[AST],
+) -> Any:
     """
     Safely evaluate constants and ``ast.Name`` nodes.
 
@@ -76,6 +78,9 @@ def literal_eval_with_names(node: AST) -> Optional[Any]:
     Modified to treat ``ast.Name`` nodes as constants.
 
     See: :py:`ast.literal_eval` source.
+
+    We intentionally ignore complexity violation here,
+    becase we try to stay as close to the original source as possible.
     """
     if isinstance(node, (Constant, NameConstant)):
         return node.value

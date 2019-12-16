@@ -103,10 +103,10 @@ This step is mandatory during the CI.
 
 We also have several helpers to make your development work easier:
 
-- `./scripts/parse.py` is used to visualize `ast` nodes in other python modules,
-  usage: `python ./scripts/parse.py my_module.py`
-- `./scripts/tokens.py` is used to visualize tokens in other python modules,
-  usage: `python ./scripts/tokens.py my_module.py`
+- `astboom` is used to visualize `ast` nodes in other python modules,
+  usage: `astboom < my_module.py`
+- `tokelor` is used to visualize tokens in other python modules,
+  usage: `tokelor my_module.py`
 
 
 ## Submitting your code
@@ -144,7 +144,6 @@ Before submitting your code please do the following steps:
 9. Run `flake8` to ensure that style is correct
 10. Run `lint-imports` to ensure that architecture contracts are correct
 11. Run `doc8` to ensure that docs are correct
-12. Run `xenon` to ensure that code quality is `A` (good enough)
 
 You can run everything at once with `make test`,
 see our `Makefile` for more details.
