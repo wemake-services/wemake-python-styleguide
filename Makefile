@@ -6,7 +6,7 @@ lint:
 	flake8 .
 	autopep8 -r . --diff --exclude=./tests/fixtures/** --exit-code
 	lint-imports
-	poetry run doc8 -q docs
+	doc8 -q docs
 
 .PHONY: unit
 unit:
@@ -15,8 +15,8 @@ unit:
 .PHONY: package
 package:
 	poetry check
-	poetry run pip check
-	poetry run safety check --bare --full-report
+	pip check
+	safety check --bare --full-report
 
 .PHONY: test
 test: lint unit package
