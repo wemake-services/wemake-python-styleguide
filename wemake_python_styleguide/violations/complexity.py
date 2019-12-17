@@ -899,6 +899,9 @@ class TooLongTryBodyViolation(ASTViolation):
         This rule is configurable with ``--max-try-body-length``.
         Default:
         :str:`wemake_python_styleguide.options.defaults.MAX_TRY_BODY_LENGTH`
+        
+    See also:
+        https://adamj.eu/tech/2019/10/02/limit-your-try-clauses-in-python/
 
     .. versionadded:: 0.12.0
 
