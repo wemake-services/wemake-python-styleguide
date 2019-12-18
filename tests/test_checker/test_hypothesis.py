@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 """
-Integration test that our linter does not brake on different random programs.
+Integration test that our linter does not break on different random programs.
 
-We generate thousands of them with the help of ``hypothesis`` and test
+We generate thousands of them with the help of ``hypothesis`` and ensure
 that they are parsed and processed correctly.
 
 We cannot tell whether or not violations are correctly shown by a random input,
-but we can tell that our program did not raise any exception at least.
+but we can tell that our program did not raise any exceptions at least.
 
 See also:
     https://github.com/HypothesisWorks/hypothesis
