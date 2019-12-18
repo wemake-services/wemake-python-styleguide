@@ -67,5 +67,5 @@ def test_no_exceptions(
         assert isinstance(violation[0], int)
         assert isinstance(violation[1], int)
         assert violation[2].startswith('WPS'), violation[2]
-        assert 'WPS000' not in violation[2]
+        assert 'WPS0' not in violation[2]
         assert violation[3] == Checker
