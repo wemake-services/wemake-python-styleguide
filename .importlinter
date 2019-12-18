@@ -12,6 +12,7 @@ containers =
 
 layers =
   checker
+  formatter
   transformations
   presets
   visitors

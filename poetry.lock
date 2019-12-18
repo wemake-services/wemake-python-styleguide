@@ -615,6 +615,41 @@ networkx = ">=2.1,<3"
 
 [[package]]
 category = "dev"
+description = "A library for property-based testing"
+name = "hypothesis"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "4.55.2"
+
+[package.dependencies]
+attrs = ">=19.2.0"
+sortedcontainers = ">=2.1.0,<3.0.0"
+
+[package.extras]
+all = ["django (>=1.11)", "dpcontracts (>=0.4)", "lark-parser (>=0.6.5)", "numpy (>=1.9.0)", "pandas (>=0.19)", "pytest (>=4.3)", "python-dateutil (>=1.4)", "pytz", "pytz (>=2014.1)"]
+dateutil = ["python-dateutil (>=1.4)"]
+django = ["pytz", "django (>=1.11)"]
+dpcontracts = ["dpcontracts (>=0.4)"]
+lark = ["lark-parser (>=0.6.5)"]
+numpy = ["numpy (>=1.9.0)"]
+pandas = ["pandas (>=0.19)"]
+pytest = ["pytest (>=4.3)"]
+pytz = ["pytz (>=2014.1)"]
+
+[[package]]
+category = "dev"
+description = "Hypothesis strategies for generating Python programs, something like CSmith"
+name = "hypothesmith"
+optional = false
+python-versions = ">=3.6"
+version = "0.0.5"
+
+[package.dependencies]
+hypothesis = ">=4.36.0"
+lark-parser = ">=0.7.2"
+
+[[package]]
+category = "dev"
 description = "Internationalized Domain Names in Applications (IDNA)"
 name = "idna"
 optional = false
@@ -766,6 +801,14 @@ name = "jmespath"
 optional = false
 python-versions = "*"
 version = "0.9.4"
+
+[[package]]
+category = "dev"
+description = "a modern parsing library"
+name = "lark-parser"
+optional = false
+python-versions = "*"
+version = "0.7.8"
 
 [[package]]
 category = "dev"
@@ -1566,7 +1609,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pathlib2", "contextlib2", "unittest2"]
 
 [metadata]
-content-hash = "55b7e0817787b407858b6189da33db4f569c03bcba1795c3ba945451ca906260"
+content-hash = "9ac6a3bd994e0a685740eefd56866c3972c7be00644a98f7cdea965f6bb64170"
 python-versions = "3.6 || 3.7"
 
 [metadata.files]
@@ -1806,6 +1849,14 @@ gitpython = [
 grimp = [
     {file = "grimp-1.2.tar.gz", hash = "sha256:733ccc25bce00235e21403cfe64ae49b1cdd9a2e9e4a93ed406438add824d42e"},
 ]
+hypothesis = [
+    {file = "hypothesis-4.55.2-py3-none-any.whl", hash = "sha256:a152b7e21468ce8a2dc353ee50a6ea540ae1949e359463f99af3b210a0e195d4"},
+    {file = "hypothesis-4.55.2.tar.gz", hash = "sha256:6616e59d67405e05c5002364b07d328d0a58038c881ac2890dae5f303edb8dca"},
+]
+hypothesmith = [
+    {file = "hypothesmith-0.0.5-py3-none-any.whl", hash = "sha256:2d4801fe288d9290c865abc6524bf58d7a307fbc197d00bdd171d75bea966406"},
+    {file = "hypothesmith-0.0.5.tar.gz", hash = "sha256:14aa033f637b67ea234a6993fafc89ed87192924769e4c8641d759dd21f6455c"},
+]
 idna = [
     {file = "idna-2.8-py2.py3-none-any.whl", hash = "sha256:ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c"},
     {file = "idna-2.8.tar.gz", hash = "sha256:c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407"},
@@ -1847,6 +1898,9 @@ jinja2 = [
 jmespath = [
     {file = "jmespath-0.9.4-py2.py3-none-any.whl", hash = "sha256:3720a4b1bd659dd2eecad0666459b9788813e032b83e7ba58578e48254e0a0e6"},
     {file = "jmespath-0.9.4.tar.gz", hash = "sha256:bde2aef6f44302dfb30320115b17d030798de8c4110e28d5cf6cf91a7a31074c"},
+]
+lark-parser = [
+    {file = "lark-parser-0.7.8.tar.gz", hash = "sha256:26215ebb157e6fb2ee74319aa4445b9f3b7e456e26be215ce19fdaaa901c20a4"},
 ]
 m2r = [
     {file = "m2r-0.2.1.tar.gz", hash = "sha256:bf90bad66cda1164b17e5ba4a037806d2443f2a4d5ddc9f6a5554a0322aaed99"},
