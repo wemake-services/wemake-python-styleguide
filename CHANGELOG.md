@@ -14,6 +14,7 @@ We used to have incremental versioning before `0.1.0`.
 
 - Updates `flake8-pep3101`
 - Updates `flake8-builtins`
+- Updates `flake8-eradicate`
 - Several small refactoring sessions
 - Adds `hypothesis`-based tests
 

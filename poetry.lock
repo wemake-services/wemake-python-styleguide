@@ -425,7 +425,7 @@ description = "Flake8 plugin to find commented out code"
 name = "flake8-eradicate"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "0.2.3"
+version = "0.2.4"
 
 [package.dependencies]
 attrs = ">=18.2,<20.0"
@@ -1609,7 +1609,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pathlib2", "contextlib2", "unittest2"]
 
 [metadata]
-content-hash = "9ac6a3bd994e0a685740eefd56866c3972c7be00644a98f7cdea965f6bb64170"
+content-hash = "672a60ad3ce5883dd4d24e6ef5129c6a2287fe72bafb38509b0c3f669cd43165"
 python-versions = "3.6 || 3.7"
 
 [metadata.files]
@@ -1788,8 +1788,8 @@ flake8-docstrings = [
     {file = "flake8_docstrings-1.5.0-py2.py3-none-any.whl", hash = "sha256:a256ba91bc52307bef1de59e2a009c3cf61c3d0952dbe035d6ff7208940c2edc"},
 ]
 flake8-eradicate = [
-    {file = "flake8-eradicate-0.2.3.tar.gz", hash = "sha256:a42c501d40b2beb6bcbbcb961169b16a7794b179dcc990cb317c2e655c19e379"},
-    {file = "flake8_eradicate-0.2.3-py3-none-any.whl", hash = "sha256:dd9baf6428319b946b85964c5ad0fb41d68c8998d40ac4ce73f37b9f41c535be"},
+    {file = "flake8-eradicate-0.2.4.tar.gz", hash = "sha256:b693e9dfe6da42dbc7fb75af8486495b9414d1ab0372d15efcf85a2ac85fd368"},
+    {file = "flake8_eradicate-0.2.4-py3-none-any.whl", hash = "sha256:b0bcdbb70a489fb799f9ee11fefc57bd0d3251e1ea9bdc5bf454443cccfd620c"},
 ]
 flake8-executable = [
     {file = "flake8-executable-2.0.3.tar.gz", hash = "sha256:a636ff78b14b63b1245d1c4d509db2f6ea0f2e27a86ee7eb848f3827bef7e16d"},
@@ -2115,6 +2115,7 @@ restructuredtext-lint = [
     {file = "ruamel.yaml.clib-0.2.0-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:550168c02d8de52ee58c3d8a8193d5a8a9491a5e7b2462d27ac5bf63717574c9"},
     {file = "ruamel.yaml.clib-0.2.0-cp37-cp37m-win32.whl", hash = "sha256:57933a6986a3036257ad7bf283529e7c19c2810ff24c86f4a0cfeb49d2099919"},
     {file = "ruamel.yaml.clib-0.2.0-cp37-cp37m-win_amd64.whl", hash = "sha256:b1b7fcee6aedcdc7e62c3a73f238b3d080c7ba6650cd808bce8d7761ec484070"},
+    {file = "ruamel.yaml.clib-0.2.0-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:be018933c2f4ee7de55e7bd7d0d801b3dfb09d21dad0cce8a97995fd3e44be30"},
     {file = "ruamel.yaml.clib-0.2.0.tar.gz", hash = "sha256:b66832ea8077d9b3f6e311c4a53d06273db5dc2db6e8a908550f3c14d67e718c"},
 ]
 safety = [

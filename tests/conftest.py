@@ -7,7 +7,11 @@ import pytest
 
 from wemake_python_styleguide.options.config import Configuration
 
-pytest_plugins = ['plugins.violations']
+pytest_plugins = [
+    'plugins.violations',
+    'plugins.ast_tree',
+    'plugins.tokenize_parser',
+]
 
 
 @pytest.fixture(scope='session')

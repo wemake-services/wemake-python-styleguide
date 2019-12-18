@@ -23,11 +23,6 @@ from hypothesis import HealthCheck, given, reject, settings
 
 from wemake_python_styleguide.checker import Checker
 
-pytest_plugins = [
-    'plugins.ast_tree',
-    'plugins.tokenize_parser',
-]
-
 settings.register_profile(
     'slow', deadline=None, suppress_health_check=HealthCheck.all(),
 )
@@ -43,6 +38,7 @@ def _fixup(string: str) -> str:
 
 
 @given(source_code=hypothesmith.from_grammar().map(_fixup))
+@settings(print_blob=True)
 def test_no_exceptions(
     source_code,
     default_options,
@@ -70,5 +66,6 @@ def test_no_exceptions(
     for violation in checker.run():
         assert isinstance(violation[0], int)
         assert isinstance(violation[1], int)
+        assert violation[2].startswith('WPS'), violation[2]
         assert 'WPS000' not in violation[2]
         assert violation[3] == Checker
