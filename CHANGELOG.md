@@ -9,6 +9,7 @@ We used to have incremental versioning before `0.1.0`.
 ### Bugfixes
 
 - Fixes supported python versions in PyPI to be `3.6` and `3.7`
+- Fix false positive ImplicitYieldFromViolation for async functions #1057
 
 ### Misc
 
