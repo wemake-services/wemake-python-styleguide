@@ -277,6 +277,9 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
             self.add_violation(ImplicitSumViolation(node))
 
     def _check_implicit_yield_from(self, node: AnyFor) -> None:
+        if isinstance(nodes.get_context(node), ast.AsyncFunctionDef):
+            # Python does not support 'yield from' inside async functions
+            return
         is_implicit_yield_from = (
             len(node.body) == 1 and
             isinstance(node.body[0], ast.Expr) and
