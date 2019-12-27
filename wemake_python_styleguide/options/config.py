@@ -129,7 +129,7 @@ You can also show all options that ``flake8`` supports by running:
 
 """
 
-from typing import ClassVar, FrozenSet, Mapping, Optional, Sequence, Union
+from typing import ClassVar, Mapping, Optional, Sequence, Union
 
 import attr
 from flake8.options.manager import OptionManager
@@ -137,7 +137,7 @@ from typing_extensions import final
 
 from wemake_python_styleguide.options import defaults
 
-ConfigValuesTypes = Union[str, int, bool, FrozenSet[str]]
+ConfigValuesTypes = Union[str, int, bool, Sequence[str]]
 
 
 @final
