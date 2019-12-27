@@ -33,10 +33,10 @@ I_CONTROL_CODE: Final = True
 MAX_NOQA_COMMENTS: Final = 10  # guessed
 
 #: List of nested classes' names we allow to use.
-NESTED_CLASSES_WHITELIST: Final = frozenset((
+NESTED_CLASSES_WHITELIST: Final = (
     'Meta',  # django forms, models, drf, etc
     'Params',  # factoryboy specific
-))
+)
 
 
 # ===========
