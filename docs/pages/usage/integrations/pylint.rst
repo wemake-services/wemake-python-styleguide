@@ -8,7 +8,7 @@ Yes, we know that it is awesome. But, it has some drawbacks:
    Since we use ``mypy`` there is no sense in this feature.
    Without this feature a lot
    of other ``pylint`` features looses its point as well
-2. There are less exisitng plugins for ``pylint`` than for ``flake8``
+2. There are less existing plugins for ``pylint`` than for ``flake8``
 3. It uses custom ``ast`` parser and library, which can be problematic
 4. It is not strict enough for us.
    So, we will have to write our own plugin no matter what platform we use
