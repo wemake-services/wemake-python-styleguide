@@ -103,6 +103,8 @@ class ConfigurationOptions(Protocol):
     max_name_length: int
     max_noqa_comments: int
     nested_classes_whitelist: List[str]
+    allowed_domain_names: List[str]
+    forbidden_domain_names: List[str]
 
     # Complexity:
     max_arguments: int

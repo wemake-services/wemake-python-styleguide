@@ -3,7 +3,7 @@
 import ast
 import itertools
 from collections import Counter
-from typing import Callable, Iterable, List, Optional, Tuple, Union, cast
+from typing import Callable, Iterable, List, Optional, Tuple, Union, cast, Set
 
 from typing_extensions import final
 
@@ -45,6 +45,8 @@ AssignTargetsNameList = List[Union[str, Tuple[str]]]
 class _NameValidator(object):
     """Utility class to separate logic from the naming visitor."""
 
+    _variable_names_blacklist: Optional[Set[str]]
+
     def __init__(
         self,
         error_callback: Callable[[base.BaseViolation], None],
@@ -53,6 +55,7 @@ class _NameValidator(object):
         """Creates new instance of a name validator."""
         self._error_callback = error_callback
         self._options = options
+        self._variable_names_blacklist = None
 
     def check_name(
         self,
@@ -61,7 +64,7 @@ class _NameValidator(object):
         *,
         is_first_argument: bool = False,
     ) -> None:
-        if logical.is_wrong_name(name, VARIABLE_NAMES_BLACKLIST):
+        if logical.is_wrong_name(name, self.variable_names_blacklist):
             self._error_callback(
                 naming.WrongVariableNameViolation(node, text=name),
             )
@@ -108,6 +111,17 @@ class _NameValidator(object):
                 self._error_callback(
                     naming.UpperCaseAttributeViolation(target, text=target.id),
                 )
+
+    @property
+    def variable_names_blacklist(self) -> Set[str]:
+        if self._variable_names_blacklist is None:
+            self._variable_names_blacklist = {
+                *VARIABLE_NAMES_BLACKLIST,
+                *self._options.forbidden_domain_names,
+            }
+            for name in self._options.allowed_domain_names:
+                self._variable_names_blacklist.discard(name)
+        return self._variable_names_blacklist
 
     def _ensure_underscores(self, node: ast.AST, name: str):
         if access.is_private(name):

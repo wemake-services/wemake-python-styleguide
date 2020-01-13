@@ -42,6 +42,8 @@ class _ValidatedOptions(object):
         validator=[_min_max(min=1, max=defaults.MAX_NOQA_COMMENTS)],
     )
     nested_classes_whitelist: List[str]
+    allowed_domain_names: List[str]
+    forbidden_domain_names: List[str]
 
     # Complexity:
     max_arguments: int = attr.ib(validator=[_min_max(min=1)])
