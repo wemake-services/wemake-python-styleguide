@@ -50,30 +50,3 @@ def test_name_in_allowed_domain_names_option(
     )
     visitor.run()
     assert_errors(visitor, [])
-
-
-@pytest.mark.parametrize('name', [
-    'handle',
-    'visitor',
-])
-def test_name_in_both_domain_names_options(
-    assert_errors,
-    parse_ast_tree,
-    naming_template,
-    options,
-    mode,
-    name,
-):
-    """Check case when both domain-names options passed.
-
-    Ensures that `allowed-domain-names` takes precedence over
-    `forbidden-domain-names`.
-    """
-    tree = parse_ast_tree(mode(naming_template.format(name)))
-
-    visitor = WrongNameVisitor(
-        options(forbidden_domain_names=[name], allowed_domain_names=[name]),
-        tree=tree,
-    )
-    visitor.run()
-    assert_errors(visitor, [])
