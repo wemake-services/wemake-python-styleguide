@@ -36,7 +36,7 @@ def test_wrong_variable_name(
     'visitor',
     'name_validator',
 ])
-def test_variable_name_is_valid_but_its_listed_in_forbidden_domain_names_option(
+def test_name_in_forbidden_domain_names_option(
     assert_errors,
     assert_error_text,
     parse_ast_tree,

@@ -3,7 +3,7 @@
 import ast
 import itertools
 from collections import Counter
-from typing import Callable, Iterable, List, Optional, Tuple, Union, cast, Set
+from typing import Callable, Iterable, List, Optional, Set, Tuple, Union, cast
 
 from typing_extensions import final
 

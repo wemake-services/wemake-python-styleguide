@@ -33,7 +33,7 @@ def test_naming_correct(
     'handle',
     'other_name',  # unknown values are ignored silently
 ])
-def test_variable_name_is_wrong_but_its_listed_in_allowed_domain_names_option(
+def test_name_in_allowed_domain_names_option(
     assert_errors,
     parse_ast_tree,
     naming_template,
@@ -56,7 +56,7 @@ def test_variable_name_is_wrong_but_its_listed_in_allowed_domain_names_option(
     'handle',
     'visitor',
 ])
-def test_variable_name_is_wrong_and_its_listed_in_both_domain_names_options(
+def test_name_in_both_domain_names_options(
     assert_errors,
     parse_ast_tree,
     naming_template,
@@ -64,7 +64,11 @@ def test_variable_name_is_wrong_and_its_listed_in_both_domain_names_options(
     mode,
     name,
 ):
-    """Ensures that `allowed-domain-names` takes precedence over `forbidden-domain-names`."""
+    """Check case when both domain-names options passed.
+
+    Ensures that `allowed-domain-names` takes precedence over
+    `forbidden-domain-names`.
+    """
     tree = parse_ast_tree(mode(naming_template.format(name)))
 
     visitor = WrongNameVisitor(
