@@ -12,11 +12,11 @@ from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
     SPECIAL_ARGUMENT_NAMES_WHITELIST,
-    VARIABLE_NAMES_BLACKLIST,
 )
 from wemake_python_styleguide.logic import functions, nodes
 from wemake_python_styleguide.logic.naming import (
     access,
+    blacklists,
     builtins,
     logical,
     name_nodes,
@@ -45,7 +45,7 @@ AssignTargetsNameList = List[Union[str, Tuple[str]]]
 class _NameValidator(object):
     """Utility class to separate logic from the naming visitor."""
 
-    _variable_names_blacklist: Optional[Set[str]]
+    variable_names_blacklist: Set[str]
 
     def __init__(
         self,
@@ -55,7 +55,9 @@ class _NameValidator(object):
         """Creates new instance of a name validator."""
         self._error_callback = error_callback
         self._options = options
-        self._variable_names_blacklist = None
+        self.variable_names_blacklist = (
+            blacklists.variable_names_blacklist_from(options)
+        )
 
     def check_name(
         self,
@@ -111,17 +113,6 @@ class _NameValidator(object):
                 self._error_callback(
                     naming.UpperCaseAttributeViolation(target, text=target.id),
                 )
-
-    @property
-    def variable_names_blacklist(self) -> Set[str]:
-        if self._variable_names_blacklist is None:
-            self._variable_names_blacklist = {
-                *VARIABLE_NAMES_BLACKLIST,
-                *self._options.forbidden_domain_names,
-            }
-            for name in self._options.allowed_domain_names:
-                self._variable_names_blacklist.discard(name)
-        return self._variable_names_blacklist
 
     def _ensure_underscores(self, node: ast.AST, name: str):
         if access.is_private(name):
