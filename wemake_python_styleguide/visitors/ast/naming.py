@@ -3,7 +3,16 @@
 import ast
 import itertools
 from collections import Counter
-from typing import Callable, Iterable, List, Optional, Set, Tuple, Union, cast
+from typing import (
+    Callable,
+    FrozenSet,
+    Iterable,
+    List,
+    Optional,
+    Tuple,
+    Union,
+    cast,
+)
 
 from typing_extensions import final
 
@@ -45,7 +54,7 @@ AssignTargetsNameList = List[Union[str, Tuple[str]]]
 class _NameValidator(object):
     """Utility class to separate logic from the naming visitor."""
 
-    variable_names_blacklist: Set[str]
+    variable_names_blacklist: FrozenSet[str]
 
     def __init__(
         self,
@@ -55,7 +64,7 @@ class _NameValidator(object):
         """Creates new instance of a name validator."""
         self._error_callback = error_callback
         self._options = options
-        self.variable_names_blacklist = (
+        self._variable_names_blacklist = (
             blacklists.variable_names_blacklist_from(options)
         )
 
@@ -66,7 +75,7 @@ class _NameValidator(object):
         *,
         is_first_argument: bool = False,
     ) -> None:
-        if logical.is_wrong_name(name, self.variable_names_blacklist):
+        if logical.is_wrong_name(name, self._variable_names_blacklist):
             self._error_callback(
                 naming.WrongVariableNameViolation(node, text=name),
             )
