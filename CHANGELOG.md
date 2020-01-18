@@ -13,9 +13,9 @@ Semantic versioning in our case means:
 
 ### Bugfixes
 
-- Fixes supported python versions in PyPI to be `3.6` and `3.7`
 - Fix false positive ImplicitYieldFromViolation for async functions #1057
 - Fixes nested-classes-whitelist option default value for flake8 prior 3.7.8 #1093
+- Improve boolean non-keyword arguments validation #1114
 
 ### Misc
 
