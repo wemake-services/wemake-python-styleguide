@@ -36,3 +36,5 @@ If you have any feedback, just write it here.
 
 It can be whatever you want!
 -->
+
+🙏 Please, if you or your company is finding wemake-python-styleguide valuable, help us sustain the project by sponsoring it transparently on https://opencollective.com/wemake-python-styleguide. As a thank you, your profile/company logo will be added to our main README which receives hundreds of unique visitors per day.
