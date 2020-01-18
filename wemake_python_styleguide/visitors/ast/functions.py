@@ -82,6 +82,9 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
             )
 
     def _check_boolean_arguments(self, node: ast.Call) -> None:
+        # Calls with single boolean argument are allowed
+        if len(node.args) == 1 and not node.keywords:
+            return
         for arg in node.args:
             if isinstance(arg, ast.NameConstant):
                 # We do not check for `None` values here:

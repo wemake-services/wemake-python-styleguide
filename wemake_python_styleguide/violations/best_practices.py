@@ -1025,6 +1025,8 @@ class BooleanPositionalArgumentViolation(ASTViolation):
         It is almost impossible to tell, what does this parameter means.
         And you almost always have to look up the implementation to tell
         what is going on.
+        The only exception from this rule is passing booleans as
+        non-keyword argument when it is the only passed argument.
 
     Solution:
         Pass booleans as keywords only.
@@ -1033,10 +1035,11 @@ class BooleanPositionalArgumentViolation(ASTViolation):
     Example::
 
         # Correct:
-        UsersRepository.update(cache=True)
+        UserRepository.update(True)
+        UsersRepository.add(user, cache=True)
 
         # Wrong:
-        UsersRepository.update(True)
+        UsersRepository.add(user, True)
 
     .. versionadded:: 0.6.0
 
