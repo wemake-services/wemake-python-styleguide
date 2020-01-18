@@ -197,6 +197,9 @@ crashlytics-build.properties
 fabric.properties
 
 ### Custom ###
+# Buggy:
+.vscode/
+
 # Used for testing:
 ex.py
 setup.py

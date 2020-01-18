@@ -22,6 +22,7 @@ Welcome to the strictest and most opinionated python linter ever.
 `wemake-python-styleguide` is actually a [flake8](http://flake8.pycqa.org/en/latest/)
 plugin with [some other plugins](https://wemake-python-stylegui.de/en/latest/pages/usage/violations/index.html#external-plugins) as dependencies.
 
+
 ## Quickstart
 
 ```bash

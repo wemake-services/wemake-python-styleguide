@@ -51,7 +51,7 @@ WPS = "wemake_python_styleguide.checker:Checker"
 wemake = "wemake_python_styleguide.formatter:WemakeFormatter"
 
 [tool.poetry.dependencies]
-python = "3.6 || 3.7"
+python = "^3.6"
 
 flake8 = "^3.7"
 attrs = "*"
