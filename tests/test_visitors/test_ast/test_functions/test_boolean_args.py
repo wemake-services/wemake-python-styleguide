@@ -11,6 +11,7 @@ from wemake_python_styleguide.visitors.ast.functions import (
 
 correct_argument = 'some(0, 1, keyword={0}, other={0})'
 wrong_argument = 'some({0}, {0})'
+single_argument = 'some({0})'
 
 
 @pytest.mark.parametrize('argument', [
@@ -83,3 +84,24 @@ def test_wrong_boolean_argument(
         BooleanPositionalArgumentViolation,
         BooleanPositionalArgumentViolation,
     ])
+
+
+@pytest.mark.parametrize('argument', [True, False])
+def test_single_boolean_argument_allowed(
+    assert_errors,
+    parse_ast_tree,
+    argument,
+    default_options,
+):
+    """Test calls with single boolean argument.
+
+    Ensure boolean argument can be passed as positional argument when
+    it is the only call's argument.
+
+    """
+    tree = parse_ast_tree(single_argument.format(argument))
+
+    visitor = WrongFunctionCallVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])

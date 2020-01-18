@@ -347,7 +347,7 @@ try:
 except BaseException:  # noqa: WPS424
     anti_wps428 = 1
 
-call_with_positional_bool(True)  # noqa: WPS425
+call_with_positional_bool(True, keyword=1)  # noqa: WPS425
 
 
 class MyInt(int):  # noqa: WPS600
