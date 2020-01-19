@@ -16,8 +16,6 @@ Semantic versioning in our case means:
 - Fix false positive ImplicitYieldFromViolation for async functions #1057
 - Fixes nested-classes-whitelist option default value for flake8 prior 3.7.8 #1093
 - Improve boolean non-keyword arguments validation #1114
-- Fixes `flakehell` docs
-- Fixes `MAX_NOQA_COMMENTS` and related violation docs
 
 ### Misc
 
@@ -27,6 +25,9 @@ Semantic versioning in our case means:
 - Several small refactoring sessions
 - Adds `hypothesis`-based tests
 - Adds `flakehell` base config
+- Fixes `flakehell` docs
+- Fixes `MAX_NOQA_COMMENTS` and related violation docs
+- Fixes `OverusedExpressionViolation` and `TooManyExpressionsViolation` docs
 
 
 ## 0.13.3

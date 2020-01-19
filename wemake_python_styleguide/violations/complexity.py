@@ -261,12 +261,25 @@ class OverusedExpressionViolation(ASTViolation):
     """
     Forbids to have overused expressions in a module, function or method.
 
+    What do we call an "overused expression"? When you use any expression
+    (like ``user_dict['age']`` for example) inside your code,
+    you always have to track that you are not using it "too much".
+    Because if that expression is everywhere inside your code,
+    it is a sign of a problem. It means that you are missing an abstraction.
+
+    We check overused expression on two levels:
+
+    - per each function
+    - per all module
+
+    Related to :class:`~TooManyExpressionsViolation`.
+
     Reasoning:
         Overusing expression lead to losing the parts that can and should
-        be refactored into methods and properties of objects.
+        be refactored into variables, methods, and properties of objects.
 
     Solution:
-        Refactor expressions to be attribute, method, or a new variable.
+        Refactor expressions to be an attribute, a method, or a new variable.
 
     Configuration:
         This rule is configurable with ``--max-module-expressions``.
@@ -392,7 +405,14 @@ class TooManyReturnsViolation(ASTViolation):
 @final
 class TooManyExpressionsViolation(ASTViolation):
     """
-    Forbids putting too many expressions in a unit of code.
+    Forbids putting too many expressions in a single function.
+
+    This rule is quite similar to "max lines" in a function,
+    but is much nicer. Because we don't count lines,
+    we count real code entities. This way adding just several extra empty
+    lines for readability will never trigger this violation.
+
+    Related to :class:`~OverusedExpressionViolation`.
 
     Reasoning:
         When there are too many expressions it means that this specific
@@ -407,6 +427,9 @@ class TooManyExpressionsViolation(ASTViolation):
         :str:`wemake_python_styleguide.options.defaults.MAX_EXPRESSIONS`
 
     .. versionadded:: 0.1.0
+
+    See also:
+        https://en.wikipedia.org/wiki/Expression_(computer_science)
 
     """
 
