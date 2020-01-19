@@ -4,7 +4,7 @@ We follow [Semantic Versions](https://semver.org/) since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 Semantic versioning in our case means:
-- Bugfixes do not bring new features, code that passes on `x.y.0` should pass on `x.y.1`. With the only exception that bugfix can raise old violations in new places, if they were hidden by a buggy behaviour. 
+- Bugfixes do not bring new features, code that passes on `x.y.0` should pass on `x.y.1`. With the only exception that bugfix can raise old violations in new places, if they were hidden by a buggy behaviour.
 - Minor releases do bring new features and configuration options. New violations can be added. Code that passes `x.0.y` might not pass on `x.1.y` release.
 - Major releases inidicate significant milestones or serious breaking changes.
 
@@ -16,6 +16,8 @@ Semantic versioning in our case means:
 - Fix false positive ImplicitYieldFromViolation for async functions #1057
 - Fixes nested-classes-whitelist option default value for flake8 prior 3.7.8 #1093
 - Improve boolean non-keyword arguments validation #1114
+- Fixes `flakehell` docs
+- Fixes `MAX_NOQA_COMMENTS` and related violation docs
 
 ### Misc
 
@@ -24,6 +26,7 @@ Semantic versioning in our case means:
 - Updates `flake8-eradicate`
 - Several small refactoring sessions
 - Adds `hypothesis`-based tests
+- Adds `flakehell` base config
 
 
 ## 0.13.3

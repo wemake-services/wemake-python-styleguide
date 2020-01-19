@@ -32,3 +32,13 @@ and keep the errors count at 0.
 
 .. image:: https://static.deepsource.io/deepsource-badge-light.svg
     :target: https://deepsource.io/gh/wemake-services/wemake-python-styleguide/?ref=repository-badge
+
+flakehell
+~~~~~~~~~
+
+You can also use ``pylint`` together with our linter if you
+want so (however, we do not recommend to use ``pylint`` at all)
+with the help of ``flakehell``.
+
+See `flakehell docs <https://github.com/life4/flakehell>`_
+for more information.

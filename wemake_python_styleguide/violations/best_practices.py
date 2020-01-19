@@ -223,8 +223,6 @@ class OveruseOfNoqaCommentViolation(SimpleViolation):
     Forbids to use too many ``# noqa`` comments.
 
     We count it on a per-module basis.
-    We use :str:`wemake_python_styleguide.constants.MAX_NOQA_COMMENTS`
-    as a hard limit.
 
     Reasoning:
         Having too many ``# noqa`` comments make your code

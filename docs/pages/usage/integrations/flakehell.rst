@@ -14,6 +14,24 @@ features to the core ``flake8`` with the new command line utility:
 .. code:: bash
 
   pip install flakehell  # however we recommend to use `poetry`
+
+Then you will have to configure ``flakehell`` inside your ``pyproject.toml``:
+
+- You can run ``flakehell plugins`` to see what plugins are you missing
+  and configure it properly
+- Or you can use our `preset <https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/flakehell.toml>`_
+  as ``base`` configuration like so:
+
+  .. code:: toml
+
+    [tool.flakehell]
+    # optionally inherit from remote config (or local if you want)
+    base = "https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/flakehell.toml"
+
+And then:
+
+.. code:: bash
+
   flakehell lint  # accepts the same arguments, does the same as `flake8`
 
 The most exciting feature for us is ``baseline`` generation.

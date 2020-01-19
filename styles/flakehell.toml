@@ -1,0 +1,37 @@
+# `flakehell` specific configuration.
+# This file is served as `base` config under `[tool.flakehell]`
+
+# Make sure to install it with:
+# `pip install flakehell`
+
+# See:
+# https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/flakehell.html
+
+# This file is not related to `nitpick` at all.
+# This file is optional, not required for `flake8` users.
+
+[tool.flakehell]
+format = "grouped"
+show_source = true
+statistics = false
+doctests = true
+enable_extensions = "G"
+
+accept_encodings = "utf-8"
+max_complexity = 6
+max_line_length = 80
+radon_max_cc = 10
+radon_show_closures = true
+radon_no_assert = true
+
+ignore = "D100, D104, D401, W504, RST303, RST304, DAR103, DAR203"
+
+[tool.flakehell.plugins]
+"flake8-*" = ["+*"]
+mccabe = ["+*"]
+nitpick = ["+*"]
+"pep8-naming" = ["+*"]
+pycodestyle = ["+*"]
+pyflakes = ["+*"]
+radon = ["+*"]
+"wemake-python-styleguide" = ["+*"]
