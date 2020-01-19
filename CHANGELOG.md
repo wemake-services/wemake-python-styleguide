@@ -9,7 +9,14 @@ Semantic versioning in our case means:
 - Major releases inidicate significant milestones or serious breaking changes.
 
 
-## 0.13.4 WIP
+## 0.14.0 WIP
+
+
+## 0.13.4
+
+This is the last `0.13.x` supporting release,
+we have to concentrate on `python3.8` support
+and `0.14.0` which will introduce it to the public.
 
 ### Bugfixes
 
