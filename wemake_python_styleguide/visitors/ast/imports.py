@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import abc
 import ast
 from itertools import chain
-from typing import Callable, Iterable, cast
+from typing import Callable, Iterable
 
 from typing_extensions import final
 
@@ -29,7 +28,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 ErrorCallback = Callable[[BaseViolation], None]  # TODO: alias and move
 
 
-class _BaseImportValidator(abc.ABC):
+class _BaseImportValidator(object):
     """Base utility class to separate logic from the visitor."""
 
     def __init__(
@@ -40,8 +39,7 @@ class _BaseImportValidator(abc.ABC):
         self._error_callback = error_callback
         self._options = options
 
-    @abc.abstractmethod
-    def validate(self, node: AnyImport):
+    def _validate_any_import(self, node: AnyImport) -> None:
         self._check_nested_import(node)
         self._check_alias(node)
         self._check_same_alias(node)
@@ -74,9 +72,8 @@ class _BaseImportValidator(abc.ABC):
 class _ImportValidator(_BaseImportValidator):
     """Validator of ``ast.Import`` nodes."""
 
-    def validate(self, node: AnyImport) -> None:
-        node = cast(ast.Import, node)
-        super().validate(node)
+    def validate(self, node: ast.Import) -> None:
+        self._validate_any_import(node)
         self._check_dotted_raw_import(node)
         self._check_protected_import(node)
 
@@ -100,9 +97,8 @@ class _ImportValidator(_BaseImportValidator):
 class _ImportFromValidator(_BaseImportValidator):
     """Validator of ``ast.ImportFrom`` nodes."""
 
-    def validate(self, node: AnyImport) -> None:
-        node = cast(ast.ImportFrom, node)
-        super().validate(node)
+    def validate(self, node: ast.ImportFrom) -> None:
+        self._validate_any_import(node)
         self._check_from_import(node)
         self._check_protected_import_from_module(node)
         self._check_protected_import_from_members(node)
