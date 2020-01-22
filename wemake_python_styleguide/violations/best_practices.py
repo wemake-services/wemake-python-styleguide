@@ -1426,6 +1426,8 @@ class ProtectedModuleViolation(ASTViolation):
     """
     Forbids to import protected modules.
 
+    Related to :class:`~ProtectedModuleMemberViolation`.
+
     Reasoning:
         When importing protected modules we break a contract
         that authors of this module enforce.
@@ -1951,6 +1953,8 @@ class FloatKeyViolation(ASTViolation):
 class ProtectedModuleMemberViolation(ASTViolation):
     """
     Forbids to import protected objects from modules.
+
+    Related to :class:`~ProtectedModuleViolation`.
 
     Reasoning:
         When importing protected modules' members we break a contract

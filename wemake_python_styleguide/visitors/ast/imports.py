@@ -125,9 +125,9 @@ class WrongImportVisitor(BaseNodeVisitor):
         Raises:
             DottedRawImportViolation
             NestedImportViolation
-            ProtectedModuleViolation,
+            ProtectedModuleViolation
             SameAliasImportViolation
-            VagueImportViolation,
+            VagueImportViolation
 
         """
         self._validator.check_nested_import(node)
@@ -145,10 +145,10 @@ class WrongImportVisitor(BaseNodeVisitor):
             FutureImportViolation
             LocalFolderImportViolation
             NestedImportViolation
-            ProtectedModuleMemberViolation,
-            ProtectedModuleViolation,
+            ProtectedModuleMemberViolation
+            ProtectedModuleViolation
             SameAliasImportViolation
-            VagueImportViolation,
+            VagueImportViolation
 
         """
         self._validator.check_from_import(node)
