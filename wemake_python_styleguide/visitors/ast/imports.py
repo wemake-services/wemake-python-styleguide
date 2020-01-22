@@ -2,7 +2,7 @@
 
 import ast
 from itertools import chain
-from typing import Callable
+from typing import Callable, Iterable
 
 from typing_extensions import final
 
@@ -14,6 +14,7 @@ from wemake_python_styleguide.violations.base import BaseViolation
 from wemake_python_styleguide.violations.best_practices import (
     FutureImportViolation,
     NestedImportViolation,
+    ProtectedModuleMemberViolation,
     ProtectedModuleViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
@@ -27,7 +28,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 ErrorCallback = Callable[[BaseViolation], None]  # TODO: alias and move
 
 
-@final
+@final  # noqa: WPS214
 class _ImportsValidator(object):
     """Utility class to separate logic from the visitor."""
 
@@ -80,11 +81,32 @@ class _ImportsValidator(object):
                     SameAliasImportViolation(node, text=alias.name),
                 )
 
-    def check_protected_import(self, node: AnyImport) -> None:
-        import_names = [alias.name for alias in node.names]
-        for name in chain(imports.get_import_parts(node), import_names):
+    def check_protected_import(self, node: ast.Import) -> None:
+        self._check_protected_names(
+            chain.from_iterable(
+                [alias.name.split('.') for alias in node.names],
+            ),
+            ProtectedModuleViolation(node),
+        )
+
+    def check_protected_import_from(self, node: ast.ImportFrom) -> None:
+        self._check_protected_names(
+            imports.get_import_parts(node),
+            ProtectedModuleViolation(node),
+        )
+        self._check_protected_names(
+            [alias.name for alias in node.names],
+            ProtectedModuleMemberViolation(node),
+        )
+
+    def _check_protected_names(
+        self,
+        names: Iterable[str],
+        violation: BaseViolation,
+    ) -> None:
+        for name in names:
             if access.is_protected(name):
-                self._error_callback(ProtectedModuleViolation(node))
+                self._error_callback(violation)
 
 
 @final
@@ -101,9 +123,11 @@ class WrongImportVisitor(BaseNodeVisitor):
         Used to find wrong ``import`` statements.
 
         Raises:
-            SameAliasImportViolation
             DottedRawImportViolation
             NestedImportViolation
+            ProtectedModuleViolation,
+            SameAliasImportViolation
+            VagueImportViolation,
 
         """
         self._validator.check_nested_import(node)
@@ -118,15 +142,18 @@ class WrongImportVisitor(BaseNodeVisitor):
         Used to find wrong ``from ... import ...`` statements.
 
         Raises:
-            SameAliasImportViolation
-            NestedImportViolation
-            LocalFolderImportViolation
             FutureImportViolation
+            LocalFolderImportViolation
+            NestedImportViolation
+            ProtectedModuleMemberViolation,
+            ProtectedModuleViolation,
+            SameAliasImportViolation
+            VagueImportViolation,
 
         """
         self._validator.check_from_import(node)
         self._validator.check_nested_import(node)
         self._validator.check_alias(node)
         self._validator.check_same_alias(node)
-        self._validator.check_protected_import(node)
+        self._validator.check_protected_import_from(node)
         self.generic_visit(node)

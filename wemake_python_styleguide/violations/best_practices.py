@@ -69,6 +69,7 @@ Summary
    StringConstantRedefinedViolation
    IncorrectExceptOrderViolation
    FloatKeyViolation
+   ProtectedModuleMemberViolation
 
 Best practices
 --------------
@@ -123,6 +124,7 @@ Best practices
 .. autoclass:: StringConstantRedefinedViolation
 .. autoclass:: IncorrectExceptOrderViolation
 .. autoclass:: FloatKeyViolation
+.. autoclass:: ProtectedModuleMemberViolation
 
 """
 
@@ -1431,21 +1433,22 @@ class ProtectedModuleViolation(ASTViolation):
         our code at any moment.
 
     Solution:
-        Do not import anything from protected modules.
+        Do not import protected modules.
         Respect the encapsulation.
 
     Example::
 
         # Correct:
+        import public_module
         from some.public.module import FooClass
 
         # Wrong:
         import _compat
         from some._protected.module import BarClass
-        from some.module import _protected
 
     .. versionadded:: 0.3.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.14.0
 
     """
 
@@ -1942,3 +1945,35 @@ class FloatKeyViolation(ASTViolation):
 
     error_template = 'Found float used as a key'
     code = 449
+
+
+@final
+class ProtectedModuleMemberViolation(ASTViolation):
+    """
+    Forbids to import protected objects from modules.
+
+    Reasoning:
+        When importing protected modules' members we break a contract
+        that authors of this module enforce.
+        This way we are not respecting encapsulation and it may break
+        our code at any moment.
+
+    Solution:
+        Do not import protected objects from modules.
+        Respect the encapsulation.
+
+    Example::
+
+        # Correct:
+        from some.public.module import FooClass
+
+        # Wrong:
+        from some.module import _protected
+        from some.module import _protected as not_protected
+
+    .. versionadded:: 0.14.0
+
+    """
+
+    error_template = 'Found protected object import'
+    code = 450

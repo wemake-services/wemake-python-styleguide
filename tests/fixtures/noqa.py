@@ -11,7 +11,8 @@ from __future__ import print_function  # noqa: WPS422
 import os.path  # noqa: WPS301
 import sys as sys  # noqa: WPS113
 
-from some import _protected  # noqa: WPS436
+from _some import protected  # noqa: WPS436
+from some import _protected  # noqa: WPS450
 
 from .version import get_version  # noqa: WPS300
 
