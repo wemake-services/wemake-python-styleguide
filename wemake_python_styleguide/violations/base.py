@@ -39,6 +39,7 @@ Reference
 
 """
 
+import abc
 import ast
 import tokenize
 from typing import ClassVar, Optional, Set, Tuple, Union
@@ -53,7 +54,7 @@ ErrorNode = Union[
 ]
 
 
-class BaseViolation(object):
+class BaseViolation(abc.ABC):
     """
     Abstract base class for all style violations.
 

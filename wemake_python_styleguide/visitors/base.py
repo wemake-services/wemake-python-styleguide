@@ -62,6 +62,7 @@ Reference
 
 """
 
+import abc
 import ast
 import tokenize
 from typing import List, Sequence, Type
@@ -74,7 +75,7 @@ from wemake_python_styleguide.types import ConfigurationOptions
 from wemake_python_styleguide.violations.base import BaseViolation
 
 
-class BaseVisitor(object):
+class BaseVisitor(abc.ABC):
     """
     Abstract base class for different types of visitors.
 
@@ -118,15 +119,14 @@ class BaseVisitor(object):
         """Adds violation to the visitor."""
         self.violations.append(violation)
 
+    @abc.abstractmethod
     def run(self) -> None:
         """
-        Abstract method to run a visitor.
+        Runs a visitor.
 
         Each visitor should know what exactly it needs
         to do when it was told to ``run``.
-        This method should be defined in all subclasses.
         """
-        raise NotImplementedError('Should be defined in a subclass')
 
     def _post_visit(self) -> None:
         """
@@ -192,13 +192,9 @@ class BaseFilenameVisitor(BaseVisitor):
 
     stem: str
 
+    @abc.abstractmethod
     def visit_filename(self) -> None:
-        """
-        Abstract method to check module file names.
-
-        This method should be overridden in a subclass.
-        """
-        raise NotImplementedError('Should be defined in a subclass')
+        """Checks module file names."""
 
     @final
     def run(self) -> None:
