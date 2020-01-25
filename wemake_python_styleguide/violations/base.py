@@ -54,7 +54,7 @@ ErrorNode = Union[
 ]
 
 
-class BaseViolation(abc.ABC):
+class BaseViolation(object, metaclass=abc.ABCMeta):
     """
     Abstract base class for all style violations.
 
@@ -121,7 +121,7 @@ class BaseViolation(abc.ABC):
         return 0, 0
 
 
-class _BaseASTViolation(BaseViolation):
+class _BaseASTViolation(BaseViolation, metaclass=abc.ABCMeta):
     """Used as a based type for all ``ast`` violations."""
 
     _node: Optional[ast.AST]
@@ -133,13 +133,13 @@ class _BaseASTViolation(BaseViolation):
         return line_number, column_offset
 
 
-class ASTViolation(_BaseASTViolation):
+class ASTViolation(_BaseASTViolation, metaclass=abc.ABCMeta):
     """Violation for ``ast`` based style visitors."""
 
     _node: ast.AST
 
 
-class MaybeASTViolation(_BaseASTViolation):
+class MaybeASTViolation(_BaseASTViolation, metaclass=abc.ABCMeta):
     """
     Violation for ``ast`` and modules visitors.
 
@@ -152,7 +152,7 @@ class MaybeASTViolation(_BaseASTViolation):
         super().__init__(node, text=text)
 
 
-class TokenizeViolation(BaseViolation):
+class TokenizeViolation(BaseViolation, metaclass=abc.ABCMeta):
     """Violation for ``tokenize`` based visitors."""
 
     _node: tokenize.TokenInfo
@@ -162,7 +162,7 @@ class TokenizeViolation(BaseViolation):
         return self._node.start
 
 
-class SimpleViolation(BaseViolation):
+class SimpleViolation(BaseViolation, metaclass=abc.ABCMeta):
     """Violation for cases where there's no associated nodes."""
 
     _node: None
