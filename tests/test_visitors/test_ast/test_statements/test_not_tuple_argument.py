@@ -19,9 +19,7 @@ from wemake_python_styleguide.visitors.ast.statements import (
     'a = {0}((x for x in some))',
     'a = {0}((x for x in some), b)',
 ])
-@pytest.mark.parametrize('method', [
-    *TUPLE_ARGUMENTS_METHODS,
-])
+@pytest.mark.parametrize('method', TUPLE_ARGUMENTS_METHODS)
 def test_passed(
     assert_errors,
     parse_ast_tree,
@@ -47,9 +45,7 @@ def test_passed(
     'a = {0}({1}1{2}, b, {1}2{2})',
     'a = {0}({1}x for x in some{2})',
 ])
-@pytest.mark.parametrize('method', [
-    *TUPLE_ARGUMENTS_METHODS,
-])
+@pytest.mark.parametrize('method', TUPLE_ARGUMENTS_METHODS)
 @pytest.mark.parametrize('braces', ['[]', '{}'])  # noqa: P103
 def test_no_passed(
     assert_errors,
@@ -71,9 +67,7 @@ def test_no_passed(
 @pytest.mark.parametrize('code', [
     'a = {0}_func([1])',
 ])
-@pytest.mark.parametrize('method', [
-    *TUPLE_ARGUMENTS_METHODS,
-])
+@pytest.mark.parametrize('method', TUPLE_ARGUMENTS_METHODS)
 def test_no_checkable(
     assert_errors,
     parse_ast_tree,

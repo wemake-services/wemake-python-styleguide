@@ -14,6 +14,7 @@ from wemake_python_styleguide.visitors.ast import (
     exceptions,
     functions,
     imports,
+    iterables,
     keywords,
     loops,
     modules,
@@ -84,6 +85,8 @@ PRESET: Final = (
     conditions.IfStatementVisitor,
     conditions.BooleanConditionVisitor,
     conditions.ImplicitBoolPatternsVisitor,
+
+    iterables.IterableUnpackingVisitor,
 
     # Classes:
     classes.WrongClassVisitor,

@@ -81,6 +81,7 @@ Summary
    IncorrectYieldFromTargetViolation
    ConsecutiveYieldsViolation
    BracketBlankLineViolation
+   IterableUnpackingViolation
 
 Consistency checks
 ------------------
@@ -141,6 +142,7 @@ Consistency checks
 .. autoclass:: IncorrectYieldFromTargetViolation
 .. autoclass:: ConsecutiveYieldsViolation
 .. autoclass:: BracketBlankLineViolation
+.. autoclass:: IterableUnpackingViolation
 
 """
 
@@ -2062,3 +2064,34 @@ class BracketBlankLineViolation(TokenizeViolation):
 
     error_template = 'Found an unnecessary blank line before a bracket'
     code = 355
+
+
+@final
+class IterableUnpackingViolation(ASTViolation):
+    """
+    Forbids unneccessary iterable unpacking.
+
+    Reasoning:
+        We do this for consistency.
+
+    Solution:
+        Do not use iterables unpacking, when it's not neccessary.
+
+    Example::
+
+        # Correct:
+        [1, *numbers, 99]
+        {*iterable, *other_iterable}
+        list(iterable)
+        first, *iterable = other_iterable
+
+        # Wrong:
+        [*iterable]
+        *iterable, = other_iterable
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found an unnecessary iterable unpacking'
+    code = 356

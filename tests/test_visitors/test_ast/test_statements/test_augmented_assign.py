@@ -27,9 +27,7 @@ OPERATIONS = frozenset((
 @pytest.mark.parametrize('code', [
     'a {0}= b',
 ])
-@pytest.mark.parametrize('operation', [
-    *OPERATIONS,
-])
+@pytest.mark.parametrize('operation', OPERATIONS)
 def test_augmented_assign(
     assert_errors,
     parse_ast_tree,
@@ -50,9 +48,7 @@ def test_augmented_assign(
 @pytest.mark.parametrize('code', [
     'a = a {0} b',
 ])
-@pytest.mark.parametrize('operation', [
-    *OPERATIONS,
-])
+@pytest.mark.parametrize('operation', OPERATIONS)
 def test_no_augmented_assign(
     assert_errors,
     parse_ast_tree,
@@ -77,9 +73,7 @@ def test_no_augmented_assign(
     'a = b {0} c',
     'a = b {0} a',
 ])
-@pytest.mark.parametrize('operation', [
-    *OPERATIONS,
-])
+@pytest.mark.parametrize('operation', OPERATIONS)
 def test_no_checkable_assign(
     assert_errors,
     parse_ast_tree,
