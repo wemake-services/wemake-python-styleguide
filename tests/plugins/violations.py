@@ -22,6 +22,18 @@ from wemake_python_styleguide.violations.base import (
     TokenizeViolation,
 )
 
+VIOLATIONS_MODULES = (
+    system,
+    naming,
+    complexity,
+    consistency,
+    best_practices,
+    refactoring,
+    oop,
+)
+
+_SESSION_SCOPE = 'session'
+
 
 def _is_violation_class(cls) -> bool:
     base_classes = {
@@ -38,18 +50,8 @@ def _is_violation_class(cls) -> bool:
 
 
 def _load_all_violation_classes():
-    modules = [
-        system,
-        naming,
-        complexity,
-        consistency,
-        best_practices,
-        refactoring,
-        oop,
-    ]
-
     classes = {}
-    for module in modules:
+    for module in VIOLATIONS_MODULES:
         classes_names_list = inspect.getmembers(module, _is_violation_class)
         only_classes = map(itemgetter(1), classes_names_list)
         classes.update({
@@ -58,7 +60,7 @@ def _load_all_violation_classes():
     return classes
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope=_SESSION_SCOPE)
 def all_violations():
     """Loads all violations from the package and creates a flat list."""
     classes = _load_all_violation_classes()
@@ -68,7 +70,7 @@ def all_violations():
     return all_errors_container
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope=_SESSION_SCOPE)
 def all_controlled_violations():
     """Loads all violations which may be tweaked using `i_control_code`."""
     classes = _load_all_violation_classes()
@@ -80,7 +82,33 @@ def all_controlled_violations():
     return controlled_errors_container
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope=_SESSION_SCOPE)
 def all_module_violations():
     """Loads all violations from the package."""
     return _load_all_violation_classes()
+
+
+@pytest.fixture(scope=_SESSION_SCOPE)
+def all_deprecated_violation_codes():
+    """Loads all deprecated codes from the package."""
+    codes = {}
+    for module in VIOLATIONS_MODULES:
+        module_deprecated_codes = getattr(module, 'DEPRECATED_CODES', ())
+        codes[module] = sorted(module_deprecated_codes)
+    return codes
+
+
+@pytest.fixture(scope=_SESSION_SCOPE)
+def all_violation_codes(all_module_violations, all_deprecated_violation_codes):
+    """Loads all codes and their violation classes from the package."""
+    all_codes = {}
+    for module in all_module_violations.keys():
+        violation_codes = {
+            violation.code: violation
+            for violation in all_module_violations[module]
+        }
+        deprecated_codes = {
+            code: None for code in all_deprecated_violation_codes[module]
+        }
+        all_codes[module] = {**violation_codes, **deprecated_codes}
+    return all_codes

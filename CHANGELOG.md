@@ -11,12 +11,14 @@ Semantic versioning in our case means:
 
 ## 0.14.0 WIP
 
-### Features 
+### Features
 
 - Extracts new violation - WPS450 from WPS436 #1118
 - Adds domain names options, that are used to create variable names' blacklist #1106
 
 ### Bugfixes
+
+- Remove ImplicitTernaryViolation - WPS332 #1099
 
 ### Misc
 

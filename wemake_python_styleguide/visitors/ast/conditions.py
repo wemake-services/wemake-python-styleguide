@@ -10,14 +10,12 @@ from typing_extensions import final
 from wemake_python_styleguide.logic import ifs, operators, source
 from wemake_python_styleguide.logic.compares import CompareBounds
 from wemake_python_styleguide.logic.functions import given_function_called
-from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     SameElementsInConditionViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
     ImplicitComplexCompareViolation,
-    ImplicitTernaryViolation,
     MultilineConditionsViolation,
 )
 from wemake_python_styleguide.violations.refactoring import (
@@ -225,13 +223,11 @@ class ImplicitBoolPatternsVisitor(BaseNodeVisitor):
         Checks that ``and`` and ``or`` do not form implicit anti-patterns.
 
         Raises:
-            ImplicitTernaryViolation
             ImplicitComplexCompareViolation
             ImplicitInConditionViolation
 
         """
         self._check_implicit_in(node)
-        self._check_implicit_ternary(node)
         self._check_implicit_complex_compare(node)
         self.generic_visit(node)
 
@@ -256,28 +252,6 @@ class ImplicitBoolPatternsVisitor(BaseNodeVisitor):
             self.add_violation(
                 ImplicitInConditionViolation(node, text=duplicate),
             )
-
-    def _check_implicit_ternary(self, node: ast.BoolOp) -> None:
-        if isinstance(get_parent(node), ast.BoolOp):
-            return
-
-        if not isinstance(node.op, ast.Or):
-            return
-
-        if len(node.values) != 2:
-            return
-
-        if not isinstance(node.values[0], ast.BoolOp):
-            return
-
-        is_implicit_ternary = (
-            len(node.values[0].values) == 2 and
-            not isinstance(node.values[1], ast.BoolOp) and
-            isinstance(node.values[0].op, ast.And) and
-            not isinstance(node.values[0].values[1], ast.BoolOp)
-        )
-        if is_implicit_ternary:
-            self.add_violation(ImplicitTernaryViolation(node))
 
     def _check_implicit_complex_compare(self, node: ast.BoolOp) -> None:
         if not isinstance(node.op, ast.And):
