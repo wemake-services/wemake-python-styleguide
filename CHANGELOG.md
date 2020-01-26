@@ -9,14 +9,20 @@ Semantic versioning in our case means:
 - Major releases inidicate significant milestones or serious breaking changes.
 
 
-## 0.14.0
+## 0.14.0 WIP
 
-+ use `abc` stdlib's module to mark abstract base classes #1122
-+ extract new violation - WPS450 from WPS436 #1118
-+ add domain names options, that are used to create variable names' blacklist #1106
+### Features 
+
+- Extracts new violation - WPS450 from WPS436 #1118
+- Adds domain names options, that are used to create variable names' blacklist #1106
+
+### Bugfixes
 
 ### Misc
-- Added `local-partial-types` to mypy config
+
+- Adds `local-partial-types` to mypy config
+- Uses `abc` stdlib's module to mark abstract base classes #1122
+
 
 ## 0.13.4
 
