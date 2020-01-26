@@ -313,8 +313,6 @@ def some_other_function():
     some_value = 1
     return some_value  # noqa: WPS331
 
-some_cond = cond() and 1 or None  # noqa: WPS332
-
 print(one > two and two > three)  # noqa: WPS333
 
 print(biggesst > middle >= smallest)  # noqa: WPS334

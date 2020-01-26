@@ -57,7 +57,6 @@ Summary
    UselessExceptCaseViolation
    UselessOperatorsViolation
    InconsistentReturnVariableViolation
-   ImplicitTernaryViolation
    ImplicitComplexCompareViolation
    ReversedComplexCompareViolation
    WrongLoopIterTypeViolation
@@ -118,7 +117,6 @@ Consistency checks
 .. autoclass:: UselessExceptCaseViolation
 .. autoclass:: UselessOperatorsViolation
 .. autoclass:: InconsistentReturnVariableViolation
-.. autoclass:: ImplicitTernaryViolation
 .. autoclass:: ImplicitComplexCompareViolation
 .. autoclass:: ReversedComplexCompareViolation
 .. autoclass:: WrongLoopIterTypeViolation
@@ -152,6 +150,8 @@ from wemake_python_styleguide.violations.base import (
     ASTViolation,
     TokenizeViolation,
 )
+
+DEPRECATED_CODES = (332,)
 
 
 @final
@@ -1300,35 +1300,6 @@ class InconsistentReturnVariableViolation(ASTViolation):
         'Found local variable that are only used in `return` statements'
     )
     code = 331
-
-
-@final
-class ImplicitTernaryViolation(ASTViolation):
-    """
-    Forbids to have implicit ternary expressions.
-
-    Reasoning:
-        This is done for consistency and readability reasons.
-        We believe that explicit ternary is better for readability.
-        This also allows you to identify hidden conditionals in your code.
-
-    Solution:
-        Refactor to use explicit ternary, or ``if`` condition.
-
-    Example::
-
-        # Correct:
-        some = one if cond() else two
-
-        # Wrong:
-        some = cond() and one or two
-
-    .. versionadded:: 0.10.0
-
-    """
-
-    code = 332
-    error_template = 'Found implicit ternary expression'
 
 
 @final

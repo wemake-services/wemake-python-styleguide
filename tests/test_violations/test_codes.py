@@ -32,13 +32,16 @@ def test_violations_start_zero(all_module_violations):
         assert starting_code == index * 100
 
 
-def test_no_holes(all_module_violations):
+def test_no_holes(all_violation_codes):
     """Ensures that there are no off-by-one errors."""
-    for module in all_module_violations.keys():
+    for module_codes in all_violation_codes.values():
         previous_code = None
-
-        for violation_class in all_module_violations[module]:
+        for code in sorted(module_codes.keys()):
             if previous_code is not None:
-                diff = violation_class.code - previous_code
-                assert diff == 1 or diff > 2, violation_class.__qualname__
-            previous_code = violation_class.code
+                diff = code - previous_code
+                assertion_name = (
+                    module_codes[code].__qualname__
+                    if module_codes[code] else 'DEPRECATED CODE'
+                )
+                assert diff == 1 or diff > 2, assertion_name
+            previous_code = code
