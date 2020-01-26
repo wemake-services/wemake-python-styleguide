@@ -2082,6 +2082,7 @@ class IterableUnpackingViolation(ASTViolation):
         # Correct:
         [1, *numbers, 99]
         {*iterable, *other_iterable}
+        list(iterable)
         first, *iterable = other_iterable
 
         # Wrong:
