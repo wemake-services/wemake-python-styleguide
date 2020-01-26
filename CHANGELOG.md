@@ -15,6 +15,8 @@ Semantic versioning in our case means:
 + extract new violation - WPS450 from WPS436 #1118
 + add domain names options, that are used to create variable names' blacklist #1106
 
+### Misc
+- Added `local-partial-types` to mypy config
 
 ## 0.13.4
 
