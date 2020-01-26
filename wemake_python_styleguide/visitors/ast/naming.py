@@ -3,7 +3,16 @@
 import ast
 import itertools
 from collections import Counter
-from typing import Callable, Iterable, List, Optional, Tuple, Union, cast
+from typing import (
+    Callable,
+    FrozenSet,
+    Iterable,
+    List,
+    Optional,
+    Tuple,
+    Union,
+    cast,
+)
 
 from typing_extensions import final
 
@@ -12,11 +21,11 @@ from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
     SPECIAL_ARGUMENT_NAMES_WHITELIST,
-    VARIABLE_NAMES_BLACKLIST,
 )
 from wemake_python_styleguide.logic import functions, nodes
 from wemake_python_styleguide.logic.naming import (
     access,
+    blacklists,
     builtins,
     logical,
     name_nodes,
@@ -45,6 +54,8 @@ AssignTargetsNameList = List[Union[str, Tuple[str]]]
 class _NameValidator(object):
     """Utility class to separate logic from the naming visitor."""
 
+    variable_names_blacklist: FrozenSet[str]
+
     def __init__(
         self,
         error_callback: Callable[[base.BaseViolation], None],
@@ -53,6 +64,9 @@ class _NameValidator(object):
         """Creates new instance of a name validator."""
         self._error_callback = error_callback
         self._options = options
+        self._variable_names_blacklist = (
+            blacklists.variable_names_blacklist_from(options)
+        )
 
     def check_name(
         self,
@@ -61,7 +75,7 @@ class _NameValidator(object):
         *,
         is_first_argument: bool = False,
     ) -> None:
-        if logical.is_wrong_name(name, VARIABLE_NAMES_BLACKLIST):
+        if logical.is_wrong_name(name, self._variable_names_blacklist):
             self._error_callback(
                 naming.WrongVariableNameViolation(node, text=name),
             )

@@ -54,6 +54,10 @@ You can also show all options that ``flake8`` supports by running:
 - ``max-noqa-comments`` - maximum number of `noqa` allowed in a module,
     defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_NOQA_COMMENTS`
+- ``allowed-domain-names`` - list of allowed domain names, defaults to
+    :str:`wemake_python_styleguide.options.defaults.ALLOWED_DOMAIN_NAMES`
+- ``forbidden-domain-names`` - list of forbidden domain names, defaults to
+    :str:`wemake_python_styleguide.options.defaults.FORBIDDEN_DOMAIN_NAMES`
 
 .. rubric:: Complexity options
 
@@ -213,6 +217,20 @@ class Configuration(object):
             '--nested-classes-whitelist',
             defaults.NESTED_CLASSES_WHITELIST,
             'List of nested classes names we allow to use.',
+            type='string',
+            comma_separated_list=True,
+        ),
+        _Option(
+            '--allowed-domain-names',
+            defaults.ALLOWED_DOMAIN_NAMES,
+            "Domain names that are removed from variable names' blacklist.",
+            type='string',
+            comma_separated_list=True,
+        ),
+        _Option(
+            '--forbidden-domain-names',
+            defaults.FORBIDDEN_DOMAIN_NAMES,
+            "Domain names that extends variable names' blacklist.",
             type='string',
             comma_separated_list=True,
         ),

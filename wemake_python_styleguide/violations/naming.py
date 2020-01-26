@@ -288,7 +288,7 @@ class WrongVariableNameViolation(ASTViolation):
 
     See
     :py:data:`~wemake_python_styleguide.constants.VARIABLE_NAMES_BLACKLIST`
-    for the full list of blacklisted variable names.
+    for the base list of blacklisted variable names.
 
     Example::
 
@@ -297,6 +297,19 @@ class WrongVariableNameViolation(ASTViolation):
 
         # Wrong:
         item = None
+
+    Configuration:
+        This rule is configurable with ``--allowed-domain-names``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.ALLOWED_DOMAIN_NAMES`
+
+        And with ``--forbidden-domain-names``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.FORBIDDEN_DOMAIN_NAMES`
+
+        The options listed above are used to create new variable names'
+        blacklist starting from
+        :py:data:`~wemake_python_styleguide.constants.VARIABLE_NAMES_BLACKLIST`.
 
     .. versionadded:: 0.1.0
 

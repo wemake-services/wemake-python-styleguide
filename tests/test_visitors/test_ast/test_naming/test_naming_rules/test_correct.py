@@ -25,3 +25,28 @@ def test_naming_correct(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('allowed_name', [
+    'item',
+    'items',
+    'handle',
+    'other_name',  # unknown values are ignored silently
+])
+def test_name_in_allowed_domain_names_option(
+    assert_errors,
+    parse_ast_tree,
+    naming_template,
+    options,
+    mode,
+    allowed_name,
+):
+    """Ensures that names listed in `allowed-domain-names` are allowed."""
+    tree = parse_ast_tree(mode(naming_template.format(allowed_name)))
+
+    visitor = WrongNameVisitor(
+        options(allowed_domain_names=[allowed_name]),
+        tree=tree,
+    )
+    visitor.run()
+    assert_errors(visitor, [])

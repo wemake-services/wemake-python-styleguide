@@ -30,3 +30,29 @@ def test_wrong_variable_name(
 
     assert_errors(visitor, [WrongVariableNameViolation])
     assert_error_text(visitor, wrong_name)
+
+
+@pytest.mark.parametrize('forbidden_name', [
+    'visitor',
+    'name_validator',
+])
+def test_name_in_forbidden_domain_names_option(
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    naming_template,
+    options,
+    mode,
+    forbidden_name,
+):
+    """Ensures that names listed in `forbidden-domain-names` are forbidden."""
+    tree = parse_ast_tree(mode(naming_template.format(forbidden_name)))
+
+    visitor = WrongNameVisitor(
+        options(forbidden_domain_names=[forbidden_name]),
+        tree=tree,
+    )
+    visitor.run()
+
+    assert_errors(visitor, [WrongVariableNameViolation])
+    assert_error_text(visitor, forbidden_name)
