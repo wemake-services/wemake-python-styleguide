@@ -11,6 +11,8 @@ Semantic versioning in our case means:
 
 ## 0.14.0 WIP
 
+### Misc
+- Added `local-partial-types` to mypy config
 
 ## 0.13.4
 
