@@ -626,3 +626,4 @@ extra_new_line = [  # noqa: WPS355
 
     'wrong',
 ]
+*numbers, = [4, 7]  # noqa: WPS356
