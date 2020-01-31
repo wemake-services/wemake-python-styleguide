@@ -575,7 +575,7 @@ class WrongIsinstanceWithTupleViolation(ASTViolation):
 
         # Correct:
         isinstance(some, (int, float))
-        isisntance(some, int)
+        isinstance(some, int)
 
         # Wrong:
         isinstance(some, (int, ))
