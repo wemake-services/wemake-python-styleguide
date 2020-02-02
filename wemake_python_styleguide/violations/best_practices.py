@@ -70,6 +70,7 @@ Summary
    IncorrectExceptOrderViolation
    FloatKeyViolation
    ProtectedModuleMemberViolation
+   ImportCollisionViolation
 
 Best practices
 --------------
@@ -125,6 +126,7 @@ Best practices
 .. autoclass:: IncorrectExceptOrderViolation
 .. autoclass:: FloatKeyViolation
 .. autoclass:: ProtectedModuleMemberViolation
+.. autoclass:: ImportCollisionViolation
 
 """
 
@@ -1981,3 +1983,40 @@ class ProtectedModuleMemberViolation(ASTViolation):
 
     error_template = 'Found protected object import'
     code = 450
+
+
+@final
+class ImportCollisionViolation(ASTViolation):
+    """
+    Forbids to import from already imported modules.
+
+    Reasoning:
+        Importing objects from already imported modules is inconsitent
+        and error-prone.
+
+    Solution:
+        Do not import objects from already imported modules or use aliases
+        when it cannot be avoided.
+
+    Example::
+
+        # Correct:
+        import public
+        from some.module import FooClass
+
+        import hypothesis
+        from hypothesis import strategies as st
+
+        # Wrong:
+        from public import utils
+        from public.utils import something
+
+        import hypothesis
+        from hypothesis import strategies
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = "Found import's collision: {0}"
+    code = 451

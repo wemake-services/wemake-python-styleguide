@@ -2,9 +2,9 @@
 
 import ast
 from itertools import chain
-from typing import Callable, Iterable
+from typing import Callable, Iterable, List, NamedTuple
 
-from typing_extensions import final
+from typing_extensions import Final, final
 
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
 from wemake_python_styleguide.logic import imports, nodes
@@ -13,6 +13,7 @@ from wemake_python_styleguide.types import AnyImport, ConfigurationOptions
 from wemake_python_styleguide.violations.base import BaseViolation
 from wemake_python_styleguide.violations.best_practices import (
     FutureImportViolation,
+    ImportCollisionViolation,
     NestedImportViolation,
     ProtectedModuleMemberViolation,
     ProtectedModuleViolation,
@@ -26,6 +27,7 @@ from wemake_python_styleguide.violations.naming import SameAliasImportViolation
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 ErrorCallback = Callable[[BaseViolation], None]  # TODO: alias and move
+MODULE_MEMBERS_SEPARATOR: Final = '.'
 
 
 class _BaseImportValidator(object):
@@ -79,14 +81,17 @@ class _ImportValidator(_BaseImportValidator):
 
     def _check_dotted_raw_import(self, node: ast.Import) -> None:
         for alias in node.names:
-            if '.' in alias.name:
+            if MODULE_MEMBERS_SEPARATOR in alias.name:
                 self._error_callback(
                     DottedRawImportViolation(node, text=alias.name),
                 )
 
     def _check_protected_import(self, node: ast.Import) -> None:
         names: Iterable[str] = chain.from_iterable(
-            [alias.name.split('.') for alias in node.names],
+            [
+                alias.name.split(MODULE_MEMBERS_SEPARATOR)
+                for alias in node.names
+            ],
         )
         for name in names:
             if access.is_protected(name):
@@ -129,6 +134,101 @@ class _ImportFromValidator(_BaseImportValidator):
 
 
 @final
+class _ImportedObjectInfo(NamedTuple):
+    node: AnyImport
+    # `position` is needed to distinguish imported names in single
+    # import statement (`import x, y, z`)
+    position: int
+    name: str
+
+
+@final
+class _ImportCollisionValidator(object):
+    """
+    Validator of ``AnyImport`` nodes collisions.
+
+    All imported names that are aliased (by using `as` keyword) are
+    considered valid.
+    """
+
+    _imported_modules: List[_ImportedObjectInfo]
+    _imported_names: List[_ImportedObjectInfo]
+
+    def __init__(self, error_callback: ErrorCallback) -> None:
+        self._error_callback = error_callback
+        self._imported_modules = []
+        self._imported_names = []
+
+    def validate(self) -> None:
+        for module_info in self._imported_modules:
+            for name_info in self._imported_names:
+                if self._does_collide(module_info, name_info):
+                    self._error_callback(
+                        ImportCollisionViolation(
+                            module_info.node,
+                            name_info.name,
+                        ),
+                    )
+
+    def add_import(self, node: ast.Import) -> None:
+        """Extract info needed for validation from ``ast.Import``."""
+        for position, alias in enumerate(node.names):
+            if not alias.asname:
+                imported_name_info = _ImportedObjectInfo(
+                    node,
+                    position,
+                    alias.name,
+                )
+                self._imported_modules.append(imported_name_info)
+                self._imported_names.append(imported_name_info)
+
+    def add_import_from(self, node: ast.ImportFrom) -> None:
+        """Extract info needed for validation from ``ast.ImportFrom``."""
+        module_name = '{0}{1}'.format(
+            MODULE_MEMBERS_SEPARATOR * node.level,
+            node.module or '',
+        )
+        # skip validation for ``ast.ImportFrom`` nodes that all names
+        # are aliased
+        if any(not alias.asname for alias in node.names):
+            self._imported_modules.append(
+                _ImportedObjectInfo(node, 0, module_name),
+            )
+
+        imported_name_prefix = '{0}{1}'.format(
+            module_name,
+            (
+                MODULE_MEMBERS_SEPARATOR *
+                int(not module_name.endswith(MODULE_MEMBERS_SEPARATOR))
+            ),
+        )
+        for position, alias in enumerate(node.names):
+            if not alias.asname:
+                self._imported_names.append(
+                    _ImportedObjectInfo(
+                        node,
+                        position,
+                        '{0}{1}'.format(imported_name_prefix, alias.name),
+                    ),
+                )
+
+    def _does_collide(
+        self,
+        module_info: _ImportedObjectInfo,
+        name_info: _ImportedObjectInfo,
+    ) -> bool:
+        return (
+            (
+                module_info.node != name_info.node or
+                module_info.position != name_info.position
+            ) and (
+                module_info.name == name_info.name or
+                module_info.name.startswith('{0}.'.format(name_info.name))
+            )
+        )
+
+
+@final
 class WrongImportVisitor(BaseNodeVisitor):
     """Responsible for finding wrong imports."""
 
@@ -142,6 +242,9 @@ class WrongImportVisitor(BaseNodeVisitor):
         self._import_from_validator = _ImportFromValidator(
             self.add_violation,
             self.options,
+        )
+        self._import_collision_validator = _ImportCollisionValidator(
+            self.add_violation,
         )
 
     def visit_Import(self, node: ast.Import) -> None:
@@ -157,6 +260,7 @@ class WrongImportVisitor(BaseNodeVisitor):
 
         """
         self._import_validator.validate(node)
+        self._import_collision_validator.add_import(node)
         self.generic_visit(node)
 
     def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
@@ -174,4 +278,15 @@ class WrongImportVisitor(BaseNodeVisitor):
 
         """
         self._import_from_validator.validate(node)
+        self._import_collision_validator.add_import_from(node)
         self.generic_visit(node)
+
+    def _post_visit(self) -> None:
+        """
+        Used to find imports collisions.
+
+        Raises:
+            ImportCollisionViolation,
+
+        """
+        self._import_collision_validator.validate()
