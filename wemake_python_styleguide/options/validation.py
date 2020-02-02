@@ -49,7 +49,7 @@ def validate_domain_names_options(
 
 
 @final
-@attr.dataclass(slots=True)
+@attr.dataclass(slots=True, frozen=True)
 class _ValidatedOptions(object):
     """
     Here we write all the required structured validation for the options.
