@@ -14,7 +14,7 @@ import sys as sys  # noqa: WPS113
 from _some import protected  # noqa: WPS436
 from some import _protected  # noqa: WPS450
 
-from foo import  bar
+from foo import bar
 from foo.bar import baz  # noqa: WPS451
 
 from .version import get_version  # noqa: WPS300
