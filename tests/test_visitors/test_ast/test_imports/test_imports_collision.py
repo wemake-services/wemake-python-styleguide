@@ -17,18 +17,22 @@ no_colliding_imports = """
     from other import public
     from other.module import something
 """
+
 similar_imports = """
     import ast
     import astor
 """
+
 no_colliding_imports_from = """
     from utils import public
     from other import something
 """
+
 colliding_import_with_alias = """
     import public
     from public import something as sth
 """
+
 colliding_import_from_with_alias = """
     from utils import public
     from utils.public.others import something as sth
@@ -39,22 +43,27 @@ colliding_import_name_module = """
     import public
     from public import something
 """
+
 colliding_import_name_module_part = """
     import public
     from public.module import something
 """
+
 colliding_multiple_imports = """
     import public, foo, bar as baz
     from public.module import something
 """
+
 colliding_imports_from = """
     from utils import public
     from utils.public.module import something
 """
+
 colliding_multiple_imports_from0 = """
     from utils import public, foo, bar as baz
     from utils.public import something
 """
+
 colliding_multiple_imports_from1 = """
     from utils import public
     from utils.public.module import something as sth, something_else

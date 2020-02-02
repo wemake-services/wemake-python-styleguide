@@ -1,10 +1,23 @@
 # -*- coding: utf-8 -*-
 
-from typing import List
+from typing import List, NamedTuple
+
+from typing_extensions import final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.logic.naming import logical
 from wemake_python_styleguide.types import AnyImport
+
+
+@final
+class ImportedObjectInfo(NamedTuple):
+    """Information about imported object."""
+
+    node: AnyImport
+    # `position` is needed to distinguish imported names in single
+    # import statement (`import x, y, z`)
+    position: int
+    name: str
 
 
 def get_import_parts(node: AnyImport) -> List[str]:

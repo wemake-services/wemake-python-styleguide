@@ -2,7 +2,7 @@
 
 import ast
 from itertools import chain
-from typing import Callable, Iterable, List, NamedTuple
+from typing import Callable, Iterable, List
 
 from typing_extensions import Final, final
 
@@ -87,12 +87,10 @@ class _ImportValidator(_BaseImportValidator):
                 )
 
     def _check_protected_import(self, node: ast.Import) -> None:
-        names: Iterable[str] = chain.from_iterable(
-            [
-                alias.name.split(MODULE_MEMBERS_SEPARATOR)
-                for alias in node.names
-            ],
-        )
+        names: Iterable[str] = chain.from_iterable([
+            alias.name.split(MODULE_MEMBERS_SEPARATOR)
+            for alias in node.names
+        ])
         for name in names:
             if access.is_protected(name):
                 self._error_callback(ProtectedModuleViolation(node))
@@ -134,15 +132,6 @@ class _ImportFromValidator(_BaseImportValidator):
 
 
 @final
-class _ImportedObjectInfo(NamedTuple):
-    node: AnyImport
-    # `position` is needed to distinguish imported names in single
-    # import statement (`import x, y, z`)
-    position: int
-    name: str
-
-
-@final
 class _ImportCollisionValidator(object):
     """
     Validator of ``AnyImport`` nodes collisions.
@@ -151,8 +140,8 @@ class _ImportCollisionValidator(object):
     considered valid.
     """
 
-    _imported_modules: List[_ImportedObjectInfo]
-    _imported_names: List[_ImportedObjectInfo]
+    _imported_modules: List[imports.ImportedObjectInfo]
+    _imported_names: List[imports.ImportedObjectInfo]
 
     def __init__(self, error_callback: ErrorCallback) -> None:
         self._error_callback = error_callback
@@ -174,7 +163,7 @@ class _ImportCollisionValidator(object):
         """Extract info needed for validation from ``ast.Import``."""
         for position, alias in enumerate(node.names):
             if not alias.asname:
-                imported_name_info = _ImportedObjectInfo(
+                imported_name_info = imports.ImportedObjectInfo(
                     node,
                     position,
                     alias.name,
@@ -192,7 +181,7 @@ class _ImportCollisionValidator(object):
         # are aliased
         if any(not alias.asname for alias in node.names):
             self._imported_modules.append(
-                _ImportedObjectInfo(node, 0, module_name),
+                imports.ImportedObjectInfo(node, 0, module_name),
             )
 
         imported_name_prefix = '{0}{1}'.format(
@@ -205,7 +194,7 @@ class _ImportCollisionValidator(object):
         for position, alias in enumerate(node.names):
             if not alias.asname:
                 self._imported_names.append(
-                    _ImportedObjectInfo(
+                    imports.ImportedObjectInfo(
                         node,
                         position,
                         '{0}{1}'.format(imported_name_prefix, alias.name),
@@ -214,8 +203,8 @@ class _ImportCollisionValidator(object):
 
     def _does_collide(
         self,
-        module_info: _ImportedObjectInfo,
-        name_info: _ImportedObjectInfo,
+        module_info: imports.ImportedObjectInfo,
+        name_info: imports.ImportedObjectInfo,
     ) -> bool:
         return (
             (

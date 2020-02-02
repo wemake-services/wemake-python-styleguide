@@ -2018,5 +2018,5 @@ class ImportCollisionViolation(ASTViolation):
 
     """
 
-    error_template = "Found import's collision: {0}"
+    error_template = 'Found imports collision: {0}'
     code = 451
