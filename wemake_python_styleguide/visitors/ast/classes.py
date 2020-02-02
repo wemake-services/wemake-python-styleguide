@@ -412,10 +412,10 @@ class ClassMethodOrderVisitor(base.BaseNodeVisitor):
             '__init__': 4,
             '__call__': 3,
         }
-        public_magic_methods_priority = 2
+        public_and_magic_methods_priority = 2
 
         if access.is_protected(first):
             return 1
         if access.is_private(first):
             return 0  # lowest priority
-        return base_methods_order.get(first, public_magic_methods_priority)
+        return base_methods_order.get(first, public_and_magic_methods_priority)
