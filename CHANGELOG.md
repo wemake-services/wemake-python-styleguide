@@ -15,6 +15,7 @@ Semantic versioning in our case means:
 
 - Extracts new violation - WPS450 from WPS436 #1118
 - Adds domain names options, that are used to create variable names' blacklist #1106
+- Add `__call__` to list of methods that should be on top #1125
 
 ### Bugfixes
 

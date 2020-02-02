@@ -407,12 +407,15 @@ class ClassMethodOrderVisitor(base.BaseNodeVisitor):
                 return
 
     def _ideal_order(self, first: str) -> int:
-        if first == '__new__':
-            return 4  # highest priority
-        if first == '__init__':
-            return 3
+        base_methods_order = {
+            '__new__': 5,  # highest priority
+            '__init__': 4,
+            '__call__': 3,
+        }
+        public_and_magic_methods_priority = 2
+
         if access.is_protected(first):
             return 1
         if access.is_private(first):
             return 0  # lowest priority
-        return 2  # public and magic methods
+        return base_methods_order.get(first, public_and_magic_methods_priority)
