@@ -35,7 +35,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS110': 3,
     'WPS111': 1,
     'WPS112': 1,
-    'WPS113': 0,
+    'WPS113': 1,
     'WPS114': 1,
     'WPS115': 1,
     'WPS116': 1,
@@ -237,7 +237,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
 
 # Violations which may be tweaked by `i_control_code` option
 SHOULD_BE_RAISED_NO_CONTROL = types.MappingProxyType({
-    'WPS113': 1,
+    'WPS113': 0,
 
     'WPS412': 0,
     'WPS413': 0,
