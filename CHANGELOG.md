@@ -9,10 +9,11 @@ Semantic versioning in our case means:
 - Major releases inidicate significant milestones or serious breaking changes.
 
 
-## 0.14.0 WIP
+## 0.14.0 aka The Walrus fighter WIP
 
 ### Features
 
+- Adds `python3.8` support
 - Removes `radon`, because `cognitive-complexity` is enough
 - Removes `flake8-loggin-format` as a direct dependency
 - Changes `styleguide.toml` and `flake8.toml` scripts definition
@@ -29,6 +30,7 @@ Semantic versioning in our case means:
 
 - Adds `local-partial-types` to mypy config
 - Uses `abc` stdlib's module to mark abstract base classes #1122
+- Adds `python3.8` to the CI
 
 
 ## 0.13.4
