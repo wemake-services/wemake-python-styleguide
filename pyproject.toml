@@ -73,14 +73,12 @@ flake8-debugger = "^3.1"
 flake8-isort = "^2.6"
 flake8-eradicate = "^0.2"
 flake8-bandit = "^2.1"
-flake8-logging-format = "^0.6"
 flake8-broken-line = "^0.1"
 flake8-print = "^3.1.4"
 flake8-annotations-complexity = "^0.0.2"
 flake8-rst-docstrings = "^0.0.12"
 flake8-executable = "^2.0"
 pep8-naming = "^0.9.1"
-radon = '^4.0'
 darglint = "^1.1"
 
 [tool.poetry.dev-dependencies]
@@ -95,7 +93,7 @@ snapshottest = "^0.5.1"
 hypothesis = "^4.55.2"
 hypothesmith = "^0.0.5"
 
-mypy = "^0.750"
+mypy = "^0.761"
 
 docutils = "^0.13"
 sphinx = "^2.2"

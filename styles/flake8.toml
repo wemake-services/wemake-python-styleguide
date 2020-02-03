@@ -12,6 +12,3 @@
 
 ["setup.cfg".flake8]
 # These values should be placed inside `setup.cfg` in your repo:
-enable-extensions = "G"
-radon-show-closures = true
-radon-no-assert = true

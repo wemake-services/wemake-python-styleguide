@@ -13,6 +13,9 @@ Semantic versioning in our case means:
 
 ### Features
 
+- Removes `radon`, because `cognitive-complexity` is enough
+- Removes `flake8-loggin-format` as a direct dependency
+- Changes `styleguide.toml` and `flake8.toml` scripts definition
 - Extracts new violation - WPS450 from WPS436 #1118
 - Adds domain names options, that are used to create variable names' blacklist #1106
 - Add `__call__` to list of methods that should be on top #1125

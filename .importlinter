@@ -65,7 +65,6 @@ forbidden_modules =
   pydocstyle
   pycodestyle
   mccabe
-  radon
   astor
   cognitive_complexity
   astboom
