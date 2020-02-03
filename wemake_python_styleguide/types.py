@@ -38,7 +38,7 @@ Reference
 """
 
 import ast
-from typing import List, Tuple, Type, Union
+from typing import Tuple, Type, Union
 
 from typing_extensions import Protocol, final
 
@@ -83,7 +83,7 @@ AnyAccess = Union[
 ]
 
 
-@final
+@final  # noqa: WPS214
 class ConfigurationOptions(Protocol):
     """
     Provides structure for the options we use in our checker and visitors.
@@ -98,35 +98,93 @@ class ConfigurationOptions(Protocol):
     """
 
     # General:
-    min_name_length: int
-    i_control_code: bool
-    max_name_length: int
-    max_noqa_comments: int
-    nested_classes_whitelist: List[str]
-    allowed_domain_names: List[str]
-    forbidden_domain_names: List[str]
+    @property
+    def min_name_length(self) -> int: ...
+
+    @property
+    def i_control_code(self) -> bool: ...
+
+    @property
+    def max_name_length(self) -> int: ...
+
+    @property
+    def max_noqa_comments(self) -> int: ...
+
+    @property
+    def nested_classes_whitelist(self) -> Tuple[str, ...]: ...
+
+    @property
+    def allowed_domain_names(self) -> Tuple[str, ...]: ...
+
+    @property
+    def forbidden_domain_names(self) -> Tuple[str, ...]: ...
 
     # Complexity:
-    max_arguments: int
-    max_local_variables: int
-    max_returns: int
-    max_expressions: int
-    max_module_members: int
-    max_methods: int
-    max_line_complexity: int
-    max_jones_score: int
-    max_imports: int
-    max_imported_names: int
-    max_base_classes: int
-    max_decorators: int
-    max_string_usages: int
-    max_awaits: int
-    max_try_body_length: int
-    max_module_expressions: int
-    max_function_expressions: int
-    max_asserts: int
-    max_access_level: int
-    max_attributes: int
-    max_cognitive_score: int
-    max_cognitive_average: int
-    max_call_level: int
+    @property
+    def max_arguments(self) -> int: ...
+
+    @property
+    def max_local_variables(self) -> int: ...
+
+    @property
+    def max_returns(self) -> int: ...
+
+    @property
+    def max_expressions(self) -> int: ...
+
+    @property
+    def max_module_members(self) -> int: ...
+
+    @property
+    def max_methods(self) -> int: ...
+
+    @property
+    def max_line_complexity(self) -> int: ...
+
+    @property
+    def max_jones_score(self) -> int: ...
+
+    @property
+    def max_imports(self) -> int: ...
+
+    @property
+    def max_imported_names(self) -> int: ...
+
+    @property
+    def max_base_classes(self) -> int: ...
+
+    @property
+    def max_decorators(self) -> int: ...
+
+    @property
+    def max_string_usages(self) -> int: ...
+
+    @property
+    def max_awaits(self) -> int: ...
+
+    @property
+    def max_try_body_length(self) -> int: ...
+
+    @property
+    def max_module_expressions(self) -> int: ...
+
+    @property
+    def max_function_expressions(self) -> int: ...
+
+    @property
+    def max_asserts(self) -> int: ...
+
+    @property
+    def max_access_level(self) -> int: ...
+
+    @property
+    def max_attributes(self) -> int: ...
+
+    @property
+    def max_cognitive_score(self) -> int: ...
+
+    @property
+    def max_cognitive_average(self) -> int: ...
+
+    @property
+    def max_call_level(self) -> int: ...

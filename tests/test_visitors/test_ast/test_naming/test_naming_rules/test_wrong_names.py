@@ -49,7 +49,7 @@ def test_name_in_forbidden_domain_names_option(
     tree = parse_ast_tree(mode(naming_template.format(forbidden_name)))
 
     visitor = WrongNameVisitor(
-        options(forbidden_domain_names=[forbidden_name]),
+        options(forbidden_domain_names=(forbidden_name,)),
         tree=tree,
     )
     visitor.run()

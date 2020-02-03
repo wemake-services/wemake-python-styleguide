@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import List, Optional
+from typing import Optional, Tuple
 
 import attr
 from typing_extensions import final
@@ -26,8 +26,8 @@ def _min_max(
 
 
 def validate_domain_names_options(
-    allowed_domain_names: List[str],
-    forbidden_domain_names: List[str],
+    allowed_domain_names: Tuple[str, ...],
+    forbidden_domain_names: Tuple[str, ...],
 ) -> None:
     """Validator to check that allowed and forbidden names doesn't intersect.
 
@@ -49,7 +49,7 @@ def validate_domain_names_options(
 
 
 @final
-@attr.dataclass(slots=True)
+@attr.dataclass(slots=True, frozen=True)
 class _ValidatedOptions(object):
     """
     Here we write all the required structured validation for the options.
@@ -64,9 +64,9 @@ class _ValidatedOptions(object):
     max_noqa_comments: int = attr.ib(
         validator=[_min_max(min=1, max=defaults.MAX_NOQA_COMMENTS)],
     )
-    nested_classes_whitelist: List[str]
-    allowed_domain_names: List[str]
-    forbidden_domain_names: List[str]
+    nested_classes_whitelist: Tuple[str, ...] = attr.ib(converter=tuple)
+    allowed_domain_names: Tuple[str, ...] = attr.ib(converter=tuple)
+    forbidden_domain_names: Tuple[str, ...] = attr.ib(converter=tuple)
 
     # Complexity:
     max_arguments: int = attr.ib(validator=[_min_max(min=1)])
