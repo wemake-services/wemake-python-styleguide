@@ -6,6 +6,7 @@ matrix:
   include:
     - python: 3.6
     - python: 3.7
+    - python: 3.8
 
   # TODO: remove when 0.14 will be really for a release
   allow_failures:
