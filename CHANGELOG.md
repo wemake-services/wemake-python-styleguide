@@ -23,6 +23,7 @@ Semantic versioning in our case means:
 ### Bugfixes
 
 - Remove ImplicitTernaryViolation - WPS332 #1099
+- Fixes how `i_control_code` behaves with WPS113
 
 ### Misc
 

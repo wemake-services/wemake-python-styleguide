@@ -62,7 +62,7 @@ class _BaseImportValidator(object):
 
     def _check_same_alias(self, node: AnyImport) -> None:
         for alias in node.names:
-            if alias.asname == alias.name and not self._options.i_control_code:
+            if alias.asname == alias.name and self._options.i_control_code:
                 self._error_callback(
                     SameAliasImportViolation(node, text=alias.name),
                 )

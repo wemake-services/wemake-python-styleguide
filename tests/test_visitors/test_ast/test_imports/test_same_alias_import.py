@@ -44,7 +44,7 @@ def test_same_alias_import_without_control(
     """Testing that imports with the same aliases are restricted."""
     same_alias = 'os'
     tree = parse_ast_tree(code.format(same_alias))
-    custom_options = options(i_control_code=False)
+    custom_options = options(i_control_code=True)
 
     visitor = WrongImportVisitor(custom_options, tree=tree)
     visitor.run()
