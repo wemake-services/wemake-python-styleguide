@@ -625,3 +625,5 @@ extra_new_line = [  # noqa: WPS355
     'wrong',
 ]
 *numbers, = [4, 7]  # noqa: WPS356
+
+some .set(1, 2) # noqa: WPS357

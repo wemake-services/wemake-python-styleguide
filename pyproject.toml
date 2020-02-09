@@ -80,6 +80,7 @@ flake8-rst-docstrings = "^0.0.12"
 flake8-executable = "^2.0"
 pep8-naming = "^0.9.1"
 darglint = "^1.1"
+libcst = "^0.3.1"
 
 [tool.poetry.dev-dependencies]
 nitpick = "^0.21.3"

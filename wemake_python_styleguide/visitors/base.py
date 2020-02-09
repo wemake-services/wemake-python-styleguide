@@ -37,6 +37,7 @@ Visitors API
    BaseNodeVisitor
    BaseFilenameVisitor
    BaseTokenVisitor
+   BaseCSTVisitor
 
 The decision relies on what parameters do you need for the task.
 It is highly unlikely that you will need two parameters at the same time.
@@ -65,8 +66,11 @@ Reference
 import abc
 import ast
 import tokenize
-from typing import List, Sequence, Type
+from typing import List, Sequence, Type, Any
 
+import libcst
+from libcst import CSTVisitor
+from libcst.metadata import PositionProvider
 from typing_extensions import final
 
 from wemake_python_styleguide import constants
@@ -271,3 +275,46 @@ class BaseTokenVisitor(BaseVisitor, metaclass=abc.ABCMeta):
         for token in self.file_tokens:
             self.visit(token)
         self._post_visit()
+
+
+class BaseCSTVisitor(CSTVisitor, BaseVisitor, metaclass=abc.ABCMeta):
+    """
+    Allows to store violations while traversing node cst tree.
+
+    This class should be used as a base class for all ``cst`` based checkers.
+    Method ``visit()`` is defined in ``CSTNode`` class.
+
+    Attributes:
+        cst: ``cst`` cst tree to be checked.
+
+    """
+
+    METADATA_DEPENDENCIES = (PositionProvider,)
+
+    def __init__(
+        self,
+        options: ConfigurationOptions,
+        cst: Any,
+        **kwargs,
+    ) -> None:
+        """Creates new ``cst`` based visitor instance."""
+        CSTVisitor.__init__(self)
+        BaseVisitor.__init__(self, options, **kwargs)
+        self.cst = libcst.metadata.MetadataWrapper(cst)
+
+    @final
+    @classmethod
+    def from_checker(
+        cls: Type['BaseCSTVisitor'],
+        checker,
+    ) -> 'BaseCSTVisitor':
+        """Constructs visitor instance from the checker."""
+        return cls(
+            options=checker.options,
+            filename=checker.filename,
+            cst=checker.cst,
+        )
+
+    def run(self):
+        """Recursively visits all ``cst`` nodes."""
+        self.cst.visit(self)

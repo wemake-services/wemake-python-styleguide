@@ -39,10 +39,13 @@ Checker API
 """
 
 import ast
+import libcst
+import pycodestyle
 import tokenize
 import traceback
 from typing import ClassVar, Iterator, Sequence, Type
 
+from flake8 import utils
 from flake8.options.manager import OptionManager
 from typing_extensions import final
 
@@ -50,6 +53,7 @@ from wemake_python_styleguide import constants, types
 from wemake_python_styleguide import version as pkg_version
 from wemake_python_styleguide.options.config import Configuration
 from wemake_python_styleguide.options.validation import validate_options
+from wemake_python_styleguide.presets.types import cst as cst_preset
 from wemake_python_styleguide.presets.types import file_tokens as tokens_preset
 from wemake_python_styleguide.presets.types import filename as filename_preset
 from wemake_python_styleguide.presets.types import tree as tree_preset
@@ -88,6 +92,7 @@ class Checker(object):
     config = Configuration()
 
     _visitors: ClassVar[Sequence[VisitorClass]] = (
+        *cst_preset.PRESET,
         *filename_preset.PRESET,
         *tree_preset.PRESET,
         *tokens_preset.PRESET,
@@ -118,6 +123,15 @@ class Checker(object):
         self.tree = transform(tree)
         self.filename = filename
         self.file_tokens = file_tokens
+        self.cst = None
+
+    def build_cst(self):
+        if self.filename in ('stdin', '-', None):
+            src = utils.stdin_get_value().splitlines(True)
+        else:
+            src = pycodestyle.readlines(self.filename)
+
+        self.cst = libcst.parse_module(''.join(src))
 
     @classmethod
     def add_options(cls, parser: OptionManager) -> None:
@@ -149,6 +163,8 @@ class Checker(object):
             Violations that were found by the passed visitors.
 
         """
+        self.build_cst()
+
         for visitor_class in self._visitors:
             visitor = visitor_class.from_checker(self)
 

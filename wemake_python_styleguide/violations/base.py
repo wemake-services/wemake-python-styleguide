@@ -19,6 +19,7 @@ Violations API
    MaybeASTViolation
    TokenizeViolation
    SimpleViolation
+   CSTViolation
 
 Violation can not have more than one base class.
 See :ref:`tutorial` for more information about choosing a correct base class.
@@ -44,12 +45,14 @@ import ast
 import tokenize
 from typing import ClassVar, Optional, Set, Tuple, Union
 
+from libcst.metadata import CodeRange
 from typing_extensions import final
 
 #: General type for all possible nodes where error happens.
 ErrorNode = Union[
     ast.AST,
     tokenize.TokenInfo,
+    CodeRange,
     None,
 ]
 
@@ -170,3 +173,14 @@ class SimpleViolation(BaseViolation, metaclass=abc.ABCMeta):
     def __init__(self, node=None, text: Optional[str] = None) -> None:
         """Creates new instance of simple style violation."""
         super().__init__(node, text=text)
+
+
+class CSTViolation(BaseViolation, metaclass=abc.ABCMeta):
+    """Used as a based type for all ``cst`` violations."""
+
+    _node: CodeRange
+
+    @final
+    def _location(self) -> Tuple[int, int]:
+        start = self._node.start
+        return start.line, start.column

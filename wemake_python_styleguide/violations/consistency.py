@@ -81,6 +81,7 @@ Summary
    ConsecutiveYieldsViolation
    BracketBlankLineViolation
    IterableUnpackingViolation
+   UnnecessarySpaceAroundDotViolation
 
 Consistency checks
 ------------------
@@ -141,6 +142,7 @@ Consistency checks
 .. autoclass:: ConsecutiveYieldsViolation
 .. autoclass:: BracketBlankLineViolation
 .. autoclass:: IterableUnpackingViolation
+.. autoclass:: UnnecessarySpaceAroundDotViolation
 
 """
 
@@ -149,6 +151,7 @@ from typing_extensions import final
 from wemake_python_styleguide.violations.base import (
     ASTViolation,
     TokenizeViolation,
+    CSTViolation,
 )
 
 DEPRECATED_CODES = (332,)
@@ -2067,3 +2070,32 @@ class IterableUnpackingViolation(ASTViolation):
 
     error_template = 'Found an unnecessary iterable unpacking'
     code = 356
+
+
+@final
+class UnnecessarySpaceAroundDotViolation(CSTViolation):
+    """
+    ...
+
+    Reasoning:
+        ...
+
+    Solution:
+        ...
+
+    Example::
+
+        # Wrong:
+        some .set(1, 2)
+        some. set(1, 2)
+        some . set(1, 2)
+
+        # Correct:
+        some.set(1, 2)
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found whitespace around the dot'
+    code = 357

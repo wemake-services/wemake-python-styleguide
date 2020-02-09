@@ -20,6 +20,7 @@ from wemake_python_styleguide.violations.base import (
     MaybeASTViolation,
     SimpleViolation,
     TokenizeViolation,
+    CSTViolation,
 )
 
 VIOLATIONS_MODULES = (
@@ -42,6 +43,7 @@ def _is_violation_class(cls) -> bool:
         SimpleViolation,
         TokenizeViolation,
         MaybeASTViolation,
+        CSTViolation,
     }
     if not inspect.isclass(cls):
         return False
