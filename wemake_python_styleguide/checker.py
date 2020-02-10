@@ -39,12 +39,13 @@ Checker API
 """
 
 import ast
-import libcst
-import pycodestyle
+import pathlib
 import tokenize
 import traceback
 from typing import ClassVar, Iterator, Sequence, Type
 
+import libcst
+import pycodestyle
 from flake8 import utils
 from flake8.options.manager import OptionManager
 from typing_extensions import final
@@ -123,15 +124,18 @@ class Checker(object):
         self.tree = transform(tree)
         self.filename = filename
         self.file_tokens = file_tokens
-        self.cst = None
+        self.cst = self.build_cst()
 
-    def build_cst(self):
-        if self.filename in ('stdin', '-', None):
+    def build_cst(self) -> libcst.Module:
+        """Build CST from source."""
+        if self.filename in {'stdin', '-', None}:
             src = utils.stdin_get_value().splitlines(True)
-        else:
+        elif pathlib.Path(self.filename).is_file():
             src = pycodestyle.readlines(self.filename)
+        else:
+            return libcst.parse_module('')
 
-        self.cst = libcst.parse_module(''.join(src))
+        return libcst.parse_module(''.join(src))
 
     @classmethod
     def add_options(cls, parser: OptionManager) -> None:
@@ -163,8 +167,6 @@ class Checker(object):
             Violations that were found by the passed visitors.
 
         """
-        self.build_cst()
-
         for visitor_class in self._visitors:
             visitor = visitor_class.from_checker(self)
 

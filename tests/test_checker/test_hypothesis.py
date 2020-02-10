@@ -61,7 +61,7 @@ def test_no_exceptions(
     tokens = list(tokenize.generate_tokens(lambda: next(lines)))
 
     Checker.parse_options(default_options)
-    checker = Checker(tree, tokens)
+    checker = Checker(tree, tokens, '')
 
     for violation in checker.run():
         assert isinstance(violation[0], int)

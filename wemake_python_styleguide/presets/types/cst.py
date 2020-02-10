@@ -2,9 +2,9 @@
 
 from typing_extensions import Final
 
-from wemake_python_styleguide.visitors.cst import syntax
+from wemake_python_styleguide.visitors.cst import attributes
 
 #: Used to store all token related visitors to be later passed to checker:
 PRESET: Final = (
-    syntax.AttributeCSTVisitor,
+    attributes.AttributeCSTVisitor,
 )

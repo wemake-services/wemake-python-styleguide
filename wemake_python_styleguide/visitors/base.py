@@ -66,10 +66,10 @@ Reference
 import abc
 import ast
 import tokenize
-from typing import List, Sequence, Type, Any
+from typing import List, Sequence, Type
 
 import libcst
-from libcst import CSTVisitor
+from libcst import CSTVisitor, Module
 from libcst.metadata import PositionProvider
 from typing_extensions import final
 
@@ -97,6 +97,7 @@ class BaseVisitor(object, metaclass=abc.ABCMeta):
         filename: str = constants.STDIN,
     ) -> None:
         """Creates base visitor instance."""
+        super().__init__()
         self.options = options
         self.filename = filename
         self.violations: List[BaseViolation] = []
@@ -277,30 +278,29 @@ class BaseTokenVisitor(BaseVisitor, metaclass=abc.ABCMeta):
         self._post_visit()
 
 
-class BaseCSTVisitor(CSTVisitor, BaseVisitor, metaclass=abc.ABCMeta):
+class BaseCSTVisitor(BaseVisitor, CSTVisitor, metaclass=abc.ABCMeta):
     """
-    Allows to store violations while traversing node cst tree.
+    Allows to store violations while traversing node cst.
 
     This class should be used as a base class for all ``cst`` based checkers.
     Method ``visit()`` is defined in ``CSTNode`` class.
 
     Attributes:
-        cst: ``cst`` cst tree to be checked.
+        tree: ``cst`` tree to be checked.
 
     """
 
-    METADATA_DEPENDENCIES = (PositionProvider,)
+    METADATA_DEPENDENCIES = (PositionProvider,)  # noqa: WPS115
 
     def __init__(
         self,
         options: ConfigurationOptions,
-        cst: Any,
+        cst: Module,
         **kwargs,
     ) -> None:
         """Creates new ``cst`` based visitor instance."""
-        CSTVisitor.__init__(self)
-        BaseVisitor.__init__(self, options, **kwargs)
-        self.cst = libcst.metadata.MetadataWrapper(cst)
+        super().__init__(options, **kwargs)
+        self.tree = libcst.metadata.MetadataWrapper(cst)
 
     @final
     @classmethod
@@ -317,4 +317,4 @@ class BaseCSTVisitor(CSTVisitor, BaseVisitor, metaclass=abc.ABCMeta):
 
     def run(self):
         """Recursively visits all ``cst`` nodes."""
-        self.cst.visit(self)
+        self.tree.visit(self)

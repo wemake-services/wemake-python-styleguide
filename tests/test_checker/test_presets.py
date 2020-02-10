@@ -10,6 +10,7 @@ import pytest
 
 from wemake_python_styleguide.checker import Checker
 from wemake_python_styleguide.visitors.base import (
+    BaseCSTVisitor,
     BaseFilenameVisitor,
     BaseNodeVisitor,
     BaseTokenVisitor,
@@ -19,6 +20,7 @@ from wemake_python_styleguide.visitors.base import (
 
 def _is_visitor_class(cls) -> bool:
     base_classes = {
+        BaseCSTVisitor,
         BaseFilenameVisitor,
         BaseNodeVisitor,
         BaseTokenVisitor,
