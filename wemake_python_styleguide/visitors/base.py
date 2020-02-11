@@ -286,7 +286,7 @@ class BaseCSTVisitor(BaseVisitor, CSTVisitor, metaclass=abc.ABCMeta):
     Method ``visit()`` is defined in ``CSTNode`` class.
 
     Attributes:
-        tree: ``cst`` tree to be checked.
+        tree: ``libcst.Module`` tree to be checked.
 
     """
 

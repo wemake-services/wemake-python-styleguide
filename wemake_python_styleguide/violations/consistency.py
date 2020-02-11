@@ -2075,13 +2075,13 @@ class IterableUnpackingViolation(ASTViolation):
 @final
 class UnnecessarySpaceAroundDotViolation(CSTViolation):
     """
-    Forbids useless whitespaces before and after dot.
+    Forbids useless whitespaces before and after attribute dot.
 
     Reasoning:
         We do this for consistency.
 
     Solution:
-        Remove whitespaces before and after of a dot.
+        Remove whitespaces before and after attribute dot.
 
     Example::
 

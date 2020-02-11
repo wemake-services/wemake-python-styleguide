@@ -33,6 +33,8 @@ wrong_attribute_case2 = 'some .set(1,2)'
 
 wrong_attribute_case3 = 'some . set(1,2)'
 
+wrong_attribute_case4 = 'some.set(1,2) .set(1,2)'
+
 
 @pytest.mark.parametrize('code', [
     correct_attribute,
@@ -58,6 +60,7 @@ def test_correct_dot(
     wrong_attribute_case1,
     wrong_attribute_case2,
     wrong_attribute_case3,
+    wrong_attribute_case4,
 ])
 def test_wrong_dot(
     assert_errors,

@@ -44,6 +44,7 @@ def test_no_exceptions(
     default_options,
     parse_ast_tree,
     parse_tokens,
+    monkeypatch,
 ):
     """
     This testcase is a complex example of magic.
@@ -60,8 +61,13 @@ def test_no_exceptions(
     lines = io.StringIO(source_code)
     tokens = list(tokenize.generate_tokens(lambda: next(lines)))
 
+    monkeypatch.setattr(
+        'sys.stdin',
+        io.TextIOWrapper(io.BytesIO(source_code.encode('utf-8-sig'))),
+    )
+
     Checker.parse_options(default_options)
-    checker = Checker(tree, tokens, '')
+    checker = Checker(tree, tokens)
 
     for violation in checker.run():
         assert isinstance(violation[0], int)

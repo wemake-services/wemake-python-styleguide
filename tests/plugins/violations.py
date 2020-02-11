@@ -17,10 +17,10 @@ from wemake_python_styleguide.violations import (
 from wemake_python_styleguide.violations.base import (
     ASTViolation,
     BaseViolation,
+    CSTViolation,
     MaybeASTViolation,
     SimpleViolation,
     TokenizeViolation,
-    CSTViolation,
 )
 
 VIOLATIONS_MODULES = (

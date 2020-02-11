@@ -28,7 +28,7 @@ class AttributeCSTVisitor(BaseCSTVisitor):
 
     def visit_Attribute(self, node: Attribute) -> None:
         """
-        Checks whitespaces around the dot.
+        Checks the `Attribute` node.
 
         Raises:
             UnnecessarySpaceAroundDotViolation
@@ -37,6 +37,7 @@ class AttributeCSTVisitor(BaseCSTVisitor):
         self._check_dot(node.dot)
 
     def _check_dot(self, node: Dot) -> None:
+        """Checks whitespaces around the dot."""
         has_whitespace = (
             _not_empty_whitespace(node.whitespace_before) or
             _not_empty_whitespace(node.whitespace_after)

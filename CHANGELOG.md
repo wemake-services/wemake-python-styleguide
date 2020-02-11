@@ -9,6 +9,13 @@ Semantic versioning in our case means:
 - Major releases inidicate significant milestones or serious breaking changes.
 
 
+## 0.15.0 WIP
+
+### Features
+
+- Forbids to use `some .method()`
+
+
 ## 0.14.0 aka The Walrus fighter WIP
 
 ### Features

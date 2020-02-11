@@ -45,7 +45,6 @@ import traceback
 from typing import ClassVar, Iterator, Sequence, Type
 
 import libcst
-import pycodestyle
 from flake8 import utils
 from flake8.options.manager import OptionManager
 from typing_extensions import final
@@ -126,16 +125,21 @@ class Checker(object):
         self.file_tokens = file_tokens
         self.cst = self.build_cst()
 
+    def read_py3(self) -> str:
+        """Read the source code."""
+        with tokenize.open(self.filename) as src_code:
+            return src_code.read()
+
     def build_cst(self) -> libcst.Module:
-        """Build CST from source."""
-        if self.filename in {'stdin', '-', None}:
-            src = utils.stdin_get_value().splitlines(True)
+        """Build CST from source code."""
+        if self.filename in frozenset(('stdin', '-', None)):
+            src = utils.stdin_get_value()
         elif pathlib.Path(self.filename).is_file():
-            src = pycodestyle.readlines(self.filename)
+            src = self.read_py3()
         else:
             return libcst.parse_module('')
 
-        return libcst.parse_module(''.join(src))
+        return libcst.parse_module(src)
 
     @classmethod
     def add_options(cls, parser: OptionManager) -> None:
