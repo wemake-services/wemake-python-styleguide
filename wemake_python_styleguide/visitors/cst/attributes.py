@@ -1,11 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from libcst import (
-    Attribute,
-    BaseParenthesizableWhitespace,
-    Dot,
-    SimpleWhitespace,
-)
+import libcst
 from libcst.metadata import PositionProvider
 from typing_extensions import final
 
@@ -15,10 +10,10 @@ from wemake_python_styleguide.violations.consistency import (
 from wemake_python_styleguide.visitors.base import BaseCSTVisitor
 
 
-def _not_empty_whitespace(node: BaseParenthesizableWhitespace) -> bool:
+def _not_empty_whitespace(node: libcst.BaseParenthesizableWhitespace) -> bool:
     """Tells if this node value contains whitespaces."""
     return (
-        isinstance(node, SimpleWhitespace) and bool(node.value)
+        isinstance(node, libcst.SimpleWhitespace) and bool(node.value)
     )
 
 
@@ -26,7 +21,7 @@ def _not_empty_whitespace(node: BaseParenthesizableWhitespace) -> bool:
 class AttributeCSTVisitor(BaseCSTVisitor):
     """Ensures that attributes are used correctly."""
 
-    def visit_Attribute(self, node: Attribute) -> None:
+    def visit_Attribute(self, node: libcst.Attribute) -> None:
         """
         Checks the `Attribute` node.
 
@@ -36,7 +31,7 @@ class AttributeCSTVisitor(BaseCSTVisitor):
         """
         self._check_dot(node.dot)
 
-    def _check_dot(self, node: Dot) -> None:
+    def _check_dot(self, node: libcst.Dot) -> None:
         """Checks whitespaces around the dot."""
         has_whitespace = (
             _not_empty_whitespace(node.whitespace_before) or

@@ -137,9 +137,9 @@ class Checker(object):
         elif pathlib.Path(self.filename).is_file():
             src = self.read_py3()
         else:
-            return libcst.parse_module('')
+            src = ''
 
-        return libcst.parse_module(src)
+        return libcst.parse_module(source=src)
 
     @classmethod
     def add_options(cls, parser: OptionManager) -> None:

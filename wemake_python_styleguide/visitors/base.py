@@ -66,11 +66,12 @@ Reference
 import abc
 import ast
 import tokenize
-from typing import List, Sequence, Type
+from typing import ClassVar, Collection, List, Sequence, Type
 
 import libcst
 from libcst import CSTVisitor, Module
 from libcst.metadata import PositionProvider
+from libcst.metadata.base_provider import ProviderT
 from typing_extensions import final
 
 from wemake_python_styleguide import constants
@@ -287,10 +288,15 @@ class BaseCSTVisitor(BaseVisitor, CSTVisitor, metaclass=abc.ABCMeta):
 
     Attributes:
         tree: ``libcst.Module`` tree to be checked.
+        METADATA_DEPENDENCIES: ``Collection[ProviderT]`` metadata interface
+        that defines a standardized way to associate nodes in a CST with
+        arbitrary metadata while maintaining the immutability of the tree.
 
     """
 
-    METADATA_DEPENDENCIES = (PositionProvider,)  # noqa: WPS115
+    METADATA_DEPENDENCIES: ClassVar[Collection[ProviderT]] = (  # noqa: WPS115
+        PositionProvider,
+    )
 
     def __init__(
         self,
