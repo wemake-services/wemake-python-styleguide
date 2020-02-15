@@ -185,6 +185,17 @@ version = "5.0.3"
 toml = ["toml"]
 
 [[package]]
+category = "dev"
+description = "Conditional coverage based on any rules you define!"
+name = "coverage-conditional-plugin"
+optional = false
+python-versions = ">=3.6,<4.0"
+version = "0.1.0"
+
+[package.dependencies]
+coverage = ">=5.0,<6.0"
+
+[[package]]
 category = "main"
 description = "A utility for ensuring Google-style docstrings stay up to date with the source code."
 name = "darglint"
@@ -1038,7 +1049,7 @@ wcwidth = "*"
 [[package]]
 category = "dev"
 description = "Run a subprocess in a pseudo terminal"
-marker = "python_version >= \"3.4\" and sys_platform != \"win32\" or sys_platform != \"win32\""
+marker = "python_version >= \"3.4\" and sys_platform != \"win32\" or sys_platform != \"win32\" or python_version >= \"3.4\" and sys_platform != \"win32\" and (python_version >= \"3.4\" and sys_platform != \"win32\" or sys_platform != \"win32\")"
 name = "ptyprocess"
 optional = false
 python-versions = "*"
@@ -1566,7 +1577,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools"]
 
 [metadata]
-content-hash = "b877d01b711f5bd3ddee169d4bf21c4247f294acc7d05b3fecb4a464600660a7"
+content-hash = "33050bf72516656108cdf51fc51664eb0aaaa4f55ae6dcf1e233783a334be2e7"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -1667,6 +1678,10 @@ coverage = [
     {file = "coverage-5.0.3-cp39-cp39m-win32.whl", hash = "sha256:b63dd43f455ba878e5e9f80ba4f748c0a2156dde6e0e6e690310e24d6e8caf40"},
     {file = "coverage-5.0.3-cp39-cp39m-win_amd64.whl", hash = "sha256:da93027835164b8223e8e5af2cf902a4c80ed93cb0909417234f4a9df3bcd9af"},
     {file = "coverage-5.0.3.tar.gz", hash = "sha256:77afca04240c40450c331fa796b3eab6f1e15c5ecf8bf2b8bee9706cd5452fef"},
+]
+coverage-conditional-plugin = [
+    {file = "coverage-conditional-plugin-0.1.0.tar.gz", hash = "sha256:9941bf2005e745190d24a6213ad681cb8884451192c668b4841b00cdc76c5f6e"},
+    {file = "coverage_conditional_plugin-0.1.0-py3-none-any.whl", hash = "sha256:7e8f0ce79aeb06ca611244f3f379afcb52d972f6bb8911029475477db8cc95c6"},
 ]
 darglint = [
     {file = "darglint-1.1.2-py3-none-any.whl", hash = "sha256:01770c3e43e96266f54f6e2c7d911feed48b11a4abe7324c05a6ff9bdcabbf18"},
