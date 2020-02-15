@@ -71,7 +71,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS221': 2,
     'WPS222': 1,
     'WPS223': 1,
-    'WPS224': 1,
+    'WPS224': 0,  # defined in version specific table.
     'WPS225': 1,
     'WPS226': 0,  # defined in ignored violations.
     'WPS227': 1,
@@ -89,7 +89,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS304': 1,
     'WPS305': 1,
     'WPS306': 2,
-    'WPS307': 1,
+    'WPS307': 0,  # defined in version specific table.
     'WPS308': 1,
     'WPS309': 1,
     'WPS310': 4,

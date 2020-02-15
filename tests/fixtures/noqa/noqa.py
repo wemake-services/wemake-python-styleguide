@@ -278,20 +278,6 @@ except TypeError:
 class BadClass:  # noqa: WPS306
     UPPER_CASE_ATTRIBUTE = 12  # noqa: WPS115
 
-    def wrong_comprehension1(self):
-        return [
-            node for node in 'ab' if node != 'a' if node != 'b'  # noqa: WPS307
-        ]
-
-    def wrong_comprehension2(self):
-        return [
-            target  # noqa: WPS224
-            for assignment in range(hex_number)
-            for target in range(assignment)
-            for _ in range(10)
-            if isinstance(target, int)
-        ]
-
     def __del__(self, *_args, **_kwargs):  # noqa: WPS603
         anti_wps428 = 1  # noqa: WPS442
 

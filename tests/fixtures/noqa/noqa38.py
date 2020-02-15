@@ -29,3 +29,19 @@ class WithStatic(object):
 @error
 def decorated():  # noqa: WPS216
     anti_wps428 = 1
+
+
+def wrong_comprehension1():
+    return [  # noqa: WPS307
+        node for node in 'ab' if node != 'a' if node != 'b'
+    ]
+
+
+def wrong_comprehension2():
+    return [  # noqa: WPS224
+        target
+        for assignment in range(hex_number)
+        for target in range(assignment)
+        for _ in range(10)
+        if isinstance(target, int)
+    ]

@@ -31,3 +31,19 @@ def decorated():
 
 
 iters = list((yield letter) for letter in 'ab')  # noqa: WPS416
+
+
+def wrong_comprehension1():
+    return [
+        node for node in 'ab' if node != 'a' if node != 'b'  # noqa: WPS307
+    ]
+
+
+def wrong_comprehension2():
+    return [
+        target  # noqa: WPS224
+        for assignment in range(hex_number)
+        for target in range(assignment)
+        for _ in range(10)
+        if isinstance(target, int)
+    ]
