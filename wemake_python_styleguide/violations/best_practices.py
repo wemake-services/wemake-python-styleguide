@@ -686,8 +686,7 @@ class YieldInComprehensionViolation(ASTViolation):
     """
     Forbids to have ``yield`` keyword inside comprehensions.
 
-    This violation is only thrown for ``python<3.8``, because since 3.8
-    it is a syntax error. And we don't check for syntax errors.
+    This is a ``SyntaxError`` starting from ``python3.8``.
 
     Reasoning:
         Having the ``yield`` keyword inside comprehensions is error-prone.

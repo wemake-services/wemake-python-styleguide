@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-
+# -*- coding: utf-8 -*-  # noqa: WPS323
 """
 This file contains all possible violations.
 
@@ -15,6 +14,59 @@ from _some import protected  # noqa: WPS436
 from some import _protected  # noqa: WPS450
 
 from .version import get_version  # noqa: WPS300
+
+import import1
+import import2
+import import3
+import import4
+import import5
+
+from some_name import (
+    name1,
+    name2,
+    name3,
+    name4,
+    name5,
+    name6,
+    name7,
+    name8,
+    name9,
+    name10,
+    name11,
+    name12,
+    name13,
+    name14,
+    name15,
+    name16,
+    name17,
+    name18,
+    name19,
+    name20,
+    name21,
+    name22,
+    name23,
+    name24,
+    name25,
+    name26,
+    name27,
+    name28,
+    name29,
+    name30,
+    name31,
+    name32,
+    name33,
+    name34,
+    name35,
+    name36,
+    name37,
+    name38,
+)
+
+# Raising and ignoring:
+some_int = 1  # type: int
+
+
+# =====
 
 full_name = u'Nikita Sobolev'  # noqa: WPS302
 phone_number = 555_123_999  # noqa:  WPS303
@@ -136,6 +188,32 @@ def many_expressions(xy):  # noqa: WPS213
     print(xy)
 
 
+class TooManyMethods(object):  # noqa: WPS214
+    def method1(self):
+        anti_wps428 = 1
+
+    def method2(self):
+        anti_wps428 = 1
+
+    def method3(self):
+        anti_wps428 = 1
+
+    def method4(self):
+        anti_wps428 = 1
+
+    def method5(self):
+        anti_wps428 = 1
+
+    def method6(self):
+        anti_wps428 = 1
+
+    def method7(self):
+        anti_wps428 = 1
+
+    def method8(self):
+        anti_wps428 = 1
+
+
 class ManyParents(First, Second, Third, Exception):  # noqa: WPS215
     anti_wps428 = 1
 
@@ -200,20 +278,18 @@ except TypeError:
 class BadClass:  # noqa: WPS306
     UPPER_CASE_ATTRIBUTE = 12  # noqa: WPS115
 
-    @staticmethod  # noqa: WPS602
-    def some_static(arg1):
+    def wrong_comprehension1(self):
+        return [
+            node for node in 'ab' if node != 'a' if node != 'b'  # noqa: WPS307
+        ]
+
+    def wrong_comprehension2(self):
         return [
             target  # noqa: WPS224
             for assignment in range(hex_number)
             for target in range(assignment)
             for _ in range(10)
             if isinstance(target, int)
-        ]
-
-    @staticmethod  # noqa: WPS602
-    async def some_async_static(arg1):
-        return [
-            node for node in 'ab' if node != 'a' if node != 'b'  # noqa: WPS307
         ]
 
     def __del__(self, *_args, **_kwargs):  # noqa: WPS603
@@ -252,6 +328,10 @@ if True:  # noqa: WPS314
 
 
 class SomeTestClass(FirstParent, SecondParent, object):  # noqa: WPS315
+    anti_wps428 = 1
+
+
+with some_context as first_context, second_context:  # noqa: WPS316
     anti_wps428 = 1
 
 
@@ -411,8 +491,6 @@ except ValueError:
     anti_wps428 = 1
 except ValueError:
     anti_wps428 = 1
-
-iters = list((yield letter) for letter in 'ab')  # noqa: WPS416
 
 
 class MyBadException(BaseException):  # noqa: WPS418

@@ -20,18 +20,22 @@ from collections import Counter
 
 ERROR_PATTERN = re.compile(r'(WPS\d{3})')
 IGNORED_VIOLATIONS = (
+    'WPS201',  # it is a module level violation
     'WPS202',  # since our test case is complex, that's fine
+    'WPS203',  # it is a module level violation
     'WPS204',  # our tests have a lot of overused expressions
-    'WPS226',  # we have a lot of ugly strings inside,
-    'WPS402',  # since we obviously use a lot of `noqa` comments
+    'WPS226',  # we have a lot of ugly strings inside
+
+    'WPS400',  # it is a module level violation
+    'WPS402',  # we obviously use a lot of `noqa` comments
 )
 
 SHOULD_BE_RAISED = types.MappingProxyType({
-    'WPS000': 0,
+    'WPS000': 0,  # logically unacceptable.
 
-    'WPS100': 0,
-    'WPS101': 0,
-    'WPS102': 0,
+    'WPS100': 0,  # logically unacceptable.
+    'WPS101': 0,  # logically unacceptable.
+    'WPS102': 0,  # logically unacceptable.
     'WPS110': 3,
     'WPS111': 1,
     'WPS112': 1,
@@ -47,19 +51,19 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS122': 1,
     'WPS123': 1,
 
-    'WPS200': 0,
-    'WPS201': 0,
-    'WPS202': 0,
-    'WPS203': 0,
-    'WPS204': 0,
+    'WPS200': 0,  # logically unacceptable.
+    'WPS201': 0,  # defined in ignored violations.
+    'WPS202': 0,  # defined in ignored violations.
+    'WPS203': 0,  # defined in ignored violations.
+    'WPS204': 0,  # defined in ignored violations.
 
     'WPS210': 1,
     'WPS211': 1,
     'WPS212': 1,
     'WPS213': 1,
-    'WPS214': 0,
+    'WPS214': 1,
     'WPS215': 1,
-    'WPS216': 0,
+    'WPS216': 0,  # defined in version specific table.
     'WPS217': 1,
     'WPS218': 1,
     'WPS219': 1,
@@ -69,13 +73,13 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS223': 1,
     'WPS224': 1,
     'WPS225': 1,
-    'WPS226': 0,
+    'WPS226': 0,  # defined in ignored violations.
     'WPS227': 1,
     'WPS228': 1,
     'WPS229': 1,
     'WPS230': 1,
     'WPS231': 1,
-    'WPS232': 0,
+    'WPS232': 0,  # logically unacceptable.
     'WPS233': 1,
 
     'WPS300': 1,
@@ -94,14 +98,14 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS313': 1,
     'WPS314': 1,
     'WPS315': 1,
-    'WPS316': 0,
+    'WPS316': 1,
     'WPS317': 1,
     'WPS318': 3,
     'WPS319': 2,
     'WPS320': 2,
     'WPS321': 1,
     'WPS322': 1,
-    'WPS323': 0,
+    'WPS323': 1,
     'WPS324': 1,
     'WPS325': 1,
     'WPS326': 1,
@@ -135,10 +139,10 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS355': 1,
     'WPS356': 1,
 
-    'WPS400': 0,
-    'WPS401': 0,
-    'WPS402': 0,
-    'WPS403': 0,
+    'WPS400': 0,  # defined in ignored violations.
+    'WPS401': 0,  # logically unacceptable.
+    'WPS402': 0,  # defined in ignored violations.
+    'WPS403': 0,  # logically unacceptable.
     'WPS404': 1,
     'WPS405': 1,
     'WPS406': 1,
@@ -146,12 +150,12 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS408': 1,
     'WPS409': 1,
     'WPS410': 1,
-    'WPS411': 0,
-    'WPS412': 0,
+    'WPS411': 0,  # logically unacceptable.
+    'WPS412': 0,  # logically unacceptable.
     'WPS413': 1,
     'WPS414': 1,
     'WPS415': 1,
-    'WPS416': 1,
+    'WPS416': 0,  # defined in version specific table.
     'WPS417': 1,
     'WPS418': 1,
     'WPS419': 1,
@@ -221,7 +225,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
 
     'WPS600': 1,
     'WPS601': 1,
-    'WPS602': 2,
+    'WPS602': 0,  # defined in version specific table.
     'WPS603': 1,
     'WPS604': 2,
     'WPS605': 1,
@@ -235,7 +239,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS613': 1,
 })
 
-# Violations which may be tweaked by `i_control_code` option
+# Violations which may be tweaked by `i_control_code` option:
 SHOULD_BE_RAISED_NO_CONTROL = types.MappingProxyType({
     'WPS113': 0,
 
@@ -273,7 +277,7 @@ def test_noqa_fixture_disabled(absolute_path, all_violations):
             '--isolated',
             '--select',
             'WPS',
-            absolute_path('fixtures', 'noqa.py'),
+            absolute_path('fixtures', 'noqa', 'noqa.py'),
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -299,7 +303,7 @@ def test_noqa_fixture_disabled_no_control(
             '--isolated',
             '--select',
             'WPS',
-            absolute_path('fixtures', 'noqa_controlled.py'),
+            absolute_path('fixtures', 'noqa', 'noqa_controlled.py'),
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -326,7 +330,7 @@ def test_noqa_fixture(absolute_path):
             '--isolated',
             '--select',
             'WPS',
-            absolute_path('fixtures', 'noqa.py'),
+            absolute_path('fixtures', 'noqa', 'noqa.py'),
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -346,7 +350,7 @@ def test_noqa_fixture_without_ignore(absolute_path):
             '--isolated',
             '--select',
             'WPS',
-            absolute_path('fixtures', 'noqa.py'),
+            absolute_path('fixtures', 'noqa', 'noqa.py'),
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -366,7 +370,7 @@ def test_noqa_fixture_diff(absolute_path, all_violations):
             'diff',
             '-uN',  # is required to ignore missing files
             'missing_file',  # is required to transform file to diff
-            absolute_path('fixtures', 'noqa.py'),
+            absolute_path('fixtures', 'noqa', 'noqa.py'),
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,

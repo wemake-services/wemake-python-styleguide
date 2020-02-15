@@ -72,11 +72,8 @@ def test_yield_keyword_syntax_error(
     mode,
 ):
     """Testing that using `yield` keyword is not allowed."""
-    tree = parse_ast_tree(mode(code.format('(yield xy)')))
-
-    visitor = WrongComprehensionVisitor(default_options, tree=tree)
     with pytest.raises(SyntaxError):
-        visitor.run()
+        parse_ast_tree(mode(code.format('(yield xy)')))
 
 
 @pytest.mark.parametrize('code', [

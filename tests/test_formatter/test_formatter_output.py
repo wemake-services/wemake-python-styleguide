@@ -44,15 +44,15 @@ def _safe_output(output: str) -> str:
     (['--show-source', '--statistic'], 'with_source_statistic'),
     (['--statistic', '--show-source'], 'statistic_with_source'),
 ])
-def test_formatter(snapshot, cli_options, output):
+def test_formatter(absolute_path, snapshot, cli_options, output):
     """
     End-to-End test to that formatting works well.
 
     We only use ``WPS`` because other violations order is unpredictable.
     Since ``flake8`` plugins work in parallel.
     """
-    filename1 = './tests/fixtures/formatter1.py'
-    filename2 = './tests/fixtures/formatter2.py'
+    filename1 = absolute_path('fixtures', 'formatter', 'formatter1.py')
+    filename2 = absolute_path('fixtures', 'formatter', 'formatter2.py')
 
     process = subprocess.Popen(
         [
@@ -87,9 +87,9 @@ def test_formatter(snapshot, cli_options, output):
     (['--show-source', '--statistic'], 'with_source_statistic'),
     (['--statistic', '--show-source'], 'statistic_with_source'),
 ])
-def test_formatter_correct(snapshot, cli_options, output):
+def test_formatter_correct(absolute_path, snapshot, cli_options, output):
     """All correct code should not raise any violations and no output."""
-    filename = './tests/fixtures/correct.py'
+    filename = absolute_path('fixtures', 'correct.py')
 
     process = subprocess.Popen(
         [
