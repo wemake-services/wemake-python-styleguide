@@ -64,7 +64,7 @@ def test_yield_keyword_in_comprehension(
     generator_expression,
     set_comprehension,
 ])
-def test_yield_keyword_in_comprehension_syntax_error(
+def test_yield_keyword_syntax_error(
     assert_errors,
     parse_ast_tree,
     code,
