@@ -686,6 +686,9 @@ class YieldInComprehensionViolation(ASTViolation):
     """
     Forbids to have ``yield`` keyword inside comprehensions.
 
+    This violation is only thrown for ``python<3.8``, because since 3.8
+    it is a syntax error. And we don't check for syntax errors.
+
     Reasoning:
         Having the ``yield`` keyword inside comprehensions is error-prone.
         You can shoot yourself in a foot by
@@ -703,7 +706,6 @@ class YieldInComprehensionViolation(ASTViolation):
 
         list([(yield letter) for letter in 'ab'])
         # Will result in: ['a', 'b']
-
 
     See also:
         https://github.com/satwikkansal/wtfPython#-yielding-none
