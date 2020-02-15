@@ -17,10 +17,9 @@ pytest_plugins = [
 @pytest.fixture(scope='session')
 def absolute_path():
     """Fixture to create full path relative to `contest.py` inside tests."""
-    def factory(*files):
+    def factory(*files: str):
         dirname = os.path.dirname(__file__)
         return os.path.join(dirname, *files)
-
     return factory
 
 
