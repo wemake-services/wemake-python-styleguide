@@ -37,6 +37,7 @@ def test_falsy_constant(
     assert_errors(visitor, [FalsyConstantCompareViolation])
 
 
+@pytest.mark.filterwarnings('ignore::SyntaxWarning')
 @pytest.mark.parametrize('comparators', wrong_comparators)
 def test_falsy_constant_is(
     assert_errors,
@@ -74,6 +75,7 @@ def test_falsy_constant_not_eq(
     assert_errors(visitor, [])
 
 
+@pytest.mark.filterwarnings('ignore::SyntaxWarning')
 @pytest.mark.parametrize('comparators', [
     ('some', '[1, 2]'),
     ('some', '{1, 2}'),

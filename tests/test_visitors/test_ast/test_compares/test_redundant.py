@@ -14,6 +14,7 @@ another_variable = 2
 """
 
 
+@pytest.mark.filterwarnings('ignore::SyntaxWarning')
 @pytest.mark.parametrize('comparators', [
     ('variable', '"test"'),
     ('variable', 'variable.call()'),

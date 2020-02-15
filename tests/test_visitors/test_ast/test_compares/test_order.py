@@ -15,6 +15,7 @@ async def function():
 """
 
 
+@pytest.mark.filterwarnings('ignore::SyntaxWarning')
 @pytest.mark.parametrize('comparators', [
     ('first_name', 'second_name'),
     ('first_name', 'second_name + 1'),
@@ -66,6 +67,7 @@ def test_compare_variables_in_special_case(
     assert_errors(visitor, [])
 
 
+@pytest.mark.filterwarnings('ignore::SyntaxWarning')
 @pytest.mark.parametrize('comparators', [
     ('"string constant"', 'first_name'),
     ([1, 2, 3], 'first_name'),

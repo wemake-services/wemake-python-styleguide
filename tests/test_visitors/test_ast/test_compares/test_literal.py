@@ -13,6 +13,7 @@ if_with_chained_compares2 = 'if {0} > {1} > 0: ...'
 if_with_chained_compares3 = 'if -1 > {0} > {1} > 0: ...'
 
 
+@pytest.mark.filterwarnings('ignore::SyntaxWarning')
 @pytest.mark.parametrize('comparators', [
     ('first_name', 'second_name'),
     ('first_name', 1),
@@ -34,6 +35,7 @@ def test_non_literal(
     assert_errors(visitor, [])
 
 
+@pytest.mark.filterwarnings('ignore::SyntaxWarning')
 @pytest.mark.parametrize('comparators', [
     (1, 2),
     ('"string1"', '"string2"'),
