@@ -42,7 +42,7 @@ VERSION_SPECIFIC = types.MappingProxyType({
     'WPS216': 1,
     'WPS224': 1,
     'WPS307': 1,
-    'WPS416': 1,
+    'WPS416': int(not PY38),  # only works for `< python3.8`
     'WPS602': 2,
 })
 

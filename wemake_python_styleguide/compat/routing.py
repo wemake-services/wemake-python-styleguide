@@ -27,13 +27,17 @@ if PY38:  # pragma: py-lt-38
         Hacked to make sure that everything we had defined before is working.
         """
         if isinstance(node, ast.Constant):
-            type_name = _CONST_NODE_TYPE_NAMES.get(type(node.value), None)
-            if type_name is not None:
-                return getattr(
-                    self,
-                    'visit_{0}'.format(type_name),
-                    self.generic_visit,
-                )(node)
-        return self.generic_visit(node)
+            # That's the hack itself, we don't get the name of the node.
+            # We get the name of wrapped type from it.
+            type_name = _CONST_NODE_TYPE_NAMES.get(type(node.value))
+        else:
+            type_name = node.__class__.__name__
+
+        return getattr(
+            self,
+            'visit_{0}'.format(type_name),
+            self.generic_visit,
+        )(node)
+
 else:  # pragma: py-gte-38
     route_visit = ast.NodeVisitor.visit  # noqa: WPS440
