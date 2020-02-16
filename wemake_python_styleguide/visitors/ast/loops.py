@@ -105,7 +105,7 @@ class WrongComprehensionVisitor(base.BaseNodeVisitor):
 
     def _check_contains_yield(self, node: _AnyComprehension) -> None:
         for sub_node in ast.walk(node):
-            if isinstance(sub_node, ast.Yield):
+            if isinstance(sub_node, ast.Yield):  # pragma: py-gte-38
                 self.add_violation(YieldInComprehensionViolation(node))
 
     def _post_visit(self) -> None:

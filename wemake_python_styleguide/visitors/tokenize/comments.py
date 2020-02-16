@@ -126,7 +126,7 @@ class WrongCommentVisitor(BaseTokenVisitor):
 class FileMagicCommentsVisitor(BaseTokenVisitor):
     """Checks comments for the whole file."""
 
-    _allowed_newlines: ClassVar[FrozenSet[int]] = frozenset((
+    _newlines: ClassVar[FrozenSet[int]] = frozenset((
         tokenize.NL,
         tokenize.NEWLINE,
         tokenize.ENDMARKER,
@@ -143,9 +143,7 @@ class FileMagicCommentsVisitor(BaseTokenVisitor):
         self._check_empty_line_after_codding(token)
 
     def _offset_for_comment_line(self, token: tokenize.TokenInfo) -> int:
-        if token.exact_type == tokenize.COMMENT:
-            return 2
-        return 0
+        return 2 if token.exact_type == tokenize.COMMENT else 0
 
     def _check_empty_line_after_codding(
         self,
@@ -161,20 +159,23 @@ class FileMagicCommentsVisitor(BaseTokenVisitor):
             https://www.python.org/dev/peps/pep-0263/
 
         """
-        if token.start == (1, 0):
-            tokens = iter(self.file_tokens[self.file_tokens.index(token):])
-            available_offset = 2  # comment + newline
-            while True:
-                next_token = next(tokens)
-                if not available_offset:
-                    available_offset = self._offset_for_comment_line(
-                        next_token,
-                    )
+        if token.start != (1, 0):
+            return
 
-                if available_offset > 0:
-                    available_offset -= 1
-                    continue
+        tokens = iter(self.file_tokens[self.file_tokens.index(token):])
+        available_offset = 2  # comment + newline
 
-                if next_token.exact_type not in self._allowed_newlines:
-                    self.add_violation(EmptyLineAfterCodingViolation(token))
-                break
+        while True:
+            next_token = next(tokens)
+            if not available_offset:
+                available_offset = self._offset_for_comment_line(
+                    next_token,
+                )
+
+            if available_offset > 0:
+                available_offset -= 1
+                continue
+
+            if next_token.exact_type not in self._newlines:  # pragma: no cover
+                self.add_violation(EmptyLineAfterCodingViolation(token))
+            break

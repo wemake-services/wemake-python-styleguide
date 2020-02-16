@@ -24,10 +24,10 @@ from wemake_python_styleguide.compat.nodes import Constant
 
 
 def _convert_num(node: Optional[AST]):
-    if isinstance(node, Constant):  # pragma: no cover
+    if isinstance(node, Constant):  # pragma: py-lt-38
         if isinstance(node.value, (int, float, complex)):
             return node.value
-    elif isinstance(node, Num):
+    elif isinstance(node, Num):  # pragma: py-gte-38
         return node.n
     elif isinstance(node, Name):  # That's what is modified from the original
         # We return string names as is, see how we return strings:
@@ -84,7 +84,7 @@ def literal_eval_with_names(  # noqa: WPS231
     """
     if isinstance(node, (Constant, NameConstant)):
         return node.value
-    elif isinstance(node, (Str, Bytes, Num)):
+    elif isinstance(node, (Str, Bytes, Num)):  # pragma: py-gte-38
         # We wrap strings to tell the difference between strings and names:
         return node.n if isinstance(node, Num) else '"{0!r}"'.format(node.s)
     elif isinstance(node, (Tuple, List, Set, Dict)):
