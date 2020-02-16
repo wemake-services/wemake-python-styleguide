@@ -113,7 +113,7 @@ MAX_COGNITIVE_AVERAGE: Final = 8  # based on this code statistics
 MAX_CALL_LEVEL: Final = 3
 
 #: Maximum number of names that can be imported from module.
-MAX_IMPORT_FROM_MEMBERS = 8  # guessed
+MAX_IMPORT_FROM_MEMBERS: Final = 8  # guessed
 
 #: Domain names that are removed from variable names' blacklist.
 ALLOWED_DOMAIN_NAMES: Final = ()

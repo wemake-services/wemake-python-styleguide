@@ -1093,7 +1093,5 @@ class TooManyImportedModuleMembersViolation(ASTViolation):
 
     """
 
-    error_template = (
-        'Found ``from ... import ...`` with too many imported names: {0}'
-    )
+    error_template = 'Found too many imported names from a module: {0}'
     code = 234
