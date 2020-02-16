@@ -176,6 +176,9 @@ class FileMagicCommentsVisitor(BaseTokenVisitor):
                 available_offset -= 1
                 continue
 
+            # We have a coverage error here.
+            # It reports, that this line is not covered.
+            # While we do have test cases for both correct and wrong cases.
             if next_token.exact_type not in self._newlines:  # pragma: no cover
                 self.add_violation(EmptyLineAfterCodingViolation(token))
             break
