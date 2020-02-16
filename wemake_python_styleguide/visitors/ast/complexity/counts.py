@@ -18,6 +18,7 @@ from wemake_python_styleguide.violations.complexity import (
     TooManyDecoratorsViolation,
     TooManyElifsViolation,
     TooManyExceptCasesViolation,
+    TooManyImportedModuleMembersViolation,
     TooManyImportedNamesViolation,
     TooManyImportsViolation,
     TooManyMethodsViolation,
@@ -81,11 +82,7 @@ class ModuleMembersVisitor(BaseNodeVisitor):
             )
 
 
-@final
-@alias('visit_any_import', (
-    'visit_ImportFrom',
-    'visit_Import',
-))
+@final  # noqa: WPS214
 class ImportMembersVisitor(BaseNodeVisitor):
     """Counts imports in a module."""
 
@@ -95,15 +92,31 @@ class ImportMembersVisitor(BaseNodeVisitor):
         self._imports_count = 0
         self._imported_names_count = 0
 
-    def visit_any_import(self, node: AnyImport) -> None:
+    def visit_Import(self, node: ast.Import) -> None:
         """
-        Counts the number of ``import`` and ``from ... import ...``.
+        Counts the number of ``import``.
 
         Raises:
             TooManyImportsViolation
             TooManyImportedNamesViolation
 
         """
+        self._visit_any_import(node)
+
+    def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
+        """
+        Counts the number ``from ... import ...``.
+
+        Raises:
+            TooManyImportsViolation
+            TooManyImportedNamesViolation
+            TooManyImportedModuleMembersViolation
+
+        """
+        self._check_import_from_names_count(node)
+        self._visit_any_import(node)
+
+    def _visit_any_import(self, node: AnyImport) -> None:
         self._imports_count += 1
         self._imported_names_count += len(node.names)
         self.generic_visit(node)
@@ -121,6 +134,16 @@ class ImportMembersVisitor(BaseNodeVisitor):
             )
             self.add_violation(
                 violation,
+            )
+
+    def _check_import_from_names_count(self, node: ast.ImportFrom) -> None:
+        imported_names_number = len(node.names)
+        if imported_names_number > self.options.max_import_from_members:
+            self.add_violation(
+                TooManyImportedModuleMembersViolation(
+                    node,
+                    text=str(imported_names_number),
+                ),
             )
 
     def _post_visit(self) -> None:

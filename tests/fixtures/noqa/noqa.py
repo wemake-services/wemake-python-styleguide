@@ -21,7 +21,7 @@ import import3
 import import4
 import import5
 
-from some_name import (
+from some_name import (  # noqa: WPS234
     name1,
     name2,
     name3,

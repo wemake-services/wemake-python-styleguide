@@ -56,6 +56,7 @@ Summary
    CognitiveComplexityViolation
    CognitiveModuleComplexityViolation
    TooLongCallChainViolation
+   TooManyImportedModuleMembersViolation
 
 
 Module complexity
@@ -94,6 +95,7 @@ Structure complexity
 .. autoclass:: CognitiveComplexityViolation
 .. autoclass:: CognitiveModuleComplexityViolation
 .. autoclass:: TooLongCallChainViolation
+.. autoclass:: TooManyImportedModuleMembersViolation
 
 """
 
@@ -1058,3 +1060,40 @@ class TooLongCallChainViolation(ASTViolation):
 
     error_template = 'Found too lang call chain length: {0}'
     code = 233
+
+
+@final
+class TooManyImportedModuleMembersViolation(ASTViolation):
+    """
+    Forbids ``from ... import ...`` with too many imported names.
+
+    Reasoning:
+        Importing too many names from one import is easy way to cause
+        `WPS203`.
+
+    Solution:
+        Refactor the imports to import a common namespace. Something like
+        ``from package import module`` and then
+        use it like ``module.function()``.
+
+    Example::
+
+        # Correct:
+        import module  # 1 imported name
+
+        # Wrong:
+        from module import func1, func2, ..., funcN  # N imported names
+
+    Configuration:
+        This rule is configurable with ``--max-import-from-members``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_IMPORT_FROM_MEMBERS`
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = (
+        'Found ``from ... import ...`` with too many imported names: {0}'
+    )
+    code = 234

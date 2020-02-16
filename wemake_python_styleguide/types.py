@@ -221,3 +221,7 @@ class ConfigurationOptions(Protocol):
     @property
     def max_call_level(self) -> int:
         ...
+
+    @property
+    def max_import_from_members(self) -> int:
+        ...
