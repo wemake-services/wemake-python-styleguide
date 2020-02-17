@@ -57,6 +57,7 @@ Summary
    UselessExceptCaseViolation
    UselessOperatorsViolation
    InconsistentReturnVariableViolation
+   WalrusViolation
    ImplicitComplexCompareViolation
    ReversedComplexCompareViolation
    WrongLoopIterTypeViolation
@@ -117,6 +118,7 @@ Consistency checks
 .. autoclass:: UselessExceptCaseViolation
 .. autoclass:: UselessOperatorsViolation
 .. autoclass:: InconsistentReturnVariableViolation
+.. autoclass:: WalrusViolation
 .. autoclass:: ImplicitComplexCompareViolation
 .. autoclass:: ReversedComplexCompareViolation
 .. autoclass:: WrongLoopIterTypeViolation
@@ -150,8 +152,6 @@ from wemake_python_styleguide.violations.base import (
     ASTViolation,
     TokenizeViolation,
 )
-
-DEPRECATED_CODES = (332,)
 
 
 @final
@@ -1300,6 +1300,41 @@ class InconsistentReturnVariableViolation(ASTViolation):
         'Found local variable that are only used in `return` statements'
     )
     code = 331
+
+
+@final
+class WalrusViolation(ASTViolation):
+    """
+    Forbids local variable that are only used in ``return`` statements.
+
+    This violation can only be thrown on ``python3.8+``.
+
+    Reasoning:
+        Code with ``:=`` is hardly readable.
+        It has big problems with scoping and reading order.
+        And it can lead to a huge mess inside your code.
+        Python is not expression-based.
+
+    Solution:
+        Don't use fancy stuff, use good old assignments.
+
+    Example::
+
+        # Correct:
+        some = call()
+        if some:
+            print(some)
+
+        # Wrong:
+        if some := call():
+            print(some)
+
+    .. versionadded:: 0.14.0
+
+    """
+
+    error_template = 'Found walrus operator'
+    code = 332
 
 
 @final

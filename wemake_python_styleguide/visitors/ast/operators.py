@@ -5,6 +5,7 @@ from typing import ClassVar, Mapping, Optional, Tuple, Type, Union
 
 from typing_extensions import final
 
+from wemake_python_styleguide.compat import types as compat_types
 from wemake_python_styleguide.logic import walk
 from wemake_python_styleguide.logic.operators import (
     count_unary_operator,
@@ -246,3 +247,25 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
                     consistency.ExplicitStringConcatViolation(node),
                 )
                 return
+
+
+@final
+class WalrusVisitor(base.BaseNodeVisitor):  # pragma: py-lt-38
+    """
+    We use this visitor to find walrus operators and ban them.
+
+    This code is only executed on ``python3.8+``,
+    because before ``3.8.0`` release
+    there was no such thing as walrus operator.
+    """
+
+    def visit_NamedExpr(self, node: compat_types.NamedExpr) -> None:
+        """
+        Disallows walrus ``:=`` operator.
+
+        Raises:
+            WalrusViolation
+
+        """
+        self.add_violation(consistency.WalrusViolation(node))
+        self.generic_visit(node)

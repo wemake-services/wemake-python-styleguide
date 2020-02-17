@@ -34,6 +34,18 @@ Conventions
 - If violation error template should have a parameter
   it should be the last part of the text: ``: {0}``
 
+Deprecating a violation
+~~~~~~~~~~~~~~~~~~~~~~~
+
+When you want to mark some violation as depracated,
+then assign ``deprecated`` boolean flag to it:
+
+.. code:: python
+
+  @final
+  class SomeViolation(ASTViolation):
+      depracated = True
+
 Reference
 ~~~~~~~~~
 
@@ -67,12 +79,14 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
         error_template: message that will be shown to user after formatting.
         code: violation unique number. Used to identify the violation.
         previous_codes: just a documentation thing to track changes in time.
+        deprecated: indicates that this violation will be removed soon.
 
     """
 
     error_template: ClassVar[str]
     code: ClassVar[int]
     previous_codes: ClassVar[Set[int]]
+    deprecated: ClassVar[bool] = False
 
     def __init__(self, node: ErrorNode, text: Optional[str] = None) -> None:
         """

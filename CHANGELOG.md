@@ -19,7 +19,8 @@ Semantic versioning in our case means:
 - Changes `styleguide.toml` and `flake8.toml` scripts definition
 - Extracts new violation - WPS450 from WPS436 #1118
 - Adds domain names options, that are used to create variable names' blacklist #1106
-- Add `__call__` to list of methods that should be on top #1125
+- Forbids to use `:=` operator
+- Adds `__call__` to list of methods that should be on top #1125
 
 ### Bugfixes
 
@@ -28,6 +29,9 @@ Semantic versioning in our case means:
 
 ### Misc
 
+- Changes how tests are executed
+- Changes how coverage is calculated, adds `coverage-conditional-plugin`
+- Adds how a violation can be deprecated
 - Adds `local-partial-types` to mypy config
 - Uses `abc` stdlib's module to mark abstract base classes #1122
 - Adds `python3.8` to the CI

@@ -74,6 +74,7 @@ PRESET: Final = (
 
     operators.UselessOperatorsVisitor,
     operators.WrongMathOperatorVisitor,
+    operators.WalrusVisitor,
 
     compares.WrongConditionalVisitor,
     compares.CompareSanityVisitor,
