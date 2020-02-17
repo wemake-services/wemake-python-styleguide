@@ -32,8 +32,6 @@ string'
 
 '\''
 
-print('test')
-
 
 def complex_annotation(
     first: List[Union[List[str], Dict[str, Dict[str, str]]]],

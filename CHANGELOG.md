@@ -13,6 +13,7 @@ Semantic versioning in our case means:
 
 ### Features
 
+- **Breaking**: removes `flake8-print`, now using `WPS421` instead
 - Adds `python3.8` support
 - Removes `radon`, because `cognitive-complexity` is enough
 - Removes `flake8-loggin-format` as a direct dependency
