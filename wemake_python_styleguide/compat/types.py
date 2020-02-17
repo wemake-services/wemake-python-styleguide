@@ -10,9 +10,9 @@ because that's how ``mypy`` knows about what we are doing.
 import ast
 import sys
 
-if sys.version_info >= (3, 8):
+if sys.version_info >= (3, 8):  # pragma: py-lt-38
     from ast import NamedExpr as NamedExpr  # noqa: WPS113, WPS433
-else:
+else:  # pragma: py-gte-38
     class NamedExpr(ast.expr):  # noqa: WPS440
         """Copied from ast.pyi file."""
 

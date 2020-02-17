@@ -41,8 +41,12 @@ IGNORED_VIOLATIONS = (
 VERSION_SPECIFIC = types.MappingProxyType({
     'WPS216': 1,
     'WPS224': 1,
+
     'WPS307': 1,
+    'WPS332': 0,  # TODO: add test case, only works for `>= python3.8`
+
     'WPS416': int(not PY38),  # only works for `< python3.8`
+
     'WPS602': 2,
 })
 
@@ -131,6 +135,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS329': 1,
     'WPS330': 1,
     'WPS331': 1,
+    'WPS332': 0,  # defined in version specific table.
     'WPS333': 1,
     'WPS334': 1,
     'WPS335': 1,
