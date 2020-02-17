@@ -5,7 +5,7 @@ This file contains all possible violations.
 It is used for e2e tests.
 """
 
-from __future__ import my_print_function  # noqa: WPS422
+from __future__ import print_function  # noqa: WPS422
 
 import os.path  # noqa: WPS301
 import sys as sys  # noqa: WPS113
