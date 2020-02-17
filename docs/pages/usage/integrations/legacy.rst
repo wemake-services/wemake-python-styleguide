@@ -109,7 +109,7 @@ It means that we only need to fix things we have touched in this commit:
           """Do this and that."""
           value_to_log = self.method_we_do_not_care_about()
           # We really need to log it, so it will be shown in logs:
-          print(value_to_log)  # noqa: T001
+          print(value_to_log)  # noqa: WPS421
 
 That's it. We have passed out linter with just so few reafctoring.
 
