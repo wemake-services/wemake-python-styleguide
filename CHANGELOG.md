@@ -14,6 +14,8 @@ Semantic versioning in our case means:
 ### Features
 
 - **Breaking**: removes `flake8-print`, now using `WPS421` instead of `T001`
+- Removes `cognitive_complexity` dependency, now it is built in into our linter
+- Changes how cognitive complexity is calculated
 - Adds `python3.8` support
 - Removes `radon`, because `cognitive-complexity` is enough
 - Removes `flake8-loggin-format` as a direct dependency
@@ -27,6 +29,9 @@ Semantic versioning in our case means:
 
 - Remove ImplicitTernaryViolation - WPS332 #1099
 - Fixes how `i_control_code` behaves with WPS113
+- Fixes that cognitive complexity was ignoring
+  `ast.Continue`, `ast.Break`, and `ast.Raise` statements
+- Fixes that cognitive complexity was ignoring `ast.AsyncFor` loops
 
 ### Misc
 

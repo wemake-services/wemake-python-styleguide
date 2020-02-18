@@ -6,7 +6,8 @@ from typing import ClassVar, DefaultDict, Dict, List, Tuple, Type, Union
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic import complexity, functions
+from wemake_python_styleguide.logic import functions
+from wemake_python_styleguide.logic.complexity import cognitive
 from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.types import (
@@ -235,7 +236,7 @@ class CognitiveComplexityVisitor(BaseNodeVisitor):
             CognitiveModuleComplexityViolation
 
         """
-        self._functions[node] = complexity.cognitive_score(node)
+        self._functions[node] = cognitive.cognitive_score(node)
         self.generic_visit(node)
 
     def _post_visit(self) -> None:

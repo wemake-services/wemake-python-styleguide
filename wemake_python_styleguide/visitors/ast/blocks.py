@@ -20,17 +20,7 @@ from wemake_python_styleguide.logic.naming.name_nodes import (
     flat_variable_names,
 )
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
-from wemake_python_styleguide.logic.scope_predicates import (
-    is_function_overload,
-    is_no_value_annotation,
-    is_property_setter,
-    is_same_value_reuse,
-)
-from wemake_python_styleguide.logic.scopes import (
-    BlockScope,
-    OuterScope,
-    extract_names,
-)
+from wemake_python_styleguide.logic.scopes import defs, predicates
 from wemake_python_styleguide.logic.walk import is_contained_by
 from wemake_python_styleguide.types import (
     AnyAssign,
@@ -93,14 +83,14 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
     """
 
     _naming_predicates: Tuple[_NamePredicate, ...] = (
-        is_function_overload,
-        is_property_setter,
-        is_no_value_annotation,
+        predicates.is_function_overload,
+        predicates.is_property_setter,
+        predicates.is_no_value_annotation,
     )
 
     _scope_predicates: Tuple[_ScopePredicate, ...] = (
-        is_same_value_reuse,
-        is_property_setter,
+        predicates.is_same_value_reuse,
+        predicates.is_property_setter,
     )
 
     # Blocks:
@@ -126,7 +116,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
             BlockAndLocalOverlapViolation
 
         """
-        names = extract_names(node.target)
+        names = defs.extract_names(node.target)
         self._scope(node, names, is_local=False)
         self._outer_scope(node, names)
         self.generic_visit(node)
@@ -155,7 +145,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
         """
         if node.optional_vars:
             parent = cast(AnyWith, get_parent(node))
-            names = extract_names(node.optional_vars)
+            names = defs.extract_names(node.optional_vars)
             self._scope(parent, names, is_local=False)
             self._outer_scope(parent, names)
         self.generic_visit(node)
@@ -188,7 +178,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
         *,
         is_local: bool,
     ) -> None:
-        scope = BlockScope(node)
+        scope = defs.BlockScope(node)
         shadow = scope.shadowing(names, is_local=is_local)
 
         ignored_scope = any(
@@ -209,7 +199,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
             scope.add_to_scope(names, is_local=is_local)
 
     def _outer_scope(self, node: ast.AST, names: Set[str]) -> None:
-        scope = OuterScope(node)
+        scope = defs.OuterScope(node)
         shadow = scope.shadowing(names)
 
         if shadow:
@@ -249,7 +239,7 @@ class AfterBlockVariablesVisitor(base.BaseNodeVisitor):
 
     def visit_any_for(self, node: AnyFor) -> None:
         """Visit loops."""
-        self._add_to_scope(node, extract_names(node.target))
+        self._add_to_scope(node, defs.extract_names(node.target))
         self.generic_visit(node)
 
     def visit_withitem(self, node: ast.withitem) -> None:
@@ -257,7 +247,7 @@ class AfterBlockVariablesVisitor(base.BaseNodeVisitor):
         if node.optional_vars:
             self._add_to_scope(
                 cast(AnyWith, get_parent(node)),
-                extract_names(node.optional_vars),
+                defs.extract_names(node.optional_vars),
             )
         self.generic_visit(node)
 

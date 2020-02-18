@@ -66,7 +66,7 @@ def test_complex_cognitive_function(
         [CognitiveComplexityViolation],
         ignored_types=(CognitiveModuleComplexityViolation,),
     )
-    assert_error_text(visitor, '19', multiple=True)
+    assert_error_text(visitor, '22', multiple=True)
 
 
 @pytest.mark.parametrize('code', [

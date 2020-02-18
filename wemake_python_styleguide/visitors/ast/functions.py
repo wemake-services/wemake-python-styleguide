@@ -2,7 +2,7 @@
 
 import ast
 from contextlib import suppress
-from typing import ClassVar, Dict, List, Optional, Union
+from typing import ClassVar, Dict, List, Union
 
 from typing_extensions import final
 
@@ -12,11 +12,11 @@ from wemake_python_styleguide.constants import (
     LITERALS_BLACKLIST,
 )
 from wemake_python_styleguide.logic import (
+    attributes,
     exceptions,
     functions,
     nodes,
     operators,
-    prop_access,
     walk,
 )
 from wemake_python_styleguide.logic.arguments import function_args
@@ -253,7 +253,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
     ) -> None:
         defs = local_variables.get(var_name)
         if defs is not None:
-            if access.is_unused(var_name):
+            if not var_name or access.is_unused(var_name):
                 # We check unused variable usage in a different place:
                 # see `visitors/ast/naming.py`
                 return
@@ -268,31 +268,26 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
         if is_name_def or isinstance(sub_node, ast.ExceptHandler):
             local_variables[var_name] = []
 
-    def _get_variable_name(self, node: LocalVariable) -> Optional[str]:
+    def _get_variable_name(self, node: LocalVariable) -> str:
         if isinstance(node, ast.Name):
             return node.id
-        return getattr(node, 'name', None)
+        return getattr(node, 'name', '')
 
     def _check_unused_variables(self, node: AnyFunctionDef) -> None:
         local_variables: Dict[str, List[LocalVariable]] = {}
         for body_item in node.body:
             for sub_node in ast.walk(body_item):
-                if not isinstance(sub_node, (ast.Name, ast.ExceptHandler)):
-                    continue
-
-                var_name = self._get_variable_name(sub_node)
-                if not var_name:
-                    continue
-
-                self._maybe_update_variable(
-                    sub_node, var_name, local_variables,
-                )
+                if isinstance(sub_node, (ast.Name, ast.ExceptHandler)):
+                    var_name = self._get_variable_name(sub_node)
+                    self._maybe_update_variable(
+                        sub_node, var_name, local_variables,
+                    )
         self._check_used_variables(local_variables)
 
     def _check_argument_default_values(self, node: AnyFunctionDef) -> None:
         for arg in node.args.defaults:
             real_arg = operators.unwrap_unary_node(arg)
-            parts = prop_access.parts(real_arg) if isinstance(
+            parts = attributes.parts(real_arg) if isinstance(
                 real_arg, ast.Attribute,
             ) else [real_arg]
 

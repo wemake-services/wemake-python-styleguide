@@ -10,10 +10,10 @@ from wemake_python_styleguide import constants, types
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.logic import (
+    attributes,
     classes,
     functions,
     nodes,
-    prop_access,
     source,
     strings,
     walk,
@@ -104,10 +104,10 @@ class WrongClassVisitor(base.BaseNodeVisitor):
         elif isinstance(base_class, ast.Attribute):
             return all(
                 isinstance(sub_node, (ast.Name, ast.Attribute))
-                for sub_node in prop_access.parts(base_class)
+                for sub_node in attributes.parts(base_class)
             )
         elif isinstance(base_class, ast.Subscript):
-            parts = list(prop_access.parts(base_class))
+            parts = list(attributes.parts(base_class))
             subscripts = list(filter(
                 lambda part: isinstance(part, ast.Subscript), parts,
             ))

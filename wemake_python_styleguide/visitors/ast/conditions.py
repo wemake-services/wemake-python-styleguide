@@ -3,7 +3,7 @@
 import ast
 from collections import defaultdict
 from functools import reduce
-from typing import ClassVar, DefaultDict, Dict, List, Set, Type
+from typing import ClassVar, DefaultDict, List, Mapping, Set, Type
 
 from typing_extensions import final
 
@@ -26,6 +26,8 @@ from wemake_python_styleguide.violations.refactoring import (
     UselessReturningElseViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
+
+_OperatorPairs = Mapping[Type[ast.boolop], Type[ast.cmpop]]
 
 
 def _duplicated_isinstance_call(node: ast.BoolOp) -> List[str]:
@@ -218,6 +220,11 @@ class BooleanConditionVisitor(BaseNodeVisitor):
 class ImplicitBoolPatternsVisitor(BaseNodeVisitor):
     """Is used to find implicit patterns that are formed by boolops."""
 
+    _allowed: ClassVar[_OperatorPairs] = {
+        ast.And: ast.NotEq,
+        ast.Or: ast.Eq,
+    }
+
     def visit_BoolOp(self, node: ast.BoolOp) -> None:
         """
         Checks that ``and`` and ``or`` do not form implicit anti-patterns.
@@ -232,21 +239,15 @@ class ImplicitBoolPatternsVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_implicit_in(self, node: ast.BoolOp) -> None:
-        allowed_ops: Dict[Type[ast.boolop], Type[ast.cmpop]] = {
-            ast.And: ast.NotEq,
-            ast.Or: ast.Eq,
-        }
-
         variables: List[Set[str]] = []
 
-        for compare in node.values:
-            if not isinstance(compare, ast.Compare) or len(compare.ops) != 1:
+        for cmp in node.values:
+            if not isinstance(cmp, ast.Compare) or len(cmp.ops) != 1:
+                return
+            if not isinstance(cmp.ops[0], self._allowed[node.op.__class__]):
                 return
 
-            if not isinstance(compare.ops[0], allowed_ops[node.op.__class__]):
-                return
-
-            variables.append({source.node_to_string(compare.left)})
+            variables.append({source.node_to_string(cmp.left)})
 
         for duplicate in _get_duplicate_names(variables):
             self.add_violation(

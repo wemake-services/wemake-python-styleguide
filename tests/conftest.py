@@ -11,6 +11,7 @@ pytest_plugins = [
     'plugins.violations',
     'plugins.ast_tree',
     'plugins.tokenize_parser',
+    'plugins.async_sync',
 ]
 
 

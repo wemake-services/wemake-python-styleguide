@@ -309,13 +309,14 @@ class SyncForLoopVisitor(base.BaseNodeVisitor):
         target = source.node_to_string(node.target)
 
         for sub in ast.walk(node):
-            if isinstance(sub, ast.Subscript):
-                if self._is_assigned_target(sub):
-                    continue
-
-                if slices.is_same_slice(iterable, target, sub):
-                    self.add_violation(ImplicitItemsIteratorViolation(node))
-                    break
+            has_violation = (
+                isinstance(sub, ast.Subscript) and
+                not self._is_assigned_target(sub) and
+                slices.is_same_slice(iterable, target, sub)
+            )
+            if has_violation:
+                self.add_violation(ImplicitItemsIteratorViolation(node))
+                break
 
     def _is_assigned_target(self, node: ast.Subscript) -> bool:
         parent = nodes.get_parent(node)

@@ -58,7 +58,6 @@ attrs = "*"
 typing_extensions = "^3.6"
 astor = "^0.8"
 pygments = "^2.4"
-cognitive_complexity = "^0.0.4"
 
 flake8-builtins = "^1.4.2"
 flake8-commas = "^2.0"
