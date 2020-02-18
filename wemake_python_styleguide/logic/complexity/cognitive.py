@@ -35,7 +35,8 @@ _CONTROL_FLOW_BREAKERS: AnyNodes = (
 #: Control flow nodes that increment.
 _SHORT_CIRCUITS: AnyNodes = (
     ast.Break,
-    ast.Continue,  # TODO: add ast.Raise
+    ast.Continue,
+    ast.Raise,
 )
 
 #: Basic nodes to be counted as `1`.
