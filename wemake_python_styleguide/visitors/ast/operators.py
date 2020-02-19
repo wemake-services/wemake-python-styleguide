@@ -257,10 +257,10 @@ class WalrusVisitor(base.BaseNodeVisitor):
     there was no such thing as walrus operator.
     """
 
-    def visit_NamedExpr(  # pragma: py-lt-38
+    def visit_NamedExpr(
         self,
         node: compat_types.NamedExpr,
-    ) -> None:
+    ) -> None:  # pragma: py-lt-38
         """
         Disallows walrus ``:=`` operator.
 
