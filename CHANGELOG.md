@@ -14,11 +14,12 @@ Semantic versioning in our case means:
 ### Features
 
 - **Breaking**: removes `flake8-print`, now using `WPS421` instead of `T001`
-- Removes `cognitive_complexity` dependency, now it is built in into our linter
-- Changes how cognitive complexity is calculated
 - Adds `python3.8` support
 - Removes `radon`, because `cognitive-complexity` is enough
 - Removes `flake8-loggin-format` as a direct dependency
+- Removes `cognitive_complexity` dependency, now it is built in into our linter
+- Changes how cognitive complexity is calculated
+- Adds support for positional arguments
 - Changes `styleguide.toml` and `flake8.toml` scripts definition
 - Extracts new violation - WPS450 from WPS436 #1118
 - Adds domain names options, that are used to create variable names' blacklist #1106

@@ -216,8 +216,7 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         class_name: str,
     ) -> None:
         if node.decorator_list:
-            # any decorator can change logic
-            # and make this overwrite useful
+            # Any decorator can change logic and make this overwrite useful.
             return
 
         call_stmt = self._get_call_stmt_of_useless_method(node)

@@ -3,6 +3,7 @@
 from ast import Call, Yield, YieldFrom, arg
 from typing import Container, List, Optional
 
+from wemake_python_styleguide.compat.functions import get_posonlyargs
 from wemake_python_styleguide.logic import source
 from wemake_python_styleguide.logic.walk import is_contained
 from wemake_python_styleguide.types import (
@@ -61,15 +62,21 @@ def get_all_arguments(node: AnyFunctionDefAndLambda) -> List[arg]:
     Returns list of all arguments that exist in a function.
 
     Respects the correct parameters order.
-    Positional args, ``*args``, keyword-only, ``**kwargs``.
+    Positional only args, regular argument,
+    ``*args``, keyword-only, ``**kwargs``.
+
+    Positional only args are only added for ``python3.8+``
+    other versions are ignoring this type of arguments.
     """
     names = [
+        *get_posonlyargs(node),
         *node.args.args,
-        *node.args.kwonlyargs,
     ]
 
     if node.args.vararg:
-        names.insert(len(node.args.args), node.args.vararg)
+        names.append(node.args.vararg)
+
+    names.extend(node.args.kwonlyargs)
 
     if node.args.kwarg:
         names.append(node.args.kwarg)
@@ -79,10 +86,15 @@ def get_all_arguments(node: AnyFunctionDefAndLambda) -> List[arg]:
 
 def is_first_argument(node: AnyFunctionDefAndLambda, name: str) -> bool:
     """Tells whether an argument name is the logically first in function."""
-    if not node.args.args:
+    positional_args = [
+        *get_posonlyargs(node),
+        *node.args.args,
+    ]
+
+    if not positional_args:
         return False
 
-    return name == node.args.args[0].arg
+    return name == positional_args[0].arg
 
 
 def is_generator(node: AnyFunctionDef) -> bool:
