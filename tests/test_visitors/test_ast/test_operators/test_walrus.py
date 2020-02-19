@@ -38,7 +38,6 @@ some = [
 """
 
 
-@pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8')
 @pytest.mark.parametrize('code', [
     correct_assignment,
     correct_if_condition,

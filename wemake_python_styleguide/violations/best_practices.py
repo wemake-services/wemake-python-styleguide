@@ -70,6 +70,7 @@ Summary
    IncorrectExceptOrderViolation
    FloatKeyViolation
    ProtectedModuleMemberViolation
+   PositionalOnlyArgumentsViolation
 
 Best practices
 --------------
@@ -125,6 +126,7 @@ Best practices
 .. autoclass:: IncorrectExceptOrderViolation
 .. autoclass:: FloatKeyViolation
 .. autoclass:: ProtectedModuleMemberViolation
+.. autoclass:: PositionalOnlyArgumentsViolation
 
 """
 
@@ -1982,3 +1984,42 @@ class ProtectedModuleMemberViolation(ASTViolation):
 
     error_template = 'Found protected object import'
     code = 450
+
+
+@final
+class PositionalOnlyArgumentsViolation(ASTViolation):
+    """
+    Forbids to use positional only or ``/`` arguments.
+
+    This violation is only raised for ``python3.8+``,
+    earlier versions do not have this concept.
+
+    Reasoning:
+        This is a very rare case.
+        Almost exclusively used by C code and stdlib.
+        There's no point in declaring your own parameters as positional only.
+        It will break your code!
+
+    Solution:
+        Use regular arguments.
+        In case you are working with C, then this violation can be ignored.
+
+    Example::
+
+        # Correct:
+        def my_function(first, second):
+            ...
+
+        # Wrong:
+        def my_function(first, /, second):
+            ...
+
+    See also:
+        https://www.python.org/dev/peps/pep-0570/
+
+    .. versionadded:: 0.14.0
+
+    """
+
+    error_template = 'Found positional-only argument'
+    code = 451

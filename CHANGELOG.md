@@ -19,11 +19,12 @@ Semantic versioning in our case means:
 - Removes `flake8-loggin-format` as a direct dependency
 - Removes `cognitive_complexity` dependency, now it is built in into our linter
 - Changes how cognitive complexity is calculated
-- Adds support for positional arguments
+- Adds support for positional arguments in different checks
 - Changes `styleguide.toml` and `flake8.toml` scripts definition
 - Extracts new violation - WPS450 from WPS436 #1118
 - Adds domain names options, that are used to create variable names' blacklist #1106
 - Forbids to use `:=` operator
+- Forbids to use positional only `/` arguments
 - Adds `__call__` to list of methods that should be on top #1125
 
 ### Bugfixes

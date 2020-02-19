@@ -45,3 +45,7 @@ def wrong_comprehension2():
         for _ in range(10)
         if isinstance(target, int)
     ]
+
+
+def positional_only(first, /, second):  # noqa: WPS451
+    anti_wps428 = 1

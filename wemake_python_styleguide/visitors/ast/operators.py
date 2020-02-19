@@ -248,7 +248,7 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
 
 
 @final
-class WalrusVisitor(base.BaseNodeVisitor):  # pragma: py-lt-38
+class WalrusVisitor(base.BaseNodeVisitor):
     """
     We use this visitor to find walrus operators and ban them.
 
@@ -257,7 +257,10 @@ class WalrusVisitor(base.BaseNodeVisitor):  # pragma: py-lt-38
     there was no such thing as walrus operator.
     """
 
-    def visit_NamedExpr(self, node: compat_types.NamedExpr) -> None:
+    def visit_NamedExpr(  # pragma: py-lt-38
+        self,
+        node: compat_types.NamedExpr,
+    ) -> None:
         """
         Disallows walrus ``:=`` operator.
 
