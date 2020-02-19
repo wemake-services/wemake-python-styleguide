@@ -14,6 +14,8 @@ Semantic versioning in our case means:
 ### Features
 
 - **Breaking**: removes `flake8-print`, now using `WPS421` instead of `T001`
+- **Breaking**: removes `flake8-annotations-complexity`,
+  now using `WPS234` instead of `TAE002`
 - Adds `python3.8` support
 - Removes `radon`, because `cognitive-complexity` is enough
 - Removes `flake8-loggin-format` as a direct dependency
@@ -22,7 +24,9 @@ Semantic versioning in our case means:
 - Adds support for positional arguments in different checks
 - Changes `styleguide.toml` and `flake8.toml` scripts definition
 - Extracts new violation - WPS450 from WPS436 #1118
-- Adds domain names options, that are used to create variable names' blacklist #1106
+- Adds domain names options:
+  `--allowed-domain-names` and `--forbidden-domain-names`,
+  that are used to create variable names' blacklist #1106
 - Forbids to use `:=` operator
 - Forbids to use positional only `/` arguments
 - Adds `__call__` to list of methods that should be on top #1125
@@ -34,6 +38,8 @@ Semantic versioning in our case means:
 - Fixes that cognitive complexity was ignoring
   `ast.Continue`, `ast.Break`, and `ast.Raise` statements
 - Fixes that cognitive complexity was ignoring `ast.AsyncFor` loops
+- Fixes that annotation complexity was not reported for `async` functions
+- Fixes that annotation complexity was not reported from lists
 
 ### Misc
 

@@ -1058,3 +1058,36 @@ class TooLongCallChainViolation(ASTViolation):
 
     error_template = 'Found too lang call chain length: {0}'
     code = 233
+
+
+@final
+class TooComplexAnnotationViolation(ASTViolation):
+    """
+    Forbids too complex annotations.
+
+    Annotation complexity is maximum annotation nesting level.
+    Example: ``List[int]`` has complexity of 2
+    and ``Tuple[List[Optional[str]], int]`` has complexity of 4.
+
+    Reasoning:
+        Too complex annotations make your types unreadable.
+        And make developers afraid of types.
+
+    Solution:
+        Create type aliases. And use them a lot!
+
+    Configuration:
+        This rule is configurable with ``--max-annotation-complexity``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_ANN_COMPLEXITY`
+
+    See also:
+        https://mypy.readthedocs.io/en/stable/kinds_of_types.html#type-aliases
+        https://github.com/best-doctor/flake8-annotations-complexity
+
+    .. versionadded:: 0.14.0
+
+    """
+
+    error_template = 'Found too complex annotation: {0}'
+    code = 234

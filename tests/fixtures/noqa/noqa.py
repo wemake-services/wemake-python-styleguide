@@ -7,6 +7,8 @@ It is used for e2e tests.
 
 from __future__ import print_function  # noqa: WPS422
 
+from typing import List
+
 import os.path  # noqa: WPS301
 import sys as sys  # noqa: WPS113
 
@@ -19,7 +21,6 @@ import import1
 import import2
 import import3
 import import4
-import import5
 
 from some_name import (
     name1,
@@ -683,6 +684,8 @@ if 'key' in some_dict:
     my_print(some_sized[len(some_sized) - 2])  # noqa: WPS530
 
 deep_func(a)(b)(c)(d)  # noqa: WPS233
+
+annotated: List[List[List[List[int]]]]  # noqa: WPS234
 
 extra_new_line = [  # noqa: WPS355
 

@@ -63,10 +63,11 @@ def test_not_posonlyargs(
     assert_errors,
     parse_ast_tree,
     code,
+    mode,
     default_options,
 ):
     """Testing that regular code is allowed."""
-    tree = parse_ast_tree(code)
+    tree = parse_ast_tree(mode(code))
 
     visitor = PositionalOnlyArgumentsVisitor(default_options, tree=tree)
     visitor.run()
@@ -88,10 +89,11 @@ def test_posonyargs(
     assert_errors,
     parse_ast_tree,
     code,
+    mode,
     default_options,
 ):
     """Testing that ``/`` is not allowed."""
-    tree = parse_ast_tree(code)
+    tree = parse_ast_tree(mode(code))
 
     visitor = PositionalOnlyArgumentsVisitor(default_options, tree=tree)
     visitor.run()
