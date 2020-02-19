@@ -11,16 +11,15 @@ from wemake_python_styleguide.constants import (
     FUNCTIONS_BLACKLIST,
     LITERALS_BLACKLIST,
 )
-from wemake_python_styleguide.logic import (
+from wemake_python_styleguide.logic import nodes, walk
+from wemake_python_styleguide.logic.arguments import function_args
+from wemake_python_styleguide.logic.naming import access
+from wemake_python_styleguide.logic.tree import (
     attributes,
     exceptions,
     functions,
-    nodes,
     operators,
-    walk,
 )
-from wemake_python_styleguide.logic.arguments import function_args
-from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 from wemake_python_styleguide.violations import consistency, naming
 from wemake_python_styleguide.violations.best_practices import (

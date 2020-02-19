@@ -8,7 +8,19 @@ from wemake_python_styleguide import constants, types
 from wemake_python_styleguide.logic.arguments.call_args import get_starred_args
 
 
-def get_args_without_special_argument(
+def is_call_matched_by_arguments(
+    node: types.AnyFunctionDefAndLambda,
+    call: ast.Call,
+) -> bool:
+    """Tells whether ``call`` is matched by arguments of ``node``."""
+    same_vararg = _has_same_vararg(node, call)
+    same_kwarg = _has_same_kwarg(node, call)
+    same_args = _has_same_args(node, call)
+    same_kw_args = _has_same_kw_args(node, call)
+    return same_vararg and same_kwarg and same_args and same_kw_args
+
+
+def _get_args_without_special_argument(
     node: types.AnyFunctionDefAndLambda,
 ) -> List[ast.arg]:
     """Gets ``node`` arguments excluding ``self``, ``cls``, ``mcs``."""
@@ -20,7 +32,7 @@ def get_args_without_special_argument(
     return node_args[1:]
 
 
-def has_same_vararg(
+def _has_same_vararg(
     node: types.AnyFunctionDefAndLambda,
     call: ast.Call,
 ) -> bool:
@@ -37,7 +49,7 @@ def has_same_vararg(
     return node.args.vararg == vararg_name  # type: ignore
 
 
-def has_same_kwarg(
+def _has_same_kwarg(
     node: types.AnyFunctionDefAndLambda,
     call: ast.Call,
 ) -> bool:
@@ -57,12 +69,12 @@ def has_same_kwarg(
     return node.args.kwarg == kwarg_name  # type: ignore
 
 
-def has_same_args(  # noqa: WPS231
+def _has_same_args(  # noqa: WPS231
     node: types.AnyFunctionDefAndLambda,
     call: ast.Call,
 ) -> bool:
     """Tells whether ``call`` has the same positional args as ``node``."""
-    node_args = get_args_without_special_argument(node)
+    node_args = _get_args_without_special_argument(node)
     paired_arguments = zip_longest(call.args, node_args)
     for call_arg, func_arg in paired_arguments:
         if isinstance(call_arg, ast.Starred):
@@ -94,7 +106,7 @@ def _clean_call_keyword_args(
     return prepared_kw_args, real_kw_args
 
 
-def has_same_kw_args(
+def _has_same_kw_args(
     node: types.AnyFunctionDefAndLambda,
     call: ast.Call,
 ) -> bool:
@@ -107,15 +119,3 @@ def has_same_kw_args(
         if func_arg and not call_arg:
             return False
     return len(real_kw_args) == len(node.args.kwonlyargs)
-
-
-def is_call_matched_by_arguments(
-    node: types.AnyFunctionDefAndLambda,
-    call: ast.Call,
-) -> bool:
-    """Tells whether ``call`` is matched by arguments of ``node``."""
-    same_vararg = has_same_vararg(node, call)
-    same_kwarg = has_same_kwarg(node, call)
-    same_args = has_same_args(node, call)
-    same_kw_args = has_same_kw_args(node, call)
-    return same_vararg and same_kwarg and same_args and same_kw_args

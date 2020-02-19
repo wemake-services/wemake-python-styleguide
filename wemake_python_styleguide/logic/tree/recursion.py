@@ -2,8 +2,8 @@
 
 from ast import AST, Attribute, Call, ClassDef, walk
 
-from wemake_python_styleguide.logic.functions import given_function_called
 from wemake_python_styleguide.logic.nodes import get_context
+from wemake_python_styleguide.logic.tree.functions import given_function_called
 from wemake_python_styleguide.types import AnyFunctionDef
 
 

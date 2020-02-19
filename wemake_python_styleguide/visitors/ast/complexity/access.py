@@ -6,7 +6,7 @@ from typing import Set, cast
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic import attributes
+from wemake_python_styleguide.logic.tree import attributes
 from wemake_python_styleguide.types import AnyAccess
 from wemake_python_styleguide.violations.complexity import (
     TooDeepAccessViolation,

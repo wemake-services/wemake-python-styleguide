@@ -6,7 +6,7 @@ from typing import ClassVar, Set, Tuple
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic import exceptions
+from wemake_python_styleguide.logic.tree import exceptions
 from wemake_python_styleguide.logic.walk import is_contained
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (

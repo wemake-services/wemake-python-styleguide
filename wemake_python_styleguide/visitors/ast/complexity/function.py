@@ -6,10 +6,10 @@ from typing import ClassVar, DefaultDict, Dict, List, Tuple, Type, Union
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic import functions
 from wemake_python_styleguide.logic.complexity import cognitive
 from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.logic.nodes import get_parent
+from wemake_python_styleguide.logic.tree import functions
 from wemake_python_styleguide.types import (
     AnyFunctionDef,
     AnyFunctionDefAndLambda,

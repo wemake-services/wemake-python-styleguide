@@ -6,7 +6,7 @@ from typing import Set
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic.calls import parts
+from wemake_python_styleguide.logic.tree.calls import parts
 from wemake_python_styleguide.violations.complexity import (
     TooLongCallChainViolation,
 )

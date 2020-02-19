@@ -7,7 +7,7 @@ from typing_extensions import final
 
 from wemake_python_styleguide.compat import types as compat_types
 from wemake_python_styleguide.logic import walk
-from wemake_python_styleguide.logic.operators import (
+from wemake_python_styleguide.logic.tree.operators import (
     count_unary_operator,
     unwrap_unary_node,
 )

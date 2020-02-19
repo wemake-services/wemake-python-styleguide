@@ -9,17 +9,15 @@ from typing_extensions import final
 from wemake_python_styleguide import constants, types
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
-from wemake_python_styleguide.logic import (
+from wemake_python_styleguide.logic import nodes, source, walk
+from wemake_python_styleguide.logic.arguments import function_args, super_args
+from wemake_python_styleguide.logic.naming import access, name_nodes
+from wemake_python_styleguide.logic.tree import (
     attributes,
     classes,
     functions,
-    nodes,
-    source,
     strings,
-    walk,
 )
-from wemake_python_styleguide.logic.arguments import function_args, super_args
-from wemake_python_styleguide.logic.naming import access, name_nodes
 from wemake_python_styleguide.violations import best_practices as bp
 from wemake_python_styleguide.violations import consistency, oop
 from wemake_python_styleguide.visitors import base, decorators

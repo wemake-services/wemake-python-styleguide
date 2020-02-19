@@ -20,7 +20,7 @@ Adapted from https://github.com/Melevir/cognitive_complexity
 import ast
 from typing import Callable, Tuple
 
-from wemake_python_styleguide.logic import bools, recursion
+from wemake_python_styleguide.logic.tree import bools, recursion
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 
 #: Control flow nodes that increment and can be nested.

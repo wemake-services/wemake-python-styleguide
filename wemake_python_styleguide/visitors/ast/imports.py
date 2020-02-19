@@ -7,8 +7,9 @@ from typing import Callable, Iterable
 from typing_extensions import final
 
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
-from wemake_python_styleguide.logic import imports, nodes
+from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming import access
+from wemake_python_styleguide.logic.tree import imports
 from wemake_python_styleguide.types import AnyImport, ConfigurationOptions
 from wemake_python_styleguide.violations.base import BaseViolation
 from wemake_python_styleguide.violations.best_practices import (

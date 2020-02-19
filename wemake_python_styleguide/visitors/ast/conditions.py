@@ -7,9 +7,10 @@ from typing import ClassVar, DefaultDict, List, Mapping, Set, Type
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic import ifs, operators, source
-from wemake_python_styleguide.logic.compares import CompareBounds
-from wemake_python_styleguide.logic.functions import given_function_called
+from wemake_python_styleguide.logic import source
+from wemake_python_styleguide.logic.tree import ifs, operators
+from wemake_python_styleguide.logic.tree.compares import CompareBounds
+from wemake_python_styleguide.logic.tree.functions import given_function_called
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     SameElementsInConditionViolation,

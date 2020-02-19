@@ -22,7 +22,7 @@ from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
     SPECIAL_ARGUMENT_NAMES_WHITELIST,
 )
-from wemake_python_styleguide.logic import functions, nodes
+from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming import (
     access,
     blacklists,
@@ -30,6 +30,7 @@ from wemake_python_styleguide.logic.naming import (
     logical,
     name_nodes,
 )
+from wemake_python_styleguide.logic.tree import functions
 from wemake_python_styleguide.types import (
     AnyAssign,
     AnyFunctionDef,

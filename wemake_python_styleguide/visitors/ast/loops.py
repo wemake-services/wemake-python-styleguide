@@ -8,14 +8,9 @@ from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import AssignNodes, ForNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
-from wemake_python_styleguide.logic import (
-    nodes,
-    operators,
-    slices,
-    source,
-    walk,
-)
-from wemake_python_styleguide.logic.variables import (
+from wemake_python_styleguide.logic import nodes, source, walk
+from wemake_python_styleguide.logic.tree import operators, slices
+from wemake_python_styleguide.logic.tree.variables import (
     is_valid_block_variable_definition,
 )
 from wemake_python_styleguide.types import AnyFor, AnyNodes

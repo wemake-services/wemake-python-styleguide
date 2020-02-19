@@ -7,8 +7,8 @@ from typing import ClassVar, DefaultDict, List, Union
 from typing_extensions import final
 
 from wemake_python_styleguide.constants import MAX_LEN_YIELD_TUPLE
-from wemake_python_styleguide.logic.functions import is_method
 from wemake_python_styleguide.logic.nodes import get_parent
+from wemake_python_styleguide.logic.tree.functions import is_method
 from wemake_python_styleguide.types import AnyFunctionDef, AnyImport
 from wemake_python_styleguide.violations.complexity import (
     TooLongCompareViolation,
