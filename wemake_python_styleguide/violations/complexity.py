@@ -56,6 +56,7 @@ Summary
    CognitiveComplexityViolation
    CognitiveModuleComplexityViolation
    TooLongCallChainViolation
+   TooComplexAnnotationViolation
 
 
 Module complexity
@@ -94,6 +95,7 @@ Structure complexity
 .. autoclass:: CognitiveComplexityViolation
 .. autoclass:: CognitiveModuleComplexityViolation
 .. autoclass:: TooLongCallChainViolation
+.. autoclass:: TooComplexAnnotationViolation
 
 """
 
