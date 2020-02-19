@@ -19,6 +19,12 @@ def f(a):
     return a * f(a - 1)  # +1 for recursion
 """
 
+complexity1_3 = """
+class Test(object):
+    def f(self, a):
+        return a * self.f(a - 1)  # +1 for recursion
+"""
+
 complexity2_1 = """
 def f(a, b):
     if a and b and True:  # +2
@@ -81,6 +87,16 @@ def f(a):
     return 'a' if a else 'b'  # +1
 """
 
+complexity5_1 = """
+def f(a):
+    valid_items = []
+    for x in a:  # +1
+        if x > 0:  # +2
+            raise ValueError(x)  # +2
+        valid_items.append(x)
+    return valid_items
+"""
+
 complexity6_1 = """
 def f(a, b):
     if a:  # +1
@@ -133,6 +149,7 @@ def enhance(tree):
 @pytest.mark.parametrize(('code', 'complexity'), [
     (complexity1_1, 1),
     (complexity1_2, 1),
+    (complexity1_3, 1),
 
     (complexity2_1, 2),
     (complexity2_2, 2),
@@ -145,6 +162,7 @@ def enhance(tree):
     (complexity4_2, 4),
     (complexity4_3, 4),
 
+    (complexity5_1, 5),
     (complexity6_1, 6),
     (complexity9_1, 9),
     (complexity10_1, 10),

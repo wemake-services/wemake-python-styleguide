@@ -7,6 +7,12 @@ from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.types import ContextNodes
 
+_CONTEXTS: Tuple[Type[ContextNodes], ...] = (
+    ast.Module,
+    ast.ClassDef,
+    *FunctionNodes,
+)
+
 
 def set_if_chain(tree: ast.AST) -> ast.AST:
     """
@@ -61,14 +67,8 @@ def set_node_context(tree: ast.AST) -> ast.AST:
     .. versionchanged:: 0.8.1
 
     """
-    contexts: Tuple[Type[ContextNodes], ...] = (
-        ast.Module,
-        ast.ClassDef,
-        *FunctionNodes,
-    )
-
     for statement in ast.walk(tree):
-        current_context = _find_context(statement, contexts)
+        current_context = _find_context(statement, _CONTEXTS)
         setattr(statement, 'wps_context', current_context)  # noqa: B010
     return tree
 
