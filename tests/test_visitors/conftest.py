@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Sequence
+from typing import Optional, Sequence
 
 import pytest
 
@@ -42,7 +42,13 @@ def assert_errors():
 @pytest.fixture(scope='session')
 def assert_error_text():
     """Helper function to assert visitor violation's text."""
-    def factory(visitor: BaseVisitor, text: str, multiple: bool = False):
+    def factory(
+        visitor: BaseVisitor,
+        text: str,
+        baseline: Optional[int] = None,
+        *,
+        multiple: bool = False,
+    ):
         if not multiple:
             assert len(visitor.violations) == 1
 
@@ -55,6 +61,7 @@ def assert_error_text():
         reproduction = violation.__class__(
             node=violation._node,  # noqa: WPS437
             text=text,
+            baseline=baseline,
         )
         assert reproduction.message() == violation.message()
 

@@ -50,6 +50,8 @@ class CallChainsVisitor(BaseNodeVisitor):
         if num_of_calls > self.options.max_call_level:
             self.add_violation(
                 TooLongCallChainViolation(
-                    node, text=str(num_of_calls),
+                    node,
+                    text=str(num_of_calls),
+                    baseline=self.options.max_call_level,
                 ),
             )

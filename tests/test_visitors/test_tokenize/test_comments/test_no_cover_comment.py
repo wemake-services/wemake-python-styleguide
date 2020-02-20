@@ -2,6 +2,7 @@
 
 import pytest
 
+from wemake_python_styleguide.constants import MAX_NO_COVER_COMMENTS
 from wemake_python_styleguide.violations.best_practices import (
     OveruseOfNoCoverCommentViolation,
 )
@@ -19,6 +20,7 @@ from wemake_python_styleguide.visitors.tokenize.comments import (
 def test_no_cover_overuse(
     parse_tokens,
     assert_errors,
+    assert_error_text,
     default_options,
     code,
 ):
@@ -29,3 +31,4 @@ def test_no_cover_overuse(
     visitor.run()
 
     assert_errors(visitor, [OveruseOfNoCoverCommentViolation])
+    assert_error_text(visitor, '6', MAX_NO_COVER_COMMENTS)

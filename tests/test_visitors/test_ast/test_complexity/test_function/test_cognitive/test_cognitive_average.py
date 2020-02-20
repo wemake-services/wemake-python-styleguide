@@ -49,7 +49,6 @@ empty_module = ''
 ])
 def test_complex_cognitive_module(
     assert_errors,
-    assert_error_text,
     parse_ast_tree,
     code,
     default_options,
@@ -66,7 +65,6 @@ def test_complex_cognitive_module(
         [CognitiveModuleComplexityViolation],
         ignored_types=(CognitiveComplexityViolation,),
     )
-    assert_error_text(visitor, '22', multiple=True)
 
 
 @pytest.mark.parametrize('code', [
@@ -93,7 +91,9 @@ def test_complex_cognitive_options(
         [CognitiveModuleComplexityViolation],
         ignored_types=(CognitiveComplexityViolation,),
     )
-    assert_error_text(visitor, '1.0', multiple=True)
+    assert_error_text(
+        visitor, '1.0', option_values.max_cognitive_average, multiple=True,
+    )
 
 
 @pytest.mark.parametrize('code', [

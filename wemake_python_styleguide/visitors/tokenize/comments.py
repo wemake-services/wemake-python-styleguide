@@ -118,6 +118,7 @@ class WrongCommentVisitor(BaseTokenVisitor):
             self.add_violation(
                 OveruseOfNoCoverCommentViolation(
                     text=str(self._no_cover_count),
+                    baseline=MAX_NO_COVER_COMMENTS,
                 ),
             )
 

@@ -829,7 +829,7 @@ class TooManyExceptCasesViolation(ASTViolation):
 
     """
 
-    error_template = 'Found too many `except` cases'
+    error_template = 'Found too many `except` cases: {0}'
     code = 225
 
 
@@ -946,6 +946,7 @@ class TooManyPublicAttributesViolation(ASTViolation):
     We do not count properties.
     We do not count annotations.
     We do not count class attributes.
+    We do not count duplicates.
 
     Reasoning:
         Having too many public instance attributes means
@@ -970,7 +971,7 @@ class TooManyPublicAttributesViolation(ASTViolation):
 
     """
 
-    error_template = 'Found too many public instance attributes'
+    error_template = 'Found too many public instance attributes: {0}'
     code = 230
 
 

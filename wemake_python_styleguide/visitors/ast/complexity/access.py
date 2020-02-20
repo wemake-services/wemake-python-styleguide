@@ -63,6 +63,8 @@ class AccessVisitor(BaseNodeVisitor):
         if access_number > self.options.max_access_level:
             self.add_violation(
                 TooDeepAccessViolation(
-                    node, text=str(access_number),
+                    node,
+                    text=str(access_number),
+                    baseline=self.options.max_access_level,
                 ),
             )

@@ -82,4 +82,4 @@ def test_decorators_incorrect(
     visitor.run()
 
     assert_errors(visitor, [TooManyDecoratorsViolation])
-    assert_error_text(visitor, '3')
+    assert_error_text(visitor, '3', option_values.max_decorators)

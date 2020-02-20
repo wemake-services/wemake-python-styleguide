@@ -84,7 +84,7 @@ def test_no_arguments_error(
     visitor.run()
 
     assert_errors(visitor, [TooManyArgumentsViolation])
-    assert_error_text(visitor, '1')
+    assert_error_text(visitor, '1', option_values.max_arguments)
 
 
 @pytest.mark.parametrize('code', [

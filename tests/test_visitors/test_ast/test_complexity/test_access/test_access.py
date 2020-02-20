@@ -70,4 +70,8 @@ def test_incorrect_access(
     visitor.run()
 
     assert_errors(visitor, [TooDeepAccessViolation])
-    assert_error_text(visitor, str(access_level))
+    assert_error_text(
+        visitor,
+        access_level,
+        option_values.max_access_level,
+    )

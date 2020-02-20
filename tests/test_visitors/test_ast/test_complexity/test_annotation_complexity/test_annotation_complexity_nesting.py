@@ -109,6 +109,7 @@ def test_complex_annotations(
 ])
 def test_complex_annotations_config(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
     template,
     code,
@@ -123,3 +124,4 @@ def test_complex_annotations_config(
     visitor.run()
 
     assert_errors(visitor, [TooComplexAnnotationViolation])
+    assert_error_text(visitor, '3', option_values.max_annotation_complexity)

@@ -73,26 +73,30 @@ def test_correct_attributes(
 @pytest.mark.parametrize('code', [
     class_template,
 ])
-@pytest.mark.parametrize('expression', [
-    'self.public = 1',
-    'self.public = self.other',
+@pytest.mark.parametrize(('expression1', 'expression2'), [
+    ('self.public = 1', 'self.other = 1'),
+    ('self.public = self.other', 'self.other = 1'),
+    ('self.public = self.other', 'self.other = self.public'),
 ])
 def test_wrong_attributes_count(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
     code,
-    expression,
+    expression1,
+    expression2,
     options,
     mode,
 ):
     """Testing of correct base classes number."""
-    tree = parse_ast_tree(mode(code.format(expression, expression)))
+    tree = parse_ast_tree(mode(code.format(expression1, expression2)))
 
     option_values = options(max_attributes=1)
     visitor = ClassComplexityVisitor(option_values, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [TooManyPublicAttributesViolation])
+    assert_error_text(visitor, '2', option_values.max_attributes)
 
 
 @pytest.mark.parametrize('code', [

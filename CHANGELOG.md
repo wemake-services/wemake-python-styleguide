@@ -20,6 +20,7 @@ Semantic versioning in our case means:
 - Removes `radon`, because `cognitive-complexity` is enough
 - Removes `flake8-loggin-format` as a direct dependency
 - Removes `cognitive_complexity` dependency, now it is built in into our linter
+- Adds baseline information for all complexity violation messages
 - Changes how cognitive complexity is calculated
 - Adds support for positional arguments in different checks
 - Changes `styleguide.toml` and `flake8.toml` scripts definition
@@ -40,6 +41,8 @@ Semantic versioning in our case means:
 - Fixes that cognitive complexity was ignoring `ast.AsyncFor` loops
 - Fixes that annotation complexity was not reported for `async` functions
 - Fixes that annotation complexity was not reported from lists
+- Fixes bug when `TooManyPublicAttributesViolation`
+  was counting duplicate fields
 
 ### Misc
 

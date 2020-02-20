@@ -212,4 +212,4 @@ def test_elif_incorrect_count(
     visitor.run()
 
     assert_errors(visitor, [TooManyElifsViolation])
-    assert_error_text(visitor, '4')
+    assert_error_text(visitor, '4', baseline=3)

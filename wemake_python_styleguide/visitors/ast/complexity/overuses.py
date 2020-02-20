@@ -54,7 +54,10 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
         for string, usage_count in self._string_constants.items():
             if usage_count > self.options.max_string_usages:
                 self.add_violation(
-                    complexity.OverusedStringViolation(text=string or "''"),
+                    complexity.OverusedStringViolation(
+                        text=string or "''",
+                        baseline=self.options.max_string_usages,
+                    ),
                 )
 
 
@@ -85,7 +88,7 @@ class ExpressionOveruseVisitor(base.BaseNodeVisitor):
         ast.SetComp,
     )
 
-    _msg: ClassVar[str] = '{0}; used {1} times'
+    _msg: ClassVar[str] = '{0}; used {1}'
 
     def __init__(self, *args, **kwargs) -> None:
         """We need to track expression usage in functions and modules."""
@@ -181,6 +184,7 @@ class ExpressionOveruseVisitor(base.BaseNodeVisitor):
                         complexity.OverusedExpressionViolation(
                             function_nodes[0],
                             text=self._msg.format(src, len(function_nodes)),
+                            baseline=self.options.max_function_expressions,
                         ),
                     )
 

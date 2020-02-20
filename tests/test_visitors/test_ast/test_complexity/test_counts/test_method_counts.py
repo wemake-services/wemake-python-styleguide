@@ -145,4 +145,4 @@ def test_method_counts_violation(
     visitor.run()
 
     assert_errors(visitor, [TooManyMethodsViolation])
-    assert_error_text(visitor, '2')
+    assert_error_text(visitor, '2', option_values.max_methods)

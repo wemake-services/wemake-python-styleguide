@@ -68,5 +68,9 @@ class AnnotationComplexityVisitor(BaseNodeVisitor):
             complexity = get_annotation_compexity(annotation)
             if complexity > max_complexity:
                 self.add_violation(
-                    TooComplexAnnotationViolation(node, text=str(complexity)),
+                    TooComplexAnnotationViolation(
+                        node,
+                        text=str(complexity),
+                        baseline=max_complexity,
+                    ),
                 )

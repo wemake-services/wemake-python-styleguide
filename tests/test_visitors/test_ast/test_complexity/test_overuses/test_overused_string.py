@@ -138,7 +138,11 @@ def test_string_overuse(
     visitor.run()
 
     assert_errors(visitor, [OverusedStringViolation])
-    assert_error_text(visitor, string_value.replace('"', '') or "''")
+    assert_error_text(
+        visitor,
+        string_value.replace('"', '') or "''",
+        default_options.max_string_usages,
+    )
 
 
 @pytest.mark.parametrize('strings', [

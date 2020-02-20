@@ -115,7 +115,7 @@ def test_module_condition_counts_violation(
     visitor.run()
 
     assert_errors(visitor, [TooManyConditionsViolation])
-    assert_error_text(visitor, '2')
+    assert_error_text(visitor, '2', baseline=1)
 
 
 @pytest.mark.parametrize('code', [
@@ -137,4 +137,4 @@ def test_module_condition_real_config(
     visitor.run()
 
     assert_errors(visitor, [TooManyConditionsViolation])
-    assert_error_text(visitor, '5')
+    assert_error_text(visitor, '5', baseline=4)
