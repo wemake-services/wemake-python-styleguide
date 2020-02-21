@@ -1630,14 +1630,10 @@ class ControlVarUsedAfterBlockViolation(ASTViolation):
 
     1. ``for`` loop unpacked variables
     2. ``with`` context variables
-    3. ``except`` exception names
 
     Reasoning:
         Variables leaking from the blocks can damage your logic.
         It might not contain what you think they contain.
-        Some variables even might be deleted right after the block,
-        just like in ``except Exception as exc:``
-        where ``exc`` won't be in scope after ``except`` body.
 
     Solution:
         Use names inside the scope they are defined.
@@ -1659,6 +1655,7 @@ class ControlVarUsedAfterBlockViolation(ASTViolation):
         https://github.com/satwikkansal/wtfPython#-explanation-32
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 0.14.0
 
     """
 

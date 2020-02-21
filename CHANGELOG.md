@@ -16,9 +16,12 @@ Semantic versioning in our case means:
 - **Breaking**: removes `flake8-print`, now using `WPS421` instead of `T001`
 - **Breaking**: removes `flake8-annotations-complexity`,
   now using `WPS234` instead of `TAE002`
+- **Breaking**: `WPS441` is no longer triggered for `except` blocks,
+  it is now handled by `F821` from `flake8`
+- **Breaking**: Removes `radon`,
+  because `cognitive-complexity` and `mccabe` is enough
+- **Breaking**: Removes `flake8-loggin-format` as a direct dependency
 - Adds `python3.8` support
-- Removes `radon`, because `cognitive-complexity` is enough
-- Removes `flake8-loggin-format` as a direct dependency
 - Removes `cognitive_complexity` dependency, now it is built in into our linter
 - Adds baseline information for all complexity violation messages
 - Changes how cognitive complexity is calculated

@@ -8,6 +8,7 @@ you will need to get familiar with these APIs:
 - Writing a `flake8` [plugin](http://flake8.pycqa.org/en/latest/plugin-development/)
 - Using `ast` [module](https://docs.python.org/3/library/ast.html)
 - [Tokenizer for Python source](https://docs.python.org/3/library/tokenize.html)
+- [Tokens tutorial](https://www.asmeurer.com/brown-water-python/tokens.html)
 
 It is also recommended to take a look at these resources:
 
