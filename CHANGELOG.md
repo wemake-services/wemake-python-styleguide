@@ -32,6 +32,7 @@ Semantic versioning in our case means:
   `--allowed-domain-names` and `--forbidden-domain-names`,
   that are used to create variable names' blacklist #1106
 - Forbids to use `:=` operator
+- Forbids to use `\r` (carriage return) as line breaks in strings #1111
 - Forbids to use positional only `/` arguments
 - Adds `__call__` to list of methods that should be on top #1125
 
