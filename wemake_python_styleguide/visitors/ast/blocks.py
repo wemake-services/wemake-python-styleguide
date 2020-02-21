@@ -2,20 +2,10 @@
 
 import ast
 from collections import defaultdict
-from typing import (
-    Callable,
-    ClassVar,
-    DefaultDict,
-    List,
-    Set,
-    Tuple,
-    Union,
-    cast,
-)
+from typing import Callable, DefaultDict, List, Set, Tuple, Union, cast
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import ForNodes, WithNodes
 from wemake_python_styleguide.logic.naming.name_nodes import (
     flat_variable_names,
 )
@@ -27,7 +17,6 @@ from wemake_python_styleguide.types import (
     AnyFor,
     AnyFunctionDef,
     AnyImport,
-    AnyNodes,
     AnyWith,
 )
 from wemake_python_styleguide.violations.best_practices import (
