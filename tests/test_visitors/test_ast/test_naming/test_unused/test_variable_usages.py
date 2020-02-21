@@ -102,8 +102,8 @@ def test_correct_variable_usage(
 
 
 @pytest.mark.parametrize('bad_name', [
-    '_',
     '__',
+    '___',
 ])
 @pytest.mark.parametrize('code', [
     annotation,
@@ -137,3 +137,40 @@ def test_wrong_variable_usage(
     visitor.run()
 
     assert_errors(visitor, [UnusedVariableIsUsedViolation])
+
+
+@pytest.mark.parametrize('bad_name', [
+    '_',  # we are forced to allow this name, because django uses it a lot.
+])
+@pytest.mark.parametrize('code', [
+    annotation,
+    annotation_value,
+    assigned,
+    assigned_attribute,
+    calling_function,
+    calling_star_function,
+    called_function,
+    calling_method,
+    accessed_attribute,
+    key_access,
+    list_definition,
+    raising_variable,
+    returning_variable,
+    awaiting_variable,
+    yielding_variable,
+    inheriting_variables,
+])
+def test_unused_special_case(
+    assert_errors,
+    parse_ast_tree,
+    bad_name,
+    code,
+    default_options,
+):
+    """Testing that any variable cannot be used if it is marked as unused."""
+    tree = parse_ast_tree(code.format(bad_name))
+
+    visitor = WrongVariableUsageVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
