@@ -670,7 +670,7 @@ class UnusedVariableIsUsedViolation(ASTViolation):
     """
     Forbids to have use variables that are marked as unused.
 
-    We discourage using ``_`` at all and variables that start with ``_``
+    We discourage using variables that start with ``_``
     only inside functions and methods as local variables.
 
     Reasoning:
@@ -683,6 +683,7 @@ class UnusedVariableIsUsedViolation(ASTViolation):
      Solution:
         Rename your variable to be a regular variable
         without a leading underscore.
+        This way it is declared to be used.
 
      Example::
 
@@ -700,6 +701,7 @@ class UnusedVariableIsUsedViolation(ASTViolation):
 
     .. versionadded:: 0.7.0
     .. versionchanged:: 0.12.0
+    .. versionchanged:: 0.14.0
 
     """
 

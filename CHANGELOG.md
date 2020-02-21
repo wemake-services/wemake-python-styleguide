@@ -34,6 +34,7 @@ Semantic versioning in our case means:
 - Forbids to use `:=` operator
 - Forbids to use positional only `/` arguments
 - Adds `__call__` to list of methods that should be on top #1125
+- Now allows `_` to be used as a defined variable
 
 ### Bugfixes
 
@@ -47,6 +48,10 @@ Semantic versioning in our case means:
 - Fixes bug when `TooManyPublicAttributesViolation`
   was counting duplicate fields
 - Fixes negated conditions `WPS504` was not reported for `if` expressions
+- Fixes that `import dumps` was reported as `WPS347`,
+  now only `from ... import dumps` is checked
+- Fixes that `from some import a as std` was reported as a vague import
+  with `WPS347` despite having a meaningful alias
 
 ### Misc
 

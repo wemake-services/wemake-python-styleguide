@@ -294,8 +294,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
                 if access.is_protected(varname):
                     self.add_violation(
                         naming.UnusedVariableIsUsedViolation(
-                            node,
-                            text=varname,
+                            node, text=varname,
                         ),
                     )
 

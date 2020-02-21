@@ -437,6 +437,9 @@ class WrongVariableUsageVisitor(BaseNodeVisitor):
         if not assigned_name or not access.is_unused(assigned_name):
             return
 
+        if assigned_name == '_':  # This is a special case for django's
+            return  # gettext and similar tools.
+
         if not is_created:
             self.add_violation(
                 naming.UnusedVariableIsUsedViolation(node, text=assigned_name),

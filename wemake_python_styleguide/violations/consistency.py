@@ -1798,6 +1798,7 @@ class VagueImportViolation(ASTViolation):
     Forbids imports that may cause confusion outside of the module.
 
     Names that we forbid to import:
+
     - Common names like ``dumps`` and ``loads``
     - Names starting with ``to_`` and ``from_``
     - Too short names like ``Q`` or ``F``, but we are fine with ``_``
@@ -1808,6 +1809,9 @@ class VagueImportViolation(ASTViolation):
         See ``loads``? It can be anything: ``yaml``, ``toml``, ``json``, etc.
         We are also enforcing consitency with our naming too-short rules here.
 
+    Solution:
+        Use package level imports or import aliases.
+
     See
     :py:data:`~wemake_python_styleguide.constants.VAGUE_IMPORTS_BLACKLIST`
     for the full list of bad import names.
@@ -1816,13 +1820,14 @@ class VagueImportViolation(ASTViolation):
 
         # Correct:
         import json
-        json.loads(content)
+        import dumps  # package names are not checked
+        from json import loads as json_loads
 
         # Wrong:
         from json import loads
-        loads(content)
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 0.14.0
 
     """
 
