@@ -45,7 +45,7 @@ def test_name_in_allowed_domain_names_option(
     tree = parse_ast_tree(mode(naming_template.format(allowed_name)))
 
     visitor = WrongNameVisitor(
-        options(allowed_domain_names=[allowed_name]),
+        options(allowed_domain_names=(allowed_name,)),
         tree=tree,
     )
     visitor.run()

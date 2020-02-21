@@ -63,4 +63,4 @@ def test_incorrect_cases(
     visitor.run()
 
     assert_errors(visitor, [TooLongCallChainViolation])
-    assert_error_text(visitor, str(call_level))
+    assert_error_text(visitor, str(call_level), option_values.max_call_level)

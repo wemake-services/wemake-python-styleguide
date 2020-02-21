@@ -6,7 +6,7 @@ from typing import Set, cast
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic.prop_access import parts
+from wemake_python_styleguide.logic.tree import attributes
 from wemake_python_styleguide.types import AnyAccess
 from wemake_python_styleguide.violations.complexity import (
     TooDeepAccessViolation,
@@ -53,7 +53,8 @@ class AccessVisitor(BaseNodeVisitor):
             return
 
         consecutive_access = cast(Set[AnyAccess], set(takewhile(
-            self._is_any_access, parts(node),
+            self._is_any_access,
+            attributes.parts(node),
         )))
 
         self._visited_accesses.update(consecutive_access)
@@ -62,6 +63,8 @@ class AccessVisitor(BaseNodeVisitor):
         if access_number > self.options.max_access_level:
             self.add_violation(
                 TooDeepAccessViolation(
-                    node, text=str(access_number),
+                    node,
+                    text=str(access_number),
+                    baseline=self.options.max_access_level,
                 ),
             )

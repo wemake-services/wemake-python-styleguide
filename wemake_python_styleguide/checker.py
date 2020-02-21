@@ -158,7 +158,7 @@ class Checker(object):
                 # In case we fail misserably, we want users to see at
                 # least something! Full stack trace
                 # and some rules that still work.
-                print(traceback.format_exc())  # noqa: T001
+                print(traceback.format_exc())  # noqa: T001, WPS421
                 visitor.add_violation(system.InternalErrorViolation())
 
             yield from (

@@ -39,9 +39,5 @@ def test_no_holes(all_violation_codes):
         for code in sorted(module_codes.keys()):
             if previous_code is not None:
                 diff = code - previous_code
-                assertion_name = (
-                    module_codes[code].__qualname__
-                    if module_codes[code] else 'DEPRECATED CODE'
-                )
-                assert diff == 1 or diff > 2, assertion_name
+                assert diff == 1 or diff > 2, module_codes[code].__qualname__
             previous_code = code

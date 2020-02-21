@@ -34,6 +34,18 @@ Conventions
 - If violation error template should have a parameter
   it should be the last part of the text: ``: {0}``
 
+Deprecating a violation
+~~~~~~~~~~~~~~~~~~~~~~~
+
+When you want to mark some violation as depracated,
+then assign ``deprecated`` boolean flag to it:
+
+.. code:: python
+
+  @final
+  class SomeViolation(ASTViolation):
+      depracated = True
+
 Reference
 ~~~~~~~~~
 
@@ -67,24 +79,37 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
         error_template: message that will be shown to user after formatting.
         code: violation unique number. Used to identify the violation.
         previous_codes: just a documentation thing to track changes in time.
+        deprecated: indicates that this violation will be removed soon.
+        postfix_template: indicates message that we show at the very end.
 
     """
 
     error_template: ClassVar[str]
     code: ClassVar[int]
     previous_codes: ClassVar[Set[int]]
+    deprecated: ClassVar[bool] = False
 
-    def __init__(self, node: ErrorNode, text: Optional[str] = None) -> None:
+    # We use this code to show base metrics and thresholds mostly:
+    postfix_template: ClassVar[str] = ' > {0}'
+
+    def __init__(
+        self,
+        node: ErrorNode,
+        text: Optional[str] = None,
+        baseline: Optional[int] = None,
+    ) -> None:
         """
         Creates a new instance of an abstract violation.
 
         Arguments:
             node: violation was raised by this node. If applicable.
             text: extra text to format the final message. If applicable.
+            baseline: some complexity violations show the logic threshold here.
 
         """
         self._node = node
         self._text = text
+        self._baseline = baseline
 
     @final
     def message(self) -> str:
@@ -93,8 +118,10 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
 
         Conditionally formats the ``error_template`` if it is required.
         """
-        return '{0} {1}'.format(
-            self._full_code(), self.error_template.format(self._text),
+        return '{0} {1}{2}'.format(
+            self._full_code(),
+            self.error_template.format(self._text),
+            self._postfix_information(),
         )
 
     @final
@@ -112,13 +139,20 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
         """
         return 'WPS{0}'.format(str(self.code).zfill(3))
 
-    def _location(self) -> Tuple[int, int]:
+    @final
+    def _postfix_information(self) -> str:
         """
-        Return violation location inside the file.
+        Adds useful information to the end of the violation message.
 
-        Default location is in the so-called "file beginning".
+        Useful for complexity baselines and other thresholds.
         """
-        return 0, 0
+        if self._baseline is None:
+            return ''
+        return self.postfix_template.format(self._baseline)
+
+    @abc.abstractmethod
+    def _location(self) -> Tuple[int, int]:
+        """Base method for showing error location."""
 
 
 class _BaseASTViolation(BaseViolation, metaclass=abc.ABCMeta):
@@ -147,9 +181,14 @@ class MaybeASTViolation(_BaseASTViolation, metaclass=abc.ABCMeta):
     Is wildly used for naming rules.
     """
 
-    def __init__(self, node=None, text: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        node: Optional[ast.AST] = None,
+        text: Optional[str] = None,
+        baseline: Optional[int] = None,
+    ) -> None:
         """Creates new instance of module violation without explicit node."""
-        super().__init__(node, text=text)
+        super().__init__(node, text=text, baseline=baseline)
 
 
 class TokenizeViolation(BaseViolation, metaclass=abc.ABCMeta):
@@ -167,6 +206,21 @@ class SimpleViolation(BaseViolation, metaclass=abc.ABCMeta):
 
     _node: None
 
-    def __init__(self, node=None, text: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        node=None,
+        text: Optional[str] = None,
+        baseline: Optional[int] = None,
+    ) -> None:
         """Creates new instance of simple style violation."""
-        super().__init__(node, text=text)
+        super().__init__(node, text=text, baseline=baseline)
+
+    @final
+    def _location(self) -> Tuple[int, int]:
+        """
+        Return violation location inside the file.
+
+        Default location is in the so-called "file beginning".
+        Cannot be ignored by inline ``noqa`` comments.
+        """
+        return 0, 0

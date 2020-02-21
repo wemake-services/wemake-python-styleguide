@@ -7,8 +7,8 @@ from typing import ClassVar, DefaultDict, List, Union
 from typing_extensions import final
 
 from wemake_python_styleguide.constants import MAX_LEN_YIELD_TUPLE
-from wemake_python_styleguide.logic.functions import is_method
 from wemake_python_styleguide.logic.nodes import get_parent
+from wemake_python_styleguide.logic.tree.functions import is_method
 from wemake_python_styleguide.types import AnyFunctionDef, AnyImport
 from wemake_python_styleguide.violations.complexity import (
     TooLongCompareViolation,
@@ -68,7 +68,9 @@ class ModuleMembersVisitor(BaseNodeVisitor):
         if number_of_decorators > self.options.max_decorators:
             self.add_violation(
                 TooManyDecoratorsViolation(
-                    node, text=str(number_of_decorators),
+                    node,
+                    text=str(number_of_decorators),
+                    baseline=self.options.max_decorators,
                 ),
             )
 
@@ -77,6 +79,7 @@ class ModuleMembersVisitor(BaseNodeVisitor):
             self.add_violation(
                 TooManyModuleMembersViolation(
                     text=str(self._public_items_count),
+                    baseline=self.options.max_module_members,
                 ),
             )
 
@@ -111,16 +114,19 @@ class ImportMembersVisitor(BaseNodeVisitor):
     def _check_imports_count(self) -> None:
         if self._imports_count > self.options.max_imports:
             self.add_violation(
-                TooManyImportsViolation(text=str(self._imports_count)),
+                TooManyImportsViolation(
+                    text=str(self._imports_count),
+                    baseline=self.options.max_imports,
+                ),
             )
 
     def _check_imported_names_count(self) -> None:
         if self._imported_names_count > self.options.max_imported_names:
-            violation = TooManyImportedNamesViolation(
-                text=str(self._imported_names_count),
-            )
             self.add_violation(
-                violation,
+                TooManyImportedNamesViolation(
+                    text=str(self._imported_names_count),
+                    baseline=self.options.max_imported_names,
+                ),
             )
 
     def _post_visit(self) -> None:
@@ -161,7 +167,11 @@ class MethodMembersVisitor(BaseNodeVisitor):
         for node, count in self._methods.items():
             if count > self.options.max_methods:
                 self.add_violation(
-                    TooManyMethodsViolation(node, text=str(count)),
+                    TooManyMethodsViolation(
+                        node,
+                        text=str(count),
+                        baseline=self.options.max_methods,
+                    ),
                 )
 
 
@@ -210,7 +220,11 @@ class ConditionsVisitor(BaseNodeVisitor):
         conditions_count = self._count_conditions(node)
         if conditions_count > self._max_conditions:
             self.add_violation(
-                TooManyConditionsViolation(node, text=str(conditions_count)),
+                TooManyConditionsViolation(
+                    node,
+                    text=str(conditions_count),
+                    baseline=self._max_conditions,
+                ),
             )
 
     def _check_compares(self, node: ast.Compare) -> None:
@@ -218,13 +232,17 @@ class ConditionsVisitor(BaseNodeVisitor):
         is_all_notequals = all(isinstance(op, ast.NotEq) for op in node.ops)
         can_be_longer = is_all_notequals or is_all_equals
 
-        treshold = self._max_compares
+        threshold = self._max_compares
         if can_be_longer:
-            treshold += 1
+            threshold += 1
 
-        if len(node.ops) > treshold:
+        if len(node.ops) > threshold:
             self.add_violation(
-                TooLongCompareViolation(node, text=str(len(node.ops))),
+                TooLongCompareViolation(
+                    node,
+                    text=str(len(node.ops)),
+                    baseline=threshold,
+                ),
             )
 
 
@@ -257,7 +275,6 @@ class ElifVisitor(BaseNodeVisitor):
         for root, children in self._if_children.items():
             if node in children:
                 return root
-
         return node
 
     def _update_if_child(self, root: ast.If, node: ast.If) -> None:
@@ -279,7 +296,11 @@ class ElifVisitor(BaseNodeVisitor):
             real_children_length = len(set(children))
             if real_children_length > self._max_elifs:
                 self.add_violation(
-                    TooManyElifsViolation(root, text=str(real_children_length)),
+                    TooManyElifsViolation(
+                        root,
+                        text=str(real_children_length),
+                        baseline=self._max_elifs,
+                    ),
                 )
 
 
@@ -305,12 +326,22 @@ class TryExceptVisitor(BaseNodeVisitor):
 
     def _check_except_count(self, node: ast.Try) -> None:
         if len(node.handlers) > self._max_except_cases:
-            self.add_violation(TooManyExceptCasesViolation(node))
+            self.add_violation(
+                TooManyExceptCasesViolation(
+                    node,
+                    text=str(len(node.handlers)),
+                    baseline=self._max_except_cases,
+                ),
+            )
 
     def _check_try_body_length(self, node: ast.Try) -> None:
         if len(node.body) > self.options.max_try_body_length:
             self.add_violation(
-                TooLongTryBodyViolation(node, text=str(len(node.body))),
+                TooLongTryBodyViolation(
+                    node,
+                    text=str(len(node.body)),
+                    baseline=self.options.max_try_body_length,
+                ),
             )
 
 
@@ -334,6 +365,8 @@ class YieldTupleVisitor(BaseNodeVisitor):
             if len(node.value.elts) > MAX_LEN_YIELD_TUPLE:
                 self.add_violation(
                     TooLongYieldTupleViolation(
-                        node, text=str(len(node.value.elts)),
+                        node,
+                        text=str(len(node.value.elts)),
+                        baseline=MAX_LEN_YIELD_TUPLE,
                     ),
                 )

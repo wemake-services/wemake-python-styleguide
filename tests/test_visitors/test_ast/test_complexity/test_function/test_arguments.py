@@ -71,7 +71,7 @@ def test_single_argument_count_invalid(
     visitor.run()
 
     assert_errors(visitor, [TooManyArgumentsViolation])
-    assert_error_text(visitor, '1')
+    assert_error_text(visitor, '1', option_values.max_arguments)
 
 
 def test_two_arguments_count_invalid(
@@ -90,4 +90,4 @@ def test_two_arguments_count_invalid(
     visitor.run()
 
     assert_errors(visitor, [TooManyArgumentsViolation])
-    assert_error_text(visitor, '2')
+    assert_error_text(visitor, '2', option_values.max_arguments)

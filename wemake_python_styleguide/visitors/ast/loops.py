@@ -8,14 +8,9 @@ from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import AssignNodes, ForNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
-from wemake_python_styleguide.logic import (
-    nodes,
-    operators,
-    slices,
-    source,
-    walk,
-)
-from wemake_python_styleguide.logic.variables import (
+from wemake_python_styleguide.logic import nodes, source, walk
+from wemake_python_styleguide.logic.tree import operators, slices
+from wemake_python_styleguide.logic.tree.variables import (
     is_valid_block_variable_definition,
 )
 from wemake_python_styleguide.types import AnyFor, AnyNodes
@@ -105,7 +100,7 @@ class WrongComprehensionVisitor(base.BaseNodeVisitor):
 
     def _check_contains_yield(self, node: _AnyComprehension) -> None:
         for sub_node in ast.walk(node):
-            if isinstance(sub_node, ast.Yield):
+            if isinstance(sub_node, ast.Yield):  # pragma: py-gte-38
                 self.add_violation(YieldInComprehensionViolation(node))
 
     def _post_visit(self) -> None:
@@ -309,13 +304,14 @@ class SyncForLoopVisitor(base.BaseNodeVisitor):
         target = source.node_to_string(node.target)
 
         for sub in ast.walk(node):
-            if isinstance(sub, ast.Subscript):
-                if self._is_assigned_target(sub):
-                    continue
-
-                if slices.is_same_slice(iterable, target, sub):
-                    self.add_violation(ImplicitItemsIteratorViolation(node))
-                    break
+            has_violation = (
+                isinstance(sub, ast.Subscript) and
+                not self._is_assigned_target(sub) and
+                slices.is_same_slice(iterable, target, sub)
+            )
+            if has_violation:
+                self.add_violation(ImplicitItemsIteratorViolation(node))
+                break
 
     def _is_assigned_target(self, node: ast.Subscript) -> bool:
         parent = nodes.get_parent(node)

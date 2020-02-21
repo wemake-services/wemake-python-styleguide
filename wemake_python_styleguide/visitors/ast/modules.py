@@ -9,7 +9,7 @@ from wemake_python_styleguide import constants
 from wemake_python_styleguide.logic.filenames import get_stem
 from wemake_python_styleguide.logic.naming.constants import is_constant
 from wemake_python_styleguide.logic.nodes import get_context
-from wemake_python_styleguide.logic.strings import is_doc_string
+from wemake_python_styleguide.logic.tree.strings import is_doc_string
 from wemake_python_styleguide.types import AnyAssign, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     BadMagicModuleFunctionViolation,

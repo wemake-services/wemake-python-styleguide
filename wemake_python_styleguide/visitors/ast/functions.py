@@ -2,36 +2,37 @@
 
 import ast
 from contextlib import suppress
-from typing import ClassVar, Dict, List, Optional, Union
+from typing import ClassVar, Dict, List, Union
 
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.compat.functions import get_posonlyargs
 from wemake_python_styleguide.constants import (
     FUNCTIONS_BLACKLIST,
     LITERALS_BLACKLIST,
 )
-from wemake_python_styleguide.logic import (
-    exceptions,
-    functions,
-    nodes,
-    operators,
-    prop_access,
-    walk,
-)
+from wemake_python_styleguide.logic import nodes, walk
 from wemake_python_styleguide.logic.arguments import function_args
 from wemake_python_styleguide.logic.naming import access
-from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
-from wemake_python_styleguide.violations import consistency, naming
+from wemake_python_styleguide.logic.tree import (
+    attributes,
+    exceptions,
+    functions,
+    operators,
+)
+from wemake_python_styleguide.types import (
+    AnyFunctionDef,
+    AnyFunctionDefAndLambda,
+    AnyNodes,
+)
+from wemake_python_styleguide.violations import consistency, naming, oop
 from wemake_python_styleguide.violations.best_practices import (
     BooleanPositionalArgumentViolation,
     ComplexDefaultValueViolation,
+    PositionalOnlyArgumentsViolation,
     StopIterationInsideGeneratorViolation,
     WrongFunctionCallViolation,
-)
-from wemake_python_styleguide.violations.oop import (
-    WrongSuperCallAccessViolation,
-    WrongSuperCallViolation,
 )
 from wemake_python_styleguide.violations.refactoring import (
     ImplicitEnumerateViolation,
@@ -104,10 +105,7 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
 
         if attr and parent_name and attr != parent_name:
             self.add_violation(
-                WrongSuperCallAccessViolation(
-                    node,
-                    text='super call with incorrect method or property access',
-                ),
+                oop.WrongSuperCallAccessViolation(node),
             )
 
         if isinstance(parent_context, FunctionNodes):
@@ -115,13 +113,13 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
             if isinstance(grand_context, ast.ClassDef):
                 return
         self.add_violation(
-            WrongSuperCallViolation(node, text='not inside method'),
+            oop.WrongSuperCallViolation(node, text='not inside method'),
         )
 
     def _ensure_super_arguments(self, node: ast.Call) -> None:
         if node.args or node.keywords:
             self.add_violation(
-                WrongSuperCallViolation(node, text='remove arguments'),
+                oop.WrongSuperCallViolation(node, text='remove arguments'),
             )
 
     def _check_super_call(self, node: ast.Call) -> None:
@@ -231,68 +229,21 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
         self._check_generator(node)
         self.generic_visit(node)
 
-    def _check_used_variables(
-        self,
-        local_variables: Dict[str, List[LocalVariable]],
-    ) -> None:
-        for varname, usages in local_variables.items():
-            for node in usages:
-                if access.is_protected(varname):
-                    self.add_violation(
-                        naming.UnusedVariableIsUsedViolation(
-                            node,
-                            text=varname,
-                        ),
-                    )
-
-    def _maybe_update_variable(
-        self,
-        sub_node: LocalVariable,
-        var_name: str,
-        local_variables: Dict[str, List[LocalVariable]],
-    ) -> None:
-        defs = local_variables.get(var_name)
-        if defs is not None:
-            if access.is_unused(var_name):
-                # We check unused variable usage in a different place:
-                # see `visitors/ast/naming.py`
-                return
-            defs.append(sub_node)
-            return
-
-        is_name_def = (
-            isinstance(sub_node, ast.Name) and
-            isinstance(sub_node.ctx, ast.Store)
-        )
-
-        if is_name_def or isinstance(sub_node, ast.ExceptHandler):
-            local_variables[var_name] = []
-
-    def _get_variable_name(self, node: LocalVariable) -> Optional[str]:
-        if isinstance(node, ast.Name):
-            return node.id
-        return getattr(node, 'name', None)
-
     def _check_unused_variables(self, node: AnyFunctionDef) -> None:
         local_variables: Dict[str, List[LocalVariable]] = {}
         for body_item in node.body:
             for sub_node in ast.walk(body_item):
-                if not isinstance(sub_node, (ast.Name, ast.ExceptHandler)):
-                    continue
-
-                var_name = self._get_variable_name(sub_node)
-                if not var_name:
-                    continue
-
-                self._maybe_update_variable(
-                    sub_node, var_name, local_variables,
-                )
-        self._check_used_variables(local_variables)
+                if isinstance(sub_node, (ast.Name, ast.ExceptHandler)):
+                    var_name = self._get_variable_name(sub_node)
+                    self._maybe_update_variable(
+                        sub_node, var_name, local_variables,
+                    )
+        self._ensure_used_variables(local_variables)
 
     def _check_argument_default_values(self, node: AnyFunctionDef) -> None:
         for arg in node.args.defaults:
             real_arg = operators.unwrap_unary_node(arg)
-            parts = prop_access.parts(real_arg) if isinstance(
+            parts = attributes.parts(real_arg) if isinstance(
                 real_arg, ast.Attribute,
             ) else [real_arg]
 
@@ -310,6 +261,48 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
                 self.add_violation(
                     StopIterationInsideGeneratorViolation(sub_node),
                 )
+
+    def _maybe_update_variable(
+        self,
+        sub_node: LocalVariable,
+        var_name: str,
+        local_variables: Dict[str, List[LocalVariable]],
+    ) -> None:
+        defs = local_variables.get(var_name)
+        if defs is not None:
+            if not var_name or access.is_unused(var_name):
+                # We check unused variable usage in a different place:
+                # see `visitors/ast/naming.py`
+                return
+            defs.append(sub_node)
+            return
+
+        is_name_def = (
+            isinstance(sub_node, ast.Name) and
+            isinstance(sub_node.ctx, ast.Store)
+        )
+
+        if is_name_def or isinstance(sub_node, ast.ExceptHandler):
+            local_variables[var_name] = []
+
+    def _ensure_used_variables(
+        self,
+        local_variables: Dict[str, List[LocalVariable]],
+    ) -> None:
+        for varname, usages in local_variables.items():
+            for node in usages:
+                if access.is_protected(varname):
+                    self.add_violation(
+                        naming.UnusedVariableIsUsedViolation(
+                            node,
+                            text=varname,
+                        ),
+                    )
+
+    def _get_variable_name(self, node: LocalVariable) -> str:
+        if isinstance(node, ast.Name):
+            return node.id
+        return getattr(node, 'name', '')
 
 
 @final
@@ -358,6 +351,37 @@ class UselessLambdaDefinitionVisitor(base.BaseNodeVisitor):
             return
 
         self.add_violation(UselessLambdaViolation(node))
+
+
+@final
+@decorators.alias('visit_any_function_and_lambda', (
+    'visit_AsyncFunctionDef',
+    'visit_FunctionDef',
+    'visit_Lambda',
+))
+class PositionalOnlyArgumentsVisitor(base.BaseNodeVisitor):
+    """Forbids to use ``/`` parameters in functions and lambdas."""
+
+    def visit_any_function_and_lambda(
+        self,
+        node: AnyFunctionDefAndLambda,
+    ) -> None:
+        """
+        Checks function defs.
+
+        Raises:
+            PositionalOnlyArgumentsViolation
+
+        """
+        self._check_pisitional_arguments(node)
+        self.generic_visit(node)
+
+    def _check_pisitional_arguments(
+        self,
+        node: AnyFunctionDefAndLambda,
+    ) -> None:
+        if get_posonlyargs(node):  # pragma: py-lt-38
+            self.add_violation(PositionalOnlyArgumentsViolation(node))
 
 
 @final

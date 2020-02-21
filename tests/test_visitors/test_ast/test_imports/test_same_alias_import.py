@@ -27,7 +27,30 @@ def test_same_alias_import(
     visitor = WrongImportVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [])
+    assert_errors(visitor, [SameAliasImportViolation])
+
+
+@pytest.mark.parametrize('code', [
+    regular_import,
+    from_import,
+])
+def test_same_alias_import_with_control(
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    code,
+    options,
+):
+    """Testing that imports with the same aliases are restricted."""
+    same_alias = 'os'
+    tree = parse_ast_tree(code.format(same_alias))
+    custom_options = options(i_control_code=True)
+
+    visitor = WrongImportVisitor(custom_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [SameAliasImportViolation])
+    assert_error_text(visitor, same_alias)
 
 
 @pytest.mark.parametrize('code', [
@@ -36,7 +59,6 @@ def test_same_alias_import(
 ])
 def test_same_alias_import_without_control(
     assert_errors,
-    assert_error_text,
     parse_ast_tree,
     code,
     options,
@@ -49,8 +71,7 @@ def test_same_alias_import_without_control(
     visitor = WrongImportVisitor(custom_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [SameAliasImportViolation])
-    assert_error_text(visitor, same_alias)
+    assert_errors(visitor, [])
 
 
 @pytest.mark.parametrize('code', [

@@ -411,6 +411,11 @@ class SameAliasImportViolation(ASTViolation):
         # Wrong:
         from os import path as path
 
+    When `--i-control-code` is set to ``False``
+    you can reexport things with ``as``,
+    because ``mypy`` might require it
+    with ``implicit_reexport = False`` setting turned on.
+
     Configuration:
         This rule is configurable with ``--i-control-code``
         and ``--i-dont-control-code``.
@@ -419,6 +424,7 @@ class SameAliasImportViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.13.0
+    .. versionchanged:: 0.14.0
 
     """
 

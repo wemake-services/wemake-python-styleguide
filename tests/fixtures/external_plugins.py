@@ -21,10 +21,6 @@ def camelCase(): ...
 assert True
 ipdb.set_trace()
 
-logger.info(
-    'Hello {world}'.format(world='Earth')
-)
-
 
 def function_name(plugin: str ='flake8') ->str:
     """Test `wrong`rst code."""
@@ -35,21 +31,6 @@ multiline_string = 'some\
 string'
 
 '\''
-
-print('test')
-
-
-def complex_annotation(
-    first: List[Union[List[str], Dict[str, Dict[str, str]]]],
-):
-    ...
-
-
-def radon_check(for_data):
-    for first in for_data:
-        for second in for_data:
-            for third in for_data:
-                assert first == second == third
 
 
 def darglint_check(arg):

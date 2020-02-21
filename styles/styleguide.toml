@@ -4,9 +4,8 @@ show-source = true
 
 # Plugins:
 accept-encodings = "utf-8"
-max-complexity = 6
 max-line-length = 80
-radon-max-cc = 10
+max-complexity = 6
 
 # Violations:
 ignore = "D100,D104,D401,W504,RST303,RST304,DAR103,DAR203"

@@ -37,6 +37,7 @@ wrong_comparators = (
 )
 
 
+@pytest.mark.filterwarnings('ignore::SyntaxWarning')
 @pytest.mark.parametrize('comparators', wrong_comparators)
 def test_wrong_constant_is(
     assert_errors,

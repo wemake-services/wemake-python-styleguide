@@ -7,10 +7,11 @@ from typing import ClassVar, Dict, List, Optional, Tuple, Type, Union
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
-from wemake_python_styleguide.logic import keywords, operators, walk
-from wemake_python_styleguide.logic.exceptions import get_exception_name
+from wemake_python_styleguide.logic import walk
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
-from wemake_python_styleguide.logic.variables import (
+from wemake_python_styleguide.logic.tree import keywords, operators
+from wemake_python_styleguide.logic.tree.exceptions import get_exception_name
+from wemake_python_styleguide.logic.tree.variables import (
     is_valid_block_variable_definition,
 )
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, AnyWith

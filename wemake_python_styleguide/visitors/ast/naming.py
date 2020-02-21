@@ -22,7 +22,7 @@ from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
     SPECIAL_ARGUMENT_NAMES_WHITELIST,
 )
-from wemake_python_styleguide.logic import functions, nodes
+from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming import (
     access,
     blacklists,
@@ -30,6 +30,7 @@ from wemake_python_styleguide.logic.naming import (
     logical,
     name_nodes,
 )
+from wemake_python_styleguide.logic.tree import functions
 from wemake_python_styleguide.types import (
     AnyAssign,
     AnyFunctionDef,
@@ -113,15 +114,7 @@ class _NameValidator(object):
 
         for assignment in top_level_assigns:
             for target in get_assign_targets(assignment):
-                if not isinstance(target, ast.Name):
-                    continue
-
-                if not target.id or not logical.is_upper_case_name(target.id):
-                    continue
-
-                self._error_callback(
-                    naming.UpperCaseAttributeViolation(target, text=target.id),
-                )
+                self._ensure_case(target)
 
     def _ensure_underscores(self, node: ast.AST, name: str):
         if access.is_private(name):
@@ -159,6 +152,17 @@ class _NameValidator(object):
         max_length = self._options.max_name_length
         if logical.is_too_long_name(name, max_length=max_length):
             self._error_callback(naming.TooLongNameViolation(node, text=name))
+
+    def _ensure_case(self, target: ast.AST) -> None:
+        if not isinstance(target, ast.Name):
+            return
+
+        if not target.id or not logical.is_upper_case_name(target.id):
+            return
+
+        self._error_callback(
+            naming.UpperCaseAttributeViolation(target, text=target.id),
+        )
 
 
 @final

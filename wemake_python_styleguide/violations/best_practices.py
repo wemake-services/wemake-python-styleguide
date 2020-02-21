@@ -70,6 +70,7 @@ Summary
    IncorrectExceptOrderViolation
    FloatKeyViolation
    ProtectedModuleMemberViolation
+   PositionalOnlyArgumentsViolation
    ImportCollisionViolation
 
 Best practices
@@ -126,6 +127,7 @@ Best practices
 .. autoclass:: IncorrectExceptOrderViolation
 .. autoclass:: FloatKeyViolation
 .. autoclass:: ProtectedModuleMemberViolation
+.. autoclass:: PositionalOnlyArgumentsViolation
 .. autoclass:: ImportCollisionViolation
 
 """
@@ -688,6 +690,8 @@ class YieldInComprehensionViolation(ASTViolation):
     """
     Forbids to have ``yield`` keyword inside comprehensions.
 
+    This is a ``SyntaxError`` starting from ``python3.8``.
+
     Reasoning:
         Having the ``yield`` keyword inside comprehensions is error-prone.
         You can shoot yourself in a foot by
@@ -705,7 +709,6 @@ class YieldInComprehensionViolation(ASTViolation):
 
         list([(yield letter) for letter in 'ab'])
         # Will result in: ['a', 'b']
-
 
     See also:
         https://github.com/satwikkansal/wtfPython#-yielding-none
@@ -1986,6 +1989,45 @@ class ProtectedModuleMemberViolation(ASTViolation):
 
 
 @final
+class PositionalOnlyArgumentsViolation(ASTViolation):
+    """
+    Forbids to use positional only or ``/`` arguments.
+
+    This violation is only raised for ``python3.8+``,
+    earlier versions do not have this concept.
+
+    Reasoning:
+        This is a very rare case.
+        Almost exclusively used by C code and stdlib.
+        There's no point in declaring your own parameters as positional only.
+        It will break your code!
+
+    Solution:
+        Use regular arguments.
+        In case you are working with C, then this violation can be ignored.
+
+    Example::
+
+        # Correct:
+        def my_function(first, second):
+            ...
+
+        # Wrong:
+        def my_function(first, /, second):
+            ...
+
+    See also:
+        https://www.python.org/dev/peps/pep-0570/
+
+    .. versionadded:: 0.14.0
+
+    """
+
+    error_template = 'Found positional-only argument'
+    code = 451
+
+
+@final
 class ImportCollisionViolation(ASTViolation):
     """
     Forbids to import from already imported modules.
@@ -1999,18 +2041,14 @@ class ImportCollisionViolation(ASTViolation):
         when it cannot be avoided.
 
     Example::
-
         # Correct:
         import public
         from some.module import FooClass
-
         import hypothesis
         from hypothesis import strategies as st
-
         # Wrong:
         from public import utils
         from public.utils import something
-
         import hypothesis
         from hypothesis import strategies
 
@@ -2019,4 +2057,4 @@ class ImportCollisionViolation(ASTViolation):
     """
 
     error_template = 'Found imports collision: {0}'
-    code = 451
+    code = 452

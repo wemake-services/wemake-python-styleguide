@@ -158,7 +158,7 @@ def test_module_counts_violation(
     visitor.run()
 
     assert_errors(visitor, [TooManyModuleMembersViolation])
-    assert_error_text(visitor, '2')
+    assert_error_text(visitor, '2', option_values.max_module_members)
 
 
 @pytest.mark.parametrize('code', [

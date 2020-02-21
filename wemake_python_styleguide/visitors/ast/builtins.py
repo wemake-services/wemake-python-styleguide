@@ -21,7 +21,7 @@ from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic import safe_eval, source
 from wemake_python_styleguide.logic.naming.name_nodes import extract_name
-from wemake_python_styleguide.logic.operators import (
+from wemake_python_styleguide.logic.tree.operators import (
     get_parent_ignoring_unary,
     unwrap_starred_node,
     unwrap_unary_node,

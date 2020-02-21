@@ -18,6 +18,7 @@ because they are, well, specific:
 - `pandas-vet <https://github.com/deppen8/pandas-vet>`_
 - `flake8-SQL <https://pypi.org/project/flake8-SQL/>`_
 - `flake8-annotations <https://github.com/python-discord/flake8-annotations>`_
+- `flake8-logging-format <https://github.com/globality-corp/flake8-logging-format>`_
 
 Hooks
 ~~~~~

@@ -45,6 +45,13 @@ wrong_module_with_coding = """# -*- coding: utf-8 -*-
 SOME_VAR = 1
 """
 
+wrong_module_with_docstring = """# -*- coding: utf-8 -*-
+'''Some docs.'''
+"""
+
+wrong_module_simple1 = '# -*- coding: utf-8 -*-\nvariable = 1'
+wrong_module_simple2 = '# -*- coding: utf-8 -*-\nvariable = 1\n\n'
+
 
 @pytest.mark.parametrize('code', [
     empty_module,
@@ -74,6 +81,9 @@ def test_correct_comments(
 
 @pytest.mark.parametrize('code', [
     wrong_module_with_coding,
+    wrong_module_with_docstring,
+    wrong_module_simple1,
+    wrong_module_simple2,
 ])
 def test_incorrect_coding_comment(
     parse_tokens,

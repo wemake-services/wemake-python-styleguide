@@ -6,9 +6,10 @@ from typing import ClassVar, DefaultDict, Dict, List, Tuple, Type, Union
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic import complexity, functions
+from wemake_python_styleguide.logic.complexity import cognitive
 from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.logic.nodes import get_parent
+from wemake_python_styleguide.logic.tree import functions
 from wemake_python_styleguide.types import (
     AnyFunctionDef,
     AnyFunctionDefAndLambda,
@@ -166,7 +167,11 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
         for var_node, variables in self._counter.variables.items():
             if len(variables) > self.options.max_local_variables:
                 self.add_violation(
-                    TooManyLocalsViolation(var_node, text=str(len(variables))),
+                    TooManyLocalsViolation(
+                        var_node,
+                        text=str(len(variables)),
+                        baseline=self.options.max_local_variables,
+                    ),
                 )
 
         for exp_node, expressions in self._counter.expressions.items():
@@ -175,14 +180,17 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
                     TooManyExpressionsViolation(
                         exp_node,
                         text=str(expressions),
+                        baseline=self.options.max_expressions,
                     ),
                 )
 
     def _check_function_signature(self) -> None:
         for counter, limit, violation in self._function_checks():
-            for node, count_result in counter.items():
-                if count_result > limit:
-                    self.add_violation(violation(node, text=str(count_result)))
+            for node, count in counter.items():
+                if count > limit:
+                    self.add_violation(
+                        violation(node, text=str(count), baseline=limit),
+                    )
 
     def _function_checks(self) -> List[_CheckRule]:
         return [
@@ -235,7 +243,7 @@ class CognitiveComplexityVisitor(BaseNodeVisitor):
             CognitiveModuleComplexityViolation
 
         """
-        self._functions[node] = complexity.cognitive_score(node)
+        self._functions[node] = cognitive.cognitive_score(node)
         self.generic_visit(node)
 
     def _post_visit(self) -> None:
@@ -248,7 +256,11 @@ class CognitiveComplexityVisitor(BaseNodeVisitor):
 
             if score > self.options.max_cognitive_score:
                 self.add_violation(
-                    CognitiveComplexityViolation(function, text=str(score)),
+                    CognitiveComplexityViolation(
+                        function,
+                        text=str(score),
+                        baseline=self.options.max_cognitive_score,
+                    ),
                 )
 
         average = total / len(self._functions)
@@ -256,5 +268,6 @@ class CognitiveComplexityVisitor(BaseNodeVisitor):
             self.add_violation(
                 CognitiveModuleComplexityViolation(
                     text=str(round(average, 1)),
+                    baseline=self.options.max_cognitive_average,
                 ),
             )

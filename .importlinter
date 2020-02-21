@@ -65,9 +65,7 @@ forbidden_modules =
   pydocstyle
   pycodestyle
   mccabe
-  radon
   astor
-  cognitive_complexity
   astboom
   tokelor
 
@@ -79,7 +77,6 @@ ignore_imports =
   # We disallow direct imports of our dependencies from anywhere, except:
   wemake_python_styleguide.formatter -> pygments
   wemake_python_styleguide.logic.source -> astor
-  wemake_python_styleguide.logic.complexity -> cognitive_complexity
 
 
 [importlinter:contract:subapi-restrictions]

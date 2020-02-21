@@ -71,6 +71,7 @@ def test_collection_with_impure(
     'some.attr',
     'some.method()',
     'some["key"]',
+    '"a" + "b"',
 ])
 def test_set_with_pure_unique(
     assert_errors,

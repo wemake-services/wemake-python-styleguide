@@ -9,17 +9,15 @@ from typing_extensions import final
 from wemake_python_styleguide import constants, types
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
-from wemake_python_styleguide.logic import (
-    classes,
-    functions,
-    nodes,
-    prop_access,
-    source,
-    strings,
-    walk,
-)
+from wemake_python_styleguide.logic import nodes, source, walk
 from wemake_python_styleguide.logic.arguments import function_args, super_args
 from wemake_python_styleguide.logic.naming import access, name_nodes
+from wemake_python_styleguide.logic.tree import (
+    attributes,
+    classes,
+    functions,
+    strings,
+)
 from wemake_python_styleguide.violations import best_practices as bp
 from wemake_python_styleguide.violations import consistency, oop
 from wemake_python_styleguide.visitors import base, decorators
@@ -104,10 +102,10 @@ class WrongClassVisitor(base.BaseNodeVisitor):
         elif isinstance(base_class, ast.Attribute):
             return all(
                 isinstance(sub_node, (ast.Name, ast.Attribute))
-                for sub_node in prop_access.parts(base_class)
+                for sub_node in attributes.parts(base_class)
             )
         elif isinstance(base_class, ast.Subscript):
-            parts = list(prop_access.parts(base_class))
+            parts = list(attributes.parts(base_class))
             subscripts = list(filter(
                 lambda part: isinstance(part, ast.Subscript), parts,
             ))
@@ -218,8 +216,7 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         class_name: str,
     ) -> None:
         if node.decorator_list:
-            # any decorator can change logic
-            # and make this overwrite useful
+            # Any decorator can change logic and make this overwrite useful.
             return
 
         call_stmt = self._get_call_stmt_of_useless_method(node)
@@ -407,12 +404,15 @@ class ClassMethodOrderVisitor(base.BaseNodeVisitor):
                 return
 
     def _ideal_order(self, first: str) -> int:
-        if first == '__new__':
-            return 4  # highest priority
-        if first == '__init__':
-            return 3
+        base_methods_order = {
+            '__new__': 5,  # highest priority
+            '__init__': 4,
+            '__call__': 3,
+        }
+        public_and_magic_methods_priority = 2
+
         if access.is_protected(first):
             return 1
         if access.is_private(first):
             return 0  # lowest priority
-        return 2  # public and magic methods
+        return base_methods_order.get(first, public_and_magic_methods_priority)

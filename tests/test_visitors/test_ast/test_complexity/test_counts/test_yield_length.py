@@ -2,8 +2,11 @@
 
 import pytest
 
-from wemake_python_styleguide.visitors.ast.complexity.counts import (
+from wemake_python_styleguide.constants import MAX_LEN_YIELD_TUPLE
+from wemake_python_styleguide.violations.complexity import (
     TooLongYieldTupleViolation,
+)
+from wemake_python_styleguide.visitors.ast.complexity.counts import (
     YieldTupleVisitor,
 )
 
@@ -64,4 +67,4 @@ def test_yield_length_violation(
     visitor.run()
 
     assert_errors(visitor, [TooLongYieldTupleViolation])
-    assert_error_text(visitor, 6)
+    assert_error_text(visitor, 6, MAX_LEN_YIELD_TUPLE)

@@ -30,7 +30,9 @@ FUNCTIONS_BLACKLIST: Final = frozenset((
     'dir',
 
     # IO:
-    'input',  # print is handled via `flake8-print`
+    'print',
+    'pprint',
+    'input',
     'breakpoint',
 
     # Attribute access:

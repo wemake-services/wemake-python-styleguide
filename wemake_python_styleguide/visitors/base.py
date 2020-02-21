@@ -70,6 +70,7 @@ from typing import List, Sequence, Type
 from typing_extensions import final
 
 from wemake_python_styleguide import constants
+from wemake_python_styleguide.compat.routing import route_visit
 from wemake_python_styleguide.logic.filenames import get_stem
 from wemake_python_styleguide.types import ConfigurationOptions
 from wemake_python_styleguide.violations.base import BaseViolation
@@ -171,6 +172,20 @@ class BaseNodeVisitor(ast.NodeVisitor, BaseVisitor, metaclass=abc.ABCMeta):
             filename=checker.filename,
             tree=checker.tree,
         )
+
+    def visit(self, tree: ast.AST) -> None:
+        """
+        Visits a node.
+
+        Modified version of :class:`ast.NodeVisitor.visit` method.
+        We need this to modify how visitors route.
+
+        Why? Because python3.8 now uses ``visit_Constant`` instead of old
+        methods like ``visit_Num``, ``visit_Str``, ``visit_Bytes``, etc.
+
+        Some classes do redefine this method to catch all nodes. It is fine.
+        """
+        return route_visit(self, tree)
 
     @final
     def run(self) -> None:

@@ -68,4 +68,4 @@ def test_expressions_wrong_count(
     visitor.run()
 
     assert_errors(visitor, [TooManyExpressionsViolation])
-    assert_error_text(visitor, '2')
+    assert_error_text(visitor, '2', option_values.max_expressions)

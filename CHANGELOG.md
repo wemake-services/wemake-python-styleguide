@@ -9,21 +9,49 @@ Semantic versioning in our case means:
 - Major releases inidicate significant milestones or serious breaking changes.
 
 
-## 0.14.0 WIP
+## 0.14.0 aka The Walrus fighter WIP
 
 ### Features
 
+- **Breaking**: removes `flake8-print`, now using `WPS421` instead of `T001`
+- **Breaking**: removes `flake8-annotations-complexity`,
+  now using `WPS234` instead of `TAE002`
+- Adds `python3.8` support
+- Removes `radon`, because `cognitive-complexity` is enough
+- Removes `flake8-loggin-format` as a direct dependency
+- Removes `cognitive_complexity` dependency, now it is built in into our linter
+- Adds baseline information for all complexity violation messages
+- Changes how cognitive complexity is calculated
+- Adds support for positional arguments in different checks
+- Changes `styleguide.toml` and `flake8.toml` scripts definition
 - Extracts new violation - WPS450 from WPS436 #1118
-- Adds domain names options, that are used to create variable names' blacklist #1106
+- Adds domain names options:
+  `--allowed-domain-names` and `--forbidden-domain-names`,
+  that are used to create variable names' blacklist #1106
+- Forbids to use `:=` operator
+- Forbids to use positional only `/` arguments
+- Adds `__call__` to list of methods that should be on top #1125
 
 ### Bugfixes
 
 - Remove ImplicitTernaryViolation - WPS332 #1099
+- Fixes how `i_control_code` behaves with WPS113
+- Fixes that cognitive complexity was ignoring
+  `ast.Continue`, `ast.Break`, and `ast.Raise` statements
+- Fixes that cognitive complexity was ignoring `ast.AsyncFor` loops
+- Fixes that annotation complexity was not reported for `async` functions
+- Fixes that annotation complexity was not reported from lists
+- Fixes bug when `TooManyPublicAttributesViolation`
+  was counting duplicate fields
 
 ### Misc
 
+- Changes how tests are executed
+- Changes how coverage is calculated, adds `coverage-conditional-plugin`
+- Adds how a violation can be deprecated
 - Adds `local-partial-types` to mypy config
 - Uses `abc` stdlib's module to mark abstract base classes #1122
+- Adds `python3.8` to the CI
 
 
 ## 0.13.4

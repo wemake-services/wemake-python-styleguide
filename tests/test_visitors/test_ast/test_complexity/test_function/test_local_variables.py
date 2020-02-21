@@ -118,4 +118,4 @@ def test_locals_wrong_count(
     visitor.run()
 
     assert_errors(visitor, [TooManyLocalsViolation])
-    assert_error_text(visitor, '2')
+    assert_error_text(visitor, '2', option_values.max_local_variables)

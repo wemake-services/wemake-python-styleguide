@@ -5,8 +5,9 @@ from typing import ClassVar, Mapping, Optional, Tuple, Type, Union
 
 from typing_extensions import final
 
+from wemake_python_styleguide.compat import types as compat_types
 from wemake_python_styleguide.logic import walk
-from wemake_python_styleguide.logic.operators import (
+from wemake_python_styleguide.logic.tree.operators import (
     count_unary_operator,
     unwrap_unary_node,
 )
@@ -154,15 +155,13 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         non_negative_numbers = []
         for node in filter(None, (left, right)):
             real_node = unwrap_unary_node(node)
-            if not isinstance(real_node, ast.Num):
-                continue
-
-            if real_node.n not in self._meaningless_operations:
-                continue
-
-            if real_node.n == 1 and walk.is_contained(node, ast.USub):
-                continue
-            non_negative_numbers.append(real_node)
+            correct_node = (
+                isinstance(real_node, ast.Num) and
+                real_node.n in self._meaningless_operations and
+                not (real_node.n == 1 and walk.is_contained(node, ast.USub))
+            )
+            if correct_node:
+                non_negative_numbers.append(real_node)
         return non_negative_numbers
 
 
@@ -246,3 +245,28 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
                     consistency.ExplicitStringConcatViolation(node),
                 )
                 return
+
+
+@final
+class WalrusVisitor(base.BaseNodeVisitor):
+    """
+    We use this visitor to find walrus operators and ban them.
+
+    This code is only executed on ``python3.8+``,
+    because before ``3.8.0`` release
+    there was no such thing as walrus operator.
+    """
+
+    def visit_NamedExpr(
+        self,
+        node: compat_types.NamedExpr,
+    ) -> None:  # pragma: py-lt-38
+        """
+        Disallows walrus ``:=`` operator.
+
+        Raises:
+            WalrusViolation
+
+        """
+        self.add_violation(consistency.WalrusViolation(node))
+        self.generic_visit(node)

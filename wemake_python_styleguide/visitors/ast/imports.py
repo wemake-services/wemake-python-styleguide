@@ -7,8 +7,9 @@ from typing import Callable, Iterable, List
 from typing_extensions import Final, final
 
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
-from wemake_python_styleguide.logic import imports, nodes
+from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming import access
+from wemake_python_styleguide.logic.tree import imports
 from wemake_python_styleguide.types import AnyImport, ConfigurationOptions
 from wemake_python_styleguide.violations.base import BaseViolation
 from wemake_python_styleguide.violations.best_practices import (
@@ -64,7 +65,7 @@ class _BaseImportValidator(object):
 
     def _check_same_alias(self, node: AnyImport) -> None:
         for alias in node.names:
-            if alias.asname == alias.name and not self._options.i_control_code:
+            if alias.asname == alias.name and self._options.i_control_code:
                 self._error_callback(
                     SameAliasImportViolation(node, text=alias.name),
                 )

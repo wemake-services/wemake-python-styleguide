@@ -4,7 +4,7 @@ import pkg_resources
 
 
 def _get_version(dist_name: str) -> str:  # pragma: no cover
-    """Fetches distribution name. Contains a fix for Sphinx."""
+    """Fetches distribution version."""
     try:
         return pkg_resources.get_distribution(dist_name).version
     except pkg_resources.DistributionNotFound:

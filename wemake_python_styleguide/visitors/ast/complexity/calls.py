@@ -6,7 +6,7 @@ from typing import Set
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic.calls import parts
+from wemake_python_styleguide.logic.tree.calls import parts
 from wemake_python_styleguide.violations.complexity import (
     TooLongCallChainViolation,
 )
@@ -50,6 +50,8 @@ class CallChainsVisitor(BaseNodeVisitor):
         if num_of_calls > self.options.max_call_level:
             self.add_violation(
                 TooLongCallChainViolation(
-                    node, text=str(num_of_calls),
+                    node,
+                    text=str(num_of_calls),
+                    baseline=self.options.max_call_level,
                 ),
             )
