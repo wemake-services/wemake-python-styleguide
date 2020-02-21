@@ -6,6 +6,7 @@ import tokenize
 from typing_extensions import final
 
 from wemake_python_styleguide.violations.consistency import (
+    LineCompriseCarriageReturnViolation,
     LineStartsWithDotViolation,
     MissingSpaceBetweenKeywordAndParenViolation,
 )
@@ -36,6 +37,16 @@ class WrongKeywordTokenVisitor(BaseTokenVisitor):
         """
         self._check_line_starts_with_dot(token)
 
+    def visit_newline(self, token: tokenize.TokenInfo) -> None:
+        """
+        Checks \r (carriage return) in line breaks.
+
+        Raises:
+            LineCompriseCarriageReturnViolation
+
+        """
+        self._check_line_comprise_carriage_return(token)
+
     def _check_space_before_open_paren(self, token: tokenize.TokenInfo) -> None:
         if not keyword.iskeyword(token.string):
             return
@@ -49,3 +60,8 @@ class WrongKeywordTokenVisitor(BaseTokenVisitor):
         line = token.line.lstrip()
         if line.startswith('.') and not line.startswith('...'):
             self.add_violation(LineStartsWithDotViolation(token))
+
+    def _check_line_comprise_carriage_return(self, token: tokenize.TokenInfo) -> None:
+        line = token.line.find('\r')
+        if line != -1 and line == (len(token.line) - 2):
+            self.add_violation(LineCompriseCarriageReturnViolation(token))

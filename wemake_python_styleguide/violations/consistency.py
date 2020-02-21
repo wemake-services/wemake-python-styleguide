@@ -73,6 +73,7 @@ Summary
    MeaninglessNumberOperationViolation
    OperationSignNegationViolation
    VagueImportViolation
+   LineCompriseCarriageReturnViolation
    LineStartsWithDotViolation
    RedundantSubscriptViolation
    AugmentedAssignPatternViolation
@@ -134,6 +135,7 @@ Consistency checks
 .. autoclass:: MeaninglessNumberOperationViolation
 .. autoclass:: OperationSignNegationViolation
 .. autoclass:: VagueImportViolation
+.. autoclass:: LineCompriseCarriageReturnViolation
 .. autoclass:: LineStartsWithDotViolation
 .. autoclass:: RedundantSubscriptViolation
 .. autoclass:: AugmentedAssignPatternViolation
@@ -2102,3 +2104,33 @@ class IterableUnpackingViolation(ASTViolation):
 
     error_template = 'Found an unnecessary iterable unpacking'
     code = 356
+
+
+@final
+class LineCompriseCarriageReturnViolation(TokenizeViolation):
+    """
+    Forbids to use \r (carriage return) in line breaks.
+
+    Reasoning:
+        We enforce strict consitency rules about how to break lines in 'str' type.
+        In this case, we only use newlines (\n), not carriage returns.
+        PEP8 doesn't yet replace \r in strings, however obsolete
+        'Windows'-style line breaks not allowed in code.
+
+    Solution:
+        Use only ``\n`` (not ``\r\n`` or ``\r``) to break lines in strings.
+
+    Example:
+
+        # Correct
+        some_proper_string = 'string with \n line break is correct'
+
+        # Wrong
+        some_improper_string = 'string with \r (carriage return) is wrong, same as \r\n sequence'
+
+    .. versionadded:: 0.14.0
+
+    """
+
+    error_template = 'Found a \r (carriage return) line break'
+    code = 357
