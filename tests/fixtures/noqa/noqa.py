@@ -692,3 +692,15 @@ extra_new_line = [  # noqa: WPS355
     'wrong',
 ]
 *numbers, = [4, 7]  # noqa: WPS356
+
+
+class GetterAndSetter(object):  # noqa: WPS614
+    
+    def __init__(self):
+        self.attribute = 1
+    
+    def get_x(self):
+        return self.attribute
+
+    def set_x(self, parameter):
+        self.attribute = parameter

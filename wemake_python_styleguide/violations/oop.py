@@ -28,6 +28,7 @@ Summary
    YieldMagicMethodViolation
    UselessOverwrittenMethodViolation
    WrongSuperCallAccessViolation
+   GetterAndSetterViolation
 
 Respect your objects
 --------------------
@@ -46,6 +47,7 @@ Respect your objects
 .. autoclass:: YieldMagicMethodViolation
 .. autoclass:: UselessOverwrittenMethodViolation
 .. autoclass:: WrongSuperCallAccessViolation
+.. autoclass:: GetterAndSetterViolation
 
 """
 
@@ -574,3 +576,26 @@ class WrongSuperCallAccessViolation(ASTViolation):
         'Found incorrect `super()` call context: incorrect name access'
     )
     code = 613
+
+@final
+class GetterAndSetterViolation(ASTViolation):
+    """
+    Summary here.
+
+    Reasoning:
+        Reasoning here.
+
+    Solution:
+        Solution here.
+
+    Example::
+        Examples here.
+
+
+    .. versionadded:: 0.13.0
+
+    """
+
+    error_template = 'Error template here'
+    
+    code = 614
