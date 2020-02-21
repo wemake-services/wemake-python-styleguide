@@ -46,6 +46,7 @@ Semantic versioning in our case means:
 - Fixes that annotation complexity was not reported from lists
 - Fixes bug when `TooManyPublicAttributesViolation`
   was counting duplicate fields
+- Fixes negated conditions `WPS504` was not reported for `if` expressions
 
 ### Misc
 

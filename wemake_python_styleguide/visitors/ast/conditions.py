@@ -98,13 +98,15 @@ class IfStatementVisitor(BaseNodeVisitor):
 
         Raises:
             UselessLenCompareViolation
+            NegatedConditionsViolation
 
         """
         self._check_useless_len(node)
+        self._check_negated_conditions(node)
         self.generic_visit(node)
 
-    def _check_negated_conditions(self, node: ast.If) -> None:
-        if not ifs.has_else(node):
+    def _check_negated_conditions(self, node: AnyIf) -> None:
+        if isinstance(node, ast.If) and not ifs.has_else(node):
             return
 
         if isinstance(node.test, ast.UnaryOp):
