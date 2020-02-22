@@ -28,7 +28,7 @@ Summary
    YieldMagicMethodViolation
    UselessOverwrittenMethodViolation
    WrongSuperCallAccessViolation
-   GetterAndSetterViolation
+   UnpythonicGetterSetterViolation
 
 Respect your objects
 --------------------
@@ -47,7 +47,7 @@ Respect your objects
 .. autoclass:: YieldMagicMethodViolation
 .. autoclass:: UselessOverwrittenMethodViolation
 .. autoclass:: WrongSuperCallAccessViolation
-.. autoclass:: GetterAndSetterViolation
+.. autoclass:: UnpythonicGetterSetterViolation
 
 """
 
@@ -577,8 +577,9 @@ class WrongSuperCallAccessViolation(ASTViolation):
     )
     code = 613
 
+
 @final
-class GetterAndSetterViolation(ASTViolation):
+class UnpythonicGetterSetterViolation(ASTViolation):
     """
     Summary here.
 
@@ -597,5 +598,5 @@ class GetterAndSetterViolation(ASTViolation):
     """
 
     error_template = 'Error template here'
-    
+
     code = 614

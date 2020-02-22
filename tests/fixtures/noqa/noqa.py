@@ -699,8 +699,8 @@ class GetterAndSetter(object):  # noqa: WPS614
     def __init__(self):
         self.attribute = 1
     
-    def get_x(self):
+    def get_attribute(self):
         return self.attribute
 
-    def set_x(self, parameter):
+    def set_attribute(self, parameter):
         self.attribute = parameter
