@@ -11,24 +11,20 @@ from wemake_python_styleguide.visitors.tokenize.syntax import (
 
 # Correct:
 
-correct_string_line_break = 'string with line break \n sequence is OK'
+correct_newline = 'print(1)\nprint(2)'
+correct_string_composed = 'some_string = "\r"'
 
 # Wrong:
 
-wrong_string_line_break_single = 'string with \r (carriage return) line break is wrong'
-
-wrong_string_line_break_sequence = 'string contains \r\n sequence is wrong'
-
-wrong_string_line_break_multiline = """
-string with carriage return line break \r in
-some multiple line is improper too
-"""
+wrong_newline_single = 'print(1)\rprint(2)'
+wrong_newline_sequenced = 'print(1)\r\nprint(2)'
+wrong_newline_in_multiline = """print(1)\rprint(2)."""
 
 
 @pytest.mark.parametrize('code', [
-    wrong_string_line_break_single,
-    wrong_string_line_break_sequence,
-    wrong_string_line_break_multiline,
+    wrong_newline_single,
+    wrong_newline_sequenced,
+    wrong_newline_in_multiline,
 ])
 def test_string_wrong_line_breaks(
     parse_tokens,
@@ -48,7 +44,8 @@ def test_string_wrong_line_breaks(
 
 
 @pytest.mark.parametrize('code', [
-    correct_string_line_break,
+    correct_newline,
+    correct_string_composed,
 ])
 def test_string_proper_line_breaks(
     parse_tokens,

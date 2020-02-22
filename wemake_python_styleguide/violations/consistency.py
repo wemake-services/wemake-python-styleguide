@@ -2108,29 +2108,20 @@ class IterableUnpackingViolation(ASTViolation):
 
 @final
 class LineCompriseCarriageReturnViolation(TokenizeViolation):
-    """
-    Forbids to use \r (carriage return) in line breaks.
+    r"""
+    Forbids to use ``\r`` (carriage return) in line breaks.
 
     Reasoning:
-        We enforce strict consitency rules about how to break lines in 'str' type.
-        In this case, we only use newlines (\n), not carriage returns.
-        PEP8 doesn't yet replace \r in strings, however obsolete
-        'Windows'-style line breaks not allowed in code.
+        We enforce Unix-style newlines.
+        We only use newlines (``\n``), not carriage returns.
+        So ``\r`` line breaks not allowed in code.
 
     Solution:
-        Use only ``\n`` (not ``\r\n`` or ``\r``) to break lines in strings.
-
-    Example:
-
-        # Correct
-        some_proper_string = 'string with \n line break is correct'
-
-        # Wrong
-        some_improper_string = 'string with \r (carriage return) is wrong, same as \r\n sequence'
+        Use only ``\n`` (not ``\r\n`` or ``\r``) to break lines.
 
     .. versionadded:: 0.14.0
 
     """
 
-    error_template = 'Found a \r (carriage return) line break'
+    error_template = r'Found a \r (carriage return) line break'
     code = 357

@@ -38,7 +38,7 @@ class WrongKeywordTokenVisitor(BaseTokenVisitor):
         self._check_line_starts_with_dot(token)
 
     def visit_newline(self, token: tokenize.TokenInfo) -> None:
-        """
+        r"""
         Checks \r (carriage return) in line breaks.
 
         Raises:
