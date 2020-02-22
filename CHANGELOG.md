@@ -9,6 +9,13 @@ Semantic versioning in our case means:
 - Major releases inidicate significant milestones or serious breaking changes.
 
 
+## 0.14.1
+
+### Features
+
+- Forbids to use `continue` in `finally` because it is a terrible practice
+
+
 ## 0.14.0 aka The Walrus fighter WIP
 
 ### Features
