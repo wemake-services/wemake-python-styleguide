@@ -2123,5 +2123,5 @@ class LineCompriseCarriageReturnViolation(TokenizeViolation):
 
     """
 
-    error_template = r'Found a \r (carriage return) line break'
+    error_template = r'Found a ``\r`` (carriage return) line break'
     code = 357
