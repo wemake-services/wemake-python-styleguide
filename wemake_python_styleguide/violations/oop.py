@@ -581,22 +581,48 @@ class WrongSuperCallAccessViolation(ASTViolation):
 @final
 class UnpythonicGetterSetterViolation(ASTViolation):
     """
-    Summary here.
+    Forbids to use getters and setters in objects.
 
     Reasoning:
-        Reasoning here.
+        Python does not need this abstraction.
 
     Solution:
-        Solution here.
+        Use @proprety as in the example below or make the attribute
+        public and change it directly.
 
     Example::
-        Examples here.
 
+        # Correct:
+        class Example(object):
+            def __init__(self):
+                self._attribute = None
+
+            @property
+            def attribute(self): # getter
+                return self._attribute
+
+            @attribute.setter # setter, name must be the same
+            def attribute(self, value):
+                self._attribute = value
+
+        # Wrong:
+        class Example(object):
+            def __init__(self):
+                self.attribute = None
+
+            def set_attribute(self):
+                return self.attribute
+
+            def get_attribute(self, value):
+                self.attribute = value
 
     .. versionadded:: 0.13.0
 
+    See also:
+        https://docs.python.org/3/library/functions.html#property
+        https://stackoverflow.com/a/36943813
+
     """
 
-    error_template = 'Error template here'
-
+    error_template = 'Found getters and setters'
     code = 614
