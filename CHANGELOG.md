@@ -23,11 +23,11 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `flake8-loggin-format` as a direct dependency
 - Adds `python3.8` support
 - Removes `cognitive_complexity` dependency, now it is built in into our linter
-- Adds baseline information for all complexity violation messages
+- Adds baseline information for all complexity violation messages: `x > baseline`
 - Changes how cognitive complexity is calculated
 - Adds support for positional arguments in different checks
 - Changes `styleguide.toml` and `flake8.toml` scripts definition
-- Extracts new violation - WPS450 from WPS436 #1118
+- Extracts new violation - `WPS450` from `WPS436` #1118
 - Adds domain names options:
   `--allowed-domain-names` and `--forbidden-domain-names`,
   that are used to create variable names' blacklist #1106
@@ -54,6 +54,10 @@ Semantic versioning in our case means:
   with `WPS347` despite having a meaningful alias
 - Fixes that `WPS501` was reported for `@contextmanager` definition
 - Fixes `WPS226` to be thrown at nested string type annotations
+- Fixes `WPS204` reported simplest nodes as overused like `[]` and `call()`
+- Fixes `WPS204` not reporting overused `f` strings
+- Fixes `WPS204` reporting overused return type annotations
+- Fixes `WPS204` reporting `self.` attribute access
 
 ### Misc
 

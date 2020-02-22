@@ -22,6 +22,7 @@ useless_lambdas = [
     ('lambda x, *y', 'method(x, *y)'),
     ('lambda x, **z', 'method(x, **z)'),
     ('lambda x, *y, **z', 'method(x, *y, **z)'),
+    ('lambda *args, **kwargs', 'method(*args, **kwargs)'),
 ]
 
 if PY38:

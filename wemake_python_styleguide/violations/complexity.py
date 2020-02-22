@@ -293,6 +293,7 @@ class OverusedExpressionViolation(ASTViolation):
         :str:`wemake_python_styleguide.options.defaults.MAX_FUNCTION_EXPRESSIONS`
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 0.14.0
 
     """
 
