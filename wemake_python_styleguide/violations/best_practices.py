@@ -71,6 +71,7 @@ Summary
    FloatKeyViolation
    ProtectedModuleMemberViolation
    PositionalOnlyArgumentsViolation
+   ContinueInFinallyBlockViolation
 
 Best practices
 --------------
@@ -127,6 +128,7 @@ Best practices
 .. autoclass:: FloatKeyViolation
 .. autoclass:: ProtectedModuleMemberViolation
 .. autoclass:: PositionalOnlyArgumentsViolation
+.. autoclass:: ContinueInFinallyBlockViolation
 
 """
 
@@ -2020,3 +2022,44 @@ class PositionalOnlyArgumentsViolation(ASTViolation):
 
     error_template = 'Found positional-only argument'
     code = 451
+
+
+class ContinueInFinallyBlockViolation(ASTViolation):
+    """
+    Forbids to use ``continue`` in ``finally`` case.
+
+    Note, that we check for any ``try``, ``except`` or ``finally`` nodes.
+
+    Reasoning:
+        Putting any control statements in finally is a terrible practice.
+        We should not allow it.
+
+    Solution:
+        Remove ``continue`` from ``finally`` blocks.
+
+    Example::
+
+        # Correct:
+        try:
+            ...
+        except YourException:
+            ...
+        finally:
+            ...
+
+        # Wrong:
+        try:
+            ...
+        except Exception:
+            ...
+        else:
+            ...
+        finally:
+            continue
+
+    .. versionadded:: 0.14.0
+
+    """
+
+    error_template = 'Found continue in finally block'
+    code = 452

@@ -11,6 +11,7 @@ from wemake_python_styleguide.logic.walk import is_contained
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     BaseExceptionViolation,
+    ContinueInFinallyBlockViolation,
     DuplicateExceptionViolation,
     IncorrectExceptOrderViolation,
     TryExceptMultipleReturnPathViolation,
@@ -74,6 +75,7 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
         self._check_return_path(node)
         self._check_exception_order(node)
         self.generic_visit(node)
+        self._check_continue_in_finally(node)
 
     def _check_if_needs_except(self, node: ast.Try) -> None:
         if node.finalbody and not node.handlers:
@@ -112,6 +114,14 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
                     self.add_violation(IncorrectExceptOrderViolation(node))
                 else:
                     seen.add(exception)
+
+    def _check_continue_in_finally(self, node: ast.Try) -> None:
+        finally_has_continue = any(
+            is_contained(line, ast.Continue)
+            for line in node.finalbody
+        )
+        if finally_has_continue:
+            self.add_violation(ContinueInFinallyBlockViolation(node))
 
 
 @final
