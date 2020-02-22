@@ -705,3 +705,17 @@ for element in range(10):
             continue
         else:
             my_print(4)
+
+
+while first_element < second_element:
+    try:  # noqa: WPS452
+        my_print(1)
+    except AnyError:
+        my_print('nope')
+    finally:
+        if first_element == 1:
+            # See:
+            # https://github.com/wemake-services/wemake-python-styleguide/issues/1082
+            continue
+        else:
+            my_print(4)
