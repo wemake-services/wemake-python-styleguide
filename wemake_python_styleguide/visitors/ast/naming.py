@@ -94,12 +94,11 @@ class _NameValidator(object):
         self._ensure_underscores(node, name)
 
     def check_function_signature(self, node: AnyFunctionDefAndLambda) -> None:
-        arguments = functions.get_all_arguments(node)
-        is_lambda = isinstance(node, ast.Lambda)
-        for arg in arguments:
-            should_check_argument = functions.is_first_argument(
-                node, arg.arg,
-            ) and not is_lambda
+        for arg in functions.get_all_arguments(node):
+            should_check_argument = (
+                functions.is_first_argument(node, arg.arg) and
+                not isinstance(node, ast.Lambda)
+            )
 
             self.check_name(
                 arg, arg.arg, is_first_argument=should_check_argument,

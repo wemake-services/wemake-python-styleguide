@@ -52,6 +52,7 @@ Semantic versioning in our case means:
   now only `from ... import dumps` is checked
 - Fixes that `from some import a as std` was reported as a vague import
   with `WPS347` despite having a meaningful alias
+- Fixes that `WPS501` was reported for `@contextmanager` definition
 
 ### Misc
 

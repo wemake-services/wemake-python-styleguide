@@ -388,6 +388,7 @@ class PrivateNameViolation(MaybeASTViolation):
 
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.4.0
+    .. versionchanged:: 0.14.0
 
     """
 
@@ -672,6 +673,9 @@ class UnusedVariableIsUsedViolation(ASTViolation):
 
     We discourage using variables that start with ``_``
     only inside functions and methods as local variables.
+
+    However, we allow to use ``_`` because tools like
+    ``ipython``, ``babel``, and ``django`` enforce it.
 
     Reasoning:
         Sometimes you start to use new logic in your functions,
