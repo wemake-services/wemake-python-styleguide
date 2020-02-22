@@ -63,7 +63,6 @@ def some():
 """
 
 
-
 @pytest.mark.parametrize('code', [
     wrong_try_example1,
     wrong_try_example2,
