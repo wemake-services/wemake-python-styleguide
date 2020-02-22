@@ -41,12 +41,28 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_string_constant(self, node: ast.Str) -> None:
-        parent = nodes.get_parent(node)
-        if isinstance(parent, _AnnNodes) and parent.annotation == node:
-            return  # it is argument or variable annotation
+        is_type_annotaion = False
 
-        if isinstance(parent, FunctionNodes) and parent.returns == node:
-            return  # it is return annotation
+        annotated = walk.get_closest_parent(node, (*_AnnNodes, *FunctionNodes))
+        if isinstance(annotated, FunctionNodes):
+            is_type_annotaion = bool(
+                node == annotated.returns or
+                (
+                    annotated.returns and
+                    walk.is_contained_by(node, annotated.returns)
+                ),
+            )
+        elif isinstance(annotated, _AnnNodes):
+            is_type_annotaion = bool(
+                node == annotated.annotation or
+                (
+                    annotated.annotation and
+                    walk.is_contained_by(node, annotated.annotation),
+                ),
+            )
+
+        if is_type_annotaion:
+            return
 
         self._string_constants[node.s] += 1
 
