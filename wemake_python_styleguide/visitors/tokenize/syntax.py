@@ -61,7 +61,9 @@ class WrongKeywordTokenVisitor(BaseTokenVisitor):
         if line.startswith('.') and not line.startswith('...'):
             self.add_violation(LineStartsWithDotViolation(token))
 
-    def _check_line_comprise_carriage_return(self, token: tokenize.TokenInfo) -> None:
+    def _check_line_comprise_carriage_return(
+        self, token: tokenize.TokenInfo
+    ) -> None:
         line = token.line.find('\r')
         if line != -1 and line == (len(token.line) - 2):
             self.add_violation(LineCompriseCarriageReturnViolation(token))

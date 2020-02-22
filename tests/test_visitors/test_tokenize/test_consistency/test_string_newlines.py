@@ -18,7 +18,9 @@ correct_string_composed = 'some_string = "\r"'
 
 wrong_newline_single = 'print(1)\rprint(2)'
 wrong_newline_sequenced = 'print(1)\r\nprint(2)'
-wrong_newline_in_multiline = """print(1)\rprint(2)."""
+wrong_newline_in_multiline = """print(1)\rprint(2)\r
+print(3).
+"""
 
 
 @pytest.mark.parametrize('code', [
