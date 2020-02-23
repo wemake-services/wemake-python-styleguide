@@ -73,7 +73,6 @@ Summary
    MeaninglessNumberOperationViolation
    OperationSignNegationViolation
    VagueImportViolation
-   LineCompriseCarriageReturnViolation
    LineStartsWithDotViolation
    RedundantSubscriptViolation
    AugmentedAssignPatternViolation
@@ -83,6 +82,7 @@ Summary
    ConsecutiveYieldsViolation
    BracketBlankLineViolation
    IterableUnpackingViolation
+   LineCompriseCarriageReturnViolation
 
 Consistency checks
 ------------------
@@ -135,7 +135,6 @@ Consistency checks
 .. autoclass:: MeaninglessNumberOperationViolation
 .. autoclass:: OperationSignNegationViolation
 .. autoclass:: VagueImportViolation
-.. autoclass:: LineCompriseCarriageReturnViolation
 .. autoclass:: LineStartsWithDotViolation
 .. autoclass:: RedundantSubscriptViolation
 .. autoclass:: AugmentedAssignPatternViolation
@@ -145,6 +144,7 @@ Consistency checks
 .. autoclass:: ConsecutiveYieldsViolation
 .. autoclass:: BracketBlankLineViolation
 .. autoclass:: IterableUnpackingViolation
+.. autoclass:: LineCompriseCarriageReturnViolation
 
 """
 
