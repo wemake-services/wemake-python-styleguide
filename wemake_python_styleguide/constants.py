@@ -357,7 +357,7 @@ TUPLE_ARGUMENTS_METHODS = frozenset((
 STDIN: Final = 'stdin'
 
 # Used as a special name patterns for unused variables, like _, __:
-UNUSED_VARIABLE_REGEX: Final = re.compile(r'^_+$')
+UNUSED_VARIABLE_REGEX: Final = re.compile('^_+$')
 
 # Used to specify as a placeholder for `__init__`:
 INIT: Final = '__init__'
