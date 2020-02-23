@@ -1106,7 +1106,7 @@ class TooManyImportedModuleMembersViolation(ASTViolation):
 
     Reasoning:
         Importing too many names from one import is easy way to cause
-        `WPS203`.
+        violation ``WPS203`` - too many imported names.
 
     Solution:
         Refactor the imports to import a common namespace. Something like
