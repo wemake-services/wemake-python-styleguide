@@ -2139,7 +2139,7 @@ class LineCompriseCarriageReturnViolation(TokenizeViolation):
     Solution:
         Use only ``\n`` (not ``\r\n`` or ``\r``) to break lines.
 
-    .. versionadded:: 0.14.0
+    .. versionadded:: 0.15.0
 
     """
 
@@ -2154,7 +2154,14 @@ class RawStringNotNeededViolation(TokenizeViolation):
     Reasoning:
         Raw string are only needed when dealing with \ in the string.
     Solution:
-        Solution here.
+        Do not prefix the string with r. Use a normal string instead.
+
+    Example::
+        # Correct:
+        r'This is a correct use \'
+
+        # Wrong:
+        r'This string should not be prefixed with r.'
     Example::
         Examples here.
     .. versionadded:: 0.15.0
