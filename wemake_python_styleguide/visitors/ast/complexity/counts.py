@@ -2,14 +2,19 @@
 
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, List, Union
+from typing import Callable, ClassVar, DefaultDict, List, Union
 
 from typing_extensions import final
 
 from wemake_python_styleguide.constants import MAX_LEN_YIELD_TUPLE
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree.functions import is_method
-from wemake_python_styleguide.types import AnyFunctionDef, AnyImport
+from wemake_python_styleguide.types import (
+    AnyFunctionDef,
+    AnyImport,
+    ConfigurationOptions,
+)
+from wemake_python_styleguide.violations.base import BaseViolation
 from wemake_python_styleguide.violations.complexity import (
     TooLongCompareViolation,
     TooLongTryBodyViolation,
@@ -27,6 +32,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 ConditionNodes = Union[ast.If, ast.While, ast.IfExp]
+ErrorCallback = Callable[[BaseViolation], None]  # TODO: alias and move
 ModuleMembers = Union[AnyFunctionDef, ast.ClassDef]
 
 
@@ -85,6 +91,33 @@ class ModuleMembersVisitor(BaseNodeVisitor):
 
 
 @final
+class _ImportFromMembersValidator(object):
+    """Validator of ``ast.ImportFrom`` nodes names."""
+
+    def __init__(
+        self,
+        error_callback: ErrorCallback,
+        options: ConfigurationOptions,
+    ) -> None:
+        self._error_callback = error_callback
+        self._options = options
+
+    def validate(self, node: ast.ImportFrom) -> None:
+        self._check_import_from_names_count(node)
+
+    def _check_import_from_names_count(self, node: ast.ImportFrom) -> None:
+        imported_names_number = len(node.names)
+        if imported_names_number > self._options.max_import_from_members:
+            self._error_callback(
+                TooManyImportedModuleMembersViolation(
+                    node,
+                    text=str(imported_names_number),
+                    baseline=self._options.max_import_from_members,
+                ),
+            )
+
+
+@final
 class ImportMembersVisitor(BaseNodeVisitor):
     """Counts imports in a module."""
 
@@ -93,29 +126,33 @@ class ImportMembersVisitor(BaseNodeVisitor):
         super().__init__(*args, **kwargs)
         self._imports_count = 0
         self._imported_names_count = 0
+        self._import_from_members_validator = _ImportFromMembersValidator(
+            self.add_violation,
+            self.options,
+        )
 
     def visit_Import(self, node: ast.Import) -> None:
         """
         Counts the number of ``import``.
 
         Raises:
-            TooManyImportsViolation
             TooManyImportedNamesViolation
+            TooManyImportsViolation
 
         """
         self._visit_any_import(node)
 
     def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
         """
-        Counts the number ``from ... import ...``.
+        Counts the number of ``from ... import ...``.
 
         Raises:
-            TooManyImportsViolation
-            TooManyImportedNamesViolation
             TooManyImportedModuleMembersViolation
+            TooManyImportedNamesViolation
+            TooManyImportsViolation
 
         """
-        self._check_import_from_names_count(node)
+        self._import_from_members_validator.validate(node)
         self._visit_any_import(node)
 
     def _visit_any_import(self, node: AnyImport) -> None:
@@ -138,17 +175,6 @@ class ImportMembersVisitor(BaseNodeVisitor):
                 TooManyImportedNamesViolation(
                     text=str(self._imported_names_count),
                     baseline=self.options.max_imported_names,
-                ),
-            )
-
-    def _check_import_from_names_count(self, node: ast.ImportFrom) -> None:
-        imported_names_number = len(node.names)
-        if imported_names_number > self.options.max_import_from_members:
-            self.add_violation(
-                TooManyImportedModuleMembersViolation(
-                    node,
-                    text=str(imported_names_number),
-                    baseline=self.options.max_import_from_members,
                 ),
             )
 
