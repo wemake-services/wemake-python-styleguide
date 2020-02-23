@@ -21,7 +21,6 @@ from wemake_python_styleguide.violations.complexity import (
     TooManyImportedModuleMembersViolation,
     TooManyImportedNamesViolation,
     TooManyImportsViolation,
-    TooManyMethodsViolation,
     TooManyModuleMembersViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -85,7 +84,7 @@ class ModuleMembersVisitor(BaseNodeVisitor):
             )
 
 
-@final  # noqa: WPS214
+@final
 class ImportMembersVisitor(BaseNodeVisitor):
     """Counts imports in a module."""
 
@@ -156,47 +155,6 @@ class ImportMembersVisitor(BaseNodeVisitor):
     def _post_visit(self) -> None:
         self._check_imports_count()
         self._check_imported_names_count()
-
-
-@final
-@alias('visit_any_function', (
-    'visit_FunctionDef',
-    'visit_AsyncFunctionDef',
-))
-class MethodMembersVisitor(BaseNodeVisitor):
-    """Counts methods in a single class."""
-
-    def __init__(self, *args, **kwargs) -> None:
-        """Creates a counter for tracked methods in different classes."""
-        super().__init__(*args, **kwargs)
-        self._methods: DefaultDict[ast.ClassDef, int] = defaultdict(int)
-
-    def visit_any_function(self, node: AnyFunctionDef) -> None:
-        """
-        Counts the number of methods in a single class.
-
-        Raises:
-            TooManyMethodsViolation
-
-        """
-        self._check_method(node)
-        self.generic_visit(node)
-
-    def _check_method(self, node: AnyFunctionDef) -> None:
-        parent = get_parent(node)
-        if isinstance(parent, ast.ClassDef):
-            self._methods[parent] += 1
-
-    def _post_visit(self) -> None:
-        for node, count in self._methods.items():
-            if count > self.options.max_methods:
-                self.add_violation(
-                    TooManyMethodsViolation(
-                        node,
-                        text=str(count),
-                        baseline=self.options.max_methods,
-                    ),
-                )
 
 
 @final

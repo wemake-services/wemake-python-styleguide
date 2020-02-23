@@ -28,13 +28,13 @@ PRESET: Final = (
 
     counts.ImportMembersVisitor,
     counts.ModuleMembersVisitor,
-    counts.MethodMembersVisitor,
     counts.ConditionsVisitor,
     counts.ElifVisitor,
     counts.TryExceptVisitor,
     counts.YieldTupleVisitor,
 
     classes.ClassComplexityVisitor,
+    classes.MethodMembersVisitor,
 
     overuses.StringOveruseVisitor,
     overuses.ExpressionOveruseVisitor,
