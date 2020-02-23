@@ -2152,7 +2152,7 @@ class RawStringNotNeededViolation(TokenizeViolation):
     """
     Summary here.
     Reasoning:
-        Reasoning here.
+        Raw string are only needed when dealing with \ in the string.
     Solution:
         Solution here.
     Example::
