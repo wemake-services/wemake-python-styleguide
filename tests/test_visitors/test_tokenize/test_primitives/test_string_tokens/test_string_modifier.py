@@ -100,7 +100,7 @@ def test_uppercase_prefix(
     visitor.run()
 
     assert_errors(
-        visitor, 
+        visitor,
         [UppercaseStringModifierViolation],
         ignored_types=(RawStringNotNeededViolation,),
     )

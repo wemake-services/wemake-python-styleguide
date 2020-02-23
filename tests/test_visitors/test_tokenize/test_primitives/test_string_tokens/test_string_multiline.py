@@ -78,10 +78,10 @@ def test_incorrect_multiline_strings(
     visitor.run()
 
     assert_errors(
-        visitor, 
+        visitor,
         [WrongMultilineStringViolation],
         ignored_types=(RawStringNotNeededViolation,),
-        )
+    )
 
 
 @pytest.mark.parametrize('primitive', [
