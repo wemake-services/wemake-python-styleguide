@@ -72,6 +72,36 @@ def test_correct_prefix_raw_string(
 
 
 @pytest.mark.parametrize('modifier', [
+    'r',
+    'rb',
+    'fr',
+])
+@pytest.mark.parametrize('primitive', [
+    '{0}""',
+    "{0}''",
+    '{0}"Big text"',
+    "{0}'Format 123'",
+])
+def test_wrong_raw_string(
+    parse_tokens,
+    assert_errors,
+    default_options,
+    primitives_usages,
+    primitive,
+    modifier,
+    mode,
+):
+    """Ensures that usage of raw string is forbidden if no backslash."""
+    string = primitive.format(modifier)
+    file_tokens = parse_tokens(mode(primitives_usages.format(string)))
+
+    visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
+    visitor.run()
+
+    assert_errors(visitor, [RawStringNotNeededViolation])
+
+
+@pytest.mark.parametrize('modifier', [
     'R',
     'B',
     'F',
