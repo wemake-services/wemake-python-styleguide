@@ -1274,6 +1274,15 @@ class InconsistentReturnVariableViolation(ASTViolation):
     """
     Forbids local variable that are only used in ``return`` statements.
 
+    We also allow cases when variable is assigned,
+    then there are some other statements without direct variable access,
+    and the variable is returned.
+    We reserve this use-case to be able
+    to do some extra work before the function returns.
+
+    We also allow to return partial, sorted,
+    or modified tuple items that are defined just above.
+
     Reasoning:
         This is done for consistency and more readable source code.
 
@@ -1286,6 +1295,11 @@ class InconsistentReturnVariableViolation(ASTViolation):
         def some_function():
             return 1
 
+        def other_function():
+            some_value = 1
+            do_something(some_value)
+            return some_value
+
         # Wrong:
         def some_function():
             some_value = 1
@@ -1293,12 +1307,11 @@ class InconsistentReturnVariableViolation(ASTViolation):
 
 
     .. versionadded:: 0.9.0
+    .. versionchanged:: 0.14.0
 
     """
 
-    error_template = (
-        'Found local variable that are only used in `return` statements'
-    )
+    error_template = 'Found variables that are only used for `return`: {0}'
     code = 331
 
 

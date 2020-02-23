@@ -58,6 +58,7 @@ Semantic versioning in our case means:
 - Fixes `WPS204` not reporting overused `f` strings
 - Fixes `WPS204` reporting overused return type annotations
 - Fixes `WPS204` reporting `self.` attribute access
+- Fixes `WPS331` reporting cases that do require some extra steps before return
 
 ### Misc
 
