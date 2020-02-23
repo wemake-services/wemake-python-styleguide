@@ -64,6 +64,5 @@ class WrongKeywordTokenVisitor(BaseTokenVisitor):
     def _check_line_comprise_carriage_return(
         self, token: tokenize.TokenInfo,
     ) -> None:
-        line = token.line.find('\r')
-        if line != -1 and token.string.startswith('\r'):
+        if token.string.startswith('\r'):
             self.add_violation(LineCompriseCarriageReturnViolation(token))
