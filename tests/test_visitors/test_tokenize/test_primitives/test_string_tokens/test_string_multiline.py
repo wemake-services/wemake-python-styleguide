@@ -6,6 +6,7 @@ from wemake_python_styleguide.violations.consistency import (
     WrongMultilineStringViolation,
 )
 from wemake_python_styleguide.visitors.tokenize.primitives import (
+    RawStringNotNeededViolation,
     WrongStringTokenVisitor,
 )
 
@@ -59,6 +60,7 @@ def test():
     '"""abc"""',
     "'''abc'''",
     '""""""',
+    "r''''''",
     'b"""some"""',
 ])
 def test_incorrect_multiline_strings(
@@ -75,7 +77,11 @@ def test_incorrect_multiline_strings(
     visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
-    assert_errors(visitor, [WrongMultilineStringViolation])
+    assert_errors(
+        visitor, 
+        [WrongMultilineStringViolation],
+        ignored_types=(RawStringNotNeededViolation,),
+        )
 
 
 @pytest.mark.parametrize('primitive', [

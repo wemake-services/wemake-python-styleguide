@@ -72,6 +72,7 @@ def test_correct_prefix_raw_string(
 
 
 @pytest.mark.parametrize('modifier', [
+    'R',
     'B',
     'F',
 ])
@@ -98,8 +99,12 @@ def test_uppercase_prefix(
     visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
-    assert_errors(visitor, [UppercaseStringModifierViolation])
-    assert_error_text(visitor, modifier)
+    assert_errors(
+        visitor, 
+        [UppercaseStringModifierViolation],
+        ignored_types=(RawStringNotNeededViolation,),
+    )
+    assert_error_text(visitor, modifier, multiple=True)
 
 
 @pytest.mark.parametrize('modifier', [
