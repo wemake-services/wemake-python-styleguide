@@ -121,6 +121,9 @@ You can also show all options that ``flake8`` supports by running:
 - ``max-attributes`` - maximum number of public instance attributes,
     defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_ATTRIBUTES`
+- ``max-raises`` - maximum number of raises in a function,
+    defaults to
+    :str:`wemake_python_styleguide.options.defaults.MAX_RAISES`
 - ``max-cognitive-score`` - maximum amount of cognitive complexity
     per function, defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_COGNITIVE_SCORE`
@@ -361,6 +364,12 @@ class Configuration(object):
             '--max-attributes',
             defaults.MAX_ATTRIBUTES,
             'Maximum number of public instance attributes.',
+        ),
+
+        _Option(
+            '--max-raises',
+            defaults.MAX_RAISES,
+            'Maximum number of raises in a function.',
         ),
 
         _Option(

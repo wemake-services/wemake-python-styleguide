@@ -142,9 +142,11 @@ extremely_long_name_that_needs_to_be_shortened_to_work_fine = 2  # noqa: WPS118
 привет_по_русски = 'Hello, world!'  # noqa: WPS119
 wrong_alias_ = 'some fake builtin alias'  # noqa: WPS120
 
+
 def some_function():
     _should_not_be_used = 1  # noqa: WPS122
     my_print(_should_not_be_used)  # noqa: WPS121
+
 
 used, __ = 1, 2  # noqa: WPS123
 
@@ -238,6 +240,7 @@ async def too_many_asserts():  # noqa: WPS218
     assert test_function(6)
 
 deep_access = some.other[0].field.type.boom  # noqa: WPS219
+
 
 def test_function():  # noqa: WPS231
     if xy > 1:
@@ -362,6 +365,7 @@ def function_with_wrong_yield():
         yield  # noqa: WPS325
     yield 1
 
+
 bad_concatenation = 'a' 'b'  # noqa: WPS326
 
 for literal in bad_concatenation:  # noqa: WPS327, WPS328
@@ -376,9 +380,11 @@ try:
 except Exception as ex:  # noqa: WPS329
     raise ex
 
+
 def some_other_function():
     some_value = 1
     return some_value  # noqa: WPS331
+
 
 my_print(one > two and two > three)  # noqa: WPS333
 
@@ -394,7 +400,7 @@ file_obj = open('filaname.py')  # noqa: WPS515
 my_print(type(file_obj) == int)  # noqa: WPS516
 
 my_print(*[], **{'@': 1})  # noqa: WPS517, WPS445
-pi = 3.14 # noqa: WPS446
+pi = 3.14  # noqa: WPS446
 my_print(lambda: 0)  # noqa: WPS522
 xterm += xterm + 1  # noqa: WPS524
 
@@ -535,7 +541,7 @@ with open('some') as MyBadException.custom:  # noqa: WPS406
 
 anti_wps428.__truediv__(1)  # noqa: WPS609
 
-if not some: # noqa: WPS504
+if not some:  # noqa: WPS504
     my_print('False')
 else:
     my_print('Wrong')
@@ -597,9 +603,11 @@ else:
     if numbers:  # noqa: WPS513
         my_print('other')
 
+
 def sync_gen():
     yield
     raise StopIteration  # noqa: WPS438
+
 
 async def async_gen():
     yield
@@ -614,6 +622,7 @@ class CheckStopIteration(object):
     async def async_gen(self):
         yield
         raise StopIteration()  # noqa: WPS438
+
 
 bad_unicode = b'\u1'  # noqa: WPS439
 CheckStopIteration = 1  # noqa: WPS440
@@ -635,11 +644,13 @@ swap_b = swap_a  # noqa: WPS523
 my_print(constant[0:7])  # noqa: WPS349
 var_a = var_a + var_b  # noqa: WPS350
 
+
 class ChildClass(ParentClass):
     def some_method(self):
-        super().some_other_method() # noqa: WPS613
+        super().some_other_method()  # noqa: WPS613
 
-LOWERCASE_ALPH = "abcdefghijklmnopqrstuvwxyz" # noqa: WPS447
+
+LOWERCASE_ALPH = "abcdefghijklmnopqrstuvwxyz"  # noqa: WPS447
 
 int()  # noqa: WPS351
 
@@ -651,11 +662,13 @@ for wrong_loop in call(  # noqa: WPS352
 if a in {1}:  # noqa: WPS525
     my_print('bad!')
 
+
 def implicit_yield_from():
     for wrong_yield in call():  # noqa: WPS526
         yield wrong_yield
 
-try: # noqa: WPS448
+
+try:  # noqa: WPS448
     anti_wps428 = 1
 except Exception:
     anti_wps428 = 1
@@ -663,7 +676,7 @@ except ValueError:
     anti_wps428 = 1
 
 
-bad_frozenset = frozenset([1]) # noqa: WPS527
+bad_frozenset = frozenset([1])  # noqa: WPS527
 
 
 def wrong_yield_from():
@@ -703,3 +716,13 @@ for element in range(10):
         # https://github.com/wemake-services/wemake-python-styleguide/issues/1082
         break
     my_print(4)
+
+
+def many_raises_function(parameter):  # noqa: WPS236
+    if parameter == 1:
+        raise ValueError('1')
+    if parameter == 2:
+        raise ValueError('2')
+    if parameter == 3:
+        raise Exception('3')
+    raise Exception('4')

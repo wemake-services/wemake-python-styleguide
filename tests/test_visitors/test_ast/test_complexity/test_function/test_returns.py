@@ -2,9 +2,11 @@
 
 import pytest
 
+from wemake_python_styleguide.violations.complexity import (
+    TooManyReturnsViolation,
+)
 from wemake_python_styleguide.visitors.ast.complexity.function import (
     FunctionComplexityVisitor,
-    TooManyReturnsViolation,
 )
 
 function_without_returns = 'def function(): ...'

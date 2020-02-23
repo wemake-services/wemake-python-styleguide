@@ -58,6 +58,7 @@ Summary
    TooLongCallChainViolation
    TooComplexAnnotationViolation
    TooManyImportedModuleMembersViolation
+   TooManyRaisesViolation
 
 
 Module complexity
@@ -98,6 +99,7 @@ Structure complexity
 .. autoclass:: TooLongCallChainViolation
 .. autoclass:: TooComplexAnnotationViolation
 .. autoclass:: TooManyImportedModuleMembersViolation
+.. autoclass:: TooManyRaisesViolation
 
 """
 
@@ -1126,9 +1128,41 @@ class TooManyImportedModuleMembersViolation(ASTViolation):
         Default:
         :str:`wemake_python_styleguide.options.defaults.MAX_IMPORT_FROM_MEMBERS`
 
-    .. versionadded:: 0.14.0
+    .. versionadded:: 0.15.0
 
     """
 
     error_template = 'Found too many imported names from a module: {0}'
+
     code = 235
+
+
+@final
+class TooManyRaisesViolation(ASTViolation):
+    """
+    Forbids too many ``raise`` statements in a function.
+
+    Reasoning:
+        Too many ``raise`` statements in a function make the code
+        untraceable and overcomplicated.
+
+    Solution:
+        Split the function into smaller functions, such that
+        each of them can raise less errors.
+        Create more standard errors, or use alternative ways to
+        raise them.
+
+    Configuration:
+        This rule is configurable with ``--max-raises``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_RAISES`
+
+    See also:
+        https://stackoverflow.com/questions/2052390/manually-raising-throwing-an-exception-in-python
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found too many raises in a function: {0}'
+    code = 236

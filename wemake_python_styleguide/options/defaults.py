@@ -109,6 +109,9 @@ MAX_ACCESS_LEVEL: Final = 4  # guessed
 #: Maximum number of public attributes in a single class.
 MAX_ATTRIBUTES: Final = 6  # guessed
 
+#: Maximum number of raises in a function.
+MAX_RAISES: Final = 3  # guessed
+
 #: Maximum amount of cognitive complexity per function.
 MAX_COGNITIVE_SCORE: Final = 12  # based on this code statistics
 

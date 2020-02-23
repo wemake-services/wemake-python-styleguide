@@ -89,6 +89,7 @@ class _ValidatedOptions(object):
     max_asserts: int = attr.ib(validator=[_min_max(min=1)])
     max_access_level: int = attr.ib(validator=[_min_max(min=1)])
     max_attributes: int = attr.ib(validator=[_min_max(min=1)])
+    max_raises: int = attr.ib(validator=[_min_max(min=1)])
     max_cognitive_score: int = attr.ib(validator=[_min_max(min=1)])
     max_cognitive_average: int = attr.ib(validator=[_min_max(min=1)])
     max_call_level: int = attr.ib(validator=[_min_max(min=1)])
