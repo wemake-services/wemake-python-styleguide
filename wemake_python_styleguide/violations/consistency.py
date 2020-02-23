@@ -2155,12 +2155,16 @@ class LineCompriseCarriageReturnViolation(TokenizeViolation):
 class RawStringNotNeededViolation(TokenizeViolation):
     """
     Summary here.
+
     Reasoning:
         Reasoning here.
+
     Solution:
         Solution here.
+
     Example::
         Examples here.
+
     .. versionadded:: 0.13.0
     """
 
