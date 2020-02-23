@@ -130,6 +130,9 @@ You can also show all options that ``flake8`` supports by running:
     :str:`wemake_python_styleguide.options.defaults.NESTED_CLASSES_WHITELIST`
 - ``max-call-level`` - maximum number of call chains, defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_CALL_LEVEL`
+- ``max-annotation-complexity`` - maximum number of nested annotations,
+    defaults to
+    :str:`wemake_python_styleguide.options.defaults.MAX_ANN_COMPLEXITY`
 - ``max-import-from-members`` - maximum number of names that can be imported
     from module, defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_IMPORT_FROM_MEMBERS`
@@ -376,6 +379,11 @@ class Configuration(object):
             '--max-call-level',
             defaults.MAX_CALL_LEVEL,
             'Maximum number of call chains.',
+        ),
+        _Option(
+            '--max-annotation-complexity',
+            defaults.MAX_ANN_COMPLEXITY,
+            'Maximum number of nested annotations.',
         ),
         _Option(
             '--max-import-from-members',

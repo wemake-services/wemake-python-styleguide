@@ -64,7 +64,7 @@ def test_module_import_counts_violation(
     visitor.run()
 
     assert_errors(visitor, [TooManyImportsViolation])
-    assert_error_text(visitor, '2')
+    assert_error_text(visitor, '2', option_values.max_imports)
 
 
 @pytest.mark.parametrize('code', [
@@ -86,7 +86,7 @@ def test_module_imported_names_counts_violation(
     visitor.run()
 
     assert_errors(visitor, [TooManyImportedNamesViolation])
-    assert_error_text(visitor, '2')
+    assert_error_text(visitor, '2', option_values.max_imported_names)
 
 
 @pytest.mark.parametrize('code', [

@@ -7,14 +7,15 @@ from typing_extensions import final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import ForNodes, FunctionNodes
-from wemake_python_styleguide.logic import functions, nodes, strings
+from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.arguments import call_args
-from wemake_python_styleguide.logic.collections import (
+from wemake_python_styleguide.logic.naming import name_nodes
+from wemake_python_styleguide.logic.tree import functions, strings
+from wemake_python_styleguide.logic.tree.collections import (
     first,
     normalize_dict_elements,
     sequence_of_node,
 )
-from wemake_python_styleguide.logic.naming import name_nodes
 from wemake_python_styleguide.types import (
     AnyFor,
     AnyFunctionDef,

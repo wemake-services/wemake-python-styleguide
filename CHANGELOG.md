@@ -13,21 +13,57 @@ Semantic versioning in our case means:
 
 ### Features
 
+- **Breaking**: removes `flake8-print`, now using `WPS421` instead of `T001`
+- **Breaking**: removes `flake8-annotations-complexity`,
+  now using `WPS234` instead of `TAE002`
+- **Breaking**: `WPS441` is no longer triggered for `except` blocks,
+  it is now handled by `F821` from `flake8`
+- **Breaking**: Removes `radon`,
+  because `cognitive-complexity` and `mccabe` is enough
+- **Breaking**: Removes `flake8-loggin-format` as a direct dependency
 - Adds `python3.8` support
-- Removes `radon`, because `cognitive-complexity` is enough
-- Removes `flake8-loggin-format` as a direct dependency
+- Removes `cognitive_complexity` dependency, now it is built in into our linter
+- Adds baseline information for all complexity violation messages: `x > baseline`
+- Changes how cognitive complexity is calculated
+- Adds support for positional arguments in different checks
 - Changes `styleguide.toml` and `flake8.toml` scripts definition
-- Extracts new violation - WPS450 from WPS436 #1118
-- Adds domain names options, that are used to create variable names' blacklist #1106
-- Add `__call__` to list of methods that should be on top #1125
+- Extracts new violation - `WPS450` from `WPS436` #1118
+- Adds domain names options:
+  `--allowed-domain-names` and `--forbidden-domain-names`,
+  that are used to create variable names' blacklist #1106
+- Forbids to use `:=` operator
+- Forbids to use positional only `/` arguments
+- Adds `__call__` to list of methods that should be on top #1125
+- Now allows `_` to be used as a defined variable
 
 ### Bugfixes
 
 - Remove ImplicitTernaryViolation - WPS332 #1099
 - Fixes how `i_control_code` behaves with WPS113
+- Fixes that cognitive complexity was ignoring
+  `ast.Continue`, `ast.Break`, and `ast.Raise` statements
+- Fixes that cognitive complexity was ignoring `ast.AsyncFor` loops
+- Fixes that annotation complexity was not reported for `async` functions
+- Fixes that annotation complexity was not reported from lists
+- Fixes bug when `TooManyPublicAttributesViolation`
+  was counting duplicate fields
+- Fixes negated conditions `WPS504` was not reported for `if` expressions
+- Fixes that `import dumps` was reported as `WPS347`,
+  now only `from ... import dumps` is checked
+- Fixes that `from some import a as std` was reported as a vague import
+  with `WPS347` despite having a meaningful alias
+- Fixes that `WPS501` was reported for `@contextmanager` definition
+- Fixes `WPS226` to be thrown at nested string type annotations
+- Fixes `WPS204` reported simplest nodes as overused like `[]` and `call()`
+- Fixes `WPS204` not reporting overused `f` strings
+- Fixes `WPS204` reporting overused return type annotations
+- Fixes `WPS204` reporting `self.` attribute access
 
 ### Misc
 
+- Changes how tests are executed
+- Changes how coverage is calculated, adds `coverage-conditional-plugin`
+- Adds how a violation can be deprecated
 - Adds `local-partial-types` to mypy config
 - Uses `abc` stdlib's module to mark abstract base classes #1122
 - Adds `python3.8` to the CI

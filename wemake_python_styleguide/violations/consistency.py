@@ -57,6 +57,7 @@ Summary
    UselessExceptCaseViolation
    UselessOperatorsViolation
    InconsistentReturnVariableViolation
+   WalrusViolation
    ImplicitComplexCompareViolation
    ReversedComplexCompareViolation
    WrongLoopIterTypeViolation
@@ -117,6 +118,7 @@ Consistency checks
 .. autoclass:: UselessExceptCaseViolation
 .. autoclass:: UselessOperatorsViolation
 .. autoclass:: InconsistentReturnVariableViolation
+.. autoclass:: WalrusViolation
 .. autoclass:: ImplicitComplexCompareViolation
 .. autoclass:: ReversedComplexCompareViolation
 .. autoclass:: WrongLoopIterTypeViolation
@@ -150,8 +152,6 @@ from wemake_python_styleguide.violations.base import (
     ASTViolation,
     TokenizeViolation,
 )
-
-DEPRECATED_CODES = (332,)
 
 
 @final
@@ -1303,6 +1303,41 @@ class InconsistentReturnVariableViolation(ASTViolation):
 
 
 @final
+class WalrusViolation(ASTViolation):
+    """
+    Forbids local variable that are only used in ``return`` statements.
+
+    This violation can only be thrown on ``python3.8+``.
+
+    Reasoning:
+        Code with ``:=`` is hardly readable.
+        It has big problems with scoping and reading order.
+        And it can lead to a huge mess inside your code.
+        Python is not expression-based.
+
+    Solution:
+        Don't use fancy stuff, use good old assignments.
+
+    Example::
+
+        # Correct:
+        some = call()
+        if some:
+            print(some)
+
+        # Wrong:
+        if some := call():
+            print(some)
+
+    .. versionadded:: 0.14.0
+
+    """
+
+    error_template = 'Found walrus operator'
+    code = 332
+
+
+@final
 class ImplicitComplexCompareViolation(ASTViolation):
     """
     Forbids to have implicit complex compare expressions.
@@ -1763,6 +1798,7 @@ class VagueImportViolation(ASTViolation):
     Forbids imports that may cause confusion outside of the module.
 
     Names that we forbid to import:
+
     - Common names like ``dumps`` and ``loads``
     - Names starting with ``to_`` and ``from_``
     - Too short names like ``Q`` or ``F``, but we are fine with ``_``
@@ -1773,6 +1809,9 @@ class VagueImportViolation(ASTViolation):
         See ``loads``? It can be anything: ``yaml``, ``toml``, ``json``, etc.
         We are also enforcing consitency with our naming too-short rules here.
 
+    Solution:
+        Use package level imports or import aliases.
+
     See
     :py:data:`~wemake_python_styleguide.constants.VAGUE_IMPORTS_BLACKLIST`
     for the full list of bad import names.
@@ -1781,13 +1820,14 @@ class VagueImportViolation(ASTViolation):
 
         # Correct:
         import json
-        json.loads(content)
+        import dumps  # package names are not checked
+        from json import loads as json_loads
 
         # Wrong:
         from json import loads
-        loads(content)
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 0.14.0
 
     """
 

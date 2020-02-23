@@ -89,6 +89,31 @@ class Test(object):
         {1}
 """
 
+# Regressions:
+
+correct_except_regression1115 = """
+try:
+    vehicles = self.client.list_vehicles()
+except tesla_api.AuthenticationError as e:
+    self.client.close()
+    raise GUIError(_("Login details are incorrect.")) from e
+except tesla_api.aiohttp.client_exceptions.ClientConnectorError as e:
+    self.client.close()
+    raise GUIError(_("Network error.")) from e
+"""
+
+wrong_except_regression1115 = """
+try:
+    ...
+except Exception as e:
+    ...
+
+try:
+    ...
+except Exception as e:
+    ...
+"""
+
 
 @pytest.mark.parametrize('except_statement', [
     except_block1,
@@ -214,3 +239,28 @@ def test_except_block_correct(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize(('code', 'violations'), [
+    (correct_except_regression1115, []),
+    (wrong_except_regression1115, [BlockAndLocalOverlapViolation]),
+])
+def test_except_block_regression1115(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    violations,
+    default_options,
+):
+    """
+    Ensures using variables is fine.
+
+    See:
+    https://github.com/wemake-services/wemake-python-styleguide/issues/1115
+    """
+    tree = parse_ast_tree(code)
+
+    visitor = BlockVariableVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, violations)

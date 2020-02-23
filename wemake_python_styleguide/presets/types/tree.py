@@ -55,6 +55,7 @@ PRESET: Final = (
     functions.UselessLambdaDefinitionVisitor,
     functions.WrongFunctionCallContextVisitior,
     functions.UnnecessaryLiteralsVisitor,
+    functions.PositionalOnlyArgumentsVisitor,
 
     exceptions.WrongTryExceptVisitor,
     exceptions.NestedTryBlocksVisitor,
@@ -74,6 +75,7 @@ PRESET: Final = (
 
     operators.UselessOperatorsVisitor,
     operators.WrongMathOperatorVisitor,
+    operators.WalrusVisitor,
 
     compares.WrongConditionalVisitor,
     compares.CompareSanityVisitor,

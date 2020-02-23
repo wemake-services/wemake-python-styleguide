@@ -7,15 +7,14 @@ from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import AssignNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
-from wemake_python_styleguide.logic import (
+from wemake_python_styleguide.logic import nodes, source
+from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
+from wemake_python_styleguide.logic.tree import (
     compares,
     functions,
     ifs,
-    nodes,
     operators,
-    source,
 )
-from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     HeterogenousCompareViolation,

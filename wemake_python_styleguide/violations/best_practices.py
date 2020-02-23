@@ -70,6 +70,7 @@ Summary
    IncorrectExceptOrderViolation
    FloatKeyViolation
    ProtectedModuleMemberViolation
+   PositionalOnlyArgumentsViolation
 
 Best practices
 --------------
@@ -125,6 +126,7 @@ Best practices
 .. autoclass:: IncorrectExceptOrderViolation
 .. autoclass:: FloatKeyViolation
 .. autoclass:: ProtectedModuleMemberViolation
+.. autoclass:: PositionalOnlyArgumentsViolation
 
 """
 
@@ -1628,14 +1630,10 @@ class ControlVarUsedAfterBlockViolation(ASTViolation):
 
     1. ``for`` loop unpacked variables
     2. ``with`` context variables
-    3. ``except`` exception names
 
     Reasoning:
         Variables leaking from the blocks can damage your logic.
         It might not contain what you think they contain.
-        Some variables even might be deleted right after the block,
-        just like in ``except Exception as exc:``
-        where ``exc`` won't be in scope after ``except`` body.
 
     Solution:
         Use names inside the scope they are defined.
@@ -1657,6 +1655,7 @@ class ControlVarUsedAfterBlockViolation(ASTViolation):
         https://github.com/satwikkansal/wtfPython#-explanation-32
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 0.14.0
 
     """
 
@@ -1982,3 +1981,42 @@ class ProtectedModuleMemberViolation(ASTViolation):
 
     error_template = 'Found protected object import'
     code = 450
+
+
+@final
+class PositionalOnlyArgumentsViolation(ASTViolation):
+    """
+    Forbids to use positional only or ``/`` arguments.
+
+    This violation is only raised for ``python3.8+``,
+    earlier versions do not have this concept.
+
+    Reasoning:
+        This is a very rare case.
+        Almost exclusively used by C code and stdlib.
+        There's no point in declaring your own parameters as positional only.
+        It will break your code!
+
+    Solution:
+        Use regular arguments.
+        In case you are working with C, then this violation can be ignored.
+
+    Example::
+
+        # Correct:
+        def my_function(first, second):
+            ...
+
+        # Wrong:
+        def my_function(first, /, second):
+            ...
+
+    See also:
+        https://www.python.org/dev/peps/pep-0570/
+
+    .. versionadded:: 0.14.0
+
+    """
+
+    error_template = 'Found positional-only argument'
+    code = 451

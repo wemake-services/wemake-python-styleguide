@@ -4,6 +4,7 @@ from typing_extensions import Final
 
 from wemake_python_styleguide.visitors.ast.complexity import (
     access,
+    annotations,
     calls,
     classes,
     counts,
@@ -41,4 +42,6 @@ PRESET: Final = (
     access.AccessVisitor,
 
     calls.CallChainsVisitor,
+
+    annotations.AnnotationComplexityVisitor,
 )

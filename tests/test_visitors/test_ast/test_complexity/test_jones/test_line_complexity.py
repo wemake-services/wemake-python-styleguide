@@ -106,7 +106,9 @@ def test_complex_lines(
     visitor.run()
 
     assert_errors(visitor, [LineComplexityViolation])
-    assert_error_text(visitor, str(complexity))
+    assert_error_text(
+        visitor, str(complexity), option_values.max_line_complexity,
+    )
 
 
 def test_same_complexity(parse_ast_tree, default_options):

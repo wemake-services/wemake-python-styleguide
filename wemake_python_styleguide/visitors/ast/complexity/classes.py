@@ -33,23 +33,32 @@ class ClassComplexityVisitor(BaseNodeVisitor):
     def _check_base_classes(self, node: ast.ClassDef) -> None:
         if len(node.bases) > self.options.max_base_classes:
             self.add_violation(
-                TooManyBaseClassesViolation(node, text=str(len(node.bases))),
+                TooManyBaseClassesViolation(
+                    node,
+                    text=str(len(node.bases)),
+                    baseline=self.options.max_base_classes,
+                ),
             )
 
     def _check_public_attributes(self, node: ast.ClassDef) -> None:
-        attributes = walk.get_subnodes_by_type(node, ast.Attribute)
-        self_public_attrs = filter(_is_public_instance_attr_def, attributes)
-        attrs_count = len(list(self_public_attrs))
+        attributes = filter(
+            self._is_public_instance_attr_def,
+            walk.get_subnodes_by_type(node, ast.Attribute),
+        )
+        attrs_count = len({attr.attr for attr in attributes})
         if attrs_count > self.options.max_attributes:
             self.add_violation(
-                TooManyPublicAttributesViolation(node, text=str(attrs_count)),
+                TooManyPublicAttributesViolation(
+                    node,
+                    text=str(attrs_count),
+                    baseline=self.options.max_attributes,
+                ),
             )
 
-
-def _is_public_instance_attr_def(node: ast.Attribute) -> bool:
-    return (
-        isinstance(node.ctx, ast.Store) and
-        access.is_public(node.attr) and
-        isinstance(node.value, ast.Name) and
-        node.value.id == 'self'
-    )
+    def _is_public_instance_attr_def(self, node: ast.Attribute) -> bool:
+        return (
+            isinstance(node.ctx, ast.Store) and
+            access.is_public(node.attr) and
+            isinstance(node.value, ast.Name) and
+            node.value.id == 'self'
+        )

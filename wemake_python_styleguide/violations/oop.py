@@ -570,5 +570,7 @@ class WrongSuperCallAccessViolation(ASTViolation):
 
     """
 
-    error_template = 'Found incorrect `super()` call context: {0}'
+    error_template = (
+        'Found incorrect `super()` call context: incorrect name access'
+    )
     code = 613

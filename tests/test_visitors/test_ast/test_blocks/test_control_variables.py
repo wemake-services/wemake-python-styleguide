@@ -81,11 +81,48 @@ def context():
     }
 """
 
-correct_except = """
+correct_except1 = """
 try:
     ...
 except Exception as e:
     print(e)
+"""
+
+correct_except2 = """
+try:
+    ...
+except TypeError as type_error:
+    print(type_error)
+except Exception as e:
+    print(e)
+"""
+
+correct_except3 = """
+e = 1
+try:
+    ...
+except Exception as e:
+    ...
+print(e)
+"""
+
+correct_except4 = """
+try:
+    ...
+except Exception as e:
+    ...
+print(e)
+"""
+
+correct_except_regression1115 = """
+try:
+    vehicles = self.client.list_vehicles()
+except tesla_api.AuthenticationError as e:
+    self.client.close()
+    raise GUIError(_("Login details are incorrect.")) from e
+except tesla_api.aiohttp.client_exceptions.ClientConnectorError as e:
+    self.client.close()
+    raise GUIError(_("Network error")) from e
 """
 
 correct_with1 = """
@@ -137,24 +174,6 @@ def wrapper():
     print(j)
 """
 
-wrong_except1 = """
-e = 1
-
-try:
-    ...
-except Exception as e:
-    ...
-print(e)
-"""
-
-wrong_except2 = """
-try:
-    ...
-except Exception as e:
-    ...
-print(e)
-"""
-
 wrong_with1 = """
 def wrapper():
     with open() as first:
@@ -181,8 +200,6 @@ def wrapper():
     wrong_for_loop1,
     wrong_for_loop2,
     wrong_for_loop3,
-    wrong_except1,
-    wrong_except2,
     wrong_with1,
     wrong_with2,
     wrong_with3,
@@ -213,7 +230,11 @@ def test_control_variable_used_after_block(
     correct_for_comprehension2,
     correct_for_comprehension3,
     correct_for_comprehension4,
-    correct_except,
+    correct_except1,
+    correct_except2,
+    correct_except3,
+    correct_except4,
+    correct_except_regression1115,
     correct_with1,
     correct_with2,
     correct_with3,

@@ -17,6 +17,8 @@ from wemake_python_styleguide.visitors.ast.compares import (
     'if a in [1]: ... ',
     'if a in (1,): ... ',
     'if a in "a": ... ',
+    'if a in {*a}: ... ',
+    'if a in {**a}: ... ',
 ])
 def test_single_item_container(
     assert_errors,
@@ -44,6 +46,8 @@ def test_single_item_container(
     'if a in [1, 2]: ... ',
     'if a in (1, 2): ... ',
     'if a in "ab": ... ',
+    'if a in {1, *a}: ... ',
+    'if a in {1: "a", **a}: ... ',
 ])
 def test_multi_item_contrainer(
     assert_errors,

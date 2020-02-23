@@ -89,26 +89,12 @@ def all_module_violations():
 
 
 @pytest.fixture(scope=_SESSION_SCOPE)
-def all_deprecated_violation_codes():
-    """Loads all deprecated codes from the package."""
-    codes = {}
-    for module in VIOLATIONS_MODULES:
-        module_deprecated_codes = getattr(module, 'DEPRECATED_CODES', ())
-        codes[module] = sorted(module_deprecated_codes)
-    return codes
-
-
-@pytest.fixture(scope=_SESSION_SCOPE)
-def all_violation_codes(all_module_violations, all_deprecated_violation_codes):
+def all_violation_codes(all_module_violations):
     """Loads all codes and their violation classes from the package."""
     all_codes = {}
     for module in all_module_violations.keys():
-        violation_codes = {
+        all_codes[module] = {
             violation.code: violation
             for violation in all_module_violations[module]
         }
-        deprecated_codes = {
-            code: None for code in all_deprecated_violation_codes[module]
-        }
-        all_codes[module] = {**violation_codes, **deprecated_codes}
     return all_codes

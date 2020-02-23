@@ -38,6 +38,12 @@ NESTED_CLASSES_WHITELIST: Final = (
     'Params',  # factoryboy specific
 )
 
+#: Domain names that are removed from variable names' blacklist.
+ALLOWED_DOMAIN_NAMES: Final = ()
+
+#: Domain names that extends variable names' blacklist.
+FORBIDDEN_DOMAIN_NAMES: Final = ()
+
 
 # ===========
 # Complexity:
@@ -112,11 +118,8 @@ MAX_COGNITIVE_AVERAGE: Final = 8  # based on this code statistics
 #: Maximum number of call chains.
 MAX_CALL_LEVEL: Final = 3
 
+#: Maximum number of nested annotations.
+MAX_ANN_COMPLEXITY: Final = 3
+
 #: Maximum number of names that can be imported from module.
 MAX_IMPORT_FROM_MEMBERS: Final = 8  # guessed
-
-#: Domain names that are removed from variable names' blacklist.
-ALLOWED_DOMAIN_NAMES: Final = ()
-
-#: Domain names that extends variable names' blacklist.
-FORBIDDEN_DOMAIN_NAMES: Final = ()

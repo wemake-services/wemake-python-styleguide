@@ -75,4 +75,4 @@ def test_module_score_error(
     visitor.run()
 
     assert_errors(visitor, [JonesScoreViolation])
-    assert_error_text(visitor, str(score))
+    assert_error_text(visitor, str(score), option_values.max_jones_score)

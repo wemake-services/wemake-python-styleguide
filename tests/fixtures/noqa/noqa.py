@@ -7,6 +7,8 @@ It is used for e2e tests.
 
 from __future__ import print_function  # noqa: WPS422
 
+from typing import List
+
 import os.path  # noqa: WPS301
 import sys as sys  # noqa: WPS113
 
@@ -19,9 +21,8 @@ import import1
 import import2
 import import3
 import import4
-import import5
 
-from some_name import (  # noqa: WPS234
+from some_name import (  # noqa: WPS235
     name1,
     name2,
     name3,
@@ -87,14 +88,14 @@ def foo_func():
     yield (1, 2, 3, 4, 5, 6)  # noqa: WPS227
 
 
-print(x > 2 > y > 4)  # noqa: WPS228
+my_print(x > 2 > y > 4)  # noqa: WPS228
 
 try:  # noqa: WPS229
-    print(1)
-    print(2)
-    print(3)
+    my_print(1)
+    my_print(2)
+    my_print(3)
 except AnyError:
-    print('nope')
+    my_print('nope')
 
 
 class TooManyPublicAtts(object):  # noqa: WPS230
@@ -143,7 +144,7 @@ wrong_alias_ = 'some fake builtin alias'  # noqa: WPS120
 
 def some_function():
     _should_not_be_used = 1  # noqa: WPS122
-    print(_should_not_be_used)  # noqa: WPS121
+    my_print(_should_not_be_used)  # noqa: WPS121
 
 used, __ = 1, 2  # noqa: WPS123
 
@@ -173,19 +174,19 @@ def many_returns(xy):  # noqa: WPS212
 
 
 def many_expressions(xy):  # noqa: WPS213
-    print(xy)
-    print(xy)
-    print(xy)
+    my_print(xy)
+    my_print(xy)
+    my_print(xy)
 
-    print(xy)
-    print(xy)
-    print(xy)
+    my_print(xy)
+    my_print(xy)
+    my_print(xy)
 
-    print(xy)
-    print(xy)
-    print(xy)
+    my_print(xy)
+    my_print(xy)
+    my_print(xy)
 
-    print(xy)
+    my_print(xy)
 
 
 class TooManyMethods(object):  # noqa: WPS214
@@ -266,13 +267,13 @@ elif line > 4:
 try:  # noqa: WPS225
     do_some_bad()
 except ValueError:
-    print('value')
+    my_print('value')
 except KeyError:
-    print('key')
+    my_print('key')
 except IndexError as exc:
-    print('index', exc)
+    my_print('index', exc)
 except TypeError:
-    print('type')
+    my_print('type')
 
 
 class BadClass:  # noqa: WPS306
@@ -328,9 +329,9 @@ class SomeClass(FirstParent,  # noqa: WPS317
 
 
 if SomeClass:
-        print(SomeClass)  # noqa: WPS318
+        my_print(SomeClass)  # noqa: WPS318
 
-print(
+my_print(
     1,
     2)  # noqa: WPS319
 
@@ -352,7 +353,7 @@ multiline_string = """abc"""  # noqa: WPS322
 
 def function_with_wrong_return():
     if some:
-        print(some)
+        my_print(some)
     return  # noqa: WPS324
 
 
@@ -379,33 +380,33 @@ def some_other_function():
     some_value = 1
     return some_value  # noqa: WPS331
 
-print(one > two and two > three)  # noqa: WPS333
+my_print(one > two and two > three)  # noqa: WPS333
 
-print(biggesst > middle >= smallest)  # noqa: WPS334
+my_print(biggesst > middle >= smallest)  # noqa: WPS334
 
 for index in [1, 2]:  # noqa: WPS335
-    print(index)
+    my_print(index)
 
 string_concat = 'a' + 'b'  # noqa: WPS336
 
-print(one == 'a' or one == 'b')  # noqa: WPS514
+my_print(one == 'a' or one == 'b')  # noqa: WPS514
 file_obj = open('filaname.py')  # noqa: WPS515
-print(type(file_obj) == int)  # noqa: WPS516
+my_print(type(file_obj) == int)  # noqa: WPS516
 
-print(*[], **{'@': 1})  # noqa: WPS517, WPS445
+my_print(*[], **{'@': 1})  # noqa: WPS517, WPS445
 pi = 3.14 # noqa: WPS446
-print(lambda: 0)  # noqa: WPS522
+my_print(lambda: 0)  # noqa: WPS522
 xterm += xterm + 1  # noqa: WPS524
 
 for range_len in range(len(file_obj)):  # noqa: WPS518
-    print(range_len)
+    my_print(range_len)
 
 sum_container = 0
 for sum_item in file_obj:  # noqa: WPS519
     sum_container += sum_item
 
-print(sum_container == [])  # noqa: WPS520
-print(sum_container is 0)  # noqa: WPS521
+my_print(sum_container == [])  # noqa: WPS520
+my_print(sum_container is 0)  # noqa: WPS521
 
 try:
     anti_wps428 = 1
@@ -455,13 +456,13 @@ class Example(object):
 
 
 for loop_index in range(6):  # noqa: WPS426
-    print(lambda: loop_index)
+    my_print(lambda: loop_index)
 
 
 async def function_with_unreachable():
     await test_function()
     raise ValueError()
-    print(1)  # noqa: WPS427
+    my_print(1)  # noqa: WPS427
 
 
 1 + 2  # noqa: WPS428
@@ -535,9 +536,9 @@ with open('some') as MyBadException.custom:  # noqa: WPS406
 anti_wps428.__truediv__(1)  # noqa: WPS609
 
 if not some: # noqa: WPS504
-    print('False')
+    my_print('False')
 else:
-    print('Wrong')
+    my_print('Wrong')
 
 try:
     try:  # noqa: WPS505
@@ -545,7 +546,7 @@ try:
     except ValueError:
         raise TypeError('Second')
 except TypeError:
-    print('WTF?')
+    my_print('WTF?')
 
 if some and (  # noqa: WPS337
     anti_wps428 == 1
@@ -575,26 +576,26 @@ CONSTANT = []  # noqa: WPS407
 numbers = map(lambda string: int(string), ['1'])  # noqa: WPS506
 
 if len(numbers) > 0:  # noqa: WPS507
-    print('len!')
+    my_print('len!')
 
 if numbers and numbers:  # noqa: WPS408
-    print('duplicate boolop')
+    my_print('duplicate boolop')
 
 if not numbers == [1]:  # noqa: WPS508
-    print('bad compare with not')
+    my_print('bad compare with not')
 
 if numbers == CONSTANT != [2]:  # noqa: WPS409
-    print(1 + (1 if number else 2))  # noqa: WPS509
+    my_print(1 + (1 if number else 2))  # noqa: WPS509
 
-print(numbers in [])  # noqa: WPS510
-print(isinstance(number, int) or isinstance(number, (float, str)))  # noqa: 474
-print(isinstance(numbers, (int,)))  # noqa: WPS512
+my_print(numbers in [])  # noqa: WPS510
+my_print(isinstance(number, int) or isinstance(number, (float, str)))  # noqa: 474
+my_print(isinstance(numbers, (int,)))  # noqa: WPS512
 
 if numbers:
-    print('first')
+    my_print('first')
 else:
     if numbers:  # noqa: WPS513
-        print('other')
+        my_print('other')
 
 def sync_gen():
     yield
@@ -616,7 +617,7 @@ class CheckStopIteration(object):
 
 bad_unicode = b'\u1'  # noqa: WPS439
 CheckStopIteration = 1  # noqa: WPS440
-print(literal)  # noqa: WPS441
+my_print(literal)  # noqa: WPS441
 unhashable = {[]}  # noqa: WPS443
 assert []  # noqa: WPS444
 unhashable = [] * 2  # noqa: WPS435
@@ -631,7 +632,7 @@ some_model = (
 swap_a = swap_b
 swap_b = swap_a  # noqa: WPS523
 
-print(constant[0:7])  # noqa: WPS349
+my_print(constant[0:7])  # noqa: WPS349
 var_a = var_a + var_b  # noqa: WPS350
 
 class ChildClass(ParentClass):
@@ -645,10 +646,10 @@ int()  # noqa: WPS351
 for wrong_loop in call(  # noqa: WPS352
     1, 2, 3,
 ):
-    print('bad loop')
+    my_print('bad loop')
 
 if a in {1}:  # noqa: WPS525
-    print('bad!')
+    my_print('bad!')
 
 def implicit_yield_from():
     for wrong_yield in call():  # noqa: WPS526
@@ -675,14 +676,16 @@ def consecutive_yields():
 
 
 for loop_var in loop_iter:  # noqa: WPS528
-    print(loop_iter[loop_var])
+    my_print(loop_iter[loop_var])
 
 if 'key' in some_dict:
-    print(some_dict['key'])  # noqa: WPS529
-    print(other_dict[1.0])  # noqa: WPS449
-    print(some_sized[len(some_sized) - 2])  # noqa: WPS530
+    my_print(some_dict['key'])  # noqa: WPS529
+    my_print(other_dict[1.0])  # noqa: WPS449
+    my_print(some_sized[len(some_sized) - 2])  # noqa: WPS530
 
 deep_func(a)(b)(c)(d)  # noqa: WPS233
+
+annotated: List[List[List[List[int]]]]  # noqa: WPS234
 
 extra_new_line = [  # noqa: WPS355
 

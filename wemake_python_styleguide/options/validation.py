@@ -92,6 +92,7 @@ class _ValidatedOptions(object):
     max_cognitive_score: int = attr.ib(validator=[_min_max(min=1)])
     max_cognitive_average: int = attr.ib(validator=[_min_max(min=1)])
     max_call_level: int = attr.ib(validator=[_min_max(min=1)])
+    max_annotation_complexity: int = attr.ib(validator=[_min_max(min=2)])
     max_import_from_members: int = attr.ib(validator=[_min_max(min=1)])
 
 
