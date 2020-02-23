@@ -695,12 +695,90 @@ extra_new_line = [  # noqa: WPS355
 
 
 class GetterAndSetter(object):  # noqa: WPS614
+
+    def get_instance_attribute(self):
+        return 1
+
+    def set_instance_attribute(self):
+        return 1
+
+    @classmethod
+    def get_class_attribute(self):
+        return 1
+
+    @classmethod
+    def set_class_attribute(self):
+        return 1      
+
+class GetterAndSetterProperty(object):
     
     def __init__(self):
-        self.attribute = 1
-    
-    def get_attribute(self):
-        return self.attribute
+        self.property = 1
 
-    def set_attribute(self, parameter):
-        self.attribute = parameter
+    @property
+    def get_property(self):
+        return 1
+
+    @property.setter
+    def set_property(self):
+        return 1
+
+class GetterOrSetterInstance(object):  # noqa: WPS614
+
+    def __init__(self):
+        self.instance_attribute1 = 1
+        self._instance_attribute2 = 1
+        self.__instance_attribute3 = 1  # noqa: WPS112
+        self.instance_attribute4 = 1
+        self._instance_attribute5 = 1
+        self.__instance_attribute5 = 1  # noqa: WPS112
+
+    def get_instance_attribute1(self):
+        return 1
+
+    def get_instance_attribute2(self):
+        return 1
+
+    def get_instance_attribute3(self):
+        return 1
+
+    def set_instance_attribute4(self):
+        return 1
+
+    def set_instance_attribute5(self):
+        return 1
+    
+    def set_instance_attribute6(self):
+        return 1
+
+class GetterOrSetterClass(object):  # noqa: WPS614
+    class_attribute1 = 1
+    _class_attribute2 = 1
+    __class_attribute3 = 1  # noqa: WPS112
+    class_attribute4 = 1
+    _class_attribute5 = 1
+    __class_attribute6 = 1  # noqa: WPS112
+
+    @classmethod
+    def get_class_attribute1(self):
+        return 1
+
+    @classmethod
+    def get_class_attribute2(self):
+        return 1
+
+    @classmethod
+    def get_class_attribute3(self):
+        return 1
+
+    @classmethod
+    def set_class_attribute4(self):
+        return 1
+
+    @classmethod
+    def set_class_attribute5(self):
+        return 1
+
+    @classmethod
+    def set_class_attribute6(self):
+        return 1
