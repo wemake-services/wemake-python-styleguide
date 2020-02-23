@@ -21,6 +21,8 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `radon`,
   because `cognitive-complexity` and `mccabe` is enough
 - **Breaking**: Removes `flake8-loggin-format` as a direct dependency
+- **Breaking**: Removes `ImplicitTernaryViolation` or `WPS332`,
+  because it has too many false positives #1099
 - Adds `python3.8` support
 - Removes `cognitive_complexity` dependency, now it is built in into our linter
 - Adds baseline information for all complexity violation messages: `x > baseline`
@@ -31,14 +33,13 @@ Semantic versioning in our case means:
 - Adds domain names options:
   `--allowed-domain-names` and `--forbidden-domain-names`,
   that are used to create variable names' blacklist #1106
-- Forbids to use `:=` operator
+- Forbids to use `:=` operator, it reuses `WPS332` code
 - Forbids to use positional only `/` arguments
 - Adds `__call__` to list of methods that should be on top #1125
 - Now allows `_` to be used as a defined variable
 
 ### Bugfixes
 
-- Remove ImplicitTernaryViolation - WPS332 #1099
 - Fixes how `i_control_code` behaves with WPS113
 - Fixes that cognitive complexity was ignoring
   `ast.Continue`, `ast.Break`, and `ast.Raise` statements
