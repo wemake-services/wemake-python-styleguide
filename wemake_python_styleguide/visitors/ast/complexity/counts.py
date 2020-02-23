@@ -149,6 +149,7 @@ class ImportMembersVisitor(BaseNodeVisitor):
                 TooManyImportedModuleMembersViolation(
                     node,
                     text=str(imported_names_number),
+                    baseline=self.options.max_import_from_members,
                 ),
             )
 

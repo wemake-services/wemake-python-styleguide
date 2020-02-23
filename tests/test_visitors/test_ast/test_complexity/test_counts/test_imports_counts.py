@@ -128,4 +128,4 @@ def test_import_from_too_many_members(
     visitor.run()
 
     assert_errors(visitor, [TooManyImportedModuleMembersViolation])
-    assert_error_text(visitor, '3')
+    assert_error_text(visitor, '3', option_values.max_import_from_members)
