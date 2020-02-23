@@ -34,11 +34,16 @@ Semantic versioning in our case means:
 - Forbids to use positional only `/` arguments
 - Forbids to have too many names imported from a single `from ... import`
 - Adds `__call__` to list of methods that should be on top #1125
+<<<<<<< HEAD
 - Allows `_` to be now used as a defined variable
 - Removes `cognitive_complexity` dependency, now it is built in into our linter
 - Adds baseline information for all complexity violation messages: `x > baseline`
 - Changes how cognitive complexity is calculated
 - Adds support for positional arguments in different checks
+=======
+- Now allows `_` to be used as a defined variable
+- Forbids to use raw strings `r''` when not necessary
+>>>>>>> doc: changelogs for new rule
 
 ### Bugfixes
 

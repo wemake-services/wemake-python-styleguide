@@ -2157,7 +2157,7 @@ class RawStringNotNeededViolation(TokenizeViolation):
         Solution here.
     Example::
         Examples here.
-    .. versionadded:: 0.13.0
+    .. versionadded:: 0.15.0
     """
 
     error_template = 'Error template here'
