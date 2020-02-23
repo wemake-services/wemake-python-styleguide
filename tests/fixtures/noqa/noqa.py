@@ -347,7 +347,7 @@ def function(  # noqa: WPS320
                }  # noqa: WPS318
 
 
-string_modifier = R'(s)'  # noqa: WPS321
+string_modifier = R'(\n)'  # noqa: WPS321
 multiline_string = """abc"""  # noqa: WPS322
 
 

@@ -147,8 +147,6 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
 
     _implicit_raw_strigns: ClassVar[Pattern] = re.compile(r'\\{2}.+')
 
-    _contains_backslash: ClassVar[Pattern] = re.compile(r'\\')
-
     def __init__(self, *args, **kwargs) -> None:
         """Initializes new visitor and saves all docstrings."""
         super().__init__(*args, **kwargs)
@@ -239,7 +237,7 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         modifiers, string_def = split_prefixes(token)
 
         if 'r' in modifiers.lower():
-            if not self._contains_backslash.search(string_def):
+            if '\\' not in string_def.encode('unicode-escape').decode():
                 self.add_violation(
                     RawStringNotNeededViolation(token, text=token.string),
                 )
