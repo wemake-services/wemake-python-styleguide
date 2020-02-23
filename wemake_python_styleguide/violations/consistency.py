@@ -82,11 +82,8 @@ Summary
    ConsecutiveYieldsViolation
    BracketBlankLineViolation
    IterableUnpackingViolation
-<<<<<<< HEAD
    LineCompriseCarriageReturnViolation
-=======
    RawStringNotNeededViolation
->>>>>>> feat: added the new violation to be completed, closes #7
 
 Consistency checks
 ------------------
@@ -148,11 +145,8 @@ Consistency checks
 .. autoclass:: ConsecutiveYieldsViolation
 .. autoclass:: BracketBlankLineViolation
 .. autoclass:: IterableUnpackingViolation
-<<<<<<< HEAD
 .. autoclass:: LineCompriseCarriageReturnViolation
-=======
 .. autoclass:: RawStringNotNeededViolation
->>>>>>> feat: added the new violation to be completed, closes #7
 
 """
 
@@ -2133,7 +2127,6 @@ class IterableUnpackingViolation(ASTViolation):
 
 
 @final
-<<<<<<< HEAD
 class LineCompriseCarriageReturnViolation(TokenizeViolation):
     r"""
     Forbids to use ``\r`` (carriage return) in line breaks.
@@ -2151,23 +2144,21 @@ class LineCompriseCarriageReturnViolation(TokenizeViolation):
     """
 
     error_template = r'Found a ``\r`` (carriage return) line break'
-=======
+    code = 357
+
+
+@final
 class RawStringNotNeededViolation(TokenizeViolation):
     """
     Summary here.
-
     Reasoning:
         Reasoning here.
-
     Solution:
         Solution here.
-
     Example::
         Examples here.
-
     .. versionadded:: 0.13.0
     """
 
     error_template = 'Error template here'
->>>>>>> feat: added the new violation to be completed, closes #7
-    code = 357
+    code = 358
