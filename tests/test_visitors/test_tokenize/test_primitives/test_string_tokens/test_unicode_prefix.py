@@ -38,7 +38,7 @@ def test_unicode_prefix(
 
 @pytest.mark.parametrize('primitive', [
     '"name"',
-    'r"text with escape carac \\"',
+    'r"text with escape carac \n"',
     "b'unicode'",
     '"u"',
     '"12"',

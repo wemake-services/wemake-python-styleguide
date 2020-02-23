@@ -10,6 +10,7 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
     WrongStringTokenVisitor,
 )
 
+
 @pytest.mark.parametrize('modifier', [
     'b',
     'f',
@@ -46,10 +47,10 @@ def test_correct_prefix(
     'fr',
 ])
 @pytest.mark.parametrize('primitive', [
-    '{0}"\\"',
-    "{0}'\\'",
-    '{0}"Big \\text"',
-    "{0}'Format \\123'",
+    '{0}"\n"',
+    "{0}'\n'",
+    '{0}"Big \ntext"',
+    "{0}'Format \n123'",
 ])
 def test_correct_prefix_raw_string(
     parse_tokens,
@@ -68,6 +69,7 @@ def test_correct_prefix_raw_string(
     visitor.run()
 
     assert_errors(visitor, [])
+
 
 @pytest.mark.parametrize('modifier', [
     'B',
