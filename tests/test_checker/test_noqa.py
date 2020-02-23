@@ -163,7 +163,11 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS354': 1,
     'WPS355': 1,
     'WPS356': 1,
+<<<<<<< HEAD
     'WPS357': 0,  # logically unacceptable.
+=======
+    'WPS357': 1,
+>>>>>>> test: added a test for violation WPS357. A raw string must contain the '\' character. If there is no '\' in the string a raw string should not be used.
 
     'WPS400': 0,  # defined in ignored violations.
     'WPS401': 0,  # logically unacceptable.
