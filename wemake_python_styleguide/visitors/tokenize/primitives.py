@@ -147,6 +147,8 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
 
     _implicit_raw_strigns: ClassVar[Pattern] = re.compile(r'\\{2}.+')
 
+    _contains_backslash: ClassVar[Pattern] = re.compile(r'\\')
+
     def __init__(self, *args, **kwargs) -> None:
         """Initializes new visitor and saves all docstrings."""
         super().__init__(*args, **kwargs)
@@ -165,12 +167,14 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
             WrongMultilineStringViolation
             ImplicitRawStringViolation
             WrongUnicodeEscapeViolation
+            RawStringNotNeededViolation
 
         """
         self._check_correct_multiline(token)
         self._check_string_modifiers(token)
         self._check_implicit_raw_string(token)
         self._check_wrong_unicode_escape(token)
+        self._check_unnecessary_raw_string(token)
 
     def _check_correct_multiline(self, token: tokenize.TokenInfo) -> None:
         _, string_def = split_prefixes(token)
@@ -230,6 +234,15 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
             # another character can always be consumed whole: the second
             # character can never be the start of a new backslash escape.
             index += 2
+
+    def _check_unnecessary_raw_string(self, token: tokenize.TokenInfo) -> None:
+        modifiers, string_def = split_prefixes(token)
+
+        if 'r' in modifiers.lower():
+            if not self._contains_backslash.search(string_def):
+                self.add_violation(
+                    RawStringNotNeededViolation(token, text=token.string),
+                )
 
 
 @final
