@@ -49,3 +49,29 @@ def wrong_comprehension2():
 
 def positional_only(first, /, second):  # noqa: WPS451
     anti_wps428 = 1
+
+
+for element in range(10):
+    try:  # noqa: WPS452
+        my_print(1)
+    except AnyError:
+        my_print('nope')
+    finally:
+        if element == 1:
+            # See:
+            # https://github.com/wemake-services/wemake-python-styleguide/issues/1082
+            continue
+        else:
+            my_print(4)
+
+
+while first_element < second_element:
+    try:  # noqa: WPS452
+        my_print(1)
+    except AnyError:
+        my_print('nope')
+    finally:
+        if first_element == 1:
+            continue
+        else:
+            my_print(4)

@@ -47,6 +47,7 @@ VERSION_SPECIFIC = types.MappingProxyType({
 
     'WPS416': int(not PY38),  # only works for `< python3.8`
     'WPS451': int(PY38),  # only works for `>= python3.8`
+    'WPS452': 2,  # only works for `>= python3.8`
 
     'WPS602': 2,
 })
@@ -215,7 +216,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS449': 1,
     'WPS450': 1,
     'WPS451': 0,  # defined in version specific table.
-    'WPS452': 2,
+    'WPS452': 0,  # defined in version specific table.
 
     'WPS500': 1,
     'WPS501': 1,
