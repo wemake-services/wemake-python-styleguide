@@ -65,5 +65,5 @@ class WrongKeywordTokenVisitor(BaseTokenVisitor):
         self, token: tokenize.TokenInfo,
     ) -> None:
         line = token.line.find('\r')
-        if line != -1 and line == len(token.line) - 2:
+        if line != -1:
             self.add_violation(LineCompriseCarriageReturnViolation(token))
