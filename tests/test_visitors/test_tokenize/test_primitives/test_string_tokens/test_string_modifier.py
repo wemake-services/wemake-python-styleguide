@@ -6,16 +6,13 @@ from wemake_python_styleguide.violations.consistency import (
     UppercaseStringModifierViolation,
 )
 from wemake_python_styleguide.visitors.tokenize.primitives import (
+    RawStringNotNeededViolation,
     WrongStringTokenVisitor,
 )
 
-
 @pytest.mark.parametrize('modifier', [
-    'r',
     'b',
-    'rb',
     'f',
-    'fr',
     '',  # special case, no modifier is used
 ])
 @pytest.mark.parametrize('primitive', [
@@ -44,7 +41,35 @@ def test_correct_prefix(
 
 
 @pytest.mark.parametrize('modifier', [
-    'R',
+    'r',
+    'rb',
+    'fr',
+])
+@pytest.mark.parametrize('primitive', [
+    '{0}"\\"',
+    "{0}'\\'",
+    '{0}"Big \\text"',
+    "{0}'Format \\123'",
+])
+def test_correct_prefix_raw_string(
+    parse_tokens,
+    assert_errors,
+    default_options,
+    primitives_usages,
+    primitive,
+    modifier,
+    mode,
+):
+    """Ensures that correct prefixes work."""
+    string = primitive.format(modifier)
+    file_tokens = parse_tokens(mode(primitives_usages.format(string)))
+
+    visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+@pytest.mark.parametrize('modifier', [
     'B',
     'F',
 ])
@@ -106,4 +131,5 @@ def test_uppercase_prefix_multiple(
     assert_errors(visitor, [
         UppercaseStringModifierViolation,
         UppercaseStringModifierViolation,
+        RawStringNotNeededViolation,
     ])

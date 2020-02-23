@@ -59,7 +59,6 @@ def test():
     '"""abc"""',
     "'''abc'''",
     '""""""',
-    "r''''''",
     'b"""some"""',
 ])
 def test_incorrect_multiline_strings(
