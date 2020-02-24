@@ -237,7 +237,7 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         modifiers, string_def = split_prefixes(token)
 
         if 'r' in modifiers.lower():
-            if '\\' not in string_def.encode('unicode-escape').decode():
+            if '\\' not in string_def:
                 self.add_violation(
                     RawStringNotNeededViolation(token),
                 )
