@@ -82,6 +82,7 @@ Summary
    ConsecutiveYieldsViolation
    BracketBlankLineViolation
    IterableUnpackingViolation
+   LineCompriseCarriageReturnViolation
 
 Consistency checks
 ------------------
@@ -143,6 +144,7 @@ Consistency checks
 .. autoclass:: ConsecutiveYieldsViolation
 .. autoclass:: BracketBlankLineViolation
 .. autoclass:: IterableUnpackingViolation
+.. autoclass:: LineCompriseCarriageReturnViolation
 
 """
 
@@ -2120,3 +2122,24 @@ class IterableUnpackingViolation(ASTViolation):
 
     error_template = 'Found an unnecessary iterable unpacking'
     code = 356
+
+
+@final
+class LineCompriseCarriageReturnViolation(TokenizeViolation):
+    r"""
+    Forbids to use ``\r`` (carriage return) in line breaks.
+
+    Reasoning:
+        We enforce Unix-style newlines.
+        We only use newlines (``\n``), not carriage returns.
+        So ``\r`` line breaks not allowed in code.
+
+    Solution:
+        Use only ``\n`` (not ``\r\n`` or ``\r``) to break lines.
+
+    .. versionadded:: 0.14.0
+
+    """
+
+    error_template = r'Found a ``\r`` (carriage return) line break'
+    code = 357
