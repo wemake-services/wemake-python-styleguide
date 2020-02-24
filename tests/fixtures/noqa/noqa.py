@@ -759,7 +759,7 @@ class GetterOrSetterInstance(object):  # noqa: WPS614
         self.__instance_attribute3 = 1  # noqa: WPS112
         self.instance_attribute4 = 1
         self._instance_attribute5 = 1
-        self.__instance_attribute5 = 1  # noqa: WPS112
+        self.__instance_attribute6 = 1  # noqa: WPS112
 
     def get_instance_attribute1(self):
         return 1

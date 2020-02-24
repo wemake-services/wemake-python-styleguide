@@ -103,3 +103,11 @@ def is_generator(node: AnyFunctionDef) -> bool:
         if is_contained(node=body_item, to_check=(Yield, YieldFrom)):
             return True
     return False
+
+
+def check_decorators(node: AnyFunctionDef, name: str) -> bool:
+    """Check if name is in decorator name."""
+    for decorator in node.decorator_list:
+        if (name in source.node_to_string(decorator)):
+            return True
+    return False

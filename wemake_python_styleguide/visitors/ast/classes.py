@@ -2,7 +2,7 @@
 
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, FrozenSet, List, Optional, Tuple
+from typing import ClassVar, DefaultDict, FrozenSet, List, Optional
 
 from typing_extensions import final
 
@@ -47,11 +47,13 @@ class WrongClassVisitor(base.BaseNodeVisitor):
             WrongBaseClassViolation
             WrongClassBodyContentViolation
             BuiltinSubclassViolation
+            UnpythonicGetterSetterViolation
 
         """
         self._check_base_classes_count(node)
         self._check_base_classes(node)
         self._check_wrong_body_nodes(node)
+        self._check_getters_setters_methods(node)
         self.generic_visit(node)
 
     def _check_base_classes_count(self, node: ast.ClassDef) -> None:
@@ -116,6 +118,24 @@ class WrongClassVisitor(base.BaseNodeVisitor):
 
             return len(subscripts) == 1 and correct_items
         return False
+
+    def _check_getters_setters_methods(self, node: ast.ClassDef) -> None:
+        class_attributes, instance_attributes = classes.get_attributes(node)
+        attribute_names = set(
+            name_nodes.flat_variable_names(class_attributes),
+        ).union({
+            instance.attr for instance in instance_attributes
+        })
+
+        for attribute in attribute_names:
+            for method_postfix in classes.getter_setter_postfixes(node):
+                if attribute.lstrip('_') == method_postfix:
+                    self.add_violation(
+                        oop.UnpythonicGetterSetterViolation(
+                            node,
+                            text=node.name,
+                        ),
+                    )
 
 
 @final
@@ -337,29 +357,8 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
         self._check_attributes_shadowing(node)
         self.generic_visit(node)
 
-    def _get_attributes(
-        self,
-        node: ast.ClassDef,
-    ) -> Tuple[List[types.AnyAssign], List[ast.Attribute]]:
-        class_attributes = []
-        instance_attributes = []
-
-        for nd in ast.walk(node):
-            if isinstance(nd, ast.Attribute) and isinstance(nd.ctx, ast.Store):
-                instance_attributes.append(nd)
-                continue
-
-            has_assign = (
-                nodes.get_context(nd) == node and
-                getattr(nd, 'value', None)
-            )
-            if isinstance(nd, AssignNodes) and has_assign:
-                class_attributes.append(nd)
-
-        return class_attributes, instance_attributes
-
     def _check_attributes_shadowing(self, node: ast.ClassDef) -> None:
-        class_attributes, instance_attributes = self._get_attributes(node)
+        class_attributes, instance_attributes = classes.get_attributes(node)
         class_attribute_names = set(
             name_nodes.flat_variable_names(class_attributes),
         )
