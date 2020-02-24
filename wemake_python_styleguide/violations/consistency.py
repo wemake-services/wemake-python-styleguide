@@ -2114,7 +2114,7 @@ class IterableUnpackingViolation(ASTViolation):
         [*iterable]
         *iterable, = other_iterable
 
-    .. versionadded:: 0.15.0
+    .. versionadded:: 0.13.0
 
     """
 

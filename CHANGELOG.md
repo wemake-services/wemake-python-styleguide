@@ -24,10 +24,6 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `ImplicitTernaryViolation` or `WPS332`,
   because it has too many false positives #1099
 - Adds `python3.8` support
-- Removes `cognitive_complexity` dependency, now it is built in into our linter
-- Adds baseline information for all complexity violation messages: `x > baseline`
-- Changes how cognitive complexity is calculated
-- Adds support for positional arguments in different checks
 - Changes `styleguide.toml` and `flake8.toml` scripts definition
 - Extracts new violation - `WPS450` from `WPS436` #1118
 - Adds domain names options:
@@ -35,8 +31,13 @@ Semantic versioning in our case means:
   that are used to create variable names' blacklist #1106
 - Forbids to use `:=` operator, it reuses `WPS332` code
 - Forbids to use positional only `/` arguments
+- Forbids to have too many names imported from a single `from ... import`
 - Adds `__call__` to list of methods that should be on top #1125
-- Now allows `_` to be used as a defined variable
+- Allows `_` to be now used as a defined variable
+- Removes `cognitive_complexity` dependency, now it is built in into our linter
+- Adds baseline information for all complexity violation messages: `x > baseline`
+- Changes how cognitive complexity is calculated
+- Adds support for positional arguments in different checks
 
 ### Bugfixes
 

@@ -1126,7 +1126,7 @@ class TooManyImportedModuleMembersViolation(ASTViolation):
         Default:
         :str:`wemake_python_styleguide.options.defaults.MAX_IMPORT_FROM_MEMBERS`
 
-    .. versionadded:: 0.15.0
+    .. versionadded:: 0.14.0
 
     """
 
