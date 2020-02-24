@@ -693,4 +693,4 @@ extra_new_line = [  # noqa: WPS355
 ]
 *numbers, = [4, 7]  # noqa: WPS356
 
-unnecessary_raw_string = r'this string does not contain any backlashes.' # noqa: WPS358
+unnecessary_raw_string = r'this string does not contain any backslashes.' # noqa: WPS358
