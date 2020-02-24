@@ -8,6 +8,13 @@ Semantic versioning in our case means:
 - Minor releases do bring new features and configuration options. New violations can be added. Code that passes `x.0.y` might not pass on `x.1.y` release.
 - Major releases inidicate significant milestones or serious breaking changes.
 
+## 0.15.0
+
+### Features
+
+- Forbids to use unpythonic getters and setters such as `get_attribute` or `set_attribute`
+
+### Bug fixes
 
 ## 0.14.0 aka The Walrus fighter WIP
 
