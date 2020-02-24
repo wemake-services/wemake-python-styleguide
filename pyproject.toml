@@ -108,5 +108,5 @@ import-linter = "^1.0"
 
 ipdb = "^0.12.3"
 ipython = "^7.10"
-astboom = "^0.2.1"
+astboom = "^0.4.2"
 tokelor = "^0.1.4"
