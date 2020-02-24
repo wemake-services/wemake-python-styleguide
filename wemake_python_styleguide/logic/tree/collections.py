@@ -2,7 +2,7 @@
 
 import ast
 from functools import partial
-from typing import (
+from typing import (  # noqa: WPS235
     Iterable,
     List,
     Optional,

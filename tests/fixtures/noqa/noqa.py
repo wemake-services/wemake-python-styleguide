@@ -22,7 +22,7 @@ import import2
 import import3
 import import4
 
-from some_name import (
+from some_name import (  # noqa: WPS235
     name1,
     name2,
     name3,

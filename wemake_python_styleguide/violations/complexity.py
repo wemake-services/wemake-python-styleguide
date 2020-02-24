@@ -57,6 +57,7 @@ Summary
    CognitiveModuleComplexityViolation
    TooLongCallChainViolation
    TooComplexAnnotationViolation
+   TooManyImportedModuleMembersViolation
 
 
 Module complexity
@@ -96,6 +97,7 @@ Structure complexity
 .. autoclass:: CognitiveModuleComplexityViolation
 .. autoclass:: TooLongCallChainViolation
 .. autoclass:: TooComplexAnnotationViolation
+.. autoclass:: TooManyImportedModuleMembersViolation
 
 """
 
@@ -1095,3 +1097,38 @@ class TooComplexAnnotationViolation(ASTViolation):
 
     error_template = 'Found too complex annotation: {0}'
     code = 234
+
+
+@final
+class TooManyImportedModuleMembersViolation(ASTViolation):
+    """
+    Forbids ``from ... import ...`` with too many imported names.
+
+    Reasoning:
+        Importing too many names from one import is easy way to cause
+        violation ``WPS203`` - too many imported names.
+
+    Solution:
+        Refactor the imports to import a common namespace. Something like
+        ``from package import module`` and then
+        use it like ``module.function()``.
+
+    Example::
+
+        # Correct:
+        import module  # 1 imported name
+
+        # Wrong:
+        from module import func1, func2, ..., funcN  # N imported names
+
+    Configuration:
+        This rule is configurable with ``--max-import-from-members``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_IMPORT_FROM_MEMBERS`
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found too many imported names from a module: {0}'
+    code = 235
