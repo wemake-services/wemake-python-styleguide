@@ -61,6 +61,7 @@ Semantic versioning in our case means:
 - Fixes `WPS204` reporting overused return type annotations
 - Fixes `WPS204` reporting `self.` attribute access
 - Fixes `WPS331` reporting cases that do require some extra steps before return
+- Fixes `WPS612` not reporing `super()` calls without return
 
 ### Misc
 
