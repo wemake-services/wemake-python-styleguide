@@ -120,3 +120,6 @@ MAX_CALL_LEVEL: Final = 3
 
 #: Maximum number of nested annotations.
 MAX_ANN_COMPLEXITY: Final = 3
+
+#: Maximum number of names that can be imported from module.
+MAX_IMPORT_FROM_MEMBERS: Final = 8  # guessed

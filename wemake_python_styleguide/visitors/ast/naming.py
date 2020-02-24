@@ -94,12 +94,11 @@ class _NameValidator(object):
         self._ensure_underscores(node, name)
 
     def check_function_signature(self, node: AnyFunctionDefAndLambda) -> None:
-        arguments = functions.get_all_arguments(node)
-        is_lambda = isinstance(node, ast.Lambda)
-        for arg in arguments:
-            should_check_argument = functions.is_first_argument(
-                node, arg.arg,
-            ) and not is_lambda
+        for arg in functions.get_all_arguments(node):
+            should_check_argument = (
+                functions.is_first_argument(node, arg.arg) and
+                not isinstance(node, ast.Lambda)
+            )
 
             self.check_name(
                 arg, arg.arg, is_first_argument=should_check_argument,
@@ -436,6 +435,9 @@ class WrongVariableUsageVisitor(BaseNodeVisitor):
     ) -> None:
         if not assigned_name or not access.is_unused(assigned_name):
             return
+
+        if assigned_name == '_':  # This is a special case for django's
+            return  # gettext and similar tools.
 
         if not is_created:
             self.add_violation(

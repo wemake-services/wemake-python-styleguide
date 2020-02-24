@@ -6,8 +6,8 @@ from typing import Set
 from typing_extensions import Final
 
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
-from wemake_python_styleguide.logic.source import node_to_string
 from wemake_python_styleguide.logic.nodes import get_parent
+from wemake_python_styleguide.logic.source import node_to_string
 
 #: That's what we expect from `@overload` decorator:
 _OVERLOAD_EXCEPTIONS: Final = frozenset(('overload', 'typing.overload'))

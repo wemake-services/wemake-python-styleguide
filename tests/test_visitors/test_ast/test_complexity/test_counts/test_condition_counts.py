@@ -2,9 +2,11 @@
 
 import pytest
 
+from wemake_python_styleguide.violations.complexity import (
+    TooManyConditionsViolation,
+)
 from wemake_python_styleguide.visitors.ast.complexity.counts import (
     ConditionsVisitor,
-    TooManyConditionsViolation,
 )
 
 empty_module = ''
