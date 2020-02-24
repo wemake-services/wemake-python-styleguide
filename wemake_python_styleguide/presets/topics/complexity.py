@@ -2,7 +2,7 @@
 
 from typing_extensions import Final
 
-from wemake_python_styleguide.visitors.ast.complexity import (
+from wemake_python_styleguide.visitors.ast.complexity import (  # noqa: WPS235
     access,
     annotations,
     calls,

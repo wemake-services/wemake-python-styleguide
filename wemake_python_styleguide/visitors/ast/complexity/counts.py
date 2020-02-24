@@ -14,20 +14,8 @@ from wemake_python_styleguide.types import (
     AnyImport,
     ConfigurationOptions,
 )
+from wemake_python_styleguide.violations import complexity
 from wemake_python_styleguide.violations.base import BaseViolation
-from wemake_python_styleguide.violations.complexity import (
-    TooLongCompareViolation,
-    TooLongTryBodyViolation,
-    TooLongYieldTupleViolation,
-    TooManyConditionsViolation,
-    TooManyDecoratorsViolation,
-    TooManyElifsViolation,
-    TooManyExceptCasesViolation,
-    TooManyImportedModuleMembersViolation,
-    TooManyImportedNamesViolation,
-    TooManyImportsViolation,
-    TooManyModuleMembersViolation,
-)
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
@@ -73,7 +61,7 @@ class ModuleMembersVisitor(BaseNodeVisitor):
         number_of_decorators = len(node.decorator_list)
         if number_of_decorators > self.options.max_decorators:
             self.add_violation(
-                TooManyDecoratorsViolation(
+                complexity.TooManyDecoratorsViolation(
                     node,
                     text=str(number_of_decorators),
                     baseline=self.options.max_decorators,
@@ -83,7 +71,7 @@ class ModuleMembersVisitor(BaseNodeVisitor):
     def _post_visit(self) -> None:
         if self._public_items_count > self.options.max_module_members:
             self.add_violation(
-                TooManyModuleMembersViolation(
+                complexity.TooManyModuleMembersViolation(
                     text=str(self._public_items_count),
                     baseline=self.options.max_module_members,
                 ),
@@ -109,7 +97,7 @@ class _ImportFromMembersValidator(object):
         imported_names_number = len(node.names)
         if imported_names_number > self._options.max_import_from_members:
             self._error_callback(
-                TooManyImportedModuleMembersViolation(
+                complexity.TooManyImportedModuleMembersViolation(
                     node,
                     text=str(imported_names_number),
                     baseline=self._options.max_import_from_members,
@@ -163,7 +151,7 @@ class ImportMembersVisitor(BaseNodeVisitor):
     def _check_imports_count(self) -> None:
         if self._imports_count > self.options.max_imports:
             self.add_violation(
-                TooManyImportsViolation(
+                complexity.TooManyImportsViolation(
                     text=str(self._imports_count),
                     baseline=self.options.max_imports,
                 ),
@@ -172,7 +160,7 @@ class ImportMembersVisitor(BaseNodeVisitor):
     def _check_imported_names_count(self) -> None:
         if self._imported_names_count > self.options.max_imported_names:
             self.add_violation(
-                TooManyImportedNamesViolation(
+                complexity.TooManyImportedNamesViolation(
                     text=str(self._imported_names_count),
                     baseline=self.options.max_imported_names,
                 ),
@@ -228,7 +216,7 @@ class ConditionsVisitor(BaseNodeVisitor):
         conditions_count = self._count_conditions(node)
         if conditions_count > self._max_conditions:
             self.add_violation(
-                TooManyConditionsViolation(
+                complexity.TooManyConditionsViolation(
                     node,
                     text=str(conditions_count),
                     baseline=self._max_conditions,
@@ -246,7 +234,7 @@ class ConditionsVisitor(BaseNodeVisitor):
 
         if len(node.ops) > threshold:
             self.add_violation(
-                TooLongCompareViolation(
+                complexity.TooLongCompareViolation(
                     node,
                     text=str(len(node.ops)),
                     baseline=threshold,
@@ -304,7 +292,7 @@ class ElifVisitor(BaseNodeVisitor):
             real_children_length = len(set(children))
             if real_children_length > self._max_elifs:
                 self.add_violation(
-                    TooManyElifsViolation(
+                    complexity.TooManyElifsViolation(
                         root,
                         text=str(real_children_length),
                         baseline=self._max_elifs,
@@ -335,7 +323,7 @@ class TryExceptVisitor(BaseNodeVisitor):
     def _check_except_count(self, node: ast.Try) -> None:
         if len(node.handlers) > self._max_except_cases:
             self.add_violation(
-                TooManyExceptCasesViolation(
+                complexity.TooManyExceptCasesViolation(
                     node,
                     text=str(len(node.handlers)),
                     baseline=self._max_except_cases,
@@ -345,7 +333,7 @@ class TryExceptVisitor(BaseNodeVisitor):
     def _check_try_body_length(self, node: ast.Try) -> None:
         if len(node.body) > self.options.max_try_body_length:
             self.add_violation(
-                TooLongTryBodyViolation(
+                complexity.TooLongTryBodyViolation(
                     node,
                     text=str(len(node.body)),
                     baseline=self.options.max_try_body_length,
@@ -372,7 +360,7 @@ class YieldTupleVisitor(BaseNodeVisitor):
         if isinstance(node.value, ast.Tuple):
             if len(node.value.elts) > MAX_LEN_YIELD_TUPLE:
                 self.add_violation(
-                    TooLongYieldTupleViolation(
+                    complexity.TooLongYieldTupleViolation(
                         node,
                         text=str(len(node.value.elts)),
                         baseline=MAX_LEN_YIELD_TUPLE,

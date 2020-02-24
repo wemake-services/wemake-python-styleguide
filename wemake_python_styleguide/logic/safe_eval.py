@@ -1,63 +1,48 @@
 # -*- coding: utf-8 -*-
 
-from ast import (
-    AST,
-    Add,
-    BinOp,
-    Bytes,
-    Dict,
-    List,
-    Name,
-    NameConstant,
-    Num,
-    Set,
-    Str,
-    Sub,
-    Tuple,
-    UAdd,
-    UnaryOp,
-    USub,
-)
+import ast
 from typing import Any, Optional, Union
 
 from wemake_python_styleguide.compat.nodes import Constant
 
 
-def _convert_num(node: Optional[AST]):
+def _convert_num(node: Optional[ast.AST]):
     if isinstance(node, Constant):  # pragma: py-lt-38
         if isinstance(node.value, (int, float, complex)):
             return node.value
-    elif isinstance(node, Num):  # pragma: py-gte-38
+    elif isinstance(node, ast.Num):  # pragma: py-gte-38
         return node.n
-    elif isinstance(node, Name):  # That's what is modified from the original
+    # That's what is modified from the original
+    elif isinstance(node, ast.Name):
         # We return string names as is, see how we return strings:
         return node.id
     raise ValueError('malformed node or string: {0!r}'.format(node))
 
 
-def _convert_signed_num(node: Optional[AST]):
-    if isinstance(node, UnaryOp) and isinstance(node.op, (UAdd, USub)):
+def _convert_signed_num(node: Optional[ast.AST]):
+    unary_operators = (ast.UAdd, ast.USub)
+    if isinstance(node, ast.UnaryOp) and isinstance(node.op, unary_operators):
         operand = _convert_num(node.operand)
-        return +operand if isinstance(node.op, UAdd) else -operand
+        return +operand if isinstance(node.op, ast.UAdd) else -operand
     return _convert_num(node)
 
 
-def _convert_complex(node: BinOp) -> Optional[complex]:
+def _convert_complex(node: ast.BinOp) -> Optional[complex]:
     left = _convert_signed_num(node.left)
     right = _convert_num(node.right)
     if isinstance(left, (int, float)) and isinstance(right, complex):
-        if isinstance(node.op, Add):
+        if isinstance(node.op, ast.Add):
             return left + right
         return left - right
     return None
 
 
-def _convert_iterable(node: Union[Tuple, List, Set, Dict]):
-    if isinstance(node, Tuple):
+def _convert_iterable(node: Union[ast.Tuple, ast.List, ast.Set, ast.Dict]):
+    if isinstance(node, ast.Tuple):
         return tuple(map(literal_eval_with_names, node.elts))
-    elif isinstance(node, List):
+    elif isinstance(node, ast.List):
         return list(map(literal_eval_with_names, node.elts))
-    elif isinstance(node, Set):
+    elif isinstance(node, ast.Set):
         return set(map(literal_eval_with_names, node.elts))
     return dict(zip(
         map(literal_eval_with_names, node.keys),
@@ -66,7 +51,7 @@ def _convert_iterable(node: Union[Tuple, List, Set, Dict]):
 
 
 def literal_eval_with_names(  # noqa: WPS231
-    node: Optional[AST],
+    node: Optional[ast.AST],
 ) -> Any:
     """
     Safely evaluate constants and ``ast.Name`` nodes.
@@ -82,14 +67,15 @@ def literal_eval_with_names(  # noqa: WPS231
     We intentionally ignore complexity violation here,
     becase we try to stay as close to the original source as possible.
     """
-    if isinstance(node, (Constant, NameConstant)):
+    binary_operators = (ast.Add, ast.Sub)
+    if isinstance(node, (Constant, ast.NameConstant)):
         return node.value
-    elif isinstance(node, (Str, Bytes, Num)):  # pragma: py-gte-38
+    elif isinstance(node, (ast.Str, ast.Bytes, ast.Num)):  # pragma: py-gte-38
         # We wrap strings to tell the difference between strings and names:
-        return node.n if isinstance(node, Num) else '"{0!r}"'.format(node.s)
-    elif isinstance(node, (Tuple, List, Set, Dict)):
+        return node.n if isinstance(node, ast.Num) else '"{0!r}"'.format(node.s)
+    elif isinstance(node, (ast.Tuple, ast.List, ast.Set, ast.Dict)):
         return _convert_iterable(node)
-    elif isinstance(node, BinOp) and isinstance(node.op, (Add, Sub)):
+    elif isinstance(node, ast.BinOp) and isinstance(node.op, binary_operators):
         maybe_complex = _convert_complex(node)
         if maybe_complex is not None:
             return maybe_complex
