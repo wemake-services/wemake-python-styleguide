@@ -694,25 +694,38 @@ extra_new_line = [  # noqa: WPS355
 *numbers, = [4, 7]  # noqa: WPS356
 
 
-class ClassWithAttribute(object):
+class GetterAndSetterParent(object):
 
     def __init__(self):
         self.parent_attribute = 1
 
 
-class GetterAndSetterMisc(ClassWithAttribute):  # noqa: WPS614
-
-    def get_instance_attribute(self):
-        return 1
-
-    def set_instance_attribute(self):
-        return 1
+class GetterAndSetterChild(GetterAndSetterParent):
 
     # What is the intended behavior here?
     def get_parent_attribute(self):
         return 1
 
     def set_parent_attribute(self):
+        return 1
+
+
+class GetterAndSetterFalsePositives(object):
+    
+    def __init__(self):
+        self.instance_attribute1 = 1
+        self.something_instance_attribute2 = 1
+
+    def something_get_instance_attribute1(self):
+        return 1
+
+    def get_instance_attribute2(self):
+        return 1
+
+    def get_instance_attribute(self):
+        return 1
+
+    def set_instance_attribute(self):
         return 1
 
     @classmethod
