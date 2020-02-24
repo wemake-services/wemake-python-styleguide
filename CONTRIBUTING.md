@@ -105,7 +105,7 @@ This step is mandatory during the CI.
 We also have several helpers to make your development work easier:
 
 - `astboom` is used to visualize `ast` nodes in other python modules,
-  usage: `astboom < my_module.py`
+  usage: `astboom ast < my_module.py`
 - `tokelor` is used to visualize tokens in other python modules,
   usage: `tokelor my_module.py`
 

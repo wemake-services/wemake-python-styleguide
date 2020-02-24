@@ -69,7 +69,7 @@ Semantic versioning in our case means:
 - Adds `local-partial-types` to mypy config
 - Uses `abc` stdlib's module to mark abstract base classes #1122
 - Adds `python3.8` to the CI
-
+- Update `astboom` version to 0.4.2
 
 ## 0.13.4
 
