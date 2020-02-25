@@ -2028,10 +2028,13 @@ class ContinueInFinallyBlockViolation(ASTViolation):
     """
     Forbids to use ``continue`` in ``finally`` case.
 
-    Note, that we check for any ``try``, ``except`` or ``finally`` nodes.
+    Related to :class:`~TryExceptMultipleReturnPathViolation`.
 
     Reasoning:
-        Putting any control statements in finally is a terrible practice.
+        Putting any control statements in finally is a
+        terrible practice, because finally is implicitly
+        called and can cause damage to your logic with
+        its implicitness.
         We should not allow it.
 
     Solution:
@@ -2042,17 +2045,11 @@ class ContinueInFinallyBlockViolation(ASTViolation):
         # Correct:
         try:
             ...
-        except YourException:
-            ...
         finally:
             ...
 
         # Wrong:
         try:
-            ...
-        except Exception:
-            ...
-        else:
             ...
         finally:
             continue
@@ -2061,5 +2058,5 @@ class ContinueInFinallyBlockViolation(ASTViolation):
 
     """
 
-    error_template = 'Found continue in finally block'
+    error_template = 'Found `continue` in `finally` block'
     code = 452

@@ -9,13 +9,6 @@ Semantic versioning in our case means:
 - Major releases inidicate significant milestones or serious breaking changes.
 
 
-## 0.14.1
-
-### Features
-
-- Forbids to use `continue` in `finally` because it is a terrible practice
-
-
 ## 0.14.0 aka The Walrus fighter WIP
 
 ### Features
@@ -41,6 +34,7 @@ Semantic versioning in our case means:
 - Forbids to use `:=` operator
 - Forbids to use positional only `/` arguments
 - Adds `__call__` to list of methods that should be on top #1125
+- Forbids to use `continue` in `finally`. It is a terrible practice, because finally is implicitly called and can cause damage to logic with its implicitness.
 
 ### Bugfixes
 
