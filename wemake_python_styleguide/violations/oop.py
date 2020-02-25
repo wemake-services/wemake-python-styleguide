@@ -587,8 +587,8 @@ class UnpythonicGetterSetterViolation(ASTViolation):
         Python does not need this abstraction.
 
     Solution:
-        Use @proprety as in the example below or make the attribute
-        public and change it directly.
+        Either use ``@property`` or make the
+        attribute public and change it directly.
 
     Example::
 
@@ -596,14 +596,6 @@ class UnpythonicGetterSetterViolation(ASTViolation):
         class Example(object):
             def __init__(self):
                 self._attribute = None
-
-            @property
-            def attribute(self): # getter
-                return self._attribute
-
-            @attribute.setter # setter, name must be the same
-            def attribute(self, value):
-                self._attribute = value
 
         # Wrong:
         class Example(object):
@@ -616,7 +608,7 @@ class UnpythonicGetterSetterViolation(ASTViolation):
             def get_attribute(self, value):
                 self.attribute = value
 
-    .. versionadded:: 0.13.0
+    .. versionadded:: 0.15.0
 
     See also:
         https://docs.python.org/3/library/functions.html#property
@@ -624,5 +616,5 @@ class UnpythonicGetterSetterViolation(ASTViolation):
 
     """
 
-    error_template = 'Found getters and setters'
+    error_template = 'Found unpythonic getter (or setter)'
     code = 614

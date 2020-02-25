@@ -107,7 +107,7 @@ def is_generator(node: AnyFunctionDef) -> bool:
 
 def check_decorators(node: AnyFunctionDef, name: str) -> bool:
     """Check if name is in decorator name."""
-    for decorator in node.decorator_list:
-        if (name in source.node_to_string(decorator)):
-            return True
-    return False
+    return any(
+        name in source.node_to_string(decorator)
+        for decorator in node.decorator_list
+    )
