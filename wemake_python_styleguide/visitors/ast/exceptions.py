@@ -120,7 +120,7 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
             is_contained(line, ast.Continue)
             for line in node.finalbody
         )
-        if finally_has_continue:
+        if finally_has_continue:  # pragma: py-lt-38
             self.add_violation(ContinueInFinallyBlockViolation(node))
 
 
