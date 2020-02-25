@@ -225,3 +225,7 @@ class ConfigurationOptions(Protocol):
     @property
     def max_annotation_complexity(self) -> int:
         ...
+
+    @property
+    def max_import_from_members(self) -> int:
+        ...

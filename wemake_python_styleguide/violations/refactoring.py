@@ -143,6 +143,11 @@ class UselessFinallyViolation(ASTViolation):
     """
     Forbids to use ``finally`` in ``try`` block without ``except`` block.
 
+    However, we allow to use ``try`` with just ``finally`` block
+    when function or method is decorated. Because we cannot control
+    what is going on in this decorator.
+    It might be ``@contextmanager`` or similar thing that requires this API.
+
     Reasoning:
         This rule will reduce complexity and improve readability.
 
@@ -165,6 +170,7 @@ class UselessFinallyViolation(ASTViolation):
 
     .. versionadded:: 0.3.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.14.0
 
     """
 

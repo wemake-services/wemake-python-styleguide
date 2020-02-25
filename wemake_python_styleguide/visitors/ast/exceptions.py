@@ -6,6 +6,8 @@ from typing import ClassVar, Set, Tuple
 
 from typing_extensions import final
 
+from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.tree import exceptions
 from wemake_python_styleguide.logic.walk import is_contained
 from wemake_python_styleguide.types import AnyNodes
@@ -78,8 +80,16 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
         self._check_continue_in_finally(node)
 
     def _check_if_needs_except(self, node: ast.Try) -> None:
-        if node.finalbody and not node.handlers:
-            self.add_violation(UselessFinallyViolation(node))
+        if not node.finalbody or node.handlers:
+            return
+
+        context = nodes.get_context(node)
+        if isinstance(context, FunctionNodes) and context.decorator_list:
+            # This is used inside a decorated function, it might be the only
+            # way to handle this situation. Eg: ``@contextmanager``
+            return
+
+        self.add_violation(UselessFinallyViolation(node))
 
     def _check_duplicate_exceptions(self, node: ast.Try) -> None:
         exceptions_list = exceptions.get_all_exception_names(node)

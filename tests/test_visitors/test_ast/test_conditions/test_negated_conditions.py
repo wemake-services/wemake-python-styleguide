@@ -7,6 +7,7 @@ from wemake_python_styleguide.violations.refactoring import (
 )
 from wemake_python_styleguide.visitors.ast.conditions import IfStatementVisitor
 
+if_expression = '1 if {0} else 2'
 simple_conditions = """
 if {0}:
     ...
@@ -85,6 +86,7 @@ def test_negated_complex_elif_conditions(
 
 
 @pytest.mark.parametrize('template', [
+    if_expression,
     complex_conditions,
     complex_elif_else_conditions,
 ])

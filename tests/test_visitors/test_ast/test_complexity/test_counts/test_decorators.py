@@ -2,9 +2,11 @@
 
 import pytest
 
+from wemake_python_styleguide.violations.complexity import (
+    TooManyDecoratorsViolation,
+)
 from wemake_python_styleguide.visitors.ast.complexity.counts import (
     ModuleMembersVisitor,
-    TooManyDecoratorsViolation,
 )
 
 function_with_decorators = """

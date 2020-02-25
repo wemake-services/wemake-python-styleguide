@@ -97,6 +97,23 @@ except Exception as e:
     print(e)
 """
 
+correct_except3 = """
+e = 1
+try:
+    ...
+except Exception as e:
+    ...
+print(e)
+"""
+
+correct_except4 = """
+try:
+    ...
+except Exception as e:
+    ...
+print(e)
+"""
+
 correct_except_regression1115 = """
 try:
     vehicles = self.client.list_vehicles()
@@ -215,6 +232,8 @@ def test_control_variable_used_after_block(
     correct_for_comprehension4,
     correct_except1,
     correct_except2,
+    correct_except3,
+    correct_except4,
     correct_except_regression1115,
     correct_with1,
     correct_with2,

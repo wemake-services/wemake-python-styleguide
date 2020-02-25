@@ -13,6 +13,14 @@ class Useless(object):
     {decorator}
     def function(self, {args_definition}):
         {statements}
+        super({super_args}).{method_name}({args_invocation})
+"""
+
+regular_method_detailed_with_return = """
+class Useless(object):
+    {decorator}
+    def function(self, {args_definition}):
+        {statements}
         return super({super_args}).{method_name}({args_invocation})
 """
 
@@ -22,8 +30,14 @@ class Useless(object):
         {statement}
 """
 
-_MethodArgs = NamedTuple('_MethodArgs', definition=str, invocation=str)
+regular_method_short_with_extra = """
+class Useless(object):
+    def function({args}):
+        {statement}
+        return None
+"""
 
+_MethodArgs = NamedTuple('_MethodArgs', definition=str, invocation=str)
 
 valid_method_args: List[_MethodArgs] = [
     _MethodArgs('', ''),
@@ -115,6 +129,7 @@ invalid_super_args = (
 
 @pytest.mark.parametrize('code', [
     regular_method_detailed,
+    regular_method_detailed_with_return,
 ])
 @pytest.mark.parametrize('statements', valid_statements)
 @pytest.mark.parametrize('method_args', valid_method_args)
@@ -148,6 +163,7 @@ def test_useless_overwriting(
 
 @pytest.mark.parametrize('code', [
     regular_method_detailed,
+    regular_method_detailed_with_return,
 ])
 @pytest.mark.parametrize('decorator', [
     '@decorator',
@@ -185,6 +201,7 @@ def test_useful_due_to_invalid_decorator(
 
 @pytest.mark.parametrize('code', [
     regular_method_detailed,
+    regular_method_detailed_with_return,
 ])
 @pytest.mark.parametrize('statements', invalid_statements)
 @pytest.mark.parametrize('method_args', valid_method_args)
@@ -218,6 +235,7 @@ def test_useful_due_to_invalid_statements(
 
 @pytest.mark.parametrize('code', [
     regular_method_detailed,
+    regular_method_detailed_with_return,
 ])
 @pytest.mark.parametrize('statements', valid_statements)
 @pytest.mark.parametrize('method_args', valid_method_args)
@@ -251,6 +269,7 @@ def test_useful_due_to_invalid_super_args(
 
 @pytest.mark.parametrize('code', [
     regular_method_detailed,
+    regular_method_detailed_with_return,
 ])
 @pytest.mark.parametrize('statements', valid_statements)
 @pytest.mark.parametrize('method_args', valid_method_args)
@@ -284,6 +303,7 @@ def test_useful_due_to_invalid_method(
 
 @pytest.mark.parametrize('code', [
     regular_method_detailed,
+    regular_method_detailed_with_return,
 ])
 @pytest.mark.parametrize('statements', valid_statements)
 @pytest.mark.parametrize('method_args', invalid_method_args)
@@ -317,6 +337,7 @@ def test_useful_due_to_invalid_method_args(
 
 @pytest.mark.parametrize('code', [
     regular_method_short,
+    regular_method_short_with_extra,
 ])
 @pytest.mark.parametrize(('args', 'statement'), [
     ('self', '""""""'),

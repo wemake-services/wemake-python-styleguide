@@ -18,6 +18,7 @@ def is_unused(name: str) -> bool:
 
     >>> is_unused('__private')
     False
+
     """
     return UNUSED_VARIABLE_REGEX.match(name) is not None
 
@@ -88,6 +89,9 @@ def is_protected(name: str) -> bool:
     False
 
     >>> is_protected('_')
+    False
+
+    >>> is_protected('__')
     False
 
     """
