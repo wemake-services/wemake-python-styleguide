@@ -57,9 +57,7 @@ for element in range(10):
     except AnyError:
         my_print('nope')
     finally:
-        if element == 1:
-            # See:
-            # https://github.com/wemake-services/wemake-python-styleguide/issues/1082
-            continue
-        else:
-            my_print(4)
+        # See:
+        # https://github.com/wemake-services/wemake-python-styleguide/issues/1082
+        continue
+    my_print(4)
