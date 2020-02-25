@@ -48,17 +48,17 @@ def get_attributes(
     class_attributes = []
     instance_attributes = []
 
-    for nd in ast.walk(node):
-        if isinstance(nd, ast.Attribute) and isinstance(nd.ctx, ast.Store):
-            instance_attributes.append(nd)
+    for sub in ast.walk(node):
+        if isinstance(sub, ast.Attribute) and isinstance(sub.ctx, ast.Store):
+            instance_attributes.append(sub)
             continue
 
         has_assign = (
-            nodes.get_context(nd) == node and
-            getattr(nd, 'value', None)
+            nodes.get_context(sub) == node and
+            getattr(sub, 'value', None)
         )
-        if isinstance(nd, AssignNodes) and has_assign:
-            class_attributes.append(nd)
+        if isinstance(sub, AssignNodes) and has_assign:
+            class_attributes.append(sub)
 
     return class_attributes, instance_attributes
 
