@@ -2153,10 +2153,10 @@ class RawStringNotNeededViolation(TokenizeViolation):
     Forbid the use of raw strings when there is no backslash in the string.
 
     Reasoning:
-        Raw string are only needed when dealing with \ in the string.
+        Raw string are only needed when dealing with ``\`` in the string.
 
     Solution:
-        Do not prefix the string with r. Use a normal string instead.
+        Do not prefix the string with ``r``. Use a normal string instead.
 
     Example::
         # Correct:

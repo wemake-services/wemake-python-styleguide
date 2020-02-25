@@ -236,8 +236,7 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
     def _check_unnecessary_raw_string(self, token: tokenize.TokenInfo) -> None:
         modifiers, string_def = split_prefixes(token)
 
-        if 'r' in modifiers.lower():
-            if '\\' not in string_def:
+        if 'r' in modifiers.lower() and '\\' not in string_def:
                 self.add_violation(
                     consistency.RawStringNotNeededViolation(token),
                 )
