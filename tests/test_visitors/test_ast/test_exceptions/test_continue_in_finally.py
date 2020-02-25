@@ -2,6 +2,7 @@
 
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.best_practices import (
     ContinueInFinallyBlockViolation,
 )
@@ -29,6 +30,20 @@ while first_element < second_element:
         ...
 """
 
+right_continue_example_in_for = """
+def some():
+    for elem in range(10):
+        if elem > 5:
+            continue
+"""
+
+right_continue_example_in_while = """
+def some():
+    while a < b:
+        if a == 5:
+            continue
+"""
+
 wrong_try_example = """
 for element in range(10):
     try:
@@ -50,6 +65,10 @@ while first_element < second_element:
 """
 
 
+@pytest.mark.skipif(
+    not PY38,
+    reason='continue in finally works only since python3.8',
+)
 @pytest.mark.parametrize('code', [
     wrong_try_example,
     wrong_try_example_with_while,
@@ -69,9 +88,15 @@ def test_wrong_finally(
     assert_errors(visitor, [ContinueInFinallyBlockViolation])
 
 
+@pytest.mark.skipif(
+    not PY38,
+    reason='continue in finally works only since python3.8',
+)
 @pytest.mark.parametrize('code', [
     right_try_example,
     right_try_example_with_while,
+    right_continue_example_in_for,
+    right_continue_example_in_while,
 ])
 def test_correct_finally(
     assert_errors,
