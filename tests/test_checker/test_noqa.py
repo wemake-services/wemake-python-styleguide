@@ -60,7 +60,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS102': 0,  # logically unacceptable.
     'WPS110': 3,
     'WPS111': 1,
-    'WPS112': 5,
+    'WPS112': 1,
     'WPS113': 1,
     'WPS114': 1,
     'WPS115': 1,
@@ -262,7 +262,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS611': 1,
     'WPS612': 1,
     'WPS613': 1,
-    'WPS614': 12,
+    'WPS614': 1,
 })
 
 # Violations which may be tweaked by `i_control_code` option:
