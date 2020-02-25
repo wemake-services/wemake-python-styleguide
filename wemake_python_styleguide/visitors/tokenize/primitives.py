@@ -239,7 +239,7 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         if 'r' in modifiers.lower():
             if '\\' not in string_def:
                 self.add_violation(
-                    RawStringNotNeededViolation(token),
+                    consistency.RawStringNotNeededViolation(token),
                 )
 
 

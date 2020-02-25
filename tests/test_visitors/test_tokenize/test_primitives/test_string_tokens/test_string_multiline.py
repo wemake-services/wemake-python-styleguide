@@ -3,10 +3,10 @@
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
+    RawStringNotNeededViolation,
     WrongMultilineStringViolation,
 )
 from wemake_python_styleguide.visitors.tokenize.primitives import (
-    RawStringNotNeededViolation,
     WrongStringTokenVisitor,
 )
 
