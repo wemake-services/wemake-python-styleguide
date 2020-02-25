@@ -603,10 +603,10 @@ class UnpythonicGetterSetterViolation(ASTViolation):
                 self.attribute = None
 
             def set_attribute(self):
-                return self.attribute
+                ...
 
             def get_attribute(self, value):
-                self.attribute = value
+                ...
 
     .. versionadded:: 0.15.0
 
