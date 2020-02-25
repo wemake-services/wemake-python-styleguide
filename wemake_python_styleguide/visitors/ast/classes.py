@@ -121,21 +121,22 @@ class WrongClassVisitor(base.BaseNodeVisitor):
 
     def _check_getters_setters_methods(self, node: ast.ClassDef) -> None:
         class_attributes, instance_attributes = classes.get_attributes(node)
-        attribute_names = set(
-            name_nodes.flat_variable_names(class_attributes),
-        ).union({
-            instance.attr for instance in instance_attributes
+        attribute_names = {
+            class_attribute.lstrip('_') for class_attribute
+            in name_nodes.flat_variable_names(class_attributes)
+        }.union({
+            instance.attr.lstrip('_') for instance
+            in instance_attributes
         })
 
-        for attribute in attribute_names:
-            for method_postfix in classes.getter_setter_postfixes(node):
-                if attribute.lstrip('_') == method_postfix:
-                    self.add_violation(
-                        oop.UnpythonicGetterSetterViolation(
-                            node,
-                            text=node.name,
-                        ),
-                    )
+        for method_postfix in classes.getter_setter_postfixes(node):
+            if any(name == method_postfix for name in attribute_names):
+                self.add_violation(
+                    oop.UnpythonicGetterSetterViolation(
+                        node,
+                        text=node.name,
+                    ),
+                )
 
 
 @final
