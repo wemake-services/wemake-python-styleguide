@@ -2,12 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.visitors.ast.classes import (
-    WrongClassVisitor,
-)
 from wemake_python_styleguide.violations.oop import (
     UnpythonicGetterSetterViolation,
 )
+from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
 
 module_getter_and_setter = """
 attribute = 1
