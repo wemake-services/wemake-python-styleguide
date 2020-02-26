@@ -16,7 +16,7 @@ from wemake_python_styleguide.visitors.ast.exceptions import (
 
 right_outside1 = """
 def function():  # we need function to use ``return``
-    for _ in range(10):  # we need ``for`` to use ``break``
+    for _ in range(10):
         try:
             ...
         except:
@@ -363,7 +363,6 @@ def function():
     'return',
     'return None',
     'return 1',
-    'break',
     'raise ValueError',
     'raise ValueError()',
     'raise TypeError(1)',
@@ -408,7 +407,6 @@ def test_wrong_return_in_else_or_finally(
     'return',
     'return None',
     'return 1',
-    'break',
     'raise ValueError',
     'raise ValueError()',
     'raise TypeError(1)',
@@ -455,33 +453,33 @@ def test_correct_return_path_in_try_except(
     ('raise ValueError(1)', '...', '...', 'return 1', '...'),
     ('raise ValueError(1)', '...', '...', 'break', '...'),
 
-    ('...', '...', '...', 'raise ValueError', 'break'),
+    ('...', '...', '...', 'raise ValueError', 'return 0'),
     ('...', '...', '...', 'raise ValueError', 'return None'),
     ('...', '...', '...', 'break', 'return'),
     ('...', '...', '...', 'break', 'raise ValueError'),
-    ('...', '...', '...', 'return', 'break'),
+    ('...', '...', '...', 'return', 'return 1'),
     ('...', '...', '...', 'return', 'raise ValueError()'),
 
     ('break', '...', '...', '...', 'raise ValueError'),
     ('break', '...', '...', '...', 'return'),
-    ('return', '...', '...', '...', 'break'),
+    ('return', '...', '...', '...', 'raise ValueError(1)'),
     ('return 0', '...', '...', '...', 'raise ValueError'),
     ('raise ValueError(1)', '...', '...', '...', 'return 1'),
-    ('raise ValueError(1)', '...', '...', '...', 'break'),
+    ('raise ValueError(1)', '...', '...', '...', 'return'),
 
     ('...', 'break', '...', '...', 'raise ValueError'),
     ('...', 'break', '...', '...', 'return'),
-    ('...', 'return', '...', '...', 'break'),
+    ('...', 'return', '...', '...', 'raise ValueError(1)'),
     ('...', 'return 0', '...', '...', 'raise ValueError'),
     ('...', 'raise ValueError(1)', '...', '...', 'return 1'),
-    ('...', 'raise ValueError(1)', '...', '...', 'break'),
+    ('...', 'raise ValueError(1)', '...', '...', 'return 0'),
 
     ('...', '...', 'break', '...', 'raise ValueError'),
     ('...', '...', 'break', '...', 'return'),
-    ('...', '...', 'return', '...', 'break'),
+    ('...', '...', 'return', '...', 'raise ValueError'),
     ('...', '...', 'return 0', '...', 'raise ValueError'),
     ('...', '...', 'raise ValueError(1)', '...', 'return 1'),
-    ('...', '...', 'raise ValueError(1)', '...', 'break'),
+    ('...', '...', 'raise ValueError(1)', '...', 'return 0'),
 ])
 def test_different_nodes_trigger_violation(
     assert_errors,
