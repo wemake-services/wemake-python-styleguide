@@ -71,6 +71,7 @@ Summary
    FloatKeyViolation
    ProtectedModuleMemberViolation
    PositionalOnlyArgumentsViolation
+   ExecutableMismatchViolation
 
 Best practices
 --------------
@@ -127,6 +128,7 @@ Best practices
 .. autoclass:: FloatKeyViolation
 .. autoclass:: ProtectedModuleMemberViolation
 .. autoclass:: PositionalOnlyArgumentsViolation
+.. autoclass:: ExecutableMismatchViolation
 
 """
 
@@ -2020,3 +2022,31 @@ class PositionalOnlyArgumentsViolation(ASTViolation):
 
     error_template = 'Found positional-only argument'
     code = 451
+
+@final
+class ExecutableMismatchViolation(TokenizeViolation):
+    """
+    Forbids to execute the file with shebang incorrectly set
+
+    Reasoning:
+	Setting the shebangs incorrectly causes executable mismatch
+
+    Solution:
+	Ensure the shebang is present and contains "python",
+	There is no whitespace, blank or comment lines before shebang
+
+    Example::
+
+        # Correct:
+        #!/usr/bin/env python
+
+        # Wrong:
+        #!/usr/bin/env
+         #!/usr/bin/env python
+	
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found executable mismatch: {0}'
+    code = 452
