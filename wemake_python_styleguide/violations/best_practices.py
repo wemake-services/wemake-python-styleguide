@@ -2071,14 +2071,14 @@ class BreakInFinallyBlockViolation(ASTViolation):
     Related to :class:`~TryExceptMultipleReturnPathViolation`.
 
     Reasoning:
-        Putting any control statements in finally is a
-        terrible practice, because finally is implicitly
+        Putting any control statements in `finally` is a
+        terrible practice, because `finally` is implicitly
         called and can cause damage to your logic with
         its implicitness.
         We should not allow it.
 
     Solution:
-        Remove ``continue`` from ``finally`` blocks.
+        Remove ``break`` from ``finally`` blocks.
 
     Example::
 
