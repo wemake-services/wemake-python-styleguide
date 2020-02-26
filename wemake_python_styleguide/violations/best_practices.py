@@ -72,6 +72,7 @@ Summary
    ProtectedModuleMemberViolation
    PositionalOnlyArgumentsViolation
    ContinueInFinallyBlockViolation
+   BreakInFinallyBlockViolation
 
 Best practices
 --------------
@@ -129,6 +130,7 @@ Best practices
 .. autoclass:: ProtectedModuleMemberViolation
 .. autoclass:: PositionalOnlyArgumentsViolation
 .. autoclass:: ContinueInFinallyBlockViolation
+.. autoclass:: BreakInFinallyBlockViolation
 
 """
 
@@ -2060,3 +2062,41 @@ class ContinueInFinallyBlockViolation(ASTViolation):
 
     error_template = 'Found `continue` in `finally` block'
     code = 452
+
+
+class BreakInFinallyBlockViolation(ASTViolation):
+    """
+    Forbids to use ``break`` in ``finally`` case.
+
+    Related to :class:`~TryExceptMultipleReturnPathViolation`.
+
+    Reasoning:
+        Putting any control statements in finally is a
+        terrible practice, because finally is implicitly
+        called and can cause damage to your logic with
+        its implicitness.
+        We should not allow it.
+
+    Solution:
+        Remove ``continue`` from ``finally`` blocks.
+
+    Example::
+
+        # Correct:
+        try:
+            ...
+        finally:
+            ...
+
+        # Wrong:
+        try:
+            ...
+        finally:
+            break
+
+    .. versionadded:: 0.14.0
+
+    """
+
+    error_template = 'Found `break` in `finally` block'
+    code = 453
