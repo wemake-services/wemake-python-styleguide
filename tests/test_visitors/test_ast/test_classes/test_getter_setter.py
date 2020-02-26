@@ -84,7 +84,6 @@ class Template(object):
 @pytest.mark.parametrize('code', [
     module_getter_and_setter,
     static_getter_and_setter,
-    property_getter_and_setter,
     child_getter_and_setter,
     nested_getter_and_setter,
 ])
@@ -138,6 +137,12 @@ def test_nonmatching_attribute_getter_setter(
     ('attribute', '@classmethod', 'set_attribute'),
     ('_attribute', '@classmethod', 'set_attribute'),
     ('__attribute', '@classmethod', 'set_attribute'),
+    ('attribute', '@property', 'get_attribute'),
+    ('_attribute', '@property', 'get_attribute'),
+    ('__attribute', '@property', 'get_attribute'),
+    ('attribute', '@attribute.setter', 'set_attribute'),
+    ('_attribute', '@attribute.setter', 'set_attribute'),
+    ('__attribute', '@attribute.setter', 'set_attribute'),
 ])
 def test_instance_and_class_getter_setter(
     assert_errors,
