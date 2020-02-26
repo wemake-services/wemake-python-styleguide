@@ -2169,5 +2169,5 @@ class RawStringNotNeededViolation(TokenizeViolation):
 
     """
 
-    error_template = 'Error template here'
+    error_template = 'Found an unnecessary use of a raw string'
     code = 358
