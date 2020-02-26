@@ -19,6 +19,7 @@ All comments have the same type.
 """
 
 import re
+import os
 import tokenize
 from typing import ClassVar, FrozenSet
 from typing.re import Pattern
@@ -142,6 +143,7 @@ class FileMagicCommentsVisitor(BaseTokenVisitor):
 
         """
         self._check_empty_line_after_codding(token)
+        self._check_valid_shebang(token)
 
     def _offset_for_comment_line(self, token: tokenize.TokenInfo) -> int:
         return 2 if token.exact_type == tokenize.COMMENT else 0
@@ -183,3 +185,32 @@ class FileMagicCommentsVisitor(BaseTokenVisitor):
             if next_token.exact_type not in self._newlines:  # pragma: no cover
                 self.add_violation(EmptyLineAfterCodingViolation(token))
             break
+
+    def _check_valid_shebang(self, token: tokenize.TokenInfo) -> None:
+
+        shebang_string = token.string
+        is_shebang_present = re.match("(\s*)#!", shebang_string)
+        shebang_line = token.start[0]
+        is_executable = os.access(self.filename, os.X_OK)
+
+        if is_executable and not is_shebang_present:
+            # self.add_violation(violationName("The file is executable but no shebang is present"))
+            pass
+
+        if is_shebang_present:
+            if not is_executable:
+                # self.add_violation(violationName("Shebang is present but the file is not executable"))
+                pass
+
+            if not "python" in shebang_string:
+                # self.add_violation(violationName("Shebang is present but does not contain \"python\""))
+                pass
+
+            if shebang_line == 1 and shebang_string.startswith((' ', '\t')):
+                # self.add_violation(violationName("There is whitespace before shebang"))
+                pass
+
+            if shebang_line != 1:
+                # self.add_violation(violationName("Shebang is not on first line"))
+                pass
+
