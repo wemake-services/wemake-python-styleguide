@@ -8,7 +8,6 @@ from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
 from wemake_python_styleguide.constants import ALLOWED_BUILTIN_CLASSES
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming.builtins import is_builtin_name
-from wemake_python_styleguide.logic.tree import functions
 
 
 def is_forbidden_super_class(class_name: Optional[str]) -> bool:
@@ -73,20 +72,10 @@ def getter_setter_postfixes(node: ast.ClassDef) -> Set[str]:
 
     """
     method_postfixes = set()
-    for subnode in ast.walk(node):
-        correct_context = nodes.get_context(subnode) == node
-        if isinstance(subnode, FunctionNodes) and correct_context:
-            if is_getter_or_setter(subnode):
-                method_postfixes.add(subnode.name.partition('get_')[2])
-                method_postfixes.add(subnode.name.partition('set_')[2])
+    for sub in ast.walk(node):
+        correct_context = nodes.get_context(sub) == node
+        if isinstance(sub, FunctionNodes) and correct_context:
+            if any(sub.name.startswith(prefix) for prefix in ('get_', 'set_')):
+                method_postfixes.add(sub.name.partition('get_')[2])
+                method_postfixes.add(sub.name.partition('set_')[2])
     return method_postfixes
-
-
-def is_getter_or_setter(node: types.AnyFunctionDef) -> bool:
-    """Checks if non property decorated function contains get or set prefix."""
-    if any(node.name.startswith(prefix) for prefix in ('get_', 'set_')):
-        is_property = functions.check_decorators(node, 'property')
-        is_property_setter = functions.check_decorators(node, '.setter')
-        if not (is_property or is_property_setter):
-            return True
-    return False
