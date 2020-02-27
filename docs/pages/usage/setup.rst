@@ -16,7 +16,7 @@ Installation
 We also recommend to use `poetry <https://github.com/sdispater/poetry>`_
 instead of a default ``pip``.
 
-You might want to also intsall optional tools
+You might want to also install optional tools
 that pairs nicely with ``wemake-python-styleguide``:
 
 - :ref:`flakehell` for easy integration into a **legacy** codebase
