@@ -18,8 +18,8 @@ That's how a basic ``comment`` type token looks like:
 All comments have the same type.
 """
 
-import re
 import os
+import re
 import tokenize
 from typing import ClassVar, FrozenSet
 from typing.re import Pattern
@@ -29,11 +29,12 @@ from typing_extensions import final
 from wemake_python_styleguide.constants import MAX_NO_COVER_COMMENTS
 from wemake_python_styleguide.logic.tokens import get_comment_text
 from wemake_python_styleguide.violations.best_practices import (
+    ExecutableMismatchViolation,
     OveruseOfNoCoverCommentViolation,
     OveruseOfNoqaCommentViolation,
     WrongDocCommentViolation,
     WrongMagicCommentViolation,
-    ExecutableMismatchViolation)
+)
 from wemake_python_styleguide.violations.consistency import (
     EmptyLineAfterCodingViolation,
 )
@@ -188,48 +189,49 @@ class FileMagicCommentsVisitor(BaseTokenVisitor):
 
     def _check_valid_shebang(self, token: tokenize.TokenInfo) -> None:
         shebang_string = token.string
-        is_shebang_present = re.match("(\s*)#!", shebang_string)
-        shebang_line = token.start[0]
+        is_shebang_present = re.match(r'(\s*)#!', shebang_string)
+        is_first_line = token.start[0] == 1
         is_executable = os.access(self.filename, os.X_OK)
 
-        if is_executable and not is_shebang_present:
+        if is_first_line and is_executable and not is_shebang_present:
             self.add_violation(
                 ExecutableMismatchViolation(
                     node=token,
-                    text="The file is executable but no shebang is present"
-                )
+                    text='The file is executable but no shebang is present',
+                ),
             )
 
-        if is_shebang_present:
-            if not is_executable:
-                self.add_violation(
-                    ExecutableMismatchViolation(
-                        node=token,
-                        text="Shebang is present but the file is not executable"
-                    )
-                )
+        if not is_shebang_present:
+            return
 
-            if not "python" in shebang_string:
-                self.add_violation(
-                    ExecutableMismatchViolation(
-                        node=token,
-                        text="Shebang is present but does not contain \"python\""
-                    )
-                )
+        if not is_executable:
+            self.add_violation(
+                ExecutableMismatchViolation(
+                    node=token,
+                    text='Shebang is present but the file is not executable',
+                ),
+            )
 
-            if shebang_line == 1 and shebang_string.startswith((' ', '\t')):
-                self.add_violation(
-                    ExecutableMismatchViolation(
-                        node=token,
-                        text="There is whitespace before shebang"
-                    )
-                )
+        if 'python' not in shebang_string:
+            self.add_violation(
+                ExecutableMismatchViolation(
+                    node=token,
+                    text='Shebang is present but does not contain \"python\"',
+                ),
+            )
 
-            if shebang_line != 1:
-                self.add_violation(
-                    ExecutableMismatchViolation(
-                        node=token,
-                        text="Shebang is not on first line"
-                    )
-                )
+        if is_first_line and shebang_string.startswith((' ', '\t')):
+            self.add_violation(
+                ExecutableMismatchViolation(
+                    node=token,
+                    text='There is whitespace before shebang',
+                ),
+            )
 
+        if not is_first_line:
+            self.add_violation(
+                ExecutableMismatchViolation(
+                    node=token,
+                    text='Shebang is not on first line',
+                ),
+            )
