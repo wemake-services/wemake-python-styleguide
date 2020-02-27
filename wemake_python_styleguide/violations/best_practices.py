@@ -71,8 +71,7 @@ Summary
    FloatKeyViolation
    ProtectedModuleMemberViolation
    PositionalOnlyArgumentsViolation
-   ContinueInFinallyBlockViolation
-   BreakInFinallyBlockViolation
+   LoopControlFinallyViolation
 
 Best practices
 --------------
@@ -129,8 +128,7 @@ Best practices
 .. autoclass:: FloatKeyViolation
 .. autoclass:: ProtectedModuleMemberViolation
 .. autoclass:: PositionalOnlyArgumentsViolation
-.. autoclass:: ContinueInFinallyBlockViolation
-.. autoclass:: BreakInFinallyBlockViolation
+.. autoclass:: LoopControlFinallyViolation
 
 """
 
@@ -2026,47 +2024,9 @@ class PositionalOnlyArgumentsViolation(ASTViolation):
     code = 451
 
 
-class ContinueInFinallyBlockViolation(ASTViolation):
+class LoopControlFinallyViolation(ASTViolation):
     """
-    Forbids to use ``continue`` in ``finally`` case.
-
-    Related to :class:`~TryExceptMultipleReturnPathViolation`.
-
-    Reasoning:
-        Putting any control statements in finally is a
-        terrible practice, because finally is implicitly
-        called and can cause damage to your logic with
-        its implicitness.
-        We should not allow it.
-
-    Solution:
-        Remove ``continue`` from ``finally`` blocks.
-
-    Example::
-
-        # Correct:
-        try:
-            ...
-        finally:
-            ...
-
-        # Wrong:
-        try:
-            ...
-        finally:
-            continue
-
-    .. versionadded:: 0.14.0
-
-    """
-
-    error_template = 'Found `continue` in `finally` block'
-    code = 452
-
-
-class BreakInFinallyBlockViolation(ASTViolation):
-    """
-    Forbids to use ``break`` in ``finally`` case.
+    Forbids to use ``break`` and ``continue`` in ``finally`` case.
 
     Related to :class:`~TryExceptMultipleReturnPathViolation`.
 
@@ -2078,7 +2038,7 @@ class BreakInFinallyBlockViolation(ASTViolation):
         We should not allow it.
 
     Solution:
-        Remove ``break`` from ``finally`` blocks.
+        Remove ``break`` and ``continue`` from ``finally`` blocks.
 
     Example::
 
@@ -2094,9 +2054,14 @@ class BreakInFinallyBlockViolation(ASTViolation):
         finally:
             break
 
+        try:
+            ...
+        finally:
+            continue
+
     .. versionadded:: 0.14.0
 
     """
 
-    error_template = 'Found `break` in `finally` block'
-    code = 453
+    error_template = 'Found `break` or `continue` in `finally` block'
+    code = 452

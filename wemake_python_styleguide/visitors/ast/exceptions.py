@@ -13,10 +13,9 @@ from wemake_python_styleguide.logic.walk import is_contained
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     BaseExceptionViolation,
-    BreakInFinallyBlockViolation,
-    ContinueInFinallyBlockViolation,
     DuplicateExceptionViolation,
     IncorrectExceptOrderViolation,
+    LoopControlFinallyViolation,
     TryExceptMultipleReturnPathViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
@@ -52,6 +51,21 @@ def _find_returing_nodes(
     return try_has, except_has, else_has, finally_has
 
 
+def _find_bad_finally_nodes(
+    node: ast.Try,
+    bad_returning_nodes: AnyNodes,
+) -> Tuple[bool, bool]:
+    finally_has_continue = any(
+        is_contained(line, ast.Continue)
+        for line in node.finalbody
+    )
+    finally_has_break = any(
+        is_contained(line, ast.Break)
+        for line in node.finalbody
+    )
+    return finally_has_continue, finally_has_break
+
+
 @final
 class WrongTryExceptVisitor(BaseNodeVisitor):
     """Responsible for examining ``try`` and friends."""
@@ -59,6 +73,11 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
     _bad_returning_nodes: ClassVar[AnyNodes] = (
         ast.Return,
         ast.Raise,
+        ast.Break,
+    )
+
+    _bad_finally_nodes: ClassVar[AnyNodes] = (
+        ast.Continue,
         ast.Break,
     )
 
@@ -71,17 +90,15 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
             DuplicateExceptionViolation
             TryExceptMultipleReturnPathViolation
             IncorrectExceptOrderViolation
-            ContinueInFinallyBlockViolation
-            BreakInFinallyBlockViolation
+            LoopControlFinallyViolation
 
         """
         self._check_if_needs_except(node)
         self._check_duplicate_exceptions(node)
         self._check_return_path(node)
         self._check_exception_order(node)
+        self._check_break_or_continue_in_finally(node)
         self.generic_visit(node)
-        self._check_continue_in_finally(node)
-        self._check_break_in_finally(node)
 
     def _check_if_needs_except(self, node: ast.Try) -> None:
         if not node.finalbody or node.handlers:
@@ -129,22 +146,13 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
                 else:
                     seen.add(exception)
 
-    def _check_continue_in_finally(self, node: ast.Try) -> None:
-        finally_has_continue = any(
-            is_contained(line, ast.Continue)
-            for line in node.finalbody
+    def _check_break_or_continue_in_finally(self, node: ast.Try) -> None:
+        finally_has_continue, finally_has_break = _find_bad_finally_nodes(
+            node, self._bad_finally_nodes,
         )
-        if finally_has_continue:  # pragma: py-lt-38
-            self.add_violation(ContinueInFinallyBlockViolation(node))
 
-    def _check_break_in_finally(self, node: ast.Try) -> None:
-        # pass
-        finally_has_break = any(
-            is_contained(line, ast.Break)
-            for line in node.finalbody
-        )
-        if finally_has_break:
-            self.add_violation(BreakInFinallyBlockViolation(node))
+        if finally_has_continue or finally_has_break:
+            self.add_violation(LoopControlFinallyViolation(node))
 
 
 @final
