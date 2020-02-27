@@ -434,17 +434,6 @@ flake8 = ">=3.5,<4.0"
 
 [[package]]
 category = "main"
-description = "A Flake8 plugin for checking executable permissions and shebangs."
-name = "flake8-executable"
-optional = false
-python-versions = ">=3.6"
-version = "2.0.3"
-
-[package.dependencies]
-flake8 = ">=3.0.0"
-
-[[package]]
-category = "main"
 description = "flake8 plugin that integrates isort ."
 name = "flake8-isort"
 optional = false

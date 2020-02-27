@@ -1,4 +1,3 @@
-#!/usr/bin/env perl
 from sys import *
 import sys
 from typing import List, Union, Dict
