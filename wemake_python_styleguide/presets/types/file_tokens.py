@@ -14,6 +14,7 @@ from wemake_python_styleguide.visitors.tokenize import (
 PRESET: Final = (
     comments.WrongCommentVisitor,
     comments.FileMagicCommentsVisitor,
+    comments.ShebangVisitor,
 
     syntax.WrongKeywordTokenVisitor,
 
