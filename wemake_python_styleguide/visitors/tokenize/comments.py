@@ -33,7 +33,7 @@ from wemake_python_styleguide.violations.best_practices import (
     OveruseOfNoqaCommentViolation,
     WrongDocCommentViolation,
     WrongMagicCommentViolation,
-)
+    ExecutableMismatchViolation)
 from wemake_python_styleguide.violations.consistency import (
     EmptyLineAfterCodingViolation,
 )
@@ -187,30 +187,49 @@ class FileMagicCommentsVisitor(BaseTokenVisitor):
             break
 
     def _check_valid_shebang(self, token: tokenize.TokenInfo) -> None:
-
         shebang_string = token.string
         is_shebang_present = re.match("(\s*)#!", shebang_string)
         shebang_line = token.start[0]
         is_executable = os.access(self.filename, os.X_OK)
 
         if is_executable and not is_shebang_present:
-            # self.add_violation(violationName("The file is executable but no shebang is present"))
-            pass
+            self.add_violation(
+                ExecutableMismatchViolation(
+                    node=token,
+                    text="The file is executable but no shebang is present"
+                )
+            )
 
         if is_shebang_present:
             if not is_executable:
-                # self.add_violation(violationName("Shebang is present but the file is not executable"))
-                pass
+                self.add_violation(
+                    ExecutableMismatchViolation(
+                        node=token,
+                        text="Shebang is present but the file is not executable"
+                    )
+                )
 
             if not "python" in shebang_string:
-                # self.add_violation(violationName("Shebang is present but does not contain \"python\""))
-                pass
+                self.add_violation(
+                    ExecutableMismatchViolation(
+                        node=token,
+                        text="Shebang is present but does not contain \"python\""
+                    )
+                )
 
             if shebang_line == 1 and shebang_string.startswith((' ', '\t')):
-                # self.add_violation(violationName("There is whitespace before shebang"))
-                pass
+                self.add_violation(
+                    ExecutableMismatchViolation(
+                        node=token,
+                        text="There is whitespace before shebang"
+                    )
+                )
 
             if shebang_line != 1:
-                # self.add_violation(violationName("Shebang is not on first line"))
-                pass
+                self.add_violation(
+                    ExecutableMismatchViolation(
+                        node=token,
+                        text="Shebang is not on first line"
+                    )
+                )
 

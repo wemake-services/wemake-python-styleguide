@@ -2032,8 +2032,8 @@ class ExecutableMismatchViolation(TokenizeViolation):
 	Setting the shebangs incorrectly causes executable mismatch
 
     Solution:
-	Ensure the shebang is present and contains "python",
-	There is no whitespace, blank or comment lines before shebang
+	Ensure the shebang is present on the first line, contains "python",
+	and there is no whitespace before.
 
     Example::
 
@@ -2043,8 +2043,8 @@ class ExecutableMismatchViolation(TokenizeViolation):
         # Wrong:
         #!/usr/bin/env
          #!/usr/bin/env python
-	
-    .. versionadded:: 0.15.0
+
+    .. versionadded:: 0.14.0
 
     """
 
