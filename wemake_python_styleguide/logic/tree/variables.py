@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import Union
+from typing import Set, Union
 
 _VarDefinition = Union[ast.AST, ast.expr]
 
@@ -22,3 +22,15 @@ def is_valid_block_variable_definition(node: _VarDefinition) -> bool:
                 return False
         return True
     return _is_valid_single(node)
+
+
+def name_in_postfix(
+    node: ast.ClassDef,
+    names: Set[str],
+    postfixes: Set[str],
+) -> bool:
+    """Checks if name is in any postfix."""
+    for postfix in postfixes:
+        if any(name == postfix for name in names):
+            return True
+    return False

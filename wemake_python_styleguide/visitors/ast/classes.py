@@ -17,6 +17,7 @@ from wemake_python_styleguide.logic.tree import (
     classes,
     functions,
     strings,
+    variables,
 )
 from wemake_python_styleguide.violations import best_practices as bp
 from wemake_python_styleguide.violations import consistency, oop
@@ -120,23 +121,27 @@ class WrongClassVisitor(base.BaseNodeVisitor):
         return False
 
     def _check_getters_setters_methods(self, node: ast.ClassDef) -> None:
-        class_attributes, instance_attributes = classes.get_attributes(node)
-        attribute_names = {
-            class_attribute.lstrip('_') for class_attribute
-            in name_nodes.flat_variable_names(class_attributes)
-        }.union({
-            instance.attr.lstrip('_') for instance
-            in instance_attributes
-        })
+        class_attributes, instance_attributes = classes.get_all_attributes_str(
+            node,
+        )
+        class_postfixes, instance_postfixes = classes.get_set_postfixes(node)
 
-        for method_postfix in classes.getter_setter_postfixes(node):
-            if any(name == method_postfix for name in attribute_names):
-                self.add_violation(
-                    oop.UnpythonicGetterSetterViolation(
-                        node,
-                        text=node.name,
-                    ),
-                )
+        if variables.name_in_postfix(node, class_attributes, class_postfixes):
+            self.add_violation(
+                oop.UnpythonicGetterSetterViolation(
+                    node,
+                    text=node.name,
+                ),
+            )
+
+        all_attributes = instance_attributes.union(class_attributes)
+        if variables.name_in_postfix(node, all_attributes, instance_postfixes):
+            self.add_violation(
+                oop.UnpythonicGetterSetterViolation(
+                    node,
+                    text=node.name,
+                ),
+            )
 
 
 @final

@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import List, Optional, Set, Tuple
+from typing import List, Optional, Set, Tuple, Union
 
 from wemake_python_styleguide import types
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
 from wemake_python_styleguide.constants import ALLOWED_BUILTIN_CLASSES
 from wemake_python_styleguide.logic import nodes
+from wemake_python_styleguide.logic.naming import name_nodes
 from wemake_python_styleguide.logic.naming.builtins import is_builtin_name
+from wemake_python_styleguide.logic.tree import functions
 
 
 def is_forbidden_super_class(class_name: Optional[str]) -> bool:
@@ -43,39 +45,85 @@ def is_forbidden_super_class(class_name: Optional[str]) -> bool:
 def get_attributes(
     node: ast.ClassDef,
 ) -> Tuple[List[types.AnyAssign], List[ast.Attribute]]:
-    """Returns all class and instance attributes of a class."""
-    class_attributes = []
-    instance_attributes = []
+    """Returns all non annotated class and instance attributes of a class."""
+    return get_class_attributes(node), get_instance_attributes(node)
 
+
+def get_all_attributes_str(
+    node: ast.ClassDef,
+) -> Tuple[Set[str], Set[str]]:
+    """Returns names of all class and instance attributes of a class."""
+    class_attributes = get_all_class_attributes(node)
+    instance_attributes = get_instance_attributes(node)
+    class_attribute_names = {
+        class_attribute.lstrip('_') for class_attribute
+        in name_nodes.flat_variable_names(class_attributes)
+    }
+    instance_attribute_names = {
+        instance.attr.lstrip('_') for instance
+        in instance_attributes
+    }
+    return class_attribute_names, instance_attribute_names
+
+
+def get_class_attributes(
+    node: ast.ClassDef,
+) -> List[Union[ast.Assign, ast.AnnAssign]]:
+    """Returns all non annotated class attributes of a class."""
+    class_attributes = []
+    for sub in ast.walk(node):
+        correct_context = nodes.get_context(sub) == node
+        has_value = getattr(sub, 'value', None)
+        if isinstance(sub, AssignNodes) and has_value and correct_context:
+            class_attributes.append(sub)
+
+    return class_attributes
+
+
+def get_all_class_attributes(
+    node: ast.ClassDef,
+) -> List[Union[ast.Assign, ast.AnnAssign]]:
+    """Returns all class attributes of a class."""
+    class_attributes = []
+    for sub in ast.walk(node):
+        correct_context = nodes.get_context(sub) == node
+        has_value = getattr(sub, 'value', None)
+        if isinstance(sub, AssignNodes) and has_value and correct_context:
+            class_attributes.append(sub)
+            continue
+        if isinstance(sub, ast.AnnAssign) and correct_context:
+            class_attributes.append(sub)
+
+    return class_attributes
+
+
+def get_instance_attributes(node: ast.ClassDef) -> List[ast.Attribute]:
+    """Returns all instance attributes of a class."""
+    instance_attributes = []
     for sub in ast.walk(node):
         if isinstance(sub, ast.Attribute) and isinstance(sub.ctx, ast.Store):
             instance_attributes.append(sub)
-            continue
-
-        has_assign = (
-            nodes.get_context(sub) == node and
-            getattr(sub, 'value', None)
-        )
-        if isinstance(sub, AssignNodes) and has_assign:
-            class_attributes.append(sub)
-
-    return class_attributes, instance_attributes
+    return instance_attributes
 
 
-def getter_setter_postfixes(node: ast.ClassDef) -> Set[str]:
+def get_set_postfixes(node: ast.ClassDef) -> Tuple[Set[str], Set[str]]:
     """
-    Return postfixes of all getter or setter methods.
+    Return postfixes of class getter or setter methods.
 
     get_class_attribute becomes class_attribute
 
     set_instance_attribute becomes instance_attribute
 
     """
-    method_postfixes = set()
+    class_method_postfixes = set()
+    instance_method_postfixes = set()
     for sub in ast.walk(node):
-        correct_context = nodes.get_context(sub) == node
-        if isinstance(sub, FunctionNodes) and correct_context:
-            if any(sub.name.startswith(prefix) for prefix in ('get_', 'set_')):
-                method_postfixes.add(sub.name.partition('get_')[2])
-                method_postfixes.add(sub.name.partition('set_')[2])
-    return method_postfixes
+        if isinstance(sub, FunctionNodes) and functions.is_get_set(node, sub):
+            if functions.check_decorator(sub, 'classmethod'):
+                class_method_postfixes.add(sub.name.partition('get_')[2])
+                class_method_postfixes.add(sub.name.partition('set_')[2])
+                continue
+            instance_method_postfixes.add(sub.name.partition('get_')[2])
+            instance_method_postfixes.add(sub.name.partition('set_')[2])
+
+    return class_method_postfixes, instance_method_postfixes
