@@ -28,24 +28,29 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `radon`,
   because `cognitive-complexity` and `mccabe` is enough
 - **Breaking**: Removes `flake8-loggin-format` as a direct dependency
+- **Breaking**: Removes `ImplicitTernaryViolation` or `WPS332`,
+  because it has too many false positives #1099
 - Adds `python3.8` support
-- Removes `cognitive_complexity` dependency, now it is built in into our linter
-- Adds baseline information for all complexity violation messages
-- Changes how cognitive complexity is calculated
-- Adds support for positional arguments in different checks
 - Changes `styleguide.toml` and `flake8.toml` scripts definition
-- Extracts new violation - WPS450 from WPS436 #1118
+- Extracts new violation - `WPS450` from `WPS436` #1118
 - Adds domain names options:
   `--allowed-domain-names` and `--forbidden-domain-names`,
   that are used to create variable names' blacklist #1106
-- Forbids to use `:=` operator
+- Forbids to use `\r` (carriage return) as line breaks in strings #1111
+- Forbids to use `:=` operator, it now reuses `WPS332` code
 - Forbids to use positional only `/` arguments
+- Forbids to have too many names imported from a single `from ... import`
 - Adds `__call__` to list of methods that should be on top #1125
-- Now allows `_` to be used as a defined variable
+- Allows `_` to be now used as a defined variable
+- Removes `cognitive_complexity` dependency, now it is built in into our linter
+- Adds baseline information for all complexity violation messages: `x > baseline`
+- Changes how cognitive complexity is calculated
+- Adds support for positional arguments in different checks
+- Forbids to use `continue` and `break` in `finally`. It is a terrible practice, because 
+  `finally` is implicitly called and can cause damage to logic with its implicitness.
 
 ### Bugfixes
 
-- Remove ImplicitTernaryViolation - WPS332 #1099
 - Fixes how `i_control_code` behaves with WPS113
 - Fixes that cognitive complexity was ignoring
   `ast.Continue`, `ast.Break`, and `ast.Raise` statements
@@ -59,6 +64,14 @@ Semantic versioning in our case means:
   now only `from ... import dumps` is checked
 - Fixes that `from some import a as std` was reported as a vague import
   with `WPS347` despite having a meaningful alias
+- Fixes that `WPS501` was reported for `@contextmanager` definition
+- Fixes `WPS226` to be thrown at nested string type annotations
+- Fixes `WPS204` reported simplest nodes as overused like `[]` and `call()`
+- Fixes `WPS204` not reporting overused `f` strings
+- Fixes `WPS204` reporting overused return type annotations
+- Fixes `WPS204` reporting `self.` attribute access
+- Fixes `WPS331` reporting cases that do require some extra steps before return
+- Fixes `WPS612` not reporing `super()` calls without return
 
 ### Misc
 
@@ -68,7 +81,7 @@ Semantic versioning in our case means:
 - Adds `local-partial-types` to mypy config
 - Uses `abc` stdlib's module to mark abstract base classes #1122
 - Adds `python3.8` to the CI
-
+- Update `astboom` version to 0.4.2
 
 ## 0.13.4
 

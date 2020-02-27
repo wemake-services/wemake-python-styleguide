@@ -526,7 +526,9 @@ class UselessOverwrittenMethodViolation(ASTViolation):
 
         # Correct:
         class Test(Base):
-            ...
+            def method(self, argument):
+                super().method(argument)
+                return argument  # or None, or anything!
 
         # Wrong:
         class Test(object):

@@ -3,7 +3,7 @@
 from typing_extensions import Final
 
 from wemake_python_styleguide.presets.topics import complexity
-from wemake_python_styleguide.visitors.ast import (
+from wemake_python_styleguide.visitors.ast import (  # noqa: WPS235
     annotations,
     attributes,
     blocks,

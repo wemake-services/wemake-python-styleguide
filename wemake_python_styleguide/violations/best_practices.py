@@ -71,6 +71,7 @@ Summary
    FloatKeyViolation
    ProtectedModuleMemberViolation
    PositionalOnlyArgumentsViolation
+   LoopControlFinallyViolation
 
 Best practices
 --------------
@@ -127,6 +128,7 @@ Best practices
 .. autoclass:: FloatKeyViolation
 .. autoclass:: ProtectedModuleMemberViolation
 .. autoclass:: PositionalOnlyArgumentsViolation
+.. autoclass:: LoopControlFinallyViolation
 
 """
 
@@ -2020,3 +2022,46 @@ class PositionalOnlyArgumentsViolation(ASTViolation):
 
     error_template = 'Found positional-only argument'
     code = 451
+
+
+class LoopControlFinallyViolation(ASTViolation):
+    """
+    Forbids to use ``break`` and ``continue`` in ``finally`` case.
+
+    Related to :class:`~TryExceptMultipleReturnPathViolation`.
+
+    Reasoning:
+        Putting any control statements in `finally` is a
+        terrible practice, because `finally` is implicitly
+        called and can cause damage to your logic with
+        its implicitness.
+        We should not allow it.
+
+    Solution:
+        Remove ``break`` and ``continue`` from ``finally`` blocks.
+
+    Example::
+
+        # Correct:
+        try:
+            ...
+        finally:
+            ...
+
+        # Wrong:
+        try:
+            ...
+        finally:
+            break
+
+        try:
+            ...
+        finally:
+            continue
+
+    .. versionadded:: 0.14.0
+
+    """
+
+    error_template = 'Found `break` or `continue` in `finally` block'
+    code = 452

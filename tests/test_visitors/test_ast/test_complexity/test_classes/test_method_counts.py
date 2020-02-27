@@ -2,7 +2,7 @@
 
 import pytest
 
-from wemake_python_styleguide.visitors.ast.complexity.counts import (
+from wemake_python_styleguide.visitors.ast.complexity.classes import (
     MethodMembersVisitor,
     TooManyMethodsViolation,
 )

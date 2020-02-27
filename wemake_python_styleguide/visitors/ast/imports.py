@@ -120,8 +120,8 @@ class _ImportFromValidator(_BaseImportValidator):
     def _check_vague_alias(self, node: ast.ImportFrom) -> None:
         for alias in node.names:
             for name in filter(None, (alias.name, alias.asname)):
-                is_regular_import = (
-                    (alias.asname and name != alias.asname) or
+                is_regular_import = (  # TODO: remove noqa after 0.14 release
+                    (alias.asname and name != alias.asname) or  # noqa: WPS332
                     not imports.is_vague_import(name)
                 )
 

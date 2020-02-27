@@ -22,7 +22,7 @@ import import2
 import import3
 import import4
 
-from some_name import (
+from some_name import (  # noqa: WPS235
     name1,
     name2,
     name3,
@@ -701,3 +701,14 @@ class AttributeGetter(object):  # noqa: WPS614
 
     def get_attribute(self):
         return 1
+
+for element in range(10):
+    try:  # noqa: WPS452
+        my_print(1)
+    except AnyError:
+        my_print('nope')
+    finally:
+        # See:
+        # https://github.com/wemake-services/wemake-python-styleguide/issues/1082
+        break
+    my_print(4)

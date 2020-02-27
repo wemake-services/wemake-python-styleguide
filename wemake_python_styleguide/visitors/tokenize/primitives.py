@@ -12,22 +12,9 @@ from wemake_python_styleguide.logic.tokens import (
     has_triple_string_quotes,
     split_prefixes,
 )
+from wemake_python_styleguide.violations import consistency
 from wemake_python_styleguide.violations.best_practices import (
     WrongUnicodeEscapeViolation,
-)
-from wemake_python_styleguide.violations.consistency import (
-    BadComplexNumberSuffixViolation,
-    BadNumberSuffixViolation,
-    ImplicitRawStringViolation,
-    ImplicitStringConcatenationViolation,
-    NumberWithMeaninglessZeroViolation,
-    PartialFloatViolation,
-    PositiveExponentViolation,
-    UnderscoredNumberViolation,
-    UnicodeStringViolation,
-    UppercaseStringModifierViolation,
-    WrongHexNumberCaseViolation,
-    WrongMultilineStringViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
@@ -71,6 +58,7 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
             UnderscoredNumberViolation
             PartialFloatViolation
             BadNumberSuffixViolation
+            BadComplexNumberSuffixViolation
             NumberWithMeaninglessZeroViolation
             PositiveExponentViolation
 
@@ -86,7 +74,7 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
     def _check_complex_suffix(self, token: tokenize.TokenInfo) -> None:
         if self._bad_complex_suffix in token.string:
             self.add_violation(
-                BadComplexNumberSuffixViolation(
+                consistency.BadComplexNumberSuffixViolation(
                     token,
                     text=self._bad_complex_suffix,
                 ),
@@ -95,29 +83,40 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
     def _check_underscored_number(self, token: tokenize.TokenInfo) -> None:
         if '_' in token.string:
             self.add_violation(
-                UnderscoredNumberViolation(token, text=token.string),
+                consistency.UnderscoredNumberViolation(
+                    token,
+                    text=token.string,
+                ),
             )
 
     def _check_partial_float(self, token: tokenize.TokenInfo) -> None:
         if token.string.startswith('.') or token.string.endswith('.'):
-            self.add_violation(PartialFloatViolation(token, text=token.string))
+            self.add_violation(
+                consistency.PartialFloatViolation(token, text=token.string),
+            )
 
     def _check_bad_number_suffixes(self, token: tokenize.TokenInfo) -> None:
         if self._bad_number_suffixes.match(token.string):
             self.add_violation(
-                BadNumberSuffixViolation(token, text=token.string),
+                consistency.BadNumberSuffixViolation(token, text=token.string),
             )
 
         float_zeros = self._leading_zero_float_pattern.match(token.string)
         other_zeros = self._leading_zero_pattern.match(token.string)
         if float_zeros or other_zeros:
             self.add_violation(
-                NumberWithMeaninglessZeroViolation(token, text=token.string),
+                consistency.NumberWithMeaninglessZeroViolation(
+                    token,
+                    text=token.string,
+                ),
             )
 
         if self._positive_exponent_pattens.match(token.string):
             self.add_violation(
-                PositiveExponentViolation(token, text=token.string),
+                consistency.PositiveExponentViolation(
+                    token,
+                    text=token.string,
+                ),
             )
 
         if token.string.startswith('0x') or token.string.startswith('0X'):
@@ -127,7 +126,10 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
             )
             if has_wrong_hex_numbers:
                 self.add_violation(
-                    WrongHexNumberCaseViolation(token, text=token.string),
+                    consistency.WrongHexNumberCaseViolation(
+                        token,
+                        text=token.string,
+                    ),
                 )
 
 
@@ -174,20 +176,25 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         _, string_def = split_prefixes(token)
         if has_triple_string_quotes(string_def):
             if '\n' not in string_def and token not in self._docstrings:
-                self.add_violation(WrongMultilineStringViolation(token))
+                self.add_violation(
+                    consistency.WrongMultilineStringViolation(token),
+                )
 
     def _check_string_modifiers(self, token: tokenize.TokenInfo) -> None:
         modifiers, _ = split_prefixes(token)
 
         if 'u' in modifiers.lower():
             self.add_violation(
-                UnicodeStringViolation(token, text=token.string),
+                consistency.UnicodeStringViolation(token, text=token.string),
             )
 
         for mod in modifiers:
             if mod in self._bad_string_modifiers:
                 self.add_violation(
-                    UppercaseStringModifierViolation(token, text=mod),
+                    consistency.UppercaseStringModifierViolation(
+                        token,
+                        text=mod,
+                    ),
                 )
 
     def _check_implicit_raw_string(self, token: tokenize.TokenInfo) -> None:
@@ -197,7 +204,10 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
 
         if self._implicit_raw_strigns.search(_replace_braces(string_def)):
             self.add_violation(
-                ImplicitRawStringViolation(token, text=token.string),
+                consistency.ImplicitRawStringViolation(
+                    token,
+                    text=token.string,
+                ),
             )
 
     def _check_wrong_unicode_escape(self, token: tokenize.TokenInfo) -> None:
@@ -253,7 +263,9 @@ class WrongStringConcatenationVisitor(BaseTokenVisitor):
 
         if token.exact_type == tokenize.STRING:
             if self._previous_token:
-                self.add_violation(ImplicitStringConcatenationViolation(token))
+                self.add_violation(
+                    consistency.ImplicitStringConcatenationViolation(token),
+                )
             self._previous_token = token
         else:
             self._previous_token = None
