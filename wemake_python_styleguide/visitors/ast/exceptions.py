@@ -51,21 +51,6 @@ def _find_returing_nodes(
     return try_has, except_has, else_has, finally_has
 
 
-def _find_bad_finally_nodes(
-    node: ast.Try,
-    bad_returning_nodes: AnyNodes,
-) -> Tuple[bool, bool]:
-    finally_has_continue = any(
-        is_contained(line, ast.Continue)
-        for line in node.finalbody
-    )
-    finally_has_break = any(
-        is_contained(line, ast.Break)
-        for line in node.finalbody
-    )
-    return finally_has_continue, finally_has_break
-
-
 @final
 class WrongTryExceptVisitor(BaseNodeVisitor):
     """Responsible for examining ``try`` and friends."""
@@ -73,11 +58,6 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
     _bad_returning_nodes: ClassVar[AnyNodes] = (
         ast.Return,
         ast.Raise,
-        ast.Break,
-    )
-
-    _bad_finally_nodes: ClassVar[AnyNodes] = (
-        ast.Continue,
         ast.Break,
     )
 
@@ -147,11 +127,12 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
                     seen.add(exception)
 
     def _check_break_or_continue_in_finally(self, node: ast.Try) -> None:
-        finally_has_continue, finally_has_break = _find_bad_finally_nodes(
-            node, self._bad_finally_nodes,
+        has_wrong_nodes = any(
+            is_contained(line, (ast.Break, ast.Continue))
+            for line in node.finalbody
         )
 
-        if finally_has_continue or finally_has_break:
+        if has_wrong_nodes:
             self.add_violation(LoopControlFinallyViolation(node))
 
 
