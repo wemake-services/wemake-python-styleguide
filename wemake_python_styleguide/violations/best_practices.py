@@ -2023,17 +2023,18 @@ class PositionalOnlyArgumentsViolation(ASTViolation):
     error_template = 'Found positional-only argument'
     code = 451
 
+
 @final
 class ExecutableMismatchViolation(TokenizeViolation):
     """
-    Forbids to execute the file with shebang incorrectly set
+    Forbids to execute the file with shebang incorrectly set.
 
     Reasoning:
-	Setting the shebangs incorrectly causes executable mismatch
+        Setting the shebang incorrectly causes executable mismatch.
 
     Solution:
-	Ensure the shebang is present on the first line, contains "python",
-	and there is no whitespace before.
+        Ensure the shebang is present on the first line,
+        contains "python", and there is no whitespace before.
 
     Example::
 
