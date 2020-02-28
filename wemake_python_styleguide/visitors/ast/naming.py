@@ -265,7 +265,7 @@ class WrongNameVisitor(BaseNodeVisitor):
         """
         variable_name = name_nodes.get_assigned_name(node)
 
-        if variable_name is not None:
+        if variable_name is not None:  # TODO: support NamedExpr
             self._validator.check_name(node, variable_name)
         self.generic_visit(node)
 
@@ -322,6 +322,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
         """
         names = list(name_nodes.flat_variable_names([node]))
 
+        # TODO: support NamedExpr
         self._check_reassignment(node, names)
         self._check_unique_assignment(node, names)
         self.generic_visit(node)
@@ -391,7 +392,7 @@ class WrongVariableUsageVisitor(BaseNodeVisitor):
         is_inside_class_or_module = isinstance(
             nodes.get_context(node),
             (ast.ClassDef, ast.Module),
-        )
+        )  # TODO: support NamedExpr
         self._check_assign_unused(
             node,
             name_nodes.flat_variable_names([node]),

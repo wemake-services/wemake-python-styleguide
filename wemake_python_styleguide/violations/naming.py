@@ -196,6 +196,9 @@ class WrongModuleNameViolation(SimpleViolation):
         utils.py
         helpers.py
 
+    See also:
+        https://tonsky.me/blog/utils/
+
     .. versionadded:: 0.1.0
 
     """

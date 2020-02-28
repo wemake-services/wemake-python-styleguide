@@ -47,7 +47,7 @@ class ClassComplexityVisitor(BaseNodeVisitor):
             )
 
     def _check_public_attributes(self, node: ast.ClassDef) -> None:
-        attributes = filter(
+        attributes = filter(  # TODO: support NamedExpr
             self._is_public_instance_attr_def,
             walk.get_subnodes_by_type(node, ast.Attribute),
         )
