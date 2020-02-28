@@ -39,7 +39,7 @@ class Test(object):
     def attribute(self):
         ...
 
-    @property.setter
+    @attribute.setter
     def attribute(self):
         ...
 """
@@ -53,7 +53,7 @@ class DataClass(object):
     def attribute(self):
         ...
 
-    @property
+    @attribute.setter
     def attribute(self):
         ...
 """
@@ -67,7 +67,7 @@ class DataClass(object):
     def get_attribute(self):
         ...
 
-    @property
+    @attribute.setter
     def set_attribute(self):
         ...
 """
