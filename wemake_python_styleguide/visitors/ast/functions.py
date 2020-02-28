@@ -246,7 +246,12 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
         self._ensure_used_variables(local_variables)
 
     def _check_argument_default_values(self, node: AnyFunctionDef) -> None:
-        for arg in node.args.defaults:
+        all_defaults = filter(None, (
+            *node.args.defaults,
+            *node.args.kw_defaults,
+        ))
+
+        for arg in all_defaults:
             real_arg = operators.unwrap_unary_node(arg)
             parts = attributes.parts(real_arg) if isinstance(
                 real_arg, ast.Attribute,

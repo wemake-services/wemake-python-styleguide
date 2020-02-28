@@ -27,6 +27,19 @@ class ClassComplexityVisitor(BaseNodeVisitor):
         """
         Checking class definitions.
 
+        We don't check ``NamedExpr`` here, because it is a syntax error
+        to assign values to attributes.
+
+        .. code:: python
+
+            class T:
+                def t(self):
+                    if self.a := True:
+                        print(self.a)
+
+            File "<stdin>", line 3
+            SyntaxError: cannot use named assignment with attribute
+
         Raises:
             TooManyBaseClassesViolation
             TooManyPublicAttributesViolation
@@ -47,7 +60,7 @@ class ClassComplexityVisitor(BaseNodeVisitor):
             )
 
     def _check_public_attributes(self, node: ast.ClassDef) -> None:
-        attributes = filter(  # TODO: support NamedExpr
+        attributes = filter(
             self._is_public_instance_attr_def,
             walk.get_subnodes_by_type(node, ast.Attribute),
         )

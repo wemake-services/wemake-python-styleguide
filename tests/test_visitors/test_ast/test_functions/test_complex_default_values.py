@@ -2,6 +2,7 @@
 
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.best_practices import (
     ComplexDefaultValueViolation,
 )
@@ -10,11 +11,56 @@ from wemake_python_styleguide.visitors.ast.functions import (
 )
 
 function_with_defaults = """
-def function(self, with_default={0}):
+def function(arg, with_default={0}):
     ...
 """
 
+function_with_posonlydefaults = """
+def function(with_default={0}, /):
+    ...
+"""
 
+function_with_kwdefaults1 = """
+def function(*, with_default={0}):
+    ...
+"""
+
+function_with_kwdefaults2 = """
+def function(*, arg, with_default={0}):
+    ...
+"""
+
+method_with_defaults = """
+class Test(object):
+    def function(self, with_default={0}):
+        ...
+"""
+
+method_with_posonlydefaults = """
+class Test(object):
+    def function(self, with_default={0}, /):
+        ...
+"""
+
+method_with_kwdefaults = """
+class Test(object):
+    def function(self, *, with_default={0}):
+        ...
+"""
+
+
+@pytest.mark.parametrize('template', [
+    function_with_defaults,
+    pytest.param(
+        function_with_posonlydefaults,
+        marks=pytest.mark.skipif(not PY38, reason='posonly appered in 3.8'),
+    ),
+    function_with_kwdefaults1,
+    function_with_kwdefaults2,
+    method_with_defaults,
+    method_with_posonlydefaults,
+    method_with_kwdefaults,
+])
 @pytest.mark.parametrize('code', [
     "'PYFLAKES_DOCTEST' in os.environ",
     'call()',
@@ -35,11 +81,12 @@ def test_wrong_function_defaults(
     assert_errors,
     parse_ast_tree,
     default_options,
+    template,
     code,
     mode,
 ):
     """Testing that wrong function defaults are forbidden."""
-    tree = parse_ast_tree(mode(function_with_defaults.format(code)))
+    tree = parse_ast_tree(mode(template.format(code)))
 
     visitor = FunctionDefinitionVisitor(default_options, tree=tree)
     visitor.run()
@@ -47,6 +94,18 @@ def test_wrong_function_defaults(
     assert_errors(visitor, [ComplexDefaultValueViolation])
 
 
+@pytest.mark.parametrize('template', [
+    function_with_defaults,
+    pytest.param(
+        function_with_posonlydefaults,
+        marks=pytest.mark.skipif(not PY38, reason='posonly appered in 3.8'),
+    ),
+    function_with_kwdefaults1,
+    function_with_kwdefaults2,
+    method_with_defaults,
+    method_with_posonlydefaults,
+    method_with_kwdefaults,
+])
 @pytest.mark.parametrize('code', [
     "'string'",
     "b''",
@@ -67,11 +126,12 @@ def test_correct_function_defaults(
     assert_errors,
     parse_ast_tree,
     default_options,
+    template,
     code,
     mode,
 ):
     """Testing that correct function defaults passes validation."""
-    tree = parse_ast_tree(mode(function_with_defaults.format(code)))
+    tree = parse_ast_tree(mode(template.format(code)))
 
     visitor = FunctionDefinitionVisitor(default_options, tree=tree)
     visitor.run()

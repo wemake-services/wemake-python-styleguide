@@ -2,6 +2,7 @@
 
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.complexity import (
     TooComplexAnnotationViolation,
 )
@@ -13,6 +14,26 @@ annassign_template = 'some: {0}'
 
 function_arg_template = """
 def some(arg: {0}):
+    ...
+"""
+
+function_posonly_arg_template = """
+def some(arg: {0}, /):
+    ...
+"""
+
+function_args_template = """
+def some(*args: {0}):
+    ...
+"""
+
+function_kwargs_template = """
+def some(**kwargs: {0}):
+    ...
+"""
+
+function_kwarg_template = """
+def some(*, arg: {0}):
     ...
 """
 
@@ -31,6 +52,13 @@ class Test(object):
 @pytest.mark.parametrize('template', [
     annassign_template,
     function_arg_template,
+    function_args_template,
+    function_kwargs_template,
+    function_kwarg_template,
+    pytest.param(
+        function_posonly_arg_template,
+        marks=pytest.mark.skipif(not PY38, reason='posonly appeared in 3.8'),
+    ),
     function_return_template,
     class_field_template,
 ])
@@ -63,6 +91,13 @@ def test_correct_annotations(
 @pytest.mark.parametrize('template', [
     annassign_template,
     function_arg_template,
+    function_args_template,
+    function_kwargs_template,
+    function_kwarg_template,
+    pytest.param(
+        function_posonly_arg_template,
+        marks=pytest.mark.skipif(not PY38, reason='posonly appeared in 3.8'),
+    ),
     function_return_template,
     class_field_template,
 ])
@@ -99,6 +134,13 @@ def test_complex_annotations(
 @pytest.mark.parametrize('template', [
     annassign_template,
     function_arg_template,
+    function_args_template,
+    function_kwargs_template,
+    function_kwarg_template,
+    pytest.param(
+        function_posonly_arg_template,
+        marks=pytest.mark.skipif(not PY38, reason='posonly appeared in 3.8'),
+    ),
     function_return_template,
     class_field_template,
 ])
