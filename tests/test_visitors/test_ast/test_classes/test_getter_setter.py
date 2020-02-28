@@ -192,7 +192,6 @@ class Test(object):
     child_getter_and_setter,
     nested_getter_and_setter,
     property_getter_and_setter,
-    instance_attribute_class_getter_setter,
     class_getter_and_setter_attributes,
     instance_getter_and_setter_attributes,
     dataclass_property_getter_setter,
@@ -216,6 +215,7 @@ def test_valid_getter_and_setter(
 @pytest.mark.parametrize('code', [
     class_attribute_instance_getter_setter,
     dataclass_getter_setter,
+    instance_attribute_class_getter_setter,
     dataclass_incorrect_property_getter_setter,
 ])
 def test_invalid_getter_and_setter(
@@ -349,7 +349,7 @@ def test_nonmatching_class(
     assignment,
     mode,
 ):
-    """Testing that nonmatching class attribute and getter/setter is allowed."""
+    """Testing that non matching attribute and getter/setter is allowed."""
     test_instance = class_attribute_template.format(
         access, attribute_name, assignment, annotation, method_name,
     )
@@ -372,6 +372,8 @@ def test_nonmatching_class(
 @pytest.mark.parametrize(('attribute_name', 'annotation', 'method_name'), [
     ('attribute', '@classmethod', 'get_attribute(cls)'),
     ('attribute', '@classmethod', 'set_attribute(cls)'),
+    ('attribute_some', '@classmethod', 'get_attribute_some(self)'),
+    ('some_attribute', '@classmethod', 'set_some_attribute(self)'),
 ])
 def test_class_attributes_getter_setter(
     assert_errors,
