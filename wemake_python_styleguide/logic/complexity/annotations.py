@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Counts annotation complexity by getting the nesting level of nodes.
 

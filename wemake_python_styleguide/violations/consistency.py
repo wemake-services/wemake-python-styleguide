@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 These checks limit the Python's inconsistency.
 

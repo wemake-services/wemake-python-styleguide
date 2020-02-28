@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from wemake_python_styleguide.logic.naming.access import is_unused
 
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Naming is hard! It is, in fact, one of the two hardest problems.
 

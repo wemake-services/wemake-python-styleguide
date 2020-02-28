@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 r"""
 Disallows to use incorrect magic comments.
 

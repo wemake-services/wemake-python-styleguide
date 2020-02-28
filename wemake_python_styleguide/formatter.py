@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Our very own ``flake8`` formatter for better error messages.
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from contextlib import suppress
 from typing import ClassVar, Dict, List, Union

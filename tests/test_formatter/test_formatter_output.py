@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 We use direct string assertiong on the formatter.
 

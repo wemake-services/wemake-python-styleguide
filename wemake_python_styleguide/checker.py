@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Entry point to the app.
 

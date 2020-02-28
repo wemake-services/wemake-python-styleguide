@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from inspect import getmro
 from typing import Dict, List, Optional, Tuple

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Constants with default values for plugin's configuration.
 

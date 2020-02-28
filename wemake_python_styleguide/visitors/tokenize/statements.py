@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import tokenize
 from collections import defaultdict
 from typing import ClassVar, DefaultDict, Dict, List, Sequence, Tuple

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from ast import AST, Attribute, Call, ClassDef, walk
 
 from wemake_python_styleguide.logic.nodes import get_context

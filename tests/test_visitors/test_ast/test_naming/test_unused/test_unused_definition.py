@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from textwrap import indent
 
 import pytest

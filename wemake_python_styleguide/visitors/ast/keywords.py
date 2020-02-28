@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from typing import ClassVar, Dict, List, Optional, Type, Union, cast
 

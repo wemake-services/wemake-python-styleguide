@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from itertools import zip_longest
 from typing import Dict, List, Optional, Tuple

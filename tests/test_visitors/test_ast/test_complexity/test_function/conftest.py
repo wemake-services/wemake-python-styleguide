@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 function_with_single_argument = 'def function(arg1): ...'

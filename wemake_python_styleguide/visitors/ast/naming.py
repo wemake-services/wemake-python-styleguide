@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import ast
 import itertools
 from collections import Counter

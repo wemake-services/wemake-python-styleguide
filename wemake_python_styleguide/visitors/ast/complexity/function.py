@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from collections import defaultdict
 from typing import ClassVar, DefaultDict, Dict, List, Tuple, Type, Union

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 These test ensures that each plugin is enabled and working.
 

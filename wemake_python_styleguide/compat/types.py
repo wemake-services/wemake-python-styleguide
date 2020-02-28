@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Module to define fix type differences in different python versions.
 
