@@ -9,8 +9,9 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors.tokenize.comments import ShebangVisitor
 
-RESOURCES_FOLDER = 'test_valid_shebang_resources'
-_python_files_folder = Path(__file__).absolute().parent / RESOURCES_FOLDER
+SHEBANG_RESOURCES_FOLDER = 'test_valid_shebang_resources'
+TESTS_FOLDER = Path(__file__).absolute().parent.parent.parent.parent
+RESOURCES_FULL_PATH = TESTS_FOLDER / 'fixtures' / SHEBANG_RESOURCES_FOLDER
 
 
 @pytest.mark.parametrize('error_code', [
@@ -27,7 +28,7 @@ def test_exe_negative(
     error_code,
 ):
     """Testing cases when no errors should be reported."""
-    filename = _python_files_folder / ''.join([error_code, '_neg.py'])
+    filename = RESOURCES_FULL_PATH / ''.join([error_code, '_neg.py'])
     with open(filename, 'r', encoding='utf-8') as test_file:
         file_content = test_file.read()
         file_tokens = parse_tokens(file_content)
@@ -54,7 +55,7 @@ def test_exe_positive(
     error_code,
 ):
     """Testing cases when errors should be reported."""
-    filename = _python_files_folder / ''.join([error_code, '_pos.py'])
+    filename = RESOURCES_FULL_PATH / ''.join([error_code, '_pos.py'])
     with open(filename, 'r', encoding='utf-8') as test_file:
         file_content = test_file.read()
         file_tokens = parse_tokens(file_content)
