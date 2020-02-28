@@ -42,16 +42,16 @@ def is_forbidden_super_class(class_name: Optional[str]) -> bool:
 
 def get_attributes(
     node: ast.ClassDef,
+    include_annotations: bool,
 ) -> Tuple[List[types.AnyAssign], List[ast.Attribute]]:
     """Returns all non annotated class and instance attributes of a class."""
-    return get_class_attributes(node), get_instance_attributes(node)
-
-
-def get_all_attributes(
-    node: ast.ClassDef,
-) -> Tuple[List[types.AnyAssign], List[ast.Attribute]]:
-    """Returns all class and instance attributes of a class."""
-    return get_annotated_class_attributes(node), get_instance_attributes(node)
+    instance_attributes = get_instance_attributes(node)
+    class_attributes = []
+    if include_annotations:
+        class_attributes = get_annotated_class_attributes(node)
+    else:
+        class_attributes = get_class_attributes(node)
+    return class_attributes, instance_attributes
 
 
 def get_class_attributes(
