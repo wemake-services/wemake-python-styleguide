@@ -7,6 +7,7 @@ from wemake_python_styleguide import types
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
 from wemake_python_styleguide.constants import ALLOWED_BUILTIN_CLASSES
 from wemake_python_styleguide.logic import nodes
+from wemake_python_styleguide.logic.naming import name_nodes
 from wemake_python_styleguide.logic.naming.builtins import is_builtin_name
 
 
@@ -42,16 +43,27 @@ def is_forbidden_super_class(class_name: Optional[str]) -> bool:
 
 def get_attributes(
     node: ast.ClassDef,
-    include_annotations: bool,
 ) -> Tuple[List[types.AnyAssign], List[ast.Attribute]]:
     """Returns all non annotated class and instance attributes of a class."""
+    return get_class_attributes(node), get_instance_attributes(node)
+
+
+def get_all_attributes_stripped(node: ast.ClassDef) -> Set[str]:
+    """
+    Returns names all class and instance attributes of a class stripped.
+
+    Removes all leading underscores from attribute names.
+
+    """
+    class_attributes = get_annotated_class_attributes(node)
     instance_attributes = get_instance_attributes(node)
-    class_attributes = []
-    if include_annotations:
-        class_attributes = get_annotated_class_attributes(node)
-    else:
-        class_attributes = get_class_attributes(node)
-    return class_attributes, instance_attributes
+    return {
+        class_attribute.lstrip('_') for class_attribute
+        in name_nodes.flat_variable_names(class_attributes)
+    }.union({
+        instance.attr.lstrip('_') for instance
+        in instance_attributes
+    })
 
 
 def get_class_attributes(
