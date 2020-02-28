@@ -42,7 +42,8 @@ from wemake_python_styleguide.violations.refactoring import (
 )
 from wemake_python_styleguide.visitors import base, decorators
 
-LocalVariable = Union[ast.Name, ast.ExceptHandler]
+#: Things we treat as local variables.
+_LocalVariable = Union[ast.Name, ast.ExceptHandler]
 
 
 @final
@@ -81,18 +82,20 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
             )
 
     def _check_boolean_arguments(self, node: ast.Call) -> None:
-        # Calls with single boolean argument are allowed
         if len(node.args) == 1 and not node.keywords:
-            return
+            return  # Calls with single boolean argument are allowed
+
         for arg in node.args:
-            if isinstance(arg, ast.NameConstant):
-                # We do not check for `None` values here:
-                if arg.value is True or arg.value is False:
-                    self.add_violation(
-                        BooleanPositionalArgumentViolation(
-                            arg, text=str(arg.value),
-                        ),
-                    )
+            if not isinstance(arg, ast.NameConstant):
+                continue
+
+            # We do not check for `None` values here:
+            if arg.value is True or arg.value is False:
+                self.add_violation(
+                    BooleanPositionalArgumentViolation(
+                        arg, text=str(arg.value),
+                    ),
+                )
 
     def _ensure_super_context(self, node: ast.Call) -> None:
         parent_context = nodes.get_context(node)
@@ -110,6 +113,7 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
             grand_context = nodes.get_context(parent_context)
             if isinstance(grand_context, ast.ClassDef):
                 return
+
         self.add_violation(
             oop.WrongSuperCallViolation(node, text='not inside method'),
         )
@@ -121,8 +125,7 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
             )
 
     def _check_super_call(self, node: ast.Call) -> None:
-        function_name = functions.given_function_called(node, {'super'})
-        if function_name:
+        if functions.given_function_called(node, {'super'}):
             self._ensure_super_context(node)
             self._ensure_super_arguments(node)
 
@@ -214,7 +217,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """
-        Checks regular, lambda, and async functions.
+        Checks regular, ``lambda``, and ``async`` functions.
 
         Raises:
             UnusedVariableIsUsedViolation
@@ -228,7 +231,8 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_unused_variables(self, node: AnyFunctionDef) -> None:
-        local_variables: Dict[str, List[LocalVariable]] = {}
+        local_variables: Dict[str, List[_LocalVariable]] = {}
+
         for body_item in node.body:
             for sub_node in ast.walk(body_item):
                 if isinstance(sub_node, (ast.Name, ast.ExceptHandler)):
@@ -236,6 +240,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
                     self._maybe_update_variable(
                         sub_node, var_name, local_variables,
                     )
+
         self._ensure_used_variables(local_variables)
 
     def _check_argument_default_values(self, node: AnyFunctionDef) -> None:
@@ -262,9 +267,9 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
 
     def _maybe_update_variable(
         self,
-        sub_node: LocalVariable,
+        sub_node: _LocalVariable,
         var_name: str,
-        local_variables: Dict[str, List[LocalVariable]],
+        local_variables: Dict[str, List[_LocalVariable]],
     ) -> None:
         defs = local_variables.get(var_name)
         if defs is not None:
@@ -285,7 +290,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
 
     def _ensure_used_variables(
         self,
-        local_variables: Dict[str, List[LocalVariable]],
+        local_variables: Dict[str, List[_LocalVariable]],
     ) -> None:
         for varname, usages in local_variables.items():
             for node in usages:
@@ -296,7 +301,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
                         ),
                     )
 
-    def _get_variable_name(self, node: LocalVariable) -> str:
+    def _get_variable_name(self, node: _LocalVariable) -> str:
         if isinstance(node, ast.Name):
             return node.id
         return getattr(node, 'name', '')

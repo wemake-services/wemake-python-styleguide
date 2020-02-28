@@ -150,7 +150,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
         """
         if isinstance(node, ast.arg):
             names = {node.arg}
-        else:
+        else:  # TODO: support NamedExpr
             names = set(flat_variable_names([node]))
 
         self._scope(node, names, is_local=True)

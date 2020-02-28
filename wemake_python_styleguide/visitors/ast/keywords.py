@@ -95,7 +95,7 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
         if not isinstance(parent, FunctionNodes):
             return
 
-        returns = len(list(filter(
+        returns = len(tuple(filter(
             lambda return_node: return_node.value is not None,
             walk.get_subnodes_by_type(parent, ast.Return),
         )))
@@ -162,6 +162,7 @@ class WrongKeywordVisitor(BaseNodeVisitor):
                 message = 'del'
             else:
                 message = node.__class__.__qualname__.lower()
+
             self.add_violation(WrongKeywordViolation(node, text=message))
 
 

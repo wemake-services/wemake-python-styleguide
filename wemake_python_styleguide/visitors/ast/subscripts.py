@@ -32,19 +32,19 @@ class SubscriptVisitor(base.BaseNodeVisitor):
             return
 
         lower_ok = (
-            (node.slice.lower is None) or (
+            node.slice.lower is None or (
                 not self._is_zero(node.slice.lower) and
                 not self._is_none(node.slice.lower)
             )
         )
 
         upper_ok = (
-            (node.slice.upper is None) or
+            node.slice.upper is None or
             not self._is_none(node.slice.upper)
         )
 
         step_ok = (
-            (node.slice.step is None) or (
+            node.slice.step is None or (
                 not self._is_one(node.slice.step) and
                 not self._is_none(node.slice.step)
             )
@@ -72,7 +72,7 @@ class SubscriptVisitor(base.BaseNodeVisitor):
 
 @final
 class ImplicitDictGetVisitor(base.BaseNodeVisitor):
-    """Checks for correct `.get` usage in code."""
+    """Checks for correct ``.get`` usage in code."""
 
     def visit_If(self, node: ast.If) -> None:
         """
@@ -104,7 +104,7 @@ class ImplicitDictGetVisitor(base.BaseNodeVisitor):
 
 @final
 class CorrectKeyVisitor(base.BaseNodeVisitor):
-    """Checks for correct `.get` usage in code."""
+    """Checks for correct keys usage in your code."""
 
     def visit_Subscript(self, node: ast.Subscript) -> None:
         """

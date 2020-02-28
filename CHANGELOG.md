@@ -33,6 +33,7 @@ Semantic versioning in our case means:
 - Forbids to use `:=` operator, it now reuses `WPS332` code
 - Forbids to use positional only `/` arguments
 - Forbids to have too many names imported from a single `from ... import`
+- Forbids to use `continue` and `break` in `finally`
 - Adds `__call__` to list of methods that should be on top #1125
 - Allows `_` to be now used as a defined variable
 - Removes `cognitive_complexity` dependency, now it is built in into our linter

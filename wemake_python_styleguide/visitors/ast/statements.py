@@ -39,7 +39,8 @@ from wemake_python_styleguide.violations.refactoring import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
-StatementWithBody = Union[
+#: Statements that do have `.body` attribute.
+_StatementWithBody = Union[
     ast.If,
     AnyFor,
     ast.While,
@@ -51,7 +52,8 @@ StatementWithBody = Union[
     ast.Module,
 ]
 
-AnyCollection = Union[
+#: Simple collections.
+_AnyCollection = Union[
     ast.List,
     ast.Set,
     ast.Dict,
@@ -146,7 +148,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         'AsyncWith': _generally_useless_body,
     }
 
-    def visit_statement_with_body(self, node: StatementWithBody) -> None:
+    def visit_statement_with_body(self, node: _StatementWithBody) -> None:
         """
         Visits statement's body internals.
 
@@ -195,7 +197,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
 
     def _check_useless_node(
         self,
-        node: StatementWithBody,
+        node: _StatementWithBody,
         body: Sequence[ast.stmt],
     ) -> None:
         if len(body) != 1:
@@ -241,7 +243,6 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
                 self.add_violation(MisrefactoredAssignmentViolation(node))
 
     def _check_internals(self, body: Sequence[ast.stmt]) -> None:
-
         after_closing_node = False
         for index, statement in enumerate(body):
             if after_closing_node:
@@ -249,11 +250,9 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
 
             if isinstance(statement, self._closing_nodes):
                 after_closing_node = True
-
-            if isinstance(statement, ast.Expr):
+            elif isinstance(statement, ast.Expr):
                 self._check_expression(statement, is_first=index == 0)
-
-            if isinstance(statement, ast.AugAssign):
+            elif isinstance(statement, ast.AugAssign):
                 self._check_self_misrefactored_assignment(statement)
 
 
@@ -271,7 +270,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
 class WrongParametersIndentationVisitor(BaseNodeVisitor):
     """Ensures that all parameters indentation follow our rules."""
 
-    def visit_collection(self, node: AnyCollection) -> None:
+    def visit_collection(self, node: _AnyCollection) -> None:
         """Checks how collection items indentation."""
         if isinstance(node, ast.Dict):
             elements = normalize_dict_elements(node)
@@ -439,7 +438,7 @@ class AssignmentPatternsVisitor(BaseNodeVisitor):
     def visit_Assign(self, node: ast.Assign) -> None:
         """Checks assignment patterns."""
         self._check_augmented_assign_pattern(node)
-        self.generic_visit(node)
+        self.generic_visit(node)  # TODO: support NamedExpr
 
     def _check_augmented_assign_pattern(
         self,

@@ -30,7 +30,7 @@ def _find_returing_nodes(
     node: ast.Try,
     bad_returning_nodes: AnyNodes,
 ) -> Tuple[bool, bool, bool, bool]:
-    try_has = any(  # TODO: also check ast.Break
+    try_has = any(
         is_contained(line, bad_returning_nodes)
         for line in node.body
     )
@@ -61,7 +61,7 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
 
     def visit_Try(self, node: ast.Try) -> None:
         """
-        Used for find finally in try blocks without except.
+        Used for find ``finally`` in ``try`` blocks without ``except``.
 
         Raises:
             UselessFinallyViolation
@@ -106,8 +106,7 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
 
         if finally_has and (try_has or except_has or else_has):
             self.add_violation(TryExceptMultipleReturnPathViolation(node))
-            return
-        if else_has and try_has:
+        elif else_has and try_has:
             self.add_violation(TryExceptMultipleReturnPathViolation(node))
 
     def _check_exception_order(self, node: ast.Try) -> None:
