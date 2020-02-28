@@ -119,11 +119,13 @@ def get_set_postfixes(node: ast.ClassDef) -> Tuple[Set[str], Set[str]]:
     instance_method_postfixes = set()
     for sub in ast.walk(node):
         if isinstance(sub, FunctionNodes) and functions.is_get_set(node, sub):
+            postfixes = [
+                sub.name.partition('get_')[2],
+                sub.name.partition('set_')[2],
+            ]
             if functions.check_decorator(sub, 'classmethod'):
-                class_method_postfixes.add(sub.name.partition('get_')[2])
-                class_method_postfixes.add(sub.name.partition('set_')[2])
+                class_method_postfixes.update(postfixes)
                 continue
-            instance_method_postfixes.add(sub.name.partition('get_')[2])
-            instance_method_postfixes.add(sub.name.partition('set_')[2])
+            instance_method_postfixes.update(postfixes)
 
     return class_method_postfixes, instance_method_postfixes
