@@ -190,9 +190,19 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         self,
         node: types.AnyFunctionDef,
     ) -> Optional[ast.Call]:
-        # consider next body as possible candidate of useless method:
-        # 1) Optional[docstring]
-        # 2) return statement with call
+        """
+        Fetches ``super`` call statement from function definition.
+
+        Consider next body as possible candidate of useless method:
+
+        1. Optional[docstring]
+        2. single return statement with call
+        3. single statement with call, but without return
+
+        Related:
+        https://github.com/wemake-services/wemake-python-styleguide/issues/1168
+
+        """
         statements_number = len(node.body)
         if statements_number > 2 or statements_number == 0:
             return None
@@ -201,14 +211,13 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
             if not strings.is_doc_string(node.body[0]):
                 return None
 
-        return_stmt = node.body[-1]
-        if not isinstance(return_stmt, ast.Return):
-            return None
-
-        call_stmt = return_stmt.value
-        if not isinstance(call_stmt, ast.Call):
-            return None
-        return call_stmt
+        stmt = node.body[-1]
+        if isinstance(stmt, ast.Return):
+            call_stmt = stmt.value
+            return call_stmt if isinstance(call_stmt, ast.Call) else None
+        elif isinstance(stmt, ast.Expr) and isinstance(stmt.value, ast.Call):
+            return stmt.value
+        return None
 
     def _check_useless_overwritten_methods(
         self,
@@ -362,7 +371,7 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
         class_attributes, instance_attributes = self._get_attributes(node)
         class_attribute_names = set(
             name_nodes.flat_variable_names(class_attributes),
-        )
+        )  # TODO: support NamedExpr
 
         for instance_attr in instance_attributes:
             if instance_attr.attr in class_attribute_names:

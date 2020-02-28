@@ -1,16 +1,22 @@
 # -*- coding: utf-8 -*-
 
 import ast
+from collections import defaultdict
+from typing import DefaultDict
 
 from typing_extensions import final
 
 from wemake_python_styleguide.logic import walk
 from wemake_python_styleguide.logic.naming import access
+from wemake_python_styleguide.logic.nodes import get_parent
+from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations.complexity import (
     TooManyBaseClassesViolation,
+    TooManyMethodsViolation,
     TooManyPublicAttributesViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
+from wemake_python_styleguide.visitors.decorators import alias
 
 
 @final
@@ -41,7 +47,7 @@ class ClassComplexityVisitor(BaseNodeVisitor):
             )
 
     def _check_public_attributes(self, node: ast.ClassDef) -> None:
-        attributes = filter(
+        attributes = filter(  # TODO: support NamedExpr
             self._is_public_instance_attr_def,
             walk.get_subnodes_by_type(node, ast.Attribute),
         )
@@ -62,3 +68,44 @@ class ClassComplexityVisitor(BaseNodeVisitor):
             isinstance(node.value, ast.Name) and
             node.value.id == 'self'
         )
+
+
+@final
+@alias('visit_any_function', (
+    'visit_FunctionDef',
+    'visit_AsyncFunctionDef',
+))
+class MethodMembersVisitor(BaseNodeVisitor):
+    """Counts methods in a single class."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Creates a counter for tracked methods in different classes."""
+        super().__init__(*args, **kwargs)
+        self._methods: DefaultDict[ast.ClassDef, int] = defaultdict(int)
+
+    def visit_any_function(self, node: AnyFunctionDef) -> None:
+        """
+        Counts the number of methods in a single class.
+
+        Raises:
+            TooManyMethodsViolation
+
+        """
+        self._check_method(node)
+        self.generic_visit(node)
+
+    def _check_method(self, node: AnyFunctionDef) -> None:
+        parent = get_parent(node)
+        if isinstance(parent, ast.ClassDef):
+            self._methods[parent] += 1
+
+    def _post_visit(self) -> None:
+        for node, count in self._methods.items():
+            if count > self.options.max_methods:
+                self.add_violation(
+                    TooManyMethodsViolation(
+                        node,
+                        text=str(count),
+                        baseline=self.options.max_methods,
+                    ),
+                )

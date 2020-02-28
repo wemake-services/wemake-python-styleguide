@@ -196,6 +196,9 @@ class WrongModuleNameViolation(SimpleViolation):
         utils.py
         helpers.py
 
+    See also:
+        https://tonsky.me/blog/utils/
+
     .. versionadded:: 0.1.0
 
     """
@@ -388,6 +391,7 @@ class PrivateNameViolation(MaybeASTViolation):
 
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.4.0
+    .. versionchanged:: 0.14.0
 
     """
 
@@ -670,8 +674,11 @@ class UnusedVariableIsUsedViolation(ASTViolation):
     """
     Forbids to have use variables that are marked as unused.
 
-    We discourage using ``_`` at all and variables that start with ``_``
+    We discourage using variables that start with ``_``
     only inside functions and methods as local variables.
+
+    However, we allow to use ``_`` because tools like
+    ``ipython``, ``babel``, and ``django`` enforce it.
 
     Reasoning:
         Sometimes you start to use new logic in your functions,
@@ -683,6 +690,7 @@ class UnusedVariableIsUsedViolation(ASTViolation):
      Solution:
         Rename your variable to be a regular variable
         without a leading underscore.
+        This way it is declared to be used.
 
      Example::
 
@@ -700,6 +708,7 @@ class UnusedVariableIsUsedViolation(ASTViolation):
 
     .. versionadded:: 0.7.0
     .. versionchanged:: 0.12.0
+    .. versionchanged:: 0.14.0
 
     """
 

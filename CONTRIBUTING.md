@@ -8,6 +8,7 @@ you will need to get familiar with these APIs:
 - Writing a `flake8` [plugin](http://flake8.pycqa.org/en/latest/plugin-development/)
 - Using `ast` [module](https://docs.python.org/3/library/ast.html)
 - [Tokenizer for Python source](https://docs.python.org/3/library/tokenize.html)
+- [Tokens tutorial](https://www.asmeurer.com/brown-water-python/tokens.html)
 
 It is also recommended to take a look at these resources:
 
@@ -15,6 +16,14 @@ It is also recommended to take a look at these resources:
 - Missing `ast` [guide](https://greentreesnakes.readthedocs.io/en/latest/)
 - List of `python` [static analysis tools](https://github.com/vintasoftware/python-linters-and-code-analysis)
 - List of `flake8` [extensions](https://github.com/DmytroLitvinov/awesome-flake8-extensions)
+
+
+## First steps
+
+1. Fork [our repo](https://github.com/wemake-services/wemake-python-styleguide), here's the [guide on forking](https://help.github.com/en/github/getting-started-with-github/fork-a-repo)
+2. [Clone your new repo](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) (forked repo) to have a local copy of the code
+3. Apply the required changes! See developer docs on how to work with the code
+4. Send a Pull Request to our original repo. Here's [the helpful guide](https://opensource.com/article/19/7/create-pull-request-github) on how to do that
 
 
 ## Developer's documentation
@@ -46,11 +55,15 @@ you will have to do several things:
 2. Add docs about the error code to the `pages/usage/violations/index.rst`
 3. Add a test that the plugin is working to `tests/test_plugins.py`
 
-
 ## One magic command
 
 Run `make test` to run everything we have!
 
+#### Building on Windows
+
+- Building directly in Windows does not work.
+- Instead, use a Windows Subsystem for Linux (WSL) such as Ubuntu 18.04 LTS that you can get from the Microsoft Store.
+- Clone the project to a part of the WSL where Windows does not overwrite permissions, for example _directly to the home of the WSL_ (do `cd` and then `git clone`). That problem looks like [this](https://github.com/wemake-services/wemake-python-styleguide/issues/1007#issuecomment-562719702) and you can read more about why changing the permissons does not work [here](https://github.com/Microsoft/WSL/issues/81).
 
 ## Tests
 
@@ -104,7 +117,7 @@ This step is mandatory during the CI.
 We also have several helpers to make your development work easier:
 
 - `astboom` is used to visualize `ast` nodes in other python modules,
-  usage: `astboom < my_module.py`
+  usage: `astboom ast < my_module.py`
 - `tokelor` is used to visualize tokens in other python modules,
   usage: `tokelor my_module.py`
 

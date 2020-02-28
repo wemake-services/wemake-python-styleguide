@@ -2,20 +2,10 @@
 
 import ast
 from collections import defaultdict
-from typing import (
-    Callable,
-    ClassVar,
-    DefaultDict,
-    List,
-    Set,
-    Tuple,
-    Union,
-    cast,
-)
+from typing import Callable, DefaultDict, List, Set, Tuple, Union, cast
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import ForNodes, WithNodes
 from wemake_python_styleguide.logic.naming.name_nodes import (
     flat_variable_names,
 )
@@ -27,7 +17,6 @@ from wemake_python_styleguide.types import (
     AnyFor,
     AnyFunctionDef,
     AnyImport,
-    AnyNodes,
     AnyWith,
 )
 from wemake_python_styleguide.violations.best_practices import (
@@ -83,14 +72,15 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
     """
 
     _naming_predicates: Tuple[_NamePredicate, ...] = (
-        predicates.is_function_overload,
         predicates.is_property_setter,
+        predicates.is_function_overload,
         predicates.is_no_value_annotation,
     )
 
     _scope_predicates: Tuple[_ScopePredicate, ...] = (
+        lambda node, names: predicates.is_property_setter(node),
         predicates.is_same_value_reuse,
-        predicates.is_property_setter,
+        predicates.is_same_try_except_cases,
     )
 
     # Blocks:
@@ -162,7 +152,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
         """
         if isinstance(node, ast.arg):
             names = {node.arg}
-        else:
+        else:  # TODO: support NamedExpr
             names = set(flat_variable_names([node]))
 
         self._scope(node, names, is_local=True)
@@ -218,12 +208,6 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
 class AfterBlockVariablesVisitor(base.BaseNodeVisitor):
     """Visitor that ensures that block variables are not used after block."""
 
-    _block_nodes: ClassVar[AnyNodes] = (
-        ast.ExceptHandler,
-        *ForNodes,
-        *WithNodes,
-    )
-
     def __init__(self, *args, **kwargs) -> None:
         """We need to store complex data about variable usages."""
         super().__init__(*args, **kwargs)
@@ -231,11 +215,7 @@ class AfterBlockVariablesVisitor(base.BaseNodeVisitor):
             lambda: defaultdict(list),
         )
 
-    def visit_ExceptHandler(self, node: ast.ExceptHandler) -> None:
-        """Visit exception names definition."""
-        if node.name:
-            self._add_to_scope(node, {node.name})
-        self.generic_visit(node)
+    # Blocks:
 
     def visit_any_for(self, node: AnyFor) -> None:
         """Visit loops."""

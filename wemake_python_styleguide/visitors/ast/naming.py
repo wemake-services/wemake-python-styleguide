@@ -94,12 +94,11 @@ class _NameValidator(object):
         self._ensure_underscores(node, name)
 
     def check_function_signature(self, node: AnyFunctionDefAndLambda) -> None:
-        arguments = functions.get_all_arguments(node)
-        is_lambda = isinstance(node, ast.Lambda)
-        for arg in arguments:
-            should_check_argument = functions.is_first_argument(
-                node, arg.arg,
-            ) and not is_lambda
+        for arg in functions.get_all_arguments(node):
+            should_check_argument = (
+                functions.is_first_argument(node, arg.arg) and
+                not isinstance(node, ast.Lambda)
+            )
 
             self.check_name(
                 arg, arg.arg, is_first_argument=should_check_argument,
@@ -266,7 +265,7 @@ class WrongNameVisitor(BaseNodeVisitor):
         """
         variable_name = name_nodes.get_assigned_name(node)
 
-        if variable_name is not None:
+        if variable_name is not None:  # TODO: support NamedExpr
             self._validator.check_name(node, variable_name)
         self.generic_visit(node)
 
@@ -323,6 +322,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
         """
         names = list(name_nodes.flat_variable_names([node]))
 
+        # TODO: support NamedExpr
         self._check_reassignment(node, names)
         self._check_unique_assignment(node, names)
         self.generic_visit(node)
@@ -392,7 +392,7 @@ class WrongVariableUsageVisitor(BaseNodeVisitor):
         is_inside_class_or_module = isinstance(
             nodes.get_context(node),
             (ast.ClassDef, ast.Module),
-        )
+        )  # TODO: support NamedExpr
         self._check_assign_unused(
             node,
             name_nodes.flat_variable_names([node]),
@@ -436,6 +436,9 @@ class WrongVariableUsageVisitor(BaseNodeVisitor):
     ) -> None:
         if not assigned_name or not access.is_unused(assigned_name):
             return
+
+        if assigned_name == '_':  # This is a special case for django's
+            return  # gettext and similar tools.
 
         if not is_created:
             self.add_violation(

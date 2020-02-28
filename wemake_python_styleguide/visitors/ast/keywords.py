@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from collections import defaultdict
-from typing import ClassVar, Dict, List, Optional, Tuple, Type, Union
+from typing import ClassVar, Dict, List, Optional, Type, Union, cast
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
 from wemake_python_styleguide.logic import walk
-from wemake_python_styleguide.logic.nodes import get_context, get_parent
+from wemake_python_styleguide.logic.naming import name_nodes
+from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree import keywords, operators
 from wemake_python_styleguide.logic.tree.exceptions import get_exception_name
 from wemake_python_styleguide.logic.tree.variables import (
@@ -32,11 +32,8 @@ from wemake_python_styleguide.violations.consistency import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
-NamesAndReturns = Tuple[
-    Dict[str, List[ast.Name]],
-    Dict[str, ast.Return],
-]
-ReturningViolations = Union[
+#: Utility type to work with violations easier.
+_ReturningViolations = Union[
     Type[InconsistentReturnViolation],
     Type[InconsistentYieldViolation],
 ]
@@ -100,7 +97,7 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
         if not isinstance(parent, FunctionNodes):
             return
 
-        returns = len(list(filter(
+        returns = len(tuple(filter(
             lambda return_node: return_node.value is not None,
             walk.get_subnodes_by_type(parent, ast.Return),
         )))
@@ -118,7 +115,7 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
         self,
         node: AnyFunctionDef,
         returning_type,  # mypy is not ok with this type declaration
-        violation: ReturningViolations,
+        violation: _ReturningViolations,
     ):
         return_nodes, has_values = keywords.returning_nodes(
             node, returning_type,
@@ -167,6 +164,7 @@ class WrongKeywordVisitor(BaseNodeVisitor):
                 message = 'del'
             else:
                 message = node.__class__.__qualname__.lower()
+
             self.add_violation(WrongKeywordViolation(node, text=message))
 
 
@@ -293,22 +291,10 @@ class GeneratorKeywordsVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_any_function', (
-    'visit_AsyncFunctionDef',
-    'visit_FunctionDef',
-))
 class ConsistentReturningVariableVisitor(BaseNodeVisitor):
-    """Finds variables that are only used in `return` statements."""
+    """Finds variables that are only used in ``return`` statements."""
 
-    _checking_nodes: ClassVar[AnyNodes] = (
-        ast.Assign,
-        ast.AnnAssign,
-        ast.AugAssign,
-        ast.Return,
-        ast.Name,
-    )
-
-    def visit_any_function(self, node: AnyFunctionDef) -> None:
+    def visit_Return(self, node: ast.Return) -> None:
         """
         Helper to get all ``return`` variables in a function at once.
 
@@ -316,90 +302,64 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
             InconsistentReturnVariableViolation
 
         """
-        self._check_variables_for_return(node)
+        self._check_consistent_variable_return(node)
         self.generic_visit(node)
 
-    def _get_assign_node_variables(self, node: List[ast.AST]) -> List[str]:
-        assign = []
-        for sub_node in node:
-            if isinstance(sub_node, ast.Assign):
-                if isinstance(sub_node.targets[0], ast.Name):
-                    assign.append(sub_node.targets[0].id)
-            if isinstance(sub_node, ast.AnnAssign):
-                if isinstance(sub_node.target, ast.Name):
-                    assign.append(sub_node.target.id)
-        return assign
+    def _check_consistent_variable_return(self, node: ast.Return) -> None:
+        if not node.value or not self._is_named_return(node):
+            return
 
-    def _get_name_nodes_variable(
-        self,
-        node: List[ast.AST],
-    ) -> Dict[str, List[ast.Name]]:
-        names: Dict[str, List[ast.Name]] = defaultdict(list)
-        for sub_node in node:
-            if isinstance(sub_node, ast.Name):
-                if isinstance(sub_node.ctx, ast.Load):
-                    names[sub_node.id].append(sub_node)
-            if isinstance(sub_node, ast.AugAssign):
-                if isinstance(sub_node.target, ast.Name):
-                    variable_name = sub_node.target.id
-                    names[variable_name].append(sub_node.target)
-        return names
+        previous_node = self._get_previous_stmt(node)
+        if not isinstance(previous_node, AssignNodes):
+            return
 
-    def _get_return_node_variables(
-        self,
-        node: List[ast.AST],
-    ) -> NamesAndReturns:
-        returns: Dict[str, List[ast.Name]] = defaultdict(list)
-        return_sub_nodes: Dict[str, ast.Return] = defaultdict()
-        for sub_node in node:
-            if isinstance(sub_node, ast.Return):
-                if isinstance(sub_node.value, ast.Name):
-                    variable_name = sub_node.value.id
-                    returns[variable_name].append(sub_node.value)
-                    return_sub_nodes[variable_name] = sub_node
-        return returns, return_sub_nodes
+        return_names = name_nodes.get_variables_from_node(node.value)
+        previous_names = list(name_nodes.flat_variable_names([previous_node]))
+        self._check_for_violations(node, return_names, previous_names)
 
-    def _is_correct_return_node(
-        self,
-        node: AnyFunctionDef,
-        sub_node: ast.AST,
-    ) -> bool:
-        if get_context(sub_node) != node:
-            return False
-        return isinstance(sub_node, self._checking_nodes)
-
-    def _check_variables_for_return(self, node: AnyFunctionDef) -> None:
-        nodes = list(
-            filter(
-                lambda sub: self._is_correct_return_node(node, sub),
-                ast.walk(node),
-            ),
+    def _is_named_return(self, node: ast.Return) -> bool:
+        if isinstance(node.value, ast.Name):
+            return True
+        return (
+            isinstance(node.value, ast.Tuple) and
+            all(isinstance(elem, ast.Name) for elem in node.value.elts)
         )
-        assign = self._get_assign_node_variables(nodes)
-        names = self._get_name_nodes_variable(nodes)
-        returns, return_sub_nodes = self._get_return_node_variables(nodes)
 
-        returns = {
-            name: returns[name]
-            for name in returns
-            if name in assign
-        }
+    def _get_previous_stmt(self, node: ast.Return) -> Optional[ast.stmt]:
+        """
+        This method gets the previous node in a block.
 
-        self._check_for_violations(names, return_sub_nodes, returns)
+        It is kind of strange. Because nodes might have several bodies.
+        Like ``try`` or ``for`` or ``if`` nodes.
+        ``return`` can also be the only statement there.
+
+        We also use ``cast`` for a reason.
+        Because ``return`` always has a parent.
+        """
+        parent = cast(ast.AST, get_parent(node))
+        for part in ('body', 'orelse', 'finalbody'):
+            block = getattr(parent, part, [])
+            try:
+                current_index = block.index(node)
+            except ValueError:
+                continue
+
+            if current_index > 0:
+                return block[current_index - 1]
+        return None
 
     def _check_for_violations(
         self,
-        names: Dict[str, List[ast.Name]],
-        return_sub_nodes: Dict[str, ast.Return],
-        returns: Dict[str, List[ast.Name]],
+        node: ast.Return,
+        return_names: List[str],
+        previous_names: List[str],
     ) -> None:
-        for variable_name, return_nodes in returns.items():
-            if not set(names[variable_name]) - set(return_nodes):
-                self.add_violation(
-                    InconsistentReturnVariableViolation(
-                        return_sub_nodes[variable_name],
-                    ),
-                )
+        if previous_names == return_names:
+            self.add_violation(
+                InconsistentReturnVariableViolation(
+                    node, text=', '.join(return_names),
+                ),
+            )
 
 
 @final

@@ -47,6 +47,7 @@ VERSION_SPECIFIC = types.MappingProxyType({
 
     'WPS416': int(not PY38),  # only works for `< python3.8`
     'WPS451': int(PY38),  # only works for `>= python3.8`
+    'WPS452': int(PY38),  # only works for `>= python3.8`
 
     'WPS602': 2,
 })
@@ -104,6 +105,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS232': 0,  # logically unacceptable.
     'WPS233': 1,
     'WPS234': 1,
+    'WPS235': 1,
 
     'WPS300': 1,
     'WPS301': 1,
@@ -162,6 +164,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS354': 1,
     'WPS355': 1,
     'WPS356': 1,
+    'WPS357': 0,  # logically unacceptable.
 
     'WPS400': 0,  # defined in ignored violations.
     'WPS401': 0,  # logically unacceptable.
@@ -215,7 +218,8 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS449': 1,
     'WPS450': 1,
     'WPS451': 0,  # defined in version specific table.
-    'WPS452': 1,
+    'WPS452': 1,  # also defined in version specific table.
+    'WPS453': 1,
 
     'WPS500': 1,
     'WPS501': 1,

@@ -82,6 +82,7 @@ Summary
    ConsecutiveYieldsViolation
    BracketBlankLineViolation
    IterableUnpackingViolation
+   LineCompriseCarriageReturnViolation
 
 Consistency checks
 ------------------
@@ -143,6 +144,7 @@ Consistency checks
 .. autoclass:: ConsecutiveYieldsViolation
 .. autoclass:: BracketBlankLineViolation
 .. autoclass:: IterableUnpackingViolation
+.. autoclass:: LineCompriseCarriageReturnViolation
 
 """
 
@@ -1274,6 +1276,15 @@ class InconsistentReturnVariableViolation(ASTViolation):
     """
     Forbids local variable that are only used in ``return`` statements.
 
+    We also allow cases when variable is assigned,
+    then there are some other statements without direct variable access,
+    and the variable is returned.
+    We reserve this use-case to be able
+    to do some extra work before the function returns.
+
+    We also allow to return partial, sorted,
+    or modified tuple items that are defined just above.
+
     Reasoning:
         This is done for consistency and more readable source code.
 
@@ -1286,6 +1297,11 @@ class InconsistentReturnVariableViolation(ASTViolation):
         def some_function():
             return 1
 
+        def other_function():
+            some_value = 1
+            do_something(some_value)
+            return some_value
+
         # Wrong:
         def some_function():
             some_value = 1
@@ -1293,12 +1309,11 @@ class InconsistentReturnVariableViolation(ASTViolation):
 
 
     .. versionadded:: 0.9.0
+    .. versionchanged:: 0.14.0
 
     """
 
-    error_template = (
-        'Found local variable that are only used in `return` statements'
-    )
+    error_template = 'Found variables that are only used for `return`: {0}'
     code = 331
 
 
@@ -1798,6 +1813,7 @@ class VagueImportViolation(ASTViolation):
     Forbids imports that may cause confusion outside of the module.
 
     Names that we forbid to import:
+
     - Common names like ``dumps`` and ``loads``
     - Names starting with ``to_`` and ``from_``
     - Too short names like ``Q`` or ``F``, but we are fine with ``_``
@@ -1808,6 +1824,9 @@ class VagueImportViolation(ASTViolation):
         See ``loads``? It can be anything: ``yaml``, ``toml``, ``json``, etc.
         We are also enforcing consitency with our naming too-short rules here.
 
+    Solution:
+        Use package level imports or import aliases.
+
     See
     :py:data:`~wemake_python_styleguide.constants.VAGUE_IMPORTS_BLACKLIST`
     for the full list of bad import names.
@@ -1816,13 +1835,14 @@ class VagueImportViolation(ASTViolation):
 
         # Correct:
         import json
-        json.loads(content)
+        import dumps  # package names are not checked
+        from json import loads as json_loads
 
         # Wrong:
         from json import loads
-        loads(content)
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 0.14.0
 
     """
 
@@ -2096,9 +2116,30 @@ class IterableUnpackingViolation(ASTViolation):
         [*iterable]
         *iterable, = other_iterable
 
-    .. versionadded:: 0.15.0
+    .. versionadded:: 0.13.0
 
     """
 
     error_template = 'Found an unnecessary iterable unpacking'
     code = 356
+
+
+@final
+class LineCompriseCarriageReturnViolation(TokenizeViolation):
+    r"""
+    Forbids to use ``\r`` (carriage return) in line breaks.
+
+    Reasoning:
+        We enforce Unix-style newlines.
+        We only use newlines (``\n``), not carriage returns.
+        So ``\r`` line breaks not allowed in code.
+
+    Solution:
+        Use only ``\n`` (not ``\r\n`` or ``\r``) to break lines.
+
+    .. versionadded:: 0.14.0
+
+    """
+
+    error_template = r'Found a ``\r`` (carriage return) line break'
+    code = 357

@@ -16,7 +16,7 @@ from _some import protected  # noqa: WPS436
 from some import _protected  # noqa: WPS450
 
 from foo import bar
-from foo.bar import baz  # noqa: WPS452
+from foo.bar import baz  # noqa: WPS453
 
 from .version import get_version  # noqa: WPS300
 
@@ -25,7 +25,7 @@ import import2
 import import3
 import import4
 
-from some_name import (
+from some_name import (  # noqa: WPS235
     name1,
     name2,
     name3,
@@ -695,3 +695,14 @@ extra_new_line = [  # noqa: WPS355
     'wrong',
 ]
 *numbers, = [4, 7]  # noqa: WPS356
+
+for element in range(10):
+    try:  # noqa: WPS452
+        my_print(1)
+    except AnyError:
+        my_print('nope')
+    finally:
+        # See:
+        # https://github.com/wemake-services/wemake-python-styleguide/issues/1082
+        break
+    my_print(4)

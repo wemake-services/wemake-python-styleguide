@@ -44,24 +44,12 @@ class _BaseImportValidator(object):
 
     def _validate_any_import(self, node: AnyImport) -> None:
         self._check_nested_import(node)
-        self._check_alias(node)
         self._check_same_alias(node)
 
     def _check_nested_import(self, node: AnyImport) -> None:
         parent = nodes.get_parent(node)
         if parent is not None and not isinstance(parent, ast.Module):
             self._error_callback(NestedImportViolation(node))
-
-    def _check_alias(self, node: AnyImport) -> None:
-        for alias in node.names:
-            for name in (alias.name, alias.asname):
-                if name is None:
-                    continue
-
-                if imports.is_vague_import(name):
-                    self._error_callback(
-                        VagueImportViolation(node, text=alias.name),
-                    )
 
     def _check_same_alias(self, node: AnyImport) -> None:
         for alias in node.names:
@@ -106,6 +94,7 @@ class _ImportFromValidator(_BaseImportValidator):
         self._check_from_import(node)
         self._check_protected_import_from_module(node)
         self._check_protected_import_from_members(node)
+        self._check_vague_alias(node)
 
     def _check_from_import(self, node: ast.ImportFrom) -> None:
         if node.level != 0:
@@ -130,6 +119,17 @@ class _ImportFromValidator(_BaseImportValidator):
         for alias in node.names:
             if access.is_protected(alias.name):
                 self._error_callback(ProtectedModuleMemberViolation(node))
+
+    def _check_vague_alias(self, node: ast.ImportFrom) -> None:
+        for alias in node.names:
+            for name in filter(None, (alias.name, alias.asname)):
+                is_regular_import = (  # TODO: remove noqa after 0.14 release
+                    (alias.asname and name != alias.asname) or  # noqa: WPS332
+                    not imports.is_vague_import(name)
+                )
+
+                if not is_regular_import:
+                    self._error_callback(VagueImportViolation(node, text=name))
 
 
 @final

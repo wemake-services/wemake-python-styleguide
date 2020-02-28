@@ -71,6 +71,7 @@ Summary
    FloatKeyViolation
    ProtectedModuleMemberViolation
    PositionalOnlyArgumentsViolation
+   LoopControlFinallyViolation
    ImportCollisionViolation
 
 Best practices
@@ -128,6 +129,7 @@ Best practices
 .. autoclass:: FloatKeyViolation
 .. autoclass:: ProtectedModuleMemberViolation
 .. autoclass:: PositionalOnlyArgumentsViolation
+.. autoclass:: LoopControlFinallyViolation
 .. autoclass:: ImportCollisionViolation
 
 """
@@ -1632,14 +1634,10 @@ class ControlVarUsedAfterBlockViolation(ASTViolation):
 
     1. ``for`` loop unpacked variables
     2. ``with`` context variables
-    3. ``except`` exception names
 
     Reasoning:
         Variables leaking from the blocks can damage your logic.
         It might not contain what you think they contain.
-        Some variables even might be deleted right after the block,
-        just like in ``except Exception as exc:``
-        where ``exc`` won't be in scope after ``except`` body.
 
     Solution:
         Use names inside the scope they are defined.
@@ -1661,6 +1659,7 @@ class ControlVarUsedAfterBlockViolation(ASTViolation):
         https://github.com/satwikkansal/wtfPython#-explanation-32
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 0.14.0
 
     """
 
@@ -2027,6 +2026,49 @@ class PositionalOnlyArgumentsViolation(ASTViolation):
     code = 451
 
 
+class LoopControlFinallyViolation(ASTViolation):
+    """
+    Forbids to use ``break`` and ``continue`` in ``finally`` case.
+
+    Related to :class:`~TryExceptMultipleReturnPathViolation`.
+
+    Reasoning:
+        Putting any control statements in `finally` is a
+        terrible practice, because `finally` is implicitly
+        called and can cause damage to your logic with
+        its implicitness.
+        We should not allow it.
+
+    Solution:
+        Remove ``break`` and ``continue`` from ``finally`` blocks.
+
+    Example::
+
+        # Correct:
+        try:
+            ...
+        finally:
+            ...
+
+        # Wrong:
+        try:
+            ...
+        finally:
+            break
+
+        try:
+            ...
+        finally:
+            continue
+
+    .. versionadded:: 0.14.0
+
+    """
+
+    error_template = 'Found `break` or `continue` in `finally` block'
+    code = 452
+
+
 @final
 class ImportCollisionViolation(ASTViolation):
     """
@@ -2057,4 +2099,4 @@ class ImportCollisionViolation(ASTViolation):
     """
 
     error_template = 'Found imports collision: {0}'
-    code = 452
+    code = 453
