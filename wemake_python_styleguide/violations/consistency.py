@@ -1016,6 +1016,7 @@ class EmptyLineAfterCodingViolation(TokenizeViolation):
         'Found missing empty line between `coding` magic comment and code'
     )
     code = 323
+    deprecated = True
 
 
 @final
