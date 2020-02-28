@@ -135,31 +135,6 @@ class Template(object):
         ...
 """
 
-class_attribute_instance_getter_setter = """
-class Test(object):
-    attribute = 1
-
-    def get_attribute(self):
-        ...
-
-    def set_attribute(self):
-        ...
-"""
-
-instance_attribute_class_getter_setter = """
-class Test(object):
-    def __init__(self):
-        self.attribute = 1
-
-    @classmethod
-    def get_attribute(self):
-        ...
-
-    @classmethod
-    def set_attribute(self):
-        ...
-"""
-
 class_attribute_template = """
 class Template(object):
     {0}{1}{2}
@@ -213,9 +188,7 @@ def test_valid_getter_and_setter(
 
 
 @pytest.mark.parametrize('code', [
-    class_attribute_instance_getter_setter,
     dataclass_getter_setter,
-    instance_attribute_class_getter_setter,
     dataclass_incorrect_property_getter_setter,
 ])
 def test_invalid_getter_and_setter(
@@ -277,10 +250,16 @@ def test_nonmatching_instance(
 @pytest.mark.parametrize(('attribute_name', 'annotation', 'method_name'), [
     ('attribute', '', 'get_attribute'),
     ('attribute', '', 'set_attribute'),
+    ('attribute_some', '', 'get_attribute_some'),
+    ('some_attribute', '', 'set_some_attribute'),
+    ('attribute', '@classmethod', 'get_attribute'),
+    ('attribute', '@classmethod', 'set_attribute'),
+    ('attribute', '@staticmethod', 'get_attribute'),
+    ('attribute', '@classmethod', 'set_attribute'),
     ('attribute', '@property', 'get_attribute'),
     ('attribute', '@attribute.setter', 'set_attribute'),
 ])
-def test_instance_and_class_getter_setter(
+def test_instance_getter_setter(
     assert_errors,
     parse_ast_tree,
     default_options,
@@ -301,31 +280,6 @@ def test_instance_and_class_getter_setter(
     visitor.run()
 
     assert_errors(visitor, [UnpythonicGetterSetterViolation])
-
-
-@pytest.mark.parametrize('access', ['', '_', '__'])
-@pytest.mark.parametrize(('first', 'second', 'third'), [
-    ('attribute', 'some', 'other'),
-    ('attribute', 'some', 'some'),
-])
-def test_class_mixed(
-    assert_errors,
-    parse_ast_tree,
-    default_options,
-    access,
-    first,
-    second,
-    third,
-    mode,
-):
-    """Testing correct use of methods with get/set in name."""
-    test_instance = class_mixed.format(access, first, second, third)
-    tree = parse_ast_tree(mode(test_instance))
-
-    visitor = WrongClassVisitor(default_options, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [])
 
 
 @pytest.mark.parametrize('access', [''])
@@ -374,6 +328,10 @@ def test_nonmatching_class(
     ('attribute', '@classmethod', 'set_attribute(cls)'),
     ('attribute_some', '@classmethod', 'get_attribute_some(self)'),
     ('some_attribute', '@classmethod', 'set_some_attribute(self)'),
+    ('attribute', '', 'get_attribute(cls)'),
+    ('attribute', '', 'set_attribute(cls)'),
+    ('attribute', '@staticmethod', 'get_attribute(cls)'),
+    ('attribute', '@staticmethod', 'set_attribute(cls)'),
 ])
 def test_class_attributes_getter_setter(
     assert_errors,
@@ -396,3 +354,28 @@ def test_class_attributes_getter_setter(
     visitor.run()
 
     assert_errors(visitor, [UnpythonicGetterSetterViolation])
+
+
+@pytest.mark.parametrize('access', ['', '_', '__'])
+@pytest.mark.parametrize(('first', 'second', 'third'), [
+    ('attribute', 'some', 'other'),
+    ('attribute', 'some', 'some'),
+])
+def test_class_mixed(
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+    access,
+    first,
+    second,
+    third,
+    mode,
+):
+    """Testing correct use of methods with get/set in name."""
+    test_instance = class_mixed.format(access, first, second, third)
+    tree = parse_ast_tree(mode(test_instance))
+
+    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
