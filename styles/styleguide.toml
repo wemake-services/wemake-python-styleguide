@@ -3,7 +3,6 @@ format = "wemake"
 show-source = true
 
 # Plugins:
-accept-encodings = "utf-8"
 max-line-length = 80
 max-complexity = 6
 
