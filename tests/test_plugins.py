@@ -12,7 +12,6 @@ import subprocess
 
 PLUGINS = (
     'B002',  # flake8-bugbear
-    'C101',  # flake8-coding
     'A001',  # flake8-builtins
     'C400',  # flake8-comprehensions
     'C819',  # flake8-commas

@@ -26,10 +26,6 @@ import pytest
 from wemake_python_styleguide.formatter import WemakeFormatter
 from wemake_python_styleguide.version import pkg_version
 
-IGNORED_VIOLATIONS = (
-    'C101',  # since issue:#1174  decided to remove encoding strings
-)
-
 
 def _safe_output(output: str) -> str:
     """
@@ -101,8 +97,6 @@ def test_formatter_correct(snapshot, cli_options, output):
             'flake8',
             '--disable-noqa',
             '--isolated',
-            '--ignore',
-            ','.join(IGNORED_VIOLATIONS),
             '--format',
             'wemake',
             *cli_options,
