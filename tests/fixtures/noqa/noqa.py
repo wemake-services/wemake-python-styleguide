@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-  # noqa: WPS323
+#!/usr/bin/env pytho # noqa: WPS452 WPS323
+# -*- coding: utf-8 -*-
 """
 This file contains all possible violations.
 
