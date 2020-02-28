@@ -60,9 +60,9 @@ def get_class_attributes(
     """Returns all non annotated class attributes of a class."""
     class_attributes = []
     for sub in ast.walk(node):
-        correct_context = nodes.get_context(sub) == node
+        is_correct_context = nodes.get_context(sub) == node
         has_value = getattr(sub, 'value', None)
-        if isinstance(sub, AssignNodes) and has_value and correct_context:
+        if isinstance(sub, AssignNodes) and has_value and is_correct_context:
             class_attributes.append(sub)
 
     return class_attributes
@@ -74,12 +74,12 @@ def get_annotated_class_attributes(
     """Returns all class attributes of a class."""
     class_attributes = []
     for sub in ast.walk(node):
-        correct_context = nodes.get_context(sub) == node
+        is_correct_context = nodes.get_context(sub) == node
         has_value = getattr(sub, 'value', None)
-        if isinstance(sub, AssignNodes) and has_value and correct_context:
+        if isinstance(sub, AssignNodes) and has_value and is_correct_context:
             class_attributes.append(sub)
             continue
-        if isinstance(sub, ast.AnnAssign) and correct_context:
+        if isinstance(sub, ast.AnnAssign) and is_correct_context:
             class_attributes.append(sub)
 
     return class_attributes
@@ -105,8 +105,8 @@ def getter_setter_postfixes(node: ast.ClassDef) -> Set[str]:
     """
     method_postfixes = set()
     for sub in ast.walk(node):
-        correct_context = nodes.get_context(sub) == node
-        if isinstance(sub, FunctionNodes) and correct_context:
+        is_correct_context = nodes.get_context(sub) == node
+        if isinstance(sub, FunctionNodes) and is_correct_context:
             if any(sub.name.startswith(prefix) for prefix in ('get_', 'set_')):
                 method_postfixes.add(sub.name.partition('get_')[2])
                 method_postfixes.add(sub.name.partition('set_')[2])
