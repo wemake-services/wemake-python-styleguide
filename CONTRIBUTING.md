@@ -47,11 +47,15 @@ you will have to do several things:
 2. Add docs about the error code to the `pages/usage/violations/index.rst`
 3. Add a test that the plugin is working to `tests/test_plugins.py`
 
-
 ## One magic command
 
 Run `make test` to run everything we have!
 
+#### Building on Windows
+
+- Building directly in Windows does not work.
+- Instead, use a Windows Subsystem for Linux (WSL) such as Ubuntu 18.04 LTS that you can get from the Microsoft Store. 
+- Clone the project to a part of the WSL where Windows does not overwrite permissions, for example _directly to the home of the WSL_ (do `cd` and then `git clone`). That problem looks like [this](https://github.com/wemake-services/wemake-python-styleguide/issues/1007#issuecomment-562719702) and you can read more about why changing the permissons does not work [here](https://github.com/Microsoft/WSL/issues/81).
 
 ## Tests
 

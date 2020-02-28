@@ -40,6 +40,8 @@ Semantic versioning in our case means:
 - Adds baseline information for all complexity violation messages: `x > baseline`
 - Changes how cognitive complexity is calculated
 - Adds support for positional arguments in different checks
+- Forbids to use `continue` and `break` in `finally`. It is a terrible practice, because 
+  `finally` is implicitly called and can cause damage to logic with its implicitness.
 
 ### Bugfixes
 

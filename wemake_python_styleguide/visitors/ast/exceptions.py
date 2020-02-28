@@ -15,6 +15,7 @@ from wemake_python_styleguide.violations.best_practices import (
     BaseExceptionViolation,
     DuplicateExceptionViolation,
     IncorrectExceptOrderViolation,
+    LoopControlFinallyViolation,
     TryExceptMultipleReturnPathViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
@@ -69,12 +70,14 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
             DuplicateExceptionViolation
             TryExceptMultipleReturnPathViolation
             IncorrectExceptOrderViolation
+            LoopControlFinallyViolation
 
         """
         self._check_if_needs_except(node)
         self._check_duplicate_exceptions(node)
         self._check_return_path(node)
         self._check_exception_order(node)
+        self._check_break_or_continue_in_finally(node)
         self.generic_visit(node)
 
     def _check_if_needs_except(self, node: ast.Try) -> None:
@@ -122,6 +125,15 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
                     self.add_violation(IncorrectExceptOrderViolation(node))
                 else:
                     seen.add(exception)
+
+    def _check_break_or_continue_in_finally(self, node: ast.Try) -> None:
+        has_wrong_nodes = any(
+            is_contained(line, (ast.Break, ast.Continue))
+            for line in node.finalbody
+        )
+
+        if has_wrong_nodes:
+            self.add_violation(LoopControlFinallyViolation(node))
 
 
 @final
