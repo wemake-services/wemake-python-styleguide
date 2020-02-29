@@ -41,6 +41,7 @@ class JonesComplexityVisitor(BaseNodeVisitor):
     _ignored_nodes = (
         ast.ClassDef,
         *FunctionNodes,
+        ast.expr_context,
     )
 
     def __init__(self, *args, **kwargs) -> None:
@@ -62,6 +63,7 @@ class JonesComplexityVisitor(BaseNodeVisitor):
         """
         line_number = getattr(node, 'lineno', None)
         is_ignored = isinstance(node, self._ignored_nodes)
+
         if line_number is not None and not is_ignored:
             if not self._maybe_ignore_child(node):
                 self._lines[line_number].append(node)
@@ -88,6 +90,7 @@ class JonesComplexityVisitor(BaseNodeVisitor):
 
         node_counts = [len(nodes) for nodes in self._lines.values()]
         total_count = median(node_counts) if node_counts else 0
+
         if total_count > self.options.max_jones_score:
             self.add_violation(
                 JonesScoreViolation(
@@ -98,6 +101,6 @@ class JonesComplexityVisitor(BaseNodeVisitor):
 
     def _maybe_ignore_child(self, node: ast.AST) -> bool:
         if isinstance(node, ast.AnnAssign):
-            self._to_ignore.append(node.annotation)
+            self._to_ignore.extend(ast.walk(node.annotation))
 
         return node in self._to_ignore

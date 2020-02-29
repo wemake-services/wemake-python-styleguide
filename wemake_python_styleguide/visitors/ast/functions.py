@@ -168,8 +168,9 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
         return bool(
             func_called and len(node.args) == self._functions[func_called],
         ) or any(
-            call.endswith(post) and len(node.args) == self._postfixes[post]
+            call.endswith(post)
             for post in self._postfixes
+            if len(node.args) == self._postfixes[post]
         )
 
 
