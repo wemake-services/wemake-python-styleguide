@@ -3,7 +3,6 @@
 import pytest
 
 from wemake_python_styleguide.violations.complexity import (
-    JonesScoreViolation,
     LineComplexityViolation,
 )
 from wemake_python_styleguide.visitors.ast.complexity.jones import (
