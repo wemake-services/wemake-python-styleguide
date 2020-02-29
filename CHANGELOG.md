@@ -13,8 +13,8 @@ Semantic versioning in our case means:
 
 ### Features
 
-- **Breaking**: removes `flake8-executable`, now using `WPS452` instead of `EXE001..EXE005`,
-- **Breaking**: removes `flake8-print`, now using `WPS421` instead of `T001`,
+- **Breaking**: removes `flake8-executable`, now using `WPS452` instead of `EXE001..EXE005`
+- **Breaking**: removes `flake8-print`, now using `WPS421` instead of `T001`
 - **Breaking**: removes `flake8-annotations-complexity`,
   now using `WPS234` instead of `TAE002`
 - **Breaking**: `WPS441` is no longer triggered for `except` blocks,
@@ -40,7 +40,7 @@ Semantic versioning in our case means:
 - Adds baseline information for all complexity violation messages: `x > baseline`
 - Changes how cognitive complexity is calculated
 - Adds support for positional arguments in different checks
-- Forbids to use `continue` and `break` in `finally`. It is a terrible practice, because 
+- Forbids to use `continue` and `break` in `finally`. It is a terrible practice, because
   `finally` is implicitly called and can cause damage to logic with its implicitness.
 
 ### Bugfixes

@@ -18,7 +18,6 @@ That's how a basic ``comment`` type token looks like:
 All comments have the same type.
 """
 
-import os
 import re
 import tokenize
 from typing import ClassVar, FrozenSet, Optional
@@ -27,11 +26,12 @@ from typing.re import Pattern
 from typing_extensions import final
 
 from wemake_python_styleguide.constants import MAX_NO_COVER_COMMENTS
+from wemake_python_styleguide.logic.system import file_is_executable
 from wemake_python_styleguide.logic.tokens import NEWLINES, get_comment_text
 from wemake_python_styleguide.violations.best_practices import (
-    ExecutableMismatchViolation,
     OveruseOfNoCoverCommentViolation,
     OveruseOfNoqaCommentViolation,
+    ShebangViolation,
     WrongDocCommentViolation,
     WrongMagicCommentViolation,
 )
@@ -191,15 +191,26 @@ class FileMagicCommentsVisitor(BaseTokenVisitor):
 class ShebangVisitor(BaseTokenVisitor):
     """Checks the first shebang in the file."""
 
+    _shebang: ClassVar[Pattern] = re.compile(r'(\s*)#!')
+    _python_executable: ClassVar[str] = 'python'
+    _comments_or_newlines = NEWLINES.union({tokenize.COMMENT})
+    _violation_token = tokenize.TokenInfo(
+        tokenize.ENDMARKER,
+        '',
+        start=(0, 1),
+        end=(0, 1),
+        line='',
+    )
+
     def visit(self, token: tokenize.TokenInfo) -> None:
         """
         Checks if there is an executable mismatch.
 
         Raises:
-            ExecutableMismatchViolation
+            ShebangViolation
 
         """
-        is_first_token = (token == self.file_tokens[0])
+        is_first_token = token == self.file_tokens[0]
 
         if not is_first_token:
             return
@@ -211,14 +222,14 @@ class ShebangVisitor(BaseTokenVisitor):
             self._check_valid_shebang(shebang_token)
 
     def _check_valid_shebang_line(self, line) -> bool:
-        return re.match(r'(\s*)#!', line) is not None
+        return self._shebang.match(line) is not None
 
     def _get_shebang_token(self) -> Optional[tokenize.TokenInfo]:
         all_tokens = iter(self.file_tokens)
 
         current_token = next(all_tokens)
 
-        while current_token.exact_type in NEWLINES.union({tokenize.COMMENT}):
+        while current_token.exact_type in self._comments_or_newlines:
             if self._check_valid_shebang_line(current_token.line):
                 return current_token
 
@@ -227,20 +238,20 @@ class ShebangVisitor(BaseTokenVisitor):
         return None
 
     def _check_executable_mismatch(self, shebang_token) -> None:
-        is_executable = os.access(self.filename, os.X_OK)
+        is_executable = file_is_executable(self.filename)
 
         if is_executable and shebang_token is None:
             self.add_violation(
-                ExecutableMismatchViolation(
-                    node=self.file_tokens[0],
+                ShebangViolation(
+                    node=self._violation_token,
                     text='The file is executable but no shebang is present',
                 ),
             )
 
         if not is_executable and shebang_token is not None:
             self.add_violation(
-                ExecutableMismatchViolation(
-                    node=shebang_token,
+                ShebangViolation(
+                    node=self._violation_token,
                     text='Shebang is present but the file is not executable',
                 ),
             )
@@ -249,26 +260,26 @@ class ShebangVisitor(BaseTokenVisitor):
         token_line = shebang_token.line
         on_first_line = shebang_token.start[0] == 1
         first_line_token = shebang_token.start[1] == 0
-        if 'python' not in token_line:
+        if self._python_executable not in token_line:
             self.add_violation(
-                ExecutableMismatchViolation(
-                    node=shebang_token,
+                ShebangViolation(
+                    node=self._violation_token,
                     text='Shebang is present but does not contain \"python\"',
                 ),
             )
 
         if not first_line_token:
             self.add_violation(
-                ExecutableMismatchViolation(
-                    node=shebang_token,
+                ShebangViolation(
+                    node=self._violation_token,
                     text='There is whitespace before shebang',
                 ),
             )
 
         if not on_first_line:
             self.add_violation(
-                ExecutableMismatchViolation(
-                    node=shebang_token,
+                ShebangViolation(
+                    node=self._violation_token,
                     text='There are blank or comment lines before shebang',
                 ),
             )

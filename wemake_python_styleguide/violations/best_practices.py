@@ -72,7 +72,7 @@ Summary
    ProtectedModuleMemberViolation
    PositionalOnlyArgumentsViolation
    LoopControlFinallyViolation
-   ExecutableMismatchViolation
+   ShebangViolation
 
 Best practices
 --------------
@@ -130,7 +130,7 @@ Best practices
 .. autoclass:: ProtectedModuleMemberViolation
 .. autoclass:: PositionalOnlyArgumentsViolation
 .. autoclass:: LoopControlFinallyViolation
-.. autoclass:: ExecutableMismatchViolation
+.. autoclass:: ShebangViolation
 
 """
 
@@ -2070,9 +2070,16 @@ class LoopControlFinallyViolation(ASTViolation):
 
 
 @final
-class ExecutableMismatchViolation(TokenizeViolation):
+class ShebangViolation(TokenizeViolation):
     """
     Forbids to execute the file with shebang incorrectly set.
+
+    A violation is raised in these cases :
+        - Shebang is present but the file is not executable.
+        - The file is executable but no shebang is present.
+        - Shebang is present but does not contain "python".
+        - There is whitespace before shebang.
+        - There are blank or comment lines before shebang.
 
     Reasoning:
         Setting the shebang incorrectly causes executable mismatch.
@@ -2088,7 +2095,7 @@ class ExecutableMismatchViolation(TokenizeViolation):
 
         # Wrong:
         #!/usr/bin/env
-         #!/usr/bin/env python
+            #!/usr/bin/env python
 
     .. versionadded:: 0.14.0
 
