@@ -66,6 +66,8 @@ Semantic versioning in our case means:
 - Fixes `WPS331` reporting cases that do require some extra steps before return
 - Fixes `WPS612` not reporing `super()` calls without return
 - Fixes `WPS404` not raising on wrong `*` and `/` defaults
+- Fixes `WPS425` raising on `.get`, `getattr`, `setattr`,
+  and other builtin functions without keyword arguments
 
 ### Misc
 

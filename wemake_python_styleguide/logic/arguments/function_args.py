@@ -2,7 +2,7 @@
 
 import ast
 from itertools import zip_longest
-from typing import Dict, List, Optional, Tuple
+from typing import List, Mapping, Optional, Tuple
 
 from wemake_python_styleguide import constants, types
 from wemake_python_styleguide.compat.functions import get_posonlyargs
@@ -105,7 +105,7 @@ def _has_same_args(  # noqa: WPS231
 
 def _clean_call_keyword_args(
     call: ast.Call,
-) -> Tuple[Dict[str, ast.keyword], List[ast.keyword]]:
+) -> Tuple[Mapping[str, ast.keyword], List[ast.keyword]]:
     prepared_kw_args = {}
     real_kw_args = []
     for kw in call.keywords:
