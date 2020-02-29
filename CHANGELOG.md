@@ -69,6 +69,8 @@ Semantic versioning in our case means:
 - Fixes `WPS404` not raising on wrong `*` and `/` defaults
 - Fixes `WPS425` raising on `.get`, `getattr`, `setattr`,
   and other builtin functions without keyword arguments
+- Fixes `WPS221` reporting differently on different `python` versions
+- Fixes `WPS221` reporting nested variable annotations
 
 ### Misc
 
