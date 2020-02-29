@@ -1,25 +1,21 @@
 # -*- coding: utf-8 -*-
 
-from os import chmod
-
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import ShebangViolation
 from wemake_python_styleguide.visitors.tokenize.comments import ShebangVisitor
 
-TEMP_FOLDER = 'tmp'
-MODE_EXECUTABLE = 0o755
-MODE_NON_EXECUTABLE = 0o644
-
 # Correct
 
-exe001_neg_shouldnt_be_executable = """if __name__ == '__main__':
+exe001_neg_shouldnt_be_executable = """
+if __name__ == '__main__':
     print('I am not executable.')
 """
 exe001_neg_executable = False
 exe001_neg_filename = 'exe001_neg.py'
 
-exe002_neg_shouldnt_be_executable = """def a_lib_function():
+exe002_neg_shouldnt_be_executable = """
+def a_lib_function():
     print('I am not executable.')
 """
 exe002_neg_executable = False
@@ -59,7 +55,8 @@ if __name__ == '__main__':
 exe001_pos_executable = False
 exe001_pos_filename = 'exe001_pos.py'
 
-exe002_pos_shouldnt_be_executable = """def a_lib_function():
+exe002_pos_shouldnt_be_executable = """
+def a_lib_function():
     print("I shouldn't be executable.")
 """
 exe002_pos_executable = True
@@ -93,29 +90,34 @@ exe005_pos_filename = 'exe005_pos.py'
 
 
 @pytest.mark.parametrize(('filename', 'file_content', 'executable'), [
-    (exe001_neg_filename,
-     exe001_neg_shouldnt_be_executable,
-     exe001_neg_executable,
-     ),
-    (exe002_neg_filename,
-     exe002_neg_shouldnt_be_executable,
-     exe002_neg_executable,
-     ),
-    (exe003_neg_filename,
-     exe003_neg_good_shebang,
-     exe003_neg_executable,
-     ),
-    (exe004_neg_filename,
-     exe004_neg_no_space_before_shebang,
-     exe004_neg_executable,
-     ),
-    (exe005_neg_filename,
-     exe005_neg_nothing_before_shebang,
-     exe005_neg_executable,
-     ),
+    (
+        exe001_neg_filename,
+        exe001_neg_shouldnt_be_executable,
+        exe001_neg_executable,
+    ),
+    (
+        exe002_neg_filename,
+        exe002_neg_shouldnt_be_executable,
+        exe002_neg_executable,
+    ),
+    (
+        exe003_neg_filename,
+        exe003_neg_good_shebang,
+        exe003_neg_executable,
+    ),
+    (
+        exe004_neg_filename,
+        exe004_neg_no_space_before_shebang,
+        exe004_neg_executable,
+    ),
+    (
+        exe005_neg_filename,
+        exe005_neg_nothing_before_shebang,
+        exe005_neg_executable,
+    ),
 ])
 def test_exe_negative(
-    tmp_path,
+    make_file,
     assert_errors,
     parse_file_tokens,
     default_options,
@@ -124,19 +126,12 @@ def test_exe_negative(
     executable,
 ):
     """Testing cases when no errors should be reported."""
-    temp_folder = tmp_path / TEMP_FOLDER
-    temp_folder.mkdir()
-    test_file = temp_folder / filename
-    file_mode = MODE_EXECUTABLE if executable else MODE_NON_EXECUTABLE
-
-    test_file.write_text(file_content)
-    chmod(test_file.as_posix(), file_mode)
-
-    file_tokens = parse_file_tokens(test_file)
+    path_to_file = make_file(filename, file_content, executable)
+    file_tokens = parse_file_tokens(path_to_file)
 
     visitor = ShebangVisitor(
         default_options,
-        filename=test_file.as_posix(),
+        filename=path_to_file,
         file_tokens=file_tokens,
     )
     visitor.run()
@@ -144,29 +139,34 @@ def test_exe_negative(
 
 
 @pytest.mark.parametrize(('filename', 'file_content', 'executable'), [
-    (exe001_pos_filename,
-     exe001_pos_should_be_executable,
-     exe001_pos_executable,
-     ),
-    (exe002_pos_filename,
-     exe002_pos_shouldnt_be_executable,
-     exe002_pos_executable,
-     ),
-    (exe003_pos_filename,
-     exe003_pos_good_shebang,
-     exe003_pos_executable,
-     ),
-    (exe004_pos_filename,
-     exe004_pos_no_space_before_shebang,
-     exe004_pos_executable,
-     ),
-    (exe005_pos_filename,
-     exe005_pos_nothing_before_shebang,
-     exe005_pos_executable,
-     ),
+    (
+        exe001_pos_filename,
+        exe001_pos_should_be_executable,
+        exe001_pos_executable,
+    ),
+    (
+        exe002_pos_filename,
+        exe002_pos_shouldnt_be_executable,
+        exe002_pos_executable,
+    ),
+    (
+        exe003_pos_filename,
+        exe003_pos_good_shebang,
+        exe003_pos_executable,
+    ),
+    (
+        exe004_pos_filename,
+        exe004_pos_no_space_before_shebang,
+        exe004_pos_executable,
+    ),
+    (
+        exe005_pos_filename,
+        exe005_pos_nothing_before_shebang,
+        exe005_pos_executable,
+    ),
 ])
-def test_exe_positive(
-    tmp_path,
+def test_exe_posititve(
+    make_file,
     assert_errors,
     parse_file_tokens,
     default_options,
@@ -174,19 +174,13 @@ def test_exe_positive(
     file_content,
     executable,
 ):
-    """Testing cases when errors should be reported."""
-    temp_folder = tmp_path / TEMP_FOLDER
-    temp_folder.mkdir()
-    test_file = temp_folder / filename
-    file_mode = MODE_EXECUTABLE if executable else MODE_NON_EXECUTABLE
+    """Testing cases when no errors should be reported."""
+    path_to_file = make_file(filename, file_content, executable)
+    file_tokens = parse_file_tokens(path_to_file)
 
-    test_file.write_text(file_content)
-    chmod(test_file.as_posix(), file_mode)
-
-    file_tokens = parse_file_tokens(test_file)
     visitor = ShebangVisitor(
         default_options,
-        filename=test_file.as_posix(),
+        filename=path_to_file,
         file_tokens=file_tokens,
     )
     visitor.run()

@@ -26,7 +26,7 @@ from typing.re import Pattern
 from typing_extensions import final
 
 from wemake_python_styleguide.constants import MAX_NO_COVER_COMMENTS
-from wemake_python_styleguide.logic.system import file_is_executable
+from wemake_python_styleguide.logic.system import is_executable_file
 from wemake_python_styleguide.logic.tokens import NEWLINES, get_comment_text
 from wemake_python_styleguide.violations.best_practices import (
     OveruseOfNoCoverCommentViolation,
@@ -193,13 +193,8 @@ class ShebangVisitor(BaseTokenVisitor):
 
     _shebang: ClassVar[Pattern] = re.compile(r'(\s*)#!')
     _python_executable: ClassVar[str] = 'python'
-    _comments_or_newlines = NEWLINES.union({tokenize.COMMENT})
-    _violation_token = tokenize.TokenInfo(
-        tokenize.ENDMARKER,
-        '',
-        start=(0, 1),
-        end=(0, 1),
-        line='',
+    _comments_or_newlines: ClassVar[FrozenSet[int]] = NEWLINES.union(
+        {tokenize.COMMENT},
     )
 
     def visit(self, token: tokenize.TokenInfo) -> None:
@@ -238,12 +233,11 @@ class ShebangVisitor(BaseTokenVisitor):
         return None
 
     def _check_executable_mismatch(self, shebang_token) -> None:
-        is_executable = file_is_executable(self.filename)
+        is_executable = is_executable_file(self.filename)
 
         if is_executable and shebang_token is None:
             self.add_violation(
                 ShebangViolation(
-                    node=self._violation_token,
                     text='The file is executable but no shebang is present',
                 ),
             )
@@ -251,7 +245,6 @@ class ShebangVisitor(BaseTokenVisitor):
         if not is_executable and shebang_token is not None:
             self.add_violation(
                 ShebangViolation(
-                    node=self._violation_token,
                     text='Shebang is present but the file is not executable',
                 ),
             )
@@ -263,7 +256,6 @@ class ShebangVisitor(BaseTokenVisitor):
         if self._python_executable not in token_line:
             self.add_violation(
                 ShebangViolation(
-                    node=self._violation_token,
                     text='Shebang is present but does not contain \"python\"',
                 ),
             )
@@ -271,7 +263,6 @@ class ShebangVisitor(BaseTokenVisitor):
         if not first_line_token:
             self.add_violation(
                 ShebangViolation(
-                    node=self._violation_token,
                     text='There is whitespace before shebang',
                 ),
             )
@@ -279,7 +270,6 @@ class ShebangVisitor(BaseTokenVisitor):
         if not on_first_line:
             self.add_violation(
                 ShebangViolation(
-                    node=self._violation_token,
                     text='There are blank or comment lines before shebang',
                 ),
             )

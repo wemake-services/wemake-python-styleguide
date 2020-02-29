@@ -2070,7 +2070,7 @@ class LoopControlFinallyViolation(ASTViolation):
 
 
 @final
-class ShebangViolation(TokenizeViolation):
+class ShebangViolation(SimpleViolation):
     """
     Forbids to execute the file with shebang incorrectly set.
 
