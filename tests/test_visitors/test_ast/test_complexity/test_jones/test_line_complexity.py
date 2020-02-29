@@ -2,7 +2,10 @@
 
 import pytest
 
-from wemake_python_styleguide.violations.complexity import LineComplexityViolation, JonesScoreViolation
+from wemake_python_styleguide.violations.complexity import (
+    JonesScoreViolation,
+    LineComplexityViolation,
+)
 from wemake_python_styleguide.visitors.ast.complexity.jones import (
     JonesComplexityVisitor,
 )
@@ -151,7 +154,6 @@ def test_exact_complexity(parse_ast_tree, default_options, code, complexity):
     visitor.run()
 
     assert len(visitor._lines) == 1  # noqa: WPS437
-    print(visitor._lines)
     assert len(visitor._lines[1]) == complexity  # noqa: WPS437
 
 
