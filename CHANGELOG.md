@@ -82,6 +82,7 @@ Semantic versioning in our case means:
 - Adds `python3.8` to the CI
 - Update `astboom` version to 0.4.2
 
+
 ## 0.13.4
 
 This is the last `0.13.x` supporting release,
