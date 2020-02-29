@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- # noqa: WPS323
+# -*- coding: utf-8 -*-  # noqa: WPS323
 """
 This file contains all possible violations.
 
