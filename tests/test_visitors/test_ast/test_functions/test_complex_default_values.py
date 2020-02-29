@@ -58,7 +58,10 @@ class Test(object):
     function_with_kwdefaults1,
     function_with_kwdefaults2,
     method_with_defaults,
-    method_with_posonlydefaults,
+    pytest.param(
+        method_with_posonlydefaults,
+        marks=pytest.mark.skipif(not PY38, reason='posonly appered in 3.8'),
+    ),
     method_with_kwdefaults,
 ])
 @pytest.mark.parametrize('code', [
@@ -103,7 +106,10 @@ def test_wrong_function_defaults(
     function_with_kwdefaults1,
     function_with_kwdefaults2,
     method_with_defaults,
-    method_with_posonlydefaults,
+    pytest.param(
+        method_with_posonlydefaults,
+        marks=pytest.mark.skipif(not PY38, reason='posonly appered in 3.8'),
+    ),
     method_with_kwdefaults,
 ])
 @pytest.mark.parametrize('code', [
