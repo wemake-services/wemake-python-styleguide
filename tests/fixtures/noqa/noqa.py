@@ -700,7 +700,7 @@ class AttributeGetter(object):  # noqa: WPS614
         self.attribute = 1
 
     def get_attribute(self):
-        return 1
+        anti_wps428 = 1
 
 for element in range(10):
     try:  # noqa: WPS452
