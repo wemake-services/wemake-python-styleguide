@@ -96,5 +96,5 @@ def _apply_if_statement(statement: ast.If) -> None:
     for child in ast.iter_child_nodes(statement):
         if isinstance(child, ast.If):
             if child in statement.orelse:
-                setattr(statement, 'wps_if_chained', True)  # noqa: WPS425
+                setattr(statement, 'wps_if_chained', True)  # noqa: B010
                 setattr(child, 'wps_if_chain', statement)  # noqa: B010

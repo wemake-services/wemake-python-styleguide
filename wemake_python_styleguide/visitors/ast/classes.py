@@ -371,7 +371,7 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
         class_attributes, instance_attributes = self._get_attributes(node)
         class_attribute_names = set(
             name_nodes.flat_variable_names(class_attributes),
-        )
+        )  # TODO: support NamedExpr
 
         for instance_attr in instance_attributes:
             if instance_attr.attr in class_attribute_names:

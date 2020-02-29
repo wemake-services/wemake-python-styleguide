@@ -34,14 +34,13 @@ Semantic versioning in our case means:
 - Forbids to use `:=` operator, it now reuses `WPS332` code
 - Forbids to use positional only `/` arguments
 - Forbids to have too many names imported from a single `from ... import`
+- Forbids to use `continue` and `break` in `finally`
 - Adds `__call__` to list of methods that should be on top #1125
 - Allows `_` to be now used as a defined variable
 - Removes `cognitive_complexity` dependency, now it is built in into our linter
 - Adds baseline information for all complexity violation messages: `x > baseline`
 - Changes how cognitive complexity is calculated
 - Adds support for positional arguments in different checks
-- Forbids to use `continue` and `break` in `finally`. It is a terrible practice, because
-  `finally` is implicitly called and can cause damage to logic with its implicitness.
 
 ### Bugfixes
 
@@ -50,7 +49,8 @@ Semantic versioning in our case means:
   `ast.Continue`, `ast.Break`, and `ast.Raise` statements
 - Fixes that cognitive complexity was ignoring `ast.AsyncFor` loops
 - Fixes that annotation complexity was not reported for `async` functions
-- Fixes that annotation complexity was not reported from lists
+- Fixes that annotation complexity was not reported for lists
+- Fixes that annotation complexity was not reported for `*` and `/` args
 - Fixes bug when `TooManyPublicAttributesViolation`
   was counting duplicate fields
 - Fixes negated conditions `WPS504` was not reported for `if` expressions
@@ -66,12 +66,16 @@ Semantic versioning in our case means:
 - Fixes `WPS204` reporting `self.` attribute access
 - Fixes `WPS331` reporting cases that do require some extra steps before return
 - Fixes `WPS612` not reporing `super()` calls without return
+- Fixes `WPS404` not raising on wrong `*` and `/` defaults
+- Fixes `WPS425` raising on `.get`, `getattr`, `setattr`,
+  and other builtin functions without keyword arguments
 
 ### Misc
 
 - Changes how tests are executed
 - Changes how coverage is calculated, adds `coverage-conditional-plugin`
 - Adds how a violation can be deprecated
+- Improves old function tests with `/` argument cases
 - Adds `local-partial-types` to mypy config
 - Uses `abc` stdlib's module to mark abstract base classes #1122
 - Adds `python3.8` to the CI
