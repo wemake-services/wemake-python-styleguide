@@ -12,7 +12,11 @@ MODE_NON_EXECUTABLE = 0o644
 @pytest.fixture()
 def make_file(tmp_path):
     """Fixture to make a temporary executable or non executable file."""
-    def factory(filename, file_content, is_executable):
+    def factory(
+        filename: str,
+        file_content: str,
+        is_executable: bool,
+    ) -> str:
         temp_folder = tmp_path / TEMP_FOLDER
         temp_folder.mkdir()
         test_file = temp_folder / filename

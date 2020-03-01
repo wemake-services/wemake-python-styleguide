@@ -11,6 +11,7 @@ exe001_neg_shouldnt_be_executable = """
 if __name__ == '__main__':
     print('I am not executable.')
 """
+
 exe001_neg_executable = False
 exe001_neg_filename = 'exe001_neg.py'
 
@@ -18,6 +19,7 @@ exe002_neg_shouldnt_be_executable = """
 def a_lib_function():
     print('I am not executable.')
 """
+
 exe002_neg_executable = False
 exe002_neg_filename = 'exe002_neg.py'
 
@@ -26,6 +28,7 @@ exe003_neg_good_shebang = """#!/usr/bin/python3
 if __name__ == '__main__':
     print('I have a good shebang.')
 """
+
 exe003_neg_executable = True
 exe003_neg_filename = 'exe003_neg.py'
 
@@ -34,6 +37,7 @@ exe004_neg_no_space_before_shebang = """#!/usr/bin/python3
 if __name__ == '__main__':
     print('I do not have whitespace before shebang.')
 """
+
 exe004_neg_executable = True
 exe004_neg_filename = 'exe004_neg.py'
 
@@ -42,6 +46,7 @@ exe005_neg_nothing_before_shebang = """#!/usr/bin/python3
 if __name__ == '__main__':
     print('I do not have any blank or comment lines before shebang.')
 """
+
 exe005_neg_executable = True
 exe005_neg_filename = 'exe005_neg.py'
 
@@ -52,6 +57,7 @@ exe001_pos_should_be_executable = """#!/usr/bin/python
 if __name__ == '__main__':
     print('I should be executable.')
 """
+
 exe001_pos_executable = False
 exe001_pos_filename = 'exe001_pos.py'
 
@@ -59,6 +65,7 @@ exe002_pos_shouldnt_be_executable = """
 def a_lib_function():
     print("I shouldn't be executable.")
 """
+
 exe002_pos_executable = True
 exe002_pos_filename = 'exe002_pos.py'
 
@@ -67,6 +74,7 @@ exe003_pos_good_shebang = """#!/bin/bash
 if __name__ == '__main__':
     print('I have a wrong shebang.')
 """
+
 exe003_pos_executable = True
 exe003_pos_filename = 'exe003_pos.py'
 
@@ -75,6 +83,7 @@ exe004_pos_no_space_before_shebang = """    #!/usr/bin/python3
 if __name__ == '__main__':
     print('I have whitespace before shebang.')
 """
+
 exe004_pos_executable = True
 exe004_pos_filename = 'exe004_pos.py'
 
@@ -85,6 +94,7 @@ exe005_pos_nothing_before_shebang = """
 if __name__ == '__main__':
     print('I have blank and comment lines before shebang.')
 """
+
 exe005_pos_executable = True
 exe005_pos_filename = 'exe005_pos.py'
 
