@@ -7,7 +7,7 @@ from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import AssignNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
-from wemake_python_styleguide.logic import nodes, source
+from wemake_python_styleguide.logic import nodes, source, walk
 from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
 from wemake_python_styleguide.logic.tree import (
     compares,
@@ -297,7 +297,7 @@ class WrongConditionalVisitor(BaseNodeVisitor):
     )
 
     _forbidden_expression_parents: ClassVar[AnyNodes] = (
-        ast.If,
+        ast.IfExp,
         ast.BoolOp,
         ast.BinOp,
         ast.UnaryOp,
@@ -318,15 +318,15 @@ class WrongConditionalVisitor(BaseNodeVisitor):
             self._check_simplifiable_if(node)
         else:
             self._check_simplifiable_ifexpr(node)
-            self._check_nested_ifexpr(node)
 
+        self._check_nested_ifexpr(node)
         self._check_constant_condition(node)
         self.generic_visit(node)
 
     def _is_simplifiable_assign(
         self,
         node_body: List[ast.stmt],
-    ) -> Optional[str]:
+    ) -> Optional[str]:  # TODO: move to logic at some point
         wrong_length = len(node_body) != 1
         if wrong_length or not isinstance(node_body[0], AssignNodes):
             return None
@@ -363,9 +363,16 @@ class WrongConditionalVisitor(BaseNodeVisitor):
         if conditions == {True, False}:
             self.add_violation(SimplifiableIfViolation(node))
 
-    def _check_nested_ifexpr(self, node: ast.IfExp) -> None:
-        parent = nodes.get_parent(node)
-        if isinstance(parent, self._forbidden_expression_parents):
+    def _check_nested_ifexpr(self, node: AnyIf) -> None:
+        is_nested_in_if = bool(
+            isinstance(node, ast.If) and
+            list(walk.get_subnodes_by_type(node.test, ast.IfExp)),
+        )
+        is_nested_poorly = walk.get_closest_parent(
+            node, self._forbidden_expression_parents,
+        )
+
+        if is_nested_in_if or is_nested_poorly:
             self.add_violation(NestedTernaryViolation(node))
 
 

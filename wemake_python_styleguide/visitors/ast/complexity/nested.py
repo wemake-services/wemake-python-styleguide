@@ -7,7 +7,7 @@ from typing_extensions import final
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.constants import NESTED_FUNCTIONS_WHITELIST
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
-from wemake_python_styleguide.logic.walk import is_child_of
+from wemake_python_styleguide.logic.walk import get_closest_parent
 from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations.best_practices import (
     NestedClassViolation,
@@ -93,7 +93,7 @@ class NestedComplexityVisitor(BaseNodeVisitor):
 
     def _check_nested_lambdas(self, node: ast.Lambda) -> None:
         is_direct = isinstance(get_context(node), ast.Lambda)
-        is_deep = is_child_of(node, ast.Lambda)
+        is_deep = get_closest_parent(node, ast.Lambda)
 
         if is_direct or is_deep:
             self.add_violation(NestedFunctionViolation(node, text='lambda'))

@@ -70,6 +70,8 @@ Semantic versioning in our case means:
   and other builtin functions without keyword arguments
 - Fixes `WPS221` reporting differently on different `python` versions
 - Fixes `WPS221` reporting nested variable annotations
+- Fixes `WPS509` not reporting nested ternary in grandchildren of `if`
+- Fixes `WPS509` not reporting nested ternary in ternary
 
 ### Misc
 
