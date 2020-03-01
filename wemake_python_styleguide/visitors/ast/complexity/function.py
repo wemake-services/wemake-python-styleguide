@@ -1,6 +1,6 @@
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, Dict, List, Tuple, Type, Union
+from typing import ClassVar, DefaultDict, List, Mapping, Tuple, Type, Union
 
 from typing_extensions import final
 
@@ -31,7 +31,7 @@ _FunctionCounter = DefaultDict[AnyFunctionDef, int]
 _FunctionCounterWithLambda = DefaultDict[AnyFunctionDefAndLambda, int]
 _AnyFunctionCounter = Union[_FunctionCounter, _FunctionCounterWithLambda]
 _CheckRule = Tuple[_AnyFunctionCounter, int, Type[BaseViolation]]
-_NodeTypeHandler = Dict[
+_NodeTypeHandler = Mapping[
     Union[type, Tuple[type, ...]],
     _FunctionCounter,
 ]

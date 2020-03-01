@@ -1,9 +1,12 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY38
+
 function_with_single_argument = 'def function(arg1): ...'
 function_with_arguments = 'def function(arg1, arg2): ...'
 function_with_args_kwargs = 'def function(*args, **kwargs): ...'
 function_with_kwonly = 'def function(*, kwonly1, kwonly2=True): ...'
+function_with_posonly = 'def function(arg1, arg2, /): ...'
 
 method_without_arguments = """
 class Test(object):
@@ -18,6 +21,11 @@ class Test(object):
 method_with_single_args = """
 class Test(object):
     def method(self, *args): ...
+"""
+
+method_with_single_posonly_arg = """
+class Test(object):
+    def method(self, arg, /): ...
 """
 
 method_with_single_kwargs = """
@@ -81,10 +89,18 @@ def single_argument(request):
     function_with_arguments,
     function_with_args_kwargs,
     function_with_kwonly,
+    pytest.param(
+        function_with_posonly,
+        marks=pytest.mark.skipif(not PY38, reason='posonly appeared in 3.8'),
+    ),
     method_with_single_argument,
     method_with_single_args,
     method_with_single_kwargs,
     method_with_single_kwonly,
+    pytest.param(
+        method_with_single_posonly_arg,
+        marks=pytest.mark.skipif(not PY38, reason='posonly appeared in 3.8'),
+    ),
     classmethod_with_single_argument,
     new_method_single_argument,
     metaclass_with_single_argument,

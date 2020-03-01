@@ -50,7 +50,8 @@ Semantic versioning in our case means:
   `ast.Continue`, `ast.Break`, and `ast.Raise` statements
 - Fixes that cognitive complexity was ignoring `ast.AsyncFor` loops
 - Fixes that annotation complexity was not reported for `async` functions
-- Fixes that annotation complexity was not reported from lists
+- Fixes that annotation complexity was not reported for lists
+- Fixes that annotation complexity was not reported for `*` and `/` args
 - Fixes bug when `TooManyPublicAttributesViolation`
   was counting duplicate fields
 - Fixes negated conditions `WPS504` was not reported for `if` expressions
@@ -66,16 +67,25 @@ Semantic versioning in our case means:
 - Fixes `WPS204` reporting `self.` attribute access
 - Fixes `WPS331` reporting cases that do require some extra steps before return
 - Fixes `WPS612` not reporing `super()` calls without return
+- Fixes `WPS404` not raising on wrong `*` and `/` defaults
+- Fixes `WPS425` raising on `.get`, `getattr`, `setattr`,
+  and other builtin functions without keyword arguments
+- Fixes `WPS221` reporting differently on different `python` versions
+- Fixes `WPS221` reporting nested variable annotations
+- Fixes `WPS509` not reporting nested ternary in grandchildren of `if`
+- Fixes `WPS509` not reporting nested ternary in ternary
 
 ### Misc
 
 - Changes how tests are executed
 - Changes how coverage is calculated, adds `coverage-conditional-plugin`
 - Adds how a violation can be deprecated
+- Improves old function tests with `/` argument cases
 - Adds `local-partial-types` to mypy config
 - Uses `abc` stdlib's module to mark abstract base classes #1122
 - Adds `python3.8` to the CI
 - Update `astboom` version to 0.4.2
+
 
 ## 0.13.4
 

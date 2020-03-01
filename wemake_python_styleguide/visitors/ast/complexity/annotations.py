@@ -6,6 +6,7 @@ from typing_extensions import final
 from wemake_python_styleguide.logic.complexity.annotations import (
     get_annotation_compexity,
 )
+from wemake_python_styleguide.logic.tree.functions import get_all_arguments
 from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations.complexity import (
     TooComplexAnnotationViolation,
@@ -49,7 +50,7 @@ class AnnotationComplexityVisitor(BaseNodeVisitor):
     ) -> None:
         annotations = [
             arg.annotation
-            for arg in node.args.args
+            for arg in get_all_arguments(node)
             if arg.annotation is not None
         ]
         if node.returns is not None:

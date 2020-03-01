@@ -505,7 +505,8 @@ class WrongModuleMetadataViolation(ASTViolation):
         Place all the metadata in ``setup.py``,
         ``setup.cfg``, or ``pyproject.toml``.
         Use proper docstrings and packaging classifiers.
-        Use ``pkg_resources`` if you need to import this data into your app.
+        Use ``importlib.metadata`` (or ``importlib_metadata`` on python < 3.8)
+        if you need to import this data into your app.
 
     See
     :py:data:`~wemake_python_styleguide.constants.MODULE_METADATA_VARIABLES_BLACKLIST`

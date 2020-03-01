@@ -1029,7 +1029,7 @@ class InCompareWithSingleItemContainerViolation(ASTViolation):
 
     """
 
-    error_template = 'Found wrong "in" compare with single item container'
+    error_template = 'Found wrong `in` compare with single item container'
     code = 525
 
 

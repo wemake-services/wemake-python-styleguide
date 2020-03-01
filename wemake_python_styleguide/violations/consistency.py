@@ -552,15 +552,14 @@ class UselessCompareViolation(ASTViolation):
 
     Example::
 
+        # Correct:
+        do_something()
+
         # Wrong:
-        a = 1
         if a < a:
             do_something()
         else:
             do_something_else()
-
-        # Correct:
-        do_something()
 
     .. versionadded:: 0.3.0
 
@@ -630,7 +629,7 @@ class ConstantConditionViolation(ASTViolation):
 
     """
 
-    error_template = 'Conditional always evaluates to same result'
+    error_template = 'Found conditional that always evaluates to same result'
     code = 314
 
 
@@ -661,7 +660,7 @@ class ObjectInBaseClassesListViolation(ASTViolation):
 
     """
 
-    error_template = 'Founded extra `object` in parent classes list'
+    error_template = 'Found extra `object` in parent classes list'
     code = 315
 
 

@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.visitors.ast.complexity.function import (
     FunctionComplexityVisitor,
     TooManyArgumentsViolation,
@@ -9,6 +10,7 @@ lambda_without_arguments = 'lambda: ...'
 lambda_with_single_argument = 'lambda arg1: ...'
 lambda_with_default_argument = 'lambda arg1=None: ...'
 lambda_with_single_args = 'lambda *args: ...'
+lambda_with_posonly_args = 'lambda arg, /: ...'
 lambda_with_single_kwargs = 'lambda **kwargs: ...'
 lambda_with_single_kwonly = 'lambda *, kwonly=True: ...'
 
@@ -18,6 +20,10 @@ lambda_with_single_kwonly = 'lambda *, kwonly=True: ...'
     lambda_with_single_argument,
     lambda_with_default_argument,
     lambda_with_single_args,
+    pytest.param(
+        lambda_with_posonly_args,
+        marks=pytest.mark.skipif(not PY38, reason='posonly was added in 3.8'),
+    ),
     lambda_with_single_kwargs,
     lambda_with_single_kwonly,
 ])
@@ -41,6 +47,10 @@ def test_correct_arguments_count(
     lambda_with_single_argument,
     lambda_with_default_argument,
     lambda_with_single_args,
+    pytest.param(
+        lambda_with_posonly_args,
+        marks=pytest.mark.skipif(not PY38, reason='posonly was added in 3.8'),
+    ),
     lambda_with_single_kwargs,
     lambda_with_single_kwonly,
 ])
@@ -64,6 +74,10 @@ def test_correct_arguments_count_custom_option(
     lambda_with_single_argument,
     lambda_with_default_argument,
     lambda_with_single_args,
+    pytest.param(
+        lambda_with_posonly_args,
+        marks=pytest.mark.skipif(not PY38, reason='posonly was added in 3.8'),
+    ),
     lambda_with_single_kwargs,
     lambda_with_single_kwonly,
 ])
