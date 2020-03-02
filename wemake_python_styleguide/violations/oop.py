@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 These checks ensures that you use Python's version of OOP correctly.
 

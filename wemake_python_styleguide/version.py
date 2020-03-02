@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from wemake_python_styleguide.compat.packaging import importlib_metadata
 
 

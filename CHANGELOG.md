@@ -40,6 +40,8 @@ Semantic versioning in our case means:
 - Adds baseline information for all complexity violation messages: `x > baseline`
 - Changes how cognitive complexity is calculated
 - Adds support for positional arguments in different checks
+- Removes flake8-coding, all encoding strings, visitor and tests
+  for `EmptyLineAfterCodingViolation`
 
 ### Bugfixes
 

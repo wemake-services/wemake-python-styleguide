@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing import Callable, Tuple, Type, TypeVar
 
 _DefinedType = TypeVar('_DefinedType')

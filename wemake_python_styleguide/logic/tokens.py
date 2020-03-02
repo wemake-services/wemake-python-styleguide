@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import tokenize
 import types
 from typing import Container, FrozenSet, Iterable, List, Mapping, Tuple

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 This file represents how AST worked before python3.8 release.
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Here we store useful aliases to make sure code works between versions.
 

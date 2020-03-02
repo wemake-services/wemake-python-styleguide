@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import subprocess
 
 from wemake_python_styleguide.version import pkg_name, pkg_version

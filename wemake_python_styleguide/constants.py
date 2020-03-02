@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 This module contains list of white- and black-listed ``python`` members.
 

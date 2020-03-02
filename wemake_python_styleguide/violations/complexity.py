@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 These checks find flaws in your application design.
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 This file contains all violations which may be tweaked using
 `i_control_code` or `i_dont_control_code` options.

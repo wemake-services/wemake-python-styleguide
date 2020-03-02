@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Fixtures to make testing cognitive complexity easy.
 

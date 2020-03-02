@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 r"""
 Disallows to use incorrect magic comments.
 
@@ -20,7 +18,7 @@ All comments have the same type.
 
 import re
 import tokenize
-from typing import ClassVar, FrozenSet
+from typing import ClassVar
 from typing.re import Pattern
 
 from typing_extensions import final
@@ -32,9 +30,6 @@ from wemake_python_styleguide.violations.best_practices import (
     OveruseOfNoqaCommentViolation,
     WrongDocCommentViolation,
     WrongMagicCommentViolation,
-)
-from wemake_python_styleguide.violations.consistency import (
-    EmptyLineAfterCodingViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
@@ -121,65 +116,3 @@ class WrongCommentVisitor(BaseTokenVisitor):
                     baseline=MAX_NO_COVER_COMMENTS,
                 ),
             )
-
-
-@final
-class FileMagicCommentsVisitor(BaseTokenVisitor):
-    """Checks comments for the whole file."""
-
-    _newlines: ClassVar[FrozenSet[int]] = frozenset((
-        tokenize.NL,
-        tokenize.NEWLINE,
-        tokenize.ENDMARKER,
-    ))
-
-    def visit_comment(self, token: tokenize.TokenInfo) -> None:
-        """
-        Checks special comments that are magic per each file.
-
-        Raises:
-            EmptyLineAfterCoddingViolation
-
-        """
-        self._check_empty_line_after_codding(token)
-
-    def _offset_for_comment_line(self, token: tokenize.TokenInfo) -> int:
-        return 2 if token.exact_type == tokenize.COMMENT else 0
-
-    def _check_empty_line_after_codding(
-        self,
-        token: tokenize.TokenInfo,
-    ) -> None:
-        """
-        Checks that we have a blank line after the magic comments.
-
-        PEP-263 says: a magic comment must be placed into the source
-        files either as first or second line in the file
-
-        See also:
-            https://www.python.org/dev/peps/pep-0263/
-
-        """
-        if token.start != (1, 0):
-            return
-
-        tokens = iter(self.file_tokens[self.file_tokens.index(token):])
-        available_offset = 2  # comment + newline
-
-        while True:
-            next_token = next(tokens)
-            if not available_offset:
-                available_offset = self._offset_for_comment_line(
-                    next_token,
-                )
-
-            if available_offset > 0:
-                available_offset -= 1
-                continue
-
-            # We have a coverage error here.
-            # It reports, that this line is not covered.
-            # While we do have test cases for both correct and wrong cases.
-            if next_token.exact_type not in self._newlines:  # pragma: no cover
-                self.add_violation(EmptyLineAfterCodingViolation(token))
-            break

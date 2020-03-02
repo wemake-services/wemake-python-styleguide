@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing_extensions import final
 
 from wemake_python_styleguide import constants

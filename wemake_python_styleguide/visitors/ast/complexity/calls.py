@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from itertools import takewhile
 from typing import Set

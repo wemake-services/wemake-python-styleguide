@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Contains detailed technical information about :term:`violation` internals.
 
