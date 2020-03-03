@@ -1058,6 +1058,9 @@ class LambdaInsideLoopViolation(ASTViolation):
     """
     Forbids to use ``lambda`` inside loops.
 
+    We check ``while``, ``for``, and ``async for`` loop bodies.
+    We also check comprehension value parts.
+
     Reasoning:
         It is error-prone to use ``lambda`` inside
         ``for`` and ``while`` loops due to the famous late-binding.
@@ -1079,6 +1082,7 @@ class LambdaInsideLoopViolation(ASTViolation):
 
     .. versionadded:: 0.5.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.14.0
 
     See also:
         https://docs.python-guide.org/writing/gotchas/#late-binding-closures
@@ -1099,7 +1103,7 @@ class UnreachableCodeViolation(ASTViolation):
     cannot be executed by python's interpreter.
 
     This is probably caused by ``return`` or ``raise`` statements.
-    However, we can not cover 100% of truly unreachable code by this rule.
+    However, we cannot cover 100% of truly unreachable code by this rule.
     This happens due to the dynamic nature of python.
     For example, detecting that ``1 / some_value`` would sometimes raise
     an exception is too complicated and is out of the scope of this rule.
@@ -1251,7 +1255,7 @@ class NestedClassViolation(ASTViolation):
 
     Reasoning:
         Nested classes are really hard to manage.
-        You can not even create an instance of this class in many cases.
+        You cannot even create an instance of this class in many cases.
         Testing them is also really hard.
 
     Solution:

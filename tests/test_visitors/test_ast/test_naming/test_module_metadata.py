@@ -40,7 +40,7 @@ def test_wrong_metadata(
     code,
     default_options,
 ):
-    """Testing that metadata can not have blacklisted names."""
+    """Testing that metadata cannot have blacklisted names."""
     tree = parse_ast_tree(code.format(bad_name))
 
     visitor = WrongModuleMetadataVisitor(default_options, tree=tree)

@@ -69,7 +69,7 @@ Real world examples of plugins unsuitable for this checker:
 Is this rule out off scope?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-There are awesome tools that can not be added
+There are awesome tools that cannot be added
 because they are just simply out of scope.
 This means that they cover very specific case or technology
 and not just good-old ``python``.

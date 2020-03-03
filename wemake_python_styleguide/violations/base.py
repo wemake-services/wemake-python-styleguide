@@ -18,7 +18,7 @@ Violations API
    TokenizeViolation
    SimpleViolation
 
-Violation can not have more than one base class.
+Violation cannot have more than one base class.
 See :ref:`tutorial` for more information about choosing a correct base class.
 
 Conventions

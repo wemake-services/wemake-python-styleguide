@@ -39,7 +39,7 @@ def get_closest_parent(
 
 def is_contained_by(node: ast.AST, container: ast.AST) -> bool:
     """
-    Tells you if a node is contained by a given node.
+    Tells you if a node is contained by a given container.
 
     Goes up by the tree of ``node`` to check all parents.
     Works with specific instances.

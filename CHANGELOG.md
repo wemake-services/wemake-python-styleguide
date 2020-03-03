@@ -74,6 +74,7 @@ Semantic versioning in our case means:
 - Fixes `WPS221` reporting nested variable annotations
 - Fixes `WPS509` not reporting nested ternary in grandchildren of `if`
 - Fixes `WPS509` not reporting nested ternary in ternary
+- Fixes `WPS426` not reporting nested `lambda` in comprehensions
 
 ### Misc
 
