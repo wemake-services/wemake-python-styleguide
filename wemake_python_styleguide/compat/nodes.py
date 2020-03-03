@@ -1,11 +1,27 @@
-import ast
+"""
+Module to define fix type differences in different python versions.
 
-try:  # pragma: no cover
+Note that we use ``sys.version_info`` directly,
+because that's how ``mypy`` knows about what we are doing.
+"""
+
+import ast
+import sys
+
+if sys.version_info >= (3, 8):  # pragma: py-lt-38
+    from ast import NamedExpr as NamedExpr  # noqa: WPS113, WPS433
     from ast import Constant as Constant  # noqa: WPS433, WPS113
-except ImportError:  # pragma: no cover
-    class Constant(ast.AST):  # type: ignore  # noqa: WPS440
+else:  # pragma: py-gte-38
+    class NamedExpr(ast.expr):  # noqa: WPS440
         """
-        Fallback for pythons that do not have ``ast.Constant``.
+        Fallback for python that does not have ``ast.NamedExpr``.
+
+        Copied from ast.pyi file.
+        """
+
+    class Constant(ast.expr):  # noqa: WPS440
+        """
+        Fallback for python that does not have ``ast.Constant``.
 
         In this case ``Constant`` is replaced with:
 
@@ -14,4 +30,6 @@ except ImportError:  # pragma: no cover
         - ``ast.NameConstant``
 
         Only ``python3.8+`` has this node.
+
+        Copied from ast.pyi file.
         """
