@@ -58,6 +58,14 @@ AnyFor = Union[ast.For, ast.AsyncFor]
 #: In case we need to work with any loop: sync, async, and while.
 AnyLoop = Union[AnyFor, ast.While]
 
+#: All diffrent comprehension types in one place.
+AnyComprehension = Union[
+    ast.ListComp,
+    ast.DictComp,
+    ast.SetComp,
+    ast.GeneratorExp,
+]
+
 #: In cases we need to work with both sync and async context managers.
 AnyWith = Union[ast.With, ast.AsyncWith]
 

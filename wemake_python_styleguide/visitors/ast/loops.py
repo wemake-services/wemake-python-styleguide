@@ -11,7 +11,12 @@ from wemake_python_styleguide.logic.tree import loops, operators, slices
 from wemake_python_styleguide.logic.tree.variables import (
     is_valid_block_variable_definition,
 )
-from wemake_python_styleguide.types import AnyFor, AnyLoop, AnyNodes
+from wemake_python_styleguide.types import (
+    AnyComprehension,
+    AnyFor,
+    AnyLoop,
+    AnyNodes,
+)
 from wemake_python_styleguide.violations.best_practices import (
     LambdaInsideLoopViolation,
     LoopVariableDefinitionViolation,
@@ -34,12 +39,8 @@ from wemake_python_styleguide.violations.refactoring import (
 )
 from wemake_python_styleguide.visitors import base, decorators
 
-_AnyComprehension = Union[
-    ast.ListComp,
-    ast.DictComp,
-    ast.SetComp,
-    ast.GeneratorExp,
-]
+#: Type alias to specify how we check different containers in loops.
+_ContainerSpec = Mapping[Type[ast.AST], Sequence[str]]
 
 
 @final
@@ -73,7 +74,7 @@ class WrongComprehensionVisitor(base.BaseNodeVisitor):
         self._check_fors(node)
         self.generic_visit(node)
 
-    def visit_any_comprehension(self, node: _AnyComprehension) -> None:
+    def visit_any_comprehension(self, node: AnyComprehension) -> None:
         """
         Finds incorrect patterns inside comprehensions.
 
@@ -95,7 +96,7 @@ class WrongComprehensionVisitor(base.BaseNodeVisitor):
         parent = nodes.get_parent(node)
         self._fors[parent] = len(parent.generators)  # type: ignore
 
-    def _check_contains_yield(self, node: _AnyComprehension) -> None:
+    def _check_contains_yield(self, node: AnyComprehension) -> None:
         for sub_node in ast.walk(node):
             if isinstance(sub_node, ast.Yield):  # pragma: py-gte-38
                 self.add_violation(YieldInComprehensionViolation(node))
@@ -121,7 +122,7 @@ class WrongComprehensionVisitor(base.BaseNodeVisitor):
 class WrongLoopVisitor(base.BaseNodeVisitor):
     """Responsible for examining loops."""
 
-    _containers: Mapping[Type[ast.AST], Sequence[str]] = {
+    _containers: ClassVar[_ContainerSpec] = {
         ast.ListComp: ['elt'],
         ast.SetComp: ['elt'],
         ast.GeneratorExp: ['elt'],
@@ -132,7 +133,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         ast.While: ['body'],
     }
 
-    def visit_any_comp(self, node: _AnyComprehension) -> None:
+    def visit_any_comp(self, node: AnyComprehension) -> None:
         """
         Checks all kinds of comprehensions.
 
@@ -165,7 +166,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
 
     def _check_lambda_inside_loop(
         self,
-        node: Union[AnyLoop, _AnyComprehension],
+        node: Union[AnyLoop, AnyComprehension],
     ) -> None:
         container_names = self._containers.get(type(node), ())
         for container in container_names:
