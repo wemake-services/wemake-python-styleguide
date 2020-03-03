@@ -76,7 +76,7 @@ and not just good-old ``python``.
 
 Real world examples of plugins that are out of scope:
 
-- `flake8-pytest <https://github.com/vikingco/flake8-pytest>`_
+- `flake8-pytest-style <https://github.com/m-burst/flake8-pytest-style>`_
 - `flake8-django <https://github.com/rocioar/flake8-django>`_
 - `flake8-scrapy <https://github.com/stummjr/flake8-scrapy>`_
 
