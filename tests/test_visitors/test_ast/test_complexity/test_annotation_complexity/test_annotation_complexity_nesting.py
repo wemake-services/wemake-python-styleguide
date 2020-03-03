@@ -68,6 +68,7 @@ class Test(object):
     'Dict[int, str]',
     'Callable[[str, int], int]',
     'List[List[int]]',
+    '"String Annontation"',
 ])
 def test_correct_annotations(
     assert_errors,
