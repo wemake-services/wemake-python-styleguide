@@ -43,6 +43,7 @@ Semantic versioning in our case means:
 - Adds support for positional arguments in different checks
 - Removes flake8-coding, all encoding strings, visitor and tests
   for `EmptyLineAfterCodingViolation`
+- Adds support for `NamedExpr` with in compare type violation 
 
 ### Bugfixes
 

@@ -13,6 +13,7 @@ from wemake_python_styleguide.logic.tree import (
     ifs,
     operators,
 )
+from wemake_python_styleguide.logic.walrus import get_assigned_expr
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     HeterogenousCompareViolation,
@@ -455,5 +456,6 @@ class InCompareSanityVisitor(BaseNodeVisitor):
             self.add_violation(InCompareWithSingleItemContainerViolation(node))
 
     def _check_wrong_comparators(self, node: ast.AST) -> None:
+        node = get_assigned_expr(node)
         if isinstance(node, self._wrong_in_comparators):
             self.add_violation(WrongInCompareTypeViolation(node))
