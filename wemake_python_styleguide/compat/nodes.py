@@ -35,8 +35,8 @@ else:  # pragma: py-gte-38
         Copied from ast.pyi file.
         """
 
-        value: Any  # type: ignore
+        value: Any  # noqa: WPS110 # type: ignore
         kind: Optional[str]
 
-        s: Any  # type: ignore
-        n: complex
+        s: Any  # noqa: WPS111 # type: ignore
+        n: complex  # noqa: WPS111
