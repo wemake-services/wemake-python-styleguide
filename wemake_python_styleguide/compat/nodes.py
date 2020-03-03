@@ -7,6 +7,7 @@ because that's how ``mypy`` knows about what we are doing.
 
 import ast
 import sys
+from typing import Any, Optional
 
 if sys.version_info >= (3, 8):  # pragma: py-lt-38
     from ast import NamedExpr as NamedExpr  # noqa: WPS113, WPS433
@@ -33,3 +34,9 @@ else:  # pragma: py-gte-38
 
         Copied from ast.pyi file.
         """
+
+        value: Any  # type: ignore
+        kind: Optional[str]
+
+        s: Any  # type: ignore
+        n: complex
