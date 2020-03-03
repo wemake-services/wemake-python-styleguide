@@ -1,14 +1,6 @@
 import ast
 from collections import defaultdict
-from typing import (
-    ClassVar,
-    DefaultDict,
-    List,
-    Mapping,
-    Sequence,
-    Type,
-    Union,
-)
+from typing import ClassVar, DefaultDict, List, Mapping, Sequence, Type, Union
 
 from typing_extensions import final
 
