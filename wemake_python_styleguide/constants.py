@@ -226,6 +226,8 @@ MAGIC_METHODS_BLACKLIST: Final = frozenset((
     '__del__',
     '__delitem__',
     '__delete__',
+    '__reduce__',
+    '__reduce_ex__',
 
     '__dir__',  # since we don't use `dir()`
     '__delattr__',  # since we don't use `delattr()`
