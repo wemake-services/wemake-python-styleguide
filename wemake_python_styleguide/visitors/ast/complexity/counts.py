@@ -178,7 +178,7 @@ class ImportMembersVisitor(BaseNodeVisitor):
 @final
 class ConditionsVisitor(BaseNodeVisitor):
     """Checks booleans for condition counts.
-    
+
     We use :str:`wemake_python_styleguide.constants.MAX_CONDITIONS`
     as a default value.
 
@@ -198,7 +198,7 @@ class ConditionsVisitor(BaseNodeVisitor):
     def visit_Compare(self, node: ast.Compare) -> None:
         """
         Counts the number of compare parts.
-            
+
         We use :str:`wemake_python_styleguide.constants.MAX_COMPARES`
         as a default value.
 
@@ -251,9 +251,10 @@ class ConditionsVisitor(BaseNodeVisitor):
 @final
 class ElifVisitor(BaseNodeVisitor):
     """Checks the number of ``elif`` cases inside conditions.
-        
+
     We use :str:`wemake_python_styleguide.constants.MAX_ELIFS`
     as a default value.
+
     """
 
     def __init__(self, *args, **kwargs) -> None:
@@ -309,10 +310,12 @@ class ElifVisitor(BaseNodeVisitor):
 
 @final
 class TryExceptVisitor(BaseNodeVisitor):
-    """Visits all try/except nodes to ensure that they are not too complex.
-    
+    """
+    Visits all try/except nodes to ensure that they are not too complex.
+
     We use :str:`wemake_python_styleguide.constants.MAX_EXCEPT_CASES`
     as a default value.
+
     """
 
 
@@ -323,7 +326,6 @@ class TryExceptVisitor(BaseNodeVisitor):
         Raises:
             TooManyExceptCasesViolation
             TooLongTryBodyViolation
-
         """
         self._check_except_count(node)
         self._check_try_body_length(node)
@@ -335,7 +337,7 @@ class TryExceptVisitor(BaseNodeVisitor):
                 complexity.TooManyExceptCasesViolation(
                     node,
                     text=str(len(node.handlers)),
-                    baseline=MAX_EXCEPT_CASES
+                    baseline=MAX_EXCEPT_CASES,
                 ),
             )
 
