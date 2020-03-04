@@ -110,7 +110,7 @@ def test_module_condition_counts_violation(
     """Testing that violations are raised when reaching max value."""
     tree = parse_ast_tree(code)
 
-    monkeypatch.setattr(ConditionsVisitor, '_max_conditions', 1)
+    monkeypatch.setattr(ConditionsVisitor, 'itions', 1)
     visitor = ConditionsVisitor(default_options, tree=tree)
     visitor.run()
 

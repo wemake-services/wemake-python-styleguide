@@ -4,7 +4,13 @@ from typing import Callable, ClassVar, DefaultDict, List, Union
 
 from typing_extensions import final
 
-from wemake_python_styleguide.constants import MAX_LEN_YIELD_TUPLE
+from wemake_python_styleguide.constants import (
+    MAX_LEN_YIELD_TUPLE,
+    MAX_CONDITIONS,
+    MAX_COMPARES,
+    MAX_ELIFS,
+    MAX_EXCEPT_CASES,
+)
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree.functions import is_method
 from wemake_python_styleguide.types import (
@@ -171,13 +177,12 @@ class ImportMembersVisitor(BaseNodeVisitor):
 
 @final
 class ConditionsVisitor(BaseNodeVisitor):
-    """Checks booleans for condition counts."""
+    """Checks booleans for condition counts.
+    
+    We use :str:`wemake_python_styleguide.constants.MAX_CONDITIONS`
+    as a default value.
 
-    #: Maximum number of conditions in a single ``if`` or ``while`` statement.
-    _max_conditions: ClassVar[int] = 4
-
-    #: Maximum number of compare nodes in a single expression.
-    _max_compares: ClassVar[int] = 2
+    """
 
     def visit_BoolOp(self, node: ast.BoolOp) -> None:
         """
@@ -193,6 +198,9 @@ class ConditionsVisitor(BaseNodeVisitor):
     def visit_Compare(self, node: ast.Compare) -> None:
         """
         Counts the number of compare parts.
+            
+        We use :str:`wemake_python_styleguide.constants.MAX_COMPARES`
+        as a default value.
 
         Raises:
             TooLongCompareViolation
@@ -212,12 +220,12 @@ class ConditionsVisitor(BaseNodeVisitor):
 
     def _check_conditions(self, node: ast.BoolOp) -> None:
         conditions_count = self._count_conditions(node)
-        if conditions_count > self._max_conditions:
+        if conditions_count > MAX_CONDITIONS:
             self.add_violation(
                 complexity.TooManyConditionsViolation(
                     node,
                     text=str(conditions_count),
-                    baseline=self._max_conditions,
+                    baseline=MAX_CONDITIONS,
                 ),
             )
 
@@ -226,7 +234,7 @@ class ConditionsVisitor(BaseNodeVisitor):
         is_all_notequals = all(isinstance(op, ast.NotEq) for op in node.ops)
         can_be_longer = is_all_notequals or is_all_equals
 
-        threshold = self._max_compares
+        threshold = MAX_COMPARES
         if can_be_longer:
             threshold += 1
 
@@ -242,10 +250,11 @@ class ConditionsVisitor(BaseNodeVisitor):
 
 @final
 class ElifVisitor(BaseNodeVisitor):
-    """Checks the number of ``elif`` cases inside conditions."""
-
-    #: Maximum number of `elif` blocks in a single `if` condition:
-    _max_elifs: ClassVar[int] = 3
+    """Checks the number of ``elif`` cases inside conditions.
+        
+    We use :str:`wemake_python_styleguide.constants.MAX_ELIFS`
+    as a default value.
+    """
 
     def __init__(self, *args, **kwargs) -> None:
         """Creates internal ``elif`` counter."""
@@ -288,22 +297,24 @@ class ElifVisitor(BaseNodeVisitor):
     def _post_visit(self):
         for root, children in self._if_children.items():
             real_children_length = len(set(children))
-            if real_children_length > self._max_elifs:
+            if real_children_length > MAX_ELIFS:
                 self.add_violation(
                     complexity.TooManyElifsViolation(
                         root,
                         text=str(real_children_length),
-                        baseline=self._max_elifs,
+                        baseline=MAX_ELIFS,
                     ),
                 )
 
 
 @final
 class TryExceptVisitor(BaseNodeVisitor):
-    """Visits all try/except nodes to ensure that they are not too complex."""
+    """Visits all try/except nodes to ensure that they are not too complex.
+    
+    We use :str:`wemake_python_styleguide.constants.MAX_EXCEPT_CASES`
+    as a default value.
+    """
 
-    #: Maximum number of ``except`` cases in a single ``try`` clause.
-    _max_except_cases: ClassVar[int] = 3
 
     def visit_Try(self, node: ast.Try) -> None:
         """
@@ -319,12 +330,12 @@ class TryExceptVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_except_count(self, node: ast.Try) -> None:
-        if len(node.handlers) > self._max_except_cases:
+        if len(node.handlers) > MAX_EXCEPT_CASES:
             self.add_violation(
                 complexity.TooManyExceptCasesViolation(
                     node,
                     text=str(len(node.handlers)),
-                    baseline=self._max_except_cases,
+                    baseline=MAX_EXCEPT_CASES
                 ),
             )
 
