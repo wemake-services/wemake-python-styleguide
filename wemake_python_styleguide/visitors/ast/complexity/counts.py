@@ -182,7 +182,12 @@ class ConditionsVisitor(BaseNodeVisitor):
     We use :str:`wemake_python_styleguide.constants.MAX_CONDITIONS`
     as a default value.
 
+    We use :str:`wemake_python_styleguide.constants.MAX_COMPARES`
+    as a default value.
+
     """
+
+    _max_conditions=MAX_CONDITIONS
 
     def visit_BoolOp(self, node: ast.BoolOp) -> None:
         """
@@ -198,9 +203,6 @@ class ConditionsVisitor(BaseNodeVisitor):
     def visit_Compare(self, node: ast.Compare) -> None:
         """
         Counts the number of compare parts.
-
-        We use :str:`wemake_python_styleguide.constants.MAX_COMPARES`
-        as a default value.
 
         Raises:
             TooLongCompareViolation
@@ -220,12 +222,12 @@ class ConditionsVisitor(BaseNodeVisitor):
 
     def _check_conditions(self, node: ast.BoolOp) -> None:
         conditions_count = self._count_conditions(node)
-        if conditions_count > MAX_CONDITIONS:
+        if conditions_count > self._max_conditions:
             self.add_violation(
                 complexity.TooManyConditionsViolation(
                     node,
                     text=str(conditions_count),
-                    baseline=MAX_CONDITIONS,
+                    baseline=self._max_conditions,
                 ),
             )
 
@@ -317,7 +319,6 @@ class TryExceptVisitor(BaseNodeVisitor):
     as a default value.
 
     """
-
 
     def visit_Try(self, node: ast.Try) -> None:
         """
