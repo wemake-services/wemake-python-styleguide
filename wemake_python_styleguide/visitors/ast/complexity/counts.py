@@ -226,7 +226,7 @@ class ConditionsVisitor(BaseNodeVisitor):
         is_all_notequals = all(isinstance(op, ast.NotEq) for op in node.ops)
         can_be_longer = is_all_notequals or is_all_equals
 
-        threshold = self.MAX_COMPARES
+        threshold = MAX_COMPARES
         if can_be_longer:
             threshold += 1
 
