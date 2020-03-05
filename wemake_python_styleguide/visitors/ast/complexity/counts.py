@@ -212,12 +212,12 @@ class ConditionsVisitor(BaseNodeVisitor):
 
     def _check_conditions(self, node: ast.BoolOp) -> None:
         conditions_count = self._count_conditions(node)
-        if conditions_count > self.MAX_CONDITIONS:
+        if conditions_count > MAX_CONDITIONS:
             self.add_violation(
                 complexity.TooManyConditionsViolation(
                     node,
                     text=str(conditions_count),
-                    baseline=self.MAX_CONDITIONS,
+                    baseline=MAX_CONDITIONS,
                 ),
             )
 
@@ -285,12 +285,12 @@ class ElifVisitor(BaseNodeVisitor):
     def _post_visit(self):
         for root, children in self._if_children.items():
             real_children_length = len(set(children))
-            if real_children_length > self.MAX_ELIFS:
+            if real_children_length > MAX_ELIFS:
                 self.add_violation(
                     complexity.TooManyElifsViolation(
                         root,
                         text=str(real_children_length),
-                        baseline=self.MAX_ELIFS,
+                        baseline=MAX_ELIFS,
                     ),
                 )
 
@@ -313,12 +313,12 @@ class TryExceptVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_except_count(self, node: ast.Try) -> None:
-        if len(node.handlers) > self.MAX_EXCEPT_CASES:
+        if len(node.handlers) > MAX_EXCEPT_CASES:
             self.add_violation(
                 complexity.TooManyExceptCasesViolation(
                     node,
                     text=str(len(node.handlers)),
-                    baseline=self.MAX_EXCEPT_CASES,
+                    baseline=MAX_EXCEPT_CASES,
                 ),
             )
 
