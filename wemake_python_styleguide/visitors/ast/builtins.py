@@ -70,7 +70,8 @@ class WrongStringVisitor(base.BaseNodeVisitor):
                 [diouxXeEfFgGcrsa]       # type
             ) | %%                       # OR literal "%%"
         )                                # end
-        """,
+        """,                             # noqa: WPS323
+        # Different python versions report `WPS323` on different lines.
         flags=re.X,
     )
 
