@@ -15,7 +15,6 @@ def camelCase(): ...
 
 '{}'.format(1)
 ""
-'%s' % 'test'
 
 assert True
 ipdb.set_trace()

@@ -3,7 +3,7 @@ from typing import ClassVar, List, Optional, Sequence
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import AssignNodes
+from wemake_python_styleguide.compat.aliases import AssignNodes, TextNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.logic import nodes, source, walk
 from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
@@ -142,8 +142,7 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
 
         # We allow `ast.NameConstant`
         ast.Num,
-        ast.Bytes,
-        ast.Str,
+        *TextNodes,
     )
 
     def visit_Compare(self, node: ast.Compare) -> None:
@@ -282,9 +281,8 @@ class WrongConditionalVisitor(BaseNodeVisitor):
 
     _forbidden_nodes: ClassVar[AnyNodes] = (
         # Constants:
+        *TextNodes,
         ast.Num,
-        ast.Str,
-        ast.Bytes,
         ast.NameConstant,
 
         # Collections:
@@ -443,15 +441,14 @@ class InCompareSanityVisitor(BaseNodeVisitor):
             self._check_wrong_comparators(comp)
 
     def _check_single_item_container(self, node: ast.AST) -> None:
-        is_lists_violated = (
+        is_text_violated = isinstance(node, TextNodes) and len(node.s) == 1
+        is_dict_violated = isinstance(node, ast.Dict) and len(node.keys) == 1
+        is_iter_violated = (
             isinstance(node, (ast.List, ast.Tuple, ast.Set)) and
             len(node.elts) == 1
         )
 
-        is_str_violated = isinstance(node, ast.Str) and len(node.s) == 1
-        is_dict_violated = isinstance(node, ast.Dict) and len(node.keys) == 1
-
-        if is_lists_violated or is_str_violated or is_dict_violated:
+        if is_text_violated or is_dict_violated or is_iter_violated:
             self.add_violation(InCompareWithSingleItemContainerViolation(node))
 
     def _check_wrong_comparators(self, node: ast.AST) -> None:

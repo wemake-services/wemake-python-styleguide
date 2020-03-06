@@ -40,6 +40,9 @@ from typing import Tuple, Type, Union
 
 from typing_extensions import Protocol, final
 
+#: We use this type to represent all string-like nodes.
+AnyText = Union[ast.Str, ast.Bytes]
+
 #: In cases we need to work with both import types.
 AnyImport = Union[ast.Import, ast.ImportFrom]
 
@@ -90,6 +93,9 @@ AnyAccess = Union[
     ast.Attribute,
     ast.Subscript,
 ]
+
+#: We use this type to work with any text-like values. Related to `AnyText`.
+AnyTextPrimitive = Union[str, bytes]
 
 
 @final

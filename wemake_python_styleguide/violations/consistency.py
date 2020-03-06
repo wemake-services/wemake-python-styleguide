@@ -46,7 +46,7 @@ Summary
    MultilineFunctionAnnotationViolation
    UppercaseStringModifierViolation
    WrongMultilineStringViolation
-   EmptyLineAfterCodingViolation
+   ModuloStringFormatViolation
    InconsistentReturnViolation
    InconsistentYieldViolation
    ImplicitStringConcatenationViolation
@@ -108,7 +108,7 @@ Consistency checks
 .. autoclass:: MultilineFunctionAnnotationViolation
 .. autoclass:: UppercaseStringModifierViolation
 .. autoclass:: WrongMultilineStringViolation
-.. autoclass:: EmptyLineAfterCodingViolation
+.. autoclass:: ModuloStringFormatViolation
 .. autoclass:: InconsistentReturnViolation
 .. autoclass:: InconsistentYieldViolation
 .. autoclass:: ImplicitStringConcatenationViolation
@@ -968,54 +968,47 @@ class WrongMultilineStringViolation(TokenizeViolation):
 
 
 @final
-class EmptyLineAfterCodingViolation(TokenizeViolation):
+class ModuloStringFormatViolation(ASTViolation):
     """
-    Enforces to have an extra empty line after the ``coding`` comment.
+    Forbids to use ``%`` formatting on strings.
+
+    We check for string formatting. We try not to issue false positives.
+    It is better for us to ignore a real (but hard to detect) case,
+    then marking a valid one as incorrect.
+
+    Internally we check for this pattern in string definitions::
+
+        %[(name)] [flags] [width] [.precision] [{h | l}] type
+
+    This is a ``C`` format specification.
+    Related to :class:`~FormattedStringViolation` and solves the same problem.
 
     Reasoning:
-        Since we use
-        `flake8-coding <https://github.com/tk0miya/flake8-coding>`_
-        as a part of our linter
-        we care about extra space after this coding comment.
-        This is done for pure consistency.
-
-        Why should we even care about this magic coding comment?
-        For several reasons.
-
-        First, explicit encoding is always better that an implicit one,
-        different countries still use some non utf-8 encodings as a default.
-        But, people might override it with other encodings in a comment.
-        Do you know how much pain it can cause to you?
-
-        We still know that ``python3`` uses ``utf-8`` inside.
-
-        Second, some tools break because of this incorrect encoding comment.
-        Including, ``django``, ``flake8``, and ``tokenize`` core module.
-        It is very hard to notice these things when they happen.
+        You must use a single formatting method accross your project.
 
     Solution:
-        Add an empty line between ``coding`` magic comment and your code.
+        We enforce to use string ``.format()`` method for this task.
 
     Example::
 
         # Correct:
-        # coding: utf-8
-
-        SOME_VAR = 1
+        'some string', 'your name: {0}', 'data: {data}'
 
         # Wrong:
-        # coding: utf-8
-        SOME_VAR = 1
+       'my name is: %s', 'data: %(data)d'
 
-    .. versionadded:: 0.7.0
+    See also:
+        https://github.com/gforcada/flake8-pep3101
+        https://msdn.microsoft.com/en-us/library/56e442dc.aspx
+        https://docs.python.org/3/library/stdtypes.html#old-string-formatting
+        https://pyformat.info/
+
+    .. versionadded:: 0.14.0
 
     """
 
-    error_template = (
-        'Found missing empty line between `coding` magic comment and code'
-    )
+    error_template = 'Found `%` string formatting'
     code = 323
-    deprecated = True
 
 
 @final
