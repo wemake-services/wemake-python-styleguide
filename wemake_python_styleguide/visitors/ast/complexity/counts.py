@@ -1,15 +1,15 @@
 import ast
 from collections import defaultdict
-from typing import Callable, ClassVar, DefaultDict, List, Union
+from typing import Callable, DefaultDict, List, Union
 
 from typing_extensions import final
 
 from wemake_python_styleguide.constants import (
-    MAX_EXCEPT_CASES,
     MAX_COMPARES,
     MAX_CONDITIONS,
-    MAX_LEN_YIELD_TUPLE,
     MAX_ELIFS,
+    MAX_EXCEPT_CASES,
+    MAX_LEN_YIELD_TUPLE,
 )
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree.functions import is_method
