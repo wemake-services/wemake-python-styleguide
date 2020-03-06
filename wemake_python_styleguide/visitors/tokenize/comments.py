@@ -204,5 +204,5 @@ class ShebangVisitor(BaseTokenVisitor):
 
         return None
 
-   def _is_valid_shebang_line(self, line) -> bool:
+    def _is_valid_shebang_line(self, line) -> bool:
         return self._shebang.match(line) is not None   
