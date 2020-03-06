@@ -311,6 +311,18 @@ MAX_NO_COVER_COMMENTS: Final = 5
 #: Maximum length of ``yield`` ``tuple`` expressions.
 MAX_LEN_YIELD_TUPLE: Final = 5
 
+#: Maximum number of compare nodes in a single expression.
+MAX_COMPARES: Final = 2
+
+#: Maximum number of conditions in a single ``if`` or ``while`` statement.
+MAX_CONDITIONS: Final = 4
+
+#: Maximum number of `elif` blocks in a single `if` condition:
+MAX_ELIFS: Final = 3
+
+#: Maximum number of ``except`` cases in a single ``try`` clause.
+MAX_EXCEPT_CASES: Final = 3
+
 #: Approximate constants which real values should be imported from math module.
 MATH_APPROXIMATE_CONSTANTS: Final = frozenset((
     math.pi,
