@@ -1,14 +1,12 @@
-# -*- coding: utf-8 -*-
-
-import pkg_resources
+from wemake_python_styleguide.compat.packaging import importlib_metadata
 
 
 def _get_version(dist_name: str) -> str:  # pragma: no cover
     """Fetches distribution version."""
     try:
-        return pkg_resources.get_distribution(dist_name).version
-    except pkg_resources.DistributionNotFound:
-        return ''  # readthedocs can not install `poetry` projects
+        return importlib_metadata.version(dist_name)
+    except importlib_metadata.PackageNotFoundError:
+        return ''  # readthedocs cannot install `poetry` projects
 
 
 pkg_name = 'wemake-python-styleguide'

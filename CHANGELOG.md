@@ -41,6 +41,8 @@ Semantic versioning in our case means:
 - Adds baseline information for all complexity violation messages: `x > baseline`
 - Changes how cognitive complexity is calculated
 - Adds support for positional arguments in different checks
+- Removes flake8-coding, all encoding strings, visitor and tests
+  for `EmptyLineAfterCodingViolation`
 
 ### Bugfixes
 
@@ -51,6 +53,7 @@ Semantic versioning in our case means:
 - Fixes that annotation complexity was not reported for `async` functions
 - Fixes that annotation complexity was not reported for lists
 - Fixes that annotation complexity was not reported for `*` and `/` args
+- Fixes that annotation complexity fails on string expressions
 - Fixes bug when `TooManyPublicAttributesViolation`
   was counting duplicate fields
 - Fixes negated conditions `WPS504` was not reported for `if` expressions
@@ -71,6 +74,9 @@ Semantic versioning in our case means:
   and other builtin functions without keyword arguments
 - Fixes `WPS221` reporting differently on different `python` versions
 - Fixes `WPS221` reporting nested variable annotations
+- Fixes `WPS509` not reporting nested ternary in grandchildren of `if`
+- Fixes `WPS509` not reporting nested ternary in ternary
+- Fixes `WPS426` not reporting nested `lambda` in comprehensions
 
 ### Misc
 
@@ -82,6 +88,7 @@ Semantic versioning in our case means:
 - Uses `abc` stdlib's module to mark abstract base classes #1122
 - Adds `python3.8` to the CI
 - Update `astboom` version to 0.4.2
+
 
 ## 0.13.4
 

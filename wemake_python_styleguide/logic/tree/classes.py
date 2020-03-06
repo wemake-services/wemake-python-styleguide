@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing import Optional
 
 from wemake_python_styleguide.constants import ALLOWED_BUILTIN_CLASSES

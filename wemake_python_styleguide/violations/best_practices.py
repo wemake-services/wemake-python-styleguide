@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 These checks ensure that you follow the best practices.
 
@@ -509,7 +507,8 @@ class WrongModuleMetadataViolation(ASTViolation):
         Place all the metadata in ``setup.py``,
         ``setup.cfg``, or ``pyproject.toml``.
         Use proper docstrings and packaging classifiers.
-        Use ``pkg_resources`` if you need to import this data into your app.
+        Use ``importlib.metadata`` (or ``importlib_metadata`` on python < 3.8)
+        if you need to import this data into your app.
 
     See
     :py:data:`~wemake_python_styleguide.constants.MODULE_METADATA_VARIABLES_BLACKLIST`
@@ -1061,6 +1060,9 @@ class LambdaInsideLoopViolation(ASTViolation):
     """
     Forbids to use ``lambda`` inside loops.
 
+    We check ``while``, ``for``, and ``async for`` loop bodies.
+    We also check comprehension value parts.
+
     Reasoning:
         It is error-prone to use ``lambda`` inside
         ``for`` and ``while`` loops due to the famous late-binding.
@@ -1082,6 +1084,7 @@ class LambdaInsideLoopViolation(ASTViolation):
 
     .. versionadded:: 0.5.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.14.0
 
     See also:
         https://docs.python-guide.org/writing/gotchas/#late-binding-closures
@@ -1102,7 +1105,7 @@ class UnreachableCodeViolation(ASTViolation):
     cannot be executed by python's interpreter.
 
     This is probably caused by ``return`` or ``raise`` statements.
-    However, we can not cover 100% of truly unreachable code by this rule.
+    However, we cannot cover 100% of truly unreachable code by this rule.
     This happens due to the dynamic nature of python.
     For example, detecting that ``1 / some_value`` would sometimes raise
     an exception is too complicated and is out of the scope of this rule.
@@ -1254,7 +1257,7 @@ class NestedClassViolation(ASTViolation):
 
     Reasoning:
         Nested classes are really hard to manage.
-        You can not even create an instance of this class in many cases.
+        You cannot even create an instance of this class in many cases.
         Testing them is also really hard.
 
     Solution:

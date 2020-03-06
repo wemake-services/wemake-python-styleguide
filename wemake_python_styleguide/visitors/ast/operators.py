@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from typing import ClassVar, Mapping, Optional, Tuple, Type, Union
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat import types as compat_types
+from wemake_python_styleguide.compat.nodes import NamedExpr
 from wemake_python_styleguide.logic import walk
 from wemake_python_styleguide.logic.tree.operators import (
     count_unary_operator,
@@ -259,7 +257,7 @@ class WalrusVisitor(base.BaseNodeVisitor):
 
     def visit_NamedExpr(
         self,
-        node: compat_types.NamedExpr,
+        node: NamedExpr,
     ) -> None:  # pragma: py-lt-38
         """
         Disallows walrus ``:=`` operator.

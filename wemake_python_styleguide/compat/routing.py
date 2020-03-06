@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
-
 import ast
 import types
 
 from typing_extensions import Final
 
 from wemake_python_styleguide.compat.constants import PY38
+from wemake_python_styleguide.compat.nodes import Constant
 
 _CONST_NODE_TYPE_NAMES: Final = types.MappingProxyType({
     bool: 'NameConstant',  # should be before int
@@ -26,7 +25,7 @@ if PY38:  # pragma: py-lt-38
 
         Hacked to make sure that everything we had defined before is working.
         """
-        if isinstance(node, ast.Constant):
+        if isinstance(node, Constant):
             # That's the hack itself, we don't get the name of the node.
             # We get the name of wrapped type from it.
             type_name = _CONST_NODE_TYPE_NAMES.get(type(node.value))

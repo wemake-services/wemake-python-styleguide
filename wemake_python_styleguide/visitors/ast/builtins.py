@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import ast
 import string
 from collections import Counter, Hashable, defaultdict

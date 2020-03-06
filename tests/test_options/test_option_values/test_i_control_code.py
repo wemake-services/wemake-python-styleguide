@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 This is a regression test for the argument parsing issue for boolean args.
 

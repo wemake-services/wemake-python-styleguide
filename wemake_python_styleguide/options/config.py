@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Provides configuration options for ``wemake-python-styleguide``.
 

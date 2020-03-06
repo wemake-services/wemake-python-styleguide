@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 This module contains list of white- and black-listed ``python`` members.
 
@@ -228,6 +226,8 @@ MAGIC_METHODS_BLACKLIST: Final = frozenset((
     '__del__',
     '__delitem__',
     '__delete__',
+    '__reduce__',
+    '__reduce_ex__',
 
     '__dir__',  # since we don't use `dir()`
     '__delattr__',  # since we don't use `delattr()`

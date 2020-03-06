@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import re
 import tokenize
 from typing import ClassVar, FrozenSet, Optional
@@ -157,7 +155,7 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         Finds incorrect string usages.
 
         ``u`` can only be the only prefix.
-        You can not combine it with ``r``, ``b``, or ``f``.
+        You cannot combine it with ``r``, ``b``, or ``f``.
         Since it will raise a ``SyntaxError`` while parsing.
 
         Raises:

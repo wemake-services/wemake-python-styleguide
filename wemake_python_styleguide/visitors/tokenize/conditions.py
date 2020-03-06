@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import tokenize
 from typing import ClassVar, FrozenSet
 

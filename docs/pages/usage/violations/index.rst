@@ -30,7 +30,6 @@ Plugin                         Codes
 -----------------------------  ------
 flake8-builtins                `A001 - A002 <https://github.com/gforcada/flake8-builtins/blob/master/flake8_builtins.py>`_
 flake8-bugbear                 `B001 - B008 <https://github.com/PyCQA/flake8-bugbear#list-of-warnings>`_
-flake8-coding                  `C101 - C103 <https://github.com/tk0miya/flake8-coding#rules>`_
 flake8-comprehensions          `C400 - C411 <https://github.com/adamchainz/flake8-comprehensions>`_
 flake8-commas                  `C812 - C819 <https://pypi.org/project/flake8-commas/>`_
 mccabe                         `C901 <http://flake8.pycqa.org/en/latest/user/error-codes.html>`_

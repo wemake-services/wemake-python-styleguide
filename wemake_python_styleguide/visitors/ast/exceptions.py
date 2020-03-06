@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from collections import Counter
 from typing import ClassVar, Set, Tuple

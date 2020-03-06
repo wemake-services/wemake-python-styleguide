@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from typing import Optional, Tuple, Type
 
@@ -18,7 +16,7 @@ def set_if_chain(tree: ast.AST) -> ast.AST:
     """
     Used to create ``if`` chains.
 
-    We have a problem, because we can not tell which situation is happening:
+    We have a problem, because we cannot tell which situation is happening:
 
     .. code:: python
 

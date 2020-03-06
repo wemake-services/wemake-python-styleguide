@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 These checks limit the Python's inconsistency.
 
@@ -1017,6 +1015,7 @@ class EmptyLineAfterCodingViolation(TokenizeViolation):
         'Found missing empty line between `coding` magic comment and code'
     )
     code = 323
+    deprecated = True
 
 
 @final

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 r"""
 Disallows to use incorrect magic comments.
 
@@ -34,9 +32,6 @@ from wemake_python_styleguide.violations.best_practices import (
     ShebangViolation,
     WrongDocCommentViolation,
     WrongMagicCommentViolation,
-)
-from wemake_python_styleguide.violations.consistency import (
-    EmptyLineAfterCodingViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
@@ -126,68 +121,6 @@ class WrongCommentVisitor(BaseTokenVisitor):
 
 
 @final
-class FileMagicCommentsVisitor(BaseTokenVisitor):
-    """Checks comments for the whole file."""
-
-    _newlines: ClassVar[FrozenSet[int]] = frozenset((
-        tokenize.NL,
-        tokenize.NEWLINE,
-        tokenize.ENDMARKER,
-    ))
-
-    def visit_comment(self, token: tokenize.TokenInfo) -> None:
-        """
-        Checks special comments that are magic per each file.
-
-        Raises:
-            EmptyLineAfterCoddingViolation
-
-        """
-        self._check_empty_line_after_codding(token)
-
-    def _offset_for_comment_line(self, token: tokenize.TokenInfo) -> int:
-        return 2 if token.exact_type == tokenize.COMMENT else 0
-
-    def _check_empty_line_after_codding(
-        self,
-        token: tokenize.TokenInfo,
-    ) -> None:
-        """
-        Checks that we have a blank line after the magic comments.
-
-        PEP-263 says: a magic comment must be placed into the source
-        files either as first or second line in the file
-
-        See also:
-            https://www.python.org/dev/peps/pep-0263/
-
-        """
-        if token.start != (1, 0):
-            return
-
-        tokens = iter(self.file_tokens[self.file_tokens.index(token):])
-        available_offset = 2  # comment + newline
-
-        while True:
-            next_token = next(tokens)
-            if not available_offset:
-                available_offset = self._offset_for_comment_line(
-                    next_token,
-                )
-
-            if available_offset > 0:
-                available_offset -= 1
-                continue
-
-            # We have a coverage error here.
-            # It reports, that this line is not covered.
-            # While we do have test cases for both correct and wrong cases.
-            if next_token.exact_type not in self._newlines:  # pragma: no cover
-                self.add_violation(EmptyLineAfterCodingViolation(token))
-            break
-
-
-@final
 class ShebangVisitor(BaseTokenVisitor):
     """Checks the first shebang in the file."""
 
@@ -207,7 +140,7 @@ class ShebangVisitor(BaseTokenVisitor):
         """
         is_first_token = token == self.file_tokens[0]
 
-        if not is_first_token:
+        if not is_first_token:  # TODO: test on windows
             return
 
         shebang_token = self._get_shebang_token()
@@ -216,36 +149,20 @@ class ShebangVisitor(BaseTokenVisitor):
         if shebang_token is not None:
             self._check_valid_shebang(shebang_token)
 
-    def _check_valid_shebang_line(self, line) -> bool:
-        return self._shebang.match(line) is not None
-
-    def _get_shebang_token(self) -> Optional[tokenize.TokenInfo]:
-        all_tokens = iter(self.file_tokens)
-
-        current_token = next(all_tokens)
-
-        while current_token.exact_type in self._comments_or_newlines:
-            if self._check_valid_shebang_line(current_token.line):
-                return current_token
-
-            current_token = next(all_tokens)
-
-        return None
-
     def _check_executable_mismatch(self, shebang_token) -> None:
         is_executable = is_executable_file(self.filename)
 
         if is_executable and shebang_token is None:
             self.add_violation(
                 ShebangViolation(
-                    text='The file is executable but no shebang is present',
+                    text='file is executable but no shebang is present',
                 ),
             )
 
         if not is_executable and shebang_token is not None:
             self.add_violation(
                 ShebangViolation(
-                    text='Shebang is present but the file is not executable',
+                    text='shebang is present but the file is not executable',
                 ),
             )
 
@@ -256,20 +173,36 @@ class ShebangVisitor(BaseTokenVisitor):
         if self._python_executable not in token_line:
             self.add_violation(
                 ShebangViolation(
-                    text='Shebang is present but does not contain \"python\"',
+                    text='shebang is present but does not contain `python`',
                 ),
             )
 
         if not first_line_token:
             self.add_violation(
                 ShebangViolation(
-                    text='There is whitespace before shebang',
+                    text='there is whitespace before shebang',
                 ),
             )
 
         if not on_first_line:
             self.add_violation(
                 ShebangViolation(
-                    text='There are blank or comment lines before shebang',
+                    text='there are blank or comment lines before shebang',
                 ),
             )
+
+    def _get_shebang_token(self) -> Optional[tokenize.TokenInfo]:
+        all_tokens = iter(self.file_tokens)
+
+        current_token = next(all_tokens)
+
+        while current_token.exact_type in self._comments_or_newlines:
+            if self._is_valid_shebang_line(current_token.line):
+                return current_token
+
+            current_token = next(all_tokens)
+
+        return None
+
+   def _is_valid_shebang_line(self, line) -> bool:
+        return self._shebang.match(line) is not None   

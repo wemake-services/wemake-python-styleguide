@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 These checks ensures that you use Python's version of OOP correctly.
 
@@ -241,7 +239,7 @@ class MethodWithoutArgumentsViolation(ASTViolation):
         Methods without arguments are allowed to be defined,
         but almost impossible to use.
         Furthermore, they don't have an access to ``self``,
-        so can not access the inner state of the object.
+        so cannot access the inner state of the object.
         It might be an intentional design or just a typo.
 
     Solution:
