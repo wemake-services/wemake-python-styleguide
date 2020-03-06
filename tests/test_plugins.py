@@ -29,7 +29,6 @@ PLUGINS = (
     'S101',  # flake8-bandit
     'T100',  # flake8-debugger
     'RST215',  # flake8-rst-docstrings
-    'EXE003',  # flake8-executable
     'DAR101',  # darglint
 )
 

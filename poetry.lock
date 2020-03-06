@@ -423,17 +423,6 @@ flake8 = ">=3.5,<4.0"
 
 [[package]]
 category = "main"
-description = "A Flake8 plugin for checking executable permissions and shebangs."
-name = "flake8-executable"
-optional = false
-python-versions = ">=3.6"
-version = "2.0.3"
-
-[package.dependencies]
-flake8 = ">=3.0.0"
-
-[[package]]
-category = "main"
 description = "flake8 plugin that integrates isort ."
 name = "flake8-isort"
 optional = false
@@ -1747,10 +1736,6 @@ flake8-docstrings = [
 flake8-eradicate = [
     {file = "flake8-eradicate-0.2.4.tar.gz", hash = "sha256:b693e9dfe6da42dbc7fb75af8486495b9414d1ab0372d15efcf85a2ac85fd368"},
     {file = "flake8_eradicate-0.2.4-py3-none-any.whl", hash = "sha256:b0bcdbb70a489fb799f9ee11fefc57bd0d3251e1ea9bdc5bf454443cccfd620c"},
-]
-flake8-executable = [
-    {file = "flake8-executable-2.0.3.tar.gz", hash = "sha256:a636ff78b14b63b1245d1c4d509db2f6ea0f2e27a86ee7eb848f3827bef7e16d"},
-    {file = "flake8_executable-2.0.3-py3-none-any.whl", hash = "sha256:968618c475a23a538ced9b957a741b818d37610838f99f6abcea249e4de7c9ec"},
 ]
 flake8-isort = [
     {file = "flake8-isort-2.8.0.tar.gz", hash = "sha256:64454d1f154a303cfe23ee715aca37271d4f1d299b2f2663f45b73bff14e36a9"},

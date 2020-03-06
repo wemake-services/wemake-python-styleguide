@@ -70,6 +70,7 @@ Summary
    ProtectedModuleMemberViolation
    PositionalOnlyArgumentsViolation
    LoopControlFinallyViolation
+   ShebangViolation
 
 Best practices
 --------------
@@ -127,6 +128,7 @@ Best practices
 .. autoclass:: ProtectedModuleMemberViolation
 .. autoclass:: PositionalOnlyArgumentsViolation
 .. autoclass:: LoopControlFinallyViolation
+.. autoclass:: ShebangViolation
 
 """
 
@@ -2068,3 +2070,39 @@ class LoopControlFinallyViolation(ASTViolation):
 
     error_template = 'Found `break` or `continue` in `finally` block'
     code = 452
+
+
+@final
+class ShebangViolation(SimpleViolation):
+    """
+    Forbids to execute the file with shebang incorrectly set.
+
+    A violation is raised in these cases :
+        - Shebang is present but the file is not executable.
+        - The file is executable but no shebang is present.
+        - Shebang is present but does not contain "python".
+        - There is whitespace before shebang.
+        - There are blank or comment lines before shebang.
+
+    Reasoning:
+        Setting the shebang incorrectly causes executable mismatch.
+
+    Solution:
+        Ensure the shebang is present on the first line,
+        contains "python", and there is no whitespace before.
+
+    Example::
+
+        # Correct:
+        #!/usr/bin/env python
+
+        # Wrong:
+        #!/usr/bin/env
+            #!/usr/bin/env python
+
+    .. versionadded:: 0.14.0
+
+    """
+
+    error_template = 'Found executable mismatch: {0}'
+    code = 453

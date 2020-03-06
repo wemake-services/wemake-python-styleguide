@@ -13,6 +13,7 @@ Semantic versioning in our case means:
 
 ### Features
 
+- **Breaking**: removes `flake8-executable`, now using `WPS452` instead of `EXE001..EXE005`
 - **Breaking**: removes `flake8-print`, now using `WPS421` instead of `T001`
 - **Breaking**: removes `flake8-annotations-complexity`,
   now using `WPS234` instead of `TAE002`
