@@ -131,6 +131,7 @@ Summary
    UnusedVariableIsUsedViolation
    UnusedVariableIsDefinedViolation
    WrongUnusedVariableNameViolation
+   UnreadableNameViolation
 
 Module names
 ------------
@@ -156,6 +157,7 @@ General names
 .. autoclass:: UnusedVariableIsUsedViolation
 .. autoclass:: UnusedVariableIsDefinedViolation
 .. autoclass:: WrongUnusedVariableNameViolation
+.. autoclass:: UnreadableNameViolation
 
 """
 
@@ -779,3 +781,39 @@ class WrongUnusedVariableNameViolation(ASTViolation):
 
     error_template = 'Found wrong unused variable name: {0}'
     code = 123
+
+
+@final
+class UnreadableNameViolation(MaybeASTViolation):
+    """
+    Forbids to have variable or module names which could be difficult to read.
+
+    Reasoning:
+        Currently one can name your classes like so: `ControlIn`
+        Inside it is just L and i, but we cannot tell it from the word.
+        There are a lot other combinations which are unreadable
+
+    Solution:
+        We need to forbid unreadable letter combinations.
+
+    This rule checks: modules, variables, attributes,
+    functions, methods, and classes.
+
+    Example::
+
+        # Correct:
+        ControlStatement
+        AveragePrice
+
+        # Wrong:
+        ControlIn
+        Fill1List
+        Memo0Output
+        l1I
+
+    .. versionadded:: 0.14
+
+    """
+
+    error_template = 'Found unreadable characters combination: {0}'
+    code = 124

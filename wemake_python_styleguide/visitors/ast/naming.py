@@ -19,15 +19,19 @@ from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
     SPECIAL_ARGUMENT_NAMES_WHITELIST,
+    UNREADABLE_CHARACTER_COMBINATIONS,
 )
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming import (
     access,
     blacklists,
     builtins,
-    logical,
     name_nodes,
 )
+from wemake_python_styleguide.logic.naming.logical import (  # noqa: I001
+    contain,  # noqa: I001
+    name_check,  # noqa: I001
+)  # noqa: I001
 from wemake_python_styleguide.logic.tree import functions
 from wemake_python_styleguide.types import (
     AnyAssign,
@@ -74,19 +78,28 @@ class _NameValidator(object):
         *,
         is_first_argument: bool = False,
     ) -> None:
-        if logical.is_wrong_name(name, self._variable_names_blacklist):
+        if name_check.is_wrong_name(name, self._variable_names_blacklist):
             self._error_callback(
                 naming.WrongVariableNameViolation(node, text=name),
             )
 
         if not is_first_argument:
-            if logical.is_wrong_name(name, SPECIAL_ARGUMENT_NAMES_WHITELIST):
+            if name_check.is_wrong_name(name, SPECIAL_ARGUMENT_NAMES_WHITELIST):
                 self._error_callback(
                     naming.ReservedArgumentNameViolation(node, text=name),
                 )
 
-        if logical.does_contain_unicode(name):
+        if contain.does_contain_unicode(name):
             self._error_callback(naming.UnicodeNameViolation(node, text=name))
+
+        is_unreadable = contain.does_contain_unreadable_characters(
+            name,
+            UNREADABLE_CHARACTER_COMBINATIONS,
+        )
+        if is_unreadable:
+            self._error_callback(
+                naming.UnreadableNameViolation(node, text=name),
+            )
 
         self._ensure_length(node, name)
         self._ensure_underscores(node, name)
@@ -119,12 +132,12 @@ class _NameValidator(object):
                 naming.PrivateNameViolation(node, text=name),
             )
 
-        if logical.does_contain_underscored_number(name):
+        if contain.does_contain_underscored_number(name):
             self._error_callback(
                 naming.UnderscoredNumberNameViolation(node, text=name),
             )
 
-        if logical.does_contain_consecutive_underscores(name):
+        if contain.does_contain_consecutive_underscores(name):
             self._error_callback(
                 naming.ConsecutiveUnderscoresInNameViolation(
                     node, text=name,
@@ -143,18 +156,18 @@ class _NameValidator(object):
 
     def _ensure_length(self, node: ast.AST, name: str) -> None:
         min_length = self._options.min_name_length
-        if logical.is_too_short_name(name, min_length=min_length):
+        if name_check.is_too_short_name(name, min_length=min_length):
             self._error_callback(naming.TooShortNameViolation(node, text=name))
 
         max_length = self._options.max_name_length
-        if logical.is_too_long_name(name, max_length=max_length):
+        if name_check.is_too_long_name(name, max_length=max_length):
             self._error_callback(naming.TooLongNameViolation(node, text=name))
 
     def _ensure_case(self, target: ast.AST) -> None:
         if not isinstance(target, ast.Name):
             return
 
-        if not target.id or not logical.is_upper_case_name(target.id):
+        if not target.id or not name_check.is_upper_case_name(target.id):
             return
 
         self._error_callback(
@@ -192,6 +205,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             UpperCaseAttributeViolation
             UnicodeNameViolation
             TrailingUnderscoreViolation
+            UnreadableNameViolation
 
         """
         self._validator.check_attribute_name(node)
@@ -209,6 +223,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             TooLongNameViolation
             UnicodeNameViolation
             TrailingUnderscoreViolation
+            UnreadableNameViolation
 
         """
         self._validator.check_name(node, node.name)
@@ -240,6 +255,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             PrivateNameViolation
             TooLongNameViolation
             TrailingUnderscoreViolation
+            UnreadableNameViolation
 
         """
         for alias_node in node.names:
@@ -259,6 +275,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             TooLongNameViolation
             UnicodeNameViolation
             TrailingUnderscoreViolation
+            UnreadableNameViolation
 
         """
         variable_name = name_nodes.get_assigned_name(node)
