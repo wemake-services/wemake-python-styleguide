@@ -64,7 +64,7 @@ def test_literal(
     (1, 'first_name'),
     (1, 1),
 ])
-def test_literal_special1(
+def test_literal_special(
     assert_errors,
     parse_ast_tree,
     code,

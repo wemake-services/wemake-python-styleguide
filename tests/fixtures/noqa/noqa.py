@@ -702,3 +702,8 @@ for element in range(10):
         # https://github.com/wemake-services/wemake-python-styleguide/issues/1082
         break
     my_print(4)
+
+
+class Memo0Output(object):  # noqa: WPS124
+    def __init__(self):
+        self.first = 1

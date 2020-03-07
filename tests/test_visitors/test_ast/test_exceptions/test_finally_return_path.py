@@ -281,7 +281,7 @@ def function():
             {0}
 """
 
-wrong_all1 = """
+wrong_all = """
 def function():
     for _ in range(10):
         try:
@@ -375,7 +375,7 @@ def function():
     wrong_try_finally,
     wrong_try_else,
     wrong_try_except_else,
-    wrong_all1,
+    wrong_all,
     wrong_all2,
     wrong_all3,
     wrong_all4,
