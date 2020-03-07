@@ -57,6 +57,7 @@ Semantic versioning in our case means:
 - Fixes that annotation complexity was not reported for `async` functions
 - Fixes that annotation complexity was not reported for lists
 - Fixes that annotation complexity was not reported for `*` and `/` args
+- Fixes that annotation complexity was not tested for dot notation attributes
 - Fixes that annotation complexity fails on string expressions
 - Fixes bug when `TooManyPublicAttributesViolation`
   was counting duplicate fields
