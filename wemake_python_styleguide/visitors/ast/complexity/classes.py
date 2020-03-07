@@ -58,7 +58,10 @@ class ClassComplexityVisitor(BaseNodeVisitor):
             )
 
     def _check_public_attributes(self, node: ast.ClassDef) -> None:
-        _, instance_attributes = classes.get_attributes(node, include_annotated=False)
+        _, instance_attributes = classes.get_attributes(
+            node,
+            include_annotated=False,
+        )
         attrs_count = len({
             attr.attr
             for attr in instance_attributes
