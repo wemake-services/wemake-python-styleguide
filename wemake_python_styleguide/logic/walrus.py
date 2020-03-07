@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import ast
 
 from wemake_python_styleguide.compat.nodes import NamedExpr
