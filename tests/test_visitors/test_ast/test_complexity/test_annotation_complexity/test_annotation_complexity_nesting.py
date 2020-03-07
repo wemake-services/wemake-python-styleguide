@@ -69,6 +69,9 @@ class Test(object):
     'Callable[[str, int], int]',
     'List[List[int]]',
     '"String Annontation"',
+    'typing.int',
+    'typing.List[int]',
+    'typing.List["typing.Tuple[int]"]',
 ])
 def test_correct_annotations(
     assert_errors,
@@ -112,6 +115,10 @@ def test_correct_annotations(
     'Dict[int, "Tuple[List[List[str]], ...]"]',
     'Dict[int, Tuple["List[List[str]]", ...]]',
     'Dict[int, Tuple[List["List[str]"], ...]]',
+
+    '"typing.List[typing.List[typing.List[typing.List[int]]]]"',
+    'typing.Dict["str", "typing.List[typing.List[typing.List[int]]]"]',
+    'typing.Tuple[typing.List[typing.Dict[int, "typing.List[str]"]]]',
 ])
 def test_complex_annotations(
     assert_errors,
