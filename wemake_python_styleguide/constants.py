@@ -366,3 +366,15 @@ NON_MAGIC_MODULO: Final = 10
 # Used to specify a pattern which checks variables and modules for underscored
 # numbers in their names:
 UNDERSCORED_NUMBER_PATTERN: Final = re.compile(r'.+\D\_\d+(\D|$)')
+
+# Used to specify unreadable combinations of letters and letters with numbers
+UNREADABLE_CHARACTER_COMBINATIONS = frozenset((
+    'lI',
+    'Il',
+    '1l',
+    'l1',
+    '1I',
+    '1i',
+    '0O',
+    'O0',
+))
