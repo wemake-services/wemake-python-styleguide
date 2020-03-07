@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import ast
-from typing import List, Optional, Set, Tuple, Union
+from typing import List, Optional, Set, Tuple
 
-from wemake_python_styleguide import types
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
 from wemake_python_styleguide.constants import ALLOWED_BUILTIN_CLASSES
 from wemake_python_styleguide.logic import nodes
-from wemake_python_styleguide.logic.naming import name_nodes
 from wemake_python_styleguide.logic.naming.builtins import is_builtin_name
+from wemake_python_styleguide.types import AnyAssign
+
+#: Type alias for the attributes we return from class inspection.
+_AllAttributes = Tuple[List[AnyAssign], List[ast.Attribute]]
 
 
 def is_forbidden_super_class(class_name: Optional[str]) -> bool:
@@ -43,67 +45,73 @@ def is_forbidden_super_class(class_name: Optional[str]) -> bool:
 
 def get_attributes(
     node: ast.ClassDef,
-) -> Tuple[List[types.AnyAssign], List[ast.Attribute]]:
-    """Returns all non annotated class and instance attributes of a class."""
-    return get_class_attributes(node), get_instance_attributes(node)
-
-
-def get_all_attributes_stripped(node: ast.ClassDef) -> Set[str]:
+    include_annotated: bool,
+) -> _AllAttributes:
     """
-    Returns names all class and instance attributes of a class stripped.
+    Helper to get all attributes from class nod definitions.
 
-    Removes all leading underscores from attribute names.
+    There are limitations.
+    First of all, we cannot get inherited attributes.
+    Secondly, ones that are set via ``setattr`` or similar.
+    Thirdly, we return all attributes and there might be duplicates.
+
+    Args:
+        node: class node definition.
+        include_annotated: whether or not to include AnnAssign attributes.
+
+    Returns:
+        A tuple of lists for both class and instance level variables.
 
     """
-    class_attributes = get_annotated_class_attributes(node)
-    instance_attributes = get_instance_attributes(node)
-    return {
-        class_attribute.lstrip('_') for class_attribute
-        in name_nodes.flat_variable_names(class_attributes)
-    }.union({
-        instance.attr.lstrip('_') for instance
-        in instance_attributes
-    })
-
-
-def get_class_attributes(
-    node: ast.ClassDef,
-) -> List[Union[ast.Assign, ast.AnnAssign]]:
-    """Returns all non annotated class attributes of a class."""
     class_attributes = []
-    for sub in ast.walk(node):
-        is_correct_context = nodes.get_context(sub) == node
-        has_value = getattr(sub, 'value', None)
-        if isinstance(sub, AssignNodes) and has_value and is_correct_context:
-            class_attributes.append(sub)
-
-    return class_attributes
-
-
-def get_annotated_class_attributes(
-    node: ast.ClassDef,
-) -> List[Union[ast.Assign, ast.AnnAssign]]:
-    """Returns all class attributes of a class."""
-    class_attributes = []
-    for sub in ast.walk(node):
-        is_correct_context = nodes.get_context(sub) == node
-        has_value = getattr(sub, 'value', None)
-        if isinstance(sub, AssignNodes) and has_value and is_correct_context:
-            class_attributes.append(sub)
-            continue
-        if isinstance(sub, ast.AnnAssign) and is_correct_context:
-            class_attributes.append(sub)
-
-    return class_attributes
-
-
-def get_instance_attributes(node: ast.ClassDef) -> List[ast.Attribute]:
-    """Returns all instance attributes of a class."""
     instance_attributes = []
-    for sub in ast.walk(node):
-        if isinstance(sub, ast.Attribute) and isinstance(sub.ctx, ast.Store):
-            instance_attributes.append(sub)
-    return instance_attributes
+
+    for subnode in ast.walk(node):
+        instance_attr = _get_instance_attribute(subnode)
+        if instance_attr is not None:
+            instance_attributes.append(instance_attr)
+            continue
+
+        if include_annotated:
+            class_attr = _get_annotated_class_attribute(node, subnode)
+        else:
+            class_attr = _get_class_attribute(node, subnode)
+        if class_attr is not None:
+            class_attributes.append(class_attr)
+
+    return class_attributes, instance_attributes
+
+
+def _get_instance_attribute(node: ast.AST) -> Optional[ast.Attribute]:
+    return node if (
+        isinstance(node, ast.Attribute) and
+        isinstance(node.ctx, ast.Store) and
+        isinstance(node.value, ast.Name) and
+        node.value.id == 'self'
+    ) else None
+
+
+def _get_class_attribute(
+    node: ast.ClassDef, subnode: ast.AST,
+) -> Optional[AnyAssign]:
+    return subnode if (
+        nodes.get_context(subnode) == node and
+        getattr(subnode, 'value', None) and
+        isinstance(subnode, AssignNodes)
+    ) else None
+
+
+def _get_annotated_class_attribute(
+    node: ast.ClassDef, subnode: ast.AST,
+) -> Optional[AnyAssign]:
+    return subnode if (
+        nodes.get_context(subnode) == node and
+        (
+            getattr(subnode, 'value', None) and
+            isinstance(subnode, AssignNodes)
+        ) or
+        isinstance(subnode, ast.AnnAssign)
+    ) else None
 
 
 def getter_setter_postfixes(node: ast.ClassDef) -> Set[str]:
