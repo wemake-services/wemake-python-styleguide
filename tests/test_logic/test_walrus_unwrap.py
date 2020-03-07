@@ -6,11 +6,9 @@ from wemake_python_styleguide.logic.walrus import get_assigned_expr
 
 
 @pytest.mark.parametrize('code', [
-    'x = 1',
     '"a"',
-    'def some(): ...',
-    'if other: ...',
-    'pass',
+    'call()',
+    '2 + 2',
     pytest.param(
         '(x := call())',
         marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
