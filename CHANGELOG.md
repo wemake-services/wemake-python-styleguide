@@ -47,6 +47,7 @@ Semantic versioning in our case means:
 - Adds baseline information for all complexity violation messages: `x > baseline`
 - Changes how cognitive complexity is calculated
 - Adds support for positional arguments in different checks
+- Adds support for `NamedExpr` with in compare type violation 
 
 ### Bugfixes
 
