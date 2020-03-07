@@ -1,10 +1,14 @@
-# -*- coding: utf-8 -*-
-
 """
 This module contains list of white- and black-listed ``python`` members.
 
-It contains lists of keywords and built-in functions we discourage to use.
-It also contains some exceptions that we allow to use in our codebase.
+We add values here when we want to make them public.
+Or when a value is reused in several places.
+Then, we automatically have to add it here and document it.
+
+Other constants that are not used accross modules
+and does not require to be documented can be defined where they are used.
+
+All values here must be documented with ``#:`` comments.
 """
 
 import math
@@ -229,6 +233,10 @@ MAGIC_METHODS_BLACKLIST: Final = frozenset((
     '__delitem__',
     '__delete__',
 
+    # Since we don't use `pickle`:
+    '__reduce__',
+    '__reduce_ex__',
+
     '__dir__',  # since we don't use `dir()`
     '__delattr__',  # since we don't use `delattr()`
 ))
@@ -311,6 +319,18 @@ MAX_NO_COVER_COMMENTS: Final = 5
 #: Maximum length of ``yield`` ``tuple`` expressions.
 MAX_LEN_YIELD_TUPLE: Final = 5
 
+#: Maximum number of compare nodes in a single expression.
+MAX_COMPARES: Final = 2
+
+#: Maximum number of conditions in a single ``if`` or ``while`` statement.
+MAX_CONDITIONS: Final = 4
+
+#: Maximum number of `elif` blocks in a single `if` condition:
+MAX_ELIFS: Final = 3
+
+#: Maximum number of ``except`` cases in a single ``try`` clause.
+MAX_EXCEPT_CASES: Final = 3
+
 #: Approximate constants which real values should be imported from math module.
 MATH_APPROXIMATE_CONSTANTS: Final = frozenset((
     math.pi,
@@ -352,19 +372,10 @@ TUPLE_ARGUMENTS_METHODS = frozenset((
 
 # Internal variables
 # They are not publicly documented since they are not used by the end user.
+# But, we still need them to be defined here.
 
 # Used as a default filename, when it is not passed by flake8:
 STDIN: Final = 'stdin'
 
-# Used as a special name patterns for unused variables, like _, __:
-UNUSED_VARIABLE_REGEX: Final = re.compile(r'^_+$')
-
 # Used to specify as a placeholder for `__init__`:
 INIT: Final = '__init__'
-
-# Allowed magic number modulo:
-NON_MAGIC_MODULO: Final = 10
-
-# Used to specify a pattern which checks variables and modules for underscored
-# numbers in their names:
-UNDERSCORED_NUMBER_PATTERN: Final = re.compile(r'.+\D\_\d+(\D|$)')

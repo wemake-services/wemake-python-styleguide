@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 These test ensures that each plugin is enabled and working.
 
@@ -14,7 +12,6 @@ import subprocess
 
 PLUGINS = (
     'B002',  # flake8-bugbear
-    'C101',  # flake8-coding
     'A001',  # flake8-builtins
     'C400',  # flake8-comprehensions
     'C819',  # flake8-commas
@@ -28,11 +25,9 @@ PLUGINS = (
     'P101',  # flake8-string-format
     'Q000',  # flake8-quotes
     'Q003',  # flake8-quotes
-    'S001',  # flake8-pep3101
     'S101',  # flake8-bandit
     'T100',  # flake8-debugger
     'RST215',  # flake8-rst-docstrings
-    'EXE003',  # flake8-executable
     'DAR101',  # darglint
 )
 

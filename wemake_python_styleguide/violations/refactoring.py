@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 These checks ensure that you don't have patterns that can be refactored.
 
@@ -1031,7 +1029,7 @@ class InCompareWithSingleItemContainerViolation(ASTViolation):
 
     """
 
-    error_template = 'Found wrong "in" compare with single item container'
+    error_template = 'Found wrong `in` compare with single item container'
     code = 525
 
 

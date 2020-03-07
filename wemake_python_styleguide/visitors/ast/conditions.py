@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from collections import defaultdict
 from functools import reduce

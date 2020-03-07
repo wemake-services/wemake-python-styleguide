@@ -1,9 +1,13 @@
-# -*- coding: utf-8 -*-
-
+import re
 from typing import Iterable
 
-from wemake_python_styleguide import constants
+from typing_extensions import Final
+
 from wemake_python_styleguide.logic.naming import access
+
+# Used to specify a pattern which checks variables and modules for underscored
+# numbers in their names:
+_UNDERSCORED_NUMBER_PATTERN: Final = re.compile(r'.+\D\_\d+(\D|$)')
 
 
 def is_wrong_name(name: str, to_check: Iterable[str]) -> bool:
@@ -176,7 +180,7 @@ def does_contain_underscored_number(name: str) -> bool:
     True
 
     """
-    return constants.UNDERSCORED_NUMBER_PATTERN.match(name) is not None
+    return _UNDERSCORED_NUMBER_PATTERN.match(name) is not None
 
 
 def does_contain_consecutive_underscores(name: str) -> bool:

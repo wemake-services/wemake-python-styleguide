@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
-
 import pytest
+
+from wemake_python_styleguide.compat.constants import PY38
 
 # Imports:
 
@@ -48,6 +48,10 @@ class Input(object):
 method_kwargs_argument = """
 class Input(object):
     def validate(self, **{0}): ...
+"""
+
+function_posonly_argument = """
+def test({0}, /): ...
 """
 
 function_kwonly_argument = """
@@ -193,6 +197,9 @@ _ALL_FIXTURES = frozenset((
     with_star_variable,
     exception,
 ))
+
+if PY38:
+    _ALL_FIXTURES |= {function_posonly_argument}
 
 _SUITABLE_FOR_UNUSED_TUPLE = frozenset((
     unpacking_variables,

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from typing import Union
 
@@ -17,8 +15,8 @@ def _is_valid_single(node: _VarDefinition) -> bool:
 def is_valid_block_variable_definition(node: _VarDefinition) -> bool:
     """Is used to check either block variables are correctly defined."""
     if isinstance(node, ast.Tuple):
-        for var_definition in node.elts:
-            if not _is_valid_single(var_definition):
-                return False
-        return True
+        return all(
+            _is_valid_single(var_definition)
+            for var_definition in node.elts
+        )
     return _is_valid_single(node)

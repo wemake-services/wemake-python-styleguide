@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from wemake_python_styleguide.visitors.ast.complexity.function import (
     FunctionComplexityVisitor,
     TooManyArgumentsViolation,

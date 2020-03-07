@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import ast
 import itertools
 from collections import Counter
@@ -357,6 +355,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
 @alias('visit_any_assign', (
     'visit_Assign',
     'visit_AnnAssign',
+    'visit_NamedExpr',
 ))
 class WrongVariableUsageVisitor(BaseNodeVisitor):
     """Checks how variables are used."""
@@ -408,7 +407,7 @@ class WrongVariableUsageVisitor(BaseNodeVisitor):
 
         """
         if node.name:
-            self._check_assign_unused(node, [node.name])
+            self._check_assign_unused(node, [node.name], is_local=True)
         self.generic_visit(node)
 
     def visit_withitem(self, node: ast.withitem) -> None:
@@ -423,6 +422,7 @@ class WrongVariableUsageVisitor(BaseNodeVisitor):
             self._check_assign_unused(
                 cast(ast.AST, nodes.get_parent(node)),
                 name_nodes.get_variables_from_node(node.optional_vars),
+                is_local=True,
             )
         self.generic_visit(node)
 
@@ -449,7 +449,7 @@ class WrongVariableUsageVisitor(BaseNodeVisitor):
         node: ast.AST,
         all_names: Iterable[str],
         *,
-        is_local: bool = True,
+        is_local: bool,
     ) -> None:
         all_names = list(all_names)  # we are using it twice
         all_unused = all(

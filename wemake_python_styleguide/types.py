@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 This module contains knowledge about the most important types that we use.
 
@@ -21,7 +19,7 @@ final
 As you can see in the source code almost everything
 is marked as ``@final`` or ``Final``.
 
-It means that this value can not be subclassed or reassigned.
+It means that this value cannot be subclassed or reassigned.
 This it only a ``mypy`` feature, it does not affect ``python`` runtime.
 
 We do this, because we value composition over inheritance.
@@ -42,6 +40,9 @@ from typing import Tuple, Type, Union
 
 from typing_extensions import Protocol, final
 
+#: We use this type to represent all string-like nodes.
+AnyText = Union[ast.Str, ast.Bytes]
+
 #: In cases we need to work with both import types.
 AnyImport = Union[ast.Import, ast.ImportFrom]
 
@@ -56,6 +57,17 @@ AnyIf = Union[ast.If, ast.IfExp]
 
 #: In cases we need to work with both sync and async loops.
 AnyFor = Union[ast.For, ast.AsyncFor]
+
+#: In case we need to work with any loop: sync, async, and while.
+AnyLoop = Union[AnyFor, ast.While]
+
+#: All diffrent comprehension types in one place.
+AnyComprehension = Union[
+    ast.ListComp,
+    ast.DictComp,
+    ast.SetComp,
+    ast.GeneratorExp,
+]
 
 #: In cases we need to work with both sync and async context managers.
 AnyWith = Union[ast.With, ast.AsyncWith]
@@ -81,6 +93,9 @@ AnyAccess = Union[
     ast.Attribute,
     ast.Subscript,
 ]
+
+#: We use this type to work with any text-like values. Related to `AnyText`.
+AnyTextPrimitive = Union[str, bytes]
 
 
 @final

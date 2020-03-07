@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 These checks find flaws in your application design.
 
@@ -734,6 +732,9 @@ class TooManyConditionsViolation(ASTViolation):
     """
     Forbids to have conditions with too many logical operators.
 
+    We use :str:`wemake_python_styleguide.constants.MAX_CONDITIONS`
+    as a default value.
+
     Reasoning:
         When reading through the complex conditions you will fail
         to understand all the possible branches. And you will end up putting
@@ -759,6 +760,9 @@ class TooManyConditionsViolation(ASTViolation):
 class TooManyElifsViolation(ASTViolation):
     """
     Forbids to use many ``elif`` branches.
+
+    We use :str:`wemake_python_styleguide.constants.MAX_ELIFS`
+    as a default value.
 
     Reasoning:
         This rule is specifically important because of many ``elif``
@@ -816,6 +820,9 @@ class TooManyForsInComprehensionViolation(ASTViolation):
 class TooManyExceptCasesViolation(ASTViolation):
     """
     Forbids to have too many ``except`` cases in a single ``try`` clause.
+
+    We use :str:`wemake_python_styleguide.constants.MAX_EXCEPT_CASES`
+    as a default value.
 
     Reasoning:
         Handling too many exceptions in a single place

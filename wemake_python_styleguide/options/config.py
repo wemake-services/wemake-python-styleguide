@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Provides configuration options for ``wemake-python-styleguide``.
 
@@ -167,12 +165,18 @@ class _Option(object):
     def __attrs_post_init__(self):
         """Is called after regular init is done."""
         object.__setattr__(  # noqa: WPS609
-            self, 'help', ' '.join((self.help, 'Defaults to: %default')),
+            self, 'help', ' '.join(
+                (self.help, 'Defaults to: %default'),  # noqa: WPS323
+            ),
         )
 
     def asdict_no_none(self) -> Mapping[str, ConfigValuesTypes]:
-        dct = attr.asdict(self)
-        return {key: opt for key, opt in dct.items() if opt is not None}
+        """We need this method to return options, but filter out ``None``."""
+        return {
+            key: opt
+            for key, opt in attr.asdict(self).items()
+            if opt is not None
+        }
 
 
 @final

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing_extensions import Final
 
 from wemake_python_styleguide.visitors.ast.complexity import (  # noqa: WPS235

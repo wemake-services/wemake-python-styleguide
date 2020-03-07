@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
@@ -48,7 +46,7 @@ def test_not_useless(
 def test_useless(
     assert_errors,
     parse_ast_tree,
-    simple_conditions,  # TODO: join with `test_useless_with_in`
+    simple_conditions,
     comparators,
     default_options,
 ):
@@ -67,7 +65,7 @@ def test_useless(
     ('variable', 'variable'),
     ('another_variable', 'another_variable'),
 ])
-def test_useless_with_in(  # TODO: join with `test_useless`
+def test_useless_with_in(
     assert_errors,
     parse_ast_tree,
     in_conditions,

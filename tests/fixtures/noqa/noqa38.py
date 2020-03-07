@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 This file represents AST location changes in python3.8 and above.
 

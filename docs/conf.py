@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Configuration file for the Sphinx documentation builder.
 #
@@ -75,7 +74,7 @@ extensions = [
 autoclass_content = 'class'
 autodoc_member_order = 'bysource'
 
-autodoc_mock_imports = [  # TODO: remove after pip==19.0
+autodoc_mock_imports = [
     'astor',
     'pep8ext_naming',
     'flake8_builtins',

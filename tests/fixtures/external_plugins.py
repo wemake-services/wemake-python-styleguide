@@ -1,4 +1,3 @@
-#!/usr/bin/env perl
 from sys import *
 import sys
 from typing import List, Union, Dict
@@ -16,7 +15,6 @@ def camelCase(): ...
 
 '{}'.format(1)
 ""
-'%s' % 'test'
 
 assert True
 ipdb.set_trace()

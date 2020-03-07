@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Integration tests definition.
 
@@ -43,7 +41,7 @@ VERSION_SPECIFIC = types.MappingProxyType({
     'WPS224': 1,
 
     'WPS307': 1,
-    'WPS332': 0,  # TODO: add test case, only works for `>= python3.8`
+    'WPS332': 0,  # TODO: pyflakes fails at `:=` at the moment
 
     'WPS416': int(not PY38),  # only works for `< python3.8`
     'WPS451': int(PY38),  # only works for `>= python3.8`
@@ -219,6 +217,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS450': 1,
     'WPS451': 0,  # defined in version specific table.
     'WPS452': 1,  # also defined in version specific table.
+    'WPS453': 0,
 
     'WPS500': 1,
     'WPS501': 1,

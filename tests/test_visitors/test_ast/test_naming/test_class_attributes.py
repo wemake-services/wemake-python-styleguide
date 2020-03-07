@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.naming import (
@@ -47,7 +45,7 @@ def test_upper_case_class_attributes(
     code,
     default_options,
 ):
-    """Testing that attribute can not have too short names."""
+    """Testing that attribute cannot have too short names."""
     tree = parse_ast_tree(code.format(non_snake_case_name))
 
     visitor = WrongNameVisitor(default_options, tree=tree)
@@ -76,7 +74,7 @@ def test_snake_case_class_attributes(
     code,
     default_options,
 ):
-    """Testing that attribute can not have too short names."""
+    """Testing that attribute cannot have too short names."""
     tree = parse_ast_tree(code.format(snake_case_name))
 
     visitor = WrongNameVisitor(default_options, tree=tree)

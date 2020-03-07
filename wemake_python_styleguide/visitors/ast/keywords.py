@@ -1,11 +1,13 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from typing import ClassVar, Dict, List, Optional, Type, Union, cast
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
+from wemake_python_styleguide.compat.aliases import (
+    AssignNodes,
+    FunctionNodes,
+    TextNodes,
+)
 from wemake_python_styleguide.logic import walk
 from wemake_python_styleguide.logic.naming import name_nodes
 from wemake_python_styleguide.logic.nodes import get_parent
@@ -97,7 +99,7 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
         if not isinstance(parent, FunctionNodes):
             return
 
-        returns = len(list(filter(
+        returns = len(tuple(filter(
             lambda return_node: return_node.value is not None,
             walk.get_subnodes_by_type(parent, ast.Return),
         )))
@@ -164,6 +166,7 @@ class WrongKeywordVisitor(BaseNodeVisitor):
                 message = 'del'
             else:
                 message = node.__class__.__qualname__.lower()
+
             self.add_violation(WrongKeywordViolation(node, text=message))
 
 
@@ -378,9 +381,8 @@ class ConstantKeywordVisitor(BaseNodeVisitor):
         ast.SetComp,
         ast.DictComp,
 
-        ast.Str,
+        *TextNodes,
         ast.Num,
-        ast.Bytes,
 
         ast.IfExp,
     )

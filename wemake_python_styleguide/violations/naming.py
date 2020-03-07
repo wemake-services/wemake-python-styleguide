@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Naming is hard! It is, in fact, one of the two hardest problems.
 
@@ -195,6 +193,9 @@ class WrongModuleNameViolation(SimpleViolation):
         # Wrong:
         utils.py
         helpers.py
+
+    See also:
+        https://tonsky.me/blog/utils/
 
     .. versionadded:: 0.1.0
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Calculates cognitive complexity metric for nodes and functions.
 

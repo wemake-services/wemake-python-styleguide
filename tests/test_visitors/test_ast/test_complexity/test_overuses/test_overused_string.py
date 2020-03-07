@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.complexity import (
@@ -139,16 +137,22 @@ def test_string_overuse_settings(
     "''",
     '""',
 ])
+@pytest.mark.parametrize('prefix', [
+    'b',
+    'u',
+    '',
+])
 def test_string_overuse(
     assert_errors,
     assert_error_text,
     parse_ast_tree,
     default_options,
     strings,
+    prefix,
     string_value,
 ):
     """Ensures that over-used strings raise violations."""
-    tree = parse_ast_tree(strings.format(string_value))
+    tree = parse_ast_tree(strings.format(prefix + string_value))
 
     visitor = StringOveruseVisitor(default_options, tree=tree)
     visitor.run()

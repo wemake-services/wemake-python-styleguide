@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.naming import (
     UnusedVariableIsUsedViolation,
 )
@@ -96,11 +95,23 @@ def some_function():
         print(_ex)
 """
 
+wrong_function_with_for = """
+def some_function():
+    for _key_item in some():
+        print(_key_item)
+"""
+
 wrong_method = """
 class Test(object):
     def some_method(self):
         _some = calling()
         print(_some)
+"""
+
+wrong_function_with_walrus = """
+def some_function():
+    if _unused := some():
+        print(_unused)
 """
 
 
@@ -135,7 +146,12 @@ def test_correct_variables(
     wrong_function2,
     wrong_function_with_exception,
     wrong_function_with_with,
+    wrong_function_with_for,
     wrong_method,
+    pytest.param(
+        wrong_function_with_walrus,
+        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
+    ),
 ])
 def test_wrong_super_call(
     assert_errors,

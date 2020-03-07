@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from functools import partial
 from typing import (  # noqa: WPS235

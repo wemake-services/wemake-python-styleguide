@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from collections import defaultdict
 from typing import Callable, DefaultDict, List, Set, Tuple, Union, cast
 
 from typing_extensions import final
 
+from wemake_python_styleguide.compat.types import AnyAssignWithWalrus
 from wemake_python_styleguide.logic.naming.name_nodes import (
     flat_variable_names,
 )
@@ -13,7 +12,6 @@ from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.scopes import defs, predicates
 from wemake_python_styleguide.logic.walk import is_contained_by
 from wemake_python_styleguide.types import (
-    AnyAssign,
     AnyFor,
     AnyFunctionDef,
     AnyImport,
@@ -51,6 +49,7 @@ _NamePredicate = Callable[[ast.AST], bool]
 @decorators.alias('visit_locals', (
     'visit_Assign',
     'visit_AnnAssign',
+    'visit_NamedExpr',
     'visit_arg',
 ))
 class BlockVariableVisitor(base.BaseNodeVisitor):
@@ -142,7 +141,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
 
     # Locals:
 
-    def visit_locals(self, node: Union[AnyAssign, ast.arg]) -> None:
+    def visit_locals(self, node: Union[AnyAssignWithWalrus, ast.arg]) -> None:
         """
         Visits local variable definitions and function arguments.
 

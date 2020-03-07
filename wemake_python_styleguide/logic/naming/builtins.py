@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import keyword
 
 from flake8_builtins import BUILTINS

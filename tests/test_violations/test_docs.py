@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from wemake_python_styleguide.options.config import Configuration
 
 

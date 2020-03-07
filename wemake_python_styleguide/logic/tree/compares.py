@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import ast
 import types
 from collections import defaultdict

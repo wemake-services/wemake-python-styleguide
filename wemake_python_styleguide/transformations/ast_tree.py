@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import ast
 
 from pep8ext_naming import NamingChecker
