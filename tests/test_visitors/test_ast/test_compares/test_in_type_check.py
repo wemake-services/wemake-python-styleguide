@@ -29,7 +29,7 @@ not_in_template = 'some not in {0}'
     '(x for x in call())',
     pytest.param(
         '(x := [1, 2, 3])',
-        marks=pytest.mark.skipif(not PY38, reason='NamedExpr appeared in 3.8'),
+        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
     ),
 ])
 def test_compare_with_wrong_type(
