@@ -65,6 +65,15 @@ class ClassWithAttrs(object):
         self.{1} = 2
 """
 
+class_attribute_with_other = """
+class ClassWithAttrs(object):
+    {0} = 0
+
+    def constructor(self) -> None:
+        other.{0} = 0
+        self.{1} = 2
+"""
+
 class_complex_attribute = """
 class ClassWithAttrs(object):
     prefix.{0} = 0
@@ -126,6 +135,7 @@ def test_incorrect_fields(
     class_attribute_usage,
     class_attribute_logic,
     class_attribute_regular_assign,
+    class_attribute_with_other,
     regular_assigns,
 ])
 @pytest.mark.parametrize(('field1', 'field2'), [

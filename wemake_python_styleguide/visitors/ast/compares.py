@@ -319,24 +319,6 @@ class WrongConditionalVisitor(BaseNodeVisitor):
         self._check_constant_condition(node)
         self.generic_visit(node)
 
-    def _is_simplifiable_assign(
-        self,
-        node_body: List[ast.stmt],
-    ) -> Optional[str]:  # TODO: move to logic at some point
-        wrong_length = len(node_body) != 1
-        if wrong_length or not isinstance(node_body[0], AssignNodes):
-            return None
-        if not isinstance(node_body[0].value, ast.NameConstant):
-            return None
-        if node_body[0].value.value is None:
-            return None
-
-        targets = get_assign_targets(node_body[0])
-        if len(targets) != 1:
-            return None
-
-        return source.node_to_string(targets[0])
-
     def _check_constant_condition(self, node: AnyIf) -> None:
         real_node = operators.unwrap_unary_node(node.test)
         if isinstance(real_node, self._forbidden_nodes):
@@ -370,6 +352,24 @@ class WrongConditionalVisitor(BaseNodeVisitor):
 
         if is_nested_in_if or is_nested_poorly:
             self.add_violation(NestedTernaryViolation(node))
+
+    def _is_simplifiable_assign(
+        self,
+        node_body: List[ast.stmt],
+    ) -> Optional[str]:
+        wrong_length = len(node_body) != 1
+        if wrong_length or not isinstance(node_body[0], AssignNodes):
+            return None
+        if not isinstance(node_body[0].value, ast.NameConstant):
+            return None
+        if node_body[0].value.value is None:
+            return None
+
+        targets = get_assign_targets(node_body[0])
+        if len(targets) != 1:
+            return None
+
+        return source.node_to_string(targets[0])
 
 
 @final

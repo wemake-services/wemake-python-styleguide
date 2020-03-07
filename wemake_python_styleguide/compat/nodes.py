@@ -20,6 +20,8 @@ else:  # pragma: py-gte-38
         Copied from ast.pyi file.
         """
 
+        target: ast.expr
+
     class Constant(ast.expr):  # noqa: WPS440
         """
         Fallback for python that does not have ``ast.Constant``.

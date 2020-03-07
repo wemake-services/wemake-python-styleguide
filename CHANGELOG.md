@@ -84,6 +84,7 @@ Semantic versioning in our case means:
 - Fixes `WPS426` not reporting nested `lambda` in comprehensions
 - Fixes several violations to reporting for `ast.Bytes` and `ast.FormattedStr`
   where `ast.Str` was checked
+- Fixes `WPS601` reporting shadowing for non-`self` attributes
 
 ### Misc
 
