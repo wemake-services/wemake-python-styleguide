@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-import sys
-
 import pytest
 
 from wemake_python_styleguide.compat.constants import PY38
