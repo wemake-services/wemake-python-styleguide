@@ -130,7 +130,7 @@ class Test(object):
     def __init__(self, other):
         other.attr = self.some()
 
-   def get_attr(self):
+    def get_attr(self):
         return something.unrelated()
 """
 
