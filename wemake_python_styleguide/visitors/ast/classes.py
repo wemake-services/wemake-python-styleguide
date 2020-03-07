@@ -120,10 +120,21 @@ class WrongClassVisitor(base.BaseNodeVisitor):
         return False
 
     def _check_getters_setters_methods(self, node: ast.ClassDef) -> None:
-        attribute_names = classes.get_all_attributes_stripped(node)
+        class_attributes, instance_attributes = classes.get_attributes(
+            node,
+            include_annotated=True,
+        )
+
+        attributes_stripped = {
+            class_attribute.lstrip('_') for class_attribute
+            in name_nodes.flat_variable_names(class_attributes)
+        }.union({
+            instance.attr.lstrip('_') for instance
+            in instance_attributes
+        })
 
         for method_postfix in classes.getter_setter_postfixes(node):
-            if any(name == method_postfix for name in attribute_names):
+            if any(name == method_postfix for name in attributes_stripped):
                 self.add_violation(
                     oop.UnpythonicGetterSetterViolation(
                         node,
@@ -361,7 +372,10 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_attributes_shadowing(self, node: ast.ClassDef) -> None:
-        class_attributes, instance_attributes = classes.get_attributes(node)
+        class_attributes, instance_attributes = classes.get_attributes(
+            node,
+            include_annotated=False,
+        )
         class_attribute_names = set(
             name_nodes.flat_variable_names(class_attributes),
         )
