@@ -1,8 +1,14 @@
 """
 This module contains list of white- and black-listed ``python`` members.
 
-It contains lists of keywords and built-in functions we discourage to use.
-It also contains some exceptions that we allow to use in our codebase.
+We add values here when we want to make them public.
+Or when a value is reused in several places.
+Then, we automatically have to add it here and document it.
+
+Other constants that are not used accross modules
+and does not require to be documented can be defined where they are used.
+
+All values here must be documented with ``#:`` comments.
 """
 
 import math
@@ -226,6 +232,8 @@ MAGIC_METHODS_BLACKLIST: Final = frozenset((
     '__del__',
     '__delitem__',
     '__delete__',
+
+    # Since we don't use `pickle`:
     '__reduce__',
     '__reduce_ex__',
 
@@ -364,19 +372,10 @@ TUPLE_ARGUMENTS_METHODS = frozenset((
 
 # Internal variables
 # They are not publicly documented since they are not used by the end user.
+# But, we still need them to be defined here.
 
 # Used as a default filename, when it is not passed by flake8:
 STDIN: Final = 'stdin'
 
-# Used as a special name patterns for unused variables, like _, __:
-UNUSED_VARIABLE_REGEX: Final = re.compile(r'^_+$')
-
 # Used to specify as a placeholder for `__init__`:
 INIT: Final = '__init__'
-
-# Allowed magic number modulo:
-NON_MAGIC_MODULO: Final = 10
-
-# Used to specify a pattern which checks variables and modules for underscored
-# numbers in their names:
-UNDERSCORED_NUMBER_PATTERN: Final = re.compile(r'.+\D\_\d+(\D|$)')

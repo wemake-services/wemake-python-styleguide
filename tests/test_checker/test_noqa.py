@@ -41,7 +41,7 @@ VERSION_SPECIFIC = types.MappingProxyType({
     'WPS224': 1,
 
     'WPS307': 1,
-    'WPS332': 0,  # TODO: add test case, only works for `>= python3.8`
+    'WPS332': 0,  # TODO: pyflakes fails at `:=` at the moment
 
     'WPS416': int(not PY38),  # only works for `< python3.8`
     'WPS451': int(PY38),  # only works for `>= python3.8`
@@ -128,7 +128,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS320': 2,
     'WPS321': 1,
     'WPS322': 1,
-    'WPS323': 0,  # violation is deprecated
+    'WPS323': 1,
     'WPS324': 1,
     'WPS325': 1,
     'WPS326': 1,

@@ -438,7 +438,7 @@ class AssignmentPatternsVisitor(BaseNodeVisitor):
     def visit_Assign(self, node: ast.Assign) -> None:
         """Checks assignment patterns."""
         self._check_augmented_assign_pattern(node)
-        self.generic_visit(node)  # TODO: support NamedExpr
+        self.generic_visit(node)
 
     def _check_augmented_assign_pattern(
         self,

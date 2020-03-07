@@ -4,7 +4,7 @@ from typing import ClassVar, Dict, List, Mapping, Union
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.compat.aliases import FunctionNodes, TextNodes
 from wemake_python_styleguide.compat.functions import get_posonlyargs
 from wemake_python_styleguide.constants import (
     FUNCTIONS_BLACKLIST,
@@ -238,12 +238,11 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
     """Responsible for checking function internals."""
 
     _allowed_default_value_types: ClassVar[AnyNodes] = (
+        *TextNodes,
         ast.Name,
         ast.Attribute,
-        ast.Str,
         ast.NameConstant,
         ast.Tuple,
-        ast.Bytes,
         ast.Num,
         ast.Ellipsis,
     )

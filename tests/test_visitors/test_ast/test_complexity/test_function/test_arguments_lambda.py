@@ -22,7 +22,7 @@ lambda_with_single_kwonly = 'lambda *, kwonly=True: ...'
     lambda_with_single_args,
     pytest.param(
         lambda_with_posonly_args,
-        marks=pytest.mark.skipif(not PY38, reason='posonly was added in 3.8'),
+        marks=pytest.mark.skipif(not PY38, reason='posonly appeared in 3.8'),
     ),
     lambda_with_single_kwargs,
     lambda_with_single_kwonly,
@@ -49,7 +49,7 @@ def test_correct_arguments_count(
     lambda_with_single_args,
     pytest.param(
         lambda_with_posonly_args,
-        marks=pytest.mark.skipif(not PY38, reason='posonly was added in 3.8'),
+        marks=pytest.mark.skipif(not PY38, reason='posonly appeared in 3.8'),
     ),
     lambda_with_single_kwargs,
     lambda_with_single_kwonly,
@@ -76,7 +76,7 @@ def test_correct_arguments_count_custom_option(
     lambda_with_single_args,
     pytest.param(
         lambda_with_posonly_args,
-        marks=pytest.mark.skipif(not PY38, reason='posonly was added in 3.8'),
+        marks=pytest.mark.skipif(not PY38, reason='posonly appeared in 3.8'),
     ),
     lambda_with_single_kwargs,
     lambda_with_single_kwonly,

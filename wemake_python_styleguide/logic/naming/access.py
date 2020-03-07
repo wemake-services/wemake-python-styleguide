@@ -1,4 +1,9 @@
-from wemake_python_styleguide.constants import UNUSED_VARIABLE_REGEX
+import re
+
+from typing_extensions import Final
+
+#: Used as a special name patterns for unused variables, like `_` and `__`.
+_UNUSED_VARIABLE_REGEX: Final = re.compile(r'^_+$')
 
 
 def is_unused(name: str) -> bool:
@@ -18,7 +23,7 @@ def is_unused(name: str) -> bool:
     False
 
     """
-    return UNUSED_VARIABLE_REGEX.match(name) is not None
+    return _UNUSED_VARIABLE_REGEX.match(name) is not None
 
 
 def is_magic(name: str) -> bool:

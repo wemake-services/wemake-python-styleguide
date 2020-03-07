@@ -22,6 +22,8 @@ else:  # pragma: py-gte-38
         
         value: ast.expr  # noqa: WPS110
 
+        target: ast.expr
+
     class Constant(ast.expr):  # noqa: WPS440
         """
         Fallback for python that does not have ``ast.Constant``.

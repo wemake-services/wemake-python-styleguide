@@ -4,9 +4,9 @@ from typing import DefaultDict
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic import walk
 from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.logic.nodes import get_parent
+from wemake_python_styleguide.logic.tree import classes
 from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations.complexity import (
     TooManyBaseClassesViolation,
@@ -58,11 +58,13 @@ class ClassComplexityVisitor(BaseNodeVisitor):
             )
 
     def _check_public_attributes(self, node: ast.ClassDef) -> None:
-        attributes = filter(
-            self._is_public_instance_attr_def,
-            walk.get_subnodes_by_type(node, ast.Attribute),
-        )
-        attrs_count = len({attr.attr for attr in attributes})
+        _, instance_attributes = classes.get_attributes(node)
+        attrs_count = len({
+            attr.attr
+            for attr in instance_attributes
+            if access.is_public(attr.attr)
+        })
+
         if attrs_count > self.options.max_attributes:
             self.add_violation(
                 TooManyPublicAttributesViolation(
@@ -71,14 +73,6 @@ class ClassComplexityVisitor(BaseNodeVisitor):
                     baseline=self.options.max_attributes,
                 ),
             )
-
-    def _is_public_instance_attr_def(self, node: ast.Attribute) -> bool:
-        return (
-            isinstance(node.ctx, ast.Store) and
-            access.is_public(node.attr) and
-            isinstance(node.value, ast.Name) and
-            node.value.id == 'self'
-        )
 
 
 @final
