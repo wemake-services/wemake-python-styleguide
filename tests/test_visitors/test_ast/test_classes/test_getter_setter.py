@@ -125,6 +125,15 @@ class Test(object):
         self.set_attribute = 1
 """
 
+other_getter_and_setter = """
+class Test(object):
+    def __init__(self, other):
+        other.attr = self.some()
+
+   def get_attr(self):
+        return something.unrelated()
+"""
+
 instance_attribute_template = """
 class Template(object):
     def __init__(self):
@@ -170,6 +179,7 @@ class Test(object):
     class_getter_and_setter_attributes,
     instance_getter_and_setter_attributes,
     dataclass_property_getter_setter,
+    other_getter_and_setter,
 ])
 def test_valid_getter_and_setter(
     assert_errors,
