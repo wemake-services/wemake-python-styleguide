@@ -3,7 +3,11 @@ from typing import ClassVar, Dict, List, Optional, Type, Union, cast
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
+from wemake_python_styleguide.compat.aliases import (
+    AssignNodes,
+    FunctionNodes,
+    TextNodes,
+)
 from wemake_python_styleguide.logic import walk
 from wemake_python_styleguide.logic.naming import name_nodes
 from wemake_python_styleguide.logic.nodes import get_parent
@@ -377,9 +381,8 @@ class ConstantKeywordVisitor(BaseNodeVisitor):
         ast.SetComp,
         ast.DictComp,
 
-        ast.Str,
+        *TextNodes,
         ast.Num,
-        ast.Bytes,
 
         ast.IfExp,
     )

@@ -155,7 +155,7 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         Finds incorrect string usages.
 
         ``u`` can only be the only prefix.
-        You can not combine it with ``r``, ``b``, or ``f``.
+        You cannot combine it with ``r``, ``b``, or ``f``.
         Since it will raise a ``SyntaxError`` while parsing.
 
         Raises:
@@ -171,7 +171,7 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         self._check_wrong_unicode_escape(token)
 
     def _check_correct_multiline(self, token: tokenize.TokenInfo) -> None:
-        _, string_def = split_prefixes(token)
+        _, string_def = split_prefixes(token.string)
         if has_triple_string_quotes(string_def):
             if '\n' not in string_def and token not in self._docstrings:
                 self.add_violation(
@@ -179,7 +179,7 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
                 )
 
     def _check_string_modifiers(self, token: tokenize.TokenInfo) -> None:
-        modifiers, _ = split_prefixes(token)
+        modifiers, _ = split_prefixes(token.string)
 
         if 'u' in modifiers.lower():
             self.add_violation(
@@ -196,7 +196,7 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
                 )
 
     def _check_implicit_raw_string(self, token: tokenize.TokenInfo) -> None:
-        modifiers, string_def = split_prefixes(token)
+        modifiers, string_def = split_prefixes(token.string)
         if 'r' in modifiers.lower():
             return
 
@@ -210,7 +210,7 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
 
     def _check_wrong_unicode_escape(self, token: tokenize.TokenInfo) -> None:
         # See: http://docs.python.org/reference/lexical_analysis.html
-        modifiers, string_body = split_prefixes(token)
+        modifiers, string_body = split_prefixes(token.string)
 
         index = 0
         while True:

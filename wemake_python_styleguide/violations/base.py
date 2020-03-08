@@ -18,7 +18,7 @@ Violations API
    TokenizeViolation
    SimpleViolation
 
-Violation can not have more than one base class.
+Violation cannot have more than one base class.
 See :ref:`tutorial` for more information about choosing a correct base class.
 
 Conventions
@@ -52,7 +52,7 @@ Reference
 import abc
 import ast
 import tokenize
-from typing import ClassVar, Optional, Set, Tuple, Union
+from typing import Callable, ClassVar, Optional, Set, Tuple, Union
 
 from typing_extensions import final
 
@@ -62,6 +62,9 @@ ErrorNode = Union[
     tokenize.TokenInfo,
     None,
 ]
+
+#: We use this type to define helper classes with callbacks to add violations.
+ErrorCallback = Callable[['BaseViolation'], None]
 
 
 class BaseViolation(object, metaclass=abc.ABCMeta):

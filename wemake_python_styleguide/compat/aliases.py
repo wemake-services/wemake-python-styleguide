@@ -10,6 +10,9 @@ import ast
 
 from typing_extensions import Final
 
+#: We need this tuple to easily work with both types of text nodes:
+TextNodes: Final = (ast.Str, ast.Bytes)
+
 #: We need this tuple to easily check that this is a real assign node.
 AssignNodes: Final = (ast.Assign, ast.AnnAssign)
 

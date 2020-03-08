@@ -6,7 +6,7 @@ def _get_version(dist_name: str) -> str:  # pragma: no cover
     try:
         return importlib_metadata.version(dist_name)
     except importlib_metadata.PackageNotFoundError:
-        return ''  # readthedocs can not install `poetry` projects
+        return ''  # readthedocs cannot install `poetry` projects
 
 
 pkg_name = 'wemake-python-styleguide'

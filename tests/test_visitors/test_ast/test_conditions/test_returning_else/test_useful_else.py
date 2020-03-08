@@ -154,7 +154,7 @@ def test_else_that_can_not_be_removed(
     default_options,
     mode,
 ):
-    """Testing that extra ``else`` blocks can not be removed."""
+    """Testing that extra ``else`` blocks cannot be removed."""
     tree = parse_ast_tree(mode(code))
 
     visitor = IfStatementVisitor(default_options, tree=tree)

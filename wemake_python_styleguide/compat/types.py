@@ -1,18 +1,7 @@
-"""
-Module to define fix type differences in different python versions.
+from typing import Union
 
-Note that we use ``sys.version_info`` directly,
-because that's how ``mypy`` knows about what we are doing.
-"""
+from wemake_python_styleguide.compat.nodes import NamedExpr
+from wemake_python_styleguide.types import AnyAssign
 
-import ast
-import sys
-
-if sys.version_info >= (3, 8):  # pragma: py-lt-38
-    from ast import NamedExpr as NamedExpr  # noqa: WPS113, WPS433
-else:  # pragma: py-gte-38
-    class NamedExpr(ast.expr):  # noqa: WPS440
-        """Copied from ast.pyi file."""
-
-        target: ast.expr
-        value: ast.expr  # noqa: WPS110
+#: When we search for assign elements, we also need typed assign.
+AnyAssignWithWalrus = Union[AnyAssign, NamedExpr]

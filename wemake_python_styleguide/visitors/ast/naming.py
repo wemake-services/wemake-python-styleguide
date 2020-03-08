@@ -280,7 +280,7 @@ class WrongNameVisitor(BaseNodeVisitor):
         """
         variable_name = name_nodes.get_assigned_name(node)
 
-        if variable_name is not None:  # TODO: support NamedExpr
+        if variable_name is not None:
             self._validator.check_name(node, variable_name)
         self.generic_visit(node)
 
@@ -337,7 +337,6 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
         """
         names = list(name_nodes.flat_variable_names([node]))
 
-        # TODO: support NamedExpr
         self._check_reassignment(node, names)
         self._check_unique_assignment(node, names)
         self.generic_visit(node)
@@ -373,6 +372,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
 @alias('visit_any_assign', (
     'visit_Assign',
     'visit_AnnAssign',
+    'visit_NamedExpr',
 ))
 class WrongVariableUsageVisitor(BaseNodeVisitor):
     """Checks how variables are used."""
@@ -407,7 +407,7 @@ class WrongVariableUsageVisitor(BaseNodeVisitor):
         is_inside_class_or_module = isinstance(
             nodes.get_context(node),
             (ast.ClassDef, ast.Module),
-        )  # TODO: support NamedExpr
+        )
         self._check_assign_unused(
             node,
             name_nodes.flat_variable_names([node]),
@@ -424,7 +424,7 @@ class WrongVariableUsageVisitor(BaseNodeVisitor):
 
         """
         if node.name:
-            self._check_assign_unused(node, [node.name])
+            self._check_assign_unused(node, [node.name], is_local=True)
         self.generic_visit(node)
 
     def visit_withitem(self, node: ast.withitem) -> None:
@@ -439,6 +439,7 @@ class WrongVariableUsageVisitor(BaseNodeVisitor):
             self._check_assign_unused(
                 cast(ast.AST, nodes.get_parent(node)),
                 name_nodes.get_variables_from_node(node.optional_vars),
+                is_local=True,
             )
         self.generic_visit(node)
 
@@ -465,7 +466,7 @@ class WrongVariableUsageVisitor(BaseNodeVisitor):
         node: ast.AST,
         all_names: Iterable[str],
         *,
-        is_local: bool = True,
+        is_local: bool,
     ) -> None:
         all_names = list(all_names)  # we are using it twice
         all_unused = all(

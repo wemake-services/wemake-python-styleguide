@@ -10,13 +10,14 @@ from wemake_python_styleguide.visitors.ast.compares import (
 
 
 @pytest.mark.parametrize('code', [
-    'if a in {1}: ...',
-    'if a in {1: "a"}: ...',
-    'if a in [1]: ... ',
-    'if a in (1,): ... ',
-    'if a in "a": ... ',
-    'if a in {*a}: ... ',
-    'if a in {**a}: ... ',
+    'a in {1}',
+    'a in {1: "a"}',
+    'a in [1]',
+    'a in (1,)',
+    'a in "a"',
+    'a in b"a"',
+    'a in {*a}',
+    'a in {**a}',
 ])
 def test_single_item_container(
     assert_errors,
@@ -39,13 +40,13 @@ def test_single_item_container(
 
 
 @pytest.mark.parametrize('code', [
-    'if a in {1, 2}: ...',
-    'if a in {1: "a", 2: "b"}: ...',
-    'if a in [1, 2]: ... ',
-    'if a in (1, 2): ... ',
-    'if a in "ab": ... ',
-    'if a in {1, *a}: ... ',
-    'if a in {1: "a", **a}: ... ',
+    'a in {1, 2}',
+    'a in {1: "a", 2: "b"}',
+    'a in [1, 2]',
+    'a in (1, 2)',
+    'a in "ab"',
+    'a in {1, *a}',
+    'a in {1: "a", **a}',
 ])
 def test_multi_item_contrainer(
     assert_errors,

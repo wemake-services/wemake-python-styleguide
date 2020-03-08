@@ -24,9 +24,12 @@ def get_annotation_compexity(annotation_node: _Annotation) -> int:
     we additionally parse them to ``ast`` nodes.
     """
     if isinstance(annotation_node, ast.Str):
-        annotation_node = ast.parse(  # type: ignore
-            annotation_node.s,
-        ).body[0].value
+        try:
+            annotation_node = ast.parse(  # type: ignore
+                annotation_node.s,
+            ).body[0].value
+        except SyntaxError:
+            return 1
 
     if isinstance(annotation_node, ast.Subscript):
         return 1 + get_annotation_compexity(

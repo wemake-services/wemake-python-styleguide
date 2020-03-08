@@ -1,6 +1,6 @@
 import ast
 from itertools import chain
-from typing import Callable, Iterable
+from typing import Iterable
 
 from typing_extensions import final
 
@@ -9,7 +9,7 @@ from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.logic.tree import imports
 from wemake_python_styleguide.types import AnyImport, ConfigurationOptions
-from wemake_python_styleguide.violations.base import BaseViolation
+from wemake_python_styleguide.violations.base import ErrorCallback
 from wemake_python_styleguide.violations.best_practices import (
     FutureImportViolation,
     NestedImportViolation,
@@ -23,8 +23,6 @@ from wemake_python_styleguide.violations.consistency import (
 )
 from wemake_python_styleguide.violations.naming import SameAliasImportViolation
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
-
-ErrorCallback = Callable[[BaseViolation], None]  # TODO: alias and move
 
 
 class _BaseImportValidator(object):
@@ -118,8 +116,8 @@ class _ImportFromValidator(_BaseImportValidator):
     def _check_vague_alias(self, node: ast.ImportFrom) -> None:
         for alias in node.names:
             for name in filter(None, (alias.name, alias.asname)):
-                is_regular_import = (  # TODO: remove noqa after 0.14 release
-                    (alias.asname and name != alias.asname) or  # noqa: WPS332
+                is_regular_import = (
+                    (alias.asname and name != alias.asname) or
                     not imports.is_vague_import(name)
                 )
 

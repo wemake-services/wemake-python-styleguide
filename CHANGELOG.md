@@ -13,16 +13,22 @@ Semantic versioning in our case means:
 
 ### Features
 
+- **Breaking**: removes `flake8-executable`, now using `WPS452` instead of `EXE001..EXE005`
 - **Breaking**: removes `flake8-print`, now using `WPS421` instead of `T001`
 - **Breaking**: removes `flake8-annotations-complexity`,
   now using `WPS234` instead of `TAE002`
+- **Breaking**: removes `flake8-pep3101`, now using `WPS323` instead of `S001`,
+  we also use a new logic for this violation:
+  we check string defs for `%` patterns, and not for `%` operator
 - **Breaking**: `WPS441` is no longer triggered for `except` blocks,
   it is now handled by `F821` from `flake8`
-- **Breaking**: Removes `radon`,
+- **Breaking**: removes `radon`,
   because `cognitive-complexity` and `mccabe` is enough
-- **Breaking**: Removes `flake8-loggin-format` as a direct dependency
-- **Breaking**: Removes `ImplicitTernaryViolation` or `WPS332`,
+- **Breaking**: removes `flake8-loggin-format` as a direct dependency
+- **Breaking**: removes `ImplicitTernaryViolation` or `WPS332`,
   because it has too many false positives #1099
+- Removes `flake8-coding`, all encoding strings, visitor and tests
+  for old `WPS323` which is now reused for modulo formatting checks
 - Adds `python3.8` support
 - Changes `styleguide.toml` and `flake8.toml` scripts definition
 - Extracts new violation - `WPS450` from `WPS436` #1118
@@ -34,14 +40,13 @@ Semantic versioning in our case means:
 - Forbids to use positional only `/` arguments
 - Forbids to have too many names imported from a single `from ... import`
 - Forbids to use `continue` and `break` in `finally`
+- Forbids to use `__reduce__` and `__reduce_ex__` magic methods
 - Adds `__call__` to list of methods that should be on top #1125
 - Allows `_` to be now used as a defined variable
 - Removes `cognitive_complexity` dependency, now it is built in into our linter
 - Adds baseline information for all complexity violation messages: `x > baseline`
 - Changes how cognitive complexity is calculated
 - Adds support for positional arguments in different checks
-- Removes flake8-coding, all encoding strings, visitor and tests
-  for `EmptyLineAfterCodingViolation`
 - Adds `UnreadableNameViolation` as `WPS124` because there are some
 character combination which is not easy to read
 
@@ -54,6 +59,8 @@ character combination which is not easy to read
 - Fixes that annotation complexity was not reported for `async` functions
 - Fixes that annotation complexity was not reported for lists
 - Fixes that annotation complexity was not reported for `*` and `/` args
+- Fixes that annotation complexity was not tested for dot notation attributes
+- Fixes that annotation complexity fails on string expressions
 - Fixes bug when `TooManyPublicAttributesViolation`
   was counting duplicate fields
 - Fixes negated conditions `WPS504` was not reported for `if` expressions
@@ -76,6 +83,10 @@ character combination which is not easy to read
 - Fixes `WPS221` reporting nested variable annotations
 - Fixes `WPS509` not reporting nested ternary in grandchildren of `if`
 - Fixes `WPS509` not reporting nested ternary in ternary
+- Fixes `WPS426` not reporting nested `lambda` in comprehensions
+- Fixes several violations to reporting for `ast.Bytes` and `ast.FormattedStr`
+  where `ast.Str` was checked
+- Fixes `WPS601` reporting shadowing for non-`self` attributes
 
 ### Misc
 

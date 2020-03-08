@@ -59,6 +59,7 @@ forbidden_modules =
   # Important direct and indirect dependencies:
   flake8
   pygments
+  pyflakes
   isort
   bandit
   eradicate

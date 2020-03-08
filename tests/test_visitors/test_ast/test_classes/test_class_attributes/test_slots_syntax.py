@@ -45,7 +45,8 @@ wrong_slots = (
     '("123",)',
     '("1_var",)',
     '("*notvalid",)',
-    '("*a", *a)',
+    '("*a", *a)',  # invalid name
+    '("a", b"b")',  # bytes
 )
 
 correct_slots = (

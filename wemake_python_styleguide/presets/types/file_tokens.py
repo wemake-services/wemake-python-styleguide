@@ -11,6 +11,7 @@ from wemake_python_styleguide.visitors.tokenize import (
 #: Used to store all token related visitors to be later passed to checker:
 PRESET: Final = (
     comments.WrongCommentVisitor,
+    comments.ShebangVisitor,
 
     syntax.WrongKeywordTokenVisitor,
 
