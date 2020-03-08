@@ -20,6 +20,7 @@ else:  # pragma: py-gte-38
         Copied from ast.pyi file.
         """
 
+        value: ast.expr  # noqa: WPS110
         target: ast.expr
 
     class Constant(ast.expr):  # noqa: WPS440

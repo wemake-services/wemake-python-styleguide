@@ -49,6 +49,7 @@ Semantic versioning in our case means:
 - Adds support for positional arguments in different checks
 - Adds `UnreadableNameViolation` as `WPS124` because there are some
 character combination which is not easy to read
+- Adds support for `NamedExpr` with in compare type violation 
 
 ### Bugfixes
 

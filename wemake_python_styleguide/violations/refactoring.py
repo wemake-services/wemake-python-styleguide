@@ -519,6 +519,7 @@ class WrongInCompareTypeViolation(ASTViolation):
 
     .. versionadded:: 0.10.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.14.0
 
     """
 
