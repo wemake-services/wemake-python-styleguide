@@ -47,7 +47,7 @@ Semantic versioning in our case means:
 - Adds baseline information for all complexity violation messages: `x > baseline`
 - Changes how cognitive complexity is calculated
 - Adds support for positional arguments in different checks
-- Adds support for `NamedExpr` with in compare type violation 
+- Adds support for `NamedExpr` with in compare type violation
 
 ### Bugfixes
 
@@ -86,6 +86,7 @@ Semantic versioning in our case means:
 - Fixes several violations to reporting for `ast.Bytes` and `ast.FormattedStr`
   where `ast.Str` was checked
 - Fixes `WPS601` reporting shadowing for non-`self` attributes
+- Fixes `WPS114` not to be so strict
 
 ### Misc
 

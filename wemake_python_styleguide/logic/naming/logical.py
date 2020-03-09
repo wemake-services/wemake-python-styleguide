@@ -7,7 +7,7 @@ from wemake_python_styleguide.logic.naming import access
 
 # Used to specify a pattern which checks variables and modules for underscored
 # numbers in their names:
-_UNDERSCORED_NUMBER_PATTERN: Final = re.compile(r'.+\D\_\d+(\D|$)')
+_UNDERSCORED_NUMBER_PATTERN: Final = re.compile(r'.+\D\_\d+($|[^a-zA-Z0-9])')
 
 
 def is_wrong_name(name: str, to_check: Iterable[str]) -> bool:
@@ -165,6 +165,9 @@ def does_contain_underscored_number(name: str) -> bool:
     False
 
     >>> does_contain_underscored_number('iso123_456')
+    False
+
+    >>> does_contain_underscored_number('contract_1c')
     False
 
     >>> does_contain_underscored_number('star_wars_episode_2')
