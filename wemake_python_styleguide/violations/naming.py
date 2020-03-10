@@ -789,15 +789,19 @@ class UnreadableNameViolation(MaybeASTViolation):
     Forbids to have variable or module names which could be difficult to read.
 
     Reasoning:
-        Currently one can name your classes like so: `ControlIn`
-        Inside it is just L and i, but we cannot tell it from the word.
-        There are a lot other combinations which are unreadable
+        Currently one can name your classes like so: ``ControlIn``
+        Inside it is just ``L`` and ``i``, but we cannot tell it from the word.
+        There are a lot other combinations which are unreadable.
 
     Solution:
-        We need to forbid unreadable letter combinations.
+        Rename your entity not to contain unreadable sequences.
 
     This rule checks: modules, variables, attributes,
     functions, methods, and classes.
+
+    See
+    :py:data:`~wemake_python_styleguide.constants.UNREADABLE_CHARACTER_COMBINATIONS`
+    for full list of unreadable combinations.
 
     Example::
 

@@ -381,7 +381,7 @@ STDIN: Final = 'stdin'
 INIT: Final = '__init__'
 
 # Used to specify unreadable combinations of letters and letters with numbers
-UNREADABLE_CHARACTER_COMBINATIONS = frozenset((
+UNREADABLE_CHARACTER_COMBINATIONS: Final = frozenset((
     'lI',
     'Il',
     '1l',

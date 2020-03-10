@@ -2,10 +2,7 @@ from typing_extensions import final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.logic.naming import access
-from wemake_python_styleguide.logic.naming.logical import (  # noqa: I001
-    contain,
-    name_check,
-)
+from wemake_python_styleguide.logic.naming.logical import alphabet, name_check
 from wemake_python_styleguide.violations import naming
 from wemake_python_styleguide.visitors.base import BaseFilenameVisitor
 
@@ -39,7 +36,11 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
         self._check_module_name_readability()
 
     def _check_module_name(self) -> None:
-        if name_check.is_wrong_name(self.stem, constants.MODULE_NAMES_BLACKLIST):  # noqa: E501
+        is_wrong_name = name_check.is_wrong_name(
+            self.stem,
+            constants.MODULE_NAMES_BLACKLIST,
+        )
+        if is_wrong_name:
             self.add_violation(naming.WrongModuleNameViolation())
 
         if access.is_magic(self.stem):
@@ -49,7 +50,7 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
         if access.is_private(self.stem):
             self.add_violation(naming.PrivateNameViolation(text=self.stem))
 
-        if contain.does_contain_unicode(self.stem):
+        if alphabet.does_contain_unicode(self.stem):
             self.add_violation(naming.UnicodeNameViolation(text=self.stem))
 
     def _check_module_name_length(self) -> None:
@@ -64,18 +65,18 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
             self.add_violation(naming.TooLongNameViolation(text=self.stem))
 
     def _check_module_name_pattern(self) -> None:
-        if contain.does_contain_consecutive_underscores(self.stem):
+        if alphabet.does_contain_consecutive_underscores(self.stem):
             self.add_violation(
                 naming.ConsecutiveUnderscoresInNameViolation(text=self.stem),
             )
 
-        if contain.does_contain_underscored_number(self.stem):
+        if alphabet.does_contain_underscored_number(self.stem):
             self.add_violation(
                 naming.UnderscoredNumberNameViolation(text=self.stem),
             )
 
     def _check_module_name_readability(self) -> None:
-        is_unreadable = contain.does_contain_unreadable_characters(
+        is_unreadable = alphabet.does_contain_unreadable_characters(
             self.stem,
             constants.UNREADABLE_CHARACTER_COMBINATIONS,
         )

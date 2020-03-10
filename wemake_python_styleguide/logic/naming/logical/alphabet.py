@@ -138,13 +138,17 @@ def does_contain_unreadable_characters(
     >>> does_contain_unreadable_characters('0Operations', ['0O'])
     True
 
-    >>> does_contain_unreadable_characters('O0', ['O0'])
+    >>> does_contain_unreadable_characters('O0smth', ['O0'])
+    True
+
+    >>> does_contain_unreadable_characters('level1', ['l1'])
+    True
+
+    >>> does_contain_unreadable_characters('smthO0', ['O0'])
     True
 
     """
-    for unreadable_combination in character_combinations:
-
-        if unreadable_combination in name:
-            return True
-
-    return False
+    return any(
+        combination in name
+        for combination in character_combinations
+    )

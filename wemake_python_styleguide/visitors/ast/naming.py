@@ -28,10 +28,7 @@ from wemake_python_styleguide.logic.naming import (
     builtins,
     name_nodes,
 )
-from wemake_python_styleguide.logic.naming.logical import (  # noqa: I001
-    contain,  # noqa: I001
-    name_check,  # noqa: I001
-)  # noqa: I001
+from wemake_python_styleguide.logic.naming.logical import alphabet, name_check
 from wemake_python_styleguide.logic.tree import functions
 from wemake_python_styleguide.types import (
     AnyAssign,
@@ -89,10 +86,10 @@ class _NameValidator(object):
                     naming.ReservedArgumentNameViolation(node, text=name),
                 )
 
-        if contain.does_contain_unicode(name):
+        if alphabet.does_contain_unicode(name):
             self._error_callback(naming.UnicodeNameViolation(node, text=name))
 
-        is_unreadable = contain.does_contain_unreadable_characters(
+        is_unreadable = alphabet.does_contain_unreadable_characters(
             name,
             UNREADABLE_CHARACTER_COMBINATIONS,
         )
@@ -132,12 +129,12 @@ class _NameValidator(object):
                 naming.PrivateNameViolation(node, text=name),
             )
 
-        if contain.does_contain_underscored_number(name):
+        if alphabet.does_contain_underscored_number(name):
             self._error_callback(
                 naming.UnderscoredNumberNameViolation(node, text=name),
             )
 
-        if contain.does_contain_consecutive_underscores(name):
+        if alphabet.does_contain_consecutive_underscores(name):
             self._error_callback(
                 naming.ConsecutiveUnderscoresInNameViolation(
                     node, text=name,

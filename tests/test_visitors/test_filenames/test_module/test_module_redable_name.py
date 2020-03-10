@@ -1,7 +1,9 @@
 import pytest
 
-from wemake_python_styleguide.violations.naming import (  # noqa: I001
+from wemake_python_styleguide.violations.naming import (
+    UnderscoredNumberNameViolation,
     UnreadableNameViolation,
+    WrongModuleNamePatternViolation,
 )
 from wemake_python_styleguide.visitors.filenames.module import (
     WrongModuleNameVisitor,
@@ -31,3 +33,17 @@ def test_readable_filename(assert_errors, filename, default_options):
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('filename', [
+    'TestO_0',
+])
+def test_corner_case(assert_errors, filename, default_options):
+    """Testing corner case related to underscore name patterns."""
+    visitor = WrongModuleNameVisitor(default_options, filename=filename)
+    visitor.run()
+
+    assert_errors(visitor, [
+        WrongModuleNamePatternViolation,
+        UnderscoredNumberNameViolation,
+    ])
