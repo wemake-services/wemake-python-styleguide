@@ -74,7 +74,7 @@ flake8-bandit = "^2.1"
 flake8-broken-line = "^0.1"
 flake8-rst-docstrings = "^0.0.12"
 pep8-naming = "^0.9.1"
-darglint = "^1.1"
+darglint = "^1.2"
 
 [tool.poetry.dev-dependencies]
 nitpick = "^0.21.3"
@@ -88,7 +88,7 @@ snapshottest = "^0.5.1"
 hypothesis = "^4.55.2"
 hypothesmith = "^0.0.5"
 
-mypy = "^0.761"
+mypy = "^0.770"
 
 docutils = "^0.13"
 sphinx = "^2.2"

@@ -1,8 +1,9 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY38
+from wemake_python_styleguide.violations.complexity import TooManyLocalsViolation
 from wemake_python_styleguide.visitors.ast.complexity.function import (
     FunctionComplexityVisitor,
-    TooManyLocalsViolation,
 )
 
 function_with_locals = """
@@ -10,6 +11,13 @@ def function():
     local_variable1 = 1
     local_variable2 = 2
     _ = None  # `_` is not counted
+"""
+
+function_with_walrus = """
+def function():
+    (local_variable1 := 1)
+    (local_variable2 := 2)
+    (_ := None)  # `_` is not counted
 """
 
 function_with_locals_redefinition = """
@@ -50,14 +58,26 @@ def function(param1):  # has two local vars
         param2 = param2 + 2
 """
 
+method_with_locals = """
+class Some(object):
+    def function():
+        local_variable1 = 1
+        local_variable2 = 2
+"""
+
 
 @pytest.mark.parametrize('code', [
     function_with_locals,
+    pytest.param(
+        function_with_walrus,
+        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
+    ),
     function_with_locals_redefinition,
     function_with_locals_and_params,
     function_with_comprehension,
     function_with_nested,
     function_with_nested_and_params,
+    method_with_locals,
 ])
 def test_locals_correct_count(
     assert_errors,
@@ -86,11 +106,16 @@ def test_locals_correct_count(
 
 @pytest.mark.parametrize('code', [
     function_with_locals,
+    pytest.param(
+        function_with_walrus,
+        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
+    ),
     function_with_locals_redefinition,
     function_with_locals_and_params,
     function_with_comprehension,
     function_with_nested,
     function_with_nested_and_params,
+    method_with_locals,
 ])
 def test_locals_wrong_count(
     assert_errors,
