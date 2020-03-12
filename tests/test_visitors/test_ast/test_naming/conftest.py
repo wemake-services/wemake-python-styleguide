@@ -68,6 +68,7 @@ class Input(object):
 """
 
 lambda_argument = 'lambda {0}: ...'
+lambda_posonly_argument = 'lambda {0}, /: ...'
 
 # Class attributes:
 
@@ -100,17 +101,10 @@ class Test(object):
 
 # Variables:
 
-variable_def = """
-{0} = 'test'
-"""
-
-variable_typed_def = """
-{0}: str = 'test'
-"""
-
-variable_typed = """
-{0}: str
-"""
+variable_def = '{0} = 1'
+variable_typed_def = '{0}: int = 2'
+variable_typed = '{0}: str'
+assignment_expression = '({0} := 1)'
 
 # See: https://github.com/wemake-services/wemake-python-styleguide/issues/405
 unpacking_variables = """
@@ -199,19 +193,28 @@ _ALL_FIXTURES = frozenset((
 ))
 
 if PY38:
-    _ALL_FIXTURES |= {function_posonly_argument}
+    _ALL_FIXTURES |= {
+        function_posonly_argument,
+        lambda_posonly_argument,
+        assignment_expression,
+    }
 
-_SUITABLE_FOR_UNUSED_TUPLE = frozenset((
+_FORBIDDEN_UNUSED_TUPLE = frozenset((
     unpacking_variables,
     variable_def,
     with_variable,
 ))
 
-_SUITABLE_FOR_UNUSED = _SUITABLE_FOR_UNUSED_TUPLE | frozenset((
+_FORBIDDEN_UNUSED = _FORBIDDEN_UNUSED_TUPLE | {
     variable_typed_def,
     variable_typed,
     exception,
-))
+}
+
+if PY38:
+    _FORBIDDEN_UNUSED |= {
+        assignment_expression,
+    }
 
 
 @pytest.fixture(params=_ALL_FIXTURES)
@@ -220,29 +223,29 @@ def naming_template(request):
     return request.param
 
 
-@pytest.fixture(params=_SUITABLE_FOR_UNUSED)
+@pytest.fixture(params=_FORBIDDEN_UNUSED)
 def forbidden_unused_template(request):
     """Returns template that can be used to define wrong unused variables."""
     return request.param
 
 
-@pytest.fixture(params=_SUITABLE_FOR_UNUSED_TUPLE)
+@pytest.fixture(params=_FORBIDDEN_UNUSED_TUPLE)
 def forbidden_tuple_unused_template(request):
     """Returns template that can be used to define wrong unused tuples."""
     return request.param
 
 
-@pytest.fixture(params=_SUITABLE_FOR_UNUSED | {
+@pytest.fixture(params=_FORBIDDEN_UNUSED | {
     static_attribute,
     static_typed_attribute,
     static_typed_annotation,
 })
 def forbidden_raw_unused_template(request):
-    """Returns template that can be used to define wrong unused tuples."""
+    """Returns template that can be used to define ``_`` patterns."""
     return request.param
 
 
-@pytest.fixture(params=_ALL_FIXTURES - _SUITABLE_FOR_UNUSED)
+@pytest.fixture(params=_ALL_FIXTURES - _FORBIDDEN_UNUSED)
 def allowed_unused_template(request):
-    """Returns template that can define unused variables."""
+    """Returns template that can be used to define unused variables."""
     return request.param
