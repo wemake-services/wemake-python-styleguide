@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations.naming import (
     UnusedVariableIsDefinedViolation,
 )
 from wemake_python_styleguide.visitors.ast.naming import (
-    WrongVariableUsageVisitor,
+    UnusedVaribaleDefinitionVisitor,
 )
 
 module_context = '{0}'
@@ -40,18 +40,19 @@ def test_unused_variable_definition(
     bad_name,
     forbidden_unused_template,
     default_options,
+    mode,
 ):
     """Testing that any variable cannot be used if it is marked as unused."""
     tree = parse_ast_tree(
-        context.format(
+        mode(context.format(
             indent(
                 forbidden_unused_template.format(bad_name),
                 ' ' * indentation,
             ),
-        ),
+        )),
     )
 
-    visitor = WrongVariableUsageVisitor(default_options, tree=tree)
+    visitor = UnusedVaribaleDefinitionVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [UnusedVariableIsDefinedViolation])
@@ -72,18 +73,19 @@ def test_unused_variable_tuple_definition(
     bad_name,
     forbidden_tuple_unused_template,
     default_options,
+    mode,
 ):
     """Testing that any variable cannot be used if it is marked as unused."""
     tree = parse_ast_tree(
-        context.format(
+        mode(context.format(
             indent(
                 forbidden_tuple_unused_template.format(bad_name),
                 ' ' * indentation,
             ),
-        ),
+        )),
     )
 
-    visitor = WrongVariableUsageVisitor(default_options, tree=tree)
+    visitor = UnusedVaribaleDefinitionVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [UnusedVariableIsDefinedViolation])
@@ -107,18 +109,19 @@ def test_used_variable_tuple_definition(
     bad_name,
     forbidden_tuple_unused_template,
     default_options,
+    mode,
 ):
     """Testing that any variable can be used if it is marked as unused."""
     tree = parse_ast_tree(
-        context.format(
+        mode(context.format(
             indent(
                 forbidden_tuple_unused_template.format(bad_name),
                 ' ' * indentation,
             ),
-        ),
+        )),
     )
 
-    visitor = WrongVariableUsageVisitor(default_options, tree=tree)
+    visitor = UnusedVaribaleDefinitionVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -141,18 +144,19 @@ def test_unused_variable_definition_allowed(
     bad_name,
     allowed_unused_template,
     default_options,
+    mode,
 ):
     """Testing that any variable can be used in some cases."""
     tree = parse_ast_tree(
-        context.format(
+        mode(context.format(
             indent(
                 allowed_unused_template.format(bad_name),
                 ' ' * indentation,
             ),
-        ),
+        )),
     )
 
-    visitor = WrongVariableUsageVisitor(default_options, tree=tree)
+    visitor = UnusedVaribaleDefinitionVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -175,18 +179,19 @@ def test_raw_unused_variable_definition(
     bad_name,
     forbidden_raw_unused_template,
     default_options,
+    mode,
 ):
     """Testing that any variable can be used in some cases."""
     tree = parse_ast_tree(
-        context.format(
+        mode(context.format(
             indent(
                 forbidden_raw_unused_template.format(bad_name),
                 ' ' * indentation,
             ),
-        ),
+        )),
     )
 
-    visitor = WrongVariableUsageVisitor(default_options, tree=tree)
+    visitor = UnusedVaribaleDefinitionVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [UnusedVariableIsDefinedViolation])
@@ -209,17 +214,18 @@ def test_used_variable_definition(
     bad_name,
     naming_template,
     default_options,
+    mode,
 ):
     """Testing that any variable cannot be used if it is marked as unused."""
     tree = parse_ast_tree(
-        context.format(
+        mode(context.format(
             indent(
                 naming_template.format(bad_name), ' ' * indentation,
             ),
-        ),
+        )),
     )
 
-    visitor = WrongVariableUsageVisitor(default_options, tree=tree)
+    visitor = UnusedVaribaleDefinitionVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])

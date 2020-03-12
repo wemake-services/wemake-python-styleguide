@@ -87,6 +87,7 @@ Semantic versioning in our case means:
   where `ast.Str` was checked
 - Fixes `WPS601` reporting shadowing for non-`self` attributes
 - Fixes `WPS114` not to be so strict
+- Fixes `WPS122` not raising for `for` and `async for` definitions
 
 ### Misc
 

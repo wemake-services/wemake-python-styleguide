@@ -75,8 +75,8 @@ class CompareSanityVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_literal_compare(self, node: ast.Compare) -> None:
-        last_was_literal = nodes.is_literal(node.left)
-        for comparator in node.comparators:
+        last_was_literal = nodes.is_literal(get_assigned_expr(node.left))
+        for comparator in map(get_assigned_expr, node.comparators):
             next_is_literal = nodes.is_literal(comparator)
             if last_was_literal and next_is_literal:
                 self.add_violation(ConstantCompareViolation(node))
@@ -84,8 +84,8 @@ class CompareSanityVisitor(BaseNodeVisitor):
             last_was_literal = next_is_literal
 
     def _check_useless_compare(self, node: ast.Compare) -> None:
-        last_variable = node.left
-        for next_variable in node.comparators:
+        last_variable = get_assigned_expr(node.left)
+        for next_variable in map(get_assigned_expr, node.comparators):
             if is_same_variable(last_variable, next_variable):
                 self.add_violation(UselessCompareViolation(node))
                 break
@@ -97,6 +97,7 @@ class CompareSanityVisitor(BaseNodeVisitor):
         for index, compare in enumerate(all_nodes):
             if not isinstance(compare, ast.Call):
                 continue
+
             if functions.given_function_called(compare, {'len'}):
                 ps = index - len(all_nodes) + 1
                 if not _is_correct_len(node.ops[ps], node.comparators[ps]):

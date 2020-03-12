@@ -40,7 +40,7 @@ class ModuleMembersVisitor(BaseNodeVisitor):
         Counts the number of _ModuleMembers in a single module.
 
         Raises:
-            TooMany_ModuleMembersViolation
+            TooManyModuleMembersViolation
 
         """
         self._check_decorators_count(node)

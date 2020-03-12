@@ -14,8 +14,11 @@ from typing import (
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import AssignNodes
+from wemake_python_styleguide.compat.aliases import (
+    AssignNodes,
+)
 from wemake_python_styleguide.compat.functions import get_assign_targets
+from wemake_python_styleguide.compat.types import AnyAssignWithWalrus
 from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
     SPECIAL_ARGUMENT_NAMES_WHITELIST,
@@ -31,6 +34,7 @@ from wemake_python_styleguide.logic.naming import (
 from wemake_python_styleguide.logic.tree import functions
 from wemake_python_styleguide.types import (
     AnyAssign,
+    AnyFor,
     AnyFunctionDef,
     AnyFunctionDefAndLambda,
     AnyImport,
@@ -357,25 +361,14 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
     'visit_AnnAssign',
     'visit_NamedExpr',
 ))
-class WrongVariableUsageVisitor(BaseNodeVisitor):
+@alias('visit_any_for', (
+    'visit_For',
+    'visit_AsyncFor',
+))
+class UnusedVaribaleDefinitionVisitor(BaseNodeVisitor):
     """Checks how variables are used."""
 
-    def visit_Name(self, node: ast.Name) -> None:
-        """
-        Checks that we cannot use ``_`` anywhere.
-
-        Raises:
-            UnusedVariableIsUsedViolation
-
-        """
-        self._check_variable_used(
-            node,
-            node.id,
-            is_created=isinstance(node.ctx, ast.Store),
-        )
-        self.generic_visit(node)
-
-    def visit_any_assign(self, node: AnyAssign) -> None:
+    def visit_any_assign(self, node: AnyAssignWithWalrus) -> None:
         """
         Checks that we cannot assign explicit unused variables.
 
@@ -395,6 +388,21 @@ class WrongVariableUsageVisitor(BaseNodeVisitor):
             node,
             name_nodes.flat_variable_names([node]),
             is_local=not is_inside_class_or_module,
+        )
+        self.generic_visit(node)
+
+    def visit_any_for(self, node: AnyFor) -> None:
+        """
+        Checks that we cannot create explicit unused loops.
+
+        Raises:
+            UnusedVariableIsDefinedViolation
+
+        """
+        self._check_assign_unused(
+            node,
+            name_nodes.get_variables_from_node(node.target),
+            is_local=True,
         )
         self.generic_visit(node)
 
@@ -426,24 +434,6 @@ class WrongVariableUsageVisitor(BaseNodeVisitor):
             )
         self.generic_visit(node)
 
-    def _check_variable_used(
-        self,
-        node: ast.AST,
-        assigned_name: Optional[str],
-        *,
-        is_created: bool,
-    ) -> None:
-        if not assigned_name or not access.is_unused(assigned_name):
-            return
-
-        if assigned_name == '_':  # This is a special case for django's
-            return  # gettext and similar tools.
-
-        if not is_created:
-            self.add_violation(
-                naming.UnusedVariableIsUsedViolation(node, text=assigned_name),
-            )
-
     def _check_assign_unused(
         self,
         node: ast.AST,
@@ -462,4 +452,40 @@ class WrongVariableUsageVisitor(BaseNodeVisitor):
                 naming.UnusedVariableIsDefinedViolation(
                     node, text=', '.join(all_names),
                 ),
+            )
+
+
+@final
+class UnusedVariableUsageVisitor(BaseNodeVisitor):
+    """Checks how variables are used."""
+
+    def visit_Name(self, node: ast.Name) -> None:
+        """
+        Checks that we cannot use ``_`` anywhere.
+
+        Raises:
+            UnusedVariableIsUsedViolation
+
+        """
+        self._check_variable_used(
+            node, node.id, is_created=isinstance(node.ctx, ast.Store),
+        )
+        self.generic_visit(node)
+
+    def _check_variable_used(
+        self,
+        node: ast.AST,
+        assigned_name: Optional[str],
+        *,
+        is_created: bool,
+    ) -> None:
+        if not assigned_name or not access.is_unused(assigned_name):
+            return
+
+        if assigned_name == '_':  # This is a special case for django's
+            return  # gettext and similar tools.
+
+        if not is_created:
+            self.add_violation(
+                naming.UnusedVariableIsUsedViolation(node, text=assigned_name),
             )

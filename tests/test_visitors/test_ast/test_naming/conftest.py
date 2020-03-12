@@ -203,6 +203,7 @@ _FORBIDDEN_UNUSED_TUPLE = frozenset((
     unpacking_variables,
     variable_def,
     with_variable,
+    for_variable,
 ))
 
 _FORBIDDEN_UNUSED = _FORBIDDEN_UNUSED_TUPLE | {

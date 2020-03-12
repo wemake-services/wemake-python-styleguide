@@ -64,7 +64,8 @@ PRESET: Final = (
     naming.WrongNameVisitor,
     naming.WrongModuleMetadataVisitor,
     naming.WrongVariableAssignmentVisitor,
-    naming.WrongVariableUsageVisitor,
+    naming.UnusedVariableUsageVisitor,
+    naming.UnusedVaribaleDefinitionVisitor,
 
     builtins.WrongNumberVisitor,
     builtins.WrongStringVisitor,
