@@ -169,13 +169,13 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
     def _check_constant(self, op: ast.cmpop, comparator: ast.expr) -> None:
         if not isinstance(op, (ast.Eq, ast.NotEq, ast.Is, ast.IsNot)):
             return
-
-        if not isinstance(comparator, (ast.List, ast.Dict, ast.Tuple)):
+        real = get_assigned_expr(comparator)
+        if not isinstance(real, (ast.List, ast.Dict, ast.Tuple)):
             return
 
-        length = len(comparator.keys) if isinstance(
-            comparator, ast.Dict,
-        ) else len(comparator.elts)
+        length = len(real.keys) if isinstance(
+            real, ast.Dict,
+        ) else len(real.elts)
 
         if not length:
             self.add_violation(FalsyConstantCompareViolation(comparator))
