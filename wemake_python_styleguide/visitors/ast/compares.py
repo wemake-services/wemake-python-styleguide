@@ -439,8 +439,9 @@ class InCompareSanityVisitor(BaseNodeVisitor):
             if not isinstance(op, self._in_nodes):
                 continue
 
-            self._check_single_item_container(comp)
-            self._check_wrong_comparators(comp)
+            real = get_assigned_expr(comp)
+            self._check_single_item_container(real)
+            self._check_wrong_comparators(real)
 
     def _check_single_item_container(self, node: ast.AST) -> None:
         is_text_violated = isinstance(node, TextNodes) and len(node.s) == 1
@@ -454,6 +455,5 @@ class InCompareSanityVisitor(BaseNodeVisitor):
             self.add_violation(InCompareWithSingleItemContainerViolation(node))
 
     def _check_wrong_comparators(self, node: ast.AST) -> None:
-        node = get_assigned_expr(node)
         if isinstance(node, self._wrong_in_comparators):
             self.add_violation(WrongInCompareTypeViolation(node))

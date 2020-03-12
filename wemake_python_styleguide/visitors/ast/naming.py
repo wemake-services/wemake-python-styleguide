@@ -14,9 +14,7 @@ from typing import (
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import (
-    AssignNodes,
-)
+from wemake_python_styleguide.compat.aliases import AssignNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.compat.types import AnyAssignWithWalrus
 from wemake_python_styleguide.constants import (
@@ -40,11 +38,7 @@ from wemake_python_styleguide.types import (
     AnyImport,
     ConfigurationOptions,
 )
-from wemake_python_styleguide.violations import base, naming
-from wemake_python_styleguide.violations.best_practices import (
-    ReassigningVariableToItselfViolation,
-    WrongModuleMetadataViolation,
-)
+from wemake_python_styleguide.violations import base, best_practices, naming
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
@@ -300,10 +294,14 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
             if not isinstance(target_node, ast.Name):
                 continue
 
-            if target_node.id in MODULE_METADATA_VARIABLES_BLACKLIST:
-                self.add_violation(
-                    WrongModuleMetadataViolation(node, text=target_node.id),
-                )
+            if target_node.id not in MODULE_METADATA_VARIABLES_BLACKLIST:
+                continue
+
+            self.add_violation(
+                best_practices.WrongModuleMetadataViolation(
+                    node, text=target_node.id,
+                ),
+            )
 
 
 @final
@@ -340,7 +338,9 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
         for var_name, var_value in itertools.zip_longest(names, var_values):
             if var_name == var_value:
                 self.add_violation(
-                    ReassigningVariableToItselfViolation(node, text=var_name),
+                    best_practices.ReassigningVariableToItselfViolation(
+                        node, text=var_name,
+                    ),
                 )
 
     def _check_unique_assignment(
@@ -351,7 +351,9 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
         for used_name, count in Counter(names).items():
             if count > 1:
                 self.add_violation(
-                    ReassigningVariableToItselfViolation(node, text=used_name),
+                    best_practices.ReassigningVariableToItselfViolation(
+                        node, text=used_name,
+                    ),
                 )
 
 
