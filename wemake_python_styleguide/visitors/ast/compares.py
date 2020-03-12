@@ -92,7 +92,9 @@ class CompareSanityVisitor(BaseNodeVisitor):
             last_variable = next_variable
 
     def _check_unpythonic_compare(self, node: ast.Compare) -> None:
-        all_nodes = [node.left, *node.comparators]
+        all_nodes = list(
+            map(get_assigned_expr, (node.left, *node.comparators)),
+        )
 
         for index, compare in enumerate(all_nodes):
             if not isinstance(compare, ast.Call):
