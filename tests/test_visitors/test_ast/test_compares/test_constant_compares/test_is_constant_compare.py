@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.refactoring import (
     FalsyConstantCompareViolation,
     WrongIsCompareViolation,
@@ -8,7 +9,7 @@ from wemake_python_styleguide.visitors.ast.compares import (
     WrongConstantCompareVisitor,
 )
 
-wrong_comparators = (
+wrong_comparators = [
     ('some', '[1, 2]'),
     ('some', '{}'),  # noqa: P103
     ('some', '()'),
@@ -32,7 +33,13 @@ wrong_comparators = (
     ('{1, 2}', 'some'),
     ('()', 'some'),
     ('"test"', 'some'),
-)
+]
+
+if PY38:
+    wrong_comparators.extend([
+        ('(x := some())', '"abc"'),
+        ('(x := "abc")', 'some()'),
+    ])
 
 
 @pytest.mark.filterwarnings('ignore::SyntaxWarning')

@@ -24,8 +24,10 @@ if PY38:
     ])
 
 correct_walrus = pytest.param(
-    ('(x := first(1, 2))', '"str"'),
-    marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
+    ['(x := first(1, 2))', '"str"'],
+    marks=pytest.mark.skipif(
+        not PY38, reason='walrus appeared in 3.8',
+    ),
 )
 
 

@@ -188,7 +188,9 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
         if not isinstance(op, (ast.Is, ast.IsNot)):
             return
 
-        unwrapped = operators.unwrap_unary_node(comparator)
+        unwrapped = operators.unwrap_unary_node(
+            get_assigned_expr(comparator),
+        )
         if isinstance(unwrapped, self._forbidden_for_is):
             self.add_violation(WrongIsCompareViolation(comparator))
 
@@ -324,7 +326,10 @@ class WrongConditionalVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_constant_condition(self, node: AnyIf) -> None:
-        real_node = operators.unwrap_unary_node(node.test)
+        real_node = operators.unwrap_unary_node(
+            get_assigned_expr(node.test),
+        )
+
         if isinstance(real_node, self._forbidden_nodes):
             self.add_violation(ConstantConditionViolation(node))
 
