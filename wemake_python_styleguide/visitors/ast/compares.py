@@ -250,7 +250,7 @@ class WrongComparisionOrderVisitor(BaseNodeVisitor):
         self,
         comparators: Sequence[ast.AST],
     ) -> bool:
-        for right in comparators:
+        for right in map(get_assigned_expr, comparators):
             if isinstance(right, self._allowed_left_nodes):
                 return True
             if isinstance(right, ast.BinOp):
@@ -260,7 +260,7 @@ class WrongComparisionOrderVisitor(BaseNodeVisitor):
         return False
 
     def _check_ordering(self, node: ast.Compare) -> None:
-        if self._is_left_node_valid(node.left):
+        if self._is_left_node_valid(get_assigned_expr(node.left)):
             return
 
         if self._is_special_case(node):

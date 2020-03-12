@@ -495,7 +495,7 @@ else:
 class ClassWithWrongContents((lambda: object)()):  # noqa: WPS606
     __slots__ = ['a', 'a']  # noqa: WPS607
 
-    for _ in range(1):  # noqa: WPS604
+    for bad_body_node in range(1):  # noqa: WPS604
         anti_wps428 = 1
 
     def method_with_no_args():  # noqa: WPS605

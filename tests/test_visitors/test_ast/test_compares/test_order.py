@@ -1,11 +1,33 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.consistency import (
     CompareOrderViolation,
 )
 from wemake_python_styleguide.visitors.ast.compares import (
     WrongComparisionOrderVisitor,
 )
+
+wrong_comparators = [
+    ('"string constant"', 'first_name'),
+    ([1, 2, 3], 'first_name'),
+    (1, 'len(first_name)'),
+    (1, 'first_name.call()'),
+    (1, 'first_name + 10'),
+    (1, 'first_name + second_name'),
+]
+
+if PY38:
+    wrong_comparators.extend([
+        ('1', '(x := first())'),
+        ('(x := 1)', 'first()'),
+    ])
+
+correct_walrus = pytest.param(
+    ('(x := first(1, 2))', '"str"'),
+    marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
+)
+
 
 regression577 = """
 async def function():
@@ -28,6 +50,7 @@ async def function():
     ('error.code', 'errors[index].code'),
     (1, 2),
     ('returned_item["id"]', 'office.id'),
+    correct_walrus,
 ])
 def test_compare_variables(
     assert_errors,
@@ -48,6 +71,7 @@ def test_compare_variables(
 @pytest.mark.parametrize('comparators', [
     ('"string constant"', 'container'),
     ('container', '"string constant"'),
+    correct_walrus,
 ])
 def test_compare_variables_in_special_case(
     assert_errors,
@@ -66,15 +90,7 @@ def test_compare_variables_in_special_case(
 
 
 @pytest.mark.filterwarnings('ignore::SyntaxWarning')
-@pytest.mark.parametrize('comparators', [
-    ('"string constant"', 'first_name'),
-    ([1, 2, 3], 'first_name'),
-    (1, 'len(first_name)'),
-    (1, 'first_name.attr'),
-    (1, 'first_name.call()'),
-    (1, 'first_name + 10'),
-    (1, 'first_name + second_name'),
-])
+@pytest.mark.parametrize('comparators', wrong_comparators)
 def test_compare_wrong_order(
     assert_errors,
     parse_ast_tree,
@@ -91,14 +107,7 @@ def test_compare_wrong_order(
     assert_errors(visitor, [CompareOrderViolation])
 
 
-@pytest.mark.parametrize('comparators', [
-    ('"string constant"', 'first_name'),
-    ([1, 2, 3], 'first_name'),
-    (1, 'len(first_name)'),
-    (1, 'first_name.call()'),
-    (1, 'first_name + 10'),
-    (1, 'first_name + second_name'),
-])
+@pytest.mark.parametrize('comparators', wrong_comparators)
 def test_compare_wrong_order_multiple(
     assert_errors,
     parse_ast_tree,
