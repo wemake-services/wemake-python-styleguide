@@ -51,7 +51,7 @@ Semantic versioning in our case means:
 
 ### Bugfixes
 
-- Fixes how `i_control_code` behaves with WPS113
+- Fixes how `i_control_code` behaves with `WPS113`
 - Fixes that cognitive complexity was ignoring
   `ast.Continue`, `ast.Break`, and `ast.Raise` statements
 - Fixes that cognitive complexity was ignoring `ast.AsyncFor` loops
@@ -94,11 +94,12 @@ Semantic versioning in our case means:
 - Changes how tests are executed
 - Changes how coverage is calculated, adds `coverage-conditional-plugin`
 - Adds how a violation can be deprecated
-- Improves old function tests with `/` argument cases
+- Improves old visitor tests with `/` argument cases
+- Improves old visitor tests with `:=` cases
 - Adds `local-partial-types` to mypy config
 - Uses `abc` stdlib's module to mark abstract base classes #1122
 - Adds `python3.8` to the CI
-- Update `astboom` version to 0.4.2
+- Updates a lot of dependencies
 
 
 ## 0.13.4
