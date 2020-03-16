@@ -3,6 +3,9 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     WrongUnpackingViolation,
 )
+from wemake_python_styleguide.violations.consistency import (
+    IterableUnpackingToListViolation,
+)
 from wemake_python_styleguide.visitors.ast.builtins import (
     WrongAssignmentVisitor,
 )
@@ -12,8 +15,12 @@ single_assignment = '{0} = 1'
 tuple_assignment1 = 'first, {0} = (1, 2)'
 tuple_assignment2 = '{0}, second = (1, 2)'
 
+list_assignment = '[first, second] = (1, 2)'
+
 spread_assignment1 = '{0}, *second = [1, 2, 3]'
 spread_assignment2 = 'first, *{0} = [1, 2, 3]'
+
+spread_assignment_in_list = '[first, *rest] = [1, 2, 3]'
 
 for_assignment = """
 def wrapper():
@@ -163,3 +170,22 @@ def test_multiple_assignments(
     visitor.run()
 
     assert_errors(visitor, [WrongUnpackingViolation])
+
+
+@pytest.mark.parametrize('code', [
+    list_assignment,
+    spread_assignment_in_list,
+])
+def test_unpacking_to_list(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+):
+    """Ensure that unpacking iterable to list is restricted."""
+    tree = parse_ast_tree(code)
+
+    visitor = WrongAssignmentVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [IterableUnpackingToListViolation])

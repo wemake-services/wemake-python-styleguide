@@ -250,11 +250,13 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         because it does not have problems that we check.
 
         Raises:
+            IterableUnpackingToListViolation
             MultipleAssignmentsViolation
             WrongUnpackingViolation
 
         """
         self._check_assign_targets(node)
+        self._check_unpacking_target_type(node)
         if isinstance(node.targets[0], ast.Tuple):
             self._check_unpacking_targets(node, node.targets[0].elts)
         self.generic_visit(node)
@@ -276,6 +278,12 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
                 self.add_violation(
                     best_practices.WrongUnpackingViolation(node),
                 )
+
+    def _check_unpacking_target_type(self, node: ast.Assign) -> None:
+        if isinstance(node.targets[0], ast.List):
+            self.add_violation(
+                consistency.IterableUnpackingToListViolation(node),
+            )
 
 
 @final
