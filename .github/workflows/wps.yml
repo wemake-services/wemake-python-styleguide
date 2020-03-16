@@ -17,3 +17,4 @@ jobs:
         reporter: 'github-pr-review'
       env:
         GITHUB_TOKEN: ${{ secrets.github_token }}
+      continue-on-error: true  # this step is optional
