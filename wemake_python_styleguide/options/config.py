@@ -155,7 +155,7 @@ class _Option(object):
 
     long_option_name: str
     default: ConfigValuesTypes
-    help: str
+    help: str  # noqa: A003
     type: Optional[str] = 'int'  # noqa: A003
     parse_from_config: bool = True
     action: str = 'store'
