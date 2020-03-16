@@ -23,7 +23,7 @@ from wemake_python_styleguide.compat.aliases import (
     FunctionNodes,
     TextNodes,
 )
-from wemake_python_styleguide.logic import nodes, safe_eval, source
+from wemake_python_styleguide.logic import nodes, safe_eval, source, walk
 from wemake_python_styleguide.logic.naming.name_nodes import extract_name
 from wemake_python_styleguide.logic.tree import operators, strings
 from wemake_python_styleguide.types import AnyFor, AnyNodes, AnyText, AnyWith
@@ -256,7 +256,7 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
 
         """
         self._check_assign_targets(node)
-        self._check_unpacking_target_type(node)
+        self._check_unpacking_target_type(node.targets[0])
         if isinstance(node.targets[0], ast.Tuple):
             self._check_unpacking_targets(node, node.targets[0].elts)
         self.generic_visit(node)
@@ -279,8 +279,8 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
                     best_practices.WrongUnpackingViolation(node),
                 )
 
-    def _check_unpacking_target_type(self, node: ast.Assign) -> None:
-        if isinstance(node.targets[0], ast.List):
+    def _check_unpacking_target_type(self, target: ast.AST) -> None:
+        for node in walk.get_subnodes_by_type(target, ast.List):
             self.add_violation(
                 consistency.IterableUnpackingToListViolation(node),
             )

@@ -17,10 +17,24 @@ tuple_assignment2 = '{0}, second = (1, 2)'
 
 list_assignment = '[first, second] = (1, 2)'
 
+nested_list_assignment0 = '[first, second], third = ((1, 2), 3)'
+nested_list_assignment1 = 'first, [second, third] = (1, (2, 3))'
+nested_list_assignment2 = 'first, (second, [third, fourth]) = (1, (2, (3, 4)))'
+
+multiple_level_nested_list_assignment = (
+    'first, [second, [third, fourth]] = (1, (2, (3, 4)))'
+)
+
 spread_assignment1 = '{0}, *second = [1, 2, 3]'
 spread_assignment2 = 'first, *{0} = [1, 2, 3]'
 
 spread_assignment_in_list = '[first, *rest] = [1, 2, 3]'
+
+nested_spread_assignment_in_list = 'first, [second, *rest] = [1, (2, 3, 4)]'
+
+multiple_level_nested_spread_assign_in_list = (
+    'first, [second, [*rest, last]] = (1, (2, (3, 4, 5)))'
+)
 
 for_assignment = """
 def wrapper():
@@ -189,3 +203,53 @@ def test_unpacking_to_list(
     visitor.run()
 
     assert_errors(visitor, [IterableUnpackingToListViolation])
+
+
+@pytest.mark.parametrize('code', [
+    nested_list_assignment0,
+    nested_list_assignment1,
+    nested_list_assignment2,
+    nested_spread_assignment_in_list,
+])
+def test_unpacking_to_nested_list(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+):
+    """Ensure that unpacking iterable to nested list is restricted."""
+    tree = parse_ast_tree(code)
+
+    visitor = WrongAssignmentVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(
+        visitor,
+        [IterableUnpackingToListViolation, WrongUnpackingViolation],
+    )
+
+
+@pytest.mark.parametrize('code', [
+    multiple_level_nested_list_assignment,
+    multiple_level_nested_spread_assign_in_list,
+])
+def test_unpacking_to_multiple_level_nested_list(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+):
+    """Test unpacking iterable to multiple levels nested list."""
+    tree = parse_ast_tree(code)
+
+    visitor = WrongAssignmentVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(
+        visitor,
+        [
+            IterableUnpackingToListViolation,
+            IterableUnpackingToListViolation,
+            WrongUnpackingViolation,
+        ],
+    )
