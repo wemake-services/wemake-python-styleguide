@@ -82,7 +82,7 @@ Summary
    IterableUnpackingViolation
    LineCompriseCarriageReturnViolation
    FloatZeroViolation
-   IterableUnpackingToListViolation
+   UnpackingIterableToListViolation
 
 Consistency checks
 ------------------
@@ -146,7 +146,7 @@ Consistency checks
 .. autoclass:: IterableUnpackingViolation
 .. autoclass:: LineCompriseCarriageReturnViolation
 .. autoclass:: FloatZeroViolation
-.. autoclass:: IterableUnpackingToListViolation
+.. autoclass:: UnpackingIterableToListViolation
 
 """
 
@@ -2217,7 +2217,6 @@ class UnpackingIterableToListViolation(ASTViolation):
         # Correct:
         first, second = (7, 4)
         first, *iterable = other_iterable
-
 
         # Wrong:
         [first, second] = (7, 4)

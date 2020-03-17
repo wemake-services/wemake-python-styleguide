@@ -5,7 +5,7 @@ from wemake_python_styleguide.violations.best_practices import (
     WrongUnpackingViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
-    IterableUnpackingToListViolation,
+    UnpackingIterableToListViolation,
 )
 from wemake_python_styleguide.visitors.ast.builtins import (
     WrongAssignmentVisitor,
@@ -93,7 +93,7 @@ def test_unpacking_to_list(
     visitor = WrongAssignmentVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [IterableUnpackingToListViolation])
+    assert_errors(visitor, [UnpackingIterableToListViolation])
 
 
 @pytest.mark.parametrize('assignment', [
@@ -129,7 +129,7 @@ def test_unpacking_to_nested_list(
 
     assert_errors(
         visitor,
-        [IterableUnpackingToListViolation, WrongUnpackingViolation],
+        [UnpackingIterableToListViolation, WrongUnpackingViolation],
     )
 
 
@@ -159,5 +159,5 @@ def test_unpacking_to_list_in_middle_target(
 
     assert_errors(
         visitor,
-        [MultipleAssignmentsViolation, IterableUnpackingToListViolation],
+        [MultipleAssignmentsViolation, UnpackingIterableToListViolation],
     )

@@ -208,7 +208,7 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         Checks assignments inside context managers to be correct.
 
         Raises:
-            IterableUnpackingToListViolation
+            UnpackingIterableToListViolation
             WrongUnpackingViolation
 
         """
@@ -225,7 +225,7 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         Checks comprehensions for the correct assignments.
 
         Raises:
-            IterableUnpackingToListViolation
+            UnpackingIterableToListViolation
             WrongUnpackingViolation
 
         """
@@ -239,7 +239,7 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         Checks assignments inside ``for`` loops to be correct.
 
         Raises:
-            IterableUnpackingToListViolation
+            UnpackingIterableToListViolation
             WrongUnpackingViolation
 
         """
@@ -256,7 +256,7 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         because it does not have problems that we check.
 
         Raises:
-            IterableUnpackingToListViolation
+            UnpackingIterableToListViolation
             MultipleAssignmentsViolation
             WrongUnpackingViolation
 
@@ -293,7 +293,7 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
             return
         for subnode in walk.get_subnodes_by_type(node, ast.List):
             self.add_violation(
-                consistency.IterableUnpackingToListViolation(subnode),
+                consistency.UnpackingIterableToListViolation(subnode),
             )
 
 
