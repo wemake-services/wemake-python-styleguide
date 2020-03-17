@@ -18,14 +18,14 @@ from typing.re import Pattern
 from typing_extensions import final
 
 from wemake_python_styleguide import constants
-from wemake_python_styleguide.compat.aliases import FunctionNodes, TextNodes
-from wemake_python_styleguide.logic import safe_eval, source
-from wemake_python_styleguide.logic.naming.name_nodes import extract_name
-from wemake_python_styleguide.logic.tree.operators import (
-    get_parent_ignoring_unary,
-    unwrap_starred_node,
-    unwrap_unary_node,
+from wemake_python_styleguide.compat.aliases import (
+    AssignNodesWithWalrus,
+    FunctionNodes,
+    TextNodes,
 )
+from wemake_python_styleguide.logic import nodes, safe_eval, source
+from wemake_python_styleguide.logic.naming.name_nodes import extract_name
+from wemake_python_styleguide.logic.tree import operators, strings
 from wemake_python_styleguide.types import AnyFor, AnyNodes, AnyText, AnyWith
 from wemake_python_styleguide.violations import best_practices, consistency
 from wemake_python_styleguide.visitors import base, decorators
@@ -72,7 +72,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         )                                # end
         """,                             # noqa: WPS323
         # Different python versions report `WPS323` on different lines.
-        flags=re.X,
+        flags=re.X,  # flag to ignore comments and whitespaces.
     )
 
     def visit_any_string(self, node: AnyText) -> None:
@@ -117,6 +117,10 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         node: AnyText,
         text_data: Optional[str],
     ) -> None:
+        parent = nodes.get_parent(node)
+        if parent and strings.is_doc_string(parent):
+            return  # we allow `%s` in docstrings: they cannot be formatted.
+
         if self._modulo_string_pattern.search(text_data):
             self.add_violation(consistency.ModuloStringFormatViolation(node))
 
@@ -126,8 +130,7 @@ class WrongNumberVisitor(base.BaseNodeVisitor):
     """Checks wrong numbers used in the code."""
 
     _allowed_parents: ClassVar[AnyNodes] = (
-        ast.Assign,
-        ast.AnnAssign,
+        *AssignNodesWithWalrus,
 
         # Constructor usages:
         *FunctionNodes,
@@ -156,7 +159,7 @@ class WrongNumberVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_is_magic(self, node: ast.Num) -> None:
-        parent = get_parent_ignoring_unary(node)
+        parent = operators.get_parent_ignoring_unary(node)
         if isinstance(parent, self._allowed_parents):
             return
 
@@ -345,7 +348,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
             if dict_key is None:
                 continue
 
-            real_key = unwrap_unary_node(dict_key)
+            real_key = operators.unwrap_unary_node(dict_key)
             is_float_key = (
                 isinstance(real_key, ast.Num) and
                 isinstance(real_key.n, float)
@@ -375,13 +378,13 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
             if set_item is None:
                 continue   # happens for `{**a}`
 
-            real_item = unwrap_unary_node(set_item)
+            real_item = operators.unwrap_unary_node(set_item)
             if isinstance(real_item, self._elements_in_sets):
                 # Similar look:
                 node_repr = source.node_to_string(set_item)
                 elements.append(node_repr.strip().strip('(').strip(')'))
 
-            real_item = unwrap_starred_node(real_item)
+            real_item = operators.unwrap_starred_node(real_item)
 
             # Non-constant nodes raise ValueError,
             # unhashables raise TypeError:

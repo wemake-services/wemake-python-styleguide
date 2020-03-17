@@ -1,7 +1,7 @@
 import ast
 
 
-def is_doc_string(node: ast.stmt) -> bool:
+def is_doc_string(node: ast.AST) -> bool:
     """
     Tells whether or not the given node is a docstring.
 
