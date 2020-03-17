@@ -208,10 +208,12 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         Checks assignments inside context managers to be correct.
 
         Raises:
+            IterableUnpackingToListViolation
             WrongUnpackingViolation
 
         """
         for withitem in node.items:
+            self._check_unpacking_target_types(withitem.optional_vars)
             if isinstance(withitem.optional_vars, ast.Tuple):
                 self._check_unpacking_targets(
                     node, withitem.optional_vars.elts,
@@ -223,9 +225,11 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         Checks comprehensions for the correct assignments.
 
         Raises:
+            IterableUnpackingToListViolation
             WrongUnpackingViolation
 
         """
+        self._check_unpacking_target_types(node.target)
         if isinstance(node.target, ast.Tuple):
             self._check_unpacking_targets(node.target, node.target.elts)
         self.generic_visit(node)
@@ -235,9 +239,11 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         Checks assignments inside ``for`` loops to be correct.
 
         Raises:
+            IterableUnpackingToListViolation
             WrongUnpackingViolation
 
         """
+        self._check_unpacking_target_types(node.target)
         if isinstance(node.target, ast.Tuple):
             self._check_unpacking_targets(node, node.target.elts)
         self.generic_visit(node)
@@ -256,7 +262,10 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
 
         """
         self._check_assign_targets(node)
-        self._check_unpacking_target_type(node.targets[0])
+
+        for target in node.targets:
+            self._check_unpacking_target_types(target)
+
         if isinstance(node.targets[0], ast.Tuple):
             self._check_unpacking_targets(node, node.targets[0].elts)
         self.generic_visit(node)
@@ -279,10 +288,12 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
                     best_practices.WrongUnpackingViolation(node),
                 )
 
-    def _check_unpacking_target_type(self, target: ast.AST) -> None:
-        for node in walk.get_subnodes_by_type(target, ast.List):
+    def _check_unpacking_target_types(self, node: Optional[ast.AST]) -> None:
+        if not node:
+            return
+        for subnode in walk.get_subnodes_by_type(node, ast.List):
             self.add_violation(
-                consistency.IterableUnpackingToListViolation(node),
+                consistency.IterableUnpackingToListViolation(subnode),
             )
 
 
