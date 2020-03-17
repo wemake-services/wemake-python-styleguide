@@ -427,7 +427,7 @@ description = "flake8 plugin that integrates isort ."
 name = "flake8-isort"
 optional = false
 python-versions = "*"
-version = "2.8.0"
+version = "2.9.0"
 
 [package.dependencies]
 flake8 = ">=3.2.1"
@@ -435,7 +435,7 @@ testfixtures = "*"
 
 [package.dependencies.isort]
 extras = ["pyproject"]
-version = ">=4.3.0"
+version = ">=4.3.5"
 
 [package.extras]
 test = ["pytest"]
@@ -1543,7 +1543,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "57b3f310e944a44b9489424860624bccd7c8e184d287b5f90c0eccb6ac2ad3f1"
+content-hash = "40535c4b26da8c08777c20f9f58a8c681facb3d874a0c548eec693a8cee4b5ed"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -1724,8 +1724,8 @@ flake8-eradicate = [
     {file = "flake8_eradicate-0.3.0-py3-none-any.whl", hash = "sha256:e8b32b32300bfb407fe7ef74667c8d2d3a6a81bdf6f09c14a7bcc82b7b870f8b"},
 ]
 flake8-isort = [
-    {file = "flake8-isort-2.8.0.tar.gz", hash = "sha256:64454d1f154a303cfe23ee715aca37271d4f1d299b2f2663f45b73bff14e36a9"},
-    {file = "flake8_isort-2.8.0-py2.py3-none-any.whl", hash = "sha256:aa0c4d004e6be47e74f122f5b7f36554d0d78ad8bf99b497a460dedccaa7cce9"},
+    {file = "flake8-isort-2.9.0.tar.gz", hash = "sha256:81e8c2ff17e8cf267b82bf46e3f404433017bf25f24d3f3554d67586d6af95da"},
+    {file = "flake8_isort-2.9.0-py2.py3-none-any.whl", hash = "sha256:e1184919b07930506b109cec8bf405f9a95bf2c0c6223362760216c8a1cf2930"},
 ]
 flake8-plugin-utils = [
     {file = "flake8-plugin-utils-1.2.0.tar.gz", hash = "sha256:0ec78b72e48b2bdaf0037e97105f0770a2b59b0e7b2519aaec35993f3538073f"},
