@@ -107,6 +107,16 @@ VARIABLE_NAMES_BLACKLIST: Final = frozenset((
     'baz',
 ))
 
+#: List of characters sequences that are hard to read.
+UNREADABLE_CHARACTER_COMBINATIONS: Final = frozenset((
+    '1l',
+    '1I',
+    '0O',
+    'O0',
+    # Not included: 'lI', 'l1', 'Il'
+    # Because these names are quite common in real words.
+))
+
 #: List of special names that are used only as first argument in methods.
 SPECIAL_ARGUMENT_NAMES_WHITELIST: Final = frozenset((
     'self',
@@ -366,11 +376,17 @@ LITERALS_BLACKLIST: Final = frozenset((
 ))
 
 #: List of functions in which arguments must be tuples.
-TUPLE_ARGUMENTS_METHODS = frozenset((
+TUPLE_ARGUMENTS_METHODS: Final = frozenset((
     'frozenset',
 ))
 
+
 # Internal variables
+# ==================
+
+# Please, do not touch values beyond this line!
+# ---------------------------------------------
+
 # They are not publicly documented since they are not used by the end user.
 # But, we still need them to be defined here.
 

@@ -16,10 +16,11 @@ It is partially automated with this linter, but:
 General
 ~~~~~~~
 
-- Use only ``ASCII`` chars for names
+- Use only ``ASCII`` characters for names
 - Do not use transliteration from any other languages, translate names instead
 - Use clear names, do not use words that do not mean anything like ``obj``
 - Use names of an appropriate length: not too short, not too long
+- Do not use unreadable charachter sequences like ``O0`` and ``Il``
 - Protected members should use underscore as the first char
 - Private names with two leading underscores are not allowed
 - If you need to explicitly state that the variable is unused,
@@ -66,7 +67,7 @@ Class attributes
 ~~~~~~~~~~~~~~~~
 
 - Class attributes must use ``snake_case``  with no exceptions
-- Enum fields also must use ``snamek_case``
+- Enum fields also must use ``snake_case``
 
 Functions and methods
 ~~~~~~~~~~~~~~~~~~~~~
@@ -82,7 +83,6 @@ Method and function arguments
 - Python's ``*args`` and ``**kwargs`` should be default names
   when just passing these values to some other method/function,
   unless you want to use these values in place, then name them explicitly
-- Keyword-only arguments must be separated from other arguments with ``*``
 
 Global (module level) variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -101,10 +101,8 @@ Type aliases
 
 - Must use ``UpperCase`` as real classes
 - Must not contain word ``type`` in its name
-- Generic types should be called ``TT`` or ``KT`` or ``VT``
-- Covariant and contravariant types
-  should be marked with ``Cov`` and ``Contra`` suffixes,
-  in this case, one letter can be dropped: ``TCov`` and ``KContra``
+- Generic types should be called clearly and properly,
+  not just ``TT`` or ``KT`` or ``VT``
 
 .. currentmodule:: wemake_python_styleguide.violations.naming
 
@@ -131,6 +129,7 @@ Summary
    UnusedVariableIsUsedViolation
    UnusedVariableIsDefinedViolation
    WrongUnusedVariableNameViolation
+   UnreadableNameViolation
 
 Module names
 ------------
@@ -156,6 +155,7 @@ General names
 .. autoclass:: UnusedVariableIsUsedViolation
 .. autoclass:: UnusedVariableIsDefinedViolation
 .. autoclass:: WrongUnusedVariableNameViolation
+.. autoclass:: UnreadableNameViolation
 
 """
 
@@ -165,6 +165,7 @@ from wemake_python_styleguide.violations.base import (
     ASTViolation,
     MaybeASTViolation,
     SimpleViolation,
+    ViolationPostfixes,
 )
 
 
@@ -360,6 +361,7 @@ class TooShortNameViolation(MaybeASTViolation):
 
     error_template = 'Found too short name: {0}'
     code = 111
+    postfix_template = ViolationPostfixes.less_than
 
 
 @final
@@ -779,3 +781,43 @@ class WrongUnusedVariableNameViolation(ASTViolation):
 
     error_template = 'Found wrong unused variable name: {0}'
     code = 123
+
+
+@final
+class UnreadableNameViolation(MaybeASTViolation):
+    """
+    Forbids to have variable or module names which could be difficult to read.
+
+    Reasoning:
+        Currently one can name your classes like so: ``ControlIn``
+        Inside it is just ``L`` and ``i``, but we cannot tell it from the word.
+        There are a lot other combinations which are unreadable.
+
+    Solution:
+        Rename your entity not to contain unreadable sequences.
+
+    This rule checks: modules, variables, attributes,
+    functions, methods, and classes.
+
+    See
+    :py:data:`~wemake_python_styleguide.constants.UNREADABLE_CHARACTER_COMBINATIONS`
+    for full list of unreadable combinations.
+
+    Example::
+
+        # Correct:
+        ControlStatement
+        AveragePrice
+
+        # Wrong:
+        ControlIn
+        Fill1List
+        Memo0Output
+        l1I
+
+    .. versionadded:: 0.14
+
+    """
+
+    error_template = 'Found unreadable characters combination: {0}'
+    code = 124
