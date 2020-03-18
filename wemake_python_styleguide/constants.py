@@ -109,12 +109,11 @@ VARIABLE_NAMES_BLACKLIST: Final = frozenset((
 
 #: List of characters sequences that are hard to read.
 UNREADABLE_CHARACTER_COMBINATIONS: Final = frozenset((
-    'lI',
     '1l',
     '1I',
     '0O',
     'O0',
-    # Not included: 'l1', 'Il'
+    # Not included: 'lI', 'l1', 'Il'
     # Because these names are quite common in real words.
 ))
 

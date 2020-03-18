@@ -18,7 +18,6 @@ class {0}(object):
     class_template,
 ])
 @pytest.mark.parametrize('expression', [
-    'StilllItem',
     'My1Item',
     'Element0Operation',
     'O0S',
