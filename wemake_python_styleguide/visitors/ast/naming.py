@@ -28,7 +28,7 @@ from wemake_python_styleguide.logic.naming import (
     alphabet,
     blacklists,
     builtins,
-    name_check,
+    logical,
     name_nodes,
 )
 from wemake_python_styleguide.logic.tree import functions
@@ -74,13 +74,13 @@ class _NameValidator(object):
         *,
         is_first_argument: bool = False,
     ) -> None:
-        if name_check.is_wrong_name(name, self._variable_names_blacklist):
+        if logical.is_wrong_name(name, self._variable_names_blacklist):
             self._error_callback(
                 naming.WrongVariableNameViolation(node, text=name),
             )
 
         if not is_first_argument:
-            if name_check.is_wrong_name(name, SPECIAL_ARGUMENT_NAMES_WHITELIST):
+            if logical.is_wrong_name(name, SPECIAL_ARGUMENT_NAMES_WHITELIST):
                 self._error_callback(
                     naming.ReservedArgumentNameViolation(node, text=name),
                 )
@@ -151,7 +151,7 @@ class _NameValidator(object):
 
     def _ensure_length(self, node: ast.AST, name: str) -> None:
         min_length = self._options.min_name_length
-        if name_check.is_too_short_name(name, min_length=min_length):
+        if logical.is_too_short_name(name, min_length=min_length):
             self._error_callback(
                 naming.TooShortNameViolation(
                     node, text=name, baseline=min_length,
@@ -159,7 +159,7 @@ class _NameValidator(object):
             )
 
         max_length = self._options.max_name_length
-        if name_check.is_too_long_name(name, max_length=max_length):
+        if logical.is_too_long_name(name, max_length=max_length):
             self._error_callback(
                 naming.TooLongNameViolation(
                     node, text=name, baseline=max_length,
@@ -170,7 +170,7 @@ class _NameValidator(object):
         if not isinstance(target, ast.Name):
             return
 
-        if not target.id or not name_check.is_upper_case_name(target.id):
+        if not target.id or not logical.is_upper_case_name(target.id):
             return
 
         self._error_callback(

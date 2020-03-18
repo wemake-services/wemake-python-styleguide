@@ -1,7 +1,7 @@
 from typing import List
 
 from wemake_python_styleguide import constants
-from wemake_python_styleguide.logic.naming import name_check
+from wemake_python_styleguide.logic.naming import logical
 from wemake_python_styleguide.types import AnyImport
 
 
@@ -33,5 +33,5 @@ def is_vague_import(name: str) -> bool:
         name.startswith('from_') or
         name.startswith('to_')
     )
-    too_short = name_check.is_too_short_name(name, 2, trim=True)
+    too_short = logical.is_too_short_name(name, 2, trim=True)
     return blacklisted or with_from_or_to or too_short

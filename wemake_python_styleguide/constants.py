@@ -395,3 +395,6 @@ STDIN: Final = 'stdin'
 
 # Used to specify as a placeholder for `__init__`:
 INIT: Final = '__init__'
+
+# Used to determine when we are running on Windows:
+WINDOWS_OS: Final = 'nt'
