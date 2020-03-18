@@ -1,5 +1,9 @@
 import pytest
 
+from wemake_python_styleguide import constants
+from wemake_python_styleguide.logic.naming.alphabet import (
+    get_unreadable_characters,
+)
 from wemake_python_styleguide.violations.naming import UnreadableNameViolation
 from wemake_python_styleguide.visitors.ast.naming import WrongNameVisitor
 
@@ -15,12 +19,10 @@ class {0}(object):
 ])
 @pytest.mark.parametrize('expression', [
     'StilllItem',
-    'Still1Name',
-    'IllustrationTypes',
-    'First1lemon',
     'My1Item',
     'Element0Operation',
     'O0S',
+    'S0O',
 ])
 def test_unreadable_name(
     assert_errors,
@@ -33,8 +35,13 @@ def test_unreadable_name(
 ):
     """Ensures that unreadable names are not allowed."""
     tree = parse_ast_tree(mode(code.format(expression, expression)))
+
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
 
+    unreadable = get_unreadable_characters(
+        expression, constants.UNREADABLE_CHARACTER_COMBINATIONS,
+    )
+
     assert_errors(visitor, [UnreadableNameViolation])
-    assert_error_text(visitor, expression)
+    assert_error_text(visitor, unreadable)

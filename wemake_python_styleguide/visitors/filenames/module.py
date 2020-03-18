@@ -1,8 +1,7 @@
 from typing_extensions import final
 
 from wemake_python_styleguide import constants
-from wemake_python_styleguide.logic.naming import access
-from wemake_python_styleguide.logic.naming.logical import alphabet, name_check
+from wemake_python_styleguide.logic.naming import access, alphabet, name_check
 from wemake_python_styleguide.violations import naming
 from wemake_python_styleguide.visitors.base import BaseFilenameVisitor
 
@@ -56,13 +55,23 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
     def _check_module_name_length(self) -> None:
         min_length = self.options.min_name_length
         if name_check.is_too_short_name(self.stem, min_length=min_length):
-            self.add_violation(naming.TooShortNameViolation(text=self.stem))
+            self.add_violation(
+                naming.TooShortNameViolation(
+                    text=self.stem,
+                    baseline=min_length,
+                ),
+            )
         elif not constants.MODULE_NAME_PATTERN.match(self.stem):
             self.add_violation(naming.WrongModuleNamePatternViolation())
 
         max_length = self.options.max_name_length
         if name_check.is_too_long_name(self.stem, max_length=max_length):
-            self.add_violation(naming.TooLongNameViolation(text=self.stem))
+            self.add_violation(
+                naming.TooLongNameViolation(
+                    text=self.stem,
+                    baseline=max_length,
+                ),
+            )
 
     def _check_module_name_pattern(self) -> None:
         if alphabet.does_contain_consecutive_underscores(self.stem):
@@ -76,11 +85,10 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
             )
 
     def _check_module_name_readability(self) -> None:
-        is_unreadable = alphabet.does_contain_unreadable_characters(
-            self.stem,
-            constants.UNREADABLE_CHARACTER_COMBINATIONS,
+        unreadable_sequence = alphabet.get_unreadable_characters(
+            self.stem, constants.UNREADABLE_CHARACTER_COMBINATIONS,
         )
-        if is_unreadable:
+        if unreadable_sequence:
             self.add_violation(
                 naming.UnreadableNameViolation(text=self.stem),
             )

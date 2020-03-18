@@ -51,6 +51,7 @@ Reference
 
 import abc
 import ast
+import enum
 import tokenize
 from typing import Callable, ClassVar, Optional, Set, Tuple, Union
 
@@ -65,6 +66,16 @@ ErrorNode = Union[
 
 #: We use this type to define helper classes with callbacks to add violations.
 ErrorCallback = Callable[['BaseViolation'], None]
+
+
+class ViolationPostfixes(enum.Enum):
+    """String values of postfixes used for violation baselines."""
+
+    #: This field is required for `mypy` plugin that types field values.
+    value: str  # noqa: WPS110
+
+    bigger_than = ' > {0}'
+    less_than = ' < {0}'
 
 
 class BaseViolation(object, metaclass=abc.ABCMeta):
@@ -91,7 +102,9 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
     deprecated: ClassVar[bool] = False
 
     # We use this code to show base metrics and thresholds mostly:
-    postfix_template: ClassVar[str] = ' > {0}'
+    postfix_template: ClassVar[ViolationPostfixes] = (
+        ViolationPostfixes.bigger_than
+    )
 
     def __init__(
         self,
@@ -149,7 +162,7 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
         """
         if self._baseline is None:
             return ''
-        return self.postfix_template.format(self._baseline)
+        return self.postfix_template.value.format(self._baseline)
 
     @abc.abstractmethod
     def _location(self) -> Tuple[int, int]:

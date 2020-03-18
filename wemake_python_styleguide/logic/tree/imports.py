@@ -1,7 +1,7 @@
 from typing import List
 
 from wemake_python_styleguide import constants
-from wemake_python_styleguide.logic.naming.logical import name_check
+from wemake_python_styleguide.logic.naming import name_check
 from wemake_python_styleguide.types import AnyImport
 
 

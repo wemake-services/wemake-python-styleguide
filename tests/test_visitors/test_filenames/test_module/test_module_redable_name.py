@@ -11,9 +11,7 @@ from wemake_python_styleguide.visitors.filenames.module import (
 
 
 @pytest.mark.parametrize('filename', [
-    'still1name',
-    'l1module',
-    'the1interstep',
+    'the1long',
 ])
 def test_unreadable_filename(assert_errors, filename, default_options):
     """Testing that unreadable characters combinations do not allowed."""

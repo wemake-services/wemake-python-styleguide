@@ -12,7 +12,7 @@ snapshots['test_formatter_correct[cli_options0-regular] formatter_correct_regula
 snapshots['test_formatter[cli_options2-with_source] formatter_with_source'] = '''
 \x1b[4m\x1b[1m./tests/fixtures/formatter/formatter1.py\x1b[0m\x1b[0m
 
-  1:1      WPS111 Found too short name: s
+  1:1      WPS111 Found too short name: s < 2
   \x1b[34mdef\x1b[39;49;00m \x1b[32ms\x1b[39;49;00m(handle: \x1b[36mint\x1b[39;49;00m) -> \x1b[36mint\x1b[39;49;00m:
   ^
 
@@ -68,7 +68,7 @@ snapshots['test_formatter_correct[cli_options1-regular_statistic] formatter_corr
 snapshots['test_formatter[cli_options3-with_source_statistic] formatter_with_source_statistic'] = '''
 \x1b[4m\x1b[1m./tests/fixtures/formatter/formatter1.py\x1b[0m\x1b[0m
 
-  1:1      WPS111 Found too short name: s
+  1:1      WPS111 Found too short name: s < 2
   \x1b[34mdef\x1b[39;49;00m \x1b[32ms\x1b[39;49;00m(handle: \x1b[36mint\x1b[39;49;00m) -> \x1b[36mint\x1b[39;49;00m:
   ^
 
@@ -107,7 +107,7 @@ snapshots['test_formatter[cli_options3-with_source_statistic] formatter_with_sou
   2     ./tests/fixtures/formatter/formatter2.py
 \x1b[4mTotal: 3\x1b[0m
 
-\x1b[1mWPS111\x1b[0m: Found too short name: s
+\x1b[1mWPS111\x1b[0m: Found too short name: s < 2
   1     ./tests/fixtures/formatter/formatter1.py
 \x1b[4mTotal: 1\x1b[0m
 
@@ -134,7 +134,7 @@ https://wemake-python-stylegui.de/en/xx.xx/pages/usage/violations/
 snapshots['test_formatter[cli_options4-statistic_with_source] formatter_statistic_with_source'] = '''
 \x1b[4m\x1b[1m./tests/fixtures/formatter/formatter1.py\x1b[0m\x1b[0m
 
-  1:1      WPS111 Found too short name: s
+  1:1      WPS111 Found too short name: s < 2
   \x1b[34mdef\x1b[39;49;00m \x1b[32ms\x1b[39;49;00m(handle: \x1b[36mint\x1b[39;49;00m) -> \x1b[36mint\x1b[39;49;00m:
   ^
 
@@ -173,7 +173,7 @@ snapshots['test_formatter[cli_options4-statistic_with_source] formatter_statisti
   2     ./tests/fixtures/formatter/formatter2.py
 \x1b[4mTotal: 3\x1b[0m
 
-\x1b[1mWPS111\x1b[0m: Found too short name: s
+\x1b[1mWPS111\x1b[0m: Found too short name: s < 2
   1     ./tests/fixtures/formatter/formatter1.py
 \x1b[4mTotal: 1\x1b[0m
 
@@ -199,7 +199,7 @@ https://wemake-python-stylegui.de/en/xx.xx/pages/usage/violations/
 
 snapshots['test_formatter[cli_options0-regular] formatter_regular'] = '''
 \x1b[4m\x1b[1m./tests/fixtures/formatter/formatter1.py\x1b[0m\x1b[0m
-  1:1      WPS111 Found too short name: s
+  1:1      WPS111 Found too short name: s < 2
   1:7      WPS110 Found wrong variable name: handle
   2:21     WPS432 Found magic number: 200
   2:21     WPS303 Found underscored number: 2_00
@@ -216,7 +216,7 @@ https://wemake-python-stylegui.de/en/xx.xx/pages/usage/violations/
 
 snapshots['test_formatter[cli_options1-regular_statistic] formatter_regular_statistic'] = '''
 \x1b[4m\x1b[1m./tests/fixtures/formatter/formatter1.py\x1b[0m\x1b[0m
-  1:1      WPS111 Found too short name: s
+  1:1      WPS111 Found too short name: s < 2
   1:7      WPS110 Found wrong variable name: handle
   2:21     WPS432 Found magic number: 200
   2:21     WPS303 Found underscored number: 2_00
@@ -232,7 +232,7 @@ snapshots['test_formatter[cli_options1-regular_statistic] formatter_regular_stat
   2     ./tests/fixtures/formatter/formatter2.py
 \x1b[4mTotal: 3\x1b[0m
 
-\x1b[1mWPS111\x1b[0m: Found too short name: s
+\x1b[1mWPS111\x1b[0m: Found too short name: s < 2
   1     ./tests/fixtures/formatter/formatter1.py
 \x1b[4mTotal: 1\x1b[0m
 

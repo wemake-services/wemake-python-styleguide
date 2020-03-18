@@ -705,7 +705,7 @@ for element in range(10):
     my_print(4)
 
 
-class Memo0Output(object):  # noqa: WPS124
+class Mem0Output(object):  # noqa: WPS124
     # See:
     # https://github.com/wemake-services/wemake-python-styleguide/issues/1191
     anti_wps124 = 'unreadable class'

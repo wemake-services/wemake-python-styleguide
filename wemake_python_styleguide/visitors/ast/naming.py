@@ -24,11 +24,12 @@ from wemake_python_styleguide.constants import (
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming import (
     access,
+    alphabet,
     blacklists,
     builtins,
+    name_check,
     name_nodes,
 )
-from wemake_python_styleguide.logic.naming.logical import alphabet, name_check
 from wemake_python_styleguide.logic.tree import functions
 from wemake_python_styleguide.types import (
     AnyAssign,
@@ -89,13 +90,12 @@ class _NameValidator(object):
         if alphabet.does_contain_unicode(name):
             self._error_callback(naming.UnicodeNameViolation(node, text=name))
 
-        is_unreadable = alphabet.does_contain_unreadable_characters(
-            name,
-            UNREADABLE_CHARACTER_COMBINATIONS,
+        unreadable_sequence = alphabet.get_unreadable_characters(
+            name, UNREADABLE_CHARACTER_COMBINATIONS,
         )
-        if is_unreadable:
+        if unreadable_sequence:
             self._error_callback(
-                naming.UnreadableNameViolation(node, text=name),
+                naming.UnreadableNameViolation(node, text=unreadable_sequence),
             )
 
         self._ensure_length(node, name)
@@ -154,11 +154,19 @@ class _NameValidator(object):
     def _ensure_length(self, node: ast.AST, name: str) -> None:
         min_length = self._options.min_name_length
         if name_check.is_too_short_name(name, min_length=min_length):
-            self._error_callback(naming.TooShortNameViolation(node, text=name))
+            self._error_callback(
+                naming.TooShortNameViolation(
+                    node, text=name, baseline=min_length,
+                ),
+            )
 
         max_length = self._options.max_name_length
         if name_check.is_too_long_name(name, max_length=max_length):
-            self._error_callback(naming.TooLongNameViolation(node, text=name))
+            self._error_callback(
+                naming.TooLongNameViolation(
+                    node, text=name, baseline=max_length,
+                ),
+            )
 
     def _ensure_case(self, target: ast.AST) -> None:
         if not isinstance(target, ast.Name):
