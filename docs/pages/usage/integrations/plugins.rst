@@ -20,6 +20,7 @@ because they are, well, specific:
 - `flake8-annotations <https://github.com/python-discord/flake8-annotations>`_
 - `flake8-logging-format <https://github.com/globality-corp/flake8-logging-format>`_
 - `flake8-coding <https://github.com/tk0miya/flake8-coding>`_
+- `flake8-spellcheck <https://github.com/MichaelAquilina/flake8-spellcheck>`_
 
 Hooks
 ~~~~~
