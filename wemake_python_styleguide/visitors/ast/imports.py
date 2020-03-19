@@ -75,7 +75,7 @@ class _ImportValidator(_BaseImportValidator):
         )
         for name in names:
             if access.is_protected(name):
-                self._error_callback(ProtectedModuleViolation(node))
+                self._error_callback(ProtectedModuleViolation(node, text=name))
 
 
 @final
@@ -103,7 +103,7 @@ class _ImportFromValidator(_BaseImportValidator):
     def _check_protected_import_from_module(self, node: ast.ImportFrom) -> None:
         for name in imports.get_import_parts(node):
             if access.is_protected(name):
-                self._error_callback(ProtectedModuleViolation(node))
+                self._error_callback(ProtectedModuleViolation(node, text=name))
 
     def _check_protected_import_from_members(
         self,
@@ -111,7 +111,9 @@ class _ImportFromValidator(_BaseImportValidator):
     ) -> None:
         for alias in node.names:
             if access.is_protected(alias.name):
-                self._error_callback(ProtectedModuleMemberViolation(node))
+                self._error_callback(
+                    ProtectedModuleMemberViolation(node, text=alias.name),
+                )
 
     def _check_vague_alias(self, node: ast.ImportFrom) -> None:
         for alias in node.names:

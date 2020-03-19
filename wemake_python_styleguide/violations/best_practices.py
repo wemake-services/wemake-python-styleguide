@@ -1464,7 +1464,7 @@ class ProtectedModuleViolation(ASTViolation):
 
     """
 
-    error_template = 'Found protected module import'
+    error_template = 'Found protected module import: {0}'
     code = 436
     previous_codes = {440}
 
@@ -1986,7 +1986,7 @@ class ProtectedModuleMemberViolation(ASTViolation):
 
     """
 
-    error_template = 'Found protected object import'
+    error_template = 'Found protected object import: {0}'
     code = 450
 
 
