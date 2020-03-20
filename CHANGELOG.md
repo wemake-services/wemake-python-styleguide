@@ -90,6 +90,7 @@ character combination which is not easy to read
 - Fixes `WPS601` reporting shadowing for non-`self` attributes
 - Fixes `WPS114` not to be so strict
 - Fixes `WPS122` not raising for `for` and `async for` definitions
+- Fixes `WPS400` raising for `# type: ignore[override]` comments
 
 ### Misc
 

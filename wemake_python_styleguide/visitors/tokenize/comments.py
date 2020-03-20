@@ -92,7 +92,7 @@ class WrongCommentVisitor(BaseTokenVisitor):
             return
 
         declared_type = match.groups()[0].strip()
-        if declared_type != 'ignore':
+        if not declared_type.startswith('ignore'):
             self.add_violation(
                 WrongMagicCommentViolation(token, text=comment_text),
             )
