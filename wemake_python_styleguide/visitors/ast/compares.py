@@ -196,8 +196,8 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
 
 
 @final
-class WrongComparisionOrderVisitor(BaseNodeVisitor):
-    """Restricts comparision where argument doesn't come first."""
+class WrongComparisonOrderVisitor(BaseNodeVisitor):
+    """Restricts comparison where argument doesn't come first."""
 
     _allowed_left_nodes: ClassVar[AnyNodes] = (
         ast.Name,
@@ -214,7 +214,7 @@ class WrongComparisionOrderVisitor(BaseNodeVisitor):
 
     def visit_Compare(self, node: ast.Compare) -> None:
         """
-        Forbids comparision where argument doesn't come first.
+        Forbids comparison where argument doesn't come first.
 
         Raises:
             CompareOrderViolation

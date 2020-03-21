@@ -5,7 +5,7 @@ from wemake_python_styleguide.violations.consistency import (
     CompareOrderViolation,
 )
 from wemake_python_styleguide.visitors.ast.compares import (
-    WrongComparisionOrderVisitor,
+    WrongComparisonOrderVisitor,
 )
 
 wrong_comparators = [
@@ -64,7 +64,7 @@ def test_compare_variables(
     """Compares work well for left variables."""
     tree = parse_ast_tree(simple_conditions.format(*comparators))
 
-    visitor = WrongComparisionOrderVisitor(default_options, tree=tree)
+    visitor = WrongComparisonOrderVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -85,7 +85,7 @@ def test_compare_variables_in_special_case(
     """Ensures that special case for `in` and `not in` is handled."""
     tree = parse_ast_tree(in_conditions.format(*comparators))
 
-    visitor = WrongComparisionOrderVisitor(default_options, tree=tree)
+    visitor = WrongComparisonOrderVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -103,7 +103,7 @@ def test_compare_wrong_order(
     """Compares raise for left constants."""
     tree = parse_ast_tree(simple_conditions.format(*comparators))
 
-    visitor = WrongComparisionOrderVisitor(default_options, tree=tree)
+    visitor = WrongComparisonOrderVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [CompareOrderViolation])
@@ -121,7 +121,7 @@ def test_compare_wrong_order_multiple(
         'if {0} > {1} and {0} < {1}: ...'.format(*comparators),
     )
 
-    visitor = WrongComparisionOrderVisitor(default_options, tree=tree)
+    visitor = WrongComparisonOrderVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [
@@ -136,13 +136,13 @@ def test_compare_wrong_order_regression577(
     default_options,
 ):
     """
-    Ensures that `await` can be used in a comparision.
+    Ensures that `await` can be used in a comparison.
 
     See: https://github.com/wemake-services/wemake-python-styleguide/issues/577
     """
     tree = parse_ast_tree(regression577)
 
-    visitor = WrongComparisionOrderVisitor(default_options, tree=tree)
+    visitor = WrongComparisonOrderVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])

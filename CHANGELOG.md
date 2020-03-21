@@ -301,7 +301,7 @@ It features a lot of new rules from different categories.
 ### Misc
 
 - Improves `README.md` with `flakehell` and `nitpick` mentions
-- Improves docs all accross the project
+- Improves docs all across the project
 
 
 ## 0.12.0

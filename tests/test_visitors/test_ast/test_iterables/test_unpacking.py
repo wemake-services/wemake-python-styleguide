@@ -47,13 +47,13 @@ def test_correct_iterable_unpacking_usage(
     wrong_tuple_definition,
     wrong_spread_assignment,
 ])
-def test_unneccessary_iterable_unpacking_usage(
+def test_unnecessary_iterable_unpacking_usage(
     assert_errors,
     parse_ast_tree,
     default_options,
     code,
 ):
-    """Testing that unneccessary iterable unpacking is restricted."""
+    """Testing that unnecessary iterable unpacking is restricted."""
     tree = parse_ast_tree(code)
 
     visitor = IterableUnpackingVisitor(default_options, tree=tree)

@@ -9,7 +9,7 @@ That's how all ``flake8`` formatters work:
     graph LR
         F2[start]  --> F3[after_init]
         F3         --> F4[start]
-        F4         --> F5[beggining]
+        F4         --> F5[beginning]
         F5         --> F6[handle]
         F6         --> F7[format]
         F6	       --> F8[show_source]

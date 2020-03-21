@@ -984,7 +984,7 @@ class ModuloStringFormatViolation(ASTViolation):
     Related to :class:`~FormattedStringViolation` and solves the same problem.
 
     Reasoning:
-        You must use a single formatting method accross your project.
+        You must use a single formatting method across your project.
 
     Solution:
         We enforce to use string ``.format()`` method for this task.
@@ -2087,13 +2087,13 @@ class BracketBlankLineViolation(TokenizeViolation):
 @final
 class IterableUnpackingViolation(ASTViolation):
     """
-    Forbids unneccessary iterable unpacking.
+    Forbids unnecessary iterable unpacking.
 
     Reasoning:
         We do this for consistency.
 
     Solution:
-        Do not use iterables unpacking, when it's not neccessary.
+        Do not use iterables unpacking, when it's not necessary.
 
     Example::
 
