@@ -967,7 +967,7 @@ class TooManyPublicAttributesViolation(ASTViolation):
     Solution:
         Make some attributes protected.
         Split this class into several ones.
-        If class is a Data Transder Object, then use ``@dataclass`` decorator.
+        If class is a Data Transfer Object, then use ``@dataclass`` decorator.
 
     Configuration:
         This rule is configurable with ``--max-attributes``.
