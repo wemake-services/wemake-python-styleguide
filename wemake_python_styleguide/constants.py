@@ -5,7 +5,7 @@ We add values here when we want to make them public.
 Or when a value is reused in several places.
 Then, we automatically have to add it here and document it.
 
-Other constants that are not used accross modules
+Other constants that are not used across modules
 and does not require to be documented can be defined where they are used.
 
 All values here must be documented with ``#:`` comments.

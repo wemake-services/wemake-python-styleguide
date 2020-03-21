@@ -29,10 +29,10 @@ class IterableUnpackingVisitor(base.BaseNodeVisitor):
             IterableUnpackingViolation
 
         """
-        self._check_unneccessary_iterable_unpacking(node)
+        self._check_unnecessary_iterable_unpacking(node)
         self.generic_visit(node)
 
-    def _check_unneccessary_iterable_unpacking(self, node: ast.Starred) -> None:
+    def _check_unnecessary_iterable_unpacking(self, node: ast.Starred) -> None:
         parent = get_parent(node)
         if isinstance(parent, self._upackable_iterable_parent_types):
             if len(getattr(parent, 'elts', [])) == 1:
