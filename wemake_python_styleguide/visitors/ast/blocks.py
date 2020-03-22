@@ -84,7 +84,10 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
 
     # Blocks:
 
-    def visit_named_nodes(self, node: AnyFunctionDef) -> None:
+    def visit_named_nodes(
+        self,
+        node: Union[AnyFunctionDef, ast.ClassDef, ast.ExceptHandler],
+    ) -> None:
         """
         Visits block nodes that have ``.name`` property.
 

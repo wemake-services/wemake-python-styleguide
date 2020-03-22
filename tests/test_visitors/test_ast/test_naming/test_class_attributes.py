@@ -17,7 +17,7 @@ class Test(object):
 
 regression423 = """
 class MyClass(object):
-    def action_method(self, request, object):
+    def action_method(self, request, second):
         ...
 
     action_method.label = 'Do action'

@@ -20,6 +20,7 @@ General
 - Do not use transliteration from any other languages, translate names instead
 - Use clear names, do not use words that do not mean anything like ``obj``
 - Use names of an appropriate length: not too short, not too long
+- Do not mask builtins
 - Do not use unreadable charachter sequences like ``O0`` and ``Il``
 - Protected members should use underscore as the first char
 - Private names with two leading underscores are not allowed
@@ -130,6 +131,7 @@ Summary
    UnusedVariableIsDefinedViolation
    WrongUnusedVariableNameViolation
    UnreadableNameViolation
+   BuiltinShadowingViolation
 
 Module names
 ------------
@@ -156,6 +158,7 @@ General names
 .. autoclass:: UnusedVariableIsDefinedViolation
 .. autoclass:: WrongUnusedVariableNameViolation
 .. autoclass:: UnreadableNameViolation
+.. autoclass:: BuiltinShadowingViolation
 
 """
 
@@ -789,8 +792,8 @@ class UnreadableNameViolation(MaybeASTViolation):
     Forbids to have variable or module names which could be difficult to read.
 
     Reasoning:
-        Currently one can name your classes like so: ``ControlIn``
-        Inside it is just ``L`` and ``i``, but we cannot tell it from the word.
+        Currently one can name your classes like so: ``ZerO0``
+        Inside it is just ``O`` and ``0``, but we cannot tell it from the word.
         There are a lot other combinations which are unreadable.
 
     Solution:
@@ -810,10 +813,7 @@ class UnreadableNameViolation(MaybeASTViolation):
         AveragePrice
 
         # Wrong:
-        ControlIn
-        Fill1List
         Memo0Output
-        l1I
 
     .. versionadded:: 0.14
 
@@ -821,3 +821,33 @@ class UnreadableNameViolation(MaybeASTViolation):
 
     error_template = 'Found unreadable characters combination: {0}'
     code = 124
+
+
+@final
+class BuiltinShadowingViolation(ASTViolation):
+    """
+    Forbids to have variable or module names which shadows builtin names.
+
+    Reasoning:
+        Your code simply breaks Python. After you create ``list = 1``,
+        you cannot not call ``builtin`` function ``list``
+        and what can be worth than that?
+
+    Solution:
+        Rename your entity not to shadow Python builtins.
+
+    Example::
+
+        # Correct:
+        my_list = list(some_other)
+
+        # Wrong:
+        str = ''
+        list = [1, 2, 3]
+
+    .. versionadded:: 0.14
+
+    """
+
+    error_template = 'Found builtin shadowing: {0}'
+    code = 125

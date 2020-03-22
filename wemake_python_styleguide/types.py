@@ -72,9 +72,6 @@ AnyComprehension = Union[
 #: In cases we need to work with both sync and async context managers.
 AnyWith = Union[ast.With, ast.AsyncWith]
 
-#: Flake8 API format to return error messages.
-CheckResult = Tuple[int, int, str, type]
-
 #: Tuple of AST node types for declarative syntax.
 AnyNodes = Tuple[Type[ast.AST], ...]
 
@@ -96,6 +93,9 @@ AnyAccess = Union[
 
 #: We use this type to work with any text-like values. Related to `AnyText`.
 AnyTextPrimitive = Union[str, bytes]
+
+#: Flake8 API format to return error messages.
+CheckResult = Tuple[int, int, str, type]
 
 
 @final

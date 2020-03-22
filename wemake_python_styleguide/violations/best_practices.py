@@ -170,7 +170,7 @@ class WrongMagicCommentViolation(SimpleViolation):
     Example::
 
         # Correct:
-        type = MyClass.get_type()  # noqa: A001
+        type = MyClass.get_type()  # noqa: WPS125
         coordinate: int = 10
         some.int_field = 'text'  # type: ignore
 

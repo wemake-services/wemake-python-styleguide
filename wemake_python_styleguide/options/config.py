@@ -155,8 +155,8 @@ class _Option(object):
 
     long_option_name: str
     default: ConfigValuesTypes
-    help: str  # noqa: A003
-    type: Optional[str] = 'int'  # noqa: A003
+    help: str  # noqa: WPS125
+    type: Optional[str] = 'int'  # noqa: WPS125
     parse_from_config: bool = True
     action: str = 'store'
     comma_separated_list: bool = False

@@ -1,13 +1,25 @@
+import builtins
+import inspect
 import keyword
 
-from flake8_builtins import BUILTINS
 from typing_extensions import Final
 
+from wemake_python_styleguide.constants import UNUSED_PLACEHOLDER
 from wemake_python_styleguide.logic.naming.access import is_magic, is_unused
+
+_BUILTINS_WHITELIST: Final = frozenset((
+    UNUSED_PLACEHOLDER,
+))
+
+_BUILTINS: Final = frozenset((
+    builtin[0]
+    for builtin in inspect.getmembers(builtins)
+    if builtin[0] not in _BUILTINS_WHITELIST
+))
 
 _ALL_BUILTINS: Final = frozenset((
     *keyword.kwlist,
-    *BUILTINS,
+    *_BUILTINS,
 
     # Special case.
     # Some python version have them, some do not have them:

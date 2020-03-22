@@ -8,8 +8,8 @@ from wemake_python_styleguide.types import ConfigurationOptions
 
 
 def _min_max(
-    min: Optional[int] = None,  # noqa: A002
-    max: Optional[int] = None,  # noqa: A002
+    min: Optional[int] = None,  # noqa: WPS125
+    max: Optional[int] = None,  # noqa: WPS125
 ):
     """Validator to check that value is in bounds."""
     def factory(instance, attribute, field_value):

@@ -13,13 +13,13 @@ class _HasAliasedProp(object):
 
 def test_raises_for_duplicates():
     """Ensures that decorator raises an exception for duplicates."""
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match='duplicate'):
         alias('name', ('duplicate', 'duplicate'))
 
 
 def test_useless_alias():
     """Ensures that decorator raises an exception for duplicates."""
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match='duplicate'):
         alias('name', ('name',))
 
 

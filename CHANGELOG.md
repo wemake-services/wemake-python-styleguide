@@ -9,12 +9,20 @@ Semantic versioning in our case means:
 - Major releases inidicate significant milestones or serious breaking changes.
 
 
-## 0.14.0 aka The Walrus fighter WIP
+## 0.14.0 aka The Walrus fighter
+
+This release was focused on adding `python3.8` support,
+removing dependencies that can be removed, and fixing bugs.
+
+There are breaking changes ahead!
+
+We also have this [nice migration guide](https://wemake-python-stylegui.de/en/latest/pages/changelog/migration_to_0_14.html).
 
 ### Features
 
 - **Breaking**: removes `flake8-executable`, now using `WPS452` instead of `EXE001..EXE005`
 - **Breaking**: removes `flake8-print`, now using `WPS421` instead of `T001`
+- **Breaking**: removes `flake8-builtins`, now using `WPS125` instead of `A001..A005`
 - **Breaking**: removes `flake8-annotations-complexity`,
   now using `WPS234` instead of `TAE002`
 - **Breaking**: removes `flake8-pep3101`, now using `WPS323` instead of `S001`,

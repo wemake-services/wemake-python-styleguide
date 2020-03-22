@@ -1,5 +1,6 @@
 from typing import Iterable
 
+from wemake_python_styleguide.constants import UNUSED_PLACEHOLDER
 from wemake_python_styleguide.logic.naming import access
 
 
@@ -113,7 +114,7 @@ def is_too_short_name(
         return False
 
     if trim:
-        name = name.strip('_')
+        name = name.strip(UNUSED_PLACEHOLDER)
 
     return len(name) < min_length
 

@@ -2,7 +2,6 @@ from sys import *
 import sys
 from typing import List, Union, Dict
 
-int = 12
 ++int
 
 extra_parens = list((node for node in 'abc'))
@@ -14,7 +13,6 @@ breaking_pycodestyle=3
 def camelCase(): ...
 
 '{}'.format(1)
-""
 
 assert True
 ipdb.set_trace()

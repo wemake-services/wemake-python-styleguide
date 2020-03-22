@@ -47,10 +47,9 @@ def test_short_variable_name_underscore(
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [
-        TooShortNameViolation,
+    assert_errors(visitor, [TooShortNameViolation], (
         TrailingUnderscoreViolation,
-    ])
+    ))
 
 
 def test_naming_length_settings(

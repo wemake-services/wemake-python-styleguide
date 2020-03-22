@@ -398,3 +398,6 @@ INIT: Final = '__init__'
 
 # Used to determine when we are running on Windows:
 WINDOWS_OS: Final = 'nt'
+
+# Used as a placeholder for special `_` variable:
+UNUSED_PLACEHOLDER: Final = '_'

@@ -3,11 +3,11 @@ import itertools
 from collections import Counter
 from typing import (
     Callable,
-    FrozenSet,
+    ClassVar,
     Iterable,
     List,
-    Optional,
-    Tuple,
+    Mapping,
+    Type,
     Union,
     cast,
 )
@@ -21,6 +21,7 @@ from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
     SPECIAL_ARGUMENT_NAMES_WHITELIST,
     UNREADABLE_CHARACTER_COMBINATIONS,
+    UNUSED_PLACEHOLDER,
 )
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming import (
@@ -44,20 +45,33 @@ from wemake_python_styleguide.violations import base, best_practices, naming
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
-VariableDef = Union[ast.Name, ast.Attribute, ast.ExceptHandler]
-AssignTargets = List[ast.expr]
-AssignTargetsNameList = List[Union[str, Tuple[str]]]
+_VariableDef = Union[ast.Name, ast.Attribute, ast.ExceptHandler]
+_ErrorCallback = Callable[[base.BaseViolation], None]
+
+_PredicateCallback = Callable[[str], bool]
+_Predicates = Mapping[_PredicateCallback, Type[base.BaseViolation]]
 
 
 @final
 class _NameValidator(object):
     """Utility class to separate logic from the naming visitor."""
 
-    variable_names_blacklist: FrozenSet[str]
+    _naming_predicates: ClassVar[_Predicates] = {
+        builtins.is_builtin_name: naming.BuiltinShadowingViolation,
+        builtins.is_wrong_alias: naming.TrailingUnderscoreViolation,
+
+        access.is_private: naming.PrivateNameViolation,
+
+        alphabet.does_contain_unicode: naming.UnicodeNameViolation,
+        alphabet.does_contain_underscored_number:
+            naming.UnderscoredNumberNameViolation,
+        alphabet.does_contain_consecutive_underscores:
+            naming.ConsecutiveUnderscoresInNameViolation,
+    }
 
     def __init__(
         self,
-        error_callback: Callable[[base.BaseViolation], None],
+        error_callback: _ErrorCallback,
         options: ConfigurationOptions,
     ) -> None:
         """Creates new instance of a name validator."""
@@ -74,30 +88,14 @@ class _NameValidator(object):
         *,
         is_first_argument: bool = False,
     ) -> None:
-        if logical.is_wrong_name(name, self._variable_names_blacklist):
-            self._error_callback(
-                naming.WrongVariableNameViolation(node, text=name),
-            )
-
-        if not is_first_argument:
-            if logical.is_wrong_name(name, SPECIAL_ARGUMENT_NAMES_WHITELIST):
-                self._error_callback(
-                    naming.ReservedArgumentNameViolation(node, text=name),
-                )
-
-        if alphabet.does_contain_unicode(name):
-            self._error_callback(naming.UnicodeNameViolation(node, text=name))
-
-        unreadable_sequence = alphabet.get_unreadable_characters(
-            name, UNREADABLE_CHARACTER_COMBINATIONS,
-        )
-        if unreadable_sequence:
-            self._error_callback(
-                naming.UnreadableNameViolation(node, text=unreadable_sequence),
-            )
+        for predicate, violation in self._naming_predicates.items():
+            if predicate(name):
+                self._error_callback(violation(node, text=name))
 
         self._ensure_length(node, name)
-        self._ensure_underscores(node, name)
+        self._ensure_complex_naming(
+            node, name, is_first_argument=is_first_argument,
+        )
 
     def check_function_signature(self, node: AnyFunctionDefAndLambda) -> None:
         for arg in functions.get_all_arguments(node):
@@ -121,34 +119,6 @@ class _NameValidator(object):
             for target in get_assign_targets(assignment):
                 self._ensure_case(target)
 
-    def _ensure_underscores(self, node: ast.AST, name: str):
-        if access.is_private(name):
-            self._error_callback(
-                naming.PrivateNameViolation(node, text=name),
-            )
-
-        if alphabet.does_contain_underscored_number(name):
-            self._error_callback(
-                naming.UnderscoredNumberNameViolation(node, text=name),
-            )
-
-        if alphabet.does_contain_consecutive_underscores(name):
-            self._error_callback(
-                naming.ConsecutiveUnderscoresInNameViolation(
-                    node, text=name,
-                ),
-            )
-
-        if builtins.is_wrong_alias(name):
-            self._error_callback(
-                naming.TrailingUnderscoreViolation(node, text=name),
-            )
-
-        if access.is_unused(name) and len(name) > 1:
-            self._error_callback(
-                naming.WrongUnusedVariableNameViolation(node, text=name),
-            )
-
     def _ensure_length(self, node: ast.AST, name: str) -> None:
         min_length = self._options.min_name_length
         if logical.is_too_short_name(name, min_length=min_length):
@@ -164,6 +134,37 @@ class _NameValidator(object):
                 naming.TooLongNameViolation(
                     node, text=name, baseline=max_length,
                 ),
+            )
+
+    def _ensure_complex_naming(
+        self,
+        node: ast.AST,
+        name: str,
+        *,
+        is_first_argument: bool,
+    ) -> None:
+        if logical.is_wrong_name(name, self._variable_names_blacklist):
+            self._error_callback(
+                naming.WrongVariableNameViolation(node, text=name),
+            )
+
+        if not is_first_argument:
+            if logical.is_wrong_name(name, SPECIAL_ARGUMENT_NAMES_WHITELIST):
+                self._error_callback(
+                    naming.ReservedArgumentNameViolation(node, text=name),
+                )
+
+        if access.is_unused(name) and len(name) > 1:
+            self._error_callback(
+                naming.WrongUnusedVariableNameViolation(node, text=name),
+            )
+
+        unreadable_sequence = alphabet.get_unreadable_characters(
+            name, UNREADABLE_CHARACTER_COMBINATIONS,
+        )
+        if unreadable_sequence:
+            self._error_callback(
+                naming.UnreadableNameViolation(node, text=unreadable_sequence),
             )
 
     def _ensure_case(self, target: ast.AST) -> None:
@@ -267,7 +268,7 @@ class WrongNameVisitor(BaseNodeVisitor):
 
         self.generic_visit(node)
 
-    def visit_variable(self, node: VariableDef) -> None:
+    def visit_variable(self, node: _VariableDef) -> None:
         """
         Used to check wrong names of assigned.
 
@@ -499,15 +500,17 @@ class UnusedVariableUsageVisitor(BaseNodeVisitor):
     def _check_variable_used(
         self,
         node: ast.AST,
-        assigned_name: Optional[str],
+        assigned_name: str,
         *,
         is_created: bool,
     ) -> None:
-        if not assigned_name or not access.is_unused(assigned_name):
+        if not access.is_unused(assigned_name):
             return
 
-        if assigned_name == '_':  # This is a special case for django's
-            return  # gettext and similar tools.
+        if assigned_name == UNUSED_PLACEHOLDER:
+            # This is a special case for django's
+            # gettext and similar tools.
+            return
 
         if not is_created:
             self.add_violation(
