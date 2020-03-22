@@ -110,9 +110,9 @@ class _NameValidator(object):
 
     def check_attribute_name(self, node: ast.ClassDef) -> None:
         top_level_assigns = [
-            sub_node
-            for sub_node in node.body
-            if isinstance(sub_node, AssignNodes)
+            sub
+            for sub in ast.walk(node)
+            if isinstance(sub, AssignNodes) and nodes.get_context(sub) is node
         ]
 
         for assignment in top_level_assigns:
@@ -167,15 +167,15 @@ class _NameValidator(object):
                 naming.UnreadableNameViolation(node, text=unreadable_sequence),
             )
 
-    def _ensure_case(self, target: ast.AST) -> None:
-        if not isinstance(target, ast.Name):
+    def _ensure_case(self, node: ast.AST) -> None:
+        if not isinstance(node, ast.Name):
             return
 
-        if not target.id or not logical.is_upper_case_name(target.id):
+        if not node.id or not logical.is_upper_case_name(node.id):
             return
 
         self._error_callback(
-            naming.UpperCaseAttributeViolation(target, text=target.id),
+            naming.UpperCaseAttributeViolation(node, text=node.id),
         )
 
 
