@@ -43,8 +43,6 @@ def test_external_plugins(absolute_path):
             'flake8',
             '--disable-noqa',
             '--isolated',
-            '--enable-extensions',
-            'G',
             filename,
         ],
         stdout=subprocess.PIPE,
@@ -77,8 +75,6 @@ def test_external_plugins_diff(absolute_path):
             'flake8',
             '--disable-noqa',
             '--isolated',
-            '--enable-extensions',
-            'G',
             '--diff',  # is required to test diffs! ;)
             '--exit-zero',  # to allow failures
         ],

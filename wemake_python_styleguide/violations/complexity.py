@@ -329,7 +329,7 @@ class TooManyLocalsViolation(ASTViolation):
         def second_function(argument):
             second_var = 1
             argument = int(argument)
-            third_var, _ = some_call()
+            third_var, _unused = some_call()
 
     In this example we will count as locals only several variables:
 
@@ -338,8 +338,9 @@ class TooManyLocalsViolation(ASTViolation):
     3. ``argument``, because it is reassigned inside the function's body
     4. ``third_var``, because it is assigned inside the function's body
 
-    Please, note that ``_`` is a special case. It is not counted as a local
-    variable. Since by design it means: do not count me as a real variable.
+    Please, note that ``_unused`` is a special case.
+    It is not counted as a local variable.
+    Since by design it means: do not count me as a real variable.
 
     Configuration:
         This rule is configurable with ``--max-local-variables``.

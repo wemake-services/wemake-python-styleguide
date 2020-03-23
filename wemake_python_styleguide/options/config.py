@@ -230,6 +230,7 @@ class Configuration(object):
             type='string',
             comma_separated_list=True,
         ),
+
         _Option(
             '--allowed-domain-names',
             defaults.ALLOWED_DOMAIN_NAMES,
@@ -237,12 +238,22 @@ class Configuration(object):
             type='string',
             comma_separated_list=True,
         ),
+
         _Option(
             '--forbidden-domain-names',
             defaults.FORBIDDEN_DOMAIN_NAMES,
             "Domain names that extends variable names' blacklist.",
             type='string',
             comma_separated_list=True,
+        ),
+
+        _Option(
+            '--baseline',
+            defaults.BASELINE,
+            'Run linter in legacy-first mode and ignore current violations.',
+            action='store_true',
+            type=None,
+            dest='baseline',
         ),
 
         # Complexity:

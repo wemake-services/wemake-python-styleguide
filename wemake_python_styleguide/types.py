@@ -144,6 +144,10 @@ class ConfigurationOptions(Protocol):
     def forbidden_domain_names(self) -> Tuple[str, ...]:
         ...
 
+    @property
+    def baseline(self) -> bool:
+        ...
+
     # Complexity:
     @property
     def max_arguments(self) -> int:
