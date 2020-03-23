@@ -56,6 +56,8 @@ You can also show all options that ``flake8`` supports by running:
     :str:`wemake_python_styleguide.options.defaults.ALLOWED_DOMAIN_NAMES`
 - ``forbidden-domain-names`` - list of forbidden domain names, defaults to
     :str:`wemake_python_styleguide.options.defaults.FORBIDDEN_DOMAIN_NAMES`
+- ``baseline`` - run linter in legacy-first mode and ignore current violations,
+    defaults to :str:`wemake_python_styleguide.options.defaults.BASELINE`
 
 .. rubric:: Complexity options
 
