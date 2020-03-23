@@ -74,6 +74,7 @@ ignore_imports =
   # These modules must import from flake8 to provide required API:
   wemake_python_styleguide.checker -> flake8
   wemake_python_styleguide.formatter -> flake8
+  wemake_python_styleguide.patches.baseline -> flake8
   wemake_python_styleguide.options.config -> flake8
   # We disallow direct imports of our dependencies from anywhere, except:
   wemake_python_styleguide.formatter -> pygments
