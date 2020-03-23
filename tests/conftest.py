@@ -1,4 +1,3 @@
-import os
 from collections import namedtuple
 
 import pytest
@@ -12,15 +11,6 @@ pytest_plugins = [
     'plugins.tokenize_parser',
     'plugins.async_sync',
 ]
-
-
-@pytest.fixture(scope='session')
-def absolute_path():
-    """Fixture to create full path relative to `contest.py` inside tests."""
-    def factory(*files: str):
-        dirname = os.path.dirname(__file__)
-        return os.path.join(dirname, *files)
-    return factory
 
 
 @pytest.fixture(scope='session')

@@ -8,7 +8,7 @@ import attr
 from typing_extensions import Final, final
 
 #: That's a constant filename where we store our baselines.
-_BASELINE_FILE: Final = '.flake8-baseline.json'
+BASELINE_FILE: Final = '.flake8-baseline.json'
 
 #: Content is: `error_code, line_number, column, text, physical_line`.
 CheckReport = Tuple[str, int, int, str, str]
@@ -19,7 +19,7 @@ SavedReports = Dict[str, List[CheckReport]]
 
 def _baseline_fullpath() -> str:
     """We only store baselines in the current (main) directory."""
-    return os.path.join(os.curdir, _BASELINE_FILE)
+    return os.path.join(os.curdir, BASELINE_FILE)
 
 
 def _unique_paths_converter(
