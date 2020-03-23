@@ -1,5 +1,9 @@
 from wemake_python_styleguide.options.config import Configuration
 
+_IGNORED_OPTIONS = frozenset((
+    '--baseline',
+))
+
 
 def test_all_violations_are_documented(all_module_violations):
     """Ensures that all violations are documented."""
@@ -43,6 +47,7 @@ def test_configuration(all_violations):
     option_listed = {
         option.long_option_name: False
         for option in Configuration._options  # noqa: WPS437
+        if option.long_option_name not in _IGNORED_OPTIONS
     }
 
     for violation in all_violations:
