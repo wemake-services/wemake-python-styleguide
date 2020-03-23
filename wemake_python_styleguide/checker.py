@@ -48,6 +48,7 @@ from wemake_python_styleguide import constants, types
 from wemake_python_styleguide import version as pkg_version
 from wemake_python_styleguide.options.config import Configuration
 from wemake_python_styleguide.options.validation import validate_options
+from wemake_python_styleguide.patches import baseline
 from wemake_python_styleguide.presets.types import file_tokens as tokens_preset
 from wemake_python_styleguide.presets.types import filename as filename_preset
 from wemake_python_styleguide.presets.types import tree as tree_preset
@@ -135,6 +136,8 @@ class Checker(object):
     def parse_options(cls, options: types.ConfigurationOptions) -> None:
         """Parses registered options for providing them to each visitor."""
         cls.options = validate_options(options)
+        if cls.options.baseline:
+            baseline.apply_patch()
 
     def run(self) -> Iterator[types.CheckResult]:
         """

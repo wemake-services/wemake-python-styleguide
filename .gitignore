@@ -203,3 +203,6 @@ fabric.properties
 # Used for testing:
 ex.py
 setup.py
+
+# Usually you don't need to gitignore this file, but we use it for testing:
+/.flake8-baseline.json

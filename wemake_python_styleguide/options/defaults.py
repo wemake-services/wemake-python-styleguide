@@ -42,6 +42,9 @@ ALLOWED_DOMAIN_NAMES: Final = ()
 #: Domain names that extends variable names' blacklist.
 FORBIDDEN_DOMAIN_NAMES: Final = ()
 
+#: Baseline mode trigger, turn it on to integrate this linter into legacy.
+BASELINE: Final = False
+
 
 # ===========
 # Complexity:

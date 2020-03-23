@@ -1,12 +1,10 @@
-# -*- coding: utf-8 -*-
-
 from os import chmod
 
 import pytest
 
-TEMP_FOLDER = 'tmp'
-MODE_EXECUTABLE = 0o755
-MODE_NON_EXECUTABLE = 0o644
+_TEMP_FOLDER = 'tmp'
+_MODE_EXECUTABLE = 0o755
+_MODE_NON_EXECUTABLE = 0o644
 
 
 @pytest.fixture()
@@ -15,16 +13,16 @@ def make_file(tmp_path):
     def factory(
         filename: str,
         file_content: str,
-        is_executable: bool,
+        *,
+        is_executable: bool = False,
     ) -> str:
-        temp_folder = tmp_path / TEMP_FOLDER
-        temp_folder.mkdir()
+        temp_folder = tmp_path / _TEMP_FOLDER
+        temp_folder.mkdir(exist_ok=True)
         test_file = temp_folder / filename
-        file_mode = MODE_EXECUTABLE if is_executable else MODE_NON_EXECUTABLE
+        file_mode = _MODE_EXECUTABLE if is_executable else _MODE_NON_EXECUTABLE
 
         test_file.write_text(file_content)
         chmod(test_file.as_posix(), file_mode)
 
         return test_file.as_posix()
-
     return factory

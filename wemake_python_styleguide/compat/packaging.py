@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import sys
 
 # Note that we use ``sys.version_info`` directly,

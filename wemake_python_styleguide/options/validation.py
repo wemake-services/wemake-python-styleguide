@@ -65,6 +65,7 @@ class _ValidatedOptions(object):
     nested_classes_whitelist: Tuple[str, ...] = attr.ib(converter=tuple)
     allowed_domain_names: Tuple[str, ...] = attr.ib(converter=tuple)
     forbidden_domain_names: Tuple[str, ...] = attr.ib(converter=tuple)
+    baseline: bool
 
     # Complexity:
     max_arguments: int = attr.ib(validator=[_min_max(min=1)])

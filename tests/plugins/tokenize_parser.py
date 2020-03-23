@@ -19,6 +19,5 @@ def parse_file_tokens(parse_tokens):
     """Parses tokens from a file."""
     def factory(filename: str):
         with open(filename, 'r', encoding='utf-8') as test_file:
-            file_content = test_file.read()
-            return parse_tokens(file_content)
+            return parse_tokens(test_file.read())
     return factory
