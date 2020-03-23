@@ -13,6 +13,7 @@ containers =
 layers =
   checker
   formatter
+  patches
   transformations
   presets
   visitors
