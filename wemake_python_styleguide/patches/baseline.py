@@ -14,16 +14,16 @@ Steps
 
 There are several steps in how baseline works.
 
-1. We can run the linter with ``--baseline`` mode enabled.
-   What will happen? If you already have ``.flake8-baseline.json`` file,
-   than your pre-saved violations will be ignored.
-   New violations will be reported.
-   If you don't have ``.flake8-baseline.json``,
-   then a new one will be created containing all the violations you have.
+We can run the linter with ``--baseline`` mode enabled.
+What will happen?
 
-2. You can also use ``--refactor-baseline`` to force users
-   to refactor at least one violation from the existing baseline.
-   This might be useful if you enforce consistent refactoring.
+If you don't have ``.flake8-baseline.json``,
+then a new one will be created containing all the violations you have.
+
+If you already have ``.flake8-baseline.json`` file,
+than your pre-saved violations will be ignored.
+
+However, new violations will still be reported.
 
 Updating baseline
 ~~~~~~~~~~~~~~~~~
@@ -34,7 +34,7 @@ To update a baseline you can delete the old one:
 
     rm .flake8-baseline.json
 
-And create a new one as always.
+And create a new one with ``--baseline`` flag.
 
 Baseline contents
 ~~~~~~~~~~~~~~~~~
@@ -47,7 +47,7 @@ Things we care when working with baselines:
 When these values change
 (for example: file is renamed or violation code is changed),
 we will treat these violations as new ones.
-And report them as usual.
+And report them to the user as usual.
 
 Things we don't care when working with baselines:
 
@@ -57,8 +57,8 @@ Things we don't care when working with baselines:
 3. Config values
 4. Target files and directories
 
-So, you add new plugins or change any config values,
-then you might want ot update the baseline.
+So, when you add new plugins or change any config values,
+then you might want ot update the baseline as well.
 
 """
 
