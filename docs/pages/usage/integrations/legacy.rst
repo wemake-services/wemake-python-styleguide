@@ -1,29 +1,102 @@
 .. _legacy:
 
 Legacy projects
----------------
+===============
 
 Introducing this package to a legacy project is going to be a challenge.
 Due to our strict quality, consistency, and complexity rules.
 
 But, you still can do several things to integrate this linter step by step:
 
-1. Fix consistency, naming and best-practices violations,
+1. Generate a baseline to ignore existing violations
+   and only report new ones that were created after the baseline.
+2. Fix consistency, naming and best-practices violations,
    they are the easiest to clean up.
-2. Per-file ignore complexity checks that are failing for your project.
+3. Per-file ignore complexity checks that are failing for your project.
    Sometimes it is possible to rewrite several parts of your code,
    but generally complexity rules are the hardest to fix.
-3. Use `boy scout rule <https://deviq.com/boy-scout-rule/>`_: always leave
+4. Use `boy scout rule <https://deviq.com/boy-scout-rule/>`_: always leave
    your code better than you found it.
 
 To make sure "boy scout rule" works we officially support ``--diff`` mode.
 The main idea of it is simple: we only lint things that we touch.
 
-We also support :ref:`flakehell-legacy` (external tool)
-to create a ``baseline`` of your current violations
-and start to lint only new one from this point.
-
 Choose what suits you best.
+
+.. _baseline:
+
+Baseline
+--------
+
+You can start using it with just a single command!
+
+.. code:: bash
+
+  flake8 --baseline your_project
+
+This guide will explain how it works.
+
+Steps
+~~~~~
+
+There are several steps in how baseline works.
+
+We can run the linter with ``--baseline`` mode enabled.
+What will happen?
+
+If you don't have ``.flake8-baseline.json``,
+then a new one will be created containing all the violations you have.
+The first time all violations will be reported.
+We do this to show the contents of the future baseline to the developer.
+Futher runs won't report any of the violations inside the baseline.
+
+If you already have ``.flake8-baseline.json`` file,
+than your baselined violations will be ignored.
+
+However, new violations will still be reported.
+
+Updating baseline
+~~~~~~~~~~~~~~~~~
+
+To update a baseline you can delete the old one:
+
+.. code:: bash
+
+  rm .flake8-baseline.json
+
+And create a new one with ``--baseline`` flag:
+
+.. code:: bash
+
+  flake8 --baseline your_project
+
+Baseline contents
+~~~~~~~~~~~~~~~~~
+
+Things we care when working with baselines:
+
+1. Violation codes and text descriptions
+2. Filenames
+
+When these values change
+(for example: file is renamed or violation code is changed),
+we will treat these violations as new ones.
+And report them to the user as usual.
+
+Things we don't care when working with baselines:
+
+1. Violation locations, because lines and columns
+   can be easily changed by simple refactoring
+2. Activated plugins
+3. Config values
+4. Target files and directories
+
+So, when you add new plugins or change any config values,
+then you might want ot update the baseline as well.
+
+
+Linting diffs
+-------------
 
 Existing legacy
 ~~~~~~~~~~~~~~~
@@ -119,7 +192,3 @@ And you are forced to improve things you write.
 
 At some point in time, you will have 100% perfect code.
 Good linters and constant refactoring is the key to the success.
-
-.. rubric:: Further reading
-
-- :ref:`Creating baselines for legacy projects <flakehell>`

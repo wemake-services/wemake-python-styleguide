@@ -34,7 +34,7 @@ removing dependencies that can be removed, and fixing bugs.
 
 There are breaking changes ahead!
 
-We also have this [nice migration guide](https://wemake-python-stylegui.de/en/latest/pages/changelog/migration_to_0_14.html).
+We also have this [0.14 migration guide](https://wemake-python-stylegui.de/en/latest/pages/changelog/migration_to_0_14.html).
 
 ### Features
 
@@ -479,7 +479,7 @@ We had to fix it before it is too late.
 So, we broke existing error codes.
 And now we can promise not to do it ever again.
 
-We also have this [nice migration guide](https://wemake-python-stylegui.de/en/latest/pages/changelog/migration_to_0_11.html)
+We also have this [0.11 migration guide](https://wemake-python-stylegui.de/en/latest/pages/changelog/migration_to_0_11.html)
 for you to rename your violations with a script.
 
 ### Features

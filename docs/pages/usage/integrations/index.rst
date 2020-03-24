@@ -1,12 +1,11 @@
 .. toctree::
   :hidden:
 
+  legacy.rst
   plugins.rst
   editors.rst
   auto-formatters.rst
   nitpick.rst
-  legacy.rst
-  flakehell.rst
   docker.rst
   github-actions.rst
   ci.rst

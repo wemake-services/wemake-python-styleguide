@@ -30,16 +30,11 @@ pip install wemake-python-styleguide
 
 You will also need to create a `setup.cfg` file with the [configuration](https://wemake-python-stylegui.de/en/latest/pages/usage/configuration.html).
 
-We highly recommend to also use:
-
-- [flakehell](https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/flakehell.html) for easy integration into a **legacy** codebase
-- [nitpick](https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/nitpick.html) for sharing and validating configuration across multiple projects
-
 
 ## Running
 
 ```bash
-flake8 your_module.py
+flake8 your_project
 ```
 
 This app is still just good old `flake8`!
@@ -49,6 +44,17 @@ And it won't change your existing workflow.
   <img src="https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/running.png"
        alt="invocation results">
 </p>
+
+We also support just a **single command**
+for [incremental adoption](https://wemake-python-stylegui.de/en/latest/pages/usage/setup.html#incremental-adoption)
+of this linter into any existing codebase:
+
+```bash
+flake8 --baseline your_project
+```
+
+Done! Now linter will not report any old violations.
+And will only report new ones created after the baseline was generated.
 
 See ["Usage" section](https://wemake-python-stylegui.de/en/latest/pages/usage/setup.html)
 in the docs for examples and integrations.
