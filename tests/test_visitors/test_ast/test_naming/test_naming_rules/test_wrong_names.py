@@ -1,8 +1,8 @@
 import pytest
 
 from wemake_python_styleguide.violations.naming import (
-    WrongVariableNameViolation,
     UpperCaseAttributeViolation,
+    WrongVariableNameViolation,
 )
 from wemake_python_styleguide.visitors.ast.naming import WrongNameVisitor
 
@@ -34,6 +34,7 @@ def test_wrong_variable_name_case_insensitive(
         ignored_types=UpperCaseAttributeViolation,
     )
     assert_error_text(visitor, wrong_name, multiple=True)
+
 
 @pytest.mark.parametrize('wrong_name', [
     'value',
