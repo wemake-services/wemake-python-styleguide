@@ -207,7 +207,7 @@ def test_with_baseline_new_correct_files(make_file, read_file):
 def test_with_baseline_new_wrong_files(make_file, read_file):
     """End-to-End test to test that baseline still generates new violations."""
     filename = make_file(filename_wrong, wrong_template.format(''))
-    new_wrong = make_file('new_wrong.py', 'wrong__name = 1')
+    new_wrong = make_file('new_wrong.py', 'undescored_number = 10_0')
     baseline_path = make_file(BASELINE_FILE, baseline)
 
     process = subprocess.Popen(
@@ -218,7 +218,6 @@ def test_with_baseline_new_wrong_files(make_file, read_file):
             '--select',
             'WPS,E',
             filename_wrong,
-            'correct.py',
             new_wrong,
         ],
         stdout=subprocess.PIPE,
@@ -229,6 +228,6 @@ def test_with_baseline_new_wrong_files(make_file, read_file):
     )
     output, _ = process.communicate()
 
-    _assert_output(output, {'WPS116': 1})
+    _assert_output(output, {'WPS303': 1})
     assert process.returncode == 1
     assert read_file(baseline_path) == baseline
