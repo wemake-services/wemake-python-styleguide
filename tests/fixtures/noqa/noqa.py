@@ -131,6 +131,7 @@ def some():  # noqa: WPS110
 del {'a': 1}['a']  # noqa: WPS420
 hasattr(object, 'some')  # noqa: WPS421
 value = 1  # noqa: WPS110
+VALUE = 1  # noqa: WPS110
 x = 2  # noqa: WPS111
 __private = 3  # noqa: WPS112
 star_wars_episode_7 = 'the worst episode ever after 8'  # noqa: WPS114
