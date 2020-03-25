@@ -31,7 +31,7 @@ def test_wrong_variable_name_case_insensitive(
     assert_errors(
         visitor,
         [WrongVariableNameViolation],
-        ignored_types=UpperCaseAttributeViolation,
+        ignored_types=(UpperCaseAttributeViolation,),
     )
     assert_error_text(visitor, wrong_name, multiple=True)
 
