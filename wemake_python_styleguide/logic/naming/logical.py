@@ -33,7 +33,7 @@ def is_wrong_name(name: str, to_check: Iterable[str]) -> bool:
             '_{0}'.format(name_to_check),
             '{0}_'.format(name_to_check),
         }
-        if name in choices_to_check:
+        if name.lower() in choices_to_check:
             return True
     return False
 

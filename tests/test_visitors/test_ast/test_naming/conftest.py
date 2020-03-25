@@ -12,6 +12,11 @@ from_import_alias = """
 from os import path as {0}
 """
 
+# Class names:
+
+class_name = 'class {0}: ...'
+
+
 # Function names:
 
 function_name = 'def {0}(): ...'
@@ -153,6 +158,9 @@ _ALL_FIXTURES = frozenset((
     # Imports:
     import_alias,
     from_import_alias,
+
+    # Class names:
+    class_name,
 
     # Function names, we don't use async function because we generate them:
     function_name,
