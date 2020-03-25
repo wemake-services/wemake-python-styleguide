@@ -28,7 +28,7 @@ Choose what suits you best.
 Baseline
 --------
 
-You can start using it with just a single command!
+You can start using our linter with just a single command!
 
 .. code:: bash
 
@@ -93,6 +93,64 @@ Things we don't care when working with baselines:
 
 So, when you add new plugins or change any config values,
 then you might want ot update the baseline as well.
+
+Full baseline example
+~~~~~~~~~~~~~~~~~~~~~
+
+You start with a legacy file that looks like this:
+
+.. code:: python
+
+  # ex.py
+  x = 1
+
+Let's lint it and ignore existing errors!
+
+.. code:: bash
+
+  flake8 --baseline ex.py
+
+.. image:: https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/baseline-initial.png
+
+We are seeing our violation. Works as expected.
+Also, now your baseline is generated. Let's see that it works:
+
+.. code:: bash
+
+  cat .flake8-baseline.json
+
+.. image:: https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/baseline-contents.png
+
+Yes, here it is. It contains a single violation from your ``ex.py`` file.
+Let's run ``flake8`` again to see that no violations are going
+to be reported with a baseline:
+
+.. code:: bash
+
+  flake8 --baseline ex.py
+
+.. image:: https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/baseline-existing.png
+
+That works! No violations are reported.
+Because baseline covers all existing ones.
+Let's add some new ones to test that it will raise a violation:
+
+.. code:: python
+
+  # ex.py
+  x = 1
+  y = 1
+
+And run the linter:
+
+.. code:: bash
+
+  flake8 --baseline ex.py
+
+.. image:: https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/baseline-new-violations.png
+
+And yes, new violation is reported! It works just as we planned.
+Enjoy your incremental adoption!
 
 
 Linting diffs
