@@ -975,7 +975,7 @@ description = "Check PEP-8 naming conventions, plugin for flake8"
 name = "pep8-naming"
 optional = false
 python-versions = "*"
-version = "0.9.1"
+version = "0.10.0"
 
 [package.dependencies]
 flake8-polyfill = ">=1.0.2,<2"
@@ -1624,7 +1624,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "25d04c702b28cfc663b887aa1764709f30a07753b9677e986254830ff4277957"
+content-hash = "31808a2d1c1e942e0ad36495cd8e8f1370127af35368c1a7c6ecf49326990375"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -2012,8 +2012,8 @@ pbr = [
     {file = "pbr-5.4.4.tar.gz", hash = "sha256:139d2625547dbfa5fb0b81daebb39601c478c21956dc57e2e07b74450a8c506b"},
 ]
 pep8-naming = [
-    {file = "pep8-naming-0.9.1.tar.gz", hash = "sha256:a33d38177056321a167decd6ba70b890856ba5025f0a8eca6a3eda607da93caf"},
-    {file = "pep8_naming-0.9.1-py2.py3-none-any.whl", hash = "sha256:45f330db8fcfb0fba57458c77385e288e7a3be1d01e8ea4268263ef677ceea5f"},
+    {file = "pep8-naming-0.10.0.tar.gz", hash = "sha256:f3b4a5f9dd72b991bf7d8e2a341d2e1aa3a884a769b5aaac4f56825c1763bf3a"},
+    {file = "pep8_naming-0.10.0-py2.py3-none-any.whl", hash = "sha256:5d9f1056cb9427ce344e98d1a7f5665710e2f20f748438e308995852cfa24164"},
 ]
 pexpect = [
     {file = "pexpect-4.8.0-py2.py3-none-any.whl", hash = "sha256:0b48a55dcb3c05f3329815901ea4fc1537514d6ba867a152b581d69ae3710937"},
