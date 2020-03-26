@@ -654,7 +654,7 @@ description = "IPython-enabled pdb"
 name = "ipdb"
 optional = false
 python-versions = ">=2.7"
-version = "0.12.3"
+version = "0.13.2"
 
 [package.dependencies]
 setuptools = "*"
@@ -1624,7 +1624,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "25d04c702b28cfc663b887aa1764709f30a07753b9677e986254830ff4277957"
+content-hash = "580113a00fe2dcdc26476123b0c99c4739ddcde8dfbce321fc7184e638c25177"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -1876,7 +1876,7 @@ importlib-resources = [
     {file = "importlib_resources-1.3.1.tar.gz", hash = "sha256:7f0e1b2b5f3981e39c52da0f99b2955353c5a139c314994d1126c2551ace9bdf"},
 ]
 ipdb = [
-    {file = "ipdb-0.12.3.tar.gz", hash = "sha256:5d9a4a0e3b7027a158fc6f2929934341045b9c3b0b86ed5d7e84e409653f72fd"},
+    {file = "ipdb-0.13.2.tar.gz", hash = "sha256:77fb1c2a6fccdfee0136078c9ed6fe547ab00db00bebff181f1e8c9e13418d49"},
 ]
 ipython = [
     {file = "ipython-7.13.0-py3-none-any.whl", hash = "sha256:eb8d075de37f678424527b5ef6ea23f7b80240ca031c2dd6de5879d687a65333"},
