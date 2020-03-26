@@ -39,7 +39,7 @@ def read_file(absolute_path):
 
 @pytest.fixture(scope='session')
 def absolute_path():
-    """Fixture to create full path relative to `contest.py` inside tests."""
+    """Fixture to create full path relative to `conftest.py` inside tests."""
     def factory(*files: str) -> str:
         dirname = os.path.dirname(os.path.dirname(__file__))
         return os.path.join(dirname, *files)
