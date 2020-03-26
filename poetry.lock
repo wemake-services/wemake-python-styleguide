@@ -261,8 +261,8 @@ category = "main"
 description = "Docutils -- Python Documentation Utilities"
 name = "docutils"
 optional = false
-python-versions = "*"
-version = "0.13.1"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "0.16"
 
 [[package]]
 category = "dev"
@@ -1624,7 +1624,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "25d04c702b28cfc663b887aa1764709f30a07753b9677e986254830ff4277957"
+content-hash = "78729f6e73168cb8d4dabdb90b01519a1d2c24c54c313d309f1664c582509a34"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -1755,9 +1755,8 @@ doc8 = [
     {file = "doc8-0.8.0.tar.gz", hash = "sha256:2df89f9c1a5abfb98ab55d0175fed633cae0cf45025b8b1e0ee5ea772be28543"},
 ]
 docutils = [
-    {file = "docutils-0.13.1-py2-none-any.whl", hash = "sha256:de454f1015958450b72641165c08afe7023cd7e3944396448f2fb1b0ccba9d77"},
-    {file = "docutils-0.13.1-py3-none-any.whl", hash = "sha256:cb3ebcb09242804f84bdbf0b26504077a054da6772c6f4d625f335cc53ebf94d"},
-    {file = "docutils-0.13.1.tar.gz", hash = "sha256:718c0f5fb677be0f34b781e04241c4067cbd9327b66bdd8e763201130f5175be"},
+    {file = "docutils-0.16-py2.py3-none-any.whl", hash = "sha256:0c5b78adfbf7762415433f5515cd5c9e762339e23369dbe8000d84a4bf4ab3af"},
+    {file = "docutils-0.16.tar.gz", hash = "sha256:c2de3a60e9e7d07be26b7f2b00ca0309c207e06c100f9cc2a94931fc75a478fc"},
 ]
 dparse = [
     {file = "dparse-0.5.0-py3-none-any.whl", hash = "sha256:14fed5efc5e98c0a81dfe100c4c2ea0a4c189104e9a9d18b5cfd342a163f97be"},
