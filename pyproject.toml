@@ -89,7 +89,7 @@ hypothesmith = "^0.0.5"
 
 mypy = "^0.770"
 
-docutils = "^0.13"
+docutils = "^0.16"
 sphinx = "^2.2"
 sphinx-autodoc-typehints = "<1.11"
 sphinxcontrib-mermaid = "^0.3"
