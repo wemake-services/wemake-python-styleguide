@@ -36,7 +36,6 @@ jobs:
     - name: Run checks and push coverage
       env:
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-        COVERALLS_SERVICE_NAME: travis-ci
       run: |
         source "$HOME/.poetry/env"
 
