@@ -40,4 +40,4 @@ jobs:
         source "$HOME/.poetry/env"
 
         make test
-        coveralls
+        poetry run coveralls
