@@ -39,8 +39,9 @@ jobs:
 
         make test
         
-    - name: Coveralls GitHub Action
-      uses: coverallsapp/github-action@v1.0.1
-      with:
-        github-token: ${{ secrets.github_token }}
-        path-to-lcov: ./coverage.xml
+    - name: Push coverage information
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+      run: |
+        pip install coveralls
+        coveralls
