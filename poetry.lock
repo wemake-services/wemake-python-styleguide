@@ -195,6 +195,22 @@ version = "0.1.0"
 coverage = ">=5.0,<6.0"
 
 [[package]]
+category = "dev"
+description = "Show coverage stats online via coveralls.io"
+name = "coveralls"
+optional = false
+python-versions = "*"
+version = "1.11.1"
+
+[package.dependencies]
+coverage = ">=3.6,<6.0"
+docopt = ">=0.6.1"
+requests = ">=1.0.0"
+
+[package.extras]
+yaml = ["PyYAML (>=3.10,<5.3)"]
+
+[[package]]
 category = "main"
 description = "A utility for ensuring Google-style docstrings stay up to date with the source code."
 name = "darglint"
@@ -255,6 +271,14 @@ docutils = "*"
 restructuredtext-lint = ">=0.7"
 six = "*"
 stevedore = "*"
+
+[[package]]
+category = "dev"
+description = "Pythonic argument parser, that will make you smile"
+name = "docopt"
+optional = false
+python-versions = "*"
+version = "0.6.2"
 
 [[package]]
 category = "main"
@@ -1624,7 +1648,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "9ece87578e512f6005003b29627cfe6906828ef78a12dfc76c2ec755add4cfbb"
+content-hash = "e9479695bf57b266e971bf9177f657987d15b1b346f3e5e9473241888783ba4e"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -1731,6 +1755,10 @@ coverage-conditional-plugin = [
     {file = "coverage-conditional-plugin-0.1.0.tar.gz", hash = "sha256:9941bf2005e745190d24a6213ad681cb8884451192c668b4841b00cdc76c5f6e"},
     {file = "coverage_conditional_plugin-0.1.0-py3-none-any.whl", hash = "sha256:7e8f0ce79aeb06ca611244f3f379afcb52d972f6bb8911029475477db8cc95c6"},
 ]
+coveralls = [
+    {file = "coveralls-1.11.1-py2.py3-none-any.whl", hash = "sha256:4b6bfc2a2a77b890f556bc631e35ba1ac21193c356393b66c84465c06218e135"},
+    {file = "coveralls-1.11.1.tar.gz", hash = "sha256:67188c7ec630c5f708c31552f2bcdac4580e172219897c4136504f14b823132f"},
+]
 darglint = [
     {file = "darglint-1.2.0-py3-none-any.whl", hash = "sha256:748f53c0c73ce7cf0b97f77aea8da38145122db32969150001918700ff9689c7"},
     {file = "darglint-1.2.0.tar.gz", hash = "sha256:5dccce27e1cf49a9f566f513504c85d26e595e4f086987ffd909f5913bad5ad7"},
@@ -1753,6 +1781,9 @@ distlib = [
 doc8 = [
     {file = "doc8-0.8.0-py2.py3-none-any.whl", hash = "sha256:d12f08aa77a4a65eb28752f4bc78f41f611f9412c4155e2b03f1f5d4a45efe04"},
     {file = "doc8-0.8.0.tar.gz", hash = "sha256:2df89f9c1a5abfb98ab55d0175fed633cae0cf45025b8b1e0ee5ea772be28543"},
+]
+docopt = [
+    {file = "docopt-0.6.2.tar.gz", hash = "sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"},
 ]
 docutils = [
     {file = "docutils-0.16-py2.py3-none-any.whl", hash = "sha256:0c5b78adfbf7762415433f5515cd5c9e762339e23369dbe8000d84a4bf4ab3af"},

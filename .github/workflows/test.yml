@@ -33,15 +33,11 @@ jobs:
         poetry config virtualenvs.in-project true
         poetry install
 
-    - name: Run checks
+    - name: Run checks and push coverage
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
       run: |
         source "$HOME/.poetry/env"
 
         make test
-        
-    - name: Push coverage information
-      env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-      run: |
-        pip install coveralls
         coveralls
