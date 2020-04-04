@@ -1,11 +1,11 @@
 import json
 import os
+import datetime as dt
 from collections import Counter, defaultdict
-from hashlib import md5
 from typing import DefaultDict, Dict, Iterable, List, Mapping, Optional, Tuple
 
 import attr
-from typing_extensions import Final, final
+from typing_extensions import Final, final, TypedDict
 
 #: That's a constant filename where we store our baselines.
 BASELINE_FILE: Final = '.flake8-baseline.json'
@@ -32,6 +32,26 @@ def _unique_paths_converter(
 
 
 @final
+class _BaselineMetadata(TypedDict):
+    """This class stores metadata that was used to create the baseline."""
+
+    baseline_file_version: str
+    created_at: dt.datetime
+    updated_at: dt.datetime
+
+
+@final
+class _BaselineEntry(TypedDict):
+    """Represents internal violation structure that is used for recordings."""
+
+    error_code: str
+    message: str
+    line: int
+    column: int
+    physical_line: str
+
+
+@final
 @attr.dataclass(slots=True, frozen=True)
 class _BaselineFile(object):
     """
@@ -47,9 +67,32 @@ class _BaselineFile(object):
 
     """
 
-    paths: Mapping[str, Dict[str, int]] = attr.ib(
-        converter=_unique_paths_converter,
-    )
+    metadata: _BaselineMetadata
+    paths: Mapping[str, List[_BaselineEntry]]
+
+    def filter_baseline(
+        self,
+        violations: List[CheckReport],
+    ) -> List[CheckReport]:
+        groupped_by_code = self._group_by_code(violations)
+        filtered_violations = []
+
+        for violation in violations:
+            same_codes = groupped_by_code.get(error_code)
+            if same_codes and self._should_be_ignored(violation, same_codes):
+                continue
+
+            filtered_violations.append(violation)
+        return violation
+
+    def _should_be_ignored(
+        self,
+        violation: CheckResult,
+        similar_violations: List[CheckReport],
+    ]) -> bool:
+        # TODO: here we decide whether this violation should be ignored
+        # or any other from the list.
+        return False
 
     def has(self, filename: str, error_code: str, text: str) -> bool:
         """
