@@ -8,6 +8,13 @@ Semantic versioning in our case means:
 - Minor releases do bring new features and configuration options. New violations can be added. Code that passes `x.0.y` might not pass on `x.1.y` release.
 - Major releases inidicate significant milestones or serious breaking changes.
 
+## 0.16.0
+
+### Features
+
+- Forbids to use too complex f-strings.
+
+### Bug fixes
 
 ## 0.15.0 aka New runtime
 

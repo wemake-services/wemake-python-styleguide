@@ -71,8 +71,7 @@ some_int = 1  # type: int
 full_name = u'Nikita Sobolev'  # noqa: WPS302
 phone_number = 555_123_999  # noqa:  WPS303
 partial_number = .05  # noqa: WPS304
-formatted_string = f'Hi, {full_name}'  # noqa: WPS305
-
+formatted_string_complex = f'1+1={1 + 1}'  # noqa: WPS305, WPS236
 
 def __getattr__():  # noqa: WPS413
     # See:

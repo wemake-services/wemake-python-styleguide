@@ -56,6 +56,7 @@ Summary
    TooLongCallChainViolation
    TooComplexAnnotationViolation
    TooManyImportedModuleMembersViolation
+   TooComplexFormattedStringViolation
 
 
 Module complexity
@@ -96,6 +97,7 @@ Structure complexity
 .. autoclass:: TooLongCallChainViolation
 .. autoclass:: TooComplexAnnotationViolation
 .. autoclass:: TooManyImportedModuleMembersViolation
+.. autoclass:: TooComplexFormattedStringViolation
 
 """
 
@@ -1139,3 +1141,48 @@ class TooManyImportedModuleMembersViolation(ASTViolation):
 
     error_template = 'Found too many imported names from a module: {0}'
     code = 235
+
+
+@final
+class TooComplexFormattedStringViolation(ASTViolation):
+    """
+    Forbids f-strings that are more complex .
+
+    Reasoning:
+        Complex `f` strings are often difficult to understand,
+        making the code less readible.
+
+    Solution:
+        Use `.format()` or assign complex expressions to variables
+        before formatting.
+
+    Example::
+
+        # Wrong:
+        f'{reverse("url-name")}?{"&".join("user="+uid for uid in user_ids)}'
+
+        # Correct:
+        reversed_url = reverse('url-name')
+        query_params = "&".join("user="+uid for uid in user_ids)
+        f'{reversed_url}?{query_params}'
+
+        # Correct:
+        '{0}?{1}'.format(
+            reverse('url-name'),
+            "&".join("user="+uid for uid in user_ids),
+        )
+
+        # Correct:
+        f'smth {value}'
+        f'smth {dict_value["key"]}'
+        f'smth {list_value[0]}'
+        f'smth {user.get_full_name()}'
+        def get_full_name(self):
+            return f'{self.first_name} {self.second_name} {self.last_name}'
+
+    .. versionadded:: 0.16.0
+
+    """
+
+    error_template = 'Found a too complex `f` string'
+    code = 236

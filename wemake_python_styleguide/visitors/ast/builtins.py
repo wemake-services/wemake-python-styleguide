@@ -27,7 +27,11 @@ from wemake_python_styleguide.logic import nodes, safe_eval, source
 from wemake_python_styleguide.logic.naming.name_nodes import extract_name
 from wemake_python_styleguide.logic.tree import operators, strings
 from wemake_python_styleguide.types import AnyFor, AnyNodes, AnyText, AnyWith
-from wemake_python_styleguide.violations import best_practices, consistency
+from wemake_python_styleguide.violations import (
+    best_practices,
+    complexity,
+    consistency,
+)
 from wemake_python_styleguide.visitors import base, decorators
 
 #: Items that can be inside a hash.
@@ -91,14 +95,16 @@ class WrongStringVisitor(base.BaseNodeVisitor):
 
     def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
         """
-        Forbids to use ``f`` strings.
+        Forbids to use ``f`` strings and too complex ``f`` strings.
 
         Raises:
             FormattedStringViolation
+            TooComplexFormattedStringViolation
 
         """
         self.add_violation(consistency.FormattedStringViolation(node))
         self.generic_visit(node)
+        self._check_complex_f_string(node)
 
     def _check_is_alphatbet(
         self,
@@ -123,6 +129,39 @@ class WrongStringVisitor(base.BaseNodeVisitor):
 
         if self._modulo_string_pattern.search(text_data):
             self.add_violation(consistency.ModuloStringFormatViolation(node))
+
+    def _check_complex_f_string(self, node: ast.JoinedStr) -> None:
+        # Whitelists all simple uses of f strings
+        # Checks if list, dict, function call with no parameters or variable
+        for string_component in node.values:
+            if isinstance(string_component, ast.FormattedValue):
+                if self._valid_f_value(string_component):
+                    continue
+                # Everything else is too complex
+                self.add_violation(
+                    complexity.TooComplexFormattedStringViolation(node),
+                )
+                break
+
+    def _valid_f_value(self, node: ast.FormattedValue) -> bool:
+        f_value = node.value
+        # Function call with empty arguments is okay
+        if isinstance(f_value, ast.Call) and not f_value.args:
+            return True
+        # Named lookup, Index lookup & Dict key is okay
+        elif isinstance(f_value, ast.Subscript):
+            if self._valid_f_lookup(f_value):
+                return True
+        # Variable lookup is okay
+        elif isinstance(f_value, ast.Name):
+            return True
+        return False
+
+    def _valid_f_lookup(self, subscript: ast.Subscript) -> bool:
+        allowed_types = (ast.Str, ast.Num, ast.Name)
+        if isinstance(subscript.slice, ast.Index):
+            return isinstance(subscript.slice.value, allowed_types)
+        return False
 
 
 @final

@@ -1,5 +1,8 @@
 import pytest
 
+from wemake_python_styleguide.violations.complexity import (
+    TooComplexFormattedStringViolation,
+)
 from wemake_python_styleguide.violations.consistency import (
     FormattedStringViolation,
     ModuloStringFormatViolation,
@@ -141,7 +144,10 @@ def test_regular_modulo_string(
     visitor = WrongStringVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [], (FormattedStringViolation,))
+    assert_errors(visitor, [], (
+        FormattedStringViolation,
+        TooComplexFormattedStringViolation,
+    ))
 
 
 @pytest.mark.parametrize('code', [
