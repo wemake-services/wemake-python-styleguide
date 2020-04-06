@@ -100,7 +100,7 @@ added-value = "^0.14"
 tomlkit = "^0.5"
 
 safety = "^1.8"
-autopep8 = "^1.4"
+autopep8 = "^1.5"
 import-linter = "^1.0"
 
 ipdb = "^0.13"
