@@ -1,11 +1,11 @@
 import ast
 from itertools import takewhile
-from typing import Set, cast
+from typing import ClassVar, et, cast
 
 from typing_extensions import final
 
 from wemake_python_styleguide.logic.tree import attributes
-from wemake_python_styleguide.types import AnyAccess
+from wemake_python_styleguide.types import AnyAccess, AnyNodes
 from wemake_python_styleguide.violations.complexity import (
     TooDeepAccessViolation,
 )
@@ -15,6 +15,11 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 @final
 class AccessVisitor(BaseNodeVisitor):
     """Counts access number for expressions."""
+
+    _access_nodes: ClassVar[AnyNodes] = (
+        ast.Attribute,
+        ast.Subscript,
+    )
 
     def __init__(self, *args, **kwargs) -> None:
         """Keeps visited accesses to not visit them again."""
@@ -44,7 +49,7 @@ class AccessVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _is_any_access(self, node: ast.AST) -> bool:
-        return isinstance(node, (ast.Attribute, ast.Subscript))
+        return isinstance(node, self._access_nodes)
 
     def _check_consecutive_access_number(self, node: AnyAccess) -> None:
         if node in self._visited_accesses:
