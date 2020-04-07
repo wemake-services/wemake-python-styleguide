@@ -104,9 +104,9 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
             self._formatter,
         )
 
-        return '  {code}  {pointer}^'.format(
+        return '  {code}  {spacing}^'.format(
             code=code,
-            pointer=' ' * (error.column_number - 1 - adjust),
+            spacing=' ' * (error.column_number - 1 - adjust),
         )
 
     def show_statistics(self, statistics: Statistics) -> None:  # noqa: WPS210
