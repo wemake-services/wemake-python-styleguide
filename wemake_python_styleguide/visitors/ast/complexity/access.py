@@ -1,6 +1,6 @@
 import ast
 from itertools import takewhile
-from typing import ClassVar, et, cast
+from typing import ClassVar, Set, cast
 
 from typing_extensions import final
 
