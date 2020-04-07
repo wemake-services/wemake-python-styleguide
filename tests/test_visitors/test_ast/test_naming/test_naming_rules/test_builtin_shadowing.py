@@ -1,8 +1,6 @@
 import pytest
 
-from wemake_python_styleguide.violations.naming import (
-    BuiltinShadowingViolation,
-)
+from wemake_python_styleguide.violations.naming import BuiltinShadowingViolation
 from wemake_python_styleguide.visitors.ast.naming import WrongNameVisitor
 
 

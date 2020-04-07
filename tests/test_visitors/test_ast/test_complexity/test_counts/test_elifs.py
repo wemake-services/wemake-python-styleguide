@@ -1,8 +1,6 @@
 import pytest
 
-from wemake_python_styleguide.violations.complexity import (
-    TooManyElifsViolation,
-)
+from wemake_python_styleguide.violations.complexity import TooManyElifsViolation
 from wemake_python_styleguide.visitors.ast.complexity.counts import ElifVisitor
 
 module_with_one_elif = """

@@ -1,8 +1,6 @@
 import pytest
 
-from wemake_python_styleguide.violations.best_practices import (
-    FloatKeyViolation,
-)
+from wemake_python_styleguide.violations.best_practices import FloatKeyViolation
 from wemake_python_styleguide.visitors.ast.builtins import (
     WrongCollectionVisitor,
 )
