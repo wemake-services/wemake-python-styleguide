@@ -1146,14 +1146,26 @@ class TooManyImportedModuleMembersViolation(ASTViolation):
 @final
 class TooComplexFormattedStringViolation(ASTViolation):
     """
-    Forbids f-strings that are more complex .
+    Forbids ``f`` strings that are too complex.
+
+    A complex format string is defined as use of any formatted value 
+    that is not:
+
+    - the value of a variable
+    - the value of a collection through lookup with a variable, number, or 
+      string as the key
+    - the return value of a procedure call without arguments
+
+    Related to :class:`~FormattedStringViolation`.
 
     Reasoning:
-        Complex `f` strings are often difficult to understand,
-        making the code less readible.
+        Complex ``f`` strings are often difficult to understand,
+        making the code less readible. Generally we don't allow 
+        ``f`` strings but this violation exists in case the user
+        decides to ignore the general violation.
 
     Solution:
-        Use `.format()` or assign complex expressions to variables
+        Use ``.format()`` or assign complex expressions to variables
         before formatting.
 
     Example::
@@ -1162,23 +1174,13 @@ class TooComplexFormattedStringViolation(ASTViolation):
         f'{reverse("url-name")}?{"&".join("user="+uid for uid in user_ids)}'
 
         # Correct:
-        reversed_url = reverse('url-name')
-        query_params = "&".join("user="+uid for uid in user_ids)
-        f'{reversed_url}?{query_params}'
-
-        # Correct:
-        '{0}?{1}'.format(
-            reverse('url-name'),
-            "&".join("user="+uid for uid in user_ids),
-        )
-
-        # Correct:
         f'smth {value}'
         f'smth {dict_value["key"]}'
         f'smth {list_value[0]}'
         f'smth {user.get_full_name()}'
         def get_full_name(self):
             return f'{self.first_name} {self.second_name} {self.last_name}'
+        
 
     .. versionadded:: 0.16.0
 

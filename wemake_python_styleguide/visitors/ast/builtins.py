@@ -25,7 +25,7 @@ from wemake_python_styleguide.compat.aliases import (
 )
 from wemake_python_styleguide.logic import nodes, safe_eval, source
 from wemake_python_styleguide.logic.naming.name_nodes import extract_name
-from wemake_python_styleguide.logic.tree import operators, strings
+from wemake_python_styleguide.logic.tree import attributes, operators, strings
 from wemake_python_styleguide.types import AnyFor, AnyNodes, AnyText, AnyWith
 from wemake_python_styleguide.violations import (
     best_practices,
@@ -78,6 +78,9 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         # Different python versions report `WPS323` on different lines.
         flags=re.X,  # flag to ignore comments and whitespaces.
     )
+
+    _valid_f_lookup_types = (ast.Str, ast.Num, ast.Name)
+    _allowed_chains = (ast.Call, ast.Subscript)
 
     def visit_any_string(self, node: AnyText) -> None:
         """
@@ -133,9 +136,25 @@ class WrongStringVisitor(base.BaseNodeVisitor):
     def _check_complex_f_string(self, node: ast.JoinedStr) -> None:
         # Whitelists all simple uses of f strings
         # Checks if list, dict, function call with no parameters or variable
+        has_f_components = any(
+            isinstance(comp, ast.FormattedValue) for comp in node.values
+        )
+        if not has_f_components:
+            # If no formatted values
+            self.add_violation(
+                complexity.TooComplexFormattedStringViolation(node),
+            )
+            return
+
         for string_component in node.values:
             if isinstance(string_component, ast.FormattedValue):
-                if self._valid_f_value(string_component):
+                # Test if possible chaining is invalid
+                if not self._is_valid_chaining(string_component):
+                    self.add_violation(
+                        complexity.TooComplexFormattedStringViolation(node),
+                    )
+                    return
+                if self._is_valid_formatted_value(string_component.value):
                     continue
                 # Everything else is too complex
                 self.add_violation(
@@ -143,24 +162,64 @@ class WrongStringVisitor(base.BaseNodeVisitor):
                 )
                 break
 
-    def _valid_f_value(self, node: ast.FormattedValue) -> bool:
-        f_value = node.value
+    def _is_valid_formatted_value(self, f_value: ast.Expr) -> bool:
         # Function call with empty arguments is okay
         if isinstance(f_value, ast.Call) and not f_value.args:
             return True
         # Named lookup, Index lookup & Dict key is okay
         elif isinstance(f_value, ast.Subscript):
-            if self._valid_f_lookup(f_value):
+            if self._is_valid_f_lookup(f_value):
                 return True
         # Variable lookup is okay
         elif isinstance(f_value, ast.Name):
             return True
+        # A single attribute is okay
+        elif isinstance(f_value, ast.Attribute):
+            return True
         return False
 
-    def _valid_f_lookup(self, subscript: ast.Subscript) -> bool:
-        allowed_types = (ast.Str, ast.Num, ast.Name)
+    def _is_valid_chaining(self, node: ast.FormattedValue) -> bool:
+        f_value = node.value
+        parts = attributes.parts(f_value)
+        chained_parts = []
+        
+        try:
+            # Should throw on at latest the fifth attempt
+            for _ in range(5):
+                chained_parts.append(next(parts))
+        except StopIteration:
+            res = True
+            has_invalid_parts = any(
+                not self._is_valid_formatted_value(part)
+                for part in chained_parts
+            )
+            if has_invalid_parts:
+                res = False
+            if len(chained_parts) == 4:
+                # If there are 4 elements, they must have exactly 2 of
+                # subscript or call. This is the alternating case fcn().fcn()
+                n_calls = sum(
+                    isinstance(part, self._allowed_chains)
+                    for part in chained_parts
+                )
+                res = n_calls == 2
+            elif len(chained_parts) == 3:
+                # If there are 3 elements, at least one must be subscript or
+                # call. This is because we don't allow name.attr.attr
+                res = any(
+                    isinstance(part, self._allowed_chains)
+                    for part in chained_parts
+                )
+            # All chaining with fewer elements is fine!
+            return res
+        return False
+
+    def _is_valid_f_lookup(self, subscript: ast.Subscript) -> bool:
         if isinstance(subscript.slice, ast.Index):
-            return isinstance(subscript.slice.value, allowed_types)
+            return isinstance(
+                subscript.slice.value,
+                self._valid_f_lookup_types,
+            )
         return False
 
 
