@@ -149,7 +149,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         for string_component in node.values:
             if isinstance(string_component, ast.FormattedValue):
                 # Test if possible chaining is invalid
-                if not self._is_valid_chaining(string_component):
+                if not self._is_valid_chaining(string_component.value):
                     self.add_violation(
                         complexity.TooComplexFormattedStringViolation(node),
                     )
@@ -168,21 +168,20 @@ class WrongStringVisitor(base.BaseNodeVisitor):
             return True
         # Named lookup, Index lookup & Dict key is okay
         elif isinstance(f_value, ast.Subscript):
-            if self._is_valid_f_lookup(f_value):
-                return True
-        # Variable lookup is okay
-        elif isinstance(f_value, ast.Name):
-            return True
-        # A single attribute is okay
-        elif isinstance(f_value, ast.Attribute):
+            if isinstance(f_value.slice, ast.Index):
+                return isinstance(
+                    f_value.slice.value,
+                    self._valid_f_lookup_types,
+                )
+        # Variable lookup is okay and a single attribute is okay
+        elif isinstance(f_value, (ast.Name, ast.Attribute)):
             return True
         return False
 
-    def _is_valid_chaining(self, node: ast.FormattedValue) -> bool:
-        f_value = node.value
+    def _is_valid_chaining(self, f_value: ast.Expr) -> bool:
         parts = attributes.parts(f_value)
         chained_parts = []
-        
+
         try:
             # Should throw on at latest the fifth attempt
             for _ in range(5):
@@ -212,14 +211,6 @@ class WrongStringVisitor(base.BaseNodeVisitor):
                 )
             # All chaining with fewer elements is fine!
             return res
-        return False
-
-    def _is_valid_f_lookup(self, subscript: ast.Subscript) -> bool:
-        if isinstance(subscript.slice, ast.Index):
-            return isinstance(
-                subscript.slice.value,
-                self._valid_f_lookup_types,
-            )
         return False
 
 
