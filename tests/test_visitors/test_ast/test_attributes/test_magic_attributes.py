@@ -174,7 +174,6 @@ def test_magic_attribute_correct_contexts(
     assert_errors(visitor, [])
 
 
-
 @pytest.mark.parametrize('attribute', [
     'regular',
     '__doc__',
@@ -214,7 +213,12 @@ def test_whitelist_regular_attributes_allowed(
     default_options,
     mode,
 ):
-    """Ensures that it is possible to use regular and whitelisted magic attributes."""
+    """
+    Tests if regular attributes are allowed.
+
+    Ensures that it is possible to use regular and
+    whitelisted magic attributes.
+    """
     tree = parse_ast_tree(mode(code.format(attribute)))
 
     visitor = WrongAttributeVisitor(default_options, tree=tree)
