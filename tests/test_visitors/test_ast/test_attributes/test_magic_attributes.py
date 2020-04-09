@@ -157,7 +157,6 @@ def test_magic_attribute_is_restricted(
     magic_super_cls_attribute,
     magic_super_cls_method,
 ])
-
 def test_magic_attribute_correct_contexts(
     assert_errors,
     parse_ast_tree,
@@ -166,7 +165,7 @@ def test_magic_attribute_correct_contexts(
     default_options,
     mode,
 ):
-    """Ensures that it is possible to use magic attributes in the right contexts."""
+    """Ensures that it is possible to use magic attributes."""
     tree = parse_ast_tree(mode(code.format(attribute)))
 
     visitor = WrongAttributeVisitor(default_options, tree=tree)
@@ -207,7 +206,7 @@ def test_magic_attribute_correct_contexts(
     magic_super_cls_attribute,
     magic_super_cls_method,
 ])
-def test_whitelist_and_regular_attributes_are_allowed(
+def test_whitelist_regular_attributes_allowed(
     assert_errors,
     parse_ast_tree,
     code,
@@ -215,8 +214,7 @@ def test_whitelist_and_regular_attributes_are_allowed(
     default_options,
     mode,
 ):
-    """Ensures that it is possible to use regular and whitelisted magic attributes,
-    both on 'right' and 'wrong' cases."""
+    """Ensures that it is possible to use regular and whitelisted magic attributes."""
     tree = parse_ast_tree(mode(code.format(attribute)))
 
     visitor = WrongAttributeVisitor(default_options, tree=tree)
