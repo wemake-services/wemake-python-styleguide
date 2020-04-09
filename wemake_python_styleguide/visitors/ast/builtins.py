@@ -510,7 +510,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
             # Non-constant nodes raise ValueError,
             # unhashables raise TypeError:
             with suppress(ValueError, TypeError):
-                # Similar val:
+                # Similar value:
                 element_values.append(
                     safe_eval.literal_eval_with_names(
                         real_item,
