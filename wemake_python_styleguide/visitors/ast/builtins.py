@@ -26,7 +26,13 @@ from wemake_python_styleguide.compat.aliases import (
 from wemake_python_styleguide.logic import nodes, safe_eval, source
 from wemake_python_styleguide.logic.naming.name_nodes import extract_name
 from wemake_python_styleguide.logic.tree import attributes, operators, strings
-from wemake_python_styleguide.types import AnyFor, AnyNodes, AnyText, AnyWith
+from wemake_python_styleguide.types import (
+    AnyChainable,
+    AnyFor,
+    AnyNodes,
+    AnyText,
+    AnyWith,
+)
 from wemake_python_styleguide.violations import (
     best_practices,
     complexity,
@@ -79,9 +85,6 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         flags=re.X,  # flag to ignore comments and whitespaces.
     )
 
-    _valid_f_lookup_types = (ast.Str, ast.Num, ast.Name)
-    _allowed_chains = (ast.Call, ast.Subscript)
-
     def visit_any_string(self, node: AnyText) -> None:
         """
         Forbids incorrect usage of strings.
@@ -95,19 +98,6 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         self._check_is_alphatbet(node, text_data)
         self._check_modulo_patterns(node, text_data)
         self.generic_visit(node)
-
-    def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
-        """
-        Forbids to use ``f`` strings and too complex ``f`` strings.
-
-        Raises:
-            FormattedStringViolation
-            TooComplexFormattedStringViolation
-
-        """
-        self.add_violation(consistency.FormattedStringViolation(node))
-        self.generic_visit(node)
-        self._check_complex_f_string(node)
 
     def _check_is_alphatbet(
         self,
@@ -133,13 +123,46 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         if self._modulo_string_pattern.search(text_data):
             self.add_violation(consistency.ModuloStringFormatViolation(node))
 
-    def _check_complex_f_string(self, node: ast.JoinedStr) -> None:
+
+@final
+class WrongFormatStringVisitor(base.BaseNodeVisitor):
+    """Restricts usage of ``f`` strings."""
+
+    _valid_format_index: ClassVar[AnyNodes] = (
+        ast.Str,
+        ast.Num,
+        ast.Name,
+    )
+    _dual_components: ClassVar[AnyNodes] = (
+        ast.Call,
+        ast.Subscript,
+    )
+    _chainable_types: ClassVar[AnyNodes] = (
+        ast.Call,
+        ast.Subscript,
+        ast.Attribute,
+    )
+
+    def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
+        """
+        Forbids use of ``f`` strings and too complex ``f`` strings.
+
+        Raises:
+            FormattedStringViolation
+            TooComplexFormattedStringViolation
+
+        """
+        self.add_violation(consistency.FormattedStringViolation(node))
+        self.generic_visit(node)
+        self._check_complex_formatted_string(node)
+
+    def _check_complex_formatted_string(self, node: ast.JoinedStr) -> None:
         # Whitelists all simple uses of f strings
         # Checks if list, dict, function call with no parameters or variable
-        has_f_components = any(
+        has_formatted_components = any(
             isinstance(comp, ast.FormattedValue) for comp in node.values
         )
-        if not has_f_components:
+        if not has_formatted_components:
             # If no formatted values
             self.add_violation(
                 complexity.TooComplexFormattedStringViolation(node),
@@ -149,12 +172,8 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         for string_component in node.values:
             if isinstance(string_component, ast.FormattedValue):
                 # Test if possible chaining is invalid
-                if not self._is_valid_chaining(string_component.value):
-                    self.add_violation(
-                        complexity.TooComplexFormattedStringViolation(node),
-                    )
-                    return
-                if self._is_valid_formatted_value(string_component.value):
+                format_value = string_component.value
+                if self._is_valid_formatted_value(format_value):
                     continue
                 # Everything else is too complex
                 self.add_violation(
@@ -162,56 +181,69 @@ class WrongStringVisitor(base.BaseNodeVisitor):
                 )
                 break
 
-    def _is_valid_formatted_value(self, f_value: ast.Expr) -> bool:
+    def _is_valid_formatted_value(self, format_value: ast.AST) -> bool:
+        if isinstance(format_value, (ast.Call, ast.Subscript, ast.Attribute)):
+            if not self._is_valid_chaining(format_value):
+                return False
+        return self._is_valid_final_value(format_value)
+
+    def _is_valid_final_value(self, format_value: ast.AST) -> bool:
+        # Variable lookup is okay and a single attribute is okay
+        if isinstance(format_value, (ast.Name, ast.Attribute)):
+            return True
         # Function call with empty arguments is okay
-        if isinstance(f_value, ast.Call) and not f_value.args:
+        elif isinstance(format_value, ast.Call) and not format_value.args:
             return True
         # Named lookup, Index lookup & Dict key is okay
-        elif isinstance(f_value, ast.Subscript):
-            if isinstance(f_value.slice, ast.Index):
+        elif isinstance(format_value, ast.Subscript):
+            if isinstance(format_value.slice, ast.Index):
                 return isinstance(
-                    f_value.slice.value,
-                    self._valid_f_lookup_types,
+                    format_value.slice.value,
+                    self._valid_format_index,
                 )
-        # Variable lookup is okay and a single attribute is okay
-        elif isinstance(f_value, (ast.Name, ast.Attribute)):
-            return True
         return False
 
-    def _is_valid_chaining(self, f_value: ast.Expr) -> bool:
-        parts = attributes.parts(f_value)
-        chained_parts = []
+    def _is_valid_chaining(self, format_value: AnyChainable) -> bool:
+        parts = iter(attributes.parts(format_value))
+        chained_parts: List[ast.AST] = []
 
+        iteration = 0
         try:
             # Should throw on at latest the fifth attempt
-            for _ in range(5):
+            while iteration < 5:
                 chained_parts.append(next(parts))
+                iteration += 1
         except StopIteration:
-            res = True
-            has_invalid_parts = any(
-                not self._is_valid_formatted_value(part)
+            return self._is_valid_chain_structure(chained_parts)
+        # As next didn't throw, there are more than 4 parts and the chaining is
+        # invalid.
+        return False
+
+    def _is_valid_chain_structure(self, chained_parts: List[ast.AST]):
+        """Helper method for _is_valid_chaining."""
+        has_invalid_parts = any(
+            not self._is_valid_final_value(part)
+            for part in chained_parts
+        )
+        if has_invalid_parts:
+            return False
+        if len(chained_parts) == 4:
+            # If there are 4 elements, they must have exactly 2 of
+            # subscript or call. This is the alternating case fcn().fcn()
+            n_calls = sum(
+                isinstance(part, self._dual_components)
                 for part in chained_parts
             )
-            if has_invalid_parts:
-                res = False
-            if len(chained_parts) == 4:
-                # If there are 4 elements, they must have exactly 2 of
-                # subscript or call. This is the alternating case fcn().fcn()
-                n_calls = sum(
-                    isinstance(part, self._allowed_chains)
-                    for part in chained_parts
-                )
-                res = n_calls == 2
-            elif len(chained_parts) == 3:
-                # If there are 3 elements, at least one must be subscript or
-                # call. This is because we don't allow name.attr.attr
-                res = any(
-                    isinstance(part, self._allowed_chains)
-                    for part in chained_parts
-                )
-            # All chaining with fewer elements is fine!
-            return res
-        return False
+            return n_calls == 2
+        elif len(chained_parts) == 3:
+            # If there are 3 elements, at least one must be subscript or
+            # call. This is because we don't allow name.attr.attr
+            return any(
+                isinstance(part, self._dual_components)
+                for part in chained_parts
+            )
+        # All chaining with fewer elements is fine!
+        return True
 
 
 @final
@@ -478,7 +510,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
             # Non-constant nodes raise ValueError,
             # unhashables raise TypeError:
             with suppress(ValueError, TypeError):
-                # Similar value:
+                # Similar val:
                 element_values.append(
                     safe_eval.literal_eval_with_names(
                         real_item,

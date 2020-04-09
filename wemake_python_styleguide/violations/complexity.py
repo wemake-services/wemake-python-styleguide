@@ -1148,11 +1148,11 @@ class TooComplexFormattedStringViolation(ASTViolation):
     """
     Forbids ``f`` strings that are too complex.
 
-    A complex format string is defined as use of any formatted value 
+    A complex format string is defined as use of any formatted value
     that is not:
 
     - the value of a variable
-    - the value of a collection through lookup with a variable, number, or 
+    - the value of a collection through lookup with a variable, number, or
       string as the key
     - the return value of a procedure call without arguments
 
@@ -1160,7 +1160,7 @@ class TooComplexFormattedStringViolation(ASTViolation):
 
     Reasoning:
         Complex ``f`` strings are often difficult to understand,
-        making the code less readible. Generally we don't allow 
+        making the code less readible. Generally we don't allow
         ``f`` strings but this violation exists in case the user
         decides to ignore the general violation.
 
@@ -1180,7 +1180,7 @@ class TooComplexFormattedStringViolation(ASTViolation):
         f'smth {user.get_full_name()}'
         def get_full_name(self):
             return f'{self.first_name} {self.second_name} {self.last_name}'
-        
+
 
     .. versionadded:: 0.16.0
 

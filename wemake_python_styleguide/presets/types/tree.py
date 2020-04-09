@@ -69,6 +69,7 @@ PRESET: Final = (
 
     builtins.WrongNumberVisitor,
     builtins.WrongStringVisitor,
+    builtins.WrongFormatStringVisitor,
     builtins.WrongAssignmentVisitor,
     builtins.WrongCollectionVisitor,
 

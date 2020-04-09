@@ -6,7 +6,10 @@ from wemake_python_styleguide.violations.complexity import (
 from wemake_python_styleguide.violations.consistency import (
     FormattedStringViolation,
 )
-from wemake_python_styleguide.visitors.ast.builtins import WrongStringVisitor
+from wemake_python_styleguide.visitors.ast.builtins import (
+    WrongFormatStringVisitor,
+    WrongStringVisitor,
+)
 
 regular_string = "'some value'"
 binary_string = "b'binary'"
@@ -27,7 +30,7 @@ f_list_index_lookup = "f'smth {list_value[0]}'"
 f_function_empty_args = "f'smth {user.get_full_name()}'"
 f_attr_on_function = "f'{fcn().attr}'"
 f_single_chained_functions = "f'{f1().f2()}'"
-f_calling_returned_function = "f'{calling_returned_function()()}'" 
+f_calling_returned_function = "f'{calling_returned_function()()}'"
 f_double_indexing = "f'{list[0][1]}'"
 
 # Disallowed
@@ -46,6 +49,7 @@ f_double_chained_attr = "f'{attr1.attr2.attr3}'"
 f_triple_call = "f'{foo()()()}'"
 f_triple_lookup = "f'{arr[0][1][2]}'"
 f_double_call_arg = "f'{foo()(arg)}'"
+
 
 @pytest.mark.parametrize('code', [
     regular_string,
@@ -75,7 +79,7 @@ def test_wrong_string(assert_errors, parse_ast_tree, code, default_options):
     """Testing that violations are raised when reaching max value."""
     tree = parse_ast_tree(code)
 
-    visitor = WrongStringVisitor(default_options, tree=tree)
+    visitor = WrongFormatStringVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [
@@ -99,10 +103,10 @@ def test_wrong_string(assert_errors, parse_ast_tree, code, default_options):
     f_double_call_arg,
 ])
 def test_complex_f_string(assert_errors, parse_ast_tree, code, default_options):
-    """Testing that complex ``f`` strings are not allowed"""
+    """Testing that complex ``f`` strings are not allowed."""
     tree = parse_ast_tree(code)
 
-    visitor = WrongStringVisitor(default_options, tree=tree)
+    visitor = WrongFormatStringVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [
@@ -123,10 +127,10 @@ def test_complex_f_string(assert_errors, parse_ast_tree, code, default_options):
     f_double_indexing,
 ])
 def test_simple_f_string(assert_errors, parse_ast_tree, code, default_options):
-    """Testing that non complex ``f`` strings are allowed"""
+    """Testing that non complex ``f`` strings are allowed."""
     tree = parse_ast_tree(code)
 
-    visitor = WrongStringVisitor(default_options, tree=tree)
+    visitor = WrongFormatStringVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [FormattedStringViolation])
