@@ -180,8 +180,6 @@ def test_custom_whitelist_nested_classes(
 @pytest.mark.parametrize('code', [
     nested_class_in_method,
     nested_class_in_function,
-    nested_class_in_method,
-    nested_class_in_function,
     nested_class_in_if,
     nested_class_in_if_else,
     nested_class_in_context_manager,

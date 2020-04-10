@@ -272,7 +272,6 @@ def test_misrefactored_assignment(
     'x <<= 1',
     'x &= 1',
     'x |= 1',
-    'x -= test(x)',
     'x -= x.attr("a")',
     'x -= test(x)',
     'x -= x.method()',

@@ -186,9 +186,6 @@ def test_try_body_correct_default(
     'print(1)',
     'm.print(1)',
     'm = 1',
-    'print(1)',
-    'm.print(1)',
-    'm = 1',
 ])
 @pytest.mark.parametrize('code', [
     wrong_simple_try_except,
