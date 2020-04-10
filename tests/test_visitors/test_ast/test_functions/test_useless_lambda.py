@@ -98,7 +98,6 @@ valid_calls = (
     'lambda *y, **z',
     'lambda *only_y',
     'lambda **only_z',
-    'lambda x=1',
 ])
 @pytest.mark.parametrize('inner_def', [
     *valid_calls,
