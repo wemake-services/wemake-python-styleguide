@@ -33,11 +33,13 @@ jobs:
         poetry config virtualenvs.in-project true
         poetry install
 
-    - name: Run checks and push coverage
-      env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+    - name: Run tests
       run: |
         source "$HOME/.poetry/env"
 
         make test
-        poetry run coveralls
+
+    - name: Upload coverage to Codecov  
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage.xml
