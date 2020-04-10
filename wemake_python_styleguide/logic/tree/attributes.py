@@ -14,7 +14,7 @@ def _chained_item(iterator: ast.AST) -> Optional[ast.AST]:
 
 def parts(node: AnyChainable) -> Iterable[ast.AST]:
     """
-    Returns all ``.`` separated elements for attributes and subscripts.
+    Returns all ``.`` separated elements for attributes, subscripts and calls.
 
     Attributes might be complex:
 
