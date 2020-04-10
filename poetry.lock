@@ -500,10 +500,10 @@ description = "A flake8 plugin checking common style issues or inconsistencies w
 name = "flake8-pytest-style"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "0.6.0"
+version = "1.0.0"
 
 [package.dependencies]
-flake8-plugin-utils = ">=1.2.0,<2.0.0"
+flake8-plugin-utils = ">=1.3.0,<2.0.0"
 
 [[package]]
 category = "main"
@@ -1649,7 +1649,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "f42ccd490066e6136fafb69f914235db09f265b4c31003659804fefe5328bd99"
+content-hash = "9737e3a78bc7060b20fecbd8b1170d6cd6789184003db8ad2326a8de2f42f8f6"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -1855,8 +1855,8 @@ flake8-polyfill = [
     {file = "flake8_polyfill-1.0.2-py2.py3-none-any.whl", hash = "sha256:12be6a34ee3ab795b19ca73505e7b55826d5f6ad7230d31b18e106400169b9e9"},
 ]
 flake8-pytest-style = [
-    {file = "flake8-pytest-style-0.6.0.tar.gz", hash = "sha256:381c5791507db8e5be47b9117529a3157a339f2dd27f0728d60e6f14e629d327"},
-    {file = "flake8_pytest_style-0.6.0-py3-none-any.whl", hash = "sha256:1314b3995d9aff89038a8860f487671fb835269f9486368478dbb1267f05868a"},
+    {file = "flake8-pytest-style-1.0.0.tar.gz", hash = "sha256:82b7c6e509d759fb91d6e0023dbba2e471dac3adf2c4367f54a1b8ea02e65531"},
+    {file = "flake8_pytest_style-1.0.0-py3-none-any.whl", hash = "sha256:d04fcd9a6237a897c46fd1548a85aa84258fb45bfde6ae8d497ceaade722543c"},
 ]
 flake8-quotes = [
     {file = "flake8-quotes-3.0.0.tar.gz", hash = "sha256:39762e16a1ea6b7f0e998a04be14d71b55e74de09b5026bd41907c996a8c82cf"},
