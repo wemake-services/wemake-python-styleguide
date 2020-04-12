@@ -949,7 +949,7 @@ class TooLongTryBodyViolation(ASTViolation):
 @final
 class TooManyPublicAttributesViolation(ASTViolation):
     """
-    Forbids to have ``try`` blocks with too long bodies.
+    Forbids to have instances with too many public attributes.
 
     We only check static definitions in a form of ``self.public = ...``.
     We do not count parent attributes.
