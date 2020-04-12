@@ -18,6 +18,7 @@ Semantic versioning in our case means:
 ### Misc
 
 - Updates lots of dependenices
+- Fixed documentation for TooManyPublicAttributesViolation
 
 
 ## 0.14.0 aka The Walrus fighter
