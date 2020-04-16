@@ -554,7 +554,7 @@ description = "A library for property-based testing"
 name = "hypothesis"
 optional = false
 python-versions = ">=3.5.2"
-version = "5.8.3"
+version = "5.9.0"
 
 [package.dependencies]
 attrs = ">=19.2.0"
@@ -1624,7 +1624,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "eee41ed790b79546ec95504de20c803a2697d22950b977498c7a46dd1a1b5f78"
+content-hash = "190982841dfc14034522fd00d47169e67c54a46d69371abfd041866d4c24f71e"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -1848,8 +1848,8 @@ grimp = [
     {file = "grimp-1.2.1.tar.gz", hash = "sha256:645a722d659398ded42b7b77015973ee344fee7f28d5e4ab1ae28cbebf26e452"},
 ]
 hypothesis = [
-    {file = "hypothesis-5.8.3-py3-none-any.whl", hash = "sha256:6e0470a1a7edd990c975429b7451ababd5425136eea72808a719e6d538bba463"},
-    {file = "hypothesis-5.8.3.tar.gz", hash = "sha256:039b6100163f649cbc5ecc338fd4e238cc88f84b2a460ff42d0ea9ac69b6a412"},
+    {file = "hypothesis-5.9.0-py3-none-any.whl", hash = "sha256:5ed71ef64680c2beeb935e0a334b2393b05b4862eb67c221f6c8930a16060bc8"},
+    {file = "hypothesis-5.9.0.tar.gz", hash = "sha256:91de2487a40102bd8ecc961bc3fd0cc49ef35485add222fe5be09836710c17f0"},
 ]
 hypothesmith = [
     {file = "hypothesmith-0.0.6-py3-none-any.whl", hash = "sha256:3501414c18dff85b9b4eab18fc569ad6d8f9c8cbe8090f2ec513c35c9c6d6f2b"},
@@ -2270,6 +2270,7 @@ wasmer = [
     {file = "wasmer-0.4.1-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:d5a58b318628bd48605a4810ee9ba030ec4423dee730d45f031bd082cf36ad8b"},
     {file = "wasmer-0.4.1-cp38-cp38-macosx_10_7_x86_64.whl", hash = "sha256:f864b1e910e6803aa8f3ed9c371b145f0b6fd191f5fbefea011ac7ed4258734d"},
     {file = "wasmer-0.4.1-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:fa1c8479781c91e6b814ef006f6e099b6550eba12601a8617475fb514fc09365"},
+    {file = "wasmer-0.4.1-py3-none-any.whl", hash = "sha256:92aee4b3994735f72e27c9deaca36d063781ddfd1068756bf63509288c1a2c14"},
 ]
 wcwidth = [
     {file = "wcwidth-0.1.9-py2.py3-none-any.whl", hash = "sha256:cafe2186b3c009a04067022ce1dcd79cb38d8d65ee4f4791b8888d6599d1bbe1"},
