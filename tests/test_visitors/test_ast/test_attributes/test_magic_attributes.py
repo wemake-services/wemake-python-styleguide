@@ -182,6 +182,7 @@ def test_magic_attribute_correct_contexts(
     '__qualname__',
     '__subclasses__',
     '__mro__',
+    '__version__',
 ])
 @pytest.mark.parametrize('code', [
     magic_attribute_assigned,
