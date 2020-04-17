@@ -14,6 +14,7 @@ Semantic versioning in our case means:
 ### Bugfixes
 
 - Fixes how wrong variable names were checked case sensitive with `WPS110`
+- Fixes false positives DirectMagicAttributeAccessViolation with `__mro__`, `__subclasses__` and `__version__`
 
 ### Misc
 
