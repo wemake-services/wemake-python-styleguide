@@ -71,6 +71,7 @@ Summary
    PositionalOnlyArgumentsViolation
    LoopControlFinallyViolation
    ShebangViolation
+   ForbiddenInlineIgnoreViolation
 
 Best practices
 --------------
@@ -129,6 +130,7 @@ Best practices
 .. autoclass:: PositionalOnlyArgumentsViolation
 .. autoclass:: LoopControlFinallyViolation
 .. autoclass:: ShebangViolation
+.. autoclass:: ForbiddenInlineIgnoreViolation
 
 """
 
@@ -2106,3 +2108,31 @@ class ShebangViolation(SimpleViolation):
 
     error_template = 'Found executable mismatch: {0}'
     code = 453
+
+
+@final
+class ForbiddenInlineIgnoreViolation(SimpleViolation):
+    """
+    Forbids to use specific inline ignore violations.
+
+    There can be forbidden a specific violation or whole
+    class of violations.
+
+    Reasoning:
+        There are violations important for specific project that must not
+        be ignored, e.g. complexity or best practices violations.
+
+    Solution:
+        Remove inline ignore for forbidden violations.
+
+    Configuration:
+        This rule is configurable with `--forbidden-inline-ignore``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.FORBIDDEN_INLINE_IGNORE`
+
+    .. versionadded:: 0.16.0
+
+    """
+
+    error_template = 'Forbidden inline ignore: {0}'
+    code = 454

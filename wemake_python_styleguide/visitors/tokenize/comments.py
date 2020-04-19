@@ -27,6 +27,7 @@ from wemake_python_styleguide.constants import MAX_NO_COVER_COMMENTS, STDIN
 from wemake_python_styleguide.logic.system import is_executable_file, is_windows
 from wemake_python_styleguide.logic.tokens import NEWLINES, get_comment_text
 from wemake_python_styleguide.violations.best_practices import (
+    ForbiddenInlineIgnoreViolation,
     OveruseOfNoCoverCommentViolation,
     OveruseOfNoqaCommentViolation,
     ShebangViolation,
@@ -60,6 +61,7 @@ class WrongCommentVisitor(BaseTokenVisitor):
             OveruseOfNoqaCommentViolation
             WrongDocCommentViolation
             WrongMagicCommentViolation
+            ForbiddenInlineIgnoreCommentViolation
 
         """
         self._check_noqa(token)
@@ -81,6 +83,29 @@ class WrongCommentVisitor(BaseTokenVisitor):
             # We cannot pass the actual line here,
             # since it will be ignored due to `# noqa` comment:
             self.add_violation(WrongMagicCommentViolation(text=comment_text))
+            return
+        self._check_forbidden_noqa(excludes)
+
+    def _check_forbidden_noqa(self, noqa_excludes) -> None:
+        excludes_list = noqa_excludes.split(',')
+        excludes_list = [ex.strip() for ex in excludes_list]
+        forbidden_noqa = ''.join(self.options.forbidden_inline_ignore)
+        forbidden_noqa_list = forbidden_noqa.split(',')
+        for fn in forbidden_noqa_list:
+            fn = fn.strip()
+            if fn in excludes_list:
+                self.add_violation(
+                    ForbiddenInlineIgnoreViolation(text=str(noqa_excludes)),
+                )
+                return
+            if not fn.isalpha():
+                continue
+            for excluded in excludes_list:
+                if re.fullmatch(r'{0}($|\d+)'.format(fn), excluded):
+                    self.add_violation(
+                        ForbiddenInlineIgnoreViolation(text=str(noqa_excludes)),
+                    )
+                    return
 
     def _check_typed_ast(self, token: tokenize.TokenInfo) -> None:
         comment_text = get_comment_text(token)

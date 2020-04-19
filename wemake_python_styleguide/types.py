@@ -137,6 +137,10 @@ class ConfigurationOptions(Protocol):
         ...
 
     @property
+    def forbidden_inline_ignore(self) -> Tuple[str, ...]:
+        ...
+
+    @property
     def allowed_domain_names(self) -> Tuple[str, ...]:
         ...
 

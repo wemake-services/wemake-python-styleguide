@@ -42,6 +42,8 @@ ALLOWED_DOMAIN_NAMES: Final = ()
 #: Domain names that extends variable names' blacklist.
 FORBIDDEN_DOMAIN_NAMES: Final = ()
 
+#: Violation codes that are forbidden to use.
+FORBIDDEN_INLINE_IGNORE: Final = ()
 
 # ===========
 # Complexity:
