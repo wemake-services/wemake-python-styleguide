@@ -71,6 +71,7 @@ We also have this [nice migration guide](https://wemake-python-stylegui.de/en/la
 - Adds `UnreadableNameViolation` as `WPS124` because there are some
 character combination which is not easy to read
 - Adds support for `NamedExpr` with in compare type violation
+- Forbids `float` and `complex` compares
 
 ### Bugfixes
 
