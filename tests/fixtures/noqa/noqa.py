@@ -711,3 +711,8 @@ for element in range(10):
         # https://github.com/wemake-services/wemake-python-styleguide/issues/1082
         break
     my_print(4)
+
+f1 = 3.0
+f2 = 0.3
+if f2/f1 != 0.1:  # noqa: WPS454
+    my_print('bad compare')
