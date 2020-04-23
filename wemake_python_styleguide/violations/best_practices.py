@@ -2130,8 +2130,8 @@ class FloatComplexCompareViolation(ASTViolation):
     Example::
 
         # Correct:
-        math.isclose(3.0, 0.3/0.1)
-        cmath.isclose(3+4j, (0.3+0.4j)/0.1)
+        math.isclose(3.0, 0.3 / 0.1)
+        cmath.isclose(3+4j, (0.3+0.4j) / 0.1)
 
         # Wrong:
         3.0 == 0.3/0.1
@@ -2141,5 +2141,5 @@ class FloatComplexCompareViolation(ASTViolation):
 
     """
 
-    error_template = 'Found comparison with float/complex'
+    error_template = 'Found comparison with float or complex number'
     code = 454

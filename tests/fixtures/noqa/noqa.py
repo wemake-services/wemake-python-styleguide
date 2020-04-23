@@ -712,7 +712,4 @@ for element in range(10):
         break
     my_print(4)
 
-f1 = 3.0
-f2 = 0.3
-if f2/f1 != 0.1:  # noqa: WPS454
-    my_print('bad compare')
+my_print(some_float == 3.0)  # noqa: WPS454

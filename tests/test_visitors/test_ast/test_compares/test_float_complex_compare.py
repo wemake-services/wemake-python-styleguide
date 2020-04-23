@@ -43,6 +43,8 @@ def test_float_complex_compare(
     'isclose(y, 3j)',
     '3 in item_list',
     '3 != 5',
+    '3.0 + x',
+    '4.5 + y > z',
 ])
 def test_correct_compares(
     assert_errors,
