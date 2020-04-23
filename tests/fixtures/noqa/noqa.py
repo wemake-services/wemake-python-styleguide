@@ -712,4 +712,4 @@ for element in range(10):
         break
     my_print(4)
 
-my_print(some_float == 3.0)  # noqa: WPS454
+my_print(some_float == 1.0)  # noqa: WPS454
