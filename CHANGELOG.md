@@ -11,6 +11,10 @@ Semantic versioning in our case means:
 
 ## 0.15.0 aka New runtime
 
+### Features
+
+- Forbids to use single `return None`
+
 ### Bugfixes
 
 - Fixes how wrong variable names were checked case sensitive with `WPS110`
