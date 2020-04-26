@@ -110,7 +110,14 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
             isinstance(node.value, ast.NameConstant) and
             node.value.value is None
         )
-        if node.value is None or last_value_return:
+
+        one_return_with_none = (
+            returns == 1 and
+            isinstance(node.value, ast.NameConstant) and
+            node.value.value is None
+        )
+
+        if node.value is None or last_value_return or one_return_with_none:
             self.add_violation(InconsistentReturnViolation(node))
 
     def _iterate_returning_values(

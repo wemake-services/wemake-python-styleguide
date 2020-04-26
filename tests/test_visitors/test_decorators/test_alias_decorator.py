@@ -5,10 +5,10 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 class _HasAliasedProp(object):
     def existing(self):
-        return None
+        """Existing."""
 
     def first(self):
-        return None
+        """First."""
 
 
 def test_raises_for_duplicates():
