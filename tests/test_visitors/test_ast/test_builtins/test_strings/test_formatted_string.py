@@ -29,12 +29,14 @@ f_dict_lookup_str_key = "f'smth {dict_value[\"key\"]}'"
 f_list_index_lookup = "f'smth {list_value[0]}'"
 f_function_empty_args = "f'smth {user.get_full_name()}'"
 f_attr_on_function = "f'{fcn().attr}'"
-f_single_chained_functions = "f'{f1().f2()}'"
-f_calling_returned_function = "f'{calling_returned_function()()}'"
-f_double_indexing = "f'{list[0][1]}'"
+f_true_index = "f'{array[True]}'"
+f_none_index = "f'{array[None]}'"
+f_byte_index = "f'{array[b\"Hello\"]}'"
 
 # Disallowed
 f_string = "f'x + y = {2 + 2}'"
+f_double_indexing = "f'{list[0][1]}'"
+f_calling_returned_function = "f'{calling_returned_function()()}'"
 f_empty_string = "f''"
 f_complex_f_string = """
     f'{reverse(\"url-name\")}?{\"&\".join(\"user=\"+uid for uid in user_ids)}'
@@ -49,6 +51,7 @@ f_double_chained_attr = "f'{attr1.attr2.attr3}'"
 f_triple_call = "f'{foo()()()}'"
 f_triple_lookup = "f'{arr[0][1][2]}'"
 f_double_call_arg = "f'{foo()(arg)}'"
+f_single_chained_functions = "f'{f1().f2()}'"
 
 
 @pytest.mark.parametrize('code', [
@@ -101,6 +104,9 @@ def test_wrong_string(assert_errors, parse_ast_tree, code, default_options):
     f_triple_call,
     f_triple_lookup,
     f_double_call_arg,
+    f_double_indexing,
+    f_calling_returned_function,
+    f_single_chained_functions,
 ])
 def test_complex_f_string(assert_errors, parse_ast_tree, code, default_options):
     """Testing that complex ``f`` strings are not allowed."""
@@ -122,9 +128,9 @@ def test_complex_f_string(assert_errors, parse_ast_tree, code, default_options):
     f_variable_lookup,
     f_single_chained_attr,
     f_attr_on_function,
-    f_single_chained_functions,
-    f_calling_returned_function,
-    f_double_indexing,
+    f_true_index,
+    f_none_index,
+    f_byte_index,
 ])
 def test_simple_f_string(assert_errors, parse_ast_tree, code, default_options):
     """Testing that non complex ``f`` strings are allowed."""

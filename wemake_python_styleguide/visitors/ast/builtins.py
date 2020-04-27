@@ -15,7 +15,7 @@ from typing import (
 )
 from typing.re import Pattern
 
-from typing_extensions import final
+from typing_extensions import Final, final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import (
@@ -42,6 +42,13 @@ from wemake_python_styleguide.visitors import base, decorators
 
 #: Items that can be inside a hash.
 _HashItems = Sequence[Optional[ast.AST]]
+
+#: Items that are chainable. Used to bypass a mypy bug.
+_chainable_types: Final = (
+    ast.Call,
+    ast.Subscript,
+    ast.Attribute,
+)
 
 
 @final
@@ -128,19 +135,14 @@ class WrongStringVisitor(base.BaseNodeVisitor):
 class WrongFormatStringVisitor(base.BaseNodeVisitor):
     """Restricts usage of ``f`` strings."""
 
-    _valid_format_index: ClassVar[AnyNodes] = (
-        ast.Str,
+    _valid_format_index: ClassVar[AnyNodes] = TextNodes + (
         ast.Num,
         ast.Name,
+        ast.NameConstant,
     )
-    _dual_components: ClassVar[AnyNodes] = (
+    _single_use_types: ClassVar[AnyNodes] = (
         ast.Call,
         ast.Subscript,
-    )
-    _chainable_types: ClassVar[AnyNodes] = (
-        ast.Call,
-        ast.Subscript,
-        ast.Attribute,
     )
 
     def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
@@ -153,8 +155,8 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
 
         """
         self.add_violation(consistency.FormattedStringViolation(node))
-        self.generic_visit(node)
         self._check_complex_formatted_string(node)
+        self.generic_visit(node)
 
     def _check_complex_formatted_string(self, node: ast.JoinedStr) -> None:
         # Whitelists all simple uses of f strings
@@ -182,7 +184,7 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
                 break
 
     def _is_valid_formatted_value(self, format_value: ast.AST) -> bool:
-        if isinstance(format_value, (ast.Call, ast.Subscript, ast.Attribute)):
+        if isinstance(format_value, _chainable_types):
             if not self._is_valid_chaining(format_value):
                 return False
         return self._is_valid_final_value(format_value)
@@ -205,21 +207,13 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
 
     def _is_valid_chaining(self, format_value: AnyChainable) -> bool:
         parts = iter(attributes.parts(format_value))
-        chained_parts: List[ast.AST] = []
+        chained_parts: List[ast.AST] = list(parts)
 
-        iteration = 0
-        try:
-            # Should throw on at latest the fifth attempt
-            while iteration < 5:
-                chained_parts.append(next(parts))
-                iteration += 1
-        except StopIteration:
+        if len(chained_parts) <= 3:
             return self._is_valid_chain_structure(chained_parts)
-        # As next didn't throw, there are more than 4 parts and the chaining is
-        # invalid.
         return False
 
-    def _is_valid_chain_structure(self, chained_parts: List[ast.AST]):
+    def _is_valid_chain_structure(self, chained_parts: List[ast.AST]) -> bool:
         """Helper method for _is_valid_chaining."""
         has_invalid_parts = any(
             not self._is_valid_final_value(part)
@@ -227,21 +221,13 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
         )
         if has_invalid_parts:
             return False
-        if len(chained_parts) == 4:
-            # If there are 4 elements, they must have exactly 2 of
-            # subscript or call. This is the alternating case fcn().fcn()
-            n_calls = sum(
-                isinstance(part, self._dual_components)
-                for part in chained_parts
-            )
-            return n_calls == 2
-        elif len(chained_parts) == 3:
-            # If there are 3 elements, at least one must be subscript or
+        if len(chained_parts) == 3:
+            # If there are 3 elements, exactly one must be subscript or
             # call. This is because we don't allow name.attr.attr
-            return any(
-                isinstance(part, self._dual_components)
+            return sum(
+                isinstance(part, self._single_use_types)
                 for part in chained_parts
-            )
+            ) == 1
         # All chaining with fewer elements is fine!
         return True
 

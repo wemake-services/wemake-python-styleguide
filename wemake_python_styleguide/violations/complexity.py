@@ -1170,16 +1170,11 @@ class TooComplexFormattedStringViolation(ASTViolation):
 
     Example::
 
+        # Correct:
+        f'smth {user.get_full_name()}'
+
         # Wrong:
         f'{reverse("url-name")}?{"&".join("user="+uid for uid in user_ids)}'
-
-        # Correct:
-        f'smth {value}'
-        f'smth {dict_value["key"]}'
-        f'smth {list_value[0]}'
-        f'smth {user.get_full_name()}'
-        def get_full_name(self):
-            return f'{self.first_name} {self.second_name} {self.last_name}'
 
 
     .. versionadded:: 0.16.0
