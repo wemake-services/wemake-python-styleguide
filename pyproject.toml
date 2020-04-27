@@ -98,7 +98,7 @@ m2r = "^0.2"
 added-value = "^0.14"
 tomlkit = "^0.6"
 
-safety = "^1.8"
+safety = "^1.9"
 autopep8 = "^1.5"
 import-linter = "^1.0"
 
