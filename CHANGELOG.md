@@ -14,6 +14,7 @@ Semantic versioning in our case means:
 ### Features
 
 - Forbids to use single `return None`
+- Add `__await__` to the list of priority magic methods
 
 ### Bugfixes
 
