@@ -1528,6 +1528,7 @@ class WrongMethodOrderViolation(ASTViolation):
     - ``__new__``
     - ``__init__``
     - ``__call__``
+    - ``__await__``
     - public and magic methods
     - protected methods
     - private methods (we discourage using them)
