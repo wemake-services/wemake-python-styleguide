@@ -87,21 +87,19 @@ class WrongCommentVisitor(BaseTokenVisitor):
         self._check_forbidden_noqa(excludes)
 
     def _check_forbidden_noqa(self, noqa_excludes) -> None:
-        excludes_list = noqa_excludes.split(',')
-        excludes_list = [ex.strip() for ex in excludes_list]
+        excludes_list = [ex.strip() for ex in noqa_excludes.split(',')]
         forbidden_noqa = ''.join(self.options.forbidden_inline_ignore)
-        forbidden_noqa_list = forbidden_noqa.split(',')
-        for fn in forbidden_noqa_list:
-            fn = fn.strip()
-            if fn in excludes_list:
+        for noqa_code in forbidden_noqa.split(','):
+            noqa_code = noqa_code.strip()
+            if noqa_code in excludes_list:
                 self.add_violation(
                     ForbiddenInlineIgnoreViolation(text=str(noqa_excludes)),
                 )
                 return
-            if not fn.isalpha():
+            if not noqa_code.isalpha():
                 continue
             for excluded in excludes_list:
-                if re.fullmatch(r'{0}($|\d+)'.format(fn), excluded):
+                if re.fullmatch(r'{0}($|\d+)'.format(noqa_code), excluded):
                     self.add_violation(
                         ForbiddenInlineIgnoreViolation(text=str(noqa_excludes)),
                     )
