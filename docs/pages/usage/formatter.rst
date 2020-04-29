@@ -3,7 +3,7 @@ Formatter
 
 Custom formatter for ``flake8`` :term:`violations <violation>`.
 
-Tries to be beatiful, compact, and informative.
+Tries to be beautiful, compact, and informative.
 Improves the default formatter used by ``flake8``.
 
 
@@ -56,13 +56,13 @@ and will show the exact problem with your code:
     def show_source(self, error:Violation) -> str:
                               ^
 
-It helps to visially identify the problems in your code and fix it faster.
+It helps to visually identify the problems in your code and fix it faster.
 We include ``show-source = True`` into our default configuration.
 
 
 .. rubric:: Showing statistic
 
-You can also show the statitics about problems inside your code.
+You can also show the statistics about problems inside your code.
 
 It will group all violations by type and tell how many of them
 do you have and where you have them:
