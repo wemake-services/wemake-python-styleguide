@@ -253,7 +253,7 @@ MAGIC_METHODS_BLACKLIST: Final = frozenset((
 
 #: List of magic methods that are not allowed to be generators.
 YIELD_MAGIC_METHODS_BLACKLIST: Final = ALL_MAGIC_METHODS.difference({
-    # Allowed to be used with ``yield`` keyowrd:
+    # Allowed to be used with ``yield`` keyword:
     '__iter__',
 })
 

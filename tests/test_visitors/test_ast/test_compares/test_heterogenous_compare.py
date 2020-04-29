@@ -30,7 +30,7 @@ def test_heterogenous_compare(
     code,
     default_options,
 ):
-    """Testing that compares with diffrent operators raise."""
+    """Testing that compares with different operators raise."""
     tree = parse_ast_tree(code)
 
     visitor = CompareSanityVisitor(default_options, tree=tree)
