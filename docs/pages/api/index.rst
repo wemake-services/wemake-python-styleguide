@@ -101,12 +101,12 @@ API Reference
 .. toctree::
   :maxdepth: 1
   :caption: Raw technical information with interface and types declarations,
-    featuring architecure and composition of classes.
+    featuring architecture and composition of classes.
 
   checker.rst
   visitors.rst
   violations.rst
-  tranformations.rst
+  transformations.rst
   types.rst
   constants.rst
   formatter.rst

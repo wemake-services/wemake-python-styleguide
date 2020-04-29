@@ -1069,7 +1069,7 @@ class TooLongCallChainViolation(ASTViolation):
 
     """
 
-    error_template = 'Found too lang call chain length: {0}'
+    error_template = 'Found too long call chain length: {0}'
     code = 233
 
 

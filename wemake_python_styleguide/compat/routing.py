@@ -6,7 +6,7 @@ from typing_extensions import Final
 from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.compat.nodes import Constant
 
-#: That's how python types and ast types map to each other, copyied from ast.
+#: That's how python types and ast types map to each other, copied from ast.
 _CONST_NODE_TYPE_NAMES: Final = types.MappingProxyType({
     bool: 'NameConstant',  # should be before int
     type(None): 'NameConstant',

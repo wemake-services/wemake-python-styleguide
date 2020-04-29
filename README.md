@@ -47,13 +47,13 @@ And it won't change your existing workflow.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/running.png"
-       alt="invocation resuts">
+       alt="invocation results">
 </p>
 
 See ["Usage" section](https://wemake-python-stylegui.de/en/latest/pages/usage/setup.html)
 in the docs for examples and integrations.
 
-We also support [Github Actions](https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/github-actions.html) as first class-citizens.
+We also support [GitHub Actions](https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/github-actions.html) as first class-citizens.
 [Try it out](https://github.com/marketplace/actions/wemake-python-styleguide)!
 
 
