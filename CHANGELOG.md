@@ -50,7 +50,7 @@ We also have this [nice migration guide](https://wemake-python-stylegui.de/en/la
   it is now handled by `F821` from `flake8`
 - **Breaking**: removes `radon`,
   because `cognitive-complexity` and `mccabe` is enough
-- **Breaking**: removes `flake8-loggin-format` as a direct dependency
+- **Breaking**: removes `flake8-logging-format` as a direct dependency
 - **Breaking**: removes `ImplicitTernaryViolation` or `WPS332`,
   because it has too many false positives #1099
 - Removes `flake8-coding`, all encoding strings, visitor and tests

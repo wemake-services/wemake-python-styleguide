@@ -29,7 +29,7 @@ We have replaced the following dependencies in this release:
 - ``flake8-builtins`` (check is ported)
 - ``flake8-annotations-complexity`` (check is ported)
 - ``flake8-pep3101`` (check is ported and modified)
-- ``flake8-loggin-format`` (check is dropped)
+- ``flake8-logging-format`` (check is dropped)
 - ``flake8-coding`` (check is dropped)
 - ``radon`` (check is dropped)
 - ``cognitive-complexity`` (check is ported)
