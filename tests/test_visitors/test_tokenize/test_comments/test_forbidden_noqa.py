@@ -3,9 +3,7 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     ForbiddenInlineIgnoreViolation,
 )
-from wemake_python_styleguide.visitors.tokenize.comments import (
-    WrongCommentVisitor,
-)
+from wemake_python_styleguide.visitors.tokenize.comments import NoqaVisitor
 
 
 @pytest.mark.parametrize(('code', 'forbidden_inline_ignore'), [
@@ -24,7 +22,7 @@ def test_forbidden_noqa(
     """Ensure that noqa comments with forbidden violations raise a violation."""
     file_tokens = parse_tokens(code)
     options = options(forbidden_inline_ignore=forbidden_inline_ignore)
-    visitor = WrongCommentVisitor(options, file_tokens=file_tokens)
+    visitor = NoqaVisitor(options, file_tokens=file_tokens)
     visitor.run()
     assert_errors(visitor, [ForbiddenInlineIgnoreViolation])
 
@@ -43,6 +41,6 @@ def test_correct_noqa(
     """Ensure that proper noqa comments do not rise violations."""
     file_tokens = parse_tokens(code)
     options = options(forbidden_inline_ignore=forbidden_inline_ignore)
-    visitor = WrongCommentVisitor(options, file_tokens=file_tokens)
+    visitor = NoqaVisitor(options, file_tokens=file_tokens)
     visitor.run()
     assert_errors(visitor, [])

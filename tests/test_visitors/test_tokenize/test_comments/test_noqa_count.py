@@ -4,9 +4,7 @@ from wemake_python_styleguide.options import defaults
 from wemake_python_styleguide.violations.best_practices import (
     OveruseOfNoqaCommentViolation,
 )
-from wemake_python_styleguide.visitors.tokenize.comments import (
-    WrongCommentVisitor,
-)
+from wemake_python_styleguide.visitors.tokenize.comments import NoqaVisitor
 
 
 @pytest.mark.parametrize('code', [
@@ -26,7 +24,7 @@ def test_noqa_overuse(
     """Ensures that `noqa` overuse raises a warning."""
     file_tokens = parse_tokens('{0}\n'.format(code) * (10 + 1))
 
-    visitor = WrongCommentVisitor(default_options, file_tokens=file_tokens)
+    visitor = NoqaVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [OveruseOfNoqaCommentViolation])
@@ -43,7 +41,7 @@ def test_noqa_overuse_is_configurable(
     )
 
     options = options(max_noqa_comments=defaults.MAX_NOQA_COMMENTS - 1)
-    visitor = WrongCommentVisitor(options, file_tokens=file_tokens)
+    visitor = NoqaVisitor(options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [OveruseOfNoqaCommentViolation])
@@ -58,7 +56,7 @@ def test_noqa_comments_can_be_forbidden(
     file_tokens = parse_tokens('wallet = 10  # noqa: WPS002, WPS114')
 
     options = options(max_noqa_comments=0)
-    visitor = WrongCommentVisitor(options, file_tokens=file_tokens)
+    visitor = NoqaVisitor(options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [OveruseOfNoqaCommentViolation])

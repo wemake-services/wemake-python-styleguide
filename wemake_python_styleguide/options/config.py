@@ -150,6 +150,7 @@ from typing_extensions import final
 from wemake_python_styleguide.options import defaults
 
 ConfigValuesTypes = Union[str, int, bool, Sequence[str]]
+string = 'string'
 
 
 @final
@@ -231,27 +232,27 @@ class Configuration(object):
             '--nested-classes-whitelist',
             defaults.NESTED_CLASSES_WHITELIST,
             'List of nested classes names we allow to use.',
-            type='string',
+            type=string,
             comma_separated_list=True,
         ),
         _Option(
             '--allowed-domain-names',
             defaults.ALLOWED_DOMAIN_NAMES,
             "Domain names that are removed from variable names' blacklist.",
-            type='string',
+            type=string,
             comma_separated_list=True,
         ),
         _Option(
             '--forbidden-domain-names',
             defaults.FORBIDDEN_DOMAIN_NAMES,
             "Domain names that extends variable names' blacklist.",
-            type='string',
+            type=string,
             comma_separated_list=True,
         ),
         _Option(
             '--forbidden-inline-ignore',
             defaults.FORBIDDEN_INLINE_IGNORE,
-            'Codes of violations or class of violations that are forbidden to inline ignore.',
+            'Codes of violations or class of violations forbidden to ignore.',
             type='string',
             comma_separated_list=True,
         ),
