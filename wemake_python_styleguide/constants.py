@@ -349,7 +349,7 @@ MATH_APPROXIMATE_CONSTANTS: Final = frozenset((
 ))
 
 #: List of vague method names that may cause confusion if imported as is:
-VAGUE_IMPORTS_BLACKLIST = frozenset((
+VAGUE_IMPORTS_BLACKLIST: Final = frozenset((
     'read',
     'write',
     'load',
