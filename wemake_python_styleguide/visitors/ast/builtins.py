@@ -255,7 +255,7 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
 
         """
         self._check_assign_targets(node)
-        if isinstance(node.targets[0], ast.Tuple):
+        if isinstance(node.targets[0], (ast.Tuple, ast.List)):
             self._check_unpacking_targets(node, node.targets[0].elts)
         self.generic_visit(node)
 
@@ -270,6 +270,11 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         node: ast.AST,
         targets: Iterable[ast.AST],
     ) -> None:
+        targets = tuple(targets)
+
+        if len(targets) == 1:
+            self.add_violation(best_practices.SingleElementDestructuringViolation(node))
+
         for target in targets:
             target_name = extract_name(target)
             if target_name is None:  # it means, that non name node was used

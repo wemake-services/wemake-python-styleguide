@@ -2,6 +2,7 @@ import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
     WrongUnpackingViolation,
+    SingleElementDestructuringViolation,
 )
 from wemake_python_styleguide.visitors.ast.builtins import (
     WrongAssignmentVisitor,
@@ -70,6 +71,11 @@ def wrapper():
     with some() as (first, {0}):
         ...
 """
+
+single_destructuring1 = 'first = {0}'
+single_destructuring2 = 'first, = {0}'
+single_destructuring3 = '(first,) = {0}'
+single_destructuring4 = '[first] = {0}'
 
 
 @pytest.mark.parametrize('code', [
@@ -163,3 +169,49 @@ def test_multiple_assignments(
     visitor.run()
 
     assert_errors(visitor, [WrongUnpackingViolation])
+
+
+@pytest.mark.parametrize('target', [
+    '(1,)[0]',
+    '[1][0]',
+])
+def test_correct_destructing(
+    assert_errors,
+    parse_ast_tree,
+    target,
+    default_options,
+    mode,
+):
+    """Testing that correct elements destructuring work."""
+    tree = parse_ast_tree(mode(single_destructuring1.format(target)))
+
+    visitor = WrongAssignmentVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('code', [
+    single_destructuring2,
+    single_destructuring3,
+    single_destructuring4,
+])
+@pytest.mark.parametrize('assignment', [
+    '(1,)',
+    '[1]',
+])
+def test_single_element_destructing(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    assignment,
+    default_options,
+    mode,
+):
+    """Testing that single element destructuring is restricted."""
+    tree = parse_ast_tree(mode(code.format(assignment)))
+
+    visitor = WrongAssignmentVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [SingleElementDestructuringViolation])

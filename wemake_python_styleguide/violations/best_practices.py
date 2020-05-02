@@ -71,6 +71,7 @@ Summary
    PositionalOnlyArgumentsViolation
    LoopControlFinallyViolation
    ShebangViolation
+   SingleElementDestructuringViolation
 
 Best practices
 --------------
@@ -129,6 +130,7 @@ Best practices
 .. autoclass:: PositionalOnlyArgumentsViolation
 .. autoclass:: LoopControlFinallyViolation
 .. autoclass:: ShebangViolation
+.. autoclass:: SingleElementDestructuringViolation
 
 """
 
@@ -2106,3 +2108,32 @@ class ShebangViolation(SimpleViolation):
 
     error_template = 'Found executable mismatch: {0}'
     code = 453
+
+
+@final
+class SingleElementDestructuringViolation(ASTViolation):
+    """
+    Forbids to have single element destructuring.
+
+    Reasoning:
+        Having single element destructuring is not readable.
+
+    Solution:
+        Use access by index instead.
+
+    Example::
+
+        # Correct:
+        first = [1][0]
+
+        # Wrong:
+        first, = [1]
+        (first,) = [1]
+        [first] = [1]
+
+    .. versionadded:: 0.16.0
+
+    """
+
+    error_template = 'Found single element destructuring'
+    code = 454

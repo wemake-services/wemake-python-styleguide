@@ -699,7 +699,7 @@ extra_new_line = [  # noqa: WPS355
 
     'wrong',
 ]
-*numbers, = [4, 7]  # noqa: WPS356
+*numbers, = [4, 7]  # noqa: WPS356, WPS454
 
 for element in range(10):
     try:  # noqa: WPS452
