@@ -1,8 +1,8 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
-    WrongUnpackingViolation,
     SingleElementDestructuringViolation,
+    WrongUnpackingViolation,
 )
 from wemake_python_styleguide.visitors.ast.builtins import (
     WrongAssignmentVisitor,

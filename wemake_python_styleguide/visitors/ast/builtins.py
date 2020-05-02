@@ -273,7 +273,9 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         targets = tuple(targets)
 
         if len(targets) == 1:
-            self.add_violation(best_practices.SingleElementDestructuringViolation(node))
+            self.add_violation(
+                best_practices.SingleElementDestructuringViolation(node),
+            )
 
         for target in targets:
             target_name = extract_name(target)
