@@ -252,6 +252,7 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         Raises:
             MultipleAssignmentsViolation
             WrongUnpackingViolation
+            SingleElementDestructuringViolation
 
         """
         self._check_assign_targets(node)

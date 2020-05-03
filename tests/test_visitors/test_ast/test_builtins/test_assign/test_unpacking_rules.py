@@ -10,8 +10,8 @@ from wemake_python_styleguide.visitors.ast.builtins import (
 
 single_assignment = '{0} = 1'
 
-tuple_assignment1 = 'first, {0} = (1, 2)'
-tuple_assignment2 = '{0}, second = (1, 2)'
+sequence_assignment1 = 'first, {0} = {1}'
+sequence_assignment2 = '{0}, second = {1}'
 
 spread_assignment1 = '{0}, *second = [1, 2, 3]'
 spread_assignment2 = 'first, *{0} = [1, 2, 3]'
@@ -72,16 +72,16 @@ def wrapper():
         ...
 """
 
-single_destructuring1 = 'first = {0}'
-single_destructuring2 = 'first, = {0}'
-single_destructuring3 = '(first,) = {0}'
-single_destructuring4 = '[first] = {0}'
+correct_single_destructuring = 'first = {0}'
+wrong_single_destructuring1 = 'first, = {0}'
+wrong_single_destructuring2 = '(first,) = {0}'
+wrong_single_destructuring3 = '[first] = {0}'
 
 
 @pytest.mark.parametrize('code', [
     single_assignment,
-    tuple_assignment1,
-    tuple_assignment2,
+    sequence_assignment1,
+    sequence_assignment2,
     spread_assignment1,
     spread_assignment2,
     for_assignment,
@@ -95,15 +95,20 @@ single_destructuring4 = '[first] = {0}'
     with_unpacking1,
     with_unpacking2,
 ])
+@pytest.mark.parametrize('target', [
+    '(1, 2)',
+    '[1, 2]',
+])
 def test_correct_unpacking(
     assert_errors,
     parse_ast_tree,
     code,
+    target,
     default_options,
     mode,
 ):
     """Testing that correct assignments work."""
-    tree = parse_ast_tree(mode(code.format('some_name')))
+    tree = parse_ast_tree(mode(code.format('some_name', target)))
 
     visitor = WrongAssignmentVisitor(default_options, tree=tree)
     visitor.run()
@@ -133,8 +138,8 @@ def test_correct_assignment(
 
 
 @pytest.mark.parametrize('code', [
-    tuple_assignment1,
-    tuple_assignment2,
+    sequence_assignment1,
+    sequence_assignment2,
     spread_assignment1,
     spread_assignment2,
     for_unpacking1,
@@ -154,16 +159,21 @@ def test_correct_assignment(
     'some[0]["key"]',
     'some["key"][0]',
 ])
+@pytest.mark.parametrize('target', [
+    '(1, 2)',
+    '[1, 2]',
+])
 def test_multiple_assignments(
     assert_errors,
     parse_ast_tree,
     code,
+    target,
     assignment,
     default_options,
     mode,
 ):
     """Testing that multiple assignments are restricted."""
-    tree = parse_ast_tree(mode(code.format(assignment)))
+    tree = parse_ast_tree(mode(code.format(assignment, target)))
 
     visitor = WrongAssignmentVisitor(default_options, tree=tree)
     visitor.run()
@@ -183,7 +193,7 @@ def test_correct_destructing(
     mode,
 ):
     """Testing that correct elements destructuring work."""
-    tree = parse_ast_tree(mode(single_destructuring1.format(target)))
+    tree = parse_ast_tree(mode(correct_single_destructuring.format(target)))
 
     visitor = WrongAssignmentVisitor(default_options, tree=tree)
     visitor.run()
@@ -192,13 +202,15 @@ def test_correct_destructing(
 
 
 @pytest.mark.parametrize('code', [
-    single_destructuring2,
-    single_destructuring3,
-    single_destructuring4,
+    wrong_single_destructuring1,
+    wrong_single_destructuring2,
+    wrong_single_destructuring3,
 ])
 @pytest.mark.parametrize('assignment', [
     '(1,)',
     '[1]',
+    'some',
+    'some()',
 ])
 def test_single_element_destructing(
     assert_errors,

@@ -2127,9 +2127,7 @@ class SingleElementDestructuringViolation(ASTViolation):
         first = [1][0]
 
         # Wrong:
-        first, = [1]
         (first,) = [1]
-        [first] = [1]
 
     .. versionadded:: 0.16.0
 
