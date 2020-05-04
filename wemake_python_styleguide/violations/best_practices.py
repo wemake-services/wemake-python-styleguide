@@ -621,7 +621,7 @@ class BadMagicModuleFunctionViolation(ASTViolation):
 @final
 class WrongUnpackingViolation(ASTViolation):
     """
-    Forbids to have tuple unpacking with side-effects.
+    Forbids to have tuple or list unpacking with side-effects.
 
     Reasoning:
         Having unpacking with side-effects is very dirty.

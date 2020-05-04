@@ -14,6 +14,7 @@ Semantic versioning in our case means:
 
 - Adds `SingleElementDestructuringViolation` as `WPS454`, because it's hard to read single
 element tuple or list unpacking.
+- Raises `WrongUnpackingViolation` for unpacking lists with side-effects.
 
 
 ## 0.15.0 aka New runtime
