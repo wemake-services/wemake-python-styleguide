@@ -129,6 +129,7 @@ Best practices
 .. autoclass:: PositionalOnlyArgumentsViolation
 .. autoclass:: LoopControlFinallyViolation
 .. autoclass:: ShebangViolation
+.. autoclass:: WrongMultilineStringUseViolation
 
 """
 
@@ -2106,3 +2107,21 @@ class ShebangViolation(SimpleViolation):
 
     error_template = 'Found executable mismatch: {0}'
     code = 453
+
+
+@final
+class WrongMultilineStringUseViolation(TokenizeViolation):
+    """
+    Forbids to use multiline strings in other cases than
+    in docstring or assignment to variables.
+
+    Reasoning:
+    readability, indentation
+
+    Solution:
+    Assign a multiline string to a variable.
+
+    """
+
+    error_template = 'Wrong multiline string usage'
+    code = 454
