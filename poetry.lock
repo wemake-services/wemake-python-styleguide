@@ -181,7 +181,7 @@ description = "Conditional coverage based on any rules you define!"
 name = "coverage-conditional-plugin"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "0.1.0"
+version = "0.2.0"
 
 [package.dependencies]
 coverage = ">=5.0,<6.0"
@@ -1530,7 +1530,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "94d05b5500fe6194684d1e0f2d1ff53fb3ce991489949b7263422caacbb4682b"
+content-hash = "07db3ced3c9a8b7bc25752e53b3d8f54ac130ad716a06b9614417cc9156d5951"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -1630,8 +1630,8 @@ coverage = [
     {file = "coverage-5.0.4.tar.gz", hash = "sha256:1b60a95fc995649464e0cd48cecc8288bac5f4198f21d04b8229dc4097d76823"},
 ]
 coverage-conditional-plugin = [
-    {file = "coverage-conditional-plugin-0.1.0.tar.gz", hash = "sha256:9941bf2005e745190d24a6213ad681cb8884451192c668b4841b00cdc76c5f6e"},
-    {file = "coverage_conditional_plugin-0.1.0-py3-none-any.whl", hash = "sha256:7e8f0ce79aeb06ca611244f3f379afcb52d972f6bb8911029475477db8cc95c6"},
+    {file = "coverage-conditional-plugin-0.2.0.tar.gz", hash = "sha256:17f24134b1f7d03f4b3b1b8a0a56c2ff575a98066677150a9f7216f3c1ce7bb8"},
+    {file = "coverage_conditional_plugin-0.2.0-py3-none-any.whl", hash = "sha256:beddd4364bdfc18cb0ab15c217566f7d19942e7f1c81b385adc21e9fa31fd395"},
 ]
 darglint = [
     {file = "darglint-1.3.0-py3-none-any.whl", hash = "sha256:bb5b0c7e1b0dd4b16d1c355db61a230b68f5537e483cc9e8a8f4b925314b5fad"},
