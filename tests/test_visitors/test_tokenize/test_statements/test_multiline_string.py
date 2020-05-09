@@ -8,8 +8,8 @@ from wemake_python_styleguide.visitors.tokenize.statements import (
 )
 
 correct_assignment = '''
-a = """dskl
-fsv
+a = """abc
+abc
 """
 '''
 
@@ -36,22 +36,22 @@ def test_correct_multiline_string_use(
     assert_errors(visitor, [])
 
 
-incorrect_compare = '''
+wrong_compare = '''
 a = 'abc'
 if a > """ab
 cd""":
-    pass
+    return 1
 '''
 
-incorrect_function_call = '''
+wrong_function_call = '''
 f("""ab
 cd""")
 '''
 
 
 @pytest.mark.parametrize('code', [
-    incorrect_compare,
-    incorrect_function_call,
+    wrong_compare,
+    wrong_function_call,
 ])
 def test_wrong_multiline_string_use(
     parse_tokens,
