@@ -10,9 +10,9 @@ from wemake_python_styleguide.logic.tokens import (
     MATCHING,
     NEWLINES,
     get_reverse_bracket,
+    has_triple_string_quotes,
     last_bracket,
     only_contains,
-    has_triple_string_quotes,
 )
 from wemake_python_styleguide.violations.best_practices import (
     WrongMultilineStringUseViolation,

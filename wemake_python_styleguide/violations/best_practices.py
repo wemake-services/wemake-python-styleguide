@@ -71,6 +71,7 @@ Summary
    PositionalOnlyArgumentsViolation
    LoopControlFinallyViolation
    ShebangViolation
+   WrongMultilineStringUseViolation
 
 Best practices
 --------------
@@ -2111,17 +2112,45 @@ class ShebangViolation(SimpleViolation):
 
 @final
 class WrongMultilineStringUseViolation(TokenizeViolation):
-    """
-    Forbids to use multiline strings in other cases than
-    in docstring or assignment to variables.
+    '''
+    Frobids direct usage of multiline strings.
+
+    Multiline strings are only allowed in docstrings
+    or assignments to variables.
 
     Reasoning:
-    readability, indentation
+        Direct usage of multiline strings is not readable.
+        One should not depend on the current indentation,
+        e.g. in comparisons or function calls.
 
     Solution:
     Assign a multiline string to a variable.
 
-    """
+    Example::
+
+        #Correct:
+        multiline = """
+            abc
+            abc
+        """
+        function(multiline)
+        if var == multiline:
+            return 1
+
+        #Wrong:
+        function("""
+            abc
+            abc
+        """)
+        if var == """
+                abc
+                abc
+                """:
+            return 1
+
+    .. versionadded:: 0.16.0
+
+    '''
 
     error_template = 'Wrong multiline string usage'
     code = 454

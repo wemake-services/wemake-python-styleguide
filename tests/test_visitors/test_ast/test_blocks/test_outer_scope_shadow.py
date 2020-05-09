@@ -331,7 +331,7 @@ def test_outer_variable_double_shadow(
     mode,
 ):
     """Testing that shadowing vars are not allowed."""
-    tree = parse_ast_tree(mode("""
+    code = """
     a = 1
 
     def test1():
@@ -339,7 +339,8 @@ def test_outer_variable_double_shadow(
 
     def test2(a):
         ...
-    """))
+    """
+    tree = parse_ast_tree(mode(code))
 
     visitor = BlockVariableVisitor(default_options, tree=tree)
     visitor.run()

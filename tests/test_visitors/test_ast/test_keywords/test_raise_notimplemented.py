@@ -86,12 +86,13 @@ def test_bare_raise(
     default_options,
 ):
     """Testing that bare `raise` is allowed."""
-    tree = parse_ast_tree("""
+    code = """
     try:
         1 / 0
     except Exception:
         raise
-    """)
+    """
+    tree = parse_ast_tree(code)
 
     visitor = WrongRaiseVisitor(default_options, tree=tree)
     visitor.run()
