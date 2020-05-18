@@ -85,7 +85,7 @@ pytest-randomly = "^3.3"
 pytest = "^5.4"
 snapshottest = "^0.5.1"
 hypothesis = "^5.14"
-hypothesmith = "^0.1.0"
+hypothesmith = "^0.1.2"
 
 mypy = "^0.770"
 
