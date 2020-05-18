@@ -238,6 +238,7 @@ class WrongStringConcatenationVisitor(BaseTokenVisitor):
         tokenize.NL,
         tokenize.NEWLINE,
         tokenize.INDENT,
+        tokenize.COMMENT,
     ))
 
     def __init__(self, *args, **kwargs) -> None:
