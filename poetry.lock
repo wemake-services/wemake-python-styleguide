@@ -547,7 +547,7 @@ description = "Hypothesis strategies for generating Python programs, something l
 name = "hypothesmith"
 optional = false
 python-versions = ">=3.6"
-version = "0.1.0"
+version = "0.1.2"
 
 [package.dependencies]
 hypothesis = ">=5.10.4"
@@ -1525,7 +1525,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "676b362f3852623be9b14d17107f3612c51f2d69c0058411c5ca04d346227898"
+content-hash = "f208948f321963692591d3fbcb6b125bfa716bc457a074e5ee2bbeee066c998a"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -1738,8 +1738,8 @@ hypothesis = [
     {file = "hypothesis-5.14.0.tar.gz", hash = "sha256:0c00645c63341f035951cade156112d7c4d3c650c5a54671d104dc8acd41a350"},
 ]
 hypothesmith = [
-    {file = "hypothesmith-0.1.0-py3-none-any.whl", hash = "sha256:dbc01d74311de9f9aee0832592d2dd2de4b9900fa6ee74f1f5692e037bc61e1e"},
-    {file = "hypothesmith-0.1.0.tar.gz", hash = "sha256:c7b57da596627e45ca2e9254914d977483e45131cfc57b84d97ee4eeca4ff7d2"},
+    {file = "hypothesmith-0.1.2-py3-none-any.whl", hash = "sha256:2e82186cfb171295ea9825dd9e5308d5b8189221fe700ca33931a130b09ceee6"},
+    {file = "hypothesmith-0.1.2.tar.gz", hash = "sha256:46ebfac39be46d77c119e9725b9f611453573a053358cf7a2a64db79b50e6324"},
 ]
 idna = [
     {file = "idna-2.9-py2.py3-none-any.whl", hash = "sha256:a068a21ceac8a4d63dbfd964670474107f541babbd2250d61922f029858365fa"},
