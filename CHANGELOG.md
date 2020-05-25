@@ -26,6 +26,7 @@ Semantic versioning in our case means:
 
 - Updates lots of dependenices
 - Fixed documentation for TooManyPublicAttributesViolation
+- Updated isort config
 
 
 ## 0.14.0 aka The Walrus fighter

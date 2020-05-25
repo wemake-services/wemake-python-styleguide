@@ -14,3 +14,4 @@
 # These values should be placed inside `setup.cfg` in your repo:
 multi_line_output = 3
 include_trailing_comma = true
+use_parentheses = true
