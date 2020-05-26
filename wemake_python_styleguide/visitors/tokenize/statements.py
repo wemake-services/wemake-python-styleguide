@@ -1,6 +1,16 @@
 import tokenize
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, Dict, List, Mapping, Sequence, Tuple
+from operator import attrgetter
+from typing import (
+    ClassVar,
+    DefaultDict,
+    Dict,
+    List,
+    Mapping,
+    Optional,
+    Sequence,
+    Tuple,
+)
 
 from flake8_quotes.docstring_detection import get_docstring_tokens
 from typing_extensions import final
@@ -198,35 +208,54 @@ class MultilineStringVisitor(BaseTokenVisitor):
         """
         self._lines[token.start[0]].append(token)
 
-    def _check_individual_line(self, tokens: List[tokenize.TokenInfo], previous_line_token, next_line_token) -> None:
+    def _check_token(
+        self,
+        index: int,
+        tokens: List[tokenize.TokenInfo],
+        previous_line_token: Optional[tokenize.TokenInfo],
+        next_line_token: Optional[tokenize.TokenInfo],
+    ):
+        previous_token = previous_line_token
+        if index != 0:
+            previous_token = tokens[index - 1]
+        if previous_token and previous_token.exact_type != tokenize.EQUAL:
+            self.add_violation(WrongMultilineStringUseViolation(previous_token))
+        next_token = next_line_token
+        if index + 1 < len(tokens):
+            next_token = tokens[index + 1]
+        if next_token and next_token.exact_type == tokenize.DOT:
+            self.add_violation(WrongMultilineStringUseViolation(next_token))
 
+    def _check_individual_line(
+        self,
+        tokens: List[tokenize.TokenInfo],
+        previous_line_token: Optional[tokenize.TokenInfo],
+        next_line_token: Optional[tokenize.TokenInfo],
+    ) -> None:
         for index, token in enumerate(tokens):
             if token.exact_type != tokenize.STRING or token in self._docstrings:
                 continue
             if has_triple_string_quotes(token.string):
-                previous_token = previous_line_token
-                if index != 0:
-                    previous_token = tokens[index - 1]
-                if previous_token and previous_token.exact_type != tokenize.EQUAL:
-                    self.add_violation(WrongMultilineStringUseViolation(token))
-                    return
-                next_token = next_line_token
-                if index + 1 < len(tokens):
-                    next_token = tokens[index + 1]
-                if next_token and next_token.exact_type == tokenize.DOT:
-                    self.add_violation(WrongMultilineStringUseViolation(next_token))
+                self._check_token(
+                    index, tokens, previous_line_token, next_line_token,
+                )
 
     def _post_visit(self) -> None:
         linenos = sorted((self._lines.keys()))
-        for index, lineno in enumerate(linenos):
-            line_tokens = self._lines[lineno]
-            line_tokens = sorted(line_tokens, key=lambda tk: tk.start)
+        for index, _ in enumerate(linenos):
+            line_tokens = sorted(
+                self._lines[linenos[index]], key=attrgetter('start'),
+            )
             previous_line_token = None
             next_line_token = None
             if index != 0:
-                previous_lineno = linenos[index - 1]
-                previous_line_token = sorted(self._lines[previous_lineno], key=lambda tk: tk.start)[-1]
+                previous_line_token = sorted(
+                    self._lines[linenos[index - 1]], key=attrgetter('start'),
+                )[-1]
             if index + 1 < len(linenos):
-                next_lineno = linenos[index + 1]
-                next_line_token = sorted(self._lines[next_lineno], key=lambda tk: tk.start)[0]
-            self._check_individual_line(line_tokens, previous_line_token, next_line_token)
+                next_line_token = sorted(
+                    self._lines[linenos[index + 1]], key=attrgetter('start'),
+                )[0]
+            self._check_individual_line(
+                line_tokens, previous_line_token, next_line_token,
+            )
