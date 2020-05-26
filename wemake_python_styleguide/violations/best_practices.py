@@ -2124,29 +2124,21 @@ class WrongMultilineStringUseViolation(TokenizeViolation):
         e.g. in comparisons or function calls.
 
     Solution:
-    Assign a multiline string to a variable.
+        Assign a multiline string to a variable.
 
     Example::
 
-        #Correct:
+        # Correct:
         multiline = """
             abc
             abc
         """
-        function(multiline)
-        if var == multiline:
-            return 1
 
-        #Wrong:
+        # Wrong:
         function("""
             abc
             abc
         """)
-        if var == """
-                abc
-                abc
-                """:
-            return 1
 
     .. versionadded:: 0.16.0
 
