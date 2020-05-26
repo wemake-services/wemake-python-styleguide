@@ -1,4 +1,5 @@
 import pytest
+import tokenize
 
 from wemake_python_styleguide.violations.best_practices import (
     WrongMultilineStringUseViolation,
@@ -48,10 +49,17 @@ f("""ab
 cd""")
 '''
 
+wrong_string_function = '''
+a = """abc
+abc
+""".strip()
+'''
+
 
 @pytest.mark.parametrize('code', [
     wrong_compare,
     wrong_function_call,
+    wrong_string_function,
 ])
 def test_wrong_multiline_string_use(
     parse_tokens,
@@ -63,4 +71,8 @@ def test_wrong_multiline_string_use(
     file_tokens = parse_tokens(code)
     visitor = MultilineStringVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
+    for v in visitor.violations:
+        print(tokenize.tok_name[v._node.exact_type])
+    for t in visitor.file_tokens:
+        print(tokenize.tok_name[t.exact_type], repr(t.string))
     assert_errors(visitor, [WrongMultilineStringUseViolation])

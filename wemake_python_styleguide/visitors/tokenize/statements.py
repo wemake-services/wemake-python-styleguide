@@ -198,15 +198,35 @@ class MultilineStringVisitor(BaseTokenVisitor):
         """
         self._lines[token.start[0]].append(token)
 
-    def _check_individual_line(self, tokens: List[tokenize.TokenInfo]) -> None:
-        tokens = sorted(tokens, key=lambda tk: tk.start)
+    def _check_individual_line(self, tokens: List[tokenize.TokenInfo], previous_line_token, next_line_token) -> None:
+
         for index, token in enumerate(tokens):
             if token.exact_type != tokenize.STRING or token in self._docstrings:
                 continue
             if has_triple_string_quotes(token.string):
-                if tokens[index - 1].exact_type != tokenize.EQUAL:
+                previous_token = previous_line_token
+                if index != 0:
+                    previous_token = tokens[index - 1]
+                if previous_token and previous_token.exact_type != tokenize.EQUAL:
                     self.add_violation(WrongMultilineStringUseViolation(token))
+                    return
+                next_token = next_line_token
+                if index + 1 < len(tokens):
+                    next_token = tokens[index + 1]
+                if next_token and next_token.exact_type == tokenize.DOT:
+                    self.add_violation(WrongMultilineStringUseViolation(next_token))
 
     def _post_visit(self) -> None:
-        for tokens in self._lines.values():
-            self._check_individual_line(tokens)
+        linenos = sorted((self._lines.keys()))
+        for index, lineno in enumerate(linenos):
+            line_tokens = self._lines[lineno]
+            line_tokens = sorted(line_tokens, key=lambda tk: tk.start)
+            previous_line_token = None
+            next_line_token = None
+            if index != 0:
+                previous_lineno = linenos[index - 1]
+                previous_line_token = sorted(self._lines[previous_lineno], key=lambda tk: tk.start)[-1]
+            if index + 1 < len(linenos):
+                next_lineno = linenos[index + 1]
+                next_line_token = sorted(self._lines[next_lineno], key=lambda tk: tk.start)[0]
+            self._check_individual_line(line_tokens, previous_line_token, next_line_token)
