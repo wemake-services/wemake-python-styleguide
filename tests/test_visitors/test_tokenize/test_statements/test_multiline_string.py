@@ -48,6 +48,13 @@ f("""ab
 cd""")
 '''
 
+wrong_function_call_newline = '''
+f(
+    """ab
+    cd""",
+)
+'''
+
 wrong_string_function = '''
 a = """abc
 abc
@@ -59,6 +66,7 @@ abc
     wrong_compare,
     wrong_function_call,
     wrong_string_function,
+    wrong_function_call_newline,
 ])
 def test_wrong_multiline_string_use(
     parse_tokens,
