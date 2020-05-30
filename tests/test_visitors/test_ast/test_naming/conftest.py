@@ -214,27 +214,38 @@ _FORBIDDEN_UNUSED_TUPLE = frozenset((
     for_variable,
 ))
 
-_FORBIDDEN_UNUSED = _FORBIDDEN_UNUSED_TUPLE | {
+# Raw unused variables return True for logic.naming.access.is_unused().
+# Example: _, __.
+# Protected unused variables return True for logic.naming.access.is_protected().
+# Example: _protected.
+_FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED = frozenset((
+    unpacking_variables,
+    variable_def,
+    with_variable,
     variable_typed_def,
     variable_typed,
     exception,
-}
+))
 
 if PY38:
-    _FORBIDDEN_UNUSED |= {
+    _FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED |= {
         assignment_expression,
     }
+
+_FORBIDDEN_RAW_UNUSED = _FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED | {
+    static_attribute,
+    static_typed_attribute,
+    static_typed_annotation,
+}
+
+_FORBIDDEN_PROTECTED_UNUSED = _FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED | {
+    for_variable,
+}
 
 
 @pytest.fixture(params=_ALL_FIXTURES)
 def naming_template(request):
     """Parametrized fixture that contains all possible naming templates."""
-    return request.param
-
-
-@pytest.fixture(params=_FORBIDDEN_UNUSED)
-def forbidden_unused_template(request):
-    """Returns template that can be used to define wrong unused variables."""
     return request.param
 
 
@@ -244,17 +255,25 @@ def forbidden_tuple_unused_template(request):
     return request.param
 
 
-@pytest.fixture(params=_FORBIDDEN_UNUSED | {
-    static_attribute,
-    static_typed_attribute,
-    static_typed_annotation,
-})
+@pytest.fixture(params=_FORBIDDEN_RAW_UNUSED)
 def forbidden_raw_unused_template(request):
-    """Returns template that can be used to define ``_`` patterns."""
+    """Returns template that forbids defining raw unused variables."""
     return request.param
 
 
-@pytest.fixture(params=_ALL_FIXTURES - _FORBIDDEN_UNUSED)
-def allowed_unused_template(request):
-    """Returns template that can be used to define unused variables."""
+@pytest.fixture(params=_ALL_FIXTURES - _FORBIDDEN_RAW_UNUSED)
+def allowed_raw_unused_template(request):
+    """Returns template that allows defining raw unused variables."""
+    return request.param
+
+
+@pytest.fixture(params=_FORBIDDEN_PROTECTED_UNUSED)
+def forbidden_protected_unused_template(request):
+    """Returns template that forbids defining protected unused variables."""
+    return request.param
+
+
+@pytest.fixture(params=_ALL_FIXTURES - _FORBIDDEN_PROTECTED_UNUSED)
+def allowed_protected_unused_template(request):
+    """Returns template that allows defining protected unused variables."""
     return request.param

@@ -424,11 +424,16 @@ class UnusedVaribaleDefinitionVisitor(BaseNodeVisitor):
             UnusedVariableIsDefinedViolation
 
         """
-        self._check_assign_unused(
-            node,
-            name_nodes.get_variables_from_node(node.target),
-            is_local=True,
+        target_names = name_nodes.get_variables_from_node(node.target)
+        is_target_no_op_variable = (
+            len(target_names) == 1 and access.is_unused(target_names[0])
         )
+        if not is_target_no_op_variable:  # see issue 1406
+            self._check_assign_unused(
+                node,
+                target_names,
+                is_local=True,
+            )
         self.generic_visit(node)
 
     def visit_ExceptHandler(self, node: ast.ExceptHandler) -> None:
