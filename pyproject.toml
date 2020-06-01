@@ -44,6 +44,9 @@ classifiers = [
   "Topic :: Software Development :: Quality Assurance",
 ]
 
+[tool.poetry.urls]
+"Funding" = "https://opencollective.com/wemake-python-styleguide"
+
 [tool.poetry.plugins."flake8.extension"]
 WPS = "wemake_python_styleguide.checker:Checker"
 
@@ -62,12 +65,12 @@ importlib-metadata = {version = "*", python = "<3.8"}
 
 flake8-commas = "^2.0"
 flake8-quotes = "^3.0"
-flake8-comprehensions = "^3.1.0"
-flake8-docstrings = "^1.3.1"
+flake8-comprehensions = "^3.1"
+flake8-docstrings = "^1.3"
 flake8-string-format = "^0.3"
 flake8-bugbear = "^20.1"
 flake8-debugger = "^3.1"
-flake8-isort = ">=2.9,<4.0"
+flake8-isort = "^3.0"
 flake8-eradicate = "^0.3"
 flake8-bandit = "^2.1"
 flake8-broken-line = "^0.2"
@@ -77,15 +80,15 @@ darglint = "^1.2"
 
 [tool.poetry.dev-dependencies]
 nitpick = "^0.22"
-flake8-pytest-style = "^1.1.1"
+flake8-pytest-style = "^1.1"
 
-pytest-cov = "^2.8"
-coverage-conditional-plugin = "^0.2.0"
-pytest-randomly = "^3.3"
 pytest = "^5.3"
-snapshottest = "^0.5.1"
+pytest-cov = "^2.8"
+coverage-conditional-plugin = "^0.2"
+pytest-randomly = "^3.3"
+snapshottest = "^0.5"
 hypothesis = "^5.11"
-hypothesmith = "^0.1.0"
+hypothesmith = "^0.1"
 
 mypy = "^0.770"
 
@@ -104,5 +107,5 @@ import-linter = "^1.0"
 
 ipdb = "^0.13"
 ipython = "^7.14"
-astboom = "^0.4.2"
-tokelor = "^0.1.4"
+astboom = "^0.4"
+tokelor = "^0.1"

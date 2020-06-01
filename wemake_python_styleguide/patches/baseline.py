@@ -1,3 +1,12 @@
+"""
+We have to patch ``flake8`` to introduce this feature.
+
+Because there's no other way for a plugin
+to be involved in a violation reporting process.
+
+We use ``_wps_`` prefix for all properties that we apply in this patch.
+"""
+
 from collections import defaultdict
 from typing import Iterable, Tuple, Type
 
@@ -12,20 +21,28 @@ def _patch_report(manager: Type[Manager]) -> None:
     def report(self) -> Tuple[int, int]:  # noqa: WPS430
         # --- patch start
         saved_reports: baseline.SavedReports = defaultdict(list)
-        self.saved_reports = saved_reports  # mypy requires that!
+        self._wps_saved_reports = saved_reports  # mypy requires that!
         # --- patch end
 
         report_result = original_report(self)
 
         # --- patch start
-        if self.baseline is None:
-            self.baseline = baseline.save_to_file(self.saved_reports)
+        if self._wps_baseline is None:
+            self._wps_baseline = baseline.write_new_file(
+                self._wps_saved_reports,
+            )
+            show_baseline = getattr(  # Regular formatters don't have this:
+                self.style_guide.formatter, 'show_baseline', None,
+            )
+            if show_baseline:
+                show_baseline(self._wps_baseline)
+        # TODO: use `--baseline-refactoring`, but it is hard
         # --- patch end
 
         return report_result
 
     manager.report = report
-    manager.baseline = baseline.load_from_file()
+    manager._wps_baseline = baseline.load_from_file()  # noqa: WPS437
 
 
 def _patch_handle_results(  # noqa: WPS210, WPS231
@@ -38,12 +55,14 @@ def _patch_handle_results(  # noqa: WPS210, WPS231
     ) -> int:
         style_guide = self.style_guide
         reported_results_count = 0
-        for (error_code, line_number, column, text, physical_line) in results:
-            # --- patch start
-            # Here we ignore violations present in the baseline.
-            if self.baseline and self.baseline.has(filename, error_code, text):
-                continue
 
+        # --- patch start
+        saved_reports = self._wps_saved_reports[filename]
+        # Here we ignore violations present in the baseline.
+        new_ones = baseline.filter_out_saved_in_baseline(
+            self._wps_baseline, results, filename,
+        )
+        for (error_code, line_number, column, text, physical_line) in new_ones:
             handled_error = style_guide.handle_error(
                 code=error_code,
                 filename=filename,
@@ -56,7 +75,7 @@ def _patch_handle_results(  # noqa: WPS210, WPS231
             reported_results_count += handled_error
 
             if handled_error:
-                self.saved_reports[filename].append(
+                saved_reports.append(
                     (error_code, line_number, column, text, physical_line),
                 )
             # --- patch end

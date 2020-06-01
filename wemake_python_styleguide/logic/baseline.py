@@ -1,54 +1,41 @@
+import datetime as dt
 import json
 import os
-import datetime as dt
-from collections import Counter, defaultdict
+from collections import defaultdict
+from typing import NamedTuple
 from typing import DefaultDict, Dict, Iterable, List, Mapping, Optional, Tuple
 
 import attr
-from typing_extensions import Final, final, TypedDict
+from typing_extensions import Final, TypedDict, final
 
 #: That's a constant filename where we store our baselines.
 BASELINE_FILE: Final = '.flake8-baseline.json'
 
+#: We version baseline files independenly. Because we can break things.
+BASELINE_FILE_VERSION: Final = '1'
+
 #: Content is: `error_code, line_number, column, text, physical_line`.
 CheckReport = Tuple[str, int, int, str, str]
+
+#: This is how we identify the violation.
+ViolationKey = Tuple[str, str]
 
 #: Mapping of filename and the report result.
 SavedReports = Dict[str, List[CheckReport]]
 
+_BaselineMetadata = NamedTuple('_BaselineMetadata', [
+    ('created_at', str),
+    ('updated_at', str),
+    ('baseline_file_version', str),
+])
 
-def _baseline_fullpath() -> str:
-    """We only store baselines in the current (main) directory."""
-    return os.path.join(os.curdir, BASELINE_FILE)
-
-
-def _unique_paths_converter(
-    mapping: Mapping[str, Iterable[str]],
-) -> Mapping[str, Dict[str, int]]:
-    return {
-        path: Counter(violations)
-        for path, violations in mapping.items()
-    }
-
-
-@final
-class _BaselineMetadata(TypedDict):
-    """This class stores metadata that was used to create the baseline."""
-
-    baseline_file_version: str
-    created_at: dt.datetime
-    updated_at: dt.datetime
-
-
-@final
-class _BaselineEntry(TypedDict):
-    """Represents internal violation structure that is used for recordings."""
-
-    error_code: str
-    message: str
-    line: int
-    column: int
-    physical_line: str
+_BaselineEntry = NamedTuple('_BaselineEntry', [
+    ('error_code', str),
+    ('line', int),
+    ('column', int),
+    ('message', str),
+    ('physical_line', str),
+])
 
 
 @final
@@ -58,79 +45,154 @@ class _BaselineFile(object):
     Baseline file representation.
 
     How paths are stored?
-    We use ``path`` -> ``violations`` mapping, here ``violations`` is
-    a mutable dict of ``digest`` and ``count``.
-
-    We mutate ``count`` to mark violation as found.
-    Once there are no more violations to find in the baseline,
-    we start to report them!
-
+    We use ``path`` -> ``violations`` mapping.
     """
 
     metadata: _BaselineMetadata
     paths: Mapping[str, List[_BaselineEntry]]
+    _db: Mapping[str, Mapping[ViolationKey, List[_BaselineEntry]]] = attr.ib(
+        init=False,
+        hash=False,
+        eq=False,
+        repr=False,
+    )
 
-    def filter_baseline(
+    def __attrs_post_init__(self) -> None:
+        """Builds a mutable database of known violations."""
+        object.__setattr__(self, '_db', {})
+        for filename, violations in self.paths.items():
+            groupped: DefaultDict[
+                ViolationKey, _BaselineEntry,
+            ] = defaultdict(list)
+            for one in violations:
+                groupped[(one[0], one[3])].append(one)
+            self._db.update({filename: groupped})
+
+    def filter_group(
         self,
+        filename: str,
+        violation_key: ViolationKey,
         violations: List[CheckReport],
     ) -> List[CheckReport]:
-        groupped_by_code = self._group_by_code(violations)
-        filtered_violations = []
-
-        for violation in violations:
-            same_codes = groupped_by_code.get(error_code)
-            if same_codes and self._should_be_ignored(violation, same_codes):
-                continue
-
-            filtered_violations.append(violation)
-        return violation
-
-    def _should_be_ignored(
-        self,
-        violation: CheckResult,
-        similar_violations: List[CheckReport],
-    ]) -> bool:
-        # TODO: here we decide whether this violation should be ignored
-        # or any other from the list.
-        return False
-
-    def has(self, filename: str, error_code: str, text: str) -> bool:
         """
         Tells whether or not this violation is saved in the baseline.
 
-        This operation is impure. Because we mutate the object's state.
-        After we find a violation once, it's counter is decreased.
-        That's how we controll violations' count inside a single file.
+        It uses several attempts to guess which violation is which. Why?
+        Because one can move the violation upwards or downwards
+        in the source code, but it will stay exactly the same.
+        Or one can slightly modify the source code of the line,
+        but leave it in the same place.
+
+        We do realize that there would be some rear cases
+        that old violations will be reported instead of new ones sometimes.
+        But that's fine. Probably there's no determenistic algorithm for it.
         """
-        if filename not in self.paths:
-            return False
+        candidates = self._db.get(filename, {}).get(violation_key, None)
+        if not candidates:  # when we don't have any stored violations
+            return violations  # we just return all reported violations
 
-        per_file = self.paths[filename]
-        digest = self._generate_violation_hash(error_code, text)
+        print('violations', violations)
+        print('candidates', candidates)
 
-        per_file[digest] = per_file[digest] - 1
-        return per_file[digest] >= 0
+        # algorithm:
+        # 1. find exact matches, remove them from being reported
+        # 2. delete exact matches from the db
+        # 3. start fuzzy match by `physical_line` and `line`
+        # 4. delete fuzzy matches from the db
+        # 5. start fuzzy match by `column` and `line`
+        # 6. delete fuzzy matches from the db
+        # 7. start fuzzy matches by `physical_line`
+        # 8. delete fuzzy matches from the db
+
+        matchers = [
+            [1, 2, 4],
+            [1, 4],
+            [1, 2],
+            [4],
+        ]
+
+        def x(args):
+            def factory(c, v):
+                print('==', args, c, v, all(c[a] == v[a] for a in args))
+                return all(c[a] == v[a] for a in args)
+            return factory
+
+        for matcher in matchers:
+            ignored_violations = []
+            for violation in violations:
+                b = self._try_match(candidates, violation, x(matcher))
+                print('-----------------------------')
+                print('try', violation, b, matcher)
+                if b:
+                    ignored_violations.append(violation)
+            for ignored_violation in ignored_violations:
+                violations.remove(ignored_violation)
+                print('ignored', ignored_violation, matcher)
+                print('left', candidates)
+                print()
+            # if ignored_violations:
+            #     break
+        return violations
+
+    def _try_match(self, candidates, violation, matcher) -> bool:
+        used_candidate = None
+        for candidate in candidates:
+            if matcher(candidate, violation):
+                used_candidate = candidate
+                break
+
+        if used_candidate is not None:
+            candidates.remove(used_candidate)
+            return True
+        return False
+
+    def error_count(self) -> int:
+        """Return the error count that is stored in the baseline."""
+        return sum(len(per_file) for per_file in self.paths.values())
 
     @classmethod
     def from_report(
-        cls, saved_reports: SavedReports,
+        cls,
+        saved_reports: SavedReports,
     ) -> '_BaselineFile':
-        """Factory method to construct baselines from ``flake8`` like stats."""
-        paths: DefaultDict[str, List[str]] = defaultdict(list)
-
+        """Factory method to construct baselines from ``flake8`` reports."""
+        paths: DefaultDict[str, List[_BaselineEntry]] = defaultdict(list)
         for filename, reports in saved_reports.items():
             for report in reports:
-                paths[filename].append(
-                    cls._generate_violation_hash(report[0], report[3]),
-                )
-        return cls(paths)
+                paths[filename].append(report)
 
-    @classmethod
-    def _generate_violation_hash(cls, error_code: str, message: str) -> str:
-        digest = md5()  # noqa: S303
-        digest.update(error_code.encode())
-        digest.update(message.encode())
-        return digest.hexdigest()
+        now = dt.datetime.now().isoformat()
+        return cls(
+            _BaselineMetadata(now, now, BASELINE_FILE_VERSION),
+            paths,
+        )
+
+
+def filter_out_saved_in_baseline(
+    baseline: Optional[_BaselineFile],
+    reported: Iterable[CheckReport],
+    filename: str,
+) -> Iterable[CheckReport]:
+    """We don't need to report violations saved in the baseline."""
+    if baseline is None:
+        return reported  # baseline does not exist yet, return everything
+
+    new_results = []  # TODO list comp
+
+    groupped = defaultdict(list)
+    for check_report in reported:
+        groupped[(check_report[0], check_report[3])].append(check_report)
+
+    for violation_key, violations in groupped.items():
+        new_results.extend(baseline.filter_group(
+            filename, violation_key, violations,
+        ))
+    return new_results
+
+
+def baseline_fullpath() -> str:
+    """We only store baselines in the current (main) directory."""
+    return os.path.join(os.curdir, BASELINE_FILE)
 
 
 def load_from_file() -> Optional[_BaselineFile]:
@@ -141,23 +203,27 @@ def load_from_file() -> Optional[_BaselineFile]:
     It means, that we run ``--baseline`` for the very first time.
     """
     try:
-        with open(_baseline_fullpath()) as baseline_file:
+        with open(baseline_fullpath()) as baseline_file:
             return _BaselineFile(**json.load(baseline_file))
-    except IOError:
-        # There was probably no baseline file, that's ok.
-        # We will create a new one later.
-        return None
+    except IOError:  # There was probably no baseline file, that's ok.
+        return None  # We will create a new one later.
 
 
-def save_to_file(saved_reports: SavedReports) -> _BaselineFile:
-    """Creates new baseline ``json`` files in current workdir."""
+def write_new_file(
+    saved_reports: SavedReports,
+) -> _BaselineFile:
+    """Creates and writes new baseline ``json`` file in current workdir."""
     baseline = _BaselineFile.from_report(saved_reports)
-    with open(_baseline_fullpath(), 'w') as baseline_file:
+    baseline_data = attr.asdict(
+        baseline,
+        # We don't need to dump private and protected attributes.
+        filter=lambda attrib, _: not attrib.name.startswith('_'),
+    )
+    with open(baseline_fullpath(), 'w') as baseline_file:
         json.dump(
-            attr.asdict(baseline),
+            baseline_data,
             baseline_file,
             sort_keys=True,
             indent=2,
         )
-
     return baseline

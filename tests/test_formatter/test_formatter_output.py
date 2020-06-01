@@ -19,11 +19,14 @@ Warning::
 """
 
 
+import os
 import subprocess
+from typing import Optional
 
 import pytest
 
 from wemake_python_styleguide.formatter import WemakeFormatter
+from wemake_python_styleguide.patches.baseline import baseline
 from wemake_python_styleguide.version import pkg_version
 
 
@@ -40,6 +43,20 @@ def _safe_output(output: str) -> str:
     return output.replace(current_version_url, general_version_url)
 
 
+@pytest.fixture()
+def clean_baseline(request):
+    """Cleans temp baseline if any."""
+    def factory(cwd: Optional[str] = None):
+        if cwd is None:
+            cwd = os.curdir
+
+        baseline_path = os.path.join(cwd, baseline.BASELINE_FILE)
+        request.addfinalizer(lambda: (
+            os.remove(baseline_path) if os.path.exists(baseline_path) else None
+        ))
+    return factory
+
+
 @pytest.mark.parametrize(('cli_options', 'output'), [
     ([], 'regular'),
     (['--statistic'], 'regular_statistic'),
@@ -49,10 +66,10 @@ def _safe_output(output: str) -> str:
 ])
 def test_formatter(snapshot, cli_options, output):
     """
-    End-to-End test to that formatting works well.
+    End-to-End test to ensure that formatting works well.
 
     We only use ``WPS`` because other violations order is unpredictable.
-    Since ``flake8`` plugins work in parallel.
+    Since ``flake8`` plugins work in parallel. And do not sort output.
     """
     filename1 = './tests/fixtures/formatter/formatter1.py'
     filename2 = './tests/fixtures/formatter/formatter2.py'
@@ -84,6 +101,43 @@ def test_formatter(snapshot, cli_options, output):
 
 
 @pytest.mark.parametrize(('cli_options', 'output'), [
+    (['--baseline'], 'baseline'),
+])
+def test_formatter_baseline(snapshot, cli_options, output, clean_baseline):
+    """End-to-End test to ensure that baseline formatting works well."""
+    filename1 = './formatter1.py'
+    filename2 = './formatter2.py'
+    cwd = 'tests/fixtures/formatter'
+
+    clean_baseline(cwd)
+    process = subprocess.Popen(
+        [
+            'flake8',
+            '--disable-noqa',
+            '--isolated',
+            '--select',
+            'WPS',
+            '--format',
+            'wemake',
+            *cli_options,
+            filename1,
+            filename2,
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        universal_newlines=True,
+        encoding='utf8',
+        cwd=cwd,
+    )
+    stdout, _ = process.communicate()
+
+    snapshot.assert_match(
+        _safe_output(stdout),
+        'formatter_{0}'.format(output),
+    )
+
+
+@pytest.mark.parametrize(('cli_options', 'output'), [
     ([], 'regular'),
     (['--statistic'], 'regular_statistic'),
     (['--show-source'], 'with_source'),
@@ -91,7 +145,7 @@ def test_formatter(snapshot, cli_options, output):
     (['--statistic', '--show-source'], 'statistic_with_source'),
 ])
 def test_formatter_correct(snapshot, cli_options, output):
-    """All correct code should not raise any violations and no output."""
+    """Correct code should not produce any output."""
     filename = './tests/fixtures/formatter/correct.py'
 
     process = subprocess.Popen(

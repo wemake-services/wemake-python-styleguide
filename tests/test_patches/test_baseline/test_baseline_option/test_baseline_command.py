@@ -17,22 +17,68 @@ All violations in this example are covered by the baseline.
 
 import os
 import subprocess
+import json
+from typing import Optional, Dict
 
 import pytest
 
 from wemake_python_styleguide.logic.baseline import BASELINE_FILE
 
-baseline = """{
+_FAKE_TIME_METADATA = 'xxxx'
+
+baseline = r"""{
+  "metadata": {
+    "baseline_file_version": "1",
+    "created_at": "xxxx",
+    "updated_at": "xxxx"
+  },
   "paths": {
-    "other_wrong.py": {
-      "e61cb3c3de1cbdac603069903e4af07c": 1
-    },
-    "wrong.py": {
-      "132954ef45e1a84ab72bb6e30126a117": 1,
-      "71b49f6407bbc09ac76c372014207dfb": 1,
-      "a37c5ca31e3d75d49a018c0bd3ff83f5": 1,
-      "dd2402e2213add848d53f8580452417e": 2
-    }
+    "other_wrong.py": [
+      {
+        "column": 10,
+        "error_code": "WPS304",
+        "line": 1,
+        "message": "Found partial float: .5",
+        "physical_line": "partial = .5"
+      }
+    ],
+    "wrong.py": [
+      {
+        "column": 0,
+        "error_code": "WPS110",
+        "line": 2,
+        "message": "Found wrong variable name: value",
+        "physical_line": "value =1\n"
+      },
+      {
+        "column": 7,
+        "error_code": "E225",
+        "line": 2,
+        "message": "missing whitespace around operator",
+        "physical_line": "value =1\n"
+      },
+      {
+        "column": 0,
+        "error_code": "WPS110",
+        "line": 3,
+        "message": "Found wrong variable name: result",
+        "physical_line": "result= 2\n"
+      },
+      {
+        "column": 6,
+        "error_code": "E225",
+        "line": 3,
+        "message": "missing whitespace around operator",
+        "physical_line": "result= 2\n"
+      },
+      {
+        "column": 20,
+        "error_code": "WPS303",
+        "line": 4,
+        "message": "Found underscored number: 10_0",
+        "physical_line": "undescored_number = 10_0\n"
+      }
+    ]
   }
 }"""
 
@@ -47,15 +93,34 @@ undescored_number = 10_0
 
 wrong_other = 'partial = .5'
 
+prepend_format = """
+{0}
+{1}
+"""
+
 # Filenames:
 
 filename_wrong = 'wrong.py'
 filename_other = 'other_wrong.py'
 
 
-def _assert_output(output: str, errors):
+def _assert_output(
+    output: str,
+    errors: Dict[str, int],
+    lines: Optional[Dict[int, int]] = None,
+):
     for error_code, error_count in errors.items():
         assert output.count(error_code) == error_count
+    if lines is not None:
+        for line, line_count in lines.items():
+            assert output.count('.py:{0}:'.format(line)) == line_count
+
+
+def _safe_baseline(baseline_text: str) -> str:
+    baseline_dict = json.loads(baseline_text)
+    baseline_dict['metadata']['created_at'] = _FAKE_TIME_METADATA
+    baseline_dict['metadata']['updated_at'] = _FAKE_TIME_METADATA
+    return json.dumps(baseline_dict, indent=2, sort_keys=True)
 
 
 def test_without_baseline(make_file, read_file):
@@ -84,7 +149,9 @@ def test_without_baseline(make_file, read_file):
 
     _assert_output(output, {'WPS110': 2, 'WPS303': 1, 'WPS304': 1, 'E225': 2})
     assert process.returncode == 1
-    assert read_file(os.path.join(cwd, BASELINE_FILE)) == baseline
+    assert _safe_baseline(
+        read_file(os.path.join(cwd, BASELINE_FILE)),
+    ) == baseline
 
 
 @pytest.mark.parametrize('files_to_check', [
@@ -118,7 +185,7 @@ def test_with_baseline(make_file, read_file, files_to_check):
 
     assert output == ''
     assert process.returncode == 0
-    assert read_file(baseline_path) == baseline
+    assert _safe_baseline(read_file(baseline_path)) == baseline
 
 
 def test_with_baseline_empty(make_file, read_file):
@@ -145,7 +212,7 @@ def test_with_baseline_empty(make_file, read_file):
 
     assert output == ''
     assert process.returncode == 0
-    assert read_file(baseline_path) == baseline
+    assert _safe_baseline(read_file(baseline_path)) == baseline
 
 
 def test_with_baseline_new_violations(make_file, read_file):
@@ -172,7 +239,7 @@ def test_with_baseline_new_violations(make_file, read_file):
 
     _assert_output(output, {'WPS111': 1})
     assert process.returncode == 1
-    assert read_file(baseline_path) == baseline
+    assert _safe_baseline(read_file(baseline_path)) == baseline
 
 
 def test_with_baseline_new_correct_files(make_file, read_file):
@@ -201,7 +268,7 @@ def test_with_baseline_new_correct_files(make_file, read_file):
 
     assert output == ''
     assert process.returncode == 0
-    assert read_file(baseline_path) == baseline
+    assert _safe_baseline(read_file(baseline_path)) == baseline
 
 
 def test_with_baseline_new_wrong_files(make_file, read_file):
@@ -230,4 +297,66 @@ def test_with_baseline_new_wrong_files(make_file, read_file):
 
     _assert_output(output, {'WPS303': 1})
     assert process.returncode == 1
-    assert read_file(baseline_path) == baseline
+    assert _safe_baseline(read_file(baseline_path)) == baseline
+
+
+def test_with_prepend_errors(make_file, read_file):
+    """End-to-End test to test that baseline still generates new violations."""
+    filename = make_file(filename_wrong, prepend_format.format(
+        'undescored_number = 10_0',
+        wrong_template.format(''),
+    ))
+    baseline_path = make_file(BASELINE_FILE, baseline)
+
+    process = subprocess.Popen(
+        [
+            'flake8',
+            '--isolated',
+            '--baseline',
+            '--select',
+            'WPS,E',
+            filename_wrong,
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        universal_newlines=True,
+        encoding='utf8',
+        cwd=os.path.dirname(filename),
+    )
+    output, _ = process.communicate()
+
+    _assert_output(output, {'WPS303': 1})
+    assert process.returncode == 1
+    assert _safe_baseline(read_file(baseline_path)) == baseline
+
+
+def test_with_prepend_and_postpend_errors(make_file, read_file):
+    """End-to-End test to test that baseline still generates new violations."""
+    new_violation = 'undescored_number = 10_0'
+    filename = make_file(filename_wrong, prepend_format.format(
+        new_violation,
+        wrong_template.format(new_violation),
+    ))
+    baseline_path = make_file(BASELINE_FILE, baseline)
+
+    process = subprocess.Popen(
+        [
+            'flake8',
+            '--isolated',
+            '--baseline',
+            '--select',
+            'WPS,E',
+            filename_wrong,
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        universal_newlines=True,
+        encoding='utf8',
+        cwd=os.path.dirname(filename),
+    )
+    output, _ = process.communicate()
+
+    print(output)
+    _assert_output(output, {'WPS303': 2}, {1: 1, 7: 1})
+    assert process.returncode == 1
+    assert _safe_baseline(read_file(baseline_path)) == baseline

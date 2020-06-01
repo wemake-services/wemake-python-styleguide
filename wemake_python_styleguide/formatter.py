@@ -36,6 +36,7 @@ from pygments.formatters import TerminalFormatter
 from pygments.lexers import PythonLexer
 from typing_extensions import Final
 
+from wemake_python_styleguide.logic.baseline import baseline_fullpath
 from wemake_python_styleguide.version import pkg_version
 
 #: That url is generated and hosted by Sphinx.
@@ -130,6 +131,21 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
 
         self._write(self.newline)
         self._write(_underline(_bold('All errors: {0}'.format(all_errors))))
+
+    def show_baseline(self, baseline) -> None:
+        """
+        Our custom method to notify users about baseline creation.
+
+        It is not called for a regular ``flake8`` formatters.
+        See :ref:`baseline` for our custom patch to it.
+        """
+        self._write(
+            '{0}Created new baseline with {1} violation(s) at:{0}{2}'.format(
+                self.newline,
+                baseline.error_count(),
+                baseline_fullpath(),
+            ),
+        )
 
     def stop(self) -> None:
         """Runs once per app when the formatting ends."""

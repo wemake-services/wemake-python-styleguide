@@ -529,7 +529,7 @@ description = "A library for property-based testing"
 name = "hypothesis"
 optional = false
 python-versions = ">=3.5.2"
-version = "5.11.0"
+version = "5.12.0"
 
 [package.dependencies]
 attrs = ">=19.2.0"
@@ -985,7 +985,7 @@ wcwidth = "*"
 [[package]]
 category = "dev"
 description = "Run a subprocess in a pseudo terminal"
-marker = "python_version >= \"3.4\" and sys_platform != \"win32\" or sys_platform != \"win32\""
+marker = "python_version >= \"3.4\" and sys_platform != \"win32\" or sys_platform != \"win32\" or python_version >= \"3.4\" and sys_platform != \"win32\" and (python_version >= \"3.4\" and sys_platform != \"win32\" or sys_platform != \"win32\")"
 name = "ptyprocess"
 optional = false
 python-versions = "*"
@@ -1530,7 +1530,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "07db3ced3c9a8b7bc25752e53b3d8f54ac130ad716a06b9614417cc9156d5951"
+content-hash = "23dcb9600e1e6ee6a8977f71c7b901c73fea36df28a517171bd8d3169c8a040c"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -1743,8 +1743,8 @@ grimp = [
     {file = "grimp-1.2.1.tar.gz", hash = "sha256:645a722d659398ded42b7b77015973ee344fee7f28d5e4ab1ae28cbebf26e452"},
 ]
 hypothesis = [
-    {file = "hypothesis-5.11.0-py3-none-any.whl", hash = "sha256:ca2adce26816d6ef690f607650f3035814281a0c37b8c8616a1dd058d23c0268"},
-    {file = "hypothesis-5.11.0.tar.gz", hash = "sha256:66c4b6267444b7443ca3fd07064164f7665c940f2847c71b2ed9ca68e2142af5"},
+    {file = "hypothesis-5.12.0-py3-none-any.whl", hash = "sha256:bf1f3a6bcd7a484b3646f35dca17a962412f536de516b6ee3eac8d9d251d971e"},
+    {file = "hypothesis-5.12.0.tar.gz", hash = "sha256:df8bc0071838e98cdf205a340e29f217ba98f20ab53a11290b8fb0e33c1619b2"},
 ]
 hypothesmith = [
     {file = "hypothesmith-0.1.0-py3-none-any.whl", hash = "sha256:dbc01d74311de9f9aee0832592d2dd2de4b9900fa6ee74f1f5692e037bc61e1e"},
