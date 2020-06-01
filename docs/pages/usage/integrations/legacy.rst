@@ -15,7 +15,7 @@ But, you still can do several things to integrate this linter step by step:
 3. Per-file ignore complexity checks that are failing for your project.
    Sometimes it is possible to rewrite several parts of your code,
    but generally complexity rules are the hardest to fix.
-4. Use `boy scout rule <https://deviq.com/boy-scout-rule/>`_: always leave
+4. Use `boyscout rule <https://deviq.com/boy-scout-rule/>`_: always leave
    your code better than you found it.
 
 To make sure "boy scout rule" works we officially support ``--diff`` mode.
