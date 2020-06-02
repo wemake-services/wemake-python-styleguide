@@ -14,9 +14,36 @@
 import os
 import sys
 
+import sphinx
 import tomlkit
 
 sys.path.insert(0, os.path.abspath('..'))
+
+
+# -- Monkeypatches -----------------------------------------------------------
+
+def _monkeypatch(cls):
+    """Decorator to monkey-patch methods."""
+    def decorator(func):
+        method = func.__name__
+        old = getattr(cls, method)
+        setattr(
+            cls,
+            method,
+            lambda inst, *args, **kwargs: func(inst, old, *args, **kwargs),
+        )
+    return decorator
+
+
+# workaround until https://github.com/miyakogi/m2r/pull/55 is merged
+@_monkeypatch(sphinx.registry.SphinxComponentRegistry)
+def add_source_parser(self, _old_add_source_parser, *args, **kwargs):
+    """This function changed in sphinx v3.0, we need to fix it back."""
+    # signature is (parser: Type[Parser], **kwargs), but m2r expects
+    # the removed (str, parser: Type[Parser], **kwargs).
+    if isinstance(args[0], str):
+        args = args[1:]
+    return _old_add_source_parser(self, *args, **kwargs)
 
 
 # -- Project information -----------------------------------------------------
@@ -29,7 +56,7 @@ def _get_project_meta():
 
 
 pkg_meta = _get_project_meta()
-project = pkg_meta['name']
+project = str(pkg_meta['name'])
 copyright = '2018, wemake.services'  # noqa: WPS125
 author = 'wemake.services'
 
