@@ -1146,10 +1146,20 @@ class UselessContinueViolation(ASTViolation):
                 continue
             print(number)
 
+        for number in [1, 2, 3]:
+            with suppress(Exception):
+                do_smth(some_obj)
+
         # Wrong:
         for number in [1, 2, 3]:
             print(number)
             continue
+
+        for number in [1, 2, 3]:
+            try:
+                do_smth(some_obj)
+            except Exception:
+                continue
 
     .. versionadded:: 0.7.0
 
