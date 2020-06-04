@@ -87,7 +87,7 @@ snapshottest = "^0.5.1"
 hypothesis = "^5.16"
 hypothesmith = "^0.1.2"
 
-mypy = "^0.770"
+mypy = "^0.780"
 
 docutils = "^0.16"
 sphinx = "^3.0"
