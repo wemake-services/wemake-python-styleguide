@@ -195,7 +195,7 @@ def test_protected_unused_variable_definition(
     assert_errors(visitor, [UnusedVariableIsDefinedViolation])
 
 
-@pytest.mark.parametrize(('context', 'indentation'), [  # noqa: WPS118
+@pytest.mark.parametrize(('context', 'indentation'), [
     (module_context, 0),
     (function_context, 4),
     (method_context, 8),
@@ -203,7 +203,7 @@ def test_protected_unused_variable_definition(
 @pytest.mark.parametrize('bad_name', [
     '_protected',
 ])
-def test_protected_unused_variable_definition_allowed(
+def test_protected_unused_var_definition_allowed(
     assert_errors,
     parse_ast_tree,
     context,
