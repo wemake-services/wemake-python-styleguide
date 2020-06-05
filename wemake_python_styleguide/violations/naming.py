@@ -472,7 +472,7 @@ class UnderscoredNumberNameViolation(MaybeASTViolation):
 
     """
 
-    error_template = 'Found underscored name pattern: {0}'
+    error_template = 'Found underscored number name pattern: {0}'
     code = 114
 
 
