@@ -61,7 +61,7 @@ copyright = '2018, wemake.services'  # noqa: WPS125
 author = 'wemake.services'
 
 # The short X.Y version
-version = pkg_meta['version']
+version = str(pkg_meta['version'])
 # The full version, including alpha/beta/rc tags
 release = version
 
@@ -69,7 +69,7 @@ release = version
 # -- General configuration ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
-needs_sphinx = '1.8'
+needs_sphinx = '3.0'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -109,15 +109,17 @@ autodoc_mock_imports = [
 ]
 
 autodoc_member_order = 'bysource'
-autodoc_default_flags = {
-    'members': '',
-    'undoc-members': 'code,error_template',
+autodoc_default_options = {
+    'members': True,
+    'undoc-members': True,
     'exclude-members': '__dict__,__weakref__',
+    'show-inheritance': True,
 }
 
 # Set `typing.TYPE_CHECKING` to `True`:
 # https://pypi.org/project/sphinx-autodoc-typehints/
 set_type_checking_flag = False
+always_document_param_types = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -146,10 +148,6 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 pygments_style = 'sphinx'
 
 add_module_names = False
-
-autodoc_default_options = {
-    'show-inheritance': True,
-}
 
 
 # -- Options for HTML output -------------------------------------------------
