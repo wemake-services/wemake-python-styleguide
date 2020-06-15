@@ -21,6 +21,7 @@ Semantic versioning in our case means:
 - Fixes how wrong variable names were checked case sensitive with `WPS110`
 - Fixes false positives DirectMagicAttributeAccessViolation with `__mro__`, `__subclasses__` and `__version__`
 - Make `WPS326` work when there is comment between string literals
+- Allowed yield statements in call method
 
 ### Misc
 
