@@ -90,7 +90,7 @@ def test_magic_statement(
 ])
 @pytest.mark.parametrize('method', [
     '__iter__',
-    '__call__', # Fixes Issue: 1461 
+    '__call__',
     '__custom__',
 ])
 @pytest.mark.parametrize('statement', [
