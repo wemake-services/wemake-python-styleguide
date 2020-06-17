@@ -72,7 +72,7 @@ flake8-eradicate = "^0.3"
 flake8-bandit = "^2.1"
 flake8-broken-line = "^0.2"
 flake8-rst-docstrings = "^0.0.13"
-pep8-naming = "^0.10"
+pep8-naming = ">=0.10,<0.12"
 darglint = "^1.2"
 
 [tool.poetry.dev-dependencies]
