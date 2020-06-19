@@ -57,7 +57,12 @@ You can also show all options that ``flake8`` supports by running:
 - ``forbidden-domain-names`` - list of forbidden domain names, defaults to
     :str:`wemake_python_styleguide.options.defaults.FORBIDDEN_DOMAIN_NAMES`
 - ``baseline`` - run linter in legacy-first mode and ignore current violations,
-    defaults to :str:`wemake_python_styleguide.options.defaults.BASELINE`
+    this requires a baseline to be created with the ``create-baseline`` option,
+    defaults to
+    :str:`wemake_python_styleguide.options.defaults.BASELINE`
+- ``create-baseline`` - Create a new baseline for the project which will be
+    used with the ``baseline`` option, default to
+    :str:`wemake_pathon_styleguide.options.defaults.CREATE_BASELINE`
 
 .. rubric:: Complexity options
 
@@ -253,9 +258,16 @@ class Configuration(object):
             '--baseline',
             defaults.BASELINE,
             'Run linter in legacy-first mode and ignore current violations.',
+            type='string',
+        ),
+
+        _Option(
+            '--create-baseline',
+            defaults.CREATE_BASELINE,
+            'Create a new baseline file for use with --baseline.',
             action='store_true',
             type=None,
-            dest='baseline',
+            dest='create_baseline',
         ),
 
         # Complexity:

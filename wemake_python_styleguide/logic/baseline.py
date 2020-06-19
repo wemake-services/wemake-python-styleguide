@@ -91,9 +91,6 @@ class _BaselineFile(object):
         if not candidates:  # when we don't have any stored violations
             return violations  # we just return all reported violations
 
-        print('violations', violations)
-        print('candidates', candidates)
-
         # algorithm:
         # 1. find exact matches, remove them from being reported
         # 2. delete exact matches from the db
@@ -113,7 +110,6 @@ class _BaselineFile(object):
 
         def x(args):
             def factory(c, v):
-                print('==', args, c, v, all(c[a] == v[a] for a in args))
                 return all(c[a] == v[a] for a in args)
             return factory
 
@@ -121,15 +117,10 @@ class _BaselineFile(object):
             ignored_violations = []
             for violation in violations:
                 b = self._try_match(candidates, violation, x(matcher))
-                print('-----------------------------')
-                print('try', violation, b, matcher)
                 if b:
                     ignored_violations.append(violation)
             for ignored_violation in ignored_violations:
                 violations.remove(ignored_violation)
-                print('ignored', ignored_violation, matcher)
-                print('left', candidates)
-                print()
             # if ignored_violations:
             #     break
         return violations
@@ -179,23 +170,23 @@ def filter_out_saved_in_baseline(
 
     new_results = []  # TODO list comp
 
-    groupped = defaultdict(list)
+    grouped = defaultdict(list)
     for check_report in reported:
-        groupped[(check_report[0], check_report[3])].append(check_report)
+        grouped[(check_report[0], check_report[3])].append(check_report)
 
-    for violation_key, violations in groupped.items():
+    for violation_key, violations in grouped.items():
         new_results.extend(baseline.filter_group(
             filename, violation_key, violations,
         ))
     return new_results
 
 
-def baseline_fullpath() -> str:
+def baseline_fullpath(filename: str) -> str:
     """We only store baselines in the current (main) directory."""
-    return os.path.join(os.curdir, BASELINE_FILE)
+    return os.path.join(os.curdir, filename)
 
 
-def load_from_file() -> Optional[_BaselineFile]:
+def load_from_file(filename: str) -> Optional[_BaselineFile]:
     """
     Loads baseline ``json`` files from current workdir.
 
@@ -203,14 +194,14 @@ def load_from_file() -> Optional[_BaselineFile]:
     It means, that we run ``--baseline`` for the very first time.
     """
     try:
-        with open(baseline_fullpath()) as baseline_file:
+        with open(baseline_fullpath(filename)) as baseline_file:
             return _BaselineFile(**json.load(baseline_file))
     except IOError:  # There was probably no baseline file, that's ok.
         return None  # We will create a new one later.
 
 
 def write_new_file(
-    saved_reports: SavedReports,
+    filename: str, saved_reports: SavedReports,
 ) -> _BaselineFile:
     """Creates and writes new baseline ``json`` file in current workdir."""
     baseline = _BaselineFile.from_report(saved_reports)
@@ -219,7 +210,7 @@ def write_new_file(
         # We don't need to dump private and protected attributes.
         filter=lambda attrib, _: not attrib.name.startswith('_'),
     )
-    with open(baseline_fullpath(), 'w') as baseline_file:
+    with open(baseline_fullpath(filename), 'w') as baseline_file:
         json.dump(
             baseline_data,
             baseline_file,
