@@ -108,6 +108,9 @@ class TooManyPublicAtts(object):  # noqa: WPS230
         self.boom = 7
 
 
+var_a, var_b, var_c, var_d, var_e = (1, 2, 3, 4, 5) # noqa: WPS236
+
+
 def function_name(
     value: int = 0,  # noqa: WPS110
 ):
@@ -159,7 +162,7 @@ some._execute()  # noqa: WPS437
 
 
 def many_locals():  # noqa: WPS210
-    arg1, arg2, arg3, arg4, arg5, arg6 = range(6)
+    arg1, arg2, arg3, arg4, arg5, arg6 = range(6)  # noqa: WPS236
 
 
 def many_arguments(_arg1, _arg2, _arg3, _arg4, _arg5, _arg6):  # noqa: WPS211
