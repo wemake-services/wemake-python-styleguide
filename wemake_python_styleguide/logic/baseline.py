@@ -68,6 +68,17 @@ class _BaselineFile(object):
                 grouped[one[0]].append(one)
             self._db.update({filename: grouped})
 
+    def check_if_moved(self, filename: str, violations: List[CheckReport]) -> Mapping[str, List[_BaselineEntry]]:
+        rename_candidates = [f for f in self._db if not os.path.exists(f)]
+        for f in rename_candidates:
+            c_violations = {tuple(v) for v_list in self._db[f].values() for v in v_list}
+            identical = c_violations | {tuple(v) for v in violations}
+            # We are checking exact matches, so we consider a 10% overlap a match.
+            if len(identical) >= len(c_violations) * .1:
+                self._db[filename] = self._db.pop(f)
+                return self._db[filename]
+        return {}
+
     def filter_group(
         self,
         filename: str,
@@ -87,7 +98,10 @@ class _BaselineFile(object):
         that old violations will be reported instead of new ones sometimes.
         But that's fine. Probably there's no determenistic algorithm for it.
         """
-        db_file = self._db.get(filename, {})
+        db_file = self._db.get(filename)
+        if db_file is None:
+            db_file = self.check_if_moved(filename, violations)
+
         candidates = db_file.get(violation_key, None)
         if not candidates:  # when we don't have any stored violations
             return violations  # we just return all reported violations
