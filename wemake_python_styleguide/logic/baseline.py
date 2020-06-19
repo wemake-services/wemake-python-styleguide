@@ -154,12 +154,14 @@ class _BaselineFile(object):
         for matcher in matchers:
             ignored_violations = []
             for violation in violations:
-                b = self._try_match(candidates, violation, x(matcher))
+                code = violation[-1] if violation[-1] is None else violation[-1].strip()
+                violation_stripped = (*violation[:-1], code)
+                b = self._try_match(candidates, violation_stripped, x(matcher))
                 if b:
                     ignored_violations.append(violation)
                     # Update our baseline, to keep in sync with codebase.
                     db_file[violation_key].remove(b)
-                    db_file[violation_key].append(violation)
+                    db_file[violation_key].append(violation_stripped)
             for ignored_violation in ignored_violations:
                 violations.remove(ignored_violation)
 
@@ -232,6 +234,8 @@ class _BaselineFile(object):
         paths: DefaultDict[str, List[_BaselineEntry]] = defaultdict(list)
         for filename, reports in saved_reports.items():
             for report in reports:
+                code = report[-1] if report[-1] is None else report[-1].strip()
+                report = (*report[:-1], code)
                 paths[filename].append(report)
 
         now = dt.datetime.now().isoformat()
