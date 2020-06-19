@@ -7,6 +7,7 @@ to be involved in a violation reporting process.
 We use ``_wps_`` prefix for all properties that we apply in this patch.
 """
 
+import sys
 from collections import defaultdict
 from typing import Iterable, Tuple, Type
 
@@ -100,12 +101,17 @@ def _patch_start(manager: Type[Manager]) -> None:
     def start(self, paths=None) -> None:  # noqa: WPS430
         # --- patch start
         self._wps_baseline = None
-        if not self.options.create_baseline:
+        if self.options.create_baseline:
+            if paths is not None or self.arguments:
+                response = input("This will create a new baseline for only the given files. Continue? (y/n) ")
+                if not response.lower().startswith("y"):
+                    sys.exit(-2)
+        else:
             self._wps_baseline = baseline.load_from_file(self.options.baseline)
 
         if self._wps_baseline is None and not self.options.create_baseline:
             print("ERROR: No baseline file found (you can create one with --create-baseline).")
-            return
+            sys.exit(-2)
         # --- patch end
 
         original_start(self, paths)
