@@ -84,6 +84,8 @@ def _patch_handle_results(  # noqa: WPS210, WPS231
                     (error_code, line_number, column, text, physical_line),
                 )
 
+        self._wps_baseline.write_file(self.options.baseline)
+
         # We should exit successfully if created a baseline.
         return 0 if self.options.create_baseline else reported_results_count
         # --- patch end

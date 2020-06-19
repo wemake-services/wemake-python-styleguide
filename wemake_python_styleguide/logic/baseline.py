@@ -50,7 +50,7 @@ class _BaselineFile(object):
 
     metadata: _BaselineMetadata
     paths: Mapping[str, List[_BaselineEntry]]
-    _db: Mapping[str, Mapping[ViolationKey, List[_BaselineEntry]]] = attr.ib(
+    _db: Mapping[str, Mapping[str, List[_BaselineEntry]]] = attr.ib(
         init=False,
         hash=False,
         eq=False,
@@ -61,17 +61,17 @@ class _BaselineFile(object):
         """Builds a mutable database of known violations."""
         object.__setattr__(self, '_db', {})
         for filename, violations in self.paths.items():
-            groupped: DefaultDict[
-                ViolationKey, _BaselineEntry,
+            grouped: DefaultDict[
+                str, _BaselineEntry,
             ] = defaultdict(list)
             for one in violations:
-                groupped[(one[0], one[3])].append(one)
-            self._db.update({filename: groupped})
+                grouped[one[0]].append(one)
+            self._db.update({filename: grouped})
 
     def filter_group(
         self,
         filename: str,
-        violation_key: ViolationKey,
+        violation_key: str,
         violations: List[CheckReport],
     ) -> List[CheckReport]:
         """
@@ -90,6 +90,7 @@ class _BaselineFile(object):
         candidates = self._db.get(filename, {}).get(violation_key, None)
         if not candidates:  # when we don't have any stored violations
             return violations  # we just return all reported violations
+        candidates = candidates[:]
 
         # algorithm:
         # 1. find exact matches, remove them from being reported
@@ -122,8 +123,15 @@ class _BaselineFile(object):
                     ignored_violations.append(violation)
             for ignored_violation in ignored_violations:
                 violations.remove(ignored_violation)
-            # if ignored_violations:
-            #     break
+
+        # Unused candidates should be removed.
+        db_file = self._db[filename]
+        for c in candidates:
+            db_file[violation_key].remove(c)
+        # Completely remove the key if no violations left.
+        if not db_file[violation_key]:
+            db_file.pop(violation_key)
+
         return violations
 
     def _try_match(self, candidates, violation, matcher) -> bool:
@@ -138,9 +146,40 @@ class _BaselineFile(object):
             return True
         return False
 
+    def remove_unused_keys(self, filename: str, used_keys: Iterable[str]) -> None:
+        """Remove unused keys for filename from the baseline."""
+        unused_keys = self._db[filename].keys() - used_keys
+        for k in unused_keys:
+            self._db[filename].pop(k)
+        # Completely remove file if no violations left.
+        if not self._db[filename]:
+            self._db.pop(filename)
+
     def error_count(self) -> int:
         """Return the error count that is stored in the baseline."""
         return sum(len(per_file) for per_file in self.paths.values())
+
+    def write_file(self, filename: str) -> None:
+        """Write this baseline to filename."""
+        self._update_paths_from_db()
+
+        baseline_data = attr.asdict(
+            self,
+            # We don't need to dump private and protected attributes.
+            filter=lambda attrib, _: not attrib.name.startswith('_'),
+        )
+        with open(baseline_fullpath(filename), 'w') as baseline_file:
+            json.dump(
+                baseline_data,
+                baseline_file,
+                sort_keys=True,
+                indent=2,
+            )
+
+    def _update_paths_from_db(self):
+        self.paths.clear()
+        for filename, groups in self._db.items():
+            self.paths[filename] = [v for v_list in groups.values() for v in v_list]
 
     @classmethod
     def from_report(
@@ -173,12 +212,15 @@ def filter_out_saved_in_baseline(
 
     grouped = defaultdict(list)
     for check_report in reported:
-        grouped[(check_report[0], check_report[3])].append(check_report)
+        grouped[check_report[0]].append(check_report)
 
     for violation_key, violations in grouped.items():
         new_results.extend(baseline.filter_group(
             filename, violation_key, violations,
         ))
+
+    baseline.remove_unused_keys(filename, grouped.keys())
+
     return new_results
 
 
@@ -206,16 +248,5 @@ def write_new_file(
 ) -> _BaselineFile:
     """Creates and writes new baseline ``json`` file in current workdir."""
     baseline = _BaselineFile.from_report(saved_reports)
-    baseline_data = attr.asdict(
-        baseline,
-        # We don't need to dump private and protected attributes.
-        filter=lambda attrib, _: not attrib.name.startswith('_'),
-    )
-    with open(baseline_fullpath(filename), 'w') as baseline_file:
-        json.dump(
-            baseline_data,
-            baseline_file,
-            sort_keys=True,
-            indent=2,
-        )
+    baseline.write_file(filename)
     return baseline
