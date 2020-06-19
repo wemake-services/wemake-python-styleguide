@@ -87,7 +87,8 @@ class _BaselineFile(object):
         that old violations will be reported instead of new ones sometimes.
         But that's fine. Probably there's no determenistic algorithm for it.
         """
-        candidates = self._db.get(filename, {}).get(violation_key, None)
+        db_file = self._db.get(filename, {})
+        candidates = db_file.get(violation_key, None)
         if not candidates:  # when we don't have any stored violations
             return violations  # we just return all reported violations
         candidates = candidates[:]
@@ -121,11 +122,13 @@ class _BaselineFile(object):
                 b = self._try_match(candidates, violation, x(matcher))
                 if b:
                     ignored_violations.append(violation)
+                    # Update our baseline, to keep in sync with codebase.
+                    db_file[violation_key].remove(b)
+                    db_file[violation_key].append(violation)
             for ignored_violation in ignored_violations:
                 violations.remove(ignored_violation)
 
         # Unused candidates should be removed.
-        db_file = self._db[filename]
         for c in candidates:
             db_file[violation_key].remove(c)
         # Completely remove the key if no violations left.
@@ -134,7 +137,7 @@ class _BaselineFile(object):
 
         return violations
 
-    def _try_match(self, candidates, violation, matcher) -> bool:
+    def _try_match(self, candidates, violation, matcher) -> Optional[_BaselineEntry]:
         used_candidate = None
         for candidate in candidates:
             if matcher(candidate, violation):
@@ -143,8 +146,8 @@ class _BaselineFile(object):
 
         if used_candidate is not None:
             candidates.remove(used_candidate)
-            return True
-        return False
+            return used_candidate
+        return None
 
     def remove_unused_keys(self, filename: str, used_keys: Iterable[str]) -> None:
         """Remove unused keys for filename from the baseline."""
