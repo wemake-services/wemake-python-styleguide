@@ -136,7 +136,7 @@ class Checker(object):
     def parse_options(cls, options: types.ConfigurationOptions) -> None:
         """Parses registered options for providing them to each visitor."""
         cls.options = validate_options(options)
-        if cls.options.baseline:
+        if cls.options.baseline is not None:
             baseline.apply_patch()
 
     def run(self) -> Iterator[types.CheckResult]:

@@ -267,6 +267,7 @@ class Configuration(object):
             'Create a new baseline file for use with --baseline.',
             action='store_true',
             type=None,
+            parse_from_config=False,
             dest='create_baseline',
         ),
 

@@ -107,6 +107,8 @@ def _patch_start(manager: Type[Manager]) -> None:
                 if not response.lower().startswith("y"):
                     sys.exit(-2)
         else:
+            if not self.options.baseline:
+                self.options.baseline = baseline.BASELINE_FILE
             self._wps_baseline = baseline.load_from_file(self.options.baseline)
 
         if self._wps_baseline is None and not self.options.create_baseline:
