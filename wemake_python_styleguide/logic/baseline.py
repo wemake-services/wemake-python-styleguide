@@ -68,16 +68,40 @@ class _BaselineFile(object):
                 grouped[one[0]].append(one)
             self._db.update({filename: grouped})
 
-    def check_if_moved(self, filename: str, violations: List[CheckReport]) -> Mapping[str, List[_BaselineEntry]]:
+    def handle_rename(self, filename: str, grouped: Mapping[str, CheckReport]) -> None:
+        if filename in self._db:
+            return
+
+        matchers = [
+            [1, 2, 4],
+            [1, 4],
+            [2, 4],
+            [1, 2],
+            [4],
+        ]
+
+        def x(args):
+            def factory(c, v):
+                return all(c[a] == v[a] for a in args)
+            return factory
+
         rename_candidates = [f for f in self._db if not os.path.exists(f)]
         for f in rename_candidates:
-            c_violations = {tuple(v) for v_list in self._db[f].values() for v in v_list}
-            identical = c_violations | {tuple(v) for v in violations}
-            # We are checking exact matches, so we consider a 10% overlap a match.
-            if len(identical) >= len(c_violations) * .1:
+            matched_violations = 0
+            for violation_key, violations in grouped.items():
+                candidates = self._db[f][violation_key]
+                candidates = candidates[:]
+
+                for matcher in matchers:
+                    for violation in violations:
+                        b = self._try_match(candidates, violation, x(matcher))
+                        if b:
+                            matched_violations += 1
+
+            old_count = sum(len(l) for l in self._db[f].values())
+            if matched_violations >= old_count * .5:
                 self._db[filename] = self._db.pop(f)
-                return self._db[filename]
-        return {}
+                return
 
     def filter_group(
         self,
@@ -98,10 +122,7 @@ class _BaselineFile(object):
         that old violations will be reported instead of new ones sometimes.
         But that's fine. Probably there's no determenistic algorithm for it.
         """
-        db_file = self._db.get(filename)
-        if db_file is None:
-            db_file = self.check_if_moved(filename, violations)
-
+        db_file = self._db.get(filename, {})
         candidates = db_file.get(violation_key, None)
         if not candidates:  # when we don't have any stored violations
             return violations  # we just return all reported violations
@@ -234,6 +255,8 @@ def filter_out_saved_in_baseline(
     grouped = defaultdict(list)
     for check_report in reported:
         grouped[check_report[0]].append(check_report)
+
+    baseline.handle_rename(filename, grouped)
 
     for violation_key, violations in grouped.items():
         new_results.extend(baseline.filter_group(
