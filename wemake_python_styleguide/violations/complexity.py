@@ -1149,13 +1149,14 @@ class TooLongTupleUnpackViolation(ASTViolation):
     Forbids using too many variables to unpack a tuple.
 
     Reasoning:
-        The order is hard to remember.
+        The order and meaning are hard to remember.
 
     Solution:
         If you have more than 2 values in a tuple, consider using
-        typing.NamedTuple instead.
+        ``typing.NamedTuple`` or a dataclass instead.
 
     Example::
+
         # Correct:
         result = foo()
 

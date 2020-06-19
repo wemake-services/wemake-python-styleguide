@@ -108,9 +108,6 @@ class TooManyPublicAtts(object):  # noqa: WPS230
         self.boom = 7
 
 
-var_a, var_b, var_c, var_d, var_e = (1, 2, 3, 4, 5) # noqa: WPS236
-
-
 def function_name(
     value: int = 0,  # noqa: WPS110
 ):
