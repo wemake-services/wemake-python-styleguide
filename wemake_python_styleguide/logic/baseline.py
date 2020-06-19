@@ -151,11 +151,15 @@ class _BaselineFile(object):
 
     def remove_unused_keys(self, filename: str, used_keys: Iterable[str]) -> None:
         """Remove unused keys for filename from the baseline."""
-        unused_keys = self._db[filename].keys() - used_keys
+        db_file = self._db.get(filename)
+        if db_file is None:
+            return
+
+        unused_keys = db_file.keys() - used_keys
         for k in unused_keys:
-            self._db[filename].pop(k)
+            db_file.pop(k)
         # Completely remove file if no violations left.
-        if not self._db[filename]:
+        if not db_file:
             self._db.pop(filename)
 
     def error_count(self) -> int:
