@@ -56,6 +56,7 @@ Summary
    TooLongCallChainViolation
    TooComplexAnnotationViolation
    TooManyImportedModuleMembersViolation
+   TooLongTupleUnpackViolation
 
 
 Module complexity
@@ -96,6 +97,7 @@ Structure complexity
 .. autoclass:: TooLongCallChainViolation
 .. autoclass:: TooComplexAnnotationViolation
 .. autoclass:: TooManyImportedModuleMembersViolation
+.. autoclass:: TooLongTupleUnpackViolation
 
 """
 
@@ -1139,3 +1141,36 @@ class TooManyImportedModuleMembersViolation(ASTViolation):
 
     error_template = 'Found too many imported names from a module: {0}'
     code = 235
+
+
+@final
+class TooLongTupleUnpackViolation(ASTViolation):
+    """
+    Forbids using too many variables to unpack a tuple.
+
+    Reasoning:
+        The order and meaning are hard to remember.
+
+    Solution:
+        If you have more than 2 values in a tuple, consider using
+        ``typing.NamedTuple`` or a dataclass instead.
+
+    Example::
+
+        # Correct:
+        result = foo()
+
+        # Wrong:
+        a, b, c, d, e = foo()
+
+    Configuration:
+        This rule is configurable with ``--max-tuple-unpack-length``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_TUPLE_UNPACK_LENGTH`
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found too many variables used to unpack a tuple: {0}'
+    code = 236

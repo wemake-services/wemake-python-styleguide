@@ -159,7 +159,7 @@ some._execute()  # noqa: WPS437
 
 
 def many_locals():  # noqa: WPS210
-    arg1, arg2, arg3, arg4, arg5, arg6 = range(6)
+    arg1, arg2, arg3, arg4, arg5, arg6 = range(6)  # noqa: WPS236
 
 
 def many_arguments(_arg1, _arg2, _arg3, _arg4, _arg5, _arg6):  # noqa: WPS211
