@@ -9,6 +9,13 @@ Semantic versioning in our case means:
 - Major releases inidicate significant milestones or serious breaking changes.
 
 
+## 0.16.0
+
+### Features
+
+- Forbids using too many variables in a tuple unpacking
+
+
 ## 0.15.0 aka New runtime
 
 ### Features

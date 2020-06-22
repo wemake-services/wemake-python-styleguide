@@ -121,3 +121,6 @@ MAX_ANN_COMPLEXITY: Final = 3  # reasonable enough
 
 #: Maximum number of names that can be imported from module.
 MAX_IMPORT_FROM_MEMBERS: Final = 8  # guessed
+
+#: Maximun number of variables in a ``tuple`` unpacking statement.
+MAX_TUPLE_UNPACK_LENGTH: Final = 4  # guessed
