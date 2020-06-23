@@ -233,6 +233,7 @@ class _BaselineFile(object):
         """Factory method to construct baselines from ``flake8`` reports."""
         paths: DefaultDict[str, List[_BaselineEntry]] = defaultdict(list)
         for filename, reports in saved_reports.items():
+            filename = normalize_filename(filename)
             for report in reports:
                 code = report[-1] if report[-1] is None else report[-1].strip()
                 report = (*report[:-1], code)
@@ -254,6 +255,8 @@ def filter_out_saved_in_baseline(
     if baseline is None:
         return reported  # baseline does not exist yet, return everything
 
+    filename = normalize_filename(filename)
+
     new_results = []  # TODO list comp
 
     grouped = defaultdict(list)
@@ -270,6 +273,11 @@ def filter_out_saved_in_baseline(
     baseline.remove_unused_keys(filename, grouped.keys())
 
     return new_results
+
+
+def normalize_filename(filename: str) -> str:
+    """Normalise filename to avoid mismatches."""
+    return os.path.relpath(os.path.expanduser(filename))
 
 
 def baseline_fullpath(filename: str) -> str:
