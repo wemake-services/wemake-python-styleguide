@@ -526,7 +526,7 @@ description = "A library for property-based testing"
 name = "hypothesis"
 optional = false
 python-versions = ">=3.5.2"
-version = "5.18.0"
+version = "5.18.1"
 
 [package.dependencies]
 attrs = ">=19.2.0"
@@ -1736,8 +1736,8 @@ grimp = [
     {file = "grimp-1.2.1.tar.gz", hash = "sha256:645a722d659398ded42b7b77015973ee344fee7f28d5e4ab1ae28cbebf26e452"},
 ]
 hypothesis = [
-    {file = "hypothesis-5.18.0-py3-none-any.whl", hash = "sha256:57935a5a1272227b945de3b7d0cefdbbfec1c3d479d22e5f7361ac0d1717dc14"},
-    {file = "hypothesis-5.18.0.tar.gz", hash = "sha256:29e69777d460494ac987b0f60a9ace5a3142c7ba731e27f014caf5a0b93409da"},
+    {file = "hypothesis-5.18.1-py3-none-any.whl", hash = "sha256:242bfbcae78d4f6cee96670496fcf40d8b707cadf5988972d8f8e76288614b30"},
+    {file = "hypothesis-5.18.1.tar.gz", hash = "sha256:2f490f733f440be28a8898832559872a4a4830126d594a89a52967cfb70e0e56"},
 ]
 hypothesmith = [
     {file = "hypothesmith-0.1.2-py3-none-any.whl", hash = "sha256:2e82186cfb171295ea9825dd9e5308d5b8189221fe700ca33931a130b09ceee6"},
