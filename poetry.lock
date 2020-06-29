@@ -182,10 +182,11 @@ description = "Conditional coverage based on any rules you define!"
 name = "coverage-conditional-plugin"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "0.3.0"
+version = "0.3.1"
 
 [package.dependencies]
 coverage = ">=5.0,<6.0"
+packaging = ">=20.4,<21.0"
 
 [[package]]
 category = "main"
@@ -1627,8 +1628,8 @@ coverage = [
     {file = "coverage-5.1.tar.gz", hash = "sha256:f90bfc4ad18450c80b024036eaf91e4a246ae287701aaa88eaebebf150868052"},
 ]
 coverage-conditional-plugin = [
-    {file = "coverage-conditional-plugin-0.3.0.tar.gz", hash = "sha256:c1cae6da031be0c7024e650d1fd3d63f679b6e8a7286925e3dfb1b432190ad40"},
-    {file = "coverage_conditional_plugin-0.3.0-py3-none-any.whl", hash = "sha256:0109fc7ef935883a3a122fc60f6ff57bb8a56dedfe5d7f08695a3aeeb295cf34"},
+    {file = "coverage-conditional-plugin-0.3.1.tar.gz", hash = "sha256:06228416486fddbbf7ef4d30a8dcdea5cb7603446f00945581d8356398536a6c"},
+    {file = "coverage_conditional_plugin-0.3.1-py3-none-any.whl", hash = "sha256:59c229d992ba3f546b78a50d29ddd420f4c1ba6e18ec1c6fb2e8005188647530"},
 ]
 darglint = [
     {file = "darglint-1.4.1-py3-none-any.whl", hash = "sha256:929f4127f2e5e5b8150d19eb4ceef424ee1432f747daec6b6ab295649e28abb8"},
