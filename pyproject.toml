@@ -103,6 +103,6 @@ autopep8 = "^1.5"
 import-linter = "^1.0"
 
 ipdb = "^0.13"
-ipython = "^7.15"
+ipython = "^7.16"
 astboom = "^0.4"
 tokelor = "^0.1"
