@@ -15,6 +15,10 @@ Semantic versioning in our case means:
 
 - Forbids using too many variables in a tuple unpacking
 
+### Bugfixes
+
+- Fixes fails of annotation complexity on `Literal[""]`.
+
 
 ## 0.15.0 aka New runtime
 
