@@ -1733,7 +1733,7 @@ class ZeroDivisionViolation(ASTViolation):
         # Wrong:
         1 / 0
 
-    .. versionadded:: 0.15.0
+    .. versionadded:: 0.12.0
 
     """
 
@@ -2171,7 +2171,7 @@ class FloatZeroViolation(TokenizeViolation):
         # Wrong:
         var = 0.0
 
-    .. versionadded:: 0.14.0
+    .. versionadded:: 0.15.0
 
     """
 
