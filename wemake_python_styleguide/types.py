@@ -244,3 +244,7 @@ class ConfigurationOptions(Protocol):
     @property
     def max_import_from_members(self) -> int:
         ...
+
+    @property
+    def max_tuple_unpack_length(self) -> int:
+        ...
