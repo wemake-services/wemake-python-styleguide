@@ -579,11 +579,11 @@ description = "Enforces rules for the imports within and between Python packages
 name = "import-linter"
 optional = false
 python-versions = "*"
-version = "1.0"
+version = "1.1"
 
 [package.dependencies]
 click = ">=6,<8"
-grimp = ">=1,<2"
+grimp = ">=1.2,<2"
 
 [[package]]
 category = "main"
@@ -1528,7 +1528,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "41130f5bd725b034670c774b30600a183852f22a6e7e0c3d619ec2439f1d5201"
+content-hash = "725e0dff4e26ba04fce17e8a984d0d9e9132421aed1b60421aea2b11b6f28d6c"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -1753,7 +1753,7 @@ imagesize = [
     {file = "imagesize-1.2.0.tar.gz", hash = "sha256:b1f6b5a4eab1f73479a50fb79fcf729514a900c341d8503d62a62dbc4127a2b1"},
 ]
 import-linter = [
-    {file = "import-linter-1.0.tar.gz", hash = "sha256:4d22798893e6a8d515441f6b6598ca0caf9e413202ea56bb2415ac2c7eb259de"},
+    {file = "import-linter-1.1.tar.gz", hash = "sha256:185c2a98a5b9d0313c0a5396bac2385baee4a2bdc73d8d717712253b937b14f1"},
 ]
 importlib-metadata = [
     {file = "importlib_metadata-1.6.1-py2.py3-none-any.whl", hash = "sha256:15ec6c0fd909e893e3a08b3a7c76ecb149122fb14b7efe1199ddd4c7c57ea958"},
