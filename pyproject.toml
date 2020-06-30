@@ -57,7 +57,7 @@ wemake = "wemake_python_styleguide.formatter:WemakeFormatter"
 python = "^3.6"
 
 flake8 = "^3.7"
-attrs = "*"
+attrs = "^19.2"
 typing_extensions = "^3.6"
 astor = "^0.8"
 pygments = "^2.4"

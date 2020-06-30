@@ -3,7 +3,7 @@ import json
 import os
 from collections import defaultdict
 from typing import NamedTuple
-from typing import DefaultDict, Dict, Iterable, List, Mapping, Optional, Tuple
+from typing import Callable, DefaultDict, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 import attr
 from typing_extensions import Final, TypedDict, final
@@ -15,7 +15,7 @@ BASELINE_FILE: Final = '.flake8-baseline.json'
 BASELINE_FILE_VERSION: Final = '1'
 
 #: Content is: `error_code, line_number, column, text, physical_line`.
-CheckReport = Tuple[str, int, int, str, str]
+CheckReport = Tuple[str, int, int, str, Optional[str]]
 
 #: This is how we identify the violation.
 ViolationKey = Tuple[str, str]
@@ -34,7 +34,7 @@ _BaselineEntry = NamedTuple('_BaselineEntry', [
     ('line', int),
     ('column', int),
     ('message', str),
-    ('physical_line', str),
+    ('physical_line', Optional[str]),
 ])
 
 
@@ -49,8 +49,8 @@ class _BaselineFile(object):
     """
 
     metadata: _BaselineMetadata
-    paths: Mapping[str, List[_BaselineEntry]]
-    _db: Mapping[str, Mapping[str, List[_BaselineEntry]]] = attr.ib(
+    paths: Dict[str, List[CheckReport]]
+    _db: Dict[str, Dict[str, List[CheckReport]]] = attr.ib(
         init=False,
         hash=False,
         eq=False,
@@ -62,13 +62,13 @@ class _BaselineFile(object):
         object.__setattr__(self, '_db', {})
         for filename, violations in self.paths.items():
             grouped: DefaultDict[
-                str, _BaselineEntry,
+                str, List[CheckReport],
             ] = defaultdict(list)
             for one in violations:
                 grouped[one[0]].append(one)
             self._db.update({filename: grouped})
 
-    def handle_rename(self, filename: str, grouped: Mapping[str, CheckReport]) -> None:
+    def handle_rename(self, filename: str, grouped: Mapping[str, List[CheckReport]]) -> None:
         if filename in self._db:
             return
 
@@ -80,7 +80,7 @@ class _BaselineFile(object):
             [4],
         ]
 
-        def x(args):
+        def x(args: Iterable[int]) -> Callable[[Sequence[object], Sequence[object]], bool]:
             def factory(c, v):
                 return all(c[a] == v[a] for a in args)
             return factory
@@ -146,7 +146,7 @@ class _BaselineFile(object):
             [4],
         ]
 
-        def x(args):
+        def x(args: Iterable[int]) -> Callable[[Sequence[object], Sequence[object]], bool]:
             def factory(c, v):
                 return all(c[a] == v[a] for a in args)
             return factory
@@ -220,7 +220,7 @@ class _BaselineFile(object):
                 indent=2,
             )
 
-    def _update_paths_from_db(self):
+    def _update_paths_from_db(self) -> None:
         self.paths.clear()
         for filename, groups in self._db.items():
             self.paths[filename] = [v for v_list in groups.values() for v in v_list]
@@ -231,7 +231,7 @@ class _BaselineFile(object):
         saved_reports: SavedReports,
     ) -> '_BaselineFile':
         """Factory method to construct baselines from ``flake8`` reports."""
-        paths: DefaultDict[str, List[_BaselineEntry]] = defaultdict(list)
+        paths: DefaultDict[str, List[CheckReport]] = defaultdict(list)
         for filename, reports in saved_reports.items():
             filename = normalize_filename(filename)
             for report in reports:

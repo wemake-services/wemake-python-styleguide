@@ -43,7 +43,7 @@ ALLOWED_DOMAIN_NAMES: Final = ()
 FORBIDDEN_DOMAIN_NAMES: Final = ()
 
 #: Baseline mode trigger, turn it on to integrate this linter into legacy.
-BASELINE: Final = None
+BASELINE: Final[None] = None
 
 #: Trigger to create a new baseline.
 CREATE_BASELINE: Final = False

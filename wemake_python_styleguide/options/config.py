@@ -152,7 +152,7 @@ from typing_extensions import final
 
 from wemake_python_styleguide.options import defaults
 
-ConfigValuesTypes = Union[str, int, bool, Sequence[str]]
+ConfigValuesTypes = Union[str, int, bool, Sequence[str], None]
 
 
 @final
