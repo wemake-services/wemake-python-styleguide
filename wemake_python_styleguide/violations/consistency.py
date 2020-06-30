@@ -81,6 +81,7 @@ Summary
    BracketBlankLineViolation
    IterableUnpackingViolation
    LineCompriseCarriageReturnViolation
+   FloatZeroViolation
 
 Consistency checks
 ------------------
@@ -143,6 +144,7 @@ Consistency checks
 .. autoclass:: BracketBlankLineViolation
 .. autoclass:: IterableUnpackingViolation
 .. autoclass:: LineCompriseCarriageReturnViolation
+.. autoclass:: FloatZeroViolation
 
 """
 
@@ -1731,7 +1733,7 @@ class ZeroDivisionViolation(ASTViolation):
         # Wrong:
         1 / 0
 
-    .. versionadded:: 0.12.0
+    .. versionadded:: 0.15.0
 
     """
 
@@ -2145,3 +2147,33 @@ class LineCompriseCarriageReturnViolation(TokenizeViolation):
 
     error_template = r'Found a ``\r`` (carriage return) line break'
     code = 357
+
+
+@final
+class FloatZeroViolation(TokenizeViolation):
+    """
+    Forbids to use float zeros: ``0.0``.
+
+    Reasoning:
+        Float zeros can be used as variable values which may lead to
+        typing bugs when trying to perform an operation between
+        an int number and the float zero.
+
+    Solution:
+        Use int zeros (0). If a float is needed, it should be cast
+        explicitly.
+
+    Example::
+
+        # Correct:
+        var = 0
+
+        # Wrong:
+        var = 0.0
+
+    .. versionadded:: 0.14.0
+
+    """
+
+    code = 358
+    error_template = 'Found a float zero (0.0)'

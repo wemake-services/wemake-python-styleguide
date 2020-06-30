@@ -77,7 +77,6 @@ def test_meaningless_zeros_and_case(
 @pytest.mark.parametrize('number', [
     '1234567890',
 
-    '0.0',
     '20.05',
 
     '0x0',

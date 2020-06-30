@@ -71,6 +71,7 @@ some_int = 1  # type: int
 full_name = u'Nikita Sobolev'  # noqa: WPS302
 phone_number = 555_123_999  # noqa:  WPS303
 partial_number = .05  # noqa: WPS304
+float_zero = 0.0  # noqa: WPS358
 formatted_string = f'Hi, {full_name}'  # noqa: WPS305
 
 
@@ -575,7 +576,7 @@ positive_exponent = 1.1e+1  # noqa: WPS340
 wrong_hex = 0xabc  # noqa: WPS341
 wrong_escape_raw_string = '\\n'  # noqa: WPS342
 bad_complex = 1J  # noqa: WPS343
-zero_div = bad_complex / 0.0  # noqa: WPS344
+zero_div = bad_complex / 0  # noqa: WPS344
 mult_one = zero_div * 1  # noqa: WPS345
 mult_one -= -1  # noqa: WPS346
 

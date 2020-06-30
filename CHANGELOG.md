@@ -26,6 +26,7 @@ Semantic versioning in our case means:
 
 - Forbids to use single `return None`
 - Add `__await__` to the list of priority magic methods
+- Forbids to use float zeros (`0.0`)
 
 ### Bugfixes
 
