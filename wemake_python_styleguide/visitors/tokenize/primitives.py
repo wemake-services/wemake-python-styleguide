@@ -48,6 +48,10 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
 
     _bad_complex_suffix: ClassVar[str] = 'J'
 
+    _float_zero: ClassVar[Pattern] = re.compile(
+        r'^0\.0$',
+    )
+
     def visit_number(self, token: tokenize.TokenInfo) -> None:
         """
         Checks number declarations.
@@ -59,6 +63,7 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
             BadComplexNumberSuffixViolation
             NumberWithMeaninglessZeroViolation
             PositiveExponentViolation
+            FloatZeroViolation
 
         Regressions:
         https://github.com/wemake-services/wemake-python-styleguide/issues/557
@@ -68,6 +73,7 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
         self._check_underscored_number(token)
         self._check_partial_float(token)
         self._check_bad_number_suffixes(token)
+        self._check_float_zeros(token)
 
     def _check_complex_suffix(self, token: tokenize.TokenInfo) -> None:
         if self._bad_complex_suffix in token.string:
@@ -129,6 +135,12 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
                         text=token.string,
                     ),
                 )
+
+    def _check_float_zeros(self, token: tokenize.TokenInfo) -> None:
+        if self._float_zero.match(token.string):
+            self.add_violation(
+                consistency.FloatZeroViolation(token, text=token.string),
+            )
 
 
 @final

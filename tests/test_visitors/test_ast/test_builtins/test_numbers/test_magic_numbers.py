@@ -90,7 +90,7 @@ some_dict[{0}]
     -10,
     -3.5,
     0,
-    0.0,
+    float(0),
     0.1,
     0.5,
     -1.0,
@@ -136,7 +136,7 @@ def test_magic_number(
 @pytest.mark.parametrize('number', [
     *MAGIC_NUMBERS_WHITELIST,
     -0,
-    0.0,
+    float(0),
     1,
     5,
     10,
