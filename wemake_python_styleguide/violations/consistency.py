@@ -2166,10 +2166,10 @@ class FloatZeroViolation(TokenizeViolation):
     Example::
 
         # Correct:
-        var = 0
+        zero = 0
 
         # Wrong:
-        var = 0.0
+        zero = 0.0
 
     .. versionadded:: 0.15.0
 

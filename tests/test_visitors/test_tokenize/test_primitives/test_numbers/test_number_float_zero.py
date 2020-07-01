@@ -14,8 +14,7 @@ def test_float_zero(
     mode,
 ):
     """Ensures that float zeros (0.0) raise a warning."""
-    primitive = 0.0  # noqa: WPS358
-    file_tokens = parse_tokens(mode(primitives_usages.format(primitive)))
+    file_tokens = parse_tokens(mode(primitives_usages.format('0.0')))
 
     visitor = WrongNumberTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
