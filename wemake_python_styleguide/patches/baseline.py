@@ -36,7 +36,7 @@ def _patch_report(manager: Type[Manager]) -> None:
 
             formatter = self.style_guide.formatter
             formatter.write(
-                '{0}Created new baseline with {1} violation(s) at:{0}{2}'.format(
+                '{0}Created new baseline with {1} violations at:{0}{2}'.format(
                     formatter.newline,
                     self._wps_baseline.error_count(),
                     baseline.baseline_fullpath(self.options.baseline),
@@ -95,7 +95,7 @@ def _patch_handle_results(  # noqa: WPS210, WPS231
     manager._handle_results = _handle_results  # noqa: WPS437
 
 
-def _patch_start(manager: Type[Manager]) -> None:
+def _patch_start(manager: Type[Manager]) -> None:  # noqa: C901,WPS231
     original_start = manager.start
 
     def start(self, paths=None) -> None:  # noqa: WPS430
@@ -103,8 +103,11 @@ def _patch_start(manager: Type[Manager]) -> None:
         self._wps_baseline = None
         if self.options.create_baseline:
             if paths is not None or self.arguments:
-                response = input("This will create a new baseline for only the given files. Continue? (y/n) ")
-                if not response.lower().startswith("y"):
+                response = input(  # noqa: WPS421
+                    'This will create a new baseline for only the given files.'
+                    + ' Continue? (y/n) '
+                )
+                if not response.lower().startswith('y'):  # noqa: WPS513
                     sys.exit(-2)
         else:
             if not self.options.baseline:
@@ -112,7 +115,10 @@ def _patch_start(manager: Type[Manager]) -> None:
             self._wps_baseline = baseline.load_from_file(self.options.baseline)
 
         if self._wps_baseline is None and not self.options.create_baseline:
-            print("ERROR: No baseline file found (you can create one with --create-baseline).")
+            print(  # noqa: WPS421
+                'ERROR: No baseline file found '
+                + '(you can create one with --create-baseline).'
+            )
             sys.exit(-2)
         # --- patch end
 
@@ -121,8 +127,8 @@ def _patch_start(manager: Type[Manager]) -> None:
     manager.start = start
 
 
-def _patch_handle_error(style_guide: Type[StyleGuide]) -> None:
-    def handle_error(
+def _patch_handle_error(style_guide: Type[StyleGuide]) -> None:  # noqa: WPS210
+    def handle_error(  # noqa: WPS210,WPS211,WPS430
         self,
         code,
         filename,
@@ -147,10 +153,10 @@ def _patch_handle_error(style_guide: Type[StyleGuide]) -> None:
         )
         is_not_inline_ignored = error.is_inline_ignored(disable_noqa) is False
         is_included_in_diff = error.is_in(self._parsed_diff)
-        if (
+        if (  #noqa: WPS337
             error_is_selected
-            and is_not_inline_ignored
-            and is_included_in_diff
+            and is_not_inline_ignored  # noqa: WPS503
+            and is_included_in_diff  # noqa: WPS503
         ):
             # --- patch start
             # Suppress output when creating baseline, we only want a summary.

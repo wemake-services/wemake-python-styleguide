@@ -2,11 +2,13 @@ import datetime as dt
 import json
 import os
 from collections import defaultdict
-from typing import NamedTuple
-from typing import Callable, DefaultDict, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
+from typing import (  # noqa: WPS235
+    Callable, DefaultDict, Dict, Iterable, List, Mapping, NamedTuple,
+    Optional, Sequence, Tuple
+)
 
 import attr
-from typing_extensions import Final, TypedDict, final
+from typing_extensions import Final, final
 
 #: That's a constant filename where we store our baselines.
 BASELINE_FILE: Final = '.flake8-baseline.json'
@@ -40,7 +42,7 @@ _BaselineEntry = NamedTuple('_BaselineEntry', [
 
 @final
 @attr.dataclass(slots=True, frozen=True)
-class _BaselineFile(object):
+class _BaselineFile(object):  # noqa: WPS214
     """
     Baseline file representation.
 
@@ -50,7 +52,7 @@ class _BaselineFile(object):
 
     metadata: _BaselineMetadata
     paths: Dict[str, List[CheckReport]]
-    _db: Dict[str, Dict[str, List[CheckReport]]] = attr.ib(
+    _db: Dict[str, SavedReports] = attr.ib(
         init=False,
         hash=False,
         eq=False,
@@ -59,7 +61,7 @@ class _BaselineFile(object):
 
     def __attrs_post_init__(self) -> None:
         """Builds a mutable database of known violations."""
-        object.__setattr__(self, '_db', {})
+        object.__setattr__(self, '_db', {})  # noqa: WPS609
         for filename, violations in self.paths.items():
             grouped: DefaultDict[
                 str, List[CheckReport],
@@ -68,42 +70,37 @@ class _BaselineFile(object):
                 grouped[one[0]].append(one)
             self._db.update({filename: grouped})
 
-    def handle_rename(self, filename: str, grouped: Mapping[str, List[CheckReport]]) -> None:
+    def handle_rename(  # noqa: C901,WPS210,WPS231
+        self,
+        filename: str,
+        grouped: Mapping[str, List[CheckReport]]
+    ) -> None:
+        """Update DB if file is renamed."""
         if filename in self._db:
             return
 
-        matchers = [
-            [1, 2, 4],
-            [1, 4],
-            [2, 4],
-            [1, 2],
-            [4],
-        ]
-
-        def x(args: Iterable[int]) -> Callable[[Sequence[object], Sequence[object]], bool]:
-            def factory(c, v):
-                return all(c[a] == v[a] for a in args)
-            return factory
-
-        rename_candidates = [f for f in self._db if not os.path.exists(f)]
-        for f in rename_candidates:
+        rename_candidates = [fl for fl in self._db if not os.path.exists(fl)]
+        for file_path in rename_candidates:
             matched_violations = 0
+            old_violations = 0
             for violation_key, violations in grouped.items():
-                candidates = self._db[f][violation_key]
+                candidates = self._db[file_path][violation_key]
                 candidates = candidates[:]
+                old_violations += len(candidates)
 
-                for matcher in matchers:
+                for matcher in self._matchers():
                     for violation in violations:
-                        b = self._try_match(candidates, violation, x(matcher))
-                        if b:
-                            matched_violations += 1
+                        bl = self._try_match(  # noqa: WPS220
+                            candidates, violation, matcher  # noqa: WPS220
+                        )  # noqa: WPS220
+                        if bl:  # noqa: WPS220
+                            matched_violations += 1  # noqa: WPS220
 
-            old_count = sum(len(l) for l in self._db[f].values())
-            if matched_violations >= old_count * .5:
-                self._db[filename] = self._db.pop(f)
+            if matched_violations >= old_violations / 2:
+                self._db[filename] = self._db.pop(file_path)
                 return
 
-    def filter_group(
+    def filter_group(  # noqa: C901,WPS210,WPS231
         self,
         filename: str,
         violation_key: str,
@@ -128,35 +125,13 @@ class _BaselineFile(object):
             return violations  # we just return all reported violations
         candidates = candidates[:]
 
-        # algorithm:
-        # 1. find exact matches, remove them from being reported
-        # 2. delete exact matches from the db
-        # 3. start fuzzy match by `physical_line` and `line`
-        # 4. delete fuzzy matches from the db
-        # 5. start fuzzy match by `column` and `line`
-        # 6. delete fuzzy matches from the db
-        # 7. start fuzzy matches by `physical_line`
-        # 8. delete fuzzy matches from the db
-
-        matchers = [
-            [1, 2, 4],
-            [1, 4],
-            [2, 4],
-            [1, 2],
-            [4],
-        ]
-
-        def x(args: Iterable[int]) -> Callable[[Sequence[object], Sequence[object]], bool]:
-            def factory(c, v):
-                return all(c[a] == v[a] for a in args)
-            return factory
-
-        for matcher in matchers:
+        for matcher in self._matchers():
             ignored_violations = []
             for violation in violations:
-                code = violation[-1] if violation[-1] is None else violation[-1].strip()
+                code = violation[-1]
+                code = code if code is None else code.strip()
                 violation_stripped = (*violation[:-1], code)
-                b = self._try_match(candidates, violation_stripped, x(matcher))
+                b = self._try_match(candidates, violation_stripped, matcher)
                 if b:
                     ignored_violations.append(violation)
                     # Update our baseline, to keep in sync with codebase.
@@ -166,35 +141,27 @@ class _BaselineFile(object):
                 violations.remove(ignored_violation)
 
         # Unused candidates should be removed.
-        for c in candidates:
-            db_file[violation_key].remove(c)
+        for candidate in candidates:
+            db_file[violation_key].remove(candidate)
         # Completely remove the key if no violations left.
         if not db_file[violation_key]:
             db_file.pop(violation_key)
 
         return violations
 
-    def _try_match(self, candidates, violation, matcher) -> Optional[_BaselineEntry]:
-        used_candidate = None
-        for candidate in candidates:
-            if matcher(candidate, violation):
-                used_candidate = candidate
-                break
-
-        if used_candidate is not None:
-            candidates.remove(used_candidate)
-            return used_candidate
-        return None
-
-    def remove_unused_keys(self, filename: str, used_keys: Iterable[str]) -> None:
+    def remove_unused_keys(
+        self,
+        filename: str,
+        used_keys: Iterable[str]
+    ) -> None:
         """Remove unused keys for filename from the baseline."""
         db_file = self._db.get(filename)
         if db_file is None:
             return
 
         unused_keys = db_file.keys() - used_keys
-        for k in unused_keys:
-            db_file.pop(k)
+        for key in unused_keys:
+            db_file.pop(key)
         # Completely remove file if no violations left.
         if not db_file:
             self._db.pop(filename)
@@ -220,13 +187,8 @@ class _BaselineFile(object):
                 indent=2,
             )
 
-    def _update_paths_from_db(self) -> None:
-        self.paths.clear()
-        for filename, groups in self._db.items():
-            self.paths[filename] = [v for v_list in groups.values() for v in v_list]
-
     @classmethod
-    def from_report(
+    def from_report(  # noqa: WPS210
         cls,
         saved_reports: SavedReports,
     ) -> '_BaselineFile':
@@ -235,7 +197,8 @@ class _BaselineFile(object):
         for filename, reports in saved_reports.items():
             filename = normalize_filename(filename)
             for report in reports:
-                code = report[-1] if report[-1] is None else report[-1].strip()
+                code = report[-1]
+                code = code if code is None else code.strip()
                 report = (*report[:-1], code)
                 paths[filename].append(report)
 
@@ -245,8 +208,61 @@ class _BaselineFile(object):
             paths,
         )
 
+    def _matchers(self):
+        # algorithm:
+        # 1. find exact matches, remove them from being reported
+        # 2. delete exact matches from the db
+        # 3. start fuzzy match by `physical_line` and `line`
+        # 4. delete fuzzy matches from the db
+        # 5. start fuzzy match by `physical_line` and `column`
+        # 6. delete fuzzy matches from the db
+        # 7. start fuzzy match by `column` and `line`
+        # 8. delete fuzzy matches from the db
+        # 9. start fuzzy matches by `physical_line`
+        # 10. delete fuzzy matches from the db
 
-def filter_out_saved_in_baseline(
+        matchers = [
+            [1, 2, 4],
+            [1, 4],
+            [2, 4],
+            [1, 2],
+            [4],
+        ]
+
+        def x(  # noqa: WPS111,WPS221,WPS430
+            args: Iterable[int]
+        ) -> Callable[[Sequence[object], Sequence[object]], bool]:
+            def factory(c, v):  # noqa: WPS111
+                return all(c[a] == v[a] for a in args)  # noqa: WPS111
+            return factory
+
+        return (x(matcher) for x in matchers)
+
+    def _try_match(
+        self,
+        candidates,
+        violation,
+        matcher
+    ) -> Optional[_BaselineEntry]:
+        used_candidate = None
+        for candidate in candidates:
+            if matcher(candidate, violation):
+                used_candidate = candidate
+                break
+
+        if used_candidate is not None:
+            candidates.remove(used_candidate)
+            return used_candidate
+        return None
+
+    def _update_paths_from_db(self) -> None:
+        self.paths.clear()
+        for filename, groups in self._db.items():
+            paths = [cand for c_list in groups.values() for cand in c_list]
+            self.paths[filename] = paths
+
+
+def filter_out_saved_in_baseline(  # noqa: WPS210
     baseline: Optional[_BaselineFile],
     reported: Iterable[CheckReport],
     filename: str,

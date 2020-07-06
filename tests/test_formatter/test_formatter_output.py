@@ -103,7 +103,12 @@ def test_formatter(snapshot, cli_options, output):
 @pytest.mark.parametrize(('cli_options', 'output'), [
     (['--baseline'], 'baseline'),
 ])
-def test_formatter_baseline(snapshot, cli_options, output, clean_baseline):
+def test_formatter_baseline(
+    snapshot,
+    cli_options,
+    output,
+    clean_baseline  # noqa: WPS442
+):
     """End-to-End test to ensure that baseline formatting works well."""
     filename1 = './formatter1.py'
     filename2 = './formatter2.py'

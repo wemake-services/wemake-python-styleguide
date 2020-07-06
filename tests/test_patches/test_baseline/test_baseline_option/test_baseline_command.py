@@ -15,10 +15,10 @@ We also have the second file around with just one ``WPS304`` inside.
 All violations in this example are covered by the baseline.
 """
 
+import json
 import os
 import subprocess
-import json
-from typing import Optional, Dict
+from typing import Dict, Optional
 
 import pytest
 
@@ -123,12 +123,7 @@ def _safe_baseline(baseline_text: str) -> str:
     return json.dumps(baseline_dict, indent=2, sort_keys=True)
 
 
-def test_without_baseline(make_file, read_file):
-    """End-to-End test for no baseline yet, initial mode."""
-    filename = make_file(filename_wrong, wrong_template.format(''))
-    make_file(filename_other, wrong_other)
-    cwd = os.path.dirname(filename)
-
+def _run_flake8(filename, *paths):
     process = subprocess.Popen(
         [
             'flake8',
@@ -136,21 +131,29 @@ def test_without_baseline(make_file, read_file):
             '--baseline',
             '--select',
             'WPS,E',
-            filename_wrong,
-            filename_other,
+            *paths,
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         universal_newlines=True,
         encoding='utf8',
-        cwd=cwd,
+        cwd=os.path.dirname(filename),
     )
     output, _ = process.communicate()
+    return output
+
+
+def test_without_baseline(make_file, read_file):
+    """End-to-End test for no baseline yet, initial mode."""
+    filename = make_file(filename_wrong, wrong_template.format(''))
+    make_file(filename_other, wrong_other)
+
+    output = _run_flake8(filename, filename_wrong, filename_other)
 
     _assert_output(output, {'WPS110': 2, 'WPS303': 1, 'WPS304': 1, 'E225': 2})
     assert process.returncode == 1
     assert _safe_baseline(
-        read_file(os.path.join(cwd, BASELINE_FILE)),
+        read_file(os.path.join(os.path.dirname(filename), BASELINE_FILE)),
     ) == baseline
 
 
@@ -166,22 +169,7 @@ def test_with_baseline(make_file, read_file, files_to_check):
     make_file(filename_other, wrong_other)
     baseline_path = make_file(BASELINE_FILE, baseline)
 
-    process = subprocess.Popen(
-        [
-            'flake8',
-            '--isolated',
-            '--baseline',
-            '--select',
-            'WPS,E',
-            *files_to_check,
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
-        encoding='utf8',
-        cwd=os.path.dirname(filename),
-    )
-    output, _ = process.communicate()
+    output = _run_flake8(filename, *files_to_check)
 
     assert output == ''
     assert process.returncode == 0
@@ -193,22 +181,7 @@ def test_with_baseline_empty(make_file, read_file):
     filename = make_file(filename_wrong, '_SOME_CONSTANT = 1')
     baseline_path = make_file(BASELINE_FILE, baseline)
 
-    process = subprocess.Popen(
-        [
-            'flake8',
-            '--isolated',
-            '--baseline',
-            '--select',
-            'WPS,E',
-            filename_wrong,
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
-        encoding='utf8',
-        cwd=os.path.dirname(filename),
-    )
-    output, _ = process.communicate()
+    output = _run_flake8(filename, filename_wrong)
 
     assert output == ''
     assert process.returncode == 0
@@ -220,22 +193,7 @@ def test_with_baseline_new_violations(make_file, read_file):
     filename = make_file(filename_wrong, wrong_template.format('x = 1'))
     baseline_path = make_file(BASELINE_FILE, baseline)
 
-    process = subprocess.Popen(
-        [
-            'flake8',
-            '--isolated',
-            '--baseline',
-            '--select',
-            'WPS,E',
-            filename_wrong,
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
-        encoding='utf8',
-        cwd=os.path.dirname(filename),
-    )
-    output, _ = process.communicate()
+    output = _run_flake8(filename, filename_wrong)
 
     _assert_output(output, {'WPS111': 1})
     assert process.returncode == 1
@@ -248,23 +206,7 @@ def test_with_baseline_new_correct_files(make_file, read_file):
     make_file('correct.py', 'SOME_CONSTANT = 1')
     baseline_path = make_file(BASELINE_FILE, baseline)
 
-    process = subprocess.Popen(
-        [
-            'flake8',
-            '--isolated',
-            '--baseline',
-            '--select',
-            'WPS,E',
-            filename_wrong,
-            'correct.py',
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
-        encoding='utf8',
-        cwd=os.path.dirname(filename),
-    )
-    output, _ = process.communicate()
+    output = _run_flake8(filename, filename_wrong, 'correct.py')
 
     assert output == ''
     assert process.returncode == 0
@@ -277,23 +219,7 @@ def test_with_baseline_new_wrong_files(make_file, read_file):
     new_wrong = make_file('new_wrong.py', 'undescored_number = 10_0')
     baseline_path = make_file(BASELINE_FILE, baseline)
 
-    process = subprocess.Popen(
-        [
-            'flake8',
-            '--isolated',
-            '--baseline',
-            '--select',
-            'WPS,E',
-            filename_wrong,
-            new_wrong,
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
-        encoding='utf8',
-        cwd=os.path.dirname(filename),
-    )
-    output, _ = process.communicate()
+    output = _run_flake8(filename, filename_wrong, new_wrong)
 
     _assert_output(output, {'WPS303': 1})
     assert process.returncode == 1
@@ -308,22 +234,7 @@ def test_with_prepend_errors(make_file, read_file):
     ))
     baseline_path = make_file(BASELINE_FILE, baseline)
 
-    process = subprocess.Popen(
-        [
-            'flake8',
-            '--isolated',
-            '--baseline',
-            '--select',
-            'WPS,E',
-            filename_wrong,
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
-        encoding='utf8',
-        cwd=os.path.dirname(filename),
-    )
-    output, _ = process.communicate()
+    output = _run_flake8(filename, filename_wrong)
 
     _assert_output(output, {'WPS303': 1})
     assert process.returncode == 1
@@ -339,24 +250,8 @@ def test_with_prepend_and_postpend_errors(make_file, read_file):
     ))
     baseline_path = make_file(BASELINE_FILE, baseline)
 
-    process = subprocess.Popen(
-        [
-            'flake8',
-            '--isolated',
-            '--baseline',
-            '--select',
-            'WPS,E',
-            filename_wrong,
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
-        encoding='utf8',
-        cwd=os.path.dirname(filename),
-    )
-    output, _ = process.communicate()
+    output = _run_flake8(filename, filename_wrong)
 
-    print(output)
     _assert_output(output, {'WPS303': 2}, {1: 1, 7: 1})
     assert process.returncode == 1
     assert _safe_baseline(read_file(baseline_path)) == baseline
