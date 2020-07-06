@@ -2,6 +2,7 @@ from wemake_python_styleguide.options.config import Configuration
 
 _IGNORED_OPTIONS = frozenset((
     '--baseline',
+    '--create-baseline',
 ))
 
 

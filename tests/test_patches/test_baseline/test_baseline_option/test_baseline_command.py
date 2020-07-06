@@ -123,16 +123,13 @@ def _safe_baseline(baseline_text: str) -> str:
     return json.dumps(baseline_dict, indent=2, sort_keys=True)
 
 
-def _run_flake8(filename, *paths):
+def _run_flake8(filename, *paths, baseline=True):
+    cmd = ['flake8', '--isolated', '--select', 'WPS,E', *paths]
+    if baseline:
+        cmd.append('--baseline')
+
     process = subprocess.Popen(
-        [
-            'flake8',
-            '--isolated',
-            '--baseline',
-            '--select',
-            'WPS,E',
-            *paths,
-        ],
+        cmd,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         universal_newlines=True,
@@ -149,7 +146,7 @@ def test_without_baseline(make_file, read_file):
     make_file(filename_other, wrong_other)
 
     output, returncode = _run_flake8(  # noqa: WPS204
-        filename, filename_wrong, filename_other,
+        filename, filename_wrong, filename_other, baseline=False,
     )
 
     _assert_output(output, {'WPS110': 2, 'WPS303': 1, 'WPS304': 1, 'E225': 2})
