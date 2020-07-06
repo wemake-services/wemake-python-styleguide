@@ -123,13 +123,17 @@ def _safe_baseline(baseline_text: str) -> str:
     return json.dumps(baseline_dict, indent=2, sort_keys=True)
 
 
-def _run_flake8(filename, *paths, baseline=True):
-    cmd = ['flake8', '--isolated', '--select', 'WPS,E', *paths]
-    if baseline:
-        cmd.append('--baseline')
-
+def _run_flake8(filename, *flake8_args):
     process = subprocess.Popen(
-        cmd,
+        [
+            'flake8',
+            '--isolated',
+            '--baseline',
+            '.flake8-baseline.json',
+            '--select',
+            'WPS,E',
+            *flake8_args
+        ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         universal_newlines=True,
@@ -140,17 +144,17 @@ def _run_flake8(filename, *paths, baseline=True):
     return output, process.returncode
 
 
-def test_without_baseline(make_file, read_file):
+def test_create_baseline(make_file, read_file):
     """End-to-End test for no baseline yet, initial mode."""
     filename = make_file(filename_wrong, wrong_template.format(''))
     make_file(filename_other, wrong_other)
 
     output, returncode = _run_flake8(  # noqa: WPS204
-        filename, filename_wrong, filename_other, baseline=False,
+        filename, '--create-baseline', filename_wrong, filename_other,
     )
 
-    _assert_output(output, {'WPS110': 2, 'WPS303': 1, 'WPS304': 1, 'E225': 2})
-    assert returncode == 1
+    assert output == ''
+    assert returncode == 0
     assert _safe_baseline(
         read_file(os.path.join(os.path.dirname(filename), BASELINE_FILE)),
     ) == baseline
