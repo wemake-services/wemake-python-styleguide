@@ -155,8 +155,8 @@ def _patch_handle_error(style_guide: Type[StyleGuide]) -> None:  # noqa: WPS210
         is_included_in_diff = error.is_in(self._parsed_diff)
         if (  # noqa: WPS337
             error_is_selected
-            and is_not_inline_ignored  # noqa: WPS503
-            and is_included_in_diff  # noqa: WPS503
+            and is_not_inline_ignored  # noqa: W503
+            and is_included_in_diff  # noqa: W503
         ):
             # --- patch start
             # Suppress output when creating baseline, we only want a summary.
