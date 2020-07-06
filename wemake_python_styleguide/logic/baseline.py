@@ -52,7 +52,7 @@ _BaselineEntry = NamedTuple('_BaselineEntry', [
 
 @final  # noqa: WPS214
 @attr.dataclass(slots=True, frozen=True)
-class _BaselineFile(object):
+class _BaselineFile(object):  # noqa: WPS214
     """
     Baseline file representation.
 
@@ -198,7 +198,7 @@ class _BaselineFile(object):
             )
 
     @classmethod  # noqa: WPS210
-    def from_report(
+    def from_report(  # noqa: WPS210
         cls,
         saved_reports: SavedReports,
     ) -> '_BaselineFile':
