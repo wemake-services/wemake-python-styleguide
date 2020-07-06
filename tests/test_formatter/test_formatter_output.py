@@ -107,7 +107,7 @@ def test_formatter_baseline(
     snapshot,
     cli_options,
     output,
-    clean_baseline  # noqa: WPS442
+    clean_baseline,  # noqa: WPS442
 ):
     """End-to-End test to ensure that baseline formatting works well."""
     filename1 = './formatter1.py'

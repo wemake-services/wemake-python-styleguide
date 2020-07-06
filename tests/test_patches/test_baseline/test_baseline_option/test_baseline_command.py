@@ -140,7 +140,7 @@ def _run_flake8(filename, *paths):
         cwd=os.path.dirname(filename),
     )
     output, _ = process.communicate()
-    return output
+    return output, process.returncode
 
 
 def test_without_baseline(make_file, read_file):
@@ -148,10 +148,10 @@ def test_without_baseline(make_file, read_file):
     filename = make_file(filename_wrong, wrong_template.format(''))
     make_file(filename_other, wrong_other)
 
-    output = _run_flake8(filename, filename_wrong, filename_other)
+    output, returncode = _run_flake8(filename, filename_wrong, filename_other)
 
     _assert_output(output, {'WPS110': 2, 'WPS303': 1, 'WPS304': 1, 'E225': 2})
-    assert process.returncode == 1
+    assert returncode == 1
     assert _safe_baseline(
         read_file(os.path.join(os.path.dirname(filename), BASELINE_FILE)),
     ) == baseline
@@ -169,10 +169,10 @@ def test_with_baseline(make_file, read_file, files_to_check):
     make_file(filename_other, wrong_other)
     baseline_path = make_file(BASELINE_FILE, baseline)
 
-    output = _run_flake8(filename, *files_to_check)
+    output, returncode = _run_flake8(filename, *files_to_check)
 
     assert output == ''
-    assert process.returncode == 0
+    assert returncode == 0
     assert _safe_baseline(read_file(baseline_path)) == baseline
 
 
@@ -181,10 +181,10 @@ def test_with_baseline_empty(make_file, read_file):
     filename = make_file(filename_wrong, '_SOME_CONSTANT = 1')
     baseline_path = make_file(BASELINE_FILE, baseline)
 
-    output = _run_flake8(filename, filename_wrong)
+    output, returncode = _run_flake8(filename, filename_wrong)
 
     assert output == ''
-    assert process.returncode == 0
+    assert returncode == 0
     assert _safe_baseline(read_file(baseline_path)) == baseline
 
 
@@ -193,10 +193,10 @@ def test_with_baseline_new_violations(make_file, read_file):
     filename = make_file(filename_wrong, wrong_template.format('x = 1'))
     baseline_path = make_file(BASELINE_FILE, baseline)
 
-    output = _run_flake8(filename, filename_wrong)
+    output, returncode = _run_flake8(filename, filename_wrong)
 
     _assert_output(output, {'WPS111': 1})
-    assert process.returncode == 1
+    assert returncode == 1
     assert _safe_baseline(read_file(baseline_path)) == baseline
 
 
@@ -206,10 +206,10 @@ def test_with_baseline_new_correct_files(make_file, read_file):
     make_file('correct.py', 'SOME_CONSTANT = 1')
     baseline_path = make_file(BASELINE_FILE, baseline)
 
-    output = _run_flake8(filename, filename_wrong, 'correct.py')
+    output, returncode = _run_flake8(filename, filename_wrong, 'correct.py')
 
     assert output == ''
-    assert process.returncode == 0
+    assert returncode == 0
     assert _safe_baseline(read_file(baseline_path)) == baseline
 
 
@@ -219,10 +219,10 @@ def test_with_baseline_new_wrong_files(make_file, read_file):
     new_wrong = make_file('new_wrong.py', 'undescored_number = 10_0')
     baseline_path = make_file(BASELINE_FILE, baseline)
 
-    output = _run_flake8(filename, filename_wrong, new_wrong)
+    output, returncode = _run_flake8(filename, filename_wrong, new_wrong)
 
     _assert_output(output, {'WPS303': 1})
-    assert process.returncode == 1
+    assert returncode == 1
     assert _safe_baseline(read_file(baseline_path)) == baseline
 
 
@@ -234,10 +234,10 @@ def test_with_prepend_errors(make_file, read_file):
     ))
     baseline_path = make_file(BASELINE_FILE, baseline)
 
-    output = _run_flake8(filename, filename_wrong)
+    output, returncode = _run_flake8(filename, filename_wrong)
 
     _assert_output(output, {'WPS303': 1})
-    assert process.returncode == 1
+    assert returncode == 1
     assert _safe_baseline(read_file(baseline_path)) == baseline
 
 
@@ -250,8 +250,8 @@ def test_with_prepend_and_postpend_errors(make_file, read_file):
     ))
     baseline_path = make_file(BASELINE_FILE, baseline)
 
-    output = _run_flake8(filename, filename_wrong)
+    output, returncode = _run_flake8(filename, filename_wrong)
 
     _assert_output(output, {'WPS303': 2}, {1: 1, 7: 1})
-    assert process.returncode == 1
+    assert returncode == 1
     assert _safe_baseline(read_file(baseline_path)) == baseline

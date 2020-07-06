@@ -104,20 +104,20 @@ def _patch_start(manager: Type[Manager]) -> None:  # noqa: C901,WPS231
         if self.options.create_baseline:
             if paths is not None or self.arguments:
                 response = input(  # noqa: WPS421
-                    'This will create a new baseline for only the given files.'
-                    + ' Continue? (y/n) '
+                    'This will create a new baseline for only the ' +
+                    'given files. Continue? (y/n) ',
                 )
                 if not response.lower().startswith('y'):  # noqa: WPS513
                     sys.exit(-2)
         else:
-            if not self.options.baseline:
+            if not self.options.baseline:  # noqa: WPS513
                 self.options.baseline = baseline.BASELINE_FILE
             self._wps_baseline = baseline.load_from_file(self.options.baseline)
 
         if self._wps_baseline is None and not self.options.create_baseline:
             print(  # noqa: WPS421
-                'ERROR: No baseline file found '
-                + '(you can create one with --create-baseline).'
+                'ERROR: No baseline file found ' +
+                '(you can create one with --create-baseline).',
             )
             sys.exit(-2)
         # --- patch end
@@ -153,7 +153,7 @@ def _patch_handle_error(style_guide: Type[StyleGuide]) -> None:  # noqa: WPS210
         )
         is_not_inline_ignored = error.is_inline_ignored(disable_noqa) is False
         is_included_in_diff = error.is_in(self._parsed_diff)
-        if (  #noqa: WPS337
+        if (  # noqa: WPS337
             error_is_selected
             and is_not_inline_ignored  # noqa: WPS503
             and is_included_in_diff  # noqa: WPS503

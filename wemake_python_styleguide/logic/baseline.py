@@ -3,8 +3,16 @@ import json
 import os
 from collections import defaultdict
 from typing import (  # noqa: WPS235
-    Callable, DefaultDict, Dict, Iterable, List, Mapping, NamedTuple,
-    Optional, Sequence, Tuple
+    Callable,
+    DefaultDict,
+    Dict,
+    Iterable,
+    List,
+    Mapping,
+    NamedTuple,
+    Optional,
+    Sequence,
+    Tuple,
 )
 
 import attr
@@ -42,9 +50,9 @@ _BaselineEntry = NamedTuple('_BaselineEntry', [
 ])
 
 
-@final
+@final  # noqa: WPS214
 @attr.dataclass(slots=True, frozen=True)
-class _BaselineFile(object):  # noqa: WPS214
+class _BaselineFile(object):
     """
     Baseline file representation.
 
@@ -75,7 +83,7 @@ class _BaselineFile(object):  # noqa: WPS214
     def handle_rename(  # noqa: C901,WPS210,WPS231
         self,
         filename: str,
-        grouped: Mapping[str, List[CheckReport]]
+        grouped: Mapping[str, List[CheckReport]],
     ) -> None:
         """Update DB if file is renamed."""
         if filename in self._db:
@@ -93,7 +101,7 @@ class _BaselineFile(object):  # noqa: WPS214
                 for matcher in self._matchers():
                     for violation in violations:
                         bl = self._try_match(  # noqa: WPS220
-                            candidates, violation, matcher  # noqa: WPS220
+                            candidates, violation, matcher,  # noqa: WPS220
                         )  # noqa: WPS220
                         if bl:  # noqa: WPS220
                             matched_violations += 1  # noqa: WPS220
@@ -133,11 +141,11 @@ class _BaselineFile(object):  # noqa: WPS214
                 code = violation[-1]
                 code = code if code is None else code.strip()
                 violation_stripped = (*violation[:-1], code)
-                b = self._try_match(candidates, violation_stripped, matcher)
-                if b:
+                base = self._try_match(candidates, violation_stripped, matcher)
+                if base:
                     ignored_violations.append(violation)
                     # Update our baseline, to keep in sync with codebase.
-                    db_file[violation_key].remove(b)
+                    db_file[violation_key].remove(base)
                     db_file[violation_key].append(violation_stripped)
             for ignored_violation in ignored_violations:
                 violations.remove(ignored_violation)
@@ -154,7 +162,7 @@ class _BaselineFile(object):  # noqa: WPS214
     def remove_unused_keys(
         self,
         filename: str,
-        used_keys: Iterable[str]
+        used_keys: Iterable[str],
     ) -> None:
         """Remove unused keys for filename from the baseline."""
         db_file = self._db.get(filename)
@@ -189,8 +197,8 @@ class _BaselineFile(object):  # noqa: WPS214
                 indent=2,
             )
 
-    @classmethod
-    def from_report(  # noqa: WPS210
+    @classmethod  # noqa: WPS210
+    def from_report(
         cls,
         saved_reports: SavedReports,
     ) -> '_BaselineFile':
@@ -232,7 +240,7 @@ class _BaselineFile(object):  # noqa: WPS214
         ]
 
         def x(  # noqa: WPS111,WPS221,WPS430
-            args: Iterable[int]
+            args: Iterable[int],
         ) -> BaselineMatcher:
             def factory(c, v):  # noqa: WPS111
                 return all(c[a] == v[a] for a in args)  # noqa: WPS111
@@ -244,7 +252,7 @@ class _BaselineFile(object):  # noqa: WPS214
         self,
         candidates,
         violation,
-        matcher
+        matcher,
     ) -> Optional[_BaselineEntry]:
         used_candidate = None
         for candidate in candidates:
