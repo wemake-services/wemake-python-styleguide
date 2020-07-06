@@ -16,6 +16,8 @@ BASELINE_FILE: Final = '.flake8-baseline.json'
 #: We version baseline files independenly. Because we can break things.
 BASELINE_FILE_VERSION: Final = '1'
 
+BaselineMatcher = Callable[[Sequence[object], Sequence[object]], bool]
+
 #: Content is: `error_code, line_number, column, text, physical_line`.
 CheckReport = Tuple[str, int, int, str, Optional[str]]
 
@@ -208,7 +210,7 @@ class _BaselineFile(object):  # noqa: WPS214
             paths,
         )
 
-    def _matchers(self):
+    def _matchers(self) -> Iterable[BaselineMatcher]:
         # algorithm:
         # 1. find exact matches, remove them from being reported
         # 2. delete exact matches from the db
@@ -231,12 +233,12 @@ class _BaselineFile(object):  # noqa: WPS214
 
         def x(  # noqa: WPS111,WPS221,WPS430
             args: Iterable[int]
-        ) -> Callable[[Sequence[object], Sequence[object]], bool]:
+        ) -> BaselineMatcher:
             def factory(c, v):  # noqa: WPS111
                 return all(c[a] == v[a] for a in args)  # noqa: WPS111
             return factory
 
-        return (x(matcher) for x in matchers)
+        return (x(matcher) for matcher in matchers)
 
     def _try_match(
         self,
