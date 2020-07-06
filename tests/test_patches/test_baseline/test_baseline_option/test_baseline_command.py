@@ -132,7 +132,7 @@ def _run_flake8(filename, *flake8_args):
             '.flake8-baseline.json',
             '--select',
             'WPS,E',
-            *flake8_args
+            *flake8_args,
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
