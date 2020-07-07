@@ -264,7 +264,6 @@ def test_with_baseline_new_wrong_files(make_file, read_file):
 
     _assert_output(output, {'WPS303': 1})
     assert returncode == 1
-    print(read_file(baseline_path))  # noqa: WPS421
     _compare_baseline(read_file(baseline_path))
 
 
