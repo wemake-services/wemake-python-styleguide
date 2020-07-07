@@ -106,7 +106,7 @@ class _BaselineFile(object):  # noqa: WPS214
                         if bl:  # noqa: WPS220
                             matched_violations += 1  # noqa: WPS220
 
-            if matched_violations >= old_violations / 2:
+            if matched_violations and matched_violations >= old_violations / 2:
                 self._db[filename] = self._db.pop(file_path)
                 return
 
