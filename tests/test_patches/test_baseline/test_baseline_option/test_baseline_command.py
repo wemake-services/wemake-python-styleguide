@@ -137,7 +137,7 @@ def _assert_output(
 
 def _compare_baseline(  # noqa: WPS210
     baseline_text: str,
-    other: Optional[str],
+    other: Optional[str] = None,
 ) -> str:
     other_baseline = baseline if other is None else other
     safe_baseline = json.loads(_safe_baseline(baseline_text))
