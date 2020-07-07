@@ -320,8 +320,11 @@ def test_with_rename(make_file, read_file):
 def test_missing_baseline(make_file, read_file):
     """Test that error is emitted if required baseline is missing."""
     filename = make_file(filename_wrong, wrong_template.format(''))
-    _run_flake8(filename)
 
-    assert output == ('ERROR: No baseline file found ' +
-                      '(you can create one with --create-baseline).')
+    output, returncode = _run_flake8(filename)
+
+    assert output == (
+        'ERROR: No baseline file found ' +
+        '(you can create one with --create-baseline).'
+    )
     assert returncode == -2
