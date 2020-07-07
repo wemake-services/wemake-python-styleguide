@@ -150,7 +150,7 @@ def _run_flake8(filename, *flake8_args):
 ])
 def test_baseline_matching(make_file, read_file, file_states):  # noqa: WPS210
     """Test that fuzzy matchers catch these sequence of changes."""
-    file_initial, *file_changes = states_to_check
+    file_initial, *file_changes = file_states
     filename = make_file(TEST_FILENAME, file_initial)
 
     output, returncode = _run_flake8(filename, '--create-baseline')
