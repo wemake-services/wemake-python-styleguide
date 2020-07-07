@@ -201,8 +201,6 @@ def test_create_baseline(make_file, read_file):
 @pytest.mark.parametrize('files_to_check', [
     (filename_wrong,),
     (filename_wrong, filename_other),
-    (filename_wrong, 'missing.py'),
-    (filename_wrong, filename_other, 'missing.py'),
 ])
 def test_with_baseline(make_file, read_file, files_to_check):
     """End-to-End test for baseline generation."""
