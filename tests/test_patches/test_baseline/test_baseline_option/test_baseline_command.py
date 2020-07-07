@@ -214,7 +214,7 @@ def test_with_baseline(make_file, read_file, files_to_check):
 
     assert output == ''
     assert returncode == 0
-    assert _compare_baseline(read_file(baseline_path))
+    _compare_baseline(read_file(baseline_path))
 
 
 def test_with_baseline_empty(make_file, read_file):
@@ -226,7 +226,7 @@ def test_with_baseline_empty(make_file, read_file):
 
     assert output == ''
     assert returncode == 0
-    assert _compare_baseline(read_file(baseline_path), baseline_removed)
+    _compare_baseline(read_file(baseline_path), baseline_removed)
 
 
 def test_with_baseline_new_violations(make_file, read_file):
@@ -238,7 +238,7 @@ def test_with_baseline_new_violations(make_file, read_file):
 
     _assert_output(output, {'WPS111': 1})
     assert returncode == 1
-    assert _compare_baseline(read_file(baseline_path))
+    _compare_baseline(read_file(baseline_path))
 
 
 def test_with_baseline_new_correct_files(make_file, read_file):
@@ -251,7 +251,7 @@ def test_with_baseline_new_correct_files(make_file, read_file):
 
     assert output == ''
     assert returncode == 0
-    assert _compare_baseline(read_file(baseline_path))
+    _compare_baseline(read_file(baseline_path))
 
 
 def test_with_baseline_new_wrong_files(make_file, read_file):
@@ -265,7 +265,7 @@ def test_with_baseline_new_wrong_files(make_file, read_file):
     _assert_output(output, {'WPS303': 1})
     assert returncode == 1
     print(read_file(baseline_path))
-    assert _compare_baseline(read_file(baseline_path))
+    _compare_baseline(read_file(baseline_path))
 
 
 def test_with_prepend_errors(make_file, read_file):
@@ -280,7 +280,7 @@ def test_with_prepend_errors(make_file, read_file):
 
     _assert_output(output, {'WPS303': 1})
     assert returncode == 1
-    assert _compare_baseline(read_file(baseline_path))
+    _compare_baseline(read_file(baseline_path))
 
 
 def test_with_prepend_and_postpend_errors(make_file, read_file):
@@ -296,4 +296,4 @@ def test_with_prepend_and_postpend_errors(make_file, read_file):
 
     _assert_output(output, {'WPS303': 2}, {1: 1, 7: 1})
     assert returncode == 1
-    assert _compare_baseline(read_file(baseline_path))
+    _compare_baseline(read_file(baseline_path))
