@@ -147,7 +147,8 @@ def _compare_baseline(  # noqa: WPS210
     assert paths1.keys() == paths2.keys()
 
     for filename, violations in paths1.items():
-        violations2 = paths2[filename]
+        violations = [tuple(viol) for viol in violations]
+        violations2 = [tuple(viol) for viol in paths2[filename]]
         assert len(violations) == len(violations2)
         assert set(violations) == set(violations2)
 
