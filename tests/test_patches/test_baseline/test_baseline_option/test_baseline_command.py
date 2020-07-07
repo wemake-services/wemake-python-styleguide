@@ -288,7 +288,7 @@ def test_with_baseline_empty(make_file, read_file):
 
 def test_with_violation_removed(make_file, read_file):
     """End-to-End test that removed violations are removed from baseline."""
-    filename = make_file(filename_wrong, '_SOME_CONSTANT = 1')
+    filename = make_file(filename_wrong, wrong_improved)
     baseline_path = make_file(BASELINE_FILE, baseline)
 
     output, returncode = _run_flake8(filename, filename_wrong)
@@ -305,7 +305,7 @@ def test_with_violation_changed(make_file, read_file):
 
     output, returncode = _run_flake8(filename, filename_wrong)
 
-    assert output == ''
+    assert output == 'wrong.py:1:18: WPS304 Found partial float: .5\n'
     assert returncode == 0
     _compare_baseline(read_file(baseline_path), baseline_removed)
 
