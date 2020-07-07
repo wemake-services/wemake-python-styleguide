@@ -150,7 +150,7 @@ def test_create_baseline(make_file, read_file):
     make_file(filename_other, wrong_other)
 
     output, returncode = _run_flake8(  # noqa: WPS204
-        filename, '--create-baseline', filename_wrong, filename_other,
+        filename, '--create-baseline',
     )
 
     assert output == ''
