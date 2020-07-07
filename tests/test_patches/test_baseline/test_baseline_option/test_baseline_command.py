@@ -299,6 +299,6 @@ def test_with_prepend_and_postpend_errors(make_file, read_file):
 
     output, returncode = _run_flake8(filename, filename_wrong)
 
-    _assert_output(output, {'WPS303': 2}, {1: 1, 7: 1})
+    _assert_output(output, {'WPS303': 2}, {2: 1, 7: 1})
     assert returncode == 1
     _compare_baseline(read_file(baseline_path), _shift_line_numbers(2))
