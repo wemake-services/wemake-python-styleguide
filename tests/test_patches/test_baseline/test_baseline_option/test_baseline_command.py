@@ -27,57 +27,57 @@ from wemake_python_styleguide.logic.baseline import BASELINE_FILE
 _FAKE_TIME_METADATA = 'xxxx'
 
 baseline = r"""{
-  "metadata": {
-    "baseline_file_version": "1",
-    "created_at": "xxxx",
-    "updated_at": "xxxx"
-  },
+  "metadata": [
+    "xxxx",
+    "xxxx",
+    "1"
+  ],
   "paths": {
     "other_wrong.py": [
-      {
-        "column": 10,
-        "error_code": "WPS304",
-        "line": 1,
-        "message": "Found partial float: .5",
-        "physical_line": "partial = .5"
-      }
+      [
+        "WPS304",
+        1,
+        10,
+        "Found partial float: .5",
+        "partial = .5"
+      ]
     ],
     "wrong.py": [
-      {
-        "column": 0,
-        "error_code": "WPS110",
-        "line": 2,
-        "message": "Found wrong variable name: value",
-        "physical_line": "value =1"
-      },
-      {
-        "column": 7,
-        "error_code": "E225",
-        "line": 2,
-        "message": "missing whitespace around operator",
-        "physical_line": "value =1"
-      },
-      {
-        "column": 0,
-        "error_code": "WPS110",
-        "line": 3,
-        "message": "Found wrong variable name: result",
-        "physical_line": "result= 2"
-      },
-      {
-        "column": 6,
-        "error_code": "E225",
-        "line": 3,
-        "message": "missing whitespace around operator",
-        "physical_line": "result= 2"
-      },
-      {
-        "column": 20,
-        "error_code": "WPS303",
-        "line": 4,
-        "message": "Found underscored number: 10_0",
-        "physical_line": "undescored_number = 10_0"
-      }
+      [
+        "WPS110",
+        2,
+        0,
+        "Found wrong variable name: value",
+        "value =1"
+      ],
+      [
+        "E225",
+        2,
+        7,
+        "missing whitespace around operator",
+        "value =1"
+      ],
+      [
+        "WPS110",
+        3,
+        0,
+        "Found wrong variable name: result",
+        "result= 2"
+      ],
+      [
+        "E225",
+        3,
+        6,
+        "missing whitespace around operator",
+        "result= 2"
+      ],
+      [
+        "WPS303",
+        4,
+        20,
+        "Found underscored number: 10_0",
+        "undescored_number = 10_0"
+      ]
     ]
   }
 }"""
