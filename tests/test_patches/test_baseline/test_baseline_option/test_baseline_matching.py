@@ -139,7 +139,7 @@ def _run_flake8(filename, *flake8_args):
     return output, process.returncode
 
 
-@pytest.mark.parametrize('states_to_check', [
+@pytest.mark.parametrize('file_states', [
     move_line,
     move_col,
     rename,
@@ -148,7 +148,7 @@ def _run_flake8(filename, *flake8_args):
     all_change,
     multi_change,
 ])
-def test_baseline_matching(make_file, read_file, states_to_check):  # noqa: WPS210
+def test_baseline_matching(make_file, read_file, file_states):  # noqa: WPS210
     """Test that fuzzy matchers catch these sequence of changes."""
     file_initial, *file_changes = states_to_check
     filename = make_file(TEST_FILENAME, file_initial)
@@ -160,7 +160,7 @@ def test_baseline_matching(make_file, read_file, states_to_check):  # noqa: WPS2
 
     for updated_file in file_changes:
         with open(filename, 'w') as file_obj:
-            filo_obj.write(updated_file)
+            file_obj.write(updated_file)
 
         output, returncode = _run_flake8(filename)
 
