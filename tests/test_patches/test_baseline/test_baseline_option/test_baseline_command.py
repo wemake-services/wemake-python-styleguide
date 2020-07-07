@@ -58,17 +58,17 @@ baseline = r"""{
         "value =1"
       ],
       [
-        "WPS110",
-        3,
-        0,
-        "Found wrong variable name: result",
-        "result= 2"
-      ],
-      [
         "E225",
         3,
         6,
         "missing whitespace around operator",
+        "result= 2"
+      ],
+      [
+        "WPS110",
+        3,
+        0,
+        "Found wrong variable name: result",
         "result= 2"
       ],
       [
