@@ -107,7 +107,7 @@ class _BaselineFile(object):  # noqa: WPS214
                             matched_violations += 1  # noqa: WPS220
 
             if matched_violations >= old_violations / 2:
-                print(file_path)  # noqa: WPS421
+                print('RENAME', file_path)  # noqa: WPS421
                 self._db[filename] = self._db.pop(file_path)
                 return
 
@@ -268,6 +268,7 @@ class _BaselineFile(object):  # noqa: WPS214
 
     def _update_paths_from_db(self) -> None:
         self.paths.clear()
+        print('RENAME', self._db)  # noqa: WPS421
         for filename, groups in self._db.items():
             paths = [cand for c_list in groups.values() for cand in c_list]
             self.paths[filename] = paths
