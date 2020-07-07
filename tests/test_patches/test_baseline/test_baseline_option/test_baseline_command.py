@@ -213,7 +213,7 @@ def test_with_baseline(make_file, read_file, files_to_check):
     """End-to-End test for baseline generation."""
     filename = make_file(filename_wrong, wrong_template.format(''))
     make_file(filename_other, wrong_other)
-    baseline_path = make_file(BASELINE_FILE, baseline)
+    baseline_path = make_file(BASELINE_FILE, baseline)  # noqa: WPS204
 
     output, returncode = _run_flake8(filename, *files_to_check)
 
