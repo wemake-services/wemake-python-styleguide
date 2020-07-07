@@ -139,7 +139,7 @@ def _run_flake8(filename, *flake8_args):
     return output, process.returncode
 
 
-@pytest.mark.parametrize('file_states', [
+@pytest.mark.parametrize('file_states', [  # noqa: WPS210
     move_line,
     move_col,
     rename,

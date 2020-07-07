@@ -190,7 +190,10 @@ def _run_flake8(filename, *flake8_args):
 
 def test_create_baseline(make_file, read_file):
     """End-to-End test for no baseline yet, initial mode."""
-    filename = make_file(filename_wrong, wrong_template.format(''))
+    filename = make_file(
+        filename_wrong,
+        wrong_template.format('')  # noqa: WPS204
+    )
     make_file(filename_other, wrong_other)
 
     output, returncode = _run_flake8(  # noqa: WPS204
