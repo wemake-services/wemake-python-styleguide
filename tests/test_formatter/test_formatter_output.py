@@ -110,8 +110,6 @@ def test_formatter_baseline(
     clean_baseline,  # noqa: WPS442
 ):
     """End-to-End test to ensure that baseline formatting works well."""
-    filename1 = './formatter1.py'
-    filename2 = './formatter2.py'
     cwd = 'tests/fixtures/formatter'
 
     clean_baseline(cwd)
