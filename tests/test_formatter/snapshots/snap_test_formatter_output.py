@@ -259,18 +259,6 @@ https://wemake-python-stylegui.de/en/xx.xx/pages/usage/violations/
 snapshots['test_formatter_correct[cli_options2-with_source] formatter_correct_with_source'] = ''
 
 snapshots['test_formatter_baseline[cli_options0-baseline] formatter_baseline'] = '''
-\x1b[4m\x1b[1m./formatter1.py\x1b[0m\x1b[0m
-  1:1      WPS111 Found too short name: s < 2
-  1:7      WPS110 Found wrong variable name: handle
-  2:21     WPS432 Found magic number: 200
-  2:21     WPS303 Found underscored number: 2_00
-
-\x1b[4m\x1b[1m./formatter2.py\x1b[0m\x1b[0m
-  1:1      WPS110 Found wrong variable name: data
-  1:10     WPS110 Found wrong variable name: param
-  2:12     WPS437 Found protected attribute usage: _protected
-  2:31     WPS303 Found underscored number: 10_00
-
 Created new baseline with 8 violation(s) at:
 ./.flake8-baseline.json
 

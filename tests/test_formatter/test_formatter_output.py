@@ -101,7 +101,7 @@ def test_formatter(snapshot, cli_options, output):
 
 
 @pytest.mark.parametrize(('cli_options', 'output'), [
-    (['--baseline'], 'baseline'),
+    (['--baseline', '.flake8-baseline.json', '--create-baseline'], 'baseline'),
 ])
 def test_formatter_baseline(
     snapshot,
