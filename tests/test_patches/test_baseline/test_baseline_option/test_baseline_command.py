@@ -160,6 +160,13 @@ def _safe_baseline(baseline_text: str) -> str:
     return json.dumps(baseline_dict, indent=2, sort_keys=True)
 
 
+def _shift_line_numbers(offset: int) -> str:
+    updated_baseline = json.loads(baseline)
+    for violation in updated_baseline['paths']['wrong.py']:
+        violation[1] += offset
+    return json.dumps(updated_baseline)
+
+
 def _run_flake8(filename, *flake8_args):
     process = subprocess.Popen(
         [
@@ -276,14 +283,9 @@ def test_with_prepend_errors(make_file, read_file):
 
     output, returncode = _run_flake8(filename, filename_wrong)
 
-    updated_baseline = json.loads(baseline)
-    for violation in updated_baseline['paths']['wrong.py']:
-        violation[1] += 1
-    updated_baseline_text = json.dumps(updated_baseline)
-
     _assert_output(output, {'WPS303': 1})
     assert returncode == 1
-    _compare_baseline(read_file(baseline_path))
+    _compare_baseline(read_file(baseline_path), _shift_line_numbers(2))
 
 
 def test_with_prepend_and_postpend_errors(make_file, read_file):
@@ -297,11 +299,6 @@ def test_with_prepend_and_postpend_errors(make_file, read_file):
 
     output, returncode = _run_flake8(filename, filename_wrong)
 
-    updated_baseline = json.loads(baseline)
-    for violation in updated_baseline['paths']['wrong.py']:
-        violation[1] += 1
-    updated_baseline_text = json.dumps(updated_baseline)
-
     _assert_output(output, {'WPS303': 2}, {1: 1, 7: 1})
     assert returncode == 1
-    _compare_baseline(read_file(baseline_path), updated_baseline_text)
+    _compare_baseline(read_file(baseline_path), _shift_line_numbers(2))
