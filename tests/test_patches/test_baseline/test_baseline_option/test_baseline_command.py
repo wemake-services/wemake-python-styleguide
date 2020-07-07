@@ -241,7 +241,7 @@ def test_create_baseline(make_file, read_file):
     """End-to-End test for no baseline yet, initial mode."""
     filename = make_file(
         filename_wrong,
-        wrong_template.format('')  # noqa: WPS204
+        wrong_template.format(''),  # noqa: WPS204
     )
     make_file(filename_other, wrong_other)
 
