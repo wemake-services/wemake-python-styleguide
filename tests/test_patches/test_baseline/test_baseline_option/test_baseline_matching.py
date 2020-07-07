@@ -1,4 +1,6 @@
 """
+Test fuzzy matching algorithm.
+
 We use this test to ensure to ensure typical code changes are correctly
 matched by the fuzzy matching algorithm and don't emit previously ignored
 errors.
@@ -146,7 +148,7 @@ def _run_flake8(filename, *flake8_args):
     all_change,
     multi_change,
 ])
-def test_baseline_matching(make_file, read_file, states_to_check):
+def test_baseline_matching(make_file, read_file, states_to_check):  # noqa: WPS210
     """Test that fuzzy matchers catch these sequence of changes."""
     file_initial, *file_changes = states_to_check
     filename = make_file(TEST_FILENAME, file_initial)
@@ -157,7 +159,9 @@ def test_baseline_matching(make_file, read_file, states_to_check):
     assert returncode == 0
 
     for updated_file in file_changes:
-        open(filename, "w").write(updated_file)
+        with open(filename, 'w') as file_obj:
+            filo_obj.write(updated_file)
+
         output, returncode = _run_flake8(filename)
 
         assert output == ''
