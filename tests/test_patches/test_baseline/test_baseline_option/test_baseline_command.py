@@ -116,6 +116,19 @@ def _assert_output(
             assert output.count('.py:{0}:'.format(line)) == line_count
 
 
+def _compare_baseline(baseline_text: str) -> str:
+    safe_baseline = json.loads(_safe_baseline(baseline_text))
+    ref_baseline = json.loads(baseline)
+    paths1, paths2 = (bl.pop("paths") for bl in (safe_baseline, ref_baseline))
+    assert safe_baseline == ref_baseline
+    assert paths1.keys() == paths2.keys()
+
+    for filename, violations in paths1.items():
+        violations2 = paths2[filename]
+        assert len(violations) == len(violations2)
+        assert set(violations) == set(violations2)
+
+
 def _safe_baseline(baseline_text: str) -> str:
     baseline_dict = json.loads(baseline_text)
     baseline_dict['metadata'][0] = _FAKE_TIME_METADATA
@@ -177,7 +190,7 @@ def test_with_baseline(make_file, read_file, files_to_check):
 
     assert output == ''
     assert returncode == 0
-    assert _safe_baseline(read_file(baseline_path)) == baseline
+    assert _compare_baseline(read_file(baseline_path))
 
 
 def test_with_baseline_empty(make_file, read_file):
@@ -189,7 +202,7 @@ def test_with_baseline_empty(make_file, read_file):
 
     assert output == ''
     assert returncode == 0
-    assert _safe_baseline(read_file(baseline_path)) == baseline
+    assert _compare_baseline(read_file(baseline_path))
 
 
 def test_with_baseline_new_violations(make_file, read_file):
@@ -201,7 +214,7 @@ def test_with_baseline_new_violations(make_file, read_file):
 
     _assert_output(output, {'WPS111': 1})
     assert returncode == 1
-    assert _safe_baseline(read_file(baseline_path)) == baseline
+    assert _compare_baseline(read_file(baseline_path))
 
 
 def test_with_baseline_new_correct_files(make_file, read_file):
@@ -214,7 +227,7 @@ def test_with_baseline_new_correct_files(make_file, read_file):
 
     assert output == ''
     assert returncode == 0
-    assert _safe_baseline(read_file(baseline_path)) == baseline
+    assert _compare_baseline(read_file(baseline_path))
 
 
 def test_with_baseline_new_wrong_files(make_file, read_file):
@@ -227,7 +240,7 @@ def test_with_baseline_new_wrong_files(make_file, read_file):
 
     _assert_output(output, {'WPS303': 1})
     assert returncode == 1
-    assert _safe_baseline(read_file(baseline_path)) == baseline
+    assert _compare_baseline(read_file(baseline_path))
 
 
 def test_with_prepend_errors(make_file, read_file):
@@ -242,7 +255,7 @@ def test_with_prepend_errors(make_file, read_file):
 
     _assert_output(output, {'WPS303': 1})
     assert returncode == 1
-    assert _safe_baseline(read_file(baseline_path)) == baseline
+    assert _compare_baseline(read_file(baseline_path))
 
 
 def test_with_prepend_and_postpend_errors(make_file, read_file):
@@ -258,4 +271,4 @@ def test_with_prepend_and_postpend_errors(make_file, read_file):
 
     _assert_output(output, {'WPS303': 2}, {1: 1, 7: 1})
     assert returncode == 1
-    assert _safe_baseline(read_file(baseline_path)) == baseline
+    assert _compare_baseline(read_file(baseline_path))
