@@ -260,6 +260,7 @@ def test_with_baseline_new_wrong_files(make_file, read_file):
 
     output, returncode = _run_flake8(filename, filename_wrong, new_wrong)
 
+    print(output)
     _assert_output(output, {'WPS303': 1})
     assert returncode == 1
     _compare_baseline(read_file(baseline_path))
