@@ -259,7 +259,7 @@ https://wemake-python-stylegui.de/en/xx.xx/pages/usage/violations/
 snapshots['test_formatter_correct[cli_options2-with_source] formatter_correct_with_source'] = ''
 
 snapshots['test_formatter_baseline[cli_options0-baseline] formatter_baseline'] = '''
-Created new baseline with 8 violation(s) at:
+Created new baseline with 8 violations at:
 ./.flake8-baseline.json
 
 Full list of violations and explanations:
