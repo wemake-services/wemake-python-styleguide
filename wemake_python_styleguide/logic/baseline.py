@@ -79,6 +79,7 @@ class _BaselineFile(object):  # noqa: WPS214
             for one in violations:
                 grouped[one[0]].append(one)
             self._db.update({filename: grouped})
+        print('LOAD', self._db)  # noqa: WPS421
 
     def handle_rename(  # noqa: C901,WPS210,WPS231
         self,
@@ -268,7 +269,7 @@ class _BaselineFile(object):  # noqa: WPS214
 
     def _update_paths_from_db(self) -> None:
         self.paths.clear()
-        print('RENAME', self._db)  # noqa: WPS421
+        print('SAVE', self._db)  # noqa: WPS421
         for filename, groups in self._db.items():
             paths = [cand for c_list in groups.values() for cand in c_list]
             self.paths[filename] = paths
