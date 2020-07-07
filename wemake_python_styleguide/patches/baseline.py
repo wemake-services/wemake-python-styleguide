@@ -108,7 +108,7 @@ def _patch_start(manager: Type[Manager]) -> None:  # noqa: C901,WPS231
                     'given files. Continue? (y/n) ',
                 )
                 if not response.lower().startswith('y'):  # noqa: WPS513
-                    sys.exit(-2)
+                    sys.exit(3)
         else:
             if not self.options.baseline:  # noqa: WPS513
                 self.options.baseline = baseline.BASELINE_FILE
@@ -119,7 +119,7 @@ def _patch_start(manager: Type[Manager]) -> None:  # noqa: C901,WPS231
                 'ERROR: No baseline file found ' +
                 '(you can create one with --create-baseline).',
             )
-            sys.exit(-2)
+            sys.exit(3)
         # --- patch end
 
         original_start(self, paths)

@@ -327,4 +327,4 @@ def test_missing_baseline(make_file, read_file):
         'ERROR: No baseline file found ' +
         '(you can create one with --create-baseline).\n'
     )
-    assert returncode == -2
+    assert returncode == 3
