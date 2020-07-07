@@ -82,6 +82,48 @@ baseline = r"""{
   }
 }"""
 
+baseline_improved = r"""{
+  "metadata": [
+    "xxxx",
+    "xxxx",
+    "1"
+  ],
+  "paths": {
+    "other_wrong.py": [
+      [
+        "WPS304",
+        1,
+        10,
+        "Found partial float: .5",
+        "partial = .5"
+      ]
+    ],
+    "wrong.py": [
+      [
+        "WPS110",
+        2,
+        0,
+        "Found wrong variable name: value",
+        "value =1"
+      ],
+      [
+        "WPS110",
+        3,
+        0,
+        "Found wrong variable name: result",
+        "result= 2"
+      ],
+      [
+        "WPS303",
+        4,
+        20,
+        "Found underscored number: 10_0",
+        "undescored_number = 10_0"
+      ]
+    ]
+  }
+}"""
+
 baseline_removed = r"""{
   "metadata": [
     "xxxx",
@@ -106,6 +148,13 @@ baseline_removed = r"""{
 wrong_template = """
 value =1
 result= 2
+undescored_number = 10_0
+{0}
+"""
+
+wrong_improved = """
+value = 1
+result = 2
 undescored_number = 10_0
 {0}
 """
@@ -228,6 +277,30 @@ def test_with_baseline(make_file, read_file, files_to_check):
 def test_with_baseline_empty(make_file, read_file):
     """End-to-End test that removed violations are removed from baseline."""
     filename = make_file(filename_wrong, '_SOME_CONSTANT = 1')
+    baseline_path = make_file(BASELINE_FILE, baseline)
+
+    output, returncode = _run_flake8(filename, filename_wrong)
+
+    assert output == ''
+    assert returncode == 0
+    _compare_baseline(read_file(baseline_path), baseline_removed)
+
+
+def test_with_violation_removed(make_file, read_file):
+    """End-to-End test that removed violations are removed from baseline."""
+    filename = make_file(filename_wrong, '_SOME_CONSTANT = 1')
+    baseline_path = make_file(BASELINE_FILE, baseline)
+
+    output, returncode = _run_flake8(filename, filename_wrong)
+
+    assert output == ''
+    assert returncode == 0
+    _compare_baseline(read_file(baseline_path), baseline_improved)
+
+
+def test_with_violation_changed(make_file, read_file):
+    """End-to-End test that changed violations are updated."""
+    filename = make_file(filename_wrong, '_SOME_CONSTANT = .5')
     baseline_path = make_file(BASELINE_FILE, baseline)
 
     output, returncode = _run_flake8(filename, filename_wrong)
