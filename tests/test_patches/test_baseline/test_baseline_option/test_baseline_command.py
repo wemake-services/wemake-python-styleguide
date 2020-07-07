@@ -276,6 +276,11 @@ def test_with_prepend_errors(make_file, read_file):
 
     output, returncode = _run_flake8(filename, filename_wrong)
 
+    updated_baseline = json.loads(baseline)
+    for violation in updated_baseline['paths']['wrong.py']:
+        violation[1] += 1
+    updated_baseline_text = json.dumps(updated_baseline)
+
     _assert_output(output, {'WPS303': 1})
     assert returncode == 1
     _compare_baseline(read_file(baseline_path))
@@ -292,6 +297,11 @@ def test_with_prepend_and_postpend_errors(make_file, read_file):
 
     output, returncode = _run_flake8(filename, filename_wrong)
 
+    updated_baseline = json.loads(baseline)
+    for violation in updated_baseline['paths']['wrong.py']:
+        violation[1] += 1
+    updated_baseline_text = json.dumps(updated_baseline)
+
     _assert_output(output, {'WPS303': 2}, {1: 1, 7: 1})
     assert returncode == 1
-    _compare_baseline(read_file(baseline_path))
+    _compare_baseline(read_file(baseline_path), updated_baseline_text)
