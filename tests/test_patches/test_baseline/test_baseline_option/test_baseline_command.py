@@ -302,3 +302,16 @@ def test_with_prepend_and_postpend_errors(make_file, read_file):
     _assert_output(output, {'WPS303': 2}, {2: 1, 7: 1})
     assert returncode == 1
     _compare_baseline(read_file(baseline_path), _shift_line_numbers(2))
+
+
+def test_with_rename(make_file, read_file):
+    """End-to-End test to test that baseline is updated when file is renamed."""
+    filename = make_file('renamed_wrong.py', wrong_template.format(''))
+    baseline_path = make_file(BASELINE_FILE, baseline)
+    renamed_baseline = baseline.replace('"wrong.py"', '"renamed_wrong.py"')
+
+    output, returncode = _run_flake8(filename, 'renamed_wrong.py')
+
+    assert output == ''
+    assert returncode == 0
+    _compare_baseline(read_file(baseline_path), renamed_baseline)
