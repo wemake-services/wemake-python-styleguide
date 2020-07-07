@@ -268,7 +268,7 @@ def test_with_baseline_new_wrong_files(make_file, read_file):
 def test_with_prepend_errors(make_file, read_file):
     """End-to-End test to test that baseline still generates new violations."""
     filename = make_file(filename_wrong, prepend_format.format(
-        'undescored_number = 10_0',
+        'new_number = 20_0',
         wrong_template.format(''),
     ))
     baseline_path = make_file(BASELINE_FILE, baseline)
