@@ -317,6 +317,36 @@ def test_with_rename(make_file, read_file):
     _compare_baseline(read_file(baseline_path), renamed_baseline)
 
 
+def test_default_baseline(make_file, read_file):
+    """Test that default baseline file is used if no explicit baseline."""
+    filename = make_file(filename_wrong, wrong_template.format(''))
+    make_file(filename_other, wrong_other)
+
+    process = subprocess.Popen(
+        [
+            'flake8',
+            '--isolated',
+            '--baseline',
+            '--select',
+            'WPS,E',
+            '--create-baseline',
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        universal_newlines=True,
+        encoding='utf8',
+        cwd=os.path.dirname(filename),
+    )
+    output, _ = process.communicate()
+
+    msg = 'Created new baseline with 6 violations at:\n./.flake8-baseline.json'
+    assert output.strip() == msg
+    assert process.returncode == 0
+    _compare_baseline(
+        read_file(os.path.join(os.path.dirname(filename), BASELINE_FILE)),
+    )
+
+
 def test_missing_baseline(make_file, read_file):
     """Test that error is emitted if required baseline is missing."""
     filename = make_file(filename_wrong, wrong_template.format(''))
