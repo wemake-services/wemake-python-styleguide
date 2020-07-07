@@ -82,6 +82,25 @@ baseline = r"""{
   }
 }"""
 
+baseline_removed = r"""{
+  "metadata": [
+    "xxxx",
+    "xxxx",
+    "1"
+  ],
+  "paths": {
+    "other_wrong.py": [
+      [
+        "WPS304",
+        1,
+        10,
+        "Found partial float: .5",
+        "partial = .5"
+      ]
+    ]
+  }
+}"""
+
 # Templates:
 
 wrong_template = """
@@ -116,10 +135,14 @@ def _assert_output(
             assert output.count('.py:{0}:'.format(line)) == line_count
 
 
-def _compare_baseline(baseline_text: str) -> str:
+def _compare_baseline(  # noqa: WPS210
+    baseline_text: str,
+    other: Optional[str]
+) -> str:
+    other_baseline = baseline if other is None else other
     safe_baseline = json.loads(_safe_baseline(baseline_text))
-    ref_baseline = json.loads(baseline)
-    paths1, paths2 = (bl.pop("paths") for bl in (safe_baseline, ref_baseline))
+    ref_baseline = json.loads(other_baseline)
+    paths1, paths2 = (bl.pop('paths') for bl in (safe_baseline, ref_baseline))
     assert safe_baseline == ref_baseline
     assert paths1.keys() == paths2.keys()
 
@@ -194,7 +217,7 @@ def test_with_baseline(make_file, read_file, files_to_check):
 
 
 def test_with_baseline_empty(make_file, read_file):
-    """End-to-End test that removed violations are fine."""
+    """End-to-End test that removed violations are removed from baseline."""
     filename = make_file(filename_wrong, '_SOME_CONSTANT = 1')
     baseline_path = make_file(BASELINE_FILE, baseline)
 
@@ -202,7 +225,7 @@ def test_with_baseline_empty(make_file, read_file):
 
     assert output == ''
     assert returncode == 0
-    assert _compare_baseline(read_file(baseline_path))
+    assert _compare_baseline(read_file(baseline_path), baseline_removed)
 
 
 def test_with_baseline_new_violations(make_file, read_file):
