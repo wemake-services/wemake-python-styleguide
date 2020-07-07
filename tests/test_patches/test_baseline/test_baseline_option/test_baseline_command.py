@@ -283,7 +283,7 @@ def test_with_prepend_errors(make_file, read_file):
 
 def test_with_prepend_and_postpend_errors(make_file, read_file):
     """End-to-End test to test that baseline still generates new violations."""
-    new_violation = 'undescored_number = 10_0'
+    new_violation = 'new_number = 20_0'
     filename = make_file(filename_wrong, prepend_format.format(
         new_violation,
         wrong_template.format(new_violation),
