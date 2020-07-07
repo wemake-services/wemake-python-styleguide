@@ -125,8 +125,6 @@ def test_formatter_baseline(
             '--format',
             'wemake',
             *cli_options,
-            filename1,
-            filename2,
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
