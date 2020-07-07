@@ -193,9 +193,9 @@ def test_create_baseline(make_file, read_file):
     msg = 'Created new baseline with 6 violations at:\n./.flake8-baseline.json'
     assert output.strip() == msg
     assert returncode == 0
-    assert _safe_baseline(
+    _compare_baseline(
         read_file(os.path.join(os.path.dirname(filename), BASELINE_FILE)),
-    ) == baseline
+    )
 
 
 @pytest.mark.parametrize('files_to_check', [
