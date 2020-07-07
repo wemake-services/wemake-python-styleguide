@@ -48,35 +48,35 @@ baseline = r"""{
         "error_code": "WPS110",
         "line": 2,
         "message": "Found wrong variable name: value",
-        "physical_line": "value =1\n"
+        "physical_line": "value =1"
       },
       {
         "column": 7,
         "error_code": "E225",
         "line": 2,
         "message": "missing whitespace around operator",
-        "physical_line": "value =1\n"
+        "physical_line": "value =1"
       },
       {
         "column": 0,
         "error_code": "WPS110",
         "line": 3,
         "message": "Found wrong variable name: result",
-        "physical_line": "result= 2\n"
+        "physical_line": "result= 2"
       },
       {
         "column": 6,
         "error_code": "E225",
         "line": 3,
         "message": "missing whitespace around operator",
-        "physical_line": "result= 2\n"
+        "physical_line": "result= 2"
       },
       {
         "column": 20,
         "error_code": "WPS303",
         "line": 4,
         "message": "Found underscored number: 10_0",
-        "physical_line": "undescored_number = 10_0\n"
+        "physical_line": "undescored_number = 10_0"
       }
     ]
   }
@@ -118,8 +118,8 @@ def _assert_output(
 
 def _safe_baseline(baseline_text: str) -> str:
     baseline_dict = json.loads(baseline_text)
-    baseline_dict['metadata']['created_at'] = _FAKE_TIME_METADATA
-    baseline_dict['metadata']['updated_at'] = _FAKE_TIME_METADATA
+    baseline_dict['metadata'][0] = _FAKE_TIME_METADATA
+    baseline_dict['metadata'][1] = _FAKE_TIME_METADATA
     return json.dumps(baseline_dict, indent=2, sort_keys=True)
 
 
@@ -129,7 +129,7 @@ def _run_flake8(filename, *flake8_args):
             'flake8',
             '--isolated',
             '--baseline',
-            '.flake8-baseline.json',
+            BASELINE_FILE,
             '--select',
             'WPS,E',
             *flake8_args,
