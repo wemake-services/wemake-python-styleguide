@@ -255,12 +255,12 @@ def test_with_baseline_new_correct_files(make_file, read_file):
 def test_with_baseline_new_wrong_files(make_file, read_file):
     """End-to-End test to test that baseline still generates new violations."""
     filename = make_file(filename_wrong, wrong_template.format(''))
+    make_file(filename_other, wrong_other)
     new_wrong = make_file('new_wrong.py', 'undescored_number = 10_0')
     baseline_path = make_file(BASELINE_FILE, baseline)
 
     output, returncode = _run_flake8(filename, filename_wrong, new_wrong)
 
-    print(output)  # noqa: WPS421
     _assert_output(output, {'WPS303': 1})
     assert returncode == 1
     _compare_baseline(read_file(baseline_path))
