@@ -115,7 +115,7 @@ baseline_improved = r"""{
       ],
       [
         "WPS303",
-        4,
+        5,
         20,
         "Found underscored number: 10_0",
         "undescored_number = 10_0"
