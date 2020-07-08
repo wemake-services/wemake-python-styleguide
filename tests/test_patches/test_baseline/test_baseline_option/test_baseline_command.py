@@ -104,14 +104,14 @@ baseline_improved = r"""{
         2,
         0,
         "Found wrong variable name: value",
-        "value =1"
+        "value = 1"
       ],
       [
         "WPS110",
         3,
         0,
         "Found wrong variable name: result",
-        "result= 2"
+        "result = 2"
       ],
       [
         "WPS303",
