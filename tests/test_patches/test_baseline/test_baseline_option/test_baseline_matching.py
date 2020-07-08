@@ -146,19 +146,23 @@ def _run_flake8(filename, *flake8_args):
 
 
 # TODO: Add rename, all_change. Looser fuzzy matching can match this in future.
-@pytest.mark.parametrize('file_states', [  # noqa: WPS210
-    move_line,
-    move_col,
-    block,
-    multierror_line,
-    multi_change,
-], ids=[
-    'move_line',
-    'move_col',
-    'block',
-    'multierror_line',
-    'multi_change',
-])
+@pytest.mark.parametrize(  # noqa: WPS210
+    'file_states',
+    [
+        move_line,
+        move_col,
+        block,
+        multierror_line,
+        multi_change,
+    ],
+    ids=[
+        'move_line',
+        'move_col',
+        'block',
+        'multierror_line',
+        'multi_change',
+    ]
+)
 def test_baseline_matching(make_file, read_file, file_states):  # noqa: WPS210
     """Test that fuzzy matchers catch these sequence of changes."""
     file_initial, *file_changes = file_states

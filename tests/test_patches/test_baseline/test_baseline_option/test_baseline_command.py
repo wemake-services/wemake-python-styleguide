@@ -402,7 +402,7 @@ def test_default_baseline(make_file, read_file):
             'flake8',
             '--isolated',
             '--baseline',
-            ''
+            '',
             '--select',
             'WPS,E',
             '--create-baseline',
