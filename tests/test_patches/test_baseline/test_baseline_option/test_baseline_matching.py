@@ -145,7 +145,8 @@ def _run_flake8(filename, *flake8_args):
     return output, process.returncode
 
 
-# TODO: Add rename, all_change. Looser fuzzy matching can match this in future.
+# TODO: Add rename, all_change, multi_change.
+# Looser fuzzy matching can match these in future.
 @pytest.mark.parametrize(  # noqa: WPS210
     'file_states',
     [
@@ -153,14 +154,12 @@ def _run_flake8(filename, *flake8_args):
         move_col,
         block,
         multierror_line,
-        multi_change,
     ],
     ids=[
         'move_line',
         'move_col',
         'block',
         'multierror_line',
-        'multi_change',
     ],
 )
 def test_baseline_matching(make_file, read_file, file_states):  # noqa: WPS210

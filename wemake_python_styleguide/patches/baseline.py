@@ -101,6 +101,9 @@ def _patch_start(manager: Type[Manager]) -> None:  # noqa: C901,WPS231
     def start(self, paths=None) -> None:  # noqa: WPS430
         # --- patch start
         self._wps_baseline = None
+        if not self.options.baseline:  # noqa: WPS513
+            self.options.baseline = baseline.BASELINE_FILE
+
         if self.options.create_baseline:
             if paths is not None or self.arguments:
                 response = input(  # noqa: WPS421
@@ -110,8 +113,6 @@ def _patch_start(manager: Type[Manager]) -> None:  # noqa: C901,WPS231
                 if not response.lower().startswith('y'):  # noqa: WPS513
                     sys.exit(3)
         else:
-            if not self.options.baseline:  # noqa: WPS513
-                self.options.baseline = baseline.BASELINE_FILE
             self._wps_baseline = baseline.load_from_file(self.options.baseline)
 
         if self._wps_baseline is None and not self.options.create_baseline:
