@@ -230,6 +230,12 @@ class _BaselineFile(object):  # noqa: WPS214
         # 8. delete fuzzy matches from the db
         # 9. start fuzzy matches by `physical_line`
         # 10. delete fuzzy matches from the db
+        # 11. start fuzzy matches by `line`
+        # 12. delete fuzzy matches from the db
+
+        # Because baseline gets updated, and old violations removed,
+        # we can use very weak matchers as they will only match violations
+        # that were still present in the last run.
 
         matchers = [
             [1, 2, 4],
@@ -237,6 +243,7 @@ class _BaselineFile(object):  # noqa: WPS214
             [2, 4],
             [1, 2],
             [4],
+            [1],
         ]
 
         def x(  # noqa: WPS111,WPS221,WPS430
