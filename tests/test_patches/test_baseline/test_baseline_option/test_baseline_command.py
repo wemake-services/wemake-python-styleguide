@@ -156,7 +156,6 @@ wrong_improved = """
 value = 1
 result = 2
 undescored_number = 10_0
-{0}
 """
 
 wrong_other = 'partial = .5'
@@ -306,7 +305,7 @@ def test_with_violation_changed(make_file, read_file):
     output, returncode = _run_flake8(filename, filename_wrong)
 
     assert output == 'wrong.py:1:18: WPS304 Found partial float: .5\n'
-    assert returncode == 0
+    assert returncode == 1
     _compare_baseline(read_file(baseline_path), baseline_removed)
 
 
@@ -403,6 +402,7 @@ def test_default_baseline(make_file, read_file):
             'flake8',
             '--isolated',
             '--baseline',
+            ''
             '--select',
             'WPS,E',
             '--create-baseline',

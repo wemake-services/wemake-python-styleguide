@@ -152,6 +152,12 @@ def _run_flake8(filename, *flake8_args):
     block,
     multierror_line,
     multi_change,
+], ids=[
+    'move_line',
+    'move_col',
+    'block',
+    'multierror_line',
+    'multi_change',
 ])
 def test_baseline_matching(make_file, read_file, file_states):  # noqa: WPS210
     """Test that fuzzy matchers catch these sequence of changes."""
