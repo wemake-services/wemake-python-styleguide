@@ -296,7 +296,7 @@ def test_with_violation_removed(make_file, read_file):
 
     output, returncode = _run_flake8(filename, filename_wrong)
 
-    assert output == 'wrong.py:4:8: missing whitespace around operator\n'
+    assert output == 'wrong.py:4:10: E225 missing whitespace around operator\n'
     assert returncode == 1
     _compare_baseline(read_file(baseline_path), baseline_improved)
 
