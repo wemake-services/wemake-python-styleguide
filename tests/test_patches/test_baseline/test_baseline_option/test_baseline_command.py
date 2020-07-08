@@ -152,9 +152,13 @@ undescored_number = 10_0
 {0}
 """
 
+# This example removes the baselined E225 violations, while adding 1 new one.
+# This ensures an edge case is run that handles removing these from the
+# baseline.
 wrong_improved = """
 value = 1
 result = 2
+new_bad =3
 undescored_number = 10_0
 """
 
@@ -292,8 +296,8 @@ def test_with_violation_removed(make_file, read_file):
 
     output, returncode = _run_flake8(filename, filename_wrong)
 
-    assert output == ''
-    assert returncode == 0
+    assert output == 'wrong.py:4:8: missing whitespace around operator\n'
+    assert returncode == 1
     _compare_baseline(read_file(baseline_path), baseline_improved)
 
 
