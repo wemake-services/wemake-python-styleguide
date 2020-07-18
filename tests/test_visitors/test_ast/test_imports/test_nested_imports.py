@@ -46,6 +46,14 @@ except ImportError:
 regular_import = 'import os'
 regular_from_import = 'from os import path'
 regular_nested_import = 'from core.violations import Error'
+type_checking_import = """
+if TYPE_CHECKING:
+    from core.violations import Error
+"""
+typing_type_checking_import = """
+if typing.TYPE_CHECKING:
+    from core.violations import Error
+"""
 
 
 @pytest.mark.parametrize('code', [
@@ -70,6 +78,8 @@ def test_nested_import(assert_errors, parse_ast_tree, code, default_options):
     regular_import,
     regular_from_import,
     regular_nested_import,
+    type_checking_import,
+    typing_type_checking_import,
 ])
 def test_regular_imports(assert_errors, parse_ast_tree, code, default_options):
     """Testing that regular imports are allowed."""
