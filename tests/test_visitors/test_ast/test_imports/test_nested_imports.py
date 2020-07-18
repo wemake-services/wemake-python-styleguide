@@ -82,7 +82,11 @@ def test_nested_import(assert_errors, parse_ast_tree, code, default_options):
     typing_type_checking_import,
 ])
 def test_regular_imports(assert_errors, parse_ast_tree, code, default_options):
-    """Testing that regular imports are allowed."""
+    """Testing imports that are allowed.
+
+    Regular imports are allowed.
+    Imports nested inside the TYPE_CHECKING check are allowed.
+    """
     tree = parse_ast_tree(code)
 
     visitor = WrongImportVisitor(default_options, tree=tree)
