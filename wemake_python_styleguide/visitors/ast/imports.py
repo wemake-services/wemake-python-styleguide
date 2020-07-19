@@ -43,7 +43,8 @@ class _BaseImportValidator(object):
     def _check_nested_import(self, node: AnyImport) -> None:
         parent = nodes.get_parent(node)
         if parent is not None and not isinstance(parent, ast.Module):
-            self._error_callback(NestedImportViolation(node))
+            if not imports.is_nested_typing_import(parent):
+                self._error_callback(NestedImportViolation(node))
 
     def _check_same_alias(self, node: AnyImport) -> None:
         for alias in node.names:
