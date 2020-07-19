@@ -46,4 +46,4 @@ def is_nested_typing_import(parent: ast.AST) -> bool:
             checked_condition = parent.test.id
         elif isinstance(parent.test, ast.Attribute):
             checked_condition = parent.test.attr
-    return checked_condition == 'TYPE_CHECKING'
+    return checked_condition in constants.ALLOWED_NESTED_IMPORTS_CONDITIONS

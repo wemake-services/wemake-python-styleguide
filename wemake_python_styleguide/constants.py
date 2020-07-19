@@ -381,6 +381,10 @@ TUPLE_ARGUMENTS_METHODS: Final = frozenset((
     'frozenset',
 ))
 
+#: Conditions that can appear in the ``if`` statement to allow nested imports.
+ALLOWED_NESTED_IMPORTS_CONDITIONS: Final = frozenset((
+    'TYPE_CHECKING',
+))
 
 # Internal variables
 # ==================
