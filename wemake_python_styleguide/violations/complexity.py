@@ -586,7 +586,7 @@ class TooManyAwaitsViolation(ASTViolation):
 @final
 class TooManyAssertsViolation(ASTViolation):
     """
-    Forbids placing too many ``asseert`` statements into a function.
+    Forbids placing too many ``assert`` statements into a function.
 
     Reasoning:
         When there are too many ``assert`` keywords,
