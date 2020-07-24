@@ -769,7 +769,7 @@ class NonUniqueItemsInHashViolation(ASTViolation):
 @final
 class BaseExceptionSubclassViolation(ASTViolation):
     """
-    Forbids to have duplicate items in ``set`` literals.
+    Forbids to have exception inherited from ``BaseException``.
 
     Reasoning:
         ``BaseException`` is a special case:
