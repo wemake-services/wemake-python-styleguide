@@ -253,7 +253,7 @@ class OveruseOfNoqaCommentViolation(SimpleViolation):
 @final
 class OveruseOfNoCoverCommentViolation(SimpleViolation):
     """
-Forbids to use too many ``# pragma: no cover`` comments.
+    Forbids to use too many ``# pragma: no cover`` comments.
 
     We count it on a per-module basis.
     We use :str:`wemake_python_styleguide.constants.MAX_NO_COVER_COMMENTS`
@@ -261,7 +261,7 @@ Forbids to use too many ``# pragma: no cover`` comments.
 
     Reasoning:
         Having too many ``# pragma: no cover`` comments
-       indicates that there's something wrong with it.
+        indicates that there's something wrong with it.
         Moreover, it makes your tests useless, since they do not cover
         a big partition of your code.
 
@@ -990,8 +990,8 @@ class BaseExceptionViolation(ASTViolation):
     Forbids to use ``BaseException`` exception.
 
     Reasoning:
-        We can silence system exit and keyboard interrupt 
-    with this exception handler. 
+        We can silence system exit and keyboard interrupt
+        with this exception handler. 
         It is almost the same as raw ``except:`` block.
 
     Solution:
@@ -1025,14 +1025,14 @@ class BooleanPositionalArgumentViolation(ASTViolation):
     Forbids to pass booleans as non-keyword parameters.
 
     Reasoning:
-        Passing boolean as regular positional parameters 
-    are very non-descriptive.
-        It is almost impossible to tell, what does this 
-    parameter mean.
-        And you almost always have to look up the implementation 
-    to tell what is going on.
-        The only exception from this rule is passing booleans as a 
-    non-keyword argument when it is the only passed argument.
+        Passing boolean as regular positional parameters
+        are very non-descriptive.
+        It is almost impossible to tell, what does this
+        parameter mean.
+        And you almost always have to look up the implementation
+        to tell what is going on.
+        The only exception from this rule is passing booleans as a
+        non-keyword argument when it is the only passed argument.
 
 
     Solution:
@@ -1112,8 +1112,8 @@ class UnreachableCodeViolation(ASTViolation):
     an exception is too complicated and is out of the scope of this rule.
 
     Reasoning:
-        Having dead code in your project is an indicator that 
-    you do not care about your codebase at all.
+        Having dead code in your project is an indicator that
+        you do not care about your codebase at all.
         It dramatically reduces code quality and readability.
         It also demotivates team members.
 
@@ -1151,7 +1151,7 @@ class StatementHasNoEffectViolation(ASTViolation):
     Reasoning:
         Statements that just access the value or expressions
         used as statements indicate that your code
-        contains deadlines. 
+        contains deadlines.
         They just pollute your codebase and do nothing.
 
     Solution:
@@ -1732,7 +1732,7 @@ class UnhashableTypeInHashViolation(ASTViolation):
 @final
 class WrongKeywordConditionViolation(ASTViolation):
     """
-   Forbids to use explicit falsely-evaluated conditions with several keywords.
+    Forbids to use explicit falsely-evaluated conditions with several keywords.
 
     We check:
 
@@ -1808,7 +1808,7 @@ class ApproximateConstantViolation(ASTViolation):
     Reasoning:
         Some constants are already defined.
         No need to write to them again, use existing values.
-        We just compare numbers as strings and raise this 
+        We just compare numbers as strings and raise this
         violation when they start with the same chars.
 
     Solution:
