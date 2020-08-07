@@ -991,7 +991,7 @@ class BaseExceptionViolation(ASTViolation):
 
     Reasoning:
         We can silence system exit and keyboard interrupt
-        with this exception handler. 
+        with this exception handler.
         It is almost the same as raw ``except:`` block.
 
     Solution:
