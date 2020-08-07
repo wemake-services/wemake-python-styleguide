@@ -1,13 +1,12 @@
 """
 These checks ensure that you follow the best practices.
 
-The source for these best practices is hidden inside countless hours
+The source for these best practices are inside countless hours
 we have spent debugging software or reviewing it.
 
 How do we find inspiration for new rules?
 We find some ugly code during code reviews and audits.
-Then we forbid to use this bad code forever.
-So, this error will never return to our codebase.
+Then we forbid to use those code forever.
 
 .. currentmodule:: wemake_python_styleguide.violations.best_practices
 
@@ -144,7 +143,7 @@ from wemake_python_styleguide.violations.base import (
 @final
 class WrongMagicCommentViolation(SimpleViolation):
     """
-    Restricts to use several control (or magic) comments.
+    Restricts to use various control (such as magic) comments.
 
     We do not allow to use:
 
@@ -157,15 +156,14 @@ class WrongMagicCommentViolation(SimpleViolation):
     Reasoning:
         We cover several different use-cases in a single rule.
         ``# noqa`` comment is restricted because it can hide other violations.
-        ``# type: some_type`` comment is restricted because
-        we can already use type annotations instead.
+        ``# type: some_type`` comment is restricted because we can already use type annotations instead.
 
     Solution:
         Use ``# noqa`` comments with specified error types.
         Use type annotations to specify types.
 
-    We still allow to use ``# type: ignore`` comment.
-    Since sometimes it is totally required.
+    We still allow using ``# type: ignore`` comment.
+    Since sometimes it is required.
 
     Example::
 
@@ -196,7 +194,7 @@ class WrongDocCommentViolation(TokenizeViolation):
     Forbids to use empty doc comments (``#:``).
 
     Reasoning:
-        Doc comments are used to provide a documentation.
+        Doc comments are used to provide documentation.
         But supplying empty doc comments breaks this use-case.
         It is unclear why they can be used with no contents.
 
@@ -232,7 +230,7 @@ class OveruseOfNoqaCommentViolation(SimpleViolation):
 
     Reasoning:
         Having too many ``# noqa`` comments make your code
-        less readable and clearly indicates that there's something
+        less readable and indicates that there's something
         wrong with it.
 
     Solution:
@@ -263,9 +261,9 @@ class OveruseOfNoCoverCommentViolation(SimpleViolation):
 
     Reasoning:
         Having too many ``# pragma: no cover`` comments
-        clearly indicates that there's something wrong with it.
+        indicates that there's something wrong with it.
         Moreover, it makes your tests useless, since they do not cover
-        a big partion of your code.
+        a big partition of your code.
 
     Solution:
         Refactor your code to much the style.
@@ -289,7 +287,7 @@ class ComplexDefaultValueViolation(ASTViolation):
     or ``ast.Ellipsis`` should be moved out from defaults.
 
     Reasoning:
-        It can be tricky. Nothing stops you from making database calls or http
+        It can be tricky. Nothing stops you from making database calls or HTTP
         requests in such expressions. It is also not readable for us.
 
     Solution:
@@ -393,7 +391,7 @@ class MutableModuleConstantViolation(ASTViolation):
     Solution:
         Use immutable types for constants.
 
-    We only treat ``ast.Set``, ``ast.Dict``, ``ast.List``, and comprehensions
+    We only treat ``ast.Set``, ``ast.Dict``, ``ast.List`` and comprehensions
     as mutable things. All other nodes are still fine.
 
     Example::
@@ -425,7 +423,7 @@ class SameElementsInConditionViolation(ASTViolation):
     Forbids to use the same logical conditions in one expression.
 
     Reasoning:
-        Using the same name in logical condition more that once
+        Using the same name in a logical condition more than once
         indicates that you are either making a logical mistake,
         or just over-complicating your design.
 
@@ -458,7 +456,7 @@ class HeterogenousCompareViolation(ASTViolation):
     """
     Forbids to heterogenous operators in one compare.
 
-    Note, that we allow to mix ``>`` with ``>=``
+    Note, that we do allow mixing  ``>`` with ``>=``
     and ``<`` with ``<=`` operators.
 
     Reasoning:
@@ -497,7 +495,7 @@ class HeterogenousCompareViolation(ASTViolation):
 @final
 class WrongModuleMetadataViolation(ASTViolation):
     """
-    Forbids to have some module level variables.
+    Forbids to have some module-level variables.
 
     Reasoning:
         We discourage using module variables like ``__author__``,
@@ -557,7 +555,7 @@ class InitModuleHasLogicViolation(SimpleViolation):
 
     Reasoning:
         If you have logic inside the ``__init__`` module
-        it means several things:
+        It means several things:
 
         1. you are keeping some outdated stuff there, you need to refactor
         2. you are placing this logic into the wrong file,
@@ -570,7 +568,7 @@ class InitModuleHasLogicViolation(SimpleViolation):
     However, we allow to have some contents inside the ``__init__`` module:
 
     1. comments, since they are dropped before AST comes in play
-    2. docs string, because sometimes it is required to state something
+    2. docstrings are used sometimes when required to state something
 
     It is also fine when you have different users that use your code.
     And you do not want to break everything for them.
@@ -605,7 +603,7 @@ class BadMagicModuleFunctionViolation(ASTViolation):
     Configuration:
         This rule is configurable with ``--i-control-code``
         and ``--i-dont-control-code``.
-        Default:
+    Default:
         :str:`wemake_python_styleguide.options.defaults.I_CONTROL_CODE`
 
     .. versionadded:: 0.9.0
@@ -655,7 +653,7 @@ class DuplicateExceptionViolation(ASTViolation):
     Reasoning:
         Having the same exception name in different blocks means
         that something is not right: since only one branch will work.
-        Other one will always be ignored. So, that is clearly an error.
+        Another one will always be ignored. So, that is an error.
 
     Solution:
         Use unique exception handling rules.
@@ -812,7 +810,7 @@ class TryExceptMultipleReturnPathViolation(ASTViolation):
 
     Reasoning:
         The problem with ``return`` in ``else`` and ``finally``
-        is that it is impossible to say what value is going to be actually
+        is that it is impossible to say what value is going to be
         returned without looking up the implementation details. Why?
         Because ``return`` does not expect
         that some other code will be executed after it.
@@ -865,7 +863,7 @@ class WrongKeywordViolation(ASTViolation):
     Forbids to use some ``python`` keywords.
 
     Reasoning:
-        Using some keywords generally gives you more pain that relieve.
+        Using some keywords generally gives you more pain than relieves.
 
         ``del`` keyword is not composable with other functions,
         you cannot pass it as a regular function.
@@ -961,7 +959,7 @@ class RaiseNotImplementedViolation(ASTViolation):
     Reasoning:
         These two violations look so similar.
         But, these violations have different use cases.
-        Use cases of ``NotImplemented`` is too limited
+        Use cases of ``NotImplemented`` are too limited
         to be generally available.
 
     Solution:
@@ -992,8 +990,9 @@ class BaseExceptionViolation(ASTViolation):
     Forbids to use ``BaseException`` exception.
 
     Reasoning:
-        We can silence system exit and keyboard interrupt with this exception
-        handler. It is almost the same as raw ``except:`` block.
+        We can silence system exit and keyboard interrupt
+        with this exception handler.
+        It is almost the same as raw ``except:`` block.
 
     Solution:
         Handle ``Exception``, ``KeyboardInterrupt``,
@@ -1026,13 +1025,15 @@ class BooleanPositionalArgumentViolation(ASTViolation):
     Forbids to pass booleans as non-keyword parameters.
 
     Reasoning:
-        Passing boolean as regular positional
-        parameters is very non-descriptive.
-        It is almost impossible to tell, what does this parameter means.
-        And you almost always have to look up the implementation to tell
-        what is going on.
-        The only exception from this rule is passing booleans as
+        Passing boolean as regular positional parameters
+        are very non-descriptive.
+        It is almost impossible to tell, what does this
+        parameter mean.
+        And you almost always have to look up the implementation
+        to tell what is going on.
+        The only exception from this rule is passing booleans as a
         non-keyword argument when it is the only passed argument.
+
 
     Solution:
         Pass booleans as keywords only.
@@ -1111,8 +1112,8 @@ class UnreachableCodeViolation(ASTViolation):
     an exception is too complicated and is out of the scope of this rule.
 
     Reasoning:
-        Having dead code in your project is an indicator that you
-        do not care about your code base at all.
+        Having dead code in your project is an indicator that
+        you do not care about your codebase at all.
         It dramatically reduces code quality and readability.
         It also demotivates team members.
 
@@ -1150,7 +1151,8 @@ class StatementHasNoEffectViolation(ASTViolation):
     Reasoning:
         Statements that just access the value or expressions
         used as statements indicate that your code
-        contains deadlines. They just pollute your codebase and do nothing.
+        contains deadlines.
+        They just pollute your codebase and do nothing.
 
     Solution:
         Refactor your code in case it was a typo or error.
@@ -1170,7 +1172,6 @@ class StatementHasNoEffectViolation(ASTViolation):
 
     .. versionadded:: 0.5.0
     .. versionchanged:: 0.11.0
-
     """
 
     error_template = 'Found statement that has no effect'
@@ -1185,7 +1186,7 @@ class MultipleAssignmentsViolation(ASTViolation):
 
     Reasoning:
         Multiple assignments on the same line might not do what you think
-        they do. They can also grown pretty long. And you will not notice
+        they do. They can also grow pretty long. And you will not notice
         the rising complexity of your code.
 
     Solution:
@@ -1216,7 +1217,7 @@ class NestedFunctionViolation(ASTViolation):
     Forbids to have nested functions.
 
     Reasoning:
-        Nesting functions is a bad practice.
+        Nesting functions is bad practice.
         It is hard to test them, it is hard then to separate them.
         People tend to overuse closures, so it's hard to manage the dataflow.
 
@@ -1261,9 +1262,9 @@ class NestedClassViolation(ASTViolation):
         Testing them is also really hard.
 
     Solution:
-        Just write flat classes, there's no need nest them.
+        Just write flat classes, there's no need to nest them.
         If you are nesting classes inside a function for parametrization,
-        then you will probably need to use different design (or metaclasses).
+        then you will probably need to use a different design (or metaclasses).
 
     Configuration:
         This rule is configurable with ``--nested-classes-whitelist``.
@@ -1299,7 +1300,7 @@ class MagicNumberViolation(ASTViolation):
     appears in your code out of nowhere. Like ``42``. Or ``0.32``.
 
     Reasoning:
-        It is very hard to remember what these numbers actually mean.
+        It is very hard to remember what these numbers mean.
         Why were they used? Should they ever be changed?
         Or are they eternal like ``3.14``?
 
@@ -1522,7 +1523,7 @@ class StopIterationInsideGeneratorViolation(ASTViolation):
         ``StopIteration`` should not be raised explicitly in generators.
 
     Solution:
-        Use return statement to get out of a generator.
+        Use a return statement to get out of a generator.
 
     Example::
 
@@ -1552,15 +1553,15 @@ class StopIterationInsideGeneratorViolation(ASTViolation):
 @final
 class WrongUnicodeEscapeViolation(TokenizeViolation):
     r"""
-    Forbids to use unicode escape sequences in binary strings.
+    Forbids to use Unicode escape sequences in binary strings.
 
     Reasoning:
-        Binary strings do not work with unicode.
+        Binary strings do not work with Unicode.
         Having unicode escape characters in there means
         that you have an error in your code.
 
     Solution:
-        Use regular strings when escaping unicode strings.
+        Use regular strings when escaping Unicode strings.
 
     Example::
 
@@ -1594,18 +1595,10 @@ class BlockAndLocalOverlapViolation(ASTViolation):
     2. Functions and async functions definitions
     3. Classes, methods, and async methods definitions
     4. For and async for loops variables
-    5. Except block exception aliases
+    5. Except for block exception aliases
 
-    We allow local variables to overlap theirselfs,
-    we forbid block varibals to overlap theirselfs.
-
-    Reasoning:
-        A lot of complex errors might happen when
-        you shadow local varibales with block variables
-        or when you shadow block variables with local variables.
-
-    Solution:
-        Use names that do not overlap.
+    We allow local variables to overlap themself,
+    we forbid block variables to overlap themself.
 
     Example::
 
@@ -1675,13 +1668,14 @@ class OuterScopeShadowingViolation(ASTViolation):
     """
     Forbids to shadow variables from outer scopes.
 
-    We check function, method, and module scopes.
-    While we do not check class scope. Because class level constants
+    We check the function, method, and module scopes.
+    While we do not check the class scope. Because class level constants
     are not available via regular name,
     and they are scope to ``ClassName.var_name``.
 
     Reasoning:
-        Shadowing can lead you to a big pile of strage and unexpected bugs.
+        Shadowing can lead you to a big pile of storage and unexpected bugs.
+
 
     Solution:
         Use different names and do not allow scoping.
@@ -1711,7 +1705,7 @@ class OuterScopeShadowingViolation(ASTViolation):
 @final
 class UnhashableTypeInHashViolation(ASTViolation):
     """
-    Forbids to use exlicit unhashable types as set items and dict keys.
+    Forbids to use explicit unhashable types of asset items and dict keys.
 
     Reasoning:
         This will resolve in ``TypeError`` in runtime.
@@ -1738,7 +1732,7 @@ class UnhashableTypeInHashViolation(ASTViolation):
 @final
 class WrongKeywordConditionViolation(ASTViolation):
     """
-    Forbids to use exlicit falsly-evaluated conditions with several keywords.
+    Forbids to use explicit falsely-evaluated conditions with several keywords.
 
     We check:
 
@@ -1749,7 +1743,7 @@ class WrongKeywordConditionViolation(ASTViolation):
     We disallow constants and some expressions.
 
     Reasoning:
-        Some conditions clearly tell us that this node won't work correctly.
+        Some conditions tell us that this node won't work correctly.
         So, we need to check that we can fix that.
 
     Solution:
@@ -1784,7 +1778,7 @@ class WrongNamedKeywordViolation(ASTViolation):
     Forbids to have wrong named keywords in starred dicts.
 
     Reasoning:
-        Using wrong keywords in starred dict.
+        Using the wrong keywords in starred dict.
         Eg.: ``print(**{'@': 1})``.
 
     Solution:
@@ -1813,9 +1807,9 @@ class ApproximateConstantViolation(ASTViolation):
 
     Reasoning:
         Some constants are already defined.
-        No need to write them again, use existing values.
-        We just compare numbers as strings and raise this violation
-        when they start with the same chars.
+        No need to write to them again, use existing values.
+        We just compare numbers as strings and raise this
+        violation when they start with the same chars.
 
     Solution:
         Use pre-defined constants.
@@ -1848,13 +1842,13 @@ class ApproximateConstantViolation(ASTViolation):
 @final
 class StringConstantRedefinedViolation(ASTViolation):
     """
-    Forbid to use alphabet as a string.
+    Forbid to use the alphabet as a string.
 
     Reasoning:
         Some constants are already defined.
-        No need to write them again, use existing values.
+        No need to write to them again, use existing values.
         We just compare strings and raise this violation
-        when they have exactly the same chars.
+        when they have the same chars.
 
     Solution:
         Use pre-defined constants.
@@ -2085,7 +2079,7 @@ class ShebangViolation(SimpleViolation):
         - There are blank or comment lines before shebang.
 
     Reasoning:
-        Setting the shebang incorrectly causes executable mismatch.
+        Setting the shebang incorrectly causes an executable mismatch.
 
     Solution:
         Ensure the shebang is present on the first line,
