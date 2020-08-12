@@ -110,6 +110,11 @@ def is_too_short_name(
     False
 
     """
+    allow_list = ['np', 'pd', 'df', 'plt', 'sns', 'tf', 'cv']
+
+    if name in allow_list:
+        return False
+
     if access.is_unused(name):
         return False
 
