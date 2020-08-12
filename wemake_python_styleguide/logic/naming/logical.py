@@ -109,6 +109,9 @@ def is_too_short_name(
     >>> is_too_short_name('xy', min_length=2, trim=True)
     False
 
+    >>> is_too_short_name('np', min_length=3)
+    False
+
     """
     allow_list = ['np', 'pd', 'df', 'plt', 'sns', 'tf', 'cv']
 
