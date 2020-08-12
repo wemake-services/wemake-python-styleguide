@@ -1,8 +1,7 @@
 from typing import Iterable
 
-from wemake_python_styleguide.constants import UNUSED_PLACEHOLDER
+from wemake_python_styleguide.constants import UNUSED_PLACEHOLDER, ALIAS_NAMES_WHITELIST
 from wemake_python_styleguide.logic.naming import access
-from wemake_python_styleguide.constants import ALIAS_NAMES_WHITELIST
 
 
 def is_wrong_name(name: str, to_check: Iterable[str]) -> bool:
@@ -114,7 +113,6 @@ def is_too_short_name(
     False
 
     """
-
     if name in ALIAS_NAMES_WHITELIST:
         return False
 
