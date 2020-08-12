@@ -306,6 +306,17 @@ MAGIC_MODULE_NAMES_BLACKLIST: Final = frozenset((
     '__dir__',
 ))
 
+#: List of commonly used aliases
+ALIAS_NAMES_WHITELIST: Final = frozenset((
+    'np',
+    'pd',
+    'df',
+    'plt',
+    'sns',
+    'tf',
+    'cv',
+))
+
 #: Regex pattern to name modules.
 MODULE_NAME_PATTERN: Final = re.compile(r'^_?_?[a-z][a-z\d_]*[a-z\d](__)?$')
 
