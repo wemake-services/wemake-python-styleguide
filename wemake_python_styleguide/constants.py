@@ -386,6 +386,17 @@ ALLOWED_NESTED_IMPORTS_CONDITIONS: Final = frozenset((
     'TYPE_CHECKING',
 ))
 
+#: List of commonly used aliases
+ALIAS_NAMES_WHITELIST: Final = frozenset((
+    'np',
+    'pd',
+    'df',
+    'plt',
+    'sns',
+    'tf',
+    'cv',
+))
+
 # Internal variables
 # ==================
 
