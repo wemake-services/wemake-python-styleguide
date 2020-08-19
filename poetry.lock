@@ -549,7 +549,7 @@ description = "Hypothesis strategies for generating Python programs, something l
 name = "hypothesmith"
 optional = false
 python-versions = ">=3.6"
-version = "0.1.3"
+version = "0.1.4"
 
 [package.dependencies]
 hypothesis = ">=5.23.7"
@@ -1744,8 +1744,8 @@ hypothesis = [
     {file = "hypothesis-5.26.0.tar.gz", hash = "sha256:54f3ce8d7146cb59eef419a26d5edfdf4e8518615b9df8c7e1f5392a2c5c9c36"},
 ]
 hypothesmith = [
-    {file = "hypothesmith-0.1.3-py3-none-any.whl", hash = "sha256:aceb0feae6029eeaa4502cd763debec313b1aec43db8805958e5a81036c3e483"},
-    {file = "hypothesmith-0.1.3.tar.gz", hash = "sha256:4cf1e2ce43407ad1c9c2ab5a940760db3ea8c3c29134435bc0600f33a4a32de4"},
+    {file = "hypothesmith-0.1.4-py3-none-any.whl", hash = "sha256:bc45f45808078d2bbe6c3806af3b3604bde35624964fcc6b849cecadf254d3a9"},
+    {file = "hypothesmith-0.1.4.tar.gz", hash = "sha256:5628fb1a06233c70751105635bc3cee789c82358041b4518c2cab5300e73cd65"},
 ]
 idna = [
     {file = "idna-2.9-py2.py3-none-any.whl", hash = "sha256:a068a21ceac8a4d63dbfd964670474107f541babbd2250d61922f029858365fa"},
