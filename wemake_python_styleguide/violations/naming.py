@@ -831,10 +831,10 @@ class BuiltinShadowingViolation(ASTViolation):
     Reasoning:
         Your code simply breaks Python. After you create ``list = 1``,
         you cannot not call ``builtin`` function ``list``
-        and what can be worth than that?
+        and what can be worse than that?
 
     Solution:
-        Rename your entity not to shadow Python builtins.
+        Rename your entity to not shadow Python builtins.
 
     Example::
 
@@ -844,6 +844,15 @@ class BuiltinShadowingViolation(ASTViolation):
         # Wrong:
         str = ''
         list = [1, 2, 3]
+
+    This can also cause problems when defining class attributes, for example::
+
+        class A:
+            min = 5
+            max = min(10, 20)  # TypeError: 'int' object is not callable
+
+    If you feel it is still necesarry to use such a class attribute,
+    consider using a `noqa` comment with caution.
 
     .. versionadded:: 0.14
 
