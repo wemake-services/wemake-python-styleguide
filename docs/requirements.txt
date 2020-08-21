@@ -15,4 +15,4 @@ docutils==0.16
 # goes to `autodoc_mock_imports` in `conf.py`:
 flake8==3.8.3
 typing-extensions==3.7.4.2
-attrs==19.3.0
+attrs==20.1.0
