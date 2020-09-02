@@ -266,7 +266,7 @@ class OveruseOfNoCoverCommentViolation(SimpleViolation):
         a big partition of your code.
 
     Solution:
-        Refactor your code to much the style.
+        Refactor your code to match the style.
         Or use a config file to switch off some checks.
 
     .. versionadded:: 0.8.0
@@ -315,7 +315,7 @@ class ComplexDefaultValueViolation(ASTViolation):
 @final
 class LoopVariableDefinitionViolation(ASTViolation):
     """
-    Forbids to use anything rather than ``ast.Name`` to define loop variables.
+    Forbids to use anything other than ``ast.Name`` to define loop variables.
 
     Reasoning:
         When defining a ``for`` loop with attributes, indexes, calls,
@@ -957,8 +957,8 @@ class RaiseNotImplementedViolation(ASTViolation):
     Forbids to use ``NotImplemented`` error.
 
     Reasoning:
-        These two violations look so similar.
-        But, these violations have different use cases.
+        These two exceptions look similar.
+        But, they have different use cases.
         Use cases of ``NotImplemented`` are too limited
         to be generally available.
 
@@ -1884,7 +1884,7 @@ class IncorrectExceptOrderViolation(ASTViolation):
 
     Reasoning:
         Using incorrect order of exceptions is error-prone, since
-        once ends up with some unreachable exception clauses.
+        you end up with some unreachable exception clauses.
 
     Solution:
         Use correct order of exceptions.
@@ -1960,7 +1960,7 @@ class ProtectedModuleMemberViolation(ASTViolation):
     Reasoning:
         When importing protected modules' members, we break the contract
         which the authors of this module enforce.
-        Thus, disrespecting encapsulation may break the code at any moment.
+        By disrespecting encapsulation, we may break the code at any moment.
 
     Solution:
         Do not import protected objects from modules.
@@ -1999,8 +1999,8 @@ class PositionalOnlyArgumentsViolation(ASTViolation):
 
     Solution:
         Use regular arguments.
-        In case you are working with C programming language,
-        then this violation can be ignored.
+        In case you are working with C, then this violation
+        can be ignored.
 
     Example::
 
@@ -2075,15 +2075,15 @@ class ShebangViolation(SimpleViolation):
         - Shebang is present but the file is not executable.
         - The file is executable but no shebang is present.
         - Shebang is present but does not contain "python".
-        - Presence of whitespace before the shebang.
+        - Whitespace is present before the shebang.
         - Presence of blank lines or commented lines before the shebang.
 
     Reasoning:
         Setting the shebang incorrectly causes an executable mismatch.
 
     Solution:
-        Ensure that the shebang present on the first line,
-        contains "python", and there is no whitespace beforehand.
+        Ensure that the shebang is present on the first line,
+        and contains "python", and there is no leading whitespace.
 
     Example::
 
