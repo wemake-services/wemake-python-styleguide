@@ -349,7 +349,7 @@ class LoopVariableDefinitionViolation(ASTViolation):
 @final
 class ContextManagerVariableDefinitionViolation(ASTViolation):
     """
-    Forbids to use anything rather than ``ast.Name`` to define contexts.
+    Forbids to use anything other than ``ast.Name`` to define contexts.
 
     Reasoning:
         When defining a ``with`` context managers with attributes,
