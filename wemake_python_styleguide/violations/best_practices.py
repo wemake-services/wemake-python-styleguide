@@ -266,7 +266,7 @@ class OveruseOfNoCoverCommentViolation(SimpleViolation):
         a big partition of your code.
 
     Solution:
-        Refactor your code to much the style.
+        Refactor your code to match the style.
         Or use a config file to switch off some checks.
 
     .. versionadded:: 0.8.0
@@ -315,7 +315,7 @@ class ComplexDefaultValueViolation(ASTViolation):
 @final
 class LoopVariableDefinitionViolation(ASTViolation):
     """
-    Forbids to use anything rather than ``ast.Name`` to define loop variables.
+    Forbids to use anything other than ``ast.Name`` to define loop variables.
 
     Reasoning:
         When defining a ``for`` loop with attributes, indexes, calls,
@@ -349,7 +349,7 @@ class LoopVariableDefinitionViolation(ASTViolation):
 @final
 class ContextManagerVariableDefinitionViolation(ASTViolation):
     """
-    Forbids to use anything rather than ``ast.Name`` to define contexts.
+    Forbids to use anything other than ``ast.Name`` to define contexts.
 
     Reasoning:
         When defining a ``with`` context managers with attributes,
@@ -572,7 +572,7 @@ class InitModuleHasLogicViolation(SimpleViolation):
 
     It is also fine when you have different users that use your code.
     And you do not want to break everything for them.
-    In this case this rule can be configured.
+    In this case, this rule can be configured.
 
     Configuration:
         This rule is configurable with ``--i-control-code``
@@ -872,7 +872,7 @@ class WrongKeywordViolation(ASTViolation):
         from the execution scope.
         Moreover, it has a lot of substitutions. You won't miss it!
 
-        ``pass`` keyword is just useless by design. There's no usecase for it.
+        ``pass`` keyword is just useless by design. There's no use-case for it.
         Because it does literally nothing.
 
         ``global`` and ``nonlocal`` promote bad-practices of having an external
@@ -957,8 +957,8 @@ class RaiseNotImplementedViolation(ASTViolation):
     Forbids to use ``NotImplemented`` error.
 
     Reasoning:
-        These two violations look so similar.
-        But, these violations have different use cases.
+        These two exceptions look similar.
+        But, they have different use cases.
         Use cases of ``NotImplemented`` are too limited
         to be generally available.
 
@@ -1318,7 +1318,7 @@ class MagicNumberViolation(ASTViolation):
         # Wrong:
         total = get_items_from_cart() * 3.33
 
-    What are numbers that we exclude from this check?
+    What are the numbers that we exclude from this check?
     Any numbers that are assigned to a variable, array, dictionary,
     or keyword arguments inside a function.
     ``int`` numbers that are in range ``[-10, 10]`` and
@@ -1557,7 +1557,7 @@ class WrongUnicodeEscapeViolation(TokenizeViolation):
 
     Reasoning:
         Binary strings do not work with Unicode.
-        Having unicode escape characters in there means
+        Having Unicode escape characters in there means
         that you have an error in your code.
 
     Solution:
@@ -1744,7 +1744,7 @@ class WrongKeywordConditionViolation(ASTViolation):
 
     Reasoning:
         Some conditions tell us that this node won't work correctly.
-        So, we need to check that we can fix that.
+        So, we need to check if we can fix that.
 
     Solution:
         Remove the unreachable node, or change the condition item.
@@ -1768,21 +1768,21 @@ class WrongKeywordConditionViolation(ASTViolation):
 
     """
 
-    error_template = 'Found wrong keyword condition'
+    error_template = 'Found incorrect keyword condition'
     code = 444
 
 
 @final
 class WrongNamedKeywordViolation(ASTViolation):
     """
-    Forbids to have wrong named keywords in starred dicts.
+    Forbids to have incorrectly named keywords in the starred dicts.
 
     Reasoning:
-        Using the wrong keywords in starred dict.
+        Using the incorrect keywords in the starred dict.
         Eg.: ``print(**{'@': 1})``.
 
     Solution:
-        Don't use incorrect identifiers for keywords.
+        Don't use incorrect identifiers as keywords.
 
     Example::
 
@@ -1797,7 +1797,7 @@ class WrongNamedKeywordViolation(ASTViolation):
     """
 
     code = 445
-    error_template = 'Found wrong named keyword in starred dict'
+    error_template = 'Found incorrectly named keyword in the starred dict'
 
 
 @final
@@ -1807,7 +1807,7 @@ class ApproximateConstantViolation(ASTViolation):
 
     Reasoning:
         Some constants are already defined.
-        No need to write to them again, use existing values.
+        No need to write them again, use existing values.
         We just compare numbers as strings and raise this
         violation when they start with the same chars.
 
@@ -1887,7 +1887,7 @@ class IncorrectExceptOrderViolation(ASTViolation):
         you end up with some unreachable exception clauses.
 
     Solution:
-        Use correct order of exceptions.
+        Use the correct order of exceptions.
 
     Example::
 
@@ -1927,7 +1927,7 @@ class FloatKeyViolation(ASTViolation):
         ``float`` is a very ugly data type.
         It has a lot of "precision" errors.
         When we use ``float`` as keys we can hit this wall.
-        We also cannot use ``float`` keys with lists by design.
+        Moreover, we cannot use ``float`` keys with lists, by design.
 
     Solution:
         Use other data types: integers, decimals, or use fuzzy logic.
@@ -1958,10 +1958,9 @@ class ProtectedModuleMemberViolation(ASTViolation):
     Related to :class:`~ProtectedModuleViolation`.
 
     Reasoning:
-        When importing protected modules' members we break a contract
-        that authors of this module enforce.
-        This way we are not respecting encapsulation and it may break
-        our code at any moment.
+        When importing protected modules' members, we break the contract
+        which the authors of this module enforce.
+        By disrespecting encapsulation, we may break the code at any moment.
 
     Solution:
         Do not import protected objects from modules.
@@ -2000,7 +1999,8 @@ class PositionalOnlyArgumentsViolation(ASTViolation):
 
     Solution:
         Use regular arguments.
-        In case you are working with C, then this violation can be ignored.
+        In case you are working with C, then this violation
+        can be ignored.
 
     Example::
 
@@ -2034,7 +2034,7 @@ class LoopControlFinallyViolation(ASTViolation):
         terrible practice, because `finally` is implicitly
         called and can cause damage to your logic with
         its implicitness.
-        We should not allow it.
+        It should not be allowed.
 
     Solution:
         Remove ``break`` and ``continue`` from ``finally`` blocks.
@@ -2075,15 +2075,15 @@ class ShebangViolation(SimpleViolation):
         - Shebang is present but the file is not executable.
         - The file is executable but no shebang is present.
         - Shebang is present but does not contain "python".
-        - There is whitespace before shebang.
-        - There are blank or comment lines before shebang.
+        - Whitespace is present before the shebang.
+        - Presence of blank lines or commented lines before the shebang.
 
     Reasoning:
         Setting the shebang incorrectly causes an executable mismatch.
 
     Solution:
-        Ensure the shebang is present on the first line,
-        contains "python", and there is no whitespace before.
+        Ensure that the shebang is present on the first line,
+        and contains "python", and there is no leading whitespace.
 
     Example::
 
