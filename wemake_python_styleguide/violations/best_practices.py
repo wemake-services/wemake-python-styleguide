@@ -572,7 +572,7 @@ class InitModuleHasLogicViolation(SimpleViolation):
 
     It is also fine when you have different users that use your code.
     And you do not want to break everything for them.
-    In this case this rule can be configured.
+    In this case, this rule can be configured.
 
     Configuration:
         This rule is configurable with ``--i-control-code``
@@ -872,7 +872,7 @@ class WrongKeywordViolation(ASTViolation):
         from the execution scope.
         Moreover, it has a lot of substitutions. You won't miss it!
 
-        ``pass`` keyword is just useless by design. There's no usecase for it.
+        ``pass`` keyword is just useless by design. There's no use-case for it.
         Because it does literally nothing.
 
         ``global`` and ``nonlocal`` promote bad-practices of having an external
@@ -1318,7 +1318,7 @@ class MagicNumberViolation(ASTViolation):
         # Wrong:
         total = get_items_from_cart() * 3.33
 
-    What are numbers that we exclude from this check?
+    What are the numbers that we exclude from this check?
     Any numbers that are assigned to a variable, array, dictionary,
     or keyword arguments inside a function.
     ``int`` numbers that are in range ``[-10, 10]`` and
@@ -1557,7 +1557,7 @@ class WrongUnicodeEscapeViolation(TokenizeViolation):
 
     Reasoning:
         Binary strings do not work with Unicode.
-        Having unicode escape characters in there means
+        Having Unicode escape characters in there means
         that you have an error in your code.
 
     Solution:
@@ -1887,7 +1887,7 @@ class IncorrectExceptOrderViolation(ASTViolation):
         you end up with some unreachable exception clauses.
 
     Solution:
-        Use correct order of exceptions.
+        Use the correct order of exceptions.
 
     Example::
 
