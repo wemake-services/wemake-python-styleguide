@@ -70,6 +70,7 @@ Summary
    PositionalOnlyArgumentsViolation
    LoopControlFinallyViolation
    ShebangViolation
+   BaseExceptionRaiseViolation
 
 Best practices
 --------------
@@ -128,6 +129,7 @@ Best practices
 .. autoclass:: PositionalOnlyArgumentsViolation
 .. autoclass:: LoopControlFinallyViolation
 .. autoclass:: ShebangViolation
+.. autoclass:: BaseExceptionRaiseViolation
 
 """
 
@@ -2100,3 +2102,39 @@ class ShebangViolation(SimpleViolation):
 
     error_template = 'Found executable mismatch: {0}'
     code = 453
+
+
+@final
+class BaseExceptionRaiseViolation(ASTViolation):
+    """
+    Forbids to raise ``Exception`` or ``BaseException``.
+
+    Reasoning:
+        ``Exception`` and ``BaseException`` are inconvenient to catch.
+        And when you catch them you can accidentally supress other exceptions.
+
+    Solution:
+        Use a user-defined exception, subclassed from ``Exception``.
+
+    Example::
+
+        # Correct:
+        raise UserNotFoundError
+        raise UserNotFoundError("cannot find user with the given id")
+
+        # Wrong:
+        raise Exception
+        raise Exception("user not found")
+        raise BaseException
+        raise BaseException("user not found")
+
+    See also:
+        https://docs.python.org/3/library/exceptions.html#exception-hierarchy
+        https://docs.python.org/3/tutorial/errors.html#user-defined-exceptions
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found wrong `raise` exception type: `{0}`'
+    code = 454
