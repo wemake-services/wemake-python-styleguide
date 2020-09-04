@@ -2136,5 +2136,5 @@ class BaseExceptionRaiseViolation(ASTViolation):
 
     """
 
-    error_template = 'Found wrong `raise` exception type: `{0}`'
+    error_template = 'Found wrong `raise` exception type: {0}'
     code = 454
