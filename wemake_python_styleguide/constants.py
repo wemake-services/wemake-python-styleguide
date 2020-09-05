@@ -278,6 +278,7 @@ ALLOWED_BUILTIN_CLASSES: Final = frozenset((
 NESTED_FUNCTIONS_WHITELIST: Final = frozenset((
     'decorator',
     'factory',
+    'wrapper',
 ))
 
 #: List of allowed ``__future__`` imports.
