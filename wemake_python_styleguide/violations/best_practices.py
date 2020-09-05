@@ -2111,7 +2111,7 @@ class BaseExceptionRaiseViolation(ASTViolation):
 
     Reasoning:
         ``Exception`` and ``BaseException`` are inconvenient to catch.
-        And when you catch them you can accidentally supress other exceptions.
+        And when you catch them you can accidentally suppress other exceptions.
 
     Solution:
         Use a user-defined exception, subclassed from ``Exception``.
