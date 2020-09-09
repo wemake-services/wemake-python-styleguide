@@ -670,7 +670,7 @@ class ImplicitInConditionViolation(ASTViolation):
 @final
 class OpenWithoutContextManagerViolation(ASTViolation):
     """
-    Forbids to use ``open()`` with a context manager.
+    Forbids to use ``open()`` without a context manager.
 
     Reasoning:
         When you ``open()`` something, you need to close it.
