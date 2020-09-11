@@ -523,8 +523,8 @@ category = "dev"
 description = "A library for property-based testing"
 name = "hypothesis"
 optional = false
-python-versions = ">=3.5.2"
-version = "5.33.2"
+python-versions = ">=3.6"
+version = "5.35.0"
 
 [package.dependencies]
 attrs = ">=19.2.0"
@@ -1531,7 +1531,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "0a1f5574337c659591a99257ca48688638b580b39c8491fee63734f098b634ab"
+content-hash = "ec2f98167e5e877b146f053999e9ffb25c3505a3a0bb285e1b6501594dcd39ad"
 lock-version = "1.0"
 python-versions = "^3.6"
 
@@ -1741,8 +1741,8 @@ grimp = [
     {file = "grimp-1.2.1.tar.gz", hash = "sha256:645a722d659398ded42b7b77015973ee344fee7f28d5e4ab1ae28cbebf26e452"},
 ]
 hypothesis = [
-    {file = "hypothesis-5.33.2-py3-none-any.whl", hash = "sha256:4255b68a15c13efde4136bcbcde09e6b526500bca01d0927382d525196581305"},
-    {file = "hypothesis-5.33.2.tar.gz", hash = "sha256:5cc9073ee5a5c109c8d731a52c304729dbb6affed570eb7d35908bfdd937975e"},
+    {file = "hypothesis-5.35.0-py3-none-any.whl", hash = "sha256:546650b62e14baae466bbc0d270de3f8c2f5da0640f476468e7f557a714ad40a"},
+    {file = "hypothesis-5.35.0.tar.gz", hash = "sha256:446f42b0ae7ceb1821f4a57e56bbe2afef98d7ab47ef5159c74c7162385e849f"},
 ]
 hypothesmith = [
     {file = "hypothesmith-0.1.4-py3-none-any.whl", hash = "sha256:bc45f45808078d2bbe6c3806af3b3604bde35624964fcc6b849cecadf254d3a9"},
