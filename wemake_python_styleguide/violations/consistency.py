@@ -351,10 +351,17 @@ class RequiredBaseClassViolation(ASTViolation):
     """
     Forbids to write classes without base classes.
 
+    Please, note that this rule has nothing to do with ``python2``.
+    We care only about consistency here.
+
     Reasoning:
         We just need to decide how to do it.
         We need a single and unified rule about base classes.
         We have decided to stick to the explicit base class notation.
+        Why? Because it is consistent with other use-cases.
+        When we have a base class ``A``, we write ``class MyClass(A):``.
+        When we have no base class, we have an implicit ``object`` base class.
+        So, we still use the same syntax: ``class MyClass(object):``.
 
     Solution:
         Add a base class.
@@ -366,9 +373,6 @@ class RequiredBaseClassViolation(ASTViolation):
 
         # Wrong:
         class Some: ...
-
-    See also:
-        https://google.github.io/styleguide/pyguide.html#39-classes
 
     .. versionadded:: 0.1.0
 
