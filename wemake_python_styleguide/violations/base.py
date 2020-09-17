@@ -68,11 +68,9 @@ ErrorNode = Union[
 ErrorCallback = Callable[['BaseViolation'], None]
 
 
+@enum.unique
 class ViolationPostfixes(enum.Enum):
     """String values of postfixes used for violation baselines."""
-
-    #: This field is required for `mypy` plugin that types field values.
-    value: str  # noqa: WPS110
 
     bigger_than = ' > {0}'
     less_than = ' < {0}'
