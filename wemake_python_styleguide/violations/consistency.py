@@ -1718,12 +1718,12 @@ class BadComplexNumberSuffixViolation(TokenizeViolation):
 @final
 class ZeroDivisionViolation(ASTViolation):
     """
-    Forbids to explicitly divide by zero.
+    Forbids to explicitly divide(or take modulo) by zero.
 
     Reasoning:
         This will just throw ``ZeroDivisionError``
         in case that's what you need: just throw it.
-        No need to use undefined meth behaviours.
+        No need to use undefined math behaviours.
         Or it might be just a typo / mistake, then fix it.
 
     Solution:
@@ -1736,8 +1736,10 @@ class ZeroDivisionViolation(ASTViolation):
 
         # Wrong:
         1 / 0
+        1 % 0
 
     .. versionadded:: 0.12.0
+    .. versionchanged: 0.15.0
 
     """
 
@@ -1756,9 +1758,11 @@ class MeaninglessNumberOperationViolation(ASTViolation):
         Multipling by zero is also redundant:
         it can be replaced with explicit ``0`` assign.
         Multiplying and dividing by ``1`` is also meaningless.
+        Likewise, using ``|`` or ``^`` with ``0``, and using
+        the ``%`` operator with ``1`` are unnecessary.
 
     Solution:
-        Remove useless zero operations.
+        Remove useless operations.
 
     Example::
 
@@ -1766,13 +1770,18 @@ class MeaninglessNumberOperationViolation(ASTViolation):
         number = 1
         zero = 0
         one = 1
+        three = 3
 
         # Wrong:
         number = 1 + 0 * 1
         zero = some * 0 / 1
         one = some ** 0 ** 1
+        three = 3 ^ 0
+        three = 3 | 0
+        three = 3 % 1
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 0.15.0
 
     """
 
