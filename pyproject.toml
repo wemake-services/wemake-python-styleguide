@@ -100,7 +100,7 @@ tomlkit = "^0.7"
 
 safety = "^1.9"
 autopep8 = "^1.5"
-import-linter = "^1.1"
+import-linter = "^1.2"
 
 ipdb = "^0.13"
 ipython = "^7.16"

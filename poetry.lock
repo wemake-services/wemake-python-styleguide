@@ -513,7 +513,7 @@ description = "Builds a queryable graph of the imports within one or more Python
 name = "grimp"
 optional = false
 python-versions = "*"
-version = "1.2.1"
+version = "1.2.2"
 
 [package.dependencies]
 networkx = ">=2.1,<3"
@@ -589,11 +589,11 @@ description = "Enforces rules for the imports within and between Python packages
 name = "import-linter"
 optional = false
 python-versions = "*"
-version = "1.1"
+version = "1.2"
 
 [package.dependencies]
 click = ">=6,<8"
-grimp = ">=1.2,<2"
+grimp = ">=1.2.2,<2"
 
 [[package]]
 category = "main"
@@ -1550,7 +1550,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "429c40e6cc8f196a96b06a90b09753991a1afba2d3734521fec360d2827c21ed"
+content-hash = "65be4541ab8b3ea55a077475ddaca74f6d1515817e3b340064d07eead9cbff1e"
 lock-version = "1.0"
 python-versions = "^3.6"
 
@@ -1757,7 +1757,7 @@ gitpython = [
     {file = "GitPython-3.1.3.tar.gz", hash = "sha256:e107af4d873daed64648b4f4beb89f89f0cfbe3ef558fc7821ed2331c2f8da1a"},
 ]
 grimp = [
-    {file = "grimp-1.2.1.tar.gz", hash = "sha256:645a722d659398ded42b7b77015973ee344fee7f28d5e4ab1ae28cbebf26e452"},
+    {file = "grimp-1.2.2.tar.gz", hash = "sha256:b2b3698ccf9134aa9b11054c3c745ca7bb5e932d4b549ed23e38d554e2e7fd19"},
 ]
 hypothesis = [
     {file = "hypothesis-5.35.4-py3-none-any.whl", hash = "sha256:72988c3cf29a89d2b506ffa2c6a1e90bbf1388ea35bac9096079457ed6107062"},
@@ -1780,7 +1780,7 @@ imagesize = [
     {file = "imagesize-1.2.0.tar.gz", hash = "sha256:b1f6b5a4eab1f73479a50fb79fcf729514a900c341d8503d62a62dbc4127a2b1"},
 ]
 import-linter = [
-    {file = "import-linter-1.1.tar.gz", hash = "sha256:185c2a98a5b9d0313c0a5396bac2385baee4a2bdc73d8d717712253b937b14f1"},
+    {file = "import-linter-1.2.tar.gz", hash = "sha256:cc43d580a50488996d5a40d4fbf80d244cb55497f2091c39a412e19bbc18486c"},
 ]
 importlib-metadata = [
     {file = "importlib_metadata-1.6.1-py2.py3-none-any.whl", hash = "sha256:15ec6c0fd909e893e3a08b3a7c76ecb149122fb14b7efe1199ddd4c7c57ea958"},
