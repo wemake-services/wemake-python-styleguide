@@ -1368,7 +1368,7 @@ description = "Mermaid diagrams in yours Sphinx powered docs"
 name = "sphinxcontrib-mermaid"
 optional = false
 python-versions = "*"
-version = "0.4.0"
+version = "0.5.0"
 
 [[package]]
 category = "dev"
@@ -1550,7 +1550,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "65be4541ab8b3ea55a077475ddaca74f6d1515817e3b340064d07eead9cbff1e"
+content-hash = "fbc96ef55d06b6698ac6a1115a69722f41b7634c6f5ca72bb13da6cce777d6cf"
 lock-version = "1.0"
 python-versions = "^3.6"
 
@@ -2086,8 +2086,7 @@ sphinxcontrib-jsmath = [
     {file = "sphinxcontrib_jsmath-1.0.1-py2.py3-none-any.whl", hash = "sha256:2ec2eaebfb78f3f2078e73666b1415417a116cc848b72e5172e596c871103178"},
 ]
 sphinxcontrib-mermaid = [
-    {file = "sphinxcontrib-mermaid-0.4.0.tar.gz", hash = "sha256:0ee45ba45b9575505eacdd6212e4e545213f4f93dfa32c7eeca32720dbc3b468"},
-    {file = "sphinxcontrib_mermaid-0.4.0-py2.py3-none-any.whl", hash = "sha256:01b3301af659555313e25ebe3cfd6ba209318044b7443148a20d5580f47baa1d"},
+    {file = "sphinxcontrib_mermaid-0.5.0-py2.py3-none-any.whl", hash = "sha256:80a4754d71c3f66a5b4ccb320868eb12f5eb0f2d25102e77886ce7ce327ec827"},
 ]
 sphinxcontrib-qthelp = [
     {file = "sphinxcontrib-qthelp-1.0.3.tar.gz", hash = "sha256:4c33767ee058b70dba89a6fc5c1892c0d57a54be67ddd3e7875a18d14cba5a72"},
