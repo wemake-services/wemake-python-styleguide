@@ -1235,21 +1235,21 @@ version = "3.0.4"
 
 [[package]]
 category = "dev"
-description = "Snapshot Testing utils for Python"
+description = "Snapshot testing for pytest, unittest, Django, and Nose"
 name = "snapshottest"
 optional = false
 python-versions = "*"
-version = "0.5.1"
+version = "0.6.0"
 
 [package.dependencies]
-fastdiff = ">=0.1.4"
+fastdiff = ">=0.1.4,<1"
 six = ">=1.10.0"
 termcolor = "*"
 
 [package.extras]
 nose = ["nose"]
 pytest = ["pytest"]
-test = ["six", "pytest (>=3.1.0)", "pytest-cov", "nose", "django (>=1.10.6)"]
+test = ["six", "pytest (>=4.6)", "pytest-cov", "nose", "django (>=1.10.6)"]
 
 [[package]]
 category = "main"
@@ -1549,7 +1549,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "1f5ef56472f8953fd5b2edf9215ec72859330980dc2f4abb43b35e7fda6c339d"
+content-hash = "66bb11a20c164e2d1546876aa592adc3b6753e2534c5f8fae0dc76b1b358e34f"
 lock-version = "1.0"
 python-versions = "^3.6"
 
@@ -2050,7 +2050,8 @@ smmap = [
     {file = "smmap-3.0.4.tar.gz", hash = "sha256:9c98bbd1f9786d22f14b3d4126894d56befb835ec90cef151af566c7e19b5d24"},
 ]
 snapshottest = [
-    {file = "snapshottest-0.5.1.tar.gz", hash = "sha256:2cc7157e77674ea8ebeb2351466ff50cd4b5ad8e213adc06df9c16a75ab5bafc"},
+    {file = "snapshottest-0.6.0-py2.py3-none-any.whl", hash = "sha256:9b177cffe0870c589df8ddbee0a770149c5474b251955bdbde58b7f32a4ec429"},
+    {file = "snapshottest-0.6.0.tar.gz", hash = "sha256:bbcaf81d92d8e330042e5c928e13d9f035e99e91b314fe55fda949c2f17b653c"},
 ]
 snowballstemmer = [
     {file = "snowballstemmer-2.0.0-py2.py3-none-any.whl", hash = "sha256:209f257d7533fdb3cb73bdbd24f436239ca3b2fa67d56f6ff88e86be08cc5ef0"},
