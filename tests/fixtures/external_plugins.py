@@ -12,6 +12,8 @@ breaking_pycodestyle=3
 
 def camelCase(): ...
 
+'{}'.format(1)
+
 assert True
 ipdb.set_trace()
 
