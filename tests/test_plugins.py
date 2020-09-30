@@ -18,7 +18,6 @@ PLUGINS = (
     'E225',  # pycodestyle
     'E800',  # flake8-eradicate
     'F401',  # pyflakes
-    'I001',  # flake8-isort
     'N400',  # flake8-broken-line
     'N802',  # pep8-naming
     'P101',  # flake8-string-format
