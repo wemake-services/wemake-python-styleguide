@@ -316,12 +316,14 @@ class FormattedStringViolation(ASTViolation):
     Forbids to use ``f`` strings.
 
     Reasoning:
-        ``f`` strings loses context too often and they are hard to lint.
+        ``f`` strings implicitly rely on the context around it.
         Imagine that you have a string that breaks
         when you move it two lines above.
         That's not how a string should behave.
         Also, they promote a bad practice:
         putting your logic inside the template.
+        Moreover, they do two things at once:
+        declare a template and format it in a single action.
 
     Solution:
         Use ``.format()`` with indexed params instead.
