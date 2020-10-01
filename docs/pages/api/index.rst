@@ -37,9 +37,9 @@ Philosophy
 5. Code must be written for people to read,
    and only incidentally for machines to execute
 6. Value consistency over syntax-ish readability
-7. Consistent code is more readable then inconsistent
+7. Consistent code is more readable then inconsistent code
 8. Do not force people to choose, they will make mistakes
-9. Made choices must be respected
+9. Choices made must be respected
 
 
 Overview
