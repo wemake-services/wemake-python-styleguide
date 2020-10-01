@@ -1228,6 +1228,11 @@ class UselessExceptCaseViolation(ASTViolation):
             sentry.log()
             raise ValueError()
 
+        try:
+            ...
+        except ValueError as exc:
+            raise CustomReadableException from exc
+
         # Wrong:
         try:
             ...
