@@ -29,6 +29,7 @@ Semantic versioning in our case means:
 - Add `__await__` to the list of priority magic methods
 - Forbids to use float zeros (`0.0`)
 - Forbids `raise Exception` and `raise BaseException`
+- Forbids to use `%` with zero as the divisor
 
 ### Bugfixes
 
@@ -36,6 +37,7 @@ Semantic versioning in our case means:
 - Fixes false positives DirectMagicAttributeAccessViolation with `__mro__`, `__subclasses__` and `__version__`
 - Make `WPS326` work when there is comment between string literals
 - Allowed yield statements in call method
+- Allow to use `^` with `1`
 
 ### Misc
 
