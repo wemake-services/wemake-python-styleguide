@@ -46,6 +46,7 @@ def test_wrong_async_magic_used(
     '__anext__',
     '__aenter__',
     '__aexit__',
+    '__call__',
     '__custom__',
 ])
 def test_correct_async_magic_used(

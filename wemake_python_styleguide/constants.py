@@ -266,6 +266,7 @@ ASYNC_MAGIC_METHODS_BLACKLIST: Final = ALL_MAGIC_METHODS.difference({
     '__anext__',
     '__aenter__',
     '__aexit__',
+    '__call__',
 })
 
 #: List of builtin classes that are allowed to subclass.
