@@ -18,7 +18,6 @@ jobs:
 
     - name: Install poetry
       run: |
-        pip install --upgrade -U pip
         curl -sSL \
           "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | python
 
