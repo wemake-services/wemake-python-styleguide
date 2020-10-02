@@ -93,7 +93,7 @@ from wemake_python_styleguide.violations.base import (
 @final
 class UselessLoopElseViolation(ASTViolation):
     """
-    Forbids to use ``else`` without ``break`` in a loop.
+    Forbid ``else`` without ``break`` in a loop.
 
     We use the same logic for ``for`` and ``while`` loops.
 
@@ -139,7 +139,7 @@ class UselessLoopElseViolation(ASTViolation):
 @final
 class UselessFinallyViolation(ASTViolation):
     """
-    Forbids to use ``finally`` in ``try`` block without ``except`` block.
+    Forbid ``finally`` in ``try`` block without ``except`` block.
 
     However, we allow to use ``try`` with just ``finally`` block
     when function or method is decorated. Because we cannot control
@@ -180,7 +180,7 @@ class UselessFinallyViolation(ASTViolation):
 @final
 class SimplifiableIfViolation(ASTViolation):
     """
-    Forbids to have simplifiable ``if`` conditions.
+    Forbid simplifiable ``if`` conditions.
 
     Reasoning:
         This complex construction can cause frustration among other developers.
@@ -217,7 +217,7 @@ class SimplifiableIfViolation(ASTViolation):
 @final
 class UselessReturningElseViolation(ASTViolation):
     """
-    Forbids to use useless ``else`` cases in returning functions.
+    Forbid useless ``else`` cases in returning functions.
 
     We check single ``if`` statements that all contain
     ``return`` or ``raise`` or ``break`` statements with this rule.
@@ -260,7 +260,7 @@ class UselessReturningElseViolation(ASTViolation):
 @final
 class NegatedConditionsViolation(ASTViolation):
     """
-    Forbids to use negated conditions together with ``else`` clause.
+    Forbid negated conditions together with ``else`` clause.
 
     Reasoning:
         It easier to read and name regular conditions. Not negated ones.
@@ -304,7 +304,7 @@ class NegatedConditionsViolation(ASTViolation):
 @final
 class NestedTryViolation(ASTViolation):
     """
-    Forbids to use nested ``try`` blocks.
+    Forbid nested ``try`` blocks.
 
     Notice, we check all possible slots for ``try`` block:
     1. the ``try`` block itself
@@ -354,7 +354,7 @@ class NestedTryViolation(ASTViolation):
 @final
 class UselessLambdaViolation(ASTViolation):
     """
-    Forbids to define useless proxy ``lambda`` expressions.
+    Forbid useless proxy ``lambda`` expressions.
 
     Reasoning:
         Sometimes developers tend to overuse ``lambda`` expressions
@@ -386,7 +386,7 @@ class UselessLambdaViolation(ASTViolation):
 @final
 class UselessLenCompareViolation(ASTViolation):
     """
-    Forbids to have unpythonic zero-length compare.
+    Forbid unpythonic zero-length compare.
 
     Note, that we allow to check arbitrary length, like ``len(arr) == 3``.
 
@@ -422,7 +422,7 @@ class UselessLenCompareViolation(ASTViolation):
 @final
 class NotOperatorWithCompareViolation(ASTViolation):
     """
-    Forbids to use ``not`` with compare expressions.
+    Forbid ``not`` with compare expressions.
 
     Reasoning:
         This version of ``not`` operator is unreadable.
@@ -454,7 +454,7 @@ class NotOperatorWithCompareViolation(ASTViolation):
 @final
 class NestedTernaryViolation(ASTViolation):
     """
-    Forbids to nest ternary expressions in some places.
+    Forbid nesting ternary expressions in certain places.
 
     Note, that we restrict to nest ternary expressions inside:
 
@@ -492,7 +492,7 @@ class NestedTernaryViolation(ASTViolation):
 @final
 class WrongInCompareTypeViolation(ASTViolation):
     """
-    Forbids to use ``in`` with static containers except ``set`` nodes.
+    Forbid ``in`` with static containers except ``set`` nodes.
 
     We enforce people to use sets as a static containers.
     You can also use variables, calls, methods, etc.
@@ -531,7 +531,7 @@ class WrongInCompareTypeViolation(ASTViolation):
 @final
 class UnmergedIsinstanceCallsViolation(ASTViolation):
     """
-    Forbids to multiple ``isinstance`` calls with the same variable.
+    Forbid multiple ``isinstance`` calls on the same variable.
 
     Reasoning:
         The best practice is to use ``isinstance`` with tuple
@@ -567,7 +567,7 @@ class UnmergedIsinstanceCallsViolation(ASTViolation):
 @final
 class WrongIsinstanceWithTupleViolation(ASTViolation):
     """
-    Forbids to multiple ``isinstance`` calls with tuples of a single item.
+    Forbid multiple ``isinstance`` calls with single-item tuples.
 
     Reasoning:
         There's no need to use tuples with single elements.
@@ -600,7 +600,7 @@ class WrongIsinstanceWithTupleViolation(ASTViolation):
 @final
 class ImplicitElifViolation(TokenizeViolation):
     """
-    Forbids to have implicit ``elif`` conditions.
+    Forbid implicit ``elif`` conditions.
 
     Reasoning:
         Nested ``if`` in ``else`` cases are bad
@@ -635,7 +635,7 @@ class ImplicitElifViolation(TokenizeViolation):
 @final
 class ImplicitInConditionViolation(ASTViolation):
     """
-    Forbids to use multiple equality compare with the same variable name.
+    Forbid multiple equality comparisons with the same variable.
 
     Reasoning:
         Using double+ equality compare with ``or``
@@ -670,7 +670,7 @@ class ImplicitInConditionViolation(ASTViolation):
 @final
 class OpenWithoutContextManagerViolation(ASTViolation):
     """
-    Forbids to use ``open()`` without a context manager.
+    Forbid ``open()`` without a context manager.
 
     Reasoning:
         When you ``open()`` something, you need to close it.
@@ -701,7 +701,7 @@ class OpenWithoutContextManagerViolation(ASTViolation):
 @final
 class TypeCompareViolation(ASTViolation):
     """
-    Forbids to compare types with ``type()`` function.
+    Forbid comparing types with ``type()`` function.
 
     Reasoning:
         When you compare types with ``type()`` function call
@@ -731,7 +731,7 @@ class TypeCompareViolation(ASTViolation):
 @final
 class PointlessStarredViolation(ASTViolation):
     """
-    Forbids to have useless starred expressions.
+    Forbid useless starred expressions.
 
     Reasoning:
         Using starred expression with constants is useless.
@@ -762,7 +762,7 @@ class PointlessStarredViolation(ASTViolation):
 @final
 class ImplicitEnumerateViolation(ASTViolation):
     """
-    Forbids to have implicit ``enumerate()`` calls.
+    Forbid implicit ``enumerate()`` calls.
 
     Reasoning:
         Using ``range(len(...))`` is not pythonic.
@@ -795,7 +795,7 @@ class ImplicitEnumerateViolation(ASTViolation):
 @final
 class ImplicitSumViolation(ASTViolation):
     """
-    Forbids to have implicit ``sum()`` calls.
+    Forbid implicit ``sum()`` calls.
 
     When summing types different from numbers, you might need to provide
     the second argument to the ``sum`` function: ``sum([[1], [2], [3]], [])``
@@ -835,7 +835,7 @@ class ImplicitSumViolation(ASTViolation):
 @final
 class FalsyConstantCompareViolation(ASTViolation):
     """
-    Forbids to compare with explicit falsy constants.
+    Forbid comparing with explicit falsy constants.
 
     We allow to compare with falsy numbers, strings, booleans, ``None``.
     We disallow complex constants like tuple, dicts, and lists.
@@ -875,7 +875,7 @@ class FalsyConstantCompareViolation(ASTViolation):
 @final
 class WrongIsCompareViolation(ASTViolation):
     """
-    Forbids to compare values with constants using ``is`` or ``is not``.
+    Forbid comparing values with constants using ``is`` or ``is not``.
 
     However, we allow to compare with ``None`` and booleans.
 
@@ -912,7 +912,7 @@ class WrongIsCompareViolation(ASTViolation):
 @final
 class ImplicitPrimitiveViolation(ASTViolation):
     """
-    Forbids to use implicit primitives in a form of ``lambda`` functions.
+    Forbid implicit primitives in the form of ``lambda`` functions.
 
     Reasoning:
         When you use ``lambda`` that returns a primitive value
@@ -942,7 +942,7 @@ class ImplicitPrimitiveViolation(ASTViolation):
 @final
 class AlmostSwappedViolation(ASTViolation):
     """
-    Forbids unpythonic swap variables.
+    Forbid unpythonic variable swaps.
 
     We check for ``a = b; b = a`` sequences.
 
@@ -976,7 +976,7 @@ class AlmostSwappedViolation(ASTViolation):
 @final
 class MisrefactoredAssignmentViolation(ASTViolation):
     """
-    Forbids to use misrefactored self assignment.
+    Forbid misrefactored self assignment.
 
     Reasoning:
         Self assignment does not need to have the same operand
@@ -1009,7 +1009,7 @@ class MisrefactoredAssignmentViolation(ASTViolation):
 @final
 class InCompareWithSingleItemContainerViolation(ASTViolation):
     """
-    Forbids comparisons where ``in`` is compared with single item container.
+    Forbid comparisons where ``in`` is compared with single item container.
 
     Reasoning:
         ``in`` comparison with a container which contains only one item looks
@@ -1037,7 +1037,7 @@ class InCompareWithSingleItemContainerViolation(ASTViolation):
 @final
 class ImplicitYieldFromViolation(ASTViolation):
     """
-    Forbids to use ``yield`` inside ``for`` loop instead of ``yield from``.
+    Forbid ``yield`` inside ``for`` loop instead of ``yield from``.
 
     Reasoning:
         It is known that ``yield from`` is a semantically identical
@@ -1074,7 +1074,7 @@ class ImplicitYieldFromViolation(ASTViolation):
 @final
 class NotATupleArgumentViolation(ASTViolation):
     """
-    Forces using tuples as arguments for some functions.
+    Require tuples as arguments for certain functions.
 
     Reasoning:
         For some functions, it is better to use tuples instead of another
@@ -1106,7 +1106,7 @@ class NotATupleArgumentViolation(ASTViolation):
 @final
 class ImplicitItemsIteratorViolation(ASTViolation):
     """
-    Forbids to use implicit ``.items()`` iterator.
+    Forbid implicit ``.items()`` iterator.
 
     Reasoning:
         When iterating over collection it is easy to forget
@@ -1138,7 +1138,7 @@ class ImplicitItemsIteratorViolation(ASTViolation):
 @final
 class ImplicitDictGetViolation(ASTViolation):
     """
-    Forbids to use implicit ``.get()`` dict method.
+    Forbid implicit ``.get()`` dict method.
 
     Reasoning:
         When using ``in`` with a dict key it is hard to keep the code clean.
@@ -1171,7 +1171,7 @@ class ImplicitDictGetViolation(ASTViolation):
 @final
 class ImplicitNegativeIndexViolation(ASTViolation):
     """
-    Forbids to use implicit negative indexes.
+    Forbid implicit negative indexes.
 
     Reasoning:
         There's no need in getting the length of an iterable
