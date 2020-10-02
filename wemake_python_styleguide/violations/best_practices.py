@@ -145,7 +145,7 @@ from wemake_python_styleguide.violations.base import (
 @final
 class WrongMagicCommentViolation(SimpleViolation):
     """
-    Restricts to use various control (such as magic) comments.
+    Restrict various control (such as magic) comments.
 
     We do not allow to use:
 
@@ -193,7 +193,7 @@ class WrongMagicCommentViolation(SimpleViolation):
 @final
 class WrongDocCommentViolation(TokenizeViolation):
     """
-    Forbids to use empty doc comments (``#:``).
+    Forbid empty doc comments (``#:``).
 
     Reasoning:
         Doc comments are used to provide documentation.
@@ -226,7 +226,7 @@ class WrongDocCommentViolation(TokenizeViolation):
 @final
 class OveruseOfNoqaCommentViolation(SimpleViolation):
     """
-    Forbids to use too many ``# noqa`` comments.
+    Forbid too many ``# noqa`` comments.
 
     We count it on a per-module basis.
 
@@ -255,7 +255,7 @@ class OveruseOfNoqaCommentViolation(SimpleViolation):
 @final
 class OveruseOfNoCoverCommentViolation(SimpleViolation):
     """
-    Forbids to use too many ``# pragma: no cover`` comments.
+    Forbid too many ``# pragma: no cover`` comments.
 
     We count it on a per-module basis.
     We use :str:`wemake_python_styleguide.constants.MAX_NO_COVER_COMMENTS`
@@ -282,7 +282,7 @@ class OveruseOfNoCoverCommentViolation(SimpleViolation):
 @final
 class ComplexDefaultValueViolation(ASTViolation):
     """
-    Forbids to use complex defaults.
+    Forbid complex defaults.
 
     Anything that is not a ``ast.Name``, ``ast.Attribute``, ``ast.Str``,
     ``ast.NameConstant``, ``ast.Tuple``, ``ast.Bytes``, ``ast.Num``
@@ -317,7 +317,7 @@ class ComplexDefaultValueViolation(ASTViolation):
 @final
 class LoopVariableDefinitionViolation(ASTViolation):
     """
-    Forbids to use anything other than ``ast.Name`` to define loop variables.
+    Forbid anything other than ``ast.Name`` to define loop variables.
 
     Reasoning:
         When defining a ``for`` loop with attributes, indexes, calls,
@@ -351,7 +351,7 @@ class LoopVariableDefinitionViolation(ASTViolation):
 @final
 class ContextManagerVariableDefinitionViolation(ASTViolation):
     """
-    Forbids to use anything other than ``ast.Name`` to define contexts.
+    Forbid anything other than ``ast.Name`` to define contexts.
 
     Reasoning:
         When defining a ``with`` context managers with attributes,
@@ -385,7 +385,7 @@ class ContextManagerVariableDefinitionViolation(ASTViolation):
 @final
 class MutableModuleConstantViolation(ASTViolation):
     """
-    Forbids mutable constants on a module level.
+    Forbid mutable constants on a module level.
 
     Reasoning:
         Constants should be immutable.
@@ -422,7 +422,7 @@ class MutableModuleConstantViolation(ASTViolation):
 @final
 class SameElementsInConditionViolation(ASTViolation):
     """
-    Forbids to use the same logical conditions in one expression.
+    Forbid using the same logical conditions in one expression.
 
     Reasoning:
         Using the same name in a logical condition more than once
@@ -456,7 +456,7 @@ class SameElementsInConditionViolation(ASTViolation):
 @final
 class HeterogenousCompareViolation(ASTViolation):
     """
-    Forbids to heterogenous operators in one compare.
+    Forbid heterogenous operators in one comparison.
 
     Note, that we do allow mixing  ``>`` with ``>=``
     and ``<`` with ``<=`` operators.
@@ -497,7 +497,7 @@ class HeterogenousCompareViolation(ASTViolation):
 @final
 class WrongModuleMetadataViolation(ASTViolation):
     """
-    Forbids to have some module-level variables.
+    Forbid some module-level variables.
 
     Reasoning:
         We discourage using module variables like ``__author__``,
@@ -531,7 +531,7 @@ class WrongModuleMetadataViolation(ASTViolation):
 @final
 class EmptyModuleViolation(SimpleViolation):
     """
-    Forbids to have empty modules.
+    Forbid empty modules.
 
     Reasoning:
         Why is it even there? Do not pollute your project with empty files.
@@ -553,7 +553,7 @@ class EmptyModuleViolation(SimpleViolation):
 @final
 class InitModuleHasLogicViolation(SimpleViolation):
     """
-    Forbids to have logic inside ``__init__`` module.
+    Forbid logic inside ``__init__`` module.
 
     Reasoning:
         If you have logic inside the ``__init__`` module
@@ -593,7 +593,7 @@ class InitModuleHasLogicViolation(SimpleViolation):
 @final
 class BadMagicModuleFunctionViolation(ASTViolation):
     """
-    Forbids to use ``__getattr__`` and ``__dir__`` module magic methods.
+    Forbid ``__getattr__`` and ``__dir__`` module magic methods.
 
     Reasoning:
         It does not bring any features,
@@ -619,7 +619,7 @@ class BadMagicModuleFunctionViolation(ASTViolation):
 @final
 class WrongUnpackingViolation(ASTViolation):
     """
-    Forbids to have tuple unpacking with side-effects.
+    Forbid tuple unpacking with side-effects.
 
     Reasoning:
         Having unpacking with side-effects is very dirty.
@@ -650,7 +650,7 @@ class WrongUnpackingViolation(ASTViolation):
 @final
 class DuplicateExceptionViolation(ASTViolation):
     """
-    Forbids to have the same exception class in multiple ``except`` blocks.
+    Forbid the same exception class in multiple ``except`` blocks.
 
     Reasoning:
         Having the same exception name in different blocks means
@@ -689,7 +689,7 @@ class DuplicateExceptionViolation(ASTViolation):
 @final
 class YieldInComprehensionViolation(ASTViolation):
     """
-    Forbids to have ``yield`` keyword inside comprehensions.
+    Forbid ``yield`` keyword inside comprehensions.
 
     This is a ``SyntaxError`` starting from ``python3.8``.
 
@@ -727,7 +727,7 @@ class YieldInComprehensionViolation(ASTViolation):
 @final
 class NonUniqueItemsInHashViolation(ASTViolation):
     """
-    Forbids to have duplicate items in hashes.
+    Forbid duplicate items in hashes.
 
     Reasoning:
         When you explicitly put duplicate items
@@ -769,7 +769,7 @@ class NonUniqueItemsInHashViolation(ASTViolation):
 @final
 class BaseExceptionSubclassViolation(ASTViolation):
     """
-    Forbids to have exception inherited from ``BaseException``.
+    Forbid exceptions inherited from ``BaseException``.
 
     Reasoning:
         ``BaseException`` is a special case:
@@ -806,7 +806,7 @@ class BaseExceptionSubclassViolation(ASTViolation):
 @final
 class TryExceptMultipleReturnPathViolation(ASTViolation):
     """
-    Forbids to use multiple returning paths with ``try`` / ``except`` case.
+    Forbid multiple returning paths with ``try`` / ``except`` case.
 
     Note, that we check for any ``return``, ``break``, or ``raise`` nodes.
 
@@ -862,7 +862,7 @@ class TryExceptMultipleReturnPathViolation(ASTViolation):
 @final
 class WrongKeywordViolation(ASTViolation):
     """
-    Forbids to use some ``python`` keywords.
+    Forbid some ``python`` keywords.
 
     Reasoning:
         Using some keywords generally gives you more pain than relieves.
@@ -898,7 +898,7 @@ class WrongKeywordViolation(ASTViolation):
 @final
 class WrongFunctionCallViolation(ASTViolation):
     """
-    Forbids to call some built-in functions.
+    Forbid calling some built-in functions.
 
     Reasoning:
         Some functions are only suitable
@@ -923,7 +923,7 @@ class WrongFunctionCallViolation(ASTViolation):
 @final
 class FutureImportViolation(ASTViolation):
     """
-    Forbids to use ``__future__`` imports.
+    Forbid ``__future__`` imports.
 
     Reasoning:
         Almost all ``__future__`` imports are legacy ``python2`` compatibility
@@ -956,7 +956,7 @@ class FutureImportViolation(ASTViolation):
 @final
 class RaiseNotImplementedViolation(ASTViolation):
     """
-    Forbids to use ``NotImplemented`` error.
+    Forbid ``NotImplemented`` exception.
 
     Reasoning:
         These two exceptions look similar.
@@ -989,7 +989,7 @@ class RaiseNotImplementedViolation(ASTViolation):
 @final
 class BaseExceptionViolation(ASTViolation):
     """
-    Forbids to use ``BaseException`` exception.
+    Forbid ``BaseException`` exception.
 
     Reasoning:
         We can silence system exit and keyboard interrupt
@@ -1024,7 +1024,7 @@ class BaseExceptionViolation(ASTViolation):
 @final
 class BooleanPositionalArgumentViolation(ASTViolation):
     """
-    Forbids to pass booleans as non-keyword parameters.
+    Forbid booleans as non-keyword parameters.
 
     Reasoning:
         Passing boolean as regular positional parameters
@@ -1061,7 +1061,7 @@ class BooleanPositionalArgumentViolation(ASTViolation):
 @final
 class LambdaInsideLoopViolation(ASTViolation):
     """
-    Forbids to use ``lambda`` inside loops.
+    Forbid ``lambda`` inside loops.
 
     We check ``while``, ``for``, and ``async for`` loop bodies.
     We also check comprehension value parts.
@@ -1102,7 +1102,7 @@ class LambdaInsideLoopViolation(ASTViolation):
 @final
 class UnreachableCodeViolation(ASTViolation):
     """
-    Forbids to have unreachable code.
+    Forbid unreachable code.
 
     What is unreachable code? It is some lines of code that
     cannot be executed by python's interpreter.
@@ -1148,7 +1148,7 @@ class UnreachableCodeViolation(ASTViolation):
 @final
 class StatementHasNoEffectViolation(ASTViolation):
     """
-    Forbids to have statements that do nothing.
+    Forbid statements that do nothing.
 
     Reasoning:
         Statements that just access the value or expressions
@@ -1184,7 +1184,7 @@ class StatementHasNoEffectViolation(ASTViolation):
 @final
 class MultipleAssignmentsViolation(ASTViolation):
     """
-    Forbids to have multiple assignments on the same line.
+    Forbid multiple assignments on the same line.
 
     Reasoning:
         Multiple assignments on the same line might not do what you think
@@ -1216,7 +1216,7 @@ class MultipleAssignmentsViolation(ASTViolation):
 @final
 class NestedFunctionViolation(ASTViolation):
     """
-    Forbids to have nested functions.
+    Forbid nested functions.
 
     Reasoning:
         Nesting functions is bad practice.
@@ -1256,7 +1256,7 @@ class NestedFunctionViolation(ASTViolation):
 @final
 class NestedClassViolation(ASTViolation):
     """
-    Forbids to use nested classes.
+    Forbid nested classes.
 
     Reasoning:
         Nested classes are really hard to manage.
@@ -1296,9 +1296,9 @@ class NestedClassViolation(ASTViolation):
 @final
 class MagicNumberViolation(ASTViolation):
     """
-    Forbids to use magic numbers in your code.
+    Forbid magic numbers.
 
-    What we call a "magic number"? Well, it is actually any number that
+    What do we call a "magic number"? Well, it is actually any number that
     appears in your code out of nowhere. Like ``42``. Or ``0.32``.
 
     Reasoning:
@@ -1341,7 +1341,7 @@ class MagicNumberViolation(ASTViolation):
 @final
 class NestedImportViolation(ASTViolation):
     """
-    Forbids to have nested imports in functions.
+    Forbid imports nested in functions.
 
     Reasoning:
         Usually, nested imports are used to fix the import cycle.
@@ -1379,7 +1379,7 @@ class NestedImportViolation(ASTViolation):
 @final
 class ReassigningVariableToItselfViolation(ASTViolation):
     """
-    Forbids to assign variable to itself.
+    Forbid assigning a variable to itself.
 
     Reasoning:
         There is no need to do that.
@@ -1408,7 +1408,7 @@ class ReassigningVariableToItselfViolation(ASTViolation):
 @final
 class ListMultiplyViolation(ASTViolation):
     """
-    Forbids to multiply lists.
+    Forbid multiplying lists.
 
     Reasoning:
         When you multiply lists - it does not create new values,
@@ -1437,7 +1437,7 @@ class ListMultiplyViolation(ASTViolation):
 @final
 class ProtectedModuleViolation(ASTViolation):
     """
-    Forbids to import protected modules.
+    Forbid importing protected modules.
 
     Related to :class:`~ProtectedModuleMemberViolation`.
 
@@ -1475,7 +1475,7 @@ class ProtectedModuleViolation(ASTViolation):
 @final
 class ProtectedAttributeViolation(ASTViolation):
     """
-    Forbids to use protected attributes and methods.
+    Forbid protected attributes and methods.
 
     Reasoning:
         When using protected attributes and method we break a contract
@@ -1519,7 +1519,7 @@ class ProtectedAttributeViolation(ASTViolation):
 @final
 class StopIterationInsideGeneratorViolation(ASTViolation):
     """
-    Forbids to raise ``StopIteration`` inside generators.
+    Forbid raising ``StopIteration`` inside generators.
 
     Reasoning:
         ``StopIteration`` should not be raised explicitly in generators.
@@ -1555,7 +1555,7 @@ class StopIterationInsideGeneratorViolation(ASTViolation):
 @final
 class WrongUnicodeEscapeViolation(TokenizeViolation):
     r"""
-    Forbids to use Unicode escape sequences in binary strings.
+    Forbid Unicode escape sequences in binary strings.
 
     Reasoning:
         Binary strings do not work with Unicode.
@@ -1584,7 +1584,7 @@ class WrongUnicodeEscapeViolation(TokenizeViolation):
 @final
 class BlockAndLocalOverlapViolation(ASTViolation):
     """
-    Forbids to local and block variables to overlap.
+    Forbid overlapping local and block variables.
 
     What we call local variables:
 
@@ -1626,7 +1626,7 @@ class BlockAndLocalOverlapViolation(ASTViolation):
 @final
 class ControlVarUsedAfterBlockViolation(ASTViolation):
     """
-    Forbids to use control variables after the block body.
+    Forbid control variables after the block body.
 
     What we call block control variables:
 
@@ -1668,7 +1668,7 @@ class ControlVarUsedAfterBlockViolation(ASTViolation):
 @final
 class OuterScopeShadowingViolation(ASTViolation):
     """
-    Forbids to shadow variables from outer scopes.
+    Forbid shadowing variables from outer scopes.
 
     We check the function, method, and module scopes.
     While we do not check the class scope. Because class level constants
@@ -1707,7 +1707,7 @@ class OuterScopeShadowingViolation(ASTViolation):
 @final
 class UnhashableTypeInHashViolation(ASTViolation):
     """
-    Forbids to use explicit unhashable types of asset items and dict keys.
+    Forbid explicit unhashable types of asset items and dict keys.
 
     Reasoning:
         This will resolve in ``TypeError`` in runtime.
@@ -1734,7 +1734,7 @@ class UnhashableTypeInHashViolation(ASTViolation):
 @final
 class WrongKeywordConditionViolation(ASTViolation):
     """
-    Forbids to use explicit falsely-evaluated conditions with several keywords.
+    Forbid explicit falsely-evaluated conditions with several keywords.
 
     We check:
 
@@ -1777,10 +1777,10 @@ class WrongKeywordConditionViolation(ASTViolation):
 @final
 class WrongNamedKeywordViolation(ASTViolation):
     """
-    Forbids to have incorrectly named keywords in the starred dicts.
+    Forbid incorrectly named keywords in starred dicts.
 
     Reasoning:
-        Using the incorrect keywords in the starred dict.
+        Using the incorrect keywords in a starred dict.
         Eg.: ``print(**{'@': 1})``.
 
     Solution:
@@ -1805,7 +1805,7 @@ class WrongNamedKeywordViolation(ASTViolation):
 @final
 class ApproximateConstantViolation(ASTViolation):
     """
-    Forbids to use approximate constants.
+    Forbid approximate constants.
 
     Reasoning:
         Some constants are already defined.
@@ -1844,7 +1844,7 @@ class ApproximateConstantViolation(ASTViolation):
 @final
 class StringConstantRedefinedViolation(ASTViolation):
     """
-    Forbid to use the alphabet as a string.
+    Forbid using the alphabet as a string.
 
     Reasoning:
         Some constants are already defined.
@@ -1878,7 +1878,7 @@ class StringConstantRedefinedViolation(ASTViolation):
 @final
 class IncorrectExceptOrderViolation(ASTViolation):
     """
-    Forbids the use of incorrect order of ``except``.
+    Forbid incorrect order of ``except``.
 
     Note, we only check for built-in exceptions.
     Because we cannot statically identify
@@ -1923,7 +1923,7 @@ class IncorrectExceptOrderViolation(ASTViolation):
 @final
 class FloatKeyViolation(ASTViolation):
     """
-    Forbids to define and use ``float`` keys.
+    Forbid ``float`` keys.
 
     Reasoning:
         ``float`` is a very ugly data type.
@@ -1955,7 +1955,7 @@ class FloatKeyViolation(ASTViolation):
 @final
 class ProtectedModuleMemberViolation(ASTViolation):
     """
-    Forbids to import protected objects from modules.
+    Forbid importing protected objects from modules.
 
     Related to :class:`~ProtectedModuleViolation`.
 
@@ -1988,7 +1988,7 @@ class ProtectedModuleMemberViolation(ASTViolation):
 @final
 class PositionalOnlyArgumentsViolation(ASTViolation):
     """
-    Forbids to use positional only or ``/`` arguments.
+    Forbid positional only or ``/`` arguments.
 
     This violation is only raised for ``python3.8+``,
     earlier versions do not have this concept.
@@ -2027,7 +2027,7 @@ class PositionalOnlyArgumentsViolation(ASTViolation):
 
 class LoopControlFinallyViolation(ASTViolation):
     """
-    Forbids to use ``break`` and ``continue`` in ``finally`` case.
+    Forbid ``break`` and ``continue`` in a ``finally`` block.
 
     Related to :class:`~TryExceptMultipleReturnPathViolation`.
 
@@ -2071,7 +2071,7 @@ class LoopControlFinallyViolation(ASTViolation):
 @final
 class ShebangViolation(SimpleViolation):
     """
-    Forbids to execute the file with shebang incorrectly set.
+    Forbid executing a file with shebang incorrectly set.
 
     A violation is raised in these cases :
         - Shebang is present but the file is not executable.
@@ -2107,7 +2107,7 @@ class ShebangViolation(SimpleViolation):
 @final
 class BaseExceptionRaiseViolation(ASTViolation):
     """
-    Forbids to raise ``Exception`` or ``BaseException``.
+    Forbid raising ``Exception`` or ``BaseException``.
 
     Reasoning:
         ``Exception`` and ``BaseException`` are inconvenient to catch.
