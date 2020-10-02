@@ -626,6 +626,9 @@ class WrongUnpackingViolation(ASTViolation):
         You might get in serious and very hard-to-debug troubles because of
         this technique. So, do not use it.
 
+        This includes assigning to attributes, as this results in modifying
+        the instance. Every modification should be explicit on it's own line.
+
     Solution:
         Use unpacking with only variables, not any other entities.
 
@@ -636,6 +639,14 @@ class WrongUnpackingViolation(ASTViolation):
 
         # Wrong:
         first, some_dict['alias'] = some()
+
+        # Wrong:
+        self.reader, self.writer = call()
+
+        # Correct:
+        reader, writter = call()
+        self.reader = reader
+        self.writer = writer
 
     .. versionadded:: 0.6.0
     .. versionchanged:: 0.11.0
