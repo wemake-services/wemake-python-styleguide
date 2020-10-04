@@ -13,6 +13,6 @@ docutils==0.16
 # Dependencies of our linter that should be documented,
 # other dependencies are just ignored or
 # goes to `autodoc_mock_imports` in `conf.py`:
-flake8==3.8.3
+flake8==3.8.4
 typing-extensions==3.7.4.3
 attrs==20.2.0
