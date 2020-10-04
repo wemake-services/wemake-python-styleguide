@@ -21,7 +21,9 @@ jobs:
         pip install -U pip
 
         curl -sSL \
-          "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | python
+          "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | python -
+
+        echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
 
     - name: Set up cache
       uses: actions/cache@v1
@@ -30,16 +32,12 @@ jobs:
         key: venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
     - name: Install dependencies
       run: |
-        source "$HOME/.poetry/env"
-
         poetry config virtualenvs.in-project true
         poetry run pip install -U pip
         poetry install
 
     - name: Run tests
       run: |
-        source "$HOME/.poetry/env"
-
         make test
 
     - name: Upload coverage to Codecov

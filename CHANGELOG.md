@@ -20,6 +20,10 @@ Semantic versioning in our case means:
 
 - Fixes fails of annotation complexity on `Literal[""]`.
 
+### Misc
+
+- Updates `poetry` version to `1.1`
+
 
 ## 0.15.0 aka New runtime
 
