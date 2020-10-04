@@ -21,7 +21,7 @@ jobs:
         pip install -U pip
 
         curl -sSL \
-          "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | python
+          "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | python -
 
     - name: Set up cache
       uses: actions/cache@v1
