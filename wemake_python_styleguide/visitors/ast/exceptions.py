@@ -14,6 +14,7 @@ from wemake_python_styleguide.violations.best_practices import (
     DuplicateExceptionViolation,
     IncorrectExceptOrderViolation,
     LoopControlFinallyViolation,
+    NonTrivialExceptViolation,
     TryExceptMultipleReturnPathViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
@@ -171,6 +172,7 @@ class WrongExceptHandlerVisitor(BaseNodeVisitor):
         """
         self._check_useless_except(node)
         self._check_exception_type(node)
+        self._check_except_expression(node)
         self.generic_visit(node)
 
     def _check_useless_except(self, node: ast.ExceptHandler) -> None:
@@ -198,3 +200,21 @@ class WrongExceptHandlerVisitor(BaseNodeVisitor):
         exception_id = getattr(exception_name, 'id', None)
         if exception_id == self._base_exception:
             self.add_violation(BaseExceptionViolation(node))
+
+    def _check_except_expression(self, node: ast.ExceptHandler) -> None:
+        # Catch-all 'except' is actually okay in this case
+        if node.type is None:
+            return
+
+        if isinstance(node.type, (ast.Name, ast.Attribute)):
+            return
+
+        if isinstance(node.type, ast.Tuple):
+            all_elements_are_trivial = all((
+                isinstance(element, (ast.Name, ast.Attribute))
+                for element in node.type.elts
+            ))
+            if all_elements_are_trivial:
+                return
+
+        self.add_violation(NonTrivialExceptViolation(node.type))

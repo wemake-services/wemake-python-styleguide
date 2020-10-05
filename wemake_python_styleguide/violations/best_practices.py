@@ -71,6 +71,7 @@ Summary
    LoopControlFinallyViolation
    ShebangViolation
    BaseExceptionRaiseViolation
+   NonTrivialExceptViolation
 
 Best practices
 --------------
@@ -130,6 +131,7 @@ Best practices
 .. autoclass:: LoopControlFinallyViolation
 .. autoclass:: ShebangViolation
 .. autoclass:: BaseExceptionRaiseViolation
+.. autoclass:: NonTrivialExceptViolation
 
 """
 
@@ -2149,3 +2151,46 @@ class BaseExceptionRaiseViolation(ASTViolation):
 
     error_template = 'Found wrong `raise` exception type: {0}'
     code = 454
+
+
+@final
+class NonTrivialExceptViolation(ASTViolation):
+    """
+    Forbids to use non-trivial expressions as a parameter for ``except``.
+
+    Reasoning:
+        Expressions used as an argument for ``except`` could be hard to read
+        and hide real list of exceptions being expected to occur in the outlined
+        code block.
+
+    Solution:
+        Use separate ``except`` blocks for each exception or provide a tuple
+        of exception classes.
+
+    Example::
+
+        # Correct:
+        try:
+            ...
+        except ValueError:
+            ...
+        except TypeError:
+            ...
+
+        try:
+            ...
+        except (TypeError, ValueError):
+            ...
+
+        # Wrong:
+        try:
+            ...
+        except TypeError or ValueError:
+            ...
+
+    .. versionadded:: 0.16.0
+
+    """
+
+    error_template = 'Found non-trivial expression as an argument for "except"'
+    code = 455
