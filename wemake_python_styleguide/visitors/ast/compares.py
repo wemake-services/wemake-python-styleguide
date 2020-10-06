@@ -333,12 +333,47 @@ class WrongConditionalVisitor(BaseNodeVisitor):
         if isinstance(real_node, self._forbidden_nodes):
             self.add_violation(ConstantConditionViolation(node))
 
+    @staticmethod
+    def _returns_bool(node: ast.Return) -> bool:
+        if isinstance(node.value, ast.Constant):
+            return isinstance(node.value.value, bool)
+        return False
+
+    def _is_simplifiable_conditional_statement(self, node: ast.If) -> bool:
+        body = node.body
+        if (
+            len(body) == 1
+            and isinstance(body[0], ast.Return)
+            and self._returns_bool(body[0])
+            and not ifs.has_elif(node)
+        ):
+            if ifs.has_else(node):
+                else_body = node.orelse
+                if (
+                    len(else_body) == 1
+                    and isinstance(else_body[0], ast.Return)
+                    and self._returns_bool(else_body[0])
+                ):
+                    return True
+            else:
+                parent_body = nodes.get_parent(node).body
+                next_index_in_parent = parent_body.index(node) + 1
+                if (
+                    len(parent_body) >= next_index_in_parent + 1
+                    and isinstance(parent_body[next_index_in_parent], ast.Return)
+                    and self._returns_bool(parent_body[next_index_in_parent])
+                ):
+                    return True
+        return False
+
     def _check_simplifiable_if(self, node: ast.If) -> None:
         if not ifs.has_elif(node) and not ifs.root_if(node):
             body_var = self._is_simplifiable_assign(node.body)
             else_var = self._is_simplifiable_assign(node.orelse)
             if body_var and body_var == else_var:
                 self.add_violation(SimplifiableIfViolation(node))
+        if self._is_simplifiable_conditional_statement(node):
+            self.add_violation(SimplifiableIfViolation(node))
 
     def _check_simplifiable_ifexpr(self, node: ast.IfExp) -> None:
         conditions = set()
