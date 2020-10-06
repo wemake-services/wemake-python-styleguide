@@ -135,7 +135,6 @@ def test_string_overuse_settings(
 @pytest.mark.parametrize('string_value', [
     '"same-string"',
     '"GenericType[int, str]"',
-
 ])
 @pytest.mark.parametrize('prefix', [
     'b',
@@ -198,9 +197,9 @@ def test_string_type_annotations(
 
 
 @pytest.mark.parametrize('string_value', [
-    '"\\t"',
-    '"\\n"',
-    '""',
+    r'"\t"',
+    r'"\n"',
+    r'""',
 ])
 @pytest.mark.parametrize('prefix', [
     'b',

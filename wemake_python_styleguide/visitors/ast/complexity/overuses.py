@@ -1,6 +1,6 @@
 import ast
 from collections import defaultdict
-from typing import Callable, ClassVar, DefaultDict, List, Set, Tuple
+from typing import Callable, ClassVar, DefaultDict, List, Set, Tuple, Union
 
 from typing_extensions import final
 
@@ -26,10 +26,10 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
     Restricts repeated usage of the same string constant.
 
     NB: Some short strings are ignored, as their use is very common and
-    forcing assignment would not make much sense (i.e. "\n", "\t").
+    forcing assignment would not make much sense (i.e. newlines or "").
     """
 
-    _ignored_string_constants: Set[str] = {
+    _ignored_string_constants: Set[Union[str, bytes]] = {
         ' ',
         '',
         '\n',
