@@ -13,6 +13,7 @@ Semantic versioning in our case means:
 
 ### Features
 
+- Forbids using non-trivial expressions as an argument to `except`
 - Forbids using too many variables in a tuple unpacking
 - Allow `__call__` method to be asynchronous
 

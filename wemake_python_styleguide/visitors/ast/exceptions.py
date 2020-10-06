@@ -1,12 +1,13 @@
 import ast
 from collections import Counter
-from typing import ClassVar, Set, Tuple
+from typing import ClassVar, Set
 
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.tree import exceptions
+from wemake_python_styleguide.logic.tree.exceptions import find_returning_nodes
 from wemake_python_styleguide.logic.walk import is_contained
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
@@ -14,6 +15,7 @@ from wemake_python_styleguide.violations.best_practices import (
     DuplicateExceptionViolation,
     IncorrectExceptOrderViolation,
     LoopControlFinallyViolation,
+    NonTrivialExceptViolation,
     TryExceptMultipleReturnPathViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
@@ -24,29 +26,6 @@ from wemake_python_styleguide.violations.refactoring import (
     UselessFinallyViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
-
-
-def _find_returing_nodes(
-    node: ast.Try,
-    bad_returning_nodes: AnyNodes,
-) -> Tuple[bool, bool, bool, bool]:
-    try_has = any(
-        is_contained(line, bad_returning_nodes)
-        for line in node.body
-    )
-    except_has = any(
-        is_contained(except_handler, bad_returning_nodes)
-        for except_handler in node.handlers
-    )
-    else_has = any(
-        is_contained(line, bad_returning_nodes)
-        for line in node.orelse
-    )
-    finally_has = any(
-        is_contained(line, bad_returning_nodes)
-        for line in node.finalbody
-    )
-    return try_has, except_has, else_has, finally_has
 
 
 @final
@@ -100,7 +79,7 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
                 )
 
     def _check_return_path(self, node: ast.Try) -> None:
-        try_has, except_has, else_has, finally_has = _find_returing_nodes(
+        try_has, except_has, else_has, finally_has = find_returning_nodes(
             node, self._bad_returning_nodes,
         )
 
@@ -160,6 +139,8 @@ class WrongExceptHandlerVisitor(BaseNodeVisitor):
 
     _base_exception: ClassVar[str] = 'BaseException'
 
+    _trivial_except_arg_nodes: ClassVar[AnyNodes] = (ast.Name, ast.Attribute)
+
     def visit_ExceptHandler(self, node: ast.ExceptHandler) -> None:
         """
         Checks all ``ExceptionHandler`` nodes.
@@ -171,6 +152,7 @@ class WrongExceptHandlerVisitor(BaseNodeVisitor):
         """
         self._check_useless_except(node)
         self._check_exception_type(node)
+        self._check_except_expression(node)
         self.generic_visit(node)
 
     def _check_useless_except(self, node: ast.ExceptHandler) -> None:
@@ -198,3 +180,21 @@ class WrongExceptHandlerVisitor(BaseNodeVisitor):
         exception_id = getattr(exception_name, 'id', None)
         if exception_id == self._base_exception:
             self.add_violation(BaseExceptionViolation(node))
+
+    def _check_except_expression(self, node: ast.ExceptHandler) -> None:
+        # Catch-all 'except' is actually okay in this case
+        if node.type is None:
+            return
+
+        if isinstance(node.type, self._trivial_except_arg_nodes):
+            return
+
+        if isinstance(node.type, ast.Tuple):
+            all_elements_are_trivial = all((
+                isinstance(element, self._trivial_except_arg_nodes)
+                for element in node.type.elts
+            ))
+            if all_elements_are_trivial:
+                return
+
+        self.add_violation(NonTrivialExceptViolation(node.type))
