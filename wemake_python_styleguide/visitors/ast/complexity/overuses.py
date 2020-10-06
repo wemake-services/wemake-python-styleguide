@@ -1,6 +1,6 @@
 import ast
 from collections import defaultdict
-from typing import Callable, ClassVar, DefaultDict, List, Set, Tuple, Union
+from typing import Callable, ClassVar, DefaultDict, List, Tuple
 
 from typing_extensions import final
 
@@ -29,7 +29,7 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
     forcing assignment would not make much sense (i.e. newlines or "").
     """
 
-    _ignored_string_constants: Set[Union[str, bytes]] = {
+    _ignored_string_constants = frozenset((
         ' ',
         '',
         '\n',
@@ -40,7 +40,7 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
         b'\n',
         b'\r\n',
         b'\t',
-    }
+    ))
 
     def __init__(self, *args, **kwargs) -> None:
         """Inits the counter for constants."""
