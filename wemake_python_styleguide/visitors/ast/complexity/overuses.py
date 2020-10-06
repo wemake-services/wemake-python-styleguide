@@ -1,6 +1,6 @@
 import ast
 from collections import defaultdict
-from typing import Callable, ClassVar, DefaultDict, List, Tuple
+from typing import Callable, ClassVar, DefaultDict, List, Set, Tuple
 
 from typing_extensions import final
 
@@ -24,6 +24,19 @@ _FunctionExpressions = DefaultDict[ast.AST, _Expressions]
 class StringOveruseVisitor(base.BaseNodeVisitor):
     """Restricts several string usages."""
 
+    _excepted_string_constants: Set[str] = {
+        ' ',
+        '',
+        '\n',
+        '\r\n',
+        '\t',
+        b' ',
+        b'',
+        b'\n',
+        b'\r\n',
+        b'\t',
+    }
+
     def __init__(self, *args, **kwargs) -> None:
         """Inits the counter for constants."""
         super().__init__(*args, **kwargs)
@@ -44,6 +57,11 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
 
     def _check_string_constant(self, node: AnyText) -> None:
         if overuses.is_annotation(node):
+            return
+
+        # Some strings are so common, that it makes no sense to check if
+        # they are overused.
+        if node.s in self._excepted_string_constants:
             return
 
         self._string_constants[node.s] += 1
