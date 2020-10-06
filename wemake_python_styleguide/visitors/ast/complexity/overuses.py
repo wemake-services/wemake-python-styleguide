@@ -22,9 +22,14 @@ _FunctionExpressions = DefaultDict[ast.AST, _Expressions]
     'visit_Bytes',
 ))
 class StringOveruseVisitor(base.BaseNodeVisitor):
-    """Restricts several string usages."""
+    """
+    Restricts repeated usage of the same string constant.
 
-    _excepted_string_constants: Set[str] = {
+    NB: Some short strings are ignored, as their use is very common and
+    forcing assignment would not make much sense (i.e. "\n", "\t").
+    """
+
+    _ignored_string_constants: Set[str] = {
         ' ',
         '',
         '\n',
@@ -61,7 +66,7 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
 
         # Some strings are so common, that it makes no sense to check if
         # they are overused.
-        if node.s in self._excepted_string_constants:
+        if node.s in self._ignored_string_constants:
             return
 
         self._string_constants[node.s] += 1
