@@ -26,6 +26,8 @@ from wemake_python_styleguide.violations.refactoring import (
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
+TRIVIAL_EXCEPT_ARG_TYPES = (ast.Name, ast.Attribute)
+
 
 def _find_returing_nodes(
     node: ast.Try,
@@ -206,12 +208,12 @@ class WrongExceptHandlerVisitor(BaseNodeVisitor):
         if node.type is None:
             return
 
-        if isinstance(node.type, (ast.Name, ast.Attribute)):
+        if isinstance(node.type, TRIVIAL_EXCEPT_ARG_TYPES):
             return
 
         if isinstance(node.type, ast.Tuple):
             all_elements_are_trivial = all((
-                isinstance(element, (ast.Name, ast.Attribute))
+                isinstance(element, TRIVIAL_EXCEPT_ARG_TYPES)
                 for element in node.type.elts
             ))
             if all_elements_are_trivial:
