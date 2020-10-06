@@ -1,12 +1,13 @@
 import ast
 from collections import Counter
-from typing import ClassVar, Set, Tuple
+from typing import ClassVar, Set
 
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.tree import exceptions
+from wemake_python_styleguide.logic.tree.exceptions import find_returning_nodes
 from wemake_python_styleguide.logic.walk import is_contained
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
@@ -25,29 +26,6 @@ from wemake_python_styleguide.violations.refactoring import (
     UselessFinallyViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
-
-
-def _find_returing_nodes(
-    node: ast.Try,
-    bad_returning_nodes: AnyNodes,
-) -> Tuple[bool, bool, bool, bool]:
-    try_has = any(
-        is_contained(line, bad_returning_nodes)
-        for line in node.body
-    )
-    except_has = any(
-        is_contained(except_handler, bad_returning_nodes)
-        for except_handler in node.handlers
-    )
-    else_has = any(
-        is_contained(line, bad_returning_nodes)
-        for line in node.orelse
-    )
-    finally_has = any(
-        is_contained(line, bad_returning_nodes)
-        for line in node.finalbody
-    )
-    return try_has, except_has, else_has, finally_has
 
 
 @final
@@ -101,7 +79,7 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
                 )
 
     def _check_return_path(self, node: ast.Try) -> None:
-        try_has, except_has, else_has, finally_has = _find_returing_nodes(
+        try_has, except_has, else_has, finally_has = find_returning_nodes(
             node, self._bad_returning_nodes,
         )
 
