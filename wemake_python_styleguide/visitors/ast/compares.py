@@ -397,7 +397,7 @@ class WrongReturningConditionalStatementVisitor(BaseNodeVisitor):
         self._check_simplifiable_conditional_statement(node)
         self.generic_visit(node)
 
-    def _returns_bool(self, node: ast.AST) -> bool:
+    def _returns_bool(self, node: ast.stmt) -> bool:
         """Checks if a node is a return of a bool constant."""
         if isinstance(node.value, ast.Constant):
             if isinstance(node.value.value, bool):
@@ -407,7 +407,7 @@ class WrongReturningConditionalStatementVisitor(BaseNodeVisitor):
     def _is_simple_returning_if(
         self,
         node: ast.If,
-        body: List[ast.AST],
+        body: Sequence[ast.stmt],
     ) -> bool:
         """Checks if we're in an if that only returns a bool."""
         has_only_one_node = len(body) == 1
@@ -416,13 +416,17 @@ class WrongReturningConditionalStatementVisitor(BaseNodeVisitor):
         does_not_have_elif = not ifs.has_elif(node)
         return is_bool_only_return and does_not_have_elif
 
-    def _is_simple_returning_else(self, body: List[ast.AST]):
+    def _is_simple_returning_else(self, body: Sequence[ast.stmt]) -> bool:
         """Checks if we're in an else that only returns a bool."""
         has_only_one_node = len(body) == 1
         is_only_return = has_only_one_node and isinstance(body[0], ast.Return)
         return is_only_return and self._returns_bool(body[0])
 
-    def _next_node_returns_bool(self, body: List[ast.AST], index: int):
+    def _next_node_returns_bool(
+        self,
+        body: Sequence[ast.stmt],
+        index: int,
+    ) -> bool:
         """Checks if the node immediately after the if returns a bool."""
         has_more_nodes = len(body) >= index + 1
         next_node_is_return = has_more_nodes and isinstance(
@@ -440,12 +444,14 @@ class WrongReturningConditionalStatementVisitor(BaseNodeVisitor):
                     self.add_violation(
                         SimplifiableReturningIfStatementViolation(node),
                     )
-            parent_body = nodes.get_parent(node).body
-            next_index_in_parent = parent_body.index(node) + 1
-            if self._next_node_returns_bool(parent_body, next_index_in_parent):
-                self.add_violation(
-                    SimplifiableReturningIfStatementViolation(node),
-                )
+            parent = nodes.get_parent(node)
+            if parent and isinstance(parent, ast.FunctionDef):
+                parent_body = parent.body
+                next_index_in_parent = parent_body.index(node) + 1
+                if self._next_node_returns_bool(parent_body, next_index_in_parent):
+                    self.add_violation(
+                        SimplifiableReturningIfStatementViolation(node),
+                    )
 
 
 @final
