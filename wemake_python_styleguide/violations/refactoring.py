@@ -1238,7 +1238,7 @@ class SimplifiableReturningIfStatementViolation(ASTViolation):
 
     Solution:
         Instead of testing the condition and returning a boolean, return the
-        condition itself.
+        condition itself. This applies to early returning ifs too.
 
     Example::
 
@@ -1253,23 +1253,12 @@ class SimplifiableReturningIfStatementViolation(ASTViolation):
                 other_function()
                 return True
 
-        def some_function():
-            if some_condition:
-                other_function()
-                return True
-            return False
-
         # Wrong:
         def some_function():
             if some_condition:
                 return True
             else:
                 return False
-
-        def some_function():
-            if some_condition:
-                return False
-            return True
 
     .. versionadded:: 0.15.0
 
