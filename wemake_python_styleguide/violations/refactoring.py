@@ -192,8 +192,6 @@ class SimplifiableIfViolation(ASTViolation):
         Either use ``bool()`` to convert test values to boolean values, or just
         leave it as it is in case your test already returns a boolean value.
         Use can also use ``not`` keyword to switch boolean values.
-        In case it is at the end of a function, instead of testing the condition
-        and returning a boolean, return the condition.
 
     Example::
 
@@ -204,37 +202,11 @@ class SimplifiableIfViolation(ASTViolation):
         # Wrong:
         my_bool = True if some_call() else False
 
-        # In functions:
-        # Correct:
-        def some_function():
-            return some_condition
-
-        def some_function():
-            return not (some_condition and other_condition)
-
-        def some_function():
-            if some_condition:
-                return True
-            other_function()
-            return False
-
-        # Wrong:
-        def some_function():
-        if some_condition:
-            return True
-        else:
-            return False
-
-        def some_function():
-        if some_condition:
-            return False
-        return True
-
     We only check ``if`` nodes where ``True`` and ``False`` values are used.
     We check both ``if`` nodes and ``if`` expressions.
 
     .. versionadded:: 0.7.0
-    .. versionchanged:: 0.15.0
+    .. versionchanged:: 0.11.0
 
     """
 
