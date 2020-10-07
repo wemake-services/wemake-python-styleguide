@@ -44,6 +44,7 @@ Summary
    ImplicitItemsIteratorViolation
    ImplicitDictGetViolation
    ImplicitNegativeIndexViolation
+   SimplifiableReturningIfStatementViolation
 
 Refactoring opportunities
 -------------------------
@@ -79,6 +80,7 @@ Refactoring opportunities
 .. autoclass:: ImplicitItemsIteratorViolation
 .. autoclass:: ImplicitDictGetViolation
 .. autoclass:: ImplicitNegativeIndexViolation
+.. autoclass:: SimplifiableReturningIfStatementViolation
 
 """
 
@@ -1222,3 +1224,56 @@ class ImplicitNegativeIndexViolation(ASTViolation):
 
     error_template = 'Found implicit negative index'
     code = 530
+
+
+@final
+class SimplifiableReturningIfStatementViolation(ASTViolation):
+    """
+    Forbid if statements that simply return booleans in functions or methods.
+
+    Reasoning:
+        There is no need to test a condition and simply return a boolean
+        depending on its outcome if there is not going to be any additional
+        code.
+
+    Solution:
+        Instead of testing the condition and returning a boolean, return the
+        condition itself.
+
+    Example::
+
+        # Correct:
+        def some_function():
+            return some_condition
+
+        def some_function():
+            if some_condition:
+                return False
+            else:
+                other_function()
+                return True
+
+        def some_function():
+            if some_condition:
+                other_function()
+                return True
+            return False
+
+        # Wrong:
+        def some_function():
+            if some_condition:
+                return True
+            else:
+                return False
+
+        def some_function():
+            if some_condition:
+                return False
+            return True
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found simplifiable returning `if` condition in a function'
+    code = 531

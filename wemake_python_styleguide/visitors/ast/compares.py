@@ -26,12 +26,13 @@ from wemake_python_styleguide.violations.consistency import (
     ReversedComplexCompareViolation,
     UselessCompareViolation,
 )
-from wemake_python_styleguide.violations.refactoring import (
+from wemake_python_styleguide.violations.refactoring import (  # noqa: WPS235
     FalsyConstantCompareViolation,
     InCompareWithSingleItemContainerViolation,
     NestedTernaryViolation,
     NotOperatorWithCompareViolation,
     SimplifiableIfViolation,
+    SimplifiableReturningIfStatementViolation,
     UselessLenCompareViolation,
     WrongInCompareTypeViolation,
     WrongIsCompareViolation,
@@ -333,47 +334,12 @@ class WrongConditionalVisitor(BaseNodeVisitor):
         if isinstance(real_node, self._forbidden_nodes):
             self.add_violation(ConstantConditionViolation(node))
 
-    @staticmethod
-    def _returns_bool(node: ast.Return) -> bool:
-        if isinstance(node.value, ast.Constant):
-            return isinstance(node.value.value, bool)
-        return False
-
-    def _is_simplifiable_conditional_statement(self, node: ast.If) -> bool:
-        body = node.body
-        if (
-            len(body) == 1
-            and isinstance(body[0], ast.Return)
-            and self._returns_bool(body[0])
-            and not ifs.has_elif(node)
-        ):
-            if ifs.has_else(node):
-                else_body = node.orelse
-                if (
-                    len(else_body) == 1
-                    and isinstance(else_body[0], ast.Return)
-                    and self._returns_bool(else_body[0])
-                ):
-                    return True
-            else:
-                parent_body = nodes.get_parent(node).body
-                next_index_in_parent = parent_body.index(node) + 1
-                if (
-                    len(parent_body) >= next_index_in_parent + 1
-                    and isinstance(parent_body[next_index_in_parent], ast.Return)
-                    and self._returns_bool(parent_body[next_index_in_parent])
-                ):
-                    return True
-        return False
-
     def _check_simplifiable_if(self, node: ast.If) -> None:
         if not ifs.has_elif(node) and not ifs.root_if(node):
             body_var = self._is_simplifiable_assign(node.body)
             else_var = self._is_simplifiable_assign(node.orelse)
             if body_var and body_var == else_var:
                 self.add_violation(SimplifiableIfViolation(node))
-        if self._is_simplifiable_conditional_statement(node):
-            self.add_violation(SimplifiableIfViolation(node))
 
     def _check_simplifiable_ifexpr(self, node: ast.IfExp) -> None:
         conditions = set()
@@ -414,6 +380,72 @@ class WrongConditionalVisitor(BaseNodeVisitor):
             return None
 
         return source.node_to_string(targets[0])
+
+
+@final
+class WrongReturningConditionalStatementVisitor(BaseNodeVisitor):
+    """Finds wrong returns in if statements."""
+
+    def visit_If(self, node: ast.If) -> None:
+        """
+        Ensures that ``if`` in a function or method do not just return a bool.
+
+        Raises:
+            SimplifiableReturningIfStatementViolation
+
+        """
+        self._check_simplifiable_conditional_statement(node)
+        self.generic_visit(node)
+
+    def _returns_bool(self, node: ast.AST) -> bool:
+        """Checks if a node is a return of a bool constant."""
+        if isinstance(node.value, ast.Constant):
+            if isinstance(node.value.value, bool):
+                return True
+        return False
+
+    def _is_simple_returning_if(
+        self,
+        node: ast.If,
+        body: List[ast.AST],
+    ) -> bool:
+        """Checks if we're in an if that only returns a bool."""
+        has_only_one_node = len(body) == 1
+        is_only_return = has_only_one_node and isinstance(body[0], ast.Return)
+        is_bool_only_return = is_only_return and self._returns_bool(body[0])
+        does_not_have_elif = not ifs.has_elif(node)
+        return is_bool_only_return and does_not_have_elif
+
+    def _is_simple_returning_else(self, body: List[ast.AST]):
+        """Checks if we're in an else that only returns a bool."""
+        has_only_one_node = len(body) == 1
+        is_only_return = has_only_one_node and isinstance(body[0], ast.Return)
+        return is_only_return and self._returns_bool(body[0])
+
+    def _next_node_returns_bool(self, body: List[ast.AST], index: int):
+        """Checks if the node immediately after the if returns a bool."""
+        has_more_nodes = len(body) >= index + 1
+        next_node_is_return = has_more_nodes and isinstance(
+            body[index],
+            ast.Return,
+        )
+        return next_node_is_return and self._returns_bool(body[index])
+
+    def _check_simplifiable_conditional_statement(self, node: ast.If) -> None:
+        body = node.body
+        if self._is_simple_returning_if(node, body):
+            if ifs.has_else(node):
+                else_body = node.orelse
+                if self._is_simple_returning_else(else_body):
+                    self.add_violation(
+                        SimplifiableReturningIfStatementViolation(node),
+                    )
+            parent_body = nodes.get_parent(node).body
+            next_index_in_parent = parent_body.index(node) + 1
+            if self._next_node_returns_bool(parent_body, next_index_in_parent):
+                self.add_violation(
+                    SimplifiableReturningIfStatementViolation(node),
+                )
 
 
 @final
