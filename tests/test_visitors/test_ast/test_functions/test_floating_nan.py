@@ -13,6 +13,8 @@ from wemake_python_styleguide.visitors.ast.functions import (
     'float(2) + 0',
     'result = "NaN".join(["a", "a"])',
     'a = math.nan',
+    'my_function("NaN")',
+    'float("123") + math.nan',
 ])
 def test_correct_nan_acquisition(
     assert_errors,
@@ -40,6 +42,10 @@ def test_correct_nan_acquisition(
     'NAN',
     'nan',
     'Nan',
+    'nAn',
+    'nAN',
+    'naN',
+    'NAn',
 ])
 @pytest.mark.parametrize('code', [
     'float({0})',

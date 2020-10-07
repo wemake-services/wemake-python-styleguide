@@ -2208,7 +2208,7 @@ class FloatingNanViolation(ASTViolation):
         catch a lot of unexpected bugs.
 
     Solution:
-        Even if you're 100% sure what you're doing, use math.nan instead.
+        Even if you're 100% sure what you're doing, use ``math.nan`` instead.
 
     Example::
 
