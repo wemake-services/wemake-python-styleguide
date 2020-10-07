@@ -500,14 +500,8 @@ if some_if_expr:  # noqa: WPS502
 else:
     some_dict['x'] = False
 
-def wrong_if():
-    if full_name == 'Nikita Sobolev': # noqa: WPS502
-        return True
-    else:
-        return False  # noqa: WPS503
-
 def another_wrong_if():
-    if full_name != 'Nikita Sobolev':  # noqa: WPS502
+    if full_name != 'Nikita Sobolev':  # noqa: WPS531
         return False
     return True
 
