@@ -34,7 +34,7 @@ Semantic versioning in our case means:
 - Forbids to use float zeros (`0.0`)
 - Forbids `raise Exception` and `raise BaseException`
 - Forbids to use `%` with zero as the divisor
-- WPS502 extension: Forbids testing conditions to just return booleans when it is possible to simply return the result of the test.
+- WPS531: Forbids testing conditions to just return booleans when it is possible to simply return the condition itself.
 
 ### Bugfixes
 
