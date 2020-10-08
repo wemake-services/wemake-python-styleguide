@@ -282,6 +282,7 @@ python-versions = "*"
 
 [package.dependencies]
 wasmer = {version = ">=0.3.0", markers = "python_version >= \"3.5\" and platform_machine == \"x86_64\" and sys_platform == \"darwin\""}
+wasmer = {version = ">=0.3.0", markers = "python_version >= \"3.5\" and platform_machine == \"x86_64\" and sys_platform == \"linux\""}
 
 [[package]]
 name = "flake8"
