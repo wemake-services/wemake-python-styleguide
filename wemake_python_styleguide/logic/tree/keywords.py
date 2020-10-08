@@ -1,5 +1,5 @@
 import ast
-from typing import List, Tuple
+from typing import List, Sequence, Tuple
 
 from wemake_python_styleguide.logic.nodes import get_context
 
@@ -18,6 +18,20 @@ def returning_nodes(
                 has_values = True
             returns.append(sub_node)
     return returns, has_values
+
+
+def is_simple_return(body: Sequence[ast.stmt]) -> bool:
+    """Check if a statement only returns a boolean constant."""
+    if len(body) != 1:
+        return False
+    return node_returns_bool_constant(body[0])
+
+
+def next_node_returns_bool(body: Sequence[ast.stmt], index: int) -> bool:
+    """Check if the node after exiting the context returns a boolean const."""
+    if len(body) < index + 1:
+        return False
+    return node_returns_bool_constant(body[index])
 
 
 def node_returns_bool_constant(node: ast.stmt) -> bool:

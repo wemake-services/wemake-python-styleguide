@@ -1,17 +1,19 @@
 import ast
-from typing import Iterable, List, Optional, Sequence, Union
+from typing import Iterable, List, Optional, Union
 
-from wemake_python_styleguide.logic.tree.keywords import (
-    node_returns_bool_constant,
-)
 from wemake_python_styleguide.types import AnyNodes
 
 _IfAndElifASTNode = Union[ast.If, List[ast.stmt]]
 
 
-def has_elif(node: ast.If) -> bool:
+def is_elif(node: ast.If) -> bool:
     """Tells if this node is a part of a ``if`` chain or just a single one."""
     return getattr(node, 'wps_if_chain', False)  # noqa: WPS425
+
+
+def has_elif(node: ast.If) -> bool:
+    """Tells if this statement has an ``elif`` chained or not."""
+    return bool(tuple(chain(node))[1:-1])
 
 
 def has_else(node: ast.If) -> bool:
@@ -62,17 +64,3 @@ def has_nodes(
         isinstance(line, to_check)
         for line in iterable
     )
-
-
-def is_simple_returning_statement(body: Sequence[ast.stmt]) -> bool:
-    """Check if the conditional statement only returns a boolean constant."""
-    if len(body) != 1:
-        return False
-    return node_returns_bool_constant(body[0])
-
-
-def next_node_returns_bool(body: Sequence[ast.stmt], index: int) -> bool:
-    """Check if the node right after the conditional returns a boolean const."""
-    if len(body) < index + 1:
-        return False
-    return node_returns_bool_constant(body[index])

@@ -37,6 +37,16 @@ def some_function():
     return {1}
 """
 
+elif_statement = """
+def some_function():
+    if some_condition:
+        return {0}
+    elif other_condition:
+        return {1}
+    else:
+        return {2}
+"""
+
 
 @pytest.mark.parametrize('comparators', [
     ('variable', '"test"'),
@@ -154,3 +164,22 @@ def test_simplifiable_if_and_useless_else(
         UselessReturningElseViolation,
         SimplifiableReturningIfStatementViolation,
     ])
+
+
+@pytest.mark.parametrize('comparators', [
+    ('True', 'False', 'True'),
+    ('False', 'True', 'True'),
+])
+def test_not_simplifiable_elif(
+    assert_errors,
+    parse_ast_tree,
+    comparators,
+    default_options,
+):
+    """These early returning ifs are simplifiable."""
+    tree = parse_ast_tree(elif_statement.format(*comparators))
+
+    visitor = IfStatementVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [UselessReturningElseViolation])
