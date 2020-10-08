@@ -176,7 +176,7 @@ def test_not_simplifiable_elif(
     comparators,
     default_options,
 ):
-    """These early returning ifs are simplifiable."""
+    """Statements with elif are not simplifiable."""
     tree = parse_ast_tree(elif_statement.format(*comparators))
 
     visitor = IfStatementVisitor(default_options, tree=tree)
