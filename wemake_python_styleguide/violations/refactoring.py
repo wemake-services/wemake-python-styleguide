@@ -1221,9 +1221,8 @@ class SimplifiableReturningIfStatementViolation(ASTViolation):
         def some_function():
             if some_condition:
                 return False
-            else:
-                other_function()
-                return True
+            other_function()
+            return True
 
         # Wrong:
         def some_function():
