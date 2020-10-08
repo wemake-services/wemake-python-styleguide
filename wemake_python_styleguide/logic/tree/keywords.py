@@ -24,9 +24,9 @@ def node_returns_bool_constant(node: ast.stmt) -> bool:
     """Checks if a Return node would return a bool constant."""
     is_return = isinstance(node, ast.Return)
     if is_return:
-        return_value = getattr(node, 'value')
+        return_value = getattr(node, 'value', None)
         returns_constant = isinstance(return_value, ast.Constant)
         if returns_constant:
-            constant_value = getattr(return_value, 'value')
+            constant_value = getattr(return_value, 'value', None)
             return isinstance(constant_value, bool)
     return False
