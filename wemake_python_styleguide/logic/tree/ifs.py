@@ -62,7 +62,9 @@ def has_nodes(
     )
 
 
-def is_simple_returning_statement(body: Sequence[ast.Return, ast.stmt]) -> bool:
+def is_simple_returning_statement(
+    body: Sequence[Union[ast.Return, ast.stmt]]
+) -> bool:
     """Check if the conditional statement only returns a boolean constant."""
     if len(body) != 1:
         return False
@@ -72,7 +74,7 @@ def is_simple_returning_statement(body: Sequence[ast.Return, ast.stmt]) -> bool:
 
 
 def next_node_returns_bool(
-    body: Sequence[ast.Return, ast.stmt],
+    body: Sequence[Union[ast.Return, ast.stmt]],
     index: int
 ) -> bool:
     """Check if the node right after the conditional returns a boolean const."""
