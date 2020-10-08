@@ -20,9 +20,10 @@ def returning_nodes(
     return returns, has_values
 
 
-def node_returns_bool(node: ast.Return) -> bool:
+def node_returns_bool_constant(node: ast.stmt) -> bool:
     """Checks if a Return node would return a bool constant."""
-    if isinstance(node.value, ast.Constant):
-        if isinstance(node.value.value, bool):
-            return True
+    if isinstance(node, ast.Return):
+        if isinstance(node.value, ast.Constant):
+            if isinstance(node.value.value, bool):
+                return True
     return False
