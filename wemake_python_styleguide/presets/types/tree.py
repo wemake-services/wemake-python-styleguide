@@ -54,6 +54,7 @@ PRESET: Final = (
     functions.WrongFunctionCallContextVisitior,
     functions.UnnecessaryLiteralsVisitor,
     functions.PositionalOnlyArgumentsVisitor,
+    functions.FloatingNanCallVisitor,
 
     exceptions.WrongTryExceptVisitor,
     exceptions.NestedTryBlocksVisitor,

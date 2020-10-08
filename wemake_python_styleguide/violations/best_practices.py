@@ -72,6 +72,7 @@ Summary
    ShebangViolation
    BaseExceptionRaiseViolation
    NonTrivialExceptViolation
+   FloatingNanViolation
 
 Best practices
 --------------
@@ -132,6 +133,7 @@ Best practices
 .. autoclass:: ShebangViolation
 .. autoclass:: BaseExceptionRaiseViolation
 .. autoclass:: NonTrivialExceptViolation
+.. autoclass:: FloatingNanViolation
 
 """
 
@@ -2194,3 +2196,31 @@ class NonTrivialExceptViolation(ASTViolation):
 
     error_template = 'Found non-trivial expression as an argument for "except"'
     code = 455
+
+
+@final
+class FloatingNanViolation(ASTViolation):
+    """
+    Forbids to use ``float("NaN")`` construct to generate NaN.
+
+    Reasoning:
+        This method to generate NaN is really confusing and is a good way to
+        catch a lot of unexpected bugs.
+
+    Solution:
+        Even if you're 100% sure what you're doing, use ``math.nan`` instead.
+
+    Example::
+
+        # Correct:
+        min(math.nan, 3)
+
+        # Wrong:
+        min(float("NAN"), 3)
+
+    .. versionadded:: 0.16.0
+
+    """
+
+    error_template = 'Found "NaN" as argument to float()'
+    code = 456
