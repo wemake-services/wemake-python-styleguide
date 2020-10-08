@@ -22,8 +22,9 @@ def returning_nodes(
 
 def node_returns_bool_constant(node: ast.stmt) -> bool:
     """Checks if a Return node would return a bool constant."""
-    if isinstance(node, ast.Return):
-        if isinstance(node.value, ast.Constant):
-            if isinstance(node.value.value, bool):
-                return True
+    is_return = isinstance(node, ast.Return)
+    if is_return:
+        returns_constant = isinstance(node.value, ast.Constant)
+        if returns_constant:
+            return isinstance(node.value.value, bool)
     return False
