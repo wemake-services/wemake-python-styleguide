@@ -18,3 +18,11 @@ def returning_nodes(
                 has_values = True
             returns.append(sub_node)
     return returns, has_values
+
+
+def node_returns_bool(node: ast.Return) -> bool:
+    """Checks if a Return node would return a bool constant."""
+    if isinstance(node.value, ast.Constant):
+        if isinstance(node.value.value, bool):
+            return True
+    return False

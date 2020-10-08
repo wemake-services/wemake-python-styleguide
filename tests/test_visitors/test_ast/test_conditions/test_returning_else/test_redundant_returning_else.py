@@ -1,6 +1,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.refactoring import (
+    SimplifiableReturningIfStatementViolation,
     UselessReturningElseViolation,
 )
 from wemake_python_styleguide.visitors.ast.conditions import IfStatementVisitor
@@ -68,7 +69,6 @@ def test():
 ])
 @pytest.mark.parametrize('code', [
     'return',
-    'return True',
     'raise ValueError()',
 ])
 def test_else_that_can_be_removed_in_function(
@@ -86,6 +86,57 @@ def test_else_that_can_be_removed_in_function(
     visitor.run()
 
     assert_errors(visitor, [UselessReturningElseViolation])
+
+
+@pytest.mark.parametrize('template', [
+    multiple_ifs1,
+    multiple_ifs2,
+])
+@pytest.mark.parametrize('code', [
+    'return True',
+])
+def test_else_that_can_be_removed_and_complex_if(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    template,
+    default_options,
+    mode,
+):
+    """Testing that extra ``else`` blocks can be removed."""
+    tree = parse_ast_tree(mode(template.format(code, code)))
+
+    visitor = IfStatementVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [UselessReturningElseViolation])
+
+
+@pytest.mark.parametrize('template', [
+    function_level_condition,
+    for_loop_level_condition,
+])
+@pytest.mark.parametrize('code', [
+    'return True',
+])
+def test_else_can_be_removed_and_simplifiable_if(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    template,
+    default_options,
+    mode,
+):
+    """Extra ``else`` blocks can be removed, plus the ``if`` is simplifiable."""
+    tree = parse_ast_tree(mode(template.format(code, code)))
+
+    visitor = IfStatementVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [
+        UselessReturningElseViolation,
+        SimplifiableReturningIfStatementViolation,
+    ])
 
 
 @pytest.mark.parametrize('template', [

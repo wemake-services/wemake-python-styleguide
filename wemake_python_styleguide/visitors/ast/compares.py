@@ -26,13 +26,12 @@ from wemake_python_styleguide.violations.consistency import (
     ReversedComplexCompareViolation,
     UselessCompareViolation,
 )
-from wemake_python_styleguide.violations.refactoring import (  # noqa: WPS235
+from wemake_python_styleguide.violations.refactoring import (
     FalsyConstantCompareViolation,
     InCompareWithSingleItemContainerViolation,
     NestedTernaryViolation,
     NotOperatorWithCompareViolation,
     SimplifiableIfViolation,
-    SimplifiableReturningIfStatementViolation,
     UselessLenCompareViolation,
     WrongInCompareTypeViolation,
     WrongIsCompareViolation,
@@ -380,78 +379,6 @@ class WrongConditionalVisitor(BaseNodeVisitor):
             return None
 
         return source.node_to_string(targets[0])
-
-
-@final
-class WrongReturningConditionalStatementVisitor(BaseNodeVisitor):
-    """Finds wrong returns in if statements."""
-
-    def visit_If(self, node: ast.If) -> None:
-        """
-        Ensures that ``if`` in a function or method do not just return a bool.
-
-        Raises:
-            SimplifiableReturningIfStatementViolation
-
-        """
-        self._check_simplifiable_conditional_statement(node)
-        self.generic_visit(node)
-
-    def _returns_bool(self, node: ast.stmt) -> bool:
-        """Checks if a node is a return of a bool constant."""
-        if isinstance(node.value, ast.Constant):
-            if isinstance(node.value.value, bool):
-                return True
-        return False
-
-    def _is_simple_returning_if(
-        self,
-        node: ast.If,
-        body: Sequence[ast.stmt],
-    ) -> bool:
-        """Checks if we're in an if that only returns a bool."""
-        has_only_one_node = len(body) == 1
-        is_only_return = has_only_one_node and isinstance(body[0], ast.Return)
-        is_bool_only_return = is_only_return and self._returns_bool(body[0])
-        does_not_have_elif = not ifs.has_elif(node)
-        return is_bool_only_return and does_not_have_elif
-
-    def _is_simple_returning_else(self, body: Sequence[ast.stmt]) -> bool:
-        """Checks if we're in an else that only returns a bool."""
-        has_only_one_node = len(body) == 1
-        is_only_return = has_only_one_node and isinstance(body[0], ast.Return)
-        return is_only_return and self._returns_bool(body[0])
-
-    def _next_node_returns_bool(
-        self,
-        body: Sequence[ast.stmt],
-        index: int,
-    ) -> bool:
-        """Checks if the node immediately after the if returns a bool."""
-        has_more_nodes = len(body) >= index + 1
-        next_node_is_return = has_more_nodes and isinstance(
-            body[index],
-            ast.Return,
-        )
-        return next_node_is_return and self._returns_bool(body[index])
-
-    def _check_simplifiable_conditional_statement(self, node: ast.If) -> None:
-        body = node.body
-        if self._is_simple_returning_if(node, body):
-            if ifs.has_else(node):
-                else_body = node.orelse
-                if self._is_simple_returning_else(else_body):
-                    self.add_violation(
-                        SimplifiableReturningIfStatementViolation(node),
-                    )
-            parent = nodes.get_parent(node)
-            if parent and isinstance(parent, ast.FunctionDef):
-                parent_body = parent.body
-                next_index_in_parent = parent_body.index(node) + 1
-                if self._next_node_returns_bool(parent_body, next_index_in_parent):
-                    self.add_violation(
-                        SimplifiableReturningIfStatementViolation(node),
-                    )
 
 
 @final

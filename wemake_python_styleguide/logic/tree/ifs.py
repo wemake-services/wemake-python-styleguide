@@ -1,6 +1,7 @@
 import ast
-from typing import Iterable, List, Optional, Union
+from typing import Iterable, List, Optional, Sequence, Union
 
+from wemake_python_styleguide.logic.tree.keywords import node_returns_bool
 from wemake_python_styleguide.types import AnyNodes
 
 _IfAndElifASTNode = Union[ast.If, List[ast.stmt]]
@@ -59,3 +60,21 @@ def has_nodes(
         isinstance(line, to_check)
         for line in iterable
     )
+
+
+def is_simple_returning_statement(body: Sequence[ast.stmt]) -> bool:
+    """Check if the conditional statement only returns a boolean constant."""
+    if len(body) != 1:
+        return False
+    if not isinstance(body[0], ast.Return):
+        return False
+    return node_returns_bool(body[0])
+
+
+def next_node_returns_bool(body: Sequence[ast.stmt], index: int) -> bool:
+    """Check if the node right after the conditional returns a boolean const."""
+    if len(body) < index + 1:
+        return False
+    if not isinstance(body[index], ast.Return):
+        return False
+    return node_returns_bool(body[index])
