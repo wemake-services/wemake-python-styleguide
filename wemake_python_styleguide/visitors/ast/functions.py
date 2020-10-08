@@ -191,7 +191,7 @@ class FloatingNanCallVisitor(base.BaseNodeVisitor):
         if not isinstance(node.args[0], (ast.Str, ast.Bytes)):
             return
 
-        if not isinstance(node.func, ast.Name) or node.func.id != 'float':
+        if not functions.given_function_called(node, 'float'):
             return
 
         if node.args[0].s.lower() in self._nan_variants:
