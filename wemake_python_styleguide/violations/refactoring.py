@@ -1218,12 +1218,6 @@ class SimplifiableReturningIfViolation(ASTViolation):
         def some_function():
             return some_condition
 
-        def some_function():
-            if some_condition:
-                return False
-            other_function()
-            return True
-
         # Wrong:
         def some_function():
             if some_condition:

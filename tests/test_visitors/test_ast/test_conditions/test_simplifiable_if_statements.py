@@ -79,6 +79,10 @@ def test_complex_early_returning_if(
     assert_errors(visitor, [])
 
 
+@pytest.mark.parametrize('template', [
+    complex_early_returning_if_inside,
+    complex_early_returning_if_outside,
+])
 @pytest.mark.parametrize('comparators', [
     ('True', 'False'),
     ('False', 'True'),
@@ -86,42 +90,14 @@ def test_complex_early_returning_if(
 def test_complex_early_returning_if_inside(
     assert_errors,
     parse_ast_tree,
+    template,
     comparators,
     default_options,
 ):
-    """These more complex early returning ifs can not be simplified (inside)."""
-    tree = parse_ast_tree(
-        complex_early_returning_if_inside.format(*comparators),
-    )
+    """These more complex early returning ifs can not be simplified."""
+    tree = parse_ast_tree(template.format(*comparators))
 
-    visitor = IfStatementVisitor(
-        default_options,
-        tree=tree,
-    )
-    visitor.run()
-
-    assert_errors(visitor, [])
-
-
-@pytest.mark.parametrize('comparators', [
-    ('True', 'False'),
-    ('False', 'True'),
-])
-def test_complex_early_returning_if_outside(
-    assert_errors,
-    parse_ast_tree,
-    comparators,
-    default_options,
-):
-    """These early returning ifs can not be simplified (outside)."""
-    tree = parse_ast_tree(
-        complex_early_returning_if_outside.format(*comparators),
-    )
-
-    visitor = IfStatementVisitor(
-        default_options,
-        tree=tree,
-    )
+    visitor = IfStatementVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
