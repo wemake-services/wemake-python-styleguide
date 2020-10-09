@@ -20,27 +20,25 @@ def returning_nodes(
     return returns, has_values
 
 
+def node_returns_bool_const(node: ast.stmt) -> bool:
+    """Checks if a Return node would return a boolean constant."""
+    is_return = isinstance(node, ast.Return)
+    if is_return:
+        return_value = getattr(node, 'value', None)
+        if isinstance(return_value, ast.NameConstant):
+            return isinstance(return_value.value, bool)
+    return False
+
+
 def is_simple_return(body: Sequence[ast.stmt]) -> bool:
     """Check if a statement only returns a boolean constant."""
     if len(body) != 1:
         return False
-    return node_returns_bool_constant(body[0])
+    return node_returns_bool_const(body[0])
 
 
 def next_node_returns_bool(body: Sequence[ast.stmt], index: int) -> bool:
     """Check if the node after exiting the context returns a boolean const."""
     if len(body) < index + 1:
         return False
-    return node_returns_bool_constant(body[index])
-
-
-def node_returns_bool_constant(node: ast.stmt) -> bool:
-    """Checks if a Return node would return a bool constant."""
-    is_return = isinstance(node, ast.Return)
-    if is_return:
-        return_value = getattr(node, 'value', None)
-        returns_constant = isinstance(return_value, ast.Constant)
-        if returns_constant:
-            constant_value = getattr(return_value, 'value', None)
-            return isinstance(constant_value, bool)
-    return False
+    return node_returns_bool_const(body[index])

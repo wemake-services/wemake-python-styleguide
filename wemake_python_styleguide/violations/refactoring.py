@@ -44,7 +44,7 @@ Summary
    ImplicitItemsIteratorViolation
    ImplicitDictGetViolation
    ImplicitNegativeIndexViolation
-   SimplifiableReturningIfStatementViolation
+   SimplifiableReturningIfViolation
 
 Refactoring opportunities
 -------------------------
@@ -80,7 +80,7 @@ Refactoring opportunities
 .. autoclass:: ImplicitItemsIteratorViolation
 .. autoclass:: ImplicitDictGetViolation
 .. autoclass:: ImplicitNegativeIndexViolation
-.. autoclass:: SimplifiableReturningIfStatementViolation
+.. autoclass:: SimplifiableReturningIfViolation
 
 """
 
@@ -1199,7 +1199,7 @@ class ImplicitNegativeIndexViolation(ASTViolation):
 
 
 @final
-class SimplifiableReturningIfStatementViolation(ASTViolation):
+class SimplifiableReturningIfViolation(ASTViolation):
     """
     Forbid if statements that simply return booleans in functions or methods.
 

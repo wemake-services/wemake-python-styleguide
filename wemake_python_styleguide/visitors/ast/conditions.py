@@ -5,7 +5,7 @@ from typing import ClassVar, DefaultDict, List, Mapping, Set, Type
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic import nodes, source
+from wemake_python_styleguide.logic import source
 from wemake_python_styleguide.logic.tree import ifs, keywords, operators
 from wemake_python_styleguide.logic.tree.compares import CompareBounds
 from wemake_python_styleguide.logic.tree.functions import given_function_called
@@ -20,7 +20,7 @@ from wemake_python_styleguide.violations.consistency import (
 from wemake_python_styleguide.violations.refactoring import (
     ImplicitInConditionViolation,
     NegatedConditionsViolation,
-    SimplifiableReturningIfStatementViolation,
+    SimplifiableReturningIfViolation,
     UnmergedIsinstanceCallsViolation,
     UselessLenCompareViolation,
     UselessReturningElseViolation,
@@ -88,7 +88,7 @@ class IfStatementVisitor(BaseNodeVisitor):
             NegatedConditionsViolation
             MultilineConditionsViolation
             UselessLenCompareViolation
-            SimplifiableReturningIfStatementViolation
+            SimplifiableReturningIfViolation
 
         """
         self._check_negated_conditions(node)
@@ -161,18 +161,12 @@ class IfStatementVisitor(BaseNodeVisitor):
             if ifs.has_else(node):
                 else_body = node.orelse
                 if keywords.is_simple_return(else_body):
-                    self.add_violation(
-                        SimplifiableReturningIfStatementViolation(node),
-                    )
+                    self.add_violation(SimplifiableReturningIfViolation(node))
                 return
-            parent = nodes.get_parent(node)
-            if parent and isinstance(parent, ast.FunctionDef):
-                body = parent.body
-                next_index_in_parent = body.index(node) + 1
-                if keywords.next_node_returns_bool(body, next_index_in_parent):
-                    self.add_violation(
-                        SimplifiableReturningIfStatementViolation(node),
-                    )
+            body = getattr(node, 'wps_parent').body
+            next_index_in_parent = body.index(node) + 1
+            if keywords.next_node_returns_bool(body, next_index_in_parent):
+                self.add_violation(SimplifiableReturningIfViolation(node))
 
 
 @final

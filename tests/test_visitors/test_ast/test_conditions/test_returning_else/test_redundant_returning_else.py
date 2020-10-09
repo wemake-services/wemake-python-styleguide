@@ -1,7 +1,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.refactoring import (
-    SimplifiableReturningIfStatementViolation,
+    SimplifiableReturningIfViolation,
     UselessReturningElseViolation,
 )
 from wemake_python_styleguide.visitors.ast.conditions import IfStatementVisitor
@@ -135,7 +135,7 @@ def test_else_can_be_removed_and_simplifiable_if(
 
     assert_errors(visitor, [
         UselessReturningElseViolation,
-        SimplifiableReturningIfStatementViolation,
+        SimplifiableReturningIfViolation,
     ])
 
 
