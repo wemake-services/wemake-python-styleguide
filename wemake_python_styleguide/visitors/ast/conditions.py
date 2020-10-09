@@ -96,7 +96,7 @@ class IfStatementVisitor(BaseNodeVisitor):
         if isinstance(node, ast.If):
             self._check_useless_else(node)
             self._check_multiline_conditions(node)
-            self._check_simplifiable_conditional_statement(node)
+            self._check_simplifiable_returning_if(node)
         self.generic_visit(node)
 
     def _check_negated_conditions(self, node: AnyIf) -> None:
@@ -151,10 +151,7 @@ class IfStatementVisitor(BaseNodeVisitor):
             if given_function_called(node.test, {'len'}):
                 self.add_violation(UselessLenCompareViolation(node))
 
-    def _check_simplifiable_conditional_statement(  # noqa: WPS231
-        self,
-        node: ast.If,
-    ) -> None:
+    def _check_simplifiable_returning_if(self, node: ast.If) -> None:
         body = node.body
         simple_if_and_root = not (ifs.has_elif(node) or ifs.is_elif(node))
         if keywords.is_simple_return(body) and simple_if_and_root:
