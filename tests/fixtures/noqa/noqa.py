@@ -500,6 +500,12 @@ if some_if_expr:  # noqa: WPS502
 else:
     some_dict['x'] = False
 
+def another_wrong_if():
+    if full_name != 'Nikita Sobolev':  # noqa: WPS531
+        return False
+    return True
+
+
 
 class ClassWithWrongContents((lambda: object)()):  # noqa: WPS606
     __slots__ = ['a', 'a']  # noqa: WPS607

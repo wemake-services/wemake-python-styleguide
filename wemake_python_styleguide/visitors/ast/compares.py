@@ -334,7 +334,7 @@ class WrongConditionalVisitor(BaseNodeVisitor):
             self.add_violation(ConstantConditionViolation(node))
 
     def _check_simplifiable_if(self, node: ast.If) -> None:
-        if not ifs.has_elif(node) and not ifs.root_if(node):
+        if not ifs.is_elif(node) and not ifs.root_if(node):
             body_var = self._is_simplifiable_assign(node.body)
             else_var = self._is_simplifiable_assign(node.orelse)
             if body_var and body_var == else_var:
