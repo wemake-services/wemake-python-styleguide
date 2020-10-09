@@ -119,7 +119,7 @@ def test_else_that_can_be_removed_and_complex_if(
 ])
 @pytest.mark.parametrize('code', [
     'return True',
-    'return False,'
+    'return False',
 ])
 def test_else_can_be_removed_and_simplifiable_if(
     assert_errors,
