@@ -105,5 +105,6 @@ ipdb = "^0.13"
 ipython = "^7.16"
 astboom = "^0.4"
 tokelor = "^0.1"
-astpath = {version = "^0.9.0", extras = ["xpath"]}
+astpath = "^0.9.0"
+lxml = "^4.5.2"
 
