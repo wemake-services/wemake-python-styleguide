@@ -22,9 +22,11 @@ class SubscriptVisitor(base.BaseNodeVisitor):
 
         Raises:
             RedundantSubscriptViolation
+            AssignToSliceViolation
 
         """
         self._check_redundant_subscript(node)
+        self._check_slice_assignment(node)
         self.generic_visit(node)
 
     def _check_redundant_subscript(self, node: ast.Subscript) -> None:
@@ -56,6 +58,17 @@ class SubscriptVisitor(base.BaseNodeVisitor):
                     node, text=str(node),
                 ),
             )
+
+    def _check_slice_assignment(self, node: ast.Subscript) -> None:
+        if not isinstance(node.slice, ast.Slice):
+            return
+        if isinstance(node.ctx, ast.Store):
+            if node.slice.upper or node.slice.lower or node.slice.step:
+                self.add_violation(
+                    consistency.AssignToSliceViolation(
+                        node, text=str(node),
+                    ),
+                )
 
     def _is_none(self, component_value: ast.expr) -> bool:
         return (

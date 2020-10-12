@@ -708,6 +708,9 @@ extra_new_line = [  # noqa: WPS355
 ]
 *numbers, = [4, 7]  # noqa: WPS356
 
+a_list = [1, 2, 3, 4, 5]
+a_list[1:3] = [1, 2] # noqa: WPS359
+
 for element in range(10):
     try:  # noqa: WPS452
         my_print(1)
@@ -730,3 +733,4 @@ except ValueError or TypeError:  # noqa: WPS455
 
 if float("NaN") < number:  # noqa: WPS456
     my_print("Greater than... what?")
+

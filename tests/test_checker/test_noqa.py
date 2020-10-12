@@ -167,7 +167,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS356': 1,
     'WPS357': 0,  # logically unacceptable.
     'WPS358': 1,
-
+    'WPS359': 1,
     'WPS400': 0,  # defined in ignored violations.
     'WPS401': 0,  # logically unacceptable.
     'WPS402': 0,  # defined in ignored violations.

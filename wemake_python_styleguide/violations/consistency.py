@@ -82,6 +82,7 @@ Summary
    IterableUnpackingViolation
    LineCompriseCarriageReturnViolation
    FloatZeroViolation
+   AssignToSliceViolation
 
 Consistency checks
 ------------------
@@ -145,6 +146,7 @@ Consistency checks
 .. autoclass:: IterableUnpackingViolation
 .. autoclass:: LineCompriseCarriageReturnViolation
 .. autoclass:: FloatZeroViolation
+.. autoclass:: AssignToSliceViolation
 
 """
 
@@ -2197,3 +2199,30 @@ class FloatZeroViolation(TokenizeViolation):
 
     code = 358
     error_template = 'Found a float zero (0.0)'
+
+
+@final
+class AssignToSliceViolation(ASTViolation):
+    """
+    Forbid assignment to a subscript slice.
+
+    Reasoning:
+        We do this for consistency.
+
+    Example::
+
+        # Correct:
+        a[5] = [1]
+    
+        # Wrong:
+        a[1:3] = [1,2]
+        a[:3] = [1,2,3]
+        a[:3:1] = [1,2,3]
+        a[::1] = [1,2,3]
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found assignment to a subscript slice'
+    code = 359
