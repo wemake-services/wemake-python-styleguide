@@ -14,6 +14,7 @@ usage_template = 'constant[{0}]= [1,2,3]'
     '3:',
     '3::',
     '::2',
+    ':2:',
 ])
 def test_slice_assignment(
     assert_errors,
@@ -21,7 +22,7 @@ def test_slice_assignment(
     expression,
     default_options,
 ):
-    """Testing that redundant subscripts are forbidden."""
+    """Testing that slice assignments are forbidden."""
     tree = parse_ast_tree(usage_template.format(expression))
 
     visitor = SubscriptVisitor(default_options, tree=tree)
@@ -34,13 +35,13 @@ def test_slice_assignment(
     '5',
     ':',
 ])
-def test_correct_subscripts(
+def test_regular_index_assignment(
     assert_errors,
     parse_ast_tree,
     expression,
     default_options,
 ):
-    """Testing that non-redundant subscripts are allowed."""
+    """Testing that regular index assignment is allowed."""
     tree = parse_ast_tree(usage_template.format(expression))
 
     visitor = SubscriptVisitor(default_options, tree=tree)

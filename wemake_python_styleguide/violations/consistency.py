@@ -2213,14 +2213,14 @@ class AssignToSliceViolation(ASTViolation):
 
         # Correct:
         a[5] = [1]
-    
+
         # Wrong:
         a[1:3] = [1,2]
         a[:3] = [1,2,3]
         a[:3:1] = [1,2,3]
         a[::1] = [1,2,3]
 
-    .. versionadded:: 0.15.0
+    .. versionadded:: 0.16.0
 
     """
 
