@@ -276,3 +276,5 @@ class TupleUnpackVisitor(BaseNodeVisitor):
                         baseline=self.options.max_tuple_unpack_length,
                     ),
                 )
+
+        self.generic_visit(node)
