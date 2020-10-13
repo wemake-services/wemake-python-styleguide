@@ -292,7 +292,7 @@ optional = false
 python-versions = "*"
 
 [package.dependencies]
-wasmer = {version = ">=0.3.0", markers = "python_version >= \"3.5\" and platform_machine == \"x86_64\" and sys_platform == \"darwin\" or python_version >= \"3.5\" and platform_machine == \"x86_64\" and sys_platform == \"linux\""}
+wasmer = {version = ">=0.3.0", markers = "python_version >= \"3.5\" and platform_machine == \"x86_64\" and sys_platform == \"darwin\""}
 
 [[package]]
 name = "flake8"
@@ -546,7 +546,7 @@ redis = ["redis (>=3.0.0)"]
 
 [[package]]
 name = "hypothesmith"
-version = "0.1.4"
+version = "0.1.5"
 description = "Hypothesis strategies for generating Python programs, something like CSmith"
 category = "dev"
 optional = false
@@ -1544,7 +1544,7 @@ testing = ["pytest (>=3.5,<3.7.3 || >3.7.3)", "pytest-checkdocs (>=1.2.3)", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "074078219ab717547fb4dbf37ee94dd9f4ed244ed93f6cca5e43781f152ee026"
+content-hash = "698a7690732704045ee665011a8b652b07753be738265867529b8422c2a6f1ae"
 
 [metadata.files]
 added-value = [
@@ -1762,8 +1762,8 @@ hypothesis = [
     {file = "hypothesis-5.37.1.tar.gz", hash = "sha256:9b524052b0c5ed584d8c3a1c21a5b5d6333378a8b20b652792af762827401681"},
 ]
 hypothesmith = [
-    {file = "hypothesmith-0.1.4-py3-none-any.whl", hash = "sha256:bc45f45808078d2bbe6c3806af3b3604bde35624964fcc6b849cecadf254d3a9"},
-    {file = "hypothesmith-0.1.4.tar.gz", hash = "sha256:5628fb1a06233c70751105635bc3cee789c82358041b4518c2cab5300e73cd65"},
+    {file = "hypothesmith-0.1.5-py3-none-any.whl", hash = "sha256:47fd14a31aada35590b6b26e595c41f4996e809b3ce8939528097913d1073725"},
+    {file = "hypothesmith-0.1.5.tar.gz", hash = "sha256:7f7ccb88ea00820177cb2c510a93a6e0154eab22924338c5ec514b79b5305bfa"},
 ]
 identify = [
     {file = "identify-1.5.5-py2.py3-none-any.whl", hash = "sha256:da683bfb7669fa749fc7731f378229e2dbf29a1d1337cbde04106f02236eb29d"},
