@@ -734,4 +734,3 @@ except ValueError or TypeError:  # noqa: WPS455
 
 if float("NaN") < number:  # noqa: WPS456
     my_print("Greater than... what?")
-
