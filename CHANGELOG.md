@@ -15,7 +15,7 @@ Semantic versioning in our case means:
 
 - Forbids using non-trivial expressions as an argument to `except`
 - Forbids using too many variables in a tuple unpacking
-- Forbid using `float("NaN")`.
+- Forbids using `float("NaN")`.
 - Forbids assigning to a slice
 - Allow `__call__` method to be asynchronous
 - Allows common strings not to be counted against string constant overuse limit
@@ -26,6 +26,7 @@ Semantic versioning in our case means:
 
 ### Misc
 
+- Introduce helper script to check for missing calls to `self.generic_visit(node)` in AST visitors
 - Updates `poetry` version to `1.1`
 
 
