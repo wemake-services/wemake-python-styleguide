@@ -8,6 +8,7 @@ Adapted from: https://github.com/best-doctor/flake8-annotations-complexity
 """
 
 import ast
+import sys
 from typing import Union
 
 _Annotation = Union[
@@ -33,6 +34,8 @@ def get_annotation_compexity(annotation_node: _Annotation) -> int:
             return 1
 
     if isinstance(annotation_node, ast.Subscript):
+        if sys.version_info >= (3, 9):
+            return 1 + get_annotation_compexity(annotation_node.slice)
         return 1 + get_annotation_compexity(
             annotation_node.slice.value,  # type: ignore
         )
