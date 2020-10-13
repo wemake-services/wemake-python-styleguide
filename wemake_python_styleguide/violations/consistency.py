@@ -2207,18 +2207,20 @@ class AssignToSliceViolation(ASTViolation):
     Forbid assignment to a subscript slice.
 
     Reasoning:
-        We do this for consistency.
+        Assingment to a slice may lead to a list changing its size
+        implicitly and strangely which makes it hard to spot bugs.
+
+    Solution:
+        Use explicit index assignment in place of slice assignment.
 
     Example::
 
         # Correct:
-        a[5] = [1]
+        a[5] = 1
 
         # Wrong:
-        a[1:3] = [1,2]
-        a[:3] = [1,2,3]
-        a[:3:1] = [1,2,3]
-        a[::1] = [1,2,3]
+        a[1:3] = [1, 2]
+        a[slice(1)] = [1, 3]
 
     .. versionadded:: 0.16.0
 

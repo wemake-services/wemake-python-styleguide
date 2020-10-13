@@ -710,6 +710,7 @@ extra_new_line = [  # noqa: WPS355
 
 a_list = [1, 2, 3, 4, 5]
 a_list[1:3] = [1, 2] # noqa: WPS359
+a_list[slice(1)] = [1, 2] # noqa: WPS359
 
 for element in range(10):
     try:  # noqa: WPS452
