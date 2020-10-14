@@ -22,7 +22,25 @@ _FunctionExpressions = DefaultDict[ast.AST, _Expressions]
     'visit_Bytes',
 ))
 class StringOveruseVisitor(base.BaseNodeVisitor):
-    """Restricts several string usages."""
+    """
+    Restricts repeated usage of the same string constant.
+
+    NB: Some short strings are ignored, as their use is very common and
+    forcing assignment would not make much sense (i.e. newlines or "").
+    """
+
+    _ignored_string_constants = frozenset((
+        ' ',
+        '',
+        '\n',
+        '\r\n',
+        '\t',
+        b' ',
+        b'',
+        b'\n',
+        b'\r\n',
+        b'\t',
+    ))
 
     def __init__(self, *args, **kwargs) -> None:
         """Inits the counter for constants."""
@@ -44,6 +62,11 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
 
     def _check_string_constant(self, node: AnyText) -> None:
         if overuses.is_annotation(node):
+            return
+
+        # Some strings are so common, that it makes no sense to check if
+        # they are overused.
+        if node.s in self._ignored_string_constants:
             return
 
         self._string_constants[node.s] += 1

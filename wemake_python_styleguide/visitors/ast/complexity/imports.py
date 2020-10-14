@@ -59,6 +59,7 @@ class ImportMembersVisitor(BaseNodeVisitor):
 
         """
         self._visit_any_import(node)
+        self.generic_visit(node)
 
     def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
         """
@@ -72,6 +73,7 @@ class ImportMembersVisitor(BaseNodeVisitor):
         """
         self._import_from_members_validator.validate(node)
         self._visit_any_import(node)
+        self.generic_visit(node)
 
     def _visit_any_import(self, node: AnyImport) -> None:
         self._imports_count += 1

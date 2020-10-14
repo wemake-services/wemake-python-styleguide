@@ -721,3 +721,12 @@ for element in range(10):
 
 def raise_bad_exception():
     raise Exception  # noqa: WPS454
+
+
+try:
+    cause_errors()
+except ValueError or TypeError:  # noqa: WPS455
+    my_print("Oops.")
+
+if float("NaN") < number:  # noqa: WPS456
+    my_print("Greater than... what?")

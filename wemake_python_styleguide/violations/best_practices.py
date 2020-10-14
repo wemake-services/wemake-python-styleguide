@@ -71,6 +71,8 @@ Summary
    LoopControlFinallyViolation
    ShebangViolation
    BaseExceptionRaiseViolation
+   NonTrivialExceptViolation
+   FloatingNanViolation
 
 Best practices
 --------------
@@ -130,6 +132,8 @@ Best practices
 .. autoclass:: LoopControlFinallyViolation
 .. autoclass:: ShebangViolation
 .. autoclass:: BaseExceptionRaiseViolation
+.. autoclass:: NonTrivialExceptViolation
+.. autoclass:: FloatingNanViolation
 
 """
 
@@ -2149,3 +2153,74 @@ class BaseExceptionRaiseViolation(ASTViolation):
 
     error_template = 'Found wrong `raise` exception type: {0}'
     code = 454
+
+
+@final
+class NonTrivialExceptViolation(ASTViolation):
+    """
+    Forbids to use non-trivial expressions as a parameter for ``except``.
+
+    Reasoning:
+        Expressions used as an argument for ``except`` could be hard to read
+        and hide real list of exceptions being expected to occur in the outlined
+        code block.
+
+    Solution:
+        Use separate ``except`` blocks for each exception or provide a tuple
+        of exception classes.
+
+    Example::
+
+        # Correct:
+        try:
+            ...
+        except ValueError:
+            ...
+        except TypeError:
+            ...
+
+        try:
+            ...
+        except (TypeError, ValueError):
+            ...
+
+        # Wrong:
+        try:
+            ...
+        except TypeError or ValueError:
+            ...
+
+    .. versionadded:: 0.16.0
+
+    """
+
+    error_template = 'Found non-trivial expression as an argument for "except"'
+    code = 455
+
+
+@final
+class FloatingNanViolation(ASTViolation):
+    """
+    Forbids to use ``float("NaN")`` construct to generate NaN.
+
+    Reasoning:
+        This method to generate NaN is really confusing and is a good way to
+        catch a lot of unexpected bugs.
+
+    Solution:
+        Even if you're 100% sure what you're doing, use ``math.nan`` instead.
+
+    Example::
+
+        # Correct:
+        min(math.nan, 3)
+
+        # Wrong:
+        min(float("NAN"), 3)
+
+    .. versionadded:: 0.16.0
+
+    """
+
+    error_template = 'Found "NaN" as argument to float()'
+    code = 456
