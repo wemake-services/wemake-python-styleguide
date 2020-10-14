@@ -13,4 +13,4 @@
 ["setup.cfg".darglint]
 # These values should be placed inside `setup.cfg` in your repo:
 strictness = "long"
-docstring_style="numpy"
+docstring_style = "numpy"
