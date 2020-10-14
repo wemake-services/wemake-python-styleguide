@@ -47,6 +47,7 @@ Semantic versioning in our case means:
 - Make `WPS326` work when there is comment between string literals
 - Allowed yield statements in call method
 - Allow to use `^` with `1`
+- Fixes false positives in WPS513
 
 ### Misc
 
