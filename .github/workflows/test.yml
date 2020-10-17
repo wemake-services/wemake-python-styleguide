@@ -33,7 +33,7 @@ jobs:
 
     - name: Run tests
       run: |
-        flake8 --bug-report
+        poetry run flake8 --bug-report
         make test
 
     - name: Upload coverage to Codecov
