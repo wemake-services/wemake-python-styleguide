@@ -112,6 +112,30 @@ class WrongStringVisitor(base.BaseNodeVisitor):
                 ),
             )
 
+    def _is_exception(self, node: AnyText) -> bool:
+        """
+        Check if the string with modulo patterns is in an exceptional situation.
+
+        Basically we have some function names in which we allow strings with
+        modulo patterns because they must have them for the functions to work
+        properly.
+        """
+        exceptions = (
+            'strftime',  # For date, time, and datetime.strftime()
+            'strptime',  # For date, time, and datetime.strptime()
+            'execute',  # For psycopg2's cur.execute()
+        )
+
+        parent = nodes.get_parent(node)
+        if parent and isinstance(parent, ast.Call):
+
+            func_name = getattr(parent.func, 'attr', None)
+            if not func_name:
+                func_name = getattr(parent.func, 'id', None)
+
+            return func_name in exceptions
+        return False
+
     def _check_modulo_patterns(
         self,
         node: AnyText,
@@ -122,7 +146,10 @@ class WrongStringVisitor(base.BaseNodeVisitor):
             return  # we allow `%s` in docstrings: they cannot be formatted.
 
         if self._modulo_string_pattern.search(text_data):
-            self.add_violation(consistency.ModuloStringFormatViolation(node))
+            if not self._is_exception(node):
+                self.add_violation(
+                    consistency.ModuloStringFormatViolation(node),
+                )
 
 
 @final
