@@ -37,6 +37,7 @@ Semantic versioning in our case means:
 - Allowed yield statements in call method
 - Allow to use `^` with `1`
 - Fixes false positives in WPS513
+- Fixes false positives in WPS323
 
 ### Misc
 
