@@ -8,7 +8,6 @@ Semantic versioning in our case means:
 - Minor releases do bring new features and configuration options. New violations can be added. Code that passes `x.0.y` might not pass on `x.1.y` release.
 - Major releases inidicate significant milestones or serious breaking changes.
 
-<<<<<<< HEAD
 
 ## 0.15.0
 
@@ -25,7 +24,8 @@ Semantic versioning in our case means:
 - Forbids to use float zeros (`0.0`)
 - Forbids `raise Exception` and `raise BaseException`
 - Forbids to use `%` with zero as the divisor
-- WPS531: Forbids testing conditions to just return booleans when it is possible to simply return the condition itself.
+- WPS531: Forbids testing conditions to just return booleans when it is possible to simply return the condition itself
+- Forbids to use unsafe infinite loops
 
 ### Bugfixes
 
@@ -182,16 +182,6 @@ and `0.14.0` which will introduce it to the public.
 
 - Updates `radon` version
 - Updates `poetry` version to `1.0`
-=======
-## 0.15.0 WIP
-
-### Features
-
-- Forbids use of `while True:` loop without `break`, `return`, or `raise` statement
-
-
-## 0.13.3 WIP
->>>>>>> Test
 
 
 ## 0.13.2
