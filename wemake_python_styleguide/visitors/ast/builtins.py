@@ -142,6 +142,7 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
         ast.Subscript,
         ast.Attribute,
     )
+    _max_chained_items = 3
 
     def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
         """
@@ -159,15 +160,17 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_complex_formatted_string(self, node: ast.JoinedStr) -> None:
-        # Whitelists all simple uses of f strings
-        # Checks if list, dict, function call with no parameters or variable
+        """
+        Whitelists all simple uses of f strings.
+
+        Checks if list, dict, function call with no parameters or variable.
+        """
         has_formatted_components = any(
             isinstance(comp, ast.FormattedValue)
             for comp in node.values
         )
         if not has_formatted_components:
-            # If no formatted values
-            self.add_violation(
+            self.add_violation(  # If no formatted values
                 complexity.TooComplexFormattedStringViolation(node),
             )
             return
@@ -207,19 +210,19 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
 
     def _is_valid_chaining(self, format_value: AnyChainable) -> bool:
         chained_parts: List[ast.AST] = list(attributes.parts(format_value))
-        if len(chained_parts) <= 3:
+        if len(chained_parts) <= self._max_chained_items:
             return self._is_valid_chain_structure(chained_parts)
         return False
 
     def _is_valid_chain_structure(self, chained_parts: List[ast.AST]) -> bool:
-        """Helper method for _is_valid_chaining."""
+        """Helper method for ``_is_valid_chaining``."""
         has_invalid_parts = any(
             not self._is_valid_final_value(part)
             for part in chained_parts
         )
         if has_invalid_parts:
             return False
-        if len(chained_parts) == 3:
+        if len(chained_parts) == self._max_chained_items:
             # If there are 3 elements, exactly one must be subscript or
             # call. This is because we don't allow name.attr.attr
             return sum(
