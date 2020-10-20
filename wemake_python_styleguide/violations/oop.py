@@ -612,5 +612,5 @@ class MethodDecoratorUsedForFunctionViolation(ASTViolation):
 
     """
 
-    error_template = 'Method decorators should not be used for functions'
+    error_template = 'Found descriptor applied on a function'
     code = 614

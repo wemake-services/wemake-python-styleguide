@@ -73,7 +73,6 @@ Summary
    BaseExceptionRaiseViolation
    NonTrivialExceptViolation
    FloatingNanViolation
-   MethodDecoratorUsedForFunctionViolation
 
 Best practices
 --------------
@@ -1966,13 +1965,11 @@ class FloatKeyViolation(ASTViolation):
 
     error_template = 'Found float used as a key'
     code = 449
-<<<<<<< HEAD
 
 
 @final
 class ProtectedModuleMemberViolation(ASTViolation):
     """
-<<<<<<< HEAD
     Forbid importing protected objects from modules.
 
     Related to :class:`~ProtectedModuleViolation`.
@@ -1985,21 +1982,6 @@ class ProtectedModuleMemberViolation(ASTViolation):
     Solution:
         Do not import protected objects from modules.
         Respect the encapsulation.
-=======
-    Forbids descriptors in regular functions.
-
-    Forbids using @staticmethod, @classmethod and @property for functions not
-    in class
-
-    Reasoning:
-        Descriptors like @staticmethod, @classmethod and @property do magic
-        only as methods. We would want to warn users if the descriptors are
-        used on regular functions
-
-    Solution:
-        Do not use @staticmethod, @classmethod and @property on regular
-        functions or wrap the functions into a Class
->>>>>>> fix styling and linting errors
 
     Example::
 
@@ -2014,14 +1996,7 @@ class ProtectedModuleMemberViolation(ASTViolation):
 
     """
 
-<<<<<<< HEAD
     error_template = 'Found protected object import: {0}'
-=======
-    error_template = """
-        Method decorators (eg. classmethod, staticmethod and property)
-        should not be used for functions
-        """
->>>>>>> fix styling and linting errors
     code = 450
 
 
@@ -2249,5 +2224,3 @@ class FloatingNanViolation(ASTViolation):
 
     error_template = 'Found "NaN" as argument to float()'
     code = 456
-=======
->>>>>>> make requested changes

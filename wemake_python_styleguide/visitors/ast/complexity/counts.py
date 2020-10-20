@@ -1,42 +1,18 @@
 import ast
-import operator
 from collections import defaultdict
-from functools import reduce
-from typing import ClassVar, DefaultDict, List, Union
+from typing import ClassVar, DefaultDict, FrozenSet, List, Union
 
 from typing_extensions import final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.logic.nodes import get_parent
-<<<<<<< HEAD
 from wemake_python_styleguide.logic.tree.functions import is_method
 from wemake_python_styleguide.types import AnyFunctionDef
-from wemake_python_styleguide.violations import complexity
-=======
-from wemake_python_styleguide.types import AnyFunctionDef, AnyImport
-from wemake_python_styleguide.violations.complexity import (
-    TooLongCompareViolation,
-    TooLongTryBodyViolation,
-    TooLongYieldTupleViolation,
-    TooManyConditionsViolation,
-    TooManyDecoratorsViolation,
-    TooManyElifsViolation,
-    TooManyExceptCasesViolation,
-    TooManyImportedNamesViolation,
-    TooManyImportsViolation,
-    TooManyMethodsViolation,
-    TooManyModuleMembersViolation,
-)
-<<<<<<< HEAD
->>>>>>> fix styling and linting errors
-=======
-from wemake_python_styleguide.violations.oop import (
-    MethodDecoratorUsedForFunctionViolation,
-)
->>>>>>> make requested changes
+from wemake_python_styleguide.violations import complexity, oop
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
+# Type alises:
 _ConditionNodes = Union[ast.If, ast.While, ast.IfExp]
 _ModuleMembers = Union[AnyFunctionDef, ast.ClassDef]
 
@@ -50,7 +26,7 @@ _ModuleMembers = Union[AnyFunctionDef, ast.ClassDef]
 class ModuleMembersVisitor(BaseNodeVisitor):
     """Counts classes and functions in a module."""
 
-    descriptor_decorator = frozenset((
+    _descriptor_decorators: ClassVar[FrozenSet[str]] = frozenset((
         'classmethod',
         'staticmethod',
         'property',
@@ -92,32 +68,19 @@ class ModuleMembersVisitor(BaseNodeVisitor):
                 ),
             )
 
-    def _check_method_decorators(self, node: ModuleMembers) -> None:
-        parent_is_class = isinstance(get_parent(node), ast.ClassDef)
+    def _check_method_decorators(self, node: _ModuleMembers) -> None:
+        if isinstance(get_parent(node), ast.ClassDef):
+            return  # classes can contain descriptors
 
-        if parent_is_class:
-            return   # classes can contain descriptors
+        method_decorators = [
+            decorator.id in self._descriptor_decorators
+            for decorator in node.decorator_list
+            if isinstance(decorator, ast.Name)
+        ]
 
-        # Check whether filtered decorators are method decorators
-        method_decorators = []
-        for decorator in node.decorator_list:
-            if isinstance(decorator, ast.Name):
-                method_decorators.append(
-                    decorator.id in ModuleMembersVisitor.descriptor_decorator,
-                )
-
-        # Check for presence of method decorators
-        has_method_decorators = (
-            reduce(
-                lambda boolean1, boolean2: operator.or_(boolean1, boolean2),
-                method_decorators,
-                False,  # noqa: WPS425
-            )
-        )
-
-        if has_method_decorators and not parent_is_class:
+        if any(method_decorators):
             self.add_violation(
-                MethodDecoratorUsedForFunctionViolation(node),
+                oop.MethodDecoratorUsedForFunctionViolation(node),
             )
 
     def _post_visit(self) -> None:
