@@ -128,7 +128,8 @@ class WrongStringVisitor(base.BaseNodeVisitor):
 class WrongFormatStringVisitor(base.BaseNodeVisitor):
     """Restricts usage of ``f`` strings."""
 
-    _valid_format_index: ClassVar[AnyNodes] = TextNodes + (
+    _valid_format_index: ClassVar[AnyNodes] = (
+        *TextNodes,
         ast.Num,
         ast.Name,
         ast.NameConstant,
