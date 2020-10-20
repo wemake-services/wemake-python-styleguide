@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
@@ -50,11 +48,19 @@ some = (
 )
 """
 
+wrong_inline_string_concatenation_w_comment = """
+some = (
+    'a'  # Comment
+    'b'
+)
+"""
+
 
 @pytest.mark.parametrize('code', [
     wrong_inline_string_concatenation,
     wrong_inline_string_concatenation_nextline,
     wrong_inline_string_concatenation_multiline,
+    wrong_inline_string_concatenation_w_comment,
 ])
 def test_implicit_string_concatenation(
     parse_tokens,

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.options.defaults import NESTED_CLASSES_WHITELIST
@@ -180,8 +178,6 @@ def test_custom_whitelist_nested_classes(
     'NestedClass',
 ])
 @pytest.mark.parametrize('code', [
-    nested_class_in_method,
-    nested_class_in_function,
     nested_class_in_method,
     nested_class_in_function,
     nested_class_in_if,

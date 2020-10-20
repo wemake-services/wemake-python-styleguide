@@ -38,9 +38,10 @@ def test_necessary_raw_string(
 
 
 @pytest.mark.parametrize('raw_strings', [
-    "r'No escaped caracter'",
-    "r'Here neither'",
+    "r'No escaped character'",
+    'r"Here neither"',
     "r'''Not here as well'''",
+    'r"""Not here as well"""',
 ])
 def test_unnecessary_raw_string(
     parse_tokens,

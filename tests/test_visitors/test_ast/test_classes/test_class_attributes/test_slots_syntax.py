@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.oop import WrongSlotsViolation
@@ -47,7 +45,8 @@ wrong_slots = (
     '("123",)',
     '("1_var",)',
     '("*notvalid",)',
-    '("*a", *a)',
+    '("*a", *a)',  # invalid name
+    '("a", b"b")',  # bytes
 )
 
 correct_slots = (

@@ -16,7 +16,7 @@ Installation
 We also recommend to use `poetry <https://github.com/sdispater/poetry>`_
 instead of a default ``pip``.
 
-You might want to also intsall optional tools
+You might want to also install optional tools
 that pairs nicely with ``wemake-python-styleguide``:
 
 - :ref:`flakehell` for easy integration into a **legacy** codebase
@@ -51,5 +51,5 @@ Check out how we do it in our different templates:
 .. rubric:: Further reading
 
 - :ref:`Configuring and ignoring violations <configuration>`
-- :ref:`Intoducing this linter to a legacy codebase <flakehell>`
+- :ref:`Introducing this linter to a legacy codebase <flakehell>`
 - :ref:`Sharing configuration across multiple projects <nitpick>`

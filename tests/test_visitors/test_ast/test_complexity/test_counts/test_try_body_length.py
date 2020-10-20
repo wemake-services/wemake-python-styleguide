@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.complexity import (
@@ -185,9 +183,6 @@ def test_try_body_correct_default(
 
 
 @pytest.mark.parametrize('statements', [
-    'print(1)',
-    'm.print(1)',
-    'm = 1',
     'print(1)',
     'm.print(1)',
     'm = 1',

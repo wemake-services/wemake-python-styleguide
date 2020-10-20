@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
@@ -12,7 +10,6 @@ binary_string = "b'binary'"
 unicode_string = "u'unicode'"
 string_variable = "some = '123'"
 formated_string = "'x + y = {0}'.format(2)"
-procent_format = "'x = %d' % 1"
 key_formated_string = "'x + y = {res}'.format(res=2)"
 variable_format = """
 some = 'x = {0}'
@@ -29,7 +26,6 @@ f_empty_string = "f''"
     unicode_string,
     string_variable,
     formated_string,
-    procent_format,
     key_formated_string,
     variable_format,
 ])

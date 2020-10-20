@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.complexity import (
@@ -7,7 +5,7 @@ from wemake_python_styleguide.violations.complexity import (
     TooManyImportedNamesViolation,
     TooManyImportsViolation,
 )
-from wemake_python_styleguide.visitors.ast.complexity.counts import (
+from wemake_python_styleguide.visitors.ast.complexity.imports import (
     ImportMembersVisitor,
 )
 

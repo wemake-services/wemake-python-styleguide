@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-
 import tokenize
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, Dict, List, Sequence, Tuple
+from typing import ClassVar, DefaultDict, Dict, List, Mapping, Sequence, Tuple
 
 from typing_extensions import final
 
@@ -127,7 +125,7 @@ class BracketLocationVisitor(BaseTokenVisitor):
     def _annotate_brackets(
         self,
         tokens: List[tokenize.TokenInfo],
-    ) -> Dict[int, int]:
+    ) -> Mapping[int, int]:
         """Annotates each opening bracket with the nested level index."""
         brackets = {bracket: 0 for bracket in MATCHING}
         for token in tokens:

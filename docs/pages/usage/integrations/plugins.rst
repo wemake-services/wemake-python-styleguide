@@ -12,13 +12,15 @@ Plugins
 There are a lot of specific plugins that are not included,
 because they are, well, specific:
 
-- `flake8-pytest <https://github.com/vikingco/flake8-pytest>`_
+- `flake8-pytest-style <https://github.com/m-burst/flake8-pytest-style>`_
 - `flake8-django <https://github.com/rocioar/flake8-django>`_
 - `flake8-scrapy <https://github.com/stummjr/flake8-scrapy>`_
 - `pandas-vet <https://github.com/deppen8/pandas-vet>`_
 - `flake8-SQL <https://pypi.org/project/flake8-SQL/>`_
 - `flake8-annotations <https://github.com/python-discord/flake8-annotations>`_
 - `flake8-logging-format <https://github.com/globality-corp/flake8-logging-format>`_
+- `flake8-coding <https://github.com/tk0miya/flake8-coding>`_
+- `flake8-spellcheck <https://github.com/MichaelAquilina/flake8-spellcheck>`_
 
 Hooks
 ~~~~~

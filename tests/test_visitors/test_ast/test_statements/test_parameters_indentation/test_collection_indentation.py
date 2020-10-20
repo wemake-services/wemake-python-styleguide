@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.visitors.ast.statements import (
@@ -228,7 +226,6 @@ some_dict = {
     correct_multi_line_list,
     correct_multi_line_set,
     correct_multi_line_dict,
-    correct_next_line_tuple,
     correct_next_line_list,
     correct_next_line_set,
     correct_next_line_tuple,

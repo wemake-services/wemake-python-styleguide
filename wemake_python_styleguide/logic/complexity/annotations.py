@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Counts annotation complexity by getting the nesting level of nodes.
 
@@ -26,9 +24,13 @@ def get_annotation_compexity(annotation_node: _Annotation) -> int:
     we additionally parse them to ``ast`` nodes.
     """
     if isinstance(annotation_node, ast.Str):
-        annotation_node = ast.parse(  # type: ignore
-            annotation_node.s,
-        ).body[0].value
+        # try to parse string-wrapped annotations
+        try:
+            annotation_node = ast.parse(  # type: ignore
+                annotation_node.s,
+            ).body[0].value
+        except (SyntaxError, IndexError):
+            return 1
 
     if isinstance(annotation_node, ast.Subscript):
         return 1 + get_annotation_compexity(

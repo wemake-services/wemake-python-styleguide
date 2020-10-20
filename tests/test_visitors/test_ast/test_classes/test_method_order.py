@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
@@ -18,6 +16,9 @@ class Test(object):
         ...
 
     def __call__(self):
+        ...
+
+    def __await__(self):
         ...
 
     def public(self):
@@ -84,23 +85,29 @@ def test_correct_method_order(
     ('__init__', '__new__'),
     ('__call__', '__init__'),
     ('__call__', '__new__'),
+    ('__await__', '__call__'),
 
     ('public', '__new__'),
     ('public', '__init__'),
     ('public', '__call__'),
+    ('public', '__await__'),
+
     ('__magic__', '__new__'),
     ('__magic__', '__init__'),
     ('__magic__', '__call__'),
+    ('__magic__', '__await__'),
 
     ('_protected', '__new__'),
     ('_protected', '__init__'),
     ('_protected', '__call__'),
+    ('_protected', '__await__'),
     ('_protected', 'public'),
     ('_protected', '__magic__'),
 
     ('__private', '__new__'),
     ('__private', '__init__'),
     ('__private', '__call__'),
+    ('__private', '__await__'),
     ('__private', 'public'),
     ('__private', '__magic__'),
     ('__private', '_protected'),

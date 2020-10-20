@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Constants with default values for plugin's configuration.
 
@@ -21,10 +19,10 @@ from typing_extensions import Final
 # ========
 
 #: Minimum variable's name length.
-MIN_NAME_LENGTH: Final = 2
+MIN_NAME_LENGTH: Final = 2  # reasonable enough
 
 #: Maximum variable and module name length:
-MAX_NAME_LENGTH: Final = 45
+MAX_NAME_LENGTH: Final = 45  # reasonable enough
 
 #: Whether you control ones who use your code.
 I_CONTROL_CODE: Final = True
@@ -116,10 +114,13 @@ MAX_COGNITIVE_SCORE: Final = 12  # based on this code statistics
 MAX_COGNITIVE_AVERAGE: Final = 8  # based on this code statistics
 
 #: Maximum number of call chains.
-MAX_CALL_LEVEL: Final = 3
+MAX_CALL_LEVEL: Final = 3  # reasonable enough
 
 #: Maximum number of nested annotations.
-MAX_ANN_COMPLEXITY: Final = 3
+MAX_ANN_COMPLEXITY: Final = 3  # reasonable enough
 
 #: Maximum number of names that can be imported from module.
 MAX_IMPORT_FROM_MEMBERS: Final = 8  # guessed
+
+#: Maximun number of variables in a ``tuple`` unpacking statement.
+MAX_TUPLE_UNPACK_LENGTH: Final = 4  # guessed

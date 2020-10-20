@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from typing import Optional, Tuple, Type
 
@@ -18,7 +16,7 @@ def set_if_chain(tree: ast.AST) -> ast.AST:
     """
     Used to create ``if`` chains.
 
-    We have a problem, because we can not tell which situation is happening:
+    We have a problem, because we cannot tell which situation is happening:
 
     .. code:: python
 
@@ -96,5 +94,5 @@ def _apply_if_statement(statement: ast.If) -> None:
     for child in ast.iter_child_nodes(statement):
         if isinstance(child, ast.If):
             if child in statement.orelse:
-                setattr(statement, 'wps_if_chained', True)  # noqa: WPS425
+                setattr(statement, 'wps_if_chained', True)  # noqa: B010
                 setattr(child, 'wps_if_chain', statement)  # noqa: B010

@@ -13,24 +13,68 @@ Semantic versioning in our case means:
 
 ### Features
 
+- Forbids using non-trivial expressions as an argument to `except`
+- Forbids using too many variables in a tuple unpacking
+- Forbids using `float("NaN")`.
+- Allow `__call__` method to be asynchronous
+- Allows common strings not to be counted against string constant overuse limit
+- Forbids to unpack iterable objects to lists #1259
+- Forbids to use single `return None`
+- Add `__await__` to the list of priority magic methods
+- Forbids to use float zeros (`0.0`)
+- Forbids `raise Exception` and `raise BaseException`
+- Forbids to use `%` with zero as the divisor
+- WPS531: Forbids testing conditions to just return booleans when it is possible to simply return the condition itself
+- Forbids to use unsafe infinite loops
 - Forbids to use raw strings `r''` when not necessary
 
-### Bug fixes
+### Bugfixes
 
-## 0.14.0 aka The Walrus fighter WIP
+- Fixes fails of annotation complexity on `Literal[""]`
+- Fixes how wrong variable names were checked case sensitive with `WPS110`
+- Fixes false positives DirectMagicAttributeAccessViolation with `__mro__`, `__subclasses__` and `__version__`
+- Make `WPS326` work when there is comment between string literals
+- Allowed yield statements in call method
+- Allow to use `^` with `1`
+- Fixes false positives in WPS513
+
+### Misc
+
+- Updates lots of dependenices
+- Fixed documentation for TooManyPublicAttributesViolation
+- Updated isort config
+- Introduce helper script to check for missing calls to `self.generic_visit(node)` in AST visitors
+- Updates `poetry` version to `1.1`
+
+
+## 0.14.0 aka The Walrus fighter
+
+This release was focused on adding `python3.8` support,
+removing dependencies that can be removed, and fixing bugs.
+
+There are breaking changes ahead!
+
+We also have this [nice migration guide](https://wemake-python-stylegui.de/en/latest/pages/changelog/migration_to_0_14.html).
 
 ### Features
 
+- **Breaking**: removes `flake8-executable`, now using `WPS452` instead of `EXE001..EXE005`
 - **Breaking**: removes `flake8-print`, now using `WPS421` instead of `T001`
+- **Breaking**: removes `flake8-builtins`, now using `WPS125` instead of `A001..A005`
 - **Breaking**: removes `flake8-annotations-complexity`,
   now using `WPS234` instead of `TAE002`
+- **Breaking**: removes `flake8-pep3101`, now using `WPS323` instead of `S001`,
+  we also use a new logic for this violation:
+  we check string defs for `%` patterns, and not for `%` operator
 - **Breaking**: `WPS441` is no longer triggered for `except` blocks,
   it is now handled by `F821` from `flake8`
-- **Breaking**: Removes `radon`,
+- **Breaking**: removes `radon`,
   because `cognitive-complexity` and `mccabe` is enough
-- **Breaking**: Removes `flake8-loggin-format` as a direct dependency
-- **Breaking**: Removes `ImplicitTernaryViolation` or `WPS332`,
+- **Breaking**: removes `flake8-logging-format` as a direct dependency
+- **Breaking**: removes `ImplicitTernaryViolation` or `WPS332`,
   because it has too many false positives #1099
+- Removes `flake8-coding`, all encoding strings, visitor and tests
+  for old `WPS323` which is now reused for modulo formatting checks
 - Adds `python3.8` support
 - Changes `styleguide.toml` and `flake8.toml` scripts definition
 - Extracts new violation - `WPS450` from `WPS436` #1118
@@ -41,21 +85,29 @@ Semantic versioning in our case means:
 - Forbids to use `:=` operator, it now reuses `WPS332` code
 - Forbids to use positional only `/` arguments
 - Forbids to have too many names imported from a single `from ... import`
+- Forbids to use `continue` and `break` in `finally`
+- Forbids to use `__reduce__` and `__reduce_ex__` magic methods
 - Adds `__call__` to list of methods that should be on top #1125
 - Allows `_` to be now used as a defined variable
 - Removes `cognitive_complexity` dependency, now it is built in into our linter
 - Adds baseline information for all complexity violation messages: `x > baseline`
 - Changes how cognitive complexity is calculated
 - Adds support for positional arguments in different checks
+- Adds `UnreadableNameViolation` as `WPS124` because there are some
+character combination which is not easy to read
+- Adds support for `NamedExpr` with in compare type violation
 
 ### Bugfixes
 
-- Fixes how `i_control_code` behaves with WPS113
+- Fixes how `i_control_code` behaves with `WPS113`
 - Fixes that cognitive complexity was ignoring
   `ast.Continue`, `ast.Break`, and `ast.Raise` statements
 - Fixes that cognitive complexity was ignoring `ast.AsyncFor` loops
 - Fixes that annotation complexity was not reported for `async` functions
-- Fixes that annotation complexity was not reported from lists
+- Fixes that annotation complexity was not reported for lists
+- Fixes that annotation complexity was not reported for `*` and `/` args
+- Fixes that annotation complexity was not tested for dot notation attributes
+- Fixes that annotation complexity fails on string expressions
 - Fixes bug when `TooManyPublicAttributesViolation`
   was counting duplicate fields
 - Fixes negated conditions `WPS504` was not reported for `if` expressions
@@ -71,16 +123,34 @@ Semantic versioning in our case means:
 - Fixes `WPS204` reporting `self.` attribute access
 - Fixes `WPS331` reporting cases that do require some extra steps before return
 - Fixes `WPS612` not reporing `super()` calls without return
+- Fixes `WPS404` not raising on wrong `*` and `/` defaults
+- Fixes `WPS425` raising on `.get`, `getattr`, `setattr`,
+  and other builtin functions without keyword arguments
+- Fixes `WPS221` reporting differently on different `python` versions
+- Fixes `WPS221` reporting nested variable annotations
+- Fixes `WPS509` not reporting nested ternary in grandchildren of `if`
+- Fixes `WPS509` not reporting nested ternary in ternary
+- Fixes `WPS426` not reporting nested `lambda` in comprehensions
+- Fixes several violations to reporting for `ast.Bytes` and `ast.FormattedStr`
+  where `ast.Str` was checked
+- Fixes `WPS601` reporting shadowing for non-`self` attributes
+- Fixes `WPS114` not to be so strict
+- Fixes `WPS122` not raising for `for` and `async for` definitions
+- Fixes `WPS400` raising for `# type: ignore[override]` comments
+- Fixes `WPS115` not raising for attributes inside other nodes
 
 ### Misc
 
 - Changes how tests are executed
 - Changes how coverage is calculated, adds `coverage-conditional-plugin`
 - Adds how a violation can be deprecated
+- Improves old visitor tests with `/` argument cases
+- Improves old visitor tests with `:=` cases
 - Adds `local-partial-types` to mypy config
 - Uses `abc` stdlib's module to mark abstract base classes #1122
 - Adds `python3.8` to the CI
-- Update `astboom` version to 0.4.2
+- Updates a lot of dependencies
+
 
 ## 0.13.4
 
@@ -278,7 +348,7 @@ It features a lot of new rules from different categories.
 ### Misc
 
 - Improves `README.md` with `flakehell` and `nitpick` mentions
-- Improves docs all accross the project
+- Improves docs all across the project
 
 
 ## 0.12.0

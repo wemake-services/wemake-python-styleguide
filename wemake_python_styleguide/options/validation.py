@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing import Optional, Tuple
 
 import attr
@@ -10,8 +8,8 @@ from wemake_python_styleguide.types import ConfigurationOptions
 
 
 def _min_max(
-    min: Optional[int] = None,  # noqa: A002
-    max: Optional[int] = None,  # noqa: A002
+    min: Optional[int] = None,  # noqa: WPS125
+    max: Optional[int] = None,  # noqa: WPS125
 ):
     """Validator to check that value is in bounds."""
     def factory(instance, attribute, field_value):
@@ -94,6 +92,7 @@ class _ValidatedOptions(object):
     max_call_level: int = attr.ib(validator=[_min_max(min=1)])
     max_annotation_complexity: int = attr.ib(validator=[_min_max(min=2)])
     max_import_from_members: int = attr.ib(validator=[_min_max(min=1)])
+    max_tuple_unpack_length: int = attr.ib(validator=[_min_max(min=1)])
 
 
 def validate_options(options: ConfigurationOptions) -> _ValidatedOptions:

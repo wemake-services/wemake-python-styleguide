@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.best_practices import (
     OuterScopeShadowingViolation,
 )
@@ -147,6 +146,14 @@ class First(object):
         ...
 """
 
+correct_walrus = """
+import some
+
+def function():
+    if other := some:
+        ...
+"""
+
 # Wrong:
 
 import_overlap1 = """
@@ -240,6 +247,14 @@ def func():
     import a
 """
 
+walrus_overlap = """
+import some
+
+def function():
+    if some := other():
+        ...
+"""
+
 
 @pytest.mark.parametrize('code', [
     correct_for_loop1,
@@ -254,6 +269,10 @@ def func():
     correct_class2,
     correct_class3,
     correct_class4,
+    pytest.param(
+        correct_walrus,
+        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
+    ),
 ])
 def test_variable_used_correctly(
     assert_errors,
@@ -284,6 +303,10 @@ def test_variable_used_correctly(
     contant_overlap4,
     contant_overlap5,
     contant_overlap6,
+    pytest.param(
+        walrus_overlap,
+        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
+    ),
 ])
 def test_outer_variable_shadow(
     assert_errors,

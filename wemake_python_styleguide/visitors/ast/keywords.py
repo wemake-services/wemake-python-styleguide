@@ -1,11 +1,13 @@
-# -*- coding: utf-8 -*-
-
 import ast
-from typing import ClassVar, Dict, List, Optional, Type, Union, cast
+from typing import ClassVar, Dict, FrozenSet, List, Optional, Type, Union, cast
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
+from wemake_python_styleguide.compat.aliases import (
+    AssignNodes,
+    FunctionNodes,
+    TextNodes,
+)
 from wemake_python_styleguide.logic import walk
 from wemake_python_styleguide.logic.naming import name_nodes
 from wemake_python_styleguide.logic.nodes import get_parent
@@ -16,6 +18,7 @@ from wemake_python_styleguide.logic.tree.variables import (
 )
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, AnyWith
 from wemake_python_styleguide.violations.best_practices import (
+    BaseExceptionRaiseViolation,
     ContextManagerVariableDefinitionViolation,
     RaiseNotImplementedViolation,
     WrongKeywordConditionViolation,
@@ -43,6 +46,11 @@ _ReturningViolations = Union[
 class WrongRaiseVisitor(BaseNodeVisitor):
     """Finds wrong ``raise`` keywords."""
 
+    _base_exceptions: ClassVar[FrozenSet[str]] = frozenset((
+        'Exception',
+        'BaseException',
+    ))
+
     def visit_Raise(self, node: ast.Raise) -> None:
         """
         Checks how ``raise`` keyword is used.
@@ -58,6 +66,10 @@ class WrongRaiseVisitor(BaseNodeVisitor):
         exception_name = get_exception_name(node)
         if exception_name == 'NotImplemented':
             self.add_violation(RaiseNotImplementedViolation(node))
+        elif exception_name in self._base_exceptions:
+            self.add_violation(
+                BaseExceptionRaiseViolation(node, text=exception_name),
+            )
 
 
 @final
@@ -97,7 +109,7 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
         if not isinstance(parent, FunctionNodes):
             return
 
-        returns = len(list(filter(
+        returns = len(tuple(filter(
             lambda return_node: return_node.value is not None,
             walk.get_subnodes_by_type(parent, ast.Return),
         )))
@@ -108,7 +120,14 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
             isinstance(node.value, ast.NameConstant) and
             node.value.value is None
         )
-        if node.value is None or last_value_return:
+
+        one_return_with_none = (
+            returns == 1 and
+            isinstance(node.value, ast.NameConstant) and
+            node.value.value is None
+        )
+
+        if node.value is None or last_value_return or one_return_with_none:
             self.add_violation(InconsistentReturnViolation(node))
 
     def _iterate_returning_values(
@@ -164,6 +183,7 @@ class WrongKeywordVisitor(BaseNodeVisitor):
                 message = 'del'
             else:
                 message = node.__class__.__qualname__.lower()
+
             self.add_violation(WrongKeywordViolation(node, text=message))
 
 
@@ -378,9 +398,8 @@ class ConstantKeywordVisitor(BaseNodeVisitor):
         ast.SetComp,
         ast.DictComp,
 
-        ast.Str,
+        *TextNodes,
         ast.Num,
-        ast.Bytes,
 
         ast.IfExp,
     )

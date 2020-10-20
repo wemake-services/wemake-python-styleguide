@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-
+import ast
 from typing import List
 
 from wemake_python_styleguide import constants
@@ -37,3 +36,14 @@ def is_vague_import(name: str) -> bool:
     )
     too_short = logical.is_too_short_name(name, 2, trim=True)
     return blacklisted or with_from_or_to or too_short
+
+
+def is_nested_typing_import(parent: ast.AST) -> bool:
+    """Tells whether ``if`` checks for ``TYPE_CHECKING``."""
+    checked_condition = None
+    if isinstance(parent, ast.If):
+        if isinstance(parent.test, ast.Name):
+            checked_condition = parent.test.id
+        elif isinstance(parent.test, ast.Attribute):
+            checked_condition = parent.test.attr
+    return checked_condition in constants.ALLOWED_NESTED_IMPORTS_CONDITIONS

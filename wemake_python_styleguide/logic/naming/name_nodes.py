@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
-
 import ast
 import itertools
 from typing import Iterable, List, Optional
 
 from wemake_python_styleguide.compat.functions import get_assign_targets
-from wemake_python_styleguide.types import AnyAssign
+from wemake_python_styleguide.compat.types import AnyAssignWithWalrus
 
 
 def is_same_variable(left: ast.AST, right: ast.AST) -> bool:
@@ -33,7 +31,7 @@ def get_assigned_name(node: ast.AST) -> Optional[str]:
     return None
 
 
-def flat_variable_names(nodes: Iterable[AnyAssign]) -> Iterable[str]:
+def flat_variable_names(nodes: Iterable[AnyAssignWithWalrus]) -> Iterable[str]:
     """
     Returns flat variable names from several nodes.
 

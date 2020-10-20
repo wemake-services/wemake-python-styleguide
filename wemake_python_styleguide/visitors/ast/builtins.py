@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
-
 import ast
+import re
 import string
 from collections import Counter, Hashable, defaultdict
 from contextlib import suppress
@@ -14,36 +13,32 @@ from typing import (
     Sequence,
     Union,
 )
+from typing.re import Pattern
 
 from typing_extensions import final
 
 from wemake_python_styleguide import constants
-from wemake_python_styleguide.compat.aliases import FunctionNodes
-from wemake_python_styleguide.logic import safe_eval, source
+from wemake_python_styleguide.compat.aliases import (
+    AssignNodesWithWalrus,
+    FunctionNodes,
+    TextNodes,
+)
+from wemake_python_styleguide.logic import nodes, safe_eval, source, walk
 from wemake_python_styleguide.logic.naming.name_nodes import extract_name
-from wemake_python_styleguide.logic.tree.operators import (
-    get_parent_ignoring_unary,
-    unwrap_starred_node,
-    unwrap_unary_node,
-)
-from wemake_python_styleguide.types import AnyFor, AnyNodes, AnyWith
-from wemake_python_styleguide.violations import consistency
-from wemake_python_styleguide.violations.best_practices import (
-    ApproximateConstantViolation,
-    FloatKeyViolation,
-    MagicNumberViolation,
-    MultipleAssignmentsViolation,
-    NonUniqueItemsInHashViolation,
-    StringConstantRedefinedViolation,
-    UnhashableTypeInHashViolation,
-    WrongUnpackingViolation,
-)
+from wemake_python_styleguide.logic.tree import operators, strings
+from wemake_python_styleguide.types import AnyFor, AnyNodes, AnyText, AnyWith
+from wemake_python_styleguide.violations import best_practices, consistency
 from wemake_python_styleguide.visitors import base, decorators
 
+#: Items that can be inside a hash.
 _HashItems = Sequence[Optional[ast.AST]]
 
 
 @final
+@decorators.alias('visit_any_string', (
+    'visit_Str',
+    'visit_Bytes',
+))
 class WrongStringVisitor(base.BaseNodeVisitor):
     """Restricts several string usages."""
 
@@ -61,9 +56,42 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         string.punctuation,
     ))
 
+    #: Copied from https://stackoverflow.com/a/30018957/4842742
+    _modulo_string_pattern: ClassVar[Pattern] = re.compile(
+        r"""                             # noqa: WPS323
+        (                                # start of capture group 1
+            %                            # literal "%"
+            (?:                          # first option
+                (?:\([a-zA-Z][\w_]*\))?  # optional named group
+                (?:[#0+-]{0,5})          # optional flags (except " ")
+                (?:\d+|\*)?              # width
+                (?:\.(?:\d+|\*))?        # precision
+                (?:h|l|L)?               # size
+                [diouxXeEfFgGcrsa]       # type
+            ) | %%                       # OR literal "%%"
+        )                                # end
+        """,                             # noqa: WPS323
+        # Different python versions report `WPS323` on different lines.
+        flags=re.X,  # flag to ignore comments and whitespaces.
+    )
+
+    def visit_any_string(self, node: AnyText) -> None:
+        """
+        Forbids incorrect usage of strings.
+
+        Raises:
+            StringConstantRedefinedViolation
+            ModuloStringFormatViolation
+
+        """
+        text_data = source.render_string(node.s)
+        self._check_is_alphatbet(node, text_data)
+        self._check_modulo_patterns(node, text_data)
+        self.generic_visit(node)
+
     def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
         """
-        Restricts to use ``f`` strings.
+        Forbids to use ``f`` strings.
 
         Raises:
             FormattedStringViolation
@@ -72,22 +100,29 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         self.add_violation(consistency.FormattedStringViolation(node))
         self.generic_visit(node)
 
-    def visit_Str(self, node: ast.Str) -> None:
-        """
-        Forbid to use alphabet as a string.
-
-        Raises:
-            StringConstantRedefinedViolation
-
-        """
-        self._check_is_alphatbet(node)
-        self.generic_visit(node)
-
-    def _check_is_alphatbet(self, node: ast.Str) -> None:
-        if node.s in self._string_constants:
+    def _check_is_alphatbet(
+        self,
+        node: AnyText,
+        text_data: Optional[str],
+    ) -> None:
+        if text_data in self._string_constants:
             self.add_violation(
-                StringConstantRedefinedViolation(node, text=node.s),
+                best_practices.StringConstantRedefinedViolation(
+                    node, text=text_data,
+                ),
             )
+
+    def _check_modulo_patterns(
+        self,
+        node: AnyText,
+        text_data: Optional[str],
+    ) -> None:
+        parent = nodes.get_parent(node)
+        if parent and strings.is_doc_string(parent):
+            return  # we allow `%s` in docstrings: they cannot be formatted.
+
+        if self._modulo_string_pattern.search(text_data):
+            self.add_violation(consistency.ModuloStringFormatViolation(node))
 
 
 @final
@@ -95,8 +130,7 @@ class WrongNumberVisitor(base.BaseNodeVisitor):
     """Checks wrong numbers used in the code."""
 
     _allowed_parents: ClassVar[AnyNodes] = (
-        ast.Assign,
-        ast.AnnAssign,
+        *AssignNodesWithWalrus,
 
         # Constructor usages:
         *FunctionNodes,
@@ -108,6 +142,8 @@ class WrongNumberVisitor(base.BaseNodeVisitor):
         ast.Set,
         ast.Tuple,
     )
+
+    _non_magic_modulo: ClassVar[int] = 10
 
     def visit_Num(self, node: ast.Num) -> None:
         """
@@ -123,17 +159,19 @@ class WrongNumberVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_is_magic(self, node: ast.Num) -> None:
-        parent = get_parent_ignoring_unary(node)
+        parent = operators.get_parent_ignoring_unary(node)
         if isinstance(parent, self._allowed_parents):
             return
 
         if node.n in constants.MAGIC_NUMBERS_WHITELIST:
             return
 
-        if isinstance(node.n, int) and node.n <= constants.NON_MAGIC_MODULO:
+        if isinstance(node.n, int) and node.n <= self._non_magic_modulo:
             return
 
-        self.add_violation(MagicNumberViolation(node, text=str(node.n)))
+        self.add_violation(
+            best_practices.MagicNumberViolation(node, text=str(node.n)),
+        )
 
     def _check_is_approximate_constant(self, node: ast.Num) -> None:
         try:
@@ -147,7 +185,9 @@ class WrongNumberVisitor(base.BaseNodeVisitor):
         for constant in constants.MATH_APPROXIMATE_CONSTANTS:
             if str(constant).startswith(str(node.n)):
                 self.add_violation(
-                    ApproximateConstantViolation(node, text=str(node.n)),
+                    best_practices.ApproximateConstantViolation(
+                        node, text=str(node.n),
+                    ),
                 )
 
 
@@ -168,10 +208,12 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         Checks assignments inside context managers to be correct.
 
         Raises:
+            UnpackingIterableToListViolation
             WrongUnpackingViolation
 
         """
         for withitem in node.items:
+            self._check_unpacking_target_types(withitem.optional_vars)
             if isinstance(withitem.optional_vars, ast.Tuple):
                 self._check_unpacking_targets(
                     node, withitem.optional_vars.elts,
@@ -183,9 +225,11 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         Checks comprehensions for the correct assignments.
 
         Raises:
+            UnpackingIterableToListViolation
             WrongUnpackingViolation
 
         """
+        self._check_unpacking_target_types(node.target)
         if isinstance(node.target, ast.Tuple):
             self._check_unpacking_targets(node.target, node.target.elts)
         self.generic_visit(node)
@@ -195,9 +239,11 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         Checks assignments inside ``for`` loops to be correct.
 
         Raises:
+            UnpackingIterableToListViolation
             WrongUnpackingViolation
 
         """
+        self._check_unpacking_target_types(node.target)
         if isinstance(node.target, ast.Tuple):
             self._check_unpacking_targets(node, node.target.elts)
         self.generic_visit(node)
@@ -210,18 +256,25 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         because it does not have problems that we check.
 
         Raises:
+            UnpackingIterableToListViolation
             MultipleAssignmentsViolation
             WrongUnpackingViolation
 
         """
         self._check_assign_targets(node)
+
+        for target in node.targets:
+            self._check_unpacking_target_types(target)
+
         if isinstance(node.targets[0], ast.Tuple):
             self._check_unpacking_targets(node, node.targets[0].elts)
         self.generic_visit(node)
 
     def _check_assign_targets(self, node: ast.Assign) -> None:
         if len(node.targets) > 1:
-            self.add_violation(MultipleAssignmentsViolation(node))
+            self.add_violation(
+                best_practices.MultipleAssignmentsViolation(node),
+            )
 
     def _check_unpacking_targets(
         self,
@@ -231,7 +284,17 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         for target in targets:
             target_name = extract_name(target)
             if target_name is None:  # it means, that non name node was used
-                self.add_violation(WrongUnpackingViolation(node))
+                self.add_violation(
+                    best_practices.WrongUnpackingViolation(node),
+                )
+
+    def _check_unpacking_target_types(self, node: Optional[ast.AST]) -> None:
+        if not node:
+            return
+        for subnode in walk.get_subnodes_by_type(node, ast.List):
+            self.add_violation(
+                consistency.UnpackingIterableToListViolation(subnode),
+            )
 
 
 @final
@@ -239,8 +302,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
     """Ensures that collection definitions are correct."""
 
     _elements_in_sets: ClassVar[AnyNodes] = (
-        ast.Str,
-        ast.Bytes,
+        *TextNodes,
         ast.Num,
         ast.NameConstant,
         ast.Name,
@@ -257,9 +319,8 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
     )
 
     _elements_to_eval: ClassVar[AnyNodes] = (
+        *TextNodes,
         ast.Num,
-        ast.Str,
-        ast.Bytes,
         ast.NameConstant,
         ast.Tuple,
         ast.List,
@@ -306,13 +367,13 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
             if dict_key is None:
                 continue
 
-            real_key = unwrap_unary_node(dict_key)
+            real_key = operators.unwrap_unary_node(dict_key)
             is_float_key = (
                 isinstance(real_key, ast.Num) and
                 isinstance(real_key.n, float)
             )
             if is_float_key:
-                self.add_violation(FloatKeyViolation(dict_key))
+                self.add_violation(best_practices.FloatKeyViolation(dict_key))
 
     def _check_unhashable_elements(
         self,
@@ -320,7 +381,9 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
     ) -> None:
         for set_item in keys_or_elts:
             if isinstance(set_item, self._unhashable_types):
-                self.add_violation(UnhashableTypeInHashViolation(set_item))
+                self.add_violation(
+                    best_practices.UnhashableTypeInHashViolation(set_item),
+                )
 
     def _check_set_elements(
         self,
@@ -334,13 +397,13 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
             if set_item is None:
                 continue   # happens for `{**a}`
 
-            real_item = unwrap_unary_node(set_item)
+            real_item = operators.unwrap_unary_node(set_item)
             if isinstance(real_item, self._elements_in_sets):
                 # Similar look:
                 node_repr = source.node_to_string(set_item)
                 elements.append(node_repr.strip().strip('(').strip(')'))
 
-            real_item = unwrap_starred_node(real_item)
+            real_item = operators.unwrap_starred_node(real_item)
 
             # Non-constant nodes raise ValueError,
             # unhashables raise TypeError:
@@ -364,7 +427,9 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
         for look_element, look_count in Counter(elements).items():
             if look_count > 1:
                 self.add_violation(
-                    NonUniqueItemsInHashViolation(node, text=look_element),
+                    best_practices.NonUniqueItemsInHashViolation(
+                        node, text=look_element,
+                    ),
                 )
                 return
 
@@ -379,5 +444,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
 
             if value_counts[real_value] > 1:
                 self.add_violation(
-                    NonUniqueItemsInHashViolation(node, text=value_element),
+                    best_practices.NonUniqueItemsInHashViolation(
+                        node, text=value_element,
+                    ),
                 )

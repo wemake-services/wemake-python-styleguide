@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Our very own ``flake8`` formatter for better error messages.
 
@@ -11,7 +9,7 @@ That's how all ``flake8`` formatters work:
     graph LR
         F2[start]  --> F3[after_init]
         F3         --> F4[start]
-        F4         --> F5[beggining]
+        F4         --> F5[beginning]
         F5         --> F6[handle]
         F6         --> F7[format]
         F6	       --> F8[show_source]
@@ -83,7 +81,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
         super().handle(error)
         self._error_count += 1
 
-    def format(self, error: Violation) -> str:  # noqa: A003
+    def format(self, error: Violation) -> str:  # noqa: WPS125
         """Called to format each individual :term:`violation`."""
         return '{newline}  {row_col:<8} {code:<5} {text}'.format(
             newline=self.newline if self._should_show_source(error) else '',
@@ -106,9 +104,9 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
             self._formatter,
         )
 
-        return '  {code}  {pointer}^'.format(
+        return '  {code}  {spacing}^'.format(
             code=code,
-            pointer=' ' * (error.column_number - 1 - adjust),
+            spacing=' ' * (error.column_number - 1 - adjust),
         )
 
     def show_statistics(self, statistics: Statistics) -> None:  # noqa: WPS210

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from unittest.mock import MagicMock
 
 from wemake_python_styleguide import constants

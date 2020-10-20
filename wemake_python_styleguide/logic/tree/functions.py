@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from ast import Call, Yield, YieldFrom, arg
 from typing import Container, List, Optional
 

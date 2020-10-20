@@ -1,10 +1,6 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
-from wemake_python_styleguide.violations.consistency import (
-    UselessNodeViolation,
-)
+from wemake_python_styleguide.violations.consistency import UselessNodeViolation
 from wemake_python_styleguide.visitors.ast.statements import (
     StatementsWithBodiesVisitor,
 )

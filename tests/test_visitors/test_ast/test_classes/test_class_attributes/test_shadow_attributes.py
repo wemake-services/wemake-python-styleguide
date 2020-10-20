@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.oop import (
@@ -12,6 +10,14 @@ from wemake_python_styleguide.visitors.ast.classes import ClassAttributeVisitor
 class_attribute = """
 class ClassWithAttrs(object):
     {0} = 0
+
+    def __init__(self) -> None:
+        self.{1} = 2
+"""
+
+class_annotated_attribute = """
+class ClassWithAttrs(object):
+    {0}: int = 0
 
     def __init__(self) -> None:
         self.{1} = 2
@@ -67,6 +73,15 @@ class ClassWithAttrs(object):
         self.{1} = 2
 """
 
+class_attribute_with_other = """
+class ClassWithAttrs(object):
+    {0} = 0
+
+    def constructor(self) -> None:
+        other.{0} = 0
+        self.{1} = 2
+"""
+
 class_complex_attribute = """
 class ClassWithAttrs(object):
     prefix.{0} = 0
@@ -91,6 +106,7 @@ regular_assigns = """
 
 @pytest.mark.parametrize('code', [
     class_attribute,
+    class_annotated_attribute,
     class_attribute_runtime,
     class_attribute_annotated,
     class_attribute_logic,
@@ -120,6 +136,7 @@ def test_incorrect_fields(
 
 @pytest.mark.parametrize('code', [
     class_attribute,
+    class_annotated_attribute,
     class_attribute_runtime,
     class_attribute_annotated,
     class_annotation,
@@ -128,6 +145,7 @@ def test_incorrect_fields(
     class_attribute_usage,
     class_attribute_logic,
     class_attribute_regular_assign,
+    class_attribute_with_other,
     regular_assigns,
 ])
 @pytest.mark.parametrize(('field1', 'field2'), [
