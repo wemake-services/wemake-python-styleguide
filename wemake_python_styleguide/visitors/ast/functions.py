@@ -1,6 +1,6 @@
 import ast
 from contextlib import suppress
-from typing import ClassVar, Dict, List, Mapping, Union
+from typing import ClassVar, Dict, FrozenSet, List, Mapping, Union
 
 from typing_extensions import final
 
@@ -18,6 +18,7 @@ from wemake_python_styleguide.logic.tree import (
     exceptions,
     functions,
     operators,
+    variables,
 )
 from wemake_python_styleguide.types import (
     AnyFunctionDef,
@@ -273,6 +274,12 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
         ast.Ellipsis,
     )
 
+    _descriptor_decorators: ClassVar[FrozenSet[str]] = frozenset((
+        'classmethod',
+        'staticmethod',
+        'property',
+    ))
+
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """
         Checks regular, ``lambda``, and ``async`` functions.
@@ -286,6 +293,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
         self._check_argument_default_values(node)
         self._check_unused_variables(node)
         self._check_generator(node)
+        self._check_descriptor_decorators(node)
         self.generic_visit(node)
 
     def _check_unused_variables(self, node: AnyFunctionDef) -> None:
@@ -294,7 +302,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
         for body_item in node.body:
             for sub_node in ast.walk(body_item):
                 if isinstance(sub_node, (ast.Name, ast.ExceptHandler)):
-                    var_name = self._get_variable_name(sub_node)
+                    var_name = variables.get_variable_name(sub_node)
                     self._maybe_update_variable(
                         sub_node, var_name, local_variables,
                     )
@@ -327,6 +335,21 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
                 self.add_violation(
                     StopIterationInsideGeneratorViolation(sub_node),
                 )
+
+    def _check_descriptor_decorators(self, node: AnyFunctionDef) -> None:
+        if isinstance(nodes.get_parent(node), ast.ClassDef):
+            return  # classes can contain descriptors
+
+        descriptor_decorators = [
+            decorator.id in self._descriptor_decorators
+            for decorator in node.decorator_list
+            if isinstance(decorator, ast.Name)
+        ]
+
+        if any(descriptor_decorators):
+            self.add_violation(
+                oop.WrongDescriptorDecoratorViolation(node),
+            )
 
     def _maybe_update_variable(
         self,
@@ -363,11 +386,6 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
                             node, text=varname,
                         ),
                     )
-
-    def _get_variable_name(self, node: _LocalVariable) -> str:
-        if isinstance(node, ast.Name):
-            return node.id
-        return getattr(node, 'name', '')
 
 
 @final

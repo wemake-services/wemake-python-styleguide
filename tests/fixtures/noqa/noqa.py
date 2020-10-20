@@ -109,7 +109,8 @@ class TooManyPublicAtts(object):  # noqa: WPS230
         self.boom = 7
 
 
-def function_name(
+@property  # noqa: WPS614
+def function_name(  # noqa: WPS614
     value: int = 0,  # noqa: WPS110
 ):
     # See:
@@ -135,7 +136,7 @@ value = 1  # noqa: WPS110
 VALUE = 1  # noqa: WPS110
 x = 2  # noqa: WPS111
 __private = 3  # noqa: WPS112
-star_wars_episode_7 = 'the worst episode ever after 8'  # noqa: WPS114
+star_wars_episode_7 = 'the worst episode ever after 8 and 9'  # noqa: WPS114
 consecutive__underscores = 4  # noqa: WPS116
 cls = 5  # noqa: WPS117
 __author__ = 'Nikita Sobolev'  # noqa: WPS410
