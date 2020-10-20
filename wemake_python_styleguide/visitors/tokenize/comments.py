@@ -24,10 +24,7 @@ from typing.re import Pattern
 from typing_extensions import final
 
 from wemake_python_styleguide.constants import MAX_NO_COVER_COMMENTS, STDIN
-from wemake_python_styleguide.logic.system import (
-    is_executable_file,
-    is_windows,
-)
+from wemake_python_styleguide.logic.system import is_executable_file, is_windows
 from wemake_python_styleguide.logic.tokens import NEWLINES, get_comment_text
 from wemake_python_styleguide.violations.best_practices import (
     OveruseOfNoCoverCommentViolation,

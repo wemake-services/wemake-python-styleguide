@@ -61,7 +61,7 @@ AnyFor = Union[ast.For, ast.AsyncFor]
 #: In case we need to work with any loop: sync, async, and while.
 AnyLoop = Union[AnyFor, ast.While]
 
-#: All diffrent comprehension types in one place.
+#: All different comprehension types in one place.
 AnyComprehension = Union[
     ast.ListComp,
     ast.DictComp,
@@ -250,4 +250,8 @@ class ConfigurationOptions(Protocol):
 
     @property
     def max_import_from_members(self) -> int:
+        ...
+
+    @property
+    def max_tuple_unpack_length(self) -> int:
         ...

@@ -28,6 +28,9 @@ class WrongAttributeVisitor(BaseNodeVisitor):
         '__name__',
         '__qualname__',
         '__doc__',
+        '__subclasses__',
+        '__mro__',
+        '__version__',
     ))
 
     def visit_Attribute(self, node: ast.Attribute) -> None:

@@ -14,6 +14,9 @@ import sys as sys  # noqa: WPS113
 from _some import protected  # noqa: WPS436
 from some import _protected  # noqa: WPS450
 
+from foo import bar
+from foo.bar import baz  # noqa: WPS458
+
 from .version import get_version  # noqa: WPS300
 
 import import1
@@ -71,7 +74,10 @@ some_int = 1  # type: int
 full_name = u'Nikita Sobolev'  # noqa: WPS302
 phone_number = 555_123_999  # noqa:  WPS303
 partial_number = .05  # noqa: WPS304
-formatted_string_complex = f'1+1={1 + 1}'  # noqa: WPS305, WPS236
+float_zero = 0.0  # noqa: WPS358
+formatted_string = f'Hi, {full_name}'  # noqa: WPS305
+formatted_string_complex = f'1+1={1 + 1}'  # noqa: WPS305, WPS237
+
 
 def __getattr__():  # noqa: WPS413
     # See:
@@ -107,7 +113,8 @@ class TooManyPublicAtts(object):  # noqa: WPS230
         self.boom = 7
 
 
-def function_name(
+@property  # noqa: WPS614
+def function_name(  # noqa: WPS614
     value: int = 0,  # noqa: WPS110
 ):
     # See:
@@ -133,7 +140,7 @@ value = 1  # noqa: WPS110
 VALUE = 1  # noqa: WPS110
 x = 2  # noqa: WPS111
 __private = 3  # noqa: WPS112
-star_wars_episode_7 = 'the worst episode ever after 8'  # noqa: WPS114
+star_wars_episode_7 = 'the worst episode ever after 8 and 9'  # noqa: WPS114
 consecutive__underscores = 4  # noqa: WPS116
 cls = 5  # noqa: WPS117
 __author__ = 'Nikita Sobolev'  # noqa: WPS410
@@ -158,7 +165,7 @@ some._execute()  # noqa: WPS437
 
 
 def many_locals():  # noqa: WPS210
-    arg1, arg2, arg3, arg4, arg5, arg6 = range(6)
+    arg1, arg2, arg3, arg4, arg5, arg6 = range(6)  # noqa: WPS236
 
 
 def many_arguments(_arg1, _arg2, _arg3, _arg4, _arg5, _arg6):  # noqa: WPS211
@@ -353,7 +360,7 @@ def function(  # noqa: WPS320
                }  # noqa: WPS318
 
 
-string_modifier = R'(s)'  # noqa: WPS321
+string_modifier = R'(\n)'  # noqa: WPS321
 multiline_string = """abc"""  # noqa: WPS322
 modulo_formatting = 'some %s'  # noqa: WPS323
 
@@ -498,6 +505,12 @@ if some_if_expr:  # noqa: WPS502
 else:
     some_dict['x'] = False
 
+def another_wrong_if():
+    if full_name != 'Nikita Sobolev':  # noqa: WPS531
+        return False
+    return True
+
+
 
 class ClassWithWrongContents((lambda: object)()):  # noqa: WPS606
     __slots__ = ['a', 'a']  # noqa: WPS607
@@ -574,7 +587,7 @@ positive_exponent = 1.1e+1  # noqa: WPS340
 wrong_hex = 0xabc  # noqa: WPS341
 wrong_escape_raw_string = '\\n'  # noqa: WPS342
 bad_complex = 1J  # noqa: WPS343
-zero_div = bad_complex / 0.0  # noqa: WPS344
+zero_div = bad_complex / 0  # noqa: WPS344
 mult_one = zero_div * 1  # noqa: WPS345
 mult_one -= -1  # noqa: WPS346
 
@@ -698,7 +711,9 @@ extra_new_line = [  # noqa: WPS355
 
     'wrong',
 ]
+
 *numbers, = [4, 7]  # noqa: WPS356
+[first_number, second_number] = [4, 7]  # noqa: WPS359
 
 for element in range(10):
     try:  # noqa: WPS452
@@ -710,3 +725,21 @@ for element in range(10):
         # https://github.com/wemake-services/wemake-python-styleguide/issues/1082
         break
     my_print(4)
+
+def raise_bad_exception():
+    raise Exception  # noqa: WPS454
+
+
+try:
+    cause_errors()
+except ValueError or TypeError:  # noqa: WPS455
+    my_print("Oops.")
+
+if float("NaN") < number:  # noqa: WPS456
+    my_print("Greater than... what?")
+
+def infinite_loop():
+    while True:  # noqa: WPS457
+        my_print('forever')
+
+unnecessary_raw_string = r'no backslashes.' # noqa: WPS360

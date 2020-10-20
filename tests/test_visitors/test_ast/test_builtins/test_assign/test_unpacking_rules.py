@@ -10,7 +10,7 @@ from wemake_python_styleguide.visitors.ast.builtins import (
 single_assignment = '{0} = 1'
 
 tuple_assignment1 = 'first, {0} = (1, 2)'
-tuple_assignment1 = '{0}, second = (1, 2)'
+tuple_assignment2 = '{0}, second = (1, 2)'
 
 spread_assignment1 = '{0}, *second = [1, 2, 3]'
 spread_assignment2 = 'first, *{0} = [1, 2, 3]'
@@ -75,7 +75,7 @@ def wrapper():
 @pytest.mark.parametrize('code', [
     single_assignment,
     tuple_assignment1,
-    tuple_assignment1,
+    tuple_assignment2,
     spread_assignment1,
     spread_assignment2,
     for_assignment,
@@ -128,7 +128,7 @@ def test_correct_assignment(
 
 @pytest.mark.parametrize('code', [
     tuple_assignment1,
-    tuple_assignment1,
+    tuple_assignment2,
     spread_assignment1,
     spread_assignment2,
     for_unpacking1,

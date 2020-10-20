@@ -23,7 +23,7 @@ from wemake_python_styleguide.compat.aliases import (
     FunctionNodes,
     TextNodes,
 )
-from wemake_python_styleguide.logic import nodes, safe_eval, source
+from wemake_python_styleguide.logic import nodes, safe_eval, source, walk
 from wemake_python_styleguide.logic.naming.name_nodes import extract_name
 from wemake_python_styleguide.logic.tree import attributes, operators, strings
 from wemake_python_styleguide.types import (
@@ -42,13 +42,6 @@ from wemake_python_styleguide.visitors import base, decorators
 
 #: Items that can be inside a hash.
 _HashItems = Sequence[Optional[ast.AST]]
-
-#: Items that are chainable. Used to bypass a mypy bug.
-_chainable_types: Final = (
-    ast.Call,
-    ast.Subscript,
-    ast.Attribute,
-)
 
 
 @final
@@ -135,7 +128,8 @@ class WrongStringVisitor(base.BaseNodeVisitor):
 class WrongFormatStringVisitor(base.BaseNodeVisitor):
     """Restricts usage of ``f`` strings."""
 
-    _valid_format_index: ClassVar[AnyNodes] = TextNodes + (
+    _valid_format_index: ClassVar[AnyNodes] = (
+        *TextNodes,
         ast.Num,
         ast.Name,
         ast.NameConstant,
@@ -143,6 +137,11 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
     _single_use_types: ClassVar[AnyNodes] = (
         ast.Call,
         ast.Subscript,
+    )
+    _chainable_types: Final = (
+        ast.Call,
+        ast.Subscript,
+        ast.Attribute,
     )
 
     def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
@@ -154,19 +153,24 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
             TooComplexFormattedStringViolation
 
         """
-        self.add_violation(consistency.FormattedStringViolation(node))
         self._check_complex_formatted_string(node)
+
+        # We don't allow `f` strings by default:
+        self.add_violation(consistency.FormattedStringViolation(node))
         self.generic_visit(node)
 
     def _check_complex_formatted_string(self, node: ast.JoinedStr) -> None:
-        # Whitelists all simple uses of f strings
-        # Checks if list, dict, function call with no parameters or variable
+        """
+        Whitelists all simple uses of f strings.
+
+        Checks if list, dict, function call with no parameters or variable.
+        """
         has_formatted_components = any(
-            isinstance(comp, ast.FormattedValue) for comp in node.values
+            isinstance(comp, ast.FormattedValue)
+            for comp in node.values
         )
         if not has_formatted_components:
-            # If no formatted values
-            self.add_violation(
+            self.add_violation(  # If no formatted values
                 complexity.TooComplexFormattedStringViolation(node),
             )
             return
@@ -177,14 +181,13 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
                 format_value = string_component.value
                 if self._is_valid_formatted_value(format_value):
                     continue
-                # Everything else is too complex
-                self.add_violation(
+                self.add_violation(  # Everything else is too complex
                     complexity.TooComplexFormattedStringViolation(node),
                 )
                 break
 
     def _is_valid_formatted_value(self, format_value: ast.AST) -> bool:
-        if isinstance(format_value, _chainable_types):
+        if isinstance(format_value, self._chainable_types):
             if not self._is_valid_chaining(format_value):
                 return False
         return self._is_valid_final_value(format_value)
@@ -206,15 +209,13 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
         return False
 
     def _is_valid_chaining(self, format_value: AnyChainable) -> bool:
-        parts = iter(attributes.parts(format_value))
-        chained_parts: List[ast.AST] = list(parts)
-
+        chained_parts: List[ast.AST] = list(attributes.parts(format_value))
         if len(chained_parts) <= 3:
             return self._is_valid_chain_structure(chained_parts)
         return False
 
     def _is_valid_chain_structure(self, chained_parts: List[ast.AST]) -> bool:
-        """Helper method for _is_valid_chaining."""
+        """Helper method for ``_is_valid_chaining``."""
         has_invalid_parts = any(
             not self._is_valid_final_value(part)
             for part in chained_parts
@@ -315,10 +316,12 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         Checks assignments inside context managers to be correct.
 
         Raises:
+            UnpackingIterableToListViolation
             WrongUnpackingViolation
 
         """
         for withitem in node.items:
+            self._check_unpacking_target_types(withitem.optional_vars)
             if isinstance(withitem.optional_vars, ast.Tuple):
                 self._check_unpacking_targets(
                     node, withitem.optional_vars.elts,
@@ -330,9 +333,11 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         Checks comprehensions for the correct assignments.
 
         Raises:
+            UnpackingIterableToListViolation
             WrongUnpackingViolation
 
         """
+        self._check_unpacking_target_types(node.target)
         if isinstance(node.target, ast.Tuple):
             self._check_unpacking_targets(node.target, node.target.elts)
         self.generic_visit(node)
@@ -342,9 +347,11 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         Checks assignments inside ``for`` loops to be correct.
 
         Raises:
+            UnpackingIterableToListViolation
             WrongUnpackingViolation
 
         """
+        self._check_unpacking_target_types(node.target)
         if isinstance(node.target, ast.Tuple):
             self._check_unpacking_targets(node, node.target.elts)
         self.generic_visit(node)
@@ -357,11 +364,16 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         because it does not have problems that we check.
 
         Raises:
+            UnpackingIterableToListViolation
             MultipleAssignmentsViolation
             WrongUnpackingViolation
 
         """
         self._check_assign_targets(node)
+
+        for target in node.targets:
+            self._check_unpacking_target_types(target)
+
         if isinstance(node.targets[0], ast.Tuple):
             self._check_unpacking_targets(node, node.targets[0].elts)
         self.generic_visit(node)
@@ -383,6 +395,14 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
                 self.add_violation(
                     best_practices.WrongUnpackingViolation(node),
                 )
+
+    def _check_unpacking_target_types(self, node: Optional[ast.AST]) -> None:
+        if not node:
+            return
+        for subnode in walk.get_subnodes_by_type(node, ast.List):
+            self.add_violation(
+                consistency.UnpackingIterableToListViolation(subnode),
+            )
 
 
 @final

@@ -65,7 +65,7 @@ def transform(tree: ast.AST) -> ast.AST:
     """
     Mutates the given ``ast`` tree.
 
-    Applies all possible tranformations.
+    Applies all possible transformations.
 
     Ordering:
     - initial ones

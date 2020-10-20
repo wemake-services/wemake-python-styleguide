@@ -3,9 +3,7 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     MutableModuleConstantViolation,
 )
-from wemake_python_styleguide.visitors.ast.modules import (
-    ModuleConstantsVisitor,
-)
+from wemake_python_styleguide.visitors.ast.modules import ModuleConstantsVisitor
 
 module_constant = 'CONST = {0}'
 module_typed_constant = 'CONST: int = {0}'
