@@ -83,6 +83,7 @@ Summary
    LineCompriseCarriageReturnViolation
    FloatZeroViolation
    UnpackingIterableToListViolation
+   RawStringNotNeededViolation
 
 Consistency checks
 ------------------
@@ -147,6 +148,7 @@ Consistency checks
 .. autoclass:: LineCompriseCarriageReturnViolation
 .. autoclass:: FloatZeroViolation
 .. autoclass:: UnpackingIterableToListViolation
+.. autoclass:: RawStringNotNeededViolation
 
 """
 
@@ -2228,3 +2230,30 @@ class UnpackingIterableToListViolation(ASTViolation):
 
     error_template = 'Found an iterable unpacking to list'
     code = 359
+
+
+@final
+class RawStringNotNeededViolation(TokenizeViolation):
+    r"""
+    Forbid the use of raw strings when there is no backslash in the string.
+
+    Reasoning:
+        Raw string are only needed when dealing with ``\`` in the string.
+
+    Solution:
+        Do not prefix the string with ``r``. Use a normal string instead.
+
+    Example::
+
+        # Correct:
+        r'This is a correct use \n'
+
+        # Wrong:
+        r'This string should not be prefixed with r.'
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found an unnecessary use of a raw string: {0}'
+    code = 360

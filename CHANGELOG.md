@@ -26,6 +26,7 @@ Semantic versioning in our case means:
 - Forbids to use `%` with zero as the divisor
 - WPS531: Forbids testing conditions to just return booleans when it is possible to simply return the condition itself
 - Forbids to use unsafe infinite loops
+- Forbids to use raw strings `r''` when not necessary
 
 ### Bugfixes
 

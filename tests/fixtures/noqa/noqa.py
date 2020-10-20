@@ -356,7 +356,7 @@ def function(  # noqa: WPS320
                }  # noqa: WPS318
 
 
-string_modifier = R'(s)'  # noqa: WPS321
+string_modifier = R'(\n)'  # noqa: WPS321
 multiline_string = """abc"""  # noqa: WPS322
 modulo_formatting = 'some %s'  # noqa: WPS323
 
@@ -737,3 +737,5 @@ if float("NaN") < number:  # noqa: WPS456
 def infinite_loop():
     while True:  # noqa: WPS457
         my_print('forever')
+
+unnecessary_raw_string = r'no backslashes.' # noqa: WPS360
