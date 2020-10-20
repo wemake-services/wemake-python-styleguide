@@ -22,8 +22,11 @@ def given_function_called(node: Call, to_check: Container[str]) -> str:
     >>> given_function_called(module.body[0].value, ['adjust'])
     ''
 
+    >>> module = ast.parse('datetime.timedelta(days=1)')
+    >>> given_function_called(module.body[0].value, ['timedelta'])
+    'timedelta'
     """
-    function_name = source.node_to_string(node.func)
+    function_name = source.node_to_string(node.func).split('.')[-1]
     if function_name in to_check:
         return function_name
     return ''
