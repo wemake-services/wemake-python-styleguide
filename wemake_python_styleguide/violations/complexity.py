@@ -57,6 +57,7 @@ Summary
    TooComplexAnnotationViolation
    TooManyImportedModuleMembersViolation
    TooLongTupleUnpackViolation
+   TooComplexFormattedStringViolation
 
 
 Module complexity
@@ -98,6 +99,7 @@ Structure complexity
 .. autoclass:: TooComplexAnnotationViolation
 .. autoclass:: TooManyImportedModuleMembersViolation
 .. autoclass:: TooLongTupleUnpackViolation
+.. autoclass:: TooComplexFormattedStringViolation
 
 """
 
@@ -1176,3 +1178,45 @@ class TooLongTupleUnpackViolation(ASTViolation):
 
     error_template = 'Found too many variables used to unpack a tuple: {0}'
     code = 236
+
+
+@final
+class TooComplexFormattedStringViolation(ASTViolation):
+    """
+    Forbids ``f`` strings that are too complex.
+
+    A complex format string is defined as use of any formatted value
+    that is not:
+
+    - the value of a variable
+    - the value of a collection through lookup with a variable, number, or
+      string as the key
+    - the return value of a procedure call without arguments
+
+    Related to :class:`~FormattedStringViolation`.
+
+    Reasoning:
+        Complex ``f`` strings are often difficult to understand,
+        making the code less readible. Generally we don't allow
+        ``f`` strings but this violation exists in case the user
+        decides to ignore the general violation.
+
+    Solution:
+        Use ``.format()`` or assign complex expressions to variables
+        before formatting.
+
+    Example::
+
+        # Correct:
+        f'smth {user.get_full_name()}'
+
+        # Wrong:
+        f'{reverse("url-name")}?{"&".join("user="+uid for uid in user_ids)}'
+
+
+    .. versionadded:: 0.16.0
+
+    """
+
+    error_template = 'Found a too complex `f` string'
+    code = 237
