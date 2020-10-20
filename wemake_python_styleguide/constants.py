@@ -411,9 +411,6 @@ ALIAS_NAMES_WHITELIST: Final = frozenset((
 # Used as a default filename, when it is not passed by flake8:
 STDIN: Final = 'stdin'
 
-# Used as a special name patterns for unused variables, like _, __:
-UNUSED_VARIABLE_REGEX: Final = re.compile('^_+$')
-
 # Used to specify as a placeholder for `__init__`:
 INIT: Final = '__init__'
 
