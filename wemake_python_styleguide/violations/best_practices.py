@@ -69,15 +69,12 @@ Summary
    ProtectedModuleMemberViolation
    PositionalOnlyArgumentsViolation
    LoopControlFinallyViolation
-<<<<<<< HEAD
-   ImportCollisionViolation
-=======
    ShebangViolation
    BaseExceptionRaiseViolation
    NonTrivialExceptViolation
    FloatingNanViolation
    InfiniteWhileLoopViolation
->>>>>>> master
+   ImportCollisionViolation
 
 Best practices
 --------------
@@ -135,15 +132,12 @@ Best practices
 .. autoclass:: ProtectedModuleMemberViolation
 .. autoclass:: PositionalOnlyArgumentsViolation
 .. autoclass:: LoopControlFinallyViolation
-<<<<<<< HEAD
-.. autoclass:: ImportCollisionViolation
-=======
 .. autoclass:: ShebangViolation
 .. autoclass:: BaseExceptionRaiseViolation
 .. autoclass:: NonTrivialExceptViolation
 .. autoclass:: FloatingNanViolation
 .. autoclass:: InfiniteWhileLoopViolation
->>>>>>> master
+.. autoclass:: ImportCollisionViolation
 
 """
 
