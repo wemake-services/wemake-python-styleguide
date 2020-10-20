@@ -15,7 +15,7 @@ from _some import protected  # noqa: WPS436
 from some import _protected  # noqa: WPS450
 
 from foo import bar
-from foo.bar import baz  # noqa: WPS453
+from foo.bar import baz  # noqa: WPS458
 
 from .version import get_version  # noqa: WPS300
 
