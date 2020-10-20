@@ -26,6 +26,7 @@ from wemake_python_styleguide.compat.aliases import (
 from wemake_python_styleguide.logic import nodes, safe_eval, source, walk
 from wemake_python_styleguide.logic.naming.name_nodes import extract_name
 from wemake_python_styleguide.logic.tree import operators, strings
+from wemake_python_styleguide.logic.tree.functions import given_function_called
 from wemake_python_styleguide.types import AnyFor, AnyNodes, AnyText, AnyWith
 from wemake_python_styleguide.violations import best_practices, consistency
 from wemake_python_styleguide.visitors import base, decorators
@@ -127,12 +128,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         )
 
         if parent and isinstance(parent, ast.Call):
-
-            func_name = getattr(parent.func, 'attr', None)
-            if not func_name:
-                func_name = getattr(parent.func, 'id', None)
-
-            return func_name in exceptions
+            return bool(given_function_called(parent, exceptions))
         return False
 
     def _check_modulo_patterns(
