@@ -53,7 +53,7 @@ PRESET: Final = (
     functions.UselessLambdaDefinitionVisitor,
     functions.WrongFunctionCallContextVisitior,
     functions.UnnecessaryLiteralsVisitor,
-    functions.PositionalOnlyArgumentsVisitor,
+    functions.FunctionArgumentsVisitor,
     functions.FloatingNanCallVisitor,
 
     exceptions.WrongTryExceptVisitor,
