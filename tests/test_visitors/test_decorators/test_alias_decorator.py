@@ -18,7 +18,7 @@ def test_raises_for_duplicates():
 
 
 def test_useless_alias():
-    """Ensures that decorator raises an exception for duplicates."""
+    """Ensures that decorator raises an exception for useless alias."""
     with pytest.raises(ValueError, match='duplicate'):
         alias('name', ('name',))
 
