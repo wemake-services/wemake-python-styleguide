@@ -145,6 +145,7 @@ def test_regular_modulo_string(
 
 
 @pytest.mark.parametrize('code', [
+    'dt.strftime("%A, %d. %B %Y %I:%M%p")',
     'datetime.strftime("%d-%m-%Y (%H:%M:%S)")',
     'datetime.strptime("01-01-2020 (10:20:30)", "%d-%m-%Y (%H:%M:%S)")',
     'date.strftime("%d-%m-%Y (%H:%M:%S)")',
