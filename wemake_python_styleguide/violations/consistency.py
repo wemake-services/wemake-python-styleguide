@@ -82,6 +82,7 @@ Summary
    IterableUnpackingViolation
    LineCompriseCarriageReturnViolation
    FloatZeroViolation
+   UnpackingIterableToListViolation
 
 Consistency checks
 ------------------
@@ -145,6 +146,7 @@ Consistency checks
 .. autoclass:: IterableUnpackingViolation
 .. autoclass:: LineCompriseCarriageReturnViolation
 .. autoclass:: FloatZeroViolation
+.. autoclass:: UnpackingIterableToListViolation
 
 """
 
@@ -2197,3 +2199,32 @@ class FloatZeroViolation(TokenizeViolation):
 
     code = 358
     error_template = 'Found a float zero (0.0)'
+
+
+@final
+class UnpackingIterableToListViolation(ASTViolation):
+    """
+    Forbids to unpack iterable objects to lists.
+
+    Reasoning:
+        We do this for consistency.
+
+    Solution:
+        Do not unpack iterables to lists, use tuples for that.
+
+    Example::
+
+        # Correct:
+        first, second = (7, 4)
+        first, *iterable = other_iterable
+
+        # Wrong:
+        [first, second] = (7, 4)
+        [first, *iterable] = other_iterable
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found an iterable unpacking to list'
+    code = 359
