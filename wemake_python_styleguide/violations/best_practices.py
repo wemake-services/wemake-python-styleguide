@@ -1134,7 +1134,7 @@ class UnreachableCodeViolation(ASTViolation):
         It also demotivates team members.
 
     Solution:
-        Delete any unreachable code you have or refactor it, 
+        Delete any unreachable code you have or refactor it,
         if this happens by your mistake.
 
     Example::
