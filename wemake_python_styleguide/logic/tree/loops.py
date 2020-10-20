@@ -2,7 +2,6 @@ import ast
 from typing import Optional
 
 from wemake_python_styleguide.compat.aliases import ForNodes
-from wemake_python_styleguide.logic import walk
 from wemake_python_styleguide.types import AnyLoop, AnyNodes
 
 
