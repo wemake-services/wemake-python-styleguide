@@ -86,8 +86,8 @@ def test_wrong_string(assert_errors, parse_ast_tree, code, default_options):
     visitor.run()
 
     assert_errors(visitor, [
-        FormattedStringViolation,
         TooComplexFormattedStringViolation,
+        FormattedStringViolation,
     ])
 
 
