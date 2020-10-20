@@ -5,10 +5,6 @@ from wemake_python_styleguide.compat.aliases import ForNodes
 from wemake_python_styleguide.types import AnyLoop, AnyNodes
 
 
-def _is_nested_loop(node: AnyLoop, sub: ast.AST) -> bool:
-    return isinstance(sub, (*ForNodes, ast.While)) and sub is not node
-
-
 def _does_loop_contain_node(
     loop: Optional[AnyLoop],
     to_check: ast.AST,
