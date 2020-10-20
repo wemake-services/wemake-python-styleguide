@@ -74,6 +74,7 @@ Summary
    NonTrivialExceptViolation
    FloatingNanViolation
    InfiniteWhileLoopViolation
+   ImportCollisionViolation
 
 Best practices
 --------------
@@ -136,6 +137,7 @@ Best practices
 .. autoclass:: NonTrivialExceptViolation
 .. autoclass:: FloatingNanViolation
 .. autoclass:: InfiniteWhileLoopViolation
+.. autoclass:: ImportCollisionViolation
 
 """
 
@@ -2255,3 +2257,40 @@ class InfiniteWhileLoopViolation(ASTViolation):
 
     error_template = 'Found an infinite while loop'
     code = 457
+
+
+@final
+class ImportCollisionViolation(ASTViolation):
+    """
+    Forbids to import from already imported modules.
+
+    Reasoning:
+        Importing objects from already imported modules is inconsitent
+        and error-prone.
+
+    Solution:
+        Do not import objects from already imported modules or use aliases
+        when it cannot be avoided.
+
+    Example::
+
+        # Correct:
+        import public
+        from some.module import FooClass
+
+        import hypothesis
+        from hypothesis import strategies as st
+
+        # Wrong:
+        from public import utils
+        from public.utils import something
+
+        import hypothesis
+        from hypothesis import strategies
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found imports collision: {0}'
+    code = 458
