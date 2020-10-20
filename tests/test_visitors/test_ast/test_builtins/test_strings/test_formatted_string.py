@@ -115,10 +115,11 @@ def test_complex_f_string(assert_errors, parse_ast_tree, code, default_options):
     visitor = WrongFormatStringVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [
-        FormattedStringViolation,
-        TooComplexFormattedStringViolation,
-    ])
+    assert_errors(
+        visitor,
+        [TooComplexFormattedStringViolation],
+        ignored_types=FormattedStringViolation,
+    )
 
 
 @pytest.mark.parametrize('code', [

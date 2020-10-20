@@ -1213,7 +1213,6 @@ class TooComplexFormattedStringViolation(ASTViolation):
         # Wrong:
         f'{reverse("url-name")}?{"&".join("user="+uid for uid in user_ids)}'
 
-
     .. versionadded:: 0.15.0
 
     """
