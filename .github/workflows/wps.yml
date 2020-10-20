@@ -3,7 +3,7 @@ name: wps
 on:
   pull_request:
     branches:
-    - master
+      - master
 
 jobs:
   build:

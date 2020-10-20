@@ -1,18 +1,16 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from contextlib import suppress
-from typing import ClassVar, Dict, List, Union
+from typing import ClassVar, Dict, FrozenSet, List, Mapping, Union
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.compat.aliases import FunctionNodes, TextNodes
 from wemake_python_styleguide.compat.functions import get_posonlyargs
 from wemake_python_styleguide.constants import (
     FUNCTIONS_BLACKLIST,
     LITERALS_BLACKLIST,
 )
-from wemake_python_styleguide.logic import nodes, walk
+from wemake_python_styleguide.logic import nodes, source, walk
 from wemake_python_styleguide.logic.arguments import function_args
 from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.logic.tree import (
@@ -20,6 +18,7 @@ from wemake_python_styleguide.logic.tree import (
     exceptions,
     functions,
     operators,
+    variables,
 )
 from wemake_python_styleguide.types import (
     AnyFunctionDef,
@@ -30,6 +29,7 @@ from wemake_python_styleguide.violations import consistency, naming, oop
 from wemake_python_styleguide.violations.best_practices import (
     BooleanPositionalArgumentViolation,
     ComplexDefaultValueViolation,
+    FloatingNanViolation,
     PositionalOnlyArgumentsViolation,
     StopIterationInsideGeneratorViolation,
     WrongFunctionCallViolation,
@@ -47,6 +47,9 @@ from wemake_python_styleguide.visitors import base, decorators
 #: Things we treat as local variables.
 _LocalVariable = Union[ast.Name, ast.ExceptHandler]
 
+#: Function definitions with name and arity:
+_Defs = Mapping[str, int]
+
 
 @final
 class WrongFunctionCallVisitor(base.BaseNodeVisitor):
@@ -55,6 +58,21 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
 
     All these functions are defined in ``FUNCTIONS_BLACKLIST``.
     """
+
+    _functions: ClassVar[_Defs] = {
+        'getattr': 3,
+        'setattr': 3,
+    }
+
+    _postfixes: ClassVar[_Defs] = {
+        # dict methods:
+        '.get': 2,
+        '.pop': 2,
+        '.setdefault': 2,
+
+        # list methods:
+        '.insert': 2,
+    }
 
     def visit_Call(self, node: ast.Call) -> None:
         """
@@ -70,8 +88,12 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
         """
         self._check_wrong_function_called(node)
         self._check_boolean_arguments(node)
-        self._check_super_call(node)
         self._check_isinstance_call(node)
+
+        if functions.given_function_called(node, {'super'}):
+            self._check_super_context(node)
+            self._check_super_arguments(node)
+
         self.generic_visit(node)
 
     def _check_wrong_function_called(self, node: ast.Call) -> None:
@@ -91,15 +113,26 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
             if not isinstance(arg, ast.NameConstant):
                 continue
 
+            is_ignored = self._is_call_ignored(node)
+
             # We do not check for `None` values here:
-            if arg.value is True or arg.value is False:
+            if not is_ignored and arg.value in {True, False}:
                 self.add_violation(
                     BooleanPositionalArgumentViolation(
                         arg, text=str(arg.value),
                     ),
                 )
 
-    def _ensure_super_context(self, node: ast.Call) -> None:
+    def _check_isinstance_call(self, node: ast.Call) -> None:
+        function_name = functions.given_function_called(node, {'isinstance'})
+        if not function_name or len(node.args) != 2:
+            return
+
+        if isinstance(node.args[1], ast.Tuple):
+            if len(node.args[1].elts) == 1:
+                self.add_violation(WrongIsinstanceWithTupleViolation(node))
+
+    def _check_super_context(self, node: ast.Call) -> None:
         parent_context = nodes.get_context(node)
         parent_node = nodes.get_parent(node)
 
@@ -120,25 +153,50 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
             oop.WrongSuperCallViolation(node, text='not inside method'),
         )
 
-    def _ensure_super_arguments(self, node: ast.Call) -> None:
+    def _check_super_arguments(self, node: ast.Call) -> None:
         if node.args or node.keywords:
             self.add_violation(
                 oop.WrongSuperCallViolation(node, text='remove arguments'),
             )
 
-    def _check_super_call(self, node: ast.Call) -> None:
-        if functions.given_function_called(node, {'super'}):
-            self._ensure_super_context(node)
-            self._ensure_super_arguments(node)
+    def _is_call_ignored(self, node: ast.Call) -> bool:
+        call = source.node_to_string(node.func)
+        func_called = functions.given_function_called(
+            node, self._functions.keys(),
+        )
 
-    def _check_isinstance_call(self, node: ast.Call) -> None:
-        function_name = functions.given_function_called(node, {'isinstance'})
-        if not function_name or len(node.args) != 2:
+        return bool(
+            func_called and len(node.args) == self._functions[func_called],
+        ) or any(
+            call.endswith(post)
+            for post in self._postfixes
+            if len(node.args) == self._postfixes[post]
+        )
+
+
+@final
+class FloatingNanCallVisitor(base.BaseNodeVisitor):
+    """Ensure that NaN is acquired in an explicit way."""
+
+    _nan_variants = frozenset(('nan', b'nan'))
+
+    def visit_Call(self, node: ast.Call) -> None:
+        """Used to find ``float("NaN")`` calls."""
+        self._check_floating_nan(node)
+        self.generic_visit(node)
+
+    def _check_floating_nan(self, node: ast.Call) -> None:
+        if len(node.args) != 1:
             return
 
-        if isinstance(node.args[1], ast.Tuple):
-            if len(node.args[1].elts) == 1:
-                self.add_violation(WrongIsinstanceWithTupleViolation(node))
+        if not isinstance(node.args[0], (ast.Str, ast.Bytes)):
+            return
+
+        if not functions.given_function_called(node, 'float'):
+            return
+
+        if node.args[0].s.lower() in self._nan_variants:
+            self.add_violation(FloatingNanViolation(node))
 
 
 @final
@@ -206,20 +264,15 @@ class WrongFunctionCallContextVisitior(base.BaseNodeVisitor):
 class FunctionDefinitionVisitor(base.BaseNodeVisitor):
     """Responsible for checking function internals."""
 
-    _allowed_default_value_types: ClassVar[AnyNodes] = (
-        ast.Name,
-        ast.Attribute,
-        ast.Str,
-        ast.NameConstant,
-        ast.Tuple,
-        ast.Bytes,
-        ast.Num,
-        ast.Ellipsis,
-    )
+    _descriptor_decorators: ClassVar[FrozenSet[str]] = frozenset((
+        'classmethod',
+        'staticmethod',
+        'property',
+    ))
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """
-        Checks regular, ``lambda``, and ``async`` functions.
+        Checks regular and ``async`` functions.
 
         Raises:
             UnusedVariableIsUsedViolation
@@ -227,9 +280,9 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
             StopIterationInsideGeneratorViolation
 
         """
-        self._check_argument_default_values(node)
         self._check_unused_variables(node)
         self._check_generator(node)
+        self._check_descriptor_decorators(node)
         self.generic_visit(node)
 
     def _check_unused_variables(self, node: AnyFunctionDef) -> None:
@@ -238,24 +291,12 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
         for body_item in node.body:
             for sub_node in ast.walk(body_item):
                 if isinstance(sub_node, (ast.Name, ast.ExceptHandler)):
-                    var_name = self._get_variable_name(sub_node)
+                    var_name = variables.get_variable_name(sub_node)
                     self._maybe_update_variable(
                         sub_node, var_name, local_variables,
                     )
 
         self._ensure_used_variables(local_variables)
-
-    def _check_argument_default_values(self, node: AnyFunctionDef) -> None:
-        for arg in node.args.defaults:
-            real_arg = operators.unwrap_unary_node(arg)
-            parts = attributes.parts(real_arg) if isinstance(
-                real_arg, ast.Attribute,
-            ) else [real_arg]
-
-            for part in parts:
-                if not isinstance(part, self._allowed_default_value_types):
-                    self.add_violation(ComplexDefaultValueViolation(arg))
-                    return
 
     def _check_generator(self, node: AnyFunctionDef) -> None:
         if not functions.is_generator(node):
@@ -266,6 +307,21 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
                 self.add_violation(
                     StopIterationInsideGeneratorViolation(sub_node),
                 )
+
+    def _check_descriptor_decorators(self, node: AnyFunctionDef) -> None:
+        if isinstance(nodes.get_parent(node), ast.ClassDef):
+            return  # classes can contain descriptors
+
+        descriptor_decorators = [
+            decorator.id in self._descriptor_decorators
+            for decorator in node.decorator_list
+            if isinstance(decorator, ast.Name)
+        ]
+
+        if any(descriptor_decorators):
+            self.add_violation(
+                oop.WrongDescriptorDecoratorViolation(node),
+            )
 
     def _maybe_update_variable(
         self,
@@ -292,7 +348,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
 
     def _ensure_used_variables(
         self,
-        local_variables: Dict[str, List[_LocalVariable]],
+        local_variables: Mapping[str, List[_LocalVariable]],
     ) -> None:
         for varname, usages in local_variables.items():
             for node in usages:
@@ -302,11 +358,6 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
                             node, text=varname,
                         ),
                     )
-
-    def _get_variable_name(self, node: _LocalVariable) -> str:
-        if isinstance(node, ast.Name):
-            return node.id
-        return getattr(node, 'name', '')
 
 
 @final
@@ -363,8 +414,23 @@ class UselessLambdaDefinitionVisitor(base.BaseNodeVisitor):
     'visit_FunctionDef',
     'visit_Lambda',
 ))
-class PositionalOnlyArgumentsVisitor(base.BaseNodeVisitor):
-    """Forbids to use ``/`` parameters in functions and lambdas."""
+class FunctionArgumentsVisitor(base.BaseNodeVisitor):
+    """
+    Checks function arguments when function is defined.
+
+    Forbids to use ``/`` parameters in functions and lambdas.
+    Also forbids to use complex default arguments.
+    """
+
+    _allowed_default_value_types: ClassVar[AnyNodes] = (
+        *TextNodes,
+        ast.Name,
+        ast.Attribute,
+        ast.NameConstant,
+        ast.Tuple,
+        ast.Num,
+        ast.Ellipsis,
+    )
 
     def visit_any_function_and_lambda(
         self,
@@ -377,15 +443,39 @@ class PositionalOnlyArgumentsVisitor(base.BaseNodeVisitor):
             PositionalOnlyArgumentsViolation
 
         """
-        self._check_pisitional_arguments(node)
+        self._check_positional_arguments(node)
+        self._check_complex_argument_defaults(node)
         self.generic_visit(node)
 
-    def _check_pisitional_arguments(
+    def _check_positional_arguments(
         self,
         node: AnyFunctionDefAndLambda,
     ) -> None:
         if get_posonlyargs(node):  # pragma: py-lt-38
             self.add_violation(PositionalOnlyArgumentsViolation(node))
+
+    def _check_complex_argument_defaults(
+        self,
+        node: AnyFunctionDefAndLambda,
+    ) -> None:
+        all_defaults = filter(None, (
+            *node.args.defaults,
+            *node.args.kw_defaults,
+        ))
+
+        for arg in all_defaults:
+            real_arg = operators.unwrap_unary_node(arg)
+            parts = attributes.parts(real_arg) if isinstance(
+                real_arg, ast.Attribute,
+            ) else [real_arg]
+
+            has_incorrect_part = any(
+                not isinstance(part, self._allowed_default_value_types)
+                for part in parts
+            )
+
+            if has_incorrect_part:
+                self.add_violation(ComplexDefaultValueViolation(arg))
 
 
 @final

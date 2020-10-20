@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 These checks find flaws in your application design.
 
@@ -58,6 +56,7 @@ Summary
    TooLongCallChainViolation
    TooComplexAnnotationViolation
    TooManyImportedModuleMembersViolation
+   TooLongTupleUnpackViolation
 
 
 Module complexity
@@ -98,6 +97,7 @@ Structure complexity
 .. autoclass:: TooLongCallChainViolation
 .. autoclass:: TooComplexAnnotationViolation
 .. autoclass:: TooManyImportedModuleMembersViolation
+.. autoclass:: TooLongTupleUnpackViolation
 
 """
 
@@ -113,7 +113,7 @@ from wemake_python_styleguide.violations.base import (
 @final
 class JonesScoreViolation(SimpleViolation):
     """
-    Forbids to have modules with complex lines.
+    Forbid modules with complex lines.
 
     We are using Jones Complexity algorithm to count module's score.
     See
@@ -146,7 +146,7 @@ class JonesScoreViolation(SimpleViolation):
 @final
 class TooManyImportsViolation(SimpleViolation):
     """
-    Forbids to have modules with too many imports.
+    Forbid modules with too many imports.
 
     Namespaces are one honking great idea -- let's do more of those!
 
@@ -185,7 +185,7 @@ class TooManyImportsViolation(SimpleViolation):
 @final
 class TooManyModuleMembersViolation(SimpleViolation):
     """
-    Forbids to have many classes and functions in a single module.
+    Forbid too many classes and functions in a single module.
 
     Reasoning:
         Having many classes and functions in a single module is a bad thing.
@@ -215,7 +215,7 @@ class TooManyModuleMembersViolation(SimpleViolation):
 @final
 class TooManyImportedNamesViolation(SimpleViolation):
     """
-    Forbids to have modules with too many imported names.
+    Forbid modules with too many imported names.
 
     Namespaces are one honking great idea -- let's do more of those!
 
@@ -263,7 +263,7 @@ class TooManyImportedNamesViolation(SimpleViolation):
 @final
 class OverusedExpressionViolation(ASTViolation):
     """
-    Forbids to have overused expressions in a module, function or method.
+    Forbid overused expressions in a module, function or method.
 
     What do we call an "overused expression"? When you use any expression
     (like ``user_dict['age']`` for example) inside your code,
@@ -308,7 +308,7 @@ class OverusedExpressionViolation(ASTViolation):
 @final
 class TooManyLocalsViolation(ASTViolation):
     """
-    Forbids to have too many local variables in the unit of code.
+    Forbid too many local variables in the unit of code.
 
     Reasoning:
         Having too many variables in a single function is a bad thing.
@@ -359,7 +359,7 @@ class TooManyLocalsViolation(ASTViolation):
 @final
 class TooManyArgumentsViolation(ASTViolation):
     """
-    Forbids to have too many arguments for a function or method.
+    Forbid too many arguments for a function or method.
 
     Reasoning:
         This is an indicator of a bad design. When a function requires many
@@ -385,7 +385,7 @@ class TooManyArgumentsViolation(ASTViolation):
 @final
 class TooManyReturnsViolation(ASTViolation):
     """
-    Forbids placing too many ``return`` statements into the function.
+    Forbid placing too many ``return`` statements into the function.
 
     Reasoning:
         When there are too many ``return`` keywords,
@@ -410,7 +410,7 @@ class TooManyReturnsViolation(ASTViolation):
 @final
 class TooManyExpressionsViolation(ASTViolation):
     """
-    Forbids putting too many expressions in a single function.
+    Forbid putting too many expressions in a single function.
 
     This rule is quite similar to "max lines" in a function,
     but is much nicer. Because we don't count lines,
@@ -445,7 +445,7 @@ class TooManyExpressionsViolation(ASTViolation):
 @final
 class TooManyMethodsViolation(ASTViolation):
     """
-    Forbids to have many methods in a single class.
+    Forbid too many methods in a single class.
 
     Reasoning:
         Having too many methods might lead to the "God object".
@@ -561,7 +561,7 @@ class TooManyDecoratorsViolation(ASTViolation):
 @final
 class TooManyAwaitsViolation(ASTViolation):
     """
-    Forbids placing too many ``await`` expressions into a function.
+    Forbid placing too many ``await`` expressions into a function.
 
     Reasoning:
         When there are too many ``await`` keywords,
@@ -586,7 +586,7 @@ class TooManyAwaitsViolation(ASTViolation):
 @final
 class TooManyAssertsViolation(ASTViolation):
     """
-    Forbids placing too many ``asseert`` statements into a function.
+    Forbid placing too many ``assert`` statements into a function.
 
     Reasoning:
         When there are too many ``assert`` keywords,
@@ -612,7 +612,7 @@ class TooManyAssertsViolation(ASTViolation):
 @final
 class TooDeepAccessViolation(ASTViolation):
     """
-    Forbids to have consecutive expressions with too deep access level.
+    Forbid consecutive expressions with too deep access level.
 
     We consider only these expressions as accesses:
 
@@ -664,7 +664,7 @@ class TooDeepAccessViolation(ASTViolation):
 @final
 class TooDeepNestingViolation(ASTViolation):
     """
-    Forbids nesting blocks too deep.
+    Forbid nesting blocks too deep.
 
     Reasoning:
         If nesting is too deep that indicates usage of complex logic
@@ -687,7 +687,7 @@ class TooDeepNestingViolation(ASTViolation):
 @final
 class LineComplexityViolation(ASTViolation):
     """
-    Forbids to have complex lines.
+    Forbid complex lines.
 
     We are using Jones Complexity algorithm to count complexity.
     What is Jones Complexity? It is a simple yet powerful method to count
@@ -732,7 +732,10 @@ class LineComplexityViolation(ASTViolation):
 @final
 class TooManyConditionsViolation(ASTViolation):
     """
-    Forbids to have conditions with too many logical operators.
+    Forbid conditions with too many logical operators.
+
+    We use :str:`wemake_python_styleguide.constants.MAX_CONDITIONS`
+    as a default value.
 
     Reasoning:
         When reading through the complex conditions you will fail
@@ -758,7 +761,10 @@ class TooManyConditionsViolation(ASTViolation):
 @final
 class TooManyElifsViolation(ASTViolation):
     """
-    Forbids to use many ``elif`` branches.
+    Forbid too many ``elif`` branches.
+
+    We use :str:`wemake_python_styleguide.constants.MAX_ELIFS`
+    as a default value.
 
     Reasoning:
         This rule is specifically important because of many ``elif``
@@ -783,7 +789,7 @@ class TooManyElifsViolation(ASTViolation):
 @final
 class TooManyForsInComprehensionViolation(ASTViolation):
     """
-    Forbids to have too many ``for`` statement within a comprehension.
+    Forbid too many ``for`` statements within a comprehension.
 
     Reasoning:
         When reading through the complex comprehension you will fail
@@ -815,7 +821,10 @@ class TooManyForsInComprehensionViolation(ASTViolation):
 @final
 class TooManyExceptCasesViolation(ASTViolation):
     """
-    Forbids to have too many ``except`` cases in a single ``try`` clause.
+    Forbid too many ``except`` cases in a single ``try`` clause.
+
+    We use :str:`wemake_python_styleguide.constants.MAX_EXCEPT_CASES`
+    as a default value.
 
     Reasoning:
         Handling too many exceptions in a single place
@@ -839,7 +848,7 @@ class TooManyExceptCasesViolation(ASTViolation):
 @final
 class OverusedStringViolation(MaybeASTViolation):
     """
-    Forbids to over-use string constants.
+    Forbid overuse of string constants.
 
     We allow to use strings without any restrictions as annotations for
     variables, arguments, return values, and class attributes.
@@ -869,7 +878,7 @@ class OverusedStringViolation(MaybeASTViolation):
 @final
 class TooLongYieldTupleViolation(ASTViolation):
     """
-    Forbids to yield too long tuples.
+    Forbid yielding too long tuples.
 
     Reasoning:
         Long yield tuples complicate generator using.
@@ -889,7 +898,7 @@ class TooLongYieldTupleViolation(ASTViolation):
 @final
 class TooLongCompareViolation(ASTViolation):
     """
-    Forbids to have too long compare expressions.
+    Forbid too long compare expressions.
 
     Reasoning:
         To long compare expressions indicate
@@ -910,7 +919,7 @@ class TooLongCompareViolation(ASTViolation):
 @final
 class TooLongTryBodyViolation(ASTViolation):
     """
-    Forbids to have ``try`` blocks with too long bodies.
+    Forbid ``try`` blocks with too long bodies.
 
     Reasoning:
         Having too many statements inside your ``try`` block
@@ -942,7 +951,7 @@ class TooLongTryBodyViolation(ASTViolation):
 @final
 class TooManyPublicAttributesViolation(ASTViolation):
     """
-    Forbids to have ``try`` blocks with too long bodies.
+    Forbid instances with too many public attributes.
 
     We only check static definitions in a form of ``self.public = ...``.
     We do not count parent attributes.
@@ -960,7 +969,7 @@ class TooManyPublicAttributesViolation(ASTViolation):
     Solution:
         Make some attributes protected.
         Split this class into several ones.
-        If class is a Data Transder Object, then use ``@dataclass`` decorator.
+        If class is a Data Transfer Object, then use ``@dataclass`` decorator.
 
     Configuration:
         This rule is configurable with ``--max-attributes``.
@@ -981,7 +990,7 @@ class TooManyPublicAttributesViolation(ASTViolation):
 @final
 class CognitiveComplexityViolation(ASTViolation):
     """
-    Forbids to have functions with too high cognitive complexity.
+    Forbid functions with too high cognitive complexity.
 
     Reasoning:
         People are not great at reading and iterpretating code in their heads.
@@ -1014,7 +1023,7 @@ class CognitiveComplexityViolation(ASTViolation):
 @final
 class CognitiveModuleComplexityViolation(SimpleViolation):
     """
-    Forbids to have modules with too high average cognitive complexity.
+    Forbid modules with too high average cognitive complexity.
 
     Reasoning:
         Modules with lots of functions might hide cognitive complexity
@@ -1043,7 +1052,7 @@ class CognitiveModuleComplexityViolation(SimpleViolation):
 @final
 class TooLongCallChainViolation(ASTViolation):
     """
-    Forbids too long call chains.
+    Forbid too long call chains.
 
     Reasoning:
         Too long call chains are overcomplicated and
@@ -1062,14 +1071,14 @@ class TooLongCallChainViolation(ASTViolation):
 
     """
 
-    error_template = 'Found too lang call chain length: {0}'
+    error_template = 'Found too long call chain length: {0}'
     code = 233
 
 
 @final
 class TooComplexAnnotationViolation(ASTViolation):
     """
-    Forbids too complex annotations.
+    Forbid too complex annotations.
 
     Annotation complexity is maximum annotation nesting level.
     Example: ``List[int]`` has complexity of 2
@@ -1102,7 +1111,7 @@ class TooComplexAnnotationViolation(ASTViolation):
 @final
 class TooManyImportedModuleMembersViolation(ASTViolation):
     """
-    Forbids ``from ... import ...`` with too many imported names.
+    Forbid ``from ... import ...`` with too many imported names.
 
     Reasoning:
         Importing too many names from one import is easy way to cause
@@ -1132,3 +1141,36 @@ class TooManyImportedModuleMembersViolation(ASTViolation):
 
     error_template = 'Found too many imported names from a module: {0}'
     code = 235
+
+
+@final
+class TooLongTupleUnpackViolation(ASTViolation):
+    """
+    Forbid using too many variables to unpack a tuple.
+
+    Reasoning:
+        The order and meaning are hard to remember.
+
+    Solution:
+        If you have more than 2 values in a tuple, consider using
+        ``typing.NamedTuple`` or a dataclass instead.
+
+    Example::
+
+        # Correct:
+        result = foo()
+
+        # Wrong:
+        a, b, c, d, e = foo()
+
+    Configuration:
+        This rule is configurable with ``--max-tuple-unpack-length``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_TUPLE_UNPACK_LENGTH`
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found too many variables used to unpack a tuple: {0}'
+    code = 236

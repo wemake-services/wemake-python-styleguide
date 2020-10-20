@@ -5,7 +5,7 @@
 
 .. toctree::
   :maxdepth: 1
-  :caption: Userguide:
+  :caption: User guide:
   :hidden:
 
   pages/usage/setup.rst

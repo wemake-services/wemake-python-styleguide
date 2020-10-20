@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.naming import (
@@ -49,7 +47,9 @@ def test_length_option(assert_errors, assert_error_text, options):
     visitor.run()
 
     assert_errors(visitor, [TooShortNameViolation])
-    assert_error_text(visitor, filename.replace('.py', ''))
+    assert_error_text(
+        visitor, filename.replace('.py', ''), option_values.min_name_length,
+    )
 
 
 @pytest.mark.parametrize('filename', [
@@ -75,4 +75,6 @@ def test_max_length_option(assert_errors, assert_error_text, options):
     visitor.run()
 
     assert_errors(visitor, [TooLongNameViolation])
-    assert_error_text(visitor, filename.replace('.py', ''))
+    assert_error_text(
+        visitor, filename.replace('.py', ''), option_values.max_name_length,
+    )

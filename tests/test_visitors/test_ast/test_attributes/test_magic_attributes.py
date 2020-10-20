@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.oop import (
@@ -142,45 +140,7 @@ def test_magic_attribute_is_restricted(
 
 
 @pytest.mark.parametrize('attribute', [
-    'regular',
-    '__doc__',
-    '__name__',
-    '__class__',
-    '__qualname__',
-])
-@pytest.mark.parametrize('code', [
-    magic_attribute_assigned,
-    magic_attribute_accessed,
-    magic_method_called,
-    magic_method_called_params,
-    magic_container_attribute,
-    magic_container_method,
-    magic_callable_attribute,
-])
-def test_regular_attributes(
-    assert_errors,
-    parse_ast_tree,
-    code,
-    attribute,
-    default_options,
-    mode,
-):
-    """Ensures that it is impossible to use magic attributes."""
-    tree = parse_ast_tree(mode(code.format(attribute)))
-
-    visitor = WrongAttributeVisitor(default_options, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [])
-
-
-@pytest.mark.parametrize('attribute', [
-    'regular',
-    '__magic__',  # errors
-    '__doc__',
-    '__name__',
-    '__class__',
-    '__qualname__',
+    '__magic__',
 ])
 @pytest.mark.parametrize('code', [
     magic_name_definition,
@@ -197,7 +157,7 @@ def test_regular_attributes(
     magic_super_cls_attribute,
     magic_super_cls_method,
 ])
-def test_whitelist_magic_attributes_are_allowed(
+def test_magic_attribute_correct_contexts(
     assert_errors,
     parse_ast_tree,
     code,
@@ -206,6 +166,60 @@ def test_whitelist_magic_attributes_are_allowed(
     mode,
 ):
     """Ensures that it is possible to use magic attributes."""
+    tree = parse_ast_tree(mode(code.format(attribute)))
+
+    visitor = WrongAttributeVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('attribute', [
+    'regular',
+    '__doc__',
+    '__name__',
+    '__class__',
+    '__qualname__',
+    '__subclasses__',
+    '__mro__',
+    '__version__',
+])
+@pytest.mark.parametrize('code', [
+    magic_attribute_assigned,
+    magic_attribute_accessed,
+    magic_method_called,
+    magic_method_called_params,
+    magic_container_attribute,
+    magic_container_method,
+    magic_callable_attribute,
+    magic_name_definition,
+    magic_name_attr_definition,
+    magic_self_attribute,
+    magic_self_method,
+    magic_cls_attribute,
+    magic_cls_method,
+    magic_attribute_definition,
+    magic_method_definition,
+    magic_classmethod_definition,
+    magic_super_attribute,
+    magic_super_method,
+    magic_super_cls_attribute,
+    magic_super_cls_method,
+])
+def test_whitelist_regular_attributes_allowed(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    attribute,
+    default_options,
+    mode,
+):
+    """
+    Tests if regular attributes are allowed.
+
+    Ensures that it is possible to use regular and
+    whitelisted magic attributes.
+    """
     tree = parse_ast_tree(mode(code.format(attribute)))
 
     visitor = WrongAttributeVisitor(default_options, tree=tree)

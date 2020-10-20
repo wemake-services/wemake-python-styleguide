@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
@@ -61,10 +59,10 @@ def function():
     return 3
 """
 
-correct_example8 = """
+correct_example8 = '''
 def function():
-    return None  # single `return None` statement
-"""
+    """some"""
+'''
 
 correct_example9 = """
 def function():
@@ -104,6 +102,23 @@ def function():
     return decorator
 """
 
+wrong_example5 = """
+def function():
+    return None
+"""
+
+wrong_example6 = '''
+def function():
+    """some"""
+    return None
+'''
+
+wrong_example7 = '''
+def function():
+    """some"""
+    return
+'''
+
 double_wrong_return1 = """
 def function():
     if some:
@@ -125,6 +140,9 @@ def function():
     wrong_example2,
     wrong_example3,
     wrong_example4,
+    wrong_example5,
+    wrong_example6,
+    wrong_example7,
 ])
 def test_wrong_return_statement(
     assert_errors,

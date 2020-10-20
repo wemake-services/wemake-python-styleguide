@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import importlib
 import inspect
 from operator import itemgetter

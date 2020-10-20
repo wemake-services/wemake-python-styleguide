@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
@@ -45,6 +43,7 @@ def test_correct_import(
 ])
 def test_incorrect_modules_import(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
     code,
     default_options,
@@ -56,6 +55,7 @@ def test_incorrect_modules_import(
     visitor.run()
 
     assert_errors(visitor, [ProtectedModuleViolation])
+    assert_error_text(visitor, '_protected')
 
 
 @pytest.mark.parametrize('code', [
@@ -64,6 +64,7 @@ def test_incorrect_modules_import(
 ])
 def test_incorrect_module_members_import(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
     code,
     default_options,
@@ -75,3 +76,4 @@ def test_incorrect_module_members_import(
     visitor.run()
 
     assert_errors(visitor, [ProtectedModuleMemberViolation])
+    assert_error_text(visitor, '_protected')

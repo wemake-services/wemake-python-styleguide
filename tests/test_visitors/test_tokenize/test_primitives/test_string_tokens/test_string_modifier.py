@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
+    RawStringNotNeededViolation,
     UppercaseStringModifierViolation,
 )
 from wemake_python_styleguide.visitors.tokenize.primitives import (
@@ -12,10 +11,10 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
 
 @pytest.mark.parametrize('modifier', [
     'r',
-    'b',
     'rb',
-    'f',
     'fr',
+    'b',
+    'f',
     '',  # special case, no modifier is used
 ])
 @pytest.mark.parametrize('primitive', [
@@ -40,7 +39,11 @@ def test_correct_prefix(
     visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
-    assert_errors(visitor, [])
+    assert_errors(
+        visitor,
+        [],
+        ignored_types=(RawStringNotNeededViolation,),
+    )
 
 
 @pytest.mark.parametrize('modifier', [
@@ -71,8 +74,12 @@ def test_uppercase_prefix(
     visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
-    assert_errors(visitor, [UppercaseStringModifierViolation])
-    assert_error_text(visitor, modifier)
+    assert_errors(
+        visitor,
+        [UppercaseStringModifierViolation],
+        ignored_types=(RawStringNotNeededViolation,),
+    )
+    assert_error_text(visitor, modifier, multiple=True)
 
 
 @pytest.mark.parametrize('modifier', [
@@ -106,4 +113,5 @@ def test_uppercase_prefix_multiple(
     assert_errors(visitor, [
         UppercaseStringModifierViolation,
         UppercaseStringModifierViolation,
+        RawStringNotNeededViolation,
     ])

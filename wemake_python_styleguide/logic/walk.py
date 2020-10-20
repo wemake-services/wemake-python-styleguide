@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from typing import Iterator, Optional, Type, TypeVar, Union
 
@@ -39,20 +37,9 @@ def get_closest_parent(
         parent = get_parent(parent)
 
 
-def is_child_of(node: ast.AST, parents: _IsInstanceContainer) -> bool:
-    """
-    Checks whether node is inside a given set of parents or not.
-
-    Goes up by the tree of ``node`` to check all parents.
-    Works with general types.
-    """
-    closest_parent = get_closest_parent(node, parents)
-    return closest_parent is not None
-
-
 def is_contained_by(node: ast.AST, container: ast.AST) -> bool:
     """
-    Tells you if a node is contained by a given node.
+    Tells you if a node is contained by a given container.
 
     Goes up by the tree of ``node`` to check all parents.
     Works with specific instances.

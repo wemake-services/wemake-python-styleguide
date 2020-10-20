@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Integration tests definition.
 
@@ -43,7 +41,7 @@ VERSION_SPECIFIC = types.MappingProxyType({
     'WPS224': 1,
 
     'WPS307': 1,
-    'WPS332': 0,  # TODO: add test case, only works for `>= python3.8`
+    'WPS332': 0,  # TODO: pyflakes fails at `:=` at the moment
 
     'WPS416': int(not PY38),  # only works for `< python3.8`
     'WPS451': int(PY38),  # only works for `>= python3.8`
@@ -59,7 +57,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS100': 0,  # logically unacceptable.
     'WPS101': 0,  # logically unacceptable.
     'WPS102': 0,  # logically unacceptable.
-    'WPS110': 3,
+    'WPS110': 4,
     'WPS111': 1,
     'WPS112': 1,
     'WPS113': 1,
@@ -73,6 +71,8 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS121': 1,
     'WPS122': 1,
     'WPS123': 1,
+    'WPS124': 1,
+    'WPS125': 1,
 
     'WPS200': 0,  # logically unacceptable.
     'WPS201': 0,  # defined in ignored violations.
@@ -106,6 +106,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS233': 1,
     'WPS234': 1,
     'WPS235': 1,
+    'WPS236': 1,
 
     'WPS300': 1,
     'WPS301': 1,
@@ -165,6 +166,9 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS355': 1,
     'WPS356': 1,
     'WPS357': 0,  # logically unacceptable.
+    'WPS358': 1,
+    'WPS359': 1,
+    'WPS360': 1,
 
     'WPS400': 0,  # defined in ignored violations.
     'WPS401': 0,  # logically unacceptable.
@@ -219,7 +223,12 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS450': 1,
     'WPS451': 0,  # defined in version specific table.
     'WPS452': 1,  # also defined in version specific table.
-    'WPS453': 1,
+    'WPS453': 0,
+    'WPS454': 1,
+    'WPS455': 1,
+    'WPS456': 1,
+    'WPS457': 1,
+    'WPS458': 1,
 
     'WPS500': 1,
     'WPS501': 1,
@@ -252,6 +261,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS528': 1,
     'WPS529': 1,
     'WPS530': 1,
+    'WPS531': 1,
 
     'WPS600': 1,
     'WPS601': 1,
@@ -267,6 +277,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS611': 1,
     'WPS612': 1,
     'WPS613': 1,
+    'WPS614': 1,
 })
 
 # Violations which may be tweaked by `i_control_code` option:

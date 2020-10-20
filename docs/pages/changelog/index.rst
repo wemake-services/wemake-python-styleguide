@@ -6,3 +6,4 @@
   :hidden:
 
   migration_to_0_11.rst
+  migration_to_0_14.rst

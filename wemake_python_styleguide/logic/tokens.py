@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import tokenize
 import types
 from typing import Container, FrozenSet, Iterable, List, Mapping, Tuple
@@ -21,21 +19,21 @@ ALLOWED_EMPTY_LINE_TOKENS: FrozenSet[int] = frozenset((
 ))
 
 
-def split_prefixes(token: tokenize.TokenInfo) -> Tuple[str, str]:
+def split_prefixes(string: str) -> Tuple[str, str]:
     """
-    Splits string token by prefixes and the quoted content.
+    Splits string repr by prefixes and the quoted content.
 
-    Returns the tuple of modifiers and untouched string contents.
+    Returns the tuple of modifiers and untouched internal string contents.
 
-    >>> import tokenize
-    >>> import token
-    >>> token = tokenize.TokenInfo(token.STRING, "Br'test'", 1, 9, "Br'test'")
-    >>> split_prefixes(token)
+    >>> split_prefixes("Br'test'")
     ('Br', "'test'")
 
+    >>> split_prefixes("'test'")
+    ('', "'test'")
+
     """
-    split = token.string.split(token.string[-1])
-    return split[0], token.string.replace(split[0], '', 1)
+    split = string.split(string[-1])
+    return split[0], string.replace(split[0], '', 1)
 
 
 def has_triple_string_quotes(string_contents: str) -> bool:

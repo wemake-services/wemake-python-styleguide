@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
@@ -368,7 +366,6 @@ def function():
     'raise TypeError(1)',
 ])
 @pytest.mark.parametrize('code', [
-    wrong_try_finally,
     wrong_except_finally,
     wrong_multiple_except_finally1,
     wrong_multiple_except_finally2,

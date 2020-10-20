@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Test to ensure that we count cognitive complexity correctly.
 

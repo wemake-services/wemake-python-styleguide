@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
@@ -113,7 +111,7 @@ def test_collection_with_pure_duplicate(
     element,
     default_options,
 ):
-    """Testing that pure elements can not be contained multiple times."""
+    """Testing that pure elements cannot be contained multiple times."""
     tree = parse_ast_tree(code.format(element, element))
 
     visitor = WrongCollectionVisitor(default_options, tree=tree)
@@ -138,7 +136,7 @@ def test_set_with_pure_duplicate(
     element,
     default_options,
 ):
-    """Testing that pure elements can not be contained multiple times."""
+    """Testing that pure elements cannot be contained multiple times."""
     tree = parse_ast_tree(code.format(element, element))
 
     visitor = WrongCollectionVisitor(default_options, tree=tree)

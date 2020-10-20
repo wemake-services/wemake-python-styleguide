@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
@@ -131,7 +129,6 @@ some = [
     correct_annotated_variable,
     correct_function,
     correct_multiline_function,
-    correct_multiline_call,
     correct_multiline_list,
     correct_multiline_tuple,
     correct_multiline_dict,

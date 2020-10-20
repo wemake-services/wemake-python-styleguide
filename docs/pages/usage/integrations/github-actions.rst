@@ -1,13 +1,13 @@
-Github Actions
+GitHub Actions
 --------------
 
 .. image:: https://github.com/wemake-services/wemake-python-styleguide/workflows/wps/badge.svg
-  :alt: Github Action badge
+  :alt: GitHub Action badge
   :target: https://github.com/wemake-services/wemake-python-styleguide/actions
 
-Good news: we ship pre-built Github Action with this project.
+Good news: we ship pre-built GitHub Action with this project.
 
-You can use it from the `Github Marketplace <https://github.com/marketplace/actions/wemake-python-styleguide>`_:
+You can use it from the `GitHub Marketplace <https://github.com/marketplace/actions/wemake-python-styleguide>`_:
 
 .. code:: yaml
 

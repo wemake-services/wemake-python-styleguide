@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.refactoring import (
@@ -36,6 +34,15 @@ else:
             ...
 """
 
+correct_else_if = """
+if some:
+    ...
+else:
+    if other:
+        ...
+    ...
+"""
+
 # Wrong:
 
 implicit_elif = """
@@ -44,6 +51,16 @@ if some:
 else:
     if other:
         ...
+"""
+
+implicit_elif_nested_if = """
+if some:
+    ...
+else:
+    if other:
+        ...
+        if more:
+            ...
 """
 
 # False positives, triggered by other constructs with `else` clause
@@ -82,6 +99,7 @@ technically_correct_token_stream = """
     elif_cases,
     if_expression_in_else,
     not_direct_parent,
+    correct_else_if,
 ])
 def test_correct_if_statements(
     code,
@@ -100,6 +118,7 @@ def test_correct_if_statements(
 
 @pytest.mark.parametrize('code', [
     implicit_elif,
+    implicit_elif_nested_if,
 ])
 def test_implicit_elif_statements(
     code,

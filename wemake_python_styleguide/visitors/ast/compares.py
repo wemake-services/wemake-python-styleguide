@@ -1,13 +1,11 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from typing import ClassVar, List, Optional, Sequence
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import AssignNodes
+from wemake_python_styleguide.compat.aliases import AssignNodes, TextNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
-from wemake_python_styleguide.logic import nodes, source
+from wemake_python_styleguide.logic import nodes, source, walk
 from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
 from wemake_python_styleguide.logic.tree import (
     compares,
@@ -15,6 +13,7 @@ from wemake_python_styleguide.logic.tree import (
     ifs,
     operators,
 )
+from wemake_python_styleguide.logic.walrus import get_assigned_expr
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     HeterogenousCompareViolation,
@@ -76,8 +75,8 @@ class CompareSanityVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_literal_compare(self, node: ast.Compare) -> None:
-        last_was_literal = nodes.is_literal(node.left)
-        for comparator in node.comparators:
+        last_was_literal = nodes.is_literal(get_assigned_expr(node.left))
+        for comparator in map(get_assigned_expr, node.comparators):
             next_is_literal = nodes.is_literal(comparator)
             if last_was_literal and next_is_literal:
                 self.add_violation(ConstantCompareViolation(node))
@@ -85,19 +84,22 @@ class CompareSanityVisitor(BaseNodeVisitor):
             last_was_literal = next_is_literal
 
     def _check_useless_compare(self, node: ast.Compare) -> None:
-        last_variable = node.left
-        for next_variable in node.comparators:
+        last_variable = get_assigned_expr(node.left)
+        for next_variable in map(get_assigned_expr, node.comparators):
             if is_same_variable(last_variable, next_variable):
                 self.add_violation(UselessCompareViolation(node))
                 break
             last_variable = next_variable
 
     def _check_unpythonic_compare(self, node: ast.Compare) -> None:
-        all_nodes = [node.left, *node.comparators]
+        all_nodes = list(
+            map(get_assigned_expr, (node.left, *node.comparators)),
+        )
 
         for index, compare in enumerate(all_nodes):
             if not isinstance(compare, ast.Call):
                 continue
+
             if functions.given_function_called(compare, {'len'}):
                 ps = index - len(all_nodes) + 1
                 if not _is_correct_len(node.ops[ps], node.comparators[ps]):
@@ -144,8 +146,7 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
 
         # We allow `ast.NameConstant`
         ast.Num,
-        ast.Bytes,
-        ast.Str,
+        *TextNodes,
     )
 
     def visit_Compare(self, node: ast.Compare) -> None:
@@ -168,13 +169,13 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
     def _check_constant(self, op: ast.cmpop, comparator: ast.expr) -> None:
         if not isinstance(op, (ast.Eq, ast.NotEq, ast.Is, ast.IsNot)):
             return
-
-        if not isinstance(comparator, (ast.List, ast.Dict, ast.Tuple)):
+        real = get_assigned_expr(comparator)
+        if not isinstance(real, (ast.List, ast.Dict, ast.Tuple)):
             return
 
-        length = len(comparator.keys) if isinstance(
-            comparator, ast.Dict,
-        ) else len(comparator.elts)
+        length = len(real.keys) if isinstance(
+            real, ast.Dict,
+        ) else len(real.elts)
 
         if not length:
             self.add_violation(FalsyConstantCompareViolation(comparator))
@@ -187,14 +188,16 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
         if not isinstance(op, (ast.Is, ast.IsNot)):
             return
 
-        unwrapped = operators.unwrap_unary_node(comparator)
+        unwrapped = operators.unwrap_unary_node(
+            get_assigned_expr(comparator),
+        )
         if isinstance(unwrapped, self._forbidden_for_is):
             self.add_violation(WrongIsCompareViolation(comparator))
 
 
 @final
-class WrongComparisionOrderVisitor(BaseNodeVisitor):
-    """Restricts comparision where argument doesn't come first."""
+class WrongComparisonOrderVisitor(BaseNodeVisitor):
+    """Restricts comparison where argument doesn't come first."""
 
     _allowed_left_nodes: ClassVar[AnyNodes] = (
         ast.Name,
@@ -211,7 +214,7 @@ class WrongComparisionOrderVisitor(BaseNodeVisitor):
 
     def visit_Compare(self, node: ast.Compare) -> None:
         """
-        Forbids comparision where argument doesn't come first.
+        Forbids comparison where argument doesn't come first.
 
         Raises:
             CompareOrderViolation
@@ -249,7 +252,7 @@ class WrongComparisionOrderVisitor(BaseNodeVisitor):
         self,
         comparators: Sequence[ast.AST],
     ) -> bool:
-        for right in comparators:
+        for right in map(get_assigned_expr, comparators):
             if isinstance(right, self._allowed_left_nodes):
                 return True
             if isinstance(right, ast.BinOp):
@@ -259,7 +262,7 @@ class WrongComparisionOrderVisitor(BaseNodeVisitor):
         return False
 
     def _check_ordering(self, node: ast.Compare) -> None:
-        if self._is_left_node_valid(node.left):
+        if self._is_left_node_valid(get_assigned_expr(node.left)):
             return
 
         if self._is_special_case(node):
@@ -284,9 +287,8 @@ class WrongConditionalVisitor(BaseNodeVisitor):
 
     _forbidden_nodes: ClassVar[AnyNodes] = (
         # Constants:
+        *TextNodes,
         ast.Num,
-        ast.Str,
-        ast.Bytes,
         ast.NameConstant,
 
         # Collections:
@@ -297,7 +299,7 @@ class WrongConditionalVisitor(BaseNodeVisitor):
     )
 
     _forbidden_expression_parents: ClassVar[AnyNodes] = (
-        ast.If,
+        ast.IfExp,
         ast.BoolOp,
         ast.BinOp,
         ast.UnaryOp,
@@ -318,10 +320,47 @@ class WrongConditionalVisitor(BaseNodeVisitor):
             self._check_simplifiable_if(node)
         else:
             self._check_simplifiable_ifexpr(node)
-            self._check_nested_ifexpr(node)
 
+        self._check_nested_ifexpr(node)
         self._check_constant_condition(node)
         self.generic_visit(node)
+
+    def _check_constant_condition(self, node: AnyIf) -> None:
+        real_node = operators.unwrap_unary_node(
+            get_assigned_expr(node.test),
+        )
+
+        if isinstance(real_node, self._forbidden_nodes):
+            self.add_violation(ConstantConditionViolation(node))
+
+    def _check_simplifiable_if(self, node: ast.If) -> None:
+        if not ifs.is_elif(node) and not ifs.root_if(node):
+            body_var = self._is_simplifiable_assign(node.body)
+            else_var = self._is_simplifiable_assign(node.orelse)
+            if body_var and body_var == else_var:
+                self.add_violation(SimplifiableIfViolation(node))
+
+    def _check_simplifiable_ifexpr(self, node: ast.IfExp) -> None:
+        conditions = set()
+        if isinstance(node.body, ast.NameConstant):
+            conditions.add(node.body.value)
+        if isinstance(node.orelse, ast.NameConstant):
+            conditions.add(node.orelse.value)
+
+        if conditions == {True, False}:
+            self.add_violation(SimplifiableIfViolation(node))
+
+    def _check_nested_ifexpr(self, node: AnyIf) -> None:
+        is_nested_in_if = bool(
+            isinstance(node, ast.If) and
+            list(walk.get_subnodes_by_type(node.test, ast.IfExp)),
+        )
+        is_nested_poorly = walk.get_closest_parent(
+            node, self._forbidden_expression_parents,
+        )
+
+        if is_nested_in_if or is_nested_poorly:
+            self.add_violation(NestedTernaryViolation(node))
 
     def _is_simplifiable_assign(
         self,
@@ -340,33 +379,6 @@ class WrongConditionalVisitor(BaseNodeVisitor):
             return None
 
         return source.node_to_string(targets[0])
-
-    def _check_constant_condition(self, node: AnyIf) -> None:
-        real_node = operators.unwrap_unary_node(node.test)
-        if isinstance(real_node, self._forbidden_nodes):
-            self.add_violation(ConstantConditionViolation(node))
-
-    def _check_simplifiable_if(self, node: ast.If) -> None:
-        if not ifs.has_elif(node) and not ifs.root_if(node):
-            body_var = self._is_simplifiable_assign(node.body)
-            else_var = self._is_simplifiable_assign(node.orelse)
-            if body_var and body_var == else_var:
-                self.add_violation(SimplifiableIfViolation(node))
-
-    def _check_simplifiable_ifexpr(self, node: ast.IfExp) -> None:
-        conditions = set()
-        if isinstance(node.body, ast.NameConstant):
-            conditions.add(node.body.value)
-        if isinstance(node.orelse, ast.NameConstant):
-            conditions.add(node.orelse.value)
-
-        if conditions == {True, False}:
-            self.add_violation(SimplifiableIfViolation(node))
-
-    def _check_nested_ifexpr(self, node: ast.IfExp) -> None:
-        parent = nodes.get_parent(node)
-        if isinstance(parent, self._forbidden_expression_parents):
-            self.add_violation(NestedTernaryViolation(node))
 
 
 @final
@@ -434,19 +446,19 @@ class InCompareSanityVisitor(BaseNodeVisitor):
             if not isinstance(op, self._in_nodes):
                 continue
 
-            self._check_single_item_container(comp)
-            self._check_wrong_comparators(comp)
+            real = get_assigned_expr(comp)
+            self._check_single_item_container(real)
+            self._check_wrong_comparators(real)
 
     def _check_single_item_container(self, node: ast.AST) -> None:
-        is_lists_violated = (
+        is_text_violated = isinstance(node, TextNodes) and len(node.s) == 1
+        is_dict_violated = isinstance(node, ast.Dict) and len(node.keys) == 1
+        is_iter_violated = (
             isinstance(node, (ast.List, ast.Tuple, ast.Set)) and
             len(node.elts) == 1
         )
 
-        is_str_violated = isinstance(node, ast.Str) and len(node.s) == 1
-        is_dict_violated = isinstance(node, ast.Dict) and len(node.keys) == 1
-
-        if is_lists_violated or is_str_violated or is_dict_violated:
+        if is_text_violated or is_dict_violated or is_iter_violated:
             self.add_violation(InCompareWithSingleItemContainerViolation(node))
 
     def _check_wrong_comparators(self, node: ast.AST) -> None:

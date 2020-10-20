@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 We use direct string assertiong on the formatter.
 
@@ -35,6 +33,8 @@ def _safe_output(output: str) -> str:
 
     So our formatter will be tested on all versions correctly.
     """
+    assert pkg_version, 'Looks like version is broken'
+
     current_version_url = WemakeFormatter._doc_url  # noqa: WPS437
     general_version_url = current_version_url.replace(pkg_version, 'xx.xx')
     return output.replace(current_version_url, general_version_url)

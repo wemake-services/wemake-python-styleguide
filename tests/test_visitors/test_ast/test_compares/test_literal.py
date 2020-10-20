@@ -1,16 +1,18 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.consistency import (
     ConstantCompareViolation,
     ReversedComplexCompareViolation,
 )
 from wemake_python_styleguide.visitors.ast.compares import CompareSanityVisitor
 
-if_with_chained_compares1 = 'if 0 < {0} < {1}: ...'
-if_with_chained_compares2 = 'if {0} > {1} > 0: ...'
-if_with_chained_compares3 = 'if -1 > {0} > {1} > 0: ...'
+chained_compares1 = '0 < {0} < {1}'
+chained_compares2 = '{0} > {1} > 0'
+chained_compares3 = '-1 > {0} > {1} > 0'
+
+walrus_compares1 = '(x := {0}) > {1} > 1'
+walrus_compares2 = '{0} > (x := {1}) > 1'
 
 
 @pytest.mark.filterwarnings('ignore::SyntaxWarning')
@@ -59,8 +61,8 @@ def test_literal(
 
 
 @pytest.mark.parametrize('code', [
-    if_with_chained_compares1,
-    if_with_chained_compares3,
+    chained_compares1,
+    chained_compares3,
 ])
 @pytest.mark.parametrize('comparators', [
     (1, 'first_name'),
@@ -83,8 +85,16 @@ def test_literal_special1(
 
 
 @pytest.mark.parametrize('code', [
-    if_with_chained_compares2,
-    if_with_chained_compares3,
+    chained_compares2,
+    chained_compares3,
+    pytest.param(
+        walrus_compares1,
+        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
+    ),
+    pytest.param(
+        walrus_compares2,
+        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
+    ),
 ])
 @pytest.mark.parametrize('comparators', [
     ('first_name', 1),
@@ -111,9 +121,17 @@ def test_literal_special2(
 
 
 @pytest.mark.parametrize('code', [
-    if_with_chained_compares1,
-    if_with_chained_compares2,
-    if_with_chained_compares3,
+    chained_compares1,
+    chained_compares2,
+    chained_compares3,
+    pytest.param(
+        walrus_compares1,
+        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
+    ),
+    pytest.param(
+        walrus_compares2,
+        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
+    ),
 ])
 def test_literal_special_without_errors(
     assert_errors,
