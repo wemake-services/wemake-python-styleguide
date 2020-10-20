@@ -73,6 +73,7 @@ Summary
    BaseExceptionRaiseViolation
    NonTrivialExceptViolation
    FloatingNanViolation
+   InfiniteWhileLoopViolation
 
 Best practices
 --------------
@@ -134,6 +135,7 @@ Best practices
 .. autoclass:: BaseExceptionRaiseViolation
 .. autoclass:: NonTrivialExceptViolation
 .. autoclass:: FloatingNanViolation
+.. autoclass:: InfiniteWhileLoopViolation
 
 """
 
@@ -2223,3 +2225,33 @@ class FloatingNanViolation(ASTViolation):
 
     error_template = 'Found "NaN" as argument to float()'
     code = 456
+
+
+@final
+class InfiniteWhileLoopViolation(ASTViolation):
+    """
+    Forbids use of infinite ``while True:`` loops.
+
+    Reasoning:
+        Infinite loops will cause bugs in code.
+
+    Solution:
+        Add either a return, raise, or break to handle the infinite loop.
+
+    Example::
+
+        # Correct:
+        while True:
+            print('forever')
+            break
+
+        # Wrong:
+        while True:
+            print('forever')
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found an infinite while loop'
+    code = 457
