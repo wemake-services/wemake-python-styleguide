@@ -35,14 +35,14 @@ Conventions
 Deprecating a violation
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-When you want to mark some violation as deprecated,
+When you want to mark some violation as depracated,
 then assign ``deprecated`` boolean flag to it:
 
 .. code:: python
 
   @final
   class SomeViolation(ASTViolation):
-      deprecated = True
+      depracated = True
 
 Reference
 ~~~~~~~~~
@@ -87,7 +87,7 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
 
     Attributes:
         error_template: message that will be shown to user after formatting.
-        code: unique violation number. Used to identify the violation.
+        code: violation unique number. Used to identify the violation.
         previous_codes: just a documentation thing to track changes in time.
         deprecated: indicates that this violation will be removed soon.
         postfix_template: indicates message that we show at the very end.
