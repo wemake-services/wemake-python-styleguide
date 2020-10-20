@@ -26,7 +26,7 @@ Summary
    YieldMagicMethodViolation
    UselessOverwrittenMethodViolation
    WrongSuperCallAccessViolation
-   MethodDecoratorUsedForFunctionViolation
+   WrongDescriptorDecoratorViolation
 
 Respect your objects
 --------------------
@@ -45,7 +45,7 @@ Respect your objects
 .. autoclass:: YieldMagicMethodViolation
 .. autoclass:: UselessOverwrittenMethodViolation
 .. autoclass:: WrongSuperCallAccessViolation
-.. autoclass:: MethodDecoratorUsedForFunctionViolation
+.. autoclass:: WrongDescriptorDecoratorViolation
 
 """
 
@@ -580,7 +580,7 @@ class WrongSuperCallAccessViolation(ASTViolation):
 
 
 @final
-class MethodDecoratorUsedForFunctionViolation(ASTViolation):
+class WrongDescriptorDecoratorViolation(ASTViolation):
     """
     Forbids descriptors in regular functions.
 

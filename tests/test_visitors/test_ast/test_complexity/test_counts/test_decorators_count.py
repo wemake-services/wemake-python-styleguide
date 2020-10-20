@@ -3,9 +3,6 @@ import pytest
 from wemake_python_styleguide.violations.complexity import (
     TooManyDecoratorsViolation,
 )
-from wemake_python_styleguide.violations.oop import (
-    MethodDecoratorUsedForFunctionViolation,
-)
 from wemake_python_styleguide.visitors.ast.complexity.counts import (
     ModuleMembersVisitor,
 )

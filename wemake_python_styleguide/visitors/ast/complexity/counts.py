@@ -1,6 +1,6 @@
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, FrozenSet, List, Union
+from typing import DefaultDict, List, Union
 
 from typing_extensions import final
 
@@ -8,7 +8,7 @@ from wemake_python_styleguide import constants
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree.functions import is_method
 from wemake_python_styleguide.types import AnyFunctionDef
-from wemake_python_styleguide.violations import complexity, oop
+from wemake_python_styleguide.violations import complexity
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
@@ -26,12 +26,6 @@ _ModuleMembers = Union[AnyFunctionDef, ast.ClassDef]
 class ModuleMembersVisitor(BaseNodeVisitor):
     """Counts classes and functions in a module."""
 
-    _descriptor_decorators: ClassVar[FrozenSet[str]] = frozenset((
-        'classmethod',
-        'staticmethod',
-        'property',
-    ))
-
     def __init__(self, *args, **kwargs) -> None:
         """Creates a counter for tracked metrics."""
         super().__init__(*args, **kwargs)
@@ -47,7 +41,6 @@ class ModuleMembersVisitor(BaseNodeVisitor):
         """
         self._check_decorators_count(node)
         self._check_members_count(node)
-        self._check_method_decorators(node)
         self.generic_visit(node)
 
     def _check_members_count(self, node: _ModuleMembers) -> None:
@@ -66,21 +59,6 @@ class ModuleMembersVisitor(BaseNodeVisitor):
                     text=str(number_of_decorators),
                     baseline=self.options.max_decorators,
                 ),
-            )
-
-    def _check_method_decorators(self, node: _ModuleMembers) -> None:
-        if isinstance(get_parent(node), ast.ClassDef):
-            return  # classes can contain descriptors
-
-        method_decorators = [
-            decorator.id in self._descriptor_decorators
-            for decorator in node.decorator_list
-            if isinstance(decorator, ast.Name)
-        ]
-
-        if any(method_decorators):
-            self.add_violation(
-                oop.MethodDecoratorUsedForFunctionViolation(node),
             )
 
     def _post_visit(self) -> None:
