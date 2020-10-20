@@ -8,14 +8,8 @@ Semantic versioning in our case means:
 - Minor releases do bring new features and configuration options. New violations can be added. Code that passes `x.0.y` might not pass on `x.1.y` release.
 - Major releases inidicate significant milestones or serious breaking changes.
 
-## 0.15.0 WIP
 
-### Features
-
-- Forbids to unpack iterable objects to lists #1259
-
-
-## 0.16.0
+## 0.15.0
 
 ### Features
 
@@ -24,21 +18,7 @@ Semantic versioning in our case means:
 - Forbids using `float("NaN")`.
 - Allow `__call__` method to be asynchronous
 - Allows common strings not to be counted against string constant overuse limit
-
-### Bugfixes
-
-- Fixes fails of annotation complexity on `Literal[""]`.
-
-### Misc
-
-- Introduce helper script to check for missing calls to `self.generic_visit(node)` in AST visitors
-- Updates `poetry` version to `1.1`
-
-
-## 0.15.0 aka New runtime
-
-### Features
-
+- Forbids to unpack iterable objects to lists #1259
 - Forbids to use single `return None`
 - Add `__await__` to the list of priority magic methods
 - Forbids to use float zeros (`0.0`)
@@ -48,6 +28,7 @@ Semantic versioning in our case means:
 
 ### Bugfixes
 
+- Fixes fails of annotation complexity on `Literal[""]`
 - Fixes how wrong variable names were checked case sensitive with `WPS110`
 - Fixes false positives DirectMagicAttributeAccessViolation with `__mro__`, `__subclasses__` and `__version__`
 - Make `WPS326` work when there is comment between string literals
@@ -60,6 +41,8 @@ Semantic versioning in our case means:
 - Updates lots of dependenices
 - Fixed documentation for TooManyPublicAttributesViolation
 - Updated isort config
+- Introduce helper script to check for missing calls to `self.generic_visit(node)` in AST visitors
+- Updates `poetry` version to `1.1`
 
 
 ## 0.14.0 aka The Walrus fighter

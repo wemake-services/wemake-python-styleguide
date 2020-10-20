@@ -2190,7 +2190,7 @@ class NonTrivialExceptViolation(ASTViolation):
         except TypeError or ValueError:
             ...
 
-    .. versionadded:: 0.16.0
+    .. versionadded:: 0.15.0
 
     """
 
@@ -2218,7 +2218,7 @@ class FloatingNanViolation(ASTViolation):
         # Wrong:
         min(float("NAN"), 3)
 
-    .. versionadded:: 0.16.0
+    .. versionadded:: 0.15.0
 
     """
 
