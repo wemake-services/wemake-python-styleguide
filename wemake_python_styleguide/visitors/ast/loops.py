@@ -170,7 +170,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_loop_needs_else(self, node: AnyLoop) -> None:
-        if node.orelse and not loops.has_break(node):
+        if node.orelse and not loops.has_break(node, break_nodes=(ast.Break,)):
             self.add_violation(UselessLoopElseViolation(node))
 
     def _check_lambda_inside_loop(

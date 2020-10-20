@@ -78,9 +78,6 @@ AnyNodes = Tuple[Type[ast.AST], ...]
 #: When we search for assign elements, we also need typed assign.
 AnyAssign = Union[ast.Assign, ast.AnnAssign]
 
-#: In cases we need to work with both for and while loops.
-AnyLoop = Union[AnyFor, ast.While]
-
 #: That's how we define context of operations.
 ContextNodes = Union[
     ast.Module,
