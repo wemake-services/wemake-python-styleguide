@@ -112,7 +112,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
                 ),
             )
 
-    def _is_exception(self, node: AnyText) -> bool:
+    def _is_exception(self, parent: Optional[ast.AST]) -> bool:
         """
         Check if the string with modulo patterns is in an exceptional situation.
 
@@ -126,7 +126,6 @@ class WrongStringVisitor(base.BaseNodeVisitor):
             'execute',  # For psycopg2's cur.execute()
         )
 
-        parent = nodes.get_parent(node)
         if parent and isinstance(parent, ast.Call):
 
             func_name = getattr(parent.func, 'attr', None)
@@ -146,7 +145,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
             return  # we allow `%s` in docstrings: they cannot be formatted.
 
         if self._modulo_string_pattern.search(text_data):
-            if not self._is_exception(node):
+            if not self._is_exception(parent):
                 self.add_violation(
                     consistency.ModuloStringFormatViolation(node),
                 )
