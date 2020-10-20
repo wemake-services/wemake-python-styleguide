@@ -165,7 +165,8 @@ class TooManyImportsViolation(SimpleViolation):
         ``from package import module`` and then
         use it like ``module.function()``.
 
-        Or refactor your code and split the complex module into several modules.
+        Or refactor your code and split the complex module
+        into several modules.
 
     We do not make any distinction between
     ``import`` and ``from ... import ...``.
@@ -969,7 +970,8 @@ class TooManyPublicAttributesViolation(ASTViolation):
     Solution:
         Make some attributes protected.
         Split this class into several.
-        If the class is a Data Transfer Object, then use ``@dataclass`` decorator.
+        If the class is a Data Transfer Object,
+        then use ``@dataclass`` decorator.
 
     Configuration:
         This rule is configurable with ``--max-attributes``.
@@ -990,7 +992,7 @@ class TooManyPublicAttributesViolation(ASTViolation):
 @final
 class CognitiveComplexityViolation(ASTViolation):
     """
-    Forbid functions with cognitive complexity that is too high.
+    Forbid functions with too much cognitive complexity.
 
     Reasoning:
         People are not great at reading and interpreting code in their heads.
@@ -1016,7 +1018,7 @@ class CognitiveComplexityViolation(ASTViolation):
 
     """
 
-    error_template = 'Found function with cognitive complexity that is too high: {0}'
+    error_template = 'Found function with too much cognitive complexity: {0}'
     code = 231
 
 
