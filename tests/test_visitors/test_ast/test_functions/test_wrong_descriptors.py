@@ -1,8 +1,5 @@
 import pytest
 
-from wemake_python_styleguide.violations.complexity import (
-    TooManyDecoratorsViolation,
-)
 from wemake_python_styleguide.violations.oop import (
     WrongDescriptorDecoratorViolation,
 )
