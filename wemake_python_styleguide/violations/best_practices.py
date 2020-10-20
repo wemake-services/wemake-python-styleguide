@@ -1,12 +1,12 @@
 """
 These checks ensure that you follow the best practices.
 
-The source for these best practices are inside countless hours
+The source for these best practices is countless hours
 we have spent debugging software or reviewing it.
 
 How do we find inspiration for new rules?
-We find some ugly code during code reviews and audits.
-Then we forbid to use those code forever.
+We find some ugly code during code reviews and audits,
+then we forbid the use of code like it forever.
 
 .. currentmodule:: wemake_python_styleguide.violations.best_practices
 
@@ -151,7 +151,7 @@ class WrongMagicCommentViolation(SimpleViolation):
     """
     Restrict various control (such as magic) comments.
 
-    We do not allow to use:
+    We do not allow:
 
     1. ``# noqa`` comment without specified violations
     2. ``# type: some_type`` comments to specify a type for ``typed_ast``
@@ -160,16 +160,16 @@ class WrongMagicCommentViolation(SimpleViolation):
     so it cannot be locally ignored.
 
     Reasoning:
-        We cover several different use-cases in a single rule.
+        We cover several use-cases in a single rule.
         ``# noqa`` comment is restricted because it can hide other violations.
-        ``# type: some_type`` comment is restricted because we can already use type annotations instead.
+        ``# type: some_type`` comment is restricted because we can use type annotations instead.
 
     Solution:
         Use ``# noqa`` comments with specified error types.
         Use type annotations to specify types.
 
-    We still allow using ``# type: ignore`` comment.
-    Since sometimes it is required.
+    We still allow using ``# type: ignore`` comment,
+    since sometimes it is required.
 
     Example::
 
@@ -200,12 +200,12 @@ class WrongDocCommentViolation(TokenizeViolation):
     Forbid empty doc comments (``#:``).
 
     Reasoning:
-        Doc comments are used to provide documentation.
-        But supplying empty doc comments breaks this use-case.
+        Doc comments are used to provide documentation
+        but supplying empty doc comments breaks this use-case.
         It is unclear why they can be used with no contents.
 
     Solution:
-        Add some documentation to this comment. Or remove it.
+        Add some documentation to this comment or remove it.
 
     Empty doc comments are not caught by the default ``pycodestyle`` checks.
 
@@ -232,10 +232,10 @@ class OveruseOfNoqaCommentViolation(SimpleViolation):
     """
     Forbid too many ``# noqa`` comments.
 
-    We count it on a per-module basis.
+    We count them on a per-module basis.
 
     Reasoning:
-        Having too many ``# noqa`` comments make your code
+        Having too many ``# noqa`` comments makes your code
         less readable and indicates that there's something
         wrong with it.
 
@@ -261,15 +261,15 @@ class OveruseOfNoCoverCommentViolation(SimpleViolation):
     """
     Forbid too many ``# pragma: no cover`` comments.
 
-    We count it on a per-module basis.
+    We count them on a per-module basis.
     We use :str:`wemake_python_styleguide.constants.MAX_NO_COVER_COMMENTS`
     as a default value.
 
     Reasoning:
         Having too many ``# pragma: no cover`` comments
-        indicates that there's something wrong with it.
+        indicates that there's something wrong with the code.
         Moreover, it makes your tests useless, since they do not cover
-        a big partition of your code.
+        a big portion of your code.
 
     Solution:
         Refactor your code to match the style.
@@ -434,7 +434,7 @@ class SameElementsInConditionViolation(ASTViolation):
         or just over-complicating your design.
 
     Solution:
-        Remove the duplicating condition.
+        Remove the duplicated condition.
 
     Example::
 
@@ -564,14 +564,14 @@ class InitModuleHasLogicViolation(SimpleViolation):
         It means several things:
 
         1. you are keeping some outdated stuff there, you need to refactor
-        2. you are placing this logic into the wrong file,
+        2. you are placing this logic in the wrong file,
            just create another one
         3. you are doing some dark magic, and you should not do that
 
     Solution:
         Put your code in other modules.
 
-    However, we allow to have some contents inside the ``__init__`` module:
+    However, we allow some contents inside the ``__init__`` module:
 
     1. comments, since they are dropped before AST comes in play
     2. docstrings are used sometimes when required to state something
@@ -628,13 +628,13 @@ class WrongUnpackingViolation(ASTViolation):
     Reasoning:
         Having unpacking with side-effects is very dirty.
         You might get in serious and very hard-to-debug troubles because of
-        this technique. So, do not use it.
+        this technique so do not use it.
 
         This includes assigning to attributes, as this results in modifying
         the instance. Every modification should be explicit on it's own line.
 
     Solution:
-        Use unpacking with only variables, not any other entities.
+        Use unpacking only with variables, not any other entities.
 
     Example::
 
@@ -710,12 +710,12 @@ class YieldInComprehensionViolation(ASTViolation):
 
     Reasoning:
         Having the ``yield`` keyword inside comprehensions is error-prone.
-        You can shoot yourself in a foot by
+        You can shoot yourself in the foot by
         an inaccurate usage of this feature.
 
     Solution:
-        Use regular ``for`` loops with ``yield`` keywords.
-        Or create a separate generator function.
+        Use regular ``for`` loops with ``yield`` keywords
+        or create a separate generator function.
 
     Example::
 
@@ -747,7 +747,7 @@ class NonUniqueItemsInHashViolation(ASTViolation):
     Reasoning:
         When you explicitly put duplicate items
         in ``set`` literals or in ``dict`` keys
-        it just does not make any sense. Since hashes cannot contain
+        it just does not make any sense since hashes cannot contain
         duplicate items and they will be removed anyway.
 
     Solution:
@@ -880,7 +880,7 @@ class WrongKeywordViolation(ASTViolation):
     Forbid some ``python`` keywords.
 
     Reasoning:
-        Using some keywords generally gives you more pain than relieves.
+        Using some keywords generally causes more pain than it relieves.
 
         ``del`` keyword is not composable with other functions,
         you cannot pass it as a regular function.
@@ -893,8 +893,8 @@ class WrongKeywordViolation(ASTViolation):
         Because it does literally nothing.
 
         ``global`` and ``nonlocal`` promote bad-practices of having an external
-        mutable state somewhere. This solution does not scale.
-        And leads to multiple possible mistakes in the future.
+        mutable state somewhere. This solution does not scale
+        and leads to multiple possible mistakes in the future.
 
     Solution:
         Solutions differ from keyword to keyword.
@@ -918,7 +918,7 @@ class WrongFunctionCallViolation(ASTViolation):
     Reasoning:
         Some functions are only suitable
         for very specific use cases,
-        we forbid to use them in a free manner.
+        we forbid the use of them in a free manner.
 
     See
     :py:data:`~wemake_python_styleguide.constants.FUNCTIONS_BLACKLIST`
@@ -974,8 +974,8 @@ class RaiseNotImplementedViolation(ASTViolation):
     Forbid ``NotImplemented`` exception.
 
     Reasoning:
-        These two exceptions look similar.
-        But, they have different use cases.
+        ``NotImplemented`` and ``NotImplementedError`` look similar
+        but they have different use cases.
         Use cases of ``NotImplemented`` are too limited
         to be generally available.
 
@@ -1042,13 +1042,12 @@ class BooleanPositionalArgumentViolation(ASTViolation):
     Forbid booleans as non-keyword parameters.
 
     Reasoning:
-        Passing boolean as regular positional parameters
-        are very non-descriptive.
-        It is almost impossible to tell, what does this
-        parameter mean.
-        And you almost always have to look up the implementation
+        Passing booleans as regular positional parameters
+        is very non-descriptive.
+        It is almost impossible to tell what this
+        parameter means and you almost always have to look up the implementation
         to tell what is going on.
-        The only exception from this rule is passing booleans as a
+        The only exception from this rule is passing a boolean as a
         non-keyword argument when it is the only passed argument.
 
 
@@ -1135,8 +1134,8 @@ class UnreachableCodeViolation(ASTViolation):
         It also demotivates team members.
 
     Solution:
-        Delete any unreachable code you have.
-        Or refactor it, if this happens by your mistake.
+        Delete any unreachable code you have or refactor it, 
+        if this happens by your mistake.
 
     Example::
 
@@ -1172,8 +1171,8 @@ class StatementHasNoEffectViolation(ASTViolation):
         They just pollute your codebase and do nothing.
 
     Solution:
-        Refactor your code in case it was a typo or error.
-        Or just delete this code.
+        Refactor your code in case it was a typo or error
+        or just delete this code.
 
     Example::
 
@@ -1203,7 +1202,7 @@ class MultipleAssignmentsViolation(ASTViolation):
 
     Reasoning:
         Multiple assignments on the same line might not do what you think
-        they do. They can also grow pretty long. And you will not notice
+        they do. They can also grow pretty long and you might not notice
         the rising complexity of your code.
 
     Solution:
@@ -1235,15 +1234,15 @@ class NestedFunctionViolation(ASTViolation):
 
     Reasoning:
         Nesting functions is bad practice.
-        It is hard to test them, it is hard then to separate them.
+        It is hard to test them and it is hard to separate them later.
         People tend to overuse closures, so it's hard to manage the dataflow.
 
     Solution:
         Just write flat functions, there's no need to nest them.
-        Pass parameters as normal arguments, do not use closures.
-        Until you need them for decorators or factories.
+        Pass parameters as normal arguments, do not use closures
+        until you need them for decorators or factories.
 
-    We also disallow to nest ``lambda`` and ``async`` functions.
+    We also forbid nesting ``lambda`` and ``async`` functions.
 
     See
     :py:data:`~wemake_python_styleguide.constants.NESTED_FUNCTIONS_WHITELIST`
@@ -1365,7 +1364,7 @@ class NestedImportViolation(ASTViolation):
     Solution:
         You don't need nested imports, you need to refactor your code.
         Introduce a new module or find another way to do what you want to do.
-        Rethink how your layered architecture should look like.
+        Rethink how your layered architecture should look.
 
     Example::
 
@@ -1614,8 +1613,8 @@ class BlockAndLocalOverlapViolation(ASTViolation):
     4. For and async for loops variables
     5. Except for block exception aliases
 
-    We allow local variables to overlap themself,
-    we forbid block variables to overlap themself.
+    We allow local variables to overlap themselves,
+    we forbid block variables to overlap themselves.
 
     Example::
 
@@ -1757,7 +1756,7 @@ class WrongKeywordConditionViolation(ASTViolation):
     - ``ast.Assert``
 
     We do not check variables, attributes, calls, bool and bin operators, etc.
-    We disallow constants and some expressions.
+    We forbid constants and some expressions.
 
     Reasoning:
         Some conditions tell us that this node won't work correctly.
@@ -1895,8 +1894,8 @@ class IncorrectExceptOrderViolation(ASTViolation):
     """
     Forbid incorrect order of ``except``.
 
-    Note, we only check for built-in exceptions.
-    Because we cannot statically identify
+    Note, we only check for built-in exceptions
+    because we cannot statically identify
     the inheritance order of custom ones.
 
     Reasoning:
@@ -1975,7 +1974,7 @@ class ProtectedModuleMemberViolation(ASTViolation):
     Related to :class:`~ProtectedModuleViolation`.
 
     Reasoning:
-        When importing protected modules' members, we break the contract
+        When importing a protected modules' members, we break the contract
         which the authors of this module enforce.
         By disrespecting encapsulation, we may break the code at any moment.
 
@@ -2158,7 +2157,7 @@ class BaseExceptionRaiseViolation(ASTViolation):
 @final
 class NonTrivialExceptViolation(ASTViolation):
     """
-    Forbids to use non-trivial expressions as a parameter for ``except``.
+    Forbids using non-trivial expressions as a parameter for ``except``.
 
     Reasoning:
         Expressions used as an argument for ``except`` could be hard to read
@@ -2201,7 +2200,7 @@ class NonTrivialExceptViolation(ASTViolation):
 @final
 class FloatingNanViolation(ASTViolation):
     """
-    Forbids to use ``float("NaN")`` construct to generate NaN.
+    Forbids using ``float("NaN")`` construct to generate NaN.
 
     Reasoning:
         This method to generate NaN is really confusing and is a good way to
