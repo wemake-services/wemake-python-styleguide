@@ -707,6 +707,7 @@ extra_new_line = [  # noqa: WPS355
 
     'wrong',
 ]
+
 *numbers, = [4, 7]  # noqa: WPS356
 [first_number, second_number] = [4, 7]  # noqa: WPS359
 
@@ -732,3 +733,7 @@ except ValueError or TypeError:  # noqa: WPS455
 
 if float("NaN") < number:  # noqa: WPS456
     my_print("Greater than... what?")
+
+def infinite_loop():
+    while True:  # noqa: WPS457
+        my_print('forever')
