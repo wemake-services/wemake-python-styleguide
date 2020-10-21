@@ -1,6 +1,5 @@
 import importlib
 import inspect
-from importlib.machinery import SourceFileLoader
 from operator import itemgetter
 from pathlib import Path
 
@@ -32,7 +31,7 @@ def _import_module_by_path(path: str):
     module_name = path[:-3].replace('/', '.')
     spec = importlib.util.spec_from_file_location(
         module_name,
-        loader=SourceFileLoader(module_name, path),
+        loader=importlib.machinery.SourceFileLoader(module_name, path),
     )
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)

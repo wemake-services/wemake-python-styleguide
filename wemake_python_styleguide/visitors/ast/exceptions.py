@@ -7,7 +7,6 @@ from typing_extensions import final
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.tree import exceptions
-from wemake_python_styleguide.logic.tree.exceptions import find_returning_nodes
 from wemake_python_styleguide.logic.walk import is_contained
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
@@ -79,7 +78,8 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
                 )
 
     def _check_return_path(self, node: ast.Try) -> None:
-        try_has, except_has, else_has, finally_has = find_returning_nodes(
+        find_returning = exceptions.find_returning_nodes
+        try_has, except_has, else_has, finally_has = find_returning(
             node, self._bad_returning_nodes,
         )
 

@@ -28,6 +28,7 @@ Semantic versioning in our case means:
 - Forbids to use unsafe infinite loops
 - Forbids to use raw strings `r''` when not necessary
 - Add parameter to `given_function_called` so that it checks if a function has been called by its name regardless of the modules or classes it is in
+- Forbids to use too complex f-strings
 
 ### Bugfixes
 

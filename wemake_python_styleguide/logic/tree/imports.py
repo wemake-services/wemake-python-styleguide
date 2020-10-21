@@ -1,9 +1,19 @@
 import ast
-from typing import List
+from typing import List, NamedTuple
+
+from typing_extensions import final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.logic.naming import logical
 from wemake_python_styleguide.types import AnyImport
+
+
+@final
+class ImportedObjectInfo(NamedTuple):
+    """Information about imported object."""
+
+    module: str
+    node: AnyImport
 
 
 def get_import_parts(node: AnyImport) -> List[str]:
