@@ -107,13 +107,14 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS234': 1,
     'WPS235': 1,
     'WPS236': 1,
+    'WPS237': 1,
 
     'WPS300': 1,
     'WPS301': 1,
     'WPS302': 1,
     'WPS303': 1,
     'WPS304': 1,
-    'WPS305': 1,
+    'WPS305': 2,
     'WPS306': 2,
     'WPS307': 0,  # defined in version specific table.
     'WPS308': 1,
@@ -228,6 +229,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS455': 1,
     'WPS456': 1,
     'WPS457': 1,
+    'WPS458': 1,
 
     'WPS500': 1,
     'WPS501': 1,

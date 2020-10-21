@@ -14,6 +14,9 @@ import sys as sys  # noqa: WPS113
 from _some import protected  # noqa: WPS436
 from some import _protected  # noqa: WPS450
 
+from foo import bar
+from foo.bar import baz  # noqa: WPS458
+
 from .version import get_version  # noqa: WPS300
 
 import import1
@@ -73,6 +76,7 @@ phone_number = 555_123_999  # noqa:  WPS303
 partial_number = .05  # noqa: WPS304
 float_zero = 0.0  # noqa: WPS358
 formatted_string = f'Hi, {full_name}'  # noqa: WPS305
+formatted_string_complex = f'1+1={1 + 1}'  # noqa: WPS305, WPS237
 
 
 def __getattr__():  # noqa: WPS413

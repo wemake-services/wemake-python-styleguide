@@ -91,6 +91,13 @@ AnyAccess = Union[
     ast.Subscript,
 ]
 
+#: In case we need to handle types that can be chained.
+AnyChainable = Union[
+    ast.Attribute,
+    ast.Subscript,
+    ast.Call,
+]
+
 #: We use this type to work with any text-like values. Related to `AnyText`.
 AnyTextPrimitive = Union[str, bytes]
 
