@@ -13,6 +13,7 @@ from wemake_python_styleguide.types import (
 def given_function_called(
     node: Call,
     to_check: Container[str],
+    *,
     split_modules: bool = False,
 ) -> str:
     """
@@ -20,30 +21,6 @@ def given_function_called(
 
     If `split_modules`, takes the modules or objects into account. Otherwise,
     it only cares about the function's name.
-
-    >>> import ast
-    >>> module = ast.parse('print(123, 456)')
-    >>> given_function_called(module.body[0].value, ['print'])
-    'print'
-
-    >>> given_function_called(module.body[0].value, ['adjust'])
-    ''
-
-    >>> module = ast.parse('datetime.timedelta(days=1)')
-    >>> given_function_called(module.body[0].value, ['timedelta'])
-    ''
-
-    >>> module = ast.parse('datetime.timedelta(days=1)')
-    >>> given_function_called(module.body[0].value, ['datetime.timedelta'])
-    'datetime.timedelta'
-
-    >>> module = ast.parse('datetime.timedelta(days=1)')
-    >>> given_function_called(
-    ...     module.body[0].value,
-    ...     ['timedelta'],
-    ...     split_modules=True,
-    ... )
-    'timedelta'
     """
     function_name = source.node_to_string(node.func)
     if split_modules:
