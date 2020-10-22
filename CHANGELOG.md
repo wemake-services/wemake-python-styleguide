@@ -46,12 +46,9 @@ Semantic versioning in our case means:
 
 - Updates lots of dependenices
 - Fixed documentation for TooManyPublicAttributesViolation
-<<<<<<< HEAD
-=======
 - Updated isort config
 - Introduce helper script to check for missing calls to `self.generic_visit(node)` in AST visitors
 - Updates `poetry` version to `1.1`
->>>>>>> master
 
 
 ## 0.14.0 aka The Walrus fighter
