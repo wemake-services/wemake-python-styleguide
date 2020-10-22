@@ -1,9 +1,11 @@
 import pytest
 
-from wemake_python_styleguide.violations.consistency import UnpackingIterableToListViolation
 from wemake_python_styleguide.violations.best_practices import (
     SingleElementDestructuringViolation,
     WrongUnpackingViolation,
+)
+from wemake_python_styleguide.violations.consistency import (
+    UnpackingIterableToListViolation,
 )
 from wemake_python_styleguide.visitors.ast.builtins import (
     WrongAssignmentVisitor,
