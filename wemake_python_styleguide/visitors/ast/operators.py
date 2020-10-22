@@ -38,14 +38,13 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
     }
 
     _meaningless_operations: ClassVar[_MeaninglessOperators] = {
-        # ast.Div is not in the list,
+        # ast.Div and ast.Mod is not in the list,
         # since we have a special violation for it.
         0: (
             ast.Mult,
             ast.Add,
             ast.Sub,
             ast.Pow,
-            ast.Mod,
 
             ast.BitAnd,
             ast.BitOr,
@@ -71,6 +70,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
     _zero_divisors: ClassVar[AnyNodes] = (
         ast.Div,
         ast.FloorDiv,
+        ast.Mod,
     )
 
     def visit_numbers_and_constants(self, node: _NumbersAndConstants) -> None:

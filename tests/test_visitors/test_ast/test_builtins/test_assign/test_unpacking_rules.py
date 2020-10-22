@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.violations.consistency import UnpackingIterableToListViolation
 from wemake_python_styleguide.violations.best_practices import (
     SingleElementDestructuringViolation,
     WrongUnpackingViolation,
@@ -9,9 +10,10 @@ from wemake_python_styleguide.visitors.ast.builtins import (
 )
 
 single_assignment = '{0} = 1'
-
 sequence_assignment1 = 'first, {0} = {1}'
 sequence_assignment2 = '{0}, second = {1}'
+tuple_assignment1 = 'first, {0} = (1, 2)'
+tuple_assignment2 = '{0}, second = (1, 2)'
 
 spread_assignment1 = '{0}, *second = [1, 2, 3]'
 spread_assignment2 = 'first, *{0} = [1, 2, 3]'
@@ -82,6 +84,8 @@ wrong_single_destructuring3 = '[first] = {0}'
     single_assignment,
     sequence_assignment1,
     sequence_assignment2,
+    tuple_assignment1,
+    tuple_assignment2,
     spread_assignment1,
     spread_assignment2,
     for_assignment,
@@ -140,6 +144,8 @@ def test_correct_assignment(
 @pytest.mark.parametrize('code', [
     sequence_assignment1,
     sequence_assignment2,
+    tuple_assignment1,
+    tuple_assignment2,
     spread_assignment1,
     spread_assignment2,
     for_unpacking1,
@@ -226,4 +232,8 @@ def test_single_element_destructing(
     visitor = WrongAssignmentVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [SingleElementDestructuringViolation])
+    assert_errors(
+        visitor,
+        [SingleElementDestructuringViolation],
+        ignored_types=UnpackingIterableToListViolation,
+    )

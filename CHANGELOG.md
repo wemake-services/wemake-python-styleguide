@@ -35,6 +35,48 @@ element tuple or list unpacking.
 - Fixed documentation for TooManyPublicAttributesViolation
 
 
+## 0.15.0
+
+### Features
+
+- Forbids using non-trivial expressions as an argument to `except`
+- Forbids using too many variables in a tuple unpacking
+- Forbids using `float("NaN")`.
+- Allow `__call__` method to be asynchronous
+- Allows common strings not to be counted against string constant overuse limit
+- Forbids to unpack iterable objects to lists #1259
+- Forbids to use single `return None`
+- Add `__await__` to the list of priority magic methods
+- Forbids to use float zeros (`0.0`)
+- Forbids `raise Exception` and `raise BaseException`
+- Forbids to use `%` with zero as the divisor
+- WPS531: Forbids testing conditions to just return booleans when it is possible to simply return the condition itself
+- Forbids to use unsafe infinite loops
+- Forbids to use raw strings `r''` when not necessary
+- Forbids to use too complex `f`-strings
+- Forbids to use too many `raise` statements inside a single function
+- Forbids to compare with `float` and `complex` values
+
+### Bugfixes
+
+- Fixes fails of annotation complexity on `Literal[""]`
+- Fixes how wrong variable names were checked case sensitive with `WPS110`
+- Fixes false positives DirectMagicAttributeAccessViolation with `__mro__`, `__subclasses__` and `__version__`
+- Make `WPS326` work when there is comment between string literals
+- Allowed yield statements in call method
+- Allow to use `^` with `1`
+- Fixes false positives in WPS513
+- Fixes false positives in WPS323
+
+### Misc
+
+- Updates lots of dependenices
+- Fixed documentation for TooManyPublicAttributesViolation
+- Updated isort config
+- Introduce helper script to check for missing calls to `self.generic_visit(node)` in AST visitors
+- Updates `poetry` version to `1.1`
+
+
 ## 0.14.0 aka The Walrus fighter
 
 This release was focused on adding `python3.8` support,
@@ -84,6 +126,7 @@ We also have this [nice migration guide](https://wemake-python-stylegui.de/en/la
 - Adds `UnreadableNameViolation` as `WPS124` because there are some
 character combination which is not easy to read
 - Adds support for `NamedExpr` with in compare type violation
+- Forbids `float` and `complex` compares
 
 ### Bugfixes
 

@@ -254,6 +254,7 @@ MAGIC_METHODS_BLACKLIST: Final = frozenset((
 #: List of magic methods that are not allowed to be generators.
 YIELD_MAGIC_METHODS_BLACKLIST: Final = ALL_MAGIC_METHODS.difference({
     # Allowed to be used with ``yield`` keyword:
+    '__call__',
     '__iter__',
 })
 
@@ -265,6 +266,7 @@ ASYNC_MAGIC_METHODS_BLACKLIST: Final = ALL_MAGIC_METHODS.difference({
     '__anext__',
     '__aenter__',
     '__aexit__',
+    '__call__',
 })
 
 #: List of builtin classes that are allowed to subclass.
@@ -277,6 +279,7 @@ ALLOWED_BUILTIN_CLASSES: Final = frozenset((
 NESTED_FUNCTIONS_WHITELIST: Final = frozenset((
     'decorator',
     'factory',
+    'wrapper',
 ))
 
 #: List of allowed ``__future__`` imports.
@@ -380,6 +383,21 @@ TUPLE_ARGUMENTS_METHODS: Final = frozenset((
     'frozenset',
 ))
 
+#: Conditions that can appear in the ``if`` statement to allow nested imports.
+ALLOWED_NESTED_IMPORTS_CONDITIONS: Final = frozenset((
+    'TYPE_CHECKING',
+))
+
+#: List of commonly used aliases
+ALIAS_NAMES_WHITELIST: Final = frozenset((
+    'np',
+    'pd',
+    'df',
+    'plt',
+    'sns',
+    'tf',
+    'cv',
+))
 
 # Internal variables
 # ==================

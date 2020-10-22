@@ -18,7 +18,6 @@ PLUGINS = (
     'E225',  # pycodestyle
     'E800',  # flake8-eradicate
     'F401',  # pyflakes
-    'I001',  # flake8-isort
     'N400',  # flake8-broken-line
     'N802',  # pep8-naming
     'P101',  # flake8-string-format
@@ -41,10 +40,7 @@ def test_external_plugins(absolute_path):
     process = subprocess.Popen(
         [
             'flake8',
-            '--disable-noqa',
             '--isolated',
-            '--enable-extensions',
-            'G',
             filename,
         ],
         stdout=subprocess.PIPE,
@@ -75,10 +71,7 @@ def test_external_plugins_diff(absolute_path):
     output = subprocess.check_output(
         [
             'flake8',
-            '--disable-noqa',
             '--isolated',
-            '--enable-extensions',
-            'G',
             '--diff',  # is required to test diffs! ;)
             '--exit-zero',  # to allow failures
         ],

@@ -175,7 +175,7 @@ from wemake_python_styleguide.violations.base import (
 @final
 class WrongModuleNameViolation(SimpleViolation):
     """
-    Forbids to use blacklisted module names.
+    Forbid blacklisted module names.
 
     Reasoning:
         Some module names are not expressive enough.
@@ -212,7 +212,7 @@ class WrongModuleNameViolation(SimpleViolation):
 @final
 class WrongModuleMagicNameViolation(SimpleViolation):
     """
-    Forbids to use any magic names except whitelisted ones.
+    Forbid magic names (except some whitelisted ones).
 
     Reasoning:
         Do not fall in love with magic. There's no good reason to use
@@ -242,7 +242,7 @@ class WrongModuleMagicNameViolation(SimpleViolation):
 @final
 class WrongModuleNamePatternViolation(SimpleViolation):
     """
-    Forbids to use module names that do not match our pattern.
+    Forbid module names that do not match our pattern.
 
     Reasoning:
         Module names must be valid python identifiers.
@@ -279,7 +279,7 @@ class WrongModuleNamePatternViolation(SimpleViolation):
 @final
 class WrongVariableNameViolation(ASTViolation):
     """
-    Forbids to have blacklisted variable names.
+    Forbid blacklisted variable names.
 
     Reasoning:
         We have found some names that are not expressive enough.
@@ -327,7 +327,7 @@ class WrongVariableNameViolation(ASTViolation):
 @final
 class TooShortNameViolation(MaybeASTViolation):
     """
-    Forbids to have too short variable or module names.
+    Forbid short variable or module names.
 
     Reasoning:
         It is hard to understand what the variable means and why it is used,
@@ -370,7 +370,7 @@ class TooShortNameViolation(MaybeASTViolation):
 @final
 class PrivateNameViolation(MaybeASTViolation):
     """
-    Forbids to have private name pattern.
+    Forbid private name pattern.
 
     Reasoning:
         Private is not private in ``python``.
@@ -405,7 +405,7 @@ class PrivateNameViolation(MaybeASTViolation):
 @final
 class SameAliasImportViolation(ASTViolation):
     """
-    Forbids to use the same alias as the original name in imports.
+    Forbid using the same alias as the original name in imports.
 
     Reasoning:
         Why would you even do this in the first place?
@@ -442,7 +442,7 @@ class SameAliasImportViolation(ASTViolation):
 @final
 class UnderscoredNumberNameViolation(MaybeASTViolation):
     """
-    Forbids to have names with underscored numbers pattern.
+    Forbid names with underscored numbers pattern.
 
     Reasoning:
         This is done for consistency in naming.
@@ -472,14 +472,14 @@ class UnderscoredNumberNameViolation(MaybeASTViolation):
 
     """
 
-    error_template = 'Found underscored name pattern: {0}'
+    error_template = 'Found underscored number name pattern: {0}'
     code = 114
 
 
 @final
 class UpperCaseAttributeViolation(ASTViolation):
     """
-    Forbids to use anything but ``snake_case`` for naming class attributes.
+    Require ``snake_case`` for naming class attributes.
 
     Reasoning:
         Constants with upper-case names belong on a module level.
@@ -511,7 +511,7 @@ class UpperCaseAttributeViolation(ASTViolation):
 @final
 class ConsecutiveUnderscoresInNameViolation(MaybeASTViolation):
     """
-    Forbids to use more than one consecutive underscore in variable names.
+    Forbid using more than one consecutive underscore in variable names.
 
     Reasoning:
         This is done to gain extra readability.
@@ -540,7 +540,7 @@ class ConsecutiveUnderscoresInNameViolation(MaybeASTViolation):
 @final
 class ReservedArgumentNameViolation(ASTViolation):
     """
-    Forbids to name your variables as ``self``, ``cls``, and ``mcs``.
+    Forbid naming variables ``self``, ``cls``, or ``mcs``.
 
     Reasoning:
         These names are special, they should only be used as first
@@ -571,7 +571,7 @@ class ReservedArgumentNameViolation(ASTViolation):
 @final
 class TooLongNameViolation(MaybeASTViolation):
     """
-    Forbids to have long short variable or module names.
+    Forbid long variable or module names.
 
     Reasoning:
         Too long names are unreadable.
@@ -611,7 +611,7 @@ class TooLongNameViolation(MaybeASTViolation):
 @final
 class UnicodeNameViolation(MaybeASTViolation):
     """
-    Forbids to use unicode names.
+    Forbid unicode names.
 
     Reasoning:
         This should be forbidden for sanity, readability, and writability.
@@ -642,7 +642,7 @@ class UnicodeNameViolation(MaybeASTViolation):
 @final
 class TrailingUnderscoreViolation(ASTViolation):
     """
-    Forbids to use trailing ``_`` for names that do not need it.
+    Forbid trailing ``_`` for names that do not need it.
 
     Reasoning:
         We use trailing underscore for a reason:
@@ -675,7 +675,7 @@ class TrailingUnderscoreViolation(ASTViolation):
 @final
 class UnusedVariableIsUsedViolation(ASTViolation):
     """
-    Forbids to have use variables that are marked as unused.
+    Forbid using variables that are marked as unused.
 
     We discourage using variables that start with ``_``
     only inside functions and methods as local variables.
@@ -722,7 +722,7 @@ class UnusedVariableIsUsedViolation(ASTViolation):
 @final
 class UnusedVariableIsDefinedViolation(ASTViolation):
     """
-    Forbids to define explicit unused variables.
+    Forbid explicit unused variables.
 
     Reasoning:
         While it is ok to define unused variables when you have to,
@@ -758,7 +758,7 @@ class UnusedVariableIsDefinedViolation(ASTViolation):
 @final
 class WrongUnusedVariableNameViolation(ASTViolation):
     """
-    Forbids to define unused variables with multiple underscores.
+    Forbid unused variables with multiple underscores.
 
     Reasoning:
         We only use ``_`` as a special definition for an unused variable.
@@ -789,7 +789,7 @@ class WrongUnusedVariableNameViolation(ASTViolation):
 @final
 class UnreadableNameViolation(MaybeASTViolation):
     """
-    Forbids to have variable or module names which could be difficult to read.
+    Forbid variable or module names which could be difficult to read.
 
     Reasoning:
         Currently one can name your classes like so: ``ZerO0``
@@ -826,15 +826,15 @@ class UnreadableNameViolation(MaybeASTViolation):
 @final
 class BuiltinShadowingViolation(ASTViolation):
     """
-    Forbids to have variable or module names which shadows builtin names.
+    Forbid variable or module names which shadow builtin names.
 
     Reasoning:
         Your code simply breaks Python. After you create ``list = 1``,
         you cannot not call ``builtin`` function ``list``
-        and what can be worth than that?
+        and what can be worse than that?
 
     Solution:
-        Rename your entity not to shadow Python builtins.
+        Rename your entity to not shadow Python builtins.
 
     Example::
 
@@ -844,6 +844,15 @@ class BuiltinShadowingViolation(ASTViolation):
         # Wrong:
         str = ''
         list = [1, 2, 3]
+
+    This can also cause problems when defining class attributes, for example::
+
+        class A:
+            min = 5
+            max = min(10, 20)  # TypeError: 'int' object is not callable
+
+    If you feel it is still necesarry to use such a class attribute,
+    consider using a `noqa` comment with caution.
 
     .. versionadded:: 0.14
 
