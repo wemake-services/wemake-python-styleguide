@@ -49,6 +49,14 @@ from wemake_python_styleguide.visitors import base, decorators
 _HashItems = Sequence[Optional[ast.AST]]
 
 
+#: names of functions in which we allow strings with modulo patterns.
+_modulo_pattern_exceptions: ClassVar[FrozenSet[str]] = frozenset((
+    'strftime',  # For date, time, and datetime.strftime()
+    'strptime',  # For date, time, and datetime.strptime()
+    'execute',  # For psycopg2's cur.execute()
+))
+
+
 @final
 @decorators.alias('visit_any_string', (
     'visit_Str',
@@ -124,16 +132,10 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         modulo patterns because they must have them for the functions to work
         properly.
         """
-        exceptions = (
-            'strftime',  # For date, time, and datetime.strftime()
-            'strptime',  # For date, time, and datetime.strptime()
-            'execute',  # For psycopg2's cur.execute()
-        )
-
         if parent and isinstance(parent, ast.Call):
             return bool(functions.given_function_called(
                 parent,
-                exceptions,
+                _modulo_pattern_exceptions,
                 split_modules=True,
             ))
         return False
