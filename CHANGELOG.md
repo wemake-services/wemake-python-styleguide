@@ -8,6 +8,32 @@ Semantic versioning in our case means:
 - Minor releases do bring new features and configuration options. New violations can be added. Code that passes `x.0.y` might not pass on `x.1.y` release.
 - Major releases inidicate significant milestones or serious breaking changes.
 
+## 0.16.0
+
+### Features
+
+- Adds `SingleElementDestructuringViolation` as `WPS454`, because it's hard to read single
+element tuple or list unpacking.
+- Raises `WrongUnpackingViolation` for unpacking lists with side-effects.
+
+
+## 0.15.0 aka New runtime
+
+### Features
+
+- Forbids to use single `return None`
+- Add `__await__` to the list of priority magic methods
+
+### Bugfixes
+
+- Fixes how wrong variable names were checked case sensitive with `WPS110`
+- Fixes false positives DirectMagicAttributeAccessViolation with `__mro__`, `__subclasses__` and `__version__`
+
+### Misc
+
+- Updates lots of dependenices
+- Fixed documentation for TooManyPublicAttributesViolation
+
 
 ## 0.15.0
 

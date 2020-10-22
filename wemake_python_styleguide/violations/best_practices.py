@@ -76,6 +76,7 @@ Summary
    InfiniteWhileLoopViolation
    ImportCollisionViolation
    FloatComplexCompareViolation
+   SingleElementDestructuringViolation
 
 Best practices
 --------------
@@ -140,6 +141,7 @@ Best practices
 .. autoclass:: InfiniteWhileLoopViolation
 .. autoclass:: ImportCollisionViolation
 .. autoclass:: FloatComplexCompareViolation
+.. autoclass:: SingleElementDestructuringViolation
 
 """
 
@@ -2331,3 +2333,30 @@ class FloatComplexCompareViolation(ASTViolation):
 
     error_template = 'Found comparison with float or complex number'
     code = 459
+
+
+@final
+class SingleElementDestructuringViolation(ASTViolation):
+    """
+    Forbids to have single element destructuring.
+
+    Reasoning:
+        Having single element destructuring is not readable.
+
+    Solution:
+        Use access by index instead.
+
+    Example::
+
+        # Correct:
+        first = single_element_list[0]
+
+        # Wrong:
+        (first,) = [1]
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found single element destructuring'
+    code = 460

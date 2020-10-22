@@ -712,7 +712,7 @@ extra_new_line = [  # noqa: WPS355
     'wrong',
 ]
 
-*numbers, = [4, 7]  # noqa: WPS356
+*numbers, = [4, 7]  # noqa: WPS356, WPS460
 [first_number, second_number] = [4, 7]  # noqa: WPS359
 
 for element in range(10):
