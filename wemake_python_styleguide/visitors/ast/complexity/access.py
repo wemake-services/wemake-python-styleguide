@@ -26,7 +26,7 @@ class AccessVisitor(BaseNodeVisitor):
         super().__init__(*args, **kwargs)
         self._visited_accesses: Set[AnyAccess] = set()
 
-    def visit_Subscript(self, node: ast.Attribute) -> None:
+    def visit_Subscript(self, node: ast.Subscript) -> None:
         """
         Checks subscript access number.
 
@@ -37,7 +37,7 @@ class AccessVisitor(BaseNodeVisitor):
         self._check_consecutive_access_number(node)
         self.generic_visit(node)
 
-    def visit_Attribute(self, node: ast.Subscript) -> None:
+    def visit_Attribute(self, node: ast.Attribute) -> None:
         """
         Checks attribute access number.
 

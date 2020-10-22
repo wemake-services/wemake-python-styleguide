@@ -153,7 +153,7 @@ class Checker(object):
             try:
                 visitor.run()
             except Exception:
-                # In case we fail misserably, we want users to see at
+                # In case we fail miserably, we want users to see at
                 # least something! Full stack trace
                 # and some rules that still work.
                 print(traceback.format_exc())  # noqa: T001, WPS421

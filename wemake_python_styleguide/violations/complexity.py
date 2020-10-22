@@ -56,7 +56,9 @@ Summary
    TooLongCallChainViolation
    TooComplexAnnotationViolation
    TooManyImportedModuleMembersViolation
-
+   TooLongTupleUnpackViolation
+   TooComplexFormattedStringViolation
+   TooManyRaisesViolation
 
 Module complexity
 -----------------
@@ -96,6 +98,9 @@ Structure complexity
 .. autoclass:: TooLongCallChainViolation
 .. autoclass:: TooComplexAnnotationViolation
 .. autoclass:: TooManyImportedModuleMembersViolation
+.. autoclass:: TooLongTupleUnpackViolation
+.. autoclass:: TooComplexFormattedStringViolation
+.. autoclass:: TooManyRaisesViolation
 
 """
 
@@ -111,12 +116,12 @@ from wemake_python_styleguide.violations.base import (
 @final
 class JonesScoreViolation(SimpleViolation):
     """
-    Forbids to have modules with complex lines.
+    Forbid modules with complex lines.
 
-    We are using Jones Complexity algorithm to count module's score.
+    We are using the Jones Complexity algorithm to count module's score.
     See
     :py:class:`~.LineComplexityViolation` for details of per-line-complexity.
-    How it is done: we count complexity per line, then measuring the median
+    How it is done: we count complexity per line, then measure the median
     complexity across the lines in the whole module.
 
     Reasoning:
@@ -144,28 +149,29 @@ class JonesScoreViolation(SimpleViolation):
 @final
 class TooManyImportsViolation(SimpleViolation):
     """
-    Forbids to have modules with too many imports.
+    Forbid modules with too many imports.
 
     Namespaces are one honking great idea -- let's do more of those!
 
     Reasoning:
         Having too many imports without prefixes is quite expensive.
-        You have to memorize all the source locations of the imports.
-        And sometimes it is hard to remember what kind of functions and classes
+        You have to memorize all the source locations of the imports
+        and sometimes it is hard to remember what kind of functions and classes
         are already injected into your context.
 
         It is also a questionable design if a single module has a lot of
-        imports. Why a single module has so many dependencies?
-        So, it becomes too coupled.
+        imports. Why would a single module have so many dependencies?
+        So, the module becomes too coupled.
 
     Solution:
         Refactor the imports to import a common namespace. Something like
         ``from package import module`` and then
         use it like ``module.function()``.
 
-        Or refactor your code and split the complex module into several ones.
+        Or refactor your code and split the complex module
+        into several modules.
 
-    We do not make any differences between
+    We do not make any distinction between
     ``import`` and ``from ... import ...``.
 
     Configuration:
@@ -183,7 +189,7 @@ class TooManyImportsViolation(SimpleViolation):
 @final
 class TooManyModuleMembersViolation(SimpleViolation):
     """
-    Forbids to have many classes and functions in a single module.
+    Forbid too many classes and functions in a single module.
 
     Reasoning:
         Having many classes and functions in a single module is a bad thing.
@@ -192,7 +198,7 @@ class TooManyModuleMembersViolation(SimpleViolation):
     Solution:
         It is better to split this module into several modules or a package.
 
-    We do not make any differences between classes and functions in this check.
+    We do not make any distinctions between classes and functions in this check.
     They are treated as the same unit of logic.
     We also do not care about functions and classes being public or not.
     However, methods are counted separately on a per-class basis.
@@ -213,26 +219,26 @@ class TooManyModuleMembersViolation(SimpleViolation):
 @final
 class TooManyImportedNamesViolation(SimpleViolation):
     """
-    Forbids to have modules with too many imported names.
+    Forbid modules with too many imported names.
 
     Namespaces are one honking great idea -- let's do more of those!
 
     Reasoning:
         Having too many imported names without prefixes is quite expensive.
-        You have to memorize all the source locations of the imports.
-        And sometimes it is hard to remember what kind of functions and classes
+        You have to memorize all the source locations of the imports
+        and sometimes it is hard to remember what kind of functions and classes
         are already injected into your context.
 
         It is also a questionable design if a single module has a lot of
-        imports. Why a single module has so many dependencies?
-        So, it becomes too coupled.
+        imports. Why would a single module have so many dependencies?
+        So, the module becomes too coupled.
 
     Solution:
         Refactor the imports to import a common namespace. Something like
         ``from package import module`` and then
         use it like ``module.function()``.
 
-        Or refactor your code and split the complex module into several ones.
+        Or refactor your code and split the complex module into several modules.
 
     Example::
 
@@ -261,15 +267,15 @@ class TooManyImportedNamesViolation(SimpleViolation):
 @final
 class OverusedExpressionViolation(ASTViolation):
     """
-    Forbids to have overused expressions in a module, function or method.
+    Forbid overused expressions in a module, function or method.
 
     What do we call an "overused expression"? When you use any expression
     (like ``user_dict['age']`` for example) inside your code,
-    you always have to track that you are not using it "too much".
-    Because if that expression is everywhere inside your code,
+    you always have to track that you are not using it "too much"
+    because if that expression is everywhere inside your code,
     it is a sign of a problem. It means that you are missing an abstraction.
 
-    We check overused expression on two levels:
+    We check for overused expressions on two levels:
 
     - per each function
     - per all module
@@ -277,7 +283,7 @@ class OverusedExpressionViolation(ASTViolation):
     Related to :class:`~TooManyExpressionsViolation`.
 
     Reasoning:
-        Overusing expression lead to losing the parts that can and should
+        Overusing expressions leads to losing the parts that can and should
         be refactored into variables, methods, and properties of objects.
 
     Solution:
@@ -306,17 +312,17 @@ class OverusedExpressionViolation(ASTViolation):
 @final
 class TooManyLocalsViolation(ASTViolation):
     """
-    Forbids to have too many local variables in the unit of code.
+    Forbid too many local variables in the unit of code.
 
     Reasoning:
         Having too many variables in a single function is a bad thing.
-        Soon, you will find troubles to understand what this variable means.
+        Soon, you will have trouble understanding what this variable means.
         It will also become hard to name new variables.
 
     Solution:
         If you have too many variables in a function, you have to refactor it.
 
-    What counts as a local variable? We only count variable as local
+    What counts as a local variable? We only count a variable as local
     in the following case: it is assigned inside the function body.
     We do not count variables defined inside comprehensions as local variables,
     since it is impossible to use them outside of the comprehension.
@@ -357,15 +363,15 @@ class TooManyLocalsViolation(ASTViolation):
 @final
 class TooManyArgumentsViolation(ASTViolation):
     """
-    Forbids to have too many arguments for a function or method.
+    Forbid too many arguments for a function or method.
 
     Reasoning:
         This is an indicator of a bad design. When a function requires many
-        arguments it shows that it is required to refactor this piece of code.
-        It also indicates that function does too many things at once.
+        arguments it is a sign that it should be refactored.
+        It also indicates that the function does too many things at once.
 
     Solution:
-        Split function into several functions.
+        Split the function into several functions.
         Then it will be easier to use them.
 
     Configuration:
@@ -383,7 +389,7 @@ class TooManyArgumentsViolation(ASTViolation):
 @final
 class TooManyReturnsViolation(ASTViolation):
     """
-    Forbids placing too many ``return`` statements into the function.
+    Forbid placing too many ``return`` statements in a function.
 
     Reasoning:
         When there are too many ``return`` keywords,
@@ -391,7 +397,7 @@ class TooManyReturnsViolation(ASTViolation):
         hard to change and keep everything inside your head at once.
 
     Solution:
-        Change your design. Split functions into multiple ones.
+        Change your design. Split the function into multiple functions.
 
     Configuration:
         This rule is configurable with ``--max-returns``.
@@ -408,17 +414,17 @@ class TooManyReturnsViolation(ASTViolation):
 @final
 class TooManyExpressionsViolation(ASTViolation):
     """
-    Forbids putting too many expressions in a single function.
+    Forbid putting too many expressions in a single function.
 
     This rule is quite similar to "max lines" in a function,
-    but is much nicer. Because we don't count lines,
+    but is much nicer because we don't count lines,
     we count real code entities. This way adding just several extra empty
     lines for readability will never trigger this violation.
 
     Related to :class:`~OverusedExpressionViolation`.
 
     Reasoning:
-        When there are too many expressions it means that this specific
+        When there are too many expressions it means that this
         function does too many things at once. It has too much logic.
 
     Solution:
@@ -443,20 +449,20 @@ class TooManyExpressionsViolation(ASTViolation):
 @final
 class TooManyMethodsViolation(ASTViolation):
     """
-    Forbids to have many methods in a single class.
+    Forbid too many methods in a single class.
 
     Reasoning:
-        Having too many methods might lead to the "God object".
-        This kind of objects can handle everything.
+        Having too many methods might lead to the "God object" anti-pattern.
+        This kind of object can handle everything.
         So, in the end, your code becomes too hard to maintain and test.
 
     Solution:
         What to do if you have too many methods in a single class?
-        Split this class into several classes.
-        Then use composition or inheritance to refactor your code.
-        This will protect you from "God object" anti-pattern.
+        Split this class into several classes,
+        then use composition or inheritance to refactor your code.
+        This will protect you from the "God object" anti-pattern.
 
-    We do not make any difference between instance and class methods.
+    We do not make any distinctions between instance and class methods.
     We also do not care about functions and classes being public or not.
     We also do not count inherited methods from parents.
     This rule does not count the attributes of a class.
@@ -530,15 +536,15 @@ class TooManyDecoratorsViolation(ASTViolation):
 
     Reasoning:
         When you are using too many decorators it means that
-        you try to overuse the magic.
+        you are trying to overuse the magic.
         You have to ask yourself: do I really know what happens inside
         this decorator tree? Typically, the answer will be "no".
 
     Solution:
         Using too many decorators typically means that
-        you try to configure the behavior from outside of the class.
+        you are trying to configure the behavior from outside of the class.
         Do not do that too much.
-        Split functions or classes into multiple ones.
+        Split functions or classes into smaller ones.
         Use higher order decorators.
 
     Configuration:
@@ -559,15 +565,15 @@ class TooManyDecoratorsViolation(ASTViolation):
 @final
 class TooManyAwaitsViolation(ASTViolation):
     """
-    Forbids placing too many ``await`` expressions into a function.
+    Forbid placing too many ``await`` expressions in a function.
 
     Reasoning:
         When there are too many ``await`` keywords,
         functions are starting to get really complex.
-        It is hard to tell where are we and what is going on.
+        It is hard to tell where we are and what is going on.
 
     Solution:
-        Change your design. Split functions into multiple ones.
+        Change your design. Split functions into smaller ones.
 
     Configuration:
         This rule is configurable with ``--max-awaits``.
@@ -584,7 +590,7 @@ class TooManyAwaitsViolation(ASTViolation):
 @final
 class TooManyAssertsViolation(ASTViolation):
     """
-    Forbids placing too many ``asseert`` statements into a function.
+    Forbid placing too many ``assert`` statements into a function.
 
     Reasoning:
         When there are too many ``assert`` keywords,
@@ -610,7 +616,7 @@ class TooManyAssertsViolation(ASTViolation):
 @final
 class TooDeepAccessViolation(ASTViolation):
     """
-    Forbids to have consecutive expressions with too deep access level.
+    Forbid consecutive expressions with too deep access level.
 
     We consider only these expressions as accesses:
 
@@ -662,7 +668,7 @@ class TooDeepAccessViolation(ASTViolation):
 @final
 class TooDeepNestingViolation(ASTViolation):
     """
-    Forbids nesting blocks too deep.
+    Forbid nesting blocks too deep.
 
     Reasoning:
         If nesting is too deep that indicates usage of complex logic
@@ -685,10 +691,10 @@ class TooDeepNestingViolation(ASTViolation):
 @final
 class LineComplexityViolation(ASTViolation):
     """
-    Forbids to have complex lines.
+    Forbid complex lines.
 
-    We are using Jones Complexity algorithm to count complexity.
-    What is Jones Complexity? It is a simple yet powerful method to count
+    We are using the Jones Complexity algorithm to count complexity.
+    What is the Jones Complexity? It is a simple yet powerful method to count
     the number of ``ast`` nodes per line.
     If the complexity of a single line is higher than a threshold,
     then an error is raised.
@@ -730,7 +736,7 @@ class LineComplexityViolation(ASTViolation):
 @final
 class TooManyConditionsViolation(ASTViolation):
     """
-    Forbids to have conditions with too many logical operators.
+    Forbid conditions with too many logical operators.
 
     We use :str:`wemake_python_styleguide.constants.MAX_CONDITIONS`
     as a default value.
@@ -759,21 +765,21 @@ class TooManyConditionsViolation(ASTViolation):
 @final
 class TooManyElifsViolation(ASTViolation):
     """
-    Forbids to use many ``elif`` branches.
+    Forbid too many ``elif`` branches.
 
     We use :str:`wemake_python_styleguide.constants.MAX_ELIFS`
     as a default value.
 
     Reasoning:
-        This rule is specifically important because of many ``elif``
-        branches indicate a complex flow in your design:
+        This rule is specifically important because many ``elif``
+        branches indicates a complex flow in your design:
         you are reimplementing ``switch`` in python.
 
     Solution:
         There are different design patterns to use instead.
-        For example, you can use some interface that
-        just call a specific method without ``if``.
-        Or separate your ``if`` into multiple functions.
+        For example, you can use an interface that
+        just calls a specific method without ``if``.
+        Another option is to separate your ``if`` into multiple functions.
 
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.5.0
@@ -787,14 +793,14 @@ class TooManyElifsViolation(ASTViolation):
 @final
 class TooManyForsInComprehensionViolation(ASTViolation):
     """
-    Forbids to have too many ``for`` statement within a comprehension.
+    Forbid too many ``for`` statements within a comprehension.
 
     Reasoning:
         When reading through the complex comprehension you will fail
         to understand it.
 
     Solution:
-        We can reduce the complexity of comprehension by reducing the
+        We can reduce the complexity of the comprehension by reducing the
         amount of ``for`` statements. Refactor your code to use several
         ``for`` loops, comprehensions, or different functions.
 
@@ -819,16 +825,16 @@ class TooManyForsInComprehensionViolation(ASTViolation):
 @final
 class TooManyExceptCasesViolation(ASTViolation):
     """
-    Forbids to have too many ``except`` cases in a single ``try`` clause.
+    Forbid too many ``except`` cases in a single ``try`` clause.
 
     We use :str:`wemake_python_styleguide.constants.MAX_EXCEPT_CASES`
     as a default value.
 
     Reasoning:
         Handling too many exceptions in a single place
-        is a good indicator of a bad design.
-        Since this way, one controlling structure will become too complex.
-        And you will need to test a lot of paths your application might go.
+        is a good indicator of a bad design
+        since one controlling structure will become too complex.
+        Also, you will need to test a lot of logic paths in your application.
 
     Solution:
         We can reduce the complexity of this case by splitting it into multiple
@@ -846,15 +852,15 @@ class TooManyExceptCasesViolation(ASTViolation):
 @final
 class OverusedStringViolation(MaybeASTViolation):
     """
-    Forbids to over-use string constants.
+    Forbid the overuse of string constants.
 
     We allow to use strings without any restrictions as annotations for
     variables, arguments, return values, and class attributes.
 
     Reasoning:
         When some string is used more than several time in your code,
-        it probably means that this string is a meaningful constant.
-        And should be treated like one.
+        it probably means that this string is a meaningful constant
+        and should be treated like one.
 
     Solution:
         Deduplicate you string usages
@@ -876,10 +882,10 @@ class OverusedStringViolation(MaybeASTViolation):
 @final
 class TooLongYieldTupleViolation(ASTViolation):
     """
-    Forbids to yield too long tuples.
+    Forbid yielding tuples that are too long.
 
     Reasoning:
-        Long yield tuples complicate generator using.
+        Long yield tuples complicate generator usage.
         This rule helps to reduce complication.
 
     Solution:
@@ -896,10 +902,10 @@ class TooLongYieldTupleViolation(ASTViolation):
 @final
 class TooLongCompareViolation(ASTViolation):
     """
-    Forbids to have too long compare expressions.
+    Forbid compare expressions that are too long.
 
     Reasoning:
-        To long compare expressions indicate
+        Compare expressions that are too long indicate
         that there's something wrong going on in the code.
         Compares should not be longer than 3 or 4 items.
 
@@ -917,17 +923,17 @@ class TooLongCompareViolation(ASTViolation):
 @final
 class TooLongTryBodyViolation(ASTViolation):
     """
-    Forbids to have ``try`` blocks with too long bodies.
+    Forbid ``try`` blocks with bodies that are too long.
 
     Reasoning:
         Having too many statements inside your ``try`` block
-        can lead to situations when some different statement
+        can lead to situations when a statement
         raises an exception and you are not aware of it
         since it is not expected.
 
     Solution:
         Move things out of the ``try`` block or create new functions.
-        The less lines you have in your ``try`` block - the safer
+        The fewer lines you have in your ``try`` block - the safer
         you are from accidental errors.
 
     Configuration:
@@ -949,7 +955,7 @@ class TooLongTryBodyViolation(ASTViolation):
 @final
 class TooManyPublicAttributesViolation(ASTViolation):
     """
-    Forbids to have instances with too many public attributes.
+    Forbid instances with too many public attributes.
 
     We only check static definitions in a form of ``self.public = ...``.
     We do not count parent attributes.
@@ -966,8 +972,9 @@ class TooManyPublicAttributesViolation(ASTViolation):
 
     Solution:
         Make some attributes protected.
-        Split this class into several ones.
-        If class is a Data Transfer Object, then use ``@dataclass`` decorator.
+        Split this class into several.
+        If the class is a Data Transfer Object,
+        then use ``@dataclass`` decorator.
 
     Configuration:
         This rule is configurable with ``--max-attributes``.
@@ -988,10 +995,10 @@ class TooManyPublicAttributesViolation(ASTViolation):
 @final
 class CognitiveComplexityViolation(ASTViolation):
     """
-    Forbids to have functions with too high cognitive complexity.
+    Forbid functions with too much cognitive complexity.
 
     Reasoning:
-        People are not great at reading and iterpretating code in their heads.
+        People are not great at reading and interpreting code in their heads.
         That's why code with a lot of nested loops,
         conditions, exceptions handlers,
         and context managers is hard to read and understand.
@@ -1014,22 +1021,22 @@ class CognitiveComplexityViolation(ASTViolation):
 
     """
 
-    error_template = 'Found too high function cognitive complexity: {0}'
+    error_template = 'Found function with too much cognitive complexity: {0}'
     code = 231
 
 
 @final
 class CognitiveModuleComplexityViolation(SimpleViolation):
     """
-    Forbids to have modules with too high average cognitive complexity.
+    Forbid modules with average cognitive complexity that is too high.
 
     Reasoning:
         Modules with lots of functions might hide cognitive complexity
-        inside many small and relatevely simple functions.
+        inside many small and relatively simple functions.
 
     Solution:
-        Rewrite your code to be simplier.
-        Or use several modules.
+        Rewrite your code to be simplier
+        or use several modules.
 
     Configuration:
         This rule is configurable with ``--max-cognitive-average``.
@@ -1043,17 +1050,17 @@ class CognitiveModuleComplexityViolation(SimpleViolation):
 
     """
 
-    error_template = 'Found too high module cognitive complexity: {0}'
+    error_template = 'Found module cognitive complexity that is too high: {0}'
     code = 232
 
 
 @final
 class TooLongCallChainViolation(ASTViolation):
     """
-    Forbids too long call chains.
+    Forbid call chains that are too long.
 
     Reasoning:
-        Too long call chains are overcomplicated and
+        Call chains that are too long are overcomplicated and
         indicators of bad API design.
 
     Solution:
@@ -1069,21 +1076,21 @@ class TooLongCallChainViolation(ASTViolation):
 
     """
 
-    error_template = 'Found too long call chain length: {0}'
+    error_template = 'Found call chain that is too long: {0}'
     code = 233
 
 
 @final
 class TooComplexAnnotationViolation(ASTViolation):
     """
-    Forbids too complex annotations.
+    Forbid overly complex annotations.
 
     Annotation complexity is maximum annotation nesting level.
     Example: ``List[int]`` has complexity of 2
     and ``Tuple[List[Optional[str]], int]`` has complexity of 4.
 
     Reasoning:
-        Too complex annotations make your types unreadable.
+        Overly complex annotations make your types unreadable.
         And make developers afraid of types.
 
     Solution:
@@ -1102,18 +1109,18 @@ class TooComplexAnnotationViolation(ASTViolation):
 
     """
 
-    error_template = 'Found too complex annotation: {0}'
+    error_template = 'Found overly complex annotation: {0}'
     code = 234
 
 
 @final
 class TooManyImportedModuleMembersViolation(ASTViolation):
     """
-    Forbids ``from ... import ...`` with too many imported names.
+    Forbid ``from ... import ...`` with too many imported names.
 
     Reasoning:
-        Importing too many names from one import is easy way to cause
-        violation ``WPS203`` - too many imported names.
+        Importing too many names from one import is an easy way to cause
+        the violation ``WPS203`` - too many imported names.
 
     Solution:
         Refactor the imports to import a common namespace. Something like
@@ -1133,9 +1140,112 @@ class TooManyImportedModuleMembersViolation(ASTViolation):
         Default:
         :str:`wemake_python_styleguide.options.defaults.MAX_IMPORT_FROM_MEMBERS`
 
-    .. versionadded:: 0.14.0
+    .. versionadded:: 0.15.0
 
     """
 
     error_template = 'Found too many imported names from a module: {0}'
+
     code = 235
+
+
+@final
+class TooLongTupleUnpackViolation(ASTViolation):
+    """
+    Forbid using too many variables to unpack a tuple.
+
+    Reasoning:
+        The order and meaning are hard to remember.
+
+    Solution:
+        If you have more than 2 values in a tuple, consider using
+        ``typing.NamedTuple`` or a dataclass instead.
+
+    Example::
+
+        # Correct:
+        result = foo()
+
+        # Wrong:
+        a, b, c, d, e = foo()
+
+    Configuration:
+        This rule is configurable with ``--max-tuple-unpack-length``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_TUPLE_UNPACK_LENGTH`
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found too many variables used to unpack a tuple: {0}'
+    code = 236
+
+
+@final
+class TooComplexFormattedStringViolation(ASTViolation):
+    """
+    Forbids ``f`` strings that are too complex.
+
+    A complex format string is defined as use of any formatted value
+    that is not:
+
+    - the value of a variable
+    - the value of a collection through lookup with a variable, number, or
+      string as the key
+    - the return value of a procedure call without arguments
+
+    Related to :class:`~FormattedStringViolation`.
+
+    Reasoning:
+        Complex ``f`` strings are often difficult to understand,
+        making the code less readible. Generally we don't allow
+        ``f`` strings but this violation exists in case the user
+        decides to ignore the general violation.
+
+    Solution:
+        Use ``.format()`` or assign complex expressions to variables
+        before formatting.
+
+    Example::
+
+        # Correct:
+        f'smth {user.get_full_name()}'
+
+        # Wrong:
+        f'{reverse("url-name")}?{"&".join("user="+uid for uid in user_ids)}'
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found a too complex `f` string'
+    code = 237
+
+
+@final
+class TooManyRaisesViolation(ASTViolation):
+    """
+    Forbids too many ``raise`` statements in a function.
+
+    Reasoning:
+        Too many ``raise`` statements in a function make the code
+        untraceable and overcomplicated.
+
+    Solution:
+        Split the function into smaller functions, such that
+        each of them can raise less errors.
+        Create more standard errors, or use alternative ways to
+        raise them.
+
+    Configuration:
+        This rule is configurable with ``--max-raises``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_RAISES`
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found too many raises in a function: {0}'
+    code = 238

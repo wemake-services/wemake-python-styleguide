@@ -1,5 +1,8 @@
 import pytest
 
+from wemake_python_styleguide.violations.complexity import (
+    TooComplexFormattedStringViolation,
+)
 from wemake_python_styleguide.violations.consistency import (
     FormattedStringViolation,
     ModuloStringFormatViolation,
@@ -137,6 +140,36 @@ def test_regular_modulo_string(
 ):
     """Testing that the strings violate the rules."""
     tree = parse_ast_tree('x = {0}"{1}"'.format(prefix, code))
+
+    visitor = WrongStringVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [], (
+        FormattedStringViolation,
+        TooComplexFormattedStringViolation,
+    ))
+
+
+@pytest.mark.parametrize('code', [
+    'dt.strftime("%A, %d. %B %Y %I:%M%p")',
+    'datetime.strftime("%d-%m-%Y (%H:%M:%S)")',
+    'datetime.strptime("01-01-2020 (10:20:30)", "%d-%m-%Y (%H:%M:%S)")',
+    'date.strftime("%d-%m-%Y (%H:%M:%S)")',
+    'date.strptime("01-01-2020", "%d-%m-%Y")',
+    'time.strftime("%H:%M:%S")',
+    'time.strptime("10:20:30", "%H:%M:%S")',
+    'strptime("01-01-2020 (10:20:30)", "%d-%m-%Y (%H:%M:%S)")',
+    'cur.execute("SELECT * FROM table WHERE column = %s", ("some_column"))',
+    'execute("SELECT * FROM table WHERE column = %s", ("some_column"))',
+])
+def test_functions_modulo_string(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+):
+    """Testing that the strings violate the rules."""
+    tree = parse_ast_tree(code)
 
     visitor = WrongStringVisitor(default_options, tree=tree)
     visitor.run()

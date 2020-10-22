@@ -6,9 +6,22 @@ from wemake_python_styleguide.types import AnyNodes
 _IfAndElifASTNode = Union[ast.If, List[ast.stmt]]
 
 
-def has_elif(node: ast.If) -> bool:
-    """Tells if this node is a part of a ``if`` chain or just a single one."""
+def is_elif(node: ast.If) -> bool:
+    """Tells if this node is a part of an ``if`` chain or just a single one."""
     return getattr(node, 'wps_if_chain', False)  # noqa: WPS425
+
+
+def has_elif(node: ast.If) -> bool:
+    """
+    Tells if this statement has an ``elif`` chained or not.
+
+    Just for informational purposes, the ``if`` chain is a sequence as follows:
+    ``[ast.If, [ast.stmt, ...]]`` for an ``if: ... else: ...``
+    ``[ast.If, ast.If, [ast.stmt, ...]]`` for an ``if: ... elif: ... else: ...``
+    And so on.
+    As you can see, a chain that has a length of more than 2 has ``elif`` in it.
+    """
+    return len(tuple(chain(node))) > 2
 
 
 def has_else(node: ast.If) -> bool:

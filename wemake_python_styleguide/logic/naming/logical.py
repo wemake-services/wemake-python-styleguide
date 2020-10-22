@@ -1,6 +1,9 @@
 from typing import Iterable
 
-from wemake_python_styleguide.constants import UNUSED_PLACEHOLDER
+from wemake_python_styleguide.constants import (
+    ALIAS_NAMES_WHITELIST,
+    UNUSED_PLACEHOLDER,
+)
 from wemake_python_styleguide.logic.naming import access
 
 
@@ -109,7 +112,13 @@ def is_too_short_name(
     >>> is_too_short_name('xy', min_length=2, trim=True)
     False
 
+    >>> is_too_short_name('np', min_length=3)
+    False
+
     """
+    if name in ALIAS_NAMES_WHITELIST:
+        return False
+
     if access.is_unused(name):
         return False
 

@@ -109,6 +109,9 @@ MAX_ACCESS_LEVEL: Final = 4  # guessed
 #: Maximum number of public attributes in a single class.
 MAX_ATTRIBUTES: Final = 6  # guessed
 
+#: Maximum number of raises in a function.
+MAX_RAISES: Final = 3  # guessed
+
 #: Maximum amount of cognitive complexity per function.
 MAX_COGNITIVE_SCORE: Final = 12  # based on this code statistics
 
@@ -123,3 +126,6 @@ MAX_ANN_COMPLEXITY: Final = 3  # reasonable enough
 
 #: Maximum number of names that can be imported from module.
 MAX_IMPORT_FROM_MEMBERS: Final = 8  # guessed
+
+#: Maximun number of variables in a ``tuple`` unpacking statement.
+MAX_TUPLE_UNPACK_LENGTH: Final = 4  # guessed
