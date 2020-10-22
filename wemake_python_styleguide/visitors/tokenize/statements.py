@@ -212,15 +212,14 @@ class MultilineStringVisitor(BaseTokenVisitor):
         self,
         index: int,
         tokens: List[tokenize.TokenInfo],
-        previous_line_token: Optional[tokenize.TokenInfo],
-        next_line_token: Optional[tokenize.TokenInfo],
-    ):
-        previous_token = previous_line_token
+        previous_token: Optional[tokenize.TokenInfo],
+        next_token: Optional[tokenize.TokenInfo],
+    ) -> None:
         if index != 0:
             previous_token = tokens[index - 1]
         if previous_token and previous_token.exact_type != tokenize.EQUAL:
             self.add_violation(WrongMultilineStringUseViolation(previous_token))
-        next_token = next_line_token
+
         if index + 1 < len(tokens):
             next_token = tokens[index + 1]
         if next_token and next_token.exact_type == tokenize.DOT:
@@ -229,16 +228,14 @@ class MultilineStringVisitor(BaseTokenVisitor):
     def _check_individual_line(
         self,
         tokens: List[tokenize.TokenInfo],
-        previous_line_token: Optional[tokenize.TokenInfo],
-        next_line_token: Optional[tokenize.TokenInfo],
+        previous_token: Optional[tokenize.TokenInfo],
+        next_token: Optional[tokenize.TokenInfo],
     ) -> None:
         for index, token in enumerate(tokens):
             if token.exact_type != tokenize.STRING or token in self._docstrings:
                 continue
             if has_triple_string_quotes(token.string):
-                self._check_token(
-                    index, tokens, previous_line_token, next_line_token,
-                )
+                self._check_token(index, tokens, previous_token, next_token)
 
     def _post_visit(self) -> None:
         linenos = sorted((self._lines.keys()))

@@ -12,6 +12,7 @@ from wemake_python_styleguide.visitors.tokenize import (
 PRESET: Final = (
     comments.WrongCommentVisitor,
     comments.ShebangVisitor,
+    comments.NoqaVisitor,
 
     syntax.WrongKeywordTokenVisitor,
 

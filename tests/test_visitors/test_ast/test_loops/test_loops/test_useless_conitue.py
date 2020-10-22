@@ -24,6 +24,7 @@ while True:
         continue
 
     print(number)
+    break
 """
 
 # Wrong:
@@ -41,23 +42,10 @@ def wrapper():
             continue
 """
 
-wrong_while_loop = """
-while True:
-    continue
-"""
-
-wrong_nested_while_loop = """
-while True:
-    if number == 0:
-        continue
-"""
-
 
 @pytest.mark.parametrize('code', [
     wrong_for_loop,
     wrong_nested_for_loop,
-    wrong_while_loop,
-    wrong_nested_while_loop,
 ])
 def test_wrong_continue_in_loop(
     assert_errors,
