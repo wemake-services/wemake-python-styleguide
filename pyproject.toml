@@ -21,7 +21,6 @@ readme = "README.md"
 
 repository = "https://github.com/wemake-services/wemake-python-styleguide"
 homepage = "https://wemake-python-stylegui.de"
-funding = "https://opencollective.com/wemake-python-styleguide"
 
 keywords = [
   "flake8",
@@ -43,6 +42,9 @@ classifiers = [
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Topic :: Software Development :: Quality Assurance",
 ]
+
+[tool.poetry.urls]
+"Funding" = "https://opencollective.com/wemake-python-styleguide"
 
 [tool.poetry.plugins."flake8.extension"]
 WPS = "wemake_python_styleguide.checker:Checker"
