@@ -1,10 +1,6 @@
 import pytest
 
-<<<<<<< HEAD
-=======
 from wemake_python_styleguide.compat.constants import PY38
-
->>>>>>> master
 from wemake_python_styleguide.violations.complexity import (
     TooManyLocalsViolation,
 )

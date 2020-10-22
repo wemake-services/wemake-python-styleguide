@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-# -*- coding: utf-8 -*-
-
-=======
->>>>>>> master
 from wemake_python_styleguide.violations.complexity import (
     TooManyArgumentsViolation,
 )
