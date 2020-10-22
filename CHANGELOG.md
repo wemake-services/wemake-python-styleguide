@@ -55,19 +55,6 @@ Semantic versioning in our case means:
 - Updates `poetry` version to `1.1`
 
 
-## 0.15.0 aka New runtime
-
-### Bugfixes
-
-- Fixes how wrong variable names were checked case sensitive with `WPS110`
-- Fixes false positives DirectMagicAttributeAccessViolation with `__mro__`, `__subclasses__` and `__version__`
-
-### Misc
-
-- Updates lots of dependenices
-- Fixed documentation for TooManyPublicAttributesViolation
-
-
 ## 0.14.0 aka The Walrus fighter
 
 This release was focused on adding `python3.8` support,
