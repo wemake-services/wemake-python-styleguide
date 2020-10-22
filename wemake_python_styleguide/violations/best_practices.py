@@ -75,6 +75,7 @@ Summary
    FloatingNanViolation
    InfiniteWhileLoopViolation
    ImportCollisionViolation
+   FloatComplexCompareViolation
 
 Best practices
 --------------
@@ -138,6 +139,7 @@ Best practices
 .. autoclass:: FloatingNanViolation
 .. autoclass:: InfiniteWhileLoopViolation
 .. autoclass:: ImportCollisionViolation
+.. autoclass:: FloatComplexCompareViolation
 
 """
 
@@ -2294,3 +2296,38 @@ class ImportCollisionViolation(ASTViolation):
 
     error_template = 'Found imports collision: {0}'
     code = 458
+
+
+@final
+class FloatComplexCompareViolation(ASTViolation):
+    """
+    Forbids comparisons with ``float`` and ``complex``.
+
+    Reasoning:
+        This is a best practice rule, as ``float`` and ``complex``
+        suffer from representation error, leading to possibly
+        incorrect results during comparison.
+
+    Solution:
+        Use fuzzy operators.
+        1. ``abs(f1 - f2) <= allowed_error``
+        2. ``math.isclose(f1, f2)`` (for ``float``)
+        3. ``cmath.isclose(c1, c2)`` (for ``complex``)
+        4. Custom logic, not using operators
+
+    Example::
+
+        # Correct:
+        math.isclose(3.0, 0.3 / 0.1)
+        cmath.isclose(3 + 4j, (0.3 + 0.4j) / 0.1)
+
+        # Wrong:
+        3.0 == 0.3 / 0.1
+        3 + 4j == (0.3 + 0.4j) / 0.1
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found comparison with float or complex number'
+    code = 459

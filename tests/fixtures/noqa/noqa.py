@@ -726,6 +726,7 @@ for element in range(10):
         break
     my_print(4)
 
+
 def raise_bad_exception():
     raise Exception  # noqa: WPS454
 
@@ -742,6 +743,8 @@ def infinite_loop():
     while True:  # noqa: WPS457
         my_print('forever')
 
+
+my_print(some_float == 1.0)  # noqa: WPS459
 unnecessary_raw_string = r'no backslashes.' # noqa: WPS360
 
 
