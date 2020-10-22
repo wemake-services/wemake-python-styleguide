@@ -56,6 +56,7 @@ element tuple or list unpacking.
 - Forbids to use too complex `f`-strings
 - Forbids to use too many `raise` statements inside a single function
 - Forbids to compare with `float` and `complex` values
+- Forbids to ignore some violations (configurable) on a line level
 
 ### Bugfixes
 
@@ -65,8 +66,7 @@ element tuple or list unpacking.
 - Make `WPS326` work when there is comment between string literals
 - Allowed yield statements in call method
 - Allow to use `^` with `1`
-- Fixes false positives in WPS513
-- Fixes false positives in WPS323
+- Fixes false positives in WPS513 and WPS323
 
 ### Misc
 
@@ -75,24 +75,6 @@ element tuple or list unpacking.
 - Updated isort config
 - Introduce helper script to check for missing calls to `self.generic_visit(node)` in AST visitors
 - Updates `poetry` version to `1.1`
-
-
-## 0.15.0 aka New runtime
-
-### Features
-
-- Forbids to use single `return None`
-- Add `__await__` to the list of priority magic methods
-
-### Bugfixes
-
-- Fixes how wrong variable names were checked case sensitive with `WPS110`
-- Fixes false positives DirectMagicAttributeAccessViolation with `__mro__`, `__subclasses__` and `__version__`
-
-### Misc
-
-- Updates lots of dependenices
-- Fixed documentation for TooManyPublicAttributesViolation
 
 
 ## 0.14.0 aka The Walrus fighter

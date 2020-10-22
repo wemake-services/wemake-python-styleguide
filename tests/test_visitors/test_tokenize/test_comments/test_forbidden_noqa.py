@@ -11,6 +11,7 @@ from wemake_python_styleguide.visitors.tokenize.comments import NoqaVisitor
     ('x = 10_00  # noqa:W002, U114', 'W'),
     ('x = 10_00  # noqa: J002, WPS114', 'J, WPS'),
     ('x = 10_00  # noqa: J, WPS114', 'J'),
+    ('x = 10_00  # noqa: WPS114', 'WPS'),;
 ])
 def test_forbidden_noqa(
     parse_tokens,
