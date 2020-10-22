@@ -1243,8 +1243,7 @@ class TooManyRaisesViolation(ASTViolation):
         Default:
         :str:`wemake_python_styleguide.options.defaults.MAX_RAISES`
 
-    See also:
-        https://stackoverflow.com/questions/2052390/manually-raising-throwing-an-exception-in-python
+    .. versionadded:: 0.15.0
 
     """
 

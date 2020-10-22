@@ -749,7 +749,7 @@ def many_raises_function(parameter):  # noqa: WPS238
     if parameter == 1:
         raise ValueError('1')
     if parameter == 2:
-        raise ValueError('2')
+        raise KeyError('2')
     if parameter == 3:
-        raise Exception('3')
-    raise Exception('4')
+        raise IndexError('3')
+    raise TypeError('4')
