@@ -25,7 +25,12 @@ from wemake_python_styleguide.compat.aliases import (
 )
 from wemake_python_styleguide.logic import nodes, safe_eval, source, walk
 from wemake_python_styleguide.logic.naming.name_nodes import extract_name
-from wemake_python_styleguide.logic.tree import attributes, operators, strings
+from wemake_python_styleguide.logic.tree import (
+    attributes,
+    functions,
+    operators,
+    strings,
+)
 from wemake_python_styleguide.types import (
     AnyChainable,
     AnyFor,
@@ -85,6 +90,13 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         flags=re.X,  # flag to ignore comments and whitespaces.
     )
 
+    #: Names of functions in which we allow strings with modulo patterns.
+    _modulo_pattern_exceptions: ClassVar[FrozenSet[str]] = frozenset((
+        'strftime',  # For date, time, and datetime.strftime()
+        'strptime',  # For date, time, and datetime.strptime()
+        'execute',  # For psycopg2's cur.execute()
+    ))
+
     def visit_any_string(self, node: AnyText) -> None:
         """
         Forbids incorrect usage of strings.
@@ -111,6 +123,22 @@ class WrongStringVisitor(base.BaseNodeVisitor):
                 ),
             )
 
+    def _is_modulo_pattern_exception(self, parent: Optional[ast.AST]) -> bool:
+        """
+        Check if the string with modulo patterns is in an exceptional situation.
+
+        Basically we have some function names in which we allow strings with
+        modulo patterns because they must have them for the functions to work
+        properly.
+        """
+        if parent and isinstance(parent, ast.Call):
+            return bool(functions.given_function_called(
+                parent,
+                self._modulo_pattern_exceptions,
+                split_modules=True,
+            ))
+        return False
+
     def _check_modulo_patterns(
         self,
         node: AnyText,
@@ -121,7 +149,10 @@ class WrongStringVisitor(base.BaseNodeVisitor):
             return  # we allow `%s` in docstrings: they cannot be formatted.
 
         if self._modulo_string_pattern.search(text_data):
-            self.add_violation(consistency.ModuloStringFormatViolation(node))
+            if not self._is_modulo_pattern_exception(parent):
+                self.add_violation(
+                    consistency.ModuloStringFormatViolation(node),
+                )
 
 
 @final

@@ -27,7 +27,6 @@ Semantic versioning in our case means:
 - WPS531: Forbids testing conditions to just return booleans when it is possible to simply return the condition itself
 - Forbids to use unsafe infinite loops
 - Forbids to use raw strings `r''` when not necessary
-- Add parameter to `given_function_called` so that it checks if a function has been called by its name regardless of the modules or classes it is in
 - Forbids to use too complex f-strings
 
 ### Bugfixes
@@ -39,6 +38,7 @@ Semantic versioning in our case means:
 - Allowed yield statements in call method
 - Allow to use `^` with `1`
 - Fixes false positives in WPS513
+- Fixes false positives in WPS323
 
 ### Misc
 
