@@ -27,6 +27,7 @@ from wemake_python_styleguide.constants import MAX_NO_COVER_COMMENTS, STDIN
 from wemake_python_styleguide.logic.system import is_executable_file, is_windows
 from wemake_python_styleguide.logic.tokens import NEWLINES, get_comment_text
 from wemake_python_styleguide.violations.best_practices import (
+    ForbiddenInlineIgnoreViolation,
     OveruseOfNoCoverCommentViolation,
     OveruseOfNoqaCommentViolation,
     ShebangViolation,
@@ -41,7 +42,6 @@ class WrongCommentVisitor(BaseTokenVisitor):
     """Checks comment tokens."""
 
     _no_cover: ClassVar[Pattern] = re.compile(r'^pragma:\s+no\s+cover')
-    _noqa_check: ClassVar[Pattern] = re.compile(r'^(noqa:?)($|[A-Z\d\,\s]+)')
     _type_check: ClassVar[Pattern] = re.compile(
         r'^type:\s?([\w\d\[\]\'\"\.]+)$',
     )
@@ -49,7 +49,6 @@ class WrongCommentVisitor(BaseTokenVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Initializes a counter."""
         super().__init__(*args, **kwargs)
-        self._noqa_count = 0
         self._no_cover_count = 0
 
     def visit_comment(self, token: tokenize.TokenInfo) -> None:
@@ -57,30 +56,13 @@ class WrongCommentVisitor(BaseTokenVisitor):
         Performs comment checks.
 
         Raises:
-            OveruseOfNoqaCommentViolation
             WrongDocCommentViolation
             WrongMagicCommentViolation
 
         """
-        self._check_noqa(token)
         self._check_typed_ast(token)
         self._check_empty_doc_comment(token)
         self._check_cover_comments(token)
-
-    def _check_noqa(self, token: tokenize.TokenInfo) -> None:
-        comment_text = get_comment_text(token)
-        match = self._noqa_check.match(comment_text)
-        if not match:
-            return
-
-        self._noqa_count += 1
-        excludes = match.groups()[1].strip()
-        prefix = match.groups()[0].strip()
-
-        if not excludes or prefix[-1] != ':':
-            # We cannot pass the actual line here,
-            # since it will be ignored due to `# noqa` comment:
-            self.add_violation(WrongMagicCommentViolation(text=comment_text))
 
     def _check_typed_ast(self, token: tokenize.TokenInfo) -> None:
         comment_text = get_comment_text(token)
@@ -107,10 +89,6 @@ class WrongCommentVisitor(BaseTokenVisitor):
         self._no_cover_count += 1
 
     def _post_visit(self) -> None:
-        if self._noqa_count > self.options.max_noqa_comments:
-            self.add_violation(
-                OveruseOfNoqaCommentViolation(text=str(self._noqa_count)),
-            )
         if self._no_cover_count > MAX_NO_COVER_COMMENTS:
             self.add_violation(
                 OveruseOfNoCoverCommentViolation(
@@ -208,3 +186,68 @@ class ShebangVisitor(BaseTokenVisitor):
 
     def _is_valid_shebang_line(self, token: tokenize.TokenInfo) -> bool:
         return self._shebang.match(token.line) is not None
+
+
+@final
+class NoqaVisitor(BaseTokenVisitor):
+    """Checks noqa comment tokens."""
+
+    _noqa_check: ClassVar[Pattern] = re.compile(r'^(noqa:?)($|[A-Z\d\,\s]+)')
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Initializes a counter."""
+        super().__init__(*args, **kwargs)
+        self._noqa_count = 0
+
+    def visit_comment(self, token: tokenize.TokenInfo) -> None:
+        """
+        Performs comment checks.
+
+        Raises:
+            OveruseOfNoqaCommentViolation
+            ForbiddenInlineIgnoreViolation
+
+        """
+        self._check_noqa(token)
+
+    def _check_noqa(self, token: tokenize.TokenInfo) -> None:
+        comment_text = get_comment_text(token)
+        match = self._noqa_check.match(comment_text)
+        if not match:
+            return
+
+        self._noqa_count += 1
+        excludes = match.groups()[1].strip()
+        prefix = match.groups()[0].strip()
+
+        if not excludes or prefix[-1] != ':':
+            # We cannot pass the actual line here,
+            # since it will be ignored due to `# noqa` comment:
+            self.add_violation(WrongMagicCommentViolation(text=comment_text))
+            return
+        self._check_forbidden_noqa(excludes)
+
+    def _check_forbidden_noqa(self, noqa_excludes) -> None:
+        excludes_list = [ex.strip() for ex in noqa_excludes.split(',')]
+        forbidden_noqa = ''.join(self.options.forbidden_inline_ignore)
+        for noqa_code in forbidden_noqa.split(','):
+            noqa_code = noqa_code.strip()
+            if noqa_code in excludes_list:
+                self.add_violation(
+                    ForbiddenInlineIgnoreViolation(text=str(noqa_excludes)),
+                )
+                return
+            if not noqa_code.isalpha():
+                continue
+            for excluded in excludes_list:
+                if re.fullmatch(r'{0}($|\d+)'.format(noqa_code), excluded):
+                    self.add_violation(
+                        ForbiddenInlineIgnoreViolation(text=str(noqa_excludes)),
+                    )
+                    return
+
+    def _post_visit(self) -> None:
+        if self._noqa_count > self.options.max_noqa_comments:
+            self.add_violation(
+                OveruseOfNoqaCommentViolation(text=str(self._noqa_count)),
+            )

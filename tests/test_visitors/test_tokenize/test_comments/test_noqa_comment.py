@@ -3,9 +3,7 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     WrongMagicCommentViolation,
 )
-from wemake_python_styleguide.visitors.tokenize.comments import (
-    WrongCommentVisitor,
-)
+from wemake_python_styleguide.visitors.tokenize.comments import NoqaVisitor
 
 
 @pytest.mark.parametrize('code', [
@@ -29,7 +27,7 @@ def test_correct_comments(
     """Ensures that correct comments do not raise a warning."""
     file_tokens = parse_tokens(code)
 
-    visitor = WrongCommentVisitor(default_options, file_tokens=file_tokens)
+    visitor = NoqaVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -56,7 +54,7 @@ def test_incorrect_noqa_comment(
     """Ensures that incorrect `noqa` comments raise a warning."""
     file_tokens = parse_tokens(code)
 
-    visitor = WrongCommentVisitor(default_options, file_tokens=file_tokens)
+    visitor = NoqaVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [WrongMagicCommentViolation])

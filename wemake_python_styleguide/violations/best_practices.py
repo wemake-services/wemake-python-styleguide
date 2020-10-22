@@ -77,6 +77,7 @@ Summary
    ImportCollisionViolation
    FloatComplexCompareViolation
    SingleElementDestructuringViolation
+   ForbiddenInlineIgnoreViolation
 
 Best practices
 --------------
@@ -142,6 +143,7 @@ Best practices
 .. autoclass:: ImportCollisionViolation
 .. autoclass:: FloatComplexCompareViolation
 .. autoclass:: SingleElementDestructuringViolation
+.. autoclass:: ForbiddenInlineIgnoreViolation
 
 """
 
@@ -2360,3 +2362,31 @@ class SingleElementDestructuringViolation(ASTViolation):
 
     error_template = 'Found single element destructuring'
     code = 460
+
+
+@final
+class ForbiddenInlineIgnoreViolation(SimpleViolation):
+    """
+    Forbids to use specific inline ignore violations.
+
+    There can be forbidden a specific violation or whole
+    class of violations.
+
+    Reasoning:
+        There are violations important for specific project that must not
+        be ignored, e.g. complexity or best practices violations.
+
+    Solution:
+        Remove inline ignore for forbidden violations.
+
+    Configuration:
+        This rule is configurable with `--forbidden-inline-ignore``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.FORBIDDEN_INLINE_IGNORE`
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Forbidden inline ignore: {0}'
+    code = 461

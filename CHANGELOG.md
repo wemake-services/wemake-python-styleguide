@@ -6,36 +6,10 @@ We used to have incremental versioning before `0.1.0`.
 Semantic versioning in our case means:
 - Bugfixes do not bring new features, code that passes on `x.y.0` should pass on `x.y.1`. With the only exception that bugfix can raise old violations in new places, if they were hidden by a buggy behaviour.
 - Minor releases do bring new features and configuration options. New violations can be added. Code that passes `x.0.y` might not pass on `x.1.y` release.
-- Major releases inidicate significant milestones or serious breaking changes.
-
-## 0.16.0
-
-### Features
-
-- Adds `SingleElementDestructuringViolation` as `WPS454`, because it's hard to read single
-element tuple or list unpacking.
-- Raises `WrongUnpackingViolation` for unpacking lists with side-effects.
+- Major releases inidicate significant milestones or serious breaking changes..
 
 
-## 0.15.0 aka New runtime
-
-### Features
-
-- Forbids to use single `return None`
-- Add `__await__` to the list of priority magic methods
-
-### Bugfixes
-
-- Fixes how wrong variable names were checked case sensitive with `WPS110`
-- Fixes false positives DirectMagicAttributeAccessViolation with `__mro__`, `__subclasses__` and `__version__`
-
-### Misc
-
-- Updates lots of dependenices
-- Fixed documentation for TooManyPublicAttributesViolation
-
-
-## 0.15.0
+## 0.15.0 aka Hello, LibCST
 
 ### Features
 
@@ -56,6 +30,10 @@ element tuple or list unpacking.
 - Forbids to use too complex `f`-strings
 - Forbids to use too many `raise` statements inside a single function
 - Forbids to compare with `float` and `complex` values
+- Forbids single element destruct
+- Forbids to ignore some violations (configurable) on a line level
+- Forbids single element unpacking
+- Forbids to unpack lists with side-effects
 
 ### Bugfixes
 
@@ -65,8 +43,7 @@ element tuple or list unpacking.
 - Make `WPS326` work when there is comment between string literals
 - Allowed yield statements in call method
 - Allow to use `^` with `1`
-- Fixes false positives in WPS513
-- Fixes false positives in WPS323
+- Fixes false positives in WPS513 and WPS323
 
 ### Misc
 
