@@ -25,7 +25,12 @@ from wemake_python_styleguide.compat.aliases import (
 )
 from wemake_python_styleguide.logic import nodes, safe_eval, source, walk
 from wemake_python_styleguide.logic.naming.name_nodes import extract_name
-from wemake_python_styleguide.logic.tree import attributes, operators, strings
+from wemake_python_styleguide.logic.tree import (
+    attributes,
+    functions,
+    operators,
+    strings,
+)
 from wemake_python_styleguide.types import (
     AnyChainable,
     AnyFor,
@@ -111,7 +116,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
                 ),
             )
 
-    def _is_exception(self, parent: Optional[ast.AST]) -> bool:
+    def _is_modulo_pattern_exception(self, parent: Optional[ast.AST]) -> bool:
         """
         Check if the string with modulo patterns is in an exceptional situation.
 
@@ -126,7 +131,11 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         )
 
         if parent and isinstance(parent, ast.Call):
-            return bool(given_function_called(parent, exceptions))
+            return bool(functions.given_function_called(
+                parent,
+                exceptions,
+                split_modules=True,
+            ))
         return False
 
     def _check_modulo_patterns(
@@ -139,7 +148,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
             return  # we allow `%s` in docstrings: they cannot be formatted.
 
         if self._modulo_string_pattern.search(text_data):
-            if not self._is_exception(parent):
+            if not self._is_modulo_pattern_exception(parent):
                 self.add_violation(
                     consistency.ModuloStringFormatViolation(node),
                 )
