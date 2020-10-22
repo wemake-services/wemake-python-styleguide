@@ -34,6 +34,7 @@ Semantic versioning in our case means:
 - Forbids to ignore some violations (configurable) on a line level
 - Forbids single element unpacking
 - Forbids to unpack lists with side-effects
+- Forbids to use miltiline strings except for assignments and docstrings
 
 ### Bugfixes
 

@@ -176,12 +176,13 @@ def test_double_wrong_variables(
     mode,
 ):
     """Testing that it is possible to have two violations with wrong vars."""
-    tree = parse_ast_tree(mode("""
+    code = """
     def some_function():
         _should_not_be_used = 1
         print(_should_not_be_used)
         print(_should_not_be_used)
-    """))
+    """
+    tree = parse_ast_tree(mode(code))
 
     visitor = FunctionDefinitionVisitor(default_options, tree=tree)
     visitor.run()

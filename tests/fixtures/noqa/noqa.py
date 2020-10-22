@@ -756,3 +756,8 @@ def many_raises_function(parameter):  # noqa: WPS238
     if parameter == 3:
         raise IndexError('3')
     raise TypeError('4')
+
+
+my_print("""
+text
+""")  # noqa: WPS462

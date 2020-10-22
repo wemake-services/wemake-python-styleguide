@@ -78,6 +78,7 @@ Summary
    FloatComplexCompareViolation
    SingleElementDestructuringViolation
    ForbiddenInlineIgnoreViolation
+   WrongMultilineStringUseViolation
 
 Best practices
 --------------
@@ -144,6 +145,7 @@ Best practices
 .. autoclass:: FloatComplexCompareViolation
 .. autoclass:: SingleElementDestructuringViolation
 .. autoclass:: ForbiddenInlineIgnoreViolation
+.. autoclass:: WrongMultilineStringUseViolation
 
 """
 
@@ -2390,3 +2392,41 @@ class ForbiddenInlineIgnoreViolation(SimpleViolation):
 
     error_template = 'Forbidden inline ignore: {0}'
     code = 461
+
+
+@final
+class WrongMultilineStringUseViolation(TokenizeViolation):
+    '''
+    Frobids direct usage of multiline strings.
+
+    Multiline strings are only allowed in docstrings
+    or assignments to variables.
+
+    Reasoning:
+        Direct usage of multiline strings is not readable.
+        One should not depend on the current indentation,
+        e.g. in comparisons or function calls.
+
+    Solution:
+        Assign a multiline string to a variable.
+
+    Example::
+
+        # Correct:
+        multiline = """
+            abc
+            abc
+        """
+
+        # Wrong:
+        function("""
+            abc
+            abc
+        """)
+
+    .. versionadded:: 0.15.0
+
+    '''
+
+    error_template = 'Wrong multiline string usage'
+    code = 462

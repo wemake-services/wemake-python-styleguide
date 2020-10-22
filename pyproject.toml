@@ -43,6 +43,9 @@ classifiers = [
   "Topic :: Software Development :: Quality Assurance",
 ]
 
+[tool.poetry.urls]
+"Funding" = "https://opencollective.com/wemake-python-styleguide"
+
 [tool.poetry.plugins."flake8.extension"]
 WPS = "wemake_python_styleguide.checker:Checker"
 
