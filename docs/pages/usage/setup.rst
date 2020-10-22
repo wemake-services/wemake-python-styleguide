@@ -51,5 +51,5 @@ Check out how we do it in our different templates:
 .. rubric:: Further reading
 
 - :ref:`Configuring and ignoring violations <configuration>`
-- :ref:`Intoducing this linter to a legacy codebase <flakehell>`
+- :ref:`Introducing this linter to a legacy codebase <flakehell>`
 - :ref:`Sharing configuration across multiple projects <nitpick>`

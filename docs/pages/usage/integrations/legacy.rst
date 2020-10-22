@@ -13,14 +13,14 @@ But, you still can do several things to integrate this linter step by step:
 2. Per-file ignore complexity checks that are failing for your project.
    Sometimes it is possible to rewrite several parts of your code,
    but generally complexity rules are the hardest to fix.
-3. Use `boyscout rule <https://deviq.com/boy-scout-rule/>`_: always leave
+3. Use `boy scout rule <https://deviq.com/boy-scout-rule/>`_: always leave
    your code better than you found it.
 
-To make sure "boyscout rule" works we offically support ``--diff`` mode.
+To make sure "boy scout rule" works we officially support ``--diff`` mode.
 The main idea of it is simple: we only lint things that we touch.
 
 We also support :ref:`flakehell-legacy` (external tool)
-to create a ``baseline`` of your currect violations
+to create a ``baseline`` of your current violations
 and start to lint only new one from this point.
 
 Choose what suits you best.
@@ -47,7 +47,7 @@ Imagine that we have this old and very big class (like 1000 lines of code):
           return
 
 Of course, it won't make its way trough our linter.
-And you obciously do not want to refactor 1000s lines of code
+And you obviously do not want to refactor 1000s lines of code
 just to make a simple fix to ``method_we_need_to_touch``.
 
 New changes to it
@@ -111,7 +111,7 @@ It means that we only need to fix things we have touched in this commit:
           # We really need to log it, so it will be shown in logs:
           print(value_to_log)  # noqa: WPS421
 
-That's it. We have passed out linter with just so few reafctoring.
+That's it. We have passed out linter with just so few refactoring.
 
 Of course, it has a downside: the ugly code still lives with you,
 but new ugly code won't make its way to the project.

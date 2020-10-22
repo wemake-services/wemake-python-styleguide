@@ -61,7 +61,7 @@ AnyFor = Union[ast.For, ast.AsyncFor]
 #: In case we need to work with any loop: sync, async, and while.
 AnyLoop = Union[AnyFor, ast.While]
 
-#: All diffrent comprehension types in one place.
+#: All different comprehension types in one place.
 AnyComprehension = Union[
     ast.ListComp,
     ast.DictComp,
@@ -89,6 +89,13 @@ ContextNodes = Union[
 AnyAccess = Union[
     ast.Attribute,
     ast.Subscript,
+]
+
+#: In case we need to handle types that can be chained.
+AnyChainable = Union[
+    ast.Attribute,
+    ast.Subscript,
+    ast.Call,
 ]
 
 #: We use this type to work with any text-like values. Related to `AnyText`.
@@ -226,6 +233,10 @@ class ConfigurationOptions(Protocol):
         ...
 
     @property
+    def max_raises(self) -> int:
+        ...
+
+    @property
     def max_cognitive_score(self) -> int:
         ...
 
@@ -243,4 +254,8 @@ class ConfigurationOptions(Protocol):
 
     @property
     def max_import_from_members(self) -> int:
+        ...
+
+    @property
+    def max_tuple_unpack_length(self) -> int:
         ...

@@ -1,9 +1,11 @@
 import pytest
 
 from wemake_python_styleguide.compat.constants import PY38
+from wemake_python_styleguide.violations.complexity import (
+    TooManyArgumentsViolation,
+)
 from wemake_python_styleguide.visitors.ast.complexity.function import (
     FunctionComplexityVisitor,
-    TooManyArgumentsViolation,
 )
 
 lambda_without_arguments = 'lambda: ...'

@@ -48,6 +48,10 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
 
     _bad_complex_suffix: ClassVar[str] = 'J'
 
+    _float_zero: ClassVar[Pattern] = re.compile(
+        r'^0\.0$',
+    )
+
     def visit_number(self, token: tokenize.TokenInfo) -> None:
         """
         Checks number declarations.
@@ -59,6 +63,7 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
             BadComplexNumberSuffixViolation
             NumberWithMeaninglessZeroViolation
             PositiveExponentViolation
+            FloatZeroViolation
 
         Regressions:
         https://github.com/wemake-services/wemake-python-styleguide/issues/557
@@ -68,6 +73,7 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
         self._check_underscored_number(token)
         self._check_partial_float(token)
         self._check_bad_number_suffixes(token)
+        self._check_float_zeros(token)
 
     def _check_complex_suffix(self, token: tokenize.TokenInfo) -> None:
         if self._bad_complex_suffix in token.string:
@@ -130,6 +136,12 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
                     ),
                 )
 
+    def _check_float_zeros(self, token: tokenize.TokenInfo) -> None:
+        if self._float_zero.match(token.string):
+            self.add_violation(
+                consistency.FloatZeroViolation(token, text=token.string),
+            )
+
 
 @final
 class WrongStringTokenVisitor(BaseTokenVisitor):
@@ -163,12 +175,14 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
             WrongMultilineStringViolation
             ImplicitRawStringViolation
             WrongUnicodeEscapeViolation
+            RawStringNotNeededViolation
 
         """
         self._check_correct_multiline(token)
         self._check_string_modifiers(token)
         self._check_implicit_raw_string(token)
         self._check_wrong_unicode_escape(token)
+        self._check_unnecessary_raw_string(token)
 
     def _check_correct_multiline(self, token: tokenize.TokenInfo) -> None:
         _, string_def = split_prefixes(token.string)
@@ -229,6 +243,14 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
             # character can never be the start of a new backslash escape.
             index += 2
 
+    def _check_unnecessary_raw_string(self, token: tokenize.TokenInfo) -> None:
+        modifiers, string_def = split_prefixes(token.string)
+
+        if 'r' in modifiers.lower() and '\\' not in string_def:
+            self.add_violation(
+                consistency.RawStringNotNeededViolation(token, text=string_def),
+            )
+
 
 @final
 class WrongStringConcatenationVisitor(BaseTokenVisitor):
@@ -238,6 +260,7 @@ class WrongStringConcatenationVisitor(BaseTokenVisitor):
         tokenize.NL,
         tokenize.NEWLINE,
         tokenize.INDENT,
+        tokenize.COMMENT,
     ))
 
     def __init__(self, *args, **kwargs) -> None:

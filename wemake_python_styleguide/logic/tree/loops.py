@@ -1,23 +1,46 @@
 import ast
+from typing import Optional
 
 from wemake_python_styleguide.compat.aliases import ForNodes
-from wemake_python_styleguide.logic import walk
-from wemake_python_styleguide.types import AnyLoop
+from wemake_python_styleguide.types import AnyLoop, AnyNodes
 
 
-def _is_nested_loop(node: AnyLoop, sub: ast.AST) -> bool:
-    return isinstance(sub, (*ForNodes, ast.While)) and sub is not node
+def _does_loop_contain_node(
+    loop: Optional[AnyLoop],
+    to_check: ast.AST,
+) -> bool:
+    """
+    Helper function to check for break statement in a nested loop.
+
+    If a loop contains a loop with a break, this ensures that
+    we don't count the outside loop as having a break.
+    """
+    if loop is None:
+        return False
+
+    for inner_node in ast.walk(loop):
+        # We are checking this specific node, not just any `break`:
+        if to_check is inner_node:
+            return True
+    return False
 
 
-def has_break(node: AnyLoop) -> bool:
-    """Tells whether or not given loop has ``break`` keyword in its body."""
+def has_break(
+    node: AnyLoop,
+    *,
+    break_nodes: AnyNodes,
+) -> bool:
+    """Checks whether loop contains a break statement."""
     closest_loop = None
 
-    for sub in ast.walk(node):
-        if _is_nested_loop(node, sub):
-            closest_loop = sub
+    for subnode in ast.walk(node):
+        if isinstance(subnode, (*ForNodes, ast.While)) and subnode is not node:
+            closest_loop = subnode
 
-        if isinstance(sub, ast.Break):
-            if not closest_loop or not walk.is_contained_by(sub, closest_loop):
+        if isinstance(subnode, break_nodes):
+            is_nested_break = _does_loop_contain_node(
+                closest_loop, subnode,
+            )
+            if not is_nested_break:
                 return True
     return False

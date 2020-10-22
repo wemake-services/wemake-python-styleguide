@@ -16,7 +16,7 @@ But, we will need some information about what's wrong to help you.
 
 <!-- Describe what is not working. Please, attach a traceback. -->
 
-## How is that should be
+## How it should be
 
 <!-- Describe how it should work. -->
 

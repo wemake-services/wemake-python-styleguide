@@ -119,6 +119,9 @@ You can also show all options that ``flake8`` supports by running:
 - ``max-attributes`` - maximum number of public instance attributes,
     defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_ATTRIBUTES`
+- ``max-raises`` - maximum number of raises in a function,
+    defaults to
+    :str:`wemake_python_styleguide.options.defaults.MAX_RAISES`
 - ``max-cognitive-score`` - maximum amount of cognitive complexity
     per function, defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_COGNITIVE_SCORE`
@@ -134,7 +137,9 @@ You can also show all options that ``flake8`` supports by running:
 - ``max-import-from-members`` - maximum number of names that can be imported
     from module, defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_IMPORT_FROM_MEMBERS`
-
+- ``max-tuple-unpack-length`` - maximum number of variables in tuple unpacking,
+    defaults to
+    :str:`wemake_python_styleguide.options.defaults.MAX_TUPLE_UNPACK_LENGTH`
 """
 
 from typing import ClassVar, Mapping, Optional, Sequence, Union
@@ -368,6 +373,12 @@ class Configuration(object):
         ),
 
         _Option(
+            '--max-raises',
+            defaults.MAX_RAISES,
+            'Maximum number of raises in a function.',
+        ),
+
+        _Option(
             '--max-cognitive-score',
             defaults.MAX_COGNITIVE_SCORE,
             'Maximum amount of cognitive complexity per function.',
@@ -393,6 +404,11 @@ class Configuration(object):
             '--max-import-from-members',
             defaults.MAX_IMPORT_FROM_MEMBERS,
             'Maximum number of names that can be imported from module.',
+        ),
+        _Option(
+            '--max-tuple-unpack-length',
+            defaults.MAX_TUPLE_UNPACK_LENGTH,
+            'Maximum number of variables in a tuple unpacking.',
         ),
     ]
 

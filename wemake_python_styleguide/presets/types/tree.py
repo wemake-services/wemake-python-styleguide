@@ -53,7 +53,8 @@ PRESET: Final = (
     functions.UselessLambdaDefinitionVisitor,
     functions.WrongFunctionCallContextVisitior,
     functions.UnnecessaryLiteralsVisitor,
-    functions.PositionalOnlyArgumentsVisitor,
+    functions.FunctionArgumentsVisitor,
+    functions.FloatingNanCallVisitor,
 
     exceptions.WrongTryExceptVisitor,
     exceptions.NestedTryBlocksVisitor,
@@ -69,6 +70,7 @@ PRESET: Final = (
 
     builtins.WrongNumberVisitor,
     builtins.WrongStringVisitor,
+    builtins.WrongFormatStringVisitor,
     builtins.WrongAssignmentVisitor,
     builtins.WrongCollectionVisitor,
 

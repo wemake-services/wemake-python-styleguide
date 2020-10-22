@@ -18,15 +18,15 @@ Like code with bad variable names, unreachable branches,
 statements that have no effect.
 
 We in ``wemake.services`` believe that these kind of tools are not required,
-because a good linter will just not let your badly formated code pass the CI,
+because a good linter will just not let your badly formatted code pass the CI,
 so there would be no junk to reformat!
-All code is perfectly formated all the time.
+All code is perfectly formatted all the time.
 
 Rely on strict linters, not auto-formatters.
 
 However, if you still want to use some autoformatter
 together with ``wemake-python-styleguide``
-we have made some reasearch to help you!
+we have made some research to help you!
 
 autopep8
 ~~~~~~~~
@@ -118,7 +118,7 @@ Here are the violations that ``black`` produces:
 - Quotes: for some reasons ``black`` uses ``"``
   that almost no one uses in the ``python`` world
 - Trailing commas: ``black`` strips trailing commas and this makes
-  adding new code harder to review, since your ``git diff`` is poluted
+  adding new code harder to review, since your ``git diff`` is polluted
   by a comma change, the sad thing that trailing commas as a best-practice
   are quite popular in ``python`` code
 - Line length. Violating rules by 10%-15% is not ok.

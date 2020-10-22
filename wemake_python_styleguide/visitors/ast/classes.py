@@ -391,9 +391,10 @@ class ClassMethodOrderVisitor(base.BaseNodeVisitor):
 
     def _ideal_order(self, first: str) -> int:
         base_methods_order = {
-            '__new__': 5,  # highest priority
-            '__init__': 4,
-            '__call__': 3,
+            '__new__': 6,  # highest priority
+            '__init__': 5,
+            '__call__': 4,
+            '__await__': 3,
         }
         public_and_magic_methods_priority = 2
 
