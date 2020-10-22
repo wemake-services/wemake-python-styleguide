@@ -70,9 +70,6 @@ Summary
    PositionalOnlyArgumentsViolation
    LoopControlFinallyViolation
    ShebangViolation
-<<<<<<< HEAD
-   WrongMultilineStringUseViolation
-=======
    BaseExceptionRaiseViolation
    NonTrivialExceptViolation
    FloatingNanViolation
@@ -81,7 +78,7 @@ Summary
    FloatComplexCompareViolation
    SingleElementDestructuringViolation
    ForbiddenInlineIgnoreViolation
->>>>>>> master
+   WrongMultilineStringUseViolation
 
 Best practices
 --------------
@@ -140,9 +137,6 @@ Best practices
 .. autoclass:: PositionalOnlyArgumentsViolation
 .. autoclass:: LoopControlFinallyViolation
 .. autoclass:: ShebangViolation
-<<<<<<< HEAD
-.. autoclass:: WrongMultilineStringUseViolation
-=======
 .. autoclass:: BaseExceptionRaiseViolation
 .. autoclass:: NonTrivialExceptViolation
 .. autoclass:: FloatingNanViolation
@@ -151,7 +145,7 @@ Best practices
 .. autoclass:: FloatComplexCompareViolation
 .. autoclass:: SingleElementDestructuringViolation
 .. autoclass:: ForbiddenInlineIgnoreViolation
->>>>>>> master
+.. autoclass:: WrongMultilineStringUseViolation
 
 """
 
