@@ -1,21 +1,19 @@
-# -*- coding: utf-8 -*-
-
 """
-These checks limit the Python's inconsistency.
+These checks limit Python's inconsistencies.
 
 We can do the same things differently in Python.
 For example, there are three ways to format a string.
 There are several ways to write the same number.
 
 We like our code to be consistent.
-It is easier to bare with your code base if you follow these rules.
+It is easier to work with your code base if you follow these rules.
 
 So, we choose a single way to do things.
 It does not mean that we choose the best way to do it.
-But, we value consistency more than being 100% right.
-And we are ready to suffer all trade-offs that might come.
+But, we value consistency more than being 100% right
+and we are ready to suffer all trade-offs that might come.
 
-Once again, these rules are highly subjective. But, we love them.
+Once again, these rules are highly subjective, but we love them.
 
 .. currentmodule:: wemake_python_styleguide.violations.consistency
 
@@ -48,7 +46,7 @@ Summary
    MultilineFunctionAnnotationViolation
    UppercaseStringModifierViolation
    WrongMultilineStringViolation
-   EmptyLineAfterCodingViolation
+   ModuloStringFormatViolation
    InconsistentReturnViolation
    InconsistentYieldViolation
    ImplicitStringConcatenationViolation
@@ -83,6 +81,9 @@ Summary
    BracketBlankLineViolation
    IterableUnpackingViolation
    LineCompriseCarriageReturnViolation
+   FloatZeroViolation
+   UnpackingIterableToListViolation
+   RawStringNotNeededViolation
 
 Consistency checks
 ------------------
@@ -110,7 +111,7 @@ Consistency checks
 .. autoclass:: MultilineFunctionAnnotationViolation
 .. autoclass:: UppercaseStringModifierViolation
 .. autoclass:: WrongMultilineStringViolation
-.. autoclass:: EmptyLineAfterCodingViolation
+.. autoclass:: ModuloStringFormatViolation
 .. autoclass:: InconsistentReturnViolation
 .. autoclass:: InconsistentYieldViolation
 .. autoclass:: ImplicitStringConcatenationViolation
@@ -145,6 +146,9 @@ Consistency checks
 .. autoclass:: BracketBlankLineViolation
 .. autoclass:: IterableUnpackingViolation
 .. autoclass:: LineCompriseCarriageReturnViolation
+.. autoclass:: FloatZeroViolation
+.. autoclass:: UnpackingIterableToListViolation
+.. autoclass:: RawStringNotNeededViolation
 
 """
 
@@ -159,7 +163,7 @@ from wemake_python_styleguide.violations.base import (
 @final
 class LocalFolderImportViolation(ASTViolation):
     """
-    Forbids to have imports relative to the current folder.
+    Forbid imports relative to the current folder.
 
     Reasoning:
         We should pick one style and stick to it.
@@ -188,10 +192,10 @@ class LocalFolderImportViolation(ASTViolation):
 @final
 class DottedRawImportViolation(ASTViolation):
     """
-    Forbids to use imports like ``import os.path``.
+    Forbid imports like ``import os.path``.
 
     Reasoning:
-        There too many different ways to import something.
+        There are too many ways to import something.
         We should pick one style and stick to it.
         We have decided to use the readable one.
 
@@ -217,11 +221,11 @@ class DottedRawImportViolation(ASTViolation):
 @final
 class UnicodeStringViolation(TokenizeViolation):
     """
-    Forbids to use ``u`` string prefix.
+    Forbid ``u`` string prefix.
 
     Reasoning:
-        We do not need this prefix since ``python2``.
-        But, it is still possible to find it inside the codebase.
+        We haven't needed this prefix since ``python2``,
+        but it is still possible to find it in a codebase.
 
     Solution:
         Remove this prefix.
@@ -246,7 +250,7 @@ class UnicodeStringViolation(TokenizeViolation):
 @final
 class UnderscoredNumberViolation(TokenizeViolation):
     """
-    Forbids to use underscores (``_``) in numbers.
+    Forbid underscores (``_``) in numbers.
 
     Reasoning:
         It is possible to write ``1000`` in three different ways:
@@ -281,7 +285,7 @@ class UnderscoredNumberViolation(TokenizeViolation):
 @final
 class PartialFloatViolation(TokenizeViolation):
     """
-    Forbids to use partial floats like ``.05`` or ``23.``.
+    Forbid partial floats like ``.05`` or ``23.``.
 
     Reasoning:
         Partial numbers are hard to read and they can be confused with
@@ -290,7 +294,7 @@ class PartialFloatViolation(TokenizeViolation):
         through the source code.
 
     Solution:
-        Use full versions with leading and starting zeros.
+        Use full versions with leading and trailing zeros.
 
     Example::
 
@@ -313,15 +317,17 @@ class PartialFloatViolation(TokenizeViolation):
 @final
 class FormattedStringViolation(ASTViolation):
     """
-    Forbids to use ``f`` strings.
+    Forbid ``f`` strings.
 
     Reasoning:
-        ``f`` strings loses context too often and they are hard to lint.
+        ``f`` strings implicitly rely on the context around them.
         Imagine that you have a string that breaks
         when you move it two lines above.
         That's not how a string should behave.
         Also, they promote a bad practice:
         putting your logic inside the template.
+        Moreover, they do two things at once:
+        declare a template and format it in a single action.
 
     Solution:
         Use ``.format()`` with indexed params instead.
@@ -349,12 +355,19 @@ class FormattedStringViolation(ASTViolation):
 @final
 class RequiredBaseClassViolation(ASTViolation):
     """
-    Forbids to write classes without base classes.
+    Forbid writing classes without base classes.
+
+    Please, note that this rule has nothing to do with ``python2``.
+    We care only about consistency here.
 
     Reasoning:
         We just need to decide how to do it.
         We need a single and unified rule about base classes.
         We have decided to stick to the explicit base class notation.
+        Why? Because it is consistent with other use-cases.
+        When we have a base class ``A``, we write ``class MyClass(A):``.
+        When we have no base class, we have an implicit ``object`` base class.
+        So, we still use the same syntax: ``class MyClass(object):``.
 
     Solution:
         Add a base class.
@@ -367,9 +380,6 @@ class RequiredBaseClassViolation(ASTViolation):
         # Wrong:
         class Some: ...
 
-    See also:
-        https://google.github.io/styleguide/pyguide.html#39-classes
-
     .. versionadded:: 0.1.0
 
     """
@@ -381,7 +391,7 @@ class RequiredBaseClassViolation(ASTViolation):
 @final
 class MultipleIfsInComprehensionViolation(ASTViolation):
     """
-    Forbids to have multiple ``if`` statements inside list comprehensions.
+    Forbid multiple ``if`` statements inside list comprehensions.
 
     Reasoning:
         It is very hard to read multiple ``if`` statements inside
@@ -411,15 +421,15 @@ class MultipleIfsInComprehensionViolation(ASTViolation):
 @final
 class ConstantCompareViolation(ASTViolation):
     """
-    Forbids to have compares between two literals.
+    Forbid comparing between two literals.
 
     Reasoning:
         When two constants are compared it is typically an indication of a
-        mistake, since the Boolean value of the compare, will always be
+        mistake, since the Boolean value of the comparison, will always be
         the same.
 
     Solution:
-        Remove the constant compare and any associated dead code.
+        Remove the constant comparison and any associated dead code.
 
     Example::
 
@@ -436,22 +446,22 @@ class ConstantCompareViolation(ASTViolation):
 
     """
 
-    error_template = 'Found constant compare'
+    error_template = 'Found constant comparison'
     code = 308
 
 
 @final
 class CompareOrderViolation(ASTViolation):
     """
-    Forbids comparison where argument doesn't come first.
+    Forbid comparisons where the argument doesn't come first.
 
     Reasoning:
         It is hard to read the code when
-        you have to shuffle ordering of the arguments all the time.
-        Bring consistency to the compare!
+        you have to shuffle the ordering of the arguments all the time.
+        Bring consistency to the comparison!
 
     Solution:
-        Refactor your compare expression, place the argument first.
+        Refactor your comparison expression, place the argument first.
 
     Example::
 
@@ -473,12 +483,12 @@ class CompareOrderViolation(ASTViolation):
 @final
 class BadNumberSuffixViolation(TokenizeViolation):
     """
-    Forbids to use capital ``X``, ``O``, ``B``, and ``E`` in numbers.
+    Forbid uppercase ``X``, ``O``, ``B``, and ``E`` in numbers.
 
     Reasoning:
         Octal, hex, binary and scientific notation suffixes could
-        be written in two possible notations: lowercase and uppercase.
-        Which brings confusion and decreases code consistency and readability.
+        be written in two possible notations: lowercase and uppercase
+        which brings confusion and decreases code consistency and readability.
         We enforce a single way to write numbers with suffixes:
         suffix with lowercase chars.
 
@@ -511,14 +521,14 @@ class BadNumberSuffixViolation(TokenizeViolation):
 @final
 class MultipleInCompareViolation(ASTViolation):
     """
-    Forbids comparison where multiple ``in`` checks.
+    Forbid comparisons with multiple ``in`` checks.
 
     Reasoning:
-        Using multiple ``in`` is unreadable.
+        Using multiple ``in`` checks is unreadable.
 
     Solution:
-        Refactor your compare expression to use several ``and`` conditions
-        or separate ``if`` statements in case it is appropriate.
+        Refactor your comparison expression to use several ``and`` conditions
+        or separate ``if`` statements in cases where it is appropriate.
 
     Example::
 
@@ -542,47 +552,46 @@ class MultipleInCompareViolation(ASTViolation):
 @final
 class UselessCompareViolation(ASTViolation):
     """
-    Forbids to have compares between the same variable.
+    Forbid comparisons of a variable to itself.
 
     Reasoning:
-        When the same variables are compared it is typically an indication
-        of a mistake, since the Boolean value of the compare will always be
+        When a variable is compared to itself, it is typically an indication
+        of a mistake since the Boolean value of the comparison will always be
         the same.
 
     Solution:
-        Remove the same variable compare and any associated dead code.
+        Remove the comparison and any associated dead code.
 
     Example::
 
+        # Correct:
+        do_something()
+
         # Wrong:
-        a = 1
         if a < a:
             do_something()
         else:
             do_something_else()
 
-        # Correct:
-        do_something()
-
     .. versionadded:: 0.3.0
 
     """
 
-    error_template = 'Found compare between same variable'
+    error_template = 'Found comparison of a variable to itself'
     code = 312
 
 
 @final
 class MissingSpaceBetweenKeywordAndParenViolation(TokenizeViolation):
     """
-    Enforces to separate parenthesis from the keywords with spaces.
+    Enforce separation of parenthesis from keywords with spaces.
 
     Reasoning:
         Some people use ``return`` and ``yield`` keywords as functions.
         The same happened to good old ``print`` in Python2.
 
     Solution:
-        Insert space symbol between keyword and open paren.
+        Insert space symbol between the keyword and opening parenthesis.
 
     Example::
 
@@ -603,14 +612,14 @@ class MissingSpaceBetweenKeywordAndParenViolation(TokenizeViolation):
 
     """
 
-    error_template = 'Found parens right after a keyword'
+    error_template = 'Found parenthesis immediately after a keyword'
     code = 313
 
 
 @final
 class ConstantConditionViolation(ASTViolation):
     """
-    Forbids using ``if`` statements that use invalid conditionals.
+    Forbid using ``if`` statements that use invalid conditionals.
 
     Reasoning:
         When invalid conditional arguments are used
@@ -632,14 +641,14 @@ class ConstantConditionViolation(ASTViolation):
 
     """
 
-    error_template = 'Conditional always evaluates to same result'
+    error_template = 'Found conditional that always evaluates the same'
     code = 314
 
 
 @final
 class ObjectInBaseClassesListViolation(ASTViolation):
     """
-    Forbids extra ``object`` in parent classes list.
+    Forbid extra ``object`` in parent classes list.
 
     Reasoning:
         We should allow object only when
@@ -663,21 +672,21 @@ class ObjectInBaseClassesListViolation(ASTViolation):
 
     """
 
-    error_template = 'Founded extra `object` in parent classes list'
+    error_template = 'Found extra `object` in parent classes list'
     code = 315
 
 
 @final
 class MultipleContextManagerAssignmentsViolation(ASTViolation):
     """
-    Forbids multiple assignment targets for context managers.
+    Forbid multiple assignment targets for context managers.
 
     Reasoning:
         It is hard to distinguish whether ``as`` should unpack into
-        tuple or we are just using two context managers.
+        a tuple or if we are just using two context managers.
 
     Solution:
-        Use several context managers. Or explicit brackets.
+        Use several context managers or explicit brackets.
 
     Example::
 
@@ -704,7 +713,7 @@ class MultipleContextManagerAssignmentsViolation(ASTViolation):
 @final
 class ParametersIndentationViolation(ASTViolation):
     """
-    Forbids to use incorrect parameters indentation.
+    Forbid incorrect indentation for parameters.
 
     Reasoning:
         It is really easy to spoil your perfect, readable code with
@@ -780,17 +789,17 @@ class ParametersIndentationViolation(ASTViolation):
 @final
 class ExtraIndentationViolation(TokenizeViolation):
     """
-    Forbids to use extra indentation.
+    Forbid extra indentation.
 
     Reasoning:
         You can use extra indentation for lines of code.
-        Python allows you to do that in case you will keep the indentation
-        level equal for this specific node.
-        But, that's insane!
+        Python allows you to do that in case you want to keep the
+        indentation level equal for this specific node,
+        but that's insane!
 
     Solution:
         We should stick to 4 spaces for an indentation block.
-        Each next block should be indented by just 4 extra spaces.
+        Each next block level should be indented by just 4 extra spaces.
 
     Example::
 
@@ -821,10 +830,10 @@ class ExtraIndentationViolation(TokenizeViolation):
 @final
 class WrongBracketPositionViolation(TokenizeViolation):
     """
-    Forbids to have brackets in the wrong position.
+    Forbid brackets in the wrong position.
 
     Reasoning:
-        You can do bizzare things with bracket positioning in python.
+        You can do bizarre things with bracket positioning in python.
         We require all brackets to be consistent.
 
     Solution:
@@ -874,7 +883,7 @@ class WrongBracketPositionViolation(TokenizeViolation):
 @final
 class MultilineFunctionAnnotationViolation(ASTViolation):
     """
-    Forbids to use multi-line function type annotations.
+    Forbid multi-line function type annotations.
 
     Reasoning:
         Functions with multi-line type annotations are unreadable.
@@ -908,13 +917,13 @@ class MultilineFunctionAnnotationViolation(ASTViolation):
 @final
 class UppercaseStringModifierViolation(TokenizeViolation):
     """
-    Forbids to use uppercase string modifiers.
+    Forbid uppercase string modifiers.
 
     Reasoning:
         String modifiers should be consistent.
 
     Solution:
-        Use lowercase modifiers.
+        Use lowercase string modifiers.
 
     Example::
 
@@ -937,7 +946,7 @@ class UppercaseStringModifierViolation(TokenizeViolation):
 @final
 class WrongMultilineStringViolation(TokenizeViolation):
     '''
-    Forbids to use triple quotes for singleline strings.
+    Forbid triple quotes for singleline strings.
 
     Reasoning:
         String quotes should be consistent.
@@ -971,63 +980,57 @@ class WrongMultilineStringViolation(TokenizeViolation):
 
 
 @final
-class EmptyLineAfterCodingViolation(TokenizeViolation):
+class ModuloStringFormatViolation(ASTViolation):
     """
-    Enforces to have an extra empty line after the ``coding`` comment.
+    Forbid ``%`` formatting on strings.
+
+    We check for string formatting. We try not to issue false positives.
+    It is better for us to ignore a real (but hard to detect) case,
+    then marking a valid one as incorrect.
+
+    Internally we check for this pattern in string definitions::
+
+        %[(name)] [flags] [width] [.precision] [{h | l}] type
+
+    This is a ``C`` format specification.
+    Related to :class:`~FormattedStringViolation` and solves the same problem.
 
     Reasoning:
-        Since we use
-        `flake8-coding <https://github.com/tk0miya/flake8-coding>`_
-        as a part of our linter
-        we care about extra space after this coding comment.
-        This is done for pure consistency.
-
-        Why should we even care about this magic coding comment?
-        For several reasons.
-
-        First, explicit encoding is always better that an implicit one,
-        different countries still use some non utf-8 encodings as a default.
-        But, people might override it with other encodings in a comment.
-        Do you know how much pain it can cause to you?
-
-        We still know that ``python3`` uses ``utf-8`` inside.
-
-        Second, some tools break because of this incorrect encoding comment.
-        Including, ``django``, ``flake8``, and ``tokenize`` core module.
-        It is very hard to notice these things when they happen.
+        You must use a single formatting method across your project.
 
     Solution:
-        Add an empty line between ``coding`` magic comment and your code.
+        We enforce to use string ``.format()`` method for this task.
 
     Example::
 
         # Correct:
-        # coding: utf-8
-
-        SOME_VAR = 1
+        'some string', 'your name: {0}', 'data: {data}'
 
         # Wrong:
-        # coding: utf-8
-        SOME_VAR = 1
+       'my name is: %s', 'data: %(data)d'
 
-    .. versionadded:: 0.7.0
+    See also:
+        https://github.com/gforcada/flake8-pep3101
+        https://msdn.microsoft.com/en-us/library/56e442dc.aspx
+        https://docs.python.org/3/library/stdtypes.html#old-string-formatting
+        https://pyformat.info/
+
+    .. versionadded:: 0.14.0
 
     """
 
-    error_template = (
-        'Found missing empty line between `coding` magic comment and code'
-    )
+    error_template = 'Found `%` string formatting'
     code = 323
 
 
 @final
 class InconsistentReturnViolation(ASTViolation):
     """
-    Enforces to have consistent ``return`` statements.
+    Enforce consistent ``return`` statements.
 
     Rules are:
     1. if any ``return`` has a value, all ``return`` nodes should have a value
-    2. do not place ``return`` without value at the end of a function
+    2. do not place ``return`` without a value at the end of a function
 
     This rule respects ``mypy`` style of placing ``return`` statements.
     There should be no conflict with these two checks.
@@ -1066,7 +1069,7 @@ class InconsistentReturnViolation(ASTViolation):
 @final
 class InconsistentYieldViolation(ASTViolation):
     """
-    Enforces to have consistent ``yield`` statements.
+    Enforce consistent ``yield`` statements.
 
     Rules are:
     1. if any ``yield`` has a value, all ``yield`` nodes should have a value
@@ -1107,12 +1110,12 @@ class InconsistentYieldViolation(ASTViolation):
 @final
 class ImplicitStringConcatenationViolation(TokenizeViolation):
     """
-    Forbids to use implicit string concatenation.
+    Forbid implicit string concatenation.
 
     Reasoning:
         This is error-prone, since you can possibly miss a comma
-        in a collection of string and get an implicit concatenation.
-        And because there are different and safe ways to do the same thing
+        in a collection of strings and get an implicit concatenation.
+        And because there are safer ways to do the same thing
         it is better to use them instead.
 
     Solution:
@@ -1137,15 +1140,15 @@ class ImplicitStringConcatenationViolation(TokenizeViolation):
 @final
 class UselessContinueViolation(ASTViolation):
     """
-    Forbids to use meaningless ``continue`` node in loops.
+    Forbid meaningless ``continue`` in loops.
 
     Reasoning:
-        Placing this keyword in the end of any loop won't make any difference
+        Placing this keyword at the end of any loop won't make any difference
         to your code. And we prefer not to have meaningless
         constructs in our code.
 
     Solution:
-        Remove useless ``continue`` node from the loop.
+        Remove useless ``continue`` from the loop.
 
     Example::
 
@@ -1155,10 +1158,20 @@ class UselessContinueViolation(ASTViolation):
                 continue
             print(number)
 
+        for number in [1, 2, 3]:
+            with suppress(Exception):
+                do_smth(some_obj)
+
         # Wrong:
         for number in [1, 2, 3]:
             print(number)
             continue
+
+        for number in [1, 2, 3]:
+            try:
+                do_smth(some_obj)
+            except Exception:
+                continue
 
     .. versionadded:: 0.7.0
 
@@ -1171,12 +1184,12 @@ class UselessContinueViolation(ASTViolation):
 @final
 class UselessNodeViolation(ASTViolation):
     """
-    Forbids to use meaningless nodes.
+    Forbid meaningless nodes.
 
     Reasoning:
         Some nodes might be completely useless. They will literally do nothing.
         Sometimes they are hard to find, because this situation can be caused
-        by a recent refactoring or just by acedent.
+        by a recent refactoring or just by accident.
         This might be also an overuse of syntax.
 
     Solution:
@@ -1199,7 +1212,7 @@ class UselessNodeViolation(ASTViolation):
 @final
 class UselessExceptCaseViolation(ASTViolation):
     """
-    Forbids to use meaningless ``except`` cases.
+    Forbid meaningless ``except`` cases.
 
     Reasoning:
         Using ``except`` cases that just reraise the same exception
@@ -1219,6 +1232,11 @@ class UselessExceptCaseViolation(ASTViolation):
             sentry.log()
             raise ValueError()
 
+        try:
+            ...
+        except ValueError as exc:
+            raise CustomReadableException from exc
+
         # Wrong:
         try:
             ...
@@ -1236,7 +1254,7 @@ class UselessExceptCaseViolation(ASTViolation):
 @final
 class UselessOperatorsViolation(ASTViolation):
     """
-    Forbids the use of unnecessary operators in your code.
+    Forbid unnecessary operators in your code.
 
     You can write: ``5.4`` and ``+5.4``. There's no need to use the second
     version. Similarly ``--5.4``, ``---5.4``, ``not not foo``, and ``~~42``
@@ -1274,15 +1292,15 @@ class UselessOperatorsViolation(ASTViolation):
 @final
 class InconsistentReturnVariableViolation(ASTViolation):
     """
-    Forbids local variable that are only used in ``return`` statements.
+    Forbid local variables that are only used in ``return`` statements.
 
-    We also allow cases when variable is assigned,
-    then there are some other statements without direct variable access,
+    We also allow cases when a variable is assigned,
+    then there are some other statements without direct variable access
     and the variable is returned.
     We reserve this use-case to be able
     to do some extra work before the function returns.
 
-    We also allow to return partial, sorted,
+    We also allow the return of partial, sorted,
     or modified tuple items that are defined just above.
 
     Reasoning:
@@ -1320,7 +1338,7 @@ class InconsistentReturnVariableViolation(ASTViolation):
 @final
 class WalrusViolation(ASTViolation):
     """
-    Forbids local variable that are only used in ``return`` statements.
+    Forbid local variable that are only used in ``return`` statements.
 
     This violation can only be thrown on ``python3.8+``.
 
@@ -1355,15 +1373,15 @@ class WalrusViolation(ASTViolation):
 @final
 class ImplicitComplexCompareViolation(ASTViolation):
     """
-    Forbids to have implicit complex compare expressions.
+    Forbid implicit complex comparison expressions.
 
     Reasoning:
-        Two compares in python that are joined with ``and`` operator
-        mean that you indeed have a complex compare with tree operators.
+        Two comparisons in python that are joined with ``and`` operator
+        mean that you have a complex comparison with tree operators.
 
     Solution:
-        Refactor your compare without ``and`` but with the third operator.
-        Notice, that you might have to change the ordering.
+        Refactor your comparison without ``and`` but with the third operator.
+        Notice that you might have to change the ordering.
 
     Example::
 
@@ -1386,17 +1404,17 @@ class ImplicitComplexCompareViolation(ASTViolation):
 @final
 class ReversedComplexCompareViolation(ASTViolation):
     """
-    Forbids to have reversed order complex compare expressions.
+    Forbid reversed order complex comparison expressions.
 
     Reasoning:
-        Compares where comparators start from the lowest element
+        Comparisons where comparators start from the lowest element
         are easier to read than one that start from the biggest one.
         It is also possible to write the same expression
-        in two separate way, which is incosistent.
+        in two separate way, which is inconsistent.
 
     Solution:
-        Reverse the order, so the smallest element comes the first
-        and the biggest one comes the last.
+        Reverse the order, so the smallest element comes first
+        and the biggest one comes last.
 
     Example::
 
@@ -1413,13 +1431,13 @@ class ReversedComplexCompareViolation(ASTViolation):
     """
 
     code = 334
-    error_template = 'Found reversed complex compare'
+    error_template = 'Found reversed complex comparison'
 
 
 @final
 class WrongLoopIterTypeViolation(ASTViolation):
     """
-    Forbids to use wrong ``for`` loop iter targets.
+    Forbid wrong ``for`` loop iter targets.
 
     We forbid to use:
 
@@ -1432,8 +1450,8 @@ class WrongLoopIterTypeViolation(ASTViolation):
     Reasoning:
         Using lists, dicts, and sets do not make much sense.
         You can use tuples instead.
-        Using comprehensions implicitly create a two level loops,
-        that are hard to read and deal with.
+        Using comprehensions implicitly creates a two level loop,
+        that is hard to read and deal with.
 
     Solution:
         Use tuples to create explicit iterables for ``for`` loops.
@@ -1461,9 +1479,9 @@ class WrongLoopIterTypeViolation(ASTViolation):
 @final
 class ExplicitStringConcatViolation(ASTViolation):
     """
-    Forbids explicit string concat in favour of ``.format`` method.
+    Forbid explicit string concatanation in favour of ``.format`` method.
 
-    However, we still allow multiline string concat
+    However, we still allow multiline string concatanation
     as a way to write long strings that does not fit the 80-chars rule.
 
     Reasoning:
@@ -1487,20 +1505,20 @@ class ExplicitStringConcatViolation(ASTViolation):
     """
 
     code = 336
-    error_template = 'Found explicit string concat'
+    error_template = 'Found explicit string concatanation'
 
 
 @final
 class MultilineConditionsViolation(ASTViolation):
     """
-    Forbids multiline conditions.
+    Forbid multiline conditions.
 
     Reasoning:
-        This way of writing conditions hides the inner complexity this line has.
-        And it decreases readability of the code.
+        This way of writing conditions hides the inner complexity this line has
+        and it decreases readability of the code.
 
     Solution:
-        Divide multiline conditions to some ``if`` condition. Or use variables.
+        Divide multiline conditions to some ``if`` condition or use variables.
 
     Example::
 
@@ -1530,13 +1548,14 @@ class MultilineConditionsViolation(ASTViolation):
 @final
 class WrongMethodOrderViolation(ASTViolation):
     """
-    Forbids to have incorrect order of methods inside a class.
+    Forbid incorrect order of methods inside a class.
 
     We follow the same ordering:
 
     - ``__new__``
     - ``__init__``
     - ``__call__``
+    - ``__await__``
     - public and magic methods
     - protected methods
     - private methods (we discourage using them)
@@ -1562,16 +1581,16 @@ class WrongMethodOrderViolation(ASTViolation):
 @final
 class NumberWithMeaninglessZeroViolation(TokenizeViolation):
     """
-    Forbids to use meaningless zeros.
+    Forbid meaningless zeros.
 
-    We discorauge using meaningless zeros in
+    We discourage using meaningless zeros in
     float, binary, octal, hex, and exponential numbers.
 
     Reasoning:
         There are ~infinite ways to write these numbers
         by adding meaningless leading zeros to the number itself.
         ``0b1`` is the same as ``0b01`` and ``0b001``.
-        How a language can be called consistent
+        How can a language be called consistent
         if you can write numbers in an infinite ways?
         It hurts readability and understanding of your code.
 
@@ -1597,7 +1616,7 @@ class NumberWithMeaninglessZeroViolation(TokenizeViolation):
 @final
 class PositiveExponentViolation(TokenizeViolation):
     """
-    Forbids to extra ``+`` signs in the exponent.
+    Forbid extra ``+`` signs in the exponent.
 
     Reasoning:
         Positive exponent is positive by default,
@@ -1626,7 +1645,7 @@ class PositiveExponentViolation(TokenizeViolation):
 @final
 class WrongHexNumberCaseViolation(TokenizeViolation):
     """
-    Forbids to use letters as hex numbers.
+    Forbid letters as hex numbers.
 
     Reasoning:
         One can write ``0xA`` and ``0xa`` which is inconsistent.
@@ -1654,10 +1673,10 @@ class WrongHexNumberCaseViolation(TokenizeViolation):
 @final
 class ImplicitRawStringViolation(TokenizeViolation):
     r"""
-    Forbids to use ``\\`` escape sequences inside regular strings.
+    Forbid ``\\`` escape sequences inside regular strings.
 
     Reasoning:
-        It is hard to read escape sequencse inside regular strings,
+        It is hard to read escape sequences inside regular strings,
         because they use ``\\`` double backslash for a single character escape.
 
     Solution:
@@ -1683,7 +1702,7 @@ class ImplicitRawStringViolation(TokenizeViolation):
 @final
 class BadComplexNumberSuffixViolation(TokenizeViolation):
     """
-    Forbids to use uppercase complex number suffix.
+    Forbid uppercase complex number suffix.
 
     Reasoning:
         Numbers should be consistent.
@@ -1710,16 +1729,16 @@ class BadComplexNumberSuffixViolation(TokenizeViolation):
 @final
 class ZeroDivisionViolation(ASTViolation):
     """
-    Forbids to explicitly divide by zero.
+    Forbid explicit division (or modulo) by zero.
 
     Reasoning:
-        This will just throw ``ZeroDivisionError``
-        in case that's what you need: just throw it.
-        No need to use undefined meth behaviours.
+        This will just throw ``ZeroDivisionError``.
+        If that's what you need: just throw it.
+        No need to use undefined math behaviours.
         Or it might be just a typo / mistake, then fix it.
 
     Solution:
-        Use ``ZeroDivisionError`` or fix your number not to be ``0``.
+        Use ``ZeroDivisionError`` or make your number something besides ``0``.
 
     Example::
 
@@ -1728,8 +1747,10 @@ class ZeroDivisionViolation(ASTViolation):
 
         # Wrong:
         1 / 0
+        1 % 0
 
     .. versionadded:: 0.12.0
+    .. versionchanged: 0.15.0
 
     """
 
@@ -1740,17 +1761,19 @@ class ZeroDivisionViolation(ASTViolation):
 @final
 class MeaninglessNumberOperationViolation(ASTViolation):
     """
-    Forbids to use meaningless math operations with ``0`` and ``1``.
+    Forbid meaningless math operations with ``0`` and ``1``.
 
     Reasoning:
         Adding and substracting zero does not change the value.
         There's no need to do that.
-        Multipling by zero is also redundant:
+        Multiplying by zero is also redundant:
         it can be replaced with explicit ``0`` assign.
         Multiplying and dividing by ``1`` is also meaningless.
+        Likewise, using ``|`` or ``^`` with ``0``, and using
+        the ``%`` operator with ``1`` are unnecessary.
 
     Solution:
-        Remove useless zero operations.
+        Remove useless operations.
 
     Example::
 
@@ -1758,13 +1781,18 @@ class MeaninglessNumberOperationViolation(ASTViolation):
         number = 1
         zero = 0
         one = 1
+        three = 3
 
         # Wrong:
         number = 1 + 0 * 1
         zero = some * 0 / 1
         one = some ** 0 ** 1
+        three = 3 ^ 0
+        three = 3 | 0
+        three = 3 % 1
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 0.15.0
 
     """
 
@@ -1775,7 +1803,7 @@ class MeaninglessNumberOperationViolation(ASTViolation):
 @final
 class OperationSignNegationViolation(ASTViolation):
     """
-    Forbids to have double minus operations.
+    Forbid double minus operations.
 
     Reasoning:
         Having two operations is harder than having just one.
@@ -1810,7 +1838,7 @@ class OperationSignNegationViolation(ASTViolation):
 @final
 class VagueImportViolation(ASTViolation):
     """
-    Forbids imports that may cause confusion outside of the module.
+    Forbid imports that may cause confusion outside of the module.
 
     Names that we forbid to import:
 
@@ -1853,7 +1881,7 @@ class VagueImportViolation(ASTViolation):
 @final
 class LineStartsWithDotViolation(TokenizeViolation):
     """
-    Forbids to start lines with a dot.
+    Forbid starting lines with a dot.
 
     Reasoning:
         We enforce strict consitency rules about how to break lines.
@@ -1892,7 +1920,7 @@ class LineStartsWithDotViolation(TokenizeViolation):
 @final
 class RedundantSubscriptViolation(ASTViolation):
     """
-    Forbids the use of redundant components in a subscript's slice.
+    Forbid redundant components in a subscript's slice.
 
     Reasoning:
         We do it for consistency reasons.
@@ -1943,7 +1971,7 @@ class AugmentedAssignPatternViolation(ASTViolation):
 @final
 class UnnecessaryLiteralsViolation(ASTViolation):
     """
-    Forbids the use of unnecessary literals in your code.
+    Forbid unnecessary literals in your code.
 
     Reasoning:
         We discourage using primitive calls to get default type values.
@@ -1971,7 +1999,7 @@ class UnnecessaryLiteralsViolation(ASTViolation):
 @final
 class MultilineLoopViolation(ASTViolation):
     """
-    Forbids multiline loops.
+    Forbid multiline loops.
 
     Reasoning:
         It decreased the readability of the code.
@@ -2004,7 +2032,7 @@ class MultilineLoopViolation(ASTViolation):
 @final
 class IncorrectYieldFromTargetViolation(ASTViolation):
     """
-    Forbids to use ``yield from`` with several nodes.
+    Forbid ``yield from`` with several nodes.
 
     We allow to ``yield from`` tuples,
     names, attributes, calls, and subscripts.
@@ -2038,14 +2066,14 @@ class IncorrectYieldFromTargetViolation(ASTViolation):
 @final
 class ConsecutiveYieldsViolation(ASTViolation):
     """
-    Forbids to have consecutive ``yield`` expressions.
+    Forbid consecutive ``yield`` expressions.
 
     We raise this violation when we find at least
     two consecutive ``yield`` expressions.
 
     Reasoning:
         One can write multiple ``yield`` nodes in a row.
-        That's incosistent. Because we have ``yield from`` form.
+        That's inconsistent. Because we have ``yield from`` form.
 
     Solution:
         It can be easily changed to ``yield from (...)`` format.
@@ -2061,7 +2089,7 @@ class ConsecutiveYieldsViolation(ASTViolation):
 @final
 class BracketBlankLineViolation(TokenizeViolation):
     """
-    Forbids useless blank lines before and after brackets.
+    Forbid useless blank lines before and after brackets.
 
     Reasoning:
         We do this for consistency.
@@ -2096,13 +2124,13 @@ class BracketBlankLineViolation(TokenizeViolation):
 @final
 class IterableUnpackingViolation(ASTViolation):
     """
-    Forbids unneccessary iterable unpacking.
+    Forbid unnecessary iterable unpacking.
 
     Reasoning:
         We do this for consistency.
 
     Solution:
-        Do not use iterables unpacking, when it's not neccessary.
+        Do not use iterable unpacking when it's not necessary.
 
     Example::
 
@@ -2127,7 +2155,7 @@ class IterableUnpackingViolation(ASTViolation):
 @final
 class LineCompriseCarriageReturnViolation(TokenizeViolation):
     r"""
-    Forbids to use ``\r`` (carriage return) in line breaks.
+    Forbid using ``\r`` (carriage return) in line breaks.
 
     Reasoning:
         We enforce Unix-style newlines.
@@ -2143,3 +2171,89 @@ class LineCompriseCarriageReturnViolation(TokenizeViolation):
 
     error_template = r'Found a ``\r`` (carriage return) line break'
     code = 357
+
+
+@final
+class FloatZeroViolation(TokenizeViolation):
+    """
+    Forbid using float zeros: ``0.0``.
+
+    Reasoning:
+        Float zeros can be used as variable values which may lead to
+        typing bugs when trying to perform an operation between
+        an int number and the float zero.
+
+    Solution:
+        Use int zeros (0). If a float is needed, it should be cast
+        explicitly.
+
+    Example::
+
+        # Correct:
+        zero = 0
+
+        # Wrong:
+        zero = 0.0
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    code = 358
+    error_template = 'Found a float zero (0.0)'
+
+
+@final
+class UnpackingIterableToListViolation(ASTViolation):
+    """
+    Forbids to unpack iterable objects to lists.
+
+    Reasoning:
+        We do this for consistency.
+
+    Solution:
+        Do not unpack iterables to lists, use tuples for that.
+
+    Example::
+
+        # Correct:
+        first, second = (7, 4)
+        first, *iterable = other_iterable
+
+        # Wrong:
+        [first, second] = (7, 4)
+        [first, *iterable] = other_iterable
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found an iterable unpacking to list'
+    code = 359
+
+
+@final
+class RawStringNotNeededViolation(TokenizeViolation):
+    r"""
+    Forbid the use of raw strings when there is no backslash in the string.
+
+    Reasoning:
+        Raw string are only needed when dealing with ``\`` in the string.
+
+    Solution:
+        Do not prefix the string with ``r``. Use a normal string instead.
+
+    Example::
+
+        # Correct:
+        r'This is a correct use \n'
+
+        # Wrong:
+        r'This string should not be prefixed with r.'
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found an unnecessary use of a raw string: {0}'
+    code = 360

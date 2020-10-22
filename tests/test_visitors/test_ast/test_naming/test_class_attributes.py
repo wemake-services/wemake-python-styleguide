@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.naming import (
@@ -17,9 +15,15 @@ class Test(object):
     {0}: int = None
 """
 
+static_typed_condition_attribute = """
+class Test(object):
+    if sys.version_info > (3, 8):
+        {0}: int = None
+"""
+
 regression423 = """
 class MyClass(object):
-    def action_method(self, request, object):
+    def action_method(self, request, second):
         ...
 
     action_method.label = 'Do action'
@@ -29,6 +33,7 @@ class MyClass(object):
 @pytest.mark.parametrize('code', [
     static_attribute,
     static_typed_attribute,
+    static_typed_condition_attribute,
 ])
 @pytest.mark.parametrize('non_snake_case_name', [
     'Abc',
@@ -47,7 +52,7 @@ def test_upper_case_class_attributes(
     code,
     default_options,
 ):
-    """Testing that attribute can not have too short names."""
+    """Testing that attribute cannot have too short names."""
     tree = parse_ast_tree(code.format(non_snake_case_name))
 
     visitor = WrongNameVisitor(default_options, tree=tree)
@@ -60,6 +65,7 @@ def test_upper_case_class_attributes(
 @pytest.mark.parametrize('code', [
     static_attribute,
     static_typed_attribute,
+    static_typed_condition_attribute,
 ])
 @pytest.mark.parametrize('snake_case_name', [
     'abc',
@@ -76,7 +82,7 @@ def test_snake_case_class_attributes(
     code,
     default_options,
 ):
-    """Testing that attribute can not have too short names."""
+    """Testing that attribute cannot have too short names."""
     tree = parse_ast_tree(code.format(snake_case_name))
 
     visitor = WrongNameVisitor(default_options, tree=tree)

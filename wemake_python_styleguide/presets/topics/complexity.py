@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing_extensions import Final
 
 from wemake_python_styleguide.visitors.ast.complexity import (  # noqa: WPS235
@@ -9,6 +7,7 @@ from wemake_python_styleguide.visitors.ast.complexity import (  # noqa: WPS235
     classes,
     counts,
     function,
+    imports,
     jones,
     nested,
     offset,
@@ -20,18 +19,20 @@ PRESET: Final = (
     function.FunctionComplexityVisitor,
     function.CognitiveComplexityVisitor,
 
+    imports.ImportMembersVisitor,
+
     jones.JonesComplexityVisitor,
 
     nested.NestedComplexityVisitor,
 
     offset.OffsetVisitor,
 
-    counts.ImportMembersVisitor,
     counts.ModuleMembersVisitor,
     counts.ConditionsVisitor,
     counts.ElifVisitor,
     counts.TryExceptVisitor,
     counts.YieldTupleVisitor,
+    counts.TupleUnpackVisitor,
 
     classes.ClassComplexityVisitor,
     classes.MethodMembersVisitor,

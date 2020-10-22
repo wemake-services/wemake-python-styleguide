@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
@@ -38,7 +36,7 @@ def test_unicode_prefix(
 
 @pytest.mark.parametrize('primitive', [
     '"name"',
-    'r"text"',
+    'r"text with escape carac \n"',
     "b'unicode'",
     '"u"',
     '"12"',

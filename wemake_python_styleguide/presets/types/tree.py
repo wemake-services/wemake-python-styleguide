@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing_extensions import Final
 
 from wemake_python_styleguide.presets.topics import complexity
@@ -55,7 +53,8 @@ PRESET: Final = (
     functions.UselessLambdaDefinitionVisitor,
     functions.WrongFunctionCallContextVisitior,
     functions.UnnecessaryLiteralsVisitor,
-    functions.PositionalOnlyArgumentsVisitor,
+    functions.FunctionArgumentsVisitor,
+    functions.FloatingNanCallVisitor,
 
     exceptions.WrongTryExceptVisitor,
     exceptions.NestedTryBlocksVisitor,
@@ -66,10 +65,12 @@ PRESET: Final = (
     naming.WrongNameVisitor,
     naming.WrongModuleMetadataVisitor,
     naming.WrongVariableAssignmentVisitor,
-    naming.WrongVariableUsageVisitor,
+    naming.UnusedVariableUsageVisitor,
+    naming.UnusedVaribaleDefinitionVisitor,
 
     builtins.WrongNumberVisitor,
     builtins.WrongStringVisitor,
+    builtins.WrongFormatStringVisitor,
     builtins.WrongAssignmentVisitor,
     builtins.WrongCollectionVisitor,
 
@@ -79,7 +80,7 @@ PRESET: Final = (
 
     compares.WrongConditionalVisitor,
     compares.CompareSanityVisitor,
-    compares.WrongComparisionOrderVisitor,
+    compares.WrongComparisonOrderVisitor,
     compares.UnaryCompareVisitor,
     compares.WrongConstantCompareVisitor,
     compares.InCompareSanityVisitor,

@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.consistency import (
     UselessCompareViolation,
 )
@@ -13,16 +12,35 @@ another_variable = 2
 {0}
 """
 
-
-@pytest.mark.filterwarnings('ignore::SyntaxWarning')
-@pytest.mark.parametrize('comparators', [
+correct_comparators = [
     ('variable', '"test"'),
     ('variable', 'variable.call()'),
     ('variable', 'variable.attr'),
     ('variable', 'len(variable)'),
     ('variable', 'another_variable'),
     ('variable', '222'),
-])
+]
+
+wrong_comparators = [
+    ('variable', 'variable'),
+    ('another_variable', 'another_variable'),
+]
+
+if PY38:
+    correct_comparators.extend([
+        ('(x := variable)', 'some()'),
+        ('(x := some())', 'variable'),
+    ])
+
+    wrong_comparators.extend([
+        ('(x := variable)', 'variable'),
+        ('variable', '(x := variable)'),
+        ('(x := variable)', '(x := variable)'),
+    ])
+
+
+@pytest.mark.filterwarnings('ignore::SyntaxWarning')
+@pytest.mark.parametrize('comparators', correct_comparators)
 def test_not_useless(
     assert_errors,
     parse_ast_tree,
@@ -41,14 +59,11 @@ def test_not_useless(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('comparators', [
-    ('variable', 'variable'),
-    ('another_variable', 'another_variable'),
-])
+@pytest.mark.parametrize('comparators', wrong_comparators)
 def test_useless(
     assert_errors,
     parse_ast_tree,
-    simple_conditions,  # TODO: join with `test_useless_with_in`
+    simple_conditions,
     comparators,
     default_options,
 ):
@@ -63,11 +78,8 @@ def test_useless(
     assert_errors(visitor, [UselessCompareViolation])
 
 
-@pytest.mark.parametrize('comparators', [
-    ('variable', 'variable'),
-    ('another_variable', 'another_variable'),
-])
-def test_useless_with_in(  # TODO: join with `test_useless`
+@pytest.mark.parametrize('comparators', wrong_comparators)
+def test_useless_with_in(
     assert_errors,
     parse_ast_tree,
     in_conditions,

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from collections import defaultdict
 from functools import reduce
@@ -8,7 +6,7 @@ from typing import ClassVar, DefaultDict, List, Mapping, Set, Type
 from typing_extensions import final
 
 from wemake_python_styleguide.logic import source
-from wemake_python_styleguide.logic.tree import ifs, operators
+from wemake_python_styleguide.logic.tree import ifs, keywords, operators
 from wemake_python_styleguide.logic.tree.compares import CompareBounds
 from wemake_python_styleguide.logic.tree.functions import given_function_called
 from wemake_python_styleguide.types import AnyIf, AnyNodes
@@ -22,11 +20,13 @@ from wemake_python_styleguide.violations.consistency import (
 from wemake_python_styleguide.violations.refactoring import (
     ImplicitInConditionViolation,
     NegatedConditionsViolation,
+    SimplifiableReturningIfViolation,
     UnmergedIsinstanceCallsViolation,
     UselessLenCompareViolation,
     UselessReturningElseViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
+from wemake_python_styleguide.visitors.decorators import alias
 
 _OperatorPairs = Mapping[Type[ast.boolop], Type[ast.cmpop]]
 
@@ -59,6 +59,10 @@ def _get_duplicate_names(variables: List[Set[str]]):
 
 
 @final
+@alias('visit_any_if', (
+    'visit_If',
+    'visit_IfExp',
+))
 class IfStatementVisitor(BaseNodeVisitor):
     """Checks single and consecutive ``if`` statement nodes."""
 
@@ -75,34 +79,24 @@ class IfStatementVisitor(BaseNodeVisitor):
         super().__init__(*args, **kwargs)
         self._visited_ifs: Set[ast.If] = set()
 
-    def visit_If(self, node: ast.If) -> None:
+    def visit_any_if(self, node: ast.If) -> None:
         """
-        Checks ``if`` nodes.
+        Checks ``if`` nodes and expressions.
 
         Raises:
             UselessReturningElseViolation
             NegatedConditionsViolation
             MultilineConditionsViolation
             UselessLenCompareViolation
+            SimplifiableReturningIfViolation
 
         """
         self._check_negated_conditions(node)
-        self._check_useless_else(node)
-        self._check_multiline_conditions(node)
         self._check_useless_len(node)
-        self.generic_visit(node)
-
-    def visit_IfExp(self, node: ast.IfExp) -> None:
-        """
-        Checks ``if`` expressions.
-
-        Raises:
-            UselessLenCompareViolation
-            NegatedConditionsViolation
-
-        """
-        self._check_useless_len(node)
-        self._check_negated_conditions(node)
+        if isinstance(node, ast.If):
+            self._check_useless_else(node)
+            self._check_multiline_conditions(node)
+            self._check_simplifiable_returning_if(node)
         self.generic_visit(node)
 
     def _check_negated_conditions(self, node: AnyIf) -> None:
@@ -156,6 +150,20 @@ class IfStatementVisitor(BaseNodeVisitor):
         if isinstance(node.test, ast.Call):
             if given_function_called(node.test, {'len'}):
                 self.add_violation(UselessLenCompareViolation(node))
+
+    def _check_simplifiable_returning_if(self, node: ast.If) -> None:
+        body = node.body
+        simple_if_and_root = not (ifs.has_elif(node) or ifs.is_elif(node))
+        if keywords.is_simple_return(body) and simple_if_and_root:
+            if ifs.has_else(node):
+                else_body = node.orelse
+                if keywords.is_simple_return(else_body):
+                    self.add_violation(SimplifiableReturningIfViolation(node))
+                return
+            body = getattr(node, 'wps_parent').body
+            next_index_in_parent = body.index(node) + 1
+            if keywords.next_node_returns_bool(body, next_index_in_parent):
+                self.add_violation(SimplifiableReturningIfViolation(node))
 
 
 @final

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from wemake_python_styleguide.violations.naming import TooLongNameViolation
 from wemake_python_styleguide.visitors.ast.naming import WrongNameVisitor
 
@@ -20,7 +18,7 @@ def test_long_variable_name(
     visitor.run()
 
     assert_errors(visitor, [TooLongNameViolation])
-    assert_error_text(visitor, long_name)
+    assert_error_text(visitor, long_name, default_options.max_name_length)
 
 
 def test_long_variable_name_config(

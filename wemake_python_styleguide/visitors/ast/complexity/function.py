@@ -1,13 +1,15 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, Dict, List, Tuple, Type, Union
+from typing import ClassVar, DefaultDict, List, Mapping, Tuple, Type, Union
 
-import attr
 from typing_extensions import final
 
 from wemake_python_styleguide.logic.complexity import cognitive
+from wemake_python_styleguide.logic.complexity.functions import (
+    ComplexityMetrics,
+    FunctionCounter,
+    FunctionCounterWithLambda,
+)
 from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree import functions
@@ -21,31 +23,14 @@ from wemake_python_styleguide.violations.base import BaseViolation
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
-_FunCt = DefaultDict[AnyFunctionDef, int]
-_FunCtWithLambda = DefaultDict[AnyFunctionDefAndLambda, int]
-_FunCtVars = DefaultDict[AnyFunctionDef, List[str]]
-_AnyFunCt = Union[_FunCt, _FunCtWithLambda]
-_CheckRule = Tuple[_AnyFunCt, int, Type[BaseViolation]]
-_NodeTypeHandler = Dict[
+# Type aliases:
+
+_AnyFunctionCounter = Union[FunctionCounter, FunctionCounterWithLambda]
+_CheckRule = Tuple[_AnyFunctionCounter, int, Type[BaseViolation]]
+_NodeTypeHandler = Mapping[
     Union[type, Tuple[type, ...]],
-    _FunCt,
+    FunctionCounter,
 ]
-
-
-@final
-@attr.dataclass(frozen=False)
-class _ComplexityMetrics(object):
-    """
-    Helper class.
-
-    Stores counters of function internals.
-    """
-
-    returns: _FunCt = attr.ib(factory=lambda: defaultdict(int))
-    raises: _FunCt = attr.ib(factory=lambda: defaultdict(int))
-    awaits: _FunCt = attr.ib(factory=lambda: defaultdict(int))  # noqa: WPS204
-    asserts: _FunCt = attr.ib(factory=lambda: defaultdict(int))
-    expressions: _FunCt = attr.ib(factory=lambda: defaultdict(int))
 
 
 @final
@@ -57,15 +42,11 @@ class _ComplexityCounter(object):
     )
 
     def __init__(self) -> None:
-        self.arguments: _FunCtWithLambda = defaultdict(int)
-        self.variables: _FunCtVars = defaultdict(
-            list,
-        )
-        self.metr = _ComplexityMetrics()
+        self.metrics = ComplexityMetrics()
 
     def check_arguments_count(self, node: AnyFunctionDefAndLambda) -> None:
         """Checks the number of the arguments in a function."""
-        self.arguments[node] = len(functions.get_all_arguments(node))
+        self.metrics.arguments[node] = len(functions.get_all_arguments(node))
 
     def check_function_complexity(self, node: AnyFunctionDef) -> None:
         """
@@ -88,7 +69,7 @@ class _ComplexityCounter(object):
         What is treated as a local variable?
         Check ``TooManyLocalsViolation`` documentation.
         """
-        function_variables = self.variables[function]
+        function_variables = self.metrics.variables[function]
         if variable_def.id not in function_variables:
             if access.is_unused(variable_def.id):
                 return
@@ -110,11 +91,11 @@ class _ComplexityCounter(object):
                 self._update_variables(node, sub_node)
 
         error_counters: _NodeTypeHandler = {
-            ast.Return: self.metr.returns,
-            ast.Expr: self.metr.expressions,
-            ast.Await: self.metr.awaits,
-            ast.Assert: self.metr.asserts,
-            ast.Raise: self.metr.raises,
+            ast.Return: self.metrics.returns,
+            ast.Expr: self.metrics.expressions,
+            ast.Await: self.metrics.awaits,
+            ast.Assert: self.metrics.asserts,
+            ast.Raise: self.metrics.raises,
         }
 
         for types, counter in error_counters.items():
@@ -174,7 +155,7 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_function_internals(self) -> None:
-        for var_node, variables in self._counter.variables.items():
+        for var_node, variables in self._counter.metrics.variables.items():
             if len(variables) > self.options.max_local_variables:
                 self.add_violation(
                     complexity.TooManyLocalsViolation(
@@ -184,7 +165,7 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
                     ),
                 )
 
-        for exp_node, expressions in self._counter.metr.expressions.items():
+        for exp_node, expressions in self._counter.metrics.expressions.items():
             if expressions > self.options.max_expressions:
                 self.add_violation(
                     complexity.TooManyExpressionsViolation(
@@ -205,27 +186,27 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
     def _function_checks(self) -> List[_CheckRule]:
         return [
             (
-                self._counter.arguments,
+                self._counter.metrics.arguments,
                 self.options.max_arguments,
                 complexity.TooManyArgumentsViolation,
             ),
             (
-                self._counter.metr.returns,
+                self._counter.metrics.returns,
                 self.options.max_returns,
                 complexity.TooManyReturnsViolation,
             ),
             (
-                self._counter.metr.awaits,
+                self._counter.metrics.awaits,
                 self.options.max_awaits,
                 complexity.TooManyAwaitsViolation,
             ),
             (
-                self._counter.metr.asserts,
+                self._counter.metrics.asserts,
                 self.options.max_asserts,
                 complexity.TooManyAssertsViolation,
             ),
             (
-                self._counter.metr.raises,
+                self._counter.metrics.raises,
                 self.options.max_raises,
                 complexity.TooManyRaisesViolation,
             ),

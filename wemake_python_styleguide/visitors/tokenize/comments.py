@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 r"""
 Disallows to use incorrect magic comments.
 
@@ -20,21 +18,20 @@ All comments have the same type.
 
 import re
 import tokenize
-from typing import ClassVar, FrozenSet
+from typing import ClassVar
 from typing.re import Pattern
 
 from typing_extensions import final
 
-from wemake_python_styleguide.constants import MAX_NO_COVER_COMMENTS
-from wemake_python_styleguide.logic.tokens import get_comment_text
+from wemake_python_styleguide.constants import MAX_NO_COVER_COMMENTS, STDIN
+from wemake_python_styleguide.logic.system import is_executable_file, is_windows
+from wemake_python_styleguide.logic.tokens import NEWLINES, get_comment_text
 from wemake_python_styleguide.violations.best_practices import (
     OveruseOfNoCoverCommentViolation,
     OveruseOfNoqaCommentViolation,
+    ShebangViolation,
     WrongDocCommentViolation,
     WrongMagicCommentViolation,
-)
-from wemake_python_styleguide.violations.consistency import (
-    EmptyLineAfterCodingViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
@@ -92,7 +89,7 @@ class WrongCommentVisitor(BaseTokenVisitor):
             return
 
         declared_type = match.groups()[0].strip()
-        if declared_type != 'ignore':
+        if not declared_type.startswith('ignore'):
             self.add_violation(
                 WrongMagicCommentViolation(token, text=comment_text),
             )
@@ -124,62 +121,90 @@ class WrongCommentVisitor(BaseTokenVisitor):
 
 
 @final
-class FileMagicCommentsVisitor(BaseTokenVisitor):
-    """Checks comments for the whole file."""
+class ShebangVisitor(BaseTokenVisitor):
+    """
+    Checks the first shebang in the file.
 
-    _newlines: ClassVar[FrozenSet[int]] = frozenset((
-        tokenize.NL,
-        tokenize.NEWLINE,
-        tokenize.ENDMARKER,
-    ))
+    Code is insipired by https://github.com/xuhdev/flake8-executable
+    """
+
+    _shebang: ClassVar[Pattern] = re.compile(r'(\s*)#!')
+    _python_executable: ClassVar[str] = 'python'
 
     def visit_comment(self, token: tokenize.TokenInfo) -> None:
         """
-        Checks special comments that are magic per each file.
+        Checks if there is an executable mismatch.
 
         Raises:
-            EmptyLineAfterCoddingViolation
+            ShebangViolation
 
         """
-        self._check_empty_line_after_codding(token)
+        if not self._is_first_comment(token):
+            return  # this is a regular comment, not a shebang
 
-    def _offset_for_comment_line(self, token: tokenize.TokenInfo) -> int:
-        return 2 if token.exact_type == tokenize.COMMENT else 0
+        is_shebang = self._is_valid_shebang_line(token)
+        self._check_executable_mismatch(token, is_shebang=is_shebang)
+        if is_shebang:
+            self._check_valid_shebang(token)
 
-    def _check_empty_line_after_codding(
+    def _check_executable_mismatch(
         self,
         token: tokenize.TokenInfo,
+        *,
+        is_shebang: bool,
     ) -> None:
-        """
-        Checks that we have a blank line after the magic comments.
-
-        PEP-263 says: a magic comment must be placed into the source
-        files either as first or second line in the file
-
-        See also:
-            https://www.python.org/dev/peps/pep-0263/
-
-        """
-        if token.start != (1, 0):
+        if is_windows() or self.filename == STDIN:
+            # Windows does not have this concept of "executable" file.
+            # The same for STDIN inputs.
             return
 
-        tokens = iter(self.file_tokens[self.file_tokens.index(token):])
-        available_offset = 2  # comment + newline
+        is_executable = is_executable_file(self.filename)
+        if is_executable and not is_shebang:
+            self.add_violation(
+                ShebangViolation(
+                    text='file is executable but no shebang is present',
+                ),
+            )
+        elif not is_executable and is_shebang:
+            self.add_violation(
+                ShebangViolation(
+                    text='shebang is present but the file is not executable',
+                ),
+            )
+
+    def _check_valid_shebang(self, token: tokenize.TokenInfo) -> None:
+        if self._python_executable not in token.line:
+            self.add_violation(
+                ShebangViolation(
+                    text='shebang is present but does not contain `python`',
+                ),
+            )
+
+        if token.start[1] != 0:
+            self.add_violation(
+                ShebangViolation(
+                    text='there is a whitespace before shebang',
+                ),
+            )
+
+        if token.start[0] != 1:
+            self.add_violation(
+                ShebangViolation(
+                    text='there are blank or comment lines before shebang',
+                ),
+            )
+
+    def _is_first_comment(self, token: tokenize.TokenInfo) -> bool:
+        all_tokens = iter(self.file_tokens)
+        current_token = next(all_tokens)
 
         while True:
-            next_token = next(tokens)
-            if not available_offset:
-                available_offset = self._offset_for_comment_line(
-                    next_token,
-                )
+            if current_token == token:
+                return True
+            elif current_token.exact_type not in NEWLINES:
+                break
+            current_token = next(all_tokens)
+        return False
 
-            if available_offset > 0:
-                available_offset -= 1
-                continue
-
-            # We have a coverage error here.
-            # It reports, that this line is not covered.
-            # While we do have test cases for both correct and wrong cases.
-            if next_token.exact_type not in self._newlines:  # pragma: no cover
-                self.add_violation(EmptyLineAfterCodingViolation(token))
-            break
+    def _is_valid_shebang_line(self, token: tokenize.TokenInfo) -> bool:
+        return self._shebang.match(token.line) is not None

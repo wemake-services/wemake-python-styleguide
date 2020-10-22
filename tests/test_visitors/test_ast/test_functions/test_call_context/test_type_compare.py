@@ -1,10 +1,6 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
-from wemake_python_styleguide.violations.refactoring import (
-    TypeCompareViolation,
-)
+from wemake_python_styleguide.violations.refactoring import TypeCompareViolation
 from wemake_python_styleguide.visitors.ast.functions import (
     WrongFunctionCallContextVisitior,
 )

@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from typing import ClassVar, Mapping, Optional, Tuple, Type, Union
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat import types as compat_types
+from wemake_python_styleguide.compat.aliases import TextNodes
+from wemake_python_styleguide.compat.nodes import NamedExpr
 from wemake_python_styleguide.logic import walk
 from wemake_python_styleguide.logic.tree.operators import (
     count_unary_operator,
@@ -39,14 +38,13 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
     }
 
     _meaningless_operations: ClassVar[_MeaninglessOperators] = {
-        # ast.Div is not in the list,
+        # ast.Div and ast.Mod is not in the list,
         # since we have a special violation for it.
         0: (
             ast.Mult,
             ast.Add,
             ast.Sub,
             ast.Pow,
-            ast.Mod,
 
             ast.BitAnd,
             ast.BitOr,
@@ -72,6 +70,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
     _zero_divisors: ClassVar[AnyNodes] = (
         ast.Div,
         ast.FloorDiv,
+        ast.Mod,
     )
 
     def visit_numbers_and_constants(self, node: _NumbersAndConstants) -> None:
@@ -170,8 +169,7 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
     """Checks that there are not wrong math operations."""
 
     _string_nodes: ClassVar[AnyNodes] = (
-        ast.Str,
-        ast.Bytes,
+        *TextNodes,
         ast.JoinedStr,
     )
 
@@ -259,7 +257,7 @@ class WalrusVisitor(base.BaseNodeVisitor):
 
     def visit_NamedExpr(
         self,
-        node: compat_types.NamedExpr,
+        node: NamedExpr,
     ) -> None:  # pragma: py-lt-38
         """
         Disallows walrus ``:=`` operator.

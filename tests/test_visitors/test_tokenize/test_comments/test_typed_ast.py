@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
@@ -13,6 +11,8 @@ from wemake_python_styleguide.visitors.tokenize.comments import (
 @pytest.mark.parametrize('code', [
     '1 + "12"  # type: ignore',
     '1 + "12"  # type:ignore',
+    '1 + "12"  # type: ignore[override]',
+    '1 + "12"  # type:ignore[fake]',
     'total = 1000  # type is not clear',
     'print(12 + 3)  # regular comment',
     'print(12 + 3)  #',

@@ -10,7 +10,7 @@ that you are familiar with ``flake8``
 By default we encourage everyone to use ``setup.cfg`` to store all
 the configuration to all ``python`` projects.
 
-.. rubric:: Sharable configurations
+.. rubric:: Shareable configurations
 
 If you need to make sure that all projects share the same configuration
 you might be interested in :ref:`nitpick` tool to lint your config.

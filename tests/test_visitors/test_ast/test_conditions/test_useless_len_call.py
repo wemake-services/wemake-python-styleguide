@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.refactoring import (
@@ -37,6 +35,7 @@ def test_useful_len_call(
 
 @pytest.mark.parametrize('code', [
     wrong_len_call1,
+    wrong_len_call2,
 ])
 def test_useless_len_call(
     assert_errors,

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from wemake_python_styleguide.violations.naming import (
@@ -29,7 +27,7 @@ def test_short_variable_name(
     visitor.run()
 
     assert_errors(visitor, [TooShortNameViolation])
-    assert_error_text(visitor, short_name)
+    assert_error_text(visitor, short_name, default_options.min_name_length)
 
 
 @pytest.mark.parametrize('short_name', [
@@ -49,10 +47,9 @@ def test_short_variable_name_underscore(
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [
-        TooShortNameViolation,
+    assert_errors(visitor, [TooShortNameViolation], (
         TrailingUnderscoreViolation,
-    ])
+    ))
 
 
 def test_naming_length_settings(
@@ -72,4 +69,4 @@ def test_naming_length_settings(
     visitor.run()
 
     assert_errors(visitor, [TooShortNameViolation])
-    assert_error_text(visitor, short_name)
+    assert_error_text(visitor, short_name, option_values.min_name_length)

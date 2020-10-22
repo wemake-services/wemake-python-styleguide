@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Contains detailed technical documentation about how to write a :term:`visitor`.
 

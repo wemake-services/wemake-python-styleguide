@@ -33,7 +33,7 @@ Philosophy
 1. Done is better than perfect
 2. However, we pursuit perfect software
 3. False negatives over false positives
-4. If you can not sustain your promise - do not promise
+4. If you cannot sustain your promise - do not promise
 5. Code must be written for people to read,
    and only incidentally for machines to execute
 6. Value consistency over syntax-ish readability
@@ -101,12 +101,12 @@ API Reference
 .. toctree::
   :maxdepth: 1
   :caption: Raw technical information with interface and types declarations,
-    featuring architecure and composition of classes.
+    featuring architecture and composition of classes.
 
   checker.rst
   visitors.rst
   violations.rst
-  tranformations.rst
+  transformations.rst
   types.rst
   constants.rst
   formatter.rst

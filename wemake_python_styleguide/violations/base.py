@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Contains detailed technical information about :term:`violation` internals.
 
@@ -20,7 +18,7 @@ Violations API
    TokenizeViolation
    SimpleViolation
 
-Violation can not have more than one base class.
+Violation cannot have more than one base class.
 See :ref:`tutorial` for more information about choosing a correct base class.
 
 Conventions
@@ -37,14 +35,14 @@ Conventions
 Deprecating a violation
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-When you want to mark some violation as depracated,
+When you want to mark some violation as deprecated,
 then assign ``deprecated`` boolean flag to it:
 
 .. code:: python
 
   @final
   class SomeViolation(ASTViolation):
-      depracated = True
+      deprecated = True
 
 Reference
 ~~~~~~~~~
@@ -53,8 +51,9 @@ Reference
 
 import abc
 import ast
+import enum
 import tokenize
-from typing import ClassVar, Optional, Set, Tuple, Union
+from typing import Callable, ClassVar, Optional, Set, Tuple, Union
 
 from typing_extensions import final
 
@@ -64,6 +63,17 @@ ErrorNode = Union[
     tokenize.TokenInfo,
     None,
 ]
+
+#: We use this type to define helper classes with callbacks to add violations.
+ErrorCallback = Callable[['BaseViolation'], None]
+
+
+@enum.unique
+class ViolationPostfixes(enum.Enum):
+    """String values of postfixes used for violation baselines."""
+
+    bigger_than = ' > {0}'
+    less_than = ' < {0}'
 
 
 class BaseViolation(object, metaclass=abc.ABCMeta):
@@ -77,7 +87,7 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
 
     Attributes:
         error_template: message that will be shown to user after formatting.
-        code: violation unique number. Used to identify the violation.
+        code: unique violation number. Used to identify the violation.
         previous_codes: just a documentation thing to track changes in time.
         deprecated: indicates that this violation will be removed soon.
         postfix_template: indicates message that we show at the very end.
@@ -90,7 +100,9 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
     deprecated: ClassVar[bool] = False
 
     # We use this code to show base metrics and thresholds mostly:
-    postfix_template: ClassVar[str] = ' > {0}'
+    postfix_template: ClassVar[ViolationPostfixes] = (
+        ViolationPostfixes.bigger_than
+    )
 
     def __init__(
         self,
@@ -148,7 +160,7 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
         """
         if self._baseline is None:
             return ''
-        return self.postfix_template.format(self._baseline)
+        return self.postfix_template.value.format(self._baseline)
 
     @abc.abstractmethod
     def _location(self) -> Tuple[int, int]:

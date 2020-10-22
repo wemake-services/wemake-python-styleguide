@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Provides configuration options for ``wemake-python-styleguide``.
 
@@ -139,7 +137,9 @@ You can also show all options that ``flake8`` supports by running:
 - ``max-import-from-members`` - maximum number of names that can be imported
     from module, defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_IMPORT_FROM_MEMBERS`
-
+- ``max-tuple-unpack-length`` - maximum number of variables in tuple unpacking,
+    defaults to
+    :str:`wemake_python_styleguide.options.defaults.MAX_TUPLE_UNPACK_LENGTH`
 """
 
 from typing import ClassVar, Mapping, Optional, Sequence, Union
@@ -160,8 +160,8 @@ class _Option(object):
 
     long_option_name: str
     default: ConfigValuesTypes
-    help: str
-    type: Optional[str] = 'int'  # noqa: A003
+    help: str  # noqa: WPS125
+    type: Optional[str] = 'int'  # noqa: WPS125
     parse_from_config: bool = True
     action: str = 'store'
     comma_separated_list: bool = False
@@ -170,12 +170,18 @@ class _Option(object):
     def __attrs_post_init__(self):
         """Is called after regular init is done."""
         object.__setattr__(  # noqa: WPS609
-            self, 'help', ' '.join((self.help, 'Defaults to: %default')),
+            self, 'help', ' '.join(
+                (self.help, 'Defaults to: %default'),  # noqa: WPS323
+            ),
         )
 
     def asdict_no_none(self) -> Mapping[str, ConfigValuesTypes]:
-        dct = attr.asdict(self)
-        return {key: opt for key, opt in dct.items() if opt is not None}
+        """We need this method to return options, but filter out ``None``."""
+        return {
+            key: opt
+            for key, opt in attr.asdict(self).items()
+            if opt is not None
+        }
 
 
 @final
@@ -398,6 +404,11 @@ class Configuration(object):
             '--max-import-from-members',
             defaults.MAX_IMPORT_FROM_MEMBERS,
             'Maximum number of names that can be imported from module.',
+        ),
+        _Option(
+            '--max-tuple-unpack-length',
+            defaults.MAX_TUPLE_UNPACK_LENGTH,
+            'Maximum number of variables in a tuple unpacking.',
         ),
     ]
 

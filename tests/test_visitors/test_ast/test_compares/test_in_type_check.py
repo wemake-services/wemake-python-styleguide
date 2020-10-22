@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.refactoring import (
     InCompareWithSingleItemContainerViolation,
     WrongInCompareTypeViolation,
@@ -28,6 +27,10 @@ not_in_template = 'some not in {0}'
     '()',
     '(1, 2, 3)',
     '(x for x in call())',
+    pytest.param(
+        '(x := [1, 2, 3])',
+        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
+    ),
 ])
 def test_compare_with_wrong_type(
     assert_errors,

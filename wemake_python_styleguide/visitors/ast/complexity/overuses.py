@@ -1,33 +1,64 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from collections import defaultdict
-from typing import Callable, ClassVar, DefaultDict, List, Tuple
+from typing import (
+    Callable,
+    ClassVar,
+    DefaultDict,
+    FrozenSet,
+    List,
+    Tuple,
+    Union,
+)
 
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic import source, walk
 from wemake_python_styleguide.logic.complexity import overuses
-from wemake_python_styleguide.types import AnyNodes
+from wemake_python_styleguide.types import AnyNodes, AnyText, AnyTextPrimitive
 from wemake_python_styleguide.violations import complexity
-from wemake_python_styleguide.visitors import base
+from wemake_python_styleguide.visitors import base, decorators
 
 #: We use these types to store the number of nodes usage in different contexts.
 _Expressions = DefaultDict[str, List[ast.AST]]
 _FunctionExpressions = DefaultDict[ast.AST, _Expressions]
+_StringConstants = FrozenSet[Union[str, bytes]]
 
 
 @final
+@decorators.alias('visit_any_string', (
+    'visit_Str',
+    'visit_Bytes',
+))
 class StringOveruseVisitor(base.BaseNodeVisitor):
-    """Restricts several string usages."""
+    """
+    Restricts repeated usage of the same string constant.
+
+    NB: Some short strings are ignored, as their use is very common and
+    forcing assignment would not make much sense (i.e. newlines or "").
+    """
+
+    _ignored_string_constants: ClassVar[_StringConstants] = frozenset((
+        ' ',
+        '',
+        '\n',
+        '\r\n',
+        '\t',
+        b' ',
+        b'',
+        b'\n',
+        b'\r\n',
+        b'\t',
+    ))
 
     def __init__(self, *args, **kwargs) -> None:
         """Inits the counter for constants."""
         super().__init__(*args, **kwargs)
-        self._string_constants: DefaultDict[str, int] = defaultdict(int)
+        self._string_constants: DefaultDict[
+            AnyTextPrimitive, int,
+        ] = defaultdict(int)
 
-    def visit_Str(self, node: ast.Str) -> None:
+    def visit_any_string(self, node: AnyText) -> None:
         """
         Restricts to over-use string constants.
 
@@ -38,8 +69,13 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
         self._check_string_constant(node)
         self.generic_visit(node)
 
-    def _check_string_constant(self, node: ast.Str) -> None:
+    def _check_string_constant(self, node: AnyText) -> None:
         if overuses.is_annotation(node):
+            return
+
+        # Some strings are so common, that it makes no sense to check if
+        # they are overused.
+        if node.s in self._ignored_string_constants:
             return
 
         self._string_constants[node.s] += 1
@@ -49,7 +85,7 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
             if usage_count > self.options.max_string_usages:
                 self.add_violation(
                     complexity.OverusedStringViolation(
-                        text=string or "''",
+                        text=source.render_string(string) or "''",
                         baseline=self.options.max_string_usages,
                     ),
                 )

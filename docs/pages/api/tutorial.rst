@@ -69,14 +69,14 @@ Real world examples of plugins unsuitable for this checker:
 Is this rule out off scope?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-There are awesome tools that can not be added
+There are awesome tools that cannot be added
 because they are just simply out of scope.
 This means that they cover very specific case or technology
 and not just good-old ``python``.
 
 Real world examples of plugins that are out of scope:
 
-- `flake8-pytest <https://github.com/vikingco/flake8-pytest>`_
+- `flake8-pytest-style <https://github.com/m-burst/flake8-pytest-style>`_
 - `flake8-django <https://github.com/rocioar/flake8-django>`_
 - `flake8-scrapy <https://github.com/stummjr/flake8-scrapy>`_
 
@@ -190,7 +190,7 @@ work correctly together all the way from flake8 config file to its output.
 To check all supported violations, we have two modules containing code which
 raises them: ``noqa.py`` and ``noqa_controlled.py``. The first is for all
 possible violations while the second is only for those which may be tweaked
-using ``i_control_code`` option. If violation may be ignored (or istead,
+using ``i_control_code`` option. If violation may be ignored (or instead,
 raised) with ``i_control_code``, the appropriate piece of code should be
 added to both modules.
 

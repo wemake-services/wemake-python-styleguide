@@ -1,20 +1,24 @@
-# -*- coding: utf-8 -*-
-
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, List, Optional, Union
+from typing import ClassVar, DefaultDict, List, Mapping, Sequence, Type, Union
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import AssignNodes, ForNodes
+from wemake_python_styleguide.compat.aliases import AssignNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.logic import nodes, source, walk
-from wemake_python_styleguide.logic.tree import operators, slices
+from wemake_python_styleguide.logic.tree import loops, operators, slices
 from wemake_python_styleguide.logic.tree.variables import (
     is_valid_block_variable_definition,
 )
-from wemake_python_styleguide.types import AnyFor, AnyNodes
+from wemake_python_styleguide.types import (
+    AnyComprehension,
+    AnyFor,
+    AnyLoop,
+    AnyNodes,
+)
 from wemake_python_styleguide.violations.best_practices import (
+    InfiniteWhileLoopViolation,
     LambdaInsideLoopViolation,
     LoopVariableDefinitionViolation,
     YieldInComprehensionViolation,
@@ -36,13 +40,8 @@ from wemake_python_styleguide.violations.refactoring import (
 )
 from wemake_python_styleguide.visitors import base, decorators
 
-_AnyLoop = Union[AnyFor, ast.While]
-_AnyComprehension = Union[
-    ast.ListComp,
-    ast.DictComp,
-    ast.SetComp,
-    ast.GeneratorExp,
-]
+#: Type alias to specify how we check different containers in loops.
+_ContainerSpec = Mapping[Type[ast.AST], Sequence[str]]
 
 
 @final
@@ -76,7 +75,7 @@ class WrongComprehensionVisitor(base.BaseNodeVisitor):
         self._check_fors(node)
         self.generic_visit(node)
 
-    def visit_any_comprehension(self, node: _AnyComprehension) -> None:
+    def visit_any_comprehension(self, node: AnyComprehension) -> None:
         """
         Finds incorrect patterns inside comprehensions.
 
@@ -98,7 +97,7 @@ class WrongComprehensionVisitor(base.BaseNodeVisitor):
         parent = nodes.get_parent(node)
         self._fors[parent] = len(parent.generators)  # type: ignore
 
-    def _check_contains_yield(self, node: _AnyComprehension) -> None:
+    def _check_contains_yield(self, node: AnyComprehension) -> None:
         for sub_node in ast.walk(node):
             if isinstance(sub_node, ast.Yield):  # pragma: py-gte-38
                 self.add_violation(YieldInComprehensionViolation(node))
@@ -115,10 +114,44 @@ class WrongComprehensionVisitor(base.BaseNodeVisitor):
     'visit_While',
     'visit_AsyncFor',
 ))
+@decorators.alias('visit_any_comp', (
+    'visit_ListComp',
+    'visit_SetComp',
+    'visit_DictComp',
+    'visit_GeneratorExp',
+))
 class WrongLoopVisitor(base.BaseNodeVisitor):
     """Responsible for examining loops."""
 
-    def visit_any_loop(self, node: _AnyLoop) -> None:
+    _breaks: ClassVar[AnyNodes] = (
+        ast.Break,
+        ast.Return,
+        ast.Raise,
+    )
+
+    _containers: ClassVar[_ContainerSpec] = {
+        ast.ListComp: ['elt'],
+        ast.SetComp: ['elt'],
+        ast.GeneratorExp: ['elt'],
+        ast.DictComp: ['key', 'value'],
+
+        ast.For: ['body'],
+        ast.AsyncFor: ['body'],
+        ast.While: ['body'],
+    }
+
+    def visit_any_comp(self, node: AnyComprehension) -> None:
+        """
+        Checks all kinds of comprehensions.
+
+        Raises:
+            LambdaInsideLoopViolation
+
+        """
+        self._check_lambda_inside_loop(node)
+        self.generic_visit(node)
+
+    def visit_any_loop(self, node: AnyLoop) -> None:
         """
         Checks ``for`` and ``while`` loops.
 
@@ -126,54 +159,35 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
             UselessLoopElseViolation
             LambdaInsideLoopViolation
             MultilineLoopViolation
+            InfiniteWhileLoopViolation
 
         """
         self._check_loop_needs_else(node)
         self._check_lambda_inside_loop(node)
         self._check_useless_continue(node)
         self._check_multiline_loop(node)
+        self._check_infinite_while_loop(node)
         self.generic_visit(node)
 
-    def _does_loop_contain_node(  # TODO: move, reuse in annotations.py
-        self,
-        loop: Optional[_AnyLoop],
-        to_check: ast.Break,
-    ) -> bool:
-        if loop is None:
-            return False
-
-        for inner_node in ast.walk(loop):
-            # We are checking this specific node, not just any `break`:
-            if to_check is inner_node:
-                return True
-        return False
-
-    def _has_break(self, node: _AnyLoop) -> bool:
-        closest_loop = None
-
-        for subnode in ast.walk(node):
-            if isinstance(subnode, (*ForNodes, ast.While)):
-                if subnode is not node:
-                    closest_loop = subnode
-
-            if isinstance(subnode, ast.Break):
-                is_nested_break = self._does_loop_contain_node(
-                    closest_loop, subnode,
-                )
-                if not is_nested_break:
-                    return True
-        return False
-
-    def _check_loop_needs_else(self, node: _AnyLoop) -> None:
-        if node.orelse and not self._has_break(node):
+    def _check_loop_needs_else(self, node: AnyLoop) -> None:
+        if node.orelse and not loops.has_break(node, break_nodes=(ast.Break,)):
             self.add_violation(UselessLoopElseViolation(node))
 
-    def _check_lambda_inside_loop(self, node: _AnyLoop) -> None:
-        for subnode in node.body:
-            if walk.is_contained(subnode, (ast.Lambda,)):
-                self.add_violation(LambdaInsideLoopViolation(node))
+    def _check_lambda_inside_loop(
+        self,
+        node: Union[AnyLoop, AnyComprehension],
+    ) -> None:
+        container_names = self._containers.get(type(node), ())
+        for container in container_names:
+            body = getattr(node, container, [])
+            if not isinstance(body, list):
+                body = [body]
 
-    def _check_useless_continue(self, node: _AnyLoop) -> None:
+            for subnode in body:
+                if walk.is_contained(subnode, ast.Lambda):
+                    self.add_violation(LambdaInsideLoopViolation(node))
+
+    def _check_useless_continue(self, node: AnyLoop) -> None:
         nodes_at_line: DefaultDict[int, List[ast.AST]] = defaultdict(list)
         for sub_node in ast.walk(node):
             lineno = getattr(sub_node, 'lineno', None)
@@ -184,7 +198,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         if any(isinstance(last, ast.Continue) for last in last_line):
             self.add_violation(UselessContinueViolation(node))
 
-    def _check_multiline_loop(self, node: _AnyLoop) -> None:
+    def _check_multiline_loop(self, node: AnyLoop) -> None:
         start_lineno = getattr(node, 'lineno', None)
 
         if isinstance(node, ast.While):
@@ -197,6 +211,15 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
             if sub_lineno is not None and sub_lineno > start_lineno:
                 self.add_violation(MultilineLoopViolation(node))
                 break
+
+    def _check_infinite_while_loop(self, node: AnyLoop) -> None:
+        if not isinstance(node, ast.While):
+            return
+
+        real_node = operators.unwrap_unary_node(node.test)
+        if isinstance(real_node, ast.NameConstant) and real_node.value is True:
+            if not loops.has_break(node, break_nodes=self._breaks):
+                self.add_violation(InfiniteWhileLoopViolation(node))
 
 
 @final
@@ -275,6 +298,7 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
         if isinstance(nodes.get_context(node), ast.AsyncFunctionDef):
             # Python does not support 'yield from' inside async functions
             return
+
         is_implicit_yield_from = (
             len(node.body) == 1 and
             isinstance(node.body[0], ast.Expr) and

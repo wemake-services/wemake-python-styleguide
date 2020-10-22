@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.best_practices import (
     BlockAndLocalOverlapViolation,
 )
@@ -69,6 +68,13 @@ def context():
         ...
 """
 
+import_and_walrus = """
+import overlap
+
+if overlap := other():
+    ...
+"""
+
 # Correct:
 
 unused_variables_overlap1 = """
@@ -115,6 +121,10 @@ def context():
     loop_and_with,
     loop_and_loop1,
     loop_and_loop2,
+    pytest.param(
+        import_and_walrus,
+        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
+    ),
 ])
 def test_block_overlap(
     assert_errors,

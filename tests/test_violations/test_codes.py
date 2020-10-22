@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 
 def test_all_unique_violation_codes(all_violations):
     """Ensures that all violations have unique violation codes."""

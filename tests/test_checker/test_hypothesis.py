@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Integration test that our linter does not break on different random programs.
 
