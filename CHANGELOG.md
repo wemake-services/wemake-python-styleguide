@@ -27,7 +27,8 @@ Semantic versioning in our case means:
 - WPS531: Forbids testing conditions to just return booleans when it is possible to simply return the condition itself
 - Forbids to use unsafe infinite loops
 - Forbids to use raw strings `r''` when not necessary
-- Forbids to use too complex f-strings
+- Forbids to use too complex `f`-strings
+- Forbids to use too many `raise` statements inside a single function
 
 ### Bugfixes
 

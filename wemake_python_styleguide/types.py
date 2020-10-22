@@ -233,6 +233,10 @@ class ConfigurationOptions(Protocol):
         ...
 
     @property
+    def max_raises(self) -> int:
+        ...
+
+    @property
     def max_cognitive_score(self) -> int:
         ...
 

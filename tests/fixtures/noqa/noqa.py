@@ -743,3 +743,13 @@ def infinite_loop():
         my_print('forever')
 
 unnecessary_raw_string = r'no backslashes.' # noqa: WPS360
+
+
+def many_raises_function(parameter):  # noqa: WPS238
+    if parameter == 1:
+        raise ValueError('1')
+    if parameter == 2:
+        raise KeyError('2')
+    if parameter == 3:
+        raise IndexError('3')
+    raise TypeError('4')
