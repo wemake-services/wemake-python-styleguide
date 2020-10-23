@@ -9,10 +9,11 @@ Semantic versioning in our case means:
 - Major releases inidicate significant milestones or serious breaking changes..
 
 
-## 0.15.0 aka Hello, LibCST
+## 0.15.0 aka python3.9
 
 ### Features
 
+- Adds `python3.9` support
 - Forbids using non-trivial expressions as an argument to `except`
 - Forbids using too many variables in a tuple unpacking
 - Forbids using `float("NaN")`.
