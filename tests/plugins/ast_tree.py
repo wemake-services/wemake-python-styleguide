@@ -10,10 +10,10 @@ from wemake_python_styleguide.transformations.ast_tree import transform
 @pytest.fixture(scope='session')
 def parse_ast_tree():
     """
-    Helper function to convert code to ast.
+    Function to convert code to AST.
 
     This helper mimics some transformations that generally
-    happen in different `flake8` plugins that we rely on.
+    happen in different ``flake8`` plugins that we rely on.
 
     This list can be extended only when there's a direct need to
     replicate the existing behavior from other plugin.
@@ -36,8 +36,8 @@ def _compile_code(code_to_parse: str) -> None:
     Compiles given string to Python's AST.
 
     We need to compile to check some syntax features
-    that are validated after the `ast` is processed:
-    like double arguments or `break` outside of loops.
+    that are validated after the ``ast`` is processed:
+    like double arguments or ``break`` outside of loops.
     """
     try:
         compile(code_to_parse, '<filename>', 'exec')  # noqa: WPS421

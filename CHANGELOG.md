@@ -6,7 +6,7 @@ We used to have incremental versioning before `0.1.0`.
 Semantic versioning in our case means:
 - Bugfixes do not bring new features, code that passes on `x.y.0` should pass on `x.y.1`. With the only exception that bugfix can raise old violations in new places, if they were hidden by a buggy behaviour.
 - Minor releases do bring new features and configuration options. New violations can be added. Code that passes `x.0.y` might not pass on `x.1.y` release.
-- Major releases inidicate significant milestones or serious breaking changes..
+- Major releases inidicate significant milestones or serious breaking changes. There are no major releases right now: we are still at `0.x.y` version
 
 
 ## 0.15.0 aka python3.9
