@@ -91,6 +91,13 @@ AnyAccess = Union[
     ast.Subscript,
 ]
 
+#: In case we need to handle types that can be chained.
+AnyChainable = Union[
+    ast.Attribute,
+    ast.Subscript,
+    ast.Call,
+]
+
 #: We use this type to work with any text-like values. Related to `AnyText`.
 AnyTextPrimitive = Union[str, bytes]
 
@@ -134,6 +141,10 @@ class ConfigurationOptions(Protocol):
 
     @property
     def nested_classes_whitelist(self) -> Tuple[str, ...]:
+        ...
+
+    @property
+    def forbidden_inline_ignore(self) -> Tuple[str, ...]:
         ...
 
     @property
@@ -223,6 +234,10 @@ class ConfigurationOptions(Protocol):
 
     @property
     def max_attributes(self) -> int:
+        ...
+
+    @property
+    def max_raises(self) -> int:
         ...
 
     @property

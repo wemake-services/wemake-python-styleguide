@@ -56,6 +56,10 @@ You can also show all options that ``flake8`` supports by running:
     :str:`wemake_python_styleguide.options.defaults.ALLOWED_DOMAIN_NAMES`
 - ``forbidden-domain-names`` - list of forbidden domain names, defaults to
     :str:`wemake_python_styleguide.options.defaults.FORBIDDEN_DOMAIN_NAMES`
+- ``forbidden-inline-ignore`` - list of codes of violations or
+    class of violations that are forbidden to ignore inline, defaults to
+    :str:`wemake_python_styleguide.options.defaults.FORBIDDEN_NOQA`
+
 
 .. rubric:: Complexity options
 
@@ -119,6 +123,9 @@ You can also show all options that ``flake8`` supports by running:
 - ``max-attributes`` - maximum number of public instance attributes,
     defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_ATTRIBUTES`
+- ``max-raises`` - maximum number of raises in a function,
+    defaults to
+    :str:`wemake_python_styleguide.options.defaults.MAX_RAISES`
 - ``max-cognitive-score`` - maximum amount of cognitive complexity
     per function, defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_COGNITIVE_SCORE`
@@ -148,6 +155,7 @@ from typing_extensions import final
 from wemake_python_styleguide.options import defaults
 
 ConfigValuesTypes = Union[str, int, bool, Sequence[str]]
+string = 'string'
 
 
 @final
@@ -229,20 +237,27 @@ class Configuration(object):
             '--nested-classes-whitelist',
             defaults.NESTED_CLASSES_WHITELIST,
             'List of nested classes names we allow to use.',
-            type='string',
+            type=string,
             comma_separated_list=True,
         ),
         _Option(
             '--allowed-domain-names',
             defaults.ALLOWED_DOMAIN_NAMES,
             "Domain names that are removed from variable names' blacklist.",
-            type='string',
+            type=string,
             comma_separated_list=True,
         ),
         _Option(
             '--forbidden-domain-names',
             defaults.FORBIDDEN_DOMAIN_NAMES,
             "Domain names that extends variable names' blacklist.",
+            type=string,
+            comma_separated_list=True,
+        ),
+        _Option(
+            '--forbidden-inline-ignore',
+            defaults.FORBIDDEN_INLINE_IGNORE,
+            'Codes of violations or class of violations forbidden to ignore.',
             type='string',
             comma_separated_list=True,
         ),
@@ -367,6 +382,12 @@ class Configuration(object):
             '--max-attributes',
             defaults.MAX_ATTRIBUTES,
             'Maximum number of public instance attributes.',
+        ),
+
+        _Option(
+            '--max-raises',
+            defaults.MAX_RAISES,
+            'Maximum number of raises in a function.',
         ),
 
         _Option(

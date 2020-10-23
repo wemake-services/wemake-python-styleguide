@@ -175,12 +175,14 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
             WrongMultilineStringViolation
             ImplicitRawStringViolation
             WrongUnicodeEscapeViolation
+            RawStringNotNeededViolation
 
         """
         self._check_correct_multiline(token)
         self._check_string_modifiers(token)
         self._check_implicit_raw_string(token)
         self._check_wrong_unicode_escape(token)
+        self._check_unnecessary_raw_string(token)
 
     def _check_correct_multiline(self, token: tokenize.TokenInfo) -> None:
         _, string_def = split_prefixes(token.string)
@@ -240,6 +242,14 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
             # another character can always be consumed whole: the second
             # character can never be the start of a new backslash escape.
             index += 2
+
+    def _check_unnecessary_raw_string(self, token: tokenize.TokenInfo) -> None:
+        modifiers, string_def = split_prefixes(token.string)
+
+        if 'r' in modifiers.lower() and '\\' not in string_def:
+            self.add_violation(
+                consistency.RawStringNotNeededViolation(token, text=string_def),
+            )
 
 
 @final

@@ -12,6 +12,7 @@ from wemake_python_styleguide.violations import complexity
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
+# Type alises:
 _ConditionNodes = Union[ast.If, ast.While, ast.IfExp]
 _ModuleMembers = Union[AnyFunctionDef, ast.ClassDef]
 
@@ -276,3 +277,5 @@ class TupleUnpackVisitor(BaseNodeVisitor):
                         baseline=self.options.max_tuple_unpack_length,
                     ),
                 )
+
+        self.generic_visit(node)

@@ -14,6 +14,9 @@ import sys as sys  # noqa: WPS113
 from _some import protected  # noqa: WPS436
 from some import _protected  # noqa: WPS450
 
+from foo import bar
+from foo.bar import baz  # noqa: WPS458
+
 from .version import get_version  # noqa: WPS300
 
 import import1
@@ -73,6 +76,7 @@ phone_number = 555_123_999  # noqa:  WPS303
 partial_number = .05  # noqa: WPS304
 float_zero = 0.0  # noqa: WPS358
 formatted_string = f'Hi, {full_name}'  # noqa: WPS305
+formatted_string_complex = f'1+1={1 + 1}'  # noqa: WPS305, WPS237
 
 
 def __getattr__():  # noqa: WPS413
@@ -109,7 +113,8 @@ class TooManyPublicAtts(object):  # noqa: WPS230
         self.boom = 7
 
 
-def function_name(
+@property  # noqa: WPS614
+def function_name(  # noqa: WPS614
     value: int = 0,  # noqa: WPS110
 ):
     # See:
@@ -135,7 +140,7 @@ value = 1  # noqa: WPS110
 VALUE = 1  # noqa: WPS110
 x = 2  # noqa: WPS111
 __private = 3  # noqa: WPS112
-star_wars_episode_7 = 'the worst episode ever after 8'  # noqa: WPS114
+star_wars_episode_7 = 'the worst episode ever after 8 and 9'  # noqa: WPS114
 consecutive__underscores = 4  # noqa: WPS116
 cls = 5  # noqa: WPS117
 __author__ = 'Nikita Sobolev'  # noqa: WPS410
@@ -355,7 +360,7 @@ def function(  # noqa: WPS320
                }  # noqa: WPS318
 
 
-string_modifier = R'(s)'  # noqa: WPS321
+string_modifier = R'(\n)'  # noqa: WPS321
 multiline_string = """abc"""  # noqa: WPS322
 modulo_formatting = 'some %s'  # noqa: WPS323
 
@@ -499,6 +504,12 @@ if some_if_expr:  # noqa: WPS502
     some_dict['x'] = True
 else:
     some_dict['x'] = False
+
+def another_wrong_if():
+    if full_name != 'Nikita Sobolev':  # noqa: WPS531
+        return False
+    return True
+
 
 
 class ClassWithWrongContents((lambda: object)()):  # noqa: WPS606
@@ -700,7 +711,9 @@ extra_new_line = [  # noqa: WPS355
 
     'wrong',
 ]
-*numbers, = [4, 7]  # noqa: WPS356
+
+*numbers, = [4, 7]  # noqa: WPS356, WPS460
+[first_number, second_number] = [4, 7]  # noqa: WPS359
 
 for element in range(10):
     try:  # noqa: WPS452
@@ -713,6 +726,7 @@ for element in range(10):
         break
     my_print(4)
 
+
 def raise_bad_exception():
     raise Exception  # noqa: WPS454
 
@@ -722,3 +736,23 @@ try:
 except ValueError or TypeError:  # noqa: WPS455
     my_print("Oops.")
 
+if float("NaN") < number:  # noqa: WPS456
+    my_print("Greater than... what?")
+
+def infinite_loop():
+    while True:  # noqa: WPS457
+        my_print('forever')
+
+
+my_print(some_float == 1.0)  # noqa: WPS459
+unnecessary_raw_string = r'no backslashes.' # noqa: WPS360
+
+
+def many_raises_function(parameter):  # noqa: WPS238
+    if parameter == 1:
+        raise ValueError('1')
+    if parameter == 2:
+        raise KeyError('2')
+    if parameter == 3:
+        raise IndexError('3')
+    raise TypeError('4')

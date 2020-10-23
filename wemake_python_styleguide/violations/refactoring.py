@@ -44,6 +44,7 @@ Summary
    ImplicitItemsIteratorViolation
    ImplicitDictGetViolation
    ImplicitNegativeIndexViolation
+   SimplifiableReturningIfViolation
 
 Refactoring opportunities
 -------------------------
@@ -79,6 +80,7 @@ Refactoring opportunities
 .. autoclass:: ImplicitItemsIteratorViolation
 .. autoclass:: ImplicitDictGetViolation
 .. autoclass:: ImplicitNegativeIndexViolation
+.. autoclass:: SimplifiableReturningIfViolation
 
 """
 
@@ -183,13 +185,12 @@ class SimplifiableIfViolation(ASTViolation):
     Forbid simplifiable ``if`` conditions.
 
     Reasoning:
-        This complex construction can cause frustration among other developers.
-        It is longer, more verbose, and more complex.
+        These complex constructions can cause frustration among other
+        developers. They are longer, more verbose, and more complex.
 
     Solution:
-        Use ``bool()`` to convert test values to boolean values.
-        Or just leave it as it is in case
-        when your test already returns a boolean value.
+        Either use ``bool()`` to convert test values to boolean values, or just
+        leave it as it is in case your test already returns a boolean value.
         Use can also use ``not`` keyword to switch boolean values.
 
     Example::
@@ -1195,3 +1196,38 @@ class ImplicitNegativeIndexViolation(ASTViolation):
 
     error_template = 'Found implicit negative index'
     code = 530
+
+
+@final
+class SimplifiableReturningIfViolation(ASTViolation):
+    """
+    Forbid if statements that simply return booleans in functions or methods.
+
+    Reasoning:
+        There is no need to test a condition and simply return a boolean
+        depending on its outcome if there is not going to be any additional
+        code.
+
+    Solution:
+        Instead of testing the condition and returning a boolean, return the
+        condition itself. This applies to early returning ifs too.
+
+    Example::
+
+        # Correct:
+        def some_function():
+            return some_condition
+
+        # Wrong:
+        def some_function():
+            if some_condition:
+                return True
+            else:
+                return False
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found simplifiable returning `if` condition in a function'
+    code = 531

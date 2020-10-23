@@ -30,12 +30,14 @@ def wrapper():
 lambda_inside_while_loop = """
 while True:
     print(lambda: index)
+    break
 """
 
 nested_lambda_inside_while_loop = """
 while True:
     if some:
         print(lambda: index)
+    break
 """
 
 lambda_inside_set = """

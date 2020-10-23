@@ -7,6 +7,7 @@ lint:
 	poetry run autopep8 -r . --diff --exclude=./tests/fixtures/** --exit-code
 	poetry run lint-imports
 	poetry run doc8 -q docs
+	poetry run python3 scripts/check_generic_visit.py wemake_python_styleguide/visitors/ast
 
 .PHONY: unit
 unit:

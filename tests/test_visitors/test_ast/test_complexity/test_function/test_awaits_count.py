@@ -1,8 +1,10 @@
 import pytest
 
+from wemake_python_styleguide.violations.complexity import (
+    TooManyAwaitsViolation,
+)
 from wemake_python_styleguide.visitors.ast.complexity.function import (
     FunctionComplexityVisitor,
-    TooManyAwaitsViolation,
 )
 
 function_without_awaits = 'def function(): ...'
