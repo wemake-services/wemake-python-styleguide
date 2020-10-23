@@ -35,6 +35,8 @@ def parse_ast_tree():
             except SyntaxError:
                 if sys.version_info[:3] == (3, 9, 0):
                     pytest.skip('Python 3.9.0 has strange syntax errors')
+                else:
+                    raise
         return transform(ast.parse(code_to_parse))
 
     return factory
