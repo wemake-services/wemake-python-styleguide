@@ -17,14 +17,7 @@ nested_lambda_inside_for_loop = """
 def wrapper():
     for index in range(10):
         if some:
-            print(lambda: index)
-"""
-
-nested_argument_lambda_inside_for_loop = """
-def wrapper():
-    for index in range(10):
-        if some:
-            print(lambda index=inde: index)
+            print(lambda x: x + index)
 """
 
 lambda_inside_while_loop = """
@@ -42,17 +35,17 @@ while True:
 
 lambda_inside_set = """
 def wrapper():
-    return {lambda x=x: x for x in some()}
+    return {lambda: x for x in some()}
 """
 
 lambda_inside_list = """
 def wrapper():
-    return [lambda x: x for x in some()]
+    return [lambda: x for x in some()]
 """
 
 lambda_inside_gen = """
 def wrapper():
-    return (lambda x: x for x in some())
+    return (lambda: x for x in some())
 """
 
 lambda_inside_dict_key = """
@@ -69,6 +62,12 @@ def wrapper():
 
 correct_lambda_inside_for = """
 def wrapper():
+    for index in range(10):
+        print(lambda x: x)
+"""
+
+correct_lambda_inside_map = """
+def wrapper():
     for some in map(lambda x: x * 2, items):
         ...
 """
@@ -80,14 +79,20 @@ def wrapper():
 
 correct_lambda_inside_list = """
 def wrapper():
-    return [x for x in some() if callback(lambda: x)]
+    return [x for x in some() if callback(lambda x: x)]
+"""
+
+correct_lambda_nested_argument_for = """
+def wrapper():
+    for index in range(10):
+        if some:
+            print(lambda index=some: index)
 """
 
 
 @pytest.mark.parametrize('code', [
     lambda_inside_for_loop,
     nested_lambda_inside_for_loop,
-    nested_argument_lambda_inside_for_loop,
     lambda_inside_while_loop,
     nested_lambda_inside_while_loop,
     lambda_inside_list,
@@ -114,8 +119,10 @@ def test_lambda_body(
 
 @pytest.mark.parametrize('code', [
     correct_lambda_inside_for,
+    correct_lambda_inside_map,
     correct_lambda_inside_list,
     correct_lambda_inside_set,
+    correct_lambda_nested_argument_for,
 ])
 def test_correct_lambda_body(
     assert_errors,
