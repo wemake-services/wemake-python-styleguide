@@ -18,6 +18,7 @@ from wemake_python_styleguide.logic.tree import (
     exceptions,
     functions,
     operators,
+    stubs,
     variables,
 )
 from wemake_python_styleguide.types import (
@@ -30,6 +31,7 @@ from wemake_python_styleguide.violations.best_practices import (
     BooleanPositionalArgumentViolation,
     ComplexDefaultValueViolation,
     FloatingNanViolation,
+    GetterWithoutReturnViolation,
     PositionalOnlyArgumentsViolation,
     StopIterationInsideGeneratorViolation,
     WrongFunctionCallViolation,
@@ -264,7 +266,9 @@ class WrongFunctionCallContextVisitior(base.BaseNodeVisitor):
 class FunctionDefinitionVisitor(base.BaseNodeVisitor):
     """Responsible for checking function internals."""
 
-    _descriptor_decorators: ClassVar[FrozenSet[str]] = frozenset((
+    _descriptor_decorators: ClassVar[
+        FrozenSet[str]
+    ] = frozenset((
         'classmethod',
         'staticmethod',
         'property',
@@ -414,12 +418,13 @@ class UselessLambdaDefinitionVisitor(base.BaseNodeVisitor):
     'visit_FunctionDef',
     'visit_Lambda',
 ))
-class FunctionArgumentsVisitor(base.BaseNodeVisitor):
+class FunctionSignatureVisitor(base.BaseNodeVisitor):
     """
-    Checks function arguments when function is defined.
+    Checks function arguments and name when function is defined.
 
     Forbids to use ``/`` parameters in functions and lambdas.
-    Also forbids to use complex default arguments.
+    Forbids to use complex default arguments.
+    Forbids to use getters with no output value.
     """
 
     _allowed_default_value_types: ClassVar[AnyNodes] = (
@@ -437,15 +442,42 @@ class FunctionArgumentsVisitor(base.BaseNodeVisitor):
         node: AnyFunctionDefAndLambda,
     ) -> None:
         """
-        Checks function defs.
+        Checks function and lambda defs.
 
         Raises:
             PositionalOnlyArgumentsViolation
+            ComplexDefaultValueViolation
+            GetterWithoutReturnViolation
 
         """
         self._check_positional_arguments(node)
         self._check_complex_argument_defaults(node)
+        if not isinstance(node, ast.Lambda):
+            self._check_getter_without_return(node)
         self.generic_visit(node)
+
+    def _check_getter_without_return(self, node: AnyFunctionDef) -> None:
+        if not self._is_concrete_getter(node):
+            return
+
+        has_explicit_function_exit = False
+        for function_exit_node in functions.get_function_exit_nodes(node):
+            has_explicit_function_exit = True
+
+            if function_exit_node.value is None:
+                # Bare `yield` is allowed
+                if isinstance(function_exit_node, ast.Yield):
+                    continue
+                self.add_violation(GetterWithoutReturnViolation(node))
+
+        if not has_explicit_function_exit:
+            self.add_violation(GetterWithoutReturnViolation(node))
+
+    def _is_concrete_getter(self, node: AnyFunctionDef) -> bool:
+        return (
+            node.name.startswith('get_') and
+            not stubs.is_stub(node)
+        )
 
     def _check_positional_arguments(
         self,
