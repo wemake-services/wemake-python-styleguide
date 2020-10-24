@@ -177,15 +177,8 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         self,
         node: Union[AnyLoop, AnyComprehension],
     ) -> None:
-        container_names = self._containers.get(type(node), ())
-        for container in container_names:
-            body = getattr(node, container, [])
-            if not isinstance(body, list):
-                body = [body]
-
-            for subnode in body:
-                if walk.is_contained(subnode, ast.Lambda):
-                    self.add_violation(LambdaInsideLoopViolation(node))
+        for _ in walk.get_subnodes_by_type(node, ast.Lambda):
+            self.add_violation(LambdaInsideLoopViolation(node))
 
     def _check_useless_continue(self, node: AnyLoop) -> None:
         nodes_at_line: DefaultDict[int, List[ast.AST]] = defaultdict(list)
