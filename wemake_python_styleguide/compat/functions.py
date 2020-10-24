@@ -31,7 +31,7 @@ def get_posonlyargs(node: AnyFunctionDefAndLambda) -> List[ast.arg]:
 
 def get_slice_expr(node: ast.Subscript) -> ast.expr:
     """
-    Get slice expresion from the subscript in all versions of python.
+    Get slice expression from the subscript in all versions of python.
 
     It was changed in ``python3.9``.
 
