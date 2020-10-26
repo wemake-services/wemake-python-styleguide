@@ -36,6 +36,7 @@ FUNCTIONS_BLACKLIST: Final = frozenset((
     # IO:
     'print',
     'pprint',
+    'pprint.pprint',
     'input',
     'breakpoint',
 

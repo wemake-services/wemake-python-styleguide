@@ -47,6 +47,7 @@ Semantic versioning in our case means:
 - Allow to use `^` with `1`
 - Fixes false positives in WPS513 and WPS323
 - Fixes false positive WPS426 if `lambda` in loop uses only its arguments
+- Fixes false negative WPS421 with `pprint.pprint`
 
 ### Misc
 
