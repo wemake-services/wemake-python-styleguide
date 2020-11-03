@@ -14,7 +14,6 @@
 import os
 import sys
 
-import sphinx
 import tomlkit
 
 sys.path.insert(0, os.path.abspath('..'))
