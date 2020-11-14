@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations.best_practices import (
     PositionalOnlyArgumentsViolation,
 )
 from wemake_python_styleguide.visitors.ast.functions import (
-    FunctionArgumentsVisitor,
+    FunctionSignatureVisitor,
 )
 
 function_with_defaults = """
@@ -104,7 +104,7 @@ def test_wrong_function_defaults(
     """Testing that wrong function defaults are forbidden."""
     tree = parse_ast_tree(mode(template.format(code)))
 
-    visitor = FunctionArgumentsVisitor(default_options, tree=tree)
+    visitor = FunctionSignatureVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(
@@ -142,7 +142,7 @@ def test_correct_function_defaults(
     """Testing that correct function defaults passes validation."""
     tree = parse_ast_tree(mode(template.format(code)))
 
-    visitor = FunctionArgumentsVisitor(default_options, tree=tree)
+    visitor = FunctionSignatureVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [], ignored_types=PositionalOnlyArgumentsViolation)

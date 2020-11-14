@@ -1,5 +1,5 @@
-from ast import Call, Yield, YieldFrom, arg
-from typing import Container, List, Optional
+from ast import Call, Return, Yield, YieldFrom, arg, walk
+from typing import Container, Iterable, List, Optional, Tuple, Type, Union
 
 from wemake_python_styleguide.compat.functions import get_posonlyargs
 from wemake_python_styleguide.logic import source
@@ -8,6 +8,23 @@ from wemake_python_styleguide.types import (
     AnyFunctionDef,
     AnyFunctionDefAndLambda,
 )
+
+#: Expressions that causes control transfer from a routine
+_AnyControlTransfers = Union[
+    Return,
+    Yield,
+    YieldFrom,
+]
+
+#: Type annotation for an iterable of control transfer nodes
+_ControlTransferIterable = Iterable[_AnyControlTransfers]
+
+#: Type annotation for a tuple of control transfer nodes
+_ControlTransferTuple = Tuple[
+    Type[Return],
+    Type[Yield],
+    Type[YieldFrom],
+]
 
 
 def given_function_called(
@@ -102,3 +119,12 @@ def is_generator(node: AnyFunctionDef) -> bool:
         if is_contained(node=body_item, to_check=(Yield, YieldFrom)):
             return True
     return False
+
+
+def get_function_exit_nodes(node: AnyFunctionDef) -> _ControlTransferIterable:
+    """Yields nodes that cause a control transfer from a function."""
+    control_transfer_nodes = (Return, Yield, YieldFrom)
+    for body_item in node.body:
+        for sub_node in walk(body_item):
+            if isinstance(sub_node, control_transfer_nodes):
+                yield sub_node
