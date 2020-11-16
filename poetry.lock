@@ -546,14 +546,14 @@ redis = ["redis (>=3.0.0)"]
 
 [[package]]
 name = "hypothesmith"
-version = "0.1.6"
+version = "0.1.7"
 description = "Hypothesis strategies for generating Python programs, something like CSmith"
 category = "dev"
 optional = false
 python-versions = ">=3.6"
 
 [package.dependencies]
-hypothesis = ">=5.39.0"
+hypothesis = ">=5.41.0"
 lark-parser = ">=0.7.2"
 libcst = ">=0.3.8"
 
@@ -1762,8 +1762,8 @@ hypothesis = [
     {file = "hypothesis-5.41.2.tar.gz", hash = "sha256:f8c281355aaba1da696e40f1488c2bb47c42660424f5750daea45a85e2d047b3"},
 ]
 hypothesmith = [
-    {file = "hypothesmith-0.1.6-py3-none-any.whl", hash = "sha256:b92385e9fcfe82572af1c3b106fcfd6f1651ebb1ae1e0ef09164ad9ade05f6c8"},
-    {file = "hypothesmith-0.1.6.tar.gz", hash = "sha256:54399e45a2d4be4b76198a4b50b5fc5d3acb3567a56d84cd9520c2df0ccb6f01"},
+    {file = "hypothesmith-0.1.7-py3-none-any.whl", hash = "sha256:f37d0b55fec60d31c4fff271e6ae38100fce4c622c584aae0037f08163fea93f"},
+    {file = "hypothesmith-0.1.7.tar.gz", hash = "sha256:97802ad8136033e65db748bbb5a7c9193b9e4df85028f074484db993e8548019"},
 ]
 identify = [
     {file = "identify-1.5.6-py2.py3-none-any.whl", hash = "sha256:3139bf72d81dfd785b0a464e2776bd59bdc725b4cc10e6cf46b56a0db931c82e"},
