@@ -1,0 +1,43 @@
+This file contains test cases that we want to add to the unit test
+(might wanna consider edge cases where comment is the first or last thing in the file)
+
+- Passing
+
+1. simple
+
+# Hello
+#
+# Hi
+
+2. any number of empty comments surrounded by non-empty ones
+
+# Hello
+#
+#
+# Hi
+
+3.
+
+
+- Failing
+
+1. simple case
+
+#           <--- alert
+my_var = 1
+
+2. any number of empty comments
+
+#           <--- alert
+#
+my_var = 5
+#           <--- alert
+#
+
+3. similar to 2, but comment instead of code statement
+
+#           <--- alert
+#
+# A cat
+#           <--- alert
+#
