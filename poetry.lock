@@ -764,7 +764,7 @@ source = ["Cython (>=0.29.7)"]
 
 [[package]]
 name = "m2r2"
-version = "0.2.5"
+version = "0.2.6"
 description = "Markdown and reStructuredText in a single file."
 category = "dev"
 optional = false
@@ -1544,7 +1544,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "26faf4146eabe986f648d2d00158a596c272750f42516c448bc5321ded8ece2b"
+content-hash = "82b3f215f6e5c8ea119677ec92945abea6941ff3f2c4cf423a4752a932fc9654"
 
 [metadata.files]
 added-value = [
@@ -1862,8 +1862,8 @@ lxml = [
     {file = "lxml-4.6.1.tar.gz", hash = "sha256:c152b2e93b639d1f36ec5a8ca24cde4a8eefb2b6b83668fcd8e83a67badcb367"},
 ]
 m2r2 = [
-    {file = "m2r2-0.2.5-py3-none-any.whl", hash = "sha256:2fe7e03c41e1d2052b9cf3e76359bbfe64960b8fee9d69dfc1fc6e35ccff01e7"},
-    {file = "m2r2-0.2.5.tar.gz", hash = "sha256:9da08226c7ff0a60c4fce62ad5b60c761d7fd6e8c20bd2b7f9c246bce4dc0685"},
+    {file = "m2r2-0.2.6-py3-none-any.whl", hash = "sha256:fcaa04878f889e53f0629792d517348d64d4e5af81a9b9317d8b42eec09b28ec"},
+    {file = "m2r2-0.2.6.tar.gz", hash = "sha256:598be13b9bc20afbeaf47a09eb3c107e2de9c83982747ebb4143f29bbf653fa1"},
 ]
 markupsafe = [
     {file = "MarkupSafe-1.1.1-cp27-cp27m-macosx_10_6_intel.whl", hash = "sha256:09027a7803a62ca78792ad89403b1b7a73a01c8cb65909cd876f7fcebd79b161"},
@@ -2041,6 +2041,8 @@ pyyaml = [
     {file = "PyYAML-5.3.1-cp37-cp37m-win_amd64.whl", hash = "sha256:73f099454b799e05e5ab51423c7bcf361c58d3206fa7b0d555426b1f4d9a3eaf"},
     {file = "PyYAML-5.3.1-cp38-cp38-win32.whl", hash = "sha256:06a0d7ba600ce0b2d2fe2e78453a470b5a6e000a985dd4a4e54e436cc36b0e97"},
     {file = "PyYAML-5.3.1-cp38-cp38-win_amd64.whl", hash = "sha256:95f71d2af0ff4227885f7a6605c37fd53d3a106fcab511b8860ecca9fcf400ee"},
+    {file = "PyYAML-5.3.1-cp39-cp39-win32.whl", hash = "sha256:ad9c67312c84def58f3c04504727ca879cb0013b2517c85a9a253f0cb6380c0a"},
+    {file = "PyYAML-5.3.1-cp39-cp39-win_amd64.whl", hash = "sha256:6034f55dab5fea9e53f436aa68fa3ace2634918e8b5994d82f3621c04ff5ed2e"},
     {file = "PyYAML-5.3.1.tar.gz", hash = "sha256:b8eac752c5e14d3eca0e6dd9199cd627518cb5ec06add0de9d32baeee6fe645d"},
 ]
 requests = [
