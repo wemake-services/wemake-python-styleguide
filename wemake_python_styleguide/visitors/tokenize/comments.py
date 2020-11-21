@@ -18,6 +18,7 @@ All comments have the same type.
 
 import re
 import tokenize
+import copy
 from typing import ClassVar
 from typing.re import Pattern
 
@@ -27,6 +28,7 @@ from wemake_python_styleguide.constants import MAX_NO_COVER_COMMENTS, STDIN
 from wemake_python_styleguide.logic.system import is_executable_file, is_windows
 from wemake_python_styleguide.logic.tokens import NEWLINES, get_comment_text
 from wemake_python_styleguide.violations.best_practices import (
+    EmptyCommentViolation,
     ForbiddenInlineIgnoreViolation,
     OveruseOfNoCoverCommentViolation,
     OveruseOfNoqaCommentViolation,
@@ -51,6 +53,15 @@ class WrongCommentVisitor(BaseTokenVisitor):
         super().__init__(*args, **kwargs)
         self._no_cover_count = 0
 
+        self.last_comment_line_num = -1
+
+        # edge case 
+        self.same_block = True
+
+        # self.first_empty = -1  # line number
+        self.prev_non_empty = -1
+        self.reserved_token = None
+
     def visit_comment(self, token: tokenize.TokenInfo) -> None:
         """
         Performs comment checks.
@@ -63,6 +74,8 @@ class WrongCommentVisitor(BaseTokenVisitor):
         self._check_typed_ast(token)
         self._check_empty_doc_comment(token)
         self._check_cover_comments(token)
+        self._check_empty_comment(token)
+        self.last_comment_line_num = token.start[0]
 
     def _check_typed_ast(self, token: tokenize.TokenInfo) -> None:
         comment_text = get_comment_text(token)
@@ -80,6 +93,33 @@ class WrongCommentVisitor(BaseTokenVisitor):
         if get_comment_text(token) == ':':
             self.add_violation(WrongDocCommentViolation(token))
 
+    def _check_empty_comment(self, token: tokenize.TokenInfo) -> None:
+        line_num = token.start[0]
+        if line_num - self.last_comment_line_num == 1 and token.line.lstrip()[0] == '#':
+            self.same_block = True
+        else:
+            self.same_block = False
+
+        # trigger reserved token to be added
+        if not self.same_block and self.reserved_token != None:
+            self.add_violation(EmptyCommentViolation(self.reserved_token))
+            self.reserved_token = None
+
+        if get_comment_text(token) == '':
+            
+            if not self.same_block: # stand alone empty comment or first empty comment in a block
+                # self.first_empty = line_num
+                self.add_violation(EmptyCommentViolation(token))
+            elif self.same_block and line_num - self.prev_non_empty == 1: # empty comment, same block, right after a non-empty
+                self.reserved_token = copy.deepcopy(token)
+
+        else:
+            if self.same_block and self.reserved_token != None:
+                self.reserved_token = None
+
+            self.prev_non_empty = line_num
+                
+
     def _check_cover_comments(self, token: tokenize.TokenInfo) -> None:
         comment_text = get_comment_text(token)
         match = self._no_cover.match(comment_text)
@@ -96,6 +136,9 @@ class WrongCommentVisitor(BaseTokenVisitor):
                     baseline=MAX_NO_COVER_COMMENTS,
                 ),
             )
+
+        if self.reserved_token != None:
+            self.add_violation(EmptyCommentViolation(self.reserved_token))
 
 
 @final

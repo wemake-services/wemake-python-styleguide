@@ -1,13 +1,17 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
-    WrongDocCommentViolation,
+    EmptyCommentViolation
 )
 from wemake_python_styleguide.visitors.tokenize.comments import (
-    WrongCommentVisitor,
+    WrongCommentVisitor
 )
 
+
+# TODO:
 # Replace the violation and visitor later after we implement them
+
+# add test for inline comment
 
 # Be aware of code coverage
 # what about alerting in the right line? since we only alert the first line of a block
@@ -30,7 +34,7 @@ multi_empty_wrapped = """
 # empty_comment = "#"
 
 
-single_empty_beginging = """
+single_empty_beginning = """
 #
 {0}
 """
@@ -40,7 +44,7 @@ single_empty_end = """
 #
 """
 
-multi_empty_begining = """
+multi_empty_beginning = """
 #
 #
 {0}
@@ -70,22 +74,22 @@ def test_correct_doc_comment(
     comment,
 ):
     """Ensures that correct comments do not raise a warning."""
-    # file_tokens = parse_tokens(pattern.format(comment))
+    file_tokens = parse_tokens(pattern.format(comment))
 
     print(pattern.format(comment))
 
-    # visitor = WrongCommentVisitor(default_options, file_tokens=file_tokens)
-    # visitor.run()
+    visitor = WrongCommentVisitor(default_options, file_tokens=file_tokens)
+    visitor.run()
     # print(visitor)
     assert(False)
 
-    # assert_errors(visitor, [])
+    assert_errors(visitor, [])
 
 
 @pytest.mark.parametrize('pattern', [
-    single_empty_beginging,
+    single_empty_beginning,
     single_empty_end,
-    multi_empty_begining,
+    multi_empty_beginning,
     multi_empty_end
 
 ])
@@ -101,13 +105,13 @@ def test_incorrect_doc_comment(
     code_or_comment,
 ):
     """Ensures that incorrect empty comments raise a warning."""
-    # file_tokens = parse_tokens(pattern.format(code_or_comment))
+    file_tokens = parse_tokens(pattern.format(code_or_comment))
 
     print(pattern.format(code_or_comment))
 
-    # visitor = WrongCommentVisitor(default_options, file_tokens=file_tokens)
-    # visitor.run()
+    visitor = WrongCommentVisitor(default_options, file_tokens=file_tokens)
+    visitor.run()
     # print(visitor)
     assert(False)
 
-    # assert_errors(visitor, [WrongDocCommentViolation])
+    assert_errors(visitor, [EmptyCommentViolation])

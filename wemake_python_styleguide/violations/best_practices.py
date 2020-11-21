@@ -79,6 +79,7 @@ Summary
    SingleElementDestructuringViolation
    ForbiddenInlineIgnoreViolation
    WrongMultilineStringUseViolation
+   EmptyCommentViolation
 
 Best practices
 --------------
@@ -146,7 +147,7 @@ Best practices
 .. autoclass:: SingleElementDestructuringViolation
 .. autoclass:: ForbiddenInlineIgnoreViolation
 .. autoclass:: WrongMultilineStringUseViolation
-
+.. autoclass:: EmptyCommentViolation
 """
 
 from typing_extensions import final
@@ -2430,3 +2431,12 @@ class WrongMultilineStringUseViolation(TokenizeViolation):
 
     error_template = 'Wrong multiline string usage'
     code = 462
+
+
+@final
+class EmptyCommentViolation(TokenizeViolation):
+    '''
+    '''
+
+    error_template = 'Found empty comment'
+    code = 463
