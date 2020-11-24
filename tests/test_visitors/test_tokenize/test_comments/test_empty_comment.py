@@ -9,13 +9,31 @@ from wemake_python_styleguide.visitors.tokenize.comments import (
 
 
 # TODO:
-# Replace the violation and visitor later after we implement them
-
-# add test for inline comment
-
 # Be aware of code coverage
 # what about alerting in the right line? since we only alert the first line of a block
 
+inline_comment = """
+four = 4
+seven = 7  #
+"""
+
+end_of_file_comment = """
+# Non-empty
+#
+#
+# Next line will trigger violation
+#
+#
+"""
+
+max_one_alert_per_block = """
+#
+# Previous line will trigger violation
+#
+# Non-empty
+#
+#
+"""
 
 single_empty_wrapped = """
 {0}
@@ -29,10 +47,6 @@ multi_empty_wrapped = """
 #
 {0}
 """
-
-# empty_line = ""
-# empty_comment = "#"
-
 
 single_empty_beginning = """
 #
@@ -66,7 +80,7 @@ code_statement = "my_var = 1"
 @pytest.mark.parametrize('comment', [
     non_empty_comment
 ])
-def test_correct_doc_comment(
+def test_correct_empty_comment(
     parse_tokens,
     assert_errors,
     default_options,
@@ -81,7 +95,7 @@ def test_correct_doc_comment(
     visitor = WrongCommentVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
     # print(visitor)
-    assert(False)
+    # assert(False)
 
     assert_errors(visitor, [])
 
@@ -97,7 +111,7 @@ def test_correct_doc_comment(
     non_empty_comment,
     code_statement
 ])
-def test_incorrect_doc_comment(
+def test_incorrect_empty_comment(
     parse_tokens,
     assert_errors,
     default_options,
@@ -112,6 +126,30 @@ def test_incorrect_doc_comment(
     visitor = WrongCommentVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
     # print(visitor)
-    assert(False)
+    # assert(False)
+
+    assert_errors(visitor, [EmptyCommentViolation])
+
+
+@pytest.mark.parametrize('edge_case', [
+    inline_comment,
+    end_of_file_comment,
+    max_one_alert_per_block
+])
+def test_edge_case_empty_comment(
+    parse_tokens,
+    assert_errors,
+    default_options,
+    edge_case
+):
+    """Ensures that edge cases incorrect empty comments raise a warning."""
+    file_tokens = parse_tokens(edge_case)
+
+    print(edge_case)
+
+    visitor = WrongCommentVisitor(default_options, file_tokens=file_tokens)
+    visitor.run()
+    # print(visitor)
+    # assert(False)
 
     assert_errors(visitor, [EmptyCommentViolation])
