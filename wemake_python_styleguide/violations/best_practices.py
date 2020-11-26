@@ -79,6 +79,7 @@ Summary
    SingleElementDestructuringViolation
    ForbiddenInlineIgnoreViolation
    WrongMultilineStringUseViolation
+   GetterWithoutReturnViolation
    EmptyCommentViolation
 
 Best practices
@@ -147,7 +148,9 @@ Best practices
 .. autoclass:: SingleElementDestructuringViolation
 .. autoclass:: ForbiddenInlineIgnoreViolation
 .. autoclass:: WrongMultilineStringUseViolation
+.. autoclass:: GetterWithoutReturnViolation
 .. autoclass:: EmptyCommentViolation
+
 """
 
 from typing_extensions import final
@@ -2434,6 +2437,39 @@ class WrongMultilineStringUseViolation(TokenizeViolation):
 
 
 @final
+class GetterWithoutReturnViolation(ASTViolation):
+    """
+    Forbids to have functions starting with ``get_`` without returning a value.
+
+    Applies to both methods and functions.
+
+    Reasoning:
+        A ``get_`` function is generally expected to return a value. Otherwise,
+        it is most likely either an error or bad naming.
+
+    Solution:
+        Make sure getter functions ``return`` or ``yield`` a value on all
+        execution paths, or rename the function.
+
+    Example::
+
+        # Correct
+        def get_random_number():
+             return random.randint(1, 10)
+
+        # Wrong
+        def get_random_number():
+             print('I do not return a value!')
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found a getter without a return value'
+    code = 463
+
+
+@final
 class EmptyCommentViolation(TokenizeViolation):
     """
     Forbid empty comments.
@@ -2461,10 +2497,6 @@ class EmptyCommentViolation(TokenizeViolation):
 
         #
         my_var = 1
-
-    .. versionadded:: 0.15.0
-
     """
-
     error_template = 'Found empty comment'
-    code = 463
+    code = 464

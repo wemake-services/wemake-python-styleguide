@@ -761,3 +761,7 @@ def many_raises_function(parameter):  # noqa: WPS238
 my_print("""
 text
 """)  # noqa: WPS462
+
+
+def get_item():  # noqa: WPS463
+    return  # noqa: WPS324
