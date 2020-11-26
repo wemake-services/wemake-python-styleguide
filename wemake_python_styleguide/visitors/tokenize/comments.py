@@ -57,7 +57,10 @@ class WrongCommentVisitor(BaseTokenVisitor):
         self._prev_non_empty = -1
         self._in_same_block = True
         self._block_alerted = False
-        self._reserved_token = None
+        self._reserved_token = tokenize.TokenInfo(
+            type=0, string='', start=(2, 0), end=(2, 0), line='',
+        )
+        self._has_reserved = False
 
     def visit_comment(self, token: tokenize.TokenInfo) -> None:
         """
@@ -68,11 +71,18 @@ class WrongCommentVisitor(BaseTokenVisitor):
             WrongMagicCommentViolation
 
         """
+        self._line_num = token.start[0]
+        self._in_same_block = (
+            self._line_num - self._prev_comment_line_num == 1 and  # is consec
+            token.line.lstrip()[0] == '#'  # is inline comment
+        )
+        if not self._in_same_block:
+            self._block_alerted = False
+
         self._check_typed_ast(token)
         self._check_empty_doc_comment(token)
         self._check_cover_comments(token)
         self._check_empty_comment(token)
-        self._prev_comment_line_num = token.start[0]
 
     def _check_typed_ast(self, token: tokenize.TokenInfo) -> None:
         comment_text = get_comment_text(token)
@@ -91,22 +101,11 @@ class WrongCommentVisitor(BaseTokenVisitor):
             self.add_violation(WrongDocCommentViolation(token))
 
     def _check_empty_comment(self, token: tokenize.TokenInfo) -> None:
-        line_num = token.start[0]
-        is_same_block = (
-            line_num - self._prev_comment_line_num == 1 and  # is consecutive
-            token.line.lstrip()[0] == '#'  # is inline comment
-        )
-        if is_same_block:
-            self._in_same_block = True
-        else:
-            self._in_same_block = False
-            self._block_alerted = False
-
         # Triggering reserved token to be added
-        if not self._in_same_block and self._reserved_token is not None:
+        if not self._in_same_block and self._has_reserved:
             self.add_violation(EmptyCommentViolation(self._reserved_token))
             self._block_alerted = True
-            self._reserved_token = None
+            self._has_reserved = False
 
         if get_comment_text(token) == '':
             if not self._in_same_block:
@@ -118,16 +117,18 @@ class WrongCommentVisitor(BaseTokenVisitor):
             to_reserve = (
                 # Empty comment right after non-empty, block not yet alerted
                 self._in_same_block and
-                line_num - self._prev_non_empty == 1 and
+                self._line_num - self._prev_non_empty == 1 and
                 not self._block_alerted
             )
             if to_reserve:
+                self._has_reserved = True
                 self._reserved_token = token
         else:
-            if self._in_same_block and self._reserved_token is not None:
-                self._reserved_token = None
+            if self._in_same_block:
+                self._has_reserved = False
+            self._prev_non_empty = self._line_num
 
-            self._prev_non_empty = line_num
+        self._prev_comment_line_num = token.start[0]
 
     def _check_cover_comments(self, token: tokenize.TokenInfo) -> None:
         comment_text = get_comment_text(token)
@@ -146,7 +147,7 @@ class WrongCommentVisitor(BaseTokenVisitor):
                 ),
             )
 
-        if self._reserved_token is not None and not self._block_alerted:
+        if self._has_reserved and not self._block_alerted:
             self.add_violation(EmptyCommentViolation(self._reserved_token))
 
 

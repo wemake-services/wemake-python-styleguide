@@ -2435,8 +2435,36 @@ class WrongMultilineStringUseViolation(TokenizeViolation):
 
 @final
 class EmptyCommentViolation(TokenizeViolation):
-    '''
-    '''
+    """
+    Forbid empty comments.
+
+    Empty comments are only allowed in between valid comments.
+
+    Reasoning:
+        Empty comments that do not help formatting should be excluded.
+
+    Solution:
+        Remove the empty comments.
+
+    Example::
+
+        # Correct:
+
+        # First line
+        #
+        # Samples:
+        # One
+        # Two
+        my_var = 1
+
+        # Wrong:
+
+        #
+        my_var = 1
+
+    .. versionadded:: 0.15.0
+
+    """
 
     error_template = 'Found empty comment'
     code = 463
