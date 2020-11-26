@@ -2497,6 +2497,10 @@ class EmptyCommentViolation(TokenizeViolation):
 
         #
         my_var = 1
+
+    .. versionadded:: 0.15.0
+
     """
+
     error_template = 'Found empty comment'
     code = 464

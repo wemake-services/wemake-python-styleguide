@@ -30,6 +30,13 @@ max_one_alert_per_block = """
 #
 """
 
+two_blocks = """
+# Next line will trigger violation
+#
+
+# Non-empty
+"""
+
 single_empty_wrapped = """
 {0}
 #
@@ -122,6 +129,7 @@ def test_incorrect_empty_comment(
     inline_comment,
     end_of_file_comment,
     max_one_alert_per_block,
+    two_blocks,
 ])
 def test_edge_case_empty_comment(
     parse_tokens,
