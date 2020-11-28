@@ -4,7 +4,7 @@ from wemake_python_styleguide.violations.best_practices import (
     EmptyCommentViolation,
 )
 from wemake_python_styleguide.visitors.tokenize.comments import (
-    WrongCommentVisitor,
+    EmptyCommentVisitor,
 )
 
 inline_comment = """
@@ -90,10 +90,10 @@ def test_correct_empty_comment(
     pattern,
     comment,
 ):
-    """Ensures that correct comments do not raise a warning."""
+    """Ensure that empty comments surrounded with non-empty ones are valid."""
     file_tokens = parse_tokens(pattern.format(comment))
 
-    visitor = WrongCommentVisitor(default_options, file_tokens=file_tokens)
+    visitor = EmptyCommentVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -116,10 +116,10 @@ def test_incorrect_empty_comment(
     pattern,
     code_or_comment,
 ):
-    """Ensures that incorrect empty comments raise a warning."""
+    """Ensure that incorrect empty comments raise a warning."""
     file_tokens = parse_tokens(pattern.format(code_or_comment))
 
-    visitor = WrongCommentVisitor(default_options, file_tokens=file_tokens)
+    visitor = EmptyCommentVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [EmptyCommentViolation])
@@ -137,10 +137,10 @@ def test_edge_case_empty_comment(
     default_options,
     edge_case,
 ):
-    """Ensures that edge cases incorrect empty comments raise a warning."""
+    """Ensure that edge cases incorrect empty comments raise a warning."""
     file_tokens = parse_tokens(edge_case)
 
-    visitor = WrongCommentVisitor(default_options, file_tokens=file_tokens)
+    visitor = EmptyCommentVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [EmptyCommentViolation])
