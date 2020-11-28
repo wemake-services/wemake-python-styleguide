@@ -107,11 +107,15 @@ class EmptyCommentVisitor(BaseTokenVisitor):
         """Initializes fields to track empty comments."""
         super().__init__(*args, **kwargs)
 
+        self._line_num = -1
         self._prev_comment_line_num = -1
         self._prev_non_empty = -1
         self._in_same_block = True
         self._block_alerted = False
         self._has_reserved = False
+        self._reserved_token = tokenize.TokenInfo(
+            type=0, string='', start=(0, 0), end=(0, 0), line='',
+        )
 
     def visit_comment(self, token: tokenize.TokenInfo) -> None:
         """
@@ -156,7 +160,7 @@ class EmptyCommentVisitor(BaseTokenVisitor):
 
         self._prev_comment_line_num = token.start[0]
 
-    def _check_same_block(self, token: tokenize.TokenInfo):
+    def _check_same_block(self, token: tokenize.TokenInfo) -> None:
         self._in_same_block = (
             self._is_consecutive(self._prev_comment_line_num) and
             token.line.lstrip()[0] == '#'  # is inline comment
@@ -164,7 +168,7 @@ class EmptyCommentVisitor(BaseTokenVisitor):
         if not self._in_same_block:
             self._block_alerted = False
 
-    def _is_consecutive(self, prev_line_num):
+    def _is_consecutive(self, prev_line_num) -> bool:
         return (self._line_num - prev_line_num == 1)
 
     def _post_visit(self) -> None:
