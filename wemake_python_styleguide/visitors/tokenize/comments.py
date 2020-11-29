@@ -37,6 +37,10 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
+EMPTY_TOKEN = tokenize.TokenInfo(
+    type=0, string='', start=(0, 0), end=(0, 0), line='',
+)
+
 
 @final
 class WrongCommentVisitor(BaseTokenVisitor):
@@ -112,10 +116,7 @@ class EmptyCommentVisitor(BaseTokenVisitor):
         self._prev_non_empty = -1
         self._in_same_block = True
         self._block_alerted = False
-        self._has_reserved = False
-        self._reserved_token = tokenize.TokenInfo(
-            type=0, string='', start=(0, 0), end=(0, 0), line='',
-        )
+        self._reserved_token = EMPTY_TOKEN
 
     def visit_comment(self, token: tokenize.TokenInfo) -> None:
         """
@@ -132,10 +133,10 @@ class EmptyCommentVisitor(BaseTokenVisitor):
         self._check_same_block(token)
 
         # Triggering reserved token to be added
-        if not self._in_same_block and self._has_reserved:
+        if not self._in_same_block and self._has_reserved_token():
             self.add_violation(EmptyCommentViolation(self._reserved_token))
             self._block_alerted = True
-            self._has_reserved = False
+            self._reserved_token = EMPTY_TOKEN
 
         if get_comment_text(token) == '':
             if not self._in_same_block:
@@ -151,12 +152,11 @@ class EmptyCommentVisitor(BaseTokenVisitor):
                 not self._block_alerted
             )
             if to_reserve:
-                self._has_reserved = True
                 self._reserved_token = token
         else:
             self._prev_non_empty = self._line_num
             if self._in_same_block:
-                self._has_reserved = False
+                self._reserved_token = EMPTY_TOKEN
 
         self._prev_comment_line_num = token.start[0]
 
@@ -168,11 +168,14 @@ class EmptyCommentVisitor(BaseTokenVisitor):
         if not self._in_same_block:
             self._block_alerted = False
 
-    def _is_consecutive(self, prev_line_num) -> bool:
+    def _is_consecutive(self, prev_line_num: int) -> bool:
         return (self._line_num - prev_line_num == 1)
 
+    def _has_reserved_token(self) -> bool:
+        return (self._reserved_token != EMPTY_TOKEN)
+
     def _post_visit(self) -> None:
-        if self._has_reserved and not self._block_alerted:
+        if self._has_reserved_token() and not self._block_alerted:
             self.add_violation(EmptyCommentViolation(self._reserved_token))
 
 
