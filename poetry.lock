@@ -768,7 +768,7 @@ source = ["Cython (>=0.29.7)"]
 
 [[package]]
 name = "m2r2"
-version = "0.2.6"
+version = "0.2.7"
 description = "Markdown and reStructuredText in a single file."
 category = "dev"
 optional = false
@@ -1548,7 +1548,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "79a5479d68fe712f13059183352159f3a0fafd4b5004c0d3b2f4d121c3d45bbd"
+content-hash = "debee89bf30b9d13bfc729e467cdc28f7220e778036d2d59224c04f33bf8be43"
 
 [metadata.files]
 added-value = [
@@ -1867,8 +1867,8 @@ lxml = [
     {file = "lxml-4.6.1.tar.gz", hash = "sha256:c152b2e93b639d1f36ec5a8ca24cde4a8eefb2b6b83668fcd8e83a67badcb367"},
 ]
 m2r2 = [
-    {file = "m2r2-0.2.6-py3-none-any.whl", hash = "sha256:fcaa04878f889e53f0629792d517348d64d4e5af81a9b9317d8b42eec09b28ec"},
-    {file = "m2r2-0.2.6.tar.gz", hash = "sha256:598be13b9bc20afbeaf47a09eb3c107e2de9c83982747ebb4143f29bbf653fa1"},
+    {file = "m2r2-0.2.7-py3-none-any.whl", hash = "sha256:a1b87b00f4d5163a3616253fca4c045f8351818cd803ba2e24af8897442a0eae"},
+    {file = "m2r2-0.2.7.tar.gz", hash = "sha256:fbf72ade9f648d41658f97c5267687431612451f36b65761a138fbc276294df5"},
 ]
 markupsafe = [
     {file = "MarkupSafe-1.1.1-cp27-cp27m-macosx_10_6_intel.whl", hash = "sha256:09027a7803a62ca78792ad89403b1b7a73a01c8cb65909cd876f7fcebd79b161"},
