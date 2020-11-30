@@ -18,10 +18,11 @@ All comments have the same type.
 
 import re
 import tokenize
+from token import ENDMARKER
 from typing import ClassVar
 from typing.re import Pattern
 
-from typing_extensions import final
+from typing_extensions import Final, final
 
 from wemake_python_styleguide.constants import MAX_NO_COVER_COMMENTS, STDIN
 from wemake_python_styleguide.logic.system import is_executable_file, is_windows
@@ -37,8 +38,12 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
-EMPTY_TOKEN = tokenize.TokenInfo(
-    type=0, string='', start=(0, 0), end=(0, 0), line='',
+SENTINEL_TOKEN: Final = tokenize.TokenInfo(
+    type=ENDMARKER,
+    string='',
+    start=(ENDMARKER, ENDMARKER),
+    end=(ENDMARKER, ENDMARKER),
+    line='',
 )
 
 
@@ -116,7 +121,7 @@ class EmptyCommentVisitor(BaseTokenVisitor):
         self._prev_non_empty = -1
         self._in_same_block = True
         self._block_alerted = False
-        self._reserved_token = EMPTY_TOKEN
+        self._reserved_token = SENTINEL_TOKEN
 
     def visit_comment(self, token: tokenize.TokenInfo) -> None:
         """
@@ -136,7 +141,7 @@ class EmptyCommentVisitor(BaseTokenVisitor):
         if not self._in_same_block and self._has_reserved_token():
             self.add_violation(EmptyCommentViolation(self._reserved_token))
             self._block_alerted = True
-            self._reserved_token = EMPTY_TOKEN
+            self._reserved_token = SENTINEL_TOKEN
 
         if get_comment_text(token) == '':
             if not self._in_same_block:
@@ -156,7 +161,7 @@ class EmptyCommentVisitor(BaseTokenVisitor):
         else:
             self._prev_non_empty = self._line_num
             if self._in_same_block:
-                self._reserved_token = EMPTY_TOKEN
+                self._reserved_token = SENTINEL_TOKEN
 
         self._prev_comment_line_num = token.start[0]
 
@@ -172,7 +177,7 @@ class EmptyCommentVisitor(BaseTokenVisitor):
         return (self._line_num - prev_line_num == 1)
 
     def _has_reserved_token(self) -> bool:
-        return (self._reserved_token != EMPTY_TOKEN)
+        return (self._reserved_token != SENTINEL_TOKEN)
 
     def _post_visit(self) -> None:
         if self._has_reserved_token() and not self._block_alerted:
