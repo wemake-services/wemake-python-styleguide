@@ -41,8 +41,8 @@ from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 SENTINEL_TOKEN: Final = tokenize.TokenInfo(
     type=ENDMARKER,
     string='',
-    start=(ENDMARKER, ENDMARKER),
-    end=(ENDMARKER, ENDMARKER),
+    start=(0, 0),
+    end=(0, 0),
     line='',
 )
 
