@@ -13,6 +13,7 @@ PRESET: Final = (
     comments.WrongCommentVisitor,
     comments.ShebangVisitor,
     comments.NoqaVisitor,
+    comments.EmptyCommentVisitor,
 
     syntax.WrongKeywordTokenVisitor,
 

@@ -18,15 +18,17 @@ All comments have the same type.
 
 import re
 import tokenize
+from token import ENDMARKER
 from typing import ClassVar
 from typing.re import Pattern
 
-from typing_extensions import final
+from typing_extensions import Final, final
 
 from wemake_python_styleguide.constants import MAX_NO_COVER_COMMENTS, STDIN
 from wemake_python_styleguide.logic.system import is_executable_file, is_windows
 from wemake_python_styleguide.logic.tokens import NEWLINES, get_comment_text
 from wemake_python_styleguide.violations.best_practices import (
+    EmptyCommentViolation,
     ForbiddenInlineIgnoreViolation,
     OveruseOfNoCoverCommentViolation,
     OveruseOfNoqaCommentViolation,
@@ -35,6 +37,16 @@ from wemake_python_styleguide.violations.best_practices import (
     WrongMagicCommentViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
+
+EMPTY_STRING: Final = ''
+
+SENTINEL_TOKEN: Final = tokenize.TokenInfo(
+    type=ENDMARKER,
+    string=EMPTY_STRING,
+    start=(0, 0),
+    end=(0, 0),
+    line=EMPTY_STRING,
+)
 
 
 @final
@@ -96,6 +108,82 @@ class WrongCommentVisitor(BaseTokenVisitor):
                     baseline=MAX_NO_COVER_COMMENTS,
                 ),
             )
+
+
+@final
+class EmptyCommentVisitor(BaseTokenVisitor):
+    """Checks empty comment tokens."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Initializes fields to track empty comments."""
+        super().__init__(*args, **kwargs)
+
+        self._line_num = -1
+        self._prev_comment_line_num = -1
+        self._prev_non_empty = -1
+        self._in_same_block = True
+        self._block_alerted = False
+        self._reserved_token = SENTINEL_TOKEN
+
+    def visit_comment(self, token: tokenize.TokenInfo) -> None:
+        """
+        Performs comment checks.
+
+        Raises:
+            EmptyCommentViolation
+
+        """
+        self._check_empty_comment(token)
+
+    def _check_empty_comment(self, token: tokenize.TokenInfo) -> None:
+        self._line_num = token.start[0]
+        self._check_same_block(token)
+
+        # Triggering reserved token to be added
+        if not self._in_same_block and self._has_reserved_token():
+            self.add_violation(EmptyCommentViolation(self._reserved_token))
+            self._block_alerted = True
+            self._reserved_token = SENTINEL_TOKEN
+
+        if get_comment_text(token) == EMPTY_STRING:
+            if not self._in_same_block:
+                # Stand alone empty comment or first empty comment in a block
+                self.add_violation(EmptyCommentViolation(token))
+                self._block_alerted = True
+                self._in_same_block = True
+
+            to_reserve = (
+                # Empty comment right after non-empty, block not yet alerted
+                self._is_consecutive(self._prev_non_empty) and
+                self._in_same_block and
+                not self._block_alerted
+            )
+            if to_reserve:
+                self._reserved_token = token
+        else:
+            self._prev_non_empty = self._line_num
+            if self._in_same_block:
+                self._reserved_token = SENTINEL_TOKEN
+
+        self._prev_comment_line_num = token.start[0]
+
+    def _check_same_block(self, token: tokenize.TokenInfo) -> None:
+        self._in_same_block = (
+            self._is_consecutive(self._prev_comment_line_num) and
+            token.line.lstrip()[0] == '#'  # is inline comment
+        )
+        if not self._in_same_block:
+            self._block_alerted = False
+
+    def _is_consecutive(self, prev_line_num: int) -> bool:
+        return (self._line_num - prev_line_num == 1)
+
+    def _has_reserved_token(self) -> bool:
+        return (self._reserved_token != SENTINEL_TOKEN)
+
+    def _post_visit(self) -> None:
+        if self._has_reserved_token() and not self._block_alerted:
+            self.add_violation(EmptyCommentViolation(self._reserved_token))
 
 
 @final
@@ -229,7 +317,7 @@ class NoqaVisitor(BaseTokenVisitor):
 
     def _check_forbidden_noqa(self, noqa_excludes) -> None:
         excludes_list = [ex.strip() for ex in noqa_excludes.split(',')]
-        forbidden_noqa = ''.join(self.options.forbidden_inline_ignore)
+        forbidden_noqa = EMPTY_STRING.join(self.options.forbidden_inline_ignore)
         for noqa_code in forbidden_noqa.split(','):
             noqa_code = noqa_code.strip()
             if noqa_code in excludes_list:

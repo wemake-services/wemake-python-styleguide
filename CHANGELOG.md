@@ -37,6 +37,7 @@ Semantic versioning in our case means:
 - Forbids to unpack lists with side-effects
 - Forbids to use miltiline strings except for assignments and docstrings
 - Forbids not returning anything in functions and methods starting with `get_`
+- Forbids to use empty comment
 
 ### Bugfixes
 

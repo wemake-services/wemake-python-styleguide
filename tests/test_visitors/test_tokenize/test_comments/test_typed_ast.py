@@ -15,7 +15,6 @@ from wemake_python_styleguide.visitors.tokenize.comments import (
     '1 + "12"  # type:ignore[fake]',
     'total = 1000  # type is not clear',
     'print(12 + 3)  # regular comment',
-    'print(12 + 3)  #',
     'print(12 + 3)',
     '',
 ])
