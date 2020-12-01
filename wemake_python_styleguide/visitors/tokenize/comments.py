@@ -38,12 +38,14 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
+EMPTY_STRING: Final = ''
+
 SENTINEL_TOKEN: Final = tokenize.TokenInfo(
     type=ENDMARKER,
-    string='',
+    string=EMPTY_STRING,
     start=(0, 0),
     end=(0, 0),
-    line='',
+    line=EMPTY_STRING,
 )
 
 
@@ -143,7 +145,7 @@ class EmptyCommentVisitor(BaseTokenVisitor):
             self._block_alerted = True
             self._reserved_token = SENTINEL_TOKEN
 
-        if get_comment_text(token) == '':
+        if get_comment_text(token) == EMPTY_STRING:
             if not self._in_same_block:
                 # Stand alone empty comment or first empty comment in a block
                 self.add_violation(EmptyCommentViolation(token))
@@ -315,7 +317,7 @@ class NoqaVisitor(BaseTokenVisitor):
 
     def _check_forbidden_noqa(self, noqa_excludes) -> None:
         excludes_list = [ex.strip() for ex in noqa_excludes.split(',')]
-        forbidden_noqa = ''.join(self.options.forbidden_inline_ignore)
+        forbidden_noqa = EMPTY_STRING.join(self.options.forbidden_inline_ignore)
         for noqa_code in forbidden_noqa.split(','):
             noqa_code = noqa_code.strip()
             if noqa_code in excludes_list:
