@@ -45,6 +45,9 @@ FORBIDDEN_DOMAIN_NAMES: Final = ()
 #: Violation codes that are forbidden to use.
 FORBIDDEN_INLINE_IGNORE: Final = ()
 
+#: Binary operators that are ignored by no effect violation.
+ALLOWED_NO_EFFECT_BINARY_OPERATORS: Final = ()
+
 # ===========
 # Complexity:
 # ===========

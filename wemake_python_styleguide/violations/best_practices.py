@@ -1202,8 +1202,13 @@ class StatementHasNoEffectViolation(ASTViolation):
             8 + 2
             print
 
+    Configuration:
+        This rule is configurable with `--allowed-no-effect-binary-operators``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.ALLOWED_NO_EFFECT_BINARY_OPERATORS`
+
     .. versionadded:: 0.5.0
-    .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.14.2
     """
 
     error_template = 'Found statement that has no effect'

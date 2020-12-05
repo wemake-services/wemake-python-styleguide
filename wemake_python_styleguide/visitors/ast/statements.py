@@ -1,5 +1,5 @@
 import ast
-from typing import ClassVar, Mapping, Optional, Sequence, Set, Union
+from typing import ClassVar, Mapping, Optional, Sequence, Set, Type, Union
 
 from typing_extensions import final
 
@@ -19,6 +19,7 @@ from wemake_python_styleguide.types import (
     AnyFunctionDef,
     AnyNodes,
     AnyWith,
+    ConfigurationOptions,
 )
 from wemake_python_styleguide.violations.best_practices import (
     StatementHasNoEffectViolation,
@@ -59,6 +60,9 @@ _AnyCollection = Union[
     ast.Dict,
     ast.Tuple,
 ]
+
+#: Operators that can be optionally ignored by no effect violation.
+_AstOperatorType = Type[ast.operator]
 
 
 @final
@@ -148,6 +152,33 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         'AsyncWith': _generally_useless_body,
     }
 
+    _string_to_binary_operator: ClassVar[Mapping[str, _AstOperatorType]] = {
+        '+': ast.Add,
+        '-': ast.Sub,
+        '*': ast.Mult,
+        '/': ast.Div,
+        '**': ast.Pow,
+        '^': ast.BitXor,
+        '%': ast.Mod,
+        '>>': ast.RShift,
+        '<<': ast.LShift,
+        '&': ast.BitAnd,
+        '|': ast.BitOr,
+    }
+
+    def __init__(
+        self,
+        options: ConfigurationOptions,
+        tree: ast.AST,
+        **kwargs,
+    ) -> None:
+        """Creates new ``ast`` based instance."""
+        super().__init__(options, tree, **kwargs)
+        self._allowed_no_effect_binary_operators = tuple(
+            self._string_to_binary_operator[option_value]
+            for option_value in options.allowed_no_effect_binary_operators
+        )
+
     def visit_statement_with_body(self, node: _StatementWithBody) -> None:
         """
         Visits statement's body internals.
@@ -223,6 +254,11 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
     ) -> None:
         if isinstance(node.value, self._have_effect):
             return
+
+        if isinstance(node.value, ast.BinOp):
+            expr_op = node.value.op
+            if isinstance(expr_op, self._allowed_no_effect_binary_operators):
+                return
 
         if is_first and strings.is_doc_string(node):
             if isinstance(nodes.get_parent(node), self._have_doc_strings):

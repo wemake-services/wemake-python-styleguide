@@ -177,6 +177,16 @@ async def container():
     '3 > 4',
     '1 + 2',
     '-100',
+    'x - 1',
+    'x * 1',
+    'x / 1',
+    'x ** 1',
+    'x ^ 1',
+    'x % 1',
+    'x >> 1',
+    'x << 1',
+    'x & 1',
+    'x | 1',
 ])
 def test_statement_with_no_effect(
     assert_errors,
@@ -192,6 +202,65 @@ def test_statement_with_no_effect(
     visitor.run()
 
     assert_errors(visitor, [StatementHasNoEffectViolation])
+
+
+@pytest.mark.parametrize('code', [
+    module_template,
+
+    if_template,
+    if_elif_template,
+    if_else_template,
+
+    for_template,
+    for_else_template,
+    while_template,
+    while_else_template,
+
+    try_template,
+    try_except_template,
+    try_else_template,
+    try_finally_template,
+
+    with_template,
+
+    function_template,
+    class_template,
+
+    async_function_template,
+    async_with_template,
+    async_for_template,
+    async_for_else_template,
+])
+@pytest.mark.parametrize(('statement', 'allowed_operator'), [
+    ('x - 1', '-'),
+    ('x * 1', '*'),
+    ('x / 1', '/'),
+    ('x ** 1', '**'),
+    ('x ^ 1', '^'),
+    ('x % 1', '%'),
+    ('airflow_dag >> airflow_operator', '>>'),
+    ('airflow_downstream_operator << airflow_upstream_operator', '<<'),
+    ('x & 1', '&'),
+    ('x | 1', '|'),
+])
+def test_ignored_statement_with_no_effect(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    statement,
+    allowed_operator,
+    options,
+):
+    """Testing that unreachable code is detected."""
+    tree = parse_ast_tree(code.format(statement))
+
+    option_values = options(
+        allowed_no_effect_binary_operators=(allowed_operator,),
+    )
+    visitor = StatementsWithBodiesVisitor(option_values, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
 
 
 @pytest.mark.parametrize('code', [

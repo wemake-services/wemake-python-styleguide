@@ -59,6 +59,9 @@ You can also show all options that ``flake8`` supports by running:
 - ``forbidden-inline-ignore`` - list of codes of violations or
     class of violations that are forbidden to ignore inline, defaults to
     :str:`wemake_python_styleguide.options.defaults.FORBIDDEN_NOQA`
+- ``allowed-no-effect-binary-operators`` - list of binary operators that are
+    ignored by no effect violation, defaults to
+    :str:`wemake_python_styleguide.options.defaults.ALLOWED_NO_EFFECT_BINARY_OPERATORS`
 
 
 .. rubric:: Complexity options
@@ -259,6 +262,14 @@ class Configuration(object):
             defaults.FORBIDDEN_INLINE_IGNORE,
             'Codes of violations or class of violations forbidden to ignore.',
             type='string',
+            comma_separated_list=True,
+        ),
+
+        _Option(
+            '--allowed-no-effect-binary-operators',
+            defaults.ALLOWED_NO_EFFECT_BINARY_OPERATORS,
+            'Binary operators that are ignored by no effect violation.',
+            type=string,
             comma_separated_list=True,
         ),
 
