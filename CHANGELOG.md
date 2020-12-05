@@ -61,6 +61,14 @@ Semantic versioning in our case means:
 - Updates `reviewdog` version to `0.11.0` and adds `action-depup`
 
 
+## 0.14.2
+
+### Features
+
+- Adds an option: `--allowed-no-effect-binary-operators`, which allows ignoring
+  no effect violation for selected binary operators #1737.
+
+
 ## 0.14.0 aka The Walrus fighter
 
 This release was focused on adding `python3.8` support,
