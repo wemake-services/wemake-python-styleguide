@@ -59,9 +59,10 @@ You can also show all options that ``flake8`` supports by running:
 - ``forbidden-inline-ignore`` - list of codes of violations or
     class of violations that are forbidden to ignore inline, defaults to
     :str:`wemake_python_styleguide.options.defaults.FORBIDDEN_NOQA`
-- ``allowed-no-effect-binary-operators`` - list of binary operators that are
-    ignored by no effect violation, defaults to
-    :str:`wemake_python_styleguide.options.defaults.ALLOWED_NO_EFFECT_BINARY_OPERATORS`
+- ``allowed-no-effect-binary-operators`` - comma separated binary operators that
+    are ignored by no effect violation, defaults to
+    :str:`wemake_python_styleguide.options.defaults.ALLOWED_NO_EFFECT_BINARY_OPERATORS`,
+    example: ``--allowed-no-effect-binary-operators '>>,&'``.
 
 
 .. rubric:: Complexity options
