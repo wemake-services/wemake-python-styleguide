@@ -124,6 +124,7 @@ class ExpressionOveruseVisitor(base.BaseNodeVisitor):
         overuses.is_class_context,
         overuses.is_super_call,
         overuses.is_primitive,
+        overuses.is_unary_operator,
     )
 
     _msg: ClassVar[str] = '{0}; used {1}'
