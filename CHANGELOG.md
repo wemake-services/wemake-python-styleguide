@@ -38,6 +38,7 @@ Semantic versioning in our case means:
 - Forbids to use miltiline strings except for assignments and docstrings
 - Forbids not returning anything in functions and methods starting with `get_`
 - Forbids to use empty comment
+- WPS204: Supress validation for unary operators with named variable
 
 ### Bugfixes
 
