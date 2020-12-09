@@ -123,7 +123,6 @@ violating_expressions = (
     'b + a',
     'call(1, None)',
     'a >= 1',
-    '-item.attr',
     'lambda x: x.set',
     '{a: 1 for a in "123"}',
     '{"1": a}',
@@ -133,6 +132,7 @@ violating_expressions = (
     '(x.attr for x in other)',
     '{1, 2, 3}',
     '{a for a in other}',
+    '-1',  # unary minus operator is raising when used with literal
 
     # Special cases for self:
     'self.method([star])',  # `[star]` is raising
@@ -164,6 +164,8 @@ ignored_expressions = (
     'dict()',
     # attributes
     'some.prop',
+    # unary operator
+    '-value',
 )
 
 
