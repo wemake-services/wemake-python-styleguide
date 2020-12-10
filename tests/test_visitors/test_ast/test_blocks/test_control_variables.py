@@ -43,6 +43,14 @@ def wrapper():
     print(wrapper)
 """
 
+correct_for_multi_loops = """
+def wrapper():
+    for my_var in range(3):
+        my_var = my_var + 3
+    for my_var in range(4):
+        my_var = my_var + 4
+"""
+
 correct_for_comprehension1 = """
 def context():
     nodes = [
@@ -224,6 +232,7 @@ def test_control_variable_used_after_block(
     correct_for_loop3,
     correct_for_loop4,
     correct_for_loop5,
+    correct_for_multi_loops,
     correct_for_comprehension1,
     correct_for_comprehension2,
     correct_for_comprehension3,
