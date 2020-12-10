@@ -85,6 +85,8 @@ PRESET: Final = (
     compares.WrongConstantCompareVisitor,
     compares.InCompareSanityVisitor,
     compares.WrongFloatComplexCompareVisitor,
+    compares.BitwiseOpVisitor,
+
 
     conditions.IfStatementVisitor,
     conditions.BooleanConditionVisitor,
