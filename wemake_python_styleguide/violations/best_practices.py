@@ -81,6 +81,7 @@ Summary
    WrongMultilineStringUseViolation
    GetterWithoutReturnViolation
    EmptyCommentViolation
+   BitwiseAndBooleanMixupViolation
 
 Best practices
 --------------
@@ -150,6 +151,7 @@ Best practices
 .. autoclass:: WrongMultilineStringUseViolation
 .. autoclass:: GetterWithoutReturnViolation
 .. autoclass:: EmptyCommentViolation
+.. autoclass:: BitwiseAndBooleanMixupViolation
 
 """
 
@@ -2504,3 +2506,37 @@ class EmptyCommentViolation(TokenizeViolation):
 
     error_template = 'Found empty comment'
     code = 464
+
+
+@final
+class BitwiseAndBooleanMixupViolation(ASTViolation):
+    """
+    Forbid comparisons between bitwise and boolean expressions.
+
+    Empty comments are only allowed in between valid comments.
+
+    Reasoning:
+       This case indicates that a person confused & with and and | with or.
+       This can be the case if a person is comming from another language.
+
+    Solution:
+        Change bitwise operator to boolean operators.
+
+    Example::
+
+        # Correct:
+
+        first | 10
+        result = ((first > 0) && False)
+     
+
+        # Wrong:
+
+        result = ((first > 0) & False)
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Likely bitwise and boolean operation mixup'
+    code = 465
