@@ -1,21 +1,19 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
-    ListMultiplyViolation,
+    BitwiseAndBooleanMixupViolation,
 )
-from wemake_python_styleguide.visitors.ast.operators import (
-    WrongMathOperatorVisitor,
-)
+from wemake_python_styleguide.visitors.ast.compares import BitwiseOpVisitor
 
-# replace with my finished vistor and violations
-
-usage_template = 'constant = {0}'
 # add more cases for more usages of mixup
 
 
 @pytest.mark.parametrize('expression', [
     'True | False',
     '(x >= y) & True',
+    '(x > 5) | (10 == second)',
+    '(11 != first) | (not False)',
+    '(1 or first) & (second and first)',
 ])
 def test_bitwise_boolean_mixup(
     assert_errors,
@@ -24,17 +22,20 @@ def test_bitwise_boolean_mixup(
     default_options,
 ):
     """Testing for forbidden comparison between bitwise and boolean operator."""
-    tree = parse_ast_tree(usage_template.format(expression))
+    tree = parse_ast_tree(expression)
 
-    visitor = WrongMathOperatorVisitor(default_options, tree=tree)
+    visitor = BitwiseOpVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [ListMultiplyViolation])
+    assert_errors(visitor, [BitwiseAndBooleanMixupViolation])
 
 
 @pytest.mark.parametrize('expression', [
     'x | y',
     'y & x',
+    'first & second',
+    '5 | 10',
+    '5 | x',
 ])
 def test_correct_binary(
     assert_errors,
@@ -43,9 +44,9 @@ def test_correct_binary(
     default_options,
 ):
     """Testing allowed bitwise comparisions."""
-    tree = parse_ast_tree(usage_template.format(expression))
+    tree = parse_ast_tree(expression)
 
-    visitor = WrongMathOperatorVisitor(default_options, tree=tree)
+    visitor = BitwiseOpVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
