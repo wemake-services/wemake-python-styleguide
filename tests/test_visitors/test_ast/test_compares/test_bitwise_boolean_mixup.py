@@ -6,11 +6,12 @@ from wemake_python_styleguide.violations.best_practices import (
 from wemake_python_styleguide.visitors.ast.operators import (
     WrongMathOperatorVisitor,
 )
+
 # replace with my finished vistor and violations
 
 usage_template = 'constant = {0}'
-
 # add more cases for more usages of mixup
+
 
 @pytest.mark.parametrize('expression', [
     'True | False',
@@ -22,7 +23,7 @@ def test_bitwise_boolean_mixup(
     expression,
     default_options,
 ):
-    """Testing for forbidden comparison between bitwise and boolean operator"""
+    """Testing for forbidden comparison between bitwise and boolean operator."""
     tree = parse_ast_tree(usage_template.format(expression))
 
     visitor = WrongMathOperatorVisitor(default_options, tree=tree)
@@ -41,7 +42,7 @@ def test_correct_binary(
     expression,
     default_options,
 ):
-    """Testing allowed bitwise comparisions"""
+    """Testing allowed bitwise comparisions."""
     tree = parse_ast_tree(usage_template.format(expression))
 
     visitor = WrongMathOperatorVisitor(default_options, tree=tree)
