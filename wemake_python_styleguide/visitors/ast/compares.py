@@ -495,4 +495,3 @@ class WrongFloatComplexCompareVisitor(BaseNodeVisitor):
         ) or self._is_float_or_complex(node.left)
         if any_float_or_complex:
             self.add_violation(FloatComplexCompareViolation(node))
-

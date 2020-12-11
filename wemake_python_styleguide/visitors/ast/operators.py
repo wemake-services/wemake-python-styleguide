@@ -296,8 +296,8 @@ class BitwiseOpVisitor(base.BaseNodeVisitor):
     # checks either side of the Bitwise operation invalid usage
     def _check_sides(self, node) -> bool:
         invalid = False
-        if not isinstance(node, (ast.Name, ast.Num)):
+        if isinstance(node, (ast.BoolOp, ast.UnaryOp)):
             invalid = True
-        if isinstance(node, ast.NameConstant):
+        if isinstance(node, (ast.NameConstant, ast.Compare)):
             invalid = True
         return invalid

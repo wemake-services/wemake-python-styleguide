@@ -11,9 +11,11 @@ from wemake_python_styleguide.visitors.ast.operators import BitwiseOpVisitor
 @pytest.mark.parametrize('expression', [
     'True | False',
     '(x >= y) & True',
-    '(x > 5) | (10 == second)',
+    'first | (10 == second)',
     '(11 != first) | (not False)',
     '(1 or first) & (second and first)',
+    '(first > 0 & second != 0) | (other is None)',
+    '(5234 + 2345) & True',
 ])
 def test_bitwise_boolean_mixup(
     assert_errors,
@@ -36,6 +38,8 @@ def test_bitwise_boolean_mixup(
     'first & second',
     '5 | 10',
     '5 | x',
+    '(5 + 324 + 35) & y',
+    '(2 & 2 + 4 -5) | 5 - 3 + 3 & 3',
 ])
 def test_correct_binary(
     assert_errors,
