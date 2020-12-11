@@ -13,6 +13,7 @@ from wemake_python_styleguide.logic.tree.operators import (
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations import consistency
 from wemake_python_styleguide.violations.best_practices import (
+    BitwiseAndBooleanMixupViolation,
     ListMultiplyViolation,
 )
 from wemake_python_styleguide.visitors import base, decorators
@@ -268,3 +269,35 @@ class WalrusVisitor(base.BaseNodeVisitor):
         """
         self.add_violation(consistency.WalrusViolation(node))
         self.generic_visit(node)
+
+
+@final
+class BitwiseOpVisitor(base.BaseNodeVisitor):
+    """Checks bitwise operations are used correctly."""
+
+    def visit_BinOp(self, node: ast.BinOp) -> None:
+        """
+        Finds bad usage of bitwise operation with binary operation.
+
+        Raises:
+            BitwiseAndBooleanMixupViolation
+
+        """
+        self._check_BitOp(node)
+        self.generic_visit(node)
+
+    def _check_BitOp(self, node: ast.BinOp) -> None:
+        if not isinstance(node.op, (ast.BitOr, ast.BitAnd)):
+            return
+
+        if (self._check_sides(node.left) or self._check_sides(node.right)):
+            self.add_violation(BitwiseAndBooleanMixupViolation(node))
+
+    # checks either side of the Bitwise operation invalid usage
+    def _check_sides(self, node) -> bool:
+        invalid = False
+        if not isinstance(node, (ast.Name, ast.Num)):
+            invalid = True
+        if isinstance(node, ast.NameConstant):
+            invalid = True
+        return invalid

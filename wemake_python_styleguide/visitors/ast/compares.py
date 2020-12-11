@@ -16,7 +16,6 @@ from wemake_python_styleguide.logic.tree import (
 from wemake_python_styleguide.logic.walrus import get_assigned_expr
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
-    BitwiseAndBooleanMixupViolation,
     FloatComplexCompareViolation,
     HeterogenousCompareViolation,
 )
@@ -497,34 +496,3 @@ class WrongFloatComplexCompareVisitor(BaseNodeVisitor):
         if any_float_or_complex:
             self.add_violation(FloatComplexCompareViolation(node))
 
-
-@final
-class BitwiseOpVisitor(BaseNodeVisitor):
-    """Checks bitwise operations are used correctly."""
-
-    def visit_BinOp(self, node: ast.BinOp) -> None:
-        """
-        Finds bad usage of bitwise operation with binary operation.
-
-        Raises:
-            BitwiseAndBooleanMixupViolation
-
-        """
-        self._check_BitOp(node)
-        self.generic_visit(node)
-
-    def _check_BitOp(self, node: ast.BinOp) -> None:
-        if not isinstance(node.op, (ast.BitOr, ast.BitAnd)):
-            return
-
-        if (self._check_sides(node.left) or self._check_sides(node.right)):
-            self.add_violation(BitwiseAndBooleanMixupViolation(node))
-
-    # checks either side of the Bitwise operation invalid usage
-    def _check_sides(self, node) -> bool:
-        invalid = False
-        if not isinstance(node, (ast.Name, ast.Num)):
-            invalid = True
-        if isinstance(node, ast.NameConstant):
-            invalid = True
-        return invalid

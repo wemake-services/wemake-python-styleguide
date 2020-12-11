@@ -3,7 +3,7 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     BitwiseAndBooleanMixupViolation,
 )
-from wemake_python_styleguide.visitors.ast.compares import BitwiseOpVisitor
+from wemake_python_styleguide.visitors.ast.operators import BitwiseOpVisitor
 
 # add more cases for more usages of mixup
 
