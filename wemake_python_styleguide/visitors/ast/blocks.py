@@ -255,8 +255,11 @@ class AfterBlockVariablesVisitor(base.BaseNodeVisitor):
     def _check_variable_usage(self, node: ast.Name) -> None:
         context = cast(ast.AST, get_context(node))
         blocks = self._block_variables[context][node.id]
-
-        if not blocks or any(is_contained_by(node, block) for block in blocks):
+        is_contained_block_var = any(
+            is_contained_by(node, block) for block in blocks
+        )
+        # return if not a block variable or a contained block variable
+        if not blocks or is_contained_block_var:
             return
 
         self.add_violation(
