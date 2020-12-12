@@ -301,5 +301,5 @@ class BitwiseOpVisitor(base.BaseNodeVisitor):
             self.add_violation(BitwiseAndBooleanMixupViolation(node))
 
     # checks either side of the Bitwise operation invalid usage
-    def _is_bool_like(self, node) -> bool:
+    def _is_bool_like(self, node: ast.expr) -> bool:
         return isinstance(node, self._invalid_nodes)
