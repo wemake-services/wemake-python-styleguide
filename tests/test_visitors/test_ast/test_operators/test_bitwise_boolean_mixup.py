@@ -16,6 +16,10 @@ from wemake_python_styleguide.visitors.ast.operators import BitwiseOpVisitor
     '(1 or first) & (second and first)',
     '(first > 0 & second != 0) | (other is None)',
     '(5234 + 2345) & True',
+    'True | True',
+    'False & False',
+    'None & None',
+    'None | 1246',
 ])
 def test_bitwise_boolean_mixup(
     assert_errors,

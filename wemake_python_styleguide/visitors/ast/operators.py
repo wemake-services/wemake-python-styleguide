@@ -275,6 +275,13 @@ class WalrusVisitor(base.BaseNodeVisitor):
 class BitwiseOpVisitor(base.BaseNodeVisitor):
     """Checks bitwise operations are used correctly."""
 
+    _invalid_nodes: ClassVar[AnyNodes] = (
+        ast.BoolOp,
+        ast.UnaryOp,
+        ast.NameConstant,
+        ast.Compare,
+    )
+
     def visit_BinOp(self, node: ast.BinOp) -> None:
         """
         Finds bad usage of bitwise operation with binary operation.
@@ -283,21 +290,16 @@ class BitwiseOpVisitor(base.BaseNodeVisitor):
             BitwiseAndBooleanMixupViolation
 
         """
-        self._check_BitOp(node)
+        self._check_logical_bitwise_operator(node)
         self.generic_visit(node)
 
-    def _check_BitOp(self, node: ast.BinOp) -> None:
+    def _check_logical_bitwise_operator(self, node: ast.BinOp) -> None:
         if not isinstance(node.op, (ast.BitOr, ast.BitAnd)):
             return
 
-        if (self._check_sides(node.left) or self._check_sides(node.right)):
+        if self._check_sides(node.left) or self._check_sides(node.right):
             self.add_violation(BitwiseAndBooleanMixupViolation(node))
 
     # checks either side of the Bitwise operation invalid usage
     def _check_sides(self, node) -> bool:
-        invalid = False
-        if isinstance(node, (ast.BoolOp, ast.UnaryOp)):
-            invalid = True
-        if isinstance(node, (ast.NameConstant, ast.Compare)):
-            invalid = True
-        return invalid
+        return isinstance(node, self._invalid_nodes)

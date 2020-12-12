@@ -2527,7 +2527,6 @@ class BitwiseAndBooleanMixupViolation(ASTViolation):
         # Correct:
 
         first | 10
-        result = ((first > 0) && False)
 
         # Wrong:
 
