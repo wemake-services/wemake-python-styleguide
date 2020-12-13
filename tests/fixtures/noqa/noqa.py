@@ -765,3 +765,5 @@ text
 
 def get_item():  # noqa: WPS463
     return  # noqa: WPS324
+
+bad_bitwise = True | True # noqa: WPS465
