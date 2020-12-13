@@ -203,11 +203,11 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         if len(body) != 1:
             return
 
-        forbiden = self._useless_combination.get(
+        forbidden = self._useless_combination.get(
             node.__class__.__qualname__, None,
         )
 
-        if not forbiden or not isinstance(body[0], forbiden):
+        if not forbidden or not isinstance(body[0], forbidden):
             return
 
         self.add_violation(

@@ -575,7 +575,7 @@ class WrongIsinstanceWithTupleViolation(ASTViolation):
         You can use single variables or tuples with multiple elements.
 
     Solution:
-        Use tuples with multiple elements or a single varaible.
+        Use tuples with multiple elements or a single variable.
 
     Example::
 
@@ -677,7 +677,7 @@ class OpenWithoutContextManagerViolation(ASTViolation):
         When you ``open()`` something, you need to close it.
         When using a context manager - it is automatically done for you.
         When not using it - you might find yourself in a situation
-        when file is not closed and is not accessable anymore.
+        when file is not closed and is not accessible anymore.
 
     Solution:
         Refactor ``open()`` call to use ``with``.
@@ -706,7 +706,7 @@ class TypeCompareViolation(ASTViolation):
 
     Reasoning:
         When you compare types with ``type()`` function call
-        it means that you break polymorphism and dissallow child classes
+        it means that you break polymorphism and disallow child classes
         of a node to work here. That's incorrect.
 
     Solution:
@@ -1143,7 +1143,7 @@ class ImplicitDictGetViolation(ASTViolation):
 
     Reasoning:
         When using ``in`` with a dict key it is hard to keep the code clean.
-        It is more convinient to use ``.get()`` and check for ``None`` later.
+        It is more convenient to use ``.get()`` and check for ``None`` later.
 
     Solution:
         Use ``.get()`` with the key you need.

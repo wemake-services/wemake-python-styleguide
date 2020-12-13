@@ -129,7 +129,7 @@ class BracketLocationVisitor(BaseTokenVisitor):
 
     def visit(self, token: tokenize.TokenInfo) -> None:
         """
-        Goes trough all tokens to separate them by line numbers.
+        Goes through all tokens to separate them by line numbers.
 
         Raises:
             WrongBracketPositionViolation
@@ -200,7 +200,7 @@ class MultilineStringVisitor(BaseTokenVisitor):
 
     def visit(self, token: tokenize.TokenInfo) -> None:
         """
-        Goes trough all tokens to separate them by line numbers.
+        Goes through all tokens to separate them by line numbers.
 
         Raises:
             WrongMultilineStringUseViolation

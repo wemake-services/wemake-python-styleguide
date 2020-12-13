@@ -47,7 +47,7 @@ def test_no_exceptions(
     This testcase is a complex example of magic.
 
     We use property based-test to generate python programs for us.
-    And then we ensure that our linter does not crash on arbitary input.
+    And then we ensure that our linter does not crash on arbitrary input.
     """
     try:
         tree = parse_ast_tree(str(source_code.encode('utf-8-sig')))
