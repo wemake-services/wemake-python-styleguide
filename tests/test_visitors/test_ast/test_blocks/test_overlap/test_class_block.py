@@ -49,7 +49,7 @@ def test_class_block_overlap(
     variable_name,
     default_options,
 ):
-    """Ensures that overlaping variables exist."""
+    """Ensures that overlapping variables exist."""
     code = context.format(
         class_statement.format(variable_name),
         assign_and_annotation_statement.format(variable_name),
@@ -84,7 +84,7 @@ def test_class_internals_overlap(
     variable_name,
     default_options,
 ):
-    """Ensures that overlaping variables exist."""
+    """Ensures that overlapping variables exist."""
     code = context.format(
         class_statement.format('UniqueClassName'),
         assign_statement.format(variable_name),

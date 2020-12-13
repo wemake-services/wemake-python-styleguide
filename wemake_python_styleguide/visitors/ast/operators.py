@@ -194,7 +194,7 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
 
     def visit_AugAssign(self, node: ast.AugAssign) -> None:
         """
-        Visits augmented assignes.
+        Visits augmented assigns.
 
         Raises:
             DoubleMinusOpeationViolation

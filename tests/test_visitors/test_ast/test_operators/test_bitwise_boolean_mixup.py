@@ -51,7 +51,7 @@ def test_correct_binary(
     expression,
     default_options,
 ):
-    """Testing allowed bitwise comparisions."""
+    """Testing allowed bitwise comparisons."""
     tree = parse_ast_tree(expression)
 
     visitor = BitwiseOpVisitor(default_options, tree=tree)

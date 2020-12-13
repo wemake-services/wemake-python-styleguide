@@ -21,7 +21,7 @@ General
 - Use clear names, do not use words that do not mean anything like ``obj``
 - Use names of an appropriate length: not too short, not too long
 - Do not mask builtins
-- Do not use unreadable charachter sequences like ``O0`` and ``Il``
+- Do not use unreadable character sequences like ``O0`` and ``Il``
 - Protected members should use underscore as the first char
 - Private names with two leading underscores are not allowed
 - If you need to explicitly state that the variable is unused,
@@ -851,7 +851,7 @@ class BuiltinShadowingViolation(ASTViolation):
             min = 5
             max = min(10, 20)  # TypeError: 'int' object is not callable
 
-    If you feel it is still necesarry to use such a class attribute,
+    If you feel it is still necessary to use such a class attribute,
     consider using a `noqa` comment with caution.
 
     .. versionadded:: 0.14

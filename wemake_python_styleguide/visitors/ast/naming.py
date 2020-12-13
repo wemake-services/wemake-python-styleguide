@@ -397,7 +397,7 @@ class UnusedVaribaleDefinitionVisitor(BaseNodeVisitor):
         """
         Checks that we cannot assign explicit unused variables.
 
-        We do not check assignes inside modules and classes,
+        We do not check assigns inside modules and classes,
         since there ``_`` prefixed variable means
         that it is protected, not unused.
 

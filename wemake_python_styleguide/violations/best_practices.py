@@ -478,7 +478,7 @@ class SameElementsInConditionViolation(ASTViolation):
 @final
 class HeterogenousCompareViolation(ASTViolation):
     """
-    Forbid heterogenous operators in one comparison.
+    Forbid heterogeneous operators in one comparison.
 
     Note, that we do allow mixing  ``>`` with ``>=``
     and ``<`` with ``<=`` operators.
@@ -511,7 +511,7 @@ class HeterogenousCompareViolation(ASTViolation):
 
     """
 
-    error_template = 'Found heterogenous compare'
+    error_template = 'Found heterogeneous compare'
     code = 409
     previous_codes = {471}
 
@@ -2279,7 +2279,7 @@ class ImportCollisionViolation(ASTViolation):
     Forbids to import from already imported modules.
 
     Reasoning:
-        Importing objects from already imported modules is inconsitent
+        Importing objects from already imported modules is inconsistent
         and error-prone.
 
     Solution:
@@ -2517,7 +2517,7 @@ class BitwiseAndBooleanMixupViolation(ASTViolation):
 
     Reasoning:
        This case indicates that a person confused & with and and | with or.
-       This can be the case if a person is comming from another language.
+       This can be the case if a person is coming from another language.
 
     Solution:
         Change bitwise operator to boolean operators.
