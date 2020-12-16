@@ -256,3 +256,74 @@ class MultilineStringVisitor(BaseTokenVisitor):
             self._check_individual_line(
                 line_tokens, previous_line_token, next_line_token,
             )
+
+@final
+@alias('visit_any_left_bracket', (
+    'visit_lsqb',
+    'visit_lbrace',
+))
+@alias('visit_any_right_bracket', (
+    'visit_rsqb',
+    'visit_rbrace',
+))
+class InconsistentComprehensionVisitor(BaseTokenVisitor):
+    """
+    Checks if comprehensions either use only one line or inserts a newline 
+    for each clause (i.e. bracket, action, for loop(s), and conditional)
+    """
+
+    def __init__(self, *args, **kwargs) -> None:
+        self._reset()
+
+    def _reset(self) -> None:
+        self._inside_brackets = False
+        self._is_comprehension = False
+        """
+        Flag is set when the current line already contains a "clause", which
+        is either the action, each for loop, or the conditional. Starts off
+        as True to account for the action, which we don't actually visit.
+        """
+        self._seen_clause_in_line = True
+        """
+        Flag for if we've seen any logical newlines, indicating this is a 
+        multiline comprehension
+        """
+        self._seen_nl = False
+        """
+        Flag for when we see multiple "clauses" in one line. Only a violation
+        if this is a multiline comprehension.
+        """
+        self._potential_violation = False 
+
+    def visit_any_left_bracket(self, token: tokenize.TokenInfo) -> None:  
+        self._inside_brackets = True
+
+    def visit_any_right_bracket(self, token: tokenize.TokenInfo) -> None:
+        self._reset()
+
+    def visit_nl(self, token: tokenize.TokenInfo) -> None:
+        if self._inside_brackets:
+            self._seen_nl = True
+            self._seen_clause_in_line = False
+            self._check_violation(token)
+
+    def visit_name(self, token: tokenize.TokenInfo) -> None:
+        if (
+            self._inside_brackets 
+            and (token.string == "for" or token.string == "if")
+        ):
+            self._is_comprehension = True
+            self._potential_violation = (
+                self._potential_violation 
+                or self._seen_clause_in_line
+            )
+            self._seen_clause_in_line = True
+            self._check_violation(token)
+
+    def _check_violation(self, token: tokenize.TokenInfo) -> None:
+        if (
+            self._inside_brackets 
+            and self._seen_nl 
+            and self._potential_violation
+        ):
+            self.add_violation(InconsistentComprehensionViolation(token))
