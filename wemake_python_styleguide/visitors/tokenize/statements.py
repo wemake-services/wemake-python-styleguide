@@ -279,7 +279,7 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
         self._inside_brackets = False
         self._is_comprehension = False
         """
-        Flag is set when the current line already contains a "clause", which
+        Flag is set when the current line already contains a clause, which
         is either the action, each for loop, or the conditional. Starts off
         as True to account for the action, which we don't actually visit.
         """
@@ -290,7 +290,7 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
         """
         self._seen_nl = False
         """
-        Flag for when we see multiple "clauses" in one line. Only a violation
+        Flag for when we see multiple clauses in one line. Only a violation
         if this is a multiline comprehension.
         """
         self._potential_violation = False 
