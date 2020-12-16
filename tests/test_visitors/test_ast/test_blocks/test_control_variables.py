@@ -201,6 +201,14 @@ def wrapper():
     print(second)
 """
 
+wrong_block_variable_reuse1 = """
+def wrapper():
+    for my_var in range(3):
+        my_var = my_var + 3
+    with open() as my_var:
+        my_var = my_var + 4
+"""
+
 
 @pytest.mark.parametrize('code', [
     wrong_for_loop1,
@@ -209,6 +217,7 @@ def wrapper():
     wrong_with1,
     wrong_with2,
     wrong_with3,
+    wrong_block_variable_reuse1,
 ])
 def test_control_variable_used_after_block(
     assert_errors,
