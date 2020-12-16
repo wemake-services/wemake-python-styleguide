@@ -1,0 +1,7 @@
+- repo: https://gitlab.com/pycqa/flake8
+  rev: 3.7.3  # pick a git hash / tag to point to
+  hooks:
+  - id: flake8
+      name: pre-commit
+      always_run: true
+      stages: pre-commit 
