@@ -34,6 +34,7 @@ from wemake_python_styleguide.violations.consistency import (
     InconsistentComprehensionViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
+from wemake_python_styleguide.visitors.decorators import alias
 
 TokenLines = DefaultDict[int, List[tokenize.TokenInfo]]
 
@@ -274,6 +275,7 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
     """
 
     def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
         self._reset()
 
     def _reset(self) -> None:
@@ -284,7 +286,7 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
         is either the action, each for loop, or the conditional. Starts off
         as True to account for the action, which we don't actually visit.
         """
-        self._seen_clause_in_line = True
+        self._seen_clause_in_line = False
         """
         Flag for if we've seen any logical newlines, indicating this is a 
         multiline comprehension
@@ -295,6 +297,8 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
         if this is a multiline comprehension.
         """
         self._potential_violation = False 
+        """Flag tracks whether we've already reported this violation."""
+        self._reported = False
 
     def visit_any_left_bracket(self, token: tokenize.TokenInfo) -> None:  
         self._inside_brackets = True
@@ -309,22 +313,22 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
             self._check_violation(token)
 
     def visit_name(self, token: tokenize.TokenInfo) -> None:
-        if (
-            self._inside_brackets 
-            and (token.string == "for" or token.string == "if")
-        ):
-            self._is_comprehension = True
-            self._potential_violation = (
-                self._potential_violation 
-                or self._seen_clause_in_line
-            )
+        if self._inside_brackets:
+            if token.string == "for" or token.string == "if":
+                self._is_comprehension = True
+                self._potential_violation = (
+                    self._potential_violation 
+                    or self._seen_clause_in_line
+                )
+                self._check_violation(token)
             self._seen_clause_in_line = True
-            self._check_violation(token)
 
     def _check_violation(self, token: tokenize.TokenInfo) -> None:
         if (
             self._inside_brackets 
             and self._seen_nl 
             and self._potential_violation
+            and not self._reported
         ):
+            self._reported = True
             self.add_violation(InconsistentComprehensionViolation(token))

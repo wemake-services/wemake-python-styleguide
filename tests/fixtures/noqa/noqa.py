@@ -766,7 +766,7 @@ text
 def get_item():  # noqa: WPS463
     return  # noqa: WPS324
 
-[
+matrix = [
    some(number) for numbers in matrix # noqa: WPS361
    for number in numbers 
    if number > 0
