@@ -277,12 +277,13 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
     for each clause (i.e. bracket, action, for loop(s), and conditional)
     """
 
-    def __init__(self, *args, **kwargs) -> None:
-        """Creates line tracking for tokens."""
-        super().__init__(*args, **kwargs)
-        self._reset()
-
-    def _reset(self) -> None:
+    class InconsistentComprehensionContext:
+    """
+    Helper class for InconsistentComprehensionVisitor which stores context
+    for the current (potential) comprehension we are in. Combined with a 
+    stack to enable support for nested comprehensions.
+    """
+        def __init__(self) -> None:
         """
         Sets all flags tracked by this visitor.
 
@@ -304,16 +305,23 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
         self._reported:
         Flag tracks whether we've already reported this violation.
         """
-        self._inside_brackets = False
-        self._is_comprehension = False
-        self._seen_clause_in_line = False
-        self._seen_nl = False
-        self._potential_violation = False
-        self._reported = False
+            self._is_comprehension = False
+            self._seen_clause_in_line = False
+            self._seen_nl = False
+            self._potential_violation = False
+            self._reported = False
+
+
+    def __init__(self, *args, **kwargs) -> None:
+        """
+        Creates line tracking for tokens.
+        """
+        super().__init__(*args, **kwargs)
+        self._bracket_stack = []
 
     def visit_any_left_bracket(self, token: tokenize.TokenInfo) -> None:
         """Sets self._inside_brackets to True if left bracket found."""
-        self._inside_brackets = True
+        self._bracket_stack.append(InconsistentComprehensionContext())
 
     def visit_any_right_bracket(self, token: tokenize.TokenInfo) -> None:
         """Resets environment if right bracket is encountered."""
