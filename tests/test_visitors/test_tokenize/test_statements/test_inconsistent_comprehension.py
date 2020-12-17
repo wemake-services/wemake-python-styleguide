@@ -7,13 +7,36 @@ from wemake_python_styleguide.visitors.tokenize.statements import (
     InconsistentComprehensionVisitor,
 )
 
-just_a_list = """
+# Tests that should NOT be flagged
+
+# List comprehension tests
+
+correct_empty_list = """
 a = []
+"""
+
+correct_full_list = """
+a = [1,2,3]
+"""
+
+correct_one_line_comprehension = """
+[some(number) for number in numbers]
+"""
+
+correct_well_spaced_comprehension = """
+[
+    some(number)
+    for number in matrix
+    if number > 0
+]
 """
 
 
 @pytest.mark.parametrize('code', [
-    just_a_list,
+    correct_empty_list,
+    correct_full_list,
+    correct_one_line_comprehension,
+    correct_well_spaced_comprehension,
 ])
 def test_correct_comprehension_consistency(
     parse_tokens,
@@ -29,6 +52,8 @@ def test_correct_comprehension_consistency(
 
     assert_errors(visitor, [])
 
+
+# Should raise fag
 
 wrong_because_almost_one_line = """
 [
