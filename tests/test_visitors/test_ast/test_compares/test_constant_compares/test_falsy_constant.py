@@ -40,7 +40,7 @@ def test_falsy_constant(
     eq_conditions,
     default_options,
 ):
-    """Testing that compares with falsy contants are not allowed."""
+    """Testing that compares with falsy constants are not allowed."""
     tree = parse_ast_tree(eq_conditions.format(*comparators))
 
     visitor = WrongConstantCompareVisitor(default_options, tree=tree)
@@ -58,7 +58,7 @@ def test_falsy_constant_is(
     is_conditions,
     default_options,
 ):
-    """Testing that compares with falsy contants are not allowed."""
+    """Testing that compares with falsy constants are not allowed."""
     tree = parse_ast_tree(is_conditions.format(*comparators))
 
     visitor = WrongConstantCompareVisitor(default_options, tree=tree)
@@ -78,7 +78,7 @@ def test_falsy_constant_not_eq(
     other_conditions,
     default_options,
 ):
-    """Testing that compares with falsy contants are not allowed."""
+    """Testing that compares with falsy constants are not allowed."""
     tree = parse_ast_tree(other_conditions.format(*comparators))
 
     visitor = WrongConstantCompareVisitor(default_options, tree=tree)

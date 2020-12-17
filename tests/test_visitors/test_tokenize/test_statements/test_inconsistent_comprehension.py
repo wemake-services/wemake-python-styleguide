@@ -11,7 +11,7 @@ from wemake_python_styleguide.visitors.tokenize.statements import (
 
 # List comprehension tests
 
-correct_empty_list = """
+correct_list_empty = """
 a = []
 """
 
@@ -19,7 +19,7 @@ correct_one_line_comprehension = """
 [some(number) for number in numbers]
 """
 
-correct_well_spaced_comprehension = """
+correct_list_well_spaced_comprehension = """
 [
     some(number)
     for number in matrix
@@ -33,7 +33,6 @@ return [
                *call.args,
                *[kw.value for kw in call.keywords],
            ]
-"""
 
 
 @pytest.mark.parametrize('code', [
@@ -43,6 +42,42 @@ return [
     nested_comprehension,
 ])
 def test_correct_list_comprehension(
+    correct_list_empty,
+    correct_list_full,
+    correct_list_one_line_comprehension,
+    correct_list_well_spaced_comprehension,
+])
+
+
+# Dictionary comprehension tests
+
+correct_dict_empty = """
+a = {{}}
+"""
+
+correct_dict_full = """
+a = {'a':1,'b':2,'c':3}
+"""
+
+correct_dict_one_line_comprehension = """
+{key:val for (key, val) in tuples}
+"""
+
+correct_dict_well_spaced_comprehension = """
+{
+    key:val
+    for (key, val) in matrix
+    if key > 0
+}
+"""
+
+@pytest.mark.parametrize('code', [
+    correct_dict_empty,
+    correct_dict_full,
+    correct_dict_one_line_comprehension,
+    correct_dict_well_spaced_comprehension,
+])
+def test_correct_dict_comprehension_consistency(
     parse_tokens,
     assert_errors,
     default_options,
@@ -106,7 +141,8 @@ def test_correct_set_comprehension(
 
 # Should raise flag
 
-# List comprehensions
+# List comprehension tests
+
 wrong_almost_one_line = """
 [
     some(number) for number in numbers
@@ -137,6 +173,42 @@ wrong_for_and_if = """
     wrong_for_and_if,
 ])
 def test_wrong_list_comprehension(
+    parse_tokens,
+    assert_errors,
+    default_options,
+    code,
+):
+    """Ensures that wrong comprehension consistencies raise a warning."""
+    file_tokens = parse_tokens(code)
+
+    visitor = InconsistentComprehensionVisitor(default_options, file_tokens)
+    visitor.run()
+
+    assert_errors(visitor, [InconsistentComprehensionViolation])
+
+# Dictionary comprehension tests
+
+wrong_dict_because_almost_one_line = """
+{
+    key:val for (key, val) in tuples
+    if key > 0
+}
+"""
+
+wrong_dict_because_two_lines_in_one = """
+{
+    key:val
+    for numbers in matrix
+    for (key, val) in numbers if key > 0
+}
+"""
+
+
+@pytest.mark.parametrize('code', [
+    wrong_dict_because_almost_one_line,
+    wrong_dict_because_two_lines_in_one,
+])
+def test_wrong_dictionary_comprehension(
     parse_tokens,
     assert_errors,
     default_options,

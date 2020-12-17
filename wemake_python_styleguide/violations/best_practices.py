@@ -81,6 +81,7 @@ Summary
    WrongMultilineStringUseViolation
    GetterWithoutReturnViolation
    EmptyCommentViolation
+   BitwiseAndBooleanMixupViolation
 
 Best practices
 --------------
@@ -150,6 +151,7 @@ Best practices
 .. autoclass:: WrongMultilineStringUseViolation
 .. autoclass:: GetterWithoutReturnViolation
 .. autoclass:: EmptyCommentViolation
+.. autoclass:: BitwiseAndBooleanMixupViolation
 
 """
 
@@ -476,7 +478,7 @@ class SameElementsInConditionViolation(ASTViolation):
 @final
 class HeterogenousCompareViolation(ASTViolation):
     """
-    Forbid heterogenous operators in one comparison.
+    Forbid heterogeneous operators in one comparison.
 
     Note, that we do allow mixing  ``>`` with ``>=``
     and ``<`` with ``<=`` operators.
@@ -509,7 +511,7 @@ class HeterogenousCompareViolation(ASTViolation):
 
     """
 
-    error_template = 'Found heterogenous compare'
+    error_template = 'Found heterogeneous compare'
     code = 409
     previous_codes = {471}
 
@@ -2277,7 +2279,7 @@ class ImportCollisionViolation(ASTViolation):
     Forbids to import from already imported modules.
 
     Reasoning:
-        Importing objects from already imported modules is inconsitent
+        Importing objects from already imported modules is inconsistent
         and error-prone.
 
     Solution:
@@ -2504,3 +2506,35 @@ class EmptyCommentViolation(TokenizeViolation):
 
     error_template = 'Found empty comment'
     code = 464
+
+
+@final
+class BitwiseAndBooleanMixupViolation(ASTViolation):
+    """
+    Forbid comparisons between bitwise and boolean expressions.
+
+    Empty comments are only allowed in between valid comments.
+
+    Reasoning:
+       This case indicates that a person confused & with and and | with or.
+       This can be the case if a person is coming from another language.
+
+    Solution:
+        Change bitwise operator to boolean operators.
+
+    Example::
+
+        # Correct:
+
+        first | 10
+
+        # Wrong:
+
+        result = ((first > 0) & False)
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Likely bitwise and boolean operation mixup'
+    code = 465

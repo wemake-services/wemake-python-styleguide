@@ -131,7 +131,7 @@ class BracketLocationVisitor(BaseTokenVisitor):
 
     def visit(self, token: tokenize.TokenInfo) -> None:
         """
-        Goes trough all tokens to separate them by line numbers.
+        Goes through all tokens to separate them by line numbers.
 
         Raises:
             WrongBracketPositionViolation
@@ -202,7 +202,7 @@ class MultilineStringVisitor(BaseTokenVisitor):
 
     def visit(self, token: tokenize.TokenInfo) -> None:
         """
-        Goes trough all tokens to separate them by line numbers.
+        Goes through all tokens to separate them by line numbers.
 
         Raises:
             WrongMultilineStringUseViolation
@@ -261,65 +261,16 @@ class MultilineStringVisitor(BaseTokenVisitor):
 
 
 @final
-@alias('visit_any_left_bracket', (
-    'visit_lsqb',
-    'visit_lbrace',
-))
-@alias('visit_any_right_bracket', (
-    'visit_rsqb',
-    'visit_rbrace',
-))
-class InconsistentComprehensionVisitor(BaseTokenVisitor):
+class InconsistentComprehensionContext(object):
     """
-    Visitor for checking inconsistent comprehension syntax.
+    Context for individual bracket contexts (i.e. within a set of brackets).
 
-    Checks if comprehensions either use only one line or inserts a newline
-    for each clause (i.e. bracket, action, for loop(s), and conditional)
+    Helper class for InconsistentComprehensionVisitor which stores context
+    for the current (potential) comprehension we are in. Combined with a
+    stack to enable support for nested comprehensions.
     """
 
-    def __init__(self, *args, **kwargs) -> None:
-        """Creates line tracking for tokens."""
-        super().__init__(*args, **kwargs)
-        self._reset()
-
-    def visit_any_left_bracket(self, token: tokenize.TokenInfo) -> None:
-        """Sets self._inside_brackets to True if left bracket found."""
-        self._inside_brackets = True
-
-    def visit_any_right_bracket(self, token: tokenize.TokenInfo) -> None:
-        """Resets environment if right bracket is encountered."""
-        self._reset()
-
-    def visit_nl(self, token: tokenize.TokenInfo) -> None:
-        """Sets appropriate flags to True if nl encountered inside brackets."""
-        if self._inside_brackets:
-            self._seen_nl = True
-            self._seen_clause_in_line = False
-            self._check_violation(token)
-
-    def visit_name(self, token: tokenize.TokenInfo) -> None:
-        """
-        Sets flags for comprehension and potential violation as appropriate.
-
-        Conditionally dependent on the flag signifying inside brackets.
-        """
-        if self._inside_brackets:
-            if token.string in {'for', 'if'}:
-                self._is_comprehension = True
-                self._potential_violation = (
-                    self._potential_violation or self._seen_clause_in_line
-                )
-                self._check_violation(token)
-            self._seen_clause_in_line = True
-
-    def _check_violation(self, token: tokenize.TokenInfo) -> None:
-        """Checks if current environment state implies a violation."""
-        if self._inside_brackets and self._seen_nl:
-            if self._potential_violation and not self._reported:
-                self._reported = True
-                self.add_violation(InconsistentComprehensionViolation(token))
-
-    def _reset(self) -> None:
+    def __init__(self) -> None:
         """
         Sets all flags tracked by this visitor.
 
@@ -341,9 +292,77 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
         self._reported:
         Flag tracks whether we've already reported this violation.
         """
-        self._inside_brackets = False
-        self._is_comprehension = False
-        self._seen_clause_in_line = False
-        self._seen_nl = False
-        self._potential_violation = False
-        self._reported = False
+        self.is_comprehension = False
+        self.seen_clause_in_line = False
+        self.seen_nl = False
+        self.potential_violation = False
+        self.reported = False
+
+
+@final
+@alias('visit_any_left_bracket', (
+    'visit_lsqb',
+    'visit_lbrace',
+))
+@alias('visit_any_right_bracket', (
+    'visit_rsqb',
+    'visit_rbrace',
+))
+class InconsistentComprehensionVisitor(BaseTokenVisitor):
+    """
+    Visitor for checking inconsistent comprehension syntax.
+
+    Checks if comprehensions either use only one line or inserts a newline
+    for each clause (i.e. bracket, action, for loop(s), and conditional)
+    """
+
+    def __init__(self, *args, **kwargs) -> None:
+        """
+        Initializes stack of bracket contexts.
+
+        Creates an empty stack for bracket contexts to accomodate for nested
+        comprehensions.
+        """
+        super().__init__(*args, **kwargs)
+        self._bracket_stack: List[InconsistentComprehensionContext] = []
+        self._ctxt: Optional[InconsistentComprehensionContext] = None
+
+    def visit_any_left_bracket(self, token: tokenize.TokenInfo) -> None:
+        """Sets self._inside_brackets to True if left bracket found."""
+        self._bracket_stack.append(InconsistentComprehensionContext())
+        self._ctxt = self._bracket_stack[-1]
+
+    def visit_any_right_bracket(self, token: tokenize.TokenInfo) -> None:
+        """Resets environment if right bracket is encountered."""
+        self._bracket_stack.pop()
+        self._ctxt = self._bracket_stack[-1] if self._bracket_stack else None
+
+    def visit_nl(self, token: tokenize.TokenInfo) -> None:
+        """Sets appropriate flags to True if nl encountered inside brackets."""
+        if self._ctxt:
+            self._ctxt.seen_nl = True
+            self._ctxt.seen_clause_in_line = False
+            self._check_violation(token)
+
+    def visit_name(self, token: tokenize.TokenInfo) -> None:
+        """
+        Sets flags for comprehension and potential violation as appropriate.
+
+        Conditionally dependent on the flag signifying inside brackets.
+        """
+        if self._ctxt:
+            if token.string in {'for', 'if'}:
+                self._ctxt.is_comprehension = True
+                self._ctxt.potential_violation = (
+                    self._ctxt.potential_violation or
+                    self._ctxt.seen_clause_in_line
+                )
+                self._check_violation(token)
+            self._ctxt.seen_clause_in_line = True
+
+    def _check_violation(self, token: tokenize.TokenInfo) -> None:
+        """Checks if current environment state implies a violation."""
+        if self._ctxt and self._ctxt.seen_nl:
+            if self._ctxt.potential_violation and not self._ctxt.reported:
+                self._ctxt.reported = True
+                self.add_violation(InconsistentComprehensionViolation(token))
