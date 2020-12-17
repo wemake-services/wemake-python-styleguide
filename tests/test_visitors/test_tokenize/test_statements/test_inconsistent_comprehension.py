@@ -53,7 +53,7 @@ def test_correct_comprehension_consistency(
     assert_errors(visitor, [])
 
 
-# Should raise fag
+# Should raise flag
 
 wrong_because_almost_one_line = """
 [
@@ -62,11 +62,20 @@ wrong_because_almost_one_line = """
 ]
 """
 
+wrong_because_two_lines_in_one = """
+[
+    some(number)
+    for numbers in matrix
+    for number in numbers if number > 0
+]
+"""
+
 
 @pytest.mark.parametrize('code', [
     wrong_because_almost_one_line,
+    wrong_because_two_lines_in_one,
 ])
-def test_wrong_multiline_string_use(
+def test_wrong_comprehension_use(
     parse_tokens,
     assert_errors,
     default_options,
