@@ -2273,7 +2273,7 @@ class InconsistentComprehensionViolation(TokenizeViolation):
         Either place comprehension on a single line or ensure that action,
         for loops, and condition are all on different lines.
 
-    Example:
+    Example::
 
         # Correct:
         list = [some(number) for number in numbers]
