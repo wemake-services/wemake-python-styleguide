@@ -366,3 +366,32 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
             if self._ctxt.potential_violation and not self._ctxt.reported:
                 self._ctxt.reported = True
                 self.add_violation(InconsistentComprehensionViolation(token))
+
+    def _reset(self) -> None:
+        """
+        Sets all flags tracked by this visitor.
+
+        self._inside_brackets:
+        Flag is set if a left bracket has been encountered, and a right
+        bracket has not yet been encountered.
+        self._is_comprehension:
+        Flag is set if current clause is identified as a list comprehension.
+        self._seen_clause_in_line:
+        Flag is set when the current line already contains a clause, which
+        is either the action, each for loop, or the conditional. Starts off
+        as True to account for the action, which we don't actually visit.
+        self._seen_nl:
+        Flag for if we've seen any logical newlines, indicating this is a
+        multiline comprehension
+        self._potential_violation = False
+        Flag for when we see multiple clauses in one line. Only a violation
+        if this is a multiline comprehension
+        self._reported:
+        Flag tracks whether we've already reported this violation.
+        """
+        self._inside_brackets = False
+        self._is_comprehension = False
+        self._seen_clause_in_line = False
+        self._seen_nl = False
+        self._potential_violation = False
+        self._reported = False
