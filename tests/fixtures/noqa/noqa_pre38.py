@@ -33,7 +33,10 @@ iters = list((yield letter) for letter in 'ab')  # noqa: WPS416
 
 def wrong_comprehension1():
     return [
-        node for node in 'ab' if node != 'a' if node != 'b'  # noqa: WPS307
+        node
+        for node in 'ab'
+        if node != 'a'
+        if node != 'b' # noqa: WPS307
     ]
 
 

@@ -107,6 +107,14 @@ wrong_list_because_almost_one_line = """
 ]
 """
 
+wrong_list_because_two_lines_in_one = """
+[
+    some(number)
+    for numbers in matrix
+    for number in numbers if number > 0
+]
+"""
+
 # Dictionary comprehension tests
 
 wrong_dict_because_almost_one_line = """
@@ -116,11 +124,20 @@ wrong_dict_because_almost_one_line = """
 }
 """
 
+wrong_dict_because_two_lines_in_one = """
+{
+    key:val
+    for numbers in matrix
+    for (key, val) in numbers if key > 0
+}
+"""
+
 
 @pytest.mark.parametrize('code', [
     wrong_list_because_almost_one_line,
+    wrong_list_because_two_lines_in_one,
 ])
-def test_wrong_multiline_string_use_list(
+def test_wrong_comprehension_use_list(
     parse_tokens,
     assert_errors,
     default_options,
@@ -137,8 +154,9 @@ def test_wrong_multiline_string_use_list(
 
 @pytest.mark.parametrize('code', [
     wrong_dict_because_almost_one_line,
+    wrong_dict_because_two_lines_in_one,
 ])
-def test_wrong_multiline_string_use_dict(
+def test_wrong_comprehension_use_dict(
     parse_tokens,
     assert_errors,
     default_options,
