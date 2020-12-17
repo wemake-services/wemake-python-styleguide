@@ -62,25 +62,6 @@ wrong_because_almost_one_line = """
 ]
 """
 
-
-@pytest.mark.parametrize('code', [
-    wrong_because_almost_one_line,
-])
-def test_wrong_comprehension_use(
-    parse_tokens,
-    assert_errors,
-    default_options,
-    code,
-):
-    """Ensures that wrong comprehension consistencies raise a warning."""
-    file_tokens = parse_tokens(code)
-
-    visitor = InconsistentComprehensionVisitor(default_options, file_tokens)
-    visitor.run()
-
-    assert_errors(visitor, [InconsistentComprehensionViolation])
-
-
 wrong_because_two_lines_in_one = """
 [
     some(number)
@@ -91,9 +72,10 @@ wrong_because_two_lines_in_one = """
 
 
 @pytest.mark.parametrize('code', [
+    wrong_because_almost_one_line,
     wrong_because_two_lines_in_one,
 ])
-def test_wrong_second_line_comprehension_use(
+def test_wrong_comprehension_use(
     parse_tokens,
     assert_errors,
     default_options,
