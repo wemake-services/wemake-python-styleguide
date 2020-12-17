@@ -31,6 +31,7 @@ from wemake_python_styleguide.violations.consistency import (
     BracketBlankLineViolation,
     ExtraIndentationViolation,
     WrongBracketPositionViolation,
+    InconsistentComprehensionViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
