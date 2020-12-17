@@ -43,10 +43,10 @@ return [
     nested_comprehension,
 ])
 def test_correct_list_comprehension(
-        parse_tokens,
-        assert_errors,
-        default_options,
-        code,
+    parse_tokens,
+    assert_errors,
+    default_options,
+    code,
 ):
     """Ensures that correct consistency does not raise a warning."""
     file_tokens = parse_tokens(code)
@@ -60,7 +60,7 @@ def test_correct_list_comprehension(
 # Set comprehensions
 
 correct_empty_set = """
-{}
+{{}}
 """
 
 correct_one_line_comprehension = """
@@ -103,6 +103,7 @@ def test_correct_set_comprehension(
 
     assert_errors(visitor, [])
 
+
 # Should raise flag
 
 # List comprehensions
@@ -113,12 +114,14 @@ wrong_almost_one_line = """
 ]
 """
 
+
 wrong_two_fors = """
 [
     some(number)
     for numbers in matrix for number in numbers
 ]
 """
+
 
 wrong_for_and_if = """
 [
@@ -141,11 +144,12 @@ def test_wrong_list_comprehension(
 ):
     """Ensures that wrong comprehension consistencies raise a warning."""
     file_tokens = parse_tokens(code)
-    
+
     visitor = InconsistentComprehensionVisitor(default_options, file_tokens)
     visitor.run()
-    
+
     assert_errors(visitor, [InconsistentComprehensionViolation])
+
 
 # Set comprehensions
 
