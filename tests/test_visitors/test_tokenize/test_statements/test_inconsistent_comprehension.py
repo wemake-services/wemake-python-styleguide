@@ -29,24 +29,32 @@ correct_list_well_spaced_comprehension = """
 
 nested_comprehension = """
 def get_all_args(call: ast.Call) -> Sequence[ast.AST]:
-return [
-               *call.args,
-               *[kw.value for kw in call.keywords],
-           ]
+    return [
+              *call.args,
+              *[kw.value for kw in call.keywords],
+    ]
+"""
 
 
 @pytest.mark.parametrize('code', [
-    correct_empty_list,
+    correct_list_empty,
     correct_one_line_comprehension,
-    correct_well_spaced_comprehension,
+    correct_list_well_spaced_comprehension,
     nested_comprehension,
 ])
 def test_correct_list_comprehension(
-    correct_list_empty,
-    correct_list_full,
-    correct_list_one_line_comprehension,
-    correct_list_well_spaced_comprehension,
-])
+    parse_tokens,
+    assert_errors,
+    default_options,
+    code,
+):
+    """Ensures that correct consistency does not raise a warning."""
+    file_tokens = parse_tokens(code)
+
+    visitor = InconsistentComprehensionVisitor(default_options, file_tokens)
+    visitor.run()
+
+    assert_errors(visitor, [])
 
 
 # Dictionary comprehension tests
@@ -70,6 +78,7 @@ correct_dict_well_spaced_comprehension = """
     if key > 0
 }
 """
+
 
 @pytest.mark.parametrize('code', [
     correct_dict_empty,
@@ -185,6 +194,7 @@ def test_wrong_list_comprehension(
     visitor.run()
 
     assert_errors(visitor, [InconsistentComprehensionViolation])
+
 
 # Dictionary comprehension tests
 
