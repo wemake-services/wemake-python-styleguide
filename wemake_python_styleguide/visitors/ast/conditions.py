@@ -75,7 +75,7 @@ class IfStatementVisitor(BaseNodeVisitor):
     )
 
     def __init__(self, *args, **kwargs) -> None:
-        """We need to store visited ``if`` not to dublicate violations."""
+        """We need to store visited ``if`` not to duplicate violations."""
         super().__init__(*args, **kwargs)
         self._visited_ifs: Set[ast.If] = set()
 

@@ -31,7 +31,7 @@ def _check_function_recursion(func: AnyFunctionDef) -> bool:
 
 def has_recursive_calls(func: AnyFunctionDef) -> bool:
     """
-    Determins whether function has recrusive calls or not.
+    Determines whether function has recursive calls or not.
 
     Does not work for methods.
     """

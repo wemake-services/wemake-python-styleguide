@@ -55,7 +55,7 @@ all_templates = (
     function_with_defaults,
     pytest.param(
         function_with_posonly_defaults,
-        marks=pytest.mark.skipif(not PY38, reason='posonly appered in 3.8'),
+        marks=pytest.mark.skipif(not PY38, reason='posonly appeared in 3.8'),
     ),
     function_with_kw_defaults1,
     function_with_kw_defaults2,
@@ -63,14 +63,14 @@ all_templates = (
     method_with_defaults,
     pytest.param(
         method_with_posonly_defaults,
-        marks=pytest.mark.skipif(not PY38, reason='posonly appered in 3.8'),
+        marks=pytest.mark.skipif(not PY38, reason='posonly appeared in 3.8'),
     ),
     method_with_kw_defaults,
 
     lambda_with_defaults,
     pytest.param(
         lambda_with_posonly_defaults,
-        marks=pytest.mark.skipif(not PY38, reason='posonly appered in 3.8'),
+        marks=pytest.mark.skipif(not PY38, reason='posonly appeared in 3.8'),
     ),
     lambda_with_kw_defaults,
 )

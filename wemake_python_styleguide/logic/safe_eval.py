@@ -63,7 +63,7 @@ def literal_eval_with_names(  # noqa: WPS231
     See: :py:`ast.literal_eval` source.
 
     We intentionally ignore complexity violation here,
-    becase we try to stay as close to the original source as possible.
+    because we try to stay as close to the original source as possible.
     """
     binary_operators = (ast.Add, ast.Sub)
     if isinstance(node, (Constant, ast.NameConstant)):
