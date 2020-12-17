@@ -51,7 +51,7 @@ def test_reuse_no_overlap(
     first_name,
     second_name,
 ):
-    """Ensures that overlaping variables does not exist."""
+    """Ensures that overlapping variables does not exist."""
     code = context.format(
         block_statement.format(first_name, second_name),
         local_statement.format(first_name, second_name),
@@ -100,7 +100,7 @@ def test_reuse_overlap(
     first_name,
     second_name,
 ):
-    """Ensures that overlaping variables exist no."""
+    """Ensures that overlapping variables exist no."""
     code = context.format(
         block_statement.format(first_name, second_name),
         local_statement.format(first_name, second_name),

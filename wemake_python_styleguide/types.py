@@ -114,7 +114,7 @@ class ConfigurationOptions(Protocol):
     It uses structural sub-typing, and does not represent any kind of a real
     class or structure.
 
-    We use ``@property`` decorator here instread of regular attributes,
+    We use ``@property`` decorator here instead of regular attributes,
     because we need to explicitly mark these atrtibutes as read-only.
 
     See also:

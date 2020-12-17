@@ -61,7 +61,7 @@ def test_wrong_argument_annotation(
     default_options,
     mode,
 ):
-    """Ensures that using incorrect argument annotations is forbiden."""
+    """Ensures that using incorrect argument annotations is forbidden."""
     tree = parse_ast_tree(mode(code))
 
     visitor = WrongAnnotationVisitor(default_options, tree=tree)

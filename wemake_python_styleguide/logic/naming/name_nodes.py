@@ -88,7 +88,7 @@ def extract_name(node: ast.AST) -> Optional[str]:
 
     Is used to get name from node in case it is ``ast.Name``.
 
-    Should not be used direclty with assigns,
+    Should not be used directly with assigns,
     use safer :py:`~get_assign_names` function.
 
     Example:

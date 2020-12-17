@@ -7,7 +7,7 @@ When you want to force someone to write the code the way you want:
 you need to create a :term:`rule` for that.
 
 There are multiple options of how this can be done.
-This guide will walk trough all possible cases and cover every decision path.
+This guide will walk through all possible cases and cover every decision path.
 
 Deciding what exactly to write
 ------------------------------

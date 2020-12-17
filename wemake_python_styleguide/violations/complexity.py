@@ -910,7 +910,7 @@ class TooLongCompareViolation(ASTViolation):
         Compares should not be longer than 3 or 4 items.
 
     Solution:
-        Use several conditions, seprate variables, or functions.
+        Use several conditions, separate variables, or functions.
 
     .. versionadded:: 0.10.0
 
@@ -1004,7 +1004,7 @@ class CognitiveComplexityViolation(ASTViolation):
         and context managers is hard to read and understand.
 
     Solution:
-        Rewrite your code to be simplier.
+        Rewrite your code to be simpler.
         Use flat structures and conditions, remove nested loops.
 
     Configuration:
@@ -1035,7 +1035,7 @@ class CognitiveModuleComplexityViolation(SimpleViolation):
         inside many small and relatively simple functions.
 
     Solution:
-        Rewrite your code to be simplier
+        Rewrite your code to be simpler
         or use several modules.
 
     Configuration:
@@ -1199,7 +1199,7 @@ class TooComplexFormattedStringViolation(ASTViolation):
 
     Reasoning:
         Complex ``f`` strings are often difficult to understand,
-        making the code less readible. Generally we don't allow
+        making the code less readable. Generally we don't allow
         ``f`` strings but this violation exists in case the user
         decides to ignore the general violation.
 

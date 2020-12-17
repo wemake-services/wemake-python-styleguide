@@ -87,6 +87,6 @@ def transform(tree: ast.AST) -> ast.AST:
         set_if_chain,
     )
 
-    for tranformation in pipeline:
-        tree = tranformation(tree)
+    for transformation in pipeline:
+        tree = transformation(tree)
     return tree
