@@ -53,7 +53,7 @@ def test_correct_comprehension_consistency(
     assert_errors(visitor, [])
 
 
-# Should raise fag
+# Should raise flag
 
 wrong_because_almost_one_line = """
 [
@@ -80,9 +80,10 @@ def test_wrong_comprehension_use(
 
     assert_errors(visitor, [InconsistentComprehensionViolation])
 
+
 wrong_because_two_lines_in_one = """
 [
-    some(number) 
+    some(number)
     for numbers in matrix
     for number in numbers if number > 0
 ]
