@@ -324,8 +324,8 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
         comprehensions.
         """
         super().__init__(*args, **kwargs)
-        self._bracket_stack = []
-        self._ctxt = None
+        self._bracket_stack: List[InconsistentComprehensionContext] = []
+        self._ctxt: Optional[InconsistentComprehensionContext] = None
 
     def visit_any_left_bracket(self, token: tokenize.TokenInfo) -> None:
         """Sets self._inside_brackets to True if left bracket found."""
