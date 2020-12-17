@@ -15,14 +15,16 @@ def _is_self_call(func: AnyFunctionDef, node: AST) -> bool:
 
 def _check_method_recursion(func: AnyFunctionDef) -> bool:
     return bool([
-        node for node in walk(func)
+        node
+        for node in walk(func)
         if _is_self_call(func, node)
     ])
 
 
 def _check_function_recursion(func: AnyFunctionDef) -> bool:
     return bool([
-        node for node in walk(func)
+        node
+        for node in walk(func)
         if isinstance(node, Call) and given_function_called(node, {func.name})
     ])
 

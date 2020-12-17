@@ -7,9 +7,9 @@ from wemake_python_styleguide.visitors.tokenize.statements import (
     InconsistentComprehensionVisitor,
 )
 
-just_a_list = '''
+just_a_list = """
 a = []
-'''
+"""
 
 
 @pytest.mark.parametrize('code', [
@@ -30,12 +30,12 @@ def test_correct_comprehension_consistency(
     assert_errors(visitor, [])
 
 
-wrong_because_almost_one_line = '''
+wrong_because_almost_one_line = """
 [
     some(number) for number in numbers
     if number > 0
 ]
-'''
+"""
 
 
 @pytest.mark.parametrize('code', [

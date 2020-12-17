@@ -2260,10 +2260,11 @@ class RawStringNotNeededViolation(TokenizeViolation):
     error_template = 'Found an unnecessary use of a raw string: {0}'
     code = 360
 
+
 @final
 class InconsistentComprehensionViolation(TokenizeViolation):
     """
-    Forbids inconsistent newlines in comprehensions
+    Forbids inconsistent newlines in comprehensions.
 
     Reasoning:
         We do this for consistency.
@@ -2276,21 +2277,22 @@ class InconsistentComprehensionViolation(TokenizeViolation):
 
         # Correct:
         list = [some(number) for number in numbers]
+        
         list = [
            some(number)
            for numbers in matrix
-           for number in numbers 
+           for number in numbers
            if number > 0
         ]
-        
+
         # Wrong:
         list = [
-            some(number) for number in numbers 
+            some(number) for number in numbers
             if number > 0
         ]
         list = [
             some(number)
-            for numbers in matrix for number in numbers 
+            for numbers in matrix for number in numbers
             if number > 0
         ]
         list = [
@@ -2299,7 +2301,6 @@ class InconsistentComprehensionViolation(TokenizeViolation):
         ]
 
     .. versionadded:: 0.15.0
-    
     """
 
     error_template = 'Found an inconsistently structured comprehension'
