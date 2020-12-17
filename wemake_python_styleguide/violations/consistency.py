@@ -2277,7 +2277,7 @@ class InconsistentComprehensionViolation(TokenizeViolation):
 
         # Correct:
         list = [some(number) for number in numbers]
-        
+
         list = [
            some(number)
            for numbers in matrix
