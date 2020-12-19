@@ -303,10 +303,12 @@ class InconsistentComprehensionContext(object):
 @alias('visit_any_left_bracket', (
     'visit_lsqb',
     'visit_lbrace',
+    'visit_lpar',
 ))
 @alias('visit_any_right_bracket', (
     'visit_rsqb',
     'visit_rbrace',
+    'visit_rpar',
 ))
 class InconsistentComprehensionVisitor(BaseTokenVisitor):
     """
@@ -338,9 +340,16 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
         self._ctxt = self._bracket_stack[-1] if self._bracket_stack else None
 
     def visit_nl(self, token: tokenize.TokenInfo) -> None:
-        """Sets appropriate flags to True if nl encountered inside brackets."""
+        """
+        Sets appropriate flags to True if nl encountered inside brackets after
+        some clause, so that a single line comprehension with brackets on
+        multiple lines is still accepted.
+        """
         if self._ctxt:
-            self._ctxt.seen_nl = True
+            self._ctxt.seen_nl = (
+                self._ctxt.seen_nl or 
+                self._ctxt.seen_clause_in_line
+            )
             self._ctxt.seen_clause_in_line = False
             self._check_violation(token)
 
