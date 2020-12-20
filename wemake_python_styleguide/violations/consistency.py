@@ -2290,15 +2290,6 @@ class InconsistentComprehensionViolation(TokenizeViolation):
             some(number) for number in numbers
             if number > 0
         ]
-        list = [
-            some(number)
-            for numbers in matrix for number in numbers
-            if number > 0
-        ]
-        list = [
-            some(number)
-            for numbers in matrix if number > 0
-        ]
 
     .. versionadded:: 0.15.0
     """

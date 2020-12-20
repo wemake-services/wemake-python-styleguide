@@ -768,8 +768,8 @@ def get_item():  # noqa: WPS463
 
 bad_bitwise = True | True # noqa: WPS465
 
-matrix = [
+matrix = [ # noqa: WPS361
    some(number) for numbers in matrix # noqa: WPS361
-   for number in numbers 
-   if number > 0
-]
+   for number in numbers # noqa: WPS361
+   if number > 0 # noqa: WPS361
+] # noqa: WPS361

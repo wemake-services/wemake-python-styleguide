@@ -178,13 +178,15 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         node: Union[AnyLoop, AnyComprehension],
     ) -> None:
         for lambda_node in walk.get_subnodes_by_type(node, ast.Lambda):
+            arg_nodes = walk.get_subnodes_by_type(lambda_node, ast.arg)
+            body_nodes = walk.get_subnodes_by_type(lambda_node.body, ast.Name)
             arguments = (
-                arg.arg for arg
-                in walk.get_subnodes_by_type(lambda_node, ast.arg)
+                arg.arg
+                for arg in arg_nodes
             )
             body = (
-                subnode.id for subnode
-                in walk.get_subnodes_by_type(lambda_node.body, ast.Name)
+                subnode.id
+                for subnode in body_nodes
             )
             if not all(symbol in arguments for symbol in body):
                 self.add_violation(LambdaInsideLoopViolation(node))
