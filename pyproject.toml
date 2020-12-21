@@ -99,7 +99,7 @@ doc8 = "^0.8"
 added-value = "^0.14"
 tomlkit = "^0.7"
 
-safety = "^1.9"
+safety = "^1.10"
 autopep8 = "^1.5"
 import-linter = "^1.2"
 
