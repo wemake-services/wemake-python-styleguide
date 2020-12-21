@@ -361,11 +361,11 @@ flake8 = ">=2,<4.0.0"
 
 [[package]]
 name = "flake8-comprehensions"
-version = "3.3.0"
+version = "3.3.1"
 description = "A flake8 plugin to help you write better list/set/dict comprehensions."
 category = "main"
 optional = false
-python-versions = ">=3.5"
+python-versions = ">=3.6"
 
 [package.dependencies]
 flake8 = ">=3.0,<3.2.0 || >3.2.0,<4"
@@ -1711,8 +1711,8 @@ flake8-commas = [
     {file = "flake8_commas-2.0.0-py2.py3-none-any.whl", hash = "sha256:ee2141a3495ef9789a3894ed8802d03eff1eaaf98ce6d8653a7c573ef101935e"},
 ]
 flake8-comprehensions = [
-    {file = "flake8-comprehensions-3.3.0.tar.gz", hash = "sha256:355ef47288523cad7977cb9c1bc81b71c82b7091e425cd9fbcd7e5c19a613677"},
-    {file = "flake8_comprehensions-3.3.0-py3-none-any.whl", hash = "sha256:c1dd6d8a00e9722619a5c5e0e6c5747f5cf23c089032c86eaf614c14a2e40adb"},
+    {file = "flake8-comprehensions-3.3.1.tar.gz", hash = "sha256:e734bf03806bb562886d9bf635d23a65a1a995c251b67d7e007a7b608af9bd22"},
+    {file = "flake8_comprehensions-3.3.1-py3-none-any.whl", hash = "sha256:6d80dfafda0d85633f88ea5bc7de949485f71f1e28db7af7719563fe5f62dcb1"},
 ]
 flake8-debugger = [
     {file = "flake8-debugger-4.0.0.tar.gz", hash = "sha256:e43dc777f7db1481db473210101ec2df2bd39a45b149d7218a618e954177eda6"},
