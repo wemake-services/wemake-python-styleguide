@@ -274,7 +274,7 @@ class InconsistentComprehensionContext(object):
         for the current (potential) comprehension we are in. Combined with a
         stack to enable support for nested comprehensions.
 
-        is_comprehension:
+        _is_comprehension:
         Flag is set if current clause is identified as a list comprehension.
 
         seen_clause_in_line:
@@ -316,7 +316,7 @@ class InconsistentComprehensionContext(object):
         self._potential_violation = False
         self._reported = False
 
-    def handle_nl(self, token: tokenize.TokenInfo) -> None:
+    def check_nl(self, token: tokenize.TokenInfo) -> None:
         """
         Handles logical newline character depending on context.
 
@@ -329,7 +329,7 @@ class InconsistentComprehensionContext(object):
         self._seen_for_in_line = False
         self._seen_if_in_line = False
 
-    def handle_for(self, token: tokenize.TokenInfo) -> bool:
+    def check_for(self, token: tokenize.TokenInfo) -> bool:
         """Handles 'for' tokens inside brackets."""
         self._is_comprehension = True
         self._seen_for = True
@@ -341,7 +341,7 @@ class InconsistentComprehensionContext(object):
         )
         return self._check_violation(token)
 
-    def handle_if(self, token: tokenize.TokenInfo) -> bool:
+    def check_if(self, token: tokenize.TokenInfo) -> bool:
         """
         Handles 'if' tokens inside brackets.
 
@@ -361,7 +361,7 @@ class InconsistentComprehensionContext(object):
             return self._check_violation(token)
         return True
 
-    def handle_in(self, token: tokenize.TokenInfo) -> bool:
+    def check_in(self, token: tokenize.TokenInfo) -> bool:
         """
         Adds a violation when a for...in statement is split across lines.
 
@@ -417,35 +417,37 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
         """
         super().__init__(*args, **kwargs)
         self._bracket_stack: List[InconsistentComprehensionContext] = []
-        self._ctxt: Optional[InconsistentComprehensionContext] = None
+        self._current_ctx: Optional[InconsistentComprehensionContext] = None
 
     def visit_any_left_bracket(self, token: tokenize.TokenInfo) -> None:
         """Sets self._inside_brackets to True if left bracket found."""
         self._bracket_stack.append(InconsistentComprehensionContext())
-        self._ctxt = self._bracket_stack[-1]
+        self._current_ctx = self._bracket_stack[-1]
 
     def visit_any_right_bracket(self, token: tokenize.TokenInfo) -> None:
         """Resets environment if right bracket is encountered."""
         self._bracket_stack.pop()
-        self._ctxt = self._bracket_stack[-1] if self._bracket_stack else None
+        self._current_ctx = (self._bracket_stack[-1]
+        if self._bracket_stack
+        else None)
 
     def visit_nl(self, token: tokenize.TokenInfo) -> None:
         """Handles logical newline character depending on context."""
-        if self._ctxt:
-            self._ctxt.handle_nl(token)
+        if self._current_ctx:
+            self._current_ctx.check_nl(token)
 
     def visit_name(self, token: tokenize.TokenInfo) -> None:
         """Sets flags for comprehension keywords."""
-        if self._ctxt:
+        if self._current_ctx:
             well_formed: bool = True
             if token.string == 'for':
-                well_formed = self._ctxt.handle_for(token)
+                well_formed = self._current_ctx.check_for(token)
             elif token.string == 'if':
-                well_formed = self._ctxt.handle_if(token)
+                well_formed = self._current_ctx.check_if(token)
             elif token.string == 'in':
-                well_formed = self._ctxt.handle_in(token)
+                well_formed = self._current_ctx.check_in(token)
 
-            self._ctxt.seen_clause_in_line = True
+            self._current_ctx.seen_clause_in_line = True
             if not well_formed:
                 self.add_violation(
                     InconsistentComprehensionViolation(token),
