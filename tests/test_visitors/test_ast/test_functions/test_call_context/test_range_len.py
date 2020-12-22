@@ -17,6 +17,8 @@ from wemake_python_styleguide.visitors.ast.functions import (
     'len([])',
     'len(some)',
     'len(range(10))',
+    'range(0, len(some), 2)',
+    'range(0, len(some), -2)',
 ])
 def test_correct_range_len(
     assert_errors,
