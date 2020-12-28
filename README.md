@@ -56,6 +56,7 @@ in the docs for examples and integrations.
 We also support [GitHub Actions](https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/github-actions.html) as first class-citizens.
 [Try it out](https://github.com/marketplace/actions/wemake-python-styleguide)!
 
+You can also [run the project on Jupyter Notebooks](https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/jupyter_notebooks.html).
 
 ## What we are about
 

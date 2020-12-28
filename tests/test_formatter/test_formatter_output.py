@@ -115,3 +115,32 @@ def test_formatter_correct(snapshot, cli_options, output):
         _safe_output(stdout),
         'formatter_correct_{0}'.format(output),
     )
+
+
+def test_ipynb(snapshot):
+    """All correct code should not raise any violations and no output."""
+    filename = './tests/fixtures/notebook.ipynb'
+    cli_options = ['--extend-ignore', 'NIP102,D100']
+
+    process = subprocess.Popen(
+        [
+            'nbqa',
+            'flake8',
+            filename,
+            '--disable-noqa',
+            '--isolated',
+            '--format',
+            'wemake',
+            *cli_options,
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        universal_newlines=True,
+        encoding='utf8',
+    )
+    stdout, _ = process.communicate()
+
+    snapshot.assert_match(
+        _safe_output(stdout),
+        'formatter_ipynb',
+    )
