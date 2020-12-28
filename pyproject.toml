@@ -109,4 +109,6 @@ astboom = "^0.4"
 tokelor = "^0.1"
 astpath = "^0.9"
 lxml = "^4.6"
-m2r2 = "^0.2"
+m2r2 = "^0.2.7"
+
+nbqa = {version = "^0.5", python = ">=3.6.1"}
