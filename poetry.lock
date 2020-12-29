@@ -1565,7 +1565,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "5e3a247710d246f0b9bc87612e8f2418d1120991066ace944256ed7517d79b4e"
+content-hash = "27d28ad90d5f6fdef6c3b4bd181ca159e7cfa71ee4bdc0779684fad2173f5682"
 
 [metadata.files]
 added-value = [
