@@ -9,8 +9,9 @@ such as `nbqa <https://github.com/nbQA-dev/nbQA>`_ and
 
 Due to some error/warning codes not applying naturally to Jupyter Notebooks
 (e.g. "missing module docstring"), it may be a good idea to ignore some of them,
-for example by running
+for example by running:
 
-.. code-block::
+.. code:: bash
 
-    nbqa flake8 notebook.ipynb --extend-ignore=NIP102,D100,E302,E305,E703
+    $ nbqa flake8 notebook.ipynb --extend-ignore=NIP102,D100,E302,E305,E703
+    notebook.ipynb:cell_3:1:1: WPS437 Found protected attribute usage: _protected
