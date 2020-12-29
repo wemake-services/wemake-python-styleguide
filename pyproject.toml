@@ -76,6 +76,7 @@ flake8-broken-line = ">=0.2,<0.4"
 flake8-rst-docstrings = "^0.0.14"
 pep8-naming = "^0.11"
 darglint = "^1.2"
+nbqa = "^0.5.6"
 
 [tool.poetry.dev-dependencies]
 nitpick = "^0.23"
@@ -111,4 +112,4 @@ astpath = "^0.9.0"
 lxml = "^4.6"
 m2r2 = "^0.2.7"
 
-nbqa = {version = ">=0.5.6", python = ">=3.6.1"}
+nbqa = {version = "^0.5.6", python = ">=3.6.1,<4.0"}
