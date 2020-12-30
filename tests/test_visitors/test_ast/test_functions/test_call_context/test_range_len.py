@@ -4,7 +4,7 @@ from wemake_python_styleguide.violations.refactoring import (
     ImplicitEnumerateViolation,
 )
 from wemake_python_styleguide.visitors.ast.functions import (
-    WrongFunctionCallContextVisitior,
+    WrongFunctionCallContextVisitor,
 )
 
 
@@ -29,7 +29,7 @@ def test_correct_range_len(
     """Testing that ``range()`` can be used."""
     tree = parse_ast_tree(code)
 
-    visitor = WrongFunctionCallContextVisitior(default_options, tree=tree)
+    visitor = WrongFunctionCallContextVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -52,7 +52,7 @@ def test_range_len(
     """Testing that ``range(len(...))`` cannot be used."""
     tree = parse_ast_tree(code)
 
-    visitor = WrongFunctionCallContextVisitior(default_options, tree=tree)
+    visitor = WrongFunctionCallContextVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [ImplicitEnumerateViolation])

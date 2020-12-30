@@ -97,7 +97,7 @@ VARIABLE_NAMES_BLACKLIST: Final = frozenset((
     'params',
     'parameters',
 
-    # Confuseables:
+    # Reserved:
     'no',
     'true',
     'false',
@@ -108,7 +108,7 @@ VARIABLE_NAMES_BLACKLIST: Final = frozenset((
     'baz',
 ))
 
-#: List of characters sequences that are hard to read.
+#: List of character sequences that are hard to read.
 UNREADABLE_CHARACTER_COMBINATIONS: Final = frozenset((
     '1l',
     '1I',

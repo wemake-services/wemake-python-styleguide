@@ -15,8 +15,8 @@ regular_string = "'some value'"
 binary_string = "b'binary'"
 unicode_string = "u'unicode'"
 string_variable = "some = '123'"
-formated_string = "'x + y = {0}'.format(2)"
-key_formated_string = "'x + y = {res}'.format(res=2)"
+formatted_string = "'x + y = {0}'.format(2)"
+key_formatted_string = "'x + y = {res}'.format(res=2)"
 variable_format = """
 some = 'x = {0}'
 some.format(2)
@@ -59,8 +59,8 @@ f_single_chained_functions = "f'{f1().f2()}'"
     binary_string,
     unicode_string,
     string_variable,
-    formated_string,
-    key_formated_string,
+    formatted_string,
+    key_formatted_string,
     variable_format,
 ])
 def test_string_normal(

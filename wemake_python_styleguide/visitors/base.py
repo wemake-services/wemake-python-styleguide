@@ -36,7 +36,7 @@ Visitors API
    BaseFilenameVisitor
    BaseTokenVisitor
 
-The decision relies on what parameters do you need for the task.
+The decision relies on what parameters you need for the task.
 It is highly unlikely that you will need two parameters at the same time.
 See :ref:`tutorial` for more information about choosing a correct base class.
 
@@ -108,8 +108,8 @@ class BaseVisitor(object, metaclass=abc.ABCMeta):
         from the :term:`checker` instance.
 
         Generally speaking, each visitor class needs to eject required
-        parameters from checker and then run
-        its constructor with these parameters.
+        parameters from checker and then run its constructor
+        with these parameters.
         """
         return cls(options=checker.options, filename=checker.filename)
 
@@ -181,7 +181,7 @@ class BaseNodeVisitor(ast.NodeVisitor, BaseVisitor, metaclass=abc.ABCMeta):
         Why? Because python3.8 now uses ``visit_Constant`` instead of old
         methods like ``visit_Num``, ``visit_Str``, ``visit_Bytes``, etc.
 
-        Some classes do redefine this method to catch all nodes. It is fine.
+        Some classes do redefine this method to catch all nodes. This is valid.
         """
         return route_visit(self, tree)
 

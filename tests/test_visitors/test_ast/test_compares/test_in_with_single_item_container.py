@@ -57,7 +57,7 @@ def test_single_item_container(
         marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
     ),
 ])
-def test_multi_item_contrainer(
+def test_multi_item_container(
     assert_errors,
     parse_ast_tree,
     code,
