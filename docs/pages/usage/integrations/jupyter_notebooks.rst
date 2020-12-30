@@ -14,4 +14,5 @@ for example by running:
 .. code:: bash
 
     $ nbqa flake8 notebook.ipynb --extend-ignore=NIP102,D100,E302,E305,E703
-    notebook.ipynb:cell_3:1:1: WPS437 Found protected attribute usage: _protected
+
+.. image:: https://raw.githubusercontent.com/MarcoGorelli/wemake-python-styleguide/issue-1704/docs/_static/running.png
