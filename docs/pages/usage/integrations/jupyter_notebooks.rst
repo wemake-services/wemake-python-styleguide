@@ -15,4 +15,10 @@ for example by running:
 
     $ nbqa flake8 notebook.ipynb --extend-ignore=NIP102,D100,E302,E305,E703
 
-.. image:: https://raw.githubusercontent.com/MarcoGorelli/wemake-python-styleguide/issue-1704/docs/_static/running.png
+For example, if we have a file ``notebook.ipynb``
+
+.. image:: https://raw.githubusercontent.com/MarcoGorelli/wemake-python-styleguide/issue-1704/docs/_static/notebook.png
+
+we can run this project on this as follows:
+
+.. image:: https://raw.githubusercontent.com/MarcoGorelli/wemake-python-styleguide/issue-1704/docs/_static/notebook_terminal.png
