@@ -97,7 +97,7 @@ VARIABLE_NAMES_BLACKLIST: Final = frozenset((
     'params',
     'parameters',
 
-    # Reserved:
+    # Confusables:
     'no',
     'true',
     'false',
