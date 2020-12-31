@@ -4,7 +4,7 @@ from pyflakes.checker import Checker as PyFlakesChecker
 
 from wemake_python_styleguide.checker import Checker
 
-code_that_brakes = '''
+code_that_breaks = '''
 def current_session(
     telegram_id: int,
     for_update: bool = True,
