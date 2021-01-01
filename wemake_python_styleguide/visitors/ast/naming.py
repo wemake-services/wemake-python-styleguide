@@ -390,7 +390,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
     'visit_For',
     'visit_AsyncFor',
 ))
-class UnusedVaribaleDefinitionVisitor(BaseNodeVisitor):
+class UnusedVariableDefinitionVisitor(BaseNodeVisitor):
     """Checks how variables are used."""
 
     def visit_any_assign(self, node: AnyAssignWithWalrus) -> None:

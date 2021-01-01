@@ -17,7 +17,7 @@ from wemake_python_styleguide.logic.walrus import get_assigned_expr
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     FloatComplexCompareViolation,
-    HeterogenousCompareViolation,
+    HeterogeneousCompareViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
     CompareOrderViolation,
@@ -53,14 +53,14 @@ class CompareSanityVisitor(BaseNodeVisitor):
             ConstantCompareViolation
             UselessCompareViolation
             UselessLenCompareViolation
-            HeterogenousCompareViolation
+            HeterogeneousCompareViolation
             ReversedComplexCompareViolation
 
         """
         self._check_literal_compare(node)
         self._check_useless_compare(node)
         self._check_unpythonic_compare(node)
-        self._check_heterogenous_operators(node)
+        self._check_heterogeneous_operators(node)
         self._check_reversed_complex_compare(node)
         self.generic_visit(node)
 
@@ -105,7 +105,7 @@ class CompareSanityVisitor(BaseNodeVisitor):
                 if not self._is_correct_len(node.ops[ps], node.comparators[ps]):
                     self.add_violation(UselessLenCompareViolation(node))
 
-    def _check_heterogenous_operators(self, node: ast.Compare) -> None:
+    def _check_heterogeneous_operators(self, node: ast.Compare) -> None:
         if len(node.ops) == 1:
             return
 
@@ -113,7 +113,7 @@ class CompareSanityVisitor(BaseNodeVisitor):
 
         for op in node.ops:
             if not isinstance(op, prototype):
-                self.add_violation(HeterogenousCompareViolation(node))
+                self.add_violation(HeterogeneousCompareViolation(node))
                 break
 
     def _check_reversed_complex_compare(self, node: ast.Compare) -> None:
@@ -158,11 +158,11 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
 
         """
         self._check_constant(node.ops[0], node.left)
-        self._check_is_constant_comprare(node.ops[0], node.left)
+        self._check_is_constant_compare(node.ops[0], node.left)
 
         for op, comparator in zip(node.ops, node.comparators):
             self._check_constant(op, comparator)
-            self._check_is_constant_comprare(op, comparator)
+            self._check_is_constant_compare(op, comparator)
 
         self.generic_visit(node)
 
@@ -180,7 +180,7 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
         if not length:
             self.add_violation(FalsyConstantCompareViolation(comparator))
 
-    def _check_is_constant_comprare(
+    def _check_is_constant_compare(
         self,
         op: ast.cmpop,
         comparator: ast.expr,

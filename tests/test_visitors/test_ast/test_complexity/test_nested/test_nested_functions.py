@@ -165,7 +165,7 @@ def container():
     nested_function_in_async_method,
     nested_async_function_in_async_method,
 
-    # Rergession when functions were allowed to be nested in deep nodes:
+    # Regression when functions were allowed to be nested in deep nodes:
     nested_function_in_if,
     nested_function_in_if_else,
     nested_function_while_loop,

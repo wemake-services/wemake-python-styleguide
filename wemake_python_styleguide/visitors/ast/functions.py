@@ -178,7 +178,7 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
 
 @final
 class FloatingNanCallVisitor(base.BaseNodeVisitor):
-    """Ensure that NaN is acquired in an explicit way."""
+    """Ensure that NaN explicitly acquired."""
 
     _nan_variants = frozenset(('nan', b'nan'))
 
@@ -202,7 +202,7 @@ class FloatingNanCallVisitor(base.BaseNodeVisitor):
 
 
 @final
-class WrongFunctionCallContextVisitior(base.BaseNodeVisitor):
+class WrongFunctionCallContextVisitor(base.BaseNodeVisitor):
     """Ensure that we call several functions in the correct context."""
 
     def visit_Call(self, node: ast.Call) -> None:

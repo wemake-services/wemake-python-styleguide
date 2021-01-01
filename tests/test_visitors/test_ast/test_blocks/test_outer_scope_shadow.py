@@ -200,21 +200,21 @@ def other(test):
     test1 = test + 1
 """
 
-contant_overlap1 = """
+constant_overlap1 = """
 a = 1
 
 def func(a):
     ...
 """
 
-contant_overlap2 = """
+constant_overlap2 = """
 a = 1
 
 def func():
     a = 2
 """
 
-contant_overlap3 = """
+constant_overlap3 = """
 a = 1
 
 def func():
@@ -222,7 +222,7 @@ def func():
         ...
 """
 
-contant_overlap4 = """
+constant_overlap4 = """
 a = 1
 
 def func():
@@ -232,7 +232,7 @@ def func():
         ...
 """
 
-contant_overlap5 = """
+constant_overlap5 = """
 a = 1
 
 def func():
@@ -240,7 +240,7 @@ def func():
         ...
 """
 
-contant_overlap6 = """
+constant_overlap6 = """
 a = 1
 
 def func():
@@ -297,12 +297,12 @@ def test_variable_used_correctly(
     import_overlap4,
     function_overlap1,
     function_overlap2,
-    contant_overlap1,
-    contant_overlap2,
-    contant_overlap3,
-    contant_overlap4,
-    contant_overlap5,
-    contant_overlap6,
+    constant_overlap1,
+    constant_overlap2,
+    constant_overlap3,
+    constant_overlap4,
+    constant_overlap5,
+    constant_overlap6,
     pytest.param(
         walrus_overlap,
         marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),

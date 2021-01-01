@@ -2,7 +2,7 @@ import pytest
 
 from wemake_python_styleguide.violations.refactoring import TypeCompareViolation
 from wemake_python_styleguide.visitors.ast.functions import (
-    WrongFunctionCallContextVisitior,
+    WrongFunctionCallContextVisitor,
 )
 
 # Wrong:
@@ -59,7 +59,7 @@ def test_type_regular_usage(
     """Testing that ``type()`` can be used."""
     tree = parse_ast_tree(mode(code.format(call)))
 
-    visitor = WrongFunctionCallContextVisitior(default_options, tree=tree)
+    visitor = WrongFunctionCallContextVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -95,7 +95,7 @@ def test_not_type_functions(
     """Testing that regular calls work."""
     tree = parse_ast_tree(mode(code.format(call)))
 
-    visitor = WrongFunctionCallContextVisitior(default_options, tree=tree)
+    visitor = WrongFunctionCallContextVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -123,7 +123,7 @@ def test_type_with_compare(
     """Testing that ``type()`` cannot be used inside a compare."""
     tree = parse_ast_tree(mode(code.format(call)))
 
-    visitor = WrongFunctionCallContextVisitior(default_options, tree=tree)
+    visitor = WrongFunctionCallContextVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [TypeCompareViolation])
