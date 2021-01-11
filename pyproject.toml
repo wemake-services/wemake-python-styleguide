@@ -86,7 +86,7 @@ coverage-conditional-plugin = "^0.3"
 pytest-randomly = "^3.5"
 pytest = "^6.2"
 snapshottest = "^0.6"
-hypothesis = "^5.49"
+hypothesis = "^6.0"
 hypothesmith = "^0.1"
 
 mypy = "^0.790"
