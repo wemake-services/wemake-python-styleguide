@@ -15,7 +15,7 @@ from wemake_python_styleguide.visitors import base
 class IterableUnpackingVisitor(base.BaseNodeVisitor):
     """Checks iterables unpacking."""
 
-    _upackable_iterable_parent_types: ClassVar[AnyNodes] = (
+    _unpackable_iterable_parent_types: ClassVar[AnyNodes] = (
         ast.List,
         ast.Set,
         ast.Tuple,
@@ -34,6 +34,6 @@ class IterableUnpackingVisitor(base.BaseNodeVisitor):
 
     def _check_unnecessary_iterable_unpacking(self, node: ast.Starred) -> None:
         parent = get_parent(node)
-        if isinstance(parent, self._upackable_iterable_parent_types):
+        if isinstance(parent, self._unpackable_iterable_parent_types):
             if len(getattr(parent, 'elts', [])) == 1:
                 self.add_violation(IterableUnpackingViolation(node))

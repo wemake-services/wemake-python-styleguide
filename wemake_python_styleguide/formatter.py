@@ -69,14 +69,14 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
         self._formatter = TerminalFormatter()
 
         # Logic:
-        self._proccessed_filenames: List[str] = []
+        self._processed_filenames: List[str] = []
         self._error_count = 0
 
     def handle(self, error: Violation) -> None:  # noqa: WPS110
         """Processes each :term:`violation` to print it and all related."""
-        if error.filename not in self._proccessed_filenames:
+        if error.filename not in self._processed_filenames:
             self._print_header(error.filename)
-            self._proccessed_filenames.append(error.filename)
+            self._processed_filenames.append(error.filename)
 
         super().handle(error)
         self._error_count += 1
@@ -95,11 +95,11 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
         if not self._should_show_source(error):
             return ''
 
-        formated_line = error.physical_line.lstrip()
-        adjust = len(error.physical_line) - len(formated_line)
+        formatted_line = error.physical_line.lstrip()
+        adjust = len(error.physical_line) - len(formatted_line)
 
         code = _highlight(
-            formated_line,
+            formatted_line,
             self._lexer,
             self._formatter,
         )

@@ -13,7 +13,7 @@ from wemake_python_styleguide.visitors.ast.builtins import (
 
 list_target = '[first, second]'
 nested_list_target0 = '([first, second], third)'
-nested_list_tatget1 = '(first, [second, third])'
+nested_list_target1 = '(first, [second, third])'
 nested_list_target2 = '(first, (second, [third, fourth]))'
 multiple_level_nested_list_target = '(first, (second, [third, fourth]))'
 
@@ -98,7 +98,7 @@ def test_unpacking_to_list(
 
 @pytest.mark.parametrize('assignment', [
     nested_list_target0,
-    nested_list_tatget1,
+    nested_list_target1,
     nested_list_target2,
     multiple_level_nested_list_target,
     nested_spread_assignment_in_list,
@@ -136,7 +136,7 @@ def test_unpacking_to_nested_list(
 @pytest.mark.parametrize('assignment', [
     list_target,
     nested_list_target0,
-    nested_list_tatget1,
+    nested_list_target1,
     nested_list_target2,
     multiple_level_nested_list_target,
     spread_assignment_in_list_target,

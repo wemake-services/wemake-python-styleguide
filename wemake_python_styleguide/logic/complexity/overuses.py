@@ -104,7 +104,7 @@ def is_primitive(node: ast.AST) -> bool:
 
     We use this predicate to allow values
     like ``[]`` or ``call()`` to be overused.
-    Because you cannot simply them.
+    Because you cannot simplify them.
 
     We do not check for strings, numbers, etc
     because they are globally ignored.

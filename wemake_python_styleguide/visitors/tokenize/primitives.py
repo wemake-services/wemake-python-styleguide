@@ -38,7 +38,7 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
         r'^[0-9]*\.[0-9]+0+$',
     )
 
-    _positive_exponent_pattens: ClassVar[Pattern] = re.compile(
+    _positive_exponent_patterns: ClassVar[Pattern] = re.compile(
         r'^[0-9\.]+e\+', re.IGNORECASE | re.ASCII,
     )
 
@@ -115,7 +115,7 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
                 ),
             )
 
-        if self._positive_exponent_pattens.match(token.string):
+        if self._positive_exponent_patterns.match(token.string):
             self.add_violation(
                 consistency.PositiveExponentViolation(
                     token,
@@ -155,7 +155,7 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         'u', 'U', 'N',
     ))
 
-    _implicit_raw_strigns: ClassVar[Pattern] = re.compile(r'\\{2}.+')
+    _implicit_raw_strings: ClassVar[Pattern] = re.compile(r'\\{2}.+')
 
     def __init__(self, *args, **kwargs) -> None:
         """Initializes new visitor and saves all docstrings."""
@@ -214,7 +214,7 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         if 'r' in modifiers.lower():
             return
 
-        if self._implicit_raw_strigns.search(_replace_braces(string_def)):
+        if self._implicit_raw_strings.search(_replace_braces(string_def)):
             self.add_violation(
                 consistency.ImplicitRawStringViolation(
                     token,

@@ -15,7 +15,7 @@ some_line = some.attr(
 )
 """
 
-correct_elipsis = """
+correct_ellipsis = """
 first[
     1,
     ...,
@@ -64,7 +64,7 @@ def test_wrong_dot_start(
 
 @pytest.mark.parametrize('code', [
     correct_dot_attr,
-    correct_elipsis,
+    correct_ellipsis,
     correct_string_dot,
 ])
 def test_correct_dot_start(

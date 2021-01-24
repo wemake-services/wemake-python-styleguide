@@ -88,7 +88,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         )                                # end
         """,                             # noqa: WPS323
         # Different python versions report `WPS323` on different lines.
-        flags=re.X,  # flag to ignore comments and whitespaces.
+        flags=re.X,  # flag to ignore comments and whitespace.
     )
 
     #: Names of functions in which we allow strings with modulo patterns.
@@ -108,11 +108,11 @@ class WrongStringVisitor(base.BaseNodeVisitor):
 
         """
         text_data = source.render_string(node.s)
-        self._check_is_alphatbet(node, text_data)
+        self._check_is_alphabet(node, text_data)
         self._check_modulo_patterns(node, text_data)
         self.generic_visit(node)
 
-    def _check_is_alphatbet(
+    def _check_is_alphabet(
         self,
         node: AnyText,
         text_data: Optional[str],
@@ -126,7 +126,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
 
     def _is_modulo_pattern_exception(self, parent: Optional[ast.AST]) -> bool:
         """
-        Check if the string with modulo patterns is in an exceptional situation.
+        Check if string with modulo pattern is in an exceptional situation.
 
         Basically we have some function names in which we allow strings with
         modulo patterns because they must have them for the functions to work
