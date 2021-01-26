@@ -1,13 +1,16 @@
 import os
 
-from wemake_python_styleguide.compat.packaging import importlib_metadata
+from wemake_python_styleguide.compat.packaging import (
+    PackageNotFoundError,
+    get_version,
+)
 
 
 def _get_version(dist_name: str) -> str:  # pragma: no cover
     """Fetches distribution version."""
     try:
-        return importlib_metadata.version(dist_name)
-    except importlib_metadata.PackageNotFoundError:
+        return get_version(dist_name)
+    except PackageNotFoundError:
         return ''  # readthedocs cannot install `poetry` projects
 
 

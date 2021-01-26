@@ -4,7 +4,7 @@ from typing import List
 from typing_extensions import final
 
 from wemake_python_styleguide.logic.complexity.annotations import (
-    get_annotation_compexity,
+    get_annotation_complexity,
 )
 from wemake_python_styleguide.logic.tree.functions import get_all_arguments
 from wemake_python_styleguide.types import AnyFunctionDef
@@ -64,7 +64,7 @@ class AnnotationComplexityVisitor(BaseNodeVisitor):
     ) -> None:
         max_complexity = self.options.max_annotation_complexity
         for annotation in annotations:
-            complexity = get_annotation_compexity(annotation)
+            complexity = get_annotation_complexity(annotation)
             if complexity > max_complexity:
                 self.add_violation(
                     TooComplexAnnotationViolation(

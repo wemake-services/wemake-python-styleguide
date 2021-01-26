@@ -25,7 +25,7 @@ Summary
    ContextManagerVariableDefinitionViolation
    MutableModuleConstantViolation
    SameElementsInConditionViolation
-   HeterogenousCompareViolation
+   HeterogeneousCompareViolation
    WrongModuleMetadataViolation
    EmptyModuleViolation
    InitModuleHasLogicViolation
@@ -95,7 +95,7 @@ Best practices
 .. autoclass:: ContextManagerVariableDefinitionViolation
 .. autoclass:: MutableModuleConstantViolation
 .. autoclass:: SameElementsInConditionViolation
-.. autoclass:: HeterogenousCompareViolation
+.. autoclass:: HeterogeneousCompareViolation
 .. autoclass:: WrongModuleMetadataViolation
 .. autoclass:: EmptyModuleViolation
 .. autoclass:: InitModuleHasLogicViolation
@@ -476,7 +476,7 @@ class SameElementsInConditionViolation(ASTViolation):
 
 
 @final
-class HeterogenousCompareViolation(ASTViolation):
+class HeterogeneousCompareViolation(ASTViolation):
     """
     Forbid heterogeneous operators in one comparison.
 

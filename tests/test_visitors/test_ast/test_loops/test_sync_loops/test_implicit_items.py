@@ -65,7 +65,7 @@ def test_implicit_forloop_items(
 
 
 @pytest.mark.parametrize(('target', 'iterable', 'expression'), [
-    # Correct exmpressions:
+    # Correct expressions:
     ('index', 'some_other', 'some[index]'),
     ('index_other', 'some', 'print(some[index])'),
     ('index', 'some', 'some.index.call()'),

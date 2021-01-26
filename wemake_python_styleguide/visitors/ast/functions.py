@@ -178,7 +178,7 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
 
 @final
 class FloatingNanCallVisitor(base.BaseNodeVisitor):
-    """Ensure that NaN is acquired in an explicit way."""
+    """Ensure that NaN explicitly acquired."""
 
     _nan_variants = frozenset(('nan', b'nan'))
 
@@ -202,7 +202,7 @@ class FloatingNanCallVisitor(base.BaseNodeVisitor):
 
 
 @final
-class WrongFunctionCallContextVisitior(base.BaseNodeVisitor):
+class WrongFunctionCallContextVisitor(base.BaseNodeVisitor):
     """Ensure that we call several functions in the correct context."""
 
     def visit_Call(self, node: ast.Call) -> None:
@@ -240,22 +240,38 @@ class WrongFunctionCallContextVisitior(base.BaseNodeVisitor):
             self.add_violation(TypeCompareViolation(node))
 
     def _check_range_len(self, node: ast.Call) -> None:
-        function_name = functions.given_function_called(node, {'range'})
-        if not function_name:
+        if not functions.given_function_called(node, {'range'}):
             return
 
-        is_one_argument_range = (
-            len(node.args) == 1 and
+        args_len = len(node.args)
+
+        is_one_arg_range = (
+            args_len == 1 and
             isinstance(node.args[0], ast.Call) and
             functions.given_function_called(node.args[0], {'len'})
         )
-        is_two_arguments_range = (
+        is_two_args_range = (
+            self._is_multiple_args_range_with_len(node) and
+            args_len == 2
+        )
+        # for three args add violation
+        # only if `step` arg do not equals 1 or -1
+        step_arg = args_len == 3 and operators.unwrap_unary_node(node.args[2])
+        is_three_args_range = (
+            self._is_multiple_args_range_with_len(node) and
+            args_len == 3 and
+            isinstance(step_arg, ast.Num) and
+            abs(step_arg.n) == 1
+        )
+        if any([is_one_arg_range, is_two_args_range, is_three_args_range]):
+            self.add_violation(ImplicitEnumerateViolation(node))
+
+    def _is_multiple_args_range_with_len(self, node: ast.Call) -> bool:
+        return bool(
             len(node.args) in {2, 3} and
             isinstance(node.args[1], ast.Call) and
-            functions.given_function_called(node.args[1], {'len'})
+            functions.given_function_called(node.args[1], {'len'}),
         )
-        if is_one_argument_range or is_two_arguments_range:
-            self.add_violation(ImplicitEnumerateViolation(node))
 
 
 @final

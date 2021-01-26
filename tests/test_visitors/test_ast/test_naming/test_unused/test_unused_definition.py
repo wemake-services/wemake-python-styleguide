@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations.naming import (
     UnusedVariableIsDefinedViolation,
 )
 from wemake_python_styleguide.visitors.ast.naming import (
-    UnusedVaribaleDefinitionVisitor,
+    UnusedVariableDefinitionVisitor,
 )
 
 module_context = '{0}'
@@ -50,7 +50,7 @@ def test_unused_variable_tuple_definition(
         )),
     )
 
-    visitor = UnusedVaribaleDefinitionVisitor(default_options, tree=tree)
+    visitor = UnusedVariableDefinitionVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [UnusedVariableIsDefinedViolation])
@@ -86,7 +86,7 @@ def test_used_variable_tuple_definition_allowed(
         )),
     )
 
-    visitor = UnusedVaribaleDefinitionVisitor(default_options, tree=tree)
+    visitor = UnusedVariableDefinitionVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -121,7 +121,7 @@ def test_raw_unused_variable_definition(
         )),
     )
 
-    visitor = UnusedVaribaleDefinitionVisitor(default_options, tree=tree)
+    visitor = UnusedVariableDefinitionVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [UnusedVariableIsDefinedViolation])
@@ -156,7 +156,7 @@ def test_raw_unused_variable_definition_allowed(
         )),
     )
 
-    visitor = UnusedVaribaleDefinitionVisitor(default_options, tree=tree)
+    visitor = UnusedVariableDefinitionVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -189,7 +189,7 @@ def test_protected_unused_variable_definition(
         )),
     )
 
-    visitor = UnusedVaribaleDefinitionVisitor(default_options, tree=tree)
+    visitor = UnusedVariableDefinitionVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [UnusedVariableIsDefinedViolation])
@@ -223,7 +223,7 @@ def test_protected_unused_var_definition_allowed(
         )),
     )
 
-    visitor = UnusedVaribaleDefinitionVisitor(default_options, tree=tree)
+    visitor = UnusedVariableDefinitionVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -257,7 +257,7 @@ def test_used_variable_definition_allowed(
         )),
     )
 
-    visitor = UnusedVaribaleDefinitionVisitor(default_options, tree=tree)
+    visitor = UnusedVariableDefinitionVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
