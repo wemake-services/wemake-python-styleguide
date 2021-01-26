@@ -282,29 +282,29 @@ class InconsistentComprehensionContext(object):
         is either the action, each for loop, or the conditional. Starts off
         as True to account for the action, which we don't actually visit.
 
-        seen_for:
+        _seen_for:
         Flag tracks whether we've seen a for statement within these brackets.
         Effectively determines whether we are looking at some kind of
         comprehension or not.
 
-        seen_for_in_line:
+        _seen_for_in_line:
         Flag tracks whether we've seen a for statement on this line. Used to
         determine if a for...in statement has been split across multiple lines.
 
-        seen_if_in_line:
+        _seen_if_in_line:
         Flag tracks whether we've seen an if statement on this line. Used to
         determine whether an in statement is from a for...in statement or
         is a logical in.
 
-        seen_nl:
+        _seen_nl:
         Flag for if we've seen any logical newlines, indicating this is a
         multiline comprehension
 
-        potential_violation:
+        _potential_violation:
         Flag for when we see multiple clauses in one line. Only a violation
         if this is a multiline comprehension
 
-        reported:
+        _reported:
         Flag tracks whether we've already reported this violation.
         """
         self.seen_clause_in_line = False
@@ -427,9 +427,10 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
     def visit_any_right_bracket(self, token: tokenize.TokenInfo) -> None:
         """Resets environment if right bracket is encountered."""
         self._bracket_stack.pop()
-        self._current_ctx = (self._bracket_stack[-1]
-        if self._bracket_stack
-        else None)
+        if self._bracket_stack:
+            self._current_ctx = self._bracket_stack[-1]
+        else:
+            self._current_ctx = None
 
     def visit_nl(self, token: tokenize.TokenInfo) -> None:
         """Handles logical newline character depending on context."""
