@@ -440,7 +440,7 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
     def visit_name(self, token: tokenize.TokenInfo) -> None:
         """Sets flags for comprehension keywords."""
         if self._current_ctx:
-            well_formed: bool = True
+            well_formed = True
             if token.string == 'for':
                 well_formed = self._current_ctx.check_for(token)
             elif token.string == 'if':
