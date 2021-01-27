@@ -31,7 +31,10 @@ def decorated():  # noqa: WPS216
 
 def wrong_comprehension1():
     return [  # noqa: WPS307
-        node for node in 'ab' if node != 'a' if node != 'b'
+        node 
+        for node in 'ab' 
+        if node != 'a' 
+        if node != 'b'
     ]
 
 

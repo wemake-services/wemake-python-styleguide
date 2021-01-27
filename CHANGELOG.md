@@ -39,6 +39,7 @@ Semantic versioning in our case means:
 - Forbids not returning anything in functions and methods starting with `get_`
 - Forbids to use empty comment
 - Forbids using bitwise operation with boolean operation
+- Forbids inconsistent structuring of multiline comprehensions
 
 ### Bugfixes
 

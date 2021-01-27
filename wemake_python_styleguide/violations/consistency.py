@@ -84,6 +84,7 @@ Summary
    FloatZeroViolation
    UnpackingIterableToListViolation
    RawStringNotNeededViolation
+   InconsistentComprehensionViolation
 
 Consistency checks
 ------------------
@@ -149,6 +150,7 @@ Consistency checks
 .. autoclass:: FloatZeroViolation
 .. autoclass:: UnpackingIterableToListViolation
 .. autoclass:: RawStringNotNeededViolation
+.. autoclass:: InconsistentComprehensionViolation
 
 """
 
@@ -2257,3 +2259,40 @@ class RawStringNotNeededViolation(TokenizeViolation):
 
     error_template = 'Found an unnecessary use of a raw string: {0}'
     code = 360
+
+
+@final
+class InconsistentComprehensionViolation(TokenizeViolation):
+    """
+    Forbids inconsistent newlines in comprehensions.
+
+    Reasoning:
+        We do this for consistency.
+
+    Solution:
+        Either place comprehension on a single line or ensure that action,
+        for loops, and condition are all on different lines.
+
+    Example::
+
+        # Correct:
+        list = [some(number) for number in numbers]
+
+        list = [
+           some(number)
+           for numbers in matrix
+           for number in numbers
+           if number > 0
+        ]
+
+        # Wrong:
+        list = [
+            some(number) for number in numbers
+            if number > 0
+        ]
+
+    .. versionadded:: 0.15.0
+    """
+
+    error_template = 'Found an inconsistently structured comprehension'
+    code = 361
