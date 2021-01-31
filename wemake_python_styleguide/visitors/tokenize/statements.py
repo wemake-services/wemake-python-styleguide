@@ -412,7 +412,7 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
         """
         Initializes stack of bracket contexts.
 
-        Creates an empty stack for bracket contexts to accomodate for nested
+        Creates an empty stack for bracket contexts to accommodate for nested
         comprehensions.
         """
         super().__init__(*args, **kwargs)
