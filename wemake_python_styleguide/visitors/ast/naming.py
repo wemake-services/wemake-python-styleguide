@@ -371,7 +371,11 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
         node: AnyAssign,
         names: List[str],
     ) -> None:
-        for used_name, count in Counter(names).items():
+        used_names = filter(
+            lambda assigned_name: not access.is_unused(assigned_name),
+            names,
+        )
+        for used_name, count in Counter(used_names).items():
             if count > 1:
                 self.add_violation(
                     best_practices.ReassigningVariableToItselfViolation(
