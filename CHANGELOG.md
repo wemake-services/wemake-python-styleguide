@@ -57,6 +57,7 @@ Semantic versioning in our case means:
 - Fixes false positive ImplicitEnumerateViolation on range with step #1742
 - Allows to use `_` to declare several unused variables,
   like: `x, _, _ = coordinates()`
+- Fixes variable reassignment in class context
 - Fixes that `*'abc'` was not counted as pointless star expression
 - Fixes that `-some` was counted as overused expression
 

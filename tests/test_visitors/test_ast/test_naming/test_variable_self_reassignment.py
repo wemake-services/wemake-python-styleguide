@@ -63,6 +63,14 @@ right_parts_unused2 = 'x, _, _ = some()'
 right_parts_unused3 = '_, x, _ = some()'
 right_parts_unused4 = '_, _, x = some()'
 
+# regression 1827
+right_class_reassignment = """
+MyValue = 1
+
+class MyClass(object):
+    MyValue = MyValue
+"""
+
 # Wrong:
 
 wrong_fragment = """
@@ -231,6 +239,7 @@ def test_self_variable_reassignment_triple(
     right_parts_unused2,
     right_parts_unused3,
     right_parts_unused4,
+    right_class_reassignment,
 ])
 def test_correct_variable_reassignment(
     assert_errors,

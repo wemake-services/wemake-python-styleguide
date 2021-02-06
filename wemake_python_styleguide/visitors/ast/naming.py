@@ -357,6 +357,9 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
         if not node.value:
             return
 
+        if isinstance(nodes.get_context(node), ast.ClassDef):
+            return  # This is not a variable, but a class property
+
         var_values = name_nodes.get_variables_from_node(node.value)
         for var_name, var_value in itertools.zip_longest(names, var_values):
             if var_name == var_value:
