@@ -1009,7 +1009,12 @@ class ModuloStringFormatViolation(ASTViolation):
         'some string', 'your name: {0}', 'data: {data}'
 
         # Wrong:
-       'my name is: %s', 'data: %(data)d'
+        'my name is: %s', 'data: %(data)d'
+
+    It might be a good idea to disable this rule
+    and switch to ``flake8-pep3101`` in case your project
+    has a lot of false-positives due
+    to some specific string chars that uses ``%`` a lot.
 
     See also:
         https://github.com/gforcada/flake8-pep3101
