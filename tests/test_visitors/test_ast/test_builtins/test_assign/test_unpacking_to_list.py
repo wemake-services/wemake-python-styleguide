@@ -11,6 +11,8 @@ from wemake_python_styleguide.visitors.ast.builtins import (
     WrongAssignmentVisitor,
 )
 
+# Assignments:
+
 list_target = '[first, second]'
 nested_list_target0 = '([first, second], third)'
 nested_list_target1 = '(first, [second, third])'
@@ -26,6 +28,8 @@ multiple_level_nested_spread_assign_in_list = (
 regular_assignment = '{0} = some()'
 
 regular_multiple_assignment = 'result = {0} = some_other_result = some()'
+
+# Templates:
 
 for_assignment = """
 def wrapper():
@@ -86,9 +90,10 @@ def test_unpacking_to_list(
     default_options,
     code,
     assignment,
+    mode,
 ):
     """Ensure that unpacking iterable to list is restricted."""
-    tree = parse_ast_tree(code.format(assignment))
+    tree = parse_ast_tree(mode(code.format(assignment)))
 
     visitor = WrongAssignmentVisitor(default_options, tree=tree)
     visitor.run()
@@ -129,7 +134,8 @@ def test_unpacking_to_nested_list(
 
     assert_errors(
         visitor,
-        [UnpackingIterableToListViolation, WrongUnpackingViolation],
+        [UnpackingIterableToListViolation],
+        ignored_types=(WrongUnpackingViolation,),
     )
 
 
@@ -157,7 +163,7 @@ def test_unpacking_to_list_in_middle_target(
     visitor = WrongAssignmentVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(
-        visitor,
-        [MultipleAssignmentsViolation, UnpackingIterableToListViolation],
-    )
+    assert_errors(visitor, [
+        MultipleAssignmentsViolation,
+        UnpackingIterableToListViolation,
+    ])
