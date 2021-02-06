@@ -263,7 +263,7 @@ def test_nonmatching_instance(
     ('attribute', '@classmethod', 'get_attribute'),
     ('attribute', '@classmethod', 'set_attribute'),
     ('attribute', '@staticmethod', 'get_attribute'),
-    ('attribute', '@classmethod', 'set_attribute'),
+    ('attribute', '@staticmethod', 'set_attribute'),
     ('attribute', '@property', 'get_attribute'),
     ('attribute', '@attribute.setter', 'set_attribute'),
 ])
