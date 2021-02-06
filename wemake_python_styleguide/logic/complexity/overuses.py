@@ -124,9 +124,9 @@ def is_primitive(node: ast.AST) -> bool:
     return False
 
 
-def is_unary_operator(node: ast.AST) -> bool:
+def is_unary_minus(node: ast.AST) -> bool:
     """
-    Detects if node is unary operator.
+    Detects if node is unary minus operator.
 
     We use this predicate to allow values
     like ``-some_value`` to be overused.
@@ -135,5 +135,8 @@ def is_unary_operator(node: ast.AST) -> bool:
     should raise violation to force naming them.
     """
     if isinstance(node, ast.UnaryOp):
-        return not isinstance(node.operand, Constant)
+        return (
+            isinstance(node.op, ast.USub) and
+            not isinstance(node.operand, (Constant, ast.Num))
+        )
     return False
