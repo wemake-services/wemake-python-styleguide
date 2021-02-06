@@ -7,7 +7,6 @@ from typing import (
     ClassVar,
     DefaultDict,
     FrozenSet,
-    Iterable,
     List,
     Optional,
     Sequence,
@@ -25,7 +24,6 @@ from wemake_python_styleguide.compat.aliases import (
 )
 from wemake_python_styleguide.compat.functions import get_slice_expr
 from wemake_python_styleguide.logic import nodes, safe_eval, source, walk
-from wemake_python_styleguide.logic.naming.name_nodes import extract_name
 from wemake_python_styleguide.logic.tree import (
     attributes,
     functions,
