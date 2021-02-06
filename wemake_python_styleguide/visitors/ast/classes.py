@@ -45,11 +45,13 @@ class WrongClassVisitor(base.BaseNodeVisitor):
             WrongBaseClassViolation
             WrongClassBodyContentViolation
             BuiltinSubclassViolation
+            UnpythonicGetterSetterViolation
 
         """
         self._check_base_classes_count(node)
         self._check_base_classes(node)
         self._check_wrong_body_nodes(node)
+        self._check_getters_setters_methods(node)
         self.generic_visit(node)
 
     def _check_base_classes_count(self, node: ast.ClassDef) -> None:
@@ -114,6 +116,30 @@ class WrongClassVisitor(base.BaseNodeVisitor):
 
             return len(subscripts) == 1 and correct_items
         return False
+
+    def _check_getters_setters_methods(self, node: ast.ClassDef) -> None:
+        class_attributes, instance_attributes = classes.get_attributes(
+            node,
+            include_annotated=True,
+        )
+        flat_class_attributes = name_nodes.flat_variable_names(class_attributes)
+
+        attributes_stripped = {
+            class_attribute.lstrip('_')
+            for class_attribute in flat_class_attributes
+        }.union({
+            instance.attr.lstrip('_')
+            for instance in instance_attributes
+        })
+
+        for method in classes.find_getters_and_setters(node):
+            if method.name[classes.GETTER_LENGTH:] in attributes_stripped:
+                self.add_violation(
+                    oop.UnpythonicGetterSetterViolation(
+                        method,
+                        text=method.name,
+                    ),
+                )
 
 
 @final
@@ -345,7 +371,10 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_attributes_shadowing(self, node: ast.ClassDef) -> None:
-        class_attributes, instance_attributes = classes.get_attributes(node)
+        class_attributes, instance_attributes = classes.get_attributes(
+            node,
+            include_annotated=False,
+        )
         class_attribute_names = set(
             name_nodes.flat_variable_names(class_attributes),
         )

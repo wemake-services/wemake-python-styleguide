@@ -40,6 +40,7 @@ Semantic versioning in our case means:
 - Forbids to use empty comment
 - Forbids using bitwise operation with boolean operation
 - Forbids inconsistent structuring of multiline comprehensions
+- Forbids to use unpythonic getters and setters such as `get_attribute` or `set_attribute`
 
 ### Bugfixes
 

@@ -715,6 +715,18 @@ extra_new_line = [  # noqa: WPS355
 *numbers, = [4, 7]  # noqa: WPS356, WPS460
 [first_number, second_number] = [4, 7]  # noqa: WPS359
 
+
+class AttributeGetter(object):
+    def __init__(self):
+        self.attribute = 1
+
+    def get_attribute(self):  # noqa: WPS615
+        return self  # this is not important
+
+    def set_attribute(self):  # noqa: WPS615
+        anti_wps = ...
+
+
 for element in range(10):
     try:  # noqa: WPS452
         my_print(1)
