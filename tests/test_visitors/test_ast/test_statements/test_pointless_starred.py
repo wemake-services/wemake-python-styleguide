@@ -17,6 +17,8 @@ from wemake_python_styleguide.visitors.ast.statements import (
     'print(*(1, 2))',
     'print(*{1, 2})',
     'print(**{"end": " "})',
+    'print(*"end")',
+    'print(*b"end")',
 ])
 def test_pointless_starred_arg(
     assert_errors,

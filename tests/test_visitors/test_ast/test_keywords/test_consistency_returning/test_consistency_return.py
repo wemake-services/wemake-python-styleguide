@@ -164,7 +164,7 @@ def test_wrong_return_statement(
     double_wrong_return1,
     double_wrong_return2,
 ])
-def test_douple_wrong_return_statement(
+def test_double_wrong_return_statement(
     assert_errors,
     parse_ast_tree,
     default_options,

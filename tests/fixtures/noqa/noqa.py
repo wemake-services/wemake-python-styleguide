@@ -715,6 +715,18 @@ extra_new_line = [  # noqa: WPS355
 *numbers, = [4, 7]  # noqa: WPS356, WPS460
 [first_number, second_number] = [4, 7]  # noqa: WPS359
 
+
+class AttributeGetter(object):
+    def __init__(self):
+        self.attribute = 1
+
+    def get_attribute(self):  # noqa: WPS615
+        return self  # this is not important
+
+    def set_attribute(self):  # noqa: WPS615
+        anti_wps = ...
+
+
 for element in range(10):
     try:  # noqa: WPS452
         my_print(1)
@@ -765,3 +777,11 @@ text
 
 def get_item():  # noqa: WPS463
     return  # noqa: WPS324
+
+bad_bitwise = True | True # noqa: WPS465
+
+matrix = [ # noqa: WPS361
+   some(number) for numbers in matrix # noqa: WPS361
+   for number in numbers # noqa: WPS361
+   if number > 0 # noqa: WPS361
+] # noqa: WPS361

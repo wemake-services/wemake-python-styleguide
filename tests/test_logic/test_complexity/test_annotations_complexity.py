@@ -22,11 +22,11 @@ from wemake_python_styleguide.logic.complexity import annotations
     # complex annotations
     ('Tuple[List[int], Optional[Dict[str, int]]]', 4),
 ])
-def test_get_annotation_compexity(
+def test_get_annotation_complexity(
     parse_ast_tree, annotation: str, complexity: int,
 ) -> None:
-    """Test get_annotation_compexity function."""
+    """Test get_annotation_complexity function."""
     text = 'def f() -> {annotation}: pass\n'.format(annotation=annotation)
     tree = parse_ast_tree(text)
     node = tree.body[0].returns
-    assert annotations.get_annotation_compexity(node) == complexity
+    assert annotations.get_annotation_complexity(node) == complexity

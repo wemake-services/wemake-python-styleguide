@@ -84,6 +84,7 @@ Summary
    FloatZeroViolation
    UnpackingIterableToListViolation
    RawStringNotNeededViolation
+   InconsistentComprehensionViolation
 
 Consistency checks
 ------------------
@@ -149,6 +150,7 @@ Consistency checks
 .. autoclass:: FloatZeroViolation
 .. autoclass:: UnpackingIterableToListViolation
 .. autoclass:: RawStringNotNeededViolation
+.. autoclass:: InconsistentComprehensionViolation
 
 """
 
@@ -1485,7 +1487,7 @@ class ExplicitStringConcatViolation(ASTViolation):
     as a way to write long strings that does not fit the 80-chars rule.
 
     Reasoning:
-        When formating strings one must use ``.format``
+        When formatting strings one must use ``.format``
         and not any other formatting methods like ``%``, ``+``, or ``f``.
         This is done for consistency reasons.
 
@@ -1764,7 +1766,7 @@ class MeaninglessNumberOperationViolation(ASTViolation):
     Forbid meaningless math operations with ``0`` and ``1``.
 
     Reasoning:
-        Adding and substracting zero does not change the value.
+        Adding and subtracting zero does not change the value.
         There's no need to do that.
         Multiplying by zero is also redundant:
         it can be replaced with explicit ``0`` assign.
@@ -1850,7 +1852,7 @@ class VagueImportViolation(ASTViolation):
         See ``datetime.*`` in code? You know that it's from datetime.
         See ``BaseView`` in a Django project? You know where it is from.
         See ``loads``? It can be anything: ``yaml``, ``toml``, ``json``, etc.
-        We are also enforcing consitency with our naming too-short rules here.
+        We are also enforcing consistency with our naming too-short rules here.
 
     Solution:
         Use package level imports or import aliases.
@@ -1884,7 +1886,7 @@ class LineStartsWithDotViolation(TokenizeViolation):
     Forbid starting lines with a dot.
 
     Reasoning:
-        We enforce strict consitency rules about how to break lines.
+        We enforce strict consistency rules about how to break lines.
         We also enforce strict rules about multi-line parameters.
         Starting new lines with the dot means that this rule is broken.
 
@@ -2038,7 +2040,7 @@ class IncorrectYieldFromTargetViolation(ASTViolation):
     names, attributes, calls, and subscripts.
 
     Reasoning:
-        We enforce consitency when yielding values
+        We enforce consistency when yielding values
         from tuple instead of any other types.
         It also might be an error when you try to ``yield from`` something
         that is not iterable.
@@ -2257,3 +2259,40 @@ class RawStringNotNeededViolation(TokenizeViolation):
 
     error_template = 'Found an unnecessary use of a raw string: {0}'
     code = 360
+
+
+@final
+class InconsistentComprehensionViolation(TokenizeViolation):
+    """
+    Forbids inconsistent newlines in comprehensions.
+
+    Reasoning:
+        We do this for consistency.
+
+    Solution:
+        Either place comprehension on a single line or ensure that action,
+        for loops, and condition are all on different lines.
+
+    Example::
+
+        # Correct:
+        list = [some(number) for number in numbers]
+
+        list = [
+           some(number)
+           for numbers in matrix
+           for number in numbers
+           if number > 0
+        ]
+
+        # Wrong:
+        list = [
+            some(number) for number in numbers
+            if number > 0
+        ]
+
+    .. versionadded:: 0.15.0
+    """
+
+    error_template = 'Found an inconsistently structured comprehension'
+    code = 361

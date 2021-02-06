@@ -383,7 +383,7 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
 
 @final
 class ConstantKeywordVisitor(BaseNodeVisitor):
-    """Visits keyword definitions to detect contant conditions."""
+    """Visits keyword definitions to detect constant conditions."""
 
     _forbidden_nodes: ClassVar[AnyNodes] = (
         ast.NameConstant,

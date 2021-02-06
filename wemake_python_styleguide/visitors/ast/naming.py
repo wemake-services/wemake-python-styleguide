@@ -371,7 +371,11 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
         node: AnyAssign,
         names: List[str],
     ) -> None:
-        for used_name, count in Counter(names).items():
+        used_names = filter(
+            lambda assigned_name: not access.is_unused(assigned_name),
+            names,
+        )
+        for used_name, count in Counter(used_names).items():
             if count > 1:
                 self.add_violation(
                     best_practices.ReassigningVariableToItselfViolation(
@@ -390,14 +394,14 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
     'visit_For',
     'visit_AsyncFor',
 ))
-class UnusedVaribaleDefinitionVisitor(BaseNodeVisitor):
+class UnusedVariableDefinitionVisitor(BaseNodeVisitor):
     """Checks how variables are used."""
 
     def visit_any_assign(self, node: AnyAssignWithWalrus) -> None:
         """
         Checks that we cannot assign explicit unused variables.
 
-        We do not check assignes inside modules and classes,
+        We do not check assigns inside modules and classes,
         since there ``_`` prefixed variable means
         that it is protected, not unused.
 
