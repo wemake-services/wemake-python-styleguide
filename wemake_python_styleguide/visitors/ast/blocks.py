@@ -258,14 +258,14 @@ class AfterBlockVariablesVisitor(base.BaseNodeVisitor):
         is_contained_block_var = any(
             is_contained_by(node, block) for block in blocks
         )
-        # restrict the use of block variables with the same name to
-        # the same type of block - either for or with
+        # Restrict the use of block variables with the same name to
+        # the same type of block - either `for` or `with`.
         is_same_type_block = all(
-            isinstance(block, (ast.For, ast.AsyncFor)) for block in blocks
+            isinstance(block, AnyFor) for block in blocks
         ) or all(
-            isinstance(block, (ast.With, ast.AsyncWith)) for block in blocks
+            isinstance(block, AnyWith) for block in blocks
         )
-        # return if not a block variable or a contained block variable
+        # Return if not a block variable or a contained block variable.
         if not blocks or (is_contained_block_var and is_same_type_block):
             return
 
