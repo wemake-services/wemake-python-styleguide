@@ -31,6 +31,7 @@ from wemake_python_styleguide.logic.tree import (
     functions,
     operators,
     strings,
+    variables,
 )
 from wemake_python_styleguide.types import (
     AnyChainable,
@@ -420,18 +421,15 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
     def _check_unpacking_targets(
         self,
         node: ast.AST,
-        targets: Iterable[ast.AST],
+        targets: List[ast.expr],
     ) -> None:
-        targets = tuple(targets)
-
         if len(targets) == 1:
             self.add_violation(
                 best_practices.SingleElementDestructuringViolation(node),
             )
 
         for target in targets:
-            target_name = extract_name(target)
-            if target_name is None:  # it means, that non name node was used
+            if not variables.is_valid_unpacking_target(target):
                 self.add_violation(
                     best_practices.WrongUnpackingViolation(node),
                 )

@@ -11,7 +11,7 @@ from wemake_python_styleguide.compat.aliases import (
 from wemake_python_styleguide.logic import walk
 from wemake_python_styleguide.logic.naming import name_nodes
 from wemake_python_styleguide.logic.nodes import get_parent
-from wemake_python_styleguide.logic.tree import keywords, operators
+from wemake_python_styleguide.logic.tree import keywords, operators, variables
 from wemake_python_styleguide.logic.tree.exceptions import get_exception_name
 from wemake_python_styleguide.logic.tree.variables import (
     is_valid_block_variable_definition,
