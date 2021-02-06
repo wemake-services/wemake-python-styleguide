@@ -4,6 +4,7 @@
 #
 # This file can be modified at any time by the project lead
 # without any notices. And it is not ever a breaking change.
+# This file is included into wemake-preset.
 
 ["setup.cfg".flake8]
 format = "wemake"

@@ -1,3 +1,15 @@
+# `nitpick` specific configuration.
+# `nitpick` ensures that you have the same configuration
+# in your own project.
+
+# Make sure to install it with:
+# `pip install nitpick`
+
+# See:
+# https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/nitpick
+
+# This file is included into wemake-preset.
+
 [nitpick.files.absent]
 "requirements.txt" = "Install poetry, run 'poetry init' to create pyproject.toml, and move dependencies to it"
 "Pipfile" = "Use pyproject.toml instead"
@@ -7,7 +19,8 @@
 ".flake8" = "Move values to setup.cfg, section [flake8]"
 "mypy.ini" = "Move values to setup.cfg, section [mypy]"
 
-".pyup.yml" = "Configure .travis.yml with safety instead: https://github.com/pyupio/safety#using-safety-with-a-ci-service"
+".travis.yml" = "Travis is shutting down, please switch to some other CI service"
+".pyup.yml" = "Configure your CI with safety instead: https://github.com/pyupio/safety#using-safety-with-a-ci-service"
 
 
 [nitpick.files.present]
