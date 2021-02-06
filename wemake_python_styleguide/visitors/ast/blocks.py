@@ -4,6 +4,7 @@ from typing import Callable, DefaultDict, List, Set, Tuple, Union, cast
 
 from typing_extensions import final
 
+from wemake_python_styleguide.compat.aliases import ForNodes, WithNodes
 from wemake_python_styleguide.compat.types import AnyAssignWithWalrus
 from wemake_python_styleguide.logic.naming.name_nodes import flat_variable_names
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
@@ -261,9 +262,9 @@ class AfterBlockVariablesVisitor(base.BaseNodeVisitor):
         # Restrict the use of block variables with the same name to
         # the same type of block - either `for` or `with`.
         is_same_type_block = all(
-            isinstance(block, AnyFor) for block in blocks
+            isinstance(block, ForNodes) for block in blocks
         ) or all(
-            isinstance(block, AnyWith) for block in blocks
+            isinstance(block, WithNodes) for block in blocks
         )
         # Return if not a block variable or a contained block variable.
         if not blocks or (is_contained_block_var and is_same_type_block):
