@@ -26,11 +26,8 @@ Summary
    YieldMagicMethodViolation
    UselessOverwrittenMethodViolation
    WrongSuperCallAccessViolation
-<<<<<<< HEAD
-   UnpythonicGetterSetterViolation
-=======
    WrongDescriptorDecoratorViolation
->>>>>>> master
+   UnpythonicGetterSetterViolation
 
 Respect your objects
 --------------------
@@ -49,11 +46,8 @@ Respect your objects
 .. autoclass:: YieldMagicMethodViolation
 .. autoclass:: UselessOverwrittenMethodViolation
 .. autoclass:: WrongSuperCallAccessViolation
-<<<<<<< HEAD
-.. autoclass:: UnpythonicGetterSetterViolation
-=======
 .. autoclass:: WrongDescriptorDecoratorViolation
->>>>>>> master
+.. autoclass:: UnpythonicGetterSetterViolation
 
 """
 

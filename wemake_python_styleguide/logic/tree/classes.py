@@ -98,7 +98,8 @@ def _get_instance_attribute(node: ast.AST) -> Optional[ast.Attribute]:
 
 
 def _get_class_attribute(
-    node: ast.ClassDef, subnode: ast.AST,
+    node: ast.ClassDef,
+    subnode: ast.AST,
 ) -> Optional[AnyAssign]:
     return subnode if (
         nodes.get_context(subnode) == node and
@@ -108,16 +109,17 @@ def _get_class_attribute(
 
 
 def _get_annotated_class_attribute(
-    node: ast.ClassDef, subnode: ast.AST,
+    node: ast.ClassDef,
+    subnode: ast.AST,
 ) -> Optional[AnyAssign]:
-    return subnode if (
-        nodes.get_context(subnode) == node and
-        (
+    if nodes.get_context(subnode) == node:
+        is_assign = (
             getattr(subnode, 'value', None) and
             isinstance(subnode, AssignNodes)
-        ) or
-        isinstance(subnode, ast.AnnAssign)
-    ) else None
+        ) or isinstance(subnode, ast.AnnAssign)
+        if is_assign:
+            return subnode
+    return None
 
 
 def find_getters_and_setters(node: ast.ClassDef) -> Iterable[AnyFunctionDef]:
