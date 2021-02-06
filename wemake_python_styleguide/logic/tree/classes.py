@@ -1,5 +1,7 @@
 import ast
-from typing import List, Optional, Set, Tuple, Final
+from typing import Iterable, List, Optional, Tuple
+
+from typing_extensions import Final
 
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
 from wemake_python_styleguide.constants import ALLOWED_BUILTIN_CLASSES
