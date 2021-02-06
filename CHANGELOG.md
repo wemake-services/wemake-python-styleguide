@@ -55,6 +55,8 @@ Semantic versioning in our case means:
 - Fixes false negative WPS421 with `pprint.pprint`
 - Fixes WPS441 triggering when reusing variable names in multiple loops
 - Fixes false positive ImplicitEnumerateViolation on range with step #1742
+- Allows to use `_` to declare several unused variables,
+  like: `x, _, _ = coordinates()`
 
 ### Misc
 
