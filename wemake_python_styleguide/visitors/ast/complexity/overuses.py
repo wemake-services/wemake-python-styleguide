@@ -101,10 +101,10 @@ class ExpressionOveruseVisitor(base.BaseNodeVisitor):
         ast.Assert,
         ast.BoolOp,
         ast.BinOp,
+        ast.UnaryOp,
         ast.Call,
         ast.Compare,
         ast.Subscript,
-        ast.UnaryOp,
         ast.Lambda,
 
         ast.DictComp,
@@ -124,6 +124,7 @@ class ExpressionOveruseVisitor(base.BaseNodeVisitor):
         overuses.is_class_context,
         overuses.is_super_call,
         overuses.is_primitive,
+        overuses.is_unary_minus,
     )
 
     _msg: ClassVar[str] = '{0}; used {1}'

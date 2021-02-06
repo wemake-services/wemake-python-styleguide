@@ -58,6 +58,7 @@ Semantic versioning in our case means:
 - Allows to use `_` to declare several unused variables,
   like: `x, _, _ = coordinates()`
 - Fixes that `*'abc'` was not counted as pointless star expression
+- Fixes that `-some` was counted as overused expression
 
 ### Misc
 
