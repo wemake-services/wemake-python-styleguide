@@ -1,5 +1,5 @@
 import ast
-from typing import ClassVar, Dict, List, Optional, Type, Union, cast
+from typing import ClassVar, Dict, FrozenSet, List, Optional, Type, Union, cast
 
 from typing_extensions import final
 
@@ -18,6 +18,7 @@ from wemake_python_styleguide.logic.tree.variables import (
 )
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, AnyWith
 from wemake_python_styleguide.violations.best_practices import (
+    BaseExceptionRaiseViolation,
     ContextManagerVariableDefinitionViolation,
     RaiseNotImplementedViolation,
     WrongKeywordConditionViolation,
@@ -45,6 +46,11 @@ _ReturningViolations = Union[
 class WrongRaiseVisitor(BaseNodeVisitor):
     """Finds wrong ``raise`` keywords."""
 
+    _base_exceptions: ClassVar[FrozenSet[str]] = frozenset((
+        'Exception',
+        'BaseException',
+    ))
+
     def visit_Raise(self, node: ast.Raise) -> None:
         """
         Checks how ``raise`` keyword is used.
@@ -60,6 +66,10 @@ class WrongRaiseVisitor(BaseNodeVisitor):
         exception_name = get_exception_name(node)
         if exception_name == 'NotImplemented':
             self.add_violation(RaiseNotImplementedViolation(node))
+        elif exception_name in self._base_exceptions:
+            self.add_violation(
+                BaseExceptionRaiseViolation(node, text=exception_name),
+            )
 
 
 @final
@@ -110,7 +120,14 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
             isinstance(node.value, ast.NameConstant) and
             node.value.value is None
         )
-        if node.value is None or last_value_return:
+
+        one_return_with_none = (
+            returns == 1 and
+            isinstance(node.value, ast.NameConstant) and
+            node.value.value is None
+        )
+
+        if node.value is None or last_value_return or one_return_with_none:
             self.add_violation(InconsistentReturnViolation(node))
 
     def _iterate_returning_values(
@@ -366,7 +383,7 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
 
 @final
 class ConstantKeywordVisitor(BaseNodeVisitor):
-    """Visits keyword definitions to detect contant conditions."""
+    """Visits keyword definitions to detect constant conditions."""
 
     _forbidden_nodes: ClassVar[AnyNodes] = (
         ast.NameConstant,

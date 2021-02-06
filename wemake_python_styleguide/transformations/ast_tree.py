@@ -65,7 +65,7 @@ def transform(tree: ast.AST) -> ast.AST:
     """
     Mutates the given ``ast`` tree.
 
-    Applies all possible tranformations.
+    Applies all possible transformations.
 
     Ordering:
     - initial ones
@@ -87,6 +87,6 @@ def transform(tree: ast.AST) -> ast.AST:
         set_if_chain,
     )
 
-    for tranformation in pipeline:
-        tree = tranformation(tree)
+    for transformation in pipeline:
+        tree = transformation(tree)
     return tree

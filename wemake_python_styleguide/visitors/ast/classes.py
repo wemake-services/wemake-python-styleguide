@@ -122,21 +122,22 @@ class WrongClassVisitor(base.BaseNodeVisitor):
             node,
             include_annotated=True,
         )
+        flat_class_attributes = name_nodes.flat_variable_names(class_attributes)
 
         attributes_stripped = {
-            class_attribute.lstrip('_') for class_attribute
-            in name_nodes.flat_variable_names(class_attributes)
+            class_attribute.lstrip('_')
+            for class_attribute in flat_class_attributes
         }.union({
-            instance.attr.lstrip('_') for instance
-            in instance_attributes
+            instance.attr.lstrip('_')
+            for instance in instance_attributes
         })
 
-        for method_postfix in classes.getter_setter_postfixes(node):
-            if any(name == method_postfix for name in attributes_stripped):
+        for method in classes.find_getters_and_setters(node):
+            if method.name[classes.GETTER_LENGTH:] in attributes_stripped:
                 self.add_violation(
                     oop.UnpythonicGetterSetterViolation(
-                        node,
-                        text=node.name,
+                        method,
+                        text=method.name,
                     ),
                 )
 
@@ -419,9 +420,10 @@ class ClassMethodOrderVisitor(base.BaseNodeVisitor):
 
     def _ideal_order(self, first: str) -> int:
         base_methods_order = {
-            '__new__': 5,  # highest priority
-            '__init__': 4,
-            '__call__': 3,
+            '__new__': 6,  # highest priority
+            '__init__': 5,
+            '__call__': 4,
+            '__await__': 3,
         }
         public_and_magic_methods_priority = 2
 

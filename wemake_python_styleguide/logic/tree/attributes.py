@@ -1,7 +1,7 @@
 import ast
 from typing import Iterable, Optional
 
-from wemake_python_styleguide.types import AnyAccess
+from wemake_python_styleguide.types import AnyChainable
 
 
 def _chained_item(iterator: ast.AST) -> Optional[ast.AST]:
@@ -12,9 +12,9 @@ def _chained_item(iterator: ast.AST) -> Optional[ast.AST]:
     return None
 
 
-def parts(node: AnyAccess) -> Iterable[ast.AST]:
+def parts(node: AnyChainable) -> Iterable[ast.AST]:
     """
-    Returns all ``.`` separated elements for attributes and subscripts.
+    Returns all ``.`` separated elements for attributes, subscripts and calls.
 
     Attributes might be complex:
 

@@ -1,8 +1,6 @@
 import pytest
 
-from wemake_python_styleguide.violations.best_practices import (
-    FloatKeyViolation,
-)
+from wemake_python_styleguide.violations.best_practices import FloatKeyViolation
 from wemake_python_styleguide.visitors.ast.subscripts import CorrectKeyVisitor
 
 usage_template = 'some_dict[{0}]'

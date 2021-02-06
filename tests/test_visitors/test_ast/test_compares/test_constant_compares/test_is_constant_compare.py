@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.refactoring import (
     FalsyConstantCompareViolation,
     WrongIsCompareViolation,
@@ -8,7 +9,7 @@ from wemake_python_styleguide.visitors.ast.compares import (
     WrongConstantCompareVisitor,
 )
 
-wrong_comparators = (
+wrong_comparators = [
     ('some', '[1, 2]'),
     ('some', '{}'),  # noqa: P103
     ('some', '()'),
@@ -32,7 +33,13 @@ wrong_comparators = (
     ('{1, 2}', 'some'),
     ('()', 'some'),
     ('"test"', 'some'),
-)
+]
+
+if PY38:
+    wrong_comparators.extend([
+        ('(x := some())', '"abc"'),
+        ('(x := "abc")', 'some()'),
+    ])
 
 
 @pytest.mark.filterwarnings('ignore::SyntaxWarning')
@@ -44,7 +51,7 @@ def test_wrong_constant_is(
     is_conditions,
     default_options,
 ):
-    """Testing that compares with falsy contants are not allowed."""
+    """Testing that compares with falsy constants are not allowed."""
     tree = parse_ast_tree(is_conditions.format(*comparators))
 
     visitor = WrongConstantCompareVisitor(default_options, tree=tree)
@@ -76,7 +83,7 @@ def test_correct_constant_is(
     is_conditions,
     default_options,
 ):
-    """Testing that compares with falsy contants are not allowed."""
+    """Testing that compares with falsy constants are not allowed."""
     tree = parse_ast_tree(is_conditions.format(*comparators))
 
     visitor = WrongConstantCompareVisitor(default_options, tree=tree)

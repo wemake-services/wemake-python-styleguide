@@ -90,6 +90,7 @@ def test_magic_statement(
 ])
 @pytest.mark.parametrize('method', [
     '__iter__',
+    '__call__',
     '__custom__',
 ])
 @pytest.mark.parametrize('statement', [
@@ -105,7 +106,7 @@ def test_iter_generator(
     method,
     statement,
 ):
-    """Testing that magic `iter` method with `yield` is allowed."""
+    """Testing that magic `iter` and `call` methods with `yield` are allowed."""
     tree = parse_ast_tree(code.format(method, statement))
 
     visitor = WrongMethodVisitor(default_options, tree=tree)

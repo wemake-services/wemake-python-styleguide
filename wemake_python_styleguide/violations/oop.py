@@ -1,7 +1,7 @@
 """
 These checks ensures that you use Python's version of OOP correctly.
 
-There are different gotchas in Python to write beatiful classes
+There are different gotchas in Python to write beautiful classes
 and using objects correctly. That's the place we collect these kind of rules.
 
 .. currentmodule:: wemake_python_styleguide.violations.oop
@@ -26,7 +26,11 @@ Summary
    YieldMagicMethodViolation
    UselessOverwrittenMethodViolation
    WrongSuperCallAccessViolation
+<<<<<<< HEAD
    UnpythonicGetterSetterViolation
+=======
+   WrongDescriptorDecoratorViolation
+>>>>>>> master
 
 Respect your objects
 --------------------
@@ -45,7 +49,11 @@ Respect your objects
 .. autoclass:: YieldMagicMethodViolation
 .. autoclass:: UselessOverwrittenMethodViolation
 .. autoclass:: WrongSuperCallAccessViolation
+<<<<<<< HEAD
 .. autoclass:: UnpythonicGetterSetterViolation
+=======
+.. autoclass:: WrongDescriptorDecoratorViolation
+>>>>>>> master
 
 """
 
@@ -57,7 +65,7 @@ from wemake_python_styleguide.violations.base import ASTViolation
 @final
 class BuiltinSubclassViolation(ASTViolation):
     """
-    Forbids to subclass lowercase builtins.
+    Forbid subclassing lowercase builtins.
 
     We forbid to subclass builtins like ``int``, ``str``, ``bool``, etc.
     We allow to subclass ``object`` and ``type``, warnings, and exceptions.
@@ -96,12 +104,15 @@ class BuiltinSubclassViolation(ASTViolation):
 @final
 class ShadowedClassAttributeViolation(ASTViolation):
     """
-    Forbids to shadow class level attributes with instance level attributes.
+    Forbid shadowing class level attributes with instance level attributes.
 
     Reasoning:
         This way you will have two attributes inside your ``__mro__`` chain:
         one from instance and one from class. It might cause errors.
         Needless to say, that this is just pointless to do so.
+
+        Also, if you ever want to optimise your code with a tool like `mypyc`_,
+        this rule is a requirement.
 
     Solution:
         Use either class attributes or instance attributes.
@@ -135,6 +146,7 @@ class ShadowedClassAttributeViolation(ASTViolation):
     .. versionadded:: 0.10.0
     .. versionchanged:: 0.11.0
     .. versionchanged:: 0.14.0
+    .. _mypyc: https://github.com/python/mypy/tree/master/mypyc
 
     """
 
@@ -146,7 +158,7 @@ class ShadowedClassAttributeViolation(ASTViolation):
 @final
 class StaticMethodViolation(ASTViolation):
     """
-    Forbids to use ``@staticmethod`` decorator.
+    Forbid ``@staticmethod`` decorator.
 
     Reasoning:
         Static methods are not required to be inside the class.
@@ -168,7 +180,7 @@ class StaticMethodViolation(ASTViolation):
 @final
 class BadMagicMethodViolation(ASTViolation):
     """
-    Forbids to use some magic methods.
+    Forbid certain magic methods.
 
     Reasoning:
         We forbid to use magic methods related to the forbidden language parts.
@@ -199,7 +211,7 @@ class BadMagicMethodViolation(ASTViolation):
 @final
 class WrongClassBodyContentViolation(ASTViolation):
     """
-    Forbids to use incorrect nodes inside ``class`` definitions.
+    Forbid incorrect nodes inside ``class`` definitions.
 
     Reasoning:
         Python allows us to have conditions, context managers,
@@ -236,7 +248,7 @@ class WrongClassBodyContentViolation(ASTViolation):
 @final
 class MethodWithoutArgumentsViolation(ASTViolation):
     """
-    Forbids to have methods without any arguments.
+    Forbid methods without any arguments.
 
     Reasoning:
         Methods without arguments are allowed to be defined,
@@ -272,7 +284,7 @@ class MethodWithoutArgumentsViolation(ASTViolation):
 @final
 class WrongBaseClassViolation(ASTViolation):
     """
-    Forbids to have anything else than a class as a base class.
+    Forbid anything other than a class as a base class.
 
     We only check base classes and not keywords. They can be anything you need.
 
@@ -310,7 +322,7 @@ class WrongBaseClassViolation(ASTViolation):
 @final
 class WrongSlotsViolation(ASTViolation):
     """
-    Forbids to have incorrect ``__slots__`` definition.
+    Forbid incorrect ``__slots__`` definition.
 
     Things that this rule checks:
 
@@ -358,7 +370,7 @@ class WrongSlotsViolation(ASTViolation):
 @final
 class WrongSuperCallViolation(ASTViolation):
     """
-    Forbids to use ``super()`` with parameters or outside of methods.
+    Forbid ``super()`` with parameters or outside of methods.
 
     Reasoning:
         ``super()`` is a very special function.
@@ -390,7 +402,7 @@ class WrongSuperCallViolation(ASTViolation):
 @final
 class DirectMagicAttributeAccessViolation(ASTViolation):
     """
-    Forbids to use direct magic attributes and methods.
+    Forbid direct magic attributes and methods.
 
     Reasoning:
         When using direct magic attributes or method
@@ -426,7 +438,7 @@ class DirectMagicAttributeAccessViolation(ASTViolation):
 @final
 class AsyncMagicMethodViolation(ASTViolation):
     """
-    Forbids to make some magic methods async.
+    Forbid certain async magic methods.
 
     We allow to make ``__anext__``, ``__aenter__``, ``__aexit__`` async.
     We also allow custom magic methods to be async.
@@ -466,7 +478,7 @@ class AsyncMagicMethodViolation(ASTViolation):
 @final
 class YieldMagicMethodViolation(ASTViolation):
     """
-    Forbids to use ``yield`` inside of several magic methods.
+    Forbid ``yield`` inside of certain magic methods.
 
     We allow to make ``__iter__`` a generator.
     See
@@ -511,7 +523,7 @@ class YieldMagicMethodViolation(ASTViolation):
 @final
 class UselessOverwrittenMethodViolation(ASTViolation):
     """
-    Forbids to have useless overwritten methods.
+    Forbid useless overwritten methods.
 
     Reasoning:
         Overwriting method without any changes
@@ -546,7 +558,7 @@ class UselessOverwrittenMethodViolation(ASTViolation):
 @final
 class WrongSuperCallAccessViolation(ASTViolation):
     """
-    Forbids to use ``super()`` with incorrect methods or properties access.
+    Forbid ``super()`` with incorrect method or property access.
 
     Reasoning:
         Can only use ``super()`` method that matches the following context.
@@ -577,6 +589,44 @@ class WrongSuperCallAccessViolation(ASTViolation):
         'Found incorrect `super()` call context: incorrect name access'
     )
     code = 613
+
+
+@final
+class WrongDescriptorDecoratorViolation(ASTViolation):
+    """
+    Forbids descriptors in regular functions.
+
+    Forbids using `@staticmethod`, ``@classmethod`` and ``@property`` for
+    functions not in class.
+
+    Reasoning:
+        Descriptors like @staticmethod, @classmethod and @property do magic
+        only as methods. We would want to warn users if the descriptors are
+        used on regular functions.
+
+    Solution:
+        Do not use @staticmethod, @classmethod and @property on regular
+        functions or wrap the functions into a Class.
+
+    Example::
+
+        # Correct:
+        class TestClass(object):
+            @property
+            def my_method():
+                ...
+
+        # Wrong:
+        @property
+        def my_function():
+            ...
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found descriptor applied on a function'
+    code = 614
 
 
 @final
@@ -611,11 +661,7 @@ class UnpythonicGetterSetterViolation(ASTViolation):
 
     .. versionadded:: 0.15.0
 
-    See also:
-        https://docs.python.org/3/library/functions.html#property
-        https://stackoverflow.com/a/36943813
-
     """
 
-    error_template = 'Found unpythonic getter (or setter)'
-    code = 614
+    error_template = 'Found unpythonic getter or setter'
+    code = 615

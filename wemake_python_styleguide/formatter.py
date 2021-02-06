@@ -9,7 +9,7 @@ That's how all ``flake8`` formatters work:
     graph LR
         F2[start]  --> F3[after_init]
         F3         --> F4[start]
-        F4         --> F5[beggining]
+        F4         --> F5[beginning]
         F5         --> F6[handle]
         F6         --> F7[format]
         F6	       --> F8[show_source]
@@ -69,19 +69,19 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
         self._formatter = TerminalFormatter()
 
         # Logic:
-        self._proccessed_filenames: List[str] = []
+        self._processed_filenames: List[str] = []
         self._error_count = 0
 
     def handle(self, error: Violation) -> None:  # noqa: WPS110
         """Processes each :term:`violation` to print it and all related."""
-        if error.filename not in self._proccessed_filenames:
+        if error.filename not in self._processed_filenames:
             self._print_header(error.filename)
-            self._proccessed_filenames.append(error.filename)
+            self._processed_filenames.append(error.filename)
 
         super().handle(error)
         self._error_count += 1
 
-    def format(self, error: Violation) -> str:  # noqa: A003
+    def format(self, error: Violation) -> str:  # noqa: WPS125
         """Called to format each individual :term:`violation`."""
         return '{newline}  {row_col:<8} {code:<5} {text}'.format(
             newline=self.newline if self._should_show_source(error) else '',
@@ -95,18 +95,18 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
         if not self._should_show_source(error):
             return ''
 
-        formated_line = error.physical_line.lstrip()
-        adjust = len(error.physical_line) - len(formated_line)
+        formatted_line = error.physical_line.lstrip()
+        adjust = len(error.physical_line) - len(formatted_line)
 
         code = _highlight(
-            formated_line,
+            formatted_line,
             self._lexer,
             self._formatter,
         )
 
-        return '  {code}  {pointer}^'.format(
+        return '  {code}  {spacing}^'.format(
             code=code,
-            pointer=' ' * (error.column_number - 1 - adjust),
+            spacing=' ' * (error.column_number - 1 - adjust),
         )
 
     def show_statistics(self, statistics: Statistics) -> None:  # noqa: WPS210

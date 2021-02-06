@@ -12,5 +12,8 @@ def test_call_flake8_version():
         encoding='utf8',
     )
 
+    assert pkg_name
+    assert pkg_version
+
     assert pkg_name in output_text
     assert pkg_version in output_text

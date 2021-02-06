@@ -4,7 +4,7 @@ from pyflakes.checker import Checker as PyFlakesChecker
 
 from wemake_python_styleguide.checker import Checker
 
-code_that_brakes = '''
+code_that_breaks = '''
 def current_session(
     telegram_id: int,
     for_update: bool = True,
@@ -38,7 +38,7 @@ def test_regression112(default_options):
 
     See: https://github.com/wemake-services/wemake-python-styleguide/issues/112
     """
-    module = ast.parse(code_that_brakes)
+    module = ast.parse(code_that_breaks)
     Checker.parse_options(default_options)
 
     # Now we create modifications to the tree:

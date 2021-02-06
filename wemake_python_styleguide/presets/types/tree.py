@@ -51,9 +51,10 @@ PRESET: Final = (
     functions.WrongFunctionCallVisitor,
     functions.FunctionDefinitionVisitor,
     functions.UselessLambdaDefinitionVisitor,
-    functions.WrongFunctionCallContextVisitior,
+    functions.WrongFunctionCallContextVisitor,
     functions.UnnecessaryLiteralsVisitor,
-    functions.PositionalOnlyArgumentsVisitor,
+    functions.FunctionSignatureVisitor,
+    functions.FloatingNanCallVisitor,
 
     exceptions.WrongTryExceptVisitor,
     exceptions.NestedTryBlocksVisitor,
@@ -64,23 +65,28 @@ PRESET: Final = (
     naming.WrongNameVisitor,
     naming.WrongModuleMetadataVisitor,
     naming.WrongVariableAssignmentVisitor,
-    naming.WrongVariableUsageVisitor,
+    naming.UnusedVariableUsageVisitor,
+    naming.UnusedVariableDefinitionVisitor,
 
     builtins.WrongNumberVisitor,
     builtins.WrongStringVisitor,
+    builtins.WrongFormatStringVisitor,
     builtins.WrongAssignmentVisitor,
     builtins.WrongCollectionVisitor,
 
     operators.UselessOperatorsVisitor,
     operators.WrongMathOperatorVisitor,
     operators.WalrusVisitor,
+    operators.BitwiseOpVisitor,
 
     compares.WrongConditionalVisitor,
     compares.CompareSanityVisitor,
-    compares.WrongComparisionOrderVisitor,
+    compares.WrongComparisonOrderVisitor,
     compares.UnaryCompareVisitor,
     compares.WrongConstantCompareVisitor,
     compares.InCompareSanityVisitor,
+    compares.WrongFloatComplexCompareVisitor,
+
 
     conditions.IfStatementVisitor,
     conditions.BooleanConditionVisitor,

@@ -8,20 +8,20 @@
 # https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/github-actions.html
 #
 # It can still be used as a raw image for your own containers.
-# See `action.yml` in case you want to learn more about Github Actions.
+# See `action.yml` in case you want to learn more about GitHub Actions.
 # See it live:
 # https://github.com/wemake-services/wemake-python-styleguide/actions
 #
 # This image is also available on Dockerhub:
 # https://hub.docker.com/r/wemakeservices/wemake-python-styleguide
 
-FROM python:3.7-alpine
+FROM python:3.8.6-alpine
 
 LABEL maintainer="sobolevn@wemake.services"
 LABEL vendor="wemake.services"
 
-ENV WPS_VERSION='0.13.2'
-ENV REVIEWDOG_VERSION='v0.9.15'
+ENV WPS_VERSION='0.14.1'
+ENV REVIEWDOG_VERSION='v0.11.0'
 
 RUN apk add --no-cache bash git wget
 RUN pip install "wemake-python-styleguide==$WPS_VERSION" \

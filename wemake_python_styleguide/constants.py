@@ -5,7 +5,7 @@ We add values here when we want to make them public.
 Or when a value is reused in several places.
 Then, we automatically have to add it here and document it.
 
-Other constants that are not used accross modules
+Other constants that are not used across modules
 and does not require to be documented can be defined where they are used.
 
 All values here must be documented with ``#:`` comments.
@@ -36,6 +36,7 @@ FUNCTIONS_BLACKLIST: Final = frozenset((
     # IO:
     'print',
     'pprint',
+    'pprint.pprint',
     'input',
     'breakpoint',
 
@@ -96,7 +97,7 @@ VARIABLE_NAMES_BLACKLIST: Final = frozenset((
     'params',
     'parameters',
 
-    # Confuseables:
+    # Confusables:
     'no',
     'true',
     'false',
@@ -105,6 +106,16 @@ VARIABLE_NAMES_BLACKLIST: Final = frozenset((
     'foo',
     'bar',
     'baz',
+))
+
+#: List of character sequences that are hard to read.
+UNREADABLE_CHARACTER_COMBINATIONS: Final = frozenset((
+    '1l',
+    '1I',
+    '0O',
+    'O0',
+    # Not included: 'lI', 'l1', 'Il'
+    # Because these names are quite common in real words.
 ))
 
 #: List of special names that are used only as first argument in methods.
@@ -243,7 +254,8 @@ MAGIC_METHODS_BLACKLIST: Final = frozenset((
 
 #: List of magic methods that are not allowed to be generators.
 YIELD_MAGIC_METHODS_BLACKLIST: Final = ALL_MAGIC_METHODS.difference({
-    # Allowed to be used with ``yield`` keyowrd:
+    # Allowed to be used with ``yield`` keyword:
+    '__call__',
     '__iter__',
 })
 
@@ -255,6 +267,7 @@ ASYNC_MAGIC_METHODS_BLACKLIST: Final = ALL_MAGIC_METHODS.difference({
     '__anext__',
     '__aenter__',
     '__aexit__',
+    '__call__',
 })
 
 #: List of builtin classes that are allowed to subclass.
@@ -267,6 +280,7 @@ ALLOWED_BUILTIN_CLASSES: Final = frozenset((
 NESTED_FUNCTIONS_WHITELIST: Final = frozenset((
     'decorator',
     'factory',
+    'wrapper',
 ))
 
 #: List of allowed ``__future__`` imports.
@@ -339,7 +353,7 @@ MATH_APPROXIMATE_CONSTANTS: Final = frozenset((
 ))
 
 #: List of vague method names that may cause confusion if imported as is:
-VAGUE_IMPORTS_BLACKLIST = frozenset((
+VAGUE_IMPORTS_BLACKLIST: Final = frozenset((
     'read',
     'write',
     'load',
@@ -366,11 +380,32 @@ LITERALS_BLACKLIST: Final = frozenset((
 ))
 
 #: List of functions in which arguments must be tuples.
-TUPLE_ARGUMENTS_METHODS = frozenset((
+TUPLE_ARGUMENTS_METHODS: Final = frozenset((
     'frozenset',
 ))
 
+#: Conditions that can appear in the ``if`` statement to allow nested imports.
+ALLOWED_NESTED_IMPORTS_CONDITIONS: Final = frozenset((
+    'TYPE_CHECKING',
+))
+
+#: List of commonly used aliases
+ALIAS_NAMES_WHITELIST: Final = frozenset((
+    'np',
+    'pd',
+    'df',
+    'plt',
+    'sns',
+    'tf',
+    'cv',
+))
+
 # Internal variables
+# ==================
+
+# Please, do not touch values beyond this line!
+# ---------------------------------------------
+
 # They are not publicly documented since they are not used by the end user.
 # But, we still need them to be defined here.
 
@@ -379,3 +414,9 @@ STDIN: Final = 'stdin'
 
 # Used to specify as a placeholder for `__init__`:
 INIT: Final = '__init__'
+
+# Used to determine when we are running on Windows:
+WINDOWS_OS: Final = 'nt'
+
+# Used as a placeholder for special `_` variable:
+UNUSED_PLACEHOLDER: Final = '_'

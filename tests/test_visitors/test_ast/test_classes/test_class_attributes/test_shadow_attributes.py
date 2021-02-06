@@ -15,6 +15,14 @@ class ClassWithAttrs(object):
         self.{1} = 2
 """
 
+class_annotated_attribute = """
+class ClassWithAttrs(object):
+    {0}: int = 0
+
+    def __init__(self) -> None:
+        self.{1} = 2
+"""
+
 class_attribute_logic = """
 class ClassWithAttrs(object):
     if some_flag:
@@ -98,6 +106,7 @@ regular_assigns = """
 
 @pytest.mark.parametrize('code', [
     class_attribute,
+    class_annotated_attribute,
     class_attribute_runtime,
     class_attribute_annotated,
     class_attribute_logic,
@@ -127,6 +136,7 @@ def test_incorrect_fields(
 
 @pytest.mark.parametrize('code', [
     class_attribute,
+    class_annotated_attribute,
     class_attribute_runtime,
     class_attribute_annotated,
     class_annotation,

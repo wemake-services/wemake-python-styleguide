@@ -122,7 +122,7 @@ def test_non_nested_ternary(
     wrong_compare4,
     wrong_compare5,
     wrong_compare6,
-    wrong_binop7,
+    wrong_compare7,
 
     wrong_boolop1,
     wrong_boolop2,

@@ -61,7 +61,7 @@ AnyFor = Union[ast.For, ast.AsyncFor]
 #: In case we need to work with any loop: sync, async, and while.
 AnyLoop = Union[AnyFor, ast.While]
 
-#: All diffrent comprehension types in one place.
+#: All different comprehension types in one place.
 AnyComprehension = Union[
     ast.ListComp,
     ast.DictComp,
@@ -71,9 +71,6 @@ AnyComprehension = Union[
 
 #: In cases we need to work with both sync and async context managers.
 AnyWith = Union[ast.With, ast.AsyncWith]
-
-#: Flake8 API format to return error messages.
-CheckResult = Tuple[int, int, str, type]
 
 #: Tuple of AST node types for declarative syntax.
 AnyNodes = Tuple[Type[ast.AST], ...]
@@ -94,8 +91,18 @@ AnyAccess = Union[
     ast.Subscript,
 ]
 
+#: In case we need to handle types that can be chained.
+AnyChainable = Union[
+    ast.Attribute,
+    ast.Subscript,
+    ast.Call,
+]
+
 #: We use this type to work with any text-like values. Related to `AnyText`.
 AnyTextPrimitive = Union[str, bytes]
+
+#: Flake8 API format to return error messages.
+CheckResult = Tuple[int, int, str, type]
 
 
 @final
@@ -107,7 +114,7 @@ class ConfigurationOptions(Protocol):
     It uses structural sub-typing, and does not represent any kind of a real
     class or structure.
 
-    We use ``@property`` decorator here instread of regular attributes,
+    We use ``@property`` decorator here instead of regular attributes,
     because we need to explicitly mark these atrtibutes as read-only.
 
     See also:
@@ -134,6 +141,10 @@ class ConfigurationOptions(Protocol):
 
     @property
     def nested_classes_whitelist(self) -> Tuple[str, ...]:
+        ...
+
+    @property
+    def forbidden_inline_ignore(self) -> Tuple[str, ...]:
         ...
 
     @property
@@ -226,6 +237,10 @@ class ConfigurationOptions(Protocol):
         ...
 
     @property
+    def max_raises(self) -> int:
+        ...
+
+    @property
     def max_cognitive_score(self) -> int:
         ...
 
@@ -243,4 +258,8 @@ class ConfigurationOptions(Protocol):
 
     @property
     def max_import_from_members(self) -> int:
+        ...
+
+    @property
+    def max_tuple_unpack_length(self) -> int:
         ...

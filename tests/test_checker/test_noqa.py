@@ -57,7 +57,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS100': 0,  # logically unacceptable.
     'WPS101': 0,  # logically unacceptable.
     'WPS102': 0,  # logically unacceptable.
-    'WPS110': 3,
+    'WPS110': 4,
     'WPS111': 1,
     'WPS112': 1,
     'WPS113': 1,
@@ -71,6 +71,8 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS121': 1,
     'WPS122': 1,
     'WPS123': 1,
+    'WPS124': 1,
+    'WPS125': 1,
 
     'WPS200': 0,  # logically unacceptable.
     'WPS201': 0,  # defined in ignored violations.
@@ -104,13 +106,16 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS233': 1,
     'WPS234': 1,
     'WPS235': 1,
+    'WPS236': 1,
+    'WPS237': 1,
+    'WPS238': 1,
 
     'WPS300': 1,
     'WPS301': 1,
     'WPS302': 1,
     'WPS303': 1,
     'WPS304': 1,
-    'WPS305': 1,
+    'WPS305': 2,
     'WPS306': 2,
     'WPS307': 0,  # defined in version specific table.
     'WPS308': 1,
@@ -129,7 +134,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS321': 1,
     'WPS322': 1,
     'WPS323': 1,
-    'WPS324': 1,
+    'WPS324': 2,
     'WPS325': 1,
     'WPS326': 1,
     'WPS327': 1,
@@ -163,6 +168,10 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS355': 1,
     'WPS356': 1,
     'WPS357': 0,  # logically unacceptable.
+    'WPS358': 1,
+    'WPS359': 1,
+    'WPS360': 1,
+    'WPS361': 1,
 
     'WPS400': 0,  # defined in ignored violations.
     'WPS401': 0,  # logically unacceptable.
@@ -218,6 +227,18 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS451': 0,  # defined in version specific table.
     'WPS452': 1,  # also defined in version specific table.
     'WPS453': 0,
+    'WPS454': 1,
+    'WPS455': 1,
+    'WPS456': 1,
+    'WPS457': 1,
+    'WPS458': 1,
+    'WPS459': 1,
+    'WPS460': 1,
+    'WPS461': 0,  # logically unacceptable.
+    'WPS462': 1,
+    'WPS463': 1,
+    'WPS464': 0,  # logically unacceptable.
+    'WPS465': 1,
 
     'WPS500': 1,
     'WPS501': 1,
@@ -250,6 +271,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS528': 1,
     'WPS529': 1,
     'WPS530': 1,
+    'WPS531': 1,
 
     'WPS600': 1,
     'WPS601': 1,
@@ -266,6 +288,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS612': 1,
     'WPS613': 1,
     'WPS614': 1,
+    'WPS615': 2,
 })
 
 # Violations which may be tweaked by `i_control_code` option:

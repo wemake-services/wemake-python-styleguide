@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.constants import MAGIC_NUMBERS_WHITELIST
 from wemake_python_styleguide.violations.best_practices import (
     MagicNumberViolation,
@@ -11,6 +12,7 @@ from wemake_python_styleguide.visitors.ast.builtins import WrongNumberVisitor
 assignment = 'constant = {0}'
 assignment_typed = 'constant: int = {0}'
 assignment_unary = 'constant = -{0}'
+walrus = '(constant := {0})'
 
 function_definition = """
 def function_name(param1, param2={0}):
@@ -72,6 +74,10 @@ some_dict[{0}]
     assignment,
     assignment_typed,
     assignment_unary,
+    pytest.param(
+        walrus,
+        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
+    ),
     function_definition,
     function_definition_typed,
     list_definition,
@@ -84,7 +90,7 @@ some_dict[{0}]
     -10,
     -3.5,
     0,
-    0.0,
+    float(0),
     0.1,
     0.5,
     -1.0,
@@ -130,7 +136,7 @@ def test_magic_number(
 @pytest.mark.parametrize('number', [
     *MAGIC_NUMBERS_WHITELIST,
     -0,
-    0.0,
+    float(0),
     1,
     5,
     10,

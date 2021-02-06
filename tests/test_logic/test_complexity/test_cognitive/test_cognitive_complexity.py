@@ -167,10 +167,10 @@ def enhance(tree):
     (complexity14_1, 14),
 ])
 def test_cognitive_complexity(
-    get_code_snippet_compexity,
+    get_code_snippet_complexity,
     mode,
     code,
     complexity,
 ):
     """Ensures that cognitive complexity count is correct."""
-    assert get_code_snippet_compexity(mode(code)) == complexity
+    assert get_code_snippet_complexity(mode(code)) == complexity

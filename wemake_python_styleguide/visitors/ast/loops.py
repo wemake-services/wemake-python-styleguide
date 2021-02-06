@@ -18,6 +18,7 @@ from wemake_python_styleguide.types import (
     AnyNodes,
 )
 from wemake_python_styleguide.violations.best_practices import (
+    InfiniteWhileLoopViolation,
     LambdaInsideLoopViolation,
     LoopVariableDefinitionViolation,
     YieldInComprehensionViolation,
@@ -122,6 +123,12 @@ class WrongComprehensionVisitor(base.BaseNodeVisitor):
 class WrongLoopVisitor(base.BaseNodeVisitor):
     """Responsible for examining loops."""
 
+    _breaks: ClassVar[AnyNodes] = (
+        ast.Break,
+        ast.Return,
+        ast.Raise,
+    )
+
     _containers: ClassVar[_ContainerSpec] = {
         ast.ListComp: ['elt'],
         ast.SetComp: ['elt'],
@@ -152,31 +159,37 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
             UselessLoopElseViolation
             LambdaInsideLoopViolation
             MultilineLoopViolation
+            InfiniteWhileLoopViolation
 
         """
         self._check_loop_needs_else(node)
         self._check_lambda_inside_loop(node)
         self._check_useless_continue(node)
         self._check_multiline_loop(node)
+        self._check_infinite_while_loop(node)
         self.generic_visit(node)
 
     def _check_loop_needs_else(self, node: AnyLoop) -> None:
-        if node.orelse and not loops.has_break(node):
+        if node.orelse and not loops.has_break(node, break_nodes=(ast.Break,)):
             self.add_violation(UselessLoopElseViolation(node))
 
     def _check_lambda_inside_loop(
         self,
         node: Union[AnyLoop, AnyComprehension],
     ) -> None:
-        container_names = self._containers.get(type(node), ())
-        for container in container_names:
-            body = getattr(node, container, [])
-            if not isinstance(body, list):
-                body = [body]
-
-            for subnode in body:
-                if walk.is_contained(subnode, ast.Lambda):
-                    self.add_violation(LambdaInsideLoopViolation(node))
+        for lambda_node in walk.get_subnodes_by_type(node, ast.Lambda):
+            arg_nodes = walk.get_subnodes_by_type(lambda_node, ast.arg)
+            body_nodes = walk.get_subnodes_by_type(lambda_node.body, ast.Name)
+            arguments = (
+                arg.arg
+                for arg in arg_nodes
+            )
+            body = (
+                subnode.id
+                for subnode in body_nodes
+            )
+            if not all(symbol in arguments for symbol in body):
+                self.add_violation(LambdaInsideLoopViolation(node))
 
     def _check_useless_continue(self, node: AnyLoop) -> None:
         nodes_at_line: DefaultDict[int, List[ast.AST]] = defaultdict(list)
@@ -202,6 +215,15 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
             if sub_lineno is not None and sub_lineno > start_lineno:
                 self.add_violation(MultilineLoopViolation(node))
                 break
+
+    def _check_infinite_while_loop(self, node: AnyLoop) -> None:
+        if not isinstance(node, ast.While):
+            return
+
+        real_node = operators.unwrap_unary_node(node.test)
+        if isinstance(real_node, ast.NameConstant) and real_node.value is True:
+            if not loops.has_break(node, break_nodes=self._breaks):
+                self.add_violation(InfiniteWhileLoopViolation(node))
 
 
 @final

@@ -180,8 +180,6 @@ def test_custom_whitelist_nested_classes(
 @pytest.mark.parametrize('code', [
     nested_class_in_method,
     nested_class_in_function,
-    nested_class_in_method,
-    nested_class_in_function,
     nested_class_in_if,
     nested_class_in_if_else,
     nested_class_in_context_manager,
@@ -218,13 +216,14 @@ def test_ordinary_class(
     mode,
 ):
     """Testing that it is possible to write basic classes."""
-    tree = parse_ast_tree(mode("""
+    code = """
     class Ordinary(object):
         def method(self): ...
 
     class Second(Ordinary):
         def method(self): ...
-    """))
+    """
+    tree = parse_ast_tree(mode(code))
 
     visitor = NestedComplexityVisitor(default_options, tree=tree)
     visitor.run()

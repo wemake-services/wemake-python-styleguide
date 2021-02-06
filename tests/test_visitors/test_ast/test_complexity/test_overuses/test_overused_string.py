@@ -12,6 +12,7 @@ first = {0}
 second({0})
 third[{0}]
 'new' + {0}
+{0}.join("1", "2", "3")
 """
 
 string_function_type_annotations1 = """
@@ -121,7 +122,7 @@ def test_string_overuse_settings(
     """Ensures that settings for string over-use work."""
     tree = parse_ast_tree(mode(strings.format(string_value)))
 
-    option_values = options(max_string_usages=4)
+    option_values = options(max_string_usages=5)
     visitor = StringOveruseVisitor(option_values, tree=tree)
     visitor.run()
 
@@ -134,8 +135,6 @@ def test_string_overuse_settings(
 @pytest.mark.parametrize('string_value', [
     '"same-string"',
     '"GenericType[int, str]"',
-    "''",
-    '""',
 ])
 @pytest.mark.parametrize('prefix', [
     'b',
@@ -192,6 +191,33 @@ def test_string_type_annotations(
 
     option_values = options(max_string_usages=0)
     visitor = StringOveruseVisitor(option_values, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('string_value', [
+    r'"\t"',
+    r'"\n"',
+    '""',
+])
+@pytest.mark.parametrize('prefix', [
+    'b',
+    'u',
+    '',
+])
+def test_string_overuse_exceptions(
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+    prefix,
+    string_value,
+):
+    """Ensures that over-used strings raise violations."""
+    snippet = string_actions.format(prefix + string_value)
+    tree = parse_ast_tree(snippet)
+
+    visitor = StringOveruseVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])

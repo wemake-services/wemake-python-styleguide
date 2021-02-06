@@ -1,13 +1,10 @@
-import re
 from typing import Iterable
 
-from typing_extensions import Final
-
+from wemake_python_styleguide.constants import (
+    ALIAS_NAMES_WHITELIST,
+    UNUSED_PLACEHOLDER,
+)
 from wemake_python_styleguide.logic.naming import access
-
-# Used to specify a pattern which checks variables and modules for underscored
-# numbers in their names:
-_UNDERSCORED_NUMBER_PATTERN: Final = re.compile(r'.+\D\_\d+(\D|$)')
 
 
 def is_wrong_name(name: str, to_check: Iterable[str]) -> bool:
@@ -39,7 +36,7 @@ def is_wrong_name(name: str, to_check: Iterable[str]) -> bool:
             '_{0}'.format(name_to_check),
             '{0}_'.format(name_to_check),
         }
-        if name in choices_to_check:
+        if name.lower() in choices_to_check:
             return True
     return False
 
@@ -115,12 +112,18 @@ def is_too_short_name(
     >>> is_too_short_name('xy', min_length=2, trim=True)
     False
 
+    >>> is_too_short_name('np', min_length=3)
+    False
+
     """
+    if name in ALIAS_NAMES_WHITELIST:
+        return False
+
     if access.is_unused(name):
         return False
 
     if trim:
-        name = name.strip('_')
+        name = name.strip(UNUSED_PLACEHOLDER)
 
     return len(name) < min_length
 
@@ -146,97 +149,3 @@ def is_too_long_name(
 
     """
     return len(name) > max_length
-
-
-def does_contain_underscored_number(name: str) -> bool:
-    """
-    Checks for names with underscored number.
-
-    >>> does_contain_underscored_number('star_wars_episode2')
-    False
-
-    >>> does_contain_underscored_number('come2_me')
-    False
-
-    >>> does_contain_underscored_number('_')
-    False
-
-    >>> does_contain_underscored_number('z1')
-    False
-
-    >>> does_contain_underscored_number('iso123_456')
-    False
-
-    >>> does_contain_underscored_number('star_wars_episode_2')
-    True
-
-    >>> does_contain_underscored_number('come_2_me')
-    True
-
-    >>> does_contain_underscored_number('come_44_me')
-    True
-
-    >>> does_contain_underscored_number('iso_123_456')
-    True
-
-    """
-    return _UNDERSCORED_NUMBER_PATTERN.match(name) is not None
-
-
-def does_contain_consecutive_underscores(name: str) -> bool:
-    """
-    Checks if name contains consecutive underscores in middle of name.
-
-    >>> does_contain_consecutive_underscores('name')
-    False
-
-    >>> does_contain_consecutive_underscores('__magic__')
-    False
-
-    >>> does_contain_consecutive_underscores('__private')
-    False
-
-    >>> does_contain_consecutive_underscores('name')
-    False
-
-    >>> does_contain_consecutive_underscores('some__value')
-    True
-
-    >>> does_contain_consecutive_underscores('__some__value__')
-    True
-
-    >>> does_contain_consecutive_underscores('__private__value')
-    True
-
-    >>> does_contain_consecutive_underscores('some_value__')
-    True
-
-    """
-    if access.is_magic(name) or access.is_private(name):
-        return '__' in name.strip('_')
-    return '__' in name
-
-
-def does_contain_unicode(name: str) -> bool:
-    """
-    Check if name contains unicode characters.
-
-    >>> does_contain_unicode('hello_world1')
-    False
-
-    >>> does_contain_unicode('')
-    False
-
-    >>> does_contain_unicode('привет_мир1')
-    True
-
-    >>> does_contain_unicode('russian_техт')
-    True
-
-    """
-    try:
-        name.encode('ascii')
-    except UnicodeEncodeError:
-        return True
-    else:
-        return False

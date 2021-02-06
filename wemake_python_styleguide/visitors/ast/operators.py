@@ -13,6 +13,7 @@ from wemake_python_styleguide.logic.tree.operators import (
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations import consistency
 from wemake_python_styleguide.violations.best_practices import (
+    BitwiseAndBooleanMixupViolation,
     ListMultiplyViolation,
 )
 from wemake_python_styleguide.visitors import base, decorators
@@ -38,14 +39,13 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
     }
 
     _meaningless_operations: ClassVar[_MeaninglessOperators] = {
-        # ast.Div is not in the list,
+        # ast.Div and ast.Mod is not in the list,
         # since we have a special violation for it.
         0: (
             ast.Mult,
             ast.Add,
             ast.Sub,
             ast.Pow,
-            ast.Mod,
 
             ast.BitAnd,
             ast.BitOr,
@@ -71,6 +71,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
     _zero_divisors: ClassVar[AnyNodes] = (
         ast.Div,
         ast.FloorDiv,
+        ast.Mod,
     )
 
     def visit_numbers_and_constants(self, node: _NumbersAndConstants) -> None:
@@ -193,7 +194,7 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
 
     def visit_AugAssign(self, node: ast.AugAssign) -> None:
         """
-        Visits augmented assignes.
+        Visits augmented assigns.
 
         Raises:
             DoubleMinusOpeationViolation
@@ -268,3 +269,37 @@ class WalrusVisitor(base.BaseNodeVisitor):
         """
         self.add_violation(consistency.WalrusViolation(node))
         self.generic_visit(node)
+
+
+@final
+class BitwiseOpVisitor(base.BaseNodeVisitor):
+    """Checks bitwise operations are used correctly."""
+
+    _invalid_nodes: ClassVar[AnyNodes] = (
+        ast.BoolOp,
+        ast.UnaryOp,
+        ast.NameConstant,
+        ast.Compare,
+    )
+
+    def visit_BinOp(self, node: ast.BinOp) -> None:
+        """
+        Finds bad usage of bitwise operation with binary operation.
+
+        Raises:
+            BitwiseAndBooleanMixupViolation
+
+        """
+        self._check_logical_bitwise_operator(node)
+        self.generic_visit(node)
+
+    def _check_logical_bitwise_operator(self, node: ast.BinOp) -> None:
+        if not isinstance(node.op, (ast.BitOr, ast.BitAnd)):
+            return
+
+        if self._is_bool_like(node.left) or self._is_bool_like(node.right):
+            self.add_violation(BitwiseAndBooleanMixupViolation(node))
+
+    # checks either side of the Bitwise operation invalid usage
+    def _is_bool_like(self, node: ast.expr) -> bool:
+        return isinstance(node, self._invalid_nodes)

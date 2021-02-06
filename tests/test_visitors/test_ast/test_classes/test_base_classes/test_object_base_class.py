@@ -54,7 +54,7 @@ def test_wrong_base_class(
     code,
     default_options,
 ):
-    """Testing that not using explicit base class is forbiden."""
+    """Testing that not using explicit base class is forbidden."""
     tree = parse_ast_tree(code)
 
     visitor = WrongClassVisitor(default_options, tree=tree)

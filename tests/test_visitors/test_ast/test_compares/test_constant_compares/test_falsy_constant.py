@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.refactoring import (
     FalsyConstantCompareViolation,
     WrongIsCompareViolation,
@@ -8,13 +9,26 @@ from wemake_python_styleguide.visitors.ast.compares import (
     WrongConstantCompareVisitor,
 )
 
-wrong_comparators = (
+wrong_comparators = [
     ('some', '[]'),
     ('some', '{}'),  # noqa: P103
     ('some', '()'),
     ('[]', 'some'),
     ('{}', 'some'),  # noqa: P103
     ('()', 'some'),
+]
+
+if PY38:
+    wrong_comparators.extend([
+        ('some', '(x := [])'),
+        ('(x := [])', 'some'),
+    ])
+
+correct_walrus = pytest.param(
+    ['(x := [1, 2])', 'some'],
+    marks=pytest.mark.skipif(
+        not PY38, reason='walrus appeared in 3.8',
+    ),
 )
 
 
@@ -26,7 +40,7 @@ def test_falsy_constant(
     eq_conditions,
     default_options,
 ):
-    """Testing that compares with falsy contants are not allowed."""
+    """Testing that compares with falsy constants are not allowed."""
     tree = parse_ast_tree(eq_conditions.format(*comparators))
 
     visitor = WrongConstantCompareVisitor(default_options, tree=tree)
@@ -44,7 +58,7 @@ def test_falsy_constant_is(
     is_conditions,
     default_options,
 ):
-    """Testing that compares with falsy contants are not allowed."""
+    """Testing that compares with falsy constants are not allowed."""
     tree = parse_ast_tree(is_conditions.format(*comparators))
 
     visitor = WrongConstantCompareVisitor(default_options, tree=tree)
@@ -64,7 +78,7 @@ def test_falsy_constant_not_eq(
     other_conditions,
     default_options,
 ):
-    """Testing that compares with falsy contants are not allowed."""
+    """Testing that compares with falsy constants are not allowed."""
     tree = parse_ast_tree(other_conditions.format(*comparators))
 
     visitor = WrongConstantCompareVisitor(default_options, tree=tree)
@@ -92,8 +106,8 @@ def test_falsy_constant_not_eq(
     ('some', 'other.attr'),
     ('some', 'other.method()'),
     ('some', 'other[0]'),
-
     ('None', 'some'),
+    correct_walrus,
 ])
 def test_correct_constant_compare(
     assert_errors,

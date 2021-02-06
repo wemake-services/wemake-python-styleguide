@@ -28,14 +28,14 @@ def some():
     yield 2
 """
 
-seprated_yield1 = """
+separated_yield1 = """
 def some():
     yield 1
     print('---')
     yield 2
 """
 
-seprated_yield2 = """
+separated_yield2 = """
 def some():
     yield 1
     print('---')
@@ -100,8 +100,8 @@ def some():
     simple_yield,
     conditional_yield1,
     conditional_yield2,
-    seprated_yield1,
-    seprated_yield2,
+    separated_yield1,
+    separated_yield2,
 ])
 def test_yield_correct(
     assert_errors,
@@ -145,7 +145,7 @@ def test_yield_correct_sync(
     wrong_yield4,
     wrong_yield5,
 ])
-def test_yield_inccorect(
+def test_yield_incorrect(
     assert_errors,
     parse_ast_tree,
     code,

@@ -12,6 +12,11 @@ from_import_alias = """
 from os import path as {0}
 """
 
+# Class names:
+
+class_name = 'class {0}: ...'
+
+
 # Function names:
 
 function_name = 'def {0}(): ...'
@@ -68,6 +73,7 @@ class Input(object):
 """
 
 lambda_argument = 'lambda {0}: ...'
+lambda_posonly_argument = 'lambda {0}, /: ...'
 
 # Class attributes:
 
@@ -100,17 +106,10 @@ class Test(object):
 
 # Variables:
 
-variable_def = """
-{0} = 'test'
-"""
-
-variable_typed_def = """
-{0}: str = 'test'
-"""
-
-variable_typed = """
-{0}: str
-"""
+variable_def = '{0} = 1'
+variable_typed_def = '{0}: int = 2'
+variable_typed = '{0}: str'
+assignment_expression = '({0} := 1)'
 
 # See: https://github.com/wemake-services/wemake-python-styleguide/issues/405
 unpacking_variables = """
@@ -160,6 +159,9 @@ _ALL_FIXTURES = frozenset((
     import_alias,
     from_import_alias,
 
+    # Class names:
+    class_name,
+
     # Function names, we don't use async function because we generate them:
     function_name,
     method_name,
@@ -199,19 +201,46 @@ _ALL_FIXTURES = frozenset((
 ))
 
 if PY38:
-    _ALL_FIXTURES |= {function_posonly_argument}
+    _ALL_FIXTURES |= {
+        function_posonly_argument,
+        lambda_posonly_argument,
+        assignment_expression,
+    }
 
-_SUITABLE_FOR_UNUSED_TUPLE = frozenset((
+_FORBIDDEN_UNUSED_TUPLE = frozenset((
     unpacking_variables,
     variable_def,
     with_variable,
+    for_variable,
 ))
 
-_SUITABLE_FOR_UNUSED = _SUITABLE_FOR_UNUSED_TUPLE | frozenset((
+# Raw unused variables return True for logic.naming.access.is_unused().
+# Example: _, __.
+# Protected unused variables return True for logic.naming.access.is_protected().
+# Example: _protected.
+_FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED = frozenset((
+    unpacking_variables,
+    variable_def,
+    with_variable,
     variable_typed_def,
     variable_typed,
     exception,
 ))
+
+if PY38:
+    _FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED |= {
+        assignment_expression,
+    }
+
+_FORBIDDEN_RAW_UNUSED = _FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED | {
+    static_attribute,
+    static_typed_attribute,
+    static_typed_annotation,
+}
+
+_FORBIDDEN_PROTECTED_UNUSED = _FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED | {
+    for_variable,
+}
 
 
 @pytest.fixture(params=_ALL_FIXTURES)
@@ -220,29 +249,31 @@ def naming_template(request):
     return request.param
 
 
-@pytest.fixture(params=_SUITABLE_FOR_UNUSED)
-def forbidden_unused_template(request):
-    """Returns template that can be used to define wrong unused variables."""
-    return request.param
-
-
-@pytest.fixture(params=_SUITABLE_FOR_UNUSED_TUPLE)
+@pytest.fixture(params=_FORBIDDEN_UNUSED_TUPLE)
 def forbidden_tuple_unused_template(request):
     """Returns template that can be used to define wrong unused tuples."""
     return request.param
 
 
-@pytest.fixture(params=_SUITABLE_FOR_UNUSED | {
-    static_attribute,
-    static_typed_attribute,
-    static_typed_annotation,
-})
+@pytest.fixture(params=_FORBIDDEN_RAW_UNUSED)
 def forbidden_raw_unused_template(request):
-    """Returns template that can be used to define wrong unused tuples."""
+    """Returns template that forbids defining raw unused variables."""
     return request.param
 
 
-@pytest.fixture(params=_ALL_FIXTURES - _SUITABLE_FOR_UNUSED)
-def allowed_unused_template(request):
-    """Returns template that can define unused variables."""
+@pytest.fixture(params=_ALL_FIXTURES - _FORBIDDEN_RAW_UNUSED)
+def allowed_raw_unused_template(request):
+    """Returns template that allows defining raw unused variables."""
+    return request.param
+
+
+@pytest.fixture(params=_FORBIDDEN_PROTECTED_UNUSED)
+def forbidden_protected_unused_template(request):
+    """Returns template that forbids defining protected unused variables."""
+    return request.param
+
+
+@pytest.fixture(params=_ALL_FIXTURES - _FORBIDDEN_PROTECTED_UNUSED)
+def allowed_protected_unused_template(request):
+    """Returns template that allows defining protected unused variables."""
     return request.param

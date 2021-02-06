@@ -5,21 +5,21 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 class _HasAliasedProp(object):
     def existing(self):
-        return None
+        """Existing."""
 
     def first(self):
-        return None
+        """First."""
 
 
 def test_raises_for_duplicates():
     """Ensures that decorator raises an exception for duplicates."""
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match='duplicate'):
         alias('name', ('duplicate', 'duplicate'))
 
 
 def test_useless_alias():
-    """Ensures that decorator raises an exception for duplicates."""
-    with pytest.raises(ValueError):
+    """Ensures that decorator raises an exception for useless alias."""
+    with pytest.raises(ValueError, match='duplicate'):
         alias('name', ('name',))
 
 

@@ -7,7 +7,7 @@ When you want to force someone to write the code the way you want:
 you need to create a :term:`rule` for that.
 
 There are multiple options of how this can be done.
-This guide will walk trough all possible cases and cover every decision path.
+This guide will walk through all possible cases and cover every decision path.
 
 Deciding what exactly to write
 ------------------------------
@@ -190,7 +190,7 @@ work correctly together all the way from flake8 config file to its output.
 To check all supported violations, we have two modules containing code which
 raises them: ``noqa.py`` and ``noqa_controlled.py``. The first is for all
 possible violations while the second is only for those which may be tweaked
-using ``i_control_code`` option. If violation may be ignored (or istead,
+using ``i_control_code`` option. If violation may be ignored (or instead,
 raised) with ``i_control_code``, the appropriate piece of code should be
 added to both modules.
 

@@ -1,9 +1,7 @@
 import pytest
 
 from wemake_python_styleguide import constants
-from wemake_python_styleguide.violations.consistency import (
-    VagueImportViolation,
-)
+from wemake_python_styleguide.violations.consistency import VagueImportViolation
 from wemake_python_styleguide.visitors.ast.imports import WrongImportVisitor
 
 import_template = 'import {0}'

@@ -1,7 +1,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
-    HeterogenousCompareViolation,
+    HeterogeneousCompareViolation,
 )
 from wemake_python_styleguide.visitors.ast.compares import CompareSanityVisitor
 
@@ -24,19 +24,19 @@ from wemake_python_styleguide.visitors.ast.compares import CompareSanityVisitor
     'call() != attr.prop in array',
     'item not in array == value',
 ])
-def test_heterogenous_compare(
+def test_heterogeneous_compare(
     assert_errors,
     parse_ast_tree,
     code,
     default_options,
 ):
-    """Testing that compares with diffrent operators raise."""
+    """Testing that compares with different operators raise."""
     tree = parse_ast_tree(code)
 
     visitor = CompareSanityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [HeterogenousCompareViolation])
+    assert_errors(visitor, [HeterogeneousCompareViolation])
 
 
 @pytest.mark.parametrize('code', [

@@ -10,8 +10,8 @@ import sys
 from typing import Any, Optional
 
 if sys.version_info >= (3, 8):  # pragma: py-lt-38
-    from ast import NamedExpr as NamedExpr  # noqa: WPS113, WPS433
     from ast import Constant as Constant  # noqa: WPS433, WPS113
+    from ast import NamedExpr as NamedExpr  # noqa: WPS113, WPS433
 else:  # pragma: py-gte-38
     class NamedExpr(ast.expr):  # noqa: WPS440
         """
@@ -20,6 +20,7 @@ else:  # pragma: py-gte-38
         Copied from ast.pyi file.
         """
 
+        value: ast.expr  # noqa: WPS110
         target: ast.expr
 
     class Constant(ast.expr):  # noqa: WPS440

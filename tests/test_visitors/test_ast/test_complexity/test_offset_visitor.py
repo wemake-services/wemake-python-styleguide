@@ -197,10 +197,11 @@ def test_regression282(
 
     See: https://github.com/wemake-services/wemake-python-styleguide/issues/282
     """
-    tree = parse_ast_tree("""
+    code = """
     async def no_offset():
         ...
-    """)
+    """
+    tree = parse_ast_tree(code)
 
     monkeypatch.setattr(OffsetVisitor, '_max_offset_blocks', 1)
     visitor = OffsetVisitor(default_options, tree=tree)

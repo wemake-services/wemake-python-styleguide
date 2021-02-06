@@ -4,10 +4,9 @@ from typing import Callable, DefaultDict, List, Set, Tuple, Union, cast
 
 from typing_extensions import final
 
+from wemake_python_styleguide.compat.aliases import ForNodes, WithNodes
 from wemake_python_styleguide.compat.types import AnyAssignWithWalrus
-from wemake_python_styleguide.logic.naming.name_nodes import (
-    flat_variable_names,
-)
+from wemake_python_styleguide.logic.naming.name_nodes import flat_variable_names
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.scopes import defs, predicates
 from wemake_python_styleguide.logic.walk import is_contained_by
@@ -84,7 +83,10 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
 
     # Blocks:
 
-    def visit_named_nodes(self, node: AnyFunctionDef) -> None:
+    def visit_named_nodes(
+        self,
+        node: Union[AnyFunctionDef, ast.ClassDef, ast.ExceptHandler],
+    ) -> None:
         """
         Visits block nodes that have ``.name`` property.
 
@@ -254,7 +256,18 @@ class AfterBlockVariablesVisitor(base.BaseNodeVisitor):
     def _check_variable_usage(self, node: ast.Name) -> None:
         context = cast(ast.AST, get_context(node))
         blocks = self._block_variables[context][node.id]
-        if all(is_contained_by(node, block) for block in blocks):
+        is_contained_block_var = any(
+            is_contained_by(node, block) for block in blocks
+        )
+        # Restrict the use of block variables with the same name to
+        # the same type of block - either `for` or `with`.
+        is_same_type_block = all(
+            isinstance(block, ForNodes) for block in blocks
+        ) or all(
+            isinstance(block, WithNodes) for block in blocks
+        )
+        # Return if not a block variable or a contained block variable.
+        if not blocks or (is_contained_block_var and is_same_type_block):
             return
 
         self.add_violation(

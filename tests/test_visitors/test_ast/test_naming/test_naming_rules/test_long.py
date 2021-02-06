@@ -18,7 +18,7 @@ def test_long_variable_name(
     visitor.run()
 
     assert_errors(visitor, [TooLongNameViolation])
-    assert_error_text(visitor, long_name)
+    assert_error_text(visitor, long_name, default_options.max_name_length)
 
 
 def test_long_variable_name_config(

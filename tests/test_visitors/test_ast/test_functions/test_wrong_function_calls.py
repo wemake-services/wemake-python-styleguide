@@ -42,6 +42,33 @@ def test_wrong_function_called(
     assert_error_text(visitor, bad_function)
 
 
+@pytest.mark.parametrize('bad_module_and_function', [
+    'pprint.pprint',
+])
+@pytest.mark.parametrize('code', [
+    regular_call,
+    assignment_call,
+    nested_function_call,
+])
+def test_wrong_function_call_with_module(
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    bad_module_and_function,
+    code,
+    default_options,
+    mode,
+):
+    """Testing that a module.function() call can be restricted."""
+    tree = parse_ast_tree(mode(code.format(bad_module_and_function)))
+
+    visitor = WrongFunctionCallVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [WrongFunctionCallViolation])
+    assert_error_text(visitor, bad_module_and_function)
+
+
 @pytest.mark.parametrize('good_function', [
     'len',
     'abs',

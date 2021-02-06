@@ -15,9 +15,15 @@ class Test(object):
     {0}: int = None
 """
 
+static_typed_condition_attribute = """
+class Test(object):
+    if sys.version_info > (3, 8):
+        {0}: int = None
+"""
+
 regression423 = """
 class MyClass(object):
-    def action_method(self, request, object):
+    def action_method(self, request, second):
         ...
 
     action_method.label = 'Do action'
@@ -27,6 +33,7 @@ class MyClass(object):
 @pytest.mark.parametrize('code', [
     static_attribute,
     static_typed_attribute,
+    static_typed_condition_attribute,
 ])
 @pytest.mark.parametrize('non_snake_case_name', [
     'Abc',
@@ -58,6 +65,7 @@ def test_upper_case_class_attributes(
 @pytest.mark.parametrize('code', [
     static_attribute,
     static_typed_attribute,
+    static_typed_condition_attribute,
 ])
 @pytest.mark.parametrize('snake_case_name', [
     'abc',

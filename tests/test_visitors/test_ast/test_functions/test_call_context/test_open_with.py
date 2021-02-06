@@ -4,7 +4,7 @@ from wemake_python_styleguide.violations.refactoring import (
     OpenWithoutContextManagerViolation,
 )
 from wemake_python_styleguide.visitors.ast.functions import (
-    WrongFunctionCallContextVisitior,
+    WrongFunctionCallContextVisitor,
 )
 
 # Correct:
@@ -68,7 +68,7 @@ def test_open_inside_context_manager(
     """Testing that ``open()`` inside a context manager works."""
     tree = parse_ast_tree(mode(code.format(call)))
 
-    visitor = WrongFunctionCallContextVisitior(default_options, tree=tree)
+    visitor = WrongFunctionCallContextVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -100,7 +100,7 @@ def test_regular_functions(
     """Testing that regular calls work."""
     tree = parse_ast_tree(mode(code.format(call)))
 
-    visitor = WrongFunctionCallContextVisitior(default_options, tree=tree)
+    visitor = WrongFunctionCallContextVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -127,7 +127,7 @@ def test_open_without_context_manager(
     """Testing that ``open()`` without context managers raise a violation."""
     tree = parse_ast_tree(mode(code.format(call)))
 
-    visitor = WrongFunctionCallContextVisitior(default_options, tree=tree)
+    visitor = WrongFunctionCallContextVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [OpenWithoutContextManagerViolation])

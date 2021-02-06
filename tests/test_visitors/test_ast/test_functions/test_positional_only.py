@@ -5,7 +5,7 @@ from wemake_python_styleguide.violations.best_practices import (
     PositionalOnlyArgumentsViolation,
 )
 from wemake_python_styleguide.visitors.ast.functions import (
-    PositionalOnlyArgumentsVisitor,
+    FunctionSignatureVisitor,
 )
 
 # Correct:
@@ -67,7 +67,7 @@ def test_not_posonlyargs(
     """Testing that regular code is allowed."""
     tree = parse_ast_tree(mode(code))
 
-    visitor = PositionalOnlyArgumentsVisitor(default_options, tree=tree)
+    visitor = FunctionSignatureVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -93,7 +93,7 @@ def test_posonyargs(
     """Testing that ``/`` is not allowed."""
     tree = parse_ast_tree(mode(code))
 
-    visitor = PositionalOnlyArgumentsVisitor(default_options, tree=tree)
+    visitor = FunctionSignatureVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [PositionalOnlyArgumentsViolation])

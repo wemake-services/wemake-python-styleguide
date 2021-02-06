@@ -18,15 +18,18 @@ All comments have the same type.
 
 import re
 import tokenize
-from typing import ClassVar, FrozenSet, Optional
+from token import ENDMARKER
+from typing import ClassVar
 from typing.re import Pattern
 
-from typing_extensions import final
+from typing_extensions import Final, final
 
-from wemake_python_styleguide.constants import MAX_NO_COVER_COMMENTS
-from wemake_python_styleguide.logic.system import is_executable_file
+from wemake_python_styleguide.constants import MAX_NO_COVER_COMMENTS, STDIN
+from wemake_python_styleguide.logic.system import is_executable_file, is_windows
 from wemake_python_styleguide.logic.tokens import NEWLINES, get_comment_text
 from wemake_python_styleguide.violations.best_practices import (
+    EmptyCommentViolation,
+    ForbiddenInlineIgnoreViolation,
     OveruseOfNoCoverCommentViolation,
     OveruseOfNoqaCommentViolation,
     ShebangViolation,
@@ -35,13 +38,22 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
+EMPTY_STRING: Final = ''
+
+SENTINEL_TOKEN: Final = tokenize.TokenInfo(
+    type=ENDMARKER,
+    string=EMPTY_STRING,
+    start=(0, 0),
+    end=(0, 0),
+    line=EMPTY_STRING,
+)
+
 
 @final
 class WrongCommentVisitor(BaseTokenVisitor):
     """Checks comment tokens."""
 
     _no_cover: ClassVar[Pattern] = re.compile(r'^pragma:\s+no\s+cover')
-    _noqa_check: ClassVar[Pattern] = re.compile(r'^(noqa:?)($|[A-Z\d\,\s]+)')
     _type_check: ClassVar[Pattern] = re.compile(
         r'^type:\s?([\w\d\[\]\'\"\.]+)$',
     )
@@ -49,7 +61,6 @@ class WrongCommentVisitor(BaseTokenVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Initializes a counter."""
         super().__init__(*args, **kwargs)
-        self._noqa_count = 0
         self._no_cover_count = 0
 
     def visit_comment(self, token: tokenize.TokenInfo) -> None:
@@ -57,30 +68,13 @@ class WrongCommentVisitor(BaseTokenVisitor):
         Performs comment checks.
 
         Raises:
-            OveruseOfNoqaCommentViolation
             WrongDocCommentViolation
             WrongMagicCommentViolation
 
         """
-        self._check_noqa(token)
         self._check_typed_ast(token)
         self._check_empty_doc_comment(token)
         self._check_cover_comments(token)
-
-    def _check_noqa(self, token: tokenize.TokenInfo) -> None:
-        comment_text = get_comment_text(token)
-        match = self._noqa_check.match(comment_text)
-        if not match:
-            return
-
-        self._noqa_count += 1
-        excludes = match.groups()[1].strip()
-        prefix = match.groups()[0].strip()
-
-        if not excludes or prefix[-1] != ':':
-            # We cannot pass the actual line here,
-            # since it will be ignored due to `# noqa` comment:
-            self.add_violation(WrongMagicCommentViolation(text=comment_text))
 
     def _check_typed_ast(self, token: tokenize.TokenInfo) -> None:
         comment_text = get_comment_text(token)
@@ -89,7 +83,7 @@ class WrongCommentVisitor(BaseTokenVisitor):
             return
 
         declared_type = match.groups()[0].strip()
-        if declared_type != 'ignore':
+        if not declared_type.startswith('ignore'):
             self.add_violation(
                 WrongMagicCommentViolation(token, text=comment_text),
             )
@@ -107,10 +101,6 @@ class WrongCommentVisitor(BaseTokenVisitor):
         self._no_cover_count += 1
 
     def _post_visit(self) -> None:
-        if self._noqa_count > self.options.max_noqa_comments:
-            self.add_violation(
-                OveruseOfNoqaCommentViolation(text=str(self._noqa_count)),
-            )
         if self._no_cover_count > MAX_NO_COVER_COMMENTS:
             self.add_violation(
                 OveruseOfNoCoverCommentViolation(
@@ -121,16 +111,93 @@ class WrongCommentVisitor(BaseTokenVisitor):
 
 
 @final
+class EmptyCommentVisitor(BaseTokenVisitor):
+    """Checks empty comment tokens."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Initializes fields to track empty comments."""
+        super().__init__(*args, **kwargs)
+
+        self._line_num = -1
+        self._prev_comment_line_num = -1
+        self._prev_non_empty = -1
+        self._in_same_block = True
+        self._block_alerted = False
+        self._reserved_token = SENTINEL_TOKEN
+
+    def visit_comment(self, token: tokenize.TokenInfo) -> None:
+        """
+        Performs comment checks.
+
+        Raises:
+            EmptyCommentViolation
+
+        """
+        self._check_empty_comment(token)
+
+    def _check_empty_comment(self, token: tokenize.TokenInfo) -> None:
+        self._line_num = token.start[0]
+        self._check_same_block(token)
+
+        # Triggering reserved token to be added
+        if not self._in_same_block and self._has_reserved_token():
+            self.add_violation(EmptyCommentViolation(self._reserved_token))
+            self._block_alerted = True
+            self._reserved_token = SENTINEL_TOKEN
+
+        if get_comment_text(token) == EMPTY_STRING:
+            if not self._in_same_block:
+                # Stand alone empty comment or first empty comment in a block
+                self.add_violation(EmptyCommentViolation(token))
+                self._block_alerted = True
+                self._in_same_block = True
+
+            to_reserve = (
+                # Empty comment right after non-empty, block not yet alerted
+                self._is_consecutive(self._prev_non_empty) and
+                self._in_same_block and
+                not self._block_alerted
+            )
+            if to_reserve:
+                self._reserved_token = token
+        else:
+            self._prev_non_empty = self._line_num
+            if self._in_same_block:
+                self._reserved_token = SENTINEL_TOKEN
+
+        self._prev_comment_line_num = token.start[0]
+
+    def _check_same_block(self, token: tokenize.TokenInfo) -> None:
+        self._in_same_block = (
+            self._is_consecutive(self._prev_comment_line_num) and
+            token.line.lstrip()[0] == '#'  # is inline comment
+        )
+        if not self._in_same_block:
+            self._block_alerted = False
+
+    def _is_consecutive(self, prev_line_num: int) -> bool:
+        return (self._line_num - prev_line_num == 1)
+
+    def _has_reserved_token(self) -> bool:
+        return (self._reserved_token != SENTINEL_TOKEN)
+
+    def _post_visit(self) -> None:
+        if self._has_reserved_token() and not self._block_alerted:
+            self.add_violation(EmptyCommentViolation(self._reserved_token))
+
+
+@final
 class ShebangVisitor(BaseTokenVisitor):
-    """Checks the first shebang in the file."""
+    """
+    Checks the first shebang in the file.
+
+    Code is insipired by https://github.com/xuhdev/flake8-executable
+    """
 
     _shebang: ClassVar[Pattern] = re.compile(r'(\s*)#!')
     _python_executable: ClassVar[str] = 'python'
-    _comments_or_newlines: ClassVar[FrozenSet[int]] = NEWLINES.union(
-        {tokenize.COMMENT},
-    )
 
-    def visit(self, token: tokenize.TokenInfo) -> None:
+    def visit_comment(self, token: tokenize.TokenInfo) -> None:
         """
         Checks if there is an executable mismatch.
 
@@ -138,71 +205,137 @@ class ShebangVisitor(BaseTokenVisitor):
             ShebangViolation
 
         """
-        is_first_token = token == self.file_tokens[0]
+        if not self._is_first_comment(token):
+            return  # this is a regular comment, not a shebang
 
-        if not is_first_token:  # TODO: test on windows
+        is_shebang = self._is_valid_shebang_line(token)
+        self._check_executable_mismatch(token, is_shebang=is_shebang)
+        if is_shebang:
+            self._check_valid_shebang(token)
+
+    def _check_executable_mismatch(
+        self,
+        token: tokenize.TokenInfo,
+        *,
+        is_shebang: bool,
+    ) -> None:
+        if is_windows() or self.filename == STDIN:
+            # Windows does not have this concept of "executable" file.
+            # The same for STDIN inputs.
             return
 
-        shebang_token = self._get_shebang_token()
-
-        self._check_executable_mismatch(shebang_token)
-        if shebang_token is not None:
-            self._check_valid_shebang(shebang_token)
-
-    def _check_executable_mismatch(self, shebang_token) -> None:
         is_executable = is_executable_file(self.filename)
-
-        if is_executable and shebang_token is None:
+        if is_executable and not is_shebang:
             self.add_violation(
                 ShebangViolation(
                     text='file is executable but no shebang is present',
                 ),
             )
-
-        if not is_executable and shebang_token is not None:
+        elif not is_executable and is_shebang:
             self.add_violation(
                 ShebangViolation(
                     text='shebang is present but the file is not executable',
                 ),
             )
 
-    def _check_valid_shebang(self, shebang_token: tokenize.TokenInfo) -> None:
-        token_line = shebang_token.line
-        on_first_line = shebang_token.start[0] == 1
-        first_line_token = shebang_token.start[1] == 0
-        if self._python_executable not in token_line:
+    def _check_valid_shebang(self, token: tokenize.TokenInfo) -> None:
+        if self._python_executable not in token.line:
             self.add_violation(
                 ShebangViolation(
                     text='shebang is present but does not contain `python`',
                 ),
             )
 
-        if not first_line_token:
+        if token.start[1] != 0:
             self.add_violation(
                 ShebangViolation(
-                    text='there is whitespace before shebang',
+                    text='there is a whitespace before shebang',
                 ),
             )
 
-        if not on_first_line:
+        if token.start[0] != 1:
             self.add_violation(
                 ShebangViolation(
                     text='there are blank or comment lines before shebang',
                 ),
             )
 
-    def _get_shebang_token(self) -> Optional[tokenize.TokenInfo]:
+    def _is_first_comment(self, token: tokenize.TokenInfo) -> bool:
         all_tokens = iter(self.file_tokens)
-
         current_token = next(all_tokens)
 
-        while current_token.exact_type in self._comments_or_newlines:
-            if self._is_valid_shebang_line(current_token.line):
-                return current_token
-
+        while True:
+            if current_token == token:
+                return True
+            elif current_token.exact_type not in NEWLINES:
+                break
             current_token = next(all_tokens)
+        return False
 
-        return None
+    def _is_valid_shebang_line(self, token: tokenize.TokenInfo) -> bool:
+        return self._shebang.match(token.line) is not None
 
-    def _is_valid_shebang_line(self, line) -> bool:
-        return self._shebang.match(line) is not None
+
+@final
+class NoqaVisitor(BaseTokenVisitor):
+    """Checks noqa comment tokens."""
+
+    _noqa_check: ClassVar[Pattern] = re.compile(r'^(noqa:?)($|[A-Z\d\,\s]+)')
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Initializes a counter."""
+        super().__init__(*args, **kwargs)
+        self._noqa_count = 0
+
+    def visit_comment(self, token: tokenize.TokenInfo) -> None:
+        """
+        Performs comment checks.
+
+        Raises:
+            OveruseOfNoqaCommentViolation
+            ForbiddenInlineIgnoreViolation
+
+        """
+        self._check_noqa(token)
+
+    def _check_noqa(self, token: tokenize.TokenInfo) -> None:
+        comment_text = get_comment_text(token)
+        match = self._noqa_check.match(comment_text)
+        if not match:
+            return
+
+        self._noqa_count += 1
+        excludes = match.groups()[1].strip()
+        prefix = match.groups()[0].strip()
+
+        if not excludes or prefix[-1] != ':':
+            # We cannot pass the actual line here,
+            # since it will be ignored due to `# noqa` comment:
+            self.add_violation(WrongMagicCommentViolation(text=comment_text))
+            return
+        self._check_forbidden_noqa(excludes)
+
+    def _check_forbidden_noqa(self, noqa_excludes) -> None:
+        excludes_list = [ex.strip() for ex in noqa_excludes.split(',')]
+        forbidden_noqa = EMPTY_STRING.join(self.options.forbidden_inline_ignore)
+        for noqa_code in forbidden_noqa.split(','):
+            noqa_code = noqa_code.strip()
+            if noqa_code in excludes_list:
+                self.add_violation(
+                    ForbiddenInlineIgnoreViolation(text=str(noqa_excludes)),
+                )
+                return
+            if not noqa_code.isalpha():
+                continue
+            for excluded in excludes_list:
+                if re.fullmatch(r'{0}($|\d+)'.format(noqa_code), excluded):
+                    self.add_violation(
+                        ForbiddenInlineIgnoreViolation(text=str(noqa_excludes)),
+                    )
+                    return
+
+    def _post_visit(self) -> None:
+        if self._noqa_count > self.options.max_noqa_comments:
+            self.add_violation(
+                OveruseOfNoqaCommentViolation(text=str(self._noqa_count)),
+            )

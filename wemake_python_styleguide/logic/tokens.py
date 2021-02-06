@@ -49,7 +49,7 @@ def only_contains(
     tokens: Iterable[tokenize.TokenInfo],
     container: Container[int],
 ) -> bool:
-    """Determins that only tokens from the given list are contained."""
+    """Determines that only tokens from the given list are contained."""
     for token in tokens:
         if token.exact_type not in container:
             return False
@@ -63,7 +63,7 @@ def get_comment_text(token: tokenize.TokenInfo) -> str:
 
 def get_reverse_bracket(bracket: tokenize.TokenInfo) -> int:
     """
-    Returns the reverse closing bracket for an openning token.
+    Returns the reverse closing bracket for an opening token.
 
     >>> import tokenize
     >>> import token

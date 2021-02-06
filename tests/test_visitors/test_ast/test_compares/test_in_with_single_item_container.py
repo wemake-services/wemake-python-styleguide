@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.refactoring import (
     InCompareWithSingleItemContainerViolation,
     WrongInCompareTypeViolation,
@@ -18,6 +19,10 @@ from wemake_python_styleguide.visitors.ast.compares import (
     'a in b"a"',
     'a in {*a}',
     'a in {**a}',
+    pytest.param(
+        'a in (x := [1])',
+        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
+    ),
 ])
 def test_single_item_container(
     assert_errors,
@@ -47,8 +52,12 @@ def test_single_item_container(
     'a in "ab"',
     'a in {1, *a}',
     'a in {1: "a", **a}',
+    pytest.param(
+        'a in (x := {1, 2, 3})',
+        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
+    ),
 ])
-def test_multi_item_contrainer(
+def test_multi_item_container(
     assert_errors,
     parse_ast_tree,
     code,
