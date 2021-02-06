@@ -31,7 +31,7 @@ PLUGINS = (
 
 def _assert_plugin_output(output):
     for plugin_code in PLUGINS:
-        assert output.count(plugin_code) > 0
+        assert output.count(plugin_code) > 0, plugin_code
 
 
 def test_external_plugins(absolute_path):

@@ -10,7 +10,7 @@
 
 # This file is included into base-preset.
 
-["setup.cfg".darglint]
+["setup.cfg".flake8]
 # These values should be placed inside `setup.cfg` in your repo:
 strictness = "long"
 docstring_style = "numpy"
