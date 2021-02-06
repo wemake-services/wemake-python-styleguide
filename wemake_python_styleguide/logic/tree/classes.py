@@ -7,7 +7,7 @@ from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
 from wemake_python_styleguide.constants import ALLOWED_BUILTIN_CLASSES
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming.builtins import is_builtin_name
-from wemake_python_styleguide.types import AnyAssign
+from wemake_python_styleguide.types import AnyAssign, AnyFunctionDef
 
 #: Type alias for the attributes we return from class inspection.
 _AllAttributes = Tuple[List[AnyAssign], List[ast.Attribute]]
@@ -120,7 +120,7 @@ def _get_annotated_class_attribute(
     ) else None
 
 
-def find_getters_and_setters(node: ast.ClassDef) -> Iterable[FunctionNodes]:
+def find_getters_and_setters(node: ast.ClassDef) -> Iterable[AnyFunctionDef]:
     """Returns nodes of all getter or setter methods."""
     for sub in ast.walk(node):
         is_correct_context = nodes.get_context(sub) == node
