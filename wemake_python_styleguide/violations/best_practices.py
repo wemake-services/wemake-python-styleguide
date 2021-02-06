@@ -660,18 +660,13 @@ class WrongUnpackingViolation(ASTViolation):
     Example::
 
         # Correct:
-        first, second = some()
-
-        # Wrong:
-        first, some_dict['alias'] = some()
-
-        # Wrong:
-        self.reader, self.writer = call()
-
-        # Correct:
         reader, writter = call()
         self.reader = reader
         self.writer = writer
+
+        # Wrong:
+        first, some_dict['alias'] = some()
+        self.reader, self.writer = call()
 
     .. versionadded:: 0.6.0
     .. versionchanged:: 0.11.0
