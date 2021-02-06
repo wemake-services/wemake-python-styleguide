@@ -390,14 +390,14 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
     'visit_For',
     'visit_AsyncFor',
 ))
-class UnusedVaribaleDefinitionVisitor(BaseNodeVisitor):
+class UnusedVariableDefinitionVisitor(BaseNodeVisitor):
     """Checks how variables are used."""
 
     def visit_any_assign(self, node: AnyAssignWithWalrus) -> None:
         """
         Checks that we cannot assign explicit unused variables.
 
-        We do not check assignes inside modules and classes,
+        We do not check assigns inside modules and classes,
         since there ``_`` prefixed variable means
         that it is protected, not unused.
 

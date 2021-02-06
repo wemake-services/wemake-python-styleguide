@@ -1,7 +1,7 @@
 """
 These checks ensures that you use Python's version of OOP correctly.
 
-There are different gotchas in Python to write beatiful classes
+There are different gotchas in Python to write beautiful classes
 and using objects correctly. That's the place we collect these kind of rules.
 
 .. currentmodule:: wemake_python_styleguide.violations.oop
@@ -103,6 +103,9 @@ class ShadowedClassAttributeViolation(ASTViolation):
         one from instance and one from class. It might cause errors.
         Needless to say, that this is just pointless to do so.
 
+        Also, if you ever want to optimise your code with a tool like `mypyc`_,
+        this rule is a requirement.
+
     Solution:
         Use either class attributes or instance attributes.
         Use ``ClassVar`` type on fields that are declared as class attributes.
@@ -135,6 +138,7 @@ class ShadowedClassAttributeViolation(ASTViolation):
     .. versionadded:: 0.10.0
     .. versionchanged:: 0.11.0
     .. versionchanged:: 0.14.0
+    .. _mypyc: https://github.com/python/mypy/tree/master/mypyc
 
     """
 

@@ -90,7 +90,7 @@ def test_implicit_unicode_raw_string(
     r"U'\\\\'",
     r"U'some \\ escaped'",
 ])
-def test_implicit_upercase_unicode_raw_string(
+def test_implicit_uppercase_unicode_raw_string(
     parse_tokens,
     assert_errors,
     default_options,

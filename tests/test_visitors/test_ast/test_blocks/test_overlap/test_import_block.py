@@ -56,7 +56,7 @@ def test_import_block_overlap(
     default_options,
     mode,
 ):
-    """Ensures that overlaping variables exist."""
+    """Ensures that overlapping variables exist."""
     code = context.format(
         import_statement.format(variable_name),
         assign_and_annotation_statement.format(variable_name),

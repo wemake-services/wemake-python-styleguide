@@ -42,8 +42,8 @@ def _visitors_paths():
     base_path = Path('wemake_python_styleguide')
     excluded_paths = list(Path(base_path, 'presets').glob('**/*.py'))
     return [
-        path for path in
-        base_path.glob('**/*.py')
+        path
+        for path in base_path.glob('**/*.py')
         if path not in excluded_paths
     ]
 

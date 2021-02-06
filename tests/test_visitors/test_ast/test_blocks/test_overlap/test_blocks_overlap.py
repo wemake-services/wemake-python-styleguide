@@ -134,7 +134,7 @@ def test_block_overlap(
     code,
     mode,
 ):
-    """Testing that overlaps between blocks are forbiden."""
+    """Testing that overlaps between blocks are forbidden."""
     tree = parse_ast_tree(mode(code))
 
     visitor = BlockVariableVisitor(default_options, tree=tree)

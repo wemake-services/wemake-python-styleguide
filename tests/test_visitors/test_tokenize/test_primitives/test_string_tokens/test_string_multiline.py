@@ -69,7 +69,7 @@ def test_incorrect_multiline_strings(
     primitive,
     mode,
 ):
-    """Ensures that incorrect multiline strings are forbiden."""
+    """Ensures that incorrect multiline strings are forbidden."""
     file_tokens = parse_tokens(mode(primitives_usages.format(primitive)))
 
     visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)

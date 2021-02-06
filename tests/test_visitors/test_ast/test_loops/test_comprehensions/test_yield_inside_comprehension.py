@@ -26,7 +26,7 @@ def container():
 
 # We ignore `DeprecationWarning: 'yield' inside generator expression` here,
 # which is thrown on python3.7
-# We also skip this test on python3.8, because it does not make any sence.
+# We also skip this test on python3.8, because it does not make any sense.
 @pytest.mark.skipif(
     PY38,
     reason='yield inside a generator is a syntax error in python3.8',

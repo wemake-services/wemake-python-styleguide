@@ -38,6 +38,8 @@ Semantic versioning in our case means:
 - Forbids to use miltiline strings except for assignments and docstrings
 - Forbids not returning anything in functions and methods starting with `get_`
 - Forbids to use empty comment
+- Forbids using bitwise operation with boolean operation
+- Forbids inconsistent structuring of multiline comprehensions
 
 ### Bugfixes
 
@@ -51,6 +53,7 @@ Semantic versioning in our case means:
 - Fixes false positive WPS426 if `lambda` in loop uses only its arguments
 - Fixes false negative WPS421 with `pprint.pprint`
 - Fixes WPS441 triggering when reusing variable names in multiple loops
+- Fixes false positive ImplicitEnumerateViolation on range with step #1742
 
 ### Misc
 
@@ -138,7 +141,7 @@ character combination which is not easy to read
 - Fixes `WPS204` reporting overused return type annotations
 - Fixes `WPS204` reporting `self.` attribute access
 - Fixes `WPS331` reporting cases that do require some extra steps before return
-- Fixes `WPS612` not reporing `super()` calls without return
+- Fixes `WPS612` not reporting `super()` calls without return
 - Fixes `WPS404` not raising on wrong `*` and `/` defaults
 - Fixes `WPS425` raising on `.get`, `getattr`, `setattr`,
   and other builtin functions without keyword arguments
@@ -375,7 +378,7 @@ In this release we had a little focus on:
 1. Strings and numbers and how to write them
 1. OOP features
 1. Blocks and code structure,
-   including variable scoping and overlaping variables
+   including variable scoping and overlapping variables
 1. Overused expressions and new complexity metrics
 
 ### Features
@@ -407,7 +410,7 @@ In this release we had a little focus on:
 - Forbids to define useless overwritten methods
 - Enforces `j` prefix over `J` for `complex` numbers
 - Forbids overused expressions
-- Forbids explicit `0` division, multiply, pow, addition, and substraction
+- Forbids explicit `0` division, multiply, pow, addition, and subtraction
 - Fordids to pow, multiply, or divide by `1`
 - Forbids to use expressions like `x + -2`, or `y - -1`, or `z -= -1`
 - Forbids to multiply lists like `[0] * 2`
@@ -433,7 +436,7 @@ In this release we had a little focus on:
 
 - Bumps `flake8-eradicate` version
   and solves `attrs` incompatible versions issue
-- Bumps `flake8-dosctrings` veresion
+- Bumps `flake8-dosctrings` version
   and solved `pydocstyle` issue
 - Fixes `TryExceptMultipleReturnPathViolation` not tracking `else` and `finally`
   returns at the same time
@@ -570,7 +573,7 @@ big cudos to the developers of this wonderful tool.
 - Forbids to use `len(sized) > 0` and `if len(sized)` style checks
 - Forbids to use repeatable conditions: `flag or flag`
 - Forbids to write conditions like `not some > 1`
-- Forbids to use heterogenous compares like `x == x > 0`
+- Forbids to use heterogeneous compares like `x == x > 0`
 - Forbids to use complex compare with several items (`>= 3`)
 - Forbids to have class variables that are shadowed by instance variables
 - Forbids to use ternary expressions inside `if` conditions
@@ -755,11 +758,11 @@ and lots of bug fixes.
 - Improves tests: changes how `flake8` is executed, now it is twice as fast
 - Improves docs: now linting `conf.py` with `flake8`
 - Improves tests: now we check that ignored violation are raised with `noqa`
-- Improves docs: we have added a special graph to show our architecure
+- Improves docs: we have added a special graph to show our architecture
 - Improves docs: we now have a clean page for `checker` without extra junk
 - Improves docs: we now have a tutorial for creating new rules
 - Refactoring: moves `presets` package to the root
-- Improves tests: we now lint our layered architecure with `layer-lint`
+- Improves tests: we now lint our layered architecture with `layer-lint`
 
 
 ## Version 0.6.3

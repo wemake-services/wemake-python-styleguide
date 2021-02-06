@@ -12,7 +12,7 @@ from wemake_python_styleguide.visitors.ast.builtins import WrongStringVisitor
 
 
 @pytest.mark.parametrize('code', [
-    # We don't test all values here, because of strage parsing issues.
+    # We don't test all values here, because of strange parsing issues.
     string.digits,
     string.hexdigits,
     string.octdigits,

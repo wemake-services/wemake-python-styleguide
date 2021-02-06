@@ -63,7 +63,7 @@ Run `make test` to run everything we have!
 
 - Building directly in Windows does not work.
 - Instead, use a Windows Subsystem for Linux (WSL) such as Ubuntu 18.04 LTS that you can get from the Microsoft Store.
-- Clone the project to a part of the WSL where Windows does not overwrite permissions, for example _directly to the home of the WSL_ (do `cd` and then `git clone`). That problem looks like [this](https://github.com/wemake-services/wemake-python-styleguide/issues/1007#issuecomment-562719702) and you can read more about why changing the permissons does not work [here](https://github.com/Microsoft/WSL/issues/81).
+- Clone the project to a part of the WSL where Windows does not overwrite permissions, for example _directly to the home of the WSL_ (do `cd` and then `git clone`). That problem looks like [this](https://github.com/wemake-services/wemake-python-styleguide/issues/1007#issuecomment-562719702) and you can read more about why changing the permissions does not work [here](https://github.com/Microsoft/WSL/issues/81).
 
 ## Tests
 
@@ -110,6 +110,32 @@ mypy wemake_python_styleguide
 ```
 
 This step is mandatory during the CI.
+
+
+## Spellcheckers
+
+This project is developed by a diverse and multi-languaged group of people.
+Many of us are not English native speakers. And we also know that people can make mistakes and typos in the simpliest words.
+
+So, that's why we use a bunch of tools to find and fix spelling and grammar.
+
+You would need to install them manually, because we don't ship them with the dependencies:
+
+```bash
+pip install codespell flake8-spellcheck
+```
+
+And then you can use them:
+
+```bash
+# codespell:
+codespell -w wemake_python_styleguide tests docs scripts styles *.md
+
+# flake8-spellcheck:
+flake8 --whitelist ./tests/whitelist.txt .
+```
+
+We run them from time to time, this is not in the CI yet.
 
 
 ## Helpers
