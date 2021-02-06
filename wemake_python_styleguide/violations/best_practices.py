@@ -604,6 +604,9 @@ class InitModuleHasLogicViolation(SimpleViolation):
         Default:
         :str:`wemake_python_styleguide.options.defaults.I_CONTROL_CODE`
 
+    When using ``--i-dont-control-code`` it is still recommended
+    to only have imports in your ``__init__.py``.
+
     .. versionadded:: 0.1.0
 
     """
