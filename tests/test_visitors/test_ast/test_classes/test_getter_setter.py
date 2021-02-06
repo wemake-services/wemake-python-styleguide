@@ -212,7 +212,10 @@ def test_invalid_getter_and_setter(
     visitor = WrongClassVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [UnpythonicGetterSetterViolation])
+    assert_errors(visitor, [
+        UnpythonicGetterSetterViolation,
+        UnpythonicGetterSetterViolation,
+    ])
 
 
 @pytest.mark.parametrize('access', [''])

@@ -721,7 +721,7 @@ class AttributeGetter(object):
         self.attribute = 1
 
     def get_attribute(self):  # noqa: WPS615
-        anti_wps = ...
+        return self  # this is not important
 
     def set_attribute(self):  # noqa: WPS615
         anti_wps = ...
