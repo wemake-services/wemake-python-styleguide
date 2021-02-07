@@ -854,7 +854,12 @@ class BuiltinShadowingViolation(ASTViolation):
     If you feel it is still necessary to use such a class attribute,
     consider using a `noqa` comment with caution.
 
+    See
+    :py:data:`~wemake_python_styleguide.constants.BUILTINS_WHITELIST`
+    for full list of builtins we allow to shadow.
+
     .. versionadded:: 0.14
+    .. versionchanged:: 0.15
 
     """
 

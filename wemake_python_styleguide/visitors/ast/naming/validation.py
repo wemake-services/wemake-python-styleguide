@@ -62,6 +62,10 @@ class _SimpleNameValidator(object):
             alphabet.does_contain_unicode,
             naming.UnicodeNameViolation,
         ),
+        _NamingPredicate(
+            lambda name: access.is_unused(name) and len(name) > 1,
+            naming.WrongUnusedVariableNameViolation,
+        )
     )
 
     def __init__(
@@ -120,7 +124,6 @@ class _RegularNameValidator(_SimpleNameValidator):
         self._ensure_length(node, name)
         self._ensure_correct_name(node, name)
         self._ensure_readable_name(node, name)
-        self._ensure_proper_unused(node, name)
 
     def _ensure_length(self, node: ast.AST, name: str) -> None:
         min_length = self._options.min_name_length
@@ -152,12 +155,6 @@ class _RegularNameValidator(_SimpleNameValidator):
         if unreadable_sequence:
             self._error_callback(
                 naming.UnreadableNameViolation(node, text=unreadable_sequence),
-            )
-
-    def _ensure_proper_unused(self, node: ast.AST, name: str) -> None:
-        if access.is_unused(name) and len(name) > 1:
-            self._error_callback(
-                naming.WrongUnusedVariableNameViolation(node, text=name),
             )
 
 

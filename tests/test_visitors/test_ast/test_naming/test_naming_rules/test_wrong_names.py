@@ -8,24 +8,32 @@ from wemake_python_styleguide.visitors.ast.naming.validation import (
     WrongNameVisitor,
 )
 
+patterns = (
+    'value',
+    'no',
+    'data',
 
-@pytest.mark.parametrize('wrong_name', [
     'SOME',
     'Value',
     'nO',
     'dATa',
-])
-def test_wrong_variable_name_case_insensitive(
+)
+
+
+@pytest.mark.parametrize('wrong_name', patterns)
+def test_wrong_variable_name(
     assert_errors,
     assert_error_text,
     parse_ast_tree,
-    naming_template,
+    own_naming_template,
     default_options,
     mode,
     wrong_name,
 ):
     """Ensures that wrong names are not allowed, case insensitive."""
-    tree = parse_ast_tree(mode(naming_template.format(wrong_name)))
+    tree = parse_ast_tree(
+        mode(own_naming_template.format(wrong_name)),
+    )
 
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
@@ -33,33 +41,33 @@ def test_wrong_variable_name_case_insensitive(
     assert_errors(
         visitor,
         [WrongVariableNameViolation],
-        ignored_types=(UpperCaseAttributeViolation,),
+        ignored_types=UpperCaseAttributeViolation,
     )
-    assert_error_text(visitor, wrong_name, multiple=True)
+    assert_error_text(
+        visitor,
+        wrong_name,
+        ignored_types=UpperCaseAttributeViolation,
+    )
 
 
-@pytest.mark.parametrize('wrong_name', [
-    'value',
-    'no',
-    'data',
-])
-def test_wrong_variable_name(
+@pytest.mark.parametrize('wrong_name', patterns)
+def test_allowed_wrong_variable_name_for_foreign(
     assert_errors,
-    assert_error_text,
     parse_ast_tree,
-    naming_template,
+    foreign_naming_template,
     default_options,
     mode,
     wrong_name,
 ):
-    """Ensures that wrong names are not allowed."""
-    tree = parse_ast_tree(mode(naming_template.format(wrong_name)))
+    """Ensures that wrong names are not allowed, case insensitive."""
+    tree = parse_ast_tree(
+        mode(foreign_naming_template.format(wrong_name)),
+    )
 
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [WrongVariableNameViolation])
-    assert_error_text(visitor, wrong_name)
+    assert_errors(visitor, [])
 
 
 @pytest.mark.parametrize('forbidden_name', [
@@ -70,13 +78,15 @@ def test_name_in_forbidden_domain_names_option(
     assert_errors,
     assert_error_text,
     parse_ast_tree,
-    naming_template,
+    own_naming_template,
     options,
     mode,
     forbidden_name,
 ):
     """Ensures that names listed in `forbidden-domain-names` are forbidden."""
-    tree = parse_ast_tree(mode(naming_template.format(forbidden_name)))
+    tree = parse_ast_tree(
+        mode(own_naming_template.format(forbidden_name)),
+    )
 
     visitor = WrongNameVisitor(
         options(forbidden_domain_names=(forbidden_name,)),

@@ -46,11 +46,21 @@ def assert_error_text():
         baseline: Optional[int] = None,
         *,
         multiple: bool = False,
+        ignored_types=None,
     ):
-        if not multiple:
-            assert len(visitor.violations) == 1
+        if ignored_types:
+            real_errors = [
+                error
+                for error in visitor.violations
+                if not isinstance(error, ignored_types)
+            ]
+        else:
+            real_errors = visitor.violations
 
-        violation = visitor.violations[0]
+        if not multiple:
+            assert len(real_errors) == 1
+
+        violation = real_errors[0]
         error_format = ': {0}'
 
         assert error_format in violation.error_template

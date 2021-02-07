@@ -14,7 +14,7 @@ from os import path as {0}
 
 # Class names:
 
-class_name = 'class {0}: ...'
+class_name = 'class {0}(SomeParent): ...'
 
 
 # Function names:
@@ -75,7 +75,7 @@ class Input(object):
 lambda_argument = 'lambda {0}: ...'
 lambda_posonly_argument = 'lambda {0}, /: ...'
 
-# Class attributes:
+# Defined attributes:
 
 static_attribute = """
 class Test:
@@ -103,6 +103,10 @@ class Test(object):
     def __init__(self):
         self.{0}: int = 123
 """
+
+# Foreign attributes:
+
+foreign_attribute = 'other.{0} = 1'
 
 # Variables:
 
@@ -180,12 +184,13 @@ _ALL_FIXTURES = frozenset((
     method_kwonly_argument,
     lambda_argument,
 
-    # Class attributes:
+    # Attributes:
     static_attribute,
     static_typed_attribute,
     static_typed_annotation,
     instance_attribute,
     instance_typed_attribute,
+    foreign_attribute,
 
     # Variables:
     variable_def,
@@ -206,6 +211,20 @@ if PY38:
         lambda_posonly_argument,
         assignment_expression,
     }
+
+_ATTRIBUTES = frozenset((
+    method_name,
+
+    static_attribute,
+    static_typed_attribute,
+    static_typed_annotation,
+    instance_attribute,
+    instance_typed_attribute,
+))
+
+_FOREIGN_NAME_PATTERNS = frozenset((
+    foreign_attribute,
+))
 
 _FORBIDDEN_UNUSED_TUPLE = frozenset((
     unpacking_variables,
@@ -246,6 +265,30 @@ _FORBIDDEN_PROTECTED_UNUSED = _FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED | {
 @pytest.fixture(params=_ALL_FIXTURES)
 def naming_template(request):
     """Parametrized fixture that contains all possible naming templates."""
+    return request.param
+
+
+@pytest.fixture(params=_ATTRIBUTES)
+def attribute_template(request):
+    """Parametrized fixture that contains patterns for attributes."""
+    return request.param
+
+
+@pytest.fixture(params=_ALL_FIXTURES - _ATTRIBUTES)
+def non_attribute_template(request):
+    """Fixture that contains all naming templates except attributes."""
+    return request.param
+
+
+@pytest.fixture(params=_FOREIGN_NAME_PATTERNS)
+def foreign_naming_template(request):
+    """Fixture that contains all foreign name templates."""
+    return request.param
+
+
+@pytest.fixture(params=_ALL_FIXTURES - _FOREIGN_NAME_PATTERNS)
+def own_naming_template(request):
+    """Fixture that contains all own name templates."""
     return request.param
 
 
