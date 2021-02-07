@@ -64,22 +64,17 @@ class SubscriptVisitor(base.BaseNodeVisitor):
         if not isinstance(node.ctx, ast.Store):
             return
 
-        subscript_slice_assignment = (
-            isinstance(node.slice, ast.Slice)
-        )
+        subscript_slice_assignment = isinstance(node.slice, ast.Slice)
 
+        slice_expr = get_slice_expr(node)
         slice_function_assignment = (
-            isinstance(node.slice, ast.Index) and
-            isinstance(node.slice.value, ast.Call) and
-            isinstance(node.slice.value.func, ast.Name) and
-            node.slice.value.func.id == 'slice'
+            isinstance(slice_expr, ast.Call) and
+            functions.given_function_called(slice_expr, {'slice'})
         )
 
         if subscript_slice_assignment or slice_function_assignment:
             self.add_violation(
-                consistency.AssignToSliceViolation(
-                    node, text=str(node),
-                ),
+                consistency.AssignToSliceViolation(node),
             )
 
     def _is_none(self, component_value: ast.expr) -> bool:
