@@ -727,6 +727,10 @@ class AttributeGetter(object):
         anti_wps = ...
 
 
+a_list = [1, 2, 3, 4, 5]
+a_list[1:3] = [1, 2]  # noqa: WPS362
+a_list[slice(1)] = [1, 2]  # noqa: WPS362
+
 for element in range(10):
     try:  # noqa: WPS452
         my_print(1)

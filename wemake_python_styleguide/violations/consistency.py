@@ -85,6 +85,7 @@ Summary
    UnpackingIterableToListViolation
    RawStringNotNeededViolation
    InconsistentComprehensionViolation
+   AssignToSliceViolation
 
 Consistency checks
 ------------------
@@ -151,6 +152,7 @@ Consistency checks
 .. autoclass:: UnpackingIterableToListViolation
 .. autoclass:: RawStringNotNeededViolation
 .. autoclass:: InconsistentComprehensionViolation
+.. autoclass:: AssignToSliceViolation
 
 """
 
@@ -2297,7 +2299,47 @@ class InconsistentComprehensionViolation(TokenizeViolation):
         ]
 
     .. versionadded:: 0.15.0
+
     """
 
     error_template = 'Found an inconsistently structured comprehension'
     code = 361
+
+
+@final
+class AssignToSliceViolation(ASTViolation):
+    """
+    Forbid assignment to a subscript slice.
+
+    Reasoning:
+        Assingment to a slice may lead to a list changing its size
+        implicitly and strangely which makes it hard to spot bugs.
+
+    Solution:
+        Use explicit index assignment in place of slice assignment.
+
+    Why you may disable or inline-ignore this rule?
+
+    The quite common and useful example which violates this rule
+    is inplace list replacement via ``[:]`` - this helps
+    to keep the same object reference while it content could be completely
+    erased or replaced with the new one.
+
+    One more thing: slice assignment is the only way
+    for inplace array multiple replacement when you need that.
+
+    Example::
+
+        # Correct:
+        a[5] = 1
+
+        # Wrong:
+        a[1:3] = [1, 2]
+        a[slice(1)] = [1, 3]
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found assignment to a subscript slice'
+    code = 362

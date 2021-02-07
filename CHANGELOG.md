@@ -17,6 +17,7 @@ Semantic versioning in our case means:
 - Forbids using non-trivial expressions as an argument to `except`
 - Forbids using too many variables in a tuple unpacking
 - Forbids using `float("NaN")`.
+- Forbids assigning to a slice
 - Allow `__call__` method to be asynchronous
 - Allows common strings not to be counted against string constant overuse limit
 - Forbids to unpack iterable objects to lists #1259
