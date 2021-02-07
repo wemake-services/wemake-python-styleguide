@@ -52,7 +52,6 @@ def test_long_variable_name_config(
     mode,
 ):
     """Ensures that it is possible to configure `max_name_length`."""
-    long_name = 'incredibly_long_name_that_should_not_pass_the_long_name_test'
     tree = parse_ast_tree(
         mode(own_naming_template.format(long_name)),
     )
