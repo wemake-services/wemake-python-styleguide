@@ -2,7 +2,6 @@ import ast
 from typing import Union
 
 from wemake_python_styleguide.logic import nodes
-from wemake_python_styleguide.types import AnyVariableDef
 
 _VarDefinition = Union[ast.AST, ast.expr]
 _LocalVariable = Union[ast.Name, ast.ExceptHandler]
@@ -15,11 +14,14 @@ def get_variable_name(node: _LocalVariable) -> str:
     return getattr(node, 'name', '')
 
 
-def looks_like_builtin(node: AnyVariableDef) -> bool:
+def does_shadow_builtin(node: ast.AST) -> bool:
     """
     We allow attributes and class-level builtin overrides.
 
-    Like: ``self.map = {}`` or ``def map(self, function):``
+    Like: ``self.list = []`` or ``def map(self, function):``
+
+    Why?
+    Because they cannot harm you since they do not shadow the real builtin.
     """
     return (
         not isinstance(node, ast.Attribute) and

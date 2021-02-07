@@ -93,7 +93,7 @@ class _RegularNameValidator(_SimpleNameValidator):
         _NamingPredicate(
             builtins.is_builtin_name,
             naming.BuiltinShadowingViolation,
-            variables.looks_like_builtin,
+            variables.does_shadow_builtin,
         ),
         _NamingPredicate(
             builtins.is_wrong_alias,
@@ -186,7 +186,7 @@ class _FunctionNameValidator(_RegularNameValidator):
 
 
 @final
-class _ClassBasedNameValidator(_SimpleNameValidator):
+class _ClassBasedNameValidator(_RegularNameValidator):
     def check_attribute_names(self, node: ast.ClassDef) -> None:
         class_attributes, _ = classes.get_attributes(
             node, include_annotated=True,
