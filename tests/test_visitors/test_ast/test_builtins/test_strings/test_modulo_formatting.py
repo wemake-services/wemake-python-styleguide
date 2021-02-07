@@ -146,10 +146,14 @@ def test_regular_modulo_string(
     visitor = WrongStringVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [], ignored_types=(
-        FormattedStringViolation,
-        TooComplexFormattedStringViolation,
-    ))
+    assert_errors(
+        visitor,
+        [],
+        ignored_types=(
+            FormattedStringViolation,
+            TooComplexFormattedStringViolation,
+        ),
+    )
 
 
 @pytest.mark.parametrize('code', [
