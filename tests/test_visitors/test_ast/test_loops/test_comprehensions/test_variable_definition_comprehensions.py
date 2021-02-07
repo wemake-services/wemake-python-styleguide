@@ -69,6 +69,9 @@ def test_wrong_definitions_in_comprehension(
     '(y, xy)',
     '(first, *star)',
     '(first, second, *star)',
+    # regression 1684
+    'first, (second, third)',
+    '(first, second), third',
 ])
 def test_comprehension_without_bad_definitions(
     assert_errors,

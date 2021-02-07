@@ -89,7 +89,6 @@ wrong_single_destructuring3 = '[first] = {0}'
     tuple_assignment1,
     tuple_assignment2,
     spread_assignment1,
-    spread_assignment2,
     for_assignment,
     for_unpacking1,
     for_unpacking2,
@@ -101,6 +100,10 @@ wrong_single_destructuring3 = '[first] = {0}'
     with_unpacking1,
     with_unpacking2,
 ])
+@pytest.mark.parametrize('definition', [
+    'some_name',
+    '(a, b)',  # tuple
+])
 @pytest.mark.parametrize('target', [
     '(1, 2)',
     '[1, 2]',
@@ -109,12 +112,41 @@ def test_correct_unpacking(
     assert_errors,
     parse_ast_tree,
     code,
+    definition,
     target,
     default_options,
     mode,
 ):
     """Testing that correct assignments work."""
-    tree = parse_ast_tree(mode(code.format('some_name', target)))
+    tree = parse_ast_tree(mode(code.format(definition, target)))
+
+    visitor = WrongAssignmentVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('code', [
+    spread_assignment2,
+])
+@pytest.mark.parametrize('definition', [
+    'some_name',
+])
+@pytest.mark.parametrize('target', [
+    '(1, 2)',
+    '[1, 2]',
+])
+def test_correct_spread_unpacking(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    definition,
+    target,
+    default_options,
+    mode,
+):
+    """Testing that correct assignments work."""
+    tree = parse_ast_tree(mode(code.format(definition, target)))
 
     visitor = WrongAssignmentVisitor(default_options, tree=tree)
     visitor.run()

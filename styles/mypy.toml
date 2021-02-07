@@ -1,3 +1,15 @@
+# `nitpick` specific configuration.
+# `nitpick` ensures that you have the same configuration
+# in your own project.
+
+# Make sure to install it with:
+# `pip install nitpick`
+
+# See:
+# https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/nitpick
+
+# This file is included into wemake-preset.
+
 ["setup.cfg".mypy]
 allow_redefinition = false
 check_untyped_defs = true

@@ -27,6 +27,7 @@ Summary
    UselessOverwrittenMethodViolation
    WrongSuperCallAccessViolation
    WrongDescriptorDecoratorViolation
+   UnpythonicGetterSetterViolation
 
 Respect your objects
 --------------------
@@ -46,6 +47,7 @@ Respect your objects
 .. autoclass:: UselessOverwrittenMethodViolation
 .. autoclass:: WrongSuperCallAccessViolation
 .. autoclass:: WrongDescriptorDecoratorViolation
+.. autoclass:: UnpythonicGetterSetterViolation
 
 """
 
@@ -603,14 +605,15 @@ class WrongDescriptorDecoratorViolation(ASTViolation):
     Example::
 
         # Correct:
-        Class TestClass(Object):
+        class TestClass(object):
             @property
-            def myMethod():
+            def my_method():
                 ...
 
         # Wrong:
         @property
-        def myFunction():
+        def my_function():
+            ...
 
     .. versionadded:: 0.15.0
 
@@ -618,3 +621,41 @@ class WrongDescriptorDecoratorViolation(ASTViolation):
 
     error_template = 'Found descriptor applied on a function'
     code = 614
+
+
+@final
+class UnpythonicGetterSetterViolation(ASTViolation):
+    """
+    Forbids to use getters and setters in objects.
+
+    Reasoning:
+        Python does not need this abstraction.
+
+    Solution:
+        Either use ``@property`` or make the
+        attribute public and change it directly.
+
+    Example::
+
+        # Correct:
+        class Example(object):
+            def __init__(self):
+                self._attribute = None
+
+        # Wrong:
+        class Example(object):
+            def __init__(self):
+                self.attribute = None
+
+            def set_attribute(self):
+                ...
+
+            def get_attribute(self, value):
+                ...
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found unpythonic getter or setter'
+    code = 615

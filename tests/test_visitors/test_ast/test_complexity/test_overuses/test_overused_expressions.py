@@ -118,12 +118,11 @@ class Context(object):
 
 violating_expressions = (
     # Nodes:
-    'assert 1',
+    'assert 1',  # statement, but still
     'a and b',
     'b + a',
     'call(1, None)',
     'a >= 1',
-    '-item.attr',
     'lambda x: x.set',
     '{a: 1 for a in "123"}',
     '{"1": a}',
@@ -133,6 +132,10 @@ violating_expressions = (
     '(x.attr for x in other)',
     '{1, 2, 3}',
     '{a for a in other}',
+
+    # Unary nodes:
+    '-1',  # unary minus operator is raising when used with literal
+    '+some',  # unary plus always raises
 
     # Special cases for self:
     'self.method([star])',  # `[star]` is raising
@@ -164,6 +167,8 @@ ignored_expressions = (
     'dict()',
     # attributes
     'some.prop',
+    # unary operator
+    '-value',
 )
 
 

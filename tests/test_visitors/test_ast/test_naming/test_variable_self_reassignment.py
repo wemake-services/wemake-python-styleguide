@@ -56,6 +56,21 @@ z = 3
 x, *y = z, x, y
 """
 
+# regression 1812
+# https://github.com/wemake-services/wemake-python-styleguide/issues/1812
+right_parts_unused1 = 'x, _ = some()'
+right_parts_unused2 = 'x, _, _ = some()'
+right_parts_unused3 = '_, x, _ = some()'
+right_parts_unused4 = '_, _, x = some()'
+
+# regression 1827
+right_class_reassignment = """
+MyValue = 1
+
+class MyClass(object):
+    MyValue = MyValue
+"""
+
 # Wrong:
 
 wrong_fragment = """
@@ -105,6 +120,9 @@ z = 3
 x, y, z = x, z, y
 """
 
+# regression 1812
+wrong_parts_unused1 = 'x, _num, _num = some()'
+
 # Double wrong:
 
 wrong_fragment_tuple_assignment = """
@@ -146,6 +164,7 @@ x, y, z = x, y, z
     wrong_fragment_other_assignment,
     wrong_fragment_typed_other_assignment,
     wrong_fragment_mixed_tuple_assignment,
+    wrong_parts_unused1,
 ])
 def test_self_variable_reassignment(
     assert_errors,
@@ -216,6 +235,11 @@ def test_self_variable_reassignment_triple(
     right_star_assignment1,
     right_star_assignment2,
     right_star_assignment3,
+    right_parts_unused1,
+    right_parts_unused2,
+    right_parts_unused3,
+    right_parts_unused4,
+    right_class_reassignment,
 ])
 def test_correct_variable_reassignment(
     assert_errors,

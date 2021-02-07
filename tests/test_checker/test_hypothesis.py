@@ -30,7 +30,8 @@ settings.load_profile('slow')
 def _fixup(string: str) -> str:
     """Avoid known issues with tokenize() by editing the string."""
     return ''.join(
-        char for char in string
+        char
+        for char in string
         if char.isprintable()
     ).strip().strip('\\').strip() + '\n'
 

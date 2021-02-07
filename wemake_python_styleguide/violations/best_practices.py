@@ -604,6 +604,9 @@ class InitModuleHasLogicViolation(SimpleViolation):
         Default:
         :str:`wemake_python_styleguide.options.defaults.I_CONTROL_CODE`
 
+    When using ``--i-dont-control-code`` it is still recommended
+    to only have imports in your ``__init__.py``.
+
     .. versionadded:: 0.1.0
 
     """
@@ -657,18 +660,13 @@ class WrongUnpackingViolation(ASTViolation):
     Example::
 
         # Correct:
-        first, second = some()
-
-        # Wrong:
-        first, some_dict['alias'] = some()
-
-        # Wrong:
-        self.reader, self.writer = call()
-
-        # Correct:
         reader, writter = call()
         self.reader = reader
         self.writer = writer
+
+        # Wrong:
+        first, some_dict['alias'] = some()
+        self.reader, self.writer = call()
 
     .. versionadded:: 0.6.0
     .. versionchanged:: 0.11.0
