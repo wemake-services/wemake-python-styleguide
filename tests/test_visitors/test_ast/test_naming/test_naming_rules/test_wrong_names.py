@@ -4,7 +4,9 @@ from wemake_python_styleguide.violations.naming import (
     UpperCaseAttributeViolation,
     WrongVariableNameViolation,
 )
-from wemake_python_styleguide.visitors.ast.naming import WrongNameVisitor
+from wemake_python_styleguide.visitors.ast.naming.validation import (
+    WrongNameVisitor,
+)
 
 
 @pytest.mark.parametrize('wrong_name', [

@@ -1,5 +1,7 @@
 from wemake_python_styleguide.violations.naming import PrivateNameViolation
-from wemake_python_styleguide.visitors.ast.naming import WrongNameVisitor
+from wemake_python_styleguide.visitors.ast.naming.validation import (
+    WrongNameVisitor,
+)
 
 
 def test_private_variable_name(

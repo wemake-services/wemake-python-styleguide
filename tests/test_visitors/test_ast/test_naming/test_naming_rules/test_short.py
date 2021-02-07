@@ -4,7 +4,9 @@ from wemake_python_styleguide.violations.naming import (
     TooShortNameViolation,
     TrailingUnderscoreViolation,
 )
-from wemake_python_styleguide.visitors.ast.naming import WrongNameVisitor
+from wemake_python_styleguide.visitors.ast.naming.validation import (
+    WrongNameVisitor,
+)
 
 
 @pytest.mark.parametrize('short_name', [

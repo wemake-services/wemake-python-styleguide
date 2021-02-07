@@ -5,7 +5,7 @@ import pytest
 from wemake_python_styleguide.violations.naming import (
     UnusedVariableIsDefinedViolation,
 )
-from wemake_python_styleguide.visitors.ast.naming import (
+from wemake_python_styleguide.visitors.ast.naming.variables import (
     UnusedVariableDefinitionVisitor,
 )
 

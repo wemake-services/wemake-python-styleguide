@@ -3,7 +3,7 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     WrongModuleMetadataViolation,
 )
-from wemake_python_styleguide.visitors.ast.naming import (
+from wemake_python_styleguide.visitors.ast.naming.variables import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
     WrongModuleMetadataVisitor,
 )

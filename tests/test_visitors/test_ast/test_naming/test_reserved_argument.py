@@ -4,7 +4,9 @@ from wemake_python_styleguide.constants import SPECIAL_ARGUMENT_NAMES_WHITELIST
 from wemake_python_styleguide.violations.naming import (
     ReservedArgumentNameViolation,
 )
-from wemake_python_styleguide.visitors.ast.naming import WrongNameVisitor
+from wemake_python_styleguide.visitors.ast.naming.validation import (
+    WrongNameVisitor,
+)
 
 # Correct:
 

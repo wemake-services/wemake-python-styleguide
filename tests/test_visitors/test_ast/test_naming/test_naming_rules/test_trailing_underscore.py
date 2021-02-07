@@ -3,7 +3,9 @@ import pytest
 from wemake_python_styleguide.violations.naming import (
     TrailingUnderscoreViolation,
 )
-from wemake_python_styleguide.visitors.ast.naming import WrongNameVisitor
+from wemake_python_styleguide.visitors.ast.naming.validation import (
+    WrongNameVisitor,
+)
 
 
 def test_wrong_trailing_underscore(

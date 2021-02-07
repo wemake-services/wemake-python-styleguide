@@ -5,7 +5,9 @@ from wemake_python_styleguide.logic.naming.alphabet import (
     get_unreadable_characters,
 )
 from wemake_python_styleguide.violations.naming import UnreadableNameViolation
-from wemake_python_styleguide.visitors.ast.naming import WrongNameVisitor
+from wemake_python_styleguide.visitors.ast.naming.validation import (
+    WrongNameVisitor,
+)
 
 class_template = """
 class {0}(object):

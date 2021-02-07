@@ -1,5 +1,7 @@
 from wemake_python_styleguide.violations.naming import TooLongNameViolation
-from wemake_python_styleguide.visitors.ast.naming import WrongNameVisitor
+from wemake_python_styleguide.visitors.ast.naming.validation import (
+    WrongNameVisitor,
+)
 
 
 def test_long_variable_name(
