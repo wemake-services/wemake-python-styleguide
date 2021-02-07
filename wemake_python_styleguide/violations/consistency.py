@@ -2213,6 +2213,16 @@ class AssignToSliceViolation(ASTViolation):
     Solution:
         Use explicit index assignment in place of slice assignment.
 
+    Why you may disable or inline-ignore this rule?
+
+    The quite common and useful example which violates this rule
+    is inplace list replacement via ``[:]`` - this helps
+    to keep the same object reference while it content could be completely
+    erased or replaced with the new one.
+
+    One more thing: slice assignment is the only way
+    for inplace array multiple replacement when you need that.
+
     Example::
 
         # Correct:
@@ -2222,7 +2232,7 @@ class AssignToSliceViolation(ASTViolation):
         a[1:3] = [1, 2]
         a[slice(1)] = [1, 3]
 
-    .. versionadded:: 0.16.0
+    .. versionadded:: 0.15.0
 
     """
 

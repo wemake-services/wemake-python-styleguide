@@ -5,7 +5,7 @@ from wemake_python_styleguide.violations.consistency import (
 )
 from wemake_python_styleguide.visitors.ast.subscripts import SubscriptVisitor
 
-usage_template = 'constant[{0}]= [1, 2, 3]'
+usage_template = 'constant[{0}] = [1, 2, 3]'
 
 
 @pytest.mark.parametrize('expression', [
@@ -37,6 +37,11 @@ def test_slice_assignment(
 
 @pytest.mark.parametrize('expression', [
     '5',
+    '"string"',
+    'object',
+    'dict[key]',
+    'subslice[1:2]',
+    'func(1, 2)',
 ])
 def test_regular_index_assignment(
     assert_errors,
