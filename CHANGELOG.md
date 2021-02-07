@@ -14,6 +14,11 @@ Semantic versioning in our case means:
 ### Features
 
 - Adds `python3.9` support
+- Changes how we treat own/foreign attributes,
+  since now we only check assigned attribute names for `self`/`cls`/`mcs`,
+  but not any other ones.
+  So, now writting `point.x = 1` will not trigger any violations.
+  Previously, it would raise "too short name".
 - Forbids using non-trivial expressions as an argument to `except`
 - Forbids using too many variables in a tuple unpacking
 - Forbids using `float("NaN")`.
@@ -42,6 +47,7 @@ Semantic versioning in our case means:
 - Forbids using bitwise operation with boolean operation
 - Forbids inconsistent structuring of multiline comprehensions
 - Forbids to use unpythonic getters and setters such as `get_attribute` or `set_attribute`
+- Now `credits`, `license`, and `copyright` builtins are free to shadow
 
 ### Bugfixes
 
@@ -61,6 +67,7 @@ Semantic versioning in our case means:
 - Fixes variable reassignment in class context
 - Fixes that `*'abc'` was not counted as pointless star expression
 - Fixes that `-some` was counted as overused expression
+- Fixes several bugs with attribute names
 
 ### Misc
 

@@ -1,6 +1,6 @@
 from typing_extensions import Final
 
-from wemake_python_styleguide.presets.topics import complexity
+from wemake_python_styleguide.presets.topics import complexity, naming
 from wemake_python_styleguide.visitors.ast import (  # noqa: WPS235
     annotations,
     attributes,
@@ -16,7 +16,6 @@ from wemake_python_styleguide.visitors.ast import (  # noqa: WPS235
     keywords,
     loops,
     modules,
-    naming,
     operators,
     statements,
     subscripts,
@@ -61,12 +60,6 @@ PRESET: Final = (
     exceptions.WrongExceptHandlerVisitor,
 
     imports.WrongImportVisitor,
-
-    naming.WrongNameVisitor,
-    naming.WrongModuleMetadataVisitor,
-    naming.WrongVariableAssignmentVisitor,
-    naming.UnusedVariableUsageVisitor,
-    naming.UnusedVariableDefinitionVisitor,
 
     builtins.WrongNumberVisitor,
     builtins.WrongStringVisitor,
@@ -114,6 +107,7 @@ PRESET: Final = (
     subscripts.ImplicitDictGetVisitor,
     subscripts.CorrectKeyVisitor,
 
-    # Complexity:
+    # Topics:
     *complexity.PRESET,
+    *naming.PRESET,
 )

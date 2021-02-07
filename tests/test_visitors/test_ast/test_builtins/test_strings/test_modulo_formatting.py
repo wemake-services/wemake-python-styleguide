@@ -96,9 +96,11 @@ def test_modulo_formatting(
     visitor = WrongStringVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [ModuloStringFormatViolation], (
-        FormattedStringViolation,
-    ))
+    assert_errors(
+        visitor,
+        [ModuloStringFormatViolation],
+        ignored_types=FormattedStringViolation,
+    )
 
 
 @pytest.mark.parametrize('code', [
@@ -144,10 +146,14 @@ def test_regular_modulo_string(
     visitor = WrongStringVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [], (
-        FormattedStringViolation,
-        TooComplexFormattedStringViolation,
-    ))
+    assert_errors(
+        visitor,
+        [],
+        ignored_types=(
+            FormattedStringViolation,
+            TooComplexFormattedStringViolation,
+        ),
+    )
 
 
 @pytest.mark.parametrize('code', [
@@ -174,7 +180,7 @@ def test_functions_modulo_string(
     visitor = WrongStringVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [], (FormattedStringViolation,))
+    assert_errors(visitor, [], ignored_types=FormattedStringViolation)
 
 
 @pytest.mark.parametrize('code', [

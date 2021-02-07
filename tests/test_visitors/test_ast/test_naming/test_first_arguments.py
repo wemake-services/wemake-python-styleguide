@@ -1,7 +1,9 @@
 import pytest
 
 from wemake_python_styleguide.constants import SPECIAL_ARGUMENT_NAMES_WHITELIST
-from wemake_python_styleguide.visitors.ast.naming import WrongNameVisitor
+from wemake_python_styleguide.visitors.ast.naming.validation import (
+    WrongNameVisitor,
+)
 
 lambda_first_argument = 'lambda {0}: ...'
 function_first_argument = 'def function({0}): ...'

@@ -16,6 +16,34 @@ import re
 
 from typing_extensions import Final
 
+# Internal variables
+# ==================
+
+# Please, do not touch values beyond this line!
+# ---------------------------------------------
+
+# They are not publicly documented since they are not used by the end user.
+# But, we still need them to be defined here.
+
+# Used as a default filename, when it is not passed by flake8:
+STDIN: Final = 'stdin'
+
+# Used to specify as a placeholder for `__init__`:
+INIT: Final = '__init__'
+
+# Used to determine when we are running on Windows:
+WINDOWS_OS: Final = 'nt'
+
+# Used as a placeholder for special `_` variable:
+UNUSED_PLACEHOLDER: Final = '_'
+
+
+# Public variables
+# ================
+
+# Values beyond this line are public and should be used.
+# ------------------------------------------------------
+
 #: List of functions we forbid to use.
 FUNCTIONS_BLACKLIST: Final = frozenset((
     # Code generation:
@@ -276,6 +304,14 @@ ALLOWED_BUILTIN_CLASSES: Final = frozenset((
     'object',
 ))
 
+#: List of builtins that we allow to shadow.
+BUILTINS_WHITELIST: Final = frozenset((
+    UNUSED_PLACEHOLDER,
+    'license',
+    'copyright',
+    'credits',
+))
+
 #: List of nested functions' names we allow to use.
 NESTED_FUNCTIONS_WHITELIST: Final = frozenset((
     'decorator',
@@ -399,24 +435,3 @@ ALIAS_NAMES_WHITELIST: Final = frozenset((
     'tf',
     'cv',
 ))
-
-# Internal variables
-# ==================
-
-# Please, do not touch values beyond this line!
-# ---------------------------------------------
-
-# They are not publicly documented since they are not used by the end user.
-# But, we still need them to be defined here.
-
-# Used as a default filename, when it is not passed by flake8:
-STDIN: Final = 'stdin'
-
-# Used to specify as a placeholder for `__init__`:
-INIT: Final = '__init__'
-
-# Used to determine when we are running on Windows:
-WINDOWS_OS: Final = 'nt'
-
-# Used as a placeholder for special `_` variable:
-UNUSED_PLACEHOLDER: Final = '_'

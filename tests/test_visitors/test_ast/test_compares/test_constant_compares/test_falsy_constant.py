@@ -122,4 +122,4 @@ def test_correct_constant_compare(
     visitor = WrongConstantCompareVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [], (WrongIsCompareViolation,))
+    assert_errors(visitor, [], ignored_types=WrongIsCompareViolation)

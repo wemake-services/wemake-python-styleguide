@@ -396,7 +396,7 @@ def test_wrong_return_in_else_or_finally(
     assert_errors(
         visitor,
         [TryExceptMultipleReturnPathViolation],
-        (UselessExceptCaseViolation),
+        ignored_types=UselessExceptCaseViolation,
     )
 
 
@@ -438,7 +438,7 @@ def test_correct_return_path_in_try_except(
     visitor = WrongTryExceptVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [], (UselessExceptCaseViolation))
+    assert_errors(visitor, [], ignored_types=UselessExceptCaseViolation)
 
 
 @pytest.mark.parametrize('statements', [

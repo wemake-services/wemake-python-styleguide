@@ -3,9 +3,11 @@ import pytest
 from wemake_python_styleguide.violations.naming import (
     UnusedVariableIsUsedViolation,
 )
-from wemake_python_styleguide.visitors.ast.naming import (
-    UnusedVariableUsageVisitor,
+from wemake_python_styleguide.visitors.ast.naming.validation import (
     WrongNameVisitor,
+)
+from wemake_python_styleguide.visitors.ast.naming.variables import (
+    UnusedVariableUsageVisitor,
 )
 
 annotation = 'some_var: {0}'

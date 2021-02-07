@@ -57,9 +57,11 @@ def test_alphabet_as_fstring_violation(
     visitor = WrongStringVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [StringConstantRedefinedViolation], (
-        FormattedStringViolation,
-    ))
+    assert_errors(
+        visitor,
+        [StringConstantRedefinedViolation],
+        ignored_types=FormattedStringViolation,
+    )
 
 
 @pytest.mark.parametrize('code', [

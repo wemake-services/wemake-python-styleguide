@@ -116,7 +116,7 @@ def test_literal_special2(
     assert_errors(
         visitor,
         [ConstantCompareViolation],
-        ReversedComplexCompareViolation,
+        ignored_types=ReversedComplexCompareViolation,
     )
 
 
@@ -145,4 +145,8 @@ def test_literal_special_without_errors(
     visitor = CompareSanityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [], ReversedComplexCompareViolation)
+    assert_errors(
+        visitor,
+        [],
+        ignored_types=ReversedComplexCompareViolation,
+    )
