@@ -56,7 +56,7 @@ class Input(object):
 """
 
 function_posonly_argument = """
-def test({0}, /): ...
+def test(first, {0}, /): ...
 """
 
 function_kwonly_argument = """

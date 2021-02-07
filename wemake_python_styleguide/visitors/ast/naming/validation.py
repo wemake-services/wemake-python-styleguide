@@ -84,10 +84,33 @@ class _SimpleNameValidator(object):
         self,
         node: ast.AST,
         name: str,
+        *,
+        is_first_argument: bool = False,
     ) -> None:
         for predicate in self._naming_predicates:
             if predicate.is_applicable(node) and predicate.is_correct(name):
                 self._error_callback(predicate.violation(node, text=name))
+
+        self._ensure_reserved_name(
+            node, name, is_first_argument=is_first_argument,
+        )
+
+    def _ensure_reserved_name(
+        self,
+        node: ast.AST,
+        name: str,
+        *,
+        is_first_argument: bool,
+    ) -> None:
+        if is_first_argument:
+            return
+
+        if not logical.is_wrong_name(name, SPECIAL_ARGUMENT_NAMES_WHITELIST):
+            return
+
+        self._error_callback(
+            naming.ReservedArgumentNameViolation(node, text=name),
+        )
 
 
 class _RegularNameValidator(_SimpleNameValidator):
@@ -118,8 +141,10 @@ class _RegularNameValidator(_SimpleNameValidator):
         self,
         node: ast.AST,
         name: str,
+        *,
+        is_first_argument: bool = False,
     ) -> None:
-        super().check_name(node, name)
+        super().check_name(node, name, is_first_argument=is_first_argument)
 
         self._ensure_length(node, name)
         self._ensure_correct_name(node, name)
@@ -162,23 +187,12 @@ class _RegularNameValidator(_SimpleNameValidator):
 class _FunctionNameValidator(_RegularNameValidator):
     def check_function_signature(self, node: AnyFunctionDefAndLambda) -> None:
         for arg in functions.get_all_arguments(node):
-            self.check_name(arg, arg.arg)
-
-            should_ignore_argument = (
+            is_first_argument = (
                 functions.is_first_argument(node, arg.arg) and
                 not isinstance(node, ast.Lambda)
             )
-            if not should_ignore_argument:
-                self._ensure_first_argument(node, arg.arg)
-
-    def _ensure_first_argument(
-        self,
-        node: ast.AST,
-        name: str,
-    ) -> None:
-        if logical.is_wrong_name(name, SPECIAL_ARGUMENT_NAMES_WHITELIST):
-            self._error_callback(
-                naming.ReservedArgumentNameViolation(node, text=name),
+            self.check_name(
+                arg, arg.arg, is_first_argument=is_first_argument,
             )
 
 
