@@ -24,7 +24,9 @@ def test_builtin_shadowing(
     wrong_name,
 ):
     """Test names that shadow builtins."""
-    tree = parse_ast_tree(mode(non_attribute_template.format(wrong_name)))
+    tree = parse_ast_tree(
+        mode(non_attribute_template.format(wrong_name)),
+    )
 
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
@@ -43,7 +45,9 @@ def test_builtin_shadowing_whitelist(
     wrong_name,
 ):
     """Test names that shadow allowed builtins."""
-    tree = parse_ast_tree(mode(non_attribute_template.format(wrong_name)))
+    tree = parse_ast_tree(
+        mode(non_attribute_template.format(wrong_name)),
+    )
 
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
@@ -61,7 +65,9 @@ def test_builtin_attribute(
     wrong_name,
 ):
     """Test attribute names that do not shadow builtins."""
-    tree = parse_ast_tree(mode(attribute_template.format(wrong_name)))
+    tree = parse_ast_tree(
+        mode(attribute_template.format(wrong_name)),
+    )
 
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()

@@ -75,7 +75,7 @@ class Input(object):
 lambda_argument = 'lambda {0}: ...'
 lambda_posonly_argument = 'lambda {0}, /: ...'
 
-# Defined attributes:
+# Own attributes:
 
 static_attribute = """
 class Test:
@@ -231,7 +231,7 @@ _ATTRIBUTES = frozenset((
     foreign_attribute,
 ))
 
-_FOREIGN_NAME_PATTERNS = frozenset((
+_FOREIGN_NAMING_PATTERNS = frozenset((
     foreign_attribute,
 ))
 
@@ -289,13 +289,13 @@ def non_attribute_template(request):
     return request.param
 
 
-@pytest.fixture(params=_FOREIGN_NAME_PATTERNS)
+@pytest.fixture(params=_FOREIGN_NAMING_PATTERNS)
 def foreign_naming_template(request):
     """Fixture that contains all foreign name templates."""
     return request.param
 
 
-@pytest.fixture(params=_ALL_FIXTURES - _FOREIGN_NAME_PATTERNS)
+@pytest.fixture(params=_ALL_FIXTURES - _FOREIGN_NAMING_PATTERNS)
 def own_naming_template(request):
     """Fixture that contains all own name templates."""
     return request.param

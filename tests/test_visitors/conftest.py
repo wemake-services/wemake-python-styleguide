@@ -1,12 +1,19 @@
-from typing import Optional, Sequence
+from typing import Optional, Sequence, Tuple, Type, Union
 
 import pytest
 
 from wemake_python_styleguide.violations.base import (
     ASTViolation,
+    BaseViolation,
     TokenizeViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseVisitor
+
+_IgnoredTypes = Union[
+    Type[BaseViolation],
+    Tuple[BaseViolation, ...],
+    None,
+]
 
 
 @pytest.fixture(scope='session')
@@ -15,8 +22,9 @@ def assert_errors():
     def factory(
         visitor: BaseVisitor,
         errors: Sequence[str],
-        ignored_types=None,
-    ):
+        *,
+        ignored_types: _IgnoredTypes = None,
+    ) -> None:
         if ignored_types:
             real_errors = [
                 error
@@ -46,8 +54,8 @@ def assert_error_text():
         baseline: Optional[int] = None,
         *,
         multiple: bool = False,
-        ignored_types=None,
-    ):
+        ignored_types: _IgnoredTypes = None,
+    ) -> None:
         if ignored_types:
             real_errors = [
                 error
