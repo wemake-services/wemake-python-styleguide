@@ -82,6 +82,11 @@ class Test:
     {0} = None
 """
 
+static_multiple_attributes = """
+class Test:
+    {0}, other = (1, 2)
+"""
+
 static_typed_attribute = """
 class Test:
     {0}: int = None
@@ -186,6 +191,7 @@ _ALL_FIXTURES = frozenset((
 
     # Attributes:
     static_attribute,
+    static_multiple_attributes,
     static_typed_attribute,
     static_typed_annotation,
     instance_attribute,
@@ -216,10 +222,13 @@ _ATTRIBUTES = frozenset((
     method_name,
 
     static_attribute,
+    static_multiple_attributes,
     static_typed_attribute,
     static_typed_annotation,
     instance_attribute,
     instance_typed_attribute,
+
+    foreign_attribute,
 ))
 
 _FOREIGN_NAME_PATTERNS = frozenset((
