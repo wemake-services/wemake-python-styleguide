@@ -4,7 +4,7 @@ import keyword
 
 from typing_extensions import Final
 
-from wemake_python_styleguide.constants import UNUSED_PLACEHOLDER, BUILTINS_WHITELIST
+from wemake_python_styleguide.constants import BUILTINS_WHITELIST
 from wemake_python_styleguide.logic.naming.access import is_magic, is_unused
 
 _BUILTINS: Final = frozenset((

@@ -65,7 +65,7 @@ class _SimpleNameValidator(object):
         _NamingPredicate(
             lambda name: access.is_unused(name) and len(name) > 1,
             naming.WrongUnusedVariableNameViolation,
-        )
+        ),
     )
 
     def __init__(
