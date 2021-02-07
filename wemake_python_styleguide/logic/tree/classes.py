@@ -51,6 +51,7 @@ def is_forbidden_super_class(class_name: Optional[str]) -> bool:
 
 def get_attributes(
     node: ast.ClassDef,
+    *,
     include_annotated: bool,
 ) -> _AllAttributes:
     """
@@ -102,7 +103,7 @@ def _get_class_attribute(
     subnode: ast.AST,
 ) -> Optional[AnyAssign]:
     return subnode if (
-        nodes.get_context(subnode) == node and
+        nodes.get_context(subnode) is node and
         getattr(subnode, 'value', None) and
         isinstance(subnode, AssignNodes)
     ) else None
@@ -113,7 +114,7 @@ def _get_annotated_class_attribute(
     subnode: ast.AST,
 ) -> Optional[AnyAssign]:
     return subnode if (
-        nodes.get_context(subnode) == node and
+        nodes.get_context(subnode) is node and
         (
             getattr(subnode, 'value', None) and
             isinstance(subnode, AssignNodes)
@@ -124,7 +125,7 @@ def _get_annotated_class_attribute(
 def find_getters_and_setters(node: ast.ClassDef) -> Iterable[AnyFunctionDef]:
     """Returns nodes of all getter or setter methods."""
     for sub in ast.walk(node):
-        is_correct_context = nodes.get_context(sub) == node
+        is_correct_context = nodes.get_context(sub) is node
         if isinstance(sub, FunctionNodes) and is_correct_context:
             if sub.name[:GETTER_LENGTH] in _GetterSetterPrefixes:
                 yield sub

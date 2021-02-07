@@ -66,8 +66,8 @@ def get_variables_from_node(node: ast.AST) -> List[str]:
     Can be used with any nodes that operate with ``ast.Name`` or ``ast.Tuple``
     as targets for the assignment.
 
-    Can be used with nodes like ``ast.Assign``, ``ast.Tuple``, ``ast.For``,
-    ``ast.With``, etc.
+    Can be used with nodes like
+    ``ast.Assign``, ``ast.Tuple``, ``ast.For``, ``ast.With``, etc.
     """
     names: List[str] = []
     naive_attempt = extract_name(node)

@@ -18,7 +18,7 @@ usage_template = 'constant[{0}] = [1, 2, 3]'
     ':',
     'slice(1)',
     'slice()',
-    'slice(1,3)',
+    'slice(1, 3)',
 ])
 def test_slice_assignment(
     assert_errors,

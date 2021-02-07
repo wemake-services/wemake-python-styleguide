@@ -61,6 +61,9 @@ AnyFor = Union[ast.For, ast.AsyncFor]
 #: In case we need to work with any loop: sync, async, and while.
 AnyLoop = Union[AnyFor, ast.While]
 
+#: This is how you can define a variable in Python.
+AnyVariableDef = Union[ast.Name, ast.Attribute, ast.ExceptHandler]
+
 #: All different comprehension types in one place.
 AnyComprehension = Union[
     ast.ListComp,
@@ -72,18 +75,8 @@ AnyComprehension = Union[
 #: In cases we need to work with both sync and async context managers.
 AnyWith = Union[ast.With, ast.AsyncWith]
 
-#: Tuple of AST node types for declarative syntax.
-AnyNodes = Tuple[Type[ast.AST], ...]
-
 #: When we search for assign elements, we also need typed assign.
 AnyAssign = Union[ast.Assign, ast.AnnAssign]
-
-#: That's how we define context of operations.
-ContextNodes = Union[
-    ast.Module,
-    ast.ClassDef,
-    AnyFunctionDef,
-]
 
 #: In cases we need to work with both access types.
 AnyAccess = Union[
@@ -98,8 +91,18 @@ AnyChainable = Union[
     ast.Call,
 ]
 
+#: Tuple of AST node types for declarative syntax.
+AnyNodes = Tuple[Type[ast.AST], ...]
+
 #: We use this type to work with any text-like values. Related to `AnyText`.
 AnyTextPrimitive = Union[str, bytes]
+
+#: That's how we define context of operations.
+ContextNodes = Union[
+    ast.Module,
+    ast.ClassDef,
+    AnyFunctionDef,
+]
 
 #: Flake8 API format to return error messages.
 CheckResult = Tuple[int, int, str, type]

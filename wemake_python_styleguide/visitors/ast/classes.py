@@ -125,10 +125,10 @@ class WrongClassVisitor(base.BaseNodeVisitor):
         flat_class_attributes = name_nodes.flat_variable_names(class_attributes)
 
         attributes_stripped = {
-            class_attribute.lstrip('_')
+            class_attribute.lstrip(constants.UNUSED_PLACEHOLDER)
             for class_attribute in flat_class_attributes
         }.union({
-            instance.attr.lstrip('_')
+            instance.attr.lstrip(constants.UNUSED_PLACEHOLDER)
             for instance in instance_attributes
         })
 
@@ -409,7 +409,7 @@ class ClassMethodOrderVisitor(base.BaseNodeVisitor):
 
         for subnode in ast.walk(node):
             if isinstance(subnode, FunctionNodes):
-                if nodes.get_context(subnode) == node:
+                if nodes.get_context(subnode) is node:
                     method_nodes.append(subnode.name)
 
         ideal = sorted(method_nodes, key=self._ideal_order, reverse=True)
