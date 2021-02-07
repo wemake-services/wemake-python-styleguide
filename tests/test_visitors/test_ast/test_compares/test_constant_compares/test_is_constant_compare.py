@@ -57,9 +57,11 @@ def test_wrong_constant_is(
     visitor = WrongConstantCompareVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [WrongIsCompareViolation], (
-        FalsyConstantCompareViolation,
-    ))
+    assert_errors(
+        visitor,
+        [WrongIsCompareViolation],
+        ignored_types=FalsyConstantCompareViolation,
+    )
 
 
 @pytest.mark.parametrize('comparators', [
