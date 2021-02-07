@@ -2,6 +2,7 @@ import ast
 
 from typing_extensions import final
 
+from wemake_python_styleguide.compat.functions import get_slice_expr
 from wemake_python_styleguide.logic import source
 from wemake_python_styleguide.logic.tree import functions, operators, slices
 from wemake_python_styleguide.violations import (
@@ -144,21 +145,16 @@ class CorrectKeyVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_float_key(self, node: ast.Subscript) -> None:
-        is_float_key = (
-            isinstance(node.slice, ast.Index) and
-            self._is_float_key(node.slice)
-        )
-
-        if is_float_key:
+        if self._is_float_key(get_slice_expr(node)):
             self.add_violation(best_practices.FloatKeyViolation(node))
 
     def _check_len_call(self, node: ast.Subscript) -> None:
+        node_slice = get_slice_expr(node)
         is_len_call = (
-            isinstance(node.slice, ast.Index) and
-            isinstance(node.slice.value, ast.BinOp) and
-            isinstance(node.slice.value.op, ast.Sub) and
+            isinstance(node_slice, ast.BinOp) and
+            isinstance(node_slice.op, ast.Sub) and
             self._is_wrong_len(
-                node.slice.value,
+                node_slice,
                 source.node_to_string(node.value),
             )
         )
@@ -175,8 +171,8 @@ class CorrectKeyVisitor(base.BaseNodeVisitor):
             source.node_to_string(node.left.args[0]) == element
         )
 
-    def _is_float_key(self, node: ast.Index) -> bool:
-        real_node = operators.unwrap_unary_node(node.value)
+    def _is_float_key(self, node: ast.expr) -> bool:
+        real_node = operators.unwrap_unary_node(node)
         return (
             isinstance(real_node, ast.Num) and
             isinstance(real_node.n, float)

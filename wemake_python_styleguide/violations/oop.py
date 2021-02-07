@@ -1,7 +1,7 @@
 """
 These checks ensures that you use Python's version of OOP correctly.
 
-There are different gotchas in Python to write beatiful classes
+There are different gotchas in Python to write beautiful classes
 and using objects correctly. That's the place we collect these kind of rules.
 
 .. currentmodule:: wemake_python_styleguide.violations.oop
@@ -26,6 +26,8 @@ Summary
    YieldMagicMethodViolation
    UselessOverwrittenMethodViolation
    WrongSuperCallAccessViolation
+   WrongDescriptorDecoratorViolation
+   UnpythonicGetterSetterViolation
 
 Respect your objects
 --------------------
@@ -44,6 +46,8 @@ Respect your objects
 .. autoclass:: YieldMagicMethodViolation
 .. autoclass:: UselessOverwrittenMethodViolation
 .. autoclass:: WrongSuperCallAccessViolation
+.. autoclass:: WrongDescriptorDecoratorViolation
+.. autoclass:: UnpythonicGetterSetterViolation
 
 """
 
@@ -101,6 +105,9 @@ class ShadowedClassAttributeViolation(ASTViolation):
         one from instance and one from class. It might cause errors.
         Needless to say, that this is just pointless to do so.
 
+        Also, if you ever want to optimise your code with a tool like `mypyc`_,
+        this rule is a requirement.
+
     Solution:
         Use either class attributes or instance attributes.
         Use ``ClassVar`` type on fields that are declared as class attributes.
@@ -133,6 +140,7 @@ class ShadowedClassAttributeViolation(ASTViolation):
     .. versionadded:: 0.10.0
     .. versionchanged:: 0.11.0
     .. versionchanged:: 0.14.0
+    .. _mypyc: https://github.com/python/mypy/tree/master/mypyc
 
     """
 
@@ -575,3 +583,79 @@ class WrongSuperCallAccessViolation(ASTViolation):
         'Found incorrect `super()` call context: incorrect name access'
     )
     code = 613
+
+
+@final
+class WrongDescriptorDecoratorViolation(ASTViolation):
+    """
+    Forbids descriptors in regular functions.
+
+    Forbids using `@staticmethod`, ``@classmethod`` and ``@property`` for
+    functions not in class.
+
+    Reasoning:
+        Descriptors like @staticmethod, @classmethod and @property do magic
+        only as methods. We would want to warn users if the descriptors are
+        used on regular functions.
+
+    Solution:
+        Do not use @staticmethod, @classmethod and @property on regular
+        functions or wrap the functions into a Class.
+
+    Example::
+
+        # Correct:
+        class TestClass(object):
+            @property
+            def my_method():
+                ...
+
+        # Wrong:
+        @property
+        def my_function():
+            ...
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found descriptor applied on a function'
+    code = 614
+
+
+@final
+class UnpythonicGetterSetterViolation(ASTViolation):
+    """
+    Forbids to use getters and setters in objects.
+
+    Reasoning:
+        Python does not need this abstraction.
+
+    Solution:
+        Either use ``@property`` or make the
+        attribute public and change it directly.
+
+    Example::
+
+        # Correct:
+        class Example(object):
+            def __init__(self):
+                self._attribute = None
+
+        # Wrong:
+        class Example(object):
+            def __init__(self):
+                self.attribute = None
+
+            def set_attribute(self):
+                ...
+
+            def get_attribute(self, value):
+                ...
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found unpythonic getter or setter'
+    code = 615

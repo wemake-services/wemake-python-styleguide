@@ -1,4 +1,3 @@
-#
 # Configuration file for the Sphinx documentation builder.
 #
 # This file does only contain a selection of the most common options. For a
@@ -14,36 +13,9 @@
 import os
 import sys
 
-import sphinx
 import tomlkit
 
 sys.path.insert(0, os.path.abspath('..'))
-
-
-# -- Monkeypatches -----------------------------------------------------------
-
-def _monkeypatch(cls):
-    """Decorator to monkey-patch methods."""
-    def decorator(func):
-        method = func.__name__
-        old = getattr(cls, method)
-        setattr(
-            cls,
-            method,
-            lambda inst, *args, **kwargs: func(inst, old, *args, **kwargs),
-        )
-    return decorator
-
-
-# workaround until https://github.com/miyakogi/m2r/pull/55 is merged
-@_monkeypatch(sphinx.registry.SphinxComponentRegistry)
-def add_source_parser(self, _old_add_source_parser, *args, **kwargs):
-    """This function changed in sphinx v3.0, we need to fix it back."""
-    # signature is (parser: Type[Parser], **kwargs), but m2r expects
-    # the removed (str, parser: Type[Parser], **kwargs).
-    if isinstance(args[0], str):
-        args = args[1:]
-    return _old_add_source_parser(self, *args, **kwargs)
 
 
 # -- Project information -----------------------------------------------------
@@ -86,7 +58,7 @@ extensions = [
     'sphinx.ext.napoleon',
 
     # Used to include .md files:
-    'm2r',
+    'm2r2',
 
     # Used to insert typehints into the final docs:
     'sphinx_autodoc_typehints',
@@ -154,7 +126,6 @@ add_module_names = False
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-#
 html_theme = 'alabaster'
 
 # Theme options are theme-specific and customize the look and feel of a theme

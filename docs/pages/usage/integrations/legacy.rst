@@ -46,7 +46,7 @@ Imagine that we have this old and very big class (like 1000 lines of code):
       def method_we_need_to_touch(self):
           return
 
-Of course, it won't make its way trough our linter.
+Of course, it won't make its way through our linter.
 And you obviously do not want to refactor 1000s lines of code
 just to make a simple fix to ``method_we_need_to_touch``.
 

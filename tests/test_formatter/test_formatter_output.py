@@ -99,6 +99,8 @@ def test_formatter_correct(snapshot, cli_options, output):
             'flake8',
             '--disable-noqa',
             '--isolated',
+            '--select',
+            'WPS',
             '--format',
             'wemake',
             *cli_options,

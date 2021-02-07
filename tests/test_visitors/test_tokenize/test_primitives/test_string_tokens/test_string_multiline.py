@@ -1,6 +1,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
+    RawStringNotNeededViolation,
     WrongMultilineStringViolation,
 )
 from wemake_python_styleguide.visitors.tokenize.primitives import (
@@ -68,13 +69,17 @@ def test_incorrect_multiline_strings(
     primitive,
     mode,
 ):
-    """Ensures that incorrect multiline strings are forbiden."""
+    """Ensures that incorrect multiline strings are forbidden."""
     file_tokens = parse_tokens(mode(primitives_usages.format(primitive)))
 
     visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
-    assert_errors(visitor, [WrongMultilineStringViolation])
+    assert_errors(
+        visitor,
+        [WrongMultilineStringViolation],
+        ignored_types=(RawStringNotNeededViolation,),
+    )
 
 
 @pytest.mark.parametrize('primitive', [

@@ -199,7 +199,7 @@ def test_string_type_annotations(
 @pytest.mark.parametrize('string_value', [
     r'"\t"',
     r'"\n"',
-    r'""',
+    '""',
 ])
 @pytest.mark.parametrize('prefix', [
     'b',

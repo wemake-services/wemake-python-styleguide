@@ -17,7 +17,7 @@ def get_assign_targets(
 
 def get_posonlyargs(node: AnyFunctionDefAndLambda) -> List[ast.arg]:
     """
-    Helper function to get posonlyargs in all version of python.
+    Function to get posonlyargs in all versions of python.
 
     This field was added in ``python3.8+``. And it was not present before.
 
@@ -27,3 +27,19 @@ def get_posonlyargs(node: AnyFunctionDefAndLambda) -> List[ast.arg]:
 
     """
     return getattr(node.args, 'posonlyargs', [])
+
+
+def get_slice_expr(node: ast.Subscript) -> ast.expr:
+    """
+    Get slice expression from the subscript in all versions of python.
+
+    It was changed in ``python3.9``.
+
+    Before: ``ast.Subscript`` -> ``ast.Index`` -> ``ast.expr``
+    After: ``ast.Subscript`` -> ``ast.expr``
+    """
+    return (
+        node.slice.value  # type: ignore
+        if isinstance(node.slice, ast.Index)
+        else node.slice
+    )

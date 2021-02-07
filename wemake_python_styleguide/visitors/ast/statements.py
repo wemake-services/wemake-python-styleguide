@@ -4,7 +4,11 @@ from typing import ClassVar, Mapping, Optional, Sequence, Set, Union
 from typing_extensions import final
 
 from wemake_python_styleguide import constants
-from wemake_python_styleguide.compat.aliases import ForNodes, FunctionNodes
+from wemake_python_styleguide.compat.aliases import (
+    ForNodes,
+    FunctionNodes,
+    TextNodes,
+)
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.arguments import call_args
 from wemake_python_styleguide.logic.naming import name_nodes
@@ -203,11 +207,11 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         if len(body) != 1:
             return
 
-        forbiden = self._useless_combination.get(
+        forbidden = self._useless_combination.get(
             node.__class__.__qualname__, None,
         )
 
-        if not forbiden or not isinstance(body[0], forbiden):
+        if not forbidden or not isinstance(body[0], forbidden):
             return
 
         self.add_violation(
@@ -357,6 +361,7 @@ class PointlessStarredVisitor(BaseNodeVisitor):
         ast.List,
         ast.Set,
         ast.Tuple,
+        *TextNodes,
     )
 
     def visit_Call(self, node: ast.Call) -> None:

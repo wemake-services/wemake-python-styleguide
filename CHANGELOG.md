@@ -6,54 +6,70 @@ We used to have incremental versioning before `0.1.0`.
 Semantic versioning in our case means:
 - Bugfixes do not bring new features, code that passes on `x.y.0` should pass on `x.y.1`. With the only exception that bugfix can raise old violations in new places, if they were hidden by a buggy behaviour.
 - Minor releases do bring new features and configuration options. New violations can be added. Code that passes `x.0.y` might not pass on `x.1.y` release.
-- Major releases inidicate significant milestones or serious breaking changes.
+- Major releases inidicate significant milestones or serious breaking changes. There are no major releases right now: we are still at `0.x.y` version
 
 
-## 0.16.0
+## 0.15.0 aka python3.9
 
 ### Features
 
+- Adds `python3.9` support
 - Forbids using non-trivial expressions as an argument to `except`
 - Forbids using too many variables in a tuple unpacking
 - Forbids using `float("NaN")`.
 - Forbids assigning to a slice
 - Allow `__call__` method to be asynchronous
 - Allows common strings not to be counted against string constant overuse limit
-
-### Bugfixes
-
-- Fixes fails of annotation complexity on `Literal[""]`.
-
-### Misc
-
-- Introduce helper script to check for missing calls to `self.generic_visit(node)` in AST visitors
-- Updates `poetry` version to `1.1`
-
-
-## 0.15.0 aka New runtime
-
-### Features
-
+- Forbids to unpack iterable objects to lists #1259
 - Forbids to use single `return None`
 - Add `__await__` to the list of priority magic methods
 - Forbids to use float zeros (`0.0`)
 - Forbids `raise Exception` and `raise BaseException`
 - Forbids to use `%` with zero as the divisor
-- WPS531: Forbids testing conditions to just return booleans when it is possible to simply return the condition itself.
+- WPS531: Forbids testing conditions to just return booleans when it is possible to simply return the condition itself
+- Forbids to use unsafe infinite loops
+- Forbids to use raw strings `r''` when not necessary
+- Forbids to use too complex `f`-strings
+- Forbids to use too many `raise` statements inside a single function
+- Forbids to compare with `float` and `complex` values
+- Forbids single element destruct
+- Forbids to ignore some violations (configurable) on a line level
+- Forbids single element unpacking
+- Forbids to unpack lists with side-effects
+- Forbids to use miltiline strings except for assignments and docstrings
+- Forbids not returning anything in functions and methods starting with `get_`
+- Forbids to use empty comment
+- Forbids using bitwise operation with boolean operation
+- Forbids inconsistent structuring of multiline comprehensions
+- Forbids to use unpythonic getters and setters such as `get_attribute` or `set_attribute`
 
 ### Bugfixes
 
+- Fixes fails of annotation complexity on `Literal[""]`
 - Fixes how wrong variable names were checked case sensitive with `WPS110`
 - Fixes false positives DirectMagicAttributeAccessViolation with `__mro__`, `__subclasses__` and `__version__`
 - Make `WPS326` work when there is comment between string literals
 - Allowed yield statements in call method
 - Allow to use `^` with `1`
+- Fixes false positives in WPS513 and WPS323
+- Fixes false positive WPS426 if `lambda` in loop uses only its arguments
+- Fixes false negative WPS421 with `pprint.pprint`
+- Fixes WPS441 triggering when reusing variable names in multiple loops
+- Fixes false positive ImplicitEnumerateViolation on range with step #1742
+- Allows to use `_` to declare several unused variables,
+  like: `x, _, _ = coordinates()`
+- Fixes variable reassignment in class context
+- Fixes that `*'abc'` was not counted as pointless star expression
+- Fixes that `-some` was counted as overused expression
 
 ### Misc
 
 - Updates lots of dependenices
 - Fixed documentation for TooManyPublicAttributesViolation
 - Updated isort config
+- Introduce helper script to check for missing calls to `self.generic_visit(node)` in AST visitors
+- Updates `poetry` version to `1.1`
+- Updates `reviewdog` version to `0.11.0` and adds `action-depup`
 
 
 ## 0.14.0 aka The Walrus fighter
@@ -105,6 +121,7 @@ We also have this [nice migration guide](https://wemake-python-stylegui.de/en/la
 - Adds `UnreadableNameViolation` as `WPS124` because there are some
 character combination which is not easy to read
 - Adds support for `NamedExpr` with in compare type violation
+- Forbids `float` and `complex` compares
 
 ### Bugfixes
 
@@ -131,7 +148,7 @@ character combination which is not easy to read
 - Fixes `WPS204` reporting overused return type annotations
 - Fixes `WPS204` reporting `self.` attribute access
 - Fixes `WPS331` reporting cases that do require some extra steps before return
-- Fixes `WPS612` not reporing `super()` calls without return
+- Fixes `WPS612` not reporting `super()` calls without return
 - Fixes `WPS404` not raising on wrong `*` and `/` defaults
 - Fixes `WPS425` raising on `.get`, `getattr`, `setattr`,
   and other builtin functions without keyword arguments
@@ -368,7 +385,7 @@ In this release we had a little focus on:
 1. Strings and numbers and how to write them
 1. OOP features
 1. Blocks and code structure,
-   including variable scoping and overlaping variables
+   including variable scoping and overlapping variables
 1. Overused expressions and new complexity metrics
 
 ### Features
@@ -400,7 +417,7 @@ In this release we had a little focus on:
 - Forbids to define useless overwritten methods
 - Enforces `j` prefix over `J` for `complex` numbers
 - Forbids overused expressions
-- Forbids explicit `0` division, multiply, pow, addition, and substraction
+- Forbids explicit `0` division, multiply, pow, addition, and subtraction
 - Fordids to pow, multiply, or divide by `1`
 - Forbids to use expressions like `x + -2`, or `y - -1`, or `z -= -1`
 - Forbids to multiply lists like `[0] * 2`
@@ -426,7 +443,7 @@ In this release we had a little focus on:
 
 - Bumps `flake8-eradicate` version
   and solves `attrs` incompatible versions issue
-- Bumps `flake8-dosctrings` veresion
+- Bumps `flake8-dosctrings` version
   and solved `pydocstyle` issue
 - Fixes `TryExceptMultipleReturnPathViolation` not tracking `else` and `finally`
   returns at the same time
@@ -563,7 +580,7 @@ big cudos to the developers of this wonderful tool.
 - Forbids to use `len(sized) > 0` and `if len(sized)` style checks
 - Forbids to use repeatable conditions: `flag or flag`
 - Forbids to write conditions like `not some > 1`
-- Forbids to use heterogenous compares like `x == x > 0`
+- Forbids to use heterogeneous compares like `x == x > 0`
 - Forbids to use complex compare with several items (`>= 3`)
 - Forbids to have class variables that are shadowed by instance variables
 - Forbids to use ternary expressions inside `if` conditions
@@ -748,11 +765,11 @@ and lots of bug fixes.
 - Improves tests: changes how `flake8` is executed, now it is twice as fast
 - Improves docs: now linting `conf.py` with `flake8`
 - Improves tests: now we check that ignored violation are raised with `noqa`
-- Improves docs: we have added a special graph to show our architecure
+- Improves docs: we have added a special graph to show our architecture
 - Improves docs: we now have a clean page for `checker` without extra junk
 - Improves docs: we now have a tutorial for creating new rules
 - Refactoring: moves `presets` package to the root
-- Improves tests: we now lint our layered architecure with `layer-lint`
+- Improves tests: we now lint our layered architecture with `layer-lint`
 
 
 ## Version 0.6.3

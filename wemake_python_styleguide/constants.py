@@ -36,6 +36,7 @@ FUNCTIONS_BLACKLIST: Final = frozenset((
     # IO:
     'print',
     'pprint',
+    'pprint.pprint',
     'input',
     'breakpoint',
 
@@ -96,7 +97,7 @@ VARIABLE_NAMES_BLACKLIST: Final = frozenset((
     'params',
     'parameters',
 
-    # Confuseables:
+    # Confusables:
     'no',
     'true',
     'false',
@@ -107,7 +108,7 @@ VARIABLE_NAMES_BLACKLIST: Final = frozenset((
     'baz',
 ))
 
-#: List of characters sequences that are hard to read.
+#: List of character sequences that are hard to read.
 UNREADABLE_CHARACTER_COMBINATIONS: Final = frozenset((
     '1l',
     '1I',
@@ -254,7 +255,7 @@ MAGIC_METHODS_BLACKLIST: Final = frozenset((
 #: List of magic methods that are not allowed to be generators.
 YIELD_MAGIC_METHODS_BLACKLIST: Final = ALL_MAGIC_METHODS.difference({
     # Allowed to be used with ``yield`` keyword:
-    '__call__',  # Fixes Issue:146
+    '__call__',
     '__iter__',
 })
 

@@ -27,7 +27,7 @@ deep_access = 'self.some.other.attr().first.second.third.fourth.boom'
     mixed_with_calls_access,
     call_chain,
 ])
-def test_correct_accesss(
+def test_correct_access(
     assert_errors,
     parse_ast_tree,
     code,

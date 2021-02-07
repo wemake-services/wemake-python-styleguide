@@ -216,13 +216,14 @@ def test_ordinary_class(
     mode,
 ):
     """Testing that it is possible to write basic classes."""
-    tree = parse_ast_tree(mode("""
+    code = """
     class Ordinary(object):
         def method(self): ...
 
     class Second(Ordinary):
         def method(self): ...
-    """))
+    """
+    tree = parse_ast_tree(mode(code))
 
     visitor = NestedComplexityVisitor(default_options, tree=tree)
     visitor.run()

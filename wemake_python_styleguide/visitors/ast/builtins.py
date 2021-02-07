@@ -7,7 +7,6 @@ from typing import (
     ClassVar,
     DefaultDict,
     FrozenSet,
-    Iterable,
     List,
     Optional,
     Sequence,
@@ -15,7 +14,7 @@ from typing import (
 )
 from typing.re import Pattern
 
-from typing_extensions import final
+from typing_extensions import Final, final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import (
@@ -23,11 +22,27 @@ from wemake_python_styleguide.compat.aliases import (
     FunctionNodes,
     TextNodes,
 )
-from wemake_python_styleguide.logic import nodes, safe_eval, source
-from wemake_python_styleguide.logic.naming.name_nodes import extract_name
-from wemake_python_styleguide.logic.tree import operators, strings
-from wemake_python_styleguide.types import AnyFor, AnyNodes, AnyText, AnyWith
-from wemake_python_styleguide.violations import best_practices, consistency
+from wemake_python_styleguide.compat.functions import get_slice_expr
+from wemake_python_styleguide.logic import nodes, safe_eval, source, walk
+from wemake_python_styleguide.logic.tree import (
+    attributes,
+    functions,
+    operators,
+    strings,
+    variables,
+)
+from wemake_python_styleguide.types import (
+    AnyChainable,
+    AnyFor,
+    AnyNodes,
+    AnyText,
+    AnyWith,
+)
+from wemake_python_styleguide.violations import (
+    best_practices,
+    complexity,
+    consistency,
+)
 from wemake_python_styleguide.visitors import base, decorators
 
 #: Items that can be inside a hash.
@@ -72,8 +87,15 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         )                                # end
         """,                             # noqa: WPS323
         # Different python versions report `WPS323` on different lines.
-        flags=re.X,  # flag to ignore comments and whitespaces.
+        flags=re.X,  # flag to ignore comments and whitespace.
     )
+
+    #: Names of functions in which we allow strings with modulo patterns.
+    _modulo_pattern_exceptions: ClassVar[FrozenSet[str]] = frozenset((
+        'strftime',  # For date, time, and datetime.strftime()
+        'strptime',  # For date, time, and datetime.strptime()
+        'execute',  # For psycopg2's cur.execute()
+    ))
 
     def visit_any_string(self, node: AnyText) -> None:
         """
@@ -85,22 +107,11 @@ class WrongStringVisitor(base.BaseNodeVisitor):
 
         """
         text_data = source.render_string(node.s)
-        self._check_is_alphatbet(node, text_data)
+        self._check_is_alphabet(node, text_data)
         self._check_modulo_patterns(node, text_data)
         self.generic_visit(node)
 
-    def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
-        """
-        Forbids to use ``f`` strings.
-
-        Raises:
-            FormattedStringViolation
-
-        """
-        self.add_violation(consistency.FormattedStringViolation(node))
-        self.generic_visit(node)
-
-    def _check_is_alphatbet(
+    def _check_is_alphabet(
         self,
         node: AnyText,
         text_data: Optional[str],
@@ -112,6 +123,22 @@ class WrongStringVisitor(base.BaseNodeVisitor):
                 ),
             )
 
+    def _is_modulo_pattern_exception(self, parent: Optional[ast.AST]) -> bool:
+        """
+        Check if string with modulo pattern is in an exceptional situation.
+
+        Basically we have some function names in which we allow strings with
+        modulo patterns because they must have them for the functions to work
+        properly.
+        """
+        if parent and isinstance(parent, ast.Call):
+            return bool(functions.given_function_called(
+                parent,
+                self._modulo_pattern_exceptions,
+                split_modules=True,
+            ))
+        return False
+
     def _check_modulo_patterns(
         self,
         node: AnyText,
@@ -122,7 +149,119 @@ class WrongStringVisitor(base.BaseNodeVisitor):
             return  # we allow `%s` in docstrings: they cannot be formatted.
 
         if self._modulo_string_pattern.search(text_data):
-            self.add_violation(consistency.ModuloStringFormatViolation(node))
+            if not self._is_modulo_pattern_exception(parent):
+                self.add_violation(
+                    consistency.ModuloStringFormatViolation(node),
+                )
+
+
+@final
+class WrongFormatStringVisitor(base.BaseNodeVisitor):
+    """Restricts usage of ``f`` strings."""
+
+    _valid_format_index: ClassVar[AnyNodes] = (
+        *TextNodes,
+        ast.Num,
+        ast.Name,
+        ast.NameConstant,
+    )
+    _single_use_types: ClassVar[AnyNodes] = (
+        ast.Call,
+        ast.Subscript,
+    )
+    _chainable_types: Final = (
+        ast.Call,
+        ast.Subscript,
+        ast.Attribute,
+    )
+    _max_chained_items = 3
+
+    def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
+        """
+        Forbids use of ``f`` strings and too complex ``f`` strings.
+
+        Raises:
+            FormattedStringViolation
+            TooComplexFormattedStringViolation
+
+        """
+        self._check_complex_formatted_string(node)
+
+        # We don't allow `f` strings by default:
+        self.add_violation(consistency.FormattedStringViolation(node))
+        self.generic_visit(node)
+
+    def _check_complex_formatted_string(self, node: ast.JoinedStr) -> None:
+        """
+        Whitelists all simple uses of f strings.
+
+        Checks if list, dict, function call with no parameters or variable.
+        """
+        has_formatted_components = any(
+            isinstance(comp, ast.FormattedValue)
+            for comp in node.values
+        )
+        if not has_formatted_components:
+            self.add_violation(  # If no formatted values
+                complexity.TooComplexFormattedStringViolation(node),
+            )
+            return
+
+        for string_component in node.values:
+            if isinstance(string_component, ast.FormattedValue):
+                # Test if possible chaining is invalid
+                format_value = string_component.value
+                if self._is_valid_formatted_value(format_value):
+                    continue
+                self.add_violation(  # Everything else is too complex:
+                    complexity.TooComplexFormattedStringViolation(node),
+                )
+                break
+
+    def _is_valid_formatted_value(self, format_value: ast.AST) -> bool:
+        if isinstance(format_value, self._chainable_types):
+            if not self._is_valid_chaining(format_value):
+                return False
+        return self._is_valid_final_value(format_value)
+
+    def _is_valid_final_value(self, format_value: ast.AST) -> bool:
+        # Variable lookup is okay and a single attribute is okay
+        if isinstance(format_value, (ast.Name, ast.Attribute)):
+            return True
+        # Function call with empty arguments is okay
+        elif isinstance(format_value, ast.Call) and not format_value.args:
+            return True
+        # Named lookup, Index lookup & Dict key is okay
+        elif isinstance(format_value, ast.Subscript):
+            return isinstance(
+                get_slice_expr(format_value),
+                self._valid_format_index,
+            )
+        return False
+
+    def _is_valid_chaining(self, format_value: AnyChainable) -> bool:
+        chained_parts: List[ast.AST] = list(attributes.parts(format_value))
+        if len(chained_parts) <= self._max_chained_items:
+            return self._is_valid_chain_structure(chained_parts)
+        return False
+
+    def _is_valid_chain_structure(self, chained_parts: List[ast.AST]) -> bool:
+        """Helper method for ``_is_valid_chaining``."""
+        has_invalid_parts = any(
+            not self._is_valid_final_value(part)
+            for part in chained_parts
+        )
+        if has_invalid_parts:
+            return False
+        if len(chained_parts) == self._max_chained_items:
+            # If there are 3 elements, exactly one must be subscript or
+            # call. This is because we don't allow name.attr.attr
+            return sum(
+                isinstance(part, self._single_use_types)
+                for part in chained_parts
+            ) == 1
+        # All chaining with fewer elements is fine!
+        return True
 
 
 @final
@@ -208,10 +347,12 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         Checks assignments inside context managers to be correct.
 
         Raises:
+            UnpackingIterableToListViolation
             WrongUnpackingViolation
 
         """
         for withitem in node.items:
+            self._check_unpacking_target_types(withitem.optional_vars)
             if isinstance(withitem.optional_vars, ast.Tuple):
                 self._check_unpacking_targets(
                     node, withitem.optional_vars.elts,
@@ -223,9 +364,11 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         Checks comprehensions for the correct assignments.
 
         Raises:
+            UnpackingIterableToListViolation
             WrongUnpackingViolation
 
         """
+        self._check_unpacking_target_types(node.target)
         if isinstance(node.target, ast.Tuple):
             self._check_unpacking_targets(node.target, node.target.elts)
         self.generic_visit(node)
@@ -235,9 +378,11 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         Checks assignments inside ``for`` loops to be correct.
 
         Raises:
+            UnpackingIterableToListViolation
             WrongUnpackingViolation
 
         """
+        self._check_unpacking_target_types(node.target)
         if isinstance(node.target, ast.Tuple):
             self._check_unpacking_targets(node, node.target.elts)
         self.generic_visit(node)
@@ -250,12 +395,18 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         because it does not have problems that we check.
 
         Raises:
+            UnpackingIterableToListViolation
             MultipleAssignmentsViolation
             WrongUnpackingViolation
+            SingleElementDestructuringViolation
 
         """
         self._check_assign_targets(node)
-        if isinstance(node.targets[0], ast.Tuple):
+
+        for target in node.targets:
+            self._check_unpacking_target_types(target)
+
+        if isinstance(node.targets[0], (ast.Tuple, ast.List)):
             self._check_unpacking_targets(node, node.targets[0].elts)
         self.generic_visit(node)
 
@@ -268,14 +419,26 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
     def _check_unpacking_targets(
         self,
         node: ast.AST,
-        targets: Iterable[ast.AST],
+        targets: List[ast.expr],
     ) -> None:
+        if len(targets) == 1:
+            self.add_violation(
+                best_practices.SingleElementDestructuringViolation(node),
+            )
+
         for target in targets:
-            target_name = extract_name(target)
-            if target_name is None:  # it means, that non name node was used
+            if not variables.is_valid_unpacking_target(target):
                 self.add_violation(
                     best_practices.WrongUnpackingViolation(node),
                 )
+
+    def _check_unpacking_target_types(self, node: Optional[ast.AST]) -> None:
+        if not node:
+            return
+        for subnode in walk.get_subnodes_by_type(node, ast.List):
+            self.add_violation(
+                consistency.UnpackingIterableToListViolation(subnode),
+            )
 
 
 @final

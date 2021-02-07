@@ -1,6 +1,14 @@
 import ast
 from collections import defaultdict
-from typing import Callable, ClassVar, DefaultDict, List, Tuple
+from typing import (
+    Callable,
+    ClassVar,
+    DefaultDict,
+    FrozenSet,
+    List,
+    Tuple,
+    Union,
+)
 
 from typing_extensions import final
 
@@ -14,6 +22,7 @@ from wemake_python_styleguide.visitors import base, decorators
 #: We use these types to store the number of nodes usage in different contexts.
 _Expressions = DefaultDict[str, List[ast.AST]]
 _FunctionExpressions = DefaultDict[ast.AST, _Expressions]
+_StringConstants = FrozenSet[Union[str, bytes]]
 
 
 @final
@@ -29,7 +38,7 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
     forcing assignment would not make much sense (i.e. newlines or "").
     """
 
-    _ignored_string_constants = frozenset((
+    _ignored_string_constants: ClassVar[_StringConstants] = frozenset((
         ' ',
         '',
         '\n',
@@ -92,10 +101,10 @@ class ExpressionOveruseVisitor(base.BaseNodeVisitor):
         ast.Assert,
         ast.BoolOp,
         ast.BinOp,
+        ast.UnaryOp,
         ast.Call,
         ast.Compare,
         ast.Subscript,
-        ast.UnaryOp,
         ast.Lambda,
 
         ast.DictComp,
@@ -115,6 +124,7 @@ class ExpressionOveruseVisitor(base.BaseNodeVisitor):
         overuses.is_class_context,
         overuses.is_super_call,
         overuses.is_primitive,
+        overuses.is_unary_minus,
     )
 
     _msg: ClassVar[str] = '{0}; used {1}'

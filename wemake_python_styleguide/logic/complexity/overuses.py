@@ -2,6 +2,7 @@ import ast
 from typing import Union
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.compat.nodes import Constant
 from wemake_python_styleguide.constants import SPECIAL_ARGUMENT_NAMES_WHITELIST
 from wemake_python_styleguide.logic import nodes, walk
 from wemake_python_styleguide.logic.arguments import call_args
@@ -104,7 +105,7 @@ def is_primitive(node: ast.AST) -> bool:
 
     We use this predicate to allow values
     like ``[]`` or ``call()`` to be overused.
-    Because you cannot simply them.
+    Because you cannot simplify them.
 
     We do not check for strings, numbers, etc
     because they are globally ignored.
@@ -120,4 +121,22 @@ def is_primitive(node: ast.AST) -> bool:
         return not list(filter(None, node.keys))
     elif isinstance(node, ast.Call):
         return not call_args.get_all_args(node)  # we do allow `call()`
+    return False
+
+
+def is_unary_minus(node: ast.AST) -> bool:
+    """
+    Detects if node is unary minus operator.
+
+    We use this predicate to allow values
+    like ``-some_value`` to be overused.
+
+    Although negative constants like ``-1``
+    should raise violation to force naming them.
+    """
+    if isinstance(node, ast.UnaryOp):
+        return (
+            isinstance(node.op, ast.USub) and
+            not isinstance(node.operand, (Constant, ast.Num))
+        )
     return False

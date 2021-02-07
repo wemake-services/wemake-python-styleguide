@@ -16,7 +16,8 @@ from wemake_python_styleguide.logic.tree import (
 from wemake_python_styleguide.logic.walrus import get_assigned_expr
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
-    HeterogenousCompareViolation,
+    FloatComplexCompareViolation,
+    HeterogeneousCompareViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
     CompareOrderViolation,
@@ -40,17 +41,6 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 
-def _is_correct_len(sign: ast.cmpop, comparator: ast.AST) -> bool:
-    """This is a helper function to tell what calls to ``len()`` are valid."""
-    if isinstance(operators.unwrap_unary_node(comparator), ast.Num):
-        numeric_value = ast.literal_eval(comparator)
-        if numeric_value == 0:
-            return False
-        if numeric_value == 1:
-            return not isinstance(sign, (ast.GtE, ast.Lt))
-    return True
-
-
 @final
 class CompareSanityVisitor(BaseNodeVisitor):
     """Restricts the incorrect compares."""
@@ -63,16 +53,26 @@ class CompareSanityVisitor(BaseNodeVisitor):
             ConstantCompareViolation
             UselessCompareViolation
             UselessLenCompareViolation
-            HeterogenousCompareViolation
+            HeterogeneousCompareViolation
             ReversedComplexCompareViolation
 
         """
         self._check_literal_compare(node)
         self._check_useless_compare(node)
         self._check_unpythonic_compare(node)
-        self._check_heterogenous_operators(node)
+        self._check_heterogeneous_operators(node)
         self._check_reversed_complex_compare(node)
         self.generic_visit(node)
+
+    def _is_correct_len(self, sign: ast.cmpop, comparator: ast.AST) -> bool:
+        """Helper function which tells what calls to ``len()`` are valid."""
+        if isinstance(operators.unwrap_unary_node(comparator), ast.Num):
+            numeric_value = ast.literal_eval(comparator)
+            if numeric_value == 0:
+                return False
+            if numeric_value == 1:
+                return not isinstance(sign, (ast.GtE, ast.Lt))
+        return True
 
     def _check_literal_compare(self, node: ast.Compare) -> None:
         last_was_literal = nodes.is_literal(get_assigned_expr(node.left))
@@ -102,10 +102,10 @@ class CompareSanityVisitor(BaseNodeVisitor):
 
             if functions.given_function_called(compare, {'len'}):
                 ps = index - len(all_nodes) + 1
-                if not _is_correct_len(node.ops[ps], node.comparators[ps]):
+                if not self._is_correct_len(node.ops[ps], node.comparators[ps]):
                     self.add_violation(UselessLenCompareViolation(node))
 
-    def _check_heterogenous_operators(self, node: ast.Compare) -> None:
+    def _check_heterogeneous_operators(self, node: ast.Compare) -> None:
         if len(node.ops) == 1:
             return
 
@@ -113,7 +113,7 @@ class CompareSanityVisitor(BaseNodeVisitor):
 
         for op in node.ops:
             if not isinstance(op, prototype):
-                self.add_violation(HeterogenousCompareViolation(node))
+                self.add_violation(HeterogeneousCompareViolation(node))
                 break
 
     def _check_reversed_complex_compare(self, node: ast.Compare) -> None:
@@ -158,11 +158,11 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
 
         """
         self._check_constant(node.ops[0], node.left)
-        self._check_is_constant_comprare(node.ops[0], node.left)
+        self._check_is_constant_compare(node.ops[0], node.left)
 
         for op, comparator in zip(node.ops, node.comparators):
             self._check_constant(op, comparator)
-            self._check_is_constant_comprare(op, comparator)
+            self._check_is_constant_compare(op, comparator)
 
         self.generic_visit(node)
 
@@ -180,7 +180,7 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
         if not length:
             self.add_violation(FalsyConstantCompareViolation(comparator))
 
-    def _check_is_constant_comprare(
+    def _check_is_constant_compare(
         self,
         op: ast.cmpop,
         comparator: ast.expr,
@@ -464,3 +464,34 @@ class InCompareSanityVisitor(BaseNodeVisitor):
     def _check_wrong_comparators(self, node: ast.AST) -> None:
         if isinstance(node, self._wrong_in_comparators):
             self.add_violation(WrongInCompareTypeViolation(node))
+
+
+@final
+class WrongFloatComplexCompareVisitor(BaseNodeVisitor):
+    """Restricts incorrect compares with ``float`` and ``complex``."""
+
+    def visit_Compare(self, node: ast.Compare) -> None:
+        """
+        Ensures that compares are written correctly.
+
+        Raises:
+            FloatComplexCompareViolation
+
+        """
+        self._check_float_complex_compare(node)
+        self.generic_visit(node)
+
+    def _is_float_or_complex(self, node: ast.AST) -> bool:
+        node = operators.unwrap_unary_node(node)
+        return (
+            isinstance(node, ast.Num) and
+            isinstance(node.n, (float, complex))
+        )
+
+    def _check_float_complex_compare(self, node: ast.Compare) -> None:
+        any_float_or_complex = any(
+            self._is_float_or_complex(comparator)
+            for comparator in node.comparators
+        ) or self._is_float_or_complex(node.left)
+        if any_float_or_complex:
+            self.add_violation(FloatComplexCompareViolation(node))

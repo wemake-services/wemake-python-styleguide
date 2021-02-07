@@ -142,7 +142,7 @@ def test_except_block_overlap(
     default_options,
     mode,
 ):
-    """Ensures that overlaping variables exist."""
+    """Ensures that overlapping variables exist."""
     code = context.format(
         except_statement.format(variable_name),
         assign_statement.format(variable_name),
