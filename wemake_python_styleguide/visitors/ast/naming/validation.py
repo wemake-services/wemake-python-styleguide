@@ -47,7 +47,7 @@ class _NamingPredicate(object):
 
     def is_applicable(self, node: ast.AST) -> bool:
         """Usability function over real applicable predicate."""
-        return self._is_applicable is not None and self._is_applicable(node)
+        return self._is_applicable is None or self._is_applicable(node)
 
 
 class _SimpleNameValidator(object):
