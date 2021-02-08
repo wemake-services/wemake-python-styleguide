@@ -258,14 +258,8 @@ class WrongNameVisitor(BaseNodeVisitor):
 
     def visit_variable(self, node: AnyVariableDef) -> None:
         """Used to check wrong names of assigned."""
-        validator = self._simple_validator if (
-            # This condition finds attributes like `point.x`,
-            # but, ignores all other cases like `self.x`.
-            # So, we change the strictness of this rule,
-            # based on the attribute source.
-            isinstance(node, ast.Attribute) and
-            isinstance(node.value, ast.Name) and
-            node.value.id not in SPECIAL_ARGUMENT_NAMES_WHITELIST
+        validator = self._simple_validator if self._is_foreign_attribute(
+            node,
         ) else self._regular_validator
 
         variable_name = name_nodes.get_assigned_name(node)
@@ -285,3 +279,16 @@ class WrongNameVisitor(BaseNodeVisitor):
         self._class_based_validator.check_name(node, node.name)
         self._class_based_validator.check_attribute_names(node)
         self.generic_visit(node)
+
+    def _is_foreign_attribute(self, node: AnyVariableDef) -> bool:
+        if not isinstance(node, ast.Attribute):
+            return False
+
+        if not isinstance(node.value, ast.Name):
+            return True
+
+        # This condition finds attributes like `point.x`,
+        # but, ignores all other cases like `self.x`.
+        # So, we change the strictness of this rule,
+        # based on the attribute source.
+        return node.value.id not in SPECIAL_ARGUMENT_NAMES_WHITELIST

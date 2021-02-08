@@ -112,6 +112,7 @@ class Test(object):
 # Foreign attributes:
 
 foreign_attribute = 'other.{0} = 1'
+foreign_nested_attribute = 'self.attr.{0} = 1'
 
 # Variables:
 
@@ -196,7 +197,9 @@ _ALL_FIXTURES = frozenset((
     static_typed_annotation,
     instance_attribute,
     instance_typed_attribute,
+
     foreign_attribute,
+    foreign_nested_attribute,
 
     # Variables:
     variable_def,
@@ -218,6 +221,11 @@ if PY38:
         assignment_expression,
     }
 
+_FOREIGN_NAMING_PATTERNS = frozenset((
+    foreign_attribute,
+    foreign_nested_attribute,
+))
+
 _ATTRIBUTES = frozenset((
     method_name,
 
@@ -227,13 +235,7 @@ _ATTRIBUTES = frozenset((
     static_typed_annotation,
     instance_attribute,
     instance_typed_attribute,
-
-    foreign_attribute,
-))
-
-_FOREIGN_NAMING_PATTERNS = frozenset((
-    foreign_attribute,
-))
+)) | _FOREIGN_NAMING_PATTERNS
 
 _FORBIDDEN_UNUSED_TUPLE = frozenset((
     unpacking_variables,
