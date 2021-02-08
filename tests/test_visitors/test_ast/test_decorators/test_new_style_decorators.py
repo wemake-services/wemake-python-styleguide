@@ -59,7 +59,10 @@ def test_invalid_decorators(
     assert_errors(visitor, [NewStyledDecoratorViolation])
 
 
-@pytest.mark.parametrize('code', _fixtures)
+@pytest.mark.parametrize('code', [
+    function_def,
+    method_def,
+])
 @pytest.mark.parametrize('decorator', [
     'some',
     'some()',
