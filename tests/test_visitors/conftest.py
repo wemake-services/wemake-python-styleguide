@@ -11,7 +11,7 @@ from wemake_python_styleguide.visitors.base import BaseVisitor
 
 _IgnoredTypes = Union[
     Type[BaseViolation],
-    Tuple[BaseViolation, ...],
+    Tuple[Type[BaseViolation], ...],
     None,
 ]
 

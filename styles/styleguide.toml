@@ -14,6 +14,9 @@ show-source = true
 max-line-length = 80
 max-complexity = 6
 
+# darglint:
+docstring_style = "numpy"
+
 # Violations:
 ignore = "D100,D104,D401,W504,RST303,RST304,DAR103,DAR203"
 

@@ -40,7 +40,7 @@ def test_reserved_argument_name(
 ):
     """Ensures that special names for arguments are restricted."""
     with suppress(SyntaxError):
-        # We use `suppress` here because some fixutres
+        # We use `suppress` here because some fixtures
         # have duplicated `self` or `cls` arguments.
         tree = parse_ast_tree(mode(naming_template.format(argument)))
 
