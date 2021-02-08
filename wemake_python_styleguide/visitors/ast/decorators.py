@@ -42,10 +42,7 @@ class WrongDecoratorVisitor(BaseNodeVisitor):
         if isinstance(decorator, ast.Name):
             return True  # Simple names are fine!
 
-        for part in attributes.parts(decorator):  # pragma: py-lt-39
-            # This part of code can only be accessed by python3.9+
-            # because previous versions did not allow that
-            # on a parser level. Which was cool...
-            if not isinstance(part, _ALLOWED_DECORATOR_TYPES):
-                return False
-        return True
+        return all(
+            isinstance(part, _ALLOWED_DECORATOR_TYPES)
+            for part in attributes.parts(decorator)
+        )
