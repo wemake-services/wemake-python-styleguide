@@ -13,12 +13,16 @@ Docs: https://wemake-python-stylegui.de/en/latest/pages/api/contributing.html
 
 import re
 import subprocess
+import sys
 import types
 from collections import Counter
 
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY38
+# Versions for different version-specific fixtures.
+_PY_OLD = sys.version_info < (3, 8)
+_PY38 = (3, 8) <= sys.version_info < (3, 9)
+_PY39 = (3, 9) <= sys.version_info < (3, 10)
 
 #: Used to find violations' codes in output.
 ERROR_PATTERN = re.compile(r'(WPS\d{3})')
@@ -37,17 +41,18 @@ IGNORED_VIOLATIONS = (
 
 #: Number and count of violations that would be raised.
 VERSION_SPECIFIC = types.MappingProxyType({
-    'WPS216': 1,
-    'WPS224': 1,
+    'WPS216': int(not _PY39),
+    'WPS224': int(not _PY39),
 
-    'WPS307': 1,
+    'WPS307': int(not _PY39),
     'WPS332': 0,  # TODO: pyflakes fails at `:=` at the moment
 
-    'WPS416': int(not PY38),  # only works for `< python3.8`
-    'WPS451': int(PY38),  # only works for `>= python3.8`
-    'WPS452': int(PY38),  # only works for `>= python3.8`
+    'WPS416': int(_PY_OLD),  # only works for `< python3.8`
+    'WPS451': int(_PY38),  # only works for `== python3.8`
+    'WPS452': int(_PY38),  # only works for `== python3.8`
+    'WPS466': int(_PY39),  # only works for `== python3.9`
 
-    'WPS602': 2,
+    'WPS602': 2 * int(not _PY39),
 })
 
 #: Number and count of violations that would be raised.
@@ -240,6 +245,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS463': 1,
     'WPS464': 0,  # logically unacceptable.
     'WPS465': 1,
+    'WPS466': 0,  # defined in version specific table.
 
     'WPS500': 1,
     'WPS501': 1,
@@ -305,7 +311,8 @@ def _assert_errors_count_in_output(
     output,
     errors,
     all_violations,
-    total=True,
+    *,
+    total: bool = True,
 ):
     found_errors = Counter(
         (match.group(0) for match in ERROR_PATTERN.finditer(output)),
@@ -336,13 +343,19 @@ def test_codes(all_violations):
         'noqa_pre38.py',
         VERSION_SPECIFIC,
         0,
-        marks=pytest.mark.skipif(PY38, reason='ast changes on 3.8'),
+        marks=pytest.mark.skipif(not _PY_OLD, reason='ast changes on 3.8'),
     ),
     pytest.param(
         'noqa38.py',
         VERSION_SPECIFIC,
         0,
-        marks=pytest.mark.skipif(not PY38, reason='ast changes on 3.8'),
+        marks=pytest.mark.skipif(not _PY38, reason='ast changes on 3.8'),
+    ),
+    pytest.param(
+        'noqa39.py',
+        VERSION_SPECIFIC,
+        0,
+        marks=pytest.mark.skipif(not _PY39, reason='ast changes on 3.9'),
     ),
 ])
 def test_noqa_fixture_disabled(
@@ -371,7 +384,12 @@ def test_noqa_fixture_disabled(
     )
     stdout, _ = process.communicate()
 
-    _assert_errors_count_in_output(stdout, violations, all_violations, total)
+    _assert_errors_count_in_output(
+        stdout,
+        violations,
+        all_violations,
+        total=total,
+    )
 
 
 def test_noqa_fixture_disabled_no_control(
