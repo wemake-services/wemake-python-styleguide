@@ -1,6 +1,6 @@
 [[package]]
 name = "added-value"
-version = "0.14.2"
+version = "0.15.0"
 description = "Sphinx \"added-value\" extension"
 category = "dev"
 optional = false
@@ -1550,12 +1550,12 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "33d1ed7647add5ec73abde64b6ef04887724bedd09b5996018f1cd8ee2cf0ac6"
+content-hash = "eec5647f50e9eb7eaf90b34c62f26298b460187532de25f84d31daeb4bd0cbd5"
 
 [metadata.files]
 added-value = [
-    {file = "added-value-0.14.2.tar.gz", hash = "sha256:8c886aee74635cec15beb64c28a90ae664526f331c1a4941e4d6ab98af232028"},
-    {file = "added_value-0.14.2-py2.py3-none-any.whl", hash = "sha256:b25fcb86f9bfad9a40adf4d344322690e312741556c7b75681bc948380a251e6"},
+    {file = "added-value-0.15.0.tar.gz", hash = "sha256:9c3812c5a42dc013845eecbf30c65eb29f39b2284b4799eb0ae1722eaace8140"},
+    {file = "added_value-0.15.0-py2.py3-none-any.whl", hash = "sha256:46f042c93585fc68963d66c2b1b11d08ba1aeab99cc7f3235fdda56cd0fd4bf4"},
 ]
 alabaster = [
     {file = "alabaster-0.7.12-py2.py3-none-any.whl", hash = "sha256:446438bdcca0e05bd45ea2de1668c1d9b032e1a9154c2c259092d77031ddd359"},
