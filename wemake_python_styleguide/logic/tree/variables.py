@@ -43,7 +43,7 @@ def is_valid_unpacking_target(target: ast.expr) -> bool:
     """Checks if unpacking target is correct."""
     if isinstance(target, ast.Tuple):
         return all(
-            _is_valid_single(element) is not None
+            _is_valid_single(element)
             for element in target.elts
         )
     return _is_valid_single(target)

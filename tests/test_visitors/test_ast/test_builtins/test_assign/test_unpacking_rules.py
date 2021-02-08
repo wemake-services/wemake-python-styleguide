@@ -198,6 +198,9 @@ def test_correct_assignment(
     'some.attr',
     'some[0]["key"]',
     'some["key"][0]',
+    # regression 1856
+    '(some, other[0])',
+    '(some.attr, other)',
 ])
 @pytest.mark.parametrize('target', [
     '(1, 2)',

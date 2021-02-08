@@ -135,7 +135,7 @@ def test_unpacking_to_nested_list(
     assert_errors(
         visitor,
         [UnpackingIterableToListViolation],
-        ignored_types=(WrongUnpackingViolation,),
+        ignored_types=WrongUnpackingViolation,
     )
 
 
