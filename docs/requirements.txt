@@ -6,7 +6,7 @@ sphinx_autodoc_typehints==1.11.1
 sphinxcontrib-mermaid==0.6.0
 recommonmark==0.7.1
 m2r2==0.2.7
-added-value==0.14.2
+added-value==0.15.0
 tomlkit==0.7.0
 docutils==0.16
 
