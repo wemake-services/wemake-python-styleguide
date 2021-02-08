@@ -1,15 +1,20 @@
 import ast
-from typing import ClassVar
 
-from typing_extensions import final
+from typing_extensions import Final, final
 
 from wemake_python_styleguide.logic.tree import attributes
-from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
+from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations.best_practices import (
     NewStyledDecoratorViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
+
+_ALLOWED_DECORATOR_TYPES: Final = (
+    ast.Attribute,
+    ast.Call,
+    ast.Name,
+)
 
 
 @final
@@ -19,12 +24,6 @@ from wemake_python_styleguide.visitors.decorators import alias
 ))
 class WrongDecoratorVisitor(BaseNodeVisitor):
     """Checks decorators's correctness."""
-
-    _allowed_decorator_types: ClassVar[AnyNodes] = (
-        ast.Attribute,
-        ast.Call,
-        ast.Name,
-    )
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """Checks functions' decorators."""
@@ -37,13 +36,16 @@ class WrongDecoratorVisitor(BaseNodeVisitor):
                 self.add_violation(NewStyledDecoratorViolation(decorator))
 
     def _is_allowed_decorator(self, decorator: ast.expr) -> bool:
-        if not isinstance(decorator, self._allowed_decorator_types):
+        if not isinstance(decorator, _ALLOWED_DECORATOR_TYPES):
             return False
+
+        if isinstance(decorator, ast.Name):
+            return True  # Simple names are fine!
 
         for part in attributes.parts(decorator):  # pragma: py-lt-39
             # This part of code can only be accessed by python3.9+
             # because previous versions did not allow that
             # on a parser level. Which was cool...
-            if not isinstance(part, self._allowed_decorator_types):
+            if not isinstance(part, _ALLOWED_DECORATOR_TYPES):
                 return False
         return True
