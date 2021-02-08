@@ -33,9 +33,17 @@ class WrongDecoratorVisitor(BaseNodeVisitor):
 
     def _check_new_decorator_syntax(self, node: AnyFunctionDef) -> None:
         for decorator in node.decorator_list:
-            for part in attributes.parts(decorator):  # pragma: py-lt-39
-                # This part of code can only be accessed by python3.9+
-                # because previous versions did not allow that
-                # on a parser level. Which was cool...
-                if not isinstance(part, self._allowed_decorator_types):
-                    self.add_violation(NewStyledDecoratorViolation(decorator))
+            if not self._is_allowed_decorator(decorator):
+                self.add_violation(NewStyledDecoratorViolation(decorator))
+
+    def _is_allowed_decorator(self, decorator: ast.expr) -> bool:
+        if not isinstance(decorator, self._allowed_decorator_types):
+            return False
+
+        for part in attributes.parts(decorator):  # pragma: py-lt-39
+            # This part of code can only be accessed by python3.9+
+            # because previous versions did not allow that
+            # on a parser level. Which was cool...
+            if not isinstance(part, self._allowed_decorator_types):
+                return False
+        return True
