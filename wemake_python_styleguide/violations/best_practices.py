@@ -2539,7 +2539,6 @@ class BitwiseAndBooleanMixupViolation(ASTViolation):
     code = 465
 
 
-
 @final
 class NewStyledDecoratorViolation(ASTViolation):
     """
