@@ -9,6 +9,7 @@ from wemake_python_styleguide.visitors.ast.decorators import (
 )
 
 _reason = 'new-styled decorators appeared in 3.9'
+_mark = pytest.mark.skipif(not PY39, reason=_reason)
 
 function_def = """
 @{0}
@@ -28,10 +29,8 @@ _fixtures = (
 
 
 @pytest.mark.parametrize('code', [
-    pytest.param(
-        fixture,
-        marks=pytest.mark.skipif(not PY39, reason=_reason),
-    ) for fixture in _fixtures
+    pytest.param(fixture, marks=_mark)
+    for fixture in _fixtures
 ])
 @pytest.mark.parametrize('decorator', [
     'some[1]',
