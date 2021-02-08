@@ -22,15 +22,16 @@ class Some(object):
     def some(self): ...
 """
 
-_fixtures = (
-    function_def,
-    method_def,
-)
-
 
 @pytest.mark.parametrize('code', [
-    pytest.param(fixture, marks=_mark)
-    for fixture in _fixtures
+    pytest.param(
+        function_def,
+        marks=pytest.mark.skipif(not PY39, reason=_reason),
+    ),
+    pytest.param(
+        method_def,
+        marks=pytest.mark.skipif(not PY39, reason=_reason),
+    ),
 ])
 @pytest.mark.parametrize('decorator', [
     'some[1]',
