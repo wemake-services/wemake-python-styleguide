@@ -14,6 +14,7 @@ Semantic versioning in our case means:
 ### Features
 
 - Adds `python3.9` support
+- Forbids to use new-style decorators on `python3.9`
 - Changes how we treat own/foreign attributes,
   since now we only check assigned attribute names for `self`/`cls`/`mcs`,
   but not any other ones.
