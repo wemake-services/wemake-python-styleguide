@@ -9,6 +9,7 @@ from wemake_python_styleguide.visitors.ast import (  # noqa: WPS235
     classes,
     compares,
     conditions,
+    decorators,
     exceptions,
     functions,
     imports,
@@ -80,32 +81,31 @@ PRESET: Final = (
     compares.InCompareSanityVisitor,
     compares.WrongFloatComplexCompareVisitor,
 
-
     conditions.IfStatementVisitor,
     conditions.BooleanConditionVisitor,
     conditions.ImplicitBoolPatternsVisitor,
 
     iterables.IterableUnpackingVisitor,
 
-    # Classes:
     classes.WrongClassVisitor,
     classes.WrongMethodVisitor,
     classes.WrongSlotsVisitor,
     classes.ClassAttributeVisitor,
     classes.ClassMethodOrderVisitor,
 
-    # Modules:
-    modules.EmptyModuleContentsVisitor,
-    modules.MagicModuleFunctionsVisitor,
-    modules.ModuleConstantsVisitor,
-
-    # Blocks:
     blocks.BlockVariableVisitor,
     blocks.AfterBlockVariablesVisitor,
 
     subscripts.SubscriptVisitor,
     subscripts.ImplicitDictGetVisitor,
     subscripts.CorrectKeyVisitor,
+
+    decorators.WrongDecoratorVisitor,
+
+    # Modules:
+    modules.EmptyModuleContentsVisitor,
+    modules.MagicModuleFunctionsVisitor,
+    modules.ModuleConstantsVisitor,
 
     # Topics:
     *complexity.PRESET,

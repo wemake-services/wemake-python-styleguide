@@ -82,6 +82,7 @@ Summary
    GetterWithoutReturnViolation
    EmptyCommentViolation
    BitwiseAndBooleanMixupViolation
+   NewStyledDecoratorViolation
 
 Best practices
 --------------
@@ -152,6 +153,7 @@ Best practices
 .. autoclass:: GetterWithoutReturnViolation
 .. autoclass:: EmptyCommentViolation
 .. autoclass:: BitwiseAndBooleanMixupViolation
+.. autoclass:: NewStyledDecoratorViolation
 
 """
 
@@ -2177,8 +2179,8 @@ class NonTrivialExceptViolation(ASTViolation):
 
     Reasoning:
         Expressions used as an argument for ``except`` could be hard to read
-        and hide real list of exceptions being expected to occur in the outlined
-        code block.
+        and hide real list of exceptions being expected
+        to occur in the outlined code block.
 
     Solution:
         Use separate ``except`` blocks for each exception or provide a tuple
@@ -2288,7 +2290,7 @@ class ImportCollisionViolation(ASTViolation):
 
         # Correct:
         import public
-        from some.module import FooClass
+        from public.module import FooClass
 
         import hypothesis
         from hypothesis import strategies as st
@@ -2453,11 +2455,11 @@ class GetterWithoutReturnViolation(ASTViolation):
 
     Example::
 
-        # Correct
+        # Correct:
         def get_random_number():
              return random.randint(1, 10)
 
-        # Wrong
+        # Wrong:
         def get_random_number():
              print('I do not return a value!')
 
@@ -2514,7 +2516,8 @@ class BitwiseAndBooleanMixupViolation(ASTViolation):
     Empty comments are only allowed in between valid comments.
 
     Reasoning:
-       This case indicates that a person confused & with and and | with or.
+       This case indicates that a person
+       confused ``&`` with ``and`` and ``|`` with ``or``.
        This can be the case if a person is coming from another language.
 
     Solution:
@@ -2523,16 +2526,49 @@ class BitwiseAndBooleanMixupViolation(ASTViolation):
     Example::
 
         # Correct:
-
         first | 10
 
         # Wrong:
-
         result = ((first > 0) & False)
 
     .. versionadded:: 0.15.0
 
     """
 
-    error_template = 'Likely bitwise and boolean operation mixup'
+    error_template = 'Found likely bitwise and boolean operation mixup'
     code = 465
+
+
+@final
+class NewStyledDecoratorViolation(ASTViolation):
+    """
+    Forbid using complex grammar for using decorators.
+
+    This violation is only raised for ``python3.9+``,
+    earlier versions do not have this concept.
+
+    Reasoning:
+       New grammar allows to use decorators in a more liberal way.
+       It is probably not a good idea.
+       Because decorators should be simple and easy to read.
+
+    Solution:
+        Use names, attributes, and calls as decorators only.
+        You are free to pass any args to function calls, however.
+
+    Example::
+
+        # Correct:
+        @some.decorator(args)
+        def my_function(): ...
+
+        # Wrong:
+        @some.decorator['method'] + other
+        def my_function(): ...
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found new-styled decorator'
+    code = 466
