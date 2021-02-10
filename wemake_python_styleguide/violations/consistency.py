@@ -2312,7 +2312,7 @@ class AssignToSliceViolation(ASTViolation):
     Forbid assignment to a subscript slice.
 
     Reasoning:
-        Assingment to a slice may lead to a list changing its size
+        Assignment to a slice may lead to a list changing its size
         implicitly and strangely which makes it hard to spot bugs.
 
     Solution:

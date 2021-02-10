@@ -56,7 +56,7 @@ def test_correct_order_exception(
     default_options,
     statements,
 ):
-    """Testing restrictions are not raised when use correct oder of `except`."""
+    """Violations are not raised when using the correct order of `except`."""
     tree = parse_ast_tree(code.format(*statements))
 
     visitor = WrongTryExceptVisitor(default_options, tree=tree)
