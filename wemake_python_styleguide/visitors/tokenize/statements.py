@@ -264,57 +264,55 @@ class MultilineStringVisitor(BaseTokenVisitor):
 @final
 @attr.dataclass(slots=True)
 class _InconsistentComprehensionContext(object):
-    r"""Context for individual bracket enclosures (i.e. [],\{\}, or ())."""
+    r"""
+    Context for individual bracket enclosures (i.e. [],\{\}, or ()).
 
-    def __init__(self) -> None:
-        r"""
-        Initializes context for a given bracket enclosure (i.e. [],\{\}, or ()).
+    Helper class for InconsistentComprehensionVisitor which stores context
+    for the current (potential) comprehension we are in. Combined with a
+    stack to enable support for nested comprehensions.
 
-        Helper class for InconsistentComprehensionVisitor which stores context
-        for the current (potential) comprehension we are in. Combined with a
-        stack to enable support for nested comprehensions.
+    _is_comprehension:
+    Flag is set if current clause is identified as a list comprehension.
 
-        _is_comprehension:
-        Flag is set if current clause is identified as a list comprehension.
+    seen_clause_in_line:
+    Flag is set when the current line already contains a clause, which
+    is either the action, each for loop, or the conditional. Starts off
+    as True to account for the action, which we don't actually visit.
 
-        seen_clause_in_line:
-        Flag is set when the current line already contains a clause, which
-        is either the action, each for loop, or the conditional. Starts off
-        as True to account for the action, which we don't actually visit.
+    _seen_for:
+    Flag tracks whether we've seen a for statement within these brackets.
+    Effectively determines whether we are looking at some kind of
+    comprehension or not.
 
-        _seen_for:
-        Flag tracks whether we've seen a for statement within these brackets.
-        Effectively determines whether we are looking at some kind of
-        comprehension or not.
+    _seen_for_in_line:
+    Flag tracks whether we've seen a for statement on this line. Used to
+    determine if a for...in statement has been split across multiple lines.
 
-        _seen_for_in_line:
-        Flag tracks whether we've seen a for statement on this line. Used to
-        determine if a for...in statement has been split across multiple lines.
+    _seen_if_in_line:
+    Flag tracks whether we've seen an if statement on this line. Used to
+    determine whether an in statement is from a for...in statement or
+    is a logical in.
 
-        _seen_if_in_line:
-        Flag tracks whether we've seen an if statement on this line. Used to
-        determine whether an in statement is from a for...in statement or
-        is a logical in.
+    _seen_nl:
+    Flag for if we've seen any logical newlines, indicating this is a
+    multiline comprehension
 
-        _seen_nl:
-        Flag for if we've seen any logical newlines, indicating this is a
-        multiline comprehension
+    _potential_violation:
+    Flag for when we see multiple clauses in one line. Only a violation
+    if this is a multiline comprehension
 
-        _potential_violation:
-        Flag for when we see multiple clauses in one line. Only a violation
-        if this is a multiline comprehension
+    _reported:
+    Flag tracks whether we've already reported this violation.
+    """
 
-        _reported:
-        Flag tracks whether we've already reported this violation.
-        """
-        self.seen_clause_in_line = False
-        self._is_comprehension = False
-        self._seen_for = False
-        self._seen_for_in_line = False
-        self._seen_if_in_line = False
-        self._seen_nl = False
-        self._potential_violation = False
-        self._reported = False
+    seen_clause_in_line: bool = False
+    _is_comprehension: bool = False
+    _seen_for: bool = False
+    _seen_for_in_line: bool = False
+    _seen_if_in_line: bool = False
+    _seen_nl: bool = False
+    _potential_violation: bool = False
+    _reported: bool = False
 
     def check_nl(self, token: tokenize.TokenInfo) -> None:
         """
