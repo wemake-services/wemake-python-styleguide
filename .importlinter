@@ -56,6 +56,9 @@ source_modules =
   wemake_python_styleguide
 
 forbidden_modules =
+  # Std imports we don't like:
+  dataclasses
+
   # Important direct and indirect dependencies:
   flake8
   pygments

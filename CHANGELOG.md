@@ -9,6 +9,13 @@ Semantic versioning in our case means:
 - Major releases inidicate significant milestones or serious breaking changes. There are no major releases right now: we are still at `0.x.y` version
 
 
+## 0.15.1
+
+### Bugfixes
+
+- Fixes `dataclasses` import, it was failing on `python3.6`
+
+
 ## 0.15.0 aka python3.9
 
 ### Features

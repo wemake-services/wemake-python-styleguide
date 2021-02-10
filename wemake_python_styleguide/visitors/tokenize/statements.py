@@ -1,6 +1,5 @@
 import tokenize
 from collections import defaultdict
-from dataclasses import dataclass
 from operator import attrgetter
 from typing import (
     ClassVar,
@@ -13,6 +12,7 @@ from typing import (
     Tuple,
 )
 
+import attr
 from flake8_quotes.docstring_detection import get_docstring_tokens
 from typing_extensions import final
 
@@ -262,8 +262,8 @@ class MultilineStringVisitor(BaseTokenVisitor):
 
 
 @final
-@dataclass
-class InconsistentComprehensionContext(object):
+@attr.dataclass(slots=True)
+class _InconsistentComprehensionContext(object):
     r"""Context for individual bracket enclosures (i.e. [],\{\}, or ())."""
 
     def __init__(self) -> None:
@@ -416,12 +416,12 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
         comprehensions.
         """
         super().__init__(*args, **kwargs)
-        self._bracket_stack: List[InconsistentComprehensionContext] = []
-        self._current_ctx: Optional[InconsistentComprehensionContext] = None
+        self._bracket_stack: List[_InconsistentComprehensionContext] = []
+        self._current_ctx: Optional[_InconsistentComprehensionContext] = None
 
     def visit_any_left_bracket(self, token: tokenize.TokenInfo) -> None:
         """Sets self._inside_brackets to True if left bracket found."""
-        self._bracket_stack.append(InconsistentComprehensionContext())
+        self._bracket_stack.append(_InconsistentComprehensionContext())
         self._current_ctx = self._bracket_stack[-1]
 
     def visit_any_right_bracket(self, token: tokenize.TokenInfo) -> None:
