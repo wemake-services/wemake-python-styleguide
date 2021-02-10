@@ -50,6 +50,33 @@ while True:
     {1}
 """
 
+while1 = """
+while True:
+    try:
+       ...
+    except:
+        ...
+"""
+
+while2 = """
+while other:
+    while True:
+        try:
+            ...
+        except:
+            ...
+"""
+
+
+while3 = """
+def wrapper():
+    while True:
+        try:
+            ...
+        except:
+            ...
+"""
+
 
 @pytest.mark.parametrize('template', [
     template_simple,
@@ -58,6 +85,9 @@ while True:
     template_nested_if,
     template_function,
     template_other,
+    while1,
+    while2,
+    while3,
 ])
 @pytest.mark.parametrize('keyword', [
     'break',

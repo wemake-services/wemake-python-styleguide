@@ -19,7 +19,7 @@ Semantic versioning in our case means:
 - Fixes multiple `if` support for `InconsistentComprehensionViolation`
 - Fixes that `NestedTernaryViolation` was not reported for a comprehension
 - Fixes that `ConstantConditionViolation` was not reported for a comprehension
-
+- Fix false positive `InfiniteWhileLoopViolation` for `try` #1857
 ### Misc
 
 - Refactors how `tokenize` tests are executed, now we have an option to compile fixture code to make sure it is syntatically valid

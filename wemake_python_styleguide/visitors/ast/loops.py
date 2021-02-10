@@ -220,6 +220,13 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         if not isinstance(node, ast.While):
             return
 
+        has_try = any(
+            isinstance(sub_node, ast.Try)
+            for sub_node in ast.walk(node)
+        )
+        if has_try:
+            return
+
         real_node = operators.unwrap_unary_node(node.test)
         if isinstance(real_node, ast.NameConstant) and real_node.value is True:
             if not loops.has_break(node, break_nodes=self._breaks):
