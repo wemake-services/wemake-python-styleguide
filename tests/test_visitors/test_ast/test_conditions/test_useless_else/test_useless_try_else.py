@@ -132,7 +132,7 @@ raise ...
     correct_example9,
     correct_example10,
 ])
-def test_else_that_can_not_be_removed(
+def test_else_that_can_not_be_removed1(
     assert_errors,
     parse_ast_tree,
     code,
@@ -276,7 +276,7 @@ def test_else_that_can_be_removed_in_module(
 @pytest.mark.parametrize('returning', [
     'raise ValueError()',
 ])
-def test_else_that_can_not_be_removed(
+def test_else_that_can_not_be_removed2(
     assert_errors,
     parse_ast_tree,
     template,

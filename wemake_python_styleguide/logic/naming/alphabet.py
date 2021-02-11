@@ -100,8 +100,7 @@ def does_contain_unicode(name: str) -> bool:
         name.encode('ascii')
     except UnicodeEncodeError:
         return True
-    else:
-        return False
+    return False
 
 
 def get_unreadable_characters(

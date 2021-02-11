@@ -74,7 +74,6 @@ def function():
 """
 
 
-
 @pytest.mark.parametrize('code', [
     correct_example1,
     correct_example2,
