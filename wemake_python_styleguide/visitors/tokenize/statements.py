@@ -21,9 +21,11 @@ from wemake_python_styleguide.logic.tokens.brackets import (
 from wemake_python_styleguide.logic.tokens.comprehensions import Compehension
 from wemake_python_styleguide.logic.tokens.constants import (
     ALLOWED_EMPTY_LINE_TOKENS,
-    MATCHING,
-    NEWLINES,
 )
+from wemake_python_styleguide.logic.tokens.constants import (
+    MATCHING_BRACKETS as MATCHING,
+)
+from wemake_python_styleguide.logic.tokens.constants import NEWLINES
 from wemake_python_styleguide.logic.tokens.newlines import next_meaningful_token
 from wemake_python_styleguide.logic.tokens.queries import only_contains
 from wemake_python_styleguide.logic.tokens.strings import (

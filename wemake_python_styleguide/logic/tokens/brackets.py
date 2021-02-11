@@ -1,7 +1,10 @@
 import tokenize
 from typing import List
 
-from wemake_python_styleguide.logic.tokens.constants import MATCHING, NEWLINES
+from wemake_python_styleguide.logic.tokens.constants import (
+    MATCHING_BRACKETS,
+    NEWLINES,
+)
 from wemake_python_styleguide.logic.tokens.queries import only_contains
 
 
@@ -16,8 +19,8 @@ def get_reverse_bracket(bracket: tokenize.TokenInfo) -> int:
     True
 
     """
-    index = list(MATCHING.values()).index(bracket.exact_type)
-    return list(MATCHING.keys())[index]
+    index = list(MATCHING_BRACKETS.values()).index(bracket.exact_type)
+    return list(MATCHING_BRACKETS.keys())[index]
 
 
 def last_bracket(tokens: List[tokenize.TokenInfo], index: int) -> bool:

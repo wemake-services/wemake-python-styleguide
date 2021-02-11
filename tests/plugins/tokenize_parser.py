@@ -1,6 +1,7 @@
 import io
 import tokenize
 from textwrap import dedent
+from typing import List
 
 import pytest
 
@@ -8,7 +9,11 @@ import pytest
 @pytest.fixture(scope='session')
 def parse_tokens(compile_code):
     """Parses tokens from a string."""
-    def factory(code: str, *, do_compile: bool = True) -> None:
+    def factory(
+        code: str,
+        *,
+        do_compile: bool = True,
+    ) -> List[tokenize.TokenInfo]:
         code = dedent(code)
         if do_compile:
             compile_code(code)
@@ -20,7 +25,11 @@ def parse_tokens(compile_code):
 @pytest.fixture(scope='session')
 def parse_file_tokens(parse_tokens, compile_code):
     """Parses tokens from a file."""
-    def factory(filename: str, *, do_compile: bool = True) -> None:
+    def factory(
+        filename: str,
+        *,
+        do_compile: bool = True,
+    ) -> List[tokenize.TokenInfo]:
         with open(filename, 'r', encoding='utf-8') as test_file:
             file_content = test_file.read()
             if do_compile:
