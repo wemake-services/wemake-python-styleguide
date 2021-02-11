@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.best_practices import (
     WrongKeywordConditionViolation,
 )
@@ -45,6 +46,10 @@ assert_with_message_template = 'assert {0}, "message"'
     '{1 for a in some()}',
     '{"a": a for a in some()}',
     'some if x else other',
+    pytest.param(
+        '(unique := +0)',
+        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
+    ),
 ])
 def test_false_condition_keywords(
     assert_errors,
@@ -85,12 +90,7 @@ def test_false_assert_condition_keywords(
     assert_errors(visitor, [WrongKeywordConditionViolation])
 
 
-@pytest.mark.parametrize('code', [
-    while_template,
-    assert_template,
-    assert_with_message_template,
-])
-@pytest.mark.parametrize('condition', [
+fixtures = (
     'call()',
     'name',
     '-name',
@@ -101,8 +101,41 @@ def test_false_assert_condition_keywords(
     'value + 1',
     'x > 1',
     'x + 1 > 1 and y < 1',
+)
+
+
+@pytest.mark.parametrize('code', [
+    while_template,
 ])
-def test_true_condition_keywords(
+@pytest.mark.parametrize('condition', [
+    *fixtures,
+    pytest.param(
+        'x := other()',
+        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
+    ),
+])
+def test_true_condition_keywords_while(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    condition,
+    default_options,
+):
+    """Testing that true coniditions in keywords are allowed."""
+    tree = parse_ast_tree(code.format(condition))
+
+    visitor = ConstantKeywordVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('code', [
+    assert_template,
+    assert_with_message_template,
+])
+@pytest.mark.parametrize('condition', fixtures)
+def test_true_condition_keywords_assert(
     assert_errors,
     parse_ast_tree,
     code,
@@ -123,6 +156,10 @@ def test_true_condition_keywords(
 ])
 @pytest.mark.parametrize('condition', [
     'True',
+    pytest.param(
+        'x := +True',
+        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
+    ),
 ])
 def test_true_while_condition_keywords(
     assert_errors,

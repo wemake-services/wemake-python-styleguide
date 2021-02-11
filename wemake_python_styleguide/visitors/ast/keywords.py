@@ -8,7 +8,7 @@ from wemake_python_styleguide.compat.aliases import (
     FunctionNodes,
     TextNodes,
 )
-from wemake_python_styleguide.logic import walk
+from wemake_python_styleguide.logic import walk, walrus
 from wemake_python_styleguide.logic.naming import name_nodes
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree import keywords, operators
@@ -405,29 +405,19 @@ class ConstantKeywordVisitor(BaseNodeVisitor):
     )
 
     def visit_While(self, node: ast.While) -> None:
-        """
-        Visits ``while`` keyword and tests that loop will execute.
-
-        Raises:
-            WrongKeywordConditionViolation
-
-        """
+        """Visits ``while`` keyword and tests that loop will execute."""
         self._check_condition(node, node.test)
         self.generic_visit(node)
 
     def visit_Assert(self, node: ast.Assert) -> None:
-        """
-        Visits ``assert`` keyword and tests that condition is correct.
-
-        Raises:
-            WrongKeywordConditionViolation
-
-        """
+        """Visits ``assert`` keyword and tests that condition is correct."""
         self._check_condition(node, node.test)
         self.generic_visit(node)
 
     def _check_condition(self, node: ast.AST, condition: ast.AST) -> None:
-        real_node = operators.unwrap_unary_node(condition)
+        real_node = operators.unwrap_unary_node(
+            walrus.get_assigned_expr(condition),
+        )
         if isinstance(real_node, ast.NameConstant) and real_node.value is True:
             if isinstance(node, ast.While):
                 return  # We should allow `while True:`
