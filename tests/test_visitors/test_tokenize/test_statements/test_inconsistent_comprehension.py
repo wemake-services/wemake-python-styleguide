@@ -59,6 +59,15 @@ def wrapper():
     ]
 """
 
+correct_list_well_spaced_comprehension3 = """
+def wrapper():
+    [ # We need this comment
+        some(number)
+        for number in matrix
+        if number > 0
+    ]
+"""
+
 correct_list_nested_comprehension = """
 def get_all_args(call: ast.Call) -> Sequence[ast.AST]:
     return [
@@ -281,6 +290,7 @@ def wrapper():
     correct_list_other_one_line_comprehension,
     correct_list_well_spaced_comprehension1,
     correct_list_well_spaced_comprehension2,
+    correct_list_well_spaced_comprehension3,
     correct_list_nested_comprehension,
     correct_list_ternary1,
     correct_list_ternary2,
