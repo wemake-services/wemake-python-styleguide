@@ -2,7 +2,6 @@ import pytest
 
 from wemake_python_styleguide.violations.refactoring import (
     SimplifiableReturningIfViolation,
-    UselessReturningElseViolation,
 )
 from wemake_python_styleguide.visitors.ast.conditions import IfStatementVisitor
 
@@ -116,10 +115,7 @@ def test_simplifiable_early_returning_if(
     """These early returning ifs are simplifiable."""
     tree = parse_ast_tree(simple_early_returning_if.format(*comparators))
 
-    visitor = IfStatementVisitor(
-        default_options,
-        tree=tree,
-    )
+    visitor = IfStatementVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [SimplifiableReturningIfViolation])
@@ -141,7 +137,7 @@ def test_complex_else(
     visitor = IfStatementVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [UselessReturningElseViolation])
+    assert_errors(visitor, [])
 
 
 @pytest.mark.parametrize('comparators', [
@@ -160,7 +156,7 @@ def test_not_simplifiable_elif(
     visitor = IfStatementVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [UselessReturningElseViolation])
+    assert_errors(visitor, [])
 
 
 @pytest.mark.parametrize('comparators', [

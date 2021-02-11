@@ -220,9 +220,10 @@ class UselessReturningElseViolation(ASTViolation):
     """
     Forbid useless ``else`` cases in returning functions.
 
-    We check single ``if`` statements that all contain
-    ``return`` or ``raise`` or ``break`` statements with this rule.
-    We do not check ``if`` statements with ``elif`` cases.
+    We check single ``if``, ``for``, ``while``, and ``try``
+    statements that all contain
+    ``return``, ``raise``, ``continue``, or ``break``
+    statements with this rule.
 
     Reasoning:
         Using extra ``else`` creates a situation when
@@ -250,6 +251,7 @@ class UselessReturningElseViolation(ASTViolation):
 
     .. versionadded:: 0.7.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.15.1
 
     """
 
