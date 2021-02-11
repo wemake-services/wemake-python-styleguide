@@ -279,6 +279,10 @@ class MultilineStringVisitor(BaseTokenVisitor):
     'visit_rbrace',
     'visit_rpar',
 ))
+@alias('visit_compat_name', (
+    'visit_name',
+    'visit_async',  # python3.6 has this token type for `async` keyword
+))
 class InconsistentComprehensionVisitor(BaseTokenVisitor):
     """
     Visitor for checking inconsistent comprehension syntax.
@@ -316,7 +320,7 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
         else:
             self._current_ctx = None
 
-    def visit_name(self, token: tokenize.TokenInfo) -> None:
+    def visit_compat_name(self, token: tokenize.TokenInfo) -> None:
         """Builds the comprehension."""
         if not self._current_ctx:
             return
