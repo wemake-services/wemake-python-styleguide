@@ -7,6 +7,7 @@ from wemake_python_styleguide.options.config import Configuration
 
 pytest_plugins = [
     'plugins.violations',
+    'plugins.compile_code',
     'plugins.ast_tree',
     'plugins.tokenize_parser',
     'plugins.async_sync',

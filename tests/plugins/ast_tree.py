@@ -7,7 +7,7 @@ from wemake_python_styleguide.transformations.ast_tree import transform
 
 
 @pytest.fixture(scope='session')
-def parse_ast_tree():
+def parse_ast_tree(compile_code):
     """
     Function to convert code to AST.
 
@@ -22,20 +22,9 @@ def parse_ast_tree():
 
     Order is important.
     """
-    def factory(code: str, do_compile: bool = True) -> ast.AST:
+    def factory(code: str, *, do_compile: bool = True) -> ast.AST:
         code_to_parse = dedent(code)
         if do_compile:
-            _compile_code(code_to_parse)
+            compile_code(code_to_parse)
         return transform(ast.parse(code_to_parse))
     return factory
-
-
-def _compile_code(code_to_parse: str) -> None:
-    """
-    Compiles given string to Python's AST.
-
-    We need to compile to check some syntax features
-    that are validated after the ``ast`` is processed:
-    like double arguments or ``break`` outside of loops.
-    """
-    compile(code_to_parse, '<filename>', 'exec')  # noqa: WPS421

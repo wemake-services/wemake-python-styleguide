@@ -77,7 +77,7 @@ def test_wrong_multiline_string_use(
     code,
 ):
     """Ensures that wrong multiline string uses raise a warning."""
-    file_tokens = parse_tokens(code)
+    file_tokens = parse_tokens(code, do_compile=False)
 
     visitor = MultilineStringVisitor(default_options, file_tokens=file_tokens)
     visitor.run()

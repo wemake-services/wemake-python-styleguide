@@ -26,7 +26,8 @@ from typing_extensions import Final, final
 
 from wemake_python_styleguide.constants import MAX_NO_COVER_COMMENTS, STDIN
 from wemake_python_styleguide.logic.system import is_executable_file, is_windows
-from wemake_python_styleguide.logic.tokens import NEWLINES, get_comment_text
+from wemake_python_styleguide.logic.tokens.constants import NEWLINES
+from wemake_python_styleguide.logic.tokens.strings import get_comment_text
 from wemake_python_styleguide.violations.best_practices import (
     EmptyCommentViolation,
     ForbiddenInlineIgnoreViolation,

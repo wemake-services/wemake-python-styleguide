@@ -46,7 +46,7 @@ def test_correct_unicode_escape(
     code,
 ):
     """Ensures that correct unicode escape does not raise a warning."""
-    file_tokens = parse_tokens(code)
+    file_tokens = parse_tokens(code, do_compile=False)
 
     visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
@@ -67,7 +67,7 @@ def test_correct_unicode_string_escape(
     code,
 ):
     """Ensures that correct unicode escape does not raise a warning."""
-    file_tokens = parse_tokens(code)
+    file_tokens = parse_tokens(code, do_compile=False)
 
     visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
@@ -88,7 +88,7 @@ def test_correct_unicode_upper_string_escape(
     code,
 ):
     """Ensures that correct unicode escape does not raise a warning."""
-    file_tokens = parse_tokens(code)
+    file_tokens = parse_tokens(code, do_compile=False)
 
     visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()

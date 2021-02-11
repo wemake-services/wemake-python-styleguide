@@ -51,7 +51,10 @@ def test_correct_strings(
     mode,
 ):
     """Ensures that correct strings are fine."""
-    file_tokens = parse_tokens(mode(primitives_usages.format(primitive)))
+    file_tokens = parse_tokens(
+        mode(primitives_usages.format(primitive)),
+        do_compile=False,
+    )
 
     visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()

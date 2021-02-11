@@ -62,7 +62,7 @@ def test_missing_space(
     code,
 ):
     """Ensures that parens right after keyword raise a warning."""
-    file_tokens = parse_tokens(code)
+    file_tokens = parse_tokens(code, do_compile=False)
 
     visitor = WrongKeywordTokenVisitor(
         default_options, file_tokens=file_tokens,
@@ -99,7 +99,7 @@ def test_space_between_keyword_and_parens(
     code,
 ):
     """Ensures that there's no violation if space in between."""
-    file_tokens = parse_tokens(code)
+    file_tokens = parse_tokens(code, do_compile=False)
 
     visitor = WrongKeywordTokenVisitor(
         default_options, file_tokens=file_tokens,

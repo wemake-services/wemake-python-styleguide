@@ -4,9 +4,9 @@ We follow [Semantic Versions](https://semver.org/) since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 Semantic versioning in our case means:
-- Bugfixes do not bring new features, code that passes on `x.y.0` should pass on `x.y.1`. With the only exception that bugfix can raise old violations in new places, if they were hidden by a buggy behaviour.
-- Minor releases do bring new features and configuration options. New violations can be added. Code that passes `x.0.y` might not pass on `x.1.y` release.
-- Major releases inidicate significant milestones or serious breaking changes. There are no major releases right now: we are still at `0.x.y` version
+- Bugfixes do not bring new features, code that passes on `x.y.0` should pass on `x.y.1`. With the only exception that bugfix can raise old violations in new places, if they were hidden by a buggy behaviour. But we do not add new checks.
+- Minor releases do bring new features and configuration options. New violations can be added. Code that passes `x.0.y` might not pass on `x.1.y` release because of the new checks.
+- Major releases inidicate significant milestones or serious breaking changes. There are no major releases right now: we are still at `0.x.y` version. But, in the future we might change the configuration names / logic, change the client facing API, change code conventions signigicantly, etc.
 
 
 ## 0.15.1
@@ -14,6 +14,13 @@ Semantic versioning in our case means:
 ### Bugfixes
 
 - Fixes `dataclasses` import, it was failing on `python3.6`
+- Fixes `InconsistentComprehensionViolation` work with `async` comprehensions
+- Fixes nested compehensions support for `InconsistentComprehensionViolation`
+- Fixes multiple `if` support for `InconsistentComprehensionViolation`
+
+### Misc
+
+- Refactors how `tokenize` tests are executed, now we have an option to compile fixture code to make sure it is syntatically valid
 
 
 ## 0.15.0 aka python3.9
