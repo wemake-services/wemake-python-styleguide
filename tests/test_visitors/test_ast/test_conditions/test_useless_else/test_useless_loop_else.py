@@ -105,7 +105,8 @@ def test_else_that_can_not_be_removed(
 while_loop = """
 def wrapper():
     while ...:
-        {0}
+        if ...:  # nested
+            {0}
     else:
         {1}
 """
@@ -113,7 +114,9 @@ def wrapper():
 for_loop = """
 def wrapper():
     for x in ...:
+        ...
         {0}
+        ...
     else:
         {1}
 """

@@ -152,7 +152,7 @@ def function():
     correct_example12,
     correct_example13,
 ])
-def test_else_that_can_not_be_removed(
+def test_else_that_can_not_be_removed1(
     assert_errors,
     parse_ast_tree,
     code,
@@ -362,7 +362,7 @@ def test_else_that_can_be_removed_in_module(
     'print()',
     'new_var = 1',
 ])
-def test_else_that_can_not_be_removed(
+def test_else_that_can_not_be_removed2(
     assert_errors,
     parse_ast_tree,
     template,
