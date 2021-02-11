@@ -17,6 +17,8 @@ Semantic versioning in our case means:
 - Fixes `InconsistentComprehensionViolation` work with `async` comprehensions
 - Fixes nested compehensions support for `InconsistentComprehensionViolation`
 - Fixes multiple `if` support for `InconsistentComprehensionViolation`
+- Fixes that `NestedTernaryViolation` was not reported for a comprehension
+- Fixes that `ConstantConditionViolation` was not reported for a comprehension
 
 ### Misc
 

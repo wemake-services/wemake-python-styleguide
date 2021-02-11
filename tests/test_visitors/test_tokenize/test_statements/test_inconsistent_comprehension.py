@@ -389,6 +389,17 @@ def wrapper():
     ]
 """
 
+wrong_list_split_multiple_ifs3 = """
+def wrapper():
+    [
+        some(number)
+        for number in matrix
+        if some
+        for other in iterable
+        if number > 0
+    ]
+"""
+
 wrong_list_two_compehensions1 = """
 def wrapper():
     comp = [
@@ -506,6 +517,7 @@ def wrapper():
     wrong_list_split_for_in,
     wrong_list_split_multiple_ifs1,
     wrong_list_split_multiple_ifs2,
+    wrong_list_split_multiple_ifs3,
     wrong_list_two_compehensions1,
     wrong_list_two_compehensions2,
     wrong_dict_almost_one_line,

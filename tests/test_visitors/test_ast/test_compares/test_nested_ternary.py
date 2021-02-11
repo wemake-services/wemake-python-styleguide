@@ -47,6 +47,11 @@ wrong_if2 = 'if call(a if b else c): ...'
 wrong_if3 = 'if attr.call(a if b else c): ...'
 wrong_if4 = 'if x := 1 if True else 2: ...'
 
+wrong_comprehension1 = '[x for x in number if (some if x else other)]'
+wrong_comprehension2 = '(x for x in number if (some if x else other))'
+wrong_comprehension3 = '{{x for x in number if (some if x else other)}}'
+wrong_comprehension4 = '{{x: 1 for x in number if (some if x else other)}}'
+
 # Correct:
 
 correct_if1 = """
@@ -157,6 +162,11 @@ def test_non_nested_ternary(
         wrong_if3,
         marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
     ),
+
+    wrong_comprehension1,
+    wrong_comprehension2,
+    wrong_comprehension3,
+    wrong_comprehension4,
 ])
 def test_nested_ternary(
     assert_errors,
