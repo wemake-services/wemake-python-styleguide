@@ -15,8 +15,7 @@ def is_literal(node: ast.AST) -> bool:
         ast.literal_eval(node)
     except ValueError:
         return False
-    else:
-        return True
+    return True
 
 
 def get_parent(node: ast.AST) -> Optional[ast.AST]:

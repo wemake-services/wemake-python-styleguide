@@ -5,11 +5,11 @@ from typing import ClassVar, DefaultDict, List, Mapping, Set, Type
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic import source
+from wemake_python_styleguide.logic import source, walk
 from wemake_python_styleguide.logic.tree import ifs, keywords, operators
 from wemake_python_styleguide.logic.tree.compares import CompareBounds
 from wemake_python_styleguide.logic.tree.functions import given_function_called
-from wemake_python_styleguide.types import AnyIf, AnyNodes
+from wemake_python_styleguide.types import AnyIf, AnyLoop, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     SameElementsInConditionViolation,
 )
@@ -31,6 +31,7 @@ from wemake_python_styleguide.visitors.decorators import alias
 _OperatorPairs = Mapping[Type[ast.boolop], Type[ast.cmpop]]
 
 
+# TODO: move to logic
 def _duplicated_isinstance_call(node: ast.BoolOp) -> List[str]:
     counter: DefaultDict[str, int] = defaultdict(int)
 
@@ -51,7 +52,8 @@ def _duplicated_isinstance_call(node: ast.BoolOp) -> List[str]:
     ]
 
 
-def _get_duplicate_names(variables: List[Set[str]]):
+# TODO: move to logic
+def _get_duplicate_names(variables: List[Set[str]]) -> Set[str]:
     return reduce(
         lambda acc, element: acc.intersection(element),
         variables,
@@ -66,35 +68,11 @@ def _get_duplicate_names(variables: List[Set[str]]):
 class IfStatementVisitor(BaseNodeVisitor):
     """Checks single and consecutive ``if`` statement nodes."""
 
-    #: Nodes that break or return the execution flow.
-    _returning_nodes: ClassVar[AnyNodes] = (
-        ast.Break,
-        ast.Raise,
-        ast.Return,
-        ast.Continue,
-    )
-
-    def __init__(self, *args, **kwargs) -> None:
-        """We need to store visited ``if`` not to duplicate violations."""
-        super().__init__(*args, **kwargs)
-        self._visited_ifs: Set[ast.If] = set()
-
     def visit_any_if(self, node: ast.If) -> None:
-        """
-        Checks ``if`` nodes and expressions.
-
-        Raises:
-            UselessReturningElseViolation
-            NegatedConditionsViolation
-            MultilineConditionsViolation
-            UselessLenCompareViolation
-            SimplifiableReturningIfViolation
-
-        """
+        """Checks ``if`` nodes and expressions."""
         self._check_negated_conditions(node)
         self._check_useless_len(node)
         if isinstance(node, ast.If):
-            self._check_useless_else(node)
             self._check_multiline_conditions(node)
             self._check_simplifiable_returning_if(node)
         self.generic_visit(node)
@@ -119,33 +97,6 @@ class IfStatementVisitor(BaseNodeVisitor):
                 self.add_violation(MultilineConditionsViolation(node))
                 break
 
-    def _check_useless_else(self, node: ast.If) -> None:
-        real_ifs = []
-        for chained_if in ifs.chain(node):
-            if isinstance(chained_if, ast.If):
-                if chained_if in self._visited_ifs:
-                    return
-
-                self._visited_ifs.update({chained_if})
-                real_ifs.append(chained_if)
-                continue
-
-            previous_has_returns = all(
-                ifs.has_nodes(
-                    self._returning_nodes,
-                    real_if.body,
-                )
-                for real_if in real_ifs
-            )
-            current_has_returns = ifs.has_nodes(
-                self._returning_nodes, chained_if,
-            )
-
-            if previous_has_returns and current_has_returns:
-                self.add_violation(
-                    UselessReturningElseViolation(chained_if[0]),
-                )
-
     def _check_useless_len(self, node: AnyIf) -> None:
         if isinstance(node.test, ast.Call):
             if given_function_called(node.test, {'len'}):
@@ -160,10 +111,106 @@ class IfStatementVisitor(BaseNodeVisitor):
                 if keywords.is_simple_return(else_body):
                     self.add_violation(SimplifiableReturningIfViolation(node))
                 return
-            body = getattr(node, 'wps_parent').body
+            body = getattr(node, 'wps_parent').body  # TODO: refactor
             next_index_in_parent = body.index(node) + 1
             if keywords.next_node_returns_bool(body, next_index_in_parent):
                 self.add_violation(SimplifiableReturningIfViolation(node))
+
+
+@final
+@alias('visit_any_loop', (
+    'visit_For',
+    'visit_AsyncFor',
+    'visit_While',
+))
+class UselessElseVisitor(BaseNodeVisitor):
+    """Ensures that ``else`` is used correctly for different nodes."""
+
+    #: Nodes that break or return the execution flow.
+    _returning_nodes: ClassVar[AnyNodes] = (
+        ast.Break,
+        ast.Raise,
+        ast.Return,
+        ast.Continue,
+    )
+
+    def __init__(self, *args, **kwargs) -> None:
+        """We need to store visited ``if`` not to duplicate violations."""
+        super().__init__(*args, **kwargs)
+        self._visited_ifs: Set[ast.If] = set()
+
+    def visit_If(self, node: ast.If) -> None:
+        """Checks ``if`` statements."""
+        self._check_useless_if_else(node)
+        self.generic_visit(node)
+
+    def visit_Try(self, node: ast.Try) -> None:
+        """Checks exception handling."""
+        self._check_useless_try_else(node)
+        self.generic_visit(node)
+
+    def visit_any_loop(self, node: AnyLoop) -> None:
+        """Checks any loops."""
+        self._check_useless_loop_else(node)
+        self.generic_visit(node)
+
+    def _check_useless_if_else(self, node: ast.If) -> None:
+        real_ifs = []
+        for chained_if in ifs.chain(node):
+            if isinstance(chained_if, ast.If):
+                if chained_if in self._visited_ifs:
+                    return
+
+                self._visited_ifs.update({chained_if})
+                real_ifs.append(chained_if)
+                continue
+
+            previous_has_returns = all(
+                ifs.has_nodes(self._returning_nodes, real_if.body)
+                for real_if in real_ifs
+            )
+            current_has_returns = ifs.has_nodes(
+                self._returning_nodes, chained_if,
+            )
+
+            if previous_has_returns and current_has_returns:
+                self.add_violation(
+                    UselessReturningElseViolation(chained_if[0]),
+                )
+
+    def _check_useless_try_else(self, node: ast.Try) -> None:
+        if not node.orelse or node.finalbody:
+            # `finally` cancels this rule.
+            # Because refactoring `try` with `else` and `finally`
+            # by moving `else` body after `finally` will change
+            # the execution order.
+            return
+
+        all_except_returning = all(
+            walk.is_contained(except_, self._returning_nodes)
+            for except_ in node.handlers
+        )
+        else_returning = any(
+            walk.is_contained(sub, self._returning_nodes)
+            for sub in node.orelse
+        )
+        if all_except_returning and else_returning:
+            self.add_violation(UselessReturningElseViolation(node))
+
+    def _check_useless_loop_else(self, node: AnyLoop) -> None:
+        if not node.orelse:
+            return
+
+        body_returning = any(
+            walk.is_contained(sub, self._returning_nodes)
+            for sub in node.body
+        )
+        else_returning = any(
+            walk.is_contained(sub, self._returning_nodes)
+            for sub in node.orelse
+        )
+        if body_returning and else_returning:
+            self.add_violation(UselessReturningElseViolation(node))
 
 
 @final
@@ -177,14 +224,7 @@ class BooleanConditionVisitor(BaseNodeVisitor):
         self._isinstance_calls: List[ast.BoolOp] = []
 
     def visit_BoolOp(self, node: ast.BoolOp) -> None:
-        """
-        Checks that ``and`` and ``or`` conditions are correct.
-
-        Raises:
-            SameElementsInConditionViolation
-            UnmergedIsinstanceCallsViolation
-
-        """
+        """Checks that ``and`` and ``or`` conditions are correct."""
         self._check_same_elements(node)
         self._check_isinstance_calls(node)
         self.generic_visit(node)
@@ -237,14 +277,7 @@ class ImplicitBoolPatternsVisitor(BaseNodeVisitor):
     }
 
     def visit_BoolOp(self, node: ast.BoolOp) -> None:
-        """
-        Checks that ``and`` and ``or`` do not form implicit anti-patterns.
-
-        Raises:
-            ImplicitComplexCompareViolation
-            ImplicitInConditionViolation
-
-        """
+        """Checks ``and`` and ``or`` don't form implicit anti-patterns."""
         self._check_implicit_in(node)
         self._check_implicit_complex_compare(node)
         self.generic_visit(node)

@@ -531,7 +531,7 @@ def useless_returning_else():
 
 
 def multiple_return_path():
-    try:  # noqa: WPS419
+    try:  # noqa: WPS419, WPS503
         return 1
     except Exception:
         return 2

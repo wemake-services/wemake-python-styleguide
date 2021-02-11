@@ -84,6 +84,7 @@ PRESET: Final = (
     conditions.IfStatementVisitor,
     conditions.BooleanConditionVisitor,
     conditions.ImplicitBoolPatternsVisitor,
+    conditions.UselessElseVisitor,
 
     iterables.IterableUnpackingVisitor,
 
