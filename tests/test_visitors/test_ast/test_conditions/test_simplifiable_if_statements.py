@@ -14,13 +14,6 @@ def some_function():
         return {1}
 """
 
-simple_early_returning_if = """
-def some_function():
-    if some_condition:
-        return {0}
-    return {1}
-"""
-
 complex_early_returning_if_inside = """
 def some_function():
     if some_condition:
@@ -53,7 +46,29 @@ def some_function():
         return {0}
 """
 
+simple_early_returning_if = """
+def some_function():
+    if some_condition:
+        return {0}
+    return {1}
+"""
 
+early_returning_if_else = """
+def some_function():
+    if some_condition:
+        return {0}
+    else:
+        return {1}
+"""
+
+
+@pytest.mark.parametrize('code', [
+    simple_early_returning_if,
+    early_returning_if_else,
+
+    complex_early_returning_if_inside,
+    complex_early_returning_if_outside,
+])
 @pytest.mark.parametrize('comparators', [
     ('variable', '"test"'),
     ('12', 'variable.call()'),
@@ -63,11 +78,12 @@ def some_function():
 def test_complex_early_returning_if(
     assert_errors,
     parse_ast_tree,
+    code,
     comparators,
     default_options,
 ):
     """These early returning ifs can not be simplified."""
-    tree = parse_ast_tree(simple_early_returning_if.format(*comparators))
+    tree = parse_ast_tree(code.format(*comparators))
 
     visitor = IfStatementVisitor(
         default_options,
@@ -102,6 +118,10 @@ def test_complex_early_returning_if_inside(
     assert_errors(visitor, [])
 
 
+@pytest.mark.parametrize('code', [
+    simple_early_returning_if,
+    early_returning_if_else,
+])
 @pytest.mark.parametrize('comparators', [
     ('True', 'False'),
     ('False', 'True'),
@@ -110,10 +130,11 @@ def test_simplifiable_early_returning_if(
     assert_errors,
     parse_ast_tree,
     comparators,
+    code,
     default_options,
 ):
     """These early returning ifs are simplifiable."""
-    tree = parse_ast_tree(simple_early_returning_if.format(*comparators))
+    tree = parse_ast_tree(code.format(*comparators))
 
     visitor = IfStatementVisitor(default_options, tree=tree)
     visitor.run()
