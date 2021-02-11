@@ -12,18 +12,25 @@ from typing import (
     Tuple,
 )
 
-import attr
-from flake8_quotes.docstring_detection import get_docstring_tokens
 from typing_extensions import final
 
-from wemake_python_styleguide.logic.tokens import (
-    ALLOWED_EMPTY_LINE_TOKENS,
-    MATCHING,
-    NEWLINES,
+from wemake_python_styleguide.logic.tokens.brackets import (
     get_reverse_bracket,
-    has_triple_string_quotes,
     last_bracket,
-    only_contains,
+)
+from wemake_python_styleguide.logic.tokens.comprehensions import Compehension
+from wemake_python_styleguide.logic.tokens.constants import (
+    ALLOWED_EMPTY_LINE_TOKENS,
+)
+from wemake_python_styleguide.logic.tokens.constants import (
+    MATCHING_BRACKETS as MATCHING,
+)
+from wemake_python_styleguide.logic.tokens.constants import NEWLINES
+from wemake_python_styleguide.logic.tokens.newlines import next_meaningful_token
+from wemake_python_styleguide.logic.tokens.queries import only_contains
+from wemake_python_styleguide.logic.tokens.strings import (
+    get_docstring_tokens,
+    has_triple_string_quotes,
 )
 from wemake_python_styleguide.violations.best_practices import (
     WrongMultilineStringUseViolation,
@@ -262,132 +269,6 @@ class MultilineStringVisitor(BaseTokenVisitor):
 
 
 @final
-@attr.dataclass(slots=True)
-class _InconsistentComprehensionContext(object):
-    r"""
-    Context for individual bracket enclosures (i.e. [],\{\}, or ()).
-
-    Helper class for InconsistentComprehensionVisitor which stores context
-    for the current (potential) comprehension we are in. Combined with a
-    stack to enable support for nested comprehensions.
-
-    _is_comprehension:
-    Flag is set if current clause is identified as a list comprehension.
-
-    seen_clause_in_line:
-    Flag is set when the current line already contains a clause, which
-    is either the action, each for loop, or the conditional. Starts off
-    as True to account for the action, which we don't actually visit.
-
-    _seen_for:
-    Flag tracks whether we've seen a for statement within these brackets.
-    Effectively determines whether we are looking at some kind of
-    comprehension or not.
-
-    _seen_for_in_line:
-    Flag tracks whether we've seen a for statement on this line. Used to
-    determine if a for...in statement has been split across multiple lines.
-
-    _seen_if_in_line:
-    Flag tracks whether we've seen an if statement on this line. Used to
-    determine whether an in statement is from a for...in statement or
-    is a logical in.
-
-    _seen_nl:
-    Flag for if we've seen any logical newlines, indicating this is a
-    multiline comprehension
-
-    _potential_violation:
-    Flag for when we see multiple clauses in one line. Only a violation
-    if this is a multiline comprehension
-
-    _reported:
-    Flag tracks whether we've already reported this violation.
-    """
-
-    seen_clause_in_line: bool = False
-    _is_comprehension: bool = False
-    _seen_for: bool = False
-    _seen_for_in_line: bool = False
-    _seen_if_in_line: bool = False
-    _seen_nl: bool = False
-    _potential_violation: bool = False
-    _reported: bool = False
-
-    def check_nl(self, token: tokenize.TokenInfo) -> None:
-        """
-        Handles logical newline character depending on context.
-
-        Sets appropriate flags to True if nl encountered inside brackets after
-        some clause, so that a single line comprehension with brackets on
-        multiple lines is still accepted.
-        """
-        self._seen_nl = self.seen_clause_in_line
-        self.seen_clause_in_line = False
-        self._seen_for_in_line = False
-        self._seen_if_in_line = False
-
-    def check_for(self, token: tokenize.TokenInfo) -> bool:
-        """Handles 'for' tokens inside brackets."""
-        self._is_comprehension = True
-        self._seen_for = True
-        self._seen_for_in_line = True
-
-        self._potential_violation = (
-            self._potential_violation or
-            self.seen_clause_in_line
-        )
-        return self._check_violation(token)
-
-    def check_if(self, token: tokenize.TokenInfo) -> bool:
-        """
-        Handles 'if' tokens inside brackets.
-
-        In order to rule out this if statement being part of a ternary operator
-        in the action statement of a comprehension, we ensure that we've already
-        passed the action statement, as once a for statement appears any
-        following if statements will be the conditional statement of the
-        comprehension.
-        """
-        if self._seen_for:
-            self._seen_if_in_line = True
-
-            self._potential_violation = (
-                self._potential_violation or
-                self.seen_clause_in_line
-            )
-            return self._check_violation(token)
-        return True
-
-    def check_in(self, token: tokenize.TokenInfo) -> bool:
-        """
-        Adds a violation when a for...in statement is split across lines.
-
-        Because of the overloaded nature of 'in', we have to rule
-        out several edge cases before we can say that this is a violation:
-        First, we only want to consider this split for...in statement
-        in the case that we've seen a for statement but not on this line.
-        Second, we don't want to catch an 'in' in the conditional clause of the
-        comprehension, so we make sure we haven't seen an if statement on
-        this line.
-        """
-        if self._seen_for:
-            if not self._seen_for_in_line:
-                if not self._seen_if_in_line:
-                    self._reported = True
-                    return False
-        return True
-
-    def _check_violation(self, token: tokenize.TokenInfo) -> bool:
-        """Checks if current environment state implies a violation."""
-        if self._seen_nl:
-            if self._potential_violation and not self._reported:
-                self._reported = True
-                return False
-        return True
-
-
-@final
 @alias('visit_any_left_bracket', (
     'visit_lsqb',
     'visit_lbrace',
@@ -397,6 +278,10 @@ class _InconsistentComprehensionContext(object):
     'visit_rsqb',
     'visit_rbrace',
     'visit_rpar',
+))
+@alias('visit_compat_name', (
+    'visit_name',
+    'visit_async',  # python3.6 has this token type for `async` keyword
 ))
 class InconsistentComprehensionVisitor(BaseTokenVisitor):
     """
@@ -414,40 +299,68 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
         comprehensions.
         """
         super().__init__(*args, **kwargs)
-        self._bracket_stack: List[_InconsistentComprehensionContext] = []
-        self._current_ctx: Optional[_InconsistentComprehensionContext] = None
+        self._bracket_stack: List[Compehension] = []
+        self._current_ctx: Optional[Compehension] = None
 
     def visit_any_left_bracket(self, token: tokenize.TokenInfo) -> None:
         """Sets self._inside_brackets to True if left bracket found."""
-        self._bracket_stack.append(_InconsistentComprehensionContext())
-        self._current_ctx = self._bracket_stack[-1]
+        self._current_ctx = Compehension(left_bracket=token)
+        self._bracket_stack.append(self._current_ctx)
 
     def visit_any_right_bracket(self, token: tokenize.TokenInfo) -> None:
         """Resets environment if right bracket is encountered."""
-        self._bracket_stack.pop()
+        previous_ctx = self._bracket_stack.pop()
+        if previous_ctx.is_ready() and not previous_ctx.check():
+            self.add_violation(
+                InconsistentComprehensionViolation(previous_ctx.fors[-1]),
+            )
+
         if self._bracket_stack:
             self._current_ctx = self._bracket_stack[-1]
         else:
             self._current_ctx = None
 
-    def visit_nl(self, token: tokenize.TokenInfo) -> None:
-        """Handles logical newline character depending on context."""
-        if self._current_ctx:
-            self._current_ctx.check_nl(token)
+    def visit_compat_name(self, token: tokenize.TokenInfo) -> None:
+        """Builds the comprehension."""
+        if not self._current_ctx:
+            return
 
-    def visit_name(self, token: tokenize.TokenInfo) -> None:
-        """Sets flags for comprehension keywords."""
-        if self._current_ctx:
-            well_formed = True
-            if token.string == 'for':
-                well_formed = self._current_ctx.check_for(token)
-            elif token.string == 'if':
-                well_formed = self._current_ctx.check_if(token)
-            elif token.string == 'in':
-                well_formed = self._current_ctx.check_in(token)
+        if token.string == 'async':
+            self._apply_async(token)
+        elif token.string == 'for':
+            self._apply_expr(token)
+            self._current_ctx.fors.append(token)
+        elif token.string == 'in':
+            self._current_ctx.ins.append(token)
+        elif token.string == 'if':
+            self._current_ctx.append_if(token)
 
-            self._current_ctx.seen_clause_in_line = True
-            if not well_formed:
-                self.add_violation(
-                    InconsistentComprehensionViolation(token),
-                )
+    def _apply_async(self, token: tokenize.TokenInfo) -> None:
+        assert self._current_ctx  # noqa: S101
+
+        # `for` is always next due to grammar rules,
+        # you can try to add a comment there, but we don't allow it
+        for_token = self.file_tokens[self.file_tokens.index(token) + 1]
+        is_broken = (
+            for_token.string != 'for' or
+            token.start[0] != for_token.start[0]
+        )
+        if is_broken:
+            self._current_ctx.async_broken = True
+
+    def _apply_expr(self, token: tokenize.TokenInfo) -> None:
+        assert self._current_ctx  # noqa: S101
+
+        if self._current_ctx.expr:
+            return  # we set this value only once
+
+        # What we do here is simple:
+        # 1. We find opening bracket
+        # 2. Then we find the next meaningful (non-NL) token
+        #    that represents the actual expr of a comprehension
+        # 3. We assign it to the current comprehension structure
+        token_index = self.file_tokens.index(self._current_ctx.left_bracket)
+        self._current_ctx.expr = next_meaningful_token(
+            self.file_tokens,
+            token_index,
+        )

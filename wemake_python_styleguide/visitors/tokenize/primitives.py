@@ -3,10 +3,10 @@ import tokenize
 from typing import ClassVar, FrozenSet, Optional
 from typing.re import Pattern
 
-from flake8_quotes.docstring_detection import get_docstring_tokens
 from typing_extensions import final
 
-from wemake_python_styleguide.logic.tokens import (
+from wemake_python_styleguide.logic.tokens.strings import (
+    get_docstring_tokens,
     has_triple_string_quotes,
     split_prefixes,
 )

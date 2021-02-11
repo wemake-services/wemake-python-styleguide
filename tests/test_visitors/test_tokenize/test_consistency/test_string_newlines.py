@@ -67,7 +67,7 @@ def test_string_proper_line_breaks(
     code,
 ):
     """Ensures that proper string's line break are fine."""
-    file_tokens = parse_tokens(code)
+    file_tokens = parse_tokens(code, do_compile=False)
 
     visitor = WrongKeywordTokenVisitor(
         default_options, file_tokens=file_tokens,

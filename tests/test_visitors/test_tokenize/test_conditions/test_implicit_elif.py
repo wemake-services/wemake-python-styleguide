@@ -148,7 +148,7 @@ def test_false_positives_are_ignored(
     default_options,
 ):
     """Testing regular conditions."""
-    file_tokens = parse_tokens(code)
+    file_tokens = parse_tokens(code, do_compile=False)
 
     visitor = IfElseVisitor(default_options, file_tokens=file_tokens)
     visitor.run()

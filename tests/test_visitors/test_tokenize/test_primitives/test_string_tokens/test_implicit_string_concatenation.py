@@ -69,7 +69,7 @@ def test_implicit_string_concatenation(
     code,
 ):
     """Ensures that implicit string concatenation raise a warning."""
-    file_tokens = parse_tokens(code)
+    file_tokens = parse_tokens(code, do_compile=False)
 
     visitor = WrongStringConcatenationVisitor(
         default_options, file_tokens=file_tokens,
