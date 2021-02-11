@@ -16,16 +16,42 @@ variable = 1
 if_statement = 'if {0}: ...'
 ternary = 'ternary = 0 if {0} else 1'
 
-if_statement_in_comprehension = """
+list_comprehension = """
 def container():
     [x for x in [1, 2, 3] if {0}]
+"""
+
+set_comprehension = """
+def container():
+    {{
+        x
+        for x in [1, 2, 3]
+        if {0}
+    }}
+"""
+
+dict_comprehension = """
+def container():
+    {{
+        x: '1'
+        for x in [1, 2, 3]
+        if {0}
+    }}
+"""
+
+gen_comprehension = """
+def container():
+    (x for x in [1, 2, 3] if {0})
 """
 
 
 @pytest.mark.parametrize('code', [
     if_statement,
     ternary,
-    if_statement_in_comprehension,
+    list_comprehension,
+    set_comprehension,
+    dict_comprehension,
+    gen_comprehension,
 ])
 @pytest.mark.parametrize('comparators', [
     'variable < 3',
@@ -62,6 +88,10 @@ def test_valid_conditional(
 @pytest.mark.parametrize('code', [
     if_statement,
     ternary,
+    # list_comprehension,
+    # set_comprehension,
+    # dict_comprehension,
+    # gen_comprehension,
 ])
 @pytest.mark.parametrize('comparators', [
     'True',
@@ -81,16 +111,23 @@ def test_valid_conditional(
         '(unique := True)',
         marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
     ),
+    pytest.param(
+        '(unique := -1)',
+        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
+    ),
 ])
-def test_useless(
+def test_constant_condition(
     assert_errors,
     parse_ast_tree,
     code,
     comparators,
     default_options,
+    mode,
 ):
     """Testing that violations are when using invalid conditional."""
-    tree = parse_ast_tree(create_variable.format(code.format(comparators)))
+    tree = parse_ast_tree(
+        mode(create_variable.format(code.format(comparators))),
+    )
 
     visitor = WrongConditionalVisitor(default_options, tree=tree)
     visitor.run()

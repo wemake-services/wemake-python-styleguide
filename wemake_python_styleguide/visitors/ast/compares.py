@@ -304,6 +304,7 @@ class WrongConditionalVisitor(BaseNodeVisitor):
         ast.BinOp,
         ast.UnaryOp,
         ast.Compare,
+        ast.comprehension,
     )
 
     def visit_any_if(self, node: AnyIf) -> None:
@@ -322,14 +323,17 @@ class WrongConditionalVisitor(BaseNodeVisitor):
             self._check_simplifiable_ifexpr(node)
 
         self._check_nested_ifexpr(node)
-        self._check_constant_condition(node)
+        self._check_constant_condition(node.test)
         self.generic_visit(node)
 
-    def _check_constant_condition(self, node: AnyIf) -> None:
-        real_node = operators.unwrap_unary_node(
-            get_assigned_expr(node.test),
-        )
+    def visit_comprehension(self, node: ast.comprehension) -> None:
+        """Checks all possible comprehensions."""
+        for expr in node.ifs:
+            self._check_constant_condition(expr)
+        self.generic_visit(node)
 
+    def _check_constant_condition(self, node: ast.AST) -> None:
+        real_node = operators.unwrap_unary_node(get_assigned_expr(node))
         if isinstance(real_node, self._forbidden_nodes):
             self.add_violation(ConstantConditionViolation(node))
 
