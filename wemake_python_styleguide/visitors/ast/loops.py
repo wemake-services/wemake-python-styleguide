@@ -1,12 +1,13 @@
 import ast
 from collections import defaultdict
+from contextlib import suppress
 from typing import ClassVar, DefaultDict, List, Mapping, Sequence, Type, Union
 
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import AssignNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
-from wemake_python_styleguide.logic import nodes, source, walk
+from wemake_python_styleguide.logic import nodes, safe_eval, source, walk
 from wemake_python_styleguide.logic.tree import loops, operators, slices
 from wemake_python_styleguide.logic.tree.variables import (
     is_valid_block_variable_definition,
@@ -123,10 +124,12 @@ class WrongComprehensionVisitor(base.BaseNodeVisitor):
 class WrongLoopVisitor(base.BaseNodeVisitor):
     """Responsible for examining loops."""
 
-    _breaks: ClassVar[AnyNodes] = (
+    _can_break_loop: ClassVar[AnyNodes] = (
         ast.Break,
         ast.Return,
         ast.Raise,
+        # We only check for `try/except`, not `try/finally`:
+        ast.ExceptHandler,
     )
 
     _containers: ClassVar[_ContainerSpec] = {
@@ -220,16 +223,12 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         if not isinstance(node, ast.While):
             return
 
-        has_try = any(
-            isinstance(sub_node, ast.Try)
-            for sub_node in ast.walk(node)
-        )
-        if has_try:
+        if loops.has_break(node, break_nodes=self._can_break_loop):
             return
 
-        real_node = operators.unwrap_unary_node(node.test)
-        if isinstance(real_node, ast.NameConstant) and real_node.value is True:
-            if not loops.has_break(node, break_nodes=self._breaks):
+        with suppress(ValueError):
+            evaled = ast.literal_eval(node.test)
+            if not isinstance(evaled, ast.Name) and bool(evaled):
                 self.add_violation(InfiniteWhileLoopViolation(node))
 
 
