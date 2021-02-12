@@ -1,5 +1,4 @@
 import ast
-from contextlib import suppress
 from typing import ClassVar, Dict, FrozenSet, List, Optional, Type, Union, cast
 
 from typing_extensions import final
