@@ -19,7 +19,7 @@ while True:
 
 template_nested_while2 = """
 while other:
-    while True:
+    while +1:
         {0}
     {0}
 """
@@ -45,9 +45,79 @@ while other:
 
 template_double_while = """
 while True:
-    while True:
+    while 'inf':
         {0}
     {1}
+"""
+
+# Correct
+
+correct_while1 = """
+while 1:
+    try:
+       ...
+    except:
+        ...
+"""
+
+correct_while2 = """
+while other:
+    while [1, 2, 3]:
+        try:
+            ...
+        except:
+            ...
+"""
+
+
+correct_while3 = """
+def wrapper():
+    while True:
+        try:
+            ...
+        except:
+            ...
+"""
+
+correct_while4 = """
+while other:
+    ...
+"""
+
+correct_while5 = """
+while 1 + 1:
+    try:
+        ...
+    except:
+        ...
+    finally:
+        ...
+"""
+
+correct_while6 = """
+while 0:
+    ...
+"""
+
+# Do raise:
+
+wrong_while1 = """
+while other:
+    try:
+        ...
+    except:
+        ...
+
+    while True:
+        ...
+"""
+
+wrong_while2 = """
+while True:
+    try:
+        ...
+    finally:
+        ...
 """
 
 
@@ -65,7 +135,7 @@ while True:
     'raise Some()',
     'raise',
 ])
-def test_correct_while_loops(
+def test_correct_while_loops_with_statements(
     assert_errors,
     parse_ast_tree,
     keyword,
@@ -74,6 +144,29 @@ def test_correct_while_loops(
 ):
     """Testing while loops with correct code."""
     tree = parse_ast_tree(template.format(keyword))
+
+    visitor = WrongLoopVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('code', [
+    correct_while1,
+    correct_while2,
+    correct_while3,
+    correct_while4,
+    correct_while5,
+    correct_while6,
+])
+def test_correct_while_loops_with_try(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+):
+    """Testing while loops with correct code."""
+    tree = parse_ast_tree(code)
 
     visitor = WrongLoopVisitor(default_options, tree=tree)
     visitor.run()
@@ -106,30 +199,6 @@ def test_correct_while_loops_function(
 
 
 @pytest.mark.parametrize('template', [
-    template_other,
-])
-@pytest.mark.parametrize('keyword', [
-    'print(some)',
-    'attr.method()',
-    'a = 1',
-])
-def test_other_while_loops(
-    assert_errors,
-    parse_ast_tree,
-    keyword,
-    template,
-    default_options,
-):
-    """Testing other while loops with regular code."""
-    tree = parse_ast_tree(template.format(keyword))
-
-    visitor = WrongLoopVisitor(default_options, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [])
-
-
-@pytest.mark.parametrize('template', [
     template_simple,
     template_nested_while1,
     template_nested_while2,
@@ -150,6 +219,25 @@ def test_wrong_while_loops(
 ):
     """Testing while loops with wrong code."""
     tree = parse_ast_tree(template.format(keyword))
+
+    visitor = WrongLoopVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [InfiniteWhileLoopViolation])
+
+
+@pytest.mark.parametrize('code', [
+    wrong_while1,
+    wrong_while2,
+])
+def test_wrong_while_loops_with_try(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+):
+    """Testing while loops with correct code."""
+    tree = parse_ast_tree(code)
 
     visitor = WrongLoopVisitor(default_options, tree=tree)
     visitor.run()

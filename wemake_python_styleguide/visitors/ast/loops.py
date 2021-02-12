@@ -1,5 +1,6 @@
 import ast
 from collections import defaultdict
+from contextlib import suppress
 from typing import ClassVar, DefaultDict, List, Mapping, Sequence, Type, Union
 
 from typing_extensions import final
@@ -123,10 +124,12 @@ class WrongComprehensionVisitor(base.BaseNodeVisitor):
 class WrongLoopVisitor(base.BaseNodeVisitor):
     """Responsible for examining loops."""
 
-    _breaks: ClassVar[AnyNodes] = (
+    _can_break_loop: ClassVar[AnyNodes] = (
         ast.Break,
         ast.Return,
         ast.Raise,
+        # We only check for `try/except`, not `try/finally`:
+        ast.ExceptHandler,
     )
 
     _containers: ClassVar[_ContainerSpec] = {
@@ -220,9 +223,12 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         if not isinstance(node, ast.While):
             return
 
-        real_node = operators.unwrap_unary_node(node.test)
-        if isinstance(real_node, ast.NameConstant) and real_node.value is True:
-            if not loops.has_break(node, break_nodes=self._breaks):
+        if loops.has_break(node, break_nodes=self._can_break_loop):
+            return
+
+        with suppress(ValueError):
+            evaled = ast.literal_eval(node.test)
+            if not isinstance(evaled, ast.Name) and bool(evaled):
                 self.add_violation(InfiniteWhileLoopViolation(node))
 
 

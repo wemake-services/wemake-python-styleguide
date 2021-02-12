@@ -4,9 +4,17 @@ We follow [Semantic Versions](https://semver.org/) since the `0.1.0` release.
 We used to have incremental versioning before `0.1.0`.
 
 Semantic versioning in our case means:
-- Bugfixes do not bring new features, code that passes on `x.y.0` should pass on `x.y.1`. With the only exception that bugfix can raise old violations in new places, if they were hidden by a buggy behaviour. But we do not add new checks.
-- Minor releases do bring new features and configuration options. New violations can be added. Code that passes `x.0.y` might not pass on `x.1.y` release because of the new checks.
-- Major releases inidicate significant milestones or serious breaking changes. There are no major releases right now: we are still at `0.x.y` version. But, in the future we might change the configuration names / logic, change the client facing API, change code conventions signigicantly, etc.
+- Bugfixes do not bring new features, code that passes on `x.y.0`
+  should pass on `x.y.1`.
+  With the only exception that bugfix can raise old violations in new places,
+  if they were hidden by a buggy behaviour. But we do not add new checks.
+- Minor releases do bring new features and configuration options.
+  New violations can be added. Code that passes on `x.0.y`
+  might not pass on `x.1.y` release because of the new checks.
+- Major releases inidicate significant milestones or serious breaking changes.
+  There are no major releases right now: we are still at `0.x.y` version.
+  But, in the future we might change the configuration names / logic,
+  change the client facing API, change code conventions signigicantly, etc.
 
 
 ## 0.15.1
@@ -19,10 +27,18 @@ Semantic versioning in our case means:
 - Fixes multiple `if` support for `InconsistentComprehensionViolation`
 - Fixes that `NestedTernaryViolation` was not reported for a comprehension
 - Fixes that `ConstantConditionViolation` was not reported for a comprehension
+- Fixes that `ConstantConditionViolation` was triggering for `while x := True:`
+- Fixes that `UselessElseViolation` was not reported
+  for `for`, `while`, and `try` keywords
+- Fixes false positive `InfiniteWhileLoopViolation` for `try` #1857
+- Fixes that `InfiniteWhileLoopViolation` was not triggered on `1`
+  or other truthy nodes
 
 ### Misc
 
-- Refactors how `tokenize` tests are executed, now we have an option to compile fixture code to make sure it is syntatically valid
+- Refactors how `tokenize` tests are executed,
+  now we have an option to compile fixture code
+  to make sure it is syntatically valid
 
 
 ## 0.15.0 aka python3.9
@@ -48,7 +64,8 @@ Semantic versioning in our case means:
 - Forbids to use float zeros (`0.0`)
 - Forbids `raise Exception` and `raise BaseException`
 - Forbids to use `%` with zero as the divisor
-- WPS531: Forbids testing conditions to just return booleans when it is possible to simply return the condition itself
+- Forbids testing conditions to just return booleans
+  when it is possible to simply return the condition itself
 - Forbids to use unsafe infinite loops
 - Forbids to use raw strings `r''` when not necessary
 - Forbids to use too complex `f`-strings
@@ -91,7 +108,8 @@ Semantic versioning in our case means:
 - Updates lots of dependenices
 - Fixed documentation for TooManyPublicAttributesViolation
 - Updated isort config
-- Introduce helper script to check for missing calls to `self.generic_visit(node)` in AST visitors
+- Introduce helper script to check
+  for missing calls to `self.generic_visit(node)` in AST visitors
 - Updates `poetry` version to `1.1`
 - Updates `reviewdog` version to `0.11.0` and adds `action-depup`
 
