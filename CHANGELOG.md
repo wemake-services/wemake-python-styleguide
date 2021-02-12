@@ -29,11 +29,15 @@ Semantic versioning in our case means:
 - Fixes that `ConstantConditionViolation` was not reported for a comprehension
 - Fixes that `UselessElseViolation` was not reported
   for `for`, `while`, and `try` keywords
-- Fix false positive `InfiniteWhileLoopViolation` for `try` #1857
+- Fixes false positive `InfiniteWhileLoopViolation` for `try` #1857
+- Fixes that `InfiniteWhileLoopViolation` was not triggered on `1`
+  or other truthy nodes
 
 ### Misc
 
-- Refactors how `tokenize` tests are executed, now we have an option to compile fixture code to make sure it is syntatically valid
+- Refactors how `tokenize` tests are executed,
+  now we have an option to compile fixture code
+  to make sure it is syntatically valid
 
 
 ## 0.15.0 aka python3.9
