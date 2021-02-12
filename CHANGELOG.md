@@ -27,6 +27,7 @@ Semantic versioning in our case means:
 - Fixes multiple `if` support for `InconsistentComprehensionViolation`
 - Fixes that `NestedTernaryViolation` was not reported for a comprehension
 - Fixes that `ConstantConditionViolation` was not reported for a comprehension
+- Fixes that `ConstantConditionViolation` was triggering for `while x := True:`
 - Fixes that `UselessElseViolation` was not reported
   for `for`, `while`, and `try` keywords
 - Fixes false positive `InfiniteWhileLoopViolation` for `try` #1857

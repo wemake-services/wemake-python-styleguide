@@ -33,6 +33,7 @@ assert_with_message_template = 'assert {0}, "message"'
     '[]',
     '()',
     '{}',  # noqa: P103
+    '+True',
     'False',
     'None',
     '1',
@@ -48,6 +49,10 @@ assert_with_message_template = 'assert {0}, "message"'
     'some if x else other',
     pytest.param(
         '(unique := +0)',
+        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
+    ),
+    pytest.param(
+        '(unique := +True)',
         marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
     ),
 ])
@@ -156,10 +161,6 @@ def test_true_condition_keywords_assert(
 ])
 @pytest.mark.parametrize('condition', [
     'True',
-    pytest.param(
-        'x := +True',
-        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
-    ),
 ])
 def test_true_while_condition_keywords(
     assert_errors,

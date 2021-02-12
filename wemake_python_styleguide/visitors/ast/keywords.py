@@ -1,4 +1,5 @@
 import ast
+from contextlib import suppress
 from typing import ClassVar, Dict, FrozenSet, List, Optional, Type, Union, cast
 
 from typing_extensions import final
@@ -414,13 +415,11 @@ class ConstantKeywordVisitor(BaseNodeVisitor):
         self._check_condition(node, node.test)
         self.generic_visit(node)
 
-    def _check_condition(self, node: ast.AST, condition: ast.AST) -> None:
-        real_node = operators.unwrap_unary_node(
-            walrus.get_assigned_expr(condition),
-        )
-        if isinstance(real_node, ast.NameConstant) and real_node.value is True:
+    def _check_condition(self, node: ast.AST, cond: ast.AST) -> None:
+        if isinstance(cond, ast.NameConstant) and cond.value is True:
             if isinstance(node, ast.While):
-                return  # We should allow `while True:`
+                return  # We should allow plain `while True:`
 
+        real_node = operators.unwrap_unary_node(walrus.get_assigned_expr(cond))
         if isinstance(real_node, self._forbidden_nodes):
-            self.add_violation(WrongKeywordConditionViolation(condition))
+            self.add_violation(WrongKeywordConditionViolation(cond))
