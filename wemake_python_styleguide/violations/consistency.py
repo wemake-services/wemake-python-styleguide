@@ -1514,7 +1514,7 @@ class ExplicitStringConcatViolation(ASTViolation):
     """
 
     code = 336
-    error_template = 'Found explicit string concatanation'
+    error_template = 'Found explicit string concatenation'
 
 
 @final
