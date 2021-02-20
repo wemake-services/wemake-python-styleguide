@@ -58,3 +58,30 @@ def test_correct_binary(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('context', [
+    'foo: {0}',
+    'def fun(foo) -> {0}: ...',
+    'def fun(foo: {0}): ...',
+])
+@pytest.mark.parametrize('expression', [
+    'str | int',
+    'int | None',
+    'First | None',
+    'First | Second',
+])
+def test_union_type(
+    assert_errors,
+    parse_ast_tree,
+    context,
+    expression,
+    default_options,
+):
+    """Testing PEP 604 union types."""
+    tree = parse_ast_tree(context.format(expression))
+
+    visitor = BitwiseOpVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])

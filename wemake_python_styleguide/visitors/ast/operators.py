@@ -6,6 +6,7 @@ from typing_extensions import final
 from wemake_python_styleguide.compat.aliases import TextNodes
 from wemake_python_styleguide.compat.nodes import NamedExpr
 from wemake_python_styleguide.logic import walk
+from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree.operators import (
     count_unary_operator,
     unwrap_unary_node,
@@ -297,9 +298,24 @@ class BitwiseOpVisitor(base.BaseNodeVisitor):
         if not isinstance(node.op, (ast.BitOr, ast.BitAnd)):
             return
 
+        if self._is_type_annotation(node):
+            return
+
         if self._is_bool_like(node.left) or self._is_bool_like(node.right):
             self.add_violation(BitwiseAndBooleanMixupViolation(node))
 
     # checks either side of the Bitwise operation invalid usage
     def _is_bool_like(self, node: ast.expr) -> bool:
         return isinstance(node, self._invalid_nodes)
+
+    # checks whether bitwise operator is used in a type annotation
+    def _is_type_annotation(self, node: ast.BinOp) -> bool:
+        parent_node = get_parent(node)
+
+        if isinstance(parent_node, (ast.AnnAssign, ast.arg)):
+            return node is parent_node.annotation
+
+        if isinstance(parent_node, ast.FunctionDef):
+            return node is parent_node.returns
+
+        return False
