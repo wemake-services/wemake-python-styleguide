@@ -28,6 +28,7 @@ Summary
    WrongSuperCallAccessViolation
    WrongDescriptorDecoratorViolation
    UnpythonicGetterSetterViolation
+   UnpackingKwargsViolation
 
 Respect your objects
 --------------------
@@ -48,6 +49,7 @@ Respect your objects
 .. autoclass:: WrongSuperCallAccessViolation
 .. autoclass:: WrongDescriptorDecoratorViolation
 .. autoclass:: UnpythonicGetterSetterViolation
+.. autoclass:: UnpackingKwargsViolation
 
 """
 
@@ -659,3 +661,33 @@ class UnpythonicGetterSetterViolation(ASTViolation):
 
     error_template = 'Found unpythonic getter or setter'
     code = 615
+
+
+@final
+class UnpackingKwargsViolation(ASTViolation):
+    """
+    Forbids to use unpacking kwargs in class definition.
+
+    Reasoning:
+        Dynamic class generation with unknown values is really bad!
+
+    Solution:
+        Either use ``@property`` or make the
+        attribute public and change it directly.
+
+    Example::
+
+        # Correct:
+        class Example(object, a=1):
+            pass
+
+        # Wrong:
+        class Example(object, **kwargs):
+            pass
+
+    .. .. versionadded:: 0.16.0
+
+    """
+
+    error_template = 'Found kwargs unpacking in class definition'
+    code = 616

@@ -46,6 +46,7 @@ class WrongClassVisitor(base.BaseNodeVisitor):
             WrongClassBodyContentViolation
             BuiltinSubclassViolation
             UnpythonicGetterSetterViolation
+            UnpackingKwargsViolation
 
         """
         self._check_base_classes_count(node)
@@ -67,6 +68,10 @@ class WrongClassVisitor(base.BaseNodeVisitor):
                 continue
 
             self._check_base_classes_rules(node, base_name)
+
+        for keyword in node.keywords:
+            if not keyword.arg:
+                self.add_violation(oop.UnpackingKwargsViolation(node))
 
     def _check_base_classes_rules(
         self,

@@ -726,6 +726,9 @@ class AttributeGetter(object):
     def set_attribute(self):  # noqa: WPS615
         anti_wps = ...
 
+class UnpackKwargs(object, **{"a": 1}): # noqa: WPS616
+    '''Docs.'''
+
 
 a_list = [1, 2, 3, 4, 5]
 a_list[1:3] = [1, 2]  # noqa: WPS362
