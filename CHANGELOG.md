@@ -21,6 +21,7 @@ Semantic versioning in our case means:
 ### Bugfixes
 
 - Fixes `BitwiseAndBooleanMixupViolation` work with PEP 604 union types #1884
+- Fixes `ImplicitEnumerateViolation` raised outside of for loops
 
 ## 0.15.1
 

@@ -19,6 +19,9 @@ from wemake_python_styleguide.visitors.ast.functions import (
     'len(range(10))',
     'range(0, len(some), 2)',
     'range(0, len(some), -2)',
+    'combinations(range(len(foo)), 2)',
+    'itertools.combinations(range(len(foo)), 2)',
+    'range(len(bar))',
 ])
 def test_correct_range_len(
     assert_errors,
@@ -26,7 +29,7 @@ def test_correct_range_len(
     code,
     default_options,
 ):
-    """Testing that ``range()`` can be used."""
+    """Testing that ``range(len(...))`` can be used outside loops."""
     tree = parse_ast_tree(code)
 
     visitor = WrongFunctionCallContextVisitor(default_options, tree=tree)
@@ -49,8 +52,9 @@ def test_range_len(
     code,
     default_options,
 ):
-    """Testing that ``range(len(...))`` cannot be used."""
-    tree = parse_ast_tree(code)
+    """Testing that ``range(len(...))`` cannot be used inside loops."""
+    context = 'for foo in {0}: foo'
+    tree = parse_ast_tree(context.format(code))
 
     visitor = WrongFunctionCallContextVisitor(default_options, tree=tree)
     visitor.run()

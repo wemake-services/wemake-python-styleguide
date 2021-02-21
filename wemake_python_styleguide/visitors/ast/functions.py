@@ -243,6 +243,9 @@ class WrongFunctionCallContextVisitor(base.BaseNodeVisitor):
         if not functions.given_function_called(node, {'range'}):
             return
 
+        if self._is_outside_of_loop(node):
+            return
+
         args_len = len(node.args)
 
         is_one_arg_range = (
@@ -265,6 +268,11 @@ class WrongFunctionCallContextVisitor(base.BaseNodeVisitor):
         )
         if any([is_one_arg_range, is_two_args_range, is_three_args_range]):
             self.add_violation(ImplicitEnumerateViolation(node))
+
+    # checks if `range(len(...))` is used outside of a for loop
+    def _is_outside_of_loop(self, node: ast.Call) -> bool:
+        parent_node = nodes.get_parent(node)
+        return not isinstance(parent_node, ast.For)
 
     def _is_multiple_args_range_with_len(self, node: ast.Call) -> bool:
         return bool(
