@@ -10,6 +10,10 @@ It is not our responsibility.
 
 import subprocess
 
+import pytest
+
+from wemake_python_styleguide.logic.system import is_windows
+
 PLUGINS = (
     'B002',  # flake8-bugbear
     'C400',  # flake8-comprehensions
@@ -53,6 +57,7 @@ def test_external_plugins(absolute_path):
     _assert_plugin_output(output)
 
 
+@pytest.mark.skipif(is_windows(), reason='does not run on windows')
 def test_external_plugins_diff(absolute_path):
     """Ensures that our linter and all plugins work in ``diff`` mode."""
     process = subprocess.Popen(

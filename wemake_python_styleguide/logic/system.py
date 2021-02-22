@@ -3,7 +3,7 @@ import os
 from wemake_python_styleguide.constants import WINDOWS_OS
 
 
-def is_executable_file(filename: str) -> bool:
+def is_executable_file(filename: str) -> bool:  # pragma: win
     """Checks if a file is executable."""
     return os.access(filename, os.X_OK)
 

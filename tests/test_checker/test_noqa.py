@@ -19,6 +19,8 @@ from collections import Counter
 
 import pytest
 
+from wemake_python_styleguide.logic.system import is_windows
+
 # Versions for different version-specific fixtures.
 _PY_OLD = sys.version_info < (3, 8)
 _PY38 = (3, 8) <= sys.version_info < (3, 9)
@@ -337,6 +339,7 @@ def test_codes(all_violations):
     assert len(SHOULD_BE_RAISED) == len(all_violations)
 
 
+@pytest.mark.skipif(is_windows(), reason='does not run on windows')
 @pytest.mark.parametrize(('filename', 'violations', 'total'), [
     ('noqa.py', SHOULD_BE_RAISED, True),
     pytest.param(
@@ -465,6 +468,7 @@ def test_noqa_fixture_without_ignore(absolute_path):
         assert stdout.count(violation) > 0
 
 
+@pytest.mark.skipif(is_windows(), reason='does not run on windows')
 def test_noqa_fixture_diff(absolute_path, all_violations):
     """Ensures that our linter works in ``diff`` mode."""
     process = subprocess.Popen(
