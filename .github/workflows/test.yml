@@ -10,6 +10,9 @@ name: test
   workflow_dispatch:
 
 jobs:
+
+  # Linux
+
   build:
     runs-on: ubuntu-latest
     strategy:
@@ -50,6 +53,8 @@ jobs:
       uses: codecov/codecov-action@v1
       with:
         file: ./coverage.xml
+        
+  # Windows
 
   build-win:
     runs-on: windows-latest
@@ -64,8 +69,8 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - uses: crazy-max/ghaction-chocolatey@v1
     - name: Install curl and make
+      uses: crazy-max/ghaction-chocolatey@v1
       with:
         args: install curl make -y
 
