@@ -35,7 +35,7 @@ jobs:
       uses: actions/cache@v1
       with:
         path: .venv
-        key: venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
+        key: venv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
     - name: Install dependencies
       run: |
         poetry config virtualenvs.in-project true
@@ -49,11 +49,14 @@ jobs:
       uses: codecov/codecov-action@v1
       with:
         file: ./coverage.xml
-        
+
   # Windows
 
   build-win:
     runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
     strategy:
       matrix:
         python-version: [3.6, 3.7, 3.8, 3.9]
@@ -82,7 +85,7 @@ jobs:
       uses: actions/cache@v1
       with:
         path: .venv
-        key: venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
+        key: venv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
     - name: Install dependencies
       run: |
         poetry config virtualenvs.in-project true
