@@ -219,7 +219,7 @@ class ShebangVisitor(BaseTokenVisitor):
         token: tokenize.TokenInfo,
         *,
         is_shebang: bool,
-    ) -> None:  # pragma: win
+    ) -> None:  # pragma: os-win
         if is_windows() or self.filename == STDIN:
             # Windows does not have this concept of "executable" file.
             # The same for STDIN inputs.
