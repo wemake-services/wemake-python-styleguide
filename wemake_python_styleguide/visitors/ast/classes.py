@@ -14,6 +14,7 @@ from wemake_python_styleguide.logic.tree import (
     attributes,
     classes,
     functions,
+    getters_setters,
     strings,
 )
 from wemake_python_styleguide.violations import best_practices as bp
@@ -118,28 +119,21 @@ class WrongClassVisitor(base.BaseNodeVisitor):
         return False
 
     def _check_getters_setters_methods(self, node: ast.ClassDef) -> None:
-        class_attributes, instance_attributes = classes.get_attributes(
-            node,
-            include_annotated=True,
-        )
-        flat_class_attributes = name_nodes.flat_variable_names(class_attributes)
-
-        attributes_stripped = {
-            class_attribute.lstrip(constants.UNUSED_PLACEHOLDER)
-            for class_attribute in flat_class_attributes
-        }.union({
-            instance.attr.lstrip(constants.UNUSED_PLACEHOLDER)
-            for instance in instance_attributes
-        })
-
-        for method in classes.find_getters_and_setters(node):
-            if method.name[classes.GETTER_LENGTH:] in attributes_stripped:
-                self.add_violation(
-                    oop.UnpythonicGetterSetterViolation(
-                        method,
-                        text=method.name,
-                    ),
-                )
+        getters_and_setters = set(filter(
+            lambda getter_setter: functions.is_method(
+                getattr(getter_setter, 'function_type', None),
+            ),
+            getters_setters.find_paired_getters_and_setters(node),
+        )).union(set(  # To delete duplicated violations
+            getters_setters.find_attributed_getters_and_setters(node),
+        ))
+        for method in getters_and_setters:
+            self.add_violation(
+                oop.UnpythonicGetterSetterViolation(
+                    method,
+                    text=method.name,
+                ),
+            )
 
 
 @final

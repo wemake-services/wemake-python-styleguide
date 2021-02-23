@@ -1,22 +1,14 @@
 import ast
-from typing import Iterable, List, Optional, Tuple
+from typing import List, Optional, Tuple
 
-from typing_extensions import Final
-
-from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
+from wemake_python_styleguide.compat.aliases import AssignNodes
 from wemake_python_styleguide.constants import ALLOWED_BUILTIN_CLASSES
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming.builtins import is_builtin_name
-from wemake_python_styleguide.types import AnyAssign, AnyFunctionDef
+from wemake_python_styleguide.types import AnyAssign
 
 #: Type alias for the attributes we return from class inspection.
 _AllAttributes = Tuple[List[AnyAssign], List[ast.Attribute]]
-
-#: Prefixes that usually define getters and setters.
-_GetterSetterPrefixes: Final = ('get_', 'set_')
-
-#: Fixes length of a getter/setter.
-GETTER_LENGTH: Final = 4
 
 
 def is_forbidden_super_class(class_name: Optional[str]) -> bool:
@@ -120,12 +112,3 @@ def _get_annotated_class_attribute(
             isinstance(subnode, AssignNodes)
         ) or isinstance(subnode, ast.AnnAssign)
     ) else None
-
-
-def find_getters_and_setters(node: ast.ClassDef) -> Iterable[AnyFunctionDef]:
-    """Returns nodes of all getter or setter methods."""
-    for sub in ast.walk(node):
-        is_correct_context = nodes.get_context(sub) is node
-        if isinstance(sub, FunctionNodes) and is_correct_context:
-            if sub.name[:GETTER_LENGTH] in _GetterSetterPrefixes:
-                yield sub

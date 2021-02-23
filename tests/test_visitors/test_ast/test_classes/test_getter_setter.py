@@ -28,6 +28,15 @@ class Test(object):
         ...
 """
 
+paired_getter_and_setter = """
+class Test(object):
+    def get_attribute():
+        ...
+
+    def set_attribute():
+        ...
+"""
+
 property_getter_and_setter = """
 class Test(object):
     def __init__(self):
@@ -170,8 +179,6 @@ class Test(object):
 
 @pytest.mark.parametrize('code', [
     module_getter_and_setter,
-    static_getter_and_setter,
-    child_getter_and_setter,
     nested_getter_and_setter,
     property_getter_and_setter,
     class_getter_and_setter_attributes,
@@ -198,6 +205,9 @@ def test_valid_getter_and_setter(
 @pytest.mark.parametrize('code', [
     dataclass_getter_setter,
     dataclass_incorrect_property_getter_setter,
+    static_getter_and_setter,
+    child_getter_and_setter,
+    paired_getter_and_setter,
 ])
 def test_invalid_getter_and_setter(
     assert_errors,
@@ -370,7 +380,7 @@ def test_class_attributes_getter_setter(
 @pytest.mark.parametrize('access', ['', '_', '__'])
 @pytest.mark.parametrize(('first', 'second', 'third'), [
     ('attribute', 'some', 'other'),
-    ('attribute', 'some', 'some'),
+    ('attribute', 'some', 'another'),
 ])
 def test_class_mixed(
     assert_errors,
