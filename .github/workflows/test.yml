@@ -72,19 +72,15 @@ jobs:
       with:
         args: install curl make -y
 
-    - name: Install poetry
-      run: |
-        pip install -U pip
-
-        curl -sSL "https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py" | python -
-
-        echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
-
     - name: Set up cache
       uses: actions/cache@v1
       with:
         path: .venv
         key: venv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
+
+    - name: Install poetry
+      uses: Gr1N/setup-poetry@v4
+
     - name: Install dependencies
       run: |
         poetry config virtualenvs.in-project true
