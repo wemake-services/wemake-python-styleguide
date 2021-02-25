@@ -432,3 +432,28 @@ class ClassMethodOrderVisitor(base.BaseNodeVisitor):
         if access.is_private(first):
             return 0  # lowest priority
         return base_methods_order.get(first, public_and_magic_methods_priority)
+
+
+@final
+class InstanceAssignmentVisitor(base.BaseNodeVisitor):
+    """Checks that all attributes of instance are assigned correctly."""
+
+    def visit_ClassDef(self, node: ast.ClassDef) -> None:
+        """
+        Ensures that instance has correct attributes assignment.
+
+        Raises:
+            InstanceLambdaAssignment
+
+        """
+        self._check_lambda_assignment(node)
+        self.generic_visit(node)
+
+    def _check_lambda_assignment(self, node: ast.ClassDef) -> None:
+        for subnode in walk.get_subnodes_by_type(node, ast.Assign):
+            for target in subnode.targets:
+                is_lambda = isinstance(subnode.value, ast.Lambda)
+                if isinstance(target, ast.Attribute) and is_lambda:
+                    self.add_violation(
+                        bp.InstanceLambdaAssignmentViolation(subnode),
+                    )

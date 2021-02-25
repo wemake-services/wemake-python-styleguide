@@ -581,6 +581,10 @@ class WrongMethodOrder(object):  # noqa: WPS338
     def public(self):
         return self
 
+class LambdaAssignment(object):
+    def __init__(self):
+        self._attr = lambda: ...  # noqa: WPS467
+
 
 leading_zero = 1.2e01  # noqa: WPS339
 positive_exponent = 1.1e+1  # noqa: WPS340
