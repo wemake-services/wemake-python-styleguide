@@ -78,7 +78,7 @@ def test_incorrect_multiline_strings(
     assert_errors(
         visitor,
         [WrongMultilineStringViolation],
-        ignored_types=(RawStringNotNeededViolation,),
+        ignored_types=RawStringNotNeededViolation,
     )
 
 

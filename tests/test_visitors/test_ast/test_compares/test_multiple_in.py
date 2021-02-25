@@ -47,7 +47,7 @@ def test_compare_with_in(
     assert_errors(
         visitor,
         [],
-        ignored_types=(InCompareWithSingleItemContainerViolation,),
+        ignored_types=InCompareWithSingleItemContainerViolation,
     )
 
 
@@ -78,7 +78,7 @@ def test_compare_with_multiple_in(
     assert_errors(
         visitor,
         [MultipleInCompareViolation],
-        ignored_types=(InCompareWithSingleItemContainerViolation,),
+        ignored_types=InCompareWithSingleItemContainerViolation,
     )
 
 

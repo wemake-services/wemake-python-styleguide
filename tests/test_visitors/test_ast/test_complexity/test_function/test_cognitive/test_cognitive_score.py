@@ -8,6 +8,8 @@ from wemake_python_styleguide.visitors.ast.complexity.function import (
     CognitiveComplexityVisitor,
 )
 
+# Complex sample:
+
 complex_function = """
 def literal_eval(node):
     if isinstance(node, (Constant, NameConstant)):
@@ -24,7 +26,7 @@ def literal_eval(node):
     return _convert_signed_num(node)
 """
 
-# Samples:
+# Regular samples:
 
 function_example = """
 def some():
@@ -62,10 +64,13 @@ def test_complex_cognitive_function(
     assert_errors(
         visitor,
         [CognitiveComplexityViolation],
-        ignored_types=(CognitiveModuleComplexityViolation,),
+        ignored_types=CognitiveModuleComplexityViolation,
     )
     assert_error_text(
-        visitor, '22', default_options.max_cognitive_score, multiple=True,
+        visitor,
+        '22',  # we calculate this manually
+        default_options.max_cognitive_score,
+        multiple=True,
     )
 
 
@@ -91,10 +96,13 @@ def test_complex_cognitive_options(
     assert_errors(
         visitor,
         [CognitiveComplexityViolation],
-        ignored_types=(CognitiveModuleComplexityViolation,),
+        ignored_types=CognitiveModuleComplexityViolation,
     )
     assert_error_text(
-        visitor, '1', option_values.max_cognitive_score, multiple=True,
+        visitor,
+        '1',  # we calculate this manually
+        option_values.max_cognitive_score,
+        multiple=True,
     )
 
 

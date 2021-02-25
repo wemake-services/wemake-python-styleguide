@@ -40,7 +40,7 @@ def test_single_item_container(
     assert_errors(
         visitor,
         [InCompareWithSingleItemContainerViolation],
-        ignored_types=(WrongInCompareTypeViolation,),
+        ignored_types=WrongInCompareTypeViolation,
     )
 
 
@@ -70,8 +70,4 @@ def test_multi_item_container(
     visitor = InCompareSanityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(
-        visitor,
-        [],
-        ignored_types=(WrongInCompareTypeViolation,),
-    )
+    assert_errors(visitor, [], ignored_types=WrongInCompareTypeViolation)

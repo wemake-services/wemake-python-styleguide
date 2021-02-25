@@ -16,11 +16,15 @@ Semantic versioning in our case means:
   But, in the future we might change the configuration names / logic,
   change the client facing API, change code conventions signigicantly, etc.
 
+
 ## 0.15.2
 
 ### Bugfixes
 
 - Fixes `BitwiseAndBooleanMixupViolation` work with PEP 604 union types #1884
+- Fixes `CognitiveModuleComplexityViolation` to not trigger
+  for a single-item modules
+
 
 ## 0.15.1
 

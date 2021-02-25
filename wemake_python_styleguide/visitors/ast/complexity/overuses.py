@@ -15,6 +15,7 @@ from typing_extensions import final
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic import source, walk
 from wemake_python_styleguide.logic.complexity import overuses
+from wemake_python_styleguide.logic.tree import annotations
 from wemake_python_styleguide.types import AnyNodes, AnyText, AnyTextPrimitive
 from wemake_python_styleguide.violations import complexity
 from wemake_python_styleguide.visitors import base, decorators
@@ -70,7 +71,7 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_string_constant(self, node: AnyText) -> None:
-        if overuses.is_annotation(node):
+        if annotations.is_annotation(node):
             return
 
         # Some strings are so common, that it makes no sense to check if
@@ -120,7 +121,7 @@ class ExpressionOveruseVisitor(base.BaseNodeVisitor):
     _ignore_predicates: Tuple[Callable[[ast.AST], bool], ...] = (
         overuses.is_decorator,
         overuses.is_self,
-        overuses.is_annotation,
+        annotations.is_annotation,
         overuses.is_class_context,
         overuses.is_super_call,
         overuses.is_primitive,
