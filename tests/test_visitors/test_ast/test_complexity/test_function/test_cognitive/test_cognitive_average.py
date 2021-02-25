@@ -65,7 +65,7 @@ def test_complex_cognitive_module(
     mode,
 ):
     """Ensures that complex cognitive code does not work."""
-    tree = parse_ast_tree(mode(multiple_items.format(code)));
+    tree = parse_ast_tree(mode(multiple_items.format(code)))
 
     visitor = CognitiveComplexityVisitor(default_options, tree=tree)
     visitor.run()

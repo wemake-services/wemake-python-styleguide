@@ -299,7 +299,7 @@ class BitwiseOpVisitor(base.BaseNodeVisitor):
             return
 
         if isinstance(node.op, ast.BitOr) and is_annotation(node):
-            return # We allow new styled union types like: `int | None`
+            return  # We allow new styled union types like: `int | None`
 
         if self._is_bool_like(node.left) or self._is_bool_like(node.right):
             self.add_violation(BitwiseAndBooleanMixupViolation(node))
