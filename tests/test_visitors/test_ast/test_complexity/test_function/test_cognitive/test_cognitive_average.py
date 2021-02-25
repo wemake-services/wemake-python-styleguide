@@ -8,6 +8,18 @@ from wemake_python_styleguide.visitors.ast.complexity.function import (
     CognitiveComplexityVisitor,
 )
 
+# Templates:
+
+single_item = '{0}'
+multiple_items = """
+def other():
+    ...
+
+{0}
+"""
+
+# Complex samples:
+
 complex_function = """
 def literal_eval(node):
     if isinstance(node, (Constant, NameConstant)):
@@ -53,7 +65,7 @@ def test_complex_cognitive_module(
     mode,
 ):
     """Ensures that complex cognitive code does not work."""
-    tree = parse_ast_tree(mode(code))
+    tree = parse_ast_tree(mode(multiple_items.format(code)))
 
     visitor = CognitiveComplexityVisitor(default_options, tree=tree)
     visitor.run()
@@ -61,7 +73,7 @@ def test_complex_cognitive_module(
     assert_errors(
         visitor,
         [CognitiveModuleComplexityViolation],
-        ignored_types=(CognitiveComplexityViolation,),
+        ignored_types=CognitiveComplexityViolation,
     )
 
 
@@ -78,7 +90,7 @@ def test_complex_cognitive_options(
     mode,
 ):
     """Ensures that complex can be modified via settings."""
-    tree = parse_ast_tree(mode(code))
+    tree = parse_ast_tree(mode(multiple_items.format(code)))
 
     option_values = options(max_cognitive_average=0)
     visitor = CognitiveComplexityVisitor(option_values, tree=tree)
@@ -87,13 +99,20 @@ def test_complex_cognitive_options(
     assert_errors(
         visitor,
         [CognitiveModuleComplexityViolation],
-        ignored_types=(CognitiveComplexityViolation,),
+        ignored_types=CognitiveComplexityViolation,
     )
     assert_error_text(
-        visitor, '1.0', option_values.max_cognitive_average, multiple=True,
+        visitor,
+        '0.5',  # manually calculated
+        option_values.max_cognitive_average,
+        multiple=True,
     )
 
 
+@pytest.mark.parametrize('template', [
+    single_item,
+    multiple_items,
+])
 @pytest.mark.parametrize('code', [
     function_example,
     method_example,
@@ -102,12 +121,13 @@ def test_complex_cognitive_options(
 def test_cognitive_average_default_options(
     assert_errors,
     parse_ast_tree,
+    template,
     code,
     default_options,
     mode,
 ):
     """Ensures that simple cognitive code does work."""
-    tree = parse_ast_tree(mode(code))
+    tree = parse_ast_tree(mode(template.format(code)))
 
     visitor = CognitiveComplexityVisitor(default_options, tree=tree)
     visitor.run()

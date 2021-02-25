@@ -42,7 +42,7 @@ def test_correct_prefix(
     assert_errors(
         visitor,
         [],
-        ignored_types=(RawStringNotNeededViolation,),
+        ignored_types=RawStringNotNeededViolation,
     )
 
 
@@ -77,7 +77,7 @@ def test_uppercase_prefix(
     assert_errors(
         visitor,
         [UppercaseStringModifierViolation],
-        ignored_types=(RawStringNotNeededViolation,),
+        ignored_types=RawStringNotNeededViolation,
     )
     assert_error_text(visitor, modifier, multiple=True)
 

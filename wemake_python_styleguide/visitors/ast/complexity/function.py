@@ -259,6 +259,9 @@ class CognitiveComplexityVisitor(BaseNodeVisitor):
                     ),
                 )
 
+        if len(self._functions) <= 1:
+            return  # We don't check module average for a single function.
+
         average = total / len(self._functions)
         if average > self.options.max_cognitive_average:
             self.add_violation(

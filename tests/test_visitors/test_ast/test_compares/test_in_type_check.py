@@ -48,7 +48,7 @@ def test_compare_with_wrong_type(
     assert_errors(
         visitor,
         [WrongInCompareTypeViolation],
-        ignored_types=(InCompareWithSingleItemContainerViolation,),
+        ignored_types=InCompareWithSingleItemContainerViolation,
     )
 
 
