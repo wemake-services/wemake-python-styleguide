@@ -24,6 +24,7 @@ Semantic versioning in our case means:
 - Fixes `BitwiseAndBooleanMixupViolation` work with PEP 604 union types #1884
 - Fixes `CognitiveModuleComplexityViolation` to not trigger
   for a single-item modules
+- Fixes that `ConstantConditionViolation` was not reported for a BoolOp
 
 
 ## 0.15.1

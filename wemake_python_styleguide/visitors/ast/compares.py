@@ -333,9 +333,13 @@ class WrongConditionalVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_constant_condition(self, node: ast.AST) -> None:
-        real_node = operators.unwrap_unary_node(get_assigned_expr(node))
-        if isinstance(real_node, self._forbidden_nodes):
-            self.add_violation(ConstantConditionViolation(node))
+        if isinstance(node, ast.BoolOp):
+            for condition in node.values:
+                self._check_constant_condition(condition)
+        else:
+            real_node = operators.unwrap_unary_node(get_assigned_expr(node))
+            if isinstance(real_node, self._forbidden_nodes):
+                self.add_violation(ConstantConditionViolation(node))
 
     def _check_simplifiable_if(self, node: ast.If) -> None:
         if not ifs.is_elif(node) and not ifs.root_if(node):
