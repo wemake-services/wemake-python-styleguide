@@ -5,26 +5,31 @@ body:
   - type: textarea
     attributes:
       label: "What's wrong"
-      required: True
       description: "Please, explain your problem"
+      validations:
+        required: True
   - type: textarea
     attributes:
       label: "How it should be"
-      required: True
       description: "Please, explain how do you expect it to be"
+      validations:
+        required: True
 
   - type: textarea
     attributes:
       label: "Flake8 version and plugins"
-      required: True
       description: "Contents of `flake8 --bug-report`"
+      validations:
+        required: True
   - type: textarea
     attributes:
       label: "pip information"
-      required: True
       description: "Contents of `pip --version && pip freeze`"
+      validations:
+        required: True
   - type: textarea
     attributes:
       label: "OS information"
-      required: True
       description: "Your OS name and version"
+      validations:
+        required: True
