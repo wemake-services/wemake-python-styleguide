@@ -1,7 +1,7 @@
 name: Bug
 about: Create a report to help us improve
 labels: 'bug'
-inputs:
+body:
   - type: textarea
     attributes:
       label: "What's wrong"
