@@ -1,0 +1,30 @@
+name: Bug
+about: Create a report to help us improve
+labels: 'bug'
+inputs:
+  - type: textarea
+    attributes:
+      label: "What's wrong"
+      required: True
+      description: "Please, explain your problem"
+  - type: textarea
+    attributes:
+      label: "How it should be"
+      required: True
+      description: "Please, explain how do you expect it to be"
+
+  - type: textarea
+    attributes:
+      label: "Flake8 version and plugins"
+      required: True
+      description: "Contents of `flake8 --bug-report`"
+  - type: textarea
+    attributes:
+      label: "pip information"
+      required: True
+      description: "Contents of `pip --version && pip freeze`"
+  - type: textarea
+    attributes:
+      label: "OS information"
+      required: True
+      description: "Your OS name and version"
