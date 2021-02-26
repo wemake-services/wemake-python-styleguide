@@ -1,8 +1,10 @@
 import ast
-from typing import Optional, Tuple, Type
+import operator
+from typing import Optional, Tuple, Type, Union, Any
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic.nodes import get_parent
+from wemake_python_styleguide.logic.safe_eval import literal_eval_with_names
 from wemake_python_styleguide.types import ContextNodes
 
 _CONTEXTS: Tuple[Type[ContextNodes], ...] = (
@@ -10,6 +12,23 @@ _CONTEXTS: Tuple[Type[ContextNodes], ...] = (
     ast.ClassDef,
     *FunctionNodes,
 )
+
+_AST_OPERATORS = {
+    ast.Add: operator.add,
+    ast.Sub: operator.sub,
+    ast.Mult: operator.mul,
+    ast.Div: operator.truediv,
+    ast.Mod: operator.mod,
+    ast.FloorDiv: operator.floordiv,
+    ast.MatMult: operator.matmul,
+    ast.Pow: operator.pow,
+    ast.LShift: operator.lshift,
+    ast.RShift: operator.rshift,
+    ast.BitAnd: operator.and_,
+    ast.BitOr: operator.or_,
+    ast.BitXor: operator.xor,
+    ast.Invert: operator.inv,
+}
 
 
 def set_if_chain(tree: ast.AST) -> ast.AST:
@@ -71,6 +90,27 @@ def set_node_context(tree: ast.AST) -> ast.AST:
     return tree
 
 
+def set_constant_evaluations(tree: ast.AST) -> ast.AST:
+    """
+    Used to evaluate operations between constants.
+
+    We want this to be able to analyze parts of the code in which a math operation is making the
+    linter unable to understand if the code is compliant or not.
+
+    Example:
+    .. code:: python
+
+        value = array[1 + 0.5]
+
+    This should not be allowed, because we would be using a float to index an array, but since
+    there is an addition, the linter doesn't know that and doesn't raise an error.
+    """
+    for statement in ast.walk(tree):
+        if isinstance(statement, ast.BinOp) and not hasattr(statement, 'wps_op_evaluation'):
+            _evaluate_operation(statement)
+    return tree
+
+
 def _find_context(
     node: ast.AST,
     contexts: Tuple[Type[ast.AST], ...],
@@ -96,3 +136,19 @@ def _apply_if_statement(statement: ast.If) -> None:
             if child in statement.orelse:
                 setattr(statement, 'wps_if_chained', True)  # noqa: B010
                 setattr(child, 'wps_if_chain', statement)  # noqa: B010
+
+
+def _evaluate_operation(st: ast.BinOp) -> Optional[Union[Type[Exception], Any]]:
+    """Recursive method that tries to evaluate all math operations inside the statement."""
+    if isinstance(st.left, ast.BinOp):
+        left = _evaluate_operation(st.left)
+    else:
+        left = st.left.value
+    if isinstance(st.right, ast.BinOp):
+        right = _evaluate_operation(st.right)
+    else:
+        right = st.right.value
+    op = _AST_OPERATORS[type(st.op)]
+    result = op(left, right)
+    setattr(st, 'wps_op_evaluation', result)
+    return result
