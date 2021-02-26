@@ -60,7 +60,7 @@ def container():
     'variable is False',
     '[1, 2, 3].size > 3',
     'variable is None',
-    'variable is int or not None',
+    'variable is int or not some()',
     pytest.param(
         '(unique := some()) is True',
         marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
@@ -107,6 +107,10 @@ def test_valid_conditional(
     '{"set"}',
     '("tuple",)',
     '["list"]',
+    'variable or False',
+    'variable and False',
+    'variable or True',
+    'variable and True',
     pytest.param(
         '(unique := True)',
         marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
