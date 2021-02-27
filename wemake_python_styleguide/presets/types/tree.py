@@ -93,7 +93,7 @@ PRESET: Final = (
     classes.WrongSlotsVisitor,
     classes.ClassAttributeVisitor,
     classes.ClassMethodOrderVisitor,
-    classes.InstanceAssignmentVisitor,
+    classes.AttributesAssignmentVisitor,
 
     blocks.BlockVariableVisitor,
     blocks.AfterBlockVariablesVisitor,

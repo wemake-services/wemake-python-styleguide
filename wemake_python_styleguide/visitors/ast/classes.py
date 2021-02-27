@@ -1,4 +1,5 @@
 import ast
+import itertools
 from collections import defaultdict
 from typing import ClassVar, DefaultDict, FrozenSet, List, Optional
 
@@ -11,6 +12,7 @@ from wemake_python_styleguide.logic import nodes, source, walk
 from wemake_python_styleguide.logic.arguments import function_args, super_args
 from wemake_python_styleguide.logic.naming import access, name_nodes
 from wemake_python_styleguide.logic.tree import (
+    assignments,
     attributes,
     classes,
     functions,
@@ -435,12 +437,12 @@ class ClassMethodOrderVisitor(base.BaseNodeVisitor):
 
 
 @final
-class InstanceAssignmentVisitor(base.BaseNodeVisitor):
-    """Checks that all attributes of instance are assigned correctly."""
+class AttributesAssignmentVisitor(base.BaseNodeVisitor):
+    """Checks that all attributes inside class are assigned correctly."""
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """
-        Ensures that instance has correct attributes assignment.
+        Ensures that class or instance has correct attributes assignment.
 
         Raises:
             InstanceLambdaAssignment
@@ -450,10 +452,17 @@ class InstanceAssignmentVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_lambda_assignment(self, node: ast.ClassDef) -> None:
-        for subnode in walk.get_subnodes_by_type(node, ast.Assign):
-            for target in subnode.targets:
-                is_lambda = isinstance(subnode.value, ast.Lambda)
-                if isinstance(target, ast.Attribute) and is_lambda:
-                    self.add_violation(
-                        bp.InstanceLambdaAssignmentViolation(subnode),
-                    )
+        class_assignments, instance_assignments = assignments.get_assignments(
+            node,
+        )
+        flatten_values = assignments.flat_assignment_values(
+            itertools.chain(
+                class_assignments,
+                instance_assignments,
+            ),
+        )
+        for assigned_value in flatten_values:
+            if isinstance(assigned_value, ast.Lambda):
+                self.add_violation(
+                    bp.InstanceLambdaAssignmentViolation(assigned_value),
+                )

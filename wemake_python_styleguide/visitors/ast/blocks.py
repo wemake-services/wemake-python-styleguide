@@ -76,7 +76,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
     )
 
     _scope_predicates: Tuple[_ScopePredicate, ...] = (
-        lambda node, names: predicates.is_property_setter(node),
+        lambda node, names: predicates.is_property_setter(node),  # noqa: WPS467
         predicates.is_same_value_reuse,
         predicates.is_same_try_except_cases,
     )
