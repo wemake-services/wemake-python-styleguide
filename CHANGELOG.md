@@ -25,6 +25,8 @@ Semantic versioning in our case means:
 - Fixes `CognitiveModuleComplexityViolation` to not trigger
   for a single-item modules
 - Fixes that `ConstantConditionViolation` was not reported for a BoolOp
+- Functions and methods marked as `@overload` or `@typing.overload`
+  do not count in complexity rules
 
 
 ## 0.15.1

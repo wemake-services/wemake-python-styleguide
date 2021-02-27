@@ -89,6 +89,17 @@ class First(object):
     async def method2(cls): ...
 """
 
+# regression1779
+
+class_with_overloades = """
+class First(object):
+    @overload
+    def my_method(self): ...
+
+    @typing.overload
+    def my_method(self): ...
+"""
+
 
 @pytest.mark.parametrize('code', [
     module_without_methods,
@@ -102,6 +113,7 @@ class First(object):
     class_with_async_and_usual_class_methods,
     class_with_staticmethods,
     class_with_async_staticmethods,
+    class_with_overloades,
 ])
 def test_method_counts_normal(
     assert_errors,
@@ -144,3 +156,22 @@ def test_method_counts_violation(
 
     assert_errors(visitor, [TooManyMethodsViolation])
     assert_error_text(visitor, '2', option_values.max_methods)
+
+
+@pytest.mark.parametrize('code', [
+    class_with_overloades,
+])
+def test_method_counts_exceptions(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    options,
+):
+    """Testing that violations are raised not when using special cases."""
+    tree = parse_ast_tree(code)
+
+    option_values = options(max_methods=0)
+    visitor = MethodMembersVisitor(option_values, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])

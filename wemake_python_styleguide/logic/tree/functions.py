@@ -1,5 +1,7 @@
 from ast import Call, Return, Yield, YieldFrom, arg, walk
-from typing import Container, Iterable, List, Optional, Tuple, Type, Union
+from typing import Container, Iterable, List, Tuple, Type, Union
+
+from typing_extensions import Final
 
 from wemake_python_styleguide.compat.functions import get_posonlyargs
 from wemake_python_styleguide.logic import source
@@ -26,6 +28,13 @@ _ControlTransferTuple = Tuple[
     Type[YieldFrom],
 ]
 
+#: Method types
+_METHOD_TYPES: Final = frozenset((
+    'method',
+    'classmethod',
+    'staticmethod',
+))
+
 
 def given_function_called(
     node: Call,
@@ -47,7 +56,7 @@ def given_function_called(
     return ''
 
 
-def is_method(function_type: Optional[str]) -> bool:
+def is_method(function_type: str) -> bool:
     """
     Returns whether a given function type belongs to a class.
 
@@ -70,7 +79,7 @@ def is_method(function_type: Optional[str]) -> bool:
     False
 
     """
-    return function_type in {'method', 'classmethod', 'staticmethod'}
+    return function_type in _METHOD_TYPES
 
 
 def get_all_arguments(node: AnyFunctionDefAndLambda) -> List[arg]:
