@@ -5,8 +5,9 @@ from typing import DefaultDict, List, Union
 from typing_extensions import final
 
 from wemake_python_styleguide import constants
+from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic.nodes import get_parent
-from wemake_python_styleguide.logic.tree.functions import is_method
+from wemake_python_styleguide.logic.tree import decorators, functions
 from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations import complexity
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -32,22 +33,21 @@ class ModuleMembersVisitor(BaseNodeVisitor):
         self._public_items_count = 0
 
     def visit_module_members(self, node: _ModuleMembers) -> None:
-        """
-        Counts the number of _ModuleMembers in a single module.
-
-        Raises:
-            TooManyModuleMembersViolation
-
-        """
+        """Counts the number of _ModuleMembers in a single module."""
         self._check_decorators_count(node)
         self._check_members_count(node)
         self.generic_visit(node)
 
     def _check_members_count(self, node: _ModuleMembers) -> None:
         """This method increases the number of module members."""
-        is_real_method = is_method(getattr(node, 'function_type', None))
+        if functions.is_method(getattr(node, 'function_type', '')):
+            return
 
-        if isinstance(get_parent(node), ast.Module) and not is_real_method:
+        if isinstance(node, FunctionNodes):
+            if decorators.has_overload_decorator(node):
+                return  # We don't count `@overload` defs as real defs
+
+        if isinstance(get_parent(node), ast.Module):
             self._public_items_count += 1
 
     def _check_decorators_count(self, node: _ModuleMembers) -> None:
@@ -76,24 +76,12 @@ class ConditionsVisitor(BaseNodeVisitor):
     """Checks booleans for condition counts."""
 
     def visit_BoolOp(self, node: ast.BoolOp) -> None:
-        """
-        Counts the number of conditions.
-
-        Raises:
-            TooManyConditionsViolation
-
-        """
+        """Counts the number of conditions."""
         self._check_conditions(node)
         self.generic_visit(node)
 
     def visit_Compare(self, node: ast.Compare) -> None:
-        """
-        Counts the number of compare parts.
-
-        Raises:
-            TooLongCompareViolation
-
-        """
+        """Counts the number of compare parts."""
         self._check_compares(node)
         self.generic_visit(node)
 
@@ -148,13 +136,7 @@ class ElifVisitor(BaseNodeVisitor):
         )
 
     def visit_If(self, node: ast.If) -> None:
-        """
-        Checks condition not to reimplement switch.
-
-        Raises:
-            TooManyElifsViolation
-
-        """
+        """Checks condition not to reimplement switch."""
         self._check_elifs(node)
         self.generic_visit(node)
 
@@ -196,14 +178,7 @@ class TryExceptVisitor(BaseNodeVisitor):
     """Visits all try/except nodes to ensure that they are not too complex."""
 
     def visit_Try(self, node: ast.Try) -> None:
-        """
-        Ensures that try/except is correct.
-
-        Raises:
-            TooManyExceptCasesViolation
-            TooLongTryBodyViolation
-
-        """
+        """Ensures that try/except is correct."""
         self._check_except_count(node)
         self._check_try_body_length(node)
         self.generic_visit(node)
@@ -234,13 +209,7 @@ class YieldTupleVisitor(BaseNodeVisitor):
     """Finds too long ``tuples`` in ``yield`` expressions."""
 
     def visit_Yield(self, node: ast.Yield) -> None:
-        """
-        Helper to get all ``yield`` nodes in a function at once.
-
-        Raises:
-            TooLongYieldTupleViolation
-
-        """
+        """Helper to get all ``yield`` nodes in a function at once."""
         self._check_yield_values(node)
         self.generic_visit(node)
 
@@ -261,21 +230,21 @@ class TupleUnpackVisitor(BaseNodeVisitor):
     """Finds statements with too many variables receiving an unpacked tuple."""
 
     def visit_Assign(self, node: ast.Assign) -> None:
-        """
-        Finds statements using too many variables to receive an unpacked tuple.
-
-        Raises:
-            TooLongTupleUnpackViolation
-
-        """
-        if isinstance(node.targets[0], ast.Tuple):
-            if len(node.targets[0].elts) > self.options.max_tuple_unpack_length:
-                self.add_violation(
-                    complexity.TooLongTupleUnpackViolation(
-                        node,
-                        text=str(len(node.targets[0].elts)),
-                        baseline=self.options.max_tuple_unpack_length,
-                    ),
-                )
-
+        """Finds statements using too many variables to unpack a tuple."""
+        self._check_tuple_unpack(node)
         self.generic_visit(node)
+
+    def _check_tuple_unpack(self, node: ast.Assign) -> None:
+        if not isinstance(node.targets[0], ast.Tuple):
+            return
+
+        if len(node.targets[0].elts) <= self.options.max_tuple_unpack_length:
+            return
+
+        self.add_violation(
+            complexity.TooLongTupleUnpackViolation(
+                node,
+                text=str(len(node.targets[0].elts)),
+                baseline=self.options.max_tuple_unpack_length,
+            ),
+        )
