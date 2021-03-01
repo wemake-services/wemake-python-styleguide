@@ -108,9 +108,7 @@ def set_constant_evaluations(tree: ast.AST) -> ast.AST:
     """
     for statement in ast.walk(tree):
         if isinstance(statement, ast.BinOp):
-            try:
-                statement.wps_op_eval  # noqa: WPS428
-            except AttributeError:
+            if not hasattr(statement, 'wps_op_eval'):  # noqa: WPS421
                 _evaluate_operation(statement)
     return tree
 
