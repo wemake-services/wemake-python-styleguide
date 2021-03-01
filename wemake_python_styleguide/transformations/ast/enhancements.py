@@ -4,7 +4,6 @@ from typing import Optional, Tuple, Type, Union, Any
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic.nodes import get_parent
-from wemake_python_styleguide.logic.safe_eval import literal_eval_with_names
 from wemake_python_styleguide.types import ContextNodes
 
 _CONTEXTS: Tuple[Type[ContextNodes], ...] = (
@@ -13,21 +12,19 @@ _CONTEXTS: Tuple[Type[ContextNodes], ...] = (
     *FunctionNodes,
 )
 
-_AST_OPERATORS = {
+_AST_OPS_TO_OPERATORS = {
     ast.Add: operator.add,
     ast.Sub: operator.sub,
     ast.Mult: operator.mul,
     ast.Div: operator.truediv,
-    ast.Mod: operator.mod,
     ast.FloorDiv: operator.floordiv,
-    ast.MatMult: operator.matmul,
+    ast.Mod: operator.mod,
     ast.Pow: operator.pow,
     ast.LShift: operator.lshift,
     ast.RShift: operator.rshift,
     ast.BitAnd: operator.and_,
     ast.BitOr: operator.or_,
     ast.BitXor: operator.xor,
-    ast.Invert: operator.inv,
 }
 
 
@@ -103,7 +100,7 @@ def set_constant_evaluations(tree: ast.AST) -> ast.AST:
         value = array[1 + 0.5]
 
     This should not be allowed, because we would be using a float to index an array, but since
-    there is an addition, the linter doesn't know that and doesn't raise an error.
+    there is an addition, the linter does not know that and does not raise an error.
     """
     for statement in ast.walk(tree):
         if isinstance(statement, ast.BinOp) and not hasattr(statement, 'wps_op_evaluation'):
@@ -138,17 +135,26 @@ def _apply_if_statement(statement: ast.If) -> None:
                 setattr(child, 'wps_if_chain', statement)  # noqa: B010
 
 
-def _evaluate_operation(st: ast.BinOp) -> Optional[Union[Type[Exception], Any]]:
-    """Recursive method that tries to evaluate all math operations inside the statement."""
-    if isinstance(st.left, ast.BinOp):
-        left = _evaluate_operation(st.left)
+def _evaluate_node(node: ast.AST) -> Optional[Union[Type[Exception], Any]]:
+    """Returns the value of a node, or its evaluation if it contains more operations."""
+    if isinstance(node, ast.BinOp):
+        return _evaluate_operation(node)
+    return getattr(node, 'value', None)
+
+
+def _evaluate_operation(statement: ast.BinOp) -> Optional[Union[Type[Exception], Any]]:
+    """Tries to evaluate all math operations inside the statement."""
+    left = _evaluate_node(statement.left)
+    right = _evaluate_node(statement.right)
+    op = _AST_OPS_TO_OPERATORS[type(statement.op)]
+
+    if left and right:
+        try:
+            result = op(left, right)
+        except Exception:
+            result = None
     else:
-        left = st.left.value
-    if isinstance(st.right, ast.BinOp):
-        right = _evaluate_operation(st.right)
-    else:
-        right = st.right.value
-    op = _AST_OPERATORS[type(st.op)]
-    result = op(left, right)
-    setattr(st, 'wps_op_evaluation', result)
+        result = None
+
+    setattr(statement, 'wps_op_evaluation', result)
     return result
