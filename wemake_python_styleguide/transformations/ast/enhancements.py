@@ -1,10 +1,11 @@
 import ast
 import operator
-from typing import Optional, Tuple, Type, Union, Any
+from types import MappingProxyType
+from typing import Optional, Tuple, Type, Union
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic.nodes import get_parent
-from wemake_python_styleguide.logic.safe_eval import _convert_signed_num
+from wemake_python_styleguide.logic.safe_eval import literal_eval_with_names
 from wemake_python_styleguide.types import ContextNodes
 
 _CONTEXTS: Tuple[Type[ContextNodes], ...] = (
@@ -13,7 +14,7 @@ _CONTEXTS: Tuple[Type[ContextNodes], ...] = (
     *FunctionNodes,
 )
 
-_AST_OPS_TO_OPERATORS = {
+_AST_OPS_TO_OPERATORS = MappingProxyType({
     ast.Add: operator.add,
     ast.Sub: operator.sub,
     ast.Mult: operator.mul,
@@ -26,7 +27,7 @@ _AST_OPS_TO_OPERATORS = {
     ast.BitAnd: operator.and_,
     ast.BitOr: operator.or_,
     ast.BitXor: operator.xor,
-}
+})
 
 
 def set_if_chain(tree: ast.AST) -> ast.AST:
@@ -92,20 +93,25 @@ def set_constant_evaluations(tree: ast.AST) -> ast.AST:
     """
     Used to evaluate operations between constants.
 
-    We want this to be able to analyze parts of the code in which a math operation is making the
-    linter unable to understand if the code is compliant or not.
+    We want this to be able to analyze parts of the code in which a math
+    operation is making the linter unable to understand if the code is
+    compliant or not.
 
     Example:
     .. code:: python
 
         value = array[1 + 0.5]
 
-    This should not be allowed, because we would be using a float to index an array, but since
-    there is an addition, the linter does not know that and does not raise an error.
+    This should not be allowed, because we would be using a float to index an
+    array, but since there is an addition, the linter does not know that and
+    does not raise an error.
     """
     for statement in ast.walk(tree):
-        if isinstance(statement, ast.BinOp) and not hasattr(statement, 'wps_op_evaluation'):
-            _evaluate_operation(statement)
+        if isinstance(statement, ast.BinOp):
+            try:
+                statement.wps_op_eval  # noqa: WPS428
+            except AttributeError:
+                _evaluate_operation(statement)
     return tree
 
 
@@ -136,8 +142,8 @@ def _apply_if_statement(statement: ast.If) -> None:
                 setattr(child, 'wps_if_chain', statement)  # noqa: B010
 
 
-def _evaluate_node(node: ast.AST) -> Optional[Union[Type[Exception], Any]]:
-    """Returns the value of a node, or its evaluation if it contains more operations."""
+def _evaluate_node(node: ast.AST) -> Optional[Union[int, float, str, bytes]]:
+    """Returns the value of a node or its evaluation."""
     if isinstance(node, ast.BinOp):
         return _evaluate_operation(node)
     if isinstance(node, (ast.Str, ast.Bytes)):
@@ -145,13 +151,15 @@ def _evaluate_node(node: ast.AST) -> Optional[Union[Type[Exception], Any]]:
     if isinstance(node, ast.Name):
         return None
     try:
-        signed_node = _convert_signed_num(node)
+        signed_node = literal_eval_with_names(node)
     except Exception:
         return None
     return signed_node
 
 
-def _evaluate_operation(statement: ast.BinOp) -> Optional[Union[Type[Exception], Any]]:
+def _evaluate_operation(
+    statement: ast.BinOp,
+) -> Optional[Union[int, float, str, bytes]]:
     """Tries to evaluate all math operations inside the statement."""
     left = _evaluate_node(statement.left)
     right = _evaluate_node(statement.right)
@@ -159,11 +167,11 @@ def _evaluate_operation(statement: ast.BinOp) -> Optional[Union[Type[Exception],
 
     if left and right:
         try:
-            result = op(left, right)
+            evaluation = op(left, right)
         except Exception:
-            result = None
+            evaluation = None
     else:
-        result = None
+        evaluation = None
 
-    setattr(statement, 'wps_op_evaluation', result)
-    return result
+    setattr(statement, 'wps_op_eval', evaluation)  # noqa: B010
+    return evaluation
