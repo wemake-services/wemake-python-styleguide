@@ -4,6 +4,7 @@ from typing import Optional, Tuple, Type, Union, Any
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic.nodes import get_parent
+from wemake_python_styleguide.logic.safe_eval import _convert_signed_num
 from wemake_python_styleguide.types import ContextNodes
 
 _CONTEXTS: Tuple[Type[ContextNodes], ...] = (
@@ -139,7 +140,15 @@ def _evaluate_node(node: ast.AST) -> Optional[Union[Type[Exception], Any]]:
     """Returns the value of a node, or its evaluation if it contains more operations."""
     if isinstance(node, ast.BinOp):
         return _evaluate_operation(node)
-    return getattr(node, 'value', None)
+    if isinstance(node, (ast.Str, ast.Bytes)):
+        return node.s
+    if isinstance(node, ast.Name):
+        return None
+    try:
+        signed_node = _convert_signed_num(node)
+    except Exception:
+        return None
+    return signed_node
 
 
 def _evaluate_operation(statement: ast.BinOp) -> Optional[Union[Type[Exception], Any]]:
