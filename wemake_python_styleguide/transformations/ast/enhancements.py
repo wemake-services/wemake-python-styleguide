@@ -161,9 +161,9 @@ def _evaluate_operation(
     """Tries to evaluate all math operations inside the statement."""
     left = _evaluate_node(statement.left)
     right = _evaluate_node(statement.right)
-    op = _AST_OPS_TO_OPERATORS[type(statement.op)]
+    op = _AST_OPS_TO_OPERATORS.get(type(statement.op))
 
-    if left and right:
+    if left and right and op:
         try:
             evaluation = op(left, right)
         except Exception:
