@@ -2,6 +2,7 @@ import ast
 import operator
 from types import MappingProxyType
 from typing import Optional, Tuple, Type, Union
+
 from typing_extensions import Final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
