@@ -1,7 +1,7 @@
 import ast
 import operator
 from types import MappingProxyType
-from typing import Optional, Tuple, Type, Union
+from typing import Optional, Tuple, Type, Union, Final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic.nodes import get_parent
@@ -14,7 +14,7 @@ _CONTEXTS: Tuple[Type[ContextNodes], ...] = (
     *FunctionNodes,
 )
 
-_AST_OPS_TO_OPERATORS = MappingProxyType({
+_AST_OPS_TO_OPERATORS: Final = MappingProxyType({
     ast.Add: operator.add,
     ast.Sub: operator.sub,
     ast.Mult: operator.mul,
