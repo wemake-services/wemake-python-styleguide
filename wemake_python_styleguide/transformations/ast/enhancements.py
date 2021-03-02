@@ -1,5 +1,6 @@
 import ast
 import operator
+from contextlib import suppress
 from types import MappingProxyType
 from typing import Optional, Tuple, Type, Union
 
@@ -157,13 +158,10 @@ def evaluate_operation(
 
     op = _AST_OPS_TO_OPERATORS.get(type(statement.op))
 
+    evaluation = None
     if op is not None:
-        try:
+        with suppress(Exception):
             evaluation = op(left, right)
-        except Exception:
-            evaluation = None
-    else:
-        evaluation = None
 
     setattr(statement, 'wps_op_eval', evaluation)  # noqa: B010
     return evaluation
