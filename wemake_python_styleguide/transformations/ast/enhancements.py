@@ -1,11 +1,10 @@
 import ast
 import operator
 from types import MappingProxyType
-from typing import Optional, Tuple, Type, Union, Final
+from typing import Final, Optional, Tuple, Type, Union
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
-from wemake_python_styleguide.logic.nodes import get_parent
-from wemake_python_styleguide.logic.safe_eval import literal_eval_with_names
+from wemake_python_styleguide.logic.nodes import get_parent, evaluate_node
 from wemake_python_styleguide.types import ContextNodes
 
 _CONTEXTS: Tuple[Type[ContextNodes], ...] = (
@@ -109,7 +108,7 @@ def set_constant_evaluations(tree: ast.AST) -> ast.AST:
     for statement in ast.walk(tree):
         if isinstance(statement, ast.BinOp):
             if not hasattr(statement, 'wps_op_eval'):  # noqa: WPS421
-                _evaluate_operation(statement)
+                evaluate_operation(statement)
     return tree
 
 
@@ -140,27 +139,12 @@ def _apply_if_statement(statement: ast.If) -> None:
                 setattr(child, 'wps_if_chain', statement)  # noqa: B010
 
 
-def _evaluate_node(node: ast.AST) -> Optional[Union[int, float, str, bytes]]:
-    """Returns the value of a node or its evaluation."""
-    if isinstance(node, ast.BinOp):
-        return _evaluate_operation(node)
-    if isinstance(node, (ast.Str, ast.Bytes)):
-        return node.s
-    if isinstance(node, ast.Name):
-        return None
-    try:
-        signed_node = literal_eval_with_names(node)
-    except Exception:
-        return None
-    return signed_node
-
-
-def _evaluate_operation(
+def evaluate_operation(
     statement: ast.BinOp,
 ) -> Optional[Union[int, float, str, bytes]]:
     """Tries to evaluate all math operations inside the statement."""
-    left = _evaluate_node(statement.left)
-    right = _evaluate_node(statement.right)
+    left = evaluate_node(statement.left)
+    right = evaluate_node(statement.right)
     op = _AST_OPS_TO_OPERATORS.get(type(statement.op))
 
     if left and right and op:
