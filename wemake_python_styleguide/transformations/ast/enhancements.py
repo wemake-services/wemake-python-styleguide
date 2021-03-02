@@ -4,7 +4,7 @@ from types import MappingProxyType
 from typing import Final, Optional, Tuple, Type, Union
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
-from wemake_python_styleguide.logic.nodes import get_parent, evaluate_node
+from wemake_python_styleguide.logic.nodes import evaluate_node, get_parent
 from wemake_python_styleguide.types import ContextNodes
 
 _CONTEXTS: Tuple[Type[ContextNodes], ...] = (
@@ -143,11 +143,19 @@ def evaluate_operation(
     statement: ast.BinOp,
 ) -> Optional[Union[int, float, str, bytes]]:
     """Tries to evaluate all math operations inside the statement."""
-    left = evaluate_node(statement.left)
-    right = evaluate_node(statement.right)
+    if isinstance(statement.left, ast.BinOp):
+        left = evaluate_operation(statement.left)
+    else:
+        left = evaluate_node(statement.left)
+
+    if isinstance(statement.right, ast.BinOp):
+        right = evaluate_operation(statement.right)
+    else:
+        right = evaluate_node(statement.right)
+
     op = _AST_OPS_TO_OPERATORS.get(type(statement.op))
 
-    if left and right and op:
+    if all(element is not None for element in (left, right, op)):
         try:
             evaluation = op(left, right)
         except Exception:

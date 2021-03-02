@@ -2,9 +2,6 @@ import ast
 from typing import Optional, Union
 
 from wemake_python_styleguide.logic.safe_eval import literal_eval_with_names
-from wemake_python_styleguide.transformations.ast.enhancements import (
-    evaluate_operation,
-)
 from wemake_python_styleguide.types import ContextNodes
 
 
@@ -34,10 +31,6 @@ def get_context(node: ast.AST) -> Optional[ContextNodes]:
 
 def evaluate_node(node: ast.AST) -> Optional[Union[int, float, str, bytes]]:
     """Returns the value of a node or its evaluation."""
-    if isinstance(node, ast.BinOp):
-        return evaluate_operation(node)
-    if isinstance(node, (ast.Str, ast.Bytes)):
-        return node.s
     if isinstance(node, ast.Name):
         return None
     try:
