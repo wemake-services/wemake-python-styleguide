@@ -6,6 +6,7 @@ import pytest
     ('1 * 2', 2),
     ('"a" * 5', 'aaaaa'),
     ('b"hello" * 2', b'hellohello'),
+    ('"hello " + "world"', 'hello world'),
     ('(2 + 6) / 4 - 2', 0),
     ('1 << 4', 16),
     ('255 >> 4', 15),
@@ -29,6 +30,7 @@ def test_evaluate_valid_operations(parse_ast_tree, expression: str, output):
     '-x + y',
     '0 / 0',
     '"a" * 2.1',
+    '"a" + 1',
     '3 << 1.5',
     '((4 - 1) * 3 - 9) // (7 >> 4)',
 ])
