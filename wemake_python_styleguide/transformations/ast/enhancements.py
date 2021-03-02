@@ -155,7 +155,7 @@ def evaluate_operation(
 
     op = _AST_OPS_TO_OPERATORS.get(type(statement.op))
 
-    if all(element is not None for element in (left, right, op)):
+    if op is not None:
         try:
             evaluation = op(left, right)
         except Exception:
