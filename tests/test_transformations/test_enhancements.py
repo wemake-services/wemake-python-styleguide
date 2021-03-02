@@ -33,6 +33,7 @@ def test_evaluate_valid_operations(parse_ast_tree, expression: str, output):
     '"a" + 1',
     '3 << 1.5',
     '((4 - 1) * 3 - 9) // (7 >> 4)',
+    '[[1, 0], [0, 1]] @ [[1, 1], [0, 0]]',
 ])
 def test_evaluate_invalid_operations(parse_ast_tree, expression: str):
     """Tests that the operations can not be evaluated and thus return None."""
