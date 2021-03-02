@@ -108,10 +108,11 @@ def set_constant_evaluations(tree: ast.AST) -> ast.AST:
     array, but since there is an addition, the linter does not know that and
     does not raise an error.
     """
-    for statement in ast.walk(tree):
-        if isinstance(statement, ast.BinOp):
-            if not hasattr(statement, 'wps_op_eval'):  # noqa: WPS421
-                evaluate_operation(statement)
+    for stmt in ast.walk(tree):
+        parent = get_parent(stmt)
+        if isinstance(stmt, ast.BinOp) and not isinstance(parent, ast.BinOp):
+            evaluation = evaluate_operation(stmt)
+            setattr(stmt, 'wps_op_eval', evaluation)  # noqa: B010
     return tree
 
 
@@ -163,5 +164,4 @@ def evaluate_operation(
         with suppress(Exception):
             evaluation = op(left, right)
 
-    setattr(statement, 'wps_op_eval', evaluation)  # noqa: B010
     return evaluation
