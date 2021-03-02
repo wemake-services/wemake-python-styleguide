@@ -1,7 +1,8 @@
 import ast
 import operator
 from types import MappingProxyType
-from typing import Final, Optional, Tuple, Type, Union
+from typing import Optional, Tuple, Type, Union
+from typing_extensions import Final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic.nodes import evaluate_node, get_parent
