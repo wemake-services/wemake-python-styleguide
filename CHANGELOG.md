@@ -25,6 +25,10 @@ Semantic versioning in our case means:
 - Fixes `CognitiveModuleComplexityViolation` to not trigger
   for a single-item modules
 
+### Features
+
+- Adds a math operations evaluator to improve and allow several violation checks.
+
 
 ## 0.15.1
 
