@@ -33,6 +33,8 @@ def evaluate_node(node: ast.AST) -> Optional[Union[int, float, str, bytes]]:
     """Returns the value of a node or its evaluation."""
     if isinstance(node, ast.Name):
         return None
+    if isinstance(node, (ast.Str, ast.Bytes)):
+        return node.s
     try:
         signed_node = literal_eval_with_names(node)
     except Exception:
