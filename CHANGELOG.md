@@ -68,6 +68,12 @@ Semantic versioning in our case means:
 - Adds documentation (and tests) for how to run project on Jupyter Notebooks
 - Updates `mypy` to `0.902` and fixes type issues
 
+## 0.16.0
+
+### Features
+
+* Forbids getting first element of list by unpacking
+
 
 ## 0.15.2
 

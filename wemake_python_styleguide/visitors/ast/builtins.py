@@ -378,6 +378,12 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
             self.add_violation(
                 best_practices.SingleElementDestructuringViolation(node),
             )
+        elif variables.is_getting_element_by_unpacking(targets):
+            self.add_violation(
+                best_practices.GettingElementByUnpackingViolation(
+                    node,
+                ),
+            )
 
         for target in targets:
             if not variables.is_valid_unpacking_target(target):
