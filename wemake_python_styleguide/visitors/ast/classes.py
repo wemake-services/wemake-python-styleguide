@@ -12,7 +12,6 @@ from wemake_python_styleguide.logic import nodes, source, walk
 from wemake_python_styleguide.logic.arguments import function_args, super_args
 from wemake_python_styleguide.logic.naming import access, name_nodes
 from wemake_python_styleguide.logic.tree import (
-    assignments,
     attributes,
     classes,
     functions,
@@ -120,18 +119,21 @@ class WrongClassVisitor(base.BaseNodeVisitor):
         return False
 
     def _check_getters_setters_methods(self, node: ast.ClassDef) -> None:
-        class_attributes, instance_attributes = classes.get_attributes(
+        class_assignments, instance_assignments = classes.get_assignments(
             node,
             include_annotated=True,
         )
-        flat_class_attributes = name_nodes.flat_variable_names(class_attributes)
+        flat_class_attributes = name_nodes.flat_variable_names(
+            class_assignments,
+        )
 
         attributes_stripped = {
             class_attribute.lstrip(constants.UNUSED_PLACEHOLDER)
             for class_attribute in flat_class_attributes
         }.union({
-            instance.attr.lstrip(constants.UNUSED_PLACEHOLDER)
-            for instance in instance_attributes
+            attr.attr.lstrip(constants.UNUSED_PLACEHOLDER)
+            for assign in instance_assignments
+            for attr in walk.get_subnodes_by_type(assign, ast.Attribute)
         })
 
         for method in classes.find_getters_and_setters(node):
@@ -373,14 +375,18 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_attributes_shadowing(self, node: ast.ClassDef) -> None:
-        class_attributes, instance_attributes = classes.get_attributes(
+        class_assignments, instance_assignments = classes.get_assignments(
             node,
             include_annotated=False,
         )
         class_attribute_names = set(
-            name_nodes.flat_variable_names(class_attributes),
+            name_nodes.flat_variable_names(class_assignments),
         )
-
+        instance_attributes = (
+            attr
+            for assign in instance_assignments
+            for attr in walk.get_subnodes_by_type(assign, ast.Attribute)
+        )
         for instance_attr in instance_attributes:
             if instance_attr.attr in class_attribute_names:
                 self.add_violation(
@@ -452,10 +458,11 @@ class AttributesAssignmentVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_lambda_assignment(self, node: ast.ClassDef) -> None:
-        class_assignments, instance_assignments = assignments.get_assignments(
+        class_assignments, instance_assignments = classes.get_assignments(
             node,
+            include_annotated=True,
         )
-        flatten_values = assignments.flat_assignment_values(
+        flatten_values = name_nodes.flat_assignment_values(
             itertools.chain(
                 class_assignments,
                 instance_assignments,

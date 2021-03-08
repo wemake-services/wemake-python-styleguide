@@ -2594,9 +2594,13 @@ class InstanceLambdaAssignmentViolation(ASTViolation):
         class Example(object):
             def foo(self):
                 ...
+            @classmethod
+            def cls_foo(cls):
+                ...
 
         # Wrong:
         class Example(object):
+            cls_foo = lambda: ...
             def __init__(self):
                 self.foo = lambda: ...
 

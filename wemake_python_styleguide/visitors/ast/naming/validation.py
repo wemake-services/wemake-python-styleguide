@@ -199,11 +199,11 @@ class _FunctionNameValidator(_RegularNameValidator):
 @final
 class _ClassBasedNameValidator(_RegularNameValidator):
     def check_attribute_names(self, node: ast.ClassDef) -> None:
-        class_attributes, _ = classes.get_attributes(
+        class_assignments, _ = classes.get_assignments(
             node, include_annotated=True,
         )
 
-        for assign in class_attributes:
+        for assign in class_assignments:
             for target in get_assign_targets(assign):
                 for attr_name in name_nodes.get_variables_from_node(target):
                     self._ensure_case(assign, attr_name)

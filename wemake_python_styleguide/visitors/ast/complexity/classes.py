@@ -7,6 +7,7 @@ from typing_extensions import final
 from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree import classes
+from wemake_python_styleguide.logic.walk import get_subnodes_by_type
 from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations.complexity import (
     TooManyBaseClassesViolation,
@@ -58,13 +59,14 @@ class ClassComplexityVisitor(BaseNodeVisitor):
             )
 
     def _check_public_attributes(self, node: ast.ClassDef) -> None:
-        _, instance_attributes = classes.get_attributes(
+        _, instance_assignments = classes.get_assignments(
             node,
             include_annotated=False,
         )
         attrs_count = len({
             attr.attr
-            for attr in instance_attributes
+            for assign in instance_assignments
+            for attr in get_subnodes_by_type(assign, ast.Attribute)
             if access.is_public(attr.attr)
         })
 

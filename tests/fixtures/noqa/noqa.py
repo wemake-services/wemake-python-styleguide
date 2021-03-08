@@ -582,6 +582,7 @@ class WrongMethodOrder(object):  # noqa: WPS338
         return self
 
 class LambdaAssignment(object):
+    cls_attr = lambda: ...  # noqa: WPS467
     def __init__(self):
         self._attr = lambda: ...  # noqa: WPS467
 

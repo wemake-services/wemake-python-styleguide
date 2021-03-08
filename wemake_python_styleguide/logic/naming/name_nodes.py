@@ -4,6 +4,7 @@ from typing import Iterable, List, Optional
 
 from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.compat.types import AnyAssignWithWalrus
+from wemake_python_styleguide.types import AnyAssign
 
 
 def is_same_variable(left: ast.AST, right: ast.AST) -> bool:
@@ -57,6 +58,37 @@ def flat_variable_names(nodes: Iterable[AnyAssignWithWalrus]) -> Iterable[str]:
         for node in nodes
         for target in get_assign_targets(node)
     ))
+
+
+def flat_assignment_values(assigns: Iterable[AnyAssign]) -> Iterable[ast.AST]:
+    """
+    Returns flat values from assignment.
+
+    Use this function when you need to get list of values
+    from assign nodes.
+    """
+    return itertools.chain.from_iterable((
+        flat_tuples(assign.value)
+        for assign in assigns
+        if isinstance(assign.value, ast.AST)
+    ))
+
+
+def flat_tuples(node: ast.AST) -> List[ast.AST]:
+    """
+    Returns flat values from tuples.
+
+    Use this function when you need to get list of values
+    from tuple nodes.
+    """
+    flatten_nodes: List[ast.AST] = []
+
+    if isinstance(node, ast.Tuple):
+        for subnode in node.elts:
+            flatten_nodes.extend(flat_tuples(subnode))
+    else:
+        flatten_nodes.append(node)
+    return flatten_nodes
 
 
 def get_variables_from_node(node: ast.AST) -> List[str]:

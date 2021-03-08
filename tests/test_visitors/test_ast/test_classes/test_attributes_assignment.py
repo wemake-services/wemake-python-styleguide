@@ -18,6 +18,13 @@ class Example(object):
     {0}
 """
 
+classmethod_lambda_assignment = """
+class Example(object):
+    @classmethod
+    def some(cls):
+         {0}
+"""
+
 
 @pytest.mark.parametrize('assignment', [
     'self.attr = lambda: ...',
@@ -58,6 +65,31 @@ def test_class_lambda_assignment(
 ):
     """Testing lambda assignment to class."""
     tree = parse_ast_tree(mode(class_lambda_assignment.format(assignment)))
+
+    visitor = AttributesAssignmentVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [InstanceLambdaAssignmentViolation])
+
+
+@pytest.mark.parametrize('assignment', [
+    'cls.attr = lambda: ...',
+    'cls.attr1 = cls.attr2 = lambda: ...',
+    'cls.attr1, cls.attr2 = lambda: ..., "value"',
+    'cls.attr: Callable[[], None] = lambda: ...',
+])
+def test_classmethod_lambda_assignment(
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    default_options,
+    assignment,
+    mode,
+):
+    """Testing lambda assignment to class."""
+    tree = parse_ast_tree(mode(
+        classmethod_lambda_assignment.format(assignment),
+    ))
 
     visitor = AttributesAssignmentVisitor(default_options, tree=tree)
     visitor.run()
