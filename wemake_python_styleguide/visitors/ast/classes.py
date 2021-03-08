@@ -1,4 +1,5 @@
 import ast
+import itertools
 from collections import defaultdict
 from typing import ClassVar, DefaultDict, FrozenSet, List, Optional
 
@@ -11,6 +12,7 @@ from wemake_python_styleguide.logic import nodes, source, walk
 from wemake_python_styleguide.logic.arguments import function_args, super_args
 from wemake_python_styleguide.logic.naming import access, name_nodes
 from wemake_python_styleguide.logic.tree import (
+    assignments,
     attributes,
     classes,
     functions,
@@ -432,3 +434,35 @@ class ClassMethodOrderVisitor(base.BaseNodeVisitor):
         if access.is_private(first):
             return 0  # lowest priority
         return base_methods_order.get(first, public_and_magic_methods_priority)
+
+
+@final
+class AttributesAssignmentVisitor(base.BaseNodeVisitor):
+    """Checks that all attributes inside class are assigned correctly."""
+
+    def visit_ClassDef(self, node: ast.ClassDef) -> None:
+        """
+        Ensures that class or instance has correct attributes assignment.
+
+        Raises:
+            InstanceLambdaAssignment
+
+        """
+        self._check_lambda_assignment(node)
+        self.generic_visit(node)
+
+    def _check_lambda_assignment(self, node: ast.ClassDef) -> None:
+        class_assignments, instance_assignments = assignments.get_assignments(
+            node,
+        )
+        flatten_values = assignments.flat_assignment_values(
+            itertools.chain(
+                class_assignments,
+                instance_assignments,
+            ),
+        )
+        for assigned_value in flatten_values:
+            if isinstance(assigned_value, ast.Lambda):
+                self.add_violation(
+                    bp.InstanceLambdaAssignmentViolation(assigned_value),
+                )

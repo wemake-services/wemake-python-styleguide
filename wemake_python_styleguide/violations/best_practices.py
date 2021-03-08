@@ -83,6 +83,7 @@ Summary
    EmptyCommentViolation
    BitwiseAndBooleanMixupViolation
    NewStyledDecoratorViolation
+   InstanceLambdaAssignmentViolation
 
 Best practices
 --------------
@@ -154,6 +155,7 @@ Best practices
 .. autoclass:: EmptyCommentViolation
 .. autoclass:: BitwiseAndBooleanMixupViolation
 .. autoclass:: NewStyledDecoratorViolation
+.. autoclass:: InstanceLambdaAssignmentViolation
 
 """
 
@@ -2572,3 +2574,35 @@ class NewStyledDecoratorViolation(ASTViolation):
 
     error_template = 'Found new-styled decorator'
     code = 466
+
+
+@final
+class InstanceLambdaAssignmentViolation(ASTViolation):
+    """
+    Forbid lambda assignment to instance attributes.
+
+    Reasoning:
+       This will be very tricky to understand for users.
+       example.callback(1) looks like a method, but it is not really a method.
+
+    Solution:
+        Do not assign lambda functions to attributes, create real methods.
+
+    Example::
+
+        # Correct:
+        class Example(object):
+            def foo(self):
+                ...
+
+        # Wrong:
+        class Example(object):
+            def __init__(self):
+                self.foo = lambda: ...
+
+    .. versionadded:: 0.16.0
+
+    """
+
+    error_template = 'Found lambda assignment to instance attribute'
+    code = 467
