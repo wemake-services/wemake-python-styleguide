@@ -1,18 +1,21 @@
 import pytest
 
-from wemake_python_styleguide.constants import MAX_LEN_YIELD_TUPLE
+from wemake_python_styleguide.constants import MAX_LEN_TUPLE_OUTPUT
 from wemake_python_styleguide.violations.complexity import (
-    TooLongYieldTupleViolation,
+    TooLongOutputTupleViolation,
 )
 from wemake_python_styleguide.visitors.ast.complexity.counts import (
-    YieldTupleVisitor,
+    ReturnLikeStatementTupleVisitor,
 )
+
+RETURN_LIKE_STATEMENTS = ('return', 'yield')
+
 
 generator = """
 def function_name():
     i = 0
     while True:
-        yield {0}
+        {0} {1}
         i = i + 1
 """
 
@@ -30,17 +33,19 @@ tuple_short = 'i, i + 1, i + 2'
     tuple_empty,
     tuple_fixed_short,
 ])
-def test_yield_length_normal(
+@pytest.mark.parametrize('return_like', RETURN_LIKE_STATEMENTS)
+def test_output_length_normal(
     assert_errors,
     parse_ast_tree,
     tuple_param,
     mode,
     default_options,
+    return_like,
 ):
     """Testing that classes and functions in a module work well."""
-    tree = parse_ast_tree(mode(generator.format(tuple_param)))
+    tree = parse_ast_tree(mode(generator.format(return_like, tuple_param)))
 
-    visitor = YieldTupleVisitor(default_options, tree=tree)
+    visitor = ReturnLikeStatementTupleVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -50,19 +55,21 @@ def test_yield_length_normal(
     tuple_long,
     tuple_fixed_long,
 ])
-def test_yield_length_violation(
+@pytest.mark.parametrize('return_like', RETURN_LIKE_STATEMENTS)
+def test_output_length_violation(
     assert_errors,
     assert_error_text,
     parse_ast_tree,
     tuple_param,
     mode,
     default_options,
+    return_like,
 ):
     """Testing that classes and functions in a module work well."""
-    tree = parse_ast_tree(mode(generator.format(tuple_param)))
+    tree = parse_ast_tree(mode(generator.format(return_like, tuple_param)))
 
-    visitor = YieldTupleVisitor(default_options, tree=tree)
+    visitor = ReturnLikeStatementTupleVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [TooLongYieldTupleViolation])
-    assert_error_text(visitor, 6, MAX_LEN_YIELD_TUPLE)
+    assert_errors(visitor, [TooLongOutputTupleViolation])
+    assert_error_text(visitor, 6, MAX_LEN_TUPLE_OUTPUT)

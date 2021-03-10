@@ -75,6 +75,12 @@ Semantic versioning in our case means:
 - Forbids getting first element of list by unpacking
 
 
+## 0.16.0
+
+### Features
+
+- Now `WPS227` forbids returning tuples that are too long
+
 ## 0.15.2
 
 ### Bugfixes

@@ -47,7 +47,7 @@ Summary
    TooManyForsInComprehensionViolation
    TooManyExceptCasesViolation
    OverusedStringViolation
-   TooLongYieldTupleViolation
+   TooLongOutputTupleViolation
    TooLongCompareViolation
    TooLongTryBodyViolation
    TooManyPublicAttributesViolation
@@ -89,7 +89,7 @@ Structure complexity
 .. autoclass:: TooManyForsInComprehensionViolation
 .. autoclass:: TooManyExceptCasesViolation
 .. autoclass:: OverusedStringViolation
-.. autoclass:: TooLongYieldTupleViolation
+.. autoclass:: TooLongOutputTupleViolation
 .. autoclass:: TooLongCompareViolation
 .. autoclass:: TooLongTryBodyViolation
 .. autoclass:: TooManyPublicAttributesViolation
@@ -884,22 +884,24 @@ class OverusedStringViolation(MaybeASTViolation):
 
 
 @final
-class TooLongYieldTupleViolation(ASTViolation):
+class TooLongOutputTupleViolation(ASTViolation):
     """
-    Forbid yielding tuples that are too long.
+    Forbid returning or yielding tuples that are too long.
 
     Reasoning:
-        Long yield tuples complicate generator usage.
+        Long output tuples complicate function or generator usage.
         This rule helps to reduce complication.
 
     Solution:
         Use lists of similar type or wrapper objects.
 
     .. versionadded:: 0.10.0
+    .. versionchanged:: 0.16.0
+
 
     """
 
-    error_template = 'Found too long yield tuple: {0}'
+    error_template = 'Found too long function output tuple: {0}'
     code = 227
 
 
