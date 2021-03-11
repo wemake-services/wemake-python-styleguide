@@ -2,6 +2,7 @@ import ast
 from typing import List, Union
 
 from wemake_python_styleguide.logic import nodes
+from wemake_python_styleguide.logic.naming import access
 
 _VarDefinition = Union[ast.AST, ast.expr]
 _LocalVariable = Union[ast.Name, ast.ExceptHandler]
@@ -74,4 +75,4 @@ def is_getting_element_by_unpacking(targets: List[ast.expr]) -> bool:
 
 
 def _is_unused_variable_name(node: ast.expr) -> bool:
-    return isinstance(node, ast.Name) and node.id.startswith('_')
+    return isinstance(node, ast.Name) and access.looks_like_unused(node.id)
