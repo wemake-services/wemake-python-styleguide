@@ -672,7 +672,7 @@ grimp = ">=1.2.3,<2"
 
 [[package]]
 name = "importlib-metadata"
-version = "3.9.0"
+version = "3.10.0"
 description = "Read metadata from Python packages"
 category = "main"
 optional = false
@@ -1958,8 +1958,8 @@ import-linter = [
     {file = "import-linter-1.2.1.tar.gz", hash = "sha256:1a59c9e80c39dd11d86aed6710c839c257779bd3d7814ad643eb269d35195049"},
 ]
 importlib-metadata = [
-    {file = "importlib_metadata-3.9.0-py3-none-any.whl", hash = "sha256:6fd684b4c6c7bb36d57e93d57fc244b5ffc08faa1c298bcda3dfbbbf19d7550a"},
-    {file = "importlib_metadata-3.9.0.tar.gz", hash = "sha256:036eae7ebbd41db176774c42e80f3288a1e41c7ebfc8ed099a94653973ebd00f"},
+    {file = "importlib_metadata-3.10.0-py3-none-any.whl", hash = "sha256:d2d46ef77ffc85cbf7dac7e81dd663fde71c45326131bea8033b9bad42268ebe"},
+    {file = "importlib_metadata-3.10.0.tar.gz", hash = "sha256:c9db46394197244adf2f0b08ec5bc3cf16757e9590b02af1fca085c16c0d600a"},
 ]
 iniconfig = [
     {file = "iniconfig-1.1.1-py2.py3-none-any.whl", hash = "sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3"},
