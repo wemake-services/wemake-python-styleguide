@@ -200,9 +200,11 @@ class UselessElseVisitor(BaseNodeVisitor):
     def _check_useless_loop_else(self, node: AnyLoop) -> None:
         if not node.orelse:
             return
-
+        # An else statement makes sense if we
+        # want to execute something after breaking
+        # out of the loop without writing more code
         body_returning = any(
-            walk.is_contained(sub, self._returning_nodes)
+            walk.is_contained(sub, self._returning_nodes[1:])
             for sub in node.body
         )
         else_returning = any(
