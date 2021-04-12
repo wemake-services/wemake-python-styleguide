@@ -83,7 +83,7 @@ flake8-pytest-style = "^1.4"
 
 pytest-cov = "^2.11"
 coverage-conditional-plugin = "^0.3"
-pytest-randomly = "^3.5"
+pytest-randomly = "^3.7"
 pytest = "^6.2"
 snapshottest = "^0.6"
 hypothesis = "^6.9"
