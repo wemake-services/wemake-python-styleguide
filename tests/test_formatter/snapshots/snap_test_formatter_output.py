@@ -259,7 +259,7 @@ All errors: 0
 '''
 
 snapshots['test_ipynb formatter_ipynb'] = '''
-/home/marco/wemake-python-styleguide/tests/fixtures/notebook.ipynb
+tests/fixtures/notebook.ipynb
   3:1      DAR101 Missing parameter(s) in Docstring: - good_name
   3:1      DAR201 Missing "Returns" in Docstring: - return
   8:1      D103  Missing docstring in public function

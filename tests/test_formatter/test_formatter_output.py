@@ -19,6 +19,7 @@ Warning::
 """
 
 
+import os
 import subprocess
 
 import pytest
@@ -142,6 +143,9 @@ def test_ipynb(snapshot):
         encoding='utf8',
     )
     stdout, _ = process.communicate()
+
+    # nbQA output contains absolute path
+    stdout = stdout.replace(os.getcwd()+os.sep, '')
 
     snapshot.assert_match(
         _safe_output(stdout),
