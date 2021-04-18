@@ -145,7 +145,7 @@ def test_ipynb(snapshot):
     stdout, _ = process.communicate()
 
     # nbQA output contains absolute path
-    stdout = stdout.replace(os.getcwd()+os.sep, '')
+    stdout = stdout.replace(os.getcwd() + os.sep, '')
 
     snapshot.assert_match(
         _safe_output(stdout),
