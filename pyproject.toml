@@ -76,7 +76,6 @@ flake8-broken-line = "^0.3"
 flake8-rst-docstrings = ">=0.0.14,<0.1.2"
 pep8-naming = "^0.11"
 darglint = "^1.2"
-nbqa = "^0.7.0"
 
 [tool.poetry.dev-dependencies]
 nitpick = "^0.26"
@@ -111,3 +110,4 @@ tokelor = "^0.1"
 astpath = "^0.9"
 lxml = "^4.6"
 m2r2 = "^0.2"
+nbqa = "^0.7.0"
