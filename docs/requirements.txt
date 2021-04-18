@@ -1,14 +1,14 @@
 # This file is used to setup env
 # to generate documentation.
 
-sphinx==3.5.2
-sphinx_autodoc_typehints==1.11.1
+sphinx==3.5.3
+sphinx_autodoc_typehints==1.12.0
 sphinxcontrib-mermaid==0.6.3
 recommonmark==0.7.1
 m2r2==0.2.7
 added-value==0.15.0
 tomlkit==0.7.0
-docutils==0.16
+docutils==0.17
 
 # Dependencies of our linter that should be documented,
 # other dependencies are just ignored or

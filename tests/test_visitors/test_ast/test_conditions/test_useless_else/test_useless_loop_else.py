@@ -146,11 +146,15 @@ def test_else_that_can_be_removed(
 ):
     """Testing that extra ``else`` blocks can be removed."""
     tree = parse_ast_tree(mode(template.format(code1, code2)))
-
     visitor = UselessElseVisitor(default_options, tree=tree)
     visitor.run()
-
-    assert_errors(visitor, [UselessReturningElseViolation])
+    overrides = ['break']  # regression1958
+    if code1 in overrides:
+        # We might want to have an else statement
+        # if the loop contains a break statement
+        assert_errors(visitor, [])
+    else:
+        assert_errors(visitor, [UselessReturningElseViolation])
 
 
 @pytest.mark.parametrize('template', [
