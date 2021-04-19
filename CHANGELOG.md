@@ -23,6 +23,10 @@ Semantic versioning in our case means:
 
 - Fixes `UselessReturningElseViolation` to not report `else` with `break` #1958
 
+### Misc
+
+- Adds documentation (and test) for how to run project on Jupyter Notebooks
+
 
 ## 0.15.2
 
@@ -135,7 +139,6 @@ Semantic versioning in our case means:
   for missing calls to `self.generic_visit(node)` in AST visitors
 - Updates `poetry` version to `1.1`
 - Updates `reviewdog` version to `0.11.0` and adds `action-depup`
-- Adds documentation (and test) for how to run project on Jupyter Notebooks
 
 
 ## 0.14.0 aka The Walrus fighter
