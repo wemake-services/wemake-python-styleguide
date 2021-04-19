@@ -13,3 +13,4 @@
   stubs.rst
   pylint.rst
   extras.rst
+  jupyter_notebooks.rst

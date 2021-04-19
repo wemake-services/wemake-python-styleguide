@@ -23,6 +23,10 @@ Semantic versioning in our case means:
 
 - Fixes `UselessReturningElseViolation` to not report `else` with `break` #1958
 
+### Misc
+
+- Adds documentation (and test) for how to run project on Jupyter Notebooks
+
 
 ## 0.15.2
 
