@@ -51,6 +51,12 @@ class WrongRaiseVisitor(BaseNodeVisitor):
         'BaseException',
     ))
 
+    _bad_returning_nodes: ClassVar[AnyNodes] = (
+        ast.Return,
+        ast.Raise,
+        ast.Break,
+    )
+
     def visit_Raise(self, node: ast.Raise) -> None:
         """
         Checks how ``raise`` keyword is used.
@@ -60,6 +66,7 @@ class WrongRaiseVisitor(BaseNodeVisitor):
 
         """
         self._check_exception_type(node)
+        self._check_bare_raise(node)
         self.generic_visit(node)
 
     def _check_exception_type(self, node: ast.Raise) -> None:
@@ -70,6 +77,12 @@ class WrongRaiseVisitor(BaseNodeVisitor):
             self.add_violation(
                 BaseExceptionRaiseViolation(node, text=exception_name),
             )
+
+    def _check_bare_raise(self, node: ast.Raise) -> None:
+        parent = walk.is_contained_by(node, ast.Try)
+        if not parent:
+            print( " alsndasndasdnad. -> bhargavi " )
+            self.add_violation(InconsistentReturnViolation(node))
 
 
 @final
