@@ -45,6 +45,7 @@ Summary
    ImplicitDictGetViolation
    ImplicitNegativeIndexViolation
    SimplifiableReturningIfViolation
+   BareRaiseViolation
 
 Refactoring opportunities
 -------------------------
@@ -81,7 +82,7 @@ Refactoring opportunities
 .. autoclass:: ImplicitDictGetViolation
 .. autoclass:: ImplicitNegativeIndexViolation
 .. autoclass:: SimplifiableReturningIfViolation
-
+.. autoclass:: BareRaiseViolation
 """
 
 from typing_extensions import final
@@ -1233,3 +1234,33 @@ class SimplifiableReturningIfViolation(ASTViolation):
 
     error_template = 'Found simplifiable returning `if` condition in a function'
     code = 531
+
+@final
+class BareRaiseViolation(ASTViolation):
+    """
+    Forbid bare ``raise`` outside of ``except`` block.
+
+    Reasoning:
+        One could call a function from an except and have a bare raise 
+        inside but it is considered bad practice to have a 
+        bare raise outside of an except block.
+
+    Solution:
+        Always use a raise statement inside a parent except block.
+
+    Example::
+
+        # good
+        def smth():
+            try:
+                ...
+            except:
+                raise
+
+        # bad
+        def smth():
+            raise
+        
+    """
+    error_template = "Detect bare raise outside of except block"
+    code = 532

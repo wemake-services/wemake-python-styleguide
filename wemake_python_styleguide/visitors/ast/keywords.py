@@ -32,6 +32,7 @@ from wemake_python_styleguide.violations.consistency import (
     IncorrectYieldFromTargetViolation,
     MultipleContextManagerAssignmentsViolation,
 )
+from wemake_python_styleguide.violations.refactoring import BareRaiseViolation
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
@@ -63,6 +64,7 @@ class WrongRaiseVisitor(BaseNodeVisitor):
 
         Raises:
             RaiseNotImplementedViolation
+            BareRaiseViolation
 
         """
         self._check_exception_type(node)
@@ -79,10 +81,9 @@ class WrongRaiseVisitor(BaseNodeVisitor):
             )
 
     def _check_bare_raise(self, node: ast.Raise) -> None:
-        parent = walk.is_contained_by(node, ast.Try)
+        parent = walk.get_closest_parent(node, ast.ExceptHandler)
         if not parent:
-            print( " alsndasndasdnad. -> bhargavi " )
-            self.add_violation(InconsistentReturnViolation(node))
+            self.add_violation(BareRaiseViolation(node))
 
 
 @final
