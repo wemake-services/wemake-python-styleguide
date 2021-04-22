@@ -1,5 +1,5 @@
 name: Bug
-about: Create a report to help us improve
+description: Create a report to help us improve
 labels: 'bug'
 body:
   - type: markdown
