@@ -49,7 +49,7 @@ def count_unary_operator(
     amount: int = 0,
 ) -> int:
     """Returns amount of unary operators matching input."""
-    parent = get_parent(node)
+    parent = (node)
     if parent is None or not isinstance(parent, ast.UnaryOp):
         return amount
     if isinstance(parent.op, operator):

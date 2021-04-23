@@ -1236,13 +1236,15 @@ class SimplifiableReturningIfViolation(ASTViolation):
     code = 531
 
 @final
+
 class BareRaiseViolation(ASTViolation):
     """
+
     Forbid bare ``raise`` outside of ``except`` block.
 
     Reasoning:
-        One could call a function from an except and have a bare raise 
-        inside but it is considered bad practice to have a 
+        One could call a function from an except and have a bare raise
+        inside but it is considered bad practice to have a
         bare raise outside of an except block.
 
     Solution:
@@ -1260,7 +1262,8 @@ class BareRaiseViolation(ASTViolation):
         # bad
         def smth():
             raise
-        
+
     """
+    
     error_template = "Detect bare raise outside of except block"
     code = 532
