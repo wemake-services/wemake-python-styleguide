@@ -13,7 +13,7 @@ for example by running:
 
 .. code:: bash
 
-    $ nbqa flake8 notebook.ipynb --extend-ignore=NIP102,D100,E302,E305,E703
+    $ nbqa flake8 notebook.ipynb --extend-ignore=NIP102,D100,E302,E305,E703,WPS102,WPS114
 
 For example, if we have a file ``notebook.ipynb``
 
