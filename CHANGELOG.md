@@ -22,6 +22,7 @@ Semantic versioning in our case means:
 ### Bugfixes
 
 - Fixes `UselessReturningElseViolation` to not report `else` with `break` #1958
+- Fixes bare raise outside of except block #1974
 
 ### Misc
 
