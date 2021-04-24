@@ -788,3 +788,24 @@ matrix = [
    some(number) for numbers in matrix
    for number in numbers # noqa: WPS361
 ]
+
+def detect_bare_raise1():
+    """Function to check if the bare raise is detected."""  # noqa: DAR401
+    raise ValueError
+
+def check1():
+    """Calls detect_bare_raise1 function."""  # noqa: D401
+    detect_bare_raise1()
+
+def detect_bare_raise2():
+    """Function to check if the bare raise is detected."""  # noqa: DAR401
+    raise ZeroDivisionError
+
+def detect_bare_raise2_helper():
+    """Function to check if the bare raise is detected."""  # noqa: D401
+    try:
+        testvar = 1/0  # noqa: WPS344, F841
+    except ZeroDivisionError:
+        detect_bare_raise2()
+        raise ZeroDivisionError
+
