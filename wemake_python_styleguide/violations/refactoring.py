@@ -1235,11 +1235,11 @@ class SimplifiableReturningIfViolation(ASTViolation):
     error_template = 'Found simplifiable returning `if` condition in a function'
     code = 531
 
+
 @final
 
 class BareRaiseViolation(ASTViolation):
     """
-
     Forbid bare ``raise`` outside of ``except`` block.
 
     Reasoning:
@@ -1262,8 +1262,7 @@ class BareRaiseViolation(ASTViolation):
         # bad
         def smth():
             raise
-
     """
-    
-    error_template = "Detect bare raise outside of except block"
+
+    error_template = 'Detect bare raise outside of except block'
     code = 532
