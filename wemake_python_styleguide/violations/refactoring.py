@@ -1237,7 +1237,6 @@ class SimplifiableReturningIfViolation(ASTViolation):
 
 
 @final
-
 class BareRaiseViolation(ASTViolation):
     """
     Forbid bare ``raise`` outside of ``except`` block.
