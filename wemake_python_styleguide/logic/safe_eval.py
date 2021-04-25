@@ -14,7 +14,6 @@ def _convert_num(node: Optional[ast.AST]):
     elif isinstance(node, ast.Name):
         # We return string names as is, see how we return strings:
         return node.id
-    raise ValueError('malformed node or string: {0!r}'.format(node))
 
 
 def _convert_signed_num(node: Optional[ast.AST]):
