@@ -1261,6 +1261,9 @@ class BareRaiseViolation(ASTViolation):
         # bad
         def smth():
             raise
+
+    .. versionadded:: 0.15.3
+
     """
 
     error_template = 'Bare raise outside of except block detected'
