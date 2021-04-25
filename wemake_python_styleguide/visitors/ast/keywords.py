@@ -52,12 +52,6 @@ class WrongRaiseVisitor(BaseNodeVisitor):
         'BaseException',
     ))
 
-    _bad_returning_nodes: ClassVar[AnyNodes] = (
-        ast.Return,
-        ast.Raise,
-        ast.Break,
-    )
-
     def visit_Raise(self, node: ast.Raise) -> None:
         """
         Checks how ``raise`` keyword is used.
@@ -82,7 +76,7 @@ class WrongRaiseVisitor(BaseNodeVisitor):
 
     def _check_bare_raise(self, node: ast.Raise) -> None:
         parent = walk.get_closest_parent(node, ast.ExceptHandler)
-        if not parent:
+        if not parent and parent.exc is None:
             self.add_violation(BareRaiseViolation(node))
 
 

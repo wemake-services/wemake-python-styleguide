@@ -1242,12 +1242,12 @@ class BareRaiseViolation(ASTViolation):
     Forbid bare ``raise`` outside of ``except`` block.
 
     Reasoning:
-        One could call a function from an except and have a bare raise
-        inside but it is considered bad practice to have a
-        bare raise outside of an except block.
+        One could call a function from an ``except`` and have 
+        a bare ``raise`` inside but it is considered bad practice 
+        to have a bare ``raise`` outside of an ``except`` block.
 
     Solution:
-        Always use a raise statement inside a parent except block.
+        Use a ``raise`` statement inside a parent ``except`` block.
 
     Example::
 
@@ -1263,5 +1263,5 @@ class BareRaiseViolation(ASTViolation):
             raise
     """
 
-    error_template = 'Detect bare raise outside of except block'
+    error_template = 'Bare raise outside of except block detected'
     code = 532
