@@ -793,15 +793,3 @@ def detect_bare_raise1():
     """Function to check if the bare raise is detected."""
     raise
 
-def detect_bare_raise2_helper():
-    """Function to check if the bare raise is detected."""
-    raise ZeroDivisionError
-
-def detect_bare_raise2():
-    """Function to check if the bare raise is detected."""
-    try:
-        testvar = 1/0  # noqa: WPS344, F841
-    except ZeroDivisionError:
-        detect_bare_raise2()
-        raise ZeroDivisionError
-

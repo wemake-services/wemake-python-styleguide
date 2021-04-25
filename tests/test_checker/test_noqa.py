@@ -442,7 +442,7 @@ def test_noqa_fixture(absolute_path):
     )
     stdout, _ = process.communicate()
 
-    assert stdout.count('WPS') == 0
+    assert stdout.count('WPS') == 1
 
 
 def test_noqa_fixture_without_ignore(absolute_path):
