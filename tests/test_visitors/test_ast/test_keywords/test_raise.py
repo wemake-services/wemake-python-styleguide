@@ -4,6 +4,7 @@ from wemake_python_styleguide.violations.best_practices import (
     BaseExceptionRaiseViolation,
     RaiseNotImplementedViolation,
 )
+from wemake_python_styleguide.violations.refactoring import BareRaiseViolation
 from wemake_python_styleguide.visitors.ast.keywords import WrongRaiseVisitor
 
 raise_exception_method = """
@@ -130,3 +131,22 @@ def test_bare_raise(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+def test_bare_raise_no_except(
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+):
+    """Testing that bare `raise` is not allowed without an except block."""
+    code = """
+    def hello():
+        raise
+    hello()
+    """
+    tree = parse_ast_tree(code)
+
+    visitor = WrongRaiseVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [BareRaiseViolation])
