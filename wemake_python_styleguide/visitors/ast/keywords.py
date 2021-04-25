@@ -76,7 +76,7 @@ class WrongRaiseVisitor(BaseNodeVisitor):
 
     def _check_bare_raise(self, node: ast.Raise) -> None:
         parent = walk.get_closest_parent(node, ast.ExceptHandler)
-        if not parent and parent.exc is None:
+        if not parent and node.exc is None:
             self.add_violation(BareRaiseViolation(node))
 
 
