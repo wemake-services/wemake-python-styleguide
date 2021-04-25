@@ -1242,8 +1242,8 @@ class BareRaiseViolation(ASTViolation):
     Forbid bare ``raise`` outside of ``except`` block.
 
     Reasoning:
-        One could call a function from an ``except`` and have 
-        a bare ``raise`` inside but it is considered bad practice 
+        One could call a function from an ``except`` and have
+        a bare ``raise`` inside but it is considered bad practice
         to have a bare ``raise`` outside of an ``except`` block.
 
     Solution:
