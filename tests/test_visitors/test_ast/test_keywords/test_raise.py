@@ -18,6 +18,14 @@ def check_exception_without_call():
     raise {0}
 """
 
+raise_exception_with_except = """
+def check_exception_without_call():
+    try:
+        x = 1
+    except Exception:
+        raise {0}
+"""
+
 raise_exception_property = """
 class CheckAbstractMethods():
     @property
@@ -113,57 +121,25 @@ def test_raise_good_errors(
     assert_errors(visitor, [])
 
 
-def test_bare_raise(
+@pytest.mark.parametrize(('raise_statement', 'bare_option'), [
+    ("ValueError('1')", True),
+    ("ValueError('1')", False),
+    ('', True),
+])
+def test_bare_raise_correct(
     assert_errors,
     parse_ast_tree,
     default_options,
+    raise_statement,
+    bare_option,
 ):
-    """Testing that bare `raise` is allowed."""
-    code = """
-    try:
-        1 / 0
-    except Exception:
-        raise
-    """
-    tree = parse_ast_tree(code)
+    """Testing correct instances of `raise SomeException()` and bare `raise`."""
+    code = None
+    if bare_option:
+        code = raise_exception_with_except.format(raise_statement)
+    else:
+        code = raise_exception_function.format(raise_statement)
 
-    visitor = WrongRaiseVisitor(default_options, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [])
-
-
-def test_raise_except(
-    assert_errors,
-    parse_ast_tree,
-    default_options,
-):
-    """Testing that bare `raise` is not allowed without an except block."""
-    code = """
-    def hello():
-        try:
-            x = 1
-        except Exception:
-            raise ValueError('1')
-    """
-    tree = parse_ast_tree(code)
-
-    visitor = WrongRaiseVisitor(default_options, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [])
-
-
-def test_raise_no_except(
-    assert_errors,
-    parse_ast_tree,
-    default_options,
-):
-    """Testing that bare `raise` is not allowed without an except block."""
-    code = """
-    def hello():
-        raise ValueError('1')
-    """
     tree = parse_ast_tree(code)
 
     visitor = WrongRaiseVisitor(default_options, tree=tree)
@@ -178,10 +154,7 @@ def test_bare_raise_no_except(
     default_options,
 ):
     """Testing that bare `raise` is not allowed without an except block."""
-    code = """
-    def hello():
-        raise
-    """
+    code = raise_exception_raw.format('')
     tree = parse_ast_tree(code)
 
     visitor = WrongRaiseVisitor(default_options, tree=tree)

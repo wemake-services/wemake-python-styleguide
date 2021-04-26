@@ -791,5 +791,5 @@ matrix = [
 
 def detect_bare_raise1():
     """Function to check if the bare raise is detected."""
-    raise
+    raise # noqa: WPS532
 
