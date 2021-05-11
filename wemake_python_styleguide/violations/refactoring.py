@@ -717,7 +717,8 @@ class TypeCompareViolation(ASTViolation):
     Example::
 
         # Correct:
-        print(something, type(something))
+        if isinstance(something, int):
+            ...
 
         # Wrong:
         if type(something) == int:
