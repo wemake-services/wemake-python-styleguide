@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.logic.system import is_windows
 from wemake_python_styleguide.violations.best_practices import ShebangViolation
 from wemake_python_styleguide.visitors.tokenize import comments
 
@@ -151,6 +152,7 @@ def test_shebang_with_stdin(
     assert_errors(visitor, [])
 
 
+@pytest.mark.skipif(is_windows(), reason="windows hasn't shebang exe files")
 @pytest.mark.parametrize('template', [
     template_regular,
     template_with_leading_comment,

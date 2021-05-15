@@ -6,6 +6,9 @@ name: test
   workflow_dispatch:
 
 jobs:
+
+  # Linux
+
   build:
     runs-on: ubuntu-latest
     strategy:
@@ -32,18 +35,56 @@ jobs:
       uses: actions/cache@v2
       with:
         path: .venv
-        key: venv-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
+        key: venv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
     - name: Install dependencies
       run: |
         poetry config virtualenvs.in-project true
-        poetry run pip install -U pip
         poetry install
 
     - name: Run tests
-      run: |
-        make test
+      run: make test
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:
         file: ./coverage.xml
+
+  # Windows
+
+  build-win:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install curl and make
+      uses: crazy-max/ghaction-chocolatey@v1
+      with:
+        args: install curl make -y
+
+    - name: Set up cache
+      uses: actions/cache@v1
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('poetry.lock') }}
+
+    - name: Install poetry
+      uses: Gr1N/setup-poetry@v4
+
+    - name: Install dependencies
+      run: |
+        poetry config virtualenvs.in-project true
+        poetry install
+
+    - name: Run tests
+      run: make test
