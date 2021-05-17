@@ -81,7 +81,7 @@ darglint = "^1.2"
 nitpick = "^0.26"
 flake8-pytest-style = "^1.4"
 
-pytest-cov = "^2.11"
+pytest-cov = "^2.12"
 coverage-conditional-plugin = "^0.3"
 pytest-randomly = "^3.8"
 pytest = "^6.2"
