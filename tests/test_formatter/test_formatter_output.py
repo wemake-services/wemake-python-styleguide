@@ -124,7 +124,10 @@ def test_ipynb(snapshot):
     """All correct code should not raise any violations and no output."""
     filename = './tests/fixtures/notebook.ipynb'
     # Ignore error codes which don't apply to Jupyter Notebooks
-    cli_options = ['--extend-ignore', 'NIP102,D100,WPS102,WPS114,WPS124']
+    cli_options = [
+        '--extend-ignore',
+        'NIP102,D100,WPS102,WPS114,WPS116,WPS124',
+    ]
 
     process = subprocess.Popen(
         [
