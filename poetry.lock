@@ -956,7 +956,7 @@ icu = ["PyICU (>=1.0.0)"]
 
 [[package]]
 name = "nbqa"
-version = "0.8.1"
+version = "0.9.0"
 description = "Run any standard Python code quality tool on a Jupyter Notebook"
 category = "dev"
 optional = false
@@ -1699,7 +1699,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "d70f8f7774b784f888d4f78d1a2441362d7e1b562d9dc8bcc88812309e2b5765"
+content-hash = "e7825a736e92b6b4b871dab740717add8c5183c5bb34ea6297eb8844b5a4700e"
 
 [metadata.files]
 added-value = [
@@ -2178,8 +2178,8 @@ natsort = [
     {file = "natsort-7.1.1.tar.gz", hash = "sha256:00c603a42365830c4722a2eb7663a25919551217ec09a243d3399fa8dd4ac403"},
 ]
 nbqa = [
-    {file = "nbqa-0.8.1-py3-none-any.whl", hash = "sha256:ba3f37db22bba71e203979acb259dbe3675ebe8b7d1712664faf6069d5d3d66d"},
-    {file = "nbqa-0.8.1.tar.gz", hash = "sha256:44ec9129e0502465a8a1cd0ceaf69ad55c363a803d413ed6dc58c09f217ba13b"},
+    {file = "nbqa-0.9.0-py3-none-any.whl", hash = "sha256:18068402a544ee89176d538ff13c3dff6adf7fdcd7ea10cac104efc0c02787d9"},
+    {file = "nbqa-0.9.0.tar.gz", hash = "sha256:dfd8ebcad7334901bab218ffb3777642d848ddf49a4dd6f61d05516bed03aecf"},
 ]
 networkx = [
     {file = "networkx-2.5-py3-none-any.whl", hash = "sha256:8c5812e9f798d37c50570d15c4a69d5710a18d77bafc903ee9c5fba7454c616c"},
@@ -2520,6 +2520,7 @@ wasmer = [
     {file = "wasmer-1.0.0-cp38-cp38-manylinux2010_x86_64.whl", hash = "sha256:a08be93aff695ce3be871994f726716b68bef36bd583bccad75778359cd273df"},
     {file = "wasmer-1.0.0-cp38-none-win_amd64.whl", hash = "sha256:8b13214b5dcc84d43f4c44e2309442497f19137561afada7f34babad89365355"},
     {file = "wasmer-1.0.0-cp39-cp39-macosx_10_7_x86_64.whl", hash = "sha256:1fada13fb536f44e12d7c98c557f5b7a55df94389d3cb90964193dcc8e16f0fa"},
+    {file = "wasmer-1.0.0-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:f390a54e26775456602f21d5d7d62dbad487f6a1022cab4379d7eac2c812d7ce"},
     {file = "wasmer-1.0.0-cp39-cp39-manylinux2010_x86_64.whl", hash = "sha256:04e5d51eed336be0e1bf1445aa032fc34466b77220c26732b8990df872f29e92"},
     {file = "wasmer-1.0.0-cp39-none-win_amd64.whl", hash = "sha256:690c5ed46a98e91bc638f52a25e5011c5baa1ef0581f414018eb7aa0e7f844bc"},
     {file = "wasmer-1.0.0-py3-none-any.whl", hash = "sha256:427e9c5e5301a453a09b8b9ceb8c793d85411b8f45e54c9c0d801566dd8d214e"},
