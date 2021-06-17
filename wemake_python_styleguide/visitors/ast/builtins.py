@@ -1,7 +1,8 @@
 import ast
 import re
 import string
-from collections import Counter, Hashable, defaultdict
+from collections import Counter, defaultdict
+from collections.abc import Hashable
 from contextlib import suppress
 from typing import (
     ClassVar,
