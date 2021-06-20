@@ -788,3 +788,8 @@ matrix = [
    some(number) for numbers in matrix
    for number in numbers # noqa: WPS361
 ]
+
+def detect_bare_raise1():
+    """Function to check if the bare raise is detected."""
+    raise # noqa: WPS532
+
