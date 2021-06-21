@@ -8,7 +8,7 @@ style = "styles/nitpick-style-wemake.toml"
 
 [tool.poetry]
 name = "wemake-python-styleguide"
-version = "0.15.2"
+version = "0.15.3"
 description = "The strictest and most opinionated python linter ever"
 
 license = "MIT"
