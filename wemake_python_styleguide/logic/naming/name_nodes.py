@@ -74,11 +74,11 @@ def get_variables_from_node(node: ast.AST) -> List[str]:
 
     if naive_attempt:
         names.append(naive_attempt)
-    elif isinstance(node, ast.Tuple):
+    elif isinstance(node, ast.Tuple) and len(node.elts) > 1:
+        # If tuple has just a single variable, we want to ignore it:
+        # like `x = (x,)`
         for subnode in node.elts:
-            extracted_name = get_variables_from_node(subnode)
-            if extracted_name:
-                names.extend(extracted_name)
+            names.extend(get_variables_from_node(subnode))
     return names
 
 
@@ -100,7 +100,9 @@ def extract_name(node: ast.AST) -> Optional[str]:
 
     """
     if isinstance(node, ast.Starred):
-        node = node.value
+        return extract_name(node.value)
+    if isinstance(node, ast.UnaryOp):
+        return extract_name(node.operand)
     if isinstance(node, ast.Name):
         return node.id
     return None
