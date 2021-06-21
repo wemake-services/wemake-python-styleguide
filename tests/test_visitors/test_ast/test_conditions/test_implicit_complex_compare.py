@@ -7,7 +7,7 @@ from wemake_python_styleguide.visitors.ast.conditions import (
     ImplicitBoolPatternsVisitor,
 )
 
-# Wrong:
+# Won't match our rule with any values:
 
 less_or_less = '{0} < {1} or {2} < {3}'
 less_or_more = '{0} < {1} or {2} > {3}'
@@ -25,7 +25,7 @@ moreeq_or_more = '{0} >= {1} or {2} > {3}'
 more_or_moreeq = '{0} > {1} or {2} >= {3}'
 moreeq_or_moreeq = '{0} >= {1} or {2} >= {3}'
 
-# Correct:
+# Will match our rule with some values:
 
 more_and_more = '{0} > {1} and {2} > {3}'  # a > b > c
 less_and_less = '{0} < {1} and {2} < {3}'  # a < b < c
@@ -74,6 +74,8 @@ moreq_and_lesseq = '{0} >= {1} and {2} <= {3}'
     ('1', 'a', 'a', '10'),
     ('1', 'a', 'a', 'b'),
     ('1', 'a', 'a', '10 and call()'),
+    # regression 2071
+    ('len(names)', '1', 'len(var_values)', '1'),
 ])
 def test_implicit_complex_compare(
     code,
