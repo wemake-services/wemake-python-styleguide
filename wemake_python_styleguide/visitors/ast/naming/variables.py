@@ -91,6 +91,11 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
             return  # This is not a variable, but a class property
 
         var_values = name_nodes.get_variables_from_node(node.value)
+        if len(names) <= 1 and len(var_values) > 1:
+            # It means that we have something like `x = (y, z)`
+            # or even `x = (x, y)`, which is also fine. See #1807
+            return
+
         for var_name, var_value in itertools.zip_longest(names, var_values):
             if var_name == var_value:
                 self.add_violation(

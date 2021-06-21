@@ -71,6 +71,22 @@ class MyClass(object):
     MyValue = MyValue
 """
 
+# regression 1807
+right_tuplelize1 = 'my_var = (my_var,)'
+right_tuplelize2 = 'my_var = (other,)'
+right_tuplelize3 = 'my_var = (my_var, my_var)'
+right_tuplelize4 = 'my_var = (my_var, other)'
+right_tuplelize5 = 'my_var = (other, my_var)'
+
+# regression 1874
+right_swap1 = 'dx, dy = -dy, dx'
+right_swap2 = 'dy, dx = dx, -dy'
+right_swap3 = 'dx, dy = --dy, dx'
+right_swap4 = 'dx, dy = +dy, -dx'
+right_swap5 = 'dx, dy = dy, dx'
+right_swap6 = 'dy, dx = dx, dy'
+
+
 # Wrong:
 
 wrong_fragment = """
@@ -240,6 +256,17 @@ def test_self_variable_reassignment_triple(
     right_parts_unused3,
     right_parts_unused4,
     right_class_reassignment,
+    right_tuplelize1,
+    right_tuplelize2,
+    right_tuplelize3,
+    right_tuplelize4,
+    right_tuplelize5,
+    right_swap1,
+    right_swap2,
+    right_swap3,
+    right_swap4,
+    right_swap5,
+    right_swap6,
 ])
 def test_correct_variable_reassignment(
     assert_errors,
