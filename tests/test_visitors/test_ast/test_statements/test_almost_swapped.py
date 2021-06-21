@@ -24,10 +24,16 @@ a = b
 b = temp
 """
 
+wrong_double_swap = """
+dx, dy = dy, dx
+dx, dy = dy, dx
+"""
+
 
 @pytest.mark.parametrize('code', [
     wrong_swapped_variables,
     wrong_swapped_variables_with_temp,
+    wrong_double_swap,
 ])
 def test_wrong_swapped_variables(
     assert_errors,

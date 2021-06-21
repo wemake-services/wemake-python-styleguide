@@ -196,7 +196,6 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
 
             if len(previous_var & current_var) == 1:
                 current_var ^= previous_var
-
             previous_var = current_var
 
     def _check_useless_node(
