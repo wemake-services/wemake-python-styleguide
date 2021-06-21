@@ -159,6 +159,12 @@ def some():
     return x[0], y, z
 """
 
+correct_example24 = """
+def some():
+    x = 1
+    return -x
+"""
+
 # Wrong:
 
 wrong_example1 = """
@@ -375,6 +381,7 @@ def test_wrong_return_variable(
     correct_example21,
     correct_example22,
     correct_example23,
+    correct_example24,
 ])
 def test_correct_return_statements(
     assert_errors,
