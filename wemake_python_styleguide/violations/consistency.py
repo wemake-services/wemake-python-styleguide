@@ -86,6 +86,7 @@ Summary
    RawStringNotNeededViolation
    InconsistentComprehensionViolation
    AssignToSliceViolation
+   UnsafeGeneratorExpressionViolation
 
 Consistency checks
 ------------------
@@ -153,6 +154,7 @@ Consistency checks
 .. autoclass:: RawStringNotNeededViolation
 .. autoclass:: InconsistentComprehensionViolation
 .. autoclass:: AssignToSliceViolation
+.. autoclass:: UnsafeGeneratorExpressionViolation
 
 """
 
@@ -2343,3 +2345,37 @@ class AssignToSliceViolation(ASTViolation):
 
     error_template = 'Found assignment to a subscript slice'
     code = 362
+
+
+@final
+class UnsafeGeneratorExpressionViolation(ASTViolation):
+    """
+    Forbids the reassignment of variables that affect the generator expression.
+
+    Reasoning:
+        Reassigning values to variables that affect a generator expression
+        before the generator expression is used will produce a different
+        result from what it is expected.
+
+    Solution:
+        Either do not reassign new values to the variables that affect the
+        generator expression or implement it before reassigning.
+
+    Example:
+        # Correct
+        a = 1
+        b = (a * i for i in range(5))
+        c = (sum(b))
+
+        # Incorrect
+        a = 1
+        b = (a * i for i in range(5))
+        a = 2
+        c = (sum(c))
+
+    .. versionadded:: 0.15.0
+
+    """
+
+    error_template = 'Found an unsafe generator expression'
+    code = 363
