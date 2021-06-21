@@ -74,8 +74,6 @@ moreq_and_lesseq = '{0} >= {1} and {2} <= {3}'
     ('1', 'a', 'a', '10'),
     ('1', 'a', 'a', 'b'),
     ('1', 'a', 'a', '10 and call()'),
-    # regression 2071
-    ('len(names)', '1', 'len(var_values)', '1'),
 ])
 def test_implicit_complex_compare(
     code,
