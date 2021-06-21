@@ -27,6 +27,7 @@ Semantic versioning in our case means:
 - Fixes `ReassigningVariableToItselfViolation` to extract variables
   from unary operators #1874
 - Fixes that `f'{some:,}'` was considered too complex #1921
+- Fixes that `range(len(x))` was not allowed even outside `for` loops #1883
 
 ### Misc
 

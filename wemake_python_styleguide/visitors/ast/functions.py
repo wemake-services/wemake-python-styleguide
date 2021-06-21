@@ -4,7 +4,11 @@ from typing import ClassVar, Dict, FrozenSet, List, Mapping, Union
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import FunctionNodes, TextNodes
+from wemake_python_styleguide.compat.aliases import (
+    ForNodes,
+    FunctionNodes,
+    TextNodes,
+)
 from wemake_python_styleguide.compat.functions import get_posonlyargs
 from wemake_python_styleguide.constants import (
     FUNCTIONS_BLACKLIST,
@@ -240,6 +244,8 @@ class WrongFunctionCallContextVisitor(base.BaseNodeVisitor):
             self.add_violation(TypeCompareViolation(node))
 
     def _check_range_len(self, node: ast.Call) -> None:
+        if not isinstance(nodes.get_parent(node), ForNodes):
+            return
         if not functions.given_function_called(node, {'range'}):
             return
 
