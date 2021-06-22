@@ -109,6 +109,7 @@ Semantic versioning in our case means:
 - Forbids inconsistent structuring of multiline comprehensions
 - Forbids to use unpythonic getters and setters such as `get_attribute` or `set_attribute`
 - Now `credits`, `license`, and `copyright` builtins are free to shadow
+- Forbids the reassignment of variables that affect the generator expression
 
 ### Bugfixes
 
