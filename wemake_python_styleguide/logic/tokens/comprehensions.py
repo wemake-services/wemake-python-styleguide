@@ -49,14 +49,11 @@ class Compehension(object):
 
         We also check that each compehension is analyzed only once.
         """
-        if self._checked:
-            return False  # Checked comprehensions should not be rechecked
-
         return (
             self.expr is not None and
             bool(self.fors) and
-            len(self.fors) == len(self.ins) and
-            len(self.ins) == len(self.in_exprs)
+            len(self.fors) == len(self.ins) == len(self.in_exprs) and
+            not self._checked
         )
 
     def is_valid(self) -> bool:
