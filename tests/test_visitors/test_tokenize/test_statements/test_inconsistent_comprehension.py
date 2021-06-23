@@ -125,6 +125,16 @@ def wrapper():
     ]
 """
 
+# regression 2075
+correct_list_multiline_in = """
+def wrapper():
+    rules = [
+        rule for rule in (
+            config.get_option(self._rules_opt_name).items()
+        )
+    ]
+"""
+
 
 # Dictionary comprehension tests
 
@@ -152,6 +162,16 @@ def wrapper():
         key:val
         for (key, val) in matrix
         if key > 0
+    }
+"""
+
+# regression 2075
+correct_dict_multiline_in = """
+def wrapper():
+    rules = {
+        rule: 1 for rule in (
+            config.get_option(self._rules_opt_name).items()
+        )
     }
 """
 
@@ -208,6 +228,15 @@ def wrapper():
 correct_set_nested_comprehension3 = """
 def wrapper():
     {s for s in (1, 2, 3, 4)}
+"""
+
+correct_set_multiline_in = """
+def wrapper():
+    rules = {
+        rule for rule in (
+            config.get_option(self._rules_opt_name).items()
+        )
+    }
 """
 
 
@@ -280,6 +309,15 @@ def wrapper():
     )
 """
 
+correct_gen_multiline_in = """
+def wrapper():
+    rules = (
+        rule for rule in (
+            config.get_option(self._rules_opt_name).items()
+        )
+    )
+"""
+
 
 @pytest.mark.parametrize('code', [
     correct_list_empty,
@@ -297,11 +335,13 @@ def wrapper():
     correct_list_final_conditional_in,
     correct_list_two_compehensions1,
     correct_list_two_compehensions2,
+    correct_list_multiline_in,
     correct_dict_empty,
     correct_dict_full,
     correct_dict_one_line_comprehension,
     correct_dict_other_one_line_comprehension,
     correct_dict_well_spaced_comprehension,
+    correct_dict_multiline_in,
     correct_set,
     correct_set_one_line_comprehension,
     correct_set_other_one_line_comprehension,
@@ -310,6 +350,7 @@ def wrapper():
     correct_set_nested_comprehension2,
     correct_set_nested_comprehension3,
     correct_set_complex_comprehension,
+    correct_set_multiline_in,
     correct_gen_one_line_comprehension,
     correct_gen_ternary_in_comprehension1,
     correct_gen_ternary_in_comprehension2,
@@ -319,6 +360,7 @@ def wrapper():
     correct_gen_ternary_in_comprehension6,
     correct_gen_other_one_line_comprehension,
     correct_gen_well_spaced_comprehension,
+    correct_gen_multiline_in,
 ])
 def test_correct_comprehension(
     parse_tokens,
@@ -336,7 +378,7 @@ def test_correct_comprehension(
     assert_errors(visitor, [])
 
 
-# Should raise flag
+# Should raise a violation
 
 # List comprehension tests
 
@@ -420,6 +462,15 @@ def wrapper():
     ]
 """
 
+wrong_list_multiline_in = """
+def wrapper():
+    comp = [
+        x for b in
+        some()
+    ]
+"""
+
+
 # Dictionary comprehension tests
 
 wrong_dict_almost_one_line = """
@@ -455,6 +506,14 @@ def wrapper():
     }
 """
 
+wrong_dict_multiline_in = """
+def wrapper():
+    comp = {
+        x: 1 for b in
+        attr.some()
+    }
+"""
+
 
 # Set comprehensions
 
@@ -479,6 +538,14 @@ def wrapper():
     {
         some(number)
         for number in matrix if number > 0
+    }
+"""
+
+wrong_set_multiline_in = """
+def wrapper():
+    comp = {
+        x for b in
+        some()
     }
 """
 
@@ -509,6 +576,14 @@ def wrapper():
     )
 """
 
+wrong_gen_multiline_in = """
+def wrapper():
+    comp = (
+        x for b in
+        some
+    )
+"""
+
 
 @pytest.mark.parametrize('code', [
     wrong_list_almost_one_line,
@@ -520,16 +595,20 @@ def wrapper():
     wrong_list_split_multiple_ifs3,
     wrong_list_two_compehensions1,
     wrong_list_two_compehensions2,
+    wrong_list_multiline_in,
     wrong_dict_almost_one_line,
     wrong_dict_not_one_line_no_paren,
     wrong_dict_two_lines_in_one,
     wrong_dict_for_and_if,
+    wrong_dict_multiline_in,
     wrong_set_almost_one_line,
     wrong_set_two_fors,
     wrong_set_for_and_if,
+    wrong_set_multiline_in,
     wrong_gen_almost_one_line,
     wrong_gen_two_fors,
     wrong_gen_for_and_if,
+    wrong_gen_multiline_in,
 ])
 def test_wrong_comprehension_consistency(
     parse_tokens,

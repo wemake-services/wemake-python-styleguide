@@ -17,6 +17,14 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions signigicantly, etc.
 
 
+## {{ Next Version }}
+
+### Bugfixes
+
+- Fixes thah `InconsistentComprehensionViolation` was ignoring
+  misalligned `in` expressions #2075
+
+
 ## 0.15.3
 
 ### Bugfixes

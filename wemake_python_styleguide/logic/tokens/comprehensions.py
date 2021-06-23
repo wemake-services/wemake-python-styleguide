@@ -18,12 +18,18 @@ class Compehension(object):
 
     left_bracket: tokenize.TokenInfo
     expr: Optional[tokenize.TokenInfo] = None
+
+    # `for` keywords
     fors: List[tokenize.TokenInfo] = attr.ib(factory=list)
+
+    # `in` part, keywords and expressions
     ins: List[tokenize.TokenInfo] = attr.ib(factory=list)
-    ifs: List[tokenize.TokenInfo] = attr.ib(factory=list)
+    in_exprs: List[tokenize.TokenInfo] = attr.ib(factory=list)
+
+    # Condition part:
+    _ifs: List[tokenize.TokenInfo] = attr.ib(factory=list)
 
     async_broken: bool = False
-
     _checked: bool = False
 
     def append_if(self, token: tokenize.TokenInfo) -> None:
@@ -35,7 +41,7 @@ class Compehension(object):
         In real comprehensions ``if`` are always after ``for``.
         """
         if self.fors:
-            self.ifs.append(token)
+            self._ifs.append(token)
 
     def is_ready(self) -> bool:
         """
@@ -43,14 +49,17 @@ class Compehension(object):
 
         We also check that each compehension is analyzed only once.
         """
+        if self._checked:
+            return False  # Checked comprehensions should not be rechecked
+
         return (
             self.expr is not None and
             bool(self.fors) and
             len(self.fors) == len(self.ins) and
-            not self._checked
+            len(self.ins) == len(self.in_exprs)
         )
 
-    def check(self) -> bool:
+    def is_valid(self) -> bool:
         """Checks that compehension definition is valid."""
         if self.async_broken:
             return False
@@ -75,8 +84,8 @@ class Compehension(object):
     def _check_for_in(self) -> bool:
         """Checks that all ``for`` and ``in`` tokens are aligned together."""
         return all(
-            for_.start[0] == in_.start[0]
-            for for_, in_ in zip(self.fors, self.ins)
+            for_.start[0] == in_.start[0] == in_expr.start[0]
+            for for_, in_, in_expr in zip(self.fors, self.ins, self.in_exprs)
         )
 
     def _check_fors(self, *, is_multiline: bool) -> bool:
@@ -101,9 +110,9 @@ class Compehension(object):
             last_for_line = self.fors[-1].start[0]
             return all(
                 if_.start[0] == last_for_line + index + 1
-                for index, if_ in enumerate(self.ifs)
+                for index, if_ in enumerate(self._ifs)
             )
         return all(
             if_.start[0] == self._first_for_line
-            for if_ in self.ifs
+            for if_ in self._ifs
         )

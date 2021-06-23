@@ -310,7 +310,7 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
     def visit_any_right_bracket(self, token: tokenize.TokenInfo) -> None:
         """Resets environment if right bracket is encountered."""
         previous_ctx = self._bracket_stack.pop()
-        if previous_ctx.is_ready() and not previous_ctx.check():
+        if previous_ctx.is_ready() and not previous_ctx.is_valid():
             self.add_violation(
                 InconsistentComprehensionViolation(previous_ctx.fors[-1]),
             )
@@ -331,6 +331,7 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
             self._apply_expr(token)
             self._current_ctx.fors.append(token)
         elif token.string == 'in':
+            self._apply_in_expr(token)
             self._current_ctx.ins.append(token)
         elif token.string == 'if':
             self._current_ctx.append_if(token)
@@ -354,8 +355,8 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
         if self._current_ctx.expr:
             return  # we set this value only once
 
-        # What we do here is simple:
-        # 1. We find opening bracket
+        # What we do here:
+        # 1. We find an opening bracket
         # 2. Then we find the next meaningful (non-NL) token
         #    that represents the actual expr of a comprehension
         # 3. We assign it to the current comprehension structure
@@ -364,3 +365,13 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
             self.file_tokens,
             token_index,
         )
+
+    def _apply_in_expr(self, token: tokenize.TokenInfo) -> None:
+        assert self._current_ctx  # noqa: S101
+
+        # This is not the whole expression, but we only need where it starts:
+        token_index = self.file_tokens.index(token)
+        self._current_ctx.in_exprs.append(next_meaningful_token(
+            self.file_tokens,
+            token_index,
+        ))
