@@ -15,9 +15,9 @@ sum_result = sum(expression) # noqa: WPS363
 """
 
 no_variables = """
-a = 1
-b = (i for i in range(5))
-c = sum(b)
+first_value = 1
+result = (index for index in range(5))
+c = sum(result)
 """
 
 single_use = """
@@ -31,9 +31,42 @@ result = sum((first_value * i for i in range(5)))
 first_value = 2
 """
 
+unsafe_string = """
+line = ['child','tall']
+suffix = 'ish'
+converted_words = (word + suffix for word in line)
+suffix = 'ash'
+print(list(converted_words))
+"""
+
+safe_string = """
+line = ['hello', 'world']
+suffix = 'rar'
+converted_words = (word + suffix for word in line)
+print(list(converted_words))
+"""
+
+unsafe_change_index = """
+values = [1, 2, 3, 4, 5]
+exponent = 5
+power_expr = (value * exponent for value in values)
+exponent = 10
+print(list(power_expr))
+"""
+
+safe_change_index = """
+values = [1, 2, 3, 4, 5]
+exponent = 5
+power_expr = (value * exponent for value in values)
+print(list(power_expr))
+exponent = 10
+"""
+
 
 @pytest.mark.parametrize('code', [
     unsafe_function,
+    unsafe_string,
+    unsafe_change_index,
 ])
 def test_unsafe_gen_expression(
     assert_errors,
@@ -53,6 +86,8 @@ def test_unsafe_gen_expression(
     single_use,
     single_use_variables_assigned,
     no_variables,
+    safe_string,
+    safe_change_index,
 ])
 def test_safe_gen_expression(
     assert_errors,
