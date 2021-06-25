@@ -2363,17 +2363,17 @@ class UnsafeGeneratorExpressionViolation(ASTViolation):
 
     Example:
         # Correct
-        a = 1
-        b = (a * i for i in range(5))
-        c = (sum(b))
+        suffix = 'ish'
+        converted_words = (word + suffix for word in line)
+        print(list(converted_words))
 
         # Incorrect
-        a = 1
-        b = (a * i for i in range(5))
-        a = 2
-        c = (sum(c))
+        suffix = 'ish'
+        converted_words = (word + suffix for word in line)
+        suffix = 'ash'
+        print(list(converted_words))
 
-    .. versionadded:: 0.15.0
+    .. versionadded:: 0.16.0
 
     """
 
