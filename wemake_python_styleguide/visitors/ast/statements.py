@@ -1,14 +1,5 @@
 import ast
-from typing import (
-    ClassVar,
-    List,
-    Mapping,
-    Optional,
-    Sequence,
-    Set,
-    Tuple,
-    Union,
-)
+from typing import ClassVar, List, Mapping, Optional, Sequence, Set, Union
 
 from typing_extensions import final
 
@@ -18,7 +9,7 @@ from wemake_python_styleguide.compat.aliases import (
     FunctionNodes,
     TextNodes,
 )
-from wemake_python_styleguide.logic import nodes
+from wemake_python_styleguide.logic import nodes, walk
 from wemake_python_styleguide.logic.arguments import call_args
 from wemake_python_styleguide.logic.naming import name_nodes
 from wemake_python_styleguide.logic.tree import functions, strings
@@ -517,99 +508,106 @@ class UnsafeGeneratorExpressionVisitor(BaseNodeVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Creates the lists that would hold the variables."""
         super().__init__(*args, **kwargs)
-        self.inside_variables: List[str] = []
-        self.created_variables: List[str] = []
-        self.affecting_variables: List[str] = []
+        self._call_names: List[ast.Name] = []
+        self._targets: List[ast.Name] = []
+        self._expr_targets: List[ast.Name] = []
+        self._generators: List[ast.GeneratorExp] = []
+        self._gen_call: List[ast.Name] = []
+        self._var_binop: List[ast.Name] = []
 
-    def visit(self, node: ast.AST) -> None:
-        """Checks if the generator expression has affecting variables."""
-        assignments = [
-            sub_node
-            for sub_node in ast.walk(node)
-            if isinstance(sub_node, ast.Assign)
-        ]
-        generators = [
-            generator.value
-            for generator in assignments
-            if isinstance(generator.value, ast.GeneratorExp)
-        ]
+    def visit_Call(self, node: ast.Call) -> None:
+        """Collects all called variables."""
+        for arg in node.args:
+            if isinstance(arg, ast.Name):
+                self._call_names.append(arg)
 
-        if generators:
-            for generator in generators:
-                self._get_inside_variables(generator)
-                self._check_generator_variables(generator)
-                
-                inside = self.inside_variables
-                created = self.created_variables
+        self.generic_visit(node)
 
-                self.affecting_variables = ([
-                    name
-                    for name in inside
-                    if name not in inside or name not in created
-                ])
+    def visit_Assign(self, node: ast.Assign) -> None:
+        """Collects all the information."""
+        for target in node.targets:
+            if isinstance(target, ast.Name):
+                if isinstance(node.value, ast.GeneratorExp):
+                    self._generators.append(node.value)
+                    self._expr_targets.append(target)
+                else:
+                    self._targets.append(target)
 
-                if self.affecting_variables:
-                    self._check_gen_usage(node, assignments)
+        self.generic_visit(node)
 
-    def _get_inside_variables(self, node: ast.GeneratorExp) -> None:
-        sub_node = node.elt
-        self.inside_variables = [
-            op_node.id
-            for op_node in ast.walk(sub_node)
-            if isinstance(op_node, ast.Name)
+    def _get_gen_call(self) -> None:
+        """Retrieves the generator expressions called."""
+        call_names_id = [
+            name.id
+            for name in self._call_names
         ]
 
-    def _check_generator_variables(self, node: ast.GeneratorExp) -> None:
-        for generator in node.generators:
-            self._check_comprehension(generator)
+        expr_targets_id = [
+            name.id
+            for name in self._expr_targets
+        ]
 
-    def _check_comprehension(self, node: ast.comprehension) -> None:
-        if isinstance(node.target, ast.Name):
-            self._get_created_variables(node.target)
+        gen_called_id = [
+            gen_called
+            for gen_called in expr_targets_id
+            if gen_called in call_names_id
+        ]
 
-    def _get_created_variables(self, node: ast.Name) -> None:
-        if isinstance(node.ctx, ast.Store):
-            self.created_variables.append(node.id)
+        self._gen_call = [
+            name
+            for name in self._call_names
+            if name.id in gen_called_id
+        ]
 
-    def _get_gen_positions(
-        self,
-        assignments: List[ast.Assign],
-    ) -> List[Tuple[str, int]]:
-        gen_positions = []
+    def _get_affecting_var(self, node: ast.GeneratorExp) -> List[ast.Name]:
+        """Obtain the variables that affect the generator expression."""
+        created_variables = list(walk.get_subnodes_by_type(node.elt, ast.Name))
 
-        for generator in assignments:
-            if isinstance(generator.value, ast.GeneratorExp):
-                for target in generator.targets:
-                    if isinstance(target, ast.Name):
-                        gen_target_id_lineno = self._get_id_lineno(target)
-                        gen_positions.append(gen_target_id_lineno)
+        inside_variables = list(
+            walk.get_subnodes_by_type(node.generators[0], ast.Name),
+        )
 
-        return gen_positions
+        inside_variables_id = [name.id for name in inside_variables]
+        created_variables_id = [name.id for name in created_variables]
 
-    def _get_id_lineno(self, node: ast.Name):
-        return (node.id, node.lineno)
+        affecting_variables_id = [
+            name_id
+            for name_id in created_variables_id
+            if name_id not in inside_variables_id
+        ]
 
-    def _check_gen_usage(self, node: ast.AST, assignments: List[ast.Assign]):
-        gen_positions = self._get_gen_positions(assignments)
+        return [
+            name
+            for name in created_variables
+            if name.id in affecting_variables_id
+        ]
 
-        gen_var_name = [name[0] for name in gen_positions]
+    def _check_unsafe(self, affecting_vars: List[ast.Name], start: int) -> None:
+        target_id = [
+            target.id
+            for target in self._expr_targets
+            if target.lineno == start
+        ]
 
-        called_gen_positions = []
+        end = [
+            call.lineno
+            for call in self._gen_call
+            if call.id == target_id[0]
+        ]
 
-        for sub_node in ast.walk(node):
-            if isinstance(sub_node, ast.Call):
-                for arg in sub_node.args:
-                    if isinstance(arg, ast.Name):
-                        if arg.id in gen_var_name:
-                            called_gen_positions.append((arg.id, arg.lineno))
+        for affect_var in affecting_vars:
+            for name in self._targets:
+                if name.id == affect_var.id and start < name.lineno < end[0]:
+                    self.add_violation(
+                        UnsafeGeneratorExpressionViolation(affect_var),
+                    )
 
-        pre_pivot = gen_positions[0][1]
-        pivot = called_gen_positions[0][1]
+    def _post_visit(self) -> None:
+        """Checks if there was an unsafe generator expression."""
+        if self._expr_targets:
+            self._get_gen_call()
 
-        for sub_node in ast.walk(node):
-            if isinstance(sub_node, ast.Assign):
-                for target in sub_node.targets:
-                    if isinstance(target, ast.Name):
-                        if target.id in self.affecting_variables:
-                            if target.lineno > pre_pivot and target.lineno < pivot:
-                                self.add_violation(UnsafeGeneratorExpressionViolation(sub_node))
+            if self._gen_call:
+                for generator in self._generators:
+                    affecting_vars = self._get_affecting_var(generator)
+                    self._check_unsafe(affecting_vars, generator.lineno)
