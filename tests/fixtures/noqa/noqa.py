@@ -789,7 +789,8 @@ matrix = [
    for number in numbers # noqa: WPS361
 ]
 
+ex_values = [1, 2, 3, 4, 5]
 first_value = 1
-expression = (first_value * index for index in range(5)) # noqa: WPS441
-first_value = 2 # noqa: WPS363
+expression = (first_value * ex_value for ex_value in ex_values)  # noqa: WPS363
+first_value = 2
 sum_result = sum(expression)
