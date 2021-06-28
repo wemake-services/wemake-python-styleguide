@@ -524,7 +524,7 @@ class UnsafeGeneratorExpressionVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def visit_Assign(self, node: ast.Assign) -> None:
-        """Collects all the information."""
+        """Collects all ast.Name and ast.GeneratorExp in targets."""
         for target in node.targets:
             if isinstance(target, ast.Name):
                 if isinstance(node.value, ast.GeneratorExp):
@@ -535,29 +535,12 @@ class UnsafeGeneratorExpressionVisitor(BaseNodeVisitor):
 
         self.generic_visit(node)
 
-    def _get_gen_call(self) -> None:
-        """Retrieves the generator expressions called."""
-        call_names_id = [
-            name.id
-            for name in self._call_names
-        ]
+    def visit_AugAssign(self, node: ast.AugAssign) -> None:
+        """Collects all ast.Name in target."""
+        if isinstance(node.target, ast.Name):
+            self._targets.append(node.target)
 
-        expr_targets_id = [
-            name.id
-            for name in self._expr_targets
-        ]
-
-        gen_called_id = [
-            gen_called
-            for gen_called in expr_targets_id
-            if gen_called in call_names_id
-        ]
-
-        self._gen_call = [
-            name
-            for name in self._call_names
-            if name.id in gen_called_id
-        ]
+        self.generic_visit(node)
 
     def _get_affecting_var(self, node: ast.GeneratorExp) -> List[ast.Name]:
         """Obtain the variables that affect the generator expression."""
@@ -605,7 +588,27 @@ class UnsafeGeneratorExpressionVisitor(BaseNodeVisitor):
     def _post_visit(self) -> None:
         """Checks if there was an unsafe generator expression."""
         if self._expr_targets:
-            self._get_gen_call()
+            call_names_id = [
+                name.id
+                for name in self._call_names
+            ]
+
+            expr_targets_id = [
+                name.id
+                for name in self._expr_targets
+            ]
+
+            gen_called_id = [
+                gen_called
+                for gen_called in expr_targets_id
+                if gen_called in call_names_id
+            ]
+
+            self._gen_call = [
+                name
+                for name in self._call_names
+                if name.id in gen_called_id
+            ]
 
             if self._gen_call:
                 for generator in self._generators:
