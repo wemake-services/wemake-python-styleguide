@@ -2600,5 +2600,5 @@ class UnspecifiedEncodingViolation(ASTViolation):
     .. versionadded:: 0.16.0
     """
 
-    error_template = 'Found unespecified encoding'
+    error_template = 'Found `open()` call without specified encoding'
     code = 467
