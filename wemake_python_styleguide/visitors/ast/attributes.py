@@ -80,32 +80,26 @@ class WrongAttributeVisitor(BaseNodeVisitor):
 class EncodingVisitor(BaseNodeVisitor):
     """Check if open function has the encoding parameter."""
 
-    def __init__(self, *args, **kwargs) -> None:
-        """Creates the booleans indicating encoding was found."""
-        super().__init__(*args, **kwargs)
-        self._encoding = False
-
-    def visit_Call(self, node: ast.Call):
+    def visit_Call(self, node: ast.Call) -> None:
         """Visit calls and finds if it is an open function."""
         if isinstance(node.func, ast.Name) and node.func.id == 'open':
-            if node.keywords:
-                for keyword in node.keywords:
-                    self._check_keywords(keyword)
-            if node.args:
-                self._check_args(node.args)
+            is_positional = False
+            is_keyword = False
 
-            if self._encoding is False:
+            if node.keywords:
+                is_keyword = self._check_keywords(node.keywords)
+            if node.args:
+                is_positional = self._check_args(node.args)
+
+            if not is_positional and not is_keyword:
                 self.add_violation(UnspecifiedEncodingViolation(node))
 
         self.generic_visit(node)
 
-    def _check_keywords(self, node: ast.keyword):
+    def _check_keywords(self, keywords: List[ast.keyword]) -> bool:
         """Check if there is an encoding parameter."""
-        if node.arg == 'encoding':
-            self._encoding = True
+        return bool(filter(lambda keyword: keyword.arg == 'encoding', keywords))
 
-    def _check_args(self, node: List[ast.expr]):
+    def _check_args(self, positionals: List[ast.expr]) -> bool:
         """Check if there is an encoding parameter."""
-        if len(node) > 3:
-            if isinstance(node[3], ast.Constant):
-                self._encoding = True
+        return len(positionals) > 3 and isinstance(positionals[3], ast.Constant)
