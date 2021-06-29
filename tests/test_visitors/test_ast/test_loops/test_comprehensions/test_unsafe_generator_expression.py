@@ -78,12 +78,43 @@ print(list(power_expr))
 exponent += 1
 """
 
+unsafe_self = """
+values = [1, 2, 3, 4, 5]
+self.exponent = 5
+power_expr = (value * self.exponent for value in values)
+self.exponent = 1
+print(list(power_expr))
+"""
+
+safe_self = """
+values = [1, 2, 3, 4, 5]
+self.exponent = 5
+power_expr = (value * self.exponent for value in values)
+print(list(power_expr))
+self.exponent = 1
+"""
+
+unsafe_append = """
+values = [1, 2, 3, 4, 5]
+power_expr = (value for value in values)
+values.append(6)
+print(list(power_expr))
+"""
+
+safe_append = """
+values = [1, 2, 3, 4, 5]
+power_expr = (value for value in values)
+print(list(power_expr))
+values.append(6)
+"""
+
 
 @pytest.mark.parametrize('code', [
     unsafe_function,
     unsafe_string,
     unsafe_change_index,
     unsafe_aug_value,
+    unsafe_self,
 ])
 def test_unsafe_gen_expression(
     assert_errors,
@@ -106,6 +137,7 @@ def test_unsafe_gen_expression(
     safe_string,
     safe_change_index,
     safe_aug_value,
+    safe_self,
 ])
 def test_safe_gen_expression(
     assert_errors,
