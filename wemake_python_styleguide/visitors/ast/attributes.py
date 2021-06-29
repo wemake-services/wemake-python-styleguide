@@ -4,6 +4,7 @@ from typing import ClassVar, FrozenSet, List
 from typing_extensions import final
 
 from wemake_python_styleguide.logic.naming import access
+from wemake_python_styleguide.logic.tree.functions import given_function_called
 from wemake_python_styleguide.violations.best_practices import (
     ProtectedAttributeViolation,
     UnspecifiedEncodingViolation,
@@ -82,14 +83,9 @@ class EncodingVisitor(BaseNodeVisitor):
 
     def visit_Call(self, node: ast.Call) -> None:
         """Visit calls and finds if it is an open function."""
-        if isinstance(node.func, ast.Name) and node.func.id == 'open':
-            is_positional = False
-            is_keyword = False
-
-            if node.keywords:
-                is_keyword = self._check_keywords(node.keywords)
-            if node.args:
-                is_positional = self._check_args(node.args)
+        if given_function_called(node, {'open'}):
+            is_keyword = self._check_keywords(node.keywords)
+            is_positional = self._check_args(node.args)
 
             if not is_positional and not is_keyword:
                 self.add_violation(UnspecifiedEncodingViolation(node))
@@ -98,7 +94,7 @@ class EncodingVisitor(BaseNodeVisitor):
 
     def _check_keywords(self, keywords: List[ast.keyword]) -> bool:
         """Check if there is an encoding parameter."""
-        return bool(filter(lambda keyword: keyword.arg == 'encoding', keywords))
+        return any(keyword.arg == 'encoding' for keyword in keywords)
 
     def _check_args(self, positionals: List[ast.expr]) -> bool:
         """Check if there is an encoding parameter."""
