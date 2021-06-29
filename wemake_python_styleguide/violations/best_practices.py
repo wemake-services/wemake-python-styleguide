@@ -83,6 +83,7 @@ Summary
    EmptyCommentViolation
    BitwiseAndBooleanMixupViolation
    NewStyledDecoratorViolation
+   UnspecifiedEncodingViolation
 
 Best practices
 --------------
@@ -154,6 +155,7 @@ Best practices
 .. autoclass:: EmptyCommentViolation
 .. autoclass:: BitwiseAndBooleanMixupViolation
 .. autoclass:: NewStyledDecoratorViolation
+.. autoclass:: UnspecifiedEncodingViolation
 
 """
 
@@ -2572,3 +2574,31 @@ class NewStyledDecoratorViolation(ASTViolation):
 
     error_template = 'Found new-styled decorator'
     code = 466
+
+
+@final
+class UnspecifiedEncodingViolation(ASTViolation):
+    """
+    Forbid using open without specifying encoding.
+
+    Reasoning:
+        Inspired by https://www.python.org/dev/peps/pep-0597/
+        Not specifying the encoding could be considered a bug.
+        Developers using macOS or Linux may forget that the
+        default encoding is not always UTF-8.
+
+    Solution:
+        Specify the encoding in open.
+
+    Example:
+        # Correct:
+        open('filename.txt', encoding='utf8')
+
+        # Wrong:
+        with open('filename.txt')
+
+    .. versionadded:: 0.16.0
+    """
+
+    error_template = 'Found unespecified encoding'
+    code = 467

@@ -1,11 +1,12 @@
 import ast
-from typing import ClassVar, FrozenSet
+from typing import ClassVar, FrozenSet, List
 
 from typing_extensions import final
 
 from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.violations.best_practices import (
     ProtectedAttributeViolation,
+    UnspecifiedEncodingViolation,
 )
 from wemake_python_styleguide.violations.oop import (
     DirectMagicAttributeAccessViolation,
@@ -73,3 +74,38 @@ class WrongAttributeVisitor(BaseNodeVisitor):
                 self._ensure_attribute_type(
                     node, DirectMagicAttributeAccessViolation,
                 )
+
+
+@final
+class EncodingVisitor(BaseNodeVisitor):
+    """Check if open function has the encoding parameter."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Creates the booleans indicating encoding was found."""
+        super().__init__(*args, **kwargs)
+        self._encoding = False
+
+    def visit_Call(self, node: ast.Call):
+        """Visit calls and finds if it is an open function."""
+        if isinstance(node.func, ast.Name) and node.func.id == 'open':
+            if node.keywords:
+                for keyword in node.keywords:
+                    self._check_keywords(keyword)
+            if node.args:
+                self._check_args(node.args)
+
+            if self._encoding is False:
+                self.add_violation(UnspecifiedEncodingViolation(node))
+
+        self.generic_visit(node)
+
+    def _check_keywords(self, node: ast.keyword):
+        """Check if there is an encoding parameter."""
+        if node.arg == 'encoding':
+            self._encoding = True
+
+    def _check_args(self, node: List[ast.expr]):
+        """Check if there is an encoding parameter."""
+        if len(node) > 3:
+            if isinstance(node[3], ast.Constant):
+                self._encoding = True

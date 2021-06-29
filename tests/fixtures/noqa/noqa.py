@@ -381,7 +381,7 @@ bad_concatenation = 'a' 'b'  # noqa: WPS326
 for literal in bad_concatenation:  # noqa: WPS327, WPS328
     continue
 
-with open(bad_concatenation):  # noqa: WPS328
+with open(bad_concatenation):  # noqa: WPS328, WPS467
     pass  # noqa: WPS420
 
 
@@ -404,7 +404,7 @@ for index in [1, 2]:  # noqa: WPS335
 string_concat = 'a' + 'b'  # noqa: WPS336
 
 my_print(one == 'a' or one == 'b')  # noqa: WPS514
-file_obj = open('filaname.py')  # noqa: WPS515
+file_obj = open('filaname.py')  # noqa: WPS515, WPS467
 my_print(type(file_obj) == int)  # noqa: WPS516
 
 my_print(*[], **{'@': 1})  # noqa: WPS517, WPS445
@@ -549,7 +549,7 @@ def bad_default_values(
 for nodes[0] in (1, 2, 3):  # noqa: WPS405
     anti_wps428 = 1
 
-with open('some') as MyBadException.custom:  # noqa: WPS406
+with open('some') as MyBadException.custom:  # noqa: WPS406, WPS467
     anti_wps428 = 1
 
 

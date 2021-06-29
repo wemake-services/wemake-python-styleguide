@@ -46,6 +46,7 @@ PRESET: Final = (
     loops.SyncForLoopVisitor,
 
     attributes.WrongAttributeVisitor,
+    attributes.EncodingVisitor,
     annotations.WrongAnnotationVisitor,
 
     functions.WrongFunctionCallVisitor,

@@ -33,7 +33,7 @@ if __name__ == '__main__':
     my_print('"self.generic_visit(node)" should be last statement here:')
 
     for fn, line in matches:
-        with open(fn, 'r') as fp:
+        with open(fn, 'r', encoding='utf-8-sig') as fp:
             source = fp.read()
             lines = source.splitlines()
             highlighted = highlight(
