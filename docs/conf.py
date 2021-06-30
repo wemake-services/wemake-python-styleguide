@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.abspath('..'))
 # -- Project information -----------------------------------------------------
 
 def _get_project_meta():
-    with open('../pyproject.toml', encoding='utf-16') as pyproject:
+    with open('../pyproject.toml', encoding='utf-8') as pyproject:
         file_contents = pyproject.read()
 
     return tomlkit.parse(file_contents)['tool']['poetry']
