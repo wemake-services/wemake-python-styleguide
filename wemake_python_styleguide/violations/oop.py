@@ -165,7 +165,7 @@ class StaticMethodViolation(ASTViolation):
     .. versionchanged:: 0.11.0
 
     See also:
-       webucator.com/article/when-to-use-static-methods-in-python-never/
+       webucator.com/article/when-to-use-static-methods-in-python-never
 
     """
 
