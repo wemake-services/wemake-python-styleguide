@@ -1,5 +1,14 @@
 import ast
-from typing import ClassVar, List, Mapping, Optional, Sequence, Set, Union
+from typing import (
+    ClassVar,
+    List,
+    Mapping,
+    Optional,
+    Sequence,
+    Set,
+    Tuple,
+    Union,
+)
 
 from typing_extensions import final
 
@@ -508,109 +517,159 @@ class UnsafeGeneratorExpressionVisitor(BaseNodeVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Creates the lists that would hold the variables."""
         super().__init__(*args, **kwargs)
-        self._call_names: List[ast.Name] = []
-        self._targets: List[ast.Name] = []
-        self._expr_targets: List[ast.Name] = []
-        self._generators: List[ast.GeneratorExp] = []
-        self._gen_call: List[ast.Name] = []
-        self._var_binop: List[ast.Name] = []
-
-    def visit_Call(self, node: ast.Call) -> None:
-        """Collects all called variables."""
-        for arg in node.args:
-            if isinstance(arg, ast.Name):
-                self._call_names.append(arg)
-
-        self.generic_visit(node)
+        self._asg_app: List[Tuple[str, int]] = []
+        self._gen_exps: List[ast.GeneratorExp] = []
+        self._gen_targs: List[Tuple[str, int]] = []
+        self._calls: List[Tuple[str, int]] = []
 
     def visit_Assign(self, node: ast.Assign) -> None:
-        """Collects all ast.Name and ast.GeneratorExp in targets."""
+        """Collects all Name, Attribute, and GeneratorExp in targets."""
         for target in node.targets:
             if isinstance(target, ast.Name):
                 if isinstance(node.value, ast.GeneratorExp):
-                    self._generators.append(node.value)
-                    self._expr_targets.append(target)
+                    self._gen_exps.append(node.value)
+                    self._gen_targs.append((target.id, target.lineno))
                 else:
-                    self._targets.append(target)
+                    self._asg_app.append((target.id, target.lineno))
+
+            if isinstance(target, ast.Attribute) and isinstance(target.value, ast.Name):
+                attr_id = '{0}.{1}'.format(target.value.id, target.attr)
+                if isinstance(node.value, ast.GeneratorExp):
+                    self._gen_exps.append(node.value)
+                    self._gen_targs.append((attr_id, target.lineno))
+                else:
+                    self._asg_app.append((attr_id, target.lineno))
 
         self.generic_visit(node)
 
     def visit_AugAssign(self, node: ast.AugAssign) -> None:
-        """Collects all ast.Name in target."""
+        """Collects all ast.Name and ast.Attribute in target."""
         if isinstance(node.target, ast.Name):
-            self._targets.append(node.target)
+            self._asg_app.append((node.target.id, node.target.lineno))
+
+        if isinstance(node.target, ast.Attribute):
+            if isinstance(node.target.value, ast.Name):
+                attr_id = '{0}.{1}'.format(node.target.value.id, node.target.attr)
+                self._asg_app.append((attr_id, node.target.lineno))
 
         self.generic_visit(node)
 
-    def _get_affecting_var(self, node: ast.GeneratorExp) -> List[ast.Name]:
+    def visit_Call(self, node: ast.Call) -> None:
+        """Collects all called variables."""
+        if isinstance(node.func, ast.Attribute) and node.func.attr == 'append':
+            if isinstance(node.func.value, ast.Attribute) and isinstance(node.func.value.value, ast.Name):
+                attr_id = node.func.value.value.id
+                attr = '{0}.{1}'.format(attr_id, node.func.value.attr)
+                self._asg_app.append((attr, node.func.lineno))
+
+            if isinstance(node.func.value, ast.Name):
+                name_id = node.func.value.id
+                name_line = node.func.value.lineno
+                self._asg_app.append((name_id, name_line))
+        else:
+            for arg in node.args:
+                if isinstance(arg, ast.Name):
+                    self._calls.append((arg.id, arg.lineno))
+
+                if isinstance(arg, ast.Attribute) and isinstance(arg.value, ast.Name):
+                    attr_id = '{0}.{1}'.format(arg.value.id, arg.attr)
+                    self._calls.append((attr_id, arg.lineno))
+
+        self.generic_visit(node)
+
+    def _get_affect_var(self, node: ast.GeneratorExp) -> List[Tuple[str, int]]:
         """Obtain the variables that affect the generator expression."""
-        created_variables = list(walk.get_subnodes_by_type(node.elt, ast.Name))
-
-        inside_variables = list(
-            walk.get_subnodes_by_type(node.generators[0], ast.Name),
-        )
-
-        inside_variables_id = [name.id for name in inside_variables]
-        created_variables_id = [name.id for name in created_variables]
-
-        affecting_variables_id = [
-            name_id
-            for name_id in created_variables_id
-            if name_id not in inside_variables_id
+        created_variables = [
+            (name.id, name.lineno)
+            for name in list(walk.get_subnodes_by_type(node.elt, ast.Name))
+            if name.id not in {'self', 'range'}
+        ] + [
+            ('{0}.{1}'.format(attr_v.value.id, attr_v.attr), attr_v.lineno)
+            for attr_v in list(walk.get_subnodes_by_type(node.elt, ast.Attribute))
+            if isinstance(attr_v.value, ast.Name)
         ]
+
+        inside_var_name = []
+        inside_var_attrs = []
+        targets = []
+
+        for generator in node.generators:
+            if isinstance(generator.target, ast.Name):
+                targets.append(generator.target.id)
+
+            inside_var_name += list(
+                walk.get_subnodes_by_type(generator, ast.Name),
+            )
+
+            inside_var_attrs += list(
+                walk.get_subnodes_by_type(generator, ast.Attribute),
+            )
+
+        inside_variables_names = [
+            (name.id, name.lineno)
+            for name in inside_var_name
+            if name.id not in {'self', 'range'}
+        ]
+        inside_variables_attrs = [
+            ('{0}.{1}'.format(attr_v.value.id, attr_v.attr), attr_v.lineno)
+            for attr_v in inside_var_attrs
+            if isinstance(attr_v.value, ast.Name) and attr_v.value.id == 'self'
+        ]
+
+        inside_variables = inside_variables_names + inside_variables_attrs
+
+        affecting_variables = created_variables + inside_variables
 
         return [
-            name
-            for name in created_variables
-            if name.id in affecting_variables_id
+            affecting_variable
+            for affecting_variable in affecting_variables
+            if affecting_variable[0] not in targets
         ]
 
-    def _check_unsafe(self, affecting_vars: List[ast.Name], start: int) -> None:
-        target_id = [
-            target.id
-            for target in self._expr_targets
-            if target.lineno == start
+    def _check_unsafe(self, affecting_vars, node: ast.GeneratorExp) -> None:
+        """Raise Violation if the Exp was unsafe."""
+        target = [
+            target[0]
+            for target in self._gen_targs
+            if target[1] == node.lineno
         ]
+        target_id = target[0]
 
-        end = [
-            call.lineno
-            for call in self._gen_call
-            if call.id == target_id[0]
+        positions = [
+            call[1]
+            for call in self._calls
+            if call[0] == target_id
         ]
+        end = positions[0]
 
         for affect_var in affecting_vars:
-            for name in self._targets:
-                if name.id == affect_var.id and start < name.lineno < end[0]:
-                    self.add_violation(
-                        UnsafeGeneratorExpressionViolation(affect_var),
-                    )
+            for name in self._asg_app:
+                position = name[1]
+                if name[0] == affect_var[0] and node.lineno < position < end:
+                    self.add_violation(UnsafeGeneratorExpressionViolation(node))
 
     def _post_visit(self) -> None:
         """Checks if there was an unsafe generator expression."""
-        if self._expr_targets:
-            call_names_id = [
-                name.id
-                for name in self._call_names
+        if self._gen_targs:
+            gen_targs_ids = [
+                targ[0]
+                for targ in self._gen_targs
             ]
-
-            expr_targets_id = [
-                name.id
-                for name in self._expr_targets
+            gen_call_ids = [
+                call[0]
+                for call in self._calls
             ]
-
             gen_called_id = [
                 gen_called
-                for gen_called in expr_targets_id
-                if gen_called in call_names_id
+                for gen_called in gen_call_ids
+                if gen_called in gen_targs_ids
+            ]
+            gen_called = [
+                tuple_string_int
+                for tuple_string_int in self._calls
+                if tuple_string_int[0] in gen_called_id
             ]
 
-            self._gen_call = [
-                name
-                for name in self._call_names
-                if name.id in gen_called_id
-            ]
-
-            if self._gen_call:
-                for generator in self._generators:
-                    affecting_vars = self._get_affecting_var(generator)
-                    self._check_unsafe(affecting_vars, generator.lineno)
+            if gen_called:
+                for gen in self._gen_exps:
+                    self._check_unsafe(self._get_affect_var(gen), gen)
