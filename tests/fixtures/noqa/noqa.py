@@ -778,6 +778,8 @@ my_print("""
 text
 """)  # noqa: WPS462
 
+list_numbers = [1, 2, 3, 4]
+slice_list = list_numbers[1:][2:] # noqa: WPS363
 
 def get_item():  # noqa: WPS463
     return  # noqa: WPS324
