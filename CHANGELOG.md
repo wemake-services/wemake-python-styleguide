@@ -17,6 +17,13 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions signigicantly, etc.
   
   
+## 0.16.0
+
+### Features
+
+- Forbids the use of consecutive slices to improve readability. 
+
+
 ## 0.15.3 WIP
 
 ### Bugfixes

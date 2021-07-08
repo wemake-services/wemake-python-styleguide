@@ -100,6 +100,7 @@ PRESET: Final = (
     subscripts.SubscriptVisitor,
     subscripts.ImplicitDictGetVisitor,
     subscripts.CorrectKeyVisitor,
+    subscripts.ConsecutiveSlicesVisitor,
 
     decorators.WrongDecoratorVisitor,
 

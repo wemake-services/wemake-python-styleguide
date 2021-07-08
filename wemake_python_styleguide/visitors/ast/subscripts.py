@@ -172,3 +172,43 @@ class CorrectKeyVisitor(base.BaseNodeVisitor):
             isinstance(real_node, ast.Num) and
             isinstance(real_node.n, float)
         )
+
+
+@final
+class ConsecutiveSlicesVisitor(base.BaseNodeVisitor):
+    """Check the existance of consecutive slices."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Create necessary variables."""
+        super().__init__(*args, **kwargs)
+        self._max_cons_slices: int = 0
+        self._first_oc: ast.Subscript
+
+    def visit_Subscript(self, node: ast.Subscript) -> None:
+        """
+        Visits subscript.
+
+        Raises:
+            ForbidConsecutiveSlicesViolation
+
+        """
+        self._check_consecutive(node)
+        self.generic_visit(node)
+
+    def _check_consecutive(self, node: ast.Subscript) -> None:
+        """Check if subscript node has a slice and a subscript."""
+        condition = (
+            isinstance(node.slice, ast.Slice) and
+            isinstance(node.value, ast.Subscript) and
+            isinstance(node.value.slice, ast.Slice)
+        )
+        if condition:
+            if self._max_cons_slices == 0:
+                self._first_oc = node
+            self._max_cons_slices += 1
+
+    def _post_visit(self) -> None:
+        if self._max_cons_slices > 0 and self._first_oc:
+            self.add_violation(
+                consistency.ForbidConsecutiveSlicesViolation(self._first_oc),
+            )

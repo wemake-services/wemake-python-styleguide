@@ -86,6 +86,7 @@ Summary
    RawStringNotNeededViolation
    InconsistentComprehensionViolation
    AssignToSliceViolation
+   ForbidConsecutiveSlicesViolation
 
 Consistency checks
 ------------------
@@ -153,6 +154,7 @@ Consistency checks
 .. autoclass:: RawStringNotNeededViolation
 .. autoclass:: InconsistentComprehensionViolation
 .. autoclass:: AssignToSliceViolation
+.. autoclass:: ForbidConsecutiveSlicesViolation
 
 """
 
@@ -2343,3 +2345,31 @@ class AssignToSliceViolation(ASTViolation):
 
     error_template = 'Found assignment to a subscript slice'
     code = 362
+
+
+@final
+class ForbidConsecutiveSlicesViolation(ASTViolation):
+    """
+    Forbid the use consecutive slices in lists.
+
+    Reasoning:
+        It is more readable and effective to use
+        single slices.
+
+    Solution:
+        Use no more than one slice at a time.
+
+    Example::
+        # Correct:
+        my_list = [1, 2, 3, 4]
+        my_list[1:3]
+
+        # Wrong:
+        my_list = [1, 2, 3, 4]
+        my_list[1:][:2]
+
+    .. versionadded:: 0.16.0
+    """
+
+    error_template = 'Found use of consecutive slices'
+    code = 363
