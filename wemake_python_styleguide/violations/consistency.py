@@ -86,7 +86,7 @@ Summary
    RawStringNotNeededViolation
    InconsistentComprehensionViolation
    AssignToSliceViolation
-   ForbidConsecutiveSlicesViolation
+   ConsecutiveSlicesViolation
 
 Consistency checks
 ------------------
@@ -154,7 +154,7 @@ Consistency checks
 .. autoclass:: RawStringNotNeededViolation
 .. autoclass:: InconsistentComprehensionViolation
 .. autoclass:: AssignToSliceViolation
-.. autoclass:: ForbidConsecutiveSlicesViolation
+.. autoclass:: ConsecutiveSlicesViolation
 
 """
 
@@ -2348,7 +2348,7 @@ class AssignToSliceViolation(ASTViolation):
 
 
 @final
-class ForbidConsecutiveSlicesViolation(ASTViolation):
+class ConsecutiveSlicesViolation(ASTViolation):
     """
     Forbid the use consecutive slices in lists.
 

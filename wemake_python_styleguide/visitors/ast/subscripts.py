@@ -1,4 +1,5 @@
 import ast
+from typing import List
 
 from typing_extensions import final
 
@@ -181,34 +182,44 @@ class ConsecutiveSlicesVisitor(base.BaseNodeVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Create necessary variables."""
         super().__init__(*args, **kwargs)
-        self._max_cons_slices: int = 0
-        self._first_oc: ast.Subscript
+        self._consecutives: List[ast.Subscript] = []
 
     def visit_Subscript(self, node: ast.Subscript) -> None:
         """
         Visits subscript.
 
         Raises:
-            ForbidConsecutiveSlicesViolation
+            ConsecutiveSlicesViolation
 
         """
         self._check_consecutive(node)
         self.generic_visit(node)
 
+    def _get_consecutives(self, node: ast.Subscript) -> None:
+        """Retrieves a list of all consecutive slices."""
+        ch = node.value
+
+        while isinstance(ch, ast.Subscript) and isinstance(ch.slice, ast.Slice):
+            self._consecutives.append(ch)
+            ch = ch.value
+
     def _check_consecutive(self, node: ast.Subscript) -> None:
         """Check if subscript node has a slice and a subscript."""
-        condition = (
+        is_slice = (
             isinstance(node.slice, ast.Slice) and
-            isinstance(node.value, ast.Subscript) and
-            isinstance(node.value.slice, ast.Slice)
+            node not in self._consecutives
         )
-        if condition:
-            if self._max_cons_slices == 0:
-                self._first_oc = node
-            self._max_cons_slices += 1
 
-    def _post_visit(self) -> None:
-        if self._max_cons_slices > 0 and self._first_oc:
+        has_consecutives = (
+            is_slice and
+            isinstance(node.value, ast.Subscript) and
+            self._consecutives
+        )
+
+        if is_slice:
+            self._get_consecutives(node)
+
+        if has_consecutives:
             self.add_violation(
-                consistency.ForbidConsecutiveSlicesViolation(self._first_oc),
+                consistency.ConsecutiveSlicesViolation(node),
             )
