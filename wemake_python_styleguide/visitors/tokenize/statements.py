@@ -315,10 +315,9 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
                 InconsistentComprehensionViolation(previous_ctx.fors[-1]),
             )
 
-        if self._bracket_stack:
-            self._current_ctx = self._bracket_stack[-1]
-        else:
-            self._current_ctx = None
+        self._current_ctx = (
+            self._bracket_stack[-1] if self._bracket_stack else None
+        )
 
     def visit_compat_name(self, token: tokenize.TokenInfo) -> None:
         """Builds the comprehension."""
