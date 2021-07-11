@@ -208,11 +208,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
     def _check_multiline_loop(self, node: AnyLoop) -> None:
         start_lineno = getattr(node, 'lineno', None)
 
-        if isinstance(node, ast.While):
-            node_to_check = node.test
-        else:
-            node_to_check = node.iter
-
+        node_to_check = node.test if isinstance(node, ast.While) else node.iter
         for sub_node in ast.walk(node_to_check):
             sub_lineno = getattr(sub_node, 'lineno', None)
             if sub_lineno is not None and sub_lineno > start_lineno:
