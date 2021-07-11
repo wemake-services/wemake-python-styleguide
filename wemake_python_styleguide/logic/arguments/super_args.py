@@ -37,11 +37,11 @@ def _get_keyword_args_by_names(
     *names: str,
 ) -> Dict[str, ast.expr]:
     """Returns keywords of ``call`` by specified ``names``."""
-    keyword_args = {}
-    for keyword in call.keywords:
-        if keyword.arg in names:
-            keyword_args[keyword.arg] = keyword.value
-    return keyword_args
+    return {
+        keyword.arg: keyword.value
+        for keyword in call.keywords
+        if keyword.arg in names
+    }
 
 
 def _is_super_called_with(call: ast.Call, type_: str, object_: str) -> bool:
