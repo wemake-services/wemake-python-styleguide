@@ -89,10 +89,10 @@ def all_module_violations():
 @pytest.fixture(scope=_SESSION_SCOPE)
 def all_violation_codes(all_module_violations):
     """Loads all codes and their violation classes from the package."""
-    all_codes = {}
-    for module in all_module_violations.keys():
-        all_codes[module] = {
+    return {
+        module: {
             violation.code: violation
             for violation in all_module_violations[module]
         }
-    return all_codes
+        for module in all_module_violations.keys()
+    }
