@@ -198,10 +198,13 @@ class ConsecutiveSlicesVisitor(base.BaseNodeVisitor):
     def _get_consecutives(self, node: ast.Subscript) -> None:
         """Retrieves a list of all consecutive slices."""
         ch = node.value
+        consecutives = []
 
         while isinstance(ch, ast.Subscript) and isinstance(ch.slice, ast.Slice):
-            self._consecutives.append(ch)
+            consecutives.append(ch)
             ch = ch.value
+
+        self._consecutives.extend(consecutives)
 
     def _check_consecutive(self, node: ast.Subscript) -> None:
         """Check if subscript node has a slice and a subscript."""
