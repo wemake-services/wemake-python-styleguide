@@ -648,7 +648,7 @@ class UnpythonicGetterSetterViolation(ASTViolation):
         # Wrong:
         class Example(object):
             def __init__(self):
-                self.attribute = None
+                self._attribute = None
 
             def set_attribute(self, value):
                 ...
