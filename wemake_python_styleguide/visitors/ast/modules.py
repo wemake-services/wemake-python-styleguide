@@ -125,10 +125,9 @@ class ModuleConstantsVisitor(BaseNodeVisitor):
         if not isinstance(get_context(node), ast.Module):
             return
 
-        if isinstance(node, ast.AnnAssign):
-            targets = [node.target]
-        else:
-            targets = node.targets
+        targets = (
+            [node.target] if isinstance(node, ast.AnnAssign) else node.targets
+        )
 
         for target in targets:
             if not isinstance(target, ast.Name) or not is_constant(target.id):
