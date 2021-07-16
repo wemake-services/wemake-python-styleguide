@@ -412,7 +412,7 @@ class MultipleIfsInComprehensionViolation(ASTViolation):
         nodes = [node for node in html if node != 'b' if node != 'i']
 
         # Correct:
-        nodes = [node for node in html if node not in ('b', 'i')]
+        nodes = [node for node in html if node not in {'b', 'i'}]
 
     .. versionadded:: 0.1.0
 
