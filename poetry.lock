@@ -995,8 +995,8 @@ scipy = ["scipy"]
 
 [[package]]
 name = "nitpick"
-version = "0.26.0"
-description = "Enforce the same configuration across multiple projects"
+version = "0.27.0"
+description = "Enforce the same settings across multiple language-independent projects"
 category = "dev"
 optional = false
 python-versions = ">=3.6,<4.0"
@@ -1025,7 +1025,7 @@ toml = "*"
 tomlkit = "*"
 
 [package.extras]
-test = ["freezegun", "pytest-cov", "pytest", "responses", "testfixtures"]
+test = ["freezegun", "pytest-cov", "pytest-socket", "pytest-testmon", "pytest-watch", "pytest", "responses", "testfixtures"]
 lint = ["pylint"]
 doc = ["sphinx", "sphinx-rtd-theme", "sphobjinv"]
 
@@ -1699,7 +1699,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "b169e77558367cfe0211b1c9678b19749fd019974aaeb5417872bdf179158286"
+content-hash = "bbee3c6754c61ef2f136b6fba42c19c9e63dfa359371a90d3bd30912915cc119"
 
 [metadata.files]
 added-value = [
@@ -2187,8 +2187,8 @@ networkx = [
     {file = "networkx-2.5.tar.gz", hash = "sha256:7978955423fbc9639c10498878be59caf99b44dc304c2286162fd24b458c1602"},
 ]
 nitpick = [
-    {file = "nitpick-0.26.0-py3-none-any.whl", hash = "sha256:f5cfcd68f83910ce8a4cd998804a4e15dfd5a9a54a3cb4e201f1ec4bee67fe89"},
-    {file = "nitpick-0.26.0.tar.gz", hash = "sha256:b11009c77975990d7776ea6d307ed4272f5122e83b2fc16a6bad557222b6d809"},
+    {file = "nitpick-0.27.0-py3-none-any.whl", hash = "sha256:bc8a92b004099cef4f35db4f986b76bd1425a364afc5cd0fc38fce13365cf81f"},
+    {file = "nitpick-0.27.0.tar.gz", hash = "sha256:4424a2a374c76173fd6cc1b637b9ab79f1f487cb892e7e9db4458de072082f07"},
 ]
 packaging = [
     {file = "packaging-20.9-py2.py3-none-any.whl", hash = "sha256:67714da7f7bc052e064859c05c595155bd1ee9f69f76557e21f051443c20947a"},
