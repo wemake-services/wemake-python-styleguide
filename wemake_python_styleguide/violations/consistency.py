@@ -341,12 +341,12 @@ class FormattedStringViolation(ASTViolation):
 
     Example::
 
-        # Wrong:
-        f'Result is: {2 + 2}'
-
         # Correct:
         'Result is: {0}'.format(2 + 2)
         'Hey {user}! How are you?'.format(user='sobolevn')
+
+        # Wrong:
+        f'Result is: {2 + 2}'
 
     .. versionadded:: 0.1.0
 
@@ -408,11 +408,11 @@ class MultipleIfsInComprehensionViolation(ASTViolation):
 
     Example::
 
-        # Wrong:
-        nodes = [node for node in html if node != 'b' if node != 'i']
-
         # Correct:
         nodes = [node for node in html if node not in {'b', 'i'}]
+
+        # Wrong:
+        nodes = [node for node in html if node != 'b' if node != 'i']
 
     .. versionadded:: 0.1.0
 
@@ -437,14 +437,14 @@ class ConstantCompareViolation(ASTViolation):
 
     Example::
 
+        # Correct:
+        do_something_else()
+
         # Wrong:
         if 60 * 60 < 1000:
             do_something()
         else:
             do_something_else()
-
-        # Correct:
-        do_something_else()
 
     .. versionadded:: 0.3.0
 
@@ -599,18 +599,18 @@ class MissingSpaceBetweenKeywordAndParenViolation(TokenizeViolation):
 
     Example::
 
+        # Correct:
+        def func():
+            a = 1
+            del (a, b)
+            yield (1, 2, 3)
+
         # Wrong:
         def func():
             a = 1
             b = 2
             del(a, b)
             yield(1, 2, 3)
-
-        # Correct:
-        def func():
-            a = 1
-            del (a, b)
-            yield (1, 2, 3)
 
     .. versionadded:: 0.3.0
 
@@ -1536,7 +1536,6 @@ class MultilineConditionsViolation(ASTViolation):
             if isinstance(node.test.op, ast.Not):
                 ...
 
-
         # Wrong:
         if isinstance(node.test, ast.UnaryOp) and isinstance(
             node.test.op,
@@ -1911,7 +1910,7 @@ class LineStartsWithDotViolation(TokenizeViolation):
             ...,
         )
 
-        # Wrong
+        # Wrong:
         some = (
             MyModel.objects.filter(...)
                 .exclude(...)
