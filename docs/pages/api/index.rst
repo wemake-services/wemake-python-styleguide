@@ -67,12 +67,13 @@ to understand how all components are bound together.
 
 High-level overview of our codebase:
 
-.. image: https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/code-diagram.svg
+.. image:: https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/code-diagram.svg
+   :alt: Code organization
 
 We use a `layered architecture <https://import-linter.readthedocs.io/>`_
 that follows this contract:
 
-.. literalinclude :: ../../../.importlinter
+.. literalinclude:: ../../../.importlinter
    :language: ini
 
 Contributing
