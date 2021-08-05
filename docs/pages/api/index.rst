@@ -65,6 +65,10 @@ to understand how all components are bound together.
       Visitor->>Violation: Visitors raise violations when they find bad code
       Violation-->>flake8: Raised violations are shown to user by flake8
 
+High-level overview of our codebase:
+
+.. image: https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/code-diagram.svg
+
 We use a `layered architecture <https://import-linter.readthedocs.io/>`_
 that follows this contract:
 
