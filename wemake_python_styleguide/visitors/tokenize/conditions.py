@@ -75,18 +75,18 @@ class IfElseVisitor(BaseTokenVisitor):
         return False
 
     def _if_has_code_on_line(
-            self,
-            remaining_tokens: Sequence[tokenize.TokenInfo],
+        self,
+        remaining_tokens: Sequence[tokenize.TokenInfo],
     ) -> bool:
         """
         Checks to see if code is on the same line as the ``if`` statement.
 
         For one-line ``if`` statements, the code might be on the same line.
         """
-        for i, next_token in enumerate(remaining_tokens):
-            if (next_token.exact_type == tokenize.COLON and
-                    remaining_tokens[i + 1].exact_type != tokenize.NEWLINE):
-                return True
+        for ind, next_token in enumerate(remaining_tokens):
+            if next_token.exact_type == tokenize.COLON:
+                if remaining_tokens[ind + 1].exact_type != tokenize.NEWLINE:
+                    return True
 
         return False
 
