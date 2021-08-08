@@ -1,8 +1,10 @@
 import ast
-from typing import Optional
+from typing import Optional, Union, List, Iterable
 
 from wemake_python_styleguide.compat.aliases import ForNodes
 from wemake_python_styleguide.types import AnyLoop, AnyNodes
+
+_ForAndElseASTNode = Union[ast.If, List[ast.stmt]]
 
 
 def _does_loop_contain_node(
@@ -44,3 +46,39 @@ def has_break(
             if not is_nested_break:
                 return True
     return False
+
+
+def has_else(node: ast.For) -> bool:
+    """Tells if this node or ``for`` chain ends with an ``else`` expression."""
+    if not isinstance(node, ast.For):
+        return False
+    last_elem = tuple(chain(node))[-1]
+    return bool(last_elem)
+
+
+def chain(node: ast.For) -> Iterable[_ForAndElseASTNode]:
+    """
+    Yields the whole chain of ``for`` statements.
+
+    This function also does go not up in the tree
+    to find all parent ``for`` nodes. The rest order is preserved.
+    The first one to return is the node itself.
+
+    The last element of array is always a list of expressions that represent
+    the last ``else`` node in the chain.
+    That's ugly, but that's how ``ast`` works in python.
+    """
+    iterator: _ForAndElseASTNode = node
+    yield iterator
+
+    while True:
+        if not isinstance(iterator, ast.For):
+            return
+
+        next_for = iterator.orelse
+        if len(next_for) == 1 and isinstance(next_for[0], ast.For):
+            yield next_for[0]
+            iterator = next_for[0]
+        else:
+            yield next_for
+            iterator = next_for

@@ -6,7 +6,7 @@ from typing import ClassVar, DefaultDict, List, Mapping, Set, Type
 from typing_extensions import final
 
 from wemake_python_styleguide.logic import source, walk
-from wemake_python_styleguide.logic.tree import ifs, keywords, operators
+from wemake_python_styleguide.logic.tree import ifs, keywords, operators, loops
 from wemake_python_styleguide.logic.tree.compares import CompareBounds
 from wemake_python_styleguide.logic.tree.functions import given_function_called
 from wemake_python_styleguide.types import AnyIf, AnyLoop, AnyNodes
@@ -111,7 +111,13 @@ class IfStatementVisitor(BaseNodeVisitor):
                 if keywords.is_simple_return(else_body):
                     self.add_violation(SimplifiableReturningIfViolation(node))
                 return
-            body = getattr(node, 'wps_parent').body  # TODO: refactor
+
+            parent = getattr(node, 'wps_parent')  # TODO: refactor
+            body = parent.body  # TODO: refactor
+            if loops.has_else(parent):
+                print(parent)
+                body = parent.body + parent.orelse
+
             next_index_in_parent = body.index(node) + 1
             if keywords.next_node_returns_bool(body, next_index_in_parent):
                 self.add_violation(SimplifiableReturningIfViolation(node))
