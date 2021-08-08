@@ -115,7 +115,6 @@ class IfStatementVisitor(BaseNodeVisitor):
             parent = getattr(node, 'wps_parent')  # TODO: refactor
             body = parent.body  # TODO: refactor
             if loops.has_else(parent):
-                print(parent)
                 body = parent.body + parent.orelse
 
             next_index_in_parent = body.index(node) + 1

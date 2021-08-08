@@ -1,4 +1,3 @@
-from wemake_python_styleguide.violations.system import InternalErrorViolation
 from wemake_python_styleguide.visitors.ast.conditions import IfStatementVisitor
 
 code_that_breaks = """
@@ -18,8 +17,7 @@ def test_regression_for_else(
     default_options,
     parse_ast_tree,
 ):
-    """Testing to see if ``for`` statement has an ``else`` statement 
-    with a nested ``if`` statement."""
+    """Tests for nested ``if`` statement in ``for else`` statement."""
     tree = parse_ast_tree(code_that_breaks)
 
     visitor = IfStatementVisitor(default_options, tree=tree)

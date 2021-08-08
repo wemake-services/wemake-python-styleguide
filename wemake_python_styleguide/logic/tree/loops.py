@@ -1,6 +1,6 @@
 import ast
-from typing import Optional, Union, List, Iterable
 
+from typing import Optional, Union, List, Iterable
 from wemake_python_styleguide.compat.aliases import ForNodes
 from wemake_python_styleguide.types import AnyLoop, AnyNodes
 
