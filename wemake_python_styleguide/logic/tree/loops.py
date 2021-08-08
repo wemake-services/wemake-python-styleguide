@@ -4,7 +4,7 @@ from typing import Optional, Union, List, Iterable
 from wemake_python_styleguide.compat.aliases import ForNodes
 from wemake_python_styleguide.types import AnyLoop, AnyNodes
 
-_ForAndElseASTNode = Union[ast.If, List[ast.stmt]]
+_ForAndElseASTNode = Union[ast.For, List[ast.stmt]]
 
 
 def _does_loop_contain_node(
