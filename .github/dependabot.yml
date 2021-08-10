@@ -6,30 +6,12 @@ updates:
     interval: daily
     time: "02:00"
   open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: sphinx
-    versions:
-    - 3.5.3
-  - dependency-name: nitpick
-    versions:
-    - 0.24.0
-  - dependency-name: sphinxcontrib-mermaid
-    versions:
-    - 0.6.1
 - package-ecosystem: pip
   directory: "/docs"
   schedule:
     interval: daily
     time: "02:00"
   open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: sphinx
-    versions:
-    - 3.5.4
-  - dependency-name: sphinxcontrib-mermaid
-    versions:
-    - 0.6.0
-    - 0.6.1
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
@@ -42,8 +24,3 @@ updates:
     interval: daily
     time: "02:00"
   open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: python
-    versions:
-    - 3.9.2.pre.alpine
-    - 3.9.3.pre.alpine
