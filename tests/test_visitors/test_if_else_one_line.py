@@ -1,4 +1,4 @@
-from wemake_python_styleguide.violations.system import InternalErrorViolation
+from wemake_python_styleguide.violations.refactoring import ImplicitElifViolation
 from wemake_python_styleguide.visitors.tokenize.conditions import IfElseVisitor
 
 code_that_breaks = """
@@ -21,4 +21,4 @@ def test_regression2127(
     visitor = IfElseVisitor(default_options, tokens)
     visitor.run()
 
-    assert_errors(visitor, [InternalErrorViolation])
+    assert_errors(visitor, [])
