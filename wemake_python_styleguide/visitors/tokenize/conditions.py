@@ -74,22 +74,6 @@ class IfElseVisitor(BaseTokenVisitor):
 
         return False
 
-    def _if_has_code_on_line(
-        self,
-        remaining_tokens: Sequence[tokenize.TokenInfo],
-    ) -> bool:
-        """
-        Checks to see if code is on the same line as the ``if`` statement.
-
-        For one-line ``if`` statements, the code might be on the same line.
-        """
-        for ind, next_token in enumerate(remaining_tokens):
-            if next_token.exact_type == tokenize.COLON:
-                if remaining_tokens[ind + 1].exact_type != tokenize.NEWLINE:
-                    return True
-
-        return False
-
     def _if_has_code_below(
         self,
         remaining_tokens: Sequence[tokenize.TokenInfo],
@@ -100,14 +84,14 @@ class IfElseVisitor(BaseTokenVisitor):
         Checks that, below an if that comes immediately after an else, there is
         more code to be considered so as not to throw an incorrect violation.
         """
-        # First check to see if the code is on the same line
-        if self._if_has_code_on_line(remaining_tokens):
-            return True
-
         index = 1
 
-        while remaining_tokens[index - 1].exact_type != tokenize.INDENT:
+        indent_set = {tokenize.INDENT, tokenize.DEDENT}
+        while remaining_tokens[index - 1].exact_type not in indent_set:
             index += 1
+
+        if len(remaining_tokens) == index + 1:
+            return False
 
         context_count = 1
 
