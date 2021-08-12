@@ -1,4 +1,3 @@
-from wemake_python_styleguide.violations.refactoring import ImplicitElifViolation
 from wemake_python_styleguide.visitors.tokenize.conditions import IfElseVisitor
 
 code_that_breaks = """
