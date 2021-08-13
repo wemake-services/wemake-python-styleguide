@@ -23,4 +23,4 @@ def test_regression_for_else(
     visitor = IfStatementVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [ValueError])
+    assert_errors(visitor, [])
