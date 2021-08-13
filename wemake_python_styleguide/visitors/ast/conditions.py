@@ -112,8 +112,9 @@ class IfStatementVisitor(BaseNodeVisitor):
                     self.add_violation(SimplifiableReturningIfViolation(node))
                 return
 
-            parent = getattr(node, 'wps_parent')  # TODO: refactor
-            body = parent.body  # TODO: refactor
+            parent = node.wps_parent
+            body = parent.body
+
             if loops.has_else(parent):
                 body = parent.body + parent.orelse
 

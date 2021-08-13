@@ -76,7 +76,7 @@ def chain(node: ast.For) -> Iterable[_ForAndElseASTNode]:
             return
 
         next_for = iterator.orelse
-        if len(next_for) == 1 and isinstance(next_for[0], ast.For):
+        if len(next_for) == 1:
             yield next_for[0]
             iterator = next_for[0]
         else:
