@@ -1,6 +1,6 @@
 [[package]]
 name = "added-value"
-version = "0.15.0"
+version = "0.16.0"
 description = "Sphinx \"added-value\" extension"
 category = "dev"
 optional = false
@@ -1710,12 +1710,12 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "351c6ed09ccbfdc313607ef0a46d1a2621a4fb0693c7c2ebe79c233e857e7507"
+content-hash = "e93348fe5824068ae75f808751f4ba253b196a4ae645c80618aa9bf6a75cb268"
 
 [metadata.files]
 added-value = [
-    {file = "added-value-0.15.0.tar.gz", hash = "sha256:9c3812c5a42dc013845eecbf30c65eb29f39b2284b4799eb0ae1722eaace8140"},
-    {file = "added_value-0.15.0-py2.py3-none-any.whl", hash = "sha256:46f042c93585fc68963d66c2b1b11d08ba1aeab99cc7f3235fdda56cd0fd4bf4"},
+    {file = "added-value-0.16.0.tar.gz", hash = "sha256:5776ecd6f5a8f8be8bf63ad0d59470b8d6f474483b571e491b5e411cd94c8e4f"},
+    {file = "added_value-0.16.0-py2.py3-none-any.whl", hash = "sha256:7351eb41950a6d0ac9cb86f19eac73ca7676171de9cbabf97271d7ba351550da"},
 ]
 aiocontextvars = [
     {file = "aiocontextvars-0.2.2-py2.py3-none-any.whl", hash = "sha256:885daf8261818767d8f7cbd79f9d4482d118f024b6586ef6e67980236a27bfa3"},
