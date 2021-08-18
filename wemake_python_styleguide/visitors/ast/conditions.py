@@ -6,6 +6,7 @@ from typing import ClassVar, DefaultDict, List, Mapping, Set, Type
 from typing_extensions import final
 
 from wemake_python_styleguide.logic import source, walk
+from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree import ifs, keywords, loops, operators
 from wemake_python_styleguide.logic.tree.compares import CompareBounds
 from wemake_python_styleguide.logic.tree.functions import given_function_called
@@ -112,7 +113,7 @@ class IfStatementVisitor(BaseNodeVisitor):
                     self.add_violation(SimplifiableReturningIfViolation(node))
                 return
 
-            parent = node.wps_parent
+            parent = get_parent(node)
             body = parent.body
 
             if loops.has_else(parent):
