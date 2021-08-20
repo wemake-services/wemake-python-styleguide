@@ -1,13 +1,12 @@
 import ast
 from collections import defaultdict
 from functools import reduce
-from typing import ClassVar, DefaultDict, List, Mapping, Set, Type
+from typing import ClassVar, DefaultDict, List, Mapping, Optional, Set, Type
 
 from typing_extensions import final
 
 from wemake_python_styleguide.logic import source, walk
-from wemake_python_styleguide.logic.nodes import get_parent
-from wemake_python_styleguide.logic.tree import ifs, keywords, loops, operators
+from wemake_python_styleguide.logic.tree import ifs, keywords, operators
 from wemake_python_styleguide.logic.tree.compares import CompareBounds
 from wemake_python_styleguide.logic.tree.functions import given_function_called
 from wemake_python_styleguide.types import AnyIf, AnyLoop, AnyNodes
@@ -103,6 +102,13 @@ class IfStatementVisitor(BaseNodeVisitor):
             if given_function_called(node.test, {'len'}):
                 self.add_violation(UselessLenCompareViolation(node))
 
+    def _check_else_body(self, node: ast.AST) -> Optional[List[ast.AST]]:
+        else_body = getattr(node, 'orelse', None)
+        else_nodes = (ast.For, ast.While, ast.Try)
+        if isinstance(node, else_nodes):
+            return node.body + else_body
+        return None
+
     def _check_simplifiable_returning_if(self, node: ast.If) -> None:
         body = node.body
         simple_if_and_root = not (ifs.has_elif(node) or ifs.is_elif(node))
@@ -113,10 +119,9 @@ class IfStatementVisitor(BaseNodeVisitor):
                     self.add_violation(SimplifiableReturningIfViolation(node))
                 return
 
-            parent = get_parent(node)
+            parent = getattr(node, 'wps_parent', None)
             body = parent.body
-
-            if loops.has_else(parent):
+            if self._check_else_body(parent):
                 body = parent.body + parent.orelse
 
             next_index_in_parent = body.index(node) + 1

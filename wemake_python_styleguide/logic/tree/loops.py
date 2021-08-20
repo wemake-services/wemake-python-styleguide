@@ -44,10 +44,3 @@ def has_break(
             if not is_nested_break:
                 return True
     return False
-
-
-def has_else(node: ast.For) -> bool:
-    """Tells if this node or ``for`` chain ends with an ``else`` expression."""
-    if not isinstance(node, ast.For):
-        return False
-    return bool(len(node.orelse) == 1)
