@@ -1,9 +1,9 @@
 import ast
 from collections import defaultdict
 from functools import reduce
-from typing import ClassVar, DefaultDict, Final, List, Mapping, Set, Type
+from typing import ClassVar, DefaultDict, List, Mapping, Set, Type
 
-from typing_extensions import final
+from typing_extensions import Final, final
 
 from wemake_python_styleguide.compat.aliases import ForNodes
 from wemake_python_styleguide.logic import source, walk
