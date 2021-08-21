@@ -38,6 +38,11 @@ class IfElseVisitor(BaseTokenVisitor):
 
     """
 
+    _idents: ClassVar[FrozenSet[int]] = frozenset((
+        tokenize.INDENT,
+        tokenize.DEDENT,
+    ))
+
     _allowed_token_types: ClassVar[FrozenSet[int]] = frozenset((
         tokenize.NEWLINE,
         tokenize.NL,
@@ -46,14 +51,23 @@ class IfElseVisitor(BaseTokenVisitor):
     ))
 
     def visit_name(self, token: tokenize.TokenInfo) -> None:
-        """
-        Checks that ``if`` nodes are defined correctly.
-
-        Raises:
-            ImplicitElifViolation
-
-        """
+        """Checks that ``if`` nodes are defined correctly."""
         self._check_implicit_elif(token)
+
+    def _check_implicit_elif(self, token: tokenize.TokenInfo) -> None:
+        token_index = self.file_tokens.index(token)
+
+        if self._is_invalid_token(token_index, token):
+            return
+
+        # There's a bug in coverage, I am not sure how to make it work.
+        next_tokens = self.file_tokens[token_index + 1:]
+        for index, next_token in enumerate(next_tokens):  # pragma: no cover
+            if next_token.exact_type in self._allowed_token_types:
+                continue
+            elif next_token.string == 'if':
+                self._check_complex_else(next_tokens, next_token, index)
+            return
 
     def _does_else_belong_to_if(self, start_index: int) -> bool:
         previous_token = self.file_tokens[start_index - 1]
@@ -85,16 +99,13 @@ class IfElseVisitor(BaseTokenVisitor):
         more code to be considered so as not to throw an incorrect violation.
         """
         index = 1
-
-        indent_set = {tokenize.INDENT, tokenize.DEDENT}
-        while remaining_tokens[index - 1].exact_type not in indent_set:
+        while remaining_tokens[index - 1].exact_type not in self._idents:
             index += 1
 
         if len(remaining_tokens) == index + 1:
             return False
 
         context_count = 1
-
         while context_count:
             next_token = remaining_tokens[index]
             if next_token.exact_type == tokenize.INDENT:
@@ -121,20 +132,4 @@ class IfElseVisitor(BaseTokenVisitor):
         # `else` token can belong also to `for` and `try/except` statement,
         # which can trigger false positive for that violation.
         belongs_to_if = self._does_else_belong_to_if(index)
-
         return is_not_else or not belongs_to_if
-
-    def _check_implicit_elif(self, token: tokenize.TokenInfo) -> None:
-        token_index = self.file_tokens.index(token)
-
-        if self._is_invalid_token(token_index, token):
-            return
-
-        # There's a bug in coverage, I am not sure how to make it work.
-        next_tokens = self.file_tokens[token_index + 1:]
-        for index, next_token in enumerate(next_tokens):  # pragma: no cover
-            if next_token.exact_type in self._allowed_token_types:
-                continue
-            elif next_token.string == 'if':
-                self._check_complex_else(next_tokens, next_token, index)
-            return
