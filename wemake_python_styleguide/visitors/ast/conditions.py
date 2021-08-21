@@ -5,6 +5,7 @@ from typing import ClassVar, DefaultDict, Final, List, Mapping, Set, Type
 
 from typing_extensions import final
 
+from wemake_python_styleguide.compat.aliases import ForNodes
 from wemake_python_styleguide.logic import source, walk
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree import ifs, keywords, operators
@@ -30,7 +31,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 _OperatorPairs = Mapping[Type[ast.boolop], Type[ast.cmpop]]
-ELSE_NODES: Final = (ast.AsyncFor, ast.For, ast.While, ast.Try)
+_ELSE_NODES: Final = (*ForNodes, ast.While, ast.Try)
 
 
 # TODO: move to logic
@@ -106,14 +107,10 @@ class IfStatementVisitor(BaseNodeVisitor):
 
     def _check_parent(self, node: ast.If) -> None:
         parent = get_parent(node)
-
-        if parent is None:
-            return None
-
-        if isinstance(parent, ELSE_NODES):
+        if isinstance(parent, _ELSE_NODES):
             body = parent.body + parent.orelse
         else:
-            body = parent.body
+            body = getattr(parent, 'body', [node])
 
         next_index_in_parent = body.index(node) + 1
         if keywords.next_node_returns_bool(body, next_index_in_parent):
