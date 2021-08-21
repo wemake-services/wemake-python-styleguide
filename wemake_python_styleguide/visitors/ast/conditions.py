@@ -3,9 +3,8 @@ from collections import defaultdict
 from functools import reduce
 from typing import ClassVar, DefaultDict, List, Mapping, Set, Type
 
-from typing_extensions import Final, final
+from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import ForNodes
 from wemake_python_styleguide.logic import source, walk
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree import ifs, keywords, operators
@@ -31,7 +30,6 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 _OperatorPairs = Mapping[Type[ast.boolop], Type[ast.cmpop]]
-_ELSE_NODES: Final = (*ForNodes, ast.While, ast.Try)
 
 
 # TODO: move to logic
@@ -71,7 +69,7 @@ def _get_duplicate_names(variables: List[Set[str]]) -> Set[str]:
 class IfStatementVisitor(BaseNodeVisitor):
     """Checks single and consecutive ``if`` statement nodes."""
 
-    def visit_any_if(self, node: ast.If) -> None:
+    def visit_any_if(self, node: AnyIf) -> None:
         """Checks ``if`` nodes and expressions."""
         self._check_negated_conditions(node)
         self._check_useless_len(node)
@@ -106,12 +104,7 @@ class IfStatementVisitor(BaseNodeVisitor):
                 self.add_violation(UselessLenCompareViolation(node))
 
     def _check_parent(self, node: ast.If) -> None:
-        parent = get_parent(node)
-        if isinstance(parent, _ELSE_NODES):
-            body = parent.body + parent.orelse
-        else:
-            body = getattr(parent, 'body', [node])
-
+        body = getattr(get_parent(node), 'body', [node])
         next_index_in_parent = body.index(node) + 1
         if keywords.next_node_returns_bool(body, next_index_in_parent):
             self.add_violation(SimplifiableReturningIfViolation(node))
@@ -127,7 +120,6 @@ class IfStatementVisitor(BaseNodeVisitor):
                 return
 
             self._check_parent(node)
-            return
 
 
 @final
