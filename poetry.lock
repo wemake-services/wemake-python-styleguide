@@ -676,7 +676,7 @@ toml = ["toml"]
 
 [[package]]
 name = "importlib-metadata"
-version = "4.6.4"
+version = "4.7.0"
 description = "Read metadata from Python packages"
 category = "main"
 optional = false
@@ -2006,8 +2006,8 @@ import-linter = [
     {file = "import-linter-1.2.4.tar.gz", hash = "sha256:3fbc9a6e401c259e030cc1ffe39413758561ee356752257068ea64df0be4de19"},
 ]
 importlib-metadata = [
-    {file = "importlib_metadata-4.6.4-py3-none-any.whl", hash = "sha256:ed5157fef23a4bc4594615a0dd8eba94b2bb36bf2a343fa3d8bb2fa0a62a99d5"},
-    {file = "importlib_metadata-4.6.4.tar.gz", hash = "sha256:7b30a78db2922d78a6f47fb30683156a14f3c6aa5cc23f77cc8967e9ab2d002f"},
+    {file = "importlib_metadata-4.7.0-py3-none-any.whl", hash = "sha256:a69df6d94f8ac09cd46fdf79a955c153164b312442f7594a3eeeec46f230fe2b"},
+    {file = "importlib_metadata-4.7.0.tar.gz", hash = "sha256:1be82867064622fe56c7046bb5280063949f56c0abcdfc3cd33875efd4fc5498"},
 ]
 iniconfig = [
     {file = "iniconfig-1.1.1-py2.py3-none-any.whl", hash = "sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3"},
