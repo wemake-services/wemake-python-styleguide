@@ -96,7 +96,7 @@ sphinx = "^4.1"
 sphinx-autodoc-typehints = "^1.12"
 sphinxcontrib-mermaid = "^0.7"
 doc8 = "^0.9"
-added-value = "^0.16"
+added-value = "^0.18"
 tomlkit = "^0.7"
 
 safety = "^1.10"
