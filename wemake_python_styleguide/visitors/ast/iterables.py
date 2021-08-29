@@ -22,13 +22,7 @@ class IterableUnpackingVisitor(base.BaseNodeVisitor):
     )
 
     def visit_Starred(self, node: ast.Starred) -> None:
-        """
-        Checks iterable's unpacking.
-
-        Raises:
-            IterableUnpackingViolation
-
-        """
+        """Checks iterable's unpacking."""
         self._check_unnecessary_iterable_unpacking(node)
         self.generic_visit(node)
 

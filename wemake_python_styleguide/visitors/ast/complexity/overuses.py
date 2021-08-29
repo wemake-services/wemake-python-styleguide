@@ -60,13 +60,7 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
         ] = defaultdict(int)
 
     def visit_any_string(self, node: AnyText) -> None:
-        """
-        Restricts to over-use string constants.
-
-        Raises:
-            OverusedStringViolation
-
-        """
+        """Restricts to over-use string constants."""
         self._check_string_constant(node)
         self.generic_visit(node)
 
@@ -139,13 +133,7 @@ class ExpressionOveruseVisitor(base.BaseNodeVisitor):
         )
 
     def visit(self, node: ast.AST) -> None:
-        """
-        Visits all nodes in a module to find overused values.
-
-        Raises:
-            OverusedExpressionViolation
-
-        """
+        """Visits all nodes in a module to find overused values."""
         if isinstance(node, self._expressions):
             self._add_expression(node)
         self.generic_visit(node)

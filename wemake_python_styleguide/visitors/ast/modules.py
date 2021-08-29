@@ -31,11 +31,6 @@ class EmptyModuleContentsVisitor(BaseNodeVisitor):
         for ``__init__.py`` and regular files.
         Since, we believe that ``__init__.py`` must be empty.
         But, other files must have contents.
-
-        Raises:
-            EmptyModuleViolation
-            InitModuleHasLogicViolation
-
         """
         self._check_init_contents(node)
         self._check_module_contents(node)
@@ -73,11 +68,7 @@ class MagicModuleFunctionsVisitor(BaseNodeVisitor):
         """
         Checks that module hasn't magic module functions.
 
-        All this functions are defined in ``MAGIC_MODULE_NAMES_BLACKLIST``
-
-        Raises:
-            BadMagicModuleFunctionViolation
-
+        All these functions are defined in ``MAGIC_MODULE_NAMES_BLACKLIST``
         """
         self._check_magic_module_functions(node)
         self.generic_visit(node)
@@ -111,13 +102,7 @@ class ModuleConstantsVisitor(BaseNodeVisitor):
     )
 
     def visit_any_assign(self, node: AnyAssign) -> None:
-        """
-        Checks that module's cannot have incorrect constants.
-
-        Raises:
-            MutableModuleConstantViolation
-
-        """
+        """Checks that module's cannot have incorrect constants."""
         self._check_mutable_constant(node)
         self.generic_visit(node)
 

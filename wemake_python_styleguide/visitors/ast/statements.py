@@ -153,14 +153,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
     }
 
     def visit_statement_with_body(self, node: _StatementWithBody) -> None:
-        """
-        Visits statement's body internals.
-
-        Raises:
-            UnreachableCodeViolation,
-            UselessNodeViolation
-
-        """
+        """Visits statement's body internals."""
         self._check_internals(node.body)
         if isinstance(node, self._nodes_with_orelse):
             self._check_internals(node.orelse)

@@ -76,36 +76,18 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
     )
 
     def visit_numbers_and_constants(self, node: _NumbersAndConstants) -> None:
-        """
-        Checks numbers unnecessary operators inside the code.
-
-        Raises:
-            UselessOperatorsViolation
-
-        """
+        """Checks numbers unnecessary operators inside the code."""
         self._check_operator_count(node)
         self.generic_visit(node)
 
     def visit_BinOp(self, node: ast.BinOp) -> None:
-        """
-        Visits binary operators.
-
-        Raises:
-            ZeroDivisionViolation
-
-        """
+        """Visits binary operators."""
         self._check_zero_division(node.op, node.right)
         self._check_useless_math_operator(node.op, node.left, node.right)
         self.generic_visit(node)
 
     def visit_AugAssign(self, node: ast.AugAssign) -> None:
-        """
-        Visits augmented assigns.
-
-        Raises:
-            ZeroDivisionViolation
-
-        """
+        """Visits augmented assigns."""
         self._check_zero_division(node.op, node.value)
         self._check_useless_math_operator(node.op, node.value)
         self.generic_visit(node)
@@ -181,26 +163,14 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
     )
 
     def visit_BinOp(self, node: ast.BinOp) -> None:
-        """
-        Visits binary operations.
-
-        Raises:
-            DoubleMinusOpeationViolation
-
-        """
+        """Visits binary operations."""
         self._check_negation(node.op, node.right)
         self._check_list_multiply(node)
         self._check_string_concat(node.left, node.op, node.right)
         self.generic_visit(node)
 
     def visit_AugAssign(self, node: ast.AugAssign) -> None:
-        """
-        Visits augmented assigns.
-
-        Raises:
-            DoubleMinusOpeationViolation
-
-        """
+        """Visits augmented assigns."""
         self._check_negation(node.op, node.value)
         self._check_string_concat(node.value, node.op)
         self.generic_visit(node)
@@ -261,13 +231,7 @@ class WalrusVisitor(base.BaseNodeVisitor):
         self,
         node: NamedExpr,
     ) -> None:  # pragma: py-lt-38
-        """
-        Disallows walrus ``:=`` operator.
-
-        Raises:
-            WalrusViolation
-
-        """
+        """Disallows walrus ``:=`` operator."""
         self.add_violation(consistency.WalrusViolation(node))
         self.generic_visit(node)
 
@@ -284,13 +248,7 @@ class BitwiseOpVisitor(base.BaseNodeVisitor):
     )
 
     def visit_BinOp(self, node: ast.BinOp) -> None:
-        """
-        Finds bad usage of bitwise operation with binary operation.
-
-        Raises:
-            BitwiseAndBooleanMixupViolation
-
-        """
+        """Finds bad usage of bitwise operation with binary operation."""
         self._check_logical_bitwise_operator(node)
         self.generic_visit(node)
 

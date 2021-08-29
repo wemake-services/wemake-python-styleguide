@@ -34,14 +34,7 @@ class WrongAttributeVisitor(BaseNodeVisitor):
     ))
 
     def visit_Attribute(self, node: ast.Attribute) -> None:
-        """
-        Checks the `Attribute` node.
-
-        Raises:
-            ProtectedAttributeViolation
-            DirectMagicAttributeAccessViolation
-
-        """
+        """Checks the `Attribute` node."""
         self._check_protected_attribute(node)
         self._check_magic_attribute(node)
         self.generic_visit(node)

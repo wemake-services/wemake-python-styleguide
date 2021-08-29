@@ -48,10 +48,6 @@ class OffsetVisitor(BaseNodeVisitor):
         But ``Name`` node is allowed to behave like so.
 
         So, we only check nodes that represent "all liners".
-
-        Raises:
-            TooDeepNestingViolation
-
         """
         self._check_offset(node)
         self.generic_visit(node)

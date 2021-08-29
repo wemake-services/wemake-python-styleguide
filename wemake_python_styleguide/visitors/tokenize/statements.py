@@ -73,13 +73,7 @@ class ExtraIndentationVisitor(BaseTokenVisitor):
         self._offsets: Dict[int, tokenize.TokenInfo] = {}
 
     def visit(self, token: tokenize.TokenInfo) -> None:
-        """
-        Goes through all tokens to find wrong indentation.
-
-        Raises:
-            ExtraIndentationViolation
-
-        """
+        """Goes through all tokens to find wrong indentation."""
         self._check_extra_indentation(token)
 
     def _check_extra_indentation(self, token: tokenize.TokenInfo) -> None:
@@ -138,13 +132,7 @@ class BracketLocationVisitor(BaseTokenVisitor):
         self._lines: TokenLines = defaultdict(list)
 
     def visit(self, token: tokenize.TokenInfo) -> None:
-        """
-        Goes through all tokens to separate them by line numbers.
-
-        Raises:
-            WrongBracketPositionViolation
-
-        """
+        """Goes through all tokens to separate them by line numbers."""
         self._lines[token.start[0]].append(token)
 
     def _annotate_brackets(
@@ -209,13 +197,7 @@ class MultilineStringVisitor(BaseTokenVisitor):
         self._docstrings = get_docstring_tokens(self.file_tokens)
 
     def visit(self, token: tokenize.TokenInfo) -> None:
-        """
-        Goes through all tokens to separate them by line numbers.
-
-        Raises:
-            WrongMultilineStringUseViolation
-
-        """
+        """Goes through all tokens to separate them by line numbers."""
         self._lines[token.start[0]].append(token)
 
     def _check_token(

@@ -24,6 +24,10 @@ Semantic versioning in our case means:
 - Fixes thah `InconsistentComprehensionViolation` was ignoring
   misalligned `in` expressions #2075
 
+### Misc
+
+- Removes all `Raises:` from docstrings, they were unused
+
 
 ## 0.15.3
 

@@ -53,11 +53,6 @@ class JonesComplexityVisitor(BaseNodeVisitor):
         Visits all nodes, sums the number of nodes per line.
 
         Then calculates the median value of all line results.
-
-        Raises:
-            JonesScoreViolation
-            LineComplexityViolation
-
         """
         line_number = getattr(node, 'lineno', None)
         is_ignored = isinstance(node, self._ignored_nodes)

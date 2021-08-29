@@ -81,17 +81,7 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
     }
 
     def visit_Call(self, node: ast.Call) -> None:
-        """
-        Used to find ``FUNCTIONS_BLACKLIST`` calls.
-
-        Raises:
-            BooleanPositionalArgumentViolation
-            WrongFunctionCallViolation
-            WrongIsinstanceWithTupleViolation
-            WrongSuperCallAccessViolation
-            WrongSuperCallViolation
-
-        """
+        """Used to find ``FUNCTIONS_BLACKLIST`` calls."""
         self._check_wrong_function_called(node)
         self._check_boolean_arguments(node)
         self._check_isinstance_call(node)
@@ -210,15 +200,7 @@ class WrongFunctionCallContextVisitor(base.BaseNodeVisitor):
     """Ensure that we call several functions in the correct context."""
 
     def visit_Call(self, node: ast.Call) -> None:
-        """
-        Visits function calls to find wrong contexts.
-
-        Raises:
-            OpenWithoutContextManagerViolation
-            TypeCompareViolation
-            ImplicitEnumerateViolation
-
-        """
+        """Visits function calls to find wrong contexts."""
         self._check_open_call_context(node)
         self._check_type_compare(node)
         self._check_range_len(node)
@@ -297,15 +279,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
     ))
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
-        """
-        Checks regular and ``async`` functions.
-
-        Raises:
-            UnusedVariableIsUsedViolation
-            ComplexDefaultValueViolation
-            StopIterationInsideGeneratorViolation
-
-        """
+        """Checks regular and ``async`` functions."""
         self._check_unused_variables(node)
         self._check_generator(node)
         self._check_descriptor_decorators(node)
@@ -391,14 +365,7 @@ class UselessLambdaDefinitionVisitor(base.BaseNodeVisitor):
     """This visitor is used specifically for ``lambda`` functions."""
 
     def visit_Lambda(self, node: ast.Lambda) -> None:
-        """
-        Checks if ``lambda`` functions are defined correctly.
-
-        Raises:
-            UselessLambdaViolation
-            ImplicitPrimitiveViolation
-
-        """
+        """Checks if ``lambda`` functions are defined correctly."""
         self._check_useless_lambda(node)
         self._check_implicit_primitive(node)
         self.generic_visit(node)
@@ -463,15 +430,7 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
         self,
         node: AnyFunctionDefAndLambda,
     ) -> None:
-        """
-        Checks function and lambda defs.
-
-        Raises:
-            PositionalOnlyArgumentsViolation
-            ComplexDefaultValueViolation
-            GetterWithoutReturnViolation
-
-        """
+        """Checks function and lambda defs."""
         self._check_positional_arguments(node)
         self._check_complex_argument_defaults(node)
         if not isinstance(node, ast.Lambda):
@@ -541,13 +500,7 @@ class UnnecessaryLiteralsVisitor(base.BaseNodeVisitor):
     """
 
     def visit_Call(self, node: ast.Call) -> None:
-        """
-        Used to find ``LITERALS_BLACKLIST`` without args calls.
-
-        Raises:
-            UnnecessaryLiteralsViolation
-
-        """
+        """Used to find ``LITERALS_BLACKLIST`` without args calls."""
         self._check_unnecessary_literals(node)
         self.generic_visit(node)
 

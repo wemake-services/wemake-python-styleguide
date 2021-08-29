@@ -65,14 +65,7 @@ class WrongCommentVisitor(BaseTokenVisitor):
         self._no_cover_count = 0
 
     def visit_comment(self, token: tokenize.TokenInfo) -> None:
-        """
-        Performs comment checks.
-
-        Raises:
-            WrongDocCommentViolation
-            WrongMagicCommentViolation
-
-        """
+        """Performs comment checks."""
         self._check_typed_ast(token)
         self._check_empty_doc_comment(token)
         self._check_cover_comments(token)
@@ -127,13 +120,7 @@ class EmptyCommentVisitor(BaseTokenVisitor):
         self._reserved_token = SENTINEL_TOKEN
 
     def visit_comment(self, token: tokenize.TokenInfo) -> None:
-        """
-        Performs comment checks.
-
-        Raises:
-            EmptyCommentViolation
-
-        """
+        """Performs comment checks."""
         self._check_empty_comment(token)
 
     def _check_empty_comment(self, token: tokenize.TokenInfo) -> None:
@@ -199,13 +186,7 @@ class ShebangVisitor(BaseTokenVisitor):
     _python_executable: ClassVar[str] = 'python'
 
     def visit_comment(self, token: tokenize.TokenInfo) -> None:
-        """
-        Checks if there is an executable mismatch.
-
-        Raises:
-            ShebangViolation
-
-        """
+        """Checks if there is an executable mismatch."""
         if not self._is_first_comment(token):
             return  # this is a regular comment, not a shebang
 
@@ -289,14 +270,7 @@ class NoqaVisitor(BaseTokenVisitor):
         self._noqa_count = 0
 
     def visit_comment(self, token: tokenize.TokenInfo) -> None:
-        """
-        Performs comment checks.
-
-        Raises:
-            OveruseOfNoqaCommentViolation
-            ForbiddenInlineIgnoreViolation
-
-        """
+        """Performs comment checks."""
         self._check_noqa(token)
 
     def _check_noqa(self, token: tokenize.TokenInfo) -> None:

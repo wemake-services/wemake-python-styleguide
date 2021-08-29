@@ -50,27 +50,12 @@ class ImportMembersVisitor(BaseNodeVisitor):
         )
 
     def visit_Import(self, node: ast.Import) -> None:
-        """
-        Counts the number of ``import``.
-
-        Raises:
-            TooManyImportedNamesViolation
-            TooManyImportsViolation
-
-        """
+        """Counts the number of ``import`` nodes."""
         self._visit_any_import(node)
         self.generic_visit(node)
 
     def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
-        """
-        Counts the number of ``from ... import ...``.
-
-        Raises:
-            TooManyImported_ModuleMembersViolation
-            TooManyImportedNamesViolation
-            TooManyImportsViolation
-
-        """
+        """Counts the number of ``from ... import ...``."""
         self._import_from_members_validator.validate(node)
         self._visit_any_import(node)
         self.generic_visit(node)

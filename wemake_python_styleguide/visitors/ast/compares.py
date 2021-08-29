@@ -46,17 +46,7 @@ class CompareSanityVisitor(BaseNodeVisitor):
     """Restricts the incorrect compares."""
 
     def visit_Compare(self, node: ast.Compare) -> None:
-        """
-        Ensures that compares are written correctly.
-
-        Raises:
-            ConstantCompareViolation
-            UselessCompareViolation
-            UselessLenCompareViolation
-            HeterogeneousCompareViolation
-            ReversedComplexCompareViolation
-
-        """
+        """Ensures that compares are written correctly."""
         self._check_literal_compare(node)
         self._check_useless_compare(node)
         self._check_unpythonic_compare(node)
@@ -150,13 +140,7 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
     )
 
     def visit_Compare(self, node: ast.Compare) -> None:
-        """
-        Visits compare with constants.
-
-        Raises:
-            FalsyConstantCompareViolation
-
-        """
+        """Visits compare with constants."""
         self._check_constant(node.ops[0], node.left)
         self._check_is_constant_compare(node.ops[0], node.left)
 
@@ -213,13 +197,7 @@ class WrongComparisonOrderVisitor(BaseNodeVisitor):
     )
 
     def visit_Compare(self, node: ast.Compare) -> None:
-        """
-        Forbids comparison where argument doesn't come first.
-
-        Raises:
-            CompareOrderViolation
-
-        """
+        """Forbids comparison where argument doesn't come first."""
         self._check_ordering(node)
         self.generic_visit(node)
 
@@ -308,15 +286,7 @@ class WrongConditionalVisitor(BaseNodeVisitor):
     )
 
     def visit_any_if(self, node: AnyIf) -> None:
-        """
-        Ensures that ``if`` nodes are using valid conditionals.
-
-        Raises:
-            ConstantConditionViolation
-            SimplifiableIfViolation
-            NestedTernaryViolation
-
-        """
+        """Ensures that ``if`` nodes are using valid conditionals."""
         if isinstance(node, ast.If):
             self._check_simplifiable_if(node)
         else:
@@ -394,13 +364,7 @@ class UnaryCompareVisitor(BaseNodeVisitor):
     """Checks that unary compare operators are used correctly."""
 
     def visit_UnaryOp(self, node: ast.UnaryOp) -> None:
-        """
-        Finds bad `not` usages.
-
-        Raises:
-            NotOperatorWithCompareViolation
-
-        """
+        """Finds bad `not` usages."""
         self._check_incorrect_not(node)
         self.generic_visit(node)
 
@@ -431,15 +395,7 @@ class InCompareSanityVisitor(BaseNodeVisitor):
     )
 
     def visit_Compare(self, node: ast.Compare) -> None:
-        """
-        Ensures that compares are written correctly.
-
-        Raises:
-            MultipleInCompareViolation
-            WrongInCompareTypeViolation
-            InCompareWithSingleItemContainerViolation
-
-        """
+        """Ensures that compares are written correctly."""
         self._check_multiply_compares(node)
         self._check_comparators(node)
         self.generic_visit(node)
@@ -479,13 +435,7 @@ class WrongFloatComplexCompareVisitor(BaseNodeVisitor):
     """Restricts incorrect compares with ``float`` and ``complex``."""
 
     def visit_Compare(self, node: ast.Compare) -> None:
-        """
-        Ensures that compares are written correctly.
-
-        Raises:
-            FloatComplexCompareViolation
-
-        """
+        """Ensures that compares are written correctly."""
         self._check_float_complex_compare(node)
         self.generic_visit(node)
 

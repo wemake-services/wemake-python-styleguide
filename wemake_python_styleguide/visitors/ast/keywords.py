@@ -52,13 +52,7 @@ class WrongRaiseVisitor(BaseNodeVisitor):
     ))
 
     def visit_Raise(self, node: ast.Raise) -> None:
-        """
-        Checks how ``raise`` keyword is used.
-
-        Raises:
-            RaiseNotImplementedViolation
-
-        """
+        """Checks how ``raise`` keyword is used."""
         self._check_exception_type(node)
         self.generic_visit(node)
 
@@ -81,25 +75,12 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
     """Finds incorrect and inconsistent ``return`` and ``yield`` nodes."""
 
     def visit_Return(self, node: ast.Return) -> None:
-        """
-        Checks ``return`` statements for consistency.
-
-        Raises:
-            InconsistentReturnViolation
-
-        """
+        """Checks ``return`` statements for consistency."""
         self._check_last_return_in_function(node)
         self.generic_visit(node)
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
-        """
-        Helper to get all ``return`` and ``yield`` nodes in a function at once.
-
-        Raises:
-            InconsistentReturnViolation
-            InconsistentYieldViolation
-
-        """
+        """All ``return`` and ``yield`` nodes in a function at once."""
         self._check_return_values(node)
         self._check_yield_values(node)
         self.generic_visit(node)
@@ -167,13 +148,7 @@ class WrongKeywordVisitor(BaseNodeVisitor):
     )
 
     def visit(self, node: ast.AST) -> None:
-        """
-        Used to find wrong keywords.
-
-        Raises:
-            WrongKeywordViolation
-
-        """
+        """Used to find wrong keywords."""
         self._check_keyword(node)
         self.generic_visit(node)
 
@@ -196,24 +171,12 @@ class WrongContextManagerVisitor(BaseNodeVisitor):
     """Checks context managers."""
 
     def visit_withitem(self, node: ast.withitem) -> None:
-        """
-        Checks that all variables inside context managers defined correctly.
-
-        Raises:
-            ContextManagerVariableDefinitionViolation
-
-        """
+        """Variables inside context managers must be defined correctly."""
         self._check_variable_definitions(node)
         self.generic_visit(node)
 
     def visit_any_with(self, node: AnyWith) -> None:
-        """
-        Checks the number of assignments for context managers.
-
-        Raises:
-            MultipleContextManagerAssignmentsViolation
-
-        """
+        """Checks the number of assignments for context managers."""
         self._check_target_assignment(node)
         self.generic_visit(node)
 
@@ -257,24 +220,12 @@ class GeneratorKeywordsVisitor(BaseNodeVisitor):
         self._yield_locations: Dict[int, ast.Expr] = {}
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
-        """
-        We use this visitor method to check for consecutive ``yield`` nodes.
-
-        Raises:
-            ConsecutiveYieldsViolation
-
-        """
+        """Checks for consecutive ``yield`` nodes."""
         self._check_consecutive_yields(node)
         self.generic_visit(node)
 
     def visit_YieldFrom(self, node: ast.YieldFrom) -> None:
-        """
-        Visits `yield from` nodes.
-
-        Raises:
-            IncorrectYieldFromTargetViolation
-
-        """
+        """Checks ``yield from`` nodes."""
         self._check_yield_from_type(node)
         self._check_yield_from_empty(node)
         self.generic_visit(node)
@@ -314,13 +265,7 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
     """Finds variables that are only used in ``return`` statements."""
 
     def visit_Return(self, node: ast.Return) -> None:
-        """
-        Helper to get all ``return`` variables in a function at once.
-
-        Raises:
-            InconsistentReturnVariableViolation
-
-        """
+        """Helper to get all ``return`` variables in a function at once."""
         self._check_consistent_variable_return(node)
         self.generic_visit(node)
 

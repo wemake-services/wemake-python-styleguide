@@ -87,39 +87,21 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
         self,
         node: Union[AnyFunctionDef, ast.ClassDef, ast.ExceptHandler],
     ) -> None:
-        """
-        Visits block nodes that have ``.name`` property.
-
-        Raises:
-            BlockAndLocalOverlapViolation
-
-        """
+        """Visits block nodes that have ``.name`` property."""
         names = {node.name} if node.name else set()
         self._scope(node, names, is_local=False)
         self._outer_scope(node, names)
         self.generic_visit(node)
 
     def visit_any_for(self, node: AnyFor) -> None:
-        """
-        Collects block nodes from loop definitions.
-
-        Raises:
-            BlockAndLocalOverlapViolation
-
-        """
+        """Collects block nodes from loop definitions."""
         names = defs.extract_names(node.target)
         self._scope(node, names, is_local=False)
         self._outer_scope(node, names)
         self.generic_visit(node)
 
     def visit_alias(self, node: ast.alias) -> None:
-        """
-        Visits aliases from ``import`` and ``from ... import`` block nodes.
-
-        Raises:
-            BlockAndLocalOverlapViolation
-
-        """
+        """Aliases from ``import`` and ``from ... import`` block nodes."""
         parent = cast(AnyImport, get_parent(node))
         import_name = {node.asname} if node.asname else {node.name}
         self._scope(parent, import_name, is_local=False)
@@ -127,13 +109,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def visit_withitem(self, node: ast.withitem) -> None:
-        """
-        Visits ``with`` and ``async with`` declarations.
-
-        Raises:
-            BlockAndLocalOverlapViolation
-
-        """
+        """Visits ``with`` and ``async with`` declarations."""
         if node.optional_vars:
             parent = cast(AnyWith, get_parent(node))
             names = defs.extract_names(node.optional_vars)
@@ -144,13 +120,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
     # Locals:
 
     def visit_locals(self, node: Union[AnyAssignWithWalrus, ast.arg]) -> None:
-        """
-        Visits local variable definitions and function arguments.
-
-        Raises:
-            BlockAndLocalOverlapViolation
-
-        """
+        """Visits local variable definitions and function arguments."""
         if isinstance(node, ast.arg):
             names = {node.arg}
         else:
@@ -235,13 +205,7 @@ class AfterBlockVariablesVisitor(base.BaseNodeVisitor):
     # Variable usages:
 
     def visit_Name(self, node: ast.Name) -> None:
-        """
-        Check variable usages.
-
-        Raises:
-            ControlVarUsedAfterBlockViolation
-
-        """
+        """Check variable usages."""
         if isinstance(node.ctx, ast.Load):
             self._check_variable_usage(node)
         self.generic_visit(node)

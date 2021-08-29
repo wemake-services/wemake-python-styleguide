@@ -28,13 +28,7 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
     """Finds wrong metadata information of a module."""
 
     def visit_any_assign(self, node: AnyAssign) -> None:
-        """
-        Used to find the bad metadata variable names.
-
-        Raises:
-            WrongModuleMetadataViolation
-
-        """
+        """Used to find the bad metadata variable names."""
         self._check_metadata(node)
         self.generic_visit(node)
 
@@ -66,13 +60,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
     """Finds wrong variables assignments."""
 
     def visit_any_assign(self, node: AnyAssign) -> None:
-        """
-        Used to check assignment variable to itself.
-
-        Raises:
-            ReassigningVariableToItselfViolation
-
-        """
+        """Used to check assignment variable to itself."""
         names = list(name_nodes.flat_variable_names([node]))
 
         self._check_reassignment(node, names)
@@ -142,10 +130,6 @@ class UnusedVariableDefinitionVisitor(BaseNodeVisitor):
         We do not check assigns inside modules and classes,
         since there ``_`` prefixed variable means
         that it is protected, not unused.
-
-        Raises:
-            UnusedVariableIsDefinedViolation
-
         """
         is_inside_class_or_module = isinstance(
             nodes.get_context(node),
@@ -159,13 +143,7 @@ class UnusedVariableDefinitionVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def visit_any_for(self, node: AnyFor) -> None:
-        """
-        Checks that we cannot create explicit unused loops.
-
-        Raises:
-            UnusedVariableIsDefinedViolation
-
-        """
+        """Checks that we cannot create explicit unused loops."""
         target_names = name_nodes.get_variables_from_node(node.target)
         is_target_no_op_variable = (
             len(target_names) == 1 and access.is_unused(target_names[0])
@@ -179,25 +157,13 @@ class UnusedVariableDefinitionVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def visit_ExceptHandler(self, node: ast.ExceptHandler) -> None:
-        """
-        Checks that we cannot create explicit unused exceptions.
-
-        Raises:
-            UnusedVariableIsDefinedViolation
-
-        """
+        """Checks that we cannot create explicit unused exceptions."""
         if node.name:
             self._check_assign_unused(node, [node.name], is_local=True)
         self.generic_visit(node)
 
     def visit_withitem(self, node: ast.withitem) -> None:
-        """
-        Checks that we cannot create explicit unused context variables.
-
-        Raises:
-            UnusedVariableIsDefinedViolation
-
-        """
+        """Checks that we cannot create explicit unused context variables."""
         if node.optional_vars:
             self._check_assign_unused(
                 cast(ast.AST, nodes.get_parent(node)),
@@ -232,13 +198,7 @@ class UnusedVariableUsageVisitor(BaseNodeVisitor):
     """Checks how variables are used."""
 
     def visit_Name(self, node: ast.Name) -> None:
-        """
-        Checks that we cannot use ``_`` anywhere.
-
-        Raises:
-            UnusedVariableIsUsedViolation
-
-        """
+        """Checks that we cannot use ``_`` anywhere."""
         self._check_variable_used(
             node, node.id, is_created=isinstance(node.ctx, ast.Store),
         )

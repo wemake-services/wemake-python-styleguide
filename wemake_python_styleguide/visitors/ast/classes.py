@@ -36,18 +36,7 @@ class WrongClassVisitor(base.BaseNodeVisitor):
     )
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
-        """
-        Checking class definitions.
-
-        Raises:
-            RequiredBaseClassViolation
-            ObjectInBaseClassesListViolation
-            WrongBaseClassViolation
-            WrongClassBodyContentViolation
-            BuiltinSubclassViolation
-            UnpythonicGetterSetterViolation
-
-        """
+        """Checking class definitions."""
         self._check_base_classes_count(node)
         self._check_base_classes(node)
         self._check_wrong_body_nodes(node)
@@ -155,18 +144,7 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
     ))
 
     def visit_any_function(self, node: types.AnyFunctionDef) -> None:
-        """
-        Checking class methods: async and regular.
-
-        Raises:
-            StaticMethodViolation
-            BadMagicMethodViolation
-            YieldMagicMethodViolation
-            MethodWithoutArgumentsViolation
-            AsyncMagicMethodViolation
-            UselessOverwrittenMethodViolation
-
-        """
+        """Checking class methods: async and regular."""
         self._check_decorators(node)
         self._check_bound_methods(node)
         self._check_method_contents(node)
@@ -291,13 +269,7 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
     )
 
     def visit_any_assign(self, node: types.AnyAssign) -> None:
-        """
-        Checks all assigns that have correct context.
-
-        Raises:
-            WrongSlotsViolation
-
-        """
+        """Checks all assigns that have correct context."""
         self._check_slots(node)
         self.generic_visit(node)
 
@@ -360,13 +332,7 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
     """Finds incorrect class attributes."""
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
-        """
-        Checks that class attributes are correct.
-
-        Raises:
-            ShadowedClassAttributeViolation
-
-        """
+        """Checks that class attributes are correct."""
         self._check_attributes_shadowing(node)
         self.generic_visit(node)
 
@@ -394,13 +360,7 @@ class ClassMethodOrderVisitor(base.BaseNodeVisitor):
     """Checks that all methods inside the class are ordered correctly."""
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
-        """
-        Ensures that class has correct method order.
-
-        Raises:
-            WrongMethodOrderViolation
-
-        """
+        """Ensures that class has correct methods order."""
         self._check_method_order(node)
         self.generic_visit(node)
 

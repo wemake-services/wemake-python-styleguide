@@ -99,14 +99,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
     ))
 
     def visit_any_string(self, node: AnyText) -> None:
-        """
-        Forbids incorrect usage of strings.
-
-        Raises:
-            StringConstantRedefinedViolation
-            ModuloStringFormatViolation
-
-        """
+        """Forbids incorrect usage of strings."""
         text_data = source.render_string(node.s)
         self._check_is_alphabet(node, text_data)
         self._check_modulo_patterns(node, text_data)
@@ -178,14 +171,7 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
     _max_chained_items = 3
 
     def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
-        """
-        Forbids use of ``f`` strings and too complex ``f`` strings.
-
-        Raises:
-            FormattedStringViolation
-            TooComplexFormattedStringViolation
-
-        """
+        """Forbids use of ``f`` strings and too complex ``f`` strings."""
         if not isinstance(nodes.get_parent(node), ast.FormattedValue):
             # We don't allow `f` strings by default,
             # But, we need this condition to make sure that this
@@ -287,14 +273,7 @@ class WrongNumberVisitor(base.BaseNodeVisitor):
     _non_magic_modulo: ClassVar[int] = 10
 
     def visit_Num(self, node: ast.Num) -> None:
-        """
-        Checks wrong constants inside the code.
-
-        Raises:
-            MagicNumberViolation
-            ApproximateConstantViolation
-
-        """
+        """Checks wrong constants inside the code."""
         self._check_is_magic(node)
         self._check_is_approximate_constant(node)
         self.generic_visit(node)
@@ -345,14 +324,7 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
     """Visits all assign nodes."""
 
     def visit_any_with(self, node: AnyWith) -> None:
-        """
-        Checks assignments inside context managers to be correct.
-
-        Raises:
-            UnpackingIterableToListViolation
-            WrongUnpackingViolation
-
-        """
+        """Checks assignments inside context managers to be correct."""
         for withitem in node.items:
             self._check_unpacking_target_types(withitem.optional_vars)
             if isinstance(withitem.optional_vars, ast.Tuple):
@@ -362,28 +334,14 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def visit_comprehension(self, node: ast.comprehension) -> None:
-        """
-        Checks comprehensions for the correct assignments.
-
-        Raises:
-            UnpackingIterableToListViolation
-            WrongUnpackingViolation
-
-        """
+        """Checks comprehensions for the correct assignments."""
         self._check_unpacking_target_types(node.target)
         if isinstance(node.target, ast.Tuple):
             self._check_unpacking_targets(node.target, node.target.elts)
         self.generic_visit(node)
 
     def visit_any_for(self, node: AnyFor) -> None:
-        """
-        Checks assignments inside ``for`` loops to be correct.
-
-        Raises:
-            UnpackingIterableToListViolation
-            WrongUnpackingViolation
-
-        """
+        """Checks assignments inside ``for`` loops to be correct."""
         self._check_unpacking_target_types(node.target)
         if isinstance(node.target, ast.Tuple):
             self._check_unpacking_targets(node, node.target.elts)
@@ -395,13 +353,6 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
 
         We do not check ``AnnAssign`` here,
         because it does not have problems that we check.
-
-        Raises:
-            UnpackingIterableToListViolation
-            MultipleAssignmentsViolation
-            WrongUnpackingViolation
-            SingleElementDestructuringViolation
-
         """
         self._check_assign_targets(node)
 
@@ -481,28 +432,13 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
     )
 
     def visit_Set(self, node: ast.Set) -> None:
-        """
-        Ensures that set literals do not have any duplicate items.
-
-        Raises:
-            NonUniqueItemsInHashViolation
-            UnhashableTypeInHashViolation
-
-        """
+        """Ensures that set literals do not have any duplicate items."""
         self._check_set_elements(node, node.elts)
         self._check_unhashable_elements(node.elts)
         self.generic_visit(node)
 
     def visit_Dict(self, node: ast.Dict) -> None:
-        """
-        Ensures that dict literals do not have any duplicate keys.
-
-        Raises:
-            NonUniqueItemsInHashViolation
-            UnhashableTypeInHashViolation
-            FloatKeyViolation
-
-        """
+        """Ensures that dict literals do not have any duplicate keys."""
         self._check_set_elements(node, node.keys)
         self._check_unhashable_elements(node.keys)
         self._check_float_keys(node.keys)

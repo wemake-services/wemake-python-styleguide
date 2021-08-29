@@ -18,14 +18,7 @@ class SubscriptVisitor(base.BaseNodeVisitor):
     """Checks subscripts used in the code."""
 
     def visit_Subscript(self, node: ast.Subscript) -> None:
-        """
-        Visits subscript.
-
-        Raises:
-            RedundantSubscriptViolation
-            AssignToSliceViolation
-
-        """
+        """Visits subscript."""
         self._check_redundant_subscript(node)
         self._check_slice_assignment(node)
         self.generic_visit(node)
@@ -95,13 +88,7 @@ class ImplicitDictGetVisitor(base.BaseNodeVisitor):
     """Checks for correct ``.get`` usage in code."""
 
     def visit_If(self, node: ast.If) -> None:
-        """
-        Checks the compares.
-
-        Raises:
-            ImplicitDictGetViolation
-
-        """
+        """Checks the compares."""
         self._check_implicit_get(node)
         self.generic_visit(node)
 
@@ -127,14 +114,7 @@ class CorrectKeyVisitor(base.BaseNodeVisitor):
     """Checks for correct keys usage in your code."""
 
     def visit_Subscript(self, node: ast.Subscript) -> None:
-        """
-        Checks that key usage is correct, without any errors.
-
-        Raises:
-            FloatKeyViolation
-            ImplicitNegativeIndexViolation
-
-        """
+        """Checks that key usage is correct, without any errors."""
         self._check_float_key(node)
         self._check_len_call(node)
         self.generic_visit(node)

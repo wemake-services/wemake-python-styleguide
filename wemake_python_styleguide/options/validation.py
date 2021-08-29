@@ -27,10 +27,12 @@ def validate_domain_names_options(
     allowed_domain_names: Tuple[str, ...],
     forbidden_domain_names: Tuple[str, ...],
 ) -> None:
-    """Validator to check that allowed and forbidden names doesn't intersect.
+    """
+    Validator to check that allowed and forbidden names doesn't intersect.
 
     Raises:
-        ValueError
+        ValueError - when domain names option is invalid.
+
     """
     if not allowed_domain_names or not forbidden_domain_names:
         return
