@@ -114,7 +114,7 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
     def _iterate_returning_values(
         self,
         node: AnyFunctionDef,
-        returning_type,  # mypy is not ok with this type declaration
+        returning_type: Union[Type[ast.Return], Type[ast.Yield]],
         violation: _ReturningViolations,
     ):
         return_nodes, has_values = keywords.returning_nodes(
