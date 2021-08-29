@@ -1,15 +1,17 @@
 import ast
-from typing import List, Sequence, Tuple, Type, Union, overload
+from typing import List, Sequence, Tuple, Type, Union
 
 from wemake_python_styleguide.logic.nodes import get_context
+
+_ReturningNodes = List[Union[ast.Return, ast.Yield]]
 
 
 def returning_nodes(
     node: ast.AST,
     returning_type: Union[Type[ast.Return], Type[ast.Yield]],
-) -> Tuple[List[Union[ast.Return, ast.Yield]], bool]:
+) -> Tuple[_ReturningNodes, bool]:
     """Returns ``return`` or ``yield`` nodes with values."""
-    returns: List[Union[ast.Return, ast.Yield]] = []
+    returns: _ReturningNodes = []
     has_values = False
     for sub_node in ast.walk(node):
         context_node = get_context(sub_node)
