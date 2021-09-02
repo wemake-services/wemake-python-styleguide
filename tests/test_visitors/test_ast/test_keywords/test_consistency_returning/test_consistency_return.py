@@ -135,16 +135,6 @@ def function():
     print()
 '''
 
-wrong_example10 = '''
-def function():
-    if some:
-        return None
-    if other:
-        some
-    else:
-        some
-    return none
-'''
 
 
 double_wrong_return1 = """
