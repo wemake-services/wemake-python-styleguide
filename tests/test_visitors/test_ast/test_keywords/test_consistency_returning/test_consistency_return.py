@@ -6,7 +6,9 @@ from wemake_python_styleguide.violations.consistency import (
 from wemake_python_styleguide.visitors.ast.keywords import (
     ConsistentReturningVisitor,
 )
-
+from wemake_python_styleguide.violations.consistency import (
+    AllReturnsAreNoneViolation,
+)
 # Correct:
 
 correct_example1 = """
@@ -118,6 +120,32 @@ def function():
     """some"""
     return
 '''
+wrong_example8 ='''
+def function():
+    if some:
+        return None
+    if other:
+        return None
+    print()
+'''
+wrong_example9 = '''
+def function():
+    if some:
+        return None
+    print()
+'''
+
+wrong_example10 = '''
+def function():
+    if some:
+        return None
+    if other:
+        some
+    else:
+        some
+    return none
+'''
+
 
 double_wrong_return1 = """
 def function():
@@ -204,7 +232,25 @@ def test_correct_return_statements(
     """Testing correct `return` statements."""
     tree = parse_ast_tree(mode(code))
 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
     visitor = ConsistentReturningVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
+
+@pytest.mark.parametrize('code', [
+    wrong_example8,
+        wrong_example9
+])
+def test_if_all_return_none_statements(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+    mode,
+):
+    tree = parse_ast_tree(mode(code))
+
+    visitor = ConsistentReturningVisitor(default_options, tree=tree)
+    visitor.run()
+    assert_errors(visitor, [AllReturnsAreNoneViolation])

@@ -86,6 +86,7 @@ Summary
    RawStringNotNeededViolation
    InconsistentComprehensionViolation
    AssignToSliceViolation
+   AllReturnsAreNoneViolation
 
 Consistency checks
 ------------------
@@ -153,6 +154,7 @@ Consistency checks
 .. autoclass:: RawStringNotNeededViolation
 .. autoclass:: InconsistentComprehensionViolation
 .. autoclass:: AssignToSliceViolation
+.. autoclass.. AllReturnsAreNoneViolation
 
 """
 
@@ -2342,3 +2344,42 @@ class AssignToSliceViolation(ASTViolation):
 
     error_template = 'Found assignment to a subscript slice'
     code = 362
+
+@final
+class AllReturnsAreNoneViolation(ASTViolation):
+    """
+    Forbid all return nodes to be none.
+
+    Rules are:
+    1. if all ``return`` has value ``None`` then must be replaced with 
+        just ``return``
+
+    Reasoning: 
+        Return None is never used if there are 
+        no other possible return values from the function.
+
+    Solution:
+        Use "Return" only in place of "Return None"
+
+    Example:
+        # Correct
+        def func():
+            if some:
+                return
+            if other:
+                return
+            print("Correct")
+
+        # Wrong
+        def fun():
+            if some:
+                return None
+            if other:
+                return None
+            print("Wrong")
+
+    .. versionadded:: 0.15.3
+
+    """
+    error_template ='Inconsistent use of Return None'
+    code = 363 

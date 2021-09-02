@@ -31,6 +31,7 @@ from wemake_python_styleguide.violations.consistency import (
     InconsistentYieldViolation,
     IncorrectYieldFromTargetViolation,
     MultipleContextManagerAssignmentsViolation,
+    AllReturnsAreNoneViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
@@ -39,6 +40,7 @@ from wemake_python_styleguide.visitors.decorators import alias
 _ReturningViolations = Union[
     Type[InconsistentReturnViolation],
     Type[InconsistentYieldViolation],
+    Type[AllReturnsAreNoneViolation],
 ]
 
 
@@ -120,6 +122,17 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
         return_nodes, has_values = keywords.returning_nodes(
             node, returning_type,
         )
+        is_all_none = (
+            issubclass(returning_type, ast.Return) and
+            has_values and
+            all(
+                ret_node.value.value is None
+                for ret_node in return_nodes
+                if isinstance(ret_node.value, (compat.nodes.Constant, ast.NameConstant))
+            )
+        )
+        if is_all_none:
+            self.add_violation(AllReturnsAreNoneViolation(node))
 
         for return_node in return_nodes:
             if not return_node.value and has_values:
@@ -367,3 +380,4 @@ class ConstantKeywordVisitor(BaseNodeVisitor):
         real_node = operators.unwrap_unary_node(walrus.get_assigned_expr(cond))
         if isinstance(real_node, self._forbidden_nodes):
             self.add_violation(WrongKeywordConditionViolation(cond))
+
