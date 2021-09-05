@@ -1,5 +1,4 @@
 import ast
-from PyInstaller import compat
 from typing import ClassVar, Dict, FrozenSet, List, Optional, Type, Union, cast
 
 from typing_extensions import final
@@ -32,7 +31,7 @@ from wemake_python_styleguide.violations.consistency import (
     InconsistentYieldViolation,
     IncorrectYieldFromTargetViolation,
     MultipleContextManagerAssignmentsViolation,
-    AllReturnsAreNoneViolation,
+    AllReturnsAreNoneViolation
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
@@ -129,7 +128,7 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
             all(
                 ret_node.value.value is None
                 for ret_node in return_nodes
-                if isinstance(ret_node.value, (compat.nodes.Constant, ast.NameConstant))
+                if isinstance(ret_node.value, ast.NameConstant)
             )
         )
         if is_all_none:
