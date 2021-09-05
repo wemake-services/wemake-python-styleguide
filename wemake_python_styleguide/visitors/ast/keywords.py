@@ -1,4 +1,5 @@
 import ast
+from PyInstaller import compat
 from typing import ClassVar, Dict, FrozenSet, List, Optional, Type, Union, cast
 
 from typing_extensions import final
