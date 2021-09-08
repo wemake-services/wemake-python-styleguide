@@ -120,6 +120,18 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
         return_nodes, has_values = keywords.returning_nodes(
             node, returning_type,
         )
+        is_all_none = (
+            has_values and
+            all(
+                (
+                    isinstance(ret_node.value, ast.NameConstant) and
+                    ret_node.value.value is None
+                )
+                for ret_node in return_nodes
+            )
+        )
+        if is_all_none:
+            self.add_violation(violation(node))
 
         for return_node in return_nodes:
             if not return_node.value and has_values:

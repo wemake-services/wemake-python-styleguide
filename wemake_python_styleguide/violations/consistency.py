@@ -1038,8 +1038,9 @@ class InconsistentReturnViolation(ASTViolation):
     Enforce consistent ``return`` statements.
 
     Rules are:
-    1. if any ``return`` has a value, all ``return`` nodes should have a value
-    2. do not place ``return`` without a value at the end of a function
+    1. If any ``return`` has a value, all ``return`` nodes should have a value
+    2. Do not place ``return`` without a value at the end of a function
+    3. Do not use ``return None`` where just ``return`` is good enough
 
     This rule respects ``mypy`` style of placing ``return`` statements.
     There should be no conflict with these two checks.
@@ -1068,6 +1069,7 @@ class InconsistentReturnViolation(ASTViolation):
             return 1
 
     .. versionadded:: 0.7.0
+    .. versionchanged:: 0.16.0
 
     """
 
@@ -1082,6 +1084,7 @@ class InconsistentYieldViolation(ASTViolation):
 
     Rules are:
     1. if any ``yield`` has a value, all ``yield`` nodes should have a value
+    2. Use ``yield`` instead of ``yield None`` where possible
 
     This rule respects ``mypy`` style of placing ``yield`` statements.
     There should be no conflict with these two checks.
@@ -1109,6 +1112,7 @@ class InconsistentYieldViolation(ASTViolation):
             yield 1
 
     .. versionadded:: 0.7.0
+    .. versionchanged:: 0.16.0
 
     """
 
