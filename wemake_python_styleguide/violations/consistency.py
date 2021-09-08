@@ -86,7 +86,6 @@ Summary
    RawStringNotNeededViolation
    InconsistentComprehensionViolation
    AssignToSliceViolation
-   AllReturnsAreNoneViolation
 
 Consistency checks
 ------------------
@@ -154,7 +153,6 @@ Consistency checks
 .. autoclass:: RawStringNotNeededViolation
 .. autoclass:: InconsistentComprehensionViolation
 .. autoclass:: AssignToSliceViolation
-.. autoclass.. AllReturnsAreNoneViolation
 
 """
 
@@ -1040,8 +1038,9 @@ class InconsistentReturnViolation(ASTViolation):
     Enforce consistent ``return`` statements.
 
     Rules are:
-    1. if any ``return`` has a value, all ``return`` nodes should have a value
-    2. do not place ``return`` without a value at the end of a function
+    1. If any ``return`` has a value, all ``return`` nodes should have a value
+    2. Do not place ``return`` without a value at the end of a function
+    3. Do not use ``return None`` where just ``return`` is good enough
 
     This rule respects ``mypy`` style of placing ``return`` statements.
     There should be no conflict with these two checks.
@@ -1070,6 +1069,7 @@ class InconsistentReturnViolation(ASTViolation):
             return 1
 
     .. versionadded:: 0.7.0
+    .. versionchanged:: 0.16.0
 
     """
 
@@ -1084,6 +1084,7 @@ class InconsistentYieldViolation(ASTViolation):
 
     Rules are:
     1. if any ``yield`` has a value, all ``yield`` nodes should have a value
+    2. Use ``yield`` instead of ``yield None`` where possible
 
     This rule respects ``mypy`` style of placing ``yield`` statements.
     There should be no conflict with these two checks.
@@ -1111,6 +1112,7 @@ class InconsistentYieldViolation(ASTViolation):
             yield 1
 
     .. versionadded:: 0.7.0
+    .. versionchanged:: 0.16.0
 
     """
 
@@ -2344,42 +2346,3 @@ class AssignToSliceViolation(ASTViolation):
 
     error_template = 'Found assignment to a subscript slice'
     code = 362
-
-@final
-class AllReturnsAreNoneViolation(ASTViolation):
-    """
-    Forbid all return nodes to be none.
-
-    Rules are:
-    1. if all ``return`` has value ``None`` then must be replaced with 
-        just ``return``
-
-    Reasoning: 
-        Return None is never used if there are 
-        no other possible return values from the function.
-
-    Solution:
-        Use "Return" only in place of "Return None"
-
-    Example:
-        # Correct
-        def func():
-            if some:
-                return
-            if other:
-                return
-            print("Correct")
-
-        # Wrong
-        def fun():
-            if some:
-                return None
-            if other:
-                return None
-            print("Wrong")
-
-    .. versionadded:: 0.15.3
-
-    """
-    error_template ='Inconsistent use of Return None'
-    code = 363 

@@ -19,6 +19,12 @@ Semantic versioning in our case means:
 
 ## {{ Next Version }}
 
+## Features
+
+- Now `InconsistentYieldViolation` and `InconsistentReturnViolation` are raised
+  when `yield` or `return` is used with `None`
+  where plain version should be used
+
 ### Bugfixes
 
 - Fixes thah `InconsistentComprehensionViolation` was ignoring

@@ -44,6 +44,24 @@ def function():
     yield 1
 """
 
+correct_example7 = """
+def function():
+    if some:
+        yield None
+    if other:
+        yield None
+    yield 1
+"""
+
+correct_example8 = """
+def function():
+    if some:
+        yield
+    if other:
+        yield
+    yield
+"""
+
 # Wrong:
 
 wrong_example1 = """
@@ -66,11 +84,21 @@ def function():
     yield
 """
 
+wrong_example4 = """
+def function():
+    if some:
+        yield None
+    if other:
+        yield None
+    yield None
+"""
+
 
 @pytest.mark.parametrize('code', [
     wrong_example1,
     wrong_example2,
     wrong_example3,
+    wrong_example4,
 ])
 def test_wrong_yield_statement(
     assert_errors,
@@ -95,6 +123,8 @@ def test_wrong_yield_statement(
     correct_example4,
     correct_example5,
     correct_example6,
+    correct_example7,
+    correct_example8,
 ])
 def test_correct_yield_statements(
     assert_errors,
