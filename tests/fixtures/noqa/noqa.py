@@ -788,3 +788,7 @@ matrix = [
    some(number) for numbers in matrix
    for number in numbers # noqa: WPS361
 ]
+
+
+def bare_raise_function():
+    raise # noqa: WPS467
