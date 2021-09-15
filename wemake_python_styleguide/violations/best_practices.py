@@ -83,6 +83,7 @@ Summary
    EmptyCommentViolation
    BitwiseAndBooleanMixupViolation
    NewStyledDecoratorViolation
+   BareRaiseViolation
 
 Best practices
 --------------
@@ -154,6 +155,7 @@ Best practices
 .. autoclass:: EmptyCommentViolation
 .. autoclass:: BitwiseAndBooleanMixupViolation
 .. autoclass:: NewStyledDecoratorViolation
+.. autoclass:: BareRaiseViolation
 
 """
 
@@ -2572,3 +2574,36 @@ class NewStyledDecoratorViolation(ASTViolation):
 
     error_template = 'Found new-styled decorator'
     code = 466
+
+
+@final
+class BareRaiseViolation(ASTViolation):
+    """
+    Forbid using a bare ``raise`` keyword outside of ``except``.
+
+    Reasoning:
+       Using a bare ``raise`` outside of an ``except`` block
+       causes a runtime error.
+
+    Solution:
+        Only use bare ``raise`` within an ``except`` block.
+
+    Example::
+
+        # Correct:
+        def smth():
+            try:
+                ...
+            except:
+                raise
+
+        # Wrong:
+        def smth():
+            raise
+
+    .. versionadded:: 0.16.0
+
+    """
+
+    error_template = 'Found bare raise keyword'
+    code = 467
