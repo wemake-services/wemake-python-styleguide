@@ -2582,7 +2582,8 @@ class BareRaiseViolation(ASTViolation):
     Forbid using a bare ``raise`` keyword outside of ``except``.
 
     Reasoning:
-       Bad practice to use a bare ``raise`` outside of an ``except`` block
+       Using a bare ``raise`` outside of an ``except`` block
+       causes a runtime error.
 
     Solution:
         Only use bare ``raise`` within an ``except`` block.
@@ -2600,7 +2601,7 @@ class BareRaiseViolation(ASTViolation):
         def smth():
             raise
 
-    .. versionadded:: 0.15.0
+    .. versionadded:: 0.16.0
 
     """
 
