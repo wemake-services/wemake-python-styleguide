@@ -5,7 +5,9 @@ from wemake_python_styleguide.violations.best_practices import (
     BaseExceptionRaiseViolation,
     RaiseNotImplementedViolation,
 )
-from wemake_python_styleguide.visitors.ast.keywords import WrongRaiseVisitor
+from wemake_python_styleguide.visitors.ast.keywords import (
+    WrongRaiseVisitor,
+)
 
 raise_exception_method = """
 class CheckAbstractMethods():
