@@ -661,7 +661,7 @@ test = ["flake8 (>=3.8.4,<3.9.0)", "pycodestyle (>=2.6.0,<2.7.0)"]
 
 [[package]]
 name = "import-linter"
-version = "1.2.4"
+version = "1.2.5"
 description = "Enforces rules for the imports within and between Python packages."
 category = "dev"
 optional = false
@@ -2003,7 +2003,7 @@ immutables = [
     {file = "immutables-0.15.tar.gz", hash = "sha256:3713ab1ebbb6946b7ce1387bb9d1d7f5e09c45add58c2a2ee65f963c171e746b"},
 ]
 import-linter = [
-    {file = "import-linter-1.2.4.tar.gz", hash = "sha256:3fbc9a6e401c259e030cc1ffe39413758561ee356752257068ea64df0be4de19"},
+    {file = "import-linter-1.2.5.tar.gz", hash = "sha256:118732d96b85f8f220cc4648464af214c6bbba9566928bf37b427ffd67ab3fa7"},
 ]
 importlib-metadata = [
     {file = "importlib_metadata-4.8.1-py3-none-any.whl", hash = "sha256:b618b6d2d5ffa2f16add5697cf57a46c76a56229b0ed1c438322e4e95645bd15"},
