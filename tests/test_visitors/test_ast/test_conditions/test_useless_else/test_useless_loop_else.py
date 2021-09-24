@@ -85,6 +85,18 @@ def function():
         raise ...
 """
 
+correct_example10 = """
+def function():
+    for x in ...:
+        try:
+            ...
+        except ...:
+           continue
+        break
+    else:
+        raise ...
+"""
+
 
 @pytest.mark.parametrize('code', [
     correct_example1,
@@ -96,6 +108,7 @@ def function():
     correct_example7,
     correct_example8,
     correct_example9,
+    correct_example10,
 ])
 def test_else_that_can_not_be_removed(
     assert_errors,
