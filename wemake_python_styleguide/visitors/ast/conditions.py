@@ -215,6 +215,12 @@ class UselessElseVisitor(BaseNodeVisitor):
         # An else statement makes sense if we
         # want to execute something after breaking
         # out of the loop without writing more code
+        has_break = any(
+            walk.is_contained(sub, ast.Break)
+            for sub in node.body
+        )
+        if has_break:
+            return
         body_returning = any(
             walk.is_contained(sub, self._returning_nodes[1:])
             for sub in node.body

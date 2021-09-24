@@ -46,6 +46,8 @@ Semantic versioning in our case means:
   from unary operators #1874
 - Fixes that `f'{some:,}'` was considered too complex #1921
 - Fixes that `range(len(x))` was not allowed even outside `for` loops #1883
+- Fixes `UselessReturningElseViolation` to not report `else` with `break` #2187
+  (even if we have `except` in loop)
 
 ### Misc
 
