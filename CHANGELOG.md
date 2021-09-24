@@ -33,7 +33,7 @@ Semantic versioning in our case means:
 ### Misc
 
 - Removes all `Raises:` from docstrings, they were unused
-
+- Adds `myst-parser` to replace depriciated `recommonmark`
 
 ## 0.15.3
 
