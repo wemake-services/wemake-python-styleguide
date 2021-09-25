@@ -48,6 +48,7 @@ Semantic versioning in our case means:
 - Fixes that `range(len(x))` was not allowed even outside `for` loops #1883
 - Fixes `UselessReturningElseViolation` to not report `else` with `break` #2187
   (even if we have `except` in loop)
+- Fixes fixture in `UselessReturningElseViolation` #2191
 
 ### Misc
 
