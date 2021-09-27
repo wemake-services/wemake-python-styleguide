@@ -9,7 +9,7 @@
 
 ---
 
-Welcome to the strictest and most opinionated python linter ever.
+Welcome to the strictest and most opinionated Python linter ever.
 
 <p align="center">
   <a href="https://wemake-python-stylegui.de">
@@ -60,7 +60,7 @@ We also support [GitHub Actions](https://wemake-python-stylegui.de/en/latest/pag
 ## What we are about
 
 The ultimate goal of this project is
-to make all people write **exactly** the same `python` code.
+to make all people write **exactly** the same `Python` code.
 
 |                            | flake8 | pylint | black | mypy | wemake-python-styleguide |
 |----------------------------|--------|--------|-------|------|--------------------------|
