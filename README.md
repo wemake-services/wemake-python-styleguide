@@ -56,12 +56,12 @@ in the docs for examples and integrations.
 We also support [GitHub Actions](https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/github-actions.html) as first class-citizens.
 [Try it out](https://github.com/marketplace/actions/wemake-python-styleguide)!
 
-## The case for strict linting
+## Strict is the new cool
 
 Strict linting offers the following benefits to developers and companies:
-1. Ensures consistency
-2. Helps avoid potential bugs
-3. Reduces time for code reviews and revisions
+1. Ensures consistency - no matter who works on it, the end product will always be the same dependable code
+2. Helps avoid potential bugs - strict rules make sure that you don't contradict/make a fool of yourself in the future
+3. Reduces time for code reviews and revisions - no more refactoring to make the code readable. If it passes all the checks, there's little left to review!
 
 
 ## What we are about
