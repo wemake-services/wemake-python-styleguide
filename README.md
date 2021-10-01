@@ -61,7 +61,8 @@ We also support [GitHub Actions](https://wemake-python-stylegui.de/en/latest/pag
 Strict linting offers the following benefits to developers and companies:
 1. Ensures consistency - no matter who works on it, the end product will always be the same dependable code
 2. Helps avoid potential bugs - strict rules make sure that you don't contradict/make a fool of yourself in the future
-3. Reduces time for code reviews and revisions - no more refactoring to make the code readable. If it passes all the checks, there's little left to review!
+3. Efficient code reviews - each piece of code has a similar familiar style and syntax. If it passes all the checks, there's little left to review!
+4. Less code revisions - strict linting ensures that you don't have to re-write the codebase again and again
 
 
 ## What we are about
