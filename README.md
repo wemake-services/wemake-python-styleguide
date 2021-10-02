@@ -9,7 +9,7 @@
 
 ---
 
-Welcome to the strictest and most opinionated python linter ever.
+Welcome to the strictest and most opinionated Python linter ever.
 
 <p align="center">
   <a href="https://wemake-python-stylegui.de">
@@ -56,11 +56,20 @@ in the docs for examples and integrations.
 We also support [GitHub Actions](https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/github-actions.html) as first class-citizens.
 [Try it out](https://github.com/marketplace/actions/wemake-python-styleguide)!
 
+## Strict is the new cool
+
+Strict linting offers the following benefits to developers and companies:
+1. Ensures consistency - no matter who works on it, the end product will always be the same dependable code
+2. Helps avoid potential bugs - strict rules make sure that you don't make common mistakes
+3. Efficient code reviews - each piece of code has a similar familiar style and syntax. If it passes all the checks, there's little left to review!
+4. Less code revisions - strict linting ensures that you don't have to re-write the codebase again and again
+5. Reduce code redundancy - Sometimes we write complex code as we are thinking in a certain way about a problem. The linter offers suggestions that can help simplify the code and eliminate redundant statements
+
 
 ## What we are about
 
 The ultimate goal of this project is
-to make all people write **exactly** the same `python` code.
+to make all people write **exactly** the same `Python` code.
 
 |                            | flake8 | pylint | black | mypy | wemake-python-styleguide |
 |----------------------------|--------|--------|-------|------|--------------------------|
