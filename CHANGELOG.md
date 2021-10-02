@@ -35,7 +35,7 @@ Semantic versioning in our case means:
 - Removes all `Raises:` from docstrings, they were unused
 - Added example to README.md
 - Added `why strict is good`
-- Replaced all `python` with `Python` on README.md
+- Replaced all `python` with `Python` in README.md
 
 
 ## 0.15.3
