@@ -50,8 +50,34 @@ And it won't change your existing workflow.
        alt="invocation results">
 </p>
 
+### Example
+
+Here's some poorly written code:
+<p align="center">
+  <img src="/docs/_static/bad_code_example.PNG"
+       alt="Bad code example">
+</p>
+
+Running the linter using the command,
+```bash
+flake8 test.py
+```
+we get the following errors and warnings:
+<p align="center">
+  <img src="/docs/_static/code_issues_example.PNG"
+       alt="Code issues">
+</p>
+
+This is how the code looks after rectifying all the errors/warnings:
+<p align="center">
+  <img src="/docs/_static/good_code_example.PNG"
+       alt="Good code example">
+</p>
+
+The updated code is pretty readable and has a consistent structure that is lacking in the bad code. The linter also suggests to simplify the logic of the code which makes it less redundant.
+
 See ["Usage" section](https://wemake-python-stylegui.de/en/latest/pages/usage/setup.html)
-in the docs for examples and integrations.
+in the docs for more examples and integrations.
 
 We also support [GitHub Actions](https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/github-actions.html) as first class-citizens.
 [Try it out](https://github.com/marketplace/actions/wemake-python-styleguide)!
