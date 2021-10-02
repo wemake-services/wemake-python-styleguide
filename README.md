@@ -89,7 +89,7 @@ Strict linting offers the following benefits to developers and companies:
 2. Helps avoid potential bugs - strict rules make sure that you don't make common mistakes
 3. Efficient code reviews - each piece of code has a similar familiar style and syntax. If it passes all the checks, there's little left to review!
 4. Less code revisions - strict linting ensures that you don't have to re-write the codebase again and again
-5. Reduce code redundancy - Sometimes we write complex code as we are thinking in a certain way about a problem. The linter offers suggestions that can help simplify the code and eliminate redundant statements. 
+5. Reduce code redundancy - Sometimes we write complex code as we are thinking in a certain way about a problem. The linter offers suggestions that can help simplify the code and eliminate redundant statements
 
 
 ## What we are about
