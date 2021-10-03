@@ -1431,7 +1431,7 @@ class ReassigningVariableToItselfViolation(ASTViolation):
         x_coord, y_coord = x_coord, y_coord
 
     .. versionadded:: 0.3.0
-    .. versionchanged:: 0.15.3
+    .. versionchanged:: 0.16.0
 
     """
 
