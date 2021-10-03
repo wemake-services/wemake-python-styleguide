@@ -13,8 +13,8 @@ Semantic versioning in our case means:
   might not pass on `x.1.y` release because of the new checks.
 - Major releases inidicate significant milestones or serious breaking changes.
   There are no major releases right now: we are still at `0.x.y` version.
-  But, in the future we might change the configuration names / logic,
-  change the client facing API, change code conventions signigicantly, etc.
+  But, in the future we might change the configuration names/logic,
+  change the client facing API, change code conventions significantly, etc.
 
 
 ## {{ Next Version }}
@@ -27,8 +27,8 @@ Semantic versioning in our case means:
 
 ### Bugfixes
 
-- Fixes thah `InconsistentComprehensionViolation` was ignoring
-  misalligned `in` expressions #2075
+- Fixes that `InconsistentComprehensionViolation` was ignoring
+  misaligned `in` expressions #2075
 
 ### Misc
 
@@ -36,13 +36,14 @@ Semantic versioning in our case means:
 - Added example to README.md
 - Added `why strict is good`
 - Replaced all `python` with `Python` in README.md
+- Improve Docs: Fixed all typos and grammatical errors in CHANGELOG
 
 
 ## 0.15.3
 
 ### Bugfixes
 
-- Fixes crash on `python3.10`
+- Fixes crash on `python 3.10`
 - Fixes `UselessReturningElseViolation` to not report `else` with `break` #1958
 - Fixes `ReassigningVariableToItselfViolation` to not report on `x = (x,)` #1807
 - Fixes `ReassigningVariableToItselfViolation` to extract variables
@@ -81,7 +82,7 @@ Semantic versioning in our case means:
 
 - Fixes `dataclasses` import, it was failing on `python3.6`
 - Fixes `InconsistentComprehensionViolation` work with `async` comprehensions
-- Fixes nested compehensions support for `InconsistentComprehensionViolation`
+- Fixes nested comprehensions support for `InconsistentComprehensionViolation`
 - Fixes multiple `if` support for `InconsistentComprehensionViolation`
 - Fixes that `NestedTernaryViolation` was not reported for a comprehension
 - Fixes that `ConstantConditionViolation` was not reported for a comprehension
@@ -96,7 +97,7 @@ Semantic versioning in our case means:
 
 - Refactors how `tokenize` tests are executed,
   now we have an option to compile fixture code
-  to make sure it is syntatically valid
+  to make sure it is syntactically valid.
 
 
 ## 0.15.0 aka python3.9
@@ -108,7 +109,7 @@ Semantic versioning in our case means:
 - Changes how we treat own/foreign attributes,
   since now we only check assigned attribute names for `self`/`cls`/`mcs`,
   but not any other ones.
-  So, now writting `point.x = 1` will not trigger any violations.
+  So, now writing `point.x = 1` will not trigger any violations.
   Previously, it would raise "too short name".
 - Forbids using non-trivial expressions as an argument to `except`
 - Forbids using too many variables in a tuple unpacking
@@ -133,7 +134,7 @@ Semantic versioning in our case means:
 - Forbids to ignore some violations (configurable) on a line level
 - Forbids single element unpacking
 - Forbids to unpack lists with side-effects
-- Forbids to use miltiline strings except for assignments and docstrings
+- Forbids to use multiline strings except for assignments and docstrings
 - Forbids not returning anything in functions and methods starting with `get_`
 - Forbids to use empty comment
 - Forbids using bitwise operation with boolean operation
@@ -593,7 +594,7 @@ In this release we had a little focus on:
 - Adds `bellybutton` to the list of other linters
 - Documents how to use `nitpick` to sync the configuration
 - Documents how to use `flakehell` to create `baseline`s for legacy integrations
-- Improves tests for binary, octal, hex, and expanetional numbers
+- Improves tests for binary, octal, hex, and exponentional numbers
 - Adds new `xenon` CI check
 - Now handles exceptions in our own code, hope to never see them!
 - Now uses `coverage` checks in deepsource
@@ -663,7 +664,7 @@ We introduce a lot of new rules related to this topic improving:
 consistency, complexity, and general feel from your code.
 
 In this release we have ported a lot of existing `pylint` rules,
-big cudos to the developers of this wonderful tool.
+big kudos to the developers of this wonderful tool.
 
 ### Features
 
