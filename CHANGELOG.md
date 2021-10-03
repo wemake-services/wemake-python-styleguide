@@ -43,7 +43,7 @@ Semantic versioning in our case means:
 
 ### Bugfixes
 
-- Fixes crash on `python 3.10`
+- Fixes crash on `python3.10`
 - Fixes `UselessReturningElseViolation` to not report `else` with `break` #1958
 - Fixes `ReassigningVariableToItselfViolation` to not report on `x = (x,)` #1807
 - Fixes `ReassigningVariableToItselfViolation` to extract variables
