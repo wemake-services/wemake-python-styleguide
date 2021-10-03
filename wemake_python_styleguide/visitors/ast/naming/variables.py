@@ -86,11 +86,14 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
 
         for var_name, var_value in itertools.zip_longest(names, var_values):
             if var_name == var_value:
-                self.add_violation(
-                    best_practices.ReassigningVariableToItselfViolation(
-                        node, text=var_name,
-                    ),
-                )
+                if type(var_name)==bool or type(var_value) == bool:
+                    pass
+                else:
+                    self.add_violation(
+                        best_practices.ReassigningVariableToItselfViolation(
+                            node, text=var_name,
+                        ),
+                    )
 
     def _check_unique_assignment(
         self,
