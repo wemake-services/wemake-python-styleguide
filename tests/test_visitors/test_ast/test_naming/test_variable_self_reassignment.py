@@ -86,6 +86,8 @@ right_swap4 = 'dx, dy = +dy, -dx'
 right_swap5 = 'dx, dy = dy, dx'
 right_swap6 = 'dy, dx = dx, dy'
 
+right_unary1 = 'a = not a'
+right_unary2 = 'a = -a'
 
 # Wrong:
 
@@ -267,6 +269,8 @@ def test_self_variable_reassignment_triple(
     right_swap4,
     right_swap5,
     right_swap6,
+    right_unary1,
+    right_unary2,
 ])
 def test_correct_variable_reassignment(
     assert_errors,

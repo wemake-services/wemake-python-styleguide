@@ -67,6 +67,16 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
         self._check_unique_assignment(node, names)
         self.generic_visit(node)
 
+    def _is_reassignment_edge_case(self, node: AnyAssign) -> bool:
+        # This is not a variable, but a class property
+        if isinstance(nodes.get_context(node), ast.ClassDef):
+            return True
+
+        # It means that someone probably modifies original value
+        # of the variable using some unary operation, e.g. `a = not a`
+        # See #2189
+        return isinstance(node.value, ast.UnaryOp)
+
     def _check_reassignment(
         self,
         node: AnyAssign,
@@ -75,8 +85,8 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
         if not node.value:
             return
 
-        if isinstance(nodes.get_context(node), ast.ClassDef):
-            return  # This is not a variable, but a class property
+        if self._is_reassignment_edge_case(node):
+            return
 
         var_values = name_nodes.get_variables_from_node(node.value)
         if len(names) <= 1 < len(var_values):

@@ -1424,13 +1424,14 @@ class ReassigningVariableToItselfViolation(ASTViolation):
         # Correct:
         some = some + 1
         x_coord, y_coord = y_coord, x_coord
+        flag = not flag
 
         # Wrong:
         some = some
         x_coord, y_coord = x_coord, y_coord
 
     .. versionadded:: 0.3.0
-    .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.15.3
 
     """
 
