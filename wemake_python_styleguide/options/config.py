@@ -58,7 +58,7 @@ You can also show all options that ``flake8`` supports by running:
     :str:`wemake_python_styleguide.options.defaults.FORBIDDEN_DOMAIN_NAMES`
 - ``forbidden-inline-ignore`` - list of codes of violations or
     class of violations that are forbidden to ignore inline, defaults to
-    :str:`wemake_python_styleguide.options.defaults.FORBIDDEN_NOQA`
+    :str:`wemake_python_styleguide.options.defaults.FORBIDDEN_INLINE_IGNORE`
 
 
 .. rubric:: Complexity options
