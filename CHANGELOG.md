@@ -24,7 +24,7 @@ Semantic versioning in our case means:
 - Now `InconsistentYieldViolation` and `InconsistentReturnViolation` are raised
   when `yield` or `return` is used with `None`
   where plain version should be used
-- Dot and comma are not counted against string constant overuse limit anymore
+- Dot and comma are not counted against string literal overuse limit anymore
 
 ### Bugfixes
 
