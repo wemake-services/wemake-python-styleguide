@@ -41,6 +41,8 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
 
     _ignored_string_constants: ClassVar[_StringConstants] = frozenset((
         ' ',
+        '.',
+        ',',
         '',
         '\n',
         '\r\n',
