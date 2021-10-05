@@ -851,15 +851,15 @@ class TooManyExceptCasesViolation(ASTViolation):
 
 @final
 class OverusedStringViolation(MaybeASTViolation):
-    """
+    r"""
     Forbid the overuse of string literals.
 
     We allow to use strings without any restrictions as annotations for
     variables, arguments, return values, and class attributes.
 
     Some common string literals like dot `'.'`, comma `','`, empty string `''`,
-    single space `' '`, new line `'\n'`, `'\r\n'` and tabulator `'\t'` do not count
-    against string literal overuse limit.
+    single space `' '`, new line `'\n'`, `'\r\n'` and tabulator `'\t'`
+    do not count against string literal overuse limit.
 
     Reasoning:
         When some string is used more than several time in your code,
@@ -879,7 +879,7 @@ class OverusedStringViolation(MaybeASTViolation):
 
     """
 
-    error_template = 'Found string literal over-use: \'{0}\''
+    error_template = "Found string literal over-use: '{0}'"
     code = 226
 
 
