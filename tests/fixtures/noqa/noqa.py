@@ -792,3 +792,13 @@ matrix = [
 
 def bare_raise_function():
     raise # noqa: WPS467
+
+for _, something in enumerate(collection): # noqa: WPS468
+    report(something)
+
+variable_to_store_things = {
+    definitely_something
+    for _, definitely_something in enumerate(collection) # noqa: WPS468
+}
+
+
