@@ -69,7 +69,7 @@ def assert_error_text():
             assert len(real_errors) == 1
 
         violation = real_errors[0]
-        error_format = ': {0}'
+        error_format = ": '{0}'"
 
         assert error_format in violation.error_template
         assert violation.error_template.endswith(error_format)
