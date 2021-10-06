@@ -62,7 +62,7 @@ Strict linting offers the following benefits to developers and companies:
 1. Ensures consistency - no matter who works on it, the end product will always be the same dependable code
 2. Helps avoid potential bugs - strict rules make sure that you don't make common mistakes
 3. Efficient code reviews - each piece of code has a similar familiar style and syntax. If it passes all the checks, there's little left to review!
-4. Less code revisions - strict linting ensures that you don't have to re-write the codebase again and again
+4. Fewer code revisions - strict linting ensures that you don't have to re-write the codebase again and again
 5. Reduce code redundancy - Sometimes we write complex code as we are thinking in a certain way about a problem. The linter offers suggestions that can help simplify the code and eliminate redundant statements
 
 
@@ -83,7 +83,7 @@ to make all people write **exactly** the same `Python` code.
 We have several primary objectives:
 
 0. Enforce `python3.6+` usage
-1. Significantly reduce complexity of your code and make it more maintainable
+1. Significantly reduce the complexity of your code and make it more maintainable
 2. Enforce "There should be one -- and preferably only one -- obvious way to do it" rule to coding and naming styles
 3. Protect developers from possible errors and enforce best practices
 
@@ -119,7 +119,7 @@ you can return us a favor by supporting the work we do.
 If you use our linter - it means that your code is awesome.
 You can be proud of it!
 And you should share your accomplishment with others
-by including a badge to your `README` file. It looks like this:
+by including a badge in your `README` file. It looks like this:
 
 [![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
 
