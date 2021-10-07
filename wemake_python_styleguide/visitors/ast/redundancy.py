@@ -1,29 +1,29 @@
 import ast
-from typing import Union
 
 from typing_extensions import final
 
+from wemake_python_styleguide.types import AnyFor
 from wemake_python_styleguide.violations.best_practices import (
     RedundantEnumerateViolation,
 )
-from wemake_python_styleguide.visitors import base
+from wemake_python_styleguide.visitors.ast import decorators
+from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
 @final
-class RedundantEnumerateVisitor(base.BaseNodeVisitor):
+@decorators.alias('visit_any_for', (
+    'visit_For',
+    'visit_AsyncFor',
+))
+class RedundantEnumerateVisitor(BaseNodeVisitor):
     """Responsible for detecting redundant usages of ``enumerate`` function."""
 
-    def visit_For(self, node: ast.For) -> None:
+    def visit_any_for(self, node: AnyFor) -> None:
         """Used to find redundant usages of ``enumerate`` function."""
         self._check_for_redundant_enumerate(node)
         self.generic_visit(node)
 
-    def visit_AsyncFor(self, node: ast.AsyncFor) -> None:
-        """Used to find redundant usages of ``enumerate`` in async context."""
-        self._check_for_redundant_enumerate(node)
-        self.generic_visit(node)
-
-    def _check_for_redundant_enumerate(self, node: Union[ast.For, ast.AsyncFor]) -> None:  # noqa: E501
+    def _check_for_redundant_enumerate(self, node: AnyFor) -> None:
         if not isinstance(node.iter, ast.Call):
             return
 
