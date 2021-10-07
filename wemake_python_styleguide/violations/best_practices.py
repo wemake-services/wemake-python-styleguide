@@ -85,6 +85,7 @@ Summary
    NewStyledDecoratorViolation
    BareRaiseViolation
    RedundantEnumerateViolation
+   RaiseFromItselfViolation
 
 Best practices
 --------------
@@ -158,6 +159,7 @@ Best practices
 .. autoclass:: NewStyledDecoratorViolation
 .. autoclass:: BareRaiseViolation
 .. autoclass:: RedundantEnumerateViolation
+.. autoclass:: RaiseFromItselfViolation
 
 """
 
@@ -2640,3 +2642,33 @@ class RedundantEnumerateViolation(ASTViolation):
 
     error_template = 'Found redundant use of `enumerate`'
     code = 468
+
+
+@final
+class RaiseFromItselfViolation(ASTViolation):
+    """
+    Forbid raising an exception from itself.
+
+    Reasoning:
+        It doesn't make sense to raise an exception from it self,
+        since the final behavior will be the same.
+
+    Solution:
+        Don't raise an exeception from itself.
+
+    Example::
+
+        # Correct
+        ex = Exception('Some Exception')
+        raise ex
+
+        # Wrong
+        ex = Exception('Some Exception')
+        raise ex from ex
+
+    .. versionadded:: 0.16.0
+
+    """
+
+    error_template = 'Found error raising from itself'
+    code = 469

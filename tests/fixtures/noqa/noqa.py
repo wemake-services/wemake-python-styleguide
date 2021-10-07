@@ -801,4 +801,8 @@ variable_to_store_things = {
     for _, definitely_something in enumerate(collection) # noqa: WPS468
 }
 
-
+try:  # noqa: WPS328
+    raise TypeError('Type Error')
+except TypeError as raise_from_itself:
+    my_print(raise_from_itself)
+    raise raise_from_itself from raise_from_itself  # noqa: WPS469

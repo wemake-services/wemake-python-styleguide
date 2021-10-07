@@ -20,6 +20,11 @@ def get_exception_name(node: ast.Raise) -> Optional[str]:
     return getattr(exception, 'id', None)
 
 
+def get_cause_name(node: ast.Raise) -> Optional[str]:
+    """Returns the cause name or ``None`` if node has not it."""
+    return getattr(node.cause, 'id', None)
+
+
 def get_all_exception_names(node: ast.Try) -> List[str]:
     """Returns a list of all exceptions names in ``ast.Try``."""
     exceptions: List[str] = []
