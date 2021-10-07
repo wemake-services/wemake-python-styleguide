@@ -2662,7 +2662,7 @@ class RaiseFromItselfViolation(ASTViolation):
         ex = Exception('Some Exception')
         raise ex
 
-        # Wrong
+        # Wrong:
         ex = Exception('Some Exception')
         raise ex from ex
 
