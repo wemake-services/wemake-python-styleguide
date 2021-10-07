@@ -24,6 +24,7 @@ Semantic versioning in our case means:
 - Now `InconsistentYieldViolation` and `InconsistentReturnViolation` are raised
   when `yield` or `return` is used with `None`
   where plain version should be used
+- Added `RedundantEnumerateViolation` #1825
 
 ### Bugfixes
 

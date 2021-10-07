@@ -84,6 +84,7 @@ Summary
    BitwiseAndBooleanMixupViolation
    NewStyledDecoratorViolation
    BareRaiseViolation
+   RedundantEnumerateViolation
 
 Best practices
 --------------
@@ -156,6 +157,7 @@ Best practices
 .. autoclass:: BitwiseAndBooleanMixupViolation
 .. autoclass:: NewStyledDecoratorViolation
 .. autoclass:: BareRaiseViolation
+.. autoclass:: RedundantEnumerateViolation
 
 """
 
@@ -2608,3 +2610,33 @@ class BareRaiseViolation(ASTViolation):
 
     error_template = 'Found bare raise keyword'
     code = 467
+
+
+@final
+class RedundantEnumerateViolation(ASTViolation):
+    """
+    Forbid using a placeholder (``_``) with ``enumerate``.
+
+    Reasoning:
+       This adds no value and introduces additional complexity.
+
+    Solution:
+        Only use ``enumerate`` when you are going to do something with the
+        index it returns.
+
+    Example::
+
+        # Correct:
+        for item in items:
+          ...
+
+        # Wrong:
+        for _, item in enumerate(items):
+          ...
+
+    .. versionadded:: 0.18.0
+
+    """
+
+    error_template = 'Found redundant use of `enumerate`'
+    code = 468
