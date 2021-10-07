@@ -61,18 +61,47 @@ def container():
         ...
 """
 
-wrong_iteration_comprehension_tuple = """
+wrong_iteration_set_comprehension = """
 def container():
     some_value = {
         something
-        for index, something in enumerate(items)
+        for _, something in enumerate(items)
     }
+"""
+
+wrong_iteration_dict_comprehension = """
+def container():
+    some_value = {
+        something: something
+        for _, something in enumerate(items)
+    }
+"""
+
+wrong_iteration_generator_expression = """
+def container():
+    some_value = (
+        something
+        for _, something in enumerate(items)
+    )
+"""
+
+wrong_iteration_multiple_generators = """
+def container():
+    some_value = (
+        something
+        for _, something in enumerate(items)
+        for i, v in enumerate([1, 2, 3])
+        for _, another in enumerate(stuff)
+    )
 """
 
 
 @pytest.mark.parametrize('code', [
     wrong_iteration_enumerate_tuple_placeholder,
     wrong_iteration_with_receiver_placeholder,
+    wrong_iteration_set_comprehension,
+    wrong_iteration_dict_comprehension,
+    wrong_iteration_generator_expression,
 ])
 def test_wrong_usage_of_enumerate(
     assert_errors,
@@ -88,6 +117,28 @@ def test_wrong_usage_of_enumerate(
     visitor.run()
 
     assert_errors(visitor, [RedundantEnumerateViolation])
+
+
+@pytest.mark.parametrize('code', [
+    wrong_iteration_multiple_generators,
+])
+def test_wrong_multiple_generators(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+    mode,
+):
+    """Ensures that using incorrect return annotations is forbidden."""
+    tree = parse_ast_tree(mode(code))
+
+    visitor = RedundantEnumerateVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [
+        RedundantEnumerateViolation,
+        RedundantEnumerateViolation,
+    ])
 
 
 @pytest.mark.parametrize('code', [

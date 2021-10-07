@@ -274,5 +274,5 @@ tests/fixtures/notebook.ipynb
   14:31    WPS303 Found underscored number: 10_00
 
 Full list of violations and explanations:
-https://wemake-python-stylegui.de/en/xx.xx/pages/usage/violations/
+https://wemake-python-stylegui.de/en/0.14.1/pages/usage/violations/
 '''
