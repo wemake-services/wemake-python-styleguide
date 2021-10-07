@@ -2658,7 +2658,7 @@ class RaiseFromItselfViolation(ASTViolation):
 
     Example::
 
-        # Correct
+        # Correct:
         ex = Exception('Some Exception')
         raise ex
 
