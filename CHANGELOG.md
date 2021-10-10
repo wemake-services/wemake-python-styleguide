@@ -38,6 +38,7 @@ Semantic versioning in our case means:
 - Added `why strict is good`
 - Replaced all `python` with `Python` in README.md
 - Improve Docs: Fixed all typos and grammatical errors in CHANGELOG
+- Updated documentation with the recommended `isort` config. #1934
 
 
 ## 0.15.3
