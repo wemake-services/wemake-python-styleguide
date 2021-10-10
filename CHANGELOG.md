@@ -26,7 +26,7 @@ Semantic versioning in our case means:
   where plain version should be used
 - Added `RedundantEnumerateViolation` #1825
 - Adds `RaiseFromItselfViolation` #2133
-- Adds `KwargUnpackingInClassDefinitionViolation` #1714
+- Adds `KwargsUnpackingInClassDefinitionViolation` #1714
 
 ### Bugfixes
 

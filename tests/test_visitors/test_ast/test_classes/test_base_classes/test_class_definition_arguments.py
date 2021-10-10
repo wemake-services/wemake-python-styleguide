@@ -1,7 +1,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
-    KwargUnpackingInClassDefinitionViolation,
+    KwargsUnpackingInClassDefinitionViolation,
 )
 from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
 
@@ -40,7 +40,7 @@ def test_kwarg_unpacking_violation(
     visitor = WrongClassVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [KwargUnpackingInClassDefinitionViolation])
+    assert_errors(visitor, [KwargsUnpackingInClassDefinitionViolation])
 
 
 class_definition_with_keyword_arg = """

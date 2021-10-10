@@ -41,7 +41,7 @@ class WrongClassVisitor(base.BaseNodeVisitor):  # noqa: WPS214
         self._check_base_classes(node)
         self._check_wrong_body_nodes(node)
         self._check_getters_setters_methods(node)
-        self._check_kwarg_unpacking(node)
+        self._check_kwargs_unpacking(node)
         self.generic_visit(node)
 
     def _check_base_classes_count(self, node: ast.ClassDef) -> None:
@@ -131,11 +131,11 @@ class WrongClassVisitor(base.BaseNodeVisitor):  # noqa: WPS214
                     ),
                 )
 
-    def _check_kwarg_unpacking(self, node: ast.ClassDef) -> None:
+    def _check_kwargs_unpacking(self, node: ast.ClassDef) -> None:
         for keyword in node.keywords:
             if keyword.arg is None:
                 self.add_violation(
-                    bp.KwargUnpackingInClassDefinitionViolation(node),
+                    bp.KwargsUnpackingInClassDefinitionViolation(node),
                 )
 
 

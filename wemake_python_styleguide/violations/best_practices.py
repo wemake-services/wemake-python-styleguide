@@ -86,7 +86,7 @@ Summary
    BareRaiseViolation
    RedundantEnumerateViolation
    RaiseFromItselfViolation
-   KwargUnpackingInClassDefinitionViolation
+   KwargsUnpackingInClassDefinitionViolation
 
 Best practices
 --------------
@@ -161,7 +161,7 @@ Best practices
 .. autoclass:: BareRaiseViolation
 .. autoclass:: RedundantEnumerateViolation
 .. autoclass:: RaiseFromItselfViolation
-.. autoclass:: KwargUnpackingInClassDefinitionViolation
+.. autoclass:: KwargsUnpackingInClassDefinitionViolation
 
 """
 
@@ -2677,12 +2677,14 @@ class RaiseFromItselfViolation(ASTViolation):
 
 
 @final
-class KwargUnpackingInClassDefinitionViolation(ASTViolation):
+class KwargsUnpackingInClassDefinitionViolation(ASTViolation):
     """
     Forbid kwarg unpacking in class definition.
 
     Reasoning:
-        Dynamic class generation with unknown arguments is bad.
+        Dynamic class generation with unknown arguments is bad because it
+        creates too much flexibility and possibilities for errors.
+        It also limits the typechecking capabilities.
 
     Solution:
         Use keyword arguments noramlly without unpacking them.
