@@ -30,6 +30,7 @@ Semantic versioning in our case means:
 
 - Fixes that `InconsistentComprehensionViolation` was ignoring
   misaligned `in` expressions #2075
+- `darglint.toml` was missing certain options from main `setup.cfg`. 
 
 ### Misc
 
