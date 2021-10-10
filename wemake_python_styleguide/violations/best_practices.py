@@ -86,6 +86,7 @@ Summary
    BareRaiseViolation
    RedundantEnumerateViolation
    RaiseFromItselfViolation
+   KwargUnpackingInClassDefinitionViolation
 
 Best practices
 --------------
@@ -160,6 +161,7 @@ Best practices
 .. autoclass:: BareRaiseViolation
 .. autoclass:: RedundantEnumerateViolation
 .. autoclass:: RaiseFromItselfViolation
+.. autoclass:: KwargUnpackingInClassDefinitionViolation
 
 """
 
@@ -2672,3 +2674,33 @@ class RaiseFromItselfViolation(ASTViolation):
 
     error_template = 'Found error raising from itself'
     code = 469
+
+
+@final
+class KwargUnpackingInClassDefinitionViolation(ASTViolation):
+    """
+    Forbid kwarg unpacking in class definition.
+
+    Reasoning:
+        Dynamic class generation with unknown arguments is bad.
+
+    Solution:
+        Use keyword arguments noramlly without unpacking them.
+
+    Example::
+
+        # Correct:
+        class MyClass(argument='argument'):
+            ...
+
+        # Wrong:
+        arguments = {'argument': 'argument'}
+        class MyClass(**arguments):
+            ...
+
+    .. versionadded:: 0.16.0
+
+    """
+
+    error_template = 'Found kwarg unpacking in class definition'
+    code = 470

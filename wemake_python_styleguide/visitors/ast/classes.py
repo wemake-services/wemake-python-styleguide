@@ -22,7 +22,7 @@ from wemake_python_styleguide.visitors import base, decorators
 
 
 @final
-class WrongClassVisitor(base.BaseNodeVisitor):
+class WrongClassVisitor(base.BaseNodeVisitor):  # noqa: WPS214
     """
     This class is responsible for restricting some ``class`` anti-patterns.
 
@@ -41,6 +41,7 @@ class WrongClassVisitor(base.BaseNodeVisitor):
         self._check_base_classes(node)
         self._check_wrong_body_nodes(node)
         self._check_getters_setters_methods(node)
+        self._check_kwarg_unpacking(node)
         self.generic_visit(node)
 
     def _check_base_classes_count(self, node: ast.ClassDef) -> None:
@@ -128,6 +129,13 @@ class WrongClassVisitor(base.BaseNodeVisitor):
                         method,
                         text=method.name,
                     ),
+                )
+
+    def _check_kwarg_unpacking(self, node: ast.ClassDef) -> None:
+        for keyword in node.keywords:
+            if keyword.arg is None:
+                self.add_violation(
+                    bp.KwargUnpackingInClassDefinitionViolation(node),
                 )
 
 
