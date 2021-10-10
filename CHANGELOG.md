@@ -1037,7 +1037,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - [@roxe322](https://github.com/roxe322)
 - [@geoc0ld](https://github.com/geoc0ld)
 - [@lensvol](https://github.com/lensvol)
-- [@SheldonNunes ](https://github.com/SheldonNunes)
+- [@SheldonNunes](https://github.com/SheldonNunes)
 - [@tommbee](https://github.com/tommbee)
 - [@valignatev](https://github.com/valignatev)
 - [@vsmaxim](https://github.com/vsmaxim)
