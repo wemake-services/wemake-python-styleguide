@@ -13,4 +13,3 @@
 ["setup.cfg".flake8]
 # These values should be placed inside `setup.cfg` in your repo:
 strictness = "long"
-docstring-style = "numpy"
