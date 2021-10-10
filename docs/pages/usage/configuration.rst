@@ -42,8 +42,8 @@ file is available with the core settings for ``flake8``.
 **flake8-isort**
 
 We use ``flake8-isort`` to check style of imports in our code.
-To avoid triggering these checks, please update your configuration
-with the following lines:
+To avoid triggering these checks, you can either use `"wemake" isort profile <https://pycqa.github.io/isort/docs/configuration/profiles.html#wemake>`_
+or update your configuration with the following lines:
 
 .. code:: ini
 
@@ -53,7 +53,6 @@ with the following lines:
   include_trailing_comma = true
   use_parentheses = true
   multi_line_output = 3
-  line_length = 80
 
 Our `isort.toml <https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/isort.toml>`_
 file is available with the core settings for ``isort``.
@@ -70,7 +69,6 @@ following settings:
 
   [darglint]
   strictness = long
-  docstring-style = numpy
 
 Our `darglint.toml <https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/darglint.toml>`_
 file is available with the core settings for ``isort``.
