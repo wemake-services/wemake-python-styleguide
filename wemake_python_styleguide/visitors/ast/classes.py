@@ -22,25 +22,17 @@ from wemake_python_styleguide.visitors import base, decorators
 
 
 @final
-class WrongClassVisitor(base.BaseNodeVisitor):  # noqa: WPS214
+class WrongClassDefVisitor(base.BaseNodeVisitor):
     """
-    This class is responsible for restricting some ``class`` anti-patterns.
+    This class is responsible for restricting some ``class`` def anti-patterns.
 
     Here we check for stylistic issues and design patterns.
     """
-
-    _allowed_body_nodes: ClassVar[types.AnyNodes] = (
-        *FunctionNodes,
-        ast.ClassDef,  # we allow some nested classes
-        *AssignNodes,  # fields and annotations
-    )
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """Checking class definitions."""
         self._check_base_classes_count(node)
         self._check_base_classes(node)
-        self._check_wrong_body_nodes(node)
-        self._check_getters_setters_methods(node)
         self._check_kwargs_unpacking(node)
         self.generic_visit(node)
 
@@ -57,34 +49,6 @@ class WrongClassVisitor(base.BaseNodeVisitor):  # noqa: WPS214
                 continue
 
             self._check_base_classes_rules(node, base_name)
-
-    def _check_base_classes_rules(
-        self,
-        node: ast.ClassDef,
-        base_name: ast.expr,
-    ) -> None:
-        id_attr = getattr(base_name, 'id', None)
-
-        if id_attr == 'BaseException':
-            self.add_violation(bp.BaseExceptionSubclassViolation(node))
-        elif id_attr == 'object' and len(node.bases) >= 2:
-            self.add_violation(
-                consistency.ObjectInBaseClassesListViolation(
-                    node, text=id_attr,
-                ),
-            )
-        elif classes.is_forbidden_super_class(id_attr):
-            self.add_violation(
-                oop.BuiltinSubclassViolation(node, text=id_attr),
-            )
-
-    def _check_wrong_body_nodes(self, node: ast.ClassDef) -> None:
-        for sub_node in node.body:
-            if isinstance(sub_node, self._allowed_body_nodes):
-                continue
-            if strings.is_doc_string(sub_node):
-                continue
-            self.add_violation(oop.WrongClassBodyContentViolation(sub_node))
 
     def _is_correct_base_class(self, base_class: ast.AST) -> bool:
         if isinstance(base_class, ast.Name):
@@ -106,6 +70,62 @@ class WrongClassVisitor(base.BaseNodeVisitor):  # noqa: WPS214
 
             return len(subscripts) == 1 and correct_items
         return False
+
+    def _check_base_classes_rules(
+        self,
+        node: ast.ClassDef,
+        base_name: ast.expr,
+    ) -> None:
+        id_attr = getattr(base_name, 'id', None)
+
+        if id_attr == 'BaseException':
+            self.add_violation(bp.BaseExceptionSubclassViolation(node))
+        elif id_attr == 'object' and len(node.bases) >= 2:
+            self.add_violation(
+                consistency.ObjectInBaseClassesListViolation(
+                    node, text=id_attr,
+                ),
+            )
+        elif classes.is_forbidden_super_class(id_attr):
+            self.add_violation(
+                oop.BuiltinSubclassViolation(node, text=id_attr),
+            )
+
+    def _check_kwargs_unpacking(self, node: ast.ClassDef) -> None:
+        for keyword in node.keywords:
+            if keyword.arg is None:
+                self.add_violation(
+                    bp.KwargsUnpackingInClassDefinitionViolation(node),
+                )
+
+
+@final
+class WrongClassBodyVisitor(base.BaseNodeVisitor):
+    """
+    This class is responsible for restricting some ``class`` body anti-patterns.
+
+    Here we check for stylistic issues and design patterns.
+    """
+
+    _allowed_body_nodes: ClassVar[types.AnyNodes] = (
+        *FunctionNodes,
+        ast.ClassDef,  # we allow some nested classes
+        *AssignNodes,  # fields and annotations
+    )
+
+    def visit_ClassDef(self, node: ast.ClassDef) -> None:
+        """Checking class definitions."""
+        self._check_wrong_body_nodes(node)
+        self._check_getters_setters_methods(node)
+        self.generic_visit(node)
+
+    def _check_wrong_body_nodes(self, node: ast.ClassDef) -> None:
+        for sub_node in node.body:
+            if isinstance(sub_node, self._allowed_body_nodes):
+                continue
+            if strings.is_doc_string(sub_node):
+                continue
+            self.add_violation(oop.WrongClassBodyContentViolation(sub_node))
 
     def _check_getters_setters_methods(self, node: ast.ClassDef) -> None:
         class_attributes, instance_attributes = classes.get_attributes(
@@ -129,13 +149,6 @@ class WrongClassVisitor(base.BaseNodeVisitor):  # noqa: WPS214
                         method,
                         text=method.name,
                     ),
-                )
-
-    def _check_kwargs_unpacking(self, node: ast.ClassDef) -> None:
-        for keyword in node.keywords:
-            if keyword.arg is None:
-                self.add_violation(
-                    bp.KwargsUnpackingInClassDefinitionViolation(node),
                 )
 
 

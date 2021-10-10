@@ -89,7 +89,8 @@ PRESET: Final = (
 
     iterables.IterableUnpackingVisitor,
 
-    classes.WrongClassVisitor,
+    classes.WrongClassDefVisitor,
+    classes.WrongClassBodyVisitor,
     classes.WrongMethodVisitor,
     classes.WrongSlotsVisitor,
     classes.ClassAttributeVisitor,
