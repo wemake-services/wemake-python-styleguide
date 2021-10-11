@@ -86,6 +86,7 @@ Summary
    BareRaiseViolation
    RedundantEnumerateViolation
    RaiseFromItselfViolation
+   ConsecutiveSlicesViolation
 
 Best practices
 --------------
@@ -160,6 +161,7 @@ Best practices
 .. autoclass:: BareRaiseViolation
 .. autoclass:: RedundantEnumerateViolation
 .. autoclass:: RaiseFromItselfViolation
+.. autoclass:: ConsecutiveSlicesViolation
 
 """
 
@@ -2672,3 +2674,32 @@ class RaiseFromItselfViolation(ASTViolation):
 
     error_template = 'Found error raising from itself'
     code = 469
+
+
+@final
+class ConsecutiveSlicesViolation(ASTViolation):
+    """
+    Forbid consecutive slices.
+
+    Reasoning:
+        Consecutive slices reduce readability of the code and obscure
+        intended meaning of the expression.
+
+    Solution:
+        Compress multiple consecutive slices into a single one.
+
+    Example::
+
+        a = [1, 2, 3, 4]
+
+        # Correct:
+        a[1:3]
+
+        # Wrong:
+        a[1:][:2]
+
+    .. versionadded:: 0.16.0
+    """
+
+    error_template = 'Found consecutive slices'
+    code = 470

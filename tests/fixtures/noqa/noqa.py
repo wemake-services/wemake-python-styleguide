@@ -806,3 +806,6 @@ try:  # noqa: WPS328
 except TypeError as raise_from_itself:
     my_print(raise_from_itself)
     raise raise_from_itself from raise_from_itself  # noqa: WPS469
+
+
+secondary_slice = items[1:][:3]  # noqa: WPS470
