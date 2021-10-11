@@ -87,6 +87,7 @@ Summary
    RedundantEnumerateViolation
    RaiseFromItselfViolation
    KwargsUnpackingInClassDefinitionViolation
+   ConsecutiveSlicesViolation
 
 Best practices
 --------------
@@ -162,6 +163,7 @@ Best practices
 .. autoclass:: RedundantEnumerateViolation
 .. autoclass:: RaiseFromItselfViolation
 .. autoclass:: KwargsUnpackingInClassDefinitionViolation
+.. autoclass:: ConsecutiveSlicesViolation
 
 """
 
@@ -2706,3 +2708,31 @@ class KwargsUnpackingInClassDefinitionViolation(ASTViolation):
 
     error_template = 'Found kwarg unpacking in class definition'
     code = 470
+
+
+@final
+class ConsecutiveSlicesViolation(ASTViolation):
+    """
+    Forbid consecutive slices.
+
+    Reasoning:
+        Consecutive slices reduce readability of the code and obscure
+        intended meaning of the expression.
+
+    Solution:
+        Compress multiple consecutive slices into a single one.
+
+    Example::
+
+        # Correct:
+        my_list[1:3]
+
+        # Wrong:
+        my_list[1:][:2]
+
+    .. versionadded:: 0.16.0
+
+    """
+
+    error_template = 'Found consecutive slices'
+    code = 471

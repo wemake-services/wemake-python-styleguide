@@ -1,4 +1,5 @@
 import ast
+from typing import Set
 
 from typing_extensions import final
 
@@ -17,11 +18,43 @@ from wemake_python_styleguide.visitors import base
 class SubscriptVisitor(base.BaseNodeVisitor):
     """Checks subscripts used in the code."""
 
+    _marked_slices: Set[ast.Subscript] = set()
+
     def visit_Subscript(self, node: ast.Subscript) -> None:
         """Visits subscript."""
         self._check_redundant_subscript(node)
+
+        if node in self._marked_slices:
+            # Violation for that specific slice was already triggered earlier
+            self._marked_slices.remove(node)
+        else:
+            self._check_consecutive_slices(node)
+
         self._check_slice_assignment(node)
         self.generic_visit(node)
+
+    def _check_consecutive_slices(self, node: ast.Subscript):
+        if not isinstance(node.slice, ast.Slice):
+            return
+
+        if not isinstance(node.value, ast.Subscript):
+            return
+
+        if not isinstance(node.value.slice, ast.Slice):
+            return
+
+        self.add_violation(best_practices.ConsecutiveSlicesViolation(node))
+
+        # We do not want to trigger duplicate violations for each subsequent
+        # subscript in the same chain, so we proactively mark them so
+        # that visitor can skip them in the future.
+        current_sub = node.value
+        while isinstance(current_sub.value, ast.Subscript):
+            if not isinstance(current_sub.value.slice, ast.Slice):
+                break
+
+            self._marked_slices.add(current_sub)
+            current_sub = current_sub.value
 
     def _check_redundant_subscript(self, node: ast.Subscript) -> None:
         if not isinstance(node.slice, ast.Slice):

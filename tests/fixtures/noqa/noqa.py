@@ -810,3 +810,6 @@ except TypeError as raise_from_itself:
 
 class TestClass(object, **{}):  # noqa: WPS470
     """Docs."""
+
+
+secondary_slice = items[1:][:3]  # noqa: WPS471
