@@ -3,7 +3,7 @@ import pytest
 from wemake_python_styleguide.violations.consistency import (
     RequiredBaseClassViolation,
 )
-from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
+from wemake_python_styleguide.visitors.ast.classes import WrongClassDefVisitor
 
 class_without_base = """
 class Meta:
@@ -57,7 +57,7 @@ def test_wrong_base_class(
     """Testing that not using explicit base class is forbidden."""
     tree = parse_ast_tree(code)
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongClassDefVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [RequiredBaseClassViolation])
@@ -85,7 +85,7 @@ def test_regular_base_classes(
     """Testing that regular base classes work."""
     tree = parse_ast_tree(code.format(base))
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongClassDefVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
