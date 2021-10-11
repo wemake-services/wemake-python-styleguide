@@ -58,6 +58,8 @@ def test_forbidden_multiple_consecutive_slices(
     'a[4][:5]',
     'a["hello"][4:]',
     'a[1:]["tram"][17:]',
+    'a[a[:1]][a[1:2]][a[2:3]]',
+    'a[1][2][3]',
 ])
 def test_nonconsecutive_slices(
     assert_errors,

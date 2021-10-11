@@ -808,8 +808,8 @@ except TypeError as raise_from_itself:
     raise raise_from_itself from raise_from_itself  # noqa: WPS469
 
 
-secondary_slice = items[1:][:3]  # noqa: WPS471
-
-
 class TestClass(object, **{}):  # noqa: WPS470
     """Docs."""
+
+
+secondary_slice = items[1:][:3]  # noqa: WPS471

@@ -86,8 +86,8 @@ Summary
    BareRaiseViolation
    RedundantEnumerateViolation
    RaiseFromItselfViolation
-   ConsecutiveSlicesViolation
    KwargsUnpackingInClassDefinitionViolation
+   ConsecutiveSlicesViolation
 
 Best practices
 --------------
@@ -162,8 +162,8 @@ Best practices
 .. autoclass:: BareRaiseViolation
 .. autoclass:: RedundantEnumerateViolation
 .. autoclass:: RaiseFromItselfViolation
-.. autoclass:: ConsecutiveSlicesViolation
 .. autoclass:: KwargsUnpackingInClassDefinitionViolation
+.. autoclass:: ConsecutiveSlicesViolation
 
 """
 
@@ -2724,13 +2724,11 @@ class ConsecutiveSlicesViolation(ASTViolation):
 
     Example::
 
-        a = [1, 2, 3, 4]
-
         # Correct:
-        a[1:3]
+        my_list[1:3]
 
         # Wrong:
-        a[1:][:2]
+        my_list[1:][:2]
 
     .. versionadded:: 0.16.0
 
