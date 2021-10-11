@@ -2733,6 +2733,7 @@ class ConsecutiveSlicesViolation(ASTViolation):
         a[1:][:2]
 
     .. versionadded:: 0.16.0
+
     """
 
     error_template = 'Found consecutive slices'
