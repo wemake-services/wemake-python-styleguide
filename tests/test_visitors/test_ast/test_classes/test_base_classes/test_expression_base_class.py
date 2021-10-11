@@ -1,7 +1,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.oop import WrongBaseClassViolation
-from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
+from wemake_python_styleguide.visitors.ast.classes import WrongClassDefVisitor
 
 class_with_base = """
 class Meta({0}):
@@ -34,7 +34,7 @@ def test_base_class_expression(
     """Testing that it is not possible to use any incorrect nodes as bases."""
     tree = parse_ast_tree(class_with_base.format(base))
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongClassDefVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [WrongBaseClassViolation])
@@ -70,7 +70,7 @@ def test_correct_base_classes(
     """Testing that it is possible to use correct nodes as bases."""
     tree = parse_ast_tree(class_with_base.format(base))
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongClassDefVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])

@@ -87,6 +87,7 @@ Summary
    RedundantEnumerateViolation
    RaiseFromItselfViolation
    ConsecutiveSlicesViolation
+   KwargsUnpackingInClassDefinitionViolation
 
 Best practices
 --------------
@@ -162,6 +163,7 @@ Best practices
 .. autoclass:: RedundantEnumerateViolation
 .. autoclass:: RaiseFromItselfViolation
 .. autoclass:: ConsecutiveSlicesViolation
+.. autoclass:: KwargsUnpackingInClassDefinitionViolation
 
 """
 
@@ -2677,6 +2679,38 @@ class RaiseFromItselfViolation(ASTViolation):
 
 
 @final
+class KwargsUnpackingInClassDefinitionViolation(ASTViolation):
+    """
+    Forbid kwarg unpacking in class definition.
+
+    Reasoning:
+        Dynamic class generation with unknown arguments is bad because it
+        creates too much flexibility and possibilities for errors.
+        It also limits the typechecking capabilities.
+
+    Solution:
+        Use keyword arguments noramlly without unpacking them.
+
+    Example::
+
+        # Correct:
+        class MyClass(argument='argument'):
+            ...
+
+        # Wrong:
+        arguments = {'argument': 'argument'}
+        class MyClass(**arguments):
+            ...
+
+    .. versionadded:: 0.16.0
+
+    """
+
+    error_template = 'Found kwarg unpacking in class definition'
+    code = 470
+
+
+@final
 class ConsecutiveSlicesViolation(ASTViolation):
     """
     Forbid consecutive slices.
@@ -2702,4 +2736,4 @@ class ConsecutiveSlicesViolation(ASTViolation):
     """
 
     error_template = 'Found consecutive slices'
-    code = 470
+    code = 471

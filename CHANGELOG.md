@@ -27,6 +27,7 @@ Semantic versioning in our case means:
 - Added `RedundantEnumerateViolation` #1825
 - Adds `RaiseFromItselfViolation` #2133
 - Adds `ConsecutiveSlicesViolation` #2064
+- Adds `KwargsUnpackingInClassDefinitionViolation` #1714
 
 ### Bugfixes
 
