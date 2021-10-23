@@ -115,7 +115,7 @@ This step is mandatory during the CI.
 ## Spellcheckers
 
 This project is developed by a diverse and multilingual group of people.
-Many of us are not English native speakers. And we also know that people can make mistakes and typos even in the simplest of words.
+Many of us are not English native speakers and we also know that people can make mistakes and typos even in the simplest of words.
 
 So, that's why we use a bunch of tools to find and fix spelling and grammar.
 
