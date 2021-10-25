@@ -49,3 +49,61 @@ jobs:
       uses: codecov/codecov-action@v2.1.0
       with:
         file: ./coverage.xml
+
+  remark-lint:
+    name: remark-lint
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Node
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Install remark presets
+      run: |
+        npm install remark \
+          remark-cli \
+          remark-lint \
+          remark-lint-code-block-style \
+          remark-lint-no-empty-url \
+          remark-lint-no-tabs \
+          remark-preset-lint-consistent \
+          remark-preset-lint-markdown-style-guide \
+          remark-preset-lint-recommended \
+          remark-validate-links
+
+    - name: Create config file
+      run: |
+        cat << EOF > .remarkrc
+        {
+          "plugins": [
+            "lint",
+            "lint-no-tabs",
+            "lint-no-empty-url",
+            "lint-code-block-style",
+            [
+              "lint-unordered-list-marker-style",
+              "-"
+            ],
+            "validate-links",
+            "remark-preset-lint-recommended",
+            [
+              "lint-list-item-indent",
+              "space"
+            ],
+            "preset-lint-consistent"
+          ]
+        }
+        EOF
+
+    - name: remark-lint
+      uses: reviewdog/action-remark-lint@v5
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        fail_on_error: true
+        remark_args: --rc-path=.remarkrc
+        filter_mode: nofilter
+        reporter: github-pr-check
