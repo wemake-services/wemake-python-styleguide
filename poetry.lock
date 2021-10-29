@@ -259,7 +259,7 @@ packaging = ">=20.4"
 
 [[package]]
 name = "darglint"
-version = "1.8.0"
+version = "1.8.1"
 description = "A utility for ensuring Google-style docstrings stay up to date with the source code."
 category = "main"
 optional = false
@@ -1876,8 +1876,8 @@ coverage-conditional-plugin = [
     {file = "coverage_conditional_plugin-0.4.0-py3-none-any.whl", hash = "sha256:3bf586f7b793a9e4e2950f7af32711012929b39d1a4b53a4829489e763fda2dc"},
 ]
 darglint = [
-    {file = "darglint-1.8.0-py3-none-any.whl", hash = "sha256:ac6797bcc918cd8d8f14c168a4a364f54e1aeb4ced59db58e7e4c6dfec2fe15c"},
-    {file = "darglint-1.8.0.tar.gz", hash = "sha256:aa605ef47817a6d14797d32b390466edab621768ea4ca5cc0f3c54f6d8dcaec8"},
+    {file = "darglint-1.8.1-py3-none-any.whl", hash = "sha256:5ae11c259c17b0701618a20c3da343a3eb98b3bc4b5a83d31cdd94f5ebdced8d"},
+    {file = "darglint-1.8.1.tar.gz", hash = "sha256:080d5106df149b199822e7ee7deb9c012b49891538f14a11be681044f0bb20da"},
 ]
 dataclasses = [
     {file = "dataclasses-0.8-py3-none-any.whl", hash = "sha256:0201d89fa866f68c8ebd9d08ee6ff50c0b255f8ec63a71c16fda7af82bb887bf"},
