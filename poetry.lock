@@ -1,6 +1,6 @@
 [[package]]
 name = "added-value"
-version = "0.18.0"
+version = "0.20.0"
 description = "Sphinx \"added-value\" extension"
 category = "dev"
 optional = false
@@ -8,6 +8,7 @@ python-versions = "*"
 
 [package.dependencies]
 docutils = "*"
+les-iterables = ">=0.6.0"
 natsort = "*"
 six = "*"
 sphinx = "*"
@@ -818,6 +819,22 @@ python-versions = "*"
 atomic_cache = ["atomicwrites"]
 nearley = ["js2py"]
 regex = ["regex"]
+
+[[package]]
+name = "les-iterables"
+version = "0.9.0"
+description = "Iterable processing functions"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+more-itertools = "*"
+
+[package.extras]
+dev = ["bumpversion"]
+doc = ["sphinx", "sphinx-rtd-theme", "better-apidoc"]
+test = ["pytest", "coverage", "pytest-cov", "hypothesis", "tox"]
 
 [[package]]
 name = "libcst"
@@ -1728,12 +1745,12 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "c71f9255782dfc56d094c7dca2c0e3e274845ff4e134f3c6b937d32ffe34111c"
+content-hash = "670b075aa68ab9690097cbb217608eb1b568058518bf380ea6bfee86cfb878bc"
 
 [metadata.files]
 added-value = [
-    {file = "added-value-0.18.0.tar.gz", hash = "sha256:6bd6b5d5a10d51a0c77e353885a8cccf8bdd3287c4a3aee4bd221093945b9bf0"},
-    {file = "added_value-0.18.0-py2.py3-none-any.whl", hash = "sha256:5ce3ab683fe2b1401e4bdc25dc06919820c0dd346db12a71201f92a213e94e9c"},
+    {file = "added-value-0.20.0.tar.gz", hash = "sha256:329757c8cdf99ad9aca7fbbeb1335b008b45aaa6cd745e44f10819e3839def53"},
+    {file = "added_value-0.20.0-py2.py3-none-any.whl", hash = "sha256:28b93bc7f76b277cca73f0bb2659b8bf81f8d6415b1cb7b5ea995c79a0870551"},
 ]
 aiocontextvars = [
     {file = "aiocontextvars-0.2.2-py2.py3-none-any.whl", hash = "sha256:885daf8261818767d8f7cbd79f9d4482d118f024b6586ef6e67980236a27bfa3"},
@@ -2061,6 +2078,10 @@ jmespath = [
 ]
 lark-parser = [
     {file = "lark-parser-0.11.3.tar.gz", hash = "sha256:e29ca814a98bb0f81674617d878e5f611cb993c19ea47f22c80da3569425f9bd"},
+]
+les-iterables = [
+    {file = "les_iterables-0.9.0-py3-none-any.whl", hash = "sha256:43b0dbf1f4789ebf6492827f70065460dc75215d0a693f8bf52769bd6e4b0402"},
+    {file = "les_iterables-0.9.0.tar.gz", hash = "sha256:d59d07c758b7d67b13dc0ffde280b6eea07b1ba7b8e5dfd6ac0969013852ec68"},
 ]
 libcst = [
     {file = "libcst-0.3.19-py3-none-any.whl", hash = "sha256:9e26313ded6e17605658b93319299bce43cc8d7e24dafc12d6f782f758a3faf4"},
