@@ -1033,7 +1033,7 @@ scipy = ["scipy"]
 
 [[package]]
 name = "nitpick"
-version = "0.28.0"
+version = "0.29.0"
 description = "Enforce the same settings across multiple language-independent projects"
 category = "dev"
 optional = false
@@ -1745,7 +1745,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "670b075aa68ab9690097cbb217608eb1b568058518bf380ea6bfee86cfb878bc"
+content-hash = "e26c2a2edd22306335e295557329d993c1dedd5d0b233215b61804cd6caf95ee"
 
 [metadata.files]
 added-value = [
@@ -2290,8 +2290,8 @@ networkx = [
     {file = "networkx-2.5.tar.gz", hash = "sha256:7978955423fbc9639c10498878be59caf99b44dc304c2286162fd24b458c1602"},
 ]
 nitpick = [
-    {file = "nitpick-0.28.0-py3-none-any.whl", hash = "sha256:93ff80ee9ead995e09480f64832d3dab990575238e9aaf829f8b8aad038ad1fd"},
-    {file = "nitpick-0.28.0.tar.gz", hash = "sha256:99b5b1efc6856dcc5a898f0215cbd5f3422a84d2e4044996a1b8a97e5b835c23"},
+    {file = "nitpick-0.29.0-py3-none-any.whl", hash = "sha256:d3f4677aaa5bd3a9bb83bf967555400aad2493694b2550f265010016e5365ae2"},
+    {file = "nitpick-0.29.0.tar.gz", hash = "sha256:7b3acb6079a62492000fb7f6e3eea549d5b91b391da121839bc0164a7d2eac6a"},
 ]
 packaging = [
     {file = "packaging-20.9-py2.py3-none-any.whl", hash = "sha256:67714da7f7bc052e064859c05c595155bd1ee9f69f76557e21f051443c20947a"},
