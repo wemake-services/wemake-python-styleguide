@@ -57,7 +57,7 @@ python = "^3.6"
 
 flake8 = ">=3.7,<5"
 attrs = "*"
-typing_extensions = "^3.6"
+typing_extensions = ">=3.6,<5.0"
 astor = "^0.8"
 pygments = "^2.4"
 importlib-metadata = {version = "*", python = "<3.8"}
