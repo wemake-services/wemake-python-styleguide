@@ -586,7 +586,7 @@ networkx = ">=2.1,<3"
 
 [[package]]
 name = "hypothesis"
-version = "6.24.3"
+version = "6.24.4"
 description = "A library for property-based testing"
 category = "dev"
 optional = false
@@ -2001,8 +2001,8 @@ grimp = [
     {file = "grimp-1.2.3.tar.gz", hash = "sha256:bfee2e3290844a4b6e008f67c07dab54f38703fc0bf0161119a54731ba1bed0d"},
 ]
 hypothesis = [
-    {file = "hypothesis-6.24.3-py3-none-any.whl", hash = "sha256:8dee9d2220b4ad34e5553a90258120f1daff9bdf7379e3afe13cb523d22da76e"},
-    {file = "hypothesis-6.24.3.tar.gz", hash = "sha256:fccfba3803f391eea2c8c6f21667886ca7407b135b6121e0701a7f8addc176f7"},
+    {file = "hypothesis-6.24.4-py3-none-any.whl", hash = "sha256:1f2acec81fdaf1ebbb42a0c63f07946694610b98d345feb6334bfb39d65434e3"},
+    {file = "hypothesis-6.24.4.tar.gz", hash = "sha256:1302a498d602420fd85e13db0a99e9e1d0a3a98fa4d2a1c03bf648ae4a53cf1a"},
 ]
 hypothesmith = [
     {file = "hypothesmith-0.1.9-py3-none-any.whl", hash = "sha256:f5337fb5fce2f798b356daeb0721566a3e5c696d3a7873aff956753881217768"},
@@ -2605,6 +2605,7 @@ typed-ast = [
 ]
 typing-extensions = [
     {file = "typing_extensions-4.0.0-py3-none-any.whl", hash = "sha256:829704698b22e13ec9eaf959122315eabb370b0884400e9818334d8b677023d9"},
+    {file = "typing_extensions-4.0.0.tar.gz", hash = "sha256:2cdf80e4e04866a9b3689a51869016d36db0814d84b8d8a568d22781d45d27ed"},
 ]
 typing-inspect = [
     {file = "typing_inspect-0.7.1-py2-none-any.whl", hash = "sha256:b1f56c0783ef0f25fb064a01be6e5407e54cf4a4bf4f3ba3fe51e0bd6dcea9e5"},
