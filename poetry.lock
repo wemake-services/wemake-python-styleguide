@@ -992,7 +992,7 @@ icu = ["PyICU (>=1.0.0)"]
 
 [[package]]
 name = "nbqa"
-version = "1.2.1"
+version = "1.2.2"
 description = "Run any standard Python code quality tool on a Jupyter Notebook"
 category = "dev"
 optional = false
@@ -1745,7 +1745,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "88cd3953c7db66a966d7b12688420a0f58e125f445554b2b1c120f7a7a8b0d8b"
+content-hash = "2851493cf22eaa78d5af18b5e239112fcdbebc8204fbfc12db52cbe517239cd0"
 
 [metadata.files]
 added-value = [
@@ -2282,8 +2282,8 @@ natsort = [
     {file = "natsort-7.1.1.tar.gz", hash = "sha256:00c603a42365830c4722a2eb7663a25919551217ec09a243d3399fa8dd4ac403"},
 ]
 nbqa = [
-    {file = "nbqa-1.2.1-py3-none-any.whl", hash = "sha256:b90f63149b0b3c64c3b829bc4f8c5150c614b4bc32e7d75eba4498adf02c0664"},
-    {file = "nbqa-1.2.1.tar.gz", hash = "sha256:80e2c04ab4b332725a30cd7d68acd784ebd721aef2e0755d73fecf25b49be3d1"},
+    {file = "nbqa-1.2.2-py3-none-any.whl", hash = "sha256:fe7665f662cf0c49e7ddd5d5b6e545d985b69a31875ae064d5ad56ffcea538fc"},
+    {file = "nbqa-1.2.2.tar.gz", hash = "sha256:49767118762c791b86022794576fc1f08273679527ba4135f2ad0e1d5c829c3c"},
 ]
 networkx = [
     {file = "networkx-2.5-py3-none-any.whl", hash = "sha256:8c5812e9f798d37c50570d15c4a69d5710a18d77bafc903ee9c5fba7454c616c"},
