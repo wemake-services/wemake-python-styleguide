@@ -614,7 +614,7 @@ zoneinfo = ["importlib-resources (>=3.3.0)", "backports.zoneinfo (>=0.2.1)", "tz
 
 [[package]]
 name = "hypothesmith"
-version = "0.1.9"
+version = "0.2.0"
 description = "Hypothesis strategies for generating Python programs, something like CSmith"
 category = "dev"
 optional = false
@@ -1745,7 +1745,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "2851493cf22eaa78d5af18b5e239112fcdbebc8204fbfc12db52cbe517239cd0"
+content-hash = "240f595a828069d955a66eadac0660574f06b8368ec31bc3973d242a508559e2"
 
 [metadata.files]
 added-value = [
@@ -2005,8 +2005,8 @@ hypothesis = [
     {file = "hypothesis-6.27.1.tar.gz", hash = "sha256:908b7357ec4ae884004acf1afdd86bc1994eac312f1cb787d32db1bebfc1bb15"},
 ]
 hypothesmith = [
-    {file = "hypothesmith-0.1.9-py3-none-any.whl", hash = "sha256:f5337fb5fce2f798b356daeb0721566a3e5c696d3a7873aff956753881217768"},
-    {file = "hypothesmith-0.1.9.tar.gz", hash = "sha256:039fd6aa0102f89df9df7ad4cff70aa8068678c13c3be2713c92568917317a04"},
+    {file = "hypothesmith-0.2.0-py3-none-any.whl", hash = "sha256:21e4169bbdf471e44b3e0bedaade4bb2268d06ac660ef7d5facf4807be93cf6f"},
+    {file = "hypothesmith-0.2.0.tar.gz", hash = "sha256:0fb7b3fd03d76eddd4474b0561e1c2662457593a74cc300fd27e5409cd4d7922"},
 ]
 identify = [
     {file = "identify-1.6.2-py2.py3-none-any.whl", hash = "sha256:8f9879b5b7cca553878d31548a419ec2f227d3328da92fe8202bc5e546d5cbc3"},
