@@ -1430,7 +1430,7 @@ python-versions = "*"
 
 [[package]]
 name = "sphinx"
-version = "4.3.0"
+version = "4.3.1"
 description = "Python documentation generator"
 category = "dev"
 optional = false
@@ -2497,8 +2497,8 @@ sortedcontainers = [
     {file = "sortedcontainers-2.4.0.tar.gz", hash = "sha256:25caa5a06cc30b6b83d11423433f65d1f9d76c4c6a0c90e3379eaa43b9bfdb88"},
 ]
 sphinx = [
-    {file = "Sphinx-4.3.0-py3-none-any.whl", hash = "sha256:7e2b30da5f39170efcd95c6270f07669d623c276521fee27ad6c380f49d2bf5b"},
-    {file = "Sphinx-4.3.0.tar.gz", hash = "sha256:6d051ab6e0d06cba786c4656b0fe67ba259fe058410f49e95bee6e49c4052cbf"},
+    {file = "Sphinx-4.3.1-py3-none-any.whl", hash = "sha256:048dac56039a5713f47a554589dc98a442b39226a2b9ed7f82797fcb2fe9253f"},
+    {file = "Sphinx-4.3.1.tar.gz", hash = "sha256:32a5b3e9a1b176cc25ed048557d4d3d01af635e6b76c5bc7a43b0a34447fbd45"},
 ]
 sphinx-autodoc-typehints = [
     {file = "sphinx-autodoc-typehints-1.12.0.tar.gz", hash = "sha256:193617d9dbe0847281b1399d369e74e34cd959c82e02c7efde077fca908a9f52"},
