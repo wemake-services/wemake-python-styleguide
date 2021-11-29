@@ -586,7 +586,7 @@ networkx = ">=2.1,<3"
 
 [[package]]
 name = "hypothesis"
-version = "6.27.1"
+version = "6.29.0"
 description = "A library for property-based testing"
 category = "dev"
 optional = false
@@ -1745,7 +1745,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "240f595a828069d955a66eadac0660574f06b8368ec31bc3973d242a508559e2"
+content-hash = "e277febbe0228278b5cea125c9553895bef11af416c22a483eb5ee5a0c9b2802"
 
 [metadata.files]
 added-value = [
@@ -2001,8 +2001,8 @@ grimp = [
     {file = "grimp-1.2.3.tar.gz", hash = "sha256:bfee2e3290844a4b6e008f67c07dab54f38703fc0bf0161119a54731ba1bed0d"},
 ]
 hypothesis = [
-    {file = "hypothesis-6.27.1-py3-none-any.whl", hash = "sha256:cf2a5f76a6dc703090824724965439d188b7e64c6b1a2cc1f141c371f2c25ddc"},
-    {file = "hypothesis-6.27.1.tar.gz", hash = "sha256:908b7357ec4ae884004acf1afdd86bc1994eac312f1cb787d32db1bebfc1bb15"},
+    {file = "hypothesis-6.29.0-py3-none-any.whl", hash = "sha256:6f82f795fddbc428b8085cc4027bc36d1454ffd0a7db1e2d4ae4f927c40260ce"},
+    {file = "hypothesis-6.29.0.tar.gz", hash = "sha256:13f61e0775ba89483afbc6d6241e8edf2491f8569f8dd382a361288ec42e49dd"},
 ]
 hypothesmith = [
     {file = "hypothesmith-0.2.0-py3-none-any.whl", hash = "sha256:21e4169bbdf471e44b3e0bedaade4bb2268d06ac660ef7d5facf4807be93cf6f"},
