@@ -290,6 +290,11 @@ ALL_MAGIC_METHODS: Final = frozenset((
     # dataclasses
     '__post_init__',
 
+    # attrs:
+    '__attrs_pre_init__',
+    '__attrs_init__',
+    '__attrs_post_init__',
+
     # inspect
     '__signature__',
 
