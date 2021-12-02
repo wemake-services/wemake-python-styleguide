@@ -399,12 +399,11 @@ class WrongSuperCallViolation(ASTViolation):
 @final
 class DirectMagicAttributeAccessViolation(ASTViolation):
     """
-    Forbid direct magic attributes and methods.
+    Forbid directly calling certain magic attributes and methods.
 
     Reasoning:
-        When using direct magic attributes or method
-        it means that you are doing something wrong.
-        Magic methods are not suited to be directly called or accessed.
+        Certain magic methods are only meant to be called by particular
+        functions or operators, not directly accessed.
 
     Solution:
         Use special syntax constructs that will call underlying magic methods.
@@ -413,17 +412,20 @@ class DirectMagicAttributeAccessViolation(ASTViolation):
 
         # Correct:
         super().__init__()
+        mymodule.__name__
 
         # Wrong:
-        2..__truediv__(2)
-        d.__delitem__('a')
+        foo.__str__()  # use `str(foo)`
+        2..__truediv__(2)  # use `2 / 2`
+        d.__delitem__('a')  # use del d['a']
 
-    Note, that it is possible to use direct magic attributes with
+    Note, that it is possible to directly use these magic attributes with
     ``self``, ``cls``, and ``super()`` as base names.
     We allow this because a lot of internal logic relies on these methods.
 
     .. versionadded:: 0.8.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.16.0
 
     """
 

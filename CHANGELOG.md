@@ -28,6 +28,8 @@ Semantic versioning in our case means:
 - Adds `RaiseFromItselfViolation` #2133
 - Adds `ConsecutiveSlicesViolation` #2064
 - Adds `KwargsUnpackingInClassDefinitionViolation` #1714
+- `DirectMagicAttributeAccessViolation` now only flags instances for which
+  a known alternative exists #2268
 
 ### Bugfixes
 
