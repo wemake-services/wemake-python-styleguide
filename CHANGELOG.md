@@ -35,6 +35,7 @@ Semantic versioning in our case means:
 
 - Fixes that `InconsistentComprehensionViolation` was ignoring
   misaligned `in` expressions #2075
+- Fixes some common magic methods not being recognized as such  #2281
 
 ### Misc
 
