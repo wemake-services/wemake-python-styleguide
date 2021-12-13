@@ -200,20 +200,22 @@ def test_string_type_annotations(
     r'"\t"',
     r'"\n"',
     '""',
+    '","',
+    '"."',
 ])
 @pytest.mark.parametrize('prefix', [
     'b',
     'u',
     '',
 ])
-def test_string_overuse_exceptions(
+def test_common_strings_allowed(
     assert_errors,
     parse_ast_tree,
     default_options,
     prefix,
     string_value,
 ):
-    """Ensures that over-used strings raise violations."""
+    """Ensures that common strings do not count against the overuse limit."""
     snippet = string_actions.format(prefix + string_value)
     tree = parse_ast_tree(snippet)
 

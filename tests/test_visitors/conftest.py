@@ -1,6 +1,7 @@
 from typing import Optional, Sequence, Tuple, Type, Union
 
 import pytest
+from typing_extensions import Final
 
 from wemake_python_styleguide.violations.base import (
     ASTViolation,
@@ -14,6 +15,7 @@ _IgnoredTypes = Union[
     Tuple[Type[BaseViolation], ...],
     None,
 ]
+_ERROR_FORMAT: Final = ': {0}'
 
 
 @pytest.fixture(scope='session')
@@ -69,10 +71,9 @@ def assert_error_text():
             assert len(real_errors) == 1
 
         violation = real_errors[0]
-        error_format = ': {0}'
 
-        assert error_format in violation.error_template
-        assert violation.error_template.endswith(error_format)
+        assert _ERROR_FORMAT in violation.error_template
+        assert violation.error_template.endswith(_ERROR_FORMAT)
 
         reproduction = violation.__class__(
             node=violation._node,  # noqa: WPS437

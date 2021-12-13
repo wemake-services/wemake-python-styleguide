@@ -23,7 +23,8 @@ Semantic versioning in our case means:
 
 - Now `InconsistentYieldViolation` and `InconsistentReturnViolation` are raised
   when `yield` or `return` is used with `None`
-  where plain version should be used
+  where plain version should be used #2151
+- Dot `'.'` and comma `','` do not count against string literal overuse limit anymore #2209
 - Added `RedundantEnumerateViolation` #1825
 - Adds `RaiseFromItselfViolation` #2133
 - Adds `ConsecutiveSlicesViolation` #2064

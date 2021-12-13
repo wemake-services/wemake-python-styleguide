@@ -36,16 +36,21 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
     Restricts repeated usage of the same string constant.
 
     NB: Some short strings are ignored, as their use is very common and
-    forcing assignment would not make much sense (i.e. newlines or "").
+    forcing assignment would not make much sense (i.e. newlines, "",
+    comma, dot).
     """
 
     _ignored_string_constants: ClassVar[_StringConstants] = frozenset((
         ' ',
+        '.',
+        ',',
         '',
         '\n',
         '\r\n',
         '\t',
         b' ',
+        b'.',
+        b',',
         b'',
         b'\n',
         b'\r\n',
