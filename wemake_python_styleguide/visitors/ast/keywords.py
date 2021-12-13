@@ -12,14 +12,19 @@ from wemake_python_styleguide.logic import walk, walrus
 from wemake_python_styleguide.logic.naming import name_nodes
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree import keywords, operators
-from wemake_python_styleguide.logic.tree.exceptions import get_exception_name
+from wemake_python_styleguide.logic.tree.exceptions import (
+    get_cause_name,
+    get_exception_name,
+)
 from wemake_python_styleguide.logic.tree.variables import (
     is_valid_block_variable_definition,
 )
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, AnyWith
 from wemake_python_styleguide.violations.best_practices import (
+    BareRaiseViolation,
     BaseExceptionRaiseViolation,
     ContextManagerVariableDefinitionViolation,
+    RaiseFromItselfViolation,
     RaiseNotImplementedViolation,
     WrongKeywordConditionViolation,
     WrongKeywordViolation,
@@ -52,14 +57,10 @@ class WrongRaiseVisitor(BaseNodeVisitor):
     ))
 
     def visit_Raise(self, node: ast.Raise) -> None:
-        """
-        Checks how ``raise`` keyword is used.
-
-        Raises:
-            RaiseNotImplementedViolation
-
-        """
+        """Checks how ``raise`` keyword is used."""
         self._check_exception_type(node)
+        self._check_bare_raise(node)
+        self._check_raise_from_itself(node)
         self.generic_visit(node)
 
     def _check_exception_type(self, node: ast.Raise) -> None:
@@ -71,6 +72,20 @@ class WrongRaiseVisitor(BaseNodeVisitor):
                 BaseExceptionRaiseViolation(node, text=exception_name),
             )
 
+    def _check_bare_raise(self, node: ast.Raise) -> None:
+        if node.exc is None:
+            parent_except = walk.get_closest_parent(node, ast.ExceptHandler)
+
+            if not parent_except:
+                self.add_violation(BareRaiseViolation(node))
+
+    def _check_raise_from_itself(self, node: ast.Raise) -> None:
+        if node.exc and node.cause:
+            names_are_same = get_exception_name(node) == get_cause_name(node)
+
+            if names_are_same:
+                self.add_violation(RaiseFromItselfViolation(node))
+
 
 @final
 @alias('visit_any_function', (
@@ -81,25 +96,12 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
     """Finds incorrect and inconsistent ``return`` and ``yield`` nodes."""
 
     def visit_Return(self, node: ast.Return) -> None:
-        """
-        Checks ``return`` statements for consistency.
-
-        Raises:
-            InconsistentReturnViolation
-
-        """
+        """Checks ``return`` statements for consistency."""
         self._check_last_return_in_function(node)
         self.generic_visit(node)
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
-        """
-        Helper to get all ``return`` and ``yield`` nodes in a function at once.
-
-        Raises:
-            InconsistentReturnViolation
-            InconsistentYieldViolation
-
-        """
+        """All ``return`` and ``yield`` nodes in a function at once."""
         self._check_return_values(node)
         self._check_yield_values(node)
         self.generic_visit(node)
@@ -133,12 +135,24 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
     def _iterate_returning_values(
         self,
         node: AnyFunctionDef,
-        returning_type,  # mypy is not ok with this type declaration
+        returning_type: Union[Type[ast.Return], Type[ast.Yield]],
         violation: _ReturningViolations,
     ):
         return_nodes, has_values = keywords.returning_nodes(
             node, returning_type,
         )
+        is_all_none = (
+            has_values and
+            all(
+                (
+                    isinstance(ret_node.value, ast.NameConstant) and
+                    ret_node.value.value is None
+                )
+                for ret_node in return_nodes
+            )
+        )
+        if is_all_none:
+            self.add_violation(violation(node))
 
         for return_node in return_nodes:
             if not return_node.value and has_values:
@@ -167,13 +181,7 @@ class WrongKeywordVisitor(BaseNodeVisitor):
     )
 
     def visit(self, node: ast.AST) -> None:
-        """
-        Used to find wrong keywords.
-
-        Raises:
-            WrongKeywordViolation
-
-        """
+        """Used to find wrong keywords."""
         self._check_keyword(node)
         self.generic_visit(node)
 
@@ -196,24 +204,12 @@ class WrongContextManagerVisitor(BaseNodeVisitor):
     """Checks context managers."""
 
     def visit_withitem(self, node: ast.withitem) -> None:
-        """
-        Checks that all variables inside context managers defined correctly.
-
-        Raises:
-            ContextManagerVariableDefinitionViolation
-
-        """
+        """Variables inside context managers must be defined correctly."""
         self._check_variable_definitions(node)
         self.generic_visit(node)
 
     def visit_any_with(self, node: AnyWith) -> None:
-        """
-        Checks the number of assignments for context managers.
-
-        Raises:
-            MultipleContextManagerAssignmentsViolation
-
-        """
+        """Checks the number of assignments for context managers."""
         self._check_target_assignment(node)
         self.generic_visit(node)
 
@@ -257,24 +253,12 @@ class GeneratorKeywordsVisitor(BaseNodeVisitor):
         self._yield_locations: Dict[int, ast.Expr] = {}
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
-        """
-        We use this visitor method to check for consecutive ``yield`` nodes.
-
-        Raises:
-            ConsecutiveYieldsViolation
-
-        """
+        """Checks for consecutive ``yield`` nodes."""
         self._check_consecutive_yields(node)
         self.generic_visit(node)
 
     def visit_YieldFrom(self, node: ast.YieldFrom) -> None:
-        """
-        Visits `yield from` nodes.
-
-        Raises:
-            IncorrectYieldFromTargetViolation
-
-        """
+        """Checks ``yield from`` nodes."""
         self._check_yield_from_type(node)
         self._check_yield_from_empty(node)
         self.generic_visit(node)
@@ -314,13 +298,7 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
     """Finds variables that are only used in ``return`` statements."""
 
     def visit_Return(self, node: ast.Return) -> None:
-        """
-        Helper to get all ``return`` variables in a function at once.
-
-        Raises:
-            InconsistentReturnVariableViolation
-
-        """
+        """Helper to get all ``return`` variables in a function at once."""
         self._check_consistent_variable_return(node)
         self.generic_visit(node)
 

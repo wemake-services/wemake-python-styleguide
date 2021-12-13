@@ -341,12 +341,12 @@ class FormattedStringViolation(ASTViolation):
 
     Example::
 
-        # Wrong:
-        f'Result is: {2 + 2}'
-
         # Correct:
         'Result is: {0}'.format(2 + 2)
         'Hey {user}! How are you?'.format(user='sobolevn')
+
+        # Wrong:
+        f'Result is: {2 + 2}'
 
     .. versionadded:: 0.1.0
 
@@ -408,11 +408,11 @@ class MultipleIfsInComprehensionViolation(ASTViolation):
 
     Example::
 
+        # Correct:
+        nodes = [node for node in html if node not in {'b', 'i'}]
+
         # Wrong:
         nodes = [node for node in html if node != 'b' if node != 'i']
-
-        # Correct:
-        nodes = [node for node in html if node not in ('b', 'i')]
 
     .. versionadded:: 0.1.0
 
@@ -437,14 +437,14 @@ class ConstantCompareViolation(ASTViolation):
 
     Example::
 
+        # Correct:
+        do_something_else()
+
         # Wrong:
         if 60 * 60 < 1000:
             do_something()
         else:
             do_something_else()
-
-        # Correct:
-        do_something_else()
 
     .. versionadded:: 0.3.0
 
@@ -599,18 +599,18 @@ class MissingSpaceBetweenKeywordAndParenViolation(TokenizeViolation):
 
     Example::
 
+        # Correct:
+        def func():
+            a = 1
+            del (a, b)
+            yield (1, 2, 3)
+
         # Wrong:
         def func():
             a = 1
             b = 2
             del(a, b)
             yield(1, 2, 3)
-
-        # Correct:
-        def func():
-            a = 1
-            del (a, b)
-            yield (1, 2, 3)
 
     .. versionadded:: 0.3.0
 
@@ -1038,8 +1038,9 @@ class InconsistentReturnViolation(ASTViolation):
     Enforce consistent ``return`` statements.
 
     Rules are:
-    1. if any ``return`` has a value, all ``return`` nodes should have a value
-    2. do not place ``return`` without a value at the end of a function
+    1. If any ``return`` has a value, all ``return`` nodes should have a value
+    2. Do not place ``return`` without a value at the end of a function
+    3. Do not use ``return None`` where just ``return`` is good enough
 
     This rule respects ``mypy`` style of placing ``return`` statements.
     There should be no conflict with these two checks.
@@ -1068,6 +1069,7 @@ class InconsistentReturnViolation(ASTViolation):
             return 1
 
     .. versionadded:: 0.7.0
+    .. versionchanged:: 0.16.0
 
     """
 
@@ -1082,6 +1084,7 @@ class InconsistentYieldViolation(ASTViolation):
 
     Rules are:
     1. if any ``yield`` has a value, all ``yield`` nodes should have a value
+    2. Use ``yield`` instead of ``yield None`` where possible
 
     This rule respects ``mypy`` style of placing ``yield`` statements.
     There should be no conflict with these two checks.
@@ -1109,6 +1112,7 @@ class InconsistentYieldViolation(ASTViolation):
             yield 1
 
     .. versionadded:: 0.7.0
+    .. versionchanged:: 0.16.0
 
     """
 
@@ -1536,7 +1540,6 @@ class MultilineConditionsViolation(ASTViolation):
             if isinstance(node.test.op, ast.Not):
                 ...
 
-
         # Wrong:
         if isinstance(node.test, ast.UnaryOp) and isinstance(
             node.test.op,
@@ -1911,7 +1914,7 @@ class LineStartsWithDotViolation(TokenizeViolation):
             ...,
         )
 
-        # Wrong
+        # Wrong:
         some = (
             MyModel.objects.filter(...)
                 .exclude(...)

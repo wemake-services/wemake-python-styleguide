@@ -13,14 +13,81 @@ Semantic versioning in our case means:
   might not pass on `x.1.y` release because of the new checks.
 - Major releases inidicate significant milestones or serious breaking changes.
   There are no major releases right now: we are still at `0.x.y` version.
-  But, in the future we might change the configuration names / logic,
-  change the client facing API, change code conventions signigicantly, etc.
+  But, in the future we might change the configuration names/logic,
+  change the client facing API, change code conventions significantly, etc.
+
+
+## {{ Next Version }}
+
+## Features
+
+- Now `InconsistentYieldViolation` and `InconsistentReturnViolation` are raised
+  when `yield` or `return` is used with `None`
+  where plain version should be used #2151
+- Dot `'.'` and comma `','` do not count against string literal overuse limit anymore #2209
+- Added `RedundantEnumerateViolation` #1825
+- Adds `RaiseFromItselfViolation` #2133
+- Adds `ConsecutiveSlicesViolation` #2064
+- Adds `KwargsUnpackingInClassDefinitionViolation` #1714
+- `DirectMagicAttributeAccessViolation` now only flags instances for which
+  a known alternative exists #2268
+
+### Bugfixes
+
+- Fixes that `InconsistentComprehensionViolation` was ignoring
+  misaligned `in` expressions #2075
+- Fixes some common magic methods not being recognized as such  #2281
+
+### Misc
+
+- Removes all `Raises:` from docstrings, they were unused
+- Added example to README.md
+- Added `why strict is good`
+- Replaced all `python` with `Python` in README.md
+- Improve Docs: Fixed all typos and grammatical errors in CHANGELOG
+- Updated documentation with the recommended `isort` config. #1934
+
+
+## 0.15.3
+
+### Bugfixes
+
+- Fixes crash on `python3.10`
+- Fixes `UselessReturningElseViolation` to not report `else` with `break` #1958
+- Fixes `ReassigningVariableToItselfViolation` to not report on `x = (x,)` #1807
+- Fixes `ReassigningVariableToItselfViolation` to extract variables
+  from unary operators #1874
+- Fixes that `f'{some:,}'` was considered too complex #1921
+- Fixes that `range(len(x))` was not allowed even outside `for` loops #1883
+- Fixes `UselessReturningElseViolation` to not report `else` with `break` #2187
+  (even if we have `except` in loop)
+- Fixes fixture in `UselessReturningElseViolation` #2191
+
+### Misc
+
+- Adds documentation (and tests) for how to run project on Jupyter Notebooks
+- Updates `mypy` to `0.902` and fixes type issues
+
 
 ## 0.15.2
 
 ### Bugfixes
 
 - Fixes `BitwiseAndBooleanMixupViolation` work with PEP 604 union types #1884
+- Fixes `CognitiveModuleComplexityViolation` to not trigger
+  for a single-item modules
+- Fixes that `ConstantConditionViolation` was not reported for a `BoolOp`
+- Functions and methods marked as `@overload` or `@typing.overload`
+  do not count in complexity rules
+
+### Misc
+
+- Updates GitHub Action's base Python image version to `3.8.8`
+
+### Features
+
+- Adds a math operations evaluator to improve and allow several violation checks.
+
 
 ## 0.15.1
 
@@ -28,7 +95,7 @@ Semantic versioning in our case means:
 
 - Fixes `dataclasses` import, it was failing on `python3.6`
 - Fixes `InconsistentComprehensionViolation` work with `async` comprehensions
-- Fixes nested compehensions support for `InconsistentComprehensionViolation`
+- Fixes nested comprehensions support for `InconsistentComprehensionViolation`
 - Fixes multiple `if` support for `InconsistentComprehensionViolation`
 - Fixes that `NestedTernaryViolation` was not reported for a comprehension
 - Fixes that `ConstantConditionViolation` was not reported for a comprehension
@@ -43,7 +110,7 @@ Semantic versioning in our case means:
 
 - Refactors how `tokenize` tests are executed,
   now we have an option to compile fixture code
-  to make sure it is syntatically valid
+  to make sure it is syntactically valid.
 
 
 ## 0.15.0 aka python3.9
@@ -55,7 +122,7 @@ Semantic versioning in our case means:
 - Changes how we treat own/foreign attributes,
   since now we only check assigned attribute names for `self`/`cls`/`mcs`,
   but not any other ones.
-  So, now writting `point.x = 1` will not trigger any violations.
+  So, now writing `point.x = 1` will not trigger any violations.
   Previously, it would raise "too short name".
 - Forbids using non-trivial expressions as an argument to `except`
 - Forbids using too many variables in a tuple unpacking
@@ -80,7 +147,7 @@ Semantic versioning in our case means:
 - Forbids to ignore some violations (configurable) on a line level
 - Forbids single element unpacking
 - Forbids to unpack lists with side-effects
-- Forbids to use miltiline strings except for assignments and docstrings
+- Forbids to use multiline strings except for assignments and docstrings
 - Forbids not returning anything in functions and methods starting with `get_`
 - Forbids to use empty comment
 - Forbids using bitwise operation with boolean operation
@@ -540,7 +607,7 @@ In this release we had a little focus on:
 - Adds `bellybutton` to the list of other linters
 - Documents how to use `nitpick` to sync the configuration
 - Documents how to use `flakehell` to create `baseline`s for legacy integrations
-- Improves tests for binary, octal, hex, and expanetional numbers
+- Improves tests for binary, octal, hex, and exponentional numbers
 - Adds new `xenon` CI check
 - Now handles exceptions in our own code, hope to never see them!
 - Now uses `coverage` checks in deepsource
@@ -610,7 +677,7 @@ We introduce a lot of new rules related to this topic improving:
 consistency, complexity, and general feel from your code.
 
 In this release we have ported a lot of existing `pylint` rules,
-big cudos to the developers of this wonderful tool.
+big kudos to the developers of this wonderful tool.
 
 ### Features
 
@@ -978,7 +1045,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - [@roxe322](https://github.com/roxe322)
 - [@geoc0ld](https://github.com/geoc0ld)
 - [@lensvol](https://github.com/lensvol)
-- [@SheldonNunes ](https://github.com/SheldonNunes)
+- [@SheldonNunes](https://github.com/SheldonNunes)
 - [@tommbee](https://github.com/tommbee)
 - [@valignatev](https://github.com/valignatev)
 - [@vsmaxim](https://github.com/vsmaxim)

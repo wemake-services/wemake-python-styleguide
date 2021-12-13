@@ -114,12 +114,12 @@ This step is mandatory during the CI.
 
 ## Spellcheckers
 
-This project is developed by a diverse and multi-languaged group of people.
-Many of us are not English native speakers. And we also know that people can make mistakes and typos in the simpliest words.
+This project is developed by a diverse and multilingual group of people.
+Many of us are not English native speakers and we also know that people can make mistakes and typos even in the simplest of words.
 
 So, that's why we use a bunch of tools to find and fix spelling and grammar.
 
-You would need to install them manually, because we don't ship them with the dependencies:
+You will need to install them manually, because we don't ship them with the dependencies:
 
 ```bash
 pip install codespell flake8-spellcheck

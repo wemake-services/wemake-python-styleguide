@@ -1,6 +1,7 @@
 import ast
-from typing import Optional
+from typing import Optional, Union
 
+from wemake_python_styleguide.logic.safe_eval import literal_eval_with_names
 from wemake_python_styleguide.types import ContextNodes
 
 
@@ -26,3 +27,16 @@ def get_parent(node: ast.AST) -> Optional[ast.AST]:
 def get_context(node: ast.AST) -> Optional[ContextNodes]:
     """Returns the context or ``None`` if node has no context."""
     return getattr(node, 'wps_context', None)
+
+
+def evaluate_node(node: ast.AST) -> Optional[Union[int, float, str, bytes]]:
+    """Returns the value of a node or its evaluation."""
+    if isinstance(node, ast.Name):
+        return None
+    if isinstance(node, (ast.Str, ast.Bytes)):
+        return node.s
+    try:
+        signed_node = literal_eval_with_names(node)
+    except Exception:
+        return None
+    return signed_node

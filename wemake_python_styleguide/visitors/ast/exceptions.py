@@ -38,17 +38,7 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
     )
 
     def visit_Try(self, node: ast.Try) -> None:
-        """
-        Used for find ``finally`` in ``try`` blocks without ``except``.
-
-        Raises:
-            UselessFinallyViolation
-            DuplicateExceptionViolation
-            TryExceptMultipleReturnPathViolation
-            IncorrectExceptOrderViolation
-            LoopControlFinallyViolation
-
-        """
+        """Used for find ``finally`` in ``try`` blocks without ``except``."""
         self._check_if_needs_except(node)
         self._check_duplicate_exceptions(node)
         self._check_return_path(node)
@@ -117,13 +107,7 @@ class NestedTryBlocksVisitor(BaseNodeVisitor):
     """Ensures that there are no nested ``try`` blocks."""
 
     def visit_Try(self, node: ast.Try) -> None:
-        """
-        Visits all try nodes in the tree.
-
-        Raises:
-            NestedTryViolation
-
-        """
+        """Visits all try nodes in the tree."""
         self._check_nested_try(node)
         self.generic_visit(node)
 
@@ -142,14 +126,7 @@ class WrongExceptHandlerVisitor(BaseNodeVisitor):
     _trivial_except_arg_nodes: ClassVar[AnyNodes] = (ast.Name, ast.Attribute)
 
     def visit_ExceptHandler(self, node: ast.ExceptHandler) -> None:
-        """
-        Checks all ``ExceptionHandler`` nodes.
-
-        Raises:
-            BaseExceptionViolation
-            UselessExceptCaseViolation
-
-        """
+        """Checks all ``ExceptionHandler`` nodes."""
         self._check_useless_except(node)
         self._check_exception_type(node)
         self._check_except_expression(node)

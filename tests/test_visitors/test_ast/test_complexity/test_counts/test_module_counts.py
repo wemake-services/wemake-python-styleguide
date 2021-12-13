@@ -99,6 +99,18 @@ class First(object):
     def other(self): ...
 """
 
+# regression1779
+module_with_overloads = """
+@overload
+def first(): ...
+
+@typing.overload
+def first(): ...
+
+# Only this def counts:
+def first(): ...
+"""
+
 # Empty:
 
 empty_module = ''
@@ -116,6 +128,7 @@ empty_module = ''
     module_with_staticmethods,
     module_with_classmethods,
     module_with_single_class,
+    module_with_overloads,
 ])
 def test_module_counts_normal(
     assert_errors,
@@ -166,6 +179,7 @@ def test_module_counts_violation(
     module_with_single_function,
     module_with_single_async_function,
     module_with_single_class,
+    module_with_overloads,
 ])
 def test_module_counts_single_member(
     assert_errors,

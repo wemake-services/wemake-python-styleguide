@@ -6,7 +6,7 @@ from typing_extensions import final
 
 from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.logic.nodes import get_parent
-from wemake_python_styleguide.logic.tree import classes
+from wemake_python_styleguide.logic.tree import classes, decorators
 from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations.complexity import (
     TooManyBaseClassesViolation,
@@ -37,10 +37,6 @@ class ClassComplexityVisitor(BaseNodeVisitor):
 
             File "<stdin>", line 3
             SyntaxError: cannot use named assignment with attribute
-
-        Raises:
-            TooManyBaseClassesViolation
-            TooManyPublicAttributesViolation
 
         """
         self._check_base_classes(node)
@@ -92,17 +88,14 @@ class MethodMembersVisitor(BaseNodeVisitor):
         self._methods: DefaultDict[ast.ClassDef, int] = defaultdict(int)
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
-        """
-        Counts the number of methods in a single class.
-
-        Raises:
-            TooManyMethodsViolation
-
-        """
+        """Counts the number of methods in a single class."""
         self._check_method(node)
         self.generic_visit(node)
 
     def _check_method(self, node: AnyFunctionDef) -> None:
+        if decorators.has_overload_decorator(node):
+            return  # we don't count `@overload` methods
+
         parent = get_parent(node)
         if isinstance(parent, ast.ClassDef):
             self._methods[parent] += 1

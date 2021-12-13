@@ -70,6 +70,8 @@ def test_correct_binary(
     'int | None',
     'First | None',
     'First | Second',
+    'List[List[str | None]]',
+    'set[Alias | Other | Third | None]',
 ])
 def test_union_type(
     assert_errors,

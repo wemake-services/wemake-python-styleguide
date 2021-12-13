@@ -21,6 +21,9 @@ dict_template4 = '{{ {0}: 1, other: value }}'
     '1.0',
     '-0.3',
     '+0.0',
+    '1 / 3',
+    '-1 - 0.5',
+    '0 + 0.1',
 ])
 def test_dict_with_float_key(
     assert_errors,
@@ -47,9 +50,6 @@ def test_dict_with_float_key(
 @pytest.mark.parametrize('element', [
     '1',
     '"-0.3"',
-    '0 + 0.1',
-    '0 - 1.0',
-    '1 / 3',
     '1 // 3',
     'call()',
     'name',

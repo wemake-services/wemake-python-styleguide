@@ -11,24 +11,7 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
     """Checks that modules have correct names."""
 
     def visit_filename(self) -> None:
-        """
-        Checks a single module's filename.
-
-        Raises:
-            ConsecutiveUnderscoresInNameViolation
-            PrivateNameViolation
-            TooLongNameViolation
-            TooShortModuleNameViolation
-            TooShortNameViolation
-            UnderscoredNumberNameViolation
-            UnreadableNameViolation
-            UnicodeNameViolation
-            WrongModuleMagicNameViolation
-            WrongModuleNamePatternViolation
-            WrongModuleNameUnderscoresViolation
-            WrongModuleNameViolation
-
-        """
+        """Checks a single module's filename."""
         self._check_module_name()
         self._check_module_name_length()
         self._check_module_name_pattern()

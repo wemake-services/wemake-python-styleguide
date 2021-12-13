@@ -166,6 +166,9 @@ class StaticMethodViolation(ASTViolation):
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.11.0
 
+    See also:
+       webucator.com/article/when-to-use-static-methods-in-python-never
+
     """
 
     error_template = 'Found using `@staticmethod`'
@@ -398,12 +401,11 @@ class WrongSuperCallViolation(ASTViolation):
 @final
 class DirectMagicAttributeAccessViolation(ASTViolation):
     """
-    Forbid direct magic attributes and methods.
+    Forbid directly calling certain magic attributes and methods.
 
     Reasoning:
-        When using direct magic attributes or method
-        it means that you are doing something wrong.
-        Magic methods are not suited to be directly called or accessed.
+        Certain magic methods are only meant to be called by particular
+        functions or operators, not directly accessed.
 
     Solution:
         Use special syntax constructs that will call underlying magic methods.
@@ -412,17 +414,25 @@ class DirectMagicAttributeAccessViolation(ASTViolation):
 
         # Correct:
         super().__init__()
+        mymodule.__name__
 
         # Wrong:
-        2..__truediv__(2)
-        d.__delitem__('a')
+        foo.__str__()  # use `str(foo)`
+        2..__truediv__(2)  # use `2 / 2`
+        d.__delitem__('a')  # use del d['a']
 
-    Note, that it is possible to use direct magic attributes with
+    Note, that it is possible to directly use these magic attributes with
     ``self``, ``cls``, and ``super()`` as base names.
     We allow this because a lot of internal logic relies on these methods.
 
+    See
+    :py:data:`~wemake_python_styleguide.constants.ALL_MAGIC_METHODS`
+    for the full list of magic attributes disallowed from being
+    accessed directly.
+
     .. versionadded:: 0.8.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.16.0
 
     """
 
@@ -642,17 +652,17 @@ class UnpythonicGetterSetterViolation(ASTViolation):
         # Correct:
         class Example(object):
             def __init__(self):
-                self._attribute = None
+                self.attribute = None
 
         # Wrong:
         class Example(object):
             def __init__(self):
-                self.attribute = None
+                self._attribute = None
 
-            def set_attribute(self):
+            def set_attribute(self, value):
                 ...
 
-            def get_attribute(self, value):
+            def get_attribute(self):
                 ...
 
     .. versionadded:: 0.15.0

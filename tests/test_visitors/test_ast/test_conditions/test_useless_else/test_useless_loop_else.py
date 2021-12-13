@@ -31,17 +31,9 @@ while ...:
 raise ...
 """
 
-correct_example4 = """
-def function():
-    for x in ...:
-        ...
-    else:
-        raise ...
-"""
-
 correct_example5 = """
 def function():
-    while ...:
+    for x in ...:
         ...
     else:
         raise ...
@@ -49,16 +41,15 @@ def function():
 
 correct_example6 = """
 def function():
-    for x in ...:
-        return
-    else:
+    while ...:
         ...
-    return
+    else:
+        raise ...
 """
 
 correct_example7 = """
 def function():
-    while ...:
+    for x in ...:
         return
     else:
         ...
@@ -67,10 +58,43 @@ def function():
 
 correct_example8 = """
 def function():
+    while ...:
+        return
+    else:
+        ...
+    return
+"""
+
+correct_example9 = """
+def function():
     for x in ...:
         if ...:
             return 2
     return 1
+"""
+
+correct_example10 = """
+def function():
+    while ...:
+        try:
+            ...
+        except ...:
+           continue
+        break
+    else:
+        raise ...
+"""
+
+correct_example11 = """
+def function():
+    for x in ...:
+        try:
+            ...
+        except ...:
+           continue
+        break
+    else:
+        raise ...
 """
 
 
@@ -83,6 +107,9 @@ def function():
     correct_example6,
     correct_example7,
     correct_example8,
+    correct_example9,
+    correct_example10,
+    correct_example11,
 ])
 def test_else_that_can_not_be_removed(
     assert_errors,
@@ -146,11 +173,15 @@ def test_else_that_can_be_removed(
 ):
     """Testing that extra ``else`` blocks can be removed."""
     tree = parse_ast_tree(mode(template.format(code1, code2)))
-
     visitor = UselessElseVisitor(default_options, tree=tree)
     visitor.run()
-
-    assert_errors(visitor, [UselessReturningElseViolation])
+    overrides = ['break']  # regression1958
+    if code1 in overrides:
+        # We might want to have an else statement
+        # if the loop contains a break statement
+        assert_errors(visitor, [])
+    else:
+        assert_errors(visitor, [UselessReturningElseViolation])
 
 
 @pytest.mark.parametrize('template', [

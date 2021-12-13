@@ -125,6 +125,9 @@ class ConfigurationOptions(Protocol):
 
     """
 
+    def __hash__(self) -> int:
+        """We need these options to be hashable."""
+
     # General:
     @property
     def min_name_length(self) -> int:

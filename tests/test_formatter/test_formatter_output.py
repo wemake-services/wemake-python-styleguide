@@ -19,6 +19,7 @@ Warning::
 """
 
 
+import os
 import subprocess
 
 import pytest
@@ -116,4 +117,40 @@ def test_formatter_correct(snapshot, cli_options, output):
     snapshot.assert_match(
         _safe_output(stdout),
         'formatter_correct_{0}'.format(output),
+    )
+
+
+def test_ipynb(snapshot):
+    """All correct code should not raise any violations and no output."""
+    filename = './tests/fixtures/notebook.ipynb'
+    # Ignore error codes which don't apply to Jupyter Notebooks
+    cli_options = [
+        '--extend-ignore',
+        'NIP102,D100,WPS102,WPS114,WPS116,WPS124',
+    ]
+
+    process = subprocess.Popen(
+        [
+            'nbqa',
+            'flake8',
+            filename,
+            '--disable-noqa',
+            '--isolated',
+            '--format',
+            'wemake',
+            *cli_options,
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        universal_newlines=True,
+        encoding='utf8',
+    )
+    stdout, _ = process.communicate()
+
+    # nbQA output contains absolute path
+    stdout = stdout.replace(os.getcwd() + os.sep, '')
+
+    snapshot.assert_match(
+        _safe_output(stdout),
+        'formatter_ipynb',
     )

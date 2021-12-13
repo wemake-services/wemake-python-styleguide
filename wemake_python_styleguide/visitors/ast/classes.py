@@ -14,6 +14,7 @@ from wemake_python_styleguide.logic.tree import (
     attributes,
     classes,
     functions,
+    getters_setters,
     strings,
 )
 from wemake_python_styleguide.violations import best_practices as bp
@@ -22,37 +23,18 @@ from wemake_python_styleguide.visitors import base, decorators
 
 
 @final
-class WrongClassVisitor(base.BaseNodeVisitor):
+class WrongClassDefVisitor(base.BaseNodeVisitor):
     """
-    This class is responsible for restricting some ``class`` anti-patterns.
+    This class is responsible for restricting some ``class`` def anti-patterns.
 
     Here we check for stylistic issues and design patterns.
     """
 
-    _allowed_body_nodes: ClassVar[types.AnyNodes] = (
-        *FunctionNodes,
-        ast.ClassDef,  # we allow some nested classes
-        *AssignNodes,  # fields and annotations
-    )
-
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
-        """
-        Checking class definitions.
-
-        Raises:
-            RequiredBaseClassViolation
-            ObjectInBaseClassesListViolation
-            WrongBaseClassViolation
-            WrongClassBodyContentViolation
-            BuiltinSubclassViolation
-            UnpythonicGetterSetterViolation
-            UnpackingKwargsViolation
-
-        """
+        """Checking class definitions."""
         self._check_base_classes_count(node)
         self._check_base_classes(node)
-        self._check_wrong_body_nodes(node)
-        self._check_getters_setters_methods(node)
+        self._check_kwargs_unpacking(node)
         self.generic_visit(node)
 
     def _check_base_classes_count(self, node: ast.ClassDef) -> None:
@@ -72,34 +54,6 @@ class WrongClassVisitor(base.BaseNodeVisitor):
         for keyword in node.keywords:
             if not keyword.arg:
                 self.add_violation(oop.UnpackingKwargsViolation(node))
-
-    def _check_base_classes_rules(
-        self,
-        node: ast.ClassDef,
-        base_name: ast.expr,
-    ) -> None:
-        id_attr = getattr(base_name, 'id', None)
-
-        if id_attr == 'BaseException':
-            self.add_violation(bp.BaseExceptionSubclassViolation(node))
-        elif id_attr == 'object' and len(node.bases) >= 2:
-            self.add_violation(
-                consistency.ObjectInBaseClassesListViolation(
-                    node, text=id_attr,
-                ),
-            )
-        elif classes.is_forbidden_super_class(id_attr):
-            self.add_violation(
-                oop.BuiltinSubclassViolation(node, text=id_attr),
-            )
-
-    def _check_wrong_body_nodes(self, node: ast.ClassDef) -> None:
-        for sub_node in node.body:
-            if isinstance(sub_node, self._allowed_body_nodes):
-                continue
-            if strings.is_doc_string(sub_node):
-                continue
-            self.add_violation(oop.WrongClassBodyContentViolation(sub_node))
 
     def _is_correct_base_class(self, base_class: ast.AST) -> bool:
         if isinstance(base_class, ast.Name):
@@ -122,29 +76,78 @@ class WrongClassVisitor(base.BaseNodeVisitor):
             return len(subscripts) == 1 and correct_items
         return False
 
-    def _check_getters_setters_methods(self, node: ast.ClassDef) -> None:
-        class_attributes, instance_attributes = classes.get_attributes(
-            node,
-            include_annotated=True,
-        )
-        flat_class_attributes = name_nodes.flat_variable_names(class_attributes)
+    def _check_base_classes_rules(
+        self,
+        node: ast.ClassDef,
+        base_name: ast.expr,
+    ) -> None:
+        id_attr = getattr(base_name, 'id', None)
 
-        attributes_stripped = {
-            class_attribute.lstrip(constants.UNUSED_PLACEHOLDER)
-            for class_attribute in flat_class_attributes
-        }.union({
-            instance.attr.lstrip(constants.UNUSED_PLACEHOLDER)
-            for instance in instance_attributes
-        })
+        if id_attr == 'BaseException':
+            self.add_violation(bp.BaseExceptionSubclassViolation(node))
+        elif id_attr == 'object' and len(node.bases) >= 2:
+            self.add_violation(
+                consistency.ObjectInBaseClassesListViolation(
+                    node, text=id_attr,
+                ),
+            )
+        elif classes.is_forbidden_super_class(id_attr):
+            self.add_violation(
+                oop.BuiltinSubclassViolation(node, text=id_attr),
+            )
 
-        for method in classes.find_getters_and_setters(node):
-            if method.name[classes.GETTER_LENGTH:] in attributes_stripped:
+    def _check_kwargs_unpacking(self, node: ast.ClassDef) -> None:
+        for keyword in node.keywords:
+            if keyword.arg is None:
                 self.add_violation(
-                    oop.UnpythonicGetterSetterViolation(
-                        method,
-                        text=method.name,
-                    ),
+                    bp.KwargsUnpackingInClassDefinitionViolation(node),
                 )
+
+
+@final
+class WrongClassBodyVisitor(base.BaseNodeVisitor):
+    """
+    This class is responsible for restricting some ``class`` body anti-patterns.
+
+    Here we check for stylistic issues and design patterns.
+    """
+
+    _allowed_body_nodes: ClassVar[types.AnyNodes] = (
+        *FunctionNodes,
+        ast.ClassDef,  # we allow some nested classes
+        *AssignNodes,  # fields and annotations
+    )
+
+    def visit_ClassDef(self, node: ast.ClassDef) -> None:
+        """Checking class definitions."""
+        self._check_wrong_body_nodes(node)
+        self._check_getters_setters_methods(node)
+        self.generic_visit(node)
+
+    def _check_wrong_body_nodes(self, node: ast.ClassDef) -> None:
+        for sub_node in node.body:
+            if isinstance(sub_node, self._allowed_body_nodes):
+                continue
+            if strings.is_doc_string(sub_node):
+                continue
+            self.add_violation(oop.WrongClassBodyContentViolation(sub_node))
+
+    def _check_getters_setters_methods(self, node: ast.ClassDef) -> None:
+        getters_and_setters = set(filter(
+            lambda getter_setter: functions.is_method(
+                getattr(getter_setter, 'function_type', None),
+            ),
+            getters_setters.find_paired_getters_and_setters(node),
+        )).union(set(  # To delete duplicated violations
+            getters_setters.find_attributed_getters_and_setters(node),
+        ))
+        for method in getters_and_setters:
+            self.add_violation(
+                oop.UnpythonicGetterSetterViolation(
+                    method,
+                    text=method.name,
+                ),
+            )
 
 
 @final
@@ -160,18 +163,7 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
     ))
 
     def visit_any_function(self, node: types.AnyFunctionDef) -> None:
-        """
-        Checking class methods: async and regular.
-
-        Raises:
-            StaticMethodViolation
-            BadMagicMethodViolation
-            YieldMagicMethodViolation
-            MethodWithoutArgumentsViolation
-            AsyncMagicMethodViolation
-            UselessOverwrittenMethodViolation
-
-        """
+        """Checking class methods: async and regular."""
         self._check_decorators(node)
         self._check_bound_methods(node)
         self._check_method_contents(node)
@@ -296,13 +288,7 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
     )
 
     def visit_any_assign(self, node: types.AnyAssign) -> None:
-        """
-        Checks all assigns that have correct context.
-
-        Raises:
-            WrongSlotsViolation
-
-        """
+        """Checks all assigns that have correct context."""
         self._check_slots(node)
         self.generic_visit(node)
 
@@ -365,13 +351,7 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
     """Finds incorrect class attributes."""
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
-        """
-        Checks that class attributes are correct.
-
-        Raises:
-            ShadowedClassAttributeViolation
-
-        """
+        """Checks that class attributes are correct."""
         self._check_attributes_shadowing(node)
         self.generic_visit(node)
 
@@ -399,13 +379,7 @@ class ClassMethodOrderVisitor(base.BaseNodeVisitor):
     """Checks that all methods inside the class are ordered correctly."""
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
-        """
-        Ensures that class has correct method order.
-
-        Raises:
-            WrongMethodOrderViolation
-
-        """
+        """Ensures that class has correct methods order."""
         self._check_method_order(node)
         self.generic_visit(node)
 

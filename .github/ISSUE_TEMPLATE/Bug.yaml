@@ -1,0 +1,47 @@
+name: Bug
+description: Create a report to help us improve
+labels: 'bug'
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Awesome that you are using our project!
+        But, sad that it broke :(
+
+        We will try to fix it as soon as possible.
+        Do you want your features to be implemented faster?
+
+        Please consider supporting our collective:
+        👉  https://opencollective.com/wemake-python-styleguide/donate
+
+  - type: textarea
+    attributes:
+      label: "What's wrong"
+      description: "Please, explain your problem"
+    validations:
+      required: True
+  - type: textarea
+    attributes:
+      label: "How it should be"
+      description: "Please, explain how do you expect it to be"
+    validations:
+      required: True
+
+  - type: textarea
+    attributes:
+      label: "Flake8 version and plugins"
+      description: "Contents of `flake8 --bug-report`"
+    validations:
+      required: True
+  - type: textarea
+    attributes:
+      label: "pip information"
+      description: "Contents of `pip --version && pip freeze`"
+    validations:
+      required: True
+  - type: textarea
+    attributes:
+      label: "OS information"
+      description: "Your OS name and version"
+    validations:
+      required: True

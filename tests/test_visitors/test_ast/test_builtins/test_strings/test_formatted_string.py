@@ -53,6 +53,9 @@ f_triple_lookup = "f'{arr[0][1][2]}'"
 f_double_call_arg = "f'{foo()(arg)}'"
 f_single_chained_functions = "f'{f1().f2()}'"
 
+# regression 1921
+f_string_comma_format = 'f"Count={count:,}"'
+
 
 @pytest.mark.parametrize('code', [
     regular_string,
@@ -132,6 +135,7 @@ def test_complex_f_string(assert_errors, parse_ast_tree, code, default_options):
     f_true_index,
     f_none_index,
     f_byte_index,
+    f_string_comma_format,
 ])
 def test_simple_f_string(assert_errors, parse_ast_tree, code, default_options):
     """Testing that non complex ``f`` strings are allowed."""

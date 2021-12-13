@@ -212,45 +212,17 @@ class WrongImportVisitor(BaseNodeVisitor):
         )
 
     def visit_Import(self, node: ast.Import) -> None:
-        """
-        Used to find wrong ``import`` statements.
-
-        Raises:
-            DottedRawImportViolation
-            NestedImportViolation
-            ProtectedModuleViolation
-            SameAliasImportViolation
-            VagueImportViolation
-
-        """
+        """Used to find wrong ``import`` statements."""
         self._import_validator.validate(node)
         self._import_collision_validator.add_import(node)
         self.generic_visit(node)
 
     def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
-        """
-        Used to find wrong ``from ... import ...`` statements.
-
-        Raises:
-            FutureImportViolation
-            LocalFolderImportViolation
-            NestedImportViolation
-            ProtectedModuleMemberViolation
-            ProtectedModuleViolation
-            SameAliasImportViolation
-            VagueImportViolation
-
-        """
+        """Used to find wrong ``from ... import ...`` statements."""
         self._import_from_validator.validate(node)
         self._import_collision_validator.add_import_from(node)
         self.generic_visit(node)
 
     def _post_visit(self) -> None:
-        """
-        Used to find imports collisions.
-
-        Raises:
-            ImportCollisionViolation,
-
-        """
+        """Used to find imports collisions."""
         self._import_collision_validator.validate()

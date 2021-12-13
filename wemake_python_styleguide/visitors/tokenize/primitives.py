@@ -56,18 +56,8 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
         """
         Checks number declarations.
 
-        Raises:
-            UnderscoredNumberViolation
-            PartialFloatViolation
-            BadNumberSuffixViolation
-            BadComplexNumberSuffixViolation
-            NumberWithMeaninglessZeroViolation
-            PositiveExponentViolation
-            FloatZeroViolation
-
         Regressions:
         https://github.com/wemake-services/wemake-python-styleguide/issues/557
-
         """
         self._check_complex_suffix(token)
         self._check_underscored_number(token)
@@ -169,14 +159,6 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         ``u`` can only be the only prefix.
         You cannot combine it with ``r``, ``b``, or ``f``.
         Since it will raise a ``SyntaxError`` while parsing.
-
-        Raises:
-            UnicodeStringViolation
-            WrongMultilineStringViolation
-            ImplicitRawStringViolation
-            WrongUnicodeEscapeViolation
-            RawStringNotNeededViolation
-
         """
         self._check_correct_multiline(token)
         self._check_string_modifiers(token)
@@ -269,13 +251,7 @@ class WrongStringConcatenationVisitor(BaseTokenVisitor):
         self._previous_token: Optional[tokenize.TokenInfo] = None
 
     def visit(self, token: tokenize.TokenInfo) -> None:
-        """
-        Ensures that all string are concatenated as we allow.
-
-        Raises:
-            ImplicitStringConcatenationViolation
-
-        """
+        """Ensures that all string are concatenated as we allow."""
         self._check_concatenation(token)
 
     def _check_concatenation(self, token: tokenize.TokenInfo) -> None:

@@ -15,6 +15,7 @@ from typing_extensions import final
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic import source, walk
 from wemake_python_styleguide.logic.complexity import overuses
+from wemake_python_styleguide.logic.tree import annotations
 from wemake_python_styleguide.types import AnyNodes, AnyText, AnyTextPrimitive
 from wemake_python_styleguide.violations import complexity
 from wemake_python_styleguide.visitors import base, decorators
@@ -35,16 +36,21 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
     Restricts repeated usage of the same string constant.
 
     NB: Some short strings are ignored, as their use is very common and
-    forcing assignment would not make much sense (i.e. newlines or "").
+    forcing assignment would not make much sense (i.e. newlines, "",
+    comma, dot).
     """
 
     _ignored_string_constants: ClassVar[_StringConstants] = frozenset((
         ' ',
+        '.',
+        ',',
         '',
         '\n',
         '\r\n',
         '\t',
         b' ',
+        b'.',
+        b',',
         b'',
         b'\n',
         b'\r\n',
@@ -59,18 +65,12 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
         ] = defaultdict(int)
 
     def visit_any_string(self, node: AnyText) -> None:
-        """
-        Restricts to over-use string constants.
-
-        Raises:
-            OverusedStringViolation
-
-        """
+        """Restricts to over-use string constants."""
         self._check_string_constant(node)
         self.generic_visit(node)
 
     def _check_string_constant(self, node: AnyText) -> None:
-        if overuses.is_annotation(node):
+        if annotations.is_annotation(node):
             return
 
         # Some strings are so common, that it makes no sense to check if
@@ -120,7 +120,7 @@ class ExpressionOveruseVisitor(base.BaseNodeVisitor):
     _ignore_predicates: Tuple[Callable[[ast.AST], bool], ...] = (
         overuses.is_decorator,
         overuses.is_self,
-        overuses.is_annotation,
+        annotations.is_annotation,
         overuses.is_class_context,
         overuses.is_super_call,
         overuses.is_primitive,
@@ -138,13 +138,7 @@ class ExpressionOveruseVisitor(base.BaseNodeVisitor):
         )
 
     def visit(self, node: ast.AST) -> None:
-        """
-        Visits all nodes in a module to find overused values.
-
-        Raises:
-            OverusedExpressionViolation
-
-        """
+        """Visits all nodes in a module to find overused values."""
         if isinstance(node, self._expressions):
             self._add_expression(node)
         self.generic_visit(node)

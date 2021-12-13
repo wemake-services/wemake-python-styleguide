@@ -1,18 +1,18 @@
 # This file is used to setup env
 # to generate documentation.
 
-sphinx==3.5.1
-sphinx_autodoc_typehints==1.11.1
-sphinxcontrib-mermaid==0.6.2
+sphinx==4.3.1
+sphinx_autodoc_typehints==1.12.0
+sphinxcontrib-mermaid==0.7.1
 recommonmark==0.7.1
-m2r2==0.2.7
-added-value==0.15.0
-tomlkit==0.7.0
-docutils==0.16
+m2r2==0.3.2
+added-value==0.20.0
+tomlkit==0.7.2
+docutils==0.17.1
 
 # Dependencies of our linter that should be documented,
 # other dependencies are just ignored or
 # goes to `autodoc_mock_imports` in `conf.py`:
-flake8==3.8.4
-typing-extensions==3.7.4.3
-attrs==20.3.0
+flake8==4.0.1
+typing-extensions==4.0.1
+attrs==21.2.0

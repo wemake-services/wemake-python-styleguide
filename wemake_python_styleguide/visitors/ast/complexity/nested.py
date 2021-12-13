@@ -35,10 +35,6 @@ class NestedComplexityVisitor(BaseNodeVisitor):
         Used to find nested classes in other classes and functions.
 
         Uses ``NESTED_CLASSES_WHITELIST`` to respect some nested classes.
-
-        Raises:
-            NestedClassViolation
-
         """
         self._check_nested_classes(node)
         self.generic_visit(node)
@@ -48,22 +44,12 @@ class NestedComplexityVisitor(BaseNodeVisitor):
         Used to find nested functions.
 
         Uses ``NESTED_FUNCTIONS_WHITELIST`` to respect some nested functions.
-
-        Raises:
-            NestedFunctionViolation
-
         """
         self._check_nested_function(node)
         self.generic_visit(node)
 
     def visit_Lambda(self, node: ast.Lambda) -> None:
-        """
-        Used to find nested ``lambda`` functions.
-
-        Raises:
-            NestedFunctionViolation
-
-        """
+        """Used to find nested ``lambda`` functions."""
         self._check_nested_lambdas(node)
         self.generic_visit(node)
 

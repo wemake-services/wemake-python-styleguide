@@ -3,7 +3,7 @@ import pytest
 from wemake_python_styleguide.violations.oop import (
     UnpythonicGetterSetterViolation,
 )
-from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
+from wemake_python_styleguide.visitors.ast.classes import WrongClassBodyVisitor
 
 module_getter_and_setter = """
 attribute = 1
@@ -24,6 +24,15 @@ class Test(object):
         ...
 
     @staticmethod
+    def set_attribute():
+        ...
+"""
+
+paired_getter_and_setter = """
+class Test(object):
+    def get_attribute():
+        ...
+
     def set_attribute():
         ...
 """
@@ -170,8 +179,6 @@ class Test(object):
 
 @pytest.mark.parametrize('code', [
     module_getter_and_setter,
-    static_getter_and_setter,
-    child_getter_and_setter,
     nested_getter_and_setter,
     property_getter_and_setter,
     class_getter_and_setter_attributes,
@@ -189,7 +196,7 @@ def test_valid_getter_and_setter(
     """Testing that correct usage of getter/setter is allowed."""
     tree = parse_ast_tree(mode(code))
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongClassBodyVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -198,6 +205,9 @@ def test_valid_getter_and_setter(
 @pytest.mark.parametrize('code', [
     dataclass_getter_setter,
     dataclass_incorrect_property_getter_setter,
+    static_getter_and_setter,
+    child_getter_and_setter,
+    paired_getter_and_setter,
 ])
 def test_invalid_getter_and_setter(
     assert_errors,
@@ -209,7 +219,7 @@ def test_invalid_getter_and_setter(
     """Testing that wrong use of getter/setter is prohibited."""
     tree = parse_ast_tree(mode(code))
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongClassBodyVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [
@@ -245,7 +255,7 @@ def test_nonmatching_instance(
     )
     tree = parse_ast_tree(mode(test_instance))
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongClassBodyVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -287,7 +297,7 @@ def test_instance_getter_setter(
     )
     tree = parse_ast_tree(mode(test_instance))
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongClassBodyVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [UnpythonicGetterSetterViolation])
@@ -320,7 +330,7 @@ def test_nonmatching_class(
     )
     tree = parse_ast_tree(mode(test_instance))
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongClassBodyVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -361,7 +371,7 @@ def test_class_attributes_getter_setter(
     )
     tree = parse_ast_tree(mode(test_instance))
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongClassBodyVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [UnpythonicGetterSetterViolation])
@@ -370,7 +380,7 @@ def test_class_attributes_getter_setter(
 @pytest.mark.parametrize('access', ['', '_', '__'])
 @pytest.mark.parametrize(('first', 'second', 'third'), [
     ('attribute', 'some', 'other'),
-    ('attribute', 'some', 'some'),
+    ('attribute', 'some', 'another'),
 ])
 def test_class_mixed(
     assert_errors,
@@ -386,7 +396,7 @@ def test_class_mixed(
     test_instance = class_mixed.format(access, first, second, third)
     tree = parse_ast_tree(mode(test_instance))
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongClassBodyVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])

@@ -68,7 +68,16 @@ correct_example9 = """
 def function():
     def factory():
         return 1
-    return None  # single `return None` statement if this context
+    return factory
+"""
+
+correct_example10 = """
+def function():
+    if some:
+        return None
+    if other:
+        return None
+    return 1
 """
 
 # Wrong:
@@ -80,8 +89,9 @@ def function():
 
 wrong_example2 = """
 def function():
-    print(1)
-    return None
+    if some:
+        return None
+    print()
 """
 
 wrong_example3 = """
@@ -102,22 +112,20 @@ def function():
     return decorator
 """
 
-wrong_example5 = """
-def function():
-    return None
-"""
-
-wrong_example6 = '''
-def function():
-    """some"""
-    return None
-'''
-
-wrong_example7 = '''
+wrong_example5 = '''
 def function():
     """some"""
     return
 '''
+
+wrong_example6 = """
+def function():
+    if some:
+        return None
+    if other:
+        return None
+    print()
+"""
 
 double_wrong_return1 = """
 def function():
@@ -134,6 +142,23 @@ def function():
     return
 """
 
+double_wrong_return3 = """
+def function():
+    print(1)
+    return None
+"""
+
+double_wrong_return4 = """
+def function():
+    return None
+"""
+
+double_wrong_return5 = '''
+def function():
+    """some"""
+    return None
+'''
+
 
 @pytest.mark.parametrize('code', [
     wrong_example1,
@@ -142,7 +167,6 @@ def function():
     wrong_example4,
     wrong_example5,
     wrong_example6,
-    wrong_example7,
 ])
 def test_wrong_return_statement(
     assert_errors,
@@ -163,6 +187,9 @@ def test_wrong_return_statement(
 @pytest.mark.parametrize('code', [
     double_wrong_return1,
     double_wrong_return2,
+    double_wrong_return3,
+    double_wrong_return4,
+    double_wrong_return5,
 ])
 def test_double_wrong_return_statement(
     assert_errors,
@@ -193,6 +220,7 @@ def test_double_wrong_return_statement(
     correct_example7,
     correct_example8,
     correct_example9,
+    correct_example10,
 ])
 def test_correct_return_statements(
     assert_errors,

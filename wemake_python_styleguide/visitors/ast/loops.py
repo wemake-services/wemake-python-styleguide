@@ -64,26 +64,13 @@ class WrongComprehensionVisitor(base.BaseNodeVisitor):
         self._fors: DefaultDict[ast.AST, int] = defaultdict(int)
 
     def visit_comprehension(self, node: ast.comprehension) -> None:
-        """
-        Finds multiple ``if`` and ``for`` nodes inside the comprehension.
-
-        Raises:
-            MultipleIfsInComprehensionViolation
-            TooManyForsInComprehensionViolation
-
-        """
+        """Checks ``if`` and ``for`` nodes inside the comprehension."""
         self._check_ifs(node)
         self._check_fors(node)
         self.generic_visit(node)
 
     def visit_any_comprehension(self, node: AnyComprehension) -> None:
-        """
-        Finds incorrect patterns inside comprehensions.
-
-        Raises:
-            YieldInComprehensionViolation
-
-        """
+        """Finds incorrect patterns inside comprehensions."""
         self._check_contains_yield(node)
         self.generic_visit(node)
 
@@ -144,27 +131,12 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
     }
 
     def visit_any_comp(self, node: AnyComprehension) -> None:
-        """
-        Checks all kinds of comprehensions.
-
-        Raises:
-            LambdaInsideLoopViolation
-
-        """
+        """Checks all kinds of comprehensions."""
         self._check_lambda_inside_loop(node)
         self.generic_visit(node)
 
     def visit_any_loop(self, node: AnyLoop) -> None:
-        """
-        Checks ``for`` and ``while`` loops.
-
-        Raises:
-            UselessLoopElseViolation
-            LambdaInsideLoopViolation
-            MultilineLoopViolation
-            InfiniteWhileLoopViolation
-
-        """
+        """Checks ``for`` and ``while`` loops."""
         self._check_loop_needs_else(node)
         self._check_lambda_inside_loop(node)
         self._check_useless_continue(node)
@@ -208,11 +180,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
     def _check_multiline_loop(self, node: AnyLoop) -> None:
         start_lineno = getattr(node, 'lineno', None)
 
-        if isinstance(node, ast.While):
-            node_to_check = node.test
-        else:
-            node_to_check = node.iter
-
+        node_to_check = node.test if isinstance(node, ast.While) else node.iter
         for sub_node in ast.walk(node_to_check):
             sub_lineno = getattr(sub_node, 'lineno', None)
             if sub_lineno is not None and sub_lineno > start_lineno:
@@ -253,15 +221,7 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
     )
 
     def visit_any_for(self, node: AnyFor) -> None:
-        """
-        Ensures that ``for`` loop definitions are correct.
-
-        Raises:
-            LoopVariableDefinitionViolation
-            WrongLoopIterTypeViolation
-            ImplicitSumViolation
-
-        """
+        """Ensures that ``for`` loop definitions are correct."""
         self._check_variable_definitions(node.target)
         self._check_explicit_iter_type(node)
         self._check_implicit_sum(node)
@@ -269,13 +229,7 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def visit_comprehension(self, node: ast.comprehension) -> None:
-        """
-        Ensures that comprehension definitions are correct.
-
-        Raises:
-            LoopVariableDefinitionViolation
-
-        """
+        """Ensures that comprehension definitions are correct."""
         self._check_variable_definitions(node.target)
         self._check_explicit_iter_type(node)
         self.generic_visit(node)
@@ -323,13 +277,7 @@ class SyncForLoopVisitor(base.BaseNodeVisitor):
     """We use this visitor to check just sync ``for`` loops."""
 
     def visit_For(self, node: ast.For) -> None:
-        """
-        Checks for hidden patterns in sync loops.
-
-        Raises:
-            ImplicitItemsIteratorViolation
-
-        """
+        """Checks for hidden patterns in sync loops."""
         self._check_implicit_items(node)
         self.generic_visit(node)
 

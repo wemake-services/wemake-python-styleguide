@@ -24,24 +24,12 @@ class AnnotationComplexityVisitor(BaseNodeVisitor):
     """Ensures that annotations are used correctly."""
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
-        """
-        Checks return type annotations.
-
-        Raises:
-            TooComplexAnnotationViolation
-
-        """
+        """Checks return type annotations."""
         self._check_function_annotations_complexity(node)
         self.generic_visit(node)
 
     def visit_AnnAssign(self, node: ast.AnnAssign) -> None:
-        """
-        Check assignment annotation.
-
-        Raises:
-            TooComplexAnnotationViolation
-
-        """
+        """Check assignment annotation."""
         self._check_annotations_complexity(node, [node.annotation])
         self.generic_visit(node)
 

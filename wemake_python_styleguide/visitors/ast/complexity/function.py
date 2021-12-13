@@ -127,30 +127,13 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
         self._counter = _ComplexityCounter()
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
-        """
-        Checks function's internal complexity.
-
-        Raises:
-            TooManyExpressionsViolation
-            TooManyReturnsViolation
-            TooManyLocalsViolation
-            TooManyArgumentsViolation
-            TooManyAwaitsViolation
-            TooManyRaisesViolation
-
-        """
+        """Checks function's internal complexity."""
         self._counter.check_arguments_count(node)
         self._counter.check_function_complexity(node)
         self.generic_visit(node)
 
     def visit_Lambda(self, node: ast.Lambda) -> None:
-        """
-        Checks lambda function's internal complexity.
-
-        Raises:
-            TooManyArgumentsViolation
-
-        """
+        """Checks lambda function's internal complexity."""
         self._counter.check_arguments_count(node)
         self.generic_visit(node)
 
@@ -231,14 +214,7 @@ class CognitiveComplexityVisitor(BaseNodeVisitor):
         self._functions: DefaultDict[AnyFunctionDef, int] = defaultdict(int)
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
-        """
-        Counts cognitive complexity.
-
-        Raises:
-            CognitiveComplexityViolation
-            CognitiveModuleComplexityViolation
-
-        """
+        """Counts cognitive complexity."""
         self._functions[node] = cognitive.cognitive_score(node)
         self.generic_visit(node)
 
@@ -258,6 +234,9 @@ class CognitiveComplexityVisitor(BaseNodeVisitor):
                         baseline=self.options.max_cognitive_score,
                     ),
                 )
+
+        if len(self._functions) <= 1:
+            return  # We don't check module average for a single function.
 
         average = total / len(self._functions)
         if average > self.options.max_cognitive_average:

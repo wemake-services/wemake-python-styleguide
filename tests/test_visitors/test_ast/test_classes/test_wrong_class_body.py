@@ -3,7 +3,7 @@ import pytest
 from wemake_python_styleguide.violations.oop import (
     WrongClassBodyContentViolation,
 )
-from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
+from wemake_python_styleguide.visitors.ast.classes import WrongClassBodyVisitor
 
 class_body_template = """
 class ClassWithBody(object):
@@ -30,7 +30,7 @@ def test_incorrect_body_items(
     """Testing that incorrect body nodes are prohibited."""
     tree = parse_ast_tree(class_body_template.format(code))
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongClassBodyVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [WrongClassBodyContentViolation])
@@ -56,7 +56,7 @@ def test_body_correct_items(
     """Testing correct body items are allowed."""
     tree = parse_ast_tree(mode(class_body_template.format(code)))
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongClassBodyVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])

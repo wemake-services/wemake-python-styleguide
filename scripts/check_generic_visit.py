@@ -9,12 +9,12 @@ FAIL_CODE = 255
 
 OK_CODE = 0
 
-PATTERN = '''
+PATTERN = """
 //ClassDef[contains(bases, Name[@id='BaseNodeVisitor'])]/body
 /FunctionDef[re:match('visit_.*', @name)
 and not(child::body/Expr[last()]/value/Call/func
 /Attribute[@attr='generic_visit'])]
-'''  # noqa: Q001
+"""
 
 # This is needed to stop linter from spewing WPS421 errors.
 my_print = print

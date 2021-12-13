@@ -1,10 +1,7 @@
 
 def test_all_unique_violation_codes(all_violations):
     """Ensures that all violations have unique violation codes."""
-    codes = []
-    for violation in all_violations:
-        codes.append(int(violation.code))
-
+    codes = [int(violation.code) for violation in all_violations]
     assert len(set(codes)) == len(all_violations)
 
 

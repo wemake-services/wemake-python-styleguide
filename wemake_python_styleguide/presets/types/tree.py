@@ -18,6 +18,7 @@ from wemake_python_styleguide.visitors.ast import (  # noqa: WPS235
     loops,
     modules,
     operators,
+    redundancy,
     statements,
     subscripts,
 )
@@ -88,7 +89,8 @@ PRESET: Final = (
 
     iterables.IterableUnpackingVisitor,
 
-    classes.WrongClassVisitor,
+    classes.WrongClassDefVisitor,
+    classes.WrongClassBodyVisitor,
     classes.WrongMethodVisitor,
     classes.WrongSlotsVisitor,
     classes.ClassAttributeVisitor,
@@ -102,6 +104,8 @@ PRESET: Final = (
     subscripts.CorrectKeyVisitor,
 
     decorators.WrongDecoratorVisitor,
+
+    redundancy.RedundantEnumerateVisitor,
 
     # Modules:
     modules.EmptyModuleContentsVisitor,

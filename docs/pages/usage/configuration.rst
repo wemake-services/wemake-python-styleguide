@@ -31,19 +31,47 @@ with ``wemake-python-styleguide``.
 It is also important to configure different plugins that we ship with
 this module.
 
+All recommended settings can be found in our `styleguide.toml <https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/styleguide.toml>`_.
+
 You can basically configure them as you wish,
 including stylistic (like ``--quotes`` from ``flake8-quotes``)
 and important things (like ``--max-complexity`` from ``mccabe``).
 Our `flake8.toml <https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/flake8.toml>`_
 file is available with the core settings for ``flake8``.
 
-We also use ``flake8-isort`` to style our imports.
-You will need to update your configuration with the following lines:
-Otherwise, your ``isort`` will complain about your imports.
+**flake8-isort**
+
+We use ``flake8-isort`` to check style of imports in our code.
+To avoid triggering these checks, you can either use `"wemake" isort profile <https://pycqa.github.io/isort/docs/configuration/profiles.html#wemake>`_
+or update your configuration with the following lines:
+
+.. code:: ini
+
+  # Inside `setup.cfg`:
+
+  [isort]
+  include_trailing_comma = true
+  use_parentheses = true
+  multi_line_output = 3
+
 Our `isort.toml <https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/isort.toml>`_
 file is available with the core settings for ``isort``.
 
-All recommended settings can be found in our `styleguide.toml <https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/styleguide.toml>`_.
+**darglint**
+
+We use ``darglint`` to ensure that docstrings match NumPy documentation style.
+To avoid triggering these checks, please ensure that your configuration contains
+following settings:
+
+.. code:: ini
+
+  # Inside `setup.cfg`
+
+  [darglint]
+  strictness = long
+
+Our `darglint.toml <https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/darglint.toml>`_
+file is available with the core settings for ``isort``.
 
 .. rubric:: Ignoring violations
 

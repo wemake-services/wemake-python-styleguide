@@ -19,24 +19,12 @@ class WrongAnnotationVisitor(BaseNodeVisitor):
     """Ensures that annotations are used correctly."""
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
-        """
-        Checks return type annotations.
-
-        Raises:
-            MultilineFunctionAnnotationViolation
-
-        """
+        """Checks return type annotations."""
         self._check_return_annotation(node)
         self.generic_visit(node)
 
     def visit_arg(self, node: ast.arg) -> None:
-        """
-        Checks arguments annotations.
-
-        Raises:
-            MultilineFunctionAnnotationViolation
-
-        """
+        """Checks arguments annotations."""
         self._check_arg_annotation(node)
         self.generic_visit(node)
 

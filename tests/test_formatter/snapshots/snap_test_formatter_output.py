@@ -257,3 +257,22 @@ snapshots['test_formatter_correct[cli_options4-statistic_with_source] formatter_
 
 All errors: 0
 '''
+
+snapshots['test_ipynb formatter_ipynb'] = '''
+tests/fixtures/notebook.ipynb
+  3:1      DAR101 Missing parameter(s) in Docstring: - good_name
+  3:1      DAR201 Missing "Returns" in Docstring: - return
+  8:1      D103  Missing docstring in public function
+  8:1      WPS111 Found too short name: s < 2
+  8:7      WPS110 Found wrong variable name: handle
+  9:21     WPS432 Found magic number: 200
+  9:21     WPS303 Found underscored number: 2_00
+  13:1     D103  Missing docstring in public function
+  13:1     WPS110 Found wrong variable name: data
+  13:10    WPS110 Found wrong variable name: param
+  14:12    WPS437 Found protected attribute usage: _protected
+  14:31    WPS303 Found underscored number: 10_00
+
+Full list of violations and explanations:
+https://wemake-python-stylegui.de/en/xx.xx/pages/usage/violations/
+'''

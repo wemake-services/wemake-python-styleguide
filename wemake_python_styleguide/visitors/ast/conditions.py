@@ -3,9 +3,11 @@ from collections import defaultdict
 from functools import reduce
 from typing import ClassVar, DefaultDict, List, Mapping, Set, Type
 
-from typing_extensions import final
+from typing_extensions import Final, final
 
+from wemake_python_styleguide.compat.aliases import ForNodes
 from wemake_python_styleguide.logic import source, walk
+from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree import ifs, keywords, operators
 from wemake_python_styleguide.logic.tree.compares import CompareBounds
 from wemake_python_styleguide.logic.tree.functions import given_function_called
@@ -29,6 +31,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 _OperatorPairs = Mapping[Type[ast.boolop], Type[ast.cmpop]]
+_ELSE_NODES: Final = (*ForNodes, ast.While, ast.Try)
 
 
 # TODO: move to logic
@@ -68,7 +71,7 @@ def _get_duplicate_names(variables: List[Set[str]]) -> Set[str]:
 class IfStatementVisitor(BaseNodeVisitor):
     """Checks single and consecutive ``if`` statement nodes."""
 
-    def visit_any_if(self, node: ast.If) -> None:
+    def visit_any_if(self, node: AnyIf) -> None:
         """Checks ``if`` nodes and expressions."""
         self._check_negated_conditions(node)
         self._check_useless_len(node)
@@ -88,6 +91,11 @@ class IfStatementVisitor(BaseNodeVisitor):
             if any(isinstance(elem, ast.NotEq) for elem in node.test.ops):
                 self.add_violation(NegatedConditionsViolation(node))
 
+    def _check_useless_len(self, node: AnyIf) -> None:
+        if isinstance(node.test, ast.Call):
+            if given_function_called(node.test, {'len'}):
+                self.add_violation(UselessLenCompareViolation(node))
+
     def _check_multiline_conditions(self, node: ast.If) -> None:
         """Checks multiline conditions ``if`` statement nodes."""
         start_lineno = getattr(node, 'lineno', None)
@@ -96,11 +104,6 @@ class IfStatementVisitor(BaseNodeVisitor):
             if sub_lineno is not None and sub_lineno > start_lineno:
                 self.add_violation(MultilineConditionsViolation(node))
                 break
-
-    def _check_useless_len(self, node: AnyIf) -> None:
-        if isinstance(node.test, ast.Call):
-            if given_function_called(node.test, {'len'}):
-                self.add_violation(UselessLenCompareViolation(node))
 
     def _check_simplifiable_returning_if(self, node: ast.If) -> None:
         body = node.body
@@ -111,10 +114,19 @@ class IfStatementVisitor(BaseNodeVisitor):
                 if keywords.is_simple_return(else_body):
                     self.add_violation(SimplifiableReturningIfViolation(node))
                 return
-            body = getattr(node, 'wps_parent').body  # TODO: refactor
-            next_index_in_parent = body.index(node) + 1
-            if keywords.next_node_returns_bool(body, next_index_in_parent):
-                self.add_violation(SimplifiableReturningIfViolation(node))
+
+            self._check_simplifiable_returning_parent(node)
+
+    def _check_simplifiable_returning_parent(self, node: ast.If) -> None:
+        parent = get_parent(node)
+        if isinstance(parent, _ELSE_NODES):
+            body = parent.body + parent.orelse
+        else:
+            body = getattr(parent, 'body', [node])
+
+        next_index_in_parent = body.index(node) + 1
+        if keywords.next_node_returns_bool(body, next_index_in_parent):
+            self.add_violation(SimplifiableReturningIfViolation(node))
 
 
 @final
@@ -200,9 +212,17 @@ class UselessElseVisitor(BaseNodeVisitor):
     def _check_useless_loop_else(self, node: AnyLoop) -> None:
         if not node.orelse:
             return
-
+        # An else statement makes sense if we
+        # want to execute something after breaking
+        # out of the loop without writing more code
+        has_break = any(
+            walk.is_contained(sub, ast.Break)
+            for sub in node.body
+        )
+        if has_break:
+            return
         body_returning = any(
-            walk.is_contained(sub, self._returning_nodes)
+            walk.is_contained(sub, self._returning_nodes[1:])
             for sub in node.body
         )
         else_returning = any(

@@ -21,13 +21,7 @@ class CallChainsVisitor(BaseNodeVisitor):
         self._visited_calls: Set[ast.Call] = set()
 
     def visit_Call(self, node: ast.Call) -> None:
-        """
-        Checks number of function calls.
-
-        Raises:
-            TooLongCallChainViolation
-
-        """
+        """Checks number of function calls."""
         self._check_consecutive_call_number(node)
         self.generic_visit(node)
 
