@@ -31,7 +31,7 @@ PRESET: Final = (
     counts.ConditionsVisitor,
     counts.ElifVisitor,
     counts.TryExceptVisitor,
-    counts.YieldTupleVisitor,
+    counts.ReturnLikeStatementTupleVisitor,
     counts.TupleUnpackVisitor,
 
     classes.ClassComplexityVisitor,

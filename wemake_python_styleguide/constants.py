@@ -406,8 +406,8 @@ MAGIC_NUMBERS_WHITELIST: Final = frozenset((
 #: Maximum amount of ``pragma`` no-cover comments per module.
 MAX_NO_COVER_COMMENTS: Final = 5
 
-#: Maximum length of ``yield`` ``tuple`` expressions.
-MAX_LEN_YIELD_TUPLE: Final = 5
+#: Maximum length of ``yield`` or ``return`` ``tuple`` expressions.
+MAX_LEN_TUPLE_OUTPUT: Final = 5
 
 #: Maximum number of compare nodes in a single expression.
 MAX_COMPARES: Final = 2

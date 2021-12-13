@@ -16,6 +16,7 @@ from wemake_python_styleguide.visitors.decorators import alias
 # Type aliases:
 _ConditionNodes = Union[ast.If, ast.While, ast.IfExp]
 _ModuleMembers = Union[AnyFunctionDef, ast.ClassDef]
+_ReturnLikeStatement = Union[ast.Return, ast.Yield]
 
 
 @final
@@ -205,22 +206,26 @@ class TryExceptVisitor(BaseNodeVisitor):
 
 
 @final
-class YieldTupleVisitor(BaseNodeVisitor):
-    """Finds too long ``tuples`` in ``yield`` expressions."""
+@alias('visit_return_like', (
+    'visit_Return',
+    'visit_Yield',
+))
+class ReturnLikeStatementTupleVisitor(BaseNodeVisitor):
+    """Finds too long ``tuples`` in ``yield`` and ``return`` expressions."""
 
-    def visit_Yield(self, node: ast.Yield) -> None:
-        """Helper to get all ``yield`` nodes in a function at once."""
-        self._check_yield_values(node)
+    def visit_return_like(self, node: _ReturnLikeStatement) -> None:
+        """Helper to get all ``yield`` and ``return`` nodes in a function."""
+        self._check_return_like_values(node)
         self.generic_visit(node)
 
-    def _check_yield_values(self, node: ast.Yield) -> None:
+    def _check_return_like_values(self, node: _ReturnLikeStatement) -> None:
         if isinstance(node.value, ast.Tuple):
-            if len(node.value.elts) > constants.MAX_LEN_YIELD_TUPLE:
+            if len(node.value.elts) > constants.MAX_LEN_TUPLE_OUTPUT:
                 self.add_violation(
-                    complexity.TooLongYieldTupleViolation(
+                    complexity.TooLongOutputTupleViolation(
                         node,
                         text=str(len(node.value.elts)),
-                        baseline=constants.MAX_LEN_YIELD_TUPLE,
+                        baseline=constants.MAX_LEN_TUPLE_OUTPUT,
                     ),
                 )
 
