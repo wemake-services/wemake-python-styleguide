@@ -15,7 +15,7 @@ _IgnoredTypes = Union[
     Tuple[Type[BaseViolation], ...],
     None,
 ]
-_ErrorFormat: Final = ': {0}'
+_ERROR_FORMAT: Final = ': {0}'
 
 
 @pytest.fixture(scope='session')
@@ -72,8 +72,8 @@ def assert_error_text():
 
         violation = real_errors[0]
 
-        assert _ErrorFormat in violation.error_template
-        assert violation.error_template.endswith(error_format)
+        assert _ERROR_FORMAT in violation.error_template
+        assert violation.error_template.endswith(_ERROR_FORMAT)
 
         reproduction = violation.__class__(
             node=violation._node,  # noqa: WPS437
