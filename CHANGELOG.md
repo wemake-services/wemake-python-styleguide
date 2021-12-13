@@ -83,6 +83,10 @@ Semantic versioning in our case means:
 
 - Updates GitHub Action's base Python image version to `3.8.8`
 
+### Features
+
+- Adds a math operations evaluator to improve and allow several violation checks.
+
 
 ## 0.15.1
 

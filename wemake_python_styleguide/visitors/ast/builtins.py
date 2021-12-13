@@ -449,12 +449,17 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
             if dict_key is None:
                 continue
 
+            evaluates_to_float = False
+            if isinstance(dict_key, ast.BinOp):
+                evaluated_key = getattr(dict_key, 'wps_op_eval', None)
+                evaluates_to_float = isinstance(evaluated_key, float)
+
             real_key = operators.unwrap_unary_node(dict_key)
             is_float_key = (
                 isinstance(real_key, ast.Num) and
                 isinstance(real_key.n, float)
             )
-            if is_float_key:
+            if is_float_key or evaluates_to_float:
                 self.add_violation(best_practices.FloatKeyViolation(dict_key))
 
     def _check_unhashable_elements(

@@ -8,6 +8,7 @@ from wemake_python_styleguide.transformations.ast.bugfixes import (
     fix_line_number,
 )
 from wemake_python_styleguide.transformations.ast.enhancements import (
+    set_constant_evaluations,
     set_if_chain,
     set_node_context,
 )
@@ -85,6 +86,7 @@ def transform(tree: ast.AST) -> ast.AST:
         # Enhancements, order is not important:
         set_node_context,
         set_if_chain,
+        set_constant_evaluations,
     )
 
     for transformation in pipeline:
