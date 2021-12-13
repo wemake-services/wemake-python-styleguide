@@ -3,7 +3,7 @@ import pytest
 from wemake_python_styleguide.violations.consistency import (
     ObjectInBaseClassesListViolation,
 )
-from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
+from wemake_python_styleguide.visitors.ast.classes import WrongClassDefVisitor
 
 extra_object = """
 class TestClassName(FirstName, SecondName, object):
@@ -33,7 +33,7 @@ def test_wrong_class_definition_multiple_parent(
     """Testing wrong class definition."""
     tree = parse_ast_tree(code)
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongClassDefVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [ObjectInBaseClassesListViolation])
@@ -52,7 +52,7 @@ def test_correct_class_definitions(
     """Testing correct class definition with single parent."""
     tree = parse_ast_tree(code)
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongClassDefVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])

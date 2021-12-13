@@ -25,11 +25,18 @@ Semantic versioning in our case means:
   when `yield` or `return` is used with `None`
   where plain version should be used
 - Dot `'.'` and comma `','` do not count against string literal overuse limit anymore
+- Added `RedundantEnumerateViolation` #1825
+- Adds `RaiseFromItselfViolation` #2133
+- Adds `ConsecutiveSlicesViolation` #2064
+- Adds `KwargsUnpackingInClassDefinitionViolation` #1714
+- `DirectMagicAttributeAccessViolation` now only flags instances for which
+  a known alternative exists #2268
 
 ### Bugfixes
 
 - Fixes that `InconsistentComprehensionViolation` was ignoring
   misaligned `in` expressions #2075
+- Fixes some common magic methods not being recognized as such  #2281
 
 ### Misc
 
@@ -38,6 +45,7 @@ Semantic versioning in our case means:
 - Added `why strict is good`
 - Replaced all `python` with `Python` in README.md
 - Improve Docs: Fixed all typos and grammatical errors in CHANGELOG
+- Updated documentation with the recommended `isort` config. #1934
 
 
 ## 0.15.3
@@ -1033,7 +1041,7 @@ to the project during `#hactoberfest`. List of awesome people:
 - [@roxe322](https://github.com/roxe322)
 - [@geoc0ld](https://github.com/geoc0ld)
 - [@lensvol](https://github.com/lensvol)
-- [@SheldonNunes ](https://github.com/SheldonNunes)
+- [@SheldonNunes](https://github.com/SheldonNunes)
 - [@tommbee](https://github.com/tommbee)
 - [@valignatev](https://github.com/valignatev)
 - [@vsmaxim](https://github.com/vsmaxim)

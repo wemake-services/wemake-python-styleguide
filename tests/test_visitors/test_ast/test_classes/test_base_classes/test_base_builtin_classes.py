@@ -1,7 +1,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.oop import BuiltinSubclassViolation
-from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
+from wemake_python_styleguide.visitors.ast.classes import WrongClassDefVisitor
 
 class_with_base = """
 class TestClass({0}):
@@ -26,7 +26,7 @@ def test_builtin_subclass(
     """Testing that it is not possible to subclass builtins."""
     tree = parse_ast_tree(class_with_base.format(super_class))
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongClassDefVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [BuiltinSubclassViolation])
@@ -47,7 +47,7 @@ def test_regular_subclass(
     """Testing that it is possible to subclass regulars."""
     tree = parse_ast_tree(class_with_base.format(super_class))
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongClassDefVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])

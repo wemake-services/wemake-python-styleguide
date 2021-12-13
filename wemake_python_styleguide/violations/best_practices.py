@@ -84,6 +84,10 @@ Summary
    BitwiseAndBooleanMixupViolation
    NewStyledDecoratorViolation
    BareRaiseViolation
+   RedundantEnumerateViolation
+   RaiseFromItselfViolation
+   KwargsUnpackingInClassDefinitionViolation
+   ConsecutiveSlicesViolation
 
 Best practices
 --------------
@@ -156,6 +160,10 @@ Best practices
 .. autoclass:: BitwiseAndBooleanMixupViolation
 .. autoclass:: NewStyledDecoratorViolation
 .. autoclass:: BareRaiseViolation
+.. autoclass:: RedundantEnumerateViolation
+.. autoclass:: RaiseFromItselfViolation
+.. autoclass:: KwargsUnpackingInClassDefinitionViolation
+.. autoclass:: ConsecutiveSlicesViolation
 
 """
 
@@ -2608,3 +2616,123 @@ class BareRaiseViolation(ASTViolation):
 
     error_template = 'Found bare raise keyword'
     code = 467
+
+
+@final
+class RedundantEnumerateViolation(ASTViolation):
+    """
+    Forbid using a placeholder (``_``) with ``enumerate``.
+
+    Reasoning:
+       This adds no value and introduces additional complexity.
+
+    Solution:
+        Only use ``enumerate`` when you are going to do something with the
+        index it returns.
+
+    Example::
+
+        # Correct:
+        for item in items:
+          ...
+
+        # Wrong:
+        for _, item in enumerate(items):
+          ...
+
+    .. versionadded:: 0.18.0
+
+    """
+
+    error_template = 'Found redundant use of `enumerate`'
+    code = 468
+
+
+@final
+class RaiseFromItselfViolation(ASTViolation):
+    """
+    Forbid raising an exception from itself.
+
+    Reasoning:
+        It doesn't make sense to raise an exception from it self,
+        since the final behavior will be the same.
+
+    Solution:
+        Don't raise an exeception from itself.
+
+    Example::
+
+        # Correct:
+        ex = Exception('Some Exception')
+        raise ex
+
+        # Wrong:
+        ex = Exception('Some Exception')
+        raise ex from ex
+
+    .. versionadded:: 0.16.0
+
+    """
+
+    error_template = 'Found error raising from itself'
+    code = 469
+
+
+@final
+class KwargsUnpackingInClassDefinitionViolation(ASTViolation):
+    """
+    Forbid kwarg unpacking in class definition.
+
+    Reasoning:
+        Dynamic class generation with unknown arguments is bad because it
+        creates too much flexibility and possibilities for errors.
+        It also limits the typechecking capabilities.
+
+    Solution:
+        Use keyword arguments noramlly without unpacking them.
+
+    Example::
+
+        # Correct:
+        class MyClass(argument='argument'):
+            ...
+
+        # Wrong:
+        arguments = {'argument': 'argument'}
+        class MyClass(**arguments):
+            ...
+
+    .. versionadded:: 0.16.0
+
+    """
+
+    error_template = 'Found kwarg unpacking in class definition'
+    code = 470
+
+
+@final
+class ConsecutiveSlicesViolation(ASTViolation):
+    """
+    Forbid consecutive slices.
+
+    Reasoning:
+        Consecutive slices reduce readability of the code and obscure
+        intended meaning of the expression.
+
+    Solution:
+        Compress multiple consecutive slices into a single one.
+
+    Example::
+
+        # Correct:
+        my_list[1:3]
+
+        # Wrong:
+        my_list[1:][:2]
+
+    .. versionadded:: 0.16.0
+
+    """
+
+    error_template = 'Found consecutive slices'
+    code = 471

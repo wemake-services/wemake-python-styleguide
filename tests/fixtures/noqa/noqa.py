@@ -792,3 +792,24 @@ matrix = [
 
 def bare_raise_function():
     raise # noqa: WPS467
+
+for _, something in enumerate(collection): # noqa: WPS468
+    report(something)
+
+variable_to_store_things = {
+    definitely_something
+    for _, definitely_something in enumerate(collection) # noqa: WPS468
+}
+
+try:  # noqa: WPS328
+    raise TypeError('Type Error')
+except TypeError as raise_from_itself:
+    my_print(raise_from_itself)
+    raise raise_from_itself from raise_from_itself  # noqa: WPS469
+
+
+class TestClass(object, **{}):  # noqa: WPS470
+    """Docs."""
+
+
+secondary_slice = items[1:][:3]  # noqa: WPS471

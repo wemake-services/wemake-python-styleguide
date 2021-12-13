@@ -3,6 +3,7 @@ from typing import ClassVar, FrozenSet
 
 from typing_extensions import final
 
+from wemake_python_styleguide.constants import ALL_MAGIC_METHODS
 from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.violations.best_practices import (
     ProtectedAttributeViolation,
@@ -21,16 +22,6 @@ class WrongAttributeVisitor(BaseNodeVisitor):
         'self',
         'cls',
         'mcs',
-    ))
-
-    _allowed_magic_attributes: ClassVar[FrozenSet[str]] = frozenset((
-        '__class__',
-        '__name__',
-        '__qualname__',
-        '__doc__',
-        '__subclasses__',
-        '__mro__',
-        '__version__',
     ))
 
     def visit_Attribute(self, node: ast.Attribute) -> None:
@@ -59,7 +50,7 @@ class WrongAttributeVisitor(BaseNodeVisitor):
 
     def _check_magic_attribute(self, node: ast.Attribute) -> None:
         if access.is_magic(node.attr):
-            if node.attr not in self._allowed_magic_attributes:
+            if node.attr in ALL_MAGIC_METHODS:
                 self._ensure_attribute_type(
                     node, DirectMagicAttributeAccessViolation,
                 )

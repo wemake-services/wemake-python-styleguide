@@ -109,7 +109,15 @@ class Test(object):
 
 
 @pytest.mark.parametrize('attribute', [
-    '__magic__',
+    '__truediv__',
+    '__radd__',
+    '__iter__',
+    '__int__',
+    '__float__',
+    '__repr__',
+    '__coerce__',
+    '__str__',
+    '__next__',
 ])
 @pytest.mark.parametrize('code', [
     magic_attribute_assigned,
@@ -120,7 +128,7 @@ class Test(object):
     magic_container_method,
     magic_callable_attribute,
 ])
-def test_magic_attribute_is_restricted(
+def test_disallowed_magic_attribute_is_restricted(
     assert_errors,
     assert_error_text,
     parse_ast_tree,
@@ -129,7 +137,7 @@ def test_magic_attribute_is_restricted(
     default_options,
     mode,
 ):
-    """Ensures that it is impossible to use magic attributes."""
+    """Ensures that it is impossible to use certain magic attributes."""
     tree = parse_ast_tree(mode(code.format(attribute)))
 
     visitor = WrongAttributeVisitor(default_options, tree=tree)
@@ -141,6 +149,12 @@ def test_magic_attribute_is_restricted(
 
 @pytest.mark.parametrize('attribute', [
     '__magic__',
+    '__str__',
+    '__float__',
+    '__members__',
+    '__path__',
+    '__foo__',
+    '__unknown__',
 ])
 @pytest.mark.parametrize('code', [
     magic_name_definition,
@@ -165,7 +179,7 @@ def test_magic_attribute_correct_contexts(
     default_options,
     mode,
 ):
-    """Ensures that it is possible to use magic attributes."""
+    """Ensures it is possible to use magic attributes in certain contexts."""
     tree = parse_ast_tree(mode(code.format(attribute)))
 
     visitor = WrongAttributeVisitor(default_options, tree=tree)
@@ -183,6 +197,11 @@ def test_magic_attribute_correct_contexts(
     '__subclasses__',
     '__mro__',
     '__version__',
+    '__path__',
+    '__bases__',
+    '__members__',
+    '__unknown__',
+    '__foo__',
 ])
 @pytest.mark.parametrize('code', [
     magic_attribute_assigned,
@@ -206,7 +225,7 @@ def test_magic_attribute_correct_contexts(
     magic_super_cls_attribute,
     magic_super_cls_method,
 ])
-def test_whitelist_regular_attributes_allowed(
+def test_other_magic_attributs_allowed(
     assert_errors,
     parse_ast_tree,
     code,
@@ -217,8 +236,8 @@ def test_whitelist_regular_attributes_allowed(
     """
     Tests if regular attributes are allowed.
 
-    Ensures that it is possible to use regular and
-    whitelisted magic attributes.
+    Ensures that it is possible to use regular attributes, as well as
+    magic attributes for which no (known) alternative exists.
     """
     tree = parse_ast_tree(mode(code.format(attribute)))
 
