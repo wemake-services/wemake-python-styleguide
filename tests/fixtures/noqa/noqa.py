@@ -789,7 +789,6 @@ matrix = [
    for number in numbers # noqa: WPS361
 ]
 
-
 def bare_raise_function():
     raise # noqa: WPS467
 
@@ -813,3 +812,4 @@ class TestClass(object, **{}):  # noqa: WPS470
 
 
 secondary_slice = items[1:][:3]  # noqa: WPS471
+first, *_rest = some_collection  # noqa: WPS472

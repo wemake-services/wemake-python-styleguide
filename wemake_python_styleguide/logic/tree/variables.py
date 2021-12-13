@@ -1,7 +1,8 @@
 import ast
-from typing import Union
+from typing import List, Union
 
 from wemake_python_styleguide.logic import nodes
+from wemake_python_styleguide.logic.naming import access
 
 _VarDefinition = Union[ast.AST, ast.expr]
 _LocalVariable = Union[ast.Name, ast.ExceptHandler]
@@ -54,3 +55,24 @@ def _is_valid_single(node: _VarDefinition) -> bool:
         isinstance(node, ast.Name) or
         isinstance(node, ast.Starred) and isinstance(node.value, ast.Name)
     )
+
+
+def is_getting_element_by_unpacking(targets: List[ast.expr]) -> bool:
+    """Checks if unpacking targets used to get first or last element."""
+    if len(targets) != 2:
+        return False
+    first_item = (
+        isinstance(targets[0], ast.Name) and
+        isinstance(targets[1], ast.Starred) and
+        _is_unused_variable_name(targets[1].value)
+    )
+    last_item = (
+        isinstance(targets[1], ast.Name) and
+        isinstance(targets[0], ast.Starred) and
+        _is_unused_variable_name(targets[0].value)
+    )
+    return first_item or last_item
+
+
+def _is_unused_variable_name(node: ast.expr) -> bool:
+    return isinstance(node, ast.Name) and access.looks_like_unused(node.id)

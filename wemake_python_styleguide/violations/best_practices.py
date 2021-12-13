@@ -88,6 +88,7 @@ Summary
    RaiseFromItselfViolation
    KwargsUnpackingInClassDefinitionViolation
    ConsecutiveSlicesViolation
+   GettingElementByUnpackingViolation
 
 Best practices
 --------------
@@ -164,6 +165,7 @@ Best practices
 .. autoclass:: RaiseFromItselfViolation
 .. autoclass:: KwargsUnpackingInClassDefinitionViolation
 .. autoclass:: ConsecutiveSlicesViolation
+.. autoclass:: GettingElementByUnpackingViolation
 
 """
 
@@ -309,7 +311,7 @@ class OveruseOfNoCoverCommentViolation(SimpleViolation):
 
     """
 
-    error_template = 'Found `noqa` comments overuse: {0}'
+    error_template = 'Found `no cover` comments overuse: {0}'
     code = 403
 
 
@@ -2640,7 +2642,7 @@ class RedundantEnumerateViolation(ASTViolation):
         for _, item in enumerate(items):
           ...
 
-    .. versionadded:: 0.18.0
+    .. versionadded:: 0.16.0
 
     """
 
@@ -2736,3 +2738,35 @@ class ConsecutiveSlicesViolation(ASTViolation):
 
     error_template = 'Found consecutive slices'
     code = 471
+
+
+@final
+class GettingElementByUnpackingViolation(ASTViolation):
+    """
+    Forbid getting first element using unpacking.
+
+    Reasoning:
+        Performance. Prefixing unused variables with underscore is nothing
+        more than convention, Python still creates these variables.
+        So, unpacking above makes a new unused list which is slow.
+
+    Solution:
+        Use `collection[0]` or `next(iter(collection))`
+
+    Example::
+
+        # Correct:
+        first = some_collection[0]
+        first = next(iter(collection))
+
+        # Wrong:
+        first, *_rest = some_collection
+
+    .. versionadded:: 0.16.0
+
+    """
+
+    error_template = (
+        'Found unpacking used to get a single element from a collection'
+    )
+    code = 472

@@ -1,8 +1,20 @@
+from collections import Counter
+
 
 def test_all_unique_violation_codes(all_violations):
     """Ensures that all violations have unique violation codes."""
     codes = [int(violation.code) for violation in all_violations]
     assert len(set(codes)) == len(all_violations)
+
+
+def test_all_unique_violation_messages(all_violations):
+    """Ensures that all violations have unique violation messages."""
+    messages = Counter([
+        violation.error_template
+        for violation in all_violations
+    ])
+    for message, count in messages.items():
+        assert count == 1, message
 
 
 def test_all_violations_correct_numbers(all_module_violations):

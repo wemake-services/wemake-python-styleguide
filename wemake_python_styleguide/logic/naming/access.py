@@ -26,6 +26,31 @@ def is_unused(name: str) -> bool:
     return _UNUSED_VARIABLE_REGEX.match(name) is not None
 
 
+def looks_like_unused(name: str) -> bool:
+    """
+    Checks whether the given ``name`` is probably unused.
+
+    Tolerant version of ``is_unused``, which takes everything prefixed with
+    "_" as unused. See: https://github.com/wemake-services\
+    /wemake-python-styleguide/pull/1927#discussion_r591688670
+
+
+    >>> looks_like_unused('_')
+    True
+
+    >>> looks_like_unused('___')
+    True
+
+    >>> looks_like_unused('_protected')
+    True
+
+    >>> looks_like_unused('__private')
+    False
+
+    """
+    return is_unused(name) or is_protected(name)
+
+
 def is_magic(name: str) -> bool:
     """
     Checks whether the given ``name`` is magic.
