@@ -1,7 +1,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.oop import UnpackingKwargsViolation
-from wemake_python_styleguide.visitors.ast.classes import WrongClassVisitor
+from wemake_python_styleguide.visitors.ast.classes import WrongClassDefVisitor
 
 class_with_kwargs = """
 class Example(BaseTestClass, {0}):
@@ -19,7 +19,7 @@ def test_explicit_kwargs(
     """Testing keyword parameters passing."""
     tree = parse_ast_tree(class_with_kwargs.format(kwargs))
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongClassDefVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
@@ -35,7 +35,7 @@ def test_unpacking_kwargs(
     """Testing that implicit kwargs unpacking is forbidden."""
     tree = parse_ast_tree(class_with_kwargs.format(kwargs))
 
-    visitor = WrongClassVisitor(default_options, tree=tree)
+    visitor = WrongClassDefVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [UnpackingKwargsViolation])
