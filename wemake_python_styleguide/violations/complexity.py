@@ -879,7 +879,7 @@ class OverusedStringViolation(MaybeASTViolation):
 
     """
 
-    error_template = "Found string literal over-use: '{0}'"
+    error_template = "Found string literal over-use: {0}"
     code = 226
 
 
