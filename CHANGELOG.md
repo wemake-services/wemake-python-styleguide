@@ -29,7 +29,7 @@ Semantic versioning in our case means:
 - Added `RedundantEnumerateViolation` #1825
 - Adds `RaiseFromItselfViolation` #2133
 - Adds `ConsecutiveSlicesViolation` #2064
-- Adds `KwargsUnpackingInClassDefinitionViolation` #1714
+- Adds `KwargsUnpackingInClassDefinitionViolation` #1754
 - `DirectMagicAttributeAccessViolation` now only flags instances for which
   a known alternative exists #2268
 - Forbids getting collection element of list by unpacking #1824
