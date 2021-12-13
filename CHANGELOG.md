@@ -17,10 +17,11 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
-## {{ Next Version }}
+## 0.16.0
 
 ## Features
 
+- Supports new `flake8` version `4.x`
 - Now `InconsistentYieldViolation` and `InconsistentReturnViolation` are raised
   when `yield` or `return` is used with `None`
   where plain version should be used #2151
@@ -38,16 +39,17 @@ Semantic versioning in our case means:
 
 - Fixes that `InconsistentComprehensionViolation` was ignoring
   misaligned `in` expressions #2075
-- Fixes some common magic methods not being recognized as such  #2281
+- Fixes some common magic methods not being recognized as such #2281
 
 ### Misc
 
 - Removes all `Raises:` from docstrings, they were unused
-- Added example to README.md
+- Added example to `README.md`
 - Added `why strict is good`
-- Replaced all `python` with `Python` in README.md
-- Improve Docs: Fixed all typos and grammatical errors in CHANGELOG
+- Replaced all `python` with `Python` in `README.md`
+- Improve Docs: Fixed all typos and grammatical errors in `CHANGELOG.md`
 - Updated documentation with the recommended `isort` config. #1934
+- Updates `typing_extensions` to `4.x`
 
 
 ## 0.15.3
