@@ -31,6 +31,8 @@ Semantic versioning in our case means:
 - Adds `KwargsUnpackingInClassDefinitionViolation` #1714
 - `DirectMagicAttributeAccessViolation` now only flags instances for which
   a known alternative exists #2268
+- Forbids getting collection element of list by unpacking #1824
+- Now `WPS227` forbids returning tuples that are too long #1731
 
 ### Bugfixes
 
@@ -68,18 +70,6 @@ Semantic versioning in our case means:
 - Adds documentation (and tests) for how to run project on Jupyter Notebooks
 - Updates `mypy` to `0.902` and fixes type issues
 
-## 0.16.0
-
-### Features
-
-- Forbids getting first element of list by unpacking
-
-
-## 0.16.0
-
-### Features
-
-- Now `WPS227` forbids returning tuples that are too long
 
 ## 0.15.2
 
