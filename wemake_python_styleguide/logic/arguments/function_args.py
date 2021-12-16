@@ -122,8 +122,7 @@ def _has_same_kw_args(
     """Tells whether ``call`` has the same keyword-only args as ``node``."""
     prepared_kw_args, real_kw_args = _clean_call_keyword_args(call)
     for func_arg in node.args.kwonlyargs:
-        func_arg_name = getattr(func_arg, 'arg', None)
-        call_arg = prepared_kw_args.get(func_arg_name)
+        call_arg = prepared_kw_args.get(func_arg.arg)
 
         if func_arg and not call_arg:
             return False

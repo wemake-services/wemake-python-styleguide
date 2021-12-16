@@ -113,4 +113,5 @@ def validate_options(options: ConfigurationOptions) -> _ValidatedOptions:
         field: getattr(options, field, None)
         for field in fields_to_validate
     }
-    return _ValidatedOptions(**options_subset)  # raises TypeError
+    # Next line raises `TypeError` if `options_subset` is invalid.
+    return _ValidatedOptions(**options_subset)  # type: ignore

@@ -1,5 +1,5 @@
 from ast import Call, Return, Yield, YieldFrom, arg, walk
-from typing import Container, Iterable, List, Tuple, Type, Union
+from typing import Container, Iterable, List, Optional, Union
 
 from typing_extensions import Final
 
@@ -20,13 +20,6 @@ _AnyControlTransfers = Union[
 
 #: Type annotation for an iterable of control transfer nodes
 _ControlTransferIterable = Iterable[_AnyControlTransfers]
-
-#: Type annotation for a tuple of control transfer nodes
-_ControlTransferTuple = Tuple[
-    Type[Return],
-    Type[Yield],
-    Type[YieldFrom],
-]
 
 #: Method types
 _METHOD_TYPES: Final = frozenset((
@@ -56,7 +49,7 @@ def given_function_called(
     return ''
 
 
-def is_method(function_type: str) -> bool:
+def is_method(function_type: Optional[str]) -> bool:
     """
     Returns whether a given function type belongs to a class.
 
