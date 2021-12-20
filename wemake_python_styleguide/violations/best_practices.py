@@ -674,7 +674,7 @@ class WrongUnpackingViolation(ASTViolation):
     Example::
 
         # Correct:
-        reader, writter = call()
+        reader, writer = call()
         self.reader = reader
         self.writer = writer
 
