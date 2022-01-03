@@ -82,7 +82,7 @@ nitpick = "^0.29"
 flake8-pytest-style = "^1.5"
 
 pytest-cov = "^3.0"
-coverage-conditional-plugin = "^0.4"
+coverage-conditional-plugin = "^0.5"
 pytest-randomly = "^3.10"
 pytest = "^6.2"
 snapshottest = "^0.6"
