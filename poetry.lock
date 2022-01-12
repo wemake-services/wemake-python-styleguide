@@ -996,7 +996,7 @@ icu = ["PyICU (>=1.0.0)"]
 
 [[package]]
 name = "nbqa"
-version = "1.2.2"
+version = "1.2.3"
 description = "Run any standard Python code quality tool on a Jupyter Notebook"
 category = "dev"
 optional = false
@@ -1006,7 +1006,7 @@ python-versions = ">=3.6.0"
 importlib-metadata = {version = "*", markers = "python_version < \"3.8\""}
 ipython = ">=7.8.0"
 tokenize-rt = ">=3.2.0"
-tomli = "<2.0.0"
+tomli = "*"
 
 [package.extras]
 toolchain = ["black", "flake8", "isort", "mypy", "pylint", "pyupgrade"]
@@ -2299,8 +2299,8 @@ natsort = [
     {file = "natsort-8.0.2.tar.gz", hash = "sha256:feb87e0ce1dc1f8f3f21e18a85216c790e746d76a5ff6889563394605f504a2b"},
 ]
 nbqa = [
-    {file = "nbqa-1.2.2-py3-none-any.whl", hash = "sha256:fe7665f662cf0c49e7ddd5d5b6e545d985b69a31875ae064d5ad56ffcea538fc"},
-    {file = "nbqa-1.2.2.tar.gz", hash = "sha256:49767118762c791b86022794576fc1f08273679527ba4135f2ad0e1d5c829c3c"},
+    {file = "nbqa-1.2.3-py3-none-any.whl", hash = "sha256:ffabf18f318f91ef13d8f2545cc068474502e5f378d6b6a065a224b166e6e951"},
+    {file = "nbqa-1.2.3.tar.gz", hash = "sha256:07cb2774b844683e85600acb20cf202e9878e9146b4198b0d354ebac44f8568a"},
 ]
 networkx = [
     {file = "networkx-2.5-py3-none-any.whl", hash = "sha256:8c5812e9f798d37c50570d15c4a69d5710a18d77bafc903ee9c5fba7454c616c"},
