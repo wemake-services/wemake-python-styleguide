@@ -4,6 +4,7 @@ from typing import ClassVar, DefaultDict, FrozenSet, List, Optional
 
 from typing_extensions import final
 
+from wemake_python_styleguide.violations.best_practices import WrongFunctionCallViolation
 from wemake_python_styleguide import constants, types
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
@@ -238,15 +239,15 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
 
     def _check_super_in_generator_expr(
         self,
-        call: ast.Call,
+        call: ast.Call
     ) -> None:
         function_name = functions.given_function_called(call, {'super'})
-        if function_name != 'super':
+        if not function_name:
             return
         elif len(call.args) == 2:
             return
         elif walk.get_closest_parent(call, ast.GeneratorExp):
-            WrongMethodVisitor(call, text=function_name)
+            self.add_violation(WrongFunctionCallViolation(call, text=function_name))
 
     def _check_useless_overwritten_methods(
         self,
