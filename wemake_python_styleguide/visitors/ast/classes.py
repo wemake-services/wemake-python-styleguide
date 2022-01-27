@@ -235,11 +235,10 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         elif isinstance(stmt, ast.Expr) and isinstance(stmt.value, ast.Call):
             return stmt.value
         return None
-        
-        
+
     def _check_super_in_generator_expr(
         self,
-        call: ast.Call
+        call: ast.Call,
     ) -> None:
         function_name = functions.given_function_called(call, {'super'})
         if function_name != 'super':
