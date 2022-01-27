@@ -241,7 +241,7 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         call: ast.Call,
     ) -> None:
         function_name = functions.given_function_called(call, {'super'})
-        if function_name != 'super':
+        if not function_name:
             return
         elif len(call.args) == 2:
             return
