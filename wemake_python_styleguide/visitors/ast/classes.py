@@ -3,6 +3,7 @@ from collections import defaultdict
 from typing import ClassVar, DefaultDict, FrozenSet, List, Optional
 
 from typing_extensions import final
+
 from wemake_python_styleguide import constants, types
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
@@ -22,7 +23,6 @@ from wemake_python_styleguide.violations.best_practices import (
     WrongFunctionCallViolation,
 )
 from wemake_python_styleguide.visitors import base, decorators
-
 
 
 @final
