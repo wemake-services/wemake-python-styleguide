@@ -17,6 +17,13 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
+## 0.16.1 WIP
+
+### Bugfixes
+
+- Fixes crash on `'Literal["raise"]'` annotation #2341
+
+
 ## 0.16.0
 
 ## Features

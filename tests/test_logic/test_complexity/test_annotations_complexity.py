@@ -16,6 +16,9 @@ from wemake_python_styleguide.logic.complexity import annotations
     ('Literal[""]', 2),
     ('Tuple[()]', 2),
 
+    # Literals with strings:
+    ('Literal["regular", "raise", "is"]', 2),
+
     # invalid annotations
     ('"This is rainbow in the dark!"', 1),
 
