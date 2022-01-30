@@ -62,12 +62,10 @@ def is_getting_element_by_unpacking(targets: List[ast.expr]) -> bool:
     if len(targets) != 2:
         return False
     first_item = (
-        isinstance(targets[0], ast.Name) and
         isinstance(targets[1], ast.Starred) and
         _is_unused_variable_name(targets[1].value)
     )
     last_item = (
-        isinstance(targets[1], ast.Name) and
         isinstance(targets[0], ast.Starred) and
         _is_unused_variable_name(targets[0].value)
     )

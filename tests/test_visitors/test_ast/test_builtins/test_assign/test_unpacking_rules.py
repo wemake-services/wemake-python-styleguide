@@ -21,6 +21,8 @@ tuple_assignment2 = '{0}, second = (1, 2)'
 spread_assignment1 = '{0}, *second = [1, 2, 3]'
 spread_assignment2 = 'first, *{0} = [1, 2, 3]'
 spread_assignment3 = '*{0}, second = [1, 2, 3]'
+spread_assignment4 = '(first, second), *{0} = ...'
+spread_assignment5 = '*{0}, self.second = [1, 2, 3]'
 
 for_assignment = """
 def wrapper():
@@ -281,6 +283,8 @@ def test_single_element_destructing(
 @pytest.mark.parametrize('code', [
     spread_assignment2,
     spread_assignment3,
+    spread_assignment4,
+    spread_assignment5,
 ])
 @pytest.mark.parametrize('definition', [
     '_',
@@ -299,4 +303,8 @@ def test_element_getting_by_unpacking(
     visitor = WrongAssignmentVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [GettingElementByUnpackingViolation])
+    assert_errors(
+        visitor,
+        [GettingElementByUnpackingViolation],
+        ignored_types=WrongUnpackingViolation,
+    )

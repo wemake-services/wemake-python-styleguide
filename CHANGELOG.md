@@ -22,6 +22,7 @@ Semantic versioning in our case means:
 ### Bugfixes
 
 - Fixes crash on `'Literal["raise"]'` annotation #2341
+- Fixes `WPS471` was not detected on complex assignment targets #2301
 
 
 ## 0.16.0
