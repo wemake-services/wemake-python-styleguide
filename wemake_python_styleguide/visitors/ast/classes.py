@@ -249,7 +249,6 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         elif len(call.args) == 2:
             return
         elif walk.get_closest_parent(call, ast.GeneratorExp):
-            #WrongMethodVisitor(call, text=function_name)
             self.add_violation(WrongFunctionCallViolation(call, text=function_name))
 
     def _check_useless_overwritten_methods(
