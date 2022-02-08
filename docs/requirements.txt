@@ -7,7 +7,7 @@ sphinxcontrib-mermaid==0.7.1
 recommonmark==0.7.1
 m2r2==0.3.2
 added-value==0.20.0
-tomlkit==0.9.0
+tomlkit==0.9.1
 docutils==0.17.1
 
 # Dependencies of our linter that should be documented,
