@@ -1639,7 +1639,7 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "tomlkit"
-version = "0.9.2"
+version = "0.10.0"
 description = "Style preserving TOML library"
 category = "dev"
 optional = false
@@ -1752,7 +1752,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "a9693f9cd82f40f9e90575774cfda15d892fea92a69ba874c9ae4350e16b5fba"
+content-hash = "2d9b5eafe90d2d7a0ddafc267dad12b87e1e3cc7957b172f2d1aac051c8daa74"
 
 [metadata.files]
 added-value = [
@@ -2570,8 +2570,8 @@ tomli = [
     {file = "tomli-1.2.3.tar.gz", hash = "sha256:05b6166bff487dc068d322585c7ea4ef78deed501cc124060e0f238e89a9231f"},
 ]
 tomlkit = [
-    {file = "tomlkit-0.9.2-py3-none-any.whl", hash = "sha256:daf4f9c5f2fbf6b861d6adfc51940b98dee36c13e1d88749a6dc9fb280fff304"},
-    {file = "tomlkit-0.9.2.tar.gz", hash = "sha256:ebd982d61446af95a1e082b103e250cb9e6d152eae2581d4a07d31a70b34ab0f"},
+    {file = "tomlkit-0.10.0-py3-none-any.whl", hash = "sha256:cac4aeaff42f18fef6e07831c2c2689a51df76cf2ede07a6a4fa5fcb83558870"},
+    {file = "tomlkit-0.10.0.tar.gz", hash = "sha256:d99946c6aed3387c98b89d91fb9edff8f901bf9255901081266a84fb5604adcd"},
 ]
 traitlets = [
     {file = "traitlets-4.3.3-py2.py3-none-any.whl", hash = "sha256:70b4c6a1d9019d7b4f6846832288f86998aa3b9207c6821f3578a6a6a467fe44"},
