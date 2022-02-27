@@ -325,6 +325,9 @@ YIELD_MAGIC_METHODS_BLACKLIST: Final = ALL_MAGIC_METHODS.difference({
     # Allowed to be used with ``yield`` keyword:
     '__call__',
     '__iter__',
+    '__anext__',
+    '__aiter__',
+    '__next__',
 })
 
 #: List of magic methods that are not allowed to be async.
