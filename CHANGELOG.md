@@ -23,6 +23,7 @@ Semantic versioning in our case means:
 
 - Fixes crash on `'Literal["raise"]'` annotation #2341
 - Fixes `WPS471` was not detected on complex assignment targets #2301
+- Allow `-1` instead of raising negative constants overuse #2364
 
 
 ## 0.16.0
