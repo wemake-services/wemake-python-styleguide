@@ -134,7 +134,7 @@ violating_expressions = (
     '{a for a in other}',
 
     # Unary nodes:
-    '-1',  # unary minus operator is raising when used with literal
+    '-2',  # unary minus operator is raising when used with literal, except -1
     '+some',  # unary plus always raises
 
     # Special cases for self:
@@ -169,6 +169,7 @@ ignored_expressions = (
     'some.prop',
     # unary operator
     '-value',
+    '-1'
 )
 
 
