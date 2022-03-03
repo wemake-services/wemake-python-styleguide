@@ -102,7 +102,7 @@ def is_unary_minus(node: ast.AST) -> bool:
     We use this predicate to allow values
     like ``-some_value`` to be overused.
 
-    Although negative constants like ``-1``
+    Although negative constants like ``-2``
     should raise violation to force naming them.
     """
     return (
