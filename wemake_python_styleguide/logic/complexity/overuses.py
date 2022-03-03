@@ -105,8 +105,10 @@ def is_unary_minus(node: ast.AST) -> bool:
     Although negative constants like ``-1``
     should raise violation to force naming them.
     """
-    return (isinstance(node, ast.UnaryOp) and
-            isinstance(node.op, ast.USub) and
-            (not isinstance(node.operand, (Constant, ast.Num)) or
-            node.operand.n == -1)
+    return (
+        isinstance(node, ast.UnaryOp) and
+        isinstance(node.op, ast.USub) and
+        (not isinstance(node.operand, (Constant, ast.Num)) or
+         node.operand.n == -1
+         )
     )
