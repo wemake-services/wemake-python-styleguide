@@ -169,7 +169,7 @@ ignored_expressions = (
     'some.prop',
     # unary operator
     '-value',
-    '-1'
+    '-1',
 )
 
 
