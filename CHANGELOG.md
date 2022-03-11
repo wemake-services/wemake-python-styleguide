@@ -17,12 +17,13 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
-## 0.16.1 WIP
+## 0.16.1
 
 ### Bugfixes
 
 - Fixes crash on `'Literal["raise"]'` annotation #2341
 - Fixes `WPS471` was not detected on complex assignment targets #2301
+- Fixes `flake8-bandit` and `bandit` version conflict #2368
 
 
 ## 0.16.0
