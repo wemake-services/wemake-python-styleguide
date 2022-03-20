@@ -94,3 +94,21 @@ do you have and where you have them:
 We do not include ``show-statistic`` in our default configuration.
 It should be only called when user needs to find how many violations
 there are and what files do contain them.
+
+
+.. rubric:: Showing links to documentation
+
+You can also show links to the documentation pages of violations:
+
+.. code::
+
+  » flake8 . --format=wemake --show-source --show-violation-links
+
+  ./wemake_python_styleguide/formatter.py
+
+    E231  120:32   missing whitespace after ':' (https://pyflak.es/E231)
+    def show_source(self, error:Violation) -> str:
+
+In modern terminals, you can click them to open the respective docs page.
+
+We do not include ``show-violation-links`` in our default configuration.

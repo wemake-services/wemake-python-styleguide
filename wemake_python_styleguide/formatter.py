@@ -83,11 +83,15 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
 
     def format(self, error: Violation) -> str:  # noqa: WPS125
         """Called to format each individual :term:`violation`."""
-        return '{newline}  {row_col:<8} {code:<5} {text}'.format(
+        return '{newline}  {row_col:<8} {code:<5} {text}{link}'.format(
             newline=self.newline if self._should_show_source(error) else '',
             code=error.code,
             text=error.text,
             row_col='{0}:{1}'.format(error.line_number, error.column_number),
+            link=(
+                ' (https://pyflak.es/{0})'.format(error.code)
+                if self.options.show_violation_links else ''
+            ),
         )
 
     def show_source(self, error: Violation) -> str:
