@@ -83,9 +83,16 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
             self._print_header(error.filename)
             self._processed_filenames.append(error.filename)
 
-        super().handle(error)
+        line = self.format(error)
+        source = self.show_source(error)
         link = self._show_link(error)
-        self.write(link, None)
+
+        if line:
+            self._write(line)
+        if link:
+            self._write(link)
+        if source:
+            self._write(source)
 
         self._error_count += 1
 
@@ -153,7 +160,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
             return ''
 
         return '  {spacing}-> {link}'.format(
-            spacing='' if self._should_show_source(error) else ' ' * 9,
+            spacing=' ' * 9,
             link=SHORTLINK_TEMPLATE.format(error.code),
         )
 
