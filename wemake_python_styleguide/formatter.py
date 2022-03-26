@@ -84,7 +84,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
             self._processed_filenames.append(error.filename)
 
         super().handle(error)
-        link = self.show_link(error)
+        link = self._show_link(error)
         self.write(link, None)
 
         self._error_count += 1
@@ -117,16 +117,6 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
             spacing=' ' * (error.column_number - 1 - adjust),
         )
 
-    def show_link(self, error: Violation) -> str:
-        """Called when ``--show-violation-links`` option is provided."""
-        if not self.options.show_violation_links:
-            return ''
-
-        return '  {spacing}-> {link}'.format(
-            spacing='' if self._should_show_source(error) else ' ' * 9,
-            link=SHORTLINK_TEMPLATE.format(error.code),
-        )
-
     def show_statistics(self, statistics: Statistics) -> None:  # noqa: WPS210
         """Called when ``--statistic`` option is passed."""
         all_errors = 0
@@ -156,6 +146,16 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
             self._write(message.format(self.newline, self._doc_url))
 
     # Our own methods:
+
+    def _show_link(self, error: Violation) -> str:
+        """Called when ``--show-violation-links`` option is provided."""
+        if not self.options.show_violation_links:
+            return ''
+
+        return '  {spacing}-> {link}'.format(
+            spacing='' if self._should_show_source(error) else ' ' * 9,
+            link=SHORTLINK_TEMPLATE.format(error.code),
+        )
 
     def _print_header(self, filename: str) -> None:
         self._write(
