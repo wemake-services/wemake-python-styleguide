@@ -43,6 +43,11 @@ DOCS_URL_TEMPLATE: Final = (
     'https://wemake-python-stylegui.de/en/{0}/pages/usage/violations/'
 )
 
+#: This url points to the specific violation page.
+SHORTLINK_TEMPLATE: Final = (
+    'https://pyflak.es/{0}'
+)
+
 
 class WemakeFormatter(BaseFormatter):  # noqa: WPS214
     """
@@ -79,19 +84,18 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
             self._processed_filenames.append(error.filename)
 
         super().handle(error)
+        link = self.show_link(error)
+        self.write(link, None)
+
         self._error_count += 1
 
     def format(self, error: Violation) -> str:  # noqa: WPS125
         """Called to format each individual :term:`violation`."""
-        return '{newline}  {row_col:<8} {code:<5} {text}{link}'.format(
+        return '{newline}  {row_col:<8} {code:<5} {text}'.format(
             newline=self.newline if self._should_show_source(error) else '',
             code=error.code,
             text=error.text,
             row_col='{0}:{1}'.format(error.line_number, error.column_number),
-            link=(
-                ' (https://pyflak.es/{0})'.format(error.code)
-                if self.options.show_violation_links else ''
-            ),
         )
 
     def show_source(self, error: Violation) -> str:
@@ -111,6 +115,16 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
         return '  {code}  {spacing}^'.format(
             code=code,
             spacing=' ' * (error.column_number - 1 - adjust),
+        )
+
+    def show_link(self, error: Violation) -> str:
+        """Called when ``--show-violation-links`` option is provided."""
+        if not self.options.show_violation_links:
+            return ''
+
+        return '  {spacing}-> {link}'.format(
+            spacing='' if self._should_show_source(error) else ' ' * 9,
+            link=SHORTLINK_TEMPLATE.format(error.code),
         )
 
     def show_statistics(self, statistics: Statistics) -> None:  # noqa: WPS210
