@@ -45,7 +45,7 @@ UNUSED_PLACEHOLDER: Final = '_'
 # ------------------------------------------------------
 
 #: List of functions we forbid to use.
-FUNCTIONS_BLACKLIST: Final = frozenset((
+FUNC: Final = frozenset((
     # Code generation:
     'eval',
     'exec',
