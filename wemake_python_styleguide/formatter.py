@@ -87,8 +87,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
         source = self.show_source(error)
         link = self._show_link(error)
 
-        if line:
-            self._write(line)
+        self._write(line)
         if link:
             self._write(link)
         if source:
