@@ -52,7 +52,7 @@ and will show the exact problem with your code:
 
   ./wemake_python_styleguide/formatter.py
 
-    E231  120:32   missing whitespace after ':'
+    107:32   E231  missing whitespace after ':'
     def show_source(self, error:Violation) -> str:
                                ^
 
@@ -73,13 +73,13 @@ do you have and where you have them:
 
   ./wemake_python_styleguide/formatter.py
 
-    E231  136:32   missing whitespace after ':'
+    107:32   E231  missing whitespace after ':'
     def show_source(self, error:Violation) -> str:
                                ^
 
   ./wemake_python_styleguide/types.py
 
-    E231  52:47    missing whitespace after ','
+    53:47    E231  missing whitespace after ','
     AnyFunctionDefAndLambda = Union[AnyFunctionDef,ast.Lambda]
                                                   ^
 
@@ -106,10 +106,10 @@ You can also show links to the documentation pages of violations:
 
   ./wemake_python_styleguide/formatter.py
 
-    E231  120:32   missing whitespace after ':'
+    107:32   E231  missing whitespace after ':'
+             -> https://pyflak.es/E231
     def show_source(self, error:Violation) -> str:
                                ^
-    -> https://pyflak.es/E231
 
 In modern terminals, you can click them to open the respective docs page.
 
