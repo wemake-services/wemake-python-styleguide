@@ -36,14 +36,16 @@ def main() -> None:
 
     for fn, line in matches:
         with open(fn, 'r') as fp:
-            source = fp.read()
-            lines = source.splitlines()
-            highlighted = highlight(
-                lines[line - 1],
-                PythonLexer(),
-                Terminal256Formatter(),
+            lines = fp.read().splitlines()
+            report('\t{0}:{1}\n\t{2}'.format(
+                fn,
+                line,
+                highlight(
+                    lines[line - 1],
+                    PythonLexer(),
+                    Terminal256Formatter(),
+                )),
             )
-            report('\t{0}:{1}\n\t{2}'.format(fn, line, highlighted))
 
     exit(FAIL_CODE)  # noqa: WPS421
 
