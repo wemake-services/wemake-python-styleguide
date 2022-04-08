@@ -144,6 +144,12 @@ You can also show all options that ``flake8`` supports by running:
 - ``max-tuple-unpack-length`` - maximum number of variables in tuple unpacking,
     defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_TUPLE_UNPACK_LENGTH`
+
+.. rubric:: Formatter options
+
+- ``show-violation-links`` - whether to show violation shortlinks in the
+    formatter output
+    :str:`wemake_python_styleguide.options.defaults.SHOW_VIOLATION_LINKS`
 """
 
 from typing import ClassVar, Mapping, Optional, Sequence, Union
@@ -421,6 +427,17 @@ class Configuration(object):
             '--max-tuple-unpack-length',
             defaults.MAX_TUPLE_UNPACK_LENGTH,
             'Maximum number of variables in a tuple unpacking.',
+        ),
+
+        # Formatter:
+
+        _Option(
+            '--show-violation-links',
+            defaults.SHOW_VIOLATION_LINKS,
+            'Whether to show violation shortlinks in the formatter output.',
+            action='store_true',
+            type=None,
+            dest='show_violation_links',
         ),
     ]
 

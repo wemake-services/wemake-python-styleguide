@@ -52,9 +52,9 @@ and will show the exact problem with your code:
 
   ./wemake_python_styleguide/formatter.py
 
-    E231  120:32   missing whitespace after ':'
+    107:32   E231  missing whitespace after ':'
     def show_source(self, error:Violation) -> str:
-                              ^
+                               ^
 
 It helps to visually identify the problems in your code and fix it faster.
 We include ``show-source = True`` into our default configuration.
@@ -73,15 +73,15 @@ do you have and where you have them:
 
   ./wemake_python_styleguide/formatter.py
 
-    E231  136:32   missing whitespace after ':'
+    107:32   E231  missing whitespace after ':'
     def show_source(self, error:Violation) -> str:
-                              ^
+                               ^
 
   ./wemake_python_styleguide/types.py
 
-    E231  52:47    missing whitespace after ','
+    53:47    E231  missing whitespace after ','
     AnyFunctionDefAndLambda = Union[AnyFunctionDef,ast.Lambda]
-                                                 ^
+                                                  ^
 
   E231: missing whitespace after ':'
     1     ./wemake_python_styleguide/formatter.py
@@ -94,3 +94,23 @@ do you have and where you have them:
 We do not include ``show-statistic`` in our default configuration.
 It should be only called when user needs to find how many violations
 there are and what files do contain them.
+
+
+.. rubric:: Showing links to documentation
+
+You can also show links to the documentation pages of violations:
+
+.. code::
+
+  » flake8 . --format=wemake --show-source --show-violation-links
+
+  ./wemake_python_styleguide/formatter.py
+
+    107:32   E231  missing whitespace after ':'
+             -> https://pyflak.es/E231
+    def show_source(self, error:Violation) -> str:
+                               ^
+
+In modern terminals, you can click them to open the respective docs page.
+
+We do not include ``show-violation-links`` in our default configuration.

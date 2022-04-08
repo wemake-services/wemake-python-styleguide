@@ -43,6 +43,11 @@ DOCS_URL_TEMPLATE: Final = (
     'https://wemake-python-stylegui.de/en/{0}/pages/usage/violations/'
 )
 
+#: This url points to the specific violation page.
+SHORTLINK_TEMPLATE: Final = (
+    'https://pyflak.es/{0}'
+)
+
 
 class WemakeFormatter(BaseFormatter):  # noqa: WPS214
     """
@@ -78,7 +83,16 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
             self._print_header(error.filename)
             self._processed_filenames.append(error.filename)
 
-        super().handle(error)
+        line = self.format(error)
+        source = self.show_source(error)
+        link = self._show_link(error)
+
+        self._write(line)
+        if link:
+            self._write(link)
+        if source:
+            self._write(source)
+
         self._error_count += 1
 
     def format(self, error: Violation) -> str:  # noqa: WPS125
@@ -138,6 +152,16 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
             self._write(message.format(self.newline, self._doc_url))
 
     # Our own methods:
+
+    def _show_link(self, error: Violation) -> str:
+        """Called when ``--show-violation-links`` option is provided."""
+        if not self.options.show_violation_links:
+            return ''
+
+        return '  {spacing}-> {link}'.format(
+            spacing=' ' * 9,
+            link=SHORTLINK_TEMPLATE.format(error.code),
+        )
 
     def _print_header(self, filename: str) -> None:
         self._write(
