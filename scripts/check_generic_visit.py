@@ -1,10 +1,11 @@
 import sys
-from typing import Final
+from typing import NoReturn
 
 import astpath
 from pygments import highlight
 from pygments.formatters.terminal256 import Terminal256Formatter
 from pygments.lexers.python import PythonLexer
+from typing_extensions import Final
 
 FAIL_CODE: Final = 255
 
@@ -21,7 +22,7 @@ and not(child::body/Expr[last()]/value/Call/func
 report = print
 
 
-def main() -> None:
+def main() -> NoReturn:
     """Check for ``self.generic_visit()`` in all visit methods."""
     if len(sys.argv) == 1:
         report('Please provide path to search in!')
