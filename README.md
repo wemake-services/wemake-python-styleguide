@@ -30,6 +30,8 @@ pip install wemake-python-styleguide
 
 You will also need to create a `setup.cfg` file with the [configuration](https://wemake-python-stylegui.de/en/latest/pages/usage/configuration.html).
 
+[Try it online](https://wps.orsinium.dev)!
+
 We highly recommend to also use:
 
 - [flakehell](https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/flakehell.html) for easy integration into a **legacy** codebase
