@@ -325,6 +325,10 @@ YIELD_MAGIC_METHODS_BLACKLIST: Final = ALL_MAGIC_METHODS.difference({
     # Allowed to be used with ``yield`` keyword:
     '__call__',
     '__iter__',
+})
+
+#: List of magic methods that can be async if and only if they are a generator.
+ASYNC_IF_YIELDS_MAGIC_METHODS: Final = frozenset({
     '__aiter__',
 })
 
