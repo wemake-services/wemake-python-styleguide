@@ -35,7 +35,7 @@ def test_wrong_sync_yield_magic_used(
     statement,
 ):
     """Testing that the method cannot be a sync generator."""
-    tree = parse_ast_tree(sync_method.format(method))
+    tree = parse_ast_tree(sync_method.format(method, statement))
 
     visitor = WrongMethodVisitor(default_options, tree=tree)
     visitor.run()
@@ -59,7 +59,7 @@ def test_wrong_async_magic_used(
     statement,
 ):
     """Testing that the method cannot be a coroutine."""
-    tree = parse_ast_tree(async_method.format(method))
+    tree = parse_ast_tree(async_method.format(method, statement))
 
     visitor = WrongMethodVisitor(default_options, tree=tree)
     visitor.run()
@@ -83,7 +83,7 @@ def test_correct_async_yield_magic_used(
     statement,
 ):
     """Testing that the method can be an async generator."""
-    tree = parse_ast_tree(async_method.format(method))
+    tree = parse_ast_tree(async_method.format(method, statement))
 
     visitor = WrongMethodVisitor(default_options, tree=tree)
     visitor.run()
@@ -105,7 +105,7 @@ def test_correct_sync_magic_used(
     statement,
 ):
     """Testing that the method can be a normal method."""
-    tree = parse_ast_tree(sync_method.format(method))
+    tree = parse_ast_tree(sync_method.format(method, statement))
 
     visitor = WrongMethodVisitor(default_options, tree=tree)
     visitor.run()
