@@ -190,7 +190,7 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         if is_async and access.is_magic(node.name):
             if node.name in constants.ASYNC_MAGIC_METHODS_BLACKLIST:
                 can_async = node.name in constants.ASYNC_IF_YIELDS_MAGIC_METHODS
-                if not (can_async and walk.is_contained(node, (ast.Yield))):
+                if not (can_async and walk.is_contained(node, ast.Yield)):
                     self.add_violation(
                         oop.AsyncMagicMethodViolation(node, text=node.name),
                     )
