@@ -27,6 +27,8 @@ class Test(object):
     '__str__',
     '__aenter__',
     '__exit__',
+    '__anext__',
+    '__next__',
 ])
 @pytest.mark.parametrize('statement', [
     'yield',
