@@ -17,6 +17,11 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
+## 0.16.2
+
+### Misc
+- Adds full violation codes to docs and `BaseViolation.full_code` #2409 
+
 ## 0.16.1
 
 ### Bugfixes
