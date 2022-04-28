@@ -67,6 +67,11 @@ ErrorNode = Union[
 #: We use this type to define helper classes with callbacks to add violations.
 ErrorCallback = Callable[['BaseViolation'], None]
 
+def _prepend_skipping_whitespaces(prefix: str, text: str) -> str:
+    lstripped_text = text.lstrip()
+    leading_whitespaces = text[:len(text) - len(lstripped_text)]
+    return f'{leading_whitespaces}{prefix}{lstripped_text}'
+
 
 @enum.unique
 class ViolationPostfixes(enum.Enum):
@@ -98,11 +103,27 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
     code: ClassVar[int]
     previous_codes: ClassVar[Set[int]]
     deprecated: ClassVar[bool] = False
+    
+    # assigned in __init_subclass__
+    full_code: ClassVar[str]
+    summary: ClassVar[str]
 
     # We use this code to show base metrics and thresholds mostly:
     postfix_template: ClassVar[ViolationPostfixes] = (
         ViolationPostfixes.bigger_than
     )
+
+    def __init_subclass__(cls) -> None:
+        """
+        Derives and sets additional values for subclasses
+        """
+        if hasattr(cls, 'code'):
+            # this is mostly done for docs to display the full code,
+            # allowing its indexing in search engines and better discoverability
+            cls.full_code = cls._full_code()
+            cls.summary = cls.__doc__.lstrip().split('\n', maxsplit=1)[0]
+            # this hack adds full code to summary table in the docs
+            cls.__doc__ = _prepend_skipping_whitespaces(f'{cls.full_code} — ', cls.__doc__)
 
     def __init__(
         self,
@@ -131,7 +152,7 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
         Conditionally formats the ``error_template`` if it is required.
         """
         return '{0} {1}{2}'.format(
-            self._full_code(),
+            self.full_code,
             self.error_template.format(self._text),
             self._postfix_information(),
         )
@@ -142,14 +163,15 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
         return (*self._location(), self.message())
 
     @final
-    def _full_code(self) -> str:
+    @classmethod
+    def _full_code(cls) -> str:
         """
         Returns fully formatted code.
 
         Adds violation letter to the numbers.
         Also ensures that codes like ``3`` will be represented as ``WPS003``.
         """
-        return 'WPS{0}'.format(str(self.code).zfill(3))
+        return 'WPS{0}'.format(str(cls.code).zfill(3))
 
     @final
     def _postfix_information(self) -> str:
