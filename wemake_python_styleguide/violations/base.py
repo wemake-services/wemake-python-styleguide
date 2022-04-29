@@ -114,7 +114,7 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
     )
 
     def __init_subclass__(cls) -> None:
-        """
+        """Sets additional values for subclasses."""
         Derives and sets additional values for subclasses
         """
         if hasattr(cls, 'code'):
