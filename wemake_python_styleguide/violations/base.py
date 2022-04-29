@@ -115,8 +115,6 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
 
     def __init_subclass__(cls) -> None:
         """Sets additional values for subclasses."""
-        Derives and sets additional values for subclasses
-        """
         violation_code = getattr(cls, 'code', None)
         if violation_code is not None:
             # this is mostly done for docs to display the full code,
