@@ -70,7 +70,7 @@ ErrorCallback = Callable[['BaseViolation'], None]
 def _prepend_skipping_whitespaces(prefix: str, text: str) -> str:
     lstripped_text = text.lstrip()
     leading_whitespaces = text[:len(text) - len(lstripped_text)]
-    return f'{leading_whitespaces}{prefix}{lstripped_text}'
+    return leading_whitespaces + prefix + lstripped_text
 
 
 @enum.unique
