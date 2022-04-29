@@ -16,7 +16,7 @@ Semantic versioning in our case means:
   But, in the future we might change the configuration names/logic,
   change the client facing API, change code conventions significantly, etc.
 
-## 0.16.2
+## 0.17.1
 
 ### Features
 - Adds `__init_subclass__` in the beginning of accepted methods order as per WPS338
