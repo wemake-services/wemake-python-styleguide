@@ -103,7 +103,7 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
     code: ClassVar[int]
     previous_codes: ClassVar[Set[int]]
     deprecated: ClassVar[bool] = False
-    
+
     # assigned in __init_subclass__
     full_code: ClassVar[str]
     summary: ClassVar[str]
@@ -116,7 +116,7 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
     def __init_subclass__(cls) -> None:
         """Sets additional values for subclasses."""
         violation_code = getattr(cls, 'code', None)
-        if violation_code is not None:
+        if violation_code is not None and cls.__doc__:
             # this is mostly done for docs to display the full code,
             # allowing its indexing in search engines and better discoverability
             cls.full_code = cls._full_code()
