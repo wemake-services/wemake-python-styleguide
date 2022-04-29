@@ -117,7 +117,8 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
         """Sets additional values for subclasses."""
         Derives and sets additional values for subclasses
         """
-        if hasattr(cls, 'code'):
+        violation_code = getattr(cls, 'code', None)
+        if violation_code is not None:
             # this is mostly done for docs to display the full code,
             # allowing its indexing in search engines and better discoverability
             cls.full_code = cls._full_code()
