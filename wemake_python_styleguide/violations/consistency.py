@@ -1564,6 +1564,7 @@ class WrongMethodOrderViolation(ASTViolation):
 
     We follow the same ordering:
 
+    - ``__init_subclass__``
     - ``__new__``
     - ``__init__``
     - ``__call__``

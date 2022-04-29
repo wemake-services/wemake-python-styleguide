@@ -9,6 +9,9 @@ from wemake_python_styleguide.visitors.ast.classes import (
 
 correct_method_order = """
 class Test(object):
+    def __init_subclass__(cls):
+        ...
+
     def __new__(self):
         ...
 
@@ -82,21 +85,25 @@ def test_correct_method_order(
 
 
 @pytest.mark.parametrize(('first', 'second'), [
+    ('__new__', '__init_subclass__'),
     ('__init__', '__new__'),
     ('__call__', '__init__'),
     ('__call__', '__new__'),
     ('__await__', '__call__'),
 
+    ('public', '__init_subclass__'),
     ('public', '__new__'),
     ('public', '__init__'),
     ('public', '__call__'),
     ('public', '__await__'),
 
+    ('__magic__', '__init_subclass__'),
     ('__magic__', '__new__'),
     ('__magic__', '__init__'),
     ('__magic__', '__call__'),
     ('__magic__', '__await__'),
 
+    ('_protected', '__init_subclass__'),
     ('_protected', '__new__'),
     ('_protected', '__init__'),
     ('_protected', '__call__'),
@@ -104,6 +111,7 @@ def test_correct_method_order(
     ('_protected', 'public'),
     ('_protected', '__magic__'),
 
+    ('__private', '__init_subclass__'),
     ('__private', '__new__'),
     ('__private', '__init__'),
     ('__private', '__call__'),
