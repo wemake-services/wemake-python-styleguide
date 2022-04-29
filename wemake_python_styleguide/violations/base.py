@@ -67,12 +67,6 @@ ErrorNode = Union[
 #: We use this type to define helper classes with callbacks to add violations.
 ErrorCallback = Callable[['BaseViolation'], None]
 
-def _prepend_skipping_whitespaces(prefix: str, text: str) -> str:
-    lstripped_text = text.lstrip()
-    leading_whitespaces = text[:len(text) - len(lstripped_text)]
-    return leading_whitespaces + prefix + lstripped_text
-
-
 @enum.unique
 class ViolationPostfixes(enum.Enum):
     """String values of postfixes used for violation baselines."""
@@ -259,3 +253,9 @@ class SimpleViolation(BaseViolation, metaclass=abc.ABCMeta):
         Cannot be ignored by inline ``noqa`` comments.
         """
         return 0, 0
+
+
+def _prepend_skipping_whitespaces(prefix: str, text: str) -> str:
+    lstripped_text = text.lstrip()
+    leading_whitespaces = text[:len(text) - len(lstripped_text)]
+    return leading_whitespaces + prefix + lstripped_text
