@@ -122,7 +122,9 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
             cls.full_code = cls._full_code()
             cls.summary = cls.__doc__.lstrip().split('\n', maxsplit=1)[0]
             # this hack adds full code to summary table in the docs
-            cls.__doc__ = _prepend_skipping_whitespaces(f'{cls.full_code} — ', cls.__doc__)
+            cls.__doc__ = _prepend_skipping_whitespaces(
+                '{0} — '.format(cls.full_code), cls.__doc__,
+            )
 
     def __init__(
         self,
