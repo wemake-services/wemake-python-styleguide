@@ -76,7 +76,8 @@ class ViolationPostfixes(enum.Enum):
     less_than = ' < {0}'
 
 
-class BaseViolation(object, metaclass=abc.ABCMeta):
+# TODO: remove `noqa` after a new release:
+class BaseViolation(object, metaclass=abc.ABCMeta):  # noqa: WPS338
     """
     Abstract base class for all style violations.
 
@@ -108,8 +109,7 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
         ViolationPostfixes.bigger_than
     )
 
-    # TODO: remove `noqa` after a new release: 
-    def __init_subclass__(cls, **kwargs) -> None:  # noqa: WPS338
+    def __init_subclass__(cls, **kwargs) -> None:
         """Sets additional values for subclasses."""
         super().__init_subclass__(**kwargs)
         violation_code = getattr(cls, 'code', None)
