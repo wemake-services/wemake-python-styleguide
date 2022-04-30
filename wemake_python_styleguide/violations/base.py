@@ -76,7 +76,8 @@ class ViolationPostfixes(enum.Enum):
     less_than = ' < {0}'
 
 
-class BaseViolation(object, metaclass=abc.ABCMeta):
+# TODO: remove `noqa` after a new release:
+class BaseViolation(object, metaclass=abc.ABCMeta):  # noqa: WPS338
     """
     Abstract base class for all style violations.
 
@@ -99,10 +100,33 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
     previous_codes: ClassVar[Set[int]]
     deprecated: ClassVar[bool] = False
 
+    # assigned in __init_subclass__
+    full_code: ClassVar[str]
+    summary: ClassVar[str]
+
     # We use this code to show base metrics and thresholds mostly:
     postfix_template: ClassVar[ViolationPostfixes] = (
         ViolationPostfixes.bigger_than
     )
+
+    def __init_subclass__(cls, **kwargs) -> None:
+        """Sets additional values for subclasses."""
+        super().__init_subclass__(**kwargs)
+        violation_code = getattr(cls, 'code', None)
+        if violation_code is None:
+            return
+        if cls.__doc__ is None:
+            raise TypeError(
+                'Please include a docstring documenting {0}'.format(cls),
+            )
+        # this is mostly done for docs to display the full code,
+        # allowing its indexing in search engines and better discoverability
+        cls.full_code = cls._full_code()
+        cls.summary = cls.__doc__.lstrip().split('\n', maxsplit=1)[0]
+        # this hack adds full code to summary table in the docs
+        cls.__doc__ = _prepend_skipping_whitespaces(
+            '{0} — '.format(cls.full_code), cls.__doc__,
+        )
 
     def __init__(
         self,
@@ -131,7 +155,7 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
         Conditionally formats the ``error_template`` if it is required.
         """
         return '{0} {1}{2}'.format(
-            self._full_code(),
+            self.full_code,
             self.error_template.format(self._text),
             self._postfix_information(),
         )
@@ -142,14 +166,15 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
         return (*self._location(), self.message())
 
     @final
-    def _full_code(self) -> str:
+    @classmethod
+    def _full_code(cls) -> str:
         """
         Returns fully formatted code.
 
         Adds violation letter to the numbers.
         Also ensures that codes like ``3`` will be represented as ``WPS003``.
         """
-        return 'WPS{0}'.format(str(self.code).zfill(3))
+        return 'WPS{0}'.format(str(cls.code).zfill(3))
 
     @final
     def _postfix_information(self) -> str:
@@ -236,3 +261,9 @@ class SimpleViolation(BaseViolation, metaclass=abc.ABCMeta):
         Cannot be ignored by inline ``noqa`` comments.
         """
         return 0, 0
+
+
+def _prepend_skipping_whitespaces(prefix: str, text: str) -> str:
+    lstripped_text = text.lstrip()
+    leading_whitespaces = text[:len(text) - len(lstripped_text)]
+    return leading_whitespaces + prefix + lstripped_text

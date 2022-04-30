@@ -60,3 +60,9 @@ def test_configuration(all_violations):
 
     for option_item, is_listed in option_listed.items():
         assert is_listed, option_item
+
+
+def test_all_violations_doc_start_with_full_code(all_violations):
+    """Ensures that all violations have `versionadded` tag."""
+    for violation in all_violations:
+        assert violation.__doc__.lstrip().startswith(violation.full_code)

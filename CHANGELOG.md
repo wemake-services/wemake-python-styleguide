@@ -21,6 +21,11 @@ Semantic versioning in our case means:
 ### Features
 - Adds `__init_subclass__` in the beginning of accepted methods order as per WPS338
 
+## 0.16.2
+
+### Misc
+- Adds full violation codes to docs and `BaseViolation.full_code` #2409 
+
 ## 0.16.1
 
 ### Bugfixes
