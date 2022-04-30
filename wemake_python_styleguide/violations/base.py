@@ -108,8 +108,9 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
         ViolationPostfixes.bigger_than
     )
 
-    def __init_subclass__(cls) -> None:
+    def __init_subclass__(cls, **kwargs) -> None:
         """Sets additional values for subclasses."""
+        super().__init_subclass__(**kwargs)
         violation_code = getattr(cls, 'code', None)
         if violation_code is None:
             return
