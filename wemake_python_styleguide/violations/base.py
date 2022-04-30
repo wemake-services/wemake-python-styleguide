@@ -108,7 +108,8 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
         ViolationPostfixes.bigger_than
     )
 
-    def __init_subclass__(cls, **kwargs) -> None:
+    # TODO: remove `noqa` after a new release: 
+    def __init_subclass__(cls, **kwargs) -> None:  # noqa: WPS338
         """Sets additional values for subclasses."""
         super().__init_subclass__(**kwargs)
         violation_code = getattr(cls, 'code', None)
