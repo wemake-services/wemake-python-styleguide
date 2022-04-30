@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations.base import ASTViolation
 class NewViolation(ASTViolation):
     """
     Yells at cloud.
-    
+
     Yay, I'm a docstring!
     """
 
