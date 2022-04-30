@@ -67,6 +67,7 @@ ErrorNode = Union[
 #: We use this type to define helper classes with callbacks to add violations.
 ErrorCallback = Callable[['BaseViolation'], None]
 
+
 @enum.unique
 class ViolationPostfixes(enum.Enum):
     """String values of postfixes used for violation baselines."""
@@ -110,15 +111,20 @@ class BaseViolation(object, metaclass=abc.ABCMeta):
     def __init_subclass__(cls) -> None:
         """Sets additional values for subclasses."""
         violation_code = getattr(cls, 'code', None)
-        if violation_code is not None and cls.__doc__:
-            # this is mostly done for docs to display the full code,
-            # allowing its indexing in search engines and better discoverability
-            cls.full_code = cls._full_code()
-            cls.summary = cls.__doc__.lstrip().split('\n', maxsplit=1)[0]
-            # this hack adds full code to summary table in the docs
-            cls.__doc__ = _prepend_skipping_whitespaces(
-                '{0} — '.format(cls.full_code), cls.__doc__,
+        if violation_code is None:
+            return
+        if cls.__doc__ is None:
+            raise TypeError(
+                'Please include a docstring documenting {0}'.format(cls),
             )
+        # this is mostly done for docs to display the full code,
+        # allowing its indexing in search engines and better discoverability
+        cls.full_code = cls._full_code()
+        cls.summary = cls.__doc__.lstrip().split('\n', maxsplit=1)[0]
+        # this hack adds full code to summary table in the docs
+        cls.__doc__ = _prepend_skipping_whitespaces(
+            '{0} — '.format(cls.full_code), cls.__doc__,
+        )
 
     def __init__(
         self,
