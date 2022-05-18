@@ -1,7 +1,6 @@
 import re
 import tokenize
-from typing import ClassVar, FrozenSet, Optional
-from typing.re import Pattern
+from typing import ClassVar, FrozenSet, Optional, Pattern
 
 from typing_extensions import final
 
