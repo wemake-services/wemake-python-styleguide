@@ -26,18 +26,18 @@ def _replace_braces(string: str) -> str:
 class WrongNumberTokenVisitor(BaseTokenVisitor):
     """Visits number tokens to find incorrect usages."""
 
-    _bad_number_suffixes: ClassVar[Pattern] = re.compile(
+    _bad_number_suffixes: ClassVar[Pattern[str]] = re.compile(
         r'^[0-9\.]+[BOXE]',
     )
 
-    _leading_zero_pattern: ClassVar[Pattern] = re.compile(
+    _leading_zero_pattern: ClassVar[Pattern[str]] = re.compile(
         r'^[0-9\.]+([box]|e\+?\-?)0.+', re.IGNORECASE | re.ASCII,
     )
-    _leading_zero_float_pattern: ClassVar[Pattern] = re.compile(
+    _leading_zero_float_pattern: ClassVar[Pattern[str]] = re.compile(
         r'^[0-9]*\.[0-9]+0+$',
     )
 
-    _positive_exponent_patterns: ClassVar[Pattern] = re.compile(
+    _positive_exponent_patterns: ClassVar[Pattern[str]] = re.compile(
         r'^[0-9\.]+e\+', re.IGNORECASE | re.ASCII,
     )
 
@@ -47,7 +47,7 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
 
     _bad_complex_suffix: ClassVar[str] = 'J'
 
-    _float_zero: ClassVar[Pattern] = re.compile(
+    _float_zero: ClassVar[Pattern[str]] = re.compile(
         r'^0\.0$',
     )
 
@@ -144,7 +144,7 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         'u', 'U', 'N',
     ))
 
-    _implicit_raw_strings: ClassVar[Pattern] = re.compile(r'\\{2}.+')
+    _implicit_raw_strings: ClassVar[Pattern[str]] = re.compile(r'\\{2}.+')
 
     def __init__(self, *args, **kwargs) -> None:
         """Initializes new visitor and saves all docstrings."""
