@@ -19,8 +19,7 @@ All comments have the same type.
 import re
 import tokenize
 from token import ENDMARKER
-from typing import ClassVar
-from typing.re import Pattern
+from typing import ClassVar, Pattern
 
 from typing_extensions import Final, final
 
@@ -54,8 +53,8 @@ SENTINEL_TOKEN: Final = tokenize.TokenInfo(
 class WrongCommentVisitor(BaseTokenVisitor):
     """Checks comment tokens."""
 
-    _no_cover: ClassVar[Pattern] = re.compile(r'^pragma:\s+no\s+cover')
-    _type_check: ClassVar[Pattern] = re.compile(
+    _no_cover: ClassVar[Pattern[str]] = re.compile(r'^pragma:\s+no\s+cover')
+    _type_check: ClassVar[Pattern[str]] = re.compile(
         r'^type:\s?([\w\d\[\]\'\"\.]+)$',
     )
 
@@ -182,7 +181,7 @@ class ShebangVisitor(BaseTokenVisitor):
     Code is insipired by https://github.com/xuhdev/flake8-executable
     """
 
-    _shebang: ClassVar[Pattern] = re.compile(r'(\s*)#!')
+    _shebang: ClassVar[Pattern[str]] = re.compile(r'(\s*)#!')
     _python_executable: ClassVar[str] = 'python'
 
     def visit_comment(self, token: tokenize.TokenInfo) -> None:
@@ -262,7 +261,9 @@ class ShebangVisitor(BaseTokenVisitor):
 class NoqaVisitor(BaseTokenVisitor):
     """Checks noqa comment tokens."""
 
-    _noqa_check: ClassVar[Pattern] = re.compile(r'^(noqa:?)($|[A-Z\d\,\s]+)')
+    _noqa_check: ClassVar[Pattern[str]] = re.compile(
+        r'^(noqa:?)($|[A-Z\d\,\s]+)',
+    )
 
     def __init__(self, *args, **kwargs) -> None:
         """Initializes a counter."""
