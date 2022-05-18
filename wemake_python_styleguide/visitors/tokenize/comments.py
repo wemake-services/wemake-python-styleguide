@@ -19,8 +19,7 @@ All comments have the same type.
 import re
 import tokenize
 from token import ENDMARKER
-from typing import ClassVar
-from typing.re import Pattern
+from typing import ClassVar, Pattern
 
 from typing_extensions import Final, final
 
