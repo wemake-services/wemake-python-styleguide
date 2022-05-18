@@ -10,10 +10,10 @@ from typing import (
     FrozenSet,
     List,
     Optional,
+    Pattern,
     Sequence,
     Union,
 )
-from typing.re import Pattern
 
 from typing_extensions import Final, final
 
