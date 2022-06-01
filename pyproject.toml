@@ -104,6 +104,6 @@ autopep8 = "^1.5"
 import-linter = "^1.2"
 
 astpath = "^0.9"
-lxml = "^4.8"
+lxml = "^4.9"
 m2r2 = "^0.3"
 nbqa = "^1.2"
