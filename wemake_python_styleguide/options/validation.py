@@ -68,6 +68,7 @@ class _ValidatedOptions(object):
     allowed_domain_names: Tuple[str, ...] = attr.ib(converter=tuple)
     forbidden_domain_names: Tuple[str, ...] = attr.ib(converter=tuple)
     forbidden_inline_ignore: Tuple[str, ...] = attr.ib(converter=tuple)
+    disallow_union_type: bool
 
     # Complexity:
     max_arguments: int = attr.ib(validator=[_min_max(min=1)])

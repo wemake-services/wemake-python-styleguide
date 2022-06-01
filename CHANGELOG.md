@@ -16,6 +16,11 @@ Semantic versioning in our case means:
   But, in the future we might change the configuration names/logic,
   change the client facing API, change code conventions significantly, etc.
 
+## 0.17.2
+
+### Features
+- Adds `disallow_union_type` configuration option
+
 ## 0.17.1
 
 ### Features
@@ -24,7 +29,7 @@ Semantic versioning in our case means:
 ## 0.16.2
 
 ### Misc
-- Adds full violation codes to docs and `BaseViolation.full_code` #2409 
+- Adds full violation codes to docs and `BaseViolation.full_code` #2409
 
 ## 0.16.1
 

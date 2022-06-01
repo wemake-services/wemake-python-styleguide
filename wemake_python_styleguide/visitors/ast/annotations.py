@@ -1,8 +1,13 @@
 import ast
+from typing import Optional, Union
 
 from typing_extensions import final
 
+from wemake_python_styleguide.compat.functions import get_slice_expr
 from wemake_python_styleguide.types import AnyFunctionDef
+from wemake_python_styleguide.violations.best_practices import (
+    DisallowUnionTypeViolation,
+)
 from wemake_python_styleguide.violations.consistency import (
     MultilineFunctionAnnotationViolation,
 )
@@ -21,11 +26,13 @@ class WrongAnnotationVisitor(BaseNodeVisitor):
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """Checks return type annotations."""
         self._check_return_annotation(node)
+        self._check_prohibited_union_annotation(node, node.returns)
         self.generic_visit(node)
 
     def visit_arg(self, node: ast.arg) -> None:
         """Checks arguments annotations."""
         self._check_arg_annotation(node)
+        self._check_prohibited_union_annotation(node, node.annotation)
         self.generic_visit(node)
 
     def _check_return_annotation(self, node: AnyFunctionDef) -> None:
@@ -44,3 +51,42 @@ class WrongAnnotationVisitor(BaseNodeVisitor):
             if lineno and lineno != node.lineno:
                 self.add_violation(MultilineFunctionAnnotationViolation(node))
                 return
+
+    def _check_prohibited_union_annotation(
+        self,
+        node: Union[AnyFunctionDef, ast.arg],
+        annotation_node: Optional[ast.expr],
+    ) -> None:
+        if not self.options.disallow_union_type or annotation_node is None:
+            return
+
+        if self._has_union_annotation_been_used(node, annotation_node):
+            self.add_violation(DisallowUnionTypeViolation(node))
+
+    def _has_union_annotation_been_used(
+        self,
+        node: Union[AnyFunctionDef, ast.arg],
+        annotation_node: Optional[ast.expr],
+    ) -> bool:
+        if not isinstance(annotation_node, ast.Subscript):
+            return False
+
+        union_names = ('Union', 'Optional')
+        union_used_in_node_name = (
+            isinstance(annotation_node.value, ast.Name) and
+            annotation_node.value.id in union_names
+        )
+        if union_used_in_node_name:
+            return True
+
+        union_used_in_node_attr = (
+            isinstance(annotation_node.value, ast.Attribute) and
+            annotation_node.value.attr in union_names
+        )
+        if union_used_in_node_attr:
+            return True
+
+        return self._has_union_annotation_been_used(
+            node,
+            get_slice_expr(annotation_node),
+        )

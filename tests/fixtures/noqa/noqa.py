@@ -814,5 +814,9 @@ class TestClass(object, **{}):  # noqa: WPS470
 secondary_slice = items[1:][:3]  # noqa: WPS471
 first, *_rest = some_collection  # noqa: WPS472
 
+
+def function_with_unions(a: Union[int, str], b: Optional[int]) -> None:  # noqa: WPS473
+    _ = f'{a} {b}'
+
 def foo2_func():
     return (1, 2, 3, 4, 5, 6)  # noqa: WPS227

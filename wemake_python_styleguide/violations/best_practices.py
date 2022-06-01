@@ -89,6 +89,7 @@ Summary
    KwargsUnpackingInClassDefinitionViolation
    ConsecutiveSlicesViolation
    GettingElementByUnpackingViolation
+   DisallowUnionTypeViolation
 
 Best practices
 --------------
@@ -166,6 +167,7 @@ Best practices
 .. autoclass:: KwargsUnpackingInClassDefinitionViolation
 .. autoclass:: ConsecutiveSlicesViolation
 .. autoclass:: GettingElementByUnpackingViolation
+.. autoclass:: DisallowUnionTypeViolation
 
 """
 
@@ -2770,3 +2772,40 @@ class GettingElementByUnpackingViolation(ASTViolation):
         'Found unpacking used to get a single element from a collection'
     )
     code = 472
+
+
+@final
+class DisallowUnionTypeViolation(ASTViolation):
+    """
+    Forbid usage of the `typing.Union` and `typing.Optional` when denoting type.
+
+    Reasoning:
+        Python 3.10 introduced a new union type syntax in form of `|` syntax.
+
+    Solution:
+        Write union types using the new syntax.
+
+    Example::
+
+        # Correct:
+        def func(arg: X | Y) -> None: ...
+        def func(arg: X | None) -> None: ...
+
+        # Wrong:
+        def func(arg: Union[X, Y]) -> None: ...
+        def func(arg: Optional[X]) -> None: ...
+
+    Configuration:
+        This rule is configurable with ``--disallow-union-type`` option.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.DISALLOW_UNION_TYPE`
+
+    .. versionadded:: 0.17.2
+
+    """
+
+    error_template = (
+        'Found usage of the `typing.Union` or `typing.Optional` when ' +
+        'denoting union type'
+    )
+    code = 473

@@ -59,6 +59,8 @@ You can also show all options that ``flake8`` supports by running:
 - ``forbidden-inline-ignore`` - list of codes of violations or
     class of violations that are forbidden to ignore inline, defaults to
     :str:`wemake_python_styleguide.options.defaults.FORBIDDEN_INLINE_IGNORE`
+- ``disallow-union-type`` - controls whether `typing.Union` usage should be
+    prohibited in favor of the new `|` syntax, defaults to False
 
 
 .. rubric:: Complexity options
@@ -266,6 +268,17 @@ class Configuration(object):
             'Codes of violations or class of violations forbidden to ignore.',
             type='string',
             comma_separated_list=True,
+        ),
+        _Option(
+            '--disallow-union-type',
+            defaults.DISALLOW_UNION_TYPE,
+            (
+                'Should the `typing.Union` and `typing.Optional` ' +
+                'usage be prohibited.'
+            ),
+            action='store_true',
+            type=None,
+            dest='disallow_union_type',
         ),
 
         # Complexity:
