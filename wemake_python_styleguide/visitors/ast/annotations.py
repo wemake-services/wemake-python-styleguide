@@ -69,44 +69,41 @@ class WrongAnnotationVisitor(BaseNodeVisitor):  # noqa: WPS214
     def _check_prohibited_union_annotation(
         self,
         node: AnyFunctionDef | ast.arg | ast.Assign | ast.AnnAssign,
-        annotation_node: ast.expr | None,
+        annotate_node: ast.expr | None,
     ) -> None:
         should_skip_check = (
             sys.version_info < (3, 10) or
-            annotation_node is None
+            annotate_node is None
         )
         if should_skip_check:
             return
 
-        is_check_violated = (
-            self._has_union_annotation_been_used(node, annotation_node)
-        )
-        if is_check_violated:  # pragma: py-lt-310
+        if self._has_union_been_used(node, annotate_node):  # pragma: py-lt-310
             self.add_violation(DisallowUnionTypeViolation(node))
 
-    def _has_union_annotation_been_used(
+    def _has_union_been_used(
         self,
         node: AnyFunctionDef | ast.arg | ast.Assign | ast.AnnAssign,
-        annotation_node: ast.expr | None,
-    ) -> bool:
-        if not isinstance(annotation_node, ast.Subscript):
+        annotate_node: ast.expr | None,
+    ) -> bool:  # pragma: py-lt-310
+        if not isinstance(annotate_node, ast.Subscript):
             return False
 
         union_used_in_node_name = (
-            isinstance(annotation_node.value, ast.Name) and
-            annotation_node.value.id in self._union_names
+            isinstance(annotate_node.value, ast.Name) and
+            annotate_node.value.id in self._union_names
         )
         if union_used_in_node_name:
             return True
 
         union_used_in_node_attr = (
-            isinstance(annotation_node.value, ast.Attribute) and
-            annotation_node.value.attr in self._union_names
+            isinstance(annotate_node.value, ast.Attribute) and
+            annotate_node.value.attr in self._union_names
         )
         if union_used_in_node_attr:
             return True
 
-        return self._has_union_annotation_been_used(
+        return self._has_union_been_used(
             node,
-            get_slice_expr(annotation_node),
+            get_slice_expr(annotate_node),
         )
