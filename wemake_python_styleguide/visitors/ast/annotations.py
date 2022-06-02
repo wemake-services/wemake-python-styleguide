@@ -84,7 +84,7 @@ class WrongAnnotationVisitor(BaseNodeVisitor):  # noqa: WPS214
 
     def _has_union_annotation_been_used(
         self,
-        node: AnyFunctionDef | ast.arg,
+        node: AnyFunctionDef | ast.arg | ast.Assign | ast.AnnAssign,
         annotation_node: ast.expr | None,
     ) -> bool:
         if not isinstance(annotation_node, ast.Subscript):
