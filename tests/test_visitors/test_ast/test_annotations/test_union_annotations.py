@@ -1,3 +1,5 @@
+import sys
+
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
@@ -32,4 +34,7 @@ def test_wrong_return_annotation(
     visitor = WrongAnnotationVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [DisallowUnionTypeViolation])
+    if sys.version_info < (3, 10):  # pragma: py-lt-310
+        assert_errors(visitor, [DisallowUnionTypeViolation])
+    else:  # pragma: py-gte-310
+        assert_errors(visitor, [DisallowUnionTypeViolation])
