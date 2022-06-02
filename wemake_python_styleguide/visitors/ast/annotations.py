@@ -42,10 +42,12 @@ class WrongAnnotationVisitor(BaseNodeVisitor):  # noqa: WPS214
     def visit_Assign(self, node: ast.Assign) -> None:
         """Checks assignment annotations."""
         self._check_prohibited_union_annotation(node, node.value)
+        self.generic_visit(node)
 
     def visit_AnnAssign(self, node: ast.AnnAssign) -> None:
         """Checks variable type annotations."""
         self._check_prohibited_union_annotation(node, node.annotation)
+        self.generic_visit(node)
 
     def _check_return_annotation(self, node: AnyFunctionDef) -> None:
         if not node.returns:
