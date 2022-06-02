@@ -19,7 +19,7 @@ Semantic versioning in our case means:
 ## 0.18.0
 
 ### Features
-- Adds `disallow_union_type` configuration option
+- Adds `WPS473` check for `typing.Union` and `typing.Optional` usages
 
 ## 0.17.1
 
