@@ -4,8 +4,8 @@ from typing import List, Union
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming import access
 
-_VarDefinition = Union[ast.AST, ast.expr]
-_LocalVariable = Union[ast.Name, ast.ExceptHandler]
+_VarDefinition = Union[ast.AST, ast.expr]  # noqa: WPS473
+_LocalVariable = Union[ast.Name, ast.ExceptHandler]  # noqa: WPS473
 
 
 def get_variable_name(node: _LocalVariable) -> str:

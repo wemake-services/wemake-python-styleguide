@@ -14,9 +14,9 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 # Type aliases:
-_ConditionNodes = Union[ast.If, ast.While, ast.IfExp]
-_ModuleMembers = Union[AnyFunctionDef, ast.ClassDef]
-_ReturnLikeStatement = Union[ast.Return, ast.Yield]
+_ConditionNodes = Union[ast.If, ast.While, ast.IfExp]  # noqa: WPS473
+_ModuleMembers = Union[AnyFunctionDef, ast.ClassDef]  # noqa: WPS473
+_ReturnLikeStatement = Union[ast.Return, ast.Yield]  # noqa: WPS473
 
 
 @final

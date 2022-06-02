@@ -25,7 +25,10 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 # Type aliases:
 
-_AnyFunctionCounter = Union[FunctionCounter, FunctionCounterWithLambda]
+_AnyFunctionCounter = Union[  # noqa: WPS473
+    FunctionCounter,
+    FunctionCounterWithLambda,
+]
 _CheckRule = Tuple[_AnyFunctionCounter, int, Type[BaseViolation]]
 _NodeTypeHandler = Mapping[
     Union[type, Tuple[type, ...]],

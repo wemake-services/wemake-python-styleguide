@@ -22,7 +22,7 @@ from wemake_python_styleguide.visitors.decorators import alias
     'visit_FunctionDef',
     'visit_AsyncFunctionDef',
 ))
-class WrongAnnotationVisitor(BaseNodeVisitor):
+class WrongAnnotationVisitor(BaseNodeVisitor):  # noqa: WPS214
     """Ensures that annotations are used correctly."""
 
     _union_names = ('Union', 'Optional')
@@ -38,6 +38,14 @@ class WrongAnnotationVisitor(BaseNodeVisitor):
         self._check_arg_annotation(node)
         self._check_prohibited_union_annotation(node, node.annotation)
         self.generic_visit(node)
+
+    def visit_Assign(self, node: ast.Assign) -> None:
+        """Checks assignment annotations."""
+        self._check_prohibited_union_annotation(node, node.value)
+
+    def visit_AnnAssign(self, node: ast.AnnAssign) -> None:
+        """Checks variable type annotations."""
+        self._check_prohibited_union_annotation(node, node.annotation)
 
     def _check_return_annotation(self, node: AnyFunctionDef) -> None:
         if not node.returns:
@@ -58,7 +66,7 @@ class WrongAnnotationVisitor(BaseNodeVisitor):
 
     def _check_prohibited_union_annotation(
         self,
-        node: AnyFunctionDef | ast.arg,
+        node: AnyFunctionDef | ast.arg | ast.Assign | ast.AnnAssign,
         annotation_node: ast.expr | None,
     ) -> None:
         should_skip_check = (

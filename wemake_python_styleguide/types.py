@@ -41,31 +41,35 @@ from typing import Tuple, Type, Union
 from typing_extensions import Protocol, final
 
 #: We use this type to represent all string-like nodes.
-AnyText = Union[ast.Str, ast.Bytes]
+AnyText = Union[ast.Str, ast.Bytes]  # noqa: WPS473
 
 #: In cases we need to work with both import types.
-AnyImport = Union[ast.Import, ast.ImportFrom]
+AnyImport = Union[ast.Import, ast.ImportFrom]  # noqa: WPS473
 
 #: In cases we need to work with both function definitions.
-AnyFunctionDef = Union[ast.FunctionDef, ast.AsyncFunctionDef]
+AnyFunctionDef = Union[ast.FunctionDef, ast.AsyncFunctionDef]  # noqa: WPS473
 
 #: In cases we need to work with all function definitions (including lambdas).
-AnyFunctionDefAndLambda = Union[AnyFunctionDef, ast.Lambda]
+AnyFunctionDefAndLambda = Union[AnyFunctionDef, ast.Lambda]  # noqa: WPS473
 
 #: In cases we need to work with both forms of if functions.
-AnyIf = Union[ast.If, ast.IfExp]
+AnyIf = Union[ast.If, ast.IfExp]  # noqa: WPS473
 
 #: In cases we need to work with both sync and async loops.
-AnyFor = Union[ast.For, ast.AsyncFor]
+AnyFor = Union[ast.For, ast.AsyncFor]  # noqa: WPS473
 
 #: In case we need to work with any loop: sync, async, and while.
-AnyLoop = Union[AnyFor, ast.While]
+AnyLoop = Union[AnyFor, ast.While]  # noqa: WPS473
 
 #: This is how you can define a variable in Python.
-AnyVariableDef = Union[ast.Name, ast.Attribute, ast.ExceptHandler]
+AnyVariableDef = Union[  # noqa: WPS473
+    ast.Name,
+    ast.Attribute,
+    ast.ExceptHandler,
+]
 
 #: All different comprehension types in one place.
-AnyComprehension = Union[
+AnyComprehension = Union[  # noqa: WPS473
     ast.ListComp,
     ast.DictComp,
     ast.SetComp,
@@ -73,19 +77,19 @@ AnyComprehension = Union[
 ]
 
 #: In cases we need to work with both sync and async context managers.
-AnyWith = Union[ast.With, ast.AsyncWith]
+AnyWith = Union[ast.With, ast.AsyncWith]  # noqa: WPS473
 
 #: When we search for assign elements, we also need typed assign.
-AnyAssign = Union[ast.Assign, ast.AnnAssign]
+AnyAssign = Union[ast.Assign, ast.AnnAssign]  # noqa: WPS473
 
 #: In cases we need to work with both access types.
-AnyAccess = Union[
+AnyAccess = Union[  # noqa: WPS473
     ast.Attribute,
     ast.Subscript,
 ]
 
 #: In case we need to handle types that can be chained.
-AnyChainable = Union[
+AnyChainable = Union[  # noqa: WPS473
     ast.Attribute,
     ast.Subscript,
     ast.Call,
@@ -95,10 +99,10 @@ AnyChainable = Union[
 AnyNodes = Tuple[Type[ast.AST], ...]
 
 #: We use this type to work with any text-like values. Related to `AnyText`.
-AnyTextPrimitive = Union[str, bytes]
+AnyTextPrimitive = Union[str, bytes]  # noqa: WPS473
 
 #: That's how we define context of operations.
-ContextNodes = Union[
+ContextNodes = Union[  # noqa: WPS473
     ast.Module,
     ast.ClassDef,
     AnyFunctionDef,

@@ -11,7 +11,7 @@ from wemake_python_styleguide.visitors.ast.annotations import (
 
 
 @pytest.mark.parametrize(
-    'function',
+    'expression',
     [
         'def function(a: Union[int, str]): ...',
         'def function(a: typing.Union[int, str]): ...',
@@ -19,17 +19,20 @@ from wemake_python_styleguide.visitors.ast.annotations import (
         'def function(a: List[Union[int, str]]): ...',
         'def function(a: int) -> Union[int, str]: ...',
         'def function(a: Optional[int]) -> None: ...',
+        'a = Union[int, str]',
+        'a: Optional[str] = None',
+        'a: Optional[Union[int, str]]',
     ],
 )
-def test_wrong_return_annotation(
+def test_wrong_union_func_annotation(
     assert_errors,
     parse_ast_tree,
-    function,
+    expression,
     default_options,
     mode,
 ) -> None:
-    """Ensures that using incorrect return annotations is forbidden."""
-    tree = parse_ast_tree(mode(function))
+    """Ensures that using incorrect union annotations is forbidden."""
+    tree = parse_ast_tree(mode(expression))
 
     visitor = WrongAnnotationVisitor(default_options, tree=tree)
     visitor.run()

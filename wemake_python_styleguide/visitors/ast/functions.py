@@ -51,7 +51,7 @@ from wemake_python_styleguide.violations.refactoring import (
 from wemake_python_styleguide.visitors import base, decorators
 
 #: Things we treat as local variables.
-_LocalVariable = Union[ast.Name, ast.ExceptHandler]
+_LocalVariable = Union[ast.Name, ast.ExceptHandler]  # noqa: WPS473
 
 #: Function definitions with name and arity:
 _Defs = Mapping[str, int]

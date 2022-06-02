@@ -12,7 +12,7 @@ from typing import Union
 
 from wemake_python_styleguide.compat.functions import get_slice_expr
 
-_Annotation = Union[
+_Annotation = Union[  # noqa: WPS473
     ast.expr,
     ast.Str,
 ]

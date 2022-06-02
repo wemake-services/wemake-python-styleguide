@@ -12,7 +12,7 @@ from wemake_python_styleguide.violations.base import (
 )
 from wemake_python_styleguide.visitors.base import BaseVisitor
 
-_IgnoredTypes = Union[
+_IgnoredTypes = Union[  # noqa: WPS473
     Type[BaseViolation],
     Tuple[Type[BaseViolation], ...],
     None,

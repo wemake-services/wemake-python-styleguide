@@ -23,7 +23,7 @@ from wemake_python_styleguide.visitors import base, decorators
 #: We use these types to store the number of nodes usage in different contexts.
 _Expressions = DefaultDict[str, List[ast.AST]]
 _FunctionExpressions = DefaultDict[ast.AST, _Expressions]
-_StringConstants = FrozenSet[Union[str, bytes]]
+_StringConstants = FrozenSet[Union[str, bytes]]  # noqa: WPS473
 
 
 @final
