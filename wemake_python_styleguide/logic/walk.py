@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 import ast
-from typing import Iterator, Type, TypeVar
+from typing import Iterator, Type, TypeVar, Union
 
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.types import AnyNodes
 
 _SubnodeType = TypeVar('_SubnodeType', bound=ast.AST)
-_IsInstanceContainer = AnyNodes | type
+_IsInstanceContainer = Union[AnyNodes, type]  # noqa: WPS473
 
 
 def is_contained(

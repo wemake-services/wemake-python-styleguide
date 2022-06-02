@@ -35,6 +35,6 @@ def test_wrong_return_annotation(
     visitor.run()
 
     if sys.version_info < (3, 10):  # pragma: py-lt-310
-        assert_errors(visitor, [DisallowUnionTypeViolation])
+        assert_errors(visitor, [])
     else:  # pragma: py-gte-310
         assert_errors(visitor, [DisallowUnionTypeViolation])
