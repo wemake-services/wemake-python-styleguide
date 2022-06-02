@@ -1,4 +1,6 @@
-from typing import Optional, Tuple
+from __future__ import annotations
+
+from typing import Tuple
 
 import attr
 from typing_extensions import final
@@ -8,8 +10,8 @@ from wemake_python_styleguide.types import ConfigurationOptions
 
 
 def _min_max(
-    min: Optional[int] = None,  # noqa: WPS125
-    max: Optional[int] = None,  # noqa: WPS125
+    min: int | None = None,  # noqa: WPS125
+    max: int | None = None,  # noqa: WPS125
 ):
     """Validator to check that value is in bounds."""
     def factory(instance, attribute, field_value):

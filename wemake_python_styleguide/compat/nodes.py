@@ -5,9 +5,11 @@ Note that we use ``sys.version_info`` directly,
 because that's how ``mypy`` knows about what we are doing.
 """
 
+from __future__ import annotations
+
 import ast
 import sys
-from typing import Any, Optional
+from typing import Any
 
 if sys.version_info >= (3, 8):  # pragma: py-lt-38
     from ast import Constant as Constant  # noqa: WPS433, WPS113
@@ -39,7 +41,7 @@ else:  # pragma: py-gte-38
         """
 
         value: Any  # noqa: WPS110
-        kind: Optional[str]
+        kind: str | None
 
         s: Any  # noqa: WPS111
         n: complex  # noqa: WPS111

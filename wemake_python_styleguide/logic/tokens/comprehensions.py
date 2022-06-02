@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import tokenize
-from typing import List, Optional
+from typing import List
 
 import attr
 from typing_extensions import final
@@ -17,7 +19,7 @@ class Compehension(object):
     """
 
     left_bracket: tokenize.TokenInfo
-    expr: Optional[tokenize.TokenInfo] = None
+    expr: tokenize.TokenInfo | None = None
 
     # `for` keywords
     fors: List[tokenize.TokenInfo] = attr.ib(factory=list)

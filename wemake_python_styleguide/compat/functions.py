@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import ast
-from typing import List, Union
+from typing import List
 
 from wemake_python_styleguide.compat.nodes import NamedExpr
 from wemake_python_styleguide.compat.types import AnyAssignWithWalrus
@@ -7,7 +9,7 @@ from wemake_python_styleguide.types import AnyFunctionDefAndLambda
 
 
 def get_assign_targets(
-    node: Union[AnyAssignWithWalrus, ast.AugAssign],
+    node: AnyAssignWithWalrus | ast.AugAssign,
 ) -> List[ast.expr]:
     """Returns list of assign targets without knowing the type of assign."""
     if isinstance(node, (ast.AnnAssign, ast.AugAssign, NamedExpr)):

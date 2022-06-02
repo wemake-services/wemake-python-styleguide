@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import ast
 import operator
 from contextlib import suppress
 from types import MappingProxyType
-from typing import Optional, Tuple, Type, Union
+from typing import Tuple, Type
 
 from typing_extensions import Final
 
@@ -119,7 +121,7 @@ def set_constant_evaluations(tree: ast.AST) -> ast.AST:
 def _find_context(
     node: ast.AST,
     contexts: Tuple[Type[ast.AST], ...],
-) -> Optional[ast.AST]:
+) -> ast.AST | None:
     """
     We changed how we find and assign contexts in 0.8.1 version.
 
@@ -145,7 +147,7 @@ def _apply_if_statement(statement: ast.If) -> None:
 
 def evaluate_operation(
     statement: ast.BinOp,
-) -> Optional[Union[int, float, str, bytes]]:
+) -> int | float | str | bytes | None:
     """Tries to evaluate all math operations inside the statement."""
     if isinstance(statement.left, ast.BinOp):
         left = evaluate_operation(statement.left)

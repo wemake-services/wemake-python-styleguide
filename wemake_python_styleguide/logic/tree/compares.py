@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import ast
 import types
 from collections import defaultdict
-from typing import DefaultDict, Mapping, Set, Tuple, Type, Union
+from typing import DefaultDict, Mapping, Set, Tuple, Type
 
 import attr
 from typing_extensions import Final, final
@@ -40,7 +42,7 @@ SIMILAR_OPERATORS: Final[_ComparesMapping] = types.MappingProxyType({
 
 def get_similar_operators(
     operator: ast.cmpop,
-) -> Union[Type[ast.cmpop], _MultipleCompareOperators]:
+) -> Type[ast.cmpop] | _MultipleCompareOperators:
     """Returns similar operators types for the given operator."""
     operator_type = operator.__class__
     return SIMILAR_OPERATORS.get(operator_type, operator_type)

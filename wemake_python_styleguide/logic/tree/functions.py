@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 from ast import Call, Return, Yield, YieldFrom, arg, walk
-from typing import Container, Iterable, List, Optional, Union
+from typing import Container, Iterable, List, Union
 
 from typing_extensions import Final
 
@@ -12,7 +14,7 @@ from wemake_python_styleguide.types import (
 )
 
 #: Expressions that causes control transfer from a routine
-_AnyControlTransfers = Union[
+_AnyControlTransfers = Union[  # noqa: WPS473
     Return,
     Yield,
     YieldFrom,
@@ -49,7 +51,7 @@ def given_function_called(
     return ''
 
 
-def is_method(function_type: Optional[str]) -> bool:
+def is_method(function_type: str | None) -> bool:
     """
     Returns whether a given function type belongs to a class.
 

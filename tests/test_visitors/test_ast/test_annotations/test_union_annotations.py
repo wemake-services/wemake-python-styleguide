@@ -13,12 +13,12 @@ from wemake_python_styleguide.visitors.ast.annotations import (
 @pytest.mark.parametrize(
     'function',
     [
-        """def function(a: Union[int, str]): ...""",
-        """def function(a: typing.Union[int, str]): ...""",
-        """def function(a: t.Union[int, str]): ...""",
-        """def function(a: List[Union[int, str]]): ...""",
-        """def function(a: int) -> Union[int, str]: ...""",
-        """def function(a: Optional[int]) -> None: ...""",
+        'def function(a: Union[int, str]): ...',
+        'def function(a: typing.Union[int, str]): ...',
+        'def function(a: t.Union[int, str]): ...',
+        'def function(a: List[Union[int, str]]): ...',
+        'def function(a: int) -> Union[int, str]: ...',
+        'def function(a: Optional[int]) -> None: ...',
     ],
 )
 def test_wrong_return_annotation(

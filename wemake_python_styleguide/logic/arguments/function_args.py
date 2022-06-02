@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import ast
 from itertools import zip_longest
-from typing import List, Mapping, Optional, Tuple
+from typing import List, Mapping, Tuple
 
 from wemake_python_styleguide import constants, types
 from wemake_python_styleguide.compat.functions import get_posonlyargs
@@ -41,7 +43,7 @@ def _has_same_vararg(
     call: ast.Call,
 ) -> bool:
     """Tells whether ``call`` has the same vararg ``*args`` as ``node``."""
-    vararg_name: Optional[str] = None
+    vararg_name: str | None = None
     for starred_arg in get_starred_args(call):
         # 'args': [<_ast.Starred object at 0x10d77a3c8>]
         if isinstance(starred_arg.value, ast.Name):
@@ -58,7 +60,7 @@ def _has_same_kwarg(
     call: ast.Call,
 ) -> bool:
     """Tells whether ``call`` has the same kwargs as ``node``."""
-    kwarg_name: Optional[str] = None
+    kwarg_name: str | None = None
     null_arg_keywords = filter(lambda key: key.arg is None, call.keywords)
     for keyword in null_arg_keywords:
         # `a=1` vs `**kwargs`:

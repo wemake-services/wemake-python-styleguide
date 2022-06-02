@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import ast
-from typing import ClassVar, Mapping, Optional, Tuple, Type, Union
+from typing import ClassVar, Mapping, Tuple, Type, Union
 
 from typing_extensions import final
 
@@ -21,7 +23,7 @@ from wemake_python_styleguide.visitors import base, decorators
 
 _MeaninglessOperators = Mapping[complex, Tuple[Type[ast.operator], ...]]
 _OperatorLimits = Mapping[Type[ast.unaryop], int]
-_NumbersAndConstants = Union[ast.Num, ast.NameConstant]
+_NumbersAndConstants = Union[ast.Num, ast.NameConstant]  # noqa: WPS473
 
 
 @final
@@ -114,8 +116,8 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
     def _check_useless_math_operator(
         self,
         op: ast.operator,
-        left: Optional[ast.AST],
-        right: Optional[ast.AST] = None,
+        left: ast.AST | None,
+        right: ast.AST | None = None,
     ) -> None:
         if isinstance(left, ast.Num) and left.n in self._left_special_cases:
             if right and isinstance(op, self._left_special_cases[left.n]):
@@ -132,8 +134,8 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
 
     def _get_non_negative_nodes(
         self,
-        left: Optional[ast.AST],
-        right: Optional[ast.AST] = None,
+        left: ast.AST | None,
+        right: ast.AST | None = None,
     ):
         non_negative_numbers = []
         for node in filter(None, (left, right)):
@@ -198,7 +200,7 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
         self,
         left: ast.AST,
         op: ast.operator,
-        right: Optional[ast.AST] = None,
+        right: ast.AST | None = None,
     ) -> None:
         if not isinstance(op, ast.Add):
             return

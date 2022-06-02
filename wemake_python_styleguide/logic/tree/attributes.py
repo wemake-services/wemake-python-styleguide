@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 import ast
-from typing import Iterable, Optional
+from typing import Iterable
 
 from wemake_python_styleguide.types import AnyChainable
 
 
-def _chained_item(iterator: ast.AST) -> Optional[ast.AST]:
+def _chained_item(iterator: ast.AST) -> ast.AST | None:
     if isinstance(iterator, (ast.Attribute, ast.Subscript)):
         return iterator.value
     elif isinstance(iterator, ast.Call):

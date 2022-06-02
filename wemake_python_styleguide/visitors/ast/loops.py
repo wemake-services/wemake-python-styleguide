@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import ast
 from collections import defaultdict
 from contextlib import suppress
-from typing import ClassVar, DefaultDict, List, Mapping, Sequence, Type, Union
+from typing import ClassVar, DefaultDict, List, Mapping, Sequence, Type
 
 from typing_extensions import final
 
@@ -150,7 +152,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
 
     def _check_lambda_inside_loop(
         self,
-        node: Union[AnyLoop, AnyComprehension],
+        node: AnyLoop | AnyComprehension,
     ) -> None:
         for lambda_node in walk.get_subnodes_by_type(node, ast.Lambda):
             arg_nodes = walk.get_subnodes_by_type(lambda_node, ast.arg)
@@ -240,7 +242,7 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
 
     def _check_explicit_iter_type(
         self,
-        node: Union[AnyFor, ast.comprehension],
+        node: AnyFor | ast.comprehension,
     ) -> None:
         node_iter = operators.unwrap_unary_node(node.iter)
         is_wrong = isinstance(node_iter, self._forbidden_for_iters)

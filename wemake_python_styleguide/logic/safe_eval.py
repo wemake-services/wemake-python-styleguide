@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 import ast
-from typing import Any, Optional, Union
+from typing import Any
 
 from wemake_python_styleguide.compat.nodes import Constant
 
 
-def _convert_num(node: Optional[ast.AST]):
+def _convert_num(node: ast.AST | None):
     if isinstance(node, Constant):  # pragma: py-lt-38
         if isinstance(node.value, (int, float, complex)):
             return node.value
@@ -17,7 +19,7 @@ def _convert_num(node: Optional[ast.AST]):
     raise ValueError('malformed node or string: {0!r}'.format(node))
 
 
-def _convert_signed_num(node: Optional[ast.AST]):
+def _convert_signed_num(node: ast.AST | None):
     unary_operators = (ast.UAdd, ast.USub)
     if isinstance(node, ast.UnaryOp) and isinstance(node.op, unary_operators):
         operand = _convert_num(node.operand)
@@ -25,7 +27,7 @@ def _convert_signed_num(node: Optional[ast.AST]):
     return _convert_num(node)
 
 
-def _convert_complex(node: ast.BinOp) -> Optional[complex]:
+def _convert_complex(node: ast.BinOp) -> complex | None:
     left = _convert_signed_num(node.left)
     right = _convert_num(node.right)
     if isinstance(left, (int, float)) and isinstance(right, complex):
@@ -35,7 +37,7 @@ def _convert_complex(node: ast.BinOp) -> Optional[complex]:
     return None
 
 
-def _convert_iterable(node: Union[ast.Tuple, ast.List, ast.Set, ast.Dict]):
+def _convert_iterable(node: ast.Tuple | ast.List | ast.Set | ast.Dict):
     if isinstance(node, ast.Tuple):
         return tuple(map(literal_eval_with_names, node.elts))
     elif isinstance(node, ast.List):
@@ -49,7 +51,7 @@ def _convert_iterable(node: Union[ast.Tuple, ast.List, ast.Set, ast.Dict]):
 
 
 def literal_eval_with_names(  # noqa: WPS231
-    node: Optional[ast.AST],
+    node: ast.AST | None,
 ) -> Any:
     """
     Safely evaluate constants and ``ast.Name`` nodes.

@@ -16,13 +16,13 @@ def function() -> int: ...
 """
 
 correct_compound_return = """
-def function() -> Optional[int]: ...
+def function() -> List[int]: ...
 """
 
 correct_multiline_return = """
 def function(
     arg1,
-) -> Union[int, str, None]: ...
+) -> Tuple[int, str, None]: ...
 """
 
 # Wrong:
@@ -30,16 +30,16 @@ def function(
 wrong_multiline_return1 = """
 def function(
     arg
-) -> Optional[
-    Union[int, str]
+) -> List[
+    Tuple[int, str]
 ]: ...
 """
 
 wrong_multiline_return2 = """
 def function(
     arg
-) -> Optional[
-    Union[
+) -> List[
+    Tuple[
         int, str,
     ]
 ]: ...
@@ -48,8 +48,8 @@ def function(
 wrong_multiline_return3 = """
 def function(
     arg
-) -> Optional[
-    Union[
+) -> List[
+    Tuple[
         int,
         str,
     ]

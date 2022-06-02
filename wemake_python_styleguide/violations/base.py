@@ -49,16 +49,18 @@ Reference
 
 """
 
+from __future__ import annotations
+
 import abc
 import ast
 import enum
 import tokenize
-from typing import Callable, ClassVar, Optional, Set, Tuple, Union
+from typing import Callable, ClassVar, Set, Tuple, Union
 
 from typing_extensions import final
 
 #: General type for all possible nodes where error happens.
-ErrorNode = Union[
+ErrorNode = Union[  # noqa: WPS473
     ast.AST,
     tokenize.TokenInfo,
     None,
@@ -131,8 +133,8 @@ class BaseViolation(object, metaclass=abc.ABCMeta):  # noqa: WPS338
     def __init__(
         self,
         node: ErrorNode,
-        text: Optional[str] = None,
-        baseline: Optional[int] = None,
+        text: str | None = None,
+        baseline: int | None = None,
     ) -> None:
         """
         Creates a new instance of an abstract violation.
@@ -195,7 +197,7 @@ class BaseViolation(object, metaclass=abc.ABCMeta):  # noqa: WPS338
 class _BaseASTViolation(BaseViolation, metaclass=abc.ABCMeta):
     """Used as a based type for all ``ast`` violations."""
 
-    _node: Optional[ast.AST]
+    _node: ast.AST | None
 
     @final
     def _location(self) -> Tuple[int, int]:
@@ -220,9 +222,9 @@ class MaybeASTViolation(_BaseASTViolation, metaclass=abc.ABCMeta):
 
     def __init__(
         self,
-        node: Optional[ast.AST] = None,
-        text: Optional[str] = None,
-        baseline: Optional[int] = None,
+        node: ast.AST | None = None,
+        text: str | None = None,
+        baseline: int | None = None,
     ) -> None:
         """Creates new instance of module violation without explicit node."""
         super().__init__(node, text=text, baseline=baseline)
@@ -246,8 +248,8 @@ class SimpleViolation(BaseViolation, metaclass=abc.ABCMeta):
     def __init__(
         self,
         node=None,
-        text: Optional[str] = None,
-        baseline: Optional[int] = None,
+        text: str | None = None,
+        baseline: int | None = None,
     ) -> None:
         """Creates new instance of simple style violation."""
         super().__init__(node, text=text, baseline=baseline)

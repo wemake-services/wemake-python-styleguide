@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 import ast
-from typing import Iterable, List, Optional, Union
+from typing import Iterable, List, Union
 
 from wemake_python_styleguide.types import AnyNodes
 
-_IfAndElifASTNode = Union[ast.If, List[ast.stmt]]
+_IfAndElifASTNode = Union[ast.If, List[ast.stmt]]  # noqa: WPS473
 
 
 def is_elif(node: ast.If) -> bool:
@@ -30,7 +32,7 @@ def has_else(node: ast.If) -> bool:
     return bool(last_elem)
 
 
-def root_if(node: ast.If) -> Optional[ast.If]:
+def root_if(node: ast.If) -> ast.If | None:
     """Returns the previous ``if`` node in the chain if it exists."""
     return getattr(node, 'wps_if_chained', None)
 

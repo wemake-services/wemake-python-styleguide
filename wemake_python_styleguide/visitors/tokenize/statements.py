@@ -1,16 +1,9 @@
+from __future__ import annotations
+
 import tokenize
 from collections import defaultdict
 from operator import attrgetter
-from typing import (
-    ClassVar,
-    DefaultDict,
-    Dict,
-    List,
-    Mapping,
-    Optional,
-    Sequence,
-    Tuple,
-)
+from typing import ClassVar, DefaultDict, Dict, List, Mapping, Sequence, Tuple
 
 from typing_extensions import final
 
@@ -204,8 +197,8 @@ class MultilineStringVisitor(BaseTokenVisitor):
         self,
         index: int,
         tokens: List[tokenize.TokenInfo],
-        previous_token: Optional[tokenize.TokenInfo],
-        next_token: Optional[tokenize.TokenInfo],
+        previous_token: tokenize.TokenInfo | None,
+        next_token: tokenize.TokenInfo | None,
     ) -> None:
         if index != 0:
             previous_token = tokens[index - 1]
@@ -220,8 +213,8 @@ class MultilineStringVisitor(BaseTokenVisitor):
     def _check_individual_line(
         self,
         tokens: List[tokenize.TokenInfo],
-        previous_token: Optional[tokenize.TokenInfo],
-        next_token: Optional[tokenize.TokenInfo],
+        previous_token: tokenize.TokenInfo | None,
+        next_token: tokenize.TokenInfo | None,
     ) -> None:
         for index, token in enumerate(tokens):
             if token.exact_type != tokenize.STRING or token in self._docstrings:
@@ -282,7 +275,7 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
         """
         super().__init__(*args, **kwargs)
         self._bracket_stack: List[Compehension] = []
-        self._current_ctx: Optional[Compehension] = None
+        self._current_ctx: Compehension | None = None
 
     def visit_any_left_bracket(self, token: tokenize.TokenInfo) -> None:
         """Sets self._inside_brackets to True if left bracket found."""

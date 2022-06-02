@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import ast
-from typing import Iterable, Optional
+from typing import Iterable
 
 
-def _chained_item(iterator: ast.AST) -> Optional[ast.Call]:
+def _chained_item(iterator: ast.AST) -> ast.Call | None:
     children = list(ast.iter_child_nodes(iterator))
     if isinstance(children[0], ast.Call):
         return children[0]

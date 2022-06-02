@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import ast
-from typing import Optional, Type
+from typing import Type
 
 from wemake_python_styleguide.logic.nodes import get_parent
 
@@ -24,7 +26,7 @@ def unwrap_starred_node(node: ast.AST) -> ast.AST:
     return node
 
 
-def get_parent_ignoring_unary(node: ast.AST) -> Optional[ast.AST]:
+def get_parent_ignoring_unary(node: ast.AST) -> ast.AST | None:
     """
     Returns real parent ignoring proxy unary parent level.
 

@@ -1,14 +1,14 @@
+from __future__ import annotations
+
 import ast
 from functools import partial
 from typing import (  # noqa: WPS235
     Iterable,
     List,
-    Optional,
     Sequence,
     Tuple,
     Type,
     TypeVar,
-    Union,
     cast,
 )
 
@@ -70,7 +70,7 @@ def sequence_of_node(
 
 def first(
     sequence: Iterable[_NodeType],
-    default: Optional[_DefaultType] = None,
-) -> Union[_NodeType, _DefaultType, None]:
+    default: _DefaultType | None = None,
+) -> _NodeType | _DefaultType | None:
     """Get first variable from sequence or default."""
     return next(iter(sequence), default)

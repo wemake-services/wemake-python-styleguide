@@ -1,14 +1,16 @@
+from __future__ import annotations
+
 import ast
 from typing import List, Sequence, Tuple, Type, Union
 
 from wemake_python_styleguide.logic.nodes import get_context
 
-_ReturningNodes = List[Union[ast.Return, ast.Yield]]
+_ReturningNodes = List[Union[ast.Return, ast.Yield]]  # noqa: WPS473
 
 
 def returning_nodes(
     node: ast.AST,
-    returning_type: Union[Type[ast.Return], Type[ast.Yield]],
+    returning_type: Type[ast.Return] | Type[ast.Yield],
 ) -> Tuple[_ReturningNodes, bool]:
     """Returns ``return`` or ``yield`` nodes with values."""
     returns: _ReturningNodes = []

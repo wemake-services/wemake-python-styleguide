@@ -1,13 +1,15 @@
+from __future__ import annotations
+
 import ast
 from inspect import getmro
-from typing import List, Mapping, Optional, Tuple
+from typing import List, Mapping, Tuple
 
 from wemake_python_styleguide.logic import source
 from wemake_python_styleguide.logic.walk import is_contained
 from wemake_python_styleguide.types import AnyNodes
 
 
-def get_exception_name(node: ast.Raise) -> Optional[str]:
+def get_exception_name(node: ast.Raise) -> str | None:
     """Returns the exception name or ``None`` if node has not it."""
     exception = node.exc
     if exception is None:
@@ -20,7 +22,7 @@ def get_exception_name(node: ast.Raise) -> Optional[str]:
     return getattr(exception, 'id', None)
 
 
-def get_cause_name(node: ast.Raise) -> Optional[str]:
+def get_cause_name(node: ast.Raise) -> str | None:
     """Returns the cause name or ``None`` if node has not it."""
     return getattr(node.cause, 'id', None)
 

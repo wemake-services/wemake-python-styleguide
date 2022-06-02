@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import ast
-from typing import Callable, ClassVar, Iterable, Optional, Type
+from typing import Callable, ClassVar, Iterable, Type
 
 import attr
 from typing_extensions import final
@@ -43,7 +45,7 @@ class _NamingPredicate(object):
     is_correct: _PredicateLogicalCallback
     violation: Type[base.BaseViolation]
 
-    _is_applicable: Optional[_PredicateApplicableCallback] = None
+    _is_applicable: _PredicateApplicableCallback | None = None
 
     def is_applicable(self, node: ast.AST) -> bool:
         """Usability function over real applicable predicate."""

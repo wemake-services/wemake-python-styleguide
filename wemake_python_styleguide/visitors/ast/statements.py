@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import ast
-from typing import ClassVar, Mapping, Optional, Sequence, Set, Union
+from typing import ClassVar, Mapping, Sequence, Set, Union
 
 from typing_extensions import final
 
@@ -44,7 +46,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 #: Statements that do have `.body` attribute.
-_StatementWithBody = Union[
+_StatementWithBody = Union[  # noqa: WPS473
     ast.If,
     AnyFor,
     ast.While,
@@ -57,7 +59,7 @@ _StatementWithBody = Union[
 ]
 
 #: Simple collections.
-_AnyCollection = Union[
+_AnyCollection = Union[  # noqa: WPS473
     ast.List,
     ast.Set,
     ast.Dict,
@@ -172,7 +174,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
             self._almost_swapped(assigns)
 
     def _almost_swapped(self, assigns: Sequence[ast.Assign]) -> None:
-        previous_var: Set[Optional[str]] = set()
+        previous_var: Set[str | None] = set()
 
         for assign in assigns:
             current_var = {
@@ -297,7 +299,7 @@ class WrongParametersIndentationVisitor(BaseNodeVisitor):
         node: ast.AST,
         statement: ast.AST,
         extra_lines: int,
-    ) -> Optional[bool]:
+    ) -> bool | None:
         if statement.lineno == node.lineno and not extra_lines:
             return False
         return None
@@ -307,8 +309,8 @@ class WrongParametersIndentationVisitor(BaseNodeVisitor):
         node: ast.AST,
         statement: ast.AST,
         previous_line: int,
-        multi_line_mode: Optional[bool],
-    ) -> Optional[bool]:
+        multi_line_mode: bool | None,
+    ) -> bool | None:
         previous_has_break = previous_line != statement.lineno
         if not previous_has_break and multi_line_mode:
             self.add_violation(ParametersIndentationViolation(node))
@@ -324,7 +326,7 @@ class WrongParametersIndentationVisitor(BaseNodeVisitor):
         elements: Sequence[ast.AST],
         extra_lines: int = 0,  # we need it due to wrong lineno in collections
     ) -> None:
-        multi_line_mode: Optional[bool] = None
+        multi_line_mode: bool | None = None
         for index, statement in enumerate(elements):
             if index == 0:
                 # We treat first element differently,

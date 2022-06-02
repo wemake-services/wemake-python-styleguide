@@ -59,8 +59,6 @@ You can also show all options that ``flake8`` supports by running:
 - ``forbidden-inline-ignore`` - list of codes of violations or
     class of violations that are forbidden to ignore inline, defaults to
     :str:`wemake_python_styleguide.options.defaults.FORBIDDEN_INLINE_IGNORE`
-- ``disallow-union-type`` - controls whether `typing.Union` usage should be
-    prohibited in favor of the new `|` syntax, defaults to False
 
 
 .. rubric:: Complexity options
@@ -154,7 +152,9 @@ You can also show all options that ``flake8`` supports by running:
     :str:`wemake_python_styleguide.options.defaults.SHOW_VIOLATION_LINKS`
 """
 
-from typing import ClassVar, Mapping, Optional, Sequence, Union
+from __future__ import annotations
+
+from typing import ClassVar, Mapping, Sequence, Union
 
 import attr
 from flake8.options.manager import OptionManager
@@ -162,7 +162,7 @@ from typing_extensions import final
 
 from wemake_python_styleguide.options import defaults
 
-ConfigValuesTypes = Union[str, int, bool, Sequence[str]]
+ConfigValuesTypes = Union[str, int, bool, Sequence[str]]  # noqa: WPS473
 string = 'string'
 
 
@@ -174,11 +174,11 @@ class _Option(object):
     long_option_name: str
     default: ConfigValuesTypes
     help: str  # noqa: WPS125
-    type: Optional[str] = 'int'  # noqa: WPS125
+    type: str | None = 'int'  # noqa: WPS125
     parse_from_config: bool = True
     action: str = 'store'
     comma_separated_list: bool = False
-    dest: Optional[str] = None
+    dest: str | None = None
 
     def __attrs_post_init__(self):
         """Is called after regular init is done."""

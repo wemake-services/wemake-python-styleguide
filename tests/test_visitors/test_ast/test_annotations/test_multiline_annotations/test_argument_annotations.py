@@ -20,13 +20,13 @@ def function(arg: int): ...
 """
 
 correct_compound_argument = """
-def function(arg: Optional[int]): ...
+def function(arg: List[int]): ...
 """
 
 correct_multiline_arguments = """
 def function(
     arg1: str,
-    arg2: Union[int, str, None],
+    arg2: Tuple[int, str, None],
 ): ...
 """
 
@@ -34,7 +34,7 @@ def function(
 
 wrong_multiline_arguments = """
 def function(
-    arg: Optional[
+    arg: List[
         int,
     ],
 ): ...

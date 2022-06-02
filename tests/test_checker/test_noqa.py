@@ -23,6 +23,7 @@ import pytest
 _PY_OLD = sys.version_info < (3, 8)
 _PY38 = (3, 8) <= sys.version_info < (3, 9)
 _PY39 = (3, 9) <= sys.version_info < (3, 10)
+_PYGTE310 = sys.version_info >= (3, 10)
 
 #: Used to find violations' codes in output.
 ERROR_PATTERN = re.compile(r'(WPS\d{3})')
@@ -41,18 +42,19 @@ IGNORED_VIOLATIONS = (
 
 #: Number and count of violations that would be raised.
 VERSION_SPECIFIC = types.MappingProxyType({
-    'WPS216': int(not _PY39),
-    'WPS224': int(not _PY39),
+    'WPS216': int(not _PY39 and not _PYGTE310),
+    'WPS224': int(not _PY39 and not _PYGTE310),
 
-    'WPS307': int(not _PY39),
+    'WPS307': int(not _PY39 and not _PYGTE310),
     'WPS332': 0,  # TODO: pyflakes fails at `:=` at the moment
 
     'WPS416': int(_PY_OLD),  # only works for `< python3.8`
     'WPS451': int(_PY38),  # only works for `== python3.8`
     'WPS452': int(_PY38),  # only works for `== python3.8`
     'WPS466': int(_PY39),  # only works for `== python3.9`
+    'WPS473': 2 * int(_PYGTE310),  # only works for `>= python3.10`
 
-    'WPS602': 2 * int(not _PY39),
+    'WPS602': 2 * int(not _PY39 and not _PYGTE310),
 })
 
 #: Number and count of violations that would be raised.
@@ -252,6 +254,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS470': 1,
     'WPS471': 1,
     'WPS472': 1,
+    'WPS473': 0,  # defined in version specific table.
 
     'WPS500': 1,
     'WPS501': 1,
@@ -362,6 +365,15 @@ def test_codes(all_violations):
         VERSION_SPECIFIC,
         0,
         marks=pytest.mark.skipif(not _PY39, reason='ast changes on 3.9'),
+    ),
+    pytest.param(
+        'noqa310.py',
+        VERSION_SPECIFIC,
+        0,
+        marks=pytest.mark.skipif(
+            not _PYGTE310,
+            reason='Union symbol `|` enforced in 3.10',
+        ),
     ),
 ])
 def test_noqa_fixture_disabled(

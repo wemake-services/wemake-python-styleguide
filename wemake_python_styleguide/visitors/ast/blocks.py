@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import ast
 from collections import defaultdict
-from typing import Callable, DefaultDict, List, Set, Tuple, Union, cast
+from typing import Callable, DefaultDict, List, Set, Tuple, cast
 
 from typing_extensions import final
 
@@ -85,7 +87,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
 
     def visit_named_nodes(
         self,
-        node: Union[AnyFunctionDef, ast.ClassDef, ast.ExceptHandler],
+        node: AnyFunctionDef | ast.ClassDef | ast.ExceptHandler,
     ) -> None:
         """Visits block nodes that have ``.name`` property."""
         names = {node.name} if node.name else set()
@@ -119,7 +121,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
 
     # Locals:
 
-    def visit_locals(self, node: Union[AnyAssignWithWalrus, ast.arg]) -> None:
+    def visit_locals(self, node: AnyAssignWithWalrus | ast.arg) -> None:
         """Visits local variable definitions and function arguments."""
         if isinstance(node, ast.arg):
             names = {node.arg}

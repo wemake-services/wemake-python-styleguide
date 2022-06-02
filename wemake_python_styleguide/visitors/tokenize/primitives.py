@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import re
 import tokenize
-from typing import ClassVar, FrozenSet, Optional, Pattern
+from typing import ClassVar, FrozenSet, Pattern
 
 from typing_extensions import final
 
@@ -247,7 +249,7 @@ class WrongStringConcatenationVisitor(BaseTokenVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Adds extra ``_previous_token`` property."""
         super().__init__(*args, **kwargs)
-        self._previous_token: Optional[tokenize.TokenInfo] = None
+        self._previous_token: tokenize.TokenInfo | None = None
 
     def visit(self, token: tokenize.TokenInfo) -> None:
         """Ensures that all string are concatenated as we allow."""

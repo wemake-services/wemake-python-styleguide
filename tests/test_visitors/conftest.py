@@ -1,4 +1,6 @@
-from typing import Optional, Sequence, Tuple, Type, Union
+from __future__ import annotations
+
+from typing import Sequence, Tuple, Type, Union
 
 import pytest
 from typing_extensions import Final
@@ -53,7 +55,7 @@ def assert_error_text():
     def factory(
         visitor: BaseVisitor,
         text: str,
-        baseline: Optional[int] = None,
+        baseline: int | None = None,
         *,
         multiple: bool = False,
         ignored_types: _IgnoredTypes = None,

@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import ast
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 
 from wemake_python_styleguide.compat.aliases import AssignNodes
 from wemake_python_styleguide.constants import ALLOWED_BUILTIN_CLASSES
@@ -11,7 +13,7 @@ from wemake_python_styleguide.types import AnyAssign
 _AllAttributes = Tuple[List[AnyAssign], List[ast.Attribute]]
 
 
-def is_forbidden_super_class(class_name: Optional[str]) -> bool:
+def is_forbidden_super_class(class_name: str | None) -> bool:
     """
     Tells whether or not the base class is forbidden to be subclassed.
 
@@ -81,7 +83,7 @@ def get_attributes(
     return class_attributes, instance_attributes
 
 
-def _get_instance_attribute(node: ast.AST) -> Optional[ast.Attribute]:
+def _get_instance_attribute(node: ast.AST) -> ast.Attribute | None:
     return node if (
         isinstance(node, ast.Attribute) and
         isinstance(node.ctx, ast.Store) and
@@ -93,7 +95,7 @@ def _get_instance_attribute(node: ast.AST) -> Optional[ast.Attribute]:
 def _get_class_attribute(
     node: ast.ClassDef,
     subnode: ast.AST,
-) -> Optional[AnyAssign]:
+) -> AnyAssign | None:
     return subnode if (
         nodes.get_context(subnode) is node and
         getattr(subnode, 'value', None) and
@@ -104,7 +106,7 @@ def _get_class_attribute(
 def _get_annotated_class_attribute(
     node: ast.ClassDef,
     subnode: ast.AST,
-) -> Optional[AnyAssign]:
+) -> AnyAssign | None:
     return subnode if (
         nodes.get_context(subnode) is node and
         (

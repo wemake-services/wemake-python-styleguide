@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import ast
 import itertools
-from typing import Iterable, List, Optional
+from typing import Iterable, List
 
 from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.compat.types import AnyAssignWithWalrus
@@ -13,7 +15,7 @@ def is_same_variable(left: ast.AST, right: ast.AST) -> bool:
     return False
 
 
-def get_assigned_name(node: ast.AST) -> Optional[str]:
+def get_assigned_name(node: ast.AST) -> str | None:
     """
     Returns variable names for node that is just assigned.
 
@@ -82,7 +84,7 @@ def get_variables_from_node(node: ast.AST) -> List[str]:
     return names
 
 
-def extract_name(node: ast.AST) -> Optional[str]:
+def extract_name(node: ast.AST) -> str | None:
     """
     Utility to extract names for several types of nodes.
 

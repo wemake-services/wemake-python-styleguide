@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import ast
-from typing import ClassVar, Dict, FrozenSet, List, Optional, Type, Union, cast
+from typing import ClassVar, Dict, FrozenSet, List, Type, Union, cast
 
 from typing_extensions import final
 
@@ -41,7 +43,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 #: Utility type to work with violations easier.
-_ReturningViolations = Union[
+_ReturningViolations = Union[  # noqa: WPS473
     Type[InconsistentReturnViolation],
     Type[InconsistentYieldViolation],
 ]
@@ -135,7 +137,7 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
     def _iterate_returning_values(
         self,
         node: AnyFunctionDef,
-        returning_type: Union[Type[ast.Return], Type[ast.Yield]],
+        returning_type: Type[ast.Return] | Type[ast.Yield],
         violation: _ReturningViolations,
     ):
         return_nodes, has_values = keywords.returning_nodes(
@@ -278,8 +280,8 @@ class GeneratorKeywordsVisitor(BaseNodeVisitor):
                 self.add_violation(IncorrectYieldFromTargetViolation(node))
 
     def _post_visit(self) -> None:
-        previous_line: Optional[int] = None
-        previous_parent: Optional[ast.AST] = None
+        previous_line: int | None = None
+        previous_parent: ast.AST | None = None
 
         for line, node in self._yield_locations.items():
             parent = get_parent(node)
@@ -322,7 +324,7 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
             all(isinstance(elem, ast.Name) for elem in node.value.elts)
         )
 
-    def _get_previous_stmt(self, node: ast.Return) -> Optional[ast.stmt]:
+    def _get_previous_stmt(self, node: ast.Return) -> ast.stmt | None:
         """
         This method gets the previous node in a block.
 

@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, FrozenSet, List, Optional
+from typing import ClassVar, DefaultDict, FrozenSet, List
 
 from typing_extensions import final
 
@@ -206,7 +208,7 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
     def _get_call_stmt_of_useless_method(
         self,
         node: types.AnyFunctionDef,
-    ) -> Optional[ast.Call]:
+    ) -> ast.Call | None:
         """
         Fetches ``super`` call statement from function definition.
 
@@ -327,7 +329,7 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
         if isinstance(node.value, ast.Tuple):
             self._count_slots_items(node, node.value)
 
-    def _slot_item_name(self, node: ast.AST) -> Optional[str]:
+    def _slot_item_name(self, node: ast.AST) -> str | None:
         if isinstance(node, ast.Str):
             return node.s
         if isinstance(node, ast.Starred):

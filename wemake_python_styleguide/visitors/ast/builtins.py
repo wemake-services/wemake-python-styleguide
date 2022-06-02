@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import ast
 import re
 import string
@@ -12,7 +14,6 @@ from typing import (
     Optional,
     Pattern,
     Sequence,
-    Union,
 )
 
 from typing_extensions import Final, final
@@ -47,7 +48,7 @@ from wemake_python_styleguide.violations import (
 from wemake_python_styleguide.visitors import base, decorators
 
 #: Items that can be inside a hash.
-_HashItems = Sequence[Optional[ast.AST]]
+_HashItems = Sequence[Optional[ast.AST]]  # noqa: WPS473
 
 
 @final
@@ -108,7 +109,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
     def _check_is_alphabet(
         self,
         node: AnyText,
-        text_data: Optional[str],
+        text_data: str | None,
     ) -> None:
         if text_data in self._string_constants:
             self.add_violation(
@@ -117,7 +118,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
                 ),
             )
 
-    def _is_modulo_pattern_exception(self, parent: Optional[ast.AST]) -> bool:
+    def _is_modulo_pattern_exception(self, parent: ast.AST | None) -> bool:
         """
         Check if string with modulo pattern is in an exceptional situation.
 
@@ -136,7 +137,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
     def _check_modulo_patterns(
         self,
         node: AnyText,
-        text_data: Optional[str],
+        text_data: str | None,
     ) -> None:
         parent = nodes.get_parent(node)
         if parent and strings.is_doc_string(parent):
@@ -391,7 +392,7 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
                     best_practices.WrongUnpackingViolation(node),
                 )
 
-    def _check_unpacking_target_types(self, node: Optional[ast.AST]) -> None:
+    def _check_unpacking_target_types(self, node: ast.AST | None) -> None:
         if not node:
             return
         for subnode in walk.get_subnodes_by_type(node, ast.List):
@@ -480,7 +481,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
 
     def _check_set_elements(
         self,
-        node: Union[ast.Set, ast.Dict],
+        node: ast.Set | ast.Dict,
         keys_or_elts: _HashItems,
     ) -> None:
         elements: List[str] = []
@@ -513,7 +514,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
 
     def _report_set_elements(
         self,
-        node: Union[ast.Set, ast.Dict],
+        node: ast.Set | ast.Dict,
         elements: List[str],
         element_values,
     ) -> None:

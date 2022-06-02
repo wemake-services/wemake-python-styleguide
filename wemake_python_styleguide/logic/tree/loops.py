@@ -1,12 +1,13 @@
+from __future__ import annotations
+
 import ast
-from typing import Optional
 
 from wemake_python_styleguide.compat.aliases import ForNodes
 from wemake_python_styleguide.types import AnyLoop, AnyNodes
 
 
 def _does_loop_contain_node(
-    loop: Optional[AnyLoop],
+    loop: AnyLoop | None,
     to_check: ast.AST,
 ) -> bool:
     """

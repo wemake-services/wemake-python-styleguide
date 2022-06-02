@@ -1,11 +1,13 @@
+from __future__ import annotations
+
 import ast
-from typing import Iterator, Optional, Type, TypeVar, Union
+from typing import Iterator, Type, TypeVar
 
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.types import AnyNodes
 
 _SubnodeType = TypeVar('_SubnodeType', bound=ast.AST)
-_IsInstanceContainer = Union[AnyNodes, type]
+_IsInstanceContainer = AnyNodes | type
 
 
 def is_contained(
@@ -26,7 +28,7 @@ def is_contained(
 def get_closest_parent(
     node: ast.AST,
     parents: _IsInstanceContainer,
-) -> Optional[ast.AST]:
+) -> ast.AST | None:
     """Returns the closes parent of a node of requested types."""
     parent = get_parent(node)
     while True:
