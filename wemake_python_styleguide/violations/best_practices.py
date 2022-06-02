@@ -2777,7 +2777,8 @@ class GettingElementByUnpackingViolation(ASTViolation):
 @final
 class DisallowUnionTypeViolation(ASTViolation):
     """
-    Forbid usage of the `typing.Union` and `typing.Optional` when denoting type.
+    Forbid usage of the `typing.Union` and `typing.Optional` when denoting type
+    while using Python 3.10+.
 
     Reasoning:
         Python 3.10 introduced a new union type syntax in form of `|` syntax.
@@ -2795,12 +2796,7 @@ class DisallowUnionTypeViolation(ASTViolation):
         def func(arg: Union[X, Y]) -> None: ...
         def func(arg: Optional[X]) -> None: ...
 
-    Configuration:
-        This rule is configurable with ``--disallow-union-type`` option.
-        Default:
-        :str:`wemake_python_styleguide.options.defaults.DISALLOW_UNION_TYPE`
-
-    .. versionadded:: 0.17.2
+    .. versionadded:: 0.18.0
 
     """
 

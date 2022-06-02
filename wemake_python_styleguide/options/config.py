@@ -269,17 +269,6 @@ class Configuration(object):
             type='string',
             comma_separated_list=True,
         ),
-        _Option(
-            '--disallow-union-type',
-            defaults.DISALLOW_UNION_TYPE,
-            (
-                'Should the `typing.Union` and `typing.Optional` ' +
-                'usage be prohibited.'
-            ),
-            action='store_true',
-            type=None,
-            dest='disallow_union_type',
-        ),
 
         # Complexity:
 

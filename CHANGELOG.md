@@ -16,7 +16,7 @@ Semantic versioning in our case means:
   But, in the future we might change the configuration names/logic,
   change the client facing API, change code conventions significantly, etc.
 
-## 0.17.2
+## 0.18.0
 
 ### Features
 - Adds `disallow_union_type` configuration option

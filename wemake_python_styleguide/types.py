@@ -273,7 +273,3 @@ class ConfigurationOptions(Protocol):
     @property
     def show_violation_links(self) -> bool:
         ...
-
-    @property
-    def disallow_union_type(self) -> bool:
-        ...

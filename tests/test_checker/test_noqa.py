@@ -378,7 +378,6 @@ def test_noqa_fixture_disabled(
             '--ignore',
             ','.join(IGNORED_VIOLATIONS),
             '--disable-noqa',
-            '--disallow-union-type',
             '--isolated',
             '--select',
             'WPS',

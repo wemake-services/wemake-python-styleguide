@@ -46,9 +46,6 @@ FORBIDDEN_DOMAIN_NAMES: Final = ()
 #: Violation codes that are forbidden to use.
 FORBIDDEN_INLINE_IGNORE: Final = ()
 
-#: Whether usage of ``typing.Union`` is allowed.
-DISALLOW_UNION_TYPE: Final = False
-
 # ===========
 # Complexity:
 # ===========

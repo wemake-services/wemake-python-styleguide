@@ -1,4 +1,5 @@
 import ast
+import sys
 from typing import Optional, Union
 
 from typing_extensions import final
@@ -22,6 +23,7 @@ from wemake_python_styleguide.visitors.decorators import alias
 ))
 class WrongAnnotationVisitor(BaseNodeVisitor):
     """Ensures that annotations are used correctly."""
+    _union_names = ('Union', 'Optional')
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """Checks return type annotations."""
@@ -57,10 +59,15 @@ class WrongAnnotationVisitor(BaseNodeVisitor):
         node: Union[AnyFunctionDef, ast.arg],
         annotation_node: Optional[ast.expr],
     ) -> None:
-        if not self.options.disallow_union_type or annotation_node is None:
+        should_skip_check = (
+            sys.version_info < (3, 10) or
+            annotation_node is None
+        )
+        if should_skip_check:
             return
 
-        if self._has_union_annotation_been_used(node, annotation_node):
+        is_check_violated = self._has_union_annotation_been_used(node, annotation_node)
+        if is_check_violated:  # pragma: py-lt-310
             self.add_violation(DisallowUnionTypeViolation(node))
 
     def _has_union_annotation_been_used(
@@ -71,17 +78,16 @@ class WrongAnnotationVisitor(BaseNodeVisitor):
         if not isinstance(annotation_node, ast.Subscript):
             return False
 
-        union_names = ('Union', 'Optional')
         union_used_in_node_name = (
             isinstance(annotation_node.value, ast.Name) and
-            annotation_node.value.id in union_names
+            annotation_node.value.id in self._union_names
         )
         if union_used_in_node_name:
             return True
 
         union_used_in_node_attr = (
             isinstance(annotation_node.value, ast.Attribute) and
-            annotation_node.value.attr in union_names
+            annotation_node.value.attr in self._union_names
         )
         if union_used_in_node_attr:
             return True
