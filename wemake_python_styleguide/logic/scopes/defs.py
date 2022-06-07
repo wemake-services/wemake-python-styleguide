@@ -118,7 +118,7 @@ class OuterScope(_BaseScope):
         while True:
             context = cast(ContextNodes, get_context(context))
             outer_names = outer_names.union(self._scopes[context])
-            if not context:
+            if not context:  # type: ignore
                 break
 
         return outer_names

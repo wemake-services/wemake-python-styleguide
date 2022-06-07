@@ -123,7 +123,6 @@ def _has_same_kw_args(
     prepared_kw_args, real_kw_args = _clean_call_keyword_args(call)
     for func_arg in node.args.kwonlyargs:
         call_arg = prepared_kw_args.get(func_arg.arg)
-
-        if func_arg and not call_arg:
+        if call_arg is None:
             return False
     return len(real_kw_args) == len(node.args.kwonlyargs)
