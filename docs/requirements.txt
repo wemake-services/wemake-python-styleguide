@@ -2,7 +2,7 @@
 # to generate documentation.
 
 sphinx==5.0.1
-sphinx_autodoc_typehints==1.18.2
+sphinx_autodoc_typehints==1.18.3
 sphinxcontrib-mermaid==0.7.1
 recommonmark==0.7.1
 m2r2==0.3.2
