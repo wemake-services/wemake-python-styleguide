@@ -38,7 +38,7 @@ def test_unpack_length_normal(
     unpack_expression,
     options,
 ):
-    """Test that correct usage of unpack expression don't raise excptions."""
+    """Test that correct usage of unpack expression don't raise exceptions."""
     tree = parse_ast_tree(unpack_expression)
 
     option_values = options(max_tuple_unpack_length=4)

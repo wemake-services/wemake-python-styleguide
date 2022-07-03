@@ -178,7 +178,7 @@ class ShebangVisitor(BaseTokenVisitor):
     """
     Checks the first shebang in the file.
 
-    Code is insipired by https://github.com/xuhdev/flake8-executable
+    Code is inspired by https://github.com/xuhdev/flake8-executable
     """
 
     _shebang: ClassVar[Pattern[str]] = re.compile(r'(\s*)#!')

@@ -2691,7 +2691,7 @@ class KwargsUnpackingInClassDefinitionViolation(ASTViolation):
         It also limits the typechecking capabilities.
 
     Solution:
-        Use keyword arguments noramlly without unpacking them.
+        Use keyword arguments normally without unpacking them.
 
     Example::
 
