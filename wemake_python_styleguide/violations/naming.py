@@ -727,7 +727,7 @@ class UnusedVariableIsDefinedViolation(ASTViolation):
     Reasoning:
         While it is ok to define unused variables when you have to,
         like when unpacking a tuple, it is totally not ok to define explicit
-        unusued variables in cases like assignment, function return,
+        unused variables in cases like assignment, function return,
         exception handling, or context managers.
         Why do you need this explicitly unused variables?
 

@@ -100,7 +100,7 @@ def test_wrong_negated_complex_conditions(
     parse_ast_tree,
     default_options,
 ):
-    """Testing complex conditions with nagated ``if`` condition."""
+    """Testing complex conditions with negated ``if`` condition."""
     tree = parse_ast_tree(template.format(code))
 
     visitor = IfStatementVisitor(default_options, tree=tree)

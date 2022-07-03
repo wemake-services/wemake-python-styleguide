@@ -67,7 +67,7 @@ class JonesComplexityVisitor(BaseNodeVisitor):
         """
         Triggers after the whole module was processed.
 
-        Checks each line for its complexity, compares it to the tresshold.
+        Checks each line for its complexity, compares it to the threshold.
         We also calculate the final Jones score for the whole module.
         """
         for line_nodes in self._lines.values():

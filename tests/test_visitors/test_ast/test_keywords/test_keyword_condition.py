@@ -63,7 +63,7 @@ def test_false_condition_keywords(
     condition,
     default_options,
 ):
-    """Testing that false coniditions in keywords are restricted."""
+    """Testing that false conditions in keywords are restricted."""
     tree = parse_ast_tree(code.format(condition))
 
     visitor = ConstantKeywordVisitor(default_options, tree=tree)
@@ -86,7 +86,7 @@ def test_false_assert_condition_keywords(
     condition,
     default_options,
 ):
-    """Testing that false coniditions in keywords are restricted."""
+    """Testing that false conditions in keywords are restricted."""
     tree = parse_ast_tree(code.format(condition))
 
     visitor = ConstantKeywordVisitor(default_options, tree=tree)
@@ -126,7 +126,7 @@ def test_true_condition_keywords_while(
     condition,
     default_options,
 ):
-    """Testing that true coniditions in keywords are allowed."""
+    """Testing that true conditions in keywords are allowed."""
     tree = parse_ast_tree(code.format(condition))
 
     visitor = ConstantKeywordVisitor(default_options, tree=tree)
@@ -147,7 +147,7 @@ def test_true_condition_keywords_assert(
     condition,
     default_options,
 ):
-    """Testing that true coniditions in keywords are allowed."""
+    """Testing that true conditions in keywords are allowed."""
     tree = parse_ast_tree(code.format(condition))
 
     visitor = ConstantKeywordVisitor(default_options, tree=tree)
@@ -169,7 +169,7 @@ def test_true_while_condition_keywords(
     condition,
     default_options,
 ):
-    """Testing that true coniditions in keywords are allowed."""
+    """Testing that true conditions in keywords are allowed."""
     tree = parse_ast_tree(code.format(condition))
 
     visitor = ConstantKeywordVisitor(default_options, tree=tree)
