@@ -8,7 +8,6 @@ recommonmark==0.7.1
 m2r2==0.3.2
 added-value==0.20.0
 tomlkit==0.11.1
-docutils==0.19
 
 # Dependencies of our linter that should be documented,
 # other dependencies are just ignored or
