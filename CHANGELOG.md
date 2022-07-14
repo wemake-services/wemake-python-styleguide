@@ -24,7 +24,7 @@ Semantic versioning in our case means:
 ## 0.16.2
 
 ### Misc
-- Adds full violation codes to docs and `BaseViolation.full_code` #2409 
+- Adds full violation codes to docs and `BaseViolation.full_code` #2409
 
 ## 0.16.1
 
@@ -215,7 +215,7 @@ removing dependencies that can be removed, and fixing bugs.
 
 There are breaking changes ahead!
 
-We also have this [nice migration guide](https://wemake-python-stylegui.de/en/latest/pages/changelog/migration_to_0_14.html).
+We also have this [nice migration guide](https://wemake-python-styleguide.rtfd.io/en/latest/pages/changelog/migration_to_0_14.html).
 
 ### Features
 
@@ -661,7 +661,7 @@ We had to fix it before it is too late.
 So, we broke existing error codes.
 And now we can promise not to do it ever again.
 
-We also have this [nice migration guide](https://wemake-python-stylegui.de/en/latest/pages/changelog/migration_to_0_11.html)
+We also have this [nice migration guide](https://wemake-python-styleguide.rtfd.io/en/latest/pages/changelog/migration_to_0_11.html)
 for you to rename your violations with a script.
 
 ### Features

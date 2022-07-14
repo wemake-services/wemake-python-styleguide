@@ -5,7 +5,7 @@
 # `pip install flakehell`
 
 # See:
-# https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/flakehell.html
+# https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/integrations/flakehell.html
 
 # This file is not related to `nitpick` at all.
 # This file is optional, not required for `flake8` users.

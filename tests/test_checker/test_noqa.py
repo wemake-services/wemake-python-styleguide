@@ -8,7 +8,7 @@ These are integration tests for several things:
 3. that line number where violation is raised is correct
 4. that `noqa` works
 
-Docs: https://wemake-python-stylegui.de/en/latest/pages/api/contributing.html
+Docs: https://wemake-python-styleguide.rtfd.io/en/latest/pages/api/contributing.html
 """
 
 import re
