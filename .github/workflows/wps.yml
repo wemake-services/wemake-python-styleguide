@@ -5,9 +5,12 @@ on:
     branches:
       - master
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
