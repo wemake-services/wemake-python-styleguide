@@ -40,7 +40,7 @@ from wemake_python_styleguide.version import pkg_version
 
 #: That url is generated and hosted by Sphinx.
 DOCS_URL_TEMPLATE: Final = (
-    'https://wemake-python-stylegui.de/en/{0}/pages/usage/violations/'
+    'https://wemake-python-styleguide.rtfd.io/en/{0}/pages/usage/violations/'
 )
 
 #: This url points to the specific violation page.

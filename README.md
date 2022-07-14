@@ -12,14 +12,14 @@
 Welcome to the strictest and most opinionated Python linter ever.
 
 <p align="center">
-  <a href="https://wemake-python-stylegui.de">
+  <a href="https://wemake-python-styleguide.rtfd.io">
     <img src="https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/logo.png"
          alt="wemake-python-styleguide logo">
   </a>
 </p>
 
 `wemake-python-styleguide` is actually a [flake8](http://flake8.pycqa.org/en/latest/)
-plugin with [some other plugins](https://wemake-python-stylegui.de/en/latest/pages/usage/violations/index.html#external-plugins) as dependencies.
+plugin with [some other plugins](https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/violations/index.html#external-plugins) as dependencies.
 
 
 ## Quickstart
@@ -28,14 +28,14 @@ plugin with [some other plugins](https://wemake-python-stylegui.de/en/latest/pag
 pip install wemake-python-styleguide
 ```
 
-You will also need to create a `setup.cfg` file with the [configuration](https://wemake-python-stylegui.de/en/latest/pages/usage/configuration.html).
+You will also need to create a `setup.cfg` file with the [configuration](https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/configuration.html).
 
 [Try it online](https://wps.orsinium.dev)!
 
 We highly recommend to also use:
 
-- [flakehell](https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/flakehell.html) for easy integration into a **legacy** codebase
-- [nitpick](https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/nitpick.html) for sharing and validating configuration across multiple projects
+- [flakehell](https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/integrations/flakehell.html) for easy integration into a **legacy** codebase
+- [nitpick](https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/integrations/nitpick.html) for sharing and validating configuration across multiple projects
 
 
 ## Running
@@ -52,10 +52,10 @@ And it won't change your existing workflow.
        alt="invocation results">
 </p>
 
-See ["Usage" section](https://wemake-python-stylegui.de/en/latest/pages/usage/setup.html)
+See ["Usage" section](https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/setup.html)
 in the docs for examples and integrations.
 
-We also support [GitHub Actions](https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/github-actions.html) as first class-citizens.
+We also support [GitHub Actions](https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/integrations/github-actions.html) as first class-citizens.
 [Try it out](https://github.com/marketplace/actions/wemake-python-styleguide)!
 
 
@@ -90,7 +90,7 @@ We have several primary objectives:
 2. Enforce "There should be one -- and preferably only one -- obvious way to do it" rule to coding and naming styles
 3. Protect developers from possible errors and enforce best practices
 
-You can find all error codes and plugins [in the docs](https://wemake-python-stylegui.de/en/latest/pages/usage/violations/index.html).
+You can find all error codes and plugins [in the docs](https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/violations/index.html).
 
 
 ## What we are not
@@ -98,9 +98,9 @@ You can find all error codes and plugins [in the docs](https://wemake-python-sty
 We are *not* planning to do the following things:
 
 0. Assume or check types, use `mypy` together with our linter
-1. [Reformat code](https://wemake-python-stylegui.de/en/latest/pages/usage/integrations/auto-formatters.html), since we believe that developers should do that
+1. [Reformat code](https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/integrations/auto-formatters.html), since we believe that developers should do that
 2. Check for `SyntaxError` or logical bugs, write tests instead
-3. Appeal to everyone. But, you can [switch off](https://wemake-python-stylegui.de/en/latest/pages/usage/setup.html#ignoring-violations) any rules that you don't like
+3. Appeal to everyone. But, you can [switch off](https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/setup.html#ignoring-violations) any rules that you don't like
 
 
 ## Supporting us :tada:
@@ -146,7 +146,7 @@ We **warmly welcome** all contributions!
 
 [![List of contributors](https://opencollective.com/wemake-python-styleguide/contributors.svg?width=890&button=0)](https://github.com/wemake-services/wemake-python-styleguide/graphs/contributors)
 
-See ["Contributing"](https://wemake-python-stylegui.de/en/latest/pages/api/index.html#contributing) section in the documentation if you want to contribute.
+See ["Contributing"](https://wemake-python-styleguide.rtfd.io/en/latest/pages/api/index.html#contributing) section in the documentation if you want to contribute.
 
 You can start with [issues that need some help](https://github.com/wemake-services/wemake-python-styleguide/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
 right now.

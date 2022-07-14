@@ -28,10 +28,10 @@ It is also recommended to take a look at these resources:
 
 ## Developer's documentation
 
-Make sure that you are familiar with [developer's documentation](https://wemake-python-stylegui.de/en/latest/pages/api/index.html).
+Make sure that you are familiar with [developer's documentation](https://wemake-python-styleguide.rtfd.io/en/latest/pages/api/index.html).
 
 That's a main starting point to the future development.
-You can jump start into the development of new rules by reading ["Creating a new rule tutorial"](https://wemake-python-stylegui.de/en/latest/pages/api/tutorial.html).
+You can jump start into the development of new rules by reading ["Creating a new rule tutorial"](https://wemake-python-styleguide.rtfd.io/en/latest/pages/api/tutorial.html).
 
 
 ## Dependencies
