@@ -1355,7 +1355,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "safety"
-version = "2.0.0"
+version = "2.1.0"
 description = "Checks installed dependencies for known vulnerabilities and licenses."
 category = "dev"
 optional = false
@@ -1723,7 +1723,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "306f6b9b41b6c9a322f64a90a89c2dd0082fa9d2074e822563106680a35058f6"
+content-hash = "a3193b43d289117237c747f226f49f8f4b2fa616473cee0d5340a7d063122423"
 
 [metadata.files]
 added-value = [
@@ -2510,8 +2510,8 @@ restructuredtext-lint = [
     {file = "ruamel.yaml.clib-0.2.6.tar.gz", hash = "sha256:4ff604ce439abb20794f05613c374759ce10e3595d1867764dd1ae675b85acbd"},
 ]
 safety = [
-    {file = "safety-2.0.0-py3-none-any.whl", hash = "sha256:77cebdd128ce47b941e68a1b3bbc29fbbd2b9e98d11f179c5def64c1d05da295"},
-    {file = "safety-2.0.0.tar.gz", hash = "sha256:d739d00a9e4203cfaba34540c822a73ca1d327159ed7776b3dce09391f81c35d"},
+    {file = "safety-2.1.0-py3-none-any.whl", hash = "sha256:2f8d95cdab74461e53972ad654ce5fee3a3b3bf6b6f139cc595a6011378b28c8"},
+    {file = "safety-2.1.0.tar.gz", hash = "sha256:6211d4bf228694ef262a55e58dd3573650b979861f40a49dc7d534f8f0b339b3"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
