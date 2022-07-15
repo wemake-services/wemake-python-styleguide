@@ -21,6 +21,9 @@ Semantic versioning in our case means:
 ### Features
 - Adds `__init_subclass__` in the beginning of accepted methods order as per WPS338
 
+### Misc
+- Fix documentation mismatch between default setting for `max-string-usages` and enforced rule
+
 ## 0.16.2
 
 ### Misc
