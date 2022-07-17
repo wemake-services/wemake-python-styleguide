@@ -101,7 +101,7 @@ You can also show all options that ``flake8`` supports by running:
     :str:`wemake_python_styleguide.options.defaults.MAX_DECORATORS`
 - ``max-string-usages`` - maximum number of repeated string constants
     in your modules, defaults to
-    :str:`wemake_python_styleguide.options.defaults.MAX_DECORATORS`
+    :str:`wemake_python_styleguide.options.defaults.MAX_STRING_USAGES`
 - ``max-awaits`` - maximum allowed number of ``await``
     expressions in one function, defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_AWAITS`
