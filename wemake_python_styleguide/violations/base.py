@@ -76,8 +76,7 @@ class ViolationPostfixes(enum.Enum):
     less_than = ' < {0}'
 
 
-# TODO: remove `noqa` after a new release:
-class BaseViolation(object, metaclass=abc.ABCMeta):  # noqa: WPS338
+class BaseViolation(object, metaclass=abc.ABCMeta):
     """
     Abstract base class for all style violations.
 
