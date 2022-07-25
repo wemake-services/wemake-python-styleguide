@@ -21,14 +21,16 @@ Semantic versioning in our case means:
 
 ### Features
 
-- Adds `__init_subclass__` in the beginning of accepted methods 
+- Adds `__init_subclass__` in the beginning of accepted methods
   order as per WPS338 #2411
 
 ### Misc
 
 - Adds full violation codes to docs and `BaseViolation.full_code` #2409
 - Fix documentation mismatch between default setting
-  for `max-string-usages` and enforced rule  #2456
+  for `max-string-usages` and enforced rule #2456
+- Domain name was changed from `wemake-python-stylegui.de`
+  to `wemake-python-styleguide.rtfd.io`
 
 
 ## 0.16.1
