@@ -19,6 +19,9 @@ from wemake_python_styleguide.logic.tree import (
 )
 from wemake_python_styleguide.violations import best_practices as bp
 from wemake_python_styleguide.violations import consistency, oop
+from wemake_python_styleguide.violations.best_practices import (
+    WrongFunctionCallViolation,
+)
 from wemake_python_styleguide.visitors import base, decorators
 
 
@@ -235,6 +238,18 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         elif isinstance(stmt, ast.Expr) and isinstance(stmt.value, ast.Call):
             return stmt.value
         return None
+
+    def _check_super_in_generator_expr(
+        self,
+        call: ast.Call,
+    ) -> None:
+        function_name = functions.given_function_called(call, {'super'})
+        if not function_name:
+            return
+        elif len(call.args) == 2:
+            return
+        elif walk.get_closest_parent(call, ast.GeneratorExp):
+            self.add_violation(WrongFunctionCallViolation(call, text=function_name))
 
     def _check_useless_overwritten_methods(
         self,
