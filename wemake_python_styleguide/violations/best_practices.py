@@ -2770,3 +2770,43 @@ class GettingElementByUnpackingViolation(ASTViolation):
         'Found unpacking used to get a single element from a collection'
     )
     code = 472
+
+
+@final
+class WrongEmptyLinesCountVisitorViolation(ASTViolation):
+    """
+    Limit empty lines in functions or methods body.
+
+    Reasoning:
+        Functions or methods have few empty lines, it not holistic,
+        and it makes sense to divide the method into several.
+
+    Solution:
+        Limit count of empty lines of the function or method body
+
+    Example::
+
+        # Correct:
+        def func(name):
+            foo()
+            if name == 'Moonflower':
+                print('Love')
+            baz()
+
+        # Wrong:
+        def func(name):
+            foo()
+
+            if name == 'Moonflower':
+                print('Love')
+
+            baz()
+
+    .. versionadded:: 0.17.0
+
+    """
+
+    error_template = (
+        'Found wrong empty lines count: {0}'
+    )
+    code = 473
