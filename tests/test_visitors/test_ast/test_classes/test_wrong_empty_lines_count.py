@@ -53,6 +53,17 @@ def func():
 """
 
 
+allow_function_with_comments = """
+def log_costomer_info(customer):
+    # printing customer name
+    print(customer.name)
+    # printing customer phone
+    print(customer.phone)
+    # printing customer company
+    print(customer.company)
+"""
+
+
 @pytest.mark.parametrize('input_', [
     class_with_wrong_method,
     wrong_function,
@@ -77,6 +88,7 @@ def test_wrong(
 @pytest.mark.parametrize('input_', [
     class_with_allow_method,
     allow_function,
+    allow_function_with_comments,
 ])
 def test_success(
     input_,
