@@ -267,6 +267,11 @@ class Configuration(object):
             type='string',
             comma_separated_list=True,
         ),
+        _Option(
+            '--available-expressions-for-one-empty-line',
+            defaults.AVAILABLE_EXPRESSIONS_FOR_ONE_EMPTY_LINE,
+            'Count of expressions for one empty line if function body.',
+        ),
 
         # Complexity:
 
