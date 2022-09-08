@@ -2,7 +2,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
-    WrongEmptyLinesCountVisitorViolation,
+    WrongEmptyLinesCountViolation,
 )
 from wemake_python_styleguide.visitors.ast.function_empty_lines import (
     WrongEmptyLinesCountVisitor,
@@ -82,7 +82,7 @@ def test_wrong(
     visitor = WrongEmptyLinesCountVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [WrongEmptyLinesCountVisitorViolation])
+    assert_errors(visitor, [WrongEmptyLinesCountViolation])
 
 
 @pytest.mark.parametrize('input_', [
@@ -103,4 +103,4 @@ def test_success(
     visitor = WrongEmptyLinesCountVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [WrongEmptyLinesCountVisitorViolation])
+    assert_errors(visitor, [WrongEmptyLinesCountViolation])

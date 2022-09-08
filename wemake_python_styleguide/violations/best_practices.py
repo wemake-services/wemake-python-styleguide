@@ -2773,7 +2773,7 @@ class GettingElementByUnpackingViolation(ASTViolation):
 
 
 @final
-class WrongEmptyLinesCountVisitorViolation(ASTViolation):
+class WrongEmptyLinesCountViolation(ASTViolation):
     """
     Limit empty lines in functions or methods body.
 

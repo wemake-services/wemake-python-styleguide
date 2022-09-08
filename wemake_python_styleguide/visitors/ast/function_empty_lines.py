@@ -40,7 +40,7 @@ class WrongEmptyLinesCountVisitor(base.BaseNodeVisitor):
                 continue
             if empty_lines_count >= available_empty_lines:
                 self.add_violation(
-                    best_practices.WrongEmptyLinesCountVisitorViolation(
+                    best_practices.WrongEmptyLinesCountViolation(
                         node,
                         text=str(empty_lines_count),
                         baseline=available_empty_lines,
