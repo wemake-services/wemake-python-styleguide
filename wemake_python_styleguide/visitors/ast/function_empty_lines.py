@@ -46,6 +46,7 @@ class WrongEmptyLinesCountVisitor(base.BaseNodeVisitor):
                         baseline=available_empty_lines,
                     ),
                 )
+        self.generic_visit(node)
 
     def _available_empty_lines(self, lines_with_expressions_count: int) -> int:
         option = self.options.available_expressions_for_one_empty_line
