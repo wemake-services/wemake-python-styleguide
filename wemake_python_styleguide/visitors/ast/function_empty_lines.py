@@ -38,7 +38,7 @@ class WrongEmptyLinesCountVisitor(base.BaseNodeVisitor):
             )
             if not empty_lines_count:
                 continue
-            if empty_lines_count >= available_empty_lines:
+            if empty_lines_count > available_empty_lines:
                 self.add_violation(
                     best_practices.WrongEmptyLinesCountViolation(
                         node,
@@ -50,4 +50,6 @@ class WrongEmptyLinesCountVisitor(base.BaseNodeVisitor):
 
     def _available_empty_lines(self, lines_with_expressions_count: int) -> int:
         option = self.options.available_expressions_for_one_empty_line
+        if option == 0:
+            return 0
         return math.floor(lines_with_expressions_count / option)
