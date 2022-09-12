@@ -275,5 +275,5 @@ class ConfigurationOptions(Protocol):
         ...
 
     @property
-    def available_expressions_for_one_empty_line(self) -> int:
+    def exps_for_one_empty_line(self) -> int:
         ...

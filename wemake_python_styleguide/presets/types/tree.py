@@ -11,6 +11,7 @@ from wemake_python_styleguide.visitors.ast import (  # noqa: WPS235
     conditions,
     decorators,
     exceptions,
+    function_empty_lines,
     functions,
     imports,
     iterables,
@@ -21,7 +22,6 @@ from wemake_python_styleguide.visitors.ast import (  # noqa: WPS235
     redundancy,
     statements,
     subscripts,
-    function_empty_lines,
 )
 
 #: Used to store all general visitors to be later passed to checker:

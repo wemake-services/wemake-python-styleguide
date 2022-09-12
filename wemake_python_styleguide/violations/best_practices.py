@@ -2805,9 +2805,9 @@ class WrongEmptyLinesCountViolation(ASTViolation):
             baz()
 
     Configuration:
-        This rule is configurable with ``--available-expressions-for-one-empty-line``.
+        This rule is configurable with ``--exps-for-one-empty-line``.
         Default:
-        :str:`wemake_python_styleguide.options.defaults.AVAILABLE_EXPRESSIONS_FOR_ONE_EMPTY_LINE`
+        :str:`wemake_python_styleguide.options.defaults.EXPS_FOR_ONE_EMPTY_LINE`
 
     .. versionadded:: 0.17.0
 

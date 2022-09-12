@@ -17,6 +17,8 @@ class WrongClass(object):
         bar()
 
         baz()
+
+        lighter()
 """
 
 class_with_allow_method = """
