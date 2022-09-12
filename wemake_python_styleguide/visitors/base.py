@@ -136,7 +136,7 @@ class BaseVisitor(object, metaclass=abc.ABCMeta):
         """
 
 
-class BaseNodeVisitor(ast.NodeVisitor, BaseVisitor, metaclass=abc.ABCMeta):
+class BaseNodeVisitor(ast.NodeVisitor, BaseVisitor):
     """
     Allows to store violations while traversing node tree.
 
@@ -224,7 +224,7 @@ class BaseFilenameVisitor(BaseVisitor, metaclass=abc.ABCMeta):
             self._post_visit()
 
 
-class BaseTokenVisitor(BaseVisitor, metaclass=abc.ABCMeta):
+class BaseTokenVisitor(BaseVisitor):
     """
     Allows to check ``tokenize`` sequences.
 
