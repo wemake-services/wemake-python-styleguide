@@ -59,6 +59,9 @@ You can also show all options that ``flake8`` supports by running:
 - ``forbidden-inline-ignore`` - list of codes of violations or
     class of violations that are forbidden to ignore inline, defaults to
     :str:`wemake_python_styleguide.options.defaults.FORBIDDEN_INLINE_IGNORE`
+- ``available-expressions-for-one-empty-line`` - number of expressions in
+    function or method body for available empty line (without code)
+    :str:`wemake_python_styleguide.options.defaults.AVAILABLE_EXPRESSIONS_FOR_ONE_EMPTY_LINE`
 
 
 .. rubric:: Complexity options

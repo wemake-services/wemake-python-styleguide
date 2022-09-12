@@ -303,6 +303,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS613': 1,
     'WPS614': 1,
     'WPS615': 2,
+    'WPS473': 0,
 })
 
 # Violations which may be tweaked by `i_control_code` option:

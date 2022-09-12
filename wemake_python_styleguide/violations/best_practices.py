@@ -89,6 +89,7 @@ Summary
    KwargsUnpackingInClassDefinitionViolation
    ConsecutiveSlicesViolation
    GettingElementByUnpackingViolation
+   WrongEmptyLinesCountViolation
 
 Best practices
 --------------
@@ -166,6 +167,7 @@ Best practices
 .. autoclass:: KwargsUnpackingInClassDefinitionViolation
 .. autoclass:: ConsecutiveSlicesViolation
 .. autoclass:: GettingElementByUnpackingViolation
+.. autoclass:: WrongEmptyLinesCountViolation
 
 """
 
@@ -2801,6 +2803,11 @@ class WrongEmptyLinesCountViolation(ASTViolation):
                 print('Love')
 
             baz()
+
+    Configuration:
+        This rule is configurable with ``--available-expressions-for-one-empty-line``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.AVAILABLE_EXPRESSIONS_FOR_ONE_EMPTY_LINE`
 
     .. versionadded:: 0.17.0
 
