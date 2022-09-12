@@ -192,7 +192,7 @@ class BaseViolation(object, metaclass=abc.ABCMeta):  # noqa: WPS338
         """Base method for showing error location."""
 
 
-class _BaseASTViolation(BaseViolation, metaclass=abc.ABCMeta):
+class _BaseASTViolation(BaseViolation):
     """Used as a based type for all ``ast`` violations."""
 
     _node: Optional[ast.AST]
@@ -204,13 +204,13 @@ class _BaseASTViolation(BaseViolation, metaclass=abc.ABCMeta):
         return line_number, column_offset
 
 
-class ASTViolation(_BaseASTViolation, metaclass=abc.ABCMeta):
+class ASTViolation(_BaseASTViolation):
     """Violation for ``ast`` based style visitors."""
 
     _node: ast.AST
 
 
-class MaybeASTViolation(_BaseASTViolation, metaclass=abc.ABCMeta):
+class MaybeASTViolation(_BaseASTViolation):
     """
     Violation for ``ast`` and modules visitors.
 
@@ -228,7 +228,7 @@ class MaybeASTViolation(_BaseASTViolation, metaclass=abc.ABCMeta):
         super().__init__(node, text=text, baseline=baseline)
 
 
-class TokenizeViolation(BaseViolation, metaclass=abc.ABCMeta):
+class TokenizeViolation(BaseViolation):
     """Violation for ``tokenize`` based visitors."""
 
     _node: tokenize.TokenInfo
@@ -238,7 +238,7 @@ class TokenizeViolation(BaseViolation, metaclass=abc.ABCMeta):
         return self._node.start
 
 
-class SimpleViolation(BaseViolation, metaclass=abc.ABCMeta):
+class SimpleViolation(BaseViolation):
     """Violation for cases where there's no associated nodes."""
 
     _node: None
