@@ -48,6 +48,7 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
         '\n',
         '\r\n',
         '\t',
+        '|',
         b' ',
         b'.',
         b',',
@@ -55,6 +56,7 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
         b'\n',
         b'\r\n',
         b'\t',
+        b'|',
     ))
 
     def __init__(self, *args, **kwargs) -> None:
