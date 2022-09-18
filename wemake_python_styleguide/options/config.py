@@ -273,7 +273,7 @@ class Configuration(object):
         _Option(
             '--exps-for-one-empty-line',
             defaults.EXPS_FOR_ONE_EMPTY_LINE,
-            'Count of expressions for one empty line if function body.',
+            'Count of expressions for one empty line in a function body.',
         ),
 
         # Complexity:

@@ -26,14 +26,14 @@ class WrongEmptyLinesCountVisitor(base.BaseNodeVisitor):
             return
         lines_range = set(range(start_line, node.end_lineno))
         lines_without_expressions = self._lines_without_expressions(
-            copy(lines_range), node,
+            lines_range.copy(), node,
         )
         empty_lines_count = len(lines_without_expressions)
+        if not empty_lines_count:
+            return
         available_empty_lines = self._available_empty_lines(
             len(lines_range - lines_without_expressions),
         )
-        if not empty_lines_count:
-            return
         if empty_lines_count > available_empty_lines:
             self.add_violation(
                 best_practices.WrongEmptyLinesCountViolation(
@@ -51,7 +51,7 @@ class WrongEmptyLinesCountVisitor(base.BaseNodeVisitor):
     ) -> set[int]:
         for subnode in ast.walk(node):
             if isinstance(subnode, ast.Constant) and subnode.end_lineno:
-                lines_range = lines_range - set(range(
+                lines_range -= set(range(
                     subnode.lineno, subnode.end_lineno + 1,
                 ))
             with suppress(AttributeError, KeyError):
