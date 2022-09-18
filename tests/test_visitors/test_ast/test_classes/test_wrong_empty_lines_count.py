@@ -21,7 +21,7 @@ class WrongClass(object):
         lighter()
 """
 
-class_with_allow_method = """
+class_with_valid_method = """
 class WrongClass(object):
 
     def wrong_method(self):
@@ -79,7 +79,7 @@ def test_wrong(
     assert_error_text,
 ):
     """Testing wrong cases."""
-    tree = parse_ast_tree(class_with_wrong_method)
+    tree = parse_ast_tree(input_)
 
     visitor = WrongEmptyLinesCountVisitor(default_options, tree=tree)
     visitor.run()
@@ -88,7 +88,7 @@ def test_wrong(
 
 
 @pytest.mark.parametrize('input_', [
-    class_with_allow_method,
+    class_with_valid_method,
     allow_function,
     allow_function_with_comments,
 ])
@@ -100,7 +100,7 @@ def test_success(
     assert_error_text,
 ):
     """Testing available cases."""
-    tree = parse_ast_tree(class_with_wrong_method)
+    tree = parse_ast_tree(input_)
 
     visitor = WrongEmptyLinesCountVisitor(default_options, tree=tree)
     visitor.run()
