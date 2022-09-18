@@ -2780,8 +2780,8 @@ class WrongEmptyLinesCountViolation(ASTViolation):
     Limit empty lines in functions or methods body.
 
     Reasoning:
-        Functions or methods have few empty lines, it not holistic,
-        and it makes sense to divide the method into several.
+        It's not holistic to have functions or methods that contain many empty lines,
+        and it makes sense to divide the method into several ones.
 
     Solution:
         Limit count of empty lines of the function or method body
