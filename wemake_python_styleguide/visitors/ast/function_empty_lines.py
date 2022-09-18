@@ -29,11 +29,11 @@ class WrongEmptyLinesCountVisitor(base.BaseNodeVisitor):
             lines_range.copy(), node,
         )
         empty_lines_count = len(lines_without_expressions)
+        if not empty_lines_count:
+            return
         available_empty_lines = self._available_empty_lines(
             len(lines_range - lines_without_expressions),
         )
-        if not empty_lines_count:
-            return
         if empty_lines_count > available_empty_lines:
             self.add_violation(
                 best_practices.WrongEmptyLinesCountViolation(
