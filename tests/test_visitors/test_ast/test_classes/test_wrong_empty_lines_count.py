@@ -56,7 +56,7 @@ def func():
 
 
 allow_function_with_comments = """
-def log_costomer_info(customer):
+def log_customer_info(customer):
     # printing customer name
     print(customer.name)
     # printing customer phone
