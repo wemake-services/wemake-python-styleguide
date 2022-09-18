@@ -26,7 +26,7 @@ class WrongEmptyLinesCountVisitor(base.BaseNodeVisitor):
             return
         lines_range = set(range(start_line, node.end_lineno))
         lines_without_expressions = self._lines_without_expressions(
-            copy(lines_range), node,
+            lines_range.copy(), node,
         )
         empty_lines_count = len(lines_without_expressions)
         available_empty_lines = self._available_empty_lines(
