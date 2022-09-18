@@ -2814,6 +2814,6 @@ class WrongEmptyLinesCountViolation(ASTViolation):
     """
 
     error_template = (
-        'Found wrong empty lines count: {0}'
+        'Found too many empty lines: {0}'
     )
     code = 473
