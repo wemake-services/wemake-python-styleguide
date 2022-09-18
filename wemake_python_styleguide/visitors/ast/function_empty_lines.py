@@ -51,7 +51,7 @@ class WrongEmptyLinesCountVisitor(base.BaseNodeVisitor):
     ) -> set[int]:
         for subnode in ast.walk(node):
             if isinstance(subnode, ast.Constant) and subnode.end_lineno:
-                lines_range = lines_range - set(range(
+                lines_range -= set(range(
                     subnode.lineno, subnode.end_lineno + 1,
                 ))
             with suppress(AttributeError, KeyError):
