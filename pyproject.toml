@@ -81,7 +81,7 @@ darglint = "^1.2"
 sphinx = { version = "^5.0", optional = true }
 sphinx-autodoc-typehints = { version = "^1.12", optional = true }
 sphinxcontrib-mermaid = { version = "^0.7", optional = true }
-added-value = { version = "^0.20", optional = true }
+added-value = { version = ">=0.20,<0.22", optional = true }
 m2r2 = { version = "^0.3", optional = true }
 tomlkit = { version = "^0.11", optional = true }
 

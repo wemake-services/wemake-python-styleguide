@@ -1,7 +1,7 @@
 [[package]]
 name = "added-value"
-version = "0.20.0"
-description = "Sphinx \"added-value\" extension"
+version = "0.21.3"
+description = "Sphinx extension for embedding values extracted from Python modules"
 category = "main"
 optional = true
 python-versions = "*"
@@ -14,9 +14,9 @@ six = "*"
 sphinx = "*"
 
 [package.extras]
-deploy = ["bumpversion", "twine", "wheel"]
-docs = ["sphinx", "sphinx-rtd-theme"]
-test = ["beautifulsoup4", "coveralls", "hypothesis", "pytest", "pytest-cov"]
+dev = ["build", "bumpversion", "twine", "wheel"]
+doc = ["better-apidoc", "sphinx", "sphinx-rtd-theme"]
+test = ["beautifulsoup4", "coverage", "hypothesis", "pytest", "pytest-cov", "tox"]
 
 [[package]]
 name = "aiocontextvars"
@@ -1732,12 +1732,12 @@ docs = ["sphinx", "sphinx-autodoc-typehints", "sphinxcontrib-mermaid", "added-va
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "310bbf107f1e89e528fb3e76cc2bc5519183b30b5e0e0be569f491d45544a3b1"
+content-hash = "4445e06d4e4773fb9df554b280a4ffb69b96b95332e5d7c997d1715fedd52736"
 
 [metadata.files]
 added-value = [
-    {file = "added-value-0.20.0.tar.gz", hash = "sha256:329757c8cdf99ad9aca7fbbeb1335b008b45aaa6cd745e44f10819e3839def53"},
-    {file = "added_value-0.20.0-py2.py3-none-any.whl", hash = "sha256:28b93bc7f76b277cca73f0bb2659b8bf81f8d6415b1cb7b5ea995c79a0870551"},
+    {file = "added-value-0.21.3.tar.gz", hash = "sha256:e55e319fd96253f511904a18e886bbc213ff6ab9bcfec7514d14d6e9a89f53bf"},
+    {file = "added_value-0.21.3-py2.py3-none-any.whl", hash = "sha256:dd96203b616946d718ffc81a1cf0e5c670ec9899d1504caa86ef211ab77d829a"},
 ]
 aiocontextvars = [
     {file = "aiocontextvars-0.2.2-py2.py3-none-any.whl", hash = "sha256:885daf8261818767d8f7cbd79f9d4482d118f024b6586ef6e67980236a27bfa3"},
