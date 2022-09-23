@@ -48,6 +48,7 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
         '\n',
         '\r\n',
         '\t',
+        '|',
         b' ',
         b'.',
         b',',

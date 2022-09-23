@@ -32,6 +32,10 @@ Semantic versioning in our case means:
 - Domain name was changed from `wemake-python-stylegui.de`
   to `wemake-python-styleguide.rtfd.io`
 
+### Bugfixes
+
+- Fixes `WPS226` false positives on `|` use in `SomeType | AnotherType` type hints syntax
+
 
 ## 0.16.1
 

@@ -177,6 +177,8 @@ def test_string_overuse(
     '"GenericType[int, str]"',
     '"int"',
     'List["int"]',
+    'list[int]',
+    'int | None',
 ])
 def test_string_type_annotations(
     assert_errors,
