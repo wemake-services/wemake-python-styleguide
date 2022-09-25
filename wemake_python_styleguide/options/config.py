@@ -156,7 +156,7 @@ from typing import ClassVar, Mapping, Optional, Sequence, Union
 
 import attr
 from flake8.options.manager import OptionManager
-from typing_extensions import Final, TypeAlias, final
+from typing_extensions import Final, эTypeAlias, final
 
 from wemake_python_styleguide.options import defaults
 
@@ -264,7 +264,7 @@ class Configuration(object):
             '--forbidden-inline-ignore',
             defaults.FORBIDDEN_INLINE_IGNORE,
             'Codes of violations or class of violations forbidden to ignore.',
-            type='String',
+            type=String,
             comma_separated_list=True,
         ),
 
