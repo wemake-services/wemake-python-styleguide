@@ -521,7 +521,7 @@ class YieldMagicMethodViolation(ASTViolation):
 
     """
 
-    error_template = 'Found forbidden `yield` magic method usage'
+    error_template = 'Found forbidden `yield` magic method usage: {0}'
     code = 611
     previous_codes = {439, 435}
 

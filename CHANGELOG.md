@@ -30,6 +30,8 @@ Semantic versioning in our case means:
 - Fixes `WPS226` false positives on `|` use in `SomeType | AnotherType`
   type hints syntax
 - Now `-1` is not reported to be an overused expression
+- Allow `__aiter__` to be async iterator
+- Adds violation method name to error message of `YieldMagicMethodViolation`
 
 ### Misc
 
