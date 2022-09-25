@@ -36,6 +36,8 @@ def func():
 
     a = 1 + 4
 
+    bar()
+
     baz()
 """
 
@@ -43,7 +45,11 @@ wrong_function_with_loop = """
 def func():
     for x in range(10):
 
-        requests.get('https://github.com/wemake-services/wemake-python-styleguide')
+        requests.get(
+
+
+            'https://github.com/wemake-services/wemake-python-styleguide'
+        )
 """
 
 allow_function = """
@@ -73,15 +79,16 @@ def log_customer_info(customer):
 ])
 def test_wrong(
     input_,
-    parse_ast_tree,
     default_options,
     assert_errors,
-    assert_error_text,
+    parse_tokens,
 ):
     """Testing wrong cases."""
-    tree = parse_ast_tree(input_)
+    file_tokens = parse_tokens(input_)
 
-    visitor = WrongEmptyLinesCountVisitor(default_options, tree=tree)
+    visitor = WrongEmptyLinesCountVisitor(
+        default_options, file_tokens=file_tokens,
+    )
     visitor.run()
 
     assert_errors(visitor, [WrongEmptyLinesCountViolation])
@@ -94,15 +101,16 @@ def test_wrong(
 ])
 def test_success(
     input_,
-    parse_ast_tree,
+    parse_tokens,
     default_options,
     assert_errors,
-    assert_error_text,
 ):
     """Testing available cases."""
-    tree = parse_ast_tree(input_)
+    file_tokens = parse_tokens(input_)
 
-    visitor = WrongEmptyLinesCountVisitor(default_options, tree=tree)
+    visitor = WrongEmptyLinesCountVisitor(
+        default_options, file_tokens=file_tokens,
+    )
     visitor.run()
 
-    assert_errors(visitor, [WrongEmptyLinesCountViolation])
+    assert_errors(visitor, [])

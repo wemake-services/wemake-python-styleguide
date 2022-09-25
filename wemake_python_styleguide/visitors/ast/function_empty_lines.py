@@ -1,65 +1,60 @@
-import ast
 import math
-from contextlib import suppress
-from copy import copy
+import tokenize
 
 from typing_extensions import final
 
-from wemake_python_styleguide import types
 from wemake_python_styleguide.violations import best_practices
 from wemake_python_styleguide.visitors import base
-from wemake_python_styleguide.visitors.decorators import alias
 
 
 @final
-@alias('visit_any_function', (
-    'visit_FunctionDef',
-    'visit_AsyncFunctionDef',
-))
-class WrongEmptyLinesCountVisitor(base.BaseNodeVisitor):
+class WrongEmptyLinesCountVisitor(base.BaseTokenVisitor):
     """Restricts empty lines in function or method body."""
 
-    def visit_any_function(self, node: types.AnyFunctionDef) -> None:
+    def __init__(self, *args, **kwargs) -> None:
+        """Initializes a counter."""
+        super().__init__(*args, **kwargs)
+        self._empty_lines_count = 0
+        self._function_start_line = 0
+
+    def visit(self, token: tokenize.TokenInfo) -> None:
         """Find empty lines count."""
-        start_line = node.lineno
-        if not start_line or not node.end_lineno:
-            return
-        lines_range = set(range(start_line, node.end_lineno))
-        lines_without_expressions = self._lines_without_expressions(
-            lines_range.copy(), node,
-        )
-        empty_lines_count = len(lines_without_expressions)
-        if not empty_lines_count:
-            return
-        available_empty_lines = self._available_empty_lines(
-            len(lines_range - lines_without_expressions),
-        )
-        if empty_lines_count > available_empty_lines:
-            self.add_violation(
-                best_practices.WrongEmptyLinesCountViolation(
-                    node,
-                    text=str(empty_lines_count),
-                    baseline=available_empty_lines,
-                ),
-            )
-        self.generic_visit(node)
+        self._try_mark_function_start(token)
+        if self._function_start_line:
+            if token.type == tokenize.NL and token.line == '\n':
+                self._empty_lines_count += 1
+            self._check_empty_lines(token)
 
-    def _lines_without_expressions(
+    def _check_empty_lines(self, token: tokenize.TokenInfo):
+        if token.type == tokenize.DEDENT and token.line == '':
+            func_lines = token.start[0] - self._function_start_line - 1
+            if self._empty_lines_count:
+                available_empty_lines = self._available_empty_lines(
+                    func_lines,
+                    self._empty_lines_count,
+                )
+                if self._empty_lines_count > available_empty_lines:
+                    self.add_violation(
+                        best_practices.WrongEmptyLinesCountViolation(
+                            token,
+                            text=str(self._empty_lines_count),
+                            baseline=available_empty_lines,
+                        ),
+                    )
+                self._function_start_line = 0
+
+    def _try_mark_function_start(self, token: tokenize.TokenInfo):
+        if token.string == 'def':
+            self._empty_lines_count = 0
+            self._function_start_line = token.start[0]
+
+    def _available_empty_lines(
         self,
-        lines_range: set[int],
-        node,
-    ) -> set[int]:
-        for subnode in ast.walk(node):
-            if isinstance(subnode, ast.Constant) and subnode.end_lineno:
-                lines_range -= set(range(
-                    subnode.lineno, subnode.end_lineno + 1,
-                ))
-            with suppress(AttributeError, KeyError):
-                lines_range.remove(subnode.lineno)
-        return lines_range
-
-    def _available_empty_lines(self, lines_with_expressions_count: int) -> int:
+        function_len: int,
+        empty_lines: int,
+    ) -> int:
         option = self.options.exps_for_one_empty_line
         if option == 0:
             return 0
-        return math.floor(lines_with_expressions_count / option)
+        lines_with_expressions = function_len - empty_lines
+        return math.floor(lines_with_expressions / option)

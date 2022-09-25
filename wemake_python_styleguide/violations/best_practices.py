@@ -2775,13 +2775,14 @@ class GettingElementByUnpackingViolation(ASTViolation):
 
 
 @final
-class WrongEmptyLinesCountViolation(ASTViolation):
+class WrongEmptyLinesCountViolation(TokenizeViolation):
     """
     Limit empty lines in functions or methods body.
 
     Reasoning:
-        It's not holistic to have functions or methods that contain many empty lines,
-        and it makes sense to divide the method into several ones.
+        It's not holistic to have functions or methods that contain many
+        empty lines, and it makes sense to divide the method into several
+        ones.
 
     Solution:
         Limit count of empty lines of the function or method body
