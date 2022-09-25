@@ -156,7 +156,7 @@ from typing import ClassVar, Mapping, Optional, Sequence, Union
 
 import attr
 from flake8.options.manager import OptionManager
-from typing_extensions import TypeAlias, final
+from typing_extensions import Final, TypeAlias, final
 
 from wemake_python_styleguide.options import defaults
 
