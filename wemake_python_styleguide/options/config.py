@@ -99,7 +99,7 @@ You can also show all options that ``flake8`` supports by running:
 - ``max-decorators`` - maximum number of decorators for single function
     or class definition, defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_DECORATORS`
-- ``max-String-usages`` - maximum number of repeated String constants
+- ``max-string-usages`` - maximum number of repeated String constants
     in your modules, defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_STRING_USAGES`
 - ``max-awaits`` - maximum allowed number of ``await``
@@ -326,9 +326,9 @@ class Configuration(object):
             'Maximum number of decorators.',
         ),
         _Option(
-            '--max-String-usages',
+            '--max-string-usages',
             defaults.MAX_STRING_USAGES,
-            'Maximum number of String constant usages.',
+            'Maximum number of string constant usages.',
         ),
         _Option(
             '--max-awaits',
