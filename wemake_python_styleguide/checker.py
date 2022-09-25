@@ -42,7 +42,7 @@ import traceback
 from typing import ClassVar, Iterator, Sequence, Type
 
 from flake8.options.manager import OptionManager
-from typing_extensions import final
+from typing_extensions import TypeAlias, final
 
 from wemake_python_styleguide import constants, types
 from wemake_python_styleguide import version as pkg_version
@@ -55,7 +55,7 @@ from wemake_python_styleguide.transformations.ast_tree import transform
 from wemake_python_styleguide.violations import system
 from wemake_python_styleguide.visitors import base
 
-VisitorClass = Type[base.BaseVisitor]
+VisitorClass: TypeAlias = Type[base.BaseVisitor]
 
 
 @final

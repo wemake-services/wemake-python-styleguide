@@ -1,7 +1,9 @@
 from typing import Union
 
+from typing_extensions import TypeAlias
+
 from wemake_python_styleguide.compat.nodes import NamedExpr
 from wemake_python_styleguide.types import AnyAssign
 
 #: When we search for assign elements, we also need typed assign.
-AnyAssignWithWalrus = Union[AnyAssign, NamedExpr]
+AnyAssignWithWalrus: TypeAlias = Union[AnyAssign, NamedExpr]

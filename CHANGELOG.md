@@ -21,10 +21,19 @@ Semantic versioning in our case means:
 
 ### Features
 
+- **Breaking**: drops `python3.6` support
 - Adds `__init_subclass__` in the beginning of accepted methods
   order as per WPS338 #2411
 
 - Adds `WrongEmptyLinesCountViolation` #2486
+
+### Bugfixes
+
+- Fixes `WPS226` false positives on `|` use in `SomeType | AnotherType`
+  type hints syntax
+- Now `-1` is not reported to be an overused expression
+- Allow `__aiter__` to be async iterator
+- Adds violation method name to error message of `YieldMagicMethodViolation`
 
 ### Misc
 

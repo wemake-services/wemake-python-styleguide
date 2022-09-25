@@ -1,11 +1,13 @@
 import ast
 from typing import List, Union
 
+from typing_extensions import TypeAlias
+
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming import access
 
-_VarDefinition = Union[ast.AST, ast.expr]
-_LocalVariable = Union[ast.Name, ast.ExceptHandler]
+_VarDefinition: TypeAlias = Union[ast.AST, ast.expr]
+_LocalVariable: TypeAlias = Union[ast.Name, ast.ExceptHandler]
 
 
 def get_variable_name(node: _LocalVariable) -> str:

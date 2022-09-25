@@ -10,9 +10,11 @@ Adapted from: https://github.com/best-doctor/flake8-annotations-complexity
 import ast
 from typing import Union
 
+from typing_extensions import TypeAlias
+
 from wemake_python_styleguide.compat.functions import get_slice_expr
 
-_Annotation = Union[
+_Annotation: TypeAlias = Union[
     ast.expr,
     ast.Str,
 ]

@@ -1,7 +1,7 @@
 from typing import Optional, Sequence, Tuple, Type, Union
 
 import pytest
-from typing_extensions import Final
+from typing_extensions import Final, TypeAlias
 
 from wemake_python_styleguide.violations.base import (
     ASTViolation,
@@ -10,7 +10,7 @@ from wemake_python_styleguide.violations.base import (
 )
 from wemake_python_styleguide.visitors.base import BaseVisitor
 
-_IgnoredTypes = Union[
+_IgnoredTypes: TypeAlias = Union[
     Type[BaseViolation],
     Tuple[Type[BaseViolation], ...],
     None,

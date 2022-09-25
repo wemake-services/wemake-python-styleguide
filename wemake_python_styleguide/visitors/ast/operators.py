@@ -1,7 +1,7 @@
 import ast
 from typing import ClassVar, Mapping, Optional, Tuple, Type, Union
 
-from typing_extensions import final
+from typing_extensions import TypeAlias, final
 
 from wemake_python_styleguide.compat.aliases import TextNodes
 from wemake_python_styleguide.compat.nodes import NamedExpr
@@ -19,9 +19,12 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors import base, decorators
 
-_MeaninglessOperators = Mapping[complex, Tuple[Type[ast.operator], ...]]
-_OperatorLimits = Mapping[Type[ast.unaryop], int]
-_NumbersAndConstants = Union[ast.Num, ast.NameConstant]
+_MeaninglessOperators: TypeAlias = Mapping[
+    complex,
+    Tuple[Type[ast.operator], ...],
+]
+_OperatorLimits: TypeAlias = Mapping[Type[ast.unaryop], int]
+_NumbersAndConstants: TypeAlias = Union[ast.Num, ast.NameConstant]
 
 
 @final

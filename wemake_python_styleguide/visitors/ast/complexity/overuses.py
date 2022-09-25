@@ -10,7 +10,7 @@ from typing import (
     Union,
 )
 
-from typing_extensions import final
+from typing_extensions import TypeAlias, final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic import source, walk
@@ -21,9 +21,9 @@ from wemake_python_styleguide.violations import complexity
 from wemake_python_styleguide.visitors import base, decorators
 
 #: We use these types to store the number of nodes usage in different contexts.
-_Expressions = DefaultDict[str, List[ast.AST]]
-_FunctionExpressions = DefaultDict[ast.AST, _Expressions]
-_StringConstants = FrozenSet[Union[str, bytes]]
+_Expressions: TypeAlias = DefaultDict[str, List[ast.AST]]
+_FunctionExpressions: TypeAlias = DefaultDict[ast.AST, _Expressions]
+_StringConstants: TypeAlias = FrozenSet[Union[str, bytes]]
 
 
 @final
@@ -48,6 +48,7 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
         '\n',
         '\r\n',
         '\t',
+        '|',
         b' ',
         b'.',
         b',',

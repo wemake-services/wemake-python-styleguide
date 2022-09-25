@@ -1,7 +1,7 @@
 import ast
 from typing import ClassVar, Dict, FrozenSet, List, Optional, Type, Union, cast
 
-from typing_extensions import final
+from typing_extensions import TypeAlias, final
 
 from wemake_python_styleguide.compat.aliases import (
     AssignNodes,
@@ -41,7 +41,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 #: Utility type to work with violations easier.
-_ReturningViolations = Union[
+_ReturningViolations: TypeAlias = Union[
     Type[InconsistentReturnViolation],
     Type[InconsistentYieldViolation],
 ]

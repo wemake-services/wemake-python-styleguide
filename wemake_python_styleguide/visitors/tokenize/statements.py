@@ -12,7 +12,7 @@ from typing import (
     Tuple,
 )
 
-from typing_extensions import final
+from typing_extensions import TypeAlias, final
 
 from wemake_python_styleguide.logic.tokens.brackets import (
     get_reverse_bracket,
@@ -44,7 +44,7 @@ from wemake_python_styleguide.violations.consistency import (
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
-TokenLines = DefaultDict[int, List[tokenize.TokenInfo]]
+TokenLines: TypeAlias = DefaultDict[int, List[tokenize.TokenInfo]]
 
 
 @final
@@ -261,10 +261,6 @@ class MultilineStringVisitor(BaseTokenVisitor):
     'visit_rbrace',
     'visit_rpar',
 ))
-@alias('visit_compat_name', (
-    'visit_name',
-    'visit_async',  # python3.6 has this token type for `async` keyword
-))
 class InconsistentComprehensionVisitor(BaseTokenVisitor):
     """
     Visitor for checking inconsistent comprehension syntax.
@@ -301,7 +297,7 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
             self._bracket_stack[-1] if self._bracket_stack else None
         )
 
-    def visit_compat_name(self, token: tokenize.TokenInfo) -> None:
+    def visit_name(self, token: tokenize.TokenInfo) -> None:
         """Builds the comprehension."""
         if not self._current_ctx:
             return

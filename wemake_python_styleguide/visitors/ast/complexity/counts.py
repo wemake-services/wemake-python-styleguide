@@ -2,7 +2,7 @@ import ast
 from collections import defaultdict
 from typing import DefaultDict, List, Union
 
-from typing_extensions import final
+from typing_extensions import TypeAlias, final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import FunctionNodes
@@ -14,9 +14,8 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 # Type aliases:
-_ConditionNodes = Union[ast.If, ast.While, ast.IfExp]
-_ModuleMembers = Union[AnyFunctionDef, ast.ClassDef]
-_ReturnLikeStatement = Union[ast.Return, ast.Yield]
+_ModuleMembers: TypeAlias = Union[AnyFunctionDef, ast.ClassDef]
+_ReturnLikeStatement: TypeAlias = Union[ast.Return, ast.Yield]
 
 
 @final

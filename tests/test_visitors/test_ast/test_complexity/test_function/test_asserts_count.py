@@ -33,10 +33,11 @@ def test_asserts_correct_count(
     assert_errors,
     parse_ast_tree,
     code,
+    mode,
     default_options,
 ):
     """Testing that asserts counted correctly."""
-    tree = parse_ast_tree(code)
+    tree = parse_ast_tree(mode(code))
 
     visitor = FunctionComplexityVisitor(default_options, tree=tree)
     visitor.run()
@@ -54,9 +55,10 @@ def test_asserts_wrong_count(
     parse_ast_tree,
     options,
     code,
+    mode,
 ):
     """Testing that many asserts raises a warning."""
-    tree = parse_ast_tree(code)
+    tree = parse_ast_tree(mode(code))
 
     option_values = options(max_asserts=1)
     visitor = FunctionComplexityVisitor(option_values, tree=tree)

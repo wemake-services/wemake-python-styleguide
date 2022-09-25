@@ -15,7 +15,7 @@ from typing import (
     Union,
 )
 
-from typing_extensions import Final, final
+from typing_extensions import Final, TypeAlias, final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import (
@@ -47,7 +47,7 @@ from wemake_python_styleguide.violations import (
 from wemake_python_styleguide.visitors import base, decorators
 
 #: Items that can be inside a hash.
-_HashItems = Sequence[Optional[ast.AST]]
+_HashItems: TypeAlias = Sequence[Optional[ast.AST]]
 
 
 @final
