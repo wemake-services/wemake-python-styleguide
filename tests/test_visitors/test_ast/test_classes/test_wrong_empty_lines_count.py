@@ -57,6 +57,7 @@ def func():
     foo()
     if name == 'Moonflower':
         print('Love')
+
     baz()
 """
 
@@ -114,3 +115,18 @@ def test_success(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+def test_zero_option(
+    parse_tokens,
+    default_options,
+    assert_errors,
+    options,
+):
+    """Test zero configuration."""
+    file_tokens = parse_tokens(allow_function)
+    visitor = WrongEmptyLinesCountVisitor(
+        options(exps_for_one_empty_line=0), file_tokens=file_tokens,
+    )
+    visitor.run()
+    assert_errors(visitor, [WrongEmptyLinesCountViolation])
