@@ -3,7 +3,7 @@ from collections import defaultdict
 from functools import reduce
 from typing import ClassVar, DefaultDict, List, Mapping, Set, Type
 
-from typing_extensions import Final, final
+from typing_extensions import Final, TypeAlias, final
 
 from wemake_python_styleguide.compat.aliases import ForNodes
 from wemake_python_styleguide.logic import source, walk
@@ -30,7 +30,7 @@ from wemake_python_styleguide.violations.refactoring import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
-_OperatorPairs = Mapping[Type[ast.boolop], Type[ast.cmpop]]
+_OperatorPairs: TypeAlias = Mapping[Type[ast.boolop], Type[ast.cmpop]]
 _ELSE_NODES: Final = (*ForNodes, ast.While, ast.Try)
 
 

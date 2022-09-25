@@ -2,7 +2,7 @@ import ast
 from collections import defaultdict
 from typing import Callable, DefaultDict, List, Set, Tuple, Union, cast
 
-from typing_extensions import final
+from typing_extensions import TypeAlias, final
 
 from wemake_python_styleguide.compat.aliases import ForNodes, WithNodes
 from wemake_python_styleguide.compat.types import AnyAssignWithWalrus
@@ -24,14 +24,14 @@ from wemake_python_styleguide.violations.best_practices import (
 from wemake_python_styleguide.visitors import base, decorators
 
 #: That's how we represent contexts for control variables.
-_BlockVariables = DefaultDict[
+_BlockVariables: TypeAlias = DefaultDict[
     ast.AST,
     DefaultDict[str, List[ast.AST]],
 ]
 
 #: That's how we filter some overlaps that do happen in Python:
-_ScopePredicate = Callable[[ast.AST, Set[str]], bool]
-_NamePredicate = Callable[[ast.AST], bool]
+_ScopePredicate: TypeAlias = Callable[[ast.AST, Set[str]], bool]
+_NamePredicate: TypeAlias = Callable[[ast.AST], bool]
 
 
 @final

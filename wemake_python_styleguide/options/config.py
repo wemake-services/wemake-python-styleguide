@@ -99,7 +99,7 @@ You can also show all options that ``flake8`` supports by running:
 - ``max-decorators`` - maximum number of decorators for single function
     or class definition, defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_DECORATORS`
-- ``max-string-usages`` - maximum number of repeated string constants
+- ``max-String-usages`` - maximum number of repeated String constants
     in your modules, defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_STRING_USAGES`
 - ``max-awaits`` - maximum allowed number of ``await``
@@ -156,12 +156,12 @@ from typing import ClassVar, Mapping, Optional, Sequence, Union
 
 import attr
 from flake8.options.manager import OptionManager
-from typing_extensions import final
+from typing_extensions import TypeAlias, final
 
 from wemake_python_styleguide.options import defaults
 
-ConfigValuesTypes = Union[str, int, bool, Sequence[str]]
-string = 'string'
+ConfigValuesTypes: TypeAlias = Union[str, int, bool, Sequence[str]]
+String: Final = 'string'
 
 
 @final
@@ -243,28 +243,28 @@ class Configuration(object):
             '--nested-classes-whitelist',
             defaults.NESTED_CLASSES_WHITELIST,
             'List of nested classes names we allow to use.',
-            type=string,
+            type=String,
             comma_separated_list=True,
         ),
         _Option(
             '--allowed-domain-names',
             defaults.ALLOWED_DOMAIN_NAMES,
             "Domain names that are removed from variable names' blacklist.",
-            type=string,
+            type=String,
             comma_separated_list=True,
         ),
         _Option(
             '--forbidden-domain-names',
             defaults.FORBIDDEN_DOMAIN_NAMES,
             "Domain names that extends variable names' blacklist.",
-            type=string,
+            type=String,
             comma_separated_list=True,
         ),
         _Option(
             '--forbidden-inline-ignore',
             defaults.FORBIDDEN_INLINE_IGNORE,
             'Codes of violations or class of violations forbidden to ignore.',
-            type='string',
+            type='String',
             comma_separated_list=True,
         ),
 
@@ -343,9 +343,9 @@ class Configuration(object):
         ),
 
         _Option(
-            '--max-string-usages',
+            '--max-String-usages',
             defaults.MAX_STRING_USAGES,
-            'Maximum number of string constant usages.',
+            'Maximum number of String constant usages.',
         ),
 
         _Option(

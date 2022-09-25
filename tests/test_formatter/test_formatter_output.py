@@ -21,7 +21,6 @@ Warning::
 
 import os
 import subprocess
-import sys
 
 import pytest
 
@@ -125,10 +124,6 @@ def test_formatter_correct(snapshot, cli_options, output):
     )
 
 
-@pytest.mark.skipif(
-    sys.version_info < (3, 7),
-    reason='3.6 is not supported by nbqa',
-)
 def test_ipynb(snapshot):
     """All correct code should not raise any violations and no output."""
     filename = './tests/fixtures/notebook.ipynb'

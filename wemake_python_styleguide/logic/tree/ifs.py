@@ -1,9 +1,11 @@
 import ast
 from typing import Iterable, List, Optional, Union
 
+from typing_extensions import TypeAlias
+
 from wemake_python_styleguide.types import AnyNodes
 
-_IfAndElifASTNode = Union[ast.If, List[ast.stmt]]
+_IfAndElifASTNode: TypeAlias = Union[ast.If, List[ast.stmt]]
 
 
 def is_elif(node: ast.If) -> bool:

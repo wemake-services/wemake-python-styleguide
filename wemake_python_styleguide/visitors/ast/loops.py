@@ -3,7 +3,7 @@ from collections import defaultdict
 from contextlib import suppress
 from typing import ClassVar, DefaultDict, List, Mapping, Sequence, Type, Union
 
-from typing_extensions import final
+from typing_extensions import TypeAlias, final
 
 from wemake_python_styleguide.compat.aliases import AssignNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
@@ -42,7 +42,7 @@ from wemake_python_styleguide.violations.refactoring import (
 from wemake_python_styleguide.visitors import base, decorators
 
 #: Type alias to specify how we check different containers in loops.
-_ContainerSpec = Mapping[Type[ast.AST], Sequence[str]]
+_ContainerSpec: TypeAlias = Mapping[Type[ast.AST], Sequence[str]]
 
 
 @final

@@ -4,7 +4,6 @@ from pep8ext_naming import NamingChecker
 from typing_extensions import final
 
 from wemake_python_styleguide.transformations.ast.bugfixes import (
-    fix_async_offset,
     fix_line_number,
 )
 from wemake_python_styleguide.transformations.ast.enhancements import (
@@ -80,7 +79,6 @@ def transform(tree: ast.AST) -> ast.AST:
         _set_function_type,
 
         # Bugfixes, order is not important:
-        fix_async_offset,
         fix_line_number,
 
         # Enhancements, order is not important:
