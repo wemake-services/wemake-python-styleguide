@@ -21,8 +21,15 @@ Semantic versioning in our case means:
 
 ### Features
 
+- **Breaking**: drops `python3.6` support
 - Adds `__init_subclass__` in the beginning of accepted methods
   order as per WPS338 #2411
+
+### Bugfixes
+
+- Fixes `WPS226` false positives on `|` use in `SomeType | AnotherType`
+  type hints syntax
+- Now `-1` is not reported to be an overused expression
 
 ### Misc
 
@@ -31,10 +38,6 @@ Semantic versioning in our case means:
   for `max-string-usages` and enforced rule #2456
 - Domain name was changed from `wemake-python-stylegui.de`
   to `wemake-python-styleguide.rtfd.io`
-
-### Bugfixes
-
-- Fixes `WPS226` false positives on `|` use in `SomeType | AnotherType` type hints syntax
 
 
 ## 0.16.1
