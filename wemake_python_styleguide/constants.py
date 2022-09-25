@@ -325,19 +325,18 @@ YIELD_MAGIC_METHODS_BLACKLIST: Final = ALL_MAGIC_METHODS.difference({
     # Allowed to be used with ``yield`` keyword:
     '__call__',
     '__iter__',
-    '__anext__',
     '__aiter__',
-    '__next__',
 })
 
 #: List of magic methods that are not allowed to be async.
 ASYNC_MAGIC_METHODS_BLACKLIST: Final = ALL_MAGIC_METHODS.difference({
     # In order of appearance on
     # https://docs.python.org/3/reference/datamodel.html#basic-customization
-    # Allowed magic methods are:
+    # Allowed async magic methods are:
     '__anext__',
     '__aenter__',
     '__aexit__',
+    '__aiter__',
     '__call__',
 })
 

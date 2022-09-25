@@ -27,6 +27,8 @@ class Test(object):
     '__str__',
     '__aenter__',
     '__exit__',
+    '__anext__',
+    '__next__',
 ])
 @pytest.mark.parametrize('statement', [
     'yield',
@@ -35,6 +37,7 @@ class Test(object):
 ])
 def test_magic_generator(
     assert_errors,
+    assert_error_text,
     parse_ast_tree,
     default_options,
     code,
@@ -48,6 +51,7 @@ def test_magic_generator(
     visitor.run()
 
     assert_errors(visitor, [YieldMagicMethodViolation])
+    assert_error_text(visitor, method)
 
 
 @pytest.mark.parametrize('code', [
@@ -90,6 +94,7 @@ def test_magic_statement(
 ])
 @pytest.mark.parametrize('method', [
     '__iter__',
+    '__aiter__',
     '__call__',
     '__custom__',
 ])
@@ -106,7 +111,7 @@ def test_iter_generator(
     method,
     statement,
 ):
-    """Testing that magic `iter` and `call` methods with `yield` are allowed."""
+    """Testing that some magic methods with `yield` are allowed."""
     tree = parse_ast_tree(code.format(method, statement))
 
     visitor = WrongMethodVisitor(default_options, tree=tree)

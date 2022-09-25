@@ -445,6 +445,7 @@ class AsyncMagicMethodViolation(ASTViolation):
     Forbid certain async magic methods.
 
     We allow to make ``__anext__``, ``__aenter__``, ``__aexit__`` async.
+    We allow to make ``__aiter__`` async if it is a generator (contains yield).
     We also allow custom magic methods to be async.
 
     See
@@ -485,6 +486,7 @@ class YieldMagicMethodViolation(ASTViolation):
     Forbid ``yield`` inside of certain magic methods.
 
     We allow to make ``__iter__`` a generator.
+    We allow to make ``__aiter__`` an async generator.
     See
     :py:data:`~wemake_python_styleguide.constants.YIELD_MAGIC_METHODS_BLACKLIST`
     for the whole list of blacklisted generator magic methods.
@@ -519,7 +521,7 @@ class YieldMagicMethodViolation(ASTViolation):
 
     """
 
-    error_template = 'Found forbidden `yield` magic method usage'
+    error_template = 'Found forbidden `yield` magic method usage: {0}'
     code = 611
     previous_codes = {439, 435}
 

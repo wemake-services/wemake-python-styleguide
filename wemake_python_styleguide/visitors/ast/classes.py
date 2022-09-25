@@ -157,12 +157,22 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
     _staticmethod_names: ClassVar[FrozenSet[str]] = frozenset((
         'staticmethod',
     ))
+    _special_async_iter: ClassVar[FrozenSet[str]] = frozenset((
+        '__aiter__',
+    ))
 
     def visit_any_function(self, node: types.AnyFunctionDef) -> None:
         """Checking class methods: async and regular."""
-        self._check_decorators(node)
-        self._check_bound_methods(node)
-        self._check_method_contents(node)
+        node_context = nodes.get_context(node)
+        if isinstance(node_context, ast.ClassDef):
+            self._check_decorators(node)
+            self._check_bound_methods(node)
+            self._check_yield_magic_methods(node)
+            self._check_async_magic_methods(node)
+            self._check_useless_overwritten_methods(
+                node,
+                class_name=node_context.name,
+            )
         self.generic_visit(node)
 
     def _check_decorators(self, node: types.AnyFunctionDef) -> None:
@@ -172,10 +182,6 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
                 self.add_violation(oop.StaticMethodViolation(node))
 
     def _check_bound_methods(self, node: types.AnyFunctionDef) -> None:
-        node_context = nodes.get_context(node)
-        if not isinstance(node_context, ast.ClassDef):
-            return
-
         if not functions.get_all_arguments(node):
             self.add_violation(
                 oop.MethodWithoutArgumentsViolation(node, text=node.name),
@@ -186,22 +192,59 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
                 oop.BadMagicMethodViolation(node, text=node.name),
             )
 
-        is_async = isinstance(node, ast.AsyncFunctionDef)
-        if is_async and access.is_magic(node.name):
-            if node.name in constants.ASYNC_MAGIC_METHODS_BLACKLIST:
+    def _check_yield_magic_methods(self, node: types.AnyFunctionDef) -> None:
+        if isinstance(node, ast.AsyncFunctionDef):
+            return
+
+        if node.name in constants.YIELD_MAGIC_METHODS_BLACKLIST:
+            if walk.is_contained(node, (ast.Yield, ast.YieldFrom)):
+                self.add_violation(
+                    oop.YieldMagicMethodViolation(node, text=node.name),
+                )
+
+    def _check_async_magic_methods(self, node: types.AnyFunctionDef) -> None:
+        if not isinstance(node, ast.AsyncFunctionDef):
+            return
+
+        if node.name in self._special_async_iter:
+            if not walk.is_contained(node, ast.Yield):  # YieldFrom not async
                 self.add_violation(
                     oop.AsyncMagicMethodViolation(node, text=node.name),
                 )
+        elif node.name in constants.ASYNC_MAGIC_METHODS_BLACKLIST:
+            self.add_violation(
+                oop.AsyncMagicMethodViolation(node, text=node.name),
+            )
 
-        self._check_useless_overwritten_methods(
-            node,
-            class_name=node_context.name,
+    def _check_useless_overwritten_methods(
+        self,
+        node: types.AnyFunctionDef,
+        class_name: str,
+    ) -> None:
+        if node.decorator_list:
+            # Any decorator can change logic and make this overwrite useful.
+            return
+
+        call_stmt = self._get_call_stmt_of_useless_method(node)
+        if call_stmt is None or not isinstance(call_stmt.func, ast.Attribute):
+            return
+
+        attribute = call_stmt.func
+        defined_method_name = node.name
+        if defined_method_name != attribute.attr:
+            return
+
+        if not super_args.is_ordinary_super_call(attribute.value, class_name):
+            return
+
+        if not function_args.is_call_matched_by_arguments(node, call_stmt):
+            return
+
+        self.add_violation(
+            oop.UselessOverwrittenMethodViolation(
+                node, text=defined_method_name,
+            ),
         )
-
-    def _check_method_contents(self, node: types.AnyFunctionDef) -> None:
-        if node.name in constants.YIELD_MAGIC_METHODS_BLACKLIST:
-            if walk.is_contained(node, (ast.Yield, ast.YieldFrom)):
-                self.add_violation(oop.YieldMagicMethodViolation(node))
 
     def _get_call_stmt_of_useless_method(
         self,
@@ -235,36 +278,6 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         elif isinstance(stmt, ast.Expr) and isinstance(stmt.value, ast.Call):
             return stmt.value
         return None
-
-    def _check_useless_overwritten_methods(
-        self,
-        node: types.AnyFunctionDef,
-        class_name: str,
-    ) -> None:
-        if node.decorator_list:
-            # Any decorator can change logic and make this overwrite useful.
-            return
-
-        call_stmt = self._get_call_stmt_of_useless_method(node)
-        if call_stmt is None or not isinstance(call_stmt.func, ast.Attribute):
-            return
-
-        attribute = call_stmt.func
-        defined_method_name = node.name
-        if defined_method_name != attribute.attr:
-            return
-
-        if not super_args.is_ordinary_super_call(attribute.value, class_name):
-            return
-
-        if not function_args.is_call_matched_by_arguments(node, call_stmt):
-            return
-
-        self.add_violation(
-            oop.UselessOverwrittenMethodViolation(
-                node, text=defined_method_name,
-            ),
-        )
 
 
 @final
