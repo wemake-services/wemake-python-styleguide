@@ -102,12 +102,12 @@ def is_unary_minus(node: ast.AST) -> bool:
     We use this predicate to allow values
     like ``-some_value`` to be overused.
 
-    Although negative constants like ``-1``
+    Although negative constants like ``-5``
     should raise violation to force naming them.
     """
-    if isinstance(node, ast.UnaryOp):
-        return (
-            isinstance(node.op, ast.USub) and
-            not isinstance(node.operand, (Constant, ast.Num))
-        )
+    if isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.USub):
+        # We allow variables, attributes, subscripts, and `-1`
+        if isinstance(node.operand, (Constant, ast.Num)):
+            return node.operand.n == 1
+        return True
     return False
