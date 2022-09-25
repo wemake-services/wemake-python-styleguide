@@ -2,7 +2,7 @@ import ast
 from collections import defaultdict
 from typing import ClassVar, DefaultDict, List, Mapping, Tuple, Type, Union
 
-from typing_extensions import final
+from typing_extensions import TypeAlias, final
 
 from wemake_python_styleguide.logic.complexity import cognitive
 from wemake_python_styleguide.logic.complexity.functions import (
@@ -25,9 +25,12 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 # Type aliases:
 
-_AnyFunctionCounter = Union[FunctionCounter, FunctionCounterWithLambda]
-_CheckRule = Tuple[_AnyFunctionCounter, int, Type[BaseViolation]]
-_NodeTypeHandler = Mapping[
+_AnyFunctionCounter: TypeAlias = Union[
+    FunctionCounter,
+    FunctionCounterWithLambda,
+]
+_CheckRule: TypeAlias = Tuple[_AnyFunctionCounter, int, Type[BaseViolation]]
+_NodeTypeHandler: TypeAlias = Mapping[
     Union[type, Tuple[type, ...]],
     FunctionCounter,
 ]

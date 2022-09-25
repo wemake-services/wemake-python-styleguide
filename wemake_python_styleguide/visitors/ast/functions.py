@@ -2,7 +2,7 @@ import ast
 from contextlib import suppress
 from typing import ClassVar, Dict, FrozenSet, List, Mapping, Union
 
-from typing_extensions import final
+from typing_extensions import TypeAlias, final
 
 from wemake_python_styleguide.compat.aliases import (
     ForNodes,
@@ -51,10 +51,10 @@ from wemake_python_styleguide.violations.refactoring import (
 from wemake_python_styleguide.visitors import base, decorators
 
 #: Things we treat as local variables.
-_LocalVariable = Union[ast.Name, ast.ExceptHandler]
+_LocalVariable: TypeAlias = Union[ast.Name, ast.ExceptHandler]
 
 #: Function definitions with name and arity:
-_Defs = Mapping[str, int]
+_Defs: TypeAlias = Mapping[str, int]
 
 
 @final

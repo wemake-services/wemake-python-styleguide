@@ -55,17 +55,17 @@ import enum
 import tokenize
 from typing import Callable, ClassVar, Optional, Set, Tuple, Union
 
-from typing_extensions import final
+from typing_extensions import TypeAlias, final
 
 #: General type for all possible nodes where error happens.
-ErrorNode = Union[
+ErrorNode: TypeAlias = Union[
     ast.AST,
     tokenize.TokenInfo,
     None,
 ]
 
 #: We use this type to define helper classes with callbacks to add violations.
-ErrorCallback = Callable[['BaseViolation'], None]
+ErrorCallback: TypeAlias = Callable[['BaseViolation'], None]
 
 
 @enum.unique

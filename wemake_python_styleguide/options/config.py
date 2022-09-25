@@ -99,7 +99,7 @@ You can also show all options that ``flake8`` supports by running:
 - ``max-decorators`` - maximum number of decorators for single function
     or class definition, defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_DECORATORS`
-- ``max-string-usages`` - maximum number of repeated string constants
+- ``max-string-usages`` - maximum number of repeated String constants
     in your modules, defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_STRING_USAGES`
 - ``max-awaits`` - maximum allowed number of ``await``
@@ -156,12 +156,12 @@ from typing import ClassVar, Mapping, Optional, Sequence, Union
 
 import attr
 from flake8.options.manager import OptionManager
-from typing_extensions import final
+from typing_extensions import Final, TypeAlias, final
 
 from wemake_python_styleguide.options import defaults
 
-ConfigValuesTypes = Union[str, int, bool, Sequence[str]]
-string = 'string'
+ConfigValuesTypes: TypeAlias = Union[str, int, bool, Sequence[str]]
+String: Final = 'string'
 
 
 @final
@@ -207,13 +207,11 @@ class Configuration(object):
             defaults.MIN_NAME_LENGTH,
             'Minimum required length of variable and module names.',
         ),
-
         _Option(
             '--max-name-length',
             defaults.MAX_NAME_LENGTH,
             'Maximum possible length of the variable and module names.',
         ),
-
         _Option(
             '--i-control-code',
             defaults.I_CONTROL_CODE,
@@ -222,7 +220,6 @@ class Configuration(object):
             type=None,
             dest='i_control_code',
         ),
-
         _Option(
             '--i-dont-control-code',
             defaults.I_CONTROL_CODE,
@@ -232,39 +229,37 @@ class Configuration(object):
             dest='i_control_code',
             parse_from_config=False,
         ),
-
         _Option(
             '--max-noqa-comments',
             defaults.MAX_NOQA_COMMENTS,
             'Maximum amount of `noqa` comments per module.',
         ),
-
         _Option(
             '--nested-classes-whitelist',
             defaults.NESTED_CLASSES_WHITELIST,
             'List of nested classes names we allow to use.',
-            type=string,
+            type=String,
             comma_separated_list=True,
         ),
         _Option(
             '--allowed-domain-names',
             defaults.ALLOWED_DOMAIN_NAMES,
             "Domain names that are removed from variable names' blacklist.",
-            type=string,
+            type=String,
             comma_separated_list=True,
         ),
         _Option(
             '--forbidden-domain-names',
             defaults.FORBIDDEN_DOMAIN_NAMES,
             "Domain names that extends variable names' blacklist.",
-            type=string,
+            type=String,
             comma_separated_list=True,
         ),
         _Option(
             '--forbidden-inline-ignore',
             defaults.FORBIDDEN_INLINE_IGNORE,
             'Codes of violations or class of violations forbidden to ignore.',
-            type='string',
+            type=String,
             comma_separated_list=True,
         ),
 
@@ -275,139 +270,116 @@ class Configuration(object):
             defaults.MAX_RETURNS,
             'Maximum allowed number of return statements in one function.',
         ),
-
         _Option(
             '--max-local-variables',
             defaults.MAX_LOCAL_VARIABLES,
             'Maximum allowed number of local variables in one function.',
         ),
-
         _Option(
             '--max-expressions',
             defaults.MAX_EXPRESSIONS,
             'Maximum allowed number of expressions in one function.',
         ),
-
         _Option(
             '--max-arguments',
             defaults.MAX_ARGUMENTS,
             'Maximum allowed number of arguments in one function.',
         ),
-
         _Option(
             '--max-module-members',
             defaults.MAX_MODULE_MEMBERS,
             'Maximum number of classes and functions in a single module.',
         ),
-
         _Option(
             '--max-methods',
             defaults.MAX_METHODS,
             'Maximum number of methods in a single class.',
         ),
-
         _Option(
             '--max-line-complexity',
             defaults.MAX_LINE_COMPLEXITY,
             'Maximum line complexity, measured in `ast` nodes.',
         ),
-
         _Option(
             '--max-jones-score',
             defaults.MAX_JONES_SCORE,
             'Maximum median module complexity, based on sum of lines.',
         ),
-
         _Option(
             '--max-imports',
             defaults.MAX_IMPORTS,
             'Maximum number of imports in a single module.',
         ),
-
         _Option(
             '--max-imported-names',
             defaults.MAX_IMPORTED_NAMES,
             'Maximum number of imported names in a single module.',
         ),
-
         _Option(
             '--max-base-classes',
             defaults.MAX_BASE_CLASSES,
             'Maximum number of base classes.',
         ),
-
         _Option(
             '--max-decorators',
             defaults.MAX_DECORATORS,
             'Maximum number of decorators.',
         ),
-
         _Option(
             '--max-string-usages',
             defaults.MAX_STRING_USAGES,
             'Maximum number of string constant usages.',
         ),
-
         _Option(
             '--max-awaits',
             defaults.MAX_AWAITS,
             'Maximum allowed number of await expressions in one function.',
         ),
-
         _Option(
             '--max-try-body-length',
             defaults.MAX_TRY_BODY_LENGTH,
             'Maximum amount of try block node body length.',
         ),
-
         _Option(
             '--max-module-expressions',
             defaults.MAX_MODULE_EXPRESSIONS,
             'Maximum amount of expression usages in a module.',
         ),
-
         _Option(
             '--max-function-expressions',
             defaults.MAX_FUNCTION_EXPRESSIONS,
             'Maximum amount of expression usages in a function or method.',
         ),
-
         _Option(
             '--max-asserts',
             defaults.MAX_ASSERTS,
             'Maximum allowed number of assert statements in one function.',
         ),
-
         _Option(
             '--max-access-level',
             defaults.MAX_ACCESS_LEVEL,
             'Maximum number of access level in an expression.',
         ),
-
         _Option(
             '--max-attributes',
             defaults.MAX_ATTRIBUTES,
             'Maximum number of public instance attributes.',
         ),
-
         _Option(
             '--max-raises',
             defaults.MAX_RAISES,
             'Maximum number of raises in a function.',
         ),
-
         _Option(
             '--max-cognitive-score',
             defaults.MAX_COGNITIVE_SCORE,
             'Maximum amount of cognitive complexity per function.',
         ),
-
         _Option(
             '--max-cognitive-average',
             defaults.MAX_COGNITIVE_AVERAGE,
             'Maximum amount of average cognitive complexity per module.',
         ),
-
         _Option(
             '--max-call-level',
             defaults.MAX_CALL_LEVEL,

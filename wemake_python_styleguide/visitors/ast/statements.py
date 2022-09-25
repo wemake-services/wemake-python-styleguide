@@ -1,7 +1,7 @@
 import ast
 from typing import ClassVar, Mapping, Optional, Sequence, Set, Union
 
-from typing_extensions import final
+from typing_extensions import TypeAlias, final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import (
@@ -44,7 +44,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 #: Statements that do have `.body` attribute.
-_StatementWithBody = Union[
+_StatementWithBody: TypeAlias = Union[
     ast.If,
     AnyFor,
     ast.While,
@@ -57,7 +57,7 @@ _StatementWithBody = Union[
 ]
 
 #: Simple collections.
-_AnyCollection = Union[
+_AnyCollection: TypeAlias = Union[
     ast.List,
     ast.Set,
     ast.Dict,

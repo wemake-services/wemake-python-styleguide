@@ -1,7 +1,7 @@
 from ast import Call, Return, Yield, YieldFrom, arg, walk
 from typing import Container, Iterable, List, Optional, Union
 
-from typing_extensions import Final
+from typing_extensions import Final, TypeAlias
 
 from wemake_python_styleguide.compat.functions import get_posonlyargs
 from wemake_python_styleguide.logic import source
@@ -12,14 +12,14 @@ from wemake_python_styleguide.types import (
 )
 
 #: Expressions that causes control transfer from a routine
-_AnyControlTransfers = Union[
+_AnyControlTransfers: TypeAlias = Union[
     Return,
     Yield,
     YieldFrom,
 ]
 
 #: Type annotation for an iterable of control transfer nodes
-_ControlTransferIterable = Iterable[_AnyControlTransfers]
+_ControlTransferIterable: TypeAlias = Iterable[_AnyControlTransfers]
 
 #: Method types
 _METHOD_TYPES: Final = frozenset((
