@@ -157,6 +157,9 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
     _staticmethod_names: ClassVar[FrozenSet[str]] = frozenset((
         'staticmethod',
     ))
+    _special_async_iter: ClassVar[FrozenSet[str]] = frozenset((
+        '__aiter__',
+    ))
 
     def visit_any_function(self, node: types.AnyFunctionDef) -> None:
         """Checking class methods: async and regular."""
@@ -203,7 +206,7 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         if not isinstance(node, ast.AsyncFunctionDef):
             return
 
-        if node.name in constants.ASYNC_IF_YIELDS_MAGIC_METHODS:
+        if node.name in self._special_async_iter:
             if not walk.is_contained(node, ast.Yield):  # YieldFrom not async
                 self.add_violation(
                     oop.AsyncMagicMethodViolation(node, text=node.name),
