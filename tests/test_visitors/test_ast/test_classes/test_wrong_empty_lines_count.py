@@ -61,15 +61,59 @@ def func():
     baz()
 """
 
-
 allow_function_with_comments = """
-def log_customer_info(customer):
-    # printing customer name
-    print(customer.name)
-    # printing customer phone
-    print(customer.phone)
-    # printing customer company
-    print(customer.company)
+def test_func():
+   # This function
+   #
+   # has lots
+   #
+   # of empty
+   #
+   # lines
+   #
+   # in comments
+   return 0
+"""
+
+function_with_docstring = """
+def test_func():
+   \"""
+   Its docstring
+
+   has many new lines
+
+   but this is
+
+   totally fine
+
+   we don't raise a violation for this
+   \"""
+   return
+"""
+
+function_with_docstring_and_comments = """
+def test_func():
+   \"""
+   Its docstring
+
+   has many new lines
+
+   but this is
+
+   totally fine
+
+   we don't raise a violation for this
+   \"""
+   # This function
+   #
+   # has lots
+   #
+   # of empty
+   #
+   # lines
+   #
+   # in comments
+   return 0
 """
 
 
@@ -83,9 +127,10 @@ def test_wrong(
     default_options,
     assert_errors,
     parse_tokens,
+    mode,
 ):
     """Testing wrong cases."""
-    file_tokens = parse_tokens(input_)
+    file_tokens = parse_tokens(mode(input_))
 
     visitor = WrongEmptyLinesCountVisitor(
         default_options, file_tokens=file_tokens,
@@ -99,15 +144,18 @@ def test_wrong(
     class_with_valid_method,
     allow_function,
     allow_function_with_comments,
+    function_with_docstring,
+    function_with_docstring_and_comments,
 ])
 def test_success(
     input_,
     parse_tokens,
     default_options,
     assert_errors,
+    mode,
 ):
     """Testing available cases."""
-    file_tokens = parse_tokens(input_)
+    file_tokens = parse_tokens(mode(input_))
 
     visitor = WrongEmptyLinesCountVisitor(
         default_options, file_tokens=file_tokens,
@@ -122,9 +170,10 @@ def test_zero_option(
     default_options,
     assert_errors,
     options,
+    mode,
 ):
     """Test zero configuration."""
-    file_tokens = parse_tokens(allow_function)
+    file_tokens = parse_tokens(mode(allow_function))
     visitor = WrongEmptyLinesCountVisitor(
         options(exps_for_one_empty_line=0), file_tokens=file_tokens,
     )
