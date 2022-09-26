@@ -6,6 +6,7 @@ from typing import Iterable, List, cast
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.functions import get_assign_targets
+from wemake_python_styleguide.compat.nodes import MatchAs
 from wemake_python_styleguide.compat.types import AnyAssignWithWalrus
 from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
@@ -67,16 +68,6 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
         self._check_unique_assignment(node, names)
         self.generic_visit(node)
 
-    def _is_reassignment_edge_case(self, node: AnyAssign) -> bool:
-        # This is not a variable, but a class property
-        if isinstance(nodes.get_context(node), ast.ClassDef):
-            return True
-
-        # It means that someone probably modifies original value
-        # of the variable using some unary operation, e.g. `a = not a`
-        # See #2189
-        return isinstance(node.value, ast.UnaryOp)
-
     def _check_reassignment(
         self,
         node: AnyAssign,
@@ -118,6 +109,17 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
                         node, text=used_name,
                     ),
                 )
+
+    def _is_reassignment_edge_case(self, node: AnyAssign) -> bool:
+        # This is not a variable, but a class property
+        if isinstance(nodes.get_context(node), ast.ClassDef):
+            return True
+
+        # It means that someone probably modifies original value
+        # of the variable using some unary operation, e.g. `a = not a`
+        # See #2189
+        return isinstance(node.value, ast.UnaryOp)
+
 
 
 @final
@@ -180,6 +182,11 @@ class UnusedVariableDefinitionVisitor(BaseNodeVisitor):
                 name_nodes.get_variables_from_node(node.optional_vars),
                 is_local=True,
             )
+        self.generic_visit(node)
+
+    def visit_MatchAs(self, node: MatchAs) -> None:
+        if node.name:
+            self._check_assign_unused(node, [node.name], is_local=True)
         self.generic_visit(node)
 
     def _check_assign_unused(

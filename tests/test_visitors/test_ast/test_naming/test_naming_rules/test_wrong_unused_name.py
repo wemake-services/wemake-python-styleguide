@@ -38,11 +38,13 @@ def test_correct_unused_variable_name(
     assert_errors,
     parse_ast_tree,
     naming_template,
+    skip_match_case_syntax_error,
     default_options,
     mode,
     wrong_name,
 ):
     """Ensures that wrong names are not allowed."""
+    skip_match_case_syntax_error(naming_template, wrong_name)
     tree = parse_ast_tree(mode(naming_template.format(wrong_name)))
 
     visitor = WrongNameVisitor(default_options, tree=tree)

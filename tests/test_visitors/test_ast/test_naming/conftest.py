@@ -1,6 +1,7 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY38
+from wemake_python_styleguide.compat.constants import PY38, PY310
+from wemake_python_styleguide.constants import UNUSED_PLACEHOLDER
 
 # Imports:
 
@@ -161,6 +162,14 @@ except Exception as {0}:
     raise
 """
 
+# Pattern matching:
+
+match_as = """
+match some_value:
+    case [] as {0}:
+        ...
+"""
+
 
 # Fixtures:
 
@@ -220,6 +229,10 @@ if PY38:
         lambda_posonly_argument,
         assignment_expression,
     }
+if PY310:
+    _ALL_FIXTURES |= {
+        match_as,
+    }
 
 _FOREIGN_NAMING_PATTERNS = frozenset((
     foreign_attribute,
@@ -260,6 +273,10 @@ _FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED = frozenset((
 if PY38:
     _FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED |= {
         assignment_expression,
+    }
+if PY310:
+    _FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED |= {
+        match_as,
     }
 
 _FORBIDDEN_RAW_UNUSED = _FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED | {
@@ -331,3 +348,20 @@ def forbidden_protected_unused_template(request):
 def allowed_protected_unused_template(request):
     """Returns template that allows defining protected unused variables."""
     return request.param
+
+
+@pytest.fixture()
+def skip_match_case_syntax_error():
+    """Returns a helper that skips tests when `_` is used with pattern match."""
+    def factory(template: str, variable_name: str) -> None:
+        # We use non-exact compare, because template could be modified:
+        if variable_name != UNUSED_PLACEHOLDER:
+            return
+
+        has_all_pm_keywords = all(
+            '{0} '.format(keyword) in template
+            for keyword in ('match', 'case', 'as')
+        )
+        if has_all_pm_keywords:
+            pytest.skip('"_" cannot be used as "case" target')
+    return factory

@@ -40,11 +40,13 @@ def test_builtin_shadowing_whitelist(
     assert_errors,
     parse_ast_tree,
     non_attribute_template,
+    skip_match_case_syntax_error,
     default_options,
     mode,
     wrong_name,
 ):
     """Test names that shadow allowed builtins."""
+    skip_match_case_syntax_error(non_attribute_template, wrong_name)
     tree = parse_ast_tree(
         mode(non_attribute_template.format(wrong_name)),
     )

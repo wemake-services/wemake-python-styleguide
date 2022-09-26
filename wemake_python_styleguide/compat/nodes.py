@@ -43,3 +43,11 @@ else:  # pragma: py-gte-38
 
         s: Any  # noqa: WPS111
         n: complex  # noqa: WPS111
+
+if sys.version_info >= (3, 10):  # pragma: py-lt-310
+    from ast import MatchAs as MatchAs  # noqa: WPS433, WPS113
+else:  # pragma: py-gte-310
+    class MatchAs(ast.AST):
+        """Used for ``case ... as some:`` code."""
+
+        name: Optional[str]  # noqa: WPS110

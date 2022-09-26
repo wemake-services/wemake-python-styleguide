@@ -5,6 +5,7 @@ import attr
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.functions import get_assign_targets
+from wemake_python_styleguide.compat.nodes import MatchAs
 from wemake_python_styleguide.constants import (
     SPECIAL_ARGUMENT_NAMES_WHITELIST,
     UNREADABLE_CHARACTER_COMBINATIONS,
@@ -278,6 +279,11 @@ class WrongNameVisitor(BaseNodeVisitor):
         """Used to find upper attribute declarations."""
         self._class_based_validator.check_name(node, node.name)
         self._class_based_validator.check_attribute_names(node)
+        self.generic_visit(node)
+
+    def visit_MatchAs(self, node: MatchAs) -> None:
+        if node.name:
+            self._regular_validator.check_name(node, node.name)
         self.generic_visit(node)
 
     def _is_foreign_attribute(self, node: AnyVariableDef) -> bool:
