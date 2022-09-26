@@ -2786,6 +2786,7 @@ class WrongEmptyLinesCountViolation(TokenizeViolation):
 
     Solution:
         Limit count of empty lines of the function or method body
+        By default, we allow 1 empty line for 2 non-empty lines.
 
     Example::
 
