@@ -121,7 +121,6 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
         return isinstance(node.value, ast.UnaryOp)
 
 
-
 @final
 @alias('visit_any_assign', (
     'visit_Assign',
