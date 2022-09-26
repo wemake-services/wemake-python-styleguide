@@ -2786,6 +2786,7 @@ class WrongEmptyLinesCountViolation(TokenizeViolation):
 
     Solution:
         Limit count of empty lines of the function or method body
+        By default, we allow 1 empty line for 2 non-empty lines.
 
     Example::
 
@@ -2814,7 +2815,5 @@ class WrongEmptyLinesCountViolation(TokenizeViolation):
 
     """
 
-    error_template = (
-        'Found too many empty lines: {0}'
-    )
+    error_template = 'Found too many empty lines in `def`: {0}'
     code = 473
