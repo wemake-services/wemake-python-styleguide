@@ -2814,7 +2814,5 @@ class WrongEmptyLinesCountViolation(TokenizeViolation):
 
     """
 
-    error_template = (
-        'Found too many empty lines: {0}'
-    )
+    error_template = 'Found too many empty lines in `def`: {0}'
     code = 473
