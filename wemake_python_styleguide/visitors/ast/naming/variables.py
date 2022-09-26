@@ -183,7 +183,7 @@ class UnusedVariableDefinitionVisitor(BaseNodeVisitor):
             )
         self.generic_visit(node)
 
-    def visit_MatchAs(self, node: MatchAs) -> None:
+    def visit_MatchAs(self, node: MatchAs) -> None:  # pragma: py-lt-310
         """Check pattern matching in a form of `case ... as NAME`."""
         if node.name:
             self._check_assign_unused(node, [node.name], is_local=True)
