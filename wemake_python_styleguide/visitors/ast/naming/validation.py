@@ -282,6 +282,7 @@ class WrongNameVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def visit_MatchAs(self, node: MatchAs) -> None:
+        """Check pattern matching in a form of `case ... as NAME`."""
         if node.name:
             self._regular_validator.check_name(node, node.name)
         self.generic_visit(node)

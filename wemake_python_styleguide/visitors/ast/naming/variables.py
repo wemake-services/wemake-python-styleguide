@@ -185,6 +185,7 @@ class UnusedVariableDefinitionVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def visit_MatchAs(self, node: MatchAs) -> None:
+        """Check pattern matching in a form of `case ... as NAME`."""
         if node.name:
             self._check_assign_unused(node, [node.name], is_local=True)
         self.generic_visit(node)
