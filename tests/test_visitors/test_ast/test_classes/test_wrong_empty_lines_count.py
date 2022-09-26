@@ -179,3 +179,19 @@ def test_zero_option(
     )
     visitor.run()
     assert_errors(visitor, [WrongEmptyLinesCountViolation])
+
+
+def test_zero_option_with_valid_method(
+    parse_tokens,
+    default_options,
+    assert_errors,
+    options,
+    mode,
+):
+    """Test zero configuration with valid method."""
+    file_tokens = parse_tokens(mode(class_with_valid_method))
+    visitor = WrongEmptyLinesCountVisitor(
+        options(exps_for_one_empty_line=0), file_tokens=file_tokens,
+    )
+    visitor.run()
+    assert_errors(visitor, [])
