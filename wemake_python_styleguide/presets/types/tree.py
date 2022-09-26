@@ -11,6 +11,7 @@ from wemake_python_styleguide.visitors.ast import (  # noqa: WPS235
     conditions,
     decorators,
     exceptions,
+    function_empty_lines,
     functions,
     imports,
     iterables,
@@ -106,6 +107,8 @@ PRESET: Final = (
     decorators.WrongDecoratorVisitor,
 
     redundancy.RedundantEnumerateVisitor,
+
+    function_empty_lines.WrongEmptyLinesCountVisitor,
 
     # Modules:
     modules.EmptyModuleContentsVisitor,

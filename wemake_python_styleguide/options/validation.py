@@ -98,6 +98,7 @@ class _ValidatedOptions(object):
     max_import_from_members: int = attr.ib(validator=[_min_max(min=1)])
     max_tuple_unpack_length: int = attr.ib(validator=[_min_max(min=1)])
     show_violation_links: bool
+    exps_for_one_empty_line: int
 
 
 def validate_options(options: ConfigurationOptions) -> _ValidatedOptions:

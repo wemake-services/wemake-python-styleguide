@@ -89,6 +89,7 @@ Summary
    KwargsUnpackingInClassDefinitionViolation
    ConsecutiveSlicesViolation
    GettingElementByUnpackingViolation
+   WrongEmptyLinesCountViolation
 
 Best practices
 --------------
@@ -166,6 +167,7 @@ Best practices
 .. autoclass:: KwargsUnpackingInClassDefinitionViolation
 .. autoclass:: ConsecutiveSlicesViolation
 .. autoclass:: GettingElementByUnpackingViolation
+.. autoclass:: WrongEmptyLinesCountViolation
 
 """
 
@@ -2770,3 +2772,48 @@ class GettingElementByUnpackingViolation(ASTViolation):
         'Found unpacking used to get a single element from a collection'
     )
     code = 472
+
+
+@final
+class WrongEmptyLinesCountViolation(TokenizeViolation):
+    """
+    Limit empty lines in functions or methods body.
+
+    Reasoning:
+        It's not holistic to have functions or methods that contain many
+        empty lines, and it makes sense to divide the method into several
+        ones.
+
+    Solution:
+        Limit count of empty lines of the function or method body
+        By default, we allow 1 empty line for 2 non-empty lines.
+
+    Example::
+
+        # Correct:
+        def func(name):
+            foo()
+            if name == 'Moonflower':
+                print('Love')
+            baz()
+
+        # Wrong:
+        def func(name):
+            foo()
+
+            if name == 'Moonflower':
+                print('Love')
+
+            baz()
+
+    Configuration:
+        This rule is configurable with ``--exps-for-one-empty-line``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.EXPS_FOR_ONE_EMPTY_LINE`
+
+    .. versionadded:: 0.17.0
+
+    """
+
+    error_template = 'Found too many empty lines in `def`: {0}'
+    code = 473

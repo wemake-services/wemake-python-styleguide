@@ -273,3 +273,7 @@ class ConfigurationOptions(Protocol):
     @property
     def show_violation_links(self) -> bool:
         ...
+
+    @property
+    def exps_for_one_empty_line(self) -> int:
+        ...

@@ -46,6 +46,9 @@ FORBIDDEN_DOMAIN_NAMES: Final = ()
 #: Violation codes that are forbidden to use.
 FORBIDDEN_INLINE_IGNORE: Final = ()
 
+#: Count of available expressions for one empty line in function or method body.
+EXPS_FOR_ONE_EMPTY_LINE: Final = 2
+
 # ===========
 # Complexity:
 # ===========
