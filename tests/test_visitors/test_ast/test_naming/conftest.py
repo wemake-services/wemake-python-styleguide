@@ -164,7 +164,20 @@ except Exception as {0}:
 
 # Pattern matching:
 
-match_as = """
+match_variable = """
+match some_value:
+    case {0}:
+        ...
+"""
+
+match_inner = """
+match some_value:
+    case [{0}]:
+        ...
+"""
+
+# This is the only case where we don't allow unused variables.
+match_as_explicit = """
 match some_value:
     case [] as {0}:
         ...
@@ -231,7 +244,9 @@ if PY38:
     }
 if PY310:
     _ALL_FIXTURES |= {
-        match_as,
+        match_variable,
+        match_as_explicit,
+        match_inner,
     }
 
 _FOREIGN_NAMING_PATTERNS = frozenset((
@@ -276,7 +291,7 @@ if PY38:
     }
 if PY310:
     _FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED |= {
-        match_as,
+        match_as_explicit,
     }
 
 _FORBIDDEN_RAW_UNUSED = _FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED | {
@@ -353,15 +368,7 @@ def allowed_protected_unused_template(request):
 @pytest.fixture()
 def skip_match_case_syntax_error():
     """Returns a helper that skips tests when `_` is used with pattern match."""
-    def factory(template: str, variable_name: str) -> None:
-        # We use non-exact compare, because template could be modified:
-        if variable_name != UNUSED_PLACEHOLDER:
-            return
-
-        has_all_pm_keywords = all(
-            '{0} '.format(keyword) in template
-            for keyword in ('match', 'case', 'as')
-        )
-        if has_all_pm_keywords:
+    def factory(template: str, var_name: str) -> None:
+        if var_name == UNUSED_PLACEHOLDER and template == match_as_explicit:
             pytest.skip('"_" cannot be used as "case" target')
     return factory

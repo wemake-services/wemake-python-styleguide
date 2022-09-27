@@ -10,10 +10,10 @@ import sys
 from typing import Any, Optional
 
 if sys.version_info >= (3, 8):  # pragma: py-lt-38
-    from ast import Constant as Constant  # noqa: WPS433, WPS113
-    from ast import NamedExpr as NamedExpr  # noqa: WPS113, WPS433
+    from ast import Constant as Constant
+    from ast import NamedExpr as NamedExpr
 else:  # pragma: py-gte-38
-    class NamedExpr(ast.expr):  # noqa: WPS440
+    class NamedExpr(ast.expr):
         """
         Fallback for python that does not have ``ast.NamedExpr``.
 
@@ -23,7 +23,7 @@ else:  # pragma: py-gte-38
         value: ast.expr  # noqa: WPS110
         target: ast.expr
 
-    class Constant(ast.expr):  # noqa: WPS440
+    class Constant(ast.expr):
         """
         Fallback for python that does not have ``ast.Constant``.
 
@@ -45,9 +45,18 @@ else:  # pragma: py-gte-38
         n: complex  # noqa: WPS111
 
 if sys.version_info >= (3, 10):  # pragma: py-lt-310
-    from ast import MatchAs as MatchAs  # noqa: WPS433, WPS113
+    from ast import Match as Match
+    from ast import MatchAs as MatchAs
+    from ast import match_case as match_case
 else:  # pragma: py-gte-310
-    class MatchAs(ast.AST):  # noqa: WPS440
-        """Used for ``case ... as some:`` code."""
+    class Match(ast.stmt):
+        """Used for ``match`` keyword and its body."""
+
+    class match_case(ast.AST):  # noqa: N801
+        """Used as a top level wrapper of pattern matched cases."""
+
+    class MatchAs(ast.AST):
+        """Used to declare variables in pattern matched code."""
 
         name: Optional[str]  # noqa: WPS110
+        pattern: Optional[ast.AST]

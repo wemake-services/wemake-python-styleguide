@@ -6,7 +6,7 @@ from typing import Iterable, List, cast
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.functions import get_assign_targets
-from wemake_python_styleguide.compat.nodes import MatchAs
+from wemake_python_styleguide.compat.nodes import Match
 from wemake_python_styleguide.compat.types import AnyAssignWithWalrus
 from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
@@ -14,6 +14,7 @@ from wemake_python_styleguide.constants import (
 )
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming import access, name_nodes
+from wemake_python_styleguide.logic.tree import pattern_matching
 from wemake_python_styleguide.types import AnyAssign, AnyFor
 from wemake_python_styleguide.violations import best_practices, naming
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -183,10 +184,14 @@ class UnusedVariableDefinitionVisitor(BaseNodeVisitor):
             )
         self.generic_visit(node)
 
-    def visit_MatchAs(self, node: MatchAs) -> None:  # pragma: py-lt-310
+    def visit_Match(self, node: Match) -> None:  # pragma: py-lt-310
         """Check pattern matching in a form of `case ... as NAME`."""
-        if node.name:
-            self._check_assign_unused(node, [node.name], is_local=True)
+        for match_as in pattern_matching.get_explicit_as_names(node):
+            self._check_assign_unused(
+                match_as,
+                [cast(str, match_as.name)],  # We check for it in getter
+                is_local=True,
+            )
         self.generic_visit(node)
 
     def _check_assign_unused(
@@ -215,7 +220,7 @@ class UnusedVariableUsageVisitor(BaseNodeVisitor):
     """Checks how variables are used."""
 
     def visit_Name(self, node: ast.Name) -> None:
-        """Checks that we cannot use ``_`` anywhere."""
+        """Checks that we cannot use unused variables anywhere."""
         self._check_variable_used(
             node, node.id, is_created=isinstance(node.ctx, ast.Store),
         )
