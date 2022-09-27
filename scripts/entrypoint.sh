@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Default values:
+: "${INPUT_REPORTER:='terminal'}"
+: "${INPUT_PATH:=$1}"
+
 # Diagnostic output:
 echo "Using reporter: $INPUT_REPORTER"
 echo "Linting path: $INPUT_PATH"
