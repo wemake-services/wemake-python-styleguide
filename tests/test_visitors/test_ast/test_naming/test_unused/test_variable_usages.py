@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY310
 from wemake_python_styleguide.violations.naming import (
     UnusedVariableIsUsedViolation,
 )
@@ -49,6 +50,11 @@ def function():
 
 inheriting_variables = 'class ValidName({0}): ...'
 
+pattern_match_usage = """
+match {0}:
+    case []: ...
+"""
+
 
 @pytest.mark.parametrize('bad_name', [
     'value',  # blacklisted
@@ -84,9 +90,13 @@ inheriting_variables = 'class ValidName({0}): ...'
     awaiting_variable,
     yielding_variable,
     inheriting_variables,
+    pytest.param(
+        pattern_match_usage,
+        marks=pytest.mark.skipif(not PY310, reason='pm was added in 3.10'),
+    ),
 ])
 @pytest.mark.parametrize('visitor_class', [
-    # We tests it here,
+    # We test it here,
     # since I am too lazy to refactor usage patterns to be a fixture.
     WrongNameVisitor,
 

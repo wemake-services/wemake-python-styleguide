@@ -31,9 +31,9 @@ def decorated():  # noqa: WPS216
 
 def wrong_comprehension1():
     return [  # noqa: WPS307
-        node 
-        for node in 'ab' 
-        if node != 'a' 
+        node
+        for node in 'ab'
+        if node != 'a'
         if node != 'b'
     ]
 
@@ -53,6 +53,9 @@ def positional_only(first, /, second):  # noqa: WPS451
 
 
 for element in range(10):
+    if (other := element) > 5:  # noqa: WPS332
+        my_print(1)
+
     try:  # noqa: WPS452
         my_print(1)
     except AnyError:

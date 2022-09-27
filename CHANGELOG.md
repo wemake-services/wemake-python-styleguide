@@ -22,6 +22,7 @@ Semantic versioning in our case means:
 ### Features
 
 - **Breaking**: drops `python3.6` support
+- Adds support for pattern matching naming rules, same as other variables
 - Adds `__init_subclass__` in the beginning of accepted methods
   order as per WPS338 #2411
 

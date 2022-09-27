@@ -105,6 +105,15 @@ Type aliases
 - Generic types should be called clearly and properly,
   not just ``TT`` or ``KT`` or ``VT``
 
+Pattern matching
+~~~~~~~~~~~~~~~~
+
+- All rules from local variables apply
+- Explicit ``as`` patterns must be used:
+  ``case ... as _var_name`` is not allowed
+- However, mapping or sequence patterns can contain unused variables:
+  ``case {"a_key": _not_used_value}:``
+
 .. currentmodule:: wemake_python_styleguide.violations.naming
 
 Summary

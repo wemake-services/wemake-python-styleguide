@@ -24,6 +24,7 @@ import pytest
 _PY_OLD = sys.version_info < (3, 8)
 _PY38 = (3, 8) <= sys.version_info < (3, 9)
 _PY39 = (3, 9) <= sys.version_info < (3, 10)
+_PY310 = (3, 10) <= sys.version_info < (3, 11)
 
 #: Used to find violations' codes in output.
 ERROR_PATTERN = re.compile(r'(WPS\d{3})')
@@ -42,18 +43,30 @@ IGNORED_VIOLATIONS = (
 
 #: Number and count of violations that would be raised.
 VERSION_SPECIFIC = types.MappingProxyType({
-    'WPS216': int(not _PY39),
-    'WPS224': int(not _PY39),
-
-    'WPS307': int(not _PY39),
-    'WPS332': 0,  # TODO: pyflakes fails at `:=` at the moment
-
-    'WPS416': int(_PY_OLD),  # only works for `< python3.8`
-    'WPS451': int(_PY38),  # only works for `== python3.8`
-    'WPS452': int(_PY38),  # only works for `== python3.8`
-    'WPS466': int(_PY39),  # only works for `== python3.9`
-
-    'WPS602': 2 * int(not _PY39),
+    'noqa_pre38': {
+        'WPS216': 1,
+        'WPS224': 1,
+        'WPS307': 1,
+        'WPS416': 1,
+        'WPS602': 2,
+    },
+    'noqa38': {
+        'WPS216': 1,
+        'WPS224': 1,
+        'WPS307': 1,
+        'WPS332': 1,
+        'WPS451': 1,
+        'WPS452': 1,
+        'WPS602': 2,
+    },
+    'noqa39': {
+        'WPS466': 1,
+    },
+    'noqa310': {
+        'WPS110': 1,
+        'WPS111': 1,
+        'WPS122': 1,
+    },
 })
 
 #: Number and count of violations that would be raised.
@@ -349,21 +362,27 @@ def test_codes(all_violations):
     ('noqa.py', SHOULD_BE_RAISED, True),
     pytest.param(
         'noqa_pre38.py',
-        VERSION_SPECIFIC,
+        VERSION_SPECIFIC['noqa_pre38'],
         0,
         marks=pytest.mark.skipif(not _PY_OLD, reason='ast changes on 3.8'),
     ),
     pytest.param(
         'noqa38.py',
-        VERSION_SPECIFIC,
+        VERSION_SPECIFIC['noqa38'],
         0,
         marks=pytest.mark.skipif(not _PY38, reason='ast changes on 3.8'),
     ),
     pytest.param(
         'noqa39.py',
-        VERSION_SPECIFIC,
+        VERSION_SPECIFIC['noqa39'],
         0,
         marks=pytest.mark.skipif(not _PY39, reason='ast changes on 3.9'),
+    ),
+    pytest.param(
+        'noqa310.py',
+        VERSION_SPECIFIC['noqa310'],
+        0,
+        marks=pytest.mark.skipif(not _PY310, reason='ast changes on 3.10'),
     ),
 ])
 def test_noqa_fixture_disabled(

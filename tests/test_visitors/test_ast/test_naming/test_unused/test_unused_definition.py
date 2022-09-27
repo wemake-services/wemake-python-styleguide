@@ -108,10 +108,12 @@ def test_raw_unused_variable_definition(
     indentation,
     bad_name,
     forbidden_raw_unused_template,
+    skip_match_case_syntax_error,
     default_options,
     mode,
 ):
     """Testing raw variable definition is forbidden in some cases."""
+    skip_match_case_syntax_error(forbidden_raw_unused_template, bad_name)
     tree = parse_ast_tree(
         mode(context.format(
             indent(
