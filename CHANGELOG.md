@@ -25,8 +25,8 @@ Semantic versioning in our case means:
 - Adds support for pattern matching naming rules, same as other variables
 - Adds `__init_subclass__` in the beginning of accepted methods
   order as per WPS338 #2411
-
-- Adds `WrongEmptyLinesCountViolation` #2486
+- Adds `WrongEmptyLinesCountViolation` to check
+  for too many lines in functions and methods definitions #2486
 
 ### Bugfixes
 
@@ -35,6 +35,7 @@ Semantic versioning in our case means:
 - Now `-1` is not reported to be an overused expression
 - Allow `__aiter__` to be async iterator
 - Adds violation method name to error message of `YieldMagicMethodViolation`
+- Fixes direct docker image invocation #2492
 
 ### Misc
 
