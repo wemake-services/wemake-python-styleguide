@@ -15,5 +15,5 @@ def test_call_flake8_version():
     assert pkg_name
     assert pkg_version
 
-    assert pkg_name in output_text
+    assert pkg_name in output_text or pkg_name.replace('_', '-') in output_text
     assert pkg_version in output_text
