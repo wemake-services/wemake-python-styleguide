@@ -16,6 +16,12 @@ Semantic versioning in our case means:
   But, in the future we might change the configuration names/logic,
   change the client facing API, change code conventions significantly, etc.
 
+## WIP
+
+## Features
+
+- Bump `flake8` to version `5.x` for python `>=3.8`
+- Bump `flake8-bandit` to version `^4.1` for python `>=3.8`
 
 ## 0.17.0
 
