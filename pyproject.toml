@@ -48,8 +48,8 @@ wemake = "wemake_python_styleguide.formatter:WemakeFormatter"
 python = "^3.7"
 
 flake8 = [
-    { version = ">=3.7,<5", python = "<3.8" },
-    { version = "^5.0", python = ">=3.8" }
+  { version = "^3.9", python = "<3.8" },
+  { version = "^5.0", python = ">=3.8" }
 ]
 attrs = "*"
 typing_extensions = ">=4.0,<5.0"
@@ -67,10 +67,10 @@ flake8-debugger = "^4.0"
 flake8-isort = "^4.0"
 flake8-eradicate = "^1.0"
 flake8-bandit = [
-    { version = ">=2.1,<4", python = "<3.8" },
-    { version = "^4.1", python = ">=3.8" }
+  { version = "^3.0", python = "<3.8" },
+  { version = "^4.1", python = ">=3.8" }
 ]
-flake8-broken-line = "^0.5"
+flake8-broken-line = "^0.6"
 flake8-rst-docstrings = "^0.2"
 pep8-naming = "^0.13"
 darglint = "^1.2"
