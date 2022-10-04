@@ -2,13 +2,14 @@
 # https://raw.githubusercontent.com/andreoliwa/nitpick/v0.18.0/nitpick-style.toml
 
 [nitpick]
-minimum_version = "0.22.0"
+minimum_version = "0.29.0"
 
 [nitpick.styles]
 include = [
   "file-structure.toml",
   "flake8.toml",
-  "isort.toml",
+  # Its contents are over-written in `styleguide.toml`:
+  # "isort.toml",
   "darglint.toml",
   "mypy.toml",
   "poetry.toml",
