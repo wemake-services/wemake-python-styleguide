@@ -70,7 +70,7 @@ flake8-bandit = [
     { version = ">=2.1,<4", python = "<3.8" },
     { version = "^4.1", python = ">=3.8" }
 ]
-flake8-broken-line = "^0.5"
+flake8-broken-line = ">=0.5,<0.7"
 flake8-rst-docstrings = "^0.2"
 pep8-naming = "^0.13"
 darglint = "^1.2"
