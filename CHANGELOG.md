@@ -24,6 +24,10 @@ Semantic versioning in our case means:
 - Bump `flake8` to version `5.x`
 - Bump `flake8-bandit` to version `^4.1`
 
+### Misc
+
+- Replaced `flakehell` mentions to `flakeheaven` #2409
+
 
 ## 0.17.0
 

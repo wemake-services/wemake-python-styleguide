@@ -19,7 +19,7 @@ But, you still can do several things to integrate this linter step by step:
 To make sure "boy scout rule" works we officially support ``--diff`` mode.
 The main idea of it is simple: we only lint things that we touch.
 
-We also support :ref:`flakehell-legacy` (external tool)
+We also support :ref:`flakeheaven-legacy` (external tool)
 to create a ``baseline`` of your current violations
 and start to lint only new one from this point.
 
@@ -122,4 +122,4 @@ Good linters and constant refactoring is the key to the success.
 
 .. rubric:: Further reading
 
-- :ref:`Creating baselines for legacy projects <flakehell>`
+- :ref:`Creating baselines for legacy projects <flakeheaven>`

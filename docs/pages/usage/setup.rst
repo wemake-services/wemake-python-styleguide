@@ -19,7 +19,7 @@ instead of a default ``pip``.
 You might want to also install optional tools
 that pairs nicely with ``wemake-python-styleguide``:
 
-- :ref:`flakehell` for easy integration into a **legacy** codebase
+- :ref:`flakeheaven` for easy integration into a **legacy** codebase
 - :ref:`nitpick` for sharing and validating
   configuration across multiple projects
 
@@ -51,5 +51,5 @@ Check out how we do it in our different templates:
 .. rubric:: Further reading
 
 - :ref:`Configuring and ignoring violations <configuration>`
-- :ref:`Introducing this linter to a legacy codebase <flakehell>`
+- :ref:`Introducing this linter to a legacy codebase <flakeheaven>`
 - :ref:`Sharing configuration across multiple projects <nitpick>`

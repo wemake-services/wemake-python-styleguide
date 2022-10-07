@@ -6,7 +6,7 @@
   auto-formatters.rst
   nitpick.rst
   legacy.rst
-  flakehell.rst
+  flakeheaven.rst
   docker.rst
   github-actions.rst
   ci.rst
