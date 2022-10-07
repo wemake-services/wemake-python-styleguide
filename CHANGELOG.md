@@ -366,8 +366,8 @@ and `0.14.0` which will introduce it to the public.
 - Updates `flake8-eradicate`
 - Several small refactoring sessions
 - Adds `hypothesis`-based tests
-- Adds `flakeheaven` base config
-- Fixes `flakeheaven` docs
+- Adds `flakehell` base config
+- Fixes `flakehell` docs
 - Fixes `MAX_NOQA_COMMENTS` and related violation docs
 - Fixes `OverusedExpressionViolation` and `TooManyExpressionsViolation` docs
 
