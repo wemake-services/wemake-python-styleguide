@@ -108,7 +108,6 @@ ContextNodes: TypeAlias = Union[
 CheckResult: TypeAlias = Tuple[int, int, str, type]
 
 
-@final
 class ConfigurationOptions(Protocol):
     """
     Provides structure for the options we use in our checker and visitors.

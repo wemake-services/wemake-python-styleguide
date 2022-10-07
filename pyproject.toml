@@ -97,7 +97,9 @@ optional = true
 
 [tool.poetry.group.docs.dependencies]
 # There's a conflict in `importlib-metadata` resolution:
-sphinx = "<5"
+sphinx = "^3.2"
+jinja2 = "^3.0"
+# end
 sphinx-autodoc-typehints = "^1.12"
 sphinxcontrib-mermaid = "^0.7"
 added-value = "^0.21"
