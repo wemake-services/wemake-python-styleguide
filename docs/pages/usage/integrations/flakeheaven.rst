@@ -1,42 +1,42 @@
-.. _flakehell:
+.. _flakeheaven:
 
-flakehell
----------
+flakeheaven
+-----------
 
-``flakehell`` is a `legacy-first <https://github.com/life4/flakehell>`_
+``flakeheaven`` is a `legacy-first <https://github.com/life4/flakeheaven>`_
 wrapper around ``flake8`` linter to make it awesome.
 
-.. image:: https://raw.githubusercontent.com/life4/flakehell/master/assets/logo.png
+.. image:: https://raw.githubusercontent.com/life4/flakeheaven/master/assets/logo.png
 
 What does it mean? It means, that it adds some useful
 features to the core ``flake8`` with the new command line utility:
 
 .. code:: bash
 
-  pip install flakehell  # however we recommend to use `poetry`
+  pip install flakeheaven  # however we recommend to use `poetry`
 
-Then you will have to configure ``flakehell`` inside your ``pyproject.toml``:
+Then you will have to configure ``flakeheaven`` inside your ``pyproject.toml``:
 
-- You can run ``flakehell plugins`` to see what plugins are you missing
+- You can run ``flakeheaven plugins`` to see what plugins are you missing
   and configure it properly
-- Or you can use our `preset <https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/flakehell.toml>`_
+- Or you can use our `preset <https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/flakeheaven.toml>`_
   as ``base`` configuration like so:
 
   .. code:: toml
 
-    [tool.flakehell]
+    [tool.flakeheaven]
     # optionally inherit from remote config (or local if you want)
-    base = "https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/flakehell.toml"
+    base = "https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/flakeheaven.toml"
 
 And then:
 
 .. code:: bash
 
-  flakehell lint  # accepts the same arguments, does the same as `flake8`
+  flakeheaven lint  # accepts the same arguments, does the same as `flake8`
 
 The most exciting feature for us is ``baseline`` generation.
 
-.. _flakehell-legacy:
+.. _flakeheaven-legacy:
 
 Legacy first
 ~~~~~~~~~~~~
@@ -53,7 +53,7 @@ Let me introduce the ``baseline`` concept:
 
    .. code:: bash
 
-     flakehell baseline > .flakehell_baseline
+     flakeheaven baseline > .flakeheaven_baseline
 
    It will contain all your current violations list
    with exact locations and quantity.
@@ -62,10 +62,10 @@ Let me introduce the ``baseline`` concept:
    .. code:: ini
 
      # Inside your pyproject.toml
-     [tool.flakehell]
-     baseline = ".flakehell_baseline"
+     [tool.flakeheaven]
+     baseline = ".flakeheaven_baseline"
 
-3. Run your linter again with ``flakehell lint``. You will see no violations!
+3. Run your linter again with ``flakeheaven lint``. You will see no violations!
 4. Try to add a new one into your source code.
    And run your linter again. It will be reported!
 
@@ -79,11 +79,11 @@ Enjoy your new linter in your old project!
 Support
 ~~~~~~~
 
-``flakehell`` is officially supported by ``wemake-python-styleguide``
+``flakeheaven`` is officially supported by ``wemake-python-styleguide``
 and developed by the same people.
 
 Further reading
 ~~~~~~~~~~~~~~~
 
 - Our :ref:`legacy` guide
-- Official docs: `flakehell.readthedocs.io <https://flakehell.readthedocs.io>`_
+- Official docs: `flakeheaven.readthedocs.io <https://flakeheaven.readthedocs.io>`_

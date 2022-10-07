@@ -1,16 +1,16 @@
-# `flakehell` specific configuration.
-# This file is served as `base` config under `[tool.flakehell]`
+# `flakeheaven` specific configuration.
+# This file is served as `base` config under `[tool.flakeheaven]`
 
 # Make sure to install it with:
-# `pip install flakehell`
+# `pip install flakeheaven`
 
 # See:
-# https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/integrations/flakehell.html
+# https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/integrations/flakeheaven.html
 
 # This file is not related to `nitpick` at all.
 # This file is optional, not required for `flake8` users.
 
-[tool.flakehell]
+[tool.flakeheaven]
 format = "grouped"
 show_source = true
 statistics = false
@@ -23,7 +23,7 @@ max_line_length = 80
 
 ignore = "D100, D104, D401, W504, RST303, RST304, DAR103, DAR203"
 
-[tool.flakehell.plugins]
+[tool.flakeheaven.plugins]
 "flake8-*" = ["+*"]
 mccabe = ["+*"]
 nitpick = ["+*"]

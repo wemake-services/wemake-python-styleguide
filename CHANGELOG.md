@@ -362,8 +362,8 @@ and `0.14.0` which will introduce it to the public.
 - Updates `flake8-eradicate`
 - Several small refactoring sessions
 - Adds `hypothesis`-based tests
-- Adds `flakehell` base config
-- Fixes `flakehell` docs
+- Adds `flakeheaven` base config
+- Fixes `flakeheaven` docs
 - Fixes `MAX_NOQA_COMMENTS` and related violation docs
 - Fixes `OverusedExpressionViolation` and `TooManyExpressionsViolation` docs
 
@@ -538,7 +538,7 @@ It features a lot of new rules from different categories.
 
 ### Misc
 
-- Improves `README.md` with `flakehell` and `nitpick` mentions
+- Improves `README.md` with `flakeheaven` and `nitpick` mentions
 - Improves docs all across the project
 
 
@@ -657,7 +657,7 @@ In this release we had a little focus on:
 - Adds `styles/` directory with style presets for tools we use and recommend
 - Adds `bellybutton` to the list of other linters
 - Documents how to use `nitpick` to sync the configuration
-- Documents how to use `flakehell` to create `baseline`s for legacy integrations
+- Documents how to use `flakeheaven` to create `baseline`s for legacy integrations
 - Improves tests for binary, octal, hex, and exponentional numbers
 - Adds new `xenon` CI check
 - Now handles exceptions in our own code, hope to never see them!
