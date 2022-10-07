@@ -40,5 +40,5 @@ You can also use ``pylint`` together with our linter if you
 want so (however, we do not recommend to use ``pylint`` at all)
 with the help of ``flakeheaven``.
 
-See `flakeheaven docs <https://github.com/life4/flakeheaven>`_
+See `flakeheaven docs <https://github.com/flakeheaven/flakeheaven>`_
 for more information.

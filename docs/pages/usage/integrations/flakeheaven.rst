@@ -3,10 +3,8 @@
 flakeheaven
 -----------
 
-``flakeheaven`` is a `legacy-first <https://github.com/life4/flakeheaven>`_
+``flakeheaven`` is a `legacy-first <https://github.com/flakeheaven/flakeheaven>`_
 wrapper around ``flake8`` linter to make it awesome.
-
-.. image:: https://raw.githubusercontent.com/life4/flakeheaven/master/assets/logo.png
 
 What does it mean? It means, that it adds some useful
 features to the core ``flake8`` with the new command line utility:
