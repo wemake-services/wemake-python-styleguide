@@ -8,10 +8,6 @@ else:  # pragma: py-gte-38
     import importlib_metadata  # noqa: WPS440, WPS433
 
 
-#: Our alias for importlib basic exception.
-PackageNotFoundError = importlib_metadata.PackageNotFoundError
-
-
 def get_version(distribution_name: str) -> str:
     """Our helper to get version of a package."""
     return importlib_metadata.version(distribution_name)  # type: ignore
