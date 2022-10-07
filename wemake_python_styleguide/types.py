@@ -38,7 +38,7 @@ Reference
 import ast
 from typing import Tuple, Type, Union
 
-from typing_extensions import Protocol, TypeAlias, final
+from typing_extensions import Protocol, TypeAlias
 
 #: We use this type to represent all string-like nodes.
 AnyText: TypeAlias = Union[ast.Str, ast.Bytes]
