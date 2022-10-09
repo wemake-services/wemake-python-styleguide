@@ -1,12 +1,3 @@
-# Docs:
-# https://docs.readthedocs.io/en/stable/config-file/v2.html
-# https://docs.readthedocs.io/en/stable/build-customization.html
-#
-# NOTE: Please, don't copy this file to build django docs on readthedocs.com
-# This is very specific to our needs (because this project is a template).
-# Also, we have a lot of configuration on rtd's admin side.
-#
-# End projects most of the time do not need any `.readthedocs.yml` file at all.
 version: 2
 
 # Set the version of Python and other tools you might need
