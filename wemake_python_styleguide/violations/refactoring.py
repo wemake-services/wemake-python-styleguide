@@ -45,6 +45,7 @@ Summary
    ImplicitDictGetViolation
    ImplicitNegativeIndexViolation
    SimplifiableReturningIfViolation
+   ChainedIsViolation
 
 Refactoring opportunities
 -------------------------
@@ -81,6 +82,7 @@ Refactoring opportunities
 .. autoclass:: ImplicitDictGetViolation
 .. autoclass:: ImplicitNegativeIndexViolation
 .. autoclass:: SimplifiableReturningIfViolation
+.. autoclass:: ChainedIsViolation
 
 """
 
@@ -1236,3 +1238,31 @@ class SimplifiableReturningIfViolation(ASTViolation):
 
     error_template = 'Found simplifiable returning `if` condition in a function'
     code = 531
+
+
+@final
+class ChainedIsViolation(ASTViolation):
+    """
+    Forbid `ast.Is` in `ast.Compare.ops` when it's size is not zero.
+
+    Reasoning:
+        From the AST perspective, `is` is an operator and can be chained.
+        That can lead to unexpected results when the author wanted to
+        compare the result of `a is b` operation. Instead, Python will chain
+        the operations and compare the last argument of the previous operation.
+
+    Solution:
+        Who knows at this point.
+
+    Example::
+        Correct:
+            a is b and b is None
+
+        Wrong:
+            a is b is None
+
+    .. versionadded:: 0.17.0
+    """
+
+    error_template = 'Found chained `is` operators in an expression'
+    code = 532
