@@ -73,6 +73,17 @@ following settings:
 Our `darglint.toml <https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/darglint.toml>`_
 file is available with the core settings for ``isort``.
 
+.. warning::
+
+  There is a `known issue <https://github.com/terrencepreilly/darglint/issues/186>`_
+  with ``darglint``'s performance when using ``google`` or ``numpy``
+  documentation style, if you face long running times during the linting
+  process you can use the ``sphinx`` style by setting
+  ``docstring-style = sphinx`` in the ``["setup.cfg".flake8]`` section in a
+  nitpick configuration file. Otherwise, you can run ``darglint`` manually and
+  through CIs only, disabling it in flake8 args with
+  ``--darglint-ignore-regex='.*'``.
+
 .. rubric:: Ignoring violations
 
 We know that people might not agree with 100% of our rules.
