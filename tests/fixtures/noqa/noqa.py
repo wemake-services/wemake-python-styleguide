@@ -816,3 +816,5 @@ first, *_rest = some_collection  # noqa: WPS472
 
 def foo2_func():
     return (1, 2, 3, 4, 5, 6)  # noqa: WPS227
+
+noqa_wps532 = variable is some_thing is other_thing  # noqa: WPS532
