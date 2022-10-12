@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.constants import ALL_MAGIC_METHODS
 from wemake_python_styleguide.violations.oop import (
     DirectMagicAttributeAccessViolation,
 )
@@ -105,6 +106,24 @@ class Test(object):
     @classmethod
     def method(cls):
         super().{0}()
+"""
+
+magic_wrapper_method = """
+class Test(object):
+
+    def {0}(cls):
+        self.conn.{0}()
+"""
+
+magic_wrapper_method_inside_stacked_cls = """
+class StackedTest(object):
+
+    def something(cls):
+        class Test(object):
+            def {0}(cls):
+                self.conn.{0}()
+
+        anything()
 """
 
 
@@ -225,7 +244,7 @@ def test_magic_attribute_correct_contexts(
     magic_super_cls_attribute,
     magic_super_cls_method,
 ])
-def test_other_magic_attributs_allowed(
+def test_other_magic_attributes_allowed(
     assert_errors,
     parse_ast_tree,
     code,
@@ -238,6 +257,33 @@ def test_other_magic_attributs_allowed(
 
     Ensures that it is possible to use regular attributes, as well as
     magic attributes for which no (known) alternative exists.
+    """
+    tree = parse_ast_tree(mode(code.format(attribute)))
+
+    visitor = WrongAttributeVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('attribute', ALL_MAGIC_METHODS)
+@pytest.mark.parametrize('code', [
+    magic_wrapper_method,
+    magic_wrapper_method_inside_stacked_cls,
+])
+def test_happy_little_magic_wrapper_methods(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    attribute,
+    default_options,
+    mode,
+):
+    """
+    Test calling magic methods with the same name.
+
+    Ensure that calling magic method inside magic method with the same
+    name does not trigger any violations.
     """
     tree = parse_ast_tree(mode(code.format(attribute)))
 
