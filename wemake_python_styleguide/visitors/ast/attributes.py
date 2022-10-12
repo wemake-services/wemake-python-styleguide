@@ -3,6 +3,7 @@ from typing import ClassVar, FrozenSet
 
 from typing_extensions import final
 
+from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.constants import ALL_MAGIC_METHODS
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming import access
@@ -56,7 +57,7 @@ class WrongAttributeVisitor(BaseNodeVisitor):
             # a "false positive".
 
             ctx = nodes.get_context(node)
-            if isinstance(ctx, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            if isinstance(ctx, FunctionNodes):
                 if node.attr == ctx.name:
                     return
 
