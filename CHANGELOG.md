@@ -19,7 +19,7 @@ Semantic versioning in our case means:
 
 ## WIP
 
-## Features
+### Features
 
 - Bump `flake8` to version `5.x`
 - Bump `flake8-bandit` to version `^4.1`
@@ -27,6 +27,7 @@ Semantic versioning in our case means:
 
 ### Bugfixes
 - Make `generic_visit()` check script properly handle `with` statements.
+- Allow calling magic methods with the same name as the enclosing method #2381
 
 ### Misc
 
