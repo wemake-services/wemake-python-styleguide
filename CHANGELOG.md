@@ -24,6 +24,9 @@ Semantic versioning in our case means:
 - Bump `flake8` to version `5.x`
 - Bump `flake8-bandit` to version `^4.1`
 
+### Bugfixes
+- Make `generic_visit()` check script properly handle `with` statements.
+
 ### Misc
 
 - Replaced `flakehell` mentions to `flakeheaven` #2409
