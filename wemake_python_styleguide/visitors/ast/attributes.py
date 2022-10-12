@@ -1,10 +1,10 @@
 import ast
-import contextlib
-from typing import ClassVar, FrozenSet, List
+from typing import ClassVar, FrozenSet
 
 from typing_extensions import final
 
 from wemake_python_styleguide.constants import ALL_MAGIC_METHODS
+from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.violations.best_practices import (
     ProtectedAttributeViolation,
@@ -12,15 +12,10 @@ from wemake_python_styleguide.violations.best_practices import (
 from wemake_python_styleguide.violations.oop import (
     DirectMagicAttributeAccessViolation,
 )
-from wemake_python_styleguide.visitors import decorators
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
 @final
-@decorators.alias('visit_any_function', (
-    'visit_AsyncFunctionDef',
-    'visit_FunctionDef',
-))
 class WrongAttributeVisitor(BaseNodeVisitor):
     """Ensures that attributes are used correctly."""
 
@@ -29,19 +24,6 @@ class WrongAttributeVisitor(BaseNodeVisitor):
         'cls',
         'mcs',
     ))
-
-    _func_stack: List[str] = []
-
-    def visit_any_function(self, node: ast.FunctionDef) -> None:
-        """
-        Maintain a stack of function names for 'magic method' check context.
-
-        To check for the enclosing function name further down the line,
-        we maintain a stack of them to take possibility of multiple nested
-        definitions into account.
-        """
-        with self._memorize_function_name(node.name):
-            self.generic_visit(node)
 
     def visit_Attribute(self, node: ast.Attribute) -> None:
         """Checks the `Attribute` node."""
@@ -72,18 +54,13 @@ class WrongAttributeVisitor(BaseNodeVisitor):
             # If "magic" method being called has the same name as
             # the enclosing function, then it is a "wrapper" and thus
             # a "false positive".
-            if self._func_stack:
-                if node.attr == self._func_stack[-1]:
+
+            ctx = nodes.get_context(node)
+            if isinstance(ctx, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                if node.attr == ctx.name:
                     return
 
             if node.attr in ALL_MAGIC_METHODS:
                 self._ensure_attribute_type(
                     node, DirectMagicAttributeAccessViolation,
                 )
-
-    @contextlib.contextmanager
-    def _memorize_function_name(self, name):
-        """Used to sidestep `generic_visit(node)` call requirement."""
-        self._func_stack.append(name)
-        yield
-        self._func_stack.pop()
