@@ -126,17 +126,6 @@ class StackedTest(object):
         anything()
 """
 
-magic_wrapper_method_with_stacked_wrapper_cls = """
-class TwiceStackedTest(object):
-
-    def {0}(cls):
-        class Test(object):
-            def {0}(cls):
-                self.conn.{0}()
-
-        self.anything.{0}()
-"""
-
 
 @pytest.mark.parametrize('attribute', [
     '__truediv__',
