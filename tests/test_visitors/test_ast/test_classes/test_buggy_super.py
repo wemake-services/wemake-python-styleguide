@@ -58,6 +58,13 @@ correct_generator_expression = """
     (super(cls, self).transmute(it) for it in items)
 """
 
+correct_nested_methods = """
+class A:
+    def outer_method(self):
+        def inner_method(self):
+            super(A, self).ancestor()
+"""
+
 
 @pytest.mark.parametrize('code', [
     error_generator_expression,
@@ -88,6 +95,7 @@ def test_buggy_super_context(
     correct_list_comprehension,
     correct_dict_comprehension,
     correct_generator_expression,
+    correct_nested_methods,
 ])
 def test_correct_super_context(
     assert_errors,
