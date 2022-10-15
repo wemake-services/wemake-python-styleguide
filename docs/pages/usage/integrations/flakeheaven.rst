@@ -24,7 +24,7 @@ Then you will have to configure ``flakeheaven`` inside your ``pyproject.toml``:
 
     [tool.flakeheaven]
     # optionally inherit from remote config (or local if you want)
-    base = "https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/flakeheaven.toml"
+    base = "https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/styles/flakeheaven.toml"
 
 And then:
 
