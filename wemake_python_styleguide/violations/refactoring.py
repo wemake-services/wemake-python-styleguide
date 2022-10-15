@@ -1261,7 +1261,7 @@ class ChainedIsViolation(ASTViolation):
         Wrong:
             a is b is None
 
-    .. versionadded:: 0.17.0
+    .. versionadded:: 0.18.0
     """
 
     error_template = 'Found chained `is` operators in an expression'
