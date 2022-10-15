@@ -421,3 +421,43 @@ class ClassMethodOrderVisitor(base.BaseNodeVisitor):
         if access.is_private(first):
             return 0  # lowest priority
         return base_methods_order.get(first, public_and_magic_methods_priority)
+
+
+@final
+class BuggySuperCallVisitor(base.BaseNodeVisitor):
+    """
+    Responsible for finding wrong form of `super()` call for certain contexts.
+
+    Call to `super()` without arguments will cause unexpected `TypeError` in a
+    number of specific contexts. Read more: https://bugs.python.org/issue46175
+    """
+
+    _buggy_super_contexts: ClassVar[types.AnyNodes] = (
+        ast.GeneratorExp,
+        ast.SetComp,
+        ast.ListComp,
+        ast.DictComp,
+    )
+
+    def visit_Call(self, node: ast.Call) -> None:
+        """Checks if this is a `super()` call in a specific context."""
+        self._check_buggy_super_context(node)
+        self.generic_visit(node)
+
+    def _check_buggy_super_context(self, node: ast.Call):
+        if not isinstance(node.func, ast.Name):
+            return
+
+        if node.func.id != 'super' or node.args:
+            return
+
+        # Check for being in a nested function
+        ctx = nodes.get_context(node)
+        if isinstance(ctx, FunctionNodes):
+            outer_ctx = nodes.get_context(ctx)
+            if isinstance(outer_ctx, FunctionNodes):
+                self.add_violation(oop.BuggySuperContextViolation(node))
+                return
+
+        if walk.get_closest_parent(node, self._buggy_super_contexts):
+            self.add_violation(oop.BuggySuperContextViolation(node))

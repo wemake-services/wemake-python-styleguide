@@ -818,3 +818,11 @@ def foo2_func():
     return (1, 2, 3, 4, 5, 6)  # noqa: WPS227
 
 noqa_wps532 = variable is some_thing is other_thing  # noqa: WPS532
+
+class Baseline(object):
+    def method(self, number):
+        return number + 1
+
+class Antediluvian(Baseline):
+    def method(self):
+        return list((super().method(some_item) for some_item in items))  # noqa: WPS616

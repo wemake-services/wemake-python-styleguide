@@ -28,6 +28,7 @@ Summary
    WrongSuperCallAccessViolation
    WrongDescriptorDecoratorViolation
    UnpythonicGetterSetterViolation
+   BuggySuperContextViolation
 
 Respect your objects
 --------------------
@@ -48,6 +49,7 @@ Respect your objects
 .. autoclass:: WrongSuperCallAccessViolation
 .. autoclass:: WrongDescriptorDecoratorViolation
 .. autoclass:: UnpythonicGetterSetterViolation
+.. autoclass:: BuggySuperContextViolation
 
 """
 
@@ -671,3 +673,33 @@ class UnpythonicGetterSetterViolation(ASTViolation):
 
     error_template = 'Found unpythonic getter or setter'
     code = 615
+
+
+@final
+class BuggySuperContextViolation(ASTViolation):
+    """
+    Calling super() in buggy context.
+
+    Reasoning:
+        Call to `super()` without arguments will cause unexpected `TypeError`
+        in a number of specific contexts, e.g. dict/set/list comprehensions
+        and generator expressions.
+
+        Read more: https://bugs.python.org/issue46175
+
+    Solution:
+        Use `super(cls, self)` instead in those cases.
+
+    Example::
+
+        # Correct
+        (super(cls, self).augment(it) for it in items)
+
+        # Wrong
+        (super().augment(it) for it in items)
+
+    .. versionadded:: 0.18.0
+    """
+
+    error_template = 'Found incorrect form of `super()` call for the context'
+    code = 616
