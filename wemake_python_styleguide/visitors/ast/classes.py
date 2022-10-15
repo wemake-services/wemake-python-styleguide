@@ -451,5 +451,13 @@ class BuggySuperCallVisitor(base.BaseNodeVisitor):
         if node.func.id != 'super' or node.args:
             return
 
+        # Check for being in a nested function
+        ctx = nodes.get_context(node)
+        if isinstance(ctx, FunctionNodes):
+            outer_ctx = nodes.get_context(ctx)
+            if isinstance(outer_ctx, FunctionNodes):
+                self.add_violation(oop.BuggySuperContextViolation(node))
+                return
+
         if walk.get_closest_parent(node, self._buggy_super_contexts):
             self.add_violation(oop.BuggySuperContextViolation(node))

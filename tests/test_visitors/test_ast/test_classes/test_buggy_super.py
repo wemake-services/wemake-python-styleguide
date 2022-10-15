@@ -26,6 +26,13 @@ error_nested_comprehensions = """
     ]
 """
 
+error_nested_methods = """
+class B(A):
+   def method(self):
+       def inner():
+           super().method()
+"""
+
 error_multiple_nested_comprehensions = """
     [
         it + k + el + 1
@@ -59,6 +66,7 @@ correct_generator_expression = """
     error_set_comprehension,
     error_list_comprehension,
     error_dict_comprehension,
+    error_nested_methods,
 ])
 def test_buggy_super_context(
     assert_errors,
