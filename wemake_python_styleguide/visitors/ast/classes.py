@@ -451,10 +451,5 @@ class BuggySuperCallVisitor(base.BaseNodeVisitor):
         if node.func.id != 'super' or node.args:
             return
 
-        parent = nodes.get_parent(node)
-        while parent:
-            if isinstance(parent, self._buggy_super_contexts):
-                self.add_violation(oop.BuggySuperContextViolation(node))
-                break
-
-            parent = nodes.get_parent(parent)
+        if walk.get_closest_parent(node, self._buggy_super_contexts):
+            self.add_violation(oop.BuggySuperContextViolation(node))

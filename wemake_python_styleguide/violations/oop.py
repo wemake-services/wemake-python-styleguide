@@ -675,6 +675,7 @@ class UnpythonicGetterSetterViolation(ASTViolation):
     code = 615
 
 
+@final
 class BuggySuperContextViolation(ASTViolation):
     """
     Calling super() in buggy context.
@@ -697,7 +698,7 @@ class BuggySuperContextViolation(ASTViolation):
         # Wrong
         (super().augment(it) for it in items)
 
-    .. versionadded:: 0.17.0
+    .. versionadded:: 0.18.0
     """
 
     error_template = 'Found incorrect form of `super()` call for the context'
