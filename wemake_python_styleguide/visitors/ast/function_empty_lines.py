@@ -22,9 +22,7 @@ class _Function(object):
         for token in self._tokens:
             if self._is_target_line(token):
                 continue
-            target_tokens.append(
-                token,
-            )
+            target_tokens.append(token)
         return ''.join([target_token.string for target_token in target_tokens])
 
     def _is_target_line(self, token: tokenize.TokenInfo) -> bool:
@@ -37,7 +35,7 @@ class _Function(object):
 @final
 class _FileFunctions(object):
 
-    def __init__(self, file_tokens: Tuple[tokenize.TokenInfo, ...]):
+    def __init__(self, file_tokens: Tuple[tokenize.TokenInfo, ...]) -> None:
         self._file_tokens = file_tokens
 
     def as_list(self) -> List[_Function]:
@@ -47,7 +45,7 @@ class _FileFunctions(object):
         for token in self._file_tokens:
             if self._is_function_start(token):
                 in_function = True
-            elif self._is_function_end(token, function_tokens):
+            elif self._is_function_end(token, bool(function_tokens)):
                 in_function = False
                 functions.append(_Function(tuple(function_tokens)))
                 function_tokens = []
@@ -61,10 +59,10 @@ class _FileFunctions(object):
     def _is_function_end(
         self,
         token: tokenize.TokenInfo,
-        function_tokens: List[tokenize.TokenInfo],
+        function_tokens_exists: bool,
     ) -> bool:
         is_dedent_token = token.type == tokenize.DEDENT and token.start[1] == 0
-        return is_dedent_token and function_tokens
+        return is_dedent_token and function_tokens_exists
 
 
 @final
@@ -87,6 +85,7 @@ class _FileTokens(object):
             ])
             if not empty_lines_count:
                 return []
+
             available_empty_lines = self._available_empty_lines(
                 len(splitted_function_body), empty_lines_count,
             )
