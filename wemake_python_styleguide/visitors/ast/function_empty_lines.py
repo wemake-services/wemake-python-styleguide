@@ -27,7 +27,7 @@ class _Function(object):
             )
         return ''.join([target_token.string for target_token in target_tokens])
 
-    def _is_target_line(self, token) -> bool:
+    def _is_target_line(self, token: tokenize.TokenInfo) -> bool:
         is_comment = '#' in token.line
         is_string = token.type == tokenize.STRING
         is_multistring_end = '"""' in token.line
@@ -45,7 +45,7 @@ class _FileFunctions(object):
         function_tokens: List[tokenize.TokenInfo] = []
         in_function = False
         for token in self._file_tokens:
-            if self._is_definition_token(token):
+            if self._is_function_start(token):
                 in_function = True
             elif self._is_function_end(token, function_tokens):
                 in_function = False
@@ -55,10 +55,14 @@ class _FileFunctions(object):
                 function_tokens.append(token)
         return functions
 
-    def _is_definition_token(self, token) -> bool:
+    def _is_function_start(self, token: tokenize.TokenInfo) -> bool:
         return token.type == tokenize.NAME and token.string == 'def'
 
-    def _is_function_end(self, token, function_tokens) -> bool:
+    def _is_function_end(
+        self,
+        token: tokenize.TokenInfo,
+        function_tokens: List[tokenize.TokenInfo],
+    ) -> bool:
         is_dedent_token = token.type == tokenize.DEDENT and token.start[1] == 0
         return is_dedent_token and function_tokens
 
