@@ -11,8 +11,6 @@ from wemake_python_styleguide.visitors import base
 @final
 class _Function(object):
 
-    _tokens: Tuple[tokenize.TokenInfo, ...]
-
     def __init__(self, file_tokens: Tuple[tokenize.TokenInfo, ...]):
         self._tokens = file_tokens
 
@@ -38,8 +36,6 @@ class _Function(object):
 
 @final
 class _FileFunctions(object):
-
-    _file_tokens: Tuple[tokenize.TokenInfo, ...]
 
     def __init__(self, file_tokens: Tuple[tokenize.TokenInfo, ...]):
         self._file_tokens = file_tokens
@@ -115,8 +111,6 @@ class _FileTokens(object):
 @final
 class WrongEmptyLinesCountVisitor(base.BaseTokenVisitor):
     """Restricts empty lines in function or method body."""
-
-    _file_tokens: List[tokenize.TokenInfo]
 
     def __init__(self, *args, **kwargs) -> None:
         """Initializes a counter."""
