@@ -1,6 +1,6 @@
 import math
 import tokenize
-from typing import List, Tuple
+from typing import List
 
 from typing_extensions import final
 
@@ -11,7 +11,7 @@ from wemake_python_styleguide.visitors import base
 @final
 class _Function(object):
 
-    def __init__(self, file_tokens: Tuple[tokenize.TokenInfo, ...]):
+    def __init__(self, file_tokens: List[tokenize.TokenInfo]):
         self._tokens = file_tokens
 
     def name_token(self) -> tokenize.TokenInfo:
@@ -35,7 +35,7 @@ class _Function(object):
 @final
 class _FileFunctions(object):
 
-    def __init__(self, file_tokens: Tuple[tokenize.TokenInfo, ...]) -> None:
+    def __init__(self, file_tokens: List[tokenize.TokenInfo]) -> None:
         self._file_tokens = file_tokens
 
     def as_list(self) -> List[_Function]:
@@ -47,7 +47,7 @@ class _FileFunctions(object):
                 in_function = True
             elif self._is_function_end(token, bool(function_tokens)):
                 in_function = False
-                functions.append(_Function(tuple(function_tokens)))
+                functions.append(_Function(function_tokens))
                 function_tokens = []
             if in_function:
                 function_tokens.append(token)
@@ -126,9 +126,7 @@ class WrongEmptyLinesCountVisitor(base.BaseTokenVisitor):
         if token.type != tokenize.ENDMARKER:
             return
         violations = _FileTokens(
-            _FileFunctions(
-                tuple(self._file_tokens),
-            ),
+            _FileFunctions(self._file_tokens),
             self.options.exps_for_one_empty_line,
         ).analyze()
         for violation in violations:
