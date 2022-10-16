@@ -35,7 +35,7 @@ class _Function(object):
 @final
 class _FileFunctions(object):
 
-    def __init__(self, file_tokens: Tuple[tokenize.TokenInfo, ...]):
+    def __init__(self, file_tokens: Tuple[tokenize.TokenInfo, ...]) -> None:
         self._file_tokens = file_tokens
 
     def as_list(self) -> List[_Function]:
