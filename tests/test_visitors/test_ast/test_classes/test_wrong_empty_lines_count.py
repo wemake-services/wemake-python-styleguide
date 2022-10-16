@@ -30,6 +30,24 @@ class WrongClass(object):
         baz()
 """
 
+file_with_few_class = """
+class ValidClass(object):
+
+    def valid_method(self):
+        foo()
+        bar()
+        baz()
+
+    def very_valid_method(self):
+        foo()
+        bar()
+
+
+class EmptyError(Exception):
+
+    message = 'fail'
+"""
+
 wrong_function = """
 def func():
     foo()
@@ -117,6 +135,38 @@ def test_func():
 """
 
 
+class_with_attributes = """
+class Foo(object):
+    first_attribute = 'foo'
+
+
+
+
+    second_attribute = 'bar'
+"""
+
+expression_without_function = """
+print(
+    'Contributing in WPS',
+
+
+
+
+    'is a lot of fun',
+)
+"""
+
+module_level_empty_lines = """
+fstrings_feature = Fstring()
+
+
+
+
+
+fstrings_feature.deprecate()
+"""
+
+
 @pytest.mark.parametrize('input_', [
     class_with_wrong_method,
     wrong_function,
@@ -146,6 +196,10 @@ def test_wrong(
     allow_function_with_comments,
     function_with_docstring,
     function_with_docstring_and_comments,
+    file_with_few_class,
+    class_with_attributes,
+    expression_without_function,
+    module_level_empty_lines,
 ])
 def test_success(
     input_,
