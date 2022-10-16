@@ -22,9 +22,7 @@ class _Function(object):
         for token in self._tokens:
             if self._is_target_line(token):
                 continue
-            target_tokens.append(
-                token,
-            )
+            target_tokens.append(token)
         return ''.join([target_token.string for target_token in target_tokens])
 
     def _is_target_line(self, token) -> bool:
