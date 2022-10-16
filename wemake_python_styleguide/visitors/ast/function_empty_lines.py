@@ -70,7 +70,7 @@ class _FileTokens(object):
         self,
         file_functions: _FileFunctions,
         exps_for_one_empty_line: int,
-    ):
+    ) -> None:
         self._file_functions = file_functions
         self._exps_for_one_empty_line = exps_for_one_empty_line
 
@@ -115,7 +115,7 @@ class WrongEmptyLinesCountVisitor(base.BaseTokenVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Initializes a counter."""
         super().__init__(*args, **kwargs)
-        self._file_tokens = []
+        self._file_tokens: List[tokenize.TokenInfo] = []
 
     def visit(self, token: tokenize.TokenInfo) -> None:
         """Find empty lines count."""
