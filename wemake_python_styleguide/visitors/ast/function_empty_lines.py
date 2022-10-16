@@ -81,6 +81,7 @@ class _FileTokens(object):
             ])
             if not empty_lines_count:
                 return []
+
             available_empty_lines = self._available_empty_lines(
                 len(splitted_function_body), empty_lines_count,
             )
