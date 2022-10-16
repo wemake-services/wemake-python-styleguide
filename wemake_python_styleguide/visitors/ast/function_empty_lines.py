@@ -74,7 +74,7 @@ class _FileTokens(object):
         self,
         file_functions: _FileFunctions,
         exps_for_one_empty_line: int,
-    ):
+    ) -> None:
         self._file_functions = file_functions
         self._exps_for_one_empty_line = exps_for_one_empty_line
 
