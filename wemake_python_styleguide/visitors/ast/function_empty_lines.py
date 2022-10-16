@@ -11,7 +11,7 @@ from wemake_python_styleguide.visitors import base
 @final
 class _Function(object):
 
-    def __init__(self, file_tokens: List[tokenize.TokenInfo]):
+    def __init__(self, file_tokens: List[tokenize.TokenInfo]) -> None:
         self._tokens = file_tokens
 
     def name_token(self) -> tokenize.TokenInfo:
