@@ -121,7 +121,7 @@ class WrongEmptyLinesCountVisitor(base.BaseTokenVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Initializes a counter."""
         super().__init__(*args, **kwargs)
-        self._file_tokens = []
+        self._file_tokens: List[tokenize.TokenInfo] = []
 
     def visit(self, token: tokenize.TokenInfo) -> None:
         """Find empty lines count."""
