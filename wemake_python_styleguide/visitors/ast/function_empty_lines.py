@@ -128,7 +128,5 @@ class WrongEmptyLinesCountVisitor(base.BaseTokenVisitor):
             ),
             self.options.exps_for_one_empty_line,
         ).analyze()
-        if not violations:
-            return
         for violation in violations:
             self.add_violation(violation)
