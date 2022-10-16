@@ -1,5 +1,6 @@
 import math
 import tokenize
+from typing import Tuple
 
 from typing_extensions import final
 
@@ -10,9 +11,9 @@ from wemake_python_styleguide.visitors import base
 @final
 class _Function(object):
 
-    _tokens: tuple[tokenize.TokenInfo, ...]
+    _tokens: Tuple[tokenize.TokenInfo, ...]
 
-    def __init__(self, file_tokens: tuple[tokenize.TokenInfo, ...]):
+    def __init__(self, file_tokens: Tuple[tokenize.TokenInfo, ...]):
         self._tokens = file_tokens
 
     def name_token(self) -> tokenize.TokenInfo:
@@ -38,9 +39,9 @@ class _Function(object):
 @final
 class _FileFunctions(object):
 
-    _file_tokens: tuple[tokenize.TokenInfo, ...]
+    _file_tokens: Tuple[tokenize.TokenInfo, ...]
 
-    def __init__(self, file_tokens: tuple[tokenize.TokenInfo, ...]):
+    def __init__(self, file_tokens: Tuple[tokenize.TokenInfo, ...]):
         self._file_tokens = file_tokens
 
     def as_list(self) -> list[_Function]:
