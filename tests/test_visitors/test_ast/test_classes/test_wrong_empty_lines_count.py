@@ -30,6 +30,24 @@ class WrongClass(object):
         baz()
 """
 
+file_with_few_class = """
+class ValidClass(object):
+
+    def valid_method(self):
+        foo()
+        bar()
+        baz()
+
+    def very_valid_method(self):
+        foo()
+        bar()
+
+
+class EmptyError(Exception):
+
+    message = 'fail'
+"""
+
 wrong_function = """
 def func():
     foo()
@@ -146,6 +164,7 @@ def test_wrong(
     allow_function_with_comments,
     function_with_docstring,
     function_with_docstring_and_comments,
+    file_with_few_class,
 ])
 def test_success(
     input_,
