@@ -29,6 +29,7 @@ Semantic versioning in our case means:
 ### Bugfixes
 - Make `generic_visit()` check script properly handle `with` statements.
 - Allow calling magic methods with the same name as the enclosing method #2381
+- Fix WrongEmptyLinesCountViolation false positive #2531
 
 ### Misc
 

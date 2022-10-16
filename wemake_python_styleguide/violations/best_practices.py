@@ -2812,6 +2812,7 @@ class WrongEmptyLinesCountViolation(TokenizeViolation):
         :str:`wemake_python_styleguide.options.defaults.EXPS_FOR_ONE_EMPTY_LINE`
 
     .. versionadded:: 0.17.0
+    .. versionchanged:: 0.18.0
 
     """
 
