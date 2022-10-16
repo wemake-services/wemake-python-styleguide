@@ -1,6 +1,6 @@
 import math
 import tokenize
-from typing import Tuple
+from typing import List, Tuple
 
 from typing_extensions import final
 
@@ -44,9 +44,9 @@ class _FileFunctions(object):
     def __init__(self, file_tokens: Tuple[tokenize.TokenInfo, ...]):
         self._file_tokens = file_tokens
 
-    def as_list(self) -> list[_Function]:
+    def as_list(self) -> List[_Function]:
         functions = []
-        function_tokens: list[tokenize.TokenInfo] = []
+        function_tokens: List[tokenize.TokenInfo] = []
         in_function = False
         for token in self._file_tokens:
             if self._is_definition_token(token):
@@ -78,7 +78,7 @@ class _FileTokens(object):
         self._file_functions = file_functions
         self._exps_for_one_empty_line = exps_for_one_empty_line
 
-    def analyze(self) -> list[best_practices.WrongEmptyLinesCountViolation]:
+    def analyze(self) -> List[best_practices.WrongEmptyLinesCountViolation]:
         violations = []
         for function in self._file_functions.as_list():
             splitted_function_body = function.body().strip().split('\n')
@@ -116,7 +116,7 @@ class _FileTokens(object):
 class WrongEmptyLinesCountVisitor(base.BaseTokenVisitor):
     """Restricts empty lines in function or method body."""
 
-    _file_tokens: list[tokenize.TokenInfo]
+    _file_tokens: List[tokenize.TokenInfo]
 
     def __init__(self, *args, **kwargs) -> None:
         """Initializes a counter."""
