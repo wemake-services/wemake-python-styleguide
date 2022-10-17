@@ -236,7 +236,7 @@ def test_zero_option(
 
 
 @pytest.mark.parametrize('input_', [
-    # class_with_valid_method,
+    class_with_valid_method,
     file_with_few_class,
 ])
 def test_zero_option_with_valid_method(

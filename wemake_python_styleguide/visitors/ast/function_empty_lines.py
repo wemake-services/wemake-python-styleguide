@@ -26,7 +26,10 @@ class _Function(object):
         return ''.join([target_token.string for target_token in target_tokens])
 
     def _is_target_line(self, token: tokenize.TokenInfo) -> bool:
-        is_comment = '#' in token.line
+        stripped_token_line = token.line.strip()
+        is_comment = False
+        if stripped_token_line:
+            is_comment = '#' in stripped_token_line[0]
         is_string = token.type == tokenize.STRING
         is_multistring_end = '"""' in token.line
         return is_comment or is_string or is_multistring_end
@@ -53,7 +56,7 @@ class _FileFunctions(object):
             )
             if not in_function and self._is_function_start(token):
                 in_function = True
-                function_start_column = self._function_start_column(token)
+                function_start_column = token.start[1]
             elif function_ended:
                 in_function = False
                 function_start_column = 0
@@ -62,11 +65,8 @@ class _FileFunctions(object):
             if in_function:
                 function_tokens.append(token)
 
-    def _is_function_start(self, token: tokenize.TokenInfo) -> int:
+    def _is_function_start(self, token: tokenize.TokenInfo) -> bool:
         return token.type == tokenize.NAME and token.string in {'def', 'async'}
-
-    def _function_start_column(self, token) -> int:
-        return token.start[1]
 
     def _is_function_end(
         self,
