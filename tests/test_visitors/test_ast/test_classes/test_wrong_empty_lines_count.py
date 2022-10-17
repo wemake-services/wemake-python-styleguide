@@ -235,7 +235,12 @@ def test_zero_option(
     assert_errors(visitor, [WrongEmptyLinesCountViolation])
 
 
+@pytest.mark.parametrize('input_', [
+    # class_with_valid_method,
+    file_with_few_class,
+])
 def test_zero_option_with_valid_method(
+    input_,
     parse_tokens,
     default_options,
     assert_errors,
@@ -243,7 +248,7 @@ def test_zero_option_with_valid_method(
     mode,
 ):
     """Test zero configuration with valid method."""
-    file_tokens = parse_tokens(mode(class_with_valid_method))
+    file_tokens = parse_tokens(mode(input_))
     visitor = WrongEmptyLinesCountVisitor(
         options(exps_for_one_empty_line=0), file_tokens=file_tokens,
     )

@@ -1,6 +1,6 @@
 import math
 import tokenize
-from typing import List
+from typing import Generator, List
 
 from typing_extensions import final
 
@@ -39,30 +39,44 @@ class _FileFunctions(object):
         self._file_tokens = file_tokens
 
     def as_list(self) -> List[_Function]:
-        functions = []
+        return list(self._search_functions())
+
+    def _search_functions(self) -> Generator[_Function, None, None]:
         function_tokens: List[tokenize.TokenInfo] = []
         in_function = False
+        function_start_column = 0
         for token in self._file_tokens:
-            if self._is_function_start(token):
+            function_ended = self._is_function_end(
+                token,
+                bool(function_tokens),
+                function_start_column,
+            )
+            if not in_function and self._is_function_start(token):
                 in_function = True
-            elif self._is_function_end(token, bool(function_tokens)):
+                function_start_column = self._function_start_column(token)
+            elif function_ended:
                 in_function = False
-                functions.append(_Function(function_tokens))
+                function_start_column = 0
+                yield _Function(function_tokens)
                 function_tokens = []
             if in_function:
                 function_tokens.append(token)
-        return functions
 
-    def _is_function_start(self, token: tokenize.TokenInfo) -> bool:
-        return token.type == tokenize.NAME and token.string == 'def'
+    def _is_function_start(self, token: tokenize.TokenInfo) -> int:
+        return token.type == tokenize.NAME and token.string in {'def', 'async'}
+
+    def _function_start_column(self, token) -> int:
+        return token.start[1]
 
     def _is_function_end(
         self,
         token: tokenize.TokenInfo,
         function_tokens_exists: bool,
+        function_start_column: int,
     ) -> bool:
-        is_dedent_token = token.type == tokenize.DEDENT and token.start[1] == 0
-        return is_dedent_token and function_tokens_exists
+        column_valid = token.start[1] in {0, function_start_column}
+        is_dedent_token = token.type == tokenize.DEDENT
+        return is_dedent_token and function_tokens_exists and column_valid
 
 
 @final
@@ -84,7 +98,7 @@ class _FileTokens(object):
                 line for line in splitted_function_body if line == ''
             ])
             if not empty_lines_count:
-                return []
+                continue
 
             available_empty_lines = self._available_empty_lines(
                 len(splitted_function_body), empty_lines_count,
