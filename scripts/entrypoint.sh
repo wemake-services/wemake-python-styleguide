@@ -33,8 +33,8 @@ fi
 
 # Sets the output variable for Github Action API:
 # See: https://help.github.com/en/articles/development-tools-for-github-action
-echo "::set-output name=output::$output"
-echo '================================='
+echo "output=$output" >> $GITHUB_OUTPUT
+echo '================================'
 echo
 
 # Fail the build in case status code is not 0:
