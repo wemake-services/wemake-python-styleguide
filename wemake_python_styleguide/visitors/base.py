@@ -6,7 +6,7 @@ See also:
     https://en.wikipedia.org/wiki/Visitor_pattern
 
 Each visitor might work with one or many :term:`violations <violation>`.
-Multiple visitors might one with the same violation.
+Multiple visitors might work with the same violation.
 
 .. mermaid::
    :caption: Visitor relation with violations.
@@ -47,13 +47,13 @@ Then you will have to write logic for your visitor.
 We follow these conventions:
 
 - Public visitor methods start with ``visit_``,
-  than comes the name of a token or node to be visited
+  then comes the name of a token or node to be visited
 - All other methods and attributes should be protected
 - We try to separate as much logic from ``visit_`` methods as possible,
-  so they only route for callbacks that actually executes the checks
+  so they only route for callbacks that actually execute the checks
 - We place repeating logic into ``logic/`` package to be able to reuse it
 
-There are different example of visitors in this project already.
+There are different examples of visitors in this project already.
 
 Reference
 ~~~~~~~~~
