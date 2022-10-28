@@ -1,6 +1,6 @@
 import math
 import tokenize
-from typing import Generator, List
+from typing import Iterator, List
 
 from typing_extensions import final
 
@@ -44,7 +44,7 @@ class _FileFunctions(object):
     def as_list(self) -> List[_Function]:
         return list(self._search_functions())
 
-    def _search_functions(self) -> Generator[_Function, None, None]:
+    def _search_functions(self) -> Iterator[_Function]:
         function_tokens: List[tokenize.TokenInfo] = []
         in_function = False
         function_start_column = 0

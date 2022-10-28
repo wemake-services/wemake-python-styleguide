@@ -190,7 +190,7 @@ def test_wrong(
     assert_errors(visitor, [WrongEmptyLinesCountViolation])
 
 
-@pytest.mark.parametrize('input_', [
+@pytest.mark.parametrize('template', [
     class_with_valid_method,
     allow_function,
     allow_function_with_comments,
@@ -202,14 +202,14 @@ def test_wrong(
     module_level_empty_lines,
 ])
 def test_success(
-    input_,
+    template,
     parse_tokens,
     default_options,
     assert_errors,
     mode,
 ):
     """Testing available cases."""
-    file_tokens = parse_tokens(mode(input_))
+    file_tokens = parse_tokens(mode(template))
 
     visitor = WrongEmptyLinesCountVisitor(
         default_options, file_tokens=file_tokens,
@@ -235,12 +235,12 @@ def test_zero_option(
     assert_errors(visitor, [WrongEmptyLinesCountViolation])
 
 
-@pytest.mark.parametrize('input_', [
+@pytest.mark.parametrize('template', [
     class_with_valid_method,
     file_with_few_class,
 ])
 def test_zero_option_with_valid_method(
-    input_,
+    template,
     parse_tokens,
     default_options,
     assert_errors,
@@ -248,7 +248,7 @@ def test_zero_option_with_valid_method(
     mode,
 ):
     """Test zero configuration with valid method."""
-    file_tokens = parse_tokens(mode(input_))
+    file_tokens = parse_tokens(mode(template))
     visitor = WrongEmptyLinesCountVisitor(
         options(exps_for_one_empty_line=0), file_tokens=file_tokens,
     )
