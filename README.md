@@ -85,7 +85,7 @@ to make all people write **exactly** the same `Python` code.
 
 We have several primary objectives:
 
-0. Enforce `python3.6+` usage
+0. Enforce `python3.7+` usage
 1. Significantly reduce the complexity of your code and make it more maintainable
 2. Enforce "There should be one -- and preferably only one -- obvious way to do it" rule to coding and naming styles
 3. Protect developers from possible errors and enforce best practices
