@@ -1351,7 +1351,7 @@ class InconsistentReturnVariableViolation(ASTViolation):
 @final
 class WalrusViolation(ASTViolation):
     """
-    Forbid local variable that are only used in ``return`` statements.
+    Forbid walrus operator.
 
     This violation can only be thrown on ``python3.8+``.
 
