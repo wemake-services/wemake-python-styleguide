@@ -90,6 +90,7 @@ Summary
    ConsecutiveSlicesViolation
    GettingElementByUnpackingViolation
    WrongEmptyLinesCountViolation
+   MixingFunctionArgumentTypesViolation
 
 Best practices
 --------------
@@ -168,6 +169,7 @@ Best practices
 .. autoclass:: ConsecutiveSlicesViolation
 .. autoclass:: GettingElementByUnpackingViolation
 .. autoclass:: WrongEmptyLinesCountViolation
+.. autoclass:: MixingFunctionArgumentTypesViolation
 
 """
 
@@ -2817,3 +2819,34 @@ class WrongEmptyLinesCountViolation(TokenizeViolation):
 
     error_template = 'Found too many empty lines in `def`: {0}'
     code = 473
+
+@final 
+class MixingFunctionArgumentTypesViolation(ASTViolation):
+    """
+    Prohibits mixing certain parameter types in function signatures
+
+    Reasoning: 
+        Function definitions that have positional parameters with default values and
+        keyword-only parameters and function definitions that have positional parameters
+        with default values and *args are very confusing to call. It is best practice to 
+        create write functions that mix these parameter types.
+    
+    Solution: 
+        Change function definition and behavior so that these types of parameters are not mixed.
+
+    Example: 
+
+        # Correct:
+        def function(first: int, second: int = 0): ...
+        def function(*args): ...
+
+        # Wrong:
+        def first(first: int = 0, *, second: int): ...
+        def second(first: int = 0, *, second: int = 0): ...
+        def first(first: int = 0, *args): ...
+    
+    .. versionadded:: 0.18.0
+
+    """
+    error_template = 'Found a function signature'
+    code = 474

@@ -39,6 +39,7 @@ from wemake_python_styleguide.violations.best_practices import (
     PositionalOnlyArgumentsViolation,
     StopIterationInsideGeneratorViolation,
     WrongFunctionCallViolation,
+    MixingFunctionArgumentTypesViolation,
 )
 from wemake_python_styleguide.violations.refactoring import (
     ImplicitEnumerateViolation,
@@ -435,6 +436,7 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
         self._check_complex_argument_defaults(node)
         if not isinstance(node, ast.Lambda):
             self._check_getter_without_return(node)
+        self._check_mixed_arguments(node)
         self.generic_visit(node)
 
     def _check_getter_without_return(self, node: AnyFunctionDef) -> None:
@@ -490,6 +492,31 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
             if has_incorrect_part:
                 self.add_violation(ComplexDefaultValueViolation(arg))
 
+    def _check_mixed_arguments(self, node: AnyFunctionDefAndLambda) -> None:
+        """
+        case 1 (positional with default) and (args)
+        
+            check for positional with default by checking node.args.default, 
+            which stores the default values for positional only arguments 
+            and positional arguments
+            
+            check for args by checking node.arg.vararg, which refers to *args
+
+        case 2 (positional with defaults) and (kw-only)
+
+            check for positional with default by checking node.args.default, 
+            which stores the default values for positional only arguments 
+            and positional arguments
+
+            check for kw-only by checking node.kwonlyargs, which is a 
+            list of keyword-only arg nodes 
+        """
+        if node.args.defaults and node.args.vararg:
+            self.add_violation(MixingFunctionArgumentTypesViolation(node))
+        
+        elif node.args.kwonlyargs and node.args.defaults:
+            self.add_violation(MixingFunctionArgumentTypesViolation(node))
+            
 
 @final
 class UnnecessaryLiteralsVisitor(base.BaseNodeVisitor):
