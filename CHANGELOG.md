@@ -25,6 +25,7 @@ Semantic versioning in our case means:
 - Bump `flake8-bandit` to version `^4.1`
 - Added `ChainedIsViolation` #2443
 - Added `BuggySuperContextViolation` #2310
+- Added `MixingFunctionArgumentTypesViolation` #1343
 
 ### Bugfixes
 - Make `generic_visit()` check script properly handle `with` statements.
