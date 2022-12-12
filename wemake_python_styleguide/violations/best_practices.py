@@ -2820,19 +2820,22 @@ class WrongEmptyLinesCountViolation(TokenizeViolation):
     error_template = 'Found too many empty lines in `def`: {0}'
     code = 473
 
-@final 
+
+@final
 class MixingFunctionArgumentTypesViolation(ASTViolation):
     """
-    Prohibits mixing certain parameter types in function signatures
+    Prohibits mixing certain parameter types in function signatures.
 
     Reasoning: 
-        Function definitions that have positional parameters with default values and
-        keyword-only parameters and function definitions that have positional parameters
-        with default values and *args are very confusing to call. It is best practice to 
-        create write functions that mix these parameter types.
-    
+        Function definitions that have positional parameters with default values
+        and keyword-only parameters and function definitions that have 
+        positional parameters with default values and *args are very confusing 
+        to call. It is best practice to create functions that do not mix these 
+        parameter types.
+
     Solution: 
-        Change function definition and behavior so that these types of parameters are not mixed.
+        Change function definition and behavior so that these types of 
+        parameters are not mixed.
 
     Example: 
 
@@ -2844,9 +2847,10 @@ class MixingFunctionArgumentTypesViolation(ASTViolation):
         def first(first: int = 0, *, second: int): ...
         def second(first: int = 0, *, second: int = 0): ...
         def first(first: int = 0, *args): ...
-    
+
     .. versionadded:: 0.18.0
 
     """
-    error_template = 'Found a function signature'
+
+    error_template = 'Found bad mix of param types in function'
     code = 474

@@ -36,10 +36,10 @@ from wemake_python_styleguide.violations.best_practices import (
     ComplexDefaultValueViolation,
     FloatingNanViolation,
     GetterWithoutReturnViolation,
+    MixingFunctionArgumentTypesViolation,
     PositionalOnlyArgumentsViolation,
     StopIterationInsideGeneratorViolation,
     WrongFunctionCallViolation,
-    MixingFunctionArgumentTypesViolation,
 )
 from wemake_python_styleguide.violations.refactoring import (
     ImplicitEnumerateViolation,
@@ -494,26 +494,26 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
 
     def _check_mixed_arguments(self, node: AnyFunctionDefAndLambda) -> None:
         """
-        case 1 (positional with default) and (args)
-        
-            check for positional with default by checking node.args.default, 
-            which stores the default values for positional only arguments 
+        Case 1 (positional with default) and (args).
+
+            check for positional with default by checking node.args.default,
+            which stores the default values for positional only arguments
             and positional arguments
-            
+
             check for args by checking node.arg.vararg, which refers to *args
 
-        case 2 (positional with defaults) and (kw-only)
+        Case 2 (positional with defaults) and (kw-only).
 
-            check for positional with default by checking node.args.default, 
-            which stores the default values for positional only arguments 
+            check for positional with default by checking node.args.default,
+            which stores the default values for positional only arguments
             and positional arguments
 
-            check for kw-only by checking node.kwonlyargs, which is a 
-            list of keyword-only arg nodes 
+            check for kw-only by checking node.kwonlyargs, which is a
+            list of keyword-only arg nodes
         """
         if node.args.defaults and node.args.vararg:
             self.add_violation(MixingFunctionArgumentTypesViolation(node))
-        
+
         elif node.args.kwonlyargs and node.args.defaults:
             self.add_violation(MixingFunctionArgumentTypesViolation(node))
             
