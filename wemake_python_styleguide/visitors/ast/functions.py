@@ -516,7 +516,7 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
 
         elif node.args.kwonlyargs and node.args.defaults:
             self.add_violation(MixingFunctionArgumentTypesViolation(node))
-            
+
 
 @final
 class UnnecessaryLiteralsVisitor(base.BaseNodeVisitor):
