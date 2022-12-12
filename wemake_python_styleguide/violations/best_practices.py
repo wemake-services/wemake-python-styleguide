@@ -2843,15 +2843,17 @@ class MixingFunctionArgumentTypesViolation(ASTViolation):
         def function(first: int, second: int = 0) :
             ...
 
-        def function(\*args) :
+        def function(*args) :
             ...
 
         # Wrong:
-        def first(first: int = 0, \* , second: int) :
+        def first(first: int = 0, * , second: int) :
             ...
-        def second(first: int = 0, \* , second: int = 0) :
+
+        def second(first: int = 0, * , second: int = 0) :
             ...
-        def first(first: int = 0, \*args) :
+
+        def first(first: int = 0, *args) :
             ...
 
     .. versionadded:: 0.18.0
