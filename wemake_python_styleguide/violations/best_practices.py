@@ -2826,27 +2826,27 @@ class MixingFunctionArgumentTypesViolation(ASTViolation):
     """
     Prohibits mixing certain parameter types in function signatures.
 
-    Reasoning: 
+    Reasoning:
         Function definitions that have positional parameters with default values
-        and keyword-only parameters and function definitions that have 
-        positional parameters with default values and *args are very confusing 
-        to call. It is best practice to create functions that do not mix these 
+        and keyword-only parameters and function definitions that have
+        positional parameters with default values and *args are very confusing
+        to call. It is best practice to create functions that do not mix these
         parameter types.
 
-    Solution: 
-        Change function definition and behavior so that these types of 
+    Solution:
+        Change function definition and behavior so that these types of
         parameters are not mixed.
 
-    Example: 
+    Example:
 
         # Correct:
         def function(first: int, second: int = 0): ...
-        def function(*args): ...
+        def function(`*`args): ...
 
         # Wrong:
-        def first(first: int = 0, *, second: int): ...
-        def second(first: int = 0, *, second: int = 0): ...
-        def first(first: int = 0, *args): ...
+        def first(first: int = 0, `*`, second: int): ...
+        def second(first: int = 0, `*`, second: int = 0): ...
+        def first(first: int = 0, `*`args): ...
 
     .. versionadded:: 0.18.0
 

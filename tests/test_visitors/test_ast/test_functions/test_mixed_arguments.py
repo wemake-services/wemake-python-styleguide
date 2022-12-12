@@ -45,12 +45,12 @@ def second(first: int = 0, second: int = 0, *args) :
 """
 
 wrong_function3 = """
-def first(first: int = 0, *, second: int): 
+def first(first: int = 0, *, second: int):
     ...
 """
 
 wrong_function4 = """
-def second(first: int = 0, *, second: int = 0): 
+def second(first: int = 0, *, second: int = 0):
     ...
 """
 
@@ -91,9 +91,9 @@ def test_mixed_arguments(
     mode,
     default_options,
 ):
-    """Testing that functions with positional parameters with default values and 
-    keyword-only paramters aren't allowed. Also tests that functions with 
-    positional arguments with default values amd *args aren't allowed."""
+    """Testing that functions with positional parameters with default values
+    and keyword-only paramters are allowed. Also tests that functions with
+    positional arguments with default values and args are not allowed."""
     tree = parse_ast_tree(mode(code))
 
     visitor = FunctionSignatureVisitor(default_options, tree=tree)

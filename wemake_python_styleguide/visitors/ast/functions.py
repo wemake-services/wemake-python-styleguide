@@ -500,7 +500,7 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
             which stores the default values for positional only arguments
             and positional arguments
 
-            check for args by checking node.arg.vararg, which refers to *args
+            check for args by checking node.arg.vararg, which refers to args
 
         Case 2 (positional with defaults) and (kw-only).
 
