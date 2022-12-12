@@ -3,7 +3,6 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     MixingFunctionArgumentTypesViolation,
 )
-
 from wemake_python_styleguide.visitors.ast.functions import (
     FunctionSignatureVisitor,
 )
@@ -70,7 +69,7 @@ def test_not_mixed_arguments(
     default_options,
 ):
     """Testing that regular functions are allowed."""
-    tree= parse_ast_tree(mode(code))
+    tree = parse_ast_tree(mode(code))
 
     visitor = FunctionSignatureVisitor(default_options, tree=tree)
     visitor.run()
@@ -91,9 +90,7 @@ def test_mixed_arguments(
     mode,
     default_options,
 ):
-    """Testing that functions with positional parameters with default values
-    and keyword-only paramters are allowed. Also tests that functions with
-    positional arguments with default values and args are not allowed."""
+    """Testing that bad mixing of param types is not allowed."""
     tree = parse_ast_tree(mode(code))
 
     visitor = FunctionSignatureVisitor(default_options, tree=tree)
