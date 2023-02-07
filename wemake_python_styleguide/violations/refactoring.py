@@ -1266,3 +1266,36 @@ class ChainedIsViolation(ASTViolation):
 
     error_template = 'Found chained `is` operators in an expression'
     code = 532
+
+
+@final
+class UselessTernaryOperatorViolation(ASTViolation):
+    """
+    Forbid the use of ternary operator if both possible results return the same value.
+
+    Reasoning:
+        There is no need to use ternary operator if both possible results return
+        the same value.
+
+    Solution:
+        Instead of testing using the ternary operator we can replace it with a single
+        value.
+
+    Example::
+
+        # Correct:
+        a if .... else c
+        a if a != b else c
+
+        # Wrong:
+        a if ... else a
+        a if a is not None else None
+        a if a != b else b
+        b if a == b else a
+
+    .. versionadded:: 0.17.0
+
+    """
+
+    error_template = 'Found useless ternary operator'
+    code = 533

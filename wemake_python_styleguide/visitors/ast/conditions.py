@@ -27,6 +27,7 @@ from wemake_python_styleguide.violations.refactoring import (
     UnmergedIsinstanceCallsViolation,
     UselessLenCompareViolation,
     UselessReturningElseViolation,
+    UselessTernaryOperatorViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
@@ -338,3 +339,61 @@ class ChainedIsVisitor(BaseNodeVisitor):
                 self.add_violation(ChainedIsViolation(node))
 
         self.generic_visit(node)
+
+
+@final
+class UselessTernaryOperatorVisitor(BaseNodeVisitor):
+    """is used to find useless ternary operator"""
+
+    def visit_IfExp(self, node: ast.IfExp) -> None:
+        
+        self._check_number_of_objects(node)
+        self._check_same_return_values(node)
+        self._check_return_value_none(node)
+
+        self.generic_visit(node)
+
+    def _check_number_of_objects(self, node: ast.IfExp):
+        if (
+                isinstance(node.test, ast.Compare)
+                and len(node.test.ops) == 1
+                and (
+                        isinstance(node.test.ops[0], ast.Eq)
+                        or isinstance(node.test.ops[0], ast.NotEq)
+                    )
+            ):
+            ids = set()
+
+            if isinstance(node.body, ast.Name):
+                ids.add(node.body.id)
+            if isinstance(node.orelse, ast.Name):
+                ids.add(node.orelse.id)
+
+            if isinstance(node.test.left, ast.Name):
+                ids.add(node.test.left.id)
+            if (
+                    len(node.test.comparators) == 1
+                    and isinstance(node.test.comparators[0],ast.Name)
+                ):
+                ids.add(node.test.comparators[0].id)
+
+                if len(ids) < 3:
+                    self.add_violation(UselessTernaryOperatorViolation(node))
+    
+    def _check_same_return_values(self, node: ast.IfExp):
+        if (
+                isinstance(node.body, ast.Name)
+                and isinstance(node.orelse, ast.Name)
+                and node.body.id == node.orelse.id
+            ):
+                self.add_violation(UselessTernaryOperatorViolation(node))
+
+    def _check_return_value_none(self, node: ast.IfExp):
+        if (
+                isinstance(node.body, ast.Name)
+                and len(node.test.ops) == 1
+                and isinstance(node.test.ops[0], ast.IsNot)
+                and isinstance(node.orelse, ast.Constant)
+                and node.orelse.value == None
+            ):
+                self.add_violation(UselessTernaryOperatorViolation(node))
