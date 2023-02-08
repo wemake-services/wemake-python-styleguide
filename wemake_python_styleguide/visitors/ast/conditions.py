@@ -387,13 +387,3 @@ class UselessTernaryOperatorVisitor(BaseNodeVisitor):
                 and node.body.id == node.orelse.id
             ):
                 self.add_violation(UselessTernaryOperatorViolation(node))
-
-    def _check_return_value_none(self, node: ast.IfExp):
-        if (
-                isinstance(node.body, ast.Name)
-                and len(node.test.ops) == 1
-                and isinstance(node.test.ops[0], ast.IsNot)
-                and isinstance(node.orelse, ast.Constant)
-                and node.orelse.value == None
-            ):
-                self.add_violation(UselessTernaryOperatorViolation(node))
