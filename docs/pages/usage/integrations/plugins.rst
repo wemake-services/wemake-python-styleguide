@@ -6,11 +6,6 @@ We leverage all the existing ``flake8``
 and tools.
 There are different integrations for your workflow.
 
-If you want to keep absolute control over the installed plugins,
-and prevent wemake-python-styleguide to install its dependencies,
-you can install a lighter fork, `wps-light <https://github.com/pawamoy/wps-light>`_,
-which behaves the same but doesn't depend on any flake8 plugin.
-
 Plugins
 ~~~~~~~
 
