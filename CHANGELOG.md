@@ -34,6 +34,7 @@ Semantic versioning in our case means:
 ### Misc
 
 - Replaced `flakehell` mentions to `flakeheaven` #2409
+- Add support to run wemake-python-styleguide as a pre-commit hook
 
 
 ## 0.17.0
