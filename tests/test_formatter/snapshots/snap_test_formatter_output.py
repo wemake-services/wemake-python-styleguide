@@ -350,6 +350,7 @@ snapshots['test_ipynb formatter_ipynb'] = '''
   13:10    WPS110 Found wrong variable name: param
   14:12    WPS437 Found protected attribute usage: _protected
   14:31    WPS303 Found underscored number: 10_00
+
 Full list of violations and explanations:
 https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
 '''
