@@ -83,7 +83,6 @@ hypothesmith = "^0.2"
 
 mypy = "^0.982"
 
-safety = "^2.2"
 autopep8 = "^1.7"
 import-linter = "^1.2"
 
