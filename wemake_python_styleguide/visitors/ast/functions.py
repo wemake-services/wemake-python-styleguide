@@ -211,8 +211,18 @@ class WrongFunctionCallContextVisitor(base.BaseNodeVisitor):
         if not function_name:
             return
 
-        if isinstance(nodes.get_parent(node), ast.withitem):
+        parent_node = nodes.get_parent(node)
+
+        if isinstance(parent_node, ast.withitem):
             # We do not care about `with` or `async with` - both are fine.
+            return
+
+        if_exp_inside_with = (
+            isinstance(parent_node, ast.IfExp) and
+            isinstance(nodes.get_parent(parent_node), ast.withitem)
+        )
+
+        if if_exp_inside_with:
             return
 
         self.add_violation(OpenWithoutContextManagerViolation(node))

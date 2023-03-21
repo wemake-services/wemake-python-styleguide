@@ -33,6 +33,13 @@ def wrapper():
         ...
 """
 
+context_manager5 = """
+def wrapper():
+    with ({0} if check else nullcontext()) as x:
+        ...
+"""
+
+
 # Wrong:
 
 expression = '{0}'
@@ -51,6 +58,7 @@ finally:
     context_manager2,
     context_manager3,
     context_manager4,
+    context_manager5,
 ])
 @pytest.mark.parametrize('call', [
     'open()',
