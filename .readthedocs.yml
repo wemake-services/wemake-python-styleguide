@@ -13,9 +13,7 @@ build:
       - asdf global poetry latest
       - poetry config virtualenvs.create false
     post_install:
-      - |
-        . "$(pwd | rev | sed 's/stuokcehc/svne/' | rev)/bin/activate"
-        && poetry install --only main --only docs
+      - . "$(pwd | rev | sed 's/stuokcehc/svne/' | rev)/bin/activate" && poetry install --only main --only docs
 
 sphinx:
   configuration: 'docs/conf.py'
