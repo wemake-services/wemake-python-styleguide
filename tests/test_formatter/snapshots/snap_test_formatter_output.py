@@ -336,4 +336,20 @@ snapshots['test_formatter_correct[cli_options6-statistic_with_source] formatter_
 \x1b[4m\x1b[1mAll errors: 0\x1b[0m\x1b[0m
 '''
 
-snapshots['test_ipynb formatter_ipynb'] = ''
+snapshots['test_ipynb formatter_ipynb'] = '''
+\x1b[4m\x1b[1mtests/fixtures/notebook.ipynb\x1b[0m\x1b[0m
+  3:1      DAR101 Missing parameter(s) in Docstring: - good_name
+  3:1      DAR201 Missing "Returns" in Docstring: - return
+  8:1      D103  Missing docstring in public function
+  8:1      WPS111 Found too short name: s < 2
+  8:7      WPS110 Found wrong variable name: handle
+  9:21     WPS432 Found magic number: 200
+  9:21     WPS303 Found underscored number: 2_00
+  13:1     D103  Missing docstring in public function
+  13:1     WPS110 Found wrong variable name: data
+  13:10    WPS110 Found wrong variable name: param
+  14:12    WPS437 Found protected attribute usage: _protected
+  14:31    WPS303 Found underscored number: 10_00
+Full list of violations and explanations:
+https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+'''
