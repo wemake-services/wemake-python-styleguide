@@ -760,6 +760,7 @@ files = [
 [package.dependencies]
 attrs = ">=19.2.0"
 exceptiongroup = {version = ">=1.0.0", markers = "python_version < \"3.11\""}
+lark = {version = ">=0.10.1", optional = true, markers = "extra == \"lark\""}
 sortedcontainers = ">=2.1.0,<3.0.0"
 
 [package.extras]
@@ -780,20 +781,19 @@ zoneinfo = ["backports.zoneinfo (>=0.2.1)", "tzdata (>=2022.7)"]
 
 [[package]]
 name = "hypothesmith"
-version = "0.2.0"
+version = "0.2.3"
 description = "Hypothesis strategies for generating Python programs, something like CSmith"
 category = "dev"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 files = [
-    {file = "hypothesmith-0.2.0-py3-none-any.whl", hash = "sha256:21e4169bbdf471e44b3e0bedaade4bb2268d06ac660ef7d5facf4807be93cf6f"},
-    {file = "hypothesmith-0.2.0.tar.gz", hash = "sha256:0fb7b3fd03d76eddd4474b0561e1c2662457593a74cc300fd27e5409cd4d7922"},
+    {file = "hypothesmith-0.2.3-py3-none-any.whl", hash = "sha256:e84890e044dfa3e8e14d3368ca7463d33dcfc75737544b2b0aeac8de4a24a3c7"},
+    {file = "hypothesmith-0.2.3.tar.gz", hash = "sha256:bdce845ec984e6e3fed21e65d2e82b8ebc6de5ca5eb93649dfd76034c5906a46"},
 ]
 
 [package.dependencies]
-hypothesis = ">=5.41.0"
-lark-parser = ">=0.7.2"
-libcst = ">=0.3.8"
+hypothesis = {version = ">=6.58.1", extras = ["lark"]}
+libcst = ">=0.4.0"
 
 [[package]]
 name = "identify"
@@ -1009,15 +1009,15 @@ files = [
 ]
 
 [[package]]
-name = "lark-parser"
-version = "0.12.0"
+name = "lark"
+version = "1.1.5"
 description = "a modern parsing library"
 category = "dev"
 optional = false
 python-versions = "*"
 files = [
-    {file = "lark-parser-0.12.0.tar.gz", hash = "sha256:15967db1f1214013dca65b1180745047b9be457d73da224fcda3d9dd4e96a138"},
-    {file = "lark_parser-0.12.0-py2.py3-none-any.whl", hash = "sha256:0eaf30cb5ba787fe404d73a7d6e61df97b21d5a63ac26c5008c78a494373c675"},
+    {file = "lark-1.1.5-py3-none-any.whl", hash = "sha256:8476f9903e93fbde4f6c327f74d79e9b4bd0ed9294c5dfa3164ab8c581b5de2a"},
+    {file = "lark-1.1.5.tar.gz", hash = "sha256:4b534eae1f9af5b4ea000bea95776350befe1981658eea3820a01c37e504bb4d"},
 ]
 
 [package.extras]
