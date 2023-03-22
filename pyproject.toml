@@ -100,7 +100,7 @@ sphinx = "^3.2"
 jinja2 = "<3.1"
 # end
 sphinx-autodoc-typehints = "^1.12"
-sphinxcontrib-mermaid = "^0.7"
+sphinxcontrib-mermaid = ">=0.7,<0.9"
 added-value = "^0.21"
 m2r2 = "^0.3"
 tomli = "^2.0"
