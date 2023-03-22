@@ -1420,14 +1420,14 @@ icu = ["PyICU (>=1.0.0)"]
 
 [[package]]
 name = "nbqa"
-version = "1.5.2"
+version = "1.5.3"
 description = "Run any standard Python code quality tool on a Jupyter Notebook"
 category = "dev"
 optional = false
 python-versions = ">=3.7.0"
 files = [
-    {file = "nbqa-1.5.2-py3-none-any.whl", hash = "sha256:5613bb2be69e8c51ff49eefe1cd27682313fb3f3fa5c40c68980ed0a56b2fdf0"},
-    {file = "nbqa-1.5.2.tar.gz", hash = "sha256:a08d09e26f00d1c98f46be23a12f6185593e49fb3b0419fa76dda9ce6db27bed"},
+    {file = "nbqa-1.5.3-py3-none-any.whl", hash = "sha256:5594450b77ece3e76f27528c569afa6fd8747a9301413ca7fba37829968861be"},
+    {file = "nbqa-1.5.3.tar.gz", hash = "sha256:b33629f353d3d1bff21982f65a1a03f22a532854719db222eaa5d3bff28bc9a0"},
 ]
 
 [package.dependencies]
