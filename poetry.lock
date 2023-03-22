@@ -405,14 +405,14 @@ stevedore = "*"
 
 [[package]]
 name = "docutils"
-version = "0.19"
+version = "0.17.1"
 description = "Docutils -- Python Documentation Utilities"
 category = "main"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 files = [
-    {file = "docutils-0.19-py3-none-any.whl", hash = "sha256:5e1de4d849fee02c63b040a4a3fd567f4ab104defd8a5511fbbc24a8a017efbc"},
-    {file = "docutils-0.19.tar.gz", hash = "sha256:33995a6753c30b7f577febfc2c50411fec6aac7f7ffeb7c4cfe5991072dcf9e6"},
+    {file = "docutils-0.17.1-py2.py3-none-any.whl", hash = "sha256:cf316c8370a737a022b72b56874f6602acf974a37a9fba42ec2876387549fc61"},
+    {file = "docutils-0.17.1.tar.gz", hash = "sha256:686577d2e4c32380bb50cbb22f575ed742d58168cee37e99117a854bcd88f125"},
 ]
 
 [[package]]
@@ -1194,18 +1194,18 @@ source = ["Cython (>=0.29.7)"]
 
 [[package]]
 name = "m2r2"
-version = "0.3.3"
+version = "0.3.2"
 description = "Markdown and reStructuredText in a single file."
 category = "dev"
 optional = false
 python-versions = "*"
 files = [
-    {file = "m2r2-0.3.3-py3-none-any.whl", hash = "sha256:2ee32a5928c3598b67c70e6d22981ec936c03d5bfd2f64229e77678731952f16"},
-    {file = "m2r2-0.3.3.tar.gz", hash = "sha256:f9b6e9efbc2b6987dbd43d2fd15a6d115ba837d8158ae73295542635b4086e75"},
+    {file = "m2r2-0.3.2-py3-none-any.whl", hash = "sha256:d3684086b61b4bebe2307f15189495360f05a123c9bda2a66462649b7ca236aa"},
+    {file = "m2r2-0.3.2.tar.gz", hash = "sha256:ccd95b052dcd1ac7442ecb3111262b2001c10e4119b459c34c93ac7a5c2c7868"},
 ]
 
 [package.dependencies]
-docutils = ">=0.19"
+docutils = "*"
 mistune = "0.8.4"
 
 [[package]]
@@ -2071,22 +2071,22 @@ files = [
 ]
 
 [[package]]
-name = "Sphinx"
-version = "3.5.3"
+name = "sphinx"
+version = "4.3.2"
 description = "Python documentation generator"
 category = "dev"
 optional = false
-python-versions = ">=3.5"
+python-versions = ">=3.6"
 files = [
-    {file = "Sphinx-3.5.3-py3-none-any.whl", hash = "sha256:3f01732296465648da43dec8fb40dc451ba79eb3e2cc5c6d79005fd98197107d"},
-    {file = "Sphinx-3.5.3.tar.gz", hash = "sha256:ce9c228456131bab09a3d7d10ae58474de562a6f79abb3dc811ae401cf8c1abc"},
+    {file = "Sphinx-4.3.2-py3-none-any.whl", hash = "sha256:6a11ea5dd0bdb197f9c2abc2e0ce73e01340464feaece525e64036546d24c851"},
+    {file = "Sphinx-4.3.2.tar.gz", hash = "sha256:0a8836751a68306b3fe97ecbe44db786f8479c3bf4b80e3a7f5c838657b4698c"},
 ]
 
 [package.dependencies]
 alabaster = ">=0.7,<0.8"
 babel = ">=1.3"
 colorama = {version = ">=0.3.5", markers = "sys_platform == \"win32\""}
-docutils = ">=0.12"
+docutils = ">=0.14,<0.18"
 imagesize = "*"
 Jinja2 = ">=2.3"
 packaging = "*"
@@ -2096,14 +2096,14 @@ setuptools = "*"
 snowballstemmer = ">=1.1"
 sphinxcontrib-applehelp = "*"
 sphinxcontrib-devhelp = "*"
-sphinxcontrib-htmlhelp = "*"
+sphinxcontrib-htmlhelp = ">=2.0.0"
 sphinxcontrib-jsmath = "*"
 sphinxcontrib-qthelp = "*"
-sphinxcontrib-serializinghtml = "*"
+sphinxcontrib-serializinghtml = ">=1.1.5"
 
 [package.extras]
 docs = ["sphinxcontrib-websupport"]
-lint = ["docutils-stubs", "flake8 (>=3.5.0)", "isort", "mypy (>=0.800)"]
+lint = ["docutils-stubs", "flake8 (>=3.5.0)", "isort", "mypy (>=0.920)", "types-pkg-resources", "types-requests", "types-typed-ast"]
 test = ["cython", "html5lib", "pytest", "pytest-cov", "typed-ast"]
 
 [[package]]
@@ -2511,4 +2511,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "898987d5feda0e4c9ef640c294ff27a4c3adcc4ae17c05433ca4e1c7aa6c0c2d"
+content-hash = "ec3e4020a452cadc5179490f290cf037d0aca5d20a754c39556196728878706d"
