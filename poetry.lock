@@ -736,14 +736,17 @@ typing-extensions = {version = ">=3.7.4.3", markers = "python_version < \"3.8\""
 
 [[package]]
 name = "grimp"
-version = "2.0"
+version = "2.3"
 description = "Builds a queryable graph of the imports within one or more Python packages."
 category = "dev"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "grimp-2.0.tar.gz", hash = "sha256:4a279a04aa45451b43cbef781be77fda7beb37444c2568915418901bcfc51d27"},
+    {file = "grimp-2.3.tar.gz", hash = "sha256:78e4ace38be714bbfc0c2f64322722daa72e4d6e9b2cb0d2452058222e5b58b8"},
 ]
+
+[package.dependencies]
+typing-extensions = ">=3.10.0.0"
 
 [[package]]
 name = "hypothesis"
@@ -836,22 +839,20 @@ files = [
 
 [[package]]
 name = "import-linter"
-version = "1.4.0"
+version = "1.8.0"
 description = "Enforces rules for the imports within and between Python packages."
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "import-linter-1.4.0.tar.gz", hash = "sha256:8f682c3b10087fdba062f2d62b118fdce7fc01cc848df863e85c1a97e1194cca"},
+    {file = "import-linter-1.8.0.tar.gz", hash = "sha256:482fc2cb0c036cf17d9ee6552077acabb426fa9dab36927589bb857935b82e69"},
 ]
 
 [package.dependencies]
 click = ">=6"
-grimp = ">=2.0"
+grimp = ">=2.3"
+tomli = {version = ">=1.2.1", markers = "python_version < \"3.11\""}
 typing-extensions = ">=3.10.0.0"
-
-[package.extras]
-toml = ["toml"]
 
 [[package]]
 name = "importlib-metadata"
