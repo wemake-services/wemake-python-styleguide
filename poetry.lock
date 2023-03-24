@@ -329,18 +329,19 @@ toml = ["tomli"]
 
 [[package]]
 name = "coverage-conditional-plugin"
-version = "0.5.0"
+version = "0.8.0"
 description = "Conditional coverage based on any rules you define!"
 category = "dev"
 optional = false
-python-versions = ">=3.6,<4.0"
+python-versions = ">=3.7,<4.0"
 files = [
-    {file = "coverage-conditional-plugin-0.5.0.tar.gz", hash = "sha256:053af7b38b07131748c6c9548c77895fd8e6b24ac81cb657f337415b64bdd3c1"},
-    {file = "coverage_conditional_plugin-0.5.0-py3-none-any.whl", hash = "sha256:513d65ebafdd16f20455d5b0ac0b72807a12ce16b7937a0d09a1c3e810eea5c2"},
+    {file = "coverage-conditional-plugin-0.8.0.tar.gz", hash = "sha256:e6564944a32ccc962f8c0000ac618efa5f5ff232cb9bcc677ce98546dfa61e6d"},
+    {file = "coverage_conditional_plugin-0.8.0-py3-none-any.whl", hash = "sha256:421079fbf9676c48397dd14254746e5e2656280b87ef83835701dd233053b9cd"},
 ]
 
 [package.dependencies]
-coverage = ">=5,<7"
+coverage = ">=5,<8"
+importlib_metadata = {version = "*", markers = "python_version < \"3.10\""}
 packaging = ">=20.4"
 
 [[package]]
@@ -2500,4 +2501,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "8b6bb1300aa2e3011ee183cbd765c6636ed29885af2f17adae3e503f6264c45b"
+content-hash = "c7aca5e07df69fae320b7e9dabb1e21bda6bfbca32a19553ad670188707d08b0"
