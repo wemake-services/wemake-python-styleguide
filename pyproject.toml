@@ -83,7 +83,7 @@ hypothesmith = "^0.2"
 
 mypy = "^0.982"
 
-autopep8 = "^1.7"
+autopep8 = ">=1.7,<3.0"
 import-linter = "^1.2"
 
 astpath = "^0.9"

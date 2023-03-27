@@ -94,19 +94,19 @@ tests-no-zope = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "mypy 
 
 [[package]]
 name = "autopep8"
-version = "1.7.0"
+version = "2.0.0"
 description = "A tool that automatically formats Python code to conform to the PEP 8 style guide"
 category = "dev"
 optional = false
 python-versions = "*"
 files = [
-    {file = "autopep8-1.7.0-py2.py3-none-any.whl", hash = "sha256:6f09e90a2be784317e84dc1add17ebfc7abe3924239957a37e5040e27d812087"},
-    {file = "autopep8-1.7.0.tar.gz", hash = "sha256:ca9b1a83e53a7fad65d731dc7a2a2d50aa48f43850407c59f6a1a306c4201142"},
+    {file = "autopep8-2.0.0-py2.py3-none-any.whl", hash = "sha256:ad924b42c2e27a1ac58e432166cc4588f5b80747de02d0d35b1ecbd3e7d57207"},
+    {file = "autopep8-2.0.0.tar.gz", hash = "sha256:8b1659c7f003e693199f52caffdc06585bb0716900bbc6a7442fd931d658c077"},
 ]
 
 [package.dependencies]
 pycodestyle = ">=2.9.1"
-toml = "*"
+tomli = "*"
 
 [[package]]
 name = "autorepr"
@@ -2501,4 +2501,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "c7aca5e07df69fae320b7e9dabb1e21bda6bfbca32a19553ad670188707d08b0"
+content-hash = "abd5a6b5ffcce75ca131e22df6df47531e7d618dff51dc9a35e29cf582e0e361"
