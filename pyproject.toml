@@ -89,7 +89,7 @@ import-linter = "^1.2"
 astpath = "^0.9"
 lxml = "^4.9"
 nbqa = "^1.2"
-doc8 = "^0.11"
+doc8 = ">=0.11,<1.1"
 
 [tool.poetry.group.docs]
 optional = true
