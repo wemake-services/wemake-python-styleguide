@@ -1487,14 +1487,14 @@ toolchain = ["black", "blacken-docs", "flake8", "isort", "jupytext", "mypy", "py
 
 [[package]]
 name = "nitpick"
-version = "0.33.0"
+version = "0.33.1"
 description = "Enforce the same settings across multiple language-independent projects"
 category = "dev"
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "nitpick-0.33.0-py3-none-any.whl", hash = "sha256:737fe069f0597c2ebfc6f50f86415296fd604d5d8f475ae12efb19527455dc54"},
-    {file = "nitpick-0.33.0.tar.gz", hash = "sha256:62015828cc2977166ee53b8affacd35aaede450fe822ec8874a0383e67e565e7"},
+    {file = "nitpick-0.33.1-py3-none-any.whl", hash = "sha256:bc0fe670f77111b6205cc16d23ef541f087dd317e8b3c941f83f7913643d06cb"},
+    {file = "nitpick-0.33.1.tar.gz", hash = "sha256:859f7e1ab119d9d9405106f42872f17214f3f0030b76ea50d19fff3411ffc46e"},
 ]
 
 [package.dependencies]
@@ -1518,7 +1518,7 @@ more-itertools = "*"
 pluggy = "*"
 python-slugify = "*"
 requests = "*"
-requests-cache = ">=0.9.7"
+requests-cache = ">=1.0.0"
 "ruamel.yaml" = "*"
 sortedcontainers = "*"
 StrEnum = "*"
