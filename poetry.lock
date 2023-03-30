@@ -2,19 +2,20 @@
 
 [[package]]
 name = "added-value"
-version = "0.21.3"
+version = "0.24.0"
 description = "Sphinx extension for embedding values extracted from Python modules"
 category = "dev"
 optional = false
 python-versions = "*"
 files = [
-    {file = "added-value-0.21.3.tar.gz", hash = "sha256:e55e319fd96253f511904a18e886bbc213ff6ab9bcfec7514d14d6e9a89f53bf"},
-    {file = "added_value-0.21.3-py2.py3-none-any.whl", hash = "sha256:dd96203b616946d718ffc81a1cf0e5c670ec9899d1504caa86ef211ab77d829a"},
+    {file = "added-value-0.24.0.tar.gz", hash = "sha256:4c71f756db1589b596a0f2a35c8a35ddd86dd70b9335504c9ee29e2b95d40440"},
+    {file = "added_value-0.24.0-py2.py3-none-any.whl", hash = "sha256:637464409e84759cfae1d3809a944ac000d0655bffd46bed958ffb5b8569c1f8"},
 ]
 
 [package.dependencies]
 docutils = "*"
 les-iterables = ">=0.6.0"
+more-itertools = "*"
 natsort = "*"
 six = "*"
 sphinx = "*"
@@ -22,7 +23,7 @@ sphinx = "*"
 [package.extras]
 dev = ["build", "bumpversion", "twine", "wheel"]
 doc = ["better-apidoc", "sphinx", "sphinx-rtd-theme"]
-test = ["beautifulsoup4", "coverage", "hypothesis", "pytest", "pytest-cov", "tox"]
+test = ["beautifulsoup4", "hypothesis", "pytest"]
 
 [[package]]
 name = "alabaster"
@@ -2593,4 +2594,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "ab82a89d73672a0119e4bc88a0de7f64b98486aaf1e97f23a4b54ba23009b6b4"
+content-hash = "4e8097718db9abc92206386e4420ba1a4840505cd4bffc6f17565b9d987840f8"
