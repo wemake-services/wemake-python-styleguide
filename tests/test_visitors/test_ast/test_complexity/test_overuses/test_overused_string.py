@@ -205,6 +205,7 @@ def test_string_type_annotations(
     '","',
     '"."',
     "'\"'",
+    '"\'"',
 ])
 @pytest.mark.parametrize('prefix', [
     'b',
