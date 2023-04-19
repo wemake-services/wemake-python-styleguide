@@ -334,7 +334,7 @@ class ChainedIsVisitor(BaseNodeVisitor):
     def visit_Compare(self, node: ast.Compare) -> None:
         """Checks for chained 'is' operators in comparisons."""
         if len(node.ops) > 1:
-            if all([isinstance(op, ast.Is) for op in node.ops]):
+            if all(isinstance(op, ast.Is) for op in node.ops):
                 self.add_violation(ChainedIsViolation(node))
 
         self.generic_visit(node)
