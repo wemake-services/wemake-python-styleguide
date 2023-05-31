@@ -19,7 +19,6 @@ def test_call_flake8_version():
     assert pkg_version in output_text
 
 
-
 def test_call_flake8_help():
     """Checks that module is registered and visible in the help."""
     output_text = subprocess.check_output(
