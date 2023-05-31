@@ -49,6 +49,7 @@ python = ">=3.8.1,<4.0"
 
 flake8 = ">5"
 attrs = "*"
+setuptools = "*"  # only needed for flake8-commas
 typing_extensions = ">=4.0,<5.0"
 astor = "^0.8"
 pygments = "^2.4"

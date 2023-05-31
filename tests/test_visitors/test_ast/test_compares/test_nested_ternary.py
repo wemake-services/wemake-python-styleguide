@@ -44,7 +44,7 @@ wrong_ternary4 = '(a if some else b) if c else d'
 wrong_if1 = 'if a if b else c: ...'
 wrong_if2 = 'if call(a if b else c): ...'
 wrong_if3 = 'if attr.call(a if b else c): ...'
-wrong_if4 = 'if x := 1 if True else 2: ...'
+wrong_if4 = 'if x := 1 if cond() else 2: ...'
 
 wrong_comprehension1 = '[x for x in number if (some if x else other)]'
 wrong_comprehension2 = '(x for x in number if (some if x else other))'

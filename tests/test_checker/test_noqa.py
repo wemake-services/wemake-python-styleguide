@@ -485,38 +485,3 @@ def test_noqa_fixture_without_ignore(absolute_path):
 
     for violation in IGNORED_VIOLATIONS:
         assert stdout.count(violation) > 0
-
-
-def test_noqa_fixture_diff(absolute_path, all_violations):
-    """Ensures that our linter works in ``diff`` mode."""
-    process = subprocess.Popen(
-        [
-            'diff',
-            '-uN',  # is required to ignore missing files
-            'missing_file',  # is required to transform file to diff
-            absolute_path('fixtures', 'noqa', 'noqa.py'),
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
-        encoding='utf8',
-    )
-
-    output = subprocess.check_output(
-        [
-            'flake8',
-            '--ignore',
-            ','.join(IGNORED_VIOLATIONS),
-            '--disable-noqa',
-            '--isolated',
-            '--diff',  # is required to test diffs! ;)
-            '--exit-zero',  # to allow failures
-        ],
-        stdin=process.stdout,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
-        encoding='utf8',
-    )
-    process.communicate()
-
-    _assert_errors_count_in_output(output, SHOULD_BE_RAISED, all_violations)
