@@ -22,7 +22,7 @@ from hypothesis import HealthCheck, given, reject, settings
 from wemake_python_styleguide.checker import Checker
 
 settings.register_profile(
-    'slow', deadline=None, suppress_health_check=HealthCheck.all(),
+    'slow', deadline=None, suppress_health_check=list(HealthCheck),
 )
 settings.load_profile('slow')
 
@@ -42,7 +42,6 @@ def test_no_exceptions(
     source_code,
     default_options,
     parse_ast_tree,
-    parse_tokens,
 ):
     """
     This testcase is a complex example of magic.
