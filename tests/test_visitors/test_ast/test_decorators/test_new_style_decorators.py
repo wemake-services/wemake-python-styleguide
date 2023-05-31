@@ -26,11 +26,11 @@ class Some(object):
 @pytest.mark.parametrize('code', [
     pytest.param(
         function_def,
-        marks=pytest.mark.skipif(not PY39, reason=_reason),
+        marks=_mark,
     ),
     pytest.param(
         method_def,
-        marks=pytest.mark.skipif(not PY39, reason=_reason),
+        marks=_mark,
     ),
 ])
 @pytest.mark.parametrize('decorator', [

@@ -1,6 +1,5 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.refactoring import (
     NestedTernaryViolation,
 )
@@ -158,10 +157,7 @@ def test_non_nested_ternary(
     wrong_if1,
     wrong_if2,
     wrong_if3,
-    pytest.param(
-        wrong_if3,
-        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
-    ),
+    wrong_if3,
 
     wrong_comprehension1,
     wrong_comprehension2,

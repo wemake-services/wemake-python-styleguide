@@ -71,7 +71,6 @@ class WrongComprehensionVisitor(base.BaseNodeVisitor):
 
     def visit_any_comprehension(self, node: AnyComprehension) -> None:
         """Finds incorrect patterns inside comprehensions."""
-        self._check_contains_yield(node)
         self.generic_visit(node)
 
     def _check_ifs(self, node: ast.comprehension) -> None:
@@ -84,11 +83,6 @@ class WrongComprehensionVisitor(base.BaseNodeVisitor):
     def _check_fors(self, node: ast.comprehension) -> None:
         parent = nodes.get_parent(node)
         self._fors[parent] = len(parent.generators)  # type: ignore
-
-    def _check_contains_yield(self, node: AnyComprehension) -> None:
-        for sub_node in ast.walk(node):
-            if isinstance(sub_node, ast.Yield):  # pragma: py-gte-38
-                self.add_violation(YieldInComprehensionViolation(node))
 
     def _post_visit(self) -> None:
         for node, for_count in self._fors.items():

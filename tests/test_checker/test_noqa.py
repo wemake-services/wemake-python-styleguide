@@ -21,7 +21,6 @@ from collections import Counter
 import pytest
 
 # Versions for different version-specific fixtures.
-_PY_OLD = sys.version_info < (3, 8)
 _PY38 = (3, 8) <= sys.version_info < (3, 9)
 _PY39 = (3, 9) <= sys.version_info < (3, 10)
 _PY310 = (3, 10) <= sys.version_info < (3, 11)
@@ -362,12 +361,6 @@ def test_codes(all_violations):
 
 @pytest.mark.parametrize(('filename', 'violations', 'total'), [
     ('noqa.py', SHOULD_BE_RAISED, True),
-    pytest.param(
-        'noqa_pre38.py',
-        VERSION_SPECIFIC['noqa_pre38'],
-        0,
-        marks=pytest.mark.skipif(not _PY_OLD, reason='ast changes on 3.8'),
-    ),
     pytest.param(
         'noqa38.py',
         VERSION_SPECIFIC['noqa38'],

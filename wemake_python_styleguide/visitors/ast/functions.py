@@ -9,7 +9,6 @@ from wemake_python_styleguide.compat.aliases import (
     FunctionNodes,
     TextNodes,
 )
-from wemake_python_styleguide.compat.functions import get_posonlyargs
 from wemake_python_styleguide.constants import (
     FUNCTIONS_BLACKLIST,
     LITERALS_BLACKLIST,
@@ -474,7 +473,7 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
         self,
         node: AnyFunctionDefAndLambda,
     ) -> None:
-        if get_posonlyargs(node):  # pragma: py-lt-38
+        if node.args.posonlyargs:
             self.add_violation(PositionalOnlyArgumentsViolation(node))
 
     def _check_complex_argument_defaults(

@@ -1,6 +1,5 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.constants import MAGIC_NUMBERS_WHITELIST
 from wemake_python_styleguide.violations.best_practices import (
     MagicNumberViolation,
@@ -74,10 +73,7 @@ some_dict[{0}]
     assignment,
     assignment_typed,
     assignment_unary,
-    pytest.param(
-        walrus,
-        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
-    ),
+    walrus,
     function_definition,
     function_definition_typed,
     list_definition,

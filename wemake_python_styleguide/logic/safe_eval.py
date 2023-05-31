@@ -1,15 +1,11 @@
 import ast
 from typing import Any, Optional, Union
 
-from wemake_python_styleguide.compat.nodes import Constant
-
 
 def _convert_num(node: Optional[ast.AST]):
-    if isinstance(node, Constant):  # pragma: py-lt-38
+    if isinstance(node, ast.Constant):
         if isinstance(node.value, (int, float, complex)):
             return node.value
-    elif isinstance(node, ast.Num):  # pragma: py-gte-38
-        return node.n
     # That's what is modified from the original
     elif isinstance(node, ast.Name):
         # We return string names as is, see how we return strings:
@@ -66,11 +62,8 @@ def literal_eval_with_names(  # noqa: WPS231
     because we try to stay as close to the original source as possible.
     """
     binary_operators = (ast.Add, ast.Sub)
-    if isinstance(node, (Constant, ast.NameConstant)):
+    if isinstance(node, (ast.Constant, ast.NameConstant)):
         return node.value
-    elif isinstance(node, (ast.Str, ast.Bytes, ast.Num)):  # pragma: py-gte-38
-        # We wrap strings to tell the difference between strings and names:
-        return node.n if isinstance(node, ast.Num) else '"{0!r}"'.format(node.s)
     elif isinstance(node, (ast.Tuple, ast.List, ast.Set, ast.Dict)):
         return _convert_iterable(node)
     elif isinstance(node, ast.BinOp) and isinstance(node.op, binary_operators):

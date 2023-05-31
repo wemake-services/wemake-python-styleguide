@@ -1,6 +1,5 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.consistency import (
     UselessCompareViolation,
 )
@@ -19,24 +18,19 @@ correct_comparators = [
     ('variable', 'len(variable)'),
     ('variable', 'another_variable'),
     ('variable', '222'),
+
+    ('(x := variable)', 'some()'),
+    ('(x := some())', 'variable'),
 ]
 
 wrong_comparators = [
     ('variable', 'variable'),
     ('another_variable', 'another_variable'),
+
+    ('(x := variable)', 'variable'),
+    ('variable', '(x := variable)'),
+    ('(x := variable)', '(x := variable)'),
 ]
-
-if PY38:
-    correct_comparators.extend([
-        ('(x := variable)', 'some()'),
-        ('(x := some())', 'variable'),
-    ])
-
-    wrong_comparators.extend([
-        ('(x := variable)', 'variable'),
-        ('variable', '(x := variable)'),
-        ('(x := variable)', '(x := variable)'),
-    ])
 
 
 @pytest.mark.filterwarnings('ignore::SyntaxWarning')

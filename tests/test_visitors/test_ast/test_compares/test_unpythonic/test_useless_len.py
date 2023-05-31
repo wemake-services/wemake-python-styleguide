@@ -1,6 +1,5 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.refactoring import (
     UselessLenCompareViolation,
 )
@@ -24,10 +23,7 @@ from wemake_python_styleguide.visitors.ast.compares import CompareSanityVisitor
     'len(-some()) < 1',
     '0 < len(some) < 1',
     'call() < 1 <= len(some)',
-    pytest.param(
-        '(x := len(some)) > 0',
-        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
-    ),
+    '(x := len(some)) > 0',
 ])
 def test_useless_len_call(
     assert_errors,

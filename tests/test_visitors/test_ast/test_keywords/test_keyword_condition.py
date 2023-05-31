@@ -1,6 +1,5 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.best_practices import (
     WrongKeywordConditionViolation,
 )
@@ -47,14 +46,8 @@ assert_with_message_template = 'assert {0}, "message"'
     '{1 for a in some()}',
     '{"a": a for a in some()}',
     'some if x else other',
-    pytest.param(
-        '(unique := +0)',
-        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
-    ),
-    pytest.param(
-        '(unique := +True)',
-        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
-    ),
+    '(unique := +0)',
+    '(unique := +True)',
 ])
 def test_false_condition_keywords(
     assert_errors,
@@ -114,10 +107,7 @@ fixtures = (
 ])
 @pytest.mark.parametrize('condition', [
     *fixtures,
-    pytest.param(
-        'x := other()',
-        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
-    ),
+    'x := other()',
 ])
 def test_true_condition_keywords_while(
     assert_errors,

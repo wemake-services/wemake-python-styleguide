@@ -17,16 +17,19 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
-## WIP
+## 0.18.0
 
 ### Features
 
+- **Breaking**: drops `python3.7` support, because it has almost reached its EOL
+- Adds `python3.11` support
 - Bump `flake8` to version `5.x`
-- Bump `flake8-bandit` to version `^4.1`
+- Bump `flake8-*` dependencies to newer versions
 - Added `ChainedIsViolation` #2443
 - Added `BuggySuperContextViolation` #2310
 
 ### Bugfixes
+
 - Make `generic_visit()` check script properly handle `with` statements.
 - Allow calling magic methods with the same name as the enclosing method #2381
 - Fix WrongEmptyLinesCountViolation false positive #2531

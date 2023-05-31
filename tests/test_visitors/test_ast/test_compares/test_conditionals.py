@@ -1,6 +1,5 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.consistency import (
     ConstantConditionViolation,
 )
@@ -61,10 +60,7 @@ def container():
     '[1, 2, 3].size > 3',
     'variable is None',
     'variable is int or not some()',
-    pytest.param(
-        '(unique := some()) is True',
-        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
-    ),
+    '(unique := some()) is True',
 ])
 def test_valid_conditional(
     assert_errors,
@@ -111,14 +107,8 @@ def test_valid_conditional(
     'variable and False',
     'variable or True',
     'variable and True',
-    pytest.param(
-        '(unique := True)',
-        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
-    ),
-    pytest.param(
-        '(unique := -1)',
-        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
-    ),
+    '(unique := True)',
+    '(unique := -1)',
 ])
 def test_constant_condition(
     assert_errors,

@@ -1353,8 +1353,6 @@ class WalrusViolation(ASTViolation):
     """
     Forbid walrus operator.
 
-    This violation can only be thrown on ``python3.8+``.
-
     Reasoning:
         Code with ``:=`` is hardly readable.
         It has big problems with scoping and reading order.
