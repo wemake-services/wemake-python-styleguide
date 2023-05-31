@@ -5,7 +5,6 @@
   editors.rst
   auto-formatters.rst
   nitpick.rst
-  legacy.rst
   flakeheaven.rst
   docker.rst
   github-actions.rst

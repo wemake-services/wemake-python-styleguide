@@ -9,7 +9,14 @@ from wemake_python_styleguide.options import config
 @pytest.fixture()
 def option_parser():
     """Returns option parser that can be used for tests."""
-    if flake8_version_info > (5, ):
+    if flake8_version_info > (6, ):
+        parser = OptionManager(
+            version=version.pkg_version,
+            plugin_versions='',
+            parents=[],
+            formatter_names=[],
+        )
+    elif flake8_version_info > (5, ):
         parser = OptionManager(
             version=version.pkg_version,
             plugin_versions='',

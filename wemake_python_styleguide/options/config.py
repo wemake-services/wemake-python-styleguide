@@ -186,7 +186,7 @@ class _Option(object):
         """Is called after regular init is done."""
         object.__setattr__(  # noqa: WPS609
             self, 'help', ' '.join(
-                (self.help, 'Defaults to: %default'),  # noqa: WPS323
+                (self.help, 'Defaults to: %(default)s'),  # noqa: WPS323
             ),
         )
 
