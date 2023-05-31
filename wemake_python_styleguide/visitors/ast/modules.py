@@ -112,7 +112,7 @@ class ModuleConstantsVisitor(BaseNodeVisitor):
 
         targets = cast(
             Iterable[ast.AST],
-            [node.target] if isinstance(node, ast.AnnAssign) else node.targets
+            [node.target] if isinstance(node, ast.AnnAssign) else node.targets,
         )
 
         for target in targets:

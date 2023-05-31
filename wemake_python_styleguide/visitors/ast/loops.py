@@ -22,7 +22,6 @@ from wemake_python_styleguide.violations.best_practices import (
     InfiniteWhileLoopViolation,
     LambdaInsideLoopViolation,
     LoopVariableDefinitionViolation,
-    YieldInComprehensionViolation,
 )
 from wemake_python_styleguide.violations.complexity import (
     TooManyForsInComprehensionViolation,

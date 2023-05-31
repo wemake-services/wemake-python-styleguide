@@ -62,7 +62,7 @@ def test_compare_variables(
 @pytest.mark.parametrize('comparators', [
     ('"string constant"', 'container'),
     ('container', '"string constant"'),
-    correct_walrus,
+    ('(x := first(1, 2))', '"str"'),
 ])
 def test_compare_variables_in_special_case(
     assert_errors,

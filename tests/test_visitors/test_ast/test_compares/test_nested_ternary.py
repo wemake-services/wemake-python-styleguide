@@ -157,7 +157,7 @@ def test_non_nested_ternary(
     wrong_if1,
     wrong_if2,
     wrong_if3,
-    wrong_if3,
+    wrong_if4,
 
     wrong_comprehension1,
     wrong_comprehension2,

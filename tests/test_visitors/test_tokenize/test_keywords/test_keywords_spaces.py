@@ -1,5 +1,3 @@
-import sys
-
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (

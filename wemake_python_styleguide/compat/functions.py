@@ -2,7 +2,6 @@ import ast
 from typing import List, Union
 
 from wemake_python_styleguide.compat.types import AnyAssignWithWalrus
-from wemake_python_styleguide.types import AnyFunctionDefAndLambda
 
 
 def get_assign_targets(
