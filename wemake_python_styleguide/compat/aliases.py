@@ -10,8 +10,6 @@ import ast
 
 from typing_extensions import Final
 
-from wemake_python_styleguide.compat.nodes import NamedExpr
-
 #: We need this tuple to easily work with both types of text nodes:
 TextNodes: Final = (ast.Str, ast.Bytes)
 
@@ -19,7 +17,7 @@ TextNodes: Final = (ast.Str, ast.Bytes)
 AssignNodes: Final = (ast.Assign, ast.AnnAssign)
 
 #: We need this tuple for cases where we use full assign power.
-AssignNodesWithWalrus: Final = (*AssignNodes, NamedExpr)
+AssignNodesWithWalrus: Final = (*AssignNodes, ast.NamedExpr)
 
 #: We need this tuple since ``async def`` now has its own ast class.
 FunctionNodes: Final = (ast.FunctionDef, ast.AsyncFunctionDef)

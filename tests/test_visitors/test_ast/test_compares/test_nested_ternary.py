@@ -1,6 +1,5 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.refactoring import (
     NestedTernaryViolation,
 )
@@ -45,7 +44,7 @@ wrong_ternary4 = '(a if some else b) if c else d'
 wrong_if1 = 'if a if b else c: ...'
 wrong_if2 = 'if call(a if b else c): ...'
 wrong_if3 = 'if attr.call(a if b else c): ...'
-wrong_if4 = 'if x := 1 if True else 2: ...'
+wrong_if4 = 'if x := 1 if cond() else 2: ...'
 
 wrong_comprehension1 = '[x for x in number if (some if x else other)]'
 wrong_comprehension2 = '(x for x in number if (some if x else other))'
@@ -158,10 +157,7 @@ def test_non_nested_ternary(
     wrong_if1,
     wrong_if2,
     wrong_if3,
-    pytest.param(
-        wrong_if3,
-        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
-    ),
+    wrong_if4,
 
     wrong_comprehension1,
     wrong_comprehension2,

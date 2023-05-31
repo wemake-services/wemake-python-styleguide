@@ -1,6 +1,5 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.complexity import (
     TooManyLocalsViolation,
 )
@@ -70,10 +69,7 @@ class Some(object):
 
 @pytest.mark.parametrize('code', [
     function_with_locals,
-    pytest.param(
-        function_with_walrus,
-        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
-    ),
+    function_with_walrus,
     function_with_locals_redefinition,
     function_with_locals_and_params,
     function_with_comprehension,
@@ -108,10 +104,7 @@ def test_locals_correct_count(
 
 @pytest.mark.parametrize('code', [
     function_with_locals,
-    pytest.param(
-        function_with_walrus,
-        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
-    ),
+    function_with_walrus,
     function_with_locals_redefinition,
     function_with_locals_and_params,
     function_with_comprehension,

@@ -3,7 +3,6 @@ from typing import Container, Iterable, List, Optional, Union
 
 from typing_extensions import Final, TypeAlias
 
-from wemake_python_styleguide.compat.functions import get_posonlyargs
 from wemake_python_styleguide.logic import source
 from wemake_python_styleguide.logic.walk import is_contained
 from wemake_python_styleguide.types import (
@@ -80,14 +79,11 @@ def get_all_arguments(node: AnyFunctionDefAndLambda) -> List[arg]:
     Returns list of all arguments that exist in a function.
 
     Respects the correct parameters order.
-    Positional only args, regular argument,
-    ``*args``, keyword-only, ``**kwargs``.
-
-    Positional only args are only added for ``python3.8+``
-    other versions are ignoring this type of arguments.
+    Positional only args, regular arguments,
+    ``*args``, keyword-only args, ``**kwargs``.
     """
     names = [
-        *get_posonlyargs(node),
+        *node.args.posonlyargs,
         *node.args.args,
     ]
 
@@ -105,7 +101,7 @@ def get_all_arguments(node: AnyFunctionDefAndLambda) -> List[arg]:
 def is_first_argument(node: AnyFunctionDefAndLambda, name: str) -> bool:
     """Tells whether an argument name is the logically first in function."""
     positional_args = [
-        *get_posonlyargs(node),
+        *node.args.posonlyargs,
         *node.args.args,
     ]
 

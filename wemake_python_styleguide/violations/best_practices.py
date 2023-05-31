@@ -545,7 +545,7 @@ class WrongModuleMetadataViolation(ASTViolation):
         Place all the metadata in ``setup.py``,
         ``setup.cfg``, or ``pyproject.toml``.
         Use proper docstrings and packaging classifiers.
-        Use ``importlib.metadata`` (or ``importlib_metadata`` on python < 3.8)
+        Use ``importlib.metadata``
         if you need to import this data into your app.
 
     See
@@ -763,6 +763,8 @@ class YieldInComprehensionViolation(ASTViolation):
 
     .. versionadded:: 0.7.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.18.0
+       No longer produced, kept here for historic reasons.
 
     """
 

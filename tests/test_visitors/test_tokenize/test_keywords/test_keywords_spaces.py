@@ -1,5 +1,3 @@
-import sys
-
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
@@ -38,13 +36,7 @@ assert (
     'for (a, b) in((1, 2)):',
     'if a in(1, 2, 3):',
     'return(a)',
-    pytest.param(
-        'await(a)',
-        marks=pytest.mark.skipif(
-            sys.version_info < (3, 7),
-            reason='await is a keyword only since py3.7',
-        ),
-    ),
+    'await(a)',
     'with(lambda x: x)() as (a, b)',
     'with (lambda x: x)() as(a, b)',
     '(a, b) is(a, b)',
@@ -76,13 +68,7 @@ def test_missing_space(
     'del (a, b)',
     'for (a, b) in (1, 2, 3)',
     'return (a)',
-    pytest.param(
-        'await (a)',
-        marks=pytest.mark.skipif(
-            sys.version_info < (3, 7),
-            reason='await is a keyword only since py3.7',
-        ),
-    ),
+    'await (a)',
     'with do_things() as (a, b)',
     '(a, b) is (a, b)',
     'from foo import (bar, baz, spam)',

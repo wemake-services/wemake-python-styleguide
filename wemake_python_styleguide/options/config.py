@@ -163,8 +163,9 @@ from typing_extensions import Final, TypeAlias, final
 
 from wemake_python_styleguide.options import defaults
 
+_Type: TypeAlias = type
 ConfigValuesTypes: TypeAlias = Union[str, int, bool, Sequence[str]]
-String: Final = 'string'
+String: Final = str
 
 
 @final
@@ -175,7 +176,7 @@ class _Option(object):
     long_option_name: str
     default: ConfigValuesTypes
     help: str  # noqa: WPS125
-    type: Optional[str] = 'int'  # noqa: WPS125
+    type: Optional[_Type] = int  # noqa: WPS125
     parse_from_config: bool = True
     action: str = 'store'
     comma_separated_list: bool = False
@@ -185,7 +186,7 @@ class _Option(object):
         """Is called after regular init is done."""
         object.__setattr__(  # noqa: WPS609
             self, 'help', ' '.join(
-                (self.help, 'Defaults to: %default'),  # noqa: WPS323
+                (self.help, 'Defaults to: %(default)s'),  # noqa: WPS323
             ),
         )
 

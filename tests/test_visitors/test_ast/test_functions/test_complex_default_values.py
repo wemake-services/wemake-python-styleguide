@@ -1,6 +1,5 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.best_practices import (
     ComplexDefaultValueViolation,
     PositionalOnlyArgumentsViolation,
@@ -53,25 +52,16 @@ lambda_with_kw_defaults = 'lambda *, arg, with_default={0}: ...'
 
 all_templates = (
     function_with_defaults,
-    pytest.param(
-        function_with_posonly_defaults,
-        marks=pytest.mark.skipif(not PY38, reason='posonly appeared in 3.8'),
-    ),
+    function_with_posonly_defaults,
     function_with_kw_defaults1,
     function_with_kw_defaults2,
 
     method_with_defaults,
-    pytest.param(
-        method_with_posonly_defaults,
-        marks=pytest.mark.skipif(not PY38, reason='posonly appeared in 3.8'),
-    ),
+    method_with_posonly_defaults,
     method_with_kw_defaults,
 
     lambda_with_defaults,
-    pytest.param(
-        lambda_with_posonly_defaults,
-        marks=pytest.mark.skipif(not PY38, reason='posonly appeared in 3.8'),
-    ),
+    lambda_with_posonly_defaults,
     lambda_with_kw_defaults,
 )
 

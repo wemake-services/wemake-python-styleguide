@@ -17,3 +17,16 @@ def test_call_flake8_version():
 
     assert pkg_name in output_text or pkg_name.replace('_', '-') in output_text
     assert pkg_version in output_text
+
+
+def test_call_flake8_help():
+    """Checks that module is registered and visible in the help."""
+    output_text = subprocess.check_output(
+        ['flake8', '--help'],
+        stderr=subprocess.STDOUT,
+        universal_newlines=True,
+        encoding='utf8',
+    )
+
+    assert pkg_name
+    assert pkg_name in output_text or pkg_name.replace('_', '-') in output_text

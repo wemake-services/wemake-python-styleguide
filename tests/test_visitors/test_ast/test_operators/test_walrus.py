@@ -1,6 +1,5 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.consistency import WalrusViolation
 from wemake_python_styleguide.visitors.ast.operators import WalrusVisitor
 
@@ -56,7 +55,6 @@ def test_not_walrus(
     assert_errors(visitor, [])
 
 
-@pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8')
 @pytest.mark.parametrize('code', [
     wrong_assignment,
     wrong_if_condition,
