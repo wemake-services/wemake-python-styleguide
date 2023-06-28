@@ -293,9 +293,7 @@ class NoqaVisitor(BaseTokenVisitor):
 
     def _check_forbidden_noqa(self, noqa_excludes) -> None:
         excludes_list = [ex.strip() for ex in noqa_excludes.split(',')]
-        forbidden_noqa = EMPTY_STRING.join(self.options.forbidden_inline_ignore)
-        for noqa_code in forbidden_noqa.split(','):
-            noqa_code = noqa_code.strip()
+        for noqa_code in self.options.forbidden_inline_ignore:
             if noqa_code in excludes_list:
                 self.add_violation(
                     ForbiddenInlineIgnoreViolation(text=str(noqa_excludes)),

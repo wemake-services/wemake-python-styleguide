@@ -16,6 +16,11 @@ Semantic versioning in our case means:
   But, in the future we might change the configuration names/logic,
   change the client facing API, change code conventions significantly, etc.
 
+## WIP
+
+### Bugfixes
+
+- Fix `ForbiddenInlineIgnoreViolation` config parsing. #2590
 
 ## 0.18.0
 
