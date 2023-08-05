@@ -32,6 +32,7 @@ Semantic versioning in our case means:
 - Bump `flake8-*` dependencies to newer versions
 - Added `ChainedIsViolation` #2443
 - Added `BuggySuperContextViolation` #2310
+- Added `MixingFunctionArgumentTypesViolation` #1343
 
 ### Bugfixes
 
