@@ -18,11 +18,7 @@ def _does_loop_contain_node(
     if loop is None:
         return False
 
-    for inner_node in ast.walk(loop):
-        # We are checking this specific node, not just any `break`:
-        if to_check is inner_node:
-            return True
-    return False
+    return any(to_check is inner_node for inner_node in ast.walk(loop))
 
 
 def has_break(
