@@ -19,10 +19,7 @@ def is_contained(
 
     Goes down by the tree to check all children.
     """
-    for child in ast.walk(node):
-        if isinstance(child, to_check):
-            return True
-    return False
+    return any(isinstance(child, to_check) for child in ast.walk(node))
 
 
 def get_closest_parent(

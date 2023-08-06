@@ -113,10 +113,7 @@ def is_first_argument(node: AnyFunctionDefAndLambda, name: str) -> bool:
 
 def is_generator(node: AnyFunctionDef) -> bool:
     """Tells whether a given function is a generator."""
-    for body_item in node.body:
-        if is_contained(node=body_item, to_check=(Yield, YieldFrom)):
-            return True
-    return False
+    return any(is_contained(body, (Yield, YieldFrom)) for body in node.body)
 
 
 def get_function_exit_nodes(node: AnyFunctionDef) -> _ControlTransferIterable:
