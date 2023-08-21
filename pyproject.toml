@@ -70,7 +70,7 @@ pep8-naming = "^0.13"
 darglint = "^1.2"
 
 [tool.poetry.group.test.dependencies]
-nitpick = "^0.33"
+nitpick = ">=0.33,<0.35"
 flake8-pytest-style = "^1.5"
 
 pytest = "^7.3"
