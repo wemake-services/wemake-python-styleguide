@@ -1009,13 +1009,13 @@ files = [
 
 [[package]]
 name = "import-linter"
-version = "1.11.0"
+version = "1.11.1"
 description = "Enforces rules for the imports within and between Python packages."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "import-linter-1.11.0.tar.gz", hash = "sha256:392a3a6b1eed22cd35fa336c30d115c2e8a29b937a7aebc74274ece065bd880e"},
-    {file = "import_linter-1.11.0-py3-none-any.whl", hash = "sha256:d02c54224f3407fc6e9997df05045f1a6a7d1ba1d56bd76d1a7715cb4d66bbc5"},
+    {file = "import-linter-1.11.1.tar.gz", hash = "sha256:e5ba6abd5686a535708c3df87e91c617a15f133ee9eb7351bdfac72ce9178098"},
+    {file = "import_linter-1.11.1-py3-none-any.whl", hash = "sha256:8546ea287fe2396a401a7c8ba79c8663a7501fc5b94c7670731a6c41d74a2f60"},
 ]
 
 [package.dependencies]
