@@ -69,7 +69,7 @@ flake8-rst-docstrings = "^0.3"
 pep8-naming = "^0.13"
 darglint = "^1.2"
 
-[tool.poetry.group.test.dependencies]
+[tool.poetry.group.dev.dependencies]
 nitpick = ">=0.33,<0.35"
 flake8-pytest-style = "^1.5"
 
