@@ -5,6 +5,14 @@ name: depup
   schedule:
     - cron: '30 7 * * *'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   reviewdog:
     runs-on: ubuntu-latest
