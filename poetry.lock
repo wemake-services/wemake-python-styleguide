@@ -917,13 +917,13 @@ typing-extensions = ">=3.10.0.0"
 
 [[package]]
 name = "hypothesis"
-version = "6.83.1"
+version = "6.84.2"
 description = "A library for property-based testing"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "hypothesis-6.83.1-py3-none-any.whl", hash = "sha256:c3c33b4f1256898f370a2231389872c9c3fbeac4a87416ff727622baa917b674"},
-    {file = "hypothesis-6.83.1.tar.gz", hash = "sha256:3d487440d77a0d8f57d70d12fd9e463508b8ca4838940455aec52369b60e13d6"},
+    {file = "hypothesis-6.84.2-py3-none-any.whl", hash = "sha256:b79209f2e0adf5a48d49467548a6c7e831ec100674e7aa611a444815d8d9e0dd"},
+    {file = "hypothesis-6.84.2.tar.gz", hash = "sha256:82c7d4b696d211a8edd04dddd1077f13090b10263fee09648f7da389b749f7b0"},
 ]
 
 [package.dependencies]
@@ -950,18 +950,18 @@ zoneinfo = ["backports.zoneinfo (>=0.2.1)", "tzdata (>=2023.3)"]
 
 [[package]]
 name = "hypothesmith"
-version = "0.2.3"
+version = "0.3.0"
 description = "Hypothesis strategies for generating Python programs, something like CSmith"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "hypothesmith-0.2.3-py3-none-any.whl", hash = "sha256:e84890e044dfa3e8e14d3368ca7463d33dcfc75737544b2b0aeac8de4a24a3c7"},
-    {file = "hypothesmith-0.2.3.tar.gz", hash = "sha256:bdce845ec984e6e3fed21e65d2e82b8ebc6de5ca5eb93649dfd76034c5906a46"},
+    {file = "hypothesmith-0.3.0-py3-none-any.whl", hash = "sha256:48f204e516ab2304c1799dfb0b840d0ab5eef9c724e7b9e31409cd8a25b35abc"},
+    {file = "hypothesmith-0.3.0.tar.gz", hash = "sha256:523da04c063b873928d6c28ef16506cf64bf31777039837e17e6bbdc6e2cccdb"},
 ]
 
 [package.dependencies]
-hypothesis = {version = ">=6.58.1", extras = ["lark"]}
-libcst = ">=0.4.0"
+hypothesis = {version = ">=6.84.1", extras = ["lark"]}
+libcst = ">=1.0.1"
 
 [[package]]
 name = "identify"
@@ -2714,4 +2714,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8.1,<4.0"
-content-hash = "2b49312ed63a56088883e2b53b3639720d0e635d47d8a88f436bd946ed00cc35"
+content-hash = "72d48d44a2494821b8b82f503946bc9f19dd4bca7b7cc05966cb0c83d9c63378"
