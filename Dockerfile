@@ -21,7 +21,7 @@ LABEL maintainer="mail@sobolevn.me"
 LABEL vendor="wemake.services"
 
 ENV WPS_VERSION='0.18.0'
-ENV REVIEWDOG_VERSION='v0.14.2'
+ENV REVIEWDOG_VERSION='v0.15.0'
 
 RUN apk add --no-cache bash git wget
 RUN pip install "wemake-python-styleguide==$WPS_VERSION" \
