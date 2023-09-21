@@ -85,6 +85,7 @@ FUNCTIONS_BLACKLIST: Final = frozenset((
 
     # Mypy:
     'reveal_type',
+    'reveal_locals',
 ))
 
 #: List of module metadata we forbid to use.
