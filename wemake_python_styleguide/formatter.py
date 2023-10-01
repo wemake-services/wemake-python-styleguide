@@ -212,9 +212,8 @@ def _bold(text: str) -> str:
 
     """
     if _DISABLE_COLORS:
-        return '\033[1m{0}\033[0m'.format(text)
-    else:
         return text
+    return '\033[1m{0}\033[0m'.format(text)
 
 
 def _underline(text: str) -> str:
