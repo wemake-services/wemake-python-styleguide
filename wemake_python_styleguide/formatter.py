@@ -27,7 +27,7 @@ That's how all ``flake8`` formatters work:
 
 from os import environ
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, List
+from typing import ClassVar, DefaultDict, Final, List
 
 from flake8.formatting.base import BaseFormatter
 from flake8.statistics import Statistics
