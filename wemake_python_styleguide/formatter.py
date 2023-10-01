@@ -238,13 +238,12 @@ def _highlight(source: str, lexer, formatter) -> str:
 
     """
     if _DISABLE_COLORS:
-        try:
-            return highlight(source, lexer, formatter)
-        except Exception:  # pragma: no cover
-            # Might fail on some systems, when colors are set incorrectly,
-            # or not available at all. In this case code will be just text.
-            return source
-    else:
+        return source
+    try:
+        return highlight(source, lexer, formatter)
+    except Exception:  # pragma: no cover
+        # Might fail on some systems, when colors are set incorrectly,
+        # or not available at all. In this case code will be just text.
         return source
 
 
