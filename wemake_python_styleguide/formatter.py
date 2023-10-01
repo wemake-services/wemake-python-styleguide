@@ -226,9 +226,8 @@ def _underline(text: str) -> str:
 
     """
     if _DISABLE_COLORS:
-        return '\033[4m{0}\033[0m'.format(text)
-    else:
         return text
+    return '\033[4m{0}\033[0m'.format(text)
 
 
 def _highlight(source: str, lexer, formatter) -> str:
