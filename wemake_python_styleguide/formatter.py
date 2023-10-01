@@ -24,7 +24,7 @@ That's how all ``flake8`` formatters work:
    :no-undoc-members:
 
 """
-
+from os import environ
 from collections import defaultdict
 from typing import ClassVar, DefaultDict, List
 
@@ -200,6 +200,8 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
 
 # Formatting text:
 
+_DISABLE_COLORS: Final = environ.get('FORCE_COLOR', '1') == '0'
+
 def _bold(text: str) -> str:
     r"""
     Returns bold formatted text.
@@ -208,7 +210,10 @@ def _bold(text: str) -> str:
     '\x1b[1mHello!\x1b[0m'
 
     """
-    return '\033[1m{0}\033[0m'.format(text)
+    if _DISABLE_COLORS:
+        return '\033[1m{0}\033[0m'.format(text)
+    else:
+        return text
 
 
 def _underline(text: str) -> str:
@@ -219,7 +224,10 @@ def _underline(text: str) -> str:
     '\x1b[4mHello!\x1b[0m'
 
     """
-    return '\033[4m{0}\033[0m'.format(text)
+    if _DISABLE_COLORS:
+        return '\033[4m{0}\033[0m'.format(text)
+    else:
+        return text
 
 
 def _highlight(source: str, lexer, formatter) -> str:
@@ -230,11 +238,14 @@ def _highlight(source: str, lexer, formatter) -> str:
         https://github.com/wemake-services/wemake-python-styleguide/issues/794
 
     """
-    try:
-        return highlight(source, lexer, formatter)
-    except Exception:  # pragma: no cover
-        # Might fail on some systems, when colors are set incorrectly,
-        # or not available at all. In this case code will be just text.
+    if _DISABLE_COLORS:
+        try:
+            return highlight(source, lexer, formatter)
+        except Exception:  # pragma: no cover
+            # Might fail on some systems, when colors are set incorrectly,
+            # or not available at all. In this case code will be just text.
+            return source
+    else:
         return source
 
 
