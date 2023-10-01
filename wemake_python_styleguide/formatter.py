@@ -210,6 +210,10 @@ def _bold(text: str) -> str:
     >>> _bold('Hello!')
     '\x1b[1mHello!\x1b[0m'
 
+    Returns non-formatted text if environment variable 'FORCE_COLOR=0'
+
+    >>> _bold('Hello!')
+    'Hello!'
     """
     if _DISABLE_COLORS:
         return text
@@ -223,6 +227,10 @@ def _underline(text: str) -> str:
     >>> _underline('Hello!')
     '\x1b[4mHello!\x1b[0m'
 
+    Returns non-formatted text if environment variable 'FORCE_COLOR=0'
+
+    >>> _underline('Hello!')
+    'Hello!'
     """
     if _DISABLE_COLORS:
         return text
@@ -232,6 +240,7 @@ def _underline(text: str) -> str:
 def _highlight(source: str, lexer, formatter) -> str:
     """
     Highlights source code. Might fail.
+    Returns non-formatted text if environment variable 'FORCE_COLOR=0'
 
     See also:
         https://github.com/wemake-services/wemake-python-styleguide/issues/794
