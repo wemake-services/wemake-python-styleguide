@@ -7,3 +7,4 @@ pkg_name = os.path.basename(os.path.dirname(__file__))
 
 #: We store the version number inside the `pyproject.toml`.
 pkg_version = get_version(pkg_name)
+x = 'a'

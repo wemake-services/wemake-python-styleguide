@@ -16,11 +16,18 @@ Semantic versioning in our case means:
   But, in the future we might change the configuration names/logic,
   change the client facing API, change code conventions significantly, etc.
 
+
 ## WIP
+
+### Features
+
+- `wemake` output formatter now respects `NO_COLOR=1` option
+  to disable text highlighting. See https://no-color.org
 
 ### Bugfixes
 
 - Fix `ForbiddenInlineIgnoreViolation` config parsing. #2590
+
 
 ## 0.18.0
 

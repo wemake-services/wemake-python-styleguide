@@ -40,14 +40,16 @@ from typing_extensions import Final
 from wemake_python_styleguide.version import pkg_version
 
 #: That url is generated and hosted by Sphinx.
-DOCS_URL_TEMPLATE: Final = (
+_DOCS_URL_TEMPLATE: Final = (
     'https://wemake-python-styleguide.rtfd.io/en/{0}/pages/usage/violations/'
 )
 
 #: This url points to the specific violation page.
-SHORTLINK_TEMPLATE: Final = (
-    'https://pyflak.es/{0}'
-)
+_SHORTLINK_TEMPLATE: Final = 'https://pyflak.es/{0}'
+
+#: Option to disable any code highlight and text output format.
+#: See https://no-color.org
+_NO_COLOR: Final = environ.get('NO_COLOR', '0') == '1'
 
 
 class WemakeFormatter(BaseFormatter):  # noqa: WPS214
@@ -65,7 +67,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
 
     """
 
-    _doc_url: ClassVar[str] = DOCS_URL_TEMPLATE.format(pkg_version)
+    _doc_url: ClassVar[str] = _DOCS_URL_TEMPLATE.format(pkg_version)
 
     # API:
 
@@ -161,7 +163,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
 
         return '  {spacing}-> {link}'.format(
             spacing=' ' * 9,
-            link=SHORTLINK_TEMPLATE.format(error.code),
+            link=_SHORTLINK_TEMPLATE.format(error.code),
         )
 
     def _print_header(self, filename: str) -> None:
@@ -201,43 +203,49 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
 
 # Formatting text:
 
-_DISABLE_COLORS: Final = environ.get('FORCE_COLOR', '1') == '0'
-
-def _bold(text: str) -> str:
+def _bold(text: str, *, no_color: bool = _NO_COLOR) -> str:
     r"""
     Returns bold formatted text.
 
     >>> _bold('Hello!')
     '\x1b[1mHello!\x1b[0m'
 
-    Returns non-formatted text if environment variable 'FORCE_COLOR=0'
+    Returns non-formatted text if environment variable ``NO_COLOR=1``.
 
-    >>> _bold('Hello!')
+    >>> _bold('Hello!', no_color=True)
     'Hello!'
+
     """
-    if _DISABLE_COLORS:
+    if no_color:
         return text
     return '\033[1m{0}\033[0m'.format(text)
 
 
-def _underline(text: str) -> str:
+def _underline(text: str, *, no_color: bool = _NO_COLOR) -> str:
     r"""
     Returns underlined formatted text.
 
     >>> _underline('Hello!')
     '\x1b[4mHello!\x1b[0m'
 
-    Returns non-formatted text if environment variable 'FORCE_COLOR=0'
+    Returns non-formatted text if environment variable ``NO_COLOR=1``.
 
-    >>> _underline('Hello!')
+    >>> _underline('Hello!', no_color=True)
     'Hello!'
+
     """
-    if _DISABLE_COLORS:
+    if no_color:
         return text
     return '\033[4m{0}\033[0m'.format(text)
 
 
-def _highlight(source: str, lexer, formatter) -> str:
+def _highlight(
+    source: str,
+    lexer: PythonLexer,
+    formatter: TerminalFormatter,
+    *,
+    no_color: bool = _NO_COLOR,
+) -> str:
     """
     Highlights source code. Might fail.
     Returns non-formatted text if environment variable 'FORCE_COLOR=0'
@@ -246,7 +254,7 @@ def _highlight(source: str, lexer, formatter) -> str:
         https://github.com/wemake-services/wemake-python-styleguide/issues/794
 
     """
-    if _DISABLE_COLORS:
+    if no_color:
         return source
     try:
         return highlight(source, lexer, formatter)

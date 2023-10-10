@@ -50,7 +50,12 @@ def _safe_output(output: str) -> str:
     (['--show-source', '--show-violation-links'], 'with_source_links'),
     (['--statistic', '--show-source'], 'statistic_with_source'),
 ])
-def test_formatter(snapshot, cli_options, output):
+@pytest.mark.parametrize(
+    'no_color',
+    [True, False, None],
+    ids=['without_colors', 'with_colors', 'default_colors'],
+)
+def test_formatter(snapshot, cli_options, output, no_color):
     """
     End-to-End test to that formatting works well.
 
@@ -59,6 +64,10 @@ def test_formatter(snapshot, cli_options, output):
     """
     filename1 = './tests/fixtures/formatter/formatter1.py'
     filename2 = './tests/fixtures/formatter/formatter2.py'
+    if no_color is None:
+        env = os.environ
+    else:
+        env = {**os.environ, 'NO_COLOR': '1' if no_color else '0'}
 
     process = subprocess.Popen(
         [
@@ -77,12 +86,13 @@ def test_formatter(snapshot, cli_options, output):
         stderr=subprocess.PIPE,
         universal_newlines=True,
         encoding='utf8',
+        env=env,
     )
     stdout, _ = process.communicate()
 
     snapshot.assert_match(
         _safe_output(stdout),
-        'formatter_{0}'.format(output),
+        'formatter_{0}_{1}'.format(output, no_color),
     )
 
 
@@ -95,7 +105,12 @@ def test_formatter(snapshot, cli_options, output):
     (['--show-source', '--show-violation-links'], 'with_source_links'),
     (['--statistic', '--show-source'], 'statistic_with_source'),
 ])
-def test_formatter_correct(snapshot, cli_options, output):
+@pytest.mark.parametrize(
+    'no_color',
+    [True, False],
+    ids=['without_colors', 'with_colors'],
+)
+def test_formatter_correct(snapshot, cli_options, output, no_color):
     """All correct code should not raise any violations and no output."""
     filename = './tests/fixtures/formatter/correct.py'
 
@@ -115,12 +130,14 @@ def test_formatter_correct(snapshot, cli_options, output):
         stderr=subprocess.PIPE,
         universal_newlines=True,
         encoding='utf8',
+        env={**os.environ, 'NO_COLOR': '1' if no_color else '0'},
     )
-    stdout, _ = process.communicate()
+    stdout, stderr = process.communicate()
+    assert process.returncode == 0, (stdout, stderr)
 
     snapshot.assert_match(
         _safe_output(stdout),
-        'formatter_correct_{0}'.format(output),
+        'formatter_correct_{0}_{1}'.format(output, no_color),
     )
 
 
