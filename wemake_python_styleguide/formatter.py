@@ -35,7 +35,6 @@ from flake8.style_guide import Violation
 from pygments import highlight
 from pygments.formatters import TerminalFormatter
 from pygments.lexers import PythonLexer
-from typing_extensions import Final
 
 from wemake_python_styleguide.version import pkg_version
 
