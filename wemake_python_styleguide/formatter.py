@@ -25,8 +25,8 @@ That's how all ``flake8`` formatters work:
 
 """
 
-from os import environ
 from collections import defaultdict
+from os import environ
 from typing import ClassVar, DefaultDict, Final, List
 
 from flake8.formatting.base import BaseFormatter
@@ -247,10 +247,12 @@ def _highlight(
 ) -> str:
     """
     Highlights source code. Might fail.
-    Returns non-formatted text if environment variable 'FORCE_COLOR=0'
+
+    Returns non-formatted text if environment variable ``NO_COLOR=1``.
 
     See also:
         https://github.com/wemake-services/wemake-python-styleguide/issues/794
+        https://no-color.org
 
     """
     if no_color:
