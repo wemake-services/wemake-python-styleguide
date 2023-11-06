@@ -26,7 +26,7 @@ def get_module_name(node: ast.ImportFrom) -> str:
     """
     return '{0}{1}'.format(
         '.' * node.level,
-        node.module or ''
+        node.module or '',
     )
 
 
