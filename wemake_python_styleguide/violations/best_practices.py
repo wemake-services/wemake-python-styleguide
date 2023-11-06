@@ -90,6 +90,7 @@ Summary
    ConsecutiveSlicesViolation
    GettingElementByUnpackingViolation
    WrongEmptyLinesCountViolation
+   ImportObjectCollisionViolation
 
 Best practices
 --------------
@@ -168,6 +169,7 @@ Best practices
 .. autoclass:: ConsecutiveSlicesViolation
 .. autoclass:: GettingElementByUnpackingViolation
 .. autoclass:: WrongEmptyLinesCountViolation
+.. autoclass:: ImportObjectCollisionViolation
 
 """
 
@@ -2819,3 +2821,31 @@ class WrongEmptyLinesCountViolation(TokenizeViolation):
 
     error_template = 'Found too many empty lines in `def`: {0}'
     code = 473
+
+
+@final
+class ImportObjectCollisionViolation(ASTViolation):
+    """
+    Do not allow importing the same object under different aliases.
+
+    Reasoning:
+        This can lead to reader confusion,
+        because two names usually mean two different things.
+
+    Solution:
+        Remove useless aliases.
+
+    Example::
+
+        # Correct:
+        from module import name
+
+        # Wrong:
+        from module import name, name as alias
+
+    .. versionadded:: 0.19.0
+
+    """
+
+    error_template = 'Found import object collision: {0}'
+    code = 474
