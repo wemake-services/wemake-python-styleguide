@@ -90,6 +90,7 @@ Summary
    ConsecutiveSlicesViolation
    GettingElementByUnpackingViolation
    WrongEmptyLinesCountViolation
+   ImportObjectCollisionViolation
 
 Best practices
 --------------
@@ -168,6 +169,7 @@ Best practices
 .. autoclass:: ConsecutiveSlicesViolation
 .. autoclass:: GettingElementByUnpackingViolation
 .. autoclass:: WrongEmptyLinesCountViolation
+.. autoclass:: ImportObjectCollisionViolation
 
 """
 
