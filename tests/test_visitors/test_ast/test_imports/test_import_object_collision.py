@@ -4,7 +4,6 @@ from wemake_python_styleguide.violations.best_practices import (
     ImportObjectCollisionViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
-    DottedRawImportViolation,
     LocalFolderImportViolation,
 )
 from wemake_python_styleguide.visitors.ast.imports import WrongImportVisitor
@@ -112,5 +111,5 @@ def test_imports_collision(
     assert_errors(
         visitor,
         [ImportObjectCollisionViolation],
-        ignored_types=(LocalFolderImportViolation,)
+        ignored_types=(LocalFolderImportViolation,),
     )
