@@ -16,6 +16,20 @@ class ImportedObjectInfo(NamedTuple):
     node: AnyImport
 
 
+def get_module_name(node: ast.ImportFrom) -> str:
+    """
+    Returns module name for any ``ImportFrom``.
+
+    Handles all corner cases, including:
+    - `from . import a` -> `.`
+    - `from ..sub import b` -> `..sub`
+    """
+    return '{0}{1}'.format(
+        '.' * node.level,
+        node.module or ''
+    )
+
+
 def get_import_parts(node: AnyImport) -> List[str]:
     """Returns list of import modules."""
     module_path = getattr(node, 'module', '') or ''

@@ -23,6 +23,8 @@ Semantic versioning in our case means:
 
 - `wemake` output formatter now respects `NO_COLOR=1` option
   to disable text highlighting. See https://no-color.org
+- Add `ImportObjectCollisionViolation` to detect
+  the same objects imported under different aliases
 
 ### Bugfixes
 
