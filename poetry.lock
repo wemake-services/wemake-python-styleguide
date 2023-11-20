@@ -953,13 +953,13 @@ zoneinfo = ["backports.zoneinfo (>=0.2.1)", "tzdata (>=2023.3)"]
 
 [[package]]
 name = "hypothesmith"
-version = "0.3.0"
+version = "0.3.1"
 description = "Hypothesis strategies for generating Python programs, something like CSmith"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "hypothesmith-0.3.0-py3-none-any.whl", hash = "sha256:48f204e516ab2304c1799dfb0b840d0ab5eef9c724e7b9e31409cd8a25b35abc"},
-    {file = "hypothesmith-0.3.0.tar.gz", hash = "sha256:523da04c063b873928d6c28ef16506cf64bf31777039837e17e6bbdc6e2cccdb"},
+    {file = "hypothesmith-0.3.1-py3-none-any.whl", hash = "sha256:f435f2a912b2b81979e2860d8e0bd6b62f75756f6746a37fc3a710601875b0c6"},
+    {file = "hypothesmith-0.3.1.tar.gz", hash = "sha256:8799177a6493e832c81746842a8686752b3b1bb9530d6e832bae1758410daf3a"},
 ]
 
 [package.dependencies]
