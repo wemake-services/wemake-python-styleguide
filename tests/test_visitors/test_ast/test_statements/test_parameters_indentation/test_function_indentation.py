@@ -1,6 +1,5 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.visitors.ast.statements import (
     ParametersIndentationViolation,
     WrongParametersIndentationVisitor,
@@ -107,10 +106,7 @@ def test(
     correct_multi_line_function,
     correct_multi_line_function_with_defaults,
     correct_next_line_function,
-    pytest.param(
-        correct_multi_line_function_with_posonly,
-        marks=pytest.mark.skipif(not PY38, reason='posonly appeared in 3.8'),
-    ),
+    correct_multi_line_function_with_posonly,
 ])
 def test_correct_function_indentation(
     assert_errors,
@@ -135,10 +131,7 @@ def test_correct_function_indentation(
     wrong_function_indentation5,
     wrong_function_indentation6,
     wrong_function_indentation7,
-    pytest.param(
-        wrong_function_indentation8,
-        marks=pytest.mark.skipif(not PY38, reason='posonly appeared in 3.8'),
-    ),
+    wrong_function_indentation8,
 ])
 def test_wrong_function_indentation(
     assert_errors,

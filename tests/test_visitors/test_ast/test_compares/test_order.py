@@ -1,6 +1,5 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.consistency import (
     CompareOrderViolation,
 )
@@ -15,20 +14,10 @@ wrong_comparators = [
     (1, 'first_name.call()'),
     (1, 'first_name + 10'),
     (1, 'first_name + second_name'),
+
+    ('1', '(x := first())'),
+    ('(x := 1)', 'first()'),
 ]
-
-if PY38:
-    wrong_comparators.extend([
-        ('1', '(x := first())'),
-        ('(x := 1)', 'first()'),
-    ])
-
-correct_walrus = pytest.param(
-    ['(x := first(1, 2))', '"str"'],
-    marks=pytest.mark.skipif(
-        not PY38, reason='walrus appeared in 3.8',
-    ),
-)
 
 
 regression577 = """
@@ -52,7 +41,7 @@ async def function():
     ('error.code', 'errors[index].code'),
     (1, 2),
     ('returned_item["id"]', 'office.id'),
-    correct_walrus,
+    ('(x := first(1, 2))', '"str"'),
 ])
 def test_compare_variables(
     assert_errors,
@@ -73,7 +62,7 @@ def test_compare_variables(
 @pytest.mark.parametrize('comparators', [
     ('"string constant"', 'container'),
     ('container', '"string constant"'),
-    correct_walrus,
+    ('(x := first(1, 2))', '"str"'),
 ])
 def test_compare_variables_in_special_case(
     assert_errors,

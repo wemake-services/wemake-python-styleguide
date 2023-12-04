@@ -26,7 +26,8 @@ That's how all ``flake8`` formatters work:
 """
 
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, List
+from os import environ
+from typing import ClassVar, DefaultDict, Final, List
 
 from flake8.formatting.base import BaseFormatter
 from flake8.statistics import Statistics
@@ -34,19 +35,20 @@ from flake8.style_guide import Violation
 from pygments import highlight
 from pygments.formatters import TerminalFormatter
 from pygments.lexers import PythonLexer
-from typing_extensions import Final
 
 from wemake_python_styleguide.version import pkg_version
 
 #: That url is generated and hosted by Sphinx.
-DOCS_URL_TEMPLATE: Final = (
+_DOCS_URL_TEMPLATE: Final = (
     'https://wemake-python-styleguide.rtfd.io/en/{0}/pages/usage/violations/'
 )
 
 #: This url points to the specific violation page.
-SHORTLINK_TEMPLATE: Final = (
-    'https://pyflak.es/{0}'
-)
+_SHORTLINK_TEMPLATE: Final = 'https://pyflak.es/{0}'
+
+#: Option to disable any code highlight and text output format.
+#: See https://no-color.org
+_NO_COLOR: Final = environ.get('NO_COLOR', '0') == '1'
 
 
 class WemakeFormatter(BaseFormatter):  # noqa: WPS214
@@ -64,7 +66,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
 
     """
 
-    _doc_url: ClassVar[str] = DOCS_URL_TEMPLATE.format(pkg_version)
+    _doc_url: ClassVar[str] = _DOCS_URL_TEMPLATE.format(pkg_version)
 
     # API:
 
@@ -160,7 +162,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
 
         return '  {spacing}-> {link}'.format(
             spacing=' ' * 9,
-            link=SHORTLINK_TEMPLATE.format(error.code),
+            link=_SHORTLINK_TEMPLATE.format(error.code),
         )
 
     def _print_header(self, filename: str) -> None:
@@ -200,36 +202,61 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
 
 # Formatting text:
 
-def _bold(text: str) -> str:
+def _bold(text: str, *, no_color: bool = _NO_COLOR) -> str:
     r"""
     Returns bold formatted text.
 
     >>> _bold('Hello!')
     '\x1b[1mHello!\x1b[0m'
 
+    Returns non-formatted text if environment variable ``NO_COLOR=1``.
+
+    >>> _bold('Hello!', no_color=True)
+    'Hello!'
+
     """
+    if no_color:
+        return text
     return '\033[1m{0}\033[0m'.format(text)
 
 
-def _underline(text: str) -> str:
+def _underline(text: str, *, no_color: bool = _NO_COLOR) -> str:
     r"""
     Returns underlined formatted text.
 
     >>> _underline('Hello!')
     '\x1b[4mHello!\x1b[0m'
 
+    Returns non-formatted text if environment variable ``NO_COLOR=1``.
+
+    >>> _underline('Hello!', no_color=True)
+    'Hello!'
+
     """
+    if no_color:
+        return text
     return '\033[4m{0}\033[0m'.format(text)
 
 
-def _highlight(source: str, lexer, formatter) -> str:
+def _highlight(
+    source: str,
+    lexer: PythonLexer,
+    formatter: TerminalFormatter,
+    *,
+    no_color: bool = _NO_COLOR,
+) -> str:
     """
     Highlights source code. Might fail.
 
+    Returns non-formatted text if environment variable ``NO_COLOR=1``.
+
     See also:
         https://github.com/wemake-services/wemake-python-styleguide/issues/794
+        https://no-color.org
 
     """
+    if no_color:
+        return source
     try:
         return highlight(source, lexer, formatter)
     except Exception:  # pragma: no cover

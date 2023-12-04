@@ -114,3 +114,12 @@ You can also show links to the documentation pages of violations:
 In modern terminals, you can click them to open the respective docs page.
 
 We do not include ``show-violation-links`` in our default configuration.
+
+
+.. rubric:: Disabling colors and text highlight
+
+Set ``NO_COLOR=1`` environment variable
+to completely disable all text highligt and colors
+in ``wemake`` formatter.
+
+See https://no-color.org for more information about ``NO_COLOR``.

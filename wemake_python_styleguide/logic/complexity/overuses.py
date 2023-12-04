@@ -2,7 +2,6 @@ import ast
 from typing import Union
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
-from wemake_python_styleguide.compat.nodes import Constant
 from wemake_python_styleguide.constants import SPECIAL_ARGUMENT_NAMES_WHITELIST
 from wemake_python_styleguide.logic import nodes, walk
 from wemake_python_styleguide.logic.arguments import call_args
@@ -107,7 +106,7 @@ def is_unary_minus(node: ast.AST) -> bool:
     """
     if isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.USub):
         # We allow variables, attributes, subscripts, and `-1`
-        if isinstance(node.operand, (Constant, ast.Num)):
+        if isinstance(node.operand, (ast.Constant, ast.Num)):
             return node.operand.n == 1
         return True
     return False

@@ -1,6 +1,5 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.best_practices import (
     PositionalOnlyArgumentsViolation,
 )
@@ -73,7 +72,6 @@ def test_not_posonlyargs(
     assert_errors(visitor, [])
 
 
-@pytest.mark.skipif(not PY38, reason='posonlyargs appeared in 3.8')
 @pytest.mark.parametrize('code', [
     wrong_lambda1,
     wrong_lambda2,

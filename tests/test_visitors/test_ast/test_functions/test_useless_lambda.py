@@ -1,6 +1,5 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.refactoring import (
     UselessLambdaViolation,
 )
@@ -21,14 +20,12 @@ useless_lambdas = [
     ('lambda x, **z', 'method(x, **z)'),
     ('lambda x, *y, **z', 'method(x, *y, **z)'),
     ('lambda *args, **kwargs', 'method(*args, **kwargs)'),
-]
 
-if PY38:
-    useless_lambdas.extend([
-        ('lambda x, /, y', 'method(x, y)'),
-        ('lambda x, /, y, *, z', 'method(x, y, z=z)'),
-        ('lambda x, /, y, *arg, z, **kw', 'method(x, y, *arg, z=z, **kw)'),
-    ])
+    # with `/`:
+    ('lambda x, /, y', 'method(x, y)'),
+    ('lambda x, /, y, *, z', 'method(x, y, z=z)'),
+    ('lambda x, /, y, *arg, z, **kw', 'method(x, y, *arg, z=z, **kw)'),
+]
 
 
 @pytest.mark.parametrize(('lambda_def', 'call_def'), useless_lambdas)

@@ -51,35 +51,3 @@ def test_external_plugins(absolute_path):
     output, _ = process.communicate()
 
     _assert_plugin_output(output)
-
-
-def test_external_plugins_diff(absolute_path):
-    """Ensures that our linter and all plugins work in ``diff`` mode."""
-    process = subprocess.Popen(
-        [
-            'diff',
-            '-uN',  # is required to ignore missing files
-            'missing_file',  # is required to transform file to diff
-            absolute_path('fixtures', 'external_plugins.py'),
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
-        encoding='utf8',
-    )
-
-    output = subprocess.check_output(
-        [
-            'flake8',
-            '--isolated',
-            '--diff',  # is required to test diffs! ;)
-            '--exit-zero',  # to allow failures
-        ],
-        stdin=process.stdout,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
-        encoding='utf8',
-    )
-    process.communicate()
-
-    _assert_plugin_output(output)

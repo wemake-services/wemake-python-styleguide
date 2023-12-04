@@ -90,6 +90,7 @@ Summary
    ConsecutiveSlicesViolation
    GettingElementByUnpackingViolation
    WrongEmptyLinesCountViolation
+   ImportObjectCollisionViolation
 
 Best practices
 --------------
@@ -168,6 +169,7 @@ Best practices
 .. autoclass:: ConsecutiveSlicesViolation
 .. autoclass:: GettingElementByUnpackingViolation
 .. autoclass:: WrongEmptyLinesCountViolation
+.. autoclass:: ImportObjectCollisionViolation
 
 """
 
@@ -545,7 +547,7 @@ class WrongModuleMetadataViolation(ASTViolation):
         Place all the metadata in ``setup.py``,
         ``setup.cfg``, or ``pyproject.toml``.
         Use proper docstrings and packaging classifiers.
-        Use ``importlib.metadata`` (or ``importlib_metadata`` on python < 3.8)
+        Use ``importlib.metadata``
         if you need to import this data into your app.
 
     See
@@ -763,6 +765,8 @@ class YieldInComprehensionViolation(ASTViolation):
 
     .. versionadded:: 0.7.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.18.0
+       No longer produced, kept here for historic reasons.
 
     """
 
@@ -2817,3 +2821,31 @@ class WrongEmptyLinesCountViolation(TokenizeViolation):
 
     error_template = 'Found too many empty lines in `def`: {0}'
     code = 473
+
+
+@final
+class ImportObjectCollisionViolation(ASTViolation):
+    """
+    Do not allow importing the same object under different aliases.
+
+    Reasoning:
+        This can lead to reader confusion,
+        because two names usually mean two different things.
+
+    Solution:
+        Remove useless aliases.
+
+    Example::
+
+        # Correct:
+        from module import name
+
+        # Wrong:
+        from module import name, name as alias
+
+    .. versionadded:: 0.19.0
+
+    """
+
+    error_template = 'Found import object collision: {0}'
+    code = 474

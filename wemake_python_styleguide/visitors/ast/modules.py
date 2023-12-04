@@ -1,5 +1,5 @@
 import ast
-from typing import ClassVar
+from typing import ClassVar, Iterable, cast
 
 from typing_extensions import final
 
@@ -110,8 +110,9 @@ class ModuleConstantsVisitor(BaseNodeVisitor):
         if not isinstance(get_context(node), ast.Module):
             return
 
-        targets = (
-            [node.target] if isinstance(node, ast.AnnAssign) else node.targets
+        targets = cast(
+            Iterable[ast.AST],
+            [node.target] if isinstance(node, ast.AnnAssign) else node.targets,
         )
 
         for target in targets:

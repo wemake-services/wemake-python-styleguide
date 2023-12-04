@@ -21,7 +21,6 @@ from collections import Counter
 import pytest
 
 # Versions for different version-specific fixtures.
-_PY_OLD = sys.version_info < (3, 8)
 _PY38 = (3, 8) <= sys.version_info < (3, 9)
 _PY39 = (3, 9) <= sys.version_info < (3, 10)
 _PY310 = (3, 10) <= sys.version_info < (3, 11)
@@ -266,6 +265,8 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS470': 1,
     'WPS471': 1,
     'WPS472': 1,
+    'WPS473': 0,
+    'WPS474': 1,
 
     'WPS500': 1,
     'WPS501': 1,
@@ -318,7 +319,6 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS614': 1,
     'WPS615': 2,
     'WPS616': 1,
-    'WPS473': 0,
 })
 
 # Violations which may be tweaked by `i_control_code` option:
@@ -362,12 +362,6 @@ def test_codes(all_violations):
 
 @pytest.mark.parametrize(('filename', 'violations', 'total'), [
     ('noqa.py', SHOULD_BE_RAISED, True),
-    pytest.param(
-        'noqa_pre38.py',
-        VERSION_SPECIFIC['noqa_pre38'],
-        0,
-        marks=pytest.mark.skipif(not _PY_OLD, reason='ast changes on 3.8'),
-    ),
     pytest.param(
         'noqa38.py',
         VERSION_SPECIFIC['noqa38'],
@@ -492,38 +486,3 @@ def test_noqa_fixture_without_ignore(absolute_path):
 
     for violation in IGNORED_VIOLATIONS:
         assert stdout.count(violation) > 0
-
-
-def test_noqa_fixture_diff(absolute_path, all_violations):
-    """Ensures that our linter works in ``diff`` mode."""
-    process = subprocess.Popen(
-        [
-            'diff',
-            '-uN',  # is required to ignore missing files
-            'missing_file',  # is required to transform file to diff
-            absolute_path('fixtures', 'noqa', 'noqa.py'),
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
-        encoding='utf8',
-    )
-
-    output = subprocess.check_output(
-        [
-            'flake8',
-            '--ignore',
-            ','.join(IGNORED_VIOLATIONS),
-            '--disable-noqa',
-            '--isolated',
-            '--diff',  # is required to test diffs! ;)
-            '--exit-zero',  # to allow failures
-        ],
-        stdin=process.stdout,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
-        encoding='utf8',
-    )
-    process.communicate()
-
-    _assert_errors_count_in_output(output, SHOULD_BE_RAISED, all_violations)

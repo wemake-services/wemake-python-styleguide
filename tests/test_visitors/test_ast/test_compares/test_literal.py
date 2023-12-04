@@ -1,6 +1,5 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.consistency import (
     ConstantCompareViolation,
     ReversedComplexCompareViolation,
@@ -87,14 +86,8 @@ def test_literal_special1(
 @pytest.mark.parametrize('code', [
     chained_compares2,
     chained_compares3,
-    pytest.param(
-        walrus_compares1,
-        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
-    ),
-    pytest.param(
-        walrus_compares2,
-        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
-    ),
+    walrus_compares1,
+    walrus_compares2,
 ])
 @pytest.mark.parametrize('comparators', [
     ('first_name', 1),
@@ -124,14 +117,8 @@ def test_literal_special2(
     chained_compares1,
     chained_compares2,
     chained_compares3,
-    pytest.param(
-        walrus_compares1,
-        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
-    ),
-    pytest.param(
-        walrus_compares2,
-        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
-    ),
+    walrus_compares1,
+    walrus_compares2,
 ])
 def test_literal_special_without_errors(
     assert_errors,

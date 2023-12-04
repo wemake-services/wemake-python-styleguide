@@ -1,6 +1,7 @@
 import ast
+from collections import defaultdict
 from itertools import chain, product
-from typing import Iterable, List
+from typing import DefaultDict, Iterable, List, Set
 
 from typing_extensions import Final, final
 
@@ -13,6 +14,7 @@ from wemake_python_styleguide.violations.base import ErrorCallback
 from wemake_python_styleguide.violations.best_practices import (
     FutureImportViolation,
     ImportCollisionViolation,
+    ImportObjectCollisionViolation,
     NestedImportViolation,
     ProtectedModuleMemberViolation,
     ProtectedModuleViolation,
@@ -145,6 +147,9 @@ class _ImportCollisionValidator(object):
     def __init__(self, error_callback: ErrorCallback) -> None:
         self._error_callback = error_callback
         self._imported_names: List[imports.ImportedObjectInfo] = []
+        # This helps us to detect cases like:
+        # `from x import y, y as z`
+        self._imported_objects: DefaultDict[str, Set[str]] = defaultdict(set)
 
     def validate(self) -> None:
         """Validates that there are no intersecting imported modules."""
@@ -173,6 +178,13 @@ class _ImportCollisionValidator(object):
     def add_import_from(self, node: ast.ImportFrom) -> None:
         """Extract info needed for validation from ``ast.ImportFrom``."""
         for alias in node.names:
+            identifier = imports.get_module_name(node)
+            if alias.name in self._imported_objects[identifier]:
+                self._error_callback(
+                    ImportObjectCollisionViolation(node, alias.name),
+                )
+            self._imported_objects[identifier].add(alias.name)
+
             if not alias.asname:
                 self._imported_names.append(imports.ImportedObjectInfo(
                     _MODULE_MEMBERS_SEPARATOR.join(

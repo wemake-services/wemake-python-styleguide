@@ -1,6 +1,5 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.best_practices import (
     LoopControlFinallyViolation,
 )
@@ -120,10 +119,6 @@ def test_finally_with_break(
     assert_errors(visitor, [LoopControlFinallyViolation])
 
 
-@pytest.mark.skipif(
-    not PY38,
-    reason='continue in finally works only since python3.8',
-)
 @pytest.mark.parametrize('statement', [
     'continue',
 ])
@@ -146,27 +141,3 @@ def test_finally_with_continue(
     visitor.run()
 
     assert_errors(visitor, [LoopControlFinallyViolation])
-
-
-@pytest.mark.skipif(
-    PY38,
-    reason='continue in finally does not work till since python3.8',
-)
-@pytest.mark.parametrize('statement', [
-    'continue',
-])
-@pytest.mark.parametrize('code', [
-    wrong_try_example,
-    wrong_try_example_with_while,
-])
-def test_finally_with_continue_and_exception(
-    assert_errors,
-    parse_ast_tree,
-    code,
-    statement,
-    default_options,
-    mode,
-):
-    """Testing using `continue` keyword in python < 3.8 raises an exception."""
-    with pytest.raises(SyntaxError):
-        parse_ast_tree(mode(code.format(statement)))

@@ -4,7 +4,6 @@ from typing import ClassVar, Mapping, Optional, Tuple, Type, Union
 from typing_extensions import TypeAlias, final
 
 from wemake_python_styleguide.compat.aliases import TextNodes
-from wemake_python_styleguide.compat.nodes import NamedExpr
 from wemake_python_styleguide.logic import walk
 from wemake_python_styleguide.logic.tree.annotations import is_annotation
 from wemake_python_styleguide.logic.tree.operators import (
@@ -222,18 +221,12 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
 
 @final
 class WalrusVisitor(base.BaseNodeVisitor):
-    """
-    We use this visitor to find walrus operators and ban them.
-
-    This code is only executed on ``python3.8+``,
-    because before ``3.8.0`` release
-    there was no such thing as walrus operator.
-    """
+    """We use this visitor to find walrus operators and ban them."""
 
     def visit_NamedExpr(
         self,
-        node: NamedExpr,
-    ) -> None:  # pragma: py-lt-38
+        node: ast.NamedExpr,
+    ) -> None:
         """Disallows walrus ``:=`` operator."""
         self.add_violation(consistency.WalrusViolation(node))
         self.generic_visit(node)

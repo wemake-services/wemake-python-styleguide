@@ -1,6 +1,5 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.naming import (
     UnusedVariableIsUsedViolation,
 )
@@ -148,10 +147,7 @@ def test_correct_variables(
     wrong_function_with_with,
     wrong_function_with_for,
     wrong_method,
-    pytest.param(
-        wrong_function_with_walrus,
-        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
-    ),
+    wrong_function_with_walrus,
 ])
 def test_wrong_super_call(
     assert_errors,

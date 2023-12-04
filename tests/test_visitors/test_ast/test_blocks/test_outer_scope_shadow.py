@@ -1,6 +1,5 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations.best_practices import (
     OuterScopeShadowingViolation,
 )
@@ -269,10 +268,7 @@ def function():
     correct_class2,
     correct_class3,
     correct_class4,
-    pytest.param(
-        correct_walrus,
-        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
-    ),
+    correct_walrus,
 ])
 def test_variable_used_correctly(
     assert_errors,
@@ -303,10 +299,7 @@ def test_variable_used_correctly(
     constant_overlap4,
     constant_overlap5,
     constant_overlap6,
-    pytest.param(
-        walrus_overlap,
-        marks=pytest.mark.skipif(not PY38, reason='walrus appeared in 3.8'),
-    ),
+    walrus_overlap,
 ])
 def test_outer_variable_shadow(
     assert_errors,

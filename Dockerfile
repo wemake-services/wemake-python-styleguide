@@ -15,13 +15,13 @@
 # This image is also available on Dockerhub:
 # https://hub.docker.com/r/wemakeservices/wemake-python-styleguide
 
-FROM python:3.9.10-alpine
+FROM python:3.11.5-alpine
 
-LABEL maintainer="sobolevn@wemake.services"
+LABEL maintainer="mail@sobolevn.me"
 LABEL vendor="wemake.services"
 
-ENV WPS_VERSION='0.17.0'
-ENV REVIEWDOG_VERSION='v0.14.1'
+ENV WPS_VERSION='0.18.0'
+ENV REVIEWDOG_VERSION='v0.15.0'
 
 RUN apk add --no-cache bash git wget
 RUN pip install "wemake-python-styleguide==$WPS_VERSION" \

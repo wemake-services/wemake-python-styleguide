@@ -5,11 +5,19 @@ name: depup
   schedule:
     - cron: '30 7 * * *'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   reviewdog:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: haya14busa/action-depup@v1
         id: depup
         with:
@@ -18,7 +26,7 @@ jobs:
           repo: reviewdog/reviewdog
 
       - name: Create Pull Request to update reviewdog
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           title: "chore(deps): update reviewdog to ${{ steps.depup.outputs.latest }}"

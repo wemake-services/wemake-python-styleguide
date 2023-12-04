@@ -2,7 +2,6 @@ from typing import List, NamedTuple
 
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY38
 from wemake_python_styleguide.violations import oop
 from wemake_python_styleguide.visitors.ast.classes import WrongMethodVisitor
 
@@ -48,17 +47,14 @@ valid_method_args: List[_MethodArgs] = [
     _MethodArgs('a, *args, **kwargs', 'a, *args, **kwargs'),
     _MethodArgs('*, a, **kwargs', 'a=a, **kwargs'),
     _MethodArgs('*, a, **kwargs', '**kwargs, a=a'),
-]
 
-if PY38:
-    valid_method_args.extend([
-        _MethodArgs('/, a, b', 'a, b'),
-        _MethodArgs('a, /, b', 'a, b'),
-        _MethodArgs('a, b, /', 'a, b'),
-        _MethodArgs('a, /, b, *, c', 'a, b, c=c'),
-        _MethodArgs('a, /, b, *args, **kwargs', 'a, b, *args, **kwargs'),
-        _MethodArgs('a, /, b, *arg, c, **kw', 'a, b, *arg, **kw, c=c'),
-    ])
+    _MethodArgs('/, a, b', 'a, b'),
+    _MethodArgs('a, /, b', 'a, b'),
+    _MethodArgs('a, b, /', 'a, b'),
+    _MethodArgs('a, /, b, *, c', 'a, b, c=c'),
+    _MethodArgs('a, /, b, *args, **kwargs', 'a, b, *args, **kwargs'),
+    _MethodArgs('a, /, b, *arg, c, **kw', 'a, b, *arg, **kw, c=c'),
+]
 
 valid_statements = [
     '"""Valid docstring."""',
