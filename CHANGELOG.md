@@ -30,6 +30,10 @@ Semantic versioning in our case means:
 
 - Fix `ForbiddenInlineIgnoreViolation` config parsing. #2590
 
+### Misc
+
+- Add support to run wemake-python-styleguide as a pre-commit hook #2588
+
 
 ## 0.18.0
 
@@ -52,8 +56,6 @@ Semantic versioning in our case means:
 ### Misc
 
 - Replaced `flakehell` mentions to `flakeheaven` #2409
-- Add support to run wemake-python-styleguide as a pre-commit hook #2588
-
 
 ## 0.17.0
 
