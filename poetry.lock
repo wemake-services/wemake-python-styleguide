@@ -59,12 +59,12 @@ files = [
 
 [[package]]
 name = "astpath"
-version = "0.9.0"
+version = "0.9.1"
 description = "A query language for Python abstract syntax trees"
 optional = false
 python-versions = "*"
 files = [
-    {file = "astpath-0.9.0.tar.gz", hash = "sha256:596701faa5f5aa82c501d851abeb47e3f21a0d9ebe4c7ba8d5b5fd7f5d6ff23c"},
+    {file = "astpath-0.9.1.tar.gz", hash = "sha256:935ad8b22e4c868d3e517bce8efab500a3a7574044510423978c8238b24ae1db"},
 ]
 
 [package.extras]
