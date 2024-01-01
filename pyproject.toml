@@ -87,7 +87,7 @@ autopep8 = "^2.0"
 import-linter = "^1.2"
 
 astpath = "^0.9"
-lxml = "^4.9"
+lxml = ">=4.9,<6.0"
 nbqa = "^1.2"
 doc8 = ">=0.11,<1.2"
 
