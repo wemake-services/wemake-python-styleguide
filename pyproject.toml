@@ -96,7 +96,7 @@ optional = true
 
 [tool.poetry.group.docs.dependencies]
 sphinx = ">=6.2,<8.0"
-sphinx-autodoc-typehints = "^1.12"
+sphinx-autodoc-typehints = ">=1.12,<3.0"
 sphinxcontrib-mermaid = "^0.9"
 added-value = "^0.24"
 m2r2 = "^0.3"
