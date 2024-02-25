@@ -74,9 +74,10 @@ class _FileFunctions(object):
         function_tokens_exists: bool,
         function_start_column: int,
     ) -> bool:
+        is_elipsis_end = token.string == '...'  # TODO: must be incorrect in ellipsis into function
         column_valid = token.start[1] in {0, function_start_column}
         is_dedent_token = token.type == tokenize.DEDENT
-        return is_dedent_token and function_tokens_exists and column_valid
+        return (is_dedent_token and function_tokens_exists and column_valid) or is_elipsis_end
 
 
 @final

@@ -254,3 +254,35 @@ def test_zero_option_with_valid_method(
     )
     visitor.run()
     assert_errors(visitor, [])
+
+
+def_with_ellipsis = """
+class BaseResponse(Protocol):
+
+    @property
+    def status_code(self) -> int: ...
+
+    @property
+    def content(self) -> Any: ...
+
+    def json(self) -> Any: ...
+
+    def raise_for_status(self) -> None: ...
+
+    @property
+    def headers(self) -> dict[str, str]: ...
+"""
+
+
+def test_def_with_ellipsis(
+    parse_tokens,
+    default_options,
+    assert_errors,
+    mode,
+):
+    file_tokens = parse_tokens(mode(def_with_ellipsis))
+    visitor = WrongEmptyLinesCountVisitor(
+        default_options, file_tokens=file_tokens,
+    )
+    visitor.run()
+    assert_errors(visitor, [])
