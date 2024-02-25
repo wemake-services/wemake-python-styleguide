@@ -166,6 +166,7 @@ fstrings_feature = Fstring()
 fstrings_feature.deprecate()
 """
 
+<<<<<<< HEAD
 def_with_ellipsis = """
 class BaseResponse(Protocol):
 
@@ -217,8 +218,7 @@ def status_code(arg) -> int:
     payload()
 """
 
-
-func_with_implicit_string_concatination = """
+function_with_implicit_string_concatenation = """
 def kk() -> None:
     raise ValueError(
         "This is "
@@ -361,7 +361,10 @@ def test_string_concatination(
     options,
     mode,
 ):
-    file_tokens = parse_tokens(mode(func_with_implicit_string_concatination))
+    """Test function with multiline implicit string concatenation."""
+    file_tokens = parse_tokens(
+        mode(function_with_implicit_string_concatenation),
+    )
     visitor = WrongEmptyLinesCountVisitor(
         default_options, file_tokens=file_tokens,
     )
