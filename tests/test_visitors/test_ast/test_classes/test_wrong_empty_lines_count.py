@@ -166,7 +166,6 @@ fstrings_feature = Fstring()
 fstrings_feature.deprecate()
 """
 
-<<<<<<< HEAD
 def_with_ellipsis = """
 class BaseResponse(Protocol):
 
