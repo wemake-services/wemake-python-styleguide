@@ -218,6 +218,18 @@ def status_code(arg) -> int:
 """
 
 
+func_with_implicit_string_concatination = """
+def kk() -> None:
+    raise ValueError(
+        "This is "
+        "a very "
+        "long message "
+        "but there are "
+        "no empty lines.",
+    )
+"""
+
+
 @pytest.mark.parametrize('input_', [
     class_with_wrong_method,
     wrong_function,
@@ -340,3 +352,18 @@ def test_ellipsis_into_body(
     )
     visitor.run()
     assert_errors(visitor, [WrongEmptyLinesCountViolation])
+
+
+def test_string_concatination(
+    parse_tokens,
+    default_options,
+    assert_errors,
+    options,
+    mode,
+):
+    file_tokens = parse_tokens(mode(func_with_implicit_string_concatination))
+    visitor = WrongEmptyLinesCountVisitor(
+        default_options, file_tokens=file_tokens,
+    )
+    visitor.run()
+    assert_errors(visitor, [])
