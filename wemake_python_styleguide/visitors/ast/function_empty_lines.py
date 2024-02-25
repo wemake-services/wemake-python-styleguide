@@ -48,15 +48,18 @@ class _FileFunctions(object):
         function_tokens: List[tokenize.TokenInfo] = []
         in_function = False
         function_start_column = 0
+        function_start_line = 0
         for token in self._file_tokens:
             function_ended = self._is_function_end(
                 token,
                 bool(function_tokens),
                 function_start_column,
+                function_start_line,
             )
             if not in_function and self._is_function_start(token):
                 in_function = True
                 function_start_column = token.start[1]
+                function_start_line = token.start[0]
             elif function_ended:
                 in_function = False
                 function_start_column = 0
@@ -73,8 +76,9 @@ class _FileFunctions(object):
         token: tokenize.TokenInfo,
         function_tokens_exists: bool,
         function_start_column: int,
+        function_start_line: int,
     ) -> bool:
-        is_elipsis_end = token.string == '...'  # TODO: must be incorrect in ellipsis into function
+        is_elipsis_end = token.string == '...' and token.start[0] == function_start_line
         column_valid = token.start[1] in {0, function_start_column}
         is_dedent_token = token.type == tokenize.DEDENT
         return (is_dedent_token and function_tokens_exists and column_valid) or is_elipsis_end

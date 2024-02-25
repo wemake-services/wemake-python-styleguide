@@ -273,6 +273,19 @@ class BaseResponse(Protocol):
     def headers(self) -> dict[str, str]: ...
 """
 
+ellipsis_into_body = """
+def status_code(arg) -> int:
+    payload()
+    if not arg:
+        ...
+    payload()
+
+
+
+
+    payload()
+"""
+
 
 def test_def_with_ellipsis(
     parse_tokens,
@@ -286,3 +299,17 @@ def test_def_with_ellipsis(
     )
     visitor.run()
     assert_errors(visitor, [])
+
+
+def test_ellipsis_into_body(
+    parse_tokens,
+    default_options,
+    assert_errors,
+    mode,
+):
+    file_tokens = parse_tokens(mode(ellipsis_into_body))
+    visitor = WrongEmptyLinesCountVisitor(
+        default_options, file_tokens=file_tokens,
+    )
+    visitor.run()
+    assert_errors(visitor, [WrongEmptyLinesCountViolation])
