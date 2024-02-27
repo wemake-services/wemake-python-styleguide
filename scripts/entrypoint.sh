@@ -9,6 +9,8 @@ echo "Using reporter: $INPUT_REPORTER"
 echo "Linting path: $INPUT_PATH"
 echo 'flake8 --version:'
 flake8 --version
+ls -la
+cat setup.cfg
 echo '================================='
 echo
 
