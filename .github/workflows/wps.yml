@@ -19,7 +19,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - uses: wemake-services/wemake-python-styleguide@blablatdinov:fix-wps-action
+    - uses: wemake-services/wemake-python-styleguide@0b2a2b9d20a2627a7f686eff636e83957029ec6b
       with:
         reporter: 'github-pr-review'
       env:
