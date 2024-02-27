@@ -19,7 +19,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - uses: wemake-services/wemake-python-styleguide@0b2a2b9d20a2627a7f686eff636e83957029ec6b
+    - uses: wemake-services/wemake-python-styleguide@a0d9bc13df7f3d807affac3223bbcedc8f050576
       with:
         reporter: 'github-pr-review'
       env:
