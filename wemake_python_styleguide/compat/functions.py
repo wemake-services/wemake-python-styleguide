@@ -23,7 +23,7 @@ def get_slice_expr(node: ast.Subscript) -> ast.expr:
     After: ``ast.Subscript`` -> ``ast.expr``
     """
     return (
-        cast(ast.expr, node.slice.value)  # type: ignore[attr-defined]
+        cast(ast.expr, node.slice.value)  # type: ignore
         if isinstance(node.slice, ast.Index)
         else node.slice
     )
