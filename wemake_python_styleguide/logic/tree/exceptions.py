@@ -2,6 +2,8 @@ import ast
 from inspect import getmro
 from typing import Dict, List, Mapping, Optional, Tuple, Type
 
+from typing_extensions import TypeAlias
+
 from wemake_python_styleguide.logic import source
 from wemake_python_styleguide.logic.walk import is_contained
 from wemake_python_styleguide.types import AnyNodes
@@ -41,7 +43,7 @@ def get_all_exception_names(node: ast.Try) -> List[str]:
     return exceptions
 
 
-_ExceptionMemo = Dict[str, Tuple[str, ...]]
+_ExceptionMemo: TypeAlias = Dict[str, Tuple[str, ...]]
 
 
 def traverse_exception(
