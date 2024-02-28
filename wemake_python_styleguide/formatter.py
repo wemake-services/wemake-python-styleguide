@@ -51,7 +51,7 @@ _SHORTLINK_TEMPLATE: Final = 'https://pyflak.es/{0}'
 _NO_COLOR: Final = environ.get('NO_COLOR', '0') == '1'
 
 
-class WemakeFormatter(BaseFormatter):  # noqa: WPS214
+class WemakeFormatter(BaseFormatter):  # type: ignore[misc]  # noqa: WPS214
     """
     We need to format our style :term:`violations <violation>` beatifully.
 
@@ -70,7 +70,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
 
     # API:
 
-    def after_init(self):
+    def after_init(self) -> None:
         """Called after the original ``init`` is used to set extra fields."""
         self._lexer = PythonLexer()
         self._formatter = TerminalFormatter()
@@ -179,7 +179,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
         error_code: str,
         count: int,
         error_by_file: DefaultDict[str, int],
-    ):
+    ) -> None:
         self._write(
             '{newline}{error_code}: {message}'.format(
                 newline=self.newline,
@@ -258,7 +258,9 @@ def _highlight(
     if no_color:
         return source
     try:
-        return highlight(source, lexer, formatter)
+        return highlight(  # type: ignore[no-any-return]
+            source, lexer, formatter,
+        )
     except Exception:  # pragma: no cover
         # Might fail on some systems, when colors are set incorrectly,
         # or not available at all. In this case code will be just text.

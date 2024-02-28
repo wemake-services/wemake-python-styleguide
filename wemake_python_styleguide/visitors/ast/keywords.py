@@ -335,7 +335,7 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
         """
         parent = cast(ast.AST, get_parent(node))
         for part in ('body', 'orelse', 'finalbody'):
-            block = getattr(parent, part, [])
+            block: List[ast.stmt] = getattr(parent, part, [])
             try:
                 current_index = block.index(node)
             except ValueError:

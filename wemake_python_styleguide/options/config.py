@@ -182,7 +182,7 @@ class _Option(object):
     comma_separated_list: bool = False
     dest: Optional[str] = None
 
-    def __attrs_post_init__(self):
+    def __attrs_post_init__(self) -> None:
         """Is called after regular init is done."""
         object.__setattr__(  # noqa: WPS609
             self, 'help', ' '.join(

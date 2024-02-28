@@ -160,7 +160,7 @@ class ElifVisitor(BaseNodeVisitor):
             root = self._get_root_if_node(node)
             self._update_if_child(root, node)
 
-    def _post_visit(self):
+    def _post_visit(self) -> None:
         for root, children in self._if_children.items():
             real_children_length = len(set(children))
             if real_children_length > constants.MAX_ELIFS:

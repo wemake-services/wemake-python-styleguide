@@ -2,7 +2,7 @@ import ast
 from typing import Any, Optional, Union
 
 
-def _convert_num(node: Optional[ast.AST]):
+def _convert_num(node: Optional[ast.AST]) -> Any:
     if isinstance(node, ast.Constant):
         if isinstance(node.value, (int, float, complex)):
             return node.value
@@ -13,7 +13,7 @@ def _convert_num(node: Optional[ast.AST]):
     raise ValueError('malformed node or string: {0!r}'.format(node))
 
 
-def _convert_signed_num(node: Optional[ast.AST]):
+def _convert_signed_num(node: Optional[ast.AST]) -> Any:
     unary_operators = (ast.UAdd, ast.USub)
     if isinstance(node, ast.UnaryOp) and isinstance(node.op, unary_operators):
         operand = _convert_num(node.operand)
@@ -21,7 +21,7 @@ def _convert_signed_num(node: Optional[ast.AST]):
     return _convert_num(node)
 
 
-def _convert_complex(node: ast.BinOp) -> Optional[complex]:
+def _convert_complex(node: ast.BinOp) -> Any:
     left = _convert_signed_num(node.left)
     right = _convert_num(node.right)
     if isinstance(left, (int, float)) and isinstance(right, complex):
@@ -31,7 +31,9 @@ def _convert_complex(node: ast.BinOp) -> Optional[complex]:
     return None
 
 
-def _convert_iterable(node: Union[ast.Tuple, ast.List, ast.Set, ast.Dict]):
+def _convert_iterable(
+    node: Union[ast.Tuple, ast.List, ast.Set, ast.Dict],
+) -> Any:
     if isinstance(node, ast.Tuple):
         return tuple(map(literal_eval_with_names, node.elts))
     elif isinstance(node, ast.List):

@@ -22,7 +22,7 @@ def get_slice_expr(node: ast.Subscript) -> ast.expr:
     Before: ``ast.Subscript`` -> ``ast.Index`` -> ``ast.expr``
     After: ``ast.Subscript`` -> ``ast.expr``
     """
-    return (
+    return (  # type: ignore[no-any-return]
         node.slice.value  # type: ignore
         if isinstance(node.slice, ast.Index)
         else node.slice
