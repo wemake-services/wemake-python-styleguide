@@ -41,9 +41,12 @@ def get_all_exception_names(node: ast.Try) -> List[str]:
     return exceptions
 
 
+_ExceptionMemo = Dict[str, Tuple[str, ...]]
+
+
 def traverse_exception(
     cls: Type[BaseException],
-    builtin_exceptions: Optional[Dict[str, Tuple[str, ...]]] = None,
+    builtin_exceptions: Optional[_ExceptionMemo] = None,
 ) -> Mapping[str, Tuple[str, ...]]:
     """
     Returns a dictionary of built-in exceptions hierarchy.
