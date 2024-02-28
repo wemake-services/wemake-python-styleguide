@@ -1,5 +1,5 @@
 import ast
-from typing import List, Union
+from typing import List, Union, cast
 
 from wemake_python_styleguide.compat.types import AnyAssignWithWalrus
 
@@ -22,8 +22,8 @@ def get_slice_expr(node: ast.Subscript) -> ast.expr:
     Before: ``ast.Subscript`` -> ``ast.Index`` -> ``ast.expr``
     After: ``ast.Subscript`` -> ``ast.expr``
     """
-    return (  # type: ignore[no-any-return]
-        node.slice.value  # type: ignore
+    return (
+        cast(ast.expr, node.slice.value)  # type: ignore[attr-defined]
         if isinstance(node.slice, ast.Index)
         else node.slice
     )

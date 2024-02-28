@@ -1,6 +1,6 @@
 import ast
 from inspect import getmro
-from typing import Dict, List, Mapping, Optional, Tuple
+from typing import Dict, List, Mapping, Optional, Tuple, Type
 
 from wemake_python_styleguide.logic import source
 from wemake_python_styleguide.logic.walk import is_contained
@@ -42,7 +42,7 @@ def get_all_exception_names(node: ast.Try) -> List[str]:
 
 
 def traverse_exception(
-    cls: type[BaseException],
+    cls: Type[BaseException],
     builtin_exceptions: Optional[Dict[str, Tuple[str, ...]]] = None,
 ) -> Mapping[str, Tuple[str, ...]]:
     """
