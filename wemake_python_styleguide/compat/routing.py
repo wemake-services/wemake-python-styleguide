@@ -16,7 +16,7 @@ _CONST_NODE_TYPE_NAMES: Final = types.MappingProxyType({
 })
 
 
-def route_visit(self: ast.NodeVisitor, node: ast.AST):
+def route_visit(self: ast.NodeVisitor, node: ast.AST) -> None:
     """
     Custom router for python3.8+ release.
 
@@ -29,7 +29,7 @@ def route_visit(self: ast.NodeVisitor, node: ast.AST):
     else:
         type_name = node.__class__.__name__
 
-    return getattr(
+    return getattr(  # type: ignore[no-any-return]
         self,
         'visit_{0}'.format(type_name),
         self.generic_visit,

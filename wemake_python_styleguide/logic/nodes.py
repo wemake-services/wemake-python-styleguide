@@ -29,14 +29,13 @@ def get_context(node: ast.AST) -> Optional[ContextNodes]:
     return getattr(node, 'wps_context', None)
 
 
-def evaluate_node(node: ast.AST) -> Optional[Union[int, float, str, bytes]]:
+def evaluate_node(node: ast.AST) -> Union[int, float, str, bytes, None]:
     """Returns the value of a node or its evaluation."""
     if isinstance(node, ast.Name):
         return None
     if isinstance(node, (ast.Str, ast.Bytes)):
         return node.s
     try:
-        signed_node = literal_eval_with_names(node)
+        return literal_eval_with_names(node)  # type: ignore[no-any-return]
     except Exception:
         return None
-    return signed_node
