@@ -166,6 +166,57 @@ fstrings_feature = Fstring()
 fstrings_feature.deprecate()
 """
 
+def_with_ellipsis = """
+class BaseResponse(Protocol):
+
+    @property
+    def status_code(self) -> int: ...
+
+    @property
+    def content(self) -> Any: ...
+
+    def json(self) -> Any: ...
+
+    def raise_for_status(self) -> None: ...
+
+    @property
+    def headers(self) -> dict[str, str]: ...
+"""
+
+def_with_ellipsis_multiline = """
+class BaseResponse(Protocol):
+
+    @property
+    def status_code(
+        self,
+        arg1,
+        arg2,
+    ) -> int: ...
+
+    @property
+    def content(self) -> Any: ...
+
+    def json(self) -> Any: ...
+
+    def raise_for_status(self) -> None: ...
+
+    @property
+    def headers(self) -> dict[str, str]: ...
+"""
+
+ellipsis_into_body = """
+def status_code(arg) -> int:
+    payload()
+    if not arg:
+        ...
+    payload()
+
+
+
+
+    payload()
+"""
+
 
 @pytest.mark.parametrize('input_', [
     class_with_wrong_method,
@@ -254,3 +305,38 @@ def test_zero_option_with_valid_method(
     )
     visitor.run()
     assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('case', [
+    def_with_ellipsis,
+    def_with_ellipsis_multiline,
+])
+def test_def_with_ellipsis(
+    case,
+    parse_tokens,
+    default_options,
+    assert_errors,
+    mode,
+):
+    """Test abstract classes/protocol definitions with ellipsis."""
+    file_tokens = parse_tokens(mode(case))
+    visitor = WrongEmptyLinesCountVisitor(
+        default_options, file_tokens=file_tokens,
+    )
+    visitor.run()
+    assert_errors(visitor, [])
+
+
+def test_ellipsis_into_body(
+    parse_tokens,
+    default_options,
+    assert_errors,
+    mode,
+):
+    """Test correct detection ellipsis into function body."""
+    file_tokens = parse_tokens(mode(ellipsis_into_body))
+    visitor = WrongEmptyLinesCountVisitor(
+        default_options, file_tokens=file_tokens,
+    )
+    visitor.run()
+    assert_errors(visitor, [WrongEmptyLinesCountViolation])
