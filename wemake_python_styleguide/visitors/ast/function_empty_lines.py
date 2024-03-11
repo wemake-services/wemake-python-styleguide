@@ -29,7 +29,7 @@ class _Function(object):
         stripped_token_line = token.line.strip()
         is_comment = False
         if stripped_token_line:
-            is_comment = '#' in stripped_token_line[0]
+            is_comment = stripped_token_line[0] == '#'
         is_multistring_end = '"""' in token.line
         return is_comment or is_multistring_end
 
