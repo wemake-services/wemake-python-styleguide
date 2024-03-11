@@ -29,10 +29,9 @@ class _Function(object):
         stripped_token_line = token.line.strip()
         is_comment = False
         if stripped_token_line:
-            is_comment = '#' in stripped_token_line[0]
-        is_string = token.type == tokenize.STRING
+            is_comment = stripped_token_line.startswith('#')
         is_multistring_end = '"""' in token.line
-        return is_comment or is_string or is_multistring_end
+        return is_comment or is_multistring_end
 
 
 @final
