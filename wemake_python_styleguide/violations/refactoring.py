@@ -991,7 +991,7 @@ class MisrefactoredAssignmentViolation(ASTViolation):
         on the left hand side and on the right hand side.
 
     Solution:
-        Refactor you code to use multiple self assignments or fix your code.
+        Refactor your code to use multiple self assignments or fix your code.
 
     Example::
 

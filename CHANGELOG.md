@@ -32,6 +32,9 @@ Semantic versioning in our case means:
 - Fix `WrongEmptyLinesCountViolation` for func definitions with ellipsis. #2847
 - Fix `WrongEmptyLinesCountViolation` for multiline implicit string concatination. #2787
 
+### Misc
+
+- Replaced `you` with `your`
 
 ## 0.18.0
 
