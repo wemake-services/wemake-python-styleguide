@@ -867,7 +867,7 @@ class OverusedStringViolation(MaybeASTViolation):
         and should be treated like one.
 
     Solution:
-        Deduplicate you string usages
+        Deduplicate your string usages
         by defining new functions or constants.
 
     Configuration:
