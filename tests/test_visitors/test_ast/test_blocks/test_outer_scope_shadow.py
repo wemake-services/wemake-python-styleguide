@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY310
 from wemake_python_styleguide.violations.best_practices import (
     OuterScopeShadowingViolation,
 )
@@ -254,6 +255,22 @@ def function():
         ...
 """
 
+match_as_overlap = """
+import some
+
+def function():
+    match ...:
+        case 1 as some: ...
+"""
+
+match_star_overlap = """
+import some
+
+def function():
+    match ...:
+        case [*some]: ...
+"""
+
 
 @pytest.mark.parametrize('code', [
     correct_for_loop1,
@@ -300,6 +317,20 @@ def test_variable_used_correctly(
     constant_overlap5,
     constant_overlap6,
     walrus_overlap,
+    pytest.param(
+        match_as_overlap,
+        marks=pytest.mark.skipif(
+            not PY310,
+            reason='Pattern matching was added in Python 3.10',
+        ),
+    ),
+    pytest.param(
+        match_star_overlap,
+        marks=pytest.mark.skipif(
+            not PY310,
+            reason='Pattern matching was added in Python 3.10',
+        ),
+    ),
 ])
 def test_outer_variable_shadow(
     assert_errors,
