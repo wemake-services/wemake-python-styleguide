@@ -290,13 +290,13 @@ except TypeError:
     my_print('type')
 
 
-class BadClass:  # noqa: WPS306
+class BadClass(object):  # noqa: WPS306
     UPPER_CASE_ATTRIBUTE = 12  # noqa: WPS115
 
     def __del__(self, *_args, **_kwargs):  # noqa: WPS603
         anti_wps428 = 1  # noqa: WPS442
 
-    class Nested:  # noqa: WPS306,WPS431
+    class Nested(object):  # noqa: WPS306,WPS431
         anti_wps428 = 1
 
     async def __eq__(self, other):  # noqa: WPS610
@@ -328,7 +328,7 @@ if True:  # noqa: WPS314
     anti_wps428 = 1
 
 
-class SomeTestClass(FirstParent, SecondParent):  # noqa: WPS315
+class SomeTestClass(FirstParent, SecondParent, object):  # noqa: WPS315
     anti_wps428 = 1
 
 

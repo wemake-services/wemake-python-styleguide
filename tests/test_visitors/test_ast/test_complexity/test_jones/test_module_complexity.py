@@ -54,7 +54,7 @@ def test_module_score(
     (module_without_nodes, 0),
     (module_with_nodes, 8.5),
     (module_with_function, 6),
-    (module_with_class, 2),
+    (module_with_class, 3.0),
 ])
 def test_module_score_error(
     assert_errors,
