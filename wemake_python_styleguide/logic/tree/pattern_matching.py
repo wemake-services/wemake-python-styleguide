@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from typing import Iterable
 
 from wemake_python_styleguide.compat.nodes import Match, MatchAs, match_case
