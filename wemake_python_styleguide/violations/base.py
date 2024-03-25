@@ -156,10 +156,10 @@ class BaseViolation(metaclass=abc.ABCMeta):  # noqa: WPS338
         """
         formatted_text = self.error_template.format(self._text)
         if self._text and formatted_text == self.error_template:
-            raise ValueError('Error message was not formatted')
+            raise ValueError('Error message was not formatted', self)
         return '{0} {1}{2}'.format(
             self.full_code,
-            self.error_template.format(self._text),
+            formatted_text,
             self._postfix_information(),
         )
 

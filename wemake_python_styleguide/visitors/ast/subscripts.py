@@ -81,7 +81,7 @@ class SubscriptVisitor(base.BaseNodeVisitor):
         if not (lower_ok and upper_ok and step_ok):
             self.add_violation(
                 consistency.RedundantSubscriptViolation(
-                    node, text=str(node),
+                    node,
                 ),
             )
 

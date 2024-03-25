@@ -44,15 +44,17 @@ Semantic versioning in our case means:
 
 ### Bugfixes
 
-- Fix `ForbiddenInlineIgnoreViolation` config parsing. #2590
-- Fix `WrongEmptyLinesCountViolation` for func definitions with ellipsis. #2847
-- Fix `WrongEmptyLinesCountViolation` for multiline implicit string concatination. #2787
-- Fix `ObjectInBaseClassesListViolation` to include type name
+- Fixes `ForbiddenInlineIgnoreViolation` config parsing. #2590
+- Fixes `WrongEmptyLinesCountViolation` for func definitions with ellipsis. #2847
+- Fixes `WrongEmptyLinesCountViolation` for multiline implicit string concatination. #2787
+- Fixes `ObjectInBaseClassesListViolation`, `UnpythonicGetterSetterViolation`,
+  `ImplicitInConditionViolation`, `RedundantSubscriptViolation`,
+  `TooLongCompareViolation` to include better error details
 
 ### Misc
 
 - Updates multiple`flake8-*` dependencies
-- Fixed multiple typos in docs
+- Fixes multiple typos in docs
 
 
 ## 0.18.0

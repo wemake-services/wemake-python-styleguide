@@ -922,7 +922,7 @@ class TooLongCompareViolation(ASTViolation):
 
     """
 
-    error_template = 'Found too long compare'
+    error_template = 'Found too long compare: {0}'
     code = 228
 
 
