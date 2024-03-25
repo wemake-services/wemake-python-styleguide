@@ -322,14 +322,14 @@ def test_variable_used_correctly(
         marks=pytest.mark.skipif(
             not PY310,
             reason='Pattern matching was added in Python 3.10',
-        )
+        ),
     ),
     pytest.param(
         match_star_overlap,
         marks=pytest.mark.skipif(
             not PY310,
             reason='Pattern matching was added in Python 3.10',
-        )
+        ),
     ),
 ])
 def test_outer_variable_shadow(

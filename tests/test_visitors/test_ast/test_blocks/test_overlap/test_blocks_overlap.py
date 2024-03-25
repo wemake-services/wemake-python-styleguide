@@ -148,21 +148,21 @@ def context():
         marks=pytest.mark.skipif(
             not PY310,
             reason='Pattern matching was added in Python 3.10',
-        )
+        ),
     ),
     pytest.param(
         import_and_match_as_implicit,
         marks=pytest.mark.skipif(
             not PY310,
             reason='Pattern matching was added in Python 3.10',
-        )
+        ),
     ),
     pytest.param(
         import_and_match_star,
         marks=pytest.mark.skipif(
             not PY310,
             reason='Pattern matching was added in Python 3.10',
-        )
+        ),
     ),
 ])
 def test_block_overlap(
