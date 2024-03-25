@@ -102,7 +102,7 @@ async def update_control():
     nested_with,
     nested_while,
     pytest.param(
-        nested_try_star,
+        nested_match,
         marks=pytest.mark.skipif(
             not PY310,
             reason='Pattern matching was added in 3.10',
