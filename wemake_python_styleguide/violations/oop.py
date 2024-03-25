@@ -671,7 +671,7 @@ class UnpythonicGetterSetterViolation(ASTViolation):
 
     """
 
-    error_template = 'Found unpythonic getter or setter'
+    error_template = 'Found unpythonic getter or setter: {0}'
     code = 615
 
 

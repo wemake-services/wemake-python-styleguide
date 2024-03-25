@@ -38,19 +38,23 @@ Semantic versioning in our case means:
   `WrongUnicodeEscapeViolation`, `RawStringNotNeededViolation`
 - `wemake` output formatter now respects `NO_COLOR=1` option
   to disable text highlighting. See https://no-color.org
-- Add `ImportObjectCollisionViolation` to detect
+- Adds `ImportObjectCollisionViolation` to detect
   the same objects imported under different aliases
+- Adds `reveal_locals` to the list of forbidden functions
 
 ### Bugfixes
 
-- Fix `ForbiddenInlineIgnoreViolation` config parsing. #2590
-- Fix `WrongEmptyLinesCountViolation` for func definitions with ellipsis. #2847
-- Fix `WrongEmptyLinesCountViolation` for multiline implicit string concatination. #2787
-- Fix `ObjectInBaseClassesListViolation` to include type name
+- Fixes `ForbiddenInlineIgnoreViolation` config parsing. #2590
+- Fixes `WrongEmptyLinesCountViolation` for func definitions with ellipsis. #2847
+- Fixes `WrongEmptyLinesCountViolation` for multiline implicit string concatination. #2787
+- Fixes `ObjectInBaseClassesListViolation`, `UnpythonicGetterSetterViolation`,
+  `ImplicitInConditionViolation`, `RedundantSubscriptViolation`,
+  `TooLongCompareViolation` to include better error details
 
 ### Misc
 
-- Fixed multiple typos in docs
+- Updates multiple`flake8-*` dependencies
+- Fixes multiple typos in docs
 
 
 ## 0.18.0

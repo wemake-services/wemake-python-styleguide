@@ -154,9 +154,12 @@ class BaseViolation(metaclass=abc.ABCMeta):  # noqa: WPS338
 
         Conditionally formats the ``error_template`` if it is required.
         """
+        formatted = self.error_template.format(self._text)
+        if self._text and formatted == self.error_template:  # pragma: no cover
+            raise ValueError('Error message was not formatted', self)
         return '{0} {1}{2}'.format(
             self.full_code,
-            self.error_template.format(self._text),
+            formatted,
             self._postfix_information(),
         )
 

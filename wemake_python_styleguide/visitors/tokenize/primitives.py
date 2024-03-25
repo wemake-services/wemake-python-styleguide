@@ -129,7 +129,7 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
     def _check_float_zeros(self, token: tokenize.TokenInfo) -> None:
         if self._float_zero.match(token.string):
             self.add_violation(
-                consistency.FloatZeroViolation(token, text=token.string),
+                consistency.FloatZeroViolation(token),
             )
 
 

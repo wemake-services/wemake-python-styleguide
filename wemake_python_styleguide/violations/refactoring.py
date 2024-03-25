@@ -668,7 +668,7 @@ class ImplicitInConditionViolation(ASTViolation):
     """
 
     code = 514
-    error_template = 'Found implicit `in` condition'
+    error_template = 'Found implicit `in` condition: {0}'
     previous_codes = {336}
 
 
