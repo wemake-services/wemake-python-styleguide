@@ -20,6 +20,6 @@ def get_type_param_names(  # pragma: py-lt-312
     """Return list of type parameters' names."""
     type_params = []
     for type_param_node in getattr(node, 'type_params', []):
-        type_param_name = getattr(type_param_node, 'name')
+        type_param_name = type_param_node.name
         type_params.append((type_param_node, type_param_name))
     return type_params
