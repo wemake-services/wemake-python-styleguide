@@ -869,10 +869,6 @@ def wrong_comprehension2():
     ]
 
 
-def positional_only(arg_first, /, arg_second):  # noqa: WPS451
-    my_print('WTF?')
-
-
 for unique_element in range(10):
     if (other := unique_element) > 5:  # noqa: WPS332
         my_print(1)
