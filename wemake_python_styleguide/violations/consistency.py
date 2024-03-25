@@ -977,6 +977,8 @@ class WrongMultilineStringViolation(TokenizeViolation):
     Docstrings are ignored from this rule.
     You must use triple quotes strings for docstrings.
 
+    Is not reported for `f`-strings on python3.12+
+
     .. versionadded:: 0.7.0
 
     '''
@@ -1704,6 +1706,8 @@ class ImplicitRawStringViolation(TokenizeViolation):
         # Wrong:
         escaped = '\\n'
 
+    Is not reported for `f`-strings on python3.12+
+
     .. versionadded:: 0.12.0
 
     """
@@ -2263,6 +2267,8 @@ class RawStringNotNeededViolation(TokenizeViolation):
 
         # Wrong:
         r'This string should not be prefixed with r.'
+
+    Is not reported for `f`-strings on python3.12+
 
     .. versionadded:: 0.15.0
 

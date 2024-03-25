@@ -32,11 +32,11 @@ class WrongDecoratorVisitor(BaseNodeVisitor):
 
     def _check_new_decorator_syntax(self, node: AnyFunctionDef) -> None:
         for decorator in node.decorator_list:
-            if not self._is_allowed_decorator(decorator):  # pragma: py-lt-39
+            if not self._is_allowed_decorator(decorator):
                 self.add_violation(NewStyledDecoratorViolation(decorator))
 
     def _is_allowed_decorator(self, node: ast.expr) -> bool:
-        if not isinstance(node, _ALLOWED_DECORATOR_TYPES):  # pragma: py-lt-39
+        if not isinstance(node, _ALLOWED_DECORATOR_TYPES):
             return False
 
         if isinstance(node, ast.Name):

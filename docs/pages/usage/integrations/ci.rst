@@ -34,7 +34,7 @@ Setting up ``GitlabCI`` is also easy:
 
   .. code:: yaml
 
-    image: python3.7
+    image: python3.12
     test:
       before_script: pip install wemake-python-styleguide
       script: flake8 .

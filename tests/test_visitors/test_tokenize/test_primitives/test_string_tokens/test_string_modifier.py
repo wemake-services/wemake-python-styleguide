@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY312
 from wemake_python_styleguide.violations.consistency import (
     RawStringNotNeededViolation,
     UppercaseStringModifierViolation,
@@ -110,8 +111,11 @@ def test_uppercase_prefix_multiple(
     visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
-    assert_errors(visitor, [
-        UppercaseStringModifierViolation,
-        UppercaseStringModifierViolation,
-        RawStringNotNeededViolation,
-    ])
+    assert_errors(
+        visitor,
+        [
+            UppercaseStringModifierViolation,
+            UppercaseStringModifierViolation,
+        ],
+        ignored_types=RawStringNotNeededViolation,
+    )

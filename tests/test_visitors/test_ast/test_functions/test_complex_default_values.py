@@ -2,7 +2,6 @@ import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
     ComplexDefaultValueViolation,
-    PositionalOnlyArgumentsViolation,
 )
 from wemake_python_styleguide.visitors.ast.functions import (
     FunctionSignatureVisitor,
@@ -100,7 +99,6 @@ def test_wrong_function_defaults(
     assert_errors(
         visitor,
         [ComplexDefaultValueViolation],
-        ignored_types=PositionalOnlyArgumentsViolation,
     )
 
 
@@ -135,4 +133,4 @@ def test_correct_function_defaults(
     visitor = FunctionSignatureVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [], ignored_types=PositionalOnlyArgumentsViolation)
+    assert_errors(visitor, [])

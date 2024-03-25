@@ -773,6 +773,7 @@ class YieldInComprehensionViolation(ASTViolation):
     error_template = 'Found `yield` inside comprehension'
     code = 416
     previous_codes = {448}
+    deprecated = True
 
 
 @final
@@ -1624,6 +1625,8 @@ class WrongUnicodeEscapeViolation(TokenizeViolation):
         # Wrong:
         escaped = b'\u0040'  # equals to b'\\u0040'
 
+    Is not reported for `f`-strings on python3.12+
+
     .. versionadded:: 0.12.0
 
     """
@@ -2041,9 +2044,6 @@ class PositionalOnlyArgumentsViolation(ASTViolation):
     """
     Forbid positional only or ``/`` arguments.
 
-    This violation is only raised for ``python3.8+``,
-    earlier versions do not have this concept.
-
     Reasoning:
         This is a very rare case.
         Almost exclusively used by C code and stdlib.
@@ -2069,11 +2069,15 @@ class PositionalOnlyArgumentsViolation(ASTViolation):
         https://www.python.org/dev/peps/pep-0570/
 
     .. versionadded:: 0.14.0
+    .. versionchanged:: 0.19.0
+       This check is now disabled, since `/` parameters are now useful.
+       No longer produced, kept here for historic reasons.
 
     """
 
     error_template = 'Found positional-only argument'
     code = 451
+    deprecated = True
 
 
 class LoopControlFinallyViolation(ASTViolation):
