@@ -1,6 +1,6 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY310
+from wemake_python_styleguide.compat.constants import PY310, PY312
 from wemake_python_styleguide.constants import UNUSED_PLACEHOLDER
 
 # Imports:
@@ -189,6 +189,13 @@ match some_value:
         ...
 """
 
+# Type parameters:
+
+type_param_func = 'def some_value[{0}](): ...'
+type_param_class = 'class SomeValue[{0}]: ...'
+type_param_alias = 'type SomeValue[{0}] = ...'
+type_alias_def = 'type {0} = ...'
+
 
 # Fixtures:
 
@@ -254,6 +261,13 @@ if PY310:
         match_inner,
         match_star,
     }
+if PY312:
+    _ALL_FIXTURES |= {
+        type_param_func,
+        type_param_class,
+        type_param_alias,
+        type_alias_def,
+    }
 
 _FOREIGN_NAMING_PATTERNS = frozenset((
     foreign_attribute,
@@ -269,6 +283,9 @@ _ATTRIBUTES = frozenset((
     static_typed_annotation,
     instance_attribute,
     instance_typed_attribute,
+
+    # Not really an attribute, but similar:
+    type_param_class,
 )) | _FOREIGN_NAMING_PATTERNS
 
 _FORBIDDEN_UNUSED_TUPLE = frozenset((

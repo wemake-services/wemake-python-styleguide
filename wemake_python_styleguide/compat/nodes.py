@@ -42,3 +42,12 @@ else:  # pragma: py-gte-311
         handlers: list[ast.ExceptHandler]
         orelse: list[ast.stmt]
         finalbody: list[ast.stmt]
+
+if sys.version_info >= (3, 12):  # pragma: py-lt-312
+    from ast import TypeAlias as TypeAlias
+else:  # pragma: py-gte-312
+    class TypeAlias(ast.stmt):
+        """Used to define `TypeAlias` nodes in `python3.12+`."""
+
+        name: ast.Name
+        type_params: list[ast.stmt]
