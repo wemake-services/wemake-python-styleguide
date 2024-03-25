@@ -5,20 +5,29 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors.ast.classes import WrongClassDefVisitor
 
+# Wrong:
+
 class_definition_with_unpacking_one = """
 kwargs = {'some_arg': 'some_arg'}
-class TestClass(object, **kwargs):
+class TestClass(**kwargs):
     '''Docs.'''
 """
 
 class_definition_with_unpacking_two = """
-class TestClass(object, **{}):
+class TestClass(**{}):
     '''Docs.'''
 """  # noqa: P103
 
 class_definition_with_unpacking_and_arguments = """
 kwargs = {'another_arg': 'another_arg'}
-class TestClass(object, some_arg='some_arg', **kwargs):
+class TestClass(some_arg='some_arg', **kwargs):
+    '''Docs.'''
+"""
+
+# Correct:
+
+class_definition_with_keyword_arg = """
+class TestClass(some_arg='some_arg'):
     '''Docs.'''
 """
 
@@ -41,12 +50,6 @@ def test_kwargs_unpacking_violation(
     visitor.run()
 
     assert_errors(visitor, [KwargsUnpackingInClassDefinitionViolation])
-
-
-class_definition_with_keyword_arg = """
-class TestClass(object, some_arg='some_arg'):
-    '''Docs.'''
-"""
 
 
 @pytest.mark.parametrize('code', [
