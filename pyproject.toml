@@ -33,6 +33,7 @@ classifiers = [
   "Operating System :: OS Independent",
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Topic :: Software Development :: Quality Assurance",
+  "Typing :: Typed",
 ]
 
 [tool.poetry.urls]
