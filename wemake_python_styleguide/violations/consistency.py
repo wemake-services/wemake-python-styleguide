@@ -678,7 +678,7 @@ class ObjectInBaseClassesListViolation(ASTViolation):
 
     """
 
-    error_template = 'Found extra `object` in parent classes list'
+    error_template = 'Found extra `object` in parent classes list: {0}'
     code = 315
 
 

@@ -38,8 +38,9 @@ Semantic versioning in our case means:
   `WrongUnicodeEscapeViolation`, `RawStringNotNeededViolation`
 - `wemake` output formatter now respects `NO_COLOR=1` option
   to disable text highlighting. See https://no-color.org
-- Add `ImportObjectCollisionViolation` to detect
+- Adds `ImportObjectCollisionViolation` to detect
   the same objects imported under different aliases
+- Adds `reveal_locals` to the list of forbidden functions
 
 ### Bugfixes
 
@@ -50,6 +51,7 @@ Semantic versioning in our case means:
 
 ### Misc
 
+- Updates multiple`flake8-*` dependencies
 - Fixed multiple typos in docs
 
 
