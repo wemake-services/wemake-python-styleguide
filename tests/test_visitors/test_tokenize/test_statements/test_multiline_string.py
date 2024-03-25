@@ -57,10 +57,10 @@ f(
 )
 '''
 
-wrong_string_function = '''
+wrong_string_function = r'''
 a = """abc
 abc
-""".split('\\n')
+""".split('\n')
 '''
 
 
