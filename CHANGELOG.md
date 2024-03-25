@@ -58,6 +58,8 @@ Semantic versioning in our case means:
 - Fixes `TryExceptMultipleReturnPathViolation` to work with `TryStar`
 - Fixes `IncorrectExceptOrderViolation` to work with `TryStar`
 - Fixes that `MatchStar` was not checked in pattern matching name assignments
+- Fixes pattern matching support
+  in `BlockAndLocalOverlapViolation` and `OuterScopeShadowingViolation`
 
 ### Misc
 

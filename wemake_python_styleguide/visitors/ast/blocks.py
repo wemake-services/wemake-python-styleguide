@@ -5,6 +5,7 @@ from typing import Callable, DefaultDict, List, Set, Tuple, Union, cast
 from typing_extensions import TypeAlias, final
 
 from wemake_python_styleguide.compat.aliases import ForNodes, WithNodes
+from wemake_python_styleguide.compat.types import NamedMatch
 from wemake_python_styleguide.logic.naming.name_nodes import flat_variable_names
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.scopes import defs, predicates
@@ -33,6 +34,14 @@ _BlockVariables: TypeAlias = DefaultDict[
 _ScopePredicate: TypeAlias = Callable[[ast.AST, Set[str]], bool]
 _NamePredicate: TypeAlias = Callable[[ast.AST], bool]
 
+#: Named nodes.
+_NamedNode: TypeAlias = Union[
+    AnyFunctionDef,
+    ast.ClassDef,
+    ast.ExceptHandler,
+    NamedMatch,
+]
+
 
 @final
 @decorators.alias('visit_named_nodes', (
@@ -40,6 +49,8 @@ _NamePredicate: TypeAlias = Callable[[ast.AST], bool]
     'visit_AsyncFunctionDef',
     'visit_ClassDef',
     'visit_ExceptHandler',
+    'visit_MatchAs',
+    'visit_MatchStar',
 ))
 @decorators.alias('visit_any_for', (
     'visit_For',
@@ -83,10 +94,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
 
     # Blocks:
 
-    def visit_named_nodes(
-        self,
-        node: Union[AnyFunctionDef, ast.ClassDef, ast.ExceptHandler],
-    ) -> None:
+    def visit_named_nodes(self, node: _NamedNode) -> None:
         """Visits block nodes that have ``.name`` property."""
         names = {node.name} if node.name else set()
         self._scope(node, names, is_local=False)

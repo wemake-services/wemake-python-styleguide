@@ -1738,7 +1738,7 @@ class OuterScopeShadowingViolation(ASTViolation):
 
 
     Solution:
-        Use different names and do not allow scoping.
+        Use different names.
 
     Example::
 
