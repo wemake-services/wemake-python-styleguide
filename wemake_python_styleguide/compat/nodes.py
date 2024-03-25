@@ -28,6 +28,8 @@ else:  # pragma: py-gte-310
         pattern: Optional[ast.AST]
 
     class MatchStar(ast.AST):
+        """Used to declare `[*rest]` and `{**rest}` patterns."""
+
         name: Optional[str]
 
 if sys.version_info >= (3, 11):  # pragma: py-lt-311
