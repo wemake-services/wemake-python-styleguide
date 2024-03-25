@@ -17,7 +17,10 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
-## WIP
+## 0.19.0
+
+This minor version will be the last release with all the `flake8` plugins.
+In the future this project will be migrated to be used together with `ruff`.
 
 ### Features
 
