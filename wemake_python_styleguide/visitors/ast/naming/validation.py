@@ -286,7 +286,15 @@ class WrongNameVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def visit_named_match(self, node: NamedMatch) -> None:  # pragma: py-lt-310
-        """Check pattern matching in a form of `case ... as NAME`."""
+        """
+        Check pattern matching.
+
+        In a form of
+        - `case ... as NAME`
+        - `case [*NAME]`
+        - `case {**NAME}`
+
+        """
         if node.name:
             self._regular_validator.check_name(node, node.name)
         self.generic_visit(node)
