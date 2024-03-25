@@ -5,6 +5,7 @@ from typing import ClassVar, Set
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.compat.types import AnyTry
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.tree import exceptions
 from wemake_python_styleguide.logic.walk import is_contained
@@ -25,9 +26,14 @@ from wemake_python_styleguide.violations.refactoring import (
     UselessFinallyViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
+from wemake_python_styleguide.visitors.decorators import alias
 
 
 @final
+@alias('visit_any_try', (
+    'visit_Try',
+    'visit_TryStar',
+))
 class WrongTryExceptVisitor(BaseNodeVisitor):
     """Responsible for examining ``try`` and friends."""
 
@@ -37,7 +43,7 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
         ast.Break,
     )
 
-    def visit_Try(self, node: ast.Try) -> None:
+    def visit_any_try(self, node: AnyTry) -> None:
         """Used for find ``finally`` in ``try`` blocks without ``except``."""
         self._check_if_needs_except(node)
         self._check_duplicate_exceptions(node)
@@ -46,7 +52,7 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
         self._check_break_or_continue_in_finally(node)
         self.generic_visit(node)
 
-    def _check_if_needs_except(self, node: ast.Try) -> None:
+    def _check_if_needs_except(self, node: AnyTry) -> None:
         if not node.finalbody or node.handlers:
             return
 
@@ -58,7 +64,7 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
 
         self.add_violation(UselessFinallyViolation(node))
 
-    def _check_duplicate_exceptions(self, node: ast.Try) -> None:
+    def _check_duplicate_exceptions(self, node: AnyTry) -> None:
         exceptions_list = exceptions.get_all_exception_names(node)
 
         for exc_name, count in Counter(exceptions_list).items():
@@ -67,7 +73,7 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
                     DuplicateExceptionViolation(node, text=exc_name),
                 )
 
-    def _check_return_path(self, node: ast.Try) -> None:
+    def _check_return_path(self, node: AnyTry) -> None:
         find_returning = exceptions.find_returning_nodes
         try_has, except_has, else_has, finally_has = find_returning(
             node, self._bad_returning_nodes,
@@ -78,7 +84,7 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
         elif else_has and try_has:
             self.add_violation(TryExceptMultipleReturnPathViolation(node))
 
-    def _check_exception_order(self, node: ast.Try) -> None:
+    def _check_exception_order(self, node: AnyTry) -> None:
         built_in_exceptions = exceptions.traverse_exception(BaseException)
         exceptions_list = exceptions.get_all_exception_names(node)
         seen: Set[str] = set()
@@ -92,13 +98,14 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
                 else:
                     seen.add(exception)
 
-    def _check_break_or_continue_in_finally(self, node: ast.Try) -> None:
+    def _check_break_or_continue_in_finally(self, node: AnyTry) -> None:
         has_wrong_nodes = any(
             is_contained(line, (ast.Break, ast.Continue))
             for line in node.finalbody
         )
 
         if has_wrong_nodes:
+            # TryStar cannot have loop control in its body, ignoring:
             self.add_violation(LoopControlFinallyViolation(node))
 
 

@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY311
 from wemake_python_styleguide.violations.best_practices import (
     IncorrectExceptOrderViolation,
 )
@@ -8,6 +9,15 @@ from wemake_python_styleguide.visitors.ast.exceptions import (
 )
 
 exception_template = """
+try:
+    ...
+except {0}:
+    ...
+except {1}:
+    ...
+"""
+
+exception_star_template = """
 try:
     ...
 except {0}:
@@ -41,6 +51,13 @@ except {1}:
 
 @pytest.mark.parametrize('code', [
     exception_template,
+    pytest.param(
+        exception_star_template,
+        marks=pytest.mark.skipif(
+            not PY311,
+            reason='ExceptionGroup was added in python 3.11',
+        ),
+    ),
     custom_exception_template1,
     custom_exception_template2,
 ])
@@ -67,6 +84,13 @@ def test_correct_order_exception(
 
 @pytest.mark.parametrize('code', [
     exception_template,
+    pytest.param(
+        exception_star_template,
+        marks=pytest.mark.skipif(
+            not PY311,
+            reason='ExceptionGroup was added in python 3.11',
+        ),
+    ),
     custom_exception_template1,
     custom_exception_template2,
 ])

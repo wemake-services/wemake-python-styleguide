@@ -50,6 +50,13 @@ Semantic versioning in our case means:
 - Fixes `ObjectInBaseClassesListViolation`, `UnpythonicGetterSetterViolation`,
   `ImplicitInConditionViolation`, `RedundantSubscriptViolation`,
   `TooLongCompareViolation` to include better error details
+- Fixes `TooDeepNestingViolation` for `TryStar` and `Match` statements
+- Fixes `TooLongTryBodyViolation` and `TooManyExceptCasesViolation`
+  to work for `TryStar` statements as well
+- Fixes `UselessNodeViolation` to work with `TryStar`
+- Fixes `DuplicateExceptionViolation` to work with `TryStar`
+- Fixes `TryExceptMultipleReturnPathViolation` to work with `TryStar`
+- Fixes `IncorrectExceptOrderViolation` to work with `TryStar`
 
 ### Misc
 

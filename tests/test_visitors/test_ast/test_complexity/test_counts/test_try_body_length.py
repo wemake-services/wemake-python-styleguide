@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY311
 from wemake_python_styleguide.violations.complexity import (
     TooLongTryBodyViolation,
 )
@@ -18,6 +19,13 @@ simple_try_except = """
 try:
     {0}
 except ValueError:
+    ...
+"""
+
+try_star_except = """
+try:
+    {0}
+except* ValueError:
     ...
 """
 
@@ -77,10 +85,16 @@ else:
     simple_try_except,
     try_except_with_else,
     full_except_with_else,
+    pytest.param(
+        try_star_except,
+        marks=pytest.mark.skipif(
+            not PY311,
+            reason='ExceptionGroup was added in python 3.11',
+        ),
+    ),
 ])
 def test_try_body_count_default(
     assert_errors,
-    assert_error_text,
     parse_ast_tree,
     default_options,
     code,
@@ -105,6 +119,13 @@ def test_try_body_count_default(
     simple_try_except,
     try_except_with_else,
     full_except_with_else,
+    pytest.param(
+        try_star_except,
+        marks=pytest.mark.skipif(
+            not PY311,
+            reason='ExceptionGroup was added in python 3.11',
+        ),
+    ),
 ])
 def test_try_body_wrong_custom_options(
     assert_errors,
@@ -137,6 +158,13 @@ def test_try_body_wrong_custom_options(
     simple_try_except,
     try_except_with_else,
     full_except_with_else,
+    pytest.param(
+        try_star_except,
+        marks=pytest.mark.skipif(
+            not PY311,
+            reason='ExceptionGroup was added in python 3.11',
+        ),
+    ),
 ])
 def test_try_body_count_custom_options(
     assert_errors,
@@ -165,6 +193,13 @@ def test_try_body_count_custom_options(
     simple_try_except,
     try_except_with_else,
     full_except_with_else,
+    pytest.param(
+        try_star_except,
+        marks=pytest.mark.skipif(
+            not PY311,
+            reason='ExceptionGroup was added in python 3.11',
+        ),
+    ),
 ])
 def test_try_body_correct_default(
     assert_errors,

@@ -727,6 +727,8 @@ class DuplicateExceptionViolation(ASTViolation):
 
     .. versionadded:: 0.6.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.19.0
+       Supports `try/except*` as well.
 
     """
 
@@ -903,6 +905,8 @@ class TryExceptMultipleReturnPathViolation(ASTViolation):
     .. versionadded:: 0.7.0
     .. versionchanged:: 0.11.0
     .. versionchanged:: 0.12.0
+    .. versionchanged:: 0.19.0
+       Supports `try/except*` as well.
 
     """
 
@@ -1967,6 +1971,8 @@ class IncorrectExceptOrderViolation(ASTViolation):
         https://bit.ly/36MHlzw
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 0.19.0
+       Supports `try/except*` as well.
 
     """
 
@@ -2091,7 +2097,6 @@ class LoopControlFinallyViolation(ASTViolation):
         terrible practice, because `finally` is implicitly
         called and can cause damage to your logic with
         its implicitness.
-        It should not be allowed.
 
     Solution:
         Remove ``break`` and ``continue`` from ``finally`` blocks.

@@ -4,6 +4,7 @@ from typing import Dict, List, Mapping, Optional, Tuple, Type
 
 from typing_extensions import TypeAlias
 
+from wemake_python_styleguide.compat.types import AnyTry
 from wemake_python_styleguide.logic import source
 from wemake_python_styleguide.logic.walk import is_contained
 from wemake_python_styleguide.types import AnyNodes
@@ -27,8 +28,8 @@ def get_cause_name(node: ast.Raise) -> Optional[str]:
     return getattr(node.cause, 'id', None)
 
 
-def get_all_exception_names(node: ast.Try) -> List[str]:
-    """Returns a list of all exceptions names in ``ast.Try``."""
+def get_all_exception_names(node: AnyTry) -> List[str]:
+    """Returns a list of all exceptions names in try blocks."""
     exceptions: List[str] = []
     for exc_handler in node.handlers:
         # There might be complex things hidden inside an exception type,
@@ -78,7 +79,7 @@ def traverse_exception(
 
 
 def find_returning_nodes(
-    node: ast.Try,
+    node: AnyTry,
     bad_returning_nodes: AnyNodes,
 ) -> Tuple[bool, bool, bool, bool]:
     """Find nodes that return value and are inside try/except/else/finally."""

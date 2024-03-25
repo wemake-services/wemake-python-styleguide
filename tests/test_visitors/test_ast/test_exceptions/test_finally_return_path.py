@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY311
 from wemake_python_styleguide.violations.best_practices import (
     TryExceptMultipleReturnPathViolation,
 )
@@ -180,6 +181,17 @@ def function():
         try:
             {0}
         except:
+            ...
+        finally:
+            {0}
+"""
+
+wrong_try_star_finally = """
+def function():
+    for _ in range(10):
+        try:
+            {0}
+        except* TypeError:
             ...
         finally:
             {0}
@@ -372,6 +384,13 @@ def function():
     wrong_multiple_except_finally3,
     wrong_else_finally,
     wrong_try_finally,
+    pytest.param(
+        wrong_try_star_finally,
+        marks=pytest.mark.skipif(
+            not PY311,
+            reason='ExceptionGroup was added in python 3.11',
+        ),
+    ),
     wrong_try_else,
     wrong_try_except_else,
     wrong_all1,

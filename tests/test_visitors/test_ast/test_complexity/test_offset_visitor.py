@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY310, PY311
 from wemake_python_styleguide.visitors.ast.complexity.offset import (
     OffsetVisitor,
     TooDeepNestingViolation,
@@ -40,6 +41,14 @@ def container():
             raise
 """
 
+nested_try_star = """
+def container():
+    try:
+        ...
+    except* ...:
+        ...
+"""
+
 nested_with = """
 def container():
     with open('some') as temp:
@@ -50,6 +59,13 @@ nested_while = """
 def container():
     while True:
         continue
+"""
+
+nested_match = """
+def container():
+    match ...:
+        case 1:
+            ...
 """
 
 real_nested_values = """
@@ -76,8 +92,22 @@ async def update_control():
     nested_for,
     nested_try,
     nested_try2,
+    pytest.param(
+        nested_try_star,
+        marks=pytest.mark.skipif(
+            not PY311,
+            reason='ExceptionGroup was added in 3.11',
+        ),
+    ),
     nested_with,
     nested_while,
+    pytest.param(
+        nested_match,
+        marks=pytest.mark.skipif(
+            not PY310,
+            reason='Pattern matching was added in 3.10',
+        ),
+    ),
 ])
 def test_nested_offset(
     assert_errors,
@@ -119,8 +149,10 @@ def test_nested_offset_regression320(
     (nested_for, 1),
     (nested_try, 2),
     (nested_try2, 4),
+    (nested_try_star, 2),
     (nested_with, 1),
     (nested_while, 1),
+    (nested_match, 1),
 ])
 def test_nested_offset_errors(
     monkeypatch,
@@ -132,6 +164,11 @@ def test_nested_offset_errors(
     mode,
 ):
     """Testing that nested expressions are restricted."""
+    if code == nested_try_star and not PY311:
+        pytest.skip(reason='ExceptionGroup was added in 3.11')
+    if code == nested_match and not PY310:
+        pytest.skip(reason='Pattern matching was added in 3.10')
+
     tree = parse_ast_tree(mode(code))
 
     monkeypatch.setattr(OffsetVisitor, '_max_offset_blocks', 1)

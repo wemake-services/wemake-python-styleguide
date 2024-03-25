@@ -7,7 +7,6 @@ from typing_extensions import final
 
 from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.compat.nodes import Match
-from wemake_python_styleguide.compat.types import AnyAssignWithWalrus
 from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
     UNUSED_PLACEHOLDER,
@@ -15,7 +14,11 @@ from wemake_python_styleguide.constants import (
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming import access, name_nodes
 from wemake_python_styleguide.logic.tree import pattern_matching
-from wemake_python_styleguide.types import AnyAssign, AnyFor
+from wemake_python_styleguide.types import (
+    AnyAssign,
+    AnyAssignWithWalrus,
+    AnyFor,
+)
 from wemake_python_styleguide.violations import best_practices, naming
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias

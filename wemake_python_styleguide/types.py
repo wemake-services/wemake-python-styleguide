@@ -78,6 +78,9 @@ AnyWith: TypeAlias = Union[ast.With, ast.AsyncWith]
 #: When we search for assign elements, we also need typed assign.
 AnyAssign: TypeAlias = Union[ast.Assign, ast.AnnAssign]
 
+#: When we search for assign elements, we also need typed assign.
+AnyAssignWithWalrus: TypeAlias = Union[AnyAssign, ast.NamedExpr]
+
 #: In cases we need to work with both access types.
 AnyAccess: TypeAlias = Union[
     ast.Attribute,

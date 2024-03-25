@@ -25,3 +25,14 @@ else:  # pragma: py-gte-310
 
         name: Optional[str]  # noqa: WPS110
         pattern: Optional[ast.AST]
+
+if sys.version_info >= (3, 11):  # pragma: py-lt-311
+    from ast import TryStar as TryStar
+else:  # pragma: py-gte-311
+    class TryStar(ast.stmt):
+        """Used for `try/except*` statements."""
+
+        body: list[ast.stmt]
+        handlers: list[ast.ExceptHandler]
+        orelse: list[ast.stmt]
+        finalbody: list[ast.stmt]
