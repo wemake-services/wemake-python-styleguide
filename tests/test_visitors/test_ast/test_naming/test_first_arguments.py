@@ -9,12 +9,12 @@ lambda_first_argument = 'lambda {0}: ...'
 function_first_argument = 'def function({0}): ...'
 
 method_first_argument = """
-class Test(object):
+class Test:
     def method({0}): ...
 """
 
 classmethod_first_argument = """
-class Test(object):
+class Test:
     @classmethod
     def method({0}): ...
 """

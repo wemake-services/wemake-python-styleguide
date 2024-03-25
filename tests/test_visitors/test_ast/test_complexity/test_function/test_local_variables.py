@@ -60,7 +60,7 @@ def function(param1):  # has two local vars
 """
 
 method_with_locals = """
-class Some(object):
+class Some:
     def function():
         local_variable1 = 1
         local_variable2 = 2

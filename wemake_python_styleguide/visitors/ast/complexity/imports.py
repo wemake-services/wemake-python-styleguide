@@ -9,7 +9,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
 @final
-class _ImportFromMembersValidator(object):
+class _ImportFromMembersValidator:
     """Validator of ``ast.ImportFrom`` nodes names."""
 
     def __init__(

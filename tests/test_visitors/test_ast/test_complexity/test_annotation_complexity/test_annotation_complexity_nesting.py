@@ -40,7 +40,7 @@ def some(arg) -> {0}:
 """
 
 class_field_template = """
-class Test(object):
+class Test:
     some: {0}
     other = 1
 """

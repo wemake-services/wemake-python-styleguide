@@ -7,7 +7,7 @@ from typing_extensions import final
 
 @final
 @attr.dataclass(slots=True)
-class Compehension(object):
+class Compehension:
     """
     Represents a syntax for Python comprehension.
 

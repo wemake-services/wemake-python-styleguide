@@ -15,7 +15,7 @@ PUBLIC = _PROTECTED + 1
 """
 
 correct_class = """
-class Test(object):
+class Test:
     _constant = 1
 
     def __init__(self):
@@ -101,7 +101,7 @@ def some_function():
 """
 
 wrong_method = """
-class Test(object):
+class Test:
     def some_method(self):
         _some = calling()
         print(_some)

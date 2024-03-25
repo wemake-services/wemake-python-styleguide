@@ -170,7 +170,7 @@ String: Final = str
 
 @final
 @attr.dataclass(frozen=True, slots=True)
-class _Option(object):
+class _Option:
     """Represents ``flake8`` option object."""
 
     long_option_name: str
@@ -200,7 +200,7 @@ class _Option(object):
 
 
 @final
-class Configuration(object):
+class Configuration:
     """Simple configuration store with all options."""
 
     _options: ClassVar[Sequence[_Option]] = [

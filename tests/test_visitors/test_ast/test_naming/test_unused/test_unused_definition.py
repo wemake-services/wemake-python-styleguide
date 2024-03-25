@@ -17,7 +17,7 @@ def function():
 """
 
 method_context = """
-class Test(object):
+class Test:
     def function():
     {0}
 """

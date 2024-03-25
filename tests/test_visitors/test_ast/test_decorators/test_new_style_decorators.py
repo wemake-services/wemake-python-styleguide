@@ -17,7 +17,7 @@ def some(): ...
 """
 
 method_def = """
-class Some(object):
+class Some:
     @{0}
     def some(self): ...
 """

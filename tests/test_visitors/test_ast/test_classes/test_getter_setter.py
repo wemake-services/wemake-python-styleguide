@@ -18,7 +18,7 @@ def set_attribute():
 static_getter_and_setter = """
 attribute = 1
 
-class Test(object):
+class Test:
     @staticmethod
     def get_attribute():
         ...
@@ -29,7 +29,7 @@ class Test(object):
 """
 
 paired_getter_and_setter = """
-class Test(object):
+class Test:
     def get_attribute():
         ...
 
@@ -38,7 +38,7 @@ class Test(object):
 """
 
 property_getter_and_setter = """
-class Test(object):
+class Test:
     def __init__(self):
         self.attribute = 1
 
@@ -53,7 +53,7 @@ class Test(object):
 
 dataclass_property_getter_setter = """
 @dataclass
-class DataClass(object):
+class DataClass:
     attribute: int
 
     @property
@@ -67,7 +67,7 @@ class DataClass(object):
 
 dataclass_incorrect_property_getter_setter = """
 @dataclass
-class DataClass(object):
+class DataClass:
     attribute: int
 
     @property
@@ -81,7 +81,7 @@ class DataClass(object):
 
 dataclass_getter_setter = """
 @dataclass
-class DataClass(object):
+class DataClass:
     attribute: int
 
     def get_attribute(self):
@@ -92,7 +92,7 @@ class DataClass(object):
 """
 
 child_getter_and_setter = """
-class TestParent(object):
+class TestParent:
     def __init__(self):
         self.attribute = 1
 
@@ -105,7 +105,7 @@ class TestChild(TestParent):
 """
 
 nested_getter_and_setter = """
-class Template(object):
+class Template:
     def __init__(self):
         self.attribute = 1
 
@@ -118,14 +118,14 @@ class Template(object):
 """
 
 class_getter_and_setter_attributes = """
-class Test(object):
+class Test:
     attribute = 1
     get_attribute = 1
     set_attribute = 1
 """
 
 instance_getter_and_setter_attributes = """
-class Test(object):
+class Test:
     def __init__(self):
         self.attribute = 1
         self.get_attribute = 1
@@ -133,7 +133,7 @@ class Test(object):
 """
 
 other_getter_and_setter = """
-class Test(object):
+class Test:
     def __init__(self, other):
         other.attr = self.some()
 
@@ -142,7 +142,7 @@ class Test(object):
 """
 
 instance_attribute_template = """
-class Template(object):
+class Template:
     def __init__(self):
         self.{0}{1}{2}
 
@@ -152,7 +152,7 @@ class Template(object):
 """
 
 class_attribute_template = """
-class Template(object):
+class Template:
     {0}{1}{2}
 
     {3}
@@ -161,7 +161,7 @@ class Template(object):
 """
 
 class_mixed = """
-class Test(object):
+class Test:
     first: int
     second = 2
     third: int = 3

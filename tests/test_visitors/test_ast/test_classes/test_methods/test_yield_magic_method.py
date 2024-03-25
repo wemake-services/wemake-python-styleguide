@@ -4,13 +4,13 @@ from wemake_python_styleguide.violations.oop import YieldMagicMethodViolation
 from wemake_python_styleguide.visitors.ast.classes import WrongMethodVisitor
 
 method_template = """
-class Test(object):
+class Test:
     def {0}(self, *args, **kwargs):
         {1}
 """
 
 classmethod_template = """
-class Test(object):
+class Test:
     @classmethod
     def {0}(cls, *args, **kwargs):
         {1}

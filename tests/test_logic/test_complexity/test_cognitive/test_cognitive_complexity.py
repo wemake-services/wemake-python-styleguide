@@ -18,7 +18,7 @@ def f(a):
 """
 
 complexity1_3 = """
-class Test(object):
+class Test:
     def f(self, a):
         return a * self.f(a - 1)  # +1 for recursion
 """

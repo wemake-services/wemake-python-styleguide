@@ -60,7 +60,7 @@ def function():
 """
 
 try_template7 = """
-class Test(object):
+class Test:
     def method(self):
         try:
             {1}
@@ -69,7 +69,7 @@ class Test(object):
 """
 
 try_template8 = """
-class Test(object):
+class Test:
     def method(self):
         try:
             ...
@@ -78,7 +78,7 @@ class Test(object):
 """
 
 try_template9 = """
-class Test(object):
+class Test:
     def method(self):
         try:
             ...

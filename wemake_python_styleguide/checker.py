@@ -59,7 +59,7 @@ VisitorClass: TypeAlias = Type[base.BaseVisitor]
 
 
 @final
-class Checker(object):
+class Checker:
     """
     Implementation of :term:`checker`.
 

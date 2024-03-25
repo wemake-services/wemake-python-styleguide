@@ -37,7 +37,7 @@ _NodeTypeHandler: TypeAlias = Mapping[
 
 
 @final
-class _ComplexityCounter(object):
+class _ComplexityCounter:
     """Helper class to encapsulate logic from the visitor."""
 
     _not_contain_locals: ClassVar[AnyNodes] = (

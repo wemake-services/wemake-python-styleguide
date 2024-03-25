@@ -9,25 +9,25 @@ from wemake_python_styleguide.visitors.ast.complexity.nested import (
 )
 
 nested_class_in_class = """
-class Parent(object):
-    class {0}(object): ...
+class Parent:
+    class {0}: ...
 """
 
 nested_class_in_method = """
-class Parent(object):
+class Parent:
     def container(self):
-        class {0}(object): ...
+        class {0}: ...
 """
 
 nested_class_in_function = """
 def container():
-    class {0}(object): ...
+    class {0}: ...
 """
 
 nested_class_in_if = """
 def container():
     if some_value:
-        class {0}(object): ...
+        class {0}: ...
 """
 
 nested_class_in_if_else = """
@@ -35,31 +35,31 @@ def container():
     if some_value:
         ...
     else:
-        class {0}(object): ...
+        class {0}: ...
 """
 
 nested_class_in_context_manager = """
 def container():
     with open() as file_obj:
-        class {0}(object): ...
+        class {0}: ...
 """
 
 nested_class_in_for_loop = """
 def container():
     for some in iterable():
-        class {0}(object): ...
+        class {0}: ...
 """
 
 nested_class_in_while_loop = """
 def container():
     while True:
-        class {0}(object): ...
+        class {0}: ...
 """
 
 nested_class_in_try = """
 def container():
     try:
-        class {0}(object): ...
+        class {0}: ...
     except:
         ...
 """
@@ -69,7 +69,7 @@ def container():
     try:
         ...
     except:
-        class {0}(object): ...
+        class {0}: ...
 """
 
 nested_class_in_try_else = """
@@ -79,7 +79,7 @@ def container():
     except:
         ...
     else:
-        class {0}(object): ...
+        class {0}: ...
 """
 
 nested_class_in_try_finally = """
@@ -87,7 +87,7 @@ def container():
     try:
         ...
     finally:
-        class {0}(object): ...
+        class {0}: ...
 """
 
 
@@ -217,7 +217,7 @@ def test_ordinary_class(
 ):
     """Testing that it is possible to write basic classes."""
     code = """
-    class Ordinary(object):
+    class Ordinary:
         def method(self): ...
 
     class Second(Ordinary):

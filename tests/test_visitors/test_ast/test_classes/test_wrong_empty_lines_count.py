@@ -9,7 +9,7 @@ from wemake_python_styleguide.visitors.ast.function_empty_lines import (
 )
 
 class_with_wrong_method = """
-class WrongClass(object):
+class WrongClass:
 
     def wrong_method(self):
         foo()
@@ -22,7 +22,7 @@ class WrongClass(object):
 """
 
 class_with_valid_method = """
-class WrongClass(object):
+class WrongClass:
 
     def wrong_method(self):
         foo()
@@ -31,7 +31,7 @@ class WrongClass(object):
 """
 
 file_with_few_class = """
-class ValidClass(object):
+class ValidClass:
 
     def valid_method(self):
         foo()
@@ -136,7 +136,7 @@ def test_func():
 
 
 class_with_attributes = """
-class Foo(object):
+class Foo:
     first_attribute = 'foo'
 
 

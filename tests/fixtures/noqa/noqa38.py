@@ -9,7 +9,7 @@ Not on lines where the first decorator is defined.
 """
 
 
-class WithStatic(object):
+class WithStatic:
     @staticmethod
     def some_static(arg1):  # noqa: WPS602
         anti_wps428 = 1

@@ -12,7 +12,7 @@ from wemake_python_styleguide.types import ContextNodes
 _ContextStore = DefaultDict[ContextNodes, Set[str]]
 
 
-class _BaseScope(object):
+class _BaseScope:
     """Base class for scope operations."""
 
     @final

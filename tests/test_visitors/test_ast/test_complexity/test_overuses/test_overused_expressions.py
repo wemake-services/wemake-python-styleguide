@@ -40,13 +40,13 @@ def function(arg: List[int]) -> types.NoneType[None]:
 """
 
 class_context1 = """
-class Context(object):
+class Context:
     {0}
     {1}
 """
 
 class_context2 = """
-class Context(object):
+class Context:
     first: List[int]
     second: List[int]
 
@@ -55,7 +55,7 @@ class Context(object):
 """
 
 class_context3 = """
-class Context(object):
+class Context:
     first: List[List[int]]
     second: List[List[int]]
 
@@ -64,14 +64,14 @@ class Context(object):
 """
 
 method_context1 = """
-class Context(object):
+class Context:
     def method(self):
         {0}
         {1}
 """
 
 method_context2 = """
-class Context(object):
+class Context:
     @decorator.attr
     @decorator.attr
     def method(self):
@@ -80,7 +80,7 @@ class Context(object):
 """
 
 method_context3 = """
-class Context(object):
+class Context:
     @decorator.call('a')
     @decorator.call('a')
     def method(self, arg: List[int]) -> type.Any:
@@ -91,7 +91,7 @@ class Context(object):
 # regression for:
 # https://github.com/wemake-services/wemake-python-styleguide/issues/1152
 method_context4 = """
-class Context(object):
+class Context:
     def method1(self, arg1: List[int]) -> type.Any:
         {0}
         {0}
@@ -103,7 +103,7 @@ class Context(object):
 """
 
 method_context5 = """
-class Context(object):
+class Context:
     def method1(self, arg1: "List[int]") -> 'type.Any':
         ...
 

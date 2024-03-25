@@ -14,7 +14,7 @@ def {0}(name):
 """
 
 class_level_method = """
-class Example(object):
+class Example:
     def {0}(name):
         ...
 """

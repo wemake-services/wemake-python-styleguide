@@ -28,12 +28,12 @@ def test():
 """
 
 docstring_class = """
-class Test(object):
+class Test:
     '''Docstring with %d.'''
 """
 
 docstring_method = """
-class Test(object):
+class Test:
     def method(self):
         '''Docstring with %(named)s.'''
 """

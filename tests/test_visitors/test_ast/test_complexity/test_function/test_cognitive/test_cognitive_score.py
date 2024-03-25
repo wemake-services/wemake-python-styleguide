@@ -35,7 +35,7 @@ def some():
 """
 
 method_example = """
-class Test(object):
+class Test:
     def some():
         if condition:
             print('complex')

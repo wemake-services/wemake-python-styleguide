@@ -9,7 +9,7 @@ from wemake_python_styleguide.visitors import base
 
 
 @final
-class _Function(object):
+class _Function:
 
     def __init__(self, file_tokens: List[tokenize.TokenInfo]) -> None:
         self._tokens = file_tokens
@@ -35,7 +35,7 @@ class _Function(object):
 
 
 @final
-class _FileFunctions(object):
+class _FileFunctions:
 
     def __init__(self, file_tokens: List[tokenize.TokenInfo]) -> None:
         self._file_tokens = file_tokens
@@ -85,7 +85,7 @@ class _FileFunctions(object):
 
 
 @final
-class _FileTokens(object):
+class _FileTokens:
 
     def __init__(
         self,

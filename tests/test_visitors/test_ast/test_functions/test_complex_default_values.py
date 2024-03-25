@@ -29,19 +29,19 @@ def function(*, arg, with_default={0}):
 """
 
 method_with_defaults = """
-class Test(object):
+class Test:
     def function(self, with_default={0}):
         ...
 """
 
 method_with_posonly_defaults = """
-class Test(object):
+class Test:
     def function(self, with_default={0}, /):
         ...
 """
 
 method_with_kw_defaults = """
-class Test(object):
+class Test:
     def function(self, *, with_default={0}):
         ...
 """

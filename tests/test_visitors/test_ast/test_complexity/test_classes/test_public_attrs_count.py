@@ -8,7 +8,7 @@ from wemake_python_styleguide.visitors.ast.complexity.classes import (
 )
 
 class_template = """
-class Test(object):
+class Test:
     def __init__(self):
         {0}
 

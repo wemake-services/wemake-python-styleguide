@@ -19,7 +19,7 @@ some_function(12 + 6)
 """
 
 module_with_class = """
-class SomeClass(object):
+class SomeClass:
     def execute(self):
         return self
 

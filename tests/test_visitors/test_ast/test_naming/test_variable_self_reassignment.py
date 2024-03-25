@@ -67,7 +67,7 @@ right_parts_unused4 = '_, _, x = some()'
 right_class_reassignment = """
 MyValue = 1
 
-class MyClass(object):
+class MyClass:
     MyValue = MyValue
 """
 

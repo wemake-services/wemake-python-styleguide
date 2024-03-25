@@ -26,7 +26,7 @@ def _default_factory() -> FunctionCounter:
 
 @final
 @attr.dataclass(frozen=False)
-class ComplexityMetrics(object):
+class ComplexityMetrics:
     """
     Complexity metrics for functions.
 

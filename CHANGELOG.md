@@ -21,6 +21,13 @@ Semantic versioning in our case means:
 
 ### Features
 
+- Reconsider `object` required base class exception:
+  since `class Klass[_Type]` must not contain `object`,
+  this rule is change to be the opposite:
+  `object` explicit base class must not be used.
+  You can use `ruff` to change all `object`-based types to the new style:
+  `ruff check --select=UP004 --fix .`
+  https://docs.astral.sh/ruff/rules/useless-object-inheritance/
 - `wemake` output formatter now respects `NO_COLOR=1` option
   to disable text highlighting. See https://no-color.org
 - Add `ImportObjectCollisionViolation` to detect

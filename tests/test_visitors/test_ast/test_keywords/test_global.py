@@ -20,7 +20,7 @@ def check_global():
 global_in_method = """
 some = 0
 
-class Test(object):
+class Test:
     def run(self):
         global some
 """
@@ -34,7 +34,7 @@ def check_nonlocal():
 """
 
 nonlocal_in_method = """
-class Test(object):
+class Test:
     def check_nonlocal(self):
         some = 10
 

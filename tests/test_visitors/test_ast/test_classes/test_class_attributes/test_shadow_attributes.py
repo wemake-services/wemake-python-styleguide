@@ -8,7 +8,7 @@ from wemake_python_styleguide.visitors.ast.classes import ClassAttributeVisitor
 # Can raise:
 
 class_attribute = """
-class ClassWithAttrs(object):
+class ClassWithAttrs:
     {0} = 0
 
     def __init__(self) -> None:
@@ -16,7 +16,7 @@ class ClassWithAttrs(object):
 """
 
 class_annotated_attribute = """
-class ClassWithAttrs(object):
+class ClassWithAttrs:
     {0}: int = 0
 
     def __init__(self) -> None:
@@ -24,7 +24,7 @@ class ClassWithAttrs(object):
 """
 
 class_attribute_logic = """
-class ClassWithAttrs(object):
+class ClassWithAttrs:
     if some_flag:
         {0} = 0
 
@@ -33,7 +33,7 @@ class ClassWithAttrs(object):
 """
 
 class_attribute_runtime = """
-class ClassWithAttrs(object):
+class ClassWithAttrs:
     {0} = 0
 
     def constructor(self) -> None:
@@ -41,7 +41,7 @@ class ClassWithAttrs(object):
 """
 
 class_attribute_annotated = """
-class ClassWithAttrs(object):
+class ClassWithAttrs:
     {0}: int = 0
 
     def __init__(self) -> None:
@@ -51,7 +51,7 @@ class ClassWithAttrs(object):
 # Safe:
 
 class_annotation = """
-class ClassWithAttrs(object):
+class ClassWithAttrs:
     {0}: int
 
     def __init__(self) -> None:
@@ -59,7 +59,7 @@ class ClassWithAttrs(object):
 """
 
 class_attribute_usage = """
-class ClassWithAttrs(object):
+class ClassWithAttrs:
     {0} = 0
 
     def print_field(self) -> None:
@@ -67,14 +67,14 @@ class ClassWithAttrs(object):
 """
 
 class_attribute_regular_assign = """
-class ClassWithAttrs(object):
+class ClassWithAttrs:
     def constructor(self) -> None:
         {0} = 0
         self.{1} = 2
 """
 
 class_attribute_with_other = """
-class ClassWithAttrs(object):
+class ClassWithAttrs:
     {0} = 0
 
     def constructor(self) -> None:
@@ -83,7 +83,7 @@ class ClassWithAttrs(object):
 """
 
 class_complex_attribute = """
-class ClassWithAttrs(object):
+class ClassWithAttrs:
     prefix.{0} = 0
 
     def __init__(self) -> None:
@@ -91,7 +91,7 @@ class ClassWithAttrs(object):
 """
 
 class_complex_attribute_annotated = """
-class ClassWithAttrs(object):
+class ClassWithAttrs:
     prefix.{0}: int = 0
 
     def __init__(self) -> None:

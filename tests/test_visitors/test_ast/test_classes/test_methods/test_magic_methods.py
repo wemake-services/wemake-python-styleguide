@@ -5,7 +5,7 @@ from wemake_python_styleguide.violations.oop import BadMagicMethodViolation
 from wemake_python_styleguide.visitors.ast.classes import WrongMethodVisitor
 
 magic_method = """
-class Example(object):
+class Example:
     def {0}(self): ...
 """
 

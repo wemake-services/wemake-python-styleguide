@@ -74,7 +74,7 @@ from wemake_python_styleguide.types import ConfigurationOptions
 from wemake_python_styleguide.violations.base import BaseViolation
 
 
-class BaseVisitor(object, metaclass=abc.ABCMeta):
+class BaseVisitor(metaclass=abc.ABCMeta):
     """
     Abstract base class for different types of visitors.
 

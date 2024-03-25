@@ -23,24 +23,24 @@ async def some_function():
 """
 
 line_inside_class = """
-class SomeClass(object):
+class SomeClass:
     field = 13 / 2
 """
 
 class_with_function = """
-class First(object):
+class First:
     def second():
         return 2 + 1
 """
 
 class_with_async_function = """
-class First(object):
+class First:
     async def second():
         return 2 + 1
 """
 
 class_with_usual_and_async_function = """
-class First(object):
+class First:
     async def second():
         return 2 + 1
 
@@ -50,7 +50,7 @@ class First(object):
 
 function_declaration = 'def some_function(): ...'
 async_function_declaration = 'async def some_function(): ...'
-class_declaration = 'class SomeClass(object): ...'
+class_declaration = 'class SomeClass: ...'
 empty_module = ''
 
 # See

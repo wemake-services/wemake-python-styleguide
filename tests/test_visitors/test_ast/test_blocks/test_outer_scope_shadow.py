@@ -68,7 +68,7 @@ def wrapper():
     with open() as (first, second):
         print(first, second)
 
-class Test(object):
+class Test:
     first: str
 
     def __init__(self, second):
@@ -98,7 +98,7 @@ def other():
 """
 
 correct_class1 = """
-class Test(object):
+class Test:
     first: int
     second = 2
     third: int = 3
@@ -113,7 +113,7 @@ class Test(object):
 """
 
 correct_class2 = """
-class Test(object):
+class Test:
     first: int
     second = 2
     third: int = 3
@@ -125,7 +125,7 @@ class Test(object):
 """
 
 correct_class3 = """
-class First(object):
+class First:
     a = 1
 
 class Second(First):
@@ -138,7 +138,7 @@ a = 0
 def test():
     ...
 
-class First(object):
+class First:
     a = 1
 
     def test(self):

@@ -29,7 +29,7 @@ def function():
 """
 
 with_template3 = """
-class Test(object):
+class Test:
     def method(self):
         {0}
             ...
@@ -37,7 +37,7 @@ class Test(object):
 """
 
 with_template4 = """
-class Test(object):
+class Test:
     def method(self):
         {0}
             {1}

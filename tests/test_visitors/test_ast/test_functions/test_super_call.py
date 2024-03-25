@@ -19,7 +19,7 @@ class Example(Parent):
 # Correct:
 
 correct_super_call = """
-class Example(object):
+class Example:
     def some_method(self, arg1):
         super().some_method(arg1)
 """
@@ -60,7 +60,7 @@ def some_function():
 """
 
 super_call_in_method_with_arguments = """
-class Example(object):
+class Example:
     def some_method(self, arg1):
         super(Example, self).some_method(arg1)
 """

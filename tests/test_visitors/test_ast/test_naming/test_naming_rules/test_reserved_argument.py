@@ -13,13 +13,13 @@ from wemake_python_styleguide.visitors.ast.naming.validation import (
 # Correct:
 
 correct_method_template = """
-class Test(object):
+class Test:
     def method({0}, different):
         ...
 """
 
 correct_classmethod_template = """
-class Test(object):
+class Test:
     @classmethod
     def method({0}, different):
         ...

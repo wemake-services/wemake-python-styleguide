@@ -10,13 +10,13 @@ from wemake_python_styleguide.visitors.ast.functions import (
 # Correct:
 
 correct_decorator1 = """
-class Test(object):
+class Test:
     @classmethod
     def method(cls): ...
 """
 
 correct_decorator2 = """
-class Test(object):
+class Test:
     @first
     @second(param=4)
     @third()
@@ -24,7 +24,7 @@ class Test(object):
 """
 
 correct_decorator3 = """
-class Test(object):
+class Test:
     @first
     @second(param=4)
     @classmethod
