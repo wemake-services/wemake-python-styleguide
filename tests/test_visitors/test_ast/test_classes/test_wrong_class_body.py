@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations.oop import (
 from wemake_python_styleguide.visitors.ast.classes import WrongClassBodyVisitor
 
 class_body_template = """
-class ClassWithBody(object):
+class ClassWithBody:
     {0}
 """
 
@@ -44,7 +44,7 @@ def test_incorrect_body_items(
     'def method(self, arg: int): ...',
     'def method(self, arg): ...',
     'def method(self, arg: int) -> None: ...',
-    'class Meta(object):\n        """Docs."""',
+    'class Meta:\n        """Docs."""',
 ])
 def test_body_correct_items(
     assert_errors,

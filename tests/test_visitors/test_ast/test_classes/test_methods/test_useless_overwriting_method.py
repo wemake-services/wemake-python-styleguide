@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations import oop
 from wemake_python_styleguide.visitors.ast.classes import WrongMethodVisitor
 
 regular_method_detailed = """
-class Useless(object):
+class Useless:
     {decorator}
     def function(self, {args_definition}):
         {statements}
@@ -14,7 +14,7 @@ class Useless(object):
 """
 
 regular_method_detailed_with_return = """
-class Useless(object):
+class Useless:
     {decorator}
     def function(self, {args_definition}):
         {statements}
@@ -22,13 +22,13 @@ class Useless(object):
 """
 
 regular_method_short = """
-class Useless(object):
+class Useless:
     def function({args}):
         {statement}
 """
 
 regular_method_short_with_extra = """
-class Useless(object):
+class Useless:
     def function({args}):
         {statement}
         return None

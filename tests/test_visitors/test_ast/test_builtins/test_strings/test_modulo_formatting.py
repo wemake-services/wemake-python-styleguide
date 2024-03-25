@@ -28,12 +28,12 @@ def test():
 """
 
 docstring_class = """
-class Test(object):
+class Test:
     '''Docstring with %d.'''
 """
 
 docstring_method = """
-class Test(object):
+class Test:
     def method(self):
         '''Docstring with %(named)s.'''
 """
@@ -115,8 +115,6 @@ def test_modulo_formatting(
     '%.',
     '%+',
     '%_%',
-    '\%\%',  # noqa: W605
-    '%\d',  # noqa: W605
     '%[prefix]s',
     '%(invalid@name)s',
     '%(also-invalid)d',

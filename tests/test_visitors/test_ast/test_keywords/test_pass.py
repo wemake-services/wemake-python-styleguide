@@ -11,12 +11,12 @@ def function():
 """
 
 pass_class = """
-class Test(object):
+class Test:
     pass
 """
 
 pass_method = """
-class Test(object):
+class Test:
     def method(self):
         pass
 """

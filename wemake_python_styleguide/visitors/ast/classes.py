@@ -38,9 +38,17 @@ class WrongClassDefVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_base_classes_count(self, node: ast.ClassDef) -> None:
-        if not node.bases:
+        is_object_explicit_base = (
+            len(node.bases) == 1 and
+            isinstance(node.bases[0], ast.Name) and
+            node.bases[0].id == 'object'
+        )
+        if is_object_explicit_base:
             self.add_violation(
-                consistency.RequiredBaseClassViolation(node, text=node.name),
+                consistency.ExplicitObjectBaseClassViolation(
+                    node,
+                    text=node.name,
+                ),
             )
 
     def _check_base_classes(self, node: ast.ClassDef) -> None:

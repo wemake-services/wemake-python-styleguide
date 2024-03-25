@@ -74,7 +74,7 @@ from wemake_python_styleguide.types import ConfigurationOptions
 from wemake_python_styleguide.violations.base import BaseViolation
 
 
-class BaseVisitor(object, metaclass=abc.ABCMeta):
+class BaseVisitor(metaclass=abc.ABCMeta):
     """
     Abstract base class for different types of visitors.
 
@@ -127,7 +127,7 @@ class BaseVisitor(object, metaclass=abc.ABCMeta):
         to do when it was told to ``run``.
         """
 
-    def _post_visit(self) -> None:
+    def _post_visit(self) -> None:  # noqa: B027
         """
         Executed after all nodes have been visited.
 

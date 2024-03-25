@@ -23,7 +23,7 @@ class_name = 'class {0}(SomeParent): ...'
 function_name = 'def {0}(): ...'
 
 method_name = """
-class Input(object):
+class Input:
     def {0}(self): ...
 """
 
@@ -32,14 +32,14 @@ class Input(object):
 function_argument = 'def test(arg, {0}): ...'
 
 method_argument = """
-class Input(object):
+class Input:
     def validate(self, {0}): ...
 """
 
 function_keyword_argument = 'def test(arg, {0}=None): ...'
 
 method_keyword_argument = """
-class Input(object):
+class Input:
     def validate(self, {0}=None): ...
 """
 
@@ -47,12 +47,12 @@ function_args_argument = 'def test(arg, *{0}): ...'
 function_kwargs_argument = 'def test(arg, **{0}): ...'
 
 method_args_argument = """
-class Input(object):
+class Input:
     def validate(self, *{0}): ...
 """
 
 method_kwargs_argument = """
-class Input(object):
+class Input:
     def validate(self, **{0}): ...
 """
 
@@ -69,7 +69,7 @@ def test(*, {0}=True): ...
 """
 
 method_kwonly_argument = """
-class Input(object):
+class Input:
     def test(self, *, {0}=True): ...
 """
 
@@ -99,13 +99,13 @@ class Test:
 """
 
 instance_attribute = """
-class Test(object):
+class Test:
     def __init__(self):
         self.{0} = 123
 """
 
 instance_typed_attribute = """
-class Test(object):
+class Test:
     def __init__(self):
         self.{0}: int = 123
 """

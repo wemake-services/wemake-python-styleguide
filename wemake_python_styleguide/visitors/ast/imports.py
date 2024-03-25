@@ -31,7 +31,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 _MODULE_MEMBERS_SEPARATOR: Final = '.'
 
 
-class _BaseImportValidator(object):
+class _BaseImportValidator:
     """Base utility class to separate logic from the visitor."""
 
     def __init__(
@@ -136,7 +136,7 @@ class _ImportFromValidator(_BaseImportValidator):
 
 
 @final
-class _ImportCollisionValidator(object):
+class _ImportCollisionValidator:
     """
     Validator of ``AnyImport`` nodes collisions.
 

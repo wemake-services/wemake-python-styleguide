@@ -4,7 +4,7 @@ from wemake_python_styleguide.violations.oop import StaticMethodViolation
 from wemake_python_styleguide.visitors.ast.classes import WrongMethodVisitor
 
 decorated_method = """
-class Example(object):
+class Example:
     @{0}
     def should_fail(arg1): ...
 """

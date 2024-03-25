@@ -29,7 +29,7 @@ Summary
    UnderscoredNumberViolation
    PartialFloatViolation
    FormattedStringViolation
-   RequiredBaseClassViolation
+   ExplicitObjectBaseClassViolation
    MultipleIfsInComprehensionViolation
    ConstantCompareViolation
    CompareOrderViolation
@@ -96,7 +96,7 @@ Consistency checks
 .. autoclass:: UnderscoredNumberViolation
 .. autoclass:: PartialFloatViolation
 .. autoclass:: FormattedStringViolation
-.. autoclass:: RequiredBaseClassViolation
+.. autoclass:: ExplicitObjectBaseClassViolation
 .. autoclass:: MultipleIfsInComprehensionViolation
 .. autoclass:: ConstantCompareViolation
 .. autoclass:: CompareOrderViolation
@@ -357,38 +357,40 @@ class FormattedStringViolation(ASTViolation):
 
 
 @final
-class RequiredBaseClassViolation(ASTViolation):
+class ExplicitObjectBaseClassViolation(ASTViolation):
     """
-    Forbid writing classes without base classes.
-
-    Please, note that this rule has nothing to do with ``python2``.
-    We care only about consistency here.
+    Forbid writing explicit `object` base class.
 
     Reasoning:
-        We just need to decide how to do it.
-        We need a single and unified rule about base classes.
-        We have decided to stick to the explicit base class notation.
-        Why? Because it is consistent with other use-cases.
-        When we have a base class ``A``, we write ``class MyClass(A):``.
-        When we have no base class, we have an implicit ``object`` base class.
-        So, we still use the same syntax: ``class MyClass(object):``.
+        Adding `object` base class does not have any effect in most cases.
+        However, PEP695 adds new syntax to define classes: `class Some[T]:`
+        which is equivalent to: `class Some(Generic[T]):`.
+        If `object` is added to `class Some[T](object):`
+        it will be a runtime error: it won't be possible to create a proper MRO.
+
+        We don't want to promote feature that can cause troubles.
+
+        This feature also has some legacy Python2 connotations.
 
     Solution:
-        Add a base class.
+        Remove `object` base class.
 
     Example::
 
         # Correct:
-        class Some(object): ...
-
-        # Wrong:
         class Some: ...
 
+        # Wrong:
+        class Some(object): ...
+
     .. versionadded:: 0.1.0
+    .. versionchanged:: 0.19.0
+       Now the rule is inverted: we require no explicit `object` base class.
+       See PEP695 for extra reasoning.
 
     """
 
-    error_template = 'Found class without a base class: {0}'
+    error_template = 'Found explicit `object` base class: {0}'
     code = 306
 
 
@@ -666,7 +668,7 @@ class ObjectInBaseClassesListViolation(ASTViolation):
     Example::
 
        # Correct:
-       class SomeClassName(object): ...
+       class SomeClassName: ...
        class SomeClassName(FirstParentClass, SecondParentClass): ...
 
        # Wrong:

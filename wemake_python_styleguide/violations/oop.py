@@ -81,7 +81,7 @@ class BuiltinSubclassViolation(ASTViolation):
     Example::
 
         # Correct:
-        class Some(object): ...
+        class Some: ...
         class MyValueException(ValueError): ...
 
         # Wrong:
@@ -123,17 +123,17 @@ class ShadowedClassAttributeViolation(ASTViolation):
         # Correct:
         from typing import ClassVar
 
-        class First(object):
+        class First:
             field: ClassVar[int] = 1
 
-        class Second(object):
+        class Second:
             field: int
 
             def __init__(self) -> None:
                 self.field = 1
 
         # Wrong:
-        class Some(object):
+        class Some:
             field = 1
 
             def __init__(self) -> None:
@@ -227,7 +227,7 @@ class WrongClassBodyContentViolation(ASTViolation):
     Example::
 
         # Wrong:
-        class Test(object):
+        class Test:
             for _ in range(10):
                 print('What?!')
 
@@ -263,11 +263,11 @@ class MethodWithoutArgumentsViolation(ASTViolation):
     Example::
 
         # Correct:
-        class Test(object):
+        class Test:
             def method(self): ...
 
         # Wrong:
-        class Test(object):
+        class Test:
             def method(): ...
 
     .. versionadded:: 0.7.0
@@ -342,14 +342,14 @@ class WrongSlotsViolation(ASTViolation):
     Example::
 
         # Correct:
-        class Test(object):
+        class Test:
             __slots__ = ('field1', 'field2')
 
         class Other(Test):
             __slots__ = (*Test.__slots__, 'child')
 
         # Wrong:
-        class Test(object):
+        class Test:
             __slots__ = ['field1', 'field2', 'field2']
 
     Note, that we do ignore all complex expressions for this field.
@@ -464,11 +464,11 @@ class AsyncMagicMethodViolation(ASTViolation):
     Example::
 
         # Correct:
-        class Test(object):
+        class Test:
             def __lt__(self, other): ...
 
         # Wrong:
-        class Test(object):
+        class Test:
             async def __lt__(self, other): ...
 
     See also:
@@ -505,12 +505,12 @@ class YieldMagicMethodViolation(ASTViolation):
     Example::
 
          # Correct:
-        class Example(object):
+        class Example:
             def __init__(self):
                 ...
 
         # Wrong:
-        class Example(object):
+        class Example:
             def __init__(self):
                 yield 10
 
@@ -550,7 +550,7 @@ class UselessOverwrittenMethodViolation(ASTViolation):
                 return argument  # or None, or anything!
 
         # Wrong:
-        class Test(object):
+        class Test:
             def method(self, argument):
                 return super().method(argument)
 
@@ -619,7 +619,7 @@ class WrongDescriptorDecoratorViolation(ASTViolation):
     Example::
 
         # Correct:
-        class TestClass(object):
+        class TestClass:
             @property
             def my_method():
                 ...
@@ -652,12 +652,12 @@ class UnpythonicGetterSetterViolation(ASTViolation):
     Example::
 
         # Correct:
-        class Example(object):
+        class Example:
             def __init__(self):
                 self.attribute = None
 
         # Wrong:
-        class Example(object):
+        class Example:
             def __init__(self):
                 self._attribute = None
 

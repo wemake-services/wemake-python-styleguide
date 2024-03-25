@@ -8,7 +8,7 @@ from wemake_python_styleguide.visitors.ast.classes import (
 )
 
 correct_method_order = """
-class Test(object):
+class Test:
     def __init_subclass__(cls):
         ...
 
@@ -47,7 +47,7 @@ class Test(object):
 """
 
 nested_functions = """
-class Test(object):
+class Test:
     def _protected(self):
         def factory():
             ...
@@ -55,7 +55,7 @@ class Test(object):
 """
 
 class_template = """
-class Template(object):
+class Template:
     def {0}(self):
         ...
 

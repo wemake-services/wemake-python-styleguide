@@ -3,7 +3,7 @@ import pytest
 from wemake_python_styleguide.visitors.decorators import alias
 
 
-class _HasAliasedProp(object):
+class _HasAliasedProp:
     def existing(self):
         """Existing."""
 

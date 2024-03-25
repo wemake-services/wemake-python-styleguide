@@ -15,7 +15,7 @@ correct_single_line_items = 'arr = [1, 2, 3]'
 correct_single_line_call = 'some(1, 2, 3)'
 
 correct_method = """
-class Some(object):
+class Some:
     '''
     Dco.
 

@@ -8,23 +8,23 @@ from wemake_python_styleguide.visitors.ast.naming.validation import (
 )
 
 static_attribute = """
-class Test(object):
+class Test:
     {0} = None
 """
 
 static_typed_attribute = """
-class Test(object):
+class Test:
     {0}: int = None
 """
 
 static_typed_condition_attribute = """
-class Test(object):
+class Test:
     if sys.version_info > (3, 8):
         {0}: int = None
 """
 
 regression423 = """
-class MyClass(object):
+class MyClass:
     def action_method(self, request, second):
         ...
 

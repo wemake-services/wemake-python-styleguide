@@ -22,23 +22,23 @@ module_docstring_single = "'''{0}'''"
 module_docstring_double = '"""{0}"""'
 
 class_docstring_single = """
-class Test(object):
+class Test:
     '''{0}'''
 """
 
 class_docstring_double = '''
-class Test(object):
+class Test:
     """{0}"""
 '''
 
 method_docstring_single = """
-class Test(object):
+class Test:
     def __init__(self):
         '''{0}'''
 """
 
 method_docstring_double = '''
-class Test(object):
+class Test:
     def __init__(self):
         """{0}"""
 '''

@@ -13,7 +13,7 @@ SOME_CONSTANT = 12
 """
 
 attribute_doc = """
-class SomeClass(object):
+class SomeClass:
     #: {0}
     some_field = 'text'
 """

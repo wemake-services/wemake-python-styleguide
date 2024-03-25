@@ -4,17 +4,17 @@ from wemake_python_styleguide.violations.oop import WrongSlotsViolation
 from wemake_python_styleguide.visitors.ast.classes import WrongSlotsVisitor
 
 class_body_template = """
-class ClassWithSlots(object):
+class ClassWithSlots:
     __slots__ = {0}
 """
 
 class_body_typed_template = """
-class ClassWithSlots(object):
+class ClassWithSlots:
     __slots__: tuple = {0}
 """
 
 not_a_slot = """
-class ClassWithoutSlots(object):
+class ClassWithoutSlots:
     some_other = {0}
 """
 

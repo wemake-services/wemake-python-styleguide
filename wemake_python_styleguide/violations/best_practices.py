@@ -1326,12 +1326,12 @@ class NestedClassViolation(ASTViolation):
     Example::
 
         # Correct:
-        class Some(object): ...
-        class Other(object): ...
+        class Some: ...
+        class Other: ...
 
         # Wrong:
-        class Some(object):
-            class Inner(object):
+        class Some:
+            class Inner:
                 ...
 
     .. versionadded:: 0.1.0

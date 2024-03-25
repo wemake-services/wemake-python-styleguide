@@ -40,7 +40,7 @@ def func4() -> {0}:
 """
 
 string_class_type_annotations = """
-class SomeClass(object):
+class SomeClass:
     first: {0}
     second: {0}
     third: {0}
@@ -48,7 +48,7 @@ class SomeClass(object):
 """
 
 string_method_type_annotations1 = """
-class SomeClass(object):
+class SomeClass:
     def first(
         self,
         arg1: {0},
@@ -60,7 +60,7 @@ class SomeClass(object):
 """
 
 string_method_type_annotations2 = """
-class SomeClass(object):
+class SomeClass:
     def method1(self) -> {0}:
         ...
 
@@ -86,7 +86,7 @@ fourth: {0}
 regression1127 = """
 first: List[{0}]
 
-class Some(object):
+class Some:
     field: {0}
 
     def method(self, arg: {0}):

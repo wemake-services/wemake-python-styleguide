@@ -21,6 +21,15 @@ Semantic versioning in our case means:
 
 ### Features
 
+- Adds official `python3.12` support
+- **Breaking**: drops `python3.8` support
+- **Breaking**: Reconsider `object` required base class exception:
+  since `class Klass[_Type]` must not contain `object`,
+  this rule is change to be the opposite:
+  `object` explicit base class must not be used.
+  You can use `ruff` to change all `object`-based types to the new style:
+  `ruff check --select=UP004 --fix .`
+  https://docs.astral.sh/ruff/rules/useless-object-inheritance/
 - `wemake` output formatter now respects `NO_COLOR=1` option
   to disable text highlighting. See https://no-color.org
 - Add `ImportObjectCollisionViolation` to detect
@@ -31,10 +40,12 @@ Semantic versioning in our case means:
 - Fix `ForbiddenInlineIgnoreViolation` config parsing. #2590
 - Fix `WrongEmptyLinesCountViolation` for func definitions with ellipsis. #2847
 - Fix `WrongEmptyLinesCountViolation` for multiline implicit string concatination. #2787
+- Fix `ObjectInBaseClassesListViolation` to include type name
 
 ### Misc
 
-- Replaced `you` with `your`
+- Fixed multiple typos in docs
+
 
 ## 0.18.0
 

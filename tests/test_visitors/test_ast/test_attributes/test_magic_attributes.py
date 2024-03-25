@@ -16,19 +16,19 @@ magic_method_called = 'some.{0}()'
 magic_method_called_params = 'some.{0}(12, 33)'
 
 magic_container_attribute = """
-class Test(object):
+class Test:
     def __init__(self):
         self.container.{0} = 1
 """
 
 magic_container_method = """
-class Test(object):
+class Test:
     def __init__(self):
         self.container.{0}()
 """
 
 magic_callable_attribute = """
-class Test(object):
+class Test:
     def __init__(self):
         some().{0}()
 """
@@ -39,87 +39,87 @@ magic_name_definition = '{0} = 1'
 magic_name_attr_definition = '{0}.some = 1'
 
 magic_self_attribute = """
-class Test(object):
+class Test:
     def __init__(self):
         self.{0} = 1
 """
 
 magic_self_method = """
-class Test(object):
+class Test:
     def __init__(self):
         self.{0}()
 """
 
 magic_cls_attribute = """
-class Test(object):
+class Test:
     @classmethod
     def method(cls):
         cls.{0} = 'some'
 """
 
 magic_cls_method = """
-class Test(object):
+class Test:
     @classmethod
     def method(cls):
         cls.{0}()
 """
 
 magic_attribute_definition = """
-class Test(object):
+class Test:
     {0} = 1
 """
 
 magic_method_definition = """
-class Test(object):
+class Test:
     def {0}(self):
         ...
 """
 
 magic_classmethod_definition = """
-class Test(object):
+class Test:
     @classmethod
     def {0}(cls):
         ...
 """
 
 magic_super_attribute = """
-class Test(object):
+class Test:
     def __init__(self):
         super().{0} = 1
 """
 
 magic_super_method = """
-class Test(object):
+class Test:
     def __init__(self):
         super().{0}()
 """
 
 magic_super_cls_attribute = """
-class Test(object):
+class Test:
     @classmethod
     def method(cls):
         super().{0} = 'some'
 """
 
 magic_super_cls_method = """
-class Test(object):
+class Test:
     @classmethod
     def method(cls):
         super().{0}()
 """
 
 magic_wrapper_method = """
-class Test(object):
+class Test:
 
     def {0}(cls):
         self.conn.{0}()
 """
 
 magic_wrapper_method_inside_stacked_cls = """
-class StackedTest(object):
+class StackedTest:
 
     def something(cls):
-        class Test(object):
+        class Test:
             def {0}(cls):
                 self.conn.{0}()
 

@@ -93,25 +93,25 @@ def container():
 # Methods:
 
 nested_function_in_method = """
-class Raw(object):
+class Raw:
     def container(self):
         def {0}(): ...
 """
 
 nested_function_in_async_method = """
-class Raw(object):
+class Raw:
     async def container(self):
         def {0}(): ...
 """
 
 nested_async_function_in_async_method = """
-class Raw(object):
+class Raw:
     async def container(self):
         async def {0}(): ...
 """
 
 nested_async_function_in_method = """
-class Raw(object):
+class Raw:
     def container(self):
         async def {0}(): ...
 """
@@ -124,7 +124,7 @@ def container():
 """
 
 lambda_in_method = """
-class Raw(object):
+class Raw:
     def container(self):
         lazy_value = lambda: 12
 """
@@ -139,7 +139,7 @@ def container():
 """
 
 lambda_in_lambda_in_method = """
-class Test(object):
+class Test:
     def container(self):
         return lambda: lambda value: value + 12
 """

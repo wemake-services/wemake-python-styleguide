@@ -18,11 +18,11 @@ class_with_decorators = """
 @first
 @second(param=4)
 @third()
-class Test(object): ...
+class Test: ...
 """
 
 method_with_decorators = """
-class Test(object):
+class Test:
     @first
     @second(param=4)
     @third()
@@ -30,7 +30,7 @@ class Test(object):
 """
 
 classmethod_with_decorators = """
-class Test(object):
+class Test:
     @second(param=4)
     @third()
     @classmethod

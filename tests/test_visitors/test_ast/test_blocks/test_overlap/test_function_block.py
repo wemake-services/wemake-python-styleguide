@@ -30,13 +30,13 @@ function_template2 = """
 method_template1 = """
 {1}
 
-class Test(object):
+class Test:
     {0}
         ...
 """
 
 method_template2 = """
-class Test(object):
+class Test:
     {0}
         ...
 
@@ -241,7 +241,7 @@ def test_no_function_overload(
 
 
 method_setter_template = """
-class Test(object):
+class Test:
     @property
     def {0}():
         ...

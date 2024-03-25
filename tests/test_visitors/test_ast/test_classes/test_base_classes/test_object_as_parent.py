@@ -11,7 +11,7 @@ class TestClassName(FirstName, SecondName, object):
 """
 
 single_extra_object = """
-class TestClassName(object):
+class TestClassName:
     '''Docs.'''
 """
 

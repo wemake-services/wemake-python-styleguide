@@ -38,7 +38,7 @@ _PredicateLogicalCallback = Callable[[str], bool]
 
 @final
 @attr.dataclass(slots=True, frozen=True)
-class _NamingPredicate(object):
+class _NamingPredicate:
     """Structure we use to apply different naming rules to variable names."""
 
     is_correct: _PredicateLogicalCallback
@@ -51,7 +51,7 @@ class _NamingPredicate(object):
         return self._is_applicable is None or self._is_applicable(node)
 
 
-class _SimpleNameValidator(object):
+class _SimpleNameValidator:
     """Utility class to separate logic from the naming visitor."""
 
     _naming_predicates: ClassVar[Iterable[_NamingPredicate]] = (

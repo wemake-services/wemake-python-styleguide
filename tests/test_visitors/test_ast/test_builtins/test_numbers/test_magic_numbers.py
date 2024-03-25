@@ -43,17 +43,17 @@ def wrapper():
 """
 
 inside_class = """
-class Test(object):
+class Test:
     class_field = SOME_CONST - {0}
 """
 
 inside_class_typed = """
-class Test(object):
+class Test:
     class_field: int = SOME_CONST - {0}
 """
 
 inside_method = """
-class Test(object):
+class Test:
     def method(self):
         return {0}
 """

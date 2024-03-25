@@ -12,7 +12,7 @@ short_starred_unpack = 'a, b, *rest = (1, 2, 3, 4, 5)'
 single_unpack = 'result = (1, 2, 3, 4, 5)'
 function_unpack = 'result = some()'
 class_attr_unpack = """
-class foo(object):
+class foo:
     result = (1, 2, 3, 4, 5)
 """
 
@@ -20,7 +20,7 @@ long_unpack = 'a, b, c, d, e = (1, 2, 3, 4, 5)'
 long_starred_unpack = 'a, b, c, d, *rest = (1, 2, 3, 4, 5, 6)'
 long_function_unpack = 'a, b, c, d, e = some()'
 long_class_attr_unpack = """
-class foo(object):
+class foo:
     a, b, c, d, e = (1, 2, 3, 4, 5)
 """
 

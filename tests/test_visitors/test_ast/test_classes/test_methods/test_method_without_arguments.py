@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations.oop import (
 from wemake_python_styleguide.visitors.ast.classes import WrongMethodVisitor
 
 method_inside_class = """
-class Example(object):
+class Example:
     def some_name({0}): ...
 """
 

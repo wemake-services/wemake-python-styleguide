@@ -112,7 +112,7 @@ def function():
 # Classes:
 
 class_template = """
-class Test(object):
+class Test:
     {0}
 """
 

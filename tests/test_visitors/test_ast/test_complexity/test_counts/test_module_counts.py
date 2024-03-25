@@ -12,27 +12,27 @@ from wemake_python_styleguide.visitors.ast.complexity.counts import (
 module_with_function_and_class = """
 def first(): ...
 
-class Second(object): ...
+class Second: ...
 """
 
 module_with_function_and_class_and_method = """
 def first(): ...
 
-class Second(object):
+class Second:
     def method(self): ...
 """
 
 module_with_function_and_async_method = """
 def first(): ...
 
-class Second(object):
+class Second:
     async def method(self): ...
 """
 
 module_with_function_and_classmethod = """
 def first(): ...
 
-class Second(object):
+class Second:
     @classmethod
     def method(cls): ...
 """
@@ -40,41 +40,41 @@ class Second(object):
 module_with_async_function_and_class = """
 async def first(): ...
 
-class Second(object): ...
+class Second: ...
 """
 
 module_with_methods = """
-class First(object):
+class First:
     def method(self): ...
 
-class Second(object):
+class Second:
     def method2(self): ...
 """
 
 module_with_async_methods = """
-class First(object):
+class First:
     async def method(self): ...
 
-class Second(object):
+class Second:
     async def method2(self): ...
 """
 
 module_with_classmethods = """
-class First(object):
+class First:
     @classmethod
     def method(cls): ...
 
-class Second(object):
+class Second:
     @classmethod
     def method2(cls): ...
 """
 
 module_with_staticmethods = """
-class First(object):
+class First:
     @staticmethod
     def method(cls): ...
 
-class Second(object):
+class Second:
     @staticmethod
     def method2(cls): ...
 """
@@ -90,7 +90,7 @@ async def single(): ...
 """
 
 module_with_single_class = """
-class First(object):
+class First:
     @classmethod
     def method(cls): ...
 

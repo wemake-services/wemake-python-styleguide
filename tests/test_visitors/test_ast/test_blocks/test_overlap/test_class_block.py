@@ -8,7 +8,7 @@ from wemake_python_styleguide.visitors.ast.blocks import BlockVariableVisitor
 # Classes:
 
 class_def1 = 'class {0}():'
-class_def2 = 'class {0}(object):'
+class_def2 = 'class {0}:'
 class_def3 = 'class {0}:'
 
 # Wrong usages:

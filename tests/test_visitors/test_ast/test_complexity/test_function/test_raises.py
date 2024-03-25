@@ -25,7 +25,7 @@ def function(parameter):
 """
 
 instance_method_template = """
-class Test(object):
+class Test:
     def method(self, parameter):
         {0}
         {1}
@@ -33,7 +33,7 @@ class Test(object):
 """
 
 class_method_template = """
-class Test(object):
+class Test:
     @classmethod
     def method(cls, parameter):
         {0}
@@ -42,7 +42,7 @@ class Test(object):
 """
 
 static_method_template = """
-class Test(object):
+class Test:
     @staticmethod
     def method(parameter):
         {0}

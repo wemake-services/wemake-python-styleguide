@@ -11,7 +11,7 @@ from wemake_python_styleguide.logic import source
 
 @final
 @attr.dataclass(frozen=True, slots=True)
-class _Bounds(object):
+class _Bounds:
     """Represents the bounds we use to calculate the similar compare nodes."""
 
     lower_bound: Set[ast.Compare] = attr.ib(factory=set)
@@ -47,7 +47,7 @@ def get_similar_operators(
 
 
 @final
-class CompareBounds(object):
+class CompareBounds:
     """
     Calculates bounds of expressions like ``a > b and b > c`` in python.
 

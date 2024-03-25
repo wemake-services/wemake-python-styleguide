@@ -15,7 +15,7 @@ def function(first, *args, second, third: int = 1, **kwargs) -> None:
 """
 
 correct_method = """
-class Test(object):
+class Test:
     def function(self, first, *args, second, z: int = 1, **kwargs) -> None:
         ...
 """
@@ -39,13 +39,13 @@ def function(a, /, first, *args, second, third: int = 1, **kwargs) -> None:
 """
 
 wrong_method1 = """
-class Test(object):
+class Test:
     def function(self, /, first):
         ...
 """
 
 wrong_method2 = """
-class Test(object):
+class Test:
     def function(self, /, first, *args, second, z: int = 1, **kwargs) -> None:
         ...
 """

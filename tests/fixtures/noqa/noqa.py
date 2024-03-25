@@ -103,7 +103,7 @@ except AnyError:
     my_print('nope')
 
 
-class TooManyPublicAtts(object):  # noqa: WPS230
+class TooManyPublicAtts:  # noqa: WPS230
     def __init__(self):
         self.first = 1
         self.second = 2
@@ -126,7 +126,7 @@ def function_name(  # noqa: WPS614
 def some():  # noqa: WPS110
     from my_module import some_import  # noqa: WPS433
 
-    class Nested(object):  # noqa: WPS431
+    class Nested:  # noqa: WPS431
         ...  # noqa: WPS428, WPS604
 
     def nested():  # noqa: WPS430
@@ -155,7 +155,7 @@ def some_function():
 
 used, __ = 1, 2  # noqa: WPS123
 
-class Mem0Output(object):  # noqa: WPS124
+class Mem0Output:  # noqa: WPS124
     # See:
     # https://github.com/wemake-services/wemake-python-styleguide/issues/1191
     anti_wps124 = 'unreadable class'
@@ -203,7 +203,7 @@ def many_expressions(xy):  # noqa: WPS213
     my_print(xy)
 
 
-class TooManyMethods(object):  # noqa: WPS214
+class TooManyMethods:  # noqa: WPS214
     def method1(self):
         anti_wps428 = 1
 
@@ -290,13 +290,13 @@ except TypeError:
     my_print('type')
 
 
-class BadClass:  # noqa: WPS306
+class BadClass(object):  # noqa: WPS306
     UPPER_CASE_ATTRIBUTE = 12  # noqa: WPS115
 
     def __del__(self, *_args, **_kwargs):  # noqa: WPS603
         anti_wps428 = 1  # noqa: WPS442
 
-    class Nested:  # noqa: WPS306,WPS431
+    class Nested(object):  # noqa: WPS306,WPS431
         anti_wps428 = 1
 
     async def __eq__(self, other):  # noqa: WPS610
@@ -435,7 +435,7 @@ class MyInt(int):  # noqa: WPS600
     """My custom int subclass."""
 
 
-class ShadowsAttribute(object):
+class ShadowsAttribute:
     """Redefines attr from class."""
 
     first: int
@@ -459,7 +459,7 @@ finally:
 nodes = nodes  # noqa: WPS434
 
 
-class Example(object):
+class Example:
     """Correct class docstring."""
 
     def __init__(self):  # noqa: WPS611
@@ -575,7 +575,7 @@ if some and (  # noqa: WPS337
     anti_wps428 = 'some text'
 
 
-class WrongMethodOrder(object):  # noqa: WPS338
+class WrongMethodOrder:  # noqa: WPS338
     def _protected(self):
         return self
 
@@ -627,7 +627,7 @@ async def async_gen():
     raise StopIteration  # noqa: WPS438
 
 
-class CheckStopIteration(object):
+class CheckStopIteration:
     def sync_gen(self):
         yield
         raise StopIteration()  # noqa: WPS438
@@ -717,7 +717,7 @@ extra_new_line = [  # noqa: WPS355
 [first_number, second_number] = [4, 7]  # noqa: WPS359
 
 
-class AttributeGetter(object):
+class AttributeGetter:
     def __init__(self):
         self.attribute = 1
 
@@ -808,7 +808,7 @@ except TypeError as raise_from_itself:
     raise raise_from_itself from raise_from_itself  # noqa: WPS469
 
 
-class TestClass(object, **{}):  # noqa: WPS470
+class TestClass(**{}):  # noqa: WPS470
     """Docs."""
 
 
@@ -820,7 +820,7 @@ def foo2_func():
 
 noqa_wps532 = variable is some_thing is other_thing  # noqa: WPS532
 
-class Baseline(object):
+class Baseline:
     def method(self, number):
         return number + 1
 

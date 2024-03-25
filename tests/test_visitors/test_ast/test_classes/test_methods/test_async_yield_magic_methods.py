@@ -4,13 +4,13 @@ from wemake_python_styleguide.violations.oop import AsyncMagicMethodViolation
 from wemake_python_styleguide.visitors.ast.classes import WrongMethodVisitor
 
 sync_method = """
-class Example(object):
+class Example:
     def {0}(self, *args, **kwargs):
         {1}
 """
 
 async_method = """
-class Example(object):
+class Example:
     async def {0}(self, *args, **kwargs):
         {1}
 """

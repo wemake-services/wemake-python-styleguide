@@ -24,7 +24,7 @@ def context():
 """
 
 import_template3 = """
-class Test(object):
+class Test:
     def context(self):
         {0}
         {1}

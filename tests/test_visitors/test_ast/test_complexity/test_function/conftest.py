@@ -7,54 +7,54 @@ function_with_kwonly = 'def function(*, kwonly1, kwonly2=True): ...'
 function_with_posonly = 'def function(arg1, arg2, /): ...'
 
 method_without_arguments = """
-class Test(object):
+class Test:
     def method(self): ...
 """
 
 method_with_single_argument = """
-class Test(object):
+class Test:
     def method(self, arg): ...
 """
 
 method_with_single_args = """
-class Test(object):
+class Test:
     def method(self, *args): ...
 """
 
 method_with_single_posonly_arg = """
-class Test(object):
+class Test:
     def method(self, arg, /): ...
 """
 
 method_with_single_kwargs = """
-class Test(object):
+class Test:
     def method(self, **kwargs): ...
 """
 
 method_with_single_kwonly = """
-class Test(object):
+class Test:
     def method(self, *, kwonly=True): ...
 """
 
 classmethod_without_arguments = """
-class Test(object):
+class Test:
     @classmethod
     def method(cls): ...
 """
 
 classmethod_with_single_argument = """
-class Test(object):
+class Test:
     @classmethod
     def method(cls, arg1): ...
 """
 
 new_method_without_arguments = """
-class Test(object):
+class Test:
     def __new__(cls): ...
 """
 
 new_method_single_argument = """
-class Test(object):
+class Test:
     def __new__(cls, arg1): ...
 """
 
