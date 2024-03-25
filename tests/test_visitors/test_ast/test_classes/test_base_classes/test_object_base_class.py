@@ -1,10 +1,10 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY312
 from wemake_python_styleguide.violations.consistency import (
     ExplicitObjectBaseClassViolation,
 )
 from wemake_python_styleguide.visitors.ast.classes import WrongClassDefVisitor
-from wemake_python_styleguide.compat.constants import PY312
 
 skip_pep695 = pytest.mark.skipif(not PY312, reason='PEP 695 was added in 3.12')
 

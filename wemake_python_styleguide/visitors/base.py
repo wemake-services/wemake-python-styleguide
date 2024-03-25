@@ -127,7 +127,7 @@ class BaseVisitor(metaclass=abc.ABCMeta):
         to do when it was told to ``run``.
         """
 
-    def _post_visit(self) -> None:
+    def _post_visit(self) -> None:  # noqa: B027
         """
         Executed after all nodes have been visited.
 
