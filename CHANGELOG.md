@@ -42,6 +42,7 @@ Semantic versioning in our case means:
 - Adds `ImportObjectCollisionViolation` to detect
   the same objects imported under different aliases
 - Adds `reveal_locals` to the list of forbidden functions
+- Updates `flake8` to `7.x`
 
 ### Bugfixes
 
