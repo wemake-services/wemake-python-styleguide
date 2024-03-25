@@ -208,7 +208,10 @@ class _FunctionNameValidator(_RegularNameValidator):
 
 @final
 class _TypeParamNameValidator(_RegularNameValidator):
-    def check_type_params(self, node: NodeWithTypeParams) -> None:
+    def check_type_params(  # pragma: py-lt-312
+        self,
+        node: NodeWithTypeParams,
+    ) -> None:
         for type_param_node, type_param_name in get_type_param_names(node):
             self.check_name(type_param_node, type_param_name)
 
