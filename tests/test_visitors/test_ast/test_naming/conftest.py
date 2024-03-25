@@ -283,10 +283,13 @@ _ATTRIBUTES = frozenset((
     static_typed_annotation,
     instance_attribute,
     instance_typed_attribute,
-
-    # Not really an attribute, but similar:
-    type_param_class,
 )) | _FOREIGN_NAMING_PATTERNS
+if PY312:
+    _ATTRIBUTES |= frozenset((
+        # Not really an attribute, but similar:
+        type_param_class,
+    ))
+
 
 _FORBIDDEN_UNUSED_TUPLE = frozenset((
     unpacking_variables,
