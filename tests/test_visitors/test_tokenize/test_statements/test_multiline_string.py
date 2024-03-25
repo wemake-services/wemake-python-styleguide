@@ -60,7 +60,7 @@ f(
 wrong_string_function = '''
 a = """abc
 abc
-""".split('\n')
+""".split('\\n')
 '''
 
 
