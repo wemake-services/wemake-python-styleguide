@@ -30,6 +30,12 @@ Semantic versioning in our case means:
   You can use `ruff` to change all `object`-based types to the new style:
   `ruff check --select=UP004 --fix .`
   https://docs.astral.sh/ruff/rules/useless-object-inheritance/
+- **Breaking**: allow positional-only parameters,
+  since it is required by `mypy` when using `Concatenate`
+- Due to how `f`-string are parsed in `python3.12` several token-based
+  violations are not reported anymore for them:
+  `WrongMultilineStringViolation`, `ImplicitRawStringViolation`,
+  `WrongUnicodeEscapeViolation`, `RawStringNotNeededViolation`
 - `wemake` output formatter now respects `NO_COLOR=1` option
   to disable text highlighting. See https://no-color.org
 - Add `ImportObjectCollisionViolation` to detect

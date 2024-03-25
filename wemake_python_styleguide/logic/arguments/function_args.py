@@ -21,12 +21,7 @@ def is_call_matched_by_arguments(
 def _get_args_without_special_argument(
     node: types.AnyFunctionDefAndLambda,
 ) -> List[ast.arg]:
-    """
-    Gets ``node`` arguments excluding ``self``, ``cls``, ``mcs``.
-
-    In ``python3.8+`` we have this case: ``def some(a, /, b): ...``
-    It is ignored on all other versions.
-    """
+    """Gets ``node`` arguments excluding ``self``, ``cls``, ``mcs``."""
     node_args = node.args.posonlyargs + node.args.args
     if not node_args or isinstance(node, ast.Lambda):
         return node_args
@@ -76,12 +71,7 @@ def _has_same_args(  # noqa: WPS231
     node: types.AnyFunctionDefAndLambda,
     call: ast.Call,
 ) -> bool:
-    """
-    Tells whether ``call`` has the same positional args as ``node``.
-
-    On ``python3.8+`` also works with ``posonlyargs`` arguments
-    or ``/`` arguments as they are also known.
-    """
+    """Tells whether ``call`` has the same positional args as ``node``."""
     node_args = _get_args_without_special_argument(node)
     paired_arguments = zip_longest(call.args, node_args)
     for call_arg, func_arg in paired_arguments:

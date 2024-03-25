@@ -1,15 +1,11 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY39
 from wemake_python_styleguide.violations.best_practices import (
     NewStyledDecoratorViolation,
 )
 from wemake_python_styleguide.visitors.ast.decorators import (
     WrongDecoratorVisitor,
 )
-
-_reason = 'new-styled decorators appeared in 3.9'
-_mark = pytest.mark.skipif(not PY39, reason=_reason)
 
 function_def = """
 @{0}
@@ -24,14 +20,8 @@ class Some:
 
 
 @pytest.mark.parametrize('code', [
-    pytest.param(
-        function_def,
-        marks=_mark,
-    ),
-    pytest.param(
-        method_def,
-        marks=_mark,
-    ),
+    function_def,
+    method_def,
 ])
 @pytest.mark.parametrize('decorator', [
     'some[1]',

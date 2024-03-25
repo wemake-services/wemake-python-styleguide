@@ -110,8 +110,11 @@ def test_uppercase_prefix_multiple(
     visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
-    assert_errors(visitor, [
-        UppercaseStringModifierViolation,
-        UppercaseStringModifierViolation,
-        RawStringNotNeededViolation,
-    ])
+    assert_errors(
+        visitor,
+        [
+            UppercaseStringModifierViolation,
+            UppercaseStringModifierViolation,
+        ],
+        ignored_types=RawStringNotNeededViolation,
+    )

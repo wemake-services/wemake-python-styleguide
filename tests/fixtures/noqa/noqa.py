@@ -827,3 +827,58 @@ class Baseline:
 class Antediluvian(Baseline):
     def method(self):
         return list((super().method(some_item) for some_item in items))  # noqa: WPS616
+
+
+# porting noqa38.py
+class WithStatic:
+    @staticmethod
+    def some_static(arg1):  # noqa: WPS602
+        my_print('WTF?')
+
+    @staticmethod
+    async def some_async_static(arg1):  # noqa: WPS602
+        my_print('WTF?')
+
+
+@first
+@second
+@third(param='a')
+@fourth
+@fifth()
+@error
+def decorated():  # noqa: WPS216
+    my_print('WTF?')
+
+
+def wrong_comprehension1():
+    return [  # noqa: WPS307
+        node
+        for node in 'ab'
+        if node != 'a'
+        if node != 'b'
+    ]
+
+
+def wrong_comprehension2():
+    return [  # noqa: WPS224
+        target
+        for assignment in range(hex_number)
+        for target in range(assignment)
+        for _ in range(10)
+        if isinstance(target, int)
+    ]
+
+
+for unique_element in range(10):
+    if (other := unique_element) > 5:  # noqa: WPS332
+        my_print(1)
+
+    try:  # noqa: WPS452
+        my_print(1)
+    except AnyError:
+        my_print('nope')
+    finally:
+        # See:
+        # https://github.com/wemake-services/wemake-python-styleguide/issues/1082
+        continue
+    my_print(4)

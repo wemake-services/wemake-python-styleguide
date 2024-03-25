@@ -35,7 +35,6 @@ from wemake_python_styleguide.violations.best_practices import (
     ComplexDefaultValueViolation,
     FloatingNanViolation,
     GetterWithoutReturnViolation,
-    PositionalOnlyArgumentsViolation,
     StopIterationInsideGeneratorViolation,
     WrongFunctionCallViolation,
 )
@@ -440,7 +439,6 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
         node: AnyFunctionDefAndLambda,
     ) -> None:
         """Checks function and lambda defs."""
-        self._check_positional_arguments(node)
         self._check_complex_argument_defaults(node)
         if not isinstance(node, ast.Lambda):
             self._check_getter_without_return(node)
@@ -468,13 +466,6 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
             node.name.startswith('get_') and
             not stubs.is_stub(node)
         )
-
-    def _check_positional_arguments(
-        self,
-        node: AnyFunctionDefAndLambda,
-    ) -> None:
-        if node.args.posonlyargs:
-            self.add_violation(PositionalOnlyArgumentsViolation(node))
 
     def _check_complex_argument_defaults(
         self,

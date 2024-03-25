@@ -242,6 +242,7 @@ class BaseTokenVisitor(BaseVisitor):
         """Creates new ``tokenize`` based visitor instance."""
         super().__init__(options, **kwargs)
         self.file_tokens = file_tokens
+        self.token_index = -1
 
     @final
     @classmethod

@@ -23,7 +23,6 @@ from wemake_python_styleguide.compat.aliases import (
     FunctionNodes,
     TextNodes,
 )
-from wemake_python_styleguide.compat.functions import get_slice_expr
 from wemake_python_styleguide.logic import nodes, safe_eval, source, walk
 from wemake_python_styleguide.logic.tree import (
     attributes,
@@ -223,7 +222,7 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
         # Named lookup, Index lookup & Dict key is okay
         elif isinstance(format_value, ast.Subscript):
             return isinstance(
-                get_slice_expr(format_value),
+                format_value.slice,
                 self._valid_format_index,
             )
         return False

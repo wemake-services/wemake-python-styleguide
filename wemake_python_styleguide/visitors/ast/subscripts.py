@@ -3,7 +3,6 @@ from typing import Set
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.functions import get_slice_expr
 from wemake_python_styleguide.logic import source
 from wemake_python_styleguide.logic.tree import functions, operators, slices
 from wemake_python_styleguide.violations import (
@@ -92,7 +91,7 @@ class SubscriptVisitor(base.BaseNodeVisitor):
 
         subscript_slice_assignment = isinstance(node.slice, ast.Slice)
 
-        slice_expr = get_slice_expr(node)
+        slice_expr = node.slice
         slice_function_assignment = (
             isinstance(slice_expr, ast.Call) and
             functions.given_function_called(slice_expr, {'slice'})
@@ -153,11 +152,11 @@ class CorrectKeyVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_float_key(self, node: ast.Subscript) -> None:
-        if self._is_float_key(get_slice_expr(node)):
+        if self._is_float_key(node.slice):
             self.add_violation(best_practices.FloatKeyViolation(node))
 
     def _check_len_call(self, node: ast.Subscript) -> None:
-        node_slice = get_slice_expr(node)
+        node_slice = node.slice
         is_len_call = (
             isinstance(node_slice, ast.BinOp) and
             isinstance(node_slice.op, ast.Sub) and

@@ -21,7 +21,6 @@ from collections import Counter
 import pytest
 
 # Versions for different version-specific fixtures.
-_PY38 = (3, 8) <= sys.version_info < (3, 9)
 _PY39 = (3, 9) <= sys.version_info < (3, 10)
 _PY310 = (3, 10) <= sys.version_info < (3, 11)
 
@@ -42,22 +41,6 @@ IGNORED_VIOLATIONS = (
 
 #: Number and count of violations that would be raised.
 VERSION_SPECIFIC = types.MappingProxyType({
-    'noqa_pre38': {
-        'WPS216': 1,
-        'WPS224': 1,
-        'WPS307': 1,
-        'WPS416': 1,
-        'WPS602': 2,
-    },
-    'noqa38': {
-        'WPS216': 1,
-        'WPS224': 1,
-        'WPS307': 1,
-        'WPS332': 1,
-        'WPS451': 1,
-        'WPS452': 1,
-        'WPS602': 2,
-    },
     'noqa39': {
         'WPS466': 1,
     },
@@ -104,7 +87,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS213': 1,
     'WPS214': 1,
     'WPS215': 1,
-    'WPS216': 0,  # defined in version specific table.
+    'WPS216': 1,
     'WPS217': 1,
     'WPS218': 1,
     'WPS219': 1,
@@ -112,7 +95,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS221': 2,
     'WPS222': 1,
     'WPS223': 1,
-    'WPS224': 0,  # defined in version specific table.
+    'WPS224': 1,
     'WPS225': 1,
     'WPS226': 0,  # defined in ignored violations.
     'WPS227': 2,
@@ -135,7 +118,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS304': 1,
     'WPS305': 2,
     'WPS306': 2,
-    'WPS307': 0,  # defined in version specific table.
+    'WPS307': 1,
     'WPS308': 1,
     'WPS309': 1,
     'WPS310': 4,
@@ -160,7 +143,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS329': 1,
     'WPS330': 1,
     'WPS331': 1,
-    'WPS332': 0,  # defined in version specific table.
+    'WPS332': 1,
     'WPS333': 1,
     'WPS334': 1,
     'WPS335': 1,
@@ -208,7 +191,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS413': 1,
     'WPS414': 1,
     'WPS415': 1,
-    'WPS416': 0,  # defined in version specific table.
+    'WPS416': 0,  # deprecated
     'WPS417': 1,
     'WPS418': 1,
     'WPS419': 1,
@@ -243,8 +226,8 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS448': 1,
     'WPS449': 1,
     'WPS450': 1,
-    'WPS451': 0,  # defined in version specific table.
-    'WPS452': 1,  # also defined in version specific table.
+    'WPS451': 0,  # deprecated
+    'WPS452': 2,
     'WPS453': 0,
     'WPS454': 1,
     'WPS455': 1,
@@ -304,7 +287,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
 
     'WPS600': 1,
     'WPS601': 1,
-    'WPS602': 0,  # defined in version specific table.
+    'WPS602': 2,
     'WPS603': 1,
     'WPS604': 2,
     'WPS605': 1,
@@ -352,7 +335,7 @@ def _assert_errors_count_in_output(
 
     assert set(
         filter(lambda key: errors[key] != 0, errors),
-    ) - found_errors.keys() == set()
+    ) == set(found_errors.keys())
 
 
 def test_codes(all_violations):
@@ -362,12 +345,6 @@ def test_codes(all_violations):
 
 @pytest.mark.parametrize(('filename', 'violations', 'total'), [
     ('noqa.py', SHOULD_BE_RAISED, True),
-    pytest.param(
-        'noqa38.py',
-        VERSION_SPECIFIC['noqa38'],
-        0,
-        marks=pytest.mark.skipif(not _PY38, reason='ast changes on 3.8'),
-    ),
     pytest.param(
         'noqa39.py',
         VERSION_SPECIFIC['noqa39'],
