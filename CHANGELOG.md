@@ -21,7 +21,9 @@ Semantic versioning in our case means:
 
 ### Features
 
-- Reconsider `object` required base class exception:
+- Adds official `python3.12` support
+- **Breaking**: drops `python3.8` support
+- **Breaking**: Reconsider `object` required base class exception:
   since `class Klass[_Type]` must not contain `object`,
   this rule is change to be the opposite:
   `object` explicit base class must not be used.

@@ -32,9 +32,9 @@ def test_builtin_subclass(
     assert_errors(visitor, [BuiltinSubclassViolation])
 
 
+# `object` has a special violation, not included here:
 @pytest.mark.parametrize('super_class', [
     'type',
-    'object',
     'Custom',
     'Multiple, Classes',
 ])

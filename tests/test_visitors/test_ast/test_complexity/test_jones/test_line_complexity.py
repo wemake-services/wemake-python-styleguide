@@ -157,9 +157,9 @@ def test_exact_complexity(parse_ast_tree, default_options, code, complexity):
 @pytest.mark.parametrize(('code', 'number_of_lines'), [
     (line_inside_function, 1),
     (line_inside_async_function, 1),
-    (class_with_async_function, 2),
-    (class_with_function, 2),
-    (class_with_usual_and_async_function, 3),
+    (class_with_async_function, 1),
+    (class_with_function, 1),
+    (class_with_usual_and_async_function, 2),
     (regression1216, 1),
 ])
 def test_that_some_nodes_are_ignored(
