@@ -176,6 +176,12 @@ match some_value:
         ...
 """
 
+match_star = """
+match some_value:
+    case [*{0}]:
+        ...
+"""
+
 # This is the only case where we don't allow unused variables.
 match_as_explicit = """
 match some_value:
@@ -246,6 +252,7 @@ if PY310:
         match_variable,
         match_as_explicit,
         match_inner,
+        match_star,
     }
 
 _FOREIGN_NAMING_PATTERNS = frozenset((

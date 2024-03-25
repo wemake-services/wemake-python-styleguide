@@ -12,6 +12,7 @@ from typing import Optional
 if sys.version_info >= (3, 10):  # pragma: py-lt-310
     from ast import Match as Match
     from ast import MatchAs as MatchAs
+    from ast import MatchStar as MatchStar
     from ast import match_case as match_case
 else:  # pragma: py-gte-310
     class Match(ast.stmt):
@@ -25,6 +26,9 @@ else:  # pragma: py-gte-310
 
         name: Optional[str]  # noqa: WPS110
         pattern: Optional[ast.AST]
+
+    class MatchStar(ast.AST):
+        name: Optional[str]
 
 if sys.version_info >= (3, 11):  # pragma: py-lt-311
     from ast import TryStar as TryStar
