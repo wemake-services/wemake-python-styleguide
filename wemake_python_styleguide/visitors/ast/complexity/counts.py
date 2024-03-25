@@ -6,6 +6,7 @@ from typing_extensions import TypeAlias, final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.compat.types import AnyTry
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree import decorators, functions
 from wemake_python_styleguide.types import AnyFunctionDef
@@ -174,16 +175,20 @@ class ElifVisitor(BaseNodeVisitor):
 
 
 @final
+@alias('visit_any_try', (
+    'visit_Try',
+    'visit_TryStar',
+))
 class TryExceptVisitor(BaseNodeVisitor):
     """Visits all try/except nodes to ensure that they are not too complex."""
 
-    def visit_Try(self, node: ast.Try) -> None:
+    def visit_any_try(self, node: AnyTry) -> None:
         """Ensures that try/except is correct."""
         self._check_except_count(node)
         self._check_try_body_length(node)
         self.generic_visit(node)
 
-    def _check_except_count(self, node: ast.Try) -> None:
+    def _check_except_count(self, node: AnyTry) -> None:
         if len(node.handlers) > constants.MAX_EXCEPT_CASES:
             self.add_violation(
                 complexity.TooManyExceptCasesViolation(
@@ -193,7 +198,7 @@ class TryExceptVisitor(BaseNodeVisitor):
                 ),
             )
 
-    def _check_try_body_length(self, node: ast.Try) -> None:
+    def _check_try_body_length(self, node: AnyTry) -> None:
         if len(node.body) > self.options.max_try_body_length:
             self.add_violation(
                 complexity.TooLongTryBodyViolation(

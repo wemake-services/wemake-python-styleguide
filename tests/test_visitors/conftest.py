@@ -23,7 +23,7 @@ def assert_errors():
     """Helper function to assert visitor violations."""
     def factory(
         visitor: BaseVisitor,
-        errors: Sequence[str],
+        expected_errors: Sequence[str],
         *,
         ignored_types: _IgnoredTypes = None,
     ) -> None:
@@ -36,10 +36,10 @@ def assert_errors():
         else:
             real_errors = visitor.violations
 
-        assert len(errors) == len(real_errors)
+        assert len(expected_errors) == len(real_errors)
 
         for index, error in enumerate(real_errors):
-            assert error.code == errors[index].code
+            assert error.code == expected_errors[index].code
             if isinstance(error, (ASTViolation, TokenizeViolation)):
                 assert error._node is not None  # noqa: WPS437
                 assert error._location() != (0, 0)  # noqa: WPS437

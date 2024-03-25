@@ -5,12 +5,12 @@ from typing import Callable, DefaultDict, List, Set, Tuple, Union, cast
 from typing_extensions import TypeAlias, final
 
 from wemake_python_styleguide.compat.aliases import ForNodes, WithNodes
-from wemake_python_styleguide.compat.types import AnyAssignWithWalrus
 from wemake_python_styleguide.logic.naming.name_nodes import flat_variable_names
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.scopes import defs, predicates
 from wemake_python_styleguide.logic.walk import is_contained_by
 from wemake_python_styleguide.types import (
+    AnyAssignWithWalrus,
     AnyFor,
     AnyFunctionDef,
     AnyImport,

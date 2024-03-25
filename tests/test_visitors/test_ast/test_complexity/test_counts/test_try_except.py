@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY311
 from wemake_python_styleguide.violations.complexity import (
     TooManyExceptCasesViolation,
 )
@@ -56,15 +57,39 @@ except TypeError:
     ...
 """
 
+complex_try_star_except = """
+try:
+    ...
+except* ValueError:
+    ...
+except* KeyError:
+    ...
+except* IndexError as exc:
+    ...
+except* TypeError:
+    ...
+"""
 
+
+@pytest.mark.parametrize('code', [
+    complex_try_except,
+    pytest.param(
+        complex_try_star_except,
+        marks=pytest.mark.skipif(
+            not PY311,
+            reason='ExceptionGroup was added in python 3.11',
+        ),
+    ),
+])
 def test_try_except_count_default(
     assert_errors,
     assert_error_text,
     parse_ast_tree,
+    code,
     default_options,
 ):
     """Testing that default settings raise a warning."""
-    tree = parse_ast_tree(complex_try_except)
+    tree = parse_ast_tree(code)
 
     visitor = TryExceptVisitor(default_options, tree=tree)
     visitor.run()

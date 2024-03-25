@@ -836,12 +836,17 @@ class TooManyExceptCasesViolation(ASTViolation):
         since one controlling structure will become too complex.
         Also, you will need to test a lot of logic paths in your application.
 
+        If you have too many ``except*`` blocks,
+        it means that the exception group is too complex.
+
     Solution:
         We can reduce the complexity of this case by splitting it into multiple
         ``try`` cases, functions or using a decorator
         to handle different exceptions.
 
     .. versionadded:: 0.7.0
+    .. versionchanged:: 0.19.0
+       Supports `try/except*` as well.
 
     """
 
@@ -951,6 +956,8 @@ class TooLongTryBodyViolation(ASTViolation):
         https://adamj.eu/tech/2019/10/02/limit-your-try-clauses-in-python/
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 0.19.0
+       Supports `try/except*` as well.
 
     """
 

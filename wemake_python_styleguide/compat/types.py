@@ -3,7 +3,7 @@ from typing import Union
 
 from typing_extensions import TypeAlias
 
-from wemake_python_styleguide.types import AnyAssign
+from wemake_python_styleguide.compat.nodes import TryStar
 
-#: When we search for assign elements, we also need typed assign.
-AnyAssignWithWalrus: TypeAlias = Union[AnyAssign, ast.NamedExpr]
+#: When used with `visit_Try` and visit_TryStar`.
+AnyTry: TypeAlias = Union[ast.Try, TryStar]

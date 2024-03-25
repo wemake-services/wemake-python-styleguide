@@ -13,6 +13,8 @@ from wemake_python_styleguide.visitors.decorators import alias
 @final
 @alias('visit_line_expression', (
     'visit_Try',
+    'visit_TryStar',
+    'visit_Match',
     'visit_ExceptHandler',
     'visit_For',
     'visit_With',

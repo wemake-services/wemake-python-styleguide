@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY311
 from wemake_python_styleguide.violations.best_practices import (
     DuplicateExceptionViolation,
 )
@@ -98,6 +99,15 @@ except (exc['type'], IndexError):
     ...
 """
 
+wrong_simple_star = """
+try:
+    ...
+except* ValueError as ex:
+    ...
+except* ValueError:
+    ...
+"""
+
 
 @pytest.mark.parametrize('code', [
     correct_bare_except,
@@ -128,6 +138,13 @@ def test_correct_exceptions(
     wrong_simple,
     wrong_single_tuple,
     wrong_different_tuples,
+    pytest.param(
+        wrong_simple_star,
+        marks=pytest.mark.skipif(
+            not PY311,
+            reason='ExceptionGroup was added in python 3.11',
+        ),
+    ),
 ])
 def test_duplicate_exceptions(
     assert_errors,

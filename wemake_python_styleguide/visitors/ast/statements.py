@@ -9,6 +9,7 @@ from wemake_python_styleguide.compat.aliases import (
     FunctionNodes,
     TextNodes,
 )
+from wemake_python_styleguide.compat.nodes import TryStar
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.arguments import call_args
 from wemake_python_styleguide.logic.naming import name_nodes
@@ -50,6 +51,7 @@ _StatementWithBody: TypeAlias = Union[
     ast.While,
     AnyWith,
     ast.Try,
+    TryStar,
     ast.ExceptHandler,
     AnyFunctionDef,
     ast.ClassDef,
@@ -74,6 +76,7 @@ _AnyCollection: TypeAlias = Union[
     'visit_With',
     'visit_AsyncWith',
     'visit_Try',
+    'visit_TryStar',
     'visit_ExceptHandler',
     'visit_FunctionDef',
     'visit_AsyncFunctionDef',
@@ -109,6 +112,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         *ForNodes,
         ast.While,
         ast.Try,
+        TryStar,
     )
 
     _have_effect: ClassVar[AnyNodes] = (
@@ -148,6 +152,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         'AsyncFor': _generally_useless_body + _loop_useless_body,
         'While': _generally_useless_body + _loop_useless_body,
         'Try': _generally_useless_body + (ast.Raise,),
+        'TryStar': _generally_useless_body + (ast.Raise,),
         'With': _generally_useless_body,
         'AsyncWith': _generally_useless_body,
     }
