@@ -78,7 +78,7 @@ pytest = "^8.1"
 pytest-cov = "^5.0"
 pytest-randomly = "^3.12"
 coverage-conditional-plugin = "^0.9"
-snapshottest = "^0.6"
+syrupy = "^4.6"
 hypothesis = "^6.35"
 hypothesmith = "^0.3"
 
