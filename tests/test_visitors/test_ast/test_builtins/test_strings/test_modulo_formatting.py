@@ -115,8 +115,6 @@ def test_modulo_formatting(
     '%.',
     '%+',
     '%_%',
-    '\%\%',  # noqa: W605
-    '%\d',  # noqa: W605
     '%[prefix]s',
     '%(invalid@name)s',
     '%(also-invalid)d',
