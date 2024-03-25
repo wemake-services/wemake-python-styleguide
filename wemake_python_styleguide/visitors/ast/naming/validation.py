@@ -4,8 +4,12 @@ from typing import Callable, ClassVar, Iterable, Optional, Type
 import attr
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.functions import get_assign_targets
-from wemake_python_styleguide.compat.types import NamedMatch
+from wemake_python_styleguide.compat.functions import (
+    get_assign_targets,
+    get_type_param_names,
+)
+from wemake_python_styleguide.compat.nodes import TypeAlias as TypeAliasNode
+from wemake_python_styleguide.compat.types import NamedMatch, NodeWithTypeParams
 from wemake_python_styleguide.constants import (
     SPECIAL_ARGUMENT_NAMES_WHITELIST,
     UNREADABLE_CHARACTER_COMBINATIONS,
@@ -18,7 +22,12 @@ from wemake_python_styleguide.logic.naming import (
     logical,
     name_nodes,
 )
-from wemake_python_styleguide.logic.tree import classes, functions, variables
+from wemake_python_styleguide.logic.tree import (
+    attributes,
+    classes,
+    functions,
+    variables,
+)
 from wemake_python_styleguide.types import (
     AnyAssign,
     AnyFunctionDefAndLambda,
@@ -198,6 +207,16 @@ class _FunctionNameValidator(_RegularNameValidator):
 
 
 @final
+class _TypeParamNameValidator(_RegularNameValidator):
+    def check_type_params(  # pragma: py-lt-312
+        self,
+        node: NodeWithTypeParams,
+    ) -> None:
+        for type_param_node, type_param_name in get_type_param_names(node):
+            self.check_name(type_param_node, type_param_name)
+
+
+@final
 class _ClassBasedNameValidator(_RegularNameValidator):
     def check_attribute_names(self, node: ast.ClassDef) -> None:
         class_attributes, _ = classes.get_attributes(
@@ -253,6 +272,9 @@ class WrongNameVisitor(BaseNodeVisitor):
         self._class_based_validator = _ClassBasedNameValidator(
             self.add_violation, self.options,
         )
+        self._type_params_validator = _TypeParamNameValidator(
+            self.add_violation, self.options,
+        )
 
     def visit_any_import(self, node: AnyImport) -> None:
         """Used to check wrong import alias names."""
@@ -263,7 +285,7 @@ class WrongNameVisitor(BaseNodeVisitor):
 
     def visit_variable(self, node: AnyVariableDef) -> None:
         """Used to check wrong names of assigned."""
-        validator = self._simple_validator if self._is_foreign_attribute(
+        validator = self._simple_validator if attributes.is_foreign_attribute(
             node,
         ) else self._regular_validator
 
@@ -276,6 +298,7 @@ class WrongNameVisitor(BaseNodeVisitor):
         """Used to find wrong function and method parameters."""
         if not isinstance(node, ast.Lambda):
             self._function_validator.check_name(node, node.name)
+            self._type_params_validator.check_type_params(node)
         self._function_validator.check_function_signature(node)
         self.generic_visit(node)
 
@@ -283,6 +306,7 @@ class WrongNameVisitor(BaseNodeVisitor):
         """Used to find upper attribute declarations."""
         self._class_based_validator.check_name(node, node.name)
         self._class_based_validator.check_attribute_names(node)
+        self._type_params_validator.check_type_params(node)
         self.generic_visit(node)
 
     def visit_named_match(self, node: NamedMatch) -> None:  # pragma: py-lt-310
@@ -299,15 +323,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             self._regular_validator.check_name(node, node.name)
         self.generic_visit(node)
 
-    def _is_foreign_attribute(self, node: AnyVariableDef) -> bool:
-        if not isinstance(node, ast.Attribute):
-            return False
-
-        if not isinstance(node.value, ast.Name):
-            return True
-
-        # This condition finds attributes like `point.x`,
-        # but, ignores all other cases like `self.x`.
-        # So, we change the strictness of this rule,
-        # based on the attribute source.
-        return node.value.id not in SPECIAL_ARGUMENT_NAMES_WHITELIST
+    def visit_TypeAlias(self, node: TypeAliasNode) -> None:  # pragma: py-lt-312
+        """Visit PEP695 type aliases."""
+        self._type_params_validator.check_type_params(node)
+        self.generic_visit(node)

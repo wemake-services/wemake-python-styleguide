@@ -32,6 +32,7 @@ Semantic versioning in our case means:
   https://docs.astral.sh/ruff/rules/useless-object-inheritance/
 - **Breaking**: allow positional-only parameters,
   since it is required by `mypy` when using `Concatenate`
+- Adds support for naming rules for PEP695 type params
 - Due to how `f`-string are parsed in `python3.12` several token-based
   violations are not reported anymore for them:
   `WrongMultilineStringViolation`, `ImplicitRawStringViolation`,
