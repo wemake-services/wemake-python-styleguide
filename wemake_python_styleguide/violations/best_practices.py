@@ -1655,7 +1655,7 @@ class BlockAndLocalOverlapViolation(ASTViolation):
     2. Functions and async functions definitions
     3. Classes, methods, and async methods definitions
     4. For and async for loops variables
-    5. Except for block exception aliases
+    5. Except block exception aliases
 
     We allow local variables to overlap themselves,
     we forbid block variables to overlap themselves.
