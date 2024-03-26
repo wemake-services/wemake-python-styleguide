@@ -365,15 +365,19 @@ def test_statement_with_await_effect(
 ])
 @pytest.mark.parametrize('statement', [
     '"docstring"',
+    '...',
 ])
-def test_statement_with_docstring(
+def test_statement_with_special_definition(
     assert_errors,
     parse_ast_tree,
     code,
     statement,
     default_options,
 ):
-    """Testing that docstring works."""
+    """Testing that docstring and `...` work."""
+    if code == module_template and statement == '...':
+        pytest.skip('This should not work')
+
     tree = parse_ast_tree(code.format(statement))
 
     visitor = StatementsWithBodiesVisitor(default_options, tree=tree)
@@ -424,27 +428,3 @@ def test_statement_useless_special_statements(
     visitor.run()
 
     assert_errors(visitor, [StatementHasNoEffectViolation])
-
-
-@pytest.mark.parametrize('code', [
-    function_template,
-    class_template,
-    async_function_template,
-])
-@pytest.mark.parametrize('statement', [
-    '...'
-])
-def test_statement_ellipsis_has_effect_on_definition(
-    assert_errors,
-    parse_ast_tree,
-    code,
-    statement,
-    default_options,
-):
-    """Testing that `...` works."""
-    tree = parse_ast_tree(code.format(statement))
-
-    visitor = StatementsWithBodiesVisitor(default_options, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [])
