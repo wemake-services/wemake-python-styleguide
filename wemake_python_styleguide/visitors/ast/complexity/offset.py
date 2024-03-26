@@ -58,7 +58,7 @@ class OffsetVisitor(BaseNodeVisitor):
 
     def _check_offset(self, node: ast.AST) -> None:
         is_function_ellipsis = (
-            isinstance(get_parent(node), FunctionNodes) and
+            isinstance(get_parent(node), (*FunctionNodes, ast.ClassDef)) and
             isinstance(node, ast.Expr) and
             isinstance(node.value, ast.Constant) and
             node.value.value is Ellipsis

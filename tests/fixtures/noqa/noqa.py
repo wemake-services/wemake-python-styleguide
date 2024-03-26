@@ -127,7 +127,7 @@ def some():  # noqa: WPS110
     from my_module import some_import  # noqa: WPS433
 
     class Nested:  # noqa: WPS431
-        ...  # noqa: WPS428, WPS604
+        ...  # noqa: WPS604
 
     def nested():  # noqa: WPS430
         anti_wps428 = 1

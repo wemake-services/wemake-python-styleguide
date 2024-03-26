@@ -109,10 +109,22 @@ def function():
     {0}
 """
 
+function_extra_template = """
+def function():
+    x = 1
+    ...
+"""
+
 # Classes:
 
 class_template = """
 class Test:
+    {0}
+"""
+
+class_extra_template = """
+class Test:
+    x = 1
     {0}
 """
 
@@ -353,15 +365,19 @@ def test_statement_with_await_effect(
 ])
 @pytest.mark.parametrize('statement', [
     '"docstring"',
+    '...',
 ])
-def test_statement_with_docstring(
+def test_statement_with_special_definition(
     assert_errors,
     parse_ast_tree,
     code,
     statement,
     default_options,
 ):
-    """Testing that docstring works."""
+    """Testing that docstring and `...` work."""
+    if code == module_template and statement == '...':
+        pytest.skip('This should not work')
+
     tree = parse_ast_tree(code.format(statement))
 
     visitor = StatementsWithBodiesVisitor(default_options, tree=tree)
@@ -390,18 +406,22 @@ def test_statement_with_docstring(
     async_with_template,
     async_for_template,
     async_for_else_template,
+
+    function_extra_template,
+    class_extra_template,
 ])
 @pytest.mark.parametrize('statement', [
     '"docstring"',
+    '...',
 ])
-def test_statement_with_useless_docstring(
+def test_statement_useless_special_statements(
     assert_errors,
     parse_ast_tree,
     code,
     statement,
     default_options,
 ):
-    """Testing that docstring works."""
+    """Testing that docstring and `...` work."""
     tree = parse_ast_tree(code.format(statement))
 
     visitor = StatementsWithBodiesVisitor(default_options, tree=tree)

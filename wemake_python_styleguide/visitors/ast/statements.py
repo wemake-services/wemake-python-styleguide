@@ -220,6 +220,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
     def _check_expression(
         self,
         node: ast.Expr,
+        *,
         is_first: bool = False,
     ) -> None:
         if isinstance(node.value, self._have_effect):
@@ -228,6 +229,16 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         if is_first and strings.is_doc_string(node):
             if isinstance(nodes.get_parent(node), self._have_doc_strings):
                 return
+
+        parent = nodes.get_parent(node)
+        is_only_ellipsis_node = (
+            isinstance(node.value, ast.Constant) and
+            node.value.value is Ellipsis and
+            isinstance(parent, (*FunctionNodes, ast.ClassDef)) and
+            len(parent.body) == 1
+        )
+        if is_only_ellipsis_node:
+            return
 
         self.add_violation(StatementHasNoEffectViolation(node))
 

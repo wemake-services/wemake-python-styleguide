@@ -96,6 +96,10 @@ class MyClass:
     def function_with_really_long_name(self): ...
 """
 
+top_level_class_ellipsis = """
+class MyClassWithReallyLongName: ...
+"""
+
 
 @pytest.mark.parametrize('code', [
     nested_if,
@@ -121,6 +125,7 @@ class MyClass:
     ),
     top_level_function_ellipsis,
     top_level_method_ellipsis,
+    top_level_class_ellipsis,
 ])
 def test_nested_offset(
     assert_errors,

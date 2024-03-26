@@ -21,7 +21,10 @@ Semantic versioning in our case means:
 
 ### Bugfixes
 
-- Fixes `TooDeepNestingViolation` not to trigger on `...`
+- Fixes `TooDeepNestingViolation` not to trigger
+  on `...` in functions and classes
+- Fixes `StatementHasNoEffectViolation` not to trigger
+  on `...` in functions and classes, when it is the only node
 
 
 ## 0.19.0
