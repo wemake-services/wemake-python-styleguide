@@ -17,6 +17,13 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
+## 0.19.1
+
+### Bugfixes
+
+- Fixes `TooDeepNestingViolation` not to trigger on `...`
+
+
 ## 0.19.0
 
 This minor version will be the last release with all the `flake8` plugins.
