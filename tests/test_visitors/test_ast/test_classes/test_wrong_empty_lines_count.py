@@ -228,6 +228,16 @@ def kk() -> None:
     )
 """
 
+# https://github.com/wemake-services/wemake-python-styleguide/issues/2899
+regression_2899_1 = """
+def curry(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]:
+    ...
+"""
+
+regression_2899_2 = """
+def cur(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]: ...
+"""
+
 
 @pytest.mark.parametrize('input_', [
     class_with_wrong_method,
@@ -262,6 +272,10 @@ def test_wrong(
     class_with_attributes,
     expression_without_function,
     module_level_empty_lines,
+
+    # Do not report anything for `Callable[...]`
+    regression_2899_1,
+    regression_2899_2,
 ])
 def test_success(
     template,
@@ -304,7 +318,6 @@ def test_zero_option(
 def test_zero_option_with_valid_method(
     template,
     parse_tokens,
-    default_options,
     assert_errors,
     options,
     mode,
@@ -357,7 +370,6 @@ def test_string_concatination(
     parse_tokens,
     default_options,
     assert_errors,
-    options,
     mode,
 ):
     """Test function with multiline implicit string concatenation."""
