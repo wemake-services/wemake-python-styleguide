@@ -4,7 +4,7 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     WrongEmptyLinesCountViolation,
 )
-from wemake_python_styleguide.visitors.ast.function_empty_lines import (
+from wemake_python_styleguide.visitors.tokenize.functions import (
     WrongEmptyLinesCountVisitor,
 )
 

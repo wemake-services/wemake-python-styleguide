@@ -1,6 +1,6 @@
 import math
 import tokenize
-from typing import Iterable, List, Optional
+from typing import Iterable, List, Optional, Tuple
 
 from typing_extensions import final
 
@@ -15,7 +15,6 @@ class _Function:
         self._tokens = file_tokens
 
     def name_token(self) -> tokenize.TokenInfo:
-        print(self._tokens)
         return self._tokens[1]
 
     def body(self) -> str:
@@ -37,11 +36,10 @@ class _Function:
 
 @final
 class _FileFunctions:
-
     def __init__(self, file_tokens: List[tokenize.TokenInfo]) -> None:
         self._file_tokens = file_tokens
 
-    def search_functions(self) -> Iterable[_Function]:
+    def search_functions(self) -> Iterable[_Function]:  # noqa: WPS210
         function_tokens: List[tokenize.TokenInfo] = []
         in_function = False
         function_start_token = (0, 0)
@@ -49,9 +47,8 @@ class _FileFunctions:
             function_ended = self._is_function_end(
                 token,
                 token_index,
-                bool(function_tokens),
-                function_start_token[1],
-                function_start_token[0],
+                function_start_token,
+                function_tokens_exists=bool(function_tokens),
             )
             if not in_function and self._is_function_start(token):
                 in_function = True
@@ -71,20 +68,20 @@ class _FileFunctions:
         self,
         token: tokenize.TokenInfo,
         token_index: int,
+        function_start: Tuple[int, int],
+        *,
         function_tokens_exists: bool,
-        function_start_column: int,
-        function_start_line: int,
     ) -> bool:
         next_token = self._next_token(token_index)
         is_elipsis_end = (
             next_token and
             next_token.exact_type == tokenize.NEWLINE and
             token.string == '...' and
-            token.start[0] == function_start_line
+            token.start[0] == function_start[0]
         )
         if is_elipsis_end:
             return True
-        column_valid = token.start[1] in {0, function_start_column}
+        column_valid = token.start[1] in {0, function_start[1]}
         is_dedent_token = token.type == tokenize.DEDENT
         return is_dedent_token and function_tokens_exists and column_valid
 
