@@ -192,6 +192,8 @@ match some_value:
 # Type parameters:
 
 type_param_func = 'def some_value[{0}](): ...'
+type_param_func_typevartuple = 'def some_value[*{0}](): ...'
+type_param_func_paramspec = 'def some_value[**{0}](): ...'
 type_param_class = 'class SomeValue[{0}]: ...'
 type_param_alias = 'type SomeValue[{0}] = ...'
 type_alias_def = 'type {0} = ...'
@@ -264,6 +266,8 @@ if PY310:
 if PY312:
     _ALL_FIXTURES |= {
         type_param_func,
+        type_param_func_typevartuple,
+        type_param_func_paramspec,
         type_param_class,
         type_param_alias,
         type_alias_def,
