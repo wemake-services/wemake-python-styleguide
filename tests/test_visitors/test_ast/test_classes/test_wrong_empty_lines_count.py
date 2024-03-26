@@ -229,12 +229,12 @@ def kk() -> None:
 """
 
 # https://github.com/wemake-services/wemake-python-styleguide/issues/2899
-regression_2899_1 = """
+regression2899_1 = """
 def curry(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]:
     ...
 """
 
-regression_2899_2 = """
+regression2899_2 = """
 def cur(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]: ...
 """
 
@@ -274,8 +274,8 @@ def test_wrong(
     module_level_empty_lines,
 
     # Do not report anything for `Callable[...]`
-    regression_2899_1,
-    regression_2899_2,
+    regression2899_1,
+    regression2899_2,
 ])
 def test_success(
     template,
