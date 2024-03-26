@@ -681,6 +681,8 @@ class TooDeepNestingViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.5.0
+    .. versionchanged:: 0.19.1
+       Do not report ``...`` when used in a function or class body.
 
     """
 

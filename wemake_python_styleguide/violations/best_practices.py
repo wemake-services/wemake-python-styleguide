@@ -1229,6 +1229,10 @@ class StatementHasNoEffectViolation(ASTViolation):
 
     .. versionadded:: 0.5.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.19.1
+       Do not report ``...`` when used in a
+       function or class body as a single node.
+
     """
 
     error_template = 'Found statement that has no effect'
