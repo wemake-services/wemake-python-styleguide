@@ -11,7 +11,6 @@ from wemake_python_styleguide.visitors.ast import (  # noqa: WPS235
     conditions,
     decorators,
     exceptions,
-    function_empty_lines,
     functions,
     imports,
     iterables,
@@ -22,6 +21,9 @@ from wemake_python_styleguide.visitors.ast import (  # noqa: WPS235
     redundancy,
     statements,
     subscripts,
+)
+from wemake_python_styleguide.visitors.tokenize import (
+    functions as tokenize_functions,
 )
 
 #: Used to store all general visitors to be later passed to checker:
@@ -57,6 +59,7 @@ PRESET: Final = (
     functions.UnnecessaryLiteralsVisitor,
     functions.FunctionSignatureVisitor,
     functions.FloatingNanCallVisitor,
+    tokenize_functions.WrongEmptyLinesCountVisitor,
 
     exceptions.WrongTryExceptVisitor,
     exceptions.NestedTryBlocksVisitor,
@@ -109,8 +112,6 @@ PRESET: Final = (
     decorators.WrongDecoratorVisitor,
 
     redundancy.RedundantEnumerateVisitor,
-
-    function_empty_lines.WrongEmptyLinesCountVisitor,
 
     # Modules:
     modules.EmptyModuleContentsVisitor,

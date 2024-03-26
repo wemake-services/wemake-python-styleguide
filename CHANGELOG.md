@@ -17,6 +17,13 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
+## 0.19.2
+
+### Bugfixes
+
+- Fixes `WrongEmptyLinesCountViolation` crash on `Callable[..., ...]` #2899
+
+
 ## 0.19.1
 
 This release fixes how `...` is used. For example, it is common to define
