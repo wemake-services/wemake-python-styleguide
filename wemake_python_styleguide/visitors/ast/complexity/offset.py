@@ -3,6 +3,8 @@ from typing import ClassVar
 
 from typing_extensions import final
 
+from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.violations.complexity import (
     TooDeepNestingViolation,
 )
@@ -55,6 +57,15 @@ class OffsetVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_offset(self, node: ast.AST) -> None:
+        is_function_ellipsis = (
+            isinstance(get_parent(node), FunctionNodes) and
+            isinstance(node, ast.Expr) and
+            isinstance(node.value, ast.Constant) and
+            node.value.value is Ellipsis
+        )
+        if is_function_ellipsis:
+            return
+
         offset = getattr(node, 'col_offset', 0)
         baseline = self._max_offset_blocks * 4
         if offset > baseline:

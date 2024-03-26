@@ -9,7 +9,7 @@ from wemake_python_styleguide.visitors.ast.complexity.offset import (
 nested_if = """
 def container():
     if True:
-        x = 1
+        ...  # this needs to be an ellipsis for the test
 """
 
 nested_if2 = """
@@ -85,6 +85,17 @@ async def update_control():
                                                            'point': 1})
 """
 
+# Only ellipsis in the top level function definition is fine:
+
+top_level_function_ellipsis = """
+def function_with_really_long_name(): ...
+"""
+
+top_level_method_ellipsis = """
+class MyClass:
+    def function_with_really_long_name(self): ...
+"""
+
 
 @pytest.mark.parametrize('code', [
     nested_if,
@@ -108,6 +119,8 @@ async def update_control():
             reason='Pattern matching was added in 3.10',
         ),
     ),
+    top_level_function_ellipsis,
+    top_level_method_ellipsis,
 ])
 def test_nested_offset(
     assert_errors,
