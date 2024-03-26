@@ -19,6 +19,15 @@ Semantic versioning in our case means:
 
 ## 0.19.1
 
+This release fixes how `...` is used. For example, it is common to define
+function stubs / protocols like this:
+
+```python
+def some_function(): ...
+```
+
+Now, `...` will be excluded from several rules.
+
 ### Bugfixes
 
 - Fixes `TooDeepNestingViolation` not to trigger
