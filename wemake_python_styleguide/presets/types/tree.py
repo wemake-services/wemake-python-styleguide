@@ -109,6 +109,7 @@ PRESET: Final = (
     decorators.WrongDecoratorVisitor,
 
     redundancy.RedundantEnumerateVisitor,
+    redundancy.RedundantTernaryVisitor,
 
     function_empty_lines.WrongEmptyLinesCountVisitor,
 

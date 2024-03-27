@@ -91,6 +91,7 @@ Summary
    GettingElementByUnpackingViolation
    WrongEmptyLinesCountViolation
    ImportObjectCollisionViolation
+   RedundantTernaryViolation
 
 Best practices
 --------------
@@ -170,6 +171,7 @@ Best practices
 .. autoclass:: GettingElementByUnpackingViolation
 .. autoclass:: WrongEmptyLinesCountViolation
 .. autoclass:: ImportObjectCollisionViolation
+.. autoclass:: RedundantTernaryViolation
 
 """
 
@@ -2849,3 +2851,33 @@ class ImportObjectCollisionViolation(ASTViolation):
 
     error_template = 'Found import object collision: {0}'
     code = 474
+
+
+@final
+class RedundantTernaryViolation(ASTViolation):
+    """
+    Forbid the redundant ternary operat which returns sanme value.
+
+    Reasoning:
+        There is no need to use a ternary operator to return the same value
+        for both the true and false cases.
+    Solution:
+        Instead of using a ternary operator, use the value directly.
+
+    Example::
+        Correct:
+        a if ... else c
+        a if a != b else c
+
+        Wrong:
+        a if ... else a
+        a if a is not None else None
+        a if a != b else b
+        b if a == b else a
+
+    .. versionadded:: 0.19.0
+
+    """
+
+    error_template = 'Found redundant ternary operator'
+    code = 475
