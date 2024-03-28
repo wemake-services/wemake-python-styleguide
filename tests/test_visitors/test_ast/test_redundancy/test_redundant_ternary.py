@@ -9,42 +9,30 @@ from wemake_python_styleguide.visitors.ast.redundancy import (
 
 # Correct:
 correct_ternary_elipses = """
-a = 1
-c = 3
 a if ... else c
 """
 
 correct_not_equal = """
-a = 1
-b = 2
-c = 3
 a if a != b else c
 """
 
 correct_ternary_none = """
-a = 1
 a.split() if a is not None else None
 """
 
 # Wrong:
 wrong_ternary_same_values = """
-a = 1
 a if ... else a
 """
 
 wrong_ternary_useless_comparison_not_eq = """
-a = 1
-b = 2
 a if a != b else b
 """
 wrong_ternary_useless_comparison_eq = """
-a = 1
-b = 2
 b if a == b else a
 """
 
 wrong_ternarny_none = """
-a = 1
 a if a is not None else None
 """
 
