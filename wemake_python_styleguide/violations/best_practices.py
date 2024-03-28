@@ -2859,8 +2859,9 @@ class RedundantTernaryViolation(ASTViolation):
     Forbid the redundant ternary expressions.
 
     Reasoning:
-        There is no need to use a ternary operator to return the same value
-        for both the true and false cases.
+        If the ternary expression can be simplified,
+        it should be simplified.
+
     Solution:
         Instead of using a ternary operator, use the value directly.
 
