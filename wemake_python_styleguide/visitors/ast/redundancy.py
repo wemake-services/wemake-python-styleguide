@@ -82,12 +82,11 @@ class RedundantTernaryVisitor(BaseNodeVisitor):
             return
 
         allowed_ops = (ast.NotEq, ast.Eq, ast.IsNot)
-        is_node_test = isinstance(node.test, ast.Compare)
         correct_op = any(
             isinstance(node.test.ops[0], op) for op in allowed_ops
         )
 
-        if is_node_test and correct_op and len(node.test.ops) == 1:
+        if correct_op and len(node.test.ops) == 1:
             left = ast.unparse(node.test.left)
             right = ast.unparse(node.test.comparators[0])
 
