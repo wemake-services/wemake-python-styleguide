@@ -73,12 +73,14 @@ class RedundantTernaryVisitor(BaseNodeVisitor):
 
         self.generic_visit(node)  # Visit all other node types.
 
-    def body_orelse_check(self, node, body, orelse) -> None:
+    def body_orelse_check(
+        self, node: ast.IfExp, body: str, orelse: str,
+    ) -> None:
         """Check if body and orelse are the same."""
         if body == orelse:
             self.add_violation(RedundantTernaryViolation(node))
 
-    def check_computed_equal(self, node) -> None:
+    def check_computed_equal(self, node: ast.IfExp) -> None:
         """Used to check if the computed branches are equal."""
         if not isinstance(node.test, ast.Compare):
             return
@@ -93,7 +95,7 @@ class RedundantTernaryVisitor(BaseNodeVisitor):
 
             self.compare_operands(node, left, right)
 
-    def compare_operands(self, node, left, right) -> None:
+    def compare_operands(self, node: ast.IfExp, left: str, right: str) -> None:
         """Compare each operand to see if will result in same values."""
         body_str = ast.unparse(node.body)
         orelse_str = ast.unparse(node.orelse)
