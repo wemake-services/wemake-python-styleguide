@@ -2856,7 +2856,7 @@ class ImportObjectCollisionViolation(ASTViolation):
 @final
 class RedundantTernaryViolation(ASTViolation):
     """
-    Forbid the redundant ternary operat which returns sanme value.
+    Forbid the redundant ternary expressions.
 
     Reasoning:
         There is no need to use a ternary operator to return the same value
