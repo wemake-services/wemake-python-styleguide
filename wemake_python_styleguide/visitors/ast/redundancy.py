@@ -60,6 +60,8 @@ class RedundantEnumerateVisitor(BaseNodeVisitor):
 class RedundantTernaryVisitor(BaseNodeVisitor):
     """Finds useless ternary operators."""
 
+    allowed_ops = (ast.NotEq, ast.Eq, ast.IsNot)
+
     def visit_IfExp(self, node: ast.IfExp) -> None:
         """Finds useless ternary operators."""
         body = ast.unparse(node.body)
@@ -81,9 +83,8 @@ class RedundantTernaryVisitor(BaseNodeVisitor):
         if not isinstance(node.test, ast.Compare):
             return
 
-        allowed_ops = (ast.NotEq, ast.Eq, ast.IsNot)
         correct_op = any(
-            isinstance(node.test.ops[0], op) for op in allowed_ops
+            isinstance(node.test.ops[0], op) for op in self.allowed_ops
         )
 
         if correct_op and len(node.test.ops) == 1:
