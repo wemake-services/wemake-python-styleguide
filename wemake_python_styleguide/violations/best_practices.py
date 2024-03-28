@@ -2866,7 +2866,7 @@ class RedundantTernaryViolation(ASTViolation):
 
     Example::
         Correct:
-        a if ... else c
+        a if b is None else c
         a if a != b else c
 
         Wrong:
