@@ -17,6 +17,13 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
+## WIP
+
+### Bugfixes
+
+- Fixes `OverusedStringViolation` not to include `'...'` string
+
+
 ## 0.19.2
 
 ### Bugfixes
