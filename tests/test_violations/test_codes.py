@@ -7,6 +7,12 @@ def test_all_unique_violation_codes(all_violations):
     assert len(set(codes)) == len(all_violations)
 
 
+def test_all_violations_are_final(all_violations):
+    """Ensures that all violations are final."""
+    for violation_type in all_violations:
+        assert getattr(violation_type, '__final__', False), violation_type
+
+
 def test_all_unique_violation_messages(all_violations):
     """Ensures that all violations have unique violation messages."""
     messages = Counter([
