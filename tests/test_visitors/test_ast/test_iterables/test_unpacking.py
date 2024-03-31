@@ -1,10 +1,16 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY311
 from wemake_python_styleguide.violations.consistency import (
     IterableUnpackingViolation,
 )
 from wemake_python_styleguide.visitors.ast.iterables import (
     IterableUnpackingVisitor,
+)
+
+_skip_mark = pytest.mark.skipif(
+    not PY311,
+    reason='Unpacking in subscript is only allow in 3.11+',
 )
 
 args_unpacking_in_call = 'f(*args)'
@@ -32,12 +38,12 @@ wrong_spread_assignment = '*_, = [1, 2, 4, 3]'
     spread_assignment,
 
     # Type annotations should be allowed:
-    type_annotation1,
-    type_annotation2,
-    type_alias,
-    generic_type,
+    pytest.param(type_annotation1, marks=_skip_mark),
+    pytest.param(type_annotation2, marks=_skip_mark),
+    pytest.param(type_alias, marks=_skip_mark),
+    pytest.param(generic_type, marks=_skip_mark),
     # As a side-effect of type annotations, we also allow this code in runtime:
-    similar_but_unrelated,
+    pytest.param(similar_but_unrelated, marks=_skip_mark),
 ])
 def test_correct_iterable_unpacking_usage(
     assert_errors,
