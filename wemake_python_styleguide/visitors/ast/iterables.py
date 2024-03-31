@@ -28,6 +28,14 @@ class IterableUnpackingVisitor(base.BaseNodeVisitor):
 
     def _check_unnecessary_iterable_unpacking(self, node: ast.Starred) -> None:
         parent = get_parent(node)
-        if isinstance(parent, self._unpackable_iterable_parent_types):
-            if len(getattr(parent, 'elts', [])) == 1:
-                self.add_violation(IterableUnpackingViolation(node))
+        if not isinstance(parent, self._unpackable_iterable_parent_types):
+            return
+        if len(getattr(parent, 'elts', [])) != 1:
+            return
+
+        container = get_parent(parent)
+        if isinstance(container, ast.Subscript):
+            # We ignore cases like `Tuple[*Shape]`, because it is a type
+            # annotation which should be used like this.
+            return
+        self.add_violation(IterableUnpackingViolation(node))
