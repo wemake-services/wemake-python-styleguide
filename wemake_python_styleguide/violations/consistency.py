@@ -2156,12 +2156,16 @@ class IterableUnpackingViolation(ASTViolation):
         {*iterable, *other_iterable}
         list(iterable)
         first, *iterable = other_iterable
+        GenericTuple = tuple[*Shape]
 
         # Wrong:
         [*iterable]
         *iterable, = other_iterable
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 0.19.3
+       Allow using ``TypeVarTuple`` unpacking in generic types.
+       As a side-effect we now allow all unpackings in ``ast.Subscript``.
 
     """
 
