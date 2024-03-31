@@ -2090,6 +2090,7 @@ class PositionalOnlyArgumentsViolation(ASTViolation):
     deprecated = True
 
 
+@final
 class LoopControlFinallyViolation(ASTViolation):
     """
     Forbid ``break`` and ``continue`` in a ``finally`` block.
