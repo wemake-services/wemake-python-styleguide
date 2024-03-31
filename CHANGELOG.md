@@ -22,6 +22,7 @@ Semantic versioning in our case means:
 ### Bugfixes
 
 - Fixes `OverusedStringViolation` not to include `'...'` string
+- Removes `astor` package in favour of `ast.unparse`
 
 
 ## 0.19.2
