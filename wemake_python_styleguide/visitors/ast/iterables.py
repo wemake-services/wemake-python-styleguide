@@ -34,8 +34,9 @@ class IterableUnpackingVisitor(base.BaseNodeVisitor):
             return
 
         container = get_parent(parent)
-        if isinstance(container, ast.Subscript):
+        if isinstance(container, ast.Subscript):  # pragma: py-lt-311
             # We ignore cases like `Tuple[*Shape]`, because it is a type
             # annotation which should be used like this.
+            # It is only possible for Python 3.11+
             return
         self.add_violation(IterableUnpackingViolation(node))
