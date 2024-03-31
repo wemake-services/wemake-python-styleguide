@@ -1,5 +1,5 @@
 import ast
-from typing import ClassVar, Mapping, Optional, Tuple, Type, Union
+from typing import ClassVar, List, Mapping, Optional, Tuple, Type, Union
 
 from typing_extensions import TypeAlias, final
 
@@ -136,8 +136,8 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         self,
         left: Optional[ast.AST],
         right: Optional[ast.AST] = None,
-    ):
-        non_negative_numbers = []
+    ) -> List[ast.Num]:
+        non_negative_numbers: List[ast.Num] = []
         for node in filter(None, (left, right)):
             real_node = unwrap_unary_node(node)
             correct_node = (
@@ -145,7 +145,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
                 real_node.n in self._meaningless_operations and
                 not (real_node.n == 1 and walk.is_contained(node, ast.USub))
             )
-            if correct_node:
+            if correct_node and isinstance(real_node, ast.Num):  # mypy :)
                 non_negative_numbers.append(real_node)
         return non_negative_numbers
 
