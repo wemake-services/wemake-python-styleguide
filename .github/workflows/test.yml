@@ -49,6 +49,8 @@ jobs:
       uses: codecov/codecov-action@v4
       with:
         file: ./coverage.xml
+        token: ${{ secrets.CODECOV_TOKEN }}
+        fail_ci_if_error: true
 
   remark-lint:
     name: remark-lint
