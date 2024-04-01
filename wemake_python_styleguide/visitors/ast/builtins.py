@@ -493,7 +493,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
             if isinstance(real_item, self._elements_in_sets):
                 # Similar look:
                 node_repr = source.node_to_string(set_item)
-                elements.append(node_repr.strip().strip('(').strip(')'))
+                # elements.append(node_repr.strip().strip('(').strip(')'))
 
             real_item = operators.unwrap_starred_node(real_item)
 
