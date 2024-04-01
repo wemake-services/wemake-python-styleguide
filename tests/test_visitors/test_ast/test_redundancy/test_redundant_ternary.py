@@ -16,14 +16,6 @@ correct_not_equal = """
 a if a != b else c
 """
 
-non_compare = """
-a if a | b else None
-"""
-
-two_operation_compare = """
-a == b != c
-"""
-
 correct_ternary_none = """
 a.split() if a is not None else None
 """
@@ -55,10 +47,9 @@ def test_correct_ternary(
     assert_errors,
     parse_ast_tree,
     default_options,
-    mode,
 ):
     """Ensures that correct ternary expressions are fine."""
-    tree = parse_ast_tree(mode(code))
+    tree = parse_ast_tree(code)
 
     visitor = RedundantTernaryVisitor(default_options, tree=tree)
     visitor.run()
@@ -77,32 +68,11 @@ def test_wrong_ternary(
     assert_errors,
     parse_ast_tree,
     default_options,
-    mode,
 ):
     """Ensures that redundant ternary expressions are forbidden."""
-    tree = parse_ast_tree(mode(code))
+    tree = parse_ast_tree(code)
 
     visitor = RedundantTernaryVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [RedundantTernaryViolation])
-
-
-@pytest.mark.parametrize('code', [
-    non_compare,
-    two_operation_compare,
-])
-def safety_check_ternary(
-    code,
-    assert_errors,
-    parse_ast_tree,
-    default_options,
-    mode,
-):
-    """Ensures that conditions for checking are met."""
-    tree = parse_ast_tree(mode(code))
-
-    visitor = RedundantTernaryVisitor(default_options, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [])
