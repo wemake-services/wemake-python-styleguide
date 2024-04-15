@@ -154,7 +154,7 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
 
     _valid_format_index: ClassVar[AnyNodes] = (
         *TextNodes,
-        ast.Num,
+        ast.Constant,
         ast.Name,
         ast.NameConstant,
     )
@@ -271,13 +271,13 @@ class WrongNumberVisitor(base.BaseNodeVisitor):
 
     _non_magic_modulo: ClassVar[int] = 10
 
-    def visit_Num(self, node: ast.Num) -> None:
+    def visit_Num(self, node: ast.Constant) -> None:
         """Checks wrong constants inside the code."""
         self._check_is_magic(node)
         self._check_is_approximate_constant(node)
         self.generic_visit(node)
 
-    def _check_is_magic(self, node: ast.Num) -> None:
+    def _check_is_magic(self, node: ast.Constant) -> None:
         parent = operators.get_parent_ignoring_unary(node)
         if isinstance(parent, self._allowed_parents):
             return
@@ -292,7 +292,7 @@ class WrongNumberVisitor(base.BaseNodeVisitor):
             best_practices.MagicNumberViolation(node, text=str(node.n)),
         )
 
-    def _check_is_approximate_constant(self, node: ast.Num) -> None:
+    def _check_is_approximate_constant(self, node: ast.Constant) -> None:
         try:
             precision = len(str(node.n).split('.')[1])
         except IndexError:
@@ -405,7 +405,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
 
     _elements_in_sets: ClassVar[AnyNodes] = (
         *TextNodes,
-        ast.Num,
+        ast.Constant,
         ast.NameConstant,
         ast.Name,
     )
@@ -422,7 +422,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
 
     _elements_to_eval: ClassVar[AnyNodes] = (
         *TextNodes,
-        ast.Num,
+        ast.Constant,
         ast.NameConstant,
         ast.Tuple,
         ast.List,
@@ -461,7 +461,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
 
             real_key = operators.unwrap_unary_node(dict_key)
             is_float_key = (
-                isinstance(real_key, ast.Num) and
+                isinstance(real_key, ast.Constant) and
                 isinstance(real_key.n, float)
             )
             if is_float_key or evaluates_to_float:
