@@ -39,7 +39,6 @@ from wemake_python_styleguide.violations.refactoring import (
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
-import pytest
 
 
 @final
@@ -136,8 +135,6 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
         ast.SetComp,
 
         # We allow `ast.NameConstant`
-        # ast.Constant,
-        # ast.Num,
         *TextNodes,
     )
 
@@ -180,9 +177,7 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
         if isinstance(unwrapped, self._forbidden_for_is):
             self.add_violation(WrongIsCompareViolation(comparator))
         elif isinstance(unwrapped, ast.Constant):
-                # pytest.set_trace()
-                if isinstance(unwrapped.value, (int, float, complex)):
-                    # pytest.set_trace()
+                if isinstance(unwrapped.value, (int, float, complex)) and not isinstance(unwrapped.value, bool):
                     self.add_violation(WrongIsCompareViolation(comparator))
             
 
@@ -274,7 +269,6 @@ class WrongConditionalVisitor(BaseNodeVisitor):
     _forbidden_nodes: ClassVar[AnyNodes] = (
         # Constants:
         *TextNodes,
-        ast.Num,
         ast.NameConstant,
 
         # Collections:
@@ -318,11 +312,9 @@ class WrongConditionalVisitor(BaseNodeVisitor):
             real_node = operators.unwrap_unary_node(get_assigned_expr(node))
             if isinstance(real_node, self._forbidden_nodes):
                 self.add_violation(ConstantConditionViolation(node))
-            # elif isinstance(real_node, ast.Constant):
-            #     # pytest.set_trace()
-            #     if isinstance(real_node.value, (int, float, complex)):
-            #         # pytest.set_trace()
-            #         self.add_violation(ConstantCompareViolation(node))
+            elif isinstance(real_node, ast.Constant):
+                if isinstance(real_node.value, (int, float, complex)) and not isinstance(real_node.value, bool):
+                    self.add_violation(ConstantConditionViolation(node))
 
     def _check_simplifiable_if(self, node: ast.If) -> None:
         if not ifs.is_elif(node) and not ifs.root_if(node):
@@ -455,10 +447,9 @@ class WrongFloatComplexCompareVisitor(BaseNodeVisitor):
     def _is_float_or_complex(self, node: ast.AST) -> bool:
         node = operators.unwrap_unary_node(node)
         return (
-            # isinstance(node, ast.Constant) and
-            # isinstance(node.value, (float, complex))
-            isinstance(node, ast.Num) and
-            isinstance(node.n, (float, complex))
+            isinstance(node, ast.Constant) and
+            isinstance(node.value, (float, complex)) and not 
+            isinstance(node.value, bool)
         )
 
     def _check_float_complex_compare(self, node: ast.Compare) -> None:

@@ -256,8 +256,10 @@ class WrongFunctionCallContextVisitor(base.BaseNodeVisitor):
         is_three_args_range = (
             self._is_multiple_args_range_with_len(node) and
             args_len == 3 and
-            isinstance(step_arg, ast.Num) and
-            abs(step_arg.n) == 1
+            isinstance(step_arg, ast.Constant) and
+            isinstance(step_arg.value, (int, float, complex)) and 
+            not isinstance(step_arg.value, bool) and
+            abs(step_arg.value) == 1
         )
         if any([is_one_arg_range, is_two_args_range, is_three_args_range]):
             self.add_violation(ImplicitEnumerateViolation(node))
@@ -430,7 +432,8 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
         ast.Attribute,
         ast.NameConstant,
         ast.Tuple,
-        ast.Num,
+        # ast.Num,
+        # ast.Constant,
         ast.Ellipsis,
     )
 
@@ -483,7 +486,10 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
             ) else [real_arg]
 
             has_incorrect_part = any(
-                not isinstance(part, self._allowed_default_value_types)
+                not (isinstance(part, self._allowed_default_value_types)
+                or (isinstance(part, ast.Constant) 
+                and isinstance(part.value, (int, float, complex)) 
+                and not isinstance(part.value, bool)))
                 for part in parts
             )
 
