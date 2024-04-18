@@ -432,8 +432,6 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
         ast.Attribute,
         ast.NameConstant,
         ast.Tuple,
-        # ast.Num,
-        # ast.Constant,
         ast.Ellipsis,
     )
 

@@ -109,10 +109,14 @@ class SubscriptVisitor(base.BaseNodeVisitor):
         )
 
     def _is_zero(self, component_value: ast.expr) -> bool:
-        return isinstance(component_value, ast.Num) and component_value.n == 0
+        return (isinstance(component_value, ast.Constant) 
+              and isinstance(component_value.value, (int, float, complex)) 
+              and not isinstance(component_value.value, bool)) and component_value.value == 0
 
     def _is_one(self, component_value: ast.expr) -> bool:
-        return isinstance(component_value, ast.Num) and component_value.n == 1
+        return (isinstance(component_value, ast.Constant) 
+              and isinstance(component_value.value, (int, float, complex)) 
+              and not isinstance(component_value.value, bool)) and component_value.value == 1
 
 
 @final
@@ -181,6 +185,8 @@ class CorrectKeyVisitor(base.BaseNodeVisitor):
     def _is_float_key(self, node: ast.expr) -> bool:
         real_node = operators.unwrap_unary_node(node)
         return (
-            isinstance(real_node, ast.Num) and
-            isinstance(real_node.n, float)
+            (isinstance(real_node, ast.Constant) 
+              and isinstance(real_node.value, (int, float, complex)) 
+              and not isinstance(real_node.value, bool)) and 
+            isinstance(real_node.value, float)
         )

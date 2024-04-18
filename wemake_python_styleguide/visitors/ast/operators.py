@@ -23,7 +23,7 @@ _MeaninglessOperators: TypeAlias = Mapping[
     Tuple[Type[ast.operator], ...],
 ]
 _OperatorLimits: TypeAlias = Mapping[Type[ast.unaryop], int]
-_NumbersAndConstants: TypeAlias = Union[ast.Num, ast.NameConstant]
+_NumbersAndConstants: TypeAlias = Union[ast.Constant, ast.NameConstant]
 
 
 @final
@@ -97,7 +97,9 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
     def _check_operator_count(self, node: _NumbersAndConstants) -> None:
         for node_type, limit in self._unary_limits.items():
             if count_unary_operator(node, node_type) > limit:
-                text = str(node.n) if isinstance(node, ast.Num) else node.value
+                text = str(node.n) if (isinstance(node, ast.Constant) 
+                and isinstance(node.value, (int, float, complex)) 
+                and not isinstance(node.value, bool)) else node.value
                 self.add_violation(
                     consistency.UselessOperatorsViolation(node, text=text),
                 )
@@ -107,7 +109,9 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
 
         is_zero_division = (
             isinstance(op, self._zero_divisors) and
-            isinstance(number, ast.Num) and
+            (isinstance(number, ast.Constant) 
+                and isinstance(number.value, (int, float, complex)) 
+                and not isinstance(number.value, bool)) and
             number.n == 0
         )
         if is_zero_division:
@@ -119,8 +123,10 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         left: Optional[ast.AST],
         right: Optional[ast.AST] = None,
     ) -> None:
-        if isinstance(left, ast.Num) and left.n in self._left_special_cases:
-            if right and isinstance(op, self._left_special_cases[left.n]):
+        if (isinstance(left, ast.Constant) 
+                and isinstance(left.value, (int, float, complex)) 
+                and not isinstance(left.value, bool)) and left.value in self._left_special_cases:
+            if right and isinstance(op, self._left_special_cases[left.value]):
                 left = None
 
         non_negative_numbers = self._get_non_negative_nodes(left, right)
@@ -136,16 +142,20 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         self,
         left: Optional[ast.AST],
         right: Optional[ast.AST] = None,
-    ) -> List[ast.Num]:
-        non_negative_numbers: List[ast.Num] = []
+    ) -> List[ast.Constant]:
+        non_negative_numbers: List[ast.Constant] = []
         for node in filter(None, (left, right)):
             real_node = unwrap_unary_node(node)
             correct_node = (
-                isinstance(real_node, ast.Num) and
-                real_node.n in self._meaningless_operations and
-                not (real_node.n == 1 and walk.is_contained(node, ast.USub))
+                (isinstance(real_node, ast.Constant) 
+                and isinstance(real_node.value, (int, float, complex)) 
+                and not isinstance(real_node.value, bool)) and
+                real_node.value in self._meaningless_operations and
+                not (real_node.value == 1 and walk.is_contained(node, ast.USub))
             )
-            if correct_node and isinstance(real_node, ast.Num):  # mypy :)
+            if correct_node and (isinstance(real_node, ast.Constant) 
+                and isinstance(real_node.value, (int, float, complex)) 
+                and not isinstance(real_node.value, bool)):  # mypy :)
                 non_negative_numbers.append(real_node)
         return non_negative_numbers
 

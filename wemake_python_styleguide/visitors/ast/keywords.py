@@ -377,7 +377,6 @@ class ConstantKeywordVisitor(BaseNodeVisitor):
         ast.DictComp,
 
         *TextNodes,
-        ast.Num,
 
         ast.IfExp,
     )
@@ -399,4 +398,8 @@ class ConstantKeywordVisitor(BaseNodeVisitor):
 
         real_node = operators.unwrap_unary_node(walrus.get_assigned_expr(cond))
         if isinstance(real_node, self._forbidden_nodes):
+            self.add_violation(WrongKeywordConditionViolation(cond))
+        elif (isinstance(real_node, ast.Constant) 
+              and isinstance(real_node.value, (int, float, complex)) 
+              and not isinstance(real_node.value, bool)):
             self.add_violation(WrongKeywordConditionViolation(cond))
