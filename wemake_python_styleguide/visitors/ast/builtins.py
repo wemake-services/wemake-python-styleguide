@@ -21,7 +21,6 @@ from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import (
     AssignNodesWithWalrus,
     FunctionNodes,
-    TextNodes,
 )
 from wemake_python_styleguide.logic import nodes, safe_eval, source, walk
 from wemake_python_styleguide.logic.tree import (
@@ -153,7 +152,6 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
     """Restricts usage of ``f`` strings."""
 
     _valid_format_index: ClassVar[AnyNodes] = (
-        *TextNodes,
         ast.Constant,
         ast.Name,
         ast.NameConstant,
@@ -404,7 +402,6 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
     """Ensures that collection definitions are correct."""
 
     _elements_in_sets: ClassVar[AnyNodes] = (
-        *TextNodes,
         ast.Constant,
         ast.NameConstant,
         ast.Name,
@@ -421,7 +418,6 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
     )
 
     _elements_to_eval: ClassVar[AnyNodes] = (
-        *TextNodes,
         ast.Constant,
         ast.NameConstant,
         ast.Tuple,

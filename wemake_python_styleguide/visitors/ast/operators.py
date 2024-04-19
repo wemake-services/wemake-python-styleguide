@@ -3,7 +3,6 @@ from typing import ClassVar, List, Mapping, Optional, Tuple, Type, Union
 
 from typing_extensions import TypeAlias, final
 
-from wemake_python_styleguide.compat.aliases import TextNodes
 from wemake_python_styleguide.logic import walk
 from wemake_python_styleguide.logic.tree.annotations import is_annotation
 from wemake_python_styleguide.logic.tree.operators import (
@@ -165,7 +164,6 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
     """Checks that there are not wrong math operations."""
 
     _string_nodes: ClassVar[AnyNodes] = (
-        *TextNodes,
         ast.JoinedStr,
     )
 
@@ -222,7 +220,9 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
             return
 
         for node in (left, right):
-            if isinstance(node, self._string_nodes):
+            if (isinstance(node, self._string_nodes)
+                or (isinstance(node, ast.Constant)
+                and isinstance(node.value, (str, bytes)))):
                 self.add_violation(
                     consistency.ExplicitStringConcatViolation(node),
                 )

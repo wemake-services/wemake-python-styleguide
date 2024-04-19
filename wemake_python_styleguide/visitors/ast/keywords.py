@@ -6,7 +6,6 @@ from typing_extensions import TypeAlias, final
 from wemake_python_styleguide.compat.aliases import (
     AssignNodes,
     FunctionNodes,
-    TextNodes,
 )
 from wemake_python_styleguide.logic import walk, walrus
 from wemake_python_styleguide.logic.naming import name_nodes
@@ -376,8 +375,6 @@ class ConstantKeywordVisitor(BaseNodeVisitor):
         ast.SetComp,
         ast.DictComp,
 
-        *TextNodes,
-
         ast.IfExp,
     )
 
@@ -400,6 +397,7 @@ class ConstantKeywordVisitor(BaseNodeVisitor):
         if isinstance(real_node, self._forbidden_nodes):
             self.add_violation(WrongKeywordConditionViolation(cond))
         elif (isinstance(real_node, ast.Constant) 
-              and isinstance(real_node.value, (int, float, complex)) 
-              and not isinstance(real_node.value, bool)):
+              and ((isinstance(real_node.value, (int, float, complex)) 
+              and not isinstance(real_node.value, bool))
+              or isinstance(real_node.value, (str, bytes)))):
             self.add_violation(WrongKeywordConditionViolation(cond))

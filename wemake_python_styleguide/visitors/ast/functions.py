@@ -7,7 +7,6 @@ from typing_extensions import TypeAlias, final
 from wemake_python_styleguide.compat.aliases import (
     ForNodes,
     FunctionNodes,
-    TextNodes,
 )
 from wemake_python_styleguide.constants import (
     FUNCTIONS_BLACKLIST,
@@ -183,7 +182,7 @@ class FloatingNanCallVisitor(base.BaseNodeVisitor):
         if len(node.args) != 1:
             return
 
-        if not isinstance(node.args[0], (ast.Str, ast.Bytes)):
+        if not (isinstance(node.args[0], ast.Constant) and isinstance(node.args[0].value, (str, bytes))):
             return
 
         if not functions.given_function_called(node, 'float'):
@@ -427,7 +426,6 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
     """
 
     _allowed_default_value_types: ClassVar[AnyNodes] = (
-        *TextNodes,
         ast.Name,
         ast.Attribute,
         ast.NameConstant,
@@ -486,8 +484,9 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
             has_incorrect_part = any(
                 not (isinstance(part, self._allowed_default_value_types)
                 or (isinstance(part, ast.Constant) 
-                and isinstance(part.value, (int, float, complex)) 
-                and not isinstance(part.value, bool)))
+                and ((isinstance(part.value, (int, float, complex)) 
+                and not isinstance(part.value, bool))
+                or isinstance(part.value, (str, bytes)))))
                 for part in parts
             )
 

@@ -7,7 +7,6 @@ from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import (
     ForNodes,
     FunctionNodes,
-    TextNodes,
 )
 from wemake_python_styleguide.compat.nodes import TryStar
 from wemake_python_styleguide.logic import nodes
@@ -369,7 +368,6 @@ class PointlessStarredVisitor(BaseNodeVisitor):
         ast.List,
         ast.Set,
         ast.Tuple,
-        *TextNodes,
     )
 
     def visit_Call(self, node: ast.Call) -> None:
@@ -401,14 +399,16 @@ class PointlessStarredVisitor(BaseNodeVisitor):
                 self.add_violation(PointlessStarredViolation(keyword.value))
 
     def _is_pointless_star(self, node: ast.AST) -> bool:
-        return isinstance(node, self._pointless_star_nodes)
+        return (isinstance(node, self._pointless_star_nodes)
+                or (isinstance(node, ast.Constant) 
+                    and isinstance(node.value, (str, bytes))))
 
     def _has_non_string_keys(self, node: ast.keyword) -> bool:
         if not isinstance(node.value, ast.Dict):
             return True
 
         for key_node in node.value.keys:
-            if not isinstance(key_node, ast.Str):
+            if not (isinstance(key_node, ast.Constant) and isinstance(key_node.value, str)):
                 return True
         return False
 
@@ -438,8 +438,8 @@ class WrongNamedKeywordVisitor(BaseNodeVisitor):
             return False
 
         for key_node in node.value.keys:
-            if isinstance(key_node, ast.Str):
-                if not str.isidentifier(key_node.s):
+            if isinstance(key_node, ast.Constant) and isinstance(key_node.value, str):
+                if not str.isidentifier(key_node.value):
                     return True
         return False
 

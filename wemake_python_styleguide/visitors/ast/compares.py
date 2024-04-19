@@ -3,7 +3,7 @@ from typing import ClassVar, List, Optional, Sequence
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import AssignNodes, TextNodes
+from wemake_python_styleguide.compat.aliases import AssignNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.logic import nodes, source, walk
 from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
@@ -135,7 +135,6 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
         ast.SetComp,
 
         # We allow `ast.NameConstant`
-        *TextNodes,
     )
 
     def visit_Compare(self, node: ast.Compare) -> None:
@@ -177,7 +176,9 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
         if isinstance(unwrapped, self._forbidden_for_is):
             self.add_violation(WrongIsCompareViolation(comparator))
         elif isinstance(unwrapped, ast.Constant):
-                if isinstance(unwrapped.value, (int, float, complex)) and not isinstance(unwrapped.value, bool):
+                if (isinstance(unwrapped.value, (int, float, complex)) 
+                    and not isinstance(unwrapped.value, bool)
+                    or (isinstance(unwrapped.value, (str, bytes)))):
                     self.add_violation(WrongIsCompareViolation(comparator))
             
 
@@ -268,7 +269,6 @@ class WrongConditionalVisitor(BaseNodeVisitor):
 
     _forbidden_nodes: ClassVar[AnyNodes] = (
         # Constants:
-        *TextNodes,
         ast.NameConstant,
 
         # Collections:
@@ -313,8 +313,9 @@ class WrongConditionalVisitor(BaseNodeVisitor):
             if isinstance(real_node, self._forbidden_nodes):
                 self.add_violation(ConstantConditionViolation(node))
             elif (isinstance(real_node, ast.Constant) 
-                and isinstance(real_node.value, (int, float, complex)) 
-                and not isinstance(real_node.value, bool)):
+                and ((isinstance(real_node.value, (int, float, complex)) 
+                and not isinstance(real_node.value, bool))
+                or isinstance(real_node.value, (str, bytes)))):
                 self.add_violation(ConstantConditionViolation(node))
 
     def _check_simplifiable_if(self, node: ast.If) -> None:
@@ -421,7 +422,7 @@ class InCompareSanityVisitor(BaseNodeVisitor):
             self._check_wrong_comparators(real)
 
     def _check_single_item_container(self, node: ast.AST) -> None:
-        is_text_violated = isinstance(node, TextNodes) and len(node.s) == 1
+        is_text_violated = isinstance(node, ast.Constant) and isinstance(node.value, (str, bytes)) and len(node.s) == 1
         is_dict_violated = isinstance(node, ast.Dict) and len(node.keys) == 1
         is_iter_violated = (
             isinstance(node, (ast.List, ast.Tuple, ast.Set)) and
