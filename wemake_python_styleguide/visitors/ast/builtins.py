@@ -154,7 +154,6 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
     _valid_format_index: ClassVar[AnyNodes] = (
         ast.Constant,
         ast.Name,
-        ast.NameConstant,
     )
     _single_use_types: ClassVar[AnyNodes] = (
         ast.Call,
@@ -403,7 +402,6 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
 
     _elements_in_sets: ClassVar[AnyNodes] = (
         ast.Constant,
-        ast.NameConstant,
         ast.Name,
     )
 
@@ -419,7 +417,6 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
 
     _elements_to_eval: ClassVar[AnyNodes] = (
         ast.Constant,
-        ast.NameConstant,
         ast.Tuple,
         ast.List,
         ast.Set,

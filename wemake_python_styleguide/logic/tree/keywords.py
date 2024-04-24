@@ -40,6 +40,6 @@ def _node_returns_bool_const(node: ast.stmt) -> bool:
     """Checks if a Return node would return a boolean constant."""
     return (
         isinstance(node, ast.Return) and
-        isinstance(node.value, ast.NameConstant) and
+        isinstance(node.value, ast.Constant) and
         isinstance(node.value.value, bool)
     )

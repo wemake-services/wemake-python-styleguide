@@ -139,7 +139,6 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         ast.Break,
         ast.Continue,
         ast.Pass,
-        ast.Ellipsis,
     )
     _loop_useless_body: ClassVar[AnyNodes] = (
         ast.Return,
@@ -207,7 +206,9 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
             node.__class__.__qualname__, None,
         )
 
-        if not forbidden or not isinstance(body[0], forbidden):
+        if not forbidden or not (isinstance(body[0], forbidden) 
+                                 or (isinstance(body[0], ast.Constant) 
+                                     and isinstance(body[0].value, type(Ellipsis)))):
             return
 
         self.add_violation(

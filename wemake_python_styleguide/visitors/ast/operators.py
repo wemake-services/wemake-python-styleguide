@@ -17,12 +17,14 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors import base, decorators
 
+import pytest
+
 _MeaninglessOperators: TypeAlias = Mapping[
     complex,
     Tuple[Type[ast.operator], ...],
 ]
 _OperatorLimits: TypeAlias = Mapping[Type[ast.unaryop], int]
-_NumbersAndConstants: TypeAlias = Union[ast.Constant, ast.NameConstant]
+_NumbersAndConstants: TypeAlias = ast.Constant
 
 
 @final
@@ -249,7 +251,6 @@ class BitwiseOpVisitor(base.BaseNodeVisitor):
     _invalid_nodes: ClassVar[AnyNodes] = (
         ast.BoolOp,
         ast.UnaryOp,
-        ast.NameConstant,
         ast.Compare,
     )
 
@@ -270,4 +271,5 @@ class BitwiseOpVisitor(base.BaseNodeVisitor):
 
     def _is_bool_like(self, node: ast.expr) -> bool:
         """Checks either side of the Bitwise operation invalid usage."""
-        return isinstance(node, self._invalid_nodes)
+        return (isinstance(node, self._invalid_nodes)
+                or (isinstance(node, ast.Constant) and isinstance(node.value, (bool, type(None)))))

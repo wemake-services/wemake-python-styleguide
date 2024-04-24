@@ -64,7 +64,7 @@ def literal_eval_with_names(  # noqa: WPS231
     because we try to stay as close to the original source as possible.
     """
     binary_operators = (ast.Add, ast.Sub)
-    if isinstance(node, (ast.Constant, ast.NameConstant)):
+    if isinstance(node, ast.Constant):
         return node.value
     elif isinstance(node, (ast.Tuple, ast.List, ast.Set, ast.Dict)):
         return _convert_iterable(node)

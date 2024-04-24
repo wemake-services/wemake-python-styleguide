@@ -269,7 +269,6 @@ class WrongConditionalVisitor(BaseNodeVisitor):
 
     _forbidden_nodes: ClassVar[AnyNodes] = (
         # Constants:
-        ast.NameConstant,
 
         # Collections:
         ast.List,
@@ -315,7 +314,7 @@ class WrongConditionalVisitor(BaseNodeVisitor):
             elif (isinstance(real_node, ast.Constant) 
                 and ((isinstance(real_node.value, (int, float, complex)) 
                 and not isinstance(real_node.value, bool))
-                or isinstance(real_node.value, (str, bytes)))):
+                or isinstance(real_node.value, (str, bytes, bool, type(None))))):
                 self.add_violation(ConstantConditionViolation(node))
 
     def _check_simplifiable_if(self, node: ast.If) -> None:
@@ -327,9 +326,9 @@ class WrongConditionalVisitor(BaseNodeVisitor):
 
     def _check_simplifiable_ifexpr(self, node: ast.IfExp) -> None:
         conditions = set()
-        if isinstance(node.body, ast.NameConstant):
+        if isinstance(node.body, ast.Constant) and isinstance(node.body.value, (bool, type(None))):
             conditions.add(node.body.value)
-        if isinstance(node.orelse, ast.NameConstant):
+        if isinstance(node.orelse, ast.Constant) and isinstance(node.orelse.value, (bool, type(None))):
             conditions.add(node.orelse.value)
 
         if conditions == {True, False}:
@@ -354,7 +353,8 @@ class WrongConditionalVisitor(BaseNodeVisitor):
         wrong_length = len(node_body) != 1
         if wrong_length or not isinstance(node_body[0], AssignNodes):
             return None
-        if not isinstance(node_body[0].value, ast.NameConstant):
+        if not (isinstance(node_body[0].value, ast.Constant) 
+                and isinstance(node_body[0].value.value, (bool, type(None)))):
             return None
         if node_body[0].value.value is None:
             return None

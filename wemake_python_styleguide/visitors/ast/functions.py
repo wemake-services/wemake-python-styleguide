@@ -103,7 +103,7 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
             return  # Calls with single boolean argument are allowed
 
         for arg in node.args:
-            if not isinstance(arg, ast.NameConstant):
+            if not (isinstance(arg, ast.Constant) and isinstance(arg.value, (bool, type(None)))):
                 continue
 
             is_ignored = self._is_call_ignored(node)
@@ -428,9 +428,7 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
     _allowed_default_value_types: ClassVar[AnyNodes] = (
         ast.Name,
         ast.Attribute,
-        ast.NameConstant,
         ast.Tuple,
-        ast.Ellipsis,
     )
 
     def visit_any_function_and_lambda(
@@ -486,7 +484,7 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
                 or (isinstance(part, ast.Constant) 
                 and ((isinstance(part.value, (int, float, complex)) 
                 and not isinstance(part.value, bool))
-                or isinstance(part.value, (str, bytes)))))
+                or isinstance(part.value, (str, bytes, bool, type(None), type(Ellipsis))))))
                 for part in parts
             )
 

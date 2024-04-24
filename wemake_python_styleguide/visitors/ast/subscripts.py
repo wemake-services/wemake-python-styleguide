@@ -104,7 +104,7 @@ class SubscriptVisitor(base.BaseNodeVisitor):
 
     def _is_none(self, component_value: ast.expr) -> bool:
         return (
-            isinstance(component_value, ast.NameConstant) and
+            isinstance(component_value, ast.Constant) and
             component_value.value is None
         )
 
