@@ -17,8 +17,6 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors import base, decorators
 
-import pytest
-
 _MeaninglessOperators: TypeAlias = Mapping[
     complex,
     Tuple[Type[ast.operator], ...],
@@ -98,8 +96,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
     def _check_operator_count(self, node: _NumbersAndConstants) -> None:
         for node_type, limit in self._unary_limits.items():
             if count_unary_operator(node, node_type) > limit:
-                text = str(node.n) if (isinstance(node, ast.Constant) 
-                and isinstance(node.value, (int, float, complex)) 
+                text = str(node.n) if (isinstance(node.value, (int, float, complex)) 
                 and not isinstance(node.value, bool)) else node.value
                 self.add_violation(
                     consistency.UselessOperatorsViolation(node, text=text),
