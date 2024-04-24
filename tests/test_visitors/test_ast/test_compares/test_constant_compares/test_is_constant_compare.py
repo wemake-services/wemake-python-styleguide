@@ -87,5 +87,4 @@ def test_correct_constant_is(
     visitor = WrongConstantCompareVisitor(default_options, tree=tree)
     visitor.run()
 
-    # pytest.set_trace()
     assert_errors(visitor, [])
