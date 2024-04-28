@@ -2680,7 +2680,7 @@ class RaiseFromItselfViolation(ASTViolation):
         since the final behavior will be the same.
 
     Solution:
-        Don't raise an exeception from itself.
+        Don't raise an exception from itself.
 
     Example::
 
