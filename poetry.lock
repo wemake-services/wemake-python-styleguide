@@ -1744,13 +1744,13 @@ files = [
 
 [[package]]
 name = "pep8-naming"
-version = "0.13.3"
+version = "0.14.0"
 description = "Check PEP-8 naming conventions, plugin for flake8"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "pep8-naming-0.13.3.tar.gz", hash = "sha256:1705f046dfcd851378aac3be1cd1551c7c1e5ff363bacad707d43007877fa971"},
-    {file = "pep8_naming-0.13.3-py3-none-any.whl", hash = "sha256:1a86b8c71a03337c97181917e2b472f0f5e4ccb06844a0d6f0a33522549e7a80"},
+    {file = "pep8-naming-0.14.0.tar.gz", hash = "sha256:c2dcf35de7731b4fe1adcea4ca97e0abf52c811b137054edd25816a34016c9cd"},
+    {file = "pep8_naming-0.14.0-py3-none-any.whl", hash = "sha256:5a74972c7a0f882aa643120c8de16b5d8b8b1636a17ac04dbeaff5ce393aa8b4"},
 ]
 
 [package.dependencies]
@@ -2625,4 +2625,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "03d1973462474b769b01ad2cb999c8adfb25ddb1d57c463dd709fd25ebdd83d9"
+content-hash = "6725236cec55b23ad9f995b6b1f0c4b9db1520ae3f8f6efb0795033f9dfb5297"
