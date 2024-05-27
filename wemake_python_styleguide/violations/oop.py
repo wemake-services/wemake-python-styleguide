@@ -166,9 +166,6 @@ class StaticMethodViolation(ASTViolation):
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.11.0
 
-    See also:
-       webucator.com/article/when-to-use-static-methods-in-python-never
-
     """
 
     error_template = 'Found using `@staticmethod`'
