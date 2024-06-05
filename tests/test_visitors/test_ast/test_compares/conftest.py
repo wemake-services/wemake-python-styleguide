@@ -88,7 +88,7 @@ def in_conditions(request):
     return request.param
 
 
-@pytest.fixture()
+@pytest.fixture
 def not_in_wrapper():
     """Fixture to replace all `in` operators to `not in` operators."""
     def factory(template: str) -> str:

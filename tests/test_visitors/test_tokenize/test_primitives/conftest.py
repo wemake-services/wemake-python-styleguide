@@ -21,7 +21,7 @@ def primitives_usages(request):
     return request.param
 
 
-@pytest.fixture()
+@pytest.fixture
 def regular_number_wrapper():
     """Fixture to return regular numbers without modifications."""
     def factory(template: str) -> str:
@@ -29,7 +29,7 @@ def regular_number_wrapper():
     return factory
 
 
-@pytest.fixture()
+@pytest.fixture
 def negative_number_wrapper():
     """Fixture to return negative numbers."""
     def factory(template: str) -> str:
@@ -37,7 +37,7 @@ def negative_number_wrapper():
     return factory
 
 
-@pytest.fixture()
+@pytest.fixture
 def positive_number_wrapper():
     """Fixture to return positive numbers with explicit ``+``."""
     def factory(template: str) -> str:

@@ -6,7 +6,7 @@ from wemake_python_styleguide import version
 from wemake_python_styleguide.options import config
 
 
-@pytest.fixture()
+@pytest.fixture
 def option_parser():
     """Returns option parser that can be used for tests."""
     if flake8_version_info > (6, ):
