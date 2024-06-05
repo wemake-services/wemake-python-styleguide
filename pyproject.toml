@@ -71,7 +71,7 @@ darglint = "^1.2"
 
 [tool.poetry.group.dev.dependencies]
 nitpick = "^0.35"
-flake8-pytest-style = "^1.5"
+flake8-pytest-style = ">=1.5,<3.0"
 
 pytest = "^8.1"
 pytest-cov = "^5.0"
