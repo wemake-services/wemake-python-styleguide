@@ -18,7 +18,8 @@ Below is an example of how to use ``ondivi`` with ``flake8``:
   flake8 script.py | ondivi
 
 Optionally, you can configure ``ondivi`` to filter violations based on a
-baseline commit or branch, and specify a custom format for parsing linter messages.
+baseline commit or branch, and specify a custom format for parsing linter
+messages.
 
 .. code:: bash
 
