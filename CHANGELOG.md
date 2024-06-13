@@ -25,6 +25,10 @@ Semantic versioning in our case means:
 - Removes `astor` package in favour of `ast.unparse`
 - Fixes `IterableUnpackingViolation` with generic types and `TypeVarTuple`
 
+### Misc
+
+- Integration with `ondivi` doc for legacy codebases
+
 
 ## 0.19.2
 
