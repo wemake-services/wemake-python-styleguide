@@ -5,7 +5,7 @@
   editors.rst
   auto-formatters.rst
   nitpick.rst
-  flakeheaven.rst
+  ondivi.rst
   docker.rst
   github-actions.rst
   ci.rst
