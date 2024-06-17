@@ -74,14 +74,14 @@ Strict linting offers the following benefits to developers and companies:
 The ultimate goal of this project is
 to make all people write **exactly** the same `Python` code.
 
-|                            | flake8 | pylint | black | mypy | wemake-python-styleguide |
-|----------------------------|--------|--------|-------|------|--------------------------|
-| Formats code?              |   ❌   |   ❌   |   ✅  |  ❌  |            ❌           |
-| Finds style issues?        |   🤔   |   ✅   |   🤔  |  ❌  |            ✅           |
-| Finds bugs?                |   🤔   |   ✅   |   ❌  |  ✅  |            ✅           |
-| Finds complex code?        |   ❌   |   🤔   |   ❌  |  ❌  |            ✅           |
-| Has a lot of strict rules? |   ❌   |   🤔   |   ❌  |  ❌  |            ✅           |
-| Has a lot of plugins?      |   ✅   |   ❌   |   ❌  |  🤔  |            ✅           |
+|                            | flake8 | pylint | black | mypy | ruff | wemake-python-styleguide |
+|----------------------------|--------|--------|-------|------|------|--------------------------|
+| Formats code?              |   ❌   |   ❌   |   ✅  |  ❌  |  ✅  |            ❌            |
+| Finds style issues?        |   🤔   |   ✅   |   🤔  |  ❌  |  ✅  |            ✅            |
+| Finds bugs?                |   🤔   |   ✅   |   ❌  |  ✅  |  ❌  |            ✅            |
+| Finds complex code?        |   ❌   |   🤔   |   ❌  |  ❌  |  ✅  |            ✅            |
+| Has a lot of strict rules? |   ❌   |   🤔   |   ❌  |  ❌  |  ✅  |            ✅            |
+| Has a lot of plugins?      |   ✅   |   ❌   |   ❌  |  🤔  |  ❌  |            ✅            |
 
 We have several primary objectives:
 
