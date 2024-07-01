@@ -140,7 +140,7 @@ class BracketLocationVisitor(BaseTokenVisitor):
         tokens: List[tokenize.TokenInfo],
     ) -> Mapping[int, int]:
         """Annotates each opening bracket with the nested level index."""
-        brackets = dict.fromkeys(MATCHING, value=0)
+        brackets = dict.fromkeys(MATCHING, 0)
         for token in tokens:
             if token.exact_type in MATCHING.keys():
                 brackets[token.exact_type] += 1
