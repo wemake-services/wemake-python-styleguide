@@ -2504,13 +2504,13 @@ files = [
 
 [[package]]
 name = "tomlkit"
-version = "0.12.5"
+version = "0.13.0"
 description = "Style preserving TOML library"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "tomlkit-0.12.5-py3-none-any.whl", hash = "sha256:af914f5a9c59ed9d0762c7b64d3b5d5df007448eb9cd2edc8a46b1eafead172f"},
-    {file = "tomlkit-0.12.5.tar.gz", hash = "sha256:eef34fba39834d4d6b73c9ba7f3e4d1c417a4e56f89a7e96e090dd0d24b8fb3c"},
+    {file = "tomlkit-0.13.0-py3-none-any.whl", hash = "sha256:7075d3042d03b80f603482d69bf0c8f345c2b30e41699fd8883227f89972b264"},
+    {file = "tomlkit-0.13.0.tar.gz", hash = "sha256:08ad192699734149f5b97b45f1f18dad7eb1b6d16bc72ad0c2335772650d7b72"},
 ]
 
 [[package]]
@@ -2530,13 +2530,13 @@ test = ["argcomplete (>=3.0.3)", "mypy (>=1.7.0)", "pre-commit", "pytest (>=7.0,
 
 [[package]]
 name = "types-flake8"
-version = "7.1.0.20240616"
+version = "7.1.0.20240711"
 description = "Typing stubs for flake8"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "types-flake8-7.1.0.20240616.tar.gz", hash = "sha256:5e768d5a7ca2011263030e54cc7f302d607d513766545627bead9eed2a5266f7"},
-    {file = "types_flake8-7.1.0.20240616-py3-none-any.whl", hash = "sha256:3c762e3f9765793d53a97fb43bcd918c78df5258839293eb20ddc9544577e5d5"},
+    {file = "types-flake8-7.1.0.20240711.tar.gz", hash = "sha256:38cb92b6f31e4fb06f93303b7d36d33bc6f91c6f3efed2e87b731591e70417ea"},
+    {file = "types_flake8-7.1.0.20240711-py3-none-any.whl", hash = "sha256:caeb2d113a856228abdb43b51524aa29bd7d39b9d162a6473caab0953fce4e77"},
 ]
 
 [package.dependencies]

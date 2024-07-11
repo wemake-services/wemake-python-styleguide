@@ -155,11 +155,6 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
 
     # Our own methods:
 
-    def _write(self, output: str) -> None:  # noqa: WPS612
-        # We only need this definition before
-        # https://github.com/python/typeshed/pull/12312
-        super()._write(output)  # type: ignore[misc]
-
     def _show_link(self, error: Violation) -> str:
         """Called when ``--show-violation-links`` option is provided."""
         if not self.options.show_violation_links:
