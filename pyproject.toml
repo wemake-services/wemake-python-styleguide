@@ -80,7 +80,7 @@ syrupy = "^4.6"
 hypothesis = "^6.35"
 hypothesmith = "^0.3"
 
-mypy = "^1.10"
+mypy = "^1.11"
 types-flake8 = "^7.1"
 
 autopep8 = "^2.0"
