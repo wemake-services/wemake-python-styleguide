@@ -28,7 +28,7 @@ Semantic versioning in our case means:
 ### Misc
 
 - Integration with `ondivi` doc for legacy codebases
-
+- Fixes a documentation error for the Formatter (Showing statistic) section
 
 ## 0.19.2
 
