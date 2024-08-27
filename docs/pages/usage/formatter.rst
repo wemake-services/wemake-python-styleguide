@@ -62,14 +62,20 @@ We include ``show-source = True`` into our default configuration.
 
 .. rubric:: Showing statistic
 
-You can also show the statistics about problems inside your code.
+You can also enable ``--statistics`` option.
+It can be passed as a command line argument or set in ``setup.cfg``:
+
+.. code:: ini
+
+  [flake8]
+  statistics = True
 
 It will group all violations by type and tell how many of them
 do you have and where you have them:
 
 .. code::
 
-  » flake8 . --format=wemake --show-source --statistic
+  » flake8 . --format=wemake --show-source --statistics
 
   ./wemake_python_styleguide/formatter.py
 
@@ -91,7 +97,7 @@ do you have and where you have them:
 
   All errors: 2
 
-We do not include ``show-statistic`` in our default configuration.
+We do not include ``statistics = True`` in our default configuration.
 It should be only called when user needs to find how many violations
 there are and what files do contain them.
 
