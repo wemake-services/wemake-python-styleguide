@@ -5,7 +5,7 @@
 # See: https://help.github.com/en/articles/metadata-syntax-for-github-actions
 
 name: 'wemake-python-styleguide'
-description: 'Runs wemake-python-styleguide as a Github Action'
+description: 'Runs wemake-python-styleguide as a GitHub Action'
 branding:
   icon: 'check'
   color: 'green'
