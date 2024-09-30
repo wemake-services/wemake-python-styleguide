@@ -774,6 +774,9 @@ def many_raises_function(parameter):  # noqa: WPS238
         raise IndexError('3')
     raise TypeError('4')
 
+ternary_a = 1 
+ternary_b = 2
+ternary_result = ternary_a if ... else ternary_a # noqa: WPS475
 
 my_print("""
 text
