@@ -7,7 +7,6 @@ from typing_extensions import TypeAlias, final
 from wemake_python_styleguide.compat.aliases import (
     ForNodes,
     FunctionNodes,
-    TextNodes,
 )
 from wemake_python_styleguide.constants import (
     FUNCTIONS_BLACKLIST,
@@ -104,7 +103,7 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
             return  # Calls with single boolean argument are allowed
 
         for arg in node.args:
-            if not isinstance(arg, ast.NameConstant):
+            if not (isinstance(arg, ast.Constant) and isinstance(arg.value, (bool, type(None)))):
                 continue
 
             is_ignored = self._is_call_ignored(node)
@@ -183,7 +182,7 @@ class FloatingNanCallVisitor(base.BaseNodeVisitor):
         if len(node.args) != 1:
             return
 
-        if not isinstance(node.args[0], (ast.Str, ast.Bytes)):
+        if not (isinstance(node.args[0], ast.Constant) and isinstance(node.args[0].value, (str, bytes))):
             return
 
         if not functions.given_function_called(node, 'float'):
@@ -256,8 +255,10 @@ class WrongFunctionCallContextVisitor(base.BaseNodeVisitor):
         is_three_args_range = (
             self._is_multiple_args_range_with_len(node) and
             args_len == 3 and
-            isinstance(step_arg, ast.Num) and
-            abs(step_arg.n) == 1
+            isinstance(step_arg, ast.Constant) and
+            isinstance(step_arg.value, (int, float, complex)) and 
+            not isinstance(step_arg.value, bool) and
+            abs(step_arg.value) == 1
         )
         if any([is_one_arg_range, is_two_args_range, is_three_args_range]):
             self.add_violation(ImplicitEnumerateViolation(node))
@@ -425,13 +426,9 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
     """
 
     _allowed_default_value_types: ClassVar[AnyNodes] = (
-        *TextNodes,
         ast.Name,
         ast.Attribute,
-        ast.NameConstant,
         ast.Tuple,
-        ast.Num,
-        ast.Ellipsis,
     )
 
     def visit_any_function_and_lambda(
@@ -483,7 +480,11 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
             ) else [real_arg]
 
             has_incorrect_part = any(
-                not isinstance(part, self._allowed_default_value_types)
+                not (isinstance(part, self._allowed_default_value_types)
+                or (isinstance(part, ast.Constant) 
+                and ((isinstance(part.value, (int, float, complex)) 
+                and not isinstance(part.value, bool))
+                or isinstance(part.value, (str, bytes, bool, type(None), type(Ellipsis))))))
                 for part in parts
             )
 

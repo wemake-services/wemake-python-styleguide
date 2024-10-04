@@ -349,8 +349,8 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
             self._count_slots_items(node, node.value)
 
     def _slot_item_name(self, node: ast.AST) -> Optional[str]:
-        if isinstance(node, ast.Str):
-            return node.s
+        if isinstance(node, ast.Constant) and isinstance(node.value, str):
+            return node.value
         if isinstance(node, ast.Starred):
             return source.node_to_string(node)
         return None
@@ -359,7 +359,7 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
         return all(
             slot.s.isidentifier()
             for slot in slots
-            if isinstance(slot, ast.Str)
+            if isinstance(slot, ast.Constant) and isinstance(slot.value, str)
         )
 
 
