@@ -3,7 +3,7 @@ from typing import ClassVar, List, Optional, Sequence
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import AssignNodes, TextNodes
+from wemake_python_styleguide.compat.aliases import AssignNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.logic import nodes, source, walk
 from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
@@ -56,7 +56,7 @@ class CompareSanityVisitor(BaseNodeVisitor):
 
     def _is_correct_len(self, sign: ast.cmpop, comparator: ast.AST) -> bool:
         """Helper function which tells what calls to ``len()`` are valid."""
-        if isinstance(operators.unwrap_unary_node(comparator), ast.Num):
+        if isinstance(operators.unwrap_unary_node(comparator), ast.Constant):
             numeric_value = ast.literal_eval(comparator)
             if numeric_value == 0:
                 return False
@@ -135,8 +135,6 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
         ast.SetComp,
 
         # We allow `ast.NameConstant`
-        ast.Num,
-        *TextNodes,
     )
 
     def visit_Compare(self, node: ast.Compare) -> None:
@@ -177,6 +175,12 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
         )
         if isinstance(unwrapped, self._forbidden_for_is):
             self.add_violation(WrongIsCompareViolation(comparator))
+        elif isinstance(unwrapped, ast.Constant):
+                if (isinstance(unwrapped.value, (int, float, complex)) 
+                    and not isinstance(unwrapped.value, bool)
+                    or (isinstance(unwrapped.value, (str, bytes)))):
+                    self.add_violation(WrongIsCompareViolation(comparator))
+            
 
 
 @final
@@ -265,9 +269,6 @@ class WrongConditionalVisitor(BaseNodeVisitor):
 
     _forbidden_nodes: ClassVar[AnyNodes] = (
         # Constants:
-        *TextNodes,
-        ast.Num,
-        ast.NameConstant,
 
         # Collections:
         ast.List,
@@ -310,6 +311,11 @@ class WrongConditionalVisitor(BaseNodeVisitor):
             real_node = operators.unwrap_unary_node(get_assigned_expr(node))
             if isinstance(real_node, self._forbidden_nodes):
                 self.add_violation(ConstantConditionViolation(node))
+            elif (isinstance(real_node, ast.Constant) 
+                and ((isinstance(real_node.value, (int, float, complex)) 
+                and not isinstance(real_node.value, bool))
+                or isinstance(real_node.value, (str, bytes, bool, type(None))))):
+                self.add_violation(ConstantConditionViolation(node))
 
     def _check_simplifiable_if(self, node: ast.If) -> None:
         if not ifs.is_elif(node) and not ifs.root_if(node):
@@ -320,9 +326,9 @@ class WrongConditionalVisitor(BaseNodeVisitor):
 
     def _check_simplifiable_ifexpr(self, node: ast.IfExp) -> None:
         conditions = set()
-        if isinstance(node.body, ast.NameConstant):
+        if isinstance(node.body, ast.Constant) and isinstance(node.body.value, (bool, type(None))):
             conditions.add(node.body.value)
-        if isinstance(node.orelse, ast.NameConstant):
+        if isinstance(node.orelse, ast.Constant) and isinstance(node.orelse.value, (bool, type(None))):
             conditions.add(node.orelse.value)
 
         if conditions == {True, False}:
@@ -347,7 +353,8 @@ class WrongConditionalVisitor(BaseNodeVisitor):
         wrong_length = len(node_body) != 1
         if wrong_length or not isinstance(node_body[0], AssignNodes):
             return None
-        if not isinstance(node_body[0].value, ast.NameConstant):
+        if not (isinstance(node_body[0].value, ast.Constant) 
+                and isinstance(node_body[0].value.value, (bool, type(None)))):
             return None
         if node_body[0].value.value is None:
             return None
@@ -415,7 +422,7 @@ class InCompareSanityVisitor(BaseNodeVisitor):
             self._check_wrong_comparators(real)
 
     def _check_single_item_container(self, node: ast.AST) -> None:
-        is_text_violated = isinstance(node, TextNodes) and len(node.s) == 1
+        is_text_violated = isinstance(node, ast.Constant) and isinstance(node.value, (str, bytes)) and len(node.s) == 1
         is_dict_violated = isinstance(node, ast.Dict) and len(node.keys) == 1
         is_iter_violated = (
             isinstance(node, (ast.List, ast.Tuple, ast.Set)) and
@@ -442,8 +449,9 @@ class WrongFloatComplexCompareVisitor(BaseNodeVisitor):
     def _is_float_or_complex(self, node: ast.AST) -> bool:
         node = operators.unwrap_unary_node(node)
         return (
-            isinstance(node, ast.Num) and
-            isinstance(node.n, (float, complex))
+            isinstance(node, ast.Constant) and
+            isinstance(node.value, (float, complex)) and not 
+            isinstance(node.value, bool)
         )
 
     def _check_float_complex_compare(self, node: ast.Compare) -> None:

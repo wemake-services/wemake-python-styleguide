@@ -21,7 +21,6 @@ from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import (
     AssignNodesWithWalrus,
     FunctionNodes,
-    TextNodes,
 )
 from wemake_python_styleguide.logic import nodes, safe_eval, source, walk
 from wemake_python_styleguide.logic.tree import (
@@ -153,10 +152,8 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
     """Restricts usage of ``f`` strings."""
 
     _valid_format_index: ClassVar[AnyNodes] = (
-        *TextNodes,
-        ast.Num,
+        ast.Constant,
         ast.Name,
-        ast.NameConstant,
     )
     _single_use_types: ClassVar[AnyNodes] = (
         ast.Call,
@@ -271,13 +268,13 @@ class WrongNumberVisitor(base.BaseNodeVisitor):
 
     _non_magic_modulo: ClassVar[int] = 10
 
-    def visit_Num(self, node: ast.Num) -> None:
+    def visit_Num(self, node: ast.Constant) -> None:
         """Checks wrong constants inside the code."""
         self._check_is_magic(node)
         self._check_is_approximate_constant(node)
         self.generic_visit(node)
 
-    def _check_is_magic(self, node: ast.Num) -> None:
+    def _check_is_magic(self, node: ast.Constant) -> None:
         parent = operators.get_parent_ignoring_unary(node)
         if isinstance(parent, self._allowed_parents):
             return
@@ -292,7 +289,7 @@ class WrongNumberVisitor(base.BaseNodeVisitor):
             best_practices.MagicNumberViolation(node, text=str(node.n)),
         )
 
-    def _check_is_approximate_constant(self, node: ast.Num) -> None:
+    def _check_is_approximate_constant(self, node: ast.Constant) -> None:
         try:
             precision = len(str(node.n).split('.')[1])
         except IndexError:
@@ -404,9 +401,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
     """Ensures that collection definitions are correct."""
 
     _elements_in_sets: ClassVar[AnyNodes] = (
-        *TextNodes,
-        ast.Num,
-        ast.NameConstant,
+        ast.Constant,
         ast.Name,
     )
 
@@ -421,9 +416,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
     )
 
     _elements_to_eval: ClassVar[AnyNodes] = (
-        *TextNodes,
-        ast.Num,
-        ast.NameConstant,
+        ast.Constant,
         ast.Tuple,
         ast.List,
         ast.Set,
@@ -461,7 +454,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
 
             real_key = operators.unwrap_unary_node(dict_key)
             is_float_key = (
-                isinstance(real_key, ast.Num) and
+                isinstance(real_key, ast.Constant) and
                 isinstance(real_key.n, float)
             )
             if is_float_key or evaluates_to_float:
