@@ -906,13 +906,13 @@ typing-extensions = ">=3.10.0.0"
 
 [[package]]
 name = "hypothesis"
-version = "6.115.2"
+version = "6.115.3"
 description = "A library for property-based testing"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "hypothesis-6.115.2-py3-none-any.whl", hash = "sha256:d0ccbd67f588a6abcdc17a4f06fea3b2bc0a166ecd89126fb90985036c1940fe"},
-    {file = "hypothesis-6.115.2.tar.gz", hash = "sha256:6df95ea6cccf950f80e142f43a684d1462e26c5e28ba29ab4eceb8399e207e0b"},
+    {file = "hypothesis-6.115.3-py3-none-any.whl", hash = "sha256:d2770b0db08ad666fe6ff36027910039ab681084d13bcf9c057449c2e27099c4"},
+    {file = "hypothesis-6.115.3.tar.gz", hash = "sha256:d4efc8c7371bd4ec906d2777f1f18fee5539e47b3d7c7cdc93d1026ad35d9b33"},
 ]
 
 [package.dependencies]
