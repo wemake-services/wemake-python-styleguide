@@ -2566,13 +2566,13 @@ test = ["argcomplete (>=3.0.3)", "mypy (>=1.7.0)", "pre-commit", "pytest (>=7.0,
 
 [[package]]
 name = "types-flake8"
-version = "7.1.0.20240711"
+version = "7.1.0.20241020"
 description = "Typing stubs for flake8"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "types-flake8-7.1.0.20240711.tar.gz", hash = "sha256:38cb92b6f31e4fb06f93303b7d36d33bc6f91c6f3efed2e87b731591e70417ea"},
-    {file = "types_flake8-7.1.0.20240711-py3-none-any.whl", hash = "sha256:caeb2d113a856228abdb43b51524aa29bd7d39b9d162a6473caab0953fce4e77"},
+    {file = "types-flake8-7.1.0.20241020.tar.gz", hash = "sha256:df6cdc50911ec595635dd7725fd1ca9a16ce512b8b372ee967b6babee5a9b71b"},
+    {file = "types_flake8-7.1.0.20241020-py3-none-any.whl", hash = "sha256:9a15366470eecb0d71768a6bb9ae7a2f54a831fbe81891f5037ec67947c84d95"},
 ]
 
 [package.dependencies]
