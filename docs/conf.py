@@ -70,8 +70,6 @@ extensions = [
 
 autoclass_content = 'class'
 autodoc_member_order = 'bysource'
-
-autodoc_member_order = 'bysource'
 autodoc_default_options = {
     'members': True,
     'undoc-members': True,
