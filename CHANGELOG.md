@@ -110,6 +110,10 @@ In the future this project will be migrated to be used together with `ruff`.
 - Updates multiple`flake8-*` dependencies
 - Fixes multiple typos in docs
 
+### Misc
+
+- Add support to run wemake-python-styleguide as a pre-commit hook #2588
+
 
 ## 0.18.0
 
@@ -132,7 +136,6 @@ In the future this project will be migrated to be used together with `ruff`.
 ### Misc
 
 - Replaced `flakehell` mentions to `flakeheaven` #2409
-
 
 ## 0.17.0
 
