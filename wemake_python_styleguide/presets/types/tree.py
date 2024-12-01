@@ -112,6 +112,7 @@ PRESET: Final = (
     decorators.WrongDecoratorVisitor,
 
     redundancy.RedundantEnumerateVisitor,
+    redundancy.RedundantTernaryVisitor,
 
     # Modules:
     modules.EmptyModuleContentsVisitor,
