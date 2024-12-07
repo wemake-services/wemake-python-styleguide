@@ -14,7 +14,7 @@ from typing_extensions import TypeAlias
 
 _Annotation: TypeAlias = Union[
     ast.expr,
-    ast.Str,
+    ast.Constant
 ]
 
 
@@ -25,7 +25,7 @@ def get_annotation_complexity(annotation_node: _Annotation) -> int:
     When annotations are written as strings,
     we additionally parse them to ``ast`` nodes.
     """
-    if isinstance(annotation_node, ast.Str):
+    if isinstance(annotation_node, ast.Constant) and isinstance(annotation_node.value, str):
         # try to parse string-wrapped annotations
         try:
             annotation_node = ast.parse(  # type: ignore

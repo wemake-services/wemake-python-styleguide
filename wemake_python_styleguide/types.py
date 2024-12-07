@@ -41,7 +41,7 @@ from typing import Tuple, Type, Union
 from typing_extensions import Protocol, TypeAlias
 
 #: We use this type to represent all string-like nodes.
-AnyText: TypeAlias = Union[ast.Str, ast.Bytes]
+AnyText: TypeAlias = Union[ast.Constant]
 
 #: In cases we need to work with both import types.
 AnyImport: TypeAlias = Union[ast.Import, ast.ImportFrom]

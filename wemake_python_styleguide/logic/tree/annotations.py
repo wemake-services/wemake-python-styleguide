@@ -12,7 +12,6 @@ _AnnNodes: Final = (ast.AnnAssign, ast.arg)
 _AnnParts: Final = (
     ast.Name,
     ast.Attribute,
-    ast.Str,
     ast.List,
     ast.Tuple,
     ast.Subscript,
@@ -27,7 +26,8 @@ def is_annotation(node: ast.AST) -> bool:
     We use this predicate to allow all types of repetetive
     function and instance annotations.
     """
-    if not isinstance(node, _AnnParts):
+    if not (isinstance(node, _AnnParts)
+            or (isinstance(node, ast.Constant) and isinstance(node.value, str))):
         return False
 
     annotated = walk.get_closest_parent(node, (*_AnnNodes, *FunctionNodes))

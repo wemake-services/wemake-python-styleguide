@@ -6,7 +6,6 @@ from typing_extensions import TypeAlias, final
 from wemake_python_styleguide.compat.aliases import (
     AssignNodes,
     FunctionNodes,
-    TextNodes,
 )
 from wemake_python_styleguide.logic import walk, walrus
 from wemake_python_styleguide.logic.naming import name_nodes
@@ -119,13 +118,13 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
         last_value_return = (
             len(parent.body) > 1 and
             returns < 2 and
-            isinstance(node.value, ast.NameConstant) and
+            isinstance(node.value, ast.Constant) and
             node.value.value is None
         )
 
         one_return_with_none = (
             returns == 1 and
-            isinstance(node.value, ast.NameConstant) and
+            isinstance(node.value, ast.Constant) and
             node.value.value is None
         )
 
@@ -145,7 +144,7 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
             has_values and
             all(
                 (
-                    isinstance(ret_node.value, ast.NameConstant) and
+                    isinstance(ret_node.value, ast.Constant) and
                     ret_node.value.value is None
                 )
                 for ret_node in return_nodes
@@ -364,7 +363,6 @@ class ConstantKeywordVisitor(BaseNodeVisitor):
     """Visits keyword definitions to detect constant conditions."""
 
     _forbidden_nodes: ClassVar[AnyNodes] = (
-        ast.NameConstant,
 
         ast.List,
         ast.Tuple,
@@ -375,9 +373,6 @@ class ConstantKeywordVisitor(BaseNodeVisitor):
         ast.GeneratorExp,
         ast.SetComp,
         ast.DictComp,
-
-        *TextNodes,
-        ast.Num,
 
         ast.IfExp,
     )
@@ -393,10 +388,15 @@ class ConstantKeywordVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_condition(self, node: ast.AST, cond: ast.AST) -> None:
-        if isinstance(cond, ast.NameConstant) and cond.value is True:
+        if isinstance(cond, ast.Constant) and cond.value is True:
             if isinstance(node, ast.While):
                 return  # We should allow plain `while True:`
 
         real_node = operators.unwrap_unary_node(walrus.get_assigned_expr(cond))
         if isinstance(real_node, self._forbidden_nodes):
+            self.add_violation(WrongKeywordConditionViolation(cond))
+        elif (isinstance(real_node, ast.Constant) 
+              and ((isinstance(real_node.value, (int, float, complex)) 
+              and not isinstance(real_node.value, bool))
+              or isinstance(real_node.value, (str, bytes, bool, type(None))))):
             self.add_violation(WrongKeywordConditionViolation(cond))

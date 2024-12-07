@@ -209,8 +209,6 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
         ast.Set,
         ast.SetComp,
         ast.GeneratorExp,
-        ast.Num,
-        ast.NameConstant,
     )
 
     def visit_any_for(self, node: AnyFor) -> None:
@@ -236,7 +234,11 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
         node: Union[AnyFor, ast.comprehension],
     ) -> None:
         node_iter = operators.unwrap_unary_node(node.iter)
-        is_wrong = isinstance(node_iter, self._forbidden_for_iters)
+        is_wrong = (isinstance(node_iter, self._forbidden_for_iters) 
+                    or (isinstance(node_iter, ast.Constant) 
+                    and ((isinstance(node_iter.value, (int, float, complex)) 
+                    and not isinstance(node_iter.value, bool))
+                    or isinstance(node_iter.value, (bool, type(None))))))
         is_empty = isinstance(node_iter, ast.Tuple) and not node_iter.elts
         if is_wrong or is_empty:
             self.add_violation(WrongLoopIterTypeViolation(node_iter))
