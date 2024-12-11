@@ -24,11 +24,13 @@ Semantic versioning in our case means:
 - Fixes `OverusedStringViolation` not to include `'...'` string
 - Removes `astor` package in favour of `ast.unparse`
 - Fixes `IterableUnpackingViolation` with generic types and `TypeVarTuple`
+- Fixes unnormalized pathes in formatter output
 
 ### Misc
 
 - Integration with `ondivi` doc for legacy codebases
 - Fixes a documentation error for the Formatter (Showing statistic) section
+
 
 ## 0.19.2
 
