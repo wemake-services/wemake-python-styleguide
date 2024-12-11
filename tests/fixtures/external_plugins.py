@@ -5,12 +5,17 @@ from typing import List, Union, Dict
 ++int
 
 extra_parens = list((node for node in 'abc'))
-some_tuple = (1, 2, )
-breaking_pycodestyle=3
+some_tuple = (
+    1,
+    2,
+)
+breaking_pycodestyle = 3
 
 # commented: str = 'comment'
 
+
 def camelCase(): ...
+
 
 '{}'.format(1)
 
@@ -18,7 +23,7 @@ assert True
 ipdb.set_trace()
 
 
-def function_name(plugin: str ='flake8') ->str:
+def function_name(plugin: str = 'flake8') -> str:
     """Test `wrong`rst code."""
     return plugin
 
@@ -26,7 +31,7 @@ def function_name(plugin: str ='flake8') ->str:
 multiline_string = 'some\
 string'
 
-'\''
+"'"
 
 
 def darglint_check(arg):

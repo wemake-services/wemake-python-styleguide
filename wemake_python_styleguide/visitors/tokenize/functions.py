@@ -10,7 +10,6 @@ from wemake_python_styleguide.visitors import base
 
 @final
 class _Function:
-
     def __init__(self, file_tokens: List[tokenize.TokenInfo]) -> None:
         self._tokens = file_tokens
 
@@ -74,10 +73,10 @@ class _FileFunctions:
     ) -> bool:
         next_token = self._next_token(token_index)
         is_elipsis_end = (
-            next_token and
-            next_token.exact_type == tokenize.NEWLINE and
-            token.string == '...' and
-            token.start[0] == function_start[0]
+            next_token
+            and next_token.exact_type == tokenize.NEWLINE
+            and token.string == '...'
+            and token.start[0] == function_start[0]
         )
         if is_elipsis_end:
             return True
@@ -97,7 +96,6 @@ class _FileFunctions:
 
 @final
 class _FileTokens:
-
     def __init__(
         self,
         file_functions: _FileFunctions,
@@ -109,16 +107,15 @@ class _FileTokens:
     def analyze(self) -> Iterable[best_practices.WrongEmptyLinesCountViolation]:
         for function in self._file_functions.search_functions():
             splitted_function_body = function.body().strip().split('\n')
-            empty_lines_count = len([
-                line
-                for line in splitted_function_body
-                if line == ''
-            ])
+            empty_lines_count = len(
+                [line for line in splitted_function_body if line == '']
+            )
             if not empty_lines_count:
                 continue
 
             available_empty_lines = self._available_empty_lines(
-                len(splitted_function_body), empty_lines_count,
+                len(splitted_function_body),
+                empty_lines_count,
             )
             if empty_lines_count > available_empty_lines:
                 yield best_practices.WrongEmptyLinesCountViolation(

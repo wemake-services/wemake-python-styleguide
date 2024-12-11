@@ -35,7 +35,8 @@ def has_break(
 
         if isinstance(subnode, break_nodes):
             is_nested_break = _does_loop_contain_node(
-                closest_loop, subnode,
+                closest_loop,
+                subnode,
             )
             if not is_nested_break:
                 return True

@@ -28,9 +28,13 @@ def get_annotation_complexity(annotation_node: _Annotation) -> int:
     if isinstance(annotation_node, ast.Str):
         # try to parse string-wrapped annotations
         try:
-            annotation_node = ast.parse(  # type: ignore
-                annotation_node.s,
-            ).body[0].value
+            annotation_node = (
+                ast.parse(  # type: ignore
+                    annotation_node.s,
+                )
+                .body[0]
+                .value
+            )
         except Exception:
             return 1
 

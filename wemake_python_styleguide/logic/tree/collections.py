@@ -22,7 +22,8 @@ def sequence_of_node(
 ) -> Iterable[Sequence[_NodeType]]:
     """Find sequence of node by type."""
     is_desired_type = partial(
-        lambda types, node: isinstance(node, types), node_types,
+        lambda types, node: isinstance(node, types),
+        node_types,
     )
 
     sequence_iterator = iter(sequence)

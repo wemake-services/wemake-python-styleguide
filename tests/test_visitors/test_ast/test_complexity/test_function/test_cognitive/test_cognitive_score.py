@@ -44,9 +44,12 @@ class Test:
 empty_module = ''
 
 
-@pytest.mark.parametrize('code', [
-    complex_function,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        complex_function,
+    ],
+)
 def test_complex_cognitive_function(
     assert_errors,
     assert_error_text,
@@ -74,10 +77,13 @@ def test_complex_cognitive_function(
     )
 
 
-@pytest.mark.parametrize('code', [
-    function_example,
-    method_example,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_example,
+        method_example,
+    ],
+)
 def test_complex_cognitive_options(
     assert_errors,
     assert_error_text,
@@ -106,11 +112,14 @@ def test_complex_cognitive_options(
     )
 
 
-@pytest.mark.parametrize('code', [
-    function_example,
-    method_example,
-    empty_module,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_example,
+        method_example,
+        empty_module,
+    ],
+)
 def test_complex_cognitive_default_options(
     assert_errors,
     parse_ast_tree,

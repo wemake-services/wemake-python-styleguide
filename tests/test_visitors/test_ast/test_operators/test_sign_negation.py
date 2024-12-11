@@ -10,39 +10,39 @@ from wemake_python_styleguide.visitors.ast.operators import (
 usage_template = 'constant {0}'
 
 
-@pytest.mark.parametrize('expression', [
-    '- -1',
-    '- -0.1',
-    '- -num',
-    '- -0b0',
-    '- -0x0',
-    '- -0o4',
-    '- -1e1',
-
-    '+ -1',
-    '+ -0.1',
-    '+ -num',
-    '+ -0b0',
-    '+ -0x0',
-    '+ -0o4',
-    '+ -1e1',
-
-    '-= -1',
-    '-= -0.1',
-    '-= -num',
-    '-= -0b0',
-    '-= -0x0',
-    '-= -0o4',
-    '-= -1e1',
-
-    '+= -1',
-    '+= -0.1',
-    '+= -num',
-    '+= -0b0',
-    '+= -0x0',
-    '+= -0o4',
-    '+= -1e1',
-])
+@pytest.mark.parametrize(
+    'expression',
+    [
+        '- -1',
+        '- -0.1',
+        '- -num',
+        '- -0b0',
+        '- -0x0',
+        '- -0o4',
+        '- -1e1',
+        '+ -1',
+        '+ -0.1',
+        '+ -num',
+        '+ -0b0',
+        '+ -0x0',
+        '+ -0o4',
+        '+ -1e1',
+        '-= -1',
+        '-= -0.1',
+        '-= -num',
+        '-= -0b0',
+        '-= -0x0',
+        '-= -0o4',
+        '-= -1e1',
+        '+= -1',
+        '+= -0.1',
+        '+= -num',
+        '+= -0b0',
+        '+= -0x0',
+        '+= -0o4',
+        '+= -1e1',
+    ],
+)
 def test_minus_minus_operation(
     assert_errors,
     parse_ast_tree,
@@ -58,21 +58,23 @@ def test_minus_minus_operation(
     assert_errors(visitor, [OperationSignNegationViolation])
 
 
-@pytest.mark.parametrize('expression', [
-    '- 1',
-    '* -0.1',
-    '/ -num',
-    '+ 0b0',
-    '- ~1',
-
-    '*= -1',
-    '*= 0.1',
-    '**= -num',
-    '/= -0b0',
-    '^= -0x0',
-    '-= 0o4',
-    '-= ~1e1',
-])
+@pytest.mark.parametrize(
+    'expression',
+    [
+        '- 1',
+        '* -0.1',
+        '/ -num',
+        '+ 0b0',
+        '- ~1',
+        '*= -1',
+        '*= 0.1',
+        '**= -num',
+        '/= -0b0',
+        '^= -0x0',
+        '-= 0o4',
+        '-= ~1e1',
+    ],
+)
 def test_correct_operation(
     assert_errors,
     parse_ast_tree,

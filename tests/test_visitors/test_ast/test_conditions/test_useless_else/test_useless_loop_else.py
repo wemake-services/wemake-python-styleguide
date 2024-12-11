@@ -98,19 +98,22 @@ def function():
 """
 
 
-@pytest.mark.parametrize('code', [
-    correct_example1,
-    correct_example2,
-    correct_example3,
-    correct_example4,
-    correct_example5,
-    correct_example6,
-    correct_example7,
-    correct_example8,
-    correct_example9,
-    correct_example10,
-    correct_example11,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_example1,
+        correct_example2,
+        correct_example3,
+        correct_example4,
+        correct_example5,
+        correct_example6,
+        correct_example7,
+        correct_example8,
+        correct_example9,
+        correct_example10,
+        correct_example11,
+    ],
+)
 def test_else_that_can_not_be_removed(
     assert_errors,
     parse_ast_tree,
@@ -148,20 +151,29 @@ def wrapper():
 """
 
 
-@pytest.mark.parametrize('template', [
-    while_loop,
-    for_loop,
-])
-@pytest.mark.parametrize('code1', [
-    'return',
-    'raise ValueError()',
-    'break',
-    'continue',
-])
-@pytest.mark.parametrize('code2', [
-    'return',
-    'raise ValueError()',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        while_loop,
+        for_loop,
+    ],
+)
+@pytest.mark.parametrize(
+    'code1',
+    [
+        'return',
+        'raise ValueError()',
+        'break',
+        'continue',
+    ],
+)
+@pytest.mark.parametrize(
+    'code2',
+    [
+        'return',
+        'raise ValueError()',
+    ],
+)
 def test_else_that_can_be_removed(
     assert_errors,
     parse_ast_tree,
@@ -184,20 +196,29 @@ def test_else_that_can_be_removed(
         assert_errors(visitor, [UselessReturningElseViolation])
 
 
-@pytest.mark.parametrize('template', [
-    while_loop,
-    for_loop,
-])
-@pytest.mark.parametrize('code', [
-    'print()',
-    'new_var = 1',
-])
-@pytest.mark.parametrize('returning', [
-    'return',
-    'raise ValueError()',
-    'break',
-    'continue',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        while_loop,
+        for_loop,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        'print()',
+        'new_var = 1',
+    ],
+)
+@pytest.mark.parametrize(
+    'returning',
+    [
+        'return',
+        'raise ValueError()',
+        'break',
+        'continue',
+    ],
+)
 def test_else_that_cannot_be_removed1(
     assert_errors,
     parse_ast_tree,
@@ -216,18 +237,27 @@ def test_else_that_cannot_be_removed1(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('template', [
-    while_loop,
-    for_loop,
-])
-@pytest.mark.parametrize('code', [
-    'print()',
-    'new_var = 1',
-])
-@pytest.mark.parametrize('returning', [
-    'return',
-    'raise ValueError()',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        while_loop,
+        for_loop,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        'print()',
+        'new_var = 1',
+    ],
+)
+@pytest.mark.parametrize(
+    'returning',
+    [
+        'return',
+        'raise ValueError()',
+    ],
+)
 def test_else_that_cannot_be_removed2(
     assert_errors,
     parse_ast_tree,

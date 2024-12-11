@@ -289,6 +289,7 @@ class WrongModuleNamePatternViolation(SimpleViolation):
 
 # General names:
 
+
 @final
 class WrongVariableNameViolation(ASTViolation):
     """
@@ -402,6 +403,7 @@ class PrivateNameViolation(MaybeASTViolation):
         # Correct:
         def _collect_coverage(self): ...
 
+
         # Wrong:
         def __collect_coverage(self): ...
 
@@ -506,8 +508,11 @@ class UpperCaseAttributeViolation(ASTViolation):
 
         # Correct:
         MY_MODULE_CONSTANT = 1
+
+
         class A:
             my_attribute = 42
+
 
         # Wrong:
         class A:
@@ -563,8 +568,8 @@ class ReservedArgumentNameViolation(ASTViolation):
 
         # Correct:
         class Test:
-            def __init__(self):
-                ...
+            def __init__(self): ...
+
 
         # Wrong:
         cls = 5
@@ -715,6 +720,7 @@ class UnusedVariableIsUsedViolation(ASTViolation):
             first = 15
             return first + 10
 
+
         # Wrong:
         def function():
             _first = 15
@@ -789,7 +795,7 @@ class WrongUnusedVariableNameViolation(ASTViolation):
         some_element, _ = some_tuple()
 
         # Wrong:
-        some_element, _, __  = some_tuple()
+        some_element, _, __ = some_tuple()
 
     .. versionadded:: 0.12.0
 

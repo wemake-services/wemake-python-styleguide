@@ -11,23 +11,28 @@ from wemake_python_styleguide.violations.consistency import (
 from wemake_python_styleguide.visitors.ast.builtins import WrongStringVisitor
 
 
-@pytest.mark.parametrize('code', [
-    # We don't test all values here, because of strange parsing issues.
-    string.digits,
-    string.hexdigits,
-    string.octdigits,
-
-    string.ascii_uppercase,
-    string.ascii_lowercase,
-    string.ascii_letters,
-])
-@pytest.mark.parametrize('prefix', [
-    '',
-    'b',
-    'u',
-    'r',
-    'rb',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        # We don't test all values here, because of strange parsing issues.
+        string.digits,
+        string.hexdigits,
+        string.octdigits,
+        string.ascii_uppercase,
+        string.ascii_lowercase,
+        string.ascii_letters,
+    ],
+)
+@pytest.mark.parametrize(
+    'prefix',
+    [
+        '',
+        'b',
+        'u',
+        'r',
+        'rb',
+    ],
+)
 def test_alphabet_as_string_violation(
     assert_errors,
     assert_error_text,
@@ -64,14 +69,17 @@ def test_alphabet_as_fstring_violation(
     )
 
 
-@pytest.mark.parametrize('code', [
-    'ABCDE',
-    '1234',
-    'random text',
-    r'\n',
-    '!@#',
-    '',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'ABCDE',
+        '1234',
+        'random text',
+        r'\n',
+        '!@#',
+        '',
+    ],
+)
 def test_alphabet_as_string_no_violation(
     assert_errors,
     parse_ast_tree,

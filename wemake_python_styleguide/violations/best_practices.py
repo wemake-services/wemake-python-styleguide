@@ -437,6 +437,7 @@ class MutableModuleConstantViolation(ASTViolation):
 
         # Correct:
         import types
+
         CONST1 = frozenset((1, 2, 3))
         CONST2 = (1, 2, 3)
         CONST3 = types.MappingProxyType({'key': 'value'})
@@ -827,12 +828,11 @@ class BaseExceptionSubclassViolation(ASTViolation):
     Example::
 
         # Correct:
-        class MyException(Exception):
-            ...
+        class MyException(Exception): ...
+
 
         # Wrong:
-        class MyException(BaseException):
-            ...
+        class MyException(BaseException): ...
 
     See also:
         https://docs.python.org/3/library/exceptions.html#exception-hierarchy
@@ -1172,6 +1172,7 @@ class UnreachableCodeViolation(ASTViolation):
             print('This line is reachable, all good')
             return 5
 
+
         # Wrong:
         def some_function():
             return 5
@@ -1207,6 +1208,7 @@ class StatementHasNoEffectViolation(ASTViolation):
         def some_function():
             price = 8 + 2
             return price
+
 
         # Wrong:
         def some_function():
@@ -1283,10 +1285,10 @@ class NestedFunctionViolation(ASTViolation):
         def do_some(): ...
         def other(): ...
 
+
         # Wrong:
         def do_some():
-            def inner():
-                ...
+            def inner(): ...
 
     .. versionadded:: 0.1.0
 
@@ -1320,12 +1322,14 @@ class NestedClassViolation(ASTViolation):
 
         # Correct:
         class Some: ...
+
+
         class Other: ...
+
 
         # Wrong:
         class Some:
-            class Inner:
-                ...
+            class Inner: ...
 
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.13.0
@@ -1400,7 +1404,9 @@ class NestedImportViolation(ASTViolation):
         # Correct:
         from my_module import some_function
 
+
         def some(): ...
+
 
         # Wrong:
         def some():
@@ -1575,6 +1581,7 @@ class StopIterationInsideGeneratorViolation(ASTViolation):
                 return
             yield 1
 
+
         # Wrong:
         def some_generator():
             if some_value:
@@ -1652,6 +1659,7 @@ class BlockAndLocalOverlapViolation(ASTViolation):
 
         # Wrong:
         import my_value
+
         my_value = 1  # overlaps with import
 
     See also:
@@ -1729,11 +1737,14 @@ class OuterScopeShadowingViolation(ASTViolation):
         # Correct:
         def test(): ...
 
+
         def other():
             test1 = 1
 
+
         # Wrong:
         def test(): ...
+
 
         def other():
             test = 1  # shadows `test()` function
@@ -1862,6 +1873,7 @@ class ApproximateConstantViolation(ASTViolation):
 
         # Correct:
         from math import pi
+
         random_number = 3.15
         too_short = 3.1
 
@@ -1901,13 +1913,14 @@ class StringConstantRedefinedViolation(ASTViolation):
 
         # Correct:
         import string
+
         UPPERCASE_ALPH = string.ascii_uppercase
         LOWERCASE_ALPH = string.ascii_lowercase
 
         # Wrong:
-        GUESS_MY_NAME = "abcde...WXYZ"
-        UPPERCASE_ALPH = "ABCD...WXYZ"
-        LOWERCASE_ALPH = "abcd...wxyz"
+        GUESS_MY_NAME = 'abcde...WXYZ'
+        UPPERCASE_ALPH = 'ABCD...WXYZ'
+        LOWERCASE_ALPH = 'abcd...wxyz'
 
     .. versionadded:: 0.13.0
 
@@ -2048,12 +2061,11 @@ class PositionalOnlyArgumentsViolation(ASTViolation):
     Example::
 
         # Correct:
-        def my_function(first, second):
-            ...
+        def my_function(first, second): ...
+
 
         # Wrong:
-        def my_function(first, /, second):
-            ...
+        def my_function(first, /, second): ...
 
     See also:
         https://www.python.org/dev/peps/pep-0570/
@@ -2139,7 +2151,7 @@ class ShebangViolation(SimpleViolation):
 
         # Wrong:
         #!/usr/bin/env
-            #!/usr/bin/env python
+        #!/usr/bin/env python
 
     .. versionadded:: 0.14.0
 
@@ -2165,13 +2177,13 @@ class BaseExceptionRaiseViolation(ASTViolation):
 
         # Correct:
         raise UserNotFoundError
-        raise UserNotFoundError("cannot find user with the given id")
+        raise UserNotFoundError('cannot find user with the given id')
 
         # Wrong:
         raise Exception
-        raise Exception("user not found")
+        raise Exception('user not found')
         raise BaseException
-        raise BaseException("user not found")
+        raise BaseException('user not found')
 
     See also:
         https://docs.python.org/3/library/exceptions.html#exception-hierarchy
@@ -2246,7 +2258,7 @@ class FloatingNanViolation(ASTViolation):
         min(math.nan, 3)
 
         # Wrong:
-        min(float("NAN"), 3)
+        min(float('NAN'), 3)
 
     .. versionadded:: 0.15.0
 
@@ -2470,11 +2482,12 @@ class GetterWithoutReturnViolation(ASTViolation):
 
         # Correct:
         def get_random_number():
-             return random.randint(1, 10)
+            return random.randint(1, 10)
+
 
         # Wrong:
         def get_random_number():
-             print('I do not return a value!')
+            print('I do not return a value!')
 
     .. versionadded:: 0.15.0
 
@@ -2542,7 +2555,7 @@ class BitwiseAndBooleanMixupViolation(ASTViolation):
         first | 10
 
         # Wrong:
-        result = ((first > 0) & False)
+        result = (first > 0) & False
 
     .. versionadded:: 0.15.0
     .. versionchanged:: 1.0.0
@@ -2579,6 +2592,7 @@ class NewStyledDecoratorViolation(ASTViolation):
         @some.decorator(args)
         def my_function(): ...
 
+
         # Wrong:
         @some.decorator['method'] + other
         def my_function(): ...
@@ -2612,6 +2626,7 @@ class BareRaiseViolation(ASTViolation):
             except:
                 raise
 
+
         # Wrong:
         def smth():
             raise
@@ -2640,11 +2655,11 @@ class RedundantEnumerateViolation(ASTViolation):
 
         # Correct:
         for item in items:
-          ...
+            ...
 
         # Wrong:
         for _, item in enumerate(items):
-          ...
+            ...
 
     .. versionadded:: 0.16.0
 
@@ -2700,13 +2715,14 @@ class KwargsUnpackingInClassDefinitionViolation(ASTViolation):
     Example::
 
         # Correct:
-        class MyClass(argument='argument'):
-            ...
+        class MyClass(argument='argument'): ...
+
 
         # Wrong:
         arguments = {'argument': 'argument'}
-        class MyClass(**arguments):
-            ...
+
+
+        class MyClass(**arguments): ...
 
     .. versionadded:: 0.16.0
 
@@ -2798,6 +2814,7 @@ class WrongEmptyLinesCountViolation(TokenizeViolation):
             if name == 'Moonflower':
                 print('Love')
             baz()
+
 
         # Wrong:
         def func(name):

@@ -28,10 +28,13 @@ _ELSE_NODES: Final = (*ForNodes, ast.While, ast.Try, TryStar)
 
 
 @final
-@alias('visit_any_if', (
-    'visit_If',
-    'visit_IfExp',
-))
+@alias(
+    'visit_any_if',
+    (
+        'visit_If',
+        'visit_IfExp',
+    ),
+)
 class IfStatementVisitor(BaseNodeVisitor):
     """Checks single and consecutive ``if`` statement nodes."""
 
@@ -88,11 +91,14 @@ class IfStatementVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_any_loop', (
-    'visit_For',
-    'visit_AsyncFor',
-    'visit_While',
-))
+@alias(
+    'visit_any_loop',
+    (
+        'visit_For',
+        'visit_AsyncFor',
+        'visit_While',
+    ),
+)
 class UselessElseVisitor(BaseNodeVisitor):
     """Ensures that ``else`` is used correctly for different nodes."""
 
@@ -140,7 +146,8 @@ class UselessElseVisitor(BaseNodeVisitor):
                 for real_if in real_ifs
             )
             current_has_returns = ifs.has_nodes(
-                self._returning_nodes, chained_if,
+                self._returning_nodes,
+                chained_if,
             )
 
             if previous_has_returns and current_has_returns:
@@ -161,8 +168,7 @@ class UselessElseVisitor(BaseNodeVisitor):
             for except_ in node.handlers
         )
         else_returning = any(
-            walk.is_contained(sub, self._returning_nodes)
-            for sub in node.orelse
+            walk.is_contained(sub, self._returning_nodes) for sub in node.orelse
         )
         if all_except_returning and else_returning:
             self.add_violation(refactoring.UselessReturningElseViolation(node))
@@ -173,10 +179,7 @@ class UselessElseVisitor(BaseNodeVisitor):
         # An else statement makes sense if we
         # want to execute something after breaking
         # out of the loop without writing more code
-        has_break = any(
-            walk.is_contained(sub, ast.Break)
-            for sub in node.body
-        )
+        has_break = any(walk.is_contained(sub, ast.Break) for sub in node.body)
         if has_break:
             return
         body_returning = any(
@@ -184,8 +187,7 @@ class UselessElseVisitor(BaseNodeVisitor):
             for sub in node.body
         )
         else_returning = any(
-            walk.is_contained(sub, self._returning_nodes)
-            for sub in node.orelse
+            walk.is_contained(sub, self._returning_nodes) for sub in node.orelse
         )
         if body_returning and else_returning:
             self.add_violation(refactoring.UselessReturningElseViolation(node))

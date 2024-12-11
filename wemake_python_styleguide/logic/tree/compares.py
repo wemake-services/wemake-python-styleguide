@@ -30,12 +30,14 @@ _ComparesMapping = Mapping[
 _OperatorUsages = DefaultDict[str, _Bounds]
 
 #: Constant to define similar operators.
-SIMILAR_OPERATORS: Final[_ComparesMapping] = types.MappingProxyType({
-    ast.Gt: (ast.Gt, ast.GtE),
-    ast.GtE: (ast.Gt, ast.GtE),
-    ast.Lt: (ast.Lt, ast.LtE),
-    ast.LtE: (ast.Lt, ast.LtE),
-})
+SIMILAR_OPERATORS: Final[_ComparesMapping] = types.MappingProxyType(
+    {
+        ast.Gt: (ast.Gt, ast.GtE),
+        ast.GtE: (ast.Gt, ast.GtE),
+        ast.Lt: (ast.Lt, ast.LtE),
+        ast.LtE: (ast.Lt, ast.LtE),
+    }
+)
 
 
 def get_similar_operators(

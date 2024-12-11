@@ -9,14 +9,17 @@ class TestClass({0}):
 """
 
 
-@pytest.mark.parametrize('super_class', [
-    'int',
-    'str',
-    'bool',
-    'list',
-    'dict',
-    'float',
-])
+@pytest.mark.parametrize(
+    'super_class',
+    [
+        'int',
+        'str',
+        'bool',
+        'list',
+        'dict',
+        'float',
+    ],
+)
 def test_builtin_subclass(
     assert_errors,
     parse_ast_tree,
@@ -33,11 +36,14 @@ def test_builtin_subclass(
 
 
 # `object` has a special violation, not included here:
-@pytest.mark.parametrize('super_class', [
-    'type',
-    'Custom',
-    'Multiple, Classes',
-])
+@pytest.mark.parametrize(
+    'super_class',
+    [
+        'type',
+        'Custom',
+        'Multiple, Classes',
+    ],
+)
 def test_regular_subclass(
     assert_errors,
     parse_ast_tree,

@@ -160,14 +160,17 @@ def function():
 '''
 
 
-@pytest.mark.parametrize('code', [
-    wrong_example1,
-    wrong_example2,
-    wrong_example3,
-    wrong_example4,
-    wrong_example5,
-    wrong_example6,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_example1,
+        wrong_example2,
+        wrong_example3,
+        wrong_example4,
+        wrong_example5,
+        wrong_example6,
+    ],
+)
 def test_wrong_return_statement(
     assert_errors,
     parse_ast_tree,
@@ -184,13 +187,16 @@ def test_wrong_return_statement(
     assert_errors(visitor, [InconsistentReturnViolation])
 
 
-@pytest.mark.parametrize('code', [
-    double_wrong_return1,
-    double_wrong_return2,
-    double_wrong_return3,
-    double_wrong_return4,
-    double_wrong_return5,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        double_wrong_return1,
+        double_wrong_return2,
+        double_wrong_return3,
+        double_wrong_return4,
+        double_wrong_return5,
+    ],
+)
 def test_double_wrong_return_statement(
     assert_errors,
     parse_ast_tree,
@@ -204,24 +210,30 @@ def test_double_wrong_return_statement(
     visitor = ConsistentReturningVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [
-        InconsistentReturnViolation,
-        InconsistentReturnViolation,
-    ])
+    assert_errors(
+        visitor,
+        [
+            InconsistentReturnViolation,
+            InconsistentReturnViolation,
+        ],
+    )
 
 
-@pytest.mark.parametrize('code', [
-    correct_example1,
-    correct_example2,
-    correct_example3,
-    correct_example4,
-    correct_example5,
-    correct_example6,
-    correct_example7,
-    correct_example8,
-    correct_example9,
-    correct_example10,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_example1,
+        correct_example2,
+        correct_example3,
+        correct_example4,
+        correct_example5,
+        correct_example6,
+        correct_example7,
+        correct_example8,
+        correct_example9,
+        correct_example10,
+    ],
+)
 def test_correct_return_statements(
     assert_errors,
     parse_ast_tree,

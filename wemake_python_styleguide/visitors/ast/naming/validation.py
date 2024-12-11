@@ -102,7 +102,9 @@ class _SimpleNameValidator:
                 self._error_callback(predicate.violation(node, text=name))
 
         self._ensure_reserved_name(
-            node, name, is_first_argument=is_first_argument,
+            node,
+            name,
+            is_first_argument=is_first_argument,
         )
 
     def _ensure_reserved_name(
@@ -126,7 +128,6 @@ class _SimpleNameValidator:
 class _RegularNameValidator(_SimpleNameValidator):
     _naming_predicates: ClassVar[Iterable[_NamingPredicate]] = (
         *_SimpleNameValidator._naming_predicates,  # noqa: WPS437
-
         _NamingPredicate(
             builtins.is_builtin_name,
             naming.BuiltinShadowingViolation,
@@ -136,7 +137,6 @@ class _RegularNameValidator(_SimpleNameValidator):
             builtins.is_wrong_alias,
             naming.TrailingUnderscoreViolation,
         ),
-
         _NamingPredicate(
             alphabet.does_contain_underscored_number,
             naming.UnderscoredNumberNameViolation,
@@ -165,7 +165,9 @@ class _RegularNameValidator(_SimpleNameValidator):
         if logical.is_too_short_name(name, min_length=min_length):
             self._error_callback(
                 naming.TooShortNameViolation(
-                    node, text=name, baseline=min_length,
+                    node,
+                    text=name,
+                    baseline=min_length,
                 ),
             )
 
@@ -173,7 +175,9 @@ class _RegularNameValidator(_SimpleNameValidator):
         if logical.is_too_long_name(name, max_length=max_length):
             self._error_callback(
                 naming.TooLongNameViolation(
-                    node, text=name, baseline=max_length,
+                    node,
+                    text=name,
+                    baseline=max_length,
                 ),
             )
 
@@ -185,7 +189,8 @@ class _RegularNameValidator(_SimpleNameValidator):
 
     def _ensure_readable_name(self, node: ast.AST, name: str) -> None:
         unreadable_sequence = alphabet.get_unreadable_characters(
-            name, UNREADABLE_CHARACTER_COMBINATIONS,
+            name,
+            UNREADABLE_CHARACTER_COMBINATIONS,
         )
         if unreadable_sequence:
             self._error_callback(
@@ -197,12 +202,13 @@ class _RegularNameValidator(_SimpleNameValidator):
 class _FunctionNameValidator(_RegularNameValidator):
     def check_function_signature(self, node: AnyFunctionDefAndLambda) -> None:
         for arg in functions.get_all_arguments(node):
-            is_first_argument = (
-                functions.is_first_argument(node, arg.arg) and
-                not isinstance(node, ast.Lambda)
-            )
+            is_first_argument = functions.is_first_argument(
+                node, arg.arg
+            ) and not isinstance(node, ast.Lambda)
             self.check_name(
-                arg, arg.arg, is_first_argument=is_first_argument,
+                arg,
+                arg.arg,
+                is_first_argument=is_first_argument,
             )
 
 
@@ -220,7 +226,8 @@ class _TypeParamNameValidator(_RegularNameValidator):
 class _ClassBasedNameValidator(_RegularNameValidator):
     def check_attribute_names(self, node: ast.ClassDef) -> None:
         class_attributes, _ = classes.get_attributes(
-            node, include_annotated=True,
+            node,
+            include_annotated=True,
         )
 
         for assign in class_attributes:
@@ -236,24 +243,36 @@ class _ClassBasedNameValidator(_RegularNameValidator):
 
 
 @final
-@alias('visit_any_import', (
-    'visit_ImportFrom',
-    'visit_Import',
-))
-@alias('visit_variable', (
-    'visit_Name',
-    'visit_Attribute',
-    'visit_ExceptHandler',
-))
-@alias('visit_any_function', (
-    'visit_FunctionDef',
-    'visit_AsyncFunctionDef',
-    'visit_Lambda',
-))
-@alias('visit_named_match', (
-    'visit_MatchStar',
-    'visit_MatchAs',
-))
+@alias(
+    'visit_any_import',
+    (
+        'visit_ImportFrom',
+        'visit_Import',
+    ),
+)
+@alias(
+    'visit_variable',
+    (
+        'visit_Name',
+        'visit_Attribute',
+        'visit_ExceptHandler',
+    ),
+)
+@alias(
+    'visit_any_function',
+    (
+        'visit_FunctionDef',
+        'visit_AsyncFunctionDef',
+        'visit_Lambda',
+    ),
+)
+@alias(
+    'visit_named_match',
+    (
+        'visit_MatchStar',
+        'visit_MatchAs',
+    ),
+)
 class WrongNameVisitor(BaseNodeVisitor):
     """Performs checks based on variable names."""
 
@@ -261,19 +280,24 @@ class WrongNameVisitor(BaseNodeVisitor):
         """Initializes new naming validator for this visitor."""
         super().__init__(*args, **kwargs)
         self._simple_validator = _SimpleNameValidator(
-            self.add_violation, self.options,
+            self.add_violation,
+            self.options,
         )
         self._regular_validator = _RegularNameValidator(
-            self.add_violation, self.options,
+            self.add_violation,
+            self.options,
         )
         self._function_validator = _FunctionNameValidator(
-            self.add_violation, self.options,
+            self.add_violation,
+            self.options,
         )
         self._class_based_validator = _ClassBasedNameValidator(
-            self.add_violation, self.options,
+            self.add_violation,
+            self.options,
         )
         self._type_params_validator = _TypeParamNameValidator(
-            self.add_violation, self.options,
+            self.add_violation,
+            self.options,
         )
 
     def visit_any_import(self, node: AnyImport) -> None:
@@ -285,9 +309,13 @@ class WrongNameVisitor(BaseNodeVisitor):
 
     def visit_variable(self, node: AnyVariableDef) -> None:
         """Used to check wrong names of assigned."""
-        validator = self._simple_validator if attributes.is_foreign_attribute(
-            node,
-        ) else self._regular_validator
+        validator = (
+            self._simple_validator
+            if attributes.is_foreign_attribute(
+                node,
+            )
+            else self._regular_validator
+        )
 
         variable_name = name_nodes.get_assigned_name(node)
         if variable_name is not None:

@@ -137,21 +137,24 @@ def function():
 """
 
 
-@pytest.mark.parametrize('code', [
-    correct_example1,
-    correct_example2,
-    correct_example3,
-    correct_example4,
-    correct_example5,
-    correct_example6,
-    correct_example7,
-    correct_example8,
-    correct_example9,
-    correct_example10,
-    correct_example11,
-    correct_example12,
-    correct_example13,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_example1,
+        correct_example2,
+        correct_example3,
+        correct_example4,
+        correct_example5,
+        correct_example6,
+        correct_example7,
+        correct_example8,
+        correct_example9,
+        correct_example10,
+        correct_example11,
+        correct_example12,
+        correct_example13,
+    ],
+)
 def test_else_that_can_not_be_removed1(
     assert_errors,
     parse_ast_tree,
@@ -225,16 +228,22 @@ def test():
 """
 
 
-@pytest.mark.parametrize('template', [
-    function_level_condition,
-    for_loop_level_condition,
-    multiple_ifs1,
-    multiple_ifs2,
-])
-@pytest.mark.parametrize('code', [
-    'return',
-    'raise ValueError()',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        function_level_condition,
+        for_loop_level_condition,
+        multiple_ifs1,
+        multiple_ifs2,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        'return',
+        'raise ValueError()',
+    ],
+)
 def test_else_that_can_be_removed_in_function(
     assert_errors,
     parse_ast_tree,
@@ -252,14 +261,20 @@ def test_else_that_can_be_removed_in_function(
     assert_errors(visitor, [UselessReturningElseViolation])
 
 
-@pytest.mark.parametrize('template', [
-    multiple_ifs1,
-    multiple_ifs2,
-])
-@pytest.mark.parametrize('code', [
-    'return True',
-    'return False',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        multiple_ifs1,
+        multiple_ifs2,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        'return True',
+        'return False',
+    ],
+)
 def test_else_that_can_be_removed_and_complex_if(
     assert_errors,
     parse_ast_tree,
@@ -277,14 +292,20 @@ def test_else_that_can_be_removed_and_complex_if(
     assert_errors(visitor, [UselessReturningElseViolation])
 
 
-@pytest.mark.parametrize('template', [
-    function_level_condition,
-    for_loop_level_condition,
-])
-@pytest.mark.parametrize('code', [
-    'return True',
-    'return False',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        function_level_condition,
+        for_loop_level_condition,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        'return True',
+        'return False',
+    ],
+)
 def test_else_can_be_removed_and_simplifiable_if(
     assert_errors,
     parse_ast_tree,
@@ -302,15 +323,21 @@ def test_else_can_be_removed_and_simplifiable_if(
     assert_errors(visitor, [UselessReturningElseViolation])
 
 
-@pytest.mark.parametrize('template', [
-    for_loop_level_condition,
-    while_loop_level_condition,
-])
-@pytest.mark.parametrize('code', [
-    'break',
-    'raise ValueError()',
-    'continue',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        for_loop_level_condition,
+        while_loop_level_condition,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        'break',
+        'raise ValueError()',
+        'continue',
+    ],
+)
 def test_else_that_can_be_removed_in_loop(
     assert_errors,
     parse_ast_tree,
@@ -328,12 +355,18 @@ def test_else_that_can_be_removed_in_loop(
     assert_errors(visitor, [UselessReturningElseViolation])
 
 
-@pytest.mark.parametrize('template', [
-    module_level_condition,
-])
-@pytest.mark.parametrize('code', [
-    'raise ValueError()',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        module_level_condition,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        'raise ValueError()',
+    ],
+)
 def test_else_that_can_be_removed_in_module(
     assert_errors,
     parse_ast_tree,
@@ -350,18 +383,24 @@ def test_else_that_can_be_removed_in_module(
     assert_errors(visitor, [UselessReturningElseViolation])
 
 
-@pytest.mark.parametrize('template', [
-    function_level_condition,
-    for_loop_level_condition,
-    while_loop_level_condition,
-    module_level_condition,
-    multiple_ifs1,
-    multiple_ifs2,
-])
-@pytest.mark.parametrize('code', [
-    'print()',
-    'new_var = 1',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        function_level_condition,
+        for_loop_level_condition,
+        while_loop_level_condition,
+        module_level_condition,
+        multiple_ifs1,
+        multiple_ifs2,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        'print()',
+        'new_var = 1',
+    ],
+)
 def test_else_that_can_not_be_removed2(
     assert_errors,
     parse_ast_tree,

@@ -113,24 +113,33 @@ except Exception as e:
 """
 
 
-@pytest.mark.parametrize('except_statement', [
-    except_block1,
-    except_block2,
-])
-@pytest.mark.parametrize('context', [
-    try_template1,
-    try_template2,
-    try_template3,
-    try_template4,
-    try_template5,
-    try_template6,
-    try_template7,
-    try_template8,
-    try_template9,
-])
-@pytest.mark.parametrize('variable_name', [
-    'should_raise',
-])
+@pytest.mark.parametrize(
+    'except_statement',
+    [
+        except_block1,
+        except_block2,
+    ],
+)
+@pytest.mark.parametrize(
+    'context',
+    [
+        try_template1,
+        try_template2,
+        try_template3,
+        try_template4,
+        try_template5,
+        try_template6,
+        try_template7,
+        try_template8,
+        try_template9,
+    ],
+)
+@pytest.mark.parametrize(
+    'variable_name',
+    [
+        'should_raise',
+    ],
+)
 def test_except_block_overlap(
     assert_errors,
     assert_error_text,
@@ -156,24 +165,33 @@ def test_except_block_overlap(
     assert_error_text(visitor, variable_name)
 
 
-@pytest.mark.parametrize('except_statement', [
-    except_block1,
-    except_block2,
-])
-@pytest.mark.parametrize('context', [
-    try_template1,
-    try_template2,
-    try_template3,
-    try_template4,
-    try_template5,
-    try_template6,
-    try_template7,
-    try_template8,
-    try_template9,
-])
-@pytest.mark.parametrize('variable_name', [
-    'should_raise',
-])
+@pytest.mark.parametrize(
+    'except_statement',
+    [
+        except_block1,
+        except_block2,
+    ],
+)
+@pytest.mark.parametrize(
+    'context',
+    [
+        try_template1,
+        try_template2,
+        try_template3,
+        try_template4,
+        try_template5,
+        try_template6,
+        try_template7,
+        try_template8,
+        try_template9,
+    ],
+)
+@pytest.mark.parametrize(
+    'variable_name',
+    [
+        'should_raise',
+    ],
+)
 def test_except_block_usage(
     assert_errors,
     parse_ast_tree,
@@ -196,25 +214,34 @@ def test_except_block_usage(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('except_statement', [
-    except_block1,
-    except_block2,
-])
-@pytest.mark.parametrize('context', [
-    try_template1,
-    try_template2,
-    try_template3,
-    try_template4,
-    try_template5,
-    try_template6,
-    try_template7,
-    try_template8,
-    try_template9,
-])
-@pytest.mark.parametrize(('first_name', 'second_name'), [
-    ('unique_name', 'unique_name2'),
-    ('_', '_'),
-])
+@pytest.mark.parametrize(
+    'except_statement',
+    [
+        except_block1,
+        except_block2,
+    ],
+)
+@pytest.mark.parametrize(
+    'context',
+    [
+        try_template1,
+        try_template2,
+        try_template3,
+        try_template4,
+        try_template5,
+        try_template6,
+        try_template7,
+        try_template8,
+        try_template9,
+    ],
+)
+@pytest.mark.parametrize(
+    ('first_name', 'second_name'),
+    [
+        ('unique_name', 'unique_name2'),
+        ('_', '_'),
+    ],
+)
 def test_except_block_correct(
     assert_errors,
     parse_ast_tree,
@@ -239,10 +266,13 @@ def test_except_block_correct(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize(('code', 'violations'), [
-    (correct_except_regression1115, []),
-    (wrong_except_regression1115, [BlockAndLocalOverlapViolation]),
-])
+@pytest.mark.parametrize(
+    ('code', 'violations'),
+    [
+        (correct_except_regression1115, []),
+        (wrong_except_regression1115, [BlockAndLocalOverlapViolation]),
+    ],
+)
 def test_except_block_regression1115(
     assert_errors,
     parse_ast_tree,

@@ -10,9 +10,12 @@ from wemake_python_styleguide.visitors.filenames.module import (
 )
 
 
-@pytest.mark.parametrize('filename', [
-    'the1long',
-])
+@pytest.mark.parametrize(
+    'filename',
+    [
+        'the1long',
+    ],
+)
 def test_unreadable_filename(assert_errors, filename, default_options):
     """Testing that unreadable characters combinations do not allowed."""
     visitor = WrongModuleNameVisitor(default_options, filename=filename)
@@ -21,10 +24,13 @@ def test_unreadable_filename(assert_errors, filename, default_options):
     assert_errors(visitor, [UnreadableNameViolation])
 
 
-@pytest.mark.parametrize('filename', [
-    'ordinary',
-    'first_module',
-])
+@pytest.mark.parametrize(
+    'filename',
+    [
+        'ordinary',
+        'first_module',
+    ],
+)
 def test_readable_filename(assert_errors, filename, default_options):
     """Testing that ordinary naming works well."""
     visitor = WrongModuleNameVisitor(default_options, filename=filename)
@@ -33,15 +39,21 @@ def test_readable_filename(assert_errors, filename, default_options):
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('filename', [
-    'TestO_0',
-])
+@pytest.mark.parametrize(
+    'filename',
+    [
+        'TestO_0',
+    ],
+)
 def test_corner_case(assert_errors, filename, default_options):
     """Testing corner case related to underscore name patterns."""
     visitor = WrongModuleNameVisitor(default_options, filename=filename)
     visitor.run()
 
-    assert_errors(visitor, [
-        WrongModuleNamePatternViolation,
-        UnderscoredNumberNameViolation,
-    ])
+    assert_errors(
+        visitor,
+        [
+            WrongModuleNamePatternViolation,
+            UnderscoredNumberNameViolation,
+        ],
+    )

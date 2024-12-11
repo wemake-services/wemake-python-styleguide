@@ -30,10 +30,13 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 
 @final
-@alias('visit_any_try', (
-    'visit_Try',
-    'visit_TryStar',
-))
+@alias(
+    'visit_any_try',
+    (
+        'visit_Try',
+        'visit_TryStar',
+    ),
+)
 class WrongTryExceptVisitor(BaseNodeVisitor):
     """Responsible for examining ``try`` and friends."""
 
@@ -76,7 +79,8 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
     def _check_return_path(self, node: AnyTry) -> None:
         find_returning = exceptions.find_returning_nodes
         try_has, except_has, else_has, finally_has = find_returning(
-            node, self._bad_returning_nodes,
+            node,
+            self._bad_returning_nodes,
         )
 
         if finally_has and (try_has or except_has or else_has):
@@ -174,10 +178,12 @@ class WrongExceptHandlerVisitor(BaseNodeVisitor):
             return
 
         if isinstance(node.type, ast.Tuple):
-            all_elements_are_trivial = all((
-                isinstance(element, self._trivial_except_arg_nodes)
-                for element in node.type.elts
-            ))
+            all_elements_are_trivial = all(
+                (
+                    isinstance(element, self._trivial_except_arg_nodes)
+                    for element in node.type.elts
+                )
+            )
             if all_elements_are_trivial:
                 return
 

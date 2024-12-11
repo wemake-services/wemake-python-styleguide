@@ -20,11 +20,14 @@ _ReturnLikeStatement: TypeAlias = Union[ast.Return, ast.Yield]
 
 
 @final
-@alias('visit_module_members', (
-    'visit_ClassDef',
-    'visit_AsyncFunctionDef',
-    'visit_FunctionDef',
-))
+@alias(
+    'visit_module_members',
+    (
+        'visit_ClassDef',
+        'visit_AsyncFunctionDef',
+        'visit_FunctionDef',
+    ),
+)
 class ModuleMembersVisitor(BaseNodeVisitor):
     """Counts classes and functions in a module."""
 
@@ -153,9 +156,7 @@ class ElifVisitor(BaseNodeVisitor):
         self._if_children[root].extend(node.orelse)  # type: ignore
 
     def _check_elifs(self, node: ast.If) -> None:
-        has_elif = all(
-            isinstance(if_node, ast.If) for if_node in node.orelse
-        )
+        has_elif = all(isinstance(if_node, ast.If) for if_node in node.orelse)
 
         if has_elif:
             root = self._get_root_if_node(node)
@@ -175,10 +176,13 @@ class ElifVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_any_try', (
-    'visit_Try',
-    'visit_TryStar',
-))
+@alias(
+    'visit_any_try',
+    (
+        'visit_Try',
+        'visit_TryStar',
+    ),
+)
 class TryExceptVisitor(BaseNodeVisitor):
     """Visits all try/except nodes to ensure that they are not too complex."""
 
@@ -210,10 +214,13 @@ class TryExceptVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_return_like', (
-    'visit_Return',
-    'visit_Yield',
-))
+@alias(
+    'visit_return_like',
+    (
+        'visit_Return',
+        'visit_Yield',
+    ),
+)
 class ReturnLikeStatementTupleVisitor(BaseNodeVisitor):
     """Finds too long ``tuples`` in ``yield`` and ``return`` expressions."""
 

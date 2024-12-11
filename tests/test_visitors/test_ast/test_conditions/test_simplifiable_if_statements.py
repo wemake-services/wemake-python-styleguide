@@ -62,19 +62,24 @@ def some_function():
 """
 
 
-@pytest.mark.parametrize('code', [
-    simple_early_returning_if,
-    early_returning_if_else,
-
-    complex_early_returning_if_inside,
-    complex_early_returning_if_outside,
-])
-@pytest.mark.parametrize('comparators', [
-    ('variable', '"test"'),
-    ('12', 'variable.call()'),
-    ('False', 'len(variable)'),
-    ('True', '222'),
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        simple_early_returning_if,
+        early_returning_if_else,
+        complex_early_returning_if_inside,
+        complex_early_returning_if_outside,
+    ],
+)
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        ('variable', '"test"'),
+        ('12', 'variable.call()'),
+        ('False', 'len(variable)'),
+        ('True', '222'),
+    ],
+)
 def test_complex_early_returning_if(
     assert_errors,
     parse_ast_tree,
@@ -94,14 +99,20 @@ def test_complex_early_returning_if(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('template', [
-    complex_early_returning_if_inside,
-    complex_early_returning_if_outside,
-])
-@pytest.mark.parametrize('comparators', [
-    ('True', 'False'),
-    ('False', 'True'),
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        complex_early_returning_if_inside,
+        complex_early_returning_if_outside,
+    ],
+)
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        ('True', 'False'),
+        ('False', 'True'),
+    ],
+)
 def test_complex_early_returning_if_inside(
     assert_errors,
     parse_ast_tree,
@@ -118,14 +129,20 @@ def test_complex_early_returning_if_inside(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    simple_early_returning_if,
-    early_returning_if_else,
-])
-@pytest.mark.parametrize('comparators', [
-    ('True', 'False'),
-    ('False', 'True'),
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        simple_early_returning_if,
+        early_returning_if_else,
+    ],
+)
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        ('True', 'False'),
+        ('False', 'True'),
+    ],
+)
 def test_simplifiable_early_returning_if(
     assert_errors,
     parse_ast_tree,
@@ -142,10 +159,13 @@ def test_simplifiable_early_returning_if(
     assert_errors(visitor, [SimplifiableReturningIfViolation])
 
 
-@pytest.mark.parametrize('comparators', [
-    ('True', 'False'),
-    ('False', 'True'),
-])
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        ('True', 'False'),
+        ('False', 'True'),
+    ],
+)
 def test_complex_else(
     assert_errors,
     parse_ast_tree,
@@ -161,10 +181,13 @@ def test_complex_else(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('comparators', [
-    ('True', 'False', 'True'),
-    ('False', 'True', 'True'),
-])
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        ('True', 'False', 'True'),
+        ('False', 'True', 'True'),
+    ],
+)
 def test_not_simplifiable_elif(
     assert_errors,
     parse_ast_tree,
@@ -180,10 +203,13 @@ def test_not_simplifiable_elif(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('comparators', [
-    ('True', ),
-    ('False', ),
-])
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        ('True',),
+        ('False',),
+    ],
+)
 def test_not_simplifiable_only_if(
     assert_errors,
     parse_ast_tree,

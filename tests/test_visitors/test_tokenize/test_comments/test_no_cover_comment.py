@@ -9,12 +9,15 @@ from wemake_python_styleguide.visitors.tokenize.comments import (
 )
 
 
-@pytest.mark.parametrize('code', [
-    'wallet = 10  # pragma: no cover',
-    'wallet = 10  # pragma: no  cover',
-    'wallet = 10  # pragma:  no  cover',
-    'wallet = 10  # pragma:  no cover',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'wallet = 10  # pragma: no cover',
+        'wallet = 10  # pragma: no  cover',
+        'wallet = 10  # pragma:  no  cover',
+        'wallet = 10  # pragma:  no cover',
+    ],
+)
 def test_no_cover_overuse(
     parse_tokens,
     assert_errors,

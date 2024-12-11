@@ -19,10 +19,13 @@ def test():
 '''
 
 
-@pytest.mark.parametrize('code', [
-    correct_assignment,
-    correct_docstring,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_assignment,
+        correct_docstring,
+    ],
+)
 def test_correct_multiline_string_use(
     parse_tokens,
     assert_errors,
@@ -64,12 +67,15 @@ abc
 '''
 
 
-@pytest.mark.parametrize('code', [
-    wrong_compare,
-    wrong_function_call,
-    wrong_string_function,
-    wrong_function_call_newline,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_compare,
+        wrong_function_call,
+        wrong_string_function,
+        wrong_function_call_newline,
+    ],
+)
 def test_wrong_multiline_string_use(
     parse_tokens,
     assert_errors,

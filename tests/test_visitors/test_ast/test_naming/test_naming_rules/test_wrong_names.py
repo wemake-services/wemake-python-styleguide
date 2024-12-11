@@ -12,7 +12,6 @@ patterns = (
     'value',
     'no',
     'data',
-
     'SOME',
     'Value',
     'nO',
@@ -70,10 +69,13 @@ def test_allowed_wrong_variable_name_for_foreign(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('forbidden_name', [
-    'visitor',
-    'name_validator',
-])
+@pytest.mark.parametrize(
+    'forbidden_name',
+    [
+        'visitor',
+        'name_validator',
+    ],
+)
 def test_name_in_forbidden_domain_names_option(
     assert_errors,
     assert_error_text,

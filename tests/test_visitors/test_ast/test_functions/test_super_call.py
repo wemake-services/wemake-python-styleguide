@@ -66,10 +66,13 @@ class Example:
 """
 
 
-@pytest.mark.parametrize('code', [
-    correct_super_call,
-    correct_regression520,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_super_call,
+        correct_regression520,
+    ],
+)
 def test_correct_super_call(
     assert_errors,
     parse_ast_tree,
@@ -86,11 +89,14 @@ def test_correct_super_call(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    super_call_in_module,
-    super_call_in_function,
-    super_call_in_method_with_arguments,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        super_call_in_module,
+        super_call_in_function,
+        super_call_in_method_with_arguments,
+    ],
+)
 def test_wrong_super_call(
     assert_errors,
     parse_ast_tree,
@@ -107,10 +113,13 @@ def test_wrong_super_call(
     assert_errors(visitor, [WrongSuperCallViolation])
 
 
-@pytest.mark.parametrize('code', [
-    super_call_in_function_with_arguments,
-    super_call_in_module_with_arguments,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        super_call_in_function_with_arguments,
+        super_call_in_module_with_arguments,
+    ],
+)
 def test_double_wrong_super_call(
     assert_errors,
     parse_ast_tree,
@@ -124,22 +133,31 @@ def test_double_wrong_super_call(
     visitor = WrongFunctionCallVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [
-        WrongSuperCallViolation,
-        WrongSuperCallViolation,
-    ])
+    assert_errors(
+        visitor,
+        [
+            WrongSuperCallViolation,
+            WrongSuperCallViolation,
+        ],
+    )
 
 
-@pytest.mark.parametrize('code', [
-    super_call_with_access,
-])
-@pytest.mark.parametrize(('arg', 'prop'), [
-    ('', 'other()'),
-    ('', 'other'),
-    ('', 'other.nested'),
-    ('', 'other.method()'),
-    ('', 'other["key"]'),
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        super_call_with_access,
+    ],
+)
+@pytest.mark.parametrize(
+    ('arg', 'prop'),
+    [
+        ('', 'other()'),
+        ('', 'other'),
+        ('', 'other.nested'),
+        ('', 'other.method()'),
+        ('', 'other["key"]'),
+    ],
+)
 def test_wrong_access_super_call_with_no_args(
     assert_errors,
     parse_ast_tree,
@@ -155,21 +173,30 @@ def test_wrong_access_super_call_with_no_args(
     visitor = WrongFunctionCallVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [
-        WrongSuperCallAccessViolation,
-    ])
+    assert_errors(
+        visitor,
+        [
+            WrongSuperCallAccessViolation,
+        ],
+    )
 
 
-@pytest.mark.parametrize('code', [
-    super_call_with_access,
-])
-@pytest.mark.parametrize(('arg', 'prop'), [
-    ('Class, self', 'other()'),
-    ('Class, self', 'other'),
-    ('Class, self', 'other.nested'),
-    ('Class, self', 'other.method()'),
-    ('Class, self', 'other["key"]'),
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        super_call_with_access,
+    ],
+)
+@pytest.mark.parametrize(
+    ('arg', 'prop'),
+    [
+        ('Class, self', 'other()'),
+        ('Class, self', 'other'),
+        ('Class, self', 'other.nested'),
+        ('Class, self', 'other.method()'),
+        ('Class, self', 'other["key"]'),
+    ],
+)
 def test_wrong_access_super_call_with_args(
     assert_errors,
     parse_ast_tree,
@@ -185,7 +212,10 @@ def test_wrong_access_super_call_with_args(
     visitor = WrongFunctionCallVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [
-        WrongSuperCallAccessViolation,
-        WrongSuperCallViolation,
-    ])
+    assert_errors(
+        visitor,
+        [
+            WrongSuperCallAccessViolation,
+            WrongSuperCallViolation,
+        ],
+    )

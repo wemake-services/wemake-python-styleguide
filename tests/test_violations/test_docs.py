@@ -1,8 +1,6 @@
 from wemake_python_styleguide.options.config import Configuration
 
-FORMATTING_OPTIONS = frozenset((
-    '--show-violation-links',
-))
+FORMATTING_OPTIONS = frozenset(('--show-violation-links',))
 
 
 def test_all_violations_are_documented(all_module_violations):

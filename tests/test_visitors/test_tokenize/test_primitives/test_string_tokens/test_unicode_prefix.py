@@ -5,14 +5,17 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
 )
 
 
-@pytest.mark.parametrize('primitive', [
-    '"name"',
-    r'r"text with escape carac \n"',
-    "b'unicode'",
-    '"u"',
-    '"12"',
-    'b""',
-])
+@pytest.mark.parametrize(
+    'primitive',
+    [
+        '"name"',
+        r'r"text with escape carac \n"',
+        "b'unicode'",
+        '"u"',
+        '"12"',
+        'b""',
+    ],
+)
 def test_correct_strings(
     parse_tokens,
     assert_errors,

@@ -21,9 +21,7 @@ multiple_level_nested_list_target = '(first, (second, [third, fourth]))'
 
 spread_assignment_in_list_target = '[first, *rest]'
 nested_spread_assignment_in_list = '(first, [second, *rest])'
-multiple_level_nested_spread_assign_in_list = (
-    '(first, (second, [*rest, last]))'
-)
+multiple_level_nested_spread_assign_in_list = '(first, (second, [*rest, last]))'
 
 regular_assignment = '{0} = some()'
 
@@ -70,20 +68,26 @@ def wrapper():
 """
 
 
-@pytest.mark.parametrize('assignment', [
-    list_target,
-    spread_assignment_in_list_target,
-])
-@pytest.mark.parametrize('code', [
-    regular_assignment,
-    for_assignment,
-    list_comprehension,
-    generator_expression,
-    set_comprehension,
-    dict_comprehension,
-    with_assignment,
-    with_multiple_assignments,
-])
+@pytest.mark.parametrize(
+    'assignment',
+    [
+        list_target,
+        spread_assignment_in_list_target,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        regular_assignment,
+        for_assignment,
+        list_comprehension,
+        generator_expression,
+        set_comprehension,
+        dict_comprehension,
+        with_assignment,
+        with_multiple_assignments,
+    ],
+)
 def test_unpacking_to_list(
     assert_errors,
     parse_ast_tree,
@@ -101,24 +105,30 @@ def test_unpacking_to_list(
     assert_errors(visitor, [UnpackingIterableToListViolation])
 
 
-@pytest.mark.parametrize('assignment', [
-    nested_list_target0,
-    nested_list_target1,
-    nested_list_target2,
-    multiple_level_nested_list_target,
-    nested_spread_assignment_in_list,
-    multiple_level_nested_spread_assign_in_list,
-])
-@pytest.mark.parametrize('code', [
-    regular_assignment,
-    for_assignment,
-    list_comprehension,
-    generator_expression,
-    set_comprehension,
-    dict_comprehension,
-    with_assignment,
-    with_multiple_assignments,
-])
+@pytest.mark.parametrize(
+    'assignment',
+    [
+        nested_list_target0,
+        nested_list_target1,
+        nested_list_target2,
+        multiple_level_nested_list_target,
+        nested_spread_assignment_in_list,
+        multiple_level_nested_spread_assign_in_list,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        regular_assignment,
+        for_assignment,
+        list_comprehension,
+        generator_expression,
+        set_comprehension,
+        dict_comprehension,
+        with_assignment,
+        with_multiple_assignments,
+    ],
+)
 def test_unpacking_to_nested_list(
     assert_errors,
     parse_ast_tree,
@@ -139,16 +149,19 @@ def test_unpacking_to_nested_list(
     )
 
 
-@pytest.mark.parametrize('assignment', [
-    list_target,
-    nested_list_target0,
-    nested_list_target1,
-    nested_list_target2,
-    multiple_level_nested_list_target,
-    spread_assignment_in_list_target,
-    nested_spread_assignment_in_list,
-    multiple_level_nested_spread_assign_in_list,
-])
+@pytest.mark.parametrize(
+    'assignment',
+    [
+        list_target,
+        nested_list_target0,
+        nested_list_target1,
+        nested_list_target2,
+        multiple_level_nested_list_target,
+        spread_assignment_in_list_target,
+        nested_spread_assignment_in_list,
+        multiple_level_nested_spread_assign_in_list,
+    ],
+)
 @pytest.mark.parametrize('code', [regular_multiple_assignment])
 def test_unpacking_to_list_in_middle_target(
     assert_errors,
@@ -163,7 +176,10 @@ def test_unpacking_to_list_in_middle_target(
     visitor = WrongAssignmentVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [
-        MultipleAssignmentsViolation,
-        UnpackingIterableToListViolation,
-    ])
+    assert_errors(
+        visitor,
+        [
+            MultipleAssignmentsViolation,
+            UnpackingIterableToListViolation,
+        ],
+    )

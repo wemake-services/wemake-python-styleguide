@@ -21,19 +21,28 @@ def check_stop_iteration():
 """
 
 
-@pytest.mark.parametrize('code', [
-    stop_iteration_method,
-    stop_iteration_function,
-])
-@pytest.mark.parametrize('statement', [
-    'yield',
-    'yield some_parameter',
-])
-@pytest.mark.parametrize('exception', [
-    'StopIteration',
-    'StopIteration()',
-    'StopIteration(1)',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        stop_iteration_method,
+        stop_iteration_function,
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'yield',
+        'yield some_parameter',
+    ],
+)
+@pytest.mark.parametrize(
+    'exception',
+    [
+        'StopIteration',
+        'StopIteration()',
+        'StopIteration(1)',
+    ],
+)
 def test_stop_iteration_inside_generators(
     assert_errors,
     parse_ast_tree,
@@ -52,18 +61,27 @@ def test_stop_iteration_inside_generators(
     assert_errors(visitor, [StopIterationInsideGeneratorViolation])
 
 
-@pytest.mark.parametrize('code', [
-    stop_iteration_method,
-    stop_iteration_function,
-])
-@pytest.mark.parametrize('statement', [
-    'yield from generator()',
-])
-@pytest.mark.parametrize('exception', [
-    'StopIteration',
-    'StopIteration()',
-    'StopIteration(1)',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        stop_iteration_method,
+        stop_iteration_function,
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'yield from generator()',
+    ],
+)
+@pytest.mark.parametrize(
+    'exception',
+    [
+        'StopIteration',
+        'StopIteration()',
+        'StopIteration(1)',
+    ],
+)
 def test_stop_iteration_in_generators_yield_from(
     assert_errors,
     parse_ast_tree,
@@ -81,18 +99,27 @@ def test_stop_iteration_in_generators_yield_from(
     assert_errors(visitor, [StopIterationInsideGeneratorViolation])
 
 
-@pytest.mark.parametrize('code', [
-    stop_iteration_method,
-    stop_iteration_function,
-])
-@pytest.mark.parametrize('statement', [
-    'print("not a generator")',
-])
-@pytest.mark.parametrize('exception', [
-    'StopIteration',
-    'StopIteration()',
-    'StopIteration(1)',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        stop_iteration_method,
+        stop_iteration_function,
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'print("not a generator")',
+    ],
+)
+@pytest.mark.parametrize(
+    'exception',
+    [
+        'StopIteration',
+        'StopIteration()',
+        'StopIteration(1)',
+    ],
+)
 def test_stop_iteration_inside_bare_functions(
     assert_errors,
     parse_ast_tree,
@@ -111,19 +138,28 @@ def test_stop_iteration_inside_bare_functions(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    stop_iteration_method,
-    stop_iteration_function,
-])
-@pytest.mark.parametrize('statement', [
-    'yield',
-    'yield some_parameter',
-])
-@pytest.mark.parametrize('exception', [
-    'RuntimeError',
-    'RuntimeError()',
-    'RuntimeError(1)',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        stop_iteration_method,
+        stop_iteration_function,
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'yield',
+        'yield some_parameter',
+    ],
+)
+@pytest.mark.parametrize(
+    'exception',
+    [
+        'RuntimeError',
+        'RuntimeError()',
+        'RuntimeError(1)',
+    ],
+)
 def test_other_exceptions_inside_generators(
     assert_errors,
     parse_ast_tree,
@@ -142,18 +178,27 @@ def test_other_exceptions_inside_generators(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    stop_iteration_method,
-    stop_iteration_function,
-])
-@pytest.mark.parametrize('statement', [
-    'yield from generator()',
-])
-@pytest.mark.parametrize('exception', [
-    'RuntimeError',
-    'RuntimeError()',
-    'RuntimeError(1)',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        stop_iteration_method,
+        stop_iteration_function,
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'yield from generator()',
+    ],
+)
+@pytest.mark.parametrize(
+    'exception',
+    [
+        'RuntimeError',
+        'RuntimeError()',
+        'RuntimeError(1)',
+    ],
+)
 def test_other_exc_in_generators_yield_from(
     assert_errors,
     parse_ast_tree,

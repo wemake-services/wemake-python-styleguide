@@ -68,16 +68,22 @@ def function():
 """
 
 
-@pytest.mark.parametrize('statement', [
-    'break',
-    'continue',
-])
-@pytest.mark.parametrize('code', [
-    right_example_with_for,
-    right_example_with_while,
-    right_try_example_with_for,
-    right_try_example_with_while,
-])
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'break',
+        'continue',
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        right_example_with_for,
+        right_example_with_while,
+        right_try_example_with_for,
+        right_try_example_with_while,
+    ],
+)
 def test_right_finally(
     assert_errors,
     parse_ast_tree,
@@ -95,13 +101,19 @@ def test_right_finally(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('statement', [
-    'break',
-])
-@pytest.mark.parametrize('code', [
-    wrong_try_example,
-    wrong_try_example_with_while,
-])
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'break',
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_try_example,
+        wrong_try_example_with_while,
+    ],
+)
 def test_finally_with_break(
     assert_errors,
     parse_ast_tree,
@@ -119,13 +131,19 @@ def test_finally_with_break(
     assert_errors(visitor, [LoopControlFinallyViolation])
 
 
-@pytest.mark.parametrize('statement', [
-    'continue',
-])
-@pytest.mark.parametrize('code', [
-    wrong_try_example,
-    wrong_try_example_with_while,
-])
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'continue',
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_try_example,
+        wrong_try_example_with_while,
+    ],
+)
 def test_finally_with_continue(
     assert_errors,
     parse_ast_tree,

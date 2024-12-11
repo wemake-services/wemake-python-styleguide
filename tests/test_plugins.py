@@ -7,7 +7,6 @@ We do not test that any of the 3rd party plugins work correctly.
 It is not our responsibility.
 """
 
-
 import subprocess
 
 PLUGINS = (

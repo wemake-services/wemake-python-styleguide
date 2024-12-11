@@ -48,12 +48,15 @@ def test_foreign_trailing_underscore(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('correct_name', [
-    'list_',
-    'class_',
-    'async_',
-    'await_',
-])
+@pytest.mark.parametrize(
+    'correct_name',
+    [
+        'list_',
+        'class_',
+        'async_',
+        'await_',
+    ],
+)
 def test_correct_trailing_underscore(
     assert_errors,
     parse_ast_tree,

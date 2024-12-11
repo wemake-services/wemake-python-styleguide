@@ -82,7 +82,10 @@ class BuiltinSubclassViolation(ASTViolation):
 
         # Correct:
         class Some: ...
+
+
         class MyValueException(ValueError): ...
+
 
         # Wrong:
         class MyInt(int): ...
@@ -122,14 +125,17 @@ class ShadowedClassAttributeViolation(ASTViolation):
         # Correct:
         from typing import ClassVar
 
+
         class First:
             field: ClassVar[int] = 1
+
 
         class Second:
             field: int
 
             def __init__(self) -> None:
                 self.field = 1
+
 
         # Wrong:
         class Some:
@@ -258,6 +264,7 @@ class MethodWithoutArgumentsViolation(ASTViolation):
         class Test:
             def method(self): ...
 
+
         # Wrong:
         class Test:
             def method(): ...
@@ -292,7 +299,10 @@ class WrongBaseClassViolation(ASTViolation):
 
         # Correct:
         class Test(module.ObjectName, MixinName, keyword=True): ...
+
+
         class GenericClass(Generic[ValueType]): ...
+
 
         # Wrong:
         class Test((lambda: object)()): ...
@@ -335,8 +345,10 @@ class WrongSlotsViolation(ASTViolation):
         class Test:
             __slots__ = ('field1', 'field2')
 
+
         class Other(Test):
             __slots__ = (*Test.__slots__, 'child')
+
 
         # Wrong:
         class Test:
@@ -406,7 +418,7 @@ class DirectMagicAttributeAccessViolation(ASTViolation):
 
         # Wrong:
         foo.__str__()  # use `str(foo)`
-        2..__truediv__(2)  # use `2 / 2`
+        (2.0).__truediv__(2)  # use `2 / 2`
         d.__delitem__('a')  # use del d['a']
 
     Note, that it is possible to directly use these magic attributes with
@@ -454,6 +466,7 @@ class AsyncMagicMethodViolation(ASTViolation):
         class Test:
             def __lt__(self, other): ...
 
+
         # Wrong:
         class Test:
             async def __lt__(self, other): ...
@@ -491,10 +504,10 @@ class YieldMagicMethodViolation(ASTViolation):
 
     Example::
 
-         # Correct:
+        # Correct:
         class Example:
-            def __init__(self):
-                ...
+            def __init__(self): ...
+
 
         # Wrong:
         class Example:
@@ -535,6 +548,7 @@ class UselessOverwrittenMethodViolation(ASTViolation):
                 super().method(argument)
                 return argument  # or None, or anything!
 
+
         # Wrong:
         class Test:
             def method(self, argument):
@@ -568,6 +582,7 @@ class WrongSuperCallAccessViolation(ASTViolation):
         class Child(Parent):
             def some_method(self):
                 original = super().some_method()
+
 
         # Wrong:
         class Child(Parent):
@@ -607,13 +622,12 @@ class WrongDescriptorDecoratorViolation(ASTViolation):
         # Correct:
         class TestClass:
             @property
-            def my_method():
-                ...
+            def my_method(): ...
+
 
         # Wrong:
         @property
-        def my_function():
-            ...
+        def my_function(): ...
 
     .. versionadded:: 0.15.0
 
@@ -642,16 +656,15 @@ class UnpythonicGetterSetterViolation(ASTViolation):
             def __init__(self):
                 self.attribute = None
 
+
         # Wrong:
         class Example:
             def __init__(self):
                 self._attribute = None
 
-            def set_attribute(self, value):
-                ...
+            def set_attribute(self, value): ...
 
-            def get_attribute(self):
-                ...
+            def get_attribute(self): ...
 
     .. versionadded:: 0.15.0
 

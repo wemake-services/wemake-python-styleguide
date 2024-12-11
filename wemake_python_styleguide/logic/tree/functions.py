@@ -21,11 +21,13 @@ _AnyControlTransfers: TypeAlias = Union[
 _ControlTransferIterable: TypeAlias = Iterable[_AnyControlTransfers]
 
 #: Method types
-_METHOD_TYPES: Final = frozenset((
-    'method',
-    'classmethod',
-    'staticmethod',
-))
+_METHOD_TYPES: Final = frozenset(
+    (
+        'method',
+        'classmethod',
+        'staticmethod',
+    )
+)
 
 
 def given_function_called(

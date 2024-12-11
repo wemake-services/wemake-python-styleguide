@@ -50,26 +50,29 @@ _HashItems: TypeAlias = Sequence[Optional[ast.AST]]
 
 
 @final
-@decorators.alias('visit_any_string', (
-    'visit_Str',
-    'visit_Bytes',
-))
+@decorators.alias(
+    'visit_any_string',
+    (
+        'visit_Str',
+        'visit_Bytes',
+    ),
+)
 class WrongStringVisitor(base.BaseNodeVisitor):
     """Restricts several string usages."""
 
-    _string_constants: ClassVar[FrozenSet[str]] = frozenset((
-        string.ascii_letters,
-        string.ascii_lowercase,
-        string.ascii_uppercase,
-
-        string.digits,
-        string.octdigits,
-        string.hexdigits,
-
-        string.printable,
-        string.whitespace,
-        string.punctuation,
-    ))
+    _string_constants: ClassVar[FrozenSet[str]] = frozenset(
+        (
+            string.ascii_letters,
+            string.ascii_lowercase,
+            string.ascii_uppercase,
+            string.digits,
+            string.octdigits,
+            string.hexdigits,
+            string.printable,
+            string.whitespace,
+            string.punctuation,
+        )
+    )
 
     #: Copied from https://stackoverflow.com/a/30018957/4842742
     _modulo_string_pattern: ClassVar[Pattern[str]] = re.compile(
@@ -85,17 +88,19 @@ class WrongStringVisitor(base.BaseNodeVisitor):
                 [diouxXeEfFgGcrsa]       # type
             ) | %%                       # OR literal "%%"
         )                                # end
-        """,                             # noqa: WPS323
+        """,  # noqa: WPS323
         # Different python versions report `WPS323` on different lines.
         flags=re.X,  # flag to ignore comments and whitespace.
     )
 
     #: Names of functions in which we allow strings with modulo patterns.
-    _modulo_pattern_exceptions: ClassVar[FrozenSet[str]] = frozenset((
-        'strftime',  # For date, time, and datetime.strftime()
-        'strptime',  # For date, time, and datetime.strptime()
-        'execute',  # For psycopg2's cur.execute()
-    ))
+    _modulo_pattern_exceptions: ClassVar[FrozenSet[str]] = frozenset(
+        (
+            'strftime',  # For date, time, and datetime.strftime()
+            'strptime',  # For date, time, and datetime.strptime()
+            'execute',  # For psycopg2's cur.execute()
+        )
+    )
 
     def visit_any_string(self, node: AnyText) -> None:
         """Forbids incorrect usage of strings."""
@@ -112,7 +117,8 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         if text_data in self._string_constants:
             self.add_violation(
                 best_practices.StringConstantRedefinedViolation(
-                    node, text=text_data,
+                    node,
+                    text=text_data,
                 ),
             )
 
@@ -125,11 +131,13 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         properly.
         """
         if parent and isinstance(parent, ast.Call):
-            return bool(functions.given_function_called(
-                parent,
-                self._modulo_pattern_exceptions,
-                split_modules=True,
-            ))
+            return bool(
+                functions.given_function_called(
+                    parent,
+                    self._modulo_pattern_exceptions,
+                    split_modules=True,
+                )
+            )
         return False
 
     def _check_modulo_patterns(
@@ -186,8 +194,7 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
         Checks if list, dict, function call with no parameters or variable.
         """
         has_formatted_components = any(
-            isinstance(comp, ast.FormattedValue)
-            for comp in node.values
+            isinstance(comp, ast.FormattedValue) for comp in node.values
         )
         if not has_formatted_components:
             self.add_violation(  # If no formatted values
@@ -236,18 +243,20 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
     def _is_valid_chain_structure(self, chained_parts: List[ast.AST]) -> bool:
         """Helper method for ``_is_valid_chaining``."""
         has_invalid_parts = any(
-            not self._is_valid_final_value(part)
-            for part in chained_parts
+            not self._is_valid_final_value(part) for part in chained_parts
         )
         if has_invalid_parts:
             return False
         if len(chained_parts) == self._max_chained_items:
             # If there are 3 elements, exactly one must be subscript or
             # call. This is because we don't allow name.attr.attr
-            return sum(
-                isinstance(part, self._single_use_types)
-                for part in chained_parts
-            ) == 1
+            return (
+                sum(
+                    isinstance(part, self._single_use_types)
+                    for part in chained_parts
+                )
+                == 1
+            )
         return True  # All chaining with fewer elements is fine!
 
 
@@ -257,11 +266,9 @@ class WrongNumberVisitor(base.BaseNodeVisitor):
 
     _allowed_parents: ClassVar[AnyNodes] = (
         *AssignNodesWithWalrus,
-
         # Constructor usages:
         *FunctionNodes,
         ast.arguments,
-
         # Primitives:
         ast.List,
         ast.Dict,
@@ -305,20 +312,27 @@ class WrongNumberVisitor(base.BaseNodeVisitor):
             if str(constant).startswith(str(node.n)):
                 self.add_violation(
                     best_practices.ApproximateConstantViolation(
-                        node, text=str(node.n),
+                        node,
+                        text=str(node.n),
                     ),
                 )
 
 
 @final
-@decorators.alias('visit_any_for', (
-    'visit_For',
-    'visit_AsyncFor',
-))
-@decorators.alias('visit_any_with', (
-    'visit_With',
-    'visit_AsyncWith',
-))
+@decorators.alias(
+    'visit_any_for',
+    (
+        'visit_For',
+        'visit_AsyncFor',
+    ),
+)
+@decorators.alias(
+    'visit_any_with',
+    (
+        'visit_With',
+        'visit_AsyncWith',
+    ),
+)
 class WrongAssignmentVisitor(base.BaseNodeVisitor):
     """Visits all assign nodes."""
 
@@ -328,7 +342,8 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
             self._check_unpacking_target_types(withitem.optional_vars)
             if isinstance(withitem.optional_vars, ast.Tuple):
                 self._check_unpacking_targets(
-                    node, withitem.optional_vars.elts,
+                    node,
+                    withitem.optional_vars.elts,
                 )
         self.generic_visit(node)
 
@@ -460,9 +475,8 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
                 evaluates_to_float = isinstance(evaluated_key, float)
 
             real_key = operators.unwrap_unary_node(dict_key)
-            is_float_key = (
-                isinstance(real_key, ast.Num) and
-                isinstance(real_key.n, float)
+            is_float_key = isinstance(real_key, ast.Num) and isinstance(
+                real_key.n, float
             )
             if is_float_key or evaluates_to_float:
                 self.add_violation(best_practices.FloatKeyViolation(dict_key))
@@ -487,7 +501,7 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
 
         for set_item in keys_or_elts:
             if set_item is None:
-                continue   # happens for `{**a}`
+                continue  # happens for `{**a}`
 
             real_item = operators.unwrap_unary_node(set_item)
             if isinstance(real_item, self._elements_in_sets):
@@ -504,9 +518,12 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
                 element_values.append(
                     safe_eval.literal_eval_with_names(
                         real_item,
-                    ) if isinstance(
-                        real_item, self._elements_to_eval,
-                    ) else set_item,
+                    )
+                    if isinstance(
+                        real_item,
+                        self._elements_to_eval,
+                    )
+                    else set_item,
                 )
         self._report_set_elements(node, elements, element_values)
 
@@ -520,23 +537,30 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
             if look_count > 1:
                 self.add_violation(
                     best_practices.NonUniqueItemsInHashViolation(
-                        node, text=look_element,
+                        node,
+                        text=look_element,
                     ),
                 )
                 return
 
         value_counts: DefaultDict[Hashable, int] = defaultdict(int)
         for value_element in element_values:
-            real_value = value_element if isinstance(
-                # Lists, sets, and dicts are not hashable:
-                value_element, Hashable,
-            ) else str(value_element)
+            real_value = (
+                value_element
+                if isinstance(
+                    # Lists, sets, and dicts are not hashable:
+                    value_element,
+                    Hashable,
+                )
+                else str(value_element)
+            )
 
             value_counts[real_value] += 1
 
             if value_counts[real_value] > 1:
                 self.add_violation(
                     best_practices.NonUniqueItemsInHashViolation(
-                        node, text=value_element,
+                        node,
+                        text=value_element,
                     ),
                 )

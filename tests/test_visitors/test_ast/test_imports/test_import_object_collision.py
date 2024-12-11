@@ -68,14 +68,17 @@ from ...package import sub as alias
 """
 
 
-@pytest.mark.parametrize('code', [
-    correct_single_import_from,
-    correct_no_colliding_imports,
-    correct_aliases,
-    correct_same_module_imports,
-    correct_dot_imports,
-    correct_relative_imports,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_single_import_from,
+        correct_no_colliding_imports,
+        correct_aliases,
+        correct_same_module_imports,
+        correct_dot_imports,
+        correct_relative_imports,
+    ],
+)
 def test_correct_imports(
     assert_errors,
     parse_ast_tree,
@@ -91,11 +94,14 @@ def test_correct_imports(
     assert_errors(visitor, [], ignored_types=(LocalFolderImportViolation,))
 
 
-@pytest.mark.parametrize('code', [
-    colliding_object_import1,
-    colliding_object_import2,
-    colliding_nested_object_import,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        colliding_object_import1,
+        colliding_object_import2,
+        colliding_nested_object_import,
+    ],
+)
 def test_imports_collision(
     assert_errors,
     parse_ast_tree,

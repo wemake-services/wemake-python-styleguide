@@ -27,10 +27,13 @@ _StringConstants: TypeAlias = FrozenSet[Union[str, bytes]]
 
 
 @final
-@decorators.alias('visit_any_string', (
-    'visit_Str',
-    'visit_Bytes',
-))
+@decorators.alias(
+    'visit_any_string',
+    (
+        'visit_Str',
+        'visit_Bytes',
+    ),
+)
 class StringOveruseVisitor(base.BaseNodeVisitor):
     """
     Restricts repeated usage of the same string constant.
@@ -40,34 +43,37 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
     comma, dot).
     """
 
-    _ignored_string_constants: ClassVar[_StringConstants] = frozenset((
-        ' ',
-        '.',
-        ',',
-        '',
-        '\n',
-        '\r\n',
-        '\t',
-        '|',
-        '"',
-        "'",
-        '...',
-        b'"',
-        b"'",
-        b' ',
-        b'.',
-        b',',
-        b'',
-        b'\n',
-        b'\r\n',
-        b'\t',
-    ))
+    _ignored_string_constants: ClassVar[_StringConstants] = frozenset(
+        (
+            ' ',
+            '.',
+            ',',
+            '',
+            '\n',
+            '\r\n',
+            '\t',
+            '|',
+            '"',
+            "'",
+            '...',
+            b'"',
+            b"'",
+            b' ',
+            b'.',
+            b',',
+            b'',
+            b'\n',
+            b'\r\n',
+            b'\t',
+        )
+    )
 
     def __init__(self, *args, **kwargs) -> None:
         """Inits the counter for constants."""
         super().__init__(*args, **kwargs)
         self._string_constants: DefaultDict[
-            AnyTextPrimitive, int,
+            AnyTextPrimitive,
+            int,
         ] = defaultdict(int)
 
     def visit_any_string(self, node: AnyText) -> None:
@@ -112,7 +118,6 @@ class ExpressionOveruseVisitor(base.BaseNodeVisitor):
         ast.Compare,
         ast.Subscript,
         ast.Lambda,
-
         ast.DictComp,
         ast.Dict,
         ast.List,

@@ -22,12 +22,15 @@ def test_float_zero(
     assert_errors(visitor, [FloatZeroViolation])
 
 
-@pytest.mark.parametrize('primitive', [
-    '0',
-    'float(0)',
-    '5',
-    '30.4',
-])
+@pytest.mark.parametrize(
+    'primitive',
+    [
+        '0',
+        'float(0)',
+        '5',
+        '30.4',
+    ],
+)
 def test_correct_zero_and_non_zero_numbers(
     parse_tokens,
     assert_errors,

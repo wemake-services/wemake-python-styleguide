@@ -309,6 +309,7 @@ class OverusedExpressionViolation(ASTViolation):
 
 # Functions and classes:
 
+
 @final
 class TooManyLocalsViolation(ASTViolation):
     """
@@ -331,6 +332,7 @@ class TooManyLocalsViolation(ASTViolation):
 
         def first_function(param):
             first_var = 1
+
 
         def second_function(argument):
             second_var = 1
@@ -503,6 +505,7 @@ class TooManyBaseClassesViolation(ASTViolation):
        # Correct:
        class SomeClassName(First, Second, Mixin): ...
 
+
        # Wrong:
        class SomeClassName(
            FirstParentClass,
@@ -510,7 +513,7 @@ class TooManyBaseClassesViolation(ASTViolation):
            ThirdParentClass,
            CustomClass,
            AddedClass,
-        ): ...
+       ): ...
 
     Configuration:
         This rule is configurable with ``--max-base-classes``.

@@ -17,11 +17,14 @@ call_chain = 'bar(a)(b)'
 long_call_chain = 'baz(a)(b)(c)'
 
 
-@pytest.mark.parametrize('code', [
-    deep_call_chain,
-    call_chain,
-    long_call_chain,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        deep_call_chain,
+        call_chain,
+        long_call_chain,
+    ],
+)
 def test_correct_cases(
     assert_errors,
     parse_ast_tree,
@@ -39,11 +42,14 @@ def test_correct_cases(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize(('code', 'call_level'), [
-    (call_chain, 2),
-    (deep_call_chain, 4),
-    (long_call_chain, 3),
-])
+@pytest.mark.parametrize(
+    ('code', 'call_level'),
+    [
+        (call_chain, 2),
+        (deep_call_chain, 4),
+        (long_call_chain, 3),
+    ],
+)
 def test_incorrect_cases(
     assert_errors,
     assert_error_text,

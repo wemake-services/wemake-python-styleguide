@@ -110,10 +110,7 @@ class CompareSanityVisitor(BaseNodeVisitor):
         if len(node.ops) != 2:
             return
 
-        is_less = all(
-            isinstance(op, (ast.Gt, ast.GtE))
-            for op in node.ops
-        )
+        is_less = all(isinstance(op, (ast.Gt, ast.GtE)) for op in node.ops)
         if not is_less:
             return
 
@@ -133,7 +130,6 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
         ast.GeneratorExp,
         ast.Set,
         ast.SetComp,
-
         # We allow `ast.NameConstant`
         ast.Num,
         *TextNodes,
@@ -159,9 +155,14 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
         if walk.get_closest_parent(op, ast.Assert):
             return  # We allow any compares in `assert`
 
-        length = len(real.keys) if isinstance(
-            real, ast.Dict,
-        ) else len(real.elts)
+        length = (
+            len(real.keys)
+            if isinstance(
+                real,
+                ast.Dict,
+            )
+            else len(real.elts)
+        )
 
         if not length:
             self.add_violation(FalsyConstantCompareViolation(comparator))
@@ -236,9 +237,12 @@ class WrongComparisonOrderVisitor(BaseNodeVisitor):
             if isinstance(right, self._allowed_left_nodes):
                 return True
             if isinstance(right, ast.BinOp):
-                return self._has_wrong_nodes_on_the_right([
-                    right.left, right.right,
-                ])
+                return self._has_wrong_nodes_on_the_right(
+                    [
+                        right.left,
+                        right.right,
+                    ]
+                )
         return False
 
     def _check_ordering(self, node: ast.Compare) -> None:
@@ -258,10 +262,13 @@ class WrongComparisonOrderVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_any_if', (
-    'visit_If',
-    'visit_IfExp',
-))
+@alias(
+    'visit_any_if',
+    (
+        'visit_If',
+        'visit_IfExp',
+    ),
+)
 class WrongConditionalVisitor(BaseNodeVisitor):
     """Finds wrong conditional arguments."""
 
@@ -270,7 +277,6 @@ class WrongConditionalVisitor(BaseNodeVisitor):
         *TextNodes,
         ast.Num,
         ast.NameConstant,
-
         # Collections:
         ast.List,
         ast.Set,
@@ -332,11 +338,12 @@ class WrongConditionalVisitor(BaseNodeVisitor):
 
     def _check_nested_ifexpr(self, node: AnyIf) -> None:
         is_nested_in_if = bool(
-            isinstance(node, ast.If) and
-            list(walk.get_subnodes_by_type(node.test, ast.IfExp)),
+            isinstance(node, ast.If)
+            and list(walk.get_subnodes_by_type(node.test, ast.IfExp)),
         )
         is_nested_poorly = walk.get_closest_parent(
-            node, self._forbidden_expression_parents,
+            node,
+            self._forbidden_expression_parents,
         )
 
         if is_nested_in_if or is_nested_poorly:
@@ -420,8 +427,8 @@ class InCompareSanityVisitor(BaseNodeVisitor):
         is_text_violated = isinstance(node, TextNodes) and len(node.s) == 1
         is_dict_violated = isinstance(node, ast.Dict) and len(node.keys) == 1
         is_iter_violated = (
-            isinstance(node, (ast.List, ast.Tuple, ast.Set)) and
-            len(node.elts) == 1
+            isinstance(node, (ast.List, ast.Tuple, ast.Set))
+            and len(node.elts) == 1
         )
 
         if is_text_violated or is_dict_violated or is_iter_violated:
@@ -443,9 +450,8 @@ class WrongFloatComplexCompareVisitor(BaseNodeVisitor):
 
     def _is_float_or_complex(self, node: ast.AST) -> bool:
         node = operators.unwrap_unary_node(node)
-        return (
-            isinstance(node, ast.Num) and
-            isinstance(node.n, (float, complex))
+        return isinstance(node, ast.Num) and isinstance(
+            node.n, (float, complex)
         )
 
     def _check_float_complex_compare(self, node: ast.Compare) -> None:

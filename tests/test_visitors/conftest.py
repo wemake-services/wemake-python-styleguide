@@ -21,6 +21,7 @@ _ERROR_FORMAT: Final = ': {0}'
 @pytest.fixture(scope='session')
 def assert_errors():
     """Helper function to assert visitor violations."""
+
     def factory(
         visitor: BaseVisitor,
         expected_errors: Sequence[str],
@@ -51,6 +52,7 @@ def assert_errors():
 @pytest.fixture(scope='session')
 def assert_error_text():
     """Helper function to assert visitor violation's text."""
+
     def factory(
         visitor: BaseVisitor,
         text: str,

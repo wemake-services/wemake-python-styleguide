@@ -77,10 +77,12 @@ class _ImportValidator(_BaseImportValidator):
                 )
 
     def _check_protected_import(self, node: ast.Import) -> None:
-        names: Iterable[str] = chain.from_iterable([
-            alias.name.split(_MODULE_MEMBERS_SEPARATOR)
-            for alias in node.names
-        ])
+        names: Iterable[str] = chain.from_iterable(
+            [
+                alias.name.split(_MODULE_MEMBERS_SEPARATOR)
+                for alias in node.names
+            ]
+        )
         for name in names:
             if access.is_protected(name):
                 self._error_callback(ProtectedModuleViolation(node, text=name))
@@ -127,9 +129,8 @@ class _ImportFromValidator(_BaseImportValidator):
         for alias in node.names:
             for name in filter(None, (alias.name, alias.asname)):
                 is_regular_import = (
-                    (alias.asname and name != alias.asname) or
-                    not imports.is_vague_import(name)
-                )
+                    alias.asname and name != alias.asname
+                ) or not imports.is_vague_import(name)
 
                 if not is_regular_import:
                     self._error_callback(VagueImportViolation(node, text=name))
@@ -161,19 +162,23 @@ class _ImportCollisionValidator:
                 continue
 
             if self._does_collide(first, second):
-                self._error_callback(ImportCollisionViolation(
-                    first.node,
-                    second.module,
-                ))
+                self._error_callback(
+                    ImportCollisionViolation(
+                        first.node,
+                        second.module,
+                    )
+                )
 
     def add_import(self, node: ast.Import) -> None:
         """Extract info needed for validation from ``ast.Import``."""
         for alias in node.names:
             if not alias.asname:
-                self._imported_names.append(imports.ImportedObjectInfo(
-                    alias.name,
-                    node,
-                ))
+                self._imported_names.append(
+                    imports.ImportedObjectInfo(
+                        alias.name,
+                        node,
+                    )
+                )
 
     def add_import_from(self, node: ast.ImportFrom) -> None:
         """Extract info needed for validation from ``ast.ImportFrom``."""
@@ -186,13 +191,15 @@ class _ImportCollisionValidator:
             self._imported_objects[identifier].add(alias.name)
 
             if not alias.asname:
-                self._imported_names.append(imports.ImportedObjectInfo(
-                    _MODULE_MEMBERS_SEPARATOR.join(
-                        # ignoring `from . import some` case:
-                        filter(None, (node.module, alias.name)),
-                    ),
-                    node,
-                ))
+                self._imported_names.append(
+                    imports.ImportedObjectInfo(
+                        _MODULE_MEMBERS_SEPARATOR.join(
+                            # ignoring `from . import some` case:
+                            filter(None, (node.module, alias.name)),
+                        ),
+                        node,
+                    )
+                )
 
     def _does_collide(
         self,

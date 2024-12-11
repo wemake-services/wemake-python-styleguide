@@ -28,14 +28,16 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
     """Visits number tokens to find incorrect usages."""
 
     _leading_zero_pattern: ClassVar[Pattern[str]] = re.compile(
-        r'^[0-9\.]+([box]|e\+?\-?)0.+', re.IGNORECASE | re.ASCII,
+        r'^[0-9\.]+([box]|e\+?\-?)0.+',
+        re.IGNORECASE | re.ASCII,
     )
     _leading_zero_float_pattern: ClassVar[Pattern[str]] = re.compile(
         r'^[0-9]*\.[0-9]+0+$',
     )
 
     _positive_exponent_patterns: ClassVar[Pattern[str]] = re.compile(
-        r'^[0-9\.]+e\+', re.IGNORECASE | re.ASCII,
+        r'^[0-9\.]+e\+',
+        re.IGNORECASE | re.ASCII,
     )
 
     _float_zero: ClassVar[Pattern[str]] = re.compile(
@@ -97,13 +99,22 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
 
 @final
 class _StringTokenChecker:
-    _bad_string_modifiers: ClassVar[FrozenSet[str]] = frozenset((
-        'R', 'F', 'B', 'U',
-    ))
+    _bad_string_modifiers: ClassVar[FrozenSet[str]] = frozenset(
+        (
+            'R',
+            'F',
+            'B',
+            'U',
+        )
+    )
 
-    _unicode_escapes: ClassVar[FrozenSet[str]] = frozenset((
-        'u', 'U', 'N',
-    ))
+    _unicode_escapes: ClassVar[FrozenSet[str]] = frozenset(
+        (
+            'u',
+            'U',
+            'N',
+        )
+    )
 
     _implicit_raw_strings: ClassVar[Pattern[str]] = re.compile(r'\\{2}.+')
 
@@ -236,23 +247,35 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         Compare, before 3.12::
 
             TokenInfo(
-                type=3 (STRING), string="RF'abc'",
-                start=(1, 0), end=(1, 7), line="RF'abc'",
+                type=3(STRING),
+                string="RF'abc'",
+                start=(1, 0),
+                end=(1, 7),
+                line="RF'abc'",
             )
 
         3.12 and later versions::
 
             TokenInfo(
-                type=61 (FSTRING_START), string="RF'",
-                start=(1, 0), end=(1, 3), line="RF'abc'",
+                type=61(FSTRING_START),
+                string="RF'",
+                start=(1, 0),
+                end=(1, 3),
+                line="RF'abc'",
             )
             TokenInfo(
-                type=62 (FSTRING_MIDDLE), string='abc',
-                start=(1, 3), end=(1, 6), line="RF'abc'",
+                type=62(FSTRING_MIDDLE),
+                string='abc',
+                start=(1, 3),
+                end=(1, 6),
+                line="RF'abc'",
             )
             TokenInfo(
-                type=63 (FSTRING_END), string="'",
-                start=(1, 6), end=(1, 7), line="RF'abc'",
+                type=63(FSTRING_END),
+                string="'",
+                start=(1, 6),
+                end=(1, 7),
+                line="RF'abc'",
             )
 
         """
@@ -266,12 +289,14 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
 class WrongStringConcatenationVisitor(BaseTokenVisitor):
     """Checks incorrect string concatenation."""
 
-    _ignored_tokens: ClassVar[FrozenSet[int]] = frozenset((
-        tokenize.NL,
-        tokenize.NEWLINE,
-        tokenize.INDENT,
-        tokenize.COMMENT,
-    ))
+    _ignored_tokens: ClassVar[FrozenSet[int]] = frozenset(
+        (
+            tokenize.NL,
+            tokenize.NEWLINE,
+            tokenize.INDENT,
+            tokenize.COMMENT,
+        )
+    )
 
     def __init__(self, *args, **kwargs) -> None:
         """Adds extra ``_previous_token`` property."""

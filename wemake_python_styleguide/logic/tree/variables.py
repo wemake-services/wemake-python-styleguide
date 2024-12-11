@@ -26,9 +26,8 @@ def does_shadow_builtin(node: ast.AST) -> bool:
     Why?
     Because they cannot harm you since they do not shadow the real builtin.
     """
-    return (
-        not isinstance(node, ast.Attribute) and
-        not isinstance(nodes.get_context(node), ast.ClassDef)
+    return not isinstance(node, ast.Attribute) and not isinstance(
+        nodes.get_context(node), ast.ClassDef
     )
 
 
@@ -45,17 +44,15 @@ def is_valid_block_variable_definition(node: _VarDefinition) -> bool:
 def is_valid_unpacking_target(target: ast.expr) -> bool:
     """Checks if unpacking target is correct."""
     if isinstance(target, ast.Tuple):
-        return all(
-            _is_valid_single(element)
-            for element in target.elts
-        )
+        return all(_is_valid_single(element) for element in target.elts)
     return _is_valid_single(target)
 
 
 def _is_valid_single(node: _VarDefinition) -> bool:
     return (
-        isinstance(node, ast.Name) or
-        isinstance(node, ast.Starred) and isinstance(node.value, ast.Name)
+        isinstance(node, ast.Name)
+        or isinstance(node, ast.Starred)
+        and isinstance(node.value, ast.Name)
     )
 
 
@@ -63,14 +60,12 @@ def is_getting_element_by_unpacking(targets: List[ast.expr]) -> bool:
     """Checks if unpacking targets used to get first or last element."""
     if len(targets) != 2:
         return False
-    first_item = (
-        isinstance(targets[1], ast.Starred) and
-        _is_unused_variable_name(targets[1].value)
-    )
-    last_item = (
-        isinstance(targets[0], ast.Starred) and
-        _is_unused_variable_name(targets[0].value)
-    )
+    first_item = isinstance(
+        targets[1], ast.Starred
+    ) and _is_unused_variable_name(targets[1].value)
+    last_item = isinstance(
+        targets[0], ast.Starred
+    ) and _is_unused_variable_name(targets[0].value)
     return first_item or last_item
 
 

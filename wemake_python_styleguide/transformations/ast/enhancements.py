@@ -16,20 +16,22 @@ _CONTEXTS: Tuple[Type[ContextNodes], ...] = (
     *FunctionNodes,
 )
 
-_AST_OPS_TO_OPERATORS: Final = MappingProxyType({
-    ast.Add: operator.add,
-    ast.Sub: operator.sub,
-    ast.Mult: operator.mul,
-    ast.Div: operator.truediv,
-    ast.FloorDiv: operator.floordiv,
-    ast.Mod: operator.mod,
-    ast.Pow: operator.pow,
-    ast.LShift: operator.lshift,
-    ast.RShift: operator.rshift,
-    ast.BitAnd: operator.and_,
-    ast.BitOr: operator.or_,
-    ast.BitXor: operator.xor,
-})
+_AST_OPS_TO_OPERATORS: Final = MappingProxyType(
+    {
+        ast.Add: operator.add,
+        ast.Sub: operator.sub,
+        ast.Mult: operator.mul,
+        ast.Div: operator.truediv,
+        ast.FloorDiv: operator.floordiv,
+        ast.Mod: operator.mod,
+        ast.Pow: operator.pow,
+        ast.LShift: operator.lshift,
+        ast.RShift: operator.rshift,
+        ast.BitAnd: operator.and_,
+        ast.BitOr: operator.or_,
+        ast.BitXor: operator.xor,
+    }
+)
 
 
 def set_if_chain(tree: ast.AST) -> ast.AST:

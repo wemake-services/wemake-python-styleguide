@@ -5,6 +5,4 @@ from wemake_python_styleguide.visitors.filenames.module import (
 )
 
 #: Here we define all filename-based visitors.
-PRESET: Final = (
-    WrongModuleNameVisitor,
-)
+PRESET: Final = (WrongModuleNameVisitor,)

@@ -49,23 +49,29 @@ except {1}:
 """
 
 
-@pytest.mark.parametrize('code', [
-    exception_template,
-    pytest.param(
-        exception_star_template,
-        marks=pytest.mark.skipif(
-            not PY311,
-            reason='ExceptionGroup was added in python 3.11',
+@pytest.mark.parametrize(
+    'code',
+    [
+        exception_template,
+        pytest.param(
+            exception_star_template,
+            marks=pytest.mark.skipif(
+                not PY311,
+                reason='ExceptionGroup was added in python 3.11',
+            ),
         ),
-    ),
-    custom_exception_template1,
-    custom_exception_template2,
-])
-@pytest.mark.parametrize('statements', [
-    ('ValueError', 'Exception'),
-    ('Exception', 'MyValueError'),
-    ('MyCustomException', 'MyValueError'),
-])
+        custom_exception_template1,
+        custom_exception_template2,
+    ],
+)
+@pytest.mark.parametrize(
+    'statements',
+    [
+        ('ValueError', 'Exception'),
+        ('Exception', 'MyValueError'),
+        ('MyCustomException', 'MyValueError'),
+    ],
+)
 def test_correct_order_exception(
     assert_errors,
     parse_ast_tree,
@@ -82,24 +88,30 @@ def test_correct_order_exception(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    exception_template,
-    pytest.param(
-        exception_star_template,
-        marks=pytest.mark.skipif(
-            not PY311,
-            reason='ExceptionGroup was added in python 3.11',
+@pytest.mark.parametrize(
+    'code',
+    [
+        exception_template,
+        pytest.param(
+            exception_star_template,
+            marks=pytest.mark.skipif(
+                not PY311,
+                reason='ExceptionGroup was added in python 3.11',
+            ),
         ),
-    ),
-    custom_exception_template1,
-    custom_exception_template2,
-])
-@pytest.mark.parametrize('statements', [
-    ('Exception', 'ValueError'),
-    ('Exception', 'KeyError'),
-    ('LookupError', 'IndexError'),
-    ('BaseException', 'Exception'),
-])
+        custom_exception_template1,
+        custom_exception_template2,
+    ],
+)
+@pytest.mark.parametrize(
+    'statements',
+    [
+        ('Exception', 'ValueError'),
+        ('Exception', 'KeyError'),
+        ('LookupError', 'IndexError'),
+        ('BaseException', 'Exception'),
+    ],
+)
 def test_wrong_order_exception(
     assert_errors,
     parse_ast_tree,

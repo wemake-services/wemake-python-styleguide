@@ -70,7 +70,4 @@ def has_nodes(
     iterable: Iterable[ast.AST],
 ) -> bool:
     """Finds the given nodes types in ``if`` body."""
-    return any(
-        isinstance(line, to_check)
-        for line in iterable
-    )
+    return any(isinstance(line, to_check) for line in iterable)

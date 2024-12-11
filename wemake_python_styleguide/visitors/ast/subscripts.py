@@ -59,23 +59,18 @@ class SubscriptVisitor(base.BaseNodeVisitor):
         if not isinstance(node.slice, ast.Slice):
             return
 
-        lower_ok = (
-            node.slice.lower is None or (
-                not self._is_zero(node.slice.lower) and
-                not self._is_none(node.slice.lower)
-            )
+        lower_ok = node.slice.lower is None or (
+            not self._is_zero(node.slice.lower)
+            and not self._is_none(node.slice.lower)
         )
 
-        upper_ok = (
-            node.slice.upper is None or
-            not self._is_none(node.slice.upper)
+        upper_ok = node.slice.upper is None or not self._is_none(
+            node.slice.upper
         )
 
-        step_ok = (
-            node.slice.step is None or (
-                not self._is_one(node.slice.step) and
-                not self._is_none(node.slice.step)
-            )
+        step_ok = node.slice.step is None or (
+            not self._is_one(node.slice.step)
+            and not self._is_none(node.slice.step)
         )
 
         if not (lower_ok and upper_ok and step_ok):
@@ -92,10 +87,9 @@ class SubscriptVisitor(base.BaseNodeVisitor):
         subscript_slice_assignment = isinstance(node.slice, ast.Slice)
 
         slice_expr = node.slice
-        slice_function_assignment = (
-            isinstance(slice_expr, ast.Call) and
-            functions.given_function_called(slice_expr, {'slice'})
-        )
+        slice_function_assignment = isinstance(
+            slice_expr, ast.Call
+        ) and functions.given_function_called(slice_expr, {'slice'})
 
         if subscript_slice_assignment or slice_function_assignment:
             self.add_violation(
@@ -104,8 +98,8 @@ class SubscriptVisitor(base.BaseNodeVisitor):
 
     def _is_none(self, component_value: ast.expr) -> bool:
         return (
-            isinstance(component_value, ast.NameConstant) and
-            component_value.value is None
+            isinstance(component_value, ast.NameConstant)
+            and component_value.value is None
         )
 
     def _is_zero(self, component_value: ast.expr) -> bool:
@@ -158,9 +152,9 @@ class CorrectKeyVisitor(base.BaseNodeVisitor):
     def _check_len_call(self, node: ast.Subscript) -> None:
         node_slice = node.slice
         is_len_call = (
-            isinstance(node_slice, ast.BinOp) and
-            isinstance(node_slice.op, ast.Sub) and
-            self._is_wrong_len(
+            isinstance(node_slice, ast.BinOp)
+            and isinstance(node_slice.op, ast.Sub)
+            and self._is_wrong_len(
                 node_slice,
                 source.node_to_string(node.value),
             )
@@ -173,14 +167,11 @@ class CorrectKeyVisitor(base.BaseNodeVisitor):
 
     def _is_wrong_len(self, node: ast.BinOp, element: str) -> bool:
         return (
-            isinstance(node.left, ast.Call) and
-            bool(functions.given_function_called(node.left, {'len'})) and
-            source.node_to_string(node.left.args[0]) == element
+            isinstance(node.left, ast.Call)
+            and bool(functions.given_function_called(node.left, {'len'}))
+            and source.node_to_string(node.left.args[0]) == element
         )
 
     def _is_float_key(self, node: ast.expr) -> bool:
         real_node = operators.unwrap_unary_node(node)
-        return (
-            isinstance(real_node, ast.Num) and
-            isinstance(real_node.n, float)
-        )
+        return isinstance(real_node, ast.Num) and isinstance(real_node.n, float)

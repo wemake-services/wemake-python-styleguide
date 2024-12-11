@@ -22,9 +22,11 @@ def parse_ast_tree(compile_code):
 
     Order is important.
     """
+
     def factory(code: str, *, do_compile: bool = True) -> ast.AST:
         code_to_parse = dedent(code)
         if do_compile:
             compile_code(code_to_parse)
         return transform(ast.parse(code_to_parse))
+
     return factory

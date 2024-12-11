@@ -33,14 +33,13 @@ def is_annotation(node: ast.AST) -> bool:
     annotated = walk.get_closest_parent(node, (*_AnnNodes, *FunctionNodes))
     if isinstance(annotated, FunctionNodes):
         contains_node = bool(
-            annotated.returns and
-            walk.is_contained_by(node, annotated.returns),
+            annotated.returns and walk.is_contained_by(node, annotated.returns),
         )
         return node == annotated.returns or contains_node
     elif isinstance(annotated, _AnnNodes):
         contains_node = bool(
-            annotated.annotation and
-            walk.is_contained_by(node, annotated.annotation),
+            annotated.annotation
+            and walk.is_contained_by(node, annotated.annotation),
         )
         return node == annotated.annotation or contains_node
     return False

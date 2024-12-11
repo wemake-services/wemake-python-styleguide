@@ -141,9 +141,9 @@ class EmptyCommentVisitor(BaseTokenVisitor):
 
             to_reserve = (
                 # Empty comment right after non-empty, block not yet alerted
-                self._is_consecutive(self._prev_non_empty) and
-                self._in_same_block and
-                not self._block_alerted
+                self._is_consecutive(self._prev_non_empty)
+                and self._in_same_block
+                and not self._block_alerted
             )
             if to_reserve:
                 self._reserved_token = token
@@ -156,17 +156,17 @@ class EmptyCommentVisitor(BaseTokenVisitor):
 
     def _check_same_block(self, token: tokenize.TokenInfo) -> None:
         self._in_same_block = (
-            self._is_consecutive(self._prev_comment_line_num) and
-            token.line.lstrip()[0] == '#'  # is inline comment
+            self._is_consecutive(self._prev_comment_line_num)
+            and token.line.lstrip()[0] == '#'  # is inline comment
         )
         if not self._in_same_block:
             self._block_alerted = False
 
     def _is_consecutive(self, prev_line_num: int) -> bool:
-        return (self._line_num - prev_line_num == 1)
+        return self._line_num - prev_line_num == 1
 
     def _has_reserved_token(self) -> bool:
-        return (self._reserved_token != SENTINEL_TOKEN)
+        return self._reserved_token != SENTINEL_TOKEN
 
     def _post_visit(self) -> None:
         if self._has_reserved_token() and not self._block_alerted:

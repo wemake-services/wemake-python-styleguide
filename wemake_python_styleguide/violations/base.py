@@ -46,7 +46,6 @@ then assign ``disabled_since`` with a string version number to it:
 
 Reference
 ~~~~~~~~~
-
 """
 
 import abc
@@ -123,7 +122,8 @@ class BaseViolation(metaclass=abc.ABCMeta):  # noqa: WPS338
         cls.summary = cls.__doc__.lstrip().split('\n', maxsplit=1)[0]
         # this hack adds full code to summary table in the docs
         cls.__doc__ = _prepend_skipping_whitespaces(
-            '{0} — '.format(cls.full_code), cls.__doc__,
+            '{0} — '.format(cls.full_code),
+            cls.__doc__,
         )
 
     def __init__(
@@ -266,5 +266,5 @@ class SimpleViolation(BaseViolation):
 
 def _prepend_skipping_whitespaces(prefix: str, text: str) -> str:
     lstripped_text = text.lstrip()
-    leading_whitespaces = text[:len(text) - len(lstripped_text)]
+    leading_whitespaces = text[: len(text) - len(lstripped_text)]
     return leading_whitespaces + prefix + lstripped_text

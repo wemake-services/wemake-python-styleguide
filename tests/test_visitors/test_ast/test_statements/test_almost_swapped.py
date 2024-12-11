@@ -30,11 +30,14 @@ dx, dy = dy, dx
 """
 
 
-@pytest.mark.parametrize('code', [
-    wrong_swapped_variables,
-    wrong_swapped_variables_with_temp,
-    wrong_double_swap,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_swapped_variables,
+        wrong_swapped_variables_with_temp,
+        wrong_double_swap,
+    ],
+)
 def test_wrong_swapped_variables(
     assert_errors,
     parse_ast_tree,
@@ -50,9 +53,12 @@ def test_wrong_swapped_variables(
     assert_errors(visitor, [AlmostSwappedViolation])
 
 
-@pytest.mark.parametrize('code', [
-    correct_swapped_variables,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_swapped_variables,
+    ],
+)
 def test_correct_swapped_variables(
     assert_errors,
     parse_ast_tree,

@@ -107,5 +107,32 @@ requires = ["poetry-core>=1.9.0"]
 build-backend = "poetry.core.masonry.api"
 
 
+[tool.ruff]
+target-version = 'py39'
+fix = true
+line-length = 80
+exclude = [
+  ".git",
+  "__pycache__",
+  ".venv",
+  ".eggs",
+  "*.egg",
+]
+
+[tool.ruff.lint]
+select = ['ALL']
+
+[tool.ruff.lint.mccabe]
+max-complexity = 6
+
+[tool.ruff.lint.flake8-quotes]
+inline-quotes = 'single'
+
+[tool.ruff.format]
+quote-style = 'single'
+docstring-code-format = true
+
+
+
 [tool.nitpick]
 style = "styles/nitpick-style-wemake.toml"

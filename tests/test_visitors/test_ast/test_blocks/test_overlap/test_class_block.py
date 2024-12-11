@@ -28,17 +28,26 @@ class_template2 = """
 """
 
 
-@pytest.mark.parametrize('class_statement', [
-    class_def1,
-    class_def2,
-    class_def3,
-])
-@pytest.mark.parametrize('context', [
-    class_template1,
-])
-@pytest.mark.parametrize('variable_name', [
-    'should_raise',
-])
+@pytest.mark.parametrize(
+    'class_statement',
+    [
+        class_def1,
+        class_def2,
+        class_def3,
+    ],
+)
+@pytest.mark.parametrize(
+    'context',
+    [
+        class_template1,
+    ],
+)
+@pytest.mark.parametrize(
+    'variable_name',
+    [
+        'should_raise',
+    ],
+)
 def test_class_block_overlap(
     assert_errors,
     assert_error_text,
@@ -63,17 +72,26 @@ def test_class_block_overlap(
     assert_error_text(visitor, variable_name)
 
 
-@pytest.mark.parametrize('class_statement', [
-    class_def1,
-    class_def2,
-    class_def3,
-])
-@pytest.mark.parametrize('context', [
-    class_template2,
-])
-@pytest.mark.parametrize('variable_name', [
-    'should_raise',
-])
+@pytest.mark.parametrize(
+    'class_statement',
+    [
+        class_def1,
+        class_def2,
+        class_def3,
+    ],
+)
+@pytest.mark.parametrize(
+    'context',
+    [
+        class_template2,
+    ],
+)
+@pytest.mark.parametrize(
+    'variable_name',
+    [
+        'should_raise',
+    ],
+)
 def test_class_internals_overlap(
     assert_errors,
     assert_error_text,
@@ -99,17 +117,26 @@ def test_class_internals_overlap(
     assert_error_text(visitor, variable_name)
 
 
-@pytest.mark.parametrize('class_statement', [
-    class_def1,
-    class_def2,
-    class_def3,
-])
-@pytest.mark.parametrize('context', [
-    class_template1,
-])
-@pytest.mark.parametrize('variable_name', [
-    'should_raise',
-])
+@pytest.mark.parametrize(
+    'class_statement',
+    [
+        class_def1,
+        class_def2,
+        class_def3,
+    ],
+)
+@pytest.mark.parametrize(
+    'context',
+    [
+        class_template1,
+    ],
+)
+@pytest.mark.parametrize(
+    'variable_name',
+    [
+        'should_raise',
+    ],
+)
 def test_class_block_usage(
     assert_errors,
     parse_ast_tree,
@@ -131,18 +158,27 @@ def test_class_block_usage(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('class_statement', [
-    class_def1,
-    class_def2,
-    class_def3,
-])
-@pytest.mark.parametrize('context', [
-    class_template1,
-])
-@pytest.mark.parametrize(('first_name', 'second_name'), [
-    ('unique_name', 'unique_name1'),
-    ('_', '_'),
-])
+@pytest.mark.parametrize(
+    'class_statement',
+    [
+        class_def1,
+        class_def2,
+        class_def3,
+    ],
+)
+@pytest.mark.parametrize(
+    'context',
+    [
+        class_template1,
+    ],
+)
+@pytest.mark.parametrize(
+    ('first_name', 'second_name'),
+    [
+        ('unique_name', 'unique_name1'),
+        ('_', '_'),
+    ],
+)
 def test_class_block_correct(
     assert_errors,
     parse_ast_tree,
@@ -166,18 +202,27 @@ def test_class_block_correct(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('class_statement', [
-    class_def1,
-    class_def2,
-    class_def3,
-])
-@pytest.mark.parametrize('context', [
-    class_template2,
-])
-@pytest.mark.parametrize(('first_name', 'second_name'), [
-    ('unique_name', 'unique_name1'),
-    ('_', '_'),
-])
+@pytest.mark.parametrize(
+    'class_statement',
+    [
+        class_def1,
+        class_def2,
+        class_def3,
+    ],
+)
+@pytest.mark.parametrize(
+    'context',
+    [
+        class_template2,
+    ],
+)
+@pytest.mark.parametrize(
+    ('first_name', 'second_name'),
+    [
+        ('unique_name', 'unique_name1'),
+        ('_', '_'),
+    ],
+)
 def test_class_internal_block_correct(
     assert_errors,
     parse_ast_tree,

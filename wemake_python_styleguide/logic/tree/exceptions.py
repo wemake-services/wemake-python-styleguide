@@ -37,10 +37,9 @@ def get_all_exception_names(node: AnyTry) -> List[str]:
         if isinstance(exc_handler.type, ast.Name):
             exceptions.append(source.node_to_string(exc_handler.type))
         elif isinstance(exc_handler.type, ast.Tuple):
-            exceptions.extend([
-                source.node_to_string(node)
-                for node in exc_handler.type.elts
-            ])
+            exceptions.extend(
+                [source.node_to_string(node) for node in exc_handler.type.elts]
+            )
     return exceptions
 
 
@@ -69,8 +68,8 @@ def traverse_exception(
             base.__name__
             for base in getmro(exc)
             if (
-                issubclass(base, BaseException) and
-                base.__name__ != exc.__name__
+                issubclass(base, BaseException)
+                and base.__name__ != exc.__name__
             )
         )
         traverse_exception(exc, builtin_exceptions)
@@ -83,20 +82,15 @@ def find_returning_nodes(
     bad_returning_nodes: AnyNodes,
 ) -> Tuple[bool, bool, bool, bool]:
     """Find nodes that return value and are inside try/except/else/finally."""
-    try_has = any(
-        is_contained(line, bad_returning_nodes)
-        for line in node.body
-    )
+    try_has = any(is_contained(line, bad_returning_nodes) for line in node.body)
     except_has = any(
         is_contained(except_handler, bad_returning_nodes)
         for except_handler in node.handlers
     )
     else_has = any(
-        is_contained(line, bad_returning_nodes)
-        for line in node.orelse
+        is_contained(line, bad_returning_nodes) for line in node.orelse
     )
     finally_has = any(
-        is_contained(line, bad_returning_nodes)
-        for line in node.finalbody
+        is_contained(line, bad_returning_nodes) for line in node.finalbody
     )
     return try_has, except_has, else_has, finally_has

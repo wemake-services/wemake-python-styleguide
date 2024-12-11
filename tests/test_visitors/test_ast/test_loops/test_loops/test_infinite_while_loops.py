@@ -121,20 +121,26 @@ while True:
 """
 
 
-@pytest.mark.parametrize('template', [
-    template_simple,
-    template_nested_while1,
-    template_nested_while2,
-    template_nested_if,
-    template_function,
-    template_other,
-])
-@pytest.mark.parametrize('keyword', [
-    'break',
-    'raise Some',
-    'raise Some()',
-    'raise',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        template_simple,
+        template_nested_while1,
+        template_nested_while2,
+        template_nested_if,
+        template_function,
+        template_other,
+    ],
+)
+@pytest.mark.parametrize(
+    'keyword',
+    [
+        'break',
+        'raise Some',
+        'raise Some()',
+        'raise',
+    ],
+)
 def test_correct_while_loops_with_statements(
     assert_errors,
     parse_ast_tree,
@@ -151,14 +157,17 @@ def test_correct_while_loops_with_statements(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    correct_while1,
-    correct_while2,
-    correct_while3,
-    correct_while4,
-    correct_while5,
-    correct_while6,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_while1,
+        correct_while2,
+        correct_while3,
+        correct_while4,
+        correct_while5,
+        correct_while6,
+    ],
+)
 def test_correct_while_loops_with_try(
     assert_errors,
     parse_ast_tree,
@@ -174,13 +183,19 @@ def test_correct_while_loops_with_try(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('template', [
-    template_function,
-])
-@pytest.mark.parametrize('keyword', [
-    'return',
-    'return some',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        template_function,
+    ],
+)
+@pytest.mark.parametrize(
+    'keyword',
+    [
+        'return',
+        'return some',
+    ],
+)
 def test_correct_while_loops_function(
     assert_errors,
     parse_ast_tree,
@@ -198,18 +213,24 @@ def test_correct_while_loops_function(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('template', [
-    template_simple,
-    template_nested_while1,
-    template_nested_while2,
-    template_nested_if,
-    template_function,
-])
-@pytest.mark.parametrize('keyword', [
-    'print(some)',
-    'attr.method()',
-    'a = 1',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        template_simple,
+        template_nested_while1,
+        template_nested_while2,
+        template_nested_if,
+        template_function,
+    ],
+)
+@pytest.mark.parametrize(
+    'keyword',
+    [
+        'print(some)',
+        'attr.method()',
+        'a = 1',
+    ],
+)
 def test_wrong_while_loops(
     assert_errors,
     parse_ast_tree,
@@ -226,10 +247,13 @@ def test_wrong_while_loops(
     assert_errors(visitor, [InfiniteWhileLoopViolation])
 
 
-@pytest.mark.parametrize('code', [
-    wrong_while1,
-    wrong_while2,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_while1,
+        wrong_while2,
+    ],
+)
 def test_wrong_while_loops_with_try(
     assert_errors,
     parse_ast_tree,
@@ -245,13 +269,19 @@ def test_wrong_while_loops_with_try(
     assert_errors(visitor, [InfiniteWhileLoopViolation])
 
 
-@pytest.mark.parametrize('template', [
-    template_double_while,
-])
-@pytest.mark.parametrize('keyword', [
-    'break',
-    'raise ValueError',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        template_double_while,
+    ],
+)
+@pytest.mark.parametrize(
+    'keyword',
+    [
+        'break',
+        'raise ValueError',
+    ],
+)
 def test_double_while_correct_loops(
     assert_errors,
     parse_ast_tree,
@@ -268,13 +298,19 @@ def test_double_while_correct_loops(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('template', [
-    template_double_while,
-])
-@pytest.mark.parametrize(('keyword1', 'keyword2'), [
-    ('print()', 'break'),
-    ('break', 'other.attr = 1'),
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        template_double_while,
+    ],
+)
+@pytest.mark.parametrize(
+    ('keyword1', 'keyword2'),
+    [
+        ('print()', 'break'),
+        ('break', 'other.attr = 1'),
+    ],
+)
 def test_double_while_wrong_loops(
     assert_errors,
     parse_ast_tree,

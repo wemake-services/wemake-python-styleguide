@@ -56,53 +56,61 @@ match {0}:
 """
 
 
-@pytest.mark.parametrize('bad_name', [
-    'value',  # blacklisted
-    'x',  # short
-    '__Class_private',
-    'number_prefix_10',
-    'some__underscores',
-    'camelCase',
-    'UPPER_case',
-    'юникод',
-    'wrong_alias_',
-    '_',  # this is a different visitor
-])
-@pytest.mark.parametrize('code', [
-    annotation,
-    annotation_value,
-    assigned,
-    assigned_attribute,
-    import_name,
-    from_import_module,
-    from_import_name,
-    calling_function,
-    calling_star_function,
-    called_function,
-    calling_method,
-    called_method,
-    accessing_attribute,
-    accessed_attribute,
-    key_access,
-    list_definition,
-    raising_variable,
-    returning_variable,
-    awaiting_variable,
-    yielding_variable,
-    inheriting_variables,
-    pytest.param(
-        pattern_match_usage,
-        marks=pytest.mark.skipif(not PY310, reason='pm was added in 3.10'),
-    ),
-])
-@pytest.mark.parametrize('visitor_class', [
-    # We test it here,
-    # since I am too lazy to refactor usage patterns to be a fixture.
-    WrongNameVisitor,
-
-    # Our real visitor.
-    UnusedVariableUsageVisitor,
-])
+@pytest.mark.parametrize(
+    'bad_name',
+    [
+        'value',  # blacklisted
+        'x',  # short
+        '__Class_private',
+        'number_prefix_10',
+        'some__underscores',
+        'camelCase',
+        'UPPER_case',
+        'юникод',
+        'wrong_alias_',
+        '_',  # this is a different visitor
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        annotation,
+        annotation_value,
+        assigned,
+        assigned_attribute,
+        import_name,
+        from_import_module,
+        from_import_name,
+        calling_function,
+        calling_star_function,
+        called_function,
+        calling_method,
+        called_method,
+        accessing_attribute,
+        accessed_attribute,
+        key_access,
+        list_definition,
+        raising_variable,
+        returning_variable,
+        awaiting_variable,
+        yielding_variable,
+        inheriting_variables,
+        pytest.param(
+            pattern_match_usage,
+            marks=pytest.mark.skipif(not PY310, reason='pm was added in 3.10'),
+        ),
+    ],
+)
+@pytest.mark.parametrize(
+    'visitor_class',
+    [
+        # We test it here,
+        # since I am too lazy to refactor usage patterns to be a fixture.
+        WrongNameVisitor,
+        # Our real visitor.
+        UnusedVariableUsageVisitor,
+    ],
+)
 def test_correct_variable_usage(
     assert_errors,
     parse_ast_tree,
@@ -120,28 +128,34 @@ def test_correct_variable_usage(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('bad_name', [
-    '__',
-    '___',
-])
-@pytest.mark.parametrize('code', [
-    annotation,
-    annotation_value,
-    assigned,
-    assigned_attribute,
-    calling_function,
-    calling_star_function,
-    called_function,
-    calling_method,
-    accessed_attribute,
-    key_access,
-    list_definition,
-    raising_variable,
-    returning_variable,
-    awaiting_variable,
-    yielding_variable,
-    inheriting_variables,
-])
+@pytest.mark.parametrize(
+    'bad_name',
+    [
+        '__',
+        '___',
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        annotation,
+        annotation_value,
+        assigned,
+        assigned_attribute,
+        calling_function,
+        calling_star_function,
+        called_function,
+        calling_method,
+        accessed_attribute,
+        key_access,
+        list_definition,
+        raising_variable,
+        returning_variable,
+        awaiting_variable,
+        yielding_variable,
+        inheriting_variables,
+    ],
+)
 def test_wrong_variable_usage(
     assert_errors,
     parse_ast_tree,
@@ -158,27 +172,33 @@ def test_wrong_variable_usage(
     assert_errors(visitor, [UnusedVariableIsUsedViolation])
 
 
-@pytest.mark.parametrize('bad_name', [
-    '_',  # we are forced to allow this name, because django uses it a lot.
-])
-@pytest.mark.parametrize('code', [
-    annotation,
-    annotation_value,
-    assigned,
-    assigned_attribute,
-    calling_function,
-    calling_star_function,
-    called_function,
-    calling_method,
-    accessed_attribute,
-    key_access,
-    list_definition,
-    raising_variable,
-    returning_variable,
-    awaiting_variable,
-    yielding_variable,
-    inheriting_variables,
-])
+@pytest.mark.parametrize(
+    'bad_name',
+    [
+        '_',  # we are forced to allow this name, because django uses it a lot.
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        annotation,
+        annotation_value,
+        assigned,
+        assigned_attribute,
+        calling_function,
+        calling_star_function,
+        called_function,
+        calling_method,
+        accessed_attribute,
+        key_access,
+        list_definition,
+        raising_variable,
+        returning_variable,
+        awaiting_variable,
+        yielding_variable,
+        inheriting_variables,
+    ],
+)
 def test_unused_special_case(
     assert_errors,
     parse_ast_tree,

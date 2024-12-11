@@ -82,33 +82,46 @@ def get_attributes(
 
 
 def _get_instance_attribute(node: ast.AST) -> Optional[ast.Attribute]:
-    return node if (
-        isinstance(node, ast.Attribute) and
-        isinstance(node.ctx, ast.Store) and
-        isinstance(node.value, ast.Name) and
-        node.value.id == 'self'
-    ) else None
+    return (
+        node
+        if (
+            isinstance(node, ast.Attribute)
+            and isinstance(node.ctx, ast.Store)
+            and isinstance(node.value, ast.Name)
+            and node.value.id == 'self'
+        )
+        else None
+    )
 
 
 def _get_class_attribute(
     node: ast.ClassDef,
     subnode: ast.AST,
 ) -> Optional[AnyAssign]:
-    return subnode if (
-        nodes.get_context(subnode) is node and
-        getattr(subnode, 'value', None) and
-        isinstance(subnode, AssignNodes)
-    ) else None
+    return (
+        subnode
+        if (
+            nodes.get_context(subnode) is node
+            and getattr(subnode, 'value', None)
+            and isinstance(subnode, AssignNodes)
+        )
+        else None
+    )
 
 
 def _get_annotated_class_attribute(
     node: ast.ClassDef,
     subnode: ast.AST,
 ) -> Optional[AnyAssign]:
-    return subnode if (
-        nodes.get_context(subnode) is node and
-        (
-            getattr(subnode, 'value', None) and
-            isinstance(subnode, AssignNodes)
-        ) or isinstance(subnode, ast.AnnAssign)
-    ) else None
+    return (
+        subnode
+        if (
+            nodes.get_context(subnode) is node
+            and (
+                getattr(subnode, 'value', None)
+                and isinstance(subnode, AssignNodes)
+            )
+            or isinstance(subnode, ast.AnnAssign)
+        )
+        else None
+    )

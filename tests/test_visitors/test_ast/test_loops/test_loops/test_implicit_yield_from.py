@@ -14,15 +14,21 @@ def function():
 """
 
 
-@pytest.mark.parametrize('template', [
-    for_loop_template,
-])
-@pytest.mark.parametrize('code', [
-    'yield',
-    'yield None',
-    'yield index',
-    'yield 10',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        for_loop_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        'yield',
+        'yield None',
+        'yield index',
+        'yield 10',
+    ],
+)
 def test_implicit_yield_from(
     assert_errors,
     parse_ast_tree,
@@ -40,15 +46,21 @@ def test_implicit_yield_from(
     assert_errors(visitor, [ImplicitYieldFromViolation])
 
 
-@pytest.mark.parametrize('template', [
-    for_loop_template,
-])
-@pytest.mark.parametrize('code', [
-    'yield',
-    'yield None',
-    'yield index',
-    'yield 10',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        for_loop_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        'yield',
+        'yield None',
+        'yield index',
+        'yield 10',
+    ],
+)
 def test_async_implicit_yield_from(
     assert_errors,
     parse_ast_tree,
@@ -66,15 +78,21 @@ def test_async_implicit_yield_from(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('template', [
-    for_loop_template,
-])
-@pytest.mark.parametrize('code', [
-    'print(index)',
-    'yield index\n        print(index)',
-    'return index',
-    'call(index)',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        for_loop_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        'print(index)',
+        'yield index\n        print(index)',
+        'return index',
+        'call(index)',
+    ],
+)
 def test_correct_for_loop(
     assert_errors,
     parse_ast_tree,
@@ -92,12 +110,18 @@ def test_correct_for_loop(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('template', [
-    for_loop_template,
-])
-@pytest.mark.parametrize('code', [
-    'yield from index',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        for_loop_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        'yield from index',
+    ],
+)
 def test_correct_sync_for_loop(
     assert_errors,
     parse_ast_tree,

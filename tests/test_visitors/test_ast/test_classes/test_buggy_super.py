@@ -66,15 +66,18 @@ class A:
 """
 
 
-@pytest.mark.parametrize('code', [
-    error_generator_expression,
-    error_nested_comprehensions,
-    error_multiple_nested_comprehensions,
-    error_set_comprehension,
-    error_list_comprehension,
-    error_dict_comprehension,
-    error_nested_methods,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        error_generator_expression,
+        error_nested_comprehensions,
+        error_multiple_nested_comprehensions,
+        error_set_comprehension,
+        error_list_comprehension,
+        error_dict_comprehension,
+        error_nested_methods,
+    ],
+)
 def test_buggy_super_context(
     assert_errors,
     parse_ast_tree,
@@ -90,13 +93,16 @@ def test_buggy_super_context(
     assert_errors(visitor, [BuggySuperContextViolation])
 
 
-@pytest.mark.parametrize('code', [
-    correct_set_comprehension,
-    correct_list_comprehension,
-    correct_dict_comprehension,
-    correct_generator_expression,
-    correct_nested_methods,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_set_comprehension,
+        correct_list_comprehension,
+        correct_dict_comprehension,
+        correct_generator_expression,
+        correct_nested_methods,
+    ],
+)
 def test_correct_super_context(
     assert_errors,
     parse_ast_tree,

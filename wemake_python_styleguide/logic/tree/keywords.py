@@ -39,7 +39,7 @@ def next_node_returns_bool(body: Sequence[ast.stmt], index: int) -> bool:
 def _node_returns_bool_const(node: ast.stmt) -> bool:
     """Checks if a Return node would return a boolean constant."""
     return (
-        isinstance(node, ast.Return) and
-        isinstance(node.value, ast.NameConstant) and
-        isinstance(node.value.value, bool)
+        isinstance(node, ast.Return)
+        and isinstance(node.value, ast.NameConstant)
+        and isinstance(node.value.value, bool)
     )

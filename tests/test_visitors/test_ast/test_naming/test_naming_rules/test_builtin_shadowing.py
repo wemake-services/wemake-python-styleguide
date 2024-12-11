@@ -6,11 +6,13 @@ from wemake_python_styleguide.visitors.ast.naming.validation import (
     WrongNameVisitor,
 )
 
-real_builtins = frozenset((
-    'list',
-    'str',
-    'sum',
-))
+real_builtins = frozenset(
+    (
+        'list',
+        'str',
+        'sum',
+    )
+)
 
 
 @pytest.mark.parametrize('wrong_name', real_builtins)

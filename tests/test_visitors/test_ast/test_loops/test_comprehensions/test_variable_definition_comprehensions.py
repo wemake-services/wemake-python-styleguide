@@ -28,19 +28,25 @@ def container():
 """
 
 
-@pytest.mark.parametrize('code', [
-    list_comprehension,
-    generator_expression,
-    set_comprehension,
-    dict_comprehension,
-])
-@pytest.mark.parametrize('definition', [
-    'xy.attr',
-    'xy["key"]',
-    'xy[0]',
-    '(xy[0], y)',
-    '(y, xy.attr)',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        list_comprehension,
+        generator_expression,
+        set_comprehension,
+        dict_comprehension,
+    ],
+)
+@pytest.mark.parametrize(
+    'definition',
+    [
+        'xy.attr',
+        'xy["key"]',
+        'xy[0]',
+        '(xy[0], y)',
+        '(y, xy.attr)',
+    ],
+)
 def test_wrong_definitions_in_comprehension(
     assert_errors,
     parse_ast_tree,
@@ -58,21 +64,27 @@ def test_wrong_definitions_in_comprehension(
     assert_errors(visitor, [LoopVariableDefinitionViolation])
 
 
-@pytest.mark.parametrize('code', [
-    list_comprehension,
-    generator_expression,
-    set_comprehension,
-    dict_comprehension,
-])
-@pytest.mark.parametrize('definition', [
-    'xy',
-    '(y, xy)',
-    '(first, *star)',
-    '(first, second, *star)',
-    # regression 1684
-    'first, (second, third)',
-    '(first, second), third',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        list_comprehension,
+        generator_expression,
+        set_comprehension,
+        dict_comprehension,
+    ],
+)
+@pytest.mark.parametrize(
+    'definition',
+    [
+        'xy',
+        '(y, xy)',
+        '(first, *star)',
+        '(first, second, *star)',
+        # regression 1684
+        'first, (second, third)',
+        '(first, second), third',
+    ],
+)
 def test_comprehension_without_bad_definitions(
     assert_errors,
     parse_ast_tree,

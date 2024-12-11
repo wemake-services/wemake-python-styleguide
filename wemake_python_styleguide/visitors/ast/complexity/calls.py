@@ -32,9 +32,12 @@ class CallChainsVisitor(BaseNodeVisitor):
         if node in self._visited_calls:
             return
 
-        consecutive_calls = set(takewhile(
-            self._is_call, parts(node),
-        ))
+        consecutive_calls = set(
+            takewhile(
+                self._is_call,
+                parts(node),
+            )
+        )
 
         self._visited_calls.update(consecutive_calls)
         num_of_calls = len(consecutive_calls)

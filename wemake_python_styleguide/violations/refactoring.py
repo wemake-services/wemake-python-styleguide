@@ -159,12 +159,12 @@ class UselessFinallyViolation(ASTViolation):
     Example::
 
         # Correct:
-        with open("filename") as f:
+        with open('filename') as f:
             f.write(...)
 
         # Wrong:
         try:
-            f = open("filename")
+            f = open('filename')
             f.write(...)
         finally:
             f.close()
@@ -241,6 +241,7 @@ class UselessReturningElseViolation(ASTViolation):
                 return 'yeap'
             return 'nope'
 
+
         # Wrong:
         def some_function():
             if some_call():
@@ -274,12 +275,12 @@ class NegatedConditionsViolation(ASTViolation):
 
         # Correct:
         if some == 1:
-             ...
+            ...
         else:
-             ...
+            ...
 
         if not some:
-             ...
+            ...
 
         if not some:
             ...
@@ -288,9 +289,9 @@ class NegatedConditionsViolation(ASTViolation):
 
         # Wrong:
         if not some:
-             ...
+            ...
         else:
-             ...
+            ...
 
     .. versionadded:: 0.8.0
     .. versionchanged:: 0.11.0
@@ -576,7 +577,7 @@ class WrongIsinstanceWithTupleViolation(ASTViolation):
         isinstance(some, int)
 
         # Wrong:
-        isinstance(some, (int, ))
+        isinstance(some, (int,))
 
     See: https://docs.python.org/3/library/functions.html#isinstance
 
@@ -1051,7 +1052,7 @@ class ImplicitYieldFromViolation(ASTViolation):
         yield from some()
 
         yield from (
-            value[index:index + chunk_size]
+            value[index : index + chunk_size]
             for index in range(0, len(value), chunk_size)
         )
 
@@ -1212,6 +1213,7 @@ class SimplifiableReturningIfViolation(ASTViolation):
         # Correct:
         def some_function():
             return some_condition
+
 
         # Wrong:
         def some_function():

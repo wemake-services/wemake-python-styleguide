@@ -30,14 +30,20 @@ def test_wrong_magic_used(
     assert_error_text(visitor, method)
 
 
-@pytest.mark.parametrize('code', [
-    magic_method,
-    regular_function,
-])
-@pytest.mark.parametrize('method', [
-    '__add__',
-    '__init__',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        magic_method,
+        regular_function,
+    ],
+)
+@pytest.mark.parametrize(
+    'method',
+    [
+        '__add__',
+        '__init__',
+    ],
+)
 def test_correct_magic_method_used(
     assert_errors,
     parse_ast_tree,
@@ -54,14 +60,20 @@ def test_correct_magic_method_used(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    magic_method,
-    regular_function,
-])
-@pytest.mark.parametrize('method', [
-    'next',
-    'regular',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        magic_method,
+        regular_function,
+    ],
+)
+@pytest.mark.parametrize(
+    'method',
+    [
+        'next',
+        'regular',
+    ],
+)
 def test_regular_method_used(
     assert_errors,
     parse_ast_tree,

@@ -14,13 +14,16 @@ def wrapper():
 """
 
 
-@pytest.mark.parametrize('definition', [
-    'xy[0]',
-    'xy.attr',
-    'xy["key"]',
-    '(valid, invalid.attr)',
-    '(invalid.attr, valid)',
-])
+@pytest.mark.parametrize(
+    'definition',
+    [
+        'xy[0]',
+        'xy.attr',
+        'xy["key"]',
+        '(valid, invalid.attr)',
+        '(invalid.attr, valid)',
+    ],
+)
 def test_wrong_definition_loop(
     assert_errors,
     parse_ast_tree,
@@ -37,11 +40,14 @@ def test_wrong_definition_loop(
     assert_errors(visitor, [LoopVariableDefinitionViolation])
 
 
-@pytest.mark.parametrize('definition', [
-    'xy',
-    '(valid1, valid2)',
-    'valid1, *valid2',
-])
+@pytest.mark.parametrize(
+    'definition',
+    [
+        'xy',
+        '(valid1, valid2)',
+        'valid1, *valid2',
+    ],
+)
 def test_correct_definition_loop(
     assert_errors,
     parse_ast_tree,

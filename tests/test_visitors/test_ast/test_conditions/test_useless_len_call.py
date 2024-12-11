@@ -13,11 +13,14 @@ wrong_len_call1 = 'if len(x): ...'
 wrong_len_call2 = 'a = 1 if len(x) else 0'
 
 
-@pytest.mark.parametrize('code', [
-    correct_call1,
-    correct_call2,
-    correct_call3,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_call1,
+        correct_call2,
+        correct_call3,
+    ],
+)
 def test_useful_len_call(
     assert_errors,
     parse_ast_tree,
@@ -33,10 +36,13 @@ def test_useful_len_call(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    wrong_len_call1,
-    wrong_len_call2,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_len_call1,
+        wrong_len_call2,
+    ],
+)
 def test_useless_len_call(
     assert_errors,
     parse_ast_tree,

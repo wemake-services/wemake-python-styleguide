@@ -241,7 +241,7 @@ class UnicodeStringViolation(TokenizeViolation):
         file_contents = b'aabbcc'
 
         # Wrong:
-        nickname = u'sobolevn'
+        nickname = 'sobolevn'
 
     .. versionadded:: 0.1.0
     .. versionchanged:: 1.0.0
@@ -311,8 +311,8 @@ class PartialFloatViolation(TokenizeViolation):
         ten_float = 10.0
 
         # Wrong:
-        half = .5
-        ten_float = 10.
+        half = 0.5
+        ten_float = 10.0
 
     .. versionadded:: 0.1.0
 
@@ -383,6 +383,7 @@ class ExplicitObjectBaseClassViolation(ASTViolation):
 
         # Correct:
         class Some: ...
+
 
         # Wrong:
         class Some(object): ...
@@ -513,13 +514,13 @@ class BadNumberSuffixViolation(TokenizeViolation):
         hex_number = 0xFF
         octal_number = 0o11
         binary_number = 0b1001
-        number_with_scientific_notation = 1.5e+10
+        number_with_scientific_notation = 1.5e10
 
         # Wrong:
-        hex_number = 0XFF
-        octal_number = 0O11
-        binary_number = 0B1001
-        number_with_scientific_notation = 1.5E+10
+        hex_number = 0xFF
+        octal_number = 0o11
+        binary_number = 0b1001
+        number_with_scientific_notation = 1.5e10
 
     .. versionadded:: 0.3.0
     .. versionchanged:: 1.0.0
@@ -616,12 +617,13 @@ class MissingSpaceBetweenKeywordAndParenViolation(TokenizeViolation):
             del (a, b)
             yield (1, 2, 3)
 
+
         # Wrong:
         def func():
             a = 1
             b = 2
-            del(a, b)
-            yield(1, 2, 3)
+            del (a, b)
+            yield (1, 2, 3)
 
     .. versionadded:: 0.3.0
     .. versionchanged:: 1.0.0
@@ -651,10 +653,12 @@ class ConstantConditionViolation(ASTViolation):
     Example::
 
         # Correct:
-        if value is True: ...
+        if value is True:
+            ...
 
         # Wrong:
-        if True: ...
+        if True:
+            ...
 
     .. versionadded:: 0.3.0
 
@@ -682,7 +686,10 @@ class ObjectInBaseClassesListViolation(ASTViolation):
 
        # Correct:
        class SomeClassName: ...
+
+
        class SomeClassName(FirstParentClass, SecondParentClass): ...
+
 
        # Wrong:
        class SomeClassName(FirstParentClass, SecondParentClass, object): ...
@@ -834,9 +841,10 @@ class ExtraIndentationViolation(TokenizeViolation):
         def test():
             print('test')
 
+
         # Wrong:
         def test():
-                    print('test')
+            print('test')
 
     This rule is consistent with the "Vertical Hanging Indent" option for
     ``multi_line_output`` setting of ``isort``. To avoid conflicting rules,
@@ -874,32 +882,34 @@ class WrongBracketPositionViolation(TokenizeViolation):
     Example::
 
         # Correct:
-        print([
-            1, 2, 3,
-        ])
+        print(
+            [
+                1,
+                2,
+                3,
+            ]
+        )
 
         print(
             1,
             2,
         )
 
+
         def _annotate_brackets(
             tokens: List[tokenize.TokenInfo],
-        ) -> TokenLines:
-            ...
+        ) -> TokenLines: ...
+
 
         # Wrong:
-        print([
-            1, 2, 3],
+        print(
+            [1, 2, 3],
         )
 
-        print(
-            1,
-            2)
+        print(1, 2)
 
-        def _annotate_brackets(
-            tokens: List[tokenize.TokenInfo]) -> TokenLines:
-            ...
+
+        def _annotate_brackets(tokens: List[tokenize.TokenInfo]) -> TokenLines: ...
 
     We check round, square, and curly brackets.
 
@@ -930,14 +940,11 @@ class MultilineFunctionAnnotationViolation(ASTViolation):
     Example::
 
         # Correct:
-        def create_list(length: int) -> List[int]:
-            ...
+        def create_list(length: int) -> List[int]: ...
+
 
         # Wrong:
-        def create_list(length: int) -> List[
-            int,
-        ]:
-            ...
+        def create_list(length: int) -> List[int,]: ...
 
     This rule checks argument and return type annotations.
 
@@ -972,7 +979,7 @@ class UppercaseStringModifierViolation(TokenizeViolation):
 
         # Wrong:
         some_string = R'/regex/'
-        some_bytes = B'123'
+        some_bytes = b'123'
 
     .. versionadded:: 0.6.0
 
@@ -1099,6 +1106,7 @@ class InconsistentReturnViolation(ASTViolation):
                 return 2
             return 1
 
+
         # Wrong:
         def function():
             if some:
@@ -1141,6 +1149,7 @@ class InconsistentYieldViolation(ASTViolation):
             if some:
                 yield 2
             yield 1
+
 
         # Wrong:
         def function():
@@ -1365,10 +1374,12 @@ class InconsistentReturnVariableViolation(ASTViolation):
         def some_function():
             return 1
 
+
         def other_function():
             some_value = 1
             do_something(some_value)
             return some_value
+
 
         # Wrong:
         def some_function():
@@ -1683,7 +1694,7 @@ class PositiveExponentViolation(TokenizeViolation):
         number = 1e1 + 1e-1
 
         # Wrong:
-        number = 1e+1
+        number = 1e1
 
     .. versionadded:: 0.12.0
 
@@ -1711,7 +1722,7 @@ class WrongHexNumberCaseViolation(TokenizeViolation):
         number = 0xABCDEF
 
         # Wrong:
-        number = 0xabcdef
+        number = 0xABCDEF
 
     .. versionadded:: 0.12.0
     .. versionchanged:: 1.0.0
@@ -1773,7 +1784,7 @@ class BadComplexNumberSuffixViolation(TokenizeViolation):
         complex_number = 1j
 
         # Wrong:
-        complex_number = 1J
+        complex_number = 1j
 
     .. versionadded:: 0.12.0
     .. versionchanged:: 1.0.0
@@ -1847,7 +1858,7 @@ class MeaninglessNumberOperationViolation(ASTViolation):
         # Wrong:
         number = 1 + 0 * 1
         zero = some * 0 / 1
-        one = some ** 0 ** 1
+        one = some**0**1
         three = 3 ^ 0
         three = 3 | 0
         three = 3 % 1
@@ -1955,20 +1966,20 @@ class LineStartsWithDotViolation(TokenizeViolation):
     Example::
 
         # Correct:
-        some = MyModel.objects.filter(
-            ...,
-        ).exclude(
-            ...,
-        ).annotate(
-            ...,
+        some = (
+            MyModel.objects.filter(
+                ...,
+            )
+            .exclude(
+                ...,
+            )
+            .annotate(
+                ...,
+            )
         )
 
         # Wrong:
-        some = (
-            MyModel.objects.filter(...)
-                .exclude(...)
-                .annotate(...)
-        )
+        some = MyModel.objects.filter(...).exclude(...).annotate(...)
 
     .. versionadded:: 0.13.0
     .. versionchanged:: 1.0.0
@@ -2176,10 +2187,8 @@ class BracketBlankLineViolation(TokenizeViolation):
 
         # Wrong:
         arr = [
-
             1,
             2,
-
         ]
 
     .. versionadded:: 0.13.0
@@ -2216,7 +2225,7 @@ class IterableUnpackingViolation(ASTViolation):
 
         # Wrong:
         [*iterable]
-        *iterable, = other_iterable
+        (*iterable,) = other_iterable
 
     .. versionadded:: 0.13.0
     .. versionchanged:: 0.19.3
@@ -2323,7 +2332,7 @@ class RawStringNotNeededViolation(TokenizeViolation):
     Example::
 
         # Correct:
-        r'This is a correct use \n'
+        r"This is a correct use \n"
 
         # Wrong:
         r'This string should not be prefixed with r.'
@@ -2356,17 +2365,11 @@ class InconsistentComprehensionViolation(TokenizeViolation):
         list = [some(number) for number in numbers]
 
         list = [
-           some(number)
-           for numbers in matrix
-           for number in numbers
-           if number > 0
+            some(number) for numbers in matrix for number in numbers if number > 0
         ]
 
         # Wrong:
-        list = [
-            some(number) for number in numbers
-            if number > 0
-        ]
+        list = [some(number) for number in numbers if number > 0]
 
     .. versionadded:: 0.15.0
 

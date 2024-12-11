@@ -8,14 +8,17 @@ from wemake_python_styleguide.visitors.ast.functions import (
 )
 
 
-@pytest.mark.parametrize('code', [
-    'float(4.5) + 4.2',
-    'float(2) + 0',
-    'result = "NaN".join(["a", "a"])',
-    'a = math.nan',
-    'my_function("NaN")',
-    'float("123") + math.nan',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'float(4.5) + 4.2',
+        'float(2) + 0',
+        'result = "NaN".join(["a", "a"])',
+        'a = math.nan',
+        'my_function("NaN")',
+        'float("123") + math.nan',
+    ],
+)
 def test_correct_nan_acquisition(
     assert_errors,
     parse_ast_tree,
@@ -32,26 +35,35 @@ def test_correct_nan_acquisition(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('prefix', [
-    'b',
-    'u',
-    '',
-])
-@pytest.mark.parametrize('nan_variant', [
-    'NaN',
-    'NAN',
-    'nan',
-    'Nan',
-    'nAn',
-    'nAN',
-    'naN',
-    'NAn',
-])
-@pytest.mark.parametrize('code', [
-    'float({0})',
-    'float({0}) < 0.0',
-    'sorted([5.0, float({0}), 10.0, 0.0])',
-])
+@pytest.mark.parametrize(
+    'prefix',
+    [
+        'b',
+        'u',
+        '',
+    ],
+)
+@pytest.mark.parametrize(
+    'nan_variant',
+    [
+        'NaN',
+        'NAN',
+        'nan',
+        'Nan',
+        'nAn',
+        'nAN',
+        'naN',
+        'NAn',
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        'float({0})',
+        'float({0}) < 0.0',
+        'sorted([5.0, float({0}), 10.0, 0.0])',
+    ],
+)
 def test_floating_nan(
     assert_errors,
     parse_ast_tree,

@@ -153,8 +153,8 @@ def is_public(name: str) -> bool:
 
     """
     return (
-        not is_protected(name) and
-        not is_private(name) and
-        not is_magic(name) and
-        not is_unused(name)
+        not is_protected(name)
+        and not is_private(name)
+        and not is_magic(name)
+        and not is_unused(name)
     )

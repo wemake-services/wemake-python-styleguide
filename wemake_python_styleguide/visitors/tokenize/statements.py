@@ -70,34 +70,45 @@ class MultilineStringVisitor(BaseTokenVisitor):
         linenos = sorted((self._lines.keys()))
         for index, _ in enumerate(linenos):
             line_tokens = sorted(
-                self._lines[linenos[index]], key=attrgetter('start'),
+                self._lines[linenos[index]],
+                key=attrgetter('start'),
             )
             previous_line_token = None
             next_line_token = None
             if index != 0:
                 previous_line_token = sorted(
-                    self._lines[linenos[index - 1]], key=attrgetter('start'),
+                    self._lines[linenos[index - 1]],
+                    key=attrgetter('start'),
                 )[-1]
             if index + 1 < len(linenos):
                 next_line_token = sorted(
-                    self._lines[linenos[index + 1]], key=attrgetter('start'),
+                    self._lines[linenos[index + 1]],
+                    key=attrgetter('start'),
                 )[0]
             self._check_individual_line(
-                line_tokens, previous_line_token, next_line_token,
+                line_tokens,
+                previous_line_token,
+                next_line_token,
             )
 
 
 @final
-@alias('visit_any_left_bracket', (
-    'visit_lsqb',
-    'visit_lbrace',
-    'visit_lpar',
-))
-@alias('visit_any_right_bracket', (
-    'visit_rsqb',
-    'visit_rbrace',
-    'visit_rpar',
-))
+@alias(
+    'visit_any_left_bracket',
+    (
+        'visit_lsqb',
+        'visit_lbrace',
+        'visit_lpar',
+    ),
+)
+@alias(
+    'visit_any_right_bracket',
+    (
+        'visit_rsqb',
+        'visit_rbrace',
+        'visit_rpar',
+    ),
+)
 class InconsistentComprehensionVisitor(BaseTokenVisitor):
     """
     Visitor for checking inconsistent comprehension syntax.
@@ -157,8 +168,7 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
         # you can try to add a comment there, but we don't allow it
         for_token = self.file_tokens[self.file_tokens.index(token) + 1]
         is_broken = (
-            for_token.string != 'for' or
-            token.start[0] != for_token.start[0]
+            for_token.string != 'for' or token.start[0] != for_token.start[0]
         )
         if is_broken:
             self._current_ctx.async_broken = True
@@ -185,7 +195,9 @@ class InconsistentComprehensionVisitor(BaseTokenVisitor):
 
         # This is not the whole expression, but we only need where it starts:
         token_index = self.file_tokens.index(token)
-        self._current_ctx.in_exprs.append(next_meaningful_token(
-            self.file_tokens,
-            token_index,
-        ))
+        self._current_ctx.in_exprs.append(
+            next_meaningful_token(
+                self.file_tokens,
+                token_index,
+            )
+        )

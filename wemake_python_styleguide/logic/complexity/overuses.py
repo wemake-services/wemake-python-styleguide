@@ -63,9 +63,9 @@ def is_self(node: ast.AST) -> bool:
         self_node = node
 
     return bool(
-        self_node and
-        isinstance(self_node.value, ast.Name) and
-        self_node.value.id in SPECIAL_ARGUMENT_NAMES_WHITELIST,
+        self_node
+        and isinstance(self_node.value, ast.Name)
+        and self_node.value.id in SPECIAL_ARGUMENT_NAMES_WHITELIST,
     )
 
 
@@ -84,8 +84,7 @@ def is_primitive(node: ast.AST) -> bool:
         return not node.elts  # we do allow `[]` and `()`
     elif isinstance(node, ast.Set):
         return (  # we do allow `{*set_items}`
-            len(node.elts) == 1 and
-            isinstance(node.elts[0], ast.Starred)
+            len(node.elts) == 1 and isinstance(node.elts[0], ast.Starred)
         )
     elif isinstance(node, ast.Dict):  # we do allow `{}` and `{**values}`
         return not list(filter(None, node.keys))

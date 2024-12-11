@@ -43,10 +43,15 @@ class AccessVisitor(BaseNodeVisitor):
         if node in self._visited_accesses:
             return
 
-        consecutive_access = cast(Set[AnyAccess], set(takewhile(
-            self._is_any_access,
-            attributes.parts(node),
-        )))
+        consecutive_access = cast(
+            Set[AnyAccess],
+            set(
+                takewhile(
+                    self._is_any_access,
+                    attributes.parts(node),
+                )
+            ),
+        )
 
         self._visited_accesses.update(consecutive_access)
         access_number = len(consecutive_access)

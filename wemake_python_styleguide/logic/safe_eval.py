@@ -40,10 +40,12 @@ def _convert_iterable(
         return list(map(literal_eval_with_names, node.elts))
     elif isinstance(node, ast.Set):
         return set(map(literal_eval_with_names, node.elts))
-    return dict(zip(
-        map(literal_eval_with_names, node.keys),
-        map(literal_eval_with_names, node.values),
-    ))
+    return dict(
+        zip(
+            map(literal_eval_with_names, node.keys),
+            map(literal_eval_with_names, node.values),
+        )
+    )
 
 
 def literal_eval_with_names(  # noqa: WPS231

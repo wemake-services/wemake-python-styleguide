@@ -94,12 +94,15 @@ def function():
 """
 
 
-@pytest.mark.parametrize('code', [
-    wrong_example1,
-    wrong_example2,
-    wrong_example3,
-    wrong_example4,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_example1,
+        wrong_example2,
+        wrong_example3,
+        wrong_example4,
+    ],
+)
 def test_wrong_yield_statement(
     assert_errors,
     parse_ast_tree,
@@ -116,16 +119,19 @@ def test_wrong_yield_statement(
     assert_errors(visitor, [InconsistentYieldViolation])
 
 
-@pytest.mark.parametrize('code', [
-    correct_example1,
-    correct_example2,
-    correct_example3,
-    correct_example4,
-    correct_example5,
-    correct_example6,
-    correct_example7,
-    correct_example8,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_example1,
+        correct_example2,
+        correct_example3,
+        correct_example4,
+        correct_example5,
+        correct_example6,
+        correct_example7,
+        correct_example8,
+    ],
+)
 def test_correct_yield_statements(
     assert_errors,
     parse_ast_tree,

@@ -202,6 +202,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
 
 # Formatting text:
 
+
 def _bold(text: str, *, no_color: bool = _NO_COLOR) -> str:
     r"""
     Returns bold formatted text.
@@ -259,7 +260,9 @@ def _highlight(
         return source
     try:
         return highlight(  # type: ignore[no-any-return]
-            source, lexer, formatter,
+            source,
+            lexer,
+            formatter,
         )
     except Exception:  # pragma: no cover
         # Might fail on some systems, when colors are set incorrectly,
@@ -268,6 +271,7 @@ def _highlight(
 
 
 # Helpers:
+
 
 def _count_per_filename(
     statistics: Statistics,

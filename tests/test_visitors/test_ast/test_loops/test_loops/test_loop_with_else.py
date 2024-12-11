@@ -126,14 +126,17 @@ while x > 2:
 """
 
 
-@pytest.mark.parametrize('code', [
-    wrong_else_in_for_loop,
-    wrong_nested_else_in_for_loop,
-    wrong_nested_for_with_break,
-    wrong_nested_while_with_break,
-    wrong_multiple_breaks,
-    wrong_while_without_break,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_else_in_for_loop,
+        wrong_nested_else_in_for_loop,
+        wrong_nested_for_with_break,
+        wrong_nested_while_with_break,
+        wrong_multiple_breaks,
+        wrong_while_without_break,
+    ],
+)
 def test_wrong_else_in_for_loop(
     assert_errors,
     parse_ast_tree,
@@ -150,15 +153,18 @@ def test_wrong_else_in_for_loop(
     assert_errors(visitor, [UselessLoopElseViolation])
 
 
-@pytest.mark.parametrize('code', [
-    right_else_in_for_loop,
-    right_nested_break_in_for_loop,
-    right_multiple_nested_for_with_break,
-    right_multiple_breaks,
-    right_nested_if_else,
-    right_while_with_break,
-    right_while_without_break_and_else,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        right_else_in_for_loop,
+        right_nested_break_in_for_loop,
+        right_multiple_nested_for_with_break,
+        right_multiple_breaks,
+        right_nested_if_else,
+        right_while_with_break,
+        right_while_without_break_and_else,
+    ],
+)
 def test_correct_else_in_for_loop(
     assert_errors,
     parse_ast_tree,

@@ -31,20 +31,29 @@ class Test:
 """
 
 
-@pytest.mark.parametrize('import_statement', [
-    import_block,
-    import_block_as,
-    from_import_block,
-    from_import_block_as,
-])
-@pytest.mark.parametrize('context', [
-    import_template1,
-    import_template2,
-    import_template3,
-])
-@pytest.mark.parametrize('variable_name', [
-    'should_raise',
-])
+@pytest.mark.parametrize(
+    'import_statement',
+    [
+        import_block,
+        import_block_as,
+        from_import_block,
+        from_import_block_as,
+    ],
+)
+@pytest.mark.parametrize(
+    'context',
+    [
+        import_template1,
+        import_template2,
+        import_template3,
+    ],
+)
+@pytest.mark.parametrize(
+    'variable_name',
+    [
+        'should_raise',
+    ],
+)
 def test_import_block_overlap(
     assert_errors,
     assert_error_text,
@@ -70,20 +79,29 @@ def test_import_block_overlap(
     assert_error_text(visitor, variable_name)
 
 
-@pytest.mark.parametrize('import_statement', [
-    import_block,
-    import_block_as,
-    from_import_block,
-    from_import_block_as,
-])
-@pytest.mark.parametrize('context', [
-    import_template1,
-    import_template2,
-    import_template3,
-])
-@pytest.mark.parametrize('variable_name', [
-    'should_raise_if_assigned',
-])
+@pytest.mark.parametrize(
+    'import_statement',
+    [
+        import_block,
+        import_block_as,
+        from_import_block,
+        from_import_block_as,
+    ],
+)
+@pytest.mark.parametrize(
+    'context',
+    [
+        import_template1,
+        import_template2,
+        import_template3,
+    ],
+)
+@pytest.mark.parametrize(
+    'variable_name',
+    [
+        'should_raise_if_assigned',
+    ],
+)
 def test_import_block_usage(
     assert_errors,
     parse_ast_tree,
@@ -106,21 +124,30 @@ def test_import_block_usage(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('import_statement', [
-    import_block,
-    import_block_as,
-    from_import_block,
-    from_import_block_as,
-])
-@pytest.mark.parametrize('context', [
-    import_template1,
-    import_template2,
-    import_template3,
-])
-@pytest.mark.parametrize(('first_name', 'second_name'), [
-    ('unique_name', '_unique_name'),
-    ('_', '_'),
-])
+@pytest.mark.parametrize(
+    'import_statement',
+    [
+        import_block,
+        import_block_as,
+        from_import_block,
+        from_import_block_as,
+    ],
+)
+@pytest.mark.parametrize(
+    'context',
+    [
+        import_template1,
+        import_template2,
+        import_template3,
+    ],
+)
+@pytest.mark.parametrize(
+    ('first_name', 'second_name'),
+    [
+        ('unique_name', '_unique_name'),
+        ('_', '_'),
+    ],
+)
 def test_import_block_correct(
     assert_errors,
     parse_ast_tree,

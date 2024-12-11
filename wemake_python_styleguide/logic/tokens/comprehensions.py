@@ -50,10 +50,10 @@ class Compehension:
         We also check that each compehension is analyzed only once.
         """
         return (
-            self.expr is not None and
-            bool(self.fors) and
-            len(self.fors) == len(self.ins) == len(self.in_exprs) and
-            not self._checked
+            self.expr is not None
+            and bool(self.fors)
+            and len(self.fors) == len(self.ins) == len(self.in_exprs)
+            and not self._checked
         )
 
     def is_valid(self) -> bool:
@@ -96,10 +96,7 @@ class Compehension:
                 for index, for_ in enumerate(self.fors)
                 if index > 0
             )
-        return all(
-            for_.start[0] == self._first_for_line
-            for for_ in self.fors
-        )
+        return all(for_.start[0] == self._first_for_line for for_ in self.fors)
 
     def _check_for_if(self, *, is_multiline: bool) -> bool:
         """Checks that all ``for`` and ``if`` tokens are aligned."""
@@ -109,7 +106,4 @@ class Compehension:
                 if_.start[0] == last_for_line + index + 1
                 for index, if_ in enumerate(self._ifs)
             )
-        return all(
-            if_.start[0] == self._first_for_line
-            for if_ in self._ifs
-        )
+        return all(if_.start[0] == self._first_for_line for if_ in self._ifs)

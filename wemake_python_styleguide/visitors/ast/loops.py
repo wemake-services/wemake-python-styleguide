@@ -44,12 +44,15 @@ _ContainerSpec: TypeAlias = Mapping[Type[ast.AST], Sequence[str]]
 
 
 @final
-@decorators.alias('visit_any_comprehension', (
-    'visit_ListComp',
-    'visit_DictComp',
-    'visit_SetComp',
-    'visit_GeneratorExp',
-))
+@decorators.alias(
+    'visit_any_comprehension',
+    (
+        'visit_ListComp',
+        'visit_DictComp',
+        'visit_SetComp',
+        'visit_GeneratorExp',
+    ),
+)
 class WrongComprehensionVisitor(base.BaseNodeVisitor):
     """Checks comprehensions for correctness."""
 
@@ -89,17 +92,23 @@ class WrongComprehensionVisitor(base.BaseNodeVisitor):
 
 
 @final
-@decorators.alias('visit_any_loop', (
-    'visit_For',
-    'visit_While',
-    'visit_AsyncFor',
-))
-@decorators.alias('visit_any_comp', (
-    'visit_ListComp',
-    'visit_SetComp',
-    'visit_DictComp',
-    'visit_GeneratorExp',
-))
+@decorators.alias(
+    'visit_any_loop',
+    (
+        'visit_For',
+        'visit_While',
+        'visit_AsyncFor',
+    ),
+)
+@decorators.alias(
+    'visit_any_comp',
+    (
+        'visit_ListComp',
+        'visit_SetComp',
+        'visit_DictComp',
+        'visit_GeneratorExp',
+    ),
+)
 class WrongLoopVisitor(base.BaseNodeVisitor):
     """Responsible for examining loops."""
 
@@ -116,7 +125,6 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         ast.SetComp: ['elt'],
         ast.GeneratorExp: ['elt'],
         ast.DictComp: ['key', 'value'],
-
         ast.For: ['body'],
         ast.AsyncFor: ['body'],
         ast.While: ['body'],
@@ -146,14 +154,8 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         for lambda_node in walk.get_subnodes_by_type(node, ast.Lambda):
             arg_nodes = walk.get_subnodes_by_type(lambda_node, ast.arg)
             body_nodes = walk.get_subnodes_by_type(lambda_node.body, ast.Name)
-            arguments = (
-                arg.arg
-                for arg in arg_nodes
-            )
-            body = (
-                subnode.id
-                for subnode in body_nodes
-            )
+            arguments = (arg.arg for arg in arg_nodes)
+            body = (subnode.id for subnode in body_nodes)
             if not all(symbol in arguments for symbol in body):
                 self.add_violation(LambdaInsideLoopViolation(node))
 
@@ -182,10 +184,13 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
 
 
 @final
-@decorators.alias('visit_any_for', (
-    'visit_For',
-    'visit_AsyncFor',
-))
+@decorators.alias(
+    'visit_any_for',
+    (
+        'visit_For',
+        'visit_AsyncFor',
+    ),
+)
 class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
     """Responsible for ``for`` loops and comprehensions definitions."""
 
@@ -231,10 +236,10 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
 
     def _check_implicit_sum(self, node: AnyFor) -> None:
         is_implicit_sum = (
-            len(node.body) == 1 and
-            isinstance(node.body[0], ast.AugAssign) and
-            isinstance(node.body[0].op, ast.Add) and
-            isinstance(node.body[0].target, ast.Name)
+            len(node.body) == 1
+            and isinstance(node.body[0], ast.AugAssign)
+            and isinstance(node.body[0].op, ast.Add)
+            and isinstance(node.body[0].target, ast.Name)
         )
         if is_implicit_sum:
             self.add_violation(ImplicitSumViolation(node))
@@ -245,9 +250,9 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
             return
 
         is_implicit_yield_from = (
-            len(node.body) == 1 and
-            isinstance(node.body[0], ast.Expr) and
-            isinstance(node.body[0].value, ast.Yield)
+            len(node.body) == 1
+            and isinstance(node.body[0], ast.Expr)
+            and isinstance(node.body[0].value, ast.Yield)
         )
         if is_implicit_yield_from:
             self.add_violation(ImplicitYieldFromViolation(node))
@@ -268,9 +273,9 @@ class SyncForLoopVisitor(base.BaseNodeVisitor):
 
         for sub in ast.walk(node):
             has_violation = (
-                isinstance(sub, ast.Subscript) and
-                not self._is_assigned_target(sub) and
-                slices.is_same_slice(iterable, target, sub)
+                isinstance(sub, ast.Subscript)
+                and not self._is_assigned_target(sub)
+                and slices.is_same_slice(iterable, target, sub)
             )
             if has_violation:
                 self.add_violation(ImplicitItemsIteratorViolation(node))

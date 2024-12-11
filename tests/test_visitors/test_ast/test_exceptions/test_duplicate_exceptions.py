@@ -109,16 +109,19 @@ except* ValueError:
 """
 
 
-@pytest.mark.parametrize('code', [
-    correct_bare_except,
-    correct_simple_except,
-    correct_simple_except_with_name,
-    correct_two_exceptions,
-    correct_two_exceptions_with_names,
-    correct_two_excepts,
-    correct_two_excepts_with_names,
-    correct_two_complex_excepts,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_bare_except,
+        correct_simple_except,
+        correct_simple_except_with_name,
+        correct_two_exceptions,
+        correct_two_exceptions_with_names,
+        correct_two_excepts,
+        correct_two_excepts_with_names,
+        correct_two_complex_excepts,
+    ],
+)
 def test_correct_exceptions(
     assert_errors,
     parse_ast_tree,
@@ -134,18 +137,21 @@ def test_correct_exceptions(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    wrong_simple,
-    wrong_single_tuple,
-    wrong_different_tuples,
-    pytest.param(
-        wrong_simple_star,
-        marks=pytest.mark.skipif(
-            not PY311,
-            reason='ExceptionGroup was added in python 3.11',
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_simple,
+        wrong_single_tuple,
+        wrong_different_tuples,
+        pytest.param(
+            wrong_simple_star,
+            marks=pytest.mark.skipif(
+                not PY311,
+                reason='ExceptionGroup was added in python 3.11',
+            ),
         ),
-    ),
-])
+    ],
+)
 def test_duplicate_exceptions(
     assert_errors,
     parse_ast_tree,

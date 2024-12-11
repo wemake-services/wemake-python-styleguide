@@ -9,14 +9,17 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
 )
 
 
-@pytest.mark.parametrize('primitive', [
-    '10.',
-    '.05',
-    '.0',
-    '0.',
-    '-5.',
-    '-.43',
-])
+@pytest.mark.parametrize(
+    'primitive',
+    [
+        '10.',
+        '.05',
+        '.0',
+        '0.',
+        '-5.',
+        '-.43',
+    ],
+)
 def test_partial_float(
     parse_tokens,
     assert_errors,
@@ -36,12 +39,15 @@ def test_partial_float(
     assert_error_text(visitor, primitive.replace('-', ''))
 
 
-@pytest.mark.parametrize('primitive', [
-    '10.0',
-    '0.14',
-    '-0.05',
-    '-1.1',
-])
+@pytest.mark.parametrize(
+    'primitive',
+    [
+        '10.0',
+        '0.14',
+        '-0.05',
+        '-1.1',
+    ],
+)
 def test_correct_float(
     parse_tokens,
     assert_errors,
@@ -59,10 +65,13 @@ def test_correct_float(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('primitive', [
-    '.0500',
-    '.00',
-])
+@pytest.mark.parametrize(
+    'primitive',
+    [
+        '.0500',
+        '.00',
+    ],
+)
 def test_double_incorrect_float(
     parse_tokens,
     assert_errors,
@@ -80,7 +89,10 @@ def test_double_incorrect_float(
     visitor = WrongNumberTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
-    assert_errors(visitor, [
-        PartialFloatViolation,
-        NumberWithMeaninglessZeroViolation,
-    ])
+    assert_errors(
+        visitor,
+        [
+            PartialFloatViolation,
+            NumberWithMeaninglessZeroViolation,
+        ],
+    )

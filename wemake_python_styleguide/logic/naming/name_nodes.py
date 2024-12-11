@@ -52,11 +52,13 @@ def flat_variable_names(nodes: Iterable[AnyAssignWithWalrus]) -> Iterable[str]:
     ['z', 'y']
 
     """
-    return itertools.chain.from_iterable((
-        get_variables_from_node(target)
-        for node in nodes
-        for target in get_assign_targets(node)
-    ))
+    return itertools.chain.from_iterable(
+        (
+            get_variables_from_node(target)
+            for node in nodes
+            for target in get_assign_targets(node)
+        )
+    )
 
 
 def get_variables_from_node(node: ast.AST) -> List[str]:
