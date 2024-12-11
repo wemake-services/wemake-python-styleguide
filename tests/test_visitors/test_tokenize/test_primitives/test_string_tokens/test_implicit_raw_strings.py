@@ -2,7 +2,6 @@ import pytest
 
 from wemake_python_styleguide.violations.consistency import (
     ImplicitRawStringViolation,
-    UppercaseStringModifierViolation,
 )
 from wemake_python_styleguide.visitors.tokenize.primitives import (
     WrongStringTokenVisitor,

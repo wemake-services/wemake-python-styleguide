@@ -132,7 +132,6 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         self._check_loop_needs_else(node)
         self._check_lambda_inside_loop(node)
         self._check_useless_continue(node)
-        self._check_multiline_loop(node)
         self._check_infinite_while_loop(node)
         self.generic_visit(node)
 
