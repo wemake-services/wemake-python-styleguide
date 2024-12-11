@@ -3,9 +3,6 @@ import ast
 from pep8ext_naming import NamingChecker
 from typing_extensions import final
 
-from wemake_python_styleguide.transformations.ast.bugfixes import (
-    fix_line_number,
-)
 from wemake_python_styleguide.transformations.ast.enhancements import (
     set_constant_evaluations,
     set_if_chain,
@@ -77,9 +74,6 @@ def transform(tree: ast.AST) -> ast.AST:
         # Initial, should be the first ones, ordering inside is important:
         _set_parent,
         _set_function_type,
-
-        # Bugfixes, order is not important:
-        fix_line_number,
 
         # Enhancements, order is not important:
         set_node_context,
