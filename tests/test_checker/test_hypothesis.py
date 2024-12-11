@@ -37,7 +37,7 @@ def _fixup(string: str) -> str:
     ).strip().strip('\\').strip() + '\n'
 
 
-@pytest.mark.filterwarnings('ignore:SyntaxWarning')
+@pytest.mark.filterwarnings('ignore::SyntaxWarning')
 @given(source_code=hypothesmith.from_grammar().map(_fixup))
 @settings(print_blob=True)
 def test_no_exceptions(
