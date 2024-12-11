@@ -1,13 +1,15 @@
 import ast
-from collections import defaultdict
-from functools import reduce
-from typing import ClassVar, DefaultDict, List, Mapping, Set, Type
+from typing import ClassVar, List, Mapping, Set, Type
 
 from typing_extensions import Final, TypeAlias, final
 
 from wemake_python_styleguide.compat.aliases import ForNodes
 from wemake_python_styleguide.compat.nodes import TryStar
 from wemake_python_styleguide.logic import source, walk
+from wemake_python_styleguide.logic.naming.duplicates import (
+    duplicated_isinstance_call,
+    get_duplicate_names,
+)
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree import ifs, keywords, operators
 from wemake_python_styleguide.logic.tree.compares import CompareBounds
@@ -23,35 +25,6 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 _OperatorPairs: TypeAlias = Mapping[Type[ast.boolop], Type[ast.cmpop]]
 _ELSE_NODES: Final = (*ForNodes, ast.While, ast.Try, TryStar)
-
-
-# TODO: move to logic
-def _duplicated_isinstance_call(node: ast.BoolOp) -> List[str]:
-    counter: DefaultDict[str, int] = defaultdict(int)
-
-    for call in node.values:
-        if not isinstance(call, ast.Call) or len(call.args) != 2:
-            continue
-
-        if not given_function_called(call, {'isinstance'}):
-            continue
-
-        isinstance_object = source.node_to_string(call.args[0])
-        counter[isinstance_object] += 1
-
-    return [
-        node_name
-        for node_name, count in counter.items()
-        if count > 1
-    ]
-
-
-# TODO: move to logic
-def _get_duplicate_names(variables: List[Set[str]]) -> Set[str]:
-    return reduce(
-        lambda acc, element: acc.intersection(element),
-        variables,
-    )
 
 
 @final
@@ -268,7 +241,7 @@ class BooleanConditionVisitor(BaseNodeVisitor):
         if not isinstance(node.op, ast.Or):
             return
 
-        for var_name in _duplicated_isinstance_call(node):
+        for var_name in duplicated_isinstance_call(node):
             self.add_violation(
                 refactoring.UnmergedIsinstanceCallsViolation(
                     node,
@@ -303,7 +276,7 @@ class ImplicitBoolPatternsVisitor(BaseNodeVisitor):
 
             variables.append({source.node_to_string(cmp.left)})
 
-        for duplicate in _get_duplicate_names(variables):
+        for duplicate in get_duplicate_names(variables):
             self.add_violation(
                 refactoring.ImplicitInConditionViolation(node, text=duplicate),
             )
