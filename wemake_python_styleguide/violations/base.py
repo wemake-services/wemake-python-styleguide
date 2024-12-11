@@ -53,7 +53,7 @@ import abc
 import ast
 import enum
 import tokenize
-from typing import Callable, ClassVar, Optional, Set, Tuple, Union
+from typing import Callable, ClassVar, Optional, Tuple, Union
 
 from typing_extensions import TypeAlias, final
 
