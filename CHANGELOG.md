@@ -19,6 +19,10 @@ Semantic versioning in our case means:
 
 ## WIP
 
+### Features
+
+- Adds official `python3.13` support
+
 ### Bugfixes
 
 - Fixes `OverusedStringViolation` not to include `'...'` string
