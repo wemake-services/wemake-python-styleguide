@@ -32,24 +32,9 @@ class WrongClassDefVisitor(base.BaseNodeVisitor):
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """Checking class definitions."""
-        self._check_base_classes_count(node)
         self._check_base_classes(node)
         self._check_kwargs_unpacking(node)
         self.generic_visit(node)
-
-    def _check_base_classes_count(self, node: ast.ClassDef) -> None:
-        is_object_explicit_base = (
-            len(node.bases) == 1 and
-            isinstance(node.bases[0], ast.Name) and
-            node.bases[0].id == 'object'
-        )
-        if is_object_explicit_base:
-            self.add_violation(
-                consistency.ExplicitObjectBaseClassViolation(
-                    node,
-                    text=node.name,
-                ),
-            )
 
     def _check_base_classes(self, node: ast.ClassDef) -> None:
         for base_name in node.bases:

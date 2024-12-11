@@ -25,11 +25,13 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `WPS465`, because `|` is now heavily used by typing
 - **Breaking**: Removes `WPS348`, because it conflicts with `ruff` formatter
 - **Breaking**: Removes `WPS302`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS306`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS310`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS313`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS315`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS317`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS318`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS319`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS320`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS341`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS343`, because it is covered by `ruff` formatter
