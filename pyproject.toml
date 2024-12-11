@@ -80,7 +80,7 @@ syrupy = "^4.6"
 hypothesis = "^6.35"
 hypothesmith = "^0.3"
 
-mypy = "^1.11"
+mypy = "^1.13"
 types-flake8 = "^7.1"
 
 autopep8 = "^2.0"
@@ -89,7 +89,6 @@ import-linter = "^2.0"
 astpath = "^0.9"
 lxml = "^5.1"
 nbqa = "^1.2"
-doc8 = "^1.1"
 
 [tool.poetry.group.docs]
 optional = true
@@ -99,8 +98,8 @@ sphinx = "^7.1"
 sphinx-autodoc-typehints = "^2.0"
 sphinxcontrib-mermaid = ">=0.9,<1.1"
 added-value = "^0.24"
-m2r2 = "^0.3"
 tomli = "^2.0"
+myst-parser = { version = "^4.0", python = "^3.10" }
 
 
 [build-system]
