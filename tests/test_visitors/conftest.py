@@ -27,7 +27,7 @@ def assert_errors():  # noqa: WPS218
         *,
         ignored_types: _IgnoredTypes = None,
     ) -> None:
-        for ignored in ignored_types:
+        for ignored in (ignored_types or ()):
             assert ignored.disabled_since is None
         if ignored_types:
             real_errors = [
