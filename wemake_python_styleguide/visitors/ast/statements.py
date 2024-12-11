@@ -314,8 +314,9 @@ class WrongParametersIndentationVisitor(BaseNodeVisitor):
         statement: ast.AST,
         extra_lines: int,
     ) -> Optional[bool]:
-        if statement.lineno == node.lineno and not extra_lines:
-            return False
+        if statement.lineno == node.lineno:  # type: ignore[attr-defined]
+            if not extra_lines:
+                return False
         return None
 
     def _check_rest_elements(
@@ -325,7 +326,9 @@ class WrongParametersIndentationVisitor(BaseNodeVisitor):
         previous_line: int,
         multi_line_mode: Optional[bool],
     ) -> Optional[bool]:
-        previous_has_break = previous_line != statement.lineno
+        previous_has_break: Optional[bool] = (
+            previous_line != statement.lineno  # type: ignore[attr-defined]
+        )
         if not previous_has_break and multi_line_mode:
             self.add_violation(ParametersIndentationViolation(node))
             return None
@@ -355,7 +358,7 @@ class WrongParametersIndentationVisitor(BaseNodeVisitor):
                 multi_line_mode = self._check_rest_elements(
                     node,
                     statement,
-                    elements[index - 1].lineno,
+                    elements[index - 1].lineno,  # type: ignore[attr-defined]
                     multi_line_mode,
                 )
 

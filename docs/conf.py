@@ -56,7 +56,7 @@ extensions = [
     'sphinx.ext.napoleon',
 
     # Used to include .md files:
-    'm2r2',
+    'myst_parser',
 
     # Used to insert typehints into the final docs:
     'sphinx_autodoc_typehints',
@@ -69,8 +69,6 @@ extensions = [
 ]
 
 autoclass_content = 'class'
-autodoc_member_order = 'bysource'
-
 autodoc_member_order = 'bysource'
 autodoc_default_options = {
     'members': True,

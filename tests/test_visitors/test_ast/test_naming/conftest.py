@@ -392,7 +392,7 @@ def allowed_protected_unused_template(request):
     return request.param
 
 
-@pytest.fixture()
+@pytest.fixture
 def skip_match_case_syntax_error():
     """Returns a helper that skips tests when `_` is used with pattern match."""
     def factory(template: str, var_name: str) -> None:

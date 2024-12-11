@@ -1,7 +1,7 @@
 import pytest
 
 
-@pytest.fixture()
+@pytest.fixture
 def async_wrapper():
     """Fixture to convert all regular functions into async ones."""
     def factory(template: str) -> str:
@@ -15,7 +15,7 @@ def async_wrapper():
     return factory
 
 
-@pytest.fixture()
+@pytest.fixture
 def regular_wrapper():
     """Fixture to return regular functions without modifications."""
     def factory(template: str) -> str:

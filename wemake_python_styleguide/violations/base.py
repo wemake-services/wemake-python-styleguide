@@ -198,7 +198,7 @@ class BaseViolation(metaclass=abc.ABCMeta):  # noqa: WPS338
 class _BaseASTViolation(BaseViolation):
     """Used as a based type for all ``ast`` violations."""
 
-    _node: Optional[ast.AST]
+    _node: Optional[ast.AST]  # type: ignore[mutable-override]
 
     @final
     def _location(self) -> Tuple[int, int]:
@@ -210,7 +210,7 @@ class _BaseASTViolation(BaseViolation):
 class ASTViolation(_BaseASTViolation):
     """Violation for ``ast`` based style visitors."""
 
-    _node: ast.AST
+    _node: ast.AST  # type: ignore[mutable-override]
 
 
 class MaybeASTViolation(_BaseASTViolation):
@@ -234,7 +234,7 @@ class MaybeASTViolation(_BaseASTViolation):
 class TokenizeViolation(BaseViolation):
     """Violation for ``tokenize`` based visitors."""
 
-    _node: tokenize.TokenInfo
+    _node: tokenize.TokenInfo  # type: ignore[mutable-override]
 
     @final
     def _location(self) -> Tuple[int, int]:
@@ -244,7 +244,7 @@ class TokenizeViolation(BaseViolation):
 class SimpleViolation(BaseViolation):
     """Violation for cases where there's no associated nodes."""
 
-    _node: None
+    _node: None  # type: ignore[mutable-override]
 
     def __init__(
         self,

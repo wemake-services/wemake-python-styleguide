@@ -25,13 +25,13 @@ That's how all ``flake8`` formatters work:
 
 """
 
+import os
 from collections import defaultdict
-from os import environ
 from typing import ClassVar, DefaultDict, Final, List
 
 from flake8.formatting.base import BaseFormatter
-from flake8.statistics import Statistics
-from flake8.style_guide import Violation
+from flake8.statistics import Statistic, Statistics
+from flake8.violation import Violation
 from pygments import highlight
 from pygments.formatters import TerminalFormatter
 from pygments.lexers import PythonLexer
@@ -48,10 +48,10 @@ _SHORTLINK_TEMPLATE: Final = 'https://pyflak.es/{0}'
 
 #: Option to disable any code highlight and text output format.
 #: See https://no-color.org
-_NO_COLOR: Final = environ.get('NO_COLOR', '0') == '1'
+_NO_COLOR: Final = os.environ.get('NO_COLOR', '0') == '1'
 
 
-class WemakeFormatter(BaseFormatter):  # type: ignore[misc]  # noqa: WPS214
+class WemakeFormatter(BaseFormatter):  # noqa: WPS214
     """
     We need to format our style :term:`violations <violation>` beatifully.
 
@@ -108,7 +108,7 @@ class WemakeFormatter(BaseFormatter):  # type: ignore[misc]  # noqa: WPS214
 
     def show_source(self, error: Violation) -> str:
         """Called when ``--show-source`` option is provided."""
-        if not self._should_show_source(error):
+        if not self._should_show_source(error) or not error.physical_line:
             return ''
 
         formatted_line = error.physical_line.lstrip()
@@ -168,14 +168,14 @@ class WemakeFormatter(BaseFormatter):  # type: ignore[misc]  # noqa: WPS214
     def _print_header(self, filename: str) -> None:
         self._write(
             '{newline}{filename}'.format(
-                filename=_underline(_bold(filename)),
+                filename=_underline(_bold(os.path.normpath(filename))),
                 newline=self.newline,
             ),
         )
 
     def _print_violation_per_file(
         self,
-        statistic: Statistics,
+        statistic: Statistic,
         error_code: str,
         count: int,
         error_by_file: DefaultDict[str, int],

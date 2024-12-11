@@ -1484,7 +1484,7 @@ class ListMultiplyViolation(ASTViolation):
         my_list = [1, 2, 3] * 3
 
     See also:
-        https://github.com/satwikkansal/wtfPython#-explanation-8
+        https://github.com/satwikkansal/wtfPython#-explanation-12
 
     .. versionadded:: 0.12.0
 
@@ -2680,7 +2680,7 @@ class RaiseFromItselfViolation(ASTViolation):
         since the final behavior will be the same.
 
     Solution:
-        Don't raise an exeception from itself.
+        Don't raise an exception from itself.
 
     Example::
 
