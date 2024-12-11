@@ -16,7 +16,6 @@ _NodeType = TypeVar('_NodeType')
 _DefaultType = TypeVar('_DefaultType')
 
 
-
 def sequence_of_node(
     node_types: Tuple[Type[_NodeType], ...],
     sequence: Sequence[ast.stmt],

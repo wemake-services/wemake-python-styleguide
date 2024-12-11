@@ -1,4 +1,3 @@
-import keyword
 import tokenize
 
 from typing_extensions import final
