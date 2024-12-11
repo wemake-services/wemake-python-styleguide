@@ -1584,11 +1584,15 @@ class MultilineConditionsViolation(ASTViolation):
 
     .. versionadded:: 0.9.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found multiline conditions'
     code = 337
+    disabled_since = '1.0.0'
 
 
 @final

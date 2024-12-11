@@ -67,7 +67,6 @@ class IfStatementVisitor(BaseNodeVisitor):
         self._check_negated_conditions(node)
         self._check_useless_len(node)
         if isinstance(node, ast.If):
-            self._check_multiline_conditions(node)
             self._check_simplifiable_returning_if(node)
         self.generic_visit(node)
 
@@ -86,17 +85,6 @@ class IfStatementVisitor(BaseNodeVisitor):
         if isinstance(node.test, ast.Call):
             if given_function_called(node.test, {'len'}):
                 self.add_violation(refactoring.UselessLenCompareViolation(node))
-
-    def _check_multiline_conditions(self, node: ast.If) -> None:
-        """Checks multiline conditions ``if`` statement nodes."""
-        start_lineno = getattr(node, 'lineno', None)
-        for sub_nodes in ast.walk(node.test):
-            sub_lineno = getattr(sub_nodes, 'lineno', None)
-            if sub_lineno is not None and sub_lineno > start_lineno:
-                self.add_violation(
-                    consistency.MultilineConditionsViolation(node),
-                )
-                break
 
     def _check_simplifiable_returning_if(self, node: ast.If) -> None:
         body = node.body
