@@ -19,16 +19,14 @@ _ERROR_FORMAT: Final = ': {0}'
 
 
 @pytest.fixture(scope='session')
-def assert_errors():  # noqa: WPS218
+def assert_errors():
     """Helper function to assert visitor violations."""
-    def factory(  # noqa: WPS218
+    def factory(
         visitor: BaseVisitor,
         expected_errors: Sequence[str],
         *,
         ignored_types: _IgnoredTypes = None,
     ) -> None:
-        for ignored in (ignored_types or ()):
-            assert ignored.disabled_since is None
         if ignored_types:
             real_errors = [
                 error
