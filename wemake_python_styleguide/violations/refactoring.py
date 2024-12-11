@@ -847,6 +847,7 @@ class FalsyConstantCompareViolation(ASTViolation):
 
     We allow to compare with falsy numbers, strings, booleans, ``None``.
     We disallow complex constants like tuple, dicts, and lists.
+    We also allow to compare any values inside ``assert`` statements.
 
     Reasoning:
         When comparing ``something`` with explicit falsy constants
@@ -873,6 +874,7 @@ class FalsyConstantCompareViolation(ASTViolation):
             ...
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 1.0.0
 
     """
 

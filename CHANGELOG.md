@@ -22,6 +22,7 @@ Semantic versioning in our case means:
 ### Features
 
 - Adds official `python3.13` support
+- Allows any compares in `assert` statements for `WPS520`, #3112
 
 ### Bugfixes
 
