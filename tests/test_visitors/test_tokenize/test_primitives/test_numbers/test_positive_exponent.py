@@ -1,7 +1,6 @@
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
-    BadNumberSuffixViolation,
     NumberWithMeaninglessZeroViolation,
     PositiveExponentViolation,
 )
@@ -97,7 +96,6 @@ def test_all_error_in_exponent(
     visitor.run()
 
     assert_errors(visitor, [
-        BadNumberSuffixViolation,
         NumberWithMeaninglessZeroViolation,
         PositiveExponentViolation,
     ])

@@ -39,6 +39,7 @@ def assert_errors():
         assert len(expected_errors) == len(real_errors)
 
         for index, error in enumerate(real_errors):
+            assert expected_errors[index].disabled_since is None
             assert error.code == expected_errors[index].code
             if isinstance(error, (ASTViolation, TokenizeViolation)):
                 assert error._node is not None  # noqa: WPS437

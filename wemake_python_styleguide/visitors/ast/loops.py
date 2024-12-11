@@ -27,7 +27,6 @@ from wemake_python_styleguide.violations.complexity import (
     TooManyForsInComprehensionViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
-    MultilineLoopViolation,
     MultipleIfsInComprehensionViolation,
     UselessContinueViolation,
     WrongLoopIterTypeViolation,
@@ -133,7 +132,6 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         self._check_loop_needs_else(node)
         self._check_lambda_inside_loop(node)
         self._check_useless_continue(node)
-        self._check_multiline_loop(node)
         self._check_infinite_while_loop(node)
         self.generic_visit(node)
 
@@ -169,16 +167,6 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         last_line = nodes_at_line[sorted(nodes_at_line.keys())[-1]]
         if any(isinstance(last, ast.Continue) for last in last_line):
             self.add_violation(UselessContinueViolation(node))
-
-    def _check_multiline_loop(self, node: AnyLoop) -> None:
-        start_lineno = getattr(node, 'lineno', None)
-
-        node_to_check = node.test if isinstance(node, ast.While) else node.iter
-        for sub_node in ast.walk(node_to_check):
-            sub_lineno = getattr(sub_node, 'lineno', None)
-            if sub_lineno is not None and sub_lineno > start_lineno:
-                self.add_violation(MultilineLoopViolation(node))
-                break
 
     def _check_infinite_while_loop(self, node: AnyLoop) -> None:
         if not isinstance(node, ast.While):

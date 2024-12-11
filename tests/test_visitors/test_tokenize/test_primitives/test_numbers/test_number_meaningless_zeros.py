@@ -1,7 +1,6 @@
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
-    BadNumberSuffixViolation,
     NumberWithMeaninglessZeroViolation,
 )
 from wemake_python_styleguide.visitors.tokenize.primitives import (
@@ -69,7 +68,6 @@ def test_meaningless_zeros_and_case(
     visitor.run()
 
     assert_errors(visitor, [
-        BadNumberSuffixViolation,
         NumberWithMeaninglessZeroViolation,
     ])
 

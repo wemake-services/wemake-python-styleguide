@@ -72,7 +72,6 @@ some_int = 1  # type: int
 
 # =====
 
-full_name = u'Nikita Sobolev'  # noqa: WPS302
 phone_number = 555_123_999  # noqa:  WPS303
 partial_number = .05  # noqa: WPS304
 float_zero = 0.0  # noqa: WPS358
@@ -290,13 +289,13 @@ except TypeError:
     my_print('type')
 
 
-class BadClass(object):  # noqa: WPS306
+class BadClass:
     UPPER_CASE_ATTRIBUTE = 12  # noqa: WPS115
 
     def __del__(self, *_args, **_kwargs):  # noqa: WPS603
         anti_wps428 = 1  # noqa: WPS442
 
-    class Nested(object):  # noqa: WPS306,WPS431
+    class Nested:  # noqa: WPS431
         anti_wps428 = 1
 
     async def __eq__(self, other):  # noqa: WPS610
@@ -308,10 +307,6 @@ magic_numbers = 13.2 + 50  # noqa: WPS432
 assert 1 < 1 < hex_number  # noqa: WPS308
 assert 2 > octal_number  # noqa: WPS309
 
-hex_number = 0XFF  # noqa: WPS310
-octal_number = 0O11  # noqa: WPS310
-binary_number = 0B1001  # noqa: WPS310
-number_with_scientific_notation = 1.5E-10  # noqa: WPS310
 number_with_useless_plus = +5  # noqa: WPS330
 
 if '6' in nodes in '6':  # noqa: WPS311, WPS525
@@ -320,45 +315,13 @@ if '6' in nodes in '6':  # noqa: WPS311, WPS525
 assert hex_number == hex_number  # noqa: WPS312
 
 
-async def test_async_function():
-    return(123, 33)  # noqa: WPS313
-
-
 if True:  # noqa: WPS314
-    anti_wps428 = 1
-
-
-class SomeTestClass(FirstParent, SecondParent, object):  # noqa: WPS315
     anti_wps428 = 1
 
 
 with some_context as first_context, second_context:  # noqa: WPS316
     anti_wps428 = 1
 
-
-class SomeClass(FirstParent,  # noqa: WPS317
-                SecondParent,  # noqa: WPS318
-                ThirdParent):  # noqa: WPS319
-    anti_wps428 = 1
-
-
-if SomeClass:
-        my_print(SomeClass)  # noqa: WPS318
-
-my_print(
-    1,
-    2)  # noqa: WPS319
-
-
-def function(  # noqa: WPS320
-    arg: Optional[  # noqa: WPS320
-        str,
-    ]
-) -> Optional[
-    str,
-]:
-    some_set = {1
-               }  # noqa: WPS318
 
 
 string_modifier = R'(\n)'  # noqa: WPS321
@@ -585,9 +548,7 @@ class WrongMethodOrder:  # noqa: WPS338
 
 leading_zero = 1.2e01  # noqa: WPS339
 positive_exponent = 1.1e+1  # noqa: WPS340
-wrong_hex = 0xabc  # noqa: WPS341
 wrong_escape_raw_string = '\\n'  # noqa: WPS342
-bad_complex = 1J  # noqa: WPS343
 zero_div = bad_complex / 0  # noqa: WPS344
 mult_one = zero_div * 1  # noqa: WPS345
 mult_one -= -1  # noqa: WPS346
@@ -645,11 +606,6 @@ unhashable = [] * 2  # noqa: WPS435
 
 from json import loads  # noqa: WPS347
 
-some_model = (
-    MyModel.objects.filter(...)
-        .exclude(...)  # noqa: WPS348
-)
-
 swap_a = swap_b
 swap_b = swap_a  # noqa: WPS523
 
@@ -663,11 +619,6 @@ class ChildClass(ParentClass):
 LOWERCASE_ALPH = "abcdefghijklmnopqrstuvwxyz" # noqa: WPS447
 
 int()  # noqa: WPS351
-
-for wrong_loop in call(  # noqa: WPS352
-    1, 2, 3,
-):
-    my_print('bad loop')
 
 if a in {1}:  # noqa: WPS525
     my_print('bad!')
@@ -707,11 +658,6 @@ if 'key' in some_dict:
 deep_func(a)(b)(c)(d)  # noqa: WPS233
 
 annotated: List[List[List[List[int]]]]  # noqa: WPS234
-
-extra_new_line = [  # noqa: WPS355
-
-    'wrong',
-]
 
 *numbers, = [4, 7]  # noqa: WPS356, WPS460
 [first_number, second_number] = [4, 7]  # noqa: WPS359

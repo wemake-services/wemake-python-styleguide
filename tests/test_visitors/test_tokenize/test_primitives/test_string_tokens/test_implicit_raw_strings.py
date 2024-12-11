@@ -2,8 +2,6 @@ import pytest
 
 from wemake_python_styleguide.violations.consistency import (
     ImplicitRawStringViolation,
-    UnicodeStringViolation,
-    UppercaseStringModifierViolation,
 )
 from wemake_python_styleguide.visitors.tokenize.primitives import (
     WrongStringTokenVisitor,
@@ -79,16 +77,15 @@ def test_implicit_unicode_raw_string(
     visitor.run()
 
     assert_errors(visitor, [
-        UnicodeStringViolation,
         ImplicitRawStringViolation,
     ])
 
 
 @pytest.mark.parametrize('code', [
-    r"U'\\4'",
-    r"U'\\n'",
-    r"U'\\\\'",
-    r"U'some \\ escaped'",
+    r"'\\4'",
+    r"'\\n'",
+    r"'\\\\'",
+    r"'some \\ escaped'",
 ])
 def test_implicit_uppercase_unicode_raw_string(
     parse_tokens,
@@ -103,7 +100,5 @@ def test_implicit_uppercase_unicode_raw_string(
     visitor.run()
 
     assert_errors(visitor, [
-        UnicodeStringViolation,
-        UppercaseStringModifierViolation,
         ImplicitRawStringViolation,
     ])
