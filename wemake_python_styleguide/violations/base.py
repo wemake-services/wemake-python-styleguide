@@ -35,14 +35,14 @@ Conventions
 Deprecating a violation
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-When you want to mark some violation as deprecated,
-then assign ``deprecated`` boolean flag to it:
+When you want to mark some violation as deprecated and disabled,
+then assign ``disabled_since`` with a string version number to it:
 
 .. code:: python
 
   @final
   class SomeViolation(ASTViolation):
-      deprecated = True
+      disabled_since = '1.0.0'
 
 Reference
 ~~~~~~~~~
@@ -89,16 +89,14 @@ class BaseViolation(metaclass=abc.ABCMeta):  # noqa: WPS338
     Attributes:
         error_template: message that will be shown to user after formatting.
         code: unique violation number. Used to identify the violation.
-        previous_codes: just a documentation thing to track changes in time.
-        deprecated: indicates that this violation will be removed soon.
+        disabled_since: indicates that this violation is disabled.
         postfix_template: indicates message that we show at the very end.
 
     """
 
     error_template: ClassVar[str]
     code: ClassVar[int]
-    previous_codes: ClassVar[Set[int]]
-    deprecated: ClassVar[bool] = False
+    disabled_since: ClassVar[Optional[str]] = None
 
     # assigned in __init_subclass__
     full_code: ClassVar[str]
@@ -198,7 +196,7 @@ class BaseViolation(metaclass=abc.ABCMeta):  # noqa: WPS338
 class _BaseASTViolation(BaseViolation):
     """Used as a based type for all ``ast`` violations."""
 
-    _node: Optional[ast.AST]  # type: ignore[mutable-override]
+    _node: Optional[ast.AST]
 
     @final
     def _location(self) -> Tuple[int, int]:
@@ -210,7 +208,7 @@ class _BaseASTViolation(BaseViolation):
 class ASTViolation(_BaseASTViolation):
     """Violation for ``ast`` based style visitors."""
 
-    _node: ast.AST  # type: ignore[mutable-override]
+    _node: ast.AST
 
 
 class MaybeASTViolation(_BaseASTViolation):
@@ -234,7 +232,7 @@ class MaybeASTViolation(_BaseASTViolation):
 class TokenizeViolation(BaseViolation):
     """Violation for ``tokenize`` based visitors."""
 
-    _node: tokenize.TokenInfo  # type: ignore[mutable-override]
+    _node: tokenize.TokenInfo
 
     @final
     def _location(self) -> Tuple[int, int]:
@@ -244,7 +242,7 @@ class TokenizeViolation(BaseViolation):
 class SimpleViolation(BaseViolation):
     """Violation for cases where there's no associated nodes."""
 
-    _node: None  # type: ignore[mutable-override]
+    _node: None
 
     def __init__(
         self,
