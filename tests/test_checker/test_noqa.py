@@ -240,7 +240,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS462': 1,
     'WPS463': 1,
     'WPS464': 0,  # logically unacceptable.
-    'WPS465': 1,
+    'WPS465': 0,  # deprecated since 1.0.0
     'WPS466': 0,  # defined in version specific table.
     'WPS467': 1,
     'WPS468': 2,

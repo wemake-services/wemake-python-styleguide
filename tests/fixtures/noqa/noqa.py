@@ -783,8 +783,6 @@ text
 def get_item():  # noqa: WPS463
     return  # noqa: WPS324
 
-bad_bitwise = True | True # noqa: WPS465
-
 matrix = [
    some(number) for numbers in matrix
    for number in numbers # noqa: WPS361

@@ -1556,7 +1556,6 @@ class MultilineConditionsViolation(ASTViolation):
 
     error_template = 'Found multiline conditions'
     code = 337
-    previous_codes = {465}
 
 
 @final

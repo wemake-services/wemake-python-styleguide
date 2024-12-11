@@ -5,7 +5,6 @@ from typing_extensions import TypeAlias, final
 
 from wemake_python_styleguide.compat.aliases import TextNodes
 from wemake_python_styleguide.logic import walk
-from wemake_python_styleguide.logic.tree.annotations import is_annotation
 from wemake_python_styleguide.logic.tree.operators import (
     count_unary_operator,
     unwrap_unary_node,
@@ -13,7 +12,6 @@ from wemake_python_styleguide.logic.tree.operators import (
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations import consistency
 from wemake_python_styleguide.violations.best_practices import (
-    BitwiseAndBooleanMixupViolation,
     ListMultiplyViolation,
 )
 from wemake_python_styleguide.visitors import base, decorators
@@ -230,34 +228,3 @@ class WalrusVisitor(base.BaseNodeVisitor):
         """Disallows walrus ``:=`` operator."""
         self.add_violation(consistency.WalrusViolation(node))
         self.generic_visit(node)
-
-
-@final
-class BitwiseOpVisitor(base.BaseNodeVisitor):
-    """Checks bitwise operations are used correctly."""
-
-    _invalid_nodes: ClassVar[AnyNodes] = (
-        ast.BoolOp,
-        ast.UnaryOp,
-        ast.NameConstant,
-        ast.Compare,
-    )
-
-    def visit_BinOp(self, node: ast.BinOp) -> None:
-        """Finds bad usage of bitwise operation with binary operation."""
-        self._check_logical_bitwise_operator(node)
-        self.generic_visit(node)
-
-    def _check_logical_bitwise_operator(self, node: ast.BinOp) -> None:
-        if not isinstance(node.op, (ast.BitOr, ast.BitAnd)):
-            return
-
-        if isinstance(node.op, ast.BitOr) and is_annotation(node):
-            return  # We allow new styled union types like: `int | None`
-
-        if self._is_bool_like(node.left) or self._is_bool_like(node.right):
-            self.add_violation(BitwiseAndBooleanMixupViolation(node))
-
-    def _is_bool_like(self, node: ast.expr) -> bool:
-        """Checks either side of the Bitwise operation invalid usage."""
-        return isinstance(node, self._invalid_nodes)

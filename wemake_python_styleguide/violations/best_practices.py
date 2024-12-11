@@ -351,7 +351,6 @@ class ComplexDefaultValueViolation(ASTViolation):
 
     error_template = 'Found complex default value'
     code = 404
-    previous_codes = {459}
 
 
 @final
@@ -385,7 +384,6 @@ class LoopVariableDefinitionViolation(ASTViolation):
 
     error_template = 'Found wrong `for` loop variable definition'
     code = 405
-    previous_codes = {460}
 
 
 @final
@@ -419,7 +417,6 @@ class ContextManagerVariableDefinitionViolation(ASTViolation):
 
     error_template = 'Found wrong context manager variable definition'
     code = 406
-    previous_codes = {461}
 
 
 @final
@@ -456,7 +453,6 @@ class MutableModuleConstantViolation(ASTViolation):
 
     error_template = 'Found mutable module constant'
     code = 407
-    previous_codes = {466}
 
 
 @final
@@ -490,7 +486,6 @@ class SameElementsInConditionViolation(ASTViolation):
 
     error_template = 'Found duplicate logical condition'
     code = 408
-    previous_codes = {469}
 
 
 @final
@@ -531,7 +526,6 @@ class HeterogeneousCompareViolation(ASTViolation):
 
     error_template = 'Found heterogeneous compare'
     code = 409
-    previous_codes = {471}
 
 
 @final
@@ -693,7 +687,6 @@ class WrongUnpackingViolation(ASTViolation):
 
     error_template = 'Found incorrect unpacking target'
     code = 414
-    previous_codes = {446}
 
 
 @final
@@ -734,7 +727,6 @@ class DuplicateExceptionViolation(ASTViolation):
 
     error_template = 'Found duplicate exception: {0}'
     code = 415
-    previous_codes = {447}
 
 
 @final
@@ -774,8 +766,7 @@ class YieldInComprehensionViolation(ASTViolation):
 
     error_template = 'Found `yield` inside comprehension'
     code = 416
-    previous_codes = {448}
-    deprecated = True
+    disabled_since = '0.18.0'
 
 
 @final
@@ -817,7 +808,6 @@ class NonUniqueItemsInHashViolation(ASTViolation):
 
     error_template = 'Found non-unique item in hash: {0}'
     code = 417
-    previous_codes = {449}
 
 
 @final
@@ -854,7 +844,6 @@ class BaseExceptionSubclassViolation(ASTViolation):
 
     error_template = 'Found exception inherited from `BaseException`'
     code = 418
-    previous_codes = {450}
 
 
 @final
@@ -912,7 +901,6 @@ class TryExceptMultipleReturnPathViolation(ASTViolation):
 
     error_template = 'Found `try`/`else`/`finally` with multiple return paths'
     code = 419
-    previous_codes = {458}
 
 
 @final
@@ -1151,7 +1139,6 @@ class LambdaInsideLoopViolation(ASTViolation):
 
     error_template = "Found `lambda` in loop's body"
     code = 426
-    previous_codes = {442}
 
 
 @final
@@ -1197,7 +1184,6 @@ class UnreachableCodeViolation(ASTViolation):
 
     error_template = 'Found unreachable code'
     code = 427
-    previous_codes = {443}
 
 
 @final
@@ -1237,7 +1223,6 @@ class StatementHasNoEffectViolation(ASTViolation):
 
     error_template = 'Found statement that has no effect'
     code = 428
-    previous_codes = {444}
 
 
 @final
@@ -1269,7 +1254,6 @@ class MultipleAssignmentsViolation(ASTViolation):
 
     error_template = 'Found multiple assign targets'
     code = 429
-    previous_codes = {445}
 
 
 @final
@@ -1432,7 +1416,6 @@ class NestedImportViolation(ASTViolation):
 
     error_template = 'Found nested import'
     code = 433
-    previous_codes = {435}
 
 
 @final
@@ -1462,7 +1445,6 @@ class ReassigningVariableToItselfViolation(ASTViolation):
 
     error_template = 'Found reassigning variable to itself: {0}'
     code = 434
-    previous_codes = {438}
 
 
 @final
@@ -1529,7 +1511,6 @@ class ProtectedModuleViolation(ASTViolation):
 
     error_template = 'Found protected module import: {0}'
     code = 436
-    previous_codes = {440}
 
 
 @final
@@ -1573,7 +1554,6 @@ class ProtectedAttributeViolation(ASTViolation):
 
     error_template = 'Found protected attribute usage: {0}'
     code = 437
-    previous_codes = {441}
 
 
 @final
@@ -2087,7 +2067,7 @@ class PositionalOnlyArgumentsViolation(ASTViolation):
 
     error_template = 'Found positional-only argument'
     code = 451
-    deprecated = True
+    disabled_since = '0.19.0'
 
 
 @final
@@ -2565,11 +2545,15 @@ class BitwiseAndBooleanMixupViolation(ASTViolation):
         result = ((first > 0) & False)
 
     .. versionadded:: 0.15.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+
 
     """
 
     error_template = 'Found likely bitwise and boolean operation mixup'
     code = 465
+    disabled_since = '1.0.0'
 
 
 @final

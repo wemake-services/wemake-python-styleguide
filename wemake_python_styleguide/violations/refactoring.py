@@ -137,7 +137,6 @@ class UselessLoopElseViolation(ASTViolation):
 
     error_template = 'Found `else` in a loop without `break`'
     code = 500
-    previous_codes = {436}
 
 
 @final
@@ -178,7 +177,6 @@ class UselessFinallyViolation(ASTViolation):
 
     error_template = 'Found `finally` in `try` block without `except`'
     code = 501
-    previous_codes = {437}
 
 
 @final
@@ -214,7 +212,6 @@ class SimplifiableIfViolation(ASTViolation):
 
     error_template = 'Found simplifiable `if` condition'
     code = 502
-    previous_codes = {451}
 
 
 @final
@@ -259,7 +256,6 @@ class UselessReturningElseViolation(ASTViolation):
 
     error_template = 'Found useless returning `else` statement'
     code = 503
-    previous_codes = {457}
 
 
 @final
@@ -303,7 +299,6 @@ class NegatedConditionsViolation(ASTViolation):
 
     error_template = 'Found negated condition'
     code = 504
-    previous_codes = {463}
 
 
 @final
@@ -353,7 +348,6 @@ class NestedTryViolation(ASTViolation):
 
     error_template = 'Found nested `try` block'
     code = 505
-    previous_codes = {464}
 
 
 @final
@@ -385,7 +379,6 @@ class UselessLambdaViolation(ASTViolation):
 
     error_template = 'Found useless lambda declaration'
     code = 506
-    previous_codes = {467}
 
 
 @final
@@ -421,7 +414,6 @@ class UselessLenCompareViolation(ASTViolation):
 
     error_template = 'Found useless `len()` compare'
     code = 507
-    previous_codes = {468}
 
 
 @final
@@ -453,7 +445,6 @@ class NotOperatorWithCompareViolation(ASTViolation):
 
     error_template = 'Found incorrect `not` with compare usage'
     code = 508
-    previous_codes = {470}
 
 
 @final
@@ -491,7 +482,6 @@ class NestedTernaryViolation(ASTViolation):
 
     error_template = 'Found incorrectly nested ternary'
     code = 509
-    previous_codes = {472}
 
 
 @final
@@ -530,7 +520,6 @@ class WrongInCompareTypeViolation(ASTViolation):
 
     error_template = 'Found `in` used with a non-set container'
     code = 510
-    previous_codes = {473}
 
 
 @final
@@ -566,7 +555,6 @@ class UnmergedIsinstanceCallsViolation(ASTViolation):
         'Found separate `isinstance` calls that can be merged for: {0}'
     )
     code = 511
-    previous_codes = {474}
 
 
 @final
@@ -599,7 +587,6 @@ class WrongIsinstanceWithTupleViolation(ASTViolation):
 
     error_template = 'Found `isinstance` call with a single element tuple'
     code = 512
-    previous_codes = {475}
 
 
 @final
@@ -669,7 +656,6 @@ class ImplicitInConditionViolation(ASTViolation):
 
     code = 514
     error_template = 'Found implicit `in` condition: {0}'
-    previous_codes = {336}
 
 
 @final
