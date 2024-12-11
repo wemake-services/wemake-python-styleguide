@@ -17,6 +17,7 @@ import io
 import tokenize
 
 import hypothesmith
+import pytest
 from hypothesis import HealthCheck, given, reject, settings
 
 from wemake_python_styleguide.checker import Checker
@@ -36,6 +37,7 @@ def _fixup(string: str) -> str:
     ).strip().strip('\\').strip() + '\n'
 
 
+@pytest.mark.filterwarnings('ignore:SyntaxWarning')
 @given(source_code=hypothesmith.from_grammar().map(_fixup))
 @settings(print_blob=True)
 def test_no_exceptions(
