@@ -156,6 +156,8 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
         real = get_assigned_expr(comparator)
         if not isinstance(real, (ast.List, ast.Dict, ast.Tuple)):
             return
+        if walk.get_closest_parent(op, ast.Assert):
+            return  # We allow any compares in `assert`
 
         length = len(real.keys) if isinstance(
             real, ast.Dict,
