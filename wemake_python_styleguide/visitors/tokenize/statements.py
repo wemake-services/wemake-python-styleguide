@@ -1,16 +1,12 @@
 import tokenize
 from collections import defaultdict
 from operator import attrgetter
-from typing import DefaultDict, List, Mapping, Optional
+from typing import DefaultDict, List, Optional
 
 from typing_extensions import TypeAlias, final
 
 from wemake_python_styleguide.logic.tokens.comprehensions import Compehension
-from wemake_python_styleguide.logic.tokens.constants import (
-    ALLOWED_EMPTY_LINE_TOKENS,
-)
 from wemake_python_styleguide.logic.tokens.newlines import next_meaningful_token
-from wemake_python_styleguide.logic.tokens.queries import only_contains
 from wemake_python_styleguide.logic.tokens.strings import (
     get_docstring_tokens,
     has_triple_string_quotes,
