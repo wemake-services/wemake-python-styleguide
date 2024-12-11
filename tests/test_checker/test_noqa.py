@@ -148,7 +148,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS334': 1,
     'WPS335': 1,
     'WPS336': 1,
-    'WPS337': 1,
+    'WPS337': 0,  # deprecated since 1.0.0
     'WPS338': 1,
     'WPS339': 1,
     'WPS340': 1,

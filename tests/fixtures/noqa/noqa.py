@@ -532,11 +532,6 @@ try:
 except TypeError:
     my_print('WTF?')
 
-if some and (  # noqa: WPS337
-    anti_wps428 == 1
-):
-    anti_wps428 = 'some text'
-
 
 class WrongMethodOrder:  # noqa: WPS338
     def _protected(self):
