@@ -21,8 +21,6 @@ PRESET: Final = (
     primitives.WrongStringTokenVisitor,
     primitives.WrongStringConcatenationVisitor,
 
-    statements.ExtraIndentationVisitor,
-    statements.BracketLocationVisitor,
     statements.MultilineStringVisitor,
     statements.InconsistentComprehensionVisitor,
 

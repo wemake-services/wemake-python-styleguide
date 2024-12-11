@@ -116,6 +116,8 @@ class BaseVisitor(metaclass=abc.ABCMeta):
     @final
     def add_violation(self, violation: BaseViolation) -> None:
         """Adds violation to the visitor."""
+        # It is not allowed to add disabled violations:
+        assert violation.disabled_since is None  # noqa: S101
         self.violations.append(violation)
 
     @abc.abstractmethod

@@ -13,10 +13,9 @@ from wemake_python_styleguide.compat.nodes import TryStar
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.arguments import call_args
 from wemake_python_styleguide.logic.naming import name_nodes
-from wemake_python_styleguide.logic.tree import functions, strings
+from wemake_python_styleguide.logic.tree import strings
 from wemake_python_styleguide.logic.tree.collections import (
     first,
-    normalize_dict_elements,
     sequence_of_node,
 )
 from wemake_python_styleguide.types import (
@@ -32,7 +31,6 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.violations.consistency import (
     AugmentedAssignPatternViolation,
-    ParametersIndentationViolation,
     UselessNodeViolation,
 )
 from wemake_python_styleguide.violations.refactoring import (
@@ -266,101 +264,6 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
                 self._check_expression(statement, is_first=index == 0)
             elif isinstance(statement, ast.AugAssign):
                 self._check_self_misrefactored_assignment(statement)
-
-
-@final
-@alias('visit_collection', (
-    'visit_List',
-    'visit_Set',
-    'visit_Dict',
-    'visit_Tuple',
-))
-@alias('visit_any_function', (
-    'visit_FunctionDef',
-    'visit_AsyncFunctionDef',
-))
-class WrongParametersIndentationVisitor(BaseNodeVisitor):
-    """Ensures that all parameters indentation follow our rules."""
-
-    def visit_collection(self, node: _AnyCollection) -> None:
-        """Checks how collection items indentation."""
-        if isinstance(node, ast.Dict):
-            elements = normalize_dict_elements(node)
-        else:
-            elements = node.elts
-        self._check_indentation(node, elements, extra_lines=1)
-        self.generic_visit(node)
-
-    def visit_Call(self, node: ast.Call) -> None:
-        """Checks call arguments indentation."""
-        all_args = call_args.get_all_args(node)
-        self._check_indentation(node, all_args)
-        self.generic_visit(node)
-
-    def visit_any_function(self, node: AnyFunctionDef) -> None:
-        """Checks function parameters indentation."""
-        self._check_indentation(node, functions.get_all_arguments(node))
-        self.generic_visit(node)
-
-    def visit_ClassDef(self, node: ast.ClassDef) -> None:
-        """Checks base classes indentation."""
-        all_args = [*node.bases, *[kw.value for kw in node.keywords]]
-        self._check_indentation(node, all_args)
-        self.generic_visit(node)
-
-    def _check_first_element(
-        self,
-        node: ast.AST,
-        statement: ast.AST,
-        extra_lines: int,
-    ) -> Optional[bool]:
-        if statement.lineno == node.lineno:  # type: ignore[attr-defined]
-            if not extra_lines:
-                return False
-        return None
-
-    def _check_rest_elements(
-        self,
-        node: ast.AST,
-        statement: ast.AST,
-        previous_line: int,
-        multi_line_mode: Optional[bool],
-    ) -> Optional[bool]:
-        previous_has_break: Optional[bool] = (
-            previous_line != statement.lineno  # type: ignore[attr-defined]
-        )
-        if not previous_has_break and multi_line_mode:
-            self.add_violation(ParametersIndentationViolation(node))
-            return None
-        elif previous_has_break and multi_line_mode is False:
-            self.add_violation(ParametersIndentationViolation(node))
-            return None
-        return previous_has_break
-
-    def _check_indentation(
-        self,
-        node: ast.AST,
-        elements: Sequence[ast.AST],
-        extra_lines: int = 0,  # we need it due to wrong lineno in collections
-    ) -> None:
-        multi_line_mode: Optional[bool] = None
-        for index, statement in enumerate(elements):
-            if index == 0:
-                # We treat first element differently,
-                # since it is impossible to say what kind of multi-line
-                # parameters styles will be used at this moment.
-                multi_line_mode = self._check_first_element(
-                    node,
-                    statement,
-                    extra_lines,
-                )
-            else:
-                multi_line_mode = self._check_rest_elements(
-                    node,
-                    statement,
-                    elements[index - 1].lineno,  # type: ignore[attr-defined]
-                    multi_line_mode,
-                )
 
 
 @final

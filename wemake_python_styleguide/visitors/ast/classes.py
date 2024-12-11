@@ -89,12 +89,6 @@ class WrongClassDefVisitor(base.BaseNodeVisitor):
 
         if id_attr == 'BaseException':
             self.add_violation(bp.BaseExceptionSubclassViolation(node))
-        elif id_attr == 'object' and len(node.bases) >= 2:
-            self.add_violation(
-                consistency.ObjectInBaseClassesListViolation(
-                    node, text=id_attr,
-                ),
-            )
         elif classes.is_forbidden_super_class(id_attr):
             self.add_violation(
                 oop.BuiltinSubclassViolation(node, text=id_attr),
