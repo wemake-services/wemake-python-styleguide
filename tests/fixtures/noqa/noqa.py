@@ -481,20 +481,11 @@ class ClassWithWrongContents((lambda: object)()):  # noqa: WPS606
         my_print(based)
 
 
-def useless_returning_else():
-    if some_set:
-        return some_set
-    else:
-        return TypeError  # noqa: WPS503
-
-
 def multiple_return_path():
-    try:  # noqa: WPS419, WPS503
+    try:  # noqa: WPS419
         return 1
     except Exception:
         return 2
-    else:
-        return 3
 
 
 def bad_default_values(
