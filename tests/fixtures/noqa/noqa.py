@@ -477,7 +477,8 @@ class ClassWithWrongContents((lambda: object)()):  # noqa: WPS606
         anti_wps428 = 1
 
     def method_with_no_args():  # noqa: WPS605
-        super(ClassWithWrongContents, self).method_with_no_args()  # noqa: WPS608
+        based = super(ClassWithWrongContents, self).method_with_no_args()  # noqa: WPS608
+        my_print(based)
 
 
 def useless_returning_else():
