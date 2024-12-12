@@ -24,6 +24,7 @@ Semantic versioning in our case means:
 - Adds official `python3.13` support
 - **Breaking**: Removes `WPS465`, because `|` is now heavily used by typing
 - Allows any compares in `assert` statements for `WPS520`, #3112
+- Allows walrus operator in comprehesions
 
 ### Bugfixes
 
