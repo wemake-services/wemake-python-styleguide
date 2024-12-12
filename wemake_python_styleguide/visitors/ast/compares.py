@@ -1,5 +1,6 @@
 import ast
-from typing import ClassVar, List, Optional, Sequence
+from collections.abc import Sequence
+from typing import ClassVar
 
 from typing_extensions import final
 
@@ -344,8 +345,8 @@ class WrongConditionalVisitor(BaseNodeVisitor):
 
     def _is_simplifiable_assign(
         self,
-        node_body: List[ast.stmt],
-    ) -> Optional[str]:
+        node_body: list[ast.stmt],
+    ) -> str | None:
         wrong_length = len(node_body) != 1
         if wrong_length or not isinstance(node_body[0], AssignNodes):
             return None

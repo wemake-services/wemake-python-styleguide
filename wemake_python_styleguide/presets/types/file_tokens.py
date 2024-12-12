@@ -1,4 +1,4 @@
-from typing_extensions import Final
+from typing import Final
 
 from wemake_python_styleguide.visitors.tokenize import (
     comments,
@@ -21,10 +21,7 @@ PRESET: Final = (
     primitives.WrongStringTokenVisitor,
     primitives.WrongStringConcatenationVisitor,
 
-    statements.ExtraIndentationVisitor,
-    statements.BracketLocationVisitor,
     statements.MultilineStringVisitor,
-    statements.InconsistentComprehensionVisitor,
 
     conditions.IfElseVisitor,
 )

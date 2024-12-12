@@ -1,8 +1,8 @@
 from collections import defaultdict
-from typing import DefaultDict, List
+from typing import DefaultDict, TypeAlias
 
 import attr
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide.types import (
     AnyFunctionDef,
@@ -16,7 +16,7 @@ FunctionCounter: TypeAlias = DefaultDict[AnyFunctionDef, int]
 FunctionCounterWithLambda: TypeAlias = DefaultDict[AnyFunctionDefAndLambda, int]
 
 #: Function and their variables.
-FunctionNames: TypeAlias = DefaultDict[AnyFunctionDef, List[str]]
+FunctionNames: TypeAlias = DefaultDict[AnyFunctionDef, list[str]]
 
 
 def _default_factory() -> FunctionCounter:

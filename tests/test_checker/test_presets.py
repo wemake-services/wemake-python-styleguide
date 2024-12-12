@@ -24,7 +24,10 @@ def _is_visitor_class(cls) -> bool:
     if not inspect.isclass(cls):
         return False
 
-    return issubclass(cls, BaseVisitor) and cls not in base_classes
+    try:  # pragma: no cover
+        return issubclass(cls, BaseVisitor) and cls not in base_classes
+    except TypeError:  # pragma: no cover
+        return False
 
 
 def _import_module_by_path(path: str):

@@ -12,7 +12,7 @@ These values can be changed in the ``setup.cfg`` file on a per-project bases,
 if you find them too strict or too permissive.
 """
 
-from typing_extensions import Final
+from typing import Final
 
 # ========
 # General:

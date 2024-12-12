@@ -63,7 +63,7 @@ Reference
 import abc
 import ast
 import tokenize
-from typing import List, Sequence, Type
+from collections.abc import Sequence
 
 from typing_extensions import final
 
@@ -94,11 +94,11 @@ class BaseVisitor(metaclass=abc.ABCMeta):
         """Creates base visitor instance."""
         self.options = options
         self.filename = filename
-        self.violations: List[BaseViolation] = []
+        self.violations: list[BaseViolation] = []
 
     @classmethod
     def from_checker(
-        cls: Type['BaseVisitor'],
+        cls: type['BaseVisitor'],
         checker,
     ) -> 'BaseVisitor':
         """
@@ -116,6 +116,8 @@ class BaseVisitor(metaclass=abc.ABCMeta):
     @final
     def add_violation(self, violation: BaseViolation) -> None:
         """Adds violation to the visitor."""
+        # It is not allowed to add disabled violations:
+        assert violation.disabled_since is None, violation.code  # noqa: S101
         self.violations.append(violation)
 
     @abc.abstractmethod
@@ -161,7 +163,7 @@ class BaseNodeVisitor(ast.NodeVisitor, BaseVisitor):
     @final
     @classmethod
     def from_checker(
-        cls: Type['BaseNodeVisitor'],
+        cls: type['BaseNodeVisitor'],
         checker,
     ) -> 'BaseNodeVisitor':
         """Constructs visitor instance from the checker."""
@@ -247,7 +249,7 @@ class BaseTokenVisitor(BaseVisitor):
     @final
     @classmethod
     def from_checker(
-        cls: Type['BaseTokenVisitor'],
+        cls: type['BaseTokenVisitor'],
         checker,
     ) -> 'BaseTokenVisitor':
         """Constructs ``tokenize`` based visitor instance from the checker."""
@@ -275,7 +277,7 @@ class BaseTokenVisitor(BaseVisitor):
 
         """
         token_type = tokenize.tok_name[token.exact_type].lower()
-        method = getattr(self, 'visit_{0}'.format(token_type), None)
+        method = getattr(self, f'visit_{token_type}', None)
         if method is not None:
             method(token)
 

@@ -46,11 +46,11 @@ WPS = "wemake_python_styleguide.checker:Checker"
 wemake = "wemake_python_styleguide.formatter:WemakeFormatter"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 
 flake8 = "^7.1"
 attrs = "*"
-typing_extensions = ">=4.0,<5.0"
+typing_extensions = ">=4.0"
 pygments = "^2.4"
 
 flake8-commas = "^4.0"
@@ -69,12 +69,12 @@ pep8-naming = "^0.14"
 darglint = "^1.2"
 
 [tool.poetry.group.dev.dependencies]
-nitpick = "^0.35"
 flake8-pytest-style = "^2.0"
 
 pytest = "^8.1"
-pytest-cov = ">=5,<7"
+pytest-cov = "^6.0"
 pytest-randomly = "^3.12"
+pytest-xdist = "^3.6"
 coverage-conditional-plugin = "^0.9"
 syrupy = "^4.6"
 hypothesis = "^6.35"
@@ -83,7 +83,6 @@ hypothesmith = "^0.3"
 mypy = "^1.13"
 types-flake8 = "^7.1"
 
-autopep8 = "^2.0"
 import-linter = "^2.0"
 
 astpath = "^0.9"
@@ -96,16 +95,12 @@ optional = true
 [tool.poetry.group.docs.dependencies]
 sphinx = "^7.1"
 sphinx-autodoc-typehints = "^2.0"
-sphinxcontrib-mermaid = ">=0.9,<1.1"
+sphinxcontrib-mermaid = "^1.0"
 added-value = "^0.24"
 tomli = "^2.0"
-myst-parser = { version = "^4.0", python = "^3.10" }
+myst-parser = "^4.0"
 
 
 [build-system]
 requires = ["poetry-core>=1.9.0"]
 build-backend = "poetry.core.masonry.api"
-
-
-[tool.nitpick]
-style = "styles/nitpick-style-wemake.toml"

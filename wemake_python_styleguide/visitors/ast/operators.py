@@ -1,7 +1,8 @@
 import ast
-from typing import ClassVar, List, Mapping, Optional, Tuple, Type, Union
+from collections.abc import Mapping
+from typing import ClassVar, TypeAlias, Union
 
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import TextNodes
 from wemake_python_styleguide.logic import walk
@@ -18,9 +19,9 @@ from wemake_python_styleguide.visitors import base, decorators
 
 _MeaninglessOperators: TypeAlias = Mapping[
     complex,
-    Tuple[Type[ast.operator], ...],
+    tuple[type[ast.operator], ...],
 ]
-_OperatorLimits: TypeAlias = Mapping[Type[ast.unaryop], int]
+_OperatorLimits: TypeAlias = Mapping[type[ast.unaryop], int]
 _NumbersAndConstants: TypeAlias = Union[ast.Num, ast.NameConstant]
 
 
@@ -114,8 +115,8 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
     def _check_useless_math_operator(
         self,
         op: ast.operator,
-        left: Optional[ast.AST],
-        right: Optional[ast.AST] = None,
+        left: ast.AST | None,
+        right: ast.AST | None = None,
     ) -> None:
         if isinstance(left, ast.Num) and left.n in self._left_special_cases:
             if right and isinstance(op, self._left_special_cases[left.n]):
@@ -132,10 +133,10 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
 
     def _get_non_negative_nodes(
         self,
-        left: Optional[ast.AST],
-        right: Optional[ast.AST] = None,
-    ) -> List[ast.Num]:
-        non_negative_numbers: List[ast.Num] = []
+        left: ast.AST | None,
+        right: ast.AST | None = None,
+    ) -> list[ast.Num]:
+        non_negative_numbers: list[ast.Num] = []
         for node in filter(None, (left, right)):
             real_node = unwrap_unary_node(node)
             correct_node = (
@@ -198,7 +199,7 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
         self,
         left: ast.AST,
         op: ast.operator,
-        right: Optional[ast.AST] = None,
+        right: ast.AST | None = None,
     ) -> None:
         if not isinstance(op, ast.Add):
             return

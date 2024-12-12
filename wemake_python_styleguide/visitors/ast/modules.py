@@ -1,5 +1,6 @@
 import ast
-from typing import ClassVar, Iterable, cast
+from collections.abc import Iterable
+from typing import ClassVar, cast
 
 from typing_extensions import final
 

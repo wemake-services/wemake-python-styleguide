@@ -244,11 +244,15 @@ class UnicodeStringViolation(TokenizeViolation):
         nickname = u'sobolevn'
 
     .. versionadded:: 0.1.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This rule is covered by ``ruff`` formatter. See ``UP025``.
 
     """
 
     code = 302
     error_template = 'Found unicode string prefix: {0}'
+    disabled_since = '1.0.0'
 
 
 @final
@@ -311,11 +315,15 @@ class PartialFloatViolation(TokenizeViolation):
         ten_float = 10.
 
     .. versionadded:: 0.1.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     code = 304
     error_template = 'Found partial float: {0}'
+    disabled_since = '1.0.0'
 
 
 @final
@@ -349,11 +357,15 @@ class FormattedStringViolation(ASTViolation):
         f'Result is: {2 + 2}'
 
     .. versionadded:: 0.1.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``WPS237``.
 
     """
 
     error_template = 'Found `f` string'
     code = 305
+    disabled_since = '1.0.0'
 
 
 @final
@@ -387,11 +399,15 @@ class ExplicitObjectBaseClassViolation(ASTViolation):
     .. versionchanged:: 0.19.0
        Now the rule is inverted: we require no explicit `object` base class.
        See PEP695 for extra reasoning.
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found explicit `object` base class: {0}'
     code = 306
+    disabled_since = '1.0.0'
 
 
 @final
@@ -420,7 +436,7 @@ class MultipleIfsInComprehensionViolation(ASTViolation):
 
     """
 
-    error_template = 'Found list comprehension with multiple `if`s'
+    error_template = 'Found a comprehension with multiple `if`s'
     code = 307
 
 
@@ -517,11 +533,15 @@ class BadNumberSuffixViolation(TokenizeViolation):
         number_with_scientific_notation = 1.5E+10
 
     .. versionadded:: 0.3.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found bad number suffix: {0}'
     code = 310
+    disabled_since = '1.0.0'
 
 
 @final
@@ -615,11 +635,15 @@ class MissingSpaceBetweenKeywordAndParenViolation(TokenizeViolation):
             yield(1, 2, 3)
 
     .. versionadded:: 0.3.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found parenthesis immediately after a keyword'
     code = 313
+    disabled_since = '1.0.0'
 
 
 @final
@@ -675,11 +699,15 @@ class ObjectInBaseClassesListViolation(ASTViolation):
        class SomeClassName(FirstParentClass, SecondParentClass, object): ...
 
     .. versionadded:: 0.3.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``UP004``.
 
     """
 
     error_template = 'Found extra `object` in parent classes list: {0}'
     code = 315
+    disabled_since = '1.0.0'
 
 
 @final
@@ -785,11 +813,15 @@ class ParametersIndentationViolation(ASTViolation):
     functions, methods, and classes.
 
     .. versionadded:: 0.6.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found incorrect multi-line parameters'
     code = 317
+    disabled_since = '1.0.0'
 
 
 @final
@@ -826,11 +858,15 @@ class ExtraIndentationViolation(TokenizeViolation):
         https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/isort.toml
 
     .. versionadded:: 0.6.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found extra indentation'
     code = 318
+    disabled_since = '1.0.0'
 
 
 @final
@@ -879,11 +915,15 @@ class WrongBracketPositionViolation(TokenizeViolation):
     We check round, square, and curly brackets.
 
     .. versionadded:: 0.6.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found bracket in wrong position'
     code = 319
+    disabled_since = '1.0.0'
 
 
 @final
@@ -913,11 +953,15 @@ class MultilineFunctionAnnotationViolation(ASTViolation):
     This rule checks argument and return type annotations.
 
     .. versionadded:: 0.6.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found multi-line function type annotation'
     code = 320
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1552,11 +1596,15 @@ class MultilineConditionsViolation(ASTViolation):
 
     .. versionadded:: 0.9.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found multiline conditions'
     code = 337
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1650,11 +1698,15 @@ class PositiveExponentViolation(TokenizeViolation):
         number = 1e+1
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found exponent number with positive exponent: {0}'
     code = 340
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1678,11 +1730,15 @@ class WrongHexNumberCaseViolation(TokenizeViolation):
         number = 0xabcdef
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found wrong hex number case: {0}'
     code = 341
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1736,11 +1792,15 @@ class BadComplexNumberSuffixViolation(TokenizeViolation):
         complex_number = 1J
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found wrong complex number suffix: {0}'
     code = 343
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1927,11 +1987,15 @@ class LineStartsWithDotViolation(TokenizeViolation):
         )
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       It conflicted with the ``ruff`` formatter.
 
     """
 
     error_template = 'Found a line that starts with a dot'
     code = 348
+    disabled_since = '1.0.0'
 
 
 @final
@@ -2039,11 +2103,15 @@ class MultilineLoopViolation(ASTViolation):
             ...
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found multiline loop'
     code = 352
+    disabled_since = '1.0.0'
 
 
 @final
@@ -2131,11 +2199,15 @@ class BracketBlankLineViolation(TokenizeViolation):
         ]
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found an unnecessary blank line before a bracket'
     code = 355
+    disabled_since = '1.0.0'
 
 
 @final
@@ -2313,11 +2385,15 @@ class InconsistentComprehensionViolation(TokenizeViolation):
         ]
 
     .. versionadded:: 0.15.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found an inconsistently structured comprehension'
     code = 361
+    disabled_since = '1.0.0'
 
 
 @final

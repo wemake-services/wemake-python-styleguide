@@ -1,7 +1,6 @@
 import ast
-from typing import Iterable
-
-from typing_extensions import Final
+from collections.abc import Iterable
+from typing import Final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.constants import UNUSED_PLACEHOLDER

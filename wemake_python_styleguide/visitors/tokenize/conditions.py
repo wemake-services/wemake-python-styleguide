@@ -1,5 +1,6 @@
 import tokenize
-from typing import ClassVar, FrozenSet, Sequence
+from collections.abc import Sequence
+from typing import ClassVar
 
 from typing_extensions import final
 
@@ -38,12 +39,12 @@ class IfElseVisitor(BaseTokenVisitor):
 
     """
 
-    _idents: ClassVar[FrozenSet[int]] = frozenset((
+    _idents: ClassVar[frozenset[int]] = frozenset((
         tokenize.INDENT,
         tokenize.DEDENT,
     ))
 
-    _allowed_token_types: ClassVar[FrozenSet[int]] = frozenset((
+    _allowed_token_types: ClassVar[frozenset[int]] = frozenset((
         tokenize.NEWLINE,
         tokenize.NL,
         tokenize.COLON,

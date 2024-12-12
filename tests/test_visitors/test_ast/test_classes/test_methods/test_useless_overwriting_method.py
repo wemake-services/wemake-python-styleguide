@@ -1,4 +1,4 @@
-from typing import List, NamedTuple
+from typing import NamedTuple
 
 import pytest
 
@@ -36,7 +36,7 @@ class Useless:
 
 _MethodArgs = NamedTuple('_MethodArgs', definition=str, invocation=str)
 
-valid_method_args: List[_MethodArgs] = [
+valid_method_args: list[_MethodArgs] = [
     _MethodArgs('', ''),
     _MethodArgs('a', 'a'),
     _MethodArgs('a, b', 'a, b'),
@@ -70,7 +70,7 @@ valid_super_args = (
 )
 
 
-invalid_method_args: List[_MethodArgs] = [
+invalid_method_args: list[_MethodArgs] = [
     _MethodArgs('', 'a=1'),
     _MethodArgs('', '1'),
     _MethodArgs('a', ''),

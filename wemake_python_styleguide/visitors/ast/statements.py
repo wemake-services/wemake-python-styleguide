@@ -1,9 +1,10 @@
 import ast
-from typing import ClassVar, Mapping, Optional, Sequence, Set, Union
+from collections.abc import Mapping, Sequence
+from typing import ClassVar, TypeAlias, Union
 
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
-from wemake_python_styleguide import constants
+from wemake_python_styleguide import constants, types
 from wemake_python_styleguide.compat.aliases import (
     ForNodes,
     FunctionNodes,
@@ -13,17 +14,10 @@ from wemake_python_styleguide.compat.nodes import TryStar
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.arguments import call_args
 from wemake_python_styleguide.logic.naming import name_nodes
-from wemake_python_styleguide.logic.tree import functions, strings
+from wemake_python_styleguide.logic.tree import strings
 from wemake_python_styleguide.logic.tree.collections import (
     first,
-    normalize_dict_elements,
     sequence_of_node,
-)
-from wemake_python_styleguide.types import (
-    AnyFor,
-    AnyFunctionDef,
-    AnyNodes,
-    AnyWith,
 )
 from wemake_python_styleguide.violations.best_practices import (
     StatementHasNoEffectViolation,
@@ -32,7 +26,6 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.violations.consistency import (
     AugmentedAssignPatternViolation,
-    ParametersIndentationViolation,
     UselessNodeViolation,
 )
 from wemake_python_styleguide.violations.refactoring import (
@@ -47,23 +40,15 @@ from wemake_python_styleguide.visitors.decorators import alias
 #: Statements that do have `.body` attribute.
 _StatementWithBody: TypeAlias = Union[
     ast.If,
-    AnyFor,
+    types.AnyFor,
     ast.While,
-    AnyWith,
+    types.AnyWith,
     ast.Try,
     TryStar,
     ast.ExceptHandler,
-    AnyFunctionDef,
+    types.AnyFunctionDef,
     ast.ClassDef,
     ast.Module,
-]
-
-#: Simple collections.
-_AnyCollection: TypeAlias = Union[
-    ast.List,
-    ast.Set,
-    ast.Dict,
-    ast.Tuple,
 ]
 
 
@@ -90,20 +75,20 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
     This visitor checks all statements that have multiline bodies.
     """
 
-    _closing_nodes: ClassVar[AnyNodes] = (
+    _closing_nodes: ClassVar[types.AnyNodes] = (
         ast.Raise,
         ast.Return,
         ast.Break,
         ast.Continue,
     )
 
-    _have_doc_strings: ClassVar[AnyNodes] = (
+    _have_doc_strings: ClassVar[types.AnyNodes] = (
         *FunctionNodes,
         ast.ClassDef,
         ast.Module,
     )
 
-    _blocked_self_assignment: ClassVar[AnyNodes] = (
+    _blocked_self_assignment: ClassVar[types.AnyNodes] = (
         ast.BinOp,
     )
 
@@ -115,7 +100,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         TryStar,
     )
 
-    _have_effect: ClassVar[AnyNodes] = (
+    _have_effect: ClassVar[types.AnyNodes] = (
         ast.Return,
         ast.YieldFrom,
         ast.Yield,
@@ -136,18 +121,18 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
     )
 
     # Useless nodes:
-    _generally_useless_body: ClassVar[AnyNodes] = (
+    _generally_useless_body: ClassVar[types.AnyNodes] = (
         ast.Break,
         ast.Continue,
         ast.Pass,
         ast.Ellipsis,
     )
-    _loop_useless_body: ClassVar[AnyNodes] = (
+    _loop_useless_body: ClassVar[types.AnyNodes] = (
         ast.Return,
         ast.Raise,
     )
 
-    _useless_combination: ClassVar[Mapping[str, AnyNodes]] = {
+    _useless_combination: ClassVar[Mapping[str, types.AnyNodes]] = {
         'For': _generally_useless_body + _loop_useless_body,
         'AsyncFor': _generally_useless_body + _loop_useless_body,
         'While': _generally_useless_body + _loop_useless_body,
@@ -177,7 +162,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
             self._almost_swapped(assigns)
 
     def _almost_swapped(self, assigns: Sequence[ast.Assign]) -> None:
-        previous_var: Set[Optional[str]] = set()
+        previous_var: set[str | None] = set()
 
         for assign in assigns:
             current_var = {
@@ -269,105 +254,10 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_collection', (
-    'visit_List',
-    'visit_Set',
-    'visit_Dict',
-    'visit_Tuple',
-))
-@alias('visit_any_function', (
-    'visit_FunctionDef',
-    'visit_AsyncFunctionDef',
-))
-class WrongParametersIndentationVisitor(BaseNodeVisitor):
-    """Ensures that all parameters indentation follow our rules."""
-
-    def visit_collection(self, node: _AnyCollection) -> None:
-        """Checks how collection items indentation."""
-        if isinstance(node, ast.Dict):
-            elements = normalize_dict_elements(node)
-        else:
-            elements = node.elts
-        self._check_indentation(node, elements, extra_lines=1)
-        self.generic_visit(node)
-
-    def visit_Call(self, node: ast.Call) -> None:
-        """Checks call arguments indentation."""
-        all_args = call_args.get_all_args(node)
-        self._check_indentation(node, all_args)
-        self.generic_visit(node)
-
-    def visit_any_function(self, node: AnyFunctionDef) -> None:
-        """Checks function parameters indentation."""
-        self._check_indentation(node, functions.get_all_arguments(node))
-        self.generic_visit(node)
-
-    def visit_ClassDef(self, node: ast.ClassDef) -> None:
-        """Checks base classes indentation."""
-        all_args = [*node.bases, *[kw.value for kw in node.keywords]]
-        self._check_indentation(node, all_args)
-        self.generic_visit(node)
-
-    def _check_first_element(
-        self,
-        node: ast.AST,
-        statement: ast.AST,
-        extra_lines: int,
-    ) -> Optional[bool]:
-        if statement.lineno == node.lineno:  # type: ignore[attr-defined]
-            if not extra_lines:
-                return False
-        return None
-
-    def _check_rest_elements(
-        self,
-        node: ast.AST,
-        statement: ast.AST,
-        previous_line: int,
-        multi_line_mode: Optional[bool],
-    ) -> Optional[bool]:
-        previous_has_break: Optional[bool] = (
-            previous_line != statement.lineno  # type: ignore[attr-defined]
-        )
-        if not previous_has_break and multi_line_mode:
-            self.add_violation(ParametersIndentationViolation(node))
-            return None
-        elif previous_has_break and multi_line_mode is False:
-            self.add_violation(ParametersIndentationViolation(node))
-            return None
-        return previous_has_break
-
-    def _check_indentation(
-        self,
-        node: ast.AST,
-        elements: Sequence[ast.AST],
-        extra_lines: int = 0,  # we need it due to wrong lineno in collections
-    ) -> None:
-        multi_line_mode: Optional[bool] = None
-        for index, statement in enumerate(elements):
-            if index == 0:
-                # We treat first element differently,
-                # since it is impossible to say what kind of multi-line
-                # parameters styles will be used at this moment.
-                multi_line_mode = self._check_first_element(
-                    node,
-                    statement,
-                    extra_lines,
-                )
-            else:
-                multi_line_mode = self._check_rest_elements(
-                    node,
-                    statement,
-                    elements[index - 1].lineno,  # type: ignore[attr-defined]
-                    multi_line_mode,
-                )
-
-
-@final
 class PointlessStarredVisitor(BaseNodeVisitor):
     """Responsible for absence of useless starred expressions."""
 
-    _pointless_star_nodes: ClassVar[AnyNodes] = (
+    _pointless_star_nodes: ClassVar[types.AnyNodes] = (
         ast.Dict,
         ast.List,
         ast.Set,
@@ -480,7 +370,7 @@ class AssignmentPatternsVisitor(BaseNodeVisitor):
 class WrongMethodArgumentsVisitor(BaseNodeVisitor):
     """Ensures that all arguments follow our rules."""
 
-    _no_tuples_collections: ClassVar[AnyNodes] = (
+    _no_tuples_collections: ClassVar[types.AnyNodes] = (
         ast.List,
         ast.ListComp,
         ast.Set,

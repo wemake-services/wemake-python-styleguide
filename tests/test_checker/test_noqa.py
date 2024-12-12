@@ -14,15 +14,8 @@ https://wemake-python-styleguide.rtfd.io/en/latest/pages/api/contributing.html
 
 import re
 import subprocess
-import sys
 import types
 from collections import Counter
-
-import pytest
-
-# Versions for different version-specific fixtures.
-_PY39 = (3, 9) <= sys.version_info < (3, 10)
-_PY310 = (3, 10) <= sys.version_info < (3, 11)
 
 #: Used to find violations' codes in output.
 ERROR_PATTERN = re.compile(r'(WPS\d{3})')
@@ -40,26 +33,14 @@ IGNORED_VIOLATIONS = (
 )
 
 #: Number and count of violations that would be raised.
-VERSION_SPECIFIC = types.MappingProxyType({
-    'noqa39': {
-        'WPS466': 1,
-    },
-    'noqa310': {
-        'WPS110': 1,
-        'WPS111': 1,
-        'WPS122': 1,
-    },
-})
-
-#: Number and count of violations that would be raised.
 SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS000': 0,  # logically unacceptable.
 
     'WPS100': 0,  # logically unacceptable.
     'WPS101': 0,  # logically unacceptable.
     'WPS102': 0,  # logically unacceptable.
-    'WPS110': 4,
-    'WPS111': 1,
+    'WPS110': 5,
+    'WPS111': 2,
     'WPS112': 1,
     'WPS113': 1,
     'WPS114': 1,
@@ -70,7 +51,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS119': 1,
     'WPS120': 1,
     'WPS121': 1,
-    'WPS122': 1,
+    'WPS122': 2,
     'WPS123': 1,
     'WPS124': 1,
     'WPS125': 1,
@@ -113,25 +94,25 @@ SHOULD_BE_RAISED = types.MappingProxyType({
 
     'WPS300': 1,
     'WPS301': 1,
-    'WPS302': 1,
+    'WPS302': 0,  # deprecated since 1.0.0
     'WPS303': 1,
-    'WPS304': 1,
-    'WPS305': 2,
-    'WPS306': 2,
+    'WPS304': 0,  # deprecated since 1.0.0
+    'WPS305': 0,
+    'WPS306': 0,  # deprecated since 1.0.0
     'WPS307': 1,
     'WPS308': 1,
     'WPS309': 1,
-    'WPS310': 4,
+    'WPS310': 0,  # deprecated since 1.0.0
     'WPS311': 1,
     'WPS312': 1,
-    'WPS313': 1,
+    'WPS313': 0,  # deprecated since 1.0.0
     'WPS314': 1,
-    'WPS315': 1,
+    'WPS315': 0,  # deprecated since 1.0.0
     'WPS316': 1,
-    'WPS317': 1,
-    'WPS318': 3,
-    'WPS319': 2,
-    'WPS320': 2,
+    'WPS317': 0,  # deprecated since 1.0.0
+    'WPS318': 0,  # deprecated since 1.0.0
+    'WPS319': 0,  # deprecated since 1.0.0
+    'WPS320': 0,  # deprecated since 1.0.0
     'WPS321': 1,
     'WPS322': 1,
     'WPS323': 1,
@@ -148,31 +129,31 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS334': 1,
     'WPS335': 1,
     'WPS336': 1,
-    'WPS337': 1,
+    'WPS337': 0,  # deprecated since 1.0.0
     'WPS338': 1,
     'WPS339': 1,
-    'WPS340': 1,
-    'WPS341': 1,
+    'WPS340': 0,  # deprecated since 1.0.0
+    'WPS341': 0,  # deprecated since 1.0.0
     'WPS342': 1,
-    'WPS343': 1,
+    'WPS343': 0,  # deprecated since 1.0.0
     'WPS344': 1,
     'WPS345': 1,
     'WPS346': 1,
     'WPS347': 1,
-    'WPS348': 1,
+    'WPS348': 0,  # deprecated since 1.0.0
     'WPS349': 1,
     'WPS350': 1,
     'WPS351': 1,
-    'WPS352': 1,
+    'WPS352': 0,  # deprecated since 1.0.0
     'WPS353': 1,
     'WPS354': 1,
-    'WPS355': 1,
+    'WPS355': 0,  # deprecated since 1.0.0
     'WPS356': 1,
     'WPS357': 0,  # logically unacceptable.
     'WPS358': 1,
     'WPS359': 1,
     'WPS360': 1,
-    'WPS361': 1,
+    'WPS361': 0,  # deprecated since 1.0.0
     'WPS362': 2,
 
     'WPS400': 0,  # defined in ignored violations.
@@ -192,7 +173,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS414': 1,
     'WPS415': 1,
     'WPS416': 0,  # deprecated
-    'WPS417': 1,
+    'WPS417': 0,  # deprecated since 1.0.0
     'WPS418': 1,
     'WPS419': 1,
     'WPS420': 2,
@@ -227,7 +208,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS449': 1,
     'WPS450': 1,
     'WPS451': 0,  # deprecated
-    'WPS452': 2,
+    'WPS452': 0,  # deprecated since 1.0.0
     'WPS453': 0,
     'WPS454': 1,
     'WPS455': 1,
@@ -241,7 +222,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS463': 1,
     'WPS464': 0,  # logically unacceptable.
     'WPS465': 0,  # deprecated since 1.0.0
-    'WPS466': 0,  # defined in version specific table.
+    'WPS466': 1,
     'WPS467': 1,
     'WPS468': 2,
     'WPS469': 1,
@@ -254,7 +235,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS500': 1,
     'WPS501': 1,
     'WPS502': 2,
-    'WPS503': 2,
+    'WPS503': 0,  # deprecated since 1.0.0
     'WPS504': 1,
     'WPS505': 1,
     'WPS506': 1,
@@ -282,7 +263,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS528': 1,
     'WPS529': 1,
     'WPS530': 1,
-    'WPS531': 1,
+    'WPS531': 0,  # deprecated since 1.0.0
     'WPS532': 1,
 
     'WPS600': 1,
@@ -341,55 +322,6 @@ def _assert_errors_count_in_output(
 def test_codes(all_violations):
     """Ensures that all violations are listed."""
     assert len(SHOULD_BE_RAISED) == len(all_violations)
-
-
-@pytest.mark.parametrize(('filename', 'violations', 'total'), [
-    ('noqa.py', SHOULD_BE_RAISED, True),
-    pytest.param(
-        'noqa39.py',
-        VERSION_SPECIFIC['noqa39'],
-        0,
-        marks=pytest.mark.skipif(not _PY39, reason='ast changes on 3.9'),
-    ),
-    pytest.param(
-        'noqa310.py',
-        VERSION_SPECIFIC['noqa310'],
-        0,
-        marks=pytest.mark.skipif(not _PY310, reason='ast changes on 3.10'),
-    ),
-])
-def test_noqa_fixture_disabled(
-    absolute_path,
-    all_violations,
-    filename,
-    violations,
-    total,
-):
-    """End-to-End test to check that all violations are present."""
-    process = subprocess.Popen(
-        [
-            'flake8',
-            '--ignore',
-            ','.join(IGNORED_VIOLATIONS),
-            '--disable-noqa',
-            '--isolated',
-            '--select',
-            'WPS',
-            absolute_path('fixtures', 'noqa', filename),
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
-        encoding='utf8',
-    )
-    stdout, _ = process.communicate()
-
-    _assert_errors_count_in_output(
-        stdout,
-        violations,
-        all_violations,
-        total=total,
-    )
 
 
 def test_noqa_fixture_disabled_no_control(

@@ -1,7 +1,7 @@
-from typing import Optional, Sequence, Tuple, Type, Union
+from collections.abc import Sequence
+from typing import Final, TypeAlias, Union
 
 import pytest
-from typing_extensions import Final, TypeAlias
 
 from wemake_python_styleguide.violations.base import (
     ASTViolation,
@@ -11,8 +11,8 @@ from wemake_python_styleguide.violations.base import (
 from wemake_python_styleguide.visitors.base import BaseVisitor
 
 _IgnoredTypes: TypeAlias = Union[
-    Type[BaseViolation],
-    Tuple[Type[BaseViolation], ...],
+    type[BaseViolation],
+    tuple[type[BaseViolation], ...],
     None,
 ]
 _ERROR_FORMAT: Final = ': {0}'
@@ -39,6 +39,7 @@ def assert_errors():
         assert len(expected_errors) == len(real_errors)
 
         for index, error in enumerate(real_errors):
+            assert expected_errors[index].disabled_since is None
             assert error.code == expected_errors[index].code
             if isinstance(error, (ASTViolation, TokenizeViolation)):
                 assert error._node is not None  # noqa: WPS437
@@ -53,7 +54,7 @@ def assert_error_text():
     def factory(
         visitor: BaseVisitor,
         text: str,
-        baseline: Optional[int] = None,
+        baseline: int | None = None,
         *,
         multiple: bool = False,
         ignored_types: _IgnoredTypes = None,

@@ -9,7 +9,7 @@ def _is_self_call(func: AnyFunctionDef, node: AST) -> bool:
     return (
         isinstance(node, Call) and
         isinstance(node.func, Attribute) and
-        bool(given_function_called(node, {'self.{0}'.format(func.name)}))
+        bool(given_function_called(node, {f'self.{func.name}'}))
     )
 
 

@@ -1,12 +1,12 @@
 import ast
 import itertools
 from collections import Counter
-from typing import Iterable, List, cast
+from collections.abc import Iterable
+from typing import cast
 
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.functions import get_assign_targets
-from wemake_python_styleguide.compat.nodes import Match
 from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
     UNUSED_PLACEHOLDER,
@@ -75,7 +75,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
     def _check_reassignment(
         self,
         node: AnyAssign,
-        names: List[str],
+        names: list[str],
     ) -> None:
         if not node.value:
             return
@@ -100,7 +100,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
     def _check_unique_assignment(
         self,
         node: AnyAssign,
-        names: List[str],
+        names: list[str],
     ) -> None:
         used_names = filter(
             lambda assigned_name: not access.is_unused(assigned_name),
@@ -187,7 +187,7 @@ class UnusedVariableDefinitionVisitor(BaseNodeVisitor):
             )
         self.generic_visit(node)
 
-    def visit_Match(self, node: Match) -> None:  # pragma: py-lt-310
+    def visit_Match(self, node: ast.Match) -> None:
         """Check pattern matching in a form of `case ... as NAME`."""
         for match_as in pattern_matching.get_explicit_as_names(node):
             self._check_assign_unused(

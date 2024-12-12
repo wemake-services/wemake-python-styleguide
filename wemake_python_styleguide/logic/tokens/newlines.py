@@ -1,5 +1,5 @@
 import tokenize
-from typing import Sequence
+from collections.abc import Sequence
 
 from wemake_python_styleguide.logic.tokens.constants import NEWLINES
 

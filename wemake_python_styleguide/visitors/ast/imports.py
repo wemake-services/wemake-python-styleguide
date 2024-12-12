@@ -1,9 +1,10 @@
 import ast
 from collections import defaultdict
+from collections.abc import Iterable
 from itertools import chain, product
-from typing import DefaultDict, Iterable, List, Set
+from typing import DefaultDict, Final
 
-from typing_extensions import Final, final
+from typing_extensions import final
 
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
 from wemake_python_styleguide.logic import nodes
@@ -146,10 +147,10 @@ class _ImportCollisionValidator:
 
     def __init__(self, error_callback: ErrorCallback) -> None:
         self._error_callback = error_callback
-        self._imported_names: List[imports.ImportedObjectInfo] = []
+        self._imported_names: list[imports.ImportedObjectInfo] = []
         # This helps us to detect cases like:
         # `from x import y, y as z`
-        self._imported_objects: DefaultDict[str, Set[str]] = defaultdict(set)
+        self._imported_objects: DefaultDict[str, set[str]] = defaultdict(set)
 
     def validate(self) -> None:
         """Validates that there are no intersecting imported modules."""

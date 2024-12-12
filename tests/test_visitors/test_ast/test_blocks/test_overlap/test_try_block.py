@@ -186,7 +186,7 @@ def test_except_block_usage(
     """Ensures using variables is fine."""
     code = context.format(
         except_statement.format(variable_name),
-        'print({0})'.format(variable_name),
+        f'print({variable_name})',
     )
     tree = parse_ast_tree(mode(code))
 

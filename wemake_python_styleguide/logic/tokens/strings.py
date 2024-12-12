@@ -1,12 +1,11 @@
 import tokenize
-from typing import Tuple
 
 from flake8_quotes.docstring_detection import (  # noqa: WPS113, F401
     get_docstring_tokens as get_docstring_tokens,
 )
 
 
-def split_prefixes(string: str) -> Tuple[str, str]:
+def split_prefixes(string: str) -> tuple[str, str]:
     """
     Splits string repr by prefixes and the quoted content.
 

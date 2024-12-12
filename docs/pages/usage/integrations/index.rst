@@ -4,7 +4,6 @@
   plugins.rst
   editors.rst
   auto-formatters.rst
-  nitpick.rst
   ondivi.rst
   docker.rst
   github-actions.rst

@@ -5,9 +5,6 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     StringConstantRedefinedViolation,
 )
-from wemake_python_styleguide.violations.consistency import (
-    FormattedStringViolation,
-)
 from wemake_python_styleguide.visitors.ast.builtins import WrongStringVisitor
 
 
@@ -37,7 +34,7 @@ def test_alphabet_as_string_violation(
     default_options,
 ):
     """Testing that the strings violate the rules."""
-    tree = parse_ast_tree('{0}"{1}"'.format(prefix, code))
+    tree = parse_ast_tree(f'{prefix}"{code}"')
 
     visitor = WrongStringVisitor(default_options, tree=tree)
     visitor.run()
@@ -52,7 +49,7 @@ def test_alphabet_as_fstring_violation(
     default_options,
 ):
     """Testing that the fstrings violate the rules."""
-    tree = parse_ast_tree('f"{0}"'.format(string.ascii_letters))
+    tree = parse_ast_tree(f'f"{string.ascii_letters}"')
 
     visitor = WrongStringVisitor(default_options, tree=tree)
     visitor.run()
@@ -60,7 +57,6 @@ def test_alphabet_as_fstring_violation(
     assert_errors(
         visitor,
         [StringConstantRedefinedViolation],
-        ignored_types=FormattedStringViolation,
     )
 
 
@@ -79,7 +75,7 @@ def test_alphabet_as_string_no_violation(
     default_options,
 ):
     """Testing that regular strings work well."""
-    tree = parse_ast_tree('"{0}"'.format(code))
+    tree = parse_ast_tree(f'"{code}"')
 
     visitor = WrongStringVisitor(default_options, tree=tree)
     visitor.run()

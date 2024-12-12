@@ -1,5 +1,5 @@
 import ast
-from typing import List, NamedTuple
+from typing import NamedTuple
 
 from typing_extensions import final
 
@@ -30,7 +30,7 @@ def get_module_name(node: ast.ImportFrom) -> str:
     )
 
 
-def get_import_parts(node: AnyImport) -> List[str]:
+def get_import_parts(node: AnyImport) -> list[str]:
     """Returns list of import modules."""
     module_path = getattr(node, 'module', '') or ''
     return module_path.split('.')

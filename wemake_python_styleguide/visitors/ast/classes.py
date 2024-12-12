@@ -1,6 +1,6 @@
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, FrozenSet, List, Optional
+from typing import ClassVar, DefaultDict
 
 from typing_extensions import final
 
@@ -32,24 +32,9 @@ class WrongClassDefVisitor(base.BaseNodeVisitor):
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """Checking class definitions."""
-        self._check_base_classes_count(node)
         self._check_base_classes(node)
         self._check_kwargs_unpacking(node)
         self.generic_visit(node)
-
-    def _check_base_classes_count(self, node: ast.ClassDef) -> None:
-        is_object_explicit_base = (
-            len(node.bases) == 1 and
-            isinstance(node.bases[0], ast.Name) and
-            node.bases[0].id == 'object'
-        )
-        if is_object_explicit_base:
-            self.add_violation(
-                consistency.ExplicitObjectBaseClassViolation(
-                    node,
-                    text=node.name,
-                ),
-            )
 
     def _check_base_classes(self, node: ast.ClassDef) -> None:
         for base_name in node.bases:
@@ -89,12 +74,6 @@ class WrongClassDefVisitor(base.BaseNodeVisitor):
 
         if id_attr == 'BaseException':
             self.add_violation(bp.BaseExceptionSubclassViolation(node))
-        elif id_attr == 'object' and len(node.bases) >= 2:
-            self.add_violation(
-                consistency.ObjectInBaseClassesListViolation(
-                    node, text=id_attr,
-                ),
-            )
         elif classes.is_forbidden_super_class(id_attr):
             self.add_violation(
                 oop.BuiltinSubclassViolation(node, text=id_attr),
@@ -162,10 +141,10 @@ class WrongClassBodyVisitor(base.BaseNodeVisitor):
 class WrongMethodVisitor(base.BaseNodeVisitor):
     """Visits functions, but treats them as methods."""
 
-    _staticmethod_names: ClassVar[FrozenSet[str]] = frozenset((
+    _staticmethod_names: ClassVar[frozenset[str]] = frozenset((
         'staticmethod',
     ))
-    _special_async_iter: ClassVar[FrozenSet[str]] = frozenset((
+    _special_async_iter: ClassVar[frozenset[str]] = frozenset((
         '__aiter__',
     ))
 
@@ -257,7 +236,7 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
     def _get_call_stmt_of_useless_method(
         self,
         node: types.AnyFunctionDef,
-    ) -> Optional[ast.Call]:
+    ) -> ast.Call | None:
         """
         Fetches ``super`` call statement from function definition.
 
@@ -320,7 +299,7 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
         node: types.AnyAssign,
         elements: ast.Tuple,
     ) -> None:
-        fields: DefaultDict[str, List[ast.AST]] = defaultdict(list)
+        fields: DefaultDict[str, list[ast.AST]] = defaultdict(list)
 
         for tuple_item in elements.elts:
             slot_name = self._slot_item_name(tuple_item)
@@ -348,14 +327,14 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
         if isinstance(node.value, ast.Tuple):
             self._count_slots_items(node, node.value)
 
-    def _slot_item_name(self, node: ast.AST) -> Optional[str]:
+    def _slot_item_name(self, node: ast.AST) -> str | None:
         if isinstance(node, ast.Str):
             return node.s
         if isinstance(node, ast.Starred):
             return source.node_to_string(node)
         return None
 
-    def _are_correct_slots(self, slots: List[ast.AST]) -> bool:
+    def _are_correct_slots(self, slots: list[ast.AST]) -> bool:
         return all(
             slot.s.isidentifier()
             for slot in slots
@@ -401,7 +380,7 @@ class ClassMethodOrderVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_method_order(self, node: ast.ClassDef) -> None:
-        method_nodes: List[str] = []
+        method_nodes: list[str] = []
 
         for subnode in ast.walk(node):
             if isinstance(subnode, FunctionNodes):

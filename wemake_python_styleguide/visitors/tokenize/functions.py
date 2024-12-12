@@ -1,6 +1,6 @@
 import math
 import tokenize
-from typing import Iterable, List, Optional, Tuple
+from collections.abc import Iterable
 
 from typing_extensions import final
 
@@ -11,7 +11,7 @@ from wemake_python_styleguide.visitors import base
 @final
 class _Function:
 
-    def __init__(self, file_tokens: List[tokenize.TokenInfo]) -> None:
+    def __init__(self, file_tokens: list[tokenize.TokenInfo]) -> None:
         self._tokens = file_tokens
 
     def name_token(self) -> tokenize.TokenInfo:
@@ -36,11 +36,11 @@ class _Function:
 
 @final
 class _FileFunctions:
-    def __init__(self, file_tokens: List[tokenize.TokenInfo]) -> None:
+    def __init__(self, file_tokens: list[tokenize.TokenInfo]) -> None:
         self._file_tokens = file_tokens
 
     def search_functions(self) -> Iterable[_Function]:  # noqa: WPS210
-        function_tokens: List[tokenize.TokenInfo] = []
+        function_tokens: list[tokenize.TokenInfo] = []
         in_function = False
         function_start_token = (0, 0)
         for token_index, token in enumerate(self._file_tokens):
@@ -68,7 +68,7 @@ class _FileFunctions:
         self,
         token: tokenize.TokenInfo,
         token_index: int,
-        function_start: Tuple[int, int],
+        function_start: tuple[int, int],
         *,
         function_tokens_exists: bool,
     ) -> bool:
@@ -88,7 +88,7 @@ class _FileFunctions:
     def _next_token(
         self,
         token_index: int,
-    ) -> Optional[tokenize.TokenInfo]:
+    ) -> tokenize.TokenInfo | None:
         try:
             return self._file_tokens[token_index + 1]
         except IndexError:
@@ -146,7 +146,7 @@ class WrongEmptyLinesCountVisitor(base.BaseTokenVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Initializes a counter."""
         super().__init__(*args, **kwargs)
-        self._file_tokens: List[tokenize.TokenInfo] = []
+        self._file_tokens: list[tokenize.TokenInfo] = []
 
     def visit(self, token: tokenize.TokenInfo) -> None:
         """Find empty lines count."""

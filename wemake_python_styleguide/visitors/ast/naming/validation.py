@@ -1,5 +1,6 @@
 import ast
-from typing import Callable, ClassVar, Iterable, Optional, Type
+from collections.abc import Callable, Iterable
+from typing import ClassVar
 
 import attr
 from typing_extensions import final
@@ -51,9 +52,9 @@ class _NamingPredicate:
     """Structure we use to apply different naming rules to variable names."""
 
     is_correct: _PredicateLogicalCallback
-    violation: Type[base.BaseViolation]
+    violation: type[base.BaseViolation]
 
-    _is_applicable: Optional[_PredicateApplicableCallback] = None
+    _is_applicable: _PredicateApplicableCallback | None = None
 
     def is_applicable(self, node: ast.AST) -> bool:
         """Usability function over real applicable predicate."""
@@ -309,7 +310,7 @@ class WrongNameVisitor(BaseNodeVisitor):
         self._type_params_validator.check_type_params(node)
         self.generic_visit(node)
 
-    def visit_named_match(self, node: NamedMatch) -> None:  # pragma: py-lt-310
+    def visit_named_match(self, node: NamedMatch) -> None:
         """
         Check pattern matching.
 

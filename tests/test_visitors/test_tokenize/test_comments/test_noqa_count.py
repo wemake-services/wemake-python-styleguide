@@ -22,7 +22,7 @@ def test_noqa_overuse(
     code,
 ):
     """Ensures that `noqa` overuse raises a warning."""
-    file_tokens = parse_tokens('{0}\n'.format(code) * (10 + 1))
+    file_tokens = parse_tokens(f'{code}\n' * (10 + 1))
 
     visitor = NoqaVisitor(default_options, file_tokens=file_tokens)
     visitor.run()

@@ -1,8 +1,7 @@
-from typing_extensions import Final
+from typing import Final
 
 from wemake_python_styleguide.presets.topics import complexity, naming
 from wemake_python_styleguide.visitors.ast import (  # noqa: WPS235
-    annotations,
     attributes,
     blocks,
     builtins,
@@ -30,7 +29,6 @@ from wemake_python_styleguide.visitors.tokenize import (
 PRESET: Final = (
     # General:
     statements.StatementsWithBodiesVisitor,
-    statements.WrongParametersIndentationVisitor,
     statements.PointlessStarredVisitor,
     statements.WrongNamedKeywordVisitor,
     statements.AssignmentPatternsVisitor,
@@ -50,7 +48,6 @@ PRESET: Final = (
     loops.SyncForLoopVisitor,
 
     attributes.WrongAttributeVisitor,
-    annotations.WrongAnnotationVisitor,
 
     functions.WrongFunctionCallVisitor,
     functions.FunctionDefinitionVisitor,
@@ -88,7 +85,6 @@ PRESET: Final = (
     conditions.IfStatementVisitor,
     conditions.BooleanConditionVisitor,
     conditions.ImplicitBoolPatternsVisitor,
-    conditions.UselessElseVisitor,
     conditions.ChainedIsVisitor,
 
     iterables.IterableUnpackingVisitor,
