@@ -26,6 +26,13 @@ some = [
 ]
 """
 
+correct_dict_comprehension = """
+some = {
+    (key := compute_key(i)): values[key]
+    for i in range(10)
+}
+"""
+
 # Wrong:
 wrong_assignment = 'print(x := 1)'
 wrong_if_condition = """
@@ -40,6 +47,7 @@ if some := call():
     correct_if_condition,
     correct_comprehension,
     correct_walrus_comprehension,
+    correct_dict_comprehension,
 ])
 def test_not_walrus(
     assert_errors,
