@@ -41,7 +41,6 @@ if some := call():
 """
 
 
-
 @pytest.mark.parametrize('code', [
     correct_assignment,
     correct_if_condition,

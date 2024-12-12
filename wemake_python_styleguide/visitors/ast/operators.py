@@ -233,7 +233,7 @@ class WalrusVisitor(base.BaseNodeVisitor):
                 ast.SetComp,
                 ast.DictComp,
                 ast.GeneratorExp,
-            )
+            ),
         )
 
         if closest is None:
@@ -241,6 +241,6 @@ class WalrusVisitor(base.BaseNodeVisitor):
                 consistency.WalrusViolation(
                     node,
                     text='Found walrus operator outside of comprehension',
-                )
+                ),
             )
         self.generic_visit(node)
