@@ -20,8 +20,6 @@ You might want to also install optional tools
 that pairs nicely with ``wemake-python-styleguide``:
 
 - :ref:`ondivi` for easy integration into a **legacy** codebase
-- :ref:`nitpick` for sharing and validating
-  configuration across multiple projects
 
 
 .. _usage:
@@ -52,4 +50,3 @@ Check out how we do it in our different templates:
 
 - :ref:`Configuring and ignoring violations <configuration>`
 - :ref:`Introducing this linter to a legacy codebase <ondivi>`
-- :ref:`Sharing configuration across multiple projects <nitpick>`
