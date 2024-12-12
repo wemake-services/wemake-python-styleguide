@@ -25,6 +25,7 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `WPS465`, because `|` is now heavily used by typing
 - **Breaking**: Removes `WPS348`, because it conflicts with `ruff` formatter
 - **Breaking**: Removes `WPS302`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS304`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS306`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS310`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS313`, because it is covered by `ruff` formatter
@@ -34,10 +35,12 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `WPS319`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS320`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS337`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS340`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS341`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS343`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS352`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS355`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS361`, because it is covered by `ruff` formatter
 - Allows any compares in `assert` statements for `WPS520`, #3112
 
 ### Bugfixes

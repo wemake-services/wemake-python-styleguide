@@ -115,7 +115,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS301': 1,
     'WPS302': 0,  # deprecated since 1.0.0
     'WPS303': 1,
-    'WPS304': 1,
+    'WPS304': 0,  # deprecated since 1.0.0
     'WPS305': 2,
     'WPS306': 0,  # deprecated since 1.0.0
     'WPS307': 1,
@@ -151,7 +151,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS337': 0,  # deprecated since 1.0.0
     'WPS338': 1,
     'WPS339': 1,
-    'WPS340': 1,
+    'WPS340': 0,  # deprecated since 1.0.0
     'WPS341': 0,  # deprecated since 1.0.0
     'WPS342': 1,
     'WPS343': 0,  # deprecated since 1.0.0
@@ -172,7 +172,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS358': 1,
     'WPS359': 1,
     'WPS360': 1,
-    'WPS361': 1,
+    'WPS361': 0,  # deprecated since 1.0.0
     'WPS362': 2,
 
     'WPS400': 0,  # defined in ignored violations.
