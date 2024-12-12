@@ -1,6 +1,5 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY310
 from wemake_python_styleguide.violations.best_practices import (
     BlockAndLocalOverlapViolation,
 )
@@ -143,27 +142,9 @@ def context():
     loop_and_loop1,
     loop_and_loop2,
     import_and_walrus,
-    pytest.param(
-        import_and_match_as,
-        marks=pytest.mark.skipif(
-            not PY310,
-            reason='Pattern matching was added in Python 3.10',
-        ),
-    ),
-    pytest.param(
-        import_and_match_as_implicit,
-        marks=pytest.mark.skipif(
-            not PY310,
-            reason='Pattern matching was added in Python 3.10',
-        ),
-    ),
-    pytest.param(
-        import_and_match_star,
-        marks=pytest.mark.skipif(
-            not PY310,
-            reason='Pattern matching was added in Python 3.10',
-        ),
-    ),
+    import_and_match_as,
+    import_and_match_as_implicit,
+    import_and_match_star,
 ])
 def test_block_overlap(
     assert_errors,

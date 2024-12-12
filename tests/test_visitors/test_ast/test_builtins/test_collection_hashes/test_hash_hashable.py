@@ -1,7 +1,6 @@
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
-    NonUniqueItemsInHashViolation,
     UnhashableTypeInHashViolation,
 )
 from wemake_python_styleguide.visitors.ast.builtins import (
@@ -83,7 +82,6 @@ def test_hash_with_impure_duplicates(
     visitor.run()
 
     assert_errors(visitor, [
-        NonUniqueItemsInHashViolation,
         UnhashableTypeInHashViolation,
         UnhashableTypeInHashViolation,
     ])

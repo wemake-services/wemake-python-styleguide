@@ -3,9 +3,6 @@ import pytest
 from wemake_python_styleguide.violations.complexity import (
     TooComplexFormattedStringViolation,
 )
-from wemake_python_styleguide.violations.consistency import (
-    FormattedStringViolation,
-)
 from wemake_python_styleguide.visitors.ast.builtins import (
     WrongFormatStringVisitor,
     WrongStringVisitor,
@@ -90,7 +87,6 @@ def test_wrong_string(assert_errors, parse_ast_tree, code, default_options):
 
     assert_errors(visitor, [
         TooComplexFormattedStringViolation,
-        FormattedStringViolation,
     ])
 
 
@@ -121,7 +117,6 @@ def test_complex_f_string(assert_errors, parse_ast_tree, code, default_options):
     assert_errors(
         visitor,
         [TooComplexFormattedStringViolation],
-        ignored_types=FormattedStringViolation,
     )
 
 
@@ -144,4 +139,4 @@ def test_simple_f_string(assert_errors, parse_ast_tree, code, default_options):
     visitor = WrongFormatStringVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [FormattedStringViolation])
+    assert_errors(visitor, [])

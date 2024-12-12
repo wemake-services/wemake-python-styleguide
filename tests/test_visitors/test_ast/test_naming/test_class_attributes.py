@@ -19,7 +19,7 @@ class Test:
 
 static_typed_condition_attribute = """
 class Test:
-    if sys.version_info > (3, 8):
+    if sys.version_info > (3, 'whatever'):
         {0}: int = None
 """
 

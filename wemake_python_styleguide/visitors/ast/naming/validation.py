@@ -309,7 +309,7 @@ class WrongNameVisitor(BaseNodeVisitor):
         self._type_params_validator.check_type_params(node)
         self.generic_visit(node)
 
-    def visit_named_match(self, node: NamedMatch) -> None:  # pragma: py-lt-310
+    def visit_named_match(self, node: NamedMatch) -> None:
         """
         Check pattern matching.
 

@@ -5,9 +5,6 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     StringConstantRedefinedViolation,
 )
-from wemake_python_styleguide.violations.consistency import (
-    FormattedStringViolation,
-)
 from wemake_python_styleguide.visitors.ast.builtins import WrongStringVisitor
 
 
@@ -60,7 +57,6 @@ def test_alphabet_as_fstring_violation(
     assert_errors(
         visitor,
         [StringConstantRedefinedViolation],
-        ignored_types=FormattedStringViolation,
     )
 
 

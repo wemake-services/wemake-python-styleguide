@@ -1,6 +1,6 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY310, PY311
+from wemake_python_styleguide.compat.constants import PY311
 from wemake_python_styleguide.visitors.ast.complexity.offset import (
     OffsetVisitor,
     TooDeepNestingViolation,
@@ -116,13 +116,7 @@ class MyClassWithReallyLongName: ...
     ),
     nested_with,
     nested_while,
-    pytest.param(
-        nested_match,
-        marks=pytest.mark.skipif(
-            not PY310,
-            reason='Pattern matching was added in 3.10',
-        ),
-    ),
+    nested_match,
     top_level_function_ellipsis,
     top_level_method_ellipsis,
     top_level_class_ellipsis,
@@ -184,8 +178,6 @@ def test_nested_offset_errors(
     """Testing that nested expressions are restricted."""
     if code == nested_try_star and not PY311:
         pytest.skip(reason='ExceptionGroup was added in 3.11')
-    if code == nested_match and not PY310:
-        pytest.skip(reason='Pattern matching was added in 3.10')
 
     tree = parse_ast_tree(mode(code))
 

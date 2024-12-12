@@ -35,7 +35,6 @@ You will also need to create a `setup.cfg` file with the [configuration](https:/
 We highly recommend to also use:
 
 - [ondivi](https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/integrations/ondivi.html) for easy integration into a **legacy** codebase
-- [nitpick](https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/integrations/nitpick.html) for sharing and validating configuration across multiple projects
 
 
 ## Running
