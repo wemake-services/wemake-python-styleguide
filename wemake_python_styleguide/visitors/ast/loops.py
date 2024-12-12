@@ -1,9 +1,10 @@
 import ast
 from collections import defaultdict
+from collections.abc import Mapping, Sequence
 from contextlib import suppress
-from typing import ClassVar, DefaultDict, List, Mapping, Sequence, Type, Union
+from typing import ClassVar, DefaultDict, TypeAlias
 
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import AssignNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
@@ -40,7 +41,7 @@ from wemake_python_styleguide.violations.refactoring import (
 from wemake_python_styleguide.visitors import base, decorators
 
 #: Type alias to specify how we check different containers in loops.
-_ContainerSpec: TypeAlias = Mapping[Type[ast.AST], Sequence[str]]
+_ContainerSpec: TypeAlias = Mapping[type[ast.AST], Sequence[str]]
 
 
 @final
@@ -141,7 +142,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
 
     def _check_lambda_inside_loop(
         self,
-        node: Union[AnyLoop, AnyComprehension],
+        node: AnyLoop | AnyComprehension,
     ) -> None:
         for lambda_node in walk.get_subnodes_by_type(node, ast.Lambda):
             arg_nodes = walk.get_subnodes_by_type(lambda_node, ast.arg)
@@ -158,7 +159,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
                 self.add_violation(LambdaInsideLoopViolation(node))
 
     def _check_useless_continue(self, node: AnyLoop) -> None:
-        nodes_at_line: DefaultDict[int, List[ast.AST]] = defaultdict(list)
+        nodes_at_line: DefaultDict[int, list[ast.AST]] = defaultdict(list)
         for sub_node in ast.walk(node):
             lineno = getattr(sub_node, 'lineno', None)
             if lineno is not None:
@@ -221,7 +222,7 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
 
     def _check_explicit_iter_type(
         self,
-        node: Union[AnyFor, ast.comprehension],
+        node: AnyFor | ast.comprehension,
     ) -> None:
         node_iter = operators.unwrap_unary_node(node.iter)
         is_wrong = isinstance(node_iter, self._forbidden_for_iters)

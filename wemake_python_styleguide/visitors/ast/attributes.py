@@ -1,5 +1,5 @@
 import ast
-from typing import ClassVar, FrozenSet
+from typing import ClassVar
 
 from typing_extensions import final
 
@@ -20,7 +20,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 class WrongAttributeVisitor(BaseNodeVisitor):
     """Ensures that attributes are used correctly."""
 
-    _allowed_to_use_protected: ClassVar[FrozenSet[str]] = frozenset((
+    _allowed_to_use_protected: ClassVar[frozenset[str]] = frozenset((
         'self',
         'cls',
         'mcs',

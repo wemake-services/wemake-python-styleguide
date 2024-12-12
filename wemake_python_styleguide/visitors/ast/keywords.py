@@ -1,7 +1,7 @@
 import ast
-from typing import ClassVar, Dict, FrozenSet, List, Optional, Type, Union, cast
+from typing import ClassVar, TypeAlias, Union, cast
 
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import (
     AssignNodes,
@@ -42,8 +42,8 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 #: Utility type to work with violations easier.
 _ReturningViolations: TypeAlias = Union[
-    Type[InconsistentReturnViolation],
-    Type[InconsistentYieldViolation],
+    type[InconsistentReturnViolation],
+    type[InconsistentYieldViolation],
 ]
 
 
@@ -51,7 +51,7 @@ _ReturningViolations: TypeAlias = Union[
 class WrongRaiseVisitor(BaseNodeVisitor):
     """Finds wrong ``raise`` keywords."""
 
-    _base_exceptions: ClassVar[FrozenSet[str]] = frozenset((
+    _base_exceptions: ClassVar[frozenset[str]] = frozenset((
         'Exception',
         'BaseException',
     ))
@@ -135,7 +135,7 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
     def _iterate_returning_values(
         self,
         node: AnyFunctionDef,
-        returning_type: Union[Type[ast.Return], Type[ast.Yield]],
+        returning_type: type[ast.Return] | type[ast.Yield],
         violation: _ReturningViolations,
     ):
         return_nodes, has_values = keywords.returning_nodes(
@@ -250,7 +250,7 @@ class GeneratorKeywordsVisitor(BaseNodeVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Here we store the information about ``yield`` locations."""
         super().__init__(*args, **kwargs)
-        self._yield_locations: Dict[int, ast.Expr] = {}
+        self._yield_locations: dict[int, ast.Expr] = {}
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """Checks for consecutive ``yield`` nodes."""
@@ -278,8 +278,8 @@ class GeneratorKeywordsVisitor(BaseNodeVisitor):
                 self.add_violation(IncorrectYieldFromTargetViolation(node))
 
     def _post_visit(self) -> None:
-        previous_line: Optional[int] = None
-        previous_parent: Optional[ast.AST] = None
+        previous_line: int | None = None
+        previous_parent: ast.AST | None = None
 
         for line, node in self._yield_locations.items():
             parent = get_parent(node)
@@ -322,7 +322,7 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
             all(isinstance(elem, ast.Name) for elem in node.value.elts)
         )
 
-    def _get_previous_stmt(self, node: ast.Return) -> Optional[ast.stmt]:
+    def _get_previous_stmt(self, node: ast.Return) -> ast.stmt | None:
         """
         This method gets the previous node in a block.
 
@@ -335,7 +335,7 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
         """
         parent = cast(ast.AST, get_parent(node))
         for part in ('body', 'orelse', 'finalbody'):
-            block: List[ast.stmt] = getattr(parent, part, [])
+            block: list[ast.stmt] = getattr(parent, part, [])
             try:
                 current_index = block.index(node)
             except ValueError:
@@ -348,8 +348,8 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
     def _check_for_violations(
         self,
         node: ast.Return,
-        return_names: List[str],
-        previous_names: List[str],
+        return_names: list[str],
+        previous_names: list[str],
     ) -> None:
         if previous_names == return_names:
             self.add_violation(

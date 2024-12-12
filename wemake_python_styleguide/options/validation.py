@@ -1,4 +1,3 @@
-from typing import Optional, Tuple
 
 import attr
 from typing_extensions import final
@@ -8,8 +7,8 @@ from wemake_python_styleguide.types import ConfigurationOptions
 
 
 def _min_max(
-    min: Optional[int] = None,  # noqa: WPS125
-    max: Optional[int] = None,  # noqa: WPS125
+    min: int | None = None,  # noqa: WPS125
+    max: int | None = None,  # noqa: WPS125
 ):
     """Validator to check that value is in bounds."""
     def factory(instance, attribute, field_value):
@@ -24,8 +23,8 @@ def _min_max(
 
 
 def validate_domain_names_options(
-    allowed_domain_names: Tuple[str, ...],
-    forbidden_domain_names: Tuple[str, ...],
+    allowed_domain_names: tuple[str, ...],
+    forbidden_domain_names: tuple[str, ...],
 ) -> None:
     """
     Validator to check that allowed and forbidden names doesn't intersect.
@@ -64,10 +63,10 @@ class _ValidatedOptions:
     max_noqa_comments: int = attr.ib(
         validator=[_min_max(min=1, max=defaults.MAX_NOQA_COMMENTS)],
     )
-    nested_classes_whitelist: Tuple[str, ...] = attr.ib(converter=tuple)
-    allowed_domain_names: Tuple[str, ...] = attr.ib(converter=tuple)
-    forbidden_domain_names: Tuple[str, ...] = attr.ib(converter=tuple)
-    forbidden_inline_ignore: Tuple[str, ...] = attr.ib(converter=tuple)
+    nested_classes_whitelist: tuple[str, ...] = attr.ib(converter=tuple)
+    allowed_domain_names: tuple[str, ...] = attr.ib(converter=tuple)
+    forbidden_domain_names: tuple[str, ...] = attr.ib(converter=tuple)
+    forbidden_inline_ignore: tuple[str, ...] = attr.ib(converter=tuple)
 
     # Complexity:
     max_arguments: int = attr.ib(validator=[_min_max(min=1)])

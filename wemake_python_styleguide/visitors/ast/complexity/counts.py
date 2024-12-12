@@ -1,8 +1,8 @@
 import ast
 from collections import defaultdict
-from typing import DefaultDict, List, Union
+from typing import DefaultDict, TypeAlias, Union
 
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import FunctionNodes
@@ -132,7 +132,7 @@ class ElifVisitor(BaseNodeVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Creates internal ``elif`` counter."""
         super().__init__(*args, **kwargs)
-        self._if_children: DefaultDict[ast.If, List[ast.If]] = defaultdict(
+        self._if_children: DefaultDict[ast.If, list[ast.If]] = defaultdict(
             list,
         )
 

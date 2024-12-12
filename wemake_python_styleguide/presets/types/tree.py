@@ -1,4 +1,4 @@
-from typing_extensions import Final
+from typing import Final
 
 from wemake_python_styleguide.presets.topics import complexity, naming
 from wemake_python_styleguide.visitors.ast import (  # noqa: WPS235

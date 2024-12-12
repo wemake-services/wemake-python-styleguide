@@ -1,6 +1,6 @@
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, FrozenSet, List, Optional
+from typing import ClassVar, DefaultDict
 
 from typing_extensions import final
 
@@ -141,10 +141,10 @@ class WrongClassBodyVisitor(base.BaseNodeVisitor):
 class WrongMethodVisitor(base.BaseNodeVisitor):
     """Visits functions, but treats them as methods."""
 
-    _staticmethod_names: ClassVar[FrozenSet[str]] = frozenset((
+    _staticmethod_names: ClassVar[frozenset[str]] = frozenset((
         'staticmethod',
     ))
-    _special_async_iter: ClassVar[FrozenSet[str]] = frozenset((
+    _special_async_iter: ClassVar[frozenset[str]] = frozenset((
         '__aiter__',
     ))
 
@@ -236,7 +236,7 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
     def _get_call_stmt_of_useless_method(
         self,
         node: types.AnyFunctionDef,
-    ) -> Optional[ast.Call]:
+    ) -> ast.Call | None:
         """
         Fetches ``super`` call statement from function definition.
 
@@ -299,7 +299,7 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
         node: types.AnyAssign,
         elements: ast.Tuple,
     ) -> None:
-        fields: DefaultDict[str, List[ast.AST]] = defaultdict(list)
+        fields: DefaultDict[str, list[ast.AST]] = defaultdict(list)
 
         for tuple_item in elements.elts:
             slot_name = self._slot_item_name(tuple_item)
@@ -327,14 +327,14 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
         if isinstance(node.value, ast.Tuple):
             self._count_slots_items(node, node.value)
 
-    def _slot_item_name(self, node: ast.AST) -> Optional[str]:
+    def _slot_item_name(self, node: ast.AST) -> str | None:
         if isinstance(node, ast.Str):
             return node.s
         if isinstance(node, ast.Starred):
             return source.node_to_string(node)
         return None
 
-    def _are_correct_slots(self, slots: List[ast.AST]) -> bool:
+    def _are_correct_slots(self, slots: list[ast.AST]) -> bool:
         return all(
             slot.s.isidentifier()
             for slot in slots
@@ -380,7 +380,7 @@ class ClassMethodOrderVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_method_order(self, node: ast.ClassDef) -> None:
-        method_nodes: List[str] = []
+        method_nodes: list[str] = []
 
         for subnode in ast.walk(node):
             if isinstance(subnode, FunctionNodes):

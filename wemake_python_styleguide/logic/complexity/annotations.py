@@ -8,9 +8,7 @@ Adapted from: https://github.com/best-doctor/flake8-annotations-complexity
 """
 
 import ast
-from typing import Union
-
-from typing_extensions import TypeAlias
+from typing import TypeAlias, Union
 
 _Annotation: TypeAlias = Union[
     ast.expr,

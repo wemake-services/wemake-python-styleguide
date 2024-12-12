@@ -1,9 +1,10 @@
 import ast
 import re
 import string
-from typing import ClassVar, FrozenSet, List, Optional, Pattern, Sequence
+from collections.abc import Sequence
+from typing import ClassVar, Final, Optional, TypeAlias
 
-from typing_extensions import Final, TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import (
@@ -45,7 +46,7 @@ _HashItems: TypeAlias = Sequence[Optional[ast.AST]]
 class WrongStringVisitor(base.BaseNodeVisitor):
     """Restricts several string usages."""
 
-    _string_constants: ClassVar[FrozenSet[str]] = frozenset((
+    _string_constants: ClassVar[frozenset[str]] = frozenset((
         string.ascii_letters,
         string.ascii_lowercase,
         string.ascii_uppercase,
@@ -60,7 +61,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
     ))
 
     #: Copied from https://stackoverflow.com/a/30018957/4842742
-    _modulo_string_pattern: ClassVar[Pattern[str]] = re.compile(
+    _modulo_string_pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"""                             # noqa: WPS323
         (                                # start of capture group 1
             %                            # literal "%"
@@ -79,7 +80,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
     )
 
     #: Names of functions in which we allow strings with modulo patterns.
-    _modulo_pattern_exceptions: ClassVar[FrozenSet[str]] = frozenset((
+    _modulo_pattern_exceptions: ClassVar[frozenset[str]] = frozenset((
         'strftime',  # For date, time, and datetime.strftime()
         'strptime',  # For date, time, and datetime.strptime()
         'execute',  # For psycopg2's cur.execute()
@@ -95,7 +96,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
     def _check_is_alphabet(
         self,
         node: AnyText,
-        text_data: Optional[str],
+        text_data: str | None,
     ) -> None:
         if text_data in self._string_constants:
             self.add_violation(
@@ -104,7 +105,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
                 ),
             )
 
-    def _is_modulo_pattern_exception(self, parent: Optional[ast.AST]) -> bool:
+    def _is_modulo_pattern_exception(self, parent: ast.AST | None) -> bool:
         """
         Check if string with modulo pattern is in an exceptional situation.
 
@@ -123,7 +124,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
     def _check_modulo_patterns(
         self,
         node: AnyText,
-        text_data: Optional[str],
+        text_data: str | None,
     ) -> None:
         parent = nodes.get_parent(node)
         if parent and strings.is_doc_string(parent):
@@ -214,12 +215,12 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
         return False
 
     def _is_valid_chaining(self, format_value: AnyChainable) -> bool:
-        chained_parts: List[ast.AST] = list(attributes.parts(format_value))
+        chained_parts: list[ast.AST] = list(attributes.parts(format_value))
         if len(chained_parts) <= self._max_chained_items:
             return self._is_valid_chain_structure(chained_parts)
         return False
 
-    def _is_valid_chain_structure(self, chained_parts: List[ast.AST]) -> bool:
+    def _is_valid_chain_structure(self, chained_parts: list[ast.AST]) -> bool:
         """Helper method for ``_is_valid_chaining``."""
         has_invalid_parts = any(
             not self._is_valid_final_value(part)
@@ -357,7 +358,7 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
     def _check_unpacking_targets(
         self,
         node: ast.AST,
-        targets: List[ast.expr],
+        targets: list[ast.expr],
     ) -> None:
         if len(targets) == 1:
             self.add_violation(
@@ -376,7 +377,7 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
                     best_practices.WrongUnpackingViolation(node),
                 )
 
-    def _check_unpacking_target_types(self, node: Optional[ast.AST]) -> None:
+    def _check_unpacking_target_types(self, node: ast.AST | None) -> None:
         if not node:
             return
         for subnode in walk.get_subnodes_by_type(node, ast.List):

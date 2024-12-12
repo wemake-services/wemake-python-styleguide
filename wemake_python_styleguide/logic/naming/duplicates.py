@@ -1,13 +1,13 @@
 import ast
 from collections import defaultdict
 from functools import reduce
-from typing import DefaultDict, List, Set
+from typing import DefaultDict
 
 from wemake_python_styleguide.logic import source
 from wemake_python_styleguide.logic.tree.functions import given_function_called
 
 
-def duplicated_isinstance_call(node: ast.BoolOp) -> List[str]:
+def duplicated_isinstance_call(node: ast.BoolOp) -> list[str]:
     """Finds duplicate `isinstance` calls from `isinstance(a, ...) and ...`."""
     counter: DefaultDict[str, int] = defaultdict(int)
 
@@ -28,7 +28,7 @@ def duplicated_isinstance_call(node: ast.BoolOp) -> List[str]:
     ]
 
 
-def get_duplicate_names(variables: List[Set[str]]) -> Set[str]:
+def get_duplicate_names(variables: list[set[str]]) -> set[str]:
     """
     Find duplicate names in different nodes.
 

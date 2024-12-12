@@ -1,5 +1,4 @@
 import ast
-from typing import List
 
 from typing_extensions import final
 
@@ -48,7 +47,7 @@ class AnnotationComplexityVisitor(BaseNodeVisitor):
     def _check_annotations_complexity(
         self,
         node: ast.AST,
-        annotations: List[ast.expr],
+        annotations: list[ast.expr],
     ) -> None:
         max_complexity = self.options.max_annotation_complexity
         for annotation in annotations:

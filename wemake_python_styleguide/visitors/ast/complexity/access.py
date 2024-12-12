@@ -1,6 +1,6 @@
 import ast
 from itertools import takewhile
-from typing import ClassVar, Set, cast
+from typing import ClassVar, cast
 
 from typing_extensions import final
 
@@ -24,7 +24,7 @@ class AccessVisitor(BaseNodeVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Keeps visited accesses to not visit them again."""
         super().__init__(*args, **kwargs)
-        self._visited_accesses: Set[AnyAccess] = set()
+        self._visited_accesses: set[AnyAccess] = set()
 
     def visit_Subscript(self, node: ast.Subscript) -> None:
         """Checks subscript access number."""
@@ -43,7 +43,7 @@ class AccessVisitor(BaseNodeVisitor):
         if node in self._visited_accesses:
             return
 
-        consecutive_access = cast(Set[AnyAccess], set(takewhile(
+        consecutive_access = cast(set[AnyAccess], set(takewhile(
             self._is_any_access,
             attributes.parts(node),
         )))

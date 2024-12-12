@@ -1,17 +1,16 @@
 import builtins
 import inspect
 import keyword
-
-from typing_extensions import Final
+from typing import Final
 
 from wemake_python_styleguide.constants import BUILTINS_WHITELIST
 from wemake_python_styleguide.logic.naming.access import is_magic, is_unused
 
-_BUILTINS: Final = frozenset((
+_BUILTINS: Final = frozenset(
     builtin[0]
     for builtin in inspect.getmembers(builtins)
     if builtin[0] not in BUILTINS_WHITELIST
-))
+)
 
 _ALL_BUILTINS: Final = frozenset((
     *keyword.kwlist,

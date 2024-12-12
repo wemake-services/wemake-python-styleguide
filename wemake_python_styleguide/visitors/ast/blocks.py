@@ -1,8 +1,9 @@
 import ast
 from collections import defaultdict
-from typing import Callable, DefaultDict, List, Set, Tuple, Union, cast
+from collections.abc import Callable
+from typing import DefaultDict, TypeAlias, Union, cast
 
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import ForNodes, WithNodes
 from wemake_python_styleguide.compat.types import NamedMatch
@@ -27,11 +28,11 @@ from wemake_python_styleguide.visitors import base, decorators
 #: That's how we represent contexts for control variables.
 _BlockVariables: TypeAlias = DefaultDict[
     ast.AST,
-    DefaultDict[str, List[ast.AST]],
+    DefaultDict[str, list[ast.AST]],
 ]
 
 #: That's how we filter some overlaps that do happen in Python:
-_ScopePredicate: TypeAlias = Callable[[ast.AST, Set[str]], bool]
+_ScopePredicate: TypeAlias = Callable[[ast.AST, set[str]], bool]
 _NamePredicate: TypeAlias = Callable[[ast.AST], bool]
 
 #: Named nodes.
@@ -80,13 +81,13 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
 
     """
 
-    _naming_predicates: Tuple[_NamePredicate, ...] = (
+    _naming_predicates: tuple[_NamePredicate, ...] = (
         predicates.is_property_setter,
         predicates.is_function_overload,
         predicates.is_no_value_annotation,
     )
 
-    _scope_predicates: Tuple[_ScopePredicate, ...] = (
+    _scope_predicates: tuple[_ScopePredicate, ...] = (
         lambda node, names: predicates.is_property_setter(node),
         predicates.is_same_value_reuse,
         predicates.is_same_try_except_cases,
@@ -127,7 +128,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
 
     # Locals:
 
-    def visit_locals(self, node: Union[AnyAssignWithWalrus, ast.arg]) -> None:
+    def visit_locals(self, node: AnyAssignWithWalrus | ast.arg) -> None:
         """Visits local variable definitions and function arguments."""
         if isinstance(node, ast.arg):
             names = {node.arg}
@@ -143,7 +144,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
     def _scope(
         self,
         node: ast.AST,
-        names: Set[str],
+        names: set[str],
         *,
         is_local: bool,
     ) -> None:
@@ -167,7 +168,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
         if not ignored_name:
             scope.add_to_scope(names, is_local=is_local)
 
-    def _outer_scope(self, node: ast.AST, names: Set[str]) -> None:
+    def _outer_scope(self, node: ast.AST, names: set[str]) -> None:
         scope = defs.OuterScope(node)
         shadow = scope.shadowing(names)
 
@@ -220,7 +221,7 @@ class AfterBlockVariablesVisitor(base.BaseNodeVisitor):
 
     # Utils:
 
-    def _add_to_scope(self, node: ast.AST, names: Set[str]) -> None:
+    def _add_to_scope(self, node: ast.AST, names: set[str]) -> None:
         context = cast(ast.AST, get_context(node))
         for var_name in names:
             self._block_variables[context][var_name].append(node)

@@ -1,8 +1,9 @@
 import ast
+from collections.abc import Mapping
 from contextlib import suppress
-from typing import ClassVar, Dict, FrozenSet, List, Mapping, Union
+from typing import ClassVar, TypeAlias, Union
 
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import (
     ForNodes,
@@ -279,7 +280,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
     """Responsible for checking function internals."""
 
     _descriptor_decorators: ClassVar[
-        FrozenSet[str]
+        frozenset[str]
     ] = frozenset((
         'classmethod',
         'staticmethod',
@@ -294,7 +295,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_unused_variables(self, node: AnyFunctionDef) -> None:
-        local_variables: Dict[str, List[_LocalVariable]] = {}
+        local_variables: dict[str, list[_LocalVariable]] = {}
 
         for body_item in node.body:
             for sub_node in ast.walk(body_item):
@@ -335,7 +336,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
         self,
         sub_node: _LocalVariable,
         var_name: str,
-        local_variables: Dict[str, List[_LocalVariable]],
+        local_variables: dict[str, list[_LocalVariable]],
     ) -> None:
         defs = local_variables.get(var_name)
         if defs is not None:
@@ -356,7 +357,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
 
     def _ensure_used_variables(
         self,
-        local_variables: Mapping[str, List[_LocalVariable]],
+        local_variables: Mapping[str, list[_LocalVariable]],
     ) -> None:
         for varname, usages in local_variables.items():
             for node in usages:

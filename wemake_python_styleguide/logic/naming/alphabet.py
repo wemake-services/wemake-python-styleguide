@@ -1,7 +1,6 @@
 import re
-from typing import Iterable
-
-from typing_extensions import Final
+from collections.abc import Iterable
+from typing import Final
 
 from wemake_python_styleguide.logic.naming import access
 

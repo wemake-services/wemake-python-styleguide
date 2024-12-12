@@ -1,16 +1,9 @@
 import ast
 from collections import defaultdict
-from typing import (
-    Callable,
-    ClassVar,
-    DefaultDict,
-    FrozenSet,
-    List,
-    Tuple,
-    Union,
-)
+from collections.abc import Callable
+from typing import ClassVar, DefaultDict, TypeAlias, Union
 
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic import source, walk
@@ -21,9 +14,9 @@ from wemake_python_styleguide.violations import complexity
 from wemake_python_styleguide.visitors import base, decorators
 
 #: We use these types to store the number of nodes usage in different contexts.
-_Expressions: TypeAlias = DefaultDict[str, List[ast.AST]]
+_Expressions: TypeAlias = DefaultDict[str, list[ast.AST]]
 _FunctionExpressions: TypeAlias = DefaultDict[ast.AST, _Expressions]
-_StringConstants: TypeAlias = FrozenSet[Union[str, bytes]]
+_StringConstants: TypeAlias = frozenset[Union[str, bytes]]
 
 
 @final
@@ -123,7 +116,7 @@ class ExpressionOveruseVisitor(base.BaseNodeVisitor):
         ast.SetComp,
     )
 
-    _ignore_predicates: Tuple[Callable[[ast.AST], bool], ...] = (
+    _ignore_predicates: tuple[Callable[[ast.AST], bool], ...] = (
         overuses.is_decorator,
         overuses.is_self,
         annotations.is_annotation,
