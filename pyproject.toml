@@ -69,7 +69,6 @@ pep8-naming = "^0.14"
 darglint = "^1.2"
 
 [tool.poetry.group.dev.dependencies]
-nitpick = "^0.35"
 flake8-pytest-style = "^2.0"
 
 pytest = "^8.1"
@@ -106,7 +105,3 @@ myst-parser = "^4.0"
 [build-system]
 requires = ["poetry-core>=1.9.0"]
 build-backend = "poetry.core.masonry.api"
-
-
-[tool.nitpick]
-style = "styles/nitpick-style-wemake.toml"
