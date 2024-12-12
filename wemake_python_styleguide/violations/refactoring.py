@@ -251,11 +251,15 @@ class UselessReturningElseViolation(ASTViolation):
     .. versionadded:: 0.7.0
     .. versionchanged:: 0.11.0
     .. versionchanged:: 0.15.1
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``RET505``.
 
     """
 
     error_template = 'Found useless returning `else` statement'
     code = 503
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1221,11 +1225,15 @@ class SimplifiableReturningIfViolation(ASTViolation):
                 return False
 
     .. versionadded:: 0.15.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``RET505``.
 
     """
 
     error_template = 'Found simplifiable returning `if` condition in a function'
     code = 531
+    disabled_since = '1.0.0'
 
 
 @final
