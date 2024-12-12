@@ -74,8 +74,7 @@ some_int = 1  # type: int
 
 phone_number = 555_123_999  # noqa:  WPS303
 float_zero = 0.0  # noqa: WPS358
-formatted_string = f'Hi, {full_name}'  # noqa: WPS305
-formatted_string_complex = f'1+1={1 + 1}'  # noqa: WPS305, WPS237
+formatted_string_complex = f'1+1={1 + 1}'  # noqa: WPS237
 
 
 def __getattr__():  # noqa: WPS413

@@ -26,6 +26,7 @@ Semantic versioning in our case means:
 - **Breaking**: Drops `nitpick` support
 - **Breaking**: Removes `WPS302`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS304`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS305`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS306`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS310`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS313`, because it is covered by `ruff` formatter
