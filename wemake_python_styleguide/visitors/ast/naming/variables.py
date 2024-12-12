@@ -6,7 +6,6 @@ from typing import Iterable, List, cast
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.functions import get_assign_targets
-from wemake_python_styleguide.compat.nodes import Match
 from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
     UNUSED_PLACEHOLDER,
@@ -187,7 +186,7 @@ class UnusedVariableDefinitionVisitor(BaseNodeVisitor):
             )
         self.generic_visit(node)
 
-    def visit_Match(self, node: Match) -> None:  # pragma: py-lt-310
+    def visit_Match(self, node: ast.Match) -> None:
         """Check pattern matching in a form of `case ... as NAME`."""
         for match_as in pattern_matching.get_explicit_as_names(node):
             self._check_assign_unused(

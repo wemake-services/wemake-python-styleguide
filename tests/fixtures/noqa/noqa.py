@@ -783,3 +783,18 @@ for unique_element in range(10):
         my_print(1)
 
     my_print(4)
+
+
+@some_decorator['text']  # noqa: WPS466
+def my_function():
+    return 1
+
+
+user_id = 'uuid-user-id'
+match user:
+    case 'user_id' | 'uid' as _uid:  # noqa: WPS122
+        raise ValueError(_uid)
+    case {'key': k}:  # noqa: WPS111
+        raise ValueError(k)
+    case [objs]:  # noqa: WPS110
+        raise ValueError(objs)

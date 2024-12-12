@@ -1,6 +1,5 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY310
 from wemake_python_styleguide.violations.naming import (
     UnusedVariableIsUsedViolation,
 )
@@ -90,10 +89,7 @@ match {0}:
     awaiting_variable,
     yielding_variable,
     inheriting_variables,
-    pytest.param(
-        pattern_match_usage,
-        marks=pytest.mark.skipif(not PY310, reason='pm was added in 3.10'),
-    ),
+    pattern_match_usage,
 ])
 @pytest.mark.parametrize('visitor_class', [
     # We test it here,
