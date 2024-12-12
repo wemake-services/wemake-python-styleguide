@@ -24,6 +24,7 @@ Semantic versioning in our case means:
 - Adds official `python3.13` support
 - **Breaking**: Drops `python3.9` support
 - **Breaking**: Drops `nitpick` support
+- **Breaking**: Drops `flake9-commas` support, use `ruff format` instead
 - **Breaking**: Removes `WPS302`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS304`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS305`, because it is covered by `ruff` formatter
