@@ -28,31 +28,6 @@ However, if you still want to use some autoformatter
 together with ``wemake-python-styleguide``
 we have made some research to help you!
 
-autopep8
-~~~~~~~~
-
-`autopep8 <https://github.com/hhatto/autopep8>`_ is the best choice
-for ``wemake-python-styleguide`` users.
-
-Is officially supported in way
-that all code written inside ``wemake-python-styleguide`` is tested
-to be valid ``autopep8`` code. But, **not the other way around**.
-
-Since ``wemake-python-styleguide`` is the strictest linter
-it cannot be pleased by outputs of ``autopep8`` in 100% of cases all by itself.
-Most likely, you will need to refactor a little bit more manually (brainly!)
-to please ``wemake-python-styleguide`` after ``autopep8`` formatting is done.
-
-There are also plugins for IDEs to run ``autopep8`` on safe:
-
-- https://code.visualstudio.com/docs/python/editing
-
-There's also an awesome tool `pyformat <https://github.com/myint/pyformat>`_
-that wraps ``autopep8``,
-`autoflake <https://github.com/myint/autoflake>`_,
-`docformatter <https://github.com/myint/docformatter>`_,
-and `unify <https://github.com/myint/unify>`_.
-
 isort
 ~~~~~
 
@@ -69,7 +44,7 @@ reformat to make ``wemake-python-styleguide`` happy.
 ``isort`` can also `be invoked <https://github.com/timothycrosley/isort#using-isort>`_
 as a command line tool to fix all your import problems for you.
 
-We recommend to run ``isort`` after ``autopep8``. They are also compatible.
+We recommend to run ``isort``. They are also compatible.
 
 There are also plugins for IDEs to run ``isort`` on safe:
 
@@ -77,32 +52,6 @@ There are also plugins for IDEs to run ``isort`` on safe:
 - https://code.visualstudio.com/docs/python/editing
 
 You can find the configuration we use in ``setup.cfg`` in this repository.
-
-add-trailing-comma
-~~~~~~~~~~~~~~~~~~
-
-In case you use ``autopep8`` we also recommend
-to use `add-trailing-comma <https://github.com/asottile/add-trailing-comma>`_
-to format your enumerations, calls, and multiline definitions beautifully.
-
-It is compatible to ``wemake-python-styleguide``.
-With ``pyformat``, ``isort``, and ``add-trailing-comma``
-you will get more features as in ``black``.
-
-yapf
-~~~~
-
-This a very complex autoformatter written by Google.
-It has like lots of configuration options!
-
-We were not successful enough to configure it
-in a way that our style is respected.
-The main problems are with new lines and trailing commas:
-sometimes they are added, sometimes removed.
-
-If you have a working configuration
-for both ``yapf`` and ``wemake-python-styleguide``,
-please, let us know!
 
 black
 ~~~~~

@@ -83,7 +83,6 @@ hypothesmith = "^0.3"
 mypy = "^1.13"
 types-flake8 = "^7.1"
 
-autopep8 = "^2.0"
 import-linter = "^2.0"
 
 astpath = "^0.9"
