@@ -18,6 +18,13 @@ some = [
     if y > 2
 ]
 """
+correct_walrus_comprehension = """
+some = [
+    x + y
+    for y in [1, 2, 3]
+    if (x := y) > 2
+]
+"""
 
 # Wrong:
 wrong_assignment = 'print(x := 1)'
@@ -26,19 +33,13 @@ if some := call():
     ...
 """
 
-wrong_comprehension = """
-some = [
-    x + y
-    for y in [1, 2, 3]
-    if (x := y) > 2
-]
-"""
 
 
 @pytest.mark.parametrize('code', [
     correct_assignment,
     correct_if_condition,
     correct_comprehension,
+    correct_walrus_comprehension,
 ])
 def test_not_walrus(
     assert_errors,
@@ -58,7 +59,6 @@ def test_not_walrus(
 @pytest.mark.parametrize('code', [
     wrong_assignment,
     wrong_if_condition,
-    wrong_comprehension,
 ])
 def test_walrus(
     assert_errors,

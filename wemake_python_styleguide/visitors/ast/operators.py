@@ -220,11 +220,25 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
 @final
 class WalrusVisitor(base.BaseNodeVisitor):
     """We use this visitor to find walrus operators and ban them."""
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self._inside_comprehension = False
+
+    def visit_comprehension(self, node: ast.comprehension):
+        self._inside_comprehension = True
+        self.generic_visit(node)
+        self._inside_comprehension = False
 
     def visit_NamedExpr(
         self,
         node: ast.NamedExpr,
     ) -> None:
-        """Disallows walrus ``:=`` operator."""
-        self.add_violation(consistency.WalrusViolation(node))
+        """Disallows walrus ``:=`` operator outside comprehension."""
+        if not self._inside_comprehension:
+            self.add_violation(
+                consistency.WalrusViolation(
+                    node,
+                    text='Found walrus operator outside of comprehension',
+                )
+            )
         self.generic_visit(node)
