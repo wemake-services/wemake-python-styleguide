@@ -73,7 +73,6 @@ some_int = 1  # type: int
 # =====
 
 phone_number = 8_83_134_43  # noqa:  WPS303
-partial_number = .05  # noqa: WPS304
 float_zero = 0.0  # noqa: WPS358
 formatted_string = f'Hi, {full_name}'  # noqa: WPS305
 formatted_string_complex = f'1+1={1 + 1}'  # noqa: WPS305, WPS237
@@ -532,11 +531,6 @@ try:
 except TypeError:
     my_print('WTF?')
 
-if some and (  # noqa: WPS337
-    anti_wps428 == 1
-):
-    anti_wps428 = 'some text'
-
 
 class WrongMethodOrder:  # noqa: WPS338
     def _protected(self):
@@ -547,7 +541,6 @@ class WrongMethodOrder:  # noqa: WPS338
 
 
 leading_zero = 1.2e01  # noqa: WPS339
-positive_exponent = 1.1e+1  # noqa: WPS340
 wrong_escape_raw_string = '\\n'  # noqa: WPS342
 zero_div = bad_complex / 0  # noqa: WPS344
 mult_one = zero_div * 1  # noqa: WPS345
@@ -728,11 +721,6 @@ text
 
 def get_item():  # noqa: WPS463
     return  # noqa: WPS324
-
-matrix = [
-   some(number) for numbers in matrix
-   for number in numbers # noqa: WPS361
-]
 
 def bare_raise_function():
     raise # noqa: WPS467
