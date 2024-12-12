@@ -23,7 +23,7 @@ def test_violation_on_approximate_constants(
     variable_value,
 ):
     """Ensures that usage of approximate constants not allowed."""
-    tree = parse_ast_tree('my_const = {0}'.format(variable_value))
+    tree = parse_ast_tree(f'my_const = {variable_value}')
     visitor = WrongNumberVisitor(default_options, tree=tree)
     visitor.run()
 
@@ -64,7 +64,7 @@ def test_no_violations_on_right_constants(
     variable_value,
 ):
     """Ensures that usage of simple numbers allowed."""
-    tree = parse_ast_tree('a = {0}'.format(variable_value))
+    tree = parse_ast_tree(f'a = {variable_value}')
     visitor = WrongNumberVisitor(default_options, tree=tree)
     visitor.run()
 

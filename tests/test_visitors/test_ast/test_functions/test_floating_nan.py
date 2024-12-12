@@ -61,7 +61,7 @@ def test_floating_nan(
     default_options,
 ):
     """Testing that "NaN" argument to ``float()`` is as a violation."""
-    nan = '{0}"{1}"'.format(prefix, nan_variant)
+    nan = f'{prefix}"{nan_variant}"'
     tree = parse_ast_tree(code.format(nan))
 
     visitor = FloatingNanCallVisitor(default_options, tree=tree)

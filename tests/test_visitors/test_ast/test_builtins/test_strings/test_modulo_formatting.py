@@ -90,7 +90,7 @@ def test_modulo_formatting(
     default_options,
 ):
     """Testing that the strings violate the rules."""
-    tree = parse_ast_tree('x = {0}"{1}"'.format(prefix, code))
+    tree = parse_ast_tree(f'x = {prefix}"{code}"')
 
     visitor = WrongStringVisitor(default_options, tree=tree)
     visitor.run()
@@ -137,7 +137,7 @@ def test_regular_modulo_string(
     default_options,
 ):
     """Testing that the strings violate the rules."""
-    tree = parse_ast_tree('x = {0}"{1}"'.format(prefix, code))
+    tree = parse_ast_tree(f'x = {prefix}"{code}"')
 
     visitor = WrongStringVisitor(default_options, tree=tree)
     visitor.run()

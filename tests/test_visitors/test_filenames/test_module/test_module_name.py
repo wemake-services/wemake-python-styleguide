@@ -30,7 +30,7 @@ def test_restricted_filename(
     """Testing that some file names are restricted."""
     visitor = WrongModuleNameVisitor(
         default_options,
-        filename='{0}.py'.format(filename),
+        filename=f'{filename}.py',
     )
     visitor.run()
 
