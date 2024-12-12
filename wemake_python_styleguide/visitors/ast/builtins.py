@@ -1,18 +1,13 @@
 import ast
 import re
 import string
-from collections import Counter, defaultdict
-from collections.abc import Hashable
-from contextlib import suppress
 from typing import (
     ClassVar,
-    DefaultDict,
     FrozenSet,
     List,
     Optional,
     Pattern,
     Sequence,
-    Union,
 )
 
 from typing_extensions import Final, TypeAlias, final
@@ -23,7 +18,7 @@ from wemake_python_styleguide.compat.aliases import (
     FunctionNodes,
     TextNodes,
 )
-from wemake_python_styleguide.logic import nodes, safe_eval, source, walk
+from wemake_python_styleguide.logic import nodes, source, walk
 from wemake_python_styleguide.logic.tree import (
     attributes,
     functions,
