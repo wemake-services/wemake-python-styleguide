@@ -468,11 +468,6 @@ if some_if_expr:  # noqa: WPS502
 else:
     some_dict['x'] = False
 
-def another_wrong_if():
-    if full_name != 'Nikita Sobolev':  # noqa: WPS531
-        return False
-    return True
-
 
 
 class ClassWithWrongContents((lambda: object)()):  # noqa: WPS606
@@ -482,19 +477,12 @@ class ClassWithWrongContents((lambda: object)()):  # noqa: WPS606
         anti_wps428 = 1
 
     def method_with_no_args():  # noqa: WPS605
-        super(ClassWithWrongContents, self).method_with_no_args()  # noqa: WPS608
-        self.some_set = {1, 1}  # noqa: WPS417
-
-
-def useless_returning_else():
-    if some_set:
-        return some_set
-    else:
-        return TypeError  # noqa: WPS503
+        based = super(ClassWithWrongContents, self).method_with_no_args()  # noqa: WPS608
+        my_print(based)
 
 
 def multiple_return_path():
-    try:  # noqa: WPS419, WPS503
+    try:  # noqa: WPS419
         return 1
     except Exception:
         return 2
@@ -671,17 +659,6 @@ a_list = [1, 2, 3, 4, 5]
 a_list[1:3] = [1, 2]  # noqa: WPS362
 a_list[slice(1)] = [1, 2]  # noqa: WPS362
 
-for element in range(10):
-    try:  # noqa: WPS452
-        my_print(1)
-    except AnyError:
-        my_print('nope')
-    finally:
-        # See:
-        # https://github.com/wemake-services/wemake-python-styleguide/issues/1082
-        break
-    my_print(4)
-
 
 def raise_bad_exception():
     raise Exception  # noqa: WPS454
@@ -758,7 +735,7 @@ class Baseline:
 
 class Antediluvian(Baseline):
     def method(self):
-        return list((super().method(some_item) for some_item in items))  # noqa: WPS616
+        return (super().method(some_item) for some_item in items)  # noqa: WPS616
 
 
 # porting noqa38.py
@@ -805,12 +782,4 @@ for unique_element in range(10):
     if (other := unique_element) > 5:  # noqa: WPS332
         my_print(1)
 
-    try:  # noqa: WPS452
-        my_print(1)
-    except AnyError:
-        my_print('nope')
-    finally:
-        # See:
-        # https://github.com/wemake-services/wemake-python-styleguide/issues/1082
-        continue
     my_print(4)

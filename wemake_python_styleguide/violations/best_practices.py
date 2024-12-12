@@ -803,11 +803,15 @@ class NonUniqueItemsInHashViolation(ASTViolation):
     .. versionadded:: 0.7.0
     .. versionchanged:: 0.11.0
     .. versionchanged:: 0.12.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``B033``.
 
     """
 
     error_template = 'Found non-unique item in hash: {0}'
     code = 417
+    disabled_since = '1.0.0'
 
 
 @final
@@ -2106,11 +2110,15 @@ class LoopControlFinallyViolation(ASTViolation):
             continue
 
     .. versionadded:: 0.14.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``B012``.
 
     """
 
     error_template = 'Found `break` or `continue` in `finally` block'
     code = 452
+    disabled_since = '1.0.0'
 
 
 @final
