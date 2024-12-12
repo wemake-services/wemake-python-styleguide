@@ -796,5 +796,5 @@ match user:
         raise ValueError(_uid)
     case {'key': k}:  # noqa: WPS111
         raise ValueError(k)
-    case [value]:  # noqa: WPS110
-        raise ValueError(value)
+    case [objs]:  # noqa: WPS110
+        raise ValueError(objs)
