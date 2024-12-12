@@ -1,6 +1,6 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY310, PY312
+from wemake_python_styleguide.compat.constants import PY312
 from wemake_python_styleguide.constants import UNUSED_PLACEHOLDER
 
 # Imports:
@@ -254,15 +254,14 @@ _ALL_FIXTURES = frozenset((
     function_posonly_argument,
     lambda_posonly_argument,
     assignment_expression,
+
+    # Pattern matching:
+    match_variable,
+    match_as_explicit,
+    match_inner,
+    match_star,
 ))
 
-if PY310:
-    _ALL_FIXTURES |= {
-        match_variable,
-        match_as_explicit,
-        match_inner,
-        match_star,
-    }
 if PY312:
     _ALL_FIXTURES |= {
         type_param_func,
@@ -314,12 +313,10 @@ _FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED = frozenset((
     variable_typed,
     exception,
     assignment_expression,
-))
 
-if PY310:
-    _FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED |= {
-        match_as_explicit,
-    }
+    # Pattern matching:
+    match_as_explicit,
+))
 
 _FORBIDDEN_RAW_UNUSED = _FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED | {
     static_attribute,

@@ -22,6 +22,7 @@ Semantic versioning in our case means:
 ### Features
 
 - Adds official `python3.13` support
+- **Breaking**: Drops `python3.9` support
 - **Breaking**: Removes `WPS302`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS304`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS306`, because it is covered by `ruff` formatter

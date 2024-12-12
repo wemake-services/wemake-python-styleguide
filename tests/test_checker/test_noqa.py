@@ -14,15 +14,8 @@ https://wemake-python-styleguide.rtfd.io/en/latest/pages/api/contributing.html
 
 import re
 import subprocess
-import sys
 import types
 from collections import Counter
-
-import pytest
-
-# Versions for different version-specific fixtures.
-_PY39 = (3, 9) <= sys.version_info < (3, 10)
-_PY310 = (3, 10) <= sys.version_info < (3, 11)
 
 #: Used to find violations' codes in output.
 ERROR_PATTERN = re.compile(r'(WPS\d{3})')
@@ -40,26 +33,14 @@ IGNORED_VIOLATIONS = (
 )
 
 #: Number and count of violations that would be raised.
-VERSION_SPECIFIC = types.MappingProxyType({
-    'noqa39': {
-        'WPS466': 1,
-    },
-    'noqa310': {
-        'WPS110': 1,
-        'WPS111': 1,
-        'WPS122': 1,
-    },
-})
-
-#: Number and count of violations that would be raised.
 SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS000': 0,  # logically unacceptable.
 
     'WPS100': 0,  # logically unacceptable.
     'WPS101': 0,  # logically unacceptable.
     'WPS102': 0,  # logically unacceptable.
-    'WPS110': 4,
-    'WPS111': 1,
+    'WPS110': 5,
+    'WPS111': 2,
     'WPS112': 1,
     'WPS113': 1,
     'WPS114': 1,
@@ -70,7 +51,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS119': 1,
     'WPS120': 1,
     'WPS121': 1,
-    'WPS122': 1,
+    'WPS122': 2,
     'WPS123': 1,
     'WPS124': 1,
     'WPS125': 1,
@@ -241,7 +222,7 @@ SHOULD_BE_RAISED = types.MappingProxyType({
     'WPS463': 1,
     'WPS464': 0,  # logically unacceptable.
     'WPS465': 0,  # deprecated since 1.0.0
-    'WPS466': 0,  # defined in version specific table.
+    'WPS466': 1,
     'WPS467': 1,
     'WPS468': 2,
     'WPS469': 1,
@@ -341,55 +322,6 @@ def _assert_errors_count_in_output(
 def test_codes(all_violations):
     """Ensures that all violations are listed."""
     assert len(SHOULD_BE_RAISED) == len(all_violations)
-
-
-@pytest.mark.parametrize(('filename', 'violations', 'total'), [
-    ('noqa.py', SHOULD_BE_RAISED, True),
-    pytest.param(
-        'noqa39.py',
-        VERSION_SPECIFIC['noqa39'],
-        0,
-        marks=pytest.mark.skipif(not _PY39, reason='ast changes on 3.9'),
-    ),
-    pytest.param(
-        'noqa310.py',
-        VERSION_SPECIFIC['noqa310'],
-        0,
-        marks=pytest.mark.skipif(not _PY310, reason='ast changes on 3.10'),
-    ),
-])
-def test_noqa_fixture_disabled(
-    absolute_path,
-    all_violations,
-    filename,
-    violations,
-    total,
-):
-    """End-to-End test to check that all violations are present."""
-    process = subprocess.Popen(
-        [
-            'flake8',
-            '--ignore',
-            ','.join(IGNORED_VIOLATIONS),
-            '--disable-noqa',
-            '--isolated',
-            '--select',
-            'WPS',
-            absolute_path('fixtures', 'noqa', filename),
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
-        encoding='utf8',
-    )
-    stdout, _ = process.communicate()
-
-    _assert_errors_count_in_output(
-        stdout,
-        violations,
-        all_violations,
-        total=total,
-    )
 
 
 def test_noqa_fixture_disabled_no_control(
