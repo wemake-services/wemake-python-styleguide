@@ -56,14 +56,6 @@ _StatementWithBody: TypeAlias = Union[
     ast.Module,
 ]
 
-#: Simple collections.
-_AnyCollection: TypeAlias = Union[
-    ast.List,
-    ast.Set,
-    ast.Dict,
-    ast.Tuple,
-]
-
 
 @final
 @alias('visit_statement_with_body', (
