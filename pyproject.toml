@@ -89,6 +89,7 @@ import-linter = "^2.0"
 astpath = "^0.9"
 lxml = "^5.1"
 nbqa = "^1.2"
+pytest-xdist = "^3.6.1"
 
 [tool.poetry.group.docs]
 optional = true

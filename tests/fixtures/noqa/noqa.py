@@ -486,6 +486,8 @@ def multiple_return_path():
         return 1
     except Exception:
         return 2
+    else:
+        return 3
 
 
 def bad_default_values(
