@@ -1,9 +1,10 @@
 import ast
-from typing import ClassVar, Mapping, Optional, Sequence, Set, Union
+from collections.abc import Mapping, Sequence
+from typing import ClassVar, TypeAlias, Union
 
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
-from wemake_python_styleguide import constants
+from wemake_python_styleguide import constants, types
 from wemake_python_styleguide.compat.aliases import (
     ForNodes,
     FunctionNodes,
@@ -17,12 +18,6 @@ from wemake_python_styleguide.logic.tree import strings
 from wemake_python_styleguide.logic.tree.collections import (
     first,
     sequence_of_node,
-)
-from wemake_python_styleguide.types import (
-    AnyFor,
-    AnyFunctionDef,
-    AnyNodes,
-    AnyWith,
 )
 from wemake_python_styleguide.violations.best_practices import (
     StatementHasNoEffectViolation,
@@ -45,13 +40,13 @@ from wemake_python_styleguide.visitors.decorators import alias
 #: Statements that do have `.body` attribute.
 _StatementWithBody: TypeAlias = Union[
     ast.If,
-    AnyFor,
+    types.AnyFor,
     ast.While,
-    AnyWith,
+    types.AnyWith,
     ast.Try,
     TryStar,
     ast.ExceptHandler,
-    AnyFunctionDef,
+    types.AnyFunctionDef,
     ast.ClassDef,
     ast.Module,
 ]
@@ -80,20 +75,20 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
     This visitor checks all statements that have multiline bodies.
     """
 
-    _closing_nodes: ClassVar[AnyNodes] = (
+    _closing_nodes: ClassVar[types.AnyNodes] = (
         ast.Raise,
         ast.Return,
         ast.Break,
         ast.Continue,
     )
 
-    _have_doc_strings: ClassVar[AnyNodes] = (
+    _have_doc_strings: ClassVar[types.AnyNodes] = (
         *FunctionNodes,
         ast.ClassDef,
         ast.Module,
     )
 
-    _blocked_self_assignment: ClassVar[AnyNodes] = (
+    _blocked_self_assignment: ClassVar[types.AnyNodes] = (
         ast.BinOp,
     )
 
@@ -105,7 +100,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         TryStar,
     )
 
-    _have_effect: ClassVar[AnyNodes] = (
+    _have_effect: ClassVar[types.AnyNodes] = (
         ast.Return,
         ast.YieldFrom,
         ast.Yield,
@@ -126,18 +121,18 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
     )
 
     # Useless nodes:
-    _generally_useless_body: ClassVar[AnyNodes] = (
+    _generally_useless_body: ClassVar[types.AnyNodes] = (
         ast.Break,
         ast.Continue,
         ast.Pass,
         ast.Ellipsis,
     )
-    _loop_useless_body: ClassVar[AnyNodes] = (
+    _loop_useless_body: ClassVar[types.AnyNodes] = (
         ast.Return,
         ast.Raise,
     )
 
-    _useless_combination: ClassVar[Mapping[str, AnyNodes]] = {
+    _useless_combination: ClassVar[Mapping[str, types.AnyNodes]] = {
         'For': _generally_useless_body + _loop_useless_body,
         'AsyncFor': _generally_useless_body + _loop_useless_body,
         'While': _generally_useless_body + _loop_useless_body,
@@ -167,7 +162,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
             self._almost_swapped(assigns)
 
     def _almost_swapped(self, assigns: Sequence[ast.Assign]) -> None:
-        previous_var: Set[Optional[str]] = set()
+        previous_var: set[str | None] = set()
 
         for assign in assigns:
             current_var = {
@@ -262,7 +257,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
 class PointlessStarredVisitor(BaseNodeVisitor):
     """Responsible for absence of useless starred expressions."""
 
-    _pointless_star_nodes: ClassVar[AnyNodes] = (
+    _pointless_star_nodes: ClassVar[types.AnyNodes] = (
         ast.Dict,
         ast.List,
         ast.Set,
@@ -375,7 +370,7 @@ class AssignmentPatternsVisitor(BaseNodeVisitor):
 class WrongMethodArgumentsVisitor(BaseNodeVisitor):
     """Ensures that all arguments follow our rules."""
 
-    _no_tuples_collections: ClassVar[AnyNodes] = (
+    _no_tuples_collections: ClassVar[types.AnyNodes] = (
         ast.List,
         ast.ListComp,
         ast.Set,

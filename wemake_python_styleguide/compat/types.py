@@ -1,7 +1,5 @@
 import ast
-from typing import Union
-
-from typing_extensions import TypeAlias
+from typing import TypeAlias, Union
 
 from wemake_python_styleguide.compat.nodes import TryStar
 from wemake_python_styleguide.compat.nodes import TypeAlias as TypeAliasNode

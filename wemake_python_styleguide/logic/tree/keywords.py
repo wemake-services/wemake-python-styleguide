@@ -1,17 +1,15 @@
 import ast
-from typing import List, Tuple, Type, Union
-
-from typing_extensions import TypeAlias
+from typing import TypeAlias, Union
 
 from wemake_python_styleguide.logic.nodes import get_context
 
-_ReturningNodes: TypeAlias = List[Union[ast.Return, ast.Yield]]
+_ReturningNodes: TypeAlias = list[Union[ast.Return, ast.Yield]]
 
 
 def returning_nodes(
     node: ast.AST,
-    returning_type: Union[Type[ast.Return], Type[ast.Yield]],
-) -> Tuple[_ReturningNodes, bool]:
+    returning_type: type[ast.Return] | type[ast.Yield],
+) -> tuple[_ReturningNodes, bool]:
     """Returns ``return`` or ``yield`` nodes with values."""
     returns: _ReturningNodes = []
     has_values = False

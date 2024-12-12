@@ -1,7 +1,8 @@
 import ast
 import itertools
 from collections import Counter
-from typing import Iterable, List, cast
+from collections.abc import Iterable
+from typing import cast
 
 from typing_extensions import final
 
@@ -74,7 +75,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
     def _check_reassignment(
         self,
         node: AnyAssign,
-        names: List[str],
+        names: list[str],
     ) -> None:
         if not node.value:
             return
@@ -99,7 +100,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
     def _check_unique_assignment(
         self,
         node: AnyAssign,
-        names: List[str],
+        names: list[str],
     ) -> None:
         used_names = filter(
             lambda assigned_name: not access.is_unused(assigned_name),

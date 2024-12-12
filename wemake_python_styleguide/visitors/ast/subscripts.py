@@ -1,5 +1,4 @@
 import ast
-from typing import Set
 
 from typing_extensions import final
 
@@ -17,7 +16,7 @@ from wemake_python_styleguide.visitors import base
 class SubscriptVisitor(base.BaseNodeVisitor):
     """Checks subscripts used in the code."""
 
-    _marked_slices: Set[ast.Subscript] = set()
+    _marked_slices: set[ast.Subscript] = set()
 
     def visit_Subscript(self, node: ast.Subscript) -> None:
         """Visits subscript."""

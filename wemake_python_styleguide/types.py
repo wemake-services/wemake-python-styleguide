@@ -36,9 +36,9 @@ Reference
 """
 
 import ast
-from typing import Tuple, Type, Union
+from typing import TypeAlias, Union
 
-from typing_extensions import Protocol, TypeAlias
+from typing_extensions import Protocol
 
 #: We use this type to represent all string-like nodes.
 AnyText: TypeAlias = Union[ast.Str, ast.Bytes]
@@ -95,7 +95,7 @@ AnyChainable: TypeAlias = Union[
 ]
 
 #: Tuple of AST node types for declarative syntax.
-AnyNodes: TypeAlias = Tuple[Type[ast.AST], ...]
+AnyNodes: TypeAlias = tuple[type[ast.AST], ...]
 
 #: We use this type to work with any text-like values. Related to `AnyText`.
 AnyTextPrimitive: TypeAlias = Union[str, bytes]
@@ -108,7 +108,7 @@ ContextNodes: TypeAlias = Union[
 ]
 
 #: Flake8 API format to return error messages.
-CheckResult: TypeAlias = Tuple[int, int, str, type]
+CheckResult: TypeAlias = tuple[int, int, str, type]
 
 
 class ConfigurationOptions(Protocol):
@@ -148,19 +148,19 @@ class ConfigurationOptions(Protocol):
         ...
 
     @property
-    def nested_classes_whitelist(self) -> Tuple[str, ...]:
+    def nested_classes_whitelist(self) -> tuple[str, ...]:
         ...
 
     @property
-    def forbidden_inline_ignore(self) -> Tuple[str, ...]:
+    def forbidden_inline_ignore(self) -> tuple[str, ...]:
         ...
 
     @property
-    def allowed_domain_names(self) -> Tuple[str, ...]:
+    def allowed_domain_names(self) -> tuple[str, ...]:
         ...
 
     @property
-    def forbidden_domain_names(self) -> Tuple[str, ...]:
+    def forbidden_domain_names(self) -> tuple[str, ...]:
         ...
 
     # Complexity:

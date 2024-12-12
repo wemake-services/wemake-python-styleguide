@@ -1,5 +1,5 @@
 import ast
-from typing import Iterable
+from collections.abc import Iterable
 
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.walk import get_subnodes_by_type

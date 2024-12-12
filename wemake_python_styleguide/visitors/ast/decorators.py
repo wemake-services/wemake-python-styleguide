@@ -1,6 +1,7 @@
 import ast
+from typing import Final
 
-from typing_extensions import Final, final
+from typing_extensions import final
 
 from wemake_python_styleguide.logic.tree import attributes
 from wemake_python_styleguide.types import AnyFunctionDef

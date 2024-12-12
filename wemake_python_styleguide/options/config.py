@@ -155,11 +155,12 @@ You can also show all options that ``flake8`` supports by running:
     :str:`wemake_python_styleguide.options.defaults.SHOW_VIOLATION_LINKS`
 """
 
-from typing import ClassVar, Mapping, Optional, Sequence, Union
+from collections.abc import Mapping, Sequence
+from typing import ClassVar, Final, TypeAlias, Union
 
 import attr
 from flake8.options.manager import OptionManager
-from typing_extensions import Final, TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide.options import defaults
 
@@ -176,11 +177,11 @@ class _Option:
     long_option_name: str
     default: ConfigValuesTypes
     help: str  # noqa: WPS125
-    type: Optional[_Type] = int  # noqa: WPS125
+    type: _Type | None = int  # noqa: WPS125
     parse_from_config: bool = True
     action: str = 'store'
     comma_separated_list: bool = False
-    dest: Optional[str] = None
+    dest: str | None = None
 
     def __attrs_post_init__(self) -> None:
         """Is called after regular init is done."""

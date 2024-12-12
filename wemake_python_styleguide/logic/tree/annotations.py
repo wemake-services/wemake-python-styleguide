@@ -1,6 +1,5 @@
 import ast
-
-from typing_extensions import Final
+from typing import Final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic import walk

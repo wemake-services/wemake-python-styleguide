@@ -1,7 +1,5 @@
 import ast
-from typing import List, Union
-
-from typing_extensions import TypeAlias
+from typing import TypeAlias, Union
 
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming import access
@@ -59,7 +57,7 @@ def _is_valid_single(node: _VarDefinition) -> bool:
     )
 
 
-def is_getting_element_by_unpacking(targets: List[ast.expr]) -> bool:
+def is_getting_element_by_unpacking(targets: list[ast.expr]) -> bool:
     """Checks if unpacking targets used to get first or last element."""
     if len(targets) != 2:
         return False

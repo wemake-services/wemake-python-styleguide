@@ -1,6 +1,6 @@
 import ast
 from collections import Counter
-from typing import ClassVar, Set
+from typing import ClassVar
 
 from typing_extensions import final
 
@@ -84,7 +84,7 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
     def _check_exception_order(self, node: AnyTry) -> None:
         built_in_exceptions = exceptions.traverse_exception(BaseException)
         exceptions_list = exceptions.get_all_exception_names(node)
-        seen: Set[str] = set()
+        seen: set[str] = set()
 
         for exception in exceptions_list:
             bases = built_in_exceptions.get(exception)
@@ -161,10 +161,10 @@ class WrongExceptHandlerVisitor(BaseNodeVisitor):
             return
 
         if isinstance(node.type, ast.Tuple):
-            all_elements_are_trivial = all((
+            all_elements_are_trivial = all(
                 isinstance(element, self._trivial_except_arg_nodes)
                 for element in node.type.elts
-            ))
+            )
             if all_elements_are_trivial:
                 return
 

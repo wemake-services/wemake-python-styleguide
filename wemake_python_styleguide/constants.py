@@ -13,8 +13,7 @@ All values here must be documented with ``#:`` comments.
 
 import math
 import re
-
-from typing_extensions import Final
+from typing import Final
 
 # Internal variables
 # ==================

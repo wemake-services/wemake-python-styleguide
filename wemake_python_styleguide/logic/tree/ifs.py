@@ -1,9 +1,8 @@
 import ast
-from typing import Iterable, List, Optional, Union
+from collections.abc import Iterable
+from typing import TypeAlias, Union
 
-from typing_extensions import TypeAlias
-
-_IfAndElifASTNode: TypeAlias = Union[ast.If, List[ast.stmt]]
+_IfAndElifASTNode: TypeAlias = Union[ast.If, list[ast.stmt]]
 
 
 def is_elif(node: ast.If) -> bool:
@@ -17,7 +16,7 @@ def has_else(node: ast.If) -> bool:
     return bool(last_elem)
 
 
-def root_if(node: ast.If) -> Optional[ast.If]:
+def root_if(node: ast.If) -> ast.If | None:
     """Returns the previous ``if`` node in the chain if it exists."""
     return getattr(node, 'wps_if_chained', None)
 

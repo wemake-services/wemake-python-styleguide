@@ -19,9 +19,9 @@ All comments have the same type.
 import re
 import tokenize
 from token import ENDMARKER
-from typing import ClassVar, Pattern
+from typing import ClassVar, Final
 
-from typing_extensions import Final, final
+from typing_extensions import final
 
 from wemake_python_styleguide.constants import MAX_NO_COVER_COMMENTS, STDIN
 from wemake_python_styleguide.logic.system import is_executable_file, is_windows
@@ -53,8 +53,8 @@ SENTINEL_TOKEN: Final = tokenize.TokenInfo(
 class WrongCommentVisitor(BaseTokenVisitor):
     """Checks comment tokens."""
 
-    _no_cover: ClassVar[Pattern[str]] = re.compile(r'^pragma:\s+no\s+cover')
-    _type_check: ClassVar[Pattern[str]] = re.compile(
+    _no_cover: ClassVar[re.Pattern[str]] = re.compile(r'^pragma:\s+no\s+cover')
+    _type_check: ClassVar[re.Pattern[str]] = re.compile(
         r'^type:\s?([\w\d\[\]\'\"\.]+)$',
     )
 
@@ -181,7 +181,7 @@ class ShebangVisitor(BaseTokenVisitor):
     Code is inspired by https://github.com/xuhdev/flake8-executable
     """
 
-    _shebang: ClassVar[Pattern[str]] = re.compile(r'(\s*)#!')
+    _shebang: ClassVar[re.Pattern[str]] = re.compile(r'(\s*)#!')
     _python_executable: ClassVar[str] = 'python'
 
     def visit_comment(self, token: tokenize.TokenInfo) -> None:
@@ -261,7 +261,7 @@ class ShebangVisitor(BaseTokenVisitor):
 class NoqaVisitor(BaseTokenVisitor):
     """Checks noqa comment tokens."""
 
-    _noqa_check: ClassVar[Pattern[str]] = re.compile(
+    _noqa_check: ClassVar[re.Pattern[str]] = re.compile(
         r'^(noqa:?)($|[A-Z\d\,\s]+)',
     )
 
@@ -302,7 +302,7 @@ class NoqaVisitor(BaseTokenVisitor):
             if not noqa_code.isalpha():
                 continue
             for excluded in excludes_list:
-                if re.fullmatch(r'{0}($|\d+)'.format(noqa_code), excluded):
+                if re.fullmatch(fr'{noqa_code}($|\d+)', excluded):
                     self.add_violation(
                         ForbiddenInlineIgnoreViolation(text=str(noqa_excludes)),
                     )

@@ -1,4 +1,4 @@
-from typing_extensions import Final
+from typing import Final
 
 from wemake_python_styleguide.visitors.filenames.module import (
     WrongModuleNameVisitor,

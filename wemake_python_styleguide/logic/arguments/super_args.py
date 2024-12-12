@@ -1,5 +1,4 @@
 import ast
-from typing import Dict, Optional
 
 
 def is_ordinary_super_call(node: ast.AST, class_name: str) -> bool:
@@ -35,7 +34,7 @@ def is_ordinary_super_call(node: ast.AST, class_name: str) -> bool:
 def _get_keyword_args_by_names(
     call: ast.Call,
     *names: str,
-) -> Dict[str, ast.expr]:
+) -> dict[str, ast.expr]:
     """Returns keywords of ``call`` by specified ``names``."""
     return {
         keyword.arg: keyword.value
@@ -47,8 +46,8 @@ def _get_keyword_args_by_names(
 def _is_super_called_with(call: ast.Call, type_: str, object_: str) -> bool:
     """Tells whether super ``call`` was done with ``type_`` and ``object_``."""
     if len(call.args) == 2:  # branch for super(Test, self)
-        arg1: Optional[ast.expr] = call.args[0]
-        arg2: Optional[ast.expr] = call.args[1]
+        arg1: ast.expr | None = call.args[0]
+        arg2: ast.expr | None = call.args[1]
     elif len(call.keywords) == 2:  # branch for super(t=Test, obj=self)
         keyword_args = _get_keyword_args_by_names(call, 't', 'obj')
         arg1 = keyword_args.get('t')
@@ -61,7 +60,7 @@ def _is_super_called_with(call: ast.Call, type_: str, object_: str) -> bool:
     return is_expected_type and is_expected_object
 
 
-def _get_super_call(node: ast.AST) -> Optional[ast.Call]:
+def _get_super_call(node: ast.AST) -> ast.Call | None:
     """Returns given ``node`` if it represents ``super`` ``ast.Call``."""
     if not isinstance(node, ast.Call):
         return None

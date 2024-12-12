@@ -1,5 +1,5 @@
 import ast
-from typing import Iterator, Sequence
+from collections.abc import Iterator, Sequence
 
 
 def get_all_args(call: ast.Call) -> Sequence[ast.AST]:

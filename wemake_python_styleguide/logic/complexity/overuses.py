@@ -1,5 +1,4 @@
 import ast
-from typing import Union
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.constants import SPECIAL_ARGUMENT_NAMES_WHITELIST
@@ -56,7 +55,7 @@ def is_self(node: ast.AST) -> bool:
     We do not check for attribute access, because ``ast.Attribute`` nodes
     are globally ignored.
     """
-    self_node: Union[ast.Attribute, ast.Subscript, None] = None
+    self_node: ast.Attribute | ast.Subscript | None = None
     if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
         self_node = node.func
     elif isinstance(node, ast.Subscript):

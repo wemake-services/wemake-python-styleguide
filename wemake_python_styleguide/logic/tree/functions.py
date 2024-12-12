@@ -1,7 +1,6 @@
 from ast import Call, Return, Yield, YieldFrom, arg, walk
-from typing import Container, Iterable, List, Optional, Union
-
-from typing_extensions import Final, TypeAlias
+from collections.abc import Container, Iterable
+from typing import Final, TypeAlias, Union
 
 from wemake_python_styleguide.logic import source
 from wemake_python_styleguide.logic.walk import is_contained
@@ -48,7 +47,7 @@ def given_function_called(
     return ''
 
 
-def is_method(function_type: Optional[str]) -> bool:
+def is_method(function_type: str | None) -> bool:
     """
     Returns whether a given function type belongs to a class.
 
@@ -74,7 +73,7 @@ def is_method(function_type: Optional[str]) -> bool:
     return function_type in _METHOD_TYPES
 
 
-def get_all_arguments(node: AnyFunctionDefAndLambda) -> List[arg]:
+def get_all_arguments(node: AnyFunctionDefAndLambda) -> list[arg]:
     """
     Returns list of all arguments that exist in a function.
 

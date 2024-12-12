@@ -1,23 +1,24 @@
-from typing import Callable, Tuple, Type, TypeVar
+from collections.abc import Callable
+from typing import TypeVar
 
 _DefinedType = TypeVar('_DefinedType')
 
 
 def _modify_class(
-    cls: Type[_DefinedType],
+    cls: type[_DefinedType],
     original: str,
-    aliases: Tuple[str, ...],
-) -> Type[_DefinedType]:
+    aliases: tuple[str, ...],
+) -> type[_DefinedType]:
     original_handler = getattr(cls, original, None)
     if original_handler is None:
         raise AttributeError(
-            'Aliased attribute {0} does not exist'.format(original),
+            f'Aliased attribute {original} does not exist',
         )
 
     for method_alias in aliases:
         if getattr(cls, method_alias, None):
             raise AttributeError(
-                'Alias {0} already exists'.format(method_alias),
+                f'Alias {method_alias} already exists',
             )
         setattr(cls, method_alias, original_handler)
     return cls
@@ -25,8 +26,8 @@ def _modify_class(
 
 def alias(
     original: str,
-    aliases: Tuple[str, ...],
-) -> Callable[[Type[_DefinedType]], Type[_DefinedType]]:
+    aliases: tuple[str, ...],
+) -> Callable[[type[_DefinedType]], type[_DefinedType]]:
     """
     Decorator to alias handlers.
 
@@ -41,6 +42,6 @@ def alias(
     if len(all_names) != len(set(all_names)):
         raise ValueError('Found duplicate aliases')
 
-    def decorator(cls: Type[_DefinedType]) -> Type[_DefinedType]:
+    def decorator(cls: type[_DefinedType]) -> type[_DefinedType]:
         return _modify_class(cls, original, aliases)
     return decorator

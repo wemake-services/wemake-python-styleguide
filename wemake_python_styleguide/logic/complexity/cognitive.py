@@ -16,7 +16,7 @@ Adapted from https://github.com/Melevir/cognitive_complexity
 """
 
 import ast
-from typing import Callable, Tuple
+from collections.abc import Callable
 
 from wemake_python_styleguide.logic.tree import bools, recursion
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
@@ -69,7 +69,7 @@ def _process_child_nodes(
 def _process_node_itself(
     node: ast.AST,
     increment_by: int,
-) -> Tuple[int, int, bool]:
+) -> tuple[int, int, bool]:
     if isinstance(node, _SHORT_CIRCUITS):
         return increment_by, max(1, increment_by), True
     elif isinstance(node, _CONTROL_FLOW_BREAKERS):

@@ -1,9 +1,9 @@
 import tokenize
 from collections import defaultdict
 from operator import attrgetter
-from typing import DefaultDict, List, Optional
+from typing import DefaultDict, TypeAlias
 
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide.logic.tokens.strings import (
     get_docstring_tokens,
@@ -14,7 +14,7 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
-TokenLines: TypeAlias = DefaultDict[int, List[tokenize.TokenInfo]]
+TokenLines: TypeAlias = DefaultDict[int, list[tokenize.TokenInfo]]
 
 
 @final
@@ -34,9 +34,9 @@ class MultilineStringVisitor(BaseTokenVisitor):
     def _check_token(
         self,
         index: int,
-        tokens: List[tokenize.TokenInfo],
-        previous_token: Optional[tokenize.TokenInfo],
-        next_token: Optional[tokenize.TokenInfo],
+        tokens: list[tokenize.TokenInfo],
+        previous_token: tokenize.TokenInfo | None,
+        next_token: tokenize.TokenInfo | None,
     ) -> None:
         if index != 0:
             previous_token = tokens[index - 1]
@@ -50,9 +50,9 @@ class MultilineStringVisitor(BaseTokenVisitor):
 
     def _check_individual_line(
         self,
-        tokens: List[tokenize.TokenInfo],
-        previous_token: Optional[tokenize.TokenInfo],
-        next_token: Optional[tokenize.TokenInfo],
+        tokens: list[tokenize.TokenInfo],
+        previous_token: tokenize.TokenInfo | None,
+        next_token: tokenize.TokenInfo | None,
     ) -> None:
         for index, token in enumerate(tokens):
             if token.exact_type != tokenize.STRING or token in self._docstrings:
@@ -61,7 +61,7 @@ class MultilineStringVisitor(BaseTokenVisitor):
                 self._check_token(index, tokens, previous_token, next_token)
 
     def _post_visit(self) -> None:
-        linenos = sorted((self._lines.keys()))
+        linenos = sorted(self._lines.keys())
         for index, _ in enumerate(linenos):
             line_tokens = sorted(
                 self._lines[linenos[index]], key=attrgetter('start'),
