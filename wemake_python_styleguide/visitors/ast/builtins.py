@@ -1,14 +1,7 @@
 import ast
 import re
 import string
-from typing import (
-    ClassVar,
-    FrozenSet,
-    List,
-    Optional,
-    Pattern,
-    Sequence,
-)
+from typing import ClassVar, FrozenSet, List, Optional, Pattern, Sequence
 
 from typing_extensions import Final, TypeAlias, final
 
