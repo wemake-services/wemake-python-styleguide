@@ -160,11 +160,9 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
     def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
         """Forbids use of ``f`` strings and too complex ``f`` strings."""
         if not isinstance(nodes.get_parent(node), ast.FormattedValue):
-            # We don't allow `f` strings by default,
-            # But, we need this condition to make sure that this
+            # We need this condition to make sure that this
             # is not a part of complex string format like `f"Count={count:,}"`:
             self._check_complex_formatted_string(node)
-            self.add_violation(consistency.FormattedStringViolation(node))
         self.generic_visit(node)
 
     def _check_complex_formatted_string(self, node: ast.JoinedStr) -> None:

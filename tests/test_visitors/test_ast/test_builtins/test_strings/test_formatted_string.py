@@ -3,9 +3,6 @@ import pytest
 from wemake_python_styleguide.violations.complexity import (
     TooComplexFormattedStringViolation,
 )
-from wemake_python_styleguide.violations.consistency import (
-    FormattedStringViolation,
-)
 from wemake_python_styleguide.visitors.ast.builtins import (
     WrongFormatStringVisitor,
     WrongStringVisitor,
@@ -90,7 +87,6 @@ def test_wrong_string(assert_errors, parse_ast_tree, code, default_options):
 
     assert_errors(visitor, [
         TooComplexFormattedStringViolation,
-        FormattedStringViolation,
     ])
 
 
@@ -121,27 +117,4 @@ def test_complex_f_string(assert_errors, parse_ast_tree, code, default_options):
     assert_errors(
         visitor,
         [TooComplexFormattedStringViolation],
-        ignored_types=FormattedStringViolation,
     )
-
-
-@pytest.mark.parametrize('code', [
-    f_dict_lookup_str_key,
-    f_function_empty_args,
-    f_list_index_lookup,
-    f_variable_lookup,
-    f_single_chained_attr,
-    f_attr_on_function,
-    f_true_index,
-    f_none_index,
-    f_byte_index,
-    f_string_comma_format,
-])
-def test_simple_f_string(assert_errors, parse_ast_tree, code, default_options):
-    """Testing that non complex ``f`` strings are allowed."""
-    tree = parse_ast_tree(code)
-
-    visitor = WrongFormatStringVisitor(default_options, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [FormattedStringViolation])

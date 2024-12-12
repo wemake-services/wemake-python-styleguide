@@ -4,7 +4,6 @@ from wemake_python_styleguide.violations.complexity import (
     TooComplexFormattedStringViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
-    FormattedStringViolation,
     ModuloStringFormatViolation,
 )
 from wemake_python_styleguide.visitors.ast.builtins import WrongStringVisitor
@@ -99,7 +98,6 @@ def test_modulo_formatting(
     assert_errors(
         visitor,
         [ModuloStringFormatViolation],
-        ignored_types=FormattedStringViolation,
     )
 
 
@@ -148,7 +146,6 @@ def test_regular_modulo_string(
         visitor,
         [],
         ignored_types=(
-            FormattedStringViolation,
             TooComplexFormattedStringViolation,
         ),
     )
@@ -178,7 +175,7 @@ def test_functions_modulo_string(
     visitor = WrongStringVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [], ignored_types=FormattedStringViolation)
+    assert_errors(visitor, [])
 
 
 @pytest.mark.parametrize('code', [
