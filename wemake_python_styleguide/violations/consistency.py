@@ -266,21 +266,25 @@ class UnderscoredNumberViolation(TokenizeViolation):
         And it would be still the same number.
         Count how many ways there are to write bigger numbers.
         Currently, it all depends on the cultural habits of the author.
-        We enforce a single way to write numbers: without the underscore.
+        We enforce a single way to write numbers with thousands separators.
+        We allow only underscores to be used as thousands separators.
 
     Solution:
         Numbers should be written as numbers: ``1000``.
-        If you have a very big number with a lot of zeros, use multiplication.
+        Using underscores as thousands separators if necessary.
 
     Example::
 
         # Correct:
         phone = 88313443
         million = 1000000
+        formatted_million = 1_000_000
+        big_number = 10_000_000_000_000
 
         # Wrong:
         phone = 8_83_134_43
         million = 100_00_00
+        big_number = 100000_0000_000
 
     .. versionadded:: 0.1.0
 

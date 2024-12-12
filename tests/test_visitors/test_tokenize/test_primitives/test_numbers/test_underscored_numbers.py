@@ -9,11 +9,14 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
 
 
 @pytest.mark.parametrize('primitive', [
-    '333_555',
-    '3_3.3',
-    '+1_000_000',
-    '-5_000',
-    '-1_000.0',
+    '1_00',
+    '10_00',
+    '100_00',
+    '-1_0',
+    '-10_0',
+    '-100_0',
+    '1000_000',
+    '-1000_000',
 ])
 def test_underscored_number(
     parse_tokens,
@@ -24,7 +27,7 @@ def test_underscored_number(
     primitive,
     mode,
 ):
-    """Ensures that underscored numbers raise a warning."""
+    """Ensures that wrongly underscored numbers raise a warning."""
     file_tokens = parse_tokens(mode(primitives_usages.format(primitive)))
 
     visitor = WrongNumberTokenVisitor(default_options, file_tokens=file_tokens)
@@ -39,7 +42,19 @@ def test_underscored_number(
     '1000.0',
     '-333555',
     '-333555.5',
+    '1_000',
+    '1_000.0',
+    '+1_000',
+    '+1_000.0',
+    '-1_000',
+    '-1_000.0',
+    '10_000',
+    '100_000',
+    '100_000_000',
+    '"1_00"',
     '"10_00"',
+    '"100_00"',
+    '"-100_00"',
 ])
 def test_correct_number(
     parse_tokens,

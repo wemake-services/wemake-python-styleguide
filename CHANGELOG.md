@@ -38,6 +38,7 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `WPS352`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS355`, because it is covered by `ruff` formatter
 - Allows any compares in `assert` statements for `WPS520`, #3112
+- `WPS303`: Underscore (_) now only allowed with 3 digits after it, #3120
 
 ### Bugfixes
 

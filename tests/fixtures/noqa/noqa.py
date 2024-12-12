@@ -72,7 +72,7 @@ some_int = 1  # type: int
 
 # =====
 
-phone_number = 555_123_999  # noqa:  WPS303
+phone_number = 8_83_134_43  # noqa:  WPS303
 partial_number = .05  # noqa: WPS304
 float_zero = 0.0  # noqa: WPS358
 formatted_string = f'Hi, {full_name}'  # noqa: WPS305
