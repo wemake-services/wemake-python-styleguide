@@ -22,7 +22,6 @@ PRESET: Final = (
     primitives.WrongStringConcatenationVisitor,
 
     statements.MultilineStringVisitor,
-    statements.InconsistentComprehensionVisitor,
 
     conditions.IfElseVisitor,
 )

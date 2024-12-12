@@ -34,10 +34,6 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
         r'^[0-9]*\.[0-9]+0+$',
     )
 
-    _positive_exponent_patterns: ClassVar[Pattern[str]] = re.compile(
-        r'^[0-9\.]+e\+', re.IGNORECASE | re.ASCII,
-    )
-
     _float_zero: ClassVar[Pattern[str]] = re.compile(
         r'^0\.0$',
     )
@@ -50,7 +46,6 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
         https://github.com/wemake-services/wemake-python-styleguide/issues/557
         """
         self._check_underscored_number(token)
-        self._check_partial_float(token)
         self._check_bad_number_suffixes(token)
         self._check_float_zeros(token)
 
@@ -63,26 +58,12 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
                 ),
             )
 
-    def _check_partial_float(self, token: tokenize.TokenInfo) -> None:
-        if token.string.startswith('.') or token.string.endswith('.'):
-            self.add_violation(
-                consistency.PartialFloatViolation(token, text=token.string),
-            )
-
     def _check_bad_number_suffixes(self, token: tokenize.TokenInfo) -> None:
         float_zeros = self._leading_zero_float_pattern.match(token.string)
         other_zeros = self._leading_zero_pattern.match(token.string)
         if float_zeros or other_zeros:
             self.add_violation(
                 consistency.NumberWithMeaninglessZeroViolation(
-                    token,
-                    text=token.string,
-                ),
-            )
-
-        if self._positive_exponent_patterns.match(token.string):
-            self.add_violation(
-                consistency.PositiveExponentViolation(
                     token,
                     text=token.string,
                 ),

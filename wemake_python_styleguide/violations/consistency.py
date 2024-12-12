@@ -315,11 +315,15 @@ class PartialFloatViolation(TokenizeViolation):
         ten_float = 10.
 
     .. versionadded:: 0.1.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     code = 304
     error_template = 'Found partial float: {0}'
+    disabled_since = '1.0.0'
 
 
 @final
@@ -391,12 +395,15 @@ class ExplicitObjectBaseClassViolation(ASTViolation):
     .. versionchanged:: 0.19.0
        Now the rule is inverted: we require no explicit `object` base class.
        See PEP695 for extra reasoning.
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found explicit `object` base class: {0}'
     code = 306
-    disabled_since = '0.19.0'
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1686,11 +1693,15 @@ class PositiveExponentViolation(TokenizeViolation):
         number = 1e+1
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found exponent number with positive exponent: {0}'
     code = 340
+    disabled_since = '1.0.0'
 
 
 @final
@@ -2369,12 +2380,15 @@ class InconsistentComprehensionViolation(TokenizeViolation):
         ]
 
     .. versionadded:: 0.15.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found an inconsistently structured comprehension'
     code = 361
-    # TODO: verify ruff's rules
+    disabled_since = '1.0.0'
 
 
 @final
