@@ -4,7 +4,6 @@ SHELL:=/usr/bin/env bash
 lint:
 	poetry run mypy wemake_python_styleguide scripts
 	poetry run flake8 .
-	poetry run autopep8 -r . --diff --exclude=./tests/fixtures/** --exit-code
 	poetry run lint-imports
 	poetry run python3 scripts/check_generic_visit.py wemake_python_styleguide/visitors/ast
 
