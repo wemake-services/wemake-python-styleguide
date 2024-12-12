@@ -172,18 +172,21 @@ x, y, z = x, y, z
 """
 
 
-@pytest.mark.parametrize('code', [
-    wrong_fragment,
-    wrong_typed_fragment,
-    wrong_partial_typed_fragment1,
-    wrong_partial_typed_fragment2,
-    wrong_fragment_double_assignment,
-    wrong_fragment_double_typed_assignment,
-    wrong_fragment_other_assignment,
-    wrong_fragment_typed_other_assignment,
-    wrong_fragment_mixed_tuple_assignment,
-    wrong_parts_unused1,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_fragment,
+        wrong_typed_fragment,
+        wrong_partial_typed_fragment1,
+        wrong_partial_typed_fragment2,
+        wrong_fragment_double_assignment,
+        wrong_fragment_double_typed_assignment,
+        wrong_fragment_other_assignment,
+        wrong_fragment_typed_other_assignment,
+        wrong_fragment_mixed_tuple_assignment,
+        wrong_parts_unused1,
+    ],
+)
 def test_self_variable_reassignment(
     assert_errors,
     parse_ast_tree,
@@ -199,10 +202,13 @@ def test_self_variable_reassignment(
     assert_errors(visitor, [ReassigningVariableToItselfViolation])
 
 
-@pytest.mark.parametrize('code', [
-    wrong_fragment_tuple_assignment,
-    wrong_fragment_typed_tuple_assignment,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_fragment_tuple_assignment,
+        wrong_fragment_typed_tuple_assignment,
+    ],
+)
 def test_self_variable_reassignment_double(
     assert_errors,
     parse_ast_tree,
@@ -215,16 +221,22 @@ def test_self_variable_reassignment_double(
     visitor = WrongVariableAssignmentVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [
-        ReassigningVariableToItselfViolation,
-        ReassigningVariableToItselfViolation,
-    ])
+    assert_errors(
+        visitor,
+        [
+            ReassigningVariableToItselfViolation,
+            ReassigningVariableToItselfViolation,
+        ],
+    )
 
 
-@pytest.mark.parametrize('code', [
-    wrong_fragment_multiple_tuple_assignment,
-    wrong_fragment_typed_multiple_assignment,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_fragment_multiple_tuple_assignment,
+        wrong_fragment_typed_multiple_assignment,
+    ],
+)
 def test_self_variable_reassignment_triple(
     assert_errors,
     parse_ast_tree,
@@ -237,41 +249,47 @@ def test_self_variable_reassignment_triple(
     visitor = WrongVariableAssignmentVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [
-        ReassigningVariableToItselfViolation,
-        ReassigningVariableToItselfViolation,
-        ReassigningVariableToItselfViolation,
-    ])
+    assert_errors(
+        visitor,
+        [
+            ReassigningVariableToItselfViolation,
+            ReassigningVariableToItselfViolation,
+            ReassigningVariableToItselfViolation,
+        ],
+    )
 
 
-@pytest.mark.parametrize('code', [
-    right_fragment,
-    right_typed_fragment,
-    right_just_types,
-    right_fragment_tuple_assignment,
-    right_fragment_triple_tuple_assignment,
-    right_star_assignment1,
-    right_star_assignment2,
-    right_star_assignment3,
-    right_parts_unused1,
-    right_parts_unused2,
-    right_parts_unused3,
-    right_parts_unused4,
-    right_class_reassignment,
-    right_tuplelize1,
-    right_tuplelize2,
-    right_tuplelize3,
-    right_tuplelize4,
-    right_tuplelize5,
-    right_swap1,
-    right_swap2,
-    right_swap3,
-    right_swap4,
-    right_swap5,
-    right_swap6,
-    right_unary1,
-    right_unary2,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        right_fragment,
+        right_typed_fragment,
+        right_just_types,
+        right_fragment_tuple_assignment,
+        right_fragment_triple_tuple_assignment,
+        right_star_assignment1,
+        right_star_assignment2,
+        right_star_assignment3,
+        right_parts_unused1,
+        right_parts_unused2,
+        right_parts_unused3,
+        right_parts_unused4,
+        right_class_reassignment,
+        right_tuplelize1,
+        right_tuplelize2,
+        right_tuplelize3,
+        right_tuplelize4,
+        right_tuplelize5,
+        right_swap1,
+        right_swap2,
+        right_swap3,
+        right_swap4,
+        right_swap5,
+        right_swap6,
+        right_unary1,
+        right_unary2,
+    ],
+)
 def test_correct_variable_reassignment(
     assert_errors,
     parse_ast_tree,

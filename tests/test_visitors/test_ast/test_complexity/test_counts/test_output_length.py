@@ -27,12 +27,15 @@ tuple_long = 'i, i + 1, i + 2, i + 3, i + 4, i + 5'
 tuple_short = 'i, i + 1, i + 2'
 
 
-@pytest.mark.parametrize('tuple_param', [
-    tuple_short,
-    single,
-    tuple_empty,
-    tuple_fixed_short,
-])
+@pytest.mark.parametrize(
+    'tuple_param',
+    [
+        tuple_short,
+        single,
+        tuple_empty,
+        tuple_fixed_short,
+    ],
+)
 @pytest.mark.parametrize('return_like', RETURN_LIKE_STATEMENTS)
 def test_output_length_normal(
     assert_errors,
@@ -51,10 +54,13 @@ def test_output_length_normal(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('tuple_param', [
-    tuple_long,
-    tuple_fixed_long,
-])
+@pytest.mark.parametrize(
+    'tuple_param',
+    [
+        tuple_long,
+        tuple_fixed_long,
+    ],
+)
 @pytest.mark.parametrize('return_like', RETURN_LIKE_STATEMENTS)
 def test_output_length_violation(
     assert_errors,

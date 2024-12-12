@@ -12,15 +12,16 @@ _BUILTINS: Final = frozenset(
     if builtin[0] not in BUILTINS_WHITELIST
 )
 
-_ALL_BUILTINS: Final = frozenset((
-    *keyword.kwlist,
-    *_BUILTINS,
-
-    # Special case.
-    # Some python version have them, some do not have them:
-    'async',
-    'await',
-))
+_ALL_BUILTINS: Final = frozenset(
+    (
+        *keyword.kwlist,
+        *_BUILTINS,
+        # Special case.
+        # Some python version have them, some do not have them:
+        'async',
+        'await',
+    )
+)
 
 
 def is_builtin_name(variable_name: str) -> bool:

@@ -16,11 +16,14 @@ import_from_public_path = 'from public.path import something'
 import_protected_as_alias = 'from some.path import _protected as not_protected'
 
 
-@pytest.mark.parametrize('code', [
-    import_public,
-    import_from_public,
-    import_from_public_path,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        import_public,
+        import_from_public,
+        import_from_public_path,
+    ],
+)
 def test_correct_import(
     assert_errors,
     parse_ast_tree,
@@ -36,11 +39,14 @@ def test_correct_import(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    import_protected,
-    import_from_protected,
-    import_from_protected_path,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        import_protected,
+        import_from_protected,
+        import_from_protected_path,
+    ],
+)
 def test_incorrect_modules_import(
     assert_errors,
     assert_error_text,
@@ -58,10 +64,13 @@ def test_incorrect_modules_import(
     assert_error_text(visitor, '_protected')
 
 
-@pytest.mark.parametrize('code', [
-    import_protected_from,
-    import_protected_as_alias,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        import_protected_from,
+        import_protected_as_alias,
+    ],
+)
 def test_incorrect_module_members_import(
     assert_errors,
     assert_error_text,

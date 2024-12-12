@@ -8,14 +8,16 @@ default_param_with_type = 'def function(some: int = {0}): ...'
 statement_with_expression = 'other_var + {0}'
 
 
-@pytest.fixture(params=[
-    function_call,
-    assignment,
-    assignment_with_expression,
-    default_param,
-    default_param_with_type,
-    statement_with_expression,
-])
+@pytest.fixture(
+    params=[
+        function_call,
+        assignment,
+        assignment_with_expression,
+        default_param,
+        default_param_with_type,
+        statement_with_expression,
+    ]
+)
 def primitives_usages(request):
     """Fixture to return possible cases of promitives use cases."""
     return request.param
@@ -24,32 +26,40 @@ def primitives_usages(request):
 @pytest.fixture
 def regular_number_wrapper():
     """Fixture to return regular numbers without modifications."""
+
     def factory(template: str) -> str:
         return template
+
     return factory
 
 
 @pytest.fixture
 def negative_number_wrapper():
     """Fixture to return negative numbers."""
+
     def factory(template: str) -> str:
         return f'-{template}'
+
     return factory
 
 
 @pytest.fixture
 def positive_number_wrapper():
     """Fixture to return positive numbers with explicit ``+``."""
+
     def factory(template: str) -> str:
         return f'+{template}'
+
     return factory
 
 
-@pytest.fixture(params=[
-    'regular_number_wrapper',
-    'negative_number_wrapper',
-    'positive_number_wrapper',
-])
+@pytest.fixture(
+    params=[
+        'regular_number_wrapper',
+        'negative_number_wrapper',
+        'positive_number_wrapper',
+    ]
+)
 def number_sign(request):
     """Fixture that returns regular, negative, and positive numbers."""
     return request.getfixturevalue(request.param)

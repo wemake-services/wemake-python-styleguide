@@ -160,18 +160,21 @@ def with_ternary(some_value):
 """
 
 
-@pytest.mark.parametrize('code', [
-    module_with_one_elif,
-    module_with_two_elifs,
-    module_with_three_elifs,
-    function_with_one_elif,
-    function_with_two_elifs,
-    function_with_three_elifs,
-    function_with_ifs,
-    function_with_raw_if,
-    function_with_if_else,
-    function_with_ternary,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_with_one_elif,
+        module_with_two_elifs,
+        module_with_three_elifs,
+        function_with_one_elif,
+        function_with_two_elifs,
+        function_with_three_elifs,
+        function_with_ifs,
+        function_with_raw_if,
+        function_with_if_else,
+        function_with_ternary,
+    ],
+)
 def test_elif_correct_count(
     assert_errors,
     parse_ast_tree,
@@ -188,12 +191,15 @@ def test_elif_correct_count(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    module_with_elifs,
-    module_with_elifs_without_else,
-    function_with_elifs,
-    function_with_elifs_without_else,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_with_elifs,
+        module_with_elifs_without_else,
+        function_with_elifs,
+        function_with_elifs_without_else,
+    ],
+)
 def test_elif_incorrect_count(
     assert_errors,
     assert_error_text,

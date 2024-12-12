@@ -23,18 +23,21 @@ wrong_samples = (
 )
 
 
-@pytest.mark.parametrize('code', [
-    'range(10)',
-    'range(10, 20)',
-    'range(0, 10, 1)',
-    'range(some())',
-    'range(len)',
-    'len([])',
-    'len(some)',
-    'len(range(10))',
-    'range(0, len(some), 2)',
-    'range(0, len(some), -2)',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'range(10)',
+        'range(10, 20)',
+        'range(0, 10, 1)',
+        'range(some())',
+        'range(len)',
+        'len([])',
+        'len(some)',
+        'len(range(10))',
+        'range(0, len(some), 2)',
+        'range(0, len(some), -2)',
+    ],
+)
 def test_correct_range_len(
     assert_errors,
     parse_ast_tree,

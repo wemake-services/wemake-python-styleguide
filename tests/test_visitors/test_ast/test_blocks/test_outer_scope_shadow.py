@@ -271,21 +271,24 @@ def function():
 """
 
 
-@pytest.mark.parametrize('code', [
-    correct_for_loop1,
-    correct_for_loop2,
-    correct_for_loop3,
-    correct_for_comprehension,
-    correct_except,
-    correct_with1,
-    correct_with2,
-    correct_with3,
-    correct_class1,
-    correct_class2,
-    correct_class3,
-    correct_class4,
-    correct_walrus,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_for_loop1,
+        correct_for_loop2,
+        correct_for_loop3,
+        correct_for_comprehension,
+        correct_except,
+        correct_with1,
+        correct_with2,
+        correct_with3,
+        correct_class1,
+        correct_class2,
+        correct_class3,
+        correct_class4,
+        correct_walrus,
+    ],
+)
 def test_variable_used_correctly(
     assert_errors,
     parse_ast_tree,
@@ -302,23 +305,26 @@ def test_variable_used_correctly(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    import_overlap1,
-    import_overlap2,
-    import_overlap3,
-    import_overlap4,
-    function_overlap1,
-    function_overlap2,
-    constant_overlap1,
-    constant_overlap2,
-    constant_overlap3,
-    constant_overlap4,
-    constant_overlap5,
-    constant_overlap6,
-    walrus_overlap,
-    match_as_overlap,
-    match_star_overlap,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        import_overlap1,
+        import_overlap2,
+        import_overlap3,
+        import_overlap4,
+        function_overlap1,
+        function_overlap2,
+        constant_overlap1,
+        constant_overlap2,
+        constant_overlap3,
+        constant_overlap4,
+        constant_overlap5,
+        constant_overlap6,
+        walrus_overlap,
+        match_as_overlap,
+        match_star_overlap,
+    ],
+)
 def test_outer_variable_shadow(
     assert_errors,
     parse_ast_tree,
@@ -356,7 +362,10 @@ def test_outer_variable_double_shadow(
     visitor = BlockVariableVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [
-        OuterScopeShadowingViolation,
-        OuterScopeShadowingViolation,
-    ])
+    assert_errors(
+        visitor,
+        [
+            OuterScopeShadowingViolation,
+            OuterScopeShadowingViolation,
+        ],
+    )

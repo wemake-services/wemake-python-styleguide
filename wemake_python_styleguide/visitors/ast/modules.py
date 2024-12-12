@@ -86,10 +86,13 @@ class MagicModuleFunctionsVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_any_assign', (
-    'visit_Assign',
-    'visit_AnnAssign',
-))
+@alias(
+    'visit_any_assign',
+    (
+        'visit_Assign',
+        'visit_AnnAssign',
+    ),
+)
 class ModuleConstantsVisitor(BaseNodeVisitor):
     """Finds incorrect module constants."""
 

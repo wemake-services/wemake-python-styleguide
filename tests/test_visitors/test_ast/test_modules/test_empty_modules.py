@@ -8,12 +8,15 @@ from wemake_python_styleguide.visitors.ast.modules import (
 )
 
 
-@pytest.mark.parametrize('filename', [
-    'empty.py',
-    '/home/user/logic.py',
-    'partial/views.py',
-    'C:/path/package/module.py',
-])
+@pytest.mark.parametrize(
+    'filename',
+    [
+        'empty.py',
+        '/home/user/logic.py',
+        'partial/views.py',
+        'C:/path/package/module.py',
+    ],
+)
 def test_simple_filename(
     assert_errors,
     parse_ast_tree,
@@ -24,7 +27,9 @@ def test_simple_filename(
     tree = parse_ast_tree('')
 
     visitor = EmptyModuleContentsVisitor(
-        default_options, tree=tree, filename=filename,
+        default_options,
+        tree=tree,
+        filename=filename,
     )
     visitor.run()
 

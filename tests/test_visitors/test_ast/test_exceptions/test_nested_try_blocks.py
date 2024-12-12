@@ -80,12 +80,15 @@ else:
 """
 
 
-@pytest.mark.parametrize('code', [
-    wrong_try_nested_try,
-    wrong_try_nested_except,
-    wrong_try_nested_else,
-    wrong_try_nested_finally,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_try_nested_try,
+        wrong_try_nested_except,
+        wrong_try_nested_else,
+        wrong_try_nested_finally,
+    ],
+)
 def test_nested_try_blocks(
     assert_errors,
     parse_ast_tree,
@@ -101,10 +104,13 @@ def test_nested_try_blocks(
     assert_errors(visitor, [NestedTryViolation])
 
 
-@pytest.mark.parametrize('code', [
-    one_try_example,
-    two_tries_example,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        one_try_example,
+        two_tries_example,
+    ],
+)
 def test_correct_try_blocks(
     assert_errors,
     parse_ast_tree,

@@ -91,20 +91,23 @@ def container():
 """
 
 
-@pytest.mark.parametrize('code', [
-    nested_class_in_class,
-    nested_class_in_method,
-    nested_class_in_function,
-    nested_class_in_if,
-    nested_class_in_if_else,
-    nested_class_in_context_manager,
-    nested_class_in_for_loop,
-    nested_class_in_while_loop,
-    nested_class_in_try,
-    nested_class_in_except,
-    nested_class_in_try_else,
-    nested_class_in_try_finally,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        nested_class_in_class,
+        nested_class_in_method,
+        nested_class_in_function,
+        nested_class_in_if,
+        nested_class_in_if_else,
+        nested_class_in_context_manager,
+        nested_class_in_for_loop,
+        nested_class_in_while_loop,
+        nested_class_in_try,
+        nested_class_in_except,
+        nested_class_in_try_else,
+        nested_class_in_try_finally,
+    ],
+)
 def test_nested_class(
     assert_errors,
     assert_error_text,
@@ -125,9 +128,12 @@ def test_nested_class(
 
 
 @pytest.mark.parametrize('whitelist_name', NESTED_CLASSES_WHITELIST)
-@pytest.mark.parametrize('code', [
-    nested_class_in_class,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        nested_class_in_class,
+    ],
+)
 def test_whitelist_nested_classes(
     assert_errors,
     parse_ast_tree,
@@ -145,13 +151,19 @@ def test_whitelist_nested_classes(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('whitelist_name', [
-    *NESTED_CLASSES_WHITELIST,
-    'NestedClass',
-])
-@pytest.mark.parametrize('code', [
-    nested_class_in_class,
-])
+@pytest.mark.parametrize(
+    'whitelist_name',
+    [
+        *NESTED_CLASSES_WHITELIST,
+        'NestedClass',
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        nested_class_in_class,
+    ],
+)
 def test_custom_whitelist_nested_classes(
     assert_errors,
     parse_ast_tree,
@@ -173,23 +185,29 @@ def test_custom_whitelist_nested_classes(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('whitelist_name', [
-    *NESTED_CLASSES_WHITELIST,
-    'NestedClass',
-])
-@pytest.mark.parametrize('code', [
-    nested_class_in_method,
-    nested_class_in_function,
-    nested_class_in_if,
-    nested_class_in_if_else,
-    nested_class_in_context_manager,
-    nested_class_in_for_loop,
-    nested_class_in_while_loop,
-    nested_class_in_try,
-    nested_class_in_except,
-    nested_class_in_try_else,
-    nested_class_in_try_finally,
-])
+@pytest.mark.parametrize(
+    'whitelist_name',
+    [
+        *NESTED_CLASSES_WHITELIST,
+        'NestedClass',
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        nested_class_in_method,
+        nested_class_in_function,
+        nested_class_in_if,
+        nested_class_in_if_else,
+        nested_class_in_context_manager,
+        nested_class_in_for_loop,
+        nested_class_in_while_loop,
+        nested_class_in_try,
+        nested_class_in_except,
+        nested_class_in_try_else,
+        nested_class_in_try_finally,
+    ],
+)
 def test_whitelist_nested_classes_in_functions(
     assert_errors,
     assert_error_text,

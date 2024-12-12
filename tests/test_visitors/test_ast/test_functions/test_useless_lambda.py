@@ -20,7 +20,6 @@ useless_lambdas = [
     ('lambda x, **z', 'method(x, **z)'),
     ('lambda x, *y, **z', 'method(x, *y, **z)'),
     ('lambda *args, **kwargs', 'method(*args, **kwargs)'),
-
     # with `/`:
     ('lambda x, /, y', 'method(x, y)'),
     ('lambda x, /, y, *, z', 'method(x, y, z=z)'),
@@ -80,26 +79,32 @@ valid_calls = (
 )
 
 
-@pytest.mark.parametrize('lambda_def', [
-    'lambda x',
-    'lambda x=1',
-    'lambda *, x=1',
-    'lambda x, y',
-    'lambda x, *, y',
-    'lambda y, *, x',
-    'lambda *, x, y',
-    'lambda *, y, x',
-    'lambda x, *y',
-    'lambda x, **z',
-    'lambda x, *y, **z',
-    'lambda *y, **z',
-    'lambda *only_y',
-    'lambda **only_z',
-])
-@pytest.mark.parametrize('inner_def', [
-    *valid_calls,
-    'method()',
-])
+@pytest.mark.parametrize(
+    'lambda_def',
+    [
+        'lambda x',
+        'lambda x=1',
+        'lambda *, x=1',
+        'lambda x, y',
+        'lambda x, *, y',
+        'lambda y, *, x',
+        'lambda *, x, y',
+        'lambda *, y, x',
+        'lambda x, *y',
+        'lambda x, **z',
+        'lambda x, *y, **z',
+        'lambda *y, **z',
+        'lambda *only_y',
+        'lambda **only_z',
+    ],
+)
+@pytest.mark.parametrize(
+    'inner_def',
+    [
+        *valid_calls,
+        'method()',
+    ],
+)
 def test_correct_lambda_definition(
     assert_errors,
     parse_ast_tree,

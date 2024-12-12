@@ -8,20 +8,23 @@ from wemake_python_styleguide.visitors.ast.statements import (
 )
 
 
-@pytest.mark.parametrize('code', [
-    'print(**{"@": "2"})',
-    'print(**{"2ab": "2"})',
-    'print(**{"!": "2"})',
-    'print(**{"&a": "2"})',
-    'print(**{"()": "2"})',
-    'print(**{"-b": "2"})',
-    'print(**{"+1": "2"})',
-    'print(**{"#FFF": "2"})',
-    'print(**{"some.value": "2"})',
-    'print(**{"Username[FIELD]": "2"})',
-    'print(**{"call()": "2"})',
-    'print(end="|", **{"2ab": "2"})',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'print(**{"@": "2"})',
+        'print(**{"2ab": "2"})',
+        'print(**{"!": "2"})',
+        'print(**{"&a": "2"})',
+        'print(**{"()": "2"})',
+        'print(**{"-b": "2"})',
+        'print(**{"+1": "2"})',
+        'print(**{"#FFF": "2"})',
+        'print(**{"some.value": "2"})',
+        'print(**{"Username[FIELD]": "2"})',
+        'print(**{"call()": "2"})',
+        'print(end="|", **{"2ab": "2"})',
+    ],
+)
 def test_wrong_starred_keyword(
     assert_errors,
     parse_ast_tree,
@@ -37,20 +40,23 @@ def test_wrong_starred_keyword(
     assert_errors(visitor, [WrongNamedKeywordViolation])
 
 
-@pytest.mark.parametrize('code', [
-    '_list = [1, 2]',
-    '_dict = {"end": " "}',
-    'print(*_list, **_dict)',
-    'print(end="1", **{"a": 1})',
-    'filter(**{User.USERNAME_FIELD: username})',  # noqa: P103
-    'filter(**{"a2": 1, _: 2})',
-    'filter(**{"a": 1, b: 2})',
-    'filter(**{"_a": 1, b: 2})',
-    'filter(**{"a_": 1, b: 2})',
-    'filter(**{"a": 1, call(): 2})',
-    'filter(**{"a": 1, b.method(): 2})',
-    'filter(**{b["a"]: 2})',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        '_list = [1, 2]',
+        '_dict = {"end": " "}',
+        'print(*_list, **_dict)',
+        'print(end="1", **{"a": 1})',
+        'filter(**{User.USERNAME_FIELD: username})',  # noqa: P103
+        'filter(**{"a2": 1, _: 2})',
+        'filter(**{"a": 1, b: 2})',
+        'filter(**{"_a": 1, b: 2})',
+        'filter(**{"a_": 1, b: 2})',
+        'filter(**{"a": 1, call(): 2})',
+        'filter(**{"a": 1, b.method(): 2})',
+        'filter(**{b["a"]: 2})',
+    ],
+)
 def test_correct_starred_keyword(
     assert_errors,
     parse_ast_tree,

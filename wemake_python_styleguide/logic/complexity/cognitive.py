@@ -113,8 +113,7 @@ def cognitive_score(funcdef: AnyFunctionDef) -> int:
     related to some 3rd party code.
     """
     complexity = sum(
-        _get_cognitive_complexity_for_node(node)
-        for node in funcdef.body
+        _get_cognitive_complexity_for_node(node) for node in funcdef.body
     )
     if recursion.has_recursive_calls(funcdef):
         complexity += 1

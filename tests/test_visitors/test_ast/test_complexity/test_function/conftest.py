@@ -71,32 +71,37 @@ class TestMeta(type):
 
 # Actual fixtures:
 
-@pytest.fixture(params=[
-    function_with_single_argument,
-    method_without_arguments,
-    classmethod_without_arguments,
-    new_method_without_arguments,
-    metaclass_without_arguments,
-])
+
+@pytest.fixture(
+    params=[
+        function_with_single_argument,
+        method_without_arguments,
+        classmethod_without_arguments,
+        new_method_without_arguments,
+        metaclass_without_arguments,
+    ]
+)
 def single_argument(request):
     """Fixture that returns different code examples that have one arg."""
     return request.param
 
 
-@pytest.fixture(params=[
-    function_with_arguments,
-    function_with_args_kwargs,
-    function_with_kwonly,
-    function_with_posonly,
-    method_with_single_argument,
-    method_with_single_args,
-    method_with_single_kwargs,
-    method_with_single_kwonly,
-    method_with_single_posonly_arg,
-    classmethod_with_single_argument,
-    new_method_single_argument,
-    metaclass_with_single_argument,
-])
+@pytest.fixture(
+    params=[
+        function_with_arguments,
+        function_with_args_kwargs,
+        function_with_kwonly,
+        function_with_posonly,
+        method_with_single_argument,
+        method_with_single_args,
+        method_with_single_kwargs,
+        method_with_single_kwonly,
+        method_with_single_posonly_arg,
+        classmethod_with_single_argument,
+        new_method_single_argument,
+        metaclass_with_single_argument,
+    ]
+)
 def two_arguments(request):
     """Fixture that returns different code examples that have two args."""
     return request.param

@@ -86,32 +86,41 @@ wrong_single_destructuring2 = '(first,) = {0}'
 wrong_single_destructuring3 = '[first] = {0}'
 
 
-@pytest.mark.parametrize('code', [
-    single_assignment,
-    sequence_assignment1,
-    sequence_assignment2,
-    tuple_assignment1,
-    tuple_assignment2,
-    spread_assignment1,
-    for_assignment,
-    for_unpacking1,
-    for_unpacking2,
-    list_comprehension,
-    dict_comprehension,
-    set_comprehension,
-    generator_expression,
-    with_assignment,
-    with_unpacking1,
-    with_unpacking2,
-])
-@pytest.mark.parametrize('definition', [
-    'some_name',
-    '(a, b)',  # tuple
-])
-@pytest.mark.parametrize('target', [
-    '(1, 2)',
-    '[1, 2]',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        single_assignment,
+        sequence_assignment1,
+        sequence_assignment2,
+        tuple_assignment1,
+        tuple_assignment2,
+        spread_assignment1,
+        for_assignment,
+        for_unpacking1,
+        for_unpacking2,
+        list_comprehension,
+        dict_comprehension,
+        set_comprehension,
+        generator_expression,
+        with_assignment,
+        with_unpacking1,
+        with_unpacking2,
+    ],
+)
+@pytest.mark.parametrize(
+    'definition',
+    [
+        'some_name',
+        '(a, b)',  # tuple
+    ],
+)
+@pytest.mark.parametrize(
+    'target',
+    [
+        '(1, 2)',
+        '[1, 2]',
+    ],
+)
 def test_correct_unpacking(
     assert_errors,
     parse_ast_tree,
@@ -130,16 +139,25 @@ def test_correct_unpacking(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    spread_assignment2,
-])
-@pytest.mark.parametrize('definition', [
-    'some_name',
-])
-@pytest.mark.parametrize('target', [
-    '(1, 2)',
-    '[1, 2]',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        spread_assignment2,
+    ],
+)
+@pytest.mark.parametrize(
+    'definition',
+    [
+        'some_name',
+    ],
+)
+@pytest.mark.parametrize(
+    'target',
+    [
+        '(1, 2)',
+        '[1, 2]',
+    ],
+)
 def test_correct_spread_unpacking(
     assert_errors,
     parse_ast_tree,
@@ -158,11 +176,14 @@ def test_correct_spread_unpacking(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('assignment', [
-    'some[0]',
-    'some["key"]',
-    'some.attr',
-])
+@pytest.mark.parametrize(
+    'assignment',
+    [
+        'some[0]',
+        'some["key"]',
+        'some.attr',
+    ],
+)
 def test_correct_assignment(
     assert_errors,
     parse_ast_tree,
@@ -179,37 +200,46 @@ def test_correct_assignment(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    sequence_assignment1,
-    sequence_assignment2,
-    tuple_assignment1,
-    tuple_assignment2,
-    spread_assignment1,
-    spread_assignment2,
-    for_unpacking1,
-    for_unpacking2,
-    list_comprehension,
-    dict_comprehension,
-    set_comprehension,
-    generator_expression,
-    with_unpacking1,
-    with_unpacking2,
-])
-@pytest.mark.parametrize('assignment', [
-    'some[0]',
-    'some["key"]',
-    'some[obj]',
-    'some.attr',
-    'some[0]["key"]',
-    'some["key"][0]',
-    # regression 1856
-    '(some, other[0])',
-    '(some.attr, other)',
-])
-@pytest.mark.parametrize('target', [
-    '(1, 2)',
-    '[1, 2]',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        sequence_assignment1,
+        sequence_assignment2,
+        tuple_assignment1,
+        tuple_assignment2,
+        spread_assignment1,
+        spread_assignment2,
+        for_unpacking1,
+        for_unpacking2,
+        list_comprehension,
+        dict_comprehension,
+        set_comprehension,
+        generator_expression,
+        with_unpacking1,
+        with_unpacking2,
+    ],
+)
+@pytest.mark.parametrize(
+    'assignment',
+    [
+        'some[0]',
+        'some["key"]',
+        'some[obj]',
+        'some.attr',
+        'some[0]["key"]',
+        'some["key"][0]',
+        # regression 1856
+        '(some, other[0])',
+        '(some.attr, other)',
+    ],
+)
+@pytest.mark.parametrize(
+    'target',
+    [
+        '(1, 2)',
+        '[1, 2]',
+    ],
+)
 def test_multiple_assignments(
     assert_errors,
     parse_ast_tree,
@@ -228,10 +258,13 @@ def test_multiple_assignments(
     assert_errors(visitor, [WrongUnpackingViolation])
 
 
-@pytest.mark.parametrize('target', [
-    '(1,)[0]',
-    '[1][0]',
-])
+@pytest.mark.parametrize(
+    'target',
+    [
+        '(1,)[0]',
+        '[1][0]',
+    ],
+)
 def test_correct_destructing(
     assert_errors,
     parse_ast_tree,
@@ -248,17 +281,23 @@ def test_correct_destructing(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    wrong_single_destructuring1,
-    wrong_single_destructuring2,
-    wrong_single_destructuring3,
-])
-@pytest.mark.parametrize('assignment', [
-    '(1,)',
-    '[1]',
-    'some',
-    'some()',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_single_destructuring1,
+        wrong_single_destructuring2,
+        wrong_single_destructuring3,
+    ],
+)
+@pytest.mark.parametrize(
+    'assignment',
+    [
+        '(1,)',
+        '[1]',
+        'some',
+        'some()',
+    ],
+)
 def test_single_element_destructing(
     assert_errors,
     parse_ast_tree,
@@ -280,16 +319,22 @@ def test_single_element_destructing(
     )
 
 
-@pytest.mark.parametrize('code', [
-    spread_assignment2,
-    spread_assignment3,
-    spread_assignment4,
-    spread_assignment5,
-])
-@pytest.mark.parametrize('definition', [
-    '_',
-    '_data',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        spread_assignment2,
+        spread_assignment3,
+        spread_assignment4,
+        spread_assignment5,
+    ],
+)
+@pytest.mark.parametrize(
+    'definition',
+    [
+        '_',
+        '_data',
+    ],
+)
 def test_element_getting_by_unpacking(
     assert_errors,
     parse_ast_tree,

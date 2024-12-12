@@ -9,12 +9,15 @@ from wemake_python_styleguide.visitors.filenames.module import (
 )
 
 
-@pytest.mark.parametrize('filename', [
-    'some.py',
-    'my_module.py',
-    '__init__.py',
-    '_compat.py',
-])
+@pytest.mark.parametrize(
+    'filename',
+    [
+        'some.py',
+        'my_module.py',
+        '__init__.py',
+        '_compat.py',
+    ],
+)
 def test_correct_filename(assert_errors, filename, default_options):
     """Testing that correct file names are allowed."""
     visitor = WrongModuleNameVisitor(default_options, filename=filename)
@@ -23,10 +26,13 @@ def test_correct_filename(assert_errors, filename, default_options):
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('filename', [
-    'compat__.py',
-    'some__typo.py',
-])
+@pytest.mark.parametrize(
+    'filename',
+    [
+        'compat__.py',
+        'some__typo.py',
+    ],
+)
 def test_underscore_filename(
     assert_errors,
     assert_error_text,
@@ -41,10 +47,13 @@ def test_underscore_filename(
     assert_error_text(visitor, filename.replace('.py', ''))
 
 
-@pytest.mark.parametrize('filename', [
-    '__private.py',
-    '__compat_name.py',
-])
+@pytest.mark.parametrize(
+    'filename',
+    [
+        '__private.py',
+        '__compat_name.py',
+    ],
+)
 def test_private_filename(
     assert_errors,
     assert_error_text,

@@ -69,7 +69,8 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
 
     def _check_module_name_readability(self) -> None:
         unreadable_sequence = alphabet.get_unreadable_characters(
-            self.stem, constants.UNREADABLE_CHARACTER_COMBINATIONS,
+            self.stem,
+            constants.UNREADABLE_CHARACTER_COMBINATIONS,
         )
         if unreadable_sequence:
             self.add_violation(

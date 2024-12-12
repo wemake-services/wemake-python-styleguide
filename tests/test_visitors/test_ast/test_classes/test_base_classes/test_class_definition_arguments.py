@@ -32,11 +32,14 @@ class TestClass(some_arg='some_arg'):
 """
 
 
-@pytest.mark.parametrize('code', [
-    class_definition_with_unpacking_one,
-    class_definition_with_unpacking_two,
-    class_definition_with_unpacking_and_arguments,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        class_definition_with_unpacking_one,
+        class_definition_with_unpacking_two,
+        class_definition_with_unpacking_and_arguments,
+    ],
+)
 def test_kwargs_unpacking_violation(
     assert_errors,
     parse_ast_tree,
@@ -52,9 +55,12 @@ def test_kwargs_unpacking_violation(
     assert_errors(visitor, [KwargsUnpackingInClassDefinitionViolation])
 
 
-@pytest.mark.parametrize('code', [
-    class_definition_with_keyword_arg,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        class_definition_with_keyword_arg,
+    ],
+)
 def test_kwargs_unpacking_violation_except(
     assert_errors,
     parse_ast_tree,

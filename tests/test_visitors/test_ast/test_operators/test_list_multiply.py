@@ -10,13 +10,16 @@ from wemake_python_styleguide.visitors.ast.operators import (
 usage_template = 'constant = {0}'
 
 
-@pytest.mark.parametrize('expression', [
-    '[] * 1',
-    '[1] * 2',
-    '[1, 2] * 0',
-    '[x for x in ()] * 1.1',
-    '[[] * 2 for x in some]',
-])
+@pytest.mark.parametrize(
+    'expression',
+    [
+        '[] * 1',
+        '[1] * 2',
+        '[1, 2] * 0',
+        '[x for x in ()] * 1.1',
+        '[[] * 2 for x in some]',
+    ],
+)
 def test_list_mult_operation(
     assert_errors,
     parse_ast_tree,
@@ -32,13 +35,16 @@ def test_list_mult_operation(
     assert_errors(visitor, [ListMultiplyViolation])
 
 
-@pytest.mark.parametrize('expression', [
-    '1 * 2',
-    '() * 1',
-    '[1, 2] + [3, 4]',
-    '[x * 1 for x in some]',
-    '[x * 1 for x in some] + [2 * x for x in some]',
-])
+@pytest.mark.parametrize(
+    'expression',
+    [
+        '1 * 2',
+        '() * 1',
+        '[1, 2] + [3, 4]',
+        '[x * 1 for x in some]',
+        '[x * 1 for x in some] + [2 * x for x in some]',
+    ],
+)
 def test_correct_list_operation(
     assert_errors,
     parse_ast_tree,

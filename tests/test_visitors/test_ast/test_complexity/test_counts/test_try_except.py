@@ -71,16 +71,19 @@ except* TypeError:
 """
 
 
-@pytest.mark.parametrize('code', [
-    complex_try_except,
-    pytest.param(
-        complex_try_star_except,
-        marks=pytest.mark.skipif(
-            not PY311,
-            reason='ExceptionGroup was added in python 3.11',
+@pytest.mark.parametrize(
+    'code',
+    [
+        complex_try_except,
+        pytest.param(
+            complex_try_star_except,
+            marks=pytest.mark.skipif(
+                not PY311,
+                reason='ExceptionGroup was added in python 3.11',
+            ),
         ),
-    ),
-])
+    ],
+)
 def test_try_except_count_default(
     assert_errors,
     assert_error_text,
@@ -98,12 +101,15 @@ def test_try_except_count_default(
     assert_error_text(visitor, '4', baseline=3)
 
 
-@pytest.mark.parametrize('code', [
-    try_without_except,
-    simple_try_except,
-    try_except_with_else,
-    try_except_else_finally,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        try_without_except,
+        simple_try_except,
+        try_except_with_else,
+        try_except_else_finally,
+    ],
+)
 def test_try_except_count_custom_settings(
     assert_errors,
     parse_ast_tree,

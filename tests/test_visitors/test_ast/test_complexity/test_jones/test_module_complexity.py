@@ -28,12 +28,15 @@ print(some.execute())
 """
 
 
-@pytest.mark.parametrize('code', [
-    module_without_nodes,
-    module_with_nodes,
-    module_with_function,
-    module_with_class,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_without_nodes,
+        module_with_nodes,
+        module_with_function,
+        module_with_class,
+    ],
+)
 def test_module_score(
     assert_errors,
     parse_ast_tree,
@@ -50,12 +53,15 @@ def test_module_score(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize(('code', 'score'), [
-    (module_without_nodes, 0),
-    (module_with_nodes, 8.5),
-    (module_with_function, 6),
-    (module_with_class, 3.0),
-])
+@pytest.mark.parametrize(
+    ('code', 'score'),
+    [
+        (module_without_nodes, 0),
+        (module_with_nodes, 8.5),
+        (module_with_function, 6),
+        (module_with_class, 3.0),
+    ],
+)
 def test_module_score_error(
     assert_errors,
     assert_error_text,

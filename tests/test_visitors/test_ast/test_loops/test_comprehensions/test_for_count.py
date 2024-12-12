@@ -78,11 +78,14 @@ def container():
 """
 
 
-@pytest.mark.parametrize('code', [
-    complex_loop_comprehension,
-    complex_dict_comprehension,
-    complex_gen_expression,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        complex_loop_comprehension,
+        complex_dict_comprehension,
+        complex_gen_expression,
+    ],
+)
 def test_multiple_for_keywords_in_comprehension(
     assert_errors,
     parse_ast_tree,
@@ -97,9 +100,12 @@ def test_multiple_for_keywords_in_comprehension(
     assert_errors(visitor, [TooManyForsInComprehensionViolation])
 
 
-@pytest.mark.parametrize('code', [
-    complex_nested_list_comprehension,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        complex_nested_list_comprehension,
+    ],
+)
 def test_multiple_fors_in_async_comprehension(
     assert_errors,
     parse_ast_tree,
@@ -115,11 +121,14 @@ def test_multiple_fors_in_async_comprehension(
     assert_errors(visitor, [TooManyForsInComprehensionViolation])
 
 
-@pytest.mark.parametrize('code', [
-    regular_loop_comprehension,
-    regular_dict_comprehension,
-    regular_gen_expression,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        regular_loop_comprehension,
+        regular_dict_comprehension,
+        regular_gen_expression,
+    ],
+)
 def test_regular_fors_in_comprehension(
     assert_errors,
     parse_ast_tree,
@@ -134,9 +143,12 @@ def test_regular_fors_in_comprehension(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    regular_nested_list_comprehension,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        regular_nested_list_comprehension,
+    ],
+)
 def test_regular_fors_in_async_comprehension(
     assert_errors,
     parse_ast_tree,

@@ -67,16 +67,19 @@ class Some:
 """
 
 
-@pytest.mark.parametrize('code', [
-    function_with_locals,
-    function_with_walrus,
-    function_with_locals_redefinition,
-    function_with_locals_and_params,
-    function_with_comprehension,
-    function_with_nested,
-    function_with_nested_and_params,
-    method_with_locals,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_with_locals,
+        function_with_walrus,
+        function_with_locals_redefinition,
+        function_with_locals_and_params,
+        function_with_comprehension,
+        function_with_nested,
+        function_with_nested_and_params,
+        method_with_locals,
+    ],
+)
 def test_locals_correct_count(
     assert_errors,
     parse_ast_tree,
@@ -102,16 +105,19 @@ def test_locals_correct_count(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    function_with_locals,
-    function_with_walrus,
-    function_with_locals_redefinition,
-    function_with_locals_and_params,
-    function_with_comprehension,
-    function_with_nested,
-    function_with_nested_and_params,
-    method_with_locals,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_with_locals,
+        function_with_walrus,
+        function_with_locals_redefinition,
+        function_with_locals_and_params,
+        function_with_comprehension,
+        function_with_nested,
+        function_with_nested_and_params,
+        method_with_locals,
+    ],
+)
 def test_locals_wrong_count(
     assert_errors,
     assert_error_text,

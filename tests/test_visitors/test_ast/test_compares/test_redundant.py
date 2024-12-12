@@ -18,7 +18,6 @@ correct_comparators = [
     ('variable', 'len(variable)'),
     ('variable', 'another_variable'),
     ('variable', '222'),
-
     ('(x := variable)', 'some()'),
     ('(x := some())', 'variable'),
 ]
@@ -26,7 +25,6 @@ correct_comparators = [
 wrong_comparators = [
     ('variable', 'variable'),
     ('another_variable', 'another_variable'),
-
     ('(x := variable)', 'variable'),
     ('variable', '(x := variable)'),
     ('(x := variable)', '(x := variable)'),
