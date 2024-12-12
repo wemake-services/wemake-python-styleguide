@@ -12,7 +12,7 @@ def test_call_flake8_version():
     output_text = subprocess.check_output(
         ['flake8', '--version'],
         stderr=subprocess.STDOUT,
-        universal_newlines=True,
+        text=True,
         encoding='utf8',
     )
     output_text = output_text.replace('_', '-').replace('\n', '')
@@ -26,7 +26,7 @@ def test_call_flake8_help():
     output_text = subprocess.check_output(
         ['flake8', '--help'],
         stderr=subprocess.STDOUT,
-        universal_newlines=True,
+        text=True,
         encoding='utf8',
     )
 

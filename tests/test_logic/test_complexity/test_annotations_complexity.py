@@ -29,7 +29,7 @@ def test_get_annotation_complexity(
     parse_ast_tree, annotation: str, complexity: int,
 ) -> None:
     """Test get_annotation_complexity function."""
-    text = 'def f() -> {annotation}: pass\n'.format(annotation=annotation)
+    text = f'def f() -> {annotation}: pass\n'
     tree = parse_ast_tree(text)
     node = tree.body[0].returns
     assert annotations.get_annotation_complexity(node) == complexity

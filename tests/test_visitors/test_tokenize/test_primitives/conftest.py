@@ -33,7 +33,7 @@ def regular_number_wrapper():
 def negative_number_wrapper():
     """Fixture to return negative numbers."""
     def factory(template: str) -> str:
-        return '-{0}'.format(template)
+        return f'-{template}'
     return factory
 
 
@@ -41,7 +41,7 @@ def negative_number_wrapper():
 def positive_number_wrapper():
     """Fixture to return positive numbers with explicit ``+``."""
     def factory(template: str) -> str:
-        return '+{0}'.format(template)
+        return f'+{template}'
     return factory
 
 
