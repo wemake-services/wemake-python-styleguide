@@ -8,18 +8,21 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
 )
 
 
-@pytest.mark.parametrize('raw_strings', [
-    r"r'some text\\'",
-    r"r'some text\''",
-    r"r'some text\"'",
-    r'r"some text\'"',
-    r"r'some text\t'",
-    r"r'some text\a'",
-    r"r'some text\n'",
-    r"r'some text\u041b'",
-    r"r'some text\043'",
-    r"r'some text\x23'",
-])
+@pytest.mark.parametrize(
+    'raw_strings',
+    [
+        r"r'some text\\'",
+        r"r'some text\''",
+        r"r'some text\"'",
+        r'r"some text\'"',
+        r"r'some text\t'",
+        r"r'some text\a'",
+        r"r'some text\n'",
+        r"r'some text\u041b'",
+        r"r'some text\043'",
+        r"r'some text\x23'",
+    ],
+)
 def test_necessary_raw_string(
     parse_tokens,
     assert_errors,
@@ -35,12 +38,15 @@ def test_necessary_raw_string(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('raw_strings', [
-    "r'No escaped character'",
-    'r"Here neither"',
-    "r'''Not here as well'''",
-    'r"""Not here as well"""',
-])
+@pytest.mark.parametrize(
+    'raw_strings',
+    [
+        "r'No escaped character'",
+        'r"Here neither"',
+        "r'''Not here as well'''",
+        'r"""Not here as well"""',
+    ],
+)
 def test_unnecessary_raw_string(
     parse_tokens,
     assert_errors,

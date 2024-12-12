@@ -74,7 +74,6 @@ def transform(tree: ast.AST) -> ast.AST:
         # Initial, should be the first ones, ordering inside is important:
         _set_parent,
         _set_function_type,
-
         # Enhancements, order is not important:
         set_node_context,
         set_if_chain,

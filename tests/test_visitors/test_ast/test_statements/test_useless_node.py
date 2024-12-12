@@ -44,24 +44,30 @@ def wrapper():
 """
 
 
-@pytest.mark.parametrize('code', [
-    for_template,
-    while_template,
-    with_template,
-    try_template,
-    pytest.param(
-        try_star_template,
-        marks=pytest.mark.skipif(
-            not PY311,
-            reason='ExceptionGroup was added in python 3.11',
+@pytest.mark.parametrize(
+    'code',
+    [
+        for_template,
+        while_template,
+        with_template,
+        try_template,
+        pytest.param(
+            try_star_template,
+            marks=pytest.mark.skipif(
+                not PY311,
+                reason='ExceptionGroup was added in python 3.11',
+            ),
         ),
-    ),
-])
-@pytest.mark.parametrize('statement', [
-    'break',
-    'continue',
-    'pass',
-])
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'break',
+        'continue',
+        'pass',
+    ],
+)
 def test_useless_nodes(
     assert_errors,
     parse_ast_tree,
@@ -79,14 +85,20 @@ def test_useless_nodes(
     assert_errors(visitor, [UselessNodeViolation])
 
 
-@pytest.mark.parametrize('code', [
-    for_template,
-    while_template,
-])
-@pytest.mark.parametrize('statement', [
-    'return 1',
-    'raise TypeError()',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        for_template,
+        while_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'return 1',
+        'raise TypeError()',
+    ],
+)
 def test_useless_loop_nodes(
     assert_errors,
     parse_ast_tree,
@@ -104,19 +116,25 @@ def test_useless_loop_nodes(
     assert_errors(visitor, [UselessNodeViolation])
 
 
-@pytest.mark.parametrize('code', [
-    try_template,
-    pytest.param(
-        try_star_template,
-        marks=pytest.mark.skipif(
-            not PY311,
-            reason='ExceptionGroup was added in python 3.11',
+@pytest.mark.parametrize(
+    'code',
+    [
+        try_template,
+        pytest.param(
+            try_star_template,
+            marks=pytest.mark.skipif(
+                not PY311,
+                reason='ExceptionGroup was added in python 3.11',
+            ),
         ),
-    ),
-])
-@pytest.mark.parametrize('statement', [
-    'raise TypeError()',
-])
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'raise TypeError()',
+    ],
+)
 def test_useless_try_nodes(
     assert_errors,
     assert_error_text,
@@ -136,23 +154,29 @@ def test_useless_try_nodes(
     assert_error_text(visitor, 'trystar' if 'except*' in code else 'try')
 
 
-@pytest.mark.parametrize('code', [
-    for_template,
-    while_template,
-    with_template,
-    try_template,
-    pytest.param(
-        try_star_template,
-        marks=pytest.mark.skipif(
-            not PY311,
-            reason='ExceptionGroup was added in python 3.11',
+@pytest.mark.parametrize(
+    'code',
+    [
+        for_template,
+        while_template,
+        with_template,
+        try_template,
+        pytest.param(
+            try_star_template,
+            marks=pytest.mark.skipif(
+                not PY311,
+                reason='ExceptionGroup was added in python 3.11',
+            ),
         ),
-    ),
-])
-@pytest.mark.parametrize('statement', [
-    'some_var = 1',
-    'some_call()',
-])
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'some_var = 1',
+        'some_call()',
+    ],
+)
 def test_useful_nodes(
     assert_errors,
     parse_ast_tree,

@@ -83,27 +83,26 @@ correct_compare2 = 'a if b > x else c'
 correct_compare3 = 'a if b else c < x'
 
 
-@pytest.mark.parametrize('code', [
-    correct_if1,
-    correct_if2,
-
-    correct_unary1,
-    correct_unary2,
-    correct_unary3,
-    correct_unary4,
-
-    correct_binop1,
-    correct_binop2,
-    correct_binop3,
-
-    correct_boolop1,
-    correct_boolop2,
-    correct_boolop3,
-
-    correct_compare1,
-    correct_compare2,
-    correct_compare3,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_if1,
+        correct_if2,
+        correct_unary1,
+        correct_unary2,
+        correct_unary3,
+        correct_unary4,
+        correct_binop1,
+        correct_binop2,
+        correct_binop3,
+        correct_boolop1,
+        correct_boolop2,
+        correct_boolop3,
+        correct_compare1,
+        correct_compare2,
+        correct_compare3,
+    ],
+)
 def test_non_nested_ternary(
     assert_errors,
     parse_ast_tree,
@@ -119,51 +118,48 @@ def test_non_nested_ternary(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    wrong_compare1,
-    wrong_compare2,
-    wrong_compare3,
-    wrong_compare4,
-    wrong_compare5,
-    wrong_compare6,
-    wrong_compare7,
-
-    wrong_boolop1,
-    wrong_boolop2,
-    wrong_boolop3,
-    wrong_boolop4,
-    wrong_boolop5,
-    wrong_boolop6,
-    wrong_boolop7,
-
-    wrong_binop1,
-    wrong_binop2,
-    wrong_binop3,
-    wrong_binop4,
-    wrong_binop5,
-    wrong_binop6,
-    wrong_binop7,
-
-    wrong_unary1,
-    wrong_unary2,
-    wrong_unary3,
-    wrong_unary4,
-
-    wrong_ternary1,
-    wrong_ternary2,
-    wrong_ternary3,
-    wrong_ternary4,
-
-    wrong_if1,
-    wrong_if2,
-    wrong_if3,
-    wrong_if4,
-
-    wrong_comprehension1,
-    wrong_comprehension2,
-    wrong_comprehension3,
-    wrong_comprehension4,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_compare1,
+        wrong_compare2,
+        wrong_compare3,
+        wrong_compare4,
+        wrong_compare5,
+        wrong_compare6,
+        wrong_compare7,
+        wrong_boolop1,
+        wrong_boolop2,
+        wrong_boolop3,
+        wrong_boolop4,
+        wrong_boolop5,
+        wrong_boolop6,
+        wrong_boolop7,
+        wrong_binop1,
+        wrong_binop2,
+        wrong_binop3,
+        wrong_binop4,
+        wrong_binop5,
+        wrong_binop6,
+        wrong_binop7,
+        wrong_unary1,
+        wrong_unary2,
+        wrong_unary3,
+        wrong_unary4,
+        wrong_ternary1,
+        wrong_ternary2,
+        wrong_ternary3,
+        wrong_ternary4,
+        wrong_if1,
+        wrong_if2,
+        wrong_if3,
+        wrong_if4,
+        wrong_comprehension1,
+        wrong_comprehension2,
+        wrong_comprehension3,
+        wrong_comprehension4,
+    ],
+)
 def test_nested_ternary(
     assert_errors,
     parse_ast_tree,

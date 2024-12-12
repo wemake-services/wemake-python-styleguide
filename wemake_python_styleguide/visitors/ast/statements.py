@@ -53,21 +53,24 @@ _StatementWithBody: TypeAlias = Union[
 
 
 @final
-@alias('visit_statement_with_body', (
-    'visit_If',
-    'visit_For',
-    'visit_AsyncFor',
-    'visit_While',
-    'visit_With',
-    'visit_AsyncWith',
-    'visit_Try',
-    'visit_TryStar',
-    'visit_ExceptHandler',
-    'visit_FunctionDef',
-    'visit_AsyncFunctionDef',
-    'visit_ClassDef',
-    'visit_Module',
-))
+@alias(
+    'visit_statement_with_body',
+    (
+        'visit_If',
+        'visit_For',
+        'visit_AsyncFor',
+        'visit_While',
+        'visit_With',
+        'visit_AsyncWith',
+        'visit_Try',
+        'visit_TryStar',
+        'visit_ExceptHandler',
+        'visit_FunctionDef',
+        'visit_AsyncFunctionDef',
+        'visit_ClassDef',
+        'visit_Module',
+    ),
+)
 class StatementsWithBodiesVisitor(BaseNodeVisitor):
     """
     Responsible for restricting incorrect patterns and members inside bodies.
@@ -88,9 +91,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         ast.Module,
     )
 
-    _blocked_self_assignment: ClassVar[types.AnyNodes] = (
-        ast.BinOp,
-    )
+    _blocked_self_assignment: ClassVar[types.AnyNodes] = (ast.BinOp,)
 
     _nodes_with_orelse = (
         ast.If,
@@ -104,19 +105,15 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         ast.Return,
         ast.YieldFrom,
         ast.Yield,
-
         ast.Raise,
         ast.Break,
         ast.Continue,
-
         ast.Call,
         ast.Await,
-
         ast.Nonlocal,
         ast.Global,
         ast.Delete,
         ast.Pass,
-
         ast.Assert,
     )
 
@@ -190,7 +187,8 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
             return
 
         forbidden = self._useless_combination.get(
-            node.__class__.__qualname__, None,
+            node.__class__.__qualname__,
+            None,
         )
 
         if not forbidden or not isinstance(body[0], forbidden):
@@ -198,7 +196,8 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
 
         self.add_violation(
             UselessNodeViolation(
-                node, text=node.__class__.__qualname__.lower(),
+                node,
+                text=node.__class__.__qualname__.lower(),
             ),
         )
 
@@ -217,10 +216,10 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
 
         parent = nodes.get_parent(node)
         is_only_ellipsis_node = (
-            isinstance(node.value, ast.Constant) and
-            node.value.value is Ellipsis and
-            isinstance(parent, (*FunctionNodes, ast.ClassDef)) and
-            len(parent.body) == 1
+            isinstance(node.value, ast.Constant)
+            and node.value.value is Ellipsis
+            and isinstance(parent, (*FunctionNodes, ast.ClassDef))
+            and len(parent.body) == 1
         )
         if is_only_ellipsis_node:
             return
@@ -354,9 +353,9 @@ class AssignmentPatternsVisitor(BaseNodeVisitor):
             return
 
         is_checkable = (
-            len(node.targets) == 1 and
-            isinstance(node.value.right, ast.Name) and
-            isinstance(node.value.left, ast.Name)
+            len(node.targets) == 1
+            and isinstance(node.value.right, ast.Name)
+            and isinstance(node.value.left, ast.Name)
         )
 
         if not is_checkable:
@@ -387,8 +386,8 @@ class WrongMethodArgumentsVisitor(BaseNodeVisitor):
         node: ast.Call,
     ) -> None:
         is_checkable = (
-            isinstance(node.func, ast.Name) and
-            node.func.id in constants.TUPLE_ARGUMENTS_METHODS
+            isinstance(node.func, ast.Name)
+            and node.func.id in constants.TUPLE_ARGUMENTS_METHODS
         )
 
         if not is_checkable:

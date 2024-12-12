@@ -19,10 +19,13 @@ _ALLOWED_DECORATOR_TYPES: Final = (
 
 
 @final
-@alias('visit_any_function', (
-    'visit_FunctionDef',
-    'visit_AsyncFunctionDef',
-))
+@alias(
+    'visit_any_function',
+    (
+        'visit_FunctionDef',
+        'visit_AsyncFunctionDef',
+    ),
+)
 class WrongDecoratorVisitor(BaseNodeVisitor):
     """Checks decorators's correctness."""
 

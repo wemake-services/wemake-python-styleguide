@@ -29,7 +29,8 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
     """Visits number tokens to find incorrect usages."""
 
     _leading_zero_pattern: ClassVar[re.Pattern[str]] = re.compile(
-        r'^[0-9\.]+([box]|e\+?\-?)0.+', re.IGNORECASE | re.ASCII,
+        r'^[0-9\.]+([box]|e\+?\-?)0.+',
+        re.IGNORECASE | re.ASCII,
     )
     _leading_zero_float_pattern: ClassVar[re.Pattern[str]] = re.compile(
         r'^[0-9]*\.[0-9]+0+$',
@@ -79,13 +80,22 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
 
 @final
 class _StringTokenChecker:
-    _bad_string_modifiers: ClassVar[frozenset[str]] = frozenset((
-        'R', 'F', 'B', 'U',
-    ))
+    _bad_string_modifiers: ClassVar[frozenset[str]] = frozenset(
+        (
+            'R',
+            'F',
+            'B',
+            'U',
+        )
+    )
 
-    _unicode_escapes: ClassVar[frozenset[str]] = frozenset((
-        'u', 'U', 'N',
-    ))
+    _unicode_escapes: ClassVar[frozenset[str]] = frozenset(
+        (
+            'u',
+            'U',
+            'N',
+        )
+    )
 
     _implicit_raw_strings: ClassVar[re.Pattern[str]] = re.compile(r'\\{2}.+')
 
@@ -248,12 +258,14 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
 class WrongStringConcatenationVisitor(BaseTokenVisitor):
     """Checks incorrect string concatenation."""
 
-    _ignored_tokens: ClassVar[frozenset[int]] = frozenset((
-        tokenize.NL,
-        tokenize.NEWLINE,
-        tokenize.INDENT,
-        tokenize.COMMENT,
-    ))
+    _ignored_tokens: ClassVar[frozenset[int]] = frozenset(
+        (
+            tokenize.NL,
+            tokenize.NEWLINE,
+            tokenize.INDENT,
+            tokenize.COMMENT,
+        )
+    )
 
     def __init__(self, *args, **kwargs) -> None:
         """Adds extra ``_previous_token`` property."""

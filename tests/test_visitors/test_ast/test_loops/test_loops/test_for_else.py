@@ -38,11 +38,14 @@ def _has_same_args(
 """
 
 
-@pytest.mark.parametrize('code', [
-    code_that_breaks,
-    code_that_works,
-    code_with_complex_if,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        code_that_breaks,
+        code_that_works,
+        code_with_complex_if,
+    ],
+)
 def test_regression_for_else(
     assert_errors,
     default_options,

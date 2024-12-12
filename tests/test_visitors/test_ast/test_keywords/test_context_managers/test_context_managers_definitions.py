@@ -14,13 +14,16 @@ def wrapper():
 """
 
 
-@pytest.mark.parametrize('code', [
-    'xy[0]',
-    'xy.attr',
-    'xy["key"]',
-    '(valid, invalid.attr)',
-    '(invalid.attr, valid)',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'xy[0]',
+        'xy.attr',
+        'xy["key"]',
+        '(valid, invalid.attr)',
+        '(invalid.attr, valid)',
+    ],
+)
 def test_context_manager_wrong_definitions(
     assert_errors,
     parse_ast_tree,
@@ -37,12 +40,15 @@ def test_context_manager_wrong_definitions(
     assert_errors(visitor, [ContextManagerVariableDefinitionViolation])
 
 
-@pytest.mark.parametrize('code', [
-    'xy',
-    '(valid1, valid2)',
-    '(valid, *star)',
-    '(first, second, *star)',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'xy',
+        '(valid1, valid2)',
+        '(valid, *star)',
+        '(first, second, *star)',
+    ],
+)
 def test_context_manager_correct_definitions(
     assert_errors,
     parse_ast_tree,

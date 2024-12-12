@@ -10,6 +10,6 @@ def is_same_slice(
 ) -> bool:
     """Used to tell when slice is identical to some pair of name/index."""
     return (
-        source.node_to_string(node.value) == iterable and
-        source.node_to_string(node.slice) == target
+        source.node_to_string(node.value) == iterable
+        and source.node_to_string(node.slice) == target
     )

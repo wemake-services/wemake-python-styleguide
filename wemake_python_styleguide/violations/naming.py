@@ -289,6 +289,7 @@ class WrongModuleNamePatternViolation(SimpleViolation):
 
 # General names:
 
+
 @final
 class WrongVariableNameViolation(ASTViolation):
     """

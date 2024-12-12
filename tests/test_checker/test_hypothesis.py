@@ -23,18 +23,18 @@ from hypothesis import HealthCheck, given, reject, settings
 from wemake_python_styleguide.checker import Checker
 
 settings.register_profile(
-    'slow', deadline=None, suppress_health_check=list(HealthCheck),
+    'slow',
+    deadline=None,
+    suppress_health_check=list(HealthCheck),
 )
 settings.load_profile('slow')
 
 
 def _fixup(string: str) -> str:
     """Avoid known issues with tokenize() by editing the string."""
-    return ''.join(
-        char
-        for char in string
-        if char.isprintable()
-    ).strip().strip('\\').strip() + '\n'
+    chars = (char for char in string if char.isprintable())
+    formatted = ''.join(chars).strip().strip('\\').strip()
+    return f'{formatted}\n'
 
 
 @pytest.mark.filterwarnings('ignore::SyntaxWarning')

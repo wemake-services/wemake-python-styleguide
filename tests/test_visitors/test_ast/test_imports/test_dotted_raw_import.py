@@ -11,14 +11,20 @@ from_import = 'from {0} import some_module'
 from_import_with_alias = 'from {0} import some_module as alias'
 
 
-@pytest.mark.parametrize('code', [
-    regular_import,
-    regular_import_with_alias,
-])
-@pytest.mark.parametrize('to_import', [
-    'dotted.path',
-    'nested.dotted.path',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        regular_import,
+        regular_import_with_alias,
+    ],
+)
+@pytest.mark.parametrize(
+    'to_import',
+    [
+        'dotted.path',
+        'nested.dotted.path',
+    ],
+)
 def test_wrong_dotted_import(
     assert_errors,
     assert_error_text,
@@ -37,14 +43,20 @@ def test_wrong_dotted_import(
     assert_error_text(visitor, to_import)
 
 
-@pytest.mark.parametrize('code', [
-    regular_import,
-    regular_import_with_alias,
-])
-@pytest.mark.parametrize('to_import', [
-    'os',
-    'sys',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        regular_import,
+        regular_import_with_alias,
+    ],
+)
+@pytest.mark.parametrize(
+    'to_import',
+    [
+        'os',
+        'sys',
+    ],
+)
 def test_correct_flat_import(
     assert_errors,
     parse_ast_tree,
@@ -61,15 +73,21 @@ def test_correct_flat_import(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    from_import,
-    from_import_with_alias,
-])
-@pytest.mark.parametrize('to_import', [
-    'regular',
-    'dotted.path',
-    'nested.dotted.path',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        from_import,
+        from_import_with_alias,
+    ],
+)
+@pytest.mark.parametrize(
+    'to_import',
+    [
+        'regular',
+        'dotted.path',
+        'nested.dotted.path',
+    ],
+)
 def test_regular_from_import(
     assert_errors,
     parse_ast_tree,

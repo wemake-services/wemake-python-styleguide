@@ -38,14 +38,16 @@ def main() -> NoReturn:
     for fn, line in matches:
         with open(fn, 'r') as fp:
             lines = fp.read().splitlines()
-            report('\t{0}:{1}\n\t{2}'.format(
-                fn,
-                line,
-                highlight(
-                    lines[line - 1],
-                    PythonLexer(),
-                    Terminal256Formatter(),
-                )),
+            report(
+                '\t{0}:{1}\n\t{2}'.format(
+                    fn,
+                    line,
+                    highlight(
+                        lines[line - 1],
+                        PythonLexer(),
+                        Terminal256Formatter(),
+                    ),
+                ),
             )
 
     exit(FAIL_CODE)  # noqa: WPS421

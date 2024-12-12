@@ -56,12 +56,15 @@ some = (
 """
 
 
-@pytest.mark.parametrize('code', [
-    wrong_inline_string_concatenation,
-    wrong_inline_string_concatenation_nextline,
-    wrong_inline_string_concatenation_multiline,
-    wrong_inline_string_concatenation_w_comment,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_inline_string_concatenation,
+        wrong_inline_string_concatenation_nextline,
+        wrong_inline_string_concatenation_multiline,
+        wrong_inline_string_concatenation_w_comment,
+    ],
+)
 def test_implicit_string_concatenation(
     parse_tokens,
     assert_errors,
@@ -72,19 +75,23 @@ def test_implicit_string_concatenation(
     file_tokens = parse_tokens(code, do_compile=False)
 
     visitor = WrongStringConcatenationVisitor(
-        default_options, file_tokens=file_tokens,
+        default_options,
+        file_tokens=file_tokens,
     )
     visitor.run()
 
     assert_errors(visitor, [ImplicitStringConcatenationViolation])
 
 
-@pytest.mark.parametrize('code', [
-    correct_string_sum,
-    correct_tuple_with_strings,
-    correct_tuple_with_strings_nextline,
-    correct_tuple_with_strings_multiline,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_string_sum,
+        correct_tuple_with_strings,
+        correct_tuple_with_strings_nextline,
+        correct_tuple_with_strings_multiline,
+    ],
+)
 def test_correct_strings(
     parse_tokens,
     assert_errors,
@@ -95,7 +102,8 @@ def test_correct_strings(
     file_tokens = parse_tokens(code)
 
     visitor = WrongStringConcatenationVisitor(
-        default_options, file_tokens=file_tokens,
+        default_options,
+        file_tokens=file_tokens,
     )
     visitor.run()
 

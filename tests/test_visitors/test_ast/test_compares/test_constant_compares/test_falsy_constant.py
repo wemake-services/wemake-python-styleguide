@@ -15,7 +15,6 @@ wrong_comparators = [
     ('[]', 'some'),
     ('{}', 'some'),  # noqa: P103
     ('()', 'some'),
-
     ('some', '(x := [])'),
     ('(x := [])', 'some'),
 ]
@@ -68,10 +67,13 @@ def test_falsy_constant_is(
 
     assert_errors(
         visitor,
-        _get_error_state(code, [
-            FalsyConstantCompareViolation,
-            WrongIsCompareViolation,
-        ]),
+        _get_error_state(
+            code,
+            [
+                FalsyConstantCompareViolation,
+                WrongIsCompareViolation,
+            ],
+        ),
     )
 
 
@@ -93,27 +95,30 @@ def test_falsy_constant_not_eq(
 
 
 @pytest.mark.filterwarnings('ignore::SyntaxWarning')
-@pytest.mark.parametrize('comparators', [
-    ('some', '[1, 2]'),
-    ('some', '{1, 2}'),
-    ('some', '{"1": 2}'),
-    ('some', '(1, 2)'),
-    ('some', 'None'),
-    ('some', 'False'),
-    ('some', 'True'),
-    ('some', '0'),
-    ('some', '1'),
-    ('some', '""'),
-    ('some', '"a"'),
-    ('some', 'b"bytes"'),
-    ('some', 'other'),
-    ('some', 'other()'),
-    ('some', 'other.attr'),
-    ('some', 'other.method()'),
-    ('some', 'other[0]'),
-    ('None', 'some'),
-    ('(x := [1, 2])', 'some'),
-])
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        ('some', '[1, 2]'),
+        ('some', '{1, 2}'),
+        ('some', '{"1": 2}'),
+        ('some', '(1, 2)'),
+        ('some', 'None'),
+        ('some', 'False'),
+        ('some', 'True'),
+        ('some', '0'),
+        ('some', '1'),
+        ('some', '""'),
+        ('some', '"a"'),
+        ('some', 'b"bytes"'),
+        ('some', 'other'),
+        ('some', 'other()'),
+        ('some', 'other.attr'),
+        ('some', 'other.method()'),
+        ('some', 'other[0]'),
+        ('None', 'some'),
+        ('(x := [1, 2])', 'some'),
+    ],
+)
 def test_correct_constant_compare(
     assert_errors,
     parse_ast_tree,

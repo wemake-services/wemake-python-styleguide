@@ -43,11 +43,14 @@ class Test:
 """
 
 
-@pytest.mark.parametrize('code', [
-    global_in_module,
-    global_in_function,
-    global_in_method,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        global_in_module,
+        global_in_function,
+        global_in_method,
+    ],
+)
 def test_global_keywords(
     assert_errors,
     assert_error_text,
@@ -66,10 +69,13 @@ def test_global_keywords(
     assert_error_text(visitor, 'global')
 
 
-@pytest.mark.parametrize('code', [
-    nonlocal_in_function,
-    nonlocal_in_method,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        nonlocal_in_function,
+        nonlocal_in_method,
+    ],
+)
 def test_nonlocal_keywords(
     assert_errors,
     assert_error_text,

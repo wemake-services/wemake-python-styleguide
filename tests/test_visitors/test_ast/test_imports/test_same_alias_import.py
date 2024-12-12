@@ -7,10 +7,13 @@ regular_import = 'import os as {0}'
 from_import = 'from sys import os as {0}'
 
 
-@pytest.mark.parametrize('code', [
-    regular_import,
-    from_import,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        regular_import,
+        from_import,
+    ],
+)
 def test_same_alias_import(
     assert_errors,
     assert_error_text,
@@ -28,10 +31,13 @@ def test_same_alias_import(
     assert_errors(visitor, [SameAliasImportViolation])
 
 
-@pytest.mark.parametrize('code', [
-    regular_import,
-    from_import,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        regular_import,
+        from_import,
+    ],
+)
 def test_same_alias_import_with_control(
     assert_errors,
     assert_error_text,
@@ -51,10 +57,13 @@ def test_same_alias_import_with_control(
     assert_error_text(visitor, same_alias)
 
 
-@pytest.mark.parametrize('code', [
-    regular_import,
-    from_import,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        regular_import,
+        from_import,
+    ],
+)
 def test_same_alias_import_without_control(
     assert_errors,
     parse_ast_tree,
@@ -72,15 +81,21 @@ def test_same_alias_import_without_control(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    regular_import,
-    from_import,
-])
-@pytest.mark.parametrize('to_import', [
-    'other',
-    'names',
-    'sys',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        regular_import,
+        from_import,
+    ],
+)
+@pytest.mark.parametrize(
+    'to_import',
+    [
+        'other',
+        'names',
+        'sys',
+    ],
+)
 def test_other_alias_name(
     assert_errors,
     parse_ast_tree,

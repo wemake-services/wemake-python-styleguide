@@ -45,24 +45,33 @@ _NamedNode: TypeAlias = Union[
 
 
 @final
-@decorators.alias('visit_named_nodes', (
-    'visit_FunctionDef',
-    'visit_AsyncFunctionDef',
-    'visit_ClassDef',
-    'visit_ExceptHandler',
-    'visit_MatchAs',
-    'visit_MatchStar',
-))
-@decorators.alias('visit_any_for', (
-    'visit_For',
-    'visit_AsyncFor',
-))
-@decorators.alias('visit_locals', (
-    'visit_Assign',
-    'visit_AnnAssign',
-    'visit_NamedExpr',
-    'visit_arg',
-))
+@decorators.alias(
+    'visit_named_nodes',
+    (
+        'visit_FunctionDef',
+        'visit_AsyncFunctionDef',
+        'visit_ClassDef',
+        'visit_ExceptHandler',
+        'visit_MatchAs',
+        'visit_MatchStar',
+    ),
+)
+@decorators.alias(
+    'visit_any_for',
+    (
+        'visit_For',
+        'visit_AsyncFor',
+    ),
+)
+@decorators.alias(
+    'visit_locals',
+    (
+        'visit_Assign',
+        'visit_AnnAssign',
+        'visit_NamedExpr',
+        'visit_arg',
+    ),
+)
 class BlockVariableVisitor(base.BaseNodeVisitor):
     """
     This visitor is used to detect variables that are reused for blocks.
@@ -152,12 +161,10 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
         shadow = scope.shadowing(names, is_local=is_local)
 
         ignored_scope = any(
-            predicate(node, names)
-            for predicate in self._scope_predicates
+            predicate(node, names) for predicate in self._scope_predicates
         )
         ignored_name = any(
-            predicate(node)
-            for predicate in self._naming_predicates
+            predicate(node) for predicate in self._naming_predicates
         )
 
         if shadow and not ignored_scope:
@@ -181,10 +188,13 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
 
 
 @final
-@decorators.alias('visit_any_for', (
-    'visit_For',
-    'visit_AsyncFor',
-))
+@decorators.alias(
+    'visit_any_for',
+    (
+        'visit_For',
+        'visit_AsyncFor',
+    ),
+)
 class AfterBlockVariablesVisitor(base.BaseNodeVisitor):
     """Visitor that ensures that block variables are not used after block."""
 
@@ -236,9 +246,7 @@ class AfterBlockVariablesVisitor(base.BaseNodeVisitor):
         # the same type of block - either `for` or `with`.
         is_same_type_block = all(
             isinstance(block, ForNodes) for block in blocks
-        ) or all(
-            isinstance(block, WithNodes) for block in blocks
-        )
+        ) or all(isinstance(block, WithNodes) for block in blocks)
         # Return if not a block variable or a contained block variable.
         if not blocks or (is_contained_block_var and is_same_type_block):
             return

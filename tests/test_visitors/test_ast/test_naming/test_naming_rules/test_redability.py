@@ -13,12 +13,15 @@ from wemake_python_styleguide.visitors.ast.naming.validation import (
 )
 
 
-@pytest.mark.parametrize('expression', [
-    'My1Item',
-    'Element0Operation',
-    'O0S',
-    'S0O',
-])
+@pytest.mark.parametrize(
+    'expression',
+    [
+        'My1Item',
+        'Element0Operation',
+        'O0S',
+        'S0O',
+    ],
+)
 def test_unreadable_name(
     assert_errors,
     assert_error_text,
@@ -37,7 +40,8 @@ def test_unreadable_name(
     visitor.run()
 
     unreadable = get_unreadable_characters(
-        expression, constants.UNREADABLE_CHARACTER_COMBINATIONS,
+        expression,
+        constants.UNREADABLE_CHARACTER_COMBINATIONS,
     )
 
     assert_errors(

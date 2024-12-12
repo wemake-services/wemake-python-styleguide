@@ -76,13 +76,19 @@ non_empty_comment = '# Non empty text'
 code_statement = 'my_var = 1'
 
 
-@pytest.mark.parametrize('pattern', [
-    single_empty_wrapped,
-    multi_empty_wrapped,
-])
-@pytest.mark.parametrize('comment', [
-    non_empty_comment,
-])
+@pytest.mark.parametrize(
+    'pattern',
+    [
+        single_empty_wrapped,
+        multi_empty_wrapped,
+    ],
+)
+@pytest.mark.parametrize(
+    'comment',
+    [
+        non_empty_comment,
+    ],
+)
 def test_correct_empty_comment(
     parse_tokens,
     assert_errors,
@@ -99,16 +105,22 @@ def test_correct_empty_comment(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('pattern', [
-    single_empty_beginning,
-    single_empty_end,
-    multi_empty_beginning,
-    multi_empty_end,
-])
-@pytest.mark.parametrize('code_or_comment', [
-    non_empty_comment,
-    code_statement,
-])
+@pytest.mark.parametrize(
+    'pattern',
+    [
+        single_empty_beginning,
+        single_empty_end,
+        multi_empty_beginning,
+        multi_empty_end,
+    ],
+)
+@pytest.mark.parametrize(
+    'code_or_comment',
+    [
+        non_empty_comment,
+        code_statement,
+    ],
+)
 def test_incorrect_empty_comment(
     parse_tokens,
     assert_errors,
@@ -125,12 +137,15 @@ def test_incorrect_empty_comment(
     assert_errors(visitor, [EmptyCommentViolation])
 
 
-@pytest.mark.parametrize('edge_case', [
-    inline_comment,
-    end_of_file_comment,
-    max_one_alert_per_block,
-    two_blocks,
-])
+@pytest.mark.parametrize(
+    'edge_case',
+    [
+        inline_comment,
+        end_of_file_comment,
+        max_one_alert_per_block,
+        two_blocks,
+    ],
+)
 def test_edge_case_empty_comment(
     parse_tokens,
     assert_errors,

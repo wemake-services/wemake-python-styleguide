@@ -13,14 +13,13 @@ def has_overload_decorator(function: AnyFunctionDef) -> bool:
     """
     for decorator in function.decorator_list:
         is_partial_name = (
-            isinstance(decorator, ast.Name) and
-            decorator.id == 'overload'
+            isinstance(decorator, ast.Name) and decorator.id == 'overload'
         )
         is_full_name = (
-            isinstance(decorator, ast.Attribute) and
-            decorator.attr == 'overload' and
-            isinstance(decorator.value, ast.Name) and
-            decorator.value.id == 'typing'
+            isinstance(decorator, ast.Attribute)
+            and decorator.attr == 'overload'
+            and isinstance(decorator.value, ast.Name)
+            and decorator.value.id == 'typing'
         )
         if is_partial_name or is_full_name:
             return True

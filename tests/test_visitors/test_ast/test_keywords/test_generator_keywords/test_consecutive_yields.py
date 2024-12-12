@@ -96,13 +96,16 @@ def some():
 """
 
 
-@pytest.mark.parametrize('code', [
-    simple_yield,
-    conditional_yield1,
-    conditional_yield2,
-    separated_yield1,
-    separated_yield2,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        simple_yield,
+        conditional_yield1,
+        conditional_yield2,
+        separated_yield1,
+        separated_yield2,
+    ],
+)
 def test_yield_correct(
     assert_errors,
     parse_ast_tree,
@@ -119,10 +122,13 @@ def test_yield_correct(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    yield_with_yield_from1,
-    yield_with_yield_from2,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        yield_with_yield_from1,
+        yield_with_yield_from2,
+    ],
+)
 def test_yield_correct_sync(
     assert_errors,
     parse_ast_tree,
@@ -138,13 +144,16 @@ def test_yield_correct_sync(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    wrong_yield1,
-    wrong_yield2,
-    wrong_yield3,
-    wrong_yield4,
-    wrong_yield5,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_yield1,
+        wrong_yield2,
+        wrong_yield3,
+        wrong_yield4,
+        wrong_yield5,
+    ],
+)
 def test_yield_incorrect(
     assert_errors,
     parse_ast_tree,

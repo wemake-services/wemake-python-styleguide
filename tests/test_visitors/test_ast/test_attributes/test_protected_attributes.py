@@ -108,16 +108,19 @@ class Test:
 
 
 @pytest.mark.filterwarnings('ignore::SyntaxWarning')
-@pytest.mark.parametrize('code', [
-    protected_attribute_assigned,
-    protected_attribute_accessed,
-    builtin_protected_call,
-    protected_method_called,
-    protected_method_called_params,
-    protected_container_attribute,
-    protected_container_method,
-    protected_callable_attribute,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        protected_attribute_assigned,
+        protected_attribute_accessed,
+        builtin_protected_call,
+        protected_method_called,
+        protected_method_called_params,
+        protected_container_attribute,
+        protected_container_method,
+        protected_callable_attribute,
+    ],
+)
 def test_protected_attribute_is_restricted(
     assert_errors,
     assert_error_text,
@@ -136,21 +139,24 @@ def test_protected_attribute_is_restricted(
     assert_error_text(visitor, '_protected')
 
 
-@pytest.mark.parametrize('code', [
-    protected_name_definition,
-    protected_name_attr_definition,
-    protected_self_attribute,
-    protected_self_method,
-    protected_cls_attribute,
-    protected_cls_method,
-    protected_attribute_definition,
-    protected_method_definition,
-    protected_classmethod_definition,
-    protected_super_attribute,
-    protected_super_method,
-    protected_super_cls_attribute,
-    protected_super_cls_method,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        protected_name_definition,
+        protected_name_attr_definition,
+        protected_self_attribute,
+        protected_self_method,
+        protected_cls_attribute,
+        protected_cls_method,
+        protected_attribute_definition,
+        protected_method_definition,
+        protected_classmethod_definition,
+        protected_super_attribute,
+        protected_super_method,
+        protected_super_cls_attribute,
+        protected_super_cls_method,
+    ],
+)
 def test_protected_attribute_is_allowed(
     assert_errors,
     parse_ast_tree,

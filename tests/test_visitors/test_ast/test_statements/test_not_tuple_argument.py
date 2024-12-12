@@ -9,14 +9,17 @@ from wemake_python_styleguide.visitors.ast.statements import (
 )
 
 
-@pytest.mark.parametrize('code', [
-    'a = {0}(())',
-    'a = {0}((1,))',
-    'a = {0}((1, 2, 3))',
-    'a = {0}((1,), b)',
-    'a = {0}((x for x in some))',
-    'a = {0}((x for x in some), b)',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'a = {0}(())',
+        'a = {0}((1,))',
+        'a = {0}((1, 2, 3))',
+        'a = {0}((1,), b)',
+        'a = {0}((x for x in some))',
+        'a = {0}((x for x in some), b)',
+    ],
+)
 @pytest.mark.parametrize('method', TUPLE_ARGUMENTS_METHODS)
 def test_passed(
     assert_errors,
@@ -34,15 +37,18 @@ def test_passed(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    'a = {0}([])',
-    'a = {0}({1}1{2})',
-    'a = {0}({1}1, 2, 3{2})',
-    'a = {0}({1}1{2}, b)',
-    'a = {0}({1}1{2}, b, c)',
-    'a = {0}({1}1{2}, b, {1}2{2})',
-    'a = {0}({1}x for x in some{2})',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'a = {0}([])',
+        'a = {0}({1}1{2})',
+        'a = {0}({1}1, 2, 3{2})',
+        'a = {0}({1}1{2}, b)',
+        'a = {0}({1}1{2}, b, c)',
+        'a = {0}({1}1{2}, b, {1}2{2})',
+        'a = {0}({1}x for x in some{2})',
+    ],
+)
 @pytest.mark.parametrize('method', TUPLE_ARGUMENTS_METHODS)
 @pytest.mark.parametrize('braces', ['[]', '{}'])  # noqa: P103
 def test_no_passed(
@@ -62,9 +68,12 @@ def test_no_passed(
     assert_errors(visitor, [NotATupleArgumentViolation])
 
 
-@pytest.mark.parametrize('code', [
-    'a = {0}_func([1])',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'a = {0}_func([1])',
+    ],
+)
 @pytest.mark.parametrize('method', TUPLE_ARGUMENTS_METHODS)
 def test_no_checkable(
     assert_errors,

@@ -16,39 +16,45 @@ assert_template = 'assert {0}'
 assert_with_message_template = 'assert {0}, "message"'
 
 
-@pytest.mark.parametrize('code', [
-    while_template,
-    assert_template,
-    assert_with_message_template,
-])
-@pytest.mark.parametrize('condition', [
-    '0',
-    '0.0',
-    '+0',
-    '-1',
-    '--2.1',
-    '""',
-    'b""',
-    '[]',
-    '()',
-    '{}',  # noqa: P103
-    '+True',
-    'False',
-    'None',
-    '1',
-    '0.1',
-    '"0"',
-    '[None]',
-    '{1, 2, 3}',
-    '{name: "0"}',
-    '(a for a in some())',
-    '[a for a in some()]',
-    '{1 for a in some()}',
-    '{"a": a for a in some()}',
-    'some if x else other',
-    '(unique := +0)',
-    '(unique := +True)',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        while_template,
+        assert_template,
+        assert_with_message_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'condition',
+    [
+        '0',
+        '0.0',
+        '+0',
+        '-1',
+        '--2.1',
+        '""',
+        'b""',
+        '[]',
+        '()',
+        '{}',  # noqa: P103
+        '+True',
+        'False',
+        'None',
+        '1',
+        '0.1',
+        '"0"',
+        '[None]',
+        '{1, 2, 3}',
+        '{name: "0"}',
+        '(a for a in some())',
+        '[a for a in some()]',
+        '{1 for a in some()}',
+        '{"a": a for a in some()}',
+        'some if x else other',
+        '(unique := +0)',
+        '(unique := +True)',
+    ],
+)
 def test_false_condition_keywords(
     assert_errors,
     parse_ast_tree,
@@ -65,13 +71,19 @@ def test_false_condition_keywords(
     assert_errors(visitor, [WrongKeywordConditionViolation])
 
 
-@pytest.mark.parametrize('code', [
-    assert_template,
-    assert_with_message_template,
-])
-@pytest.mark.parametrize('condition', [
-    'True',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        assert_template,
+        assert_with_message_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'condition',
+    [
+        'True',
+    ],
+)
 def test_false_assert_condition_keywords(
     assert_errors,
     parse_ast_tree,
@@ -102,13 +114,19 @@ fixtures = (
 )
 
 
-@pytest.mark.parametrize('code', [
-    while_template,
-])
-@pytest.mark.parametrize('condition', [
-    *fixtures,
-    'x := other()',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        while_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'condition',
+    [
+        *fixtures,
+        'x := other()',
+    ],
+)
 def test_true_condition_keywords_while(
     assert_errors,
     parse_ast_tree,
@@ -125,10 +143,13 @@ def test_true_condition_keywords_while(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    assert_template,
-    assert_with_message_template,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        assert_template,
+        assert_with_message_template,
+    ],
+)
 @pytest.mark.parametrize('condition', fixtures)
 def test_true_condition_keywords_assert(
     assert_errors,
@@ -146,12 +167,18 @@ def test_true_condition_keywords_assert(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    while_template,
-])
-@pytest.mark.parametrize('condition', [
-    'True',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        while_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'condition',
+    [
+        'True',
+    ],
+)
 def test_true_while_condition_keywords(
     assert_errors,
     parse_ast_tree,

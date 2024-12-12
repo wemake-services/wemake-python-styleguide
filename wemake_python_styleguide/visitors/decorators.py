@@ -38,10 +38,11 @@ def alias(
     We can just create aliases like ``visit_Import = visit_ImportFrom``,
     but it looks verbose and ugly.
     """
-    all_names = aliases + (original, )
+    all_names = aliases + (original,)
     if len(all_names) != len(set(all_names)):
         raise ValueError('Found duplicate aliases')
 
     def decorator(cls: type[_DefinedType]) -> type[_DefinedType]:
         return _modify_class(cls, original, aliases)
+
     return decorator

@@ -14,6 +14,7 @@ _PROPERTY_EXCEPTIONS: Final = frozenset(('property', '.setter'))
 
 # Name predicates:
 
+
 def is_function_overload(node: ast.AST) -> bool:
     """Check that function decorated with `typing.overload`."""
     if isinstance(node, FunctionNodes):
@@ -38,6 +39,7 @@ def is_property_setter(node: ast.AST) -> bool:
 
 
 # Scope predicates:
+
 
 def is_same_value_reuse(node: ast.AST, names: set[str]) -> bool:
     """Checks if the given names are reused by the given node."""

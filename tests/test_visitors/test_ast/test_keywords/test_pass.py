@@ -37,13 +37,16 @@ except Exception:
 """
 
 
-@pytest.mark.parametrize('code', [
-    pass_function,
-    pass_class,
-    pass_method,
-    pass_condition,
-    pass_exception,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        pass_function,
+        pass_class,
+        pass_method,
+        pass_condition,
+        pass_exception,
+    ],
+)
 def test_pass_keyword(
     assert_errors,
     assert_error_text,

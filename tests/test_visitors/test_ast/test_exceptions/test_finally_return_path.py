@@ -369,35 +369,41 @@ def function():
 """
 
 
-@pytest.mark.parametrize('statement', [
-    'return',
-    'return None',
-    'return 1',
-    'raise ValueError',
-    'raise ValueError()',
-    'raise TypeError(1)',
-])
-@pytest.mark.parametrize('code', [
-    wrong_except_finally,
-    wrong_multiple_except_finally1,
-    wrong_multiple_except_finally2,
-    wrong_multiple_except_finally3,
-    wrong_else_finally,
-    wrong_try_finally,
-    pytest.param(
-        wrong_try_star_finally,
-        marks=pytest.mark.skipif(
-            not PY311,
-            reason='ExceptionGroup was added in python 3.11',
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'return',
+        'return None',
+        'return 1',
+        'raise ValueError',
+        'raise ValueError()',
+        'raise TypeError(1)',
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_except_finally,
+        wrong_multiple_except_finally1,
+        wrong_multiple_except_finally2,
+        wrong_multiple_except_finally3,
+        wrong_else_finally,
+        wrong_try_finally,
+        pytest.param(
+            wrong_try_star_finally,
+            marks=pytest.mark.skipif(
+                not PY311,
+                reason='ExceptionGroup was added in python 3.11',
+            ),
         ),
-    ),
-    wrong_try_else,
-    wrong_try_except_else,
-    wrong_all1,
-    wrong_all2,
-    wrong_all3,
-    wrong_all4,
-])
+        wrong_try_else,
+        wrong_try_except_else,
+        wrong_all1,
+        wrong_all2,
+        wrong_all3,
+        wrong_all4,
+    ],
+)
 def test_wrong_return_in_else_or_finally(
     assert_errors,
     parse_ast_tree,
@@ -419,30 +425,36 @@ def test_wrong_return_in_else_or_finally(
     )
 
 
-@pytest.mark.parametrize('statement', [
-    'return',
-    'return None',
-    'return 1',
-    'raise ValueError',
-    'raise ValueError()',
-    'raise TypeError(1)',
-])
-@pytest.mark.parametrize('code', [
-    right_outside1,
-    right_outside2,
-    right_try_except,
-    right_try_except_multiple,
-    right_except_else,
-    right_multiple_except_else,
-    right_else,
-    right_try_except_and_else,
-    right_finally,
-    right_try_catch_and_finally,
-    right_try_catch_and_else_and_finally1,
-    right_try_catch_and_else_and_finally2,
-    right_try_catch_and_else_and_finally3,
-    right_try_catch_and_else_and_finally4,
-])
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'return',
+        'return None',
+        'return 1',
+        'raise ValueError',
+        'raise ValueError()',
+        'raise TypeError(1)',
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        right_outside1,
+        right_outside2,
+        right_try_except,
+        right_try_except_multiple,
+        right_except_else,
+        right_multiple_except_else,
+        right_else,
+        right_try_except_and_else,
+        right_finally,
+        right_try_catch_and_finally,
+        right_try_catch_and_else_and_finally1,
+        right_try_catch_and_else_and_finally2,
+        right_try_catch_and_else_and_finally3,
+        right_try_catch_and_else_and_finally4,
+    ],
+)
 def test_correct_return_path_in_try_except(
     assert_errors,
     parse_ast_tree,
@@ -460,43 +472,42 @@ def test_correct_return_path_in_try_except(
     assert_errors(visitor, [], ignored_types=UselessExceptCaseViolation)
 
 
-@pytest.mark.parametrize('statements', [
-    # try, except1, except2, else, finally
-    ('break', '...', '...', 'raise ValueError', '...'),
-    ('break', '...', '...', 'return', '...'),
-    ('return', '...', '...', 'break', '...'),
-    ('return 0', '...', '...', 'raise ValueError', '...'),
-    ('raise ValueError(1)', '...', '...', 'return 1', '...'),
-    ('raise ValueError(1)', '...', '...', 'break', '...'),
-
-    ('...', '...', '...', 'raise ValueError', 'return 0'),
-    ('...', '...', '...', 'raise ValueError', 'return None'),
-    ('...', '...', '...', 'break', 'return'),
-    ('...', '...', '...', 'break', 'raise ValueError'),
-    ('...', '...', '...', 'return', 'return 1'),
-    ('...', '...', '...', 'return', 'raise ValueError()'),
-
-    ('break', '...', '...', '...', 'raise ValueError'),
-    ('break', '...', '...', '...', 'return'),
-    ('return', '...', '...', '...', 'raise ValueError(1)'),
-    ('return 0', '...', '...', '...', 'raise ValueError'),
-    ('raise ValueError(1)', '...', '...', '...', 'return 1'),
-    ('raise ValueError(1)', '...', '...', '...', 'return'),
-
-    ('...', 'break', '...', '...', 'raise ValueError'),
-    ('...', 'break', '...', '...', 'return'),
-    ('...', 'return', '...', '...', 'raise ValueError(1)'),
-    ('...', 'return 0', '...', '...', 'raise ValueError'),
-    ('...', 'raise ValueError(1)', '...', '...', 'return 1'),
-    ('...', 'raise ValueError(1)', '...', '...', 'return 0'),
-
-    ('...', '...', 'break', '...', 'raise ValueError'),
-    ('...', '...', 'break', '...', 'return'),
-    ('...', '...', 'return', '...', 'raise ValueError'),
-    ('...', '...', 'return 0', '...', 'raise ValueError'),
-    ('...', '...', 'raise ValueError(1)', '...', 'return 1'),
-    ('...', '...', 'raise ValueError(1)', '...', 'return 0'),
-])
+@pytest.mark.parametrize(
+    'statements',
+    [
+        # try, except1, except2, else, finally
+        ('break', '...', '...', 'raise ValueError', '...'),
+        ('break', '...', '...', 'return', '...'),
+        ('return', '...', '...', 'break', '...'),
+        ('return 0', '...', '...', 'raise ValueError', '...'),
+        ('raise ValueError(1)', '...', '...', 'return 1', '...'),
+        ('raise ValueError(1)', '...', '...', 'break', '...'),
+        ('...', '...', '...', 'raise ValueError', 'return 0'),
+        ('...', '...', '...', 'raise ValueError', 'return None'),
+        ('...', '...', '...', 'break', 'return'),
+        ('...', '...', '...', 'break', 'raise ValueError'),
+        ('...', '...', '...', 'return', 'return 1'),
+        ('...', '...', '...', 'return', 'raise ValueError()'),
+        ('break', '...', '...', '...', 'raise ValueError'),
+        ('break', '...', '...', '...', 'return'),
+        ('return', '...', '...', '...', 'raise ValueError(1)'),
+        ('return 0', '...', '...', '...', 'raise ValueError'),
+        ('raise ValueError(1)', '...', '...', '...', 'return 1'),
+        ('raise ValueError(1)', '...', '...', '...', 'return'),
+        ('...', 'break', '...', '...', 'raise ValueError'),
+        ('...', 'break', '...', '...', 'return'),
+        ('...', 'return', '...', '...', 'raise ValueError(1)'),
+        ('...', 'return 0', '...', '...', 'raise ValueError'),
+        ('...', 'raise ValueError(1)', '...', '...', 'return 1'),
+        ('...', 'raise ValueError(1)', '...', '...', 'return 0'),
+        ('...', '...', 'break', '...', 'raise ValueError'),
+        ('...', '...', 'break', '...', 'return'),
+        ('...', '...', 'return', '...', 'raise ValueError'),
+        ('...', '...', 'return 0', '...', 'raise ValueError'),
+        ('...', '...', 'raise ValueError(1)', '...', 'return 1'),
+        ('...', '...', 'raise ValueError(1)', '...', 'return 0'),
+    ],
+)
 def test_different_nodes_trigger_violation(
     assert_errors,
     parse_ast_tree,

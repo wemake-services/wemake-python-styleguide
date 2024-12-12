@@ -54,11 +54,9 @@ all_templates = (
     function_with_posonly_defaults,
     function_with_kw_defaults1,
     function_with_kw_defaults2,
-
     method_with_defaults,
     method_with_posonly_defaults,
     method_with_kw_defaults,
-
     lambda_with_defaults,
     lambda_with_posonly_defaults,
     lambda_with_kw_defaults,
@@ -66,22 +64,25 @@ all_templates = (
 
 
 @pytest.mark.parametrize('template', all_templates)
-@pytest.mark.parametrize('code', [
-    "'PYFLAKES_DOCTEST' in os.environ",
-    'call()',
-    'call().attr',
-    '-call()',
-    '+call()',
-    'index[1]',
-    'index["s"]',
-    'index[name][name]',
-    'index[1].attr',
-    '-index[1].attr',
-    'index[1].attr.call().sub',
-    'compare == 1',
-    'var + 2',
-    'a and b',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        "'PYFLAKES_DOCTEST' in os.environ",
+        'call()',
+        'call().attr',
+        '-call()',
+        '+call()',
+        'index[1]',
+        'index["s"]',
+        'index[name][name]',
+        'index[1].attr',
+        '-index[1].attr',
+        'index[1].attr.call().sub',
+        'compare == 1',
+        'var + 2',
+        'a and b',
+    ],
+)
 def test_wrong_function_defaults(
     assert_errors,
     parse_ast_tree,
@@ -103,22 +104,25 @@ def test_wrong_function_defaults(
 
 
 @pytest.mark.parametrize('template', all_templates)
-@pytest.mark.parametrize('code', [
-    "'string'",
-    "b''",
-    '1',
-    '-0',
-    'variable',
-    '-variable',
-    'module.attr',
-    '-module.attr',
-    '(1, 2)',
-    '()',
-    'None',
-    'True',
-    'False',
-    '...',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        "'string'",
+        "b''",
+        '1',
+        '-0',
+        'variable',
+        '-variable',
+        'module.attr',
+        '-module.attr',
+        '(1, 2)',
+        '()',
+        'None',
+        'True',
+        'False',
+        '...',
+    ],
+)
 def test_correct_function_defaults(
     assert_errors,
     parse_ast_tree,

@@ -20,10 +20,13 @@ class Example:
 """
 
 
-@pytest.mark.parametrize('code', [
-    module_level_method,
-    class_level_method,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_level_method,
+        class_level_method,
+    ],
+)
 @pytest.mark.parametrize('function_names', MAGIC_MODULE_NAMES_BLACKLIST)
 def test_right_magic_used(
     assert_errors,
@@ -42,9 +45,12 @@ def test_right_magic_used(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    module_level_method,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_level_method,
+    ],
+)
 @pytest.mark.parametrize('function_names', MAGIC_MODULE_NAMES_BLACKLIST)
 def test_wrong_magic_used(
     assert_errors,

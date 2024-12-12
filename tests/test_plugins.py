@@ -7,13 +7,11 @@ We do not test that any of the 3rd party plugins work correctly.
 It is not our responsibility.
 """
 
-
 import subprocess
 
 PLUGINS = (
     'B002',  # flake8-bugbear
     'C400',  # flake8-comprehensions
-    'C819',  # flake8-commas
     'D103',  # flake8-docstring
     'E225',  # pycodestyle
     'E800',  # flake8-eradicate

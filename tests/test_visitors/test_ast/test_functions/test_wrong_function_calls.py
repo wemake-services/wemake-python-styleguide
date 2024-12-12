@@ -18,11 +18,14 @@ def proxy(*args, **kwargs):
 
 
 @pytest.mark.parametrize('bad_function', FUNCTIONS_BLACKLIST)
-@pytest.mark.parametrize('code', [
-    regular_call,
-    assignment_call,
-    nested_function_call,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        regular_call,
+        assignment_call,
+        nested_function_call,
+    ],
+)
 def test_wrong_function_called(
     assert_errors,
     assert_error_text,
@@ -42,14 +45,20 @@ def test_wrong_function_called(
     assert_error_text(visitor, bad_function)
 
 
-@pytest.mark.parametrize('bad_module_and_function', [
-    'pprint.pprint',
-])
-@pytest.mark.parametrize('code', [
-    regular_call,
-    assignment_call,
-    nested_function_call,
-])
+@pytest.mark.parametrize(
+    'bad_module_and_function',
+    [
+        'pprint.pprint',
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        regular_call,
+        assignment_call,
+        nested_function_call,
+    ],
+)
 def test_wrong_function_call_with_module(
     assert_errors,
     assert_error_text,
@@ -69,17 +78,23 @@ def test_wrong_function_call_with_module(
     assert_error_text(visitor, bad_module_and_function)
 
 
-@pytest.mark.parametrize('good_function', [
-    'len',
-    'abs',
-    'max',
-    'custom',
-])
-@pytest.mark.parametrize('code', [
-    regular_call,
-    assignment_call,
-    nested_function_call,
-])
+@pytest.mark.parametrize(
+    'good_function',
+    [
+        'len',
+        'abs',
+        'max',
+        'custom',
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        regular_call,
+        assignment_call,
+        nested_function_call,
+    ],
+)
 def test_regular_function_called(
     assert_errors,
     parse_ast_tree,

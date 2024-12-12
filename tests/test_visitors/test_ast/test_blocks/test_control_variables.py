@@ -210,15 +210,18 @@ def wrapper():
 """
 
 
-@pytest.mark.parametrize('code', [
-    wrong_for_loop1,
-    wrong_for_loop2,
-    wrong_for_loop3,
-    wrong_with1,
-    wrong_with2,
-    wrong_with3,
-    wrong_block_variable_reuse1,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_for_loop1,
+        wrong_for_loop2,
+        wrong_for_loop3,
+        wrong_with1,
+        wrong_with2,
+        wrong_with3,
+        wrong_block_variable_reuse1,
+    ],
+)
 def test_control_variable_used_after_block(
     assert_errors,
     parse_ast_tree,
@@ -235,26 +238,29 @@ def test_control_variable_used_after_block(
     assert_errors(visitor, [ControlVarUsedAfterBlockViolation])
 
 
-@pytest.mark.parametrize('code', [
-    correct_for_loop1,
-    correct_for_loop2,
-    correct_for_loop3,
-    correct_for_loop4,
-    correct_for_loop5,
-    correct_for_multi_loops,
-    correct_for_comprehension1,
-    correct_for_comprehension2,
-    correct_for_comprehension3,
-    correct_for_comprehension4,
-    correct_except1,
-    correct_except2,
-    correct_except3,
-    correct_except4,
-    correct_except_regression1115,
-    correct_with1,
-    correct_with2,
-    correct_with3,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_for_loop1,
+        correct_for_loop2,
+        correct_for_loop3,
+        correct_for_loop4,
+        correct_for_loop5,
+        correct_for_multi_loops,
+        correct_for_comprehension1,
+        correct_for_comprehension2,
+        correct_for_comprehension3,
+        correct_for_comprehension4,
+        correct_except1,
+        correct_except2,
+        correct_except3,
+        correct_except4,
+        correct_except_regression1115,
+        correct_with1,
+        correct_with2,
+        correct_with3,
+    ],
+)
 def test_control_variable_used_correctly(
     assert_errors,
     parse_ast_tree,

@@ -309,6 +309,7 @@ class OverusedExpressionViolation(ASTViolation):
 
 # Functions and classes:
 
+
 @final
 class TooManyLocalsViolation(ASTViolation):
     """
