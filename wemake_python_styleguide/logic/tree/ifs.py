@@ -5,20 +5,10 @@ from typing import TypeAlias, Union
 _IfAndElifASTNode: TypeAlias = Union[ast.If, list[ast.stmt]]
 
 
-def is_elif(node: ast.If) -> bool:
-    """Tells if this node is a part of an ``if`` chain or just a single one."""
-    return getattr(node, 'wps_if_chain', False)  # noqa: WPS425
-
-
 def has_else(node: ast.If) -> bool:
     """Tells if this node or ``if`` chain ends with an ``else`` expression."""
     last_elem = tuple(chain(node))[-1]
     return bool(last_elem)
-
-
-def root_if(node: ast.If) -> ast.If | None:
-    """Returns the previous ``if`` node in the chain if it exists."""
-    return getattr(node, 'wps_if_chained', None)
 
 
 def chain(node: ast.If) -> Iterable[_IfAndElifASTNode]:

@@ -9,7 +9,6 @@ from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
 from wemake_python_styleguide.logic.tree import (
     compares,
     functions,
-    ifs,
     operators,
 )
 from wemake_python_styleguide.logic.walrus import get_assigned_expr
