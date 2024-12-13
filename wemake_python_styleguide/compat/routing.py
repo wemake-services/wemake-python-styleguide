@@ -1,19 +1,20 @@
 import ast
 import types
-
-from typing_extensions import Final
+from typing import Final
 
 #: That's how python types and ast types map to each other, copied from ast.
-_CONST_NODE_TYPE_NAMES: Final = types.MappingProxyType({
-    bool: 'NameConstant',  # should be before int
-    type(None): 'NameConstant',
-    int: 'Num',
-    float: 'Num',
-    complex: 'Num',
-    str: 'Str',
-    bytes: 'Bytes',
-    type(...): 'Ellipsis',
-})
+_CONST_NODE_TYPE_NAMES: Final = types.MappingProxyType(
+    {
+        bool: 'NameConstant',  # should be before int
+        type(None): 'NameConstant',
+        int: 'Num',
+        float: 'Num',
+        complex: 'Num',
+        str: 'Str',
+        bytes: 'Bytes',
+        type(...): 'Ellipsis',
+    }
+)
 
 
 def route_visit(self: ast.NodeVisitor, node: ast.AST) -> None:
@@ -31,6 +32,6 @@ def route_visit(self: ast.NodeVisitor, node: ast.AST) -> None:
 
     return getattr(  # type: ignore[no-any-return]
         self,
-        'visit_{0}'.format(type_name),
+        f'visit_{type_name}',
         self.generic_visit,
     )(node)

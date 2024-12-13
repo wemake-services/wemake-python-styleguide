@@ -5,11 +5,14 @@ from wemake_python_styleguide.visitors.ast.naming.validation import (
 )
 
 
-@pytest.mark.parametrize('correct_name', [
-    'snake_case',
-    '_protected',
-    'with_number5',
-])
+@pytest.mark.parametrize(
+    'correct_name',
+    [
+        'snake_case',
+        '_protected',
+        'with_number5',
+    ],
+)
 def test_naming_correct(
     assert_errors,
     parse_ast_tree,
@@ -27,12 +30,15 @@ def test_naming_correct(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('allowed_name', [
-    'item',
-    'items',
-    'handle',
-    'other_name',  # unknown values are ignored silently
-])
+@pytest.mark.parametrize(
+    'allowed_name',
+    [
+        'item',
+        'items',
+        'handle',
+        'other_name',  # unknown values are ignored silently
+    ],
+)
 def test_name_in_allowed_domain_names_option(
     assert_errors,
     parse_ast_tree,

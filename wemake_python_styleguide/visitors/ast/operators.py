@@ -1,7 +1,8 @@
 import ast
-from typing import ClassVar, List, Mapping, Optional, Tuple, Type, Union
+from collections.abc import Mapping
+from typing import ClassVar, TypeAlias, Union
 
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import TextNodes
 from wemake_python_styleguide.logic import walk
@@ -18,17 +19,20 @@ from wemake_python_styleguide.visitors import base, decorators
 
 _MeaninglessOperators: TypeAlias = Mapping[
     complex,
-    Tuple[Type[ast.operator], ...],
+    tuple[type[ast.operator], ...],
 ]
-_OperatorLimits: TypeAlias = Mapping[Type[ast.unaryop], int]
+_OperatorLimits: TypeAlias = Mapping[type[ast.unaryop], int]
 _NumbersAndConstants: TypeAlias = Union[ast.Num, ast.NameConstant]
 
 
 @final
-@decorators.alias('visit_numbers_and_constants', (
-    'visit_Num',
-    'visit_NameConstant',
-))
+@decorators.alias(
+    'visit_numbers_and_constants',
+    (
+        'visit_Num',
+        'visit_NameConstant',
+    ),
+)
 class UselessOperatorsVisitor(base.BaseNodeVisitor):
     """Checks operators used in the code."""
 
@@ -47,7 +51,6 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
             ast.Add,
             ast.Sub,
             ast.Pow,
-
             ast.BitAnd,
             ast.BitOr,
             ast.BitXor,
@@ -104,9 +107,9 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         number = unwrap_unary_node(number)
 
         is_zero_division = (
-            isinstance(op, self._zero_divisors) and
-            isinstance(number, ast.Num) and
-            number.n == 0
+            isinstance(op, self._zero_divisors)
+            and isinstance(number, ast.Num)
+            and number.n == 0
         )
         if is_zero_division:
             self.add_violation(consistency.ZeroDivisionViolation(number))
@@ -114,8 +117,8 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
     def _check_useless_math_operator(
         self,
         op: ast.operator,
-        left: Optional[ast.AST],
-        right: Optional[ast.AST] = None,
+        left: ast.AST | None,
+        right: ast.AST | None = None,
     ) -> None:
         if isinstance(left, ast.Num) and left.n in self._left_special_cases:
             if right and isinstance(op, self._left_special_cases[left.n]):
@@ -132,16 +135,16 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
 
     def _get_non_negative_nodes(
         self,
-        left: Optional[ast.AST],
-        right: Optional[ast.AST] = None,
-    ) -> List[ast.Num]:
-        non_negative_numbers: List[ast.Num] = []
+        left: ast.AST | None,
+        right: ast.AST | None = None,
+    ) -> list[ast.Num]:
+        non_negative_numbers: list[ast.Num] = []
         for node in filter(None, (left, right)):
             real_node = unwrap_unary_node(node)
             correct_node = (
-                isinstance(real_node, ast.Num) and
-                real_node.n in self._meaningless_operations and
-                not (real_node.n == 1 and walk.is_contained(node, ast.USub))
+                isinstance(real_node, ast.Num)
+                and real_node.n in self._meaningless_operations
+                and not (real_node.n == 1 and walk.is_contained(node, ast.USub))
             )
             if correct_node and isinstance(real_node, ast.Num):  # mypy :)
                 non_negative_numbers.append(real_node)
@@ -177,9 +180,9 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
 
     def _check_negation(self, op: ast.operator, right: ast.AST) -> None:
         is_double_minus = (
-            isinstance(op, (ast.Add, ast.Sub)) and
-            isinstance(right, ast.UnaryOp) and
-            isinstance(right.op, ast.USub)
+            isinstance(op, (ast.Add, ast.Sub))
+            and isinstance(right, ast.UnaryOp)
+            and isinstance(right.op, ast.USub)
         )
         if is_double_minus:
             self.add_violation(
@@ -187,9 +190,8 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
             )
 
     def _check_list_multiply(self, node: ast.BinOp) -> None:
-        is_list_multiply = (
-            isinstance(node.op, ast.Mult) and
-            isinstance(node.left, self._list_nodes)
+        is_list_multiply = isinstance(node.op, ast.Mult) and isinstance(
+            node.left, self._list_nodes
         )
         if is_list_multiply:
             self.add_violation(ListMultiplyViolation(node.left))
@@ -198,7 +200,7 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
         self,
         left: ast.AST,
         op: ast.operator,
-        right: Optional[ast.AST] = None,
+        right: ast.AST | None = None,
     ) -> None:
         if not isinstance(op, ast.Add):
             return

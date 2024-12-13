@@ -61,10 +61,13 @@ def some():
 """
 
 
-@pytest.mark.parametrize('code', [
-    wrong_try_example1,
-    wrong_try_example2,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_try_example1,
+        wrong_try_example2,
+    ],
+)
 def test_wrong_finally(
     assert_errors,
     parse_ast_tree,
@@ -81,12 +84,15 @@ def test_wrong_finally(
     assert_errors(visitor, [UselessFinallyViolation])
 
 
-@pytest.mark.parametrize('code', [
-    right_try_example,
-    check_finally_with_except,
-    check_finally_with_except_else,
-    correct_finally_decorated,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        right_try_example,
+        check_finally_with_except,
+        check_finally_with_except_else,
+        correct_finally_decorated,
+    ],
+)
 def test_correct_finally(
     assert_errors,
     parse_ast_tree,

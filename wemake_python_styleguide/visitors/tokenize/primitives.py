@@ -1,11 +1,14 @@
 import re
 import tokenize
-from typing import Callable, ClassVar, FrozenSet, Optional, Pattern, Sequence
+from collections.abc import Callable, Sequence
+from typing import ClassVar
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic.tokens.strings import (
+from wemake_python_styleguide.logic.tokens.docstrings import (
     get_docstring_tokens,
+)
+from wemake_python_styleguide.logic.tokens.strings import (
     has_triple_string_quotes,
     split_prefixes,
 )
@@ -36,14 +39,15 @@ def _is_wrongly_underscored_number(string: str) -> bool:
 class WrongNumberTokenVisitor(BaseTokenVisitor):
     """Visits number tokens to find incorrect usages."""
 
-    _leading_zero_pattern: ClassVar[Pattern[str]] = re.compile(
-        r'^[0-9\.]+([box]|e\+?\-?)0.+', re.IGNORECASE | re.ASCII,
+    _leading_zero_pattern: ClassVar[re.Pattern[str]] = re.compile(
+        r'^[0-9\.]+([box]|e\+?\-?)0.+',
+        re.IGNORECASE | re.ASCII,
     )
-    _leading_zero_float_pattern: ClassVar[Pattern[str]] = re.compile(
+    _leading_zero_float_pattern: ClassVar[re.Pattern[str]] = re.compile(
         r'^[0-9]*\.[0-9]+0+$',
     )
 
-    _float_zero: ClassVar[Pattern[str]] = re.compile(
+    _float_zero: ClassVar[re.Pattern[str]] = re.compile(
         r'^0\.0$',
     )
 
@@ -87,15 +91,24 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
 
 @final
 class _StringTokenChecker:
-    _bad_string_modifiers: ClassVar[FrozenSet[str]] = frozenset((
-        'R', 'F', 'B', 'U',
-    ))
+    _bad_string_modifiers: ClassVar[frozenset[str]] = frozenset(
+        (
+            'R',
+            'F',
+            'B',
+            'U',
+        )
+    )
 
-    _unicode_escapes: ClassVar[FrozenSet[str]] = frozenset((
-        'u', 'U', 'N',
-    ))
+    _unicode_escapes: ClassVar[frozenset[str]] = frozenset(
+        (
+            'u',
+            'U',
+            'N',
+        )
+    )
 
-    _implicit_raw_strings: ClassVar[Pattern[str]] = re.compile(r'\\{2}.+')
+    _implicit_raw_strings: ClassVar[re.Pattern[str]] = re.compile(r'\\{2}.+')
 
     def __init__(
         self,
@@ -256,17 +269,19 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
 class WrongStringConcatenationVisitor(BaseTokenVisitor):
     """Checks incorrect string concatenation."""
 
-    _ignored_tokens: ClassVar[FrozenSet[int]] = frozenset((
-        tokenize.NL,
-        tokenize.NEWLINE,
-        tokenize.INDENT,
-        tokenize.COMMENT,
-    ))
+    _ignored_tokens: ClassVar[frozenset[int]] = frozenset(
+        (
+            tokenize.NL,
+            tokenize.NEWLINE,
+            tokenize.INDENT,
+            tokenize.COMMENT,
+        )
+    )
 
     def __init__(self, *args, **kwargs) -> None:
         """Adds extra ``_previous_token`` property."""
         super().__init__(*args, **kwargs)
-        self._previous_token: Optional[tokenize.TokenInfo] = None
+        self._previous_token: tokenize.TokenInfo | None = None
 
     def visit(self, token: tokenize.TokenInfo) -> None:
         """Ensures that all string are concatenated as we allow."""

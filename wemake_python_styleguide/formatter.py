@@ -27,7 +27,7 @@ That's how all ``flake8`` formatters work:
 
 import os
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, Final, List
+from typing import ClassVar, DefaultDict, Final
 
 from flake8.formatting.base import BaseFormatter
 from flake8.statistics import Statistic, Statistics
@@ -76,7 +76,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
         self._formatter = TerminalFormatter()
 
         # Logic:
-        self._processed_filenames: List[str] = []
+        self._processed_filenames: list[str] = []
         self._error_count = 0
 
     def handle(self, error: Violation) -> None:  # noqa: WPS110
@@ -103,7 +103,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
             newline=self.newline if self._should_show_source(error) else '',
             code=error.code,
             text=error.text,
-            row_col='{0}:{1}'.format(error.line_number, error.column_number),
+            row_col=f'{error.line_number}:{error.column_number}',
         )
 
     def show_source(self, error: Violation) -> str:
@@ -145,7 +145,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
             )
 
         self._write(self.newline)
-        self._write(_underline(_bold('All errors: {0}'.format(all_errors))))
+        self._write(_underline(_bold(f'All errors: {all_errors}')))
 
     def stop(self) -> None:
         """Runs once per app when the formatting ends."""
@@ -194,13 +194,14 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
                     filename=filename,
                 ),
             )
-        self._write(_underline('Total: {0}'.format(count)))
+        self._write(_underline(f'Total: {count}'))
 
     def _should_show_source(self, error: Violation) -> bool:
         return self.options.show_source and error.physical_line is not None
 
 
 # Formatting text:
+
 
 def _bold(text: str, *, no_color: bool = _NO_COLOR) -> str:
     r"""
@@ -217,7 +218,7 @@ def _bold(text: str, *, no_color: bool = _NO_COLOR) -> str:
     """
     if no_color:
         return text
-    return '\033[1m{0}\033[0m'.format(text)
+    return f'\033[1m{text}\033[0m'
 
 
 def _underline(text: str, *, no_color: bool = _NO_COLOR) -> str:
@@ -235,7 +236,7 @@ def _underline(text: str, *, no_color: bool = _NO_COLOR) -> str:
     """
     if no_color:
         return text
-    return '\033[4m{0}\033[0m'.format(text)
+    return f'\033[4m{text}\033[0m'
 
 
 def _highlight(
@@ -259,7 +260,9 @@ def _highlight(
         return source
     try:
         return highlight(  # type: ignore[no-any-return]
-            source, lexer, formatter,
+            source,
+            lexer,
+            formatter,
         )
     except Exception:  # pragma: no cover
         # Might fail on some systems, when colors are set incorrectly,
@@ -268,6 +271,7 @@ def _highlight(
 
 
 # Helpers:
+
 
 def _count_per_filename(
     statistics: Statistics,

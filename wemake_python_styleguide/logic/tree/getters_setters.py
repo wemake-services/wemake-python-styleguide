@@ -1,7 +1,6 @@
 import ast
-from typing import Iterable
-
-from typing_extensions import Final
+from collections.abc import Iterable
+from typing import Final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.constants import UNUSED_PLACEHOLDER
@@ -45,10 +44,12 @@ def find_attributed_getters_and_setters(
     attributes_stripped = {
         class_attribute.lstrip(UNUSED_PLACEHOLDER)
         for class_attribute in flat_class_attributes
-    }.union({
-        instance.attr.lstrip(UNUSED_PLACEHOLDER)
-        for instance in instance_attributes
-    })
+    }.union(
+        {
+            instance.attr.lstrip(UNUSED_PLACEHOLDER)
+            for instance in instance_attributes
+        }
+    )
 
     for method in _find_getters_and_setters(node):
         if method.name[GETTER_LENGTH:] in attributes_stripped:

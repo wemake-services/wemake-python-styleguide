@@ -13,12 +13,10 @@ wrong_comparators = [
     ('some', '{}'),  # noqa: P103
     ('some', '()'),
     ('some', '{1, 2, 3}'),
-
     ('some', '[x for x in a]'),
     ('some', '(x for x in a)'),
     ('some', '{x for x in a}'),
     ('some', '{"1": x for x in a}'),
-
     ('some', '0'),
     ('some', '1'),
     ('some', '1.2'),
@@ -26,13 +24,11 @@ wrong_comparators = [
     ('some', '""'),
     ('some', '"abc"'),
     ('some', 'b"bytes"'),
-
     ('some', '(1, 2)'),
     ('[]', 'some'),
     ('{1, 2}', 'some'),
     ('()', 'some'),
     ('"test"', 'some'),
-
     ('(x := some())', '"abc"'),
     ('(x := "abc")', 'some()'),
 ]
@@ -60,20 +56,22 @@ def test_wrong_constant_is(
     )
 
 
-@pytest.mark.parametrize('comparators', [
-    ('some', 'None'),
-    ('some', 'False'),
-    ('some', 'True'),
-    ('None', 'some'),
-
-    ('some', 'other'),
-    ('some', 'x + y'),
-    ('some', 'other.attr'),
-    ('some', 'call()'),
-    ('some', 'other.method'),
-    ('some', 'other[key]'),
-    ('some', 'some'),
-])
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        ('some', 'None'),
+        ('some', 'False'),
+        ('some', 'True'),
+        ('None', 'some'),
+        ('some', 'other'),
+        ('some', 'x + y'),
+        ('some', 'other.attr'),
+        ('some', 'call()'),
+        ('some', 'other.method'),
+        ('some', 'other[key]'),
+        ('some', 'some'),
+    ],
+)
 def test_correct_constant_is(
     assert_errors,
     parse_ast_tree,

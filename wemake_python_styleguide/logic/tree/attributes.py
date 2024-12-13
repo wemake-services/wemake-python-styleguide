@@ -1,11 +1,11 @@
 import ast
-from typing import Iterable, Optional
+from collections.abc import Iterable
 
 from wemake_python_styleguide.constants import SPECIAL_ARGUMENT_NAMES_WHITELIST
 from wemake_python_styleguide.types import AnyChainable, AnyVariableDef
 
 
-def _chained_item(iterator: ast.AST) -> Optional[ast.AST]:
+def _chained_item(iterator: ast.AST) -> ast.AST | None:
     if isinstance(iterator, (ast.Attribute, ast.Subscript)):
         return iterator.value
     elif isinstance(iterator, ast.Call):

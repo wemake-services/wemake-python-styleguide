@@ -1,10 +1,11 @@
 import ast
 import types
 from collections import defaultdict
-from typing import DefaultDict, Mapping, Set, Tuple, Type, Union
+from collections.abc import Mapping
+from typing import DefaultDict, Final
 
 import attr
-from typing_extensions import Final, final
+from typing_extensions import final
 
 from wemake_python_styleguide.logic import source
 
@@ -14,15 +15,15 @@ from wemake_python_styleguide.logic import source
 class _Bounds:
     """Represents the bounds we use to calculate the similar compare nodes."""
 
-    lower_bound: Set[ast.Compare] = attr.ib(factory=set)
-    upper_bound: Set[ast.Compare] = attr.ib(factory=set)
+    lower_bound: set[ast.Compare] = attr.ib(factory=set)
+    upper_bound: set[ast.Compare] = attr.ib(factory=set)
 
 
-_MultipleCompareOperators = Tuple[Type[ast.cmpop], ...]
+_MultipleCompareOperators = tuple[type[ast.cmpop], ...]
 
 #: Type to represent `SIMILAR_OPERATORS` constant.
 _ComparesMapping = Mapping[
-    Type[ast.cmpop],
+    type[ast.cmpop],
     _MultipleCompareOperators,
 ]
 
@@ -30,17 +31,19 @@ _ComparesMapping = Mapping[
 _OperatorUsages = DefaultDict[str, _Bounds]
 
 #: Constant to define similar operators.
-SIMILAR_OPERATORS: Final[_ComparesMapping] = types.MappingProxyType({
-    ast.Gt: (ast.Gt, ast.GtE),
-    ast.GtE: (ast.Gt, ast.GtE),
-    ast.Lt: (ast.Lt, ast.LtE),
-    ast.LtE: (ast.Lt, ast.LtE),
-})
+SIMILAR_OPERATORS: Final[_ComparesMapping] = types.MappingProxyType(
+    {
+        ast.Gt: (ast.Gt, ast.GtE),
+        ast.GtE: (ast.Gt, ast.GtE),
+        ast.Lt: (ast.Lt, ast.LtE),
+        ast.LtE: (ast.Lt, ast.LtE),
+    }
+)
 
 
 def get_similar_operators(
     operator: ast.cmpop,
-) -> Union[Type[ast.cmpop], _MultipleCompareOperators]:
+) -> type[ast.cmpop] | _MultipleCompareOperators:
     """Returns similar operators types for the given operator."""
     operator_type = operator.__class__
     return SIMILAR_OPERATORS.get(operator_type, operator_type)

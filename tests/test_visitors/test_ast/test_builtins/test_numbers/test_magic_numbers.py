@@ -69,36 +69,42 @@ some_dict[{0}]
 """
 
 
-@pytest.mark.parametrize('code', [
-    assignment,
-    assignment_typed,
-    assignment_unary,
-    walrus,
-    function_definition,
-    function_definition_typed,
-    list_definition,
-    dict_definition_key,
-    dict_definition_value,
-    set_definition,
-    tuple_definition,
-])
-@pytest.mark.parametrize('number', [
-    -10,
-    -3.5,
-    0,
-    float(0),
-    0.1,
-    0.5,
-    -1.0,
-    8.3,
-    10,
-    765,
-    '0x20',
-    '0o12',
-    '0b1',
-    '1e1',
-    '1j',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        assignment,
+        assignment_typed,
+        assignment_unary,
+        walrus,
+        function_definition,
+        function_definition_typed,
+        list_definition,
+        dict_definition_key,
+        dict_definition_value,
+        set_definition,
+        tuple_definition,
+    ],
+)
+@pytest.mark.parametrize(
+    'number',
+    [
+        -10,
+        -3.5,
+        0,
+        float(0),
+        0.1,
+        0.5,
+        -1.0,
+        8.3,
+        10,
+        765,
+        '0x20',
+        '0o12',
+        '0b1',
+        '1e1',
+        '1j',
+    ],
+)
 def test_magic_number(
     assert_errors,
     parse_ast_tree,
@@ -116,27 +122,33 @@ def test_magic_number(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    assignment_binop,
-    assignment_binop_typed,
-    function_call,
-    function_call_named,
-    expression,
-    inside_function,
-    inside_class,
-    inside_class_typed,
-    inside_method,
-    list_index,
-    dict_key,
-])
-@pytest.mark.parametrize('number', [
-    *MAGIC_NUMBERS_WHITELIST,
-    -0,
-    float(0),
-    1,
-    5,
-    10,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        assignment_binop,
+        assignment_binop_typed,
+        function_call,
+        function_call_named,
+        expression,
+        inside_function,
+        inside_class,
+        inside_class_typed,
+        inside_method,
+        list_index,
+        dict_key,
+    ],
+)
+@pytest.mark.parametrize(
+    'number',
+    [
+        *MAGIC_NUMBERS_WHITELIST,
+        -0,
+        float(0),
+        1,
+        5,
+        10,
+    ],
+)
 def test_magic_number_whitelist(
     assert_errors,
     parse_ast_tree,
@@ -154,26 +166,32 @@ def test_magic_number_whitelist(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    assignment_binop,
-    assignment_binop_typed,
-    function_call,
-    function_call_named,
-    expression,
-    inside_function,
-    inside_class,
-    inside_class_typed,
-    inside_method,
-    list_index,
-    dict_key,
-])
-@pytest.mark.parametrize('number', [
-    '-0.3',
-    '999',
-    '10.0',
-    '--134',
-    '8.3',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        assignment_binop,
+        assignment_binop_typed,
+        function_call,
+        function_call_named,
+        expression,
+        inside_function,
+        inside_class,
+        inside_class_typed,
+        inside_method,
+        list_index,
+        dict_key,
+    ],
+)
+@pytest.mark.parametrize(
+    'number',
+    [
+        '-0.3',
+        '999',
+        '10.0',
+        '--134',
+        '8.3',
+    ],
+)
 def test_magic_number_warning(
     assert_errors,
     assert_error_text,
@@ -193,24 +211,30 @@ def test_magic_number_warning(
     assert_error_text(visitor, number.replace('-', ''))
 
 
-@pytest.mark.parametrize('code', [
-    assignment_binop,
-    assignment_binop_typed,
-    function_call,
-    function_call_named,
-    expression,
-    inside_function,
-    inside_class,
-    inside_class_typed,
-    inside_method,
-    list_index,
-    dict_key,
-])
-@pytest.mark.parametrize('number', [
-    '0b1111',
-    '0x20',
-    '-0o15',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        assignment_binop,
+        assignment_binop_typed,
+        function_call,
+        function_call_named,
+        expression,
+        inside_function,
+        inside_class,
+        inside_class_typed,
+        inside_method,
+        list_index,
+        dict_key,
+    ],
+)
+@pytest.mark.parametrize(
+    'number',
+    [
+        '0b1111',
+        '0x20',
+        '-0o15',
+    ],
+)
 def test_magic_number_octal_warning(
     assert_errors,
     parse_ast_tree,

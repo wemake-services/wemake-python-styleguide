@@ -95,12 +95,15 @@ technically_correct_token_stream = """
 """
 
 
-@pytest.mark.parametrize('code', [
-    elif_cases,
-    if_expression_in_else,
-    not_direct_parent,
-    correct_else_if,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        elif_cases,
+        if_expression_in_else,
+        not_direct_parent,
+        correct_else_if,
+    ],
+)
 def test_correct_if_statements(
     code,
     assert_errors,
@@ -116,10 +119,13 @@ def test_correct_if_statements(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    implicit_elif,
-    implicit_elif_nested_if,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        implicit_elif,
+        implicit_elif_nested_if,
+    ],
+)
 def test_implicit_elif_statements(
     code,
     assert_errors,
@@ -135,12 +141,15 @@ def test_implicit_elif_statements(
     assert_errors(visitor, [ImplicitElifViolation])
 
 
-@pytest.mark.parametrize('code', [
-    for_else,
-    try_except_else,
-    embedded_else,
-    technically_correct_token_stream,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        for_else,
+        try_except_else,
+        embedded_else,
+        technically_correct_token_stream,
+    ],
+)
 def test_false_positives_are_ignored(
     code,
     assert_errors,

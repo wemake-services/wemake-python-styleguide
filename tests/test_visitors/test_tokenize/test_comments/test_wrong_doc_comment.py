@@ -19,14 +19,20 @@ class SomeClass:
 """
 
 
-@pytest.mark.parametrize('code', [
-    constant_doc,
-    attribute_doc,
-])
-@pytest.mark.parametrize('comment', [
-    'non empty text',
-    'text with :',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        constant_doc,
+        attribute_doc,
+    ],
+)
+@pytest.mark.parametrize(
+    'comment',
+    [
+        'non empty text',
+        'text with :',
+    ],
+)
 def test_correct_comments(
     parse_tokens,
     assert_errors,
@@ -43,15 +49,21 @@ def test_correct_comments(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    constant_doc,
-    attribute_doc,
-])
-@pytest.mark.parametrize('comment', [
-    '',
-    ' ',
-    '    ',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        constant_doc,
+        attribute_doc,
+    ],
+)
+@pytest.mark.parametrize(
+    'comment',
+    [
+        '',
+        ' ',
+        '    ',
+    ],
+)
 def test_incorrect_doc_comment(
     parse_tokens,
     assert_errors,

@@ -1,6 +1,6 @@
 import math
 import tokenize
-from typing import Iterable, List, Optional, Tuple
+from collections.abc import Iterable
 
 from typing_extensions import final
 
@@ -10,8 +10,7 @@ from wemake_python_styleguide.visitors import base
 
 @final
 class _Function:
-
-    def __init__(self, file_tokens: List[tokenize.TokenInfo]) -> None:
+    def __init__(self, file_tokens: list[tokenize.TokenInfo]) -> None:
         self._tokens = file_tokens
 
     def name_token(self) -> tokenize.TokenInfo:
@@ -36,11 +35,11 @@ class _Function:
 
 @final
 class _FileFunctions:
-    def __init__(self, file_tokens: List[tokenize.TokenInfo]) -> None:
+    def __init__(self, file_tokens: list[tokenize.TokenInfo]) -> None:
         self._file_tokens = file_tokens
 
     def search_functions(self) -> Iterable[_Function]:  # noqa: WPS210
-        function_tokens: List[tokenize.TokenInfo] = []
+        function_tokens: list[tokenize.TokenInfo] = []
         in_function = False
         function_start_token = (0, 0)
         for token_index, token in enumerate(self._file_tokens):
@@ -68,16 +67,16 @@ class _FileFunctions:
         self,
         token: tokenize.TokenInfo,
         token_index: int,
-        function_start: Tuple[int, int],
+        function_start: tuple[int, int],
         *,
         function_tokens_exists: bool,
     ) -> bool:
         next_token = self._next_token(token_index)
         is_elipsis_end = (
-            next_token and
-            next_token.exact_type == tokenize.NEWLINE and
-            token.string == '...' and
-            token.start[0] == function_start[0]
+            next_token
+            and next_token.exact_type == tokenize.NEWLINE
+            and token.string == '...'
+            and token.start[0] == function_start[0]
         )
         if is_elipsis_end:
             return True
@@ -88,7 +87,7 @@ class _FileFunctions:
     def _next_token(
         self,
         token_index: int,
-    ) -> Optional[tokenize.TokenInfo]:
+    ) -> tokenize.TokenInfo | None:
         try:
             return self._file_tokens[token_index + 1]
         except IndexError:
@@ -97,7 +96,6 @@ class _FileFunctions:
 
 @final
 class _FileTokens:
-
     def __init__(
         self,
         file_functions: _FileFunctions,
@@ -109,16 +107,15 @@ class _FileTokens:
     def analyze(self) -> Iterable[best_practices.WrongEmptyLinesCountViolation]:
         for function in self._file_functions.search_functions():
             splitted_function_body = function.body().strip().split('\n')
-            empty_lines_count = len([
-                line
-                for line in splitted_function_body
-                if line == ''
-            ])
+            empty_lines_count = len(
+                [line for line in splitted_function_body if line == '']
+            )
             if not empty_lines_count:
                 continue
 
             available_empty_lines = self._available_empty_lines(
-                len(splitted_function_body), empty_lines_count,
+                len(splitted_function_body),
+                empty_lines_count,
             )
             if empty_lines_count > available_empty_lines:
                 yield best_practices.WrongEmptyLinesCountViolation(
@@ -146,7 +143,7 @@ class WrongEmptyLinesCountVisitor(base.BaseTokenVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Initializes a counter."""
         super().__init__(*args, **kwargs)
-        self._file_tokens: List[tokenize.TokenInfo] = []
+        self._file_tokens: list[tokenize.TokenInfo] = []
 
     def visit(self, token: tokenize.TokenInfo) -> None:
         """Find empty lines count."""

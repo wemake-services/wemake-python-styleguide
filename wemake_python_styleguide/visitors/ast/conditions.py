@@ -1,7 +1,8 @@
 import ast
-from typing import ClassVar, List, Mapping, Set, Type
+from collections.abc import Mapping
+from typing import ClassVar, TypeAlias
 
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide.logic import source
 from wemake_python_styleguide.logic.naming.duplicates import (
@@ -20,14 +21,17 @@ from wemake_python_styleguide.violations import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
-_OperatorPairs: TypeAlias = Mapping[Type[ast.boolop], Type[ast.cmpop]]
+_OperatorPairs: TypeAlias = Mapping[type[ast.boolop], type[ast.cmpop]]
 
 
 @final
-@alias('visit_any_if', (
-    'visit_If',
-    'visit_IfExp',
-))
+@alias(
+    'visit_any_if',
+    (
+        'visit_If',
+        'visit_IfExp',
+    ),
+)
 class IfStatementVisitor(BaseNodeVisitor):
     """Checks single and consecutive ``if`` statement nodes."""
 
@@ -61,8 +65,8 @@ class BooleanConditionVisitor(BaseNodeVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """We need to store some bool nodes not to visit them twice."""
         super().__init__(*args, **kwargs)
-        self._same_nodes: List[ast.BoolOp] = []
-        self._isinstance_calls: List[ast.BoolOp] = []
+        self._same_nodes: list[ast.BoolOp] = []
+        self._isinstance_calls: list[ast.BoolOp] = []
 
     def visit_BoolOp(self, node: ast.BoolOp) -> None:
         """Checks that ``and`` and ``or`` conditions are correct."""
@@ -73,7 +77,7 @@ class BooleanConditionVisitor(BaseNodeVisitor):
     def _get_all_names(
         self,
         node: ast.BoolOp,
-    ) -> List[str]:
+    ) -> list[str]:
         # We need to make sure that we do not visit
         # one chained `BoolOp` elements twice:
         self._same_nodes.append(node)
@@ -129,7 +133,7 @@ class ImplicitBoolPatternsVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_implicit_in(self, node: ast.BoolOp) -> None:
-        variables: List[Set[str]] = []
+        variables: list[set[str]] = []
 
         for cmp in node.values:
             if not isinstance(cmp, ast.Compare) or len(cmp.ops) != 1:

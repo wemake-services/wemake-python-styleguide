@@ -62,10 +62,13 @@ def bare_raise_with_if():
 """
 
 
-@pytest.mark.parametrize('code', [
-    bare_raise_except_function,
-    bare_raise_if_function,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        bare_raise_except_function,
+        bare_raise_if_function,
+    ],
+)
 def test_bare_raise_except(
     assert_errors,
     parse_ast_tree,

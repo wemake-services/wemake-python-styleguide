@@ -39,10 +39,13 @@ class SomeClassName(
 """
 
 
-@pytest.mark.parametrize('code', [
-    correct_count,
-    correct_count_with_keywords,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_count,
+        correct_count_with_keywords,
+    ],
+)
 def test_correct_count(
     assert_errors,
     parse_ast_tree,
@@ -58,9 +61,12 @@ def test_correct_count(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    too_many_count,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        too_many_count,
+    ],
+)
 def test_bad_number_default_option(
     assert_errors,
     assert_error_text,
@@ -78,11 +84,14 @@ def test_bad_number_default_option(
     assert_error_text(visitor, '5', default_options.max_base_classes)
 
 
-@pytest.mark.parametrize('code', [
-    too_many_count,
-    correct_count,
-    correct_count_with_keywords,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        too_many_count,
+        correct_count,
+        correct_count_with_keywords,
+    ],
+)
 def test_bad_number_custom_option(
     assert_errors,
     parse_ast_tree,

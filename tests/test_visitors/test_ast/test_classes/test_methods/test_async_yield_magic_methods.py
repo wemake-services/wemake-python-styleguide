@@ -16,17 +16,26 @@ class Example:
 """
 
 
-@pytest.mark.parametrize('template', [
-    sync_method,
-    async_method,
-])
-@pytest.mark.parametrize('method', [
-    '__aiter__',
-])
-@pytest.mark.parametrize('statement', [
-    'yield',
-    'yield 1',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        sync_method,
+        async_method,
+    ],
+)
+@pytest.mark.parametrize(
+    'method',
+    [
+        '__aiter__',
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'yield',
+        'yield 1',
+    ],
+)
 def test_yield_is_always_allowed_in_aiter(
     assert_errors,
     parse_ast_tree,
@@ -44,12 +53,18 @@ def test_yield_is_always_allowed_in_aiter(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('method', [
-    '__aiter__',
-])
-@pytest.mark.parametrize('statement', [
-    'return some_async_iterator()',
-])
+@pytest.mark.parametrize(
+    'method',
+    [
+        '__aiter__',
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'return some_async_iterator()',
+    ],
+)
 def test_wrong_async_magic_used(
     assert_errors,
     assert_error_text,
@@ -68,13 +83,19 @@ def test_wrong_async_magic_used(
     assert_error_text(visitor, method)
 
 
-@pytest.mark.parametrize('method', [
-    '__aiter__',
-])
-@pytest.mark.parametrize('statement', [
-    'yield',
-    'yield 1',
-])
+@pytest.mark.parametrize(
+    'method',
+    [
+        '__aiter__',
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'yield',
+        'yield 1',
+    ],
+)
 def test_correct_async_yield_magic_used(
     assert_errors,
     parse_ast_tree,
@@ -91,12 +112,18 @@ def test_correct_async_yield_magic_used(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('method', [
-    '__aiter__',
-])
-@pytest.mark.parametrize('statement', [
-    'return some_async_iterator()',
-])
+@pytest.mark.parametrize(
+    'method',
+    [
+        '__aiter__',
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'return some_async_iterator()',
+    ],
+)
 def test_correct_sync_magic_used(
     assert_errors,
     parse_ast_tree,
@@ -124,14 +151,20 @@ class Some:
 """
 
 
-@pytest.mark.parametrize('example', [
-    correct_nested_example,
-])
-@pytest.mark.parametrize('mode', [
-    # We don't use `mode()` fixture here, because we have a nested func.
-    '',  # sync
-    'async ',
-])
+@pytest.mark.parametrize(
+    'example',
+    [
+        correct_nested_example,
+    ],
+)
+@pytest.mark.parametrize(
+    'mode',
+    [
+        # We don't use `mode()` fixture here, because we have a nested func.
+        '',  # sync
+        'async ',
+    ],
+)
 def test_correct_examples(
     assert_errors,
     parse_ast_tree,

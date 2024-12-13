@@ -18,11 +18,14 @@ def test_correct_magic_filename(assert_errors, filename, default_options):
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('filename', [
-    '__version__.py',
-    '__custom__.py',
-    '__some_extra__.py',
-])
+@pytest.mark.parametrize(
+    'filename',
+    [
+        '__version__.py',
+        '__custom__.py',
+        '__some_extra__.py',
+    ],
+)
 def test_simple_filename(
     assert_errors,
     filename,

@@ -1,7 +1,7 @@
 import ast
-from typing import ClassVar, Dict, FrozenSet, List, Optional, Type, Union, cast
+from typing import ClassVar, TypeAlias, Union, cast
 
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import (
     AssignNodes,
@@ -42,8 +42,8 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 #: Utility type to work with violations easier.
 _ReturningViolations: TypeAlias = Union[
-    Type[InconsistentReturnViolation],
-    Type[InconsistentYieldViolation],
+    type[InconsistentReturnViolation],
+    type[InconsistentYieldViolation],
 ]
 
 
@@ -51,10 +51,12 @@ _ReturningViolations: TypeAlias = Union[
 class WrongRaiseVisitor(BaseNodeVisitor):
     """Finds wrong ``raise`` keywords."""
 
-    _base_exceptions: ClassVar[FrozenSet[str]] = frozenset((
-        'Exception',
-        'BaseException',
-    ))
+    _base_exceptions: ClassVar[frozenset[str]] = frozenset(
+        (
+            'Exception',
+            'BaseException',
+        )
+    )
 
     def visit_Raise(self, node: ast.Raise) -> None:
         """Checks how ``raise`` keyword is used."""
@@ -88,10 +90,13 @@ class WrongRaiseVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_any_function', (
-    'visit_FunctionDef',
-    'visit_AsyncFunctionDef',
-))
+@alias(
+    'visit_any_function',
+    (
+        'visit_FunctionDef',
+        'visit_AsyncFunctionDef',
+    ),
+)
 class ConsistentReturningVisitor(BaseNodeVisitor):
     """Finds incorrect and inconsistent ``return`` and ``yield`` nodes."""
 
@@ -111,22 +116,26 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
         if not isinstance(parent, FunctionNodes):
             return
 
-        returns = len(tuple(filter(
-            lambda return_node: return_node.value is not None,
-            walk.get_subnodes_by_type(parent, ast.Return),
-        )))
+        returns = len(
+            tuple(
+                filter(
+                    lambda return_node: return_node.value is not None,
+                    walk.get_subnodes_by_type(parent, ast.Return),
+                )
+            )
+        )
 
         last_value_return = (
-            len(parent.body) > 1 and
-            returns < 2 and
-            isinstance(node.value, ast.NameConstant) and
-            node.value.value is None
+            len(parent.body) > 1
+            and returns < 2
+            and isinstance(node.value, ast.NameConstant)
+            and node.value.value is None
         )
 
         one_return_with_none = (
-            returns == 1 and
-            isinstance(node.value, ast.NameConstant) and
-            node.value.value is None
+            returns == 1
+            and isinstance(node.value, ast.NameConstant)
+            and node.value.value is None
         )
 
         if node.value is None or last_value_return or one_return_with_none:
@@ -135,21 +144,19 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
     def _iterate_returning_values(
         self,
         node: AnyFunctionDef,
-        returning_type: Union[Type[ast.Return], Type[ast.Yield]],
+        returning_type: type[ast.Return] | type[ast.Yield],
         violation: _ReturningViolations,
     ):
         return_nodes, has_values = keywords.returning_nodes(
-            node, returning_type,
+            node,
+            returning_type,
         )
-        is_all_none = (
-            has_values and
-            all(
-                (
-                    isinstance(ret_node.value, ast.NameConstant) and
-                    ret_node.value.value is None
-                )
-                for ret_node in return_nodes
+        is_all_none = has_values and all(
+            (
+                isinstance(ret_node.value, ast.NameConstant)
+                and ret_node.value.value is None
             )
+            for ret_node in return_nodes
         )
         if is_all_none:
             self.add_violation(violation(node))
@@ -160,12 +167,16 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
 
     def _check_return_values(self, node: AnyFunctionDef) -> None:
         self._iterate_returning_values(
-            node, ast.Return, InconsistentReturnViolation,
+            node,
+            ast.Return,
+            InconsistentReturnViolation,
         )
 
     def _check_yield_values(self, node: AnyFunctionDef) -> None:
         self._iterate_returning_values(
-            node, ast.Yield, InconsistentYieldViolation,
+            node,
+            ast.Yield,
+            InconsistentYieldViolation,
         )
 
 
@@ -196,10 +207,13 @@ class WrongKeywordVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_any_with', (
-    'visit_With',
-    'visit_AsyncWith',
-))
+@alias(
+    'visit_any_with',
+    (
+        'visit_With',
+        'visit_AsyncWith',
+    ),
+)
 class WrongContextManagerVisitor(BaseNodeVisitor):
     """Checks context managers."""
 
@@ -230,10 +244,13 @@ class WrongContextManagerVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_any_function', (
-    'visit_FunctionDef',
-    'visit_AsyncFunctionDef',
-))
+@alias(
+    'visit_any_function',
+    (
+        'visit_FunctionDef',
+        'visit_AsyncFunctionDef',
+    ),
+)
 class GeneratorKeywordsVisitor(BaseNodeVisitor):
     """Checks how generators are defined and used."""
 
@@ -242,7 +259,6 @@ class GeneratorKeywordsVisitor(BaseNodeVisitor):
         ast.Call,
         ast.Attribute,
         ast.Subscript,
-
         ast.Tuple,
         ast.GeneratorExp,
     )
@@ -250,7 +266,7 @@ class GeneratorKeywordsVisitor(BaseNodeVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Here we store the information about ``yield`` locations."""
         super().__init__(*args, **kwargs)
-        self._yield_locations: Dict[int, ast.Expr] = {}
+        self._yield_locations: dict[int, ast.Expr] = {}
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """Checks for consecutive ``yield`` nodes."""
@@ -278,8 +294,8 @@ class GeneratorKeywordsVisitor(BaseNodeVisitor):
                 self.add_violation(IncorrectYieldFromTargetViolation(node))
 
     def _post_visit(self) -> None:
-        previous_line: Optional[int] = None
-        previous_parent: Optional[ast.AST] = None
+        previous_line: int | None = None
+        previous_parent: ast.AST | None = None
 
         for line, node in self._yield_locations.items():
             parent = get_parent(node)
@@ -317,12 +333,11 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
     def _is_named_return(self, node: ast.Return) -> bool:
         if isinstance(node.value, ast.Name):
             return True
-        return (
-            isinstance(node.value, ast.Tuple) and
-            all(isinstance(elem, ast.Name) for elem in node.value.elts)
+        return isinstance(node.value, ast.Tuple) and all(
+            isinstance(elem, ast.Name) for elem in node.value.elts
         )
 
-    def _get_previous_stmt(self, node: ast.Return) -> Optional[ast.stmt]:
+    def _get_previous_stmt(self, node: ast.Return) -> ast.stmt | None:
         """
         This method gets the previous node in a block.
 
@@ -335,7 +350,7 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
         """
         parent = cast(ast.AST, get_parent(node))
         for part in ('body', 'orelse', 'finalbody'):
-            block: List[ast.stmt] = getattr(parent, part, [])
+            block: list[ast.stmt] = getattr(parent, part, [])
             try:
                 current_index = block.index(node)
             except ValueError:
@@ -348,13 +363,14 @@ class ConsistentReturningVariableVisitor(BaseNodeVisitor):
     def _check_for_violations(
         self,
         node: ast.Return,
-        return_names: List[str],
-        previous_names: List[str],
+        return_names: list[str],
+        previous_names: list[str],
     ) -> None:
         if previous_names == return_names:
             self.add_violation(
                 InconsistentReturnVariableViolation(
-                    node, text=', '.join(return_names),
+                    node,
+                    text=', '.join(return_names),
                 ),
             )
 
@@ -365,20 +381,16 @@ class ConstantKeywordVisitor(BaseNodeVisitor):
 
     _forbidden_nodes: ClassVar[AnyNodes] = (
         ast.NameConstant,
-
         ast.List,
         ast.Tuple,
         ast.Set,
         ast.Dict,
-
         ast.ListComp,
         ast.GeneratorExp,
         ast.SetComp,
         ast.DictComp,
-
         *TextNodes,
         ast.Num,
-
         ast.IfExp,
     )
 

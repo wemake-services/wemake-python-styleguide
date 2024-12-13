@@ -54,13 +54,16 @@ def test():
 '''
 
 
-@pytest.mark.parametrize('primitive', [
-    '"""abc"""',
-    "'''abc'''",
-    '""""""',
-    "r''''''",
-    'b"""some"""',
-])
+@pytest.mark.parametrize(
+    'primitive',
+    [
+        '"""abc"""',
+        "'''abc'''",
+        '""""""',
+        "r''''''",
+        'b"""some"""',
+    ],
+)
 def test_incorrect_multiline_strings(
     parse_tokens,
     assert_errors,
@@ -82,14 +85,17 @@ def test_incorrect_multiline_strings(
     )
 
 
-@pytest.mark.parametrize('primitive', [
-    '""',
-    "''",
-    '"Big text"',
-    "'Format 123'",
-    multiline_single,
-    multiline_double,
-])
+@pytest.mark.parametrize(
+    'primitive',
+    [
+        '""',
+        "''",
+        '"Big text"',
+        "'Format 123'",
+        multiline_single,
+        multiline_double,
+    ],
+)
 def test_correct_multiline_string(
     parse_tokens,
     assert_errors,
@@ -107,21 +113,27 @@ def test_correct_multiline_string(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    module_docstring_single,
-    module_docstring_double,
-    class_docstring_single,
-    class_docstring_double,
-    method_docstring_single,
-    method_docstring_double,
-    function_docstring_single,
-    function_docstring_double,
-])
-@pytest.mark.parametrize('primitive', [
-    '',  # empty,
-    'abc',  # one line
-    'one\ntwo',  # multiline
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_docstring_single,
+        module_docstring_double,
+        class_docstring_single,
+        class_docstring_double,
+        method_docstring_single,
+        method_docstring_double,
+        function_docstring_single,
+        function_docstring_double,
+    ],
+)
+@pytest.mark.parametrize(
+    'primitive',
+    [
+        '',  # empty,
+        'abc',  # one line
+        'one\ntwo',  # multiline
+    ],
+)
 def test_correct_multiline_docstrings(
     parse_tokens,
     assert_errors,

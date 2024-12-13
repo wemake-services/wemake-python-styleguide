@@ -62,18 +62,21 @@ while (x > x1 or y < y1) or (small(z) and v) or last():
 """
 
 
-@pytest.mark.parametrize('code', [
-    empty_module,
-    assignment,
-    condition_with_single_if,
-    condition_with_single_if_multiline,
-    condition_with_several_ifs,
-    condition_with_several_elifs,
-    condition_inline,
-    condition_with_inline_for,
-    condition_with_simple_inline_for,
-    while_with_condition,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        empty_module,
+        assignment,
+        condition_with_single_if,
+        condition_with_single_if_multiline,
+        condition_with_several_ifs,
+        condition_with_several_elifs,
+        condition_inline,
+        condition_with_inline_for,
+        condition_with_simple_inline_for,
+        while_with_condition,
+    ],
+)
 def test_module_condition_counts_normal(
     assert_errors,
     parse_ast_tree,
@@ -89,11 +92,14 @@ def test_module_condition_counts_normal(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    complex_assignment,
-    complex_condition,
-    complex_while,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        complex_assignment,
+        complex_condition,
+        complex_while,
+    ],
+)
 def test_module_condition_real_config(
     assert_errors,
     assert_error_text,

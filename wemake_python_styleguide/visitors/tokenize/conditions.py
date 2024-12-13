@@ -1,5 +1,6 @@
 import tokenize
-from typing import ClassVar, FrozenSet, Sequence
+from collections.abc import Sequence
+from typing import ClassVar
 
 from typing_extensions import final
 
@@ -38,17 +39,21 @@ class IfElseVisitor(BaseTokenVisitor):
 
     """
 
-    _idents: ClassVar[FrozenSet[int]] = frozenset((
-        tokenize.INDENT,
-        tokenize.DEDENT,
-    ))
+    _idents: ClassVar[frozenset[int]] = frozenset(
+        (
+            tokenize.INDENT,
+            tokenize.DEDENT,
+        )
+    )
 
-    _allowed_token_types: ClassVar[FrozenSet[int]] = frozenset((
-        tokenize.NEWLINE,
-        tokenize.NL,
-        tokenize.COLON,
-        tokenize.INDENT,
-    ))
+    _allowed_token_types: ClassVar[frozenset[int]] = frozenset(
+        (
+            tokenize.NEWLINE,
+            tokenize.NL,
+            tokenize.COLON,
+            tokenize.INDENT,
+        )
+    )
 
     def visit_name(self, token: tokenize.TokenInfo) -> None:
         """Checks that ``if`` nodes are defined correctly."""
@@ -61,7 +66,7 @@ class IfElseVisitor(BaseTokenVisitor):
             return
 
         # There's a bug in coverage, I am not sure how to make it work.
-        next_tokens = self.file_tokens[token_index + 1:]
+        next_tokens = self.file_tokens[token_index + 1 :]
         for index, next_token in enumerate(next_tokens):  # pragma: no cover
             if next_token.exact_type in self._allowed_token_types:
                 continue
@@ -77,7 +82,7 @@ class IfElseVisitor(BaseTokenVisitor):
             # also be "embedded" else: x if A else B
             return False
 
-        for token in reversed(self.file_tokens[:start_index - 1]):
+        for token in reversed(self.file_tokens[: start_index - 1]):
             if token.type != tokenize.NAME:
                 continue
 
@@ -122,7 +127,7 @@ class IfElseVisitor(BaseTokenVisitor):
         current_token: tokenize.TokenInfo,
         index: int,
     ) -> None:
-        complex_else = self._if_has_code_below(tokens[index + 1:])
+        complex_else = self._if_has_code_below(tokens[index + 1 :])
         if not complex_else:
             self.add_violation(ImplicitElifViolation(current_token))
 

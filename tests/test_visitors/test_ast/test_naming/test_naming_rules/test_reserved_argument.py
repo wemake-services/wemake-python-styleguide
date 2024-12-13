@@ -52,11 +52,14 @@ def test_reserved_argument_name(
 
 
 @pytest.mark.parametrize('argument', SPECIAL_ARGUMENT_NAMES_WHITELIST)
-@pytest.mark.parametrize('code', [
-    correct_method_template,
-    correct_classmethod_template,
-    correct_function_template,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_method_template,
+        correct_classmethod_template,
+        correct_function_template,
+    ],
+)
 def test_correct_argument_name(
     assert_errors,
     parse_ast_tree,

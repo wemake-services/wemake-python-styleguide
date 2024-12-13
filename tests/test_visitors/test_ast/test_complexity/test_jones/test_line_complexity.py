@@ -58,23 +58,26 @@ empty_module = ''
 regression1216 = 'call.endswith(post) and len(node.args) == self._post[post]'
 
 
-@pytest.mark.parametrize('code', [
-    line_simple,
-    line_with_types,
-    line_with_complex_types,
-    line_with_comprehension,
-    line_with_math,
-    line_inside_function,
-    line_inside_async_function,
-    line_inside_class,
-    function_declaration,
-    async_function_declaration,
-    class_declaration,
-    empty_module,
-    class_with_function,
-    class_with_async_function,
-    class_with_usual_and_async_function,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        line_simple,
+        line_with_types,
+        line_with_complex_types,
+        line_with_comprehension,
+        line_with_math,
+        line_inside_function,
+        line_inside_async_function,
+        line_inside_class,
+        function_declaration,
+        async_function_declaration,
+        class_declaration,
+        empty_module,
+        class_with_function,
+        class_with_async_function,
+        class_with_usual_and_async_function,
+    ],
+)
 def test_regular_nodes(assert_errors, parse_ast_tree, code, default_options):
     """Testing that regular nodes do not raise violations."""
     tree = parse_ast_tree(code)
@@ -85,18 +88,21 @@ def test_regular_nodes(assert_errors, parse_ast_tree, code, default_options):
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize(('code', 'complexity'), [
-    (line_simple, 3),
-    (line_with_types, 3),
-    (line_with_complex_types, 2),
-    (line_with_comprehension, 6),
-    (line_with_math, 9),
-    (line_inside_function, 4),
-    (line_inside_async_function, 4),
-    (line_inside_class, 5),
-    (class_with_function, 4),
-    (class_with_async_function, 4),
-])
+@pytest.mark.parametrize(
+    ('code', 'complexity'),
+    [
+        (line_simple, 3),
+        (line_with_types, 3),
+        (line_with_complex_types, 2),
+        (line_with_comprehension, 6),
+        (line_with_math, 9),
+        (line_inside_function, 4),
+        (line_inside_async_function, 4),
+        (line_inside_class, 5),
+        (class_with_function, 4),
+        (class_with_async_function, 4),
+    ],
+)
 def test_complex_lines(
     assert_errors,
     assert_error_text,
@@ -114,7 +120,9 @@ def test_complex_lines(
 
     assert_errors(visitor, [LineComplexityViolation])
     assert_error_text(
-        visitor, str(complexity), option_values.max_line_complexity,
+        visitor,
+        str(complexity),
+        option_values.max_line_complexity,
     )
 
 
@@ -124,10 +132,12 @@ def test_same_complexity(parse_ast_tree, default_options):
     tree_with_types = parse_ast_tree(line_with_types)
 
     simple_visitor = JonesComplexityVisitor(
-        default_options, tree=tree_without_types,
+        default_options,
+        tree=tree_without_types,
     )
     typed_visitor = JonesComplexityVisitor(
-        default_options, tree=tree_with_types,
+        default_options,
+        tree=tree_with_types,
     )
 
     simple_visitor.run()
@@ -138,11 +148,14 @@ def test_same_complexity(parse_ast_tree, default_options):
     assert len(typed_visitor._lines[1]) == 3  # noqa: WPS437
 
 
-@pytest.mark.parametrize(('code', 'complexity'), [
-    (line_with_comprehension, 6),
-    (line_with_math, 9),
-    (regression1216, 15),
-])
+@pytest.mark.parametrize(
+    ('code', 'complexity'),
+    [
+        (line_with_comprehension, 6),
+        (line_with_math, 9),
+        (regression1216, 15),
+    ],
+)
 def test_exact_complexity(parse_ast_tree, default_options, code, complexity):
     """Ensures that complexity is counted correctly."""
     tree = parse_ast_tree(code)
@@ -154,14 +167,17 @@ def test_exact_complexity(parse_ast_tree, default_options, code, complexity):
     assert len(visitor._lines[1]) == complexity  # noqa: WPS437
 
 
-@pytest.mark.parametrize(('code', 'number_of_lines'), [
-    (line_inside_function, 1),
-    (line_inside_async_function, 1),
-    (class_with_async_function, 1),
-    (class_with_function, 1),
-    (class_with_usual_and_async_function, 2),
-    (regression1216, 1),
-])
+@pytest.mark.parametrize(
+    ('code', 'number_of_lines'),
+    [
+        (line_inside_function, 1),
+        (line_inside_async_function, 1),
+        (class_with_async_function, 1),
+        (class_with_function, 1),
+        (class_with_usual_and_async_function, 2),
+        (regression1216, 1),
+    ],
+)
 def test_that_some_nodes_are_ignored(
     parse_ast_tree,
     default_options,

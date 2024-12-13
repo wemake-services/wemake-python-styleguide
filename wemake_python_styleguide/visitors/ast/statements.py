@@ -1,9 +1,10 @@
 import ast
-from typing import ClassVar, Mapping, Optional, Sequence, Set, Union
+from collections.abc import Mapping, Sequence
+from typing import ClassVar, TypeAlias, Union
 
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
-from wemake_python_styleguide import constants
+from wemake_python_styleguide import constants, types
 from wemake_python_styleguide.compat.aliases import (
     ForNodes,
     FunctionNodes,
@@ -17,12 +18,6 @@ from wemake_python_styleguide.logic.tree import strings
 from wemake_python_styleguide.logic.tree.collections import (
     first,
     sequence_of_node,
-)
-from wemake_python_styleguide.types import (
-    AnyFor,
-    AnyFunctionDef,
-    AnyNodes,
-    AnyWith,
 )
 from wemake_python_styleguide.violations.best_practices import (
     StatementHasNoEffectViolation,
@@ -45,34 +40,37 @@ from wemake_python_styleguide.visitors.decorators import alias
 #: Statements that do have `.body` attribute.
 _StatementWithBody: TypeAlias = Union[
     ast.If,
-    AnyFor,
+    types.AnyFor,
     ast.While,
-    AnyWith,
+    types.AnyWith,
     ast.Try,
     TryStar,
     ast.ExceptHandler,
-    AnyFunctionDef,
+    types.AnyFunctionDef,
     ast.ClassDef,
     ast.Module,
 ]
 
 
 @final
-@alias('visit_statement_with_body', (
-    'visit_If',
-    'visit_For',
-    'visit_AsyncFor',
-    'visit_While',
-    'visit_With',
-    'visit_AsyncWith',
-    'visit_Try',
-    'visit_TryStar',
-    'visit_ExceptHandler',
-    'visit_FunctionDef',
-    'visit_AsyncFunctionDef',
-    'visit_ClassDef',
-    'visit_Module',
-))
+@alias(
+    'visit_statement_with_body',
+    (
+        'visit_If',
+        'visit_For',
+        'visit_AsyncFor',
+        'visit_While',
+        'visit_With',
+        'visit_AsyncWith',
+        'visit_Try',
+        'visit_TryStar',
+        'visit_ExceptHandler',
+        'visit_FunctionDef',
+        'visit_AsyncFunctionDef',
+        'visit_ClassDef',
+        'visit_Module',
+    ),
+)
 class StatementsWithBodiesVisitor(BaseNodeVisitor):
     """
     Responsible for restricting incorrect patterns and members inside bodies.
@@ -80,22 +78,20 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
     This visitor checks all statements that have multiline bodies.
     """
 
-    _closing_nodes: ClassVar[AnyNodes] = (
+    _closing_nodes: ClassVar[types.AnyNodes] = (
         ast.Raise,
         ast.Return,
         ast.Break,
         ast.Continue,
     )
 
-    _have_doc_strings: ClassVar[AnyNodes] = (
+    _have_doc_strings: ClassVar[types.AnyNodes] = (
         *FunctionNodes,
         ast.ClassDef,
         ast.Module,
     )
 
-    _blocked_self_assignment: ClassVar[AnyNodes] = (
-        ast.BinOp,
-    )
+    _blocked_self_assignment: ClassVar[types.AnyNodes] = (ast.BinOp,)
 
     _nodes_with_orelse = (
         ast.If,
@@ -105,39 +101,35 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         TryStar,
     )
 
-    _have_effect: ClassVar[AnyNodes] = (
+    _have_effect: ClassVar[types.AnyNodes] = (
         ast.Return,
         ast.YieldFrom,
         ast.Yield,
-
         ast.Raise,
         ast.Break,
         ast.Continue,
-
         ast.Call,
         ast.Await,
-
         ast.Nonlocal,
         ast.Global,
         ast.Delete,
         ast.Pass,
-
         ast.Assert,
     )
 
     # Useless nodes:
-    _generally_useless_body: ClassVar[AnyNodes] = (
+    _generally_useless_body: ClassVar[types.AnyNodes] = (
         ast.Break,
         ast.Continue,
         ast.Pass,
         ast.Ellipsis,
     )
-    _loop_useless_body: ClassVar[AnyNodes] = (
+    _loop_useless_body: ClassVar[types.AnyNodes] = (
         ast.Return,
         ast.Raise,
     )
 
-    _useless_combination: ClassVar[Mapping[str, AnyNodes]] = {
+    _useless_combination: ClassVar[Mapping[str, types.AnyNodes]] = {
         'For': _generally_useless_body + _loop_useless_body,
         'AsyncFor': _generally_useless_body + _loop_useless_body,
         'While': _generally_useless_body + _loop_useless_body,
@@ -167,7 +159,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
             self._almost_swapped(assigns)
 
     def _almost_swapped(self, assigns: Sequence[ast.Assign]) -> None:
-        previous_var: Set[Optional[str]] = set()
+        previous_var: set[str | None] = set()
 
         for assign in assigns:
             current_var = {
@@ -195,7 +187,8 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
             return
 
         forbidden = self._useless_combination.get(
-            node.__class__.__qualname__, None,
+            node.__class__.__qualname__,
+            None,
         )
 
         if not forbidden or not isinstance(body[0], forbidden):
@@ -203,7 +196,8 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
 
         self.add_violation(
             UselessNodeViolation(
-                node, text=node.__class__.__qualname__.lower(),
+                node,
+                text=node.__class__.__qualname__.lower(),
             ),
         )
 
@@ -222,10 +216,10 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
 
         parent = nodes.get_parent(node)
         is_only_ellipsis_node = (
-            isinstance(node.value, ast.Constant) and
-            node.value.value is Ellipsis and
-            isinstance(parent, (*FunctionNodes, ast.ClassDef)) and
-            len(parent.body) == 1
+            isinstance(node.value, ast.Constant)
+            and node.value.value is Ellipsis
+            and isinstance(parent, (*FunctionNodes, ast.ClassDef))
+            and len(parent.body) == 1
         )
         if is_only_ellipsis_node:
             return
@@ -262,7 +256,7 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
 class PointlessStarredVisitor(BaseNodeVisitor):
     """Responsible for absence of useless starred expressions."""
 
-    _pointless_star_nodes: ClassVar[AnyNodes] = (
+    _pointless_star_nodes: ClassVar[types.AnyNodes] = (
         ast.Dict,
         ast.List,
         ast.Set,
@@ -359,9 +353,9 @@ class AssignmentPatternsVisitor(BaseNodeVisitor):
             return
 
         is_checkable = (
-            len(node.targets) == 1 and
-            isinstance(node.value.right, ast.Name) and
-            isinstance(node.value.left, ast.Name)
+            len(node.targets) == 1
+            and isinstance(node.value.right, ast.Name)
+            and isinstance(node.value.left, ast.Name)
         )
 
         if not is_checkable:
@@ -375,7 +369,7 @@ class AssignmentPatternsVisitor(BaseNodeVisitor):
 class WrongMethodArgumentsVisitor(BaseNodeVisitor):
     """Ensures that all arguments follow our rules."""
 
-    _no_tuples_collections: ClassVar[AnyNodes] = (
+    _no_tuples_collections: ClassVar[types.AnyNodes] = (
         ast.List,
         ast.ListComp,
         ast.Set,
@@ -392,8 +386,8 @@ class WrongMethodArgumentsVisitor(BaseNodeVisitor):
         node: ast.Call,
     ) -> None:
         is_checkable = (
-            isinstance(node.func, ast.Name) and
-            node.func.id in constants.TUPLE_ARGUMENTS_METHODS
+            isinstance(node.func, ast.Name)
+            and node.func.id in constants.TUPLE_ARGUMENTS_METHODS
         )
 
         if not is_checkable:

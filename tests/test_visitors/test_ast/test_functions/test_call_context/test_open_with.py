@@ -53,18 +53,24 @@ finally:
 """
 
 
-@pytest.mark.parametrize('code', [
-    context_manager1,
-    context_manager2,
-    context_manager3,
-    context_manager4,
-    context_manager5,
-])
-@pytest.mark.parametrize('call', [
-    'open()',
-    'open("filename")',
-    'open("filename", mode="rb")',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        context_manager1,
+        context_manager2,
+        context_manager3,
+        context_manager4,
+        context_manager5,
+    ],
+)
+@pytest.mark.parametrize(
+    'call',
+    [
+        'open()',
+        'open("filename")',
+        'open("filename", mode="rb")',
+    ],
+)
 def test_open_inside_context_manager(
     assert_errors,
     parse_ast_tree,
@@ -82,21 +88,27 @@ def test_open_inside_context_manager(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    context_manager1,
-    context_manager2,
-    context_manager3,
-    context_manager4,
-    expression,
-    assignment,
-    try_finally,
-])
-@pytest.mark.parametrize('call', [
-    'close()',
-    'open.attr',
-    'open.attr()',
-    'obj.open()',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        context_manager1,
+        context_manager2,
+        context_manager3,
+        context_manager4,
+        expression,
+        assignment,
+        try_finally,
+    ],
+)
+@pytest.mark.parametrize(
+    'call',
+    [
+        'close()',
+        'open.attr',
+        'open.attr()',
+        'obj.open()',
+    ],
+)
 def test_regular_functions(
     assert_errors,
     parse_ast_tree,
@@ -114,16 +126,22 @@ def test_regular_functions(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    expression,
-    assignment,
-    try_finally,
-])
-@pytest.mark.parametrize('call', [
-    'open()',
-    'open("filename")',
-    'open("filename", mode="rb")',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        expression,
+        assignment,
+        try_finally,
+    ],
+)
+@pytest.mark.parametrize(
+    'call',
+    [
+        'open()',
+        'open("filename")',
+        'open("filename", mode="rb")',
+    ],
+)
 def test_open_without_context_manager(
     assert_errors,
     parse_ast_tree,

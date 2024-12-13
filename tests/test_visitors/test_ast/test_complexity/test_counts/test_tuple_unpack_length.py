@@ -25,13 +25,16 @@ class foo:
 """
 
 
-@pytest.mark.parametrize('unpack_expression', [
-    short_unpack,
-    short_starred_unpack,
-    single_unpack,
-    function_unpack,
-    class_attr_unpack,
-])
+@pytest.mark.parametrize(
+    'unpack_expression',
+    [
+        short_unpack,
+        short_starred_unpack,
+        single_unpack,
+        function_unpack,
+        class_attr_unpack,
+    ],
+)
 def test_unpack_length_normal(
     assert_errors,
     parse_ast_tree,
@@ -48,12 +51,15 @@ def test_unpack_length_normal(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('unpack_expression', [
-    long_unpack,
-    long_starred_unpack,
-    long_function_unpack,
-    long_class_attr_unpack,
-])
+@pytest.mark.parametrize(
+    'unpack_expression',
+    [
+        long_unpack,
+        long_starred_unpack,
+        long_function_unpack,
+        long_class_attr_unpack,
+    ],
+)
 def test_unpack_length_violation(
     assert_errors,
     assert_error_text,

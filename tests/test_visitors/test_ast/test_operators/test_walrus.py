@@ -35,11 +35,14 @@ some = [
 """
 
 
-@pytest.mark.parametrize('code', [
-    correct_assignment,
-    correct_if_condition,
-    correct_comprehension,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_assignment,
+        correct_if_condition,
+        correct_comprehension,
+    ],
+)
 def test_not_walrus(
     assert_errors,
     parse_ast_tree,
@@ -55,11 +58,14 @@ def test_not_walrus(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    wrong_assignment,
-    wrong_if_condition,
-    wrong_comprehension,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_assignment,
+        wrong_if_condition,
+        wrong_comprehension,
+    ],
+)
 def test_walrus(
     assert_errors,
     parse_ast_tree,

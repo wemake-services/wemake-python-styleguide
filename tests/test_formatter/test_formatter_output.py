@@ -18,7 +18,6 @@ Warning::
 
 """
 
-
 import os
 import subprocess
 
@@ -41,15 +40,18 @@ def _safe_output(output: str) -> str:
     return output.replace(current_version_url, general_version_url)
 
 
-@pytest.mark.parametrize(('cli_options', 'output'), [
-    ([], 'regular'),
-    (['--statistic'], 'regular_statistic'),
-    (['--show-source'], 'with_source'),
-    (['--show-violation-links'], 'with_links'),
-    (['--show-source', '--statistic'], 'with_source_statistic'),
-    (['--show-source', '--show-violation-links'], 'with_source_links'),
-    (['--statistic', '--show-source'], 'statistic_with_source'),
-])
+@pytest.mark.parametrize(
+    ('cli_options', 'output'),
+    [
+        ([], 'regular'),
+        (['--statistic'], 'regular_statistic'),
+        (['--show-source'], 'with_source'),
+        (['--show-violation-links'], 'with_links'),
+        (['--show-source', '--statistic'], 'with_source_statistic'),
+        (['--show-source', '--show-violation-links'], 'with_source_links'),
+        (['--statistic', '--show-source'], 'statistic_with_source'),
+    ],
+)
 @pytest.mark.parametrize(
     'no_color',
     [True, False, None],
@@ -96,15 +98,18 @@ def test_formatter(snapshot, cli_options, output, no_color):
     )
 
 
-@pytest.mark.parametrize(('cli_options', 'output'), [
-    ([], 'regular'),
-    (['--statistic'], 'regular_statistic'),
-    (['--show-source'], 'with_source'),
-    (['--show-violation-links'], 'with_links'),
-    (['--show-source', '--statistic'], 'with_source_statistic'),
-    (['--show-source', '--show-violation-links'], 'with_source_links'),
-    (['--statistic', '--show-source'], 'statistic_with_source'),
-])
+@pytest.mark.parametrize(
+    ('cli_options', 'output'),
+    [
+        ([], 'regular'),
+        (['--statistic'], 'regular_statistic'),
+        (['--show-source'], 'with_source'),
+        (['--show-violation-links'], 'with_links'),
+        (['--show-source', '--statistic'], 'with_source_statistic'),
+        (['--show-source', '--show-violation-links'], 'with_source_links'),
+        (['--statistic', '--show-source'], 'statistic_with_source'),
+    ],
+)
 @pytest.mark.parametrize(
     'no_color',
     [True, False],

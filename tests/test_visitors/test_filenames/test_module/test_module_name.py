@@ -7,12 +7,15 @@ from wemake_python_styleguide.visitors.filenames.module import (
 )
 
 
-@pytest.mark.parametrize('filename', [
-    'query.py',
-    '/home/user/logic.py',
-    'partial/views.py',
-    'C:/path/package/module.py',
-])
+@pytest.mark.parametrize(
+    'filename',
+    [
+        'query.py',
+        '/home/user/logic.py',
+        'partial/views.py',
+        'C:/path/package/module.py',
+    ],
+)
 def test_simple_filename(assert_errors, filename, default_options):
     """Testing that simple file names works well."""
     visitor = WrongModuleNameVisitor(default_options, filename=filename)
@@ -30,7 +33,7 @@ def test_restricted_filename(
     """Testing that some file names are restricted."""
     visitor = WrongModuleNameVisitor(
         default_options,
-        filename='{0}.py'.format(filename),
+        filename=f'{filename}.py',
     )
     visitor.run()
 

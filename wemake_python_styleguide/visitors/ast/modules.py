@@ -1,5 +1,6 @@
 import ast
-from typing import ClassVar, Iterable, cast
+from collections.abc import Iterable
+from typing import ClassVar, cast
 
 from typing_extensions import final
 
@@ -85,10 +86,13 @@ class MagicModuleFunctionsVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_any_assign', (
-    'visit_Assign',
-    'visit_AnnAssign',
-))
+@alias(
+    'visit_any_assign',
+    (
+        'visit_Assign',
+        'visit_AnnAssign',
+    ),
+)
 class ModuleConstantsVisitor(BaseNodeVisitor):
     """Finds incorrect module constants."""
 

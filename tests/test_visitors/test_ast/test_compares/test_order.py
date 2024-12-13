@@ -14,7 +14,6 @@ wrong_comparators = [
     (1, 'first_name.call()'),
     (1, 'first_name + 10'),
     (1, 'first_name + second_name'),
-
     ('1', '(x := first())'),
     ('(x := 1)', 'first()'),
 ]
@@ -27,22 +26,25 @@ async def function():
 
 
 @pytest.mark.filterwarnings('ignore::SyntaxWarning')
-@pytest.mark.parametrize('comparators', [
-    ('first_name', 'second_name'),
-    ('first_name', 'second_name + 1'),
-    ('first_name', '"string constant"'),
-    ('first_name', [1, 2, 3]),
-    ('first_name', 'len(second_name)'),
-    ('len(first_name)', 1),
-    ('first_name.call()', 1),
-    ('first_name.attr', 1),
-    ('first_name + 10', 1),
-    ('first_name + second_name', 1),
-    ('error.code', 'errors[index].code'),
-    (1, 2),
-    ('returned_item["id"]', 'office.id'),
-    ('(x := first(1, 2))', '"str"'),
-])
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        ('first_name', 'second_name'),
+        ('first_name', 'second_name + 1'),
+        ('first_name', '"string constant"'),
+        ('first_name', [1, 2, 3]),
+        ('first_name', 'len(second_name)'),
+        ('len(first_name)', 1),
+        ('first_name.call()', 1),
+        ('first_name.attr', 1),
+        ('first_name + 10', 1),
+        ('first_name + second_name', 1),
+        ('error.code', 'errors[index].code'),
+        (1, 2),
+        ('returned_item["id"]', 'office.id'),
+        ('(x := first(1, 2))', '"str"'),
+    ],
+)
 def test_compare_variables(
     assert_errors,
     parse_ast_tree,
@@ -59,11 +61,14 @@ def test_compare_variables(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('comparators', [
-    ('"string constant"', 'container'),
-    ('container', '"string constant"'),
-    ('(x := first(1, 2))', '"str"'),
-])
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        ('"string constant"', 'container'),
+        ('container', '"string constant"'),
+        ('(x := first(1, 2))', '"str"'),
+    ],
+)
 def test_compare_variables_in_special_case(
     assert_errors,
     parse_ast_tree,
@@ -113,10 +118,13 @@ def test_compare_wrong_order_multiple(
     visitor = WrongComparisonOrderVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [
-        CompareOrderViolation,
-        CompareOrderViolation,
-    ])
+    assert_errors(
+        visitor,
+        [
+            CompareOrderViolation,
+            CompareOrderViolation,
+        ],
+    )
 
 
 def test_compare_wrong_order_regression577(

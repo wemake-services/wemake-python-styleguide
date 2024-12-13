@@ -1,7 +1,7 @@
-from typing import Optional, Sequence, Tuple, Type, Union
+from collections.abc import Sequence
+from typing import Final, TypeAlias, Union
 
 import pytest
-from typing_extensions import Final, TypeAlias
 
 from wemake_python_styleguide.violations.base import (
     ASTViolation,
@@ -11,8 +11,8 @@ from wemake_python_styleguide.violations.base import (
 from wemake_python_styleguide.visitors.base import BaseVisitor
 
 _IgnoredTypes: TypeAlias = Union[
-    Type[BaseViolation],
-    Tuple[Type[BaseViolation], ...],
+    type[BaseViolation],
+    tuple[type[BaseViolation], ...],
     None,
 ]
 _ERROR_FORMAT: Final = ': {0}'
@@ -21,6 +21,7 @@ _ERROR_FORMAT: Final = ': {0}'
 @pytest.fixture(scope='session')
 def assert_errors():
     """Helper function to assert visitor violations."""
+
     def factory(
         visitor: BaseVisitor,
         expected_errors: Sequence[str],
@@ -51,10 +52,11 @@ def assert_errors():
 @pytest.fixture(scope='session')
 def assert_error_text():
     """Helper function to assert visitor violation's text."""
+
     def factory(
         visitor: BaseVisitor,
         text: str,
-        baseline: Optional[int] = None,
+        baseline: int | None = None,
         *,
         multiple: bool = False,
         ignored_types: _IgnoredTypes = None,

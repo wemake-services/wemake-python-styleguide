@@ -2,34 +2,34 @@ import ast
 import operator
 from contextlib import suppress
 from types import MappingProxyType
-from typing import Optional, Tuple, Type, Union
-
-from typing_extensions import Final
+from typing import Final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic.nodes import evaluate_node, get_parent
 from wemake_python_styleguide.types import ContextNodes
 
-_CONTEXTS: Tuple[Type[ContextNodes], ...] = (
+_CONTEXTS: tuple[type[ContextNodes], ...] = (
     ast.Module,
     ast.ClassDef,
     *FunctionNodes,
 )
 
-_AST_OPS_TO_OPERATORS: Final = MappingProxyType({
-    ast.Add: operator.add,
-    ast.Sub: operator.sub,
-    ast.Mult: operator.mul,
-    ast.Div: operator.truediv,
-    ast.FloorDiv: operator.floordiv,
-    ast.Mod: operator.mod,
-    ast.Pow: operator.pow,
-    ast.LShift: operator.lshift,
-    ast.RShift: operator.rshift,
-    ast.BitAnd: operator.and_,
-    ast.BitOr: operator.or_,
-    ast.BitXor: operator.xor,
-})
+_AST_OPS_TO_OPERATORS: Final = MappingProxyType(
+    {
+        ast.Add: operator.add,
+        ast.Sub: operator.sub,
+        ast.Mult: operator.mul,
+        ast.Div: operator.truediv,
+        ast.FloorDiv: operator.floordiv,
+        ast.Mod: operator.mod,
+        ast.Pow: operator.pow,
+        ast.LShift: operator.lshift,
+        ast.RShift: operator.rshift,
+        ast.BitAnd: operator.and_,
+        ast.BitOr: operator.or_,
+        ast.BitXor: operator.xor,
+    }
+)
 
 
 def set_if_chain(tree: ast.AST) -> ast.AST:
@@ -118,8 +118,8 @@ def set_constant_evaluations(tree: ast.AST) -> ast.AST:
 
 def _find_context(
     node: ast.AST,
-    contexts: Tuple[Type[ast.AST], ...],
-) -> Optional[ast.AST]:
+    contexts: tuple[type[ast.AST], ...],
+) -> ast.AST | None:
     """
     We changed how we find and assign contexts in 0.8.1 version.
 
@@ -145,7 +145,7 @@ def _apply_if_statement(statement: ast.If) -> None:
 
 def evaluate_operation(
     statement: ast.BinOp,
-) -> Optional[Union[int, float, str, bytes]]:
+) -> int | float | str | bytes | None:
     """Tries to evaluate all math operations inside the statement."""
     if isinstance(statement.left, ast.BinOp):
         left = evaluate_operation(statement.left)

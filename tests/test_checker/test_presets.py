@@ -24,7 +24,10 @@ def _is_visitor_class(cls) -> bool:
     if not inspect.isclass(cls):
         return False
 
-    return issubclass(cls, BaseVisitor) and cls not in base_classes
+    try:  # pragma: no cover
+        return issubclass(cls, BaseVisitor) and cls not in base_classes
+    except TypeError:  # pragma: no cover
+        return False
 
 
 def _import_module_by_path(path: str):
@@ -42,9 +45,7 @@ def _visitors_paths():
     base_path = Path('wemake_python_styleguide')
     excluded_paths = list(Path(base_path, 'presets').glob('**/*.py'))
     return [
-        path
-        for path in base_path.glob('**/*.py')
-        if path not in excluded_paths
+        path for path in base_path.glob('**/*.py') if path not in excluded_paths
     ]
 
 

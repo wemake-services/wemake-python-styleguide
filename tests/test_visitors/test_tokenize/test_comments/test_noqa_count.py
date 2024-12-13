@@ -7,14 +7,17 @@ from wemake_python_styleguide.violations.best_practices import (
 from wemake_python_styleguide.visitors.tokenize.comments import NoqaVisitor
 
 
-@pytest.mark.parametrize('code', [
-    'wallet = 10  # noqa: WPS002,WPS114',
-    'wallet = 10  # noqa:WPS002, WPS114',
-    'wallet = 10  # noqa: WPS002, WPS114',
-    'wallet = 10  # noqa: WPS002',
-    'wallet = 1000# noqa: WPS002',
-    'wallet = 1000# noqa:  WPS002  ',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'wallet = 10  # noqa: WPS002,WPS114',
+        'wallet = 10  # noqa:WPS002, WPS114',
+        'wallet = 10  # noqa: WPS002, WPS114',
+        'wallet = 10  # noqa: WPS002',
+        'wallet = 1000# noqa: WPS002',
+        'wallet = 1000# noqa:  WPS002  ',
+    ],
+)
 def test_noqa_overuse(
     parse_tokens,
     assert_errors,
@@ -22,7 +25,7 @@ def test_noqa_overuse(
     code,
 ):
     """Ensures that `noqa` overuse raises a warning."""
-    file_tokens = parse_tokens('{0}\n'.format(code) * (10 + 1))
+    file_tokens = parse_tokens(f'{code}\n' * (10 + 1))
 
     visitor = NoqaVisitor(default_options, file_tokens=file_tokens)
     visitor.run()

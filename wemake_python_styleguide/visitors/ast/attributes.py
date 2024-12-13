@@ -1,5 +1,5 @@
 import ast
-from typing import ClassVar, FrozenSet
+from typing import ClassVar
 
 from typing_extensions import final
 
@@ -20,11 +20,13 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 class WrongAttributeVisitor(BaseNodeVisitor):
     """Ensures that attributes are used correctly."""
 
-    _allowed_to_use_protected: ClassVar[FrozenSet[str]] = frozenset((
-        'self',
-        'cls',
-        'mcs',
-    ))
+    _allowed_to_use_protected: ClassVar[frozenset[str]] = frozenset(
+        (
+            'self',
+            'cls',
+            'mcs',
+        )
+    )
 
     def visit_Attribute(self, node: ast.Attribute) -> None:
         """Checks the `Attribute` node."""
@@ -63,5 +65,6 @@ class WrongAttributeVisitor(BaseNodeVisitor):
 
             if node.attr in ALL_MAGIC_METHODS:
                 self._ensure_attribute_type(
-                    node, DirectMagicAttributeAccessViolation,
+                    node,
+                    DirectMagicAttributeAccessViolation,
                 )

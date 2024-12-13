@@ -49,19 +49,21 @@ long_text = (
 """
 
 
-@pytest.mark.parametrize('expression', [
-    '+ ""',
-    "+ 'a'",
-    '+ b"123"',
-    '+ 1 + f""',
-    '+ b"" + 2',
-
-    '+= ""',
-    "+= b'a'",
-    '+= b"123"',
-    '+= f""',
-    '+= b""',
-])
+@pytest.mark.parametrize(
+    'expression',
+    [
+        '+ ""',
+        "+ 'a'",
+        '+ b"123"',
+        '+ 1 + f""',
+        '+ b"" + 2',
+        '+= ""',
+        "+= b'a'",
+        '+= b"123"',
+        '+= f""',
+        '+= b""',
+    ],
+)
 def test_string_concat(
     assert_errors,
     parse_ast_tree,
@@ -77,12 +79,14 @@ def test_string_concat(
     assert_errors(visitor, [ExplicitStringConcatViolation])
 
 
-@pytest.mark.parametrize('expression', [
-    '- 1',
-    '; x = "a" * 2',
-
-    '*= 2',
-])
+@pytest.mark.parametrize(
+    'expression',
+    [
+        '- 1',
+        '; x = "a" * 2',
+        '*= 2',
+    ],
+)
 def test_correct_operation(
     assert_errors,
     parse_ast_tree,
@@ -98,13 +102,16 @@ def test_correct_operation(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    docstring,
-    multiline_string_concat,
-    multiline_bytes_concat,
-    multiline_format_concat,
-    multiline_mixed_concat,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        docstring,
+        multiline_string_concat,
+        multiline_bytes_concat,
+        multiline_format_concat,
+        multiline_mixed_concat,
+    ],
+)
 def test_correct_multiline_operation(
     assert_errors,
     parse_ast_tree,

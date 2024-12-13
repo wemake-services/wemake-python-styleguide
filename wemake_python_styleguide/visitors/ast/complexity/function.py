@@ -1,8 +1,9 @@
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, List, Mapping, Tuple, Type, Union
+from collections.abc import Mapping
+from typing import ClassVar, DefaultDict, TypeAlias, Union
 
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide.logic.complexity import cognitive
 from wemake_python_styleguide.logic.complexity.functions import (
@@ -29,9 +30,9 @@ _AnyFunctionCounter: TypeAlias = Union[
     FunctionCounter,
     FunctionCounterWithLambda,
 ]
-_CheckRule: TypeAlias = Tuple[_AnyFunctionCounter, int, Type[BaseViolation]]
+_CheckRule: TypeAlias = tuple[_AnyFunctionCounter, int, type[BaseViolation]]
 _NodeTypeHandler: TypeAlias = Mapping[
-    Union[type, Tuple[type, ...]],
+    Union[type, tuple[type, ...]],
     FunctionCounter,
 ]
 
@@ -40,9 +41,7 @@ _NodeTypeHandler: TypeAlias = Mapping[
 class _ComplexityCounter:
     """Helper class to encapsulate logic from the visitor."""
 
-    _not_contain_locals: ClassVar[AnyNodes] = (
-        ast.comprehension,
-    )
+    _not_contain_locals: ClassVar[AnyNodes] = (ast.comprehension,)
 
     def __init__(self) -> None:
         self.metrics = ComplexityMetrics()
@@ -107,10 +106,13 @@ class _ComplexityCounter:
 
 
 @final
-@alias('visit_any_function', (
-    'visit_AsyncFunctionDef',
-    'visit_FunctionDef',
-))
+@alias(
+    'visit_any_function',
+    (
+        'visit_AsyncFunctionDef',
+        'visit_FunctionDef',
+    ),
+)
 class FunctionComplexityVisitor(BaseNodeVisitor):
     """
     This class checks for complexity inside functions.
@@ -169,7 +171,7 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
                         violation(node, text=str(count), baseline=limit),
                     )
 
-    def _function_checks(self) -> List[_CheckRule]:
+    def _function_checks(self) -> list[_CheckRule]:
         return [
             (
                 self._counter.metrics.arguments,
@@ -204,10 +206,13 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_any_function', (
-    'visit_AsyncFunctionDef',
-    'visit_FunctionDef',
-))
+@alias(
+    'visit_any_function',
+    (
+        'visit_AsyncFunctionDef',
+        'visit_FunctionDef',
+    ),
+)
 class CognitiveComplexityVisitor(BaseNodeVisitor):
     """Used to count cognitive score and average module complexity."""
 

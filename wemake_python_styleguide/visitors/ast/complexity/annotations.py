@@ -1,5 +1,4 @@
 import ast
-from typing import List
 
 from typing_extensions import final
 
@@ -16,10 +15,13 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 
 @final
-@alias('visit_any_function', (
-    'visit_FunctionDef',
-    'visit_AsyncFunctionDef',
-))
+@alias(
+    'visit_any_function',
+    (
+        'visit_FunctionDef',
+        'visit_AsyncFunctionDef',
+    ),
+)
 class AnnotationComplexityVisitor(BaseNodeVisitor):
     """Ensures that annotations are used correctly."""
 
@@ -34,7 +36,8 @@ class AnnotationComplexityVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_function_annotations_complexity(
-        self, node: AnyFunctionDef,
+        self,
+        node: AnyFunctionDef,
     ) -> None:
         annotations = [
             arg.annotation
@@ -48,7 +51,7 @@ class AnnotationComplexityVisitor(BaseNodeVisitor):
     def _check_annotations_complexity(
         self,
         node: ast.AST,
-        annotations: List[ast.expr],
+        annotations: list[ast.expr],
     ) -> None:
         max_complexity = self.options.max_annotation_complexity
         for annotation in annotations:

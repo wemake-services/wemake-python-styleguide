@@ -31,9 +31,9 @@ def test_violation_must_have_docstring():
     with pytest.raises(
         TypeError,
         match=re.escape(
-            'Please include a docstring documenting ' +
-            "<class 'test_implementation.test_violation_must_have_docstring." +
-            "<locals>.IShallNotPass'>",
+            'Please include a docstring documenting '
+            + "<class 'test_implementation.test_violation_must_have_docstring."
+            + "<locals>.IShallNotPass'>",
         ),
     ):
 

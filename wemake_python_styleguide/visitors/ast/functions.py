@@ -1,8 +1,9 @@
 import ast
+from collections.abc import Mapping
 from contextlib import suppress
-from typing import ClassVar, Dict, FrozenSet, List, Mapping, Union
+from typing import ClassVar, TypeAlias, Union
 
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import (
     ForNodes,
@@ -73,7 +74,6 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
         '.get': 2,
         '.pop': 2,
         '.setdefault': 2,
-
         # list methods:
         '.insert': 2,
     }
@@ -92,7 +92,8 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
 
     def _check_wrong_function_called(self, node: ast.Call) -> None:
         function_name = functions.given_function_called(
-            node, FUNCTIONS_BLACKLIST,
+            node,
+            FUNCTIONS_BLACKLIST,
         )
         if function_name:
             self.add_violation(
@@ -113,7 +114,8 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
             if not is_ignored and arg.value in {True, False}:
                 self.add_violation(
                     BooleanPositionalArgumentViolation(
-                        arg, text=str(arg.value),
+                        arg,
+                        text=str(arg.value),
                     ),
                 )
 
@@ -156,7 +158,8 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
     def _is_call_ignored(self, node: ast.Call) -> bool:
         call = source.node_to_string(node.func)
         func_called = functions.given_function_called(
-            node, self._functions.keys(),
+            node,
+            self._functions.keys(),
         )
 
         return bool(
@@ -215,9 +218,8 @@ class WrongFunctionCallContextVisitor(base.BaseNodeVisitor):
             # We do not care about `with` or `async with` - both are fine.
             return
 
-        if_exp_inside_with = (
-            isinstance(parent_node, ast.IfExp) and
-            isinstance(nodes.get_parent(parent_node), ast.withitem)
+        if_exp_inside_with = isinstance(parent_node, ast.IfExp) and isinstance(
+            nodes.get_parent(parent_node), ast.withitem
         )
 
         if if_exp_inside_with:
@@ -242,49 +244,51 @@ class WrongFunctionCallContextVisitor(base.BaseNodeVisitor):
         args_len = len(node.args)
 
         is_one_arg_range = (
-            args_len == 1 and
-            isinstance(node.args[0], ast.Call) and
-            functions.given_function_called(node.args[0], {'len'})
+            args_len == 1
+            and isinstance(node.args[0], ast.Call)
+            and functions.given_function_called(node.args[0], {'len'})
         )
         is_two_args_range = (
-            self._is_multiple_args_range_with_len(node) and
-            args_len == 2
+            self._is_multiple_args_range_with_len(node) and args_len == 2
         )
         # for three args add violation
         # only if `step` arg do not equals 1 or -1
         step_arg = args_len == 3 and operators.unwrap_unary_node(node.args[2])
         is_three_args_range = (
-            self._is_multiple_args_range_with_len(node) and
-            args_len == 3 and
-            isinstance(step_arg, ast.Num) and
-            abs(step_arg.n) == 1
+            self._is_multiple_args_range_with_len(node)
+            and args_len == 3
+            and isinstance(step_arg, ast.Num)
+            and abs(step_arg.n) == 1
         )
         if any([is_one_arg_range, is_two_args_range, is_three_args_range]):
             self.add_violation(ImplicitEnumerateViolation(node))
 
     def _is_multiple_args_range_with_len(self, node: ast.Call) -> bool:
         return bool(
-            len(node.args) in {2, 3} and
-            isinstance(node.args[1], ast.Call) and
-            functions.given_function_called(node.args[1], {'len'}),
+            len(node.args) in {2, 3}
+            and isinstance(node.args[1], ast.Call)
+            and functions.given_function_called(node.args[1], {'len'}),
         )
 
 
 @final
-@decorators.alias('visit_any_function', (
-    'visit_AsyncFunctionDef',
-    'visit_FunctionDef',
-))
+@decorators.alias(
+    'visit_any_function',
+    (
+        'visit_AsyncFunctionDef',
+        'visit_FunctionDef',
+    ),
+)
 class FunctionDefinitionVisitor(base.BaseNodeVisitor):
     """Responsible for checking function internals."""
 
-    _descriptor_decorators: ClassVar[
-        FrozenSet[str]
-    ] = frozenset((
-        'classmethod',
-        'staticmethod',
-        'property',
-    ))
+    _descriptor_decorators: ClassVar[frozenset[str]] = frozenset(
+        (
+            'classmethod',
+            'staticmethod',
+            'property',
+        )
+    )
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """Checks regular and ``async`` functions."""
@@ -294,14 +298,16 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_unused_variables(self, node: AnyFunctionDef) -> None:
-        local_variables: Dict[str, List[_LocalVariable]] = {}
+        local_variables: dict[str, list[_LocalVariable]] = {}
 
         for body_item in node.body:
             for sub_node in ast.walk(body_item):
                 if isinstance(sub_node, (ast.Name, ast.ExceptHandler)):
                     var_name = variables.get_variable_name(sub_node)
                     self._maybe_update_variable(
-                        sub_node, var_name, local_variables,
+                        sub_node,
+                        var_name,
+                        local_variables,
                     )
 
         self._ensure_used_variables(local_variables)
@@ -335,7 +341,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
         self,
         sub_node: _LocalVariable,
         var_name: str,
-        local_variables: Dict[str, List[_LocalVariable]],
+        local_variables: dict[str, list[_LocalVariable]],
     ) -> None:
         defs = local_variables.get(var_name)
         if defs is not None:
@@ -346,9 +352,8 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
             defs.append(sub_node)
             return
 
-        is_name_def = (
-            isinstance(sub_node, ast.Name) and
-            isinstance(sub_node.ctx, ast.Store)
+        is_name_def = isinstance(sub_node, ast.Name) and isinstance(
+            sub_node.ctx, ast.Store
         )
 
         if is_name_def or isinstance(sub_node, ast.ExceptHandler):
@@ -356,14 +361,15 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
 
     def _ensure_used_variables(
         self,
-        local_variables: Mapping[str, List[_LocalVariable]],
+        local_variables: Mapping[str, list[_LocalVariable]],
     ) -> None:
         for varname, usages in local_variables.items():
             for node in usages:
                 if access.is_protected(varname):
                     self.add_violation(
                         naming.UnusedVariableIsUsedViolation(
-                            node, text=varname,
+                            node,
+                            text=varname,
                         ),
                     )
 
@@ -410,11 +416,14 @@ class UselessLambdaDefinitionVisitor(base.BaseNodeVisitor):
 
 
 @final
-@decorators.alias('visit_any_function_and_lambda', (
-    'visit_AsyncFunctionDef',
-    'visit_FunctionDef',
-    'visit_Lambda',
-))
+@decorators.alias(
+    'visit_any_function_and_lambda',
+    (
+        'visit_AsyncFunctionDef',
+        'visit_FunctionDef',
+        'visit_Lambda',
+    ),
+)
 class FunctionSignatureVisitor(base.BaseNodeVisitor):
     """
     Checks function arguments and name when function is defined.
@@ -462,25 +471,30 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
             self.add_violation(GetterWithoutReturnViolation(node))
 
     def _is_concrete_getter(self, node: AnyFunctionDef) -> bool:
-        return (
-            node.name.startswith('get_') and
-            not stubs.is_stub(node)
-        )
+        return node.name.startswith('get_') and not stubs.is_stub(node)
 
     def _check_complex_argument_defaults(
         self,
         node: AnyFunctionDefAndLambda,
     ) -> None:
-        all_defaults = filter(None, (
-            *node.args.defaults,
-            *node.args.kw_defaults,
-        ))
+        all_defaults = filter(
+            None,
+            (
+                *node.args.defaults,
+                *node.args.kw_defaults,
+            ),
+        )
 
         for arg in all_defaults:
             real_arg = operators.unwrap_unary_node(arg)
-            parts = attributes.parts(real_arg) if isinstance(
-                real_arg, ast.Attribute,
-            ) else [real_arg]
+            parts = (
+                attributes.parts(real_arg)
+                if isinstance(
+                    real_arg,
+                    ast.Attribute,
+                )
+                else [real_arg]
+            )
 
             has_incorrect_part = any(
                 not isinstance(part, self._allowed_default_value_types)
@@ -506,7 +520,8 @@ class UnnecessaryLiteralsVisitor(base.BaseNodeVisitor):
 
     def _check_unnecessary_literals(self, node: ast.Call) -> None:
         function_name = functions.given_function_called(
-            node, LITERALS_BLACKLIST,
+            node,
+            LITERALS_BLACKLIST,
         )
         if function_name and not node.args:
             self.add_violation(consistency.UnnecessaryLiteralsViolation(node))

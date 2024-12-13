@@ -1,6 +1,6 @@
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, FrozenSet, List, Optional
+from typing import ClassVar, DefaultDict
 
 from typing_extensions import final
 
@@ -54,9 +54,12 @@ class WrongClassDefVisitor(base.BaseNodeVisitor):
             )
         elif isinstance(base_class, ast.Subscript):
             parts = list(attributes.parts(base_class))
-            subscripts = list(filter(
-                lambda part: isinstance(part, ast.Subscript), parts,
-            ))
+            subscripts = list(
+                filter(
+                    lambda part: isinstance(part, ast.Subscript),
+                    parts,
+                )
+            )
             correct_items = all(
                 isinstance(sub_node, (ast.Name, ast.Attribute, ast.Subscript))
                 for sub_node in parts
@@ -116,14 +119,13 @@ class WrongClassBodyVisitor(base.BaseNodeVisitor):
             self.add_violation(oop.WrongClassBodyContentViolation(sub_node))
 
     def _check_getters_setters_methods(self, node: ast.ClassDef) -> None:
-        getters_and_setters = set(filter(
-            lambda getter_setter: functions.is_method(
-                getattr(getter_setter, 'function_type', None),
-            ),
+        getters_and_setters = set(
             getters_setters.find_paired_getters_and_setters(node),
-        )).union(set(  # To delete duplicated violations
-            getters_setters.find_attributed_getters_and_setters(node),
-        ))
+        ).union(
+            set(  # To delete duplicated violations
+                getters_setters.find_attributed_getters_and_setters(node),
+            )
+        )
         for method in getters_and_setters:
             self.add_violation(
                 oop.UnpythonicGetterSetterViolation(
@@ -134,19 +136,18 @@ class WrongClassBodyVisitor(base.BaseNodeVisitor):
 
 
 @final
-@decorators.alias('visit_any_function', (
-    'visit_FunctionDef',
-    'visit_AsyncFunctionDef',
-))
+@decorators.alias(
+    'visit_any_function',
+    (
+        'visit_FunctionDef',
+        'visit_AsyncFunctionDef',
+    ),
+)
 class WrongMethodVisitor(base.BaseNodeVisitor):
     """Visits functions, but treats them as methods."""
 
-    _staticmethod_names: ClassVar[FrozenSet[str]] = frozenset((
-        'staticmethod',
-    ))
-    _special_async_iter: ClassVar[FrozenSet[str]] = frozenset((
-        '__aiter__',
-    ))
+    _staticmethod_names: ClassVar[frozenset[str]] = frozenset(('staticmethod',))
+    _special_async_iter: ClassVar[frozenset[str]] = frozenset(('__aiter__',))
 
     def visit_any_function(self, node: types.AnyFunctionDef) -> None:
         """Checking class methods: async and regular."""
@@ -229,14 +230,15 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
 
         self.add_violation(
             oop.UselessOverwrittenMethodViolation(
-                node, text=defined_method_name,
+                node,
+                text=defined_method_name,
             ),
         )
 
     def _get_call_stmt_of_useless_method(
         self,
         node: types.AnyFunctionDef,
-    ) -> Optional[ast.Call]:
+    ) -> ast.Call | None:
         """
         Fetches ``super`` call statement from function definition.
 
@@ -268,10 +270,13 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
 
 
 @final
-@decorators.alias('visit_any_assign', (
-    'visit_Assign',
-    'visit_AnnAssign',
-))
+@decorators.alias(
+    'visit_any_assign',
+    (
+        'visit_Assign',
+        'visit_AnnAssign',
+    ),
+)
 class WrongSlotsVisitor(base.BaseNodeVisitor):
     """Visits class attributes."""
 
@@ -299,7 +304,7 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
         node: types.AnyAssign,
         elements: ast.Tuple,
     ) -> None:
-        fields: DefaultDict[str, List[ast.AST]] = defaultdict(list)
+        fields: DefaultDict[str, list[ast.AST]] = defaultdict(list)
 
         for tuple_item in elements.elts:
             slot_name = self._slot_item_name(tuple_item)
@@ -327,18 +332,16 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
         if isinstance(node.value, ast.Tuple):
             self._count_slots_items(node, node.value)
 
-    def _slot_item_name(self, node: ast.AST) -> Optional[str]:
+    def _slot_item_name(self, node: ast.AST) -> str | None:
         if isinstance(node, ast.Str):
             return node.s
         if isinstance(node, ast.Starred):
             return source.node_to_string(node)
         return None
 
-    def _are_correct_slots(self, slots: List[ast.AST]) -> bool:
+    def _are_correct_slots(self, slots: list[ast.AST]) -> bool:
         return all(
-            slot.s.isidentifier()
-            for slot in slots
-            if isinstance(slot, ast.Str)
+            slot.s.isidentifier() for slot in slots if isinstance(slot, ast.Str)
         )
 
 
@@ -380,7 +383,7 @@ class ClassMethodOrderVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_method_order(self, node: ast.ClassDef) -> None:
-        method_nodes: List[str] = []
+        method_nodes: list[str] = []
 
         for subnode in ast.walk(node):
             if isinstance(subnode, FunctionNodes):

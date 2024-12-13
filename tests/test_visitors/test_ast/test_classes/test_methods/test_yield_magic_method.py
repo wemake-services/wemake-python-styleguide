@@ -17,24 +17,33 @@ class Test:
 """
 
 
-@pytest.mark.parametrize('code', [
-    method_template,
-    classmethod_template,
-])
-@pytest.mark.parametrize('method', [
-    '__init__',
-    '__new__',
-    '__str__',
-    '__aenter__',
-    '__exit__',
-    '__anext__',
-    '__next__',
-])
-@pytest.mark.parametrize('statement', [
-    'yield',
-    'yield 1',
-    'yield from some()',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        method_template,
+        classmethod_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'method',
+    [
+        '__init__',
+        '__new__',
+        '__str__',
+        '__aenter__',
+        '__exit__',
+        '__anext__',
+        '__next__',
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'yield',
+        'yield 1',
+        'yield from some()',
+    ],
+)
 def test_magic_generator(
     assert_errors,
     assert_error_text,
@@ -54,23 +63,32 @@ def test_magic_generator(
     assert_error_text(visitor, method)
 
 
-@pytest.mark.parametrize('code', [
-    method_template,
-    classmethod_template,
-])
-@pytest.mark.parametrize('method', [
-    '__init__',
-    '__new__',
-    '__str__',
-    '__aenter__',
-    '__iter__',
-    '__exit__',
-    '__custom__',
-])
-@pytest.mark.parametrize('statement', [
-    'return 1',
-    'print()',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        method_template,
+        classmethod_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'method',
+    [
+        '__init__',
+        '__new__',
+        '__str__',
+        '__aenter__',
+        '__iter__',
+        '__exit__',
+        '__custom__',
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'return 1',
+        'print()',
+    ],
+)
 def test_magic_statement(
     assert_errors,
     parse_ast_tree,
@@ -88,21 +106,30 @@ def test_magic_statement(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    method_template,
-    classmethod_template,
-])
-@pytest.mark.parametrize('method', [
-    '__iter__',
-    '__aiter__',
-    '__call__',
-    '__custom__',
-])
-@pytest.mark.parametrize('statement', [
-    'yield',
-    'yield 1',
-    'yield from some()',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        method_template,
+        classmethod_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'method',
+    [
+        '__iter__',
+        '__aiter__',
+        '__call__',
+        '__custom__',
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'yield',
+        'yield 1',
+        'yield from some()',
+    ],
+)
 def test_iter_generator(
     assert_errors,
     parse_ast_tree,

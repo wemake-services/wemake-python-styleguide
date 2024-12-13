@@ -20,16 +20,22 @@ while_construct = 'while {0} in {1}: ...'
 while_with_multiple_in = 'while {0} in {1} in {2}: ...'
 
 
-@pytest.mark.parametrize('code', [
-    if_without_multiple_in_compares,
-    ternary,
-    while_construct,
-])
-@pytest.mark.parametrize('comparators', [
-    ('x_coord', '6'),
-    ('status', {True}),
-    ('letter', {'a', 'b'}),
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        if_without_multiple_in_compares,
+        ternary,
+        while_construct,
+    ],
+)
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        ('x_coord', '6'),
+        ('status', {True}),
+        ('letter', {'a', 'b'}),
+    ],
+)
 def test_compare_with_in(
     assert_errors,
     parse_ast_tree,
@@ -51,16 +57,22 @@ def test_compare_with_in(
     )
 
 
-@pytest.mark.parametrize('code', [
-    if_with_multiple_in_compares,
-    ternary_with_multiple_in,
-    while_with_multiple_in,
-])
-@pytest.mark.parametrize('comparators', [
-    ('line', 'sqaure', 'shape'),
-    ('output', 'status', {True}),
-    ('letter', 'line', 'book'),
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        if_with_multiple_in_compares,
+        ternary_with_multiple_in,
+        while_with_multiple_in,
+    ],
+)
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        ('line', 'sqaure', 'shape'),
+        ('output', 'status', {True}),
+        ('letter', 'line', 'book'),
+    ],
+)
 def test_compare_with_multiple_in(
     assert_errors,
     parse_ast_tree,

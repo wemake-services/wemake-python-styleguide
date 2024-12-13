@@ -1,8 +1,7 @@
 import ast
+from collections.abc import Mapping
 from inspect import getmro
-from typing import Dict, List, Mapping, Optional, Tuple, Type
-
-from typing_extensions import TypeAlias
+from typing import TypeAlias
 
 from wemake_python_styleguide.compat.types import AnyTry
 from wemake_python_styleguide.logic import source
@@ -10,7 +9,7 @@ from wemake_python_styleguide.logic.walk import is_contained
 from wemake_python_styleguide.types import AnyNodes
 
 
-def get_exception_name(node: ast.Raise) -> Optional[str]:
+def get_exception_name(node: ast.Raise) -> str | None:
     """Returns the exception name or ``None`` if node has not it."""
     exception = node.exc
     if exception is None:
@@ -23,34 +22,33 @@ def get_exception_name(node: ast.Raise) -> Optional[str]:
     return getattr(exception, 'id', None)
 
 
-def get_cause_name(node: ast.Raise) -> Optional[str]:
+def get_cause_name(node: ast.Raise) -> str | None:
     """Returns the cause name or ``None`` if node has not it."""
     return getattr(node.cause, 'id', None)
 
 
-def get_all_exception_names(node: AnyTry) -> List[str]:
+def get_all_exception_names(node: AnyTry) -> list[str]:
     """Returns a list of all exceptions names in try blocks."""
-    exceptions: List[str] = []
+    exceptions: list[str] = []
     for exc_handler in node.handlers:
         # There might be complex things hidden inside an exception type,
         # so we want to get the string representation of it:
         if isinstance(exc_handler.type, ast.Name):
             exceptions.append(source.node_to_string(exc_handler.type))
         elif isinstance(exc_handler.type, ast.Tuple):
-            exceptions.extend([
-                source.node_to_string(node)
-                for node in exc_handler.type.elts
-            ])
+            exceptions.extend(
+                [source.node_to_string(node) for node in exc_handler.type.elts]
+            )
     return exceptions
 
 
-_ExceptionMemo: TypeAlias = Dict[str, Tuple[str, ...]]
+_ExceptionMemo: TypeAlias = dict[str, tuple[str, ...]]
 
 
 def traverse_exception(
-    cls: Type[BaseException],
-    builtin_exceptions: Optional[_ExceptionMemo] = None,
-) -> Mapping[str, Tuple[str, ...]]:
+    cls: type[BaseException],
+    builtin_exceptions: _ExceptionMemo | None = None,
+) -> Mapping[str, tuple[str, ...]]:
     """
     Returns a dictionary of built-in exceptions hierarchy.
 
@@ -69,8 +67,8 @@ def traverse_exception(
             base.__name__
             for base in getmro(exc)
             if (
-                issubclass(base, BaseException) and
-                base.__name__ != exc.__name__
+                issubclass(base, BaseException)
+                and base.__name__ != exc.__name__
             )
         )
         traverse_exception(exc, builtin_exceptions)
@@ -81,22 +79,17 @@ def traverse_exception(
 def find_returning_nodes(
     node: AnyTry,
     bad_returning_nodes: AnyNodes,
-) -> Tuple[bool, bool, bool, bool]:
+) -> tuple[bool, bool, bool, bool]:
     """Find nodes that return value and are inside try/except/else/finally."""
-    try_has = any(
-        is_contained(line, bad_returning_nodes)
-        for line in node.body
-    )
+    try_has = any(is_contained(line, bad_returning_nodes) for line in node.body)
     except_has = any(
         is_contained(except_handler, bad_returning_nodes)
         for except_handler in node.handlers
     )
     else_has = any(
-        is_contained(line, bad_returning_nodes)
-        for line in node.orelse
+        is_contained(line, bad_returning_nodes) for line in node.orelse
     )
     finally_has = any(
-        is_contained(line, bad_returning_nodes)
-        for line in node.finalbody
+        is_contained(line, bad_returning_nodes) for line in node.finalbody
     )
     return try_has, except_has, else_has, finally_has

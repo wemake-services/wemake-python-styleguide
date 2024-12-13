@@ -101,26 +101,29 @@ class MyClassWithReallyLongName: ...
 """
 
 
-@pytest.mark.parametrize('code', [
-    nested_if,
-    nested_if2,
-    nested_for,
-    nested_try,
-    nested_try2,
-    pytest.param(
-        nested_try_star,
-        marks=pytest.mark.skipif(
-            not PY311,
-            reason='ExceptionGroup was added in 3.11',
+@pytest.mark.parametrize(
+    'code',
+    [
+        nested_if,
+        nested_if2,
+        nested_for,
+        nested_try,
+        nested_try2,
+        pytest.param(
+            nested_try_star,
+            marks=pytest.mark.skipif(
+                not PY311,
+                reason='ExceptionGroup was added in 3.11',
+            ),
         ),
-    ),
-    nested_with,
-    nested_while,
-    nested_match,
-    top_level_function_ellipsis,
-    top_level_method_ellipsis,
-    top_level_class_ellipsis,
-])
+        nested_with,
+        nested_while,
+        nested_match,
+        top_level_function_ellipsis,
+        top_level_method_ellipsis,
+        top_level_class_ellipsis,
+    ],
+)
 def test_nested_offset(
     assert_errors,
     parse_ast_tree,
@@ -155,17 +158,20 @@ def test_nested_offset_regression320(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize(('code', 'number_of_errors'), [
-    (nested_if, 1),
-    (nested_if2, 1),
-    (nested_for, 1),
-    (nested_try, 2),
-    (nested_try2, 4),
-    (nested_try_star, 2),
-    (nested_with, 1),
-    (nested_while, 1),
-    (nested_match, 1),
-])
+@pytest.mark.parametrize(
+    ('code', 'number_of_errors'),
+    [
+        (nested_if, 1),
+        (nested_if2, 1),
+        (nested_for, 1),
+        (nested_try, 2),
+        (nested_try2, 4),
+        (nested_try_star, 2),
+        (nested_with, 1),
+        (nested_while, 1),
+        (nested_match, 1),
+    ],
+)
 def test_nested_offset_errors(
     monkeypatch,
     assert_errors,
@@ -189,13 +195,16 @@ def test_nested_offset_errors(
     assert_errors(visitor, errors)
 
 
-@pytest.mark.parametrize('code', [
-    nested_if,
-    nested_if2,
-    nested_for,
-    nested_with,
-    nested_while,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        nested_if,
+        nested_if2,
+        nested_for,
+        nested_with,
+        nested_while,
+    ],
+)
 def test_nested_offset_error_text(
     monkeypatch,
     assert_errors,

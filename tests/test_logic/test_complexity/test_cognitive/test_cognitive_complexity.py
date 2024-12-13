@@ -144,28 +144,27 @@ def enhance(tree):
 """
 
 
-@pytest.mark.parametrize(('code', 'complexity'), [
-    (complexity1_1, 1),
-    (complexity1_2, 1),
-    (complexity1_3, 1),
-
-    (complexity2_1, 2),
-    (complexity2_2, 2),
-
-    (complexity3_1, 3),
-    (complexity3_2, 3),
-    (complexity3_3, 3),
-
-    (complexity4_1, 4),
-    (complexity4_2, 4),
-    (complexity4_3, 4),
-
-    (complexity5_1, 5),
-    (complexity6_1, 6),
-    (complexity9_1, 9),
-    (complexity10_1, 10),
-    (complexity14_1, 14),
-])
+@pytest.mark.parametrize(
+    ('code', 'complexity'),
+    [
+        (complexity1_1, 1),
+        (complexity1_2, 1),
+        (complexity1_3, 1),
+        (complexity2_1, 2),
+        (complexity2_2, 2),
+        (complexity3_1, 3),
+        (complexity3_2, 3),
+        (complexity3_3, 3),
+        (complexity4_1, 4),
+        (complexity4_2, 4),
+        (complexity4_3, 4),
+        (complexity5_1, 5),
+        (complexity6_1, 6),
+        (complexity9_1, 9),
+        (complexity10_1, 10),
+        (complexity14_1, 14),
+    ],
+)
 def test_cognitive_complexity(
     get_code_snippet_complexity,
     mode,

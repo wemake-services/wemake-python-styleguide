@@ -63,12 +63,15 @@ def function(): ...
 """
 
 
-@pytest.mark.parametrize('code', [
-    correct_decorator1,
-    correct_decorator2,
-    correct_decorator3,
-    correct_decorator4,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_decorator1,
+        correct_decorator2,
+        correct_decorator3,
+        correct_decorator4,
+    ],
+)
 def test_method_decorators_correct(
     assert_errors,
     parse_ast_tree,
@@ -85,12 +88,15 @@ def test_method_decorators_correct(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    wrong_decorator1,
-    wrong_decorator2,
-    wrong_decorator3,
-    wrong_decorator4,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_decorator1,
+        wrong_decorator2,
+        wrong_decorator3,
+        wrong_decorator4,
+    ],
+)
 def test_method_decorators_incorrect(
     assert_errors,
     parse_ast_tree,

@@ -1,9 +1,10 @@
 import ast
 from collections import defaultdict
+from collections.abc import Mapping, Sequence
 from contextlib import suppress
-from typing import ClassVar, DefaultDict, List, Mapping, Sequence, Type, Union
+from typing import ClassVar, DefaultDict, TypeAlias
 
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import AssignNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
@@ -40,16 +41,19 @@ from wemake_python_styleguide.violations.refactoring import (
 from wemake_python_styleguide.visitors import base, decorators
 
 #: Type alias to specify how we check different containers in loops.
-_ContainerSpec: TypeAlias = Mapping[Type[ast.AST], Sequence[str]]
+_ContainerSpec: TypeAlias = Mapping[type[ast.AST], Sequence[str]]
 
 
 @final
-@decorators.alias('visit_any_comprehension', (
-    'visit_ListComp',
-    'visit_DictComp',
-    'visit_SetComp',
-    'visit_GeneratorExp',
-))
+@decorators.alias(
+    'visit_any_comprehension',
+    (
+        'visit_ListComp',
+        'visit_DictComp',
+        'visit_SetComp',
+        'visit_GeneratorExp',
+    ),
+)
 class WrongComprehensionVisitor(base.BaseNodeVisitor):
     """Checks comprehensions for correctness."""
 
@@ -89,17 +93,23 @@ class WrongComprehensionVisitor(base.BaseNodeVisitor):
 
 
 @final
-@decorators.alias('visit_any_loop', (
-    'visit_For',
-    'visit_While',
-    'visit_AsyncFor',
-))
-@decorators.alias('visit_any_comp', (
-    'visit_ListComp',
-    'visit_SetComp',
-    'visit_DictComp',
-    'visit_GeneratorExp',
-))
+@decorators.alias(
+    'visit_any_loop',
+    (
+        'visit_For',
+        'visit_While',
+        'visit_AsyncFor',
+    ),
+)
+@decorators.alias(
+    'visit_any_comp',
+    (
+        'visit_ListComp',
+        'visit_SetComp',
+        'visit_DictComp',
+        'visit_GeneratorExp',
+    ),
+)
 class WrongLoopVisitor(base.BaseNodeVisitor):
     """Responsible for examining loops."""
 
@@ -116,7 +126,6 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         ast.SetComp: ['elt'],
         ast.GeneratorExp: ['elt'],
         ast.DictComp: ['key', 'value'],
-
         ast.For: ['body'],
         ast.AsyncFor: ['body'],
         ast.While: ['body'],
@@ -141,24 +150,18 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
 
     def _check_lambda_inside_loop(
         self,
-        node: Union[AnyLoop, AnyComprehension],
+        node: AnyLoop | AnyComprehension,
     ) -> None:
         for lambda_node in walk.get_subnodes_by_type(node, ast.Lambda):
             arg_nodes = walk.get_subnodes_by_type(lambda_node, ast.arg)
             body_nodes = walk.get_subnodes_by_type(lambda_node.body, ast.Name)
-            arguments = (
-                arg.arg
-                for arg in arg_nodes
-            )
-            body = (
-                subnode.id
-                for subnode in body_nodes
-            )
+            arguments = (arg.arg for arg in arg_nodes)
+            body = (subnode.id for subnode in body_nodes)
             if not all(symbol in arguments for symbol in body):
                 self.add_violation(LambdaInsideLoopViolation(node))
 
     def _check_useless_continue(self, node: AnyLoop) -> None:
-        nodes_at_line: DefaultDict[int, List[ast.AST]] = defaultdict(list)
+        nodes_at_line: DefaultDict[int, list[ast.AST]] = defaultdict(list)
         for sub_node in ast.walk(node):
             lineno = getattr(sub_node, 'lineno', None)
             if lineno is not None:
@@ -182,10 +185,13 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
 
 
 @final
-@decorators.alias('visit_any_for', (
-    'visit_For',
-    'visit_AsyncFor',
-))
+@decorators.alias(
+    'visit_any_for',
+    (
+        'visit_For',
+        'visit_AsyncFor',
+    ),
+)
 class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
     """Responsible for ``for`` loops and comprehensions definitions."""
 
@@ -221,7 +227,7 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
 
     def _check_explicit_iter_type(
         self,
-        node: Union[AnyFor, ast.comprehension],
+        node: AnyFor | ast.comprehension,
     ) -> None:
         node_iter = operators.unwrap_unary_node(node.iter)
         is_wrong = isinstance(node_iter, self._forbidden_for_iters)
@@ -231,10 +237,10 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
 
     def _check_implicit_sum(self, node: AnyFor) -> None:
         is_implicit_sum = (
-            len(node.body) == 1 and
-            isinstance(node.body[0], ast.AugAssign) and
-            isinstance(node.body[0].op, ast.Add) and
-            isinstance(node.body[0].target, ast.Name)
+            len(node.body) == 1
+            and isinstance(node.body[0], ast.AugAssign)
+            and isinstance(node.body[0].op, ast.Add)
+            and isinstance(node.body[0].target, ast.Name)
         )
         if is_implicit_sum:
             self.add_violation(ImplicitSumViolation(node))
@@ -245,9 +251,9 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
             return
 
         is_implicit_yield_from = (
-            len(node.body) == 1 and
-            isinstance(node.body[0], ast.Expr) and
-            isinstance(node.body[0].value, ast.Yield)
+            len(node.body) == 1
+            and isinstance(node.body[0], ast.Expr)
+            and isinstance(node.body[0].value, ast.Yield)
         )
         if is_implicit_yield_from:
             self.add_violation(ImplicitYieldFromViolation(node))
@@ -268,9 +274,9 @@ class SyncForLoopVisitor(base.BaseNodeVisitor):
 
         for sub in ast.walk(node):
             has_violation = (
-                isinstance(sub, ast.Subscript) and
-                not self._is_assigned_target(sub) and
-                slices.is_same_slice(iterable, target, sub)
+                isinstance(sub, ast.Subscript)
+                and not self._is_assigned_target(sub)
+                and slices.is_same_slice(iterable, target, sub)
             )
             if has_violation:
                 self.add_violation(ImplicitItemsIteratorViolation(node))

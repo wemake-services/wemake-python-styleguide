@@ -155,11 +155,12 @@ You can also show all options that ``flake8`` supports by running:
     :str:`wemake_python_styleguide.options.defaults.SHOW_VIOLATION_LINKS`
 """
 
-from typing import ClassVar, Mapping, Optional, Sequence, Union
+from collections.abc import Mapping, Sequence
+from typing import ClassVar, Final, TypeAlias, Union
 
 import attr
 from flake8.options.manager import OptionManager
-from typing_extensions import Final, TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide.options import defaults
 
@@ -176,16 +177,18 @@ class _Option:
     long_option_name: str
     default: ConfigValuesTypes
     help: str  # noqa: WPS125
-    type: Optional[_Type] = int  # noqa: WPS125
+    type: _Type | None = int  # noqa: WPS125
     parse_from_config: bool = True
     action: str = 'store'
     comma_separated_list: bool = False
-    dest: Optional[str] = None
+    dest: str | None = None
 
     def __attrs_post_init__(self) -> None:
         """Is called after regular init is done."""
         object.__setattr__(  # noqa: WPS609
-            self, 'help', ' '.join(
+            self,
+            'help',
+            ' '.join(
                 (self.help, 'Defaults to: %(default)s'),  # noqa: WPS323
             ),
         )
@@ -205,7 +208,6 @@ class Configuration:
 
     _options: ClassVar[Sequence[_Option]] = [
         # General:
-
         _Option(
             '--min-name-length',
             defaults.MIN_NAME_LENGTH,
@@ -271,9 +273,7 @@ class Configuration:
             defaults.EXPS_FOR_ONE_EMPTY_LINE,
             'Count of expressions for one empty line in a function body.',
         ),
-
         # Complexity:
-
         _Option(
             '--max-returns',
             defaults.MAX_RETURNS,
@@ -409,9 +409,7 @@ class Configuration:
             defaults.MAX_TUPLE_UNPACK_LENGTH,
             'Maximum number of variables in a tuple unpacking.',
         ),
-
         # Formatter:
-
         _Option(
             '--show-violation-links',
             defaults.SHOW_VIOLATION_LINKS,

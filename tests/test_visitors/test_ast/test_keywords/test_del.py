@@ -21,11 +21,14 @@ del temp_list[0]
 """
 
 
-@pytest.mark.parametrize('code', [
-    del_variable,
-    del_key,
-    del_index,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        del_variable,
+        del_key,
+        del_index,
+    ],
+)
 def test_del_keyword(
     assert_errors,
     assert_error_text,

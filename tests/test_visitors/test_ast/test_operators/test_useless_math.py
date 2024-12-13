@@ -10,45 +10,42 @@ from wemake_python_styleguide.visitors.ast.operators import (
 usage_template = 'constant {0}'
 
 
-@pytest.mark.parametrize('expression', [
-    # Math ops:
-    '*= 0',
-    '**= -0.0',
-    '+= 0e0',
-    '-= -0b0',
-
-    '* 0',
-    '** -0.0',
-    '+ 0o0',
-    '- -0x0',
-
-    '*= 1',
-    '**= 1.0',
-    '/= 1',
-    '/= 0o1',
-    '%= 1',
-
-    '* 0b1',
-    '** 1',
-    '/ 1.0',
-    '% 0o1',
-
-    '* other / 1.0',
-    '* 1 * other',
-
-    # Boolean ops:
-    '>> 0',
-    '<< 0',
-    '| 0b0',
-    '^ 0x0',
-    '& -0o0',
-
-    '>>= 0',
-    '<<= 0',
-    '|= 0b0',
-    '^= 0x0',
-    '&= -0o0',
-])
+@pytest.mark.parametrize(
+    'expression',
+    [
+        # Math ops:
+        '*= 0',
+        '**= -0.0',
+        '+= 0e0',
+        '-= -0b0',
+        '* 0',
+        '** -0.0',
+        '+ 0o0',
+        '- -0x0',
+        '*= 1',
+        '**= 1.0',
+        '/= 1',
+        '/= 0o1',
+        '%= 1',
+        '* 0b1',
+        '** 1',
+        '/ 1.0',
+        '% 0o1',
+        '* other / 1.0',
+        '* 1 * other',
+        # Boolean ops:
+        '>> 0',
+        '<< 0',
+        '| 0b0',
+        '^ 0x0',
+        '& -0o0',
+        '>>= 0',
+        '<<= 0',
+        '|= 0b0',
+        '^= 0x0',
+        '&= -0o0',
+    ],
+)
 def test_meaningless_math(
     assert_errors,
     parse_ast_tree,
@@ -64,37 +61,35 @@ def test_meaningless_math(
     assert_errors(visitor, [MeaninglessNumberOperationViolation])
 
 
-@pytest.mark.parametrize('expression', [
-    # Math ops:
-    '*= -1',
-    '*= 10',
-    '+= 1e2',
-    '-= -0b1',
-
-    '*= 0.1',
-    '**= 1.1',
-    '/= 0o2',
-
-    '* 0b11',
-    '** 2',
-    '/ -1.0',
-
-    '* other / 1.5',
-    '* -1 * other',
-
-    # Boolean ops:
-    '>> 10',
-    '<< 1',
-    '| 0b1',
-    '^ 2',
-    '^= 0x1',
-    '& -1',
-
-    '>>= 10',
-    '<<= 1',
-    '|= 0b1',
-    '&= -0o1',
-])
+@pytest.mark.parametrize(
+    'expression',
+    [
+        # Math ops:
+        '*= -1',
+        '*= 10',
+        '+= 1e2',
+        '-= -0b1',
+        '*= 0.1',
+        '**= 1.1',
+        '/= 0o2',
+        '* 0b11',
+        '** 2',
+        '/ -1.0',
+        '* other / 1.5',
+        '* -1 * other',
+        # Boolean ops:
+        '>> 10',
+        '<< 1',
+        '| 0b1',
+        '^ 2',
+        '^= 0x1',
+        '& -1',
+        '>>= 10',
+        '<<= 1',
+        '|= 0b1',
+        '&= -0o1',
+    ],
+)
 def test_useful_math(
     assert_errors,
     parse_ast_tree,
@@ -110,13 +105,16 @@ def test_useful_math(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('expression', [
-    '1 / other',
-    '1 / 11',
-    '1 / 1.1',
-    '1.0 / number',
-    '2 // other',
-])
+@pytest.mark.parametrize(
+    'expression',
+    [
+        '1 / other',
+        '1 / 11',
+        '1 / 1.1',
+        '1.0 / number',
+        '2 // other',
+    ],
+)
 def test_one_to_divide(
     assert_errors,
     parse_ast_tree,
@@ -132,13 +130,16 @@ def test_one_to_divide(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('expression', [
-    '1 / 1',
-    '2 / 1',
-    '3.3 / 1',
-    'other / 1',
-    'other // 1',
-])
+@pytest.mark.parametrize(
+    'expression',
+    [
+        '1 / 1',
+        '2 / 1',
+        '3.3 / 1',
+        'other / 1',
+        'other // 1',
+    ],
+)
 def test_divide_by_one(
     assert_errors,
     parse_ast_tree,

@@ -35,15 +35,18 @@ else:
 """
 
 
-@pytest.mark.parametrize('code', [
-    'not some',
-    '-some',
-    'some != 1',
-    'some',
-    'some == 0',
-    'some != other',
-    'some > 1',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'not some',
+        '-some',
+        'some != 1',
+        'some',
+        'some == 0',
+        'some != other',
+        'some > 1',
+    ],
+)
 def test_negated_simple_conditions(
     code,
     assert_errors,
@@ -59,15 +62,18 @@ def test_negated_simple_conditions(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    'not some',
-    '-some',
-    'some != 1',
-    'some',
-    'some == 0',
-    'some != other',
-    'some > 1',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'not some',
+        '-some',
+        'some != 1',
+        'some',
+        'some == 0',
+        'some != other',
+        'some > 1',
+    ],
+)
 def test_negated_complex_elif_conditions(
     code,
     assert_errors,
@@ -83,16 +89,22 @@ def test_negated_complex_elif_conditions(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('template', [
-    if_expression,
-    complex_conditions,
-    complex_elif_else_conditions,
-])
-@pytest.mark.parametrize('code', [
-    'not some',
-    'some != 1',
-    'some != other',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        if_expression,
+        complex_conditions,
+        complex_elif_else_conditions,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        'not some',
+        'some != 1',
+        'some != other',
+    ],
+)
 def test_wrong_negated_complex_conditions(
     code,
     template,
@@ -109,18 +121,24 @@ def test_wrong_negated_complex_conditions(
     assert_errors(visitor, [NegatedConditionsViolation])
 
 
-@pytest.mark.parametrize('template', [
-    complex_conditions,
-    complex_elif_else_conditions,
-])
-@pytest.mark.parametrize('code', [
-    'some',
-    '-some',
-    '~some',
-    'some == 0',
-    'some > -1',
-    'some < other',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        complex_conditions,
+        complex_elif_else_conditions,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        'some',
+        '-some',
+        '~some',
+        'some == 0',
+        'some > -1',
+        'some < other',
+    ],
+)
 def test_correctly_negated_complex_conditions(
     code,
     template,

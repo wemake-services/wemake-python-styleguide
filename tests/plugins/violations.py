@@ -52,9 +52,11 @@ def _load_all_violation_classes():
     for module in VIOLATIONS_MODULES:
         classes_names_list = inspect.getmembers(module, _is_violation_class)
         only_classes = map(itemgetter(1), classes_names_list)
-        classes.update({
-            module: sorted(only_classes, key=attrgetter('code')),
-        })
+        classes.update(
+            {
+                module: sorted(only_classes, key=attrgetter('code')),
+            }
+        )
     return classes
 
 

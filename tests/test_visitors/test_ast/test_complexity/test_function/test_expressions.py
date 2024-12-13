@@ -27,11 +27,14 @@ def function():
 """
 
 
-@pytest.mark.parametrize('code', [
-    function_without_expressions,
-    function_with_expressions,
-    function_with_nested_function_and_expressions,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_without_expressions,
+        function_with_expressions,
+        function_with_nested_function_and_expressions,
+    ],
+)
 def test_expressions_correct_count(
     assert_errors,
     parse_ast_tree,
@@ -48,10 +51,13 @@ def test_expressions_correct_count(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    function_with_expressions,
-    function_with_nested_function_and_expressions,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_with_expressions,
+        function_with_nested_function_and_expressions,
+    ],
+)
 def test_expressions_wrong_count(
     assert_errors,
     assert_error_text,
