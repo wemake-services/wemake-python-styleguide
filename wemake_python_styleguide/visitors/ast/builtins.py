@@ -2,7 +2,7 @@ import ast
 import re
 import string
 from collections.abc import Sequence
-from typing import ClassVar, Final, Optional, TypeAlias
+from typing import ClassVar, Final, TypeAlias
 
 from typing_extensions import final
 
@@ -35,7 +35,7 @@ from wemake_python_styleguide.violations import (
 from wemake_python_styleguide.visitors import base, decorators
 
 #: Items that can be inside a hash.
-_HashItems: TypeAlias = Sequence[Optional[ast.AST]]
+_HashItems: TypeAlias = Sequence[ast.AST | None]
 
 
 @final
@@ -79,7 +79,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         )                                # end
         """,  # noqa: WPS323
         # Different python versions report `WPS323` on different lines.
-        flags=re.X,  # flag to ignore comments and whitespace.
+        flags=re.VERBOSE,  # flag to ignore comments and whitespace.
     )
 
     #: Names of functions in which we allow strings with modulo patterns.
@@ -208,13 +208,12 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
 
     def _is_valid_final_value(self, format_value: ast.AST) -> bool:
         # Variable lookup is okay and a single attribute is okay
-        if isinstance(format_value, (ast.Name, ast.Attribute)):
-            return True
-        # Function call with empty arguments is okay
-        elif isinstance(format_value, ast.Call) and not format_value.args:
+        if isinstance(format_value, (ast.Name, ast.Attribute)) or (
+            isinstance(format_value, ast.Call) and not format_value.args
+        ):
             return True
         # Named lookup, Index lookup & Dict key is okay
-        elif isinstance(format_value, ast.Subscript):
+        if isinstance(format_value, ast.Subscript):
             return isinstance(
                 format_value.slice,
                 self._valid_format_index,

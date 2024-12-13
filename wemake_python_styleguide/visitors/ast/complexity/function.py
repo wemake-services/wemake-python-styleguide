@@ -1,7 +1,7 @@
 import ast
 from collections import defaultdict
 from collections.abc import Mapping
-from typing import ClassVar, DefaultDict, TypeAlias, Union
+from typing import ClassVar, TypeAlias
 
 from typing_extensions import final
 
@@ -27,13 +27,10 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 # Type aliases:
 
-_AnyFunctionCounter: TypeAlias = Union[
-    FunctionCounter,
-    FunctionCounterWithLambda,
-]
+_AnyFunctionCounter: TypeAlias = FunctionCounter | FunctionCounterWithLambda
 _CheckRule: TypeAlias = tuple[_AnyFunctionCounter, int, type[BaseViolation]]
 _NodeTypeHandler: TypeAlias = Mapping[
-    Union[type, tuple[type, ...]],
+    type | tuple[type, ...],
     FunctionCounter,
 ]
 
@@ -223,7 +220,7 @@ class CognitiveComplexityVisitor(BaseNodeVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """We use to save all functions' complexity here."""
         super().__init__(*args, **kwargs)
-        self._functions: DefaultDict[AnyFunctionDef, int] = defaultdict(int)
+        self._functions: defaultdict[AnyFunctionDef, int] = defaultdict(int)
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """Counts cognitive complexity."""

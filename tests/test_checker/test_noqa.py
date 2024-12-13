@@ -302,7 +302,7 @@ def _assert_errors_count_in_output(
 
     if total:
         for violation in all_violations:
-            key = 'WPS{0}'.format(str(violation.code).zfill(3))
+            key = f'WPS{str(violation.code).zfill(3)}'
             assert key in errors, 'Unlisted #noqa violation'
 
     for found_error, found_count in found_errors.items():

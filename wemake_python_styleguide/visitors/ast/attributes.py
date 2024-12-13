@@ -2,7 +2,6 @@ import ast
 
 from typing_extensions import final
 
-from wemake_python_styleguide.violations.base import ASTViolation
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.constants import (
     ALL_MAGIC_METHODS,
@@ -10,6 +9,7 @@ from wemake_python_styleguide.constants import (
 )
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming import access
+from wemake_python_styleguide.violations.base import ASTViolation
 from wemake_python_styleguide.violations.best_practices import (
     ProtectedAttributeViolation,
 )

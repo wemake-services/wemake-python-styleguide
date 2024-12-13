@@ -35,7 +35,7 @@ def is_annotation(node: ast.AST) -> bool:
             annotated.returns and walk.is_contained_by(node, annotated.returns),
         )
         return node == annotated.returns or contains_node
-    elif isinstance(annotated, _AnnNodes):
+    if isinstance(annotated, _AnnNodes):
         contains_node = bool(
             annotated.annotation
             and walk.is_contained_by(node, annotated.annotation),

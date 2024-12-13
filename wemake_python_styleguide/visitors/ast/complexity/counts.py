@@ -1,6 +1,6 @@
 import ast
 from collections import defaultdict
-from typing import DefaultDict, TypeAlias, Union
+from typing import TypeAlias
 
 from typing_extensions import final
 
@@ -15,8 +15,8 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 # Type aliases:
-_ModuleMembers: TypeAlias = Union[AnyFunctionDef, ast.ClassDef]
-_ReturnLikeStatement: TypeAlias = Union[ast.Return, ast.Yield]
+_ModuleMembers: TypeAlias = AnyFunctionDef | ast.ClassDef
+_ReturnLikeStatement: TypeAlias = ast.Return | ast.Yield
 
 
 @final
@@ -134,7 +134,7 @@ class ElifVisitor(BaseNodeVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Creates internal ``elif`` counter."""
         super().__init__(*args, **kwargs)
-        self._if_children: DefaultDict[ast.If, list[ast.If]] = defaultdict(
+        self._if_children: defaultdict[ast.If, list[ast.If]] = defaultdict(
             list,
         )
 

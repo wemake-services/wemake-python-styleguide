@@ -121,7 +121,7 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
         """Visits compare with constants."""
         self._check_constant(node.ops[0], node.left)
 
-        for op, comparator in zip(node.ops, node.comparators):
+        for op, comparator in zip(node.ops, node.comparators, strict=False):
             self._check_constant(op, comparator)
 
         self.generic_visit(node)
@@ -245,7 +245,7 @@ class InCompareSanityVisitor(BaseNodeVisitor):
             self.add_violation(MultipleInCompareViolation(node))
 
     def _check_comparators(self, node: ast.Compare) -> None:
-        for op, comp in zip(node.ops, node.comparators):
+        for op, comp in zip(node.ops, node.comparators, strict=False):
             if not isinstance(op, self._in_nodes):
                 continue
 

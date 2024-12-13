@@ -81,14 +81,14 @@ def is_primitive(node: ast.AST) -> bool:
     """
     if isinstance(node, (ast.Tuple, ast.List)):
         return not node.elts  # we do allow `[]` and `()`
-    elif isinstance(node, ast.Set):
+    if isinstance(node, ast.Set):
         elts = node.elts
         return (  # we do allow `{*set_items}`
             len(elts) == 1 and isinstance(elts[0], ast.Starred)
         )
-    elif isinstance(node, ast.Dict):  # we do allow `{}` and `{**values}`
+    if isinstance(node, ast.Dict):  # we do allow `{}` and `{**values}`
         return not list(filter(None, node.keys))
-    elif isinstance(node, ast.Call):
+    if isinstance(node, ast.Call):
         return not call_args.get_all_args(node)  # we do allow `call()`
     return False
 

@@ -70,7 +70,7 @@ class IfElseVisitor(BaseTokenVisitor):
         for index, next_token in enumerate(next_tokens):  # pragma: no cover
             if next_token.exact_type in self._allowed_token_types:
                 continue
-            elif next_token.string == 'if':
+            if next_token.string == 'if':
                 self._check_complex_else(next_tokens, next_token, index)
             return
 

@@ -248,7 +248,7 @@ class ShebangVisitor(BaseTokenVisitor):
         while True:
             if current_token == token:
                 return True
-            elif current_token.exact_type not in NEWLINES:
+            if current_token.exact_type not in NEWLINES:
                 break
             current_token = next(all_tokens)
         return False

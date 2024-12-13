@@ -2,7 +2,7 @@ import ast
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from contextlib import suppress
-from typing import ClassVar, DefaultDict, TypeAlias
+from typing import ClassVar, TypeAlias
 
 from typing_extensions import final
 
@@ -62,7 +62,7 @@ class WrongComprehensionVisitor(base.BaseNodeVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Creates a counter for tracked metrics."""
         super().__init__(*args, **kwargs)
-        self._fors: DefaultDict[ast.AST, int] = defaultdict(int)
+        self._fors: defaultdict[ast.AST, int] = defaultdict(int)
 
     def visit_comprehension(self, node: ast.comprehension) -> None:
         """Checks ``if`` and ``for`` nodes inside the comprehension."""
@@ -160,7 +160,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
                 self.add_violation(LambdaInsideLoopViolation(node))
 
     def _check_useless_continue(self, node: AnyLoop) -> None:
-        nodes_at_line: DefaultDict[int, list[ast.AST]] = defaultdict(list)
+        nodes_at_line: defaultdict[int, list[ast.AST]] = defaultdict(list)
         for sub_node in ast.walk(node):
             lineno = getattr(sub_node, 'lineno', None)
             if lineno is not None:

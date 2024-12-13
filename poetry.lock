@@ -434,31 +434,6 @@ pycodestyle = ">=2.12.0,<2.13.0"
 pyflakes = ">=3.2.0,<3.3.0"
 
 [[package]]
-name = "flake8-plugin-utils"
-version = "1.3.3"
-description = "The package provides base classes and utils for flake8 plugin writing"
-optional = false
-python-versions = ">=3.6,<4.0"
-files = [
-    {file = "flake8-plugin-utils-1.3.3.tar.gz", hash = "sha256:39f6f338d038b301c6fd344b06f2e81e382b68fa03c0560dff0d9b1791a11a2c"},
-    {file = "flake8_plugin_utils-1.3.3-py3-none-any.whl", hash = "sha256:e4848c57d9d50f19100c2d75fa794b72df068666a9041b4b0409be923356a3ed"},
-]
-
-[[package]]
-name = "flake8-pytest-style"
-version = "2.0.0"
-description = "A flake8 plugin checking common style issues or inconsistencies with pytest-based tests."
-optional = false
-python-versions = "<4.0.0,>=3.8.1"
-files = [
-    {file = "flake8_pytest_style-2.0.0-py3-none-any.whl", hash = "sha256:abcb9f56f277954014b749e5a0937fae215be01a21852e9d05e7600c3de6aae5"},
-    {file = "flake8_pytest_style-2.0.0.tar.gz", hash = "sha256:919c328cacd4bc4f873ea61ab4db0d8f2c32e0db09a3c73ab46b1de497556464"},
-]
-
-[package.dependencies]
-flake8-plugin-utils = ">=1.3.2,<2.0.0"
-
-[[package]]
 name = "grimp"
 version = "3.5"
 description = "Builds a queryable graph of the imports within one or more Python packages."
@@ -1948,4 +1923,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "8825bd52ad96671fa5a5fe9c408a788b88a366781fb08fa1e028339ca5bfcf94"
+content-hash = "8864a3705f8af1f3598748eb724665bb6c705bc07cb1bcbc6ca37584250180a3"

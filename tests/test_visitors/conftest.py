@@ -1,5 +1,5 @@
 from collections.abc import Sequence
-from typing import Final, TypeAlias, Union
+from typing import Final, TypeAlias
 
 import pytest
 
@@ -10,11 +10,9 @@ from wemake_python_styleguide.violations.base import (
 )
 from wemake_python_styleguide.visitors.base import BaseVisitor
 
-_IgnoredTypes: TypeAlias = Union[
-    type[BaseViolation],
-    tuple[type[BaseViolation], ...],
-    None,
-]
+_IgnoredTypes: TypeAlias = (
+    type[BaseViolation] | tuple[type[BaseViolation], ...] | None
+)
 _ERROR_FORMAT: Final = ': {0}'
 
 

@@ -2,7 +2,7 @@ import ast
 import types
 from collections import defaultdict
 from collections.abc import Mapping
-from typing import DefaultDict, Final
+from typing import Final
 
 import attr
 from typing_extensions import final
@@ -28,7 +28,7 @@ _ComparesMapping = Mapping[
 ]
 
 #: Used to track the operator usages in `a > b and b >c` compares.
-_OperatorUsages = DefaultDict[str, _Bounds]
+_OperatorUsages = defaultdict[str, _Bounds]
 
 #: Constant to define similar operators.
 SIMILAR_OPERATORS: Final[_ComparesMapping] = types.MappingProxyType(
@@ -90,7 +90,9 @@ class CompareBounds:
         comparison_node: ast.Compare,
     ) -> None:
         left_operand = comparison_node.left
-        comparators = zip(comparison_node.ops, comparison_node.comparators)
+        comparators = zip(
+            comparison_node.ops, comparison_node.comparators, strict=False
+        )
 
         for operator, right_operand in comparators:
             for operand in (left_operand, right_operand):

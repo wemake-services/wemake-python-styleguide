@@ -1,7 +1,7 @@
 import ast
 from collections import defaultdict
 from collections.abc import Callable
-from typing import ClassVar, DefaultDict, TypeAlias, Union
+from typing import ClassVar, TypeAlias
 
 from typing_extensions import final
 
@@ -14,9 +14,9 @@ from wemake_python_styleguide.violations import complexity
 from wemake_python_styleguide.visitors import base, decorators
 
 #: We use these types to store the number of nodes usage in different contexts.
-_Expressions: TypeAlias = DefaultDict[str, list[ast.AST]]
-_FunctionExpressions: TypeAlias = DefaultDict[ast.AST, _Expressions]
-_StringConstants: TypeAlias = frozenset[Union[str, bytes]]
+_Expressions: TypeAlias = defaultdict[str, list[ast.AST]]
+_FunctionExpressions: TypeAlias = defaultdict[ast.AST, _Expressions]
+_StringConstants: TypeAlias = frozenset[str | bytes]
 
 
 @final
@@ -64,7 +64,7 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Inits the counter for constants."""
         super().__init__(*args, **kwargs)
-        self._string_constants: DefaultDict[
+        self._string_constants: defaultdict[
             AnyTextPrimitive,
             int,
         ] = defaultdict(int)

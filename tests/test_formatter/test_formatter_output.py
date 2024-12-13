@@ -92,10 +92,7 @@ def test_formatter(snapshot, cli_options, output, no_color):
     )
     stdout, _ = process.communicate()
 
-    assert _safe_output(stdout) == snapshot, 'formatter_{0}_{1}'.format(
-        output,
-        no_color,
-    )
+    assert _safe_output(stdout) == snapshot, f'formatter_{output}_{no_color}'
 
 
 @pytest.mark.parametrize(
@@ -140,10 +137,9 @@ def test_formatter_correct(snapshot, cli_options, output, no_color):
     stdout, stderr = process.communicate()
     assert process.returncode == 0, (stdout, stderr)
 
-    assert _safe_output(stdout) == snapshot, 'formatter_correct_{0}_{1}'.format(
-        output,
-        no_color,
-    )
+    assert (
+        _safe_output(stdout) == snapshot
+    ), f'formatter_correct_{output}_{no_color}'
 
 
 def test_ipynb(snapshot):

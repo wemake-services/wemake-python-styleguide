@@ -1,6 +1,6 @@
 import ast
 from collections.abc import Mapping, Sequence
-from typing import ClassVar, TypeAlias, Union
+from typing import ClassVar, TypeAlias
 
 from typing_extensions import final
 
@@ -38,18 +38,18 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 #: Statements that do have `.body` attribute.
-_StatementWithBody: TypeAlias = Union[
-    ast.If,
-    types.AnyFor,
-    ast.While,
-    types.AnyWith,
-    ast.Try,
-    TryStar,
-    ast.ExceptHandler,
-    types.AnyFunctionDef,
-    ast.ClassDef,
-    ast.Module,
-]
+_StatementWithBody: TypeAlias = (
+    ast.If
+    | types.AnyFor
+    | ast.While
+    | types.AnyWith
+    | ast.Try
+    | TryStar
+    | ast.ExceptHandler
+    | types.AnyFunctionDef
+    | ast.ClassDef
+    | ast.Module
+)
 
 
 @final

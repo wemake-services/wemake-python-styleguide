@@ -1,6 +1,6 @@
 import ast
 from collections.abc import Mapping
-from typing import ClassVar, TypeAlias, Union
+from typing import ClassVar, TypeAlias
 
 from typing_extensions import final
 
@@ -22,7 +22,7 @@ _MeaninglessOperators: TypeAlias = Mapping[
     tuple[type[ast.operator], ...],
 ]
 _OperatorLimits: TypeAlias = Mapping[type[ast.unaryop], int]
-_NumbersAndConstants: TypeAlias = Union[ast.Num, ast.NameConstant]
+_NumbersAndConstants: TypeAlias = ast.Num | ast.NameConstant
 
 
 @final

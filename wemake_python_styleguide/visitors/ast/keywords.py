@@ -1,5 +1,5 @@
 import ast
-from typing import ClassVar, TypeAlias, Union
+from typing import ClassVar, TypeAlias
 
 from typing_extensions import final
 
@@ -35,10 +35,9 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 #: Utility type to work with violations easier.
-_ReturningViolations: TypeAlias = Union[
-    type[InconsistentReturnViolation],
-    type[InconsistentYieldViolation],
-]
+_ReturningViolations: TypeAlias = (
+    type[InconsistentReturnViolation] | type[InconsistentYieldViolation]
+)
 
 
 @final

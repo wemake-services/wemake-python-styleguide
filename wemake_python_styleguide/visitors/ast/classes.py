@@ -1,6 +1,6 @@
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict
+from typing import ClassVar
 
 from typing_extensions import final
 
@@ -47,12 +47,12 @@ class WrongClassDefVisitor(base.BaseNodeVisitor):
     def _is_correct_base_class(self, base_class: ast.AST) -> bool:
         if isinstance(base_class, ast.Name):
             return True
-        elif isinstance(base_class, ast.Attribute):
+        if isinstance(base_class, ast.Attribute):
             return all(
                 isinstance(sub_node, (ast.Name, ast.Attribute))
                 for sub_node in attributes.parts(base_class)
             )
-        elif isinstance(base_class, ast.Subscript):
+        if isinstance(base_class, ast.Subscript):
             parts = list(attributes.parts(base_class))
             subscripts = list(
                 filter(
@@ -264,7 +264,7 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         if isinstance(stmt, ast.Return):
             call_stmt = stmt.value
             return call_stmt if isinstance(call_stmt, ast.Call) else None
-        elif isinstance(stmt, ast.Expr) and isinstance(stmt.value, ast.Call):
+        if isinstance(stmt, ast.Expr) and isinstance(stmt.value, ast.Call):
             return stmt.value
         return None
 
@@ -304,7 +304,7 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
         node: types.AnyAssign,
         elements: ast.Tuple,
     ) -> None:
-        fields: DefaultDict[str, list[ast.AST]] = defaultdict(list)
+        fields: defaultdict[str, list[ast.AST]] = defaultdict(list)
 
         for tuple_item in elements.elts:
             slot_name = self._slot_item_name(tuple_item)
@@ -391,7 +391,9 @@ class ClassMethodOrderVisitor(base.BaseNodeVisitor):
                     method_nodes.append(subnode.name)
 
         ideal = sorted(method_nodes, key=self._ideal_order, reverse=True)
-        for existing_order, ideal_order in zip(method_nodes, ideal):
+        for existing_order, ideal_order in zip(
+            method_nodes, ideal, strict=False
+        ):
             if existing_order != ideal_order:
                 self.add_violation(consistency.WrongMethodOrderViolation(node))
                 return
