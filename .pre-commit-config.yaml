@@ -10,6 +10,10 @@ repos:
       - id: mixed-line-ending
         args: [--fix=lf]
       - id: check-case-conflict
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.3
+    hooks:
+      - id: actionlint
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.8.2
     hooks:
