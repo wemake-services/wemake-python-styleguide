@@ -112,9 +112,9 @@ class CompareBounds:
         is_left: bool,
     ) -> None:
         key_name = None
-        if isinstance(operator, (ast.Lt, ast.LtE)):
+        if isinstance(operator, ast.Lt | ast.LtE):
             key_name = 'lower_bound' if is_left else 'upper_bound'
-        elif isinstance(operator, (ast.Gt, ast.GtE)):
+        elif isinstance(operator, ast.Gt | ast.GtE):
             key_name = 'upper_bound' if is_left else 'lower_bound'
 
         if key_name:

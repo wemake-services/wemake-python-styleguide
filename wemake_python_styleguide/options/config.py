@@ -188,9 +188,7 @@ class _Option:
         object.__setattr__(  # noqa: WPS609
             self,
             'help',
-            ' '.join(
-                (self.help, 'Defaults to: %(default)s'),  # noqa: WPS323
-            ),
+            f'{self.help} Defaults to: %(default)s',
         )
 
     def asdict_no_none(self) -> Mapping[str, ConfigValuesTypes]:

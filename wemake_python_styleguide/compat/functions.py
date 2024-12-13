@@ -8,7 +8,7 @@ def get_assign_targets(
     node: AnyAssignWithWalrus | ast.AugAssign,
 ) -> list[ast.expr]:
     """Returns list of assign targets without knowing the type of assign."""
-    if isinstance(node, (ast.AnnAssign, ast.AugAssign, ast.NamedExpr)):
+    if isinstance(node, ast.AnnAssign | ast.AugAssign | ast.NamedExpr):
         return [node.target]
     return node.targets
 

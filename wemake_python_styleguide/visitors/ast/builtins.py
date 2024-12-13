@@ -1,5 +1,4 @@
 import ast
-import re
 import string
 from collections.abc import Sequence
 from typing import ClassVar, Final, TypeAlias
@@ -15,9 +14,7 @@ from wemake_python_styleguide.compat.aliases import (
 from wemake_python_styleguide.logic import nodes, source, walk
 from wemake_python_styleguide.logic.tree import (
     attributes,
-    functions,
     operators,
-    strings,
     variables,
 )
 from wemake_python_styleguide.types import (
@@ -63,39 +60,10 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         )
     )
 
-    #: Copied from https://stackoverflow.com/a/30018957/4842742
-    _modulo_string_pattern: ClassVar[re.Pattern[str]] = re.compile(
-        r"""                             # noqa: WPS323
-        (                                # start of capture group 1
-            %                            # literal "%"
-            (?:                          # first option
-                (?:\([a-zA-Z][\w_]*\))?  # optional named group
-                (?:[#0+-]{0,5})          # optional flags (except " ")
-                (?:\d+|\*)?              # width
-                (?:\.(?:\d+|\*))?        # precision
-                (?:h|l|L)?               # size
-                [diouxXeEfFgGcrsa]       # type
-            ) | %%                       # OR literal "%%"
-        )                                # end
-        """,  # noqa: WPS323
-        # Different python versions report `WPS323` on different lines.
-        flags=re.VERBOSE,  # flag to ignore comments and whitespace.
-    )
-
-    #: Names of functions in which we allow strings with modulo patterns.
-    _modulo_pattern_exceptions: ClassVar[frozenset[str]] = frozenset(
-        (
-            'strftime',  # For date, time, and datetime.strftime()
-            'strptime',  # For date, time, and datetime.strptime()
-            'execute',  # For psycopg2's cur.execute()
-        )
-    )
-
     def visit_any_string(self, node: AnyText) -> None:
         """Forbids incorrect usage of strings."""
         text_data = source.render_string(node.s)
         self._check_is_alphabet(node, text_data)
-        self._check_modulo_patterns(node, text_data)
         self.generic_visit(node)
 
     def _check_is_alphabet(
@@ -110,39 +78,6 @@ class WrongStringVisitor(base.BaseNodeVisitor):
                     text=text_data,
                 ),
             )
-
-    def _is_modulo_pattern_exception(self, parent: ast.AST | None) -> bool:
-        """
-        Check if string with modulo pattern is in an exceptional situation.
-
-        Basically we have some function names in which we allow strings with
-        modulo patterns because they must have them for the functions to work
-        properly.
-        """
-        if parent and isinstance(parent, ast.Call):
-            return bool(
-                functions.given_function_called(
-                    parent,
-                    self._modulo_pattern_exceptions,
-                    split_modules=True,
-                )
-            )
-        return False
-
-    def _check_modulo_patterns(
-        self,
-        node: AnyText,
-        text_data: str | None,
-    ) -> None:
-        parent = nodes.get_parent(node)
-        if parent and strings.is_doc_string(parent):
-            return  # we allow `%s` in docstrings: they cannot be formatted.
-
-        if text_data and self._modulo_string_pattern.search(text_data):
-            if not self._is_modulo_pattern_exception(parent):
-                self.add_violation(
-                    consistency.ModuloStringFormatViolation(node),
-                )
 
 
 @final
@@ -208,7 +143,7 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
 
     def _is_valid_final_value(self, format_value: ast.AST) -> bool:
         # Variable lookup is okay and a single attribute is okay
-        if isinstance(format_value, (ast.Name, ast.Attribute)) or (
+        if isinstance(format_value, ast.Name | ast.Attribute) or (
             isinstance(format_value, ast.Call) and not format_value.args
         ):
             return True
@@ -359,7 +294,7 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
         for target in node.targets:
             self._check_unpacking_target_types(target)
 
-        if isinstance(node.targets[0], (ast.Tuple, ast.List)):
+        if isinstance(node.targets[0], ast.Tuple | ast.List):
             self._check_unpacking_targets(node, node.targets[0].elts)
         self.generic_visit(node)
 

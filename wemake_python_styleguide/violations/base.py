@@ -169,7 +169,8 @@ class BaseViolation(metaclass=abc.ABCMeta):  # noqa: WPS338
         Adds violation letter to the numbers.
         Also ensures that codes like ``3`` will be represented as ``WPS003``.
         """
-        return f'WPS{str(cls.code).zfill(3)}'
+        code_part = str(cls.code).zfill(3)
+        return f'WPS{code_part}'
 
     @final
     def _postfix_information(self) -> str:

@@ -38,7 +38,7 @@ def main() -> NoReturn:
         with open(fn) as fp:
             lines = fp.read().splitlines()
             report(
-                '\t{0}:{1}\n\t{2}'.format(
+                '\t{}:{}\n\t{}'.format(
                     fn,
                     line,
                     highlight(

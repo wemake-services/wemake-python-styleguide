@@ -24,7 +24,7 @@ def get_module_name(node: ast.ImportFrom) -> str:
     - `from . import a` -> `.`
     - `from ..sub import b` -> `..sub`
     """
-    return '{0}{1}'.format(
+    return '{}{}'.format(
         '.' * node.level,
         node.module or '',
     )

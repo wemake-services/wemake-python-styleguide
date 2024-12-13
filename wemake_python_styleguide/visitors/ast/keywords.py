@@ -246,9 +246,8 @@ class GeneratorKeywordsVisitor(BaseNodeVisitor):
             self.add_violation(IncorrectYieldFromTargetViolation(node))
 
     def _check_yield_from_empty(self, node: ast.YieldFrom) -> None:
-        if isinstance(node.value, ast.Tuple):
-            if not node.value.elts:
-                self.add_violation(IncorrectYieldFromTargetViolation(node))
+        if isinstance(node.value, ast.Tuple) and not node.value.elts:
+            self.add_violation(IncorrectYieldFromTargetViolation(node))
 
     def _post_visit(self) -> None:
         previous_line: int | None = None

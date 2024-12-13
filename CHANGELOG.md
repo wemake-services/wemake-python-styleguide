@@ -44,6 +44,7 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `WPS318`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS319`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS320`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS323`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS326`, because it is covered by `ruff` linter
 - **Breaking**: Removes `WPS329`, because it is covered by `ruff` linter
 - **Breaking**: Removes `WPS331`, because it is covered by `ruff` linter
@@ -85,6 +86,7 @@ Semantic versioning in our case means:
 
 - Integration with `ondivi` doc for legacy codebases
 - Fixes a documentation error for the Formatter (Showing statistic) section
+- Source code is now formatted with `ruff`
 
 
 ## 0.19.2

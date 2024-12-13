@@ -49,7 +49,7 @@ class WrongClassDefVisitor(base.BaseNodeVisitor):
             return True
         if isinstance(base_class, ast.Attribute):
             return all(
-                isinstance(sub_node, (ast.Name, ast.Attribute))
+                isinstance(sub_node, ast.Name | ast.Attribute)
                 for sub_node in attributes.parts(base_class)
             )
         if isinstance(base_class, ast.Subscript):
@@ -61,7 +61,7 @@ class WrongClassDefVisitor(base.BaseNodeVisitor):
                 )
             )
             correct_items = all(
-                isinstance(sub_node, (ast.Name, ast.Attribute, ast.Subscript))
+                isinstance(sub_node, ast.Name | ast.Attribute | ast.Subscript)
                 for sub_node in parts
             )
 

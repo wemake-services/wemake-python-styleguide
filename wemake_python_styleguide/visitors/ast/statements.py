@@ -133,8 +133,8 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         'For': _generally_useless_body + _loop_useless_body,
         'AsyncFor': _generally_useless_body + _loop_useless_body,
         'While': _generally_useless_body + _loop_useless_body,
-        'Try': _generally_useless_body + (ast.Raise,),
-        'TryStar': _generally_useless_body + (ast.Raise,),
+        'Try': (*_generally_useless_body, ast.Raise),
+        'TryStar': (*_generally_useless_body, ast.Raise),
         'With': _generally_useless_body,
         'AsyncWith': _generally_useless_body,
     }

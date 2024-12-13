@@ -20,13 +20,13 @@ def split_prefixes(string: str) -> tuple[str, str]:
 
 def has_triple_string_quotes(string_contents: str) -> bool:
     """Tells whether string token is written as inside triple quotes."""
-    if (
-        string_contents.startswith('"""') and string_contents.endswith('"""')
-    ) or (
-        string_contents.startswith("'''") and string_contents.endswith("'''")
-    ):
-        return True
-    return False
+    return bool(
+        (string_contents.startswith('"""') and string_contents.endswith('"""'))
+        or (
+            string_contents.startswith("'''")
+            and string_contents.endswith("'''")
+        )
+    )
 
 
 def get_comment_text(token: tokenize.TokenInfo) -> str:

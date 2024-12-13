@@ -96,5 +96,5 @@ def all_violation_codes(all_module_violations):
             violation.code: violation
             for violation in all_module_violations[module]
         }
-        for module in all_module_violations.keys()
+        for module in all_module_violations
     }

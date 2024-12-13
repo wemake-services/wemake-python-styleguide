@@ -166,9 +166,8 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
         )
 
     def _print_header(self, filename: str) -> None:
-        self._write(
-            f'{self.newline}{_underline(_bold(os.path.normpath(filename)))}',
-        )
+        header = _underline(_bold(os.path.normpath(filename)))
+        self._write(f'{self.newline}{header}')
 
     def _print_violation_per_file(
         self,
@@ -177,8 +176,9 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
         count: int,
         error_by_file: defaultdict[str, int],
     ) -> None:
+        bold_code = _bold(error_code)
         self._write(
-            f'{self.newline}{_bold(error_code)}: {statistic.message}',
+            f'{self.newline}{bold_code}: {statistic.message}',
         )
         for filename, error_count in error_by_file.items():
             self._write(

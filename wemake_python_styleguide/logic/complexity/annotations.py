@@ -35,7 +35,7 @@ def get_annotation_complexity(annotation_node: _Annotation) -> int:
 
     if isinstance(annotation_node, ast.Subscript):
         return 1 + get_annotation_complexity(annotation_node.slice)
-    if isinstance(annotation_node, (ast.Tuple, ast.List)):
+    if isinstance(annotation_node, ast.Tuple | ast.List):
         return max(
             (get_annotation_complexity(node) for node in annotation_node.elts),
             default=1,

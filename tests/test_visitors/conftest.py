@@ -40,7 +40,7 @@ def assert_errors():
         for index, error in enumerate(real_errors):
             assert expected_errors[index].disabled_since is None
             assert error.code == expected_errors[index].code
-            if isinstance(error, (ASTViolation, TokenizeViolation)):
+            if isinstance(error, ASTViolation | TokenizeViolation):
                 assert error._node is not None  # noqa: WPS437
                 assert error._location() != (0, 0)  # noqa: WPS437
 

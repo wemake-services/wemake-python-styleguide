@@ -17,7 +17,7 @@ _assigned_statements = [
     unpacking_assign2,
 ]
 
-_assigned_and_annotation_statements = _assigned_statements + [simple_annotation]
+_assigned_and_annotation_statements = [*_assigned_statements, simple_annotation]
 
 
 @pytest.fixture(params=_assigned_statements)

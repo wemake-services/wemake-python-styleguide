@@ -1081,11 +1081,15 @@ class ModuloStringFormatViolation(ASTViolation):
         https://pyformat.info/
 
     .. versionadded:: 0.14.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``UP031``.
 
     """
 
     error_template = 'Found `%` string formatting'
     code = 323
+    disabled_since = '1.0.0'
 
 
 @final

@@ -180,7 +180,7 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
 
     def _check_negation(self, op: ast.operator, right: ast.AST) -> None:
         is_double_minus = (
-            isinstance(op, (ast.Add, ast.Sub))
+            isinstance(op, ast.Add | ast.Sub)
             and isinstance(right, ast.UnaryOp)
             and isinstance(right.op, ast.USub)
         )
