@@ -29,7 +29,7 @@ Semantic versioning in our case means:
   `flake8-comprehensions`, `flake8-bugbear`, `flake8-docstrings`,
   `flake8-eradicate`, `flake8-bandit`, `flake8-broken-line`,
   `flake8-rst-docstrings`, `pep8-naming`
-  support, use `ruff format` instead
+  support, use `ruff format` and `ruff check` instead
 - **Breaking**: Drops `darglint` support, because it is unmaintained
 - **Breaking**: Removes `WPS302`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS304`, because it is covered by `ruff` formatter
@@ -69,7 +69,9 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `WPS526`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS521`, because is covered by `ruff` linter
 - Allows any compares in `assert` statements for `WPS520`, #3112
-- Allows walrus operator in comprehesions
+- Allows walrus operator (`:=`) in comprehesions #3121
+- Does not count `self`, `cls`, and `mcs` as arguments
+  for `WPS211` complexity check anymore, #2394
 
 ### Bugfixes
 
