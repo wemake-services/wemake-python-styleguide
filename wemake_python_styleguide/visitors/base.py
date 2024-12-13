@@ -74,7 +74,7 @@ from wemake_python_styleguide.types import ConfigurationOptions
 from wemake_python_styleguide.violations.base import BaseViolation
 
 
-class BaseVisitor(metaclass=abc.ABCMeta):
+class BaseVisitor(abc.ABC):
     """
     Abstract base class for different types of visitors.
 
@@ -194,7 +194,7 @@ class BaseNodeVisitor(ast.NodeVisitor, BaseVisitor):
         self._post_visit()
 
 
-class BaseFilenameVisitor(BaseVisitor, metaclass=abc.ABCMeta):
+class BaseFilenameVisitor(BaseVisitor, abc.ABC):
     """
     Abstract base class that allows to visit and check module file names.
 

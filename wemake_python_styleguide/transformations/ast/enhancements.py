@@ -28,7 +28,7 @@ _AST_OPS_TO_OPERATORS: Final = MappingProxyType(
         ast.BitAnd: operator.and_,
         ast.BitOr: operator.or_,
         ast.BitXor: operator.xor,
-    }
+    },
 )
 
 

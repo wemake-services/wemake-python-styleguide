@@ -8,5 +8,5 @@ def count_boolops(node: ast.AST) -> int:
             subnode
             for subnode in ast.walk(node)
             if isinstance(subnode, ast.BoolOp)
-        ]
+        ],
     )

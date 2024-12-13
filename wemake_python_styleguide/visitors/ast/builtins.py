@@ -57,7 +57,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
             string.printable,
             string.whitespace,
             string.punctuation,
-        )
+        ),
     )
 
     def visit_any_string(self, node: AnyText) -> None:
@@ -137,7 +137,8 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
 
     def _is_valid_formatted_value(self, format_value: ast.AST) -> bool:
         if isinstance(
-            format_value, self._chainable_types
+            format_value,
+            self._chainable_types,
         ) and not self._is_valid_chaining(format_value):
             return False
         return self._is_valid_final_value(format_value)
@@ -396,7 +397,8 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
 
             real_key = operators.unwrap_unary_node(dict_key)
             is_float_key = isinstance(real_key, ast.Num) and isinstance(
-                real_key.n, float
+                real_key.n,
+                float,
             )
             if is_float_key or evaluates_to_float:
                 self.add_violation(best_practices.FloatKeyViolation(dict_key))

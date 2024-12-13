@@ -238,7 +238,8 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
             node_value = node.value.left
 
         if isinstance(
-            node.value, self._blocked_self_assignment
+            node.value,
+            self._blocked_self_assignment,
         ) and name_nodes.is_same_variable(node.target, node_value):
             self.add_violation(MisrefactoredAssignmentViolation(node))
 
@@ -280,7 +281,7 @@ class PointlessStarredVisitor(BaseNodeVisitor):
     ) -> None:
         for node in args:
             if isinstance(node, ast.Starred) and self._is_pointless_star(
-                node.value
+                node.value,
             ):
                 self.add_violation(PointlessStarredViolation(node))
 
@@ -336,7 +337,7 @@ class WrongNamedKeywordVisitor(BaseNodeVisitor):
 
         for key_node in node.value.keys:
             if isinstance(key_node, ast.Str) and not str.isidentifier(
-                key_node.s
+                key_node.s,
             ):
                 return True
         return False

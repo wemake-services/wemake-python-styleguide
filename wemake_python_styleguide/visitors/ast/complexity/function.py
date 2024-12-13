@@ -90,7 +90,8 @@ class _ComplexityCounter:
         sub_node: ast.AST,
     ) -> None:
         if isinstance(sub_node, ast.Name) and isinstance(
-            sub_node.ctx, ast.Store
+            sub_node.ctx,
+            ast.Store,
         ):
             self._update_variables(node, sub_node)
 

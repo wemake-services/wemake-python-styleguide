@@ -35,7 +35,7 @@ class CallChainsVisitor(BaseNodeVisitor):
             takewhile(
                 self._is_call,
                 parts(node),
-            )
+            ),
         )
 
         self._visited_calls.update(consecutive_calls)

@@ -54,7 +54,8 @@ class IfStatementVisitor(BaseNodeVisitor):
 
     def _check_useless_len(self, node: AnyIf) -> None:
         if isinstance(node.test, ast.Call) and given_function_called(
-            node.test, {'len'}
+            node.test,
+            {'len'},
         ):
             self.add_violation(refactoring.UselessLenCompareViolation(node))
 

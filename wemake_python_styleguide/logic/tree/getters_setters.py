@@ -48,7 +48,7 @@ def find_attributed_getters_and_setters(
         {
             instance.attr.lstrip(UNUSED_PLACEHOLDER)
             for instance in instance_attributes
-        }
+        },
     )
 
     for method in _find_getters_and_setters(node):

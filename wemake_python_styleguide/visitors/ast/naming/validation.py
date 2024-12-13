@@ -198,7 +198,8 @@ class _FunctionNameValidator(_RegularNameValidator):
     def check_function_signature(self, node: AnyFunctionDefAndLambda) -> None:
         for arg in functions.get_all_arguments(node):
             is_first_argument = functions.is_first_argument(
-                node, arg.arg
+                node,
+                arg.arg,
             ) and not isinstance(node, ast.Lambda)
             self.check_name(
                 arg,
@@ -347,7 +348,8 @@ class WrongNameVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def visit_TypeAlias(
-        self, node: TypeAliasNode
+        self,
+        node: TypeAliasNode,
     ) -> None:  # pragma: >=3.12 cover
         """Visit PEP695 type aliases."""
         self._type_params_validator.check_type_params(node)

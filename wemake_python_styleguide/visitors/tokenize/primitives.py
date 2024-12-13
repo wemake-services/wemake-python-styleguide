@@ -88,7 +88,7 @@ class _StringTokenChecker:
             'F',
             'B',
             'U',
-        )
+        ),
     )
 
     _unicode_escapes: ClassVar[frozenset[str]] = frozenset(
@@ -96,7 +96,7 @@ class _StringTokenChecker:
             'u',
             'U',
             'N',
-        )
+        ),
     )
 
     _implicit_raw_strings: ClassVar[re.Pattern[str]] = re.compile(r'\\{2}.+')

@@ -166,7 +166,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
             if lineno is not None:
                 nodes_at_line[lineno].append(sub_node)
 
-        last_line = nodes_at_line[sorted(nodes_at_line.keys())[-1]]
+        last_line = nodes_at_line[max(nodes_at_line.keys())]
         if any(isinstance(last, ast.Continue) for last in last_line):
             self.add_violation(UselessContinueViolation(node))
 

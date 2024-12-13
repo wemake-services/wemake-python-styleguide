@@ -176,7 +176,7 @@ class UnusedVariableDefinitionVisitor(BaseNodeVisitor):
         """Checks that we cannot create explicit unused loops."""
         target_names = name_nodes.get_variables_from_node(node.target)
         is_target_no_op_variable = len(target_names) == 1 and access.is_unused(
-            target_names[0]
+            target_names[0],
         )
         if not is_target_no_op_variable:  # see issue 1406
             self._check_assign_unused(
