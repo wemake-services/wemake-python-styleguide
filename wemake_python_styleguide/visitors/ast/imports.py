@@ -2,7 +2,7 @@ import ast
 from collections import defaultdict
 from collections.abc import Iterable
 from itertools import chain, product
-from typing import DefaultDict, Final
+from typing import Final
 
 from typing_extensions import final
 
@@ -49,9 +49,12 @@ class _BaseImportValidator:
 
     def _check_nested_import(self, node: AnyImport) -> None:
         parent = nodes.get_parent(node)
-        if parent is not None and not isinstance(parent, ast.Module):
-            if not imports.is_nested_typing_import(parent):
-                self._error_callback(NestedImportViolation(node))
+        if (
+            parent is not None
+            and not isinstance(parent, ast.Module)
+            and not imports.is_nested_typing_import(parent)
+        ):
+            self._error_callback(NestedImportViolation(node))
 
     def _check_same_alias(self, node: AnyImport) -> None:
         for alias in node.names:
@@ -151,7 +154,7 @@ class _ImportCollisionValidator:
         self._imported_names: list[imports.ImportedObjectInfo] = []
         # This helps us to detect cases like:
         # `from x import y, y as z`
-        self._imported_objects: DefaultDict[str, set[str]] = defaultdict(set)
+        self._imported_objects: defaultdict[str, set[str]] = defaultdict(set)
 
     def validate(self) -> None:
         """Validates that there are no intersecting imported modules."""

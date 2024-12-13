@@ -24,7 +24,7 @@ def get_module_name(node: ast.ImportFrom) -> str:
     - `from . import a` -> `.`
     - `from ..sub import b` -> `..sub`
     """
-    return '{0}{1}'.format(
+    return '{}{}'.format(
         '.' * node.level,
         node.module or '',
     )
@@ -54,7 +54,7 @@ def is_vague_import(name: str) -> bool:
 
     """
     blacklisted = name in constants.VAGUE_IMPORTS_BLACKLIST
-    with_from_or_to = name.startswith('from_') or name.startswith('to_')
+    with_from_or_to = name.startswith(('from_', 'to_'))
     too_short = logical.is_too_short_name(name, 2, trim=True)
     return blacklisted or with_from_or_to or too_short
 

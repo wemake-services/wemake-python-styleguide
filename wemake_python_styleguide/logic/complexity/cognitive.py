@@ -72,13 +72,13 @@ def _process_node_itself(
 ) -> tuple[int, int, bool]:
     if isinstance(node, _SHORT_CIRCUITS):
         return increment_by, max(1, increment_by), True
-    elif isinstance(node, _CONTROL_FLOW_BREAKERS):
+    if isinstance(node, _CONTROL_FLOW_BREAKERS):
         increment_by += 1
         return increment_by, max(1, increment_by), True
-    elif isinstance(node, _INCREMENTERS):
+    if isinstance(node, _INCREMENTERS):
         increment_by += 1
         return increment_by, 0, True
-    elif isinstance(node, ast.BoolOp):
+    if isinstance(node, ast.BoolOp):
         inner_boolops_amount = bools.count_boolops(node)
         base_complexity = inner_boolops_amount * max(increment_by, 1)
         return increment_by, base_complexity, False

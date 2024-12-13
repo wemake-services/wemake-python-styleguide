@@ -117,11 +117,14 @@ class _StringTokenChecker:
         token: tokenize.TokenInfo,
         string_def: str,
     ) -> None:
-        if has_triple_string_quotes(string_def):
-            if '\n' not in string_def and token not in self._docstrings:
-                self._add_violation(
-                    consistency.WrongMultilineStringViolation(token),
-                )
+        if (
+            has_triple_string_quotes(string_def)
+            and '\n' not in string_def
+            and token not in self._docstrings
+        ):
+            self._add_violation(
+                consistency.WrongMultilineStringViolation(token),
+            )
 
     def check_string_modifiers(
         self,
@@ -217,7 +220,7 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         self._checker.check_wrong_unicode_escape(token, modifiers, string_def)
         self._checker.check_unnecessary_raw_string(token, modifiers, string_def)
 
-    def visit_fstring_start(  # pragma: py-lt-312
+    def visit_fstring_start(  # pragma: >3.12 cover
         self,
         token: tokenize.TokenInfo,
     ) -> None:
@@ -257,39 +260,3 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         # but, since we don't recommend `f`-string, this is a low-priority
         modifiers = token.string[:-1]
         self._checker.check_string_modifiers(token, modifiers)
-
-
-@final
-class WrongStringConcatenationVisitor(BaseTokenVisitor):
-    """Checks incorrect string concatenation."""
-
-    _ignored_tokens: ClassVar[frozenset[int]] = frozenset(
-        (
-            tokenize.NL,
-            tokenize.NEWLINE,
-            tokenize.INDENT,
-            tokenize.COMMENT,
-        )
-    )
-
-    def __init__(self, *args, **kwargs) -> None:
-        """Adds extra ``_previous_token`` property."""
-        super().__init__(*args, **kwargs)
-        self._previous_token: tokenize.TokenInfo | None = None
-
-    def visit(self, token: tokenize.TokenInfo) -> None:
-        """Ensures that all string are concatenated as we allow."""
-        self._check_concatenation(token)
-
-    def _check_concatenation(self, token: tokenize.TokenInfo) -> None:
-        if token.exact_type in self._ignored_tokens:
-            return
-
-        if token.exact_type == tokenize.STRING:
-            if self._previous_token:
-                self.add_violation(
-                    consistency.ImplicitStringConcatenationViolation(token),
-                )
-            self._previous_token = token
-        else:
-            self._previous_token = None

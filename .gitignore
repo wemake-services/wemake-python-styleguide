@@ -70,6 +70,12 @@ docs/_build/
 # PyBuilder
 target/
 
+# Ruff
+.ruff_cache/
+
+# Import Linter
+.import_linter_cache/
+
 # Jupyter Notebook
 .ipynb_checkpoints
 

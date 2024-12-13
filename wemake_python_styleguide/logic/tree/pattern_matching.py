@@ -15,6 +15,9 @@ def get_explicit_as_names(
     Or in any other forms.
     """
     for match_as in get_subnodes_by_type(node, ast.MatchAs):
-        if isinstance(get_parent(match_as), ast.match_case):
-            if match_as.pattern and match_as.name:
-                yield match_as
+        if (
+            isinstance(get_parent(match_as), ast.match_case)
+            and match_as.pattern
+            and match_as.name
+        ):
+            yield match_as

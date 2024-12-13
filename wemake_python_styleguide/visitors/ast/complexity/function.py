@@ -1,10 +1,11 @@
 import ast
 from collections import defaultdict
 from collections.abc import Mapping
-from typing import ClassVar, DefaultDict, TypeAlias, Union
+from typing import ClassVar, TypeAlias
 
 from typing_extensions import final
 
+from wemake_python_styleguide.logic.arguments import special_args
 from wemake_python_styleguide.logic.complexity import cognitive
 from wemake_python_styleguide.logic.complexity.functions import (
     ComplexityMetrics,
@@ -26,13 +27,10 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 # Type aliases:
 
-_AnyFunctionCounter: TypeAlias = Union[
-    FunctionCounter,
-    FunctionCounterWithLambda,
-]
+_AnyFunctionCounter: TypeAlias = FunctionCounter | FunctionCounterWithLambda
 _CheckRule: TypeAlias = tuple[_AnyFunctionCounter, int, type[BaseViolation]]
 _NodeTypeHandler: TypeAlias = Mapping[
-    Union[type, tuple[type, ...]],
+    type | tuple[type, ...],
     FunctionCounter,
 ]
 
@@ -48,7 +46,10 @@ class _ComplexityCounter:
 
     def check_arguments_count(self, node: AnyFunctionDefAndLambda) -> None:
         """Checks the number of the arguments in a function."""
-        self.metrics.arguments[node] = len(functions.get_all_arguments(node))
+        all_args = functions.get_all_arguments(node)
+        self.metrics.arguments[node] = len(
+            special_args.clean_special_argument(node, all_args),
+        )
 
     def check_function_complexity(self, node: AnyFunctionDef) -> None:
         """
@@ -88,9 +89,10 @@ class _ComplexityCounter:
         node: AnyFunctionDef,
         sub_node: ast.AST,
     ) -> None:
-        if isinstance(sub_node, ast.Name):
-            if isinstance(sub_node.ctx, ast.Store):
-                self._update_variables(node, sub_node)
+        if isinstance(sub_node, ast.Name) and isinstance(
+            sub_node.ctx, ast.Store
+        ):
+            self._update_variables(node, sub_node)
 
         error_counters: _NodeTypeHandler = {
             ast.Return: self.metrics.returns,
@@ -219,7 +221,7 @@ class CognitiveComplexityVisitor(BaseNodeVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """We use to save all functions' complexity here."""
         super().__init__(*args, **kwargs)
-        self._functions: DefaultDict[AnyFunctionDef, int] = defaultdict(int)
+        self._functions: defaultdict[AnyFunctionDef, int] = defaultdict(int)
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """Counts cognitive complexity."""

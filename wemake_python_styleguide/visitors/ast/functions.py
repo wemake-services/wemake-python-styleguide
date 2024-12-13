@@ -1,7 +1,7 @@
 import ast
 from collections.abc import Mapping
 from contextlib import suppress
-from typing import ClassVar, TypeAlias, Union
+from typing import ClassVar, TypeAlias
 
 from typing_extensions import final
 
@@ -12,7 +12,6 @@ from wemake_python_styleguide.compat.aliases import (
 )
 from wemake_python_styleguide.constants import (
     FUNCTIONS_BLACKLIST,
-    LITERALS_BLACKLIST,
 )
 from wemake_python_styleguide.logic import nodes, source, walk
 from wemake_python_styleguide.logic.arguments import function_args
@@ -30,7 +29,7 @@ from wemake_python_styleguide.types import (
     AnyFunctionDefAndLambda,
     AnyNodes,
 )
-from wemake_python_styleguide.violations import consistency, naming, oop
+from wemake_python_styleguide.violations import naming, oop
 from wemake_python_styleguide.violations.best_practices import (
     BooleanPositionalArgumentViolation,
     ComplexDefaultValueViolation,
@@ -45,12 +44,11 @@ from wemake_python_styleguide.violations.refactoring import (
     OpenWithoutContextManagerViolation,
     TypeCompareViolation,
     UselessLambdaViolation,
-    WrongIsinstanceWithTupleViolation,
 )
 from wemake_python_styleguide.visitors import base, decorators
 
 #: Things we treat as local variables.
-_LocalVariable: TypeAlias = Union[ast.Name, ast.ExceptHandler]
+_LocalVariable: TypeAlias = ast.Name | ast.ExceptHandler
 
 #: Function definitions with name and arity:
 _Defs: TypeAlias = Mapping[str, int]
@@ -82,7 +80,6 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
         """Used to find ``FUNCTIONS_BLACKLIST`` calls."""
         self._check_wrong_function_called(node)
         self._check_boolean_arguments(node)
-        self._check_isinstance_call(node)
 
         if functions.given_function_called(node, {'super'}):
             self._check_super_context(node)
@@ -118,15 +115,6 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
                         text=str(arg.value),
                     ),
                 )
-
-    def _check_isinstance_call(self, node: ast.Call) -> None:
-        function_name = functions.given_function_called(node, {'isinstance'})
-        if not function_name or len(node.args) != 2:
-            return
-
-        if isinstance(node.args[1], ast.Tuple):
-            if len(node.args[1].elts) == 1:
-                self.add_violation(WrongIsinstanceWithTupleViolation(node))
 
     def _check_super_context(self, node: ast.Call) -> None:
         parent_context = nodes.get_context(node)
@@ -186,7 +174,7 @@ class FloatingNanCallVisitor(base.BaseNodeVisitor):
         if len(node.args) != 1:
             return
 
-        if not isinstance(node.args[0], (ast.Str, ast.Bytes)):
+        if not isinstance(node.args[0], ast.Str | ast.Bytes):
             return
 
         if not functions.given_function_called(node, 'float'):
@@ -302,7 +290,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
 
         for body_item in node.body:
             for sub_node in ast.walk(body_item):
-                if isinstance(sub_node, (ast.Name, ast.ExceptHandler)):
+                if isinstance(sub_node, ast.Name | ast.ExceptHandler):
                     var_name = variables.get_variable_name(sub_node)
                     self._maybe_update_variable(
                         sub_node,
@@ -503,25 +491,3 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
 
             if has_incorrect_part:
                 self.add_violation(ComplexDefaultValueViolation(arg))
-
-
-@final
-class UnnecessaryLiteralsVisitor(base.BaseNodeVisitor):
-    """
-    Responsible for restricting some literals.
-
-    All these literals are defined in ``LITERALS_BLACKLIST``.
-    """
-
-    def visit_Call(self, node: ast.Call) -> None:
-        """Used to find ``LITERALS_BLACKLIST`` without args calls."""
-        self._check_unnecessary_literals(node)
-        self.generic_visit(node)
-
-    def _check_unnecessary_literals(self, node: ast.Call) -> None:
-        function_name = functions.given_function_called(
-            node,
-            LITERALS_BLACKLIST,
-        )
-        if function_name and not node.args:
-            self.add_violation(consistency.UnnecessaryLiteralsViolation(node))

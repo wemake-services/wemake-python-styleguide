@@ -138,8 +138,8 @@ def enhance(tree):
         for child in ast.iter_child_nodes(statement): # +2
             if isinstance(child, ast.If):  # +3
                 if child in statement.orelse:  # +4
-                    setattr(statement, 'wps_if_chained', True)
-                    setattr(child, 'wps_if_chain', statement)
+                    setattr(statement, '_if_chained', True)
+                    setattr(child, '_if_chain', statement)
     return tree
 """
 

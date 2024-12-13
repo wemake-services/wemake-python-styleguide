@@ -1,15 +1,13 @@
 import ast
-from typing import ClassVar, TypeAlias, Union, cast
+from typing import ClassVar, TypeAlias
 
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import (
-    AssignNodes,
     FunctionNodes,
     TextNodes,
 )
 from wemake_python_styleguide.logic import walk, walrus
-from wemake_python_styleguide.logic.naming import name_nodes
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree import keywords, operators
 from wemake_python_styleguide.logic.tree.exceptions import (
@@ -19,60 +17,38 @@ from wemake_python_styleguide.logic.tree.exceptions import (
 from wemake_python_styleguide.logic.tree.variables import (
     is_valid_block_variable_definition,
 )
-from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, AnyWith
+from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     BareRaiseViolation,
-    BaseExceptionRaiseViolation,
     ContextManagerVariableDefinitionViolation,
     RaiseFromItselfViolation,
-    RaiseNotImplementedViolation,
     WrongKeywordConditionViolation,
     WrongKeywordViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
     ConsecutiveYieldsViolation,
-    InconsistentReturnVariableViolation,
     InconsistentReturnViolation,
     InconsistentYieldViolation,
     IncorrectYieldFromTargetViolation,
-    MultipleContextManagerAssignmentsViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 #: Utility type to work with violations easier.
-_ReturningViolations: TypeAlias = Union[
-    type[InconsistentReturnViolation],
-    type[InconsistentYieldViolation],
-]
+_ReturningViolations: TypeAlias = (
+    type[InconsistentReturnViolation] | type[InconsistentYieldViolation]
+)
 
 
 @final
 class WrongRaiseVisitor(BaseNodeVisitor):
     """Finds wrong ``raise`` keywords."""
 
-    _base_exceptions: ClassVar[frozenset[str]] = frozenset(
-        (
-            'Exception',
-            'BaseException',
-        )
-    )
-
     def visit_Raise(self, node: ast.Raise) -> None:
         """Checks how ``raise`` keyword is used."""
-        self._check_exception_type(node)
         self._check_bare_raise(node)
         self._check_raise_from_itself(node)
         self.generic_visit(node)
-
-    def _check_exception_type(self, node: ast.Raise) -> None:
-        exception_name = get_exception_name(node)
-        if exception_name == 'NotImplemented':
-            self.add_violation(RaiseNotImplementedViolation(node))
-        elif exception_name in self._base_exceptions:
-            self.add_violation(
-                BaseExceptionRaiseViolation(node, text=exception_name),
-            )
 
     def _check_bare_raise(self, node: ast.Raise) -> None:
         if node.exc is None:
@@ -82,11 +58,10 @@ class WrongRaiseVisitor(BaseNodeVisitor):
                 self.add_violation(BareRaiseViolation(node))
 
     def _check_raise_from_itself(self, node: ast.Raise) -> None:
-        if node.exc and node.cause:
-            names_are_same = get_exception_name(node) == get_cause_name(node)
-
-            if names_are_same:
-                self.add_violation(RaiseFromItselfViolation(node))
+        raising_name = get_exception_name(node)
+        names_are_same = raising_name == get_cause_name(node)
+        if raising_name is not None and names_are_same:
+            self.add_violation(RaiseFromItselfViolation(node))
 
 
 @final
@@ -207,13 +182,6 @@ class WrongKeywordVisitor(BaseNodeVisitor):
 
 
 @final
-@alias(
-    'visit_any_with',
-    (
-        'visit_With',
-        'visit_AsyncWith',
-    ),
-)
 class WrongContextManagerVisitor(BaseNodeVisitor):
     """Checks context managers."""
 
@@ -221,17 +189,6 @@ class WrongContextManagerVisitor(BaseNodeVisitor):
         """Variables inside context managers must be defined correctly."""
         self._check_variable_definitions(node)
         self.generic_visit(node)
-
-    def visit_any_with(self, node: AnyWith) -> None:
-        """Checks the number of assignments for context managers."""
-        self._check_target_assignment(node)
-        self.generic_visit(node)
-
-    def _check_target_assignment(self, node: AnyWith):
-        if len(node.items) > 1:
-            self.add_violation(
-                MultipleContextManagerAssignmentsViolation(node),
-            )
 
     def _check_variable_definitions(self, node: ast.withitem) -> None:
         if node.optional_vars is None:
@@ -289,9 +246,8 @@ class GeneratorKeywordsVisitor(BaseNodeVisitor):
             self.add_violation(IncorrectYieldFromTargetViolation(node))
 
     def _check_yield_from_empty(self, node: ast.YieldFrom) -> None:
-        if isinstance(node.value, ast.Tuple):
-            if not node.value.elts:
-                self.add_violation(IncorrectYieldFromTargetViolation(node))
+        if isinstance(node.value, ast.Tuple) and not node.value.elts:
+            self.add_violation(IncorrectYieldFromTargetViolation(node))
 
     def _post_visit(self) -> None:
         previous_line: int | None = None
@@ -300,79 +256,16 @@ class GeneratorKeywordsVisitor(BaseNodeVisitor):
         for line, node in self._yield_locations.items():
             parent = get_parent(node)
 
-            if previous_line is not None:
-                if line - 1 == previous_line and previous_parent == parent:
-                    self.add_violation(ConsecutiveYieldsViolation(node.value))
-                    break
+            if (
+                previous_line is not None
+                and line - 1 == previous_line
+                and previous_parent == parent
+            ):
+                self.add_violation(ConsecutiveYieldsViolation(node.value))
+                break
 
             previous_line = line
             previous_parent = parent
-
-
-@final
-class ConsistentReturningVariableVisitor(BaseNodeVisitor):
-    """Finds variables that are only used in ``return`` statements."""
-
-    def visit_Return(self, node: ast.Return) -> None:
-        """Helper to get all ``return`` variables in a function at once."""
-        self._check_consistent_variable_return(node)
-        self.generic_visit(node)
-
-    def _check_consistent_variable_return(self, node: ast.Return) -> None:
-        if not node.value or not self._is_named_return(node):
-            return
-
-        previous_node = self._get_previous_stmt(node)
-        if not isinstance(previous_node, AssignNodes):
-            return
-
-        return_names = name_nodes.get_variables_from_node(node.value)
-        previous_names = list(name_nodes.flat_variable_names([previous_node]))
-        self._check_for_violations(node, return_names, previous_names)
-
-    def _is_named_return(self, node: ast.Return) -> bool:
-        if isinstance(node.value, ast.Name):
-            return True
-        return isinstance(node.value, ast.Tuple) and all(
-            isinstance(elem, ast.Name) for elem in node.value.elts
-        )
-
-    def _get_previous_stmt(self, node: ast.Return) -> ast.stmt | None:
-        """
-        This method gets the previous node in a block.
-
-        It is kind of strange. Because nodes might have several bodies.
-        Like ``try`` or ``for`` or ``if`` nodes.
-        ``return`` can also be the only statement there.
-
-        We also use ``cast`` for a reason.
-        Because ``return`` always has a parent.
-        """
-        parent = cast(ast.AST, get_parent(node))
-        for part in ('body', 'orelse', 'finalbody'):
-            block: list[ast.stmt] = getattr(parent, part, [])
-            try:
-                current_index = block.index(node)
-            except ValueError:
-                continue
-
-            if current_index > 0:
-                return block[current_index - 1]
-        return None
-
-    def _check_for_violations(
-        self,
-        node: ast.Return,
-        return_names: list[str],
-        previous_names: list[str],
-    ) -> None:
-        if previous_names == return_names:
-            self.add_violation(
-                InconsistentReturnVariableViolation(
-                    node,
-                    text=', '.join(return_names),
-                ),
-            )
 
 
 @final
@@ -405,9 +298,12 @@ class ConstantKeywordVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_condition(self, node: ast.AST, cond: ast.AST) -> None:
-        if isinstance(cond, ast.NameConstant) and cond.value is True:
-            if isinstance(node, ast.While):
-                return  # We should allow plain `while True:`
+        if (
+            isinstance(cond, ast.NameConstant)
+            and cond.value is True
+            and isinstance(node, ast.While)
+        ):
+            return  # We should allow plain `while True:`
 
         real_node = operators.unwrap_unary_node(walrus.get_assigned_expr(cond))
         if isinstance(real_node, self._forbidden_nodes):

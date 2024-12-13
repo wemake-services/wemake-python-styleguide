@@ -60,6 +60,9 @@ def _find_getters_and_setters(node: ast.ClassDef) -> Iterable[AnyFunctionDef]:
     """Returns nodes of all getter or setter methods."""
     for sub in ast.walk(node):
         is_correct_context = nodes.get_context(sub) is node
-        if isinstance(sub, FunctionNodes) and is_correct_context:
-            if sub.name[:GETTER_LENGTH] in _GetterSetterPrefixes:
-                yield sub
+        if (
+            isinstance(sub, FunctionNodes)
+            and is_correct_context
+            and sub.name[:GETTER_LENGTH] in _GetterSetterPrefixes
+        ):
+            yield sub

@@ -17,7 +17,6 @@ PRESET: Final = (
     syntax.WrongKeywordTokenVisitor,
     primitives.WrongNumberTokenVisitor,
     primitives.WrongStringTokenVisitor,
-    primitives.WrongStringConcatenationVisitor,
     statements.MultilineStringVisitor,
     conditions.IfElseVisitor,
 )

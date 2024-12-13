@@ -129,8 +129,6 @@ def some():  # noqa: WPS110
     def nested():  # noqa: WPS430
         anti_wps428 = 1
 
-    raise NotImplemented  # noqa: WPS423
-
 
 del {'a': 1}['a']  # noqa: WPS420
 hasattr(object, 'some')  # noqa: WPS421
@@ -156,8 +154,6 @@ class Mem0Output:  # noqa: WPS124
     # See:
     # https://github.com/wemake-services/wemake-python-styleguide/issues/1191
     anti_wps124 = 'unreadable class'
-
-type = 'type'  # noqa: WPS125
 
 some._execute()  # noqa: WPS437
 
@@ -303,7 +299,6 @@ class BadClass:
 magic_numbers = 13.2 + 50  # noqa: WPS432
 
 assert 1 < 1 < hex_number  # noqa: WPS308
-assert 2 > octal_number  # noqa: WPS309
 
 number_with_useless_plus = +5  # noqa: WPS330
 
@@ -317,14 +312,9 @@ if True:  # noqa: WPS314
     anti_wps428 = 1
 
 
-with some_context as first_context, second_context:  # noqa: WPS316
-    anti_wps428 = 1
-
-
 
 string_modifier = R'(\n)'  # noqa: WPS321
 multiline_string = """abc"""  # noqa: WPS322
-modulo_formatting = 'some %s'  # noqa: WPS323
 
 
 def function_with_wrong_return():
@@ -338,23 +328,12 @@ def function_with_wrong_yield():
         yield  # noqa: WPS325
     yield 1
 
-bad_concatenation = 'a' 'b'  # noqa: WPS326
-
 for literal in bad_concatenation:  # noqa: WPS327, WPS328
     continue
 
 with open(bad_concatenation):  # noqa: WPS328
     pass  # noqa: WPS420
 
-
-try:
-    anti_wps428 = 1
-except Exception as ex:  # noqa: WPS329
-    raise ex
-
-def some_other_function():
-    some_value = 1
-    return some_value  # noqa: WPS331
 
 my_print(one > two and two > three)  # noqa: WPS333
 
@@ -382,12 +361,6 @@ for sum_item in file_obj:  # noqa: WPS519
     sum_container += sum_item
 
 my_print(sum_container == [])  # noqa: WPS520
-my_print(sum_container is 0)  # noqa: WPS521
-
-try:
-    anti_wps428 = 1
-except BaseException:  # noqa: WPS424
-    anti_wps428 = 1
 
 call_with_positional_bool(True, keyword=1)  # noqa: WPS425
 
@@ -448,24 +421,8 @@ first = second = 2  # noqa: WPS429
 first, nodes[0] = range(2)  # noqa: WPS414
 
 
-try:  # noqa: WPS415
-    anti_wps428 = 1
-except ValueError:
-    anti_wps428 = 1
-except ValueError:
-    anti_wps428 = 1
-
-
 class MyBadException(BaseException):  # noqa: WPS418
     anti_wps428 = 1
-
-
-some_if_expr = True if some_set else False  # noqa: WPS502
-
-if some_if_expr:  # noqa: WPS502
-    some_dict['x'] = True
-else:
-    some_dict['x'] = False
 
 
 
@@ -478,15 +435,6 @@ class ClassWithWrongContents((lambda: object)()):  # noqa: WPS606
     def method_with_no_args():  # noqa: WPS605
         based = super(ClassWithWrongContents, self).method_with_no_args()  # noqa: WPS608
         my_print(based)
-
-
-def multiple_return_path():
-    try:  # noqa: WPS419
-        return 1
-    except Exception:
-        return 2
-    else:
-        return 3
 
 
 def bad_default_values(
@@ -543,15 +491,10 @@ if len(numbers) > 0:  # noqa: WPS507
 if numbers and numbers:  # noqa: WPS408
     my_print('duplicate boolop')
 
-if not numbers == [1]:  # noqa: WPS508
-    my_print('bad compare with not')
-
 if numbers == CONSTANT != [2]:  # noqa: WPS409
     my_print(1 + (1 if number else 2))  # noqa: WPS509
 
 my_print(numbers in [])  # noqa: WPS510
-my_print(isinstance(number, int) or isinstance(number, (float, str)))  # noqa: 474
-my_print(isinstance(numbers, (int,)))  # noqa: WPS512
 
 if numbers:
     my_print('first')
@@ -598,14 +541,8 @@ class ChildClass(ParentClass):
 
 LOWERCASE_ALPH = "abcdefghijklmnopqrstuvwxyz" # noqa: WPS447
 
-int()  # noqa: WPS351
-
 if a in {1}:  # noqa: WPS525
     my_print('bad!')
-
-def implicit_yield_from():
-    for wrong_yield in call():  # noqa: WPS526
-        yield wrong_yield
 
 try: # noqa: WPS448
     anti_wps428 = 1

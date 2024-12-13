@@ -1,5 +1,4 @@
 import ast
-from collections import Counter
 from typing import ClassVar
 
 from typing_extensions import final
@@ -10,14 +9,8 @@ from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.tree import exceptions
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
-    BaseExceptionViolation,
-    DuplicateExceptionViolation,
     IncorrectExceptOrderViolation,
     NonTrivialExceptViolation,
-    TryExceptMultipleReturnPathViolation,
-)
-from wemake_python_styleguide.violations.consistency import (
-    UselessExceptCaseViolation,
 )
 from wemake_python_styleguide.violations.refactoring import (
     NestedTryViolation,
@@ -38,17 +31,9 @@ from wemake_python_styleguide.visitors.decorators import alias
 class WrongTryExceptVisitor(BaseNodeVisitor):
     """Responsible for examining ``try`` and friends."""
 
-    _bad_returning_nodes: ClassVar[AnyNodes] = (
-        ast.Return,
-        ast.Raise,
-        ast.Break,
-    )
-
     def visit_any_try(self, node: AnyTry) -> None:
         """Used for find ``finally`` in ``try`` blocks without ``except``."""
         self._check_if_needs_except(node)
-        self._check_duplicate_exceptions(node)
-        self._check_return_path(node)
         self._check_exception_order(node)
         self.generic_visit(node)
 
@@ -63,27 +48,6 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
             return
 
         self.add_violation(UselessFinallyViolation(node))
-
-    def _check_duplicate_exceptions(self, node: AnyTry) -> None:
-        exceptions_list = exceptions.get_all_exception_names(node)
-
-        for exc_name, count in Counter(exceptions_list).items():
-            if count > 1:
-                self.add_violation(
-                    DuplicateExceptionViolation(node, text=exc_name),
-                )
-
-    def _check_return_path(self, node: AnyTry) -> None:
-        find_returning = exceptions.find_returning_nodes
-        try_has, except_has, else_has, finally_has = find_returning(
-            node,
-            self._bad_returning_nodes,
-        )
-
-        if finally_has and (try_has or except_has or else_has):
-            self.add_violation(TryExceptMultipleReturnPathViolation(node))
-        elif else_has and try_has:
-            self.add_violation(TryExceptMultipleReturnPathViolation(node))
 
     def _check_exception_order(self, node: AnyTry) -> None:
         built_in_exceptions = exceptions.traverse_exception(BaseException)
@@ -119,42 +83,12 @@ class NestedTryBlocksVisitor(BaseNodeVisitor):
 class WrongExceptHandlerVisitor(BaseNodeVisitor):
     """Responsible for examining ``ExceptionHandler``."""
 
-    _base_exception: ClassVar[str] = 'BaseException'
-
     _trivial_except_arg_nodes: ClassVar[AnyNodes] = (ast.Name, ast.Attribute)
 
     def visit_ExceptHandler(self, node: ast.ExceptHandler) -> None:
         """Checks all ``ExceptionHandler`` nodes."""
-        self._check_useless_except(node)
-        self._check_exception_type(node)
         self._check_except_expression(node)
         self.generic_visit(node)
-
-    def _check_useless_except(self, node: ast.ExceptHandler) -> None:
-        if len(node.body) != 1:
-            return
-
-        body = node.body[0]
-        if not isinstance(body, ast.Raise):
-            return
-
-        if isinstance(body.exc, ast.Call):
-            return
-
-        if isinstance(body.exc, ast.Name) and node.name:
-            if body.exc.id != node.name:
-                return
-
-        self.add_violation(UselessExceptCaseViolation(node))
-
-    def _check_exception_type(self, node: ast.ExceptHandler) -> None:
-        exception_name = node.type
-        if exception_name is None:
-            return
-
-        exception_id = getattr(exception_name, 'id', None)
-        if exception_id == self._base_exception:
-            self.add_violation(BaseExceptionViolation(node))
 
     def _check_except_expression(self, node: ast.ExceptHandler) -> None:
         # Catch-all 'except' is actually okay in this case

@@ -1,6 +1,6 @@
 import ast
 from collections.abc import Mapping, Sequence
-from typing import ClassVar, TypeAlias, Union
+from typing import ClassVar, TypeAlias
 
 from typing_extensions import final
 
@@ -38,18 +38,18 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 #: Statements that do have `.body` attribute.
-_StatementWithBody: TypeAlias = Union[
-    ast.If,
-    types.AnyFor,
-    ast.While,
-    types.AnyWith,
-    ast.Try,
-    TryStar,
-    ast.ExceptHandler,
-    types.AnyFunctionDef,
-    ast.ClassDef,
-    ast.Module,
-]
+_StatementWithBody: TypeAlias = (
+    ast.If
+    | types.AnyFor
+    | ast.While
+    | types.AnyWith
+    | ast.Try
+    | TryStar
+    | ast.ExceptHandler
+    | types.AnyFunctionDef
+    | ast.ClassDef
+    | ast.Module
+)
 
 
 @final
@@ -133,8 +133,8 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         'For': _generally_useless_body + _loop_useless_body,
         'AsyncFor': _generally_useless_body + _loop_useless_body,
         'While': _generally_useless_body + _loop_useless_body,
-        'Try': _generally_useless_body + (ast.Raise,),
-        'TryStar': _generally_useless_body + (ast.Raise,),
+        'Try': (*_generally_useless_body, ast.Raise),
+        'TryStar': (*_generally_useless_body, ast.Raise),
         'With': _generally_useless_body,
         'AsyncWith': _generally_useless_body,
     }
@@ -210,9 +210,12 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         if isinstance(node.value, self._have_effect):
             return
 
-        if is_first and strings.is_doc_string(node):
-            if isinstance(nodes.get_parent(node), self._have_doc_strings):
-                return
+        if (
+            is_first
+            and strings.is_doc_string(node)
+            and isinstance(nodes.get_parent(node), self._have_doc_strings)
+        ):
+            return
 
         parent = nodes.get_parent(node)
         is_only_ellipsis_node = (
@@ -234,9 +237,10 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         if isinstance(node.value, ast.BinOp):
             node_value = node.value.left
 
-        if isinstance(node.value, self._blocked_self_assignment):
-            if name_nodes.is_same_variable(node.target, node_value):
-                self.add_violation(MisrefactoredAssignmentViolation(node))
+        if isinstance(
+            node.value, self._blocked_self_assignment
+        ) and name_nodes.is_same_variable(node.target, node_value):
+            self.add_violation(MisrefactoredAssignmentViolation(node))
 
     def _check_internals(self, body: Sequence[ast.stmt]) -> None:
         after_closing_node = False
@@ -275,9 +279,10 @@ class PointlessStarredVisitor(BaseNodeVisitor):
         args: Sequence[ast.AST],
     ) -> None:
         for node in args:
-            if isinstance(node, ast.Starred):
-                if self._is_pointless_star(node.value):
-                    self.add_violation(PointlessStarredViolation(node))
+            if isinstance(node, ast.Starred) and self._is_pointless_star(
+                node.value
+            ):
+                self.add_violation(PointlessStarredViolation(node))
 
     def _check_double_starred_dict(
         self,
@@ -330,9 +335,10 @@ class WrongNamedKeywordVisitor(BaseNodeVisitor):
             return False
 
         for key_node in node.value.keys:
-            if isinstance(key_node, ast.Str):
-                if not str.isidentifier(key_node.s):
-                    return True
+            if isinstance(key_node, ast.Str) and not str.isidentifier(
+                key_node.s
+            ):
+                return True
         return False
 
 

@@ -874,8 +874,12 @@ class BuiltinShadowingViolation(ASTViolation):
 
     .. versionadded:: 0.14
     .. versionchanged:: 0.15
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``A001``.
 
     """
 
     error_template = 'Found builtin shadowing: {0}'
     code = 125
+    disabled_since = '1.0.0'

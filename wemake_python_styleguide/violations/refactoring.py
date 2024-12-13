@@ -207,11 +207,15 @@ class SimplifiableIfViolation(ASTViolation):
 
     .. versionadded:: 0.7.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``SIM108`` and ``SIM210``.
 
     """
 
     error_template = 'Found simplifiable `if` condition'
     code = 502
+    disabled_since = '1.0.0'
 
 
 @final
@@ -253,7 +257,7 @@ class UselessReturningElseViolation(ASTViolation):
     .. versionchanged:: 0.15.1
     .. versionchanged:: 1.0.0
        No longer produced, kept here for historic reasons.
-       This is covered with ``ruff`` formatter. See ``RET505``.
+       This is covered with ``ruff`` linter. See ``RET505``.
 
     """
 
@@ -444,11 +448,15 @@ class NotOperatorWithCompareViolation(ASTViolation):
 
     .. versionadded:: 0.10.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``SIM201``.
 
     """
 
     error_template = 'Found incorrect `not` with compare usage'
     code = 508
+    disabled_since = '1.0.0'
 
 
 @final
@@ -542,7 +550,7 @@ class UnmergedIsinstanceCallsViolation(ASTViolation):
     Example::
 
         # Correct:
-        isinstance(some, (int, float))
+        isinstance(some, int | float)
 
         # Wrong:
         isinstance(some, int) or isinstance(some, float)
@@ -552,6 +560,9 @@ class UnmergedIsinstanceCallsViolation(ASTViolation):
 
     .. versionadded:: 0.10.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``SIM101``.
 
     """
 
@@ -559,6 +570,7 @@ class UnmergedIsinstanceCallsViolation(ASTViolation):
         'Found separate `isinstance` calls that can be merged for: {0}'
     )
     code = 511
+    disabled_since = '1.0.0'
 
 
 @final
@@ -576,7 +588,7 @@ class WrongIsinstanceWithTupleViolation(ASTViolation):
     Example::
 
         # Correct:
-        isinstance(some, (int, float))
+        isinstance(some, int | float)
         isinstance(some, int)
 
         # Wrong:
@@ -586,11 +598,15 @@ class WrongIsinstanceWithTupleViolation(ASTViolation):
 
     .. versionadded:: 0.10.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``UP038``.
 
     """
 
     error_template = 'Found `isinstance` call with a single element tuple'
     code = 512
+    disabled_since = '1.0.0'
 
 
 @final
@@ -902,11 +918,15 @@ class WrongIsCompareViolation(ASTViolation):
         https://stackoverflow.com/a/33130014/4842742
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``F632``.
 
     """
 
     code = 521
     error_template = 'Found wrong `is` compare'
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1064,11 +1084,15 @@ class ImplicitYieldFromViolation(ASTViolation):
             yield index
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``UP028``.
 
     """
 
     error_template = 'Found implicit `yield from` usage'
     code = 526
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1227,7 +1251,7 @@ class SimplifiableReturningIfViolation(ASTViolation):
     .. versionadded:: 0.15.0
     .. versionchanged:: 1.0.0
        No longer produced, kept here for historic reasons.
-       This is covered with ``ruff`` formatter. See ``RET505``.
+       This is covered with ``ruff`` linter. See ``RET505``.
 
     """
 

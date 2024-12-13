@@ -8,12 +8,12 @@ def get_assign_targets(
     node: AnyAssignWithWalrus | ast.AugAssign,
 ) -> list[ast.expr]:
     """Returns list of assign targets without knowing the type of assign."""
-    if isinstance(node, (ast.AnnAssign, ast.AugAssign, ast.NamedExpr)):
+    if isinstance(node, ast.AnnAssign | ast.AugAssign | ast.NamedExpr):
         return [node.target]
     return node.targets
 
 
-def get_type_param_names(  # pragma: py-lt-312
+def get_type_param_names(  # pragma: >=3.12 cover
     node: NodeWithTypeParams,
 ) -> list[tuple[ast.AST, str]]:
     """Return list of type parameters' names."""

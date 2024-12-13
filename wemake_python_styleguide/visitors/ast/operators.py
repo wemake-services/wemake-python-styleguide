@@ -1,6 +1,6 @@
 import ast
 from collections.abc import Mapping
-from typing import ClassVar, TypeAlias, Union
+from typing import ClassVar, TypeAlias
 
 from typing_extensions import final
 
@@ -22,7 +22,7 @@ _MeaninglessOperators: TypeAlias = Mapping[
     tuple[type[ast.operator], ...],
 ]
 _OperatorLimits: TypeAlias = Mapping[type[ast.unaryop], int]
-_NumbersAndConstants: TypeAlias = Union[ast.Num, ast.NameConstant]
+_NumbersAndConstants: TypeAlias = ast.Num | ast.NameConstant
 
 
 @final
@@ -120,9 +120,13 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         left: ast.AST | None,
         right: ast.AST | None = None,
     ) -> None:
-        if isinstance(left, ast.Num) and left.n in self._left_special_cases:
-            if right and isinstance(op, self._left_special_cases[left.n]):
-                left = None
+        if (
+            isinstance(left, ast.Num)
+            and left.n in self._left_special_cases
+            and right
+            and isinstance(op, self._left_special_cases[left.n])
+        ):
+            left = None
 
         non_negative_numbers = self._get_non_negative_nodes(left, right)
 
@@ -180,7 +184,7 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
 
     def _check_negation(self, op: ast.operator, right: ast.AST) -> None:
         is_double_minus = (
-            isinstance(op, (ast.Add, ast.Sub))
+            isinstance(op, ast.Add | ast.Sub)
             and isinstance(right, ast.UnaryOp)
             and isinstance(right.op, ast.USub)
         )
@@ -191,7 +195,8 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
 
     def _check_list_multiply(self, node: ast.BinOp) -> None:
         is_list_multiply = isinstance(node.op, ast.Mult) and isinstance(
-            node.left, self._list_nodes
+            node.left,
+            self._list_nodes,
         )
         if is_list_multiply:
             self.add_violation(ListMultiplyViolation(node.left))
@@ -223,10 +228,27 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
 class WalrusVisitor(base.BaseNodeVisitor):
     """We use this visitor to find walrus operators and ban them."""
 
+    _available_parents: ClassVar[AnyNodes] = (
+        ast.ListComp,
+        ast.SetComp,
+        ast.DictComp,
+        ast.GeneratorExp,
+    )
+
     def visit_NamedExpr(
         self,
         node: ast.NamedExpr,
     ) -> None:
-        """Disallows walrus ``:=`` operator."""
-        self.add_violation(consistency.WalrusViolation(node))
+        """Disallows walrus ``:=`` operator outside comprehensions."""
+        self._check_walrus_in_comprehesion(node)
         self.generic_visit(node)
+
+    def _check_walrus_in_comprehesion(
+        self,
+        node: ast.NamedExpr,
+    ) -> None:
+        is_comprension = walk.get_closest_parent(node, self._available_parents)
+        if is_comprension:
+            return
+
+        self.add_violation(consistency.WalrusViolation(node))

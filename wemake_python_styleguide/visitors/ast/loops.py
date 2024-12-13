@@ -2,7 +2,7 @@ import ast
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from contextlib import suppress
-from typing import ClassVar, DefaultDict, TypeAlias
+from typing import ClassVar, TypeAlias
 
 from typing_extensions import final
 
@@ -35,7 +35,6 @@ from wemake_python_styleguide.violations.consistency import (
 from wemake_python_styleguide.violations.refactoring import (
     ImplicitItemsIteratorViolation,
     ImplicitSumViolation,
-    ImplicitYieldFromViolation,
     UselessLoopElseViolation,
 )
 from wemake_python_styleguide.visitors import base, decorators
@@ -63,7 +62,7 @@ class WrongComprehensionVisitor(base.BaseNodeVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Creates a counter for tracked metrics."""
         super().__init__(*args, **kwargs)
-        self._fors: DefaultDict[ast.AST, int] = defaultdict(int)
+        self._fors: defaultdict[ast.AST, int] = defaultdict(int)
 
     def visit_comprehension(self, node: ast.comprehension) -> None:
         """Checks ``if`` and ``for`` nodes inside the comprehension."""
@@ -161,7 +160,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
                 self.add_violation(LambdaInsideLoopViolation(node))
 
     def _check_useless_continue(self, node: AnyLoop) -> None:
-        nodes_at_line: DefaultDict[int, list[ast.AST]] = defaultdict(list)
+        nodes_at_line: defaultdict[int, list[ast.AST]] = defaultdict(list)
         for sub_node in ast.walk(node):
             lineno = getattr(sub_node, 'lineno', None)
             if lineno is not None:
@@ -212,7 +211,6 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
         self._check_variable_definitions(node.target)
         self._check_explicit_iter_type(node)
         self._check_implicit_sum(node)
-        self._check_implicit_yield_from(node)
         self.generic_visit(node)
 
     def visit_comprehension(self, node: ast.comprehension) -> None:
@@ -244,19 +242,6 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
         )
         if is_implicit_sum:
             self.add_violation(ImplicitSumViolation(node))
-
-    def _check_implicit_yield_from(self, node: AnyFor) -> None:
-        if isinstance(nodes.get_context(node), ast.AsyncFunctionDef):
-            # Python does not support 'yield from' inside async functions
-            return
-
-        is_implicit_yield_from = (
-            len(node.body) == 1
-            and isinstance(node.body[0], ast.Expr)
-            and isinstance(node.body[0].value, ast.Yield)
-        )
-        if is_implicit_yield_from:
-            self.add_violation(ImplicitYieldFromViolation(node))
 
 
 @final

@@ -1,5 +1,5 @@
 from collections.abc import Sequence
-from typing import Final, TypeAlias, Union
+from typing import Final, TypeAlias
 
 import pytest
 
@@ -10,11 +10,9 @@ from wemake_python_styleguide.violations.base import (
 )
 from wemake_python_styleguide.visitors.base import BaseVisitor
 
-_IgnoredTypes: TypeAlias = Union[
-    type[BaseViolation],
-    tuple[type[BaseViolation], ...],
-    None,
-]
+_IgnoredTypes: TypeAlias = (
+    type[BaseViolation] | tuple[type[BaseViolation], ...] | None
+)
 _ERROR_FORMAT: Final = ': {0}'
 
 
@@ -42,7 +40,7 @@ def assert_errors():
         for index, error in enumerate(real_errors):
             assert expected_errors[index].disabled_since is None
             assert error.code == expected_errors[index].code
-            if isinstance(error, (ASTViolation, TokenizeViolation)):
+            if isinstance(error, ASTViolation | TokenizeViolation):
                 assert error._node is not None  # noqa: WPS437
                 assert error._location() != (0, 0)  # noqa: WPS437
 

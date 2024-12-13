@@ -6,9 +6,9 @@ from wemake_python_styleguide.types import AnyChainable, AnyVariableDef
 
 
 def _chained_item(iterator: ast.AST) -> ast.AST | None:
-    if isinstance(iterator, (ast.Attribute, ast.Subscript)):
+    if isinstance(iterator, ast.Attribute | ast.Subscript):
         return iterator.value
-    elif isinstance(iterator, ast.Call):
+    if isinstance(iterator, ast.Call):
         return iterator.func
     return None
 

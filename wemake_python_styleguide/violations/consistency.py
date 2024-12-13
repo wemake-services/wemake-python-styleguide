@@ -246,7 +246,7 @@ class UnicodeStringViolation(TokenizeViolation):
     .. versionadded:: 0.1.0
     .. versionchanged:: 1.0.0
        No longer produced, kept here for historic reasons.
-       This rule is covered by ``ruff`` formatter. See ``UP025``.
+       This rule is covered by ``ruff`` linter. See ``UP025``.
 
     """
 
@@ -366,7 +366,7 @@ class FormattedStringViolation(ASTViolation):
     .. versionadded:: 0.1.0
     .. versionchanged:: 1.0.0
        No longer produced, kept here for historic reasons.
-       This is covered with ``ruff`` formatter. See ``WPS237``.
+       This is covered with ``ruff`` linter. See ``WPS237``.
 
     """
 
@@ -502,11 +502,15 @@ class CompareOrderViolation(ASTViolation):
         if 3 < some_x:
 
     .. versionadded:: 0.3.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``SIM300``.
 
     """
 
     error_template = 'Found reversed compare order'
     code = 309
+    disabled_since = '1.0.0'
 
 
 @final
@@ -708,7 +712,7 @@ class ObjectInBaseClassesListViolation(ASTViolation):
     .. versionadded:: 0.3.0
     .. versionchanged:: 1.0.0
        No longer produced, kept here for historic reasons.
-       This is covered with ``ruff`` formatter. See ``UP004``.
+       This is covered with ``ruff`` linter. See ``UP004``.
 
     """
 
@@ -744,11 +748,15 @@ class MultipleContextManagerAssignmentsViolation(ASTViolation):
             ...
 
     .. versionadded:: 0.6.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``SIM117``.
 
     """
 
     error_template = 'Found context manager with too many assignments'
     code = 316
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1080,11 +1088,15 @@ class ModuloStringFormatViolation(ASTViolation):
         https://pyformat.info/
 
     .. versionadded:: 0.14.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``UP031``.
 
     """
 
     error_template = 'Found `%` string formatting'
     code = 323
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1198,11 +1210,15 @@ class ImplicitStringConcatenationViolation(TokenizeViolation):
         text = 'first' 'second'
 
     .. versionadded:: 0.7.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``ISC001``.
 
     """
 
     error_template = 'Found implicit string concatenation'
     code = 326
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1312,11 +1328,15 @@ class UselessExceptCaseViolation(ASTViolation):
             raise
 
     .. versionadded:: 0.7.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``TRY203``.
 
     """
 
     error_template = 'Found useless `except` case'
     code = 329
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1396,17 +1416,21 @@ class InconsistentReturnVariableViolation(ASTViolation):
 
     .. versionadded:: 0.9.0
     .. versionchanged:: 0.14.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``RET504``.
 
     """
 
     error_template = 'Found variables that are only used for `return`: {0}'
     code = 331
+    disabled_since = '1.0.0'
 
 
 @final
 class WalrusViolation(ASTViolation):
     """
-    Forbid walrus operator.
+    Forbid the use of the walrus operator (`:=`) outside of comprehensions.
 
     Reasoning:
         Code with ``:=`` is hardly readable.
@@ -1415,7 +1439,8 @@ class WalrusViolation(ASTViolation):
         Python is not expression-based.
 
     Solution:
-        Don't use fancy stuff, use good old assignments.
+        Avoid using the walrus operator outside comprehensions.
+        Stick to traditional assignment statements for clarity.
 
     Example::
 
@@ -1432,7 +1457,7 @@ class WalrusViolation(ASTViolation):
 
     """
 
-    error_template = 'Found walrus operator'
+    error_template = 'Found walrus operator outside a comprehension'
     code = 332
 
 
@@ -2076,11 +2101,15 @@ class UnnecessaryLiteralsViolation(ASTViolation):
         default = int()
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``UP018`` and ``C408``.
 
     """
 
     error_template = 'Found unnecessary literals'
     code = 351
+    disabled_since = '1.0.0'
 
 
 @final

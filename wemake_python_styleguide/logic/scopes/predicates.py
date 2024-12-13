@@ -60,7 +60,10 @@ def is_same_try_except_cases(node: ast.AST, names: set[str]) -> bool:
         return False
 
     for except_handler in getattr(get_parent(node), 'handlers', []):
-        if except_handler.name and except_handler.name == node.name:
-            if except_handler is not node:
-                return True
+        if (
+            except_handler.name
+            and except_handler.name == node.name
+            and except_handler is not node
+        ):
+            return True
     return False

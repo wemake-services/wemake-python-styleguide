@@ -2,7 +2,6 @@ import pytest
 
 from wemake_python_styleguide.violations.refactoring import (
     FalsyConstantCompareViolation,
-    WrongIsCompareViolation,
 )
 from wemake_python_styleguide.visitors.ast.compares import (
     WrongConstantCompareVisitor,
@@ -71,7 +70,6 @@ def test_falsy_constant_is(
             code,
             [
                 FalsyConstantCompareViolation,
-                WrongIsCompareViolation,
             ],
         ),
     )
@@ -132,4 +130,4 @@ def test_correct_constant_compare(
     visitor = WrongConstantCompareVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [], ignored_types=WrongIsCompareViolation)
+    assert_errors(visitor, [])

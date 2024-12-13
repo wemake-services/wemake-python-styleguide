@@ -8,6 +8,7 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
 )
 
 
+@pytest.mark.filterwarnings('ignore::SyntaxWarning')
 @pytest.mark.parametrize(
     'code',
     [

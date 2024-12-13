@@ -1,6 +1,6 @@
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, cast
+from typing import ClassVar, cast
 
 from typing_extensions import final
 
@@ -9,7 +9,7 @@ from wemake_python_styleguide.logic.nodes import get_context
 from wemake_python_styleguide.types import ContextNodes
 
 #: That's how we represent scopes that are bound to contexts.
-_ContextStore = DefaultDict[ContextNodes, set[str]]
+_ContextStore = defaultdict[ContextNodes, set[str]]
 
 
 class _BaseScope:
@@ -23,11 +23,11 @@ class _BaseScope:
 
     def add_to_scope(self, names: set[str]) -> None:  # pragma: no cover
         """Adds a given set of names to some scope."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def shadowing(self, names: set[str]) -> set[str]:  # pragma: no cover
         """Tells either some shadowing exist between existing scopes."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @final
     def _exclude_unused(self, names: set[str]) -> set[str]:
