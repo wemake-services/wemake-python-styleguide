@@ -12,7 +12,6 @@ from wemake_python_styleguide.compat.aliases import (
 )
 from wemake_python_styleguide.constants import (
     FUNCTIONS_BLACKLIST,
-    LITERALS_BLACKLIST,
 )
 from wemake_python_styleguide.logic import nodes, source, walk
 from wemake_python_styleguide.logic.arguments import function_args
@@ -503,25 +502,3 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
 
             if has_incorrect_part:
                 self.add_violation(ComplexDefaultValueViolation(arg))
-
-
-@final
-class UnnecessaryLiteralsVisitor(base.BaseNodeVisitor):
-    """
-    Responsible for restricting some literals.
-
-    All these literals are defined in ``LITERALS_BLACKLIST``.
-    """
-
-    def visit_Call(self, node: ast.Call) -> None:
-        """Used to find ``LITERALS_BLACKLIST`` without args calls."""
-        self._check_unnecessary_literals(node)
-        self.generic_visit(node)
-
-    def _check_unnecessary_literals(self, node: ast.Call) -> None:
-        function_name = functions.given_function_called(
-            node,
-            LITERALS_BLACKLIST,
-        )
-        if function_name and not node.args:
-            self.add_violation(consistency.UnnecessaryLiteralsViolation(node))

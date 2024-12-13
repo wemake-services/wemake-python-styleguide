@@ -454,18 +454,6 @@ VAGUE_IMPORTS_BLACKLIST: Final = frozenset(
     )
 )
 
-#: List of literals without arguments we forbid to use.
-LITERALS_BLACKLIST: Final = frozenset(
-    (
-        'int',
-        'float',
-        'str',
-        'bytes',
-        'bool',
-        'complex',
-    )
-)
-
 #: List of functions in which arguments must be tuples.
 TUPLE_ARGUMENTS_METHODS: Final = frozenset(('frozenset',))
 

@@ -569,8 +569,6 @@ class ChildClass(ParentClass):
 
 LOWERCASE_ALPH = "abcdefghijklmnopqrstuvwxyz" # noqa: WPS447
 
-int()  # noqa: WPS351
-
 if a in {1}:  # noqa: WPS525
     my_print('bad!')
 
