@@ -324,7 +324,6 @@ Paren
 parens
 pathlib
 pep8
-pep8ext
 Popen
 posix
 posonly

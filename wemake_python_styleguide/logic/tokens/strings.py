@@ -1,7 +1,7 @@
 import tokenize
 
-from flake8_quotes.docstring_detection import (  # noqa: WPS113, F401
-    get_docstring_tokens as get_docstring_tokens,
+from wemake_python_styleguide.logic.tokens.docstrings import (
+    get_docstring_tokens,
 )
 
 
