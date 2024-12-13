@@ -37,7 +37,6 @@ PRESET: Final = (
     keywords.WrongKeywordVisitor,
     keywords.WrongContextManagerVisitor,
     keywords.ConsistentReturningVisitor,
-    keywords.ConsistentReturningVariableVisitor,
     keywords.ConstantKeywordVisitor,
     keywords.GeneratorKeywordsVisitor,
     loops.WrongComprehensionVisitor,

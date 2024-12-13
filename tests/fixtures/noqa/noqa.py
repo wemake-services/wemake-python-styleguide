@@ -335,18 +335,12 @@ def function_with_wrong_yield():
         yield  # noqa: WPS325
     yield 1
 
-bad_concatenation = 'a' 'b'  # noqa: WPS326
-
 for literal in bad_concatenation:  # noqa: WPS327, WPS328
     continue
 
 with open(bad_concatenation):  # noqa: WPS328
     pass  # noqa: WPS420
 
-
-def some_other_function():
-    some_value = 1
-    return some_value  # noqa: WPS331
 
 my_print(one > two and two > three)  # noqa: WPS333
 
