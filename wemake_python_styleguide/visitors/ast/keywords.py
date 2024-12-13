@@ -17,7 +17,7 @@ from wemake_python_styleguide.logic.tree.exceptions import (
 from wemake_python_styleguide.logic.tree.variables import (
     is_valid_block_variable_definition,
 )
-from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, AnyWith
+from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
     BareRaiseViolation,
     ContextManagerVariableDefinitionViolation,
@@ -30,7 +30,6 @@ from wemake_python_styleguide.violations.consistency import (
     InconsistentReturnViolation,
     InconsistentYieldViolation,
     IncorrectYieldFromTargetViolation,
-    MultipleContextManagerAssignmentsViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
@@ -184,13 +183,6 @@ class WrongKeywordVisitor(BaseNodeVisitor):
 
 
 @final
-@alias(
-    'visit_any_with',
-    (
-        'visit_With',
-        'visit_AsyncWith',
-    ),
-)
 class WrongContextManagerVisitor(BaseNodeVisitor):
     """Checks context managers."""
 
@@ -198,17 +190,6 @@ class WrongContextManagerVisitor(BaseNodeVisitor):
         """Variables inside context managers must be defined correctly."""
         self._check_variable_definitions(node)
         self.generic_visit(node)
-
-    def visit_any_with(self, node: AnyWith) -> None:
-        """Checks the number of assignments for context managers."""
-        self._check_target_assignment(node)
-        self.generic_visit(node)
-
-    def _check_target_assignment(self, node: AnyWith):
-        if len(node.items) > 1:
-            self.add_violation(
-                MultipleContextManagerAssignmentsViolation(node),
-            )
 
     def _check_variable_definitions(self, node: ast.withitem) -> None:
         if node.optional_vars is None:
