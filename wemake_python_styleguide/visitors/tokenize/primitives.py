@@ -10,6 +10,7 @@ from wemake_python_styleguide.logic.tokens.docstrings import (
 )
 from wemake_python_styleguide.logic.tokens.strings import (
     has_triple_string_quotes,
+    is_wrongly_underscored_number,
     split_prefixes,
 )
 from wemake_python_styleguide.violations import consistency
@@ -24,15 +25,6 @@ def _replace_braces(string: str) -> str:
     if string.startswith('"'):
         return string.lstrip('"').rstrip('"')
     return string.lstrip("'").rstrip("'")
-
-
-def _is_wrongly_underscored_number(string: str) -> bool:
-    parts = string.split('_')
-    if '.' in parts[-1]:
-        parts[-1] = parts[-1].split('.')[0]
-    is_correct_first_part = 1 <= len(parts[0]) <= 3
-    wrong_parts = [part for part in parts[1:] if len(part) != 3]
-    return not (is_correct_first_part and not wrong_parts)
 
 
 @final
@@ -63,7 +55,7 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
         self._check_float_zeros(token)
 
     def _check_underscored_number(self, token: tokenize.TokenInfo) -> None:
-        if '_' in token.string and _is_wrongly_underscored_number(token.string):
+        if '_' in token.string and is_wrongly_underscored_number(token.string):
             self.add_violation(
                 consistency.UnderscoredNumberViolation(
                     token,

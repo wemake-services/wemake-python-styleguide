@@ -17,6 +17,11 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
     '-100_0',
     '1000_000',
     '-1000_000',
+    '1.0_0',
+    '3_3.3',
+    '1_0_0',
+    '1_0_0_1',
+    '1_0_0.1',
 ])
 def test_underscored_number(
     parse_tokens,
@@ -52,9 +57,14 @@ def test_underscored_number(
     '100_000',
     '100_000_000',
     '"1_00"',
-    '"10_00"',
-    '"100_00"',
-    '"-100_00"',
+    '"10_000"',
+    '"100_000"',
+    '"-100_000"',
+    '"1.0_0"',
+    '"3_3.3"',
+    '"1_0_0"',
+    '"1_0_0_1"',
+    '"1_0_0.1"',
 ])
 def test_correct_number(
     parse_tokens,

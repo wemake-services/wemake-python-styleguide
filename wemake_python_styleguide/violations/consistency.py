@@ -287,6 +287,8 @@ class UnderscoredNumberViolation(TokenizeViolation):
         big_number = 100000_0000_000
 
     .. versionadded:: 0.1.0
+    .. versionchanged:: 1.0.0
+       Underscore (_) now only allowed with 3 digits after it
 
     """
 

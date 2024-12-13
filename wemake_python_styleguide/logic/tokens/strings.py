@@ -30,3 +30,17 @@ def has_triple_string_quotes(string_contents: str) -> bool:
 def get_comment_text(token: tokenize.TokenInfo) -> str:
     """Returns comment without `#` char from comment tokens."""
     return token.string[1:].strip()
+
+
+def is_wrongly_underscored_number(string: str) -> bool:
+    """Checks if the number in the string is incorrectly formatted.
+
+    The number uses underscores for thousands separators.
+
+    """
+    parts = string.split('_')
+    if '.' in parts[-1]:
+        parts[-1] = parts[-1].split('.')[0]
+    is_correct_first_part = 1 <= len(parts[0]) <= 3
+    wrong_parts = [part for part in parts[1:] if len(part) != 3]
+    return not (is_correct_first_part and not wrong_parts)
