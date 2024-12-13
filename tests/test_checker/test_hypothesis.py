@@ -53,7 +53,7 @@ def test_no_exceptions(
     """
     try:
         tree = parse_ast_tree(str(source_code.encode('utf-8-sig')))
-    except (UnicodeEncodeError, SyntaxError):
+    except (UnicodeEncodeError, SyntaxError, tokenize.TokenError):
         reject()
         raise
 
