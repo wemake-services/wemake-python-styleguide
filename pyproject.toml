@@ -133,8 +133,12 @@ select = [
   "C90",  # maccabe
   "COM",  # flake8-commas
   "D",    # pydocstyle
+  # TODO: enable once it gets out of preview:
+  # "DOC",  # pydoclint
+  "DTZ",  # flake8-datetimez
   "E",    # pycodestyle
   "ERA",  # flake8-eradicate
+  "EXE",  # flake8-executable
   "F",    # pyflakes
   "FLY",  # pyflint
   "FURB", # refurb
@@ -146,8 +150,11 @@ select = [
   "PT",   # flake8-pytest-style
   "Q",    # flake8-quotes
   "RET",  # flake8-return
+  "RSE",  # flake8-raise
   "RUF",  # ruff
+  "PIE",  # flake8-pie
   "S",    # flake8-bandit
+  "SLOT", # flake8-slots
   "SIM",  # flake8-simpify
   "T100", # flake8-debugger
   "TRY",  # tryceratops
