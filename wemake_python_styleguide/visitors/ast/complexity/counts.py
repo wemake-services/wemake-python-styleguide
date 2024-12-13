@@ -48,7 +48,8 @@ class ModuleMembersVisitor(BaseNodeVisitor):
             return
 
         if isinstance(
-            node, FunctionNodes
+            node,
+            FunctionNodes,
         ) and decorators.has_overload_decorator(node):
             return  # We don't count `@overload` defs as real defs
 

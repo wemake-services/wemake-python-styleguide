@@ -85,7 +85,7 @@ class _ImportValidator(_BaseImportValidator):
             [
                 alias.name.split(_MODULE_MEMBERS_SEPARATOR)
                 for alias in node.names
-            ]
+            ],
         )
         for name in names:
             if access.is_protected(name):
@@ -170,7 +170,7 @@ class _ImportCollisionValidator:
                     ImportCollisionViolation(
                         first.node,
                         second.module,
-                    )
+                    ),
                 )
 
     def add_import(self, node: ast.Import) -> None:
@@ -181,7 +181,7 @@ class _ImportCollisionValidator:
                     imports.ImportedObjectInfo(
                         alias.name,
                         node,
-                    )
+                    ),
                 )
 
     def add_import_from(self, node: ast.ImportFrom) -> None:
@@ -202,7 +202,7 @@ class _ImportCollisionValidator:
                             filter(None, (node.module, alias.name)),
                         ),
                         node,
-                    )
+                    ),
                 )
 
     def _does_collide(

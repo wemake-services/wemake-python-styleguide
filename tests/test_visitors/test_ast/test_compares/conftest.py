@@ -35,7 +35,7 @@ IS_COMPARES = frozenset(
     (
         if_with_is,
         if_with_is_not,
-    )
+    ),
 )
 
 EQUAL_COMPARES = frozenset(
@@ -44,7 +44,7 @@ EQUAL_COMPARES = frozenset(
         if_with_not_eq,
         assert_construct,
         assert_with_message,
-    )
+    ),
 )
 
 OTHER_COMPARES = frozenset(
@@ -55,7 +55,7 @@ OTHER_COMPARES = frozenset(
         if_with_gte,
         ternary,
         while_construct,
-    )
+    ),
 )
 
 
@@ -87,7 +87,7 @@ def other_conditions(request):
     params=[
         if_with_in,
         if_with_not_in,
-    ]
+    ],
 )
 def in_conditions(request):
     """Fixture that returns simple conditionals."""

@@ -16,7 +16,7 @@ statement_with_expression = 'other_var + {0}'
         default_param,
         default_param_with_type,
         statement_with_expression,
-    ]
+    ],
 )
 def primitives_usages(request):
     """Fixture to return possible cases of promitives use cases."""
@@ -58,7 +58,7 @@ def positive_number_wrapper():
         'regular_number_wrapper',
         'negative_number_wrapper',
         'positive_number_wrapper',
-    ]
+    ],
 )
 def number_sign(request):
     """Fixture that returns regular, negative, and positive numbers."""

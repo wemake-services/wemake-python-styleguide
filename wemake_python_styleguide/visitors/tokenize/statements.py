@@ -72,15 +72,15 @@ class MultilineStringVisitor(BaseTokenVisitor):
             previous_line_token = None
             next_line_token = None
             if index != 0:
-                previous_line_token = sorted(
+                previous_line_token = max(
                     self._lines[linenos[index - 1]],
                     key=attrgetter('start'),
-                )[-1]
+                )
             if index + 1 < len(linenos):
-                next_line_token = sorted(
+                next_line_token = min(
                     self._lines[linenos[index + 1]],
                     key=attrgetter('start'),
-                )[0]
+                )
             self._check_individual_line(
                 line_tokens,
                 previous_line_token,

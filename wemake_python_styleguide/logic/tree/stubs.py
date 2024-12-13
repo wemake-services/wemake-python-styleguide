@@ -15,7 +15,8 @@ def is_stub(node: AnyFunctionDef) -> bool:
         - a docstring + a `raise` statement
     """
     function_has_docstring = isinstance(node.body[0], Expr) and isinstance(
-        node.body[0].value, Str
+        node.body[0].value,
+        Str,
     )
     if function_has_docstring:
         return _is_stub_with_docstring(node)

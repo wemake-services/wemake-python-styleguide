@@ -65,7 +65,7 @@ class SubscriptVisitor(base.BaseNodeVisitor):
         )
 
         upper_ok = node.slice.upper is None or not self._is_none(
-            node.slice.upper
+            node.slice.upper,
         )
 
         step_ok = node.slice.step is None or (
@@ -88,7 +88,8 @@ class SubscriptVisitor(base.BaseNodeVisitor):
 
         slice_expr = node.slice
         slice_function_assignment = isinstance(
-            slice_expr, ast.Call
+            slice_expr,
+            ast.Call,
         ) and functions.given_function_called(slice_expr, {'slice'})
 
         if subscript_slice_assignment or slice_function_assignment:

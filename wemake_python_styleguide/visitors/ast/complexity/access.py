@@ -49,7 +49,7 @@ class AccessVisitor(BaseNodeVisitor):
                 takewhile(
                     self._is_any_access,
                     attributes.parts(node),
-                )
+                ),
             ),
         )
 

@@ -253,7 +253,7 @@ _ALL_FIXTURES = frozenset(
         match_as_explicit,
         match_inner,
         match_star,
-    )
+    ),
 )
 
 if PY312:
@@ -270,7 +270,7 @@ _FOREIGN_NAMING_PATTERNS = frozenset(
     (
         foreign_attribute,
         foreign_nested_attribute,
-    )
+    ),
 )
 
 _ATTRIBUTES = (
@@ -283,7 +283,7 @@ _ATTRIBUTES = (
             static_typed_annotation,
             instance_attribute,
             instance_typed_attribute,
-        )
+        ),
     )
     | _FOREIGN_NAMING_PATTERNS
 )
@@ -292,7 +292,7 @@ if PY312:
         (
             # Not really an attribute, but similar:
             type_param_class,
-        )
+        ),
     )
 
 
@@ -302,7 +302,7 @@ _FORBIDDEN_UNUSED_TUPLE = frozenset(
         variable_def,
         with_variable,
         for_variable,
-    )
+    ),
 )
 
 # Raw unused variables return True for logic.naming.access.is_unused().
@@ -320,7 +320,7 @@ _FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED = frozenset(
         assignment_expression,
         # Pattern matching:
         match_as_explicit,
-    )
+    ),
 )
 
 _FORBIDDEN_RAW_UNUSED = _FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED | {

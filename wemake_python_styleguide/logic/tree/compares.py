@@ -37,7 +37,7 @@ SIMILAR_OPERATORS: Final[_ComparesMapping] = types.MappingProxyType(
         ast.GtE: (ast.Gt, ast.GtE),
         ast.Lt: (ast.Lt, ast.LtE),
         ast.LtE: (ast.Lt, ast.LtE),
-    }
+    },
 )
 
 
@@ -91,7 +91,9 @@ class CompareBounds:
     ) -> None:
         left_operand = comparison_node.left
         comparators = zip(
-            comparison_node.ops, comparison_node.comparators, strict=False
+            comparison_node.ops,
+            comparison_node.comparators,
+            strict=False,
         )
 
         for operator, right_operand in comparators:

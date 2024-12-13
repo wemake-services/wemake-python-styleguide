@@ -96,8 +96,8 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
                 filter(
                     lambda return_node: return_node.value is not None,
                     walk.get_subnodes_by_type(parent, ast.Return),
-                )
-            )
+                ),
+            ),
         )
 
         last_value_return = (

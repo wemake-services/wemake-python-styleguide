@@ -55,7 +55,7 @@ def _load_all_violation_classes():
         classes.update(
             {
                 module: sorted(only_classes, key=attrgetter('code')),
-            }
+            },
         )
     return classes
 

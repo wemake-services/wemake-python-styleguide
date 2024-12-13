@@ -6,5 +6,5 @@ NEWLINES: Final = frozenset(
     (
         tokenize.NL,
         tokenize.NEWLINE,
-    )
+    ),
 )

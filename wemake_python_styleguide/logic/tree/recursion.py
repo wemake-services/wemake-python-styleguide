@@ -24,7 +24,7 @@ def _check_function_recursion(func: AnyFunctionDef) -> bool:
             for node in walk(func)
             if isinstance(node, Call)
             and given_function_called(node, {func.name})
-        ]
+        ],
     )
 
 

@@ -62,7 +62,7 @@ class ClassComplexityVisitor(BaseNodeVisitor):
                 attr.attr
                 for attr in instance_attributes
                 if access.is_public(attr.attr)
-            }
+            },
         )
 
         if attrs_count > self.options.max_attributes:

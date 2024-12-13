@@ -58,7 +58,7 @@ class WrongClassDefVisitor(base.BaseNodeVisitor):
                 filter(
                     lambda part: isinstance(part, ast.Subscript),
                     parts,
-                )
+                ),
             )
             correct_items = all(
                 isinstance(sub_node, ast.Name | ast.Attribute | ast.Subscript)
@@ -124,7 +124,7 @@ class WrongClassBodyVisitor(base.BaseNodeVisitor):
         ).union(
             set(  # To delete duplicated violations
                 getters_setters.find_attributed_getters_and_setters(node),
-            )
+            ),
         )
         for method in getters_and_setters:
             self.add_violation(
@@ -395,7 +395,9 @@ class ClassMethodOrderVisitor(base.BaseNodeVisitor):
 
         ideal = sorted(method_nodes, key=self._ideal_order, reverse=True)
         for existing_order, ideal_order in zip(
-            method_nodes, ideal, strict=False
+            method_nodes,
+            ideal,
+            strict=False,
         ):
             if existing_order != ideal_order:
                 self.add_violation(consistency.WrongMethodOrderViolation(node))

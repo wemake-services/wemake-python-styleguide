@@ -20,7 +20,7 @@ _ALL_BUILTINS: Final = frozenset(
         # Some python version have them, some do not have them:
         'async',
         'await',
-    )
+    ),
 )
 
 

@@ -54,7 +54,7 @@ def test_unused_variable_tuple_definition(
                     forbidden_tuple_unused_template.format(bad_name),
                     ' ' * indentation,
                 ),
-            )
+            ),
         ),
     )
 
@@ -98,7 +98,7 @@ def test_used_variable_tuple_definition_allowed(
                     forbidden_tuple_unused_template.format(bad_name),
                     ' ' * indentation,
                 ),
-            )
+            ),
         ),
     )
 
@@ -143,7 +143,7 @@ def test_raw_unused_variable_definition(
                     forbidden_raw_unused_template.format(bad_name),
                     ' ' * indentation,
                 ),
-            )
+            ),
         ),
     )
 
@@ -186,7 +186,7 @@ def test_raw_unused_variable_definition_allowed(
                     allowed_raw_unused_template.format(bad_name),
                     ' ' * indentation,
                 ),
-            )
+            ),
         ),
     )
 
@@ -227,7 +227,7 @@ def test_protected_unused_variable_definition(
                     forbidden_protected_unused_template.format(bad_name),
                     ' ' * indentation,
                 ),
-            )
+            ),
         ),
     )
 
@@ -269,7 +269,7 @@ def test_protected_unused_var_definition_allowed(
                     allowed_protected_unused_template.format(bad_name),
                     ' ' * indentation,
                 ),
-            )
+            ),
         ),
     )
 
@@ -312,7 +312,7 @@ def test_used_variable_definition_allowed(
                     naming_template.format(bad_name),
                     ' ' * indentation,
                 ),
-            )
+            ),
         ),
     )
 

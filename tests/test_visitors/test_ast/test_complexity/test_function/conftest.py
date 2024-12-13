@@ -104,7 +104,7 @@ class Test:
         new_method_without_arguments,
         metaclass_without_arguments,
         staticmethod_with_no_argument,
-    ]
+    ],
 )
 def no_argument(request):
     """Fixture that returns different code examples that have no args."""
@@ -122,7 +122,7 @@ def no_argument(request):
         new_method_single_argument,
         metaclass_with_single_argument,
         staticmethod_with_single_argument,
-    ]
+    ],
 )
 def single_argument(request):
     """Fixture that returns different code examples that have one arg."""
@@ -137,7 +137,7 @@ def single_argument(request):
         function_with_posonly,
         method_with_arguments,
         staticmethod_with_arguments,
-    ]
+    ],
 )
 def two_arguments(request):
     """Fixture that returns different code examples that have two args."""

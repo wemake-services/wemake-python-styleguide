@@ -207,7 +207,8 @@ class WrongFunctionCallContextVisitor(base.BaseNodeVisitor):
             return
 
         if_exp_inside_with = isinstance(parent_node, ast.IfExp) and isinstance(
-            nodes.get_parent(parent_node), ast.withitem
+            nodes.get_parent(parent_node),
+            ast.withitem,
         )
 
         if if_exp_inside_with:
@@ -275,7 +276,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
             'classmethod',
             'staticmethod',
             'property',
-        )
+        ),
     )
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
@@ -341,7 +342,8 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
             return
 
         is_name_def = isinstance(sub_node, ast.Name) and isinstance(
-            sub_node.ctx, ast.Store
+            sub_node.ctx,
+            ast.Store,
         )
 
         if is_name_def or isinstance(sub_node, ast.ExceptHandler):

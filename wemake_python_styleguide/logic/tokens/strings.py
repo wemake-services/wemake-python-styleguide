@@ -25,7 +25,7 @@ def has_triple_string_quotes(string_contents: str) -> bool:
         or (
             string_contents.startswith("'''")
             and string_contents.endswith("'''")
-        )
+        ),
     )
 
 

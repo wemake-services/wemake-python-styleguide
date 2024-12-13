@@ -44,7 +44,7 @@ class WrongAttributeVisitor(BaseNodeVisitor):
             return
 
         if isinstance(node.value, ast.Call) and self._is_super_called(
-            node.value
+            node.value,
         ):
             return
 

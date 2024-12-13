@@ -153,7 +153,7 @@ def test_useless_overwriting(
             super_args=super_args,
             method_name='function',
             args_invocation=method_args.invocation,
-        )
+        ),
     )
     tree = parse_ast_tree(formatted_code)
 
@@ -199,7 +199,7 @@ def test_useful_due_to_invalid_decorator(
             super_args=super_args,
             method_name='function',
             args_invocation=method_args.invocation,
-        )
+        ),
     )
     tree = parse_ast_tree(formatted_code)
 
@@ -238,7 +238,7 @@ def test_useful_due_to_invalid_statements(
             super_args=super_args,
             method_name='function',
             args_invocation=method_args.invocation,
-        )
+        ),
     )
     tree = parse_ast_tree(formatted_code)
 
@@ -277,7 +277,7 @@ def test_useful_due_to_invalid_super_args(
             super_args=super_args,
             method_name='function',
             args_invocation=method_args.invocation,
-        )
+        ),
     )
     tree = parse_ast_tree(formatted_code)
 
@@ -316,7 +316,7 @@ def test_useful_due_to_invalid_method(
             super_args=super_args,
             method_name='invalid_function',
             args_invocation=method_args.invocation,
-        )
+        ),
     )
     tree = parse_ast_tree(formatted_code)
 
@@ -355,7 +355,7 @@ def test_useful_due_to_invalid_method_args(
             super_args=super_args,
             method_name='function',
             args_invocation=method_args.invocation,
-        )
+        ),
     )
     tree = parse_ast_tree(formatted_code)
 

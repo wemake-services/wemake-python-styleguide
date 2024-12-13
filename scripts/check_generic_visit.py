@@ -35,7 +35,7 @@ def main() -> NoReturn:
     report('"self.generic_visit(node)" should be last statement here:')
 
     for fn, line in matches:
-        with open(fn) as fp:
+        with open(fn, encoding='utf8') as fp:
             lines = fp.read().splitlines()
             report(
                 '\t{}:{}\n\t{}'.format(

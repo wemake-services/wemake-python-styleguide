@@ -43,7 +43,7 @@ class IfElseVisitor(BaseTokenVisitor):
         (
             tokenize.INDENT,
             tokenize.DEDENT,
-        )
+        ),
     )
 
     _allowed_token_types: ClassVar[frozenset[int]] = frozenset(
@@ -52,7 +52,7 @@ class IfElseVisitor(BaseTokenVisitor):
             tokenize.NL,
             tokenize.COLON,
             tokenize.INDENT,
-        )
+        ),
     )
 
     def visit_name(self, token: tokenize.TokenInfo) -> None:

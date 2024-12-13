@@ -35,7 +35,7 @@ def get_all_exception_names(node: AnyTry) -> list[str]:
             exceptions.append(source.node_to_string(exc_handler.type))
         elif isinstance(exc_handler.type, ast.Tuple):
             exceptions.extend(
-                [source.node_to_string(node) for node in exc_handler.type.elts]
+                [source.node_to_string(node) for node in exc_handler.type.elts],
             )
     return exceptions
 

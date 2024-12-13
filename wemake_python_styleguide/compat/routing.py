@@ -13,7 +13,7 @@ _CONST_NODE_TYPE_NAMES: Final = types.MappingProxyType(
         str: 'Str',
         bytes: 'Bytes',
         type(...): 'Ellipsis',
-    }
+    },
 )
 
 
