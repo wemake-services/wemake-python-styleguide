@@ -34,7 +34,6 @@ class WrongTryExceptVisitor(BaseNodeVisitor):
     def visit_any_try(self, node: AnyTry) -> None:
         """Used for find ``finally`` in ``try`` blocks without ``except``."""
         self._check_if_needs_except(node)
-        self._check_duplicate_exceptions(node)
         self._check_exception_order(node)
         self.generic_visit(node)
 
