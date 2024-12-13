@@ -44,7 +44,6 @@ from wemake_python_styleguide.violations.refactoring import (
     OpenWithoutContextManagerViolation,
     TypeCompareViolation,
     UselessLambdaViolation,
-    WrongIsinstanceWithTupleViolation,
 )
 from wemake_python_styleguide.visitors import base, decorators
 
@@ -81,7 +80,6 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
         """Used to find ``FUNCTIONS_BLACKLIST`` calls."""
         self._check_wrong_function_called(node)
         self._check_boolean_arguments(node)
-        self._check_isinstance_call(node)
 
         if functions.given_function_called(node, {'super'}):
             self._check_super_context(node)
@@ -117,15 +115,6 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
                         text=str(arg.value),
                     ),
                 )
-
-    def _check_isinstance_call(self, node: ast.Call) -> None:
-        function_name = functions.given_function_called(node, {'isinstance'})
-        if not function_name or len(node.args) != 2:
-            return
-
-        if isinstance(node.args[1], ast.Tuple):
-            if len(node.args[1].elts) == 1:
-                self.add_violation(WrongIsinstanceWithTupleViolation(node))
 
     def _check_super_context(self, node: ast.Call) -> None:
         parent_context = nodes.get_context(node)

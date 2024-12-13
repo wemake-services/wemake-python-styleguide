@@ -498,8 +498,6 @@ if numbers == CONSTANT != [2]:  # noqa: WPS409
     my_print(1 + (1 if number else 2))  # noqa: WPS509
 
 my_print(numbers in [])  # noqa: WPS510
-my_print(isinstance(number, int) or isinstance(number, (float, str)))  # noqa: 474
-my_print(isinstance(numbers, (int,)))  # noqa: WPS512
 
 if numbers:
     my_print('first')
@@ -548,10 +546,6 @@ LOWERCASE_ALPH = "abcdefghijklmnopqrstuvwxyz" # noqa: WPS447
 
 if a in {1}:  # noqa: WPS525
     my_print('bad!')
-
-def implicit_yield_from():
-    for wrong_yield in call():  # noqa: WPS526
-        yield wrong_yield
 
 try: # noqa: WPS448
     anti_wps428 = 1

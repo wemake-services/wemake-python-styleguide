@@ -550,7 +550,7 @@ class UnmergedIsinstanceCallsViolation(ASTViolation):
     Example::
 
         # Correct:
-        isinstance(some, (int, float))
+        isinstance(some, int | float)
 
         # Wrong:
         isinstance(some, int) or isinstance(some, float)
@@ -560,6 +560,9 @@ class UnmergedIsinstanceCallsViolation(ASTViolation):
 
     .. versionadded:: 0.10.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``SIM101``.
 
     """
 
@@ -567,6 +570,7 @@ class UnmergedIsinstanceCallsViolation(ASTViolation):
         'Found separate `isinstance` calls that can be merged for: {0}'
     )
     code = 511
+    disabled_since = '1.0.0'
 
 
 @final
@@ -584,7 +588,7 @@ class WrongIsinstanceWithTupleViolation(ASTViolation):
     Example::
 
         # Correct:
-        isinstance(some, (int, float))
+        isinstance(some, int | float)
         isinstance(some, int)
 
         # Wrong:
@@ -594,11 +598,15 @@ class WrongIsinstanceWithTupleViolation(ASTViolation):
 
     .. versionadded:: 0.10.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``UP038``.
 
     """
 
     error_template = 'Found `isinstance` call with a single element tuple'
     code = 512
+    disabled_since = '1.0.0'
 
 
 @final
