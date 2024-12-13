@@ -29,7 +29,7 @@ from wemake_python_styleguide.types import (
     AnyFunctionDefAndLambda,
     AnyNodes,
 )
-from wemake_python_styleguide.violations import consistency, naming, oop
+from wemake_python_styleguide.violations import naming, oop
 from wemake_python_styleguide.violations.best_practices import (
     BooleanPositionalArgumentViolation,
     ComplexDefaultValueViolation,
