@@ -150,7 +150,6 @@ select = [
   "S",    # flake8-bandit
   "SIM",  # flake8-simpify
   "T100", # flake8-debugger
-  "T100", # flake8-debugger
   "TRY",  # tryceratops
   "UP",   # pyupgrade
   "W",    # pycodestyle
