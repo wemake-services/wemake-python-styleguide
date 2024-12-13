@@ -346,7 +346,9 @@ class WrongNameVisitor(BaseNodeVisitor):
             self._regular_validator.check_name(node, node.name)
         self.generic_visit(node)
 
-    def visit_TypeAlias(self, node: TypeAliasNode) -> None:  # pragma: >=3.12 cover
+    def visit_TypeAlias(
+        self, node: TypeAliasNode
+    ) -> None:  # pragma: >=3.12 cover
         """Visit PEP695 type aliases."""
         self._type_params_validator.check_type_params(node)
         self.generic_visit(node)
