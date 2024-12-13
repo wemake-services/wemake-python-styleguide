@@ -80,7 +80,7 @@ ruff = "^0.8"
 optional = true
 
 [tool.poetry.group.docs.dependencies]
-sphinx = "^7.1"
+sphinx = ">=7.1,<9.0"
 sphinx-autodoc-typehints = "^2.0"
 sphinxcontrib-mermaid = "^1.0"
 added-value = "^0.24"
