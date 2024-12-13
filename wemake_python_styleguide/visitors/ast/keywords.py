@@ -1,15 +1,13 @@
 import ast
-from typing import ClassVar, TypeAlias, Union, cast
+from typing import ClassVar, TypeAlias, Union
 
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import (
-    AssignNodes,
     FunctionNodes,
     TextNodes,
 )
 from wemake_python_styleguide.logic import walk, walrus
-from wemake_python_styleguide.logic.naming import name_nodes
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree import keywords, operators
 from wemake_python_styleguide.logic.tree.exceptions import (
@@ -29,7 +27,6 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.violations.consistency import (
     ConsecutiveYieldsViolation,
-    InconsistentReturnVariableViolation,
     InconsistentReturnViolation,
     InconsistentYieldViolation,
     IncorrectYieldFromTargetViolation,
@@ -287,72 +284,6 @@ class GeneratorKeywordsVisitor(BaseNodeVisitor):
 
             previous_line = line
             previous_parent = parent
-
-
-@final
-class ConsistentReturningVariableVisitor(BaseNodeVisitor):
-    """Finds variables that are only used in ``return`` statements."""
-
-    def visit_Return(self, node: ast.Return) -> None:
-        """Helper to get all ``return`` variables in a function at once."""
-        self._check_consistent_variable_return(node)
-        self.generic_visit(node)
-
-    def _check_consistent_variable_return(self, node: ast.Return) -> None:
-        if not node.value or not self._is_named_return(node):
-            return
-
-        previous_node = self._get_previous_stmt(node)
-        if not isinstance(previous_node, AssignNodes):
-            return
-
-        return_names = name_nodes.get_variables_from_node(node.value)
-        previous_names = list(name_nodes.flat_variable_names([previous_node]))
-        self._check_for_violations(node, return_names, previous_names)
-
-    def _is_named_return(self, node: ast.Return) -> bool:
-        if isinstance(node.value, ast.Name):
-            return True
-        return isinstance(node.value, ast.Tuple) and all(
-            isinstance(elem, ast.Name) for elem in node.value.elts
-        )
-
-    def _get_previous_stmt(self, node: ast.Return) -> ast.stmt | None:
-        """
-        This method gets the previous node in a block.
-
-        It is kind of strange. Because nodes might have several bodies.
-        Like ``try`` or ``for`` or ``if`` nodes.
-        ``return`` can also be the only statement there.
-
-        We also use ``cast`` for a reason.
-        Because ``return`` always has a parent.
-        """
-        parent = cast(ast.AST, get_parent(node))
-        for part in ('body', 'orelse', 'finalbody'):
-            block: list[ast.stmt] = getattr(parent, part, [])
-            try:
-                current_index = block.index(node)
-            except ValueError:
-                continue
-
-            if current_index > 0:
-                return block[current_index - 1]
-        return None
-
-    def _check_for_violations(
-        self,
-        node: ast.Return,
-        return_names: list[str],
-        previous_names: list[str],
-    ) -> None:
-        if previous_names == return_names:
-            self.add_violation(
-                InconsistentReturnVariableViolation(
-                    node,
-                    text=', '.join(return_names),
-                ),
-            )
 
 
 @final

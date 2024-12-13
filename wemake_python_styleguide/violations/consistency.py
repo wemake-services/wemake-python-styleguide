@@ -1195,11 +1195,15 @@ class ImplicitStringConcatenationViolation(TokenizeViolation):
         text = 'first' 'second'
 
     .. versionadded:: 0.7.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``ISC001``.
 
     """
 
     error_template = 'Found implicit string concatenation'
     code = 326
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1397,11 +1401,15 @@ class InconsistentReturnVariableViolation(ASTViolation):
 
     .. versionadded:: 0.9.0
     .. versionchanged:: 0.14.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``RET504``.
 
     """
 
     error_template = 'Found variables that are only used for `return`: {0}'
     code = 331
+    disabled_since = '1.0.0'
 
 
 @final
