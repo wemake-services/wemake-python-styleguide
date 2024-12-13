@@ -120,12 +120,7 @@ class WrongClassBodyVisitor(base.BaseNodeVisitor):
 
     def _check_getters_setters_methods(self, node: ast.ClassDef) -> None:
         getters_and_setters = set(
-            filter(
-                lambda getter_setter: functions.is_method(
-                    getattr(getter_setter, 'function_type', None),
-                ),
-                getters_setters.find_paired_getters_and_setters(node),
-            )
+            getters_setters.find_paired_getters_and_setters(node),
         ).union(
             set(  # To delete duplicated violations
                 getters_setters.find_attributed_getters_and_setters(node),

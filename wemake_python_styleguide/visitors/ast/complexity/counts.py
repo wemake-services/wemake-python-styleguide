@@ -7,8 +7,8 @@ from typing_extensions import final
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.compat.types import AnyTry
-from wemake_python_styleguide.logic.nodes import get_parent
-from wemake_python_styleguide.logic.tree import decorators, functions
+from wemake_python_styleguide.logic.nodes import get_context
+from wemake_python_styleguide.logic.tree import decorators
 from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations import complexity
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -44,15 +44,14 @@ class ModuleMembersVisitor(BaseNodeVisitor):
 
     def _check_members_count(self, node: _ModuleMembers) -> None:
         """This method increases the number of module members."""
-        if functions.is_method(getattr(node, 'function_type', '')):
+        if not isinstance(get_context(node), ast.Module):
             return
 
         if isinstance(node, FunctionNodes):
             if decorators.has_overload_decorator(node):
                 return  # We don't count `@overload` defs as real defs
 
-        if isinstance(get_parent(node), ast.Module):
-            self._public_items_count += 1
+        self._public_items_count += 1
 
     def _check_decorators_count(self, node: _ModuleMembers) -> None:
         number_of_decorators = len(node.decorator_list)

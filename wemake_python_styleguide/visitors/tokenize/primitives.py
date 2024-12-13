@@ -5,8 +5,10 @@ from typing import ClassVar
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic.tokens.strings import (
+from wemake_python_styleguide.logic.tokens.docstrings import (
     get_docstring_tokens,
+)
+from wemake_python_styleguide.logic.tokens.strings import (
     has_triple_string_quotes,
     split_prefixes,
 )

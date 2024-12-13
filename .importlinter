@@ -61,14 +61,9 @@ forbidden_modules =
 
   # Important direct and indirect dependencies:
   flake8
-  flake8_quotes
 
   pygments
   pyflakes
-  isort
-  bandit
-  eradicate
-  pydocstyle
   pycodestyle
   mccabe
 
@@ -82,7 +77,6 @@ ignore_imports =
   wemake_python_styleguide.options.config -> flake8
   # We disallow direct imports of our dependencies from anywhere, except:
   wemake_python_styleguide.formatter -> pygments
-  wemake_python_styleguide.logic.tokens.strings -> flake8_quotes
 
 
 [importlinter:contract:subapi-restrictions]

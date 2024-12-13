@@ -1,26 +1,10 @@
 import ast
 
-from pep8ext_naming import NamingChecker
-from typing_extensions import final
-
 from wemake_python_styleguide.transformations.ast.enhancements import (
     set_constant_evaluations,
     set_if_chain,
     set_node_context,
 )
-
-
-@final
-class _ClassVisitor(ast.NodeVisitor):
-    """Used to set method types inside classes."""
-
-    def __init__(self, transformer: NamingChecker) -> None:
-        super().__init__()
-        self.transformer = transformer
-
-    def visit_ClassDef(self, node: ast.ClassDef) -> None:  # noqa: N802
-        self.transformer.tag_class_functions(node)
-        self.generic_visit(node)
 
 
 def _set_parent(tree: ast.AST) -> ast.AST:
@@ -44,20 +28,6 @@ def _set_parent(tree: ast.AST) -> ast.AST:
     return tree
 
 
-def _set_function_type(tree: ast.AST) -> ast.AST:
-    """
-    Sets the function type for methods.
-
-    Can set: `method`, `classmethod`, `staticmethod`.
-
-    .. versionchanged:: 0.3.0
-
-    """
-    transformer = _ClassVisitor(NamingChecker(tree, 'stdin'))
-    transformer.visit(tree)
-    return tree
-
-
 def transform(tree: ast.AST) -> ast.AST:
     """
     Mutates the given ``ast`` tree.
@@ -73,7 +43,6 @@ def transform(tree: ast.AST) -> ast.AST:
     pipeline = (
         # Initial, should be the first ones, ordering inside is important:
         _set_parent,
-        _set_function_type,
         # Enhancements, order is not important:
         set_node_context,
         set_if_chain,

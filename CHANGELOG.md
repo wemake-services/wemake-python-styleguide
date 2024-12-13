@@ -24,7 +24,13 @@ Semantic versioning in our case means:
 - Adds official `python3.13` support
 - **Breaking**: Drops `python3.9` support
 - **Breaking**: Drops `nitpick` support
-- **Breaking**: Drops `flake9-commas` support, use `ruff format` instead
+- **Breaking**: Drops `flake8-commas`, `flake8-isort`,
+  `flake8-debugger`, `flake8-string-format`, `flake8-quotes`,
+  `flake8-comprehensions`, `flake8-bugbear`, `flake8-docstrings`,
+  `flake8-eradicate`, `flake8-bandit`, `flake8-broken-line`,
+  `flake8-rst-docstrings`, `pep8-naming`
+  support, use `ruff format` instead
+- - **Breaking**: Drops `darglint` support, because it is unsupported
 - **Breaking**: Removes `WPS302`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS304`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS305`, because it is covered by `ruff` formatter
