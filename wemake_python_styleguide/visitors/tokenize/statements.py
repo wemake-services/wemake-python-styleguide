@@ -1,7 +1,7 @@
 import tokenize
 from collections import defaultdict
 from operator import attrgetter
-from typing import DefaultDict, TypeAlias
+from typing import TypeAlias
 
 from typing_extensions import final
 
@@ -16,7 +16,7 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
-TokenLines: TypeAlias = DefaultDict[int, list[tokenize.TokenInfo]]
+TokenLines: TypeAlias = defaultdict[int, list[tokenize.TokenInfo]]
 
 
 @final

@@ -90,66 +90,66 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS238': 1,
         'WPS300': 1,
         'WPS301': 1,
-        'WPS302': 0,  # deprecated since 1.0.0
+        'WPS302': 0,  # disabled since 1.0.0
         'WPS303': 1,
-        'WPS304': 0,  # deprecated since 1.0.0
+        'WPS304': 0,  # disabled since 1.0.0
         'WPS305': 0,
-        'WPS306': 0,  # deprecated since 1.0.0
+        'WPS306': 0,  # disabled since 1.0.0
         'WPS307': 1,
         'WPS308': 1,
-        'WPS309': 0,  # deprecated since 1.0.0
-        'WPS310': 0,  # deprecated since 1.0.0
+        'WPS309': 0,  # disabled since 1.0.0
+        'WPS310': 0,  # disabled since 1.0.0
         'WPS311': 1,
         'WPS312': 1,
-        'WPS313': 0,  # deprecated since 1.0.0
+        'WPS313': 0,  # disabled since 1.0.0
         'WPS314': 1,
-        'WPS315': 0,  # deprecated since 1.0.0
-        'WPS316': 0,  # deprecated since 1.0.0
-        'WPS317': 0,  # deprecated since 1.0.0
-        'WPS318': 0,  # deprecated since 1.0.0
-        'WPS319': 0,  # deprecated since 1.0.0
-        'WPS320': 0,  # deprecated since 1.0.0
+        'WPS315': 0,  # disabled since 1.0.0
+        'WPS316': 0,  # disabled since 1.0.0
+        'WPS317': 0,  # disabled since 1.0.0
+        'WPS318': 0,  # disabled since 1.0.0
+        'WPS319': 0,  # disabled since 1.0.0
+        'WPS320': 0,  # disabled since 1.0.0
         'WPS321': 1,
         'WPS322': 1,
-        'WPS323': 1,
+        'WPS323': 0,  # disabled since 1.0.0
         'WPS324': 2,
         'WPS325': 1,
-        'WPS326': 0,  # deprecated since 1.0.0
+        'WPS326': 0,  # disabled since 1.0.0
         'WPS327': 1,
         'WPS328': 3,
-        'WPS329': 0,  # deprecated since 1.0.0
+        'WPS329': 0,  # disabled since 1.0.0
         'WPS330': 1,
-        'WPS331': 0,  # deprecated since 1.0.0
+        'WPS331': 0,  # disabled since 1.0.0
         'WPS332': 1,
         'WPS333': 1,
         'WPS334': 1,
         'WPS335': 1,
         'WPS336': 1,
-        'WPS337': 0,  # deprecated since 1.0.0
+        'WPS337': 0,  # disabled since 1.0.0
         'WPS338': 1,
         'WPS339': 1,
-        'WPS340': 0,  # deprecated since 1.0.0
-        'WPS341': 0,  # deprecated since 1.0.0
+        'WPS340': 0,  # disabled since 1.0.0
+        'WPS341': 0,  # disabled since 1.0.0
         'WPS342': 1,
-        'WPS343': 0,  # deprecated since 1.0.0
+        'WPS343': 0,  # disabled since 1.0.0
         'WPS344': 1,
         'WPS345': 1,
         'WPS346': 1,
         'WPS347': 1,
-        'WPS348': 0,  # deprecated since 1.0.0
+        'WPS348': 0,  # disabled since 1.0.0
         'WPS349': 1,
         'WPS350': 1,
-        'WPS351': 0,  # deprecated since 1.0.0
-        'WPS352': 0,  # deprecated since 1.0.0
+        'WPS351': 0,  # disabled since 1.0.0
+        'WPS352': 0,  # disabled since 1.0.0
         'WPS353': 1,
         'WPS354': 1,
-        'WPS355': 0,  # deprecated since 1.0.0
+        'WPS355': 0,  # disabled since 1.0.0
         'WPS356': 1,
         'WPS357': 0,  # logically unacceptable.
         'WPS358': 1,
         'WPS359': 1,
         'WPS360': 1,
-        'WPS361': 0,  # deprecated since 1.0.0
+        'WPS361': 0,  # disabled since 1.0.0
         'WPS362': 2,
         'WPS400': 0,  # defined in ignored violations.
         'WPS401': 0,  # logically unacceptable.
@@ -166,16 +166,16 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS412': 0,  # logically unacceptable.
         'WPS413': 1,
         'WPS414': 1,
-        'WPS415': 0,  # deprecated since 1.0.0
+        'WPS415': 0,  # disabled since 1.0.0
         'WPS416': 0,  # deprecated
-        'WPS417': 0,  # deprecated since 1.0.0
+        'WPS417': 0,  # disabled since 1.0.0
         'WPS418': 1,
-        'WPS419': 0,  # deprecated since 1.0.0
+        'WPS419': 0,  # disabled since 1.0.0
         'WPS420': 2,
         'WPS421': 1,
         'WPS422': 1,
-        'WPS423': 0,  # deprecated since 1.0.0
-        'WPS424': 0,  # deprecated since 1.0.0
+        'WPS423': 0,  # disabled since 1.0.0
+        'WPS424': 0,  # disabled since 1.0.0
         'WPS425': 1,
         'WPS426': 1,
         'WPS427': 1,
@@ -203,7 +203,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS449': 1,
         'WPS450': 1,
         'WPS451': 0,  # deprecated
-        'WPS452': 0,  # deprecated since 1.0.0
+        'WPS452': 0,  # disabled since 1.0.0
         'WPS453': 0,
         'WPS454': 1,
         'WPS455': 1,
@@ -216,7 +216,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS462': 1,
         'WPS463': 1,
         'WPS464': 0,  # logically unacceptable.
-        'WPS465': 0,  # deprecated since 1.0.0
+        'WPS465': 0,  # disabled since 1.0.0
         'WPS466': 1,
         'WPS467': 1,
         'WPS468': 2,
@@ -228,17 +228,17 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS474': 1,
         'WPS500': 1,
         'WPS501': 1,
-        'WPS502': 0,  # deprecated since 1.0.0
-        'WPS503': 0,  # deprecated since 1.0.0
+        'WPS502': 0,  # disabled since 1.0.0
+        'WPS503': 0,  # disabled since 1.0.0
         'WPS504': 1,
         'WPS505': 1,
         'WPS506': 1,
         'WPS507': 1,
-        'WPS508': 0,  # deprecated since 1.0.0
+        'WPS508': 0,  # disabled since 1.0.0
         'WPS509': 1,
         'WPS510': 1,
-        'WPS511': 0,  # deprecated since 1.0.0
-        'WPS512': 0,  # deprecated since 1.0.0
+        'WPS511': 0,  # disabled since 1.0.0
+        'WPS512': 0,  # disabled since 1.0.0
         'WPS513': 1,
         'WPS514': 1,
         'WPS515': 1,
@@ -247,17 +247,17 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS518': 1,
         'WPS519': 1,
         'WPS520': 1,
-        'WPS521': 0,  # deprecated since 1.0.0
+        'WPS521': 0,  # disabled since 1.0.0
         'WPS522': 1,
         'WPS523': 1,
         'WPS524': 1,
         'WPS525': 2,
-        'WPS526': 0,  # deprecated since 1.0.0
+        'WPS526': 0,  # disabled since 1.0.0
         'WPS527': 1,
         'WPS528': 1,
         'WPS529': 1,
         'WPS530': 1,
-        'WPS531': 0,  # deprecated since 1.0.0
+        'WPS531': 0,  # disabled since 1.0.0
         'WPS532': 1,
         'WPS600': 1,
         'WPS601': 1,
@@ -302,7 +302,7 @@ def _assert_errors_count_in_output(
 
     if total:
         for violation in all_violations:
-            key = 'WPS{0}'.format(str(violation.code).zfill(3))
+            key = f'WPS{str(violation.code).zfill(3)}'  # noqa: WPS237
             assert key in errors, 'Unlisted #noqa violation'
 
     for found_error, found_count in found_errors.items():

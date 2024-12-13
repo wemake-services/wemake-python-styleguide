@@ -79,6 +79,7 @@ def set_constant_evaluations(tree: ast.AST) -> ast.AST:
     This should not be allowed, because we would be using a float to index an
     array, but since there is an addition, the linter does not know that and
     does not raise an error.
+
     """
     for stmt in ast.walk(tree):
         parent = get_parent(stmt)
@@ -101,7 +102,7 @@ def _find_context(
     parent = get_parent(node)
     if parent is None:
         return None
-    elif isinstance(parent, contexts):
+    if isinstance(parent, contexts):
         return parent
     return _find_context(parent, contexts)
 

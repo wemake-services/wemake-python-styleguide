@@ -8,12 +8,9 @@ Adapted from: https://github.com/best-doctor/flake8-annotations-complexity
 """
 
 import ast
-from typing import TypeAlias, Union
+from typing import TypeAlias
 
-_Annotation: TypeAlias = Union[
-    ast.expr,
-    ast.Str,
-]
+_Annotation: TypeAlias = ast.expr | ast.Str
 
 
 def get_annotation_complexity(annotation_node: _Annotation) -> int:
@@ -38,7 +35,7 @@ def get_annotation_complexity(annotation_node: _Annotation) -> int:
 
     if isinstance(annotation_node, ast.Subscript):
         return 1 + get_annotation_complexity(annotation_node.slice)
-    elif isinstance(annotation_node, (ast.Tuple, ast.List)):
+    if isinstance(annotation_node, ast.Tuple | ast.List):
         return max(
             (get_annotation_complexity(node) for node in annotation_node.elts),
             default=1,

@@ -1,12 +1,12 @@
 import ast
 from collections.abc import Iterator
-from typing import TypeAlias, TypeVar, Union
+from typing import TypeAlias, TypeVar
 
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.types import AnyNodes
 
 _SubnodeType = TypeVar('_SubnodeType', bound=ast.AST)
-_IsInstanceContainer: TypeAlias = Union[AnyNodes, type]
+_IsInstanceContainer: TypeAlias = AnyNodes | type
 
 
 def is_contained(

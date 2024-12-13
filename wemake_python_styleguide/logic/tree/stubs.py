@@ -26,7 +26,7 @@ def _is_stub_with_docstring(node: AnyFunctionDef) -> bool:
     statements_in_body = len(node.body)
     if statements_in_body == 1:
         return True
-    elif statements_in_body == 2:
+    if statements_in_body == 2:
         second_node = node.body[1]
         return _is_ellipsis(second_node) or isinstance(second_node, Raise)
     return False

@@ -317,7 +317,6 @@ if True:  # noqa: WPS314
 
 string_modifier = R'(\n)'  # noqa: WPS321
 multiline_string = """abc"""  # noqa: WPS322
-modulo_formatting = 'some %s'  # noqa: WPS323
 
 
 def function_with_wrong_return():

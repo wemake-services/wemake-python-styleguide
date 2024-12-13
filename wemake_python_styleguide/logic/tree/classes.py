@@ -115,10 +115,12 @@ def _get_annotated_class_attribute(
     return (
         subnode
         if (
-            nodes.get_context(subnode) is node
-            and (
-                getattr(subnode, 'value', None)
-                and isinstance(subnode, AssignNodes)
+            (
+                nodes.get_context(subnode) is node
+                and (
+                    getattr(subnode, 'value', None)
+                    and isinstance(subnode, AssignNodes)
+                )
             )
             or isinstance(subnode, ast.AnnAssign)
         )

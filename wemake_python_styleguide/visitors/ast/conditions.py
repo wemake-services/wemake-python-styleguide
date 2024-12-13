@@ -47,14 +47,16 @@ class IfStatementVisitor(BaseNodeVisitor):
         if isinstance(node.test, ast.UnaryOp):
             if isinstance(node.test.op, ast.Not):
                 self.add_violation(refactoring.NegatedConditionsViolation(node))
-        elif isinstance(node.test, ast.Compare):
-            if any(isinstance(elem, ast.NotEq) for elem in node.test.ops):
-                self.add_violation(refactoring.NegatedConditionsViolation(node))
+        elif isinstance(node.test, ast.Compare) and any(
+            isinstance(elem, ast.NotEq) for elem in node.test.ops
+        ):
+            self.add_violation(refactoring.NegatedConditionsViolation(node))
 
     def _check_useless_len(self, node: AnyIf) -> None:
-        if isinstance(node.test, ast.Call):
-            if given_function_called(node.test, {'len'}):
-                self.add_violation(refactoring.UselessLenCompareViolation(node))
+        if isinstance(node.test, ast.Call) and given_function_called(
+            node.test, {'len'}
+        ):
+            self.add_violation(refactoring.UselessLenCompareViolation(node))
 
 
 @final
@@ -149,8 +151,9 @@ class ChainedIsVisitor(BaseNodeVisitor):
 
     def visit_Compare(self, node: ast.Compare) -> None:
         """Checks for chained 'is' operators in comparisons."""
-        if len(node.ops) > 1:
-            if all(isinstance(op, ast.Is) for op in node.ops):
-                self.add_violation(refactoring.ChainedIsViolation(node))
+        if len(node.ops) > 1 and all(
+            isinstance(operator, ast.Is) for operator in node.ops
+        ):
+            self.add_violation(refactoring.ChainedIsViolation(node))
 
         self.generic_visit(node)

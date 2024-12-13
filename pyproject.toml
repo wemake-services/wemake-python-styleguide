@@ -55,7 +55,6 @@ pygments = "^2.4"
 
 
 [tool.poetry.group.dev.dependencies]
-flake8-pytest-style = "^2.0"
 
 pytest = "^8.1"
 pytest-cov = "^6.0"
@@ -97,10 +96,77 @@ build-backend = "poetry.core.masonry.api"
 target-version = 'py310'
 line-length = 80
 extend-exclude = [
-  'tests/fixtures',
-  'tests/**/__snapshots__/*.ambr',
+  # Intentional bad code:
+  "tests/fixtures/**",
+  "tests/**/__snapshots__/**",
+  # 3rd party:
+  "wemake_python_styleguide/logic/tokens/docstrings.py",
 ]
 
 [tool.ruff.format]
 quote-style = 'single'
 docstring-code-format = false
+
+[tool.ruff.lint]
+ignore = [
+  "D100",
+  "D104",
+  "D106",
+  "D203",
+  "D212",
+  "D401",
+  "D404",
+  "D405",
+  "COM812",  # trailing comma, conflicts with `ruff format`
+  "ISC001",  # implicit string concat conflicts with `ruff format`
+  "ISC003",  # prefer explicit string concat over implicit concat
+  "TRY003",  # long exception messages from `tryceratops`
+  "RUF001",  # <
+  "RUF002",  # | allow non-ascii letters
+  "RUF100",  # conflicts with flake8
+]
+select = [
+  "B",    # flake8-bugbear
+  "C4",   # flake8-comprehensions
+  "C90",  # maccabe
+  "COM",  # flake8-commas
+  "D",    # pydocstyle
+  "E",    # pycodestyle
+  "F",    # pyflakes
+  "FLY",  # pyflint
+  "G",    # flake8-string-format
+  "I",    # isort
+  "ISC",  # flake8-implicit-str-concat
+  "Q",    # flake8-quotes
+  "T100", # flake8-debugger
+  "TRY",  # tryceratops
+  "PERF", # perflint
+  "RET",  # flake8-return
+  "RUF",  # ruff
+  "FURB", # refurb
+  "S",    # flake8-bandit
+  "SIM",  # flake8-simpify
+  "UP",   # pyupgrade
+  "W",    # pycodestyle
+
+  "T100", # flake8-debugger
+  "LOG",  # flake8-logging
+  "PT",   # flake8-pytest-style
+  "ERA",  # flake8-eradicate
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 6
+
+[tool.ruff.lint.flake8-quotes]
+inline-quotes = 'single'
+
+[tool.ruff.lint.per-file-ignores]
+"wemake_python_styleguide/visitors/ast/*.py" = ["N802"]
+"tests/*.py" = [
+    "S101",  # asserts
+    "S105",  # hardcoded passwords
+    "S603",  # do not require `shell=True`
+    "S607",  # partial executable paths
+]
+"wemake_python_styleguide/types.py" = ["D102"]

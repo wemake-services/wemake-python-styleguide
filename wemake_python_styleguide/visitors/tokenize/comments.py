@@ -248,7 +248,7 @@ class ShebangVisitor(BaseTokenVisitor):
         while True:
             if current_token == token:
                 return True
-            elif current_token.exact_type not in NEWLINES:
+            if current_token.exact_type not in NEWLINES:
                 break
             current_token = next(all_tokens)
         return False
@@ -286,7 +286,7 @@ class NoqaVisitor(BaseTokenVisitor):
 
         if not excludes or prefix[-1] != ':':
             # We cannot pass the actual line here,
-            # since it will be ignored due to `# noqa` comment:
+            # since it will be ignored due to `noqa` comment:
             self.add_violation(WrongMagicCommentViolation(text=comment_text))
             return
         self._check_forbidden_noqa(excludes)

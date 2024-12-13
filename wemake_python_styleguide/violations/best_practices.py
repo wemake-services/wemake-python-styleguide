@@ -198,7 +198,8 @@ class WrongMagicCommentViolation(SimpleViolation):
     Reasoning:
         We cover several use-cases in a single rule.
         ``# noqa`` comment is restricted because it can hide other violations.
-        ``# type: some_type`` comment is restricted because we can use type annotations instead.
+        ``# type: some_type`` comment is restricted because
+        we can use type annotations instead.
 
     Solution:
         Use ``# noqa`` comments with specified error types.

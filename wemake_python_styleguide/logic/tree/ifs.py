@@ -1,8 +1,8 @@
 import ast
 from collections.abc import Iterable
-from typing import TypeAlias, Union
+from typing import TypeAlias
 
-_IfAndElifASTNode: TypeAlias = Union[ast.If, list[ast.stmt]]
+_IfAndElifASTNode: TypeAlias = ast.If | list[ast.stmt]
 
 
 def has_else(node: ast.If) -> bool:

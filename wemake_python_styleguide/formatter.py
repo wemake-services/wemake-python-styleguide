@@ -27,7 +27,7 @@ That's how all ``flake8`` formatters work:
 
 import os
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, Final
+from typing import ClassVar, Final
 
 from flake8.formatting.base import BaseFormatter
 from flake8.statistics import Statistic, Statistics
@@ -166,33 +166,23 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
         )
 
     def _print_header(self, filename: str) -> None:
-        self._write(
-            '{newline}{filename}'.format(
-                filename=_underline(_bold(os.path.normpath(filename))),
-                newline=self.newline,
-            ),
-        )
+        header = _underline(_bold(os.path.normpath(filename)))
+        self._write(f'{self.newline}{header}')
 
     def _print_violation_per_file(
         self,
         statistic: Statistic,
         error_code: str,
         count: int,
-        error_by_file: DefaultDict[str, int],
+        error_by_file: defaultdict[str, int],
     ) -> None:
+        bold_code = _bold(error_code)
         self._write(
-            '{newline}{error_code}: {message}'.format(
-                newline=self.newline,
-                error_code=_bold(error_code),
-                message=statistic.message,
-            ),
+            f'{self.newline}{bold_code}: {statistic.message}',
         )
         for filename, error_count in error_by_file.items():
             self._write(
-                '  {error_count:<5} {filename}'.format(
-                    error_count=error_count,
-                    filename=filename,
-                ),
+                f'  {error_count:<5} {filename}',
             )
         self._write(_underline(f'Total: {count}'))
 
@@ -276,8 +266,8 @@ def _highlight(
 def _count_per_filename(
     statistics: Statistics,
     error_code: str,
-) -> DefaultDict[str, int]:
-    filenames: DefaultDict[str, int] = defaultdict(int)
+) -> defaultdict[str, int]:
+    filenames: defaultdict[str, int] = defaultdict(int)
     stats_for_error_code = statistics.statistics_for(error_code)
 
     for stat in stats_for_error_code:

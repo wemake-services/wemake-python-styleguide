@@ -114,11 +114,14 @@ class _StringTokenChecker:
         token: tokenize.TokenInfo,
         string_def: str,
     ) -> None:
-        if has_triple_string_quotes(string_def):
-            if '\n' not in string_def and token not in self._docstrings:
-                self._add_violation(
-                    consistency.WrongMultilineStringViolation(token),
-                )
+        if (
+            has_triple_string_quotes(string_def)
+            and '\n' not in string_def
+            and token not in self._docstrings
+        ):
+            self._add_violation(
+                consistency.WrongMultilineStringViolation(token),
+            )
 
     def check_string_modifiers(
         self,

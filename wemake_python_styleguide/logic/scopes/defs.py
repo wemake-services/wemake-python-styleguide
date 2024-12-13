@@ -1,6 +1,6 @@
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, cast
+from typing import ClassVar, cast
 
 from typing_extensions import final
 
@@ -9,7 +9,7 @@ from wemake_python_styleguide.logic.nodes import get_context
 from wemake_python_styleguide.types import ContextNodes
 
 #: That's how we represent scopes that are bound to contexts.
-_ContextStore = DefaultDict[ContextNodes, set[str]]
+_ContextStore = defaultdict[ContextNodes, set[str]]
 
 
 class _BaseScope:

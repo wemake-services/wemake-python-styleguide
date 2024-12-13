@@ -1,11 +1,11 @@
 import ast
-from typing import TypeAlias, Union
+from typing import TypeAlias
 
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming import access
 
-_VarDefinition: TypeAlias = Union[ast.AST, ast.expr]
-_LocalVariable: TypeAlias = Union[ast.Name, ast.ExceptHandler]
+_VarDefinition: TypeAlias = ast.AST | ast.expr
+_LocalVariable: TypeAlias = ast.Name | ast.ExceptHandler
 
 
 def get_variable_name(node: _LocalVariable) -> str:
@@ -47,10 +47,8 @@ def is_valid_unpacking_target(target: ast.expr) -> bool:
 
 
 def _is_valid_single(node: _VarDefinition) -> bool:
-    return (
-        isinstance(node, ast.Name)
-        or isinstance(node, ast.Starred)
-        and isinstance(node.value, ast.Name)
+    return isinstance(node, ast.Name) or (
+        isinstance(node, ast.Starred) and isinstance(node.value, ast.Name)
     )
 
 

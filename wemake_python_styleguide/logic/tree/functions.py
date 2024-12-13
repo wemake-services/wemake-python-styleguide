@@ -1,6 +1,6 @@
 from ast import Call, Return, Yield, YieldFrom, arg, walk
 from collections.abc import Container, Iterable
-from typing import TypeAlias, Union
+from typing import TypeAlias
 
 from wemake_python_styleguide.logic import source
 from wemake_python_styleguide.logic.walk import is_contained
@@ -10,11 +10,7 @@ from wemake_python_styleguide.types import (
 )
 
 #: Expressions that causes control transfer from a routine
-_AnyControlTransfers: TypeAlias = Union[
-    Return,
-    Yield,
-    YieldFrom,
-]
+_AnyControlTransfers: TypeAlias = Return | Yield | YieldFrom
 
 #: Type annotation for an iterable of control transfer nodes
 _ControlTransferIterable: TypeAlias = Iterable[_AnyControlTransfers]

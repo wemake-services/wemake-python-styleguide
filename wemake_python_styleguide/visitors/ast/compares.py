@@ -57,7 +57,7 @@ class CompareSanityVisitor(BaseNodeVisitor):
             if numeric_value == 0:
                 return False
             if numeric_value == 1:
-                return not isinstance(sign, (ast.GtE, ast.Lt))
+                return not isinstance(sign, ast.GtE | ast.Lt)
         return True
 
     def _check_literal_compare(self, node: ast.Compare) -> None:
@@ -117,20 +117,27 @@ class CompareSanityVisitor(BaseNodeVisitor):
 class WrongConstantCompareVisitor(BaseNodeVisitor):
     """Restricts incorrect compares with constants."""
 
+    _eq_compares: ClassVar[AnyNodes] = (
+        ast.Eq,
+        ast.NotEq,
+        ast.Is,
+        ast.IsNot,
+    )
+
     def visit_Compare(self, node: ast.Compare) -> None:
         """Visits compare with constants."""
         self._check_constant(node.ops[0], node.left)
 
-        for op, comparator in zip(node.ops, node.comparators):
+        for op, comparator in zip(node.ops, node.comparators, strict=False):
             self._check_constant(op, comparator)
 
         self.generic_visit(node)
 
     def _check_constant(self, op: ast.cmpop, comparator: ast.expr) -> None:
-        if not isinstance(op, (ast.Eq, ast.NotEq, ast.Is, ast.IsNot)):
+        if not isinstance(op, self._eq_compares):
             return
         real = get_assigned_expr(comparator)
-        if not isinstance(real, (ast.List, ast.Dict, ast.Tuple)):
+        if not isinstance(real, ast.List | ast.Dict | ast.Tuple):
             return
         if walk.get_closest_parent(op, ast.Assert):
             return  # We allow any compares in `assert`
@@ -245,7 +252,7 @@ class InCompareSanityVisitor(BaseNodeVisitor):
             self.add_violation(MultipleInCompareViolation(node))
 
     def _check_comparators(self, node: ast.Compare) -> None:
-        for op, comp in zip(node.ops, node.comparators):
+        for op, comp in zip(node.ops, node.comparators, strict=False):
             if not isinstance(op, self._in_nodes):
                 continue
 
@@ -257,7 +264,7 @@ class InCompareSanityVisitor(BaseNodeVisitor):
         is_text_violated = isinstance(node, TextNodes) and len(node.s) == 1
         is_dict_violated = isinstance(node, ast.Dict) and len(node.keys) == 1
         is_iter_violated = (
-            isinstance(node, (ast.List, ast.Tuple, ast.Set))
+            isinstance(node, ast.List | ast.Tuple | ast.Set)
             and len(node.elts) == 1
         )
 
@@ -280,9 +287,7 @@ class WrongFloatComplexCompareVisitor(BaseNodeVisitor):
 
     def _is_float_or_complex(self, node: ast.AST) -> bool:
         node = operators.unwrap_unary_node(node)
-        return isinstance(node, ast.Num) and isinstance(
-            node.n, (float, complex)
-        )
+        return isinstance(node, ast.Num) and isinstance(node.n, float | complex)
 
     def _check_float_complex_compare(self, node: ast.Compare) -> None:
         any_float_or_complex = any(

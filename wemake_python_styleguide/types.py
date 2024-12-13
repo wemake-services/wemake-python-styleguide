@@ -36,76 +36,62 @@ Reference
 """
 
 import ast
-from typing import TypeAlias, Union
+from typing import TypeAlias
 
 from typing_extensions import Protocol
 
 #: We use this type to represent all string-like nodes.
-AnyText: TypeAlias = Union[ast.Str, ast.Bytes]
+AnyText: TypeAlias = ast.Str | ast.Bytes
 
 #: In cases we need to work with both import types.
-AnyImport: TypeAlias = Union[ast.Import, ast.ImportFrom]
+AnyImport: TypeAlias = ast.Import | ast.ImportFrom
 
 #: In cases we need to work with both function definitions.
-AnyFunctionDef: TypeAlias = Union[ast.FunctionDef, ast.AsyncFunctionDef]
+AnyFunctionDef: TypeAlias = ast.FunctionDef | ast.AsyncFunctionDef
 
 #: In cases we need to work with all function definitions (including lambdas).
-AnyFunctionDefAndLambda: TypeAlias = Union[AnyFunctionDef, ast.Lambda]
+AnyFunctionDefAndLambda: TypeAlias = AnyFunctionDef | ast.Lambda
 
 #: In cases we need to work with both forms of if functions.
-AnyIf: TypeAlias = Union[ast.If, ast.IfExp]
+AnyIf: TypeAlias = ast.If | ast.IfExp
 
 #: In cases we need to work with both sync and async loops.
-AnyFor: TypeAlias = Union[ast.For, ast.AsyncFor]
+AnyFor: TypeAlias = ast.For | ast.AsyncFor
 
 #: In case we need to work with any loop: sync, async, and while.
-AnyLoop: TypeAlias = Union[AnyFor, ast.While]
+AnyLoop: TypeAlias = AnyFor | ast.While
 
 #: This is how you can define a variable in Python.
-AnyVariableDef: TypeAlias = Union[ast.Name, ast.Attribute, ast.ExceptHandler]
+AnyVariableDef: TypeAlias = ast.Name | ast.Attribute | ast.ExceptHandler
 
 #: All different comprehension types in one place.
-AnyComprehension: TypeAlias = Union[
-    ast.ListComp,
-    ast.DictComp,
-    ast.SetComp,
-    ast.GeneratorExp,
-]
+AnyComprehension: TypeAlias = (
+    ast.ListComp | ast.DictComp | ast.SetComp | ast.GeneratorExp
+)
 
 #: In cases we need to work with both sync and async context managers.
-AnyWith: TypeAlias = Union[ast.With, ast.AsyncWith]
+AnyWith: TypeAlias = ast.With | ast.AsyncWith
 
 #: When we search for assign elements, we also need typed assign.
-AnyAssign: TypeAlias = Union[ast.Assign, ast.AnnAssign]
+AnyAssign: TypeAlias = ast.Assign | ast.AnnAssign
 
 #: When we search for assign elements, we also need typed assign.
-AnyAssignWithWalrus: TypeAlias = Union[AnyAssign, ast.NamedExpr]
+AnyAssignWithWalrus: TypeAlias = AnyAssign | ast.NamedExpr
 
 #: In cases we need to work with both access types.
-AnyAccess: TypeAlias = Union[
-    ast.Attribute,
-    ast.Subscript,
-]
+AnyAccess: TypeAlias = ast.Attribute | ast.Subscript
 
 #: In case we need to handle types that can be chained.
-AnyChainable: TypeAlias = Union[
-    ast.Attribute,
-    ast.Subscript,
-    ast.Call,
-]
+AnyChainable: TypeAlias = ast.Attribute | ast.Subscript | ast.Call
 
 #: Tuple of AST node types for declarative syntax.
 AnyNodes: TypeAlias = tuple[type[ast.AST], ...]
 
 #: We use this type to work with any text-like values. Related to `AnyText`.
-AnyTextPrimitive: TypeAlias = Union[str, bytes]
+AnyTextPrimitive: TypeAlias = str | bytes
 
 #: That's how we define context of operations.
-ContextNodes: TypeAlias = Union[
-    ast.Module,
-    ast.ClassDef,
-    AnyFunctionDef,
-]
+ContextNodes: TypeAlias = ast.Module | ast.ClassDef | AnyFunctionDef
 
 #: Flake8 API format to return error messages.
 CheckResult: TypeAlias = tuple[int, int, str, type]

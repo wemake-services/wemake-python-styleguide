@@ -16,10 +16,7 @@ def _min_max(
         max_contract = max is not None and field_value > max
         if min_contract or max_contract:
             raise ValueError(
-                'Option {0} is out of bounds: {1}'.format(
-                    attribute.name,
-                    field_value,
-                )
+                f'Option {attribute.name} is out of bounds: {field_value}'
             )
 
     return factory

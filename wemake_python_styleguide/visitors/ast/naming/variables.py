@@ -163,7 +163,7 @@ class UnusedVariableDefinitionVisitor(BaseNodeVisitor):
         """
         is_inside_class_or_module = isinstance(
             nodes.get_context(node),
-            (ast.ClassDef, ast.Module),
+            ast.ClassDef | ast.Module,
         )
         self._check_assign_unused(
             node,

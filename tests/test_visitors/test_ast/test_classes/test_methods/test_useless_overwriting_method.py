@@ -34,7 +34,11 @@ class Useless:
         return None
 """
 
-_MethodArgs = NamedTuple('_MethodArgs', definition=str, invocation=str)
+
+class _MethodArgs(NamedTuple):
+    definition: str
+    invocation: str
+
 
 valid_method_args: list[_MethodArgs] = [
     _MethodArgs('', ''),

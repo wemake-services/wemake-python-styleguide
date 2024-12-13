@@ -54,16 +54,12 @@ import ast
 import enum
 import tokenize
 from collections.abc import Callable
-from typing import ClassVar, TypeAlias, Union
+from typing import ClassVar, TypeAlias
 
 from typing_extensions import final
 
 #: General type for all possible nodes where error happens.
-ErrorNode: TypeAlias = Union[
-    ast.AST,
-    tokenize.TokenInfo,
-    None,
-]
+ErrorNode: TypeAlias = ast.AST | tokenize.TokenInfo | None
 
 #: We use this type to define helper classes with callbacks to add violations.
 ErrorCallback: TypeAlias = Callable[['BaseViolation'], None]
@@ -157,11 +153,7 @@ class BaseViolation(metaclass=abc.ABCMeta):  # noqa: WPS338
         formatted = self.error_template.format(self._text)
         if self._text and formatted == self.error_template:  # pragma: no cover
             raise ValueError('Error message was not formatted', self)
-        return '{0} {1}{2}'.format(
-            self.full_code,
-            formatted,
-            self._postfix_information(),
-        )
+        return f'{self.full_code} {formatted}{self._postfix_information()}'
 
     @final
     def node_items(self) -> tuple[int, int, str]:
@@ -177,7 +169,8 @@ class BaseViolation(metaclass=abc.ABCMeta):  # noqa: WPS338
         Adds violation letter to the numbers.
         Also ensures that codes like ``3`` will be represented as ``WPS003``.
         """
-        return 'WPS{0}'.format(str(cls.code).zfill(3))
+        code_part = str(cls.code).zfill(3)
+        return f'WPS{code_part}'
 
     @final
     def _postfix_information(self) -> str:

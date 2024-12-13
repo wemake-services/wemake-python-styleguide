@@ -1,7 +1,7 @@
 import ast
 from collections.abc import Mapping
 from contextlib import suppress
-from typing import ClassVar, TypeAlias, Union
+from typing import ClassVar, TypeAlias
 
 from typing_extensions import final
 
@@ -48,7 +48,7 @@ from wemake_python_styleguide.violations.refactoring import (
 from wemake_python_styleguide.visitors import base, decorators
 
 #: Things we treat as local variables.
-_LocalVariable: TypeAlias = Union[ast.Name, ast.ExceptHandler]
+_LocalVariable: TypeAlias = ast.Name | ast.ExceptHandler
 
 #: Function definitions with name and arity:
 _Defs: TypeAlias = Mapping[str, int]
@@ -174,7 +174,7 @@ class FloatingNanCallVisitor(base.BaseNodeVisitor):
         if len(node.args) != 1:
             return
 
-        if not isinstance(node.args[0], (ast.Str, ast.Bytes)):
+        if not isinstance(node.args[0], ast.Str | ast.Bytes):
             return
 
         if not functions.given_function_called(node, 'float'):
@@ -290,7 +290,7 @@ class FunctionDefinitionVisitor(base.BaseNodeVisitor):
 
         for body_item in node.body:
             for sub_node in ast.walk(body_item):
-                if isinstance(sub_node, (ast.Name, ast.ExceptHandler)):
+                if isinstance(sub_node, ast.Name | ast.ExceptHandler):
                     var_name = variables.get_variable_name(sub_node)
                     self._maybe_update_variable(
                         sub_node,

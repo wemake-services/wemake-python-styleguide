@@ -1,9 +1,9 @@
 import ast
-from typing import TypeAlias, Union
+from typing import TypeAlias
 
 from wemake_python_styleguide.logic.nodes import get_context
 
-_ReturningNodes: TypeAlias = list[Union[ast.Return, ast.Yield]]
+_ReturningNodes: TypeAlias = list[ast.Return | ast.Yield]
 
 
 def returning_nodes(
