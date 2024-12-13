@@ -23,22 +23,28 @@ correct_calls = (
 )
 
 
-@pytest.mark.parametrize('template', [
-    correct_argument,
-    correct_single_argument,
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        correct_argument,
+        correct_single_argument,
+    ],
+)
 @pytest.mark.parametrize('function', correct_calls)
-@pytest.mark.parametrize('argument', [
-    True,
-    False,
-    None,
-    0,
-    1,
-    2,
-    '[]',
-    '""',
-    '()',
-])
+@pytest.mark.parametrize(
+    'argument',
+    [
+        True,
+        False,
+        None,
+        0,
+        1,
+        2,
+        '[]',
+        '""',
+        '()',
+    ],
+)
 def test_correct_boolean_argument(
     assert_errors,
     parse_ast_tree,
@@ -56,24 +62,33 @@ def test_correct_boolean_argument(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('template', [
-    correct_three_arguments,
-])
-@pytest.mark.parametrize('function', [
-    'setattr',
-    'getattr',
-])
-@pytest.mark.parametrize('argument', [
-    True,
-    False,
-    None,
-    0,
-    1,
-    2,
-    '[]',
-    '""',
-    '()',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        correct_three_arguments,
+    ],
+)
+@pytest.mark.parametrize(
+    'function',
+    [
+        'setattr',
+        'getattr',
+    ],
+)
+@pytest.mark.parametrize(
+    'argument',
+    [
+        True,
+        False,
+        None,
+        0,
+        1,
+        2,
+        '[]',
+        '""',
+        '()',
+    ],
+)
 def test_correct_three_boolean_argument(
     assert_errors,
     parse_ast_tree,
@@ -91,17 +106,26 @@ def test_correct_three_boolean_argument(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('template', [
-    correct_three_arguments,
-])
-@pytest.mark.parametrize('function', [
-    'nosetattr',
-    'other.getattr',
-])
-@pytest.mark.parametrize('argument', [
-    True,
-    False,
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        correct_three_arguments,
+    ],
+)
+@pytest.mark.parametrize(
+    'function',
+    [
+        'nosetattr',
+        'other.getattr',
+    ],
+)
+@pytest.mark.parametrize(
+    'argument',
+    [
+        True,
+        False,
+    ],
+)
 def test_wrong_three_boolean_argument(
     assert_errors,
     parse_ast_tree,
@@ -116,29 +140,38 @@ def test_wrong_three_boolean_argument(
     visitor = WrongFunctionCallVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [
-        BooleanPositionalArgumentViolation,
-        BooleanPositionalArgumentViolation,
-        BooleanPositionalArgumentViolation,
-    ])
+    assert_errors(
+        visitor,
+        [
+            BooleanPositionalArgumentViolation,
+            BooleanPositionalArgumentViolation,
+            BooleanPositionalArgumentViolation,
+        ],
+    )
 
 
-@pytest.mark.parametrize('template', [
-    correct_argument,
-    correct_single_argument,
-    wrong_argument,
-    wrong_single_argument,
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        correct_argument,
+        correct_single_argument,
+        wrong_argument,
+        wrong_single_argument,
+    ],
+)
 @pytest.mark.parametrize('function', correct_calls)
-@pytest.mark.parametrize('argument', [
-    None,
-    0,
-    1,
-    2,
-    '[]',
-    '""',
-    '()',
-])
+@pytest.mark.parametrize(
+    'argument',
+    [
+        None,
+        0,
+        1,
+        2,
+        '[]',
+        '""',
+        '()',
+    ],
+)
 def test_different_argument(
     assert_errors,
     parse_ast_tree,
@@ -156,18 +189,27 @@ def test_different_argument(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('template', [
-    wrong_argument,
-])
-@pytest.mark.parametrize('function', [
-    'some',
-    'get.prop',
-    'setattr.custom',
-])
-@pytest.mark.parametrize('argument', [
-    True,
-    False,
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        wrong_argument,
+    ],
+)
+@pytest.mark.parametrize(
+    'function',
+    [
+        'some',
+        'get.prop',
+        'setattr.custom',
+    ],
+)
+@pytest.mark.parametrize(
+    'argument',
+    [
+        True,
+        False,
+    ],
+)
 def test_wrong_boolean_argument(
     assert_errors,
     parse_ast_tree,
@@ -182,7 +224,10 @@ def test_wrong_boolean_argument(
     visitor = WrongFunctionCallVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [
-        BooleanPositionalArgumentViolation,
-        BooleanPositionalArgumentViolation,
-    ])
+    assert_errors(
+        visitor,
+        [
+            BooleanPositionalArgumentViolation,
+            BooleanPositionalArgumentViolation,
+        ],
+    )

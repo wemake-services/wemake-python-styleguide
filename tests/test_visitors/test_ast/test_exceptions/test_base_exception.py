@@ -29,9 +29,12 @@ except:
 """
 
 
-@pytest.mark.parametrize('code', [
-    use_base_exception,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        use_base_exception,
+    ],
+)
 def test_use_base_exception(
     assert_errors,
     parse_ast_tree,
@@ -47,10 +50,13 @@ def test_use_base_exception(
     assert_errors(visitor, [BaseExceptionViolation])
 
 
-@pytest.mark.parametrize('code', [
-    use_except_exception,
-    use_bare_except,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        use_except_exception,
+        use_bare_except,
+    ],
+)
 def test_use_exception(
     assert_errors,
     parse_ast_tree,

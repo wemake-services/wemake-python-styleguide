@@ -7,8 +7,8 @@ from typing_extensions import final
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.compat.types import AnyTry
-from wemake_python_styleguide.logic.nodes import get_parent
-from wemake_python_styleguide.logic.tree import decorators, functions
+from wemake_python_styleguide.logic.nodes import get_context
+from wemake_python_styleguide.logic.tree import decorators
 from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations import complexity
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -20,11 +20,14 @@ _ReturnLikeStatement: TypeAlias = Union[ast.Return, ast.Yield]
 
 
 @final
-@alias('visit_module_members', (
-    'visit_ClassDef',
-    'visit_AsyncFunctionDef',
-    'visit_FunctionDef',
-))
+@alias(
+    'visit_module_members',
+    (
+        'visit_ClassDef',
+        'visit_AsyncFunctionDef',
+        'visit_FunctionDef',
+    ),
+)
 class ModuleMembersVisitor(BaseNodeVisitor):
     """Counts classes and functions in a module."""
 
@@ -41,15 +44,14 @@ class ModuleMembersVisitor(BaseNodeVisitor):
 
     def _check_members_count(self, node: _ModuleMembers) -> None:
         """This method increases the number of module members."""
-        if functions.is_method(getattr(node, 'function_type', '')):
+        if not isinstance(get_context(node), ast.Module):
             return
 
         if isinstance(node, FunctionNodes):
             if decorators.has_overload_decorator(node):
                 return  # We don't count `@overload` defs as real defs
 
-        if isinstance(get_parent(node), ast.Module):
-            self._public_items_count += 1
+        self._public_items_count += 1
 
     def _check_decorators_count(self, node: _ModuleMembers) -> None:
         number_of_decorators = len(node.decorator_list)
@@ -153,9 +155,7 @@ class ElifVisitor(BaseNodeVisitor):
         self._if_children[root].extend(node.orelse)  # type: ignore
 
     def _check_elifs(self, node: ast.If) -> None:
-        has_elif = all(
-            isinstance(if_node, ast.If) for if_node in node.orelse
-        )
+        has_elif = all(isinstance(if_node, ast.If) for if_node in node.orelse)
 
         if has_elif:
             root = self._get_root_if_node(node)
@@ -175,10 +175,13 @@ class ElifVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_any_try', (
-    'visit_Try',
-    'visit_TryStar',
-))
+@alias(
+    'visit_any_try',
+    (
+        'visit_Try',
+        'visit_TryStar',
+    ),
+)
 class TryExceptVisitor(BaseNodeVisitor):
     """Visits all try/except nodes to ensure that they are not too complex."""
 
@@ -210,10 +213,13 @@ class TryExceptVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_return_like', (
-    'visit_Return',
-    'visit_Yield',
-))
+@alias(
+    'visit_return_like',
+    (
+        'visit_Return',
+        'visit_Yield',
+    ),
+)
 class ReturnLikeStatementTupleVisitor(BaseNodeVisitor):
     """Finds too long ``tuples`` in ``yield`` and ``return`` expressions."""
 

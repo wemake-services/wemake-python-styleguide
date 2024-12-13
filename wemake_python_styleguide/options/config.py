@@ -186,7 +186,9 @@ class _Option:
     def __attrs_post_init__(self) -> None:
         """Is called after regular init is done."""
         object.__setattr__(  # noqa: WPS609
-            self, 'help', ' '.join(
+            self,
+            'help',
+            ' '.join(
                 (self.help, 'Defaults to: %(default)s'),  # noqa: WPS323
             ),
         )
@@ -206,7 +208,6 @@ class Configuration:
 
     _options: ClassVar[Sequence[_Option]] = [
         # General:
-
         _Option(
             '--min-name-length',
             defaults.MIN_NAME_LENGTH,
@@ -272,9 +273,7 @@ class Configuration:
             defaults.EXPS_FOR_ONE_EMPTY_LINE,
             'Count of expressions for one empty line in a function body.',
         ),
-
         # Complexity:
-
         _Option(
             '--max-returns',
             defaults.MAX_RETURNS,
@@ -410,9 +409,7 @@ class Configuration:
             defaults.MAX_TUPLE_UNPACK_LENGTH,
             'Maximum number of variables in a tuple unpacking.',
         ),
-
         # Formatter:
-
         _Option(
             '--show-violation-links',
             defaults.SHOW_VIOLATION_LINKS,

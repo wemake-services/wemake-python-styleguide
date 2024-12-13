@@ -58,11 +58,13 @@ class ClassComplexityVisitor(BaseNodeVisitor):
             node,
             include_annotated=False,
         )
-        attrs_count = len({
-            attr.attr
-            for attr in instance_attributes
-            if access.is_public(attr.attr)
-        })
+        attrs_count = len(
+            {
+                attr.attr
+                for attr in instance_attributes
+                if access.is_public(attr.attr)
+            }
+        )
 
         if attrs_count > self.options.max_attributes:
             self.add_violation(
@@ -75,10 +77,13 @@ class ClassComplexityVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_any_function', (
-    'visit_FunctionDef',
-    'visit_AsyncFunctionDef',
-))
+@alias(
+    'visit_any_function',
+    (
+        'visit_FunctionDef',
+        'visit_AsyncFunctionDef',
+    ),
+)
 class MethodMembersVisitor(BaseNodeVisitor):
     """Counts methods in a single class."""
 

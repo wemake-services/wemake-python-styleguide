@@ -25,10 +25,13 @@ _OperatorPairs: TypeAlias = Mapping[type[ast.boolop], type[ast.cmpop]]
 
 
 @final
-@alias('visit_any_if', (
-    'visit_If',
-    'visit_IfExp',
-))
+@alias(
+    'visit_any_if',
+    (
+        'visit_If',
+        'visit_IfExp',
+    ),
+)
 class IfStatementVisitor(BaseNodeVisitor):
     """Checks single and consecutive ``if`` statement nodes."""
 

@@ -31,28 +31,32 @@ while_construct = 'while {0} > {1}: ...'
 
 # Actual fixtures:
 
-IS_COMPARES = frozenset((
-    if_with_is,
-    if_with_is_not,
-))
+IS_COMPARES = frozenset(
+    (
+        if_with_is,
+        if_with_is_not,
+    )
+)
 
-EQUAL_COMPARES = frozenset((
-    if_with_eq,
-    if_with_not_eq,
+EQUAL_COMPARES = frozenset(
+    (
+        if_with_eq,
+        if_with_not_eq,
+        assert_construct,
+        assert_with_message,
+    )
+)
 
-    assert_construct,
-    assert_with_message,
-))
-
-OTHER_COMPARES = frozenset((
-    if_with_lt,
-    if_with_gt,
-    if_with_lte,
-    if_with_gte,
-
-    ternary,
-    while_construct,
-))
+OTHER_COMPARES = frozenset(
+    (
+        if_with_lt,
+        if_with_gt,
+        if_with_lte,
+        if_with_gte,
+        ternary,
+        while_construct,
+    )
+)
 
 
 @pytest.fixture(params=IS_COMPARES | EQUAL_COMPARES | OTHER_COMPARES)
@@ -79,10 +83,12 @@ def other_conditions(request):
     return request.param
 
 
-@pytest.fixture(params=[
-    if_with_in,
-    if_with_not_in,
-])
+@pytest.fixture(
+    params=[
+        if_with_in,
+        if_with_not_in,
+    ]
+)
 def in_conditions(request):
     """Fixture that returns simple conditionals."""
     return request.param
@@ -91,11 +97,13 @@ def in_conditions(request):
 @pytest.fixture
 def not_in_wrapper():
     """Fixture to replace all `in` operators to `not in` operators."""
+
     def factory(template: str) -> str:
         return template.replace(
             ' in ',
             ' not in ',
         )
+
     return factory
 
 

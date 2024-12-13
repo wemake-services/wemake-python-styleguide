@@ -6,10 +6,13 @@ from wemake_python_styleguide.violations.consistency import (
 from wemake_python_styleguide.visitors.ast.compares import CompareSanityVisitor
 
 
-@pytest.mark.parametrize('code', [
-    'x > y >= z',
-    'x > y > z',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'x > y >= z',
+        'x > y > z',
+    ],
+)
 def test_reversed_complex_compare(
     assert_errors,
     parse_ast_tree,
@@ -25,14 +28,17 @@ def test_reversed_complex_compare(
     assert_errors(visitor, [ReversedComplexCompareViolation])
 
 
-@pytest.mark.parametrize('code', [
-    'x < y <= z',
-    'x < y < z',
-    'x <= y < z',
-    'x <= y <= z',
-    'x == y == z',
-    'x != y != z',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'x < y <= z',
+        'x < y < z',
+        'x <= y < z',
+        'x <= y <= z',
+        'x == y == z',
+        'x != y != z',
+    ],
+)
 def test_correct_compare(
     assert_errors,
     parse_ast_tree,

@@ -30,21 +30,24 @@ wrong_tuple_definition = '(*numbers,)'
 wrong_spread_assignment = '*_, = [1, 2, 4, 3]'
 
 
-@pytest.mark.parametrize('code', [
-    args_unpacking_in_call,
-    spread_list_definition,
-    spread_set_definition,
-    spread_tuple_definition,
-    spread_assignment,
-
-    # Type annotations should be allowed:
-    pytest.param(type_annotation1, marks=_skip_mark),
-    pytest.param(type_annotation2, marks=_skip_mark),
-    pytest.param(type_alias, marks=_skip_mark),
-    pytest.param(generic_type, marks=_skip_mark),
-    # As a side-effect of type annotations, we also allow this code in runtime:
-    pytest.param(similar_but_unrelated, marks=_skip_mark),
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        args_unpacking_in_call,
+        spread_list_definition,
+        spread_set_definition,
+        spread_tuple_definition,
+        spread_assignment,
+        # Type annotations should be allowed:
+        pytest.param(type_annotation1, marks=_skip_mark),
+        pytest.param(type_annotation2, marks=_skip_mark),
+        pytest.param(type_alias, marks=_skip_mark),
+        pytest.param(generic_type, marks=_skip_mark),
+        # As a side-effect of type annotations,
+        # we also allow this code in runtime:
+        pytest.param(similar_but_unrelated, marks=_skip_mark),
+    ],
+)
 def test_correct_iterable_unpacking_usage(
     assert_errors,
     parse_ast_tree,
@@ -60,12 +63,15 @@ def test_correct_iterable_unpacking_usage(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    wrong_list_definition,
-    wrong_set_definition,
-    wrong_tuple_definition,
-    wrong_spread_assignment,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_list_definition,
+        wrong_set_definition,
+        wrong_tuple_definition,
+        wrong_spread_assignment,
+    ],
+)
 def test_unnecessary_iterable_unpacking_usage(
     assert_errors,
     parse_ast_tree,

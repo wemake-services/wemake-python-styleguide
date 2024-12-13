@@ -156,40 +156,40 @@ async def container():
 """
 
 
-@pytest.mark.parametrize('code', [
-    module_template,
-
-    if_template,
-    if_elif_template,
-    if_else_template,
-
-    for_template,
-    for_else_template,
-    while_template,
-    while_else_template,
-
-    try_template,
-    try_except_template,
-    try_else_template,
-    try_finally_template,
-
-    with_template,
-
-    function_template,
-    class_template,
-
-    async_function_template,
-    async_with_template,
-    async_for_template,
-    async_for_else_template,
-])
-@pytest.mark.parametrize('statement', [
-    'print',
-    'object.mro',
-    '3 > 4',
-    '1 + 2',
-    '-100',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_template,
+        if_template,
+        if_elif_template,
+        if_else_template,
+        for_template,
+        for_else_template,
+        while_template,
+        while_else_template,
+        try_template,
+        try_except_template,
+        try_else_template,
+        try_finally_template,
+        with_template,
+        function_template,
+        class_template,
+        async_function_template,
+        async_with_template,
+        async_for_template,
+        async_for_else_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'print',
+        'object.mro',
+        '3 > 4',
+        '1 + 2',
+        '-100',
+    ],
+)
 def test_statement_with_no_effect(
     assert_errors,
     parse_ast_tree,
@@ -206,22 +206,28 @@ def test_statement_with_no_effect(
     assert_errors(visitor, [StatementHasNoEffectViolation])
 
 
-@pytest.mark.parametrize('code', [
-    module_template,
-])
-@pytest.mark.parametrize('statement', [
-    'x += x + 2',
-    'x -= x - 1',
-    'x *= x * 1',
-    'x /= x / 1',
-    'x **= x ** 1',
-    'x ^= x ^ 1',
-    'x %= x % 1',
-    'x >>= x >> 1',
-    'x <<= x << 1',
-    'x &= x & 1',
-    'x |= x | 1',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'x += x + 2',
+        'x -= x - 1',
+        'x *= x * 1',
+        'x /= x / 1',
+        'x **= x ** 1',
+        'x ^= x ^ 1',
+        'x %= x % 1',
+        'x >>= x >> 1',
+        'x <<= x << 1',
+        'x &= x & 1',
+        'x |= x | 1',
+    ],
+)
 def test_misrefactored_assignment(
     assert_errors,
     parse_ast_tree,
@@ -238,59 +244,59 @@ def test_misrefactored_assignment(
     assert_errors(visitor, [MisrefactoredAssignmentViolation])
 
 
-@pytest.mark.parametrize('code', [
-    module_template,
-
-    if_template,
-    if_elif_template,
-    if_else_template,
-
-    for_template,
-    for_else_template,
-    while_template,
-    while_else_template,
-
-    try_template,
-    try_except_template,
-    try_else_template,
-    try_finally_template,
-
-    with_template,
-
-    function_template,
-    class_template,
-
-    async_function_template,
-    async_with_template,
-    async_for_template,
-    async_for_else_template,
-])
-@pytest.mark.parametrize('statement', [
-    'some_name = 1 + 2',
-    'call()',
-    'object.mro()',
-    'del some',
-    'some_var: int',
-    'x += 2',
-    'x += y + 2',
-    'x += check(2)',
-    'x -= 1',
-    'x *= 1',
-    'x **= 1',
-    'x /= 1',
-    'x ^= 1',
-    'x %= 1',
-    'x >>= 1',
-    'x <<= 1',
-    'x &= 1',
-    'x |= 1',
-    'x -= x.attr("a")',
-    'x -= test(x)',
-    'x -= x.method()',
-    'x -= x.attr + 1',
-    'x -= test(x) + 1',
-    'x = 2 + x',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_template,
+        if_template,
+        if_elif_template,
+        if_else_template,
+        for_template,
+        for_else_template,
+        while_template,
+        while_else_template,
+        try_template,
+        try_except_template,
+        try_else_template,
+        try_finally_template,
+        with_template,
+        function_template,
+        class_template,
+        async_function_template,
+        async_with_template,
+        async_for_template,
+        async_for_else_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'some_name = 1 + 2',
+        'call()',
+        'object.mro()',
+        'del some',
+        'some_var: int',
+        'x += 2',
+        'x += y + 2',
+        'x += check(2)',
+        'x -= 1',
+        'x *= 1',
+        'x **= 1',
+        'x /= 1',
+        'x ^= 1',
+        'x %= 1',
+        'x >>= 1',
+        'x <<= 1',
+        'x &= 1',
+        'x |= 1',
+        'x -= x.attr("a")',
+        'x -= test(x)',
+        'x -= x.method()',
+        'x -= x.attr + 1',
+        'x -= test(x) + 1',
+        'x = 2 + x',
+    ],
+)
 def test_statement_with_regular_effect(
     assert_errors,
     parse_ast_tree,
@@ -307,15 +313,21 @@ def test_statement_with_regular_effect(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    function_template,
-])
-@pytest.mark.parametrize('statement', [
-    'return',
-    'yield',
-    'yield from some',
-    'raise TypeError()',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'return',
+        'yield',
+        'yield from some',
+        'raise TypeError()',
+    ],
+)
 def test_statement_with_function_effect(
     assert_errors,
     parse_ast_tree,
@@ -332,15 +344,21 @@ def test_statement_with_function_effect(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    async_function_template,
-])
-@pytest.mark.parametrize('statement', [
-    'await some',
-    'return',
-    'yield',
-    'raise TypeError()',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        async_function_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        'await some',
+        'return',
+        'yield',
+        'raise TypeError()',
+    ],
+)
 def test_statement_with_await_effect(
     assert_errors,
     parse_ast_tree,
@@ -357,16 +375,22 @@ def test_statement_with_await_effect(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    function_template,
-    async_function_template,
-    class_template,
-    module_template,
-])
-@pytest.mark.parametrize('statement', [
-    '"docstring"',
-    '...',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_template,
+        async_function_template,
+        class_template,
+        module_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        '"docstring"',
+        '...',
+    ],
+)
 def test_statement_with_special_definition(
     assert_errors,
     parse_ast_tree,
@@ -386,34 +410,35 @@ def test_statement_with_special_definition(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    if_template,
-    if_elif_template,
-    if_else_template,
-
-    for_template,
-    for_else_template,
-    while_template,
-    while_else_template,
-
-    try_template,
-    try_except_template,
-    try_else_template,
-    try_finally_template,
-
-    with_template,
-
-    async_with_template,
-    async_for_template,
-    async_for_else_template,
-
-    function_extra_template,
-    class_extra_template,
-])
-@pytest.mark.parametrize('statement', [
-    '"docstring"',
-    '...',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        if_template,
+        if_elif_template,
+        if_else_template,
+        for_template,
+        for_else_template,
+        while_template,
+        while_else_template,
+        try_template,
+        try_except_template,
+        try_else_template,
+        try_finally_template,
+        with_template,
+        async_with_template,
+        async_for_template,
+        async_for_else_template,
+        function_extra_template,
+        class_extra_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'statement',
+    [
+        '"docstring"',
+        '...',
+    ],
+)
 def test_statement_useless_special_statements(
     assert_errors,
     parse_ast_tree,

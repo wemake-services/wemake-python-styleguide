@@ -26,16 +26,22 @@ class CheckAbstractMethods():
 """
 
 
-@pytest.mark.parametrize('code', [
-    raise_exception_method,
-    raise_exception_function,
-    raise_exception_raw,
-    raise_exception_property,
-])
-@pytest.mark.parametrize('exception', [
-    'NotImplemented',
-    'NotImplemented()',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        raise_exception_method,
+        raise_exception_function,
+        raise_exception_raw,
+        raise_exception_property,
+    ],
+)
+@pytest.mark.parametrize(
+    'exception',
+    [
+        'NotImplemented',
+        'NotImplemented()',
+    ],
+)
 def test_raise_not_implemented(
     assert_errors,
     parse_ast_tree,

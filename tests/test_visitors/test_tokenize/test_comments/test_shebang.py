@@ -14,14 +14,20 @@ template_with_leading_comment = """{0}
 template_regular_comment = 'x = 1{0}'
 
 
-@pytest.mark.parametrize('template', [
-    template_regular,
-    template_with_leading_comment,
-])
-@pytest.mark.parametrize(('code', 'executable'), [
-    ('x = 1', False),
-    ('#!/bin/python', True),
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        template_regular,
+        template_with_leading_comment,
+    ],
+)
+@pytest.mark.parametrize(
+    ('code', 'executable'),
+    [
+        ('x = 1', False),
+        ('#!/bin/python', True),
+    ],
+)
 def test_correct_shebang_executable1(
     make_file,
     assert_errors,
@@ -45,16 +51,22 @@ def test_correct_shebang_executable1(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('template', [
-    template_regular_comment,
-    template_empty,
-])
-@pytest.mark.parametrize(('code', 'executable'), [
-    ('#!/bin/some', False),
-    ('#!/bin/python', False),
-    ('# any text', False),
-    ('   # any text with padding', False),
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        template_regular_comment,
+        template_empty,
+    ],
+)
+@pytest.mark.parametrize(
+    ('code', 'executable'),
+    [
+        ('#!/bin/some', False),
+        ('#!/bin/python', False),
+        ('# any text', False),
+        ('   # any text with padding', False),
+    ],
+)
 def test_correct_shebang_executable2(
     make_file,
     assert_errors,
@@ -78,18 +90,24 @@ def test_correct_shebang_executable2(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('template', [
-    template_regular,
-    template_with_leading_comment,
-    template_regular_comment,
-    template_empty,
-])
-@pytest.mark.parametrize(('code', 'executable'), [
-    ('#!/bin/python', False),
-    ('#!/bin/python', True),
-    ('# any text', False),
-    ('# any text', True),
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        template_regular,
+        template_with_leading_comment,
+        template_regular_comment,
+        template_empty,
+    ],
+)
+@pytest.mark.parametrize(
+    ('code', 'executable'),
+    [
+        ('#!/bin/python', False),
+        ('#!/bin/python', True),
+        ('# any text', False),
+        ('# any text', True),
+    ],
+)
 def test_shebang_on_windows(
     make_file,
     monkeypatch,
@@ -115,18 +133,24 @@ def test_shebang_on_windows(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('template', [
-    template_regular,
-    template_with_leading_comment,
-    template_regular_comment,
-    template_empty,
-])
-@pytest.mark.parametrize(('code', 'executable'), [
-    ('#!/bin/python', False),
-    ('#!/bin/python', True),
-    ('# any text', False),
-    ('# any text', True),
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        template_regular,
+        template_with_leading_comment,
+        template_regular_comment,
+        template_empty,
+    ],
+)
+@pytest.mark.parametrize(
+    ('code', 'executable'),
+    [
+        ('#!/bin/python', False),
+        ('#!/bin/python', True),
+        ('# any text', False),
+        ('# any text', True),
+    ],
+)
 def test_shebang_with_stdin(
     make_file,
     monkeypatch,
@@ -151,14 +175,20 @@ def test_shebang_with_stdin(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('template', [
-    template_regular,
-    template_with_leading_comment,
-])
-@pytest.mark.parametrize(('code', 'executable'), [
-    ('#!/bin/python', False),
-    ('# regular comment', True),
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        template_regular,
+        template_with_leading_comment,
+    ],
+)
+@pytest.mark.parametrize(
+    ('code', 'executable'),
+    [
+        ('#!/bin/python', False),
+        ('# regular comment', True),
+    ],
+)
 def test_wrong_shebang_executable(
     make_file,
     assert_errors,
@@ -182,14 +212,20 @@ def test_wrong_shebang_executable(
     assert_errors(visitor, [ShebangViolation])
 
 
-@pytest.mark.parametrize('template', [
-    template_with_leading_comment,
-])
-@pytest.mark.parametrize('code', [
-    '#!/bin/other',  # does not include `python`
-    ' #!/bin/python',  # has extra whitespace
-    '\n\n#!python',  # has extra newlines
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        template_with_leading_comment,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        '#!/bin/other',  # does not include `python`
+        ' #!/bin/python',  # has extra whitespace
+        '\n\n#!python',  # has extra newlines
+    ],
+)
 def test_wrong_shebang_format(
     make_file,
     assert_errors,
@@ -200,7 +236,9 @@ def test_wrong_shebang_format(
 ):
     """Testing cases when no errors should be reported."""
     path_to_file = make_file(
-        'test_file.py', template.format(code), is_executable=True,
+        'test_file.py',
+        template.format(code),
+        is_executable=True,
     )
     file_tokens = parse_file_tokens(path_to_file)
 

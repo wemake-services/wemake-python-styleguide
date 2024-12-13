@@ -27,8 +27,10 @@ def _find_function(tree: ast.AST):
 @pytest.fixture(scope='session')
 def get_code_snippet_complexity(parse_ast_tree):
     """Fixture to parse and count cognitive complexity the easy way."""
+
     def factory(src: str) -> int:
         funcdef = _find_function(parse_ast_tree(src))
         assert funcdef, 'No function definition found'
         return cognitive.cognitive_score(funcdef)
+
     return factory

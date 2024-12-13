@@ -1,4 +1,3 @@
-
 import attr
 from typing_extensions import final
 
@@ -11,14 +10,18 @@ def _min_max(
     max: int | None = None,  # noqa: WPS125
 ):
     """Validator to check that value is in bounds."""
+
     def factory(instance, attribute, field_value):
         min_contract = min is not None and field_value < min
         max_contract = max is not None and field_value > max
         if min_contract or max_contract:
-            raise ValueError('Option {0} is out of bounds: {1}'.format(
-                attribute.name,
-                field_value,
-            ))
+            raise ValueError(
+                'Option {0} is out of bounds: {1}'.format(
+                    attribute.name,
+                    field_value,
+                )
+            )
+
     return factory
 
 
@@ -39,10 +42,10 @@ def validate_domain_names_options(
     if intersecting_names:
         raise ValueError(
             (
-                'Names passed to `allowed_domain_name` and ' +
-                '`forbidden_domain_name` cannot intersect. ' +
-                'Intersecting names: ' +
-                ', '.join(intersecting_names)
+                'Names passed to `allowed_domain_name` and '
+                + '`forbidden_domain_name` cannot intersect. '
+                + 'Intersecting names: '
+                + ', '.join(intersecting_names)
             ),
         )
 
@@ -107,12 +110,10 @@ def validate_options(options: ConfigurationOptions) -> _ValidatedOptions:
         options.forbidden_domain_names,
     )
     fields_to_validate = [
-        field.name
-        for field in attr.fields(_ValidatedOptions)
+        field.name for field in attr.fields(_ValidatedOptions)
     ]
     options_subset = {
-        field: getattr(options, field, None)
-        for field in fields_to_validate
+        field: getattr(options, field, None) for field in fields_to_validate
     }
     # Next line raises `TypeError` if `options_subset` is invalid.
     return _ValidatedOptions(**options_subset)  # type: ignore

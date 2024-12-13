@@ -20,13 +20,16 @@ call_chain = 'manager.filter().exclude().annotate().values().first()'
 deep_access = 'self.some.other.attr().first.second.third.fourth.boom'
 
 
-@pytest.mark.parametrize('code', [
-    subscript_access,
-    attribute_access,
-    mixed_access,
-    mixed_with_calls_access,
-    call_chain,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        subscript_access,
+        attribute_access,
+        mixed_access,
+        mixed_with_calls_access,
+        call_chain,
+    ],
+)
 def test_correct_access(
     assert_errors,
     parse_ast_tree,
@@ -44,13 +47,16 @@ def test_correct_access(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize(('code', 'access_level'), [
-    (subscript_access, 4),
-    (attribute_access, 4),
-    (mixed_access, 4),
-    (mixed_with_calls_access, 4),
-    (deep_access, 5),
-])
+@pytest.mark.parametrize(
+    ('code', 'access_level'),
+    [
+        (subscript_access, 4),
+        (attribute_access, 4),
+        (mixed_access, 4),
+        (mixed_with_calls_access, 4),
+        (deep_access, 5),
+    ],
+)
 def test_incorrect_access(
     assert_errors,
     assert_error_text,

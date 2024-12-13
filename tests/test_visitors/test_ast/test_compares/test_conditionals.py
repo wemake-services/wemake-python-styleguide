@@ -44,24 +44,30 @@ def container():
 """
 
 
-@pytest.mark.parametrize('code', [
-    if_statement,
-    ternary,
-    list_comprehension,
-    set_comprehension,
-    dict_comprehension,
-    gen_comprehension,
-])
-@pytest.mark.parametrize('comparators', [
-    'variable < 3',
-    'variable',
-    'variable is True',
-    'variable is False',
-    '[1, 2, 3].size > 3',
-    'variable is None',
-    'variable is int or not some()',
-    '(unique := some()) is True',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        if_statement,
+        ternary,
+        list_comprehension,
+        set_comprehension,
+        dict_comprehension,
+        gen_comprehension,
+    ],
+)
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        'variable < 3',
+        'variable',
+        'variable is True',
+        'variable is False',
+        '[1, 2, 3].size > 3',
+        'variable is None',
+        'variable is int or not some()',
+        '(unique := some()) is True',
+    ],
+)
 def test_valid_conditional(
     assert_errors,
     parse_ast_tree,
@@ -81,35 +87,41 @@ def test_valid_conditional(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    if_statement,
-    ternary,
-    # list_comprehension,
-    # set_comprehension,
-    # dict_comprehension,
-    # gen_comprehension,
-])
-@pytest.mark.parametrize('comparators', [
-    'True',
-    'False',
-    'None',
-    '4',
-    '-4.8',
-    '--0.0',
-    '"test"',
-    "b'bytes'",
-    '("string in brackets")',
-    '{test : "1"}',
-    '{"set"}',
-    '("tuple",)',
-    '["list"]',
-    'variable or False',
-    'variable and False',
-    'variable or True',
-    'variable and True',
-    '(unique := True)',
-    '(unique := -1)',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        if_statement,
+        ternary,
+        # list_comprehension,
+        # set_comprehension,
+        # dict_comprehension,
+        # gen_comprehension,
+    ],
+)
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        'True',
+        'False',
+        'None',
+        '4',
+        '-4.8',
+        '--0.0',
+        '"test"',
+        "b'bytes'",
+        '("string in brackets")',
+        '{test : "1"}',
+        '{"set"}',
+        '("tuple",)',
+        '["list"]',
+        'variable or False',
+        'variable and False',
+        'variable or True',
+        'variable and True',
+        '(unique := True)',
+        '(unique := -1)',
+    ],
+)
 def test_constant_condition(
     assert_errors,
     parse_ast_tree,

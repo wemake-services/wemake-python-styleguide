@@ -96,16 +96,19 @@ def container():
 """
 
 
-@pytest.mark.parametrize('code', [
-    list_ifs_single,
-    list_without_ifs,
-    dict_ifs_single,
-    dict_without_ifs,
-    gen_ifs_single,
-    gen_without_ifs,
-    set_ifs_single,
-    set_without_ifs,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        list_ifs_single,
+        list_without_ifs,
+        dict_ifs_single,
+        dict_without_ifs,
+        gen_ifs_single,
+        gen_without_ifs,
+        set_ifs_single,
+        set_without_ifs,
+    ],
+)
 def test_if_keyword_in_comprehension(
     assert_errors,
     parse_ast_tree,
@@ -122,16 +125,19 @@ def test_if_keyword_in_comprehension(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    list_ifs_multiple,
-    list_ifs_twice,
-    dict_ifs_multiple,
-    dict_ifs_twice,
-    gen_ifs_multiple,
-    gen_ifs_twice,
-    set_ifs_multiple,
-    set_ifs_twice,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        list_ifs_multiple,
+        list_ifs_twice,
+        dict_ifs_multiple,
+        dict_ifs_twice,
+        gen_ifs_multiple,
+        gen_ifs_twice,
+        set_ifs_multiple,
+        set_ifs_twice,
+    ],
+)
 def test_multiple_if_keywords_in_comprehension(
     assert_errors,
     parse_ast_tree,

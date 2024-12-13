@@ -5,11 +5,14 @@ from wemake_python_styleguide.options.validation import (
 )
 
 
-@pytest.mark.parametrize(('allowed_names', 'forbidden_names'), [
-    (['items'], []),
-    ([], ['items']),
-    (['item'], ['handle']),
-])
+@pytest.mark.parametrize(
+    ('allowed_names', 'forbidden_names'),
+    [
+        (['items'], []),
+        ([], ['items']),
+        (['item'], ['handle']),
+    ],
+)
 def test_passes_when_any_option_not_passed(allowed_names, forbidden_names):
     """Ensures validation passes when any domain option not passed."""
     validate_domain_names_options(allowed_names, forbidden_names)

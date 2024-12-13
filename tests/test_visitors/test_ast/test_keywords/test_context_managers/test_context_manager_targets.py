@@ -32,10 +32,13 @@ def wrapper():
 """
 
 
-@pytest.mark.parametrize('code', [
-    incorrect_count,
-    incorrect_composite_assign,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        incorrect_count,
+        incorrect_composite_assign,
+    ],
+)
 def test_context_manager_multiple_targets(
     assert_errors,
     parse_ast_tree,
@@ -52,10 +55,13 @@ def test_context_manager_multiple_targets(
     assert_errors(visitor, [MultipleContextManagerAssignmentsViolation])
 
 
-@pytest.mark.parametrize('code', [
-    correct_count,
-    correct_count_tuple,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_count,
+        correct_count_tuple,
+    ],
+)
 def test_context_manager_alone_target(
     assert_errors,
     parse_ast_tree,

@@ -34,11 +34,14 @@ except ImportError:
 """
 
 
-@pytest.mark.parametrize('code', [
-    empty_module,
-    module_with_docstring,
-    module_with_comments,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        empty_module,
+        module_with_docstring,
+        module_with_comments,
+    ],
+)
 def test_init_without_logic(
     assert_errors,
     parse_ast_tree,
@@ -49,18 +52,23 @@ def test_init_without_logic(
     tree = parse_ast_tree(code)
 
     visitor = EmptyModuleContentsVisitor(
-        default_options, tree=tree, filename='__init__.py',
+        default_options,
+        tree=tree,
+        filename='__init__.py',
     )
     visitor.run()
 
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    module_with_imports,
-    module_with_one_import,
-    module_with_logic,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_with_imports,
+        module_with_one_import,
+        module_with_logic,
+    ],
+)
 def test_init_with_logic(
     assert_errors,
     parse_ast_tree,
@@ -71,18 +79,23 @@ def test_init_with_logic(
     tree = parse_ast_tree(code)
 
     visitor = EmptyModuleContentsVisitor(
-        default_options, tree=tree, filename='__init__.py',
+        default_options,
+        tree=tree,
+        filename='__init__.py',
     )
     visitor.run()
 
     assert_errors(visitor, [InitModuleHasLogicViolation])
 
 
-@pytest.mark.parametrize('code', [
-    module_with_imports,
-    module_with_one_import,
-    module_with_logic,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_with_imports,
+        module_with_one_import,
+        module_with_logic,
+    ],
+)
 def test_init_with_logic_without_control(
     assert_errors,
     parse_ast_tree,

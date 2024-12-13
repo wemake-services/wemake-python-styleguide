@@ -21,11 +21,7 @@ def duplicated_isinstance_call(node: ast.BoolOp) -> list[str]:
         isinstance_object = source.node_to_string(call.args[0])
         counter[isinstance_object] += 1
 
-    return [
-        node_name
-        for node_name, count in counter.items()
-        if count > 1
-    ]
+    return [node_name for node_name, count in counter.items() if count > 1]
 
 
 def get_duplicate_names(variables: list[set[str]]) -> set[str]:

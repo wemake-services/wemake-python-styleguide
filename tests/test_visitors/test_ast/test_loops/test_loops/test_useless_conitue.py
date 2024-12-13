@@ -43,10 +43,13 @@ def wrapper():
 """
 
 
-@pytest.mark.parametrize('code', [
-    wrong_for_loop,
-    wrong_nested_for_loop,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_for_loop,
+        wrong_nested_for_loop,
+    ],
+)
 def test_wrong_continue_in_loop(
     assert_errors,
     parse_ast_tree,
@@ -63,10 +66,13 @@ def test_wrong_continue_in_loop(
     assert_errors(visitor, [UselessContinueViolation])
 
 
-@pytest.mark.parametrize('code', [
-    correct_for_loop,
-    correct_while_loop,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_for_loop,
+        correct_while_loop,
+    ],
+)
 def test_correct_continue_usage(
     assert_errors,
     parse_ast_tree,

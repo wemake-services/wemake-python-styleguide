@@ -325,23 +325,26 @@ def some():
 """
 
 
-@pytest.mark.parametrize('code', [
-    wrong_example1,
-    wrong_example2,
-    wrong_example3,
-    wrong_example4,
-    wrong_example5,
-    wrong_example6,
-    wrong_example7,
-    wrong_example8,
-    wrong_example9,
-    wrong_example10,
-    wrong_example11,
-    wrong_example12,
-    wrong_example13,
-    wrong_example14,
-    wrong_example15,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_example1,
+        wrong_example2,
+        wrong_example3,
+        wrong_example4,
+        wrong_example5,
+        wrong_example6,
+        wrong_example7,
+        wrong_example8,
+        wrong_example9,
+        wrong_example10,
+        wrong_example11,
+        wrong_example12,
+        wrong_example13,
+        wrong_example14,
+        wrong_example15,
+    ],
+)
 def test_wrong_return_variable(
     assert_errors,
     parse_ast_tree,
@@ -357,32 +360,35 @@ def test_wrong_return_variable(
     assert_errors(visitor, [InconsistentReturnVariableViolation])
 
 
-@pytest.mark.parametrize('code', [
-    correct_example1,
-    correct_example2,
-    correct_example3,
-    correct_example4,
-    correct_example5,
-    correct_example6,
-    correct_example7,
-    correct_example8,
-    correct_example9,
-    correct_example10,
-    correct_example11,
-    correct_example12,
-    correct_example13,
-    correct_example14,
-    correct_example15,
-    correct_example16,
-    correct_example17,
-    correct_example18,
-    correct_example19,
-    correct_example20,
-    correct_example21,
-    correct_example22,
-    correct_example23,
-    correct_example24,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_example1,
+        correct_example2,
+        correct_example3,
+        correct_example4,
+        correct_example5,
+        correct_example6,
+        correct_example7,
+        correct_example8,
+        correct_example9,
+        correct_example10,
+        correct_example11,
+        correct_example12,
+        correct_example13,
+        correct_example14,
+        correct_example15,
+        correct_example16,
+        correct_example17,
+        correct_example18,
+        correct_example19,
+        correct_example20,
+        correct_example21,
+        correct_example22,
+        correct_example23,
+        correct_example24,
+    ],
+)
 def test_correct_return_statements(
     assert_errors,
     parse_ast_tree,
@@ -409,7 +415,10 @@ def test_double_wrong_return_variable(
     visitor = ConsistentReturningVariableVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [
-        InconsistentReturnVariableViolation,
-        InconsistentReturnVariableViolation,
-    ])
+    assert_errors(
+        visitor,
+        [
+            InconsistentReturnVariableViolation,
+            InconsistentReturnVariableViolation,
+        ],
+    )

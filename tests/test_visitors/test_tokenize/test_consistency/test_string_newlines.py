@@ -29,13 +29,16 @@ print(3)
 """
 
 
-@pytest.mark.parametrize('code', [
-    wrong_newline_single,
-    wrong_newline_sequenced1,
-    wrong_newline_sequenced2,
-    wrong_newline_sequenced3,
-    wrong_newline_in_multiline,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_newline_single,
+        wrong_newline_sequenced1,
+        wrong_newline_sequenced2,
+        wrong_newline_sequenced3,
+        wrong_newline_in_multiline,
+    ],
+)
 def test_string_wrong_line_breaks(
     parse_tokens,
     assert_errors,
@@ -46,20 +49,24 @@ def test_string_wrong_line_breaks(
     file_tokens = parse_tokens(code)
 
     visitor = WrongKeywordTokenVisitor(
-        default_options, file_tokens=file_tokens,
+        default_options,
+        file_tokens=file_tokens,
     )
     visitor.run()
 
     assert_errors(visitor, [LineCompriseCarriageReturnViolation])
 
 
-@pytest.mark.parametrize('code', [
-    correct_newline,
-    correct_nl,
-    correct_string,
-    correct_raw_string,
-    correct_real_newline,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_newline,
+        correct_nl,
+        correct_string,
+        correct_raw_string,
+        correct_real_newline,
+    ],
+)
 def test_string_proper_line_breaks(
     parse_tokens,
     assert_errors,
@@ -70,7 +77,8 @@ def test_string_proper_line_breaks(
     file_tokens = parse_tokens(code, do_compile=False)
 
     visitor = WrongKeywordTokenVisitor(
-        default_options, file_tokens=file_tokens,
+        default_options,
+        file_tokens=file_tokens,
     )
     visitor.run()
 

@@ -38,12 +38,15 @@ class Test:
 """
 
 
-@pytest.mark.parametrize('code', [
-    function_with_decorators,
-    class_with_decorators,
-    method_with_decorators,
-    classmethod_with_decorators,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_with_decorators,
+        class_with_decorators,
+        method_with_decorators,
+        classmethod_with_decorators,
+    ],
+)
 def test_decorators_normal(
     assert_errors,
     parse_ast_tree,
@@ -60,12 +63,15 @@ def test_decorators_normal(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    function_with_decorators,
-    class_with_decorators,
-    method_with_decorators,
-    classmethod_with_decorators,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_with_decorators,
+        class_with_decorators,
+        method_with_decorators,
+        classmethod_with_decorators,
+    ],
+)
 def test_decorators_incorrect(
     assert_errors,
     assert_error_text,
