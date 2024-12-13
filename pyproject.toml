@@ -94,7 +94,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.ruff]
 # Ruff config: https://docs.astral.sh/ruff/settings
 fix = true
-target-version = 'py310'
+target-version = "py310"
 line-length = 80
 extend-exclude = [
   # Intentional bad code:
@@ -105,27 +105,10 @@ extend-exclude = [
 ]
 
 [tool.ruff.format]
-quote-style = 'single'
+quote-style = "single"
 docstring-code-format = false
 
 [tool.ruff.lint]
-ignore = [
-  "D100",
-  "D104",
-  "D106",
-  "D203",
-  "D212",
-  "D401",
-  "D404",
-  "D405",
-  "COM812",  # trailing comma, conflicts with `ruff format`
-  "ISC001",  # implicit string concat conflicts with `ruff format`
-  "ISC003",  # prefer explicit string concat over implicit concat
-  "TRY003",  # long exception messages from `tryceratops`
-  "RUF001",  # <
-  "RUF002",  # | allow non-ascii letters
-  "RUF100",  # conflicts with flake8
-]
 select = [
   "A",    # flake8-builtins
   "B",    # flake8-bugbear
@@ -164,11 +147,30 @@ select = [
   "YTT",  # flake8-2020
 ]
 
+ignore = [
+  # Different doc rules that we don't really care about:
+  "D100",
+  "D104",
+  "D106",
+  "D203",
+  "D212",
+  "D401",
+  "D404",
+  "D405",
+  "COM812",  # trailing comma, conflicts with `ruff format`
+  "ISC001",  # implicit string concat conflicts with `ruff format`
+  "ISC003",  # prefer explicit string concat over implicit concat
+  "TRY003",  # long exception messages from `tryceratops`
+  "RUF001",  # <
+  "RUF002",  # | allow non-ascii letters
+  "RUF100",  # conflicts with flake8
+]
+
 [tool.ruff.lint.mccabe]
 max-complexity = 6
 
 [tool.ruff.lint.flake8-quotes]
-inline-quotes = 'single'
+inline-quotes = "single"
 
 [tool.ruff.lint.per-file-ignores]
 "wemake_python_styleguide/visitors/ast/*.py" = ["N802"]
@@ -188,28 +190,28 @@ strict = true
 warn_unreachable = true
 
 enable_error_code = [
-  'truthy-bool',
-  'truthy-iterable',
-  'redundant-expr',
-  'unused-awaitable',
-  # 'ignore-without-code',
-  'possibly-undefined',
-  'redundant-self',
-  # 'mutable-override',
-  'unimported-reveal',
+  "truthy-bool",
+  "truthy-iterable",
+  "redundant-expr",
+  "unused-awaitable",
+  # "ignore-without-code",
+  "possibly-undefined",
+  "redundant-self",
+  # "mutable-override",
+  "unimported-reveal",
 ]
 
 disable_error_code = [
-  'no-untyped-def',
+  "no-untyped-def",
 ]
 
 [[tool.mypy.overrides]]
-module = 'wemake_python_styleguide.compat.nodes'
+module = "wemake_python_styleguide.compat.nodes"
 # We allow explicit `Any` only in this file, because of the compatibility:
 disallow_any_explicit = false
 
 [[tool.mypy.overrides]]
-module = 'wemake_python_styleguide.compat.packaging'
+module = "wemake_python_styleguide.compat.packaging"
 # We allow unused `ignore` comments, because we cannot sync it between versions:
 warn_unused_ignores = false
 
@@ -220,29 +222,29 @@ warn_unused_ignores = false
 # Strict `@xfail` by default:
 xfail_strict = true
 # Ignore deprecation warnings:
-filterwarnings = ['ignore::DeprecationWarning']
+filterwarnings = ["ignore::DeprecationWarning"]
 
 addopts = [
-  '--strict',
-  '--doctest-modules',
-  '--cov=wemake_python_styleguide',
-  '--cov-branch',
-  '--cov-report=term-missing:skip-covered',
-  '--cov-report=html:skip-covered',
-  '--cov-report=xml',
-  '--cov-fail-under=100',
+  "--strict",
+  "--doctest-modules",
+  "--cov=wemake_python_styleguide",
+  "--cov-branch",
+  "--cov-report=term-missing:skip-covered",
+  "--cov-report=html:skip-covered",
+  "--cov-report=xml",
+  "--cov-fail-under=100",
 ]
 
 norecursedirs = [
-  'tests/fixtures',
-  '*.egg',
-  '.eggs',
-  'dist',
-  'build',
-  'docs',
-  '.tox',
-  '.git',
-  '__pycache__',
+  "tests/fixtures",
+  "*.egg",
+  ".eggs",
+  "dist",
+  "build",
+  "docs",
+  ".tox",
+  ".git",
+  "__pycache__",
 ]
 
 
@@ -250,15 +252,15 @@ norecursedirs = [
 # Coverage configuration: https://coverage.readthedocs.io/
 
 # We don't need to cover some files. They are fully checked with mypy.
-# And don't contain any logic.
+# And don"t contain any logic.
 omit = [
   # Does not contain runtime logic:
-  'wemake_python_styleguide/types.py',
+  "wemake_python_styleguide/types.py",
   # Copied from 3rd party:
-  'wemake_python_styleguide/logic/tokens/docstrings.py',
+  "wemake_python_styleguide/logic/tokens/docstrings.py",
 ]
 
 # Here we specify plugins for coverage to be used:
 plugins = [
-  'covdefaults',
+  "covdefaults",
 ]
