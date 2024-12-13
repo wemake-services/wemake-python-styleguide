@@ -741,11 +741,15 @@ class MultipleContextManagerAssignmentsViolation(ASTViolation):
             ...
 
     .. versionadded:: 0.6.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``SIM117``.
 
     """
 
     error_template = 'Found context manager with too many assignments'
     code = 316
+    disabled_since = '1.0.0'
 
 
 @final
