@@ -547,10 +547,6 @@ LOWERCASE_ALPH = "abcdefghijklmnopqrstuvwxyz" # noqa: WPS447
 if a in {1}:  # noqa: WPS525
     my_print('bad!')
 
-def implicit_yield_from():
-    for wrong_yield in call():  # noqa: WPS526
-        yield wrong_yield
-
 try: # noqa: WPS448
     anti_wps428 = 1
 except Exception:
