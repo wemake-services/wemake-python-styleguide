@@ -5,6 +5,7 @@ from typing import ClassVar, DefaultDict, TypeAlias, Union
 
 from typing_extensions import final
 
+from wemake_python_styleguide.logic.arguments import special_args
 from wemake_python_styleguide.logic.complexity import cognitive
 from wemake_python_styleguide.logic.complexity.functions import (
     ComplexityMetrics,
@@ -48,7 +49,10 @@ class _ComplexityCounter:
 
     def check_arguments_count(self, node: AnyFunctionDefAndLambda) -> None:
         """Checks the number of the arguments in a function."""
-        self.metrics.arguments[node] = len(functions.get_all_arguments(node))
+        all_args = functions.get_all_arguments(node)
+        self.metrics.arguments[node] = len(
+            special_args.clean_special_argument(node, all_args),
+        )
 
     def check_function_complexity(self, node: AnyFunctionDef) -> None:
         """
