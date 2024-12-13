@@ -136,9 +136,10 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
                 break
 
     def _is_valid_formatted_value(self, format_value: ast.AST) -> bool:
-        if isinstance(format_value, self._chainable_types):
-            if not self._is_valid_chaining(format_value):
-                return False
+        if isinstance(
+            format_value, self._chainable_types
+        ) and not self._is_valid_chaining(format_value):
+            return False
         return self._is_valid_final_value(format_value)
 
     def _is_valid_final_value(self, format_value: ast.AST) -> bool:

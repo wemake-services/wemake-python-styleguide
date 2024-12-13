@@ -286,7 +286,7 @@ class NoqaVisitor(BaseTokenVisitor):
 
         if not excludes or prefix[-1] != ':':
             # We cannot pass the actual line here,
-            # since it will be ignored due to `# noqa` comment:
+            # since it will be ignored due to `noqa` comment:
             self.add_violation(WrongMagicCommentViolation(text=comment_text))
             return
         self._check_forbidden_noqa(excludes)

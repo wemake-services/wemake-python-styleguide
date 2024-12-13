@@ -256,10 +256,13 @@ class GeneratorKeywordsVisitor(BaseNodeVisitor):
         for line, node in self._yield_locations.items():
             parent = get_parent(node)
 
-            if previous_line is not None:
-                if line - 1 == previous_line and previous_parent == parent:
-                    self.add_violation(ConsecutiveYieldsViolation(node.value))
-                    break
+            if (
+                previous_line is not None
+                and line - 1 == previous_line
+                and previous_parent == parent
+            ):
+                self.add_violation(ConsecutiveYieldsViolation(node.value))
+                break
 
             previous_line = line
             previous_parent = parent
@@ -295,9 +298,12 @@ class ConstantKeywordVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_condition(self, node: ast.AST, cond: ast.AST) -> None:
-        if isinstance(cond, ast.NameConstant) and cond.value is True:
-            if isinstance(node, ast.While):
-                return  # We should allow plain `while True:`
+        if (
+            isinstance(cond, ast.NameConstant)
+            and cond.value is True
+            and isinstance(node, ast.While)
+        ):
+            return  # We should allow plain `while True:`
 
         real_node = operators.unwrap_unary_node(walrus.get_assigned_expr(cond))
         if isinstance(real_node, self._forbidden_nodes):

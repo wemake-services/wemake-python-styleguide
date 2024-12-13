@@ -117,13 +117,16 @@ ignore = [
   "D401",
   "D404",
   "D405",
-  "COM812",  # conflicts with `ruff format`
+  "COM812",  # trailing comma, conflicts with `ruff format`
+  "ISC001",  # implicit string concat conflicts with `ruff format`
+  "ISC003",  # prefer explicit string concat over implicit concat
   "TRY003",  # long exception messages from `tryceratops`
+  "RUF001",  # <
+  "RUF002",  # | allow non-ascii letters
   "RUF100",  # conflicts with flake8
 ]
 select = [
   "B",    # flake8-bugbear
-  "BLE",  # flake8-blind-except
   "C4",   # flake8-comprehensions
   "C90",  # maccabe
   "COM",  # flake8-commas
@@ -161,7 +164,9 @@ inline-quotes = 'single'
 [tool.ruff.lint.per-file-ignores]
 "wemake_python_styleguide/visitors/ast/*.py" = ["N802"]
 "tests/*.py" = [
-    "S101",
-    "S105",
+    "S101",  # asserts
+    "S105",  # hardcoded passwords
+    "S603",  # do not require `shell=True`
+    "S607",  # partial executable paths
 ]
 "wemake_python_styleguide/types.py" = ["D102"]

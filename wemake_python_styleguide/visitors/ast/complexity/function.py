@@ -89,9 +89,10 @@ class _ComplexityCounter:
         node: AnyFunctionDef,
         sub_node: ast.AST,
     ) -> None:
-        if isinstance(sub_node, ast.Name):
-            if isinstance(sub_node.ctx, ast.Store):
-                self._update_variables(node, sub_node)
+        if isinstance(sub_node, ast.Name) and isinstance(
+            sub_node.ctx, ast.Store
+        ):
+            self._update_variables(node, sub_node)
 
         error_counters: _NodeTypeHandler = {
             ast.Return: self.metrics.returns,

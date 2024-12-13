@@ -120,9 +120,13 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         left: ast.AST | None,
         right: ast.AST | None = None,
     ) -> None:
-        if isinstance(left, ast.Num) and left.n in self._left_special_cases:
-            if right and isinstance(op, self._left_special_cases[left.n]):
-                left = None
+        if (
+            isinstance(left, ast.Num)
+            and left.n in self._left_special_cases
+            and right
+            and isinstance(op, self._left_special_cases[left.n])
+        ):
+            left = None
 
         non_negative_numbers = self._get_non_negative_nodes(left, right)
 

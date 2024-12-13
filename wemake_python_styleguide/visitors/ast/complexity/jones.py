@@ -56,9 +56,12 @@ class JonesComplexityVisitor(BaseNodeVisitor):
         line_number = getattr(node, 'lineno', None)
         is_ignored = isinstance(node, self._ignored_nodes)
 
-        if line_number is not None and not is_ignored:
-            if not self._maybe_ignore_child(node):
-                self._lines[line_number].append(node)
+        if (
+            line_number is not None
+            and not is_ignored
+            and not self._maybe_ignore_child(node)
+        ):
+            self._lines[line_number].append(node)
 
         self.generic_visit(node)
 

@@ -184,11 +184,13 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         if isinstance(node, ast.AsyncFunctionDef):
             return
 
-        if node.name in constants.YIELD_MAGIC_METHODS_BLACKLIST:
-            if walk.is_contained(node, (ast.Yield, ast.YieldFrom)):
-                self.add_violation(
-                    oop.YieldMagicMethodViolation(node, text=node.name),
-                )
+        if (
+            node.name in constants.YIELD_MAGIC_METHODS_BLACKLIST
+            and walk.is_contained(node, (ast.Yield, ast.YieldFrom))
+        ):
+            self.add_violation(
+                oop.YieldMagicMethodViolation(node, text=node.name),
+            )
 
     def _check_async_magic_methods(self, node: types.AnyFunctionDef) -> None:
         if not isinstance(node, ast.AsyncFunctionDef):
@@ -256,9 +258,8 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         if statements_number > 2 or statements_number == 0:
             return None
 
-        if statements_number == 2:
-            if not strings.is_doc_string(node.body[0]):
-                return None
+        if statements_number == 2 and not strings.is_doc_string(node.body[0]):
+            return None
 
         stmt = node.body[-1]
         if isinstance(stmt, ast.Return):
@@ -383,12 +384,14 @@ class ClassMethodOrderVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_method_order(self, node: ast.ClassDef) -> None:
-        method_nodes: list[str] = []
-
-        for subnode in ast.walk(node):
-            if isinstance(subnode, FunctionNodes):
-                if nodes.get_context(subnode) is node:
-                    method_nodes.append(subnode.name)
+        method_nodes = [
+            subnode.name
+            for subnode in ast.walk(node)
+            if (
+                isinstance(subnode, FunctionNodes)
+                and nodes.get_context(subnode) is node
+            )
+        ]
 
         ideal = sorted(method_nodes, key=self._ideal_order, reverse=True)
         for existing_order, ideal_order in zip(

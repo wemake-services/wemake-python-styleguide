@@ -37,13 +37,16 @@ class WrongAttributeVisitor(BaseNodeVisitor):
         node: ast.Attribute,
         exception: type[ASTViolation],
     ) -> None:
-        if isinstance(node.value, ast.Name):
-            if node.value.id in SPECIAL_ARGUMENT_NAMES_WHITELIST:
-                return
+        if (
+            isinstance(node.value, ast.Name)
+            and node.value.id in SPECIAL_ARGUMENT_NAMES_WHITELIST
+        ):
+            return
 
-        if isinstance(node.value, ast.Call):
-            if self._is_super_called(node.value):
-                return
+        if isinstance(node.value, ast.Call) and self._is_super_called(
+            node.value
+        ):
+            return
 
         self.add_violation(exception(node, text=node.attr))
 
@@ -58,9 +61,8 @@ class WrongAttributeVisitor(BaseNodeVisitor):
             # a "false positive".
 
             ctx = nodes.get_context(node)
-            if isinstance(ctx, FunctionNodes):
-                if node.attr == ctx.name:
-                    return
+            if isinstance(ctx, FunctionNodes) and node.attr == ctx.name:
+                return
 
             if node.attr in ALL_MAGIC_METHODS:
                 self._ensure_attribute_type(

@@ -47,9 +47,10 @@ class ModuleMembersVisitor(BaseNodeVisitor):
         if not isinstance(get_context(node), ast.Module):
             return
 
-        if isinstance(node, FunctionNodes):
-            if decorators.has_overload_decorator(node):
-                return  # We don't count `@overload` defs as real defs
+        if isinstance(
+            node, FunctionNodes
+        ) and decorators.has_overload_decorator(node):
+            return  # We don't count `@overload` defs as real defs
 
         self._public_items_count += 1
 
@@ -229,15 +230,17 @@ class ReturnLikeStatementTupleVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_return_like_values(self, node: _ReturnLikeStatement) -> None:
-        if isinstance(node.value, ast.Tuple):
-            if len(node.value.elts) > constants.MAX_LEN_TUPLE_OUTPUT:
-                self.add_violation(
-                    complexity.TooLongOutputTupleViolation(
-                        node,
-                        text=str(len(node.value.elts)),
-                        baseline=constants.MAX_LEN_TUPLE_OUTPUT,
-                    ),
-                )
+        if (
+            isinstance(node.value, ast.Tuple)
+            and len(node.value.elts) > constants.MAX_LEN_TUPLE_OUTPUT
+        ):
+            self.add_violation(
+                complexity.TooLongOutputTupleViolation(
+                    node,
+                    text=str(len(node.value.elts)),
+                    baseline=constants.MAX_LEN_TUPLE_OUTPUT,
+                ),
+            )
 
 
 @final
