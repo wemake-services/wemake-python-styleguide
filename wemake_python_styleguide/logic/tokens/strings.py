@@ -1,9 +1,5 @@
 import tokenize
 
-from wemake_python_styleguide.logic.tokens.docstrings import (
-    get_docstring_tokens,
-)
-
 
 def split_prefixes(string: str) -> tuple[str, str]:
     """
