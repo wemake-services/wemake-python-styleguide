@@ -278,13 +278,14 @@ class UnderscoredNumberViolation(TokenizeViolation):
         # Correct:
         phone = 88313443
         million = 1000000
+        decimal = 0.00001
         formatted_million = 1_000_000
-        big_number = 10_000_000_000_000
+        formatted_decimal = 0.00_001
 
         # Wrong:
         phone = 8_83_134_43
         million = 100_00_00
-        big_number = 100000_0000_000
+        decimal = 0.000_01
 
     .. versionadded:: 0.1.0
     .. versionchanged:: 1.0.0
