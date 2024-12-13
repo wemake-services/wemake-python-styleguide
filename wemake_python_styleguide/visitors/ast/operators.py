@@ -238,7 +238,6 @@ class WalrusVisitor(base.BaseNodeVisitor):
             node,
             self._available_parents,
         )
-
         if closest is not None:
             return
 
