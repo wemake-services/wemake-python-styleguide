@@ -18,20 +18,26 @@ some = [
     if y > 2
 ]
 """
+correct_walrus_comprehension = """
+some = [
+    x + y
+    for y in [1, 2, 3]
+    if (x := y) > 2
+]
+"""
+
+correct_dict_comprehension = """
+some = {
+    (key := compute_key(i)): values[key]
+    for i in range(10)
+}
+"""
 
 # Wrong:
 wrong_assignment = 'print(x := 1)'
 wrong_if_condition = """
 if some := call():
     ...
-"""
-
-wrong_comprehension = """
-some = [
-    x + y
-    for y in [1, 2, 3]
-    if (x := y) > 2
-]
 """
 
 
@@ -41,6 +47,8 @@ some = [
         correct_assignment,
         correct_if_condition,
         correct_comprehension,
+        correct_walrus_comprehension,
+        correct_dict_comprehension,
     ],
 )
 def test_not_walrus(
@@ -63,7 +71,6 @@ def test_not_walrus(
     [
         wrong_assignment,
         wrong_if_condition,
-        wrong_comprehension,
     ],
 )
 def test_walrus(

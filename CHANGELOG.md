@@ -63,6 +63,7 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `WPS503`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS526`, because is covered by `ruff` linter
 - Allows any compares in `assert` statements for `WPS520`, #3112
+- Allows walrus operator in comprehesions
 
 ### Bugfixes
 
