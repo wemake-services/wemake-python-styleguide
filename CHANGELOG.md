@@ -30,7 +30,7 @@ Semantic versioning in our case means:
   `flake8-eradicate`, `flake8-bandit`, `flake8-broken-line`,
   `flake8-rst-docstrings`, `pep8-naming`
   support, use `ruff format` instead
-- - **Breaking**: Drops `darglint` support, because it is unsupported
+- **Breaking**: Drops `darglint` support, because it is unmaintained
 - **Breaking**: Removes `WPS302`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS304`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS305`, because it is covered by `ruff` formatter
@@ -42,18 +42,26 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `WPS318`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS319`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS320`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS329`, because it is covered by `ruff` linter
 - **Breaking**: Removes `WPS337`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS340`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS341`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS343`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS348`, because it conflicts with `ruff` formatter
+- **Breaking**: Removes `WPS351`, because it is covered by `ruff` linter
 - **Breaking**: Removes `WPS352`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS355`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS361`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS415`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS417`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS419`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS423`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS424`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS452`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS454`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS465`, because `|` is now heavily used by typing
 - **Breaking**: Removes `WPS503`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS526`, because is covered by `ruff` linter
 - Allows any compares in `assert` statements for `WPS520`, #3112
 - Allows walrus operator in comprehesions
 

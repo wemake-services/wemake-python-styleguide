@@ -1305,11 +1305,15 @@ class UselessExceptCaseViolation(ASTViolation):
             raise
 
     .. versionadded:: 0.7.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``TRY203``.
 
     """
 
     error_template = 'Found useless `except` case'
     code = 329
+    disabled_since = '1.0.0'
 
 
 @final
@@ -2070,11 +2074,15 @@ class UnnecessaryLiteralsViolation(ASTViolation):
         default = int()
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``UP018`` and ``C408``.
 
     """
 
     error_template = 'Found unnecessary literals'
     code = 351
+    disabled_since = '1.0.0'
 
 
 @final

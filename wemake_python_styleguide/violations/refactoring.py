@@ -1064,11 +1064,15 @@ class ImplicitYieldFromViolation(ASTViolation):
             yield index
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``UP028``.
 
     """
 
     error_template = 'Found implicit `yield from` usage'
     code = 526
+    disabled_since = '1.0.0'
 
 
 @final

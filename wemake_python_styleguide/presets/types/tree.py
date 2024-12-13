@@ -49,7 +49,6 @@ PRESET: Final = (
     functions.FunctionDefinitionVisitor,
     functions.UselessLambdaDefinitionVisitor,
     functions.WrongFunctionCallContextVisitor,
-    functions.UnnecessaryLiteralsVisitor,
     functions.FunctionSignatureVisitor,
     functions.FloatingNanCallVisitor,
     tokenize_functions.WrongEmptyLinesCountVisitor,
