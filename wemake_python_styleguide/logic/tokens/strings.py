@@ -59,14 +59,12 @@ def format_with_thousands(
     digit_counter = 1
     for char in reversed(number_cleared):
         if char == decimal_separator:
-            number_formated = '{0}{1}'.format(char, number_formated)
+            number_formated = f'{char}{number_formated}'
             digit_counter = 1
             continue
         if digit_counter > 3:
-            number_formated = '{0}{1}'.format(
-                thousands_separator, number_formated,
-            )
+            number_formated = f'{thousands_separator}{number_formated}'
             digit_counter = 1
-        number_formated = '{0}{1}'.format(char, number_formated)
+        number_formated = f'{char}{number_formated}'
         digit_counter += 1
     return number_formated
