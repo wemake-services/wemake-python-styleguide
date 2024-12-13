@@ -22,10 +22,8 @@ from wemake_python_styleguide.logic.tree.variables import (
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes, AnyWith
 from wemake_python_styleguide.violations.best_practices import (
     BareRaiseViolation,
-    BaseExceptionRaiseViolation,
     ContextManagerVariableDefinitionViolation,
     RaiseFromItselfViolation,
-    RaiseNotImplementedViolation,
     WrongKeywordConditionViolation,
     WrongKeywordViolation,
 )
@@ -51,28 +49,11 @@ _ReturningViolations: TypeAlias = Union[
 class WrongRaiseVisitor(BaseNodeVisitor):
     """Finds wrong ``raise`` keywords."""
 
-    _base_exceptions: ClassVar[frozenset[str]] = frozenset(
-        (
-            'Exception',
-            'BaseException',
-        )
-    )
-
     def visit_Raise(self, node: ast.Raise) -> None:
         """Checks how ``raise`` keyword is used."""
-        self._check_exception_type(node)
         self._check_bare_raise(node)
         self._check_raise_from_itself(node)
         self.generic_visit(node)
-
-    def _check_exception_type(self, node: ast.Raise) -> None:
-        exception_name = get_exception_name(node)
-        if exception_name == 'NotImplemented':
-            self.add_violation(RaiseNotImplementedViolation(node))
-        elif exception_name in self._base_exceptions:
-            self.add_violation(
-                BaseExceptionRaiseViolation(node, text=exception_name),
-            )
 
     def _check_bare_raise(self, node: ast.Raise) -> None:
         if node.exc is None:

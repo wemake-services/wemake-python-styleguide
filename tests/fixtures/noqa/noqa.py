@@ -129,8 +129,6 @@ def some():  # noqa: WPS110
     def nested():  # noqa: WPS430
         anti_wps428 = 1
 
-    raise NotImplemented  # noqa: WPS423
-
 
 del {'a': 1}['a']  # noqa: WPS420
 hasattr(object, 'some')  # noqa: WPS421
@@ -347,11 +345,6 @@ with open(bad_concatenation):  # noqa: WPS328
     pass  # noqa: WPS420
 
 
-try:
-    anti_wps428 = 1
-except Exception as ex:  # noqa: WPS329
-    raise ex
-
 def some_other_function():
     some_value = 1
     return some_value  # noqa: WPS331
@@ -383,11 +376,6 @@ for sum_item in file_obj:  # noqa: WPS519
 
 my_print(sum_container == [])  # noqa: WPS520
 my_print(sum_container is 0)  # noqa: WPS521
-
-try:
-    anti_wps428 = 1
-except BaseException:  # noqa: WPS424
-    anti_wps428 = 1
 
 call_with_positional_bool(True, keyword=1)  # noqa: WPS425
 
@@ -448,14 +436,6 @@ first = second = 2  # noqa: WPS429
 first, nodes[0] = range(2)  # noqa: WPS414
 
 
-try:  # noqa: WPS415
-    anti_wps428 = 1
-except ValueError:
-    anti_wps428 = 1
-except ValueError:
-    anti_wps428 = 1
-
-
 class MyBadException(BaseException):  # noqa: WPS418
     anti_wps428 = 1
 
@@ -478,15 +458,6 @@ class ClassWithWrongContents((lambda: object)()):  # noqa: WPS606
     def method_with_no_args():  # noqa: WPS605
         based = super(ClassWithWrongContents, self).method_with_no_args()  # noqa: WPS608
         my_print(based)
-
-
-def multiple_return_path():
-    try:  # noqa: WPS419
-        return 1
-    except Exception:
-        return 2
-    else:
-        return 3
 
 
 def bad_default_values(

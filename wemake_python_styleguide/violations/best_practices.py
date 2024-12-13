@@ -722,11 +722,15 @@ class DuplicateExceptionViolation(ASTViolation):
     .. versionchanged:: 0.11.0
     .. versionchanged:: 0.19.0
        Supports `try/except*` as well.
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``B025``.
 
     """
 
     error_template = 'Found duplicate exception: {0}'
     code = 415
+    disabled_since = '1.0.0'
 
 
 @final
@@ -900,11 +904,15 @@ class TryExceptMultipleReturnPathViolation(ASTViolation):
     .. versionchanged:: 0.12.0
     .. versionchanged:: 0.19.0
        Supports `try/except*` as well.
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``B012`` and ``SIM107``.
 
     """
 
     error_template = 'Found `try`/`else`/`finally` with multiple return paths'
     code = 419
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1024,6 +1032,9 @@ class RaiseNotImplementedViolation(ASTViolation):
         raise NotImplemented
 
     .. versionadded:: 0.1.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``F901``.
 
     See also:
         https://stackoverflow.com/a/44575926/4842742
@@ -1032,6 +1043,7 @@ class RaiseNotImplementedViolation(ASTViolation):
 
     error_template = 'Found raise NotImplemented'
     code = 423
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1058,6 +1070,9 @@ class BaseExceptionViolation(ASTViolation):
         except BaseException as ex: ...
 
     .. versionadded:: 0.3.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``BLE001``.
 
     See also:
         https://docs.python.org/3/library/exceptions.html#exception-hierarchy
@@ -1067,6 +1082,7 @@ class BaseExceptionViolation(ASTViolation):
 
     error_template = 'Found except `BaseException`'
     code = 424
+    disabled_since = '1.0.0'
 
 
 @final
@@ -2186,11 +2202,15 @@ class BaseExceptionRaiseViolation(ASTViolation):
         https://docs.python.org/3/tutorial/errors.html#user-defined-exceptions
 
     .. versionadded:: 0.15.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``TRY003``.
 
     """
 
     error_template = 'Found wrong `raise` exception type: {0}'
     code = 454
+    disabled_since = '1.0.0'
 
 
 @final
