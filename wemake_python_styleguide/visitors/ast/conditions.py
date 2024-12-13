@@ -6,7 +6,6 @@ from typing_extensions import final
 
 from wemake_python_styleguide.logic import source
 from wemake_python_styleguide.logic.naming.duplicates import (
-    duplicated_isinstance_call,
     get_duplicate_names,
 )
 from wemake_python_styleguide.logic.tree import ifs, operators
@@ -66,12 +65,10 @@ class BooleanConditionVisitor(BaseNodeVisitor):
         """We need to store some bool nodes not to visit them twice."""
         super().__init__(*args, **kwargs)
         self._same_nodes: list[ast.BoolOp] = []
-        self._isinstance_calls: list[ast.BoolOp] = []
 
     def visit_BoolOp(self, node: ast.BoolOp) -> None:
         """Checks that ``and`` and ``or`` conditions are correct."""
         self._check_same_elements(node)
-        self._check_isinstance_calls(node)
         self.generic_visit(node)
 
     def _get_all_names(
@@ -102,18 +99,6 @@ class BooleanConditionVisitor(BaseNodeVisitor):
         if len(set(operands)) != len(operands):
             self.add_violation(
                 best_practices.SameElementsInConditionViolation(node),
-            )
-
-    def _check_isinstance_calls(self, node: ast.BoolOp) -> None:
-        if not isinstance(node.op, ast.Or):
-            return
-
-        for var_name in duplicated_isinstance_call(node):
-            self.add_violation(
-                refactoring.UnmergedIsinstanceCallsViolation(
-                    node,
-                    text=var_name,
-                ),
             )
 
 

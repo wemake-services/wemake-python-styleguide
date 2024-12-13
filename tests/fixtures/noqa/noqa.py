@@ -498,8 +498,6 @@ if numbers == CONSTANT != [2]:  # noqa: WPS409
     my_print(1 + (1 if number else 2))  # noqa: WPS509
 
 my_print(numbers in [])  # noqa: WPS510
-my_print(isinstance(number, int) or isinstance(number, (float, str)))  # noqa: 474
-my_print(isinstance(numbers, (int,)))  # noqa: WPS512
 
 if numbers:
     my_print('first')
