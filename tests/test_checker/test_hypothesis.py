@@ -58,11 +58,7 @@ def test_no_exceptions(
         raise
 
     lines = io.StringIO(source_code)
-    try:
-        tokens = list(tokenize.generate_tokens(lambda: next(lines)))
-    except tokenize.TokenError:
-        reject()
-        raise
+    tokens = list(tokenize.generate_tokens(lambda: next(lines)))
 
     Checker.parse_options(default_options)
     checker = Checker(tree, tokens)

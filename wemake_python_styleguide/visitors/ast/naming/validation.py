@@ -209,7 +209,7 @@ class _FunctionNameValidator(_RegularNameValidator):
 
 @final
 class _TypeParamNameValidator(_RegularNameValidator):
-    def check_type_params(  # pragma: py-lt-312
+    def check_type_params(  # pragma: >=3.12 cover
         self,
         node: NodeWithTypeParams,
     ) -> None:
@@ -346,7 +346,7 @@ class WrongNameVisitor(BaseNodeVisitor):
             self._regular_validator.check_name(node, node.name)
         self.generic_visit(node)
 
-    def visit_TypeAlias(self, node: TypeAliasNode) -> None:  # pragma: py-lt-312
+    def visit_TypeAlias(self, node: TypeAliasNode) -> None:  # pragma: >=3.12 cover
         """Visit PEP695 type aliases."""
         self._type_params_validator.check_type_params(node)
         self.generic_visit(node)
