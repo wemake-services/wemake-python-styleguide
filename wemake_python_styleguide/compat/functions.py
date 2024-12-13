@@ -13,7 +13,7 @@ def get_assign_targets(
     return node.targets
 
 
-def get_type_param_names(  # pragma: py-lt-312
+def get_type_param_names(  # pragma: >=3.12 cover
     node: NodeWithTypeParams,
 ) -> list[tuple[ast.AST, str]]:
     """Return list of type parameters' names."""

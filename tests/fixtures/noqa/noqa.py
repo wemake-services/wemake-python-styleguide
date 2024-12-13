@@ -155,8 +155,6 @@ class Mem0Output:  # noqa: WPS124
     # https://github.com/wemake-services/wemake-python-styleguide/issues/1191
     anti_wps124 = 'unreadable class'
 
-type = 'type'  # noqa: WPS125
-
 some._execute()  # noqa: WPS437
 
 

@@ -53,7 +53,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS122': 2,
         'WPS123': 1,
         'WPS124': 1,
-        'WPS125': 1,
+        'WPS125': 0,  # disabled since 1.0.0
         'WPS200': 0,  # logically unacceptable.
         'WPS201': 0,  # defined in ignored violations.
         'WPS202': 0,  # defined in ignored violations.
@@ -331,7 +331,7 @@ def test_noqa_fixture_disabled_no_control(
             '--disable-noqa',
             '--isolated',
             '--select',
-            'WPS',
+            'WPS, E999',
             absolute_path('fixtures', 'noqa', 'noqa_controlled.py'),
         ],
         stdout=subprocess.PIPE,
@@ -358,7 +358,7 @@ def test_noqa_fixture(absolute_path):
             ','.join(IGNORED_VIOLATIONS),
             '--isolated',
             '--select',
-            'WPS',
+            'WPS, E999',
             absolute_path('fixtures', 'noqa', 'noqa.py'),
         ],
         stdout=subprocess.PIPE,
@@ -378,7 +378,7 @@ def test_noqa_fixture_without_ignore(absolute_path):
             'flake8',
             '--isolated',
             '--select',
-            'WPS',
+            'WPS, E999',
             absolute_path('fixtures', 'noqa', 'noqa.py'),
         ],
         stdout=subprocess.PIPE,

@@ -23,11 +23,11 @@ class _BaseScope:
 
     def add_to_scope(self, names: set[str]) -> None:  # pragma: no cover
         """Adds a given set of names to some scope."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def shadowing(self, names: set[str]) -> set[str]:  # pragma: no cover
         """Tells either some shadowing exist between existing scopes."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @final
     def _exclude_unused(self, names: set[str]) -> set[str]:

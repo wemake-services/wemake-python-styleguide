@@ -217,7 +217,7 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         self._checker.check_wrong_unicode_escape(token, modifiers, string_def)
         self._checker.check_unnecessary_raw_string(token, modifiers, string_def)
 
-    def visit_fstring_start(  # pragma: py-lt-312
+    def visit_fstring_start(  # pragma: >3.12 cover
         self,
         token: tokenize.TokenInfo,
     ) -> None:

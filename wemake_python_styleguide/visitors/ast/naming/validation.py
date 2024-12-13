@@ -1,6 +1,6 @@
 import ast
 from collections.abc import Callable, Iterable
-from typing import ClassVar
+from typing import ClassVar, TypeAlias
 
 import attr
 from typing_extensions import final
@@ -27,7 +27,6 @@ from wemake_python_styleguide.logic.tree import (
     attributes,
     classes,
     functions,
-    variables,
 )
 from wemake_python_styleguide.types import (
     AnyAssign,
@@ -40,10 +39,10 @@ from wemake_python_styleguide.violations import base, naming
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
-_ErrorCallback = Callable[[base.BaseViolation], None]
+_ErrorCallback: TypeAlias = Callable[[base.BaseViolation], None]
 
-_PredicateApplicableCallback = Callable[[ast.AST], bool]
-_PredicateLogicalCallback = Callable[[str], bool]
+_PredicateApplicableCallback: TypeAlias = Callable[[ast.AST], bool]
+_PredicateLogicalCallback: TypeAlias = Callable[[str], bool]
 
 
 @final
@@ -130,11 +129,6 @@ class _RegularNameValidator(_SimpleNameValidator):
     _naming_predicates: ClassVar[Iterable[_NamingPredicate]] = (
         *_SimpleNameValidator._naming_predicates,  # noqa: WPS437
         _NamingPredicate(
-            builtins.is_builtin_name,
-            naming.BuiltinShadowingViolation,
-            variables.does_shadow_builtin,
-        ),
-        _NamingPredicate(
             builtins.is_wrong_alias,
             naming.TrailingUnderscoreViolation,
         ),
@@ -215,7 +209,7 @@ class _FunctionNameValidator(_RegularNameValidator):
 
 @final
 class _TypeParamNameValidator(_RegularNameValidator):
-    def check_type_params(  # pragma: py-lt-312
+    def check_type_params(  # pragma: >=3.12 cover
         self,
         node: NodeWithTypeParams,
     ) -> None:
@@ -352,7 +346,9 @@ class WrongNameVisitor(BaseNodeVisitor):
             self._regular_validator.check_name(node, node.name)
         self.generic_visit(node)
 
-    def visit_TypeAlias(self, node: TypeAliasNode) -> None:  # pragma: py-lt-312
+    def visit_TypeAlias(
+        self, node: TypeAliasNode
+    ) -> None:  # pragma: >=3.12 cover
         """Visit PEP695 type aliases."""
         self._type_params_validator.check_type_params(node)
         self.generic_visit(node)

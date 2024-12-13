@@ -59,8 +59,7 @@ pygments = "^2.4"
 pytest = "^8.1"
 pytest-cov = "^6.0"
 pytest-randomly = "^3.12"
-pytest-xdist = "^3.6"
-coverage-conditional-plugin = "^0.9"
+covdefaults = "^2.3"
 syrupy = "^4.6"
 hypothesis = "^6.35"
 hypothesmith = "^0.3"
@@ -93,6 +92,7 @@ build-backend = "poetry.core.masonry.api"
 
 
 [tool.ruff]
+fix = true
 target-version = 'py310'
 line-length = 80
 extend-exclude = [
@@ -126,33 +126,41 @@ ignore = [
   "RUF100",  # conflicts with flake8
 ]
 select = [
+  "A",    # flake8-builtins
   "B",    # flake8-bugbear
   "C4",   # flake8-comprehensions
   "C90",  # maccabe
   "COM",  # flake8-commas
   "D",    # pydocstyle
+  # TODO: enable once it gets out of preview:
+  # "DOC",  # pydoclint
+  "DTZ",  # flake8-datetimez
   "E",    # pycodestyle
+  "ERA",  # flake8-eradicate
+  "EXE",  # flake8-executable
   "F",    # pyflakes
   "FLY",  # pyflint
-  "G",    # flake8-string-format
+  "FURB", # refurb
+  "G",    # flake8-logging-format
   "I",    # isort
   "ISC",  # flake8-implicit-str-concat
+  "LOG",  # flake8-logging
+  "PERF", # perflint
+  "PT",   # flake8-pytest-style
   "Q",    # flake8-quotes
+  "RET",  # flake8-return
+  "RSE",  # flake8-raise
+  "RUF",  # ruff
+  "PIE",  # flake8-pie
+  "S",    # flake8-bandit
+  "N",    # pep8-naming
+  "SLOT", # flake8-slots
+  "SIM",  # flake8-simpify
   "T100", # flake8-debugger
   "TRY",  # tryceratops
-  "PERF", # perflint
-  "RET",  # flake8-return
-  "RUF",  # ruff
-  "FURB", # refurb
-  "S",    # flake8-bandit
-  "SIM",  # flake8-simpify
   "UP",   # pyupgrade
   "W",    # pycodestyle
-
-  "T100", # flake8-debugger
-  "LOG",  # flake8-logging
-  "PT",   # flake8-pytest-style
-  "ERA",  # flake8-eradicate
+  "YTT",  # flake8-2020
 ]
 
 [tool.ruff.lint.mccabe]

@@ -31,6 +31,7 @@ Semantic versioning in our case means:
   `flake8-rst-docstrings`, `pep8-naming`
   support, use `ruff format` and `ruff check` instead
 - **Breaking**: Drops `darglint` support, because it is unmaintained
+- **Breaking**: Removes `WPS125`, because it is covered by `ruff` linter
 - **Breaking**: Removes `WPS302`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS304`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS305`, because it is covered by `ruff` formatter

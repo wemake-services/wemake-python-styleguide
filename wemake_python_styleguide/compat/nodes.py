@@ -8,9 +8,9 @@ because that's how ``mypy`` knows about what we are doing.
 import ast
 import sys
 
-if sys.version_info >= (3, 11):  # pragma: py-lt-311
+if sys.version_info >= (3, 11):  # pragma: >=3.11 cover
     from ast import TryStar as TryStar
-else:  # pragma: py-gte-311
+else:  # pragma: <3.11 cover
 
     class TryStar(ast.stmt):
         """Used for `try/except*` statements."""
@@ -21,9 +21,9 @@ else:  # pragma: py-gte-311
         finalbody: list[ast.stmt]
 
 
-if sys.version_info >= (3, 12):  # pragma: py-lt-312
+if sys.version_info >= (3, 12):  # pragma: # pragma: >=3.12 cover
     from ast import TypeAlias as TypeAlias
-else:  # pragma: py-gte-312
+else:  # pragma: <3.12 cover
 
     class TypeAlias(ast.stmt):
         """Used to define `TypeAlias` nodes in `python3.12+`."""
