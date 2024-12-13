@@ -66,8 +66,6 @@ PRESET: Final = (
     operators.WalrusVisitor,
     compares.WrongConditionalVisitor,
     compares.CompareSanityVisitor,
-    compares.WrongComparisonOrderVisitor,
-    compares.UnaryCompareVisitor,
     compares.WrongConstantCompareVisitor,
     compares.InCompareSanityVisitor,
     compares.WrongFloatComplexCompareVisitor,

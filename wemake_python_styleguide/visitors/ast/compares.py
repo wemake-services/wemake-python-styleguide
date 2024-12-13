@@ -1,17 +1,14 @@
 import ast
-from collections.abc import Sequence
 from typing import ClassVar
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import AssignNodes, TextNodes
-from wemake_python_styleguide.compat.functions import get_assign_targets
-from wemake_python_styleguide.logic import nodes, source, walk
+from wemake_python_styleguide.compat.aliases import TextNodes
+from wemake_python_styleguide.logic import nodes, walk
 from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
 from wemake_python_styleguide.logic.tree import (
     compares,
     functions,
-    ifs,
     operators,
 )
 from wemake_python_styleguide.logic.walrus import get_assigned_expr
@@ -21,7 +18,6 @@ from wemake_python_styleguide.violations.best_practices import (
     HeterogeneousCompareViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
-    CompareOrderViolation,
     ConstantCompareViolation,
     ConstantConditionViolation,
     MultipleInCompareViolation,
@@ -32,11 +28,8 @@ from wemake_python_styleguide.violations.refactoring import (
     FalsyConstantCompareViolation,
     InCompareWithSingleItemContainerViolation,
     NestedTernaryViolation,
-    NotOperatorWithCompareViolation,
-    SimplifiableIfViolation,
     UselessLenCompareViolation,
     WrongInCompareTypeViolation,
-    WrongIsCompareViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
@@ -124,28 +117,12 @@ class CompareSanityVisitor(BaseNodeVisitor):
 class WrongConstantCompareVisitor(BaseNodeVisitor):
     """Restricts incorrect compares with constants."""
 
-    _forbidden_for_is: ClassVar[AnyNodes] = (
-        ast.List,
-        ast.ListComp,
-        ast.Dict,
-        ast.DictComp,
-        ast.Tuple,
-        ast.GeneratorExp,
-        ast.Set,
-        ast.SetComp,
-        # We allow `ast.NameConstant`
-        ast.Num,
-        *TextNodes,
-    )
-
     def visit_Compare(self, node: ast.Compare) -> None:
         """Visits compare with constants."""
         self._check_constant(node.ops[0], node.left)
-        self._check_is_constant_compare(node.ops[0], node.left)
 
         for op, comparator in zip(node.ops, node.comparators):
             self._check_constant(op, comparator)
-            self._check_is_constant_compare(op, comparator)
 
         self.generic_visit(node)
 
@@ -169,99 +146,6 @@ class WrongConstantCompareVisitor(BaseNodeVisitor):
 
         if not length:
             self.add_violation(FalsyConstantCompareViolation(comparator))
-
-    def _check_is_constant_compare(
-        self,
-        op: ast.cmpop,
-        comparator: ast.expr,
-    ) -> None:
-        if not isinstance(op, (ast.Is, ast.IsNot)):
-            return
-
-        unwrapped = operators.unwrap_unary_node(
-            get_assigned_expr(comparator),
-        )
-        if isinstance(unwrapped, self._forbidden_for_is):
-            self.add_violation(WrongIsCompareViolation(comparator))
-
-
-@final
-class WrongComparisonOrderVisitor(BaseNodeVisitor):
-    """Restricts comparison where argument doesn't come first."""
-
-    _allowed_left_nodes: ClassVar[AnyNodes] = (
-        ast.Name,
-        ast.Call,
-        ast.Attribute,
-        ast.Subscript,
-        ast.Await,
-    )
-
-    _special_cases: ClassVar[AnyNodes] = (
-        ast.In,
-        ast.NotIn,
-    )
-
-    def visit_Compare(self, node: ast.Compare) -> None:
-        """Forbids comparison where argument doesn't come first."""
-        self._check_ordering(node)
-        self.generic_visit(node)
-
-    def _is_special_case(self, node: ast.Compare) -> bool:
-        """
-        Operators ``in`` and ``not in`` are special cases.
-
-        Why? Because it is perfectly fine to use something like:
-
-        .. code:: python
-
-            if 'key' in some_dict: ...
-
-        This should not be an issue.
-
-        When there are multiple special operators it is still a separate issue.
-        """
-        return isinstance(node.ops[0], self._special_cases)
-
-    def _is_left_node_valid(self, left: ast.AST) -> bool:
-        if isinstance(left, self._allowed_left_nodes):
-            return True
-        if isinstance(left, ast.BinOp):
-            left_node = self._is_left_node_valid(left.left)
-            right_node = self._is_left_node_valid(left.right)
-            return left_node or right_node
-        return False
-
-    def _has_wrong_nodes_on_the_right(
-        self,
-        comparators: Sequence[ast.AST],
-    ) -> bool:
-        for right in map(get_assigned_expr, comparators):
-            if isinstance(right, self._allowed_left_nodes):
-                return True
-            if isinstance(right, ast.BinOp):
-                return self._has_wrong_nodes_on_the_right(
-                    [
-                        right.left,
-                        right.right,
-                    ]
-                )
-        return False
-
-    def _check_ordering(self, node: ast.Compare) -> None:
-        if self._is_left_node_valid(get_assigned_expr(node.left)):
-            return
-
-        if self._is_special_case(node):
-            return
-
-        if len(node.comparators) > 1:
-            return
-
-        if not self._has_wrong_nodes_on_the_right(node.comparators):
-            return
-
-        self.add_violation(CompareOrderViolation(node))
 
 
 @final
@@ -298,11 +182,6 @@ class WrongConditionalVisitor(BaseNodeVisitor):
 
     def visit_any_if(self, node: AnyIf) -> None:
         """Ensures that ``if`` nodes are using valid conditionals."""
-        if isinstance(node, ast.If):
-            self._check_simplifiable_if(node)
-        else:
-            self._check_simplifiable_ifexpr(node)
-
         self._check_nested_ifexpr(node)
         self._check_constant_condition(node.test)
         self.generic_visit(node)
@@ -322,23 +201,6 @@ class WrongConditionalVisitor(BaseNodeVisitor):
             if isinstance(real_node, self._forbidden_nodes):
                 self.add_violation(ConstantConditionViolation(node))
 
-    def _check_simplifiable_if(self, node: ast.If) -> None:
-        if not ifs.is_elif(node) and not ifs.root_if(node):
-            body_var = self._is_simplifiable_assign(node.body)
-            else_var = self._is_simplifiable_assign(node.orelse)
-            if body_var and body_var == else_var:
-                self.add_violation(SimplifiableIfViolation(node))
-
-    def _check_simplifiable_ifexpr(self, node: ast.IfExp) -> None:
-        conditions = set()
-        if isinstance(node.body, ast.NameConstant):
-            conditions.add(node.body.value)
-        if isinstance(node.orelse, ast.NameConstant):
-            conditions.add(node.orelse.value)
-
-        if conditions == {True, False}:
-            self.add_violation(SimplifiableIfViolation(node))
-
     def _check_nested_ifexpr(self, node: AnyIf) -> None:
         is_nested_in_if = bool(
             isinstance(node, ast.If)
@@ -351,41 +213,6 @@ class WrongConditionalVisitor(BaseNodeVisitor):
 
         if is_nested_in_if or is_nested_poorly:
             self.add_violation(NestedTernaryViolation(node))
-
-    def _is_simplifiable_assign(
-        self,
-        node_body: list[ast.stmt],
-    ) -> str | None:
-        wrong_length = len(node_body) != 1
-        if wrong_length or not isinstance(node_body[0], AssignNodes):
-            return None
-        if not isinstance(node_body[0].value, ast.NameConstant):
-            return None
-        if node_body[0].value.value is None:
-            return None
-
-        targets = get_assign_targets(node_body[0])
-        if len(targets) != 1:
-            return None
-
-        return source.node_to_string(targets[0])
-
-
-@final
-class UnaryCompareVisitor(BaseNodeVisitor):
-    """Checks that unary compare operators are used correctly."""
-
-    def visit_UnaryOp(self, node: ast.UnaryOp) -> None:
-        """Finds bad `not` usages."""
-        self._check_incorrect_not(node)
-        self.generic_visit(node)
-
-    def _check_incorrect_not(self, node: ast.UnaryOp) -> None:
-        if not isinstance(node.op, ast.Not):
-            return
-
-        if isinstance(node.operand, ast.Compare):
-            self.add_violation(NotOperatorWithCompareViolation(node))
 
 
 @final

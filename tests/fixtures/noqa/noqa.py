@@ -301,7 +301,6 @@ class BadClass:
 magic_numbers = 13.2 + 50  # noqa: WPS432
 
 assert 1 < 1 < hex_number  # noqa: WPS308
-assert 2 > octal_number  # noqa: WPS309
 
 number_with_useless_plus = +5  # noqa: WPS330
 
@@ -375,7 +374,6 @@ for sum_item in file_obj:  # noqa: WPS519
     sum_container += sum_item
 
 my_print(sum_container == [])  # noqa: WPS520
-my_print(sum_container is 0)  # noqa: WPS521
 
 call_with_positional_bool(True, keyword=1)  # noqa: WPS425
 
@@ -438,14 +436,6 @@ first, nodes[0] = range(2)  # noqa: WPS414
 
 class MyBadException(BaseException):  # noqa: WPS418
     anti_wps428 = 1
-
-
-some_if_expr = True if some_set else False  # noqa: WPS502
-
-if some_if_expr:  # noqa: WPS502
-    some_dict['x'] = True
-else:
-    some_dict['x'] = False
 
 
 
@@ -513,9 +503,6 @@ if len(numbers) > 0:  # noqa: WPS507
 
 if numbers and numbers:  # noqa: WPS408
     my_print('duplicate boolop')
-
-if not numbers == [1]:  # noqa: WPS508
-    my_print('bad compare with not')
 
 if numbers == CONSTANT != [2]:  # noqa: WPS409
     my_print(1 + (1 if number else 2))  # noqa: WPS509

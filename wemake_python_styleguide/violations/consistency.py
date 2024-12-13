@@ -246,7 +246,7 @@ class UnicodeStringViolation(TokenizeViolation):
     .. versionadded:: 0.1.0
     .. versionchanged:: 1.0.0
        No longer produced, kept here for historic reasons.
-       This rule is covered by ``ruff`` formatter. See ``UP025``.
+       This rule is covered by ``ruff`` linter. See ``UP025``.
 
     """
 
@@ -359,7 +359,7 @@ class FormattedStringViolation(ASTViolation):
     .. versionadded:: 0.1.0
     .. versionchanged:: 1.0.0
        No longer produced, kept here for historic reasons.
-       This is covered with ``ruff`` formatter. See ``WPS237``.
+       This is covered with ``ruff`` linter. See ``WPS237``.
 
     """
 
@@ -495,11 +495,15 @@ class CompareOrderViolation(ASTViolation):
         if 3 < some_x:
 
     .. versionadded:: 0.3.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``SIM300``.
 
     """
 
     error_template = 'Found reversed compare order'
     code = 309
+    disabled_since = '1.0.0'
 
 
 @final
@@ -701,7 +705,7 @@ class ObjectInBaseClassesListViolation(ASTViolation):
     .. versionadded:: 0.3.0
     .. versionchanged:: 1.0.0
        No longer produced, kept here for historic reasons.
-       This is covered with ``ruff`` formatter. See ``UP004``.
+       This is covered with ``ruff`` linter. See ``UP004``.
 
     """
 
@@ -1307,7 +1311,7 @@ class UselessExceptCaseViolation(ASTViolation):
     .. versionadded:: 0.7.0
     .. versionchanged:: 1.0.0
        No longer produced, kept here for historic reasons.
-       This is covered with ``ruff`` formatter. See ``TRY203``.
+       This is covered with ``ruff`` linter. See ``TRY203``.
 
     """
 
@@ -2076,7 +2080,7 @@ class UnnecessaryLiteralsViolation(ASTViolation):
     .. versionadded:: 0.13.0
     .. versionchanged:: 1.0.0
        No longer produced, kept here for historic reasons.
-       This is covered with ``ruff`` formatter. See ``UP018`` and ``C408``.
+       This is covered with ``ruff`` linter. See ``UP018`` and ``C408``.
 
     """
 
