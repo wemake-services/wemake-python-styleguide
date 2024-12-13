@@ -4,8 +4,6 @@ This file contains all possible violations.
 It is used for e2e tests.
 """
 
-
-
 import os.path  # noqa: WPS301
 import sys as sys  # noqa: WPS113
 
@@ -17,7 +15,7 @@ some_int = 1  # type: int
 
 phone_number = 555_123_999  # noqa:  WPS303
 float_zero = 0.0  # noqa: WPS358
-formatted_string_complex = f"1+1={1 + 1}"  # noqa: WPS237
+formatted_string_complex = f'1+1={1 + 1}'  # noqa: WPS237
 
 
 def __getattr__():  # noqa: WPS413
@@ -40,7 +38,7 @@ try:  # noqa: WPS229
     my_print(2)
     my_print(3)
 except AnyError:
-    my_print("nope")
+    my_print('nope')
 
 
 class TooManyPublicAtts:  # noqa: WPS230
@@ -64,7 +62,6 @@ def function_name(  # noqa: WPS614
 
 
 def some():  # noqa: WPS110
-
     class Nested:  # noqa: WPS431
         ...  # noqa: WPS604
 
@@ -72,32 +69,36 @@ def some():  # noqa: WPS110
         pass
 
 
-del {"a": 1}["a"]  # noqa: WPS420
-hasattr(object, "some")  # noqa: WPS421
+del {'a': 1}['a']  # noqa: WPS420
+hasattr(object, 'some')  # noqa: WPS421
 value = 1  # noqa: WPS110
 VALUE = 1  # noqa: WPS110
 x = 2  # noqa: WPS111
 __private = 3  # noqa: WPS112
-star_wars_episode_7 = "the worst episode ever after 8 and 9"  # noqa: WPS114
+star_wars_episode_7 = 'the worst episode ever after 8 and 9'  # noqa: WPS114
 consecutive__underscores = 4  # noqa: WPS116
 cls = 5  # noqa: WPS117
-__author__ = "Nikita Sobolev"  # noqa: WPS410
+__author__ = 'Nikita Sobolev'  # noqa: WPS410
 extremely_long_name_that_needs_to_be_shortened_to_work_fine = 2  # noqa: WPS118
-привет_по_русски = "Hello, world!"  # noqa: WPS119
-wrong_alias_ = "some fake builtin alias"  # noqa: WPS120
+привет_по_русски = 'Hello, world!'  # noqa: WPS119
+wrong_alias_ = 'some fake builtin alias'  # noqa: WPS120
+
 
 def some_function():
     _should_not_be_used = 1  # noqa: WPS122
     my_print(_should_not_be_used)  # noqa: WPS121
 
+
 used, __ = 1, 2  # noqa: WPS123
+
 
 class Mem0Output:  # noqa: WPS124
     # See:
     # https://github.com/wemake-services/wemake-python-styleguide/issues/1191
-    anti_wps124 = "unreadable class"
+    anti_wps124 = 'unreadable class'
 
-type = "type"  # noqa: WPS125
+
+type = 'type'  # noqa: WPS125
 
 some._execute()  # noqa: WPS437
 
@@ -188,7 +189,9 @@ async def too_many_asserts():  # noqa: WPS218
     assert test_function(5)
     assert test_function(6)
 
+
 deep_access = some.other[0].field.type.boom  # noqa: WPS219
+
 
 def test_function():  # noqa: WPS231
     if xy > 1 and xy > 2 and xy > 3 and xy > 4 and xy > 5:
@@ -206,13 +209,13 @@ if line or line > 1 or line > 2 or line > 3 or line > 4:  # noqa: WPS223
 try:  # noqa: WPS225
     do_some_bad()
 except ValueError:
-    my_print("value")
+    my_print('value')
 except KeyError:
-    my_print("key")
+    my_print('key')
 except IndexError as exc:
-    my_print("index", exc)
+    my_print('index', exc)
 except TypeError:
-    my_print("type")
+    my_print('type')
 
 
 class BadClass:
@@ -234,7 +237,7 @@ assert 1 < 1 < hex_number  # noqa: WPS308
 
 number_with_useless_plus = +5  # noqa: WPS330
 
-if "6" in nodes in "6":  # noqa: WPS311, WPS525
+if '6' in nodes in '6':  # noqa: WPS311, WPS525
     anti_wps428 = 1
 
 assert hex_number == hex_number  # noqa: WPS312
@@ -244,10 +247,9 @@ if True:  # noqa: WPS314
     anti_wps428 = 1
 
 
-
-string_modifier = R"(\n)"  # noqa: WPS321
+string_modifier = R'(\n)'  # noqa: WPS321
 multiline_string = """abc"""  # noqa: WPS322
-modulo_formatting = "some %s"  # noqa: WPS323
+modulo_formatting = 'some %s'  # noqa: WPS323
 
 
 def function_with_wrong_return():
@@ -260,6 +262,7 @@ def function_with_wrong_yield():
     if some:
         yield  # noqa: WPS325
     yield 1
+
 
 for literal in bad_concatenation:  # noqa: WPS327, WPS328
     continue
@@ -275,14 +278,14 @@ my_print(biggesst > middle >= smallest)  # noqa: WPS334
 for index in [1, 2]:  # noqa: WPS335
     my_print(index)
 
-string_concat = "a" + "b"  # noqa: WPS336
+string_concat = 'a' + 'b'  # noqa: WPS336
 
-my_print(one == "a" or one == "b")  # noqa: WPS514
-file_obj = open("filaname.py")  # noqa: WPS515
+my_print(one == 'a' or one == 'b')  # noqa: WPS514
+file_obj = open('filaname.py')  # noqa: WPS515
 my_print(type(file_obj) == int)  # noqa: WPS516
 
-my_print(*[], **{"@": 1})  # noqa: WPS517, WPS445
-pi = 3.14 # noqa: WPS446
+my_print(*[], **{'@': 1})  # noqa: WPS517, WPS445
+pi = 3.14  # noqa: WPS446
 my_print(lambda: 0)  # noqa: WPS522
 xterm += xterm + 1  # noqa: WPS524
 
@@ -313,7 +316,7 @@ class ShadowsAttribute:
         self.second = 2  # noqa: WPS601
 
 
-for _symbol in "abc":  # noqa: WPS500
+for _symbol in 'abc':  # noqa: WPS500
     anti_wps428 = 1
 else:
     anti_wps428 = 1
@@ -358,9 +361,8 @@ class MyBadException(BaseException):  # noqa: WPS418
     anti_wps428 = 1
 
 
-
 class ClassWithWrongContents((lambda: object)()):  # noqa: WPS606
-    __slots__ = ["a", "a"]  # noqa: WPS607
+    __slots__ = ['a', 'a']  # noqa: WPS607
 
     for _bad_body_node in range(1):  # noqa: WPS604
         anti_wps428 = 1
@@ -372,7 +374,7 @@ class ClassWithWrongContents((lambda: object)()):  # noqa: WPS606
 
 def bad_default_values(
     self,
-    withDoctest="PYFLAKES_DOCTEST" in os.environ,  # noqa: WPS404
+    withDoctest='PYFLAKES_DOCTEST' in os.environ,  # noqa: WPS404
 ):
     return True
 
@@ -380,24 +382,24 @@ def bad_default_values(
 for nodes[0] in (1, 2, 3):  # noqa: WPS405
     anti_wps428 = 1
 
-with open("some") as MyBadException.custom:  # noqa: WPS406
+with open('some') as MyBadException.custom:  # noqa: WPS406
     anti_wps428 = 1
 
 
 anti_wps428.__truediv__(1)  # noqa: WPS609
 
-if not some: # noqa: WPS504
-    my_print("False")
+if not some:  # noqa: WPS504
+    my_print('False')
 else:
-    my_print("Wrong")
+    my_print('Wrong')
 
 try:
     try:  # noqa: WPS505
         anti_wps428 = 1
     except ValueError:
-        raise TypeError("Second")
+        raise TypeError('Second')
 except TypeError:
-    my_print("WTF?")
+    my_print('WTF?')
 
 
 class WrongMethodOrder:  # noqa: WPS338
@@ -409,20 +411,20 @@ class WrongMethodOrder:  # noqa: WPS338
 
 
 leading_zero = 1.2e01  # noqa: WPS339
-wrong_escape_raw_string = "\\n"  # noqa: WPS342
+wrong_escape_raw_string = '\\n'  # noqa: WPS342
 zero_div = bad_complex / 0  # noqa: WPS344
 mult_one = zero_div * 1  # noqa: WPS345
 mult_one -= -1  # noqa: WPS346
 
 CONSTANT = []  # noqa: WPS407
 
-numbers = (int(string) for string in ["1"])  # noqa: WPS506
+numbers = (int(string) for string in ['1'])  # noqa: WPS506
 
 if len(numbers) > 0:  # noqa: WPS507
-    my_print("len!")
+    my_print('len!')
 
 if numbers and numbers:  # noqa: WPS408
-    my_print("duplicate boolop")
+    my_print('duplicate boolop')
 
 if numbers == CONSTANT != [2]:  # noqa: WPS409
     my_print(1 + (1 if number else 2))  # noqa: WPS509
@@ -432,14 +434,16 @@ my_print(isinstance(number, int | float | str))  # noqa: 474
 my_print(isinstance(numbers, int))  # noqa: WPS512
 
 if numbers:
-    my_print("first")
+    my_print('first')
 else:
     if numbers:  # noqa: WPS513
-        my_print("other")
+        my_print('other')
+
 
 def sync_gen():
     yield
     raise StopIteration  # noqa: WPS438
+
 
 async def async_gen():
     yield
@@ -455,7 +459,8 @@ class CheckStopIteration:
         yield
         raise StopIteration()  # noqa: WPS438
 
-bad_unicode = b"\u1"  # noqa: WPS439
+
+bad_unicode = b'\u1'  # noqa: WPS439
 CheckStopIteration = 1  # noqa: WPS440
 my_print(literal)  # noqa: WPS441
 unhashable = {[]}  # noqa: WPS443
@@ -469,19 +474,23 @@ swap_b = swap_a  # noqa: WPS523
 my_print(constant[0:7])  # noqa: WPS349
 var_a = var_a + var_b  # noqa: WPS350
 
+
 class ChildClass(ParentClass):
     def some_method(self):
-        super().some_other_method() # noqa: WPS613
+        super().some_other_method()  # noqa: WPS613
 
-LOWERCASE_ALPH = "abcdefghijklmnopqrstuvwxyz" # noqa: WPS447
+
+LOWERCASE_ALPH = 'abcdefghijklmnopqrstuvwxyz'  # noqa: WPS447
 
 if a in {1}:  # noqa: WPS525
-    my_print("bad!")
+    my_print('bad!')
+
 
 def implicit_yield_from():
     yield from call()
 
-try: # noqa: WPS448
+
+try:  # noqa: WPS448
     anti_wps428 = 1
 except Exception:
     anti_wps428 = 1
@@ -489,7 +498,7 @@ except ValueError:
     anti_wps428 = 1
 
 
-bad_frozenset = frozenset([1]) # noqa: WPS527
+bad_frozenset = frozenset([1])  # noqa: WPS527
 
 
 def wrong_yield_from():
@@ -504,8 +513,8 @@ def consecutive_yields():
 for loop_var in loop_iter:  # noqa: WPS528
     my_print(loop_iter[loop_var])
 
-if "key" in some_dict:
-    my_print(some_dict["key"])  # noqa: WPS529
+if 'key' in some_dict:
+    my_print(some_dict['key'])  # noqa: WPS529
     my_print(other_dict[1.0])  # noqa: WPS449
     my_print(some_sized[len(some_sized) - 2])  # noqa: WPS530
 
@@ -513,7 +522,7 @@ deep_func(a)(b)(c)(d)  # noqa: WPS233
 
 annotated: list[list[list[list[int]]]]  # noqa: WPS234
 
-*numbers, = [4, 7]  # noqa: WPS356, WPS460
+(*numbers,) = [4, 7]  # noqa: WPS356, WPS460
 [first_number, second_number] = [4, 7]  # noqa: WPS359
 
 
@@ -540,28 +549,29 @@ def raise_bad_exception():
 try:
     cause_errors()
 except ValueError or TypeError:  # noqa: WPS455
-    my_print("Oops.")
+    my_print('Oops.')
 
-if float("NaN") < number:  # noqa: WPS456
-    my_print("Greater than... what?")
+if float('NaN') < number:  # noqa: WPS456
+    my_print('Greater than... what?')
+
 
 def infinite_loop():
     while True:  # noqa: WPS457
-        my_print("forever")
+        my_print('forever')
 
 
 my_print(some_float == 1.0)  # noqa: WPS459
-unnecessary_raw_string = r"no backslashes." # noqa: WPS360
+unnecessary_raw_string = r'no backslashes.'  # noqa: WPS360
 
 
 def many_raises_function(parameter):  # noqa: WPS238
     if parameter == 1:
-        raise ValueError("1")
+        raise ValueError('1')
     if parameter == 2:
-        raise KeyError("2")
+        raise KeyError('2')
     if parameter == 3:
-        raise IndexError("3")
-    raise TypeError("4")
+        raise IndexError('3')
+    raise TypeError('4')
 
 
 my_print("""
@@ -572,19 +582,21 @@ text
 def get_item():  # noqa: WPS463
     return  # noqa: WPS324
 
-def bare_raise_function():
-    raise # noqa: WPS467
 
-for _, something in enumerate(collection): # noqa: WPS468
+def bare_raise_function():
+    raise  # noqa: WPS467
+
+
+for _, something in enumerate(collection):  # noqa: WPS468
     report(something)
 
 variable_to_store_things = {
     definitely_something
-    for _, definitely_something in enumerate(collection) # noqa: WPS468
+    for _, definitely_something in enumerate(collection)  # noqa: WPS468
 }
 
 try:  # noqa: WPS328
-    raise TypeError("Type Error")
+    raise TypeError('Type Error')
 except TypeError as raise_from_itself:
     my_print(raise_from_itself)
     raise raise_from_itself from raise_from_itself  # noqa: WPS469
@@ -597,14 +609,18 @@ class TestClass(**{}):  # noqa: WPS470
 secondary_slice = items[1:][:3]  # noqa: WPS471
 first, *_rest = some_collection  # noqa: WPS472
 
+
 def foo2_func():
     return (1, 2, 3, 4, 5, 6)  # noqa: WPS227
 
+
 noqa_wps532 = variable is some_thing is other_thing  # noqa: WPS532
+
 
 class Baseline:
     def method(self, number):
         return number + 1
+
 
 class Antediluvian(Baseline):
     def method(self):
@@ -615,29 +631,26 @@ class Antediluvian(Baseline):
 class WithStatic:
     @staticmethod
     def some_static(arg1):  # noqa: WPS602
-        my_print("WTF?")
+        my_print('WTF?')
 
     @staticmethod
     async def some_async_static(arg1):  # noqa: WPS602
-        my_print("WTF?")
+        my_print('WTF?')
 
 
 @first
 @second
-@third(param="a")
+@third(param='a')
 @fourth
 @fifth()
 @error
 def decorated():  # noqa: WPS216
-    my_print("WTF?")
+    my_print('WTF?')
 
 
 def wrong_comprehension1():
     return [  # noqa: WPS307
-        node
-        for node in "ab"
-        if node != "a"
-        if node != "b"
+        node for node in 'ab' if node != 'a' if node != 'b'
     ]
 
 
@@ -658,16 +671,16 @@ for unique_element in range(10):
     my_print(4)
 
 
-@some_decorator["text"]  # noqa: WPS466
+@some_decorator['text']  # noqa: WPS466
 def my_function():
     return 1
 
 
-user_id = "uuid-user-id"
+user_id = 'uuid-user-id'
 match user:
-    case "user_id" | "uid" as _uid:  # noqa: WPS122
+    case 'user_id' | 'uid' as _uid:  # noqa: WPS122
         raise ValueError(_uid)
-    case {"key": k}:  # noqa: WPS111
+    case {'key': k}:  # noqa: WPS111
         raise ValueError(k)
     case [objs]:  # noqa: WPS110
         raise ValueError(objs)

@@ -2,27 +2,29 @@ from sys import *
 
 ++int
 
-extra_parens = list("abc")
-some_tuple = (1, 2 )
-breaking_pycodestyle=3
+extra_parens = list('abc')
+some_tuple = (1, 2)
+breaking_pycodestyle = 3
 
 # commented: str = 'comment'
 
+
 def camelCase(): ...
 
-"{}".format(1)
+
+'{}'.format(1)
 
 assert True
 ipdb.set_trace()
 
 
-def function_name(plugin: str ="flake8") ->str:
+def function_name(plugin: str = 'flake8') -> str:
     """Test `wrong`rst code."""
     return plugin
 
 
-multiline_string = "some\
-string"
+multiline_string = 'some\
+string'
 
 "'"
 
@@ -35,4 +37,4 @@ def darglint_check(arg):
         Just a value to trigger the check.
 
     """
-    return "check trigger"
+    return 'check trigger'
