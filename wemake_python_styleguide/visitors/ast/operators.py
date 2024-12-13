@@ -191,7 +191,8 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
 
     def _check_list_multiply(self, node: ast.BinOp) -> None:
         is_list_multiply = isinstance(node.op, ast.Mult) and isinstance(
-            node.left, self._list_nodes,
+            node.left,
+            self._list_nodes,
         )
         if is_list_multiply:
             self.add_violation(ListMultiplyViolation(node.left))
