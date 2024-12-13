@@ -138,7 +138,7 @@ select = [
   "F",    # pyflakes
   "FLY",  # pyflint
   "FURB", # refurb
-  "G",    # flake8-string-format
+  "G",    # flake8-logging-format
   "I",    # isort
   "ISC",  # flake8-implicit-str-concat
   "LOG",  # flake8-logging
