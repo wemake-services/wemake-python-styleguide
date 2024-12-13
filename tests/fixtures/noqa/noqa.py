@@ -153,7 +153,7 @@ used, __ = 1, 2  # noqa: WPS123
 class Mem0Output:  # noqa: WPS124
     # See:
     # https://github.com/wemake-services/wemake-python-styleguide/issues/1191
-    anti_wps124 = 'unreadable class'x
+    anti_wps124 = 'unreadable class'
 
 some._execute()  # noqa: WPS437
 
