@@ -63,11 +63,10 @@ class WrongRaiseVisitor(BaseNodeVisitor):
                 self.add_violation(BareRaiseViolation(node))
 
     def _check_raise_from_itself(self, node: ast.Raise) -> None:
-        if node.exc and node.cause:
-            names_are_same = get_exception_name(node) == get_cause_name(node)
-
-            if names_are_same:
-                self.add_violation(RaiseFromItselfViolation(node))
+        raising_name = get_exception_name(node)
+        names_are_same = raising_name == get_cause_name(node)
+        if raising_name is not None and names_are_same:
+            self.add_violation(RaiseFromItselfViolation(node))
 
 
 @final
