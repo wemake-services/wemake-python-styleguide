@@ -10,14 +10,17 @@ from wemake_python_styleguide.visitors.ast.compares import (
 if_expression = '{0} if some() else {1}'
 
 
-@pytest.mark.parametrize('comparators', [
-    ('variable', '"test"'),
-    ('12', 'variable.call()'),
-    ('False', 'len(variable)'),
-    ('False', 'None'),
-    ('True', '222'),
-    ('True', 'None'),
-])
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        ('variable', '"test"'),
+        ('12', 'variable.call()'),
+        ('False', 'len(variable)'),
+        ('False', 'None'),
+        ('True', '222'),
+        ('True', 'None'),
+    ],
+)
 def test_not_simplifiable_exp(
     assert_errors,
     parse_ast_tree,
@@ -33,10 +36,13 @@ def test_not_simplifiable_exp(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('comparators', [
-    ('True', 'False'),
-    ('False', 'True'),
-])
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        ('True', 'False'),
+        ('False', 'True'),
+    ],
+)
 def test_simplifiable_exp(
     assert_errors,
     parse_ast_tree,

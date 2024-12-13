@@ -19,11 +19,14 @@ two_assignment = 'first = second = 1'
 three_assignment = 'first = second = third'
 
 
-@pytest.mark.parametrize('code', [
-    single_assignment,
-    tuple_assignment,
-    spread_assignment,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        single_assignment,
+        tuple_assignment,
+        spread_assignment,
+    ],
+)
 def test_correct_assignments(
     assert_errors,
     parse_ast_tree,
@@ -39,10 +42,13 @@ def test_correct_assignments(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    two_assignment,
-    three_assignment,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        two_assignment,
+        three_assignment,
+    ],
+)
 def test_multiple_assignments(
     assert_errors,
     parse_ast_tree,

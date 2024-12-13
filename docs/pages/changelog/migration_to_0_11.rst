@@ -71,4 +71,3 @@ Make sure that you follow it in the correct order.
 You can use ``sed`` to find all code and replace it to new ones.
 
 That's what I did for our own source code.
-

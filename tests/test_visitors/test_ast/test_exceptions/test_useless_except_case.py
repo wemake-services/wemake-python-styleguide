@@ -68,11 +68,14 @@ except Exception:
 """
 
 
-@pytest.mark.parametrize('code', [
-    wrong_reraise_except,
-    wrong_raise_except,
-    wrong_bare_raise_except,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_reraise_except,
+        wrong_raise_except,
+        wrong_bare_raise_except,
+    ],
+)
 def test_useless_except_case(
     assert_errors,
     parse_ast_tree,
@@ -88,13 +91,16 @@ def test_useless_except_case(
     assert_errors(visitor, [UselessExceptCaseViolation])
 
 
-@pytest.mark.parametrize('code', [
-    right_empty_bare_except,
-    right_logging_except,
-    right_reraise_logging_except,
-    right_raise_different_except,
-    right_raise_different_var_except,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        right_empty_bare_except,
+        right_logging_except,
+        right_reraise_logging_except,
+        right_raise_different_except,
+        right_raise_different_var_except,
+    ],
+)
 def test_correct_except_case(
     assert_errors,
     parse_ast_tree,

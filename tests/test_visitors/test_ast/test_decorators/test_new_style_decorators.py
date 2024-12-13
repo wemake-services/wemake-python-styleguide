@@ -19,19 +19,24 @@ class Some:
 """
 
 
-@pytest.mark.parametrize('code', [
-    function_def,
-    method_def,
-])
-@pytest.mark.parametrize('decorator', [
-    'some[1]',
-    'some.attr[0]',
-    'some[0].attr',
-    'call()[1].attr',
-
-    'some + other',
-    'really @ strange[0]',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_def,
+        method_def,
+    ],
+)
+@pytest.mark.parametrize(
+    'decorator',
+    [
+        'some[1]',
+        'some.attr[0]',
+        'some[0].attr',
+        'call()[1].attr',
+        'some + other',
+        'really @ strange[0]',
+    ],
+)
 def test_invalid_decorators(
     assert_errors,
     parse_ast_tree,
@@ -49,17 +54,23 @@ def test_invalid_decorators(
     assert_errors(visitor, [NewStyledDecoratorViolation])
 
 
-@pytest.mark.parametrize('code', [
-    function_def,
-    method_def,
-])
-@pytest.mark.parametrize('decorator', [
-    'some',
-    'some()',
-    'some(index[1])',
-    'some.attr',
-    'some.attr(1 + 1)',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_def,
+        method_def,
+    ],
+)
+@pytest.mark.parametrize(
+    'decorator',
+    [
+        'some',
+        'some()',
+        'some(index[1])',
+        'some.attr',
+        'some.attr(1 + 1)',
+    ],
+)
 def test_valid_decorators(
     assert_errors,
     parse_ast_tree,

@@ -15,11 +15,14 @@ walrus_compares2 = '{0} > (x := {1}) > 1'
 
 
 @pytest.mark.filterwarnings('ignore::SyntaxWarning')
-@pytest.mark.parametrize('comparators', [
-    ('first_name', 'second_name'),
-    ('first_name', 1),
-    (1, 'first_name'),
-])
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        ('first_name', 'second_name'),
+        ('first_name', 1),
+        (1, 'first_name'),
+    ],
+)
 def test_non_literal(
     assert_errors,
     parse_ast_tree,
@@ -37,12 +40,15 @@ def test_non_literal(
 
 
 @pytest.mark.filterwarnings('ignore::SyntaxWarning')
-@pytest.mark.parametrize('comparators', [
-    (1, 2),
-    ('"string1"', '"string2"'),
-    ('[1, 2, 3]', '(1, 2, 3)'),
-    ('{"key": 1}', '{"a", "b"}'),
-])
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        (1, 2),
+        ('"string1"', '"string2"'),
+        ('[1, 2, 3]', '(1, 2, 3)'),
+        ('{"key": 1}', '{"a", "b"}'),
+    ],
+)
 def test_literal(
     assert_errors,
     parse_ast_tree,
@@ -59,14 +65,20 @@ def test_literal(
     assert_errors(visitor, [ConstantCompareViolation])
 
 
-@pytest.mark.parametrize('code', [
-    chained_compares1,
-    chained_compares3,
-])
-@pytest.mark.parametrize('comparators', [
-    (1, 'first_name'),
-    (1, 1),
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        chained_compares1,
+        chained_compares3,
+    ],
+)
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        (1, 'first_name'),
+        (1, 1),
+    ],
+)
 def test_literal_special1(
     assert_errors,
     parse_ast_tree,
@@ -83,16 +95,22 @@ def test_literal_special1(
     assert_errors(visitor, [ConstantCompareViolation])
 
 
-@pytest.mark.parametrize('code', [
-    chained_compares2,
-    chained_compares3,
-    walrus_compares1,
-    walrus_compares2,
-])
-@pytest.mark.parametrize('comparators', [
-    ('first_name', 1),
-    (1, 1),
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        chained_compares2,
+        chained_compares3,
+        walrus_compares1,
+        walrus_compares2,
+    ],
+)
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        ('first_name', 1),
+        (1, 1),
+    ],
+)
 def test_literal_special2(
     assert_errors,
     parse_ast_tree,
@@ -113,13 +131,16 @@ def test_literal_special2(
     )
 
 
-@pytest.mark.parametrize('code', [
-    chained_compares1,
-    chained_compares2,
-    chained_compares3,
-    walrus_compares1,
-    walrus_compares2,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        chained_compares1,
+        chained_compares2,
+        chained_compares3,
+        walrus_compares1,
+        walrus_compares2,
+    ],
+)
 def test_literal_special_without_errors(
     assert_errors,
     parse_ast_tree,

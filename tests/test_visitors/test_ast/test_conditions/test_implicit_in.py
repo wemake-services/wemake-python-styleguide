@@ -18,19 +18,25 @@ eq_or = '{0} == some1 or {1} == some2'
 noteq_and = '{0} != some1 and {1} != some2'
 
 
-@pytest.mark.parametrize('code', [
-    eq_and,
-    noteq_or,
-    eq_or,
-    noteq_and,
-])
-@pytest.mark.parametrize(('first', 'second'), [
+@pytest.mark.parametrize(
+    'code',
+    [
+        eq_and,
+        noteq_or,
+        eq_or,
+        noteq_and,
+    ],
+)
+@pytest.mark.parametrize(
     ('first', 'second'),
-    ('one.attr', 'one'),
-    ('first', 'first()'),
-    ('value.method()', 'value.method'),
-    ('value.method(1)', 'value.method(2)'),
-])
+    [
+        ('first', 'second'),
+        ('one.attr', 'one'),
+        ('first', 'first()'),
+        ('value.method()', 'value.method'),
+        ('value.method(1)', 'value.method(2)'),
+    ],
+)
 def test_different_in_values(
     code,
     first,
@@ -48,16 +54,22 @@ def test_different_in_values(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    eq_and,
-    noteq_or,
-])
-@pytest.mark.parametrize(('first', 'second'), [
-    ('first', 'first'),
-    ('one.attr', 'one.attr'),
-    ('first()', 'first()'),
-    ('value.method(1)', 'value.method(2)'),
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        eq_and,
+        noteq_or,
+    ],
+)
+@pytest.mark.parametrize(
+    ('first', 'second'),
+    [
+        ('first', 'first'),
+        ('one.attr', 'one.attr'),
+        ('first()', 'first()'),
+        ('value.method(1)', 'value.method(2)'),
+    ],
+)
 def test_safe_patterns_in_values(
     code,
     first,
@@ -75,16 +87,22 @@ def test_safe_patterns_in_values(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    eq_or,
-    noteq_and,
-])
-@pytest.mark.parametrize(('first', 'second'), [
-    ('first', 'first'),
-    ('one.attr', 'one.attr'),
-    ('first()', 'first()'),
-    ('value.method(1)', 'value.method(1)'),
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        eq_or,
+        noteq_and,
+    ],
+)
+@pytest.mark.parametrize(
+    ('first', 'second'),
+    [
+        ('first', 'first'),
+        ('one.attr', 'one.attr'),
+        ('first()', 'first()'),
+        ('value.method(1)', 'value.method(1)'),
+    ],
+)
 def test_wrong_patterns_in_values(
     code,
     first,

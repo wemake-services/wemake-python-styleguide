@@ -51,10 +51,13 @@ class Test:
 """
 
 
-@pytest.mark.parametrize('code', [
-    module_many_raises,
-    lambda_many_raises,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_many_raises,
+        lambda_many_raises,
+    ],
+)
 def test_asserts_correct_count1(
     assert_errors,
     parse_ast_tree,
@@ -71,17 +74,27 @@ def test_asserts_correct_count1(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('context', [
-    function_template,
-    instance_method_template,
-    class_method_template,
-    static_method_template,
-])
-@pytest.mark.parametrize(('first', 'second', 'third'), [
-    ('...', '', ''),
-    ('if some:', '    raise SomeException', 'raise SomeOtherException'),
-    ('def helper():', '    raise SomeException', 'raise SomeOtherException'),
-])
+@pytest.mark.parametrize(
+    'context',
+    [
+        function_template,
+        instance_method_template,
+        class_method_template,
+        static_method_template,
+    ],
+)
+@pytest.mark.parametrize(
+    ('first', 'second', 'third'),
+    [
+        ('...', '', ''),
+        ('if some:', '    raise SomeException', 'raise SomeOtherException'),
+        (
+            'def helper():',
+            '    raise SomeException',
+            'raise SomeOtherException',
+        ),
+    ],
+)
 def test_raises_correct_count2(
     assert_errors,
     parse_ast_tree,
@@ -102,16 +115,26 @@ def test_raises_correct_count2(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('context', [
-    function_template,
-    instance_method_template,
-    class_method_template,
-    static_method_template,
-])
-@pytest.mark.parametrize(('first', 'second', 'third'), [
-    ('if some:', '    raise SomeException', 'raise SomeOtherException'),
-    ('def helper():', '    raise SomeException', 'raise SomeOtherException'),
-])
+@pytest.mark.parametrize(
+    'context',
+    [
+        function_template,
+        instance_method_template,
+        class_method_template,
+        static_method_template,
+    ],
+)
+@pytest.mark.parametrize(
+    ('first', 'second', 'third'),
+    [
+        ('if some:', '    raise SomeException', 'raise SomeOtherException'),
+        (
+            'def helper():',
+            '    raise SomeException',
+            'raise SomeOtherException',
+        ),
+    ],
+)
 def test_raises_wrong_count(
     assert_errors,
     assert_error_text,

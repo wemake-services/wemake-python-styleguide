@@ -6,24 +6,27 @@ from wemake_python_styleguide.violations.best_practices import (
 from wemake_python_styleguide.visitors.ast.compares import CompareSanityVisitor
 
 
-@pytest.mark.parametrize('code', [
-    'x > y < z',
-    'x >= y < z',
-    'x > y <= z',
-    'x >= y <= z',
-    'x < y > z',
-    'x <= y > z',
-    'x < y >= z',
-    'x <= y >= z',
-    'x > y != 0',
-    'x < y == 0',
-    'x >= y != 0',
-    'x <= y == 0',
-    'x == y != z',
-    'long == x == y >= z',
-    'call() != attr.prop in array',
-    'item not in array == value',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'x > y < z',
+        'x >= y < z',
+        'x > y <= z',
+        'x >= y <= z',
+        'x < y > z',
+        'x <= y > z',
+        'x < y >= z',
+        'x <= y >= z',
+        'x > y != 0',
+        'x < y == 0',
+        'x >= y != 0',
+        'x <= y == 0',
+        'x == y != z',
+        'long == x == y >= z',
+        'call() != attr.prop in array',
+        'item not in array == value',
+    ],
+)
 def test_heterogeneous_compare(
     assert_errors,
     parse_ast_tree,
@@ -39,13 +42,16 @@ def test_heterogeneous_compare(
     assert_errors(visitor, [HeterogeneousCompareViolation])
 
 
-@pytest.mark.parametrize('code', [
-    'x == y == z',
-    'z != y != x',
-    'call() == other.prop',
-    'x in y',
-    'x not in y',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'x == y == z',
+        'z != y != x',
+        'call() == other.prop',
+        'x in y',
+        'x not in y',
+    ],
+)
 def test_correct_compare_operators(
     assert_errors,
     parse_ast_tree,

@@ -1,6 +1,6 @@
 from ast import Call, Return, Yield, YieldFrom, arg, walk
 from collections.abc import Container, Iterable
-from typing import Final, TypeAlias, Union
+from typing import TypeAlias, Union
 
 from wemake_python_styleguide.logic import source
 from wemake_python_styleguide.logic.walk import is_contained
@@ -18,13 +18,6 @@ _AnyControlTransfers: TypeAlias = Union[
 
 #: Type annotation for an iterable of control transfer nodes
 _ControlTransferIterable: TypeAlias = Iterable[_AnyControlTransfers]
-
-#: Method types
-_METHOD_TYPES: Final = frozenset((
-    'method',
-    'classmethod',
-    'staticmethod',
-))
 
 
 def given_function_called(
@@ -45,32 +38,6 @@ def given_function_called(
     if function_name in to_check:
         return function_name
     return ''
-
-
-def is_method(function_type: str | None) -> bool:
-    """
-    Returns whether a given function type belongs to a class.
-
-    >>> is_method('function')
-    False
-
-    >>> is_method(None)
-    False
-
-    >>> is_method('method')
-    True
-
-    >>> is_method('classmethod')
-    True
-
-    >>> is_method('staticmethod')
-    True
-
-    >>> is_method('')
-    False
-
-    """
-    return function_type in _METHOD_TYPES
 
 
 def get_all_arguments(node: AnyFunctionDefAndLambda) -> list[arg]:

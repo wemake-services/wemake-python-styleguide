@@ -104,18 +104,24 @@ regular_assigns = """
 """
 
 
-@pytest.mark.parametrize('code', [
-    class_attribute,
-    class_annotated_attribute,
-    class_attribute_runtime,
-    class_attribute_annotated,
-    class_attribute_logic,
-])
-@pytest.mark.parametrize('field_name', [
-    'field1',
-    '_field1',
-    '__field1',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        class_attribute,
+        class_annotated_attribute,
+        class_attribute_runtime,
+        class_attribute_annotated,
+        class_attribute_logic,
+    ],
+)
+@pytest.mark.parametrize(
+    'field_name',
+    [
+        'field1',
+        '_field1',
+        '__field1',
+    ],
+)
 def test_incorrect_fields(
     assert_errors,
     assert_error_text,
@@ -134,25 +140,31 @@ def test_incorrect_fields(
     assert_error_text(visitor, field_name)
 
 
-@pytest.mark.parametrize('code', [
-    class_attribute,
-    class_annotated_attribute,
-    class_attribute_runtime,
-    class_attribute_annotated,
-    class_annotation,
-    class_complex_attribute,
-    class_complex_attribute_annotated,
-    class_attribute_usage,
-    class_attribute_logic,
-    class_attribute_regular_assign,
-    class_attribute_with_other,
-    regular_assigns,
-])
-@pytest.mark.parametrize(('field1', 'field2'), [
+@pytest.mark.parametrize(
+    'code',
+    [
+        class_attribute,
+        class_annotated_attribute,
+        class_attribute_runtime,
+        class_attribute_annotated,
+        class_annotation,
+        class_complex_attribute,
+        class_complex_attribute_annotated,
+        class_attribute_usage,
+        class_attribute_logic,
+        class_attribute_regular_assign,
+        class_attribute_with_other,
+        regular_assigns,
+    ],
+)
+@pytest.mark.parametrize(
     ('field1', 'field2'),
-    ('_field1', '_field2'),
-    ('__field1', '__field2'),
-])
+    [
+        ('field1', 'field2'),
+        ('_field1', '_field2'),
+        ('__field1', '__field2'),
+    ],
+)
 def test_correct_fields(
     assert_errors,
     parse_ast_tree,
@@ -170,19 +182,25 @@ def test_correct_fields(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    class_annotation,
-    class_attribute_usage,
-    class_attribute_regular_assign,
-    regular_assigns,
-    class_complex_attribute,
-    class_complex_attribute_annotated,
-])
-@pytest.mark.parametrize(('field1', 'field2'), [
-    ('field1', 'field1'),
-    ('_field1', '_field1'),
-    ('__field1', '__field1'),
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        class_annotation,
+        class_attribute_usage,
+        class_attribute_regular_assign,
+        regular_assigns,
+        class_complex_attribute,
+        class_complex_attribute_annotated,
+    ],
+)
+@pytest.mark.parametrize(
+    ('field1', 'field2'),
+    [
+        ('field1', 'field1'),
+        ('_field1', '_field1'),
+        ('__field1', '__field1'),
+    ],
+)
 def test_safe_fields(
     assert_errors,
     parse_ast_tree,

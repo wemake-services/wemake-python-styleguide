@@ -36,18 +36,24 @@ def function():
 """
 
 
-@pytest.mark.parametrize('code', [
-    expression,
-    assignment,
-    annotation,
-    try_finally,
-    function_return,
-])
-@pytest.mark.parametrize('call', [
-    'type()',
-    'type(some)',
-    'type("TypeName", (object,), dict())',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        expression,
+        assignment,
+        annotation,
+        try_finally,
+        function_return,
+    ],
+)
+@pytest.mark.parametrize(
+    'call',
+    [
+        'type()',
+        'type(some)',
+        'type("TypeName", (object,), dict())',
+    ],
+)
 def test_type_regular_usage(
     assert_errors,
     parse_ast_tree,
@@ -65,25 +71,30 @@ def test_type_regular_usage(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    simple_compare,
-    is_compare,
-    nested_compare,
-    triple_compare,
-
-    expression,
-    assignment,
-    annotation,
-    try_finally,
-    function_return,
-])
-@pytest.mark.parametrize('call', [
-    'close()',
-    'type.attr',
-    'type.attr()',
-    'obj.type()',
-    'Type[T]',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        simple_compare,
+        is_compare,
+        nested_compare,
+        triple_compare,
+        expression,
+        assignment,
+        annotation,
+        try_finally,
+        function_return,
+    ],
+)
+@pytest.mark.parametrize(
+    'call',
+    [
+        'close()',
+        'type.attr',
+        'type.attr()',
+        'obj.type()',
+        'Type[T]',
+    ],
+)
 def test_not_type_functions(
     assert_errors,
     parse_ast_tree,
@@ -101,17 +112,23 @@ def test_not_type_functions(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    simple_compare,
-    is_compare,
-    nested_compare,
-    triple_compare,
-])
-@pytest.mark.parametrize('call', [
-    'type()',
-    'type(some)',
-    'type("TypeName", (object,), dict())',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        simple_compare,
+        is_compare,
+        nested_compare,
+        triple_compare,
+    ],
+)
+@pytest.mark.parametrize(
+    'call',
+    [
+        'type()',
+        'type(some)',
+        'type("TypeName", (object,), dict())',
+    ],
+)
 def test_type_with_compare(
     assert_errors,
     parse_ast_tree,

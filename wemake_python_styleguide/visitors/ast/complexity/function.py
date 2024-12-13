@@ -41,9 +41,7 @@ _NodeTypeHandler: TypeAlias = Mapping[
 class _ComplexityCounter:
     """Helper class to encapsulate logic from the visitor."""
 
-    _not_contain_locals: ClassVar[AnyNodes] = (
-        ast.comprehension,
-    )
+    _not_contain_locals: ClassVar[AnyNodes] = (ast.comprehension,)
 
     def __init__(self) -> None:
         self.metrics = ComplexityMetrics()
@@ -108,10 +106,13 @@ class _ComplexityCounter:
 
 
 @final
-@alias('visit_any_function', (
-    'visit_AsyncFunctionDef',
-    'visit_FunctionDef',
-))
+@alias(
+    'visit_any_function',
+    (
+        'visit_AsyncFunctionDef',
+        'visit_FunctionDef',
+    ),
+)
 class FunctionComplexityVisitor(BaseNodeVisitor):
     """
     This class checks for complexity inside functions.
@@ -205,10 +206,13 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_any_function', (
-    'visit_AsyncFunctionDef',
-    'visit_FunctionDef',
-))
+@alias(
+    'visit_any_function',
+    (
+        'visit_AsyncFunctionDef',
+        'visit_FunctionDef',
+    ),
+)
 class CognitiveComplexityVisitor(BaseNodeVisitor):
     """Used to count cognitive score and average module complexity."""
 

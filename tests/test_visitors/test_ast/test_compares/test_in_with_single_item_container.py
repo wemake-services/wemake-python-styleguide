@@ -9,17 +9,20 @@ from wemake_python_styleguide.visitors.ast.compares import (
 )
 
 
-@pytest.mark.parametrize('code', [
-    'a in {1}',
-    'a in {1: "a"}',
-    'a in [1]',
-    'a in (1,)',
-    'a in "a"',
-    'a in b"a"',
-    'a in {*a}',
-    'a in {**a}',
-    'a in (x := [1])',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'a in {1}',
+        'a in {1: "a"}',
+        'a in [1]',
+        'a in (1,)',
+        'a in "a"',
+        'a in b"a"',
+        'a in {*a}',
+        'a in {**a}',
+        'a in (x := [1])',
+    ],
+)
 def test_single_item_container(
     assert_errors,
     parse_ast_tree,
@@ -40,16 +43,19 @@ def test_single_item_container(
     )
 
 
-@pytest.mark.parametrize('code', [
-    'a in {1, 2}',
-    'a in {1: "a", 2: "b"}',
-    'a in [1, 2]',
-    'a in (1, 2)',
-    'a in "ab"',
-    'a in {1, *a}',
-    'a in {1: "a", **a}',
-    'a in (x := {1, 2, 3})',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'a in {1, 2}',
+        'a in {1: "a", 2: "b"}',
+        'a in [1, 2]',
+        'a in (1, 2)',
+        'a in "ab"',
+        'a in {1, *a}',
+        'a in {1: "a", **a}',
+        'a in (x := {1, 2, 3})',
+    ],
+)
 def test_multi_item_container(
     assert_errors,
     parse_ast_tree,

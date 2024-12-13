@@ -96,13 +96,16 @@ def container():
 """
 
 
-@pytest.mark.parametrize('code', [
-    wrong_iteration_enumerate_tuple_placeholder,
-    wrong_iteration_with_receiver_placeholder,
-    wrong_iteration_set_comprehension,
-    wrong_iteration_dict_comprehension,
-    wrong_iteration_generator_expression,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_iteration_enumerate_tuple_placeholder,
+        wrong_iteration_with_receiver_placeholder,
+        wrong_iteration_set_comprehension,
+        wrong_iteration_dict_comprehension,
+        wrong_iteration_generator_expression,
+    ],
+)
 def test_wrong_usage_of_enumerate(
     assert_errors,
     parse_ast_tree,
@@ -119,9 +122,12 @@ def test_wrong_usage_of_enumerate(
     assert_errors(visitor, [RedundantEnumerateViolation])
 
 
-@pytest.mark.parametrize('code', [
-    wrong_iteration_multiple_generators,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_iteration_multiple_generators,
+    ],
+)
 def test_wrong_multiple_generators(
     assert_errors,
     parse_ast_tree,
@@ -135,20 +141,26 @@ def test_wrong_multiple_generators(
     visitor = RedundantEnumerateVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [
-        RedundantEnumerateViolation,
-        RedundantEnumerateViolation,
-    ])
+    assert_errors(
+        visitor,
+        [
+            RedundantEnumerateViolation,
+            RedundantEnumerateViolation,
+        ],
+    )
 
 
-@pytest.mark.parametrize('code', [
-    correct_iteration_without_enumerate,
-    correct_iteration_without_enumerate_raw,
-    correct_iteration_anonymous_func,
-    correct_iteration_enumerate_receiver,
-    correct_iteration_enumerate_tuple,
-    correct_iteration_enumerate_comprehension,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_iteration_without_enumerate,
+        correct_iteration_without_enumerate_raw,
+        correct_iteration_anonymous_func,
+        correct_iteration_enumerate_receiver,
+        correct_iteration_enumerate_tuple,
+        correct_iteration_enumerate_comprehension,
+    ],
+)
 def test_correct_usage_of_enumerate(
     assert_errors,
     parse_ast_tree,

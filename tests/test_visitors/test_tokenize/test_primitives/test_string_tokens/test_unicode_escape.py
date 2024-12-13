@@ -8,12 +8,15 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
 )
 
 
-@pytest.mark.parametrize('code', [
-    r"b'\ua'",
-    r"b'\u1'",
-    r"b'\Ua'",
-    r"b'\N{GREEK SMALL LETTER ALPHA}'",
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        r"b'\ua'",
+        r"b'\u1'",
+        r"b'\Ua'",
+        r"b'\N{GREEK SMALL LETTER ALPHA}'",
+    ],
+)
 def test_wrong_unicode_escape(
     parse_tokens,
     assert_errors,
@@ -29,12 +32,15 @@ def test_wrong_unicode_escape(
     assert_errors(visitor, [WrongUnicodeEscapeViolation])
 
 
-@pytest.mark.parametrize('code', [
-    r"'\ua'",
-    r"'\u1'",
-    r"'\Ua'",
-    r"'\N{GREEK SMALL LETTER ALPHA}'",
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        r"'\ua'",
+        r"'\u1'",
+        r"'\Ua'",
+        r"'\N{GREEK SMALL LETTER ALPHA}'",
+    ],
+)
 def test_correct_unicode_escape(
     parse_tokens,
     assert_errors,

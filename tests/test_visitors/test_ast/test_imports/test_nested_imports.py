@@ -56,14 +56,17 @@ if typing.TYPE_CHECKING:
 """
 
 
-@pytest.mark.parametrize('code', [
-    nested_function_import,
-    nested_function_from_import,
-    nested_method_import,
-    nested_method_from_import,
-    nested_conditional_import,
-    nested_try_import,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        nested_function_import,
+        nested_function_from_import,
+        nested_method_import,
+        nested_method_from_import,
+        nested_conditional_import,
+        nested_try_import,
+    ],
+)
 def test_nested_import(assert_errors, parse_ast_tree, code, default_options):
     """Testing that nested imports are restricted."""
     tree = parse_ast_tree(code)
@@ -74,13 +77,16 @@ def test_nested_import(assert_errors, parse_ast_tree, code, default_options):
     assert_errors(visitor, [NestedImportViolation])
 
 
-@pytest.mark.parametrize('code', [
-    regular_import,
-    regular_from_import,
-    regular_nested_import,
-    type_checking_import,
-    typing_type_checking_import,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        regular_import,
+        regular_from_import,
+        regular_nested_import,
+        type_checking_import,
+        typing_type_checking_import,
+    ],
+)
 def test_regular_imports(assert_errors, parse_ast_tree, code, default_options):
     """
     Testing imports that are allowed.

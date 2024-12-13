@@ -15,10 +15,13 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 
 @final
-@alias('visit_any_function', (
-    'visit_FunctionDef',
-    'visit_AsyncFunctionDef',
-))
+@alias(
+    'visit_any_function',
+    (
+        'visit_FunctionDef',
+        'visit_AsyncFunctionDef',
+    ),
+)
 class AnnotationComplexityVisitor(BaseNodeVisitor):
     """Ensures that annotations are used correctly."""
 
@@ -33,7 +36,8 @@ class AnnotationComplexityVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_function_annotations_complexity(
-        self, node: AnyFunctionDef,
+        self,
+        node: AnyFunctionDef,
     ) -> None:
         annotations = [
             arg.annotation

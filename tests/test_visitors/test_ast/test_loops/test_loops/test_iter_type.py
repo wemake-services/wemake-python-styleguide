@@ -46,31 +46,37 @@ def function():
 """
 
 
-@pytest.mark.parametrize('code', [
-    '()',
-    '[]',
-    '[1, 2, 3]',
-    '[elem for elem in call()]',
-    '{{}}',
-    '{"key": value}',
-    '{"key": value for value in call()}',
-    '{1, 2, 3}',
-    '{set_item for set_item in call()}',
-    '(elem for elem in call())',
-    '1',
-    '-1.2',
-    'None',
-    'False',
-    '-False',
-    '(True)',
-])
-@pytest.mark.parametrize('template', [
-    for_loop_template,
-    list_comprehension_template,
-    dict_comprehension_template,
-    set_comprehension_template,
-    generator_expression_template,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        '()',
+        '[]',
+        '[1, 2, 3]',
+        '[elem for elem in call()]',
+        '{{}}',
+        '{"key": value}',
+        '{"key": value for value in call()}',
+        '{1, 2, 3}',
+        '{set_item for set_item in call()}',
+        '(elem for elem in call())',
+        '1',
+        '-1.2',
+        'None',
+        'False',
+        '-False',
+        '(True)',
+    ],
+)
+@pytest.mark.parametrize(
+    'template',
+    [
+        for_loop_template,
+        list_comprehension_template,
+        dict_comprehension_template,
+        set_comprehension_template,
+        generator_expression_template,
+    ],
+)
 def test_iter_incorrect_type(
     assert_errors,
     parse_ast_tree,
@@ -88,21 +94,27 @@ def test_iter_incorrect_type(
     assert_errors(visitor, [WrongLoopIterTypeViolation])
 
 
-@pytest.mark.parametrize('code', [
-    '(1, 2, -3)',
-    'name',
-    'call()',
-    'set()',
-    'some.attr',
-    'some.method()',
-])
-@pytest.mark.parametrize('template', [
-    for_loop_template,
-    list_comprehension_template,
-    dict_comprehension_template,
-    set_comprehension_template,
-    generator_expression_template,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        '(1, 2, -3)',
+        'name',
+        'call()',
+        'set()',
+        'some.attr',
+        'some.method()',
+    ],
+)
+@pytest.mark.parametrize(
+    'template',
+    [
+        for_loop_template,
+        list_comprehension_template,
+        dict_comprehension_template,
+        set_comprehension_template,
+        generator_expression_template,
+    ],
+)
 def test_iter_correct_type(
     assert_errors,
     parse_ast_tree,

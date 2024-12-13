@@ -33,18 +33,21 @@ long_only_equals = 'x == y == z == c == extra'
 long_only_non_equals = 'x != y != z != c != extra'
 
 
-@pytest.mark.parametrize('code', [
-    empty_module,
-    one_compare,
-    two_compare,
-    one_equals,
-    two_equals,
-    only_equals,
-    one_non_equals,
-    two_non_equals,
-    only_non_equals,
-    mixed_short_equals,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        empty_module,
+        one_compare,
+        two_compare,
+        one_equals,
+        two_equals,
+        only_equals,
+        one_non_equals,
+        two_non_equals,
+        only_non_equals,
+        mixed_short_equals,
+    ],
+)
 def test_module_compare_counts_normal(
     assert_errors,
     parse_ast_tree,
@@ -60,14 +63,17 @@ def test_module_compare_counts_normal(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    three_similar_compare,
-    three_compare,
-    three_close_compare,
-    mixed_long_equals,
-    long_only_equals,
-    long_only_non_equals,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        three_similar_compare,
+        three_compare,
+        three_close_compare,
+        mixed_long_equals,
+        long_only_equals,
+        long_only_non_equals,
+    ],
+)
 def test_module_compare_counts_violation(
     assert_errors,
     parse_ast_tree,

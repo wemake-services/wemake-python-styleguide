@@ -26,12 +26,15 @@ class Test(type):
 
 
 @pytest.mark.parametrize('argument', SPECIAL_ARGUMENT_NAMES_WHITELIST)
-@pytest.mark.parametrize('code', [
-    function_first_argument,
-    method_first_argument,
-    classmethod_first_argument,
-    meta_first_argument,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_first_argument,
+        method_first_argument,
+        classmethod_first_argument,
+        meta_first_argument,
+    ],
+)
 def test_correct_first_arguments(
     assert_errors,
     parse_ast_tree,

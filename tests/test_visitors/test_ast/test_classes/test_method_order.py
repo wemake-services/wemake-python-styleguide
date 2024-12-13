@@ -64,10 +64,13 @@ class Template:
 """
 
 
-@pytest.mark.parametrize('code', [
-    correct_method_order,
-    nested_functions,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_method_order,
+        nested_functions,
+    ],
+)
 def test_correct_method_order(
     assert_errors,
     parse_ast_tree,
@@ -84,42 +87,41 @@ def test_correct_method_order(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize(('first', 'second'), [
-    ('__new__', '__init_subclass__'),
-    ('__init__', '__new__'),
-    ('__call__', '__init__'),
-    ('__call__', '__new__'),
-    ('__await__', '__call__'),
-
-    ('public', '__init_subclass__'),
-    ('public', '__new__'),
-    ('public', '__init__'),
-    ('public', '__call__'),
-    ('public', '__await__'),
-
-    ('__magic__', '__init_subclass__'),
-    ('__magic__', '__new__'),
-    ('__magic__', '__init__'),
-    ('__magic__', '__call__'),
-    ('__magic__', '__await__'),
-
-    ('_protected', '__init_subclass__'),
-    ('_protected', '__new__'),
-    ('_protected', '__init__'),
-    ('_protected', '__call__'),
-    ('_protected', '__await__'),
-    ('_protected', 'public'),
-    ('_protected', '__magic__'),
-
-    ('__private', '__init_subclass__'),
-    ('__private', '__new__'),
-    ('__private', '__init__'),
-    ('__private', '__call__'),
-    ('__private', '__await__'),
-    ('__private', 'public'),
-    ('__private', '__magic__'),
-    ('__private', '_protected'),
-])
+@pytest.mark.parametrize(
+    ('first', 'second'),
+    [
+        ('__new__', '__init_subclass__'),
+        ('__init__', '__new__'),
+        ('__call__', '__init__'),
+        ('__call__', '__new__'),
+        ('__await__', '__call__'),
+        ('public', '__init_subclass__'),
+        ('public', '__new__'),
+        ('public', '__init__'),
+        ('public', '__call__'),
+        ('public', '__await__'),
+        ('__magic__', '__init_subclass__'),
+        ('__magic__', '__new__'),
+        ('__magic__', '__init__'),
+        ('__magic__', '__call__'),
+        ('__magic__', '__await__'),
+        ('_protected', '__init_subclass__'),
+        ('_protected', '__new__'),
+        ('_protected', '__init__'),
+        ('_protected', '__call__'),
+        ('_protected', '__await__'),
+        ('_protected', 'public'),
+        ('_protected', '__magic__'),
+        ('__private', '__init_subclass__'),
+        ('__private', '__new__'),
+        ('__private', '__init__'),
+        ('__private', '__call__'),
+        ('__private', '__await__'),
+        ('__private', 'public'),
+        ('__private', '__magic__'),
+        ('__private', '_protected'),
+    ],
+)
 def test_incorrect_method_order(
     assert_errors,
     parse_ast_tree,
