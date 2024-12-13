@@ -5,6 +5,7 @@ from typing import ClassVar, DefaultDict, TypeAlias, Union
 
 from typing_extensions import final
 
+from wemake_python_styleguide.logic.arguments import special_args
 from wemake_python_styleguide.logic.complexity import cognitive
 from wemake_python_styleguide.logic.complexity.functions import (
     ComplexityMetrics,
@@ -42,23 +43,16 @@ class _ComplexityCounter:
     """Helper class to encapsulate logic from the visitor."""
 
     _not_contain_locals: ClassVar[AnyNodes] = (ast.comprehension,)
-    _staticmethod_names: ClassVar[frozenset[str]] = frozenset(('staticmethod',))
 
     def __init__(self) -> None:
         self.metrics = ComplexityMetrics()
 
-    def check_arguments_count_any(self, node: AnyFunctionDefAndLambda) -> None:
+    def check_arguments_count(self, node: AnyFunctionDefAndLambda) -> None:
         """Checks the number of the arguments in a function."""
-        self.metrics.arguments[node] = len(functions.get_all_arguments(node))
-
-    def check_arguments_count(self, node: AnyFunctionDef) -> None:
-        """Checks the number of the arguments in a function."""
-        self.check_arguments_count_any(node)
-        parent = get_parent(node)
-        if isinstance(parent, ast.ClassDef) and not self._check_staticmethod(
-            node
-        ):
-            self.metrics.arguments[node] -= 1
+        all_args = functions.get_all_arguments(node)
+        self.metrics.arguments[node] = len(
+            special_args.clean_special_argument(node, all_args),
+        )
 
     def check_function_complexity(self, node: AnyFunctionDef) -> None:
         """
@@ -114,16 +108,6 @@ class _ComplexityCounter:
             if isinstance(sub_node, types):
                 counter[node] += 1
 
-    def _check_staticmethod(
-        self,
-        node: AnyFunctionDef,
-    ) -> bool:
-        for decorator in node.decorator_list:
-            decorator_name = getattr(decorator, 'id', None)
-            if decorator_name in self._staticmethod_names:
-                return True
-        return False
-
 
 @final
 @alias(
@@ -159,7 +143,7 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
 
     def visit_Lambda(self, node: ast.Lambda) -> None:
         """Checks lambda function's internal complexity."""
-        self._counter.check_arguments_count_any(node)
+        self._counter.check_arguments_count(node)
         self.generic_visit(node)
 
     def _check_function_internals(self) -> None:
