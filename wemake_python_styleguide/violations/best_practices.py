@@ -724,7 +724,7 @@ class DuplicateExceptionViolation(ASTViolation):
        Supports `try/except*` as well.
     .. versionchanged:: 1.0.0
        No longer produced, kept here for historic reasons.
-       This is covered with ``ruff`` formatter. See ``B025``.
+       This is covered with ``ruff`` linter. See ``B025``.
 
     """
 
@@ -809,7 +809,7 @@ class NonUniqueItemsInHashViolation(ASTViolation):
     .. versionchanged:: 0.12.0
     .. versionchanged:: 1.0.0
        No longer produced, kept here for historic reasons.
-       This is covered with ``ruff`` formatter. See ``B033``.
+       This is covered with ``ruff`` linter. See ``B033``.
 
     """
 
@@ -906,7 +906,7 @@ class TryExceptMultipleReturnPathViolation(ASTViolation):
        Supports `try/except*` as well.
     .. versionchanged:: 1.0.0
        No longer produced, kept here for historic reasons.
-       This is covered with ``ruff`` formatter. See ``B012`` and ``SIM107``.
+       This is covered with ``ruff`` linter. See ``B012`` and ``SIM107``.
 
     """
 
@@ -1034,7 +1034,7 @@ class RaiseNotImplementedViolation(ASTViolation):
     .. versionadded:: 0.1.0
     .. versionchanged:: 1.0.0
        No longer produced, kept here for historic reasons.
-       This is covered with ``ruff`` formatter. See ``F901``.
+       This is covered with ``ruff`` linter. See ``F901``.
 
     See also:
         https://stackoverflow.com/a/44575926/4842742
@@ -1072,7 +1072,7 @@ class BaseExceptionViolation(ASTViolation):
     .. versionadded:: 0.3.0
     .. versionchanged:: 1.0.0
        No longer produced, kept here for historic reasons.
-       This is covered with ``ruff`` formatter. See ``BLE001``.
+       This is covered with ``ruff`` linter. See ``BLE001``.
 
     See also:
         https://docs.python.org/3/library/exceptions.html#exception-hierarchy
@@ -2128,7 +2128,7 @@ class LoopControlFinallyViolation(ASTViolation):
     .. versionadded:: 0.14.0
     .. versionchanged:: 1.0.0
        No longer produced, kept here for historic reasons.
-       This is covered with ``ruff`` formatter. See ``B012``.
+       This is covered with ``ruff`` linter. See ``B012``.
 
     """
 
@@ -2204,7 +2204,7 @@ class BaseExceptionRaiseViolation(ASTViolation):
     .. versionadded:: 0.15.0
     .. versionchanged:: 1.0.0
        No longer produced, kept here for historic reasons.
-       This is covered with ``ruff`` formatter. See ``TRY003``.
+       This is covered with ``ruff`` linter. See ``TRY003``.
 
     """
 
