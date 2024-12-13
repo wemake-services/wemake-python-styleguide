@@ -93,6 +93,7 @@ build-backend = "poetry.core.masonry.api"
 
 
 [tool.ruff]
+fix = true
 target-version = 'py310'
 line-length = 80
 extend-exclude = [
@@ -126,33 +127,34 @@ ignore = [
   "RUF100",  # conflicts with flake8
 ]
 select = [
+  "A",    # flake8-builtins
   "B",    # flake8-bugbear
   "C4",   # flake8-comprehensions
   "C90",  # maccabe
   "COM",  # flake8-commas
   "D",    # pydocstyle
   "E",    # pycodestyle
+  "ERA",  # flake8-eradicate
   "F",    # pyflakes
   "FLY",  # pyflint
+  "FURB", # refurb
   "G",    # flake8-string-format
   "I",    # isort
   "ISC",  # flake8-implicit-str-concat
-  "Q",    # flake8-quotes
-  "T100", # flake8-debugger
-  "TRY",  # tryceratops
+  "LOG",  # flake8-logging
   "PERF", # perflint
+  "PT",   # flake8-pytest-style
+  "Q",    # flake8-quotes
   "RET",  # flake8-return
   "RUF",  # ruff
-  "FURB", # refurb
   "S",    # flake8-bandit
   "SIM",  # flake8-simpify
+  "T100", # flake8-debugger
+  "T100", # flake8-debugger
+  "TRY",  # tryceratops
   "UP",   # pyupgrade
   "W",    # pycodestyle
-
-  "T100", # flake8-debugger
-  "LOG",  # flake8-logging
-  "PT",   # flake8-pytest-style
-  "ERA",  # flake8-eradicate
+  "YTT",  # flake8-2020
 ]
 
 [tool.ruff.lint.mccabe]

@@ -1,4 +1,4 @@
-from ast import AST, Ellipsis, Expr, Raise, Str
+from ast import AST, Ellipsis, Expr, Raise, Str  # noqa: A004
 
 from wemake_python_styleguide.types import AnyFunctionDef
 

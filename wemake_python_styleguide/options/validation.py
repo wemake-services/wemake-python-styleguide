@@ -6,8 +6,8 @@ from wemake_python_styleguide.types import ConfigurationOptions
 
 
 def _min_max(
-    min: int | None = None,  # noqa: WPS125
-    max: int | None = None,  # noqa: WPS125
+    min: int | None = None,  # noqa: A002
+    max: int | None = None,  # noqa: A002
 ):
     """Validator to check that value is in bounds."""
 
