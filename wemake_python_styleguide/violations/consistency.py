@@ -1430,7 +1430,7 @@ class WalrusViolation(ASTViolation):
 
     """
 
-    error_template = 'Found walrus operator outside comprehension'
+    error_template = 'Found walrus operator outside a comprehension'
     code = 332
 
 

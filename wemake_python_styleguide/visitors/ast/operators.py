@@ -236,23 +236,15 @@ class WalrusVisitor(base.BaseNodeVisitor):
         node: ast.NamedExpr,
     ) -> None:
         """Disallows walrus ``:=`` operator outside comprehensions."""
-        closest = self._check_walrus_in_comprehesion(node)
-        if closest is not None:
-            return
-
-        self.add_violation(
-            consistency.WalrusViolation(
-                node,
-                text='Found walrus operator outside of comprehension',
-            ),
-        )
+        self._check_walrus_in_comprehesion(node)
         self.generic_visit(node)
 
     def _check_walrus_in_comprehesion(
         self,
         node: ast.NamedExpr,
-    ):
-        return walk.get_closest_parent(
-            node,
-            self._available_parents,
-        )
+    ) -> None:
+        is_comprension = walk.get_closest_parent(node, self._available_parents)
+        if is_comprension:
+            return
+
+        self.add_violation(consistency.WalrusViolation(node))
