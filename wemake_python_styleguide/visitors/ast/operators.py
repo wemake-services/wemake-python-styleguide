@@ -191,7 +191,7 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
 
     def _check_list_multiply(self, node: ast.BinOp) -> None:
         is_list_multiply = isinstance(node.op, ast.Mult) and isinstance(
-            node.left, self._list_nodes
+            node.left, self._list_nodes,
         )
         if is_list_multiply:
             self.add_violation(ListMultiplyViolation(node.left))
@@ -235,10 +235,7 @@ class WalrusVisitor(base.BaseNodeVisitor):
         node: ast.NamedExpr,
     ) -> None:
         """Disallows walrus ``:=`` operator outside comprehensions."""
-        closest = walk.get_closest_parent(
-            node,
-            self._available_parents,
-        )
+        closest = self._check_walrus_in_comprehesion(node)
         if closest is not None:
             return
 
@@ -249,3 +246,12 @@ class WalrusVisitor(base.BaseNodeVisitor):
             ),
         )
         self.generic_visit(node)
+
+    def _check_walrus_in_comprehesion(
+        self,
+        node: ast.NamedExpr,
+    ):
+        return walk.get_closest_parent(
+            node,
+            self._available_parents,
+        )
