@@ -11,4 +11,4 @@ import sys as sys  # noqa: WPS113
 def __getattr__():  # noqa: WPS413
     # See:
     # https://github.com/wemake-services/wemake-python-styleguide/issues/461
-    anti_z428 = 1
+    pass
