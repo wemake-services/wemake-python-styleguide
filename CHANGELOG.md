@@ -79,6 +79,9 @@ Semantic versioning in our case means:
 
 ### Bugfixes
 
+- Fixes `WPS217` to allow simple calls in `f` strings, #3150
+- Fixes `WPS217` not to raise on empty `f` strings,
+  because `ruff check` handles that now for us
 - Fixes `OverusedStringViolation` not to include `'...'` string
 - Removes `astor` package in favour of `ast.unparse`
 - Fixes `IterableUnpackingViolation` with generic types and `TypeVarTuple`

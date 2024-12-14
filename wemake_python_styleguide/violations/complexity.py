@@ -1209,9 +1209,7 @@ class TooComplexFormattedStringViolation(ASTViolation):
     - the value of a variable
     - the value of a collection through lookup with a variable, number, or
       string as the key
-    - the return value of a procedure call without arguments
-
-    Related to :class:`~FormattedStringViolation`.
+    - the return value of a function / method call with 3 arguments maximum
 
     Reasoning:
         Complex ``f`` strings are often difficult to understand,
@@ -1227,9 +1225,11 @@ class TooComplexFormattedStringViolation(ASTViolation):
 
         # Correct:
         f'smth {user.get_full_name()}'
+        f'smth {math_func(1, 2, 3)}'
 
         # Wrong:
-        f'{reverse("url-name")}?{"&".join("user="+uid for uid in user_ids)}'
+        f'{reverse("url-name")}?{"&".join("user=" + uid for uid in user_ids)}'
+        f'smth {math_func(1, 2, 3, 4)}'
 
     .. versionadded:: 0.15.0
 

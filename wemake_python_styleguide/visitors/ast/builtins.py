@@ -110,30 +110,16 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_complex_formatted_string(self, node: ast.JoinedStr) -> None:
-        """
-        Whitelists all simple uses of f strings.
-
-        Checks if list, dict, function call with no parameters or variable.
-        """
-        has_formatted_components = any(
-            isinstance(comp, ast.FormattedValue) for comp in node.values
-        )
-        if not has_formatted_components:
-            self.add_violation(  # If no formatted values
-                complexity.TooComplexFormattedStringViolation(node),
-            )
-            return
-
+        """Allows all simple uses of `f` strings."""
         for string_component in node.values:
             if isinstance(string_component, ast.FormattedValue):
                 # Test if possible chaining is invalid
-                format_value = string_component.value
-                if self._is_valid_formatted_value(format_value):
+                if self._is_valid_formatted_value(string_component.value):
                     continue
                 self.add_violation(  # Everything else is too complex:
                     complexity.TooComplexFormattedStringViolation(node),
                 )
-                break
+                return
 
     def _is_valid_formatted_value(self, format_value: ast.AST) -> bool:
         if isinstance(
@@ -146,7 +132,7 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
     def _is_valid_final_value(self, format_value: ast.AST) -> bool:
         # Variable lookup is okay and a single attribute is okay
         if isinstance(format_value, ast.Name | ast.Attribute) or (
-            isinstance(format_value, ast.Call) and not format_value.args
+            isinstance(format_value, ast.Call) and len(format_value.args) <= 3
         ):
             return True
         # Named lookup, Index lookup & Dict key is okay
