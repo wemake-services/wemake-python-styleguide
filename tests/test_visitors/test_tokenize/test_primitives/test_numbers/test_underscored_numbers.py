@@ -38,6 +38,10 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
         '1_234.157_001e-1123',
         '1_234.1_57001e-1_123',
         '12_34.157_001e-1123',
+        '1e1_1',
+        '1_1e1',
+        '3_3j',
+        '0.5_6j',
     ],
 )
 def test_underscored_number(
@@ -81,6 +85,10 @@ def test_underscored_number(
         '0o10_101',
         '0x100_234',
         '1_234.157_001e-1_123',
+        '3_333j',
+        '3j',
+        '0.5_655j',
+        '0.555j',
     ],
 )
 def test_correct_number(
@@ -98,3 +106,23 @@ def test_correct_number(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+def test_numbers_do_not_error(
+    parse_tokens,
+    default_options,
+    primitives_usages,
+    mode,
+):
+    """Ensures that correct numbers are fine."""
+    try:
+        from test.test_grammar import VALID_UNDERSCORE_LITERALS  # noqa: WPS433
+    except Exception:
+        pytest.skip('VALID_UNDERSCORE_LITERALS did not import')
+    for number in VALID_UNDERSCORE_LITERALS:
+        file_tokens = parse_tokens(mode(primitives_usages.format(number)))
+
+        visitor = WrongNumberTokenVisitor(
+            default_options, file_tokens=file_tokens
+        )
+        visitor.run()

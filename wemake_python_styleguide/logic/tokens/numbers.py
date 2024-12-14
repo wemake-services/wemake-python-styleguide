@@ -2,10 +2,10 @@ import re
 from typing import Final
 
 _UNDERSCORE_PATTERN: Final = re.compile(r'^\d{1,3}(_\d{3})*$')
-_SPLIT_PATTERN: Final = re.compile(r'\.|e\+|e-')
+_SPLIT_PATTERN: Final = re.compile(r'\.|e[\+-]?')
 
 
-def has_correct_underscores(number: str) -> str:
+def has_correct_underscores(number: str) -> bool:
     """
     Formats a number as a string separated by thousands with support floating.
 
@@ -28,6 +28,7 @@ def has_correct_underscores(number: str) -> str:
         .removeprefix('0b')
         .removeprefix('0x')
         .removeprefix('0o')
+        .removesuffix('j')
     )
     return all(
         _UNDERSCORE_PATTERN.match(number_part)
