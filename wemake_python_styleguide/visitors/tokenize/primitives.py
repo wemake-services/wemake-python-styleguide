@@ -8,8 +8,10 @@ from typing_extensions import final
 from wemake_python_styleguide.logic.tokens.docstrings import (
     get_docstring_tokens,
 )
+from wemake_python_styleguide.logic.tokens.numbers import (
+    has_correct_underscores,
+)
 from wemake_python_styleguide.logic.tokens.strings import (
-    format_with_thousands,
     has_triple_string_quotes,
     split_prefixes,
 )
@@ -55,9 +57,7 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
         self._check_float_zeros(token)
 
     def _check_underscored_number(self, token: tokenize.TokenInfo) -> None:
-        if '_' in token.string and token.string != format_with_thousands(
-            number_str=token.string,
-        ):
+        if '_' in token.string and not has_correct_underscores(token.string):
             self.add_violation(
                 consistency.UnderscoredNumberViolation(
                     token,
