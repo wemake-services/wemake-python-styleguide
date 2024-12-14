@@ -230,7 +230,7 @@ addopts = [
   "--cov=wemake_python_styleguide",
   "--cov-branch",
   "--cov-report=term-missing:skip-covered",
-  "--cov-report=html:skip-covered",
+  "--cov-report=html",
   "--cov-report=xml",
   "--cov-fail-under=100",
 ]
