@@ -82,6 +82,7 @@ Semantic versioning in our case means:
 - Fixes `OverusedStringViolation` not to include `'...'` string
 - Removes `astor` package in favour of `ast.unparse`
 - Fixes `IterableUnpackingViolation` with generic types and `TypeVarTuple`
+- Fixes `WPS469` detecting incorrect names of raised exceptions, #3109
 - Fixes unnormalized pathes in formatter output
 
 ### Misc
