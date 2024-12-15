@@ -83,6 +83,7 @@ Semantic versioning in our case means:
 - Removes `astor` package in favour of `ast.unparse`
 - Fixes `WPS210` to not count nested local variables in nested scopes #3108
 - Fixes `IterableUnpackingViolation` with generic types and `TypeVarTuple`
+- Fixes `WPS469` detecting incorrect names of raised exceptions, #3109
 - Fixes unnormalized pathes in formatter output
 - Fixes `WPS434` to allow reassignment in a form of `x = [y, *x]`
 

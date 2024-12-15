@@ -54,12 +54,23 @@ except TypeError as ex:
     raise NameError('New Exception') from ex
 """
 
+regression3109 = """
+def func():
+    try:
+        return pydantic_model.model_validate(
+            raw_data,
+        )
+    except pydantic.ValidationError as exc:
+        raise exceptions.HHResumeParsingValidationError(str(exc)) from None
+"""
+
 
 @pytest.mark.parametrize(
     'code',
     [
         raise_from_other_exception_outside_try,
         raise_from_other_exception_inside_try,
+        regression3109,
     ],
 )
 def test_raise_from_other_exception(
