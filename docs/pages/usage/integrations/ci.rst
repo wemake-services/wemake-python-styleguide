@@ -55,8 +55,8 @@ For example:
   .. code:: yaml
 
      repos:
-      - repo: https://github.com/luminoso/wemake-python-styleguide
-        rev: 0.18.0
+      - repo: https://github.com/wemake-services/wemake-python-styleguide
+        rev: ...
         hooks:
-         - id: flake8
+         - id: wemake-python-styleguide
 

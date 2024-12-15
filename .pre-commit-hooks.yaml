@@ -1,7 +1,10 @@
-- id: flake8
-  name: flake8
-  description: '`flake8` is a command-line utility for enforcing style consistency across Python projects.'
+- id: wemake-python-styleguide
+  name: wemake-python-styleguide
+  description: "Run 'wemake-python-styleguide' for Python linting"
   entry: flake8
   language: python
-  types: [ python ]
+  types_or: [python, pyi]
+  args: []
   require_serial: true
+  additional_dependencies: []
+  minimum_pre_commit_version: "2.9.2"
