@@ -2,7 +2,7 @@ import ast
 import itertools
 from collections import Counter
 from collections.abc import Iterable
-from typing import cast
+from typing import ClassVar, cast
 
 from typing_extensions import final
 
@@ -18,6 +18,7 @@ from wemake_python_styleguide.types import (
     AnyAssign,
     AnyAssignWithWalrus,
     AnyFor,
+    AnyNodes,
 )
 from wemake_python_styleguide.violations import best_practices, naming
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -71,6 +72,8 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
 class WrongVariableAssignmentVisitor(BaseNodeVisitor):
     """Finds wrong variables assignments."""
 
+    _reassignment_ignores: ClassVar[AnyNodes] = (ast.Starred,)
+
     def visit_any_assign(self, node: AnyAssign) -> None:
         """Used to check assignment variable to itself."""
         names = list(name_nodes.flat_variable_names([node]))
@@ -90,7 +93,10 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
         if self._is_reassignment_edge_case(node):
             return
 
-        var_values = name_nodes.get_variables_from_node(node.value)
+        var_values = name_nodes.get_variables_from_node(
+            node.value,
+            exclude=self._reassignment_ignores,
+        )
         if len(names) <= 1 < len(var_values):
             # It means that we have something like `x = (y, z)`
             # or even `x = (x, y)`, which is also fine. See #1807
