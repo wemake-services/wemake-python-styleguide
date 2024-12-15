@@ -94,7 +94,7 @@ def test_type_params_configured_count(
     """Testing that settings can reflect the change."""
     tree = parse_ast_tree(code)
 
-    option_values = options(max_type_params=8)
+    option_values = options(max_type_params=1)
     visitor = TypeParamsVisitor(option_values, tree=tree)
     visitor.run()
 
