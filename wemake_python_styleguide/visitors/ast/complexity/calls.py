@@ -1,6 +1,5 @@
 import ast
 from itertools import takewhile
-from typing import Set
 
 from typing_extensions import final
 
@@ -18,7 +17,7 @@ class CallChainsVisitor(BaseNodeVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Keeps visited calls to not visit them again."""
         super().__init__(*args, **kwargs)
-        self._visited_calls: Set[ast.Call] = set()
+        self._visited_calls: set[ast.Call] = set()
 
     def visit_Call(self, node: ast.Call) -> None:
         """Checks number of function calls."""
@@ -32,9 +31,12 @@ class CallChainsVisitor(BaseNodeVisitor):
         if node in self._visited_calls:
             return
 
-        consecutive_calls = set(takewhile(
-            self._is_call, parts(node),
-        ))
+        consecutive_calls = set(
+            takewhile(
+                self._is_call,
+                parts(node),
+            ),
+        )
 
         self._visited_calls.update(consecutive_calls)
         num_of_calls = len(consecutive_calls)

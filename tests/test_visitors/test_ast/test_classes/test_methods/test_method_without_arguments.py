@@ -6,7 +6,7 @@ from wemake_python_styleguide.violations.oop import (
 from wemake_python_styleguide.visitors.ast.classes import WrongMethodVisitor
 
 method_inside_class = """
-class Example(object):
+class Example:
     def some_name({0}): ...
 """
 
@@ -45,19 +45,25 @@ def test_function_without_arguments(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    method_inside_class,
-    regular_function,
-])
-@pytest.mark.parametrize('arguments', [
-    'arg1',
-    'arg1=True',
-    '*args',
-    '**kwargs',
-    '*, kwonly',
-    '*, kwonly=True',
-    'arg1, arg2',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        method_inside_class,
+        regular_function,
+    ],
+)
+@pytest.mark.parametrize(
+    'arguments',
+    [
+        'arg1',
+        'arg1=True',
+        '*args',
+        '**kwargs',
+        '*, kwonly',
+        '*, kwonly=True',
+        'arg1, arg2',
+    ],
+)
 def test_with_arguments(
     assert_errors,
     parse_ast_tree,

@@ -20,7 +20,7 @@ def check_global():
 global_in_method = """
 some = 0
 
-class Test(object):
+class Test:
     def run(self):
         global some
 """
@@ -34,7 +34,7 @@ def check_nonlocal():
 """
 
 nonlocal_in_method = """
-class Test(object):
+class Test:
     def check_nonlocal(self):
         some = 10
 
@@ -43,11 +43,14 @@ class Test(object):
 """
 
 
-@pytest.mark.parametrize('code', [
-    global_in_module,
-    global_in_function,
-    global_in_method,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        global_in_module,
+        global_in_function,
+        global_in_method,
+    ],
+)
 def test_global_keywords(
     assert_errors,
     assert_error_text,
@@ -66,10 +69,13 @@ def test_global_keywords(
     assert_error_text(visitor, 'global')
 
 
-@pytest.mark.parametrize('code', [
-    nonlocal_in_function,
-    nonlocal_in_method,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        nonlocal_in_function,
+        nonlocal_in_method,
+    ],
+)
 def test_nonlocal_keywords(
     assert_errors,
     assert_error_text,

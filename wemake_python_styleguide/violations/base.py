@@ -35,14 +35,14 @@ Conventions
 Deprecating a violation
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-When you want to mark some violation as deprecated,
-then assign ``deprecated`` boolean flag to it:
+When you want to mark some violation as deprecated and disabled,
+then assign ``disabled_since`` with a string version number to it:
 
 .. code:: python
 
   @final
   class SomeViolation(ASTViolation):
-      deprecated = True
+      disabled_since = '1.0.0'
 
 Reference
 ~~~~~~~~~
@@ -53,16 +53,13 @@ import abc
 import ast
 import enum
 import tokenize
-from typing import Callable, ClassVar, Optional, Set, Tuple, Union
+from collections.abc import Callable
+from typing import ClassVar, TypeAlias
 
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
 #: General type for all possible nodes where error happens.
-ErrorNode: TypeAlias = Union[
-    ast.AST,
-    tokenize.TokenInfo,
-    None,
-]
+ErrorNode: TypeAlias = ast.AST | tokenize.TokenInfo | None
 
 #: We use this type to define helper classes with callbacks to add violations.
 ErrorCallback: TypeAlias = Callable[['BaseViolation'], None]
@@ -76,8 +73,7 @@ class ViolationPostfixes(enum.Enum):
     less_than = ' < {0}'
 
 
-# TODO: remove `noqa` after a new release (0.17.0):
-class BaseViolation(object, metaclass=abc.ABCMeta):  # noqa: WPS338
+class BaseViolation(abc.ABC):
     """
     Abstract base class for all style violations.
 
@@ -89,16 +85,14 @@ class BaseViolation(object, metaclass=abc.ABCMeta):  # noqa: WPS338
     Attributes:
         error_template: message that will be shown to user after formatting.
         code: unique violation number. Used to identify the violation.
-        previous_codes: just a documentation thing to track changes in time.
-        deprecated: indicates that this violation will be removed soon.
+        disabled_since: indicates that this violation is disabled.
         postfix_template: indicates message that we show at the very end.
 
     """
 
     error_template: ClassVar[str]
     code: ClassVar[int]
-    previous_codes: ClassVar[Set[int]]
-    deprecated: ClassVar[bool] = False
+    disabled_since: ClassVar[str | None] = None
 
     # assigned in __init_subclass__
     full_code: ClassVar[str]
@@ -117,7 +111,7 @@ class BaseViolation(object, metaclass=abc.ABCMeta):  # noqa: WPS338
             return
         if cls.__doc__ is None:
             raise TypeError(
-                'Please include a docstring documenting {0}'.format(cls),
+                f'Please include a docstring documenting {cls}',
             )
         # this is mostly done for docs to display the full code,
         # allowing its indexing in search engines and better discoverability
@@ -125,14 +119,15 @@ class BaseViolation(object, metaclass=abc.ABCMeta):  # noqa: WPS338
         cls.summary = cls.__doc__.lstrip().split('\n', maxsplit=1)[0]
         # this hack adds full code to summary table in the docs
         cls.__doc__ = _prepend_skipping_whitespaces(
-            '{0} — '.format(cls.full_code), cls.__doc__,
+            f'{cls.full_code} — ',
+            cls.__doc__,
         )
 
     def __init__(
         self,
         node: ErrorNode,
-        text: Optional[str] = None,
-        baseline: Optional[int] = None,
+        text: str | None = None,
+        baseline: int | None = None,
     ) -> None:
         """
         Creates a new instance of an abstract violation.
@@ -154,14 +149,13 @@ class BaseViolation(object, metaclass=abc.ABCMeta):  # noqa: WPS338
 
         Conditionally formats the ``error_template`` if it is required.
         """
-        return '{0} {1}{2}'.format(
-            self.full_code,
-            self.error_template.format(self._text),
-            self._postfix_information(),
-        )
+        formatted = self.error_template.format(self._text)
+        if self._text and formatted == self.error_template:  # pragma: no cover
+            raise ValueError('Error message was not formatted', self)
+        return f'{self.full_code} {formatted}{self._postfix_information()}'
 
     @final
-    def node_items(self) -> Tuple[int, int, str]:
+    def node_items(self) -> tuple[int, int, str]:
         """Returns tuple to match ``flake8`` API format."""
         return (*self._location(), self.message())
 
@@ -174,7 +168,8 @@ class BaseViolation(object, metaclass=abc.ABCMeta):  # noqa: WPS338
         Adds violation letter to the numbers.
         Also ensures that codes like ``3`` will be represented as ``WPS003``.
         """
-        return 'WPS{0}'.format(str(cls.code).zfill(3))
+        code_part = str(cls.code).zfill(3)
+        return f'WPS{code_part}'
 
     @final
     def _postfix_information(self) -> str:
@@ -188,17 +183,17 @@ class BaseViolation(object, metaclass=abc.ABCMeta):  # noqa: WPS338
         return self.postfix_template.value.format(self._baseline)
 
     @abc.abstractmethod
-    def _location(self) -> Tuple[int, int]:
+    def _location(self) -> tuple[int, int]:
         """Base method for showing error location."""
 
 
 class _BaseASTViolation(BaseViolation):
     """Used as a based type for all ``ast`` violations."""
 
-    _node: Optional[ast.AST]
+    _node: ast.AST | None
 
     @final
-    def _location(self) -> Tuple[int, int]:
+    def _location(self) -> tuple[int, int]:
         line_number = getattr(self._node, 'lineno', 0)
         column_offset = getattr(self._node, 'col_offset', 0)
         return line_number, column_offset
@@ -220,9 +215,9 @@ class MaybeASTViolation(_BaseASTViolation):
 
     def __init__(
         self,
-        node: Optional[ast.AST] = None,
-        text: Optional[str] = None,
-        baseline: Optional[int] = None,
+        node: ast.AST | None = None,
+        text: str | None = None,
+        baseline: int | None = None,
     ) -> None:
         """Creates new instance of module violation without explicit node."""
         super().__init__(node, text=text, baseline=baseline)
@@ -234,7 +229,7 @@ class TokenizeViolation(BaseViolation):
     _node: tokenize.TokenInfo
 
     @final
-    def _location(self) -> Tuple[int, int]:
+    def _location(self) -> tuple[int, int]:
         return self._node.start
 
 
@@ -246,14 +241,14 @@ class SimpleViolation(BaseViolation):
     def __init__(
         self,
         node=None,
-        text: Optional[str] = None,
-        baseline: Optional[int] = None,
+        text: str | None = None,
+        baseline: int | None = None,
     ) -> None:
         """Creates new instance of simple style violation."""
         super().__init__(node, text=text, baseline=baseline)
 
     @final
-    def _location(self) -> Tuple[int, int]:
+    def _location(self) -> tuple[int, int]:
         """
         Return violation location inside the file.
 
@@ -265,5 +260,5 @@ class SimpleViolation(BaseViolation):
 
 def _prepend_skipping_whitespaces(prefix: str, text: str) -> str:
     lstripped_text = text.lstrip()
-    leading_whitespaces = text[:len(text) - len(lstripped_text)]
+    leading_whitespaces = text[: len(text) - len(lstripped_text)]
     return leading_whitespaces + prefix + lstripped_text

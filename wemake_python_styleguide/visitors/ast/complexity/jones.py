@@ -10,7 +10,6 @@ Original project is licensed under MIT.
 import ast
 from collections import defaultdict
 from statistics import median
-from typing import DefaultDict, List, Set
 
 from typing_extensions import final
 
@@ -45,8 +44,8 @@ class JonesComplexityVisitor(BaseNodeVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Initializes line number counter."""
         super().__init__(*args, **kwargs)
-        self._lines: DefaultDict[int, List[ast.AST]] = defaultdict(list)
-        self._to_ignore: Set[ast.AST] = set()
+        self._lines: defaultdict[int, list[ast.AST]] = defaultdict(list)
+        self._to_ignore: set[ast.AST] = set()
 
     def visit(self, node: ast.AST) -> None:
         """
@@ -57,9 +56,12 @@ class JonesComplexityVisitor(BaseNodeVisitor):
         line_number = getattr(node, 'lineno', None)
         is_ignored = isinstance(node, self._ignored_nodes)
 
-        if line_number is not None and not is_ignored:
-            if not self._maybe_ignore_child(node):
-                self._lines[line_number].append(node)
+        if (
+            line_number is not None
+            and not is_ignored
+            and not self._maybe_ignore_child(node)
+        ):
+            self._lines[line_number].append(node)
 
         self.generic_visit(node)
 

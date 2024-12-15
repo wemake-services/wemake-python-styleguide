@@ -123,7 +123,7 @@ def function():
 # Classes:
 
 class_template = """
-class Test(object):
+class Test:
     {0}
     {1}
 """
@@ -160,33 +160,30 @@ async def container():
 """
 
 
-@pytest.mark.parametrize('code', [
-    module_template,
-
-    if_template,
-    if_elif_template,
-    if_else_template,
-
-    for_template,
-    for_else_template,
-    while_template,
-    while_else_template,
-
-    try_template,
-    try_except_template,
-    try_else_template,
-    try_finally_template,
-
-    with_template,
-
-    function_template,
-    class_template,
-
-    async_function_template,
-    async_with_template,
-    async_for_template,
-    async_for_else_template,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_template,
+        if_template,
+        if_elif_template,
+        if_else_template,
+        for_template,
+        for_else_template,
+        while_template,
+        while_else_template,
+        try_template,
+        try_except_template,
+        try_else_template,
+        try_finally_template,
+        with_template,
+        function_template,
+        class_template,
+        async_function_template,
+        async_with_template,
+        async_for_template,
+        async_for_else_template,
+    ],
+)
 def test_regular_lines(
     assert_errors,
     parse_ast_tree,
@@ -202,33 +199,30 @@ def test_regular_lines(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    module_template,
-
-    if_template,
-    if_elif_template,
-    if_else_template,
-
-    for_template,
-    for_else_template,
-    while_template,
-    while_else_template,
-
-    try_template,
-    try_except_template,
-    try_else_template,
-    try_finally_template,
-
-    with_template,
-
-    function_template,
-    class_template,
-
-    async_function_template,
-    async_with_template,
-    async_for_template,
-    async_for_else_template,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_template,
+        if_template,
+        if_elif_template,
+        if_else_template,
+        for_template,
+        for_else_template,
+        while_template,
+        while_else_template,
+        try_template,
+        try_except_template,
+        try_else_template,
+        try_finally_template,
+        with_template,
+        function_template,
+        class_template,
+        async_function_template,
+        async_with_template,
+        async_for_template,
+        async_for_else_template,
+    ],
+)
 def test_unreachable_code_raise(
     assert_errors,
     parse_ast_tree,
@@ -244,10 +238,13 @@ def test_unreachable_code_raise(
     assert_errors(visitor, [UnreachableCodeViolation])
 
 
-@pytest.mark.parametrize('code', [
-    function_template,
-    async_function_template,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_template,
+        async_function_template,
+    ],
+)
 def test_unreachable_code_return(
     assert_errors,
     parse_ast_tree,
@@ -263,16 +260,21 @@ def test_unreachable_code_return(
     assert_errors(visitor, [UnreachableCodeViolation])
 
 
-@pytest.mark.parametrize('code', [
-    for_template,
-    while_template,
-
-    async_for_template,
-])
-@pytest.mark.parametrize('keyword', [
-    'break',
-    'continue',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        for_template,
+        while_template,
+        async_for_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'keyword',
+    [
+        'break',
+        'continue',
+    ],
+)
 def test_unreachable_code_in_loops(
     assert_errors,
     parse_ast_tree,

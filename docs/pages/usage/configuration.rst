@@ -10,23 +10,12 @@ that you are familiar with ``flake8``
 By default we encourage everyone to use ``setup.cfg`` to store all
 the configuration to all ``python`` projects.
 
-.. rubric:: Shareable configurations
-
-If you need to make sure that all projects share the same configuration
-you might be interested in :ref:`nitpick` tool to lint your config.
-We highly recommend to use ``nitpick`` together
-with ``wemake-python-styleguide``.
-
 .. rubric:: Configuring
 
 .. automodule:: wemake_python_styleguide.options.config
    :no-members:
 
 .. rubric:: Plugins
-
-.. note::
-
-  Remember to check the configuration with :ref:`nitpick`.
 
 It is also important to configure different plugins that we ship with
 this module.
@@ -72,17 +61,6 @@ following settings:
 
 Our `darglint.toml <https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/darglint.toml>`_
 file is available with the core settings for ``isort``.
-
-.. warning::
-
-  There is a `known issue <https://github.com/terrencepreilly/darglint/issues/186>`_
-  with ``darglint``'s performance when using ``google`` or ``numpy``
-  documentation style, if you face long running times during the linting
-  process you can use the ``sphinx`` style by setting
-  ``docstring-style = sphinx`` in the ``["setup.cfg".flake8]`` section in a
-  nitpick configuration file. Otherwise, you can run ``darglint`` manually and
-  through CIs only, disabling it in flake8 args with
-  ``--darglint-ignore-regex='.*'``.
 
 .. rubric:: Ignoring violations
 

@@ -16,19 +16,19 @@ magic_method_called = 'some.{0}()'
 magic_method_called_params = 'some.{0}(12, 33)'
 
 magic_container_attribute = """
-class Test(object):
+class Test:
     def __init__(self):
         self.container.{0} = 1
 """
 
 magic_container_method = """
-class Test(object):
+class Test:
     def __init__(self):
         self.container.{0}()
 """
 
 magic_callable_attribute = """
-class Test(object):
+class Test:
     def __init__(self):
         some().{0}()
 """
@@ -39,87 +39,87 @@ magic_name_definition = '{0} = 1'
 magic_name_attr_definition = '{0}.some = 1'
 
 magic_self_attribute = """
-class Test(object):
+class Test:
     def __init__(self):
         self.{0} = 1
 """
 
 magic_self_method = """
-class Test(object):
+class Test:
     def __init__(self):
         self.{0}()
 """
 
 magic_cls_attribute = """
-class Test(object):
+class Test:
     @classmethod
     def method(cls):
         cls.{0} = 'some'
 """
 
 magic_cls_method = """
-class Test(object):
+class Test:
     @classmethod
     def method(cls):
         cls.{0}()
 """
 
 magic_attribute_definition = """
-class Test(object):
+class Test:
     {0} = 1
 """
 
 magic_method_definition = """
-class Test(object):
+class Test:
     def {0}(self):
         ...
 """
 
 magic_classmethod_definition = """
-class Test(object):
+class Test:
     @classmethod
     def {0}(cls):
         ...
 """
 
 magic_super_attribute = """
-class Test(object):
+class Test:
     def __init__(self):
         super().{0} = 1
 """
 
 magic_super_method = """
-class Test(object):
+class Test:
     def __init__(self):
         super().{0}()
 """
 
 magic_super_cls_attribute = """
-class Test(object):
+class Test:
     @classmethod
     def method(cls):
         super().{0} = 'some'
 """
 
 magic_super_cls_method = """
-class Test(object):
+class Test:
     @classmethod
     def method(cls):
         super().{0}()
 """
 
 magic_wrapper_method = """
-class Test(object):
+class Test:
 
     def {0}(cls):
         self.conn.{0}()
 """
 
 magic_wrapper_method_inside_stacked_cls = """
-class StackedTest(object):
+class StackedTest:
 
     def something(cls):
-        class Test(object):
+        class Test:
             def {0}(cls):
                 self.conn.{0}()
 
@@ -127,26 +127,32 @@ class StackedTest(object):
 """
 
 
-@pytest.mark.parametrize('attribute', [
-    '__truediv__',
-    '__radd__',
-    '__iter__',
-    '__int__',
-    '__float__',
-    '__repr__',
-    '__coerce__',
-    '__str__',
-    '__next__',
-])
-@pytest.mark.parametrize('code', [
-    magic_attribute_assigned,
-    magic_attribute_accessed,
-    magic_method_called,
-    magic_method_called_params,
-    magic_container_attribute,
-    magic_container_method,
-    magic_callable_attribute,
-])
+@pytest.mark.parametrize(
+    'attribute',
+    [
+        '__truediv__',
+        '__radd__',
+        '__iter__',
+        '__int__',
+        '__float__',
+        '__repr__',
+        '__coerce__',
+        '__str__',
+        '__next__',
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        magic_attribute_assigned,
+        magic_attribute_accessed,
+        magic_method_called,
+        magic_method_called_params,
+        magic_container_attribute,
+        magic_container_method,
+        magic_callable_attribute,
+    ],
+)
 def test_disallowed_magic_attribute_is_restricted(
     assert_errors,
     assert_error_text,
@@ -166,30 +172,36 @@ def test_disallowed_magic_attribute_is_restricted(
     assert_error_text(visitor, attribute)
 
 
-@pytest.mark.parametrize('attribute', [
-    '__magic__',
-    '__str__',
-    '__float__',
-    '__members__',
-    '__path__',
-    '__foo__',
-    '__unknown__',
-])
-@pytest.mark.parametrize('code', [
-    magic_name_definition,
-    magic_name_attr_definition,
-    magic_self_attribute,
-    magic_self_method,
-    magic_cls_attribute,
-    magic_cls_method,
-    magic_attribute_definition,
-    magic_method_definition,
-    magic_classmethod_definition,
-    magic_super_attribute,
-    magic_super_method,
-    magic_super_cls_attribute,
-    magic_super_cls_method,
-])
+@pytest.mark.parametrize(
+    'attribute',
+    [
+        '__magic__',
+        '__str__',
+        '__float__',
+        '__members__',
+        '__path__',
+        '__foo__',
+        '__unknown__',
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        magic_name_definition,
+        magic_name_attr_definition,
+        magic_self_attribute,
+        magic_self_method,
+        magic_cls_attribute,
+        magic_cls_method,
+        magic_attribute_definition,
+        magic_method_definition,
+        magic_classmethod_definition,
+        magic_super_attribute,
+        magic_super_method,
+        magic_super_cls_attribute,
+        magic_super_cls_method,
+    ],
+)
 def test_magic_attribute_correct_contexts(
     assert_errors,
     parse_ast_tree,
@@ -207,43 +219,49 @@ def test_magic_attribute_correct_contexts(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('attribute', [
-    'regular',
-    '__doc__',
-    '__name__',
-    '__class__',
-    '__qualname__',
-    '__subclasses__',
-    '__mro__',
-    '__version__',
-    '__path__',
-    '__bases__',
-    '__members__',
-    '__unknown__',
-    '__foo__',
-])
-@pytest.mark.parametrize('code', [
-    magic_attribute_assigned,
-    magic_attribute_accessed,
-    magic_method_called,
-    magic_method_called_params,
-    magic_container_attribute,
-    magic_container_method,
-    magic_callable_attribute,
-    magic_name_definition,
-    magic_name_attr_definition,
-    magic_self_attribute,
-    magic_self_method,
-    magic_cls_attribute,
-    magic_cls_method,
-    magic_attribute_definition,
-    magic_method_definition,
-    magic_classmethod_definition,
-    magic_super_attribute,
-    magic_super_method,
-    magic_super_cls_attribute,
-    magic_super_cls_method,
-])
+@pytest.mark.parametrize(
+    'attribute',
+    [
+        'regular',
+        '__doc__',
+        '__name__',
+        '__class__',
+        '__qualname__',
+        '__subclasses__',
+        '__mro__',
+        '__version__',
+        '__path__',
+        '__bases__',
+        '__members__',
+        '__unknown__',
+        '__foo__',
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        magic_attribute_assigned,
+        magic_attribute_accessed,
+        magic_method_called,
+        magic_method_called_params,
+        magic_container_attribute,
+        magic_container_method,
+        magic_callable_attribute,
+        magic_name_definition,
+        magic_name_attr_definition,
+        magic_self_attribute,
+        magic_self_method,
+        magic_cls_attribute,
+        magic_cls_method,
+        magic_attribute_definition,
+        magic_method_definition,
+        magic_classmethod_definition,
+        magic_super_attribute,
+        magic_super_method,
+        magic_super_cls_attribute,
+        magic_super_cls_method,
+    ],
+)
 def test_other_magic_attributes_allowed(
     assert_errors,
     parse_ast_tree,
@@ -267,10 +285,13 @@ def test_other_magic_attributes_allowed(
 
 
 @pytest.mark.parametrize('attribute', ALL_MAGIC_METHODS)
-@pytest.mark.parametrize('code', [
-    magic_wrapper_method,
-    magic_wrapper_method_inside_stacked_cls,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        magic_wrapper_method,
+        magic_wrapper_method_inside_stacked_cls,
+    ],
+)
 def test_happy_little_magic_wrapper_methods(
     assert_errors,
     parse_ast_tree,

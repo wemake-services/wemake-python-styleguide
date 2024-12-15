@@ -18,11 +18,11 @@ class_with_decorators = """
 @first
 @second(param=4)
 @third()
-class Test(object): ...
+class Test: ...
 """
 
 method_with_decorators = """
-class Test(object):
+class Test:
     @first
     @second(param=4)
     @third()
@@ -30,7 +30,7 @@ class Test(object):
 """
 
 classmethod_with_decorators = """
-class Test(object):
+class Test:
     @second(param=4)
     @third()
     @classmethod
@@ -38,12 +38,15 @@ class Test(object):
 """
 
 
-@pytest.mark.parametrize('code', [
-    function_with_decorators,
-    class_with_decorators,
-    method_with_decorators,
-    classmethod_with_decorators,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_with_decorators,
+        class_with_decorators,
+        method_with_decorators,
+        classmethod_with_decorators,
+    ],
+)
 def test_decorators_normal(
     assert_errors,
     parse_ast_tree,
@@ -60,12 +63,15 @@ def test_decorators_normal(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    function_with_decorators,
-    class_with_decorators,
-    method_with_decorators,
-    classmethod_with_decorators,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_with_decorators,
+        class_with_decorators,
+        method_with_decorators,
+        classmethod_with_decorators,
+    ],
+)
 def test_decorators_incorrect(
     assert_errors,
     assert_error_text,

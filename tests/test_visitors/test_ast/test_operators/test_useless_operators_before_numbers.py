@@ -37,21 +37,24 @@ usages = (
 
 
 @pytest.mark.parametrize('code', usages)
-@pytest.mark.parametrize('number', [
-    '+5',
-    '-+5',
-    '+-5',
-    '~+5',
-    '+~5',
-    '--5',
-    '---5',
-    '~~5',
-    '~~~5',
-    '(not not 5)',
-    '(not not None)',
-    '(not not not True)',
-    '(not not False)',
-])
+@pytest.mark.parametrize(
+    'number',
+    [
+        '+5',
+        '-+5',
+        '+-5',
+        '~+5',
+        '+~5',
+        '--5',
+        '---5',
+        '~~5',
+        '~~~5',
+        '(not not 5)',
+        '(not not None)',
+        '(not not not True)',
+        '(not not False)',
+    ],
+)
 def test_plus_sign_before_numbers(
     assert_errors,
     parse_ast_tree,
@@ -70,13 +73,16 @@ def test_plus_sign_before_numbers(
 
 
 @pytest.mark.parametrize('code', usages)
-@pytest.mark.parametrize('number', [
-    '5',
-    '-5',
-    '~5',
-    '(not 5)',
-    '(not True)',
-])
+@pytest.mark.parametrize(
+    'number',
+    [
+        '5',
+        '-5',
+        '~5',
+        '(not 5)',
+        '(not True)',
+    ],
+)
 def test_plus_sign_before_numbers_valid(
     assert_errors,
     parse_ast_tree,

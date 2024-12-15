@@ -1,53 +1,56 @@
 import ast
 import types
 from collections import defaultdict
-from typing import DefaultDict, Mapping, Set, Tuple, Type, Union
+from collections.abc import Mapping
+from typing import Final
 
 import attr
-from typing_extensions import Final, final
+from typing_extensions import final
 
 from wemake_python_styleguide.logic import source
 
 
 @final
 @attr.dataclass(frozen=True, slots=True)
-class _Bounds(object):
+class _Bounds:
     """Represents the bounds we use to calculate the similar compare nodes."""
 
-    lower_bound: Set[ast.Compare] = attr.ib(factory=set)
-    upper_bound: Set[ast.Compare] = attr.ib(factory=set)
+    lower_bound: set[ast.Compare] = attr.ib(factory=set)
+    upper_bound: set[ast.Compare] = attr.ib(factory=set)
 
 
-_MultipleCompareOperators = Tuple[Type[ast.cmpop], ...]
+_MultipleCompareOperators = tuple[type[ast.cmpop], ...]
 
 #: Type to represent `SIMILAR_OPERATORS` constant.
 _ComparesMapping = Mapping[
-    Type[ast.cmpop],
+    type[ast.cmpop],
     _MultipleCompareOperators,
 ]
 
 #: Used to track the operator usages in `a > b and b >c` compares.
-_OperatorUsages = DefaultDict[str, _Bounds]
+_OperatorUsages = defaultdict[str, _Bounds]
 
 #: Constant to define similar operators.
-SIMILAR_OPERATORS: Final[_ComparesMapping] = types.MappingProxyType({
-    ast.Gt: (ast.Gt, ast.GtE),
-    ast.GtE: (ast.Gt, ast.GtE),
-    ast.Lt: (ast.Lt, ast.LtE),
-    ast.LtE: (ast.Lt, ast.LtE),
-})
+SIMILAR_OPERATORS: Final[_ComparesMapping] = types.MappingProxyType(
+    {
+        ast.Gt: (ast.Gt, ast.GtE),
+        ast.GtE: (ast.Gt, ast.GtE),
+        ast.Lt: (ast.Lt, ast.LtE),
+        ast.LtE: (ast.Lt, ast.LtE),
+    },
+)
 
 
 def get_similar_operators(
     operator: ast.cmpop,
-) -> Union[Type[ast.cmpop], _MultipleCompareOperators]:
+) -> type[ast.cmpop] | _MultipleCompareOperators:
     """Returns similar operators types for the given operator."""
     operator_type = operator.__class__
     return SIMILAR_OPERATORS.get(operator_type, operator_type)
 
 
 @final
-class CompareBounds(object):
+class CompareBounds:
     """
     Calculates bounds of expressions like ``a > b and b > c`` in python.
 
@@ -87,7 +90,11 @@ class CompareBounds(object):
         comparison_node: ast.Compare,
     ) -> None:
         left_operand = comparison_node.left
-        comparators = zip(comparison_node.ops, comparison_node.comparators)
+        comparators = zip(
+            comparison_node.ops,
+            comparison_node.comparators,
+            strict=False,
+        )
 
         for operator, right_operand in comparators:
             for operand in (left_operand, right_operand):
@@ -107,9 +114,9 @@ class CompareBounds(object):
         is_left: bool,
     ) -> None:
         key_name = None
-        if isinstance(operator, (ast.Lt, ast.LtE)):
+        if isinstance(operator, ast.Lt | ast.LtE):
             key_name = 'lower_bound' if is_left else 'upper_bound'
-        elif isinstance(operator, (ast.Gt, ast.GtE)):
+        elif isinstance(operator, ast.Gt | ast.GtE):
             key_name = 'upper_bound' if is_left else 'lower_bound'
 
         if key_name:

@@ -87,19 +87,22 @@ from first import other
 """
 
 
-@pytest.mark.parametrize('code', [
-    correct_single_import,
-    correct_single_import_from,
-    correct_no_colliding_imports,
-    correct_similar_imports,
-    correct_no_colliding_imports_from,
-    correct_import_with_alias,
-    correct_import_from_with_alias,
-    correct_multiple_imports_from,
-    correct_imports_from,
-    correct_import_name_module_part,
-    correct_relative_import,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_single_import,
+        correct_single_import_from,
+        correct_no_colliding_imports,
+        correct_similar_imports,
+        correct_no_colliding_imports_from,
+        correct_import_with_alias,
+        correct_import_from_with_alias,
+        correct_multiple_imports_from,
+        correct_imports_from,
+        correct_import_name_module_part,
+        correct_relative_import,
+    ],
+)
 def test_correct_imports(
     assert_errors,
     parse_ast_tree,
@@ -115,14 +118,17 @@ def test_correct_imports(
     assert_errors(visitor, [], ignored_types=LocalFolderImportViolation)
 
 
-@pytest.mark.parametrize('code', [
-    colliding_same_line,
-    colliding_import_name_module,
-    colliding_multiple_imports,
-    colliding_multiple_imports_from,
-    colliding_relative_import1,
-    colliding_relative_import2,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        colliding_same_line,
+        colliding_import_name_module,
+        colliding_multiple_imports,
+        colliding_multiple_imports_from,
+        colliding_relative_import1,
+        colliding_relative_import2,
+    ],
+)
 def test_imports_collision(
     assert_errors,
     parse_ast_tree,

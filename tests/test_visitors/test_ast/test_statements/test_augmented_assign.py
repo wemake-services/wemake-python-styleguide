@@ -7,24 +7,29 @@ from wemake_python_styleguide.visitors.ast.statements import (
     AssignmentPatternsVisitor,
 )
 
-OPERATIONS = frozenset((
-    '+',
-    '-',
-    '*',
-    '/',
-    '%',
-    '**',
-    '&',
-    '|',
-    '^',
-    '>>',
-    '<<',
-))
+OPERATIONS = frozenset(
+    (
+        '+',
+        '-',
+        '*',
+        '/',
+        '%',
+        '**',
+        '&',
+        '|',
+        '^',
+        '>>',
+        '<<',
+    ),
+)
 
 
-@pytest.mark.parametrize('code', [
-    'a {0}= b',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'a {0}= b',
+    ],
+)
 @pytest.mark.parametrize('operation', OPERATIONS)
 def test_augmented_assign(
     assert_errors,
@@ -43,9 +48,12 @@ def test_augmented_assign(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    'a = a {0} b',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'a = a {0} b',
+    ],
+)
 @pytest.mark.parametrize('operation', OPERATIONS)
 def test_no_augmented_assign(
     assert_errors,
@@ -64,13 +72,16 @@ def test_no_augmented_assign(
     assert_errors(visitor, [AugmentedAssignPatternViolation])
 
 
-@pytest.mark.parametrize('code', [
-    'a = a {0} b + c',
-    'a = b {0} a + c',
-    'a = (a {0} b) - c',
-    'a = b {0} c',
-    'a = b {0} a',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'a = a {0} b + c',
+        'a = b {0} a + c',
+        'a = (a {0} b) - c',
+        'a = b {0} c',
+        'a = b {0} a',
+    ],
+)
 @pytest.mark.parametrize('operation', OPERATIONS)
 def test_no_checkable_assign(
     assert_errors,

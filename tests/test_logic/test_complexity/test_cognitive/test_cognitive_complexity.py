@@ -18,7 +18,7 @@ def f(a):
 """
 
 complexity1_3 = """
-class Test(object):
+class Test:
     def f(self, a):
         return a * self.f(a - 1)  # +1 for recursion
 """
@@ -138,34 +138,33 @@ def enhance(tree):
         for child in ast.iter_child_nodes(statement): # +2
             if isinstance(child, ast.If):  # +3
                 if child in statement.orelse:  # +4
-                    setattr(statement, 'wps_if_chained', True)
-                    setattr(child, 'wps_if_chain', statement)
+                    setattr(statement, '_if_chained', True)
+                    setattr(child, '_if_chain', statement)
     return tree
 """
 
 
-@pytest.mark.parametrize(('code', 'complexity'), [
-    (complexity1_1, 1),
-    (complexity1_2, 1),
-    (complexity1_3, 1),
-
-    (complexity2_1, 2),
-    (complexity2_2, 2),
-
-    (complexity3_1, 3),
-    (complexity3_2, 3),
-    (complexity3_3, 3),
-
-    (complexity4_1, 4),
-    (complexity4_2, 4),
-    (complexity4_3, 4),
-
-    (complexity5_1, 5),
-    (complexity6_1, 6),
-    (complexity9_1, 9),
-    (complexity10_1, 10),
-    (complexity14_1, 14),
-])
+@pytest.mark.parametrize(
+    ('code', 'complexity'),
+    [
+        (complexity1_1, 1),
+        (complexity1_2, 1),
+        (complexity1_3, 1),
+        (complexity2_1, 2),
+        (complexity2_2, 2),
+        (complexity3_1, 3),
+        (complexity3_2, 3),
+        (complexity3_3, 3),
+        (complexity4_1, 4),
+        (complexity4_2, 4),
+        (complexity4_3, 4),
+        (complexity5_1, 5),
+        (complexity6_1, 6),
+        (complexity9_1, 9),
+        (complexity10_1, 10),
+        (complexity14_1, 14),
+    ],
+)
 def test_cognitive_complexity(
     get_code_snippet_complexity,
     mode,

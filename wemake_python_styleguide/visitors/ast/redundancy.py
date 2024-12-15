@@ -1,5 +1,4 @@
 import ast
-from typing import Union
 
 from typing_extensions import final
 
@@ -12,16 +11,22 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 
 @final
-@decorators.alias('visit_any_for', (
-    'visit_For',
-    'visit_AsyncFor',
-))
-@decorators.alias('visit_any_comprehension', (
-    'visit_ListComp',
-    'visit_DictComp',
-    'visit_SetComp',
-    'visit_GeneratorExp',
-))
+@decorators.alias(
+    'visit_any_for',
+    (
+        'visit_For',
+        'visit_AsyncFor',
+    ),
+)
+@decorators.alias(
+    'visit_any_comprehension',
+    (
+        'visit_ListComp',
+        'visit_DictComp',
+        'visit_SetComp',
+        'visit_GeneratorExp',
+    ),
+)
 class RedundantEnumerateVisitor(BaseNodeVisitor):
     """Responsible for detecting redundant usages of ``enumerate`` function."""
 
@@ -36,7 +41,10 @@ class RedundantEnumerateVisitor(BaseNodeVisitor):
         self._check_for_redundant_enumerate(node)
         self.generic_visit(node)
 
-    def _check_for_redundant_enumerate(self, node: Union[AnyFor, ast.comprehension]) -> None:  # noqa: E501
+    def _check_for_redundant_enumerate(
+        self,
+        node: AnyFor | ast.comprehension,
+    ) -> None:  # noqa: E501
         if not isinstance(node.iter, ast.Call):
             return
 

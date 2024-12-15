@@ -17,7 +17,7 @@ module_type_metadata = """
 """
 
 nested_metadata = """
-class ORM(object):
+class ORM:
     {0} = None
 """
 
@@ -28,10 +28,13 @@ if __name__ == '__main__':
 
 
 @pytest.mark.parametrize('bad_name', MODULE_METADATA_VARIABLES_BLACKLIST)
-@pytest.mark.parametrize('code', [
-    module_metadata,
-    module_type_metadata,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_metadata,
+        module_type_metadata,
+    ],
+)
 def test_wrong_metadata(
     assert_errors,
     assert_error_text,
@@ -50,16 +53,22 @@ def test_wrong_metadata(
     assert_error_text(visitor, bad_name)
 
 
-@pytest.mark.parametrize('correct_name', [
+@pytest.mark.parametrize(
     'correct_name',
-    'xy',
-    '_value',
-])
-@pytest.mark.parametrize('code', [
-    module_metadata,
-    module_type_metadata,
-    nested_metadata,
-])
+    [
+        'correct_name',
+        'xy',
+        '_value',
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_metadata,
+        module_type_metadata,
+        nested_metadata,
+    ],
+)
 def test_correct_metadata(
     assert_errors,
     parse_ast_tree,

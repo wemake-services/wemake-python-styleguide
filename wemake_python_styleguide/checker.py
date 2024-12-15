@@ -39,10 +39,11 @@ Checker API
 import ast
 import tokenize
 import traceback
-from typing import ClassVar, Iterator, Sequence, Type
+from collections.abc import Iterator, Sequence
+from typing import ClassVar, TypeAlias
 
 from flake8.options.manager import OptionManager
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide import constants, types
 from wemake_python_styleguide import version as pkg_version
@@ -55,11 +56,11 @@ from wemake_python_styleguide.transformations.ast_tree import transform
 from wemake_python_styleguide.violations import system
 from wemake_python_styleguide.visitors import base
 
-VisitorClass: TypeAlias = Type[base.BaseVisitor]
+VisitorClass: TypeAlias = type[base.BaseVisitor]
 
 
 @final
-class Checker(object):
+class Checker:
     """
     Implementation of :term:`checker`.
 
@@ -156,7 +157,7 @@ class Checker(object):
                 # In case we fail miserably, we want users to see at
                 # least something! Full stack trace
                 # and some rules that still work.
-                print(traceback.format_exc())  # noqa: T001, WPS421
+                print(traceback.format_exc())  # noqa: FIX001, WPS421
                 visitor.add_violation(system.InternalErrorViolation())
 
             yield from (

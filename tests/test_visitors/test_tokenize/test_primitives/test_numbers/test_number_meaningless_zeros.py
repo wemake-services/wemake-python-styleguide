@@ -1,7 +1,6 @@
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
-    BadNumberSuffixViolation,
     NumberWithMeaninglessZeroViolation,
 )
 from wemake_python_styleguide.visitors.tokenize.primitives import (
@@ -9,20 +8,19 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
 )
 
 
-@pytest.mark.parametrize('number', [
-    '0.10',
-    '21.5400',
-
-    '0x00A',
-
-    '0e01',
-    '1.5e010',
-    '1.5e-010',
-
-    '0o00007',
-
-    '0b0001',
-])
+@pytest.mark.parametrize(
+    'number',
+    [
+        '0.10',
+        '21.5400',
+        '0x00A',
+        '0e01',
+        '1.5e010',
+        '1.5e-010',
+        '0o00007',
+        '0b0001',
+    ],
+)
 def test_meaningless_zeros(
     parse_tokens,
     assert_errors,
@@ -45,12 +43,15 @@ def test_meaningless_zeros(
     assert_error_text(visitor, number.lstrip('-').lstrip('+'))
 
 
-@pytest.mark.parametrize('number', [
-    '0X0A',
-    '0E09',
-    '0B01',
-    '0O07',
-])
+@pytest.mark.parametrize(
+    'number',
+    [
+        '0X0A',
+        '0E09',
+        '0B01',
+        '0O07',
+    ],
+)
 def test_meaningless_zeros_and_case(
     parse_tokens,
     assert_errors,
@@ -68,30 +69,30 @@ def test_meaningless_zeros_and_case(
     visitor = WrongNumberTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
-    assert_errors(visitor, [
-        BadNumberSuffixViolation,
-        NumberWithMeaninglessZeroViolation,
-    ])
+    assert_errors(
+        visitor,
+        [
+            NumberWithMeaninglessZeroViolation,
+        ],
+    )
 
 
-@pytest.mark.parametrize('number', [
-    '1234567890',
-
-    '20.05',
-
-    '0x0',
-    '0xA00',
-
-    '0e0',
-    '1.5e10',
-    '1.5e-100',
-
-    '0o0',
-    '0o10',
-
-    '0b0',
-    '0b100000',
-])
+@pytest.mark.parametrize(
+    'number',
+    [
+        '1234567890',
+        '20.05',
+        '0x0',
+        '0xA00',
+        '0e0',
+        '1.5e10',
+        '1.5e-100',
+        '0o0',
+        '0o10',
+        '0b0',
+        '0b100000',
+    ],
+)
 def test_correct_zeros(
     parse_tokens,
     assert_errors,

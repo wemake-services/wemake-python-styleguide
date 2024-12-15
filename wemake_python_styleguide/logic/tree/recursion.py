@@ -7,26 +7,25 @@ from wemake_python_styleguide.types import AnyFunctionDef
 
 def _is_self_call(func: AnyFunctionDef, node: AST) -> bool:
     return (
-        isinstance(node, Call) and
-        isinstance(node.func, Attribute) and
-        bool(given_function_called(node, {'self.{0}'.format(func.name)}))
+        isinstance(node, Call)
+        and isinstance(node.func, Attribute)
+        and bool(given_function_called(node, {f'self.{func.name}'}))
     )
 
 
 def _check_method_recursion(func: AnyFunctionDef) -> bool:
-    return bool([
-        node
-        for node in walk(func)
-        if _is_self_call(func, node)
-    ])
+    return bool([node for node in walk(func) if _is_self_call(func, node)])
 
 
 def _check_function_recursion(func: AnyFunctionDef) -> bool:
-    return bool([
-        node
-        for node in walk(func)
-        if isinstance(node, Call) and given_function_called(node, {func.name})
-    ])
+    return bool(
+        [
+            node
+            for node in walk(func)
+            if isinstance(node, Call)
+            and given_function_called(node, {func.name})
+        ],
+    )
 
 
 def has_recursive_calls(func: AnyFunctionDef) -> bool:

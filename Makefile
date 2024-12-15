@@ -4,9 +4,9 @@ SHELL:=/usr/bin/env bash
 lint:
 	poetry run mypy wemake_python_styleguide scripts
 	poetry run flake8 .
-	poetry run autopep8 -r . --diff --exclude=./tests/fixtures/** --exit-code
+	poetry run ruff format --check --diff
+	poetry run ruff check --exit-non-zero-on-fix --diff
 	poetry run lint-imports
-	poetry run doc8 -q docs
 	poetry run python3 scripts/check_generic_visit.py wemake_python_styleguide/visitors/ast
 
 .PHONY: unit

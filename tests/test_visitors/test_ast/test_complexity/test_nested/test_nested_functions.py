@@ -93,25 +93,25 @@ def container():
 # Methods:
 
 nested_function_in_method = """
-class Raw(object):
+class Raw:
     def container(self):
         def {0}(): ...
 """
 
 nested_function_in_async_method = """
-class Raw(object):
+class Raw:
     async def container(self):
         def {0}(): ...
 """
 
 nested_async_function_in_async_method = """
-class Raw(object):
+class Raw:
     async def container(self):
         async def {0}(): ...
 """
 
 nested_async_function_in_method = """
-class Raw(object):
+class Raw:
     def container(self):
         async def {0}(): ...
 """
@@ -124,7 +124,7 @@ def container():
 """
 
 lambda_in_method = """
-class Raw(object):
+class Raw:
     def container(self):
         lazy_value = lambda: 12
 """
@@ -139,7 +139,7 @@ def container():
 """
 
 lambda_in_lambda_in_method = """
-class Test(object):
+class Test:
     def container(self):
         return lambda: lambda value: value + 12
 """
@@ -150,31 +150,36 @@ def container():
 """
 
 
-@pytest.mark.parametrize('nested_name', [
-    'nested',
-    '_nested',
-    '__nested',
-])
-@pytest.mark.parametrize('code', [
-    nested_function_in_function,
-    nested_async_function_in_function,
-    nested_function_in_async_function,
-    nested_async_function_in_async_function,
-    nested_function_in_method,
-    nested_async_function_in_method,
-    nested_function_in_async_method,
-    nested_async_function_in_async_method,
-
-    # Regression when functions were allowed to be nested in deep nodes:
-    nested_function_in_if,
-    nested_function_in_if_else,
-    nested_function_while_loop,
-    nested_function_in_for_loop,
-    nested_function_in_try,
-    nested_function_in_try_except,
-    nested_function_in_try_else,
-    nested_function_in_try_finally,
-])
+@pytest.mark.parametrize(
+    'nested_name',
+    [
+        'nested',
+        '_nested',
+        '__nested',
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        nested_function_in_function,
+        nested_async_function_in_function,
+        nested_function_in_async_function,
+        nested_async_function_in_async_function,
+        nested_function_in_method,
+        nested_async_function_in_method,
+        nested_function_in_async_method,
+        nested_async_function_in_async_method,
+        # Regression when functions were allowed to be nested in deep nodes:
+        nested_function_in_if,
+        nested_function_in_if_else,
+        nested_function_while_loop,
+        nested_function_in_for_loop,
+        nested_function_in_try,
+        nested_function_in_try_except,
+        nested_function_in_try_else,
+        nested_function_in_try_finally,
+    ],
+)
 def test_nested_function(
     assert_errors,
     assert_error_text,
@@ -194,16 +199,19 @@ def test_nested_function(
 
 
 @pytest.mark.parametrize('whitelist_name', NESTED_FUNCTIONS_WHITELIST)
-@pytest.mark.parametrize('code', [
-    nested_function_in_function,
-    nested_async_function_in_function,
-    nested_function_in_async_function,
-    nested_async_function_in_async_function,
-    nested_function_in_method,
-    nested_async_function_in_method,
-    nested_function_in_async_method,
-    nested_async_function_in_async_method,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        nested_function_in_function,
+        nested_async_function_in_function,
+        nested_function_in_async_function,
+        nested_async_function_in_async_function,
+        nested_function_in_method,
+        nested_async_function_in_method,
+        nested_function_in_async_method,
+        nested_async_function_in_async_method,
+    ],
+)
 def test_whitelist_nested_functions(
     assert_errors,
     parse_ast_tree,
@@ -221,16 +229,19 @@ def test_whitelist_nested_functions(
 
 
 @pytest.mark.parametrize('whitelist_name', NESTED_FUNCTIONS_WHITELIST)
-@pytest.mark.parametrize('code', [
-    nested_function_in_if,
-    nested_function_in_if_else,
-    nested_function_while_loop,
-    nested_function_in_for_loop,
-    nested_function_in_try,
-    nested_function_in_try_except,
-    nested_function_in_try_else,
-    nested_function_in_try_finally,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        nested_function_in_if,
+        nested_function_in_if_else,
+        nested_function_while_loop,
+        nested_function_in_for_loop,
+        nested_function_in_try,
+        nested_function_in_try_except,
+        nested_function_in_try_else,
+        nested_function_in_try_finally,
+    ],
+)
 def test_deep_whitelist_nested_functions(
     assert_errors,
     assert_error_text,
@@ -250,10 +261,13 @@ def test_deep_whitelist_nested_functions(
     assert_error_text(visitor, whitelist_name)
 
 
-@pytest.mark.parametrize('code', [
-    lambda_in_function,
-    lambda_in_method,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        lambda_in_function,
+        lambda_in_method,
+    ],
+)
 def test_lambda_nested_functions(
     assert_errors,
     parse_ast_tree,
@@ -270,12 +284,15 @@ def test_lambda_nested_functions(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    lambda_in_lambda,
-    lambda_in_lambda_in_function,
-    lambda_in_lambda_in_method,
-    lambda_in_call_in_lambda,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        lambda_in_lambda,
+        lambda_in_lambda_in_function,
+        lambda_in_lambda_in_method,
+        lambda_in_call_in_lambda,
+    ],
+)
 def test_lambda_nested_lambdas(
     assert_errors,
     assert_error_text,

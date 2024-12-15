@@ -1,9 +1,11 @@
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, List, Mapping, Tuple, Type, Union
+from collections.abc import Mapping
+from typing import ClassVar, TypeAlias
 
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
+from wemake_python_styleguide.logic.arguments import special_args
 from wemake_python_styleguide.logic.complexity import cognitive
 from wemake_python_styleguide.logic.complexity.functions import (
     ComplexityMetrics,
@@ -11,7 +13,7 @@ from wemake_python_styleguide.logic.complexity.functions import (
     FunctionCounterWithLambda,
 )
 from wemake_python_styleguide.logic.naming import access
-from wemake_python_styleguide.logic.nodes import get_parent
+from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.tree import functions
 from wemake_python_styleguide.types import (
     AnyFunctionDef,
@@ -25,31 +27,29 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 # Type aliases:
 
-_AnyFunctionCounter: TypeAlias = Union[
-    FunctionCounter,
-    FunctionCounterWithLambda,
-]
-_CheckRule: TypeAlias = Tuple[_AnyFunctionCounter, int, Type[BaseViolation]]
+_AnyFunctionCounter: TypeAlias = FunctionCounter | FunctionCounterWithLambda
+_CheckRule: TypeAlias = tuple[_AnyFunctionCounter, int, type[BaseViolation]]
 _NodeTypeHandler: TypeAlias = Mapping[
-    Union[type, Tuple[type, ...]],
+    type | tuple[type, ...],
     FunctionCounter,
 ]
 
 
 @final
-class _ComplexityCounter(object):
+class _ComplexityCounter:
     """Helper class to encapsulate logic from the visitor."""
 
-    _not_contain_locals: ClassVar[AnyNodes] = (
-        ast.comprehension,
-    )
+    _not_contain_locals: ClassVar[AnyNodes] = (ast.comprehension,)
 
     def __init__(self) -> None:
         self.metrics = ComplexityMetrics()
 
     def check_arguments_count(self, node: AnyFunctionDefAndLambda) -> None:
         """Checks the number of the arguments in a function."""
-        self.metrics.arguments[node] = len(functions.get_all_arguments(node))
+        all_args = functions.get_all_arguments(node)
+        self.metrics.arguments[node] = len(
+            special_args.clean_special_argument(node, all_args),
+        )
 
     def check_function_complexity(self, node: AnyFunctionDef) -> None:
         """
@@ -77,6 +77,9 @@ class _ComplexityCounter(object):
             if access.is_unused(variable_def.id):
                 return
 
+            if get_context(variable_def) is not function:
+                return
+
             parent = get_parent(variable_def)
             no_locals = self._not_contain_locals
             if isinstance(parent, no_locals):
@@ -89,9 +92,11 @@ class _ComplexityCounter(object):
         node: AnyFunctionDef,
         sub_node: ast.AST,
     ) -> None:
-        if isinstance(sub_node, ast.Name):
-            if isinstance(sub_node.ctx, ast.Store):
-                self._update_variables(node, sub_node)
+        if isinstance(sub_node, ast.Name) and isinstance(
+            sub_node.ctx,
+            ast.Store,
+        ):
+            self._update_variables(node, sub_node)
 
         error_counters: _NodeTypeHandler = {
             ast.Return: self.metrics.returns,
@@ -107,10 +112,13 @@ class _ComplexityCounter(object):
 
 
 @final
-@alias('visit_any_function', (
-    'visit_AsyncFunctionDef',
-    'visit_FunctionDef',
-))
+@alias(
+    'visit_any_function',
+    (
+        'visit_AsyncFunctionDef',
+        'visit_FunctionDef',
+    ),
+)
 class FunctionComplexityVisitor(BaseNodeVisitor):
     """
     This class checks for complexity inside functions.
@@ -169,7 +177,7 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
                         violation(node, text=str(count), baseline=limit),
                     )
 
-    def _function_checks(self) -> List[_CheckRule]:
+    def _function_checks(self) -> list[_CheckRule]:
         return [
             (
                 self._counter.metrics.arguments,
@@ -204,17 +212,20 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_any_function', (
-    'visit_AsyncFunctionDef',
-    'visit_FunctionDef',
-))
+@alias(
+    'visit_any_function',
+    (
+        'visit_AsyncFunctionDef',
+        'visit_FunctionDef',
+    ),
+)
 class CognitiveComplexityVisitor(BaseNodeVisitor):
     """Used to count cognitive score and average module complexity."""
 
     def __init__(self, *args, **kwargs) -> None:
         """We use to save all functions' complexity here."""
         super().__init__(*args, **kwargs)
-        self._functions: DefaultDict[AnyFunctionDef, int] = defaultdict(int)
+        self._functions: defaultdict[AnyFunctionDef, int] = defaultdict(int)
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """Counts cognitive complexity."""

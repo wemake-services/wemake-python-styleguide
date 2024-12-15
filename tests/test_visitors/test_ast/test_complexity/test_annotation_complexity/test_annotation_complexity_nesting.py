@@ -40,35 +40,41 @@ def some(arg) -> {0}:
 """
 
 class_field_template = """
-class Test(object):
+class Test:
     some: {0}
     other = 1
 """
 
 
-@pytest.mark.parametrize('template', [
-    annassign_template,
-    function_arg_template,
-    function_args_template,
-    function_kwargs_template,
-    function_kwarg_template,
-    function_posonly_arg_template,
-    function_return_template,
-    class_field_template,
-])
-@pytest.mark.parametrize('code', [
-    'int',
-    'List[int]',
-    'List["MyType"]',
-    '"List[MyType]"',
-    'Dict[int, str]',
-    'Callable[[str, int], int]',
-    'List[List[int]]',
-    '"String Annontation"',
-    'typing.int',
-    'typing.List[int]',
-    'typing.List["typing.Tuple[int]"]',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        annassign_template,
+        function_arg_template,
+        function_args_template,
+        function_kwargs_template,
+        function_kwarg_template,
+        function_posonly_arg_template,
+        function_return_template,
+        class_field_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        'int',
+        'List[int]',
+        'List["MyType"]',
+        '"List[MyType]"',
+        'Dict[int, str]',
+        'Callable[[str, int], int]',
+        'List[List[int]]',
+        '"String Annontation"',
+        'typing.int',
+        'typing.List[int]',
+        'typing.List["typing.Tuple[int]"]',
+    ],
+)
 def test_correct_annotations(
     assert_errors,
     parse_ast_tree,
@@ -86,33 +92,36 @@ def test_correct_annotations(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('template', [
-    annassign_template,
-    function_arg_template,
-    function_args_template,
-    function_kwargs_template,
-    function_kwarg_template,
-    function_posonly_arg_template,
-    function_return_template,
-    class_field_template,
-])
-@pytest.mark.parametrize('code', [
-    'List[List[List[int]]]',
-    '"List[List[List[int]]]"',
-
-    'Callable[[], "List[List[str]]"]',
-    'Callable[[List["List[str]"]], str]',
-
-    'Dict[int, Tuple[List[List[str]], ...]]',
-    '"Dict[int, Tuple[List[List[str]], ...]]"',
-    'Dict[int, "Tuple[List[List[str]], ...]"]',
-    'Dict[int, Tuple["List[List[str]]", ...]]',
-    'Dict[int, Tuple[List["List[str]"], ...]]',
-
-    '"typing.List[typing.List[typing.List[typing.List[int]]]]"',
-    'typing.Dict["str", "typing.List[typing.List[typing.List[int]]]"]',
-    'typing.Tuple[typing.List[typing.Dict[int, "typing.List[str]"]]]',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        annassign_template,
+        function_arg_template,
+        function_args_template,
+        function_kwargs_template,
+        function_kwarg_template,
+        function_posonly_arg_template,
+        function_return_template,
+        class_field_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        'List[List[List[int]]]',
+        '"List[List[List[int]]]"',
+        'Callable[[], "List[List[str]]"]',
+        'Callable[[List["List[str]"]], str]',
+        'Dict[int, Tuple[List[List[str]], ...]]',
+        '"Dict[int, Tuple[List[List[str]], ...]]"',
+        'Dict[int, "Tuple[List[List[str]], ...]"]',
+        'Dict[int, Tuple["List[List[str]]", ...]]',
+        'Dict[int, Tuple[List["List[str]"], ...]]',
+        '"typing.List[typing.List[typing.List[typing.List[int]]]]"',
+        'typing.Dict["str", "typing.List[typing.List[typing.List[int]]]"]',
+        'typing.Tuple[typing.List[typing.Dict[int, "typing.List[str]"]]]',
+    ],
+)
 def test_complex_annotations(
     assert_errors,
     parse_ast_tree,
@@ -130,21 +139,27 @@ def test_complex_annotations(
     assert_errors(visitor, [TooComplexAnnotationViolation])
 
 
-@pytest.mark.parametrize('template', [
-    annassign_template,
-    function_arg_template,
-    function_args_template,
-    function_kwargs_template,
-    function_kwarg_template,
-    function_posonly_arg_template,
-    function_return_template,
-    class_field_template,
-])
-@pytest.mark.parametrize('code', [
-    'List[List[int]]',
-    '"List[List[int]]"',
-    'List["List[int]"]',
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        annassign_template,
+        function_arg_template,
+        function_args_template,
+        function_kwargs_template,
+        function_kwarg_template,
+        function_posonly_arg_template,
+        function_return_template,
+        class_field_template,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        'List[List[int]]',
+        '"List[List[int]]"',
+        'List["List[int]"]',
+    ],
+)
 def test_complex_annotations_config(
     assert_errors,
     assert_error_text,

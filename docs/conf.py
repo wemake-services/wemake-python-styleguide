@@ -20,6 +20,7 @@ sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
+
 def _get_project_meta():
     with open('../pyproject.toml', mode='rb') as pyproject:
         return tomli.load(pyproject)['tool']['poetry']
@@ -27,7 +28,7 @@ def _get_project_meta():
 
 pkg_meta = _get_project_meta()
 project = str(pkg_meta['name'])
-copyright = '2018, wemake.services'  # noqa: WPS125
+copyright = '2018, wemake.services'  # noqa: A001
 author = 'wemake.services'
 
 # The short X.Y version
@@ -51,33 +52,19 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
-
     # Used to write beautiful docstrings:
     'sphinx.ext.napoleon',
-
     # Used to include .md files:
-    'm2r2',
-
+    'myst_parser',
     # Used to insert typehints into the final docs:
     'sphinx_autodoc_typehints',
-
     # Used to embed values from the source code into the docs:
     'added_value',
-
     # Used to build graphs:
     'sphinxcontrib.mermaid',
 ]
 
 autoclass_content = 'class'
-autodoc_member_order = 'bysource'
-
-autodoc_mock_imports = [
-    'astor',
-    'pep8ext_naming',
-    'flake8_builtins',
-    'flake8_quotes',
-]
-
 autodoc_member_order = 'bysource'
 autodoc_default_options = {
     'members': True,

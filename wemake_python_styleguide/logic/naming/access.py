@@ -1,9 +1,8 @@
 import re
-
-from typing_extensions import Final
+from typing import Final
 
 #: Used as a special name patterns for unused variables, like `_` and `__`.
-_UNUSED_VARIABLE_REGEX: Final = re.compile('^_+$')
+_UNUSED_VARIABLE_REGEX: Final = re.compile(r'^_+$')
 
 
 def is_unused(name: str) -> bool:
@@ -153,8 +152,8 @@ def is_public(name: str) -> bool:
 
     """
     return (
-        not is_protected(name) and
-        not is_private(name) and
-        not is_magic(name) and
-        not is_unused(name)
+        not is_protected(name)
+        and not is_private(name)
+        and not is_magic(name)
+        and not is_unused(name)
     )

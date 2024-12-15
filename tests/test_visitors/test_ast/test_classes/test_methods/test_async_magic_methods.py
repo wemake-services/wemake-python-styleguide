@@ -4,23 +4,26 @@ from wemake_python_styleguide.violations.oop import AsyncMagicMethodViolation
 from wemake_python_styleguide.visitors.ast.classes import WrongMethodVisitor
 
 sync_method = """
-class Example(object):
+class Example:
     def {0}(self): ...
 """
 
 async_method = """
-class Example(object):
+class Example:
     async def {0}(self): ...
 """
 
 
-@pytest.mark.parametrize('method', [
-    '__init__',
-    '__eq__',
-    '__lt__',
-    '__enter__',
-    '__exit__',
-])
+@pytest.mark.parametrize(
+    'method',
+    [
+        '__init__',
+        '__eq__',
+        '__lt__',
+        '__enter__',
+        '__exit__',
+    ],
+)
 def test_wrong_async_magic_used(
     assert_errors,
     assert_error_text,
@@ -38,17 +41,23 @@ def test_wrong_async_magic_used(
     assert_error_text(visitor, method)
 
 
-@pytest.mark.parametrize('code', [
-    sync_method,
-    async_method,
-])
-@pytest.mark.parametrize('method', [
-    '__anext__',
-    '__aenter__',
-    '__aexit__',
-    '__call__',
-    '__custom__',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        sync_method,
+        async_method,
+    ],
+)
+@pytest.mark.parametrize(
+    'method',
+    [
+        '__anext__',
+        '__aenter__',
+        '__aexit__',
+        '__call__',
+        '__custom__',
+    ],
+)
 def test_correct_async_magic_used(
     assert_errors,
     parse_ast_tree,
@@ -65,14 +74,17 @@ def test_correct_async_magic_used(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('method', [
-    '__init__',
-    '__eq__',
-    '__lt__',
-    '__next__',
-    '__enter__',
-    '__exit__',
-])
+@pytest.mark.parametrize(
+    'method',
+    [
+        '__init__',
+        '__eq__',
+        '__lt__',
+        '__next__',
+        '__enter__',
+        '__exit__',
+    ],
+)
 def test_sync_magic_used(
     assert_errors,
     parse_ast_tree,
@@ -88,11 +100,14 @@ def test_sync_magic_used(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('method', [
-    'next',
-    'regular',
-    '__custom__',
-])
+@pytest.mark.parametrize(
+    'method',
+    [
+        'next',
+        'regular',
+        '__custom__',
+    ],
+)
 def test_regular_method_used(
     assert_errors,
     parse_ast_tree,

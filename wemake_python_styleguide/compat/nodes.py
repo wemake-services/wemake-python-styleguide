@@ -7,21 +7,26 @@ because that's how ``mypy`` knows about what we are doing.
 
 import ast
 import sys
-from typing import Optional
 
-if sys.version_info >= (3, 10):  # pragma: py-lt-310
-    from ast import Match as Match
-    from ast import MatchAs as MatchAs
-    from ast import match_case as match_case
-else:  # pragma: py-gte-310
-    class Match(ast.stmt):
-        """Used for ``match`` keyword and its body."""
+if sys.version_info >= (3, 11):  # pragma: >=3.11 cover
+    from ast import TryStar as TryStar
+else:  # pragma: <3.11 cover
 
-    class match_case(ast.AST):  # noqa: N801
-        """Used as a top level wrapper of pattern matched cases."""
+    class TryStar(ast.stmt):
+        """Used for `try/except*` statements."""
 
-    class MatchAs(ast.AST):
-        """Used to declare variables in pattern matched code."""
+        body: list[ast.stmt]
+        handlers: list[ast.ExceptHandler]
+        orelse: list[ast.stmt]
+        finalbody: list[ast.stmt]
 
-        name: Optional[str]  # noqa: WPS110
-        pattern: Optional[ast.AST]
+
+if sys.version_info >= (3, 12):  # pragma: # pragma: >=3.12 cover
+    from ast import TypeAlias as TypeAlias
+else:  # pragma: <3.12 cover
+
+    class TypeAlias(ast.stmt):
+        """Used to define `TypeAlias` nodes in `python3.12+`."""
+
+        name: ast.Name
+        type_params: list[ast.stmt]

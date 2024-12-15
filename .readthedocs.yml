@@ -1,19 +1,20 @@
 version: 2
 
-# Set the version of Python and other tools you might need
 build:
-  os: ubuntu-20.04
-  tools:
-    python: '3.9'
+  os: ubuntu-lts-latest
+  tools: {python: "3.12"}
   jobs:
-    # See https://github.com/readthedocs/readthedocs.org/issues/4912
     pre_create_environment:
       - asdf plugin add poetry
       - asdf install poetry latest
       - asdf global poetry latest
       - poetry config virtualenvs.create false
-    post_install:
-      - . "$(pwd | rev | sed 's/stuokcehc/svne/' | rev)/bin/activate" && poetry install --only main --only docs
+      - poetry self add poetry-plugin-export
+      - poetry export --only main --only docs --format=requirements.txt --output=requirements.txt
+
+python:
+  install:
+    - requirements: requirements.txt
 
 sphinx:
   configuration: 'docs/conf.py'

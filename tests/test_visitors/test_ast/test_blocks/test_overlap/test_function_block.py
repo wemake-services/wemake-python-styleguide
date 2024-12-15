@@ -30,13 +30,13 @@ function_template2 = """
 method_template1 = """
 {1}
 
-class Test(object):
+class Test:
     {0}
         ...
 """
 
 method_template2 = """
-class Test(object):
+class Test:
     {0}
         ...
 
@@ -44,16 +44,25 @@ class Test(object):
 """
 
 
-@pytest.mark.parametrize('function_statement', [
-    function_def1,
-])
-@pytest.mark.parametrize('context', [
-    function_template1,
-    function_template2,
-])
-@pytest.mark.parametrize('variable_name', [
-    'should_raise',
-])
+@pytest.mark.parametrize(
+    'function_statement',
+    [
+        function_def1,
+    ],
+)
+@pytest.mark.parametrize(
+    'context',
+    [
+        function_template1,
+        function_template2,
+    ],
+)
+@pytest.mark.parametrize(
+    'variable_name',
+    [
+        'should_raise',
+    ],
+)
 def test_function_block_overlap(
     assert_errors,
     assert_error_text,
@@ -79,16 +88,25 @@ def test_function_block_overlap(
     assert_error_text(visitor, variable_name)
 
 
-@pytest.mark.parametrize('function_statement', [
-    function_def1,
-])
-@pytest.mark.parametrize('context', [
-    method_template1,
-    method_template2,
-])
-@pytest.mark.parametrize('variable_name', [
-    'should_raise',
-])
+@pytest.mark.parametrize(
+    'function_statement',
+    [
+        function_def1,
+    ],
+)
+@pytest.mark.parametrize(
+    'context',
+    [
+        method_template1,
+        method_template2,
+    ],
+)
+@pytest.mark.parametrize(
+    'variable_name',
+    [
+        'should_raise',
+    ],
+)
 def test_method_block_overlap(
     assert_errors,
     parse_ast_tree,
@@ -112,18 +130,27 @@ def test_method_block_overlap(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('function_statement', [
-    function_def1,
-])
-@pytest.mark.parametrize('context', [
-    function_template1,
-    function_template2,
-    method_template1,
-    method_template2,
-])
-@pytest.mark.parametrize('variable_name', [
-    'should_raise',
-])
+@pytest.mark.parametrize(
+    'function_statement',
+    [
+        function_def1,
+    ],
+)
+@pytest.mark.parametrize(
+    'context',
+    [
+        function_template1,
+        function_template2,
+        method_template1,
+        method_template2,
+    ],
+)
+@pytest.mark.parametrize(
+    'variable_name',
+    [
+        'should_raise',
+    ],
+)
 def test_function_block_usage(
     assert_errors,
     parse_ast_tree,
@@ -136,7 +163,7 @@ def test_function_block_usage(
     """Ensures using variables is fine."""
     code = context.format(
         function_statement.format(variable_name),
-        'print({0})'.format(variable_name),
+        f'print({variable_name})',
     )
     tree = parse_ast_tree(mode(code))
 
@@ -146,19 +173,28 @@ def test_function_block_usage(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('function_statement', [
-    function_def1,
-])
-@pytest.mark.parametrize('context', [
-    function_template1,
-    function_template2,
-    method_template1,
-    method_template2,
-])
-@pytest.mark.parametrize(('first_name', 'second_name'), [
-    ('unique_name', 'unique_name1'),
-    ('_', '_'),
-])
+@pytest.mark.parametrize(
+    'function_statement',
+    [
+        function_def1,
+    ],
+)
+@pytest.mark.parametrize(
+    'context',
+    [
+        function_template1,
+        function_template2,
+        method_template1,
+        method_template2,
+    ],
+)
+@pytest.mark.parametrize(
+    ('first_name', 'second_name'),
+    [
+        ('unique_name', 'unique_name1'),
+        ('_', '_'),
+    ],
+)
 def test_function_block_correct(
     assert_errors,
     parse_ast_tree,
@@ -195,10 +231,13 @@ overload_template = """
 """
 
 
-@pytest.mark.parametrize('import_overload', [
-    '@overload',
-    '@typing.overload',
-])
+@pytest.mark.parametrize(
+    'import_overload',
+    [
+        '@overload',
+        '@typing.overload',
+    ],
+)
 def test_function_overload(
     assert_errors,
     assert_error_text,
@@ -217,11 +256,14 @@ def test_function_overload(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('decorator_template', [
-    '@typing.func',
-    '@module.overload',
-    '@decorate',
-])
+@pytest.mark.parametrize(
+    'decorator_template',
+    [
+        '@typing.func',
+        '@module.overload',
+        '@decorate',
+    ],
+)
 def test_no_function_overload(
     assert_errors,
     assert_error_text,
@@ -241,7 +283,7 @@ def test_no_function_overload(
 
 
 method_setter_template = """
-class Test(object):
+class Test:
     @property
     def {0}():
         ...

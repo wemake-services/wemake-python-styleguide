@@ -2,7 +2,6 @@ import pytest
 
 from wemake_python_styleguide.violations.refactoring import (
     FalsyConstantCompareViolation,
-    WrongIsCompareViolation,
 )
 from wemake_python_styleguide.visitors.ast.compares import (
     WrongConstantCompareVisitor,
@@ -15,10 +14,17 @@ wrong_comparators = [
     ('[]', 'some'),
     ('{}', 'some'),  # noqa: P103
     ('()', 'some'),
-
     ('some', '(x := [])'),
     ('(x := [])', 'some'),
 ]
+
+
+def _get_error_state(code, proposed):
+    if 'assert ' in code:
+        assert FalsyConstantCompareViolation in proposed
+        proposed.remove(FalsyConstantCompareViolation)
+        return proposed
+    return proposed
 
 
 @pytest.mark.parametrize('comparators', wrong_comparators)
@@ -30,12 +36,16 @@ def test_falsy_constant(
     default_options,
 ):
     """Testing that compares with falsy constants are not allowed."""
-    tree = parse_ast_tree(eq_conditions.format(*comparators))
+    code = eq_conditions.format(*comparators)
+    tree = parse_ast_tree(code)
 
     visitor = WrongConstantCompareVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [FalsyConstantCompareViolation])
+    assert_errors(
+        visitor,
+        _get_error_state(code, [FalsyConstantCompareViolation]),
+    )
 
 
 @pytest.mark.filterwarnings('ignore::SyntaxWarning')
@@ -48,15 +58,21 @@ def test_falsy_constant_is(
     default_options,
 ):
     """Testing that compares with falsy constants are not allowed."""
-    tree = parse_ast_tree(is_conditions.format(*comparators))
+    code = is_conditions.format(*comparators)
+    tree = parse_ast_tree(code)
 
     visitor = WrongConstantCompareVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [
-        FalsyConstantCompareViolation,
-        WrongIsCompareViolation,
-    ])
+    assert_errors(
+        visitor,
+        _get_error_state(
+            code,
+            [
+                FalsyConstantCompareViolation,
+            ],
+        ),
+    )
 
 
 @pytest.mark.parametrize('comparators', wrong_comparators)
@@ -77,27 +93,30 @@ def test_falsy_constant_not_eq(
 
 
 @pytest.mark.filterwarnings('ignore::SyntaxWarning')
-@pytest.mark.parametrize('comparators', [
-    ('some', '[1, 2]'),
-    ('some', '{1, 2}'),
-    ('some', '{"1": 2}'),
-    ('some', '(1, 2)'),
-    ('some', 'None'),
-    ('some', 'False'),
-    ('some', 'True'),
-    ('some', '0'),
-    ('some', '1'),
-    ('some', '""'),
-    ('some', '"a"'),
-    ('some', 'b"bytes"'),
-    ('some', 'other'),
-    ('some', 'other()'),
-    ('some', 'other.attr'),
-    ('some', 'other.method()'),
-    ('some', 'other[0]'),
-    ('None', 'some'),
-    ('(x := [1, 2])', 'some'),
-])
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        ('some', '[1, 2]'),
+        ('some', '{1, 2}'),
+        ('some', '{"1": 2}'),
+        ('some', '(1, 2)'),
+        ('some', 'None'),
+        ('some', 'False'),
+        ('some', 'True'),
+        ('some', '0'),
+        ('some', '1'),
+        ('some', '""'),
+        ('some', '"a"'),
+        ('some', 'b"bytes"'),
+        ('some', 'other'),
+        ('some', 'other()'),
+        ('some', 'other.attr'),
+        ('some', 'other.method()'),
+        ('some', 'other[0]'),
+        ('None', 'some'),
+        ('(x := [1, 2])', 'some'),
+    ],
+)
 def test_correct_constant_compare(
     assert_errors,
     parse_ast_tree,
@@ -111,4 +130,4 @@ def test_correct_constant_compare(
     visitor = WrongConstantCompareVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [], ignored_types=WrongIsCompareViolation)
+    assert_errors(visitor, [])

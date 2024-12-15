@@ -1,6 +1,6 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY310
+from wemake_python_styleguide.compat.constants import PY312
 from wemake_python_styleguide.constants import UNUSED_PLACEHOLDER
 
 # Imports:
@@ -23,7 +23,7 @@ class_name = 'class {0}(SomeParent): ...'
 function_name = 'def {0}(): ...'
 
 method_name = """
-class Input(object):
+class Input:
     def {0}(self): ...
 """
 
@@ -32,14 +32,14 @@ class Input(object):
 function_argument = 'def test(arg, {0}): ...'
 
 method_argument = """
-class Input(object):
+class Input:
     def validate(self, {0}): ...
 """
 
 function_keyword_argument = 'def test(arg, {0}=None): ...'
 
 method_keyword_argument = """
-class Input(object):
+class Input:
     def validate(self, {0}=None): ...
 """
 
@@ -47,12 +47,12 @@ function_args_argument = 'def test(arg, *{0}): ...'
 function_kwargs_argument = 'def test(arg, **{0}): ...'
 
 method_args_argument = """
-class Input(object):
+class Input:
     def validate(self, *{0}): ...
 """
 
 method_kwargs_argument = """
-class Input(object):
+class Input:
     def validate(self, **{0}): ...
 """
 
@@ -69,7 +69,7 @@ def test(*, {0}=True): ...
 """
 
 method_kwonly_argument = """
-class Input(object):
+class Input:
     def test(self, *, {0}=True): ...
 """
 
@@ -99,13 +99,13 @@ class Test:
 """
 
 instance_attribute = """
-class Test(object):
+class Test:
     def __init__(self):
         self.{0} = 123
 """
 
 instance_typed_attribute = """
-class Test(object):
+class Test:
     def __init__(self):
         self.{0}: int = 123
 """
@@ -176,6 +176,12 @@ match some_value:
         ...
 """
 
+match_star = """
+match some_value:
+    case [*{0}]:
+        ...
+"""
+
 # This is the only case where we don't allow unused variables.
 match_as_explicit = """
 match some_value:
@@ -183,112 +189,139 @@ match some_value:
         ...
 """
 
+# Type parameters:
+
+type_param_func = 'def some_value[{0}](): ...'
+type_param_func_typevartuple = 'def some_value[*{0}](): ...'
+type_param_func_paramspec = 'def some_value[**{0}](): ...'
+type_param_class = 'class SomeValue[{0}]: ...'
+type_param_alias = 'type SomeValue[{0}] = ...'
+type_alias_def = 'type {0} = ...'
+
 
 # Fixtures:
 
-_ALL_FIXTURES = frozenset((
-    # Imports:
-    import_alias,
-    from_import_alias,
-
-    # Class names:
-    class_name,
-
-    # Function names, we don't use async function because we generate them:
-    function_name,
-    method_name,
-
-    # Function arguments:
-    function_argument,
-    method_argument,
-    function_keyword_argument,
-    method_keyword_argument,
-    function_args_argument,
-    function_kwargs_argument,
-    method_args_argument,
-    method_kwargs_argument,
-    function_kwonly_argument,
-    function_kwonly_default_argument,
-    method_kwonly_argument,
-    lambda_argument,
-
-    # Attributes:
-    static_attribute,
-    static_multiple_attributes,
-    static_typed_attribute,
-    static_typed_annotation,
-    instance_attribute,
-    instance_typed_attribute,
-
-    foreign_attribute,
-    foreign_nested_attribute,
-
-    # Variables:
-    variable_def,
-    variable_typed_def,
-    variable_typed,
-    unpacking_variables,
-    unpacking_star_variables,
-    for_variable,
-    for_star_variable,
-    with_variable,
-    with_star_variable,
-    exception,
-
-    # Assignment expressions:
-    function_posonly_argument,
-    lambda_posonly_argument,
-    assignment_expression,
-))
-
-if PY310:
-    _ALL_FIXTURES |= {
+_ALL_FIXTURES = frozenset(
+    (
+        # Imports:
+        import_alias,
+        from_import_alias,
+        # Class names:
+        class_name,
+        # Function names, we don't use async function because we generate them:
+        function_name,
+        method_name,
+        # Function arguments:
+        function_argument,
+        method_argument,
+        function_keyword_argument,
+        method_keyword_argument,
+        function_args_argument,
+        function_kwargs_argument,
+        method_args_argument,
+        method_kwargs_argument,
+        function_kwonly_argument,
+        function_kwonly_default_argument,
+        method_kwonly_argument,
+        lambda_argument,
+        # Attributes:
+        static_attribute,
+        static_multiple_attributes,
+        static_typed_attribute,
+        static_typed_annotation,
+        instance_attribute,
+        instance_typed_attribute,
+        foreign_attribute,
+        foreign_nested_attribute,
+        # Variables:
+        variable_def,
+        variable_typed_def,
+        variable_typed,
+        unpacking_variables,
+        unpacking_star_variables,
+        for_variable,
+        for_star_variable,
+        with_variable,
+        with_star_variable,
+        exception,
+        # Assignment expressions:
+        function_posonly_argument,
+        lambda_posonly_argument,
+        assignment_expression,
+        # Pattern matching:
         match_variable,
         match_as_explicit,
         match_inner,
+        match_star,
+    ),
+)
+
+if PY312:
+    _ALL_FIXTURES |= {
+        type_param_func,
+        type_param_func_typevartuple,
+        type_param_func_paramspec,
+        type_param_class,
+        type_param_alias,
+        type_alias_def,
     }
 
-_FOREIGN_NAMING_PATTERNS = frozenset((
-    foreign_attribute,
-    foreign_nested_attribute,
-))
+_FOREIGN_NAMING_PATTERNS = frozenset(
+    (
+        foreign_attribute,
+        foreign_nested_attribute,
+    ),
+)
 
-_ATTRIBUTES = frozenset((
-    method_name,
+_ATTRIBUTES = (
+    frozenset(
+        (
+            method_name,
+            static_attribute,
+            static_multiple_attributes,
+            static_typed_attribute,
+            static_typed_annotation,
+            instance_attribute,
+            instance_typed_attribute,
+        ),
+    )
+    | _FOREIGN_NAMING_PATTERNS
+)
+if PY312:
+    _ATTRIBUTES |= frozenset(
+        (
+            # Not really an attribute, but similar:
+            type_param_class,
+        ),
+    )
 
-    static_attribute,
-    static_multiple_attributes,
-    static_typed_attribute,
-    static_typed_annotation,
-    instance_attribute,
-    instance_typed_attribute,
-)) | _FOREIGN_NAMING_PATTERNS
 
-_FORBIDDEN_UNUSED_TUPLE = frozenset((
-    unpacking_variables,
-    variable_def,
-    with_variable,
-    for_variable,
-))
+_FORBIDDEN_UNUSED_TUPLE = frozenset(
+    (
+        unpacking_variables,
+        variable_def,
+        with_variable,
+        for_variable,
+    ),
+)
 
 # Raw unused variables return True for logic.naming.access.is_unused().
 # Example: _, __.
 # Protected unused variables return True for logic.naming.access.is_protected().
 # Example: _protected.
-_FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED = frozenset((
-    unpacking_variables,
-    variable_def,
-    with_variable,
-    variable_typed_def,
-    variable_typed,
-    exception,
-    assignment_expression,
-))
-
-if PY310:
-    _FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED |= {
+_FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED = frozenset(
+    (
+        unpacking_variables,
+        variable_def,
+        with_variable,
+        variable_typed_def,
+        variable_typed,
+        exception,
+        assignment_expression,
+        # Pattern matching:
         match_as_explicit,
-    }
+    ),
+)
 
 _FORBIDDEN_RAW_UNUSED = _FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED | {
     static_attribute,
@@ -361,10 +394,12 @@ def allowed_protected_unused_template(request):
     return request.param
 
 
-@pytest.fixture()
+@pytest.fixture
 def skip_match_case_syntax_error():
     """Returns a helper that skips tests when `_` is used with pattern match."""
+
     def factory(template: str, var_name: str) -> None:
         if var_name == UNUSED_PLACEHOLDER and template == match_as_explicit:
             pytest.skip('"_" cannot be used as "case" target')
+
     return factory

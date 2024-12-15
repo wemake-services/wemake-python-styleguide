@@ -129,6 +129,9 @@ You can also show all options that ``flake8`` supports by running:
 - ``max-raises`` - maximum number of raises in a function,
     defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_RAISES`
+- ``max-except-exceptions`` - maximum number of exceptions in ``except``,
+    defaults to
+    :str:`wemake_python_styleguide.options.defaults.MAX_EXCEPT_EXCEPTIONS`
 - ``max-cognitive-score`` - maximum amount of cognitive complexity
     per function, defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_COGNITIVE_SCORE`
@@ -155,39 +158,40 @@ You can also show all options that ``flake8`` supports by running:
     :str:`wemake_python_styleguide.options.defaults.SHOW_VIOLATION_LINKS`
 """
 
-from typing import ClassVar, Mapping, Optional, Sequence, Union
+from collections.abc import Mapping, Sequence
+from typing import ClassVar, Final, TypeAlias
 
 import attr
 from flake8.options.manager import OptionManager
-from typing_extensions import Final, TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide.options import defaults
 
 _Type: TypeAlias = type
-ConfigValuesTypes: TypeAlias = Union[str, int, bool, Sequence[str]]
+ConfigValuesTypes: TypeAlias = str | int | bool | Sequence[str]
 String: Final = str
 
 
 @final
 @attr.dataclass(frozen=True, slots=True)
-class _Option(object):
+class _Option:
     """Represents ``flake8`` option object."""
 
     long_option_name: str
     default: ConfigValuesTypes
     help: str  # noqa: WPS125
-    type: Optional[_Type] = int  # noqa: WPS125
+    type: _Type | None = int  # noqa: WPS125
     parse_from_config: bool = True
     action: str = 'store'
     comma_separated_list: bool = False
-    dest: Optional[str] = None
+    dest: str | None = None
 
-    def __attrs_post_init__(self):
+    def __attrs_post_init__(self) -> None:
         """Is called after regular init is done."""
         object.__setattr__(  # noqa: WPS609
-            self, 'help', ' '.join(
-                (self.help, 'Defaults to: %(default)s'),  # noqa: WPS323
-            ),
+            self,
+            'help',
+            f'{self.help} Defaults to: %(default)s',
         )
 
     def asdict_no_none(self) -> Mapping[str, ConfigValuesTypes]:
@@ -200,12 +204,11 @@ class _Option(object):
 
 
 @final
-class Configuration(object):
+class Configuration:
     """Simple configuration store with all options."""
 
     _options: ClassVar[Sequence[_Option]] = [
         # General:
-
         _Option(
             '--min-name-length',
             defaults.MIN_NAME_LENGTH,
@@ -271,9 +274,7 @@ class Configuration(object):
             defaults.EXPS_FOR_ONE_EMPTY_LINE,
             'Count of expressions for one empty line in a function body.',
         ),
-
         # Complexity:
-
         _Option(
             '--max-returns',
             defaults.MAX_RETURNS,
@@ -380,6 +381,11 @@ class Configuration(object):
             'Maximum number of raises in a function.',
         ),
         _Option(
+            '--max-except-exceptions',
+            defaults.MAX_EXCEPT_EXCEPTIONS,
+            'Maximum number of raises in a function.',
+        ),
+        _Option(
             '--max-cognitive-score',
             defaults.MAX_COGNITIVE_SCORE,
             'Maximum amount of cognitive complexity per function.',
@@ -409,9 +415,7 @@ class Configuration(object):
             defaults.MAX_TUPLE_UNPACK_LENGTH,
             'Maximum number of variables in a tuple unpacking.',
         ),
-
         # Formatter:
-
         _Option(
             '--show-violation-links',
             defaults.SHOW_VIOLATION_LINKS,

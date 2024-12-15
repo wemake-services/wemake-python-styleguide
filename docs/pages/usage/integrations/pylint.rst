@@ -20,7 +20,7 @@ that ``pylint`` is less radical and more classic in its rules.
 They are almost compatible with each other.
 The difference is in:
 
-- Several minor rules like `class Some(object):` vs `class Some:`
+- Several minor rules like `class Some:` vs `class Some:`
 - Error codes
 - Python versions, because ``pylint`` covers more versions
 - ``wemake-python-styleguide`` is stricter and finds more

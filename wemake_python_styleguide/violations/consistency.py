@@ -29,7 +29,7 @@ Summary
    UnderscoredNumberViolation
    PartialFloatViolation
    FormattedStringViolation
-   RequiredBaseClassViolation
+   ExplicitObjectBaseClassViolation
    MultipleIfsInComprehensionViolation
    ConstantCompareViolation
    CompareOrderViolation
@@ -96,7 +96,7 @@ Consistency checks
 .. autoclass:: UnderscoredNumberViolation
 .. autoclass:: PartialFloatViolation
 .. autoclass:: FormattedStringViolation
-.. autoclass:: RequiredBaseClassViolation
+.. autoclass:: ExplicitObjectBaseClassViolation
 .. autoclass:: MultipleIfsInComprehensionViolation
 .. autoclass:: ConstantCompareViolation
 .. autoclass:: CompareOrderViolation
@@ -244,11 +244,15 @@ class UnicodeStringViolation(TokenizeViolation):
         nickname = u'sobolevn'
 
     .. versionadded:: 0.1.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This rule is covered by ``ruff`` linter. See ``UP025``.
 
     """
 
     code = 302
     error_template = 'Found unicode string prefix: {0}'
+    disabled_since = '1.0.0'
 
 
 @final
@@ -262,23 +266,29 @@ class UnderscoredNumberViolation(TokenizeViolation):
         And it would be still the same number.
         Count how many ways there are to write bigger numbers.
         Currently, it all depends on the cultural habits of the author.
-        We enforce a single way to write numbers: without the underscore.
+        We enforce a single way to write numbers with thousands separators.
+        We allow only underscores to be used as thousands separators.
 
     Solution:
         Numbers should be written as numbers: ``1000``.
-        If you have a very big number with a lot of zeros, use multiplication.
+        Using underscores as thousands separators if necessary.
 
     Example::
 
         # Correct:
         phone = 88313443
-        million = 1000000
+        million = 1_000_000.50_001
+        hexed = 1_234.157_000e-1_123
+        binary = 0b1_001_001
 
         # Wrong:
         phone = 8_83_134_43
-        million = 100_00_00
+        million = 100_00_00.1_0
+        octal = 0o00_11
 
     .. versionadded:: 0.1.0
+    .. versionchanged:: 1.0.0
+       Underscore (_) now only allowed with 3 digits after it
 
     """
 
@@ -311,11 +321,15 @@ class PartialFloatViolation(TokenizeViolation):
         ten_float = 10.
 
     .. versionadded:: 0.1.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     code = 304
     error_template = 'Found partial float: {0}'
+    disabled_since = '1.0.0'
 
 
 @final
@@ -349,47 +363,57 @@ class FormattedStringViolation(ASTViolation):
         f'Result is: {2 + 2}'
 
     .. versionadded:: 0.1.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``WPS237``.
 
     """
 
     error_template = 'Found `f` string'
     code = 305
+    disabled_since = '1.0.0'
 
 
 @final
-class RequiredBaseClassViolation(ASTViolation):
+class ExplicitObjectBaseClassViolation(ASTViolation):
     """
-    Forbid writing classes without base classes.
-
-    Please, note that this rule has nothing to do with ``python2``.
-    We care only about consistency here.
+    Forbid writing explicit `object` base class.
 
     Reasoning:
-        We just need to decide how to do it.
-        We need a single and unified rule about base classes.
-        We have decided to stick to the explicit base class notation.
-        Why? Because it is consistent with other use-cases.
-        When we have a base class ``A``, we write ``class MyClass(A):``.
-        When we have no base class, we have an implicit ``object`` base class.
-        So, we still use the same syntax: ``class MyClass(object):``.
+        Adding `object` base class does not have any effect in most cases.
+        However, PEP695 adds new syntax to define classes: `class Some[T]:`
+        which is equivalent to: `class Some(Generic[T]):`.
+        If `object` is added to `class Some[T](object):`
+        it will be a runtime error: it won't be possible to create a proper MRO.
+
+        We don't want to promote feature that can cause troubles.
+
+        This feature also has some legacy Python2 connotations.
 
     Solution:
-        Add a base class.
+        Remove `object` base class.
 
     Example::
 
         # Correct:
-        class Some(object): ...
-
-        # Wrong:
         class Some: ...
 
+        # Wrong:
+        class Some(object): ...
+
     .. versionadded:: 0.1.0
+    .. versionchanged:: 0.19.0
+       Now the rule is inverted: we require no explicit `object` base class.
+       See PEP695 for extra reasoning.
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
-    error_template = 'Found class without a base class: {0}'
+    error_template = 'Found explicit `object` base class: {0}'
     code = 306
+    disabled_since = '1.0.0'
 
 
 @final
@@ -418,7 +442,7 @@ class MultipleIfsInComprehensionViolation(ASTViolation):
 
     """
 
-    error_template = 'Found list comprehension with multiple `if`s'
+    error_template = 'Found a comprehension with multiple `if`s'
     code = 307
 
 
@@ -477,11 +501,15 @@ class CompareOrderViolation(ASTViolation):
         if 3 < some_x:
 
     .. versionadded:: 0.3.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``SIM300``.
 
     """
 
     error_template = 'Found reversed compare order'
     code = 309
+    disabled_since = '1.0.0'
 
 
 @final
@@ -515,11 +543,15 @@ class BadNumberSuffixViolation(TokenizeViolation):
         number_with_scientific_notation = 1.5E+10
 
     .. versionadded:: 0.3.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found bad number suffix: {0}'
     code = 310
+    disabled_since = '1.0.0'
 
 
 @final
@@ -613,11 +645,15 @@ class MissingSpaceBetweenKeywordAndParenViolation(TokenizeViolation):
             yield(1, 2, 3)
 
     .. versionadded:: 0.3.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found parenthesis immediately after a keyword'
     code = 313
+    disabled_since = '1.0.0'
 
 
 @final
@@ -666,18 +702,22 @@ class ObjectInBaseClassesListViolation(ASTViolation):
     Example::
 
        # Correct:
-       class SomeClassName(object): ...
+       class SomeClassName: ...
        class SomeClassName(FirstParentClass, SecondParentClass): ...
 
        # Wrong:
        class SomeClassName(FirstParentClass, SecondParentClass, object): ...
 
     .. versionadded:: 0.3.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``UP004``.
 
     """
 
-    error_template = 'Found extra `object` in parent classes list'
+    error_template = 'Found extra `object` in parent classes list: {0}'
     code = 315
+    disabled_since = '1.0.0'
 
 
 @final
@@ -707,11 +747,15 @@ class MultipleContextManagerAssignmentsViolation(ASTViolation):
             ...
 
     .. versionadded:: 0.6.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``SIM117``.
 
     """
 
     error_template = 'Found context manager with too many assignments'
     code = 316
+    disabled_since = '1.0.0'
 
 
 @final
@@ -783,11 +827,15 @@ class ParametersIndentationViolation(ASTViolation):
     functions, methods, and classes.
 
     .. versionadded:: 0.6.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found incorrect multi-line parameters'
     code = 317
+    disabled_since = '1.0.0'
 
 
 @final
@@ -824,11 +872,15 @@ class ExtraIndentationViolation(TokenizeViolation):
         https://github.com/wemake-services/wemake-python-styleguide/blob/master/styles/isort.toml
 
     .. versionadded:: 0.6.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found extra indentation'
     code = 318
+    disabled_since = '1.0.0'
 
 
 @final
@@ -877,11 +929,15 @@ class WrongBracketPositionViolation(TokenizeViolation):
     We check round, square, and curly brackets.
 
     .. versionadded:: 0.6.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found bracket in wrong position'
     code = 319
+    disabled_since = '1.0.0'
 
 
 @final
@@ -911,11 +967,15 @@ class MultilineFunctionAnnotationViolation(ASTViolation):
     This rule checks argument and return type annotations.
 
     .. versionadded:: 0.6.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found multi-line function type annotation'
     code = 320
+    disabled_since = '1.0.0'
 
 
 @final
@@ -975,6 +1035,8 @@ class WrongMultilineStringViolation(TokenizeViolation):
     Docstrings are ignored from this rule.
     You must use triple quotes strings for docstrings.
 
+    Is not reported for `f`-strings on python3.12+
+
     .. versionadded:: 0.7.0
 
     '''
@@ -1025,11 +1087,15 @@ class ModuloStringFormatViolation(ASTViolation):
         https://pyformat.info/
 
     .. versionadded:: 0.14.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``UP031``.
 
     """
 
     error_template = 'Found `%` string formatting'
     code = 323
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1143,11 +1209,15 @@ class ImplicitStringConcatenationViolation(TokenizeViolation):
         text = 'first' 'second'
 
     .. versionadded:: 0.7.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``ISC001``.
 
     """
 
     error_template = 'Found implicit string concatenation'
     code = 326
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1257,11 +1327,15 @@ class UselessExceptCaseViolation(ASTViolation):
             raise
 
     .. versionadded:: 0.7.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``TRY203``.
 
     """
 
     error_template = 'Found useless `except` case'
     code = 329
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1341,17 +1415,21 @@ class InconsistentReturnVariableViolation(ASTViolation):
 
     .. versionadded:: 0.9.0
     .. versionchanged:: 0.14.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``RET504``.
 
     """
 
     error_template = 'Found variables that are only used for `return`: {0}'
     code = 331
+    disabled_since = '1.0.0'
 
 
 @final
 class WalrusViolation(ASTViolation):
     """
-    Forbid walrus operator.
+    Forbid the use of the walrus operator (`:=`) outside of comprehensions.
 
     Reasoning:
         Code with ``:=`` is hardly readable.
@@ -1360,7 +1438,8 @@ class WalrusViolation(ASTViolation):
         Python is not expression-based.
 
     Solution:
-        Don't use fancy stuff, use good old assignments.
+        Avoid using the walrus operator outside comprehensions.
+        Stick to traditional assignment statements for clarity.
 
     Example::
 
@@ -1377,7 +1456,7 @@ class WalrusViolation(ASTViolation):
 
     """
 
-    error_template = 'Found walrus operator'
+    error_template = 'Found walrus operator outside a comprehension'
     code = 332
 
 
@@ -1547,12 +1626,15 @@ class MultilineConditionsViolation(ASTViolation):
 
     .. versionadded:: 0.9.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found multiline conditions'
     code = 337
-    previous_codes = {465}
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1646,11 +1728,15 @@ class PositiveExponentViolation(TokenizeViolation):
         number = 1e+1
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found exponent number with positive exponent: {0}'
     code = 340
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1674,11 +1760,15 @@ class WrongHexNumberCaseViolation(TokenizeViolation):
         number = 0xabcdef
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found wrong hex number case: {0}'
     code = 341
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1701,6 +1791,8 @@ class ImplicitRawStringViolation(TokenizeViolation):
 
         # Wrong:
         escaped = '\\n'
+
+    Is not reported for `f`-strings on python3.12+
 
     .. versionadded:: 0.12.0
 
@@ -1730,11 +1822,15 @@ class BadComplexNumberSuffixViolation(TokenizeViolation):
         complex_number = 1J
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found wrong complex number suffix: {0}'
     code = 343
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1921,11 +2017,15 @@ class LineStartsWithDotViolation(TokenizeViolation):
         )
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       It conflicted with the ``ruff`` formatter.
 
     """
 
     error_template = 'Found a line that starts with a dot'
     code = 348
+    disabled_since = '1.0.0'
 
 
 @final
@@ -2000,11 +2100,15 @@ class UnnecessaryLiteralsViolation(ASTViolation):
         default = int()
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``UP018`` and ``C408``.
 
     """
 
     error_template = 'Found unnecessary literals'
     code = 351
+    disabled_since = '1.0.0'
 
 
 @final
@@ -2033,11 +2137,15 @@ class MultilineLoopViolation(ASTViolation):
             ...
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found multiline loop'
     code = 352
+    disabled_since = '1.0.0'
 
 
 @final
@@ -2125,11 +2233,15 @@ class BracketBlankLineViolation(TokenizeViolation):
         ]
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found an unnecessary blank line before a bracket'
     code = 355
+    disabled_since = '1.0.0'
 
 
 @final
@@ -2150,12 +2262,16 @@ class IterableUnpackingViolation(ASTViolation):
         {*iterable, *other_iterable}
         list(iterable)
         first, *iterable = other_iterable
+        GenericTuple = tuple[*Shape]
 
         # Wrong:
         [*iterable]
         *iterable, = other_iterable
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 0.19.3
+       Allow using ``TypeVarTuple`` unpacking in generic types.
+       As a side-effect we now allow all unpackings in ``ast.Subscript``.
 
     """
 
@@ -2262,12 +2378,18 @@ class RawStringNotNeededViolation(TokenizeViolation):
         # Wrong:
         r'This string should not be prefixed with r.'
 
+    Is not reported for `f`-strings on python3.12+
+
     .. versionadded:: 0.15.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found an unnecessary use of a raw string: {0}'
     code = 360
+    disabled_since = '1.0.0'
 
 
 @final
@@ -2301,11 +2423,15 @@ class InconsistentComprehensionViolation(TokenizeViolation):
         ]
 
     .. versionadded:: 0.15.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found an inconsistently structured comprehension'
     code = 361
+    disabled_since = '1.0.0'
 
 
 @final

@@ -59,6 +59,7 @@ Summary
    TooLongTupleUnpackViolation
    TooComplexFormattedStringViolation
    TooManyRaisesViolation
+   TooManyExceptExceptionsViolation
 
 Module complexity
 -----------------
@@ -101,6 +102,7 @@ Structure complexity
 .. autoclass:: TooLongTupleUnpackViolation
 .. autoclass:: TooComplexFormattedStringViolation
 .. autoclass:: TooManyRaisesViolation
+.. autoclass:: TooManyExceptExceptionsViolation
 
 """
 
@@ -308,6 +310,7 @@ class OverusedExpressionViolation(ASTViolation):
 
 
 # Functions and classes:
+
 
 @final
 class TooManyLocalsViolation(ASTViolation):
@@ -681,6 +684,8 @@ class TooDeepNestingViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.5.0
+    .. versionchanged:: 0.19.1
+       Do not report ``...`` when used in a function or class body.
 
     """
 
@@ -836,12 +841,17 @@ class TooManyExceptCasesViolation(ASTViolation):
         since one controlling structure will become too complex.
         Also, you will need to test a lot of logic paths in your application.
 
+        If you have too many ``except*`` blocks,
+        it means that the exception group is too complex.
+
     Solution:
         We can reduce the complexity of this case by splitting it into multiple
         ``try`` cases, functions or using a decorator
         to handle different exceptions.
 
     .. versionadded:: 0.7.0
+    .. versionchanged:: 0.19.0
+       Supports `try/except*` as well.
 
     """
 
@@ -867,7 +877,7 @@ class OverusedStringViolation(MaybeASTViolation):
         and should be treated like one.
 
     Solution:
-        Deduplicate you string usages
+        Deduplicate your string usages
         by defining new functions or constants.
 
     Configuration:
@@ -922,7 +932,7 @@ class TooLongCompareViolation(ASTViolation):
 
     """
 
-    error_template = 'Found too long compare'
+    error_template = 'Found too long compare: {0}'
     code = 228
 
 
@@ -951,6 +961,8 @@ class TooLongTryBodyViolation(ASTViolation):
         https://adamj.eu/tech/2019/10/02/limit-your-try-clauses-in-python/
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 0.19.0
+       Supports `try/except*` as well.
 
     """
 
@@ -1199,9 +1211,7 @@ class TooComplexFormattedStringViolation(ASTViolation):
     - the value of a variable
     - the value of a collection through lookup with a variable, number, or
       string as the key
-    - the return value of a procedure call without arguments
-
-    Related to :class:`~FormattedStringViolation`.
+    - the return value of a function / method call with 3 arguments maximum
 
     Reasoning:
         Complex ``f`` strings are often difficult to understand,
@@ -1217,9 +1227,11 @@ class TooComplexFormattedStringViolation(ASTViolation):
 
         # Correct:
         f'smth {user.get_full_name()}'
+        f'smth {math_func(1, 2, 3)}'
 
         # Wrong:
-        f'{reverse("url-name")}?{"&".join("user="+uid for uid in user_ids)}'
+        f'{reverse("url-name")}?{"&".join("user=" + uid for uid in user_ids)}'
+        f'smth {math_func(1, 2, 3, 4)}'
 
     .. versionadded:: 0.15.0
 
@@ -1255,3 +1267,28 @@ class TooManyRaisesViolation(ASTViolation):
 
     error_template = 'Found too many raises in a function: {0}'
     code = 238
+
+
+@final
+class TooManyExceptExceptionsViolation(ASTViolation):
+    """
+    Forbids too many exceptions in ``except`` statement.
+
+    Reasoning:
+        Too exceptions in ``except`` case means
+        that too many things are happening here at once.
+
+    Solution:
+        Use common base classes, split ``except`` cases.
+
+    Configuration:
+        This rule is configurable with ``--max-except-exceptions``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_EXCEPT_EXCEPTIONS`
+
+    .. versionadded:: 1.0.0
+
+    """
+
+    error_template = 'Found too exceptions in `except` case: {0}'
+    code = 239

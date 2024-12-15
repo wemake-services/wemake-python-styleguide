@@ -184,13 +184,16 @@ def get_foo():
 """
 
 
-@pytest.mark.parametrize('code', [
-    getter_function_with_implicit_return,
-    getter_function_with_bare_return,
-    getter_method_with_implicit_return,
-    getter_method_with_bare_return,
-    getter_stub_with_extra_statements,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        getter_function_with_implicit_return,
+        getter_function_with_bare_return,
+        getter_method_with_implicit_return,
+        getter_method_with_bare_return,
+        getter_stub_with_extra_statements,
+    ],
+)
 def test_wrong_getters(
     assert_errors,
     parse_ast_tree,
@@ -207,24 +210,27 @@ def test_wrong_getters(
     assert_errors(visitor, [GetterWithoutReturnViolation])
 
 
-@pytest.mark.parametrize('code', [
-    getter_function_with_valued_return,
-    getter_function_with_explicit_none_return,
-    getter_function_with_bare_yield,
-    getter_function_with_valued_yield,
-    getter_function_with_explicit_none_yield,
-    getter_method_with_valued_return,
-    getter_method_with_explicit_none_return,
-    getter_method_with_bare_yield,
-    getter_method_with_valued_yield,
-    getter_method_with_explicit_none_yield,
-    getter_method_with_branched_return,
-    getter_stub_with_docstring,
-    getter_stub_with_ellipsis,
-    getter_stub_with_raise,
-    getter_stub_with_docstring_and_ellipsis,
-    getter_stub_with_docstring_and_raise,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        getter_function_with_valued_return,
+        getter_function_with_explicit_none_return,
+        getter_function_with_bare_yield,
+        getter_function_with_valued_yield,
+        getter_function_with_explicit_none_yield,
+        getter_method_with_valued_return,
+        getter_method_with_explicit_none_return,
+        getter_method_with_bare_yield,
+        getter_method_with_valued_yield,
+        getter_method_with_explicit_none_yield,
+        getter_method_with_branched_return,
+        getter_stub_with_docstring,
+        getter_stub_with_ellipsis,
+        getter_stub_with_raise,
+        getter_stub_with_docstring_and_ellipsis,
+        getter_stub_with_docstring_and_raise,
+    ],
+)
 def test_correct_getters(
     assert_errors,
     parse_ast_tree,
@@ -241,10 +247,13 @@ def test_correct_getters(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    getter_function_with_yield_from,
-    getter_method_with_yield_from,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        getter_function_with_yield_from,
+        getter_method_with_yield_from,
+    ],
+)
 def test_correct_getter_with_yield_from(
     assert_errors,
     parse_ast_tree,
@@ -265,14 +274,17 @@ def test_correct_getter_with_yield_from(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    regular_function_with_bare_return,
-    regular_function_with_implicit_return,
-    regular_function_with_bare_yield,
-    regular_method_with_bare_return,
-    regular_method_with_implicit_return,
-    regular_method_with_bare_yield,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        regular_function_with_bare_return,
+        regular_function_with_implicit_return,
+        regular_function_with_bare_yield,
+        regular_method_with_bare_return,
+        regular_method_with_implicit_return,
+        regular_method_with_bare_yield,
+    ],
+)
 def test_correct_non_getters(
     assert_errors,
     parse_ast_tree,

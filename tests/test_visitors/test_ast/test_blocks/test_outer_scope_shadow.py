@@ -68,7 +68,7 @@ def wrapper():
     with open() as (first, second):
         print(first, second)
 
-class Test(object):
+class Test:
     first: str
 
     def __init__(self, second):
@@ -98,7 +98,7 @@ def other():
 """
 
 correct_class1 = """
-class Test(object):
+class Test:
     first: int
     second = 2
     third: int = 3
@@ -113,7 +113,7 @@ class Test(object):
 """
 
 correct_class2 = """
-class Test(object):
+class Test:
     first: int
     second = 2
     third: int = 3
@@ -125,7 +125,7 @@ class Test(object):
 """
 
 correct_class3 = """
-class First(object):
+class First:
     a = 1
 
 class Second(First):
@@ -138,7 +138,7 @@ a = 0
 def test():
     ...
 
-class First(object):
+class First:
     a = 1
 
     def test(self):
@@ -254,22 +254,41 @@ def function():
         ...
 """
 
+match_as_overlap = """
+import some
 
-@pytest.mark.parametrize('code', [
-    correct_for_loop1,
-    correct_for_loop2,
-    correct_for_loop3,
-    correct_for_comprehension,
-    correct_except,
-    correct_with1,
-    correct_with2,
-    correct_with3,
-    correct_class1,
-    correct_class2,
-    correct_class3,
-    correct_class4,
-    correct_walrus,
-])
+def function():
+    match ...:
+        case 1 as some: ...
+"""
+
+match_star_overlap = """
+import some
+
+def function():
+    match ...:
+        case [*some]: ...
+"""
+
+
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_for_loop1,
+        correct_for_loop2,
+        correct_for_loop3,
+        correct_for_comprehension,
+        correct_except,
+        correct_with1,
+        correct_with2,
+        correct_with3,
+        correct_class1,
+        correct_class2,
+        correct_class3,
+        correct_class4,
+        correct_walrus,
+    ],
+)
 def test_variable_used_correctly(
     assert_errors,
     parse_ast_tree,
@@ -286,21 +305,26 @@ def test_variable_used_correctly(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    import_overlap1,
-    import_overlap2,
-    import_overlap3,
-    import_overlap4,
-    function_overlap1,
-    function_overlap2,
-    constant_overlap1,
-    constant_overlap2,
-    constant_overlap3,
-    constant_overlap4,
-    constant_overlap5,
-    constant_overlap6,
-    walrus_overlap,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        import_overlap1,
+        import_overlap2,
+        import_overlap3,
+        import_overlap4,
+        function_overlap1,
+        function_overlap2,
+        constant_overlap1,
+        constant_overlap2,
+        constant_overlap3,
+        constant_overlap4,
+        constant_overlap5,
+        constant_overlap6,
+        walrus_overlap,
+        match_as_overlap,
+        match_star_overlap,
+    ],
+)
 def test_outer_variable_shadow(
     assert_errors,
     parse_ast_tree,
@@ -338,7 +362,10 @@ def test_outer_variable_double_shadow(
     visitor = BlockVariableVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [
-        OuterScopeShadowingViolation,
-        OuterScopeShadowingViolation,
-    ])
+    assert_errors(
+        visitor,
+        [
+            OuterScopeShadowingViolation,
+            OuterScopeShadowingViolation,
+        ],
+    )

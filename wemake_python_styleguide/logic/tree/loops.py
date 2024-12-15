@@ -1,12 +1,11 @@
 import ast
-from typing import Optional
 
 from wemake_python_styleguide.compat.aliases import ForNodes
 from wemake_python_styleguide.types import AnyLoop, AnyNodes
 
 
 def _does_loop_contain_node(
-    loop: Optional[AnyLoop],
+    loop: AnyLoop | None,
     to_check: ast.AST,
 ) -> bool:
     """
@@ -35,7 +34,8 @@ def has_break(
 
         if isinstance(subnode, break_nodes):
             is_nested_break = _does_loop_contain_node(
-                closest_loop, subnode,
+                closest_loop,
+                subnode,
             )
             if not is_nested_break:
                 return True

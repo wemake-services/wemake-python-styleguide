@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY311
 from wemake_python_styleguide.violations.complexity import (
     TooLongTryBodyViolation,
 )
@@ -18,6 +19,13 @@ simple_try_except = """
 try:
     {0}
 except ValueError:
+    ...
+"""
+
+try_star_except = """
+try:
+    {0}
+except* ValueError:
     ...
 """
 
@@ -67,20 +75,32 @@ else:
 """
 
 
-@pytest.mark.parametrize('statements', [
-    'print(1)\n    print(2)',
-    'm.print(1)\n    m.print(2)\n    m.print(3)',
-    'm = 1\n    p = 2\n    c = 3\n    x = 4',
-])
-@pytest.mark.parametrize('code', [
-    try_without_except,
-    simple_try_except,
-    try_except_with_else,
-    full_except_with_else,
-])
+@pytest.mark.parametrize(
+    'statements',
+    [
+        'print(1)\n    print(2)',
+        'm.print(1)\n    m.print(2)\n    m.print(3)',
+        'm = 1\n    p = 2\n    c = 3\n    x = 4',
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        try_without_except,
+        simple_try_except,
+        try_except_with_else,
+        full_except_with_else,
+        pytest.param(
+            try_star_except,
+            marks=pytest.mark.skipif(
+                not PY311,
+                reason='ExceptionGroup was added in python 3.11',
+            ),
+        ),
+    ],
+)
 def test_try_body_count_default(
     assert_errors,
-    assert_error_text,
     parse_ast_tree,
     default_options,
     code,
@@ -95,17 +115,30 @@ def test_try_body_count_default(
     assert_errors(visitor, [TooLongTryBodyViolation])
 
 
-@pytest.mark.parametrize('statements', [
-    'print(1)\n    print(2)',
-    'm.print(1)\n    m.print(2)',
-    'm = 1\n    p = 2',
-])
-@pytest.mark.parametrize('code', [
-    try_without_except,
-    simple_try_except,
-    try_except_with_else,
-    full_except_with_else,
-])
+@pytest.mark.parametrize(
+    'statements',
+    [
+        'print(1)\n    print(2)',
+        'm.print(1)\n    m.print(2)',
+        'm = 1\n    p = 2',
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        try_without_except,
+        simple_try_except,
+        try_except_with_else,
+        full_except_with_else,
+        pytest.param(
+            try_star_except,
+            marks=pytest.mark.skipif(
+                not PY311,
+                reason='ExceptionGroup was added in python 3.11',
+            ),
+        ),
+    ],
+)
 def test_try_body_wrong_custom_options(
     assert_errors,
     assert_error_text,
@@ -123,21 +156,36 @@ def test_try_body_wrong_custom_options(
 
     assert_errors(visitor, [TooLongTryBodyViolation])
     assert_error_text(
-        visitor, '2', baseline=option_values.max_try_body_length,
+        visitor,
+        '2',
+        baseline=option_values.max_try_body_length,
     )
 
 
-@pytest.mark.parametrize('statements', [
-    'print(1)\n    print(2)',
-    'm.print(1)\n    m.print(2)',
-    'm = 1\n    p = 2',
-])
-@pytest.mark.parametrize('code', [
-    try_without_except,
-    simple_try_except,
-    try_except_with_else,
-    full_except_with_else,
-])
+@pytest.mark.parametrize(
+    'statements',
+    [
+        'print(1)\n    print(2)',
+        'm.print(1)\n    m.print(2)',
+        'm = 1\n    p = 2',
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        try_without_except,
+        simple_try_except,
+        try_except_with_else,
+        full_except_with_else,
+        pytest.param(
+            try_star_except,
+            marks=pytest.mark.skipif(
+                not PY311,
+                reason='ExceptionGroup was added in python 3.11',
+            ),
+        ),
+    ],
+)
 def test_try_body_count_custom_options(
     assert_errors,
     parse_ast_tree,
@@ -155,17 +203,30 @@ def test_try_body_count_custom_options(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('statements', [
-    'print(1)',
-    'm.print(1)',
-    'm = 1',
-])
-@pytest.mark.parametrize('code', [
-    try_without_except,
-    simple_try_except,
-    try_except_with_else,
-    full_except_with_else,
-])
+@pytest.mark.parametrize(
+    'statements',
+    [
+        'print(1)',
+        'm.print(1)',
+        'm = 1',
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        try_without_except,
+        simple_try_except,
+        try_except_with_else,
+        full_except_with_else,
+        pytest.param(
+            try_star_except,
+            marks=pytest.mark.skipif(
+                not PY311,
+                reason='ExceptionGroup was added in python 3.11',
+            ),
+        ),
+    ],
+)
 def test_try_body_correct_default(
     assert_errors,
     parse_ast_tree,
@@ -182,16 +243,22 @@ def test_try_body_correct_default(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('statements', [
-    'print(1)',
-    'm.print(1)',
-    'm = 1',
-])
-@pytest.mark.parametrize('code', [
-    wrong_simple_try_except,
-    wrong_try_except_with_else,
-    wrong_try_without_except,
-])
+@pytest.mark.parametrize(
+    'statements',
+    [
+        'print(1)',
+        'm.print(1)',
+        'm = 1',
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_simple_try_except,
+        wrong_try_except_with_else,
+        wrong_try_without_except,
+    ],
+)
 def test_try_body_different_nodes(
     assert_errors,
     parse_ast_tree,

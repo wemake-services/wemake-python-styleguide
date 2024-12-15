@@ -63,7 +63,7 @@ Reference
 import abc
 import ast
 import tokenize
-from typing import List, Sequence, Type
+from collections.abc import Sequence
 
 from typing_extensions import final
 
@@ -74,7 +74,7 @@ from wemake_python_styleguide.types import ConfigurationOptions
 from wemake_python_styleguide.violations.base import BaseViolation
 
 
-class BaseVisitor(object, metaclass=abc.ABCMeta):
+class BaseVisitor(abc.ABC):
     """
     Abstract base class for different types of visitors.
 
@@ -94,11 +94,11 @@ class BaseVisitor(object, metaclass=abc.ABCMeta):
         """Creates base visitor instance."""
         self.options = options
         self.filename = filename
-        self.violations: List[BaseViolation] = []
+        self.violations: list[BaseViolation] = []
 
     @classmethod
     def from_checker(
-        cls: Type['BaseVisitor'],
+        cls: type['BaseVisitor'],
         checker,
     ) -> 'BaseVisitor':
         """
@@ -116,6 +116,8 @@ class BaseVisitor(object, metaclass=abc.ABCMeta):
     @final
     def add_violation(self, violation: BaseViolation) -> None:
         """Adds violation to the visitor."""
+        # It is not allowed to add disabled violations:
+        assert violation.disabled_since is None, violation.code  # noqa: S101
         self.violations.append(violation)
 
     @abc.abstractmethod
@@ -127,7 +129,7 @@ class BaseVisitor(object, metaclass=abc.ABCMeta):
         to do when it was told to ``run``.
         """
 
-    def _post_visit(self) -> None:
+    def _post_visit(self) -> None:  # noqa: B027
         """
         Executed after all nodes have been visited.
 
@@ -161,7 +163,7 @@ class BaseNodeVisitor(ast.NodeVisitor, BaseVisitor):
     @final
     @classmethod
     def from_checker(
-        cls: Type['BaseNodeVisitor'],
+        cls: type['BaseNodeVisitor'],
         checker,
     ) -> 'BaseNodeVisitor':
         """Constructs visitor instance from the checker."""
@@ -192,7 +194,7 @@ class BaseNodeVisitor(ast.NodeVisitor, BaseVisitor):
         self._post_visit()
 
 
-class BaseFilenameVisitor(BaseVisitor, metaclass=abc.ABCMeta):
+class BaseFilenameVisitor(BaseVisitor, abc.ABC):
     """
     Abstract base class that allows to visit and check module file names.
 
@@ -242,11 +244,12 @@ class BaseTokenVisitor(BaseVisitor):
         """Creates new ``tokenize`` based visitor instance."""
         super().__init__(options, **kwargs)
         self.file_tokens = file_tokens
+        self.token_index = -1
 
     @final
     @classmethod
     def from_checker(
-        cls: Type['BaseTokenVisitor'],
+        cls: type['BaseTokenVisitor'],
         checker,
     ) -> 'BaseTokenVisitor':
         """Constructs ``tokenize`` based visitor instance from the checker."""
@@ -274,7 +277,7 @@ class BaseTokenVisitor(BaseVisitor):
 
         """
         token_type = tokenize.tok_name[token.exact_type].lower()
-        method = getattr(self, 'visit_{0}'.format(token_type), None)
+        method = getattr(self, f'visit_{token_type}', None)
         if method is not None:
             method(token)
 

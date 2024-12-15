@@ -1,11 +1,11 @@
 import sys
-from typing import NoReturn
+from pathlib import Path
+from typing import Final, NoReturn
 
 import astpath
 from pygments import highlight
 from pygments.formatters.terminal256 import Terminal256Formatter
 from pygments.lexers.python import PythonLexer
-from typing_extensions import Final
 
 FAIL_CODE: Final = 255
 
@@ -36,17 +36,18 @@ def main() -> NoReturn:
     report('"self.generic_visit(node)" should be last statement here:')
 
     for fn, line in matches:
-        with open(fn, 'r') as fp:
-            lines = fp.read().splitlines()
-            report('\t{0}:{1}\n\t{2}'.format(
+        lines = Path(fn).read_text(encoding='utf8').splitlines()
+        report(
+            '\t{}:{}\n\t{}'.format(
                 fn,
                 line,
                 highlight(
                     lines[line - 1],
                     PythonLexer(),
                     Terminal256Formatter(),
-                )),
-            )
+                ),
+            ),
+        )
 
     exit(FAIL_CODE)  # noqa: WPS421
 

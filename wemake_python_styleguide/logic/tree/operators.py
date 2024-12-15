@@ -1,5 +1,4 @@
 import ast
-from typing import Optional, Type
 
 from wemake_python_styleguide.logic.nodes import get_parent
 
@@ -17,14 +16,7 @@ def unwrap_unary_node(node: ast.AST) -> ast.AST:
         node = node.operand
 
 
-def unwrap_starred_node(node: ast.AST) -> ast.AST:
-    """Unwraps the unary ``*`` starred node."""
-    if isinstance(node, ast.Starred):
-        return node.value
-    return node
-
-
-def get_parent_ignoring_unary(node: ast.AST) -> Optional[ast.AST]:
+def get_parent_ignoring_unary(node: ast.AST) -> ast.AST | None:
     """
     Returns real parent ignoring proxy unary parent level.
 
@@ -45,7 +37,7 @@ def get_parent_ignoring_unary(node: ast.AST) -> Optional[ast.AST]:
 
 def count_unary_operator(
     node: ast.AST,
-    operator: Type[ast.unaryop],
+    operator: type[ast.unaryop],
     amount: int = 0,
 ) -> int:
     """Returns amount of unary operators matching input."""

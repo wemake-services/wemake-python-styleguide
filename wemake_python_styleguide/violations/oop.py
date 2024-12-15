@@ -81,7 +81,7 @@ class BuiltinSubclassViolation(ASTViolation):
     Example::
 
         # Correct:
-        class Some(object): ...
+        class Some: ...
         class MyValueException(ValueError): ...
 
         # Wrong:
@@ -94,7 +94,6 @@ class BuiltinSubclassViolation(ASTViolation):
 
     error_template = 'Found subclassing a builtin: {0}'
     code = 600
-    previous_codes = {426}
 
 
 @final
@@ -123,17 +122,17 @@ class ShadowedClassAttributeViolation(ASTViolation):
         # Correct:
         from typing import ClassVar
 
-        class First(object):
+        class First:
             field: ClassVar[int] = 1
 
-        class Second(object):
+        class Second:
             field: int
 
             def __init__(self) -> None:
                 self.field = 1
 
         # Wrong:
-        class Some(object):
+        class Some:
             field = 1
 
             def __init__(self) -> None:
@@ -148,7 +147,6 @@ class ShadowedClassAttributeViolation(ASTViolation):
 
     error_template = 'Found shadowed class attribute: {0}'
     code = 601
-    previous_codes = {427}
 
 
 @final
@@ -166,14 +164,10 @@ class StaticMethodViolation(ASTViolation):
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.11.0
 
-    See also:
-       webucator.com/article/when-to-use-static-methods-in-python-never
-
     """
 
     error_template = 'Found using `@staticmethod`'
     code = 602
-    previous_codes = {433}
 
 
 @final
@@ -204,7 +198,6 @@ class BadMagicMethodViolation(ASTViolation):
 
     error_template = 'Found using restricted magic method: {0}'
     code = 603
-    previous_codes = {434}
 
 
 @final
@@ -227,7 +220,7 @@ class WrongClassBodyContentViolation(ASTViolation):
     Example::
 
         # Wrong:
-        class Test(object):
+        class Test:
             for _ in range(10):
                 print('What?!')
 
@@ -241,7 +234,6 @@ class WrongClassBodyContentViolation(ASTViolation):
 
     error_template = 'Found incorrect node inside `class` body'
     code = 604
-    previous_codes = {452}
 
 
 @final
@@ -263,11 +255,11 @@ class MethodWithoutArgumentsViolation(ASTViolation):
     Example::
 
         # Correct:
-        class Test(object):
+        class Test:
             def method(self): ...
 
         # Wrong:
-        class Test(object):
+        class Test:
             def method(): ...
 
     .. versionadded:: 0.7.0
@@ -277,7 +269,6 @@ class MethodWithoutArgumentsViolation(ASTViolation):
 
     error_template = 'Found method without arguments: {0}'
     code = 605
-    previous_codes = {453}
 
 
 @final
@@ -315,7 +306,6 @@ class WrongBaseClassViolation(ASTViolation):
 
     error_template = 'Found incorrect base class'
     code = 606
-    previous_codes = {454}
 
 
 @final
@@ -342,14 +332,14 @@ class WrongSlotsViolation(ASTViolation):
     Example::
 
         # Correct:
-        class Test(object):
+        class Test:
             __slots__ = ('field1', 'field2')
 
         class Other(Test):
             __slots__ = (*Test.__slots__, 'child')
 
         # Wrong:
-        class Test(object):
+        class Test:
             __slots__ = ['field1', 'field2', 'field2']
 
     Note, that we do ignore all complex expressions for this field.
@@ -363,7 +353,6 @@ class WrongSlotsViolation(ASTViolation):
 
     error_template = 'Found incorrect `__slots__` syntax'
     code = 607
-    previous_codes = {455}
 
 
 @final
@@ -395,7 +384,6 @@ class WrongSuperCallViolation(ASTViolation):
 
     error_template = 'Found incorrect `super()` call: {0}'
     code = 608
-    previous_codes = {456}
 
 
 @final
@@ -438,7 +426,6 @@ class DirectMagicAttributeAccessViolation(ASTViolation):
 
     error_template = 'Found direct magic attribute usage: {0}'
     code = 609
-    previous_codes = {462}
 
 
 @final
@@ -464,11 +451,11 @@ class AsyncMagicMethodViolation(ASTViolation):
     Example::
 
         # Correct:
-        class Test(object):
+        class Test:
             def __lt__(self, other): ...
 
         # Wrong:
-        class Test(object):
+        class Test:
             async def __lt__(self, other): ...
 
     See also:
@@ -505,12 +492,12 @@ class YieldMagicMethodViolation(ASTViolation):
     Example::
 
          # Correct:
-        class Example(object):
+        class Example:
             def __init__(self):
                 ...
 
         # Wrong:
-        class Example(object):
+        class Example:
             def __init__(self):
                 yield 10
 
@@ -525,7 +512,6 @@ class YieldMagicMethodViolation(ASTViolation):
 
     error_template = 'Found forbidden `yield` magic method usage: {0}'
     code = 611
-    previous_codes = {439, 435}
 
 
 @final
@@ -550,7 +536,7 @@ class UselessOverwrittenMethodViolation(ASTViolation):
                 return argument  # or None, or anything!
 
         # Wrong:
-        class Test(object):
+        class Test:
             def method(self, argument):
                 return super().method(argument)
 
@@ -619,7 +605,7 @@ class WrongDescriptorDecoratorViolation(ASTViolation):
     Example::
 
         # Correct:
-        class TestClass(object):
+        class TestClass:
             @property
             def my_method():
                 ...
@@ -652,12 +638,12 @@ class UnpythonicGetterSetterViolation(ASTViolation):
     Example::
 
         # Correct:
-        class Example(object):
+        class Example:
             def __init__(self):
                 self.attribute = None
 
         # Wrong:
-        class Example(object):
+        class Example:
             def __init__(self):
                 self._attribute = None
 
@@ -671,7 +657,7 @@ class UnpythonicGetterSetterViolation(ASTViolation):
 
     """
 
-    error_template = 'Found unpythonic getter or setter'
+    error_template = 'Found unpythonic getter or setter: {0}'
     code = 615
 
 

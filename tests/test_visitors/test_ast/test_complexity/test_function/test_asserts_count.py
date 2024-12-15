@@ -24,11 +24,14 @@ def function():  # has two asserts
 """
 
 
-@pytest.mark.parametrize('code', [
-    function_without_asserts,
-    function_with_asserts,
-    function_with_nested_function_and_asserts,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_without_asserts,
+        function_with_asserts,
+        function_with_nested_function_and_asserts,
+    ],
+)
 def test_asserts_correct_count(
     assert_errors,
     parse_ast_tree,
@@ -45,10 +48,13 @@ def test_asserts_correct_count(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    function_with_asserts,
-    function_with_nested_function_and_asserts,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_with_asserts,
+        function_with_nested_function_and_asserts,
+    ],
+)
 def test_asserts_wrong_count(
     assert_errors,
     assert_error_text,

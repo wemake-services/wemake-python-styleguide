@@ -1,13 +1,14 @@
 import ast
-from typing import Iterable, Optional
+from collections.abc import Iterable
 
-from wemake_python_styleguide.types import AnyChainable
+from wemake_python_styleguide.constants import SPECIAL_ARGUMENT_NAMES_WHITELIST
+from wemake_python_styleguide.types import AnyChainable, AnyVariableDef
 
 
-def _chained_item(iterator: ast.AST) -> Optional[ast.AST]:
-    if isinstance(iterator, (ast.Attribute, ast.Subscript)):
+def _chained_item(iterator: ast.AST) -> ast.AST | None:
+    if isinstance(iterator, ast.Attribute | ast.Subscript):
         return iterator.value
-    elif isinstance(iterator, ast.Call):
+    if isinstance(iterator, ast.Call):
         return iterator.func
     return None
 
@@ -33,3 +34,18 @@ def parts(node: AnyChainable) -> Iterable[ast.AST]:
         if chained_item is None:
             return
         iterator = chained_item
+
+
+def is_foreign_attribute(node: AnyVariableDef) -> bool:
+    """Tells whether this node is a foreign attribute."""
+    if not isinstance(node, ast.Attribute):
+        return False
+
+    if not isinstance(node.value, ast.Name):
+        return True
+
+    # This condition finds attributes like `point.x`,
+    # but, ignores all other cases like `self.x`.
+    # So, we change the strictness of this rule,
+    # based on the attribute source.
+    return node.value.id not in SPECIAL_ARGUMENT_NAMES_WHITELIST

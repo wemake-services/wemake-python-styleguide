@@ -1,16 +1,9 @@
 import ast
 from collections import defaultdict
-from typing import (
-    Callable,
-    ClassVar,
-    DefaultDict,
-    FrozenSet,
-    List,
-    Tuple,
-    Union,
-)
+from collections.abc import Callable
+from typing import ClassVar, TypeAlias
 
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic import source, walk
@@ -21,16 +14,19 @@ from wemake_python_styleguide.violations import complexity
 from wemake_python_styleguide.visitors import base, decorators
 
 #: We use these types to store the number of nodes usage in different contexts.
-_Expressions: TypeAlias = DefaultDict[str, List[ast.AST]]
-_FunctionExpressions: TypeAlias = DefaultDict[ast.AST, _Expressions]
-_StringConstants: TypeAlias = FrozenSet[Union[str, bytes]]
+_Expressions: TypeAlias = defaultdict[str, list[ast.AST]]
+_FunctionExpressions: TypeAlias = defaultdict[ast.AST, _Expressions]
+_StringConstants: TypeAlias = frozenset[str | bytes]
 
 
 @final
-@decorators.alias('visit_any_string', (
-    'visit_Str',
-    'visit_Bytes',
-))
+@decorators.alias(
+    'visit_any_string',
+    (
+        'visit_Str',
+        'visit_Bytes',
+    ),
+)
 class StringOveruseVisitor(base.BaseNodeVisitor):
     """
     Restricts repeated usage of the same string constant.
@@ -40,33 +36,37 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
     comma, dot).
     """
 
-    _ignored_string_constants: ClassVar[_StringConstants] = frozenset((
-        ' ',
-        '.',
-        ',',
-        '',
-        '\n',
-        '\r\n',
-        '\t',
-        '|',
-        '"',
-        "'",
-        b'"',
-        b"'",
-        b' ',
-        b'.',
-        b',',
-        b'',
-        b'\n',
-        b'\r\n',
-        b'\t',
-    ))
+    _ignored_string_constants: ClassVar[_StringConstants] = frozenset(
+        (
+            ' ',
+            '.',
+            ',',
+            '',
+            '\n',
+            '\r\n',
+            '\t',
+            '|',
+            '"',
+            "'",
+            '...',
+            b'"',
+            b"'",
+            b' ',
+            b'.',
+            b',',
+            b'',
+            b'\n',
+            b'\r\n',
+            b'\t',
+        ),
+    )
 
     def __init__(self, *args, **kwargs) -> None:
         """Inits the counter for constants."""
         super().__init__(*args, **kwargs)
-        self._string_constants: DefaultDict[
-            AnyTextPrimitive, int,
+        self._string_constants: defaultdict[
+            AnyTextPrimitive,
+            int,
         ] = defaultdict(int)
 
     def visit_any_string(self, node: AnyText) -> None:
@@ -111,7 +111,6 @@ class ExpressionOveruseVisitor(base.BaseNodeVisitor):
         ast.Compare,
         ast.Subscript,
         ast.Lambda,
-
         ast.DictComp,
         ast.Dict,
         ast.List,
@@ -122,7 +121,7 @@ class ExpressionOveruseVisitor(base.BaseNodeVisitor):
         ast.SetComp,
     )
 
-    _ignore_predicates: Tuple[Callable[[ast.AST], bool], ...] = (
+    _ignore_predicates: tuple[Callable[[ast.AST], bool], ...] = (
         overuses.is_decorator,
         overuses.is_self,
         annotations.is_annotation,

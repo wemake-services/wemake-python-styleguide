@@ -1,12 +1,7 @@
 import tokenize
-from typing import Tuple
-
-from flake8_quotes.docstring_detection import (  # noqa: WPS113, F401
-    get_docstring_tokens as get_docstring_tokens,
-)
 
 
-def split_prefixes(string: str) -> Tuple[str, str]:
+def split_prefixes(string: str) -> tuple[str, str]:
     """
     Splits string repr by prefixes and the quoted content.
 
@@ -25,11 +20,13 @@ def split_prefixes(string: str) -> Tuple[str, str]:
 
 def has_triple_string_quotes(string_contents: str) -> bool:
     """Tells whether string token is written as inside triple quotes."""
-    if string_contents.startswith('"""') and string_contents.endswith('"""'):
-        return True
-    elif string_contents.startswith("'''") and string_contents.endswith("'''"):
-        return True
-    return False
+    return bool(
+        (string_contents.startswith('"""') and string_contents.endswith('"""'))
+        or (
+            string_contents.startswith("'''")
+            and string_contents.endswith("'''")
+        ),
+    )
 
 
 def get_comment_text(token: tokenize.TokenInfo) -> str:

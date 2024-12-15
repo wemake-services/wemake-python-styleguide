@@ -3,8 +3,8 @@ We use direct string assertiong on the formatter.
 
 So, no unit tests for formatter, only e2e ones.
 
-We use ``snapshottest`` to render and assert equality of the output:
-https://github.com/syrusakbary/snapshottest
+We use ``surupy`` to render and assert equality of the output:
+https://github.com/tophat/syrupy
 
 To update snapshots use ``--snapshot-update`` flag, when running ``pytest``.
 
@@ -13,11 +13,10 @@ because it renders differently on different envs.
 
 Warning::
 
-    Files inside ``./snapshots`` are auto generated!
+    Files inside ``./__snapshots__`` are auto generated!
     Do not edit them manually.
 
 """
-
 
 import os
 import subprocess
@@ -41,15 +40,18 @@ def _safe_output(output: str) -> str:
     return output.replace(current_version_url, general_version_url)
 
 
-@pytest.mark.parametrize(('cli_options', 'output'), [
-    ([], 'regular'),
-    (['--statistic'], 'regular_statistic'),
-    (['--show-source'], 'with_source'),
-    (['--show-violation-links'], 'with_links'),
-    (['--show-source', '--statistic'], 'with_source_statistic'),
-    (['--show-source', '--show-violation-links'], 'with_source_links'),
-    (['--statistic', '--show-source'], 'statistic_with_source'),
-])
+@pytest.mark.parametrize(
+    ('cli_options', 'output'),
+    [
+        ([], 'regular'),
+        (['--statistic'], 'regular_statistic'),
+        (['--show-source'], 'with_source'),
+        (['--show-violation-links'], 'with_links'),
+        (['--show-source', '--statistic'], 'with_source_statistic'),
+        (['--show-source', '--show-violation-links'], 'with_source_links'),
+        (['--statistic', '--show-source'], 'statistic_with_source'),
+    ],
+)
 @pytest.mark.parametrize(
     'no_color',
     [True, False, None],
@@ -90,21 +92,21 @@ def test_formatter(snapshot, cli_options, output, no_color):
     )
     stdout, _ = process.communicate()
 
-    snapshot.assert_match(
-        _safe_output(stdout),
-        'formatter_{0}_{1}'.format(output, no_color),
-    )
+    assert _safe_output(stdout) == snapshot, f'formatter_{output}_{no_color}'
 
 
-@pytest.mark.parametrize(('cli_options', 'output'), [
-    ([], 'regular'),
-    (['--statistic'], 'regular_statistic'),
-    (['--show-source'], 'with_source'),
-    (['--show-violation-links'], 'with_links'),
-    (['--show-source', '--statistic'], 'with_source_statistic'),
-    (['--show-source', '--show-violation-links'], 'with_source_links'),
-    (['--statistic', '--show-source'], 'statistic_with_source'),
-])
+@pytest.mark.parametrize(
+    ('cli_options', 'output'),
+    [
+        ([], 'regular'),
+        (['--statistic'], 'regular_statistic'),
+        (['--show-source'], 'with_source'),
+        (['--show-violation-links'], 'with_links'),
+        (['--show-source', '--statistic'], 'with_source_statistic'),
+        (['--show-source', '--show-violation-links'], 'with_source_links'),
+        (['--statistic', '--show-source'], 'statistic_with_source'),
+    ],
+)
 @pytest.mark.parametrize(
     'no_color',
     [True, False],
@@ -135,9 +137,8 @@ def test_formatter_correct(snapshot, cli_options, output, no_color):
     stdout, stderr = process.communicate()
     assert process.returncode == 0, (stdout, stderr)
 
-    snapshot.assert_match(
-        _safe_output(stdout),
-        'formatter_correct_{0}_{1}'.format(output, no_color),
+    assert _safe_output(stdout) == snapshot, (
+        f'formatter_correct_{output}_{no_color}'
     )
 
 
@@ -171,7 +172,4 @@ def test_ipynb(snapshot):
     # nbQA output contains absolute path
     stdout = stdout.replace(os.getcwd() + os.sep, '')
 
-    snapshot.assert_match(
-        _safe_output(stdout),
-        'formatter_ipynb',
-    )
+    assert _safe_output(stdout) == snapshot, 'formatter_ipynb'

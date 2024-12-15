@@ -8,23 +8,23 @@ from wemake_python_styleguide.visitors.ast.naming.validation import (
 )
 
 static_attribute = """
-class Test(object):
+class Test:
     {0} = None
 """
 
 static_typed_attribute = """
-class Test(object):
+class Test:
     {0}: int = None
 """
 
 static_typed_condition_attribute = """
-class Test(object):
-    if sys.version_info > (3, 8):
+class Test:
+    if sys.version_info > (3, 'whatever'):
         {0}: int = None
 """
 
 regression423 = """
-class MyClass(object):
+class MyClass:
     def action_method(self, request, second):
         ...
 
@@ -32,20 +32,26 @@ class MyClass(object):
 """
 
 
-@pytest.mark.parametrize('code', [
-    static_attribute,
-    static_typed_attribute,
-    static_typed_condition_attribute,
-])
-@pytest.mark.parametrize('non_snake_case_name', [
-    'Abc',
-    'A_CONSTANT',
-    'AAA',
-    'B2',
-    'CONST1_bc',
-    'camelCase',
-    '_A_c',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        static_attribute,
+        static_typed_attribute,
+        static_typed_condition_attribute,
+    ],
+)
+@pytest.mark.parametrize(
+    'non_snake_case_name',
+    [
+        'Abc',
+        'A_CONSTANT',
+        'AAA',
+        'B2',
+        'CONST1_bc',
+        'camelCase',
+        '_A_c',
+    ],
+)
 def test_upper_case_class_attributes(
     assert_errors,
     assert_error_text,
@@ -64,19 +70,25 @@ def test_upper_case_class_attributes(
     assert_error_text(visitor, non_snake_case_name)
 
 
-@pytest.mark.parametrize('code', [
-    static_attribute,
-    static_typed_attribute,
-    static_typed_condition_attribute,
-])
-@pytest.mark.parametrize('snake_case_name', [
-    'abc',
-    'a_variable',
-    'aaa',
-    'two_minutes_to_midnight',
-    'variable42_5',
-    '_a_c',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        static_attribute,
+        static_typed_attribute,
+        static_typed_condition_attribute,
+    ],
+)
+@pytest.mark.parametrize(
+    'snake_case_name',
+    [
+        'abc',
+        'a_variable',
+        'aaa',
+        'two_minutes_to_midnight',
+        'variable42_5',
+        '_a_c',
+    ],
+)
 def test_snake_case_class_attributes(
     assert_errors,
     parse_ast_tree,

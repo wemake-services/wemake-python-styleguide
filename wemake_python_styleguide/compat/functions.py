@@ -1,29 +1,24 @@
 import ast
-from typing import List, Union
 
-from wemake_python_styleguide.compat.types import AnyAssignWithWalrus
+from wemake_python_styleguide.compat.types import NodeWithTypeParams
+from wemake_python_styleguide.types import AnyAssignWithWalrus
 
 
 def get_assign_targets(
-    node: Union[AnyAssignWithWalrus, ast.AugAssign],
-) -> List[ast.expr]:
+    node: AnyAssignWithWalrus | ast.AugAssign,
+) -> list[ast.expr]:
     """Returns list of assign targets without knowing the type of assign."""
-    if isinstance(node, (ast.AnnAssign, ast.AugAssign, ast.NamedExpr)):
+    if isinstance(node, ast.AnnAssign | ast.AugAssign | ast.NamedExpr):
         return [node.target]
     return node.targets
 
 
-def get_slice_expr(node: ast.Subscript) -> ast.expr:
-    """
-    Get slice expression from the subscript in all versions of python.
-
-    It was changed in ``python3.9``.
-
-    Before: ``ast.Subscript`` -> ``ast.Index`` -> ``ast.expr``
-    After: ``ast.Subscript`` -> ``ast.expr``
-    """
-    return (
-        node.slice.value  # type: ignore
-        if isinstance(node.slice, ast.Index)
-        else node.slice
-    )
+def get_type_param_names(  # pragma: >=3.12 cover
+    node: NodeWithTypeParams,
+) -> list[tuple[ast.AST, str]]:
+    """Return list of type parameters' names."""
+    type_params = []
+    for type_param_node in getattr(node, 'type_params', []):
+        type_param_name = type_param_node.name
+        type_params.append((type_param_node, type_param_name))
+    return type_params

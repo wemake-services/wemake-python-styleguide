@@ -14,7 +14,7 @@ def _get_sorted_classes(classes):
 
 def test_violation_source_order(all_module_violations):
     """Used to force violations order inside the source code."""
-    for _, classes in all_module_violations.items():
+    for classes in all_module_violations.values():
         sorted_by_code, sorted_by_source = _get_sorted_classes(classes)
 
         assert sorted_by_code == sorted_by_source

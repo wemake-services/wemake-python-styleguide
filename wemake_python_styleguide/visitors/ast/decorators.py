@@ -1,6 +1,7 @@
 import ast
+from typing import Final
 
-from typing_extensions import Final, final
+from typing_extensions import final
 
 from wemake_python_styleguide.logic.tree import attributes
 from wemake_python_styleguide.types import AnyFunctionDef
@@ -18,10 +19,13 @@ _ALLOWED_DECORATOR_TYPES: Final = (
 
 
 @final
-@alias('visit_any_function', (
-    'visit_FunctionDef',
-    'visit_AsyncFunctionDef',
-))
+@alias(
+    'visit_any_function',
+    (
+        'visit_FunctionDef',
+        'visit_AsyncFunctionDef',
+    ),
+)
 class WrongDecoratorVisitor(BaseNodeVisitor):
     """Checks decorators's correctness."""
 
@@ -32,11 +36,11 @@ class WrongDecoratorVisitor(BaseNodeVisitor):
 
     def _check_new_decorator_syntax(self, node: AnyFunctionDef) -> None:
         for decorator in node.decorator_list:
-            if not self._is_allowed_decorator(decorator):  # pragma: py-lt-39
+            if not self._is_allowed_decorator(decorator):
                 self.add_violation(NewStyledDecoratorViolation(decorator))
 
     def _is_allowed_decorator(self, node: ast.expr) -> bool:
-        if not isinstance(node, _ALLOWED_DECORATOR_TYPES):  # pragma: py-lt-39
+        if not isinstance(node, _ALLOWED_DECORATOR_TYPES):
             return False
 
         if isinstance(node, ast.Name):

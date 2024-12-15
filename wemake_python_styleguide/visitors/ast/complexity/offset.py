@@ -3,6 +3,8 @@ from typing import ClassVar
 
 from typing_extensions import final
 
+from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.violations.complexity import (
     TooDeepNestingViolation,
 )
@@ -11,26 +13,31 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 
 @final
-@alias('visit_line_expression', (
-    'visit_Try',
-    'visit_ExceptHandler',
-    'visit_For',
-    'visit_With',
-    'visit_While',
-    'visit_If',
-    'visit_Raise',
-    'visit_Return',
-    'visit_Continue',
-    'visit_Break',
-    'visit_Assign',
-    'visit_Expr',
-    'visit_Pass',
-    'visit_ClassDef',
-    'visit_FunctionDef',
-    'visit_AsyncFor',
-    'visit_AsyncWith',
-    'visit_AsyncFunctionDef',
-))
+@alias(
+    'visit_line_expression',
+    (
+        'visit_Try',
+        'visit_TryStar',
+        'visit_Match',
+        'visit_ExceptHandler',
+        'visit_For',
+        'visit_With',
+        'visit_While',
+        'visit_If',
+        'visit_Raise',
+        'visit_Return',
+        'visit_Continue',
+        'visit_Break',
+        'visit_Assign',
+        'visit_Expr',
+        'visit_Pass',
+        'visit_ClassDef',
+        'visit_FunctionDef',
+        'visit_AsyncFor',
+        'visit_AsyncWith',
+        'visit_AsyncFunctionDef',
+    ),
+)
 class OffsetVisitor(BaseNodeVisitor):
     """Checks offset values for several nodes."""
 
@@ -53,6 +60,15 @@ class OffsetVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_offset(self, node: ast.AST) -> None:
+        is_function_ellipsis = (
+            isinstance(get_parent(node), (*FunctionNodes, ast.ClassDef))
+            and isinstance(node, ast.Expr)
+            and isinstance(node.value, ast.Constant)
+            and node.value.value is Ellipsis
+        )
+        if is_function_ellipsis:
+            return
+
         offset = getattr(node, 'col_offset', 0)
         baseline = self._max_offset_blocks * 4
         if offset > baseline:

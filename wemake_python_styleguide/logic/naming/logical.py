@@ -1,4 +1,4 @@
-from typing import Iterable
+from collections.abc import Iterable
 
 from wemake_python_styleguide.constants import (
     ALIAS_NAMES_WHITELIST,
@@ -33,8 +33,8 @@ def is_wrong_name(name: str, to_check: Iterable[str]) -> bool:
     for name_to_check in to_check:
         choices_to_check = {
             name_to_check,
-            '_{0}'.format(name_to_check),
-            '{0}_'.format(name_to_check),
+            f'_{name_to_check}',
+            f'{name_to_check}_',
         }
         if name.lower() in choices_to_check:
             return True

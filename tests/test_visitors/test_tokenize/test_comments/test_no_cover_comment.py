@@ -9,12 +9,15 @@ from wemake_python_styleguide.visitors.tokenize.comments import (
 )
 
 
-@pytest.mark.parametrize('code', [
-    'wallet = 10  # pragma: no cover',
-    'wallet = 10  # pragma: no  cover',
-    'wallet = 10  # pragma:  no  cover',
-    'wallet = 10  # pragma:  no cover',
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        'wallet = 10  # pragma: no cover',
+        'wallet = 10  # pragma: no  cover',
+        'wallet = 10  # pragma:  no  cover',
+        'wallet = 10  # pragma:  no cover',
+    ],
+)
 def test_no_cover_overuse(
     parse_tokens,
     assert_errors,
@@ -23,7 +26,7 @@ def test_no_cover_overuse(
     code,
 ):
     """Ensures that `no cover` overuse raises a warning."""
-    file_tokens = parse_tokens('{0}\n'.format(code) * (5 + 1))
+    file_tokens = parse_tokens(f'{code}\n' * (5 + 1))
 
     visitor = WrongCommentVisitor(default_options, file_tokens=file_tokens)
     visitor.run()

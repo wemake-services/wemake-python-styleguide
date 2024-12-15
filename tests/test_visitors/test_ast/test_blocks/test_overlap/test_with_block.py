@@ -29,7 +29,7 @@ def function():
 """
 
 with_template3 = """
-class Test(object):
+class Test:
     def method(self):
         {0}
             ...
@@ -37,29 +37,38 @@ class Test(object):
 """
 
 with_template4 = """
-class Test(object):
+class Test:
     def method(self):
         {0}
             {1}
 """
 
 
-@pytest.mark.parametrize('with_statement', [
-    with1,
-    with2,
-    with3,
-    with4,
-    with5,
-])
-@pytest.mark.parametrize('context', [
-    with_template1,
-    with_template2,
-    with_template3,
-    with_template4,
-])
-@pytest.mark.parametrize('variable_name', [
-    'should_raise',
-])
+@pytest.mark.parametrize(
+    'with_statement',
+    [
+        with1,
+        with2,
+        with3,
+        with4,
+        with5,
+    ],
+)
+@pytest.mark.parametrize(
+    'context',
+    [
+        with_template1,
+        with_template2,
+        with_template3,
+        with_template4,
+    ],
+)
+@pytest.mark.parametrize(
+    'variable_name',
+    [
+        'should_raise',
+    ],
+)
 def test_with_block_overlap(
     assert_errors,
     assert_error_text,
@@ -85,22 +94,31 @@ def test_with_block_overlap(
     assert_error_text(visitor, variable_name)
 
 
-@pytest.mark.parametrize('with_statement', [
-    with1,
-    with2,
-    with3,
-    with4,
-    with5,
-])
-@pytest.mark.parametrize('context', [
-    with_template1,
-    with_template2,
-    with_template3,
-    with_template4,
-])
-@pytest.mark.parametrize('variable_name', [
-    'should_raise',
-])
+@pytest.mark.parametrize(
+    'with_statement',
+    [
+        with1,
+        with2,
+        with3,
+        with4,
+        with5,
+    ],
+)
+@pytest.mark.parametrize(
+    'context',
+    [
+        with_template1,
+        with_template2,
+        with_template3,
+        with_template4,
+    ],
+)
+@pytest.mark.parametrize(
+    'variable_name',
+    [
+        'should_raise',
+    ],
+)
 def test_with_block_usage(
     assert_errors,
     parse_ast_tree,
@@ -113,7 +131,7 @@ def test_with_block_usage(
     """Ensures using variables is fine."""
     code = context.format(
         with_statement.format(variable_name),
-        'print({0})'.format(variable_name),
+        f'print({variable_name})',
     )
     tree = parse_ast_tree(mode(code))
 
@@ -123,23 +141,32 @@ def test_with_block_usage(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('with_statement', [
-    with1,
-    with2,
-    with3,
-    with4,
-    with5,
-])
-@pytest.mark.parametrize('context', [
-    with_template1,
-    with_template2,
-    with_template3,
-    with_template4,
-])
-@pytest.mark.parametrize(('first_name', 'second_name'), [
-    ('unique_name', 'unique'),
-    ('_', '_'),
-])
+@pytest.mark.parametrize(
+    'with_statement',
+    [
+        with1,
+        with2,
+        with3,
+        with4,
+        with5,
+    ],
+)
+@pytest.mark.parametrize(
+    'context',
+    [
+        with_template1,
+        with_template2,
+        with_template3,
+        with_template4,
+    ],
+)
+@pytest.mark.parametrize(
+    ('first_name', 'second_name'),
+    [
+        ('unique_name', 'unique'),
+        ('_', '_'),
+    ],
+)
 def test_with_block_correct(
     assert_errors,
     parse_ast_tree,

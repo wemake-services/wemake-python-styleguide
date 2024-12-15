@@ -25,13 +25,13 @@ That's how all ``flake8`` formatters work:
 
 """
 
+import os
 from collections import defaultdict
-from os import environ
-from typing import ClassVar, DefaultDict, Final, List
+from typing import ClassVar, Final
 
 from flake8.formatting.base import BaseFormatter
-from flake8.statistics import Statistics
-from flake8.style_guide import Violation
+from flake8.statistics import Statistic, Statistics
+from flake8.violation import Violation
 from pygments import highlight
 from pygments.formatters import TerminalFormatter
 from pygments.lexers import PythonLexer
@@ -48,7 +48,7 @@ _SHORTLINK_TEMPLATE: Final = 'https://pyflak.es/{0}'
 
 #: Option to disable any code highlight and text output format.
 #: See https://no-color.org
-_NO_COLOR: Final = environ.get('NO_COLOR', '0') == '1'
+_NO_COLOR: Final = os.environ.get('NO_COLOR', '0') == '1'
 
 
 class WemakeFormatter(BaseFormatter):  # noqa: WPS214
@@ -70,13 +70,13 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
 
     # API:
 
-    def after_init(self):
+    def after_init(self) -> None:
         """Called after the original ``init`` is used to set extra fields."""
         self._lexer = PythonLexer()
         self._formatter = TerminalFormatter()
 
         # Logic:
-        self._processed_filenames: List[str] = []
+        self._processed_filenames: list[str] = []
         self._error_count = 0
 
     def handle(self, error: Violation) -> None:  # noqa: WPS110
@@ -103,12 +103,12 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
             newline=self.newline if self._should_show_source(error) else '',
             code=error.code,
             text=error.text,
-            row_col='{0}:{1}'.format(error.line_number, error.column_number),
+            row_col=f'{error.line_number}:{error.column_number}',
         )
 
     def show_source(self, error: Violation) -> str:
         """Called when ``--show-source`` option is provided."""
-        if not self._should_show_source(error):
+        if not self._should_show_source(error) or not error.physical_line:
             return ''
 
         formatted_line = error.physical_line.lstrip()
@@ -145,7 +145,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
             )
 
         self._write(self.newline)
-        self._write(_underline(_bold('All errors: {0}'.format(all_errors))))
+        self._write(_underline(_bold(f'All errors: {all_errors}')))
 
     def stop(self) -> None:
         """Runs once per app when the formatting ends."""
@@ -166,41 +166,32 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
         )
 
     def _print_header(self, filename: str) -> None:
-        self._write(
-            '{newline}{filename}'.format(
-                filename=_underline(_bold(filename)),
-                newline=self.newline,
-            ),
-        )
+        header = _underline(_bold(os.path.normpath(filename)))
+        self._write(f'{self.newline}{header}')
 
     def _print_violation_per_file(
         self,
-        statistic: Statistics,
+        statistic: Statistic,
         error_code: str,
         count: int,
-        error_by_file: DefaultDict[str, int],
-    ):
+        error_by_file: defaultdict[str, int],
+    ) -> None:
+        bold_code = _bold(error_code)
         self._write(
-            '{newline}{error_code}: {message}'.format(
-                newline=self.newline,
-                error_code=_bold(error_code),
-                message=statistic.message,
-            ),
+            f'{self.newline}{bold_code}: {statistic.message}',
         )
         for filename, error_count in error_by_file.items():
             self._write(
-                '  {error_count:<5} {filename}'.format(
-                    error_count=error_count,
-                    filename=filename,
-                ),
+                f'  {error_count:<5} {filename}',
             )
-        self._write(_underline('Total: {0}'.format(count)))
+        self._write(_underline(f'Total: {count}'))
 
     def _should_show_source(self, error: Violation) -> bool:
         return self.options.show_source and error.physical_line is not None
 
 
 # Formatting text:
+
 
 def _bold(text: str, *, no_color: bool = _NO_COLOR) -> str:
     r"""
@@ -217,7 +208,7 @@ def _bold(text: str, *, no_color: bool = _NO_COLOR) -> str:
     """
     if no_color:
         return text
-    return '\033[1m{0}\033[0m'.format(text)
+    return f'\033[1m{text}\033[0m'
 
 
 def _underline(text: str, *, no_color: bool = _NO_COLOR) -> str:
@@ -235,7 +226,7 @@ def _underline(text: str, *, no_color: bool = _NO_COLOR) -> str:
     """
     if no_color:
         return text
-    return '\033[4m{0}\033[0m'.format(text)
+    return f'\033[4m{text}\033[0m'
 
 
 def _highlight(
@@ -258,7 +249,11 @@ def _highlight(
     if no_color:
         return source
     try:
-        return highlight(source, lexer, formatter)
+        return highlight(  # type: ignore[no-any-return]
+            source,
+            lexer,
+            formatter,
+        )
     except Exception:  # pragma: no cover
         # Might fail on some systems, when colors are set incorrectly,
         # or not available at all. In this case code will be just text.
@@ -267,11 +262,12 @@ def _highlight(
 
 # Helpers:
 
+
 def _count_per_filename(
     statistics: Statistics,
     error_code: str,
-) -> DefaultDict[str, int]:
-    filenames: DefaultDict[str, int] = defaultdict(int)
+) -> defaultdict[str, int]:
+    filenames: defaultdict[str, int] = defaultdict(int)
     stats_for_error_code = statistics.statistics_for(error_code)
 
     for stat in stats_for_error_code:

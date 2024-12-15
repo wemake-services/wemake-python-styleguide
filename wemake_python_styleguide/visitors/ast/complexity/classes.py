@@ -1,6 +1,5 @@
 import ast
 from collections import defaultdict
-from typing import DefaultDict
 
 from typing_extensions import final
 
@@ -58,11 +57,13 @@ class ClassComplexityVisitor(BaseNodeVisitor):
             node,
             include_annotated=False,
         )
-        attrs_count = len({
-            attr.attr
-            for attr in instance_attributes
-            if access.is_public(attr.attr)
-        })
+        attrs_count = len(
+            {
+                attr.attr
+                for attr in instance_attributes
+                if access.is_public(attr.attr)
+            },
+        )
 
         if attrs_count > self.options.max_attributes:
             self.add_violation(
@@ -75,17 +76,20 @@ class ClassComplexityVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_any_function', (
-    'visit_FunctionDef',
-    'visit_AsyncFunctionDef',
-))
+@alias(
+    'visit_any_function',
+    (
+        'visit_FunctionDef',
+        'visit_AsyncFunctionDef',
+    ),
+)
 class MethodMembersVisitor(BaseNodeVisitor):
     """Counts methods in a single class."""
 
     def __init__(self, *args, **kwargs) -> None:
         """Creates a counter for tracked methods in different classes."""
         super().__init__(*args, **kwargs)
-        self._methods: DefaultDict[ast.ClassDef, int] = defaultdict(int)
+        self._methods: defaultdict[ast.ClassDef, int] = defaultdict(int)
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """Counts the number of methods in a single class."""

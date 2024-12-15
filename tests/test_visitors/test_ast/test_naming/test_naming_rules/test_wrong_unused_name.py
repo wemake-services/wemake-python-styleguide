@@ -8,10 +8,13 @@ from wemake_python_styleguide.visitors.ast.naming.validation import (
 )
 
 
-@pytest.mark.parametrize('wrong_name', [
-    '__',
-    '___',
-])
+@pytest.mark.parametrize(
+    'wrong_name',
+    [
+        '__',
+        '___',
+    ],
+)
 def test_wrong_unused_variable_name(
     assert_errors,
     assert_error_text,
@@ -31,9 +34,12 @@ def test_wrong_unused_variable_name(
     assert_error_text(visitor, wrong_name)
 
 
-@pytest.mark.parametrize('wrong_name', [
-    '_',
-])
+@pytest.mark.parametrize(
+    'wrong_name',
+    [
+        '_',
+    ],
+)
 def test_correct_unused_variable_name(
     assert_errors,
     parse_ast_tree,

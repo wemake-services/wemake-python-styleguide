@@ -23,11 +23,14 @@ from sys import version
 import_from_multiple_names = 'from module import name0, name1, name2'
 
 
-@pytest.mark.parametrize('code', [
-    module_import,
-    module_with_regular_imports,
-    module_with_from_imports,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_import,
+        module_with_regular_imports,
+        module_with_from_imports,
+    ],
+)
 def test_module_import_counts_normal(
     assert_errors,
     parse_ast_tree,
@@ -43,10 +46,13 @@ def test_module_import_counts_normal(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    module_with_regular_imports,
-    module_with_from_imports,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_with_regular_imports,
+        module_with_from_imports,
+    ],
+)
 def test_module_import_counts_violation(
     assert_errors,
     assert_error_text,
@@ -65,10 +71,13 @@ def test_module_import_counts_violation(
     assert_error_text(visitor, '2', option_values.max_imports)
 
 
-@pytest.mark.parametrize('code', [
-    module_with_regular_imports,
-    module_with_from_imports,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_with_regular_imports,
+        module_with_from_imports,
+    ],
+)
 def test_module_imported_names_counts_violation(
     assert_errors,
     assert_error_text,
@@ -87,10 +96,13 @@ def test_module_imported_names_counts_violation(
     assert_error_text(visitor, '2', option_values.max_imported_names)
 
 
-@pytest.mark.parametrize('code', [
-    module_with_from_imports,
-    import_from_multiple_names,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_with_from_imports,
+        import_from_multiple_names,
+    ],
+)
 def test_import_from_correct_number_of_names(
     assert_errors,
     assert_error_text,
@@ -108,9 +120,12 @@ def test_import_from_correct_number_of_names(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    import_from_multiple_names,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        import_from_multiple_names,
+    ],
+)
 def test_import_from_too_many_members(
     assert_errors,
     assert_error_text,

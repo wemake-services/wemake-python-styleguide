@@ -25,9 +25,11 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
         if is_wrong_name:
             self.add_violation(naming.WrongModuleNameViolation())
 
-        if access.is_magic(self.stem):
-            if self.stem not in constants.MAGIC_MODULE_NAMES_WHITELIST:
-                self.add_violation(naming.WrongModuleMagicNameViolation())
+        if (
+            access.is_magic(self.stem)
+            and self.stem not in constants.MAGIC_MODULE_NAMES_WHITELIST
+        ):
+            self.add_violation(naming.WrongModuleMagicNameViolation())
 
         if access.is_private(self.stem):
             self.add_violation(naming.PrivateNameViolation(text=self.stem))
@@ -69,7 +71,8 @@ class WrongModuleNameVisitor(BaseFilenameVisitor):
 
     def _check_module_name_readability(self) -> None:
         unreadable_sequence = alphabet.get_unreadable_characters(
-            self.stem, constants.UNREADABLE_CHARACTER_COMBINATIONS,
+            self.stem,
+            constants.UNREADABLE_CHARACTER_COMBINATIONS,
         )
         if unreadable_sequence:
             self.add_violation(

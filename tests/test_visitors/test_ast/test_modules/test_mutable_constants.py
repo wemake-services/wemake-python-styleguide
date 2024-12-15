@@ -13,19 +13,25 @@ module_attribute = 'some.attr = {0}'
 module_slice = 'some[0] = {0}'
 
 
-@pytest.mark.parametrize('assignment', [
-    module_constant,
-    module_typed_constant,
-])
-@pytest.mark.parametrize('code', [
-    '{1, 2, 3}',
-    '[]',
-    '{"1": 1}',
-    '{tokenize.NL, tokenize.NEWLINE, *MATCHING.values()}',
-    '[x for x in "123"]',
-    '{x: x for x in "123"}',
-    '{x for x in "123"}',
-])
+@pytest.mark.parametrize(
+    'assignment',
+    [
+        module_constant,
+        module_typed_constant,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        '{1, 2, 3}',
+        '[]',
+        '{"1": 1}',
+        '{tokenize.NL, tokenize.NEWLINE, *MATCHING.values()}',
+        '[x for x in "123"]',
+        '{x: x for x in "123"}',
+        '{x for x in "123"}',
+    ],
+)
 def test_wrong_constant_type_used(
     assert_errors,
     parse_ast_tree,
@@ -42,19 +48,25 @@ def test_wrong_constant_type_used(
     assert_errors(visitor, [MutableModuleConstantViolation])
 
 
-@pytest.mark.parametrize('assignment', [
-    module_variable,
-    module_attribute,
-    module_slice,
-])
-@pytest.mark.parametrize('code', [
-    '{1, 2, 3}',
-    '[]',
-    '{"1": 1}',
-    '[x for x in "123"]',
-    '{x: x for x in "123"}',
-    '{x for x in "123"}',
-])
+@pytest.mark.parametrize(
+    'assignment',
+    [
+        module_variable,
+        module_attribute,
+        module_slice,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        '{1, 2, 3}',
+        '[]',
+        '{"1": 1}',
+        '[x for x in "123"]',
+        '{x: x for x in "123"}',
+        '{x for x in "123"}',
+    ],
+)
 def test_correct_non_constant(
     assert_errors,
     parse_ast_tree,
@@ -71,23 +83,29 @@ def test_correct_non_constant(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('assignment', [
-    module_constant,
-    module_typed_constant,
-    module_variable,
-    module_attribute,
-    module_slice,
-])
-@pytest.mark.parametrize('code', [
-    'frozenset((1, 2, 3))',
-    '(1, 2)',
-    '(1, 2,)',
-    'call()',
-    '1',
-    '"string"',
-    'obj.attr',
-    'dict[0]',
-])
+@pytest.mark.parametrize(
+    'assignment',
+    [
+        module_constant,
+        module_typed_constant,
+        module_variable,
+        module_attribute,
+        module_slice,
+    ],
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        'frozenset((1, 2, 3))',
+        '(1, 2)',
+        '(1, 2,)',
+        'call()',
+        '1',
+        '"string"',
+        'obj.attr',
+        'dict[0]',
+    ],
+)
 def test_correct_constant_type_used(
     assert_errors,
     parse_ast_tree,

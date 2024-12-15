@@ -90,17 +90,20 @@ def wrapper():
 """
 
 
-@pytest.mark.parametrize('code', [
-    lambda_inside_for_loop,
-    nested_lambda_inside_for_loop,
-    lambda_inside_while_loop,
-    nested_lambda_inside_while_loop,
-    lambda_inside_list,
-    lambda_inside_set,
-    lambda_inside_gen,
-    lambda_inside_dict_key,
-    lambda_inside_dict_value,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        lambda_inside_for_loop,
+        nested_lambda_inside_for_loop,
+        lambda_inside_while_loop,
+        nested_lambda_inside_while_loop,
+        lambda_inside_list,
+        lambda_inside_set,
+        lambda_inside_gen,
+        lambda_inside_dict_key,
+        lambda_inside_dict_value,
+    ],
+)
 def test_lambda_body(
     assert_errors,
     parse_ast_tree,
@@ -117,13 +120,16 @@ def test_lambda_body(
     assert_errors(visitor, [LambdaInsideLoopViolation])
 
 
-@pytest.mark.parametrize('code', [
-    correct_lambda_inside_for,
-    correct_lambda_inside_map,
-    correct_lambda_inside_list,
-    correct_lambda_inside_set,
-    correct_lambda_nested_argument_for,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_lambda_inside_for,
+        correct_lambda_inside_map,
+        correct_lambda_inside_list,
+        correct_lambda_inside_set,
+        correct_lambda_nested_argument_for,
+    ],
+)
 def test_correct_lambda_body(
     assert_errors,
     parse_ast_tree,

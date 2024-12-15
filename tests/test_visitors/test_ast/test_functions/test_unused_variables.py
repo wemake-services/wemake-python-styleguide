@@ -15,7 +15,7 @@ PUBLIC = _PROTECTED + 1
 """
 
 correct_class = """
-class Test(object):
+class Test:
     _constant = 1
 
     def __init__(self):
@@ -101,7 +101,7 @@ def some_function():
 """
 
 wrong_method = """
-class Test(object):
+class Test:
     def some_method(self):
         _some = calling()
         print(_some)
@@ -114,16 +114,19 @@ def some_function():
 """
 
 
-@pytest.mark.parametrize('code', [
-    correct_module,
-    correct_class,
-    correct_function,
-    correct_function_with_for,
-    correct_function_with_exception,
-    correct_function_with_unnamed_exception,
-    correct_func_with_re_store_unused_variable1,
-    correct_func_with_re_store_unused_variable2,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_module,
+        correct_class,
+        correct_function,
+        correct_function_with_for,
+        correct_function_with_exception,
+        correct_function_with_unnamed_exception,
+        correct_func_with_re_store_unused_variable1,
+        correct_func_with_re_store_unused_variable2,
+    ],
+)
 def test_correct_variables(
     assert_errors,
     parse_ast_tree,
@@ -140,15 +143,18 @@ def test_correct_variables(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    wrong_function1,
-    wrong_function2,
-    wrong_function_with_exception,
-    wrong_function_with_with,
-    wrong_function_with_for,
-    wrong_method,
-    wrong_function_with_walrus,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_function1,
+        wrong_function2,
+        wrong_function_with_exception,
+        wrong_function_with_with,
+        wrong_function_with_for,
+        wrong_method,
+        wrong_function_with_walrus,
+    ],
+)
 def test_wrong_super_call(
     assert_errors,
     parse_ast_tree,
@@ -183,7 +189,10 @@ def test_double_wrong_variables(
     visitor = FunctionDefinitionVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [
-        UnusedVariableIsUsedViolation,
-        UnusedVariableIsUsedViolation,
-    ])
+    assert_errors(
+        visitor,
+        [
+            UnusedVariableIsUsedViolation,
+            UnusedVariableIsUsedViolation,
+        ],
+    )

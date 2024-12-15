@@ -52,9 +52,11 @@ def _load_all_violation_classes():
     for module in VIOLATIONS_MODULES:
         classes_names_list = inspect.getmembers(module, _is_violation_class)
         only_classes = map(itemgetter(1), classes_names_list)
-        classes.update({
-            module: sorted(only_classes, key=attrgetter('code')),
-        })
+        classes.update(
+            {
+                module: sorted(only_classes, key=attrgetter('code')),
+            },
+        )
     return classes
 
 
@@ -71,13 +73,12 @@ def all_violations():
 @pytest.fixture(scope=_SESSION_SCOPE)
 def all_controlled_violations():
     """Loads all violations which may be tweaked using `i_control_code`."""
-    classes = _load_all_violation_classes()
-    controlled_errors_container = []
-    for module_classes in classes.values():
-        for violation_class in module_classes:
-            if '--i-control-code' in violation_class.__doc__:
-                controlled_errors_container.append(violation_class)
-    return controlled_errors_container
+    return [
+        violation_class
+        for module_classes in _load_all_violation_classes().values()
+        for violation_class in module_classes
+        if '--i-control-code' in violation_class.__doc__
+    ]
 
 
 @pytest.fixture(scope=_SESSION_SCOPE)
@@ -94,5 +95,5 @@ def all_violation_codes(all_module_violations):
             violation.code: violation
             for violation in all_module_violations[module]
         }
-        for module in all_module_violations.keys()
+        for module in all_module_violations
     }

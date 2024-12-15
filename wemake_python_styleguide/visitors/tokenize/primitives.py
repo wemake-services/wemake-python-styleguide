@@ -1,15 +1,22 @@
 import re
 import tokenize
-from typing import ClassVar, FrozenSet, Optional, Pattern
+from collections.abc import Callable, Sequence
+from typing import ClassVar
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic.tokens.strings import (
+from wemake_python_styleguide.logic.tokens.docstrings import (
     get_docstring_tokens,
+)
+from wemake_python_styleguide.logic.tokens.numbers import (
+    has_correct_underscores,
+)
+from wemake_python_styleguide.logic.tokens.strings import (
     has_triple_string_quotes,
     split_prefixes,
 )
 from wemake_python_styleguide.violations import consistency
+from wemake_python_styleguide.violations.base import TokenizeViolation
 from wemake_python_styleguide.violations.best_practices import (
     WrongUnicodeEscapeViolation,
 )
@@ -26,28 +33,15 @@ def _replace_braces(string: str) -> str:
 class WrongNumberTokenVisitor(BaseTokenVisitor):
     """Visits number tokens to find incorrect usages."""
 
-    _bad_number_suffixes: ClassVar[Pattern[str]] = re.compile(
-        r'^[0-9\.]+[BOXE]',
+    _leading_zero_pattern: ClassVar[re.Pattern[str]] = re.compile(
+        r'^[0-9\.]+([box]|e\+?\-?)0.+',
+        re.IGNORECASE | re.ASCII,
     )
-
-    _leading_zero_pattern: ClassVar[Pattern[str]] = re.compile(
-        r'^[0-9\.]+([box]|e\+?\-?)0.+', re.IGNORECASE | re.ASCII,
-    )
-    _leading_zero_float_pattern: ClassVar[Pattern[str]] = re.compile(
+    _leading_zero_float_pattern: ClassVar[re.Pattern[str]] = re.compile(
         r'^[0-9]*\.[0-9]+0+$',
     )
 
-    _positive_exponent_patterns: ClassVar[Pattern[str]] = re.compile(
-        r'^[0-9\.]+e\+', re.IGNORECASE | re.ASCII,
-    )
-
-    _bad_hex_numbers: ClassVar[FrozenSet[str]] = frozenset((
-        'a', 'b', 'c', 'd', 'e', 'f',
-    ))
-
-    _bad_complex_suffix: ClassVar[str] = 'J'
-
-    _float_zero: ClassVar[Pattern[str]] = re.compile(
+    _float_zero: ClassVar[re.Pattern[str]] = re.compile(
         r'^0\.0$',
     )
 
@@ -58,23 +52,12 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
         Regressions:
         https://github.com/wemake-services/wemake-python-styleguide/issues/557
         """
-        self._check_complex_suffix(token)
         self._check_underscored_number(token)
-        self._check_partial_float(token)
         self._check_bad_number_suffixes(token)
         self._check_float_zeros(token)
 
-    def _check_complex_suffix(self, token: tokenize.TokenInfo) -> None:
-        if self._bad_complex_suffix in token.string:
-            self.add_violation(
-                consistency.BadComplexNumberSuffixViolation(
-                    token,
-                    text=self._bad_complex_suffix,
-                ),
-            )
-
     def _check_underscored_number(self, token: tokenize.TokenInfo) -> None:
-        if '_' in token.string:
+        if '_' in token.string and not has_correct_underscores(token.string):
             self.add_violation(
                 consistency.UnderscoredNumberViolation(
                     token,
@@ -82,18 +65,7 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
                 ),
             )
 
-    def _check_partial_float(self, token: tokenize.TokenInfo) -> None:
-        if token.string.startswith('.') or token.string.endswith('.'):
-            self.add_violation(
-                consistency.PartialFloatViolation(token, text=token.string),
-            )
-
     def _check_bad_number_suffixes(self, token: tokenize.TokenInfo) -> None:
-        if self._bad_number_suffixes.match(token.string):
-            self.add_violation(
-                consistency.BadNumberSuffixViolation(token, text=token.string),
-            )
-
         float_zeros = self._leading_zero_float_pattern.match(token.string)
         other_zeros = self._leading_zero_pattern.match(token.string)
         if float_zeros or other_zeros:
@@ -104,52 +76,123 @@ class WrongNumberTokenVisitor(BaseTokenVisitor):
                 ),
             )
 
-        if self._positive_exponent_patterns.match(token.string):
+    def _check_float_zeros(self, token: tokenize.TokenInfo) -> None:
+        if self._float_zero.match(token.string):
             self.add_violation(
-                consistency.PositiveExponentViolation(
+                consistency.FloatZeroViolation(token),
+            )
+
+
+@final
+class _StringTokenChecker:
+    _bad_string_modifiers: ClassVar[frozenset[str]] = frozenset(
+        (
+            'R',
+            'F',
+            'B',
+            'U',
+        ),
+    )
+
+    _unicode_escapes: ClassVar[frozenset[str]] = frozenset(
+        (
+            'u',
+            'U',
+            'N',
+        ),
+    )
+
+    _implicit_raw_strings: ClassVar[re.Pattern[str]] = re.compile(r'\\{2}.+')
+
+    def __init__(
+        self,
+        file_tokens: Sequence[tokenize.TokenInfo],
+        add_violation: Callable[[TokenizeViolation], None],
+    ) -> None:
+        self._docstrings = get_docstring_tokens(file_tokens)
+        self._add_violation = add_violation
+
+    def check_correct_multiline(
+        self,
+        token: tokenize.TokenInfo,
+        string_def: str,
+    ) -> None:
+        if (
+            has_triple_string_quotes(string_def)
+            and '\n' not in string_def
+            and token not in self._docstrings
+        ):
+            self._add_violation(
+                consistency.WrongMultilineStringViolation(token),
+            )
+
+    def check_string_modifiers(
+        self,
+        token: tokenize.TokenInfo,
+        modifiers: str,
+    ) -> None:
+        for modifier in modifiers:
+            if modifier in self._bad_string_modifiers:
+                self._add_violation(
+                    consistency.UppercaseStringModifierViolation(
+                        token,
+                        text=modifier,
+                    ),
+                )
+
+    def check_implicit_raw_string(
+        self,
+        token: tokenize.TokenInfo,
+        modifiers: str,
+        string_def: str,
+    ) -> None:
+        if 'r' in modifiers.lower():
+            return
+
+        if self._implicit_raw_strings.search(_replace_braces(string_def)):
+            self._add_violation(
+                consistency.ImplicitRawStringViolation(
                     token,
                     text=token.string,
                 ),
             )
 
-        if token.string.startswith('0x') or token.string.startswith('0X'):
-            has_wrong_hex_numbers = any(
-                char in self._bad_hex_numbers
-                for char in token.string
-            )
-            if has_wrong_hex_numbers:
-                self.add_violation(
-                    consistency.WrongHexNumberCaseViolation(
-                        token,
-                        text=token.string,
-                    ),
+    def check_wrong_unicode_escape(
+        self,
+        token: tokenize.TokenInfo,
+        modifiers: str,
+        string_def: str,
+    ) -> None:
+        # See: http://docs.python.org/reference/lexical_analysis.html
+        index = 0
+        while True:
+            index = string_def.find('\\', index)
+            if index == -1:
+                break
+
+            next_char = string_def[index + 1]
+            if 'b' in modifiers.lower() and next_char in self._unicode_escapes:
+                self._add_violation(
+                    WrongUnicodeEscapeViolation(token, text=token.string),
                 )
 
-    def _check_float_zeros(self, token: tokenize.TokenInfo) -> None:
-        if self._float_zero.match(token.string):
-            self.add_violation(
-                consistency.FloatZeroViolation(token, text=token.string),
-            )
+            # Whether it was a valid escape or not, backslash followed by
+            # another character can always be consumed whole: the second
+            # character can never be the start of a new backslash escape.
+            index += 2
 
 
 @final
 class WrongStringTokenVisitor(BaseTokenVisitor):
     """Checks incorrect string tokens usages."""
 
-    _bad_string_modifiers: ClassVar[FrozenSet[str]] = frozenset((
-        'R', 'F', 'B', 'U',
-    ))
-
-    _unicode_escapes: ClassVar[FrozenSet[str]] = frozenset((
-        'u', 'U', 'N',
-    ))
-
-    _implicit_raw_strings: ClassVar[Pattern[str]] = re.compile(r'\\{2}.+')
-
     def __init__(self, *args, **kwargs) -> None:
-        """Initializes new visitor and saves all docstrings."""
+        """Check string defitions."""
         super().__init__(*args, **kwargs)
-        self._docstrings = get_docstring_tokens(self.file_tokens)
+        self._checker = _StringTokenChecker(
+            self.file_tokens,
+            self.add_violation,
+        )
 
     def visit_string(self, token: tokenize.TokenInfo) -> None:
         """
@@ -159,109 +202,49 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         You cannot combine it with ``r``, ``b``, or ``f``.
         Since it will raise a ``SyntaxError`` while parsing.
         """
-        self._check_correct_multiline(token)
-        self._check_string_modifiers(token)
-        self._check_implicit_raw_string(token)
-        self._check_wrong_unicode_escape(token)
-        self._check_unnecessary_raw_string(token)
-
-    def _check_correct_multiline(self, token: tokenize.TokenInfo) -> None:
-        _, string_def = split_prefixes(token.string)
-        if has_triple_string_quotes(string_def):
-            if '\n' not in string_def and token not in self._docstrings:
-                self.add_violation(
-                    consistency.WrongMultilineStringViolation(token),
-                )
-
-    def _check_string_modifiers(self, token: tokenize.TokenInfo) -> None:
-        modifiers, _ = split_prefixes(token.string)
-
-        if 'u' in modifiers.lower():
-            self.add_violation(
-                consistency.UnicodeStringViolation(token, text=token.string),
-            )
-
-        for mod in modifiers:
-            if mod in self._bad_string_modifiers:
-                self.add_violation(
-                    consistency.UppercaseStringModifierViolation(
-                        token,
-                        text=mod,
-                    ),
-                )
-
-    def _check_implicit_raw_string(self, token: tokenize.TokenInfo) -> None:
         modifiers, string_def = split_prefixes(token.string)
-        if 'r' in modifiers.lower():
-            return
+        self._checker.check_correct_multiline(token, string_def)
+        self._checker.check_string_modifiers(token, modifiers)
+        self._checker.check_implicit_raw_string(token, modifiers, string_def)
+        self._checker.check_wrong_unicode_escape(token, modifiers, string_def)
 
-        if self._implicit_raw_strings.search(_replace_braces(string_def)):
-            self.add_violation(
-                consistency.ImplicitRawStringViolation(
-                    token,
-                    text=token.string,
-                ),
+    def visit_fstring_start(  # pragma: >3.12 cover
+        self,
+        token: tokenize.TokenInfo,
+    ) -> None:
+        """
+        In python3.12 fstring parser was changed.
+
+        Now, instead of `STRING` token it produces a series of:
+        - `FSTRING_START`
+        - `FSTRING_MIDDLE`
+        - `FSTRING_END`
+        tokens.
+
+        Compare, before 3.12::
+
+            TokenInfo(
+                type=3 (STRING), string="RF'abc'",
+                start=(1, 0), end=(1, 7), line="RF'abc'",
             )
 
-    def _check_wrong_unicode_escape(self, token: tokenize.TokenInfo) -> None:
-        # See: http://docs.python.org/reference/lexical_analysis.html
-        modifiers, string_body = split_prefixes(token.string)
+        3.12 and later versions::
 
-        index = 0
-        while True:
-            index = string_body.find('\\', index)
-            if index == -1:
-                break
-
-            next_char = string_body[index + 1]
-            if 'b' in modifiers.lower() and next_char in self._unicode_escapes:
-                self.add_violation(
-                    WrongUnicodeEscapeViolation(token, text=token.string),
-                )
-
-            # Whether it was a valid escape or not, backslash followed by
-            # another character can always be consumed whole: the second
-            # character can never be the start of a new backslash escape.
-            index += 2
-
-    def _check_unnecessary_raw_string(self, token: tokenize.TokenInfo) -> None:
-        modifiers, string_def = split_prefixes(token.string)
-
-        if 'r' in modifiers.lower() and '\\' not in string_def:
-            self.add_violation(
-                consistency.RawStringNotNeededViolation(token, text=string_def),
+            TokenInfo(
+                type=61 (FSTRING_START), string="RF'",
+                start=(1, 0), end=(1, 3), line="RF'abc'",
+            )
+            TokenInfo(
+                type=62 (FSTRING_MIDDLE), string='abc',
+                start=(1, 3), end=(1, 6), line="RF'abc'",
+            )
+            TokenInfo(
+                type=63 (FSTRING_END), string="'",
+                start=(1, 6), end=(1, 7), line="RF'abc'",
             )
 
-
-@final
-class WrongStringConcatenationVisitor(BaseTokenVisitor):
-    """Checks incorrect string concatenation."""
-
-    _ignored_tokens: ClassVar[FrozenSet[int]] = frozenset((
-        tokenize.NL,
-        tokenize.NEWLINE,
-        tokenize.INDENT,
-        tokenize.COMMENT,
-    ))
-
-    def __init__(self, *args, **kwargs) -> None:
-        """Adds extra ``_previous_token`` property."""
-        super().__init__(*args, **kwargs)
-        self._previous_token: Optional[tokenize.TokenInfo] = None
-
-    def visit(self, token: tokenize.TokenInfo) -> None:
-        """Ensures that all string are concatenated as we allow."""
-        self._check_concatenation(token)
-
-    def _check_concatenation(self, token: tokenize.TokenInfo) -> None:
-        if token.exact_type in self._ignored_tokens:
-            return
-
-        if token.exact_type == tokenize.STRING:
-            if self._previous_token:
-                self.add_violation(
-                    consistency.ImplicitStringConcatenationViolation(token),
-                )
-            self._previous_token = token
-        else:
-            self._previous_token = None
+        """
+        # TODO: parse all string contents and report them
+        # but, since we don't recommend `f`-string, this is a low-priority
+        modifiers = token.string[:-1]
+        self._checker.check_string_modifiers(token, modifiers)

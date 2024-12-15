@@ -1,0 +1,1072 @@
+# serializer version: 1
+# name: test_formatter[default_colors-cli_options0-regular]
+  '''
+  
+  [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
+    1:1      WPS111 Found too short name: s < 2
+    1:7      WPS110 Found wrong variable name: handle
+    2:21     WPS432 Found magic number: 200
+    2:21     WPS303 Found underscored number: 2_00
+  
+  [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
+    1:1      WPS110 Found wrong variable name: data
+    1:10     WPS110 Found wrong variable name: param
+    2:12     WPS437 Found protected attribute usage: _protected
+    2:31     WPS303 Found underscored number: 10_00
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---
+# name: test_formatter[default_colors-cli_options1-regular_statistic]
+  '''
+  
+  [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
+    1:1      WPS111 Found too short name: s < 2
+    1:7      WPS110 Found wrong variable name: handle
+    2:21     WPS432 Found magic number: 200
+    2:21     WPS303 Found underscored number: 2_00
+  
+  [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
+    1:1      WPS110 Found wrong variable name: data
+    1:10     WPS110 Found wrong variable name: param
+    2:12     WPS437 Found protected attribute usage: _protected
+    2:31     WPS303 Found underscored number: 10_00
+  
+  [1mWPS110[0m: Found wrong variable name: handle
+    1     ./tests/fixtures/formatter/formatter1.py
+    2     ./tests/fixtures/formatter/formatter2.py
+  [4mTotal: 3[0m
+  
+  [1mWPS111[0m: Found too short name: s < 2
+    1     ./tests/fixtures/formatter/formatter1.py
+  [4mTotal: 1[0m
+  
+  [1mWPS303[0m: Found underscored number: 2_00
+    1     ./tests/fixtures/formatter/formatter1.py
+    1     ./tests/fixtures/formatter/formatter2.py
+  [4mTotal: 2[0m
+  
+  [1mWPS432[0m: Found magic number: 200
+    1     ./tests/fixtures/formatter/formatter1.py
+  [4mTotal: 1[0m
+  
+  [1mWPS437[0m: Found protected attribute usage: _protected
+    1     ./tests/fixtures/formatter/formatter2.py
+  [4mTotal: 1[0m
+  
+  
+  [4m[1mAll errors: 8[0m[0m
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---
+# name: test_formatter[default_colors-cli_options2-with_source]
+  '''
+  
+  [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
+  
+    1:1      WPS111 Found too short name: s < 2
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    ^
+  
+    1:7      WPS110 Found wrong variable name: handle
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+          ^
+  
+    2:21     WPS432 Found magic number: 200
+    [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
+                    ^
+  
+    2:21     WPS303 Found underscored number: 2_00
+    [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
+                    ^
+  
+  [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
+  
+    1:1      WPS110 Found wrong variable name: data
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    ^
+  
+    1:10     WPS110 Found wrong variable name: param
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+             ^
+  
+    2:12     WPS437 Found protected attribute usage: _protected
+    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
+           ^
+  
+    2:31     WPS303 Found underscored number: 10_00
+    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
+                              ^
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---
+# name: test_formatter[default_colors-cli_options3-with_links]
+  '''
+  
+  [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
+    1:1      WPS111 Found too short name: s < 2
+             -> https://pyflak.es/WPS111
+    1:7      WPS110 Found wrong variable name: handle
+             -> https://pyflak.es/WPS110
+    2:21     WPS432 Found magic number: 200
+             -> https://pyflak.es/WPS432
+    2:21     WPS303 Found underscored number: 2_00
+             -> https://pyflak.es/WPS303
+  
+  [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
+    1:1      WPS110 Found wrong variable name: data
+             -> https://pyflak.es/WPS110
+    1:10     WPS110 Found wrong variable name: param
+             -> https://pyflak.es/WPS110
+    2:12     WPS437 Found protected attribute usage: _protected
+             -> https://pyflak.es/WPS437
+    2:31     WPS303 Found underscored number: 10_00
+             -> https://pyflak.es/WPS303
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---
+# name: test_formatter[default_colors-cli_options4-with_source_statistic]
+  '''
+  
+  [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
+  
+    1:1      WPS111 Found too short name: s < 2
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    ^
+  
+    1:7      WPS110 Found wrong variable name: handle
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+          ^
+  
+    2:21     WPS432 Found magic number: 200
+    [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
+                    ^
+  
+    2:21     WPS303 Found underscored number: 2_00
+    [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
+                    ^
+  
+  [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
+  
+    1:1      WPS110 Found wrong variable name: data
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    ^
+  
+    1:10     WPS110 Found wrong variable name: param
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+             ^
+  
+    2:12     WPS437 Found protected attribute usage: _protected
+    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
+           ^
+  
+    2:31     WPS303 Found underscored number: 10_00
+    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
+                              ^
+  
+  [1mWPS110[0m: Found wrong variable name: handle
+    1     ./tests/fixtures/formatter/formatter1.py
+    2     ./tests/fixtures/formatter/formatter2.py
+  [4mTotal: 3[0m
+  
+  [1mWPS111[0m: Found too short name: s < 2
+    1     ./tests/fixtures/formatter/formatter1.py
+  [4mTotal: 1[0m
+  
+  [1mWPS303[0m: Found underscored number: 2_00
+    1     ./tests/fixtures/formatter/formatter1.py
+    1     ./tests/fixtures/formatter/formatter2.py
+  [4mTotal: 2[0m
+  
+  [1mWPS432[0m: Found magic number: 200
+    1     ./tests/fixtures/formatter/formatter1.py
+  [4mTotal: 1[0m
+  
+  [1mWPS437[0m: Found protected attribute usage: _protected
+    1     ./tests/fixtures/formatter/formatter2.py
+  [4mTotal: 1[0m
+  
+  
+  [4m[1mAll errors: 8[0m[0m
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---
+# name: test_formatter[default_colors-cli_options5-with_source_links]
+  '''
+  
+  [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
+  
+    1:1      WPS111 Found too short name: s < 2
+             -> https://pyflak.es/WPS111
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    ^
+  
+    1:7      WPS110 Found wrong variable name: handle
+             -> https://pyflak.es/WPS110
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+          ^
+  
+    2:21     WPS432 Found magic number: 200
+             -> https://pyflak.es/WPS432
+    [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
+                    ^
+  
+    2:21     WPS303 Found underscored number: 2_00
+             -> https://pyflak.es/WPS303
+    [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
+                    ^
+  
+  [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
+  
+    1:1      WPS110 Found wrong variable name: data
+             -> https://pyflak.es/WPS110
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    ^
+  
+    1:10     WPS110 Found wrong variable name: param
+             -> https://pyflak.es/WPS110
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+             ^
+  
+    2:12     WPS437 Found protected attribute usage: _protected
+             -> https://pyflak.es/WPS437
+    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
+           ^
+  
+    2:31     WPS303 Found underscored number: 10_00
+             -> https://pyflak.es/WPS303
+    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
+                              ^
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---
+# name: test_formatter[default_colors-cli_options6-statistic_with_source]
+  '''
+  
+  [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
+  
+    1:1      WPS111 Found too short name: s < 2
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    ^
+  
+    1:7      WPS110 Found wrong variable name: handle
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+          ^
+  
+    2:21     WPS432 Found magic number: 200
+    [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
+                    ^
+  
+    2:21     WPS303 Found underscored number: 2_00
+    [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
+                    ^
+  
+  [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
+  
+    1:1      WPS110 Found wrong variable name: data
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    ^
+  
+    1:10     WPS110 Found wrong variable name: param
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+             ^
+  
+    2:12     WPS437 Found protected attribute usage: _protected
+    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
+           ^
+  
+    2:31     WPS303 Found underscored number: 10_00
+    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
+                              ^
+  
+  [1mWPS110[0m: Found wrong variable name: handle
+    1     ./tests/fixtures/formatter/formatter1.py
+    2     ./tests/fixtures/formatter/formatter2.py
+  [4mTotal: 3[0m
+  
+  [1mWPS111[0m: Found too short name: s < 2
+    1     ./tests/fixtures/formatter/formatter1.py
+  [4mTotal: 1[0m
+  
+  [1mWPS303[0m: Found underscored number: 2_00
+    1     ./tests/fixtures/formatter/formatter1.py
+    1     ./tests/fixtures/formatter/formatter2.py
+  [4mTotal: 2[0m
+  
+  [1mWPS432[0m: Found magic number: 200
+    1     ./tests/fixtures/formatter/formatter1.py
+  [4mTotal: 1[0m
+  
+  [1mWPS437[0m: Found protected attribute usage: _protected
+    1     ./tests/fixtures/formatter/formatter2.py
+  [4mTotal: 1[0m
+  
+  
+  [4m[1mAll errors: 8[0m[0m
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---
+# name: test_formatter[with_colors-cli_options0-regular]
+  '''
+  
+  [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
+    1:1      WPS111 Found too short name: s < 2
+    1:7      WPS110 Found wrong variable name: handle
+    2:21     WPS432 Found magic number: 200
+    2:21     WPS303 Found underscored number: 2_00
+  
+  [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
+    1:1      WPS110 Found wrong variable name: data
+    1:10     WPS110 Found wrong variable name: param
+    2:12     WPS437 Found protected attribute usage: _protected
+    2:31     WPS303 Found underscored number: 10_00
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---
+# name: test_formatter[with_colors-cli_options1-regular_statistic]
+  '''
+  
+  [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
+    1:1      WPS111 Found too short name: s < 2
+    1:7      WPS110 Found wrong variable name: handle
+    2:21     WPS432 Found magic number: 200
+    2:21     WPS303 Found underscored number: 2_00
+  
+  [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
+    1:1      WPS110 Found wrong variable name: data
+    1:10     WPS110 Found wrong variable name: param
+    2:12     WPS437 Found protected attribute usage: _protected
+    2:31     WPS303 Found underscored number: 10_00
+  
+  [1mWPS110[0m: Found wrong variable name: handle
+    1     ./tests/fixtures/formatter/formatter1.py
+    2     ./tests/fixtures/formatter/formatter2.py
+  [4mTotal: 3[0m
+  
+  [1mWPS111[0m: Found too short name: s < 2
+    1     ./tests/fixtures/formatter/formatter1.py
+  [4mTotal: 1[0m
+  
+  [1mWPS303[0m: Found underscored number: 2_00
+    1     ./tests/fixtures/formatter/formatter1.py
+    1     ./tests/fixtures/formatter/formatter2.py
+  [4mTotal: 2[0m
+  
+  [1mWPS432[0m: Found magic number: 200
+    1     ./tests/fixtures/formatter/formatter1.py
+  [4mTotal: 1[0m
+  
+  [1mWPS437[0m: Found protected attribute usage: _protected
+    1     ./tests/fixtures/formatter/formatter2.py
+  [4mTotal: 1[0m
+  
+  
+  [4m[1mAll errors: 8[0m[0m
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---
+# name: test_formatter[with_colors-cli_options2-with_source]
+  '''
+  
+  [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
+  
+    1:1      WPS111 Found too short name: s < 2
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    ^
+  
+    1:7      WPS110 Found wrong variable name: handle
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+          ^
+  
+    2:21     WPS432 Found magic number: 200
+    [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
+                    ^
+  
+    2:21     WPS303 Found underscored number: 2_00
+    [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
+                    ^
+  
+  [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
+  
+    1:1      WPS110 Found wrong variable name: data
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    ^
+  
+    1:10     WPS110 Found wrong variable name: param
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+             ^
+  
+    2:12     WPS437 Found protected attribute usage: _protected
+    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
+           ^
+  
+    2:31     WPS303 Found underscored number: 10_00
+    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
+                              ^
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---
+# name: test_formatter[with_colors-cli_options3-with_links]
+  '''
+  
+  [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
+    1:1      WPS111 Found too short name: s < 2
+             -> https://pyflak.es/WPS111
+    1:7      WPS110 Found wrong variable name: handle
+             -> https://pyflak.es/WPS110
+    2:21     WPS432 Found magic number: 200
+             -> https://pyflak.es/WPS432
+    2:21     WPS303 Found underscored number: 2_00
+             -> https://pyflak.es/WPS303
+  
+  [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
+    1:1      WPS110 Found wrong variable name: data
+             -> https://pyflak.es/WPS110
+    1:10     WPS110 Found wrong variable name: param
+             -> https://pyflak.es/WPS110
+    2:12     WPS437 Found protected attribute usage: _protected
+             -> https://pyflak.es/WPS437
+    2:31     WPS303 Found underscored number: 10_00
+             -> https://pyflak.es/WPS303
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---
+# name: test_formatter[with_colors-cli_options4-with_source_statistic]
+  '''
+  
+  [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
+  
+    1:1      WPS111 Found too short name: s < 2
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    ^
+  
+    1:7      WPS110 Found wrong variable name: handle
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+          ^
+  
+    2:21     WPS432 Found magic number: 200
+    [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
+                    ^
+  
+    2:21     WPS303 Found underscored number: 2_00
+    [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
+                    ^
+  
+  [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
+  
+    1:1      WPS110 Found wrong variable name: data
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    ^
+  
+    1:10     WPS110 Found wrong variable name: param
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+             ^
+  
+    2:12     WPS437 Found protected attribute usage: _protected
+    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
+           ^
+  
+    2:31     WPS303 Found underscored number: 10_00
+    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
+                              ^
+  
+  [1mWPS110[0m: Found wrong variable name: handle
+    1     ./tests/fixtures/formatter/formatter1.py
+    2     ./tests/fixtures/formatter/formatter2.py
+  [4mTotal: 3[0m
+  
+  [1mWPS111[0m: Found too short name: s < 2
+    1     ./tests/fixtures/formatter/formatter1.py
+  [4mTotal: 1[0m
+  
+  [1mWPS303[0m: Found underscored number: 2_00
+    1     ./tests/fixtures/formatter/formatter1.py
+    1     ./tests/fixtures/formatter/formatter2.py
+  [4mTotal: 2[0m
+  
+  [1mWPS432[0m: Found magic number: 200
+    1     ./tests/fixtures/formatter/formatter1.py
+  [4mTotal: 1[0m
+  
+  [1mWPS437[0m: Found protected attribute usage: _protected
+    1     ./tests/fixtures/formatter/formatter2.py
+  [4mTotal: 1[0m
+  
+  
+  [4m[1mAll errors: 8[0m[0m
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---
+# name: test_formatter[with_colors-cli_options5-with_source_links]
+  '''
+  
+  [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
+  
+    1:1      WPS111 Found too short name: s < 2
+             -> https://pyflak.es/WPS111
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    ^
+  
+    1:7      WPS110 Found wrong variable name: handle
+             -> https://pyflak.es/WPS110
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+          ^
+  
+    2:21     WPS432 Found magic number: 200
+             -> https://pyflak.es/WPS432
+    [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
+                    ^
+  
+    2:21     WPS303 Found underscored number: 2_00
+             -> https://pyflak.es/WPS303
+    [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
+                    ^
+  
+  [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
+  
+    1:1      WPS110 Found wrong variable name: data
+             -> https://pyflak.es/WPS110
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    ^
+  
+    1:10     WPS110 Found wrong variable name: param
+             -> https://pyflak.es/WPS110
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+             ^
+  
+    2:12     WPS437 Found protected attribute usage: _protected
+             -> https://pyflak.es/WPS437
+    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
+           ^
+  
+    2:31     WPS303 Found underscored number: 10_00
+             -> https://pyflak.es/WPS303
+    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
+                              ^
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---
+# name: test_formatter[with_colors-cli_options6-statistic_with_source]
+  '''
+  
+  [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
+  
+    1:1      WPS111 Found too short name: s < 2
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    ^
+  
+    1:7      WPS110 Found wrong variable name: handle
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+          ^
+  
+    2:21     WPS432 Found magic number: 200
+    [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
+                    ^
+  
+    2:21     WPS303 Found underscored number: 2_00
+    [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
+                    ^
+  
+  [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
+  
+    1:1      WPS110 Found wrong variable name: data
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    ^
+  
+    1:10     WPS110 Found wrong variable name: param
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+             ^
+  
+    2:12     WPS437 Found protected attribute usage: _protected
+    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
+           ^
+  
+    2:31     WPS303 Found underscored number: 10_00
+    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
+                              ^
+  
+  [1mWPS110[0m: Found wrong variable name: handle
+    1     ./tests/fixtures/formatter/formatter1.py
+    2     ./tests/fixtures/formatter/formatter2.py
+  [4mTotal: 3[0m
+  
+  [1mWPS111[0m: Found too short name: s < 2
+    1     ./tests/fixtures/formatter/formatter1.py
+  [4mTotal: 1[0m
+  
+  [1mWPS303[0m: Found underscored number: 2_00
+    1     ./tests/fixtures/formatter/formatter1.py
+    1     ./tests/fixtures/formatter/formatter2.py
+  [4mTotal: 2[0m
+  
+  [1mWPS432[0m: Found magic number: 200
+    1     ./tests/fixtures/formatter/formatter1.py
+  [4mTotal: 1[0m
+  
+  [1mWPS437[0m: Found protected attribute usage: _protected
+    1     ./tests/fixtures/formatter/formatter2.py
+  [4mTotal: 1[0m
+  
+  
+  [4m[1mAll errors: 8[0m[0m
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---
+# name: test_formatter[without_colors-cli_options0-regular]
+  '''
+  
+  tests/fixtures/formatter/formatter1.py
+    1:1      WPS111 Found too short name: s < 2
+    1:7      WPS110 Found wrong variable name: handle
+    2:21     WPS432 Found magic number: 200
+    2:21     WPS303 Found underscored number: 2_00
+  
+  tests/fixtures/formatter/formatter2.py
+    1:1      WPS110 Found wrong variable name: data
+    1:10     WPS110 Found wrong variable name: param
+    2:12     WPS437 Found protected attribute usage: _protected
+    2:31     WPS303 Found underscored number: 10_00
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---
+# name: test_formatter[without_colors-cli_options1-regular_statistic]
+  '''
+  
+  tests/fixtures/formatter/formatter1.py
+    1:1      WPS111 Found too short name: s < 2
+    1:7      WPS110 Found wrong variable name: handle
+    2:21     WPS432 Found magic number: 200
+    2:21     WPS303 Found underscored number: 2_00
+  
+  tests/fixtures/formatter/formatter2.py
+    1:1      WPS110 Found wrong variable name: data
+    1:10     WPS110 Found wrong variable name: param
+    2:12     WPS437 Found protected attribute usage: _protected
+    2:31     WPS303 Found underscored number: 10_00
+  
+  WPS110: Found wrong variable name: handle
+    1     ./tests/fixtures/formatter/formatter1.py
+    2     ./tests/fixtures/formatter/formatter2.py
+  Total: 3
+  
+  WPS111: Found too short name: s < 2
+    1     ./tests/fixtures/formatter/formatter1.py
+  Total: 1
+  
+  WPS303: Found underscored number: 2_00
+    1     ./tests/fixtures/formatter/formatter1.py
+    1     ./tests/fixtures/formatter/formatter2.py
+  Total: 2
+  
+  WPS432: Found magic number: 200
+    1     ./tests/fixtures/formatter/formatter1.py
+  Total: 1
+  
+  WPS437: Found protected attribute usage: _protected
+    1     ./tests/fixtures/formatter/formatter2.py
+  Total: 1
+  
+  
+  All errors: 8
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---
+# name: test_formatter[without_colors-cli_options2-with_source]
+  '''
+  
+  tests/fixtures/formatter/formatter1.py
+  
+    1:1      WPS111 Found too short name: s < 2
+    def s(handle: int) -> int:
+    ^
+  
+    1:7      WPS110 Found wrong variable name: handle
+    def s(handle: int) -> int:
+          ^
+  
+    2:21     WPS432 Found magic number: 200
+    return handle + 2_00
+                    ^
+  
+    2:21     WPS303 Found underscored number: 2_00
+    return handle + 2_00
+                    ^
+  
+  tests/fixtures/formatter/formatter2.py
+  
+    1:1      WPS110 Found wrong variable name: data
+    def data(param) -> int:
+    ^
+  
+    1:10     WPS110 Found wrong variable name: param
+    def data(param) -> int:
+             ^
+  
+    2:12     WPS437 Found protected attribute usage: _protected
+    return param._protected + 10_00
+           ^
+  
+    2:31     WPS303 Found underscored number: 10_00
+    return param._protected + 10_00
+                              ^
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---
+# name: test_formatter[without_colors-cli_options3-with_links]
+  '''
+  
+  tests/fixtures/formatter/formatter1.py
+    1:1      WPS111 Found too short name: s < 2
+             -> https://pyflak.es/WPS111
+    1:7      WPS110 Found wrong variable name: handle
+             -> https://pyflak.es/WPS110
+    2:21     WPS432 Found magic number: 200
+             -> https://pyflak.es/WPS432
+    2:21     WPS303 Found underscored number: 2_00
+             -> https://pyflak.es/WPS303
+  
+  tests/fixtures/formatter/formatter2.py
+    1:1      WPS110 Found wrong variable name: data
+             -> https://pyflak.es/WPS110
+    1:10     WPS110 Found wrong variable name: param
+             -> https://pyflak.es/WPS110
+    2:12     WPS437 Found protected attribute usage: _protected
+             -> https://pyflak.es/WPS437
+    2:31     WPS303 Found underscored number: 10_00
+             -> https://pyflak.es/WPS303
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---
+# name: test_formatter[without_colors-cli_options4-with_source_statistic]
+  '''
+  
+  tests/fixtures/formatter/formatter1.py
+  
+    1:1      WPS111 Found too short name: s < 2
+    def s(handle: int) -> int:
+    ^
+  
+    1:7      WPS110 Found wrong variable name: handle
+    def s(handle: int) -> int:
+          ^
+  
+    2:21     WPS432 Found magic number: 200
+    return handle + 2_00
+                    ^
+  
+    2:21     WPS303 Found underscored number: 2_00
+    return handle + 2_00
+                    ^
+  
+  tests/fixtures/formatter/formatter2.py
+  
+    1:1      WPS110 Found wrong variable name: data
+    def data(param) -> int:
+    ^
+  
+    1:10     WPS110 Found wrong variable name: param
+    def data(param) -> int:
+             ^
+  
+    2:12     WPS437 Found protected attribute usage: _protected
+    return param._protected + 10_00
+           ^
+  
+    2:31     WPS303 Found underscored number: 10_00
+    return param._protected + 10_00
+                              ^
+  
+  WPS110: Found wrong variable name: handle
+    1     ./tests/fixtures/formatter/formatter1.py
+    2     ./tests/fixtures/formatter/formatter2.py
+  Total: 3
+  
+  WPS111: Found too short name: s < 2
+    1     ./tests/fixtures/formatter/formatter1.py
+  Total: 1
+  
+  WPS303: Found underscored number: 2_00
+    1     ./tests/fixtures/formatter/formatter1.py
+    1     ./tests/fixtures/formatter/formatter2.py
+  Total: 2
+  
+  WPS432: Found magic number: 200
+    1     ./tests/fixtures/formatter/formatter1.py
+  Total: 1
+  
+  WPS437: Found protected attribute usage: _protected
+    1     ./tests/fixtures/formatter/formatter2.py
+  Total: 1
+  
+  
+  All errors: 8
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---
+# name: test_formatter[without_colors-cli_options5-with_source_links]
+  '''
+  
+  tests/fixtures/formatter/formatter1.py
+  
+    1:1      WPS111 Found too short name: s < 2
+             -> https://pyflak.es/WPS111
+    def s(handle: int) -> int:
+    ^
+  
+    1:7      WPS110 Found wrong variable name: handle
+             -> https://pyflak.es/WPS110
+    def s(handle: int) -> int:
+          ^
+  
+    2:21     WPS432 Found magic number: 200
+             -> https://pyflak.es/WPS432
+    return handle + 2_00
+                    ^
+  
+    2:21     WPS303 Found underscored number: 2_00
+             -> https://pyflak.es/WPS303
+    return handle + 2_00
+                    ^
+  
+  tests/fixtures/formatter/formatter2.py
+  
+    1:1      WPS110 Found wrong variable name: data
+             -> https://pyflak.es/WPS110
+    def data(param) -> int:
+    ^
+  
+    1:10     WPS110 Found wrong variable name: param
+             -> https://pyflak.es/WPS110
+    def data(param) -> int:
+             ^
+  
+    2:12     WPS437 Found protected attribute usage: _protected
+             -> https://pyflak.es/WPS437
+    return param._protected + 10_00
+           ^
+  
+    2:31     WPS303 Found underscored number: 10_00
+             -> https://pyflak.es/WPS303
+    return param._protected + 10_00
+                              ^
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---
+# name: test_formatter[without_colors-cli_options6-statistic_with_source]
+  '''
+  
+  tests/fixtures/formatter/formatter1.py
+  
+    1:1      WPS111 Found too short name: s < 2
+    def s(handle: int) -> int:
+    ^
+  
+    1:7      WPS110 Found wrong variable name: handle
+    def s(handle: int) -> int:
+          ^
+  
+    2:21     WPS432 Found magic number: 200
+    return handle + 2_00
+                    ^
+  
+    2:21     WPS303 Found underscored number: 2_00
+    return handle + 2_00
+                    ^
+  
+  tests/fixtures/formatter/formatter2.py
+  
+    1:1      WPS110 Found wrong variable name: data
+    def data(param) -> int:
+    ^
+  
+    1:10     WPS110 Found wrong variable name: param
+    def data(param) -> int:
+             ^
+  
+    2:12     WPS437 Found protected attribute usage: _protected
+    return param._protected + 10_00
+           ^
+  
+    2:31     WPS303 Found underscored number: 10_00
+    return param._protected + 10_00
+                              ^
+  
+  WPS110: Found wrong variable name: handle
+    1     ./tests/fixtures/formatter/formatter1.py
+    2     ./tests/fixtures/formatter/formatter2.py
+  Total: 3
+  
+  WPS111: Found too short name: s < 2
+    1     ./tests/fixtures/formatter/formatter1.py
+  Total: 1
+  
+  WPS303: Found underscored number: 2_00
+    1     ./tests/fixtures/formatter/formatter1.py
+    1     ./tests/fixtures/formatter/formatter2.py
+  Total: 2
+  
+  WPS432: Found magic number: 200
+    1     ./tests/fixtures/formatter/formatter1.py
+  Total: 1
+  
+  WPS437: Found protected attribute usage: _protected
+    1     ./tests/fixtures/formatter/formatter2.py
+  Total: 1
+  
+  
+  All errors: 8
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---
+# name: test_formatter_correct[with_colors-cli_options0-regular]
+  ''
+# ---
+# name: test_formatter_correct[with_colors-cli_options1-regular_statistic]
+  '''
+  
+  
+  [4m[1mAll errors: 0[0m[0m
+  
+  '''
+# ---
+# name: test_formatter_correct[with_colors-cli_options2-with_source]
+  ''
+# ---
+# name: test_formatter_correct[with_colors-cli_options3-with_links]
+  ''
+# ---
+# name: test_formatter_correct[with_colors-cli_options4-with_source_statistic]
+  '''
+  
+  
+  [4m[1mAll errors: 0[0m[0m
+  
+  '''
+# ---
+# name: test_formatter_correct[with_colors-cli_options5-with_source_links]
+  ''
+# ---
+# name: test_formatter_correct[with_colors-cli_options6-statistic_with_source]
+  '''
+  
+  
+  [4m[1mAll errors: 0[0m[0m
+  
+  '''
+# ---
+# name: test_formatter_correct[without_colors-cli_options0-regular]
+  ''
+# ---
+# name: test_formatter_correct[without_colors-cli_options1-regular_statistic]
+  '''
+  
+  
+  All errors: 0
+  
+  '''
+# ---
+# name: test_formatter_correct[without_colors-cli_options2-with_source]
+  ''
+# ---
+# name: test_formatter_correct[without_colors-cli_options3-with_links]
+  ''
+# ---
+# name: test_formatter_correct[without_colors-cli_options4-with_source_statistic]
+  '''
+  
+  
+  All errors: 0
+  
+  '''
+# ---
+# name: test_formatter_correct[without_colors-cli_options5-with_source_links]
+  ''
+# ---
+# name: test_formatter_correct[without_colors-cli_options6-statistic_with_source]
+  '''
+  
+  
+  All errors: 0
+  
+  '''
+# ---
+# name: test_ipynb
+  '''
+  
+  [4m[1mtests/fixtures/notebook.ipynb[0m[0m
+    8:1      WPS111 Found too short name: s < 2
+    8:7      WPS110 Found wrong variable name: handle
+    9:21     WPS432 Found magic number: 200
+    9:21     WPS303 Found underscored number: 2_00
+    13:1     WPS110 Found wrong variable name: data
+    13:10    WPS110 Found wrong variable name: param
+    14:12    WPS437 Found protected attribute usage: _protected
+    14:31    WPS303 Found underscored number: 10_00
+  
+  Full list of violations and explanations:
+  https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
+  
+  '''
+# ---

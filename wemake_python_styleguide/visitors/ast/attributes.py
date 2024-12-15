@@ -1,12 +1,15 @@
 import ast
-from typing import ClassVar, FrozenSet
 
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
-from wemake_python_styleguide.constants import ALL_MAGIC_METHODS
+from wemake_python_styleguide.constants import (
+    ALL_MAGIC_METHODS,
+    SPECIAL_ARGUMENT_NAMES_WHITELIST,
+)
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming import access
+from wemake_python_styleguide.violations.base import ASTViolation
 from wemake_python_styleguide.violations.best_practices import (
     ProtectedAttributeViolation,
 )
@@ -20,12 +23,6 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 class WrongAttributeVisitor(BaseNodeVisitor):
     """Ensures that attributes are used correctly."""
 
-    _allowed_to_use_protected: ClassVar[FrozenSet[str]] = frozenset((
-        'self',
-        'cls',
-        'mcs',
-    ))
-
     def visit_Attribute(self, node: ast.Attribute) -> None:
         """Checks the `Attribute` node."""
         self._check_protected_attribute(node)
@@ -35,14 +32,21 @@ class WrongAttributeVisitor(BaseNodeVisitor):
     def _is_super_called(self, node: ast.Call) -> bool:
         return isinstance(node.func, ast.Name) and node.func.id == 'super'
 
-    def _ensure_attribute_type(self, node: ast.Attribute, exception) -> None:
-        if isinstance(node.value, ast.Name):
-            if node.value.id in self._allowed_to_use_protected:
-                return
+    def _ensure_attribute_type(
+        self,
+        node: ast.Attribute,
+        exception: type[ASTViolation],
+    ) -> None:
+        if (
+            isinstance(node.value, ast.Name)
+            and node.value.id in SPECIAL_ARGUMENT_NAMES_WHITELIST
+        ):
+            return
 
-        if isinstance(node.value, ast.Call):
-            if self._is_super_called(node.value):
-                return
+        if isinstance(node.value, ast.Call) and self._is_super_called(
+            node.value,
+        ):
+            return
 
         self.add_violation(exception(node, text=node.attr))
 
@@ -57,11 +61,11 @@ class WrongAttributeVisitor(BaseNodeVisitor):
             # a "false positive".
 
             ctx = nodes.get_context(node)
-            if isinstance(ctx, FunctionNodes):
-                if node.attr == ctx.name:
-                    return
+            if isinstance(ctx, FunctionNodes) and node.attr == ctx.name:
+                return
 
             if node.attr in ALL_MAGIC_METHODS:
                 self._ensure_attribute_type(
-                    node, DirectMagicAttributeAccessViolation,
+                    node,
+                    DirectMagicAttributeAccessViolation,
                 )

@@ -4,17 +4,17 @@ from wemake_python_styleguide.violations.oop import WrongSlotsViolation
 from wemake_python_styleguide.visitors.ast.classes import WrongSlotsVisitor
 
 class_body_template = """
-class ClassWithSlots(object):
+class ClassWithSlots:
     __slots__ = {0}
 """
 
 class_body_typed_template = """
-class ClassWithSlots(object):
+class ClassWithSlots:
     __slots__: tuple = {0}
 """
 
 not_a_slot = """
-class ClassWithoutSlots(object):
+class ClassWithoutSlots:
     some_other = {0}
 """
 
@@ -69,10 +69,13 @@ correct_slots = (
 )
 
 
-@pytest.mark.parametrize('template', [
-    class_body_template,
-    class_body_typed_template,
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        class_body_template,
+        class_body_typed_template,
+    ],
+)
 @pytest.mark.parametrize('code', wrong_slots)
 def test_incorrect_slots(
     assert_errors,
@@ -90,10 +93,13 @@ def test_incorrect_slots(
     assert_errors(visitor, [WrongSlotsViolation])
 
 
-@pytest.mark.parametrize('template', [
-    class_body_template,
-    class_body_typed_template,
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        class_body_template,
+        class_body_typed_template,
+    ],
+)
 @pytest.mark.parametrize('code', correct_slots)
 def test_correct_slots(
     assert_errors,
@@ -111,9 +117,12 @@ def test_correct_slots(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('template', [
-    not_a_slot,
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        not_a_slot,
+    ],
+)
 @pytest.mark.parametrize('code', wrong_slots + correct_slots)
 def test_not_slots(
     assert_errors,

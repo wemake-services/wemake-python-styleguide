@@ -12,27 +12,27 @@ from wemake_python_styleguide.visitors.ast.complexity.counts import (
 module_with_function_and_class = """
 def first(): ...
 
-class Second(object): ...
+class Second: ...
 """
 
 module_with_function_and_class_and_method = """
 def first(): ...
 
-class Second(object):
+class Second:
     def method(self): ...
 """
 
 module_with_function_and_async_method = """
 def first(): ...
 
-class Second(object):
+class Second:
     async def method(self): ...
 """
 
 module_with_function_and_classmethod = """
 def first(): ...
 
-class Second(object):
+class Second:
     @classmethod
     def method(cls): ...
 """
@@ -40,41 +40,41 @@ class Second(object):
 module_with_async_function_and_class = """
 async def first(): ...
 
-class Second(object): ...
+class Second: ...
 """
 
 module_with_methods = """
-class First(object):
+class First:
     def method(self): ...
 
-class Second(object):
+class Second:
     def method2(self): ...
 """
 
 module_with_async_methods = """
-class First(object):
+class First:
     async def method(self): ...
 
-class Second(object):
+class Second:
     async def method2(self): ...
 """
 
 module_with_classmethods = """
-class First(object):
+class First:
     @classmethod
     def method(cls): ...
 
-class Second(object):
+class Second:
     @classmethod
     def method2(cls): ...
 """
 
 module_with_staticmethods = """
-class First(object):
+class First:
     @staticmethod
     def method(cls): ...
 
-class Second(object):
+class Second:
     @staticmethod
     def method2(cls): ...
 """
@@ -90,7 +90,7 @@ async def single(): ...
 """
 
 module_with_single_class = """
-class First(object):
+class First:
     @classmethod
     def method(cls): ...
 
@@ -116,20 +116,23 @@ def first(): ...
 empty_module = ''
 
 
-@pytest.mark.parametrize('code', [
-    empty_module,
-    module_with_function_and_class,
-    module_with_function_and_class_and_method,
-    module_with_function_and_async_method,
-    module_with_function_and_classmethod,
-    module_with_async_function_and_class,
-    module_with_methods,
-    module_with_async_methods,
-    module_with_staticmethods,
-    module_with_classmethods,
-    module_with_single_class,
-    module_with_overloads,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        empty_module,
+        module_with_function_and_class,
+        module_with_function_and_class_and_method,
+        module_with_function_and_async_method,
+        module_with_function_and_classmethod,
+        module_with_async_function_and_class,
+        module_with_methods,
+        module_with_async_methods,
+        module_with_staticmethods,
+        module_with_classmethods,
+        module_with_single_class,
+        module_with_overloads,
+    ],
+)
 def test_module_counts_normal(
     assert_errors,
     parse_ast_tree,
@@ -145,17 +148,20 @@ def test_module_counts_normal(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    module_with_function_and_class,
-    module_with_function_and_class_and_method,
-    module_with_function_and_async_method,
-    module_with_function_and_classmethod,
-    module_with_async_function_and_class,
-    module_with_methods,
-    module_with_async_methods,
-    module_with_classmethods,
-    module_with_staticmethods,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_with_function_and_class,
+        module_with_function_and_class_and_method,
+        module_with_function_and_async_method,
+        module_with_function_and_classmethod,
+        module_with_async_function_and_class,
+        module_with_methods,
+        module_with_async_methods,
+        module_with_classmethods,
+        module_with_staticmethods,
+    ],
+)
 def test_module_counts_violation(
     assert_errors,
     assert_error_text,
@@ -174,13 +180,16 @@ def test_module_counts_violation(
     assert_error_text(visitor, '2', option_values.max_module_members)
 
 
-@pytest.mark.parametrize('code', [
-    empty_module,
-    module_with_single_function,
-    module_with_single_async_function,
-    module_with_single_class,
-    module_with_overloads,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        empty_module,
+        module_with_single_function,
+        module_with_single_async_function,
+        module_with_single_class,
+        module_with_overloads,
+    ],
+)
 def test_module_counts_single_member(
     assert_errors,
     parse_ast_tree,

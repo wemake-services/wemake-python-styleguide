@@ -24,28 +24,28 @@ async def second(): ...
 """
 
 class_with_methods = """
-class First(object):
+class First:
     def method(self): ...
 
     def method2(self): ...
 """
 
 class_with_async_methods = """
-class First(object):
+class First:
     async def method(self): ...
 
     async def method2(self): ...
 """
 
 class_with_async_and_usual_methods = """
-class First(object):
+class First:
     def method(self): ...
 
     async def method2(self): ...
 """
 
 class_with_class_methods = """
-class First(object):
+class First:
     @classmethod
     def method(cls): ...
 
@@ -54,7 +54,7 @@ class First(object):
 """
 
 class_with_async_class_methods = """
-class First(object):
+class First:
     @classmethod
     async def method(cls): ...
 
@@ -63,7 +63,7 @@ class First(object):
 """
 
 class_with_async_and_usual_class_methods = """
-class First(object):
+class First:
     @classmethod
     def method(cls): ...
 
@@ -72,7 +72,7 @@ class First(object):
 """
 
 class_with_staticmethods = """
-class First(object):
+class First:
     @staticmethod
     def method(cls): ...
 
@@ -81,7 +81,7 @@ class First(object):
 """
 
 class_with_async_staticmethods = """
-class First(object):
+class First:
     @staticmethod
     async def method(cls): ...
 
@@ -92,7 +92,7 @@ class First(object):
 # regression1779
 
 class_with_overloades = """
-class First(object):
+class First:
     @overload
     def my_method(self): ...
 
@@ -101,20 +101,23 @@ class First(object):
 """
 
 
-@pytest.mark.parametrize('code', [
-    module_without_methods,
-    module_with_async_functions,
-    module_async_and_usual_functions,
-    class_with_methods,
-    class_with_async_methods,
-    class_with_async_and_usual_methods,
-    class_with_class_methods,
-    class_with_async_class_methods,
-    class_with_async_and_usual_class_methods,
-    class_with_staticmethods,
-    class_with_async_staticmethods,
-    class_with_overloades,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_without_methods,
+        module_with_async_functions,
+        module_async_and_usual_functions,
+        class_with_methods,
+        class_with_async_methods,
+        class_with_async_and_usual_methods,
+        class_with_class_methods,
+        class_with_async_class_methods,
+        class_with_async_and_usual_class_methods,
+        class_with_staticmethods,
+        class_with_async_staticmethods,
+        class_with_overloades,
+    ],
+)
 def test_method_counts_normal(
     assert_errors,
     parse_ast_tree,
@@ -130,16 +133,19 @@ def test_method_counts_normal(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    class_with_methods,
-    class_with_async_methods,
-    class_with_async_and_usual_methods,
-    class_with_class_methods,
-    class_with_async_class_methods,
-    class_with_async_and_usual_class_methods,
-    class_with_staticmethods,
-    class_with_async_staticmethods,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        class_with_methods,
+        class_with_async_methods,
+        class_with_async_and_usual_methods,
+        class_with_class_methods,
+        class_with_async_class_methods,
+        class_with_async_and_usual_class_methods,
+        class_with_staticmethods,
+        class_with_async_staticmethods,
+    ],
+)
 def test_method_counts_violation(
     assert_errors,
     assert_error_text,
@@ -158,9 +164,12 @@ def test_method_counts_violation(
     assert_error_text(visitor, '2', option_values.max_methods)
 
 
-@pytest.mark.parametrize('code', [
-    class_with_overloades,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        class_with_overloades,
+    ],
+)
 def test_method_counts_exceptions(
     assert_errors,
     parse_ast_tree,

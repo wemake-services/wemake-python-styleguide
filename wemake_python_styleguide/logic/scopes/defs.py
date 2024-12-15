@@ -1,6 +1,6 @@
 import ast
 from collections import defaultdict
-from typing import ClassVar, DefaultDict, Set, cast
+from typing import ClassVar, cast
 
 from typing_extensions import final
 
@@ -9,10 +9,10 @@ from wemake_python_styleguide.logic.nodes import get_context
 from wemake_python_styleguide.types import ContextNodes
 
 #: That's how we represent scopes that are bound to contexts.
-_ContextStore = DefaultDict[ContextNodes, Set[str]]
+_ContextStore = defaultdict[ContextNodes, set[str]]
 
 
-class _BaseScope(object):
+class _BaseScope:
     """Base class for scope operations."""
 
     @final
@@ -21,16 +21,16 @@ class _BaseScope(object):
         self._node = node
         self._context = cast(ContextNodes, get_context(self._node))
 
-    def add_to_scope(self, names: Set[str]) -> None:  # pragma: no cover
+    def add_to_scope(self, names: set[str]) -> None:  # pragma: no cover
         """Adds a given set of names to some scope."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
-    def shadowing(self, names: Set[str]) -> Set[str]:  # pragma: no cover
+    def shadowing(self, names: set[str]) -> set[str]:  # pragma: no cover
         """Tells either some shadowing exist between existing scopes."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @final
-    def _exclude_unused(self, names: Set[str]) -> Set[str]:
+    def _exclude_unused(self, names: set[str]) -> set[str]:
         """Removes unused variables from set of names."""
         return {
             var_name  # we allow to reuse explicit `_` variables
@@ -51,7 +51,7 @@ class BlockScope(_BaseScope):
 
     def add_to_scope(
         self,
-        names: Set[str],
+        names: set[str],
         *,
         is_local: bool = False,
     ) -> None:
@@ -63,10 +63,10 @@ class BlockScope(_BaseScope):
 
     def shadowing(
         self,
-        names: Set[str],
+        names: set[str],
         *,
         is_local: bool = False,
-    ) -> Set[str]:
+    ) -> set[str]:
         """Calculates the intersection for a set of names and a context."""
         if not names:
             return set()
@@ -92,7 +92,7 @@ class OuterScope(_BaseScope):
 
     _scopes: ClassVar[_ContextStore] = defaultdict(set)
 
-    def add_to_scope(self, names: Set[str]) -> None:
+    def add_to_scope(self, names: set[str]) -> None:
         """Adds a set of variables to the context scope."""
         if isinstance(self._context, ast.ClassDef):
             # Class names are not available to the caller directly.
@@ -102,7 +102,7 @@ class OuterScope(_BaseScope):
             self._exclude_unused(names),
         )
 
-    def shadowing(self, names: Set[str]) -> Set[str]:
+    def shadowing(self, names: set[str]) -> set[str]:
         """Calculates the intersection for a set of names and a context."""
         if isinstance(self._context, ast.ClassDef):
             # Class names are not available to the caller directly.
@@ -111,8 +111,8 @@ class OuterScope(_BaseScope):
         current_names = self._build_outer_context()
         return set(current_names).intersection(names)
 
-    def _build_outer_context(self) -> Set[str]:
-        outer_names: Set[str] = set()
+    def _build_outer_context(self) -> set[str]:
+        outer_names: set[str] = set()
         context = self._context
 
         while True:
@@ -124,6 +124,6 @@ class OuterScope(_BaseScope):
         return outer_names
 
 
-def extract_names(node: ast.AST) -> Set[str]:
+def extract_names(node: ast.AST) -> set[str]:
     """Extracts unique set of names from a given node."""
     return set(name_nodes.get_variables_from_node(node))

@@ -74,6 +74,27 @@ if overlap := other():
     ...
 """
 
+import_and_match_as = """
+import overlap
+
+match ...:
+    case 1 as overlap: ...
+"""
+
+import_and_match_as_implicit = """
+import overlap
+
+match ...:
+    case overlap: ...
+"""
+
+import_and_match_star = """
+import overlap
+
+match ...:
+    case [1, *overlap]: ...
+"""
+
 # Correct:
 
 unused_variables_overlap1 = """
@@ -111,17 +132,23 @@ def context():
 """
 
 
-@pytest.mark.parametrize('code', [
-    import_and_class1,
-    import_and_class2,
-    import_and_function1,
-    import_and_function2,
-    import_and_try,
-    loop_and_with,
-    loop_and_loop1,
-    loop_and_loop2,
-    import_and_walrus,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        import_and_class1,
+        import_and_class2,
+        import_and_function1,
+        import_and_function2,
+        import_and_try,
+        loop_and_with,
+        loop_and_loop1,
+        loop_and_loop2,
+        import_and_walrus,
+        import_and_match_as,
+        import_and_match_as_implicit,
+        import_and_match_star,
+    ],
+)
 def test_block_overlap(
     assert_errors,
     assert_error_text,
@@ -140,12 +167,15 @@ def test_block_overlap(
     assert_error_text(visitor, 'overlap')
 
 
-@pytest.mark.parametrize('code', [
-    unused_variables_overlap1,
-    unused_variables_overlap2,
-    unused_variables_overlap3,
-    annotation_overlap,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        unused_variables_overlap1,
+        unused_variables_overlap2,
+        unused_variables_overlap3,
+        annotation_overlap,
+    ],
+)
 def test_block_correct_overlap(
     assert_errors,
     parse_ast_tree,

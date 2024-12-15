@@ -1,6 +1,6 @@
 import math
 import tokenize
-from typing import Iterator, List
+from collections.abc import Iterable
 
 from typing_extensions import final
 
@@ -9,9 +9,8 @@ from wemake_python_styleguide.visitors import base
 
 
 @final
-class _Function(object):
-
-    def __init__(self, file_tokens: List[tokenize.TokenInfo]) -> None:
+class _Function:
+    def __init__(self, file_tokens: list[tokenize.TokenInfo]) -> None:
         self._tokens = file_tokens
 
     def name_token(self) -> tokenize.TokenInfo:
@@ -29,37 +28,33 @@ class _Function(object):
         stripped_token_line = token.line.strip()
         is_comment = False
         if stripped_token_line:
-            is_comment = '#' in stripped_token_line[0]
-        is_string = token.type == tokenize.STRING
+            is_comment = stripped_token_line.startswith('#')
         is_multistring_end = '"""' in token.line
-        return is_comment or is_string or is_multistring_end
+        return is_comment or is_multistring_end
 
 
 @final
-class _FileFunctions(object):
-
-    def __init__(self, file_tokens: List[tokenize.TokenInfo]) -> None:
+class _FileFunctions:
+    def __init__(self, file_tokens: list[tokenize.TokenInfo]) -> None:
         self._file_tokens = file_tokens
 
-    def as_list(self) -> List[_Function]:
-        return list(self._search_functions())
-
-    def _search_functions(self) -> Iterator[_Function]:
-        function_tokens: List[tokenize.TokenInfo] = []
+    def search_functions(self) -> Iterable[_Function]:  # noqa: WPS210
+        function_tokens: list[tokenize.TokenInfo] = []
         in_function = False
-        function_start_column = 0
-        for token in self._file_tokens:
+        function_start_token = (0, 0)
+        for token_index, token in enumerate(self._file_tokens):
             function_ended = self._is_function_end(
                 token,
-                bool(function_tokens),
-                function_start_column,
+                token_index,
+                function_start_token,
+                function_tokens_exists=bool(function_tokens),
             )
             if not in_function and self._is_function_start(token):
                 in_function = True
-                function_start_column = token.start[1]
+                function_start_token = token.start
             elif function_ended:
                 in_function = False
-                function_start_column = 0
+                function_start_token = (function_start_token[0], 0)
                 yield _Function(function_tokens)
                 function_tokens = []
             if in_function:
@@ -71,17 +66,36 @@ class _FileFunctions(object):
     def _is_function_end(
         self,
         token: tokenize.TokenInfo,
+        token_index: int,
+        function_start: tuple[int, int],
+        *,
         function_tokens_exists: bool,
-        function_start_column: int,
     ) -> bool:
-        column_valid = token.start[1] in {0, function_start_column}
+        next_token = self._next_token(token_index)
+        is_elipsis_end = (
+            next_token
+            and next_token.exact_type == tokenize.NEWLINE
+            and token.string == '...'
+            and token.start[0] == function_start[0]
+        )
+        if is_elipsis_end:
+            return True
+        column_valid = token.start[1] in {0, function_start[1]}
         is_dedent_token = token.type == tokenize.DEDENT
         return is_dedent_token and function_tokens_exists and column_valid
 
+    def _next_token(
+        self,
+        token_index: int,
+    ) -> tokenize.TokenInfo | None:
+        try:
+            return self._file_tokens[token_index + 1]
+        except IndexError:
+            return None
+
 
 @final
-class _FileTokens(object):
-
+class _FileTokens:
     def __init__(
         self,
         file_functions: _FileFunctions,
@@ -90,28 +104,25 @@ class _FileTokens(object):
         self._file_functions = file_functions
         self._exps_for_one_empty_line = exps_for_one_empty_line
 
-    def analyze(self) -> List[best_practices.WrongEmptyLinesCountViolation]:
-        violations = []
-        for function in self._file_functions.as_list():
+    def analyze(self) -> Iterable[best_practices.WrongEmptyLinesCountViolation]:
+        for function in self._file_functions.search_functions():
             splitted_function_body = function.body().strip().split('\n')
-            empty_lines_count = len([
-                line for line in splitted_function_body if line == ''
-            ])
+            empty_lines_count = len(
+                [line for line in splitted_function_body if line == ''],
+            )
             if not empty_lines_count:
                 continue
 
             available_empty_lines = self._available_empty_lines(
-                len(splitted_function_body), empty_lines_count,
+                len(splitted_function_body),
+                empty_lines_count,
             )
             if empty_lines_count > available_empty_lines:
-                violations.append(
-                    best_practices.WrongEmptyLinesCountViolation(
-                        function.name_token(),
-                        text=str(empty_lines_count),
-                        baseline=available_empty_lines,
-                    ),
+                yield best_practices.WrongEmptyLinesCountViolation(
+                    function.name_token(),
+                    text=str(empty_lines_count),
+                    baseline=available_empty_lines,
                 )
-        return violations
 
     def _available_empty_lines(
         self,
@@ -132,7 +143,7 @@ class WrongEmptyLinesCountVisitor(base.BaseTokenVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Initializes a counter."""
         super().__init__(*args, **kwargs)
-        self._file_tokens: List[tokenize.TokenInfo] = []
+        self._file_tokens: list[tokenize.TokenInfo] = []
 
     def visit(self, token: tokenize.TokenInfo) -> None:
         """Find empty lines count."""

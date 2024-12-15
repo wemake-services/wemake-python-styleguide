@@ -40,7 +40,7 @@ def func4() -> {0}:
 """
 
 string_class_type_annotations = """
-class SomeClass(object):
+class SomeClass:
     first: {0}
     second: {0}
     third: {0}
@@ -48,7 +48,7 @@ class SomeClass(object):
 """
 
 string_method_type_annotations1 = """
-class SomeClass(object):
+class SomeClass:
     def first(
         self,
         arg1: {0},
@@ -60,7 +60,7 @@ class SomeClass(object):
 """
 
 string_method_type_annotations2 = """
-class SomeClass(object):
+class SomeClass:
     def method1(self) -> {0}:
         ...
 
@@ -86,7 +86,7 @@ fourth: {0}
 regression1127 = """
 first: List[{0}]
 
-class Some(object):
+class Some:
     field: {0}
 
     def method(self, arg: {0}):
@@ -97,20 +97,26 @@ def function() -> Dict[int, {0}]:
 """
 
 
-@pytest.mark.parametrize('strings', [
-    string_actions,
-    string_function_type_annotations1,
-    string_function_type_annotations2,
-    string_class_type_annotations,
-    string_method_type_annotations1,
-    string_method_type_annotations2,
-    string_variable_type_annotations,
-    regression1127,
-])
-@pytest.mark.parametrize('string_value', [
-    '"same_string"',
-    '"GenericType[int, str]"',
-])
+@pytest.mark.parametrize(
+    'strings',
+    [
+        string_actions,
+        string_function_type_annotations1,
+        string_function_type_annotations2,
+        string_class_type_annotations,
+        string_method_type_annotations1,
+        string_method_type_annotations2,
+        string_variable_type_annotations,
+        regression1127,
+    ],
+)
+@pytest.mark.parametrize(
+    'string_value',
+    [
+        '"same_string"',
+        '"GenericType[int, str]"',
+    ],
+)
 def test_string_overuse_settings(
     assert_errors,
     parse_ast_tree,
@@ -129,18 +135,27 @@ def test_string_overuse_settings(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('strings', [
-    string_actions,
-])
-@pytest.mark.parametrize('string_value', [
-    '"same-string"',
-    '"GenericType[int, str]"',
-])
-@pytest.mark.parametrize('prefix', [
-    'b',
-    'u',
-    '',
-])
+@pytest.mark.parametrize(
+    'strings',
+    [
+        string_actions,
+    ],
+)
+@pytest.mark.parametrize(
+    'string_value',
+    [
+        '"same-string"',
+        '"GenericType[int, str]"',
+    ],
+)
+@pytest.mark.parametrize(
+    'prefix',
+    [
+        'b',
+        'u',
+        '',
+    ],
+)
 def test_string_overuse(
     assert_errors,
     assert_error_text,
@@ -164,22 +179,28 @@ def test_string_overuse(
     )
 
 
-@pytest.mark.parametrize('strings', [
-    string_function_type_annotations1,
-    string_function_type_annotations2,
-    string_class_type_annotations,
-    string_method_type_annotations1,
-    string_method_type_annotations2,
-    string_variable_type_annotations,
-    regression1127,
-])
-@pytest.mark.parametrize('string_value', [
-    '"GenericType[int, str]"',
-    '"int"',
-    'List["int"]',
-    'list[int]',
-    'int | None',
-])
+@pytest.mark.parametrize(
+    'strings',
+    [
+        string_function_type_annotations1,
+        string_function_type_annotations2,
+        string_class_type_annotations,
+        string_method_type_annotations1,
+        string_method_type_annotations2,
+        string_variable_type_annotations,
+        regression1127,
+    ],
+)
+@pytest.mark.parametrize(
+    'string_value',
+    [
+        '"GenericType[int, str]"',
+        '"int"',
+        'List["int"]',
+        'list[int]',
+        'int | None',
+    ],
+)
 def test_string_type_annotations(
     assert_errors,
     parse_ast_tree,
@@ -198,20 +219,26 @@ def test_string_type_annotations(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('string_value', [
-    r'"\t"',
-    r'"\n"',
-    '""',
-    '","',
-    '"."',
-    "'\"'",
-    '"\'"',
-])
-@pytest.mark.parametrize('prefix', [
-    'b',
-    'u',
-    '',
-])
+@pytest.mark.parametrize(
+    'string_value',
+    [
+        r'"\t"',
+        r'"\n"',
+        '""',
+        '","',
+        '"."',
+        "'\"'",
+        '"\'"',
+    ],
+)
+@pytest.mark.parametrize(
+    'prefix',
+    [
+        'b',
+        'u',
+        '',
+    ],
+)
 def test_common_strings_allowed(
     assert_errors,
     parse_ast_tree,

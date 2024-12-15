@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import DefaultDict, List
+from typing import TypeAlias
 
 import attr
 from typing_extensions import final
@@ -10,13 +10,13 @@ from wemake_python_styleguide.types import (
 )
 
 #: Function complexity counter.
-FunctionCounter = DefaultDict[AnyFunctionDef, int]
+FunctionCounter: TypeAlias = defaultdict[AnyFunctionDef, int]
 
 #: Function and lambda complexity counter.
-FunctionCounterWithLambda = DefaultDict[AnyFunctionDefAndLambda, int]
+FunctionCounterWithLambda: TypeAlias = defaultdict[AnyFunctionDefAndLambda, int]
 
 #: Function and their variables.
-FunctionNames = DefaultDict[AnyFunctionDef, List[str]]
+FunctionNames: TypeAlias = defaultdict[AnyFunctionDef, list[str]]
 
 
 def _default_factory() -> FunctionCounter:
@@ -26,7 +26,7 @@ def _default_factory() -> FunctionCounter:
 
 @final
 @attr.dataclass(frozen=False)
-class ComplexityMetrics(object):
+class ComplexityMetrics:
     """
     Complexity metrics for functions.
 

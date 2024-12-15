@@ -50,10 +50,13 @@ except (ValueError, 1 + 2, "sad"):
 """
 
 
-@pytest.mark.parametrize('code', [
-    use_complex_expression,
-    use_tuple_with_forbidden_expressions,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        use_complex_expression,
+        use_tuple_with_forbidden_expressions,
+    ],
+)
 def test_use_base_exception(
     assert_errors,
     parse_ast_tree,
@@ -69,12 +72,15 @@ def test_use_base_exception(
     assert_errors(visitor, [NonTrivialExceptViolation])
 
 
-@pytest.mark.parametrize('code', [
-    use_name_expression,
-    use_attribute_expression,
-    use_tuple_with_allowed_expression,
-    use_null_expression,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        use_name_expression,
+        use_attribute_expression,
+        use_tuple_with_allowed_expression,
+        use_null_expression,
+    ],
+)
 def test_use_exception(
     assert_errors,
     parse_ast_tree,

@@ -40,13 +40,13 @@ def function(arg: List[int]) -> types.NoneType[None]:
 """
 
 class_context1 = """
-class Context(object):
+class Context:
     {0}
     {1}
 """
 
 class_context2 = """
-class Context(object):
+class Context:
     first: List[int]
     second: List[int]
 
@@ -55,7 +55,7 @@ class Context(object):
 """
 
 class_context3 = """
-class Context(object):
+class Context:
     first: List[List[int]]
     second: List[List[int]]
 
@@ -64,14 +64,14 @@ class Context(object):
 """
 
 method_context1 = """
-class Context(object):
+class Context:
     def method(self):
         {0}
         {1}
 """
 
 method_context2 = """
-class Context(object):
+class Context:
     @decorator.attr
     @decorator.attr
     def method(self):
@@ -80,7 +80,7 @@ class Context(object):
 """
 
 method_context3 = """
-class Context(object):
+class Context:
     @decorator.call('a')
     @decorator.call('a')
     def method(self, arg: List[int]) -> type.Any:
@@ -91,7 +91,7 @@ class Context(object):
 # regression for:
 # https://github.com/wemake-services/wemake-python-styleguide/issues/1152
 method_context4 = """
-class Context(object):
+class Context:
     def method1(self, arg1: List[int]) -> type.Any:
         {0}
         {0}
@@ -103,7 +103,7 @@ class Context(object):
 """
 
 method_context5 = """
-class Context(object):
+class Context:
     def method1(self, arg1: "List[int]") -> 'type.Any':
         ...
 
@@ -132,15 +132,12 @@ violating_expressions = (
     '(x.attr for x in other)',
     '{1, 2, 3}',
     '{a for a in other}',
-
     # Unary nodes:
     '+some',  # unary plus always raises
     '~other',
-
     # Special cases for self:
     'self.method([star])',  # `[star]` is raising
     'self[1, 2, 3]',  # tuple is raising
-
     # Annotations:
     'x: types.List[Set[int]] = call(1, 2, 3)',  # call is raising
 )
@@ -174,17 +171,20 @@ ignored_expressions = (
 )
 
 
-@pytest.mark.parametrize('code', [
-    function_context1,
-    function_context2,
-    function_context3,
-    function_context4,
-    method_context1,
-    method_context2,
-    method_context3,
-    method_context4,
-    method_context5,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_context1,
+        function_context2,
+        function_context3,
+        function_context4,
+        method_context1,
+        method_context2,
+        method_context3,
+        method_context4,
+        method_context5,
+    ],
+)
 @pytest.mark.parametrize('expression', violating_expressions)
 def test_func_expression_overuse(
     assert_errors,
@@ -204,9 +204,12 @@ def test_func_expression_overuse(
     assert_errors(visitor, [OverusedExpressionViolation])
 
 
-@pytest.mark.parametrize('code', [
-    module_context,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_context,
+    ],
+)
 @pytest.mark.parametrize('expression', violating_expressions)
 def test_module_expression_overuse(
     assert_errors,
@@ -225,11 +228,14 @@ def test_module_expression_overuse(
     assert_errors(visitor, [OverusedExpressionViolation])
 
 
-@pytest.mark.parametrize('code', [
-    class_context1,
-    class_context2,
-    class_context3,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        class_context1,
+        class_context2,
+        class_context3,
+    ],
+)
 @pytest.mark.parametrize('expression', violating_expressions)
 def test_class_expression_use(
     assert_errors,
@@ -251,21 +257,24 @@ def test_class_expression_use(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    function_context1,
-    function_context2,
-    function_context3,
-    function_context4,
-    class_context1,
-    class_context2,
-    class_context3,
-    method_context1,
-    method_context2,
-    method_context3,
-    method_context4,
-    method_context5,
-    module_context,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_context1,
+        function_context2,
+        function_context3,
+        function_context4,
+        class_context1,
+        class_context2,
+        class_context3,
+        method_context1,
+        method_context2,
+        method_context3,
+        method_context4,
+        method_context5,
+        module_context,
+    ],
+)
 @pytest.mark.parametrize('expression', ignored_expressions)
 def test_ignored_expressions(
     assert_errors,

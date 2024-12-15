@@ -1,9 +1,16 @@
 import ast
-from typing import Union
+from typing import TypeAlias
 
-from typing_extensions import TypeAlias
+from wemake_python_styleguide.compat.nodes import TryStar
+from wemake_python_styleguide.compat.nodes import TypeAlias as TypeAliasNode
 
-from wemake_python_styleguide.types import AnyAssign
+#: When used with `visit_Try` and visit_TryStar`.
+AnyTry: TypeAlias = ast.Try | TryStar
 
-#: When we search for assign elements, we also need typed assign.
-AnyAssignWithWalrus: TypeAlias = Union[AnyAssign, ast.NamedExpr]
+#: Used when named matches are needed.
+NamedMatch: TypeAlias = ast.MatchAs | ast.MatchStar
+
+#: These nodes have `.type_params` on python3.12+:
+NodeWithTypeParams: TypeAlias = (
+    ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef | TypeAliasNode
+)

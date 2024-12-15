@@ -1,13 +1,11 @@
 import ast
 
-import astor
-
 from wemake_python_styleguide.types import AnyTextPrimitive
 
 
 def node_to_string(node: ast.AST) -> str:
     """Returns the source code by doing ``ast`` to string convert."""
-    return astor.to_source(node).strip()
+    return ast.unparse(node).strip()
 
 
 def render_string(text_data: AnyTextPrimitive) -> str:

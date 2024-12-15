@@ -137,7 +137,6 @@ class UselessLoopElseViolation(ASTViolation):
 
     error_template = 'Found `else` in a loop without `break`'
     code = 500
-    previous_codes = {436}
 
 
 @final
@@ -178,7 +177,6 @@ class UselessFinallyViolation(ASTViolation):
 
     error_template = 'Found `finally` in `try` block without `except`'
     code = 501
-    previous_codes = {437}
 
 
 @final
@@ -209,12 +207,15 @@ class SimplifiableIfViolation(ASTViolation):
 
     .. versionadded:: 0.7.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``SIM108`` and ``SIM210``.
 
     """
 
     error_template = 'Found simplifiable `if` condition'
     code = 502
-    previous_codes = {451}
+    disabled_since = '1.0.0'
 
 
 @final
@@ -254,12 +255,15 @@ class UselessReturningElseViolation(ASTViolation):
     .. versionadded:: 0.7.0
     .. versionchanged:: 0.11.0
     .. versionchanged:: 0.15.1
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``RET505``.
 
     """
 
     error_template = 'Found useless returning `else` statement'
     code = 503
-    previous_codes = {457}
+    disabled_since = '1.0.0'
 
 
 @final
@@ -303,7 +307,6 @@ class NegatedConditionsViolation(ASTViolation):
 
     error_template = 'Found negated condition'
     code = 504
-    previous_codes = {463}
 
 
 @final
@@ -353,7 +356,6 @@ class NestedTryViolation(ASTViolation):
 
     error_template = 'Found nested `try` block'
     code = 505
-    previous_codes = {464}
 
 
 @final
@@ -385,7 +387,6 @@ class UselessLambdaViolation(ASTViolation):
 
     error_template = 'Found useless lambda declaration'
     code = 506
-    previous_codes = {467}
 
 
 @final
@@ -421,7 +422,6 @@ class UselessLenCompareViolation(ASTViolation):
 
     error_template = 'Found useless `len()` compare'
     code = 507
-    previous_codes = {468}
 
 
 @final
@@ -448,12 +448,15 @@ class NotOperatorWithCompareViolation(ASTViolation):
 
     .. versionadded:: 0.10.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``SIM201``.
 
     """
 
     error_template = 'Found incorrect `not` with compare usage'
     code = 508
-    previous_codes = {470}
+    disabled_since = '1.0.0'
 
 
 @final
@@ -491,7 +494,6 @@ class NestedTernaryViolation(ASTViolation):
 
     error_template = 'Found incorrectly nested ternary'
     code = 509
-    previous_codes = {472}
 
 
 @final
@@ -530,7 +532,6 @@ class WrongInCompareTypeViolation(ASTViolation):
 
     error_template = 'Found `in` used with a non-set container'
     code = 510
-    previous_codes = {473}
 
 
 @final
@@ -549,7 +550,7 @@ class UnmergedIsinstanceCallsViolation(ASTViolation):
     Example::
 
         # Correct:
-        isinstance(some, (int, float))
+        isinstance(some, int | float)
 
         # Wrong:
         isinstance(some, int) or isinstance(some, float)
@@ -559,6 +560,9 @@ class UnmergedIsinstanceCallsViolation(ASTViolation):
 
     .. versionadded:: 0.10.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter. See ``SIM101``.
 
     """
 
@@ -566,7 +570,7 @@ class UnmergedIsinstanceCallsViolation(ASTViolation):
         'Found separate `isinstance` calls that can be merged for: {0}'
     )
     code = 511
-    previous_codes = {474}
+    disabled_since = '1.0.0'
 
 
 @final
@@ -584,7 +588,7 @@ class WrongIsinstanceWithTupleViolation(ASTViolation):
     Example::
 
         # Correct:
-        isinstance(some, (int, float))
+        isinstance(some, int | float)
         isinstance(some, int)
 
         # Wrong:
@@ -594,12 +598,15 @@ class WrongIsinstanceWithTupleViolation(ASTViolation):
 
     .. versionadded:: 0.10.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``UP038``.
 
     """
 
     error_template = 'Found `isinstance` call with a single element tuple'
     code = 512
-    previous_codes = {475}
+    disabled_since = '1.0.0'
 
 
 @final
@@ -668,8 +675,7 @@ class ImplicitInConditionViolation(ASTViolation):
     """
 
     code = 514
-    error_template = 'Found implicit `in` condition'
-    previous_codes = {336}
+    error_template = 'Found implicit `in` condition: {0}'
 
 
 @final
@@ -847,6 +853,7 @@ class FalsyConstantCompareViolation(ASTViolation):
 
     We allow to compare with falsy numbers, strings, booleans, ``None``.
     We disallow complex constants like tuple, dicts, and lists.
+    We also allow to compare any values inside ``assert`` statements.
 
     Reasoning:
         When comparing ``something`` with explicit falsy constants
@@ -873,6 +880,7 @@ class FalsyConstantCompareViolation(ASTViolation):
             ...
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 1.0.0
 
     """
 
@@ -910,11 +918,15 @@ class WrongIsCompareViolation(ASTViolation):
         https://stackoverflow.com/a/33130014/4842742
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``F632``.
 
     """
 
     code = 521
     error_template = 'Found wrong `is` compare'
+    disabled_since = '1.0.0'
 
 
 @final
@@ -991,7 +1003,7 @@ class MisrefactoredAssignmentViolation(ASTViolation):
         on the left hand side and on the right hand side.
 
     Solution:
-        Refactor you code to use multiple self assignments or fix your code.
+        Refactor your code to use multiple self assignments or fix your code.
 
     Example::
 
@@ -1072,11 +1084,15 @@ class ImplicitYieldFromViolation(ASTViolation):
             yield index
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``UP028``.
 
     """
 
     error_template = 'Found implicit `yield from` usage'
     code = 526
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1233,11 +1249,15 @@ class SimplifiableReturningIfViolation(ASTViolation):
                 return False
 
     .. versionadded:: 0.15.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``RET505``.
 
     """
 
     error_template = 'Found simplifiable returning `if` condition in a function'
     code = 531
+    disabled_since = '1.0.0'
 
 
 @final

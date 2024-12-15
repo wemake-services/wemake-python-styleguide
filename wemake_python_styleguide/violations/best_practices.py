@@ -198,7 +198,8 @@ class WrongMagicCommentViolation(SimpleViolation):
     Reasoning:
         We cover several use-cases in a single rule.
         ``# noqa`` comment is restricted because it can hide other violations.
-        ``# type: some_type`` comment is restricted because we can use type annotations instead.
+        ``# type: some_type`` comment is restricted because
+        we can use type annotations instead.
 
     Solution:
         Use ``# noqa`` comments with specified error types.
@@ -351,7 +352,6 @@ class ComplexDefaultValueViolation(ASTViolation):
 
     error_template = 'Found complex default value'
     code = 404
-    previous_codes = {459}
 
 
 @final
@@ -385,7 +385,6 @@ class LoopVariableDefinitionViolation(ASTViolation):
 
     error_template = 'Found wrong `for` loop variable definition'
     code = 405
-    previous_codes = {460}
 
 
 @final
@@ -419,7 +418,6 @@ class ContextManagerVariableDefinitionViolation(ASTViolation):
 
     error_template = 'Found wrong context manager variable definition'
     code = 406
-    previous_codes = {461}
 
 
 @final
@@ -456,7 +454,6 @@ class MutableModuleConstantViolation(ASTViolation):
 
     error_template = 'Found mutable module constant'
     code = 407
-    previous_codes = {466}
 
 
 @final
@@ -490,7 +487,6 @@ class SameElementsInConditionViolation(ASTViolation):
 
     error_template = 'Found duplicate logical condition'
     code = 408
-    previous_codes = {469}
 
 
 @final
@@ -531,7 +527,6 @@ class HeterogeneousCompareViolation(ASTViolation):
 
     error_template = 'Found heterogeneous compare'
     code = 409
-    previous_codes = {471}
 
 
 @final
@@ -693,7 +688,6 @@ class WrongUnpackingViolation(ASTViolation):
 
     error_template = 'Found incorrect unpacking target'
     code = 414
-    previous_codes = {446}
 
 
 @final
@@ -727,12 +721,17 @@ class DuplicateExceptionViolation(ASTViolation):
 
     .. versionadded:: 0.6.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.19.0
+       Supports `try/except*` as well.
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``B025``.
 
     """
 
     error_template = 'Found duplicate exception: {0}'
     code = 415
-    previous_codes = {447}
+    disabled_since = '1.0.0'
 
 
 @final
@@ -772,7 +771,7 @@ class YieldInComprehensionViolation(ASTViolation):
 
     error_template = 'Found `yield` inside comprehension'
     code = 416
-    previous_codes = {448}
+    disabled_since = '0.18.0'
 
 
 @final
@@ -809,12 +808,15 @@ class NonUniqueItemsInHashViolation(ASTViolation):
     .. versionadded:: 0.7.0
     .. versionchanged:: 0.11.0
     .. versionchanged:: 0.12.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``B033``.
 
     """
 
     error_template = 'Found non-unique item in hash: {0}'
     code = 417
-    previous_codes = {449}
+    disabled_since = '1.0.0'
 
 
 @final
@@ -851,7 +853,6 @@ class BaseExceptionSubclassViolation(ASTViolation):
 
     error_template = 'Found exception inherited from `BaseException`'
     code = 418
-    previous_codes = {450}
 
 
 @final
@@ -902,12 +903,17 @@ class TryExceptMultipleReturnPathViolation(ASTViolation):
     .. versionadded:: 0.7.0
     .. versionchanged:: 0.11.0
     .. versionchanged:: 0.12.0
+    .. versionchanged:: 0.19.0
+       Supports `try/except*` as well.
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``B012`` and ``SIM107``.
 
     """
 
     error_template = 'Found `try`/`else`/`finally` with multiple return paths'
     code = 419
-    previous_codes = {458}
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1027,6 +1033,9 @@ class RaiseNotImplementedViolation(ASTViolation):
         raise NotImplemented
 
     .. versionadded:: 0.1.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``F901``.
 
     See also:
         https://stackoverflow.com/a/44575926/4842742
@@ -1035,6 +1044,7 @@ class RaiseNotImplementedViolation(ASTViolation):
 
     error_template = 'Found raise NotImplemented'
     code = 423
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1061,6 +1071,9 @@ class BaseExceptionViolation(ASTViolation):
         except BaseException as ex: ...
 
     .. versionadded:: 0.3.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``BLE001``.
 
     See also:
         https://docs.python.org/3/library/exceptions.html#exception-hierarchy
@@ -1070,6 +1083,7 @@ class BaseExceptionViolation(ASTViolation):
 
     error_template = 'Found except `BaseException`'
     code = 424
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1146,7 +1160,6 @@ class LambdaInsideLoopViolation(ASTViolation):
 
     error_template = "Found `lambda` in loop's body"
     code = 426
-    previous_codes = {442}
 
 
 @final
@@ -1192,7 +1205,6 @@ class UnreachableCodeViolation(ASTViolation):
 
     error_template = 'Found unreachable code'
     code = 427
-    previous_codes = {443}
 
 
 @final
@@ -1224,11 +1236,14 @@ class StatementHasNoEffectViolation(ASTViolation):
 
     .. versionadded:: 0.5.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 0.19.1
+       Do not report ``...`` when used in a
+       function or class body as a single node.
+
     """
 
     error_template = 'Found statement that has no effect'
     code = 428
-    previous_codes = {444}
 
 
 @final
@@ -1260,7 +1275,6 @@ class MultipleAssignmentsViolation(ASTViolation):
 
     error_template = 'Found multiple assign targets'
     code = 429
-    previous_codes = {445}
 
 
 @final
@@ -1326,12 +1340,12 @@ class NestedClassViolation(ASTViolation):
     Example::
 
         # Correct:
-        class Some(object): ...
-        class Other(object): ...
+        class Some: ...
+        class Other: ...
 
         # Wrong:
-        class Some(object):
-            class Inner(object):
+        class Some:
+            class Inner:
                 ...
 
     .. versionadded:: 0.1.0
@@ -1423,7 +1437,6 @@ class NestedImportViolation(ASTViolation):
 
     error_template = 'Found nested import'
     code = 433
-    previous_codes = {435}
 
 
 @final
@@ -1453,7 +1466,6 @@ class ReassigningVariableToItselfViolation(ASTViolation):
 
     error_template = 'Found reassigning variable to itself: {0}'
     code = 434
-    previous_codes = {438}
 
 
 @final
@@ -1475,7 +1487,7 @@ class ListMultiplyViolation(ASTViolation):
         my_list = [1, 2, 3] * 3
 
     See also:
-        https://github.com/satwikkansal/wtfPython#-explanation-8
+        https://github.com/satwikkansal/wtfPython#-explanation-12
 
     .. versionadded:: 0.12.0
 
@@ -1520,7 +1532,6 @@ class ProtectedModuleViolation(ASTViolation):
 
     error_template = 'Found protected module import: {0}'
     code = 436
-    previous_codes = {440}
 
 
 @final
@@ -1564,7 +1575,6 @@ class ProtectedAttributeViolation(ASTViolation):
 
     error_template = 'Found protected attribute usage: {0}'
     code = 437
-    previous_codes = {441}
 
 
 @final
@@ -1624,6 +1634,8 @@ class WrongUnicodeEscapeViolation(TokenizeViolation):
         # Wrong:
         escaped = b'\u0040'  # equals to b'\\u0040'
 
+    Is not reported for `f`-strings on python3.12+
+
     .. versionadded:: 0.12.0
 
     """
@@ -1648,7 +1660,7 @@ class BlockAndLocalOverlapViolation(ASTViolation):
     2. Functions and async functions definitions
     3. Classes, methods, and async methods definitions
     4. For and async for loops variables
-    5. Except for block exception aliases
+    5. Except block exception aliases
 
     We allow local variables to overlap themselves,
     we forbid block variables to overlap themselves.
@@ -1731,7 +1743,7 @@ class OuterScopeShadowingViolation(ASTViolation):
 
 
     Solution:
-        Use different names and do not allow scoping.
+        Use different names.
 
     Example::
 
@@ -1964,6 +1976,8 @@ class IncorrectExceptOrderViolation(ASTViolation):
         https://bit.ly/36MHlzw
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 0.19.0
+       Supports `try/except*` as well.
 
     """
 
@@ -2041,9 +2055,6 @@ class PositionalOnlyArgumentsViolation(ASTViolation):
     """
     Forbid positional only or ``/`` arguments.
 
-    This violation is only raised for ``python3.8+``,
-    earlier versions do not have this concept.
-
     Reasoning:
         This is a very rare case.
         Almost exclusively used by C code and stdlib.
@@ -2069,13 +2080,18 @@ class PositionalOnlyArgumentsViolation(ASTViolation):
         https://www.python.org/dev/peps/pep-0570/
 
     .. versionadded:: 0.14.0
+    .. versionchanged:: 0.19.0
+       This check is now disabled, since `/` parameters are now useful.
+       No longer produced, kept here for historic reasons.
 
     """
 
     error_template = 'Found positional-only argument'
     code = 451
+    disabled_since = '0.19.0'
 
 
+@final
 class LoopControlFinallyViolation(ASTViolation):
     """
     Forbid ``break`` and ``continue`` in a ``finally`` block.
@@ -2087,7 +2103,6 @@ class LoopControlFinallyViolation(ASTViolation):
         terrible practice, because `finally` is implicitly
         called and can cause damage to your logic with
         its implicitness.
-        It should not be allowed.
 
     Solution:
         Remove ``break`` and ``continue`` from ``finally`` blocks.
@@ -2112,11 +2127,15 @@ class LoopControlFinallyViolation(ASTViolation):
             continue
 
     .. versionadded:: 0.14.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``B012``.
 
     """
 
     error_template = 'Found `break` or `continue` in `finally` block'
     code = 452
+    disabled_since = '1.0.0'
 
 
 @final
@@ -2184,11 +2203,15 @@ class BaseExceptionRaiseViolation(ASTViolation):
         https://docs.python.org/3/tutorial/errors.html#user-defined-exceptions
 
     .. versionadded:: 0.15.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``TRY003``.
 
     """
 
     error_template = 'Found wrong `raise` exception type: {0}'
     code = 454
+    disabled_since = '1.0.0'
 
 
 @final
@@ -2551,11 +2574,15 @@ class BitwiseAndBooleanMixupViolation(ASTViolation):
         result = ((first > 0) & False)
 
     .. versionadded:: 0.15.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+
 
     """
 
     error_template = 'Found likely bitwise and boolean operation mixup'
     code = 465
+    disabled_since = '1.0.0'
 
 
 @final
@@ -2666,7 +2693,7 @@ class RaiseFromItselfViolation(ASTViolation):
         since the final behavior will be the same.
 
     Solution:
-        Don't raise an exeception from itself.
+        Don't raise an exception from itself.
 
     Example::
 

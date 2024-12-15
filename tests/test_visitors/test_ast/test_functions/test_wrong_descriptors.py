@@ -10,13 +10,13 @@ from wemake_python_styleguide.visitors.ast.functions import (
 # Correct:
 
 correct_decorator1 = """
-class Test(object):
+class Test:
     @classmethod
     def method(cls): ...
 """
 
 correct_decorator2 = """
-class Test(object):
+class Test:
     @first
     @second(param=4)
     @third()
@@ -24,7 +24,7 @@ class Test(object):
 """
 
 correct_decorator3 = """
-class Test(object):
+class Test:
     @first
     @second(param=4)
     @classmethod
@@ -63,12 +63,15 @@ def function(): ...
 """
 
 
-@pytest.mark.parametrize('code', [
-    correct_decorator1,
-    correct_decorator2,
-    correct_decorator3,
-    correct_decorator4,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        correct_decorator1,
+        correct_decorator2,
+        correct_decorator3,
+        correct_decorator4,
+    ],
+)
 def test_method_decorators_correct(
     assert_errors,
     parse_ast_tree,
@@ -85,12 +88,15 @@ def test_method_decorators_correct(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    wrong_decorator1,
-    wrong_decorator2,
-    wrong_decorator3,
-    wrong_decorator4,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        wrong_decorator1,
+        wrong_decorator2,
+        wrong_decorator3,
+        wrong_decorator4,
+    ],
+)
 def test_method_decorators_incorrect(
     assert_errors,
     parse_ast_tree,

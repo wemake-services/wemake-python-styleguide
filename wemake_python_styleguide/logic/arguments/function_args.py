@@ -1,9 +1,12 @@
 import ast
+from collections.abc import Mapping
 from itertools import zip_longest
-from typing import List, Mapping, Optional, Tuple
 
-from wemake_python_styleguide import constants, types
+from wemake_python_styleguide import types
 from wemake_python_styleguide.logic.arguments.call_args import get_starred_args
+from wemake_python_styleguide.logic.arguments.special_args import (
+    clean_special_argument,
+)
 
 
 def is_call_matched_by_arguments(
@@ -18,21 +21,12 @@ def is_call_matched_by_arguments(
     return same_args and same_vararg and same_kwarg and same_kw_args
 
 
-def _get_args_without_special_argument(
+def get_args_without_special_argument(
     node: types.AnyFunctionDefAndLambda,
-) -> List[ast.arg]:
-    """
-    Gets ``node`` arguments excluding ``self``, ``cls``, ``mcs``.
-
-    In ``python3.8+`` we have this case: ``def some(a, /, b): ...``
-    It is ignored on all other versions.
-    """
+) -> list[ast.arg]:
+    """Gets ``node`` arguments excluding ``self``, ``cls``, ``mcs``."""
     node_args = node.args.posonlyargs + node.args.args
-    if not node_args or isinstance(node, ast.Lambda):
-        return node_args
-    if node_args[0].arg not in constants.SPECIAL_ARGUMENT_NAMES_WHITELIST:
-        return node_args
-    return node_args[1:]
+    return clean_special_argument(node, node_args)
 
 
 def _has_same_vararg(
@@ -40,7 +34,7 @@ def _has_same_vararg(
     call: ast.Call,
 ) -> bool:
     """Tells whether ``call`` has the same vararg ``*args`` as ``node``."""
-    vararg_name: Optional[str] = None
+    vararg_name: str | None = None
     for starred_arg in get_starred_args(call):
         # 'args': [<_ast.Starred object at 0x10d77a3c8>]
         if isinstance(starred_arg.value, ast.Name):
@@ -57,7 +51,7 @@ def _has_same_kwarg(
     call: ast.Call,
 ) -> bool:
     """Tells whether ``call`` has the same kwargs as ``node``."""
-    kwarg_name: Optional[str] = None
+    kwarg_name: str | None = None
     null_arg_keywords = filter(lambda key: key.arg is None, call.keywords)
     for keyword in null_arg_keywords:
         # `a=1` vs `**kwargs`:
@@ -76,13 +70,8 @@ def _has_same_args(  # noqa: WPS231
     node: types.AnyFunctionDefAndLambda,
     call: ast.Call,
 ) -> bool:
-    """
-    Tells whether ``call`` has the same positional args as ``node``.
-
-    On ``python3.8+`` also works with ``posonlyargs`` arguments
-    or ``/`` arguments as they are also known.
-    """
-    node_args = _get_args_without_special_argument(node)
+    """Tells whether ``call`` has the same positional args as ``node``."""
+    node_args = get_args_without_special_argument(node)
     paired_arguments = zip_longest(call.args, node_args)
     for call_arg, func_arg in paired_arguments:
         if isinstance(call_arg, ast.Starred):
@@ -102,7 +91,7 @@ def _has_same_args(  # noqa: WPS231
 
 def _clean_call_keyword_args(
     call: ast.Call,
-) -> Tuple[Mapping[str, ast.keyword], List[ast.keyword]]:
+) -> tuple[Mapping[str, ast.keyword], list[ast.keyword]]:
     prepared_kw_args = {}
     real_kw_args = []
     for kw in call.keywords:

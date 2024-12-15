@@ -12,7 +12,7 @@ These values can be changed in the ``setup.cfg`` file on a per-project bases,
 if you find them too strict or too permissive.
 """
 
-from typing_extensions import Final
+from typing import Final
 
 # ========
 # General:
@@ -115,6 +115,9 @@ MAX_ATTRIBUTES: Final = 6  # guessed
 
 #: Maximum number of raises in a function.
 MAX_RAISES: Final = 3  # guessed
+
+#: Maximum number of exceptions in `except`.
+MAX_EXCEPT_EXCEPTIONS: Final = 3  # guessed
 
 #: Maximum amount of cognitive complexity per function.
 MAX_COGNITIVE_SCORE: Final = 12  # based on this code statistics

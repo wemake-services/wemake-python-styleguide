@@ -16,15 +16,18 @@ lambda_with_single_kwargs = 'lambda **kwargs: ...'
 lambda_with_single_kwonly = 'lambda *, kwonly=True: ...'
 
 
-@pytest.mark.parametrize('code', [
-    lambda_without_arguments,
-    lambda_with_single_argument,
-    lambda_with_default_argument,
-    lambda_with_single_args,
-    lambda_with_posonly_args,
-    lambda_with_single_kwargs,
-    lambda_with_single_kwonly,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        lambda_without_arguments,
+        lambda_with_single_argument,
+        lambda_with_default_argument,
+        lambda_with_single_args,
+        lambda_with_posonly_args,
+        lambda_with_single_kwargs,
+        lambda_with_single_kwonly,
+    ],
+)
 def test_correct_arguments_count(
     assert_errors,
     parse_ast_tree,
@@ -40,15 +43,18 @@ def test_correct_arguments_count(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    lambda_without_arguments,
-    lambda_with_single_argument,
-    lambda_with_default_argument,
-    lambda_with_single_args,
-    lambda_with_posonly_args,
-    lambda_with_single_kwargs,
-    lambda_with_single_kwonly,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        lambda_without_arguments,
+        lambda_with_single_argument,
+        lambda_with_default_argument,
+        lambda_with_single_args,
+        lambda_with_posonly_args,
+        lambda_with_single_kwargs,
+        lambda_with_single_kwonly,
+    ],
+)
 def test_correct_arguments_count_custom_option(
     assert_errors,
     parse_ast_tree,
@@ -65,14 +71,17 @@ def test_correct_arguments_count_custom_option(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    lambda_with_single_argument,
-    lambda_with_default_argument,
-    lambda_with_single_args,
-    lambda_with_posonly_args,
-    lambda_with_single_kwargs,
-    lambda_with_single_kwonly,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        lambda_with_single_argument,
+        lambda_with_default_argument,
+        lambda_with_single_args,
+        lambda_with_posonly_args,
+        lambda_with_single_kwargs,
+        lambda_with_single_kwonly,
+    ],
+)
 def test_no_arguments_error(
     assert_errors,
     assert_error_text,
@@ -91,9 +100,12 @@ def test_no_arguments_error(
     assert_error_text(visitor, '1', option_values.max_arguments)
 
 
-@pytest.mark.parametrize('code', [
-    lambda_without_arguments,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        lambda_without_arguments,
+    ],
+)
 def test_no_arguments(
     assert_errors,
     parse_ast_tree,

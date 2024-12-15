@@ -1,5 +1,4 @@
 import ast
-from typing import Union
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.constants import SPECIAL_ARGUMENT_NAMES_WHITELIST
@@ -56,16 +55,16 @@ def is_self(node: ast.AST) -> bool:
     We do not check for attribute access, because ``ast.Attribute`` nodes
     are globally ignored.
     """
-    self_node: Union[ast.Attribute, ast.Subscript, None] = None
+    self_node: ast.Attribute | ast.Subscript | None = None
     if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
         self_node = node.func
     elif isinstance(node, ast.Subscript):
         self_node = node
 
     return bool(
-        self_node and
-        isinstance(self_node.value, ast.Name) and
-        self_node.value.id in SPECIAL_ARGUMENT_NAMES_WHITELIST,
+        self_node
+        and isinstance(self_node.value, ast.Name)
+        and self_node.value.id in SPECIAL_ARGUMENT_NAMES_WHITELIST,
     )
 
 
@@ -80,16 +79,16 @@ def is_primitive(node: ast.AST) -> bool:
     We do not check for strings, numbers, etc
     because they are globally ignored.
     """
-    if isinstance(node, (ast.Tuple, ast.List)):
+    if isinstance(node, ast.Tuple | ast.List):
         return not node.elts  # we do allow `[]` and `()`
-    elif isinstance(node, ast.Set):
+    if isinstance(node, ast.Set):
+        elts = node.elts
         return (  # we do allow `{*set_items}`
-            len(node.elts) == 1 and
-            isinstance(node.elts[0], ast.Starred)
+            len(elts) == 1 and isinstance(elts[0], ast.Starred)
         )
-    elif isinstance(node, ast.Dict):  # we do allow `{}` and `{**values}`
+    if isinstance(node, ast.Dict):  # we do allow `{}` and `{**values}`
         return not list(filter(None, node.keys))
-    elif isinstance(node, ast.Call):
+    if isinstance(node, ast.Call):
         return not call_args.get_all_args(node)  # we do allow `call()`
     return False
 
@@ -106,7 +105,7 @@ def is_unary_minus(node: ast.AST) -> bool:
     """
     if isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.USub):
         # We allow variables, attributes, subscripts, and `-1`
-        if isinstance(node.operand, (ast.Constant, ast.Num)):
+        if isinstance(node.operand, ast.Constant | ast.Num):
             return node.operand.n == 1
         return True
     return False

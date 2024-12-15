@@ -25,12 +25,15 @@ async def function():  # has two awaits
 """
 
 
-@pytest.mark.parametrize('code', [
-    function_without_awaits,
-    function_async_without_awaits,
-    function_with_awaits,
-    function_with_nested_function_and_awaits,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_without_awaits,
+        function_async_without_awaits,
+        function_with_awaits,
+        function_with_nested_function_and_awaits,
+    ],
+)
 def test_awaits_correct_count(
     assert_errors,
     parse_ast_tree,
@@ -46,10 +49,13 @@ def test_awaits_correct_count(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize('code', [
-    function_with_awaits,
-    function_with_nested_function_and_awaits,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_with_awaits,
+        function_with_nested_function_and_awaits,
+    ],
+)
 def test_awaits_wrong_count(
     assert_errors,
     assert_error_text,

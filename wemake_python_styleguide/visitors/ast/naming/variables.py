@@ -1,13 +1,12 @@
 import ast
 import itertools
 from collections import Counter
-from typing import Iterable, List, cast
+from collections.abc import Iterable
+from typing import ClassVar, cast
 
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.functions import get_assign_targets
-from wemake_python_styleguide.compat.nodes import Match
-from wemake_python_styleguide.compat.types import AnyAssignWithWalrus
 from wemake_python_styleguide.constants import (
     MODULE_METADATA_VARIABLES_BLACKLIST,
     UNUSED_PLACEHOLDER,
@@ -15,17 +14,25 @@ from wemake_python_styleguide.constants import (
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming import access, name_nodes
 from wemake_python_styleguide.logic.tree import pattern_matching
-from wemake_python_styleguide.types import AnyAssign, AnyFor
+from wemake_python_styleguide.types import (
+    AnyAssign,
+    AnyAssignWithWalrus,
+    AnyFor,
+    AnyNodes,
+)
 from wemake_python_styleguide.violations import best_practices, naming
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 
 @final
-@alias('visit_any_assign', (
-    'visit_Assign',
-    'visit_AnnAssign',
-))
+@alias(
+    'visit_any_assign',
+    (
+        'visit_Assign',
+        'visit_AnnAssign',
+    ),
+)
 class WrongModuleMetadataVisitor(BaseNodeVisitor):
     """Finds wrong metadata information of a module."""
 
@@ -48,18 +55,24 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
 
             self.add_violation(
                 best_practices.WrongModuleMetadataViolation(
-                    node, text=target_node.id,
+                    node,
+                    text=target_node.id,
                 ),
             )
 
 
 @final
-@alias('visit_any_assign', (
-    'visit_Assign',
-    'visit_AnnAssign',
-))
+@alias(
+    'visit_any_assign',
+    (
+        'visit_Assign',
+        'visit_AnnAssign',
+    ),
+)
 class WrongVariableAssignmentVisitor(BaseNodeVisitor):
     """Finds wrong variables assignments."""
+
+    _reassignment_ignores: ClassVar[AnyNodes] = (ast.Starred,)
 
     def visit_any_assign(self, node: AnyAssign) -> None:
         """Used to check assignment variable to itself."""
@@ -72,7 +85,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
     def _check_reassignment(
         self,
         node: AnyAssign,
-        names: List[str],
+        names: list[str],
     ) -> None:
         if not node.value:
             return
@@ -80,7 +93,10 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
         if self._is_reassignment_edge_case(node):
             return
 
-        var_values = name_nodes.get_variables_from_node(node.value)
+        var_values = name_nodes.get_variables_from_node(
+            node.value,
+            exclude=self._reassignment_ignores,
+        )
         if len(names) <= 1 < len(var_values):
             # It means that we have something like `x = (y, z)`
             # or even `x = (x, y)`, which is also fine. See #1807
@@ -90,14 +106,15 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
             if var_name == var_value:
                 self.add_violation(
                     best_practices.ReassigningVariableToItselfViolation(
-                        node, text=var_name,
+                        node,
+                        text=var_name,
                     ),
                 )
 
     def _check_unique_assignment(
         self,
         node: AnyAssign,
-        names: List[str],
+        names: list[str],
     ) -> None:
         used_names = filter(
             lambda assigned_name: not access.is_unused(assigned_name),
@@ -107,7 +124,8 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
             if count > 1:
                 self.add_violation(
                     best_practices.ReassigningVariableToItselfViolation(
-                        node, text=used_name,
+                        node,
+                        text=used_name,
                     ),
                 )
 
@@ -123,15 +141,21 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
 
 
 @final
-@alias('visit_any_assign', (
-    'visit_Assign',
-    'visit_AnnAssign',
-    'visit_NamedExpr',
-))
-@alias('visit_any_for', (
-    'visit_For',
-    'visit_AsyncFor',
-))
+@alias(
+    'visit_any_assign',
+    (
+        'visit_Assign',
+        'visit_AnnAssign',
+        'visit_NamedExpr',
+    ),
+)
+@alias(
+    'visit_any_for',
+    (
+        'visit_For',
+        'visit_AsyncFor',
+    ),
+)
 class UnusedVariableDefinitionVisitor(BaseNodeVisitor):
     """Checks how variables are used."""
 
@@ -145,7 +169,7 @@ class UnusedVariableDefinitionVisitor(BaseNodeVisitor):
         """
         is_inside_class_or_module = isinstance(
             nodes.get_context(node),
-            (ast.ClassDef, ast.Module),
+            ast.ClassDef | ast.Module,
         )
         self._check_assign_unused(
             node,
@@ -157,8 +181,8 @@ class UnusedVariableDefinitionVisitor(BaseNodeVisitor):
     def visit_any_for(self, node: AnyFor) -> None:
         """Checks that we cannot create explicit unused loops."""
         target_names = name_nodes.get_variables_from_node(node.target)
-        is_target_no_op_variable = (
-            len(target_names) == 1 and access.is_unused(target_names[0])
+        is_target_no_op_variable = len(target_names) == 1 and access.is_unused(
+            target_names[0],
         )
         if not is_target_no_op_variable:  # see issue 1406
             self._check_assign_unused(
@@ -184,7 +208,7 @@ class UnusedVariableDefinitionVisitor(BaseNodeVisitor):
             )
         self.generic_visit(node)
 
-    def visit_Match(self, node: Match) -> None:  # pragma: py-lt-310
+    def visit_Match(self, node: ast.Match) -> None:
         """Check pattern matching in a form of `case ... as NAME`."""
         for match_as in pattern_matching.get_explicit_as_names(node):
             self._check_assign_unused(
@@ -210,7 +234,8 @@ class UnusedVariableDefinitionVisitor(BaseNodeVisitor):
         if all_names and all_unused:
             self.add_violation(
                 naming.UnusedVariableIsDefinedViolation(
-                    node, text=', '.join(all_names),
+                    node,
+                    text=', '.join(all_names),
                 ),
             )
 
@@ -222,7 +247,9 @@ class UnusedVariableUsageVisitor(BaseNodeVisitor):
     def visit_Name(self, node: ast.Name) -> None:
         """Checks that we cannot use unused variables anywhere."""
         self._check_variable_used(
-            node, node.id, is_created=isinstance(node.ctx, ast.Store),
+            node,
+            node.id,
+            is_created=isinstance(node.ctx, ast.Store),
         )
         self.generic_visit(node)
 

@@ -42,11 +42,12 @@ def test_single_argument_count(
 def test_no_arguments(
     assert_errors,
     parse_ast_tree,
+    no_argument,
     options,
     mode,
 ):
     """Ensures that functions with no arguments work."""
-    tree = parse_ast_tree(mode('def function(): ...'))
+    tree = parse_ast_tree(mode(no_argument))
 
     option_values = options(max_arguments=0)
     visitor = FunctionComplexityVisitor(option_values, tree=tree)

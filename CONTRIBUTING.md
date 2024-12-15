@@ -183,7 +183,6 @@ Before submitting your code please do the following steps:
 8. Run `mypy` to ensure that types are correct
 9. Run `flake8` to ensure that style is correct
 10. Run `lint-imports` to ensure that architecture contracts are correct
-11. Run `doc8` to ensure that docs are correct
 
 You can run everything at once with `make test`,
 see our `Makefile` for more details.

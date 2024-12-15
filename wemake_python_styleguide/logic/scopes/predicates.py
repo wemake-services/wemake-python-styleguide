@@ -1,7 +1,5 @@
 import ast
-from typing import Set
-
-from typing_extensions import Final
+from typing import Final
 
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
 from wemake_python_styleguide.logic.nodes import get_parent
@@ -15,6 +13,7 @@ _PROPERTY_EXCEPTIONS: Final = frozenset(('property', '.setter'))
 
 
 # Name predicates:
+
 
 def is_function_overload(node: ast.AST) -> bool:
     """Check that function decorated with `typing.overload`."""
@@ -41,7 +40,8 @@ def is_property_setter(node: ast.AST) -> bool:
 
 # Scope predicates:
 
-def is_same_value_reuse(node: ast.AST, names: Set[str]) -> bool:
+
+def is_same_value_reuse(node: ast.AST, names: set[str]) -> bool:
     """Checks if the given names are reused by the given node."""
     if isinstance(node, AssignNodes) and node.value:
         used_names = {
@@ -54,13 +54,16 @@ def is_same_value_reuse(node: ast.AST, names: Set[str]) -> bool:
     return False
 
 
-def is_same_try_except_cases(node: ast.AST, names: Set[str]) -> bool:
+def is_same_try_except_cases(node: ast.AST, names: set[str]) -> bool:
     """Same names in different ``except`` blocks are not counted."""
     if not isinstance(node, ast.ExceptHandler):
         return False
 
     for except_handler in getattr(get_parent(node), 'handlers', []):
-        if except_handler.name and except_handler.name == node.name:
-            if except_handler is not node:
-                return True
+        if (
+            except_handler.name
+            and except_handler.name == node.name
+            and except_handler is not node
+        ):
+            return True
     return False

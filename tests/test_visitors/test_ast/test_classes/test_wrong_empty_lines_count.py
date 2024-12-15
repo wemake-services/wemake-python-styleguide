@@ -1,15 +1,16 @@
 """Test method contain only allowed empty lines count."""
+
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
     WrongEmptyLinesCountViolation,
 )
-from wemake_python_styleguide.visitors.ast.function_empty_lines import (
+from wemake_python_styleguide.visitors.tokenize.functions import (
     WrongEmptyLinesCountVisitor,
 )
 
 class_with_wrong_method = """
-class WrongClass(object):
+class WrongClass:
 
     def wrong_method(self):
         foo()
@@ -22,7 +23,7 @@ class WrongClass(object):
 """
 
 class_with_valid_method = """
-class WrongClass(object):
+class WrongClass:
 
     def wrong_method(self):
         foo()
@@ -31,7 +32,7 @@ class WrongClass(object):
 """
 
 file_with_few_class = """
-class ValidClass(object):
+class ValidClass:
 
     def valid_method(self):
         foo()
@@ -136,7 +137,7 @@ def test_func():
 
 
 class_with_attributes = """
-class Foo(object):
+class Foo:
     first_attribute = 'foo'
 
 
@@ -166,12 +167,87 @@ fstrings_feature = Fstring()
 fstrings_feature.deprecate()
 """
 
+def_with_ellipsis = """
+class BaseResponse(Protocol):
 
-@pytest.mark.parametrize('input_', [
-    class_with_wrong_method,
-    wrong_function,
-    wrong_function_with_loop,
-])
+    @property
+    def status_code(self) -> int: ...
+
+    @property
+    def content(self) -> Any: ...
+
+    def json(self) -> Any: ...
+
+    def raise_for_status(self) -> None: ...
+
+    @property
+    def headers(self) -> dict[str, str]: ...
+"""
+
+def_with_ellipsis_multiline = """
+class BaseResponse(Protocol):
+
+    @property
+    def status_code(
+        self,
+        arg1,
+        arg2,
+    ) -> int: ...
+
+    @property
+    def content(self) -> Any: ...
+
+    def json(self) -> Any: ...
+
+    def raise_for_status(self) -> None: ...
+
+    @property
+    def headers(self) -> dict[str, str]: ...
+"""
+
+ellipsis_into_body = """
+def status_code(arg) -> int:
+    payload()
+    if not arg:
+        ...
+    payload()
+
+
+
+
+    payload()
+"""
+
+function_with_implicit_string_concatenation = """
+def kk() -> None:
+    raise ValueError(
+        "This is "
+        "a very "
+        "long message "
+        "but there are "
+        "no empty lines.",
+    )
+"""
+
+# https://github.com/wemake-services/wemake-python-styleguide/issues/2899
+regression2899_1 = """
+def curry(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]:
+    ...
+"""
+
+regression2899_2 = """
+def cur(function: Callable[..., _ReturnType]) -> Callable[..., _ReturnType]: ...
+"""
+
+
+@pytest.mark.parametrize(
+    'input_',
+    [
+        class_with_wrong_method,
+        wrong_function,
+        wrong_function_with_loop,
+    ],
+)
 def test_wrong(
     input_,
     default_options,
@@ -183,24 +259,31 @@ def test_wrong(
     file_tokens = parse_tokens(mode(input_))
 
     visitor = WrongEmptyLinesCountVisitor(
-        default_options, file_tokens=file_tokens,
+        default_options,
+        file_tokens=file_tokens,
     )
     visitor.run()
 
     assert_errors(visitor, [WrongEmptyLinesCountViolation])
 
 
-@pytest.mark.parametrize('template', [
-    class_with_valid_method,
-    allow_function,
-    allow_function_with_comments,
-    function_with_docstring,
-    function_with_docstring_and_comments,
-    file_with_few_class,
-    class_with_attributes,
-    expression_without_function,
-    module_level_empty_lines,
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        class_with_valid_method,
+        allow_function,
+        allow_function_with_comments,
+        function_with_docstring,
+        function_with_docstring_and_comments,
+        file_with_few_class,
+        class_with_attributes,
+        expression_without_function,
+        module_level_empty_lines,
+        # Do not report anything for `Callable[...]`
+        regression2899_1,
+        regression2899_2,
+    ],
+)
 def test_success(
     template,
     parse_tokens,
@@ -212,7 +295,8 @@ def test_success(
     file_tokens = parse_tokens(mode(template))
 
     visitor = WrongEmptyLinesCountVisitor(
-        default_options, file_tokens=file_tokens,
+        default_options,
+        file_tokens=file_tokens,
     )
     visitor.run()
 
@@ -229,20 +313,23 @@ def test_zero_option(
     """Test zero configuration."""
     file_tokens = parse_tokens(mode(allow_function))
     visitor = WrongEmptyLinesCountVisitor(
-        options(exps_for_one_empty_line=0), file_tokens=file_tokens,
+        options(exps_for_one_empty_line=0),
+        file_tokens=file_tokens,
     )
     visitor.run()
     assert_errors(visitor, [WrongEmptyLinesCountViolation])
 
 
-@pytest.mark.parametrize('template', [
-    class_with_valid_method,
-    file_with_few_class,
-])
+@pytest.mark.parametrize(
+    'template',
+    [
+        class_with_valid_method,
+        file_with_few_class,
+    ],
+)
 def test_zero_option_with_valid_method(
     template,
     parse_tokens,
-    default_options,
     assert_errors,
     options,
     mode,
@@ -250,7 +337,66 @@ def test_zero_option_with_valid_method(
     """Test zero configuration with valid method."""
     file_tokens = parse_tokens(mode(template))
     visitor = WrongEmptyLinesCountVisitor(
-        options(exps_for_one_empty_line=0), file_tokens=file_tokens,
+        options(exps_for_one_empty_line=0),
+        file_tokens=file_tokens,
+    )
+    visitor.run()
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize(
+    'case',
+    [
+        def_with_ellipsis,
+        def_with_ellipsis_multiline,
+    ],
+)
+def test_def_with_ellipsis(
+    case,
+    parse_tokens,
+    default_options,
+    assert_errors,
+    mode,
+):
+    """Test abstract classes/protocol definitions with ellipsis."""
+    file_tokens = parse_tokens(mode(case))
+    visitor = WrongEmptyLinesCountVisitor(
+        default_options,
+        file_tokens=file_tokens,
+    )
+    visitor.run()
+    assert_errors(visitor, [])
+
+
+def test_ellipsis_into_body(
+    parse_tokens,
+    default_options,
+    assert_errors,
+    mode,
+):
+    """Test correct detection ellipsis into function body."""
+    file_tokens = parse_tokens(mode(ellipsis_into_body))
+    visitor = WrongEmptyLinesCountVisitor(
+        default_options,
+        file_tokens=file_tokens,
+    )
+    visitor.run()
+    assert_errors(visitor, [WrongEmptyLinesCountViolation])
+
+
+def test_string_concatination(
+    parse_tokens,
+    default_options,
+    assert_errors,
+    mode,
+):
+    """Test function with multiline implicit string concatenation."""
+    file_tokens = parse_tokens(
+        mode(function_with_implicit_string_concatenation),
+    )
+    visitor = WrongEmptyLinesCountVisitor(
+        default_options,
+        file_tokens=file_tokens,
     )
     visitor.run()
     assert_errors(visitor, [])

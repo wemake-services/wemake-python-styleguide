@@ -7,8 +7,7 @@ And provide links to the python source code.
 """
 
 import ast
-
-from typing_extensions import Final
+from typing import Final
 
 #: We need this tuple to easily work with both types of text nodes:
 TextNodes: Final = (ast.Str, ast.Bytes)

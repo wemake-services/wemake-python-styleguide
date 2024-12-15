@@ -72,12 +72,9 @@ some_int = 1  # type: int
 
 # =====
 
-full_name = u'Nikita Sobolev'  # noqa: WPS302
-phone_number = 555_123_999  # noqa:  WPS303
-partial_number = .05  # noqa: WPS304
+phone_number = 8_83_134_43  # noqa:  WPS303
 float_zero = 0.0  # noqa: WPS358
-formatted_string = f'Hi, {full_name}'  # noqa: WPS305
-formatted_string_complex = f'1+1={1 + 1}'  # noqa: WPS305, WPS237
+formatted_string_complex = f'1+1={1 + 1}'  # noqa: WPS237
 
 
 def __getattr__():  # noqa: WPS413
@@ -103,7 +100,7 @@ except AnyError:
     my_print('nope')
 
 
-class TooManyPublicAtts(object):  # noqa: WPS230
+class TooManyPublicAtts:  # noqa: WPS230
     def __init__(self):
         self.first = 1
         self.second = 2
@@ -126,13 +123,11 @@ def function_name(  # noqa: WPS614
 def some():  # noqa: WPS110
     from my_module import some_import  # noqa: WPS433
 
-    class Nested(object):  # noqa: WPS431
-        ...  # noqa: WPS428, WPS604
+    class Nested:  # noqa: WPS431
+        ...  # noqa: WPS604
 
     def nested():  # noqa: WPS430
         anti_wps428 = 1
-
-    raise NotImplemented  # noqa: WPS423
 
 
 del {'a': 1}['a']  # noqa: WPS420
@@ -155,12 +150,10 @@ def some_function():
 
 used, __ = 1, 2  # noqa: WPS123
 
-class Mem0Output(object):  # noqa: WPS124
+class Mem0Output:  # noqa: WPS124
     # See:
     # https://github.com/wemake-services/wemake-python-styleguide/issues/1191
     anti_wps124 = 'unreadable class'
-
-type = 'type'  # noqa: WPS125
 
 some._execute()  # noqa: WPS437
 
@@ -203,7 +196,7 @@ def many_expressions(xy):  # noqa: WPS213
     my_print(xy)
 
 
-class TooManyMethods(object):  # noqa: WPS214
+class TooManyMethods:  # noqa: WPS214
     def method1(self):
         anti_wps428 = 1
 
@@ -290,13 +283,13 @@ except TypeError:
     my_print('type')
 
 
-class BadClass:  # noqa: WPS306
+class BadClass:
     UPPER_CASE_ATTRIBUTE = 12  # noqa: WPS115
 
     def __del__(self, *_args, **_kwargs):  # noqa: WPS603
         anti_wps428 = 1  # noqa: WPS442
 
-    class Nested:  # noqa: WPS306,WPS431
+    class Nested:  # noqa: WPS431
         anti_wps428 = 1
 
     async def __eq__(self, other):  # noqa: WPS610
@@ -306,12 +299,7 @@ class BadClass:  # noqa: WPS306
 magic_numbers = 13.2 + 50  # noqa: WPS432
 
 assert 1 < 1 < hex_number  # noqa: WPS308
-assert 2 > octal_number  # noqa: WPS309
 
-hex_number = 0XFF  # noqa: WPS310
-octal_number = 0O11  # noqa: WPS310
-binary_number = 0B1001  # noqa: WPS310
-number_with_scientific_notation = 1.5E-10  # noqa: WPS310
 number_with_useless_plus = +5  # noqa: WPS330
 
 if '6' in nodes in '6':  # noqa: WPS311, WPS525
@@ -320,50 +308,13 @@ if '6' in nodes in '6':  # noqa: WPS311, WPS525
 assert hex_number == hex_number  # noqa: WPS312
 
 
-async def test_async_function():
-    return(123, 33)  # noqa: WPS313
-
-
 if True:  # noqa: WPS314
     anti_wps428 = 1
 
 
-class SomeTestClass(FirstParent, SecondParent, object):  # noqa: WPS315
-    anti_wps428 = 1
-
-
-with some_context as first_context, second_context:  # noqa: WPS316
-    anti_wps428 = 1
-
-
-class SomeClass(FirstParent,  # noqa: WPS317
-                SecondParent,  # noqa: WPS318
-                ThirdParent):  # noqa: WPS319
-    anti_wps428 = 1
-
-
-if SomeClass:
-        my_print(SomeClass)  # noqa: WPS318
-
-my_print(
-    1,
-    2)  # noqa: WPS319
-
-
-def function(  # noqa: WPS320
-    arg: Optional[  # noqa: WPS320
-        str,
-    ]
-) -> Optional[
-    str,
-]:
-    some_set = {1
-               }  # noqa: WPS318
-
 
 string_modifier = R'(\n)'  # noqa: WPS321
 multiline_string = """abc"""  # noqa: WPS322
-modulo_formatting = 'some %s'  # noqa: WPS323
 
 
 def function_with_wrong_return():
@@ -377,23 +328,12 @@ def function_with_wrong_yield():
         yield  # noqa: WPS325
     yield 1
 
-bad_concatenation = 'a' 'b'  # noqa: WPS326
-
 for literal in bad_concatenation:  # noqa: WPS327, WPS328
     continue
 
 with open(bad_concatenation):  # noqa: WPS328
     pass  # noqa: WPS420
 
-
-try:
-    anti_wps428 = 1
-except Exception as ex:  # noqa: WPS329
-    raise ex
-
-def some_other_function():
-    some_value = 1
-    return some_value  # noqa: WPS331
 
 my_print(one > two and two > three)  # noqa: WPS333
 
@@ -421,12 +361,6 @@ for sum_item in file_obj:  # noqa: WPS519
     sum_container += sum_item
 
 my_print(sum_container == [])  # noqa: WPS520
-my_print(sum_container is 0)  # noqa: WPS521
-
-try:
-    anti_wps428 = 1
-except BaseException:  # noqa: WPS424
-    anti_wps428 = 1
 
 call_with_positional_bool(True, keyword=1)  # noqa: WPS425
 
@@ -435,7 +369,7 @@ class MyInt(int):  # noqa: WPS600
     """My custom int subclass."""
 
 
-class ShadowsAttribute(object):
+class ShadowsAttribute:
     """Redefines attr from class."""
 
     first: int
@@ -459,7 +393,7 @@ finally:
 nodes = nodes  # noqa: WPS434
 
 
-class Example(object):
+class Example:
     """Correct class docstring."""
 
     def __init__(self):  # noqa: WPS611
@@ -487,29 +421,8 @@ first = second = 2  # noqa: WPS429
 first, nodes[0] = range(2)  # noqa: WPS414
 
 
-try:  # noqa: WPS415
-    anti_wps428 = 1
-except ValueError:
-    anti_wps428 = 1
-except ValueError:
-    anti_wps428 = 1
-
-
 class MyBadException(BaseException):  # noqa: WPS418
     anti_wps428 = 1
-
-
-some_if_expr = True if some_set else False  # noqa: WPS502
-
-if some_if_expr:  # noqa: WPS502
-    some_dict['x'] = True
-else:
-    some_dict['x'] = False
-
-def another_wrong_if():
-    if full_name != 'Nikita Sobolev':  # noqa: WPS531
-        return False
-    return True
 
 
 
@@ -520,24 +433,8 @@ class ClassWithWrongContents((lambda: object)()):  # noqa: WPS606
         anti_wps428 = 1
 
     def method_with_no_args():  # noqa: WPS605
-        super(ClassWithWrongContents, self).method_with_no_args()  # noqa: WPS608
-        self.some_set = {1, 1}  # noqa: WPS417
-
-
-def useless_returning_else():
-    if some_set:
-        return some_set
-    else:
-        return TypeError  # noqa: WPS503
-
-
-def multiple_return_path():
-    try:  # noqa: WPS419, WPS503
-        return 1
-    except Exception:
-        return 2
-    else:
-        return 3
+        based = super(ClassWithWrongContents, self).method_with_no_args()  # noqa: WPS608
+        my_print(based)
 
 
 def bad_default_values(
@@ -569,13 +466,8 @@ try:
 except TypeError:
     my_print('WTF?')
 
-if some and (  # noqa: WPS337
-    anti_wps428 == 1
-):
-    anti_wps428 = 'some text'
 
-
-class WrongMethodOrder(object):  # noqa: WPS338
+class WrongMethodOrder:  # noqa: WPS338
     def _protected(self):
         return self
 
@@ -584,10 +476,7 @@ class WrongMethodOrder(object):  # noqa: WPS338
 
 
 leading_zero = 1.2e01  # noqa: WPS339
-positive_exponent = 1.1e+1  # noqa: WPS340
-wrong_hex = 0xabc  # noqa: WPS341
 wrong_escape_raw_string = '\\n'  # noqa: WPS342
-bad_complex = 1J  # noqa: WPS343
 zero_div = bad_complex / 0  # noqa: WPS344
 mult_one = zero_div * 1  # noqa: WPS345
 mult_one -= -1  # noqa: WPS346
@@ -602,15 +491,10 @@ if len(numbers) > 0:  # noqa: WPS507
 if numbers and numbers:  # noqa: WPS408
     my_print('duplicate boolop')
 
-if not numbers == [1]:  # noqa: WPS508
-    my_print('bad compare with not')
-
 if numbers == CONSTANT != [2]:  # noqa: WPS409
     my_print(1 + (1 if number else 2))  # noqa: WPS509
 
 my_print(numbers in [])  # noqa: WPS510
-my_print(isinstance(number, int) or isinstance(number, (float, str)))  # noqa: 474
-my_print(isinstance(numbers, (int,)))  # noqa: WPS512
 
 if numbers:
     my_print('first')
@@ -627,7 +511,7 @@ async def async_gen():
     raise StopIteration  # noqa: WPS438
 
 
-class CheckStopIteration(object):
+class CheckStopIteration:
     def sync_gen(self):
         yield
         raise StopIteration()  # noqa: WPS438
@@ -645,11 +529,6 @@ unhashable = [] * 2  # noqa: WPS435
 
 from json import loads  # noqa: WPS347
 
-some_model = (
-    MyModel.objects.filter(...)
-        .exclude(...)  # noqa: WPS348
-)
-
 swap_a = swap_b
 swap_b = swap_a  # noqa: WPS523
 
@@ -662,19 +541,8 @@ class ChildClass(ParentClass):
 
 LOWERCASE_ALPH = "abcdefghijklmnopqrstuvwxyz" # noqa: WPS447
 
-int()  # noqa: WPS351
-
-for wrong_loop in call(  # noqa: WPS352
-    1, 2, 3,
-):
-    my_print('bad loop')
-
 if a in {1}:  # noqa: WPS525
     my_print('bad!')
-
-def implicit_yield_from():
-    for wrong_yield in call():  # noqa: WPS526
-        yield wrong_yield
 
 try: # noqa: WPS448
     anti_wps428 = 1
@@ -708,16 +576,11 @@ deep_func(a)(b)(c)(d)  # noqa: WPS233
 
 annotated: List[List[List[List[int]]]]  # noqa: WPS234
 
-extra_new_line = [  # noqa: WPS355
-
-    'wrong',
-]
-
 *numbers, = [4, 7]  # noqa: WPS356, WPS460
 [first_number, second_number] = [4, 7]  # noqa: WPS359
 
 
-class AttributeGetter(object):
+class AttributeGetter:
     def __init__(self):
         self.attribute = 1
 
@@ -731,17 +594,6 @@ class AttributeGetter(object):
 a_list = [1, 2, 3, 4, 5]
 a_list[1:3] = [1, 2]  # noqa: WPS362
 a_list[slice(1)] = [1, 2]  # noqa: WPS362
-
-for element in range(10):
-    try:  # noqa: WPS452
-        my_print(1)
-    except AnyError:
-        my_print('nope')
-    finally:
-        # See:
-        # https://github.com/wemake-services/wemake-python-styleguide/issues/1082
-        break
-    my_print(4)
 
 
 def raise_bad_exception():
@@ -775,6 +627,12 @@ def many_raises_function(parameter):  # noqa: WPS238
     raise TypeError('4')
 
 
+try:
+    my_print('try')
+except (TypeError, ValueError, LookupError, KeyboardInterrupt):  # noqa: WPS239
+    my_print('except')
+
+
 my_print("""
 text
 """)  # noqa: WPS462
@@ -782,13 +640,6 @@ text
 
 def get_item():  # noqa: WPS463
     return  # noqa: WPS324
-
-bad_bitwise = True | True # noqa: WPS465
-
-matrix = [
-   some(number) for numbers in matrix
-   for number in numbers # noqa: WPS361
-]
 
 def bare_raise_function():
     raise # noqa: WPS467
@@ -808,7 +659,7 @@ except TypeError as raise_from_itself:
     raise raise_from_itself from raise_from_itself  # noqa: WPS469
 
 
-class TestClass(object, **{}):  # noqa: WPS470
+class TestClass(**{}):  # noqa: WPS470
     """Docs."""
 
 
@@ -820,10 +671,72 @@ def foo2_func():
 
 noqa_wps532 = variable is some_thing is other_thing  # noqa: WPS532
 
-class Baseline(object):
+class Baseline:
     def method(self, number):
         return number + 1
 
 class Antediluvian(Baseline):
     def method(self):
-        return list((super().method(some_item) for some_item in items))  # noqa: WPS616
+        return (super().method(some_item) for some_item in items)  # noqa: WPS616
+
+
+# porting noqa38.py
+class WithStatic:
+    @staticmethod
+    def some_static(arg1):  # noqa: WPS602
+        my_print('WTF?')
+
+    @staticmethod
+    async def some_async_static(arg1):  # noqa: WPS602
+        my_print('WTF?')
+
+
+@first
+@second
+@third(param='a')
+@fourth
+@fifth()
+@error
+def decorated():  # noqa: WPS216
+    my_print('WTF?')
+
+
+def wrong_comprehension1():
+    return [  # noqa: WPS307
+        node
+        for node in 'ab'
+        if node != 'a'
+        if node != 'b'
+    ]
+
+
+def wrong_comprehension2():
+    return [  # noqa: WPS224
+        target
+        for assignment in range(hex_number)
+        for target in range(assignment)
+        for _ in range(10)
+        if isinstance(target, int)
+    ]
+
+
+for unique_element in range(10):
+    if (other := unique_element) > 5:  # noqa: WPS332
+        my_print(1)
+
+    my_print(4)
+
+
+@some_decorator['text']  # noqa: WPS466
+def my_function():
+    return 1
+
+
+user_id = 'uuid-user-id'
+match user:
+    case 'user_id' | 'uid' as _uid:  # noqa: WPS122
+        raise ValueError(_uid)
+    case {'key': k}:  # noqa: WPS111
+        raise ValueError(k)
+    case [objs]:  # noqa: WPS110
+        raise ValueError(objs)

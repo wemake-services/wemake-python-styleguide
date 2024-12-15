@@ -17,18 +17,167 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
-## WIP
+## 1.0.0 WIP
 
 ### Features
 
-- `wemake` output formatter now respects `NO_COLOR=1` option
-  to disable text highlighting. See https://no-color.org
-- Add `ImportObjectCollisionViolation` to detect
-  the same objects imported under different aliases
+- Adds official `python3.13` support
+- **Breaking**: Drops `python3.9` support
+- **Breaking**: Drops `nitpick` support
+- **Breaking**: Drops `flake8-commas`, `flake8-isort`,
+  `flake8-debugger`, `flake8-string-format`, `flake8-quotes`,
+  `flake8-comprehensions`, `flake8-bugbear`, `flake8-docstrings`,
+  `flake8-eradicate`, `flake8-bandit`, `flake8-broken-line`,
+  `flake8-rst-docstrings`, `pep8-naming`
+  support, use `ruff format` and `ruff check` instead
+- **Breaking**: Drops `darglint` support, because it is unmaintained
+- **Breaking**: Removes `WPS125`, because it is covered by `ruff` linter
+- **Breaking**: Removes `WPS302`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS304`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS305`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS306`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS309`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS310`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS313`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS315`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS316`, because it is covered by `ruff` linter
+- **Breaking**: Removes `WPS317`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS318`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS319`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS320`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS323`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS326`, because it is covered by `ruff` linter
+- **Breaking**: Removes `WPS329`, because it is covered by `ruff` linter
+- **Breaking**: Removes `WPS331`, because it is covered by `ruff` linter
+- **Breaking**: Removes `WPS337`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS340`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS341`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS343`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS348`, because it conflicts with `ruff` formatter
+- **Breaking**: Removes `WPS351`, because it is covered by `ruff` linter
+- **Breaking**: Removes `WPS352`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS355`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS360`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS361`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS415`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS417`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS419`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS423`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS424`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS452`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS454`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS465`, because `|` is now heavily used by typing
+- **Breaking**: Removes `WPS502`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS503`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS508`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS526`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS521`, because is covered by `ruff` linter
+- Adds a new rule to find too complex `except` with too many exceptions
+- Allows any compares in `assert` statements for `WPS520`, #3112
+- Allows walrus operator (`:=`) in comprehesions #3121
+- Does not count `self`, `cls`, and `mcs` as arguments
+  for `WPS211` complexity check anymore, #2394
+- `WPS303`: Underscore (`_`) now only allowed with 3 digits after it, #3120
 
 ### Bugfixes
 
-- Fix `ForbiddenInlineIgnoreViolation` config parsing. #2590
+- Fixes `WPS217` to allow simple calls in `f` strings, #3150
+- Fixes `WPS217` not to raise on empty `f` strings,
+  because `ruff check` handles that now for us
+- Fixes `OverusedStringViolation` not to include `'...'` string
+- Removes `astor` package in favour of `ast.unparse`
+- Fixes `WPS210` to not count nested local variables in nested scopes #3108
+- Fixes `IterableUnpackingViolation` with generic types and `TypeVarTuple`
+- Fixes `WPS469` detecting incorrect names of raised exceptions, #3109
+- Fixes unnormalized pathes in formatter output
+- Fixes `WPS434` to allow reassignment in a form of `x = [y, *x]`
+
+### Misc
+
+- Integration with `ondivi` doc for legacy codebases
+- Fixes a documentation error for the Formatter (Showing statistic) section
+- Source code is now formatted with `ruff`
+
+
+## 0.19.2
+
+### Bugfixes
+
+- Fixes `WrongEmptyLinesCountViolation` crash on `Callable[..., ...]` #2899
+
+
+## 0.19.1
+
+This release fixes how `...` is used. For example, it is common to define
+function stubs / protocols like this:
+
+```python
+def some_function(): ...
+```
+
+Now, `...` will be excluded from several rules.
+
+### Bugfixes
+
+- Fixes `TooDeepNestingViolation` not to trigger
+  on `...` in functions and classes
+- Fixes `StatementHasNoEffectViolation` not to trigger
+  on `...` in functions and classes, when it is the only node
+
+
+## 0.19.0
+
+This minor version will be the last release with all the `flake8` plugins.
+In the future this project will be migrated to be used together with `ruff`.
+
+### Features
+
+- Adds official `python3.12` support
+- **Breaking**: drops `python3.8` support
+- **Breaking**: Reconsider `object` required base class exception:
+  since `class Klass[_Type]` must not contain `object`,
+  this rule is change to be the opposite:
+  `object` explicit base class must not be used.
+  You can use `ruff` to change all `object`-based types to the new style:
+  `ruff check --select=UP004 --fix .`
+  https://docs.astral.sh/ruff/rules/useless-object-inheritance/
+- **Breaking**: allow positional-only parameters,
+  since it is required by `mypy` when using `Concatenate`
+- Adds support for naming rules for PEP695 type params
+- Due to how `f`-string are parsed in `python3.12` several token-based
+  violations are not reported anymore for them:
+  `WrongMultilineStringViolation`, `ImplicitRawStringViolation`,
+  `WrongUnicodeEscapeViolation`, `RawStringNotNeededViolation`
+- `wemake` output formatter now respects `NO_COLOR=1` option
+  to disable text highlighting. See https://no-color.org
+- Adds `ImportObjectCollisionViolation` to detect
+  the same objects imported under different aliases
+- Adds `reveal_locals` to the list of forbidden functions
+- Updates `flake8` to `7.x`
+
+### Bugfixes
+
+- Fixes `ForbiddenInlineIgnoreViolation` config parsing. #2590
+- Fixes `WrongEmptyLinesCountViolation` for func definitions with ellipsis. #2847
+- Fixes `WrongEmptyLinesCountViolation` for multiline implicit string concatination. #2787
+- Fixes `ObjectInBaseClassesListViolation`, `UnpythonicGetterSetterViolation`,
+  `ImplicitInConditionViolation`, `RedundantSubscriptViolation`,
+  `TooLongCompareViolation` to include better error details
+- Fixes `TooDeepNestingViolation` for `TryStar` and `Match` statements
+- Fixes `TooLongTryBodyViolation` and `TooManyExceptCasesViolation`
+  to work for `TryStar` statements as well
+- Fixes `UselessNodeViolation` to work with `TryStar`
+- Fixes `DuplicateExceptionViolation` to work with `TryStar`
+- Fixes `TryExceptMultipleReturnPathViolation` to work with `TryStar`
+- Fixes `IncorrectExceptOrderViolation` to work with `TryStar`
+- Fixes that `MatchStar` was not checked in pattern matching name assignments
+- Fixes pattern matching support
+  in `BlockAndLocalOverlapViolation` and `OuterScopeShadowingViolation`
+
+### Misc
+
+- Updates multiple`flake8-*` dependencies
+- Fixes multiple typos in docs
 
 ### Misc
 

@@ -34,8 +34,7 @@ You will also need to create a `setup.cfg` file with the [configuration](https:/
 
 We highly recommend to also use:
 
-- [flakeheaven](https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/integrations/flakeheaven.html) for easy integration into a **legacy** codebase
-- [nitpick](https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/integrations/nitpick.html) for sharing and validating configuration across multiple projects
+- [ondivi](https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/integrations/ondivi.html) for easy integration into a **legacy** codebase
 
 
 ## Running
@@ -74,18 +73,17 @@ Strict linting offers the following benefits to developers and companies:
 The ultimate goal of this project is
 to make all people write **exactly** the same `Python` code.
 
-|                            | flake8 | pylint | black | mypy | wemake-python-styleguide |
-|----------------------------|--------|--------|-------|------|--------------------------|
-| Formats code?              |   ❌   |   ❌   |   ✅  |  ❌  |            ❌           |
-| Finds style issues?        |   🤔   |   ✅   |   🤔  |  ❌  |            ✅           |
-| Finds bugs?                |   🤔   |   ✅   |   ❌  |  ✅  |            ✅           |
-| Finds complex code?        |   ❌   |   🤔   |   ❌  |  ❌  |            ✅           |
-| Has a lot of strict rules? |   ❌   |   🤔   |   ❌  |  ❌  |            ✅           |
-| Has a lot of plugins?      |   ✅   |   ❌   |   ❌  |  🤔  |            ✅           |
+|                            | flake8 | pylint | black | mypy | ruff | wemake-python-styleguide |
+|----------------------------|--------|--------|-------|------|------|--------------------------|
+| Formats code?              |   ❌   |   ❌   |   ✅  |  ❌  |  ✅  |            ❌            |
+| Finds style issues?        |   🤔   |   ✅   |   🤔  |  ❌  |  ✅  |            ✅            |
+| Finds bugs?                |   🤔   |   ✅   |   ❌  |  ✅  |  ✅  |            ✅            |
+| Finds complex code?        |   ❌   |   🤔   |   ❌  |  ❌  |  ✅  |            ✅            |
+| Has a lot of strict rules? |   ❌   |   🤔   |   ❌  |  ❌  |  ✅  |            ✅            |
+| Has a lot of plugins?      |   ✅   |   ❌   |   ❌  |  🤔  |  ❌  |            ✅            |
 
 We have several primary objectives:
 
-0. Enforce `python3.7+` usage
 1. Significantly reduce the complexity of your code and make it more maintainable
 2. Enforce "There should be one -- and preferably only one -- obvious way to do it" rule to coding and naming styles
 3. Protect developers from possible errors and enforce best practices

@@ -1,29 +1,33 @@
 import ast
 from collections import defaultdict
-from typing import DefaultDict, List, Union
+from typing import TypeAlias
 
-from typing_extensions import TypeAlias, final
+from typing_extensions import final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import FunctionNodes
-from wemake_python_styleguide.logic.nodes import get_parent
-from wemake_python_styleguide.logic.tree import decorators, functions
+from wemake_python_styleguide.compat.types import AnyTry
+from wemake_python_styleguide.logic.nodes import get_context
+from wemake_python_styleguide.logic.tree import decorators
 from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations import complexity
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
 # Type aliases:
-_ModuleMembers: TypeAlias = Union[AnyFunctionDef, ast.ClassDef]
-_ReturnLikeStatement: TypeAlias = Union[ast.Return, ast.Yield]
+_ModuleMembers: TypeAlias = AnyFunctionDef | ast.ClassDef
+_ReturnLikeStatement: TypeAlias = ast.Return | ast.Yield
 
 
 @final
-@alias('visit_module_members', (
-    'visit_ClassDef',
-    'visit_AsyncFunctionDef',
-    'visit_FunctionDef',
-))
+@alias(
+    'visit_module_members',
+    (
+        'visit_ClassDef',
+        'visit_AsyncFunctionDef',
+        'visit_FunctionDef',
+    ),
+)
 class ModuleMembersVisitor(BaseNodeVisitor):
     """Counts classes and functions in a module."""
 
@@ -40,15 +44,16 @@ class ModuleMembersVisitor(BaseNodeVisitor):
 
     def _check_members_count(self, node: _ModuleMembers) -> None:
         """This method increases the number of module members."""
-        if functions.is_method(getattr(node, 'function_type', '')):
+        if not isinstance(get_context(node), ast.Module):
             return
 
-        if isinstance(node, FunctionNodes):
-            if decorators.has_overload_decorator(node):
-                return  # We don't count `@overload` defs as real defs
+        if isinstance(
+            node,
+            FunctionNodes,
+        ) and decorators.has_overload_decorator(node):
+            return  # We don't count `@overload` defs as real defs
 
-        if isinstance(get_parent(node), ast.Module):
-            self._public_items_count += 1
+        self._public_items_count += 1
 
     def _check_decorators_count(self, node: _ModuleMembers) -> None:
         number_of_decorators = len(node.decorator_list)
@@ -131,7 +136,7 @@ class ElifVisitor(BaseNodeVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Creates internal ``elif`` counter."""
         super().__init__(*args, **kwargs)
-        self._if_children: DefaultDict[ast.If, List[ast.If]] = defaultdict(
+        self._if_children: defaultdict[ast.If, list[ast.If]] = defaultdict(
             list,
         )
 
@@ -152,15 +157,13 @@ class ElifVisitor(BaseNodeVisitor):
         self._if_children[root].extend(node.orelse)  # type: ignore
 
     def _check_elifs(self, node: ast.If) -> None:
-        has_elif = all(
-            isinstance(if_node, ast.If) for if_node in node.orelse
-        )
+        has_elif = all(isinstance(if_node, ast.If) for if_node in node.orelse)
 
         if has_elif:
             root = self._get_root_if_node(node)
             self._update_if_child(root, node)
 
-    def _post_visit(self):
+    def _post_visit(self) -> None:
         for root, children in self._if_children.items():
             real_children_length = len(set(children))
             if real_children_length > constants.MAX_ELIFS:
@@ -174,16 +177,24 @@ class ElifVisitor(BaseNodeVisitor):
 
 
 @final
+@alias(
+    'visit_any_try',
+    (
+        'visit_Try',
+        'visit_TryStar',
+    ),
+)
 class TryExceptVisitor(BaseNodeVisitor):
     """Visits all try/except nodes to ensure that they are not too complex."""
 
-    def visit_Try(self, node: ast.Try) -> None:
+    def visit_any_try(self, node: AnyTry) -> None:
         """Ensures that try/except is correct."""
         self._check_except_count(node)
         self._check_try_body_length(node)
+        self._check_exceptions_count(node)
         self.generic_visit(node)
 
-    def _check_except_count(self, node: ast.Try) -> None:
+    def _check_except_count(self, node: AnyTry) -> None:
         if len(node.handlers) > constants.MAX_EXCEPT_CASES:
             self.add_violation(
                 complexity.TooManyExceptCasesViolation(
@@ -193,7 +204,7 @@ class TryExceptVisitor(BaseNodeVisitor):
                 ),
             )
 
-    def _check_try_body_length(self, node: ast.Try) -> None:
+    def _check_try_body_length(self, node: AnyTry) -> None:
         if len(node.body) > self.options.max_try_body_length:
             self.add_violation(
                 complexity.TooLongTryBodyViolation(
@@ -203,12 +214,30 @@ class TryExceptVisitor(BaseNodeVisitor):
                 ),
             )
 
+    def _check_exceptions_count(self, node: AnyTry) -> None:
+        for except_handler in node.handlers:
+            exc_type = except_handler.type
+            if (
+                isinstance(exc_type, ast.Tuple)
+                and len(exc_type.elts) > self.options.max_except_exceptions
+            ):
+                self.add_violation(
+                    complexity.TooManyExceptExceptionsViolation(
+                        except_handler,
+                        text=str(len(exc_type.elts)),
+                        baseline=self.options.max_except_exceptions,
+                    )
+                )
+
 
 @final
-@alias('visit_return_like', (
-    'visit_Return',
-    'visit_Yield',
-))
+@alias(
+    'visit_return_like',
+    (
+        'visit_Return',
+        'visit_Yield',
+    ),
+)
 class ReturnLikeStatementTupleVisitor(BaseNodeVisitor):
     """Finds too long ``tuples`` in ``yield`` and ``return`` expressions."""
 
@@ -218,15 +247,17 @@ class ReturnLikeStatementTupleVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_return_like_values(self, node: _ReturnLikeStatement) -> None:
-        if isinstance(node.value, ast.Tuple):
-            if len(node.value.elts) > constants.MAX_LEN_TUPLE_OUTPUT:
-                self.add_violation(
-                    complexity.TooLongOutputTupleViolation(
-                        node,
-                        text=str(len(node.value.elts)),
-                        baseline=constants.MAX_LEN_TUPLE_OUTPUT,
-                    ),
-                )
+        if (
+            isinstance(node.value, ast.Tuple)
+            and len(node.value.elts) > constants.MAX_LEN_TUPLE_OUTPUT
+        ):
+            self.add_violation(
+                complexity.TooLongOutputTupleViolation(
+                    node,
+                    text=str(len(node.value.elts)),
+                    baseline=constants.MAX_LEN_TUPLE_OUTPUT,
+                ),
+            )
 
 
 @final

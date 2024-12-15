@@ -16,10 +16,13 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 
 @final
-@alias('visit_any_function', (
-    'visit_FunctionDef',
-    'visit_AsyncFunctionDef',
-))
+@alias(
+    'visit_any_function',
+    (
+        'visit_FunctionDef',
+        'visit_AsyncFunctionDef',
+    ),
+)
 class NestedComplexityVisitor(BaseNodeVisitor):
     """
     Checks that structures are not nested.

@@ -102,8 +102,12 @@ Type aliases
 
 - Must use ``UpperCase`` as real classes
 - Must not contain word ``type`` in its name
-- Generic types should be called clearly and properly,
-  not just ``TT`` or ``KT`` or ``VT``
+
+Type variables
+~~~~~~~~~~~~~~
+
+- Type variables should be named clearly and properly,
+  not just ``T`` or ``_VT``
 
 Pattern matching
 ~~~~~~~~~~~~~~~~
@@ -284,6 +288,7 @@ class WrongModuleNamePatternViolation(SimpleViolation):
 
 
 # General names:
+
 
 @final
 class WrongVariableNameViolation(ASTViolation):
@@ -502,11 +507,11 @@ class UpperCaseAttributeViolation(ASTViolation):
 
         # Correct:
         MY_MODULE_CONSTANT = 1
-        class A(object):
+        class A:
             my_attribute = 42
 
         # Wrong:
-        class A(object):
+        class A:
             MY_CONSTANT = 42
 
     .. versionadded:: 0.3.0
@@ -558,7 +563,7 @@ class ReservedArgumentNameViolation(ASTViolation):
     Example::
 
         # Correct:
-        class Test(object):
+        class Test:
             def __init__(self):
                 ...
 
@@ -869,8 +874,12 @@ class BuiltinShadowingViolation(ASTViolation):
 
     .. versionadded:: 0.14
     .. versionchanged:: 0.15
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``A001``.
 
     """
 
     error_template = 'Found builtin shadowing: {0}'
     code = 125
+    disabled_since = '1.0.0'

@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY311
 from wemake_python_styleguide.visitors.ast.complexity.offset import (
     OffsetVisitor,
     TooDeepNestingViolation,
@@ -8,7 +9,7 @@ from wemake_python_styleguide.visitors.ast.complexity.offset import (
 nested_if = """
 def container():
     if True:
-        x = 1
+        ...  # this needs to be an ellipsis for the test
 """
 
 nested_if2 = """
@@ -40,6 +41,14 @@ def container():
             raise
 """
 
+nested_try_star = """
+def container():
+    try:
+        ...
+    except* ...:
+        ...
+"""
+
 nested_with = """
 def container():
     with open('some') as temp:
@@ -50,6 +59,13 @@ nested_while = """
 def container():
     while True:
         continue
+"""
+
+nested_match = """
+def container():
+    match ...:
+        case 1:
+            ...
 """
 
 real_nested_values = """
@@ -69,16 +85,45 @@ async def update_control():
                                                            'point': 1})
 """
 
+# Only ellipsis in the top level function definition is fine:
 
-@pytest.mark.parametrize('code', [
-    nested_if,
-    nested_if2,
-    nested_for,
-    nested_try,
-    nested_try2,
-    nested_with,
-    nested_while,
-])
+top_level_function_ellipsis = """
+def function_with_really_long_name(): ...
+"""
+
+top_level_method_ellipsis = """
+class MyClass:
+    def function_with_really_long_name(self): ...
+"""
+
+top_level_class_ellipsis = """
+class MyClassWithReallyLongName: ...
+"""
+
+
+@pytest.mark.parametrize(
+    'code',
+    [
+        nested_if,
+        nested_if2,
+        nested_for,
+        nested_try,
+        nested_try2,
+        pytest.param(
+            nested_try_star,
+            marks=pytest.mark.skipif(
+                not PY311,
+                reason='ExceptionGroup was added in 3.11',
+            ),
+        ),
+        nested_with,
+        nested_while,
+        nested_match,
+        top_level_function_ellipsis,
+        top_level_method_ellipsis,
+        top_level_class_ellipsis,
+    ],
+)
 def test_nested_offset(
     assert_errors,
     parse_ast_tree,
@@ -113,15 +158,20 @@ def test_nested_offset_regression320(
     assert_errors(visitor, [])
 
 
-@pytest.mark.parametrize(('code', 'number_of_errors'), [
-    (nested_if, 1),
-    (nested_if2, 1),
-    (nested_for, 1),
-    (nested_try, 2),
-    (nested_try2, 4),
-    (nested_with, 1),
-    (nested_while, 1),
-])
+@pytest.mark.parametrize(
+    ('code', 'number_of_errors'),
+    [
+        (nested_if, 1),
+        (nested_if2, 1),
+        (nested_for, 1),
+        (nested_try, 2),
+        (nested_try2, 4),
+        (nested_try_star, 2),
+        (nested_with, 1),
+        (nested_while, 1),
+        (nested_match, 1),
+    ],
+)
 def test_nested_offset_errors(
     monkeypatch,
     assert_errors,
@@ -132,6 +182,9 @@ def test_nested_offset_errors(
     mode,
 ):
     """Testing that nested expressions are restricted."""
+    if code == nested_try_star and not PY311:
+        pytest.skip(reason='ExceptionGroup was added in 3.11')
+
     tree = parse_ast_tree(mode(code))
 
     monkeypatch.setattr(OffsetVisitor, '_max_offset_blocks', 1)
@@ -142,13 +195,16 @@ def test_nested_offset_errors(
     assert_errors(visitor, errors)
 
 
-@pytest.mark.parametrize('code', [
-    nested_if,
-    nested_if2,
-    nested_for,
-    nested_with,
-    nested_while,
-])
+@pytest.mark.parametrize(
+    'code',
+    [
+        nested_if,
+        nested_if2,
+        nested_for,
+        nested_with,
+        nested_while,
+    ],
+)
 def test_nested_offset_error_text(
     monkeypatch,
     assert_errors,
