@@ -294,6 +294,7 @@ class TupleUnpackVisitor(BaseNodeVisitor):
         'visit_ClassDef',
         'visit_AsyncFunctionDef',
         'visit_FunctionDef',
+        'visit_TypeAlias',
     ),
 )
 class TypeParamsVisitor(BaseNodeVisitor):  # pragma: >=3.12 cover

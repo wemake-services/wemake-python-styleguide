@@ -60,7 +60,7 @@ Summary
    TooComplexFormattedStringViolation
    TooManyRaisesViolation
    TooManyExceptExceptionsViolation
-   TooManyTypeParams
+   TooManyTypeParamsViolation
 
 Module complexity
 -----------------
@@ -104,7 +104,7 @@ Structure complexity
 .. autoclass:: TooComplexFormattedStringViolation
 .. autoclass:: TooManyRaisesViolation
 .. autoclass:: TooManyExceptExceptionsViolation
-.. autoclass:: TooManyTypeParams
+.. autoclass:: TooManyTypeParamsViolation
 
 """
 
