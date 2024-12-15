@@ -59,4 +59,3 @@ For example:
         rev: ...
         hooks:
          - id: wemake-python-styleguide
-
