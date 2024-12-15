@@ -43,3 +43,19 @@ Examples:
 
 - ``GitlabCI`` + ``python`` `official template <https://gitlab.com/gitlab-org/gitlab-ce/blob/master/lib/gitlab/ci/templates/Python.gitlab-ci.yml>`_
 - ``django`` + ``docker`` + ``GitlabCI`` `template <https://github.com/wemake-services/wemake-django-template/blob/master/%7B%7Bcookiecutter.project_name%7D%7D/.gitlab-ci.yml>`_
+
+
+pre-commit
+~~~~~~~~~
+
+To setup `pre-commit <https://pre-commit.com/>`_ with ``wemake-python-styleguide``, add a new hook to the project `.pre-commit-config.yaml` file.
+
+For example:
+
+  .. code:: yaml
+
+     repos:
+      - repo: https://github.com/wemake-services/wemake-python-styleguide
+        rev: ...
+        hooks:
+         - id: wemake-python-styleguide

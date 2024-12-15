@@ -78,6 +78,7 @@ Semantic versioning in our case means:
 - Does not count `self`, `cls`, and `mcs` as arguments
   for `WPS211` complexity check anymore, #2394
 - `WPS303`: Underscore (`_`) now only allowed with 3 digits after it, #3120
+- Adds support to run `wemake-python-styleguide` as a `pre-commit` hook #2588
 
 ### Bugfixes
 
@@ -201,7 +202,6 @@ In the future this project will be migrated to be used together with `ruff`.
 ### Misc
 
 - Replaced `flakehell` mentions to `flakeheaven` #2409
-
 
 ## 0.17.0
 

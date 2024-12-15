@@ -76,7 +76,7 @@ to make all people write **exactly** the same `Python` code.
 |                            | flake8 | pylint | black | mypy | ruff | wemake-python-styleguide |
 |----------------------------|--------|--------|-------|------|------|--------------------------|
 | Formats code?              |   ❌   |   ❌   |   ✅  |  ❌  |  ✅  |            ❌            |
-| Finds style issues?        |   🤔   |   ✅   |   🤔  |  ❌  |  ✅  |            ✅            |
+| Finds style issues?        |   🤔   |   ✅   |   🤔  |  ❌  |  ✅  |            ❌            |
 | Finds bugs?                |   🤔   |   ✅   |   ❌  |  ✅  |  ✅  |            ✅            |
 | Finds complex code?        |   ❌   |   🤔   |   ❌  |  ❌  |  ✅  |            ✅            |
 | Has a lot of strict rules? |   ❌   |   🤔   |   ❌  |  ❌  |  ✅  |            ✅            |
