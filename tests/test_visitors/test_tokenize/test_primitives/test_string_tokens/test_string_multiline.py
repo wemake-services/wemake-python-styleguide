@@ -1,7 +1,6 @@
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
-    RawStringNotNeededViolation,
     WrongMultilineStringViolation,
 )
 from wemake_python_styleguide.visitors.tokenize.primitives import (
@@ -81,7 +80,6 @@ def test_incorrect_multiline_strings(
     assert_errors(
         visitor,
         [WrongMultilineStringViolation],
-        ignored_types=RawStringNotNeededViolation,
     )
 
 

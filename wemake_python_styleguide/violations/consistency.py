@@ -2381,11 +2381,15 @@ class RawStringNotNeededViolation(TokenizeViolation):
     Is not reported for `f`-strings on python3.12+
 
     .. versionadded:: 0.15.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` formatter.
 
     """
 
     error_template = 'Found an unnecessary use of a raw string: {0}'
     code = 360
+    disabled_since = '1.0.0'
 
 
 @final

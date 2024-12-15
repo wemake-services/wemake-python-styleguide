@@ -181,17 +181,6 @@ class _StringTokenChecker:
             # character can never be the start of a new backslash escape.
             index += 2
 
-    def check_unnecessary_raw_string(
-        self,
-        token: tokenize.TokenInfo,
-        modifiers: str,
-        string_def: str,
-    ) -> None:
-        if 'r' in modifiers.lower() and '\\' not in string_def:
-            self._add_violation(
-                consistency.RawStringNotNeededViolation(token, text=string_def),
-            )
-
 
 @final
 class WrongStringTokenVisitor(BaseTokenVisitor):
@@ -218,7 +207,6 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         self._checker.check_string_modifiers(token, modifiers)
         self._checker.check_implicit_raw_string(token, modifiers, string_def)
         self._checker.check_wrong_unicode_escape(token, modifiers, string_def)
-        self._checker.check_unnecessary_raw_string(token, modifiers, string_def)
 
     def visit_fstring_start(  # pragma: >3.12 cover
         self,

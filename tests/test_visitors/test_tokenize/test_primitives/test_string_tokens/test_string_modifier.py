@@ -1,7 +1,6 @@
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
-    RawStringNotNeededViolation,
     UppercaseStringModifierViolation,
 )
 from wemake_python_styleguide.visitors.tokenize.primitives import (
@@ -48,7 +47,6 @@ def test_correct_prefix(
     assert_errors(
         visitor,
         [],
-        ignored_types=RawStringNotNeededViolation,
     )
 
 
@@ -89,7 +87,6 @@ def test_uppercase_prefix(
     assert_errors(
         visitor,
         [UppercaseStringModifierViolation],
-        ignored_types=RawStringNotNeededViolation,
     )
     assert_error_text(visitor, modifier, multiple=True)
 
@@ -134,5 +131,4 @@ def test_uppercase_prefix_multiple(
             UppercaseStringModifierViolation,
             UppercaseStringModifierViolation,
         ],
-        ignored_types=RawStringNotNeededViolation,
     )
