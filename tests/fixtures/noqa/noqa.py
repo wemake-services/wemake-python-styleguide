@@ -627,6 +627,12 @@ def many_raises_function(parameter):  # noqa: WPS238
     raise TypeError('4')
 
 
+try:
+    my_print('try')
+except (TypeError, ValueError, LookupError, KeyboardInterrupt):  # noqa: WPS239
+    my_print('except')
+
+
 my_print("""
 text
 """)  # noqa: WPS462

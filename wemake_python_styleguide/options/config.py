@@ -129,6 +129,9 @@ You can also show all options that ``flake8`` supports by running:
 - ``max-raises`` - maximum number of raises in a function,
     defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_RAISES`
+- ``max-except-exceptions`` - maximum number of exceptions in ``except``,
+    defaults to
+    :str:`wemake_python_styleguide.options.defaults.MAX_EXCEPT_EXCEPTIONS`
 - ``max-cognitive-score`` - maximum amount of cognitive complexity
     per function, defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_COGNITIVE_SCORE`
@@ -375,6 +378,11 @@ class Configuration:
         _Option(
             '--max-raises',
             defaults.MAX_RAISES,
+            'Maximum number of raises in a function.',
+        ),
+        _Option(
+            '--max-except-exceptions',
+            defaults.MAX_EXCEPT_EXCEPTIONS,
             'Maximum number of raises in a function.',
         ),
         _Option(

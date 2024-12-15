@@ -72,6 +72,7 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `WPS508`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS526`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS521`, because is covered by `ruff` linter
+- Adds a new rule to find too complex `except` with too many exceptions
 - Allows any compares in `assert` statements for `WPS520`, #3112
 - Allows walrus operator (`:=`) in comprehesions #3121
 - Does not count `self`, `cls`, and `mcs` as arguments

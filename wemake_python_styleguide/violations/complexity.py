@@ -59,6 +59,7 @@ Summary
    TooLongTupleUnpackViolation
    TooComplexFormattedStringViolation
    TooManyRaisesViolation
+   TooManyExceptExceptionsViolation
 
 Module complexity
 -----------------
@@ -101,6 +102,7 @@ Structure complexity
 .. autoclass:: TooLongTupleUnpackViolation
 .. autoclass:: TooComplexFormattedStringViolation
 .. autoclass:: TooManyRaisesViolation
+.. autoclass:: TooManyExceptExceptionsViolation
 
 """
 
@@ -1265,3 +1267,28 @@ class TooManyRaisesViolation(ASTViolation):
 
     error_template = 'Found too many raises in a function: {0}'
     code = 238
+
+
+@final
+class TooManyExceptExceptionsViolation(ASTViolation):
+    """
+    Forbids too many exceptions in ``except`` statement.
+
+    Reasoning:
+        Too exceptions in ``except`` case means
+        that too many things are happening here at once.
+
+    Solution:
+        Use common base classes, split ``except`` cases.
+
+    Configuration:
+        This rule is configurable with ``--max-except-exceptions``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_EXCEPT_EXCEPTIONS`
+
+    .. versionadded:: 1.0.0
+
+    """
+
+    error_template = 'Found too exceptions in `except` case: {0}'
+    code = 239
