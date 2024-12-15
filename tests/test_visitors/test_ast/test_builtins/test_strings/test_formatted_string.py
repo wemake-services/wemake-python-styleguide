@@ -29,16 +29,18 @@ f_attr_on_function = "f'{fcn().attr}'"
 f_true_index = "f'{array[True]}'"
 f_none_index = "f'{array[None]}'"
 f_byte_index = 'f\'{array[b"Hello"]}\''
+f_empty_string = "f''"
+f_function_with_single_arg = "f'smth {func(arg)}'"
+f_function_with_three_args = "f'{func(arg1, arg2, arg3)}'"
+f_method_with_three_args = "f'{obj.method(arg1, arg2, arg3)}'"
 
 # Disallowed
 f_string = "f'x + y = {2 + 2}'"
 f_double_indexing = "f'{list[0][1]}'"
 f_calling_returned_function = "f'{calling_returned_function()()}'"
-f_empty_string = "f''"
 f_complex_f_string = """
     f'{reverse(\"url-name\")}?{\"&\".join(\"user=\"+uid for uid in user_ids)}'
 """
-f_function_with_args = "f'smth {func(arg)}'"
 f_dict_lookup_function_empty_args = "f'smth {dict_value[func()]}'"
 f_list_slice_lookup = "f'smth {list[:]}'"
 f_attr_on_returned_value = "f'{some.call().attr}'"
@@ -49,6 +51,8 @@ f_triple_call = "f'{foo()()()}'"
 f_triple_lookup = "f'{arr[0][1][2]}'"
 f_double_call_arg = "f'{foo()(arg)}'"
 f_single_chained_functions = "f'{f1().f2()}'"
+f_function_with_four_args = "f'{func(arg1, arg2, arg3, arg4)}'"
+f_method_with_four_args = "f'{obj.meth(arg1, arg2, arg3, arg4)}-post'"
 
 # regression 1921
 f_string_comma_format = 'f"Count={count:,}"'
@@ -84,29 +88,7 @@ def test_string_normal(
 @pytest.mark.parametrize(
     'code',
     [
-        f_empty_string,
-    ],
-)
-def test_wrong_string(assert_errors, parse_ast_tree, code, default_options):
-    """Testing that violations are raised when reaching max value."""
-    tree = parse_ast_tree(code)
-
-    visitor = WrongFormatStringVisitor(default_options, tree=tree)
-    visitor.run()
-
-    assert_errors(
-        visitor,
-        [
-            TooComplexFormattedStringViolation,
-        ],
-    )
-
-
-@pytest.mark.parametrize(
-    'code',
-    [
         f_complex_f_string,
-        f_function_with_args,
         f_dict_lookup_function_empty_args,
         f_string,
         f_list_slice_lookup,
@@ -120,6 +102,7 @@ def test_wrong_string(assert_errors, parse_ast_tree, code, default_options):
         f_double_indexing,
         f_calling_returned_function,
         f_single_chained_functions,
+        f_function_with_four_args,
     ],
 )
 def test_complex_f_string(assert_errors, parse_ast_tree, code, default_options):
@@ -148,6 +131,10 @@ def test_complex_f_string(assert_errors, parse_ast_tree, code, default_options):
         f_none_index,
         f_byte_index,
         f_string_comma_format,
+        f_empty_string,
+        f_function_with_single_arg,
+        f_function_with_three_args,
+        f_method_with_three_args,
     ],
 )
 def test_simple_f_string(assert_errors, parse_ast_tree, code, default_options):
