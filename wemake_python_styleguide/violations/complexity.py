@@ -59,6 +59,7 @@ Summary
    TooLongTupleUnpackViolation
    TooComplexFormattedStringViolation
    TooManyRaisesViolation
+   TooManyExceptExceptionsViolation
 
 Module complexity
 -----------------
@@ -101,6 +102,7 @@ Structure complexity
 .. autoclass:: TooLongTupleUnpackViolation
 .. autoclass:: TooComplexFormattedStringViolation
 .. autoclass:: TooManyRaisesViolation
+.. autoclass:: TooManyExceptExceptionsViolation
 
 """
 
