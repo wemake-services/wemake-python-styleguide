@@ -57,6 +57,7 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `WPS351`, because it is covered by `ruff` linter
 - **Breaking**: Removes `WPS352`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS355`, because it is covered by `ruff` formatter
+- **Breaking**: Removes `WPS360`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS361`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS415`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS417`, because is covered by `ruff` linter
