@@ -2,7 +2,7 @@ import pytest
 
 from wemake_python_styleguide.compat.constants import PY312
 from wemake_python_styleguide.violations.complexity import (
-    TooManyTypeParams,
+    TooManyTypeParamsViolation,
 )
 from wemake_python_styleguide.visitors.ast.complexity.counts import (
     TypeParamsVisitor,
@@ -44,7 +44,7 @@ def test_type_params_wrong_count(
     visitor = TypeParamsVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [TooManyTypeParams])
+    assert_errors(visitor, [TooManyTypeParamsViolation])
     assert_error_text(visitor, '7', baseline=default_options.max_type_params)
 
 
@@ -98,4 +98,4 @@ def test_type_params_configured_count(
     visitor = TypeParamsVisitor(option_values, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [TooManyTypeParams])
+    assert_errors(visitor, [TooManyTypeParamsViolation])

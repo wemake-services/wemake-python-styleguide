@@ -1297,7 +1297,7 @@ class TooManyExceptExceptionsViolation(ASTViolation):
 
 
 @final
-class TooManyTypeParams(ASTViolation):
+class TooManyTypeParamsViolation(ASTViolation):
     """
     Forbids to have too many type params.
 

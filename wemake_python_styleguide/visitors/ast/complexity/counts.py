@@ -309,9 +309,9 @@ class TypeParamsVisitor(BaseNodeVisitor):  # pragma: >=3.12 cover
         node: _WithTypeParams,
     ) -> None:
         type_params = getattr(node, 'type_params', [])
-        if len(type_params) >= self.options.max_type_params:
+        if len(type_params) > self.options.max_type_params:
             self.add_violation(
-                complexity.TooManyTypeParams(
+                complexity.TooManyTypeParamsViolation(
                     node,
                     text=str(len(type_params)),
                     baseline=self.options.max_type_params,
