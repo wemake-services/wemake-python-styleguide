@@ -1,4 +1,5 @@
 import pytest
+
 from wemake_python_styleguide.compat.constants import PY312
 from wemake_python_styleguide.violations.complexity import (
     TooManyTypeParams,
