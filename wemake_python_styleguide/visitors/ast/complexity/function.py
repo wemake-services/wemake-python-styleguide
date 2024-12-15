@@ -13,7 +13,7 @@ from wemake_python_styleguide.logic.complexity.functions import (
     FunctionCounterWithLambda,
 )
 from wemake_python_styleguide.logic.naming import access
-from wemake_python_styleguide.logic.nodes import get_parent
+from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.tree import functions
 from wemake_python_styleguide.types import (
     AnyFunctionDef,
@@ -75,6 +75,9 @@ class _ComplexityCounter:
         function_variables = self.metrics.variables[function]
         if variable_def.id not in function_variables:
             if access.is_unused(variable_def.id):
+                return
+
+            if get_context(variable_def) is not function:
                 return
 
             parent = get_parent(variable_def)

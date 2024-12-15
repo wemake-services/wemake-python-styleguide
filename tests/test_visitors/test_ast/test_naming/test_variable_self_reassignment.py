@@ -89,6 +89,12 @@ right_swap6 = 'dy, dx = dx, dy'
 right_unary1 = 'a = not a'
 right_unary2 = 'a = -a'
 
+# regression 3107
+starred_iterable1 = 'm = [*m, other]'
+starred_iterable2 = 'm = [*m, other, *m]'
+starred_mapping1 = 'm = {**m, **other}'
+starred_mapping2 = 'm = {"key": "value", **m}'
+
 # Wrong:
 
 wrong_fragment = """
@@ -288,6 +294,10 @@ def test_self_variable_reassignment_triple(
         right_swap6,
         right_unary1,
         right_unary2,
+        starred_iterable1,
+        starred_iterable2,
+        starred_mapping1,
+        starred_mapping2,
     ],
 )
 def test_correct_variable_reassignment(

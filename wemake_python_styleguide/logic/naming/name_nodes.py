@@ -3,7 +3,7 @@ import itertools
 from collections.abc import Iterable
 
 from wemake_python_styleguide.compat.functions import get_assign_targets
-from wemake_python_styleguide.types import AnyAssignWithWalrus
+from wemake_python_styleguide.types import AnyAssignWithWalrus, AnyNodes
 
 
 def is_same_variable(left: ast.AST, right: ast.AST) -> bool:
@@ -59,7 +59,11 @@ def flat_variable_names(nodes: Iterable[AnyAssignWithWalrus]) -> Iterable[str]:
     )
 
 
-def get_variables_from_node(node: ast.AST) -> list[str]:
+def get_variables_from_node(
+    node: ast.AST,
+    *,
+    exclude: AnyNodes = (),
+) -> list[str]:
     """
     Gets the assigned names from the list of nodes.
 
@@ -70,7 +74,7 @@ def get_variables_from_node(node: ast.AST) -> list[str]:
     ``ast.Assign``, ``ast.Tuple``, ``ast.For``, ``ast.With``, etc.
     """
     names: list[str] = []
-    naive_attempt = extract_name(node)
+    naive_attempt = extract_name(node, exclude=exclude)
 
     if naive_attempt:
         names.append(naive_attempt)
@@ -78,11 +82,11 @@ def get_variables_from_node(node: ast.AST) -> list[str]:
         # If tuple has just a single variable, we want to ignore it:
         # like `x = (x,)`
         for subnode in node.elts:
-            names.extend(get_variables_from_node(subnode))
+            names.extend(get_variables_from_node(subnode, exclude=exclude))
     return names
 
 
-def extract_name(node: ast.AST) -> str | None:
+def extract_name(node: ast.AST, *, exclude: AnyNodes = ()) -> str | None:
     """
     Utility to extract names for several types of nodes.
 
@@ -98,7 +102,11 @@ def extract_name(node: ast.AST) -> str | None:
     >>> extract_name(node)
     'a'
 
+    >>> assert extract_name(node, exclude=(ast.Name,)) is None
+
     """
+    if isinstance(node, exclude):
+        return None
     if isinstance(node, ast.Starred):
         return extract_name(node.value)
     if isinstance(node, ast.UnaryOp):
