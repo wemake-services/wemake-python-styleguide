@@ -97,6 +97,7 @@ class _ValidatedOptions:
     max_annotation_complexity: int = attr.ib(validator=[_min_max(min=2)])
     max_import_from_members: int = attr.ib(validator=[_min_max(min=1)])
     max_tuple_unpack_length: int = attr.ib(validator=[_min_max(min=1)])
+    max_type_params: int = attr.ib(validator=[_min_max(min=1)])
     show_violation_links: bool
     exps_for_one_empty_line: int
 

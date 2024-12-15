@@ -150,6 +150,9 @@ You can also show all options that ``flake8`` supports by running:
 - ``max-tuple-unpack-length`` - maximum number of variables in tuple unpacking,
     defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_TUPLE_UNPACK_LENGTH`
+- ``max-type-params`` - maximum number of PEP695 type parameters,
+    defaults to
+    :str:`wemake_python_styleguide.options.defaults.MAX_TYPE_PARAMS`
 
 .. rubric:: Formatter options
 
@@ -414,6 +417,11 @@ class Configuration:
             '--max-tuple-unpack-length',
             defaults.MAX_TUPLE_UNPACK_LENGTH,
             'Maximum number of variables in a tuple unpacking.',
+        ),
+        _Option(
+            '--max-type-params',
+            defaults.MAX_TYPE_PARAMS,
+            'Maximum number of PEP695 type parameters.',
         ),
         # Formatter:
         _Option(
