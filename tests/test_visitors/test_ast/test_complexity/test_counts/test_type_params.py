@@ -95,7 +95,7 @@ def test_type_params_configured_count(
     tree = parse_ast_tree(code)
 
     option_values = options(max_type_params=8)
-    visitor = TypeParamsVisitor(default_options, tree=tree)
+    visitor = TypeParamsVisitor(option_values, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [TooManyTypeParams])
