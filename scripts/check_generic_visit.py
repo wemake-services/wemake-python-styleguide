@@ -1,4 +1,5 @@
 import sys
+from pathlib import Path
 from typing import Final, NoReturn
 
 import astpath
@@ -35,19 +36,18 @@ def main() -> NoReturn:
     report('"self.generic_visit(node)" should be last statement here:')
 
     for fn, line in matches:
-        with open(fn, encoding='utf8') as fp:
-            lines = fp.read().splitlines()
-            report(
-                '\t{}:{}\n\t{}'.format(
-                    fn,
-                    line,
-                    highlight(
-                        lines[line - 1],
-                        PythonLexer(),
-                        Terminal256Formatter(),
-                    ),
+        lines = Path(fn).read_text(encoding='utf8').splitlines()
+        report(
+            '\t{}:{}\n\t{}'.format(
+                fn,
+                line,
+                highlight(
+                    lines[line - 1],
+                    PythonLexer(),
+                    Terminal256Formatter(),
                 ),
-            )
+            ),
+        )
 
     exit(FAIL_CODE)  # noqa: WPS421
 

@@ -95,6 +95,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.ruff]
 # Ruff config: https://docs.astral.sh/ruff/settings
 fix = true
+preview = true
 target-version = "py310"
 line-length = 80
 extend-exclude = [
@@ -117,8 +118,6 @@ select = [
   "C90",  # maccabe
   "COM",  # flake8-commas
   "D",    # pydocstyle
-  # TODO: enable once it gets out of preview:
-  # "DOC",  # pydoclint
   "DTZ",  # flake8-datetimez
   "E",    # pycodestyle
   "ERA",  # flake8-eradicate
@@ -158,6 +157,7 @@ ignore = [
   "D401",
   "D404",
   "D405",
+  "A005",    # allow to shadow stdlib and builtin module names
   "COM812",  # trailing comma, conflicts with `ruff format`
   "ISC001",  # implicit string concat conflicts with `ruff format`
   "ISC003",  # prefer explicit string concat over implicit concat
@@ -178,6 +178,7 @@ inline-quotes = "single"
 "tests/*.py" = [
     "S101",  # asserts
     "S105",  # hardcoded passwords
+    "S404",  # subprocess calls are for tests
     "S603",  # do not require `shell=True`
     "S607",  # partial executable paths
 ]

@@ -1,5 +1,6 @@
 import io
 import tokenize
+from pathlib import Path
 from textwrap import dedent
 
 import pytest
@@ -32,10 +33,9 @@ def parse_file_tokens(parse_tokens, compile_code):
         *,
         do_compile: bool = True,
     ) -> list[tokenize.TokenInfo]:
-        with open(filename, encoding='utf-8') as test_file:
-            file_content = test_file.read()
-            if do_compile:
-                compile_code(file_content)
-            return parse_tokens(file_content)
+        file_content = Path(filename).read_text(encoding='utf-8')
+        if do_compile:
+            compile_code(file_content)
+        return parse_tokens(file_content)
 
     return factory
