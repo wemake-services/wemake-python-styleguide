@@ -75,7 +75,7 @@ Semantic versioning in our case means:
 - Allows walrus operator (`:=`) in comprehesions #3121
 - Does not count `self`, `cls`, and `mcs` as arguments
   for `WPS211` complexity check anymore, #2394
-- `WPS303`: Underscore (_) now only allowed with 3 digits after it, #3120
+- `WPS303`: Underscore (`_`) now only allowed with 3 digits after it, #3120
 
 ### Bugfixes
 
@@ -84,6 +84,7 @@ Semantic versioning in our case means:
 - Fixes `WPS210` to not count nested local variables in nested scopes #3108
 - Fixes `IterableUnpackingViolation` with generic types and `TypeVarTuple`
 - Fixes unnormalized pathes in formatter output
+- Fixes `WPS434` to allow reassignment in a form of `x = [y, *x]`
 
 ### Misc
 
