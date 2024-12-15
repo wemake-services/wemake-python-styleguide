@@ -224,7 +224,7 @@ class TryExceptVisitor(BaseNodeVisitor):
                 self.add_violation(
                     complexity.TooManyExceptExceptionsViolation(
                         except_handler,
-                        text=str(len(except_handler.type.elts)),
+                        text=str(len(exc_type.elts)),
                         baseline=self.options.max_except_exceptions,
                     )
                 )
