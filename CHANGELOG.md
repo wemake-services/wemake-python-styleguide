@@ -19,9 +19,8 @@ Semantic versioning in our case means:
 
 ## 1.0.0 WIP
 
-### Features
+### Removals
 
-- Adds official `python3.13` support
 - **Breaking**: Drops `python3.9` support
 - **Breaking**: Drops `nitpick` support
 - **Breaking**: Drops `flake8-commas`, `flake8-isort`,
@@ -72,7 +71,12 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `WPS508`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS526`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS521`, because is covered by `ruff` linter
+
+## Features
+
+- Adds official `python3.13` support
 - Adds a new rule to find too complex `except` with too many exceptions
+- Adds a new rule to find too many PEP695 type params
 - Allows any compares in `assert` statements for `WPS520`, #3112
 - Allows walrus operator (`:=`) in comprehesions #3121
 - Does not count `self`, `cls`, and `mcs` as arguments

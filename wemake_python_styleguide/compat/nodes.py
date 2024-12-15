@@ -21,7 +21,7 @@ else:  # pragma: <3.11 cover
         finalbody: list[ast.stmt]
 
 
-if sys.version_info >= (3, 12):  # pragma: # pragma: >=3.12 cover
+if sys.version_info >= (3, 12):  # pragma: >=3.12 cover
     from ast import TypeAlias as TypeAlias
 else:  # pragma: <3.12 cover
 

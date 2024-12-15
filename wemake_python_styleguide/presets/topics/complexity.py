@@ -28,6 +28,7 @@ PRESET: Final = (
     counts.TryExceptVisitor,
     counts.ReturnLikeStatementTupleVisitor,
     counts.TupleUnpackVisitor,
+    counts.TypeParamsVisitor,
     classes.ClassComplexityVisitor,
     classes.MethodMembersVisitor,
     overuses.StringOveruseVisitor,

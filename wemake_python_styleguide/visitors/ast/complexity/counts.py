@@ -6,6 +6,7 @@ from typing_extensions import final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.compat.nodes import TypeAlias as ast_TypeAlias
 from wemake_python_styleguide.compat.types import AnyTry
 from wemake_python_styleguide.logic.nodes import get_context
 from wemake_python_styleguide.logic.tree import decorators
@@ -16,6 +17,7 @@ from wemake_python_styleguide.visitors.decorators import alias
 
 # Type aliases:
 _ModuleMembers: TypeAlias = AnyFunctionDef | ast.ClassDef
+_WithTypeParams: TypeAlias = _ModuleMembers | ast_TypeAlias
 _ReturnLikeStatement: TypeAlias = ast.Return | ast.Yield
 
 
@@ -283,3 +285,36 @@ class TupleUnpackVisitor(BaseNodeVisitor):
                 baseline=self.options.max_tuple_unpack_length,
             ),
         )
+
+
+@final
+@alias(
+    'visit_typed_params',
+    (
+        'visit_ClassDef',
+        'visit_AsyncFunctionDef',
+        'visit_FunctionDef',
+        'visit_TypeAlias',
+    ),
+)
+class TypeParamsVisitor(BaseNodeVisitor):  # pragma: >=3.12 cover
+    """Finds wrong type parameters."""
+
+    def visit_typed_params(self, node: _WithTypeParams) -> None:
+        """Finds all objects with ``type_params``."""
+        self._check_type_params_count(node)
+        self.generic_visit(node)
+
+    def _check_type_params_count(
+        self,
+        node: _WithTypeParams,
+    ) -> None:
+        type_params = getattr(node, 'type_params', [])
+        if len(type_params) > self.options.max_type_params:
+            self.add_violation(
+                complexity.TooManyTypeParamsViolation(
+                    node,
+                    text=str(len(type_params)),
+                    baseline=self.options.max_type_params,
+                )
+            )

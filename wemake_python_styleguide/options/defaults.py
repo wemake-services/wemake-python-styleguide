@@ -137,6 +137,9 @@ MAX_IMPORT_FROM_MEMBERS: Final = 8  # guessed
 #: Maximum number of variables in a ``tuple`` unpacking statement.
 MAX_TUPLE_UNPACK_LENGTH: Final = 4  # guessed
 
+#: Maximum number of PEP695 type parameters.
+MAX_TYPE_PARAMS: Final = 6  # guessed
+
 # ==========
 # Formatter:
 # ==========

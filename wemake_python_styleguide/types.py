@@ -227,6 +227,9 @@ class ConfigurationOptions(Protocol):
     def max_tuple_unpack_length(self) -> int: ...
 
     @property
+    def max_type_params(self) -> int: ...
+
+    @property
     def show_violation_links(self) -> bool: ...
 
     @property

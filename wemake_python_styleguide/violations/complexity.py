@@ -60,6 +60,7 @@ Summary
    TooComplexFormattedStringViolation
    TooManyRaisesViolation
    TooManyExceptExceptionsViolation
+   TooManyTypeParamsViolation
 
 Module complexity
 -----------------
@@ -103,6 +104,7 @@ Structure complexity
 .. autoclass:: TooComplexFormattedStringViolation
 .. autoclass:: TooManyRaisesViolation
 .. autoclass:: TooManyExceptExceptionsViolation
+.. autoclass:: TooManyTypeParamsViolation
 
 """
 
@@ -1272,7 +1274,7 @@ class TooManyRaisesViolation(ASTViolation):
 @final
 class TooManyExceptExceptionsViolation(ASTViolation):
     """
-    Forbids too many exceptions in ``except`` statement.
+    Forbids to have too many exceptions in ``except`` statement.
 
     Reasoning:
         Too exceptions in ``except`` case means
@@ -1290,5 +1292,34 @@ class TooManyExceptExceptionsViolation(ASTViolation):
 
     """
 
-    error_template = 'Found too exceptions in `except` case: {0}'
+    error_template = 'Found too many exceptions in `except` case: {0}'
     code = 239
+
+
+@final
+class TooManyTypeParamsViolation(ASTViolation):
+    """
+    Forbids to have too many type params.
+
+    Is only emitted on ``python3.12+``.
+
+    Reasoning:
+        Too many type params means that you are probably overly complicate
+        the object that you are typing right now.
+        It would be really hard for users
+        to manually add all generic parameters.
+
+    Solution:
+        Use composition of classes, simplify the API.
+
+    Configuration:
+        This rule is configurable with ``--max-type-params``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_TYPE_PARAMS`
+
+    .. versionadded:: 1.0.0
+
+    """
+
+    error_template = 'Found too many type params: {0}'
+    code = 240
