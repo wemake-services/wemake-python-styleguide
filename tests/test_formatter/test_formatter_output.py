@@ -137,9 +137,9 @@ def test_formatter_correct(snapshot, cli_options, output, no_color):
     stdout, stderr = process.communicate()
     assert process.returncode == 0, (stdout, stderr)
 
-    assert (
-        _safe_output(stdout) == snapshot
-    ), f'formatter_correct_{output}_{no_color}'
+    assert _safe_output(stdout) == snapshot, (
+        f'formatter_correct_{output}_{no_color}'
+    )
 
 
 def test_ipynb(snapshot):
