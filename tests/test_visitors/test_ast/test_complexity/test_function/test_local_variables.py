@@ -44,19 +44,23 @@ def function():
 """
 
 function_with_nested = """
-def function():  # has two local vars
-    def factory():  # has one local var
+def function():
+    def factory():
         variable1 = 1
+        other = 2
 
     variable2 = 2
+    other = 3
 """
 
 function_with_nested_and_params = """
-def function(param1):  # has two local vars
+def function(param1):
     param1 = param1 + 1
+    other = 2
 
-    def factory(param2):  # has one local var
+    def factory(param2):
         param2 = param2 + 2
+        other = 3
 """
 
 method_with_locals = """
@@ -64,6 +68,18 @@ class Some:
     def function():
         local_variable1 = 1
         local_variable2 = 2
+"""
+
+# regression 3108
+
+function_nested_class = """
+def test():
+    consts = 0
+    other = 1
+
+    class Nested:
+        area = 2
+        other = 3
 """
 
 
@@ -78,6 +94,7 @@ class Some:
         function_with_nested,
         function_with_nested_and_params,
         method_with_locals,
+        function_nested_class,
     ],
 )
 def test_locals_correct_count(
@@ -113,9 +130,8 @@ def test_locals_correct_count(
         function_with_locals_redefinition,
         function_with_locals_and_params,
         function_with_comprehension,
-        function_with_nested,
-        function_with_nested_and_params,
         method_with_locals,
+        function_nested_class,
     ],
 )
 def test_locals_wrong_count(
@@ -143,3 +159,27 @@ def test_locals_wrong_count(
 
     assert_errors(visitor, [TooManyLocalsViolation])
     assert_error_text(visitor, '2', option_values.max_local_variables)
+
+
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_with_nested,
+        function_with_nested_and_params,
+    ],
+)
+def test_locals_wrong_count_nested(
+    assert_errors,
+    parse_ast_tree,
+    options,
+    code,
+    mode,
+):
+    """Local variables in nested scopes."""
+    option_values = options(max_local_variables=1)
+    tree = parse_ast_tree(mode(code))
+
+    visitor = FunctionComplexityVisitor(option_values, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [TooManyLocalsViolation, TooManyLocalsViolation])
