@@ -191,6 +191,7 @@ class TryExceptVisitor(BaseNodeVisitor):
         """Ensures that try/except is correct."""
         self._check_except_count(node)
         self._check_try_body_length(node)
+        self._check_exceptions_count(node)
         self.generic_visit(node)
 
     def _check_except_count(self, node: AnyTry) -> None:
@@ -212,6 +213,21 @@ class TryExceptVisitor(BaseNodeVisitor):
                     baseline=self.options.max_try_body_length,
                 ),
             )
+
+    def _check_exceptions_count(self, node: AnyTry) -> None:
+        for except_handler in node.handlers:
+            exc_type = except_handler.type
+            if (
+                isinstance(exc_type, ast.Tuple)
+                and len(exc_type.elts) > self.options.max_except_exceptions
+            ):
+                self.add_violation(
+                    complexity.TooManyExceptExceptionsViolation(
+                        except_handler,
+                        text=str(len(except_handler.type.elts)),
+                        baseline=self.options.max_except_exceptions,
+                    )
+                )
 
 
 @final

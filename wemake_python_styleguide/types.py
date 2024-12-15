@@ -206,6 +206,9 @@ class ConfigurationOptions(Protocol):
     def max_raises(self) -> int: ...
 
     @property
+    def max_except_exceptions(self) -> int: ...
+
+    @property
     def max_cognitive_score(self) -> int: ...
 
     @property

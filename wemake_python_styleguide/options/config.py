@@ -378,6 +378,11 @@ class Configuration:
             'Maximum number of raises in a function.',
         ),
         _Option(
+            '--max-except-exceptions',
+            defaults.MAX_EXCEPT_EXCEPTIONS,
+            'Maximum number of raises in a function.',
+        ),
+        _Option(
             '--max-cognitive-score',
             defaults.MAX_COGNITIVE_SCORE,
             'Maximum amount of cognitive complexity per function.',
