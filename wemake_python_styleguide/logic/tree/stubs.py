@@ -39,4 +39,8 @@ def _is_stub_without_docstring(node: ast.AST) -> bool:
 
 
 def _is_ellipsis(node: ast.AST) -> bool:
-    return isinstance(node, ast.Expr) and isinstance(node.value, ast.Ellipsis)
+    return (
+        isinstance(node, ast.Expr)
+        and isinstance(node.value, ast.Constant)
+        and isinstance(node.value.value, type(...))
+    )
