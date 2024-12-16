@@ -350,11 +350,16 @@ class WrongSlotsVisitor(base.BaseNodeVisitor):
 
 @final
 class ClassAttributeVisitor(base.BaseNodeVisitor):
-    """Finds incorrect class attributes."""
+    """Finds incorrectattributes."""
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
-        """Checks that class attributes are correct."""
+        """Checks that assigned attributes are correct."""
         self._check_attributes_shadowing(node)
+        self.generic_visit(node)
+
+    def visit_Lambda(self, node: ast.Lambda) -> None:
+        """Finds `lambda` assigns in attributes."""
+        self._check_lambda_attribute(node)
         self.generic_visit(node)
 
     def _check_attributes_shadowing(self, node: ast.ClassDef) -> None:
@@ -374,6 +379,24 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
                         text=instance_attr.attr,
                     ),
                 )
+
+    def _check_lambda_attribute(self, node: ast.Lambda) -> None:
+        assigned = walk.get_closest_parent(node, AssignNodes)
+        if not assigned or not isinstance(assigned, ast.Assign):
+            return  # just used, not assigned
+
+        context = nodes.get_context(assigned)
+        if not isinstance(context, types.AnyFunctionDef) or not isinstance(
+            nodes.get_context(context),
+            ast.ClassDef,
+        ):
+            return  # it is not assigned in a method of a class
+
+        for attribute in assigned.targets:
+            if isinstance(
+                attribute, ast.Attribute
+            ) and attributes.is_special_attr(attribute):
+                self.add_violation(oop.LambdaAttributeAssignedViolation(node))
 
 
 @final

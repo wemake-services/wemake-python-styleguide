@@ -49,3 +49,10 @@ def is_foreign_attribute(node: AnyVariableDef) -> bool:
     # So, we change the strictness of this rule,
     # based on the attribute source.
     return node.value.id not in SPECIAL_ARGUMENT_NAMES_WHITELIST
+
+
+def is_special_attr(node: ast.Attribute) -> bool:
+    """Finds attributes that are assigned to `self`, `cls`, etc."""
+    if not isinstance(node.value, ast.Name):
+        return False
+    return node.value.id in SPECIAL_ARGUMENT_NAMES_WHITELIST

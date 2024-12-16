@@ -65,7 +65,7 @@ def get_attributes(
     instance_attributes = []
 
     for subnode in ast.walk(node):
-        instance_attr = _get_instance_attribute(subnode)
+        instance_attr = get_instance_attribute(subnode)
         if instance_attr is not None:
             instance_attributes.append(instance_attr)
             continue
@@ -80,7 +80,8 @@ def get_attributes(
     return class_attributes, instance_attributes
 
 
-def _get_instance_attribute(node: ast.AST) -> ast.Attribute | None:
+def get_instance_attribute(node: ast.AST) -> ast.Attribute | None:
+    """Returns node if this is an instance attribute or `None` if not."""
     return (
         node
         if (

@@ -1,7 +1,9 @@
 import ast
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
-from wemake_python_styleguide.constants import SPECIAL_ARGUMENT_NAMES_WHITELIST
+from wemake_python_styleguide.constants import (
+    SPECIAL_ARGUMENT_NAMES_WHITELIST,
+)
 from wemake_python_styleguide.logic import nodes, walk
 from wemake_python_styleguide.logic.arguments import call_args
 
