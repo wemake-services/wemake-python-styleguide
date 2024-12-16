@@ -1,3 +1,4 @@
+import ast
 from collections.abc import Sequence
 from typing import Final, TypeAlias
 
@@ -8,12 +9,18 @@ from wemake_python_styleguide.violations.base import (
     BaseViolation,
     TokenizeViolation,
 )
-from wemake_python_styleguide.visitors.base import BaseVisitor
+from wemake_python_styleguide.visitors.base import BaseNodeVisitor, BaseVisitor
 
 _IgnoredTypes: TypeAlias = (
     type[BaseViolation] | tuple[type[BaseViolation], ...] | None
 )
 _ERROR_FORMAT: Final = ': {0}'
+
+
+def _produce_error_message(visitor: BaseVisitor) -> str:
+    if isinstance(visitor, BaseNodeVisitor):
+        return ast.unparse(visitor.tree)
+    return ''
 
 
 @pytest.fixture(scope='session')
@@ -35,7 +42,9 @@ def assert_errors():
         else:
             real_errors = visitor.violations
 
-        assert len(expected_errors) == len(real_errors)
+        assert len(expected_errors) == len(real_errors), _produce_error_message(
+            visitor,
+        )
 
         for index, error in enumerate(real_errors):
             assert expected_errors[index].disabled_since is None

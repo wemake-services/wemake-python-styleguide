@@ -52,7 +52,10 @@ class CompareSanityVisitor(BaseNodeVisitor):
 
     def _is_correct_len(self, sign: ast.cmpop, comparator: ast.AST) -> bool:
         """Helper function which tells what calls to ``len()`` are valid."""
-        if isinstance(operators.unwrap_unary_node(comparator), ast.Num):
+        node = operators.unwrap_unary_node(comparator)
+        if isinstance(node, ast.Constant) and isinstance(
+            node.value, int | float | complex
+        ):
             numeric_value = ast.literal_eval(comparator)
             if numeric_value == 0:
                 return False
@@ -168,9 +171,7 @@ class WrongConditionalVisitor(BaseNodeVisitor):
 
     _forbidden_nodes: ClassVar[AnyNodes] = (
         # Constants:
-        *TextNodes,
-        ast.Num,
-        ast.NameConstant,
+        ast.Constant,
         # Collections:
         ast.List,
         ast.Set,
@@ -285,10 +286,6 @@ class WrongFloatComplexCompareVisitor(BaseNodeVisitor):
         self._check_float_complex_compare(node)
         self.generic_visit(node)
 
-    def _is_float_or_complex(self, node: ast.AST) -> bool:
-        node = operators.unwrap_unary_node(node)
-        return isinstance(node, ast.Num) and isinstance(node.n, float | complex)
-
     def _check_float_complex_compare(self, node: ast.Compare) -> None:
         any_float_or_complex = any(
             self._is_float_or_complex(comparator)
@@ -296,3 +293,10 @@ class WrongFloatComplexCompareVisitor(BaseNodeVisitor):
         ) or self._is_float_or_complex(node.left)
         if any_float_or_complex:
             self.add_violation(FloatComplexCompareViolation(node))
+
+    def _is_float_or_complex(self, node: ast.AST) -> bool:
+        node = operators.unwrap_unary_node(node)
+        return isinstance(node, ast.Constant) and isinstance(
+            node.value,
+            float | complex,
+        )

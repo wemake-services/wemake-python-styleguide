@@ -105,7 +105,9 @@ def is_unary_minus(node: ast.AST) -> bool:
     """
     if isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.USub):
         # We allow variables, attributes, subscripts, and `-1`
-        if isinstance(node.operand, ast.Constant | ast.Num):
-            return node.operand.n == 1
+        if isinstance(node.operand, ast.Constant) and isinstance(
+            node.operand.value, int
+        ):
+            return node.operand.value == 1
         return True
     return False

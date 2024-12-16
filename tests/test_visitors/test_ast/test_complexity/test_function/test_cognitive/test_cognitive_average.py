@@ -26,7 +26,7 @@ def literal_eval(node):
         return node.value
     elif isinstance(node, (Str, Bytes, Num)):
         # We wrap strings to tell the difference between strings and names:
-        return node.n if isinstance(node, Num) else '"{0!r}"'.format(node.s)
+        return node.value if isinstance(node, Num) else '"{0!r}"'.format(node.s)
     elif isinstance(node, (Tuple, List, Set, Dict)):
         return _convert_iterable(node)
     elif isinstance(node, BinOp) and isinstance(node.op, (Add, Sub)):

@@ -55,7 +55,7 @@ def _has_same_kwarg(
     null_arg_keywords = filter(lambda key: key.arg is None, call.keywords)
     for keyword in null_arg_keywords:
         # `a=1` vs `**kwargs`:
-        # {'arg': 'a', 'value': <_ast.Num object at 0x1027882b0>}
+        # {'arg': 'a', 'value': <_ast.Constant(1) object at 0x1027882b0>}
         # {'arg': None, 'value': <_ast.Name object at 0x102788320>}
         if isinstance(keyword.value, ast.Name):
             kwarg_name = keyword.value.id

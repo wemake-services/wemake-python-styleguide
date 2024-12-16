@@ -8,7 +8,6 @@ from typing_extensions import final
 from wemake_python_styleguide.compat.aliases import (
     ForNodes,
     FunctionNodes,
-    TextNodes,
 )
 from wemake_python_styleguide.constants import (
     FUNCTIONS_BLACKLIST,
@@ -246,8 +245,8 @@ class WrongFunctionCallContextVisitor(base.BaseNodeVisitor):
         is_three_args_range = (
             self._is_multiple_args_range_with_len(node)
             and args_len == 3
-            and isinstance(step_arg, ast.Num)
-            and abs(step_arg.n) == 1
+            and isinstance(step_arg, ast.Constant)
+            and abs(step_arg.value) == 1
         )
         if any([is_one_arg_range, is_two_args_range, is_three_args_range]):
             self.add_violation(ImplicitEnumerateViolation(node))
@@ -424,13 +423,10 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
     """
 
     _allowed_default_value_types: ClassVar[AnyNodes] = (
-        *TextNodes,
         ast.Name,
         ast.Attribute,
-        ast.NameConstant,
         ast.Tuple,
-        ast.Num,
-        ast.Ellipsis,
+        ast.Constant,
     )
 
     def visit_any_function_and_lambda(
@@ -486,10 +482,8 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
                 else [real_arg]
             )
 
-            has_incorrect_part = any(
+            if any(
                 not isinstance(part, self._allowed_default_value_types)
                 for part in parts
-            )
-
-            if has_incorrect_part:
+            ):
                 self.add_violation(ComplexDefaultValueViolation(arg))

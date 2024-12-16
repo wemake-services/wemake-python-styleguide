@@ -53,6 +53,7 @@ assert_with_message_template = 'assert {0}, "message"'
         'some if x else other',
         '(unique := +0)',
         '(unique := +True)',
+        '...',
     ],
 )
 def test_false_condition_keywords(

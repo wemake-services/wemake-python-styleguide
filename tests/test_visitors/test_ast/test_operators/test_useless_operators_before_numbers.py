@@ -1,6 +1,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
+    MeaninglessNumberOperationViolation,
     UselessOperatorsViolation,
 )
 from wemake_python_styleguide.visitors.ast.operators import (
@@ -69,7 +70,11 @@ def test_plus_sign_before_numbers(
     visitor = UselessOperatorsVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [UselessOperatorsViolation])
+    assert_errors(
+        visitor,
+        [UselessOperatorsViolation],
+        ignored_types=MeaninglessNumberOperationViolation,
+    )
 
 
 @pytest.mark.parametrize('code', usages)

@@ -202,8 +202,6 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
         ast.Set,
         ast.SetComp,
         ast.GeneratorExp,
-        ast.Num,
-        ast.NameConstant,
     )
 
     def visit_any_for(self, node: AnyFor) -> None:
