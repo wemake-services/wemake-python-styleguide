@@ -102,6 +102,8 @@ Semantic versioning in our case means:
 - Integration with `ondivi` doc for legacy codebases
 - Fixes a documentation error for the Formatter (Showing statistic) section
 - Source code is now formatted with `ruff`
+- Removes deprecated `ast` nodes from code:
+  `ast.Num`, `ast.Bytes`, `ast.Str`, `ast.NamedConstant`, etc
 
 
 ## 0.19.2

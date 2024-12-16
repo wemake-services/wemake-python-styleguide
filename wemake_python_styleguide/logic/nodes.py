@@ -29,8 +29,8 @@ def get_context(node: ast.AST) -> ContextNodes | None:
 
 def evaluate_node(node: ast.AST) -> int | float | str | bytes | None:
     """Returns the value of a node or its evaluation."""
-    if isinstance(node, ast.Str | ast.Bytes):
-        return node.s
+    if isinstance(node, ast.Constant) and isinstance(node.value, str | bytes):
+        return node.value
     try:
         return ast.literal_eval(node)  # type: ignore[no-any-return]
     except Exception:

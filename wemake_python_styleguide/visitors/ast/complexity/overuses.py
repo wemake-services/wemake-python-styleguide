@@ -9,7 +9,7 @@ from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic import source, walk
 from wemake_python_styleguide.logic.complexity import overuses
 from wemake_python_styleguide.logic.tree import annotations
-from wemake_python_styleguide.types import AnyNodes, AnyText, AnyTextPrimitive
+from wemake_python_styleguide.types import AnyNodes, AnyTextPrimitive
 from wemake_python_styleguide.violations import complexity
 from wemake_python_styleguide.visitors import base, decorators
 
@@ -69,21 +69,21 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
             int,
         ] = defaultdict(int)
 
-    def visit_any_string(self, node: AnyText) -> None:
+    def visit_any_string(self, node: ast.Constant) -> None:
         """Restricts to over-use string constants."""
         self._check_string_constant(node)
         self.generic_visit(node)
 
-    def _check_string_constant(self, node: AnyText) -> None:
+    def _check_string_constant(self, node: ast.Constant) -> None:
         if annotations.is_annotation(node):
             return
 
         # Some strings are so common, that it makes no sense to check if
         # they are overused.
-        if node.s in self._ignored_string_constants:
+        if node.value in self._ignored_string_constants:
             return
 
-        self._string_constants[node.s] += 1
+        self._string_constants[node.value] += 1
 
     def _post_visit(self) -> None:
         for string, usage_count in self._string_constants.items():

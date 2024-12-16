@@ -262,7 +262,7 @@ class InCompareSanityVisitor(BaseNodeVisitor):
             self._check_wrong_comparators(real)
 
     def _check_single_item_container(self, node: ast.AST) -> None:
-        is_text_violated = isinstance(node, TextNodes) and len(node.s) == 1
+        is_text_violated = isinstance(node, TextNodes) and len(node.value) == 1
         is_dict_violated = isinstance(node, ast.Dict) and len(node.keys) == 1
         is_iter_violated = (
             isinstance(node, ast.List | ast.Tuple | ast.Set)

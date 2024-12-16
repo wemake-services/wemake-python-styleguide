@@ -10,4 +10,7 @@ def is_doc_string(node: ast.AST) -> bool:
     """
     if not isinstance(node, ast.Expr):
         return False
-    return isinstance(node.value, ast.Str)
+    return isinstance(node.value, ast.Constant) and isinstance(
+        node.value.value,
+        str,
+    )

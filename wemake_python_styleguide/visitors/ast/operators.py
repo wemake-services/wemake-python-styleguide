@@ -162,7 +162,7 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
     """Checks that there are not wrong math operations."""
 
     _string_nodes: ClassVar[AnyNodes] = (
-        *TextNodes,
+        TextNodes,
         ast.JoinedStr,
     )
 

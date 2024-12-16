@@ -40,9 +40,6 @@ from typing import TypeAlias
 
 from typing_extensions import Protocol
 
-#: We use this type to represent all string-like nodes.
-AnyText: TypeAlias = ast.Str | ast.Bytes
-
 #: In cases we need to work with both import types.
 AnyImport: TypeAlias = ast.Import | ast.ImportFrom
 
