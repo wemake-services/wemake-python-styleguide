@@ -91,6 +91,7 @@ Summary
    GettingElementByUnpackingViolation
    WrongEmptyLinesCountViolation
    ImportObjectCollisionViolation
+   ProblematicFunctionParamsViolation
 
 Best practices
 --------------
@@ -170,6 +171,7 @@ Best practices
 .. autoclass:: GettingElementByUnpackingViolation
 .. autoclass:: WrongEmptyLinesCountViolation
 .. autoclass:: ImportObjectCollisionViolation
+.. autoclass:: ProblematicFunctionParamsViolation
 
 """
 
@@ -2875,3 +2877,37 @@ class ImportObjectCollisionViolation(ASTViolation):
 
     error_template = 'Found import object collision: {0}'
     code = 474
+
+
+@final
+class ProblematicFunctionParamsViolation(ASTViolation):
+    """
+    Do not use problematic function parameters.
+
+    Patterns that we don't allow:
+    - More than one pos-only params with defaults,
+      you cannot really pass the second one without passing the first one anyway
+    - Pos-only or regular param with default before `*args`,
+      this way you won't be able to pass just `*args`
+
+    Reasoning:
+        It would be hard to pass arguments to these functions.
+
+    Solution:
+        Change the signature: remove defaults or change the parameter kinds.
+
+    Example::
+
+        # Correct:
+        def function(first, second): ...
+
+        # Wrong:
+        def function(first=0, second=1, /): ...
+        def function(first=0, *args): ...
+
+    .. versionadded:: 1.0.0
+
+    """
+
+    error_template = 'Found problematic function parameters'
+    code = 475

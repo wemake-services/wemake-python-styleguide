@@ -80,8 +80,7 @@ def is_generator(node: AnyFunctionDef) -> bool:
 
 def get_function_exit_nodes(node: AnyFunctionDef) -> _ControlTransferIterable:
     """Yields nodes that cause a control transfer from a function."""
-    control_transfer_nodes = (Return, Yield, YieldFrom)
     for body_item in node.body:
         for sub_node in walk(body_item):
-            if isinstance(sub_node, control_transfer_nodes):
+            if isinstance(sub_node, _AnyControlTransfers):
                 yield sub_node
