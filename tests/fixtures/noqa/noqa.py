@@ -742,5 +742,5 @@ match user:
         raise ValueError(objs)
 
 
-def pos_only_problem(first=0, second=1, /):  # noqa: WPS475
-    my_print(first, second)
+def pos_only_problem(first_argpm=0, second_argpm=1, /):  # noqa: WPS475
+    my_print(first_argpm, second_argpm)
