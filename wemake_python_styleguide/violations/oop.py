@@ -29,6 +29,7 @@ Summary
    WrongDescriptorDecoratorViolation
    UnpythonicGetterSetterViolation
    BuggySuperContextViolation
+   LambdaAttributeAssignedViolation
 
 Respect your objects
 --------------------
@@ -50,6 +51,7 @@ Respect your objects
 .. autoclass:: WrongDescriptorDecoratorViolation
 .. autoclass:: UnpythonicGetterSetterViolation
 .. autoclass:: BuggySuperContextViolation
+.. autoclass:: LambdaAttributeAssignedViolation
 
 """
 
@@ -678,14 +680,49 @@ class BuggySuperContextViolation(ASTViolation):
 
     Example::
 
-        # Correct
+        # Correct:
         (super(cls, self).augment(it) for it in items)
 
-        # Wrong
+        # Wrong:
         (super().augment(it) for it in items)
 
     .. versionadded:: 0.18.0
+
     """
 
     error_template = 'Found incorrect form of `super()` call for the context'
     code = 616
+
+
+@final
+class LambdaAttributeAssignedViolation(ASTViolation):
+    """
+    Forbid using ``lambda`` as an assigned attribute.
+
+    Reasoning:
+        Assigning ``lambda`` as an attribute does not make much sense.
+        And can lead to potentially incorrect code.
+
+    Solution:
+        Use ``def`` statements to create regular or class methods.
+
+    Example::
+
+        # Correct:
+        class Used:
+            def login(self): ...
+
+        # Wrong:
+        class User:
+            def __init__(self):
+                self.login = lambda: ...
+
+    See als:
+        https://docs.astral.sh/ruff/rules/lambda-assignment
+
+    .. versionadded:: 1.0.0
+
+    """
+
+    error_template = 'Found lambda assigned as an attribute'
+    code = 617

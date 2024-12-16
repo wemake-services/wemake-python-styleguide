@@ -82,7 +82,8 @@ Semantic versioning in our case means:
 - Does not count `self`, `cls`, and `mcs` as arguments
   for `WPS211` complexity check anymore, #2394
 - `WPS303`: Underscore (`_`) now only allowed with 3 digits after it, #3120
-- Adds support to run `wemake-python-styleguide` as a `pre-commit` hook #2588
+- Adds new rule to forbid `lambda` assigns to special attributes, #1733
+- Adds support to run `wemake-python-styleguide` as a `pre-commit` hook, #2588
 
 ### Bugfixes
 

@@ -675,6 +675,11 @@ class Antediluvian(Baseline):
         return (super().method(some_item) for some_item in items)  # noqa: WPS616
 
 
+class LambdaAssign:
+    def __init__(self):
+        self.attribute = lambda self_arg: int(self_arg)  # noqa: WPS617
+
+
 # porting noqa38.py
 class WithStatic:
     @staticmethod

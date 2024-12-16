@@ -1,9 +1,9 @@
 import ast
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
-from wemake_python_styleguide.constants import SPECIAL_ARGUMENT_NAMES_WHITELIST
 from wemake_python_styleguide.logic import nodes, walk
 from wemake_python_styleguide.logic.arguments import call_args
+from wemake_python_styleguide.logic.tree import attributes
 
 
 def is_class_context(node: ast.AST) -> bool:
@@ -61,11 +61,7 @@ def is_self(node: ast.AST) -> bool:
     elif isinstance(node, ast.Subscript):
         self_node = node
 
-    return bool(
-        self_node
-        and isinstance(self_node.value, ast.Name)
-        and self_node.value.id in SPECIAL_ARGUMENT_NAMES_WHITELIST,
-    )
+    return bool(self_node and attributes.is_special_attr(self_node))
 
 
 def is_primitive(node: ast.AST) -> bool:
