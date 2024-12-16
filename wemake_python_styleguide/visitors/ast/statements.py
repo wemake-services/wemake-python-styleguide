@@ -122,7 +122,11 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         ast.Break,
         ast.Continue,
         ast.Pass,
-        ast.Ellipsis,
+        ast.Constant,
+        ast.Dict,
+        ast.List,
+        ast.Tuple,
+        ast.Set,
     )
     _loop_useless_body: ClassVar[types.AnyNodes] = (
         ast.Return,
