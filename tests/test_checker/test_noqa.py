@@ -17,6 +17,8 @@ import subprocess
 import types
 from collections import Counter
 
+import pytest
+
 #: Used to find violations' codes in output.
 ERROR_PATTERN = re.compile(r'(WPS\d{3})')
 
@@ -150,7 +152,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS357': 0,  # logically unacceptable.
         'WPS358': 1,
         'WPS359': 1,
-        'WPS360': 1,
+        'WPS360': 0,  # disabled since 1.0.0
         'WPS361': 0,  # disabled since 1.0.0
         'WPS362': 2,
         'WPS400': 0,  # defined in ignored violations.
@@ -207,7 +209,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS451': 0,  # deprecated
         'WPS452': 0,  # disabled since 1.0.0
         'WPS453': 0,
-        'WPS454': 1,
+        'WPS454': 0,  # disabled since 1.0.0
         'WPS455': 1,
         'WPS456': 1,
         'WPS457': 1,
@@ -295,17 +297,14 @@ def _assert_errors_count_in_output(
     output,
     errors,
     all_violations,
-    *,
-    total: bool = True,
 ):
     found_errors = Counter(
         (match.group(0) for match in ERROR_PATTERN.finditer(output)),
     )
 
-    if total:
-        for violation in all_violations:
-            key = f'WPS{str(violation.code).zfill(3)}'  # noqa: WPS237
-            assert key in errors, 'Unlisted #noqa violation'
+    for violation in all_violations:
+        key = f'WPS{str(violation.code).zfill(3)}'  # noqa: WPS237
+        assert key in errors, 'Unlisted #noqa violation'
 
     for found_error, found_count in found_errors.items():
         assert found_error in errors, 'Violation without a #noqa count'
@@ -321,6 +320,46 @@ def test_codes(all_violations):
     assert len(SHOULD_BE_RAISED) == len(all_violations)
 
 
+@pytest.mark.parametrize(
+    ('filename', 'violations'),
+    [
+        ('noqa.py', SHOULD_BE_RAISED),
+    ],
+)
+def test_noqa_fixture_disabled(
+    absolute_path,
+    all_violations,
+    filename,
+    violations,
+):
+    """End-to-End test to check that all violations are present."""
+    process = subprocess.Popen(
+        [
+            'flake8',
+            '--ignore',
+            ','.join(IGNORED_VIOLATIONS),
+            '--disable-noqa',
+            '--isolated',
+            '--select',
+            'WPS',
+            absolute_path('fixtures', 'noqa', filename),
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        universal_newlines=True,
+        encoding='utf8',
+    )
+    stdout, stderr = process.communicate()
+
+    assert stdout
+    assert not stderr.count('WPS')
+    _assert_errors_count_in_output(
+        stdout,
+        violations,
+        all_violations,
+    )
+
+
 def test_noqa_fixture_disabled_no_control(
     absolute_path,
     all_controlled_violations,
@@ -333,7 +372,7 @@ def test_noqa_fixture_disabled_no_control(
             '--disable-noqa',
             '--isolated',
             '--select',
-            'WPS, E999',
+            'WPS',
             absolute_path('fixtures', 'noqa', 'noqa_controlled.py'),
         ],
         stdout=subprocess.PIPE,
@@ -341,13 +380,10 @@ def test_noqa_fixture_disabled_no_control(
         universal_newlines=True,
         encoding='utf8',
     )
-    stdout, _ = process.communicate()
+    stdout, stderr = process.communicate()
 
-    _assert_errors_count_in_output(
-        stdout,
-        SHOULD_BE_RAISED_NO_CONTROL,
-        all_controlled_violations,
-    )
+    assert not stderr
+    assert not stdout
     assert len(SHOULD_BE_RAISED_NO_CONTROL) == len(all_controlled_violations)
 
 
@@ -368,9 +404,10 @@ def test_noqa_fixture(absolute_path):
         universal_newlines=True,
         encoding='utf8',
     )
-    stdout, _ = process.communicate()
+    stdout, stderr = process.communicate()
 
-    assert stdout.count('WPS') == 0
+    assert not stdout
+    assert not stderr.count('WPS')
 
 
 def test_noqa_fixture_without_ignore(absolute_path):

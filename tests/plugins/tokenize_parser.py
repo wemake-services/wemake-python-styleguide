@@ -30,12 +30,9 @@ def parse_file_tokens(parse_tokens, compile_code):
 
     def factory(
         filename: str,
-        *,
-        do_compile: bool = True,
     ) -> list[tokenize.TokenInfo]:
         file_content = Path(filename).read_text(encoding='utf-8')
-        if do_compile:
-            compile_code(file_content)
+        compile_code(file_content)
         return parse_tokens(file_content)
 
     return factory

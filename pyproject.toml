@@ -231,6 +231,7 @@ addopts = [
   "--doctest-modules",
   # pytest-cov
   "--cov=wemake_python_styleguide",
+  "--cov=tests",
   "--cov-branch",
   "--cov-report=term-missing:skip-covered",
   "--cov-report=html",
@@ -263,6 +264,8 @@ omit = [
   "wemake_python_styleguide/types.py",
   # Copied from 3rd party:
   "wemake_python_styleguide/logic/tokens/docstrings.py",
+  # All version specific tests:
+  "tests/**/*312.py",
 ]
 
 # Here we specify plugins for coverage to be used:

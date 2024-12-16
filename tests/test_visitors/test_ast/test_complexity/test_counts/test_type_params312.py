@@ -8,7 +8,7 @@ from wemake_python_styleguide.visitors.ast.complexity.counts import (
     TypeParamsVisitor,
 )
 
-if not PY312:
+if not PY312:  # pragma: >=3.12 no cover
     pytest.skip(reason='type_params was added in 3.12', allow_module_level=True)
 
 

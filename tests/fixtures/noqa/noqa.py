@@ -520,7 +520,7 @@ class CheckStopIteration:
         yield
         raise StopIteration()  # noqa: WPS438
 
-bad_unicode = b'\u1'  # noqa: WPS439
+bad_unicode = b'\u0040'  # noqa: WPS439
 CheckStopIteration = 1  # noqa: WPS440
 my_print(literal)  # noqa: WPS441
 unhashable = {[]}  # noqa: WPS443
@@ -596,10 +596,6 @@ a_list[1:3] = [1, 2]  # noqa: WPS362
 a_list[slice(1)] = [1, 2]  # noqa: WPS362
 
 
-def raise_bad_exception():
-    raise Exception  # noqa: WPS454
-
-
 try:
     cause_errors()
 except ValueError or TypeError:  # noqa: WPS455
@@ -614,7 +610,6 @@ def infinite_loop():
 
 
 my_print(some_float == 1.0)  # noqa: WPS459
-unnecessary_raw_string = r'no backslashes.' # noqa: WPS360
 
 
 def many_raises_function(parameter):  # noqa: WPS238

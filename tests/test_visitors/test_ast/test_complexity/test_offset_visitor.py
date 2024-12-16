@@ -182,7 +182,7 @@ def test_nested_offset_errors(
     mode,
 ):
     """Testing that nested expressions are restricted."""
-    if code == nested_try_star and not PY311:
+    if code == nested_try_star and not PY311:  # pragma: no cover
         pytest.skip(reason='ExceptionGroup was added in 3.11')
 
     tree = parse_ast_tree(mode(code))
