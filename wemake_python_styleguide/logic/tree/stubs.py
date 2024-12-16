@@ -1,4 +1,4 @@
-from ast import AST, Ellipsis, Expr, Raise, Str  # noqa: A004
+import ast
 
 from wemake_python_styleguide.types import AnyFunctionDef
 
@@ -14,11 +14,12 @@ def is_stub(node: AnyFunctionDef) -> bool:
         - a docstring + an Ellipsis statement
         - a docstring + a `raise` statement
     """
-    function_has_docstring = isinstance(node.body[0], Expr) and isinstance(
-        node.body[0].value,
-        Str,
-    )
-    if function_has_docstring:
+    first_node = node.body[0]
+    if (
+        isinstance(first_node, ast.Expr)
+        and isinstance(first_node.value, ast.Constant)
+        and isinstance(first_node.value.value, str)
+    ):
         return _is_stub_with_docstring(node)
     return _is_stub_without_docstring(node)
 
@@ -29,15 +30,15 @@ def _is_stub_with_docstring(node: AnyFunctionDef) -> bool:
         return True
     if statements_in_body == 2:
         second_node = node.body[1]
-        return _is_ellipsis(second_node) or isinstance(second_node, Raise)
+        return _is_ellipsis(second_node) or isinstance(second_node, ast.Raise)
     return False
 
 
 def _is_stub_without_docstring(node: AnyFunctionDef) -> bool:
     return len(node.body) == 1 and (
-        _is_ellipsis(node.body[0]) or isinstance(node.body[0], Raise)
+        _is_ellipsis(node.body[0]) or isinstance(node.body[0], ast.Raise)
     )
 
 
-def _is_ellipsis(node: AST) -> bool:
-    return isinstance(node, Expr) and isinstance(node.value, Ellipsis)
+def _is_ellipsis(node: ast.AST) -> bool:
+    return isinstance(node, ast.Expr) and isinstance(node.value, ast.Ellipsis)
