@@ -34,6 +34,7 @@ from wemake_python_styleguide.violations.best_practices import (
     ComplexDefaultValueViolation,
     FloatingNanViolation,
     GetterWithoutReturnViolation,
+    ProblematicFunctionParamsViolation,
     StopIterationInsideGeneratorViolation,
     WrongFunctionCallViolation,
 )
@@ -441,6 +442,7 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
     ) -> None:
         """Checks function and lambda defs."""
         self._check_complex_argument_defaults(node)
+        self._check_problematic_params(node)
         if not isinstance(node, ast.Lambda):
             self._check_getter_without_return(node)
         self.generic_visit(node)
@@ -462,9 +464,6 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
         if not has_explicit_function_exit:
             self.add_violation(GetterWithoutReturnViolation(node))
 
-    def _is_concrete_getter(self, node: AnyFunctionDef) -> bool:
-        return node.name.startswith('get_') and not stubs.is_stub(node)
-
     def _check_complex_argument_defaults(
         self,
         node: AnyFunctionDefAndLambda,
@@ -481,10 +480,7 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
             real_arg = operators.unwrap_unary_node(arg)
             parts = (
                 attributes.parts(real_arg)
-                if isinstance(
-                    real_arg,
-                    ast.Attribute,
-                )
+                if isinstance(real_arg, ast.Attribute)
                 else [real_arg]
             )
 
@@ -493,3 +489,22 @@ class FunctionSignatureVisitor(base.BaseNodeVisitor):
                 for part in parts
             ):
                 self.add_violation(ComplexDefaultValueViolation(arg))
+
+    def _check_problematic_params(
+        self,
+        node: AnyFunctionDefAndLambda,
+    ) -> None:
+        is_problematic = False
+        if len(node.args.defaults) - len(node.args.args) >= 2:
+            # This means that we have at least 2 pos-only with defaults.
+            is_problematic = True
+        if node.args.defaults and node.args.vararg:
+            # Won't be able to pass only `*args`,
+            # will have to pass param before it.
+            is_problematic = True
+
+        if is_problematic:
+            self.add_violation(ProblematicFunctionParamsViolation(node))
+
+    def _is_concrete_getter(self, node: AnyFunctionDef) -> bool:
+        return node.name.startswith('get_') and not stubs.is_stub(node)

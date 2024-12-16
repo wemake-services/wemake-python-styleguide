@@ -740,3 +740,7 @@ match user:
         raise ValueError(k)
     case [objs]:  # noqa: WPS110
         raise ValueError(objs)
+
+
+def pos_only_problem(first=0, second=1, /):  # noqa: WPS475
+    my_print(first, second)
