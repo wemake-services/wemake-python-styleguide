@@ -102,13 +102,13 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
         last_value_return = (
             len(parent.body) > 1
             and returns < 2
-            and isinstance(node.value, ast.NameConstant)
+            and isinstance(node.value, ast.Constant)
             and node.value.value is None
         )
 
         one_return_with_none = (
             returns == 1
-            and isinstance(node.value, ast.NameConstant)
+            and isinstance(node.value, ast.Constant)
             and node.value.value is None
         )
 
@@ -127,7 +127,7 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
         )
         is_all_none = has_values and all(
             (
-                isinstance(ret_node.value, ast.NameConstant)
+                isinstance(ret_node.value, ast.Constant)
                 and ret_node.value.value is None
             )
             for ret_node in return_nodes
@@ -272,7 +272,7 @@ class ConstantKeywordVisitor(BaseNodeVisitor):
     """Visits keyword definitions to detect constant conditions."""
 
     _forbidden_nodes: ClassVar[AnyNodes] = (
-        ast.NameConstant,
+        ast.Constant,
         ast.List,
         ast.Tuple,
         ast.Set,

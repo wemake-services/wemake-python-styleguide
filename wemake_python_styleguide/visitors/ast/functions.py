@@ -101,7 +101,9 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
             return  # Calls with single boolean argument are allowed
 
         for arg in node.args:
-            if not isinstance(arg, ast.NameConstant):
+            if not (
+                isinstance(arg, ast.Constant) and isinstance(arg.value, bool)
+            ):
                 continue
 
             is_ignored = self._is_call_ignored(node)
