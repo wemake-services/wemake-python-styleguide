@@ -92,10 +92,10 @@ def test_valid_conditional(
     [
         if_statement,
         ternary,
-        # list_comprehension,
-        # set_comprehension,
-        # dict_comprehension,
-        # gen_comprehension,
+        list_comprehension,
+        set_comprehension,
+        dict_comprehension,
+        gen_comprehension,
     ],
 )
 @pytest.mark.parametrize(
@@ -120,6 +120,7 @@ def test_valid_conditional(
         'variable and True',
         '(unique := True)',
         '(unique := -1)',
+        '...',
     ],
 )
 def test_constant_condition(

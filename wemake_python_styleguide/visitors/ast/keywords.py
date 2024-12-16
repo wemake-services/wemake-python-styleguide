@@ -5,7 +5,6 @@ from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import (
     FunctionNodes,
-    TextNodes,
 )
 from wemake_python_styleguide.logic import walk, walrus
 from wemake_python_styleguide.logic.nodes import get_parent
@@ -282,8 +281,7 @@ class ConstantKeywordVisitor(BaseNodeVisitor):
         ast.GeneratorExp,
         ast.SetComp,
         ast.DictComp,
-        *TextNodes,
-        ast.Num,
+        ast.Constant,
         ast.IfExp,
     )
 
@@ -299,7 +297,7 @@ class ConstantKeywordVisitor(BaseNodeVisitor):
 
     def _check_condition(self, node: ast.AST, cond: ast.AST) -> None:
         if (
-            isinstance(cond, ast.NameConstant)
+            isinstance(cond, ast.Constant)
             and cond.value is True
             and isinstance(node, ast.While)
         ):

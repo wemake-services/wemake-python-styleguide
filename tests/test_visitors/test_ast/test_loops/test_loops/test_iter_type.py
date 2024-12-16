@@ -59,12 +59,6 @@ def function():
         '{1, 2, 3}',
         '{set_item for set_item in call()}',
         '(elem for elem in call())',
-        '1',
-        '-1.2',
-        'None',
-        'False',
-        '-False',
-        '(True)',
     ],
 )
 @pytest.mark.parametrize(

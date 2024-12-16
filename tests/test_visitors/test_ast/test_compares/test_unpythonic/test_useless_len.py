@@ -17,6 +17,7 @@ from wemake_python_styleguide.visitors.ast.compares import CompareSanityVisitor
         'len(some) < -0',
         'len(some) < +0',
         'len(some) == 0',
+        'len(some) == -0j',
         'len(some) == +0',
         'len(some) == -0',
         'len(some) >= 1',

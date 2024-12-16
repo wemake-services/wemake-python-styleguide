@@ -9,7 +9,6 @@ from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import (
     AssignNodesWithWalrus,
     FunctionNodes,
-    TextNodes,
 )
 from wemake_python_styleguide.logic import nodes, source, walk
 from wemake_python_styleguide.logic.tree import (
@@ -85,10 +84,8 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
     """Restricts usage of ``f`` strings."""
 
     _valid_format_index: ClassVar[AnyNodes] = (
-        *TextNodes,
-        ast.Num,
+        ast.Constant,
         ast.Name,
-        ast.NameConstant,
     )
     _single_use_types: ClassVar[AnyNodes] = (
         ast.Call,
@@ -187,30 +184,30 @@ class WrongNumberVisitor(base.BaseNodeVisitor):
 
     _non_magic_modulo: ClassVar[int] = 10
 
-    def visit_Num(self, node: ast.Num) -> None:
+    def visit_Num(self, node: ast.Constant) -> None:
         """Checks wrong constants inside the code."""
         self._check_is_magic(node)
         self._check_is_approximate_constant(node)
         self.generic_visit(node)
 
-    def _check_is_magic(self, node: ast.Num) -> None:
+    def _check_is_magic(self, node: ast.Constant) -> None:
         parent = operators.get_parent_ignoring_unary(node)
         if isinstance(parent, self._allowed_parents):
             return
 
-        if node.n in constants.MAGIC_NUMBERS_WHITELIST:
+        if node.value in constants.MAGIC_NUMBERS_WHITELIST:
             return
 
-        if isinstance(node.n, int) and node.n <= self._non_magic_modulo:
+        if isinstance(node.value, int) and node.value <= self._non_magic_modulo:
             return
 
         self.add_violation(
-            best_practices.MagicNumberViolation(node, text=str(node.n)),
+            best_practices.MagicNumberViolation(node, text=str(node.value)),
         )
 
-    def _check_is_approximate_constant(self, node: ast.Num) -> None:
+    def _check_is_approximate_constant(self, node: ast.Constant) -> None:
         try:
-            precision = len(str(node.n).split('.')[1])
+            precision = len(str(node.value).split('.')[1])
         except IndexError:
             precision = 0
 
@@ -218,11 +215,11 @@ class WrongNumberVisitor(base.BaseNodeVisitor):
             return
 
         for constant in constants.MATH_APPROXIMATE_CONSTANTS:
-            if str(constant).startswith(str(node.n)):
+            if str(constant).startswith(str(node.value)):
                 self.add_violation(
                     best_practices.ApproximateConstantViolation(
                         node,
-                        text=str(node.n),
+                        text=str(node.value),
                     ),
                 )
 
@@ -327,13 +324,6 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
 class WrongCollectionVisitor(base.BaseNodeVisitor):
     """Ensures that collection definitions are correct."""
 
-    _elements_in_sets: ClassVar[AnyNodes] = (
-        *TextNodes,
-        ast.Num,
-        ast.NameConstant,
-        ast.Name,
-    )
-
     _unhashable_types: ClassVar[AnyNodes] = (
         ast.List,
         ast.ListComp,
@@ -342,22 +332,6 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
         ast.Dict,
         ast.DictComp,
         ast.GeneratorExp,
-    )
-
-    _elements_to_eval: ClassVar[AnyNodes] = (
-        *TextNodes,
-        ast.Num,
-        ast.NameConstant,
-        ast.Tuple,
-        ast.List,
-        ast.Set,
-        ast.Dict,
-        # Since python3.8 `BinOp` only works for complex numbers:
-        # https://github.com/python/cpython/pull/4035/files
-        # https://bugs.python.org/issue31778
-        ast.BinOp,
-        # Only our custom `eval` function can eval names safely:
-        ast.Name,
     )
 
     def visit_Set(self, node: ast.Set) -> None:
@@ -382,8 +356,8 @@ class WrongCollectionVisitor(base.BaseNodeVisitor):
                 evaluates_to_float = isinstance(evaluated_key, float)
 
             real_key = operators.unwrap_unary_node(dict_key)
-            is_float_key = isinstance(real_key, ast.Num) and isinstance(
-                real_key.n,
+            is_float_key = isinstance(real_key, ast.Constant) and isinstance(
+                real_key.value,
                 float,
             )
             if is_float_key or evaluates_to_float:

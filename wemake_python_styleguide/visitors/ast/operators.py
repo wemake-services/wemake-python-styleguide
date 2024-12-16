@@ -22,7 +22,6 @@ _MeaninglessOperators: TypeAlias = Mapping[
     tuple[type[ast.operator], ...],
 ]
 _OperatorLimits: TypeAlias = Mapping[type[ast.unaryop], int]
-_NumbersAndConstants: TypeAlias = ast.Num | ast.NameConstant
 
 
 @final
@@ -78,7 +77,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         ast.Mod,
     )
 
-    def visit_numbers_and_constants(self, node: _NumbersAndConstants) -> None:
+    def visit_numbers_and_constants(self, node: ast.Constant) -> None:
         """Checks numbers unnecessary operators inside the code."""
         self._check_operator_count(node)
         self.generic_visit(node)
@@ -95,12 +94,14 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         self._check_useless_math_operator(node.op, node.value)
         self.generic_visit(node)
 
-    def _check_operator_count(self, node: _NumbersAndConstants) -> None:
+    def _check_operator_count(self, node: ast.Constant) -> None:
         for node_type, limit in self._unary_limits.items():
             if count_unary_operator(node, node_type) > limit:
-                text = str(node.n) if isinstance(node, ast.Num) else node.value
                 self.add_violation(
-                    consistency.UselessOperatorsViolation(node, text=text),
+                    consistency.UselessOperatorsViolation(
+                        node,
+                        text=str(node.value),
+                    ),
                 )
 
     def _check_zero_division(self, op: ast.operator, number: ast.AST) -> None:
@@ -108,8 +109,8 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
 
         is_zero_division = (
             isinstance(op, self._zero_divisors)
-            and isinstance(number, ast.Num)
-            and number.n == 0
+            and isinstance(number, ast.Constant)
+            and number.value == 0
         )
         if is_zero_division:
             self.add_violation(consistency.ZeroDivisionViolation(number))
@@ -121,17 +122,17 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         right: ast.AST | None = None,
     ) -> None:
         if (
-            isinstance(left, ast.Num)
-            and left.n in self._left_special_cases
+            isinstance(left, ast.Constant)
+            and left.value in self._left_special_cases
             and right
-            and isinstance(op, self._left_special_cases[left.n])
+            and isinstance(op, self._left_special_cases[left.value])
         ):
             left = None
 
         non_negative_numbers = self._get_non_negative_nodes(left, right)
 
         for number in non_negative_numbers:
-            forbidden = self._meaningless_operations.get(number.n, None)
+            forbidden = self._meaningless_operations.get(number.value, None)
             if forbidden and isinstance(op, forbidden):
                 self.add_violation(
                     consistency.MeaninglessNumberOperationViolation(number),
@@ -141,16 +142,17 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         self,
         left: ast.AST | None,
         right: ast.AST | None = None,
-    ) -> list[ast.Num]:
-        non_negative_numbers: list[ast.Num] = []
+    ) -> list[ast.Constant]:
+        non_negative_numbers: list[ast.Constant] = []
         for node in filter(None, (left, right)):
             real_node = unwrap_unary_node(node)
-            correct_node = (
-                isinstance(real_node, ast.Num)
-                and real_node.n in self._meaningless_operations
-                and not (real_node.n == 1 and walk.is_contained(node, ast.USub))
-            )
-            if correct_node and isinstance(real_node, ast.Num):  # mypy :)
+            if (
+                isinstance(real_node, ast.Constant)
+                and real_node.value in self._meaningless_operations
+                and not (
+                    real_node.value == 1 and walk.is_contained(node, ast.USub)
+                )
+            ):
                 non_negative_numbers.append(real_node)
         return non_negative_numbers
 
