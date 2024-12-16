@@ -42,6 +42,12 @@ class A:
         self._api, self.other = (3, lambda x: x * 2)
 """
 
+correct_lambda_attr_assign6 = """
+class A:
+    def method(self):
+        self.other.api = lambda x: x * 2
+"""
+
 # Wrong:
 
 wrong_lambda_assign1 = """
@@ -97,11 +103,13 @@ def test_wrong_lambda_assign(
 @pytest.mark.parametrize(
     'code',
     [
+        correct_lambda_usage,
         correct_lambda_attr_assign1,
         correct_lambda_attr_assign2,
         correct_lambda_attr_assign3,
         correct_lambda_attr_assign4,
         correct_lambda_attr_assign5,
+        correct_lambda_attr_assign6,
     ],
 )
 def test_correct_lambda_assign(
