@@ -11,16 +11,16 @@ repos:
         args: [--fix=lf]
       - id: check-case-conflict
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.29.4
+    rev: 0.30.0
     hooks:
       - id: check-dependabot
       - id: check-github-workflows
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.3
+    rev: v1.7.4
     hooks:
       - id: actionlint
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.8.2
+    rev: v0.8.3
     hooks:
       - id: ruff
         args: ["--exit-non-zero-on-fix", "--fix"]
