@@ -96,7 +96,7 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
                 WrongFunctionCallViolation(node, text=function_name),
             )
 
-    def _check_boolean_arguments(self, node: ast.Call) -> None:
+    def _check_boolean_arguments(self, node: ast.Call) -> None:  # noqa: WPS231
         if len(node.args) == 1 and not node.keywords:
             return  # Calls with single boolean argument are allowed
 
@@ -109,7 +109,7 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
             is_ignored = self._is_call_ignored(node)
 
             # We do not check for `None` values here:
-            if not is_ignored and arg.value in {True, False}:
+            if not is_ignored and isinstance(arg.value, bool):
                 self.add_violation(
                     BooleanPositionalArgumentViolation(
                         arg,
