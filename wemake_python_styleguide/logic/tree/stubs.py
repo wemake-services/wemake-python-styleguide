@@ -35,9 +35,10 @@ def _is_stub_with_docstring(node: AnyFunctionDef) -> bool:
 
 
 def _is_stub_without_docstring(node: AnyFunctionDef) -> bool:
-    return len(node.body) == 1 and (
-        _is_ellipsis(node.body[0]) or isinstance(node.body[0], ast.Raise)
-    )
+    if not node.body:
+        return False
+    first_node = node.body[0]
+    return _is_ellipsis(first_node) or isinstance(first_node, ast.Raise)
 
 
 def _is_ellipsis(node: ast.AST) -> bool:
