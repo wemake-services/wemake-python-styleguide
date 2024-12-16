@@ -21,7 +21,7 @@ def is_stub(node: AnyFunctionDef) -> bool:
         and isinstance(first_node.value.value, str)
     ):
         return _is_stub_with_docstring(node)
-    return _is_stub_without_docstring(node)
+    return _is_stub_without_docstring(first_node)
 
 
 def _is_stub_with_docstring(node: AnyFunctionDef) -> bool:
@@ -34,11 +34,8 @@ def _is_stub_with_docstring(node: AnyFunctionDef) -> bool:
     return False
 
 
-def _is_stub_without_docstring(node: AnyFunctionDef) -> bool:
-    if not node.body:
-        return False
-    first_node = node.body[0]
-    return _is_ellipsis(first_node) or isinstance(first_node, ast.Raise)
+def _is_stub_without_docstring(node: ast.AST) -> bool:
+    return _is_ellipsis(node) or isinstance(node, ast.Raise)
 
 
 def _is_ellipsis(node: ast.AST) -> bool:
