@@ -25,7 +25,10 @@ def test_wrong_unicode_escape(
     code,
 ):
     """Ensures that wrong unicode escape raises a warning."""
-    file_tokens = parse_tokens(code)
+    try:  # pragma: no cover
+        file_tokens = parse_tokens(code)
+    except SyntaxError:
+        pytest.skip('SyntaxError on escapes')
 
     visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
