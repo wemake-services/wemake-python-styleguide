@@ -20,7 +20,6 @@ from wemake_python_styleguide.types import (
     AnyChainable,
     AnyFor,
     AnyNodes,
-    AnyText,
     AnyWith,
 )
 from wemake_python_styleguide.violations import (
@@ -59,15 +58,15 @@ class WrongStringVisitor(base.BaseNodeVisitor):
         ),
     )
 
-    def visit_any_string(self, node: AnyText) -> None:
+    def visit_any_string(self, node: ast.Constant) -> None:
         """Forbids incorrect usage of strings."""
-        text_data = source.render_string(node.s)
+        text_data = source.render_string(node.value)
         self._check_is_alphabet(node, text_data)
         self.generic_visit(node)
 
     def _check_is_alphabet(
         self,
-        node: AnyText,
+        node: ast.Constant,
         text_data: str | None,
     ) -> None:
         if text_data in self._string_constants:

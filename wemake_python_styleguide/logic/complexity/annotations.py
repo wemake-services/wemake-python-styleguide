@@ -10,7 +10,7 @@ Adapted from: https://github.com/best-doctor/flake8-annotations-complexity
 import ast
 from typing import TypeAlias
 
-_Annotation: TypeAlias = ast.expr | ast.Str
+_Annotation: TypeAlias = ast.expr | ast.Constant
 
 
 def get_annotation_complexity(annotation_node: _Annotation) -> int:
@@ -20,12 +20,15 @@ def get_annotation_complexity(annotation_node: _Annotation) -> int:
     When annotations are written as strings,
     we additionally parse them to ``ast`` nodes.
     """
-    if isinstance(annotation_node, ast.Str):
+    if isinstance(annotation_node, ast.Constant) and isinstance(
+        annotation_node.value,
+        str,
+    ):
         # try to parse string-wrapped annotations
         try:
             annotation_node = (
                 ast.parse(  # type: ignore
-                    annotation_node.s,
+                    annotation_node.value,
                 )
                 .body[0]
                 .value

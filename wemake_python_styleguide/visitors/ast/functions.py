@@ -162,7 +162,7 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
 class FloatingNanCallVisitor(base.BaseNodeVisitor):
     """Ensure that NaN explicitly acquired."""
 
-    _nan_variants = frozenset(('nan', b'nan'))
+    _nan_variants: ClassVar[frozenset[str | bytes]] = frozenset(('nan', b'nan'))
 
     def visit_Call(self, node: ast.Call) -> None:
         """Used to find ``float("NaN")`` calls."""
@@ -170,16 +170,20 @@ class FloatingNanCallVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_floating_nan(self, node: ast.Call) -> None:
-        if len(node.args) != 1:
+        if (
+            not functions.given_function_called(node, 'float')
+            or len(node.args) != 1
+        ):
             return
 
-        if not isinstance(node.args[0], ast.Str | ast.Bytes):
+        first_arg = node.args[0]
+        if not (
+            isinstance(first_arg, ast.Constant)
+            and isinstance(first_arg.value, str | bytes)
+        ):
             return
 
-        if not functions.given_function_called(node, 'float'):
-            return
-
-        if node.args[0].s.lower() in self._nan_variants:
+        if first_arg.value.lower() in self._nan_variants:
             self.add_violation(FloatingNanViolation(node))
 
 

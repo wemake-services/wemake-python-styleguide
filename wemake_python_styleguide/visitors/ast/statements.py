@@ -266,7 +266,7 @@ class PointlessStarredVisitor(BaseNodeVisitor):
         ast.List,
         ast.Set,
         ast.Tuple,
-        *TextNodes,
+        TextNodes,
     )
 
     def visit_Call(self, node: ast.Call) -> None:
@@ -306,7 +306,10 @@ class PointlessStarredVisitor(BaseNodeVisitor):
             return True
 
         for key_node in node.value.keys:
-            if not isinstance(key_node, ast.Str):
+            if not (
+                isinstance(key_node, ast.Constant)
+                and isinstance(key_node.value, str)
+            ):
                 return True
         return False
 
@@ -336,8 +339,10 @@ class WrongNamedKeywordVisitor(BaseNodeVisitor):
             return False
 
         for key_node in node.value.keys:
-            if isinstance(key_node, ast.Str) and not str.isidentifier(
-                key_node.s,
+            if (
+                isinstance(key_node, ast.Constant)
+                and isinstance(key_node.value, str)
+                and not str.isidentifier(key_node.value)
             ):
                 return True
         return False
