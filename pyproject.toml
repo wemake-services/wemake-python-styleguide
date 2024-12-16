@@ -223,8 +223,8 @@ warn_unused_ignores = false
 
 # Strict `@xfail` by default:
 xfail_strict = true
-# Ignore deprecation warnings:
-filterwarnings = ["ignore::DeprecationWarning"]
+# Fail on warnings:
+filterwarnings = ["error"]
 
 addopts = [
   "--strict",
