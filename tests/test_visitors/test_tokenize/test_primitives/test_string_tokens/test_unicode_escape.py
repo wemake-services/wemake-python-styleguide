@@ -18,7 +18,7 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
         r"b'\N{GREEK SMALL LETTER ALPHA}'",
     ],
 )
-def test_wrong_unicode_escape(
+def test_wrong_unicode_escape(  # pragma: >=3.12 cover
     parse_tokens,
     assert_errors,
     default_options,
