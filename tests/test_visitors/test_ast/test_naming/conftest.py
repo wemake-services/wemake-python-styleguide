@@ -256,7 +256,7 @@ _ALL_FIXTURES = frozenset(
     ),
 )
 
-if PY312:
+if PY312:  # pragma: >=3.12 cover
     _ALL_FIXTURES |= {
         type_param_func,
         type_param_func_typevartuple,
@@ -287,7 +287,7 @@ _ATTRIBUTES = (
     )
     | _FOREIGN_NAMING_PATTERNS
 )
-if PY312:
+if PY312:  # pragma: >=3.12 cover
     _ATTRIBUTES |= frozenset(
         (
             # Not really an attribute, but similar:
@@ -337,18 +337,6 @@ _FORBIDDEN_PROTECTED_UNUSED = _FORBIDDEN_BOTH_RAW_AND_PROTECTED_UNUSED | {
 @pytest.fixture(params=_ALL_FIXTURES)
 def naming_template(request):
     """Parametrized fixture that contains all possible naming templates."""
-    return request.param
-
-
-@pytest.fixture(params=_ATTRIBUTES)
-def attribute_template(request):
-    """Parametrized fixture that contains patterns for attributes."""
-    return request.param
-
-
-@pytest.fixture(params=_ALL_FIXTURES - _ATTRIBUTES)
-def non_attribute_template(request):
-    """Fixture that contains all naming templates except attributes."""
     return request.param
 
 

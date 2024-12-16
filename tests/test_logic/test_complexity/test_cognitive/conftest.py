@@ -17,11 +17,11 @@ from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic.complexity import cognitive
 
 
-def _find_function(tree: ast.AST):
+def _find_function(tree: ast.AST) -> FunctionNodes:  # pragma: no cover
     for node in ast.walk(tree):
         if isinstance(node, FunctionNodes):
             return node
-    return None
+    raise ValueError('No function definition found', tree)
 
 
 @pytest.fixture(scope='session')
@@ -30,7 +30,6 @@ def get_code_snippet_complexity(parse_ast_tree):
 
     def factory(src: str) -> int:
         funcdef = _find_function(parse_ast_tree(src))
-        assert funcdef, 'No function definition found'
         return cognitive.cognitive_score(funcdef)
 
     return factory

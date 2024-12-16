@@ -53,14 +53,18 @@ def test_no_exceptions(
     """
     try:
         tree = parse_ast_tree(str(source_code.encode('utf-8-sig')))
-    except (UnicodeEncodeError, SyntaxError, tokenize.TokenError):
+    except (
+        UnicodeEncodeError,
+        SyntaxError,
+        tokenize.TokenError,
+    ):  # pragma: no cover
         reject()
         raise
 
     lines = io.StringIO(source_code)
     try:
         tokens = list(tokenize.generate_tokens(lambda: next(lines)))
-    except tokenize.TokenError:
+    except tokenize.TokenError:  # pragma: no cover
         reject()
         raise
 
