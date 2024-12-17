@@ -30,3 +30,4 @@ else:  # pragma: <3.12 cover
 
         name: ast.Name
         type_params: list[ast.stmt]
+        value: ast.expr  # noqa: WPS110

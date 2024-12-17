@@ -98,6 +98,7 @@ Semantic versioning in our case means:
 - Fixes `WPS469` detecting incorrect names of raised exceptions, #3109
 - Fixes unnormalized pathes in formatter output
 - Fixes `WPS434` to allow reassignment in a form of `x = [y, *x]`
+- Fixes `WPS221` to ignore PEP695's `TypeAlias` from line complexity checks
 
 ### Misc
 
