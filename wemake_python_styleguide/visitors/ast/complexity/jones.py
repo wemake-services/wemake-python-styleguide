@@ -14,6 +14,7 @@ from statistics import median
 from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.compat.nodes import TypeAlias as ast_TypeAlias
 from wemake_python_styleguide.violations.complexity import (
     JonesScoreViolation,
     LineComplexityViolation,
@@ -97,4 +98,6 @@ class JonesComplexityVisitor(BaseNodeVisitor):
     def _maybe_ignore_child(self, node: ast.AST) -> bool:
         if isinstance(node, ast.AnnAssign):
             self._to_ignore.update(ast.walk(node.annotation))
+        if isinstance(node, ast_TypeAlias):
+            self._to_ignore.update(ast.walk(node.value))
         return node in self._to_ignore

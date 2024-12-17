@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY312
 from wemake_python_styleguide.violations.complexity import (
     LineComplexityViolation,
 )
@@ -10,6 +11,7 @@ from wemake_python_styleguide.visitors.ast.complexity.jones import (
 line_simple = 'x = 2'
 line_with_types = 'x: int = 2'
 line_with_complex_types = 'x: Dict[Tuple[str, str, int], Set[List[attr.Val]]]'
+line_with_complex_typealias = 'type Al[X] = Di[Tup[s, s, i], Set[Li[attr.Val]]]'
 line_with_comprehension = 'x = [f for f in "abc"]'
 line_with_math = 'x = y * 2 + 19 / 9.3'
 line_inside_function = """
@@ -76,6 +78,14 @@ regression1216 = 'call.endswith(post) and len(node.args) == self._post[post]'
         class_with_function,
         class_with_async_function,
         class_with_usual_and_async_function,
+        pytest.param(
+            line_with_complex_typealias,
+            marks=[
+                pytest.mark.skipif(
+                    not PY312, reason='PEP695 was added in 3.12'
+                ),
+            ],
+        ),
     ],
 )
 def test_regular_nodes(assert_errors, parse_ast_tree, code, default_options):
@@ -94,6 +104,7 @@ def test_regular_nodes(assert_errors, parse_ast_tree, code, default_options):
         (line_simple, 3),
         (line_with_types, 3),
         (line_with_complex_types, 2),
+        (line_with_complex_typealias, 3),
         (line_with_comprehension, 6),
         (line_with_math, 9),
         (line_inside_function, 4),
@@ -112,6 +123,8 @@ def test_complex_lines(
     options,
 ):
     """Testing that complex lines do raise violations."""
+    if code == line_with_complex_typealias and not PY312:  # pragma: no cover
+        pytest.skip('PEP695 was added in 3.12')
     tree = parse_ast_tree(code)
 
     option_values = options(max_line_complexity=1)
