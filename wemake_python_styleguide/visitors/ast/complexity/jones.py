@@ -98,6 +98,6 @@ class JonesComplexityVisitor(BaseNodeVisitor):
     def _maybe_ignore_child(self, node: ast.AST) -> bool:
         if isinstance(node, ast.AnnAssign):
             self._to_ignore.update(ast.walk(node.annotation))
-        if isinstance(node, ast_TypeAlias):
+        if isinstance(node, ast_TypeAlias):  # pragma: >=3.12 cover
             self._to_ignore.update(ast.walk(node.value))
         return node in self._to_ignore
