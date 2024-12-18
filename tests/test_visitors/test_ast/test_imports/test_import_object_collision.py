@@ -2,6 +2,7 @@ import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
     ImportObjectCollisionViolation,
+    NestedImportViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
     LocalFolderImportViolation,
@@ -43,10 +44,10 @@ from ...sub import name as alias2
 
 regression2962 = """
 def first():
-    from a import b
+    from package import sub
 
 def second():
-    from a import b
+    from package import sub
 """
 
 # Wrong:
@@ -100,7 +101,14 @@ def test_correct_imports(
     visitor = WrongImportVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [], ignored_types=(LocalFolderImportViolation,))
+    assert_errors(
+        visitor,
+        [],
+        ignored_types=(
+            LocalFolderImportViolation,
+            NestedImportViolation,
+        ),
+    )
 
 
 @pytest.mark.parametrize(
