@@ -499,7 +499,7 @@ my_print(numbers in [])  # noqa: WPS510
 if numbers:
     my_print('first')
 else:
-    if numbers:  # noqa: WPS513
+    if numbers == [1, 2]:  # noqa: WPS513
         my_print('other')
 
 def sync_gen():
