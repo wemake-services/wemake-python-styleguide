@@ -2,7 +2,7 @@ import ast
 from typing import Final
 
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
-from wemake_python_styleguide.logic.nodes import get_parent
+from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.source import node_to_string
 
 #: That's what we expect from `@overload` decorator:
@@ -81,6 +81,8 @@ def is_import_in_try(node: ast.AST) -> bool:
 
     """
     if not isinstance(node, ast.Import | ast.ImportFrom):
+        return False
+    if get_context(node) is not None:
         return False
     return isinstance(
         get_parent(node),

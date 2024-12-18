@@ -41,6 +41,14 @@ except* ImportError:
     some_thing = None
 """
 
+nested_try_import_in_function = """
+def function():
+    try:
+        from missing import some_thing
+    except* ImportError:
+        some_thing = None
+"""
+
 # Correct imports:
 
 regular_import = 'import os'
@@ -74,6 +82,7 @@ except ImportError:
         nested_method_from_import,
         nested_conditional_import,
         nested_try_star_import,
+        nested_try_import_in_function,
     ],
 )
 def test_nested_import(assert_errors, parse_ast_tree, code, default_options):
