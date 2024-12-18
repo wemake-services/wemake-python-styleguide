@@ -45,7 +45,15 @@ nested_try_import_in_function = """
 def function():
     try:
         from missing import some_thing
-    except* ImportError:
+    except ImportError:
+        some_thing = None
+"""
+
+nested_try_star_import_in_function = """
+def function():
+    try:
+        from missing import some_thing
+    except ImportError:
         some_thing = None
 """
 
@@ -83,6 +91,7 @@ except ImportError:
         nested_conditional_import,
         nested_try_star_import,
         nested_try_import_in_function,
+        nested_try_star_import_in_function,
     ],
 )
 def test_nested_import(assert_errors, parse_ast_tree, code, default_options):
