@@ -99,6 +99,7 @@ Semantic versioning in our case means:
 - Fixes unnormalized pathes in formatter output
 - Fixes `WPS434` to allow reassignment in a form of `x = [y, *x]`
 - Fixes `WPS221` to ignore PEP695's `TypeAlias` from line complexity checks
+- Fixes `WPS474` to only count import collisions in the same context, #2962
 
 ### Misc
 

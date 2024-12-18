@@ -2,6 +2,7 @@ import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
     ImportObjectCollisionViolation,
+    NestedImportViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
     LocalFolderImportViolation,
@@ -41,6 +42,14 @@ from ..sub import name as alias1
 from ...sub import name as alias2
 """
 
+regression2962 = """
+def first():
+    from package import sub
+
+def second():
+    from package import sub
+"""
+
 # Wrong:
 
 colliding_object_import1 = """
@@ -77,6 +86,7 @@ from ...package import sub as alias
         correct_same_module_imports,
         correct_dot_imports,
         correct_relative_imports,
+        regression2962,
     ],
 )
 def test_correct_imports(
@@ -91,7 +101,14 @@ def test_correct_imports(
     visitor = WrongImportVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [], ignored_types=(LocalFolderImportViolation,))
+    assert_errors(
+        visitor,
+        [],
+        ignored_types=(
+            LocalFolderImportViolation,
+            NestedImportViolation,
+        ),
+    )
 
 
 @pytest.mark.parametrize(
@@ -117,5 +134,5 @@ def test_imports_collision(
     assert_errors(
         visitor,
         [ImportObjectCollisionViolation],
-        ignored_types=(LocalFolderImportViolation,),
+        ignored_types=LocalFolderImportViolation,
     )
