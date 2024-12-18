@@ -88,10 +88,10 @@ def is_import_in_try(node: ast.AST) -> bool:
         return False
     # We don't use `ast.TryStar` here because it is not a common
     # pattern to have imports in `try/except*` blocks.
-    if (
-        isinstance(parent, ast.ExceptHandler)
-        and isinstance(get_parent(parent), TryStar)
-    ):  # pragma: <3.11 no cover
+    is_nested_in_try_star = isinstance(
+        parent, ast.ExceptHandler
+    ) and isinstance(get_parent(parent), TryStar)
+    if is_nested_in_try_star:  # pragma: <3.11 no cover
         return False
     # We still require imports to be top-level:
     return isinstance(get_context(parent), ast.Module)
