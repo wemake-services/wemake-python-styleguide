@@ -7,10 +7,10 @@ from typing_extensions import final
 
 from wemake_python_styleguide.compat.aliases import ForNodes, WithNodes
 from wemake_python_styleguide.compat.types import NamedMatch
+from wemake_python_styleguide.logic import walk
 from wemake_python_styleguide.logic.naming.name_nodes import flat_variable_names
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.scopes import defs, predicates
-from wemake_python_styleguide.logic import walk
 from wemake_python_styleguide.types import (
     AnyAssignWithWalrus,
     AnyFor,
