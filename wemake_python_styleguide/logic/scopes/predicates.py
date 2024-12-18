@@ -2,7 +2,8 @@ import ast
 from typing import Final
 
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
-from wemake_python_styleguide.logic.nodes import get_parent
+from wemake_python_styleguide.compat.nodes import TryStar
+from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.source import node_to_string
 
 #: That's what we expect from `@overload` decorator:
@@ -67,3 +68,30 @@ def is_same_try_except_cases(node: ast.AST, names: set[str]) -> bool:
         ):
             return True
     return False
+
+
+def is_import_in_try(node: ast.AST) -> bool:
+    """
+    Same import names in `try` / `except` block should be ignored.
+
+    Example:
+        try:
+            from typing import Final
+        except ImportError:
+            from typing_extensions import Final
+
+    """
+    if not isinstance(node, ast.Import | ast.ImportFrom):
+        return False
+    parent = get_parent(node)
+    if not isinstance(parent, ast.Try | ast.ExceptHandler):
+        return False
+    # We don't use `ast.TryStar` here because it is not a common
+    # pattern to have imports in `try/except*` blocks.
+    is_nested_in_try_star = isinstance(
+        parent, ast.ExceptHandler
+    ) and isinstance(get_parent(parent), TryStar)
+    if is_nested_in_try_star:  # pragma: no cover
+        return False
+    # We still require imports to be top-level:
+    return isinstance(get_context(parent), ast.Module)

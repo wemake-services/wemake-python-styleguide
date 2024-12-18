@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY311
 from wemake_python_styleguide.violations.best_practices import (
     BlockAndLocalOverlapViolation,
 )
@@ -110,6 +111,28 @@ try:
     ...
 except Exception as e:
     ...
+"""
+
+regression2382 = """
+try:
+    from typing import Final
+except ImportError:
+    from typing_extensions import Final
+"""
+
+regression2382_trystar = """
+try:
+    from typing import Final
+except* ImportError:
+    from typing_extensions import Final
+"""
+
+regression2382_in_function = """
+def function():
+    try:
+        from typing import Final
+    except ImportError:
+        from typing_extensions import Final
 """
 
 
@@ -270,6 +293,9 @@ def test_except_block_correct(
     ('code', 'violations'),
     [
         (correct_except_regression1115, []),
+        (regression2382, []),
+        (regression2382_trystar, [BlockAndLocalOverlapViolation]),
+        (regression2382_in_function, [BlockAndLocalOverlapViolation]),
         (wrong_except_regression1115, [BlockAndLocalOverlapViolation]),
     ],
 )
@@ -279,13 +305,15 @@ def test_except_block_regression1115(
     code,
     violations,
     default_options,
-):
+):  # pragma: >=3.11 cover
     """
     Ensures using variables is fine.
 
     See:
     https://github.com/wemake-services/wemake-python-styleguide/issues/1115
     """
+    if code == regression2382_trystar and not PY311:  # pragma: no cover
+        pytest.skip(reason='ExceptionGroups were added in 3.11')
     tree = parse_ast_tree(code)
 
     visitor = BlockVariableVisitor(default_options, tree=tree)
