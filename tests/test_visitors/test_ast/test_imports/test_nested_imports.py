@@ -34,13 +34,6 @@ class Test:
         from os import path
 """
 
-nested_try_import = """
-try:
-    from missing import some_thing
-except ImportError:
-    some_thing = None
-"""
-
 nested_try_star_import = """
 try:
     from missing import some_thing
@@ -60,6 +53,13 @@ if TYPE_CHECKING:
 typing_type_checking_import = """
 if typing.TYPE_CHECKING:
     from core.violations import Error
+"""
+
+nested_try_import = """
+try:
+    from missing import some_thing
+except ImportError:
+    some_thing = None
 """
 
 
