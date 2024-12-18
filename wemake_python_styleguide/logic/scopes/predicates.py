@@ -91,7 +91,7 @@ def is_import_in_try(node: ast.AST) -> bool:
     if (
         isinstance(parent, ast.ExceptHandler)
         and isinstance(get_parent(parent), TryStar)
-    ):
-        return False  # pragma: <3.11 no cover
+    ):  # pragma: <3.11 no cover
+        return False
     # We still require imports to be top-level:
     return isinstance(get_context(parent), ast.Module)
