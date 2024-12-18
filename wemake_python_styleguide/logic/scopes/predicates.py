@@ -82,11 +82,13 @@ def is_import_in_try(node: ast.AST) -> bool:
     """
     if not isinstance(node, ast.Import | ast.ImportFrom):
         return False
-    if get_context(node) is not None:
-        return False
-    return isinstance(
-        get_parent(node),
+    parent = get_parent(node)
+    if not isinstance(
+        parent,
         # We don't use `ast.TryStar` here because it is not a common
         # pattern to have imports in `try/except*` blocks.
         ast.Try | ast.ExceptHandler,
-    )
+    ):
+        return False
+    # We still require imports to be top-level:
+    return isinstance(get_context(parent), ast.Module)
