@@ -91,6 +91,8 @@ class BuiltinSubclassViolation(ASTViolation):
 
     .. versionadded:: 0.10.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 1.0.0
+       Allows subclassing builtins in ``enum.Enum`` definitions.
 
     """
 
@@ -143,6 +145,9 @@ class ShadowedClassAttributeViolation(ASTViolation):
     .. versionadded:: 0.10.0
     .. versionchanged:: 0.11.0
     .. versionchanged:: 0.14.0
+    .. versionchanged:: 1.0.0
+       Allow to shadow class attribute names in ``@dataclass`` classes.
+
     .. _mypyc: https://github.com/python/mypy/tree/master/mypyc
 
     """

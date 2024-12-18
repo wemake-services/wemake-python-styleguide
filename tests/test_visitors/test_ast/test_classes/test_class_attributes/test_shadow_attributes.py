@@ -48,6 +48,24 @@ class ClassWithAttrs:
         self.{1} = 2
 """
 
+class_with_unrelated_decorator1 = """
+@not_a_dataclass
+class ClassWithAttrs:
+    {0}: int = 0
+
+    def __post_init__(self) -> None:
+        self.{1} = 2
+"""
+
+class_with_unrelated_decorator2 = """
+@not_dataclasses[0]
+class ClassWithAttrs:
+    {0}: int = 0
+
+    def __post_init__(self) -> None:
+        self.{1} = 2
+"""
+
 # Safe:
 
 class_annotation = """
@@ -98,6 +116,24 @@ class ClassWithAttrs:
         self.{1} = 2
 """
 
+class_with_dataclass_decorator1 = """
+@dataclass
+class ClassWithAttrs:
+    {0}: int = 0
+
+    def __post_init__(self) -> None:
+        self.{1} = 2
+"""
+
+class_with_dataclass_decorator2 = """
+@dataclass(slots=True)
+class ClassWithAttrs:
+    {0}: int = 0
+
+    def __post_init__(self) -> None:
+        self.{1} = 2
+"""
+
 regular_assigns = """
 {0} = 0
 {1} = 2
@@ -112,6 +148,8 @@ regular_assigns = """
         class_attribute_runtime,
         class_attribute_annotated,
         class_attribute_logic,
+        class_with_unrelated_decorator1,
+        class_with_unrelated_decorator2,
     ],
 )
 @pytest.mark.parametrize(
@@ -154,6 +192,10 @@ def test_incorrect_fields(
         class_attribute_logic,
         class_attribute_regular_assign,
         class_attribute_with_other,
+        class_with_unrelated_decorator1,
+        class_with_unrelated_decorator2,
+        class_with_dataclass_decorator1,
+        class_with_dataclass_decorator2,
         regular_assigns,
     ],
 )
@@ -191,6 +233,8 @@ def test_correct_fields(
         regular_assigns,
         class_complex_attribute,
         class_complex_attribute_annotated,
+        class_with_dataclass_decorator1,
+        class_with_dataclass_decorator2,
     ],
 )
 @pytest.mark.parametrize(

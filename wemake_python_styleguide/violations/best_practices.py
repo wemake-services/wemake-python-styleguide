@@ -946,6 +946,8 @@ class WrongKeywordViolation(ASTViolation):
         ``global`` and ``nonlocal`` usages should be refactored.
 
     .. versionadded:: 0.1.0
+    .. versionchanged:: 1.0.0
+       Allows ``pass`` in ``case`` bodies.
 
     """
 
@@ -1430,6 +1432,8 @@ class NestedImportViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 1.0.0
+       Allows nested imports in ``try: except:`` block on top level.
 
     See also:
         https://github.com/seddonym/layer_linter
@@ -1680,6 +1684,8 @@ class BlockAndLocalOverlapViolation(ASTViolation):
         https://github.com/satwikkansal/wtfPython#-explanation-20
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 1.0.0
+       Allows nested imports in ``try: except:`` block on top level.
 
     """
 
@@ -1722,6 +1728,8 @@ class ControlVarUsedAfterBlockViolation(ASTViolation):
 
     .. versionadded:: 0.12.0
     .. versionchanged:: 0.14.0
+    .. versionchanged:: 1.0.0
+       Allows using variables after blocks in ``assert`` statements.
 
     """
 

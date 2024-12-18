@@ -155,24 +155,24 @@ class ConsistentReturningVisitor(BaseNodeVisitor):
 
 
 @final
+@alias(
+    'visit_forbidden_keyword',
+    (
+        'visit_Pass',
+        'visit_Delete',
+        'visit_Global',
+        'visit_Nonlocal',
+    ),
+)
 class WrongKeywordVisitor(BaseNodeVisitor):
     """Finds wrong keywords."""
 
-    _forbidden_keywords: ClassVar[AnyNodes] = (
-        ast.Pass,
-        ast.Delete,
-        ast.Global,
-        ast.Nonlocal,
-    )
-
-    def visit(self, node: ast.AST) -> None:
+    def visit_forbidden_keyword(self, node: ast.AST) -> None:
         """Used to find wrong keywords."""
         self._check_keyword(node)
         self.generic_visit(node)
 
     def _check_keyword(self, node: ast.AST) -> None:
-        if not isinstance(node, self._forbidden_keywords):
-            return
         if isinstance(node, ast.Pass) and walk.get_closest_parent(
             node, ast.match_case
         ):

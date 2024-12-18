@@ -384,6 +384,8 @@ class TooManyArgumentsViolation(ASTViolation):
         Default: :str:`wemake_python_styleguide.options.defaults.MAX_ARGUMENTS`
 
     .. versionadded:: 0.1.0
+    .. versionchanged:: 1.0.0
+       Does not count special ``self``, ``cls``, and ``mcs`` as parameters.
 
     """
 
