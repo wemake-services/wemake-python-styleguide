@@ -43,6 +43,13 @@ def wrapper():
     print(wrapper)
 """
 
+correct_for_loop6 = """
+def wrapper():
+    for i in ():
+        ...
+    assert i == 0
+"""
+
 correct_for_multi_loops = """
 def wrapper():
     for my_var in range(3):
@@ -155,6 +162,14 @@ def other():
     print(first)
 """
 
+correct_with4 = """
+def wrapper():
+    with open() as (first, second):
+        ...
+    assert first
+    assert second
+"""
+
 # Wrong:
 
 wrong_for_loop1 = """
@@ -246,6 +261,7 @@ def test_control_variable_used_after_block(
         correct_for_loop3,
         correct_for_loop4,
         correct_for_loop5,
+        correct_for_loop6,
         correct_for_multi_loops,
         correct_for_comprehension1,
         correct_for_comprehension2,
@@ -259,6 +275,7 @@ def test_control_variable_used_after_block(
         correct_with1,
         correct_with2,
         correct_with3,
+        correct_with4,
     ],
 )
 def test_control_variable_used_correctly(
