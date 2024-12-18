@@ -10,7 +10,7 @@ from wemake_python_styleguide.compat.types import NamedMatch
 from wemake_python_styleguide.logic.naming.name_nodes import flat_variable_names
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.scopes import defs, predicates
-from wemake_python_styleguide.logic.walk import is_contained_by
+from wemake_python_styleguide.logic import walk
 from wemake_python_styleguide.types import (
     AnyAssignWithWalrus,
     AnyFor,
@@ -234,10 +234,13 @@ class AfterBlockVariablesVisitor(base.BaseNodeVisitor):
             self._block_variables[context][var_name].append(node)
 
     def _check_variable_usage(self, node: ast.Name) -> None:
+        if walk.get_closest_parent(node, ast.Assert):
+            return  # Allow any names to be used in `assert` statements
+
         context = cast(ast.AST, get_context(node))
         blocks = self._block_variables[context][node.id]
         is_contained_block_var = any(
-            is_contained_by(node, block) for block in blocks
+            walk.is_contained_by(node, block) for block in blocks
         )
         # Restrict the use of block variables with the same name to
         # the same type of block - either `for` or `with`.

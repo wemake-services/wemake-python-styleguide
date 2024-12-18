@@ -80,6 +80,7 @@ Semantic versioning in our case means:
 - Allows any compares in `assert` statements for `WPS520`, #3112
 - Allows walrus operator (`:=`) in comprehesions #3121
 - Allows `pass` in `case` bodies, #2642
+- Allows using variables after blocks for `WPS441` in `assert` statements, #2543
 - Does not count `self`, `cls`, and `mcs` as arguments
   for `WPS211` complexity check anymore, #2394
 - `WPS303`: Underscore (`_`) now only allowed with 3 digits after it, #3120
