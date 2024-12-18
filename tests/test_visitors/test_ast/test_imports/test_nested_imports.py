@@ -46,10 +46,12 @@ except* ImportError:
 regular_import = 'import os'
 regular_from_import = 'from os import path'
 regular_nested_import = 'from core.violations import Error'
+
 type_checking_import = """
 if TYPE_CHECKING:
     from core.violations import Error
 """
+
 typing_type_checking_import = """
 if typing.TYPE_CHECKING:
     from core.violations import Error
