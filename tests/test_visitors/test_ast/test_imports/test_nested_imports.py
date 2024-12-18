@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY311
 from wemake_python_styleguide.violations.best_practices import (
     NestedImportViolation,
 )
@@ -89,9 +90,23 @@ except ImportError:
         nested_method_import,
         nested_method_from_import,
         nested_conditional_import,
-        nested_try_star_import,
+        pytest.param(
+            nested_try_star_import,
+            marks=[
+                pytest.mark.skipif(
+                    not PY311, reason='ExceptionGroups were added in 3.11'
+                )
+            ],
+        ),
         nested_try_import_in_function,
-        nested_try_star_import_in_function,
+        pytest.param(
+            nested_try_star_import_in_function,
+            marks=[
+                pytest.mark.skipif(
+                    not PY311, reason='ExceptionGroups were added in 3.11'
+                )
+            ],
+        ),
     ],
 )
 def test_nested_import(assert_errors, parse_ast_tree, code, default_options):
