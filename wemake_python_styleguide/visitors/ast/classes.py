@@ -9,7 +9,7 @@ from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.logic import nodes, source, walk
 from wemake_python_styleguide.logic.arguments import function_args, super_args
-from wemake_python_styleguide.logic.naming import access, name_nodes
+from wemake_python_styleguide.logic.naming import access, enums, name_nodes
 from wemake_python_styleguide.logic.tree import (
     attributes,
     classes,
@@ -77,7 +77,9 @@ class WrongClassDefVisitor(base.BaseNodeVisitor):
 
         if id_attr == 'BaseException':
             self.add_violation(bp.BaseExceptionSubclassViolation(node))
-        elif classes.is_forbidden_super_class(id_attr):
+        elif classes.is_forbidden_super_class(
+            id_attr,
+        ) and not enums.has_enum_base(node):
             self.add_violation(
                 oop.BuiltinSubclassViolation(node, text=id_attr),
             )
