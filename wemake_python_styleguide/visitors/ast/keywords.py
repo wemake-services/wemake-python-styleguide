@@ -171,13 +171,19 @@ class WrongKeywordVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_keyword(self, node: ast.AST) -> None:
-        if isinstance(node, self._forbidden_keywords):
-            if isinstance(node, ast.Delete):
-                message = 'del'
-            else:
-                message = node.__class__.__qualname__.lower()
+        if not isinstance(node, self._forbidden_keywords):
+            return
+        if isinstance(node, ast.Pass) and walk.get_closest_parent(
+            node, ast.match_case
+        ):
+            return  # We allow `pass` in `match: case:`
 
-            self.add_violation(WrongKeywordViolation(node, text=message))
+        if isinstance(node, ast.Delete):
+            message = 'del'
+        else:
+            message = node.__class__.__qualname__.lower()
+
+        self.add_violation(WrongKeywordViolation(node, text=message))
 
 
 @final
