@@ -666,6 +666,11 @@ def foo2_func():
 
 noqa_wps532 = variable is some_thing is other_thing  # noqa: WPS532
 
+if noqa_wps533:  # noqa: WPS533
+    my_print('1')
+elif noqa_wps533:
+    my_print('2')
+
 class Baseline:
     def method(self, number):
         return number + 1

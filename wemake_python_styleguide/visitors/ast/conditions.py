@@ -1,4 +1,5 @@
 import ast
+from collections import Counter
 from collections.abc import Mapping
 from typing import ClassVar, TypeAlias
 
@@ -38,6 +39,7 @@ class IfStatementVisitor(BaseNodeVisitor):
         """Checks ``if`` nodes and expressions."""
         self._check_negated_conditions(node)
         self._check_useless_len(node)
+        self._check_repeated_conditions(node)
         self.generic_visit(node)
 
     def _check_negated_conditions(self, node: AnyIf) -> None:
@@ -58,6 +60,24 @@ class IfStatementVisitor(BaseNodeVisitor):
             {'len'},
         ):
             self.add_violation(refactoring.UselessLenCompareViolation(node))
+
+    def _check_repeated_conditions(self, node: AnyIf) -> None:
+        if not isinstance(node, ast.If):
+            return
+
+        conditions = [
+            ast.unparse(chained.test)
+            for chained in ifs.chain(node)
+            if isinstance(chained, ast.If)
+        ]
+        for condition, times in Counter(conditions).items():
+            if times > 1:
+                self.add_violation(
+                    refactoring.DuplicateIfConditionViolation(
+                        node,
+                        text=condition,
+                    )
+                )
 
 
 @final

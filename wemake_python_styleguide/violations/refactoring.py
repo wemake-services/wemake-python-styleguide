@@ -46,6 +46,7 @@ Summary
    ImplicitNegativeIndexViolation
    SimplifiableReturningIfViolation
    ChainedIsViolation
+   DuplicateIfConditionViolation
 
 Refactoring opportunities
 -------------------------
@@ -83,6 +84,7 @@ Refactoring opportunities
 .. autoclass:: ImplicitNegativeIndexViolation
 .. autoclass:: SimplifiableReturningIfViolation
 .. autoclass:: ChainedIsViolation
+.. autoclass:: DuplicateIfConditionViolation
 
 """
 
@@ -1286,3 +1288,37 @@ class ChainedIsViolation(ASTViolation):
 
     error_template = 'Found chained `is` operators in an expression'
     code = 532
+
+
+@final
+class DuplicateIfConditionViolation(ASTViolation):
+    """
+    Forbid having duplicate conditions in several ``if`` // ``elif`` branches.
+
+    Reasoning:
+        It is likely an error to have multiple same condition
+        in ``if`` / ``elif`` statements. Only the first one will always work.
+
+    Solution:
+        Change the condition.
+
+    Example::
+
+        # Correct:
+        if something:
+            ...
+        elif other:
+            ...
+
+        # Wrong:
+        if something:
+            ...
+        elif something:
+            ...
+
+    .. versionadded:: 1.0.0
+
+    """
+
+    error_template = 'Found duplicate condition in `if`: {0}'
+    code = 533

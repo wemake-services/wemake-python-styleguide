@@ -79,12 +79,13 @@ Semantic versioning in our case means:
 - Adds a new rule to find too many PEP695 type params
 - Allows any compares in `assert` statements for `WPS520`, #3112
 - Allows walrus operator (`:=`) in comprehesions #3121
-- Allows `pass` in `case` bodies
+- Allows `pass` in `case` bodies, #2642
 - Does not count `self`, `cls`, and `mcs` as arguments
   for `WPS211` complexity check anymore, #2394
 - `WPS303`: Underscore (`_`) now only allowed with 3 digits after it, #3120
 - Adds new rule to forbid `lambda` assigns to special attributes, #1733
 - Adds new rule to check problematic function params, #1343
+- Adds new rule to detect duplicate conditions in `if`s and `elif`s, #2241
 - Adds support to run `wemake-python-styleguide` as a `pre-commit` hook, #2588
 - GitHub Action can now use `cwd:` parameter to specify
   where your configuration file is, #2474
