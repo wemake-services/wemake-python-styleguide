@@ -85,6 +85,10 @@ Semantic versioning in our case means:
 - Adds new rule to forbid `lambda` assigns to special attributes, #1733
 - Adds new rule to check problematic function params, #1343
 - Adds support to run `wemake-python-styleguide` as a `pre-commit` hook, #2588
+- GitHub Action can now use `cwd:` parameter to specify
+  where your configuration file is, #2474
+- GitHub Action can now use `fail_workflow:` parameter to not fail
+  the workflow even if the check did find any issues
 
 ### Bugfixes
 

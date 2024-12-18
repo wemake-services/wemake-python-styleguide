@@ -1,16 +1,28 @@
 #!/bin/bash
 
-# Default values:
-: "${INPUT_REPORTER:='terminal'}"
+# Passed args from GitHub Actions:
 : "${INPUT_PATH:=$1}"
+: "${INPUT_CWD:=$2}"
+: "${INPUT_REPORTER:=$3}"
+: "${INPUT_FAIL_WORKFLOW:=$4}"
+
+# Default values, needed because `Dockerfile` can be used directly:
+# These values must match ones in `action.yml`!
+: "${INPUT_PATH:='.'}"
+: "${INPUT_CWD:='.'}"
+: "${INPUT_REPORTER:='terminal'}"
+: "${INPUT_FAIL_WORKFLOW:=1}"
 
 # Diagnostic output:
 echo "Using reporter: $INPUT_REPORTER"
+echo "Using cwd: $INPUT_CWD"
 echo "Linting path: $INPUT_PATH"
 echo 'flake8 --version:'
 flake8 --version
 echo '================================='
 echo
+
+cd "$INPUT_CWD"
 
 # Runs `flake8`, possibly with `reviewdog`:
 if [ "$INPUT_REPORTER" == 'terminal' ]; then
@@ -41,5 +53,11 @@ echo
 if [ "$status" != 0 ]; then
   echo "$output"
   echo "Process failed with the status code: $status"
-  exit "$status"
+  # Now, after reporting what the status code was, if `fail_workflow` is `1`,
+  # fail the workflow. Otherwise, always `exit` with `0`.
+  if [ "$INPUT_FAIL_WORKFLOW" = 1 ]; then
+    exit "$status"
+  else
+    exit 0
+  fi
 fi
