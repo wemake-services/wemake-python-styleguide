@@ -26,9 +26,9 @@ dict_template4 = '{{ {0}: 1, other: value }}'
         '1.0',
         '-0.3',
         '+0.0',
-        '1 / 3',
-        '-1 - 0.5',
-        '0 + 0.1',
+        '1e-1',
+        '-1e1',
+        '0.0',
     ],
 )
 def test_dict_with_float_key(

@@ -2019,6 +2019,9 @@ class FloatKeyViolation(ASTViolation):
         some[1.0]
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 1.0.0
+       Does not eval nodes anymore to get ``float`` instances
+       from math operations. It was slow and not very helpful.
 
     """
 
