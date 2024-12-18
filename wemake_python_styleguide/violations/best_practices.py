@@ -1488,7 +1488,7 @@ class ListMultiplyViolation(ASTViolation):
         my_list = [1, 2, 3] * 3
 
     See also:
-        https://github.com/satwikkansal/wtfPython#-explanation-12
+        https://github.com/satwikkansal/wtfPython#-a-tic-tac-toe-where-x-wins-in-the-first-attempt
 
     .. versionadded:: 0.12.0
 
