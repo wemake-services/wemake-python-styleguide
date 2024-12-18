@@ -9,6 +9,7 @@ from typing_extensions import final
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming import access
+from wemake_python_styleguide.logic.scopes import predicates
 from wemake_python_styleguide.logic.tree import imports
 from wemake_python_styleguide.types import AnyImport, ConfigurationOptions
 from wemake_python_styleguide.violations.base import ErrorCallback
@@ -55,6 +56,7 @@ class _BaseImportValidator:
             parent is not None
             and not isinstance(parent, ast.Module)
             and not imports.is_nested_typing_import(parent)
+            and not predicates.is_import_in_try(node)
         ):
             self._error_callback(NestedImportViolation(node))
 

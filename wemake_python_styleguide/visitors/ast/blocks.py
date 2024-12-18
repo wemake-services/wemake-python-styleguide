@@ -97,6 +97,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
         lambda node, names: predicates.is_property_setter(node),
         predicates.is_same_value_reuse,
         predicates.is_same_try_except_cases,
+        lambda node, names: predicates.is_import_in_try(node),
     )
 
     # Blocks:

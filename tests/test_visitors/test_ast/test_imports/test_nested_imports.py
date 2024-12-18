@@ -64,7 +64,6 @@ if typing.TYPE_CHECKING:
         nested_method_import,
         nested_method_from_import,
         nested_conditional_import,
-        nested_try_import,
     ],
 )
 def test_nested_import(assert_errors, parse_ast_tree, code, default_options):
@@ -85,6 +84,7 @@ def test_nested_import(assert_errors, parse_ast_tree, code, default_options):
         regular_nested_import,
         type_checking_import,
         typing_type_checking_import,
+        nested_try_import,
     ],
 )
 def test_regular_imports(assert_errors, parse_ast_tree, code, default_options):

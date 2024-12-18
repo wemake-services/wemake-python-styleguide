@@ -112,6 +112,20 @@ except Exception as e:
     ...
 """
 
+regression2382 = """
+try:
+    from typing import Final
+except ImportError:
+    from typing_extensions import Final
+"""
+
+regression2382_trystar = """
+try:
+    from typing import Final
+except* ImportError:
+    from typing_extensions import Final
+"""
+
 
 @pytest.mark.parametrize(
     'except_statement',
@@ -270,6 +284,8 @@ def test_except_block_correct(
     ('code', 'violations'),
     [
         (correct_except_regression1115, []),
+        (regression2382, []),
+        (regression2382_trystar, [BlockAndLocalOverlapViolation]),
         (wrong_except_regression1115, [BlockAndLocalOverlapViolation]),
     ],
 )

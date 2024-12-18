@@ -67,3 +67,24 @@ def is_same_try_except_cases(node: ast.AST, names: set[str]) -> bool:
         ):
             return True
     return False
+
+
+def is_import_in_try(node: ast.AST) -> bool:
+    """
+    Same import names in `try` / `except` block should be ignored.
+
+    Example:
+        try:
+            from typing import Final
+        except ImportError:
+            from typing_extensions import Final
+
+    """
+    if not isinstance(node, ast.Import | ast.ImportFrom):
+        return False
+    return isinstance(
+        get_parent(node),
+        # We don't use `ast.TryStar` here because it is not a common
+        # pattern to have imports in `try/except*` blocks.
+        ast.Try | ast.ExceptHandler,
+    )
