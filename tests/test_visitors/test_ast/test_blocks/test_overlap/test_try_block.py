@@ -305,7 +305,7 @@ def test_except_block_regression1115(
     code,
     violations,
     default_options,
-):  # pragma: <3.11 no cover
+):  # pragma: >=3.11 cover
     """
     Ensures using variables is fine.
 
