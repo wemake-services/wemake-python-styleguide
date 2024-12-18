@@ -365,6 +365,11 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_attributes_shadowing(self, node: ast.ClassDef) -> None:
+        if classes.is_dataclass(node):
+            # dataclasses by its nature allow class-level attributes
+            # shadowing from instance level.
+            return
+
         class_attributes, instance_attributes = classes.get_attributes(
             node,
             include_annotated=False,

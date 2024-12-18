@@ -1,13 +1,35 @@
 import ast
+from typing import Final, TypeAlias
 
 from wemake_python_styleguide.compat.aliases import AssignNodes
 from wemake_python_styleguide.constants import ALLOWED_BUILTIN_CLASSES
-from wemake_python_styleguide.logic import nodes
+from wemake_python_styleguide.logic import nodes, source
 from wemake_python_styleguide.logic.naming.builtins import is_builtin_name
 from wemake_python_styleguide.types import AnyAssign
 
 #: Type alias for the attributes we return from class inspection.
-_AllAttributes = tuple[list[AnyAssign], list[ast.Attribute]]
+_AllAttributes: TypeAlias = tuple[list[AnyAssign], list[ast.Attribute]]
+
+#: Names that can define a dataclass.
+_DATACLASS_NAMES: Final = frozenset((
+    # stdlib:
+    'dataclasses.dataclass',
+    # attrs:
+    'attrs.define',
+    'attrs.frozen',
+    'attrs.mutable',
+    'attr.s',
+    'attr.attrs',
+    'attr.attributes',
+    'attr.frozen',
+    'attr.mutable',
+    # pydantic also has `dataclass` and `dataclasses.dataclass`
+))
+
+#: Short form of dataclass decorators without module names.
+_SHORT_DATACLASS_NAMES: Final = frozenset(
+    dataclass_name.split('.')[1] for dataclass_name in _DATACLASS_NAMES
+)
 
 
 def is_forbidden_super_class(class_name: str | None) -> bool:
@@ -38,6 +60,24 @@ def is_forbidden_super_class(class_name: str | None) -> bool:
     if class_name in ALLOWED_BUILTIN_CLASSES:
         return False
     return is_builtin_name(class_name)
+
+
+def is_dataclass(node: ast.ClassDef) -> bool:
+    """Checks if some class is defined as a dataclass using popular libs."""
+    for decorator in node.decorator_list:
+        if isinstance(decorator, ast.Call):
+            decorator = decorator.func
+
+        if not isinstance(decorator, ast.Name | ast.Attribute):
+            continue
+
+        decorator_code = source.node_to_string(decorator)
+        if (
+            decorator_code in _DATACLASS_NAMES
+            or decorator_code in _SHORT_DATACLASS_NAMES
+        ):
+            return True
+    return False
 
 
 def get_attributes(

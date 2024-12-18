@@ -883,6 +883,7 @@ class FalsyConstantCompareViolation(ASTViolation):
 
     .. versionadded:: 0.12.0
     .. versionchanged:: 1.0.0
+       Allows any compares in ``assert`` statements.
 
     """
 

@@ -288,7 +288,7 @@ class UnderscoredNumberViolation(TokenizeViolation):
 
     .. versionadded:: 0.1.0
     .. versionchanged:: 1.0.0
-       Underscore (_) now only allowed with 3 digits after it
+       Underscore ``_`` is now allowed with exactly 3 digits after it.
 
     """
 
@@ -1453,6 +1453,8 @@ class WalrusViolation(ASTViolation):
             print(some)
 
     .. versionadded:: 0.14.0
+    .. versionchanged:: 1.0.0
+       Allows ``:=`` inside comprehensions.
 
     """
 
