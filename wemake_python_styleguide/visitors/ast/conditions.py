@@ -66,7 +66,7 @@ class IfStatementVisitor(BaseNodeVisitor):
             return
 
         conditions = [
-            ast.unparse(chained.test)
+            source.node_to_string(chained.test)
             for chained in ifs.chain(node)
             if isinstance(chained, ast.If)
         ]

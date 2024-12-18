@@ -4,6 +4,7 @@ from typing import Final, TypeAlias
 
 import pytest
 
+from wemake_python_styleguide.logic.source import node_to_string
 from wemake_python_styleguide.violations.base import (
     ASTViolation,
     BaseViolation,
@@ -19,7 +20,7 @@ _ERROR_FORMAT: Final = ': {0}'
 
 def _produce_error_message(visitor: BaseVisitor) -> str:  # pragma: no cover
     if isinstance(visitor, BaseNodeVisitor):
-        return ast.unparse(visitor.tree)
+        return node_to_string(visitor.tree)
     return ''
 
 
