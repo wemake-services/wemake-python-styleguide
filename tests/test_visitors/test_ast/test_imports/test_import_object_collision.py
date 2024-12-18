@@ -41,6 +41,14 @@ from ..sub import name as alias1
 from ...sub import name as alias2
 """
 
+regression2962 = """
+def first():
+    from a import b
+
+def second():
+    from a import b
+"""
+
 # Wrong:
 
 colliding_object_import1 = """
@@ -77,6 +85,7 @@ from ...package import sub as alias
         correct_same_module_imports,
         correct_dot_imports,
         correct_relative_imports,
+        regression2962,
     ],
 )
 def test_correct_imports(
@@ -117,5 +126,5 @@ def test_imports_collision(
     assert_errors(
         visitor,
         [ImportObjectCollisionViolation],
-        ignored_types=(LocalFolderImportViolation,),
+        ignored_types=LocalFolderImportViolation,
     )

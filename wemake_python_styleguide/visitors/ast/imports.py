@@ -2,7 +2,7 @@ import ast
 from collections import defaultdict
 from collections.abc import Iterable
 from itertools import chain, product
-from typing import Final
+from typing import Final, TypeAlias
 
 from typing_extensions import final
 
@@ -30,6 +30,8 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 #: We use `.` to separate module names.
 _MODULE_MEMBERS_SEPARATOR: Final = '.'
+
+_NameAndContext: TypeAlias = tuple[str, ast.AST | None]
 
 
 class _BaseImportValidator:
@@ -154,7 +156,7 @@ class _ImportCollisionValidator:
         self._imported_names: list[imports.ImportedObjectInfo] = []
         # This helps us to detect cases like:
         # `from x import y, y as z`
-        self._imported_objects: defaultdict[str, set[str]] = defaultdict(set)
+        self._imported_objects: defaultdict[_NameAndContext, set[str]] = defaultdict(set)
 
     def validate(self) -> None:
         """Validates that there are no intersecting imported modules."""
@@ -188,11 +190,12 @@ class _ImportCollisionValidator:
         """Extract info needed for validation from ``ast.ImportFrom``."""
         for alias in node.names:
             identifier = imports.get_module_name(node)
-            if alias.name in self._imported_objects[identifier]:
+            context = nodes.get_context(node)
+            if alias.name in self._imported_objects[(identifier, context)]:
                 self._error_callback(
                     ImportObjectCollisionViolation(node, alias.name),
                 )
-            self._imported_objects[identifier].add(alias.name)
+            self._imported_objects[(identifier, context)].add(alias.name)
 
             if not alias.asname:
                 self._imported_names.append(
