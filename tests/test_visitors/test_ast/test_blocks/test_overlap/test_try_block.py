@@ -312,7 +312,7 @@ def test_except_block_regression1115(
     See:
     https://github.com/wemake-services/wemake-python-styleguide/issues/1115
     """
-    if code == regression2382_trystar and not PY311:  # pragma: >=3.11 no cover
+    if code == regression2382_trystar and not PY311:  # pragma: no cover
         pytest.skip(reason='ExceptionGroups were added in 3.11')
     tree = parse_ast_tree(code)
 

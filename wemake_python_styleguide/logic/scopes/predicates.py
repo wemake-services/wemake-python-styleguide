@@ -2,6 +2,7 @@ import ast
 from typing import Final
 
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
+from wemake_python_styleguide.compat.nodes import TryStar
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.source import node_to_string
 
@@ -89,7 +90,7 @@ def is_import_in_try(node: ast.AST) -> bool:
     # pattern to have imports in `try/except*` blocks.
     if isinstance(parent, ast.ExceptHandler) and isinstance(
         get_parent(parent),
-        ast.TryStar,
+        TryStar,
     ):
         return False
     # We still require imports to be top-level:
