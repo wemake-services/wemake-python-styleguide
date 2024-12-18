@@ -82,6 +82,7 @@ Semantic versioning in our case means:
 - Allows `pass` in `case` bodies, #2642
 - Allows subclassing builtins in `WPS600`, when creating an `Enum`, #2506
 - Allows using variables after blocks for `WPS441` in `assert` statements, #2543
+- Allows using nested `import` in `try` for `WPS433` and `WPS440`, #2382
 - Does not count `self`, `cls`, and `mcs` as arguments
   for `WPS211` complexity check anymore, #2394
 - `WPS303`: Underscore (`_`) now only allowed with 3 digits after it, #3120

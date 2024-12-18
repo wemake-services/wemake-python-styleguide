@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY311
 from wemake_python_styleguide.violations.best_practices import (
     NestedImportViolation,
 )
@@ -34,11 +35,27 @@ class Test:
         from os import path
 """
 
-nested_try_import = """
+nested_try_star_import = """
 try:
     from missing import some_thing
-except ImportError:
+except* ImportError:
     some_thing = None
+"""
+
+nested_try_import_in_function = """
+def function():
+    try:
+        from missing import some_thing
+    except ImportError:
+        some_thing = None
+"""
+
+nested_try_star_import_in_function = """
+def function():
+    try:
+        from missing import some_thing
+    except* ImportError:
+        some_thing = None
 """
 
 # Correct imports:
@@ -46,13 +63,22 @@ except ImportError:
 regular_import = 'import os'
 regular_from_import = 'from os import path'
 regular_nested_import = 'from core.violations import Error'
+
 type_checking_import = """
 if TYPE_CHECKING:
     from core.violations import Error
 """
+
 typing_type_checking_import = """
 if typing.TYPE_CHECKING:
     from core.violations import Error
+"""
+
+nested_try_import = """
+try:
+    from missing import some_thing
+except ImportError:
+    some_thing = None
 """
 
 
@@ -64,7 +90,23 @@ if typing.TYPE_CHECKING:
         nested_method_import,
         nested_method_from_import,
         nested_conditional_import,
-        nested_try_import,
+        pytest.param(
+            nested_try_star_import,
+            marks=[
+                pytest.mark.skipif(
+                    not PY311, reason='ExceptionGroups were added in 3.11'
+                )
+            ],
+        ),
+        nested_try_import_in_function,
+        pytest.param(
+            nested_try_star_import_in_function,
+            marks=[
+                pytest.mark.skipif(
+                    not PY311, reason='ExceptionGroups were added in 3.11'
+                )
+            ],
+        ),
     ],
 )
 def test_nested_import(assert_errors, parse_ast_tree, code, default_options):
@@ -85,6 +127,7 @@ def test_nested_import(assert_errors, parse_ast_tree, code, default_options):
         regular_nested_import,
         type_checking_import,
         typing_type_checking_import,
+        nested_try_import,
     ],
 )
 def test_regular_imports(assert_errors, parse_ast_tree, code, default_options):
