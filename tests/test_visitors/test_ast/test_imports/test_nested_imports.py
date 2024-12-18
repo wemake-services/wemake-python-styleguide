@@ -53,7 +53,7 @@ nested_try_star_import_in_function = """
 def function():
     try:
         from missing import some_thing
-    except ImportError:
+    except* ImportError:
         some_thing = None
 """
 
