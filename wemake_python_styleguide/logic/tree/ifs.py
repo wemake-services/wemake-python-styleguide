@@ -6,16 +6,15 @@ _IfAndElifASTNode: TypeAlias = ast.If | list[ast.stmt]
 
 
 def has_else(node: ast.If) -> bool:
-    """Tells if this node or ``if`` chain ends with an ``else`` expression."""
-    last_elem = tuple(chain(node))[-1]
-    return bool(last_elem)
+    """Tells if this node or ``if`` chain ends with an ``else`` statement."""
+    return bool(tuple(chain(node))[-1])
 
 
 def chain(node: ast.If) -> Iterable[_IfAndElifASTNode]:
     """
     Yields the whole chain of ``if`` statements.
 
-    This function also does go not up in the tree
+    This function also does not go up in the tree
     to find all parent ``if`` nodes. The rest order is preserved.
     The first one to return is the node itself.
 

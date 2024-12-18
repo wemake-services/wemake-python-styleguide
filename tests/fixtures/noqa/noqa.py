@@ -499,7 +499,7 @@ my_print(numbers in [])  # noqa: WPS510
 if numbers:
     my_print('first')
 else:
-    if numbers:  # noqa: WPS513
+    if numbers == [1, 2]:  # noqa: WPS513
         my_print('other')
 
 def sync_gen():
@@ -665,6 +665,11 @@ def foo2_func():
     return (1, 2, 3, 4, 5, 6)  # noqa: WPS227
 
 noqa_wps532 = variable is some_thing is other_thing  # noqa: WPS532
+
+if noqa_wps533:  # noqa: WPS533
+    my_print('1')
+elif noqa_wps533:
+    my_print('2')
 
 class Baseline:
     def method(self, number):
