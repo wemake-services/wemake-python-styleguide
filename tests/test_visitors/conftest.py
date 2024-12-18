@@ -1,4 +1,3 @@
-import ast
 from collections.abc import Sequence
 from typing import Final, TypeAlias
 
