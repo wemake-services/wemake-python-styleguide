@@ -19,7 +19,7 @@ _ERROR_FORMAT: Final = ': {0}'
 
 def _produce_error_message(visitor: BaseVisitor) -> str:  # pragma: no cover
     if isinstance(visitor, BaseNodeVisitor):
-        return ast.unparse(visitor.tree)
+        return f'\n{ast.unparse(visitor.tree)}'
     return ''
 
 

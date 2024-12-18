@@ -83,11 +83,13 @@ def is_import_in_try(node: ast.AST) -> bool:
     if not isinstance(node, ast.Import | ast.ImportFrom):
         return False
     parent = get_parent(node)
-    if not isinstance(
-        parent,
-        # We don't use `ast.TryStar` here because it is not a common
-        # pattern to have imports in `try/except*` blocks.
-        ast.Try | ast.ExceptHandler,
+    if not isinstance(parent, ast.Try | ast.ExceptHandler):
+        return False
+    # We don't use `ast.TryStar` here because it is not a common
+    # pattern to have imports in `try/except*` blocks.
+    if isinstance(parent, ast.ExceptHandler) and isinstance(
+        get_parent(parent),
+        ast.TryStar,
     ):
         return False
     # We still require imports to be top-level:
