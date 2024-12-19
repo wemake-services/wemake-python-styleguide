@@ -97,6 +97,9 @@ Semantic versioning in our case means:
   where your configuration file is, #2474
 - GitHub Action can now use `fail_workflow:` parameter to not fail
   the workflow even if the check did find any issues
+- GitHub Action can now use `filter_mode:` parameter to specify
+  how ReviewDog will filter found violations,
+  see https://github.com/reviewdog/reviewdog#filter-mode #2239
 
 ### Bugfixes
 

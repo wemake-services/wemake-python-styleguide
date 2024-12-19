@@ -4,19 +4,23 @@
 : "${INPUT_PATH:=$1}"
 : "${INPUT_CWD:=$2}"
 : "${INPUT_REPORTER:=$3}"
-: "${INPUT_FAIL_WORKFLOW:=$4}"
+: "${INPUT_FILTER_MODE:=$4}"
+: "${INPUT_FAIL_WORKFLOW:=$5}"
 
 # Default values, needed because `Dockerfile` can be used directly:
 # These values must match ones in `action.yml`!
 : "${INPUT_PATH:='.'}"
 : "${INPUT_CWD:='.'}"
 : "${INPUT_REPORTER:='terminal'}"
+: "${INPUT_FILTER_MODE:='added'}"
 : "${INPUT_FAIL_WORKFLOW:=1}"
 
 # Diagnostic output:
-echo "Using reporter: $INPUT_REPORTER"
-echo "Using cwd: $INPUT_CWD"
-echo "Linting path: $INPUT_PATH"
+echo "Using 'path': $INPUT_PATH"
+echo "Using 'cwd': $INPUT_CWD"
+echo "Using 'reporter': $INPUT_REPORTER"
+echo "Using 'filter_mode': $INPUT_FILTER_MODE"
+echo "Using 'fail_workflow': $INPUT_FAIL_WORKFLOW"
 echo 'flake8 --version:'
 flake8 --version
 echo '================================='
@@ -26,7 +30,7 @@ cd "$INPUT_CWD"
 
 # Runs `flake8`, possibly with `reviewdog`:
 if [ "$INPUT_REPORTER" == 'terminal' ]; then
-  output=$(flake8 $INPUT_PATH)
+  output=$(flake8 "$INPUT_PATH")
   status="$?"
 elif [ "$INPUT_REPORTER" == 'github-pr-review' ] ||
      [ "$INPUT_REPORTER" == 'github-pr-check' ]; then
@@ -34,7 +38,7 @@ elif [ "$INPUT_REPORTER" == 'github-pr-review' ] ||
   export REVIEWDOG_GITHUB_API_TOKEN="$GITHUB_TOKEN"
 
   # Running special version of `flake8` to match the `reviewdog` format:
-  output=$(flake8 $INPUT_PATH --append-config='/action-config.cfg')
+  output=$(flake8 "$INPUT_PATH" --append-config='/action-config.cfg')
   echo "$output" | reviewdog -f=pep8 -reporter="$INPUT_REPORTER" -level=error
   # `reviewdog` does not fail with any status code, so we have to get dirty:
   status=$(test "$output" = ''; echo $?)

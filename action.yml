@@ -23,6 +23,10 @@ inputs:
     description: 'How would you like the results to be displayed?'
     required: false
     default: 'terminal'
+  filter_mode:
+    description: 'How to filter found violations? Only used with `github-pr-*` reporters. Docs: https://github.com/reviewdog/reviewdog#filter-mode'
+    required: false
+    default: 'added'
   fail_workflow:
     description: 'Should we fail the workflow if the check does not pass?'
     required: false
@@ -38,4 +42,5 @@ runs:
     - ${{ inputs.path }}
     - ${{ inputs.cwd }}
     - ${{ inputs.reporter }}
+    - ${{ inputs.filter_mode }}
     - ${{ inputs.fail_workflow }}
