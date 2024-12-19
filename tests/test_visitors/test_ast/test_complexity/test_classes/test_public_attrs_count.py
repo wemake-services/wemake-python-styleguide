@@ -16,6 +16,26 @@ class Test:
         {1}
 """
 
+dataclass_template = """
+@dataclass
+class Test:
+    def __init__(self):
+        {0}
+
+    def other(self):
+        {1}
+"""
+
+not_a_dataclass_template = """
+@not_a_dataclass
+class Test:
+    def __init__(self):
+        {0}
+
+    def other(self):
+        {1}
+"""
+
 module_template = """
 {0}
 {1}
@@ -32,6 +52,8 @@ def some():
     'code',
     [
         class_template,
+        dataclass_template,
+        not_a_dataclass_template,
         module_template,
         function_template,
     ],
@@ -78,6 +100,7 @@ def test_correct_attributes(
     'code',
     [
         class_template,
+        not_a_dataclass_template,
     ],
 )
 @pytest.mark.parametrize(
@@ -112,6 +135,7 @@ def test_wrong_attributes_count(
 @pytest.mark.parametrize(
     'code',
     [
+        dataclass_template,
         module_template,
         function_template,
     ],

@@ -1007,6 +1007,8 @@ class TooManyPublicAttributesViolation(ASTViolation):
         https://en.wikipedia.org/wiki/Coupling_(computer_programming)
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 1.0.0
+       Any amount of attributes are allowed on ``@dataclasses``.
 
     """
 
