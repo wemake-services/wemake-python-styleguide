@@ -53,6 +53,9 @@ class ClassComplexityVisitor(BaseNodeVisitor):
             )
 
     def _check_public_attributes(self, node: ast.ClassDef) -> None:
+        if classes.is_dataclass(node):
+            return  # dataclasses can have any amount of attributes
+
         _, instance_attributes = classes.get_attributes(
             node,
             include_annotated=False,

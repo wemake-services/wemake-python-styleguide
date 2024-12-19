@@ -86,6 +86,7 @@ Semantic versioning in our case means:
 - Allows underscores (`_`) with exactly 3 digits after it in `WPS303`, #3120
 - Allows class / instance attribute shadowing
   in `@dataclass`es for `WPS601`, #1926
+- Allows any number of instance attributes on `@dataclass`es in `WPS230`, #2448
 - Adds new rule to forbid `lambda` assigns to special attributes, #1733
 - Adds new rule to check problematic function params, #1343
 - Adds new rule to detect duplicate conditions in `if`s and `elif`s, #2241
