@@ -6,23 +6,11 @@ from wemake_python_styleguide.compat.nodes import TryStar
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.source import node_to_string
 
-#: That's what we expect from `@overload` decorator:
-_OVERLOAD_EXCEPTIONS: Final = frozenset(('overload', 'typing.overload'))
-
 #: That's what we expect from `@property` decorator:
 _PROPERTY_EXCEPTIONS: Final = frozenset(('property', '.setter'))
 
 
 # Name predicates:
-
-
-def is_function_overload(node: ast.AST) -> bool:
-    """Check that function decorated with `typing.overload`."""
-    if isinstance(node, FunctionNodes):
-        for decorator in node.decorator_list:
-            if node_to_string(decorator) in _OVERLOAD_EXCEPTIONS:
-                return True
-    return False
 
 
 def is_no_value_annotation(node: ast.AST) -> bool:

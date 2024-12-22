@@ -92,6 +92,33 @@ class Test:
     def method(arg1, arg2): ...
 """
 
+# `overload` functions and methods do not count as having params at all
+# See https://github.com/wemake-services/wemake-python-styleguide/issues/1957
+
+overload_function_with_arguments = """
+@overload
+def function(arg1, arg2): ...
+"""
+
+overload_method_with_arguments = """
+class Test:
+    @overload
+    def method(self, arg1, arg2): ...
+"""
+
+overload_classmethod_with_arguments = """
+class Test:
+    @overload
+    @classmethod
+    def method(cls, arg1, arg2): ...
+"""
+
+overload_staticmethod_with_arguments = """
+class Test:
+    @overload
+    @staticmethod
+    def method(arg1, arg2): ...
+"""
 
 # Actual fixtures:
 
@@ -104,6 +131,11 @@ class Test:
         new_method_without_arguments,
         metaclass_without_arguments,
         staticmethod_with_no_argument,
+        # overloads:
+        overload_function_with_arguments,
+        overload_method_with_arguments,
+        overload_classmethod_with_arguments,
+        overload_staticmethod_with_arguments,
     ],
 )
 def no_argument(request):

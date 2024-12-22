@@ -11,6 +11,7 @@ from wemake_python_styleguide.logic import walk
 from wemake_python_styleguide.logic.naming.name_nodes import flat_variable_names
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.scopes import defs, predicates
+from wemake_python_styleguide.logic.tree import functions
 from wemake_python_styleguide.types import (
     AnyAssignWithWalrus,
     AnyFor,
@@ -89,7 +90,7 @@ class BlockVariableVisitor(base.BaseNodeVisitor):
 
     _naming_predicates: tuple[_NamePredicate, ...] = (
         predicates.is_property_setter,
-        predicates.is_function_overload,
+        functions.is_overload,
         predicates.is_no_value_annotation,
     )
 

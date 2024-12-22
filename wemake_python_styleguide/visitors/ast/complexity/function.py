@@ -46,6 +46,9 @@ class _ComplexityCounter:
 
     def check_arguments_count(self, node: AnyFunctionDefAndLambda) -> None:
         """Checks the number of the arguments in a function."""
+        if functions.is_overload(node):
+            return  # we allow any number of params in overload defs
+
         all_args = functions.get_all_arguments(node)
         self.metrics.arguments[node] = len(
             special_args.clean_special_argument(node, all_args),
