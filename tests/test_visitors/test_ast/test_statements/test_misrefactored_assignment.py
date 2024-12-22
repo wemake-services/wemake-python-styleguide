@@ -1,6 +1,5 @@
 import pytest
 
-
 from wemake_python_styleguide.violations.refactoring import (
     MisrefactoredAssignmentViolation,
 )

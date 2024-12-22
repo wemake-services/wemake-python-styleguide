@@ -5,9 +5,6 @@ from typing import ClassVar
 
 from typing_extensions import final
 
-from wemake_python_styleguide.logic.tokens.docstrings import (
-    get_docstring_tokens,
-)
 from wemake_python_styleguide.logic.tokens.numbers import (
     has_correct_underscores,
 )
