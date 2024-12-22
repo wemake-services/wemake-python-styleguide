@@ -217,6 +217,13 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
             # Any decorator can change logic and make this overwrite useful.
             return
 
+        if node.args.defaults or list(filter(None, node.args.kw_defaults)):
+            # It means that `lambda` has defaults in args,
+            # we cannot be sure that these defaults are the same
+            # as in the call def, ignoring it.
+            # `kw_defaults` can have [None, ...] items.
+            return
+
         call_stmt = self._get_call_stmt_of_useless_method(node)
         if call_stmt is None or not isinstance(call_stmt.func, ast.Attribute):
             return
@@ -226,10 +233,9 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         if defined_method_name != attribute.attr:
             return
 
-        if not super_args.is_ordinary_super_call(attribute.value, class_name):
-            return
-
-        if not function_args.is_call_matched_by_arguments(node, call_stmt):
+        if not super_args.is_ordinary_super_call(
+            attribute.value, class_name
+        ) or not function_args.is_call_matched_by_arguments(node, call_stmt):
             return
 
         self.add_violation(

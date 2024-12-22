@@ -79,6 +79,7 @@ invalid_method_args: list[_MethodArgs] = [
     _MethodArgs('a', ''),
     _MethodArgs('a', 'a, 1'),
     _MethodArgs('a, b', 'a'),
+    _MethodArgs('a, /, b', 'a=a, b=b'),
     _MethodArgs('a, b', 'a, b, 1'),
     _MethodArgs('a, b', 'a, b=1'),
     _MethodArgs('a, *, b', 'a'),
@@ -102,6 +103,11 @@ invalid_method_args: list[_MethodArgs] = [
     _MethodArgs('*, a, **kwargs', 'a=a'),
     _MethodArgs('*, a, **kwargs', '**kwargs'),
     _MethodArgs('*, a, **kwargs', 'a=a, b=1, **kwargs'),
+    # Presence of defaults allows passing the same args:
+    _MethodArgs('a=1', 'a'),
+    _MethodArgs('a=1, /', 'a'),
+    _MethodArgs('a, *, b=None', 'a, b=b'),
+    _MethodArgs('a=1, *args, b=2, **kwargs', 'a, *args, b=b, **kwargs'),
 ]
 
 invalid_statements = [
