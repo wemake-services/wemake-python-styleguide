@@ -14,7 +14,7 @@ raise_from_itself_inside_try = """
 def raise_from_itself():
     try:
         print('test')
-    except Exeception as ex:
+    except Exception as ex:
         raise ex from ex
 """
 

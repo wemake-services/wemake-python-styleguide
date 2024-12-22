@@ -22,7 +22,7 @@ def is_annotation(node: ast.AST) -> bool:
     """
     Detects if node is an annotation. Or a part of it.
 
-    We use this predicate to allow all types of repetetive
+    We use this predicate to allow all types of repetitive
     function and instance annotations.
     """
     if not (

@@ -130,7 +130,7 @@ And then you can use them:
 
 ```bash
 # codespell:
-codespell -w wemake_python_styleguide tests docs scripts styles *.md
+codespell -w wemake_python_styleguide tests docs scripts styles *.md --ignore-words ./tests/whitelist.txt
 
 # flake8-spellcheck:
 flake8 --whitelist ./tests/whitelist.txt .

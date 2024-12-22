@@ -305,6 +305,7 @@ notequals
 notequals
 num
 Num
+NotIn
 numpy
 octdigits
 OOP

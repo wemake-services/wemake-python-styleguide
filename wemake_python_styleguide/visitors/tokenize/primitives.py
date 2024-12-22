@@ -168,7 +168,7 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
     """Checks incorrect string tokens usages."""
 
     def __init__(self, *args, **kwargs) -> None:
-        """Check string defitions."""
+        """Check string definitions."""
         super().__init__(*args, **kwargs)
         self._checker = _StringTokenChecker(
             self.file_tokens,

@@ -34,7 +34,7 @@ MAX_NOQA_COMMENTS: Final = 10  # guessed
 NESTED_CLASSES_WHITELIST: Final = (
     'Meta',  # django forms, models, drf, etc
     'Params',  # factoryboy specific
-    'Config',  # pydantic spesific
+    'Config',  # pydantic specific
 )
 
 #: Domain names that are removed from variable names' blacklist.
