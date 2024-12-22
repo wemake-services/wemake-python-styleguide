@@ -53,7 +53,7 @@ _NO_COLOR: Final = os.environ.get('NO_COLOR', '0') == '1'
 
 class WemakeFormatter(BaseFormatter):  # noqa: WPS214
     """
-    We need to format our style :term:`violations <violation>` beatifully.
+    We need to format our style :term:`violations <violation>` beautifully.
 
     The default formatter does not allow us to do that.
     What things do we miss?

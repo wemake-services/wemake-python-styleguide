@@ -726,7 +726,7 @@ class LambdaAttributeAssignedViolation(ASTViolation):
             def __init__(self):
                 self.login = lambda: ...
 
-    See als:
+    See also:
         https://docs.astral.sh/ruff/rules/lambda-assignment
 
     .. versionadded:: 1.0.0

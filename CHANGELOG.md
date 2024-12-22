@@ -11,7 +11,7 @@ Semantic versioning in our case means:
 - Minor releases do bring new features and configuration options.
   New violations can be added. Code that passes on `x.0.y`
   might not pass on `x.1.y` release because of the new checks.
-- Major releases inidicate significant milestones or serious breaking changes.
+- Major releases indicate significant milestones or serious breaking changes.
   There are no major releases right now: we are still at `0.x.y` version.
   But, in the future we might change the configuration names/logic,
   change the client facing API, change code conventions significantly, etc.
@@ -117,7 +117,7 @@ Semantic versioning in our case means:
 - Fixes `WPS210` to not count nested local variables in nested scopes #3108
 - Fixes `IterableUnpackingViolation` with generic types and `TypeVarTuple`
 - Fixes `WPS469` detecting incorrect names of raised exceptions, #3109
-- Fixes unnormalized pathes in formatter output
+- Fixes unnormalized paths in formatter output
 - Fixes `WPS434` to allow reassignment in a form of `x = [y, *x]`
 - Fixes `WPS221` to ignore PEP695's `TypeAlias` from line complexity checks
 - Fixes `WPS474` to only count import collisions in the same context, #2962
@@ -194,7 +194,7 @@ In the future this project will be migrated to be used together with `ruff`.
 
 - Fixes `ForbiddenInlineIgnoreViolation` config parsing. #2590
 - Fixes `WrongEmptyLinesCountViolation` for func definitions with ellipsis. #2847
-- Fixes `WrongEmptyLinesCountViolation` for multiline implicit string concatination. #2787
+- Fixes `WrongEmptyLinesCountViolation` for multiline implicit string concatenation. #2787
 - Fixes `ObjectInBaseClassesListViolation`, `UnpythonicGetterSetterViolation`,
   `ImplicitInConditionViolation`, `RedundantSubscriptViolation`,
   `TooLongCompareViolation` to include better error details
@@ -440,7 +440,7 @@ In the future this project will be migrated to be used together with `ruff`.
 
 ### Misc
 
-- Updates lots of dependenices
+- Updates lots of dependencies
 - Fixed documentation for TooManyPublicAttributesViolation
 - Updated isort config
 - Introduce helper script to check
@@ -1292,7 +1292,7 @@ for tests. We also now covering more cases and testing violation texts.
 - Refactoring: removed duplicate logic inside `logics/filenames.py`
 - Improves tests: now testing almost all violations inside `noqa.py`
 - Improves tests: now testing violations text
-- Improves tests: now all common patters live in related `conftest.py`
+- Improves tests: now all common patterns live in related `conftest.py`
 - Improves docs: now all configuration options are listed in the violations
 
 

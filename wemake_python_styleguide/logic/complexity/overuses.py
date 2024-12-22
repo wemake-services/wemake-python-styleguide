@@ -35,7 +35,7 @@ def is_decorator(node: ast.AST) -> bool:
     """
     Detects if node is used as a decorator.
 
-    We use this predicates because decorators can be used miltiple times.
+    We use this predicates because decorators can be used multiple times.
     Like ``@auth_required(login_url=LOGIN_URL)`` and similar.
     """
     parent = walk.get_closest_parent(node, FunctionNodes)
