@@ -149,7 +149,7 @@ def test_ipynb(snapshot):
     # Ignore error codes which don't apply to Jupyter Notebooks
     cli_options = [
         '--extend-ignore',
-        'NIP102,D100,WPS102,WPS114,WPS116,WPS124',
+        'WPS102,WPS114,WPS116,WPS124',
     ]
 
     process = subprocess.Popen(
@@ -171,6 +171,6 @@ def test_ipynb(snapshot):
     stdout, _ = process.communicate()
 
     # nbQA output contains absolute path
-    stdout = stdout.replace(Path.cwd() + os.sep, '')
+    stdout = stdout.replace(f'{Path.cwd()}{os.sep}', '')
 
     assert _safe_output(stdout) == snapshot, 'formatter_ipynb'

@@ -2178,8 +2178,8 @@ class ShebangViolation(SimpleViolation):
         #!/usr/bin/env python
 
         # Wrong:
-        #!/usr/bin/env
-            #!/usr/bin/env python
+        #!/usr/bin/python
+        #!/usr/bin/env python
 
     .. versionadded:: 0.14.0
 

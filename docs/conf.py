@@ -15,7 +15,7 @@ import sys
 
 import tomli
 
-sys.path.insert(0, str(pathlib.Path.resolve('..')))
+sys.path.insert(0, str(pathlib.Path('..').resolve(strict=True)))
 
 
 # -- Project information -----------------------------------------------------
