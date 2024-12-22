@@ -1,4 +1,4 @@
-import os
+import pathlib
 from collections import namedtuple
 
 import pytest
@@ -18,9 +18,9 @@ pytest_plugins = [
 def absolute_path():
     """Fixture to create full path relative to `contest.py` inside tests."""
 
-    def factory(*files: str):
-        dirname = os.path.dirname(__file__)
-        return os.path.join(dirname, *files)
+    def factory(*files: str) -> pathlib.Path:
+        dirname = pathlib.Path(__file__).parent
+        return dirname.joinpath(*files)
 
     return factory
 

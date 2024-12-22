@@ -10,19 +10,19 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 
-import os
+import pathlib
 import sys
 
 import tomli
 
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, str(pathlib.Path.resolve('..')))
 
 
 # -- Project information -----------------------------------------------------
 
 
 def _get_project_meta():
-    with open('../pyproject.toml', mode='rb') as pyproject:
+    with pathlib.Path('../pyproject.toml').open(mode='rb') as pyproject:
         return tomli.load(pyproject)['tool']['poetry']
 
 

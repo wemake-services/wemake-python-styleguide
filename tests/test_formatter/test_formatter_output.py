@@ -20,6 +20,7 @@ Warning::
 
 import os
 import subprocess
+from pathlib import Path
 
 import pytest
 
@@ -170,6 +171,6 @@ def test_ipynb(snapshot):
     stdout, _ = process.communicate()
 
     # nbQA output contains absolute path
-    stdout = stdout.replace(os.getcwd() + os.sep, '')
+    stdout = stdout.replace(Path.cwd() + os.sep, '')
 
     assert _safe_output(stdout) == snapshot, 'formatter_ipynb'
