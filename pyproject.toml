@@ -26,7 +26,7 @@ keywords = [
 ]
 
 classifiers = [
-  "Development Status :: 4 - Beta",
+  "Development Status :: 5 - Stable",
   "Environment :: Console",
   "Framework :: Flake8",
   "Intended Audience :: Developers",
@@ -55,7 +55,6 @@ pygments = "^2.4"
 
 
 [tool.poetry.group.dev.dependencies]
-
 pytest = "^8.1"
 pytest-cov = "^6.0"
 pytest-randomly = "^3.12"
@@ -171,6 +170,9 @@ max-complexity = 6
 
 [tool.ruff.lint.flake8-quotes]
 inline-quotes = "single"
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
 
 [tool.ruff.lint.per-file-ignores]
 "wemake_python_styleguide/visitors/ast/*.py" = ["N802"]
