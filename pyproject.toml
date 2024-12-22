@@ -127,6 +127,7 @@ select = [
   "I",    # isort
   "ISC",  # flake8-implicit-str-concat
   "LOG",  # flake8-logging
+  "PTH",  # flake8-use-pathlib
   "PERF", # perflint
   "PT",   # flake8-pytest-style
   "Q",    # flake8-quotes

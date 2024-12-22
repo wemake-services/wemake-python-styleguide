@@ -1,5 +1,3 @@
-from os import chmod
-
 import pytest
 
 TEMP_FOLDER = 'tmp'
@@ -22,7 +20,7 @@ def make_file(tmp_path):
         file_mode = MODE_EXECUTABLE if is_executable else MODE_NON_EXECUTABLE
 
         test_file.write_text(file_content)
-        chmod(test_file.as_posix(), file_mode)
+        test_file.chmod(file_mode)
 
         return test_file.as_posix()
 
