@@ -86,6 +86,7 @@ Summary
    RawStringNotNeededViolation
    InconsistentComprehensionViolation
    AssignToSliceViolation
+   RaiseSystemErrorViolation
 
 Consistency checks
 ------------------
@@ -153,6 +154,7 @@ Consistency checks
 .. autoclass:: RawStringNotNeededViolation
 .. autoclass:: InconsistentComprehensionViolation
 .. autoclass:: AssignToSliceViolation
+.. autoclass:: RaiseSystemErrorViolation
 
 """
 
@@ -2473,3 +2475,30 @@ class AssignToSliceViolation(ASTViolation):
 
     error_template = 'Found assignment to a subscript slice'
     code = 362
+
+
+@final
+class RaiseSystemErrorViolation(ASTViolation):
+    """
+    Forbid raising :exc:`SystemError`.
+
+    Reasoning:
+        For consistency.
+
+    Solution:
+        Use :func:`sys.exit`.
+
+    Example::
+
+        # Correct:
+        sys.exit(code)
+
+        # Wrong:
+        raise SystemError(code)
+
+    .. versionadded:: 1.0.0
+
+    """
+
+    error_template = 'Found `raise SystemError`, instead of using `sys.exit`'
+    code = 363

@@ -13,9 +13,8 @@ def get_exception_name(node: ast.Raise) -> str | None:
     if exception is None:
         return None
 
-    exception_func = getattr(exception, 'func', None)
-    if exception_func:
-        exception = exception_func
+    if isinstance(exception, ast.Call):
+        exception = exception.func
 
     return getattr(exception, 'id', None)
 
