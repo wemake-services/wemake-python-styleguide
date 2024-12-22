@@ -402,7 +402,6 @@ class UselessLambdaDefinitionVisitor(base.BaseNodeVisitor):
             # It means that `lambda` has defaults in args,
             # we cannot be sure that these defaults are the same
             # as in the call def, ignoring it.
-            # `kw_defaults` can have [None, ...] items.
             return
 
         if not function_args.is_call_matched_by_arguments(node, node.body):

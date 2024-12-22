@@ -549,6 +549,10 @@ class UselessOverwrittenMethodViolation(ASTViolation):
 
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 1.0.0
+       Ignores cases when ``super().method`` is called
+       when function parameters have defaults.
+       Because defaults might be different.
 
     """
 
