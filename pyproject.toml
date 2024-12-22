@@ -99,11 +99,9 @@ preview = true
 target-version = "py310"
 line-length = 80
 extend-exclude = [
-  # Intentional bad code:
+  # Intentionally bad code:
   "tests/fixtures/**",
   "tests/**/__snapshots__/**",
-  # 3rd party:
-  "wemake_python_styleguide/logic/tokens/docstrings.py",
 ]
 
 [tool.ruff.format]
@@ -265,8 +263,6 @@ norecursedirs = [
 omit = [
   # Does not contain runtime logic:
   "wemake_python_styleguide/types.py",
-  # Copied from 3rd party:
-  "wemake_python_styleguide/logic/tokens/docstrings.py",
   # All version specific tests:
   "tests/**/*312.py",
 ]

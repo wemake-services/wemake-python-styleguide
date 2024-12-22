@@ -1,4 +1,14 @@
 import tokenize
+from typing import Final
+
+#: All tokens that don't really mean anything for user.
+_UTILITY_TOKENS: Final = frozenset((
+    tokenize.NEWLINE,
+    tokenize.INDENT,
+    tokenize.DEDENT,
+    tokenize.NL,
+    tokenize.COMMENT,
+))
 
 
 def split_prefixes(string: str) -> tuple[str, str]:
@@ -20,6 +30,7 @@ def split_prefixes(string: str) -> tuple[str, str]:
 
 def has_triple_string_quotes(string_contents: str) -> bool:
     """Tells whether string token is written as inside triple quotes."""
+    _mods, string_contents = split_prefixes(string_contents)
     return bool(
         (string_contents.startswith('"""') and string_contents.endswith('"""'))
         or (
@@ -32,3 +43,8 @@ def has_triple_string_quotes(string_contents: str) -> bool:
 def get_comment_text(token: tokenize.TokenInfo) -> str:
     """Returns comment without `#` char from comment tokens."""
     return token.string[1:].strip()
+
+
+def is_meaningful_token(token: tokenize.TokenInfo) -> bool:
+    """Returns `True` if some token is a real, not utility token."""
+    return token.exact_type not in _UTILITY_TOKENS

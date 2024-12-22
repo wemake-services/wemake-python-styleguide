@@ -3,9 +3,6 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     StatementHasNoEffectViolation,
 )
-from wemake_python_styleguide.violations.refactoring import (
-    MisrefactoredAssignmentViolation,
-)
 from wemake_python_styleguide.visitors.ast.statements import (
     StatementsWithBodiesVisitor,
 )
@@ -13,6 +10,11 @@ from wemake_python_styleguide.visitors.ast.statements import (
 # Modules:
 
 module_template = """
+{0}
+"""
+
+module_attribute_docs_template = """
+x: int = 1
 {0}
 """
 
@@ -112,7 +114,7 @@ def function():
 function_extra_template = """
 def function():
     x = 1
-    ...
+    {0}
 """
 
 # Classes:
@@ -123,6 +125,13 @@ class Test:
 """
 
 class_extra_template = """
+class Test:
+    def some(self):
+        pass
+    {0}
+"""
+
+class_attribute_docs_template = """
 class Test:
     x = 1
     {0}
@@ -155,11 +164,20 @@ async def container():
         {0}
 """
 
+# PM:
+
+pattern_matching = """
+match some:
+    case other:
+        {0}
+"""
+
 
 @pytest.mark.parametrize(
     'code',
     [
         module_template,
+        module_attribute_docs_template,
         if_template,
         if_elif_template,
         if_else_template,
@@ -173,11 +191,15 @@ async def container():
         try_finally_template,
         with_template,
         function_template,
+        function_extra_template,
         class_template,
+        class_attribute_docs_template,
+        class_extra_template,
         async_function_template,
         async_with_template,
         async_for_template,
         async_for_else_template,
+        pattern_matching,
     ],
 )
 @pytest.mark.parametrize(
@@ -210,44 +232,7 @@ def test_statement_with_no_effect(
     'code',
     [
         module_template,
-    ],
-)
-@pytest.mark.parametrize(
-    'statement',
-    [
-        'x += x + 2',
-        'x -= x - 1',
-        'x *= x * 1',
-        'x /= x / 1',
-        'x **= x ** 1',
-        'x ^= x ^ 1',
-        'x %= x % 1',
-        'x >>= x >> 1',
-        'x <<= x << 1',
-        'x &= x & 1',
-        'x |= x | 1',
-    ],
-)
-def test_misrefactored_assignment(
-    assert_errors,
-    parse_ast_tree,
-    code,
-    statement,
-    default_options,
-):
-    """Testing that unreachable code is detected."""
-    tree = parse_ast_tree(code.format(statement))
-
-    visitor = StatementsWithBodiesVisitor(default_options, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [MisrefactoredAssignmentViolation])
-
-
-@pytest.mark.parametrize(
-    'code',
-    [
-        module_template,
+        module_attribute_docs_template,
         if_template,
         if_elif_template,
         if_else_template,
@@ -261,11 +246,15 @@ def test_misrefactored_assignment(
         try_finally_template,
         with_template,
         function_template,
+        function_extra_template,
         class_template,
+        class_attribute_docs_template,
+        class_extra_template,
         async_function_template,
         async_with_template,
         async_for_template,
         async_for_else_template,
+        pattern_matching,
     ],
 )
 @pytest.mark.parametrize(
@@ -381,28 +370,50 @@ def test_statement_with_await_effect(
         function_template,
         async_function_template,
         class_template,
+        class_attribute_docs_template,
         module_template,
+        module_attribute_docs_template,
     ],
 )
 @pytest.mark.parametrize(
     'statement',
     [
         '"docstring"',
-        '...',
+        '"""docstring"""',
     ],
 )
-def test_statement_with_special_definition(
+def test_statement_with_docstring_definition(
     assert_errors,
     parse_ast_tree,
     code,
     statement,
     default_options,
 ):
-    """Testing that docstring and `...` work."""
-    if code == module_template and statement == '...':
-        pytest.skip('This should not work')
-
+    """Testing that docstrings work."""
     tree = parse_ast_tree(code.format(statement))
+
+    visitor = StatementsWithBodiesVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize(
+    'code',
+    [
+        function_template,
+        async_function_template,
+        class_template,
+    ],
+)
+def test_statement_with_ellipsis_definition(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+):
+    """Testing that `...` works."""
+    tree = parse_ast_tree(code.format('...'))
 
     visitor = StatementsWithBodiesVisitor(default_options, tree=tree)
     visitor.run()
@@ -430,6 +441,7 @@ def test_statement_with_special_definition(
         async_for_else_template,
         function_extra_template,
         class_extra_template,
+        pattern_matching,
     ],
 )
 @pytest.mark.parametrize(
@@ -437,6 +449,7 @@ def test_statement_with_special_definition(
     [
         '"docstring"',
         '...',
+        'some_name',
     ],
 )
 def test_statement_useless_special_statements(
@@ -446,7 +459,7 @@ def test_statement_useless_special_statements(
     statement,
     default_options,
 ):
-    """Testing that docstring and `...` work."""
+    """Testing that errors are correctly detected."""
     tree = parse_ast_tree(code.format(statement))
 
     visitor = StatementsWithBodiesVisitor(default_options, tree=tree)

@@ -14,7 +14,7 @@ from wemake_python_styleguide.compat.nodes import TryStar
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.arguments import call_args
 from wemake_python_styleguide.logic.naming import name_nodes
-from wemake_python_styleguide.logic.tree import strings
+from wemake_python_styleguide.logic.tree import bodies, strings
 from wemake_python_styleguide.logic.tree.collections import (
     first,
     sequence_of_node,
@@ -49,6 +49,7 @@ _StatementWithBody: TypeAlias = (
     | types.AnyFunctionDef
     | ast.ClassDef
     | ast.Module
+    | ast.match_case
 )
 
 
@@ -69,6 +70,7 @@ _StatementWithBody: TypeAlias = (
         'visit_AsyncFunctionDef',
         'visit_ClassDef',
         'visit_Module',
+        'visit_match_case',
     ),
 )
 class StatementsWithBodiesVisitor(BaseNodeVisitor):
@@ -214,22 +216,32 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         if isinstance(node.value, self._have_effect):
             return
 
+        parent = nodes.get_parent(node)
         if (
             is_first
             and strings.is_doc_string(node)
-            and isinstance(nodes.get_parent(node), self._have_doc_strings)
+            and isinstance(parent, self._have_doc_strings)
         ):
-            return
+            return  # docstrings are allowed
 
-        parent = nodes.get_parent(node)
-        is_only_ellipsis_node = (
+        if (
             isinstance(node.value, ast.Constant)
             and node.value.value is Ellipsis
             and isinstance(parent, (*FunctionNodes, ast.ClassDef))
             and len(parent.body) == 1
-        )
-        if is_only_ellipsis_node:
-            return
+        ):
+            return  # we allow `...` as the only function or class node
+
+        if (
+            isinstance(node.value, ast.Constant)
+            and isinstance(node.value.value, str)
+            and isinstance(parent, ast.Module | ast.ClassDef)
+            and isinstance(
+                bodies.previous_node(parent, node),
+                ast.Assign | ast.AnnAssign,
+            )
+        ):
+            return  # we allow docstrings after assignments in some contexts
 
         self.add_violation(StatementHasNoEffectViolation(node))
 

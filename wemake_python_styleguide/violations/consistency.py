@@ -45,7 +45,7 @@ Summary
    WrongBracketPositionViolation
    MultilineFunctionAnnotationViolation
    UppercaseStringModifierViolation
-   WrongMultilineStringViolation
+   UselessMultilineStringViolation
    ModuloStringFormatViolation
    InconsistentReturnViolation
    InconsistentYieldViolation
@@ -113,7 +113,7 @@ Consistency checks
 .. autoclass:: WrongBracketPositionViolation
 .. autoclass:: MultilineFunctionAnnotationViolation
 .. autoclass:: UppercaseStringModifierViolation
-.. autoclass:: WrongMultilineStringViolation
+.. autoclass:: UselessMultilineStringViolation
 .. autoclass:: ModuloStringFormatViolation
 .. autoclass:: InconsistentReturnViolation
 .. autoclass:: InconsistentYieldViolation
@@ -1010,8 +1010,8 @@ class UppercaseStringModifierViolation(TokenizeViolation):
 
 
 @final
-class WrongMultilineStringViolation(TokenizeViolation):
-    '''
+class UselessMultilineStringViolation(TokenizeViolation):
+    r'''
     Forbid triple quotes for singleline strings.
 
     Reasoning:
@@ -1040,6 +1040,11 @@ class WrongMultilineStringViolation(TokenizeViolation):
     Is not reported for `f`-strings on python3.12+
 
     .. versionadded:: 0.7.0
+    .. versionchanged:: 1.0.0
+       Now allows to have multiline strings without ``\n``
+       when that string is the single token on each line.
+
+       Also changed how multiline strings are detected.
 
     '''
 
