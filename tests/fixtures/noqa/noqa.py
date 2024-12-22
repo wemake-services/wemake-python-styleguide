@@ -671,6 +671,8 @@ if noqa_wps533:  # noqa: WPS533
 elif noqa_wps533:
     my_print('2')
 
+noqa_wps534 = second if first == second else first  # noqa: WPS534
+
 class Baseline:
     def method(self, number):
         return number + 1

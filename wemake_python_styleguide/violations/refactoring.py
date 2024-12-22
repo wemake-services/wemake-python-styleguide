@@ -47,6 +47,7 @@ Summary
    SimplifiableReturningIfViolation
    ChainedIsViolation
    DuplicateIfConditionViolation
+   UselessTernaryViolation
 
 Refactoring opportunities
 -------------------------
@@ -85,6 +86,7 @@ Refactoring opportunities
 .. autoclass:: SimplifiableReturningIfViolation
 .. autoclass:: ChainedIsViolation
 .. autoclass:: DuplicateIfConditionViolation
+.. autoclass:: UselessTernaryViolation
 
 """
 
@@ -1323,3 +1325,32 @@ class DuplicateIfConditionViolation(ASTViolation):
 
     error_template = 'Found duplicate condition in `if`: {0}'
     code = 533
+
+
+@final
+class UselessTernaryViolation(ASTViolation):
+    """
+    Forbid having useless ternary expressions.
+
+    Reasoning:
+        When ternary expression can be replaced with a single name,
+        it is way more readable and more performant.
+
+    Solution:
+        Remove the ternary expression.
+
+    Example::
+
+        # Correct:
+        first if some_condition else second
+
+        # Wrong:
+        a if a is not None else None
+        b if a == b else a
+
+    .. versionadded:: 1.0.0
+
+    """
+
+    error_template = 'Found useless ternary expression'
+    code = 534

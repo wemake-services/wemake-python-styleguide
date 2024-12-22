@@ -189,6 +189,7 @@ inline-quotes = "single"
 # The mypy configurations: http://bit.ly/2zEl9WI
 ignore_missing_imports = true
 strict = true
+local_partial_types = true
 warn_unreachable = true
 
 enable_error_code = [
@@ -199,13 +200,14 @@ enable_error_code = [
   # "ignore-without-code",
   "possibly-undefined",
   "redundant-self",
+  # "explicit-override",
   # "mutable-override",
   "unimported-reveal",
   "deprecated",
 ]
 
 disable_error_code = [
-  "no-untyped-def",
+  "no-untyped-def",  # TODO: fix
 ]
 
 [[tool.mypy.overrides]]

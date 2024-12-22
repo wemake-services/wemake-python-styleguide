@@ -1,6 +1,6 @@
 name: wps
 
-on:
+'on':
   pull_request:
     branches:
       - master
