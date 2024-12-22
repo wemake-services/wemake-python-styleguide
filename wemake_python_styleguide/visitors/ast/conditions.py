@@ -15,7 +15,6 @@ from wemake_python_styleguide.logic.tree import (
     ifs,
     operators,
 )
-from wemake_python_styleguide.logic.tree.compares import CompareBounds
 from wemake_python_styleguide.logic.tree.functions import given_function_called
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations import (
@@ -100,7 +99,8 @@ class IfStatementVisitor(BaseNodeVisitor):
         if not isinstance(node, ast.IfExp):
             return
 
-        if not isinstance(node.test, ast.Compare) or len(node.test.ops) > 1:
+        comp = node.test
+        if not isinstance(comp, ast.Compare) or len(comp.ops) > 1:
             return  # We only check for compares with exactly one op
 
         if not attributes.only_consists_of_parts(
@@ -114,9 +114,9 @@ class IfStatementVisitor(BaseNodeVisitor):
 
         if compares.is_useless_ternary(
             node,
-            node.test.ops[0],
-            node.test.left,
-            node.test.comparators[0],
+            comp.ops[0],
+            comp.left,
+            comp.comparators[0],
         ):
             self.add_violation(refactoring.UselessTernaryViolation(node))
 
@@ -201,7 +201,7 @@ class ImplicitBoolPatternsVisitor(BaseNodeVisitor):
         if not isinstance(node.op, ast.And):
             return
 
-        if not CompareBounds(node).is_valid():
+        if not compares.CompareBounds(node).is_valid():
             self.add_violation(
                 consistency.ImplicitComplexCompareViolation(node),
             )
