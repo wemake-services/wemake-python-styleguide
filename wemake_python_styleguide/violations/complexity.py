@@ -387,6 +387,8 @@ class TooManyArgumentsViolation(ASTViolation):
     .. versionchanged:: 1.0.0
        Does not count special ``self``, ``cls``, and ``mcs`` as parameters.
 
+       Also does not count parameters in ``@overload`` definitions.
+
     """
 
     error_template = 'Found too many arguments: {0}'
