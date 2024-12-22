@@ -1242,6 +1242,9 @@ class StatementHasNoEffectViolation(ASTViolation):
     .. versionchanged:: 0.19.1
        Do not report ``...`` when used in a
        function or class body as a single node.
+    .. versionchanged:: 1.0.0
+       Allows docstring statements to follow assignments
+       on class and module levels.
 
     """
 
@@ -2485,6 +2488,8 @@ class WrongMultilineStringUseViolation(TokenizeViolation):
         """)
 
     .. versionadded:: 0.15.0
+    .. versionchanged:: 1.0.0
+       Relaxed this rule.
 
     '''
 

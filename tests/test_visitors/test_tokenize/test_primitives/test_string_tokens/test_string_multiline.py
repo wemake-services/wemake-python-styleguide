@@ -1,10 +1,13 @@
 import pytest
 
-from wemake_python_styleguide.violations.consistency import (
-    WrongMultilineStringViolation,
+from wemake_python_styleguide.violations.best_practices import (
+    WrongMultilineStringUseViolation,
 )
-from wemake_python_styleguide.visitors.tokenize.primitives import (
-    WrongStringTokenVisitor,
+from wemake_python_styleguide.violations.consistency import (
+    UselessMultilineStringViolation,
+)
+from wemake_python_styleguide.visitors.tokenize.statements import (
+    MultilineStringVisitor,
 )
 
 multiline_single = """'''
@@ -52,6 +55,20 @@ def test():
     """{0}"""
 '''
 
+attribute_docstring_double1 = '''
+class A:
+    x: int
+    """{0}"""
+'''
+
+attribute_docstring_double2 = '''
+class A:
+    x: int
+    """
+    {0}
+    """
+'''
+
 
 @pytest.mark.parametrize(
     'primitive',
@@ -59,7 +76,7 @@ def test():
         '"""abc"""',
         "'''abc'''",
         '""""""',
-        "r''''''",
+        "r'''abc.'''",
         'b"""some"""',
     ],
 )
@@ -74,12 +91,13 @@ def test_incorrect_multiline_strings(
     """Ensures that incorrect multiline strings are forbidden."""
     file_tokens = parse_tokens(mode(primitives_usages.format(primitive)))
 
-    visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
+    visitor = MultilineStringVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(
         visitor,
-        [WrongMultilineStringViolation],
+        [UselessMultilineStringViolation],
+        ignored_types=WrongMultilineStringUseViolation,
     )
 
 
@@ -105,10 +123,10 @@ def test_correct_multiline_string(
     """Ensures that correct multiline strings are allowed."""
     file_tokens = parse_tokens(mode(primitives_usages.format(primitive)))
 
-    visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
+    visitor = MultilineStringVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
-    assert_errors(visitor, [])
+    assert_errors(visitor, [], ignored_types=WrongMultilineStringUseViolation)
 
 
 @pytest.mark.parametrize(
@@ -122,6 +140,8 @@ def test_correct_multiline_string(
         method_docstring_double,
         function_docstring_single,
         function_docstring_double,
+        attribute_docstring_double1,
+        attribute_docstring_double2,
     ],
 )
 @pytest.mark.parametrize(
@@ -143,7 +163,7 @@ def test_correct_multiline_docstrings(
     """Ensures that correct singleline and multiline docstrings are allowed."""
     file_tokens = parse_tokens(mode(code.format(primitive)))
 
-    visitor = WrongStringTokenVisitor(default_options, file_tokens=file_tokens)
+    visitor = MultilineStringVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
     assert_errors(visitor, [])

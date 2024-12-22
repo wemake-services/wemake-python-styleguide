@@ -1,3 +1,4 @@
+import tokenize
 from collections.abc import Sequence
 from typing import Final, TypeAlias
 
@@ -9,7 +10,11 @@ from wemake_python_styleguide.violations.base import (
     BaseViolation,
     TokenizeViolation,
 )
-from wemake_python_styleguide.visitors.base import BaseNodeVisitor, BaseVisitor
+from wemake_python_styleguide.visitors.base import (
+    BaseNodeVisitor,
+    BaseTokenVisitor,
+    BaseVisitor,
+)
 
 _IgnoredTypes: TypeAlias = (
     type[BaseViolation] | tuple[type[BaseViolation], ...] | None
@@ -20,6 +25,8 @@ _ERROR_FORMAT: Final = ': {0}'
 def _produce_error_message(visitor: BaseVisitor) -> str:  # pragma: no cover
     if isinstance(visitor, BaseNodeVisitor):
         return f'\n{node_to_string(visitor.tree)}'
+    if isinstance(visitor, BaseTokenVisitor):
+        return f'\n {tokenize.untokenize(visitor.file_tokens)}'
     return ''
 
 

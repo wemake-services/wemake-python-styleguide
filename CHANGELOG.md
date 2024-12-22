@@ -89,6 +89,8 @@ Semantic versioning in our case means:
 - Allows any number of instance attributes on `@dataclass`es in `WPS230`, #2448
 - Allows any number of function parameters
   in `@overload` definitions for `WPS211`, #1957
+- Allows docstrings after attributes in classes for `WPS428`, #3056
+- Allows using multiline strings when placed on separate lines, #3056
 - Adds a new rule to forbid `lambda` assigns to special attributes, #1733
 - Adds a new rule to check problematic function params, #1343
 - Adds a new rule to detect duplicate conditions in `if`s and `elif`s, #2241
@@ -120,6 +122,8 @@ Semantic versioning in our case means:
 - Fixes `WPS221` to ignore PEP695's `TypeAlias` from line complexity checks
 - Fixes `WPS474` to only count import collisions in the same context, #2962
 - Fixes `WPS612` to count defaults in function definitions, #2478
+- Fixes several bugs in `WPS322` with multiline strings detection
+- Fixes several violations not been detected in `case:` statements
 
 ### Misc
 
@@ -177,7 +181,7 @@ In the future this project will be migrated to be used together with `ruff`.
 - Adds support for naming rules for PEP695 type params
 - Due to how `f`-string are parsed in `python3.12` several token-based
   violations are not reported anymore for them:
-  `WrongMultilineStringViolation`, `ImplicitRawStringViolation`,
+  `UselessMultilineStringViolation`, `ImplicitRawStringViolation`,
   `WrongUnicodeEscapeViolation`, `RawStringNotNeededViolation`
 - `wemake` output formatter now respects `NO_COLOR=1` option
   to disable text highlighting. See https://no-color.org
