@@ -23,6 +23,7 @@ _DATACLASS_NAMES: Final = frozenset((
     'attr.attributes',
     'attr.frozen',
     'attr.mutable',
+    'attr.dataclass',
     # pydantic also has `dataclass` and `dataclasses.dataclass`
 ))
 

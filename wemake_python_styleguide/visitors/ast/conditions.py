@@ -9,10 +9,15 @@ from wemake_python_styleguide.logic import source
 from wemake_python_styleguide.logic.naming.duplicates import (
     get_duplicate_names,
 )
-from wemake_python_styleguide.logic.tree import ifs, operators
+from wemake_python_styleguide.logic.tree import (
+    attributes,
+    compares,
+    ifs,
+    operators,
+)
 from wemake_python_styleguide.logic.tree.compares import CompareBounds
 from wemake_python_styleguide.logic.tree.functions import given_function_called
-from wemake_python_styleguide.types import AnyIf
+from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations import (
     best_practices,
     consistency,
@@ -35,11 +40,23 @@ _OperatorPairs: TypeAlias = Mapping[type[ast.boolop], type[ast.cmpop]]
 class IfStatementVisitor(BaseNodeVisitor):
     """Checks single and consecutive ``if`` statement nodes."""
 
+    _nodes_to_check: ClassVar[AnyNodes] = (
+        ast.Name,
+        ast.Attribute,
+        ast.Subscript,
+        ast.Constant,
+        ast.List,
+        ast.Dict,
+        ast.Tuple,
+        ast.Set,
+    )
+
     def visit_any_if(self, node: AnyIf) -> None:
         """Checks ``if`` nodes and expressions."""
         self._check_negated_conditions(node)
         self._check_useless_len(node)
         self._check_repeated_conditions(node)
+        self._check_useless_ternary(node)
         self.generic_visit(node)
 
     def _check_negated_conditions(self, node: AnyIf) -> None:
@@ -78,6 +95,30 @@ class IfStatementVisitor(BaseNodeVisitor):
                         text=condition,
                     )
                 )
+
+    def _check_useless_ternary(self, node: AnyIf) -> None:
+        if not isinstance(node, ast.IfExp):
+            return
+
+        if not isinstance(node.test, ast.Compare) or len(node.test.ops) > 1:
+            return  # We only check for compares with exactly one op
+
+        if not attributes.only_consists_of_parts(
+            node.body,
+            self._nodes_to_check,
+        ) or not attributes.only_consists_of_parts(
+            node.orelse,
+            self._nodes_to_check,
+        ):
+            return  # Only simple nodes are allowed on left and right parts
+
+        if compares.is_useless_ternary(
+            node,
+            node.test.ops[0],
+            node.test.left,
+            node.test.comparators[0],
+        ):
+            self.add_violation(refactoring.UselessTernaryViolation(node))
 
 
 @final
