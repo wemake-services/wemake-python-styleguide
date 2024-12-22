@@ -29,6 +29,7 @@ from wemake_python_styleguide.violations.consistency import (
     InconsistentReturnViolation,
     InconsistentYieldViolation,
     IncorrectYieldFromTargetViolation,
+    RaiseSystemErrorViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
@@ -43,24 +44,32 @@ _ReturningViolations: TypeAlias = (
 class WrongRaiseVisitor(BaseNodeVisitor):
     """Finds wrong ``raise`` keywords."""
 
+    _system_error_name: ClassVar[str] = 'SystemError'
+
     def visit_Raise(self, node: ast.Raise) -> None:
         """Checks how ``raise`` keyword is used."""
         self._check_bare_raise(node)
         self._check_raise_from_itself(node)
+        self._check_raise_system_error(node)
         self.generic_visit(node)
 
     def _check_bare_raise(self, node: ast.Raise) -> None:
-        if node.exc is None:
-            parent_except = walk.get_closest_parent(node, ast.ExceptHandler)
+        if node.exc is not None:
+            return
+        if walk.get_closest_parent(node, ast.ExceptHandler):
+            return
 
-            if not parent_except:
-                self.add_violation(BareRaiseViolation(node))
+        self.add_violation(BareRaiseViolation(node))
 
     def _check_raise_from_itself(self, node: ast.Raise) -> None:
         raising_name = get_exception_name(node)
         names_are_same = raising_name == get_cause_name(node)
         if raising_name is not None and names_are_same:
             self.add_violation(RaiseFromItselfViolation(node))
+
+    def _check_raise_system_error(self, node: ast.Raise) -> None:
+        if get_exception_name(node) == self._system_error_name:
+            self.add_violation(RaiseSystemErrorViolation(node))
 
 
 @final
