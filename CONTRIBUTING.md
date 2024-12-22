@@ -139,16 +139,6 @@ flake8 --whitelist ./tests/whitelist.txt .
 We run them from time to time, this is not in the CI yet.
 
 
-## Helpers
-
-We also have several helpers to make your development work easier:
-
-- `astboom` is used to visualize `ast` nodes in other python modules,
-  usage: `astboom ast < my_module.py`
-- `tokelor` is used to visualize tokens in other python modules,
-  usage: `tokelor my_module.py`
-
-
 ## Submitting your code
 
 We use [trunk based](https://trunkbaseddevelopment.com/)
@@ -227,7 +217,6 @@ You can also share your best practices with us.
 
 You can also consider donations to the project:
 - <https://opencollective.com/wemake-python-styleguide>
-- <https://issuehunt.io/r/wemake-services/wemake-python-styleguide>
 
 Number of current supporters:
 
