@@ -6,5 +6,5 @@ def previous_node(parent: ast.AST, node: ast.AST) -> ast.AST | None:
     body: list[ast.AST] = getattr(parent, 'body', [])
     try:
         return body[body.index(node) - 1]
-    except IndexError:
+    except IndexError:  # pragma: no cover
         return None
