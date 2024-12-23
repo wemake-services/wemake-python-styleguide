@@ -50,6 +50,11 @@ class IfStatementVisitor(BaseNodeVisitor):
         ast.Set,
     )
 
+    def __init__(self, *args, **kwargs) -> None:
+        """Save visited ``if`` nodes."""
+        super().__init__(*args, **kwargs)
+        self._finder = ifs.NegatedIfConditions()
+
     def visit_any_if(self, node: AnyIf) -> None:
         """Checks ``if`` nodes and expressions."""
         self._check_negated_conditions(node)
@@ -59,16 +64,10 @@ class IfStatementVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_negated_conditions(self, node: AnyIf) -> None:
-        if isinstance(node, ast.If) and not ifs.has_else(node):
-            return
-
-        if isinstance(node.test, ast.UnaryOp):
-            if isinstance(node.test.op, ast.Not):
-                self.add_violation(refactoring.NegatedConditionsViolation(node))
-        elif isinstance(node.test, ast.Compare) and any(
-            isinstance(elem, ast.NotEq) for elem in node.test.ops
-        ):
-            self.add_violation(refactoring.NegatedConditionsViolation(node))
+        for subnode in self._finder.negated_nodes(node):
+            self.add_violation(
+                refactoring.NegatedConditionsViolation(subnode),
+            )
 
     def _check_useless_len(self, node: AnyIf) -> None:
         if isinstance(node.test, ast.Call) and given_function_called(

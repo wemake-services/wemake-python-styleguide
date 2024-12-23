@@ -20,15 +20,15 @@ def find_paired_getters_and_setters(
     node: ast.ClassDef,
 ) -> Iterable[AnyFunctionDef]:
     """Returns nodes of paired getter or setter methods."""
-    stack = {}
+    stack: dict[str, AnyFunctionDef] = {}
     for method in _find_getters_and_setters(node):
         method_stripped = method.name[GETTER_LENGTH:]
-        if method_stripped not in stack:
-            stack[method_stripped] = method
-        else:
+        if method_stripped in stack:
             yield method
             paired_method = stack.pop(method_stripped)
             yield paired_method
+        else:
+            stack[method_stripped] = method
 
 
 def find_attributed_getters_and_setters(

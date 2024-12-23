@@ -91,6 +91,8 @@ Semantic versioning in our case means:
   in `@overload` definitions for `WPS211`, #1957
 - Allows docstrings after attributes in classes for `WPS428`, #3056
 - Allows using multiline strings when placed on separate lines, #3056
+- Disallows using `is not` and `not in` as negated conditions in `WPS504`, #2617
+- Allows all branches in `if/elif/else` to be negated in `WPS504`, #2617
 - Adds a new rule to forbid `lambda` assigns to special attributes, #1733
 - Adds a new rule to check problematic function params, #1343
 - Adds a new rule to detect duplicate conditions in `if`s and `elif`s, #2241
