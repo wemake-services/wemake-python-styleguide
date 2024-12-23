@@ -9,7 +9,6 @@ from typing_extensions import final
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.naming import access
-from wemake_python_styleguide.logic.scopes import predicates
 from wemake_python_styleguide.logic.tree import imports
 from wemake_python_styleguide.types import AnyImport, ConfigurationOptions
 from wemake_python_styleguide.violations.base import ErrorCallback
@@ -53,12 +52,13 @@ class _BaseImportValidator:
     def _check_nested_import(self, node: AnyImport) -> None:
         parent = nodes.get_parent(node)
         if (
-            parent is not None
-            and not isinstance(parent, ast.Module)
-            and not imports.is_nested_typing_import(parent)
-            and not predicates.is_import_in_try(node)
+            parent is None
+            or isinstance(parent, ast.Module)
+            or imports.is_nested_typing_import(parent)
+            or imports.is_import_in_try(node)
         ):
-            self._error_callback(NestedImportViolation(node))
+            return
+        self._error_callback(NestedImportViolation(node))
 
     def _check_same_alias(self, node: AnyImport) -> None:
         for alias in node.names:

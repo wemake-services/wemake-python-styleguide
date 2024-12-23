@@ -42,6 +42,11 @@ except* ImportError:
     some_thing = None
 """
 
+nested_import_in_for_loop = """
+for _ in range():
+    from missing import some_thing
+"""
+
 nested_try_import_in_function = """
 def function():
     try:
@@ -90,6 +95,7 @@ except ImportError:
         nested_method_import,
         nested_method_from_import,
         nested_conditional_import,
+        nested_import_in_for_loop,
         pytest.param(
             nested_try_star_import,
             marks=[

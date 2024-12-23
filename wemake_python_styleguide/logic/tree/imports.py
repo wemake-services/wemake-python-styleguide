@@ -1,10 +1,10 @@
 import ast
-from typing import NamedTuple
-
-from typing_extensions import final
+from typing import NamedTuple, final
 
 from wemake_python_styleguide import constants
+from wemake_python_styleguide.compat.nodes import TryStar
 from wemake_python_styleguide.logic.naming import logical
+from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.types import AnyImport
 
 
@@ -68,3 +68,29 @@ def is_nested_typing_import(parent: ast.AST) -> bool:
         elif isinstance(parent.test, ast.Attribute):
             checked_condition = parent.test.attr
     return checked_condition in constants.ALLOWED_NESTED_IMPORTS_CONDITIONS
+
+
+def is_import_in_try(node: AnyImport) -> bool:
+    """
+    Same import names in `try` / `except` block should be ignored.
+
+    Example::
+
+        try:
+            from typing import Final
+        except ImportError:
+            from typing_extensions import Final
+
+    """
+    parent = get_parent(node)
+    if not isinstance(parent, ast.Try | ast.ExceptHandler):
+        return False
+    # We don't use `ast.TryStar` here because it is not a common
+    # pattern to have imports in `try/except*` blocks.
+    is_nested_in_try_star = isinstance(
+        parent, ast.ExceptHandler
+    ) and isinstance(get_parent(parent), TryStar)
+    if is_nested_in_try_star:  # pragma: no cover
+        return False
+    # We still require imports to be top-level:
+    return isinstance(get_context(parent), ast.Module)
