@@ -148,6 +148,11 @@ x, y, z = x, z, y
 
 wrong_walrus = '(x := x)'
 
+wrong_walrus_class_context = """
+class Some:
+    (x := x)
+"""
+
 # regression 1812
 wrong_parts_unused1 = 'x, _num, _num = some()'
 
@@ -195,6 +200,7 @@ x, y, z = x, y, z
         wrong_fragment_typed_other_assignment,
         wrong_fragment_mixed_tuple_assignment,
         wrong_walrus,
+        wrong_walrus_class_context,
         wrong_parts_unused1,
     ],
 )
