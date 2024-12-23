@@ -49,6 +49,7 @@ fi
 
 # Sets the output variable for Github Action API:
 # See: https://help.github.com/en/articles/development-tools-for-github-action
+EOF="$(dd if=/dev/urandom bs=15 count=1 status=none | base64)"
 echo "output<<$EOF" >> $GITHUB_OUTPUT
 echo "$output" >> $GITHUB_OUTPUT
 echo "$EOF" >> $GITHUB_OUTPUT
