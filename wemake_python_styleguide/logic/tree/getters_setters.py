@@ -23,12 +23,11 @@ def find_paired_getters_and_setters(
     stack: dict[str, AnyFunctionDef] = {}
     for method in _find_getters_and_setters(node):
         method_stripped = method.name[GETTER_LENGTH:]
-        if method_stripped in stack:
-            yield method
-            paired_method = stack.pop(method_stripped)
-            yield paired_method
-        else:
+        paired_method = stack.pop(method_stripped, None)
+        if paired_method is None:
             stack[method_stripped] = method
+        else:
+            yield from (method, paired_method)
 
 
 def find_attributed_getters_and_setters(
