@@ -130,7 +130,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
                     ),
                 )
 
-    def _is_reassignment_edge_case(self, node: AnyAssign) -> bool:
+    def _is_reassignment_edge_case(self, node: AnyAssignWithWalrus) -> bool:
         # This is not a variable, but a class attribute
         if isinstance(nodes.get_context(node), ast.ClassDef):
             return True
