@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: wemake-services/wemake-python-styleguide@master
+    - uses: wemake-services/wemake-python-styleguide@fix-github-action
       with:
         reporter: 'github-pr-review'
         fail_workflow: false
