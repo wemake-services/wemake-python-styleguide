@@ -124,6 +124,7 @@ select = [
   "FURB", # refurb
   "G",    # flake8-logging-format
   "I",    # isort
+  "ICN",  # flake8-import-conventions
   "ISC",  # flake8-implicit-str-concat
   "LOG",  # flake8-logging
   "PTH",  # flake8-use-pathlib
@@ -174,8 +175,12 @@ inline-quotes = "single"
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
+[tool.ruff.lint.flake8-import-conventions]
+banned-from = ["ast"]
+
 [tool.ruff.lint.per-file-ignores]
 "wemake_python_styleguide/visitors/ast/*.py" = ["N802"]
+"wemake_python_styleguide/compat/nodes.py" = ["ICN003"]
 "tests/*.py" = [
     "S101",  # asserts
     "S105",  # hardcoded passwords
