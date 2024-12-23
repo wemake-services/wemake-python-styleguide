@@ -49,7 +49,7 @@ def assert_errors():
         else:
             real_errors = visitor.violations
 
-        assert len(expected_errors) == len(real_errors), _produce_error_message(
+        assert len(real_errors) == len(expected_errors), _produce_error_message(
             visitor,
         )
 
