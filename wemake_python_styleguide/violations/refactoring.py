@@ -48,6 +48,7 @@ Summary
    ChainedIsViolation
    DuplicateIfConditionViolation
    UselessTernaryViolation
+   DuplicateCasePatternViolation
 
 Refactoring opportunities
 -------------------------
@@ -87,6 +88,7 @@ Refactoring opportunities
 .. autoclass:: ChainedIsViolation
 .. autoclass:: DuplicateIfConditionViolation
 .. autoclass:: UselessTernaryViolation
+.. autoclass:: DuplicateCasePatternViolation
 
 """
 
@@ -1358,3 +1360,35 @@ class UselessTernaryViolation(ASTViolation):
 
     error_template = 'Found useless ternary expression'
     code = 534
+
+
+@final
+class DuplicateCasePatternViolation(ASTViolation):
+    """
+    Forbid having duplicate ``case`` patterns.
+
+    Reasoning:
+        It is likely an error to have multiple same int ``case`` patterns.
+        Only the first one will always work.
+
+    Solution:
+        Change the pattern.
+
+    Example::
+
+        # Correct:
+        match some:
+            case SomeClass(field) if field > 0: ...
+            case OtherClass(): ...
+
+        # Wrong:
+        match some:
+            case SomeClass(field): ...
+            case SomeClass(field): ...
+
+    .. versionadded:: 1.0.0
+
+    """
+
+    error_template = 'Found duplicate `case` pattern: {0}'
+    code = 535

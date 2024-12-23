@@ -71,6 +71,7 @@ PRESET: Final = (
     conditions.IfStatementVisitor,
     conditions.BooleanConditionVisitor,
     conditions.ImplicitBoolPatternsVisitor,
+    conditions.MatchVisitor,
     conditions.ChainedIsVisitor,
     iterables.IterableUnpackingVisitor,
     classes.WrongClassDefVisitor,

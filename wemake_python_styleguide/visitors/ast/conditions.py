@@ -207,6 +207,32 @@ class ImplicitBoolPatternsVisitor(BaseNodeVisitor):
 
 
 @final
+class MatchVisitor(BaseNodeVisitor):
+    """Visits conditions in pattern matching."""
+
+    def visit_Match(self, node: ast.Match) -> None:
+        """Finds issues in PM conditions."""
+        self._check_duplicate_cases(node)
+        self.generic_visit(node)
+
+    def _check_duplicate_cases(self, node: ast.Match) -> None:
+        conditions = [self._parse_case(case_node) for case_node in node.cases]
+        for condition, times in Counter(conditions).items():
+            if times > 1:
+                self.add_violation(
+                    refactoring.DuplicateCasePatternViolation(
+                        node,
+                        text=condition,
+                    )
+                )
+
+    def _parse_case(self, node: ast.match_case) -> str:
+        pattern = source.node_to_string(node.pattern)
+        guard = source.node_to_string(node.guard) if node.guard else ''
+        return f'{pattern} if {guard}' if guard else pattern
+
+
+@final
 class ChainedIsVisitor(BaseNodeVisitor):
     """Is used to find chained `is` comparisons."""
 
