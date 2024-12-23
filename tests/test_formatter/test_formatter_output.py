@@ -158,6 +158,8 @@ def test_ipynb(snapshot):
             'flake8',
             filename,
             '--disable-noqa',
+            '--select',
+            'WPS',
             '--isolated',
             '--format',
             'wemake',

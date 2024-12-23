@@ -287,13 +287,13 @@ class BadClass:
     UPPER_CASE_ATTRIBUTE = 12  # noqa: WPS115
 
     def __del__(self, *_args, **_kwargs):  # noqa: WPS603
-        anti_wps428 = 1  # noqa: WPS442
+         my_print('del')
 
     class Nested:  # noqa: WPS431
         anti_wps428 = 1
 
     async def __eq__(self, other):  # noqa: WPS610
-        anti_wps428 = 3  # noqa: WPS442
+        my_print('eq')
 
 
 magic_numbers = 13.2 + 50  # noqa: WPS432
@@ -521,7 +521,6 @@ class CheckStopIteration:
         raise StopIteration()  # noqa: WPS438
 
 bad_unicode = b'\u0040'  # noqa: WPS439
-CheckStopIteration = 1  # noqa: WPS440
 my_print(literal)  # noqa: WPS441
 unhashable = {[]}  # noqa: WPS443
 assert []  # noqa: WPS444

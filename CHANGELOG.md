@@ -63,6 +63,10 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `WPS419`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS423`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS424`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS440`, because
+  it was buggy and is covered by `mypy`, #3209
+- **Breaking**: Removes `WPS442`, because
+  it was buggy and is covered by `mypy`, #3209
 - **Breaking**: Removes `WPS452`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS454`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS465`, because `|` is now heavily used by typing
@@ -80,7 +84,7 @@ Semantic versioning in our case means:
 - Allows `pass` in `case` bodies, #2642
 - Allows subclassing builtins in `WPS600`, when creating an `Enum`, #2506
 - Allows using variables after blocks for `WPS441` in `assert` statements, #2543
-- Allows using nested `import` in `try` for `WPS433` and `WPS440`, #2382
+- Allows using nested `import` in `try` for `WPS433`, #2382
 - Does not count `self`, `cls`, and `mcs` as arguments
   for `WPS211` complexity check anymore, #2394
 - Allows underscores (`_`) with exactly 3 digits after it in `WPS303`, #3120

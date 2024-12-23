@@ -1688,12 +1688,18 @@ class BlockAndLocalOverlapViolation(ASTViolation):
 
     .. versionadded:: 0.12.0
     .. versionchanged:: 1.0.0
-       Allows nested imports in ``try: except:`` block on top level.
+       Disabled. This rule was buggy and not really useful.
+       It produced a lot of false positives
+       and did not really find any problems.
+
+       This rule now can be partially replaced
+       with ``mypy`` with ``possibly-undefined`` error code enabled.
 
     """
 
     error_template = 'Found block variables overlap: {0}'
     code = 440
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1772,11 +1778,19 @@ class OuterScopeShadowingViolation(ASTViolation):
             test = 1  # shadows `test()` function
 
     .. versionadded:: 0.12.0
+    .. versionchanged:: 1.0.0
+       Disabled. This rule was buggy and not really useful.
+       It produced a lot of false positives
+       and did not really find any problems.
+
+       This rule now can be partially replaced
+       with ``mypy`` with ``possibly-undefined`` error code enabled.
 
     """
 
     error_template = 'Found outer scope names shadowing: {0}'
     code = 442
+    disabled_since = '1.0.0'
 
 
 @final

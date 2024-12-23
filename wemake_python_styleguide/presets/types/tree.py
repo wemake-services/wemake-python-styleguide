@@ -81,7 +81,6 @@ PRESET: Final = (
     classes.ClassAttributeVisitor,
     classes.ClassMethodOrderVisitor,
     classes.BuggySuperCallVisitor,
-    blocks.BlockVariableVisitor,
     blocks.AfterBlockVariablesVisitor,
     subscripts.SubscriptVisitor,
     subscripts.ImplicitDictGetVisitor,
