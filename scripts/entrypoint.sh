@@ -51,17 +51,12 @@ fi
 # Sets the output variable for Github Action API:
 # See: https://help.github.com/en/articles/development-tools-for-github-action
 delimiter="$(dd if=/dev/urandom bs=15 count=1 status=none | base64)"
-echo "$delimeter"
+echo "delimiter=$delimiter"
 echo '================================='
 # See: https://github.com/orgs/community/discussions/26288#discussioncomment-3876281
 echo "output<<$delimiter" >> "$GITHUB_OUTPUT"
 echo "$output" >> "$GITHUB_OUTPUT"
 echo "$delimiter" >> "$GITHUB_OUTPUT"
-
-# Produce logs in action:
-# echo "$output"
-# echo '================================='
-# echo
 
 # Fail the build in case status code is not 0:
 if [ "$status" != 0 ]; then
