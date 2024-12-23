@@ -677,6 +677,12 @@ elif noqa_wps533:
 
 noqa_wps534 = second if first == second else first  # noqa: WPS534
 
+match some_value:  # noqa: WPS535
+    case SomeClass():
+        my_print('first')
+    case SomeClass():
+        my_print('second')
+
 class Baseline:
     def method(self, number):
         return number + 1
