@@ -34,6 +34,15 @@ else:
     ...
 """
 
+double_elif_else_conditions = """
+if {0}:
+    ...
+elif {1}:
+    ...
+else:
+    ...
+"""
+
 
 @pytest.mark.parametrize(
     'code',
@@ -44,6 +53,10 @@ else:
         'some',
         'some == 0',
         'some != other',
+        'some == 1 != other',
+        'some != first != second',
+        'some not in other',
+        'some is not None',
         'some > 1',
     ],
 )
@@ -71,7 +84,13 @@ def test_negated_simple_conditions(
         'some',
         'some == 0',
         'some != other',
+        'some != first != second',
+        'some == first != second',
         'some > 1',
+        'some is None',
+        'some is not None',
+        'some in other',
+        'some not in other',
     ],
 )
 def test_negated_complex_elif_conditions(
@@ -101,8 +120,10 @@ def test_negated_complex_elif_conditions(
     'code',
     [
         'not some',
-        'some != 1',
         'some != other',
+        'some != other != first',
+        'some is not None',
+        'some not in other',
     ],
 )
 def test_wrong_negated_complex_conditions(
@@ -135,8 +156,11 @@ def test_wrong_negated_complex_conditions(
         '-some',
         '~some',
         'some == 0',
+        'some == first == second',
         'some > -1',
         'some < other',
+        'some is None',
+        'some in other',
     ],
 )
 def test_correctly_negated_complex_conditions(
@@ -153,3 +177,29 @@ def test_correctly_negated_complex_conditions(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize(
+    ('first', 'second', 'violations'),
+    [
+        ('x == 1', 'y == 2', []),
+        ('x != 1', 'y != 2', []),
+        ('x not in 1', 'y != 2', []),
+        ('x != 1', 'y == 2', [NegatedConditionsViolation]),
+    ],
+)
+def test_correctly_double_negated_condtions(
+    first,
+    second,
+    violations,
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+):
+    """Testing correctly negated complex conditions."""
+    tree = parse_ast_tree(double_elif_else_conditions.format(first, second))
+
+    visitor = IfStatementVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, violations)
