@@ -89,6 +89,8 @@ right_swap6 = 'dy, dx = dx, dy'
 right_unary1 = 'a = not a'
 right_unary2 = 'a = -a'
 
+right_walrus = '(x := y + x)'
+
 # regression 3107
 starred_iterable1 = 'm = [*m, other]'
 starred_iterable2 = 'm = [*m, other, *m]'
@@ -144,6 +146,8 @@ z = 3
 x, y, z = x, z, y
 """
 
+wrong_walrus = '(x := x)'
+
 # regression 1812
 wrong_parts_unused1 = 'x, _num, _num = some()'
 
@@ -190,6 +194,7 @@ x, y, z = x, y, z
         wrong_fragment_other_assignment,
         wrong_fragment_typed_other_assignment,
         wrong_fragment_mixed_tuple_assignment,
+        wrong_walrus,
         wrong_parts_unused1,
     ],
 )
@@ -286,6 +291,7 @@ def test_self_variable_reassignment_triple(
         right_tuplelize3,
         right_tuplelize4,
         right_tuplelize5,
+        right_walrus,
         right_swap1,
         right_swap2,
         right_swap3,

@@ -67,6 +67,7 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
     (
         'visit_Assign',
         'visit_AnnAssign',
+        'visit_NamedExpr',
     ),
 )
 class WrongVariableAssignmentVisitor(BaseNodeVisitor):
@@ -74,7 +75,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
 
     _reassignment_ignores: ClassVar[AnyNodes] = (ast.Starred,)
 
-    def visit_any_assign(self, node: AnyAssign) -> None:
+    def visit_any_assign(self, node: AnyAssignWithWalrus) -> None:
         """Used to check assignment variable to itself."""
         names = list(name_nodes.flat_variable_names([node]))
 
@@ -84,7 +85,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
 
     def _check_reassignment(
         self,
-        node: AnyAssign,
+        node: AnyAssignWithWalrus,
         names: list[str],
     ) -> None:
         if not node.value:
@@ -113,7 +114,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
 
     def _check_unique_assignment(
         self,
-        node: AnyAssign,
+        node: AnyAssignWithWalrus,
         names: list[str],
     ) -> None:
         used_names = filter(
@@ -130,7 +131,7 @@ class WrongVariableAssignmentVisitor(BaseNodeVisitor):
                 )
 
     def _is_reassignment_edge_case(self, node: AnyAssign) -> bool:
-        # This is not a variable, but a class property
+        # This is not a variable, but a class attribute
         if isinstance(nodes.get_context(node), ast.ClassDef):
             return True
 

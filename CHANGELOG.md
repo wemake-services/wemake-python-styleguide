@@ -126,6 +126,7 @@ Semantic versioning in our case means:
 - Fixes `WPS612` to count defaults in function definitions, #2478
 - Fixes several bugs in `WPS322` with multiline strings detection
 - Fixes several violations not been detected in `case:` statements
+- Fixes `WPS434` not detecting reassignments in `:=` case
 
 ### Misc
 
