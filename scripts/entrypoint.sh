@@ -49,7 +49,12 @@ fi
 
 # Sets the output variable for Github Action API:
 # See: https://help.github.com/en/articles/development-tools-for-github-action
-echo "output=$output" >> $GITHUB_OUTPUT
+echo "output<<$EOF" >> $GITHUB_OUTPUT
+echo "$output" >> $GITHUB_OUTPUT
+echo "$EOF" >> $GITHUB_OUTPUT
+
+# Produce logs in action:
+echo "$output"
 echo '================================'
 echo
 
