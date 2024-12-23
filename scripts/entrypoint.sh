@@ -37,10 +37,12 @@ elif [ "$INPUT_REPORTER" == 'github-pr-review' ] ||
      [ "$INPUT_REPORTER" == 'github-pr-check' ]; then
   # We will need this token for `reviewdog` to work:
   export REVIEWDOG_GITHUB_API_TOKEN="$GITHUB_TOKEN"
+  set -x  # print all commands
 
   # Running special version of `flake8` to match the `reviewdog` format:
   output=$(flake8 "$INPUT_PATH" --append-config='/action-config.cfg')
   echo "$output" | reviewdog -f=flake8 -reporter="$INPUT_REPORTER" -level=error
+  set +x  # stop printing commands
   # `reviewdog` does not fail with any status code, so we have to get dirty:
   status=$(test "$output" = ''; echo $?)
 else
