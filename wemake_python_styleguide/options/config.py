@@ -153,6 +153,9 @@ You can also show all options that ``flake8`` supports by running:
 - ``max-type-params`` - maximum number of PEP695 type parameters,
     defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_TYPE_PARAMS`
+- ``max-match-subjects`` - maximum number of subjects in a match statement,
+    defaults to
+    :str:`wemake_python_styleguide.options.defaults.MAX_MATCH_SUBJECTS`
 
 .. rubric:: Formatter options
 
@@ -422,6 +425,11 @@ class Configuration:
             '--max-type-params',
             defaults.MAX_TYPE_PARAMS,
             'Maximum number of PEP695 type parameters.',
+        ),
+        _Option(
+            '--max-match-subjects',
+            defaults.MAX_MATCH_SUBJECTS,
+            'Maximum number of subjects in a match statement.',
         ),
         # Formatter:
         _Option(

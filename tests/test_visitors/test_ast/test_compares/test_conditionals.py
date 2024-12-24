@@ -7,11 +7,6 @@ from wemake_python_styleguide.visitors.ast.compares import (
     WrongConditionalVisitor,
 )
 
-create_variable = """
-variable = 1
-{0}
-"""
-
 if_statement = 'if {0}: ...'
 ternary = 'ternary = 0 if {0} else 1'
 
@@ -83,9 +78,7 @@ def test_valid_conditional(
     mode,
 ):
     """Testing that conditionals work well."""
-    tree = parse_ast_tree(
-        mode(create_variable.format(code.format(comparators))),
-    )
+    tree = parse_ast_tree(mode(code.format(comparators)))
 
     visitor = WrongConditionalVisitor(default_options, tree=tree)
     visitor.run()
@@ -102,7 +95,6 @@ def test_valid_conditional(
         set_comprehension,
         dict_comprehension,
         gen_comprehension,
-        match_statement,
     ],
 )
 @pytest.mark.parametrize(
@@ -120,7 +112,9 @@ def test_valid_conditional(
         '{test : "1"}',
         '{"set"}',
         '("tuple",)',
-        '["list"]',
+        '[]',
+        '[variable]',
+        '(1, var)',
         'variable or False',
         'variable and False',
         'variable or True',
@@ -139,11 +133,85 @@ def test_constant_condition(
     mode,
 ):
     """Testing that violations are when using invalid conditional."""
+    tree = parse_ast_tree(mode(code.format(comparators)))
+
+    visitor = WrongConditionalVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [ConstantConditionViolation])
+
+
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        'True',
+        'False',
+        'None',
+        '4',
+        '-4.8',
+        '--0.0',
+        '"test"',
+        "b'bytes'",
+        '("string in brackets")',
+        '{1 : "1"}',
+        '{"set"}',
+        '("tuple",)',
+        '[]',
+        '[1, 2]',
+        '(1, 2)',
+        'variable or False',
+        'variable and False',
+        'variable or True',
+        'variable and True',
+        '(unique := True)',
+        '(unique := -1)',
+        '...',
+    ],
+)
+def test_constant_condition_in_match(
+    assert_errors,
+    parse_ast_tree,
+    comparators,
+    default_options,
+):
+    """Testing that violations are when using invalid conditional in PM."""
     tree = parse_ast_tree(
-        mode(create_variable.format(code.format(comparators))),
+        match_statement.format(comparators),
     )
 
     visitor = WrongConditionalVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [ConstantConditionViolation])
+
+
+@pytest.mark.parametrize(
+    'comparators',
+    [
+        'variable',
+        '(x := y)',
+        '-number',
+        '[x, y]',
+        '{test : "1"}',
+        '{test}',
+        '(x, y)',
+        '{**keys, "data": None}',
+        'variable or other',
+        'variable and other',
+    ],
+)
+def test_regular_condition_in_match(
+    assert_errors,
+    parse_ast_tree,
+    comparators,
+    default_options,
+):
+    """Testing correct conditional in PM."""
+    tree = parse_ast_tree(
+        match_statement.format(comparators),
+    )
+
+    visitor = WrongConditionalVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])

@@ -138,7 +138,10 @@ MAX_IMPORT_FROM_MEMBERS: Final = 8  # guessed
 MAX_TUPLE_UNPACK_LENGTH: Final = 4  # guessed
 
 #: Maximum number of PEP695 type parameters.
-MAX_TYPE_PARAMS: Final = 6  # guessed
+MAX_TYPE_PARAMS: Final = 6  # 7-1, guessed
+
+#: Maximum number of subjects in a ``match`` statement.
+MAX_MATCH_SUBJECTS: Final = 7  # 7 +- 0, guessed
 
 # ==========
 # Formatter:

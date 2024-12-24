@@ -2,10 +2,9 @@ import ast
 import types
 from collections import defaultdict
 from collections.abc import Mapping
-from typing import Final, TypeAlias
+from typing import Final, TypeAlias, final
 
 import attr
-from typing_extensions import final
 
 from wemake_python_styleguide.logic import source
 

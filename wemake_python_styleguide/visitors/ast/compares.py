@@ -10,6 +10,7 @@ from wemake_python_styleguide.logic.tree import (
     compares,
     functions,
     operators,
+    pattern_matching,
 )
 from wemake_python_styleguide.logic.walrus import get_assigned_expr
 from wemake_python_styleguide.types import AnyIf, AnyNodes
@@ -202,17 +203,27 @@ class WrongConditionalVisitor(BaseNodeVisitor):
 
     def visit_Match(self, node: ast.Match) -> None:
         """Ensures that ``match`` nodes are using valid conditionals."""
-        self._check_constant_condition(node.subject)
+        self._check_constant_condition(node.subject, is_match=True)
         self.generic_visit(node)
 
-    def _check_constant_condition(self, node: ast.AST) -> None:
+    def _check_constant_condition(
+        self,
+        node: ast.AST,
+        *,
+        is_match: bool = False,
+    ) -> None:
         if isinstance(node, ast.BoolOp):
             for condition in node.values:
                 self._check_constant_condition(condition)
         else:
             real_node = operators.unwrap_unary_node(get_assigned_expr(node))
-            if isinstance(real_node, self._forbidden_nodes):
-                self.add_violation(ConstantConditionViolation(node))
+            if is_match and not pattern_matching.is_constant_subject(real_node):
+                return
+            if not is_match and not isinstance(
+                real_node, self._forbidden_nodes
+            ):
+                return
+            self.add_violation(ConstantConditionViolation(node))
 
     def _check_nested_ifexpr(self, node: AnyIf) -> None:
         is_nested_in_if = bool(
