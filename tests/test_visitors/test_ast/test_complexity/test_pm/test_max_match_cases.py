@@ -39,6 +39,7 @@ match x:
     case 5: ...
     case 6: ...
     case 7: ...
+    case 8: ...
 """
 
 
@@ -62,7 +63,7 @@ def test_match_cases_wrong_count(
     visitor.run()
 
     assert_errors(visitor, [TooManyMatchCaseViolation])
-    assert_error_text(visitor, '7', baseline=default_options.max_match_cases)
+    assert_error_text(visitor, '8', baseline=default_options.max_match_cases)
 
 
 @pytest.mark.parametrize(

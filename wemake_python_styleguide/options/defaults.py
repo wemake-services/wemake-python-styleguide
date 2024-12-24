@@ -144,7 +144,7 @@ MAX_TYPE_PARAMS: Final = 6  # 7-1, guessed
 MAX_MATCH_SUBJECTS: Final = 7  # 7 +- 0, guessed
 
 #: Maximum number of subjects in match statement.
-MAX_MATCH_CASES: Final = 6  # guessed
+MAX_MATCH_CASES: Final = 7  # guessed
 
 # ==========
 # Formatter:

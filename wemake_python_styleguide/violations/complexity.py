@@ -1390,5 +1390,5 @@ class TooManyMatchCaseViolation(ASTViolation):
     .. versionadded:: 1.0.0
     """
 
-    error_template = 'Found too many cases in match: {0}'
+    error_template = 'Found too many cases in `match` block: {0}'
     code = 242

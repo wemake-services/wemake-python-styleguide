@@ -636,6 +636,25 @@ match inst1, inst2, inst3, inst4, inst5, inst6, inst7, inst8:  # noqa: WPS241
         my_print('except')
 
 
+match x:  # noqa: WPS242
+    case 1:
+        my_print('first')
+    case 2:
+        my_print('second')
+    case 3:
+        my_print('third')
+    case 4:
+        my_print('fourth')
+    case 5:
+        my_print('fifth')
+    case 6:
+        my_print('sixth')
+    case 7:
+        my_print('seventh')
+    case 8:
+        my_print('eighth')
+
+
 my_print("""
 text
 """)  # noqa: WPS462
