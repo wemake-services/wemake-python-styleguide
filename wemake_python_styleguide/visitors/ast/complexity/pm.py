@@ -26,3 +26,23 @@ class MatchSubjectsVisitor(BaseNodeVisitor):
                 baseline=self.options.max_match_subjects,
             )
         )
+
+
+@final
+class MatchCasesVisitor(BaseNodeVisitor):
+    """Finds excessive match cases in `match` statements."""
+
+    def visit_Match(self, node: ast.Match) -> None:
+        """Finds all `match` statements and checks their cases."""
+        self._check_match_cases_count(node)
+        self.generic_visit(node)
+
+    def _check_match_cases_count(self, node: ast.Match) -> None:
+        if len(node.cases) > self.options.max_match_cases:
+            self.add_violation(
+                violation=complexity.TooManyMatchCaseViolation(
+                    text=str(len(node.cases)),
+                    node=node,
+                    baseline=self.options.max_match_cases,
+                ),
+            )
