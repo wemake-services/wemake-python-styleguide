@@ -62,6 +62,7 @@ Summary
    TooManyExceptExceptionsViolation
    TooManyTypeParamsViolation
    TooManyMatchSubjectsViolation
+   TooManyMatchCaseViolation
 
 Module complexity
 -----------------
@@ -107,6 +108,7 @@ Structure complexity
 .. autoclass:: TooManyExceptExceptionsViolation
 .. autoclass:: TooManyTypeParamsViolation
 .. autoclass:: TooManyMatchSubjectsViolation
+.. autoclass:: TooManyMatchCaseViolation
 
 """
 
@@ -1359,3 +1361,34 @@ class TooManyMatchSubjectsViolation(ASTViolation):
 
     error_template = 'Found too many subjects in `match` statement: {0}'
     code = 241
+
+
+@final
+class TooManyMatchCaseViolation(ASTViolation):
+    """
+    Forbids to have too many match cases.
+
+    Reasoning:
+        Too many match cases means that you are probably overly complicate
+        the object that you are matching right now.
+        It would be really hard for users
+        to manually add all match cases.
+
+    Solution:
+        Refactor the ``match`` statement by breaking the logic into smaller,
+        focused functions. This will improve readability and maintainability.
+        Split complex logic into separate functions to keep each one concise,
+        reducing the size of the ``match`` block and making the code easier
+        to understand and modify.
+
+
+    Configuration:
+        This rule is configurable with ``--max-match-cases``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_MATCH_CASES`
+
+    .. versionadded:: 1.0.0
+    """
+
+    error_template = 'Found too many cases in `match` block: {0}'
+    code = 242

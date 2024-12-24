@@ -156,6 +156,9 @@ You can also show all options that ``flake8`` supports by running:
 - ``max-match-subjects`` - maximum number of subjects in a match statement,
     defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_MATCH_SUBJECTS`
+- ``max-match-cases`` - maximum number of cases in a match block of code
+    defaults to
+    :str:`wemake_python_styleguide.options.defaults.MAX_MATCH_CASES`
 
 .. rubric:: Formatter options
 
@@ -430,6 +433,11 @@ class Configuration:
             '--max-match-subjects',
             defaults.MAX_MATCH_SUBJECTS,
             'Maximum number of subjects in a match statement.',
+        ),
+        _Option(
+            '--max-match-cases',
+            defaults.MAX_MATCH_CASES,
+            'Maximum number of match cases in a single match.',
         ),
         # Formatter:
         _Option(

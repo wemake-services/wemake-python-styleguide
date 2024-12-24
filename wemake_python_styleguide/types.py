@@ -234,3 +234,6 @@ class ConfigurationOptions(Protocol):
 
     @property
     def max_match_subjects(self) -> int: ...
+
+    @property
+    def max_match_cases(self) -> int: ...

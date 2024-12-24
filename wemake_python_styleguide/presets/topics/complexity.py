@@ -38,4 +38,5 @@ PRESET: Final = (
     calls.CallChainsVisitor,
     annotations.AnnotationComplexityVisitor,
     pm.MatchSubjectsVisitor,
+    pm.MatchCasesVisitor,
 )
