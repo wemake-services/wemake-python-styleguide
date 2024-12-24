@@ -61,6 +61,7 @@ Summary
    TooManyRaisesViolation
    TooManyExceptExceptionsViolation
    TooManyTypeParamsViolation
+   TooManyMatchSubjectsViolation
 
 Module complexity
 -----------------
@@ -105,6 +106,7 @@ Structure complexity
 .. autoclass:: TooManyRaisesViolation
 .. autoclass:: TooManyExceptExceptionsViolation
 .. autoclass:: TooManyTypeParamsViolation
+.. autoclass:: TooManyMatchSubjectsViolation
 
 """
 
@@ -1329,3 +1331,30 @@ class TooManyTypeParamsViolation(ASTViolation):
 
     error_template = 'Found too many type params: {0}'
     code = 240
+
+
+@final
+class TooManyMatchSubjectsViolation(ASTViolation):
+    """
+    Forbids to have too many subjects in ``match`` statements.
+
+    Reasoning:
+        Too many subjects in a ``match`` statement make the code
+        difficult to read and maintain. It indicates that the logic
+        could be simplified or broken down into smaller components.
+
+    Solution:
+        Refactor the ``match`` statement to reduce the number of subjects.
+        Consider splitting the logic into multiple ``match`` statements
+        or functions to improve clarity and maintainability.
+
+    Configuration:
+        This rule is configurable with ``--max-match-subjects``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_MATCH_SUBJECTS`
+
+    .. versionadded:: 1.0.0
+
+    """
+    error_template = 'Found too many subjects in `match` statement: {0}'
+    code = 241

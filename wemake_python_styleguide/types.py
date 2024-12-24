@@ -231,3 +231,6 @@ class ConfigurationOptions(Protocol):
 
     @property
     def exps_for_one_empty_line(self) -> int: ...
+
+    @property
+    def max_match_subjects(self) -> int: ...

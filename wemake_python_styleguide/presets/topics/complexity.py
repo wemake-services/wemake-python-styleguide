@@ -12,6 +12,7 @@ from wemake_python_styleguide.visitors.ast.complexity import (  # noqa: WPS235
     nested,
     offset,
     overuses,
+    pm,
 )
 
 #: Used to store all complexity related visitors to be later passed to checker:
@@ -36,4 +37,5 @@ PRESET: Final = (
     access.AccessVisitor,
     calls.CallChainsVisitor,
     annotations.AnnotationComplexityVisitor,
+    pm.MatchSubjectsVisitor,
 )
