@@ -200,6 +200,11 @@ class WrongConditionalVisitor(BaseNodeVisitor):
             self._check_constant_condition(expr)
         self.generic_visit(node)
 
+    def visit_Match(self, node: ast.Match) -> None:
+        """Ensures that ``match`` nodes are using valid conditionals."""
+        self._check_constant_condition(node.subject)
+        self.generic_visit(node)
+
     def _check_constant_condition(self, node: ast.AST) -> None:
         if isinstance(node, ast.BoolOp):
             for condition in node.values:
