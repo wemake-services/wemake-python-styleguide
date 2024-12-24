@@ -1356,5 +1356,6 @@ class TooManyMatchSubjectsViolation(ASTViolation):
     .. versionadded:: 1.0.0
 
     """
+
     error_template = 'Found too many subjects in `match` statement: {0}'
     code = 241

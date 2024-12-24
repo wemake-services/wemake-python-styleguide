@@ -1,45 +1,25 @@
 import pytest
 
-from wemake_python_styleguide.violations.complexity import TooManyMatchSubjectsViolation
-from wemake_python_styleguide.visitors.ast.complexity.pm import MatchSubjectsVisitor
+from wemake_python_styleguide.violations.complexity import (
+    TooManyMatchSubjectsViolation,
+)
+from wemake_python_styleguide.visitors.ast.complexity.pm import (
+    MatchSubjectsVisitor,
+)
 
+match_subjects9 = """
+match a, b, c, d, e, f, g, h, i:
+    case 1: ...
+"""
+match_subjects8 = """
+match a, b, c, d, e, f, g, h:
+    case 1: ...
+"""
 
-match_subjects7 = '''
-match some_value:
-    case x | y | z:
-        pass
-    case a | b | c:
-        pass
-    case d | e | f:
-        pass
-    case g | h | i:
-        pass
-    case j | k | l:
-        pass
-    case m | n | o:
-        pass
-    case p | q | r:
-        pass
-'''
-match_subjects6 = '''
-match some_value:
-    case x | y | z:
-        pass
-    case a | b | c:
-        pass
-    case d | e | f:
-        pass
-    case g | h | i:
-        pass
-    case j | k | l:
-        pass
-    case m | n | o:
-        pass
-'''
 
 @pytest.mark.parametrize(
     'code',
-    [match_subjects7],
+    [match_subjects9],
 )
 def test_match_subjects_wrong_count(
     assert_errors,
@@ -55,12 +35,12 @@ def test_match_subjects_wrong_count(
     visitor.run()
 
     assert_errors(visitor, [TooManyMatchSubjectsViolation])
-    assert_error_text(visitor, '8', baseline=default_options.max_match_subjects)
+    assert_error_text(visitor, '9', baseline=default_options.max_match_subjects)
 
 
 @pytest.mark.parametrize(
     'code',
-    [match_subjects6],
+    [match_subjects8],
 )
 def test_match_subjects_correct_count(
     assert_errors,
@@ -80,8 +60,8 @@ def test_match_subjects_correct_count(
 @pytest.mark.parametrize(
     'code',
     [
-        match_subjects6,
-        match_subjects7,
+        match_subjects9,
+        match_subjects8,
     ],
 )
 def test_match_subjects_configured_count(
@@ -93,11 +73,8 @@ def test_match_subjects_configured_count(
     """Testing that settings can reflect the change for match subjects."""
     tree = parse_ast_tree(code)
 
-    option_values = options(max_match_subjects=6)
+    option_values = options(max_match_subjects=3)
     visitor = MatchSubjectsVisitor(option_values, tree=tree)
     visitor.run()
 
-    if code == match_subjects7:
-        assert_errors(visitor, [TooManyMatchSubjectsViolation])
-    else:
-        assert_errors(visitor, [])
+    assert_errors(visitor, [TooManyMatchSubjectsViolation])
