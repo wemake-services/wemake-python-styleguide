@@ -133,7 +133,7 @@ Semantic versioning in our case means:
 - Fixes several violations not been detected in `case:` statements
 - Fixes `WPS434` not detecting reassignments in `:=` case
 - Fixes `WPS314` not detecting `match` statements
-
+- Fixes `match` + `case` does not increase cognitive complexity
 ### Misc
 
 - Integration with `ondivi` doc for legacy codebases
