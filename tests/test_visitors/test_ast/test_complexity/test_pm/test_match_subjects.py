@@ -28,7 +28,7 @@ def test_match_subjects_wrong_count(
     code,
     default_options,
 ):
-    """Testing that default settings raise a warning for too many match subjects."""
+    """Testing that default settings raise a warning."""
     tree = parse_ast_tree(code)
 
     visitor = MatchSubjectsVisitor(default_options, tree=tree)
@@ -48,7 +48,7 @@ def test_match_subjects_correct_count(
     code,
     default_options,
 ):
-    """Testing that default settings do not raise a warning for correct match subjects count."""
+    """Testing that default settings do not raise a warning."""
     tree = parse_ast_tree(code)
 
     visitor = MatchSubjectsVisitor(default_options, tree=tree)
@@ -70,7 +70,7 @@ def test_match_subjects_configured_count(
     code,
     options,
 ):
-    """Testing that settings can reflect the change for match subjects."""
+    """Testing that settings can reflect the change."""
     tree = parse_ast_tree(code)
 
     option_values = options(max_match_subjects=3)
