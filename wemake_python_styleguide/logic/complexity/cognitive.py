@@ -28,6 +28,7 @@ _CONTROL_FLOW_BREAKERS: AnyNodes = (
     ast.AsyncFor,
     ast.While,
     ast.IfExp,
+    ast.match_case,
 )
 
 #: Control flow nodes that increment.

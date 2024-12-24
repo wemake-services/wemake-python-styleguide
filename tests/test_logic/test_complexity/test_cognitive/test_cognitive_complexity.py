@@ -23,6 +23,12 @@ class Test:
         return a * self.f(a - 1)  # +1 for recursion
 """
 
+complexity1_4 = """
+def f(a):
+    match a:
+        case _: return a # +1
+"""
+
 complexity2_1 = """
 def f(a, b):
     if a and b and True:  # +2
@@ -35,6 +41,13 @@ def f(a, b):
         return 1
     if b:  # +1
         return 2
+"""
+
+complexity2_3 = """
+def f(a, b):
+    match a:
+        case 1: return 1  # +1
+        case 2: return 2  # +1
 """
 
 complexity3_1 = """
@@ -112,6 +125,15 @@ def f(a):
             break  # +2
 """
 
+complexity9_2 = """
+def f(a):
+    for a in range(10):  # +1
+        match a:  # +2
+            case 1: continue  # +3
+            case 2: break  # +3
+"""
+
+
 complexity10_1 = """
 def process_raw_constant(constant, min_word_length):
     processed_words = []
@@ -150,8 +172,10 @@ def enhance(tree):
         (complexity1_1, 1),
         (complexity1_2, 1),
         (complexity1_3, 1),
+        (complexity1_4, 1),
         (complexity2_1, 2),
         (complexity2_2, 2),
+        (complexity2_3, 2),
         (complexity3_1, 3),
         (complexity3_2, 3),
         (complexity3_3, 3),
@@ -161,6 +185,7 @@ def enhance(tree):
         (complexity5_1, 5),
         (complexity6_1, 6),
         (complexity9_1, 9),
+        (complexity9_2, 9),
         (complexity10_1, 10),
         (complexity14_1, 14),
     ],
