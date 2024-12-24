@@ -1375,10 +1375,11 @@ class TooManyMatchCaseViolation(ASTViolation):
         to manually add all match cases.
 
     Solution:
-        Refactor the ``match`` statement by breaking the logic into smaller, focused functions.
-        This will improve readability and maintainability.
-        Split complex logic into separate functions to keep each one concise, reducing the size
-        of the ``match`` block and making the code easier to understand and modify.
+        Refactor the ``match`` statement by breaking the logic into smaller,
+        focused functions. This will improve readability and maintainability.
+        Split complex logic into separate functions to keep each one concise,
+        reducing the size of the ``match`` block and making the code easier
+        to understand and modify.
 
 
     Configuration:
