@@ -43,6 +43,11 @@ def container():
     (x for x in [1, 2, 3] if {0})
 """
 
+match_statement = """
+match {0}:
+    case SomeClassName(FirstParentClass): ...
+"""
+
 
 @pytest.mark.parametrize(
     'code',
@@ -53,6 +58,7 @@ def container():
         set_comprehension,
         dict_comprehension,
         gen_comprehension,
+        match_statement,
     ],
 )
 @pytest.mark.parametrize(
@@ -96,6 +102,7 @@ def test_valid_conditional(
         set_comprehension,
         dict_comprehension,
         gen_comprehension,
+        match_statement,
     ],
 )
 @pytest.mark.parametrize(

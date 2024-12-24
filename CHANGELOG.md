@@ -132,6 +132,7 @@ Semantic versioning in our case means:
 - Fixes several bugs in `WPS322` with multiline strings detection
 - Fixes several violations not been detected in `case:` statements
 - Fixes `WPS434` not detecting reassignments in `:=` case
+- Fixes `WPS314` not detecting `match` statements
 
 ### Misc
 

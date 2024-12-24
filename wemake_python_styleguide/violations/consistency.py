@@ -661,7 +661,7 @@ class MissingSpaceBetweenKeywordAndParenViolation(TokenizeViolation):
 @final
 class ConstantConditionViolation(ASTViolation):
     """
-    Forbid using ``if`` statements that use invalid conditionals.
+    Forbid using ``if`` or ``match`` statements that use invalid conditionals.
 
     Reasoning:
         When invalid conditional arguments are used
@@ -675,9 +675,14 @@ class ConstantConditionViolation(ASTViolation):
 
         # Correct:
         if value is True: ...
+        match value:
+            case True:
+                ...
 
         # Wrong:
         if True: ...
+        match True:
+            case True: ...
 
     .. versionadded:: 0.3.0
 
