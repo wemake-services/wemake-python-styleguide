@@ -101,6 +101,7 @@ Semantic versioning in our case means:
 - Adds a new rule to check problematic function params, #1343
 - Adds a new rule to detect duplicate conditions in `if`s and `elif`s, #2241
 - Adds a new rule to detect duplicate `case` pattens in `match`, #3206
+- Adds a new rule to find many `match` subjects, #3201
 - Adds a new rule to find too complex `except` with too many exceptions
 - Adds a new rule to find too many `PEP695` type params
 - Adds a new rule to find useless ternary expressions, #1706
