@@ -7,11 +7,6 @@ from wemake_python_styleguide.visitors.ast.compares import (
     WrongConditionalVisitor,
 )
 
-create_variable = """
-variable = 1
-{0}
-"""
-
 if_statement = 'if {0}: ...'
 ternary = 'ternary = 0 if {0} else 1'
 
@@ -83,9 +78,7 @@ def test_valid_conditional(
     mode,
 ):
     """Testing that conditionals work well."""
-    tree = parse_ast_tree(
-        mode(create_variable.format(code.format(comparators))),
-    )
+    tree = parse_ast_tree(mode(code.format(comparators)))
 
     visitor = WrongConditionalVisitor(default_options, tree=tree)
     visitor.run()
@@ -121,6 +114,7 @@ def test_valid_conditional(
         '("tuple",)',
         '[]',
         '[variable]',
+        '(1, var)',
         'variable or False',
         'variable and False',
         'variable or True',
@@ -139,9 +133,7 @@ def test_constant_condition(
     mode,
 ):
     """Testing that violations are when using invalid conditional."""
-    tree = parse_ast_tree(
-        mode(create_variable.format(code.format(comparators))),
-    )
+    tree = parse_ast_tree(mode(code.format(comparators)))
 
     visitor = WrongConditionalVisitor(default_options, tree=tree)
     visitor.run()
@@ -166,6 +158,7 @@ def test_constant_condition(
         '("tuple",)',
         '[]',
         '[1, 2]',
+        '(1, 2)',
         'variable or False',
         'variable and False',
         'variable or True',
@@ -180,11 +173,10 @@ def test_constant_condition_in_match(
     parse_ast_tree,
     comparators,
     default_options,
-    mode,
 ):
     """Testing that violations are when using invalid conditional in PM."""
     tree = parse_ast_tree(
-        mode(create_variable.format(match_statement.format(comparators))),
+        match_statement.format(comparators),
     )
 
     visitor = WrongConditionalVisitor(default_options, tree=tree)
@@ -202,6 +194,7 @@ def test_constant_condition_in_match(
         '[x, y]',
         '{test : "1"}',
         '{test}',
+        '(x, y)',
         '{**keys, "data": None}',
         'variable or other',
         'variable and other',
@@ -212,11 +205,10 @@ def test_regular_condition_in_match(
     parse_ast_tree,
     comparators,
     default_options,
-    mode,
 ):
     """Testing correct conditional in PM."""
     tree = parse_ast_tree(
-        mode(create_variable.format(match_statement.format(comparators))),
+        match_statement.format(comparators),
     )
 
     visitor = WrongConditionalVisitor(default_options, tree=tree)
