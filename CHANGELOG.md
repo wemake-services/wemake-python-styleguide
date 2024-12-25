@@ -65,6 +65,7 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `WPS419`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS423`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS424`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS425`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS433`, because is covered by `pylint` linter
 - **Breaking**: Removes `WPS436`, because is covered by `pylint` linter
 - **Breaking**: Removes `WPS440`, because

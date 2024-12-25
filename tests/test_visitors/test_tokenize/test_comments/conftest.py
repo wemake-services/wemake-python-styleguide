@@ -12,6 +12,7 @@ def make_file(tmp_path):
     def factory(
         filename: str,
         file_content: str,
+        *,
         is_executable: bool,
     ) -> str:
         temp_folder = tmp_path / TEMP_FOLDER

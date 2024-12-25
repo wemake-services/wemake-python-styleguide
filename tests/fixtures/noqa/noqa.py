@@ -355,8 +355,6 @@ for sum_item in file_obj:  # noqa: WPS519
 
 my_print(sum_container == [])  # noqa: WPS520
 
-call_with_positional_bool(True, keyword=1)  # noqa: WPS425
-
 
 class MyInt(int):  # noqa: WPS600
     """My custom int subclass."""
