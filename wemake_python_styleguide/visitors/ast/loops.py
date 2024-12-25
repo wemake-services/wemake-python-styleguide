@@ -6,10 +6,8 @@ from typing import ClassVar, TypeAlias
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import AssignNodes
-from wemake_python_styleguide.compat.functions import get_assign_targets
-from wemake_python_styleguide.logic import nodes, source, walk
-from wemake_python_styleguide.logic.tree import loops, operators, slices
+from wemake_python_styleguide.logic import nodes, walk
+from wemake_python_styleguide.logic.tree import loops, operators
 from wemake_python_styleguide.logic.tree.variables import (
     is_valid_block_variable_definition,
 )
@@ -33,7 +31,6 @@ from wemake_python_styleguide.violations.consistency import (
     WrongLoopIterTypeViolation,
 )
 from wemake_python_styleguide.violations.refactoring import (
-    ImplicitItemsIteratorViolation,
     ImplicitSumViolation,
     UselessLoopElseViolation,
 )
@@ -240,33 +237,3 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
         )
         if is_implicit_sum:
             self.add_violation(ImplicitSumViolation(node))
-
-
-@final
-class SyncForLoopVisitor(base.BaseNodeVisitor):
-    """We use this visitor to check just sync ``for`` loops."""
-
-    def visit_For(self, node: ast.For) -> None:
-        """Checks for hidden patterns in sync loops."""
-        self._check_implicit_items(node)
-        self.generic_visit(node)
-
-    def _check_implicit_items(self, node: ast.For) -> None:
-        iterable = source.node_to_string(node.iter)
-        target = source.node_to_string(node.target)
-
-        for sub in ast.walk(node):
-            has_violation = (
-                isinstance(sub, ast.Subscript)
-                and not self._is_assigned_target(sub)
-                and slices.is_same_slice(iterable, target, sub)
-            )
-            if has_violation:
-                self.add_violation(ImplicitItemsIteratorViolation(node))
-                break
-
-    def _is_assigned_target(self, node: ast.Subscript) -> bool:
-        parent = nodes.get_parent(node)
-        if not isinstance(parent, (*AssignNodes, ast.AugAssign)):
-            return False
-        return any(node == target for target in get_assign_targets(parent))

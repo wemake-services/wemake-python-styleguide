@@ -108,7 +108,7 @@ class _FileTokens:
         for function in self._file_functions.search_functions():
             splitted_function_body = function.body().strip().split('\n')
             empty_lines_count = len(
-                [line for line in splitted_function_body if line == ''],
+                [line for line in splitted_function_body if not line],
             )
             if not empty_lines_count:
                 continue

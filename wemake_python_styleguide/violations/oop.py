@@ -428,11 +428,15 @@ class DirectMagicAttributeAccessViolation(ASTViolation):
     .. versionadded:: 0.8.0
     .. versionchanged:: 0.11.0
     .. versionchanged:: 0.16.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` and ``pylint`` linters. See ``PLC2801``.
 
     """
 
     error_template = 'Found direct magic attribute usage: {0}'
     code = 609
+    disabled_since = '1.0.0'
 
 
 @final

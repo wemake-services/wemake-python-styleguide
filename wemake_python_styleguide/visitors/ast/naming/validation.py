@@ -69,10 +69,6 @@ class _SimpleNameValidator:
             naming.PrivateNameViolation,
         ),
         _NamingPredicate(
-            alphabet.does_contain_unicode,
-            naming.UnicodeNameViolation,
-        ),
-        _NamingPredicate(
             lambda name: access.is_unused(name) and len(name) > 1,
             naming.WrongUnusedVariableNameViolation,
         ),

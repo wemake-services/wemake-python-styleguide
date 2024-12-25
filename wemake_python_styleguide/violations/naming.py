@@ -446,11 +446,15 @@ class SameAliasImportViolation(ASTViolation):
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.13.0
     .. versionchanged:: 0.14.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` and ``pylint`` linters. See ``PLC0414``.
 
     """
 
     error_template = 'Found same alias import: {0}'
     code = 113
+    disabled_since = '1.0.0'
 
 
 @final
@@ -646,6 +650,9 @@ class UnicodeNameViolation(MaybeASTViolation):
         some_變量 = ''
 
     .. versionadded:: 0.5.0
+    .. versionchanged:: 1.0.0
+       Only produced for filenames now.
+       Code is covered with ``ruff`` and ``pylint`` linter. See ``PLC2401``.
 
     """
 

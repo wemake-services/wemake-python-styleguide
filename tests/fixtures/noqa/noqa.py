@@ -9,10 +9,6 @@ from __future__ import print_function  # noqa: WPS422
 from typing import List
 
 import os.path  # noqa: WPS301
-import sys as sys  # noqa: WPS113
-
-from _some import protected  # noqa: WPS436
-from some import _protected  # noqa: WPS450
 
 from foo import bar
 from foo.bar import baz  # noqa: WPS458
@@ -121,8 +117,6 @@ def function_name(  # noqa: WPS614
 
 
 def some():  # noqa: WPS110
-    from my_module import some_import  # noqa: WPS433
-
     class Nested:  # noqa: WPS431
         ...  # noqa: WPS604
 
@@ -141,7 +135,6 @@ consecutive__underscores = 4  # noqa: WPS116
 cls = 5  # noqa: WPS117
 __author__ = 'Nikita Sobolev'  # noqa: WPS410
 extremely_long_name_that_needs_to_be_shortened_to_work_fine = 2  # noqa: WPS118
-привет_по_русски = 'Hello, world!'  # noqa: WPS119
 wrong_alias_ = 'some fake builtin alias'  # noqa: WPS120
 
 def some_function():
@@ -450,9 +443,6 @@ for nodes[0] in (1, 2, 3):  # noqa: WPS405
 with open('some') as MyBadException.custom:  # noqa: WPS406
     anti_wps428 = 1
 
-
-anti_wps428.__truediv__(1)  # noqa: WPS609
-
 if not some: # noqa: WPS504
     my_print('False')
 else:
@@ -484,9 +474,6 @@ mult_one -= -1  # noqa: WPS346
 CONSTANT = []  # noqa: WPS407
 
 numbers = map(lambda string: int(string), ['1'])  # noqa: WPS506
-
-if len(numbers) > 0:  # noqa: WPS507
-    my_print('len!')
 
 if numbers and numbers:  # noqa: WPS408
     my_print('duplicate boolop')
@@ -561,10 +548,6 @@ def wrong_yield_from():
 def consecutive_yields():
     yield 1
     yield 2  # noqa: WPS354
-
-
-for loop_var in loop_iter:  # noqa: WPS528
-    my_print(loop_iter[loop_var])
 
 if 'key' in some_dict:
     my_print(some_dict['key'])  # noqa: WPS529

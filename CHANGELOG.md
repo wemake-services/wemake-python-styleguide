@@ -30,6 +30,8 @@ Semantic versioning in our case means:
   `flake8-rst-docstrings`, `pep8-naming`
   support, use `ruff format` and `ruff check` instead
 - **Breaking**: Drops `darglint` support, because it is unmaintained
+- **Breaking**: Removes `WPS113`, because is covered by `pylint` linter
+- **Breaking**: Removes `WPS119`, because is covered by `pylint` linter
 - **Breaking**: Removes `WPS125`, because it is covered by `ruff` linter
 - **Breaking**: Removes `WPS302`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS304`, because it is covered by `ruff` formatter
@@ -63,18 +65,24 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `WPS419`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS423`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS424`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS433`, because is covered by `pylint` linter
+- **Breaking**: Removes `WPS436`, because is covered by `pylint` linter
 - **Breaking**: Removes `WPS440`, because
   it was buggy and is covered by `mypy`, #3209
 - **Breaking**: Removes `WPS442`, because
   it was buggy and is covered by `mypy`, #3209
+- **Breaking**: Removes `WPS450`, because is covered by `pylint` linter
 - **Breaking**: Removes `WPS452`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS454`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS465`, because `|` is now heavily used by typing
 - **Breaking**: Removes `WPS502`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS503`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS507`, because is covered by `pylint` linter
 - **Breaking**: Removes `WPS508`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS528`, because is covered by `pylint` linter
 - **Breaking**: Removes `WPS526`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS521`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS609`, because is covered by `pylint` linter
 
 ## Features
 
@@ -84,7 +92,6 @@ Semantic versioning in our case means:
 - Allows `pass` in `case` bodies, #2642
 - Allows subclassing builtins in `WPS600`, when creating an `Enum`, #2506
 - Allows using variables after blocks for `WPS441` in `assert` statements, #2543
-- Allows using nested `import` in `try` for `WPS433`, #2382
 - Does not count `self`, `cls`, and `mcs` as arguments
   for `WPS211` complexity check anymore, #2394
 - Allows underscores (`_`) with exactly 3 digits after it in `WPS303`, #3120

@@ -15,7 +15,6 @@ from wemake_python_styleguide.logic.tree import (
     ifs,
     operators,
 )
-from wemake_python_styleguide.logic.tree.functions import given_function_called
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations import (
     best_practices,
@@ -58,7 +57,6 @@ class IfStatementVisitor(BaseNodeVisitor):
     def visit_any_if(self, node: AnyIf) -> None:
         """Checks ``if`` nodes and expressions."""
         self._check_negated_conditions(node)
-        self._check_useless_len(node)
         self._check_repeated_conditions(node)
         self._check_useless_ternary(node)
         self.generic_visit(node)
@@ -68,13 +66,6 @@ class IfStatementVisitor(BaseNodeVisitor):
             self.add_violation(
                 refactoring.NegatedConditionsViolation(subnode),
             )
-
-    def _check_useless_len(self, node: AnyIf) -> None:
-        if isinstance(node.test, ast.Call) and given_function_called(
-            node.test,
-            {'len'},
-        ):
-            self.add_violation(refactoring.UselessLenCompareViolation(node))
 
     def _check_repeated_conditions(self, node: AnyIf) -> None:
         if not isinstance(node, ast.If):

@@ -5,8 +5,6 @@ This file contains all violations which may be tweaked using
 It is used for some of e2e tests to check that `i_control_code` works.
 """
 
-import sys as sys  # noqa: WPS113
-
 
 def __getattr__():  # noqa: WPS413
     # See:

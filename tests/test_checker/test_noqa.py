@@ -43,13 +43,13 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS110': 5,
         'WPS111': 2,
         'WPS112': 1,
-        'WPS113': 1,
+        'WPS113': 0,  # disabled since 1.0.0
         'WPS114': 1,
         'WPS115': 1,
         'WPS116': 1,
         'WPS117': 1,
         'WPS118': 1,
-        'WPS119': 1,
+        'WPS119': 0,  # disabled since 1.0.0
         'WPS120': 1,
         'WPS121': 1,
         'WPS122': 2,
@@ -191,10 +191,10 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS430': 1,
         'WPS431': 2,
         'WPS432': 2,
-        'WPS433': 1,
+        'WPS433': 0,  # disabled since 1.0.0
         'WPS434': 1,
         'WPS435': 1,
-        'WPS436': 1,
+        'WPS436': 0,  # disabled since 1.0.0
         'WPS437': 1,
         'WPS438': 4,
         'WPS439': 1,
@@ -208,7 +208,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS447': 1,
         'WPS448': 1,
         'WPS449': 1,
-        'WPS450': 1,
+        'WPS450': 0,  # disabled since 1.0.0
         'WPS451': 0,  # deprecated
         'WPS452': 0,  # disabled since 1.0.0
         'WPS453': 0,
@@ -241,7 +241,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS504': 1,
         'WPS505': 1,
         'WPS506': 1,
-        'WPS507': 1,
+        'WPS507': 0,  # disabled since 1.0.0
         'WPS508': 0,  # disabled since 1.0.0
         'WPS509': 1,
         'WPS510': 1,
@@ -262,7 +262,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS525': 2,
         'WPS526': 0,  # disabled since 1.0.0
         'WPS527': 1,
-        'WPS528': 1,
+        'WPS528': 0,  # disabled since 1.0.0
         'WPS529': 1,
         'WPS530': 1,
         'WPS531': 0,  # disabled since 1.0.0
@@ -279,7 +279,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS606': 1,
         'WPS607': 1,
         'WPS608': 1,
-        'WPS609': 1,
+        'WPS609': 0,  # disabled since 1.0.0
         'WPS610': 1,
         'WPS611': 1,
         'WPS612': 1,
@@ -294,7 +294,6 @@ SHOULD_BE_RAISED = types.MappingProxyType(
 # Violations which may be tweaked by `i_control_code` option:
 SHOULD_BE_RAISED_NO_CONTROL = types.MappingProxyType(
     {
-        'WPS113': 0,
         'WPS412': 0,
         'WPS413': 0,
     },

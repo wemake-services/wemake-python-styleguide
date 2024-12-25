@@ -197,7 +197,7 @@ class _Option:
 
     def __attrs_post_init__(self) -> None:
         """Is called after regular init is done."""
-        object.__setattr__(  # noqa: WPS609
+        object.__setattr__(
             self,
             'help',
             f'{self.help} Defaults to: %(default)s',
