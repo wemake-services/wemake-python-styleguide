@@ -54,7 +54,7 @@ def test_correct_lambda(
         'lambda: ()',
         'lambda: False',
         'lambda: lambda: ""',
-        'lambda: {}',  # noqa: P103
+        'lambda: {}',
     ],
 )
 def test_wrong_lambda(

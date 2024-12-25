@@ -50,7 +50,7 @@ def test_passed(
     ],
 )
 @pytest.mark.parametrize('method', TUPLE_ARGUMENTS_METHODS)
-@pytest.mark.parametrize('braces', ['[]', '{}'])  # noqa: P103
+@pytest.mark.parametrize('braces', ['[]', '{}'])
 def test_no_passed(
     assert_errors,
     parse_ast_tree,

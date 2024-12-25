@@ -36,7 +36,7 @@ assert_with_message_template = 'assert {0}, "message"'
         'b""',
         '[]',
         '()',
-        '{}',  # noqa: P103
+        '{}',
         '+True',
         'False',
         'None',

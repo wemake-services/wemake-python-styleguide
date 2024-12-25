@@ -9,10 +9,10 @@ from wemake_python_styleguide.visitors.ast.compares import (
 
 wrong_comparators = [
     ('some', '[]'),
-    ('some', '{}'),  # noqa: P103
+    ('some', '{}'),
     ('some', '()'),
     ('[]', 'some'),
-    ('{}', 'some'),  # noqa: P103
+    ('{}', 'some'),
     ('()', 'some'),
     ('some', '(x := [])'),
     ('(x := [])', 'some'),

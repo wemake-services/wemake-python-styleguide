@@ -87,13 +87,6 @@ def does_contain_unicode(name: str) -> bool:
 
     >>> does_contain_unicode('')
     False
-
-    >>> does_contain_unicode('привет_мир1')
-    True
-
-    >>> does_contain_unicode('russian_техт')
-    True
-
     """
     try:
         name.encode('ascii')

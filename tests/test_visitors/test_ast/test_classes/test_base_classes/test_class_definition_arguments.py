@@ -16,7 +16,7 @@ class TestClass(**kwargs):
 class_definition_with_unpacking_two = """
 class TestClass(**{}):
     '''Docs.'''
-"""  # noqa: P103
+"""
 
 class_definition_with_unpacking_and_arguments = """
 kwargs = {'another_arg': 'another_arg'}
