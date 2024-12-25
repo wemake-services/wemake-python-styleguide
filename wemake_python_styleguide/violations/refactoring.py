@@ -1171,7 +1171,6 @@ class ImplicitItemsIteratorViolation(ASTViolation):
        No longer produced, kept here for historic reasons.
        This is covered with ``ruff`` and ``pylint`` linters. See ``PLC0206``.
 
-
     """
 
     error_template = 'Found implicit `.items()` usage'

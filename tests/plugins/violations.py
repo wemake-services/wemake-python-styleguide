@@ -78,6 +78,7 @@ def all_controlled_violations():
         for module_classes in _load_all_violation_classes().values()
         for violation_class in module_classes
         if '--i-control-code' in violation_class.__doc__
+        and not violation_class.disabled_since
     ]
 
 
