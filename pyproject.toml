@@ -157,9 +157,9 @@ lint.ignore = [
   "D405",
   "ISC001",  # implicit string concat conflicts with `ruff format`
   "ISC003",  # prefer explicit string concat over implicit concat
+  "PLR09",   # we have our own complexity rules
   "PLR2004", # do not report magic numbers
   "PLR6301", # do not require classmethod / staticmethod when self not used
-  "PLR09",   # we have our own complexity rules
   "RUF001",  # <
   "RUF002",  # | allow non-ascii letters
   "RUF100",  # conflicts with flake8
