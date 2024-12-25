@@ -573,9 +573,6 @@ try:
 except ValueError or TypeError:  # noqa: WPS455
     my_print("Oops.")
 
-if float("NaN") < number:  # noqa: WPS456
-    my_print("Greater than... what?")
-
 def infinite_loop():
     while True:  # noqa: WPS457
         my_print('forever')
