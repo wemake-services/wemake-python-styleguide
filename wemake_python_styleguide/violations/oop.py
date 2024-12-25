@@ -514,6 +514,7 @@ class YieldMagicMethodViolation(ASTViolation):
 
     See also:
         https://docs.python.org/3/reference/datamodel.html
+        https://docs.astral.sh/ruff/rules/yield-in-init
 
     .. versionadded:: 0.3.0
     .. versionchanged:: 0.11.0

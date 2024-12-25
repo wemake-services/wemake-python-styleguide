@@ -2687,11 +2687,15 @@ class BareRaiseViolation(ASTViolation):
             raise
 
     .. versionadded:: 0.16.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` and ``pylint`` linters. See ``PLE0704``.
 
     """
 
     error_template = 'Found bare raise keyword'
     code = 467
+    disabled_since = '1.0.0'
 
 
 @final

@@ -779,6 +779,9 @@ class PointlessStarredViolation(ASTViolation):
         # Wrong:
         print(*[1, 2, 3], **{{}})
 
+    See also:
+        https://docs.astral.sh/ruff/rules/unnecessary-dict-kwargs
+
     .. versionadded:: 0.12.0
 
     """
