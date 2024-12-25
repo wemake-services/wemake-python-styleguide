@@ -64,7 +64,7 @@ def test_all_visitors_contained_in_checker(all_visitors):  # noqa: WPS442
     """Ensures that all visitors are contained in a checker."""
     checker_visitors = {
         klass.__qualname__
-        for klass in Checker._visitors  # noqa: WPS437
+        for klass in Checker._visitors  # noqa: SLF001
         if not klass.__qualname__.startswith('_')
     }
 

@@ -1595,11 +1595,15 @@ class ProtectedAttributeViolation(ASTViolation):
 
     .. versionadded:: 0.3.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``SLF001``.
 
     """
 
     error_template = 'Found protected attribute usage: {0}'
     code = 437
+    disabled_since = '1.0.0'
 
 
 @final

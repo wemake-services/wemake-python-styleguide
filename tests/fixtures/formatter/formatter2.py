@@ -1,2 +1,2 @@
 def data(param) -> int:
-    return param._protected + 10_00
+    return s + 10_00

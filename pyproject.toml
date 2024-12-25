@@ -134,6 +134,7 @@ lint.select = [
   "RUF",  # ruff
   "S",    # flake8-bandit
   "SIM",  # flake8-simpify
+  "SLF",  # flake8-self
   "SLOT", # flake8-slots
   "T100", # flake8-debugger
   "TRY",  # tryceratops

@@ -11,8 +11,7 @@
   [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
     1:1      WPS110 Found wrong variable name: data
     1:10     WPS110 Found wrong variable name: param
-    2:12     WPS437 Found protected attribute usage: _protected
-    2:31     WPS303 Found underscored number: 10_00
+    2:16     WPS303 Found underscored number: 10_00
   
   Full list of violations and explanations:
   https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
@@ -31,8 +30,7 @@
   [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
     1:1      WPS110 Found wrong variable name: data
     1:10     WPS110 Found wrong variable name: param
-    2:12     WPS437 Found protected attribute usage: _protected
-    2:31     WPS303 Found underscored number: 10_00
+    2:16     WPS303 Found underscored number: 10_00
   
   [1mWPS110[0m: Found wrong variable name: handle
     1     ./tests/fixtures/formatter/formatter1.py
@@ -52,12 +50,8 @@
     1     ./tests/fixtures/formatter/formatter1.py
   [4mTotal: 1[0m
   
-  [1mWPS437[0m: Found protected attribute usage: _protected
-    1     ./tests/fixtures/formatter/formatter2.py
-  [4mTotal: 1[0m
   
-  
-  [4m[1mAll errors: 8[0m[0m
+  [4m[1mAll errors: 7[0m[0m
   
   Full list of violations and explanations:
   https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
@@ -95,13 +89,9 @@
     [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
              ^
   
-    2:12     WPS437 Found protected attribute usage: _protected
-    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
-           ^
-  
-    2:31     WPS303 Found underscored number: 10_00
-    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
-                              ^
+    2:16     WPS303 Found underscored number: 10_00
+    [34mreturn[39;49;00m s + [34m10_00[39;49;00m[37m[39;49;00m
+               ^
   
   Full list of violations and explanations:
   https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
@@ -126,9 +116,7 @@
              -> https://pyflak.es/WPS110
     1:10     WPS110 Found wrong variable name: param
              -> https://pyflak.es/WPS110
-    2:12     WPS437 Found protected attribute usage: _protected
-             -> https://pyflak.es/WPS437
-    2:31     WPS303 Found underscored number: 10_00
+    2:16     WPS303 Found underscored number: 10_00
              -> https://pyflak.es/WPS303
   
   Full list of violations and explanations:
@@ -167,13 +155,9 @@
     [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
              ^
   
-    2:12     WPS437 Found protected attribute usage: _protected
-    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
-           ^
-  
-    2:31     WPS303 Found underscored number: 10_00
-    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
-                              ^
+    2:16     WPS303 Found underscored number: 10_00
+    [34mreturn[39;49;00m s + [34m10_00[39;49;00m[37m[39;49;00m
+               ^
   
   [1mWPS110[0m: Found wrong variable name: handle
     1     ./tests/fixtures/formatter/formatter1.py
@@ -193,12 +177,8 @@
     1     ./tests/fixtures/formatter/formatter1.py
   [4mTotal: 1[0m
   
-  [1mWPS437[0m: Found protected attribute usage: _protected
-    1     ./tests/fixtures/formatter/formatter2.py
-  [4mTotal: 1[0m
   
-  
-  [4m[1mAll errors: 8[0m[0m
+  [4m[1mAll errors: 7[0m[0m
   
   Full list of violations and explanations:
   https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
@@ -242,15 +222,10 @@
     [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
              ^
   
-    2:12     WPS437 Found protected attribute usage: _protected
-             -> https://pyflak.es/WPS437
-    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
-           ^
-  
-    2:31     WPS303 Found underscored number: 10_00
+    2:16     WPS303 Found underscored number: 10_00
              -> https://pyflak.es/WPS303
-    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
-                              ^
+    [34mreturn[39;49;00m s + [34m10_00[39;49;00m[37m[39;49;00m
+               ^
   
   Full list of violations and explanations:
   https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
@@ -288,13 +263,9 @@
     [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
              ^
   
-    2:12     WPS437 Found protected attribute usage: _protected
-    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
-           ^
-  
-    2:31     WPS303 Found underscored number: 10_00
-    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
-                              ^
+    2:16     WPS303 Found underscored number: 10_00
+    [34mreturn[39;49;00m s + [34m10_00[39;49;00m[37m[39;49;00m
+               ^
   
   [1mWPS110[0m: Found wrong variable name: handle
     1     ./tests/fixtures/formatter/formatter1.py
@@ -314,12 +285,8 @@
     1     ./tests/fixtures/formatter/formatter1.py
   [4mTotal: 1[0m
   
-  [1mWPS437[0m: Found protected attribute usage: _protected
-    1     ./tests/fixtures/formatter/formatter2.py
-  [4mTotal: 1[0m
   
-  
-  [4m[1mAll errors: 8[0m[0m
+  [4m[1mAll errors: 7[0m[0m
   
   Full list of violations and explanations:
   https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
@@ -338,8 +305,7 @@
   [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
     1:1      WPS110 Found wrong variable name: data
     1:10     WPS110 Found wrong variable name: param
-    2:12     WPS437 Found protected attribute usage: _protected
-    2:31     WPS303 Found underscored number: 10_00
+    2:16     WPS303 Found underscored number: 10_00
   
   Full list of violations and explanations:
   https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
@@ -358,8 +324,7 @@
   [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
     1:1      WPS110 Found wrong variable name: data
     1:10     WPS110 Found wrong variable name: param
-    2:12     WPS437 Found protected attribute usage: _protected
-    2:31     WPS303 Found underscored number: 10_00
+    2:16     WPS303 Found underscored number: 10_00
   
   [1mWPS110[0m: Found wrong variable name: handle
     1     ./tests/fixtures/formatter/formatter1.py
@@ -379,12 +344,8 @@
     1     ./tests/fixtures/formatter/formatter1.py
   [4mTotal: 1[0m
   
-  [1mWPS437[0m: Found protected attribute usage: _protected
-    1     ./tests/fixtures/formatter/formatter2.py
-  [4mTotal: 1[0m
   
-  
-  [4m[1mAll errors: 8[0m[0m
+  [4m[1mAll errors: 7[0m[0m
   
   Full list of violations and explanations:
   https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
@@ -422,13 +383,9 @@
     [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
              ^
   
-    2:12     WPS437 Found protected attribute usage: _protected
-    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
-           ^
-  
-    2:31     WPS303 Found underscored number: 10_00
-    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
-                              ^
+    2:16     WPS303 Found underscored number: 10_00
+    [34mreturn[39;49;00m s + [34m10_00[39;49;00m[37m[39;49;00m
+               ^
   
   Full list of violations and explanations:
   https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
@@ -453,9 +410,7 @@
              -> https://pyflak.es/WPS110
     1:10     WPS110 Found wrong variable name: param
              -> https://pyflak.es/WPS110
-    2:12     WPS437 Found protected attribute usage: _protected
-             -> https://pyflak.es/WPS437
-    2:31     WPS303 Found underscored number: 10_00
+    2:16     WPS303 Found underscored number: 10_00
              -> https://pyflak.es/WPS303
   
   Full list of violations and explanations:
@@ -494,13 +449,9 @@
     [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
              ^
   
-    2:12     WPS437 Found protected attribute usage: _protected
-    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
-           ^
-  
-    2:31     WPS303 Found underscored number: 10_00
-    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
-                              ^
+    2:16     WPS303 Found underscored number: 10_00
+    [34mreturn[39;49;00m s + [34m10_00[39;49;00m[37m[39;49;00m
+               ^
   
   [1mWPS110[0m: Found wrong variable name: handle
     1     ./tests/fixtures/formatter/formatter1.py
@@ -520,12 +471,8 @@
     1     ./tests/fixtures/formatter/formatter1.py
   [4mTotal: 1[0m
   
-  [1mWPS437[0m: Found protected attribute usage: _protected
-    1     ./tests/fixtures/formatter/formatter2.py
-  [4mTotal: 1[0m
   
-  
-  [4m[1mAll errors: 8[0m[0m
+  [4m[1mAll errors: 7[0m[0m
   
   Full list of violations and explanations:
   https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
@@ -569,15 +516,10 @@
     [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
              ^
   
-    2:12     WPS437 Found protected attribute usage: _protected
-             -> https://pyflak.es/WPS437
-    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
-           ^
-  
-    2:31     WPS303 Found underscored number: 10_00
+    2:16     WPS303 Found underscored number: 10_00
              -> https://pyflak.es/WPS303
-    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
-                              ^
+    [34mreturn[39;49;00m s + [34m10_00[39;49;00m[37m[39;49;00m
+               ^
   
   Full list of violations and explanations:
   https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
@@ -615,13 +557,9 @@
     [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
              ^
   
-    2:12     WPS437 Found protected attribute usage: _protected
-    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
-           ^
-  
-    2:31     WPS303 Found underscored number: 10_00
-    [34mreturn[39;49;00m param._protected + [34m10_00[39;49;00m[37m[39;49;00m
-                              ^
+    2:16     WPS303 Found underscored number: 10_00
+    [34mreturn[39;49;00m s + [34m10_00[39;49;00m[37m[39;49;00m
+               ^
   
   [1mWPS110[0m: Found wrong variable name: handle
     1     ./tests/fixtures/formatter/formatter1.py
@@ -641,12 +579,8 @@
     1     ./tests/fixtures/formatter/formatter1.py
   [4mTotal: 1[0m
   
-  [1mWPS437[0m: Found protected attribute usage: _protected
-    1     ./tests/fixtures/formatter/formatter2.py
-  [4mTotal: 1[0m
   
-  
-  [4m[1mAll errors: 8[0m[0m
+  [4m[1mAll errors: 7[0m[0m
   
   Full list of violations and explanations:
   https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
@@ -665,8 +599,7 @@
   tests/fixtures/formatter/formatter2.py
     1:1      WPS110 Found wrong variable name: data
     1:10     WPS110 Found wrong variable name: param
-    2:12     WPS437 Found protected attribute usage: _protected
-    2:31     WPS303 Found underscored number: 10_00
+    2:16     WPS303 Found underscored number: 10_00
   
   Full list of violations and explanations:
   https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
@@ -685,8 +618,7 @@
   tests/fixtures/formatter/formatter2.py
     1:1      WPS110 Found wrong variable name: data
     1:10     WPS110 Found wrong variable name: param
-    2:12     WPS437 Found protected attribute usage: _protected
-    2:31     WPS303 Found underscored number: 10_00
+    2:16     WPS303 Found underscored number: 10_00
   
   WPS110: Found wrong variable name: handle
     1     ./tests/fixtures/formatter/formatter1.py
@@ -706,12 +638,8 @@
     1     ./tests/fixtures/formatter/formatter1.py
   Total: 1
   
-  WPS437: Found protected attribute usage: _protected
-    1     ./tests/fixtures/formatter/formatter2.py
-  Total: 1
   
-  
-  All errors: 8
+  All errors: 7
   
   Full list of violations and explanations:
   https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
@@ -749,13 +677,9 @@
     def data(param) -> int:
              ^
   
-    2:12     WPS437 Found protected attribute usage: _protected
-    return param._protected + 10_00
-           ^
-  
-    2:31     WPS303 Found underscored number: 10_00
-    return param._protected + 10_00
-                              ^
+    2:16     WPS303 Found underscored number: 10_00
+    return s + 10_00
+               ^
   
   Full list of violations and explanations:
   https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
@@ -780,9 +704,7 @@
              -> https://pyflak.es/WPS110
     1:10     WPS110 Found wrong variable name: param
              -> https://pyflak.es/WPS110
-    2:12     WPS437 Found protected attribute usage: _protected
-             -> https://pyflak.es/WPS437
-    2:31     WPS303 Found underscored number: 10_00
+    2:16     WPS303 Found underscored number: 10_00
              -> https://pyflak.es/WPS303
   
   Full list of violations and explanations:
@@ -821,13 +743,9 @@
     def data(param) -> int:
              ^
   
-    2:12     WPS437 Found protected attribute usage: _protected
-    return param._protected + 10_00
-           ^
-  
-    2:31     WPS303 Found underscored number: 10_00
-    return param._protected + 10_00
-                              ^
+    2:16     WPS303 Found underscored number: 10_00
+    return s + 10_00
+               ^
   
   WPS110: Found wrong variable name: handle
     1     ./tests/fixtures/formatter/formatter1.py
@@ -847,12 +765,8 @@
     1     ./tests/fixtures/formatter/formatter1.py
   Total: 1
   
-  WPS437: Found protected attribute usage: _protected
-    1     ./tests/fixtures/formatter/formatter2.py
-  Total: 1
   
-  
-  All errors: 8
+  All errors: 7
   
   Full list of violations and explanations:
   https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
@@ -896,15 +810,10 @@
     def data(param) -> int:
              ^
   
-    2:12     WPS437 Found protected attribute usage: _protected
-             -> https://pyflak.es/WPS437
-    return param._protected + 10_00
-           ^
-  
-    2:31     WPS303 Found underscored number: 10_00
+    2:16     WPS303 Found underscored number: 10_00
              -> https://pyflak.es/WPS303
-    return param._protected + 10_00
-                              ^
+    return s + 10_00
+               ^
   
   Full list of violations and explanations:
   https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
@@ -942,13 +851,9 @@
     def data(param) -> int:
              ^
   
-    2:12     WPS437 Found protected attribute usage: _protected
-    return param._protected + 10_00
-           ^
-  
-    2:31     WPS303 Found underscored number: 10_00
-    return param._protected + 10_00
-                              ^
+    2:16     WPS303 Found underscored number: 10_00
+    return s + 10_00
+               ^
   
   WPS110: Found wrong variable name: handle
     1     ./tests/fixtures/formatter/formatter1.py
@@ -968,12 +873,8 @@
     1     ./tests/fixtures/formatter/formatter1.py
   Total: 1
   
-  WPS437: Found protected attribute usage: _protected
-    1     ./tests/fixtures/formatter/formatter2.py
-  Total: 1
   
-  
-  All errors: 8
+  All errors: 7
   
   Full list of violations and explanations:
   https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
@@ -1062,8 +963,7 @@
     9:21     WPS303 Found underscored number: 2_00
     13:1     WPS110 Found wrong variable name: data
     13:10    WPS110 Found wrong variable name: param
-    14:12    WPS437 Found protected attribute usage: _protected
-    14:31    WPS303 Found underscored number: 10_00
+    14:16    WPS303 Found underscored number: 10_00
   
   Full list of violations and explanations:
   https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
