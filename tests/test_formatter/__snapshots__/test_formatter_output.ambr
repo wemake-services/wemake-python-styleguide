@@ -963,8 +963,7 @@
     9:21     WPS303 Found underscored number: 2_00
     13:1     WPS110 Found wrong variable name: data
     13:10    WPS110 Found wrong variable name: param
-    14:12    WPS437 Found protected attribute usage: _protected
-    14:31    WPS303 Found underscored number: 10_00
+    14:16    WPS303 Found underscored number: 10_00
   
   Full list of violations and explanations:
   https://wemake-python-styleguide.rtfd.io/en/xx.xx/pages/usage/violations/
