@@ -23,10 +23,6 @@ repos:
     rev: v1.7.4
     hooks:
       - id: actionlint
-  - repo: https://github.com/mrtazz/checkmake.git
-    rev: 0.2.2
-    hooks:
-      - id: checkmake
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.10.0.1
     hooks:
