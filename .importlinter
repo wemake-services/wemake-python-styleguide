@@ -67,9 +67,6 @@ forbidden_modules =
   pycodestyle
   mccabe
 
-  astboom
-  tokelor
-
 ignore_imports =
   # These modules must import from flake8 to provide required API:
   wemake_python_styleguide.checker -> flake8

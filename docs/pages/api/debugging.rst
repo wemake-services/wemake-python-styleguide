@@ -10,10 +10,10 @@ Viewing module contents
 We recommend to create a simple file with just the part that does not work.
 We usually call this file ``ex.py`` and remove it before the actual commit.
 
-To reveal internals of this Python source code, you can use following options:
+To reveal internals of this Python source code use:
 
-* ``astboom < ex.py`` will show you pretty-printed ``ast`` contents
-* ``tokelor ex.py`` will show you pretty-printed token stream
+* ``python3.12 -m ast ex.py``
+* ``python3.12 -m tokenize ex.py``
 
 It might not be enough to find some complex cases, but it helps.
 
