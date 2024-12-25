@@ -19,6 +19,10 @@ repos:
     rev: v1.7.4
     hooks:
       - id: actionlint
+  - repo: https://github.com/tox-dev/pyproject-fmt
+    rev: v2.5.0
+    hooks:
+      - id: pyproject-fmt
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.8.4
     hooks:
