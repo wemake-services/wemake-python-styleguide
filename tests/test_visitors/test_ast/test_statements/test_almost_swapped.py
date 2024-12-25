@@ -18,6 +18,11 @@ a = b
 b = a
 """
 
+wrong_swapped_uops_variables = """
+a = -b
+b = a
+"""
+
 wrong_swapped_variables_with_temp = """
 temp = a
 a = b
@@ -34,6 +39,7 @@ dx, dy = dy, dx
     'code',
     [
         wrong_swapped_variables,
+        wrong_swapped_uops_variables,
         wrong_swapped_variables_with_temp,
         wrong_double_swap,
     ],
