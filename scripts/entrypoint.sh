@@ -26,7 +26,7 @@ flake8 --version
 echo '================================='
 echo
 
-cd "$INPUT_CWD"
+cd "$INPUT_CWD" || exit 1
 
 # Runs `flake8`, possibly with `reviewdog`:
 if [ "$INPUT_REPORTER" == 'terminal' ]; then
@@ -42,6 +42,7 @@ elif [ "$INPUT_REPORTER" == 'github-pr-review' ] ||
   output=$(flake8 "$INPUT_PATH" --append-config='/action-config.cfg')
   echo "$output" | reviewdog -f=flake8 -reporter="$INPUT_REPORTER" -level=error
   # `reviewdog` does not fail with any status code, so we have to get dirty:
+  # shellcheck disable=SC2319
   status=$(test "$output" = ''; echo $?)
 else
   output="Invalid action reporter specified: $INPUT_REPORTER"
@@ -52,6 +53,7 @@ fi
 # See: https://help.github.com/en/articles/development-tools-for-github-action
 delimiter="$(dd if=/dev/urandom bs=15 count=1 status=none | base64)"
 # See: https://github.com/orgs/community/discussions/26288#discussioncomment-3876281
+# shellcheck disable=SC2129
 echo "output<<$delimiter" >> "$GITHUB_OUTPUT"
 echo "$output" >> "$GITHUB_OUTPUT"
 echo "$delimiter" >> "$GITHUB_OUTPUT"

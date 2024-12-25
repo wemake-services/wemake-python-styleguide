@@ -9,7 +9,6 @@ description: 'Runs wemake-python-styleguide as a GitHub Action'
 branding:
   icon: 'check'
   color: 'green'
-
 inputs:
   path:
     description: 'Path or space-separated list of paths to lint'
@@ -34,7 +33,6 @@ inputs:
 outputs:
   output:
     description: 'The output of wemake-python-styleguide run'
-
 runs:
   using: 'docker'
   image: 'Dockerfile'

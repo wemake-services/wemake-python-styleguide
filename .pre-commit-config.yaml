@@ -10,6 +10,10 @@ repos:
       - id: mixed-line-ending
         args: [--fix=lf]
       - id: check-case-conflict
+  - repo: https://github.com/google/yamlfmt
+    rev: v0.14.0
+    hooks:
+      - id: yamlfmt
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.30.0
     hooks:
@@ -19,6 +23,10 @@ repos:
     rev: v1.7.4
     hooks:
       - id: actionlint
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.10.0.1
+    hooks:
+      - id: shellcheck
   - repo: https://github.com/tox-dev/pyproject-fmt
     rev: v2.5.0
     hooks:
@@ -29,9 +37,7 @@ repos:
       - id: ruff
         args: ["--exit-non-zero-on-fix", "--fix"]
       - id: ruff-format
-
 exclude: ^(tests/fixtures/|tests/test_formatter/__snapshots__/)
-
 ci:
   autofix_commit_msg: "[pre-commit.ci] auto fixes from pre-commit.com hooks"
   autofix_prs: true
