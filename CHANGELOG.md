@@ -50,6 +50,7 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `WPS326`, because it is covered by `ruff` linter
 - **Breaking**: Removes `WPS329`, because it is covered by `ruff` linter
 - **Breaking**: Removes `WPS331`, because it is covered by `ruff` linter
+- **Breaking**: Removes `WPS333`, because is covered by `pylint` linter
 - **Breaking**: Removes `WPS337`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS340`, because it is covered by `ruff` formatter
 - **Breaking**: Removes `WPS341`, because it is covered by `ruff` formatter
@@ -66,6 +67,7 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `WPS423`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS424`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS425`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS428`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS433`, because is covered by `pylint` linter
 - **Breaking**: Removes `WPS436`, because is covered by `pylint` linter
 - **Breaking**: Removes `WPS440`, because
@@ -81,7 +83,10 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `WPS503`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS507`, because is covered by `pylint` linter
 - **Breaking**: Removes `WPS508`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS510`, because is covered by `pylint` linter
+- **Breaking**: Removes `WPS514`, because is covered by `pylint` linter
 - **Breaking**: Removes `WPS528`, because is covered by `pylint` linter
+- **Breaking**: Removes `WPS525`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS526`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS521`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS609`, because is covered by `pylint` linter
@@ -102,7 +107,6 @@ Semantic versioning in our case means:
 - Allows any number of instance attributes on `@dataclass`es in `WPS230`, #2448
 - Allows any number of function parameters
   in `@overload` definitions for `WPS211`, #1957
-- Allows docstrings after attributes in classes for `WPS428`, #3056
 - Allows using multiline strings when placed on separate lines, #3056
 - Disallows using `is not` and `not in` as negated conditions in `WPS504`, #2617
 - Allows all branches in `if/elif/else` to be negated in `WPS504`, #2617

@@ -1249,13 +1249,14 @@ class StatementHasNoEffectViolation(ASTViolation):
        Do not report ``...`` when used in a
        function or class body as a single node.
     .. versionchanged:: 1.0.0
-       Allows docstring statements to follow assignments
-       on class and module levels.
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``B015`` and ``B018``.
 
     """
 
     error_template = 'Found statement that has no effect'
     code = 428
+    disabled_since = '1.0.0'
 
 
 @final

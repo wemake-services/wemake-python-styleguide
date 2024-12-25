@@ -541,11 +541,15 @@ class WrongInCompareTypeViolation(ASTViolation):
     .. versionadded:: 0.10.0
     .. versionchanged:: 0.11.0
     .. versionchanged:: 0.14.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` and ``pylint`` linters. See ``PLR6201``.
 
     """
 
     error_template = 'Found `in` used with a non-set container'
     code = 510
+    disabled_since = '1.0.0'
 
 
 @final
@@ -672,7 +676,6 @@ class ImplicitInConditionViolation(ASTViolation):
     Solution:
         Refactor compares to use ``in`` or ``not in`` clauses.
 
-
     Example::
 
         # Correct:
@@ -685,11 +688,15 @@ class ImplicitInConditionViolation(ASTViolation):
 
     .. versionadded:: 0.10.0
     .. versionchanged:: 0.12.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` and ``pylint`` linters. See ``PLR1714``.
 
     """
 
     code = 514
     error_template = 'Found implicit `in` condition: {0}'
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1065,11 +1072,15 @@ class InCompareWithSingleItemContainerViolation(ASTViolation):
         a in {'s'}
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``FURB171``.
 
     """
 
     error_template = 'Found wrong `in` compare with single item container'
     code = 525
+    disabled_since = '1.0.0'
 
 
 @final

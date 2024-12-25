@@ -76,7 +76,7 @@ formatted_string_complex = f'1+1={1 + 1}'  # noqa: WPS237
 def __getattr__():  # noqa: WPS413
     # See:
     # https://github.com/wemake-services/wemake-python-styleguide/issues/461
-    anti_wps428 = 1
+    ...
 
 
 def foo_func():
@@ -113,15 +113,15 @@ def function_name(  # noqa: WPS614
 ):
     # See:
     # https://github.com/wemake-services/wemake-python-styleguide/issues/392
-    anti_wps428 = 1
+    ...
 
 
 def some():  # noqa: WPS110
     class Nested:  # noqa: WPS431
-        ...  # noqa: WPS604
+        """Docs."""  # noqa: WPS604
 
     def nested():  # noqa: WPS430
-        anti_wps428 = 1
+        ...
 
 
 del {'a': 1}['a']  # noqa: WPS420
@@ -156,7 +156,7 @@ def many_locals():  # noqa: WPS210
 
 
 def many_arguments(_arg1, _arg2, _arg3, _arg4, _arg5, _arg6):  # noqa: WPS211
-    anti_wps428 = 1
+    ...
 
 
 def many_returns(xy):  # noqa: WPS212
@@ -191,32 +191,32 @@ def many_expressions(xy):  # noqa: WPS213
 
 class TooManyMethods:  # noqa: WPS214
     def method1(self):
-        anti_wps428 = 1
+        ...
 
     def method2(self):
-        anti_wps428 = 1
+        ...
 
     def method3(self):
-        anti_wps428 = 1
+        ...
 
     def method4(self):
-        anti_wps428 = 1
+        ...
 
     def method5(self):
-        anti_wps428 = 1
+        ...
 
     def method6(self):
-        anti_wps428 = 1
+        ...
 
     def method7(self):
-        anti_wps428 = 1
+        ...
 
     def method8(self):
-        anti_wps428 = 1
+        ...
 
 
 class ManyParents(First, Second, Third, Exception):  # noqa: WPS215
-    anti_wps428 = 1
+    """Docs."""
 
 
 async def too_many_awaits():  # noqa: WPS217
@@ -250,18 +250,18 @@ def test_function():  # noqa: WPS231
 
 line = some.call(7 * 2, 3 / 4) / some.run(5 / some, 8 - 2 + 6)  # noqa: WPS221
 if line and line > 2 and line > 3 and line > 4 and line > 5:  # noqa: WPS221,WPS222
-    anti_wps428 = 1
+    ...
 
 if line:  # noqa: WPS223
-    anti_wps428 = 1
+    ...
 elif line > 1:
-    anti_wps428 = 1
+    ...
 elif line > 2:
-    anti_wps428 = 1
+    ...
 elif line > 3:
-    anti_wps428 = 1
+    ...
 elif line > 4:
-    anti_wps428 = 1
+    ...
 
 
 try:  # noqa: WPS225
@@ -283,7 +283,7 @@ class BadClass:
          my_print('del')
 
     class Nested:  # noqa: WPS431
-        anti_wps428 = 1
+        """Docs."""
 
     async def __eq__(self, other):  # noqa: WPS610
         my_print('eq')
@@ -295,14 +295,14 @@ assert 1 < 1 < hex_number  # noqa: WPS308
 
 number_with_useless_plus = +5  # noqa: WPS330
 
-if '6' in nodes in '6':  # noqa: WPS311, WPS525
-    anti_wps428 = 1
+if '6' in nodes in '6':  # noqa: WPS311
+    ...
 
 assert hex_number == hex_number  # noqa: WPS312
 
 
 if True:  # noqa: WPS314
-    anti_wps428 = 1
+    ...
 
 
 
@@ -328,8 +328,6 @@ with open(bad_concatenation):  # noqa: WPS328
     pass  # noqa: WPS420
 
 
-my_print(one > two and two > three)  # noqa: WPS333
-
 my_print(biggesst > middle >= smallest)  # noqa: WPS334
 
 for index in [1, 2]:  # noqa: WPS335
@@ -337,7 +335,6 @@ for index in [1, 2]:  # noqa: WPS335
 
 string_concat = 'a' + 'b'  # noqa: WPS336
 
-my_print(one == 'a' or one == 'b')  # noqa: WPS514
 file_obj = open('filaname.py')  # noqa: WPS515
 my_print(type(file_obj) == int)  # noqa: WPS516
 
@@ -372,14 +369,14 @@ class ShadowsAttribute:
 
 
 for symbol in 'abc':  # noqa: WPS500
-    anti_wps428 = 1
+    ...
 else:
-    anti_wps428 = 1
+    ...
 
 try:  # noqa: WPS501
-    anti_wps428 = 1
+    ...
 finally:
-    anti_wps428 = 1
+    ...
 
 nodes = nodes  # noqa: WPS434
 
@@ -405,15 +402,13 @@ async def function_with_unreachable():
     my_print(1)  # noqa: WPS427
 
 
-1 + 2  # noqa: WPS428
-
 first = second = 2  # noqa: WPS429
 
 first, nodes[0] = range(2)  # noqa: WPS414
 
 
 class MyBadException(BaseException):  # noqa: WPS418
-    anti_wps428 = 1
+    """Docs."""
 
 
 
@@ -421,7 +416,7 @@ class ClassWithWrongContents((lambda: object)()):  # noqa: WPS606
     __slots__ = ['a', 'a']  # noqa: WPS607
 
     for bad_body_node in range(1):  # noqa: WPS604
-        anti_wps428 = 1
+        anti_wps604 = 1
 
     def method_with_no_args():  # noqa: WPS605
         based = super(ClassWithWrongContents, self).method_with_no_args()  # noqa: WPS608
@@ -436,10 +431,10 @@ def bad_default_values(
 
 
 for nodes[0] in (1, 2, 3):  # noqa: WPS405
-    anti_wps428 = 1
+    ...
 
 with open('some') as MyBadException.custom:  # noqa: WPS406
-    anti_wps428 = 1
+    ...
 
 if not some: # noqa: WPS504
     my_print('False')
@@ -448,7 +443,7 @@ else:
 
 try:
     try:  # noqa: WPS505
-        anti_wps428 = 1
+        ...
     except ValueError:
         raise TypeError('Second')
 except TypeError:
@@ -478,8 +473,6 @@ if numbers and numbers:  # noqa: WPS408
 
 if numbers == CONSTANT != [2]:  # noqa: WPS409
     my_print(1 + (1 if number else 2))  # noqa: WPS509
-
-my_print(numbers in [])  # noqa: WPS510
 
 if numbers:
     my_print('first')
@@ -525,15 +518,12 @@ class ChildClass(ParentClass):
 
 LOWERCASE_ALPH = "abcdefghijklmnopqrstuvwxyz" # noqa: WPS447
 
-if a in {1}:  # noqa: WPS525
-    my_print('bad!')
-
 try: # noqa: WPS448
-    anti_wps428 = 1
+    ...
 except Exception:
-    anti_wps428 = 1
+    ...
 except ValueError:
-    anti_wps428 = 1
+    ...
 
 
 bad_frozenset = frozenset([1]) # noqa: WPS527

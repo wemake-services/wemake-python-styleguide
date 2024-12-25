@@ -6,9 +6,6 @@ from typing import ClassVar, TypeAlias
 from typing_extensions import final
 
 from wemake_python_styleguide.logic import source
-from wemake_python_styleguide.logic.naming.duplicates import (
-    get_duplicate_names,
-)
 from wemake_python_styleguide.logic.tree import (
     attributes,
     compares,
@@ -18,7 +15,6 @@ from wemake_python_styleguide.logic.tree import (
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations import (
     best_practices,
-    consistency,
     refactoring,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -153,47 +149,6 @@ class BooleanConditionVisitor(BaseNodeVisitor):
         if len(set(operands)) != len(operands):
             self.add_violation(
                 best_practices.SameElementsInConditionViolation(node),
-            )
-
-
-@final
-class ImplicitBoolPatternsVisitor(BaseNodeVisitor):
-    """Is used to find implicit patterns that are formed by boolops."""
-
-    _allowed: ClassVar[_OperatorPairs] = {
-        ast.And: ast.NotEq,
-        ast.Or: ast.Eq,
-    }
-
-    def visit_BoolOp(self, node: ast.BoolOp) -> None:
-        """Checks ``and`` and ``or`` don't form implicit anti-patterns."""
-        self._check_implicit_in(node)
-        self._check_implicit_complex_compare(node)
-        self.generic_visit(node)
-
-    def _check_implicit_in(self, node: ast.BoolOp) -> None:
-        variables: list[set[str]] = []
-
-        for cmp in node.values:
-            if not isinstance(cmp, ast.Compare) or len(cmp.ops) != 1:
-                return
-            if not isinstance(cmp.ops[0], self._allowed[node.op.__class__]):
-                return
-
-            variables.append({source.node_to_string(cmp.left)})
-
-        for duplicate in get_duplicate_names(variables):
-            self.add_violation(
-                refactoring.ImplicitInConditionViolation(node, text=duplicate),
-            )
-
-    def _check_implicit_complex_compare(self, node: ast.BoolOp) -> None:
-        if not isinstance(node.op, ast.And):
-            return
-
-        if not compares.CompareBounds(node).is_valid():
-            self.add_violation(
-                consistency.ImplicitComplexCompareViolation(node),
             )
 
 
