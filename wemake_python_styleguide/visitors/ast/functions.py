@@ -78,7 +78,6 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
     def visit_Call(self, node: ast.Call) -> None:
         """Used to find ``FUNCTIONS_BLACKLIST`` calls."""
         self._check_wrong_function_called(node)
-        self._check_boolean_arguments(node)
 
         if functions.given_function_called(node, {'super'}):
             self._check_super_context(node)
