@@ -1,7 +1,6 @@
 [build-system]
 build-backend = "poetry.core.masonry.api"
-
-requires = [ "poetry-core>=1.9" ]
+requires = ["poetry-core>=1.9"]
 
 [tool.poetry]
 name = "wemake-python-styleguide"
@@ -90,16 +89,16 @@ tomli = "^2.0"
 myst-parser = "^4.0"
 
 [tool.ruff]
+# Ruff config: https://docs.astral.sh/ruff/settings
 target-version = "py310"
 line-length = 80
 extend-exclude = [
-  "tests/**/__snapshots__/**",
   # Intentionally bad code:
+  "tests/**/__snapshots__/**",
   "tests/fixtures/**",
 ]
 
 preview = true
-# Ruff config: https://docs.astral.sh/ruff/settings
 fix = true
 format.quote-style = "single"
 format.docstring-code-format = false
