@@ -2,7 +2,6 @@ from typing import Final
 
 from wemake_python_styleguide.presets.topics import complexity, naming
 from wemake_python_styleguide.visitors.ast import (  # noqa: WPS235
-    attributes,
     blocks,
     builtins,
     classes,
@@ -42,7 +41,6 @@ PRESET: Final = (
     loops.WrongComprehensionVisitor,
     loops.WrongLoopVisitor,
     loops.WrongLoopDefinitionVisitor,
-    attributes.WrongAttributeVisitor,
     functions.WrongFunctionCallVisitor,
     functions.FunctionDefinitionVisitor,
     functions.UselessLambdaDefinitionVisitor,

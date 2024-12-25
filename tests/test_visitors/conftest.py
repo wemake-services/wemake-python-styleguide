@@ -57,8 +57,8 @@ def assert_errors():
             assert expected_errors[index].disabled_since is None
             assert error.code == expected_errors[index].code
             if isinstance(error, ASTViolation | TokenizeViolation):
-                assert error._node is not None  # noqa: WPS437
-                assert error._location() != (0, 0)  # noqa: WPS437
+                assert error._node is not None  # noqa: SLF001
+                assert error._location() != (0, 0)  # noqa: SLF001
 
     return factory
 
@@ -93,7 +93,7 @@ def assert_error_text():
         assert violation.error_template.endswith(_ERROR_FORMAT)
 
         reproduction = violation.__class__(
-            node=violation._node,  # noqa: WPS437
+            node=violation._node,  # noqa: SLF001
             text=text,
             baseline=baseline,
         )
