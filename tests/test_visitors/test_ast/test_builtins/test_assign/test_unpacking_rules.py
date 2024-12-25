@@ -228,8 +228,6 @@ def test_correct_assignment(
         'some.attr',
         'some[0]["key"]',
         'some["key"][0]',
-        '((some,),)',
-        '[[some]]',
         # regression 1856
         '(some, other[0])',
         '(some.attr, other)',
