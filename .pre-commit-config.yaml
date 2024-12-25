@@ -37,9 +37,7 @@ repos:
       - id: ruff
         args: ["--exit-non-zero-on-fix", "--fix"]
       - id: ruff-format
-
 exclude: ^(tests/fixtures/|tests/test_formatter/__snapshots__/)
-
 ci:
   autofix_commit_msg: "[pre-commit.ci] auto fixes from pre-commit.com hooks"
   autofix_prs: true

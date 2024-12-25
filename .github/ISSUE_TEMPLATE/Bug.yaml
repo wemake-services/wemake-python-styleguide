@@ -13,7 +13,6 @@ body:
 
         Please consider supporting our collective:
         👉  https://opencollective.com/wemake-python-styleguide/donate
-
   - type: textarea
     attributes:
       label: "What's wrong"
@@ -26,7 +25,6 @@ body:
       description: "Please, explain how do you expect it to be"
     validations:
       required: True
-
   - type: textarea
     attributes:
       label: "Flake8 version and plugins"
