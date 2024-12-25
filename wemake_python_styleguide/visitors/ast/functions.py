@@ -29,7 +29,6 @@ from wemake_python_styleguide.types import (
 from wemake_python_styleguide.violations import naming, oop
 from wemake_python_styleguide.violations.best_practices import (
     ComplexDefaultValueViolation,
-    FloatingNanViolation,
     GetterWithoutReturnViolation,
     ProblematicFunctionParamsViolation,
     StopIterationInsideGeneratorViolation,
@@ -102,35 +101,6 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
             self.add_violation(
                 oop.WrongSuperCallViolation(node, text='remove arguments'),
             )
-
-
-@final
-class FloatingNanCallVisitor(base.BaseNodeVisitor):
-    """Ensure that NaN explicitly acquired."""
-
-    _nan_variants: ClassVar[frozenset[str | bytes]] = frozenset(('nan', b'nan'))
-
-    def visit_Call(self, node: ast.Call) -> None:
-        """Used to find ``float("NaN")`` calls."""
-        self._check_floating_nan(node)
-        self.generic_visit(node)
-
-    def _check_floating_nan(self, node: ast.Call) -> None:
-        if (
-            not functions.given_function_called(node, 'float')
-            or len(node.args) != 1
-        ):
-            return
-
-        first_arg = node.args[0]
-        if not (
-            isinstance(first_arg, ast.Constant)
-            and isinstance(first_arg.value, str | bytes)
-        ):
-            return
-
-        if first_arg.value.lower() in self._nan_variants:
-            self.add_violation(FloatingNanViolation(node))
 
 
 @final

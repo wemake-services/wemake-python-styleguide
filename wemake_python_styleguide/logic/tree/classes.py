@@ -67,7 +67,7 @@ def is_dataclass(node: ast.ClassDef) -> bool:
     """Checks if some class is defined as a dataclass using popular libs."""
     for decorator in node.decorator_list:
         if isinstance(decorator, ast.Call):
-            decorator = decorator.func
+            decorator = decorator.func  # noqa: PLW2901
 
         if not isinstance(decorator, ast.Name | ast.Attribute):
             continue

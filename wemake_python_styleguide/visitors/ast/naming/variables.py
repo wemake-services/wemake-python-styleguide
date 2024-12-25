@@ -1,8 +1,6 @@
 import ast
-import itertools
-from collections import Counter
 from collections.abc import Iterable
-from typing import ClassVar, cast
+from typing import cast
 
 from typing_extensions import final
 
@@ -18,7 +16,6 @@ from wemake_python_styleguide.types import (
     AnyAssign,
     AnyAssignWithWalrus,
     AnyFor,
-    AnyNodes,
 )
 from wemake_python_styleguide.violations import best_practices, naming
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -59,89 +56,6 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
                     text=target_node.id,
                 ),
             )
-
-
-@final
-@alias(
-    'visit_any_assign',
-    (
-        'visit_Assign',
-        'visit_AnnAssign',
-        'visit_NamedExpr',
-    ),
-)
-class WrongVariableAssignmentVisitor(BaseNodeVisitor):
-    """Finds wrong variables assignments."""
-
-    _reassignment_ignores: ClassVar[AnyNodes] = (ast.Starred,)
-
-    def visit_any_assign(self, node: AnyAssignWithWalrus) -> None:
-        """Used to check assignment variable to itself."""
-        names = list(name_nodes.flat_variable_names([node]))
-
-        self._check_reassignment(node, names)
-        self._check_unique_assignment(node, names)
-        self.generic_visit(node)
-
-    def _check_reassignment(
-        self,
-        node: AnyAssignWithWalrus,
-        names: list[str],
-    ) -> None:
-        if not node.value:
-            return
-
-        if self._is_reassignment_edge_case(node):
-            return
-
-        var_values = name_nodes.get_variables_from_node(
-            node.value,
-            exclude=self._reassignment_ignores,
-        )
-        if len(names) <= 1 < len(var_values):
-            # It means that we have something like `x = (y, z)`
-            # or even `x = (x, y)`, which is also fine. See #1807
-            return
-
-        for var_name, var_value in itertools.zip_longest(names, var_values):
-            if var_name == var_value:
-                self.add_violation(
-                    best_practices.ReassigningVariableToItselfViolation(
-                        node,
-                        text=var_name,
-                    ),
-                )
-
-    def _check_unique_assignment(
-        self,
-        node: AnyAssignWithWalrus,
-        names: list[str],
-    ) -> None:
-        used_names = filter(
-            lambda assigned_name: not access.is_unused(assigned_name),
-            names,
-        )
-        for used_name, count in Counter(used_names).items():
-            if count > 1:
-                self.add_violation(
-                    best_practices.ReassigningVariableToItselfViolation(
-                        node,
-                        text=used_name,
-                    ),
-                )
-
-    def _is_reassignment_edge_case(self, node: AnyAssignWithWalrus) -> bool:
-        # This is not a variable, but a class attribute
-        if not isinstance(node, ast.NamedExpr) and isinstance(
-            nodes.get_context(node),
-            ast.ClassDef,
-        ):
-            return True
-
-        # It means that someone probably modifies original value
-        # of the variable using some unary operation, e.g. `a = not a`
-        # See #2189
-        return isinstance(node.value, ast.UnaryOp)
 
 
 @final

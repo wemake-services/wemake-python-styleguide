@@ -378,8 +378,6 @@ try:  # noqa: WPS501
 finally:
     ...
 
-nodes = nodes  # noqa: WPS434
-
 
 class Example:
     """Correct class docstring."""
