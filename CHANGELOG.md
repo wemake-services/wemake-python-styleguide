@@ -69,6 +69,7 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `WPS425`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS428`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS433`, because is covered by `pylint` linter
+- **Breaking**: Removes `WPS434`, because is covered by `pylint` linter
 - **Breaking**: Removes `WPS436`, because is covered by `pylint` linter
 - **Breaking**: Removes `WPS440`, because
   it was buggy and is covered by `mypy`, #3209
@@ -77,6 +78,7 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `WPS450`, because is covered by `pylint` linter
 - **Breaking**: Removes `WPS452`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS454`, because is covered by `ruff` linter
+- **Breaking**: Removes `WPS456`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS465`, because `|` is now heavily used by typing
 - **Breaking**: Removes `WPS467`, because is covered by `pylint` linter
 - **Breaking**: Removes `WPS502`, because is covered by `ruff` linter
@@ -140,13 +142,11 @@ Semantic versioning in our case means:
 - Fixes `IterableUnpackingViolation` with generic types and `TypeVarTuple`
 - Fixes `WPS469` detecting incorrect names of raised exceptions, #3109
 - Fixes unnormalized paths in formatter output
-- Fixes `WPS434` to allow reassignment in a form of `x = [y, *x]`
 - Fixes `WPS221` to ignore PEP695's `TypeAlias` from line complexity checks
 - Fixes `WPS474` to only count import collisions in the same context, #2962
 - Fixes `WPS612` to count defaults in function definitions, #2478
 - Fixes several bugs in `WPS322` with multiline strings detection
 - Fixes several violations not been detected in `case:` statements
-- Fixes `WPS434` not detecting reassignments in `:=` case
 - Fixes `WPS314` not detecting `match` statements
 - Fixes `match` + `case` does not increase cognitive complexity
 

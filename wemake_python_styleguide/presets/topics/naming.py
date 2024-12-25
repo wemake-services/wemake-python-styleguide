@@ -6,7 +6,6 @@ from wemake_python_styleguide.visitors.ast.naming import validation, variables
 PRESET: Final = (
     validation.WrongNameVisitor,
     variables.WrongModuleMetadataVisitor,
-    variables.WrongVariableAssignmentVisitor,
     variables.UnusedVariableUsageVisitor,
     variables.UnusedVariableDefinitionVisitor,
 )

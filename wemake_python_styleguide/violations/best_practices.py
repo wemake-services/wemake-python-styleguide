@@ -1478,11 +1478,15 @@ class ReassigningVariableToItselfViolation(ASTViolation):
 
     .. versionadded:: 0.3.0
     .. versionchanged:: 0.16.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` and ``pylint`` linters. See ``PLW0127``.
 
     """
 
     error_template = 'Found reassigning variable to itself: {0}'
     code = 434
+    disabled_since = '1.0.0'
 
 
 @final
@@ -2292,7 +2296,7 @@ class NonTrivialExceptViolation(ASTViolation):
         # Wrong:
         try:
             ...
-        except TypeError or ValueError:
+        except produce_excs():
             ...
 
     .. versionadded:: 0.15.0
@@ -2324,11 +2328,15 @@ class FloatingNanViolation(ASTViolation):
         min(float("NAN"), 3)
 
     .. versionadded:: 0.15.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` and ``pylint`` linters. See ``PLW0177``.
 
     """
 
     error_template = 'Found "NaN" as argument to float()'
     code = 456
+    disabled_since = '1.0.0'
 
 
 @final

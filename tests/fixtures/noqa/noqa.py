@@ -378,8 +378,6 @@ try:  # noqa: WPS501
 finally:
     ...
 
-nodes = nodes  # noqa: WPS434
-
 
 class Example:
     """Correct class docstring."""
@@ -574,9 +572,6 @@ try:
     cause_errors()
 except ValueError or TypeError:  # noqa: WPS455
     my_print("Oops.")
-
-if float("NaN") < number:  # noqa: WPS456
-    my_print("Greater than... what?")
 
 def infinite_loop():
     while True:  # noqa: WPS457
