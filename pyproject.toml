@@ -93,7 +93,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 # Ruff config: https://docs.astral.sh/ruff/settings
-# fix = true
+fix = true
 preview = true
 target-version = "py310"
 line-length = 80
@@ -138,7 +138,6 @@ select = [
   "PIE",  # flake8-pie
   "PLC",  # pylint convention
   "PLE",  # pylint error
-  "PLR",  # pylint refactoring
   "S",    # flake8-bandit
   "N",    # pep8-naming
   "SLOT", # flake8-slots
