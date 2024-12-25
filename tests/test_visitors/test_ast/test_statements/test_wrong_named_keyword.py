@@ -47,7 +47,7 @@ def test_wrong_starred_keyword(
         '_dict = {"end": " "}',
         'print(*_list, **_dict)',
         'print(end="1", **{"a": 1})',
-        'filter(**{User.USERNAME_FIELD: username})',  # noqa: P103
+        'filter(**{User.USERNAME_FIELD: username})',
         'filter(**{"a2": 1, _: 2})',
         'filter(**{"a": 1, b: 2})',
         'filter(**{"_a": 1, b: 2})',

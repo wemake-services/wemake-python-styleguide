@@ -44,7 +44,7 @@ class RedundantEnumerateVisitor(BaseNodeVisitor):
     def _check_for_redundant_enumerate(
         self,
         node: AnyFor | ast.comprehension,
-    ) -> None:  # noqa: E501
+    ) -> None:
         if not isinstance(node.iter, ast.Call):
             return
 

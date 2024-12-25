@@ -13,8 +13,8 @@ from wemake_python_styleguide.visitors.ast.statements import (
     [
         'print(*[])',
         'print(*())',
-        'print(*{})',  # noqa: P103
-        'print(**{})',  # noqa: P103
+        'print(*{})',
+        'print(**{})',
         'print(*[1, 2])',
         'print(*(1, 2))',
         'print(*{1, 2})',
@@ -41,9 +41,9 @@ def test_pointless_starred_arg(
 @pytest.mark.parametrize(
     'code',
     [
-        'print(*[], **{})',  # noqa: P103
-        'print(*[], **{"1": 1})',  # noqa: P103
-        'print(*[1], **{})',  # noqa: P103
+        'print(*[], **{})',
+        'print(*[], **{"1": 1})',
+        'print(*[1], **{})',
         'print(*[1], **{"end": " "})',
     ],
 )
@@ -74,7 +74,7 @@ def test_pointless_starred_arg_and_keyword(
         # regression767
         # See:
         # https://github.com/wemake-services/wemake-python-styleguide/issues/767
-        'filter(**{User.USERNAME_FIELD: username})',  # noqa: P103
+        'filter(**{User.USERNAME_FIELD: username})',
         'filter(**{"a": 1, b: 2})',
         'filter(**{"a": 1, call(): 2})',
         'filter(**{"a": 1, b.method(): 2})',
