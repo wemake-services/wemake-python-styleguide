@@ -2,7 +2,6 @@ import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
     ImportObjectCollisionViolation,
-    NestedImportViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
     LocalFolderImportViolation,
@@ -104,10 +103,7 @@ def test_correct_imports(
     assert_errors(
         visitor,
         [],
-        ignored_types=(
-            LocalFolderImportViolation,
-            NestedImportViolation,
-        ),
+        ignored_types=(LocalFolderImportViolation,),
     )
 
 

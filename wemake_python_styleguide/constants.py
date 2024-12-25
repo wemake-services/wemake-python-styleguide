@@ -457,9 +457,6 @@ VAGUE_IMPORTS_BLACKLIST: Final = frozenset(
 #: List of functions in which arguments must be tuples.
 TUPLE_ARGUMENTS_METHODS: Final = frozenset(('frozenset',))
 
-#: Conditions that can appear in the ``if`` statement to allow nested imports.
-ALLOWED_NESTED_IMPORTS_CONDITIONS: Final = frozenset(('TYPE_CHECKING',))
-
 #: List of commonly used aliases
 ALIAS_NAMES_WHITELIST: Final = frozenset(
     (

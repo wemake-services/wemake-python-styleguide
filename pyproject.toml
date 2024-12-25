@@ -135,6 +135,7 @@ select = [
   "RSE",  # flake8-raise
   "RUF",  # ruff
   "PIE",  # flake8-pie
+  "PLC",  # pylint convention
   "S",    # flake8-bandit
   "N",    # pep8-naming
   "SLOT", # flake8-slots
@@ -180,7 +181,7 @@ banned-from = ["ast"]
 
 [tool.ruff.lint.per-file-ignores]
 "wemake_python_styleguide/visitors/ast/*.py" = ["N802"]
-"wemake_python_styleguide/compat/nodes.py" = ["ICN003"]
+"wemake_python_styleguide/compat/nodes.py" = ["ICN003", "PLC0414"]
 "tests/*.py" = [
     "S101",  # asserts
     "S105",  # hardcoded passwords

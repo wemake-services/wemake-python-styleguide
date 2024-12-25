@@ -8,7 +8,6 @@ from wemake_python_styleguide.logic import nodes, walk
 from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
 from wemake_python_styleguide.logic.tree import (
     compares,
-    functions,
     operators,
     pattern_matching,
 )
@@ -29,7 +28,6 @@ from wemake_python_styleguide.violations.refactoring import (
     FalsyConstantCompareViolation,
     InCompareWithSingleItemContainerViolation,
     NestedTernaryViolation,
-    UselessLenCompareViolation,
     WrongInCompareTypeViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -46,23 +44,9 @@ class CompareSanityVisitor(BaseNodeVisitor):
         """Ensures that compares are written correctly."""
         self._check_literal_compare(node)
         self._check_useless_compare(node)
-        self._check_unpythonic_compare(node)
         self._check_heterogeneous_operators(node)
         self._check_reversed_complex_compare(node)
         self.generic_visit(node)
-
-    def _is_correct_len(self, sign: ast.cmpop, comparator: ast.AST) -> bool:
-        """Helper function which tells what calls to ``len()`` are valid."""
-        node = operators.unwrap_unary_node(comparator)
-        if isinstance(node, ast.Constant) and isinstance(
-            node.value, int | float | complex
-        ):
-            numeric_value = ast.literal_eval(comparator)
-            if numeric_value == 0:
-                return False
-            if numeric_value == 1:
-                return not isinstance(sign, ast.GtE | ast.Lt)
-        return True
 
     def _check_literal_compare(self, node: ast.Compare) -> None:
         last_was_literal = nodes.is_literal(get_assigned_expr(node.left))
@@ -80,20 +64,6 @@ class CompareSanityVisitor(BaseNodeVisitor):
                 self.add_violation(UselessCompareViolation(node))
                 break
             last_variable = next_variable
-
-    def _check_unpythonic_compare(self, node: ast.Compare) -> None:
-        all_nodes = list(
-            map(get_assigned_expr, (node.left, *node.comparators)),
-        )
-
-        for index, compare in enumerate(all_nodes):
-            if not isinstance(compare, ast.Call):
-                continue
-
-            if functions.given_function_called(compare, {'len'}):
-                ps = index - len(all_nodes) + 1
-                if not self._is_correct_len(node.ops[ps], node.comparators[ps]):
-                    self.add_violation(UselessLenCompareViolation(node))
 
     def _check_heterogeneous_operators(self, node: ast.Compare) -> None:
         if len(node.ops) == 1:

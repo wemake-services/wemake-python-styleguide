@@ -1436,7 +1436,8 @@ class NestedImportViolation(ASTViolation):
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.11.0
     .. versionchanged:: 1.0.0
-       Allows nested imports in ``try: except:`` block on top level.
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` and ``pylint`` linters. See ``PLC0415``.
 
     See also:
         https://github.com/seddonym/layer_linter
@@ -1445,6 +1446,7 @@ class NestedImportViolation(ASTViolation):
 
     error_template = 'Found nested import'
     code = 433
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1535,11 +1537,15 @@ class ProtectedModuleViolation(ASTViolation):
     .. versionadded:: 0.3.0
     .. versionchanged:: 0.11.0
     .. versionchanged:: 0.14.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` and ``pylint`` linters. See ``PLC2701``.
 
     """
 
     error_template = 'Found protected module import: {0}'
     code = 436
+    disabled_since = '1.0.0'
 
 
 @final
@@ -2072,11 +2078,15 @@ class ProtectedModuleMemberViolation(ASTViolation):
         from some.module import _protected as not_protected
 
     .. versionadded:: 0.14.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` and ``pylint`` linters. See ``PLC2701``.
 
     """
 
     error_template = 'Found protected object import: {0}'
     code = 450
+    disabled_since = '1.0.0'
 
 
 @final

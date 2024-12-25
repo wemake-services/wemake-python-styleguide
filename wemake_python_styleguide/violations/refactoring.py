@@ -427,11 +427,15 @@ class UselessLenCompareViolation(ASTViolation):
 
     .. versionadded:: 0.10.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` and ``pylint`` linters. See ``PLC1802``.
 
     """
 
     error_template = 'Found useless `len()` compare'
     code = 507
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1163,11 +1167,16 @@ class ImplicitItemsIteratorViolation(ASTViolation):
             print(some_key, collection[some_key])
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` and ``pylint`` linters. See ``PLC0206``.
+
 
     """
 
     error_template = 'Found implicit `.items()` usage'
     code = 528
+    disabled_since = '1.0.0'
 
 
 @final

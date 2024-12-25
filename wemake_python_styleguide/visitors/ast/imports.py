@@ -1,31 +1,25 @@
 import ast
 from collections import defaultdict
-from collections.abc import Iterable
-from itertools import chain, product
+from itertools import product
 from typing import Final, TypeAlias
 
 from typing_extensions import final
 
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
 from wemake_python_styleguide.logic import nodes
-from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.logic.tree import imports
-from wemake_python_styleguide.types import AnyImport, ConfigurationOptions
+from wemake_python_styleguide.types import ConfigurationOptions
 from wemake_python_styleguide.violations.base import ErrorCallback
 from wemake_python_styleguide.violations.best_practices import (
     FutureImportViolation,
     ImportCollisionViolation,
     ImportObjectCollisionViolation,
-    NestedImportViolation,
-    ProtectedModuleMemberViolation,
-    ProtectedModuleViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
     DottedRawImportViolation,
     LocalFolderImportViolation,
     VagueImportViolation,
 )
-from wemake_python_styleguide.violations.naming import SameAliasImportViolation
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 #: We use `.` to separate module names.
@@ -45,37 +39,13 @@ class _BaseImportValidator:
         self._error_callback = error_callback
         self._options = options
 
-    def _validate_any_import(self, node: AnyImport) -> None:
-        self._check_nested_import(node)
-        self._check_same_alias(node)
-
-    def _check_nested_import(self, node: AnyImport) -> None:
-        parent = nodes.get_parent(node)
-        if (
-            parent is None
-            or isinstance(parent, ast.Module)
-            or imports.is_nested_typing_import(parent)
-            or imports.is_import_in_try(node)
-        ):
-            return
-        self._error_callback(NestedImportViolation(node))
-
-    def _check_same_alias(self, node: AnyImport) -> None:
-        for alias in node.names:
-            if alias.asname == alias.name and self._options.i_control_code:
-                self._error_callback(
-                    SameAliasImportViolation(node, text=alias.name),
-                )
-
 
 @final
 class _ImportValidator(_BaseImportValidator):
     """Validator of ``ast.Import`` nodes."""
 
     def validate(self, node: ast.Import) -> None:
-        self._validate_any_import(node)
         self._check_dotted_raw_import(node)
-        self._check_protected_import(node)
 
     def _check_dotted_raw_import(self, node: ast.Import) -> None:
         for alias in node.names:
@@ -84,27 +54,13 @@ class _ImportValidator(_BaseImportValidator):
                     DottedRawImportViolation(node, text=alias.name),
                 )
 
-    def _check_protected_import(self, node: ast.Import) -> None:
-        names: Iterable[str] = chain.from_iterable(
-            [
-                alias.name.split(_MODULE_MEMBERS_SEPARATOR)
-                for alias in node.names
-            ],
-        )
-        for name in names:
-            if access.is_protected(name):
-                self._error_callback(ProtectedModuleViolation(node, text=name))
-
 
 @final
 class _ImportFromValidator(_BaseImportValidator):
     """Validator of ``ast.ImportFrom`` nodes."""
 
     def validate(self, node: ast.ImportFrom) -> None:
-        self._validate_any_import(node)
         self._check_from_import(node)
-        self._check_protected_import_from_module(node)
-        self._check_protected_import_from_members(node)
         self._check_vague_alias(node)
 
     def _check_from_import(self, node: ast.ImportFrom) -> None:
@@ -117,21 +73,6 @@ class _ImportFromValidator(_BaseImportValidator):
                     self._error_callback(
                         FutureImportViolation(node, text=alias.name),
                     )
-
-    def _check_protected_import_from_module(self, node: ast.ImportFrom) -> None:
-        for name in imports.get_import_parts(node):
-            if access.is_protected(name):
-                self._error_callback(ProtectedModuleViolation(node, text=name))
-
-    def _check_protected_import_from_members(
-        self,
-        node: ast.ImportFrom,
-    ) -> None:
-        for alias in node.names:
-            if access.is_protected(alias.name):
-                self._error_callback(
-                    ProtectedModuleMemberViolation(node, text=alias.name),
-                )
 
     def _check_vague_alias(self, node: ast.ImportFrom) -> None:
         for alias in node.names:
