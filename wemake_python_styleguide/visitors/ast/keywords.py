@@ -18,7 +18,6 @@ from wemake_python_styleguide.logic.tree.variables import (
 )
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 from wemake_python_styleguide.violations.best_practices import (
-    BareRaiseViolation,
     ContextManagerVariableDefinitionViolation,
     RaiseFromItselfViolation,
     WrongKeywordConditionViolation,
@@ -48,18 +47,9 @@ class WrongRaiseVisitor(BaseNodeVisitor):
 
     def visit_Raise(self, node: ast.Raise) -> None:
         """Checks how ``raise`` keyword is used."""
-        self._check_bare_raise(node)
         self._check_raise_from_itself(node)
         self._check_raise_system_error(node)
         self.generic_visit(node)
-
-    def _check_bare_raise(self, node: ast.Raise) -> None:
-        if node.exc is not None:
-            return
-        if walk.get_closest_parent(node, ast.ExceptHandler):
-            return
-
-        self.add_violation(BareRaiseViolation(node))
 
     def _check_raise_from_itself(self, node: ast.Raise) -> None:
         raising_name = get_exception_name(node)

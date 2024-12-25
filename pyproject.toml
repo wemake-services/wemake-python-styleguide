@@ -136,6 +136,7 @@ select = [
   "RUF",  # ruff
   "PIE",  # flake8-pie
   "PLC",  # pylint convention
+  "PLE",  # pylint error
   "S",    # flake8-bandit
   "N",    # pep8-naming
   "SLOT", # flake8-slots
