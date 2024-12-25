@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "poetry.core.masonry.api"
-requires = ["poetry-core>=1.9"]
+requires = [ "poetry-core>=1.9" ]
 
 [tool.poetry]
 name = "wemake-python-styleguide"
