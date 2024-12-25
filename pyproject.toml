@@ -120,6 +120,7 @@ select = [
   "ERA",  # flake8-eradicate
   "EXE",  # flake8-executable
   "F",    # pyflakes
+  "FBT",  # flake8-boolean-trap
   "FLY",  # pyflint
   "FURB", # refurb
   "G",    # flake8-logging-format

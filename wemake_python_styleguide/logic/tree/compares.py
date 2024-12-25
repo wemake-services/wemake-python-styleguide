@@ -101,7 +101,7 @@ class CompareBounds:
                     comparison_node,
                     operator,
                     source.node_to_string(operand),
-                    operand is left_operand,
+                    is_left=operand is left_operand,
                 )
             left_operand = right_operand
 
@@ -110,6 +110,7 @@ class CompareBounds:
         comparison_node: ast.Compare,
         operator: ast.cmpop,
         name: str,
+        *,
         is_left: bool,
     ) -> None:
         key_name = None

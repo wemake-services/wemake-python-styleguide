@@ -1103,7 +1103,6 @@ class BooleanPositionalArgumentViolation(ASTViolation):
         The only exception from this rule is passing a boolean as a
         non-keyword argument when it is the only passed argument.
 
-
     Solution:
         Pass booleans as keywords only.
         This will help you to save extra context on what's going on.
@@ -1117,12 +1116,19 @@ class BooleanPositionalArgumentViolation(ASTViolation):
         # Wrong:
         UsersRepository.add(user, True)
 
+    See also:
+        https://docs.astral.sh/ruff/rules/boolean-positional-value-in-call
+
     .. versionadded:: 0.6.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` linter. See ``FBT003``.
 
     """
 
     error_template = 'Found boolean non-keyword argument: {0}'
     code = 425
+    disabled_since = '1.0.0'
 
 
 @final
@@ -1433,14 +1439,14 @@ class NestedImportViolation(ASTViolation):
         def some():
             from my_module import some_function
 
+    See also:
+        https://github.com/seddonym/layer_linter
+
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.11.0
     .. versionchanged:: 1.0.0
        No longer produced, kept here for historic reasons.
        This is covered with ``ruff`` and ``pylint`` linters. See ``PLC0415``.
-
-    See also:
-        https://github.com/seddonym/layer_linter
 
     """
 

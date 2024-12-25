@@ -1,9 +1,7 @@
 import ast
 from collections.abc import Mapping
 from contextlib import suppress
-from typing import ClassVar, TypeAlias
-
-from typing_extensions import final
+from typing import ClassVar, TypeAlias, final
 
 from wemake_python_styleguide.compat.aliases import (
     ForNodes,
@@ -12,7 +10,7 @@ from wemake_python_styleguide.compat.aliases import (
 from wemake_python_styleguide.constants import (
     FUNCTIONS_BLACKLIST,
 )
-from wemake_python_styleguide.logic import nodes, source, walk
+from wemake_python_styleguide.logic import nodes, walk
 from wemake_python_styleguide.logic.arguments import function_args
 from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.logic.tree import (
@@ -30,7 +28,6 @@ from wemake_python_styleguide.types import (
 )
 from wemake_python_styleguide.violations import naming, oop
 from wemake_python_styleguide.violations.best_practices import (
-    BooleanPositionalArgumentViolation,
     ComplexDefaultValueViolation,
     FloatingNanViolation,
     GetterWithoutReturnViolation,
@@ -50,9 +47,6 @@ from wemake_python_styleguide.visitors import base, decorators
 #: Things we treat as local variables.
 _LocalVariable: TypeAlias = ast.Name | ast.ExceptHandler
 
-#: Function definitions with name and arity:
-_Defs: TypeAlias = Mapping[str, int]
-
 
 @final
 class WrongFunctionCallVisitor(base.BaseNodeVisitor):
@@ -62,24 +56,9 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
     All these functions are defined in ``FUNCTIONS_BLACKLIST``.
     """
 
-    _functions: ClassVar[_Defs] = {
-        'getattr': 3,
-        'setattr': 3,
-    }
-
-    _postfixes: ClassVar[_Defs] = {
-        # dict methods:
-        '.get': 2,
-        '.pop': 2,
-        '.setdefault': 2,
-        # list methods:
-        '.insert': 2,
-    }
-
     def visit_Call(self, node: ast.Call) -> None:
         """Used to find ``FUNCTIONS_BLACKLIST`` calls."""
         self._check_wrong_function_called(node)
-        self._check_boolean_arguments(node)
 
         if functions.given_function_called(node, {'super'}):
             self._check_super_context(node)
@@ -96,27 +75,6 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
             self.add_violation(
                 WrongFunctionCallViolation(node, text=function_name),
             )
-
-    def _check_boolean_arguments(self, node: ast.Call) -> None:  # noqa: WPS231
-        if len(node.args) == 1 and not node.keywords:
-            return  # Calls with single boolean argument are allowed
-
-        for arg in node.args:
-            if not (
-                isinstance(arg, ast.Constant) and isinstance(arg.value, bool)
-            ):
-                continue
-
-            is_ignored = self._is_call_ignored(node)
-
-            # We do not check for `None` values here:
-            if not is_ignored and isinstance(arg.value, bool):
-                self.add_violation(
-                    BooleanPositionalArgumentViolation(
-                        arg,
-                        text=str(arg.value),
-                    ),
-                )
 
     def _check_super_context(self, node: ast.Call) -> None:
         parent_context = nodes.get_context(node)
@@ -144,21 +102,6 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
             self.add_violation(
                 oop.WrongSuperCallViolation(node, text='remove arguments'),
             )
-
-    def _is_call_ignored(self, node: ast.Call) -> bool:
-        call = source.node_to_string(node.func)
-        func_called = functions.given_function_called(
-            node,
-            self._functions.keys(),
-        )
-
-        return bool(
-            func_called and len(node.args) == self._functions[func_called],
-        ) or any(
-            call.endswith(post)
-            for post in self._postfixes
-            if len(node.args) == self._postfixes[post]
-        )
 
 
 @final

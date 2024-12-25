@@ -38,7 +38,11 @@ def test_correct_shebang_executable1(
     executable,
 ):
     """Testing cases when no errors should be reported."""
-    path_to_file = make_file('test_file.py', template.format(code), executable)
+    path_to_file = make_file(
+        'test_file.py',
+        template.format(code),
+        is_executable=executable,
+    )
     file_tokens = parse_file_tokens(path_to_file)
 
     visitor = comments.ShebangVisitor(
@@ -77,7 +81,9 @@ def test_correct_shebang_executable2(
     executable,
 ):
     """Testing cases when no errors should be reported."""
-    path_to_file = make_file('test_file.py', template.format(code), executable)
+    path_to_file = make_file(
+        'test_file.py', template.format(code), is_executable=executable
+    )
     file_tokens = parse_file_tokens(path_to_file)
 
     visitor = comments.ShebangVisitor(
@@ -120,7 +126,9 @@ def test_shebang_on_windows(
 ):
     """Testing cases when no errors should be reported."""
     monkeypatch.setattr(comments, 'is_windows', lambda: True)
-    path_to_file = make_file('test_file.py', template.format(code), executable)
+    path_to_file = make_file(
+        'test_file.py', template.format(code), is_executable=executable
+    )
     file_tokens = parse_file_tokens(path_to_file)
 
     visitor = comments.ShebangVisitor(
@@ -162,7 +170,9 @@ def test_shebang_with_stdin(
     executable,
 ):
     """Testing cases when no errors should be reported."""
-    path_to_file = make_file('test_file.py', template.format(code), executable)
+    path_to_file = make_file(
+        'test_file.py', template.format(code), is_executable=executable
+    )
     file_tokens = parse_file_tokens(path_to_file)
 
     visitor = comments.ShebangVisitor(
@@ -199,7 +209,9 @@ def test_wrong_shebang_executable(
     executable,
 ):
     """Testing cases when no errors should be reported."""
-    path_to_file = make_file('test_file.py', template.format(code), executable)
+    path_to_file = make_file(
+        'test_file.py', template.format(code), is_executable=executable
+    )
     file_tokens = parse_file_tokens(path_to_file)
 
     visitor = comments.ShebangVisitor(
