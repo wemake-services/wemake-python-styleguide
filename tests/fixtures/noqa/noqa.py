@@ -118,7 +118,7 @@ def function_name(  # noqa: WPS614
 
 def some():  # noqa: WPS110
     class Nested:  # noqa: WPS431
-        ...  # noqa: WPS604
+        """Docs."""  # noqa: WPS604
 
     def nested():  # noqa: WPS430
         ...
@@ -216,7 +216,7 @@ class TooManyMethods:  # noqa: WPS214
 
 
 class ManyParents(First, Second, Third, Exception):  # noqa: WPS215
-    ...
+    """Docs."""
 
 
 async def too_many_awaits():  # noqa: WPS217
@@ -283,7 +283,7 @@ class BadClass:
          my_print('del')
 
     class Nested:  # noqa: WPS431
-        ...
+        """Docs."""
 
     async def __eq__(self, other):  # noqa: WPS610
         my_print('eq')
@@ -408,7 +408,7 @@ first, nodes[0] = range(2)  # noqa: WPS414
 
 
 class MyBadException(BaseException):  # noqa: WPS418
-    ...
+    """Docs."""
 
 
 
@@ -416,7 +416,7 @@ class ClassWithWrongContents((lambda: object)()):  # noqa: WPS606
     __slots__ = ['a', 'a']  # noqa: WPS607
 
     for bad_body_node in range(1):  # noqa: WPS604
-        ...
+        anti_wps604 = 1
 
     def method_with_no_args():  # noqa: WPS605
         based = super(ClassWithWrongContents, self).method_with_no_args()  # noqa: WPS608
