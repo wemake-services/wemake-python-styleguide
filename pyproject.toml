@@ -167,10 +167,10 @@ lint.per-file-ignores."tests/*.py" = [
   "S603", # do not require `shell=True`
   "S607", # partial executable paths
 ]
-lint.external = ["WPS"]
 lint.per-file-ignores."wemake_python_styleguide/compat/nodes.py" = [ "ICN003", "PLC0414" ]
 lint.per-file-ignores."wemake_python_styleguide/types.py" = [ "D102" ]
 lint.per-file-ignores."wemake_python_styleguide/visitors/ast/*.py" = [ "N802" ]
+lint.external = [ "WPS" ]
 lint.flake8-import-conventions.banned-from = [ "ast" ]
 lint.flake8-quotes.inline-quotes = "single"
 lint.mccabe.max-complexity = 6
