@@ -71,6 +71,7 @@ def func():
         raise_from_other_exception_outside_try,
         raise_from_other_exception_inside_try,
         regression3109,
+        'raise',  # bare
     ],
 )
 def test_raise_from_other_exception(
