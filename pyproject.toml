@@ -1,3 +1,8 @@
+[build-system]
+build-backend = "poetry.core.masonry.api"
+
+requires = [ "poetry-core>=1.9" ]
+
 [tool.poetry]
 name = "wemake-python-styleguide"
 version = "0.19.2"
@@ -6,7 +11,7 @@ description = "The strictest and most opinionated python linter ever"
 license = "MIT"
 
 authors = [
-  "Nikita Sobolev <mail@sobolevn.me>"
+  "Nikita Sobolev <mail@sobolevn.me>",
 ]
 
 readme = "README.md"
@@ -22,7 +27,7 @@ keywords = [
   "wemake.services",
   "styleguide",
   "code quality",
-  "pycqa"
+  "pycqa",
 ]
 
 classifiers = [
@@ -52,7 +57,6 @@ flake8 = "^7.1"
 attrs = "*"
 typing_extensions = ">=4.0"
 pygments = "^2.4"
-
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1"
@@ -85,30 +89,21 @@ added-value = "^0.24"
 tomli = "^2.0"
 myst-parser = "^4.0"
 
-
-[build-system]
-requires = ["poetry-core>=1.9.0"]
-build-backend = "poetry.core.masonry.api"
-
-
 [tool.ruff]
-# Ruff config: https://docs.astral.sh/ruff/settings
-fix = true
-preview = true
 target-version = "py310"
 line-length = 80
 extend-exclude = [
+  "tests/**/__snapshots__/**",
   # Intentionally bad code:
   "tests/fixtures/**",
-  "tests/**/__snapshots__/**",
 ]
 
-[tool.ruff.format]
-quote-style = "single"
-docstring-code-format = false
-
-[tool.ruff.lint]
-select = [
+preview = true
+# Ruff config: https://docs.astral.sh/ruff/settings
+fix = true
+format.quote-style = "single"
+format.docstring-code-format = false
+lint.select = [
   "A",    # flake8-builtins
   "B",    # flake8-bugbear
   "C4",   # flake8-comprehensions
@@ -128,28 +123,29 @@ select = [
   "ICN",  # flake8-import-conventions
   "ISC",  # flake8-implicit-str-concat
   "LOG",  # flake8-logging
-  "PTH",  # flake8-use-pathlib
+  "N",    # pep8-naming
   "PERF", # perflint
+  "PIE",  # flake8-pie
+  "PLC",  # pylint convention
+  "PLE",  # pylint error
   "PT",   # flake8-pytest-style
+  "PTH",  # flake8-use-pathlib
   "Q",    # flake8-quotes
   "RET",  # flake8-return
   "RSE",  # flake8-raise
   "RUF",  # ruff
-  "PIE",  # flake8-pie
-  "PLC",  # pylint convention
-  "PLE",  # pylint error
   "S",    # flake8-bandit
-  "N",    # pep8-naming
-  "SLOT", # flake8-slots
   "SIM",  # flake8-simpify
+  "SLOT", # flake8-slots
   "T100", # flake8-debugger
   "TRY",  # tryceratops
   "UP",   # pyupgrade
   "W",    # pycodestyle
   "YTT",  # flake8-2020
 ]
-
-ignore = [
+lint.ignore = [
+  "A005",   # allow to shadow stdlib and builtin module names
+  "COM812", # trailing comma, conflicts with `ruff format`
   # Different doc rules that we don't really care about:
   "D100",
   "D104",
@@ -159,76 +155,27 @@ ignore = [
   "D401",
   "D404",
   "D405",
-  "A005",    # allow to shadow stdlib and builtin module names
-  "COM812",  # trailing comma, conflicts with `ruff format`
-  "ISC001",  # implicit string concat conflicts with `ruff format`
-  "ISC003",  # prefer explicit string concat over implicit concat
-  "TRY003",  # long exception messages from `tryceratops`
-  "RUF001",  # <
-  "RUF002",  # | allow non-ascii letters
-  "RUF100",  # conflicts with flake8
+  "ISC001", # implicit string concat conflicts with `ruff format`
+  "ISC003", # prefer explicit string concat over implicit concat
+  "RUF001", # <
+  "RUF002", # | allow non-ascii letters
+  "RUF100", # conflicts with flake8
+  "TRY003", # long exception messages from `tryceratops`
 ]
-
-[tool.ruff.lint.mccabe]
-max-complexity = 6
-
-[tool.ruff.lint.flake8-quotes]
-inline-quotes = "single"
-
-[tool.ruff.lint.pydocstyle]
-convention = "google"
-
-[tool.ruff.lint.flake8-import-conventions]
-banned-from = ["ast"]
-
-[tool.ruff.lint.per-file-ignores]
-"wemake_python_styleguide/visitors/ast/*.py" = ["N802"]
-"wemake_python_styleguide/compat/nodes.py" = ["ICN003", "PLC0414"]
-"tests/*.py" = [
-    "S101",  # asserts
-    "S105",  # hardcoded passwords
-    "S404",  # subprocess calls are for tests
-    "S603",  # do not require `shell=True`
-    "S607",  # partial executable paths
+lint.per-file-ignores."tests/*.py" = [
+  "S101", # asserts
+  "S105", # hardcoded passwords
+  "S404", # subprocess calls are for tests
+  "S603", # do not require `shell=True`
+  "S607", # partial executable paths
 ]
-"wemake_python_styleguide/types.py" = ["D102"]
-
-
-[tool.mypy]
-# The mypy configurations: http://bit.ly/2zEl9WI
-ignore_missing_imports = true
-strict = true
-local_partial_types = true
-warn_unreachable = true
-
-enable_error_code = [
-  "truthy-bool",
-  "truthy-iterable",
-  "redundant-expr",
-  "unused-awaitable",
-  # "ignore-without-code",
-  "possibly-undefined",
-  "redundant-self",
-  # "explicit-override",
-  # "mutable-override",
-  "unimported-reveal",
-  "deprecated",
-]
-
-disable_error_code = [
-  "no-untyped-def",  # TODO: fix
-]
-
-[[tool.mypy.overrides]]
-module = "wemake_python_styleguide.compat.nodes"
-# We allow explicit `Any` only in this file, because of the compatibility:
-disallow_any_explicit = false
-
-[[tool.mypy.overrides]]
-module = "wemake_python_styleguide.compat.packaging"
-# We allow unused `ignore` comments, because we cannot sync it between versions:
-warn_unused_ignores = false
-
+lint.per-file-ignores."wemake_python_styleguide/compat/nodes.py" = [ "ICN003", "PLC0414" ]
+lint.per-file-ignores."wemake_python_styleguide/types.py" = [ "D102" ]
+lint.per-file-ignores."wemake_python_styleguide/visitors/ast/*.py" = [ "N802" ]
+lint.flake8-import-conventions.banned-from = [ "ast" ]
+lint.flake8-quotes.inline-quotes = "single"
+lint.mccabe.max-complexity = 6
+lint.pydocstyle.convention = "google"
 
 [tool.pytest.ini_options]
 # pytest config: http://doc.pytest.org/en/latest/customize.html
@@ -236,7 +183,7 @@ warn_unused_ignores = false
 # Strict `@xfail` by default:
 xfail_strict = true
 # Fail on warnings:
-filterwarnings = ["error"]
+filterwarnings = [ "error" ]
 
 addopts = [
   "--strict",
@@ -265,7 +212,6 @@ norecursedirs = [
   "__pycache__",
 ]
 
-
 [tool.coverage.run]
 # Coverage configuration: https://coverage.readthedocs.io/
 
@@ -282,3 +228,38 @@ omit = [
 plugins = [
   "covdefaults",
 ]
+
+[tool.mypy]
+# The mypy configurations: http://bit.ly/2zEl9WI
+ignore_missing_imports = true
+strict = true
+local_partial_types = true
+warn_unreachable = true
+
+enable_error_code = [
+  "truthy-bool",
+  "truthy-iterable",
+  "redundant-expr",
+  "unused-awaitable",
+  # "ignore-without-code",
+  "possibly-undefined",
+  "redundant-self",
+  # "explicit-override",
+  # "mutable-override",
+  "unimported-reveal",
+  "deprecated",
+]
+
+disable_error_code = [
+  "no-untyped-def", # TODO: fix
+]
+
+[[tool.mypy.overrides]]
+module = "wemake_python_styleguide.compat.nodes"
+# We allow explicit `Any` only in this file, because of the compatibility:
+disallow_any_explicit = false
+
+[[tool.mypy.overrides]]
+module = "wemake_python_styleguide.compat.packaging"
+# We allow unused `ignore` comments, because we cannot sync it between versions:
+warn_unused_ignores = false
