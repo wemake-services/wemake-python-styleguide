@@ -127,7 +127,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS330': 1,
         'WPS331': 0,  # disabled since 1.0.0
         'WPS332': 1,
-        'WPS333': 1,
+        'WPS333': 0,  # disabled since 1.0.0
         'WPS334': 1,
         'WPS335': 1,
         'WPS336': 1,
@@ -186,7 +186,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS425': 0,  # disabled since 1.0.0
         'WPS426': 1,
         'WPS427': 1,
-        'WPS428': 1,
+        'WPS428': 0,  # disabled since 1.0.0
         'WPS429': 1,
         'WPS430': 1,
         'WPS431': 2,
@@ -244,11 +244,11 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS507': 0,  # disabled since 1.0.0
         'WPS508': 0,  # disabled since 1.0.0
         'WPS509': 1,
-        'WPS510': 1,
+        'WPS510': 0,  # disabled since 1.0.0
         'WPS511': 0,  # disabled since 1.0.0
         'WPS512': 0,  # disabled since 1.0.0
         'WPS513': 1,
-        'WPS514': 1,
+        'WPS514': 0,  # disabled since 1.0.0
         'WPS515': 1,
         'WPS516': 1,
         'WPS517': 2,
@@ -259,7 +259,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS522': 1,
         'WPS523': 1,
         'WPS524': 1,
-        'WPS525': 2,
+        'WPS525': 0,  # disabled since 1.0.0
         'WPS526': 0,  # disabled since 1.0.0
         'WPS527': 1,
         'WPS528': 0,  # disabled since 1.0.0

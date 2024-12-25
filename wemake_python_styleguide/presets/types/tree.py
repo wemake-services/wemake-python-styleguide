@@ -69,7 +69,6 @@ PRESET: Final = (
     compares.WrongFloatComplexCompareVisitor,
     conditions.IfStatementVisitor,
     conditions.BooleanConditionVisitor,
-    conditions.ImplicitBoolPatternsVisitor,
     conditions.MatchVisitor,
     conditions.ChainedIsVisitor,
     iterables.IterableUnpackingVisitor,

@@ -13,7 +13,7 @@ Use ``*.pyi`` glob to list ignored violations:
   # Inside `setup.cfg`:
   [flake8]
   per-file-ignores =
-    *.pyi: WPS428, WPS604
+    *.pyi: WPS604
 
 You can look at the `returns <https://github.com/dry-python/returns>`_
 project as an example.

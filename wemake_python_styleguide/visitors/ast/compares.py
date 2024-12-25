@@ -3,7 +3,6 @@ from typing import ClassVar
 
 from typing_extensions import final
 
-from wemake_python_styleguide.compat.aliases import TextNodes
 from wemake_python_styleguide.logic import nodes, walk
 from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
 from wemake_python_styleguide.logic.tree import (
@@ -26,9 +25,7 @@ from wemake_python_styleguide.violations.consistency import (
 )
 from wemake_python_styleguide.violations.refactoring import (
     FalsyConstantCompareViolation,
-    InCompareWithSingleItemContainerViolation,
     NestedTernaryViolation,
-    WrongInCompareTypeViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
@@ -218,49 +215,15 @@ class InCompareSanityVisitor(BaseNodeVisitor):
         ast.NotIn,
     )
 
-    _wrong_in_comparators: ClassVar[AnyNodes] = (
-        ast.List,
-        ast.ListComp,
-        ast.Dict,
-        ast.DictComp,
-        ast.Tuple,
-        ast.GeneratorExp,
-    )
-
     def visit_Compare(self, node: ast.Compare) -> None:
         """Ensures that compares are written correctly."""
         self._check_multiply_compares(node)
-        self._check_comparators(node)
         self.generic_visit(node)
 
     def _check_multiply_compares(self, node: ast.Compare) -> None:
         count = sum(1 for op in node.ops if isinstance(op, self._in_nodes))
         if count > 1:
             self.add_violation(MultipleInCompareViolation(node))
-
-    def _check_comparators(self, node: ast.Compare) -> None:
-        for op, comp in zip(node.ops, node.comparators, strict=False):
-            if not isinstance(op, self._in_nodes):
-                continue
-
-            real = get_assigned_expr(comp)
-            self._check_single_item_container(real)
-            self._check_wrong_comparators(real)
-
-    def _check_single_item_container(self, node: ast.AST) -> None:
-        is_text_violated = isinstance(node, TextNodes) and len(node.value) == 1
-        is_dict_violated = isinstance(node, ast.Dict) and len(node.keys) == 1
-        is_iter_violated = (
-            isinstance(node, ast.List | ast.Tuple | ast.Set)
-            and len(node.elts) == 1
-        )
-
-        if is_text_violated or is_dict_violated or is_iter_violated:
-            self.add_violation(InCompareWithSingleItemContainerViolation(node))
-
-    def _check_wrong_comparators(self, node: ast.AST) -> None:
-        if isinstance(node, self._wrong_in_comparators):
-            self.add_violation(WrongInCompareTypeViolation(node))
 
 
 @final

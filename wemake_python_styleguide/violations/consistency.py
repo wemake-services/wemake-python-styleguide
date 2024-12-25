@@ -1498,11 +1498,15 @@ class ImplicitComplexCompareViolation(ASTViolation):
             ...
 
     .. versionadded:: 0.10.0
+    .. versionchanged:: 1.0.0
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` and ``pylint`` linters. See ``PLR1716``.
 
     """
 
     code = 333
     error_template = 'Found implicit complex compare'
+    disabled_since = '1.0.0'
 
 
 @final

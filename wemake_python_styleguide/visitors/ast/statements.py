@@ -7,20 +7,16 @@ from typing_extensions import final
 from wemake_python_styleguide import constants, types
 from wemake_python_styleguide.compat.aliases import (
     ForNodes,
-    FunctionNodes,
     TextNodes,
 )
 from wemake_python_styleguide.compat.nodes import TryStar
-from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.arguments import call_args
 from wemake_python_styleguide.logic.naming import name_nodes
-from wemake_python_styleguide.logic.tree import bodies, strings
 from wemake_python_styleguide.logic.tree.collections import (
     first,
     sequence_of_node,
 )
 from wemake_python_styleguide.violations.best_practices import (
-    StatementHasNoEffectViolation,
     UnreachableCodeViolation,
     WrongNamedKeywordViolation,
 )
@@ -87,12 +83,6 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         ast.Continue,
     )
 
-    _have_doc_strings: ClassVar[types.AnyNodes] = (
-        *FunctionNodes,
-        ast.ClassDef,
-        ast.Module,
-    )
-
     _blocked_self_assignment: ClassVar[types.AnyNodes] = (ast.BinOp,)
 
     _nodes_with_orelse = (
@@ -101,22 +91,6 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
         ast.While,
         ast.Try,
         TryStar,
-    )
-
-    _have_effect: ClassVar[types.AnyNodes] = (
-        ast.Return,
-        ast.YieldFrom,
-        ast.Yield,
-        ast.Raise,
-        ast.Break,
-        ast.Continue,
-        ast.Call,
-        ast.Await,
-        ast.Nonlocal,
-        ast.Global,
-        ast.Delete,
-        ast.Pass,
-        ast.Assert,
     )
 
     # Useless nodes:
@@ -207,44 +181,6 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
             ),
         )
 
-    def _check_expression(
-        self,
-        node: ast.Expr,
-        *,
-        is_first: bool = False,
-    ) -> None:
-        if isinstance(node.value, self._have_effect):
-            return
-
-        parent = nodes.get_parent(node)
-        if (
-            is_first
-            and strings.is_doc_string(node)
-            and isinstance(parent, self._have_doc_strings)
-        ):
-            return  # docstrings are allowed
-
-        if (
-            isinstance(node.value, ast.Constant)
-            and node.value.value is Ellipsis
-            and isinstance(parent, (*FunctionNodes, ast.ClassDef))
-            and len(parent.body) == 1
-        ):
-            return  # we allow `...` as the only function or class node
-
-        if (
-            isinstance(node.value, ast.Constant)
-            and isinstance(node.value.value, str)
-            and isinstance(parent, ast.Module | ast.ClassDef)
-            and isinstance(
-                bodies.previous_node(parent, node),
-                ast.Assign | ast.AnnAssign,
-            )
-        ):
-            return  # we allow docstrings after assignments in some contexts
-
-        self.add_violation(StatementHasNoEffectViolation(node))
-
     def _check_self_misrefactored_assignment(
         self,
         node: ast.AugAssign,
@@ -261,14 +197,12 @@ class StatementsWithBodiesVisitor(BaseNodeVisitor):
 
     def _check_internals(self, body: Sequence[ast.stmt]) -> None:
         after_closing_node = False
-        for index, statement in enumerate(body):
+        for statement in body:
             if after_closing_node:
                 self.add_violation(UnreachableCodeViolation(statement))
 
             if isinstance(statement, self._closing_nodes):
                 after_closing_node = True
-            elif isinstance(statement, ast.Expr):
-                self._check_expression(statement, is_first=index == 0)
             elif isinstance(statement, ast.AugAssign):
                 self._check_self_misrefactored_assignment(statement)
 

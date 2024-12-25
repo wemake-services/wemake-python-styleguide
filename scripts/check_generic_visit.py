@@ -30,7 +30,7 @@ def main() -> NoReturn:
     matches = astpath.search(sys.argv[1], PATTERN, print_matches=False)
 
     if not len(matches):
-        exit(OK_CODE)  # noqa: WPS421
+        sys.exit(OK_CODE)
 
     report()
     report('"self.generic_visit(node)" should be last statement here:')
@@ -49,7 +49,7 @@ def main() -> NoReturn:
             ),
         )
 
-    exit(FAIL_CODE)  # noqa: WPS421
+    sys.exit(FAIL_CODE)
 
 
 if __name__ == '__main__':

@@ -3,9 +3,6 @@ import pytest
 from wemake_python_styleguide.violations.consistency import (
     MultipleInCompareViolation,
 )
-from wemake_python_styleguide.violations.refactoring import (
-    InCompareWithSingleItemContainerViolation,
-)
 from wemake_python_styleguide.visitors.ast.compares import (
     InCompareSanityVisitor,
 )
@@ -50,11 +47,7 @@ def test_compare_with_in(
     visitor = InCompareSanityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(
-        visitor,
-        [],
-        ignored_types=InCompareWithSingleItemContainerViolation,
-    )
+    assert_errors(visitor, [])
 
 
 @pytest.mark.parametrize(
@@ -90,7 +83,6 @@ def test_compare_with_multiple_in(
     assert_errors(
         visitor,
         [MultipleInCompareViolation],
-        ignored_types=InCompareWithSingleItemContainerViolation,
     )
 
 
