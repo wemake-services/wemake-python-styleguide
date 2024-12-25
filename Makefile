@@ -1,5 +1,10 @@
 SHELL:=/usr/bin/env bash
 
+.PHONY: format
+format:
+	poetry run ruff format
+	poetry run ruff check
+
 .PHONY: lint
 lint:
 	poetry run mypy wemake_python_styleguide scripts
