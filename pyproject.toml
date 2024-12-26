@@ -54,7 +54,6 @@ python = "^3.10"
 
 flake8 = "^7.1"
 attrs = "*"
-typing_extensions = ">=4.0"
 pygments = "^2.4"
 
 [tool.poetry.group.dev.dependencies]
@@ -81,7 +80,7 @@ ruff = "^0.8"
 optional = true
 
 [tool.poetry.group.docs.dependencies]
-sphinx = ">=7.1,<9.0"
+sphinx = "^8.1"
 sphinx-autodoc-typehints = "^2.0"
 sphinxcontrib-mermaid = "^1.0"
 added-value = "^0.24"
