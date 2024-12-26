@@ -24,9 +24,6 @@ MIN_NAME_LENGTH: Final = 2  # reasonable enough
 #: Maximum variable and module name length:
 MAX_NAME_LENGTH: Final = 45  # reasonable enough
 
-#: Whether you control ones who use your code.
-I_CONTROL_CODE: Final = True
-
 #: Maximum amount of ``noqa`` comments per module.
 MAX_NOQA_COMMENTS: Final = 10  # guessed
 
@@ -48,6 +45,12 @@ FORBIDDEN_INLINE_IGNORE: Final = ()
 
 #: Count of available expressions for one empty line in function or method body.
 EXPS_FOR_ONE_EMPTY_LINE: Final = 2
+
+#: List of module metadata we allow to use.
+ALLOWED_MODULE_METADATA: Final = ()
+
+#: List of module metadata we forbid to use.
+FORBIDDEN_MODULE_METADATA: Final = ()
 
 # ===========
 # Complexity:

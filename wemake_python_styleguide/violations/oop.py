@@ -420,11 +420,6 @@ class DirectMagicAttributeAccessViolation(ASTViolation):
     ``self``, ``cls``, and ``super()`` as base names.
     We allow this because a lot of internal logic relies on these methods.
 
-    See
-    :py:data:`~wemake_python_styleguide.constants.ALL_MAGIC_METHODS`
-    for the full list of magic attributes disallowed from being
-    accessed directly.
-
     .. versionadded:: 0.8.0
     .. versionchanged:: 0.11.0
     .. versionchanged:: 0.16.0

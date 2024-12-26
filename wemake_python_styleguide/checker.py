@@ -36,11 +36,13 @@ Checker API
 
 """
 
+from __future__ import annotations
+
 import ast
 import tokenize
 import traceback
 from collections.abc import Iterator, Sequence
-from typing import ClassVar, TypeAlias, final
+from typing import TYPE_CHECKING, ClassVar, TypeAlias, final
 
 from flake8.options.manager import OptionManager
 
@@ -54,6 +56,9 @@ from wemake_python_styleguide.presets.types import tree as tree_preset
 from wemake_python_styleguide.transformations.ast_tree import transform
 from wemake_python_styleguide.violations import system
 from wemake_python_styleguide.visitors import base
+
+if TYPE_CHECKING:
+    from wemake_python_styleguide.options.validation import ValidatedOptions
 
 VisitorClass: TypeAlias = type[base.BaseVisitor]
 
@@ -73,7 +78,7 @@ class Checker:
         :class:`wemake_python_styleguide.options.config.Configuration`.
 
         options: option structure passed by ``flake8``:
-        :class:`wemake_python_styleguide.types.ConfigurationOptions`.
+        :class:`wemake_python_styleguide.options.validation.ValidatedOptions`.
 
         visitors: :term:`preset` of visitors that are run by this checker.
 
@@ -82,7 +87,7 @@ class Checker:
     name: ClassVar[str] = pkg_version.pkg_name
     version: ClassVar[str] = pkg_version.pkg_version
 
-    options: types.ConfigurationOptions
+    options: ValidatedOptions
     config = Configuration()
 
     _visitors: ClassVar[Sequence[VisitorClass]] = (
@@ -132,7 +137,7 @@ class Checker:
         cls.config.register_options(parser)
 
     @classmethod
-    def parse_options(cls, options: types.ConfigurationOptions) -> None:
+    def parse_options(cls, options: ValidatedOptions) -> None:
         """Parses registered options for providing them to each visitor."""
         cls.options = validate_options(options)
 

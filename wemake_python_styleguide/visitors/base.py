@@ -69,7 +69,7 @@ from typing import final
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.routing import route_visit
 from wemake_python_styleguide.logic.filenames import get_stem
-from wemake_python_styleguide.types import ConfigurationOptions
+from wemake_python_styleguide.options.validation import ValidatedOptions
 from wemake_python_styleguide.violations.base import BaseViolation
 
 
@@ -87,7 +87,7 @@ class BaseVisitor(abc.ABC):
 
     def __init__(
         self,
-        options: ConfigurationOptions,
+        options: ValidatedOptions,
         filename: str = constants.STDIN,
     ) -> None:
         """Creates base visitor instance."""
@@ -151,7 +151,7 @@ class BaseNodeVisitor(ast.NodeVisitor, BaseVisitor):
 
     def __init__(
         self,
-        options: ConfigurationOptions,
+        options: ValidatedOptions,
         tree: ast.AST,
         **kwargs,
     ) -> None:
@@ -236,7 +236,7 @@ class BaseTokenVisitor(BaseVisitor):
 
     def __init__(
         self,
-        options: ConfigurationOptions,
+        options: ValidatedOptions,
         file_tokens: Sequence[tokenize.TokenInfo],
         **kwargs,
     ) -> None:

@@ -187,22 +187,11 @@ Writing end-to-end tests
 In end-to-end tests we check that our visitor, violation and business logic
 work correctly together all the way from flake8 config file to its output.
 
-To check all supported violations, we have two modules containing code which
-raises them: ``noqa.py`` and ``noqa_controlled.py``. The first is for all
-possible violations while the second is only for those which may be tweaked
-using ``i_control_code`` option. If violation may be ignored (or instead,
-raised) with ``i_control_code``, the appropriate piece of code should be
-added to both modules.
+To check all supported violations, a module containing code which
+raises them: ``noqa.py``. It is for all
+possible violations.
 
 The next thing is test itself which should reside in
 ``tests/test_checker/test_noqa.py`` module. The main test functions are
 written already, so probably the only thing to do is to put the violation
-code into either ``SHOULD_BE_RAISED``, or ``SHOULD_BE_RAISED_NO_CONTROL``
-container, or into both. For example, if the violation is raised with
-``i_control_code=True``, it must be placed into ``SHOULD_BE_RAISED``
-with value ``1`` and into ``SHOULD_BE_RAISED_NO_CONTROL`` with value ``0``.
-By doing this we check that the violation is raised in one situation and
-is not raised in opposite one. If the violation is ignored when
-``i_control_code=True``, swap ``0`` and ``1`` it containers. If the
-violation cannot be tweaked with ``i_control_code`` it should only be
-put into ``SHOULD_BE_RAISED`` container with appropriate value.
+code into either ``SHOULD_BE_RAISED``.

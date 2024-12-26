@@ -24,31 +24,6 @@ class Example:
     'code',
     [
         module_level_method,
-        class_level_method,
-    ],
-)
-@pytest.mark.parametrize('function_names', MAGIC_MODULE_NAMES_BLACKLIST)
-def test_right_magic_used(
-    assert_errors,
-    code,
-    parse_ast_tree,
-    options,
-    function_names,
-):
-    """Testing magic methods with logic is restricted."""
-    tree = parse_ast_tree(code.format(function_names))
-    option_values = options(i_control_code=False)
-
-    visitor = MagicModuleFunctionsVisitor(option_values, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [])
-
-
-@pytest.mark.parametrize(
-    'code',
-    [
-        module_level_method,
     ],
 )
 @pytest.mark.parametrize('function_names', MAGIC_MODULE_NAMES_BLACKLIST)

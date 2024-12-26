@@ -71,18 +71,6 @@ def all_violations():
 
 
 @pytest.fixture(scope=_SESSION_SCOPE)
-def all_controlled_violations():
-    """Loads all violations which may be tweaked using `i_control_code`."""
-    return [
-        violation_class
-        for module_classes in _load_all_violation_classes().values()
-        for violation_class in module_classes
-        if '--i-control-code' in violation_class.__doc__
-        and not violation_class.disabled_since
-    ]
-
-
-@pytest.fixture(scope=_SESSION_SCOPE)
 def all_module_violations():
     """Loads all violations from the package."""
     return _load_all_violation_classes()

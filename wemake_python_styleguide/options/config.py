@@ -38,14 +38,6 @@ You can also show all options that ``flake8`` supports by running:
 - ``max-name-length`` - maximum number of chars to define a valid
     variable and module name, defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_NAME_LENGTH`
-- ``i-control-code`` - whether you control ones who use your code,
-    more rules are enforced when you do control it,
-    opposite to ``--i-dont-control-code``, defaults to
-    :str:`wemake_python_styleguide.options.defaults.I_CONTROL_CODE`
-- ``i-dont-control-code`` - whether you control ones who use your code,
-    more rules are enforced when you do control it,
-    opposite to ``--i-control-code``, defaults to
-    :str:`wemake_python_styleguide.options.defaults.I_CONTROL_CODE`
 - ``nested-classes-whitelist`` - list of nested classes' names we allow to use,
     defaults to
     :str:`wemake_python_styleguide.options.defaults.NESTED_CLASSES_WHITELIST`
@@ -56,6 +48,10 @@ You can also show all options that ``flake8`` supports by running:
     :str:`wemake_python_styleguide.options.defaults.ALLOWED_DOMAIN_NAMES`
 - ``forbidden-domain-names`` - list of forbidden domain names, defaults to
     :str:`wemake_python_styleguide.options.defaults.FORBIDDEN_DOMAIN_NAMES`
+- ``allowed-module-metadata`` - list of allowed module metadata, defaults to
+    :str:`wemake_python_styleguide.options.defaults.ALLOWED_MODULE_METADATA`
+- ``forbidden-module-metadata`` - list of forbidden module metadata, defaults to
+    :str:`wemake_python_styleguide.options.defaults.FORBIDDEN_MODULE_METADATA`
 - ``forbidden-inline-ignore`` - list of codes of violations or
     class of violations that are forbidden to ignore inline, defaults to
     :str:`wemake_python_styleguide.options.defaults.FORBIDDEN_INLINE_IGNORE`
@@ -228,23 +224,6 @@ class Configuration:
             'Maximum possible length of the variable and module names.',
         ),
         _Option(
-            '--i-control-code',
-            defaults.I_CONTROL_CODE,
-            'Whether you control ones who use your code.',
-            action='store_true',
-            type=None,
-            dest='i_control_code',
-        ),
-        _Option(
-            '--i-dont-control-code',
-            not defaults.I_CONTROL_CODE,
-            'Whether you control ones who use your code.',
-            action='store_false',
-            type=None,
-            dest='i_control_code',
-            parse_from_config=False,
-        ),
-        _Option(
             '--max-noqa-comments',
             defaults.MAX_NOQA_COMMENTS,
             'Maximum amount of `noqa` comments per module.',
@@ -267,6 +246,20 @@ class Configuration:
             '--forbidden-domain-names',
             defaults.FORBIDDEN_DOMAIN_NAMES,
             "Domain names that extends variable names' blacklist.",
+            type=String,
+            comma_separated_list=True,
+        ),
+        _Option(
+            '--allowed-module-metadata',
+            defaults.ALLOWED_MODULE_METADATA,
+            'Names that are allowed as a module metadata attribute.',
+            type=String,
+            comma_separated_list=True,
+        ),
+        _Option(
+            '--forbidden-module-metadata',
+            defaults.FORBIDDEN_MODULE_METADATA,
+            'Names that are disallowed as a module metadata attribute.',
             type=String,
             comma_separated_list=True,
         ),

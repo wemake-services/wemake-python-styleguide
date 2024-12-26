@@ -65,7 +65,6 @@ FUNCTIONS_BLACKLIST: Final = frozenset(
         'input',
         'breakpoint',
         # Attribute access:
-        'hasattr',
         'delattr',
         # Gratis:
         'copyright',
@@ -88,6 +87,7 @@ MODULE_METADATA_VARIABLES_BLACKLIST: Final = frozenset(
         '__all__',
         '__version__',
         '__about__',
+        '__copyright__',
     ),
 )
 
@@ -183,6 +183,7 @@ ALL_MAGIC_METHODS: Final = frozenset(
         '__init_subclass__',
         '__instancecheck__',
         '__subclasscheck__',
+        '__mro_entries__',
         '__class_getitem__',
         '__call__',
         '__len__',
@@ -274,6 +275,9 @@ ALL_MAGIC_METHODS: Final = frozenset(
         # copy
         '__copy__',
         '__deepcopy__',
+        '__replace__',
+        # typing
+        '__annotate__',
         # dataclasses
         '__post_init__',
         # attrs:
@@ -333,16 +337,6 @@ ALLOWED_BUILTIN_CLASSES: Final = frozenset(
     (
         'type',
         'object',
-    ),
-)
-
-#: List of builtins that we allow to shadow.
-BUILTINS_WHITELIST: Final = frozenset(
-    (
-        UNUSED_PLACEHOLDER,
-        'license',
-        'copyright',
-        'credits',
     ),
 )
 

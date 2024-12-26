@@ -93,6 +93,10 @@ Semantic versioning in our case means:
 - **Breaking**: Removes `WPS526`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS521`, because is covered by `ruff` linter
 - **Breaking**: Removes `WPS609`, because is covered by `pylint` linter
+- **Breaking**: Removes `--i-control-code` setting,
+  if you want to disable some violations, just use `# noqa` or `--ignore`
+  with code that you want to exclude, there's no need
+  to create one more way of disabling some specific violations
 
 ## Features
 
@@ -111,6 +115,7 @@ Semantic versioning in our case means:
 - Allows any number of function parameters
   in `@overload` definitions for `WPS211`, #1957
 - Allows using multiline strings when placed on separate lines, #3056
+- Allows using `hasattr` builtin function, #2228
 - Disallows using `is not` and `not in` as negated conditions in `WPS504`, #2617
 - Allows all branches in `if/elif/else` to be negated in `WPS504`, #2617
 - Adds a new rule to forbid `lambda` assigns to special attributes, #1733
@@ -124,6 +129,8 @@ Semantic versioning in our case means:
 - Adds a new rule to find useless ternary expressions, #1706
 - Adds a new rule to forbid `raise SystemError`, use `sys.exit` instead, #1786
 - Adds a new rule to forbid extra syntax in `match ...` subjects, #3217
+- Adds new `--allowed-module-metadata` and `--forbidden-module-metadata`
+  configuration options for `WPS410`, #3060
 - Adds support to run `wemake-python-styleguide` as a `pre-commit` hook, #2588
 - GitHub Action can now use `cwd:` parameter to specify
   where your configuration file is, #2474

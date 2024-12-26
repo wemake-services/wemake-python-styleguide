@@ -6,7 +6,7 @@ from typing import Final, TypeAlias, final
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.tree import imports
-from wemake_python_styleguide.types import ConfigurationOptions
+from wemake_python_styleguide.options.validation import ValidatedOptions
 from wemake_python_styleguide.violations.base import ErrorCallback
 from wemake_python_styleguide.violations.best_practices import (
     FutureImportViolation,
@@ -32,7 +32,7 @@ class _BaseImportValidator:
     def __init__(
         self,
         error_callback: ErrorCallback,
-        options: ConfigurationOptions,
+        options: ValidatedOptions,
     ) -> None:
         self._error_callback = error_callback
         self._options = options

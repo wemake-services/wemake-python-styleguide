@@ -305,10 +305,6 @@ class WrongVariableNameViolation(ASTViolation):
         If you really want to use any of the names from the list,
         add a prefix or suffix to it. It will serve you well.
 
-    See
-    :py:data:`~wemake_python_styleguide.constants.VARIABLE_NAMES_BLACKLIST`
-    for the base list of blacklisted variable names.
-
     Example::
 
         # Correct:
@@ -431,17 +427,6 @@ class SameAliasImportViolation(ASTViolation):
 
         # Wrong:
         from os import path as path
-
-    When `--i-control-code` is set to ``False``
-    you can reexport things with ``as``,
-    because ``mypy`` might require it
-    with ``implicit_reexport = False`` setting turned on.
-
-    Configuration:
-        This rule is configurable with ``--i-control-code``
-        and ``--i-dont-control-code``.
-        Default:
-        :str:`wemake_python_styleguide.options.defaults.I_CONTROL_CODE`
 
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.13.0
@@ -874,10 +859,6 @@ class BuiltinShadowingViolation(ASTViolation):
 
     If you feel it is still necessary to use such a class attribute,
     consider using a `noqa` comment with caution.
-
-    See
-    :py:data:`~wemake_python_styleguide.constants.BUILTINS_WHITELIST`
-    for full list of builtins we allow to shadow.
 
     .. versionadded:: 0.14
     .. versionchanged:: 0.15
