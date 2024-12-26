@@ -131,6 +131,8 @@ Semantic versioning in our case means:
 - Adds a new rule to forbid extra syntax in `match ...` subjects, #3217
 - Adds new `--allowed-module-metadata` and `--forbidden-module-metadata`
   configuration options for `WPS410`, #3060
+- Now `--allowed-domain-names` also affect `WPS11`
+  to allow custom short variable names, #2554
 - Adds support to run `wemake-python-styleguide` as a `pre-commit` hook, #2588
 - GitHub Action can now use `cwd:` parameter to specify
   where your configuration file is, #2474
