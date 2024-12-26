@@ -151,23 +151,30 @@ class _RegularNameValidator(_SimpleNameValidator):
         self._ensure_readable_name(node, name)
 
     def _ensure_length(self, node: ast.AST, name: str) -> None:
-        min_length = self._options.min_name_length
-        if logical.is_too_short_name(name, min_length=min_length):
+        if (
+            logical.is_too_short_name(
+                name,
+                min_length=self._options.min_name_length,
+            )
+            and name not in self._options.allowed_domain_names
+        ):
             self._error_callback(
                 naming.TooShortNameViolation(
                     node,
                     text=name,
-                    baseline=min_length,
+                    baseline=self._options.min_name_length,
                 ),
             )
 
-        max_length = self._options.max_name_length
-        if logical.is_too_long_name(name, max_length=max_length):
+        if logical.is_too_long_name(
+            name,
+            max_length=self._options.max_name_length,
+        ):
             self._error_callback(
                 naming.TooLongNameViolation(
                     node,
                     text=name,
-                    baseline=max_length,
+                    baseline=self._options.max_name_length,
                 ),
             )
 

@@ -366,6 +366,10 @@ class TooShortNameViolation(MaybeASTViolation):
         Default:
         :str:`wemake_python_styleguide.options.defaults.MIN_NAME_LENGTH`
 
+        Pass allowed short names with ``--allowed-domain-names``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.ALLOWED_DOMAIN_NAMES`
+
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.4.0
     .. versionchanged:: 0.12.0

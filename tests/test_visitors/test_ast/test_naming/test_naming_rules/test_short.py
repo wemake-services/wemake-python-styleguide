@@ -86,3 +86,23 @@ def test_naming_length_settings(
 
     assert_errors(visitor, [TooShortNameViolation])
     assert_error_text(visitor, short_name, option_values.min_name_length)
+
+
+def test_naming_domain_settings(
+    assert_errors,
+    parse_ast_tree,
+    own_naming_template,
+    options,
+    mode,
+):
+    """Ensures that customized domain names are allowed."""
+    short_name = 'a'
+    tree = parse_ast_tree(
+        mode(own_naming_template.format(short_name)),
+    )
+
+    option_values = options(allowed_domain_names=('a',))
+    visitor = WrongNameVisitor(option_values, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
