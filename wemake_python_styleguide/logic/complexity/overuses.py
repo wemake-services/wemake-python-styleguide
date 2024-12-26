@@ -85,8 +85,9 @@ def is_primitive(node: ast.AST) -> bool:
         return not node.elts  # we do allow `[]` and `()`
     if isinstance(node, ast.Set):
         elts = node.elts
-        return (  # we do allow `{*set_items}`
-            len(elts) == 1 and isinstance(elts[0], ast.Starred)
+        return len(elts) == 1 and isinstance(  # we do allow `{*set_items}`
+            elts[0],
+            ast.Starred,
         )
     if isinstance(node, ast.Dict):  # we do allow `{}` and `{**values}`
         return not list(filter(None, node.keys))

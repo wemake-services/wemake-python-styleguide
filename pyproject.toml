@@ -75,6 +75,7 @@ astpath = "^0.9"
 lxml = "^5.1"
 nbqa = "^1.2"
 ruff = "^0.8"
+black = "^24.10"
 
 [tool.poetry.group.docs]
 optional = true
@@ -262,3 +263,15 @@ disallow_any_explicit = false
 module = "wemake_python_styleguide.compat.packaging"
 # We allow unused `ignore` comments, because we cannot sync it between versions:
 warn_unused_ignores = false
+
+[tool.black]
+line-length = 80
+preview = true
+skip-string-normalization = true  # we use '
+target-version = ['py310']
+# Exclude intentionally bad files:
+extend-exclude = '''
+(
+  tests/.*/__snapshots__/.* | tests/fixtures/.*
+)
+'''
