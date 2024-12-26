@@ -88,6 +88,18 @@ added-value = "^0.24"
 tomli = "^2.0"
 myst-parser = "^4.0"
 
+[tool.black]
+line-length = 80
+preview = true
+skip-string-normalization = true # we use '
+target-version = [ 'py310' ]
+# Exclude intentionally bad files:
+extend-exclude = '''
+(
+  tests/.*/__snapshots__/.* | tests/fixtures/.*
+)
+'''
+
 [tool.ruff]
 # Ruff config: https://docs.astral.sh/ruff/settings
 target-version = "py310"
@@ -263,15 +275,3 @@ disallow_any_explicit = false
 module = "wemake_python_styleguide.compat.packaging"
 # We allow unused `ignore` comments, because we cannot sync it between versions:
 warn_unused_ignores = false
-
-[tool.black]
-line-length = 80
-preview = true
-skip-string-normalization = true  # we use '
-target-version = ['py310']
-# Exclude intentionally bad files:
-extend-exclude = '''
-(
-  tests/.*/__snapshots__/.* | tests/fixtures/.*
-)
-'''
