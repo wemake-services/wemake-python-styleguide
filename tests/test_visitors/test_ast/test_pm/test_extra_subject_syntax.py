@@ -1,7 +1,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.refactoring import (
-    ExtraMatchSubjectSyntax,
+    ExtraMatchSubjectSyntaxViolation,
 )
 from wemake_python_styleguide.visitors.ast.pm import MatchSubjectVisitor
 
@@ -35,7 +35,7 @@ def test_wrong_usage_of_subjects(
     visitor = MatchSubjectVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [ExtraMatchSubjectSyntax])
+    assert_errors(visitor, [ExtraMatchSubjectSyntaxViolation])
 
 
 @pytest.mark.parametrize(

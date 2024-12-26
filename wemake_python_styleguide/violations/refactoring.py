@@ -49,7 +49,7 @@ Summary
    DuplicateIfConditionViolation
    UselessTernaryViolation
    DuplicateCasePatternViolation
-   ExtraMatchSubjectSyntax
+   ExtraMatchSubjectSyntaxViolation
 
 Refactoring opportunities
 -------------------------
@@ -90,7 +90,7 @@ Refactoring opportunities
 .. autoclass:: DuplicateIfConditionViolation
 .. autoclass:: UselessTernaryViolation
 .. autoclass:: DuplicateCasePatternViolation
-.. autoclass:: ExtraMatchSubjectSyntax
+.. autoclass:: ExtraMatchSubjectSyntaxViolation
 
 """
 
@@ -1419,7 +1419,7 @@ class DuplicateCasePatternViolation(ASTViolation):
 
 
 @final
-class ExtraMatchSubjectSyntax(ASTViolation):
+class ExtraMatchSubjectSyntaxViolation(ASTViolation):
     """
     Forbid extra syntax around ``match`` like ``[]`` or ``{ ... }``.
 

@@ -36,9 +36,7 @@ Reference
 """
 
 import ast
-from typing import TypeAlias
-
-from typing_extensions import Protocol
+from typing import TypeAlias, Protocol
 
 #: In cases we need to work with both import types.
 AnyImport: TypeAlias = ast.Import | ast.ImportFrom

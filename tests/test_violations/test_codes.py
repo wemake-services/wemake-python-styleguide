@@ -1,4 +1,6 @@
+import pytest
 from collections import Counter
+from wemake_python_styleguide.compat.constants import PY311
 
 
 def test_all_unique_violation_codes(all_violations):
@@ -7,7 +9,8 @@ def test_all_unique_violation_codes(all_violations):
     assert len(set(codes)) == len(all_violations)
 
 
-def test_all_violations_are_final(all_violations):
+@pytest.mark.skipif(not PY311, reason='@final has runtime effect since 3.11')
+def test_all_violations_are_final(all_violations):  # pragma: >=3.11 cover
     """Ensures that all violations are final."""
     for violation_type in all_violations:
         assert getattr(violation_type, '__final__', False), violation_type

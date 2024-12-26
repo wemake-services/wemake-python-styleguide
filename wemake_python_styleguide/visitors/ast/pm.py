@@ -4,7 +4,7 @@ from typing import ClassVar, final
 from wemake_python_styleguide.logic.tree import pattern_matching
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.refactoring import (
-    ExtraMatchSubjectSyntax,
+    ExtraMatchSubjectSyntaxViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
@@ -32,4 +32,4 @@ class MatchSubjectVisitor(BaseNodeVisitor):
             return  # raises another violation in a different place
         if isinstance(node, ast.Tuple) and len(node.elts) > 1:
             return
-        self.add_violation(ExtraMatchSubjectSyntax(node))
+        self.add_violation(ExtraMatchSubjectSyntaxViolation(node))
