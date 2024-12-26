@@ -125,7 +125,7 @@ def some():  # noqa: WPS110
 
 
 del {'a': 1}['a']  # noqa: WPS420
-hasattr(object, 'some')  # noqa: WPS421
+delattr(object, 'some')  # noqa: WPS421
 value = 1  # noqa: WPS110
 VALUE = 1  # noqa: WPS110
 x = 2  # noqa: WPS111

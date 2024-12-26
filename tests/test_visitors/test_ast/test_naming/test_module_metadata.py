@@ -1,6 +1,8 @@
 import pytest
 
-from wemake_python_styleguide.options.defaults import FORBIDDEN_MODULE_METADATA
+from wemake_python_styleguide.constants import (
+    MODULE_METADATA_VARIABLES_BLACKLIST,
+)
 from wemake_python_styleguide.violations.best_practices import (
     WrongModuleMetadataViolation,
 )
@@ -27,7 +29,7 @@ if __name__ == '__main__':
 """
 
 
-@pytest.mark.parametrize('bad_name', FORBIDDEN_MODULE_METADATA)
+@pytest.mark.parametrize('bad_name', MODULE_METADATA_VARIABLES_BLACKLIST)
 @pytest.mark.parametrize(
     'code',
     [

@@ -310,9 +310,9 @@ def _assert_errors_count_in_output(
         assert found_error in errors, 'Violation without a #noqa count'
         assert found_count == errors.get(found_error), found_error
 
-    assert set(
-        filter(lambda key: errors[key] != 0, errors),
-    ) == set(found_errors.keys())
+    assert set(found_errors.keys()) == set(
+        filter(lambda key: errors[key] != 0, errors),  # expected
+    )
 
 
 def test_codes(all_violations):
