@@ -1,6 +1,5 @@
 import ast
-
-from typing_extensions import final
+from typing import final
 
 from wemake_python_styleguide.logic.complexity.annotations import (
     get_annotation_complexity,

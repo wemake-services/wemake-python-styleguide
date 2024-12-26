@@ -1,9 +1,7 @@
 import ast
 from collections import defaultdict
 from itertools import product
-from typing import Final, TypeAlias
-
-from typing_extensions import final
+from typing import Final, TypeAlias, final
 
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
 from wemake_python_styleguide.logic import nodes

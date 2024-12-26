@@ -1,8 +1,6 @@
 import ast
 from collections.abc import Mapping, Sequence
-from typing import ClassVar, TypeAlias
-
-from typing_extensions import final
+from typing import ClassVar, TypeAlias, final
 
 from wemake_python_styleguide import constants, types
 from wemake_python_styleguide.compat.aliases import (

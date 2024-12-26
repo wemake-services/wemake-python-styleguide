@@ -667,6 +667,10 @@ match some_value:  # noqa: WPS535
     case SomeClass():
         my_print('second')
 
+match [some_value]:  # noqa: WPS536
+    case SomeClass():
+        my_print('first')
+
 class Baseline:
     def method(self, number):
         return number + 1

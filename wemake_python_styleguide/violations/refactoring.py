@@ -49,6 +49,7 @@ Summary
    DuplicateIfConditionViolation
    UselessTernaryViolation
    DuplicateCasePatternViolation
+   ExtraMatchSubjectSyntax
 
 Refactoring opportunities
 -------------------------
@@ -89,10 +90,11 @@ Refactoring opportunities
 .. autoclass:: DuplicateIfConditionViolation
 .. autoclass:: UselessTernaryViolation
 .. autoclass:: DuplicateCasePatternViolation
+.. autoclass:: ExtraMatchSubjectSyntax
 
 """
 
-from typing_extensions import final
+from typing import final
 
 from wemake_python_styleguide.violations.base import (
     ASTViolation,
@@ -1414,3 +1416,36 @@ class DuplicateCasePatternViolation(ASTViolation):
 
     error_template = 'Found duplicate `case` pattern: {0}'
     code = 535
+
+
+@final
+class ExtraMatchSubjectSyntax(ASTViolation):
+    """
+    Forbid extra syntax around ``match`` like ``[]`` or ``{ ... }``.
+
+    Reasoning:
+        Adding extra lists / sets / dicts around your ``match`` subjects
+        is just adding more complexity.
+
+    Solution:
+        Use raw values or tuples instead.
+
+    Example::
+
+        # Correct:
+        match some:
+            case SomeClass(): ...
+
+        match (first, second):
+            case (1, 2): ...
+
+        # Wrong:
+        match [first, second]:
+            case [1, 2]: ...
+
+    .. versionadded:: 1.0.0
+
+    """
+
+    error_template = 'Found `match` subject with extra syntax: {0}'
+    code = 536

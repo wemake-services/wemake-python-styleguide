@@ -54,9 +54,7 @@ import ast
 import enum
 import tokenize
 from collections.abc import Callable
-from typing import ClassVar, TypeAlias
-
-from typing_extensions import final
+from typing import ClassVar, TypeAlias, final
 
 #: General type for all possible nodes where error happens.
 ErrorNode: TypeAlias = ast.AST | tokenize.TokenInfo | None

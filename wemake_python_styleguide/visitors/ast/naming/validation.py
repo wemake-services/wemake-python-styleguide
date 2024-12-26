@@ -1,9 +1,8 @@
 import ast
 from collections.abc import Callable, Iterable
-from typing import ClassVar, TypeAlias
+from typing import ClassVar, TypeAlias, final
 
 import attr
-from typing_extensions import final
 
 from wemake_python_styleguide.compat.functions import (
     get_assign_targets,

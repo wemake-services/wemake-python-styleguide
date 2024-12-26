@@ -1,5 +1,6 @@
+from typing import final
+
 import attr
-from typing_extensions import final
 
 from wemake_python_styleguide.options import defaults
 from wemake_python_styleguide.types import ConfigurationOptions

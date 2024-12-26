@@ -123,6 +123,7 @@ Semantic versioning in our case means:
 - Adds a new rule to find too many `PEP695` type params
 - Adds a new rule to find useless ternary expressions, #1706
 - Adds a new rule to forbid `raise SystemError`, use `sys.exit` instead, #1786
+- Adds a new rule to forbid extra syntax in `match ...` subjects, #3217
 - Adds support to run `wemake-python-styleguide` as a `pre-commit` hook, #2588
 - GitHub Action can now use `cwd:` parameter to specify
   where your configuration file is, #2474

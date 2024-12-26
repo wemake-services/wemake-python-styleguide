@@ -1,7 +1,5 @@
 import ast
-from typing import ClassVar
-
-from typing_extensions import final
+from typing import ClassVar, final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.compat.types import AnyTry

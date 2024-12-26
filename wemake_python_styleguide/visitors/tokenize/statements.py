@@ -1,9 +1,7 @@
 import tokenize
 from collections import defaultdict
 from operator import attrgetter
-from typing import TypeAlias
-
-from typing_extensions import final
+from typing import TypeAlias, final
 
 from wemake_python_styleguide.logic.tokens import strings
 from wemake_python_styleguide.violations import best_practices, consistency

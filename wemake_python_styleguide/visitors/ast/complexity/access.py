@@ -1,8 +1,6 @@
 import ast
 from itertools import takewhile
-from typing import ClassVar, cast
-
-from typing_extensions import final
+from typing import ClassVar, cast, final
 
 from wemake_python_styleguide.logic.tree import attributes
 from wemake_python_styleguide.types import AnyAccess, AnyNodes

@@ -64,8 +64,7 @@ import abc
 import ast
 import tokenize
 from collections.abc import Sequence
-
-from typing_extensions import final
+from typing import final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.routing import route_visit

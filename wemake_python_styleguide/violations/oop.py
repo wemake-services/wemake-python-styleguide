@@ -55,7 +55,7 @@ Respect your objects
 
 """
 
-from typing_extensions import final
+from typing import final
 
 from wemake_python_styleguide.violations.base import ASTViolation
 

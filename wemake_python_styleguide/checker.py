@@ -40,10 +40,9 @@ import ast
 import tokenize
 import traceback
 from collections.abc import Iterator, Sequence
-from typing import ClassVar, TypeAlias
+from typing import ClassVar, TypeAlias, final
 
 from flake8.options.manager import OptionManager
-from typing_extensions import final
 
 from wemake_python_styleguide import constants, types
 from wemake_python_styleguide import version as pkg_version

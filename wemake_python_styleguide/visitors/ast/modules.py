@@ -1,8 +1,6 @@
 import ast
 from collections.abc import Iterable
-from typing import ClassVar, cast
-
-from typing_extensions import final
+from typing import ClassVar, cast, final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.logic.filenames import get_stem

@@ -1,9 +1,7 @@
 import ast
 from collections import defaultdict
 from collections.abc import Mapping
-from typing import ClassVar, TypeAlias
-
-from typing_extensions import final
+from typing import ClassVar, TypeAlias, final
 
 from wemake_python_styleguide.logic.arguments import special_args
 from wemake_python_styleguide.logic.complexity import cognitive
