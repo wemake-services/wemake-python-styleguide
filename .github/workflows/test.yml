@@ -36,6 +36,12 @@ jobs:
           poetry install
       - name: Run tests
         run: make test
+      - name: Check black
+        run: |
+          # We ensure that WPS does not report
+          # any issues after `black` is applied.
+          poetry run black .
+          poetry run flake8 .
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
