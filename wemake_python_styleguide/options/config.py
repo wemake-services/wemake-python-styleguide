@@ -237,7 +237,7 @@ class Configuration:
         ),
         _Option(
             '--i-dont-control-code',
-            defaults.I_CONTROL_CODE,
+            not defaults.I_CONTROL_CODE,
             'Whether you control ones who use your code.',
             action='store_false',
             type=None,
