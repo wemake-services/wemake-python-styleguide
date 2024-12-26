@@ -88,7 +88,7 @@ source_modules =
 
 forbidden_modules =
   # Our sub-API parts:
-  wemake_python_styleguide.options
+  wemake_python_styleguide.options.config
   wemake_python_styleguide.transformations
   wemake_python_styleguide.presets
 

@@ -1,7 +1,8 @@
 import ast
 from typing import final
 
-from wemake_python_styleguide.types import AnyImport, ConfigurationOptions
+from wemake_python_styleguide.options.validation import ValidatedOptions
+from wemake_python_styleguide.types import AnyImport
 from wemake_python_styleguide.violations import complexity
 from wemake_python_styleguide.violations.base import ErrorCallback
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -14,7 +15,7 @@ class _ImportFromMembersValidator:
     def __init__(
         self,
         error_callback: ErrorCallback,
-        options: ConfigurationOptions,
+        options: ValidatedOptions,
     ) -> None:
         self._error_callback = error_callback
         self._options = options

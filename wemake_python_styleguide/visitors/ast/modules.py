@@ -48,9 +48,6 @@ class EmptyModuleContentsVisitor(BaseNodeVisitor):
         if not self._is_init() or not node.body:
             return
 
-        if not self.options.i_control_code:
-            return
-
         if len(node.body) > 1:
             self.add_violation(InitModuleHasLogicViolation())
             return
@@ -73,14 +70,13 @@ class MagicModuleFunctionsVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_magic_module_functions(self, node: ast.FunctionDef) -> None:
-        if self.options.i_control_code:
-            if not isinstance(get_context(node), ast.Module):
-                return
+        if not isinstance(get_context(node), ast.Module):
+            return
 
-            if node.name in constants.MAGIC_MODULE_NAMES_BLACKLIST:
-                self.add_violation(
-                    BadMagicModuleFunctionViolation(node, text=node.name),
-                )
+        if node.name in constants.MAGIC_MODULE_NAMES_BLACKLIST:
+            self.add_violation(
+                BadMagicModuleFunctionViolation(node, text=node.name),
+            )
 
 
 @final

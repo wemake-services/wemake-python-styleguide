@@ -27,12 +27,12 @@ from wemake_python_styleguide.logic.tree import (
     classes,
     functions,
 )
+from wemake_python_styleguide.options.validation import ValidatedOptions
 from wemake_python_styleguide.types import (
     AnyAssign,
     AnyFunctionDefAndLambda,
     AnyImport,
     AnyVariableDef,
-    ConfigurationOptions,
 )
 from wemake_python_styleguide.violations import base, naming
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -76,7 +76,7 @@ class _SimpleNameValidator:
     def __init__(
         self,
         error_callback: _ErrorCallback,
-        options: ConfigurationOptions,
+        options: ValidatedOptions,
     ) -> None:
         """Creates new instance of a name validator."""
         self._error_callback = error_callback

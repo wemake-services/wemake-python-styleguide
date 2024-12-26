@@ -292,14 +292,6 @@ SHOULD_BE_RAISED = types.MappingProxyType(
     },
 )
 
-# Violations which may be tweaked by `i_control_code` option:
-SHOULD_BE_RAISED_NO_CONTROL = types.MappingProxyType(
-    {
-        'WPS412': 0,
-        'WPS413': 0,
-    },
-)
-
 
 def _assert_errors_count_in_output(
     output,
@@ -366,33 +358,6 @@ def test_noqa_fixture_disabled(
         violations,
         all_violations,
     )
-
-
-def test_noqa_fixture_disabled_no_control(
-    absolute_path,
-    all_controlled_violations,
-):
-    """End-to-End test to check rules controlled by `i_control_code` option."""
-    process = subprocess.Popen(
-        [
-            'flake8',
-            '--i-dont-control-code',
-            '--disable-noqa',
-            '--isolated',
-            '--select',
-            'WPS',
-            absolute_path('fixtures', 'noqa', 'noqa_controlled.py'),
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
-        encoding='utf8',
-    )
-    stdout, stderr = process.communicate()
-
-    assert not stderr
-    assert not stdout
-    assert len(SHOULD_BE_RAISED_NO_CONTROL) == len(all_controlled_violations)
 
 
 def test_noqa_fixture(absolute_path):

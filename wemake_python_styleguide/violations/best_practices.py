@@ -546,11 +546,19 @@ class WrongModuleMetadataViolation(ASTViolation):
         Use ``importlib.metadata``
         if you need to import this data into your app.
 
-    See
-    :py:data:`~wemake_python_styleguide.constants.MODULE_METADATA_VARIABLES_BLACKLIST`
-    for full list of bad names.
+    Configuration:
+        This rule is configurable with ``--allowed-module-metadata``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.ALLOWED_MODULE_METADATA`
+
+        And with ``--forbidden-module-metadata``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.FORBIDDEN_MODULE_METADATA`
 
     Example::
+
+        # Correct:
+        GLOBAL_CONSTANT: Final = 1
 
         # Wrong:
         __author__ = 'Nikita Sobolev'
@@ -612,15 +620,6 @@ class InitModuleHasLogicViolation(SimpleViolation):
     And you do not want to break everything for them.
     In this case, this rule can be configured.
 
-    Configuration:
-        This rule is configurable with ``--i-control-code``
-        and ``--i-dont-control-code``.
-        Default:
-        :str:`wemake_python_styleguide.options.defaults.I_CONTROL_CODE`
-
-    When using ``--i-dont-control-code`` it is still recommended
-    to only have imports in your ``__init__.py``.
-
     .. versionadded:: 0.1.0
 
     """
@@ -640,12 +639,6 @@ class BadMagicModuleFunctionViolation(ASTViolation):
 
     Solution:
         Refactor your code to use custom methods instead.
-
-    Configuration:
-        This rule is configurable with ``--i-control-code``
-        and ``--i-dont-control-code``.
-    Default:
-        :str:`wemake_python_styleguide.options.defaults.I_CONTROL_CODE`
 
     .. versionadded:: 0.9.0
 

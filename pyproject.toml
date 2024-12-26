@@ -210,18 +210,9 @@ addopts = [
   "--cov-fail-under=100",
   # pytest-xdist
   "-n=auto",
-]
-
-norecursedirs = [
-  "tests/fixtures",
-  "*.egg",
-  ".eggs",
-  "dist",
-  "build",
-  "docs",
-  ".tox",
-  ".git",
-  "__pycache__",
+  # Custom ignored dirs with bad code:
+  "--ignore=tests/fixtures",
+  "--ignore=docs",
 ]
 
 [tool.coverage.run]

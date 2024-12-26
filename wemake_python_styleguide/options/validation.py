@@ -1,9 +1,8 @@
-from typing import final
+from typing import Any, final
 
 import attr
 
 from wemake_python_styleguide.options import defaults
-from wemake_python_styleguide.types import ConfigurationOptions
 
 
 def _min_max(
@@ -50,7 +49,7 @@ def validate_domain_names_options(
 
 @final
 @attr.dataclass(slots=True, frozen=True)
-class _ValidatedOptions:
+class ValidatedOptions:
     """
     Here we write all the required structured validation for the options.
 
@@ -59,7 +58,6 @@ class _ValidatedOptions:
 
     # General:
     min_name_length: int = attr.ib(validator=[_min_max(min=1)])
-    i_control_code: bool
     max_name_length: int = attr.ib(validator=[_min_max(min=1)])
     max_noqa_comments: int = attr.ib(
         validator=[_min_max(min=1, max=defaults.MAX_NOQA_COMMENTS)],
@@ -67,6 +65,8 @@ class _ValidatedOptions:
     nested_classes_whitelist: tuple[str, ...] = attr.ib(converter=tuple)
     allowed_domain_names: tuple[str, ...] = attr.ib(converter=tuple)
     forbidden_domain_names: tuple[str, ...] = attr.ib(converter=tuple)
+    allowed_module_metadata: tuple[str, ...] = attr.ib(converter=tuple)
+    forbidden_module_metadata: tuple[str, ...] = attr.ib(converter=tuple)
     forbidden_inline_ignore: tuple[str, ...] = attr.ib(converter=tuple)
 
     # Complexity:
@@ -105,17 +105,15 @@ class _ValidatedOptions:
     exps_for_one_empty_line: int
 
 
-def validate_options(options: ConfigurationOptions) -> _ValidatedOptions:
+def validate_options(options: Any) -> ValidatedOptions:
     """Validates all options from ``flake8``, uses a subset of them."""
     validate_domain_names_options(
         options.allowed_domain_names,
         options.forbidden_domain_names,
     )
-    fields_to_validate = [
-        field.name for field in attr.fields(_ValidatedOptions)
-    ]
+    fields_to_validate = [field.name for field in attr.fields(ValidatedOptions)]
     options_subset = {
         field: getattr(options, field, None) for field in fields_to_validate
     }
     # Next line raises `TypeError` if `options_subset` is invalid.
-    return _ValidatedOptions(**options_subset)  # type: ignore
+    return ValidatedOptions(**options_subset)  # type: ignore[arg-type]

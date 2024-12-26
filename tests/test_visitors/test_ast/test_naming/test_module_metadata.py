@@ -1,10 +1,10 @@
 import pytest
 
+from wemake_python_styleguide.options.defaults import FORBIDDEN_MODULE_METADATA
 from wemake_python_styleguide.violations.best_practices import (
     WrongModuleMetadataViolation,
 )
 from wemake_python_styleguide.visitors.ast.naming.variables import (
-    MODULE_METADATA_VARIABLES_BLACKLIST,
     WrongModuleMetadataVisitor,
 )
 
@@ -27,7 +27,7 @@ if __name__ == '__main__':
 """
 
 
-@pytest.mark.parametrize('bad_name', MODULE_METADATA_VARIABLES_BLACKLIST)
+@pytest.mark.parametrize('bad_name', FORBIDDEN_MODULE_METADATA)
 @pytest.mark.parametrize(
     'code',
     [
@@ -97,3 +97,53 @@ def test_correct_startup_metadata(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_metadata,
+        module_type_metadata,
+    ],
+)
+def test_module_metadata_allowed_list(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    options,
+):
+    """Testing that configuration with allowed module has the priority."""
+    option_values = options(
+        forbidden_module_metadata=('__all__', '__author__'),
+        allowed_module_metadata=('__all__',),
+    )
+    tree = parse_ast_tree(code.format('__all__'))
+
+    visitor = WrongModuleMetadataVisitor(option_values, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize(
+    'code',
+    [
+        module_metadata,
+        module_type_metadata,
+    ],
+)
+def test_module_metadata_forbidden_list(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    options,
+):
+    """Testing that startup hook is allowed."""
+    option_values = options(forbidden_module_metadata=('custom',))
+    for metadata_value in ('__all__', 'custom'):
+        tree = parse_ast_tree(code.format(metadata_value))
+
+        visitor = WrongModuleMetadataVisitor(option_values, tree=tree)
+        visitor.run()
+
+        assert_errors(visitor, [WrongModuleMetadataViolation])

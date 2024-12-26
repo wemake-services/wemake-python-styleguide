@@ -4,11 +4,10 @@ from typing import cast, final
 
 from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.constants import (
-    MODULE_METADATA_VARIABLES_BLACKLIST,
     UNUSED_PLACEHOLDER,
 )
 from wemake_python_styleguide.logic import nodes
-from wemake_python_styleguide.logic.naming import access, name_nodes
+from wemake_python_styleguide.logic.naming import access, blacklists, name_nodes
 from wemake_python_styleguide.logic.tree import pattern_matching
 from wemake_python_styleguide.types import (
     AnyAssign,
@@ -45,7 +44,9 @@ class WrongModuleMetadataVisitor(BaseNodeVisitor):
             if not isinstance(target_node, ast.Name):
                 continue
 
-            if target_node.id not in MODULE_METADATA_VARIABLES_BLACKLIST:
+            if target_node.id not in blacklists.module_metadata_blacklist(
+                self.options,
+            ):
                 continue
 
             self.add_violation(
