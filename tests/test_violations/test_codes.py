@@ -1,5 +1,7 @@
-import pytest
 from collections import Counter
+
+import pytest
+
 from wemake_python_styleguide.compat.constants import PY311
 
 
