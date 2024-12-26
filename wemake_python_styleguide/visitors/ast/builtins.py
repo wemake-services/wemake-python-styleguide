@@ -1,9 +1,7 @@
 import ast
 import string
 from collections.abc import Sequence
-from typing import ClassVar, Final, TypeAlias
-
-from typing_extensions import final
+from typing import ClassVar, Final, TypeAlias, final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import (

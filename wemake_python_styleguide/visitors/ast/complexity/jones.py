@@ -10,8 +10,7 @@ Original project is licensed under MIT.
 import ast
 from collections import defaultdict
 from statistics import median
-
-from typing_extensions import final
+from typing import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.compat.nodes import TypeAlias as ast_TypeAlias

@@ -1,7 +1,5 @@
 import ast
-from typing import ClassVar
-
-from typing_extensions import final
+from typing import ClassVar, final
 
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.types import AnyNodes

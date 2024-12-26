@@ -19,9 +19,7 @@ All comments have the same type.
 import re
 import tokenize
 from token import ENDMARKER
-from typing import ClassVar, Final
-
-from typing_extensions import final
+from typing import ClassVar, Final, final
 
 from wemake_python_styleguide.constants import MAX_NO_COVER_COMMENTS, STDIN
 from wemake_python_styleguide.logic.system import is_executable_file, is_windows

@@ -1,8 +1,7 @@
 from collections import defaultdict
-from typing import TypeAlias
+from typing import TypeAlias, final
 
 import attr
-from typing_extensions import final
 
 from wemake_python_styleguide.types import (
     AnyFunctionDef,

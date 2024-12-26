@@ -1,8 +1,6 @@
 import ast
 from collections import defaultdict
-from typing import TypeAlias
-
-from typing_extensions import final
+from typing import TypeAlias, final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.aliases import FunctionNodes

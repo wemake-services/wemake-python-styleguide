@@ -168,11 +168,10 @@ You can also show all options that ``flake8`` supports by running:
 """
 
 from collections.abc import Mapping, Sequence
-from typing import ClassVar, Final, TypeAlias
+from typing import ClassVar, Final, TypeAlias, final
 
 import attr
 from flake8.options.manager import OptionManager
-from typing_extensions import final
 
 from wemake_python_styleguide.options import defaults
 

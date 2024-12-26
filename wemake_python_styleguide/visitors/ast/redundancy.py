@@ -1,6 +1,5 @@
 import ast
-
-from typing_extensions import final
+from typing import final
 
 from wemake_python_styleguide.types import AnyComprehension, AnyFor
 from wemake_python_styleguide.violations.best_practices import (

@@ -16,6 +16,7 @@ from wemake_python_styleguide.visitors.ast import (  # noqa: WPS235
     loops,
     modules,
     operators,
+    pm,
     redundancy,
     statements,
     subscripts,
@@ -82,6 +83,7 @@ PRESET: Final = (
     subscripts.CorrectKeyVisitor,
     decorators.WrongDecoratorVisitor,
     redundancy.RedundantEnumerateVisitor,
+    pm.MatchSubjectVisitor,
     # Modules:
     modules.EmptyModuleContentsVisitor,
     modules.MagicModuleFunctionsVisitor,

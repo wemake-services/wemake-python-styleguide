@@ -1,7 +1,6 @@
 import ast
 from itertools import takewhile
-
-from typing_extensions import final
+from typing import final
 
 from wemake_python_styleguide.logic.tree.calls import parts
 from wemake_python_styleguide.violations.complexity import (

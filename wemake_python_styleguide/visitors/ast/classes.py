@@ -1,8 +1,6 @@
 import ast
 from collections import defaultdict
-from typing import ClassVar
-
-from typing_extensions import final
+from typing import ClassVar, final
 
 from wemake_python_styleguide import constants, types
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes

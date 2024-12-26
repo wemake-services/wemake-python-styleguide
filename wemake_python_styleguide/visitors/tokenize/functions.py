@@ -1,8 +1,7 @@
 import math
 import tokenize
 from collections.abc import Iterable
-
-from typing_extensions import final
+from typing import final
 
 from wemake_python_styleguide.violations import best_practices
 from wemake_python_styleguide.visitors import base

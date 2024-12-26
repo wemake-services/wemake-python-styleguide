@@ -1,8 +1,6 @@
 import ast
 from collections.abc import Iterable
-from typing import cast
-
-from typing_extensions import final
+from typing import cast, final
 
 from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.constants import (

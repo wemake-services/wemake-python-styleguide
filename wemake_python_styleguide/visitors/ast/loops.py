@@ -2,9 +2,7 @@ import ast
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from contextlib import suppress
-from typing import ClassVar, TypeAlias
-
-from typing_extensions import final
+from typing import ClassVar, TypeAlias, final
 
 from wemake_python_styleguide.logic import nodes, walk
 from wemake_python_styleguide.logic.tree import loops, operators

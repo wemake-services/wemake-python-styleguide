@@ -1,7 +1,6 @@
 import ast
 from collections import defaultdict
-
-from typing_extensions import final
+from typing import final
 
 from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.logic.nodes import get_parent

@@ -1,4 +1,4 @@
-from typing_extensions import final
+from typing import final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.logic.naming import access, alphabet, logical

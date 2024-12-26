@@ -1,9 +1,7 @@
 import re
 import tokenize
 from collections.abc import Callable, Sequence
-from typing import ClassVar
-
-from typing_extensions import final
+from typing import ClassVar, final
 
 from wemake_python_styleguide.logic.tokens.numbers import (
     has_correct_underscores,

@@ -1,6 +1,5 @@
 import ast
-
-from typing_extensions import final
+from typing import final
 
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.constants import NESTED_FUNCTIONS_WHITELIST

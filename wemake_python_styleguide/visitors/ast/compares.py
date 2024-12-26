@@ -1,7 +1,5 @@
 import ast
-from typing import ClassVar
-
-from typing_extensions import final
+from typing import ClassVar, final
 
 from wemake_python_styleguide.logic import nodes, walk
 from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
@@ -187,7 +185,8 @@ class WrongConditionalVisitor(BaseNodeVisitor):
             if is_match and not pattern_matching.is_constant_subject(real_node):
                 return
             if not is_match and not isinstance(
-                real_node, self._forbidden_nodes
+                real_node,
+                self._forbidden_nodes,
             ):
                 return
             self.add_violation(ConstantConditionViolation(node))
