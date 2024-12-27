@@ -35,7 +35,7 @@ between two linters.
 To run `WPS` and `ruff` together, use:
 
 ```bash
-ruff format && ruff check && flake8 --select=WSP .
+ruff format && ruff check && flake8 --select=WPS .
 ```
 
 You can copy our configuration from [`pyproject.toml`](https://github.com/wemake-services/wemake-python-styleguide/blob/bca0a1452335619ee5898e2ab657ca6e4a741f5f/pyproject.toml#L103) (for `ruff`) and [`setup.cfg`](https://github.com/wemake-services/wemake-python-styleguide/blob/bca0a1452335619ee5898e2ab657ca6e4a741f5f/setup.cfg#L7) (for `flake8`).
@@ -786,7 +786,7 @@ It features a lot of new rules from different categories.
 - Replace `scripts/tokens.py` and `scripts/parse.py` with external tools
 - Improves violation code testing
 - Improves testing of `.. versionchanged` and `previous_codes` properties
-- Reference `isort` settings requirement for compliance with `WSP318` in docstring
+- Reference `isort` settings requirement for compliance with `WPS318` in docstring
 - Improves tests: we now ensure that each violation with previous codes also
   has corresponding versions changed in their documentation
 
