@@ -1,5 +1,6 @@
 import ast
-from typing import Final, Collection
+from collections.abc import Collection
+from typing import Final
 
 from wemake_python_styleguide.logic.source import node_to_string
 
@@ -24,8 +25,7 @@ _ENUM_LIKE_NAMES: Final = (
 
 
 def _has_one_of_base_classes(
-    defn: ast.ClassDef,
-    base_names: Collection[str]
+    defn: ast.ClassDef, base_names: Collection[str]
 ) -> bool:
     """Tells whether some class has one of provided names as its base."""
     string_bases = {node_to_string(base) for base in defn.bases}

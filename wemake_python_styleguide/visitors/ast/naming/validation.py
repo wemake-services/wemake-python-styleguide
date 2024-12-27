@@ -22,7 +22,9 @@ from wemake_python_styleguide.logic.naming import (
     logical,
     name_nodes,
 )
-from wemake_python_styleguide.logic.naming.enums import has_enum_base, has_enum_like_base
+from wemake_python_styleguide.logic.naming.enums import (
+    has_enum_like_base,
+)
 from wemake_python_styleguide.logic.tree import (
     attributes,
     classes,
@@ -236,10 +238,7 @@ class _ClassBasedNameValidator(_RegularNameValidator):
                     self._ensure_case(assign, attr_name, is_enum_like)
 
     def _ensure_case(
-        self,
-        node: AnyAssign,
-        name: str,
-        is_enum_like: bool
+        self, node: AnyAssign, name: str, is_enum_like: bool
     ) -> None:
         if not is_enum_like and logical.is_upper_case_name(name):
             self._error_callback(
