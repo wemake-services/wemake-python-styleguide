@@ -486,7 +486,8 @@ class UnderscoredNumberNameViolation(MaybeASTViolation):
 @final
 class UpperCaseAttributeViolation(ASTViolation):
     """
-    Require ``snake_case`` for naming class attributes.
+    Require ``snake_case`` for naming class attributes, except
+    for attributes in Enum and Enum-like class.
 
     Reasoning:
         Constants with upper-case names belong on a module level.
@@ -502,6 +503,13 @@ class UpperCaseAttributeViolation(ASTViolation):
         MY_MODULE_CONSTANT = 1
         class A:
             my_attribute = 42
+
+        # Correct:
+        import enum
+
+        class Color(enum.Enum):
+            WHITE = 0
+            LIGHT_GRAY = 1
 
         # Wrong:
         class A:

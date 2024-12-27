@@ -31,6 +31,30 @@ class MyClass:
     action_method.label = 'Do action'
 """
 
+static_attribute_in_enum = """
+import enum
+
+
+class Test(enum.Enum):
+    {0} = enum.auto()
+"""
+
+static_attribute_in_django_enum_like = """
+from django.db import models
+
+
+class TestChoice1(models.TextChoices):
+    {0} = "A"
+
+
+class TestChoice2(models.IntegerChoices):
+    {0} = 1
+
+
+class TestChoice3(models.Choices):
+    {0} = True
+"""
+
 
 @pytest.mark.parametrize(
     'code',
@@ -68,6 +92,42 @@ def test_upper_case_class_attributes(
 
     assert_errors(visitor, [UpperCaseAttributeViolation])
     assert_error_text(visitor, non_snake_case_name)
+
+
+@pytest.mark.parametrize(
+    'code',
+    [
+        static_attribute_in_enum,
+        static_attribute_in_django_enum_like,
+    ],
+)
+@pytest.mark.parametrize(
+    'non_snake_case_name',
+    [
+        'ENUM_CONST_A',
+        'CONST',
+        'AAA',
+        'B2',
+    ],
+)
+def test_upper_case_enum_attributes(
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    non_snake_case_name,
+    code,
+    default_options,
+):
+    """
+    Testing that enum-like classes are allowed
+    to have UPPER_SNAKE_CASE attributes.
+    """
+    tree = parse_ast_tree(code.format(non_snake_case_name))
+
+    visitor = WrongNameVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
 
 
 @pytest.mark.parametrize(
