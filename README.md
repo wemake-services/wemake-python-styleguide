@@ -19,8 +19,9 @@ Welcome to the strictest and most opinionated Python linter ever.
 </p>
 
 `wemake-python-styleguide` is actually a [flake8](http://flake8.pycqa.org/en/latest/)
-plugin with [some other plugins](https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/violations/index.html#external-plugins) as dependencies.
+plugin, the only one you will need as your [ruff](https://github.com/astral-sh/ruff) companion.
 
+Fully compatible with **ALL** rules and format conventions from `ruff`.
 
 ## Quickstart
 
@@ -40,7 +41,7 @@ We highly recommend to also use:
 ## Running
 
 ```bash
-flake8 your_module.py
+flake8 your_module.py --select=WPS
 ```
 
 This app is still just good old `flake8`!
@@ -56,6 +57,15 @@ in the docs for examples and integrations.
 
 We also support [GitHub Actions](https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/integrations/github-actions.html) as first class-citizens.
 [Try it out](https://github.com/marketplace/actions/wemake-python-styleguide)!
+
+Can (and should!) be used with `ruff`:
+
+```bash
+ruff check && ruff format
+flake8 . --select=WPS
+```
+
+See example `ruff` configuration in our [`pyproject.toml`](https://github.com/wemake-services/wemake-python-styleguide/blob/master/pyproject.toml#L103).
 
 
 ## Strict is the new cool
@@ -96,14 +106,14 @@ You can find all error codes and plugins [in the docs](https://wemake-python-sty
 We are *not* planning to do the following things:
 
 0. Assume or check types, use `mypy` together with our linter
-1. [Reformat code](https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/integrations/auto-formatters.html), since we believe that developers should do that
+1. Format code or produce stylistic errors, use `ruff format` for that
 2. Check for `SyntaxError` or logical bugs, write tests instead
 3. Appeal to everyone. But, you can [switch off](https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/setup.html#ignoring-violations) any rules that you don't like
 
 
 ## Supporting us :tada:
 
-We in [wemake.services](https://wemake.services) make
+We in [wemake.services](https://github.com/wemake-services) make
 all our tools open-source by default, so the community can benefit from them.
 If you use our tools and they make your life easier and brings business value,
 you can return us a favor by supporting the work we do.

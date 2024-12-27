@@ -2,6 +2,7 @@ Setup
 =====
 
 Remember that ``wemake-python-styleguide`` is just a ``flake8`` plugin.
+That is compatible with ``ruff --select=ALL`` and should be used after it.
 
 
 .. _installation:
@@ -23,6 +24,12 @@ that pairs nicely with ``wemake-python-styleguide``:
 
 
 .. _usage:
+
+Required configuration
+----------------------
+
+You must either provide ``--select=WPS`` to all your ``flake8`` calls,
+or add ``select = WPS`` into your ``flake8`` configration file.
 
 Running
 -------

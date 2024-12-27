@@ -17,7 +17,70 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
-## 1.0.0 WIP
+## 1.0.0
+
+### Ruff
+
+This release introduces the new main concept: `ruff` compatibility.
+
+Now `WPS` is the only `flake8` plugin that is installed.
+Other things are done by `ruff`.
+It is faster, it has autofixing, there are lots of rules.
+Basically, this way `WPS` just gain lots
+of new rule and plugins almost for free.
+It is now stricter than ever! `WPS` now officially supports
+**ALL** `ruff` existing rules. This means that there are no conflicts
+between two linters.
+
+To run `WPS` and `ruff` together, use:
+
+```bash
+ruff format && ruff check && flake8 --select=WSP .
+```
+
+You can copy our configuration from [`pyproject.toml`](https://github.com/wemake-services/wemake-python-styleguide/blob/bca0a1452335619ee5898e2ab657ca6e4a741f5f/pyproject.toml#L103) (for `ruff`) and [`setup.cfg`](https://github.com/wemake-services/wemake-python-styleguide/blob/bca0a1452335619ee5898e2ab657ca6e4a741f5f/setup.cfg#L7) (for `flake8`).
+
+### Black
+
+`WPS` can now also be used with `black` with **default** configuration.
+However, we recommend using `ruff format` instead.
+
+### Speed
+
+`WPS` got a lot faster! Because:
+- We removed a lot of `flake8` plugins
+- We removed a lot of rules covered by `ruff`
+
+Running `0.19.2` (previous version) on https://github.com/dry-python/returns
+
+```bash
+» time flake8 .
+flake8 .  20.63s user 2.47s system 469% cpu 4.919 total
+```
+
+The same on `1.0.0`:
+
+```
+» time flake8 .
+flake8 .  8.56s user 0.54s system 898% cpu 1.013 total
+```
+
+Which is **2.4x** times faster!
+
+### Integrations
+
+We also significantly improved all the integrations!
+`WPS` can now be used as first-class `pre-commit` hook with:
+
+```yaml
+repos:
+- repo: https://github.com/wemake-services/wemake-python-styleguide
+  rev: 1.0.0
+  hooks:
+    - id: wemake-python-styleguide
+```
+
+Our [GitHub Action](https://github.com/marketplace/actions/wemake-python-styleguide) also got a lot of new options and fixes.
 
 ### Removals
 
@@ -98,7 +161,7 @@ Semantic versioning in our case means:
   with code that you want to exclude, there's no need
   to create one more way of disabling some specific violations
 
-## Features
+### Features
 
 - Adds official `python3.13` support
 - Allows any compares in `assert` statements for `WPS520`, #3112
