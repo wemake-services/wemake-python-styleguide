@@ -9,6 +9,5 @@
   github-actions.rst
   ci.rst
   stubs.rst
-  pylint.rst
   extras.rst
   jupyter_notebooks.rst
