@@ -26,7 +26,7 @@ from wemake_python_styleguide.violations.consistency import (
     InconsistentReturnViolation,
     InconsistentYieldViolation,
     IncorrectYieldFromTargetViolation,
-    RaiseSystemErrorViolation,
+    RaiseSystemExitViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
@@ -41,7 +41,7 @@ _ReturningViolations: TypeAlias = (
 class WrongRaiseVisitor(BaseNodeVisitor):
     """Finds wrong ``raise`` keywords."""
 
-    _system_error_name: ClassVar[str] = 'SystemError'
+    _system_error_name: ClassVar[str] = 'SystemExit'
 
     def visit_Raise(self, node: ast.Raise) -> None:
         """Checks how ``raise`` keyword is used."""
@@ -57,7 +57,7 @@ class WrongRaiseVisitor(BaseNodeVisitor):
 
     def _check_raise_system_error(self, node: ast.Raise) -> None:
         if get_exception_name(node) == self._system_error_name:
-            self.add_violation(RaiseSystemErrorViolation(node))
+            self.add_violation(RaiseSystemExitViolation(node))
 
 
 @final

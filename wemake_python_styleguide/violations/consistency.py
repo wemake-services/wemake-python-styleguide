@@ -86,7 +86,7 @@ Summary
    RawStringNotNeededViolation
    InconsistentComprehensionViolation
    AssignToSliceViolation
-   RaiseSystemErrorViolation
+   RaiseSystemExitViolation
 
 Consistency checks
 ------------------
@@ -154,7 +154,7 @@ Consistency checks
 .. autoclass:: RawStringNotNeededViolation
 .. autoclass:: InconsistentComprehensionViolation
 .. autoclass:: AssignToSliceViolation
-.. autoclass:: RaiseSystemErrorViolation
+.. autoclass:: RaiseSystemExitViolation
 
 """
 
@@ -2492,9 +2492,9 @@ class AssignToSliceViolation(ASTViolation):
 
 
 @final
-class RaiseSystemErrorViolation(ASTViolation):
+class RaiseSystemExitViolation(ASTViolation):
     """
-    Forbid raising :exc:`SystemError`.
+    Forbid raising :exc:`SystemExit`.
 
     Reasoning:
         For consistency.
@@ -2508,11 +2508,11 @@ class RaiseSystemErrorViolation(ASTViolation):
         sys.exit(code)
 
         # Wrong:
-        raise SystemError(code)
+        raise SystemExit(code)
 
     .. versionadded:: 1.0.0
 
     """
 
-    error_template = 'Found `raise SystemError`, instead of using `sys.exit`'
+    error_template = 'Found `raise SystemExit`, instead of using `sys.exit`'
     code = 363

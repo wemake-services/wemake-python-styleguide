@@ -127,7 +127,7 @@ Semantic versioning in our case means:
 - Adds a new rule to find too complex `except` with too many exceptions
 - Adds a new rule to find too many `PEP695` type params
 - Adds a new rule to find useless ternary expressions, #1706
-- Adds a new rule to forbid `raise SystemError`, use `sys.exit` instead, #1786
+- Adds a new rule to forbid `raise SystemExit`, use `sys.exit` instead, #1786
 - Adds a new rule to forbid extra syntax in `match ...` subjects, #3217
 - Adds new `--allowed-module-metadata` and `--forbidden-module-metadata`
   configuration options for `WPS410`, #3060
