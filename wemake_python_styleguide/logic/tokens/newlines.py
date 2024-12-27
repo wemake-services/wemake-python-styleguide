@@ -20,6 +20,6 @@ def next_meaningful_token(
     # Because we test all the possibilities here.
     return next(  # pragma: no cover
         tokens[index]
-        for index in range(token_position + 1, len(tokens))  # noqa: WPS518
+        for index in range(token_position + 1, len(tokens))
         if tokens[index].exact_type not in NEWLINES
     )
