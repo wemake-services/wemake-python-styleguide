@@ -238,7 +238,10 @@ class _ClassBasedNameValidator(_RegularNameValidator):
                     self._ensure_case(assign, attr_name, is_enum_like)
 
     def _ensure_case(
-        self, node: AnyAssign, name: str, is_enum_like: bool
+        self,
+        node: AnyAssign,
+        name: str,
+        is_enum_like: bool,  # noqa: FBT001
     ) -> None:
         if not is_enum_like and logical.is_upper_case_name(name):
             self._error_callback(

@@ -486,8 +486,11 @@ class UnderscoredNumberNameViolation(MaybeASTViolation):
 @final
 class UpperCaseAttributeViolation(ASTViolation):
     """
-    Require ``snake_case`` for naming class attributes, except
-    for attributes in Enum and Enum-like class.
+    Require ``snake_case`` for naming class attributes.
+
+    Exceptions:
+        Attributes in Enum and enum-like classes (Django Choices)
+        are ignored, as they should be written in UPPER_SNAKE_CASE
 
     Reasoning:
         Constants with upper-case names belong on a module level.

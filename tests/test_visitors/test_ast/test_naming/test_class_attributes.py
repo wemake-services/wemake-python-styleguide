@@ -119,8 +119,10 @@ def test_upper_case_enum_attributes(
     default_options,
 ):
     """
-    Testing that enum-like classes are allowed
-    to have UPPER_SNAKE_CASE attributes.
+    Testing that enum-like classes can have UPPER_SNAKE_CASE attributes.
+
+    These enum-like classes include not only default
+    Python enums, but also Django enumerations
     """
     tree = parse_ast_tree(code.format(non_snake_case_name))
 
