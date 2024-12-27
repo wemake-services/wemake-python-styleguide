@@ -1,7 +1,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
-    RaiseSystemErrorViolation,
+    RaiseSystemExitViolation,
 )
 from wemake_python_styleguide.visitors.ast.keywords import WrongRaiseVisitor
 
@@ -11,10 +11,10 @@ template = 'raise {0}'
 @pytest.mark.parametrize(
     'code',
     [
-        'SystemError',
-        'SystemError()',
-        'SystemError(0)',
-        'SystemError(code)',
+        'SystemExit',
+        'SystemExit()',
+        'SystemExit(0)',
+        'SystemExit(code)',
     ],
 )
 def test_raise_system_error(
@@ -23,13 +23,13 @@ def test_raise_system_error(
     code,
     default_options,
 ):
-    """Testing `raise SystemError` is restricted."""
+    """Testing `raise SystemExit` is restricted."""
     tree = parse_ast_tree(template.format(code))
 
     visitor = WrongRaiseVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [RaiseSystemErrorViolation])
+    assert_errors(visitor, [RaiseSystemExitViolation])
 
 
 @pytest.mark.parametrize(
@@ -37,10 +37,11 @@ def test_raise_system_error(
     [
         'NotImplementedError',
         'NotImplementedError()',
-        'CustomSystemError',
-        'CustomSystemError()',
-        'custom.SystemError',
-        'custom.SystemError()',
+        'CustomSystemExit',
+        'CustomSystemExit()',
+        'custom.SystemExit',
+        'custom.SystemExit()',
+        'SystemError',
     ],
 )
 def test_raise_good_errors(

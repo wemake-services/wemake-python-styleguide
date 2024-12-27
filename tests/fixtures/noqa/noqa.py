@@ -562,8 +562,8 @@ a_list[1:3] = [1, 2]  # noqa: WPS362
 a_list[slice(1)] = [1, 2]  # noqa: WPS362
 
 
-def function_with_systemerror():
-    raise SystemError(1)  # noqa: WPS363
+def function_with_SystemExit():
+    raise SystemExit(1)  # noqa: WPS363
 
 
 try:
