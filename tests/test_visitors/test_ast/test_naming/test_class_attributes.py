@@ -92,7 +92,7 @@ def test_upper_case_class_attributes(
         'lower_should_pass_too: bool = True',
         'lower_should_pass_too = 1',
         'UPPER_NAME = UPPER_ALIAS = auto()',
-    ]
+    ],
 )
 def test_upper_case_enum_attributes(
     assert_errors,
