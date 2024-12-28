@@ -41,6 +41,7 @@ def has_enum_like_base(defn: ast.ClassDef) -> bool:
     """
     Tells if some class has `Enum` or semantically similar class as its base.
 
-    Unlike has_enum_base it also includes support for Django Choices.
+    Unlike ``has_enum_base`` it also includes support for Django Choices.
+    https://docs.djangoproject.com/en/5.1/ref/models/fields/#choices
     """
     return _has_one_of_base_classes(defn, _ENUM_LIKE_NAMES)

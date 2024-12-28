@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.logic.naming import enums
 from wemake_python_styleguide.violations.naming import (
     UpperCaseAttributeViolation,
 )
@@ -31,29 +32,15 @@ class MyClass:
     action_method.label = 'Do action'
 """
 
-static_attribute_in_enum = """
-import enum
-
-
-class Test(enum.Enum):
-    {0} = enum.auto()
+static_attribute_with_base_template = """
+class Test({0}):
+    {1}
 """
 
-static_attribute_in_django_enum_like = """
-from django.db import models
-
-
-class TestChoice1(models.TextChoices):
-    {0} = "A"
-
-
-class TestChoice2(models.IntegerChoices):
-    {0} = 1
-
-
-class TestChoice3(models.Choices):
-    {0} = True
-"""
+upper_case_attributes = [
+    'UPPER: str = 1',
+    'UPPER_CASE = ...',
+]
 
 
 @pytest.mark.parametrize(
@@ -95,27 +82,24 @@ def test_upper_case_class_attributes(
 
 
 @pytest.mark.parametrize(
-    'code',
-    [
-        static_attribute_in_enum,
-        static_attribute_in_django_enum_like,
-    ],
+    'base_class',
+    enums._ENUM_LIKE_NAMES,  # noqa: SLF001
 )
 @pytest.mark.parametrize(
-    'non_snake_case_name',
+    'attribute',
     [
-        'ENUM_CONST_A',
-        'CONST',
-        'AAA',
-        'B2',
-    ],
+        *upper_case_attributes,
+        'lower_should_pass_too: bool = True',
+        'lower_should_pass_too = 1',
+        'UPPER_NAME = UPPER_ALIAS = auto()',
+    ]
 )
 def test_upper_case_enum_attributes(
     assert_errors,
     assert_error_text,
     parse_ast_tree,
-    non_snake_case_name,
-    code,
+    base_class,
+    attribute,
     default_options,
 ):
     """
@@ -124,12 +108,45 @@ def test_upper_case_enum_attributes(
     These enum-like classes include not only default
     Python enums, but also Django enumerations
     """
-    tree = parse_ast_tree(code.format(non_snake_case_name))
+    tree = parse_ast_tree(
+        static_attribute_with_base_template.format(base_class, attribute)
+    )
 
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize(
+    'base_class',
+    [
+        'not_enum.Base',
+        'MyAbstractFactory',
+        'metaclass=MyMeta',
+    ],
+)
+@pytest.mark.parametrize(
+    'attribute',
+    upper_case_attributes,
+)
+def test_upper_case_non_enum_attributes(
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    base_class,
+    attribute,
+    default_options,
+):
+    """Testing that UPPER_CASE attributes still aren't allowed."""
+    tree = parse_ast_tree(
+        static_attribute_with_base_template.format(base_class, attribute)
+    )
+
+    visitor = WrongNameVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [UpperCaseAttributeViolation])
 
 
 @pytest.mark.parametrize(
