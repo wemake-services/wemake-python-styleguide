@@ -17,6 +17,11 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
+## 1.0.1 WIP
+### Bugfixes
+- Fixes `WPS115` false-positive on enum attributes
+
+
 ## 1.0.0
 
 ### Ruff
@@ -223,7 +228,6 @@ Our [GitHub Action](https://github.com/marketplace/actions/wemake-python-stylegu
 - Fixes several violations not been detected in `case:` statements
 - Fixes `WPS314` not detecting `match` statements
 - Fixes `match` + `case` does not increase cognitive complexity
-- Fixes `WPS115` false-positive on enum attributes
 
 ### Misc
 

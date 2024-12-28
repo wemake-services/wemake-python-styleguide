@@ -40,6 +40,8 @@ class Test({0}):
 upper_case_attributes = [
     'UPPER: str = 1',
     'UPPER_CASE = ...',
+    'lower = UPPER = auto()',
+    'lower, UPPER = field',
 ]
 
 
