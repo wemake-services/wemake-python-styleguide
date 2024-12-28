@@ -17,6 +17,11 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
+## 1.0.1 WIP
+### Bugfixes
+- Fixes `WPS115` false-positive on enum attributes
+
+
 ## 1.0.0
 
 ### Ruff

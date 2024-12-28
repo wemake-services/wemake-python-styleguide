@@ -488,6 +488,9 @@ class UpperCaseAttributeViolation(ASTViolation):
     """
     Require ``snake_case`` for naming class attributes.
 
+    Attributes in Enum and enum-like classes (Django Choices)
+    are ignored, as they should be written in UPPER_SNAKE_CASE
+
     Reasoning:
         Constants with upper-case names belong on a module level.
 
@@ -502,6 +505,11 @@ class UpperCaseAttributeViolation(ASTViolation):
         MY_MODULE_CONSTANT = 1
         class A:
             my_attribute = 42
+
+        # Correct:
+        class Color(enum.Enum):
+            WHITE = 0
+            LIGHT_GRAY = 1
 
         # Wrong:
         class A:

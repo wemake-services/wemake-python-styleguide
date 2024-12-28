@@ -19,6 +19,7 @@ from wemake_python_styleguide.logic.naming import (
     alphabet,
     blacklists,
     builtins,
+    enums,
     logical,
     name_nodes,
 )
@@ -227,14 +228,25 @@ class _ClassBasedNameValidator(_RegularNameValidator):
             node,
             include_annotated=True,
         )
+        is_enum_like = enums.has_enum_like_base(node)
 
         for assign in class_attributes:
             for target in get_assign_targets(assign):
                 for attr_name in name_nodes.get_variables_from_node(target):
-                    self._ensure_case(assign, attr_name)
+                    self._ensure_case(
+                        assign,
+                        attr_name,
+                        is_enum_like=is_enum_like,
+                    )
 
-    def _ensure_case(self, node: AnyAssign, name: str) -> None:
-        if logical.is_upper_case_name(name):
+    def _ensure_case(
+        self,
+        node: AnyAssign,
+        name: str,
+        *,
+        is_enum_like: bool,
+    ) -> None:
+        if not is_enum_like and logical.is_upper_case_name(name):
             self._error_callback(
                 naming.UpperCaseAttributeViolation(node, text=name),
             )
