@@ -296,8 +296,6 @@ number_with_useless_plus = +5  # noqa: WPS330
 if '6' in nodes in '6':  # noqa: WPS311
     ...
 
-assert hex_number == hex_number  # noqa: WPS312
-
 
 if True:  # noqa: WPS314
     ...

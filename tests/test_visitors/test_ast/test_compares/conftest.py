@@ -53,6 +53,8 @@ OTHER_COMPARES = frozenset(
         if_with_gt,
         if_with_lte,
         if_with_gte,
+        if_with_in,
+        if_with_not_in,
         ternary,
         while_construct,
     ),
@@ -80,17 +82,6 @@ def eq_conditions(request):
 @pytest.fixture(params=OTHER_COMPARES)
 def other_conditions(request):
     """Fixture that returns other compare conditionals."""
-    return request.param
-
-
-@pytest.fixture(
-    params=[
-        if_with_in,
-        if_with_not_in,
-    ],
-)
-def in_conditions(request):
-    """Fixture that returns simple conditionals."""
     return request.param
 
 
