@@ -48,6 +48,11 @@ def test_misrefactored_assignment(
         'x2 /= x / 1',
         'x **= (x - y) ** 1',
         'x ^= (x + 1) ^ 1',
+        'x %= x() % 1',
+        'x >>= a.x >> 1',
+        'x <<= x.x << 1',
+        'x &= x.x() & 1',
+        'x |= (y := 2) | 1',
     ],
 )
 def test_correct_assignment(
