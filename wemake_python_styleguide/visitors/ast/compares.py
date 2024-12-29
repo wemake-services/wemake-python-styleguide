@@ -36,7 +36,6 @@ class CompareSanityVisitor(BaseNodeVisitor):
     def visit_Compare(self, node: ast.Compare) -> None:
         """Ensures that compares are written correctly."""
         self._check_literal_compare(node)
-        self._check_useless_compare(node)
         self._check_heterogeneous_operators(node)
         self._check_reversed_complex_compare(node)
         self.generic_visit(node)
