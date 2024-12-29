@@ -22,6 +22,7 @@ from wemake_python_styleguide.visitors.ast.statements import (
         'x <<= x << 1',
         'x &= x & 1',
         'x |= x | 1',
+        'x @= x | 1',
     ],
 )
 def test_misrefactored_assignment(
@@ -53,6 +54,7 @@ def test_misrefactored_assignment(
         'x <<= x.x << 1',
         'x &= x.x() & 1',
         'x |= (y := 2) | 1',
+        'x |= -x | 1',
     ],
 )
 def test_correct_assignment(
