@@ -106,7 +106,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS309': 0,  # disabled since 1.0.0
         'WPS310': 0,  # disabled since 1.0.0
         'WPS311': 1,
-        'WPS312': 1,
+        'WPS312': 0,  # disabled since 1.0.1
         'WPS313': 0,  # disabled since 1.0.0
         'WPS314': 1,
         'WPS315': 0,  # disabled since 1.0.0

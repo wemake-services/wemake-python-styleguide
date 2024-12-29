@@ -18,8 +18,11 @@ Semantic versioning in our case means:
 
 
 ## 1.0.1 WIP
+
 ### Bugfixes
-- Fixes `WPS115` false-positive on enum attributes
+
+- Fixes `WPS115` false-positive on `Enum` attributes, #3238
+- Removes duplicated `WPS312`, #3239
 
 
 ## 1.0.0

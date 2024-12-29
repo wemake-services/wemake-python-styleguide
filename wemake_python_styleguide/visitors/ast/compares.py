@@ -2,7 +2,6 @@ import ast
 from typing import ClassVar, final
 
 from wemake_python_styleguide.logic import nodes, walk
-from wemake_python_styleguide.logic.naming.name_nodes import is_same_variable
 from wemake_python_styleguide.logic.tree import (
     compares,
     operators,
@@ -19,7 +18,6 @@ from wemake_python_styleguide.violations.consistency import (
     ConstantConditionViolation,
     MultipleInCompareViolation,
     ReversedComplexCompareViolation,
-    UselessCompareViolation,
 )
 from wemake_python_styleguide.violations.refactoring import (
     FalsyConstantCompareViolation,
@@ -51,14 +49,6 @@ class CompareSanityVisitor(BaseNodeVisitor):
                 self.add_violation(ConstantCompareViolation(node))
                 break
             last_was_literal = next_is_literal
-
-    def _check_useless_compare(self, node: ast.Compare) -> None:
-        last_variable = get_assigned_expr(node.left)
-        for next_variable in map(get_assigned_expr, node.comparators):
-            if is_same_variable(last_variable, next_variable):
-                self.add_violation(UselessCompareViolation(node))
-                break
-            last_variable = next_variable
 
     def _check_heterogeneous_operators(self, node: ast.Compare) -> None:
         if len(node.ops) == 1:

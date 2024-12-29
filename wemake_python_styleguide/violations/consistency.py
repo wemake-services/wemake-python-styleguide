@@ -612,11 +612,15 @@ class UselessCompareViolation(ASTViolation):
             do_something_else()
 
     .. versionadded:: 0.3.0
+    .. versionchanged:: 1.0.1
+       No longer produced, kept here for historic reasons.
+       This is covered with ``ruff`` and ``pylint`` linters. See ``PLR0124``.
 
     """
 
     error_template = 'Found comparison of a variable to itself'
     code = 312
+    disabled_since = '1.0.1'
 
 
 @final
