@@ -164,7 +164,7 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
 
 
 @final
-class WrongNumberVisitor(base.BaseNodeVisitor):
+class WrongNumberVisitor(base.BaseNodeTokenVisitor):
     """Checks wrong numbers used in the code."""
 
     _allowed_parents: ClassVar[AnyNodes] = (
@@ -197,9 +197,9 @@ class WrongNumberVisitor(base.BaseNodeVisitor):
 
         if isinstance(node.value, int) and node.value <= self._non_magic_modulo:
             return
-
+        real_value = self.token_dict[node.lineno, node.col_offset].string
         self.add_violation(
-            best_practices.MagicNumberViolation(node, text=str(node.value)),
+            best_practices.MagicNumberViolation(node, text=real_value),
         )
 
     def _check_is_approximate_constant(self, node: ast.Constant) -> None:

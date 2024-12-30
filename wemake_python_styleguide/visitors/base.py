@@ -286,3 +286,59 @@ class BaseTokenVisitor(BaseVisitor):
         for token in self.file_tokens:
             self.visit(token)
         self._post_visit()
+
+
+class BaseNodeTokenVisitor(ast.NodeVisitor, BaseVisitor):
+    """Allows storing violations during node tree traversal with real values."""
+
+    def __init__(
+        self,
+        options: ValidatedOptions,
+        tree: ast.AST,
+        file_tokens: Sequence[tokenize.TokenInfo],
+        **kwargs,
+    ) -> None:
+        """Creates new ``ast`` based instance with tokens."""
+        super().__init__(options, **kwargs)
+        self.tree = tree
+        self.file_tokens = file_tokens
+        self.token_index = -1
+
+    @final
+    @classmethod
+    def from_checker(cls: type['BaseNodeTokenVisitor'], checker):
+        """Constructs visitor instance from the checker."""
+        return cls(
+            options=checker.options,
+            filename=checker.filename,
+            file_tokens=checker.file_tokens,
+            tree=checker.tree,
+        )
+
+
+    def visit(self, tree: ast.AST) -> None:
+        """
+        Visits a node.
+
+        Modified version of :class:`ast.NodeVisitor.visit` method.
+        We need this to modify how visitors route.
+
+        Why? Because python3.8 now uses ``visit_Constant`` instead of old
+        methods like ``visit_Num``, ``visit_Str``, ``visit_Bytes``, etc.
+
+        Some classes do redefine this method to catch all nodes. This is valid.
+        """
+        return route_visit(self, tree)
+
+    @final
+    def run(self) -> None:
+        """Recursively visits all ``ast`` nodes and create token_dict."""
+        self._create_token_dict()
+        self.visit(self.tree)
+        self._post_visit()
+
+    def _create_token_dict(self) -> None:
+        """Create a token dict."""
+        self.token_dict: dict[tuple[int, int], tokenize.TokenInfo] = {}
+        for token in self.file_tokens:
+            self.token_dict[token.start] = token

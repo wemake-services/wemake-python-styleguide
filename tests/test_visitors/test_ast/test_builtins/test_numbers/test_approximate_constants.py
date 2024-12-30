@@ -3,7 +3,9 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     ApproximateConstantViolation,
 )
-from wemake_python_styleguide.visitors.ast.builtins import WrongNumberVisitor
+from wemake_python_styleguide.visitors.ast.builtins import (
+    WrongNumberVisitor,
+)
 
 
 @pytest.mark.parametrize(
@@ -24,10 +26,15 @@ def test_violation_on_approximate_constants(
     parse_ast_tree,
     default_options,
     variable_value,
+    parse_tokens,
 ):
     """Ensures that usage of approximate constants not allowed."""
-    tree = parse_ast_tree(f'my_const = {variable_value}')
-    visitor = WrongNumberVisitor(default_options, tree=tree)
+    variable_str = f'my_const = {variable_value}'
+    tree = parse_ast_tree(variable_str)
+    file_tokens = parse_tokens(variable_str)
+    visitor = WrongNumberVisitor(
+        default_options, tree=tree, file_tokens=file_tokens
+    )
     visitor.run()
 
     assert_errors(visitor, [ApproximateConstantViolation])
@@ -64,10 +71,17 @@ def test_no_violations_on_right_constants(
     parse_ast_tree,
     default_options,
     variable_value,
+    parse_tokens,
 ):
     """Ensures that usage of simple numbers allowed."""
-    tree = parse_ast_tree(f'a = {variable_value}')
-    visitor = WrongNumberVisitor(default_options, tree=tree)
+    variable_str = f'a = {variable_value}'
+
+    tree = parse_ast_tree(variable_str)
+    file_tokens = parse_tokens(variable_str)
+
+    visitor = WrongNumberVisitor(
+        default_options, tree=tree, file_tokens=file_tokens
+    )
     visitor.run()
 
     assert_errors(visitor, [])

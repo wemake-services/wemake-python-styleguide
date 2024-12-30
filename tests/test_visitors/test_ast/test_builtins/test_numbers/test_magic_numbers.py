@@ -112,11 +112,16 @@ def test_magic_number(
     number,
     default_options,
     mode,
+    parse_tokens,
 ):
     """Testing that there are no magic numbers in this code."""
-    tree = parse_ast_tree(mode(code.format(number)))
+    formated_code = mode(code.format(number))
+    tree = parse_ast_tree(formated_code)
+    file_tokens = parse_tokens(formated_code)
 
-    visitor = WrongNumberVisitor(default_options, tree=tree)
+    visitor = WrongNumberVisitor(
+        default_options, tree=tree, file_tokens=file_tokens
+    )
     visitor.run()
 
     assert_errors(visitor, [])
@@ -156,11 +161,16 @@ def test_magic_number_whitelist(
     number,
     default_options,
     mode,
+    parse_tokens,
 ):
     """Testing that magic numbers in this code are whitelisted."""
-    tree = parse_ast_tree(mode(code.format(number)))
+    formated_code = mode(code.format(number))
+    tree = parse_ast_tree(formated_code)
+    file_tokens = parse_tokens(formated_code)
 
-    visitor = WrongNumberVisitor(default_options, tree=tree)
+    visitor = WrongNumberVisitor(
+        default_options, tree=tree, file_tokens=file_tokens
+    )
     visitor.run()
 
     assert_errors(visitor, [])
@@ -200,11 +210,16 @@ def test_magic_number_warning(
     number,
     default_options,
     mode,
+    parse_tokens,
 ):
     """Testing that magic numbers in this code are warnings."""
-    tree = parse_ast_tree(mode(code.format(number)))
+    formated_code = mode(code.format(number))
+    tree = parse_ast_tree(formated_code)
+    file_tokens = parse_tokens(formated_code)
 
-    visitor = WrongNumberVisitor(default_options, tree=tree)
+    visitor = WrongNumberVisitor(
+        default_options, tree=tree, file_tokens=file_tokens
+    )
     visitor.run()
 
     assert_errors(visitor, [MagicNumberViolation])
@@ -242,11 +257,17 @@ def test_magic_number_octal_warning(
     number,
     default_options,
     mode,
+    parse_tokens,
 ):
     """Testing that magic numbers in this code are warnings."""
-    tree = parse_ast_tree(mode(code.format(number)))
+    formated_code = mode(code.format(number))
+    tree = parse_ast_tree(formated_code)
+    file_tokens = parse_tokens(formated_code)
 
-    visitor = WrongNumberVisitor(default_options, tree=tree)
+    visitor = WrongNumberVisitor(
+        default_options, tree=tree, file_tokens=file_tokens
+    )
+
     visitor.run()
 
     assert_errors(visitor, [MagicNumberViolation])
