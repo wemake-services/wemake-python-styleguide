@@ -197,7 +197,7 @@ class WrongNumberVisitor(base.BaseNodeTokenVisitor):
 
         if isinstance(node.value, int) and node.value <= self._non_magic_modulo:
             return
-        real_value = self.token_dict[node.lineno, node.col_offset].string
+        real_value = self._token_dict[node.lineno, node.col_offset].string
         self.add_violation(
             best_practices.MagicNumberViolation(node, text=real_value),
         )

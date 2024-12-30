@@ -302,11 +302,12 @@ class BaseNodeTokenVisitor(ast.NodeVisitor, BaseVisitor):
         super().__init__(options, **kwargs)
         self.tree = tree
         self.file_tokens = file_tokens
-        self.token_index = -1
+        self._token_index = -1
+        self._token_dict: dict[tuple[int, int], tokenize.TokenInfo] = {}
 
     @final
     @classmethod
-    def from_checker(cls: type['BaseNodeTokenVisitor'], checker):
+    def from_checker(cls: type['BaseNodeTokenVisitor'], checker) -> 'BaseNodeTokenVisitor':
         """Constructs visitor instance from the checker."""
         return cls(
             options=checker.options,
@@ -338,6 +339,5 @@ class BaseNodeTokenVisitor(ast.NodeVisitor, BaseVisitor):
 
     def _create_token_dict(self) -> None:
         """Create a token dict."""
-        self.token_dict: dict[tuple[int, int], tokenize.TokenInfo] = {}
         for token in self.file_tokens:
-            self.token_dict[token.start] = token
+            self._token_dict[token.start] = token
