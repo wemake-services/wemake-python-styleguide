@@ -319,27 +319,16 @@ class BaseNodeTokenVisitor(ast.NodeVisitor, BaseVisitor):
         )
 
     def visit(self, tree: ast.AST) -> None:
-        """
-        Visits a node.
-
-        Modified version of :class:`ast.NodeVisitor.visit` method.
-        We need this to modify how visitors route.
-
-        Why? Because python3.8 now uses ``visit_Constant`` instead of old
-        methods like ``visit_Num``, ``visit_Str``, ``visit_Bytes``, etc.
-
-        Some classes do redefine this method to catch all nodes. This is valid.
-        """
+        """This method does the same as :meth:`BaseNodeVisitor.visit`."""
         return route_visit(self, tree)
 
     @final
     def run(self) -> None:
-        """Recursively visits all ``ast`` nodes and create token_dict."""
+        """Recursively visits all ``ast`` nodes and create ``token_dict``."""
         self._create_token_dict()
         self.visit(self.tree)
         self._post_visit()
 
     def _create_token_dict(self) -> None:
         """Create a token dict."""
-        for token in self.file_tokens:
-            self._token_dict[token.start] = token
+        self._token_dict = {token.start: token for token in self.file_tokens}

@@ -63,6 +63,8 @@ def test_violation_on_approximate_constants(
         2,
         6,
         100,
+        3.1_111_1,  # noqa: WPS303
+        3.1_2222,  # noqa: WPS303
         '"3.14"',  # strings are allowed
     ],
 )
