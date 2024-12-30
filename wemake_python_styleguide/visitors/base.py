@@ -315,7 +315,6 @@ class BaseNodeTokenVisitor(ast.NodeVisitor, BaseVisitor):
             tree=checker.tree,
         )
 
-
     def visit(self, tree: ast.AST) -> None:
         """
         Visits a node.
