@@ -957,7 +957,6 @@
   '''
   
   [4m[1mtests/fixtures/notebook.ipynb[0m[0m
-    0:1      WPS453 Found executable mismatch: file is executable but no shebang is present
     8:1      WPS111 Found too short name: s < 2
     8:7      WPS110 Found wrong variable name: handle
     9:21     WPS432 Found magic number: 2_00
