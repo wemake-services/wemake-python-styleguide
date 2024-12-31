@@ -286,3 +286,49 @@ class BaseTokenVisitor(BaseVisitor):
         for token in self.file_tokens:
             self.visit(token)
         self._post_visit()
+
+
+class BaseNodeTokenVisitor(ast.NodeVisitor, BaseVisitor):
+    """Allows storing violations during node tree traversal with real values."""
+
+    def __init__(
+        self,
+        options: ValidatedOptions,
+        tree: ast.AST,
+        file_tokens: Sequence[tokenize.TokenInfo],
+        **kwargs,
+    ) -> None:
+        """Creates new ``ast`` based instance with tokens."""
+        super().__init__(options, **kwargs)
+        self.tree = tree
+        self.file_tokens = file_tokens
+        self._token_index = -1
+        self._token_dict: dict[tuple[int, int], tokenize.TokenInfo] = {}
+
+    @final
+    @classmethod
+    def from_checker(
+        cls: type['BaseNodeTokenVisitor'], checker
+    ) -> 'BaseNodeTokenVisitor':
+        """Constructs visitor instance from the checker."""
+        return cls(
+            options=checker.options,
+            filename=checker.filename,
+            file_tokens=checker.file_tokens,
+            tree=checker.tree,
+        )
+
+    def visit(self, tree: ast.AST) -> None:
+        """This method does the same as :meth:`BaseNodeVisitor.visit`."""
+        return route_visit(self, tree)
+
+    @final
+    def run(self) -> None:
+        """Recursively visits all ``ast`` nodes and create ``token_dict``."""
+        self._create_token_dict()
+        self.visit(self.tree)
+        self._post_visit()
+
+    def _create_token_dict(self) -> None:
+        """Create a token dict."""
+        self._token_dict = {token.start: token for token in self.file_tokens}

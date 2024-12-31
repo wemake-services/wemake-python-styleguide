@@ -5,7 +5,7 @@
   [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
     1:1      WPS111 Found too short name: s < 2
     1:7      WPS110 Found wrong variable name: handle
-    2:21     WPS432 Found magic number: 200
+    2:21     WPS432 Found magic number: 2_00
     2:21     WPS303 Found underscored number: 2_00
   
   [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
@@ -24,7 +24,7 @@
   [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
     1:1      WPS111 Found too short name: s < 2
     1:7      WPS110 Found wrong variable name: handle
-    2:21     WPS432 Found magic number: 200
+    2:21     WPS432 Found magic number: 2_00
     2:21     WPS303 Found underscored number: 2_00
   
   [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
@@ -46,7 +46,7 @@
     1     ./tests/fixtures/formatter/formatter2.py
   [4mTotal: 2[0m
   
-  [1mWPS432[0m: Found magic number: 200
+  [1mWPS432[0m: Found magic number: 2_00
     1     ./tests/fixtures/formatter/formatter1.py
   [4mTotal: 1[0m
   
@@ -71,7 +71,7 @@
     [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
           ^
   
-    2:21     WPS432 Found magic number: 200
+    2:21     WPS432 Found magic number: 2_00
     [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
                     ^
   
@@ -106,7 +106,7 @@
              -> https://pyflak.es/WPS111
     1:7      WPS110 Found wrong variable name: handle
              -> https://pyflak.es/WPS110
-    2:21     WPS432 Found magic number: 200
+    2:21     WPS432 Found magic number: 2_00
              -> https://pyflak.es/WPS432
     2:21     WPS303 Found underscored number: 2_00
              -> https://pyflak.es/WPS303
@@ -137,7 +137,7 @@
     [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
           ^
   
-    2:21     WPS432 Found magic number: 200
+    2:21     WPS432 Found magic number: 2_00
     [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
                     ^
   
@@ -173,7 +173,7 @@
     1     ./tests/fixtures/formatter/formatter2.py
   [4mTotal: 2[0m
   
-  [1mWPS432[0m: Found magic number: 200
+  [1mWPS432[0m: Found magic number: 2_00
     1     ./tests/fixtures/formatter/formatter1.py
   [4mTotal: 1[0m
   
@@ -200,7 +200,7 @@
     [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
           ^
   
-    2:21     WPS432 Found magic number: 200
+    2:21     WPS432 Found magic number: 2_00
              -> https://pyflak.es/WPS432
     [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
                     ^
@@ -245,7 +245,7 @@
     [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
           ^
   
-    2:21     WPS432 Found magic number: 200
+    2:21     WPS432 Found magic number: 2_00
     [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
                     ^
   
@@ -281,7 +281,7 @@
     1     ./tests/fixtures/formatter/formatter2.py
   [4mTotal: 2[0m
   
-  [1mWPS432[0m: Found magic number: 200
+  [1mWPS432[0m: Found magic number: 2_00
     1     ./tests/fixtures/formatter/formatter1.py
   [4mTotal: 1[0m
   
@@ -299,7 +299,7 @@
   [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
     1:1      WPS111 Found too short name: s < 2
     1:7      WPS110 Found wrong variable name: handle
-    2:21     WPS432 Found magic number: 200
+    2:21     WPS432 Found magic number: 2_00
     2:21     WPS303 Found underscored number: 2_00
   
   [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
@@ -318,7 +318,7 @@
   [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
     1:1      WPS111 Found too short name: s < 2
     1:7      WPS110 Found wrong variable name: handle
-    2:21     WPS432 Found magic number: 200
+    2:21     WPS432 Found magic number: 2_00
     2:21     WPS303 Found underscored number: 2_00
   
   [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
@@ -340,7 +340,7 @@
     1     ./tests/fixtures/formatter/formatter2.py
   [4mTotal: 2[0m
   
-  [1mWPS432[0m: Found magic number: 200
+  [1mWPS432[0m: Found magic number: 2_00
     1     ./tests/fixtures/formatter/formatter1.py
   [4mTotal: 1[0m
   
@@ -365,7 +365,7 @@
     [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
           ^
   
-    2:21     WPS432 Found magic number: 200
+    2:21     WPS432 Found magic number: 2_00
     [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
                     ^
   
@@ -400,7 +400,7 @@
              -> https://pyflak.es/WPS111
     1:7      WPS110 Found wrong variable name: handle
              -> https://pyflak.es/WPS110
-    2:21     WPS432 Found magic number: 200
+    2:21     WPS432 Found magic number: 2_00
              -> https://pyflak.es/WPS432
     2:21     WPS303 Found underscored number: 2_00
              -> https://pyflak.es/WPS303
@@ -431,7 +431,7 @@
     [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
           ^
   
-    2:21     WPS432 Found magic number: 200
+    2:21     WPS432 Found magic number: 2_00
     [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
                     ^
   
@@ -467,7 +467,7 @@
     1     ./tests/fixtures/formatter/formatter2.py
   [4mTotal: 2[0m
   
-  [1mWPS432[0m: Found magic number: 200
+  [1mWPS432[0m: Found magic number: 2_00
     1     ./tests/fixtures/formatter/formatter1.py
   [4mTotal: 1[0m
   
@@ -494,7 +494,7 @@
     [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
           ^
   
-    2:21     WPS432 Found magic number: 200
+    2:21     WPS432 Found magic number: 2_00
              -> https://pyflak.es/WPS432
     [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
                     ^
@@ -539,7 +539,7 @@
     [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
           ^
   
-    2:21     WPS432 Found magic number: 200
+    2:21     WPS432 Found magic number: 2_00
     [34mreturn[39;49;00m handle + [34m2_00[39;49;00m[37m[39;49;00m
                     ^
   
@@ -575,7 +575,7 @@
     1     ./tests/fixtures/formatter/formatter2.py
   [4mTotal: 2[0m
   
-  [1mWPS432[0m: Found magic number: 200
+  [1mWPS432[0m: Found magic number: 2_00
     1     ./tests/fixtures/formatter/formatter1.py
   [4mTotal: 1[0m
   
@@ -593,7 +593,7 @@
   tests/fixtures/formatter/formatter1.py
     1:1      WPS111 Found too short name: s < 2
     1:7      WPS110 Found wrong variable name: handle
-    2:21     WPS432 Found magic number: 200
+    2:21     WPS432 Found magic number: 2_00
     2:21     WPS303 Found underscored number: 2_00
   
   tests/fixtures/formatter/formatter2.py
@@ -612,7 +612,7 @@
   tests/fixtures/formatter/formatter1.py
     1:1      WPS111 Found too short name: s < 2
     1:7      WPS110 Found wrong variable name: handle
-    2:21     WPS432 Found magic number: 200
+    2:21     WPS432 Found magic number: 2_00
     2:21     WPS303 Found underscored number: 2_00
   
   tests/fixtures/formatter/formatter2.py
@@ -634,7 +634,7 @@
     1     ./tests/fixtures/formatter/formatter2.py
   Total: 2
   
-  WPS432: Found magic number: 200
+  WPS432: Found magic number: 2_00
     1     ./tests/fixtures/formatter/formatter1.py
   Total: 1
   
@@ -659,7 +659,7 @@
     def s(handle: int) -> int:
           ^
   
-    2:21     WPS432 Found magic number: 200
+    2:21     WPS432 Found magic number: 2_00
     return handle + 2_00
                     ^
   
@@ -694,7 +694,7 @@
              -> https://pyflak.es/WPS111
     1:7      WPS110 Found wrong variable name: handle
              -> https://pyflak.es/WPS110
-    2:21     WPS432 Found magic number: 200
+    2:21     WPS432 Found magic number: 2_00
              -> https://pyflak.es/WPS432
     2:21     WPS303 Found underscored number: 2_00
              -> https://pyflak.es/WPS303
@@ -725,7 +725,7 @@
     def s(handle: int) -> int:
           ^
   
-    2:21     WPS432 Found magic number: 200
+    2:21     WPS432 Found magic number: 2_00
     return handle + 2_00
                     ^
   
@@ -761,7 +761,7 @@
     1     ./tests/fixtures/formatter/formatter2.py
   Total: 2
   
-  WPS432: Found magic number: 200
+  WPS432: Found magic number: 2_00
     1     ./tests/fixtures/formatter/formatter1.py
   Total: 1
   
@@ -788,7 +788,7 @@
     def s(handle: int) -> int:
           ^
   
-    2:21     WPS432 Found magic number: 200
+    2:21     WPS432 Found magic number: 2_00
              -> https://pyflak.es/WPS432
     return handle + 2_00
                     ^
@@ -833,7 +833,7 @@
     def s(handle: int) -> int:
           ^
   
-    2:21     WPS432 Found magic number: 200
+    2:21     WPS432 Found magic number: 2_00
     return handle + 2_00
                     ^
   
@@ -869,7 +869,7 @@
     1     ./tests/fixtures/formatter/formatter2.py
   Total: 2
   
-  WPS432: Found magic number: 200
+  WPS432: Found magic number: 2_00
     1     ./tests/fixtures/formatter/formatter1.py
   Total: 1
   
@@ -959,7 +959,7 @@
   [4m[1mtests/fixtures/notebook.ipynb[0m[0m
     8:1      WPS111 Found too short name: s < 2
     8:7      WPS110 Found wrong variable name: handle
-    9:21     WPS432 Found magic number: 200
+    9:21     WPS432 Found magic number: 2_00
     9:21     WPS303 Found underscored number: 2_00
     13:1     WPS110 Found wrong variable name: data
     13:10    WPS110 Found wrong variable name: param
