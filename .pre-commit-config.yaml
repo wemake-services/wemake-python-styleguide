@@ -6,14 +6,13 @@ repos:
       - id: end-of-file-fixer
       - id: check-yaml
       - id: check-toml
+      - id: check-xml
       - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-illegal-windows-names
       - id: mixed-line-ending
-        args: [--fix=lf]
+        args: ["--fix=lf"]
       - id: check-case-conflict
-  - repo: https://github.com/google/yamlfmt
-    rev: v0.14.0
-    hooks:
-      - id: yamlfmt
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.30.0
     hooks:
@@ -23,10 +22,15 @@ repos:
     rev: v1.7.5
     hooks:
       - id: actionlint
+  - repo: https://github.com/woodruffw/zizmor-pre-commit
+    rev: v0.8.0
+    hooks:
+      - id: zizmor
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.10.0.1
     hooks:
       - id: shellcheck
+        args: ["-S style"]
   - repo: https://github.com/tox-dev/pyproject-fmt
     rev: v2.5.0
     hooks:
@@ -35,9 +39,16 @@ repos:
     rev: v0.8.4
     hooks:
       - id: ruff
-        args: ["--exit-non-zero-on-fix", "--fix"]
+        args: ["--exit-non-zero-on-fix"]
       - id: ruff-format
+
+  # Should be the last:
+  - repo: meta
+    hooks:
+      - id: check-useless-excludes
+
 exclude: ^(tests/fixtures/|tests/test_formatter/__snapshots__/)
+
 ci:
   autofix_commit_msg: "[pre-commit.ci] auto fixes from pre-commit.com hooks"
   autofix_prs: true
