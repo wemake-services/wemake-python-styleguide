@@ -23,10 +23,9 @@ repos:
     hooks:
       - id: actionlint
   - repo: https://github.com/woodruffw/zizmor-pre-commit
-    rev: v0.8.0
+    rev: v1.0.0
     hooks:
       - id: zizmor
-        args: ["--persona=auditor"]
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.10.0.1
     hooks:
