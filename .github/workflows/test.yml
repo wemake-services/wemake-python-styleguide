@@ -31,10 +31,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install poetry
         run: |
-          curl -sSL "https://install.python-poetry.org" | python
+          curl -sSL 'https://install.python-poetry.org' | python
 
           # Adding `poetry` to `$PATH`:
-          echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+          echo "$HOME/.poetry/bin" >> "$GITHUB_PATH"
       - name: Install dependencies
         run: |
           poetry config virtualenvs.in-project true
