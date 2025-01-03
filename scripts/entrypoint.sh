@@ -13,7 +13,7 @@
 : "${INPUT_CWD:='.'}"
 : "${INPUT_REPORTER:='terminal'}"
 : "${INPUT_FILTER_MODE:='added'}"
-: "${INPUT_FAIL_WORKFLOW:=1}"
+: "${INPUT_FAIL_WORKFLOW:='1'}"
 
 # Diagnostic output:
 echo "Using 'path': $INPUT_PATH"
