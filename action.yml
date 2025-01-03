@@ -15,7 +15,7 @@ inputs:
     required: false
     default: '.'
   cwd:
-    desctiption: 'Path to `cd` into before linting'
+    description: 'Path to `cd` into before linting'
     required: false
     default: '.'
   reporter:
@@ -29,7 +29,7 @@ inputs:
   fail_workflow:
     description: 'Should we fail the workflow if the check does not pass?'
     required: false
-    default: 1
+    default: '1'
 outputs:
   output:
     description: 'The output of wemake-python-styleguide run'

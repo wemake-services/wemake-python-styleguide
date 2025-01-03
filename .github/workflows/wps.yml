@@ -22,6 +22,5 @@ jobs:
       - uses: wemake-services/wemake-python-styleguide@master
         with:
           reporter: 'github-pr-review'
-          fail_workflow: false
         env:
           GITHUB_TOKEN: ${{ secrets.github_token }}

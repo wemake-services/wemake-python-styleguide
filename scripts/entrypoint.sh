@@ -13,7 +13,7 @@
 : "${INPUT_CWD:='.'}"
 : "${INPUT_REPORTER:='terminal'}"
 : "${INPUT_FILTER_MODE:='added'}"
-: "${INPUT_FAIL_WORKFLOW:=1}"
+: "${INPUT_FAIL_WORKFLOW:='1'}"
 
 # Diagnostic output:
 echo "Using 'path': $INPUT_PATH"
@@ -58,7 +58,6 @@ echo "output<<$delimiter" >> "$GITHUB_OUTPUT"
 echo "$output" >> "$GITHUB_OUTPUT"
 echo "$delimiter" >> "$GITHUB_OUTPUT"
 
-echo '================================='
 # Fail the build in case status code is not 0:
 if [ "$status" != 0 ]; then
   echo "$output"
