@@ -58,7 +58,6 @@ echo "output<<$delimiter" >> "$GITHUB_OUTPUT"
 echo "$output" >> "$GITHUB_OUTPUT"
 echo "$delimiter" >> "$GITHUB_OUTPUT"
 
-echo '================================='
 # Fail the build in case status code is not 0:
 if [ "$status" != 0 ]; then
   echo "$output"
