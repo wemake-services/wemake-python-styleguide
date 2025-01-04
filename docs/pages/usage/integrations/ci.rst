@@ -46,7 +46,7 @@ Examples:
 
 
 pre-commit
-~~~~~~~~~
+~~~~~~~~~~
 
 To setup `pre-commit <https://pre-commit.com/>`_ with ``wemake-python-styleguide``, add a new hook to the project `.pre-commit-config.yaml` file.
 

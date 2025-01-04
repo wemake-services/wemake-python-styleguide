@@ -79,13 +79,6 @@ class BaseViolation(abc.ABC):
     this error later on.
 
     Each subclass must define ``error_template`` and ``code`` fields.
-
-    Attributes:
-        error_template: message that will be shown to user after formatting.
-        code: unique violation number. Used to identify the violation.
-        disabled_since: indicates that this violation is disabled.
-        postfix_template: indicates message that we show at the very end.
-
     """
 
     error_template: ClassVar[str]

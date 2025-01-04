@@ -2941,10 +2941,11 @@ class ProblematicFunctionParamsViolation(ASTViolation):
     Do not use problematic function parameters.
 
     Patterns that we don't allow:
-    - More than one pos-only params with defaults,
-      you cannot really pass the second one without passing the first one anyway
-    - Pos-only or regular param with default before `*args`,
-      this way you won't be able to pass just `*args`
+      - More than one pos-only params with defaults,
+        you cannot really pass the second one
+        without passing the first one anyway
+      - Pos-only or regular param with default before ``*args``,
+        this way you won't be able to pass just ``*args``
 
     Reasoning:
         It would be hard to pass arguments to these functions.

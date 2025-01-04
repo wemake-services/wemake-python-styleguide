@@ -198,10 +198,6 @@ class BaseFilenameVisitor(BaseVisitor, abc.ABC):
     Abstract base class that allows to visit and check module file names.
 
     Has ``visit_filename()`` method that should be defined in subclasses.
-
-    Attributes:
-        stem: the last part of the filename. Does not contain extension.
-
     """
 
     stem: str

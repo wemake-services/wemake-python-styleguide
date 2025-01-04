@@ -15,5 +15,4 @@ python:
     - requirements: requirements.txt
 sphinx:
   configuration: 'docs/conf.py'
-  # TODO: fix warnings and enable
-  # fail_on_warning: true
+  fail_on_warning: true

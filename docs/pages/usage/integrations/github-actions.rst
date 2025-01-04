@@ -14,10 +14,7 @@ You can use it from the `GitHub Marketplace <https://github.com/marketplace/acti
   - name: wemake-python-styleguide
     uses: wemake-services/wemake-python-styleguide
 
-You can also specify any version
-starting from ``0.12.5`` instead of the ``latest`` tag.
-You can also specify to leave inline PR comments
-and PR summary review starting from ``0.13.1`` version.
+You can also specify any version instead of the ``latest`` tag.
 
 Inputs
 ~~~~~~
@@ -29,7 +26,7 @@ We support three reporting options:
 - ``terminal`` (default one) when we just dump the output into Action's logs.
   Is the easiest one to setup, that's why we use it by default
 - ``github-pr-review`` (recommended) when we use `inline comments <https://github.com/reviewdog/reviewdog#reporter-github-pullrequest-review-comment--reportergithub-pr-review>`_ inside code reviews
-- ``github-pr-check`` when we use `GitHub Checks <https://github.com/reviewdog/reviewdog#reporter-github-checks--reportergithub-pr-check>`_ for the output
+- ``github-pr-check`` when we use `GitHub PR Checks <https://github.com/reviewdog/reviewdog#reporter-github-checks--reportergithub-pr-check>`_ for the output
 - ``github-check`` another way to use `GitHub Checks <https://github.com/reviewdog/reviewdog?tab=readme-ov-file#reporter-github-checks--reportergithub-check>`_ for the output
 
 Take a note that ``github-check``, ``github-pr-review`` and ``github-pr-check``
