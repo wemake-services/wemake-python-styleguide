@@ -15,8 +15,7 @@ import sys
 
 import tomli
 
-parent_dir = pathlib.Path('..').resolve(strict=True)
-sys.path.insert(0, str(parent_dir))
+sys.path.insert(0, str(pathlib.Path('..').resolve(strict=True)))
 
 
 # -- Project information -----------------------------------------------------
