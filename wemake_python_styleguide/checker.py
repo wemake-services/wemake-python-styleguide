@@ -24,8 +24,6 @@ That's how all ``flake8`` plugins work:
         F3         --> F4[__init__]
         F4	       --> F5[run]
 
-.. _checker:
-
 Checker API
 -----------
 
