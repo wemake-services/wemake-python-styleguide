@@ -1146,7 +1146,7 @@ class TooComplexAnnotationViolation(ASTViolation):
 @final
 class TooManyImportedModuleMembersViolation(ASTViolation):
     """
-    Forbid ``from ... import ...`` with too many imported names.
+    Forbid ``from mod import a, b, c, d`` with too many imported names.
 
     Reasoning:
         Importing too many names from one import is an easy way to cause

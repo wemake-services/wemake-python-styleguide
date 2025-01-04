@@ -1,3 +1,5 @@
+.. _checker:
+
 Checker
 =======
 

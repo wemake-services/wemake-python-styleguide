@@ -1421,7 +1421,7 @@ class DuplicateCasePatternViolation(ASTViolation):
 @final
 class ExtraMatchSubjectSyntaxViolation(ASTViolation):
     """
-    Forbid extra syntax around ``match`` like ``[]`` or ``{ ... }``.
+    Forbid extra syntax around ``match`` like list, set, or dict.
 
     Reasoning:
         Adding extra lists / sets / dicts around your ``match`` subjects

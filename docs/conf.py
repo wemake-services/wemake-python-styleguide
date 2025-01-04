@@ -15,8 +15,7 @@ import sys
 
 import tomli
 
-parent_dir = pathlib.Path('..').resolve(strict=True)
-sys.path.insert(0, str(parent_dir))
+sys.path.insert(0, str(pathlib.Path('..').resolve()))
 
 
 # -- Project information -----------------------------------------------------
@@ -39,9 +38,6 @@ release = version
 
 
 # -- General configuration ---------------------------------------------------
-
-# If your documentation needs a minimal Sphinx version, state it here.
-needs_sphinx = '3.0'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -74,9 +70,6 @@ autodoc_default_options = {
     'show-inheritance': True,
 }
 
-# Set `typing.TYPE_CHECKING` to `True`:
-# https://pypi.org/project/sphinx-autodoc-typehints/
-set_type_checking_flag = False
 always_document_param_types = False
 
 # Add any paths that contain templates here, relative to this directory.
@@ -142,64 +135,6 @@ html_sidebars = {
         'searchbox.html',
     ],
 }
-
-
-# -- Options for HTMLHelp output ---------------------------------------------
-
-# Output file base name for HTML help builder.
-htmlhelp_basename = 'wemake-python-styleguidedoc'
-
-
-# -- Options for LaTeX output ------------------------------------------------
-
-latex_elements = {}
-
-# Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title,
-#  author, documentclass [howto, manual, or own class]).
-latex_documents = [
-    (
-        master_doc,
-        'wemake-python-styleguide.tex',
-        'wemake-python-styleguide Documentation',
-        'wemake.services',
-        'manual',
-    ),
-]
-
-
-# -- Options for manual page output ------------------------------------------
-
-# One entry per manual page. List of tuples
-# (source start file, name, description, authors, manual section).
-man_pages = [
-    (
-        master_doc,
-        'wemake-python-styleguide',
-        'wemake-python-styleguide Documentation',
-        [author],
-        1,
-    ),
-]
-
-
-# -- Options for Texinfo output ----------------------------------------------
-
-# Grouping the document tree into Texinfo files. List of tuples
-# (source start file, target name, title, author,
-#  dir menu entry, description, category)
-texinfo_documents = [
-    (
-        master_doc,
-        'wemake-python-styleguide',
-        'wemake-python-styleguide Documentation',
-        author,
-        'wemake-python-styleguide',
-        'One line description of project.',
-        'Miscellaneous',
-    ),
-]
-
 
 # -- Extension configuration -------------------------------------------------
 

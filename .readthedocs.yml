@@ -1,4 +1,5 @@
 version: 2
+
 build:
   os: ubuntu-lts-latest
   tools: {python: "3.12"}
@@ -8,12 +9,16 @@ build:
       - asdf install poetry latest
       - asdf global poetry latest
       - poetry config virtualenvs.create false
+      - poetry config warnings.export false
       - poetry self add poetry-plugin-export
       - poetry export --only main --only docs --format=requirements.txt --output=requirements.txt
+
 python:
   install:
     - requirements: requirements.txt
+    - method: pip
+      path: .
+
 sphinx:
   configuration: 'docs/conf.py'
-  # TODO: fix warnings and enable
-  # fail_on_warning: true
+  fail_on_warning: true
