@@ -13,6 +13,7 @@
   pages/usage/configuration.rst
   pages/usage/violations/index.rst
   pages/usage/formatter.rst
+  pages/usage/cli.rst
 
 
 .. toctree::
