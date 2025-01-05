@@ -55,6 +55,7 @@ python = "^3.10"
 flake8 = "^7.1"
 attrs = "*"
 pygments = "^2.4"
+docutils = "^0.21.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1"
@@ -266,3 +267,6 @@ disallow_any_explicit = false
 module = "wemake_python_styleguide.compat.packaging"
 # We allow unused `ignore` comments, because we cannot sync it between versions:
 warn_unused_ignores = false
+
+[tool.poetry.scripts]
+wps = "wemake_python_styleguide.cli.cli_app:main"
