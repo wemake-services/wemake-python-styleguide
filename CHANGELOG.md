@@ -17,6 +17,11 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
+## 1.1.0 WIP
+### Command line utility
+This version introduces `wps` CLI tool.
+- `wps explain <code>` command can be used to access WPS violation docs (same as on website) without internet access
+
 ## 1.0.0
 
 ### Ruff
