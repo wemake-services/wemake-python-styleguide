@@ -64,11 +64,11 @@
   [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
   
     1:1      WPS111 Found too short name: s < 2
-    [34mdef[39;49;00m[37m [39;49;00m[32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
     ^
   
     1:7      WPS110 Found wrong variable name: handle
-    [34mdef[39;49;00m[37m [39;49;00m[32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
           ^
   
     2:21     WPS432 Found magic number: 2_00
@@ -82,11 +82,11 @@
   [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
   
     1:1      WPS110 Found wrong variable name: data
-    [34mdef[39;49;00m[37m [39;49;00m[32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
     ^
   
     1:10     WPS110 Found wrong variable name: param
-    [34mdef[39;49;00m[37m [39;49;00m[32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
              ^
   
     2:16     WPS303 Found underscored number: 10_00
@@ -130,11 +130,11 @@
   [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
   
     1:1      WPS111 Found too short name: s < 2
-    [34mdef[39;49;00m[37m [39;49;00m[32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
     ^
   
     1:7      WPS110 Found wrong variable name: handle
-    [34mdef[39;49;00m[37m [39;49;00m[32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
           ^
   
     2:21     WPS432 Found magic number: 2_00
@@ -148,11 +148,11 @@
   [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
   
     1:1      WPS110 Found wrong variable name: data
-    [34mdef[39;49;00m[37m [39;49;00m[32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
     ^
   
     1:10     WPS110 Found wrong variable name: param
-    [34mdef[39;49;00m[37m [39;49;00m[32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
              ^
   
     2:16     WPS303 Found underscored number: 10_00
@@ -192,12 +192,12 @@
   
     1:1      WPS111 Found too short name: s < 2
              -> https://pyflak.es/WPS111
-    [34mdef[39;49;00m[37m [39;49;00m[32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
     ^
   
     1:7      WPS110 Found wrong variable name: handle
              -> https://pyflak.es/WPS110
-    [34mdef[39;49;00m[37m [39;49;00m[32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
           ^
   
     2:21     WPS432 Found magic number: 2_00
@@ -214,12 +214,12 @@
   
     1:1      WPS110 Found wrong variable name: data
              -> https://pyflak.es/WPS110
-    [34mdef[39;49;00m[37m [39;49;00m[32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
     ^
   
     1:10     WPS110 Found wrong variable name: param
              -> https://pyflak.es/WPS110
-    [34mdef[39;49;00m[37m [39;49;00m[32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
              ^
   
     2:16     WPS303 Found underscored number: 10_00
@@ -238,11 +238,11 @@
   [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
   
     1:1      WPS111 Found too short name: s < 2
-    [34mdef[39;49;00m[37m [39;49;00m[32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
     ^
   
     1:7      WPS110 Found wrong variable name: handle
-    [34mdef[39;49;00m[37m [39;49;00m[32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
           ^
   
     2:21     WPS432 Found magic number: 2_00
@@ -256,11 +256,11 @@
   [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
   
     1:1      WPS110 Found wrong variable name: data
-    [34mdef[39;49;00m[37m [39;49;00m[32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
     ^
   
     1:10     WPS110 Found wrong variable name: param
-    [34mdef[39;49;00m[37m [39;49;00m[32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
              ^
   
     2:16     WPS303 Found underscored number: 10_00
@@ -358,11 +358,11 @@
   [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
   
     1:1      WPS111 Found too short name: s < 2
-    [34mdef[39;49;00m[37m [39;49;00m[32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
     ^
   
     1:7      WPS110 Found wrong variable name: handle
-    [34mdef[39;49;00m[37m [39;49;00m[32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
           ^
   
     2:21     WPS432 Found magic number: 2_00
@@ -376,11 +376,11 @@
   [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
   
     1:1      WPS110 Found wrong variable name: data
-    [34mdef[39;49;00m[37m [39;49;00m[32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
     ^
   
     1:10     WPS110 Found wrong variable name: param
-    [34mdef[39;49;00m[37m [39;49;00m[32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
              ^
   
     2:16     WPS303 Found underscored number: 10_00
@@ -424,11 +424,11 @@
   [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
   
     1:1      WPS111 Found too short name: s < 2
-    [34mdef[39;49;00m[37m [39;49;00m[32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
     ^
   
     1:7      WPS110 Found wrong variable name: handle
-    [34mdef[39;49;00m[37m [39;49;00m[32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
           ^
   
     2:21     WPS432 Found magic number: 2_00
@@ -442,11 +442,11 @@
   [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
   
     1:1      WPS110 Found wrong variable name: data
-    [34mdef[39;49;00m[37m [39;49;00m[32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
     ^
   
     1:10     WPS110 Found wrong variable name: param
-    [34mdef[39;49;00m[37m [39;49;00m[32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
              ^
   
     2:16     WPS303 Found underscored number: 10_00
@@ -486,12 +486,12 @@
   
     1:1      WPS111 Found too short name: s < 2
              -> https://pyflak.es/WPS111
-    [34mdef[39;49;00m[37m [39;49;00m[32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
     ^
   
     1:7      WPS110 Found wrong variable name: handle
              -> https://pyflak.es/WPS110
-    [34mdef[39;49;00m[37m [39;49;00m[32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
           ^
   
     2:21     WPS432 Found magic number: 2_00
@@ -508,12 +508,12 @@
   
     1:1      WPS110 Found wrong variable name: data
              -> https://pyflak.es/WPS110
-    [34mdef[39;49;00m[37m [39;49;00m[32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
     ^
   
     1:10     WPS110 Found wrong variable name: param
              -> https://pyflak.es/WPS110
-    [34mdef[39;49;00m[37m [39;49;00m[32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
              ^
   
     2:16     WPS303 Found underscored number: 10_00
@@ -532,11 +532,11 @@
   [4m[1mtests/fixtures/formatter/formatter1.py[0m[0m
   
     1:1      WPS111 Found too short name: s < 2
-    [34mdef[39;49;00m[37m [39;49;00m[32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
     ^
   
     1:7      WPS110 Found wrong variable name: handle
-    [34mdef[39;49;00m[37m [39;49;00m[32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32ms[39;49;00m(handle: [36mint[39;49;00m) -> [36mint[39;49;00m:[37m[39;49;00m
           ^
   
     2:21     WPS432 Found magic number: 2_00
@@ -550,11 +550,11 @@
   [4m[1mtests/fixtures/formatter/formatter2.py[0m[0m
   
     1:1      WPS110 Found wrong variable name: data
-    [34mdef[39;49;00m[37m [39;49;00m[32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
     ^
   
     1:10     WPS110 Found wrong variable name: param
-    [34mdef[39;49;00m[37m [39;49;00m[32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
+    [34mdef[39;49;00m [32mdata[39;49;00m(param) -> [36mint[39;49;00m:[37m[39;49;00m
              ^
   
     2:16     WPS303 Found underscored number: 10_00
