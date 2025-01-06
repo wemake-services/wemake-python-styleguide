@@ -24,10 +24,7 @@ class BufferedStreamWriter(Writable):
     """Writes to provided buffered text streams."""
 
     def __init__(
-        self,
-        out_stream: TextIO,
-        err_stream: TextIO,
-        newline_sym: str = '\n'
+        self, out_stream: TextIO, err_stream: TextIO, newline_sym: str = '\n'
     ):
         """Create stream writer."""
         self._out = out_stream

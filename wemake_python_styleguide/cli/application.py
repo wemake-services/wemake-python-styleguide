@@ -1,4 +1,5 @@
 """Provides WPS CLI application class."""
+
 from typing import final
 
 from wemake_python_styleguide.cli.commands.base import AbstractCommand
