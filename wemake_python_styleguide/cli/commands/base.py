@@ -8,7 +8,7 @@ from wemake_python_styleguide.cli.output import Writable
 class AbstractCommand(ABC):
     """ABC for all commands."""
 
-    def __init__(self, writer: Writable):
+    def __init__(self, writer: Writable) -> None:
         """Create a command and define its writer."""
         self.writer = writer
 

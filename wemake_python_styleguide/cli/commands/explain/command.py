@@ -34,6 +34,7 @@ class ExplainCommand(AbstractCommand):
         violation = violation_loader.get_violation(code)
         if violation is None:
             self.writer.write_err('Violation not found')
+            self.writer.flush()
             return 1
         message = message_formatter.format_violation(violation)
         self.writer.write_out(message)

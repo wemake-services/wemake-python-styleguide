@@ -1,14 +1,16 @@
 """Provides WPS CLI application class."""
+from typing import final
 
 from wemake_python_styleguide.cli.commands.base import AbstractCommand
 from wemake_python_styleguide.cli.commands.explain.command import ExplainCommand
 from wemake_python_styleguide.cli.output import Writable
 
 
+@final
 class Application:
     """WPS CLI application class."""
 
-    def __init__(self, writer: Writable):
+    def __init__(self, writer: Writable) -> None:
         """Create application."""
         self._writer = writer
 

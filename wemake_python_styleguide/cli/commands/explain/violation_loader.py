@@ -4,7 +4,7 @@ import importlib
 import inspect
 from collections.abc import Collection, Mapping
 from types import ModuleType
-from typing import Final
+from typing import Final, final
 
 from wemake_python_styleguide.violations.base import BaseViolation
 
@@ -20,6 +20,7 @@ _VIOLATION_SUBMODULES: Final = (
 _VIOLATION_MODULE_BASE: Final = 'wemake_python_styleguide.violations'
 
 
+@final
 class ViolationInfo:
     """Contains violation info."""
 
@@ -30,7 +31,7 @@ class ViolationInfo:
         code: int,
         docstring: str,
         section: str,
-    ):
+    ) -> None:
         """Create dataclass."""
         self.identifier = identifier
         self.fully_qualified_id = fully_qualified_id

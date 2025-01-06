@@ -2,14 +2,12 @@
 
 from typing import Final
 
+from wemake_python_styleguide import formatter
 from wemake_python_styleguide.cli.commands.explain.violation_loader import (
     ViolationInfo,
 )
 
-_DOCS_URL: Final = (
-    'https://wemake-python-styleguide.readthedocs.io/en/latest/pages/'
-    'usage/violations/{0}.html#{1}'
-)
+_DOCS_URL: Final = 'https://pyflak.es/{0}'
 
 
 def _clean_text(text: str) -> str:
@@ -41,7 +39,7 @@ def _get_whitespace_prefix(line: str) -> int:
 def _get_greatest_common_indent(text: str) -> int:
     """Get the greatest common whitespace prefix length of all lines."""
     lines = text.split('\n')
-    if len(lines) == 0:
+    if not lines:
         return 0
     greatest_common_indent = float('+inf')
     for line in lines:
@@ -66,10 +64,7 @@ def _remove_indentation(text: str, tab_size: int = 4) -> str:
 def format_violation(violation: ViolationInfo) -> str:
     """Format violation information."""
     cleaned_docstring = _remove_indentation(violation.docstring)
-    violation_url = _DOCS_URL.format(
-        violation.section,
-        violation.fully_qualified_id,
-    )
+    violation_url = _DOCS_URL.format(f"WPS{violation.code}")
     return (
         f'WPS{violation.code} ({violation.identifier})\n'
         f'{cleaned_docstring}\n'

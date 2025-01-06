@@ -1,7 +1,11 @@
 Command line tool
 =================
 
-WPS v1.1.0 introduces new feature: a command-line utility called ``wps``.
+.. versionadded:: 1.1.0
+
+WPS has a command-line utility named ``wps``
+
+Here are listed all the subcommands it has.
 
 .. rubric:: ``wps explain``
 
@@ -24,7 +28,3 @@ Examples:
    WPS116 (ConsecutiveUnderscoresInNameViolation)
 
    WPS116 - Forbid using more than one consecutive underscore in variable names.
-
-
-
-.. versionadded:: 1.1.0
