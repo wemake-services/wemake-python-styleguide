@@ -2,7 +2,6 @@
 
 from typing import Final
 
-from wemake_python_styleguide import formatter
 from wemake_python_styleguide.cli.commands.explain.violation_loader import (
     ViolationInfo,
 )
