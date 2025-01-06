@@ -2,15 +2,17 @@
 build-backend = "poetry.core.masonry.api"
 requires = [ "poetry-core>=1.9" ]
 
-[tool.poetry]
+[project]
 name = "wemake-python-styleguide"
 version = "1.0.0"
 description = "The strictest and most opinionated python linter ever"
+requires-python = ">=3.10"
+dynamic = [ "dependencies" ]
 
 license = "MIT"
 
 authors = [
-  "Nikita Sobolev <mail@sobolevn.me>",
+  { name = "Nikita Sobolev", email = "mail@sobolevn.me" },
 ]
 
 readme = "README.md"
@@ -40,21 +42,19 @@ classifiers = [
   "Typing :: Typed",
 ]
 
-[tool.poetry.urls]
+[project.urls]
 "Funding" = "https://opencollective.com/wemake-python-styleguide"
 
-[tool.poetry.plugins."flake8.extension"]
+[project.entry-points."flake8.extension"]
 WPS = "wemake_python_styleguide.checker:Checker"
 
-[tool.poetry.plugins."flake8.report"]
+[project.entry-points."flake8.report"]
 wemake = "wemake_python_styleguide.formatter:WemakeFormatter"
 
 [tool.poetry.dependencies]
-python = "^3.10"
-
 flake8 = "^7.1"
 attrs = "*"
-pygments = "^2.4"
+pygments = "^2.5"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1"
