@@ -63,7 +63,7 @@ def _remove_indentation(text: str, tab_size: int = 4) -> str:
 def format_violation(violation: ViolationInfo) -> str:
     """Format violation information."""
     cleaned_docstring = _remove_indentation(violation.docstring)
-    violation_url = _DOCS_URL.format(f"WPS{violation.code}")
+    violation_url = _DOCS_URL.format(f'WPS{violation.code}')
     return (
         f'WPS{violation.code} ({violation.identifier})\n'
         f'{cleaned_docstring}\n'
