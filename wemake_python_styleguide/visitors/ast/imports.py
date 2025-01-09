@@ -1,8 +1,9 @@
 import ast
 from collections import defaultdict
-from dataclasses import dataclass
 from itertools import product
 from typing import Final, TypeAlias, final
+
+from attrs import frozen
 
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
 from wemake_python_styleguide.logic import nodes
@@ -27,7 +28,7 @@ _MODULE_MEMBERS_SEPARATOR: Final = '.'
 _NameAndContext: TypeAlias = tuple[str, ast.AST | None]
 
 
-@dataclass(frozen=True, slots=True)
+@frozen
 class _BaseImportValidator:
     """Base utility class to separate logic from the visitor."""
 
