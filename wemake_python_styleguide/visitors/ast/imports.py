@@ -1,5 +1,6 @@
 import ast
 from collections import defaultdict
+from dataclasses import dataclass
 from itertools import product
 from typing import Final, TypeAlias, final
 
@@ -26,16 +27,12 @@ _MODULE_MEMBERS_SEPARATOR: Final = '.'
 _NameAndContext: TypeAlias = tuple[str, ast.AST | None]
 
 
+@dataclass(frozen=True, slots=True)
 class _BaseImportValidator:
     """Base utility class to separate logic from the visitor."""
 
-    def __init__(
-        self,
-        error_callback: ErrorCallback,
-        options: ValidatedOptions,
-    ) -> None:
-        self._error_callback = error_callback
-        self._options = options
+    _error_callback: ErrorCallback
+    _options: ValidatedOptions
 
 
 @final
