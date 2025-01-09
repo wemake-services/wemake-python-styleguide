@@ -3,6 +3,8 @@ from collections import defaultdict
 from itertools import product
 from typing import Final, TypeAlias, final
 
+from attrs import frozen
+
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.tree import imports
@@ -26,16 +28,12 @@ _MODULE_MEMBERS_SEPARATOR: Final = '.'
 _NameAndContext: TypeAlias = tuple[str, ast.AST | None]
 
 
+@frozen
 class _BaseImportValidator:
     """Base utility class to separate logic from the visitor."""
 
-    def __init__(
-        self,
-        error_callback: ErrorCallback,
-        options: ValidatedOptions,
-    ) -> None:
-        self._error_callback = error_callback
-        self._options = options
+    _error_callback: ErrorCallback
+    _options: ValidatedOptions
 
 
 @final
