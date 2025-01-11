@@ -1,4 +1,5 @@
 """Test that wps explain command works fine."""
+
 from io import BytesIO
 from typing import TextIO
 
