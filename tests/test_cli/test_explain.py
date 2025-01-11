@@ -5,6 +5,7 @@ from typing import TextIO
 
 import pytest
 
+from wemake_python_styleguide.cli import cli_app
 from wemake_python_styleguide.cli.application import Application
 from wemake_python_styleguide.cli.commands.explain import (
     message_formatter,
@@ -94,35 +95,29 @@ class MockWriter(Writable):
         """Blank method. Flushing not needed."""
 
 
-class MockArgs:
-    """Arguments for explain command."""
-
-    def __init__(self, code):
-        """Create mock explain arguments."""
-        self.violation_code = code
-
-
 def test_command(snapshot):
     """Test that command works and formats violations as expected."""
     writer = MockWriter()
-    command = Application(writer)
-    command.run_explain(MockArgs('WPS123'))
+    application = Application(writer)
+    args = cli_app.parse_args('explain WPS123'.split(), application)
+    application.run_explain(args)
     assert writer.out == snapshot
 
 
 @pytest.mark.parametrize(
-    'non_existent_code',
+    'arguments',
     [
-        '10000',
-        'NOT_A_CODE',
-        'WPS10000',
+        'explain 10000',
+        'explain NOT_A_CODE',
+        'explain WPS10000',
     ]
 )
-def test_command_on_not_found(non_existent_code):
+def test_command_on_not_found(arguments):
     """Test command works when violation code is wrong."""
     writer = MockWriter()
-    command = Application(writer)
-    command.run_explain(MockArgs(non_existent_code))
+    application = Application(writer)
+    args = cli_app.parse_args(arguments.split(), application)
+    application.run_explain(args)
     assert writer.err.strip() == 'Violation not found'
 
 

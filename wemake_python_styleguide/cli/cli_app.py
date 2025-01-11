@@ -2,6 +2,7 @@
 
 import argparse
 import sys
+from collections.abc import Sequence
 
 from wemake_python_styleguide.cli.application import Application
 from wemake_python_styleguide.cli.output import BufferedStreamWriter
@@ -27,10 +28,15 @@ def _configure_arg_parser(app: Application) -> argparse.ArgumentParser:
     return parser
 
 
-def main() -> int:
+def parse_args(args: Sequence[str], app: Application) -> argparse.Namespace:
+    parser = _configure_arg_parser(app)
+    return parser.parse_args(args)
+
+
+def main() -> int:  # pragma: no cover
     """Main function."""
     app = Application(BufferedStreamWriter(sys.stdout, sys.stderr))
-    args = _configure_arg_parser(app).parse_args()
+    args = parse_args(sys.argv[1:], app)
     return int(args.func(args))
 
 
