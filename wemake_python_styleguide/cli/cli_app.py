@@ -29,6 +29,7 @@ def _configure_arg_parser(app: Application) -> argparse.ArgumentParser:
 
 
 def parse_args(args: Sequence[str], app: Application) -> argparse.Namespace:
+    """Parse CLI arguments."""
     parser = _configure_arg_parser(app)
     return parser.parse_args(args)
 
