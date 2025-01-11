@@ -10,8 +10,7 @@ from wemake_python_styleguide.cli.output import BufferedStreamWriter
 def _configure_arg_parser(app: Application) -> argparse.ArgumentParser:
     """Configures CLI arguments and subcommands."""
     parser = argparse.ArgumentParser(
-        prog='wps',
-        description='WPS command line tool'
+        prog='wps', description='WPS command line tool'
     )
     sub_parsers = parser.add_subparsers(help='sub-command help')
 

@@ -46,7 +46,7 @@ def _is_a_violation(class_object) -> bool:
 
 
 def _get_violations_of_submodule(
-    module: ModuleType
+    module: ModuleType,
 ) -> Collection[type[BaseViolation]]:
     """Get all violation classes of defined module."""
     return [
@@ -57,9 +57,7 @@ def _get_violations_of_submodule(
 
 
 def _create_violation_info(
-    class_object,
-    submodule_name: str,
-    submodule_path: str
+    class_object, submodule_name: str, submodule_path: str
 ) -> ViolationInfo:
     """Create violation info DTO from violation class and metadata."""
     return ViolationInfo(

@@ -45,8 +45,7 @@ def _get_greatest_common_indent(text: str) -> int:
         if len(line.strip()) == 0:
             continue
         greatest_common_indent = min(
-            greatest_common_indent,
-            _get_whitespace_prefix(line)
+            greatest_common_indent, _get_whitespace_prefix(line)
         )
     if isinstance(greatest_common_indent, float):
         greatest_common_indent = 0
