@@ -22,7 +22,10 @@ def _clean_violation_code(violation_str: str) -> int:
         ValueError: violation str is not an integer (except WPS prefix).
     """
     violation_str = violation_str.removeprefix('WPS')
-    return int(violation_str)
+    try:
+        return int(violation_str)
+    except ValueError:
+        return -1
 
 
 class ExplainCommand(AbstractCommand):

@@ -4,11 +4,11 @@ from typing import TextIO
 
 import pytest
 
+from wemake_python_styleguide.cli.application import Application
 from wemake_python_styleguide.cli.commands.explain import (
     message_formatter,
     violation_loader,
 )
-from wemake_python_styleguide.cli.commands.explain.command import ExplainCommand
 from wemake_python_styleguide.cli.output import BufferedStreamWriter, Writable
 from wemake_python_styleguide.violations.best_practices import (
     InitModuleHasLogicViolation,
@@ -40,6 +40,12 @@ def test_violation_getter(violation_params):
     [
         ('  text\n  text\n  text', 'text\ntext\ntext'),
         ('  text\n\ttext\r\n  text', 'text\n  text\ntext'),
+        (' text\n    \n\n text', 'text\n   \n\ntext'),
+        ('\n\n', '\n\n'),
+        ('text', 'text'),
+        ('text\ntext', 'text\ntext'),
+        ('', ''),
+        ('    ', '    '),
     ],
 )
 def test_indentation_removal(test_params):
@@ -98,9 +104,25 @@ class MockArgs:
 def test_command(snapshot):
     """Test that command works and formats violations as expected."""
     writer = MockWriter()
-    command = ExplainCommand(writer)
-    command.run(MockArgs('WPS123'))
+    command = Application(writer)
+    command.run_explain(MockArgs('WPS123'))
     assert writer.out == snapshot
+
+
+@pytest.mark.parametrize(
+    'non_existent_code',
+    [
+        '10000',
+        'NOT_A_CODE',
+        'WPS10000',
+    ]
+)
+def test_command_on_not_found(non_existent_code):
+    """Test command works when violation code is wrong."""
+    writer = MockWriter()
+    command = Application(writer)
+    command.run_explain(MockArgs(non_existent_code))
+    assert writer.err.strip() == 'Violation not found'
 
 
 class MockBufferedStringIO(TextIO):
@@ -118,14 +140,6 @@ class MockBufferedStringIO(TextIO):
     def flush(self):
         """Flush buffer."""
         self._buffer.flush()
-
-    def writable(self):
-        """Is IO writable."""
-        return True
-
-    def write(self, text):
-        """Write into buffer."""
-        self._buffer.write(text.encode())
 
     def get_string(self) -> str:
         """Get string value written into buffer."""

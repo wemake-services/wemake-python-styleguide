@@ -27,23 +27,19 @@ def _replace_tabs(text: str, tab_size: int = 4) -> str:
     return text.replace('\t', ' ' * tab_size)
 
 
-def _get_whitespace_prefix(line: str) -> int:
+def _get_whitespace_prefix(line: str) -> int | float:
     """Get length of whitespace prefix of string."""
     for char_index, char in enumerate(line):
         if char != ' ':
             return char_index
-    return len(line)
+    return float('+inf')
 
 
 def _get_greatest_common_indent(text: str) -> int:
     """Get the greatest common whitespace prefix length of all lines."""
     lines = text.split('\n')
-    if not lines:
-        return 0
     greatest_common_indent = float('+inf')
     for line in lines:
-        if len(line.strip()) == 0:
-            continue
         greatest_common_indent = min(
             greatest_common_indent, _get_whitespace_prefix(line)
         )
