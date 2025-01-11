@@ -53,9 +53,7 @@ violation_mock = violation_loader.ViolationInfo(
     section='mock',
 )
 violation_string = (
-    'WPS100 (Mock)\n'
-    'docstring\n'
-    'See at website: https://pyflak.es/WPS100'
+    'WPS100 (Mock)\ndocstring\nSee at website: https://pyflak.es/WPS100'
 )
 
 
