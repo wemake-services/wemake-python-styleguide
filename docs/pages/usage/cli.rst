@@ -17,6 +17,7 @@ Syntax: ``wps explain <code>``
 Examples:
 
 .. code:: bash
+
    $ wps explain WPS115
    WPS115 (UpperCaseAttributeViolation)
 
@@ -24,6 +25,7 @@ Examples:
    ...
 
 .. code:: bash
+
    $ wps explain 116
    WPS116 (ConsecutiveUnderscoresInNameViolation)
 
