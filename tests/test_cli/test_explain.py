@@ -110,7 +110,7 @@ def test_command(snapshot):
         'explain 10000',
         'explain NOT_A_CODE',
         'explain WPS10000',
-    ]
+    ],
 )
 def test_command_on_not_found(arguments):
     """Test command works when violation code is wrong."""
