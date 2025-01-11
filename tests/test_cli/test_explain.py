@@ -116,7 +116,7 @@ def test_command(snapshot):
         '10000',
         'NOT_A_CODE',
         'WPS10000',
-    ]
+    ],
 )
 def test_command_on_not_found(non_existent_code):
     """Test command works when violation code is wrong."""
