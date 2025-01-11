@@ -99,7 +99,7 @@ def test_command(snapshot):
     """Test that command works and formats violations as expected."""
     writer = MockWriter()
     application = Application(writer)
-    args = cli_app.parse_args('explain WPS123'.split(), application)
+    args = cli_app.parse_args(['explain', 'WPS123'], application)
     application.run_explain(args)
     assert writer.out == snapshot
 

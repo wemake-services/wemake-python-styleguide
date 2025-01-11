@@ -2,30 +2,30 @@
 # name: test_command
   '''
   WPS123 (WrongUnusedVariableNameViolation)
-  
+
   WPS123 — Forbid unused variables with multiple underscores.
-  
+
   Reasoning:
       We only use ``_`` as a special definition for an unused variable.
       Other variables are hard to read. It is unclear why would one use it.
-  
+
   Solution:
       Rename unused variables to ``_``
       or give it some more context with an explicit name: ``_context``.
-  
+
   Example::
-  
+
       # Correct:
       some_element, _next_element, _ = some_tuple()
       some_element, _, _ = some_tuple()
       some_element, _ = some_tuple()
-  
+
       # Wrong:
       some_element, _, __  = some_tuple()
-  
+
   .. versionadded:: 0.12.0
-  
-  
+
+
   See at website: https://pyflak.es/WPS123
   '''
 # ---
