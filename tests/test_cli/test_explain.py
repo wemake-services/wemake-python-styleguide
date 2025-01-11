@@ -55,8 +55,7 @@ violation_mock = violation_loader.ViolationInfo(
 violation_string = (
     'WPS100 (Mock)\n'
     'docstring\n'
-    'See at website: https://wemake-python-styleguide.readthedocs.io/en/'
-    'latest/pages/usage/violations/mock.html#mock.Mock'
+    'See at website: https://pyflak.es/WPS100'
 )
 
 

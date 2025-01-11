@@ -16,14 +16,14 @@ Syntax: ``wps explain <code>``
 
 Examples:
 
-.. code::
+.. code:: bash
    $ wps explain WPS115
    WPS115 (UpperCaseAttributeViolation)
 
    WPS115 - Require ``snake_case`` for naming class attributes.
    ...
 
-.. code::
+.. code:: bash
    $ wps explain 116
    WPS116 (ConsecutiveUnderscoresInNameViolation)
 
