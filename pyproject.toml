@@ -206,7 +206,8 @@ xfail_strict = true
 filterwarnings = [ "error" ]
 
 addopts = [
-  "--strict",
+  "--strict-config",
+  "--strict-markers",
   "--doctest-modules",
   # pytest-cov
   "--cov=wemake_python_styleguide",
