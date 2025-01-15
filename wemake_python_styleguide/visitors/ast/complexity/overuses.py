@@ -66,6 +66,10 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
             AnyTextPrimitive,
             int,
         ] = defaultdict(int)
+        self._first_occurrence: dict[
+            AnyTextPrimitive,
+            ast.Constant,
+        ] = {}
 
     def visit_any_string(self, node: ast.Constant) -> None:
         """Restricts to over-use string constants."""
@@ -80,7 +84,7 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
         # they are overused.
         if node.value in self._ignored_string_constants:
             return
-
+        self._first_occurrence.setdefault(node.value, node)
         self._string_constants[node.value] += 1
 
     def _post_visit(self) -> None:
@@ -88,6 +92,7 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
             if usage_count > self.options.max_string_usages:
                 self.add_violation(
                     complexity.OverusedStringViolation(
+                        node=self._first_occurrence[string],
                         text=source.render_string(string) or "''",
                         baseline=self.options.max_string_usages,
                     ),
