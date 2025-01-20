@@ -21,13 +21,13 @@ repos:
       - id: check-github-actions
       - id: check-readthedocs
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.6
+    rev: v1.7.7
     hooks:
       - id: actionlint
         additional_dependencies:
           - "github.com/wasilibs/go-shellcheck/cmd/shellcheck@latest"
   - repo: https://github.com/woodruffw/zizmor-pre-commit
-    rev: v1.1.1
+    rev: v1.2.2
     hooks:
       - id: zizmor
   - repo: https://github.com/shellcheck-py/shellcheck-py
@@ -36,7 +36,7 @@ repos:
       - id: shellcheck
         args: ["--severity=style"]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.9.1
+    rev: v0.9.2
     hooks:
       - id: ruff
         args: ["--exit-non-zero-on-fix"]
