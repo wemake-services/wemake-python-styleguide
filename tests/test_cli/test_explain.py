@@ -64,9 +64,7 @@ violation_mock = violation_loader.ViolationInfo(
     fully_qualified_id='mock.Mock',
     section='mock',
 )
-violation_string = (
-    'docstring\nSee at website: https://pyflak.es/WPS100'
-)
+violation_string = 'docstring\nSee at website: https://pyflak.es/WPS100'
 
 
 def test_formatter():
