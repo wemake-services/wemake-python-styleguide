@@ -30,7 +30,3 @@ Examples:
    WPS116 (ConsecutiveUnderscoresInNameViolation)
 
    WPS116 - Forbid using more than one consecutive underscore in variable names.
-
-
-
-.. versionadded:: 1.1.0
