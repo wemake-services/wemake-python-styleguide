@@ -55,12 +55,17 @@ def _remove_indentation(text: str, tab_size: int = 4) -> str:
     return '\n'.join(line[max_indent:] for line in text.split('\n'))
 
 
+def _remove_newlines_at_ends(text: str) -> str:
+    """Remove leading and trailing newlines."""
+    return text.strip('\n\r')
+
+
 def format_violation(violation: ViolationInfo) -> str:
     """Format violation information."""
     cleaned_docstring = _remove_indentation(violation.docstring)
+    cleaned_docstring = _remove_newlines_at_ends(cleaned_docstring)
     violation_url = _DOCS_URL.format(f'WPS{violation.code}')
     return (
-        f'WPS{violation.code} ({violation.identifier})\n'
         f'{cleaned_docstring}\n'
         f'See at website: {violation_url}'
     )
