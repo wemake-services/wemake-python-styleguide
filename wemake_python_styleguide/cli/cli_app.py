@@ -5,7 +5,7 @@ import sys
 from collections.abc import Sequence
 
 from wemake_python_styleguide.cli.application import Application
-from wemake_python_styleguide.cli.output import BufferedStreamWriter
+from wemake_python_styleguide.cli.output import print_stderr
 
 
 def _configure_arg_parser(app: Application) -> argparse.ArgumentParser:
@@ -36,7 +36,10 @@ def parse_args(args: Sequence[str], app: Application) -> argparse.Namespace:
 
 def main() -> int:  # pragma: no cover
     """Main function."""
-    app = Application(BufferedStreamWriter(sys.stdout, sys.stderr))
+    app = Application()
+    if len(sys.argv) == 1:
+        print_stderr('Command not specified. Usage: wps help')
+        return 1
     args = parse_args(sys.argv[1:], app)
     return int(args.func(args))
 

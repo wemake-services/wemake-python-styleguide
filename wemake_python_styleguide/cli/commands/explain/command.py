@@ -5,6 +5,7 @@ from wemake_python_styleguide.cli.commands.explain import (
     message_formatter,
     violation_loader,
 )
+from wemake_python_styleguide.cli.output import print_stderr, print_stdout
 
 
 def _clean_violation_code(violation_str: str) -> int:
@@ -36,10 +37,8 @@ class ExplainCommand(AbstractCommand):
         code = _clean_violation_code(args.violation_code)
         violation = violation_loader.get_violation(code)
         if violation is None:
-            self.writer.write_err('Violation not found')
-            self.writer.flush()
+            print_stderr('Violation not found')
             return 1
         message = message_formatter.format_violation(violation)
-        self.writer.write_out(message)
-        self.writer.flush()
+        print_stdout(message)
         return 0

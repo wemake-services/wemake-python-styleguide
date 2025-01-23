@@ -22,6 +22,32 @@
       some_element, _, __  = some_tuple()
   
   .. versionadded:: 0.12.0
+  
   See at website: https://pyflak.es/WPS123
+  
+  '''
+# ---
+# name: test_command_on_not_found[wps explain 10000]
+  '''
+  Violation not found
+  
+  '''
+# ---
+# name: test_command_on_not_found[wps explain NOT_A_CODE]
+  '''
+  Violation not found
+  
+  '''
+# ---
+# name: test_command_on_not_found[wps explain WPS10000]
+  '''
+  Violation not found
+  
+  '''
+# ---
+# name: test_no_command_specified
+  '''
+  Command not specified. Usage: wps help
+  
   '''
 # ---

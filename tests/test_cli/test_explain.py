@@ -1,17 +1,14 @@
 """Test that wps explain command works fine."""
-
-from io import BytesIO
-from typing import TextIO
+import os
+import platform
+import subprocess
 
 import pytest
 
-from wemake_python_styleguide.cli import cli_app
-from wemake_python_styleguide.cli.application import Application
 from wemake_python_styleguide.cli.commands.explain import (
     message_formatter,
     violation_loader,
 )
-from wemake_python_styleguide.cli.output import BufferedStreamWriter, Writable
 from wemake_python_styleguide.violations.best_practices import (
     InitModuleHasLogicViolation,
 )
@@ -65,7 +62,7 @@ violation_mock = violation_loader.ViolationInfo(
     section='mock',
 )
 violation_string = (
-    'docstring\nSee at website: https://pyflak.es/WPS100'
+    'docstring\n\nSee at website: https://pyflak.es/WPS100'
 )
 
 
@@ -75,80 +72,52 @@ def test_formatter():
     assert formatted == violation_string
 
 
-class MockWriter(Writable):
-    """Writer for testing."""
-
-    def __init__(self):
-        """Create writer."""
-        self.out = ''
-        self.err = ''
-
-    def write_out(self, *args) -> None:
-        """Write stdout."""
-        self.out += ' '.join(map(str, args))
-
-    def write_err(self, *args) -> None:
-        """Write stderr."""
-        self.err += ' '.join(map(str, args))
-
-    def flush(self) -> None:
-        """Blank method. Flushing not needed."""
+def _popen_in_shell(args: str) -> subprocess.Popen:  # pragma: no cover
+    """Run command in shell."""
+    encoding = 'utf-8'
+    # Some encoding magic. Calling with shell=True on Windows
+    # causes everything to be in cp1251. shell=True is needed
+    # for subprocess.Popen to locate the installed wps command.
+    if platform.system() == 'Windows':
+        encoding = 'cp1251'
+    return subprocess.Popen(  # noqa: S602 (insecure shell=True)
+        args,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        universal_newlines=True,
+        encoding=encoding,
+        env=os.environ,
+        shell=True,
+    )
 
 
 def test_command(snapshot):
     """Test that command works and formats violations as expected."""
-    writer = MockWriter()
-    application = Application(writer)
-    args = cli_app.parse_args(['explain', 'WPS123'], application)
-    application.run_explain(args)
-    assert writer.out == snapshot
+    process = _popen_in_shell('wps explain WPS123')
+    stdout, stderr = process.communicate()
+    assert process.returncode == 0, (stdout, stderr)
+    assert stdout == snapshot
 
 
 @pytest.mark.parametrize(
-    'arguments',
+    'command',
     [
-        'explain 10000',
-        'explain NOT_A_CODE',
-        'explain WPS10000',
+        'wps explain 10000',
+        'wps explain NOT_A_CODE',
+        'wps explain WPS10000',
     ],
 )
-def test_command_on_not_found(arguments):
+def test_command_on_not_found(command, snapshot):
     """Test command works when violation code is wrong."""
-    writer = MockWriter()
-    application = Application(writer)
-    args = cli_app.parse_args(arguments.split(), application)
-    application.run_explain(args)
-    assert writer.err.strip() == 'Violation not found'
+    process = _popen_in_shell(command)
+    stdout, stderr = process.communicate()
+    assert process.returncode == 1, (stdout, stderr)
+    assert stderr == snapshot
 
 
-class MockBufferedStringIO(TextIO):
-    """IO for testing BufferedStreamWriter."""
-
-    def __init__(self):
-        """Create IO."""
-        self._buffer = BytesIO()
-
-    @property
-    def buffer(self):
-        """Get IO buffer."""
-        return self._buffer
-
-    def flush(self):
-        """Flush buffer."""
-        self._buffer.flush()
-
-    def get_string(self) -> str:
-        """Get string value written into buffer."""
-        return self._buffer.getvalue().decode()
-
-
-def test_buffered_stream_writer():
-    """Test that stream writer works as expected."""
-    io_out = MockBufferedStringIO()
-    io_err = MockBufferedStringIO()
-    writer = BufferedStreamWriter(io_out, io_err)
-    writer.write_out('Test', 'text')
-    writer.write_err('Test', 'error')
-    writer.flush()
-    assert io_out.get_string() == 'Test text\n'
-    assert io_err.get_string() == 'Test error\n'
+def test_no_command_specified(snapshot):
+    """Test command displays error message when no subcommand provided."""
+    process = _popen_in_shell('wps')
+    stdout, stderr = process.communicate()
+    assert process.returncode == 1, (stdout, stderr)
+    assert stderr == snapshot

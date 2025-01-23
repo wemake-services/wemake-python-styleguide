@@ -66,6 +66,6 @@ def format_violation(violation: ViolationInfo) -> str:
     cleaned_docstring = _remove_newlines_at_ends(cleaned_docstring)
     violation_url = _DOCS_URL.format(f'WPS{violation.code}')
     return (
-        f'{cleaned_docstring}\n'
+        f'{cleaned_docstring}\n\n'
         f'See at website: {violation_url}'
     )

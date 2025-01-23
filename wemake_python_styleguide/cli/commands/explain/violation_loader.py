@@ -6,6 +6,8 @@ from collections.abc import Collection, Mapping
 from types import ModuleType
 from typing import Final, final
 
+from attrs import frozen
+
 from wemake_python_styleguide.violations.base import BaseViolation
 
 _VIOLATION_SUBMODULES: Final = (
@@ -21,28 +23,22 @@ _VIOLATION_MODULE_BASE: Final = 'wemake_python_styleguide.violations'
 
 
 @final
+@frozen
 class ViolationInfo:
     """Contains violation info."""
-
-    def __init__(
-        self,
-        identifier: str,
-        fully_qualified_id: str,
-        code: int,
-        docstring: str,
-        section: str,
-    ) -> None:
-        """Create dataclass."""
-        self.identifier = identifier
-        self.fully_qualified_id = fully_qualified_id
-        self.code = code
-        self.docstring = docstring
-        self.section = section
+    identifier: str
+    fully_qualified_id: str
+    code: int
+    docstring: str
+    section: str
 
 
 def _is_a_violation(class_object) -> bool:
-    """Dumb check if class is a violation class."""
-    return hasattr(class_object, 'code')
+    """Check if class is a violation class."""
+    return (
+        issubclass(class_object, BaseViolation) and
+        hasattr(class_object, 'code')  # Not all subclasses have code
+    )
 
 
 def _get_violations_of_submodule(
