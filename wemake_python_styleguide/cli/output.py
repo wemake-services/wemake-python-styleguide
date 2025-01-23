@@ -1,4 +1,5 @@
 """Provides tool for outputting data."""
+
 import sys
 
 

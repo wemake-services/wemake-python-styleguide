@@ -26,6 +26,7 @@ _VIOLATION_MODULE_BASE: Final = 'wemake_python_styleguide.violations'
 @frozen
 class ViolationInfo:
     """Contains violation info."""
+
     identifier: str
     fully_qualified_id: str
     code: int
@@ -36,8 +37,8 @@ class ViolationInfo:
 def _is_a_violation(class_object) -> bool:
     """Check if class is a violation class."""
     return (
-        issubclass(class_object, BaseViolation) and
-        hasattr(class_object, 'code')  # Not all subclasses have code
+        issubclass(class_object, BaseViolation)
+        and hasattr(class_object, 'code')  # Not all subclasses have code
     )
 
 

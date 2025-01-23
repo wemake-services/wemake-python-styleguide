@@ -1,4 +1,5 @@
 """Test that wps explain command works fine."""
+
 import os
 import platform
 import subprocess
