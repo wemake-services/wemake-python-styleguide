@@ -34,7 +34,7 @@ def parse_args(args: Sequence[str], app: Application) -> argparse.Namespace:
     return parser.parse_args(args)
 
 
-def main() -> int:  # pragma: no cover
+def main() -> int:
     """Main function."""
     app = Application()
     if len(sys.argv) == 1:
