@@ -1,7 +1,6 @@
 """Main CLI utility file."""
 
 import argparse
-import sys
 
 from wemake_python_styleguide.cli.application import Application
 
@@ -38,7 +37,3 @@ def main() -> int:
     app = Application()
     args = parse_args(app)
     return int(args.func(args))
-
-
-if __name__ == '__main__':
-    sys.exit(main())
