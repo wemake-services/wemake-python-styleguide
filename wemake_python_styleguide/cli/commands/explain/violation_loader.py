@@ -26,11 +26,13 @@ class ViolationInfo:
 
 def _is_a_violation(class_object) -> bool:
     """Check if class is a violation class."""
-    return (
-        isinstance(class_object, type)  # py 3.10 tests don't pass w/o that
-        and issubclass(class_object, BaseViolation)
-        and hasattr(class_object, 'code')  # Only end-user classes have code
-    )
+    try:
+        return (
+            issubclass(class_object, BaseViolation)
+            and hasattr(class_object, 'code')  # Only end-user classes have code
+        )
+    except TypeError:  # py 3.10 bug raises a type error
+        return False
 
 
 def _get_violations_of_submodule(
