@@ -1,4 +1,5 @@
 """Contains command implementation."""
+from attrs import frozen
 
 from wemake_python_styleguide.cli.commands.base import AbstractCommand
 from wemake_python_styleguide.cli.commands.explain import (
@@ -17,10 +18,19 @@ def _clean_violation_code(violation_str: str) -> int:
         return -1
 
 
-class ExplainCommand(AbstractCommand):
+@frozen
+class ExplainCommandArgs:
+    """Arguments for wps explain command."""
+
+    violation_code: str
+
+
+class ExplainCommand(AbstractCommand[ExplainCommandArgs]):
     """Explain command impl."""
 
-    def run(self, args) -> int:
+    args_type = ExplainCommandArgs
+
+    def run(self, args: ExplainCommandArgs) -> int:
         """Run command."""
         code = _clean_violation_code(args.violation_code)
         violation = violation_loader.get_violation(code)

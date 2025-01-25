@@ -1,7 +1,4 @@
-"""Main CLI utility file."""
-
 import argparse
-import sys
 
 from wemake_python_styleguide.cli.application import Application
 
@@ -11,8 +8,10 @@ def _configure_arg_parser(app: Application) -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog='wps', description='WPS command line tool'
     )
-    sub_parsers = parser.add_subparsers(help='sub-command help')
-    sub_parsers.required = True
+    sub_parsers = parser.add_subparsers(
+        help='sub-parser for exact wps commands',
+        required=True,
+    )
 
     parser_explain = sub_parsers.add_parser(
         'explain',
@@ -22,7 +21,7 @@ def _configure_arg_parser(app: Application) -> argparse.ArgumentParser:
         'violation_code',
         help='Desired violation code',
     )
-    parser_explain.set_defaults(func=app.run_explain)
+    parser_explain.set_defaults(func=app.curry_run_subcommand('explain'))
 
     return parser
 
@@ -37,8 +36,4 @@ def main() -> int:
     """Main function."""
     app = Application()
     args = parse_args(app)
-    return int(args.func(args))
-
-
-if __name__ == '__main__':
-    sys.exit(main())
+    return int(args.func(args=args))
