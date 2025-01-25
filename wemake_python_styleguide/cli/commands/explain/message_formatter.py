@@ -1,4 +1,5 @@
 """Provides tools for formatting explanations."""
+
 import textwrap
 
 from wemake_python_styleguide.cli.commands.explain.violation_loader import (
