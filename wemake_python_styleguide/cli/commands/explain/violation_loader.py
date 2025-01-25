@@ -31,7 +31,8 @@ def _is_a_violation(class_object) -> bool:
             issubclass(class_object, BaseViolation)
             and hasattr(class_object, 'code')  # Only end-user classes have code
         )
-    except TypeError:  # py 3.10 bug raises a type error
+    except TypeError:  # pragma: no cover
+        # py 3.10 bug raises a type error
         return False
 
 
