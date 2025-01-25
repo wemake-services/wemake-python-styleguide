@@ -1,4 +1,5 @@
 """Provides tools to extract violation info."""
+
 import inspect
 from collections.abc import Collection, Mapping
 from types import ModuleType
@@ -43,9 +44,7 @@ def _get_violations_of_submodule(
     ]
 
 
-def _create_violation_info(
-    class_object, submodule_name: str
-) -> ViolationInfo:
+def _create_violation_info(class_object, submodule_name: str) -> ViolationInfo:
     """Create violation info DTO from violation class and metadata."""
     return ViolationInfo(
         identifier=class_object.__name__,
