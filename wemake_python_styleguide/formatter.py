@@ -36,15 +36,13 @@ from pygments import highlight
 from pygments.formatters import TerminalFormatter
 from pygments.lexers import PythonLexer
 
+from wemake_python_styleguide.constants import SHORTLINK_TEMPLATE
 from wemake_python_styleguide.version import pkg_version
 
 #: That url is generated and hosted by Sphinx.
 _DOCS_URL_TEMPLATE: Final = (
     'https://wemake-python-styleguide.rtfd.io/en/{0}/pages/usage/violations/'
 )
-
-#: This url points to the specific violation page.
-_SHORTLINK_TEMPLATE: Final = 'https://pyflak.es/{0}'
 
 #: Option to disable any code highlight and text output format.
 #: See https://no-color.org
@@ -162,7 +160,7 @@ class WemakeFormatter(BaseFormatter):  # noqa: WPS214
 
         return '  {spacing}-> {link}'.format(
             spacing=' ' * 9,
-            link=_SHORTLINK_TEMPLATE.format(error.code),
+            link=SHORTLINK_TEMPLATE.format(error.code),
         )
 
     def _print_header(self, filename: str) -> None:

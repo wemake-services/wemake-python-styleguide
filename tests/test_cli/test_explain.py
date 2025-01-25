@@ -59,7 +59,6 @@ violation_mock = violation_loader.ViolationInfo(
     identifier='Mock',
     code=100,
     docstring='docstring',
-    fully_qualified_id='mock.Mock',
     section='mock',
 )
 violation_string = 'docstring\n\nSee at website: https://pyflak.es/WPS100'
@@ -118,5 +117,5 @@ def test_no_command_specified(snapshot):
     """Test command displays error message when no subcommand provided."""
     process = _popen_in_shell('wps')
     stdout, stderr = process.communicate()
-    assert process.returncode == 1, (stdout, stderr)
+    assert process.returncode != 0, (stdout, stderr)
     assert stderr == snapshot

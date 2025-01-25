@@ -29,25 +29,26 @@
 # ---
 # name: test_command_on_not_found[wps explain 10000]
   '''
-  Violation not found
+  Violation "10000" not found
   
   '''
 # ---
 # name: test_command_on_not_found[wps explain NOT_A_CODE]
   '''
-  Violation not found
+  Violation "NOT_A_CODE" not found
   
   '''
 # ---
 # name: test_command_on_not_found[wps explain WPS10000]
   '''
-  Violation not found
+  Violation "WPS10000" not found
   
   '''
 # ---
 # name: test_no_command_specified
   '''
-  Command not specified. Usage: wps help
+  usage: wps [-h] {explain} ...
+  wps: error: the following arguments are required: {explain}
   
   '''
 # ---

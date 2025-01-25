@@ -1,24 +1,13 @@
 """Provides tools for formatting explanations."""
 
-from typing import Final
-
 from wemake_python_styleguide.cli.commands.explain.violation_loader import (
     ViolationInfo,
 )
-
-_DOCS_URL: Final = 'https://pyflak.es/{0}'
+from wemake_python_styleguide.constants import SHORTLINK_TEMPLATE
 
 
 def _clean_text(text: str) -> str:
-    """
-    Cleans provided text.
-
-    Args:
-        text: target text
-
-    Returns:
-        text with normalized newlines (CRs and CRLFs transformed to LFs).
-    """
+    """Normalize line endings and clean text."""
     return text.replace('\r\n', '\n').replace('\r', '\n')
 
 
@@ -62,7 +51,8 @@ def _remove_newlines_at_ends(text: str) -> str:
 
 def format_violation(violation: ViolationInfo) -> str:
     """Format violation information."""
-    cleaned_docstring = _remove_indentation(violation.docstring)
-    cleaned_docstring = _remove_newlines_at_ends(cleaned_docstring)
-    violation_url = _DOCS_URL.format(f'WPS{violation.code}')
+    cleaned_docstring = _remove_newlines_at_ends(
+        _remove_indentation(violation.docstring)
+    )
+    violation_url = SHORTLINK_TEMPLATE.format(f'WPS{violation.code}')
     return f'{cleaned_docstring}\n\nSee at website: {violation_url}'
