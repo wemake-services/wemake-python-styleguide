@@ -1,10 +1,13 @@
 """Provides WPS CLI application class."""
+
 import functools
 from argparse import Namespace
 from collections.abc import Callable, Mapping
-from typing import final, Any
+from typing import Any, final
 
-from wemake_python_styleguide.cli.commands.base import AbstractCommand, Initialisable
+from wemake_python_styleguide.cli.commands.base import (
+    AbstractCommand,
+)
 from wemake_python_styleguide.cli.commands.explain.command import ExplainCommand
 
 

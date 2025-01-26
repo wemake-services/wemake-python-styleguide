@@ -1,4 +1,5 @@
 """Contains command implementation."""
+
 from attrs import frozen
 
 from wemake_python_styleguide.cli.commands.base import AbstractCommand
