@@ -5,9 +5,7 @@ import subprocess
 import pytest
 
 
-def _popen_in_shell(
-    args: str
-) -> tuple[subprocess.Popen, str, str]:
+def _popen_in_shell(args: str) -> tuple[subprocess.Popen, str, str]:
     """Run command in shell."""
     # shell=True is needed for subprocess.Popen to
     # locate the installed wps command.
