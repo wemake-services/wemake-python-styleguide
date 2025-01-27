@@ -35,7 +35,7 @@ class ExplainCommand(AbstractCommand[ExplainCommandArgs]):
 
     _args_type = ExplainCommandArgs
 
-    def run(self, args: ExplainCommandArgs) -> int:
+    def _run(self, args: ExplainCommandArgs) -> int:
         """Run command."""
         code = _clean_violation_code(args.violation_code)
         violation = violation_loader.get_violation(code)
