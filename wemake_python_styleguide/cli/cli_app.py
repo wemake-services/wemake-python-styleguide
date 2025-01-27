@@ -1,9 +1,9 @@
 import argparse
 
-from wemake_python_styleguide.cli.application import Application
+from wemake_python_styleguide.cli.commands.explain.command import ExplainCommand
 
 
-def _configure_arg_parser(app: Application) -> argparse.ArgumentParser:
+def _configure_arg_parser() -> argparse.ArgumentParser:
     """Configures CLI arguments and subcommands."""
     parser = argparse.ArgumentParser(
         prog='wps', description='WPS command line tool'
@@ -21,19 +21,18 @@ def _configure_arg_parser(app: Application) -> argparse.ArgumentParser:
         'violation_code',
         help='Desired violation code',
     )
-    parser_explain.set_defaults(func=app.curry_run_subcommand('explain'))
+    parser_explain.set_defaults(func=ExplainCommand())
 
     return parser
 
 
-def parse_args(app: Application) -> argparse.Namespace:
+def parse_args() -> argparse.Namespace:
     """Parse CLI arguments."""
-    parser = _configure_arg_parser(app)
+    parser = _configure_arg_parser()
     return parser.parse_args()
 
 
 def main() -> int:
     """Main function."""
-    app = Application()
-    args = parse_args(app)
+    args = parse_args()
     return int(args.func(args=args))

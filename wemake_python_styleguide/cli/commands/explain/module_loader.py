@@ -1,6 +1,5 @@
 import importlib
 from collections.abc import Collection
-from contextlib import suppress
 from pathlib import Path
 from types import ModuleType
 from typing import Final
@@ -16,13 +15,10 @@ def get_violation_submodules() -> Collection[ModuleType]:
 def _safely_get_all_submodules(module_name: str) -> Collection[ModuleType]:
     """Get all submodules of given module. Ignore missing."""
     submodule_names = _get_all_possible_submodule_names(module_name)
-    modules = []
-    for submodule_name in submodule_names:
-        # just in case if there are some bad module paths
-        # (which generally should not happen)
-        with suppress(ModuleNotFoundError):
-            modules.append(importlib.import_module(submodule_name))
-    return modules
+    return [
+        importlib.import_module(submodule_name)
+        for submodule_name in submodule_names
+    ]
 
 
 def _get_all_possible_submodule_names(module_name: str) -> Collection[str]:
