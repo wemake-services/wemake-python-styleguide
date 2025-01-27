@@ -1,4 +1,5 @@
 """Contains command implementation."""
+
 from typing import final
 
 from attrs import frozen
@@ -34,7 +35,7 @@ class ExplainCommand(AbstractCommand[ExplainCommandArgs]):
 
     _args_type = ExplainCommandArgs
 
-    def _run(self, args: ExplainCommandArgs) -> int:
+    def run(self, args: ExplainCommandArgs) -> int:
         """Run command."""
         code = _clean_violation_code(args.violation_code)
         violation = violation_loader.get_violation(code)

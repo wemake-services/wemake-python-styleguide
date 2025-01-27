@@ -9,6 +9,7 @@ _ArgsT = TypeVar('_ArgsT')
 
 class AbstractCommand(ABC, Generic[_ArgsT]):
     """ABC for all commands."""
+
     _args_type: type[_ArgsT]
 
     def __call__(self, args: Namespace) -> int:
