@@ -9,12 +9,7 @@ _VIOLATION_MODULE_BASE: Final = 'wemake_python_styleguide.violations'
 
 def get_violation_submodules() -> Collection[ModuleType]:
     """Get all possible violation submodules."""
-    return _safely_get_all_submodules(_VIOLATION_MODULE_BASE)
-
-
-def _safely_get_all_submodules(module_name: str) -> Collection[ModuleType]:
-    """Get all submodules of given module. Ignore missing."""
-    submodule_names = _get_all_possible_submodule_names(module_name)
+    submodule_names = _get_all_possible_submodule_names(_VIOLATION_MODULE_BASE)
     return [
         importlib.import_module(submodule_name)
         for submodule_name in submodule_names
