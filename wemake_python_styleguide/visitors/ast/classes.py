@@ -162,9 +162,7 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_bound_methods(self, node: types.AnyFunctionDef) -> None:
-        is_staticmethod = functions.is_staticmethod(node)
-
-        if is_staticmethod:
+        if functions.is_staticmethod(node):
             self.add_violation(oop.StaticMethodViolation(node))
         elif not functions.get_all_arguments(node):
             self.add_violation(
