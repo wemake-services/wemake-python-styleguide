@@ -265,11 +265,6 @@ class MethodWithoutArgumentsViolation(ASTViolation):
         class Test:
             def method(self): ...
 
-        # Correct:
-        class Test:
-            @staticmethod
-            def method(): ...
-
         # Wrong:
         class Test:
             def method(): ...
