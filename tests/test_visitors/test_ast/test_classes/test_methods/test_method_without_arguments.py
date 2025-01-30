@@ -102,4 +102,4 @@ def test_with_arguments(
     visitor = WrongMethodVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [], ignored_types=(StaticMethodViolation,))
+    assert_errors(visitor, [], ignored_types=StaticMethodViolation)
