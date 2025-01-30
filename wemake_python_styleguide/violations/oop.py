@@ -275,7 +275,7 @@ class MethodWithoutArgumentsViolation(ASTViolation):
             def method(): ...
 
     .. versionadded:: 0.7.0
-    .. versionchanged:: 1.0.1
+    .. versionchanged:: 1.1.0
 
     """
 
