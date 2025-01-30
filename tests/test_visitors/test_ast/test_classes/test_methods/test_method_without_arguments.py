@@ -2,11 +2,18 @@ import pytest
 
 from wemake_python_styleguide.violations.oop import (
     MethodWithoutArgumentsViolation,
+    StaticMethodViolation,
 )
 from wemake_python_styleguide.visitors.ast.classes import WrongMethodVisitor
 
 method_inside_class = """
 class Example:
+    def some_name({0}): ...
+"""
+
+staticmethod_inside_class = """
+class Example:
+    @staticmethod
     def some_name({0}): ...
 """
 
@@ -45,10 +52,27 @@ def test_function_without_arguments(
     assert_errors(visitor, [])
 
 
+def test_staticmethod_without_arguments(
+    assert_errors,
+    parse_ast_tree,
+    mode,
+    default_options,
+):
+    """Testing that no arguments for method raises a violation."""
+    tree = parse_ast_tree(mode(staticmethod_inside_class.format('')))
+
+    visitor = WrongMethodVisitor(default_options, tree=tree)
+    visitor.run()
+
+    # will error on @staticmethod presence, but not on arguments absence
+    assert_errors(visitor, [], ignored_types=StaticMethodViolation)
+
+
 @pytest.mark.parametrize(
     'code',
     [
         method_inside_class,
+        staticmethod_inside_class,
         regular_function,
     ],
 )
@@ -78,4 +102,4 @@ def test_with_arguments(
     visitor = WrongMethodVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [])
+    assert_errors(visitor, [], ignored_types=StaticMethodViolation)

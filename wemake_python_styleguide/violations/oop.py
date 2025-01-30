@@ -250,7 +250,7 @@ class MethodWithoutArgumentsViolation(ASTViolation):
 
     Reasoning:
         Methods without arguments are allowed to be defined,
-        but almost impossible to use.
+        but almost impossible to use, if they are not @staticmethods.
         Furthermore, they don't have an access to ``self``,
         so cannot access the inner state of the object.
         It might be an intentional design or just a typo.
@@ -271,6 +271,8 @@ class MethodWithoutArgumentsViolation(ASTViolation):
 
     .. versionadded:: 0.7.0
     .. versionchanged:: 0.11.0
+    .. versionchanged:: 1.1.0
+       Allows usage of ``@staticmethod`` with no arguments.
 
     """
 
