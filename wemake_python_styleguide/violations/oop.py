@@ -270,7 +270,9 @@ class MethodWithoutArgumentsViolation(ASTViolation):
             def method(): ...
 
     .. versionadded:: 0.7.0
+    .. versionchanged:: 0.11.0
     .. versionchanged:: 1.1.0
+       Allows usage of ``@staticmethod`` with no arguments.
 
     """
 
