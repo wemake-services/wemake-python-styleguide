@@ -159,7 +159,9 @@ def test_string_overuse_settings(
 def test_string_overuse(
     assert_errors,
     assert_error_text,
+    assert_error_location,
     parse_ast_tree,
+    overused_string_expected_location,
     default_options,
     strings,
     prefix,
@@ -167,7 +169,9 @@ def test_string_overuse(
 ):
     """Ensures that over-used strings raise violations."""
     tree = parse_ast_tree(strings.format(prefix + string_value))
-
+    expected_location = overused_string_expected_location(
+        tree, string_value, prefix
+    )
     visitor = StringOveruseVisitor(default_options, tree=tree)
     visitor.run()
 
@@ -177,6 +181,7 @@ def test_string_overuse(
         string_value.replace('"', '') or "''",
         default_options.max_string_usages,
     )
+    assert_error_location(visitor, expected_location)
 
 
 @pytest.mark.parametrize(
