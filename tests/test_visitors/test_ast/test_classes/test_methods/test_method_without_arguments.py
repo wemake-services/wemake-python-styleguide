@@ -65,7 +65,7 @@ def test_staticmethod_without_arguments(
     visitor.run()
 
     # will error on @staticmethod presence, but not on arguments absence
-    assert_errors(visitor, [], ignored_types=(StaticMethodViolation,))
+    assert_errors(visitor, [], ignored_types=StaticMethodViolation)
 
 
 @pytest.mark.parametrize(
