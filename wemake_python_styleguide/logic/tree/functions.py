@@ -23,6 +23,8 @@ _OVERLOAD_EXCEPTIONS: Final = frozenset((
     'typing_extensions.overload',
 ))
 
+_STATICMETHOD_NAMES: Final = frozenset(('staticmethod',))
+
 
 def given_function_called(
     node: ast.Call,
@@ -102,4 +104,13 @@ def is_overload(node: ast.AST) -> bool:
         for decorator in node.decorator_list:
             if source.node_to_string(decorator) in _OVERLOAD_EXCEPTIONS:
                 return True
+    return False
+
+
+def is_staticmethod(node: AnyFunctionDef) -> bool:
+    """Check that function decorated with @staticmethod."""
+    for decorator in node.decorator_list:
+        decorator_name = getattr(decorator, 'id', None)
+        if decorator_name in _STATICMETHOD_NAMES:
+            return True
     return False
