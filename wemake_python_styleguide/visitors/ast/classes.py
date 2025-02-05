@@ -146,14 +146,12 @@ class WrongClassBodyVisitor(base.BaseNodeVisitor):
 class WrongMethodVisitor(base.BaseNodeVisitor):
     """Visits functions, but treats them as methods."""
 
-    _staticmethod_names: ClassVar[frozenset[str]] = frozenset(('staticmethod',))
     _special_async_iter: ClassVar[frozenset[str]] = frozenset(('__aiter__',))
 
     def visit_any_function(self, node: types.AnyFunctionDef) -> None:
         """Checking class methods: async and regular."""
         node_context = nodes.get_context(node)
         if isinstance(node_context, ast.ClassDef):
-            self._check_decorators(node)
             self._check_bound_methods(node)
             self._check_yield_magic_methods(node)
             self._check_async_magic_methods(node)
@@ -163,14 +161,10 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
             )
         self.generic_visit(node)
 
-    def _check_decorators(self, node: types.AnyFunctionDef) -> None:
-        for decorator in node.decorator_list:
-            decorator_name = getattr(decorator, 'id', None)
-            if decorator_name in self._staticmethod_names:
-                self.add_violation(oop.StaticMethodViolation(node))
-
     def _check_bound_methods(self, node: types.AnyFunctionDef) -> None:
-        if not functions.get_all_arguments(node):
+        if functions.is_staticmethod(node):
+            self.add_violation(oop.StaticMethodViolation(node))
+        elif not functions.get_all_arguments(node):
             self.add_violation(
                 oop.MethodWithoutArgumentsViolation(node, text=node.name),
             )

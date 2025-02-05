@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "poetry.core.masonry.api"
-requires = [ "poetry-core>=1.9" ]
+requires = [ "poetry-core>=2.0" ]
 
 [tool.poetry]
 name = "wemake-python-styleguide"
@@ -75,7 +75,7 @@ astpath = "^0.9"
 lxml = "^5.1"
 nbqa = "^1.2"
 ruff = "^0.9"
-black = "^24.10"
+black = ">=24.10,<26.0"
 
 [tool.poetry.group.docs]
 optional = true
@@ -206,7 +206,8 @@ xfail_strict = true
 filterwarnings = [ "error" ]
 
 addopts = [
-  "--strict",
+  "--strict-config",
+  "--strict-markers",
   "--doctest-modules",
   # pytest-cov
   "--cov=wemake_python_styleguide",
@@ -272,3 +273,6 @@ disallow_any_explicit = false
 module = "wemake_python_styleguide.compat.packaging"
 # We allow unused `ignore` comments, because we cannot sync it between versions:
 warn_unused_ignores = false
+
+[tool.poetry.scripts]
+wps = "wemake_python_styleguide.cli.cli_app:main"
