@@ -24,6 +24,7 @@ Semantic versioning in our case means:
 - Fixes `WPS115` false-positive on `Enum` attributes, #3238
 - Removes duplicated `WPS312`, #3239
 - Fixes `WPS432`, now it shows literal num, #1402
+- Fixes `WPS226`, now it points to the first string literal occurrence, #3267
 
 ## 1.0.0
 
