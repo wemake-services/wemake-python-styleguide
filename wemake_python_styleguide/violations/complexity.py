@@ -881,6 +881,8 @@ class OverusedStringViolation(MaybeASTViolation):
     single space `' '`, new line `'\n'`, `'\r\n'` and tabulator `'\t'`
     do not count against string literal overuse limit.
 
+    The violation points to the first occurrence of the overused string literal.
+
     Reasoning:
         When some string is used more than several time in your code,
         it probably means that this string is a meaningful constant

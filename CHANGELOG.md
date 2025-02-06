@@ -29,8 +29,8 @@ This version introduces `wps` CLI tool.
 - Fixes `WPS115` false-positive on `Enum` attributes, #3238
 - Removes duplicated `WPS312`, #3239
 - Fixes `WPS432`, now it shows literal num, #1402
+- Fixes `WPS226`, now it points to the first string literal occurrence, #3267
 - Fixes `WPS605` false-positive on `@staticmethod`, #3292
-
 
 ## 1.0.0
 

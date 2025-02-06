@@ -96,6 +96,8 @@ def function() -> Dict[int, {0}]:
     ...
 """
 
+EXPECTED_LOCATION = (2, 8)
+
 
 @pytest.mark.parametrize(
     'strings',
@@ -159,6 +161,7 @@ def test_string_overuse_settings(
 def test_string_overuse(
     assert_errors,
     assert_error_text,
+    assert_error_location,
     parse_ast_tree,
     default_options,
     strings,
@@ -167,7 +170,6 @@ def test_string_overuse(
 ):
     """Ensures that over-used strings raise violations."""
     tree = parse_ast_tree(strings.format(prefix + string_value))
-
     visitor = StringOveruseVisitor(default_options, tree=tree)
     visitor.run()
 
@@ -177,6 +179,7 @@ def test_string_overuse(
         string_value.replace('"', '') or "''",
         default_options.max_string_usages,
     )
+    assert_error_location(visitor, EXPECTED_LOCATION)
 
 
 @pytest.mark.parametrize(
