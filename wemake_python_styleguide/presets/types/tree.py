@@ -84,6 +84,7 @@ PRESET: Final = (
     decorators.WrongDecoratorVisitor,
     redundancy.RedundantEnumerateVisitor,
     pm.MatchSubjectVisitor,
+    classes.ConsecutiveDefaultTypeVarsVisitor,
     # Modules:
     modules.EmptyModuleContentsVisitor,
     modules.MagicModuleFunctionsVisitor,

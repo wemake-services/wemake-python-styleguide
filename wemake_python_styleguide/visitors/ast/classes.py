@@ -1,6 +1,9 @@
 import ast
 from collections import defaultdict
-from typing import ClassVar, final
+from collections.abc import Sequence
+from typing import ClassVar, final, cast
+
+from attrs import frozen
 
 from wemake_python_styleguide import constants, types
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
@@ -15,8 +18,12 @@ from wemake_python_styleguide.logic.tree import (
     getters_setters,
     strings,
 )
+from wemake_python_styleguide.options.validation import ValidatedOptions
 from wemake_python_styleguide.violations import best_practices as bp
 from wemake_python_styleguide.violations import consistency, oop
+from wemake_python_styleguide.violations.best_practices import (
+    TypeVarTupleFollowsTypeVarWithDefaultViolation,
+)
 from wemake_python_styleguide.visitors import base, decorators
 
 
@@ -493,3 +500,101 @@ class BuggySuperCallVisitor(base.BaseNodeVisitor):
 
         if walk.get_closest_parent(node, self._buggy_super_contexts):
             self.add_violation(oop.BuggySuperContextViolation(node))
+
+
+@frozen
+class TypeVarInfo:
+    name: str
+    has_default: bool
+
+
+@final
+@decorators.alias(
+    'visit_any_assign',
+    (
+        'visit_Assign',
+        'visit_AnnAssign',
+    ),
+)
+class ConsecutiveDefaultTypeVarsVisitor(base.BaseNodeVisitor):
+    """Responsible for finding TypeVarTuple after a TypeVar with default."""
+
+    def __init__(
+        self, options: ValidatedOptions, tree: ast.AST, **kwargs
+    ) -> None:
+        super().__init__(options, tree, **kwargs)
+        self._defaulted_typevars: set[str] = set()
+
+    def visit_any_assign(self, node: types.AnyAssign) -> None:
+        typevar = self._assume_typevar_creation(node)
+        if not typevar or not typevar.has_default:
+            return
+        self._defaulted_typevars.add(typevar.name)
+
+    def _assume_typevar_creation(
+        self, node: types.AnyAssign
+    ) -> TypeVarInfo | None:
+        if not isinstance(node.value, ast.Call):
+            return None
+        if not isinstance(node.value.func, ast.Name):
+            return None
+        if len(node.targets) != 1:  # pragma: no cover
+            return None
+        if not isinstance(node.targets[0], ast.Name):
+            return None
+        if node.value.func.id != "TypeVar":
+            return None
+        return TypeVarInfo(
+            name=cast(ast.Name, node.targets[0]).id,
+            has_default=any(
+                cast(ast.keyword, kw).arg == "default"
+                for kw in node.value.keywords
+            )
+        )
+
+    def visit_ClassDef(self, node: ast.ClassDef) -> None:
+        if hasattr(node, "type_params"):  # pragma: no cover
+            self._check_new_style_generics(node.type_params)
+        self._check_old_style_generics(node.bases)
+
+    def _check_new_style_generics(
+        self, type_params: Sequence[ast.type_param]
+    ) -> None:
+        had_default = False
+        for type_param in type_params:
+            had_default = had_default or (
+                isinstance(type_param, ast.TypeVar)
+                and type_param.name in self._defaulted_typevars
+            )
+            if isinstance(type_param, ast.TypeVarTuple) and had_default:
+                self.add_violation(
+                    TypeVarTupleFollowsTypeVarWithDefaultViolation(type_param)
+                )
+
+    def _check_old_style_generics(self, bases: Sequence[ast.expr]) -> None:
+        for cls_base in bases:
+            if self._is_generic_tuple_base(cls_base):
+                self._check_generic_tuple(
+                    cls_base.slice.elts
+                )
+
+    def _is_generic_tuple_base(self, cls_base: ast.expr) -> bool:
+        if not isinstance(cls_base, ast.Subscript):
+            return False
+        if not isinstance(cls_base.value, ast.Name):
+            return False
+        if cls_base.value.id != "Generic":
+            return False
+        return isinstance(cls_base.slice, ast.Tuple)
+
+    def _check_generic_tuple(self, elts: Sequence[ast.expr]) -> None:
+        had_default = False
+        for expr in elts:
+            had_default = had_default or (
+                isinstance(expr, ast.Name)
+                and expr.id in self._defaulted_typevars
+            )
+            if isinstance(expr, ast.Starred) and had_default:
+                self.add_violation(
+                    TypeVarTupleFollowsTypeVarWithDefaultViolation(expr)
+                )
