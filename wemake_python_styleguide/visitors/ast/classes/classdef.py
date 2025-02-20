@@ -196,7 +196,7 @@ class ConsecutiveDefaultTypeVarsVisitor(base.BaseNodeVisitor):
         )
 
     def _check_new_style_generics(
-        self, type_params: Sequence[ast.type_param]
+        self, type_params: Sequence[ast.AST]
     ) -> None:
         had_default = False
         for type_param in type_params:
