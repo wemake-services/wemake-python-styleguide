@@ -2971,7 +2971,7 @@ class ProblematicFunctionParamsViolation(ASTViolation):
 
 
 @final
-class TypeVarTupleFollowsTypeVarWithDefaultViolation(ASTViolation):
+class SneakyTypeVarWithDefaultViolation(ASTViolation):
     """
     Forbid using TypeVarTuple after a TypeVar with default.
 

@@ -3,16 +3,15 @@ from typing import Final
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
-    TypeVarTupleFollowsTypeVarWithDefaultViolation,
+    SneakyTypeVarWithDefaultViolation,
 )
-from wemake_python_styleguide.visitors.ast.classes import (
+from wemake_python_styleguide.visitors.ast.classes.classdef import (
     ConsecutiveDefaultTypeVarsVisitor,
 )
 
-
 class_header_formats: Final[list[str]] = [
-    "Class[{0}]",
-    "Class(Generic[{0}])"
+    'Class[{0}]',
+    'Class(Generic[{0}])'
 ]
 various_code: Final[str] = (
     "pi = 3.14\n"
@@ -23,25 +22,25 @@ various_code: Final[str] = (
     "NonDefault = TypeVar('NonDefault')\n"
 )
 classes_with_various_bases: Final[str] = (
-    "class SimpleBase(object): ...\n"
-    "class NotANameSubscript(Some.Class[object]): ...\n"
-    "class NotAGenericBase(NotAGeneric[T]): ...\n"
-    "class GenericButNotMultiple(Generic[T]): ...\n"
+    'class SimpleBase(object): ...\n'
+    'class NotANameSubscript(Some.Class[object]): ...\n'
+    'class NotAGenericBase(NotAGeneric[T]): ...\n'
+    'class GenericButNotMultiple(Generic[T]): ...\n'
 )
 
 
 @pytest.mark.parametrize(
-    "class_header_format",
+    'class_header_format',
     class_header_formats,
 )
-def test_type_var_tuple_after_type_var_with_default(
+def test_sneaky_type_var_with_default(
     assert_errors,
     parse_ast_tree,
     default_options,
     class_header_format,
 ):
     """Test that WPS476 works correctly."""
-    class_header = class_header_format.format("T, *Ts")
+    class_header = class_header_format.format('T, *Ts')
     src = (
         various_code +
         classes_with_various_bases +
@@ -57,21 +56,21 @@ def test_type_var_tuple_after_type_var_with_default(
     visitor = ConsecutiveDefaultTypeVarsVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [TypeVarTupleFollowsTypeVarWithDefaultViolation])
+    assert_errors(visitor, [SneakyTypeVarWithDefaultViolation])
 
 
 @pytest.mark.parametrize(
-    "class_header_format",
+    'class_header_format',
     class_header_formats,
 )
-def test_type_var_tuple_after_type_var_without_default(
+def test_sneaky_type_var_without_default(
     assert_errors,
     parse_ast_tree,
     default_options,
     class_header_format,
 ):
     """Test that WPS476 ignores non-defaulted TypeVars."""
-    class_header = class_header_format.format("T, *Ts")
+    class_header = class_header_format.format('T, *Ts')
     src = (
         various_code +
         classes_with_various_bases +
