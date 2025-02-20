@@ -6,6 +6,7 @@ from attrs import frozen
 
 from wemake_python_styleguide import types
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
+from wemake_python_styleguide.compat.nodes import TypeVar, TypeVarTuple
 from wemake_python_styleguide.logic.naming import enums
 from wemake_python_styleguide.logic.tree import (
     attributes,
@@ -169,12 +170,14 @@ class ConsecutiveDefaultTypeVarsVisitor(base.BaseNodeVisitor):
         if not typevar or not typevar.has_default:
             return
         self._defaulted_typevars.add(typevar.name)
+        self.generic_visit(node)
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """Check class definition for violation."""
         if hasattr(node, 'type_params'):  # pragma: no cover
             self._check_new_style_generics(node.type_params)
         self._check_old_style_generics(node.bases)
+        self.generic_visit(node)
 
     def _assume_typevar_creation(
         self, node: types.AnyAssign
@@ -196,10 +199,10 @@ class ConsecutiveDefaultTypeVarsVisitor(base.BaseNodeVisitor):
         had_default = False
         for type_param in type_params:
             had_default = had_default or (
-                isinstance(type_param, ast.TypeVar)
+                isinstance(type_param, TypeVar)
                 and type_param.name in self._defaulted_typevars
             )
-            if isinstance(type_param, ast.TypeVarTuple) and had_default:
+            if isinstance(type_param, TypeVarTuple) and had_default:
                 self.add_violation(
                     SneakyTypeVarWithDefaultViolation(type_param)
                 )
