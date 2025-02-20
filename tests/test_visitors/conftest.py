@@ -100,3 +100,18 @@ def assert_error_text():
         assert reproduction.message() == violation.message()
 
     return factory
+
+
+@pytest.fixture(scope='session')
+def assert_error_location():
+    """Helper function to assert visitor violation location is expected."""
+
+    def factory(
+        visitor: BaseVisitor,
+        expected: tuple[int, int],
+    ) -> None:
+        assert len(visitor.violations) == 1
+        violation = visitor.violations[0]
+        assert violation._location() == expected  # noqa: SLF001
+
+    return factory

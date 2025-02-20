@@ -75,7 +75,7 @@ astpath = "^0.9"
 lxml = "^5.1"
 nbqa = "^1.2"
 ruff = "^0.9"
-black = "^24.10"
+black = ">=24.10,<26.0"
 
 [tool.poetry.group.docs]
 optional = true
@@ -273,3 +273,6 @@ disallow_any_explicit = false
 module = "wemake_python_styleguide.compat.packaging"
 # We allow unused `ignore` comments, because we cannot sync it between versions:
 warn_unused_ignores = false
+
+[tool.poetry.scripts]
+wps = "wemake_python_styleguide.cli.cli_app:main"

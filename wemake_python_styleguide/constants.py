@@ -43,6 +43,9 @@ UNUSED_PLACEHOLDER: Final = '_'
 # Values beyond this line are public and should be used.
 # ------------------------------------------------------
 
+#: This url points to the specific violation page.
+SHORTLINK_TEMPLATE: Final = 'https://pyflak.es/{0}'
+
 #: List of functions we forbid to use.
 FUNCTIONS_BLACKLIST: Final = frozenset(
     (

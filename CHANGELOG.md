@@ -17,13 +17,20 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
-## 1.0.1 WIP
+## 1.1.0 WIP
+
+### Command line utility
+
+This version introduces `wps` CLI tool.
+- `wps explain <code>` command can be used to access WPS violation docs (same as on website) without internet access
 
 ### Bugfixes
 
 - Fixes `WPS115` false-positive on `Enum` attributes, #3238
 - Removes duplicated `WPS312`, #3239
 - Fixes `WPS432`, now it shows literal num, #1402
+- Fixes `WPS226`, now it points to the first string literal occurrence, #3267
+- Fixes `WPS605` false-positive on `@staticmethod`, #3292
 
 ## 1.0.0
 

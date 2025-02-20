@@ -1,0 +1,54 @@
+# serializer version: 1
+# name: test_command
+  '''
+  WPS123 — Forbid unused variables with multiple underscores.
+  
+  Reasoning:
+      We only use ``_`` as a special definition for an unused variable.
+      Other variables are hard to read. It is unclear why would one use it.
+  
+  Solution:
+      Rename unused variables to ``_``
+      or give it some more context with an explicit name: ``_context``.
+  
+  Example::
+  
+      # Correct:
+      some_element, _next_element, _ = some_tuple()
+      some_element, _, _ = some_tuple()
+      some_element, _ = some_tuple()
+  
+      # Wrong:
+      some_element, _, __  = some_tuple()
+  
+  .. versionadded:: 0.12.0
+  
+  See at website: https://pyflak.es/WPS123
+  
+  '''
+# ---
+# name: test_command_on_not_found[wps explain 10000]
+  '''
+  Violation "10000" not found
+  
+  '''
+# ---
+# name: test_command_on_not_found[wps explain NOT_A_CODE]
+  '''
+  Violation "NOT_A_CODE" not found
+  
+  '''
+# ---
+# name: test_command_on_not_found[wps explain WPS10000]
+  '''
+  Violation "WPS10000" not found
+  
+  '''
+# ---
+# name: test_no_command_specified
+  '''
+  usage: wps [-h] {explain} ...
+  wps: error: the following arguments are required: {explain}
+  
+  '''
+# ---
