@@ -44,7 +44,6 @@ else:  # pragma: <3.12 cover
         name: str
         bound: ast.expr | None  # noqa: WPS110
 
-
     class TypeVarTuple(ast.AST):
         """Used to define `TypeVarTuple` nodes from `python3.12+`."""
 
