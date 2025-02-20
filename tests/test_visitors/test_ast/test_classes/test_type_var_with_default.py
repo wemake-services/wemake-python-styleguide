@@ -44,7 +44,7 @@ def test_sneaky_type_var_with_default(
         "T = TypeVar('T', default=int)\n"
         "Ts = TypeVarTuple('Ts')\n"
         '\n'
-        f'class {various_code}:\n'
+        f'class {class_header}:\n'
         '    ...'
     )
 
