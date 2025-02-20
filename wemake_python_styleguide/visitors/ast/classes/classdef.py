@@ -192,9 +192,7 @@ class ConsecutiveDefaultTypeVarsVisitor(base.BaseNodeVisitor):
             has_default=any(kw.arg == 'default' for kw in node.value.keywords),
         )
 
-    def _check_new_style_generics(
-        self, type_params: Sequence[ast.AST]
-    ) -> None:
+    def _check_new_style_generics(self, type_params: Sequence[ast.AST]) -> None:
         had_default = False
         for type_param in type_params:
             had_default = had_default or (

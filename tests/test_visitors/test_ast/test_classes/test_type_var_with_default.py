@@ -39,14 +39,14 @@ def test_sneaky_type_var_with_default(
     """Test that WPS476 works correctly."""
     class_header = class_header_format.format('T, *Ts')
     src = (
-        '{0}\n'
-        '{1}\n'
+        f'{various_code}\n'
+        f'{classes_with_various_bases}\n'
         "T = TypeVar('T', default=int)\n"
         "Ts = TypeVarTuple('Ts')\n"
         '\n'
-        'class {0}:\n'
+        f'class {various_code}:\n'
         '    ...'
-    ).format(various_code, classes_with_various_bases, class_header)
+    )
 
     tree = parse_ast_tree(src)
 
@@ -69,14 +69,14 @@ def test_sneaky_type_var_without_default(
     """Test that WPS476 ignores non-defaulted TypeVars."""
     class_header = class_header_format.format('T, *Ts')
     src = (
-        '{0}\n'
-        '{1}\n'
+        f'{various_code}\n'
+        f'{classes_with_various_bases}\n'
         "T = TypeVar('T')\n"
         "Ts = TypeVarTuple('Ts')\n"
         '\n'
-        'class {2}:\n'
+        f'class {class_header}:\n'
         '    ...'
-    ).format(various_code, classes_with_various_bases, class_header)
+    )
 
     tree = parse_ast_tree(src)
 
