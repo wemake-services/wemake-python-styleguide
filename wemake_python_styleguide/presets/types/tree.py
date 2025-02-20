@@ -83,5 +83,5 @@ PRESET: Final = (
     # Topics:
     *complexity.PRESET,
     *naming.PRESET,
-    *classes.PRESET
+    *classes.PRESET,
 )

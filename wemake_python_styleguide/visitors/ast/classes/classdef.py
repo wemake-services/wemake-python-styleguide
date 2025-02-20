@@ -189,10 +189,7 @@ class ConsecutiveDefaultTypeVarsVisitor(base.BaseNodeVisitor):
             return None
         return TypeVarInfo(
             name=target.id,
-            has_default=any(
-                kw.arg == 'default'
-                for kw in node.value.keywords
-            )
+            has_default=any(kw.arg == 'default' for kw in node.value.keywords),
         )
 
     def _check_new_style_generics(
@@ -217,9 +214,7 @@ class ConsecutiveDefaultTypeVarsVisitor(base.BaseNodeVisitor):
                 and cls_base.value.id == 'Generic'
                 and isinstance(cls_base.slice, ast.Tuple)
             ):
-                self._check_generic_tuple(
-                    cls_base.slice.elts
-                )
+                self._check_generic_tuple(cls_base.slice.elts)
 
     def _check_generic_tuple(self, elts: Sequence[ast.expr]) -> None:
         had_default = False
@@ -229,9 +224,7 @@ class ConsecutiveDefaultTypeVarsVisitor(base.BaseNodeVisitor):
                 and expr.id in self._defaulted_typevars
             )
             if isinstance(expr, ast.Starred) and had_default:
-                self.add_violation(
-                    SneakyTypeVarWithDefaultViolation(expr)
-                )
+                self.add_violation(SneakyTypeVarWithDefaultViolation(expr))
 
 
 def _get_target_of_assign(assign: types.AnyAssign) -> ast.AST:
