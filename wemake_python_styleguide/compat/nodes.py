@@ -31,3 +31,20 @@ else:  # pragma: <3.12 cover
         name: ast.Name
         type_params: list[ast.stmt]
         value: ast.expr  # noqa: WPS110
+
+
+if sys.version_info >= (3, 12):  # pragma: >=3.12 cover
+    from ast import TypeVar as TypeVar
+    from ast import TypeVarTuple as TypeVarTuple
+else:  # pragma: <3.12 cover
+
+    class TypeVar(ast.AST):
+        """Used to define `TypeVar` nodes from `python3.12+`."""
+
+        name: str
+        bound: ast.expr | None  # noqa: WPS110
+
+    class TypeVarTuple(ast.AST):
+        """Used to define `TypeVarTuple` nodes from `python3.12+`."""
+
+        name: str
