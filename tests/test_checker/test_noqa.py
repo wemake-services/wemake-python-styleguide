@@ -346,7 +346,7 @@ def test_noqa_fixture_disabled(
     absolute_path, all_violations, filename, violations, run_condition
 ):
     """End-to-End test to check that all violations are present."""
-    if not run_condition:
+    if not run_condition:  # pragma: no cover
         return
     process = subprocess.Popen(
         [
@@ -384,7 +384,7 @@ def test_noqa_fixture_disabled(
 )
 def test_noqa_fixture(absolute_path, filename, run_condition):
     """End-to-End test to check that `noqa` works."""
-    if not run_condition:
+    if not run_condition:  # pragma: no cover
         return
     process = subprocess.Popen(
         [
@@ -418,7 +418,7 @@ def test_noqa_fixture_without_ignore(
     absolute_path, filename, ignored_violations, run_condition
 ):
     """End-to-End test to check that `noqa` works without ignores."""
-    if not run_condition:
+    if not run_condition:  # pragma: no cover
         return
     process = subprocess.Popen(
         [

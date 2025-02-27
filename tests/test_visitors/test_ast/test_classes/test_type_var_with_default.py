@@ -4,8 +4,8 @@ import pytest
 
 from wemake_python_styleguide.compat.constants import PY313
 
-if not PY313:
-    pytest.skip()
+if not PY313:  # pragma: no cover
+    pytest.skip("These tests use python 3.13+ features.")
 
 from wemake_python_styleguide.violations.best_practices import (
     SneakyTypeVarWithDefaultViolation,
