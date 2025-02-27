@@ -16,8 +16,11 @@ import re
 import subprocess
 import types
 from collections import Counter
+from typing import Final
 
 import pytest
+
+from wemake_python_styleguide.compat.constants import PY313
 
 #: Used to find violations' codes in output.
 ERROR_PATTERN = re.compile(r'(WPS\d{3})')
@@ -329,11 +332,14 @@ def test_codes(all_violations):
     assert len(SHOULD_BE_RAISED) == len(all_violations)
 
 
+ALWAYS: Final = True  # just for beautiful condition def
+
+
 @pytest.mark.parametrize(
-    ('filename', 'violations'),
+    ('filename', 'violations', 'run_condition'),
     [
-        ('noqa.py', SHOULD_BE_RAISED),
-        ('noqa313.py', SHOULD_BE_RAISED3_13),
+        ('noqa.py', SHOULD_BE_RAISED, ALWAYS),
+        ('noqa313.py', SHOULD_BE_RAISED3_13, PY313),
     ],
 )
 def test_noqa_fixture_disabled(
@@ -341,8 +347,11 @@ def test_noqa_fixture_disabled(
     all_violations,
     filename,
     violations,
+    run_condition
 ):
     """End-to-End test to check that all violations are present."""
+    if not run_condition:
+        return
     process = subprocess.Popen(
         [
             'flake8',
@@ -371,14 +380,16 @@ def test_noqa_fixture_disabled(
 
 
 @pytest.mark.parametrize(
-    'filename',
+    ('filename', 'run_condition'),
     [
-        'noqa.py',
-        'noqa313.py',
+        ('noqa.py', ALWAYS),
+        ('noqa313.py', PY313),
     ],
 )
-def test_noqa_fixture(absolute_path, filename):
+def test_noqa_fixture(absolute_path, filename, run_condition):
     """End-to-End test to check that `noqa` works."""
+    if not run_condition:
+        return
     process = subprocess.Popen(
         [
             'flake8',
@@ -401,16 +412,18 @@ def test_noqa_fixture(absolute_path, filename):
 
 
 @pytest.mark.parametrize(
-    ('filename', 'ignored_violations'),
+    ('filename', 'ignored_violations', 'run_condition'),
     [
-        ('noqa.py', IGNORED_VIOLATIONS),
-        ('noqa313.py', IGNORED_VIOLATIONS3_13),
+        ('noqa.py', IGNORED_VIOLATIONS, ALWAYS),
+        ('noqa313.py', IGNORED_VIOLATIONS3_13, PY313),
     ],
 )
 def test_noqa_fixture_without_ignore(
-    absolute_path, filename, ignored_violations
+    absolute_path, filename, ignored_violations, run_condition
 ):
     """End-to-End test to check that `noqa` works without ignores."""
+    if not run_condition:
+        return
     process = subprocess.Popen(
         [
             'flake8',

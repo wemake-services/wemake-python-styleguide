@@ -2,6 +2,11 @@ from typing import Final
 
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY313
+
+if not PY313:
+    pytest.skip()
+
 from wemake_python_styleguide.violations.best_practices import (
     SneakyTypeVarWithDefaultViolation,
 )
