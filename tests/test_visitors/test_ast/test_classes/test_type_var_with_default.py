@@ -62,9 +62,7 @@ def test_sneaky_type_var_with_default(
             '\n'
             'class Class(Generic[T, *Ts]):'
         ),
-        (
-            'class Class[T, *Ts]:'
-        )
+        ('class Class[T, *Ts]:'),
     ],
 )
 def test_type_var_ignored(
@@ -75,10 +73,7 @@ def test_type_var_ignored(
 ):
     """Test that WPS476 ignores non-defaulted and old TypeVars."""
     src = (
-        f'{various_code}\n'
-        f'{classes_with_various_bases}\n'
-        f'{class_header}\n'
-        '    ...'
+        f'{various_code}\n{classes_with_various_bases}\n{class_header}\n    ...'
     )
 
     tree = parse_ast_tree(src)

@@ -34,9 +34,7 @@ IGNORED_VIOLATIONS = (
 )
 
 #: List of ignored violations on python 3.13+.
-IGNORED_VIOLATIONS3_13 = (
-
-)
+IGNORED_VIOLATIONS3_13 = ()
 
 #: Number and count of violations that would be raised.
 SHOULD_BE_RAISED = types.MappingProxyType(
@@ -300,9 +298,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
 
 #: Number and count of violations that would be raised in 3.13+ section.
 SHOULD_BE_RAISED3_13 = types.MappingProxyType(
-    dict.fromkeys(SHOULD_BE_RAISED, 0) | {
-        'WPS476': 1
-    }
+    dict.fromkeys(SHOULD_BE_RAISED, 0) | {'WPS476': 1}
 )
 
 
@@ -379,7 +375,7 @@ def test_noqa_fixture_disabled(
     [
         'noqa.py',
         'noqa313.py',
-    ]
+    ],
 )
 def test_noqa_fixture(absolute_path, filename):
     """End-to-End test to check that `noqa` works."""
@@ -409,7 +405,7 @@ def test_noqa_fixture(absolute_path, filename):
     [
         ('noqa.py', IGNORED_VIOLATIONS),
         ('noqa313.py', IGNORED_VIOLATIONS3_13),
-    ]
+    ],
 )
 def test_noqa_fixture_without_ignore(
     absolute_path, filename, ignored_violations
