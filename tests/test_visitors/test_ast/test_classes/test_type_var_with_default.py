@@ -9,8 +9,8 @@ from wemake_python_styleguide.visitors.ast.classes.classdef import (
     ConsecutiveDefaultTypeVarsVisitor,
 )
 
-class_header_formats: Final[list[str]] = ['Class[{0}]', 'Class(Generic[{0}])']
-various_code: Final[str] = (
+class_header_formats: Final = ['Class[{0}]', 'Class(Generic[{0}])']
+various_code: Final = (
     'pi = 3.14\n'
     'a = obj.method_call()\n'
     'w, h = get_size()\n'
@@ -18,33 +18,24 @@ various_code: Final[str] = (
     'AlmostTypeVar = NotReallyATypeVar()\n'
     "NonDefault = TypeVar('NonDefault')\n"
 )
-classes_with_various_bases: Final[str] = (
+classes_with_various_bases: Final = (
     'class SimpleBase(object): ...\n'
     'class NotANameSubscript(Some.Class[object]): ...\n'
     'class NotAGenericBase(NotAGeneric[T]): ...\n'
-    'class GenericButNotMultiple(Generic[T]): ...\n'
+    'class OldGenericDefinition(Generic[T]): ...\n'
 )
 
 
-@pytest.mark.parametrize(
-    'class_header_format',
-    class_header_formats,
-)
 def test_sneaky_type_var_with_default(
     assert_errors,
     parse_ast_tree,
     default_options,
-    class_header_format,
 ):
     """Test that WPS476 works correctly."""
-    class_header = class_header_format.format('T, *Ts')
     src = (
-        f'{various_code}\n'
         f'{classes_with_various_bases}\n'
-        "T = TypeVar('T', default=int)\n"
-        "Ts = TypeVarTuple('Ts')\n"
         '\n'
-        f'class {class_header}:\n'
+        f'class Class[T=int, *Ts=*tuple[int, ...]]:\n'
         '    ...'
     )
 
@@ -57,24 +48,36 @@ def test_sneaky_type_var_with_default(
 
 
 @pytest.mark.parametrize(
-    'class_header_format',
-    class_header_formats,
+    'class_header',
+    [
+        (
+            "T = TypeVar('T')\n"
+            "Ts = TypeVarTuple('Ts')\n"
+            '\n'
+            'class Class(Generic[T, *Ts]):'
+        ),
+        (
+            "T = TypeVar('T', default=int)\n"
+            "Ts = TypeVarTuple('Ts')\n"
+            '\n'
+            'class Class(Generic[T, *Ts]):'
+        ),
+        (
+            'class Class[T, *Ts]:'
+        )
+    ],
 )
-def test_sneaky_type_var_without_default(
+def test_type_var_ignored(
     assert_errors,
     parse_ast_tree,
     default_options,
-    class_header_format,
+    class_header,
 ):
-    """Test that WPS476 ignores non-defaulted TypeVars."""
-    class_header = class_header_format.format('T, *Ts')
+    """Test that WPS476 ignores non-defaulted and old TypeVars."""
     src = (
         f'{various_code}\n'
         f'{classes_with_various_bases}\n'
-        "T = TypeVar('T')\n"
-        "Ts = TypeVarTuple('Ts')\n"
-        '\n'
-        f'class {class_header}:\n'
+        f'{class_header}\n'
         '    ...'
     )
 

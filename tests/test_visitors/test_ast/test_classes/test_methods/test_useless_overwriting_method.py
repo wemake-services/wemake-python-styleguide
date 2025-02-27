@@ -3,7 +3,9 @@ from typing import NamedTuple
 import pytest
 
 from wemake_python_styleguide.violations import oop
-from wemake_python_styleguide.visitors.ast.classes import WrongMethodVisitor
+from wemake_python_styleguide.visitors.ast.classes.methods import (
+    WrongMethodVisitor,
+)
 
 regular_method_detailed = """
 class Useless:

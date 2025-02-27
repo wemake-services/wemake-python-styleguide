@@ -1,7 +1,9 @@
 import pytest
 
 from wemake_python_styleguide.violations.oop import YieldMagicMethodViolation
-from wemake_python_styleguide.visitors.ast.classes import WrongMethodVisitor
+from wemake_python_styleguide.visitors.ast.classes.methods import (
+    WrongMethodVisitor,
+)
 
 method_template = """
 class Test:

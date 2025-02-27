@@ -747,17 +747,3 @@ match user:
 
 def pos_only_problem(first_argpm=0, second_argpm=1, /):  # noqa: WPS475
     my_print(first_argpm, second_argpm)
-
-
-TypeVarDefault = TypeVar("T", default=int)
-FollowingTuple = TypeVarTuple("Ts")
-
-
-class NewStyleGenerics[TypeVarDefault, *FollowingTuple]:  # noqa: WPS476
-    ...
-
-
-class OldStyleGenerics(
-    Generic[TypeVarDefault, *FollowingTuple]  # noqa: WPS476
-):
-    ...

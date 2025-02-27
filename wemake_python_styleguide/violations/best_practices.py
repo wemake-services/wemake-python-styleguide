@@ -92,6 +92,7 @@ Summary
    WrongEmptyLinesCountViolation
    ImportObjectCollisionViolation
    ProblematicFunctionParamsViolation
+   SneakyTypeVarWithDefaultViolation
 
 Best practices
 --------------
@@ -172,6 +173,7 @@ Best practices
 .. autoclass:: WrongEmptyLinesCountViolation
 .. autoclass:: ImportObjectCollisionViolation
 .. autoclass:: ProblematicFunctionParamsViolation
+.. autoclass:: SneakyTypeVarWithDefaultViolation
 
 """
 
@@ -2978,16 +2980,15 @@ class SneakyTypeVarWithDefaultViolation(ASTViolation):
     Reasoning:
         Following a defaulted TypeVar with a TypeVarTuple is bad,
         because you cannot specify the TypeVarTuple without
-        specifying TypeVar.
+        specifying the TypeVar.
 
     Solution:
-        Consider refactoring and getting rid of that pattern.
+        Consider refactoring and getting rid of this pattern.
 
     Example::
 
         # Wrong:
-        T = TypeVar("T", default=int)
-        class Class[T, *Ts]:
+        class Class[T=int, *Ts=*tuple[int, ...]]:
             ...
 
         # Correct (no default):
@@ -2995,8 +2996,7 @@ class SneakyTypeVarWithDefaultViolation(ASTViolation):
             ...
 
         # Correct (no tuple):
-        T = TypeVar("T", default=int)
-        class Class[T]:
+        class Class[T=int]:
             ...
 
     .. versionadded:: 1.1.0

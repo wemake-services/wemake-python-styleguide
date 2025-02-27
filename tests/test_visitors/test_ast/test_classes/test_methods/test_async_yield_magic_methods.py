@@ -1,7 +1,9 @@
 import pytest
 
 from wemake_python_styleguide.violations.oop import AsyncMagicMethodViolation
-from wemake_python_styleguide.visitors.ast.classes import WrongMethodVisitor
+from wemake_python_styleguide.visitors.ast.classes.methods import (
+    WrongMethodVisitor,
+)
 
 sync_method = """
 class Example:
