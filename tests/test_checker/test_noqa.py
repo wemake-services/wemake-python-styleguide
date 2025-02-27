@@ -343,11 +343,7 @@ ALWAYS: Final = True  # just for beautiful condition def
     ],
 )
 def test_noqa_fixture_disabled(
-    absolute_path,
-    all_violations,
-    filename,
-    violations,
-    run_condition
+    absolute_path, all_violations, filename, violations, run_condition
 ):
     """End-to-End test to check that all violations are present."""
     if not run_condition:
