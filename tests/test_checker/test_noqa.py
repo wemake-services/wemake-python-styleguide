@@ -16,8 +16,11 @@ import re
 import subprocess
 import types
 from collections import Counter
+from typing import Final
 
 import pytest
+
+from wemake_python_styleguide.compat.constants import PY313
 
 #: Used to find violations' codes in output.
 ERROR_PATTERN = re.compile(r'(WPS\d{3})')
@@ -32,6 +35,9 @@ IGNORED_VIOLATIONS = (
     'WPS400',  # it is a module level violation
     'WPS402',  # we obviously use a lot of `noqa` comments
 )
+
+#: List of ignored violations on python 3.13+.
+IGNORED_VIOLATIONS3_13 = ()
 
 #: Number and count of violations that would be raised.
 SHOULD_BE_RAISED = types.MappingProxyType(
@@ -234,6 +240,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS473': 0,
         'WPS474': 1,
         'WPS475': 1,
+        'WPS476': 0,  # enabled only in python 3.13+
         'WPS500': 1,
         'WPS501': 1,
         'WPS502': 0,  # disabled since 1.0.0
@@ -292,6 +299,11 @@ SHOULD_BE_RAISED = types.MappingProxyType(
     },
 )
 
+#: Number and count of violations that would be raised in 3.13+ section.
+SHOULD_BE_RAISED3_13 = types.MappingProxyType(
+    dict.fromkeys(SHOULD_BE_RAISED, 0) | {'WPS476': 1}
+)
+
 
 def _assert_errors_count_in_output(
     output,
@@ -320,19 +332,22 @@ def test_codes(all_violations):
     assert len(SHOULD_BE_RAISED) == len(all_violations)
 
 
+ALWAYS: Final = True  # just for beautiful condition def
+
+
 @pytest.mark.parametrize(
-    ('filename', 'violations'),
+    ('filename', 'violations', 'run_condition'),
     [
-        ('noqa.py', SHOULD_BE_RAISED),
+        ('noqa.py', SHOULD_BE_RAISED, ALWAYS),
+        ('noqa313.py', SHOULD_BE_RAISED3_13, PY313),
     ],
 )
 def test_noqa_fixture_disabled(
-    absolute_path,
-    all_violations,
-    filename,
-    violations,
+    absolute_path, all_violations, filename, violations, run_condition
 ):
     """End-to-End test to check that all violations are present."""
+    if not run_condition:  # pragma: no cover
+        return
     process = subprocess.Popen(
         [
             'flake8',
@@ -360,8 +375,17 @@ def test_noqa_fixture_disabled(
     )
 
 
-def test_noqa_fixture(absolute_path):
+@pytest.mark.parametrize(
+    ('filename', 'run_condition'),
+    [
+        ('noqa.py', ALWAYS),
+        ('noqa313.py', PY313),
+    ],
+)
+def test_noqa_fixture(absolute_path, filename, run_condition):
     """End-to-End test to check that `noqa` works."""
+    if not run_condition:  # pragma: no cover
+        return
     process = subprocess.Popen(
         [
             'flake8',
@@ -370,7 +394,7 @@ def test_noqa_fixture(absolute_path):
             '--isolated',
             '--select',
             'WPS, E999',
-            absolute_path('fixtures', 'noqa', 'noqa.py'),
+            absolute_path('fixtures', 'noqa', filename),
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -383,15 +407,26 @@ def test_noqa_fixture(absolute_path):
     assert not stderr.count('WPS')
 
 
-def test_noqa_fixture_without_ignore(absolute_path):
+@pytest.mark.parametrize(
+    ('filename', 'ignored_violations', 'run_condition'),
+    [
+        ('noqa.py', IGNORED_VIOLATIONS, ALWAYS),
+        ('noqa313.py', IGNORED_VIOLATIONS3_13, PY313),
+    ],
+)
+def test_noqa_fixture_without_ignore(
+    absolute_path, filename, ignored_violations, run_condition
+):
     """End-to-End test to check that `noqa` works without ignores."""
+    if not run_condition:  # pragma: no cover
+        return
     process = subprocess.Popen(
         [
             'flake8',
             '--isolated',
             '--select',
             'WPS, E999',
-            absolute_path('fixtures', 'noqa', 'noqa.py'),
+            absolute_path('fixtures', 'noqa', filename),
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -400,5 +435,5 @@ def test_noqa_fixture_without_ignore(absolute_path):
     )
     stdout, _ = process.communicate()
 
-    for violation in IGNORED_VIOLATIONS:
+    for violation in ignored_violations:
         assert stdout.count(violation) > 0
