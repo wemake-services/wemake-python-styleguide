@@ -2520,3 +2520,33 @@ class RaiseSystemExitViolation(ASTViolation):
 
     error_template = 'Found `raise SystemExit`, instead of using `sys.exit`'
     code = 363
+
+
+# TODO: What versionadded should be? Figure out Reasoning
+# and add Solution and Example
+@final
+class AwaitInLoopViolation(ASTViolation):
+    """
+    Forbid using ``await`` in loop.
+
+    Reasoning:
+        There is a better way to control repeated coroutines in for loops.
+
+    Solution:
+        Using :function:`asyncio.gather` or :class:`asyncio.TaskGroup`
+        (for Python 3.11+).
+
+    Example::
+
+        # Correct:
+        ...
+
+        # Wrong:
+        ...
+
+    .. versionadded:: 1.0.0
+
+    """
+
+    error_template = 'Found `await` in loop'
+    code = 364

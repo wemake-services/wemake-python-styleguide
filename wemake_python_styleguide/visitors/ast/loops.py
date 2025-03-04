@@ -24,6 +24,7 @@ from wemake_python_styleguide.violations.complexity import (
     TooManyForsInComprehensionViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
+    AwaitInLoopViolation,
     MultipleIfsInComprehensionViolation,
     UselessContinueViolation,
     WrongLoopIterTypeViolation,
@@ -136,6 +137,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         self._check_lambda_inside_loop(node)
         self._check_useless_continue(node)
         self._check_infinite_while_loop(node)
+        self._check_await_inside_for_loop(node)
         self.generic_visit(node)
 
     def _check_loop_needs_else(self, node: AnyLoop) -> None:
@@ -176,6 +178,12 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
             evaled = ast.literal_eval(node.test)
             if not isinstance(evaled, ast.Name) and bool(evaled):
                 self.add_violation(InfiniteWhileLoopViolation(node))
+
+    def _check_await_inside_for_loop(self, node: AnyLoop) -> None:
+        if isinstance(node, ast.For):
+            for sub_node in ast.walk(node):
+                if isinstance(sub_node, ast.Await):
+                    self.add_violation(AwaitInLoopViolation(node))
 
 
 @final
