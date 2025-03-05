@@ -113,7 +113,7 @@ class _SimpleNameValidator:
         if is_first_argument:
             return
 
-        if not logical.is_wrong_name(name, SPECIAL_ARGUMENT_NAMES_WHITELIST):
+        if name not in SPECIAL_ARGUMENT_NAMES_WHITELIST:
             return
 
         self._error_callback(
