@@ -2522,29 +2522,42 @@ class RaiseSystemExitViolation(ASTViolation):
     code = 363
 
 
-# TODO: What versionadded should be? Figure out Reasoning
-# and add Solution and Example
 @final
 class AwaitInLoopViolation(ASTViolation):
     """
-    Forbid using ``await`` in loop.
+    Forbid using ``await`` in ``for`` loop.
 
     Reasoning:
-        There is a better way to control repeated coroutines in for loops.
+        There is a better way to control repeated coroutines in ``for`` loops.
 
     Solution:
         Using :function:`asyncio.gather` or :class:`asyncio.TaskGroup`
-        (for Python 3.11+).
+        for Python 3.11+.
 
     Example::
 
+        urls = [
+            "https://wemake-python-styleguide.readthedocs.io/",
+            "https://flake8.pycqa.org/",
+            "https://docs.astral.sh/ruff/",
+        ]
+
         # Correct:
-        ...
+        async def request():
+            tasks = []
+            for url in urls:
+                tasks.append(fetch_data(url))
+            results = await asyncio.gather(*tasks)
 
         # Wrong:
+        async def request():
+            results = []
+            for url in urls:
+                result = await fetch_data(url)
+                results.append(result)
         ...
 
-    .. versionadded:: 1.0.0
+    .. versionadded:: 1.1.0
 
     """
 
