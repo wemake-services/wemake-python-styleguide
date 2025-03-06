@@ -2981,7 +2981,7 @@ class AwaitInLoopViolation(ASTViolation):
         There is a better way to control repeated coroutines in ``for`` loops.
 
     Solution:
-        Using :function:`asyncio.gather` or :class:`asyncio.TaskGroup`
+        Using :func:`asyncio.gather` or :class:`asyncio.TaskGroup`
         for Python 3.11+.
 
     Example::
