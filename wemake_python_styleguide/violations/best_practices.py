@@ -3011,5 +3011,5 @@ class AwaitInLoopViolation(ASTViolation):
 
     """
 
-    error_template = 'Found `await` in loop'
+    error_template = 'Found `await` in `for` loop'
     code = 476
