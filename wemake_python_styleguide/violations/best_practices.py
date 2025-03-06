@@ -2981,7 +2981,7 @@ class AwaitInLoopViolation(ASTViolation):
         There is a better way to control repeated coroutines in ``for`` loops.
 
     Solution:
-        Using :func:`asyncio.gather` or :class:`asyncio.TaskGroup`
+        Use :func:`asyncio.gather` or :class:`asyncio.TaskGroup`
         for Python 3.11+.
 
     Example::
@@ -3005,7 +3005,6 @@ class AwaitInLoopViolation(ASTViolation):
             for url in urls:
                 result = await parse_content(url)
                 parsed_content.append(result)
-        ...
 
     .. versionadded:: 1.1.0
 
