@@ -113,11 +113,11 @@ def test_numbers_do_not_error(
     default_options,
     primitives_usages,
     mode,
-):
+):  # pragma: no cover
     """Ensures that correct numbers are fine."""
     try:
         from test.test_grammar import VALID_UNDERSCORE_LITERALS  # noqa: PLC0415
-    except Exception:  # pragma: no cover
+    except Exception:
         pytest.skip('VALID_UNDERSCORE_LITERALS did not import')
     for number in VALID_UNDERSCORE_LITERALS:
         file_tokens = parse_tokens(mode(primitives_usages.format(number)))
