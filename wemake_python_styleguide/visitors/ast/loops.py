@@ -186,7 +186,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
 
         for subnode in ast.walk(node):
             if isinstance(subnode, ast.Await):
-                self.add_violation(AwaitInLoopViolation)
+                self.add_violation(AwaitInLoopViolation(node))
                 return
 
 
