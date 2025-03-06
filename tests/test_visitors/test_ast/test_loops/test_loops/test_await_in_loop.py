@@ -1,6 +1,8 @@
 import pytest
 
-from wemake_python_styleguide.violations.consistency import AwaitInLoopViolation
+from wemake_python_styleguide.violations.best_practices import (
+    AwaitInLoopViolation,
+)
 from wemake_python_styleguide.visitors.ast.loops import WrongLoopVisitor
 
 code_that_breaks = """

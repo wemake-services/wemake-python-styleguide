@@ -92,6 +92,7 @@ Summary
    WrongEmptyLinesCountViolation
    ImportObjectCollisionViolation
    ProblematicFunctionParamsViolation
+   AwaitInLoopViolation
 
 Best practices
 --------------
@@ -172,6 +173,7 @@ Best practices
 .. autoclass:: WrongEmptyLinesCountViolation
 .. autoclass:: ImportObjectCollisionViolation
 .. autoclass:: ProblematicFunctionParamsViolation
+.. autoclass:: AwaitInLoopViolation
 
 """
 
@@ -2968,3 +2970,46 @@ class ProblematicFunctionParamsViolation(ASTViolation):
 
     error_template = 'Found problematic function parameters'
     code = 475
+
+
+@final
+class AwaitInLoopViolation(ASTViolation):
+    """
+    Forbid using ``await`` in ``for`` loop.
+
+    Reasoning:
+        There is a better way to control repeated coroutines in ``for`` loops.
+
+    Solution:
+        Using :function:`asyncio.gather` or :class:`asyncio.TaskGroup`
+        for Python 3.11+.
+
+    Example::
+
+        urls = [
+            "https://wemake-python-styleguide.readthedocs.io/",
+            "https://flake8.pycqa.org/",
+            "https://docs.astral.sh/ruff/",
+        ]
+
+        # Correct:
+        async def request():
+            tasks = []
+            for url in urls:
+                tasks.append(fetch_data(url))
+            results = await asyncio.gather(*tasks)
+
+        # Wrong:
+        async def request():
+            results = []
+            for url in urls:
+                result = await fetch_data(url)
+                results.append(result)
+        ...
+
+    .. versionadded:: 1.1.0
+
+    """
+
+    error_template = 'Found `await` in loop'
+    code = 476
