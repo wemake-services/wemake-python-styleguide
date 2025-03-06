@@ -2975,7 +2975,7 @@ class ProblematicFunctionParamsViolation(ASTViolation):
 @final
 class AwaitInLoopViolation(ASTViolation):
     """
-    Forbid using ``await`` in ``for`` loop.
+    Do not use ``await`` in ``for`` loop.
 
     Reasoning:
         There is a better way to control repeated coroutines in ``for`` loops.
@@ -2996,15 +2996,15 @@ class AwaitInLoopViolation(ASTViolation):
         async def request():
             tasks = []
             for url in urls:
-                tasks.append(fetch_data(url))
-            results = await asyncio.gather(*tasks)
+                tasks.append(parse_content(url))
+            parsed_content = await asyncio.gather(*tasks)
 
         # Wrong:
         async def request():
-            results = []
+            parsed_content = []
             for url in urls:
-                result = await fetch_data(url)
-                results.append(result)
+                result = await parse_content(url)
+                parsed_content.append(result)
         ...
 
     .. versionadded:: 1.1.0
