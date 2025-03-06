@@ -129,6 +129,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
     def visit_any_comp(self, node: AnyComprehension) -> None:
         """Checks all kinds of comprehensions."""
         self._check_lambda_inside_loop(node)
+        self._check_await_inside_loop(node)
         self.generic_visit(node)
 
     def visit_any_loop(self, node: AnyLoop) -> None:
@@ -137,7 +138,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         self._check_lambda_inside_loop(node)
         self._check_useless_continue(node)
         self._check_infinite_while_loop(node)
-        self._check_await_inside_for_loop(node)
+        self._check_await_inside_loop(node)
         self.generic_visit(node)
 
     def _check_loop_needs_else(self, node: AnyLoop) -> None:
@@ -179,11 +180,14 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
             if not isinstance(evaled, ast.Name) and bool(evaled):
                 self.add_violation(InfiniteWhileLoopViolation(node))
 
-    def _check_await_inside_for_loop(self, node: AnyLoop) -> None:
-        if isinstance(node, ast.For):
-            for sub_node in ast.walk(node):
-                if isinstance(sub_node, ast.Await):
-                    self.add_violation(AwaitInLoopViolation(node))
+    def _check_await_inside_loop(self, node: AnyLoop) -> None:
+        if isinstance(node, ast.While | ast.AsyncFor):
+            return
+
+        for subnode in ast.walk(node):
+            if isinstance(subnode, ast.Await):
+                self.add_violation(AwaitInLoopViolation)
+                return
 
 
 @final
