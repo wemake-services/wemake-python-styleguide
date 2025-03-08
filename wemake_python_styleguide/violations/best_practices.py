@@ -2981,22 +2981,15 @@ class AwaitInLoopViolation(ASTViolation):
         There is a better way to control repeated coroutines in ``for`` loops.
 
     Solution:
-        Use :func:`asyncio.gather` or :class:`asyncio.TaskGroup`
-        for Python 3.11+.
+        Use :func:`asyncio.gather`,
+        :func:`asyncio.wait`,
+        or :class:`asyncio.TaskGroup`
 
     Example::
 
-        urls = [
-            "https://wemake-python-styleguide.readthedocs.io/",
-            "https://flake8.pycqa.org/",
-            "https://docs.astral.sh/ruff/",
-        ]
-
         # Correct:
         async def request():
-            tasks = []
-            for url in urls:
-                tasks.append(parse_content(url))
+            tasks = [parse_content(url) for url in urls]
             parsed_content = await asyncio.gather(*tasks)
 
         # Wrong:
