@@ -180,14 +180,26 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
             if not isinstance(evaled, ast.Name) and bool(evaled):
                 self.add_violation(InfiniteWhileLoopViolation(node))
 
-    def _check_await_inside_loop(self, node: AnyLoop) -> None:
-        if isinstance(node, ast.While | ast.AsyncFor):
-            return
+    def _check_await_inside_loop(
+        self, node: AnyLoop | AnyComprehension
+    ) -> None:
+        bad_loops = (
+            ast.For
+            | ast.DictComp
+            | ast.GeneratorExp
+            | ast.ListComp
+            | ast.SetComp
+        )
 
-        for subnode in ast.walk(node):
-            if isinstance(subnode, ast.Await):
-                self.add_violation(AwaitInLoopViolation(node))
-                return
+        for sub_node in ast.walk(node):
+            if isinstance(sub_node, ast.Await):
+                parent_node = nodes.get_parent(sub_node)
+
+                while parent_node is not None:
+                    if isinstance(parent_node, bad_loops):
+                        self.add_violation(AwaitInLoopViolation(node))
+                        return
+                    parent_node = nodes.get_parent(parent_node)
 
 
 @final
