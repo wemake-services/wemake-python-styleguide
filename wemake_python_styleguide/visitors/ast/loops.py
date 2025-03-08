@@ -1,5 +1,5 @@
 import ast
-from collections import defaultdict
+from collections import defaultdict, deque
 from collections.abc import Mapping, Sequence
 from contextlib import suppress
 from typing import ClassVar, TypeAlias, final
@@ -183,6 +183,11 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
     def _check_await_inside_loop(
         self, node: AnyLoop | AnyComprehension
     ) -> None:
+        if isinstance(node, AnyComprehension) and any(
+            generator.is_async for generator in node.generators
+        ):
+            return
+
         bad_loops = (
             ast.For
             | ast.DictComp
@@ -190,16 +195,19 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
             | ast.ListComp
             | ast.SetComp
         )
+        await_sub_nodes = walk.get_subnodes_by_type(node, ast.Await)
+        parents_to_check = deque(
+            nodes.get_parent(await_sub_node)
+            for await_sub_node in await_sub_nodes
+        )
 
-        for sub_node in ast.walk(node):
-            if isinstance(sub_node, ast.Await):
-                parent_node = nodes.get_parent(sub_node)
-
-                while parent_node is not None:
-                    if isinstance(parent_node, bad_loops):
-                        self.add_violation(AwaitInLoopViolation(node))
-                        return
-                    parent_node = nodes.get_parent(parent_node)
+        while parents_to_check:
+            parent = parents_to_check.popleft()
+            if isinstance(parent, bad_loops):
+                self.add_violation(AwaitInLoopViolation(node))
+                return
+            if parent is not None:
+                parents_to_check.append(nodes.get_parent(parent))
 
 
 @final

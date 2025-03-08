@@ -46,6 +46,26 @@ async def foo():
         await some_two()
 """
 
+async_list_comprehension = """
+async def foo():
+    result = [await some_two() async for _ in some_one()]
+"""
+
+async_dict_comprehension = """
+async def foo():
+    result = {i: await some_two() async for i in some_one()}
+"""
+
+async_set_comprehension = """
+async def foo():
+    result = {await some_two() async for i in some_one()}
+"""
+
+async_generator_comprehension = """
+async def foo():
+    result = (await some_two() async for i in some_one())
+"""
+
 
 @pytest.mark.parametrize(
     'code',
@@ -76,6 +96,10 @@ def test_wrong_await_in_loop(
     [
         while_loop,
         async_for_loop,
+        async_list_comprehension,
+        async_dict_comprehension,
+        async_set_comprehension,
+        async_generator_comprehension,
     ],
 )
 def test_good_await_in_loop(
