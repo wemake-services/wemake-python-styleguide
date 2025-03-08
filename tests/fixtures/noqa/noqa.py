@@ -752,10 +752,3 @@ def pos_only_problem(first_argpm=0, second_argpm=1, /):  # noqa: WPS475
 async def test_await_in_loop():
     for _ in range(10):  # noqa: WPS476
         await test_function()
-
-
-async def test_await_in_list_comp():
-    list_comprehension = [await test_function() for _ in range(10)]  # noqa: WPS476
-    set_comprehension = {await test_function() for _ in range(10)}  # noqa: WPS476
-    dict_comprehension = {some_hashable: await test_function() for some_hashable in range(10)} # noqa: WPS476
-    generator_comprehension = (await test_function() for _ in range(10))  # noqa: WPS476
