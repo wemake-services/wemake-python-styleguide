@@ -5,6 +5,7 @@ import pytest
 from wemake_python_styleguide.constants import SPECIAL_ARGUMENT_NAMES_WHITELIST
 from wemake_python_styleguide.violations.naming import (
     ReservedArgumentNameViolation,
+    TrailingUnderscoreViolation,
 )
 from wemake_python_styleguide.visitors.ast.naming.validation import (
     WrongNameVisitor,
@@ -79,7 +80,23 @@ def test_correct_argument_name(
 
 @pytest.mark.parametrize(
     'variable_name',
-    ['_SELF', '_Self', 'Self', '_CLS', 'cLs', '_clS', '_MCS', 'mcS', '_mCs'],
+    [
+        '_SELF',
+        '_Self',
+        'Self',
+        '_CLS',
+        'cLs',
+        '_clS',
+        '_MCS',
+        'mcS',
+        '_mCs',
+        '__self__',
+        '__cls__',
+        '__mcs__',
+        'self_',
+        'cls_',
+        'mcs_',
+    ],
 )
 def test_reserved_argument_name_variations(
     assert_errors,
@@ -95,4 +112,4 @@ def test_reserved_argument_name_variations(
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [])
+    assert_errors(visitor, [], ignored_types=TrailingUnderscoreViolation)
