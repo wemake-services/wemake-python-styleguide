@@ -5,7 +5,7 @@ import pytest
 from wemake_python_styleguide.compat.constants import PY313
 
 if not PY313:  # pragma: >=3.13 no cover
-    pytest.skip(
+    pytest.skip(  # pragma: no cover
         reason='Defaulting type params were added in python 3.13+',
         allow_module_level=True,
     )

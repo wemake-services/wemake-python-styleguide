@@ -314,7 +314,7 @@ def _assert_errors_count_in_output(
         (match.group(0) for match in ERROR_PATTERN.finditer(output)),
     )
 
-    if total:
+    if total:  # pragma: no cover
         for violation in all_violations:
             key = f'WPS{str(violation.code).zfill(3)}'  # noqa: WPS237
             assert key in errors, 'Unlisted #noqa violation'

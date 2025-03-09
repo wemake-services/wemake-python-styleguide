@@ -142,7 +142,7 @@ class ConsecutiveDefaultTypeVarsVisitor(base.BaseNodeVisitor):
         self, node: ast.ClassDef
     ) -> None:
         """Check class definition for violation."""
-        if hasattr(node, 'type_params'):
+        if hasattr(node, 'type_params'):  # pragma: no cover
             self._check_generics(node.type_params)
         self.generic_visit(node)
 
