@@ -31,6 +31,15 @@ async def foo():
     result = (await some() for i in range(10))
 """
 
+async_and_list_comprehension_in_one = """
+async def foo():
+    result = [
+        await some_three(something_2)
+        for something_1 in some_one()
+        async for something_2 in some_two(something_1)
+    ]
+"""
+
 # Correct:
 
 while_loop = """
@@ -74,6 +83,7 @@ async def foo():
         list_comprehension,
         dict_comprehension,
         generator_comprehension,
+        async_and_list_comprehension_in_one,
     ],
 )
 def test_wrong_await_in_loop(

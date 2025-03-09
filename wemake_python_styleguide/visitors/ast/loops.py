@@ -1,5 +1,5 @@
 import ast
-from collections import defaultdict, deque
+from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from contextlib import suppress
 from typing import ClassVar, TypeAlias, final
@@ -126,6 +126,14 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         ast.While: ['body'],
     }
 
+    _forbidden_await_loops: ClassVar[AnyNodes] = (
+        ast.For,
+        ast.DictComp,
+        ast.GeneratorExp,
+        ast.ListComp,
+        ast.SetComp,
+    )
+
     def visit_any_comp(self, node: AnyComprehension) -> None:
         """Checks all kinds of comprehensions."""
         self._check_lambda_inside_loop(node)
@@ -183,31 +191,18 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
     def _check_await_inside_loop(
         self, node: AnyLoop | AnyComprehension
     ) -> None:
-        if isinstance(node, AnyComprehension) and any(
-            generator.is_async for generator in node.generators
-        ):
-            return
-
-        bad_loops = (
-            ast.For
-            | ast.DictComp
-            | ast.GeneratorExp
-            | ast.ListComp
-            | ast.SetComp
-        )
-        await_sub_nodes = walk.get_subnodes_by_type(node, ast.Await)
-        parents_to_check = deque(
-            nodes.get_parent(await_sub_node)
-            for await_sub_node in await_sub_nodes
-        )
-
-        while parents_to_check:
-            parent = parents_to_check.popleft()
-            if isinstance(parent, bad_loops):
+        for sub_node in walk.get_subnodes_by_type(node, ast.Await):
+            sub_node_parent = walk.get_closest_parent(
+                sub_node, self._forbidden_await_loops
+            )
+            if sub_node_parent is not None:
+                if isinstance(sub_node_parent, AnyComprehension) and all(
+                    comprehension.is_async
+                    for comprehension in sub_node_parent.generators
+                ):
+                    return
                 self.add_violation(AwaitInLoopViolation(node))
                 return
-            if parent is not None:
-                parents_to_check.append(nodes.get_parent(parent))
 
 
 @final
