@@ -273,6 +273,28 @@ _FOREIGN_NAMING_PATTERNS = frozenset(
     ),
 )
 
+_VARIABLES = (
+    frozenset(
+        (
+            variable_def,
+            variable_typed_def,
+            variable_typed,
+            unpacking_variables,
+            unpacking_star_variables,
+            for_variable,
+            for_star_variable,
+            with_variable,
+            with_star_variable,
+            exception,
+            match_variable,
+            match_as_explicit,
+            match_inner,
+            match_star,
+        ),
+    )
+    | _FOREIGN_NAMING_PATTERNS
+)
+
 _ATTRIBUTES = (
     frozenset(
         (
@@ -391,3 +413,9 @@ def skip_match_case_syntax_error():
             pytest.skip('"_" cannot be used as "case" target')
 
     return factory
+
+
+@pytest.fixture(params=_VARIABLES)
+def simple_variables_template(request):
+    """Parametrized fixture that contains all variable naming templates."""
+    return request.param
