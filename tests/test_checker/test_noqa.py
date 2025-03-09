@@ -41,7 +41,7 @@ IGNORED_VIOLATIONS3_13 = ()
 
 #: Number and count of violations that would be raised.
 SHOULD_BE_RAISED = types.MappingProxyType(
-        {
+    {
         'WPS000': 0,  # logically unacceptable.
         'WPS100': 0,  # logically unacceptable.
         'WPS101': 0,  # logically unacceptable.
@@ -300,11 +300,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
 )
 
 #: Number and count of violations that would be raised.
-SHOULD_BE_RAISED3_13 = types.MappingProxyType(
-    {
-        'WPS476': 1
-    }
-)
+SHOULD_BE_RAISED3_13 = types.MappingProxyType({'WPS476': 1})
 
 
 def _assert_errors_count_in_output(
@@ -374,10 +370,7 @@ def test_noqa_fixture_disabled(
     assert stdout
     assert not stderr.count('WPS')
     _assert_errors_count_in_output(
-        stdout,
-        violations,
-        all_violations,
-        total=filename == 'noqa.py'
+        stdout, violations, all_violations, total=filename == 'noqa.py'
     )
 
 
