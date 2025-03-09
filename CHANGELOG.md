@@ -19,6 +19,10 @@ Semantic versioning in our case means:
 
 ## 1.1.0 WIP
 
+### Features
+
+- Forbids to use `await` in `for` loop, #1600
+
 ### Command line utility
 
 This version introduces `wps` CLI tool.
