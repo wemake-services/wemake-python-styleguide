@@ -75,3 +75,24 @@ def test_correct_argument_name(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize(
+    'variable_name',
+    ['_SELF', '_Self', 'Self', '_CLS', 'cLs', '_clS', '_MCS', 'mcS', '_mCs'],
+)
+def test_reserved_argument_name_variations(
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+    simple_variables_template,
+    mode,
+    variable_name,
+):
+    """Ensures variations of special names are allowed for simple variables."""
+    tree = parse_ast_tree(mode(simple_variables_template.format(variable_name)))
+
+    visitor = WrongNameVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
