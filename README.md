@@ -90,7 +90,7 @@ to make all people write **exactly** the same `Python` code.
 | Finds bugs?                |   🤔   |   ✅   |   ❌  |  ✅  |  ✅  |            ✅            |
 | Finds complex code?        |   ❌   |   🤔   |   ❌  |  ❌  |  ✅  |            ✅            |
 | Has a lot of strict rules? |   ❌   |   🤔   |   ❌  |  ❌  |  ✅  |            ✅            |
-| Has a lot of plugins?      |   ✅   |   ❌   |   ❌  |  🤔  |  ❌  |            ✅            |
+| Has a lot of plugins?      |   ✅   |   ❌   |   ❌  |  🤔  |  🤔  |            ✅            |
 
 We have several primary objectives:
 
