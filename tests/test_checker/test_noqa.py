@@ -41,7 +41,7 @@ IGNORED_VIOLATIONS3_13 = ()
 
 #: Number and count of violations that would be raised.
 SHOULD_BE_RAISED = types.MappingProxyType(
-    {
+        {
         'WPS000': 0,  # logically unacceptable.
         'WPS100': 0,  # logically unacceptable.
         'WPS101': 0,  # logically unacceptable.
@@ -299,9 +299,11 @@ SHOULD_BE_RAISED = types.MappingProxyType(
     },
 )
 
-#: Number and count of violations that would be raised in 3.13+ section.
+#: Number and count of violations that would be raised.
 SHOULD_BE_RAISED3_13 = types.MappingProxyType(
-    dict.fromkeys(SHOULD_BE_RAISED, 0) | {'WPS476': 1}
+    {
+        'WPS476': 1
+    }
 )
 
 
@@ -309,14 +311,17 @@ def _assert_errors_count_in_output(
     output,
     errors,
     all_violations,
+    *,
+    total: bool = True,
 ):
     found_errors = Counter(
         (match.group(0) for match in ERROR_PATTERN.finditer(output)),
     )
 
-    for violation in all_violations:
-        key = f'WPS{str(violation.code).zfill(3)}'  # noqa: WPS237
-        assert key in errors, 'Unlisted #noqa violation'
+    if total:
+        for violation in all_violations:
+            key = f'WPS{str(violation.code).zfill(3)}'  # noqa: WPS237
+            assert key in errors, 'Unlisted #noqa violation'
 
     for found_error, found_count in found_errors.items():
         assert found_error in errors, 'Violation without a #noqa count'
@@ -372,6 +377,7 @@ def test_noqa_fixture_disabled(
         stdout,
         violations,
         all_violations,
+        total=filename == 'noqa.py'
     )
 
 

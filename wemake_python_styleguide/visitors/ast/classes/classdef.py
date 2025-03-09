@@ -138,13 +138,17 @@ class WrongClassBodyVisitor(base.BaseNodeVisitor):
 class ConsecutiveDefaultTypeVarsVisitor(base.BaseNodeVisitor):
     """Responsible for finding TypeVarTuple after a TypeVar with default."""
 
-    def visit_ClassDef(self, node: ast.ClassDef) -> None:
+    def visit_ClassDef(  # pragma: >=3.13 cover
+        self, node: ast.ClassDef
+    ) -> None:
         """Check class definition for violation."""
-        if hasattr(node, 'type_params'):  # pragma: no cover
+        if hasattr(node, 'type_params'):
             self._check_generics(node.type_params)
         self.generic_visit(node)
 
-    def _check_generics(self, type_params: Sequence[ast.AST]) -> None:
+    def _check_generics(  # pragma: >=3.13 cover
+        self, type_params: Sequence[ast.AST]
+    ) -> None:
         had_default = False
         for type_param in type_params:
             had_default = had_default or (

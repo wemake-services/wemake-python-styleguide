@@ -4,8 +4,11 @@ import pytest
 
 from wemake_python_styleguide.compat.constants import PY313
 
-if not PY313:  # pragma: no cover
-    pytest.skip("These tests use python 3.13+ features.")
+if not PY313:  # pragma: >=3.13 no cover
+    pytest.skip(
+        reason='Defaulting type params were added in python 3.13+',
+        allow_module_level=True
+    )
 
 from wemake_python_styleguide.violations.best_practices import (
     SneakyTypeVarWithDefaultViolation,
@@ -52,23 +55,26 @@ def test_sneaky_type_var_with_default(
     assert_errors(visitor, [SneakyTypeVarWithDefaultViolation])
 
 
+_CLASS_HEADERS: Final = (
+    (
+        "T = TypeVar('T')\n"
+        "Ts = TypeVarTuple('Ts')\n"
+        '\n'
+        'class Class(Generic[T, *Ts]):'
+    ),
+    (
+        "T = TypeVar('T', default=int)\n"
+        "Ts = TypeVarTuple('Ts')\n"
+        '\n'
+        'class Class(Generic[T, *Ts]):'
+    ),
+    'class Class[T, *Ts]:',
+)
+
+
 @pytest.mark.parametrize(
     'class_header',
-    [
-        (
-            "T = TypeVar('T')\n"
-            "Ts = TypeVarTuple('Ts')\n"
-            '\n'
-            'class Class(Generic[T, *Ts]):'
-        ),
-        (
-            "T = TypeVar('T', default=int)\n"
-            "Ts = TypeVarTuple('Ts')\n"
-            '\n'
-            'class Class(Generic[T, *Ts]):'
-        ),
-        ('class Class[T, *Ts]:'),
-    ],
+    _CLASS_HEADERS,
 )
 def test_type_var_ignored(
     assert_errors,
