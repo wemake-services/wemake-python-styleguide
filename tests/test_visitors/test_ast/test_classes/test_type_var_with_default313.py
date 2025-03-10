@@ -49,10 +49,7 @@ def test_sneaky_type_var_with_default(
 
 
 _OLD_STYLE_GENERICS_CLS = (
-    "T = TypeVar('T')\n"
-    "Ts = TypeVarTuple('Ts')\n"
-    '\n'
-    'class Class(Generic[T, *Ts]):'
+    "T = TypeVar('T')\nTs = TypeVarTuple('Ts')\n\nclass Class(Generic[T, *Ts]):"
 )
 _OLD_STYLE_GENERICS_WITH_DEFAULT_CLS = (
     "T = TypeVar('T', default=int)\n"
