@@ -92,6 +92,7 @@ Summary
    WrongEmptyLinesCountViolation
    ImportObjectCollisionViolation
    ProblematicFunctionParamsViolation
+   SneakyTypeVarWithDefaultViolation
 
 Best practices
 --------------
@@ -172,6 +173,7 @@ Best practices
 .. autoclass:: WrongEmptyLinesCountViolation
 .. autoclass:: ImportObjectCollisionViolation
 .. autoclass:: ProblematicFunctionParamsViolation
+.. autoclass:: SneakyTypeVarWithDefaultViolation
 
 """
 
@@ -2968,3 +2970,38 @@ class ProblematicFunctionParamsViolation(ASTViolation):
 
     error_template = 'Found problematic function parameters'
     code = 475
+
+
+@final
+class SneakyTypeVarWithDefaultViolation(ASTViolation):
+    """
+    Forbid using TypeVarTuple after a TypeVar with default.
+
+    Reasoning:
+        Following a defaulted TypeVar with a TypeVarTuple is bad,
+        because you cannot specify the TypeVarTuple without
+        specifying the TypeVar.
+
+    Solution:
+        Consider refactoring and getting rid of this pattern.
+
+    Example::
+
+        # Wrong:
+        class Class[T=int, *Ts=*tuple[int, ...]]:
+            ...
+
+        # Correct (no default):
+        class Class[T, *Ts]:
+            ...
+
+        # Correct (no tuple):
+        class Class[T=int]:
+            ...
+
+    .. versionadded:: 1.1.0
+
+    """
+
+    error_template = 'Found a TypeVarTuple following a TypeVar with default'
+    code = 476

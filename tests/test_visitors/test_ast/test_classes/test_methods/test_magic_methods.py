@@ -2,7 +2,9 @@ import pytest
 
 from wemake_python_styleguide.constants import MAGIC_METHODS_BLACKLIST
 from wemake_python_styleguide.violations.oop import BadMagicMethodViolation
-from wemake_python_styleguide.visitors.ast.classes import WrongMethodVisitor
+from wemake_python_styleguide.visitors.ast.classes.methods import (
+    WrongMethodVisitor,
+)
 
 magic_method = """
 class Example:

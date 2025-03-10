@@ -232,6 +232,7 @@ addopts = [
 omit = [
   # All version specific tests:
   "tests/**/*312.py",
+  "tests/**/*313.py"
 ]
 
 # Here we specify plugins for coverage to be used:

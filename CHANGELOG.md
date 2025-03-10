@@ -19,6 +19,10 @@ Semantic versioning in our case means:
 
 ## 1.1.0 WIP
 
+### Rules
+
+- Adds `WPS476`: do not allow `TypeVarTuple` after a `TypeVar` with a default #3265
+
 ### Command line utility
 
 This version introduces `wps` CLI tool.

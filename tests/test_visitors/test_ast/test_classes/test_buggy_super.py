@@ -1,7 +1,9 @@
 import pytest
 
 from wemake_python_styleguide.violations.oop import BuggySuperContextViolation
-from wemake_python_styleguide.visitors.ast.classes import BuggySuperCallVisitor
+from wemake_python_styleguide.visitors.ast.classes.methods import (
+    BuggySuperCallVisitor,
+)
 
 error_dict_comprehension = """
     {super().make_key(it): make_value(it) for it in items}

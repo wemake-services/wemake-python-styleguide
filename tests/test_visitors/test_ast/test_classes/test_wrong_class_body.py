@@ -3,7 +3,9 @@ import pytest
 from wemake_python_styleguide.violations.oop import (
     WrongClassBodyContentViolation,
 )
-from wemake_python_styleguide.visitors.ast.classes import WrongClassBodyVisitor
+from wemake_python_styleguide.visitors.ast.classes.classdef import (
+    WrongClassBodyVisitor,
+)
 
 class_body_template = """
 class ClassWithBody:

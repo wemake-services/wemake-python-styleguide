@@ -4,7 +4,9 @@ from wemake_python_styleguide.violations.oop import (
     MethodWithoutArgumentsViolation,
     StaticMethodViolation,
 )
-from wemake_python_styleguide.visitors.ast.classes import WrongMethodVisitor
+from wemake_python_styleguide.visitors.ast.classes.methods import (
+    WrongMethodVisitor,
+)
 
 method_inside_class = """
 class Example:
