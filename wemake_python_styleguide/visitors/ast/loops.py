@@ -126,18 +126,9 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         ast.While: ['body'],
     }
 
-    _forbidden_await_loops: ClassVar[AnyNodes] = (
-        ast.For,
-        ast.DictComp,
-        ast.GeneratorExp,
-        ast.ListComp,
-        ast.SetComp,
-    )
-
     def visit_any_comp(self, node: AnyComprehension) -> None:
         """Checks all kinds of comprehensions."""
         self._check_lambda_inside_loop(node)
-        self._check_await_inside_loop(node)
         self.generic_visit(node)
 
     def visit_any_loop(self, node: AnyLoop) -> None:
@@ -146,7 +137,6 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         self._check_lambda_inside_loop(node)
         self._check_useless_continue(node)
         self._check_infinite_while_loop(node)
-        self._check_await_inside_loop(node)
         self.generic_visit(node)
 
     def _check_loop_needs_else(self, node: AnyLoop) -> None:
@@ -187,22 +177,6 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
             evaled = ast.literal_eval(node.test)
             if not isinstance(evaled, ast.Name) and bool(evaled):
                 self.add_violation(InfiniteWhileLoopViolation(node))
-
-    def _check_await_inside_loop(
-        self, node: AnyLoop | AnyComprehension
-    ) -> None:
-        for sub_node in walk.get_subnodes_by_type(node, ast.Await):
-            sub_node_parent = walk.get_closest_parent(
-                sub_node, self._forbidden_await_loops
-            )
-            if sub_node_parent is not None:
-                if isinstance(sub_node_parent, AnyComprehension) and all(
-                    comprehension.is_async
-                    for comprehension in sub_node_parent.generators
-                ):
-                    return
-                self.add_violation(AwaitInLoopViolation(node))
-                return
 
 
 @final
@@ -262,3 +236,31 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
         )
         if is_implicit_sum:
             self.add_violation(ImplicitSumViolation(node))
+
+
+@final
+class WrongStatementInLoopVisitor(base.BaseNodeVisitor):
+    """Responsible for statements inside loops."""
+
+    _forbidden_await_loops: ClassVar[AnyNodes] = (
+        ast.For,
+        ast.DictComp,
+        ast.GeneratorExp,
+        ast.ListComp,
+        ast.SetComp,
+    )
+
+    def visit_Await(self, node: ast.Await):
+        """Visits ``await`` in loops and check it appropriation to use."""
+        self._check_await_inside_loop(node)
+        self.generic_visit(node)
+
+    def _check_await_inside_loop(self, node: ast.Await) -> None:
+        node_parent = walk.get_closest_parent(node, self._forbidden_await_loops)
+        if node_parent is not None:
+            if isinstance(node_parent, AnyComprehension) and all(
+                comprehension.is_async
+                for comprehension in node_parent.generators
+            ):
+                return
+            self.add_violation(AwaitInLoopViolation(node))

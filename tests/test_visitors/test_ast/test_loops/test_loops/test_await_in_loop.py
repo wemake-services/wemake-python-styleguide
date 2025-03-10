@@ -3,7 +3,9 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     AwaitInLoopViolation,
 )
-from wemake_python_styleguide.visitors.ast.loops import WrongLoopVisitor
+from wemake_python_styleguide.visitors.ast.loops import (
+    WrongStatementInLoopVisitor,
+)
 
 simple_for_loop = """
 async def foo():
@@ -95,7 +97,7 @@ def test_wrong_await_in_loop(
     """Tests for nested ``await`` statement in ``for`` loop."""
     tree = parse_ast_tree(code)
 
-    visitor = WrongLoopVisitor(default_options, tree=tree)
+    visitor = WrongStatementInLoopVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [AwaitInLoopViolation])
@@ -121,7 +123,7 @@ def test_good_await_in_loop(
     """Tests for nested ``await`` statement in ``for`` loop."""
     tree = parse_ast_tree(code)
 
-    visitor = WrongLoopVisitor(default_options, tree=tree)
+    visitor = WrongStatementInLoopVisitor(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
