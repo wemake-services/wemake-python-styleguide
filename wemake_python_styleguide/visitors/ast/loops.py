@@ -257,10 +257,10 @@ class WrongStatementInLoopVisitor(base.BaseNodeVisitor):
 
     def _check_await_inside_loop(self, node: ast.Await) -> None:
         node_parent = walk.get_closest_parent(node, self._forbidden_await_loops)
+        if isinstance(node_parent, AnyComprehension) and all(
+            comprehension.is_async for comprehension in node_parent.generators
+        ):
+            # async comprehensions are allowed to use `await`
+            return
         if node_parent is not None:
-            if isinstance(node_parent, AnyComprehension) and all(
-                comprehension.is_async
-                for comprehension in node_parent.generators
-            ):
-                return
             self.add_violation(AwaitInLoopViolation(node))
