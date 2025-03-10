@@ -1,5 +1,3 @@
-from typing import Final
-
 import pytest
 
 from wemake_python_styleguide.compat.constants import PY313
@@ -17,8 +15,8 @@ from wemake_python_styleguide.visitors.ast.classes.classdef import (
     ConsecutiveDefaultTypeVarsVisitor,
 )
 
-class_header_formats: Final = ['Class[{0}]', 'Class(Generic[{0}])']
-various_code: Final = (
+class_header_formats = ['Class[{0}]', 'Class(Generic[{0}])']
+various_code = (
     'pi = 3.14\n'
     'a = obj.method_call()\n'
     'w, h = get_size()\n'
@@ -26,7 +24,7 @@ various_code: Final = (
     'AlmostTypeVar = NotReallyATypeVar()\n'
     "NonDefault = TypeVar('NonDefault')\n"
 )
-classes_with_various_bases: Final = (
+classes_with_various_bases = (
     'class SimpleBase(object): ...\n'
     'class NotANameSubscript(Some.Class[object]): ...\n'
     'class NotAGenericBase(NotAGeneric[T]): ...\n'
@@ -40,12 +38,7 @@ def test_sneaky_type_var_with_default(
     default_options,
 ):
     """Test that WPS476 works correctly."""
-    src = (
-        f'{classes_with_various_bases}\n'
-        '\n'
-        f'class Class[T=int, *Ts=*tuple[int, ...]]:\n'
-        '    ...'
-    )
+    src = 'class Class[T=int, *Ts=*tuple[int, ...]]: ...'
 
     tree = parse_ast_tree(src)
 
@@ -55,26 +48,28 @@ def test_sneaky_type_var_with_default(
     assert_errors(visitor, [SneakyTypeVarWithDefaultViolation])
 
 
-_CLASS_HEADERS: Final = (
-    (
-        "T = TypeVar('T')\n"
-        "Ts = TypeVarTuple('Ts')\n"
-        '\n'
-        'class Class(Generic[T, *Ts]):'
-    ),
-    (
-        "T = TypeVar('T', default=int)\n"
-        "Ts = TypeVarTuple('Ts')\n"
-        '\n'
-        'class Class(Generic[T, *Ts]):'
-    ),
-    'class Class[T, *Ts]:',
+_OLD_STYLE_GENERICS_CLS = (
+    "T = TypeVar('T')\n"
+    "Ts = TypeVarTuple('Ts')\n"
+    '\n'
+    'class Class(Generic[T, *Ts]):'
 )
+_OLD_STYLE_GENERICS_WITH_DEFAULT_CLS = (
+    "T = TypeVar('T', default=int)\n"
+    "Ts = TypeVarTuple('Ts')\n"
+    '\n'
+    'class Class(Generic[T, *Ts]):'
+)
+_NEW_STYLE_GENERICS_WITHOUT_DEFAULT_CLS = 'class Class[T, *Ts]:'
 
 
 @pytest.mark.parametrize(
     'class_header',
-    _CLASS_HEADERS,
+    [
+        _OLD_STYLE_GENERICS_WITH_DEFAULT_CLS,
+        _OLD_STYLE_GENERICS_CLS,
+        _NEW_STYLE_GENERICS_WITHOUT_DEFAULT_CLS,
+    ],
 )
 def test_type_var_ignored(
     assert_errors,
