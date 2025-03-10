@@ -42,6 +42,7 @@ PRESET: Final = (
     loops.WrongComprehensionVisitor,
     loops.WrongLoopVisitor,
     loops.WrongLoopDefinitionVisitor,
+    loops.WrongStatementInLoopVisitor,
     functions.WrongFunctionCallVisitor,
     functions.FunctionDefinitionVisitor,
     functions.UselessLambdaDefinitionVisitor,
