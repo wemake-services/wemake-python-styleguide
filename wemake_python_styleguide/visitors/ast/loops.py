@@ -16,6 +16,7 @@ from wemake_python_styleguide.types import (
     AnyNodes,
 )
 from wemake_python_styleguide.violations.best_practices import (
+    AwaitInLoopViolation,
     InfiniteWhileLoopViolation,
     LambdaInsideLoopViolation,
     LoopVariableDefinitionViolation,
@@ -235,3 +236,31 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
         )
         if is_implicit_sum:
             self.add_violation(ImplicitSumViolation(node))
+
+
+@final
+class WrongStatementInLoopVisitor(base.BaseNodeVisitor):
+    """Responsible for statements inside loops."""
+
+    _forbidden_await_loops: ClassVar[AnyNodes] = (
+        ast.For,
+        ast.DictComp,
+        ast.GeneratorExp,
+        ast.ListComp,
+        ast.SetComp,
+    )
+
+    def visit_Await(self, node: ast.Await):
+        """Visits ``await`` in loops and check it appropriation to use."""
+        self._check_await_inside_loop(node)
+        self.generic_visit(node)
+
+    def _check_await_inside_loop(self, node: ast.Await) -> None:
+        node_parent = walk.get_closest_parent(node, self._forbidden_await_loops)
+        if isinstance(node_parent, AnyComprehension) and all(
+            comprehension.is_async for comprehension in node_parent.generators
+        ):
+            # async comprehensions are allowed to use `await`
+            return
+        if node_parent is not None:
+            self.add_violation(AwaitInLoopViolation(node))
