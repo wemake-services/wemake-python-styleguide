@@ -92,6 +92,7 @@ Summary
    WrongEmptyLinesCountViolation
    ImportObjectCollisionViolation
    ProblematicFunctionParamsViolation
+   AwaitInLoopViolation
    SneakyTypeVarWithDefaultViolation
 
 Best practices
@@ -173,6 +174,7 @@ Best practices
 .. autoclass:: WrongEmptyLinesCountViolation
 .. autoclass:: ImportObjectCollisionViolation
 .. autoclass:: ProblematicFunctionParamsViolation
+.. autoclass:: AwaitInLoopViolation
 .. autoclass:: SneakyTypeVarWithDefaultViolation
 
 """
@@ -2973,6 +2975,41 @@ class ProblematicFunctionParamsViolation(ASTViolation):
 
 
 @final
+class AwaitInLoopViolation(ASTViolation):
+    """
+    Do not use ``await`` in ``for`` loop.
+
+    Reasoning:
+        There is a better way to control repeated coroutines in ``for`` loops.
+
+    Solution:
+        Use :func:`asyncio.gather`,
+        :func:`asyncio.wait`,
+        or :class:`asyncio.TaskGroup`
+
+    Example::
+
+        # Correct:
+        async def request():
+            tasks = [parse_content(url) for url in urls]
+            parsed_content = await asyncio.gather(*tasks)
+
+        # Wrong:
+        async def request():
+            parsed_content = []
+            for url in urls:
+                result = await parse_content(url)
+                parsed_content.append(result)
+
+    .. versionadded:: 1.1.0
+
+    """
+
+    error_template = 'Found `await` in `for` loop'
+    code = 476
+
+
+@final
 class SneakyTypeVarWithDefaultViolation(ASTViolation):
     """
     Forbid using TypeVarTuple after a TypeVar with default.
@@ -3004,4 +3041,4 @@ class SneakyTypeVarWithDefaultViolation(ASTViolation):
     """
 
     error_template = 'Found a TypeVarTuple following a TypeVar with default'
-    code = 476
+    code = 477
