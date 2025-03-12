@@ -22,7 +22,7 @@ Semantic versioning in our case means:
 ### Rules
 
 - Forbids to use `await` in `for` loop, #1600
-- Adds `WPS476`: do not allow `TypeVarTuple` after a `TypeVar` with a default #3265
+- Adds `WPS477`: do not allow `TypeVarTuple` after a `TypeVar` with a default #3265
 
 ### Command line utility
 

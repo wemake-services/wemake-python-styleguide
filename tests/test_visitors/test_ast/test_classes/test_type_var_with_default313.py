@@ -37,7 +37,7 @@ def test_sneaky_type_var_with_default(
     parse_ast_tree,
     default_options,
 ):
-    """Test that WPS476 works correctly."""
+    """Test that WPS477 works correctly."""
     src = 'class Class[T=int, *Ts=*tuple[int, ...]]: ...'
 
     tree = parse_ast_tree(src)
@@ -48,27 +48,25 @@ def test_sneaky_type_var_with_default(
     assert_errors(visitor, [SneakyTypeVarWithDefaultViolation])
 
 
-_OLD_STYLE_GENERICS_CLS = (
-    "T = TypeVar('T')\n"
-    "Ts = TypeVarTuple('Ts')\n"
-    '\n'
-    'class Class(Generic[T, *Ts]):'
-)
-_OLD_STYLE_GENERICS_WITH_DEFAULT_CLS = (
-    "T = TypeVar('T', default=int)\n"
-    "Ts = TypeVarTuple('Ts')\n"
-    '\n'
-    'class Class(Generic[T, *Ts]):'
-)
-_NEW_STYLE_GENERICS_WITHOUT_DEFAULT_CLS = 'class Class[T, *Ts]:'
+correct_typevar_and_tuple = """
+T = TypeVar('T')
+Ts = TypeVarTuple('Ts')
+class Class(Generic[T, *Ts]):
+"""
+correct_default_typevar_and_tuple = """
+T = TypeVar('T', default=int)
+Ts = TypeVarTuple('Ts')
+class Class(Generic[T, *Ts]):
+"""
+correct_new_typevar_and_tuple = 'class Class[T, *Ts]:'
 
 
 @pytest.mark.parametrize(
     'class_header',
     [
-        _OLD_STYLE_GENERICS_WITH_DEFAULT_CLS,
-        _OLD_STYLE_GENERICS_CLS,
-        _NEW_STYLE_GENERICS_WITHOUT_DEFAULT_CLS,
+        correct_typevar_and_tuple,
+        correct_default_typevar_and_tuple,
+        correct_new_typevar_and_tuple,
     ],
 )
 def test_type_var_ignored(
@@ -77,7 +75,7 @@ def test_type_var_ignored(
     default_options,
     class_header,
 ):
-    """Test that WPS476 ignores non-defaulted and old TypeVars."""
+    """Test that WPS477 ignores non-defaulted and old TypeVars."""
     src = (
         f'{various_code}\n{classes_with_various_bases}\n{class_header}\n    ...'
     )

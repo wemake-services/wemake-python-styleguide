@@ -6,6 +6,6 @@ It is used for e2e tests.
 
 class NewStyleGenerics[
     TypeVarDefault=int,
-    *FollowingTuple=*tuple[int, ...]  # noqa: WPS476
+    *FollowingTuple=*tuple[int, ...]  # noqa: WPS477
 ]:
     """TypeVarTuple follows a defaulted TypeVar."""
