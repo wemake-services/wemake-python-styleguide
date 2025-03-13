@@ -3,7 +3,9 @@ import pytest
 from wemake_python_styleguide.violations.oop import (
     UnpythonicGetterSetterViolation,
 )
-from wemake_python_styleguide.visitors.ast.classes import WrongClassBodyVisitor
+from wemake_python_styleguide.visitors.ast.classes.classdef import (
+    WrongClassBodyVisitor,
+)
 
 module_getter_and_setter = """
 attribute = 1

@@ -1,7 +1,9 @@
 import pytest
 
 from wemake_python_styleguide.violations.oop import WrongSlotsViolation
-from wemake_python_styleguide.visitors.ast.classes import WrongSlotsVisitor
+from wemake_python_styleguide.visitors.ast.classes.attributes import (
+    WrongSlotsVisitor,
+)
 
 class_body_template = """
 class ClassWithSlots:

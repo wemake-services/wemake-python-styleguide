@@ -1,10 +1,9 @@
 from typing import Final
 
-from wemake_python_styleguide.presets.topics import complexity, naming
+from wemake_python_styleguide.presets.topics import classes, complexity, naming
 from wemake_python_styleguide.visitors.ast import (  # noqa: WPS235
     blocks,
     builtins,
-    classes,
     compares,
     conditions,
     decorators,
@@ -71,13 +70,6 @@ PRESET: Final = (
     conditions.MatchVisitor,
     conditions.ChainedIsVisitor,
     iterables.IterableUnpackingVisitor,
-    classes.WrongClassDefVisitor,
-    classes.WrongClassBodyVisitor,
-    classes.WrongMethodVisitor,
-    classes.WrongSlotsVisitor,
-    classes.ClassAttributeVisitor,
-    classes.ClassMethodOrderVisitor,
-    classes.BuggySuperCallVisitor,
     blocks.AfterBlockVariablesVisitor,
     subscripts.SubscriptVisitor,
     subscripts.ImplicitDictGetVisitor,
@@ -92,4 +84,5 @@ PRESET: Final = (
     # Topics:
     *complexity.PRESET,
     *naming.PRESET,
+    *classes.PRESET,
 )

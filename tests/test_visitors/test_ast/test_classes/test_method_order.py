@@ -3,7 +3,7 @@ import pytest
 from wemake_python_styleguide.violations.consistency import (
     WrongMethodOrderViolation,
 )
-from wemake_python_styleguide.visitors.ast.classes import (
+from wemake_python_styleguide.visitors.ast.classes.methods import (
     ClassMethodOrderVisitor,
 )
 
