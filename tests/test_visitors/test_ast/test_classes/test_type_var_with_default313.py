@@ -51,18 +51,18 @@ def test_sneaky_type_var_with_default(
 correct_typevar_and_tuple = """
 T = TypeVar('T')
 Ts = TypeVarTuple('Ts')
-class Class(Generic[T, *Ts]):
+class Class(Generic[T, *Ts]): ...
 """
 correct_default_typevar_and_tuple = """
 T = TypeVar('T', default=int)
 Ts = TypeVarTuple('Ts')
-class Class(Generic[T, *Ts]):
+class Class(Generic[T, *Ts]): ...
 """
-correct_new_typevar_and_tuple = 'class Class[T, *Ts]:'
+correct_new_typevar_and_tuple = 'class Class[T, *Ts]: ...'
 
 
 @pytest.mark.parametrize(
-    'class_header',
+    'src',
     [
         correct_typevar_and_tuple,
         correct_default_typevar_and_tuple,
@@ -73,13 +73,31 @@ def test_type_var_ignored(
     assert_errors,
     parse_ast_tree,
     default_options,
-    class_header,
+    src,
 ):
     """Test that WPS477 ignores non-defaulted and old TypeVars."""
-    src = (
-        f'{various_code}\n{classes_with_various_bases}\n{class_header}\n    ...'
-    )
+    tree = parse_ast_tree(src)
 
+    visitor = ConsecutiveDefaultTypeVarsVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize(
+    'src',
+    [
+        various_code,
+        classes_with_various_bases
+    ],
+)
+def test_usual_code_ignored(
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+    src,
+):
+    """Test that WPS477 ignores unrelated code."""
     tree = parse_ast_tree(src)
 
     visitor = ConsecutiveDefaultTypeVarsVisitor(default_options, tree=tree)
