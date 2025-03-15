@@ -86,10 +86,7 @@ def test_type_var_ignored(
 
 @pytest.mark.parametrize(
     'src',
-    [
-        various_code,
-        classes_with_various_bases
-    ],
+    [various_code, classes_with_various_bases],
 )
 def test_usual_code_ignored(
     assert_errors,
