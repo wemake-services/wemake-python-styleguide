@@ -16,14 +16,6 @@ from wemake_python_styleguide.visitors.ast.classes.classdef import (
 )
 
 class_header_formats = ['Class[{0}]', 'Class(Generic[{0}])']
-various_code = (
-    'pi = 3.14\n'
-    'a = obj.method_call()\n'
-    'w, h = get_size()\n'
-    'obj.field = function_call()\n'
-    'AlmostTypeVar = NotReallyATypeVar()\n'
-    "NonDefault = TypeVar('NonDefault')\n"
-)
 classes_with_various_bases = (
     'class SimpleBase(object): ...\n'
     'class NotANameSubscript(Some.Class[object]): ...\n'

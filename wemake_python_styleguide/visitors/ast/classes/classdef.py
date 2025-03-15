@@ -156,7 +156,7 @@ class ConsecutiveDefaultTypeVarsVisitor(base.BaseNodeVisitor):
                 isinstance(type_param, TypeVar)
                 and type_param.default_value is not None
             )
-            if isinstance(type_param, TypeVarTuple) and had_default:
+            if had_default and isinstance(type_param, TypeVarTuple):
                 self.add_violation(
                     SneakyTypeVarWithDefaultViolation(type_param)
                 )
