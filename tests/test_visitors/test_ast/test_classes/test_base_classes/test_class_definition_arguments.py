@@ -3,7 +3,9 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     KwargsUnpackingInClassDefinitionViolation,
 )
-from wemake_python_styleguide.visitors.ast.classes import WrongClassDefVisitor
+from wemake_python_styleguide.visitors.ast.classes.classdef import (
+    WrongClassDefVisitor,
+)
 
 # Wrong:
 

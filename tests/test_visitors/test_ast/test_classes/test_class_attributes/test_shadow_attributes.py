@@ -3,7 +3,9 @@ import pytest
 from wemake_python_styleguide.violations.oop import (
     ShadowedClassAttributeViolation,
 )
-from wemake_python_styleguide.visitors.ast.classes import ClassAttributeVisitor
+from wemake_python_styleguide.visitors.ast.classes.attributes import (
+    ClassAttributeVisitor,
+)
 
 # Can raise:
 
