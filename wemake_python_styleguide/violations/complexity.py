@@ -719,6 +719,9 @@ class LineComplexityViolation(ASTViolation):
     1. modules
     2. function and classes, since they are checked differently
     3. type annotations, since they do not increase the complexity
+    4. nodes produced by ``{}`` (but not their contents!) in f-strings
+       as they raise the complexity score disproportionally to the
+       actual complexity raise
 
     Reasoning:
         Having a complex line indicates that you somehow managed to put too
