@@ -172,7 +172,7 @@ def test_same_complexity(parse_ast_tree, default_options):
         (line_with_comprehension, 6),
         (line_with_math, 9),
         (regression1216, 15),
-        (regression3350, 10),
+        (regression3350, 10),  # used to be 15
     ],
 )
 def test_exact_complexity(parse_ast_tree, default_options, code, complexity):
