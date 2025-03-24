@@ -28,7 +28,7 @@ class JonesComplexityVisitor(BaseNodeVisitor):
 
     Calculates the number of AST nodes per line of code.
     Also calculates the median nodes/line score.
-    Then compares these numbers to the given tressholds.
+    Then compares these numbers to the given thresholds.
 
     Some nodes are ignored because there's no sense in analyzing them.
     Some nodes like type annotations are not affecting line complexity,
