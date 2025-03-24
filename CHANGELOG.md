@@ -37,6 +37,7 @@ This version introduces `wps` CLI tool.
 - Fixes `WPS226`, now it points to the first string literal occurrence, #3267
 - Fixes `WPS605` false-positive on `@staticmethod`, #3292
 - Fixes `_SELF` name should not trigger `WPS117`, #3310
+- Fixes `WPS221` being too strict with f-strings
 
 ## 1.0.0
 
