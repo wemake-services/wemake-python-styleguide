@@ -28,17 +28,20 @@ class JonesComplexityVisitor(BaseNodeVisitor):
 
     Calculates the number of AST nodes per line of code.
     Also calculates the median nodes/line score.
-    Then compares these numbers to the given tressholds.
+    Then compares these numbers to the given thresholds.
 
     Some nodes are ignored because there's no sense in analyzing them.
     Some nodes like type annotations are not affecting line complexity,
-    so we do not count them.
+    so we do not count them. FormattedValue and JoinedStr nodes are not
+    counted, because they have no visible impact on source code.
     """
 
     _ignored_nodes = (
         ast.ClassDef,
         *FunctionNodes,
         ast.expr_context,
+        ast.FormattedValue,
+        ast.JoinedStr,
     )
 
     def __init__(self, *args, **kwargs) -> None:
