@@ -17,17 +17,18 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
-## 1.1.0 WIP
-
-### Rules
-
-- Forbids to use `await` in `for` loop, #1600
-- Adds `WPS477`: do not allow `TypeVarTuple` after a `TypeVar` with a default #3265
+## 1.1.0
 
 ### Command line utility
 
 This version introduces `wps` CLI tool.
-- `wps explain <code>` command can be used to access WPS violation docs (same as on website) without internet access
+`wps explain <code>` command can be used to access WPS
+violation docs (same as on website) but without any internet access.
+
+### Features
+
+- Adds `WPS476`: forbids to use `await` expressions in `for` loops, #1600
+- Adds `WPS477`: forbids `TypeVarTuple` after a `TypeVar` with a default, #3265
 
 ### Bugfixes
 
@@ -36,8 +37,9 @@ This version introduces `wps` CLI tool.
 - Fixes `WPS432`, now it shows literal num, #1402
 - Fixes `WPS226`, now it points to the first string literal occurrence, #3267
 - Fixes `WPS605` false-positive on `@staticmethod`, #3292
-- Fixes `_SELF` name should not trigger `WPS117`, #3310
-- Fixes `WPS221` being too strict with f-strings
+- Fixes `_SELF` name not to trigger `WPS117`, #3310
+- Fixes `WPS221` being too strict with f-strings, #3350
+
 
 ## 1.0.0
 
