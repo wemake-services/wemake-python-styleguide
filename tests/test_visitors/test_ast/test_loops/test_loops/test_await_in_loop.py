@@ -78,6 +78,44 @@ async def foo():
 """
 
 
+# Correct (await in definition)
+
+for_with_await_in_definition  = """
+async def foo():
+    for _ in await some_one():
+        some()
+"""
+
+
+while_loop_with_await_in_definition = """
+async def foo():
+    while await some_one():
+        some()
+        break
+"""
+
+list_comprehension_with_await_in_definition = """
+async def foo():
+    result = [some() for _ in await some_one()]
+"""
+
+set_comprehension_with_await_in_definition = """
+async def foo():
+    result = {some() for _ in await some_one()}
+"""
+
+dict_comprehension_with_await_in_definition = """
+async def foo():
+    result = {i: some() for i in await some_one()}
+"""
+
+generator_comprehension_with_await_in_definition = """
+async def foo():
+    result = (some() for i in await some_one())
+"""
+
+
+
 @pytest.mark.parametrize(
     'code',
     [
@@ -112,6 +150,15 @@ def test_wrong_await_in_loop(
         async_dict_comprehension,
         async_set_comprehension,
         async_generator_comprehension,
+
+        # Await in definition
+        for_with_await_in_definition,
+        while_loop_with_await_in_definition,
+        list_comprehension_with_await_in_definition,
+        dict_comprehension_with_await_in_definition,
+        set_comprehension_with_await_in_definition,
+        generator_comprehension_with_await_in_definition
+
     ],
 )
 def test_good_await_in_loop(
