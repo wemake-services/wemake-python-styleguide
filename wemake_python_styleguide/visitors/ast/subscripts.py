@@ -1,7 +1,7 @@
 import ast
 from typing import ClassVar, final
 
-from wemake_python_styleguide.logic import source
+from wemake_python_styleguide.logic import source, walk
 from wemake_python_styleguide.logic.tree import functions, operators, slices
 from wemake_python_styleguide.violations import (
     best_practices,
@@ -182,3 +182,29 @@ class CorrectKeyVisitor(base.BaseNodeVisitor):
         return isinstance(real_node, ast.Constant) and isinstance(
             real_node.value, float
         )
+
+
+@final
+class StricterSliceOperations(base.BaseNodeVisitor):
+    """Check for stricter operation with slices."""
+
+    def visit_Slice(self, node: ast.Slice):
+        """Check that there is no stricter way to use slices."""
+        self._check_reverse_through_slice(node)
+        self.generic_visit(node)
+
+    def _check_reverse_through_slice(self, node: ast.Slice):
+        if walk.get_closest_parent(node, ast.Assign):
+            is_no_lower_and_upper_and_negative_step = (
+                node.lower is None
+                and node.upper is None
+                and isinstance(node.step, ast.UnaryOp)
+                and isinstance(node.step.op, ast.USub)
+            )
+            if not is_no_lower_and_upper_and_negative_step:
+                return
+
+            if node.step.operand.value == 1:
+                self.add_violation(
+                    best_practices.NonStrictSliceOperationsViolation
+                )
