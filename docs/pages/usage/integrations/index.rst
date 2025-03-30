@@ -5,14 +5,14 @@ WPS can integrate with lots of popular and mainstream technologies. In this sect
 
 .. rubric:: Featured topics
 
-- :ref:`Using WPS with Ruff <Auto-formatters>`
+- :doc:`Using WPS with Ruff <auto-formatters>`
 - Integrate WPS into editors and IDEs:
 
   - `vscode plugin <https://code.visualstudio.com/docs/python/linting>`_
   - `vim plugin <https://github.com/nvie/vim-flake8>`_
   - `pycharm plugin <https://plugins.jetbrains.com/plugin/11563-flake8-support>`_
 
-- :ref:`Run WPS linting in GitHub Actions pipelines <GitHub Actions>`
+- :doc:`Run WPS linting in GitHub Actions pipelines <github-actions>`
 
 .. toctree::
   :hidden:
