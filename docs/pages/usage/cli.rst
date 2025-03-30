@@ -16,17 +16,20 @@ Syntax: ``wps explain <code>``
 
 Examples:
 
-.. code:: bash
+.. code:: plain
 
    $ wps explain WPS115
-   WPS115 (UpperCaseAttributeViolation)
+   WPS115 — Require ``snake_case`` for naming class attributes.
 
-   WPS115 - Require ``snake_case`` for naming class attributes.
+   Attributes in Enum and enum-like classes (Django Choices)
+   are ignored, as they should be written in UPPER_SNAKE_CASE
    ...
 
-.. code:: bash
+.. code:: plain
 
    $ wps explain 116
-   WPS116 (ConsecutiveUnderscoresInNameViolation)
+   WPS116 — Forbid using more than one consecutive underscore in variable names.
 
-   WPS116 - Forbid using more than one consecutive underscore in variable names.
+   Reasoning:
+       This is done to gain extra readability.
+   ...
