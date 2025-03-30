@@ -59,6 +59,10 @@ empty_module = ''
 # https://github.com/wemake-services/wemake-python-styleguide/issues/1216
 regression1216 = 'call.endswith(post) and len(node.args) == self._post[post]'
 
+# See
+# https://github.com/wemake-services/wemake-python-styleguide/issues/3350
+regression3350 = 'x = f"Values: {a}, {b}, {c}, {d}"'
+
 
 @pytest.mark.parametrize(
     'code',
@@ -86,6 +90,7 @@ regression1216 = 'call.endswith(post) and len(node.args) == self._post[post]'
                 ),
             ],
         ),
+        regression3350,
     ],
 )
 def test_regular_nodes(assert_errors, parse_ast_tree, code, default_options):
@@ -167,6 +172,7 @@ def test_same_complexity(parse_ast_tree, default_options):
         (line_with_comprehension, 6),
         (line_with_math, 9),
         (regression1216, 15),
+        (regression3350, 10),  # used to be 15
     ],
 )
 def test_exact_complexity(parse_ast_tree, default_options, code, complexity):
