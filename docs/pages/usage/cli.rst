@@ -16,7 +16,7 @@ Syntax: ``wps explain <code>``
 
 Examples:
 
-.. code:: plain
+.. code:: text
 
    $ wps explain WPS115
    WPS115 — Require ``snake_case`` for naming class attributes.
@@ -25,7 +25,7 @@ Examples:
    are ignored, as they should be written in UPPER_SNAKE_CASE
    ...
 
-.. code:: plain
+.. code:: text
 
    $ wps explain 116
    WPS116 — Forbid using more than one consecutive underscore in variable names.
