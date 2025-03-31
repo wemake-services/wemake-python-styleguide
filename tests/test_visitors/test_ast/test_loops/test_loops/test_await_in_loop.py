@@ -149,7 +149,6 @@ def test_wrong_await_in_loop(
         async_dict_comprehension,
         async_set_comprehension,
         async_generator_comprehension,
-
         # Await in definition
         for_with_await_in_definition,
         while_loop_with_await_in_definition,
