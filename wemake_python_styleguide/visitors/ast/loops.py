@@ -271,8 +271,7 @@ class WrongStatementInLoopVisitor(base.BaseNodeVisitor):
             return
 
         if isinstance(
-            node_parent,
-            AnyComprehension
+            node_parent, AnyComprehension
         ):  # await allowed in comprehensions
             for generator in node_parent.generators:
                 if generator.iter is node:

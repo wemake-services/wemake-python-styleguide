@@ -156,7 +156,6 @@ def test_wrong_await_in_loop(
         dict_comprehension_with_await_in_definition,
         set_comprehension_with_await_in_definition,
         gen_comprehension_with_await_in_definition,
-
     ],
 )
 def test_good_await_in_loop(
