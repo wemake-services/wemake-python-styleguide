@@ -263,13 +263,19 @@ class WrongStatementInLoopVisitor(base.BaseNodeVisitor):
             # async comprehensions are allowed to use `await`
             return
 
-        if node_parent is not None:
-            if isinstance(node_parent, ast.For):
-                if node_parent.iter is node: # await are allowed in loop definition
-                    return
-            if isinstance(node_parent, AnyComprehension): # await allowed in comprehensions
-                for generator in node_parent.generators:
-                    if generator.iter is node:
-                        return
+        if node_parent is None:
+            return
 
-            self.add_violation(AwaitInLoopViolation(node))
+        if isinstance(node_parent, ast.For) and node_parent.iter is node:
+            # await allowed in loop definition
+            return
+
+        if isinstance(
+            node_parent,
+            AnyComprehension
+        ):  # await allowed in comprehensions
+            for generator in node_parent.generators:
+                if generator.iter is node:
+                    return
+
+        self.add_violation(AwaitInLoopViolation(node))
