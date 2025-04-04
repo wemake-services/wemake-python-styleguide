@@ -94,6 +94,7 @@ Summary
    ProblematicFunctionParamsViolation
    AwaitInLoopViolation
    SneakyTypeVarWithDefaultViolation
+   NonStrictSliceOperationsViolation
 
 Best practices
 --------------
@@ -176,6 +177,7 @@ Best practices
 .. autoclass:: ProblematicFunctionParamsViolation
 .. autoclass:: AwaitInLoopViolation
 .. autoclass:: SneakyTypeVarWithDefaultViolation
+.. autoclass:: NonStrictSliceOperationsViolation
 
 """
 
