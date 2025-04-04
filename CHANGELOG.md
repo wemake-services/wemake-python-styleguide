@@ -20,7 +20,7 @@ Semantic versioning in our case means:
 
 ### Features
 
-- Adds `WPS478`: forbids using non strict slice operations. #<pr-code>
+- Adds `WPS478`: forbids using non strict slice operations, #1011
 
 
 ## 1.1.0
