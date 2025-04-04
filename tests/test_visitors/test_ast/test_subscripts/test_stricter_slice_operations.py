@@ -11,7 +11,14 @@ from wemake_python_styleguide.visitors.ast.subscripts import (
 @pytest.mark.parametrize(
     'expression',
     [
-        'items = items[::-1]',  # reverse
+        # reverse
+        'items = items[::-1]',
+        # copy
+        'other = items[:]',
+        'other = items[::]',
+        # pop
+        'items = items[:-1]',
+        'some, items = "some", items[:-1]',
     ],
 )
 def test_non_strict_slice_operation_bad(
@@ -34,7 +41,16 @@ def test_non_strict_slice_operation_bad(
     [
         # reverse
         'items[::-1]',
-        'foo(items[::-1])',
+        # copy
+        'items[::]',
+        'items[:]',
+        # pop
+        'other = items[:-1]',
+        # other
+        'items[0]',
+        'items[:2]',
+        'a = items[1::-1]',
+        'a = items[0]',
     ],
 )
 def test_non_strict_slice_operation_good(
