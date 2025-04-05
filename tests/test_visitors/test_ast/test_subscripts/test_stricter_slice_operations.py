@@ -12,7 +12,7 @@ from wemake_python_styleguide.visitors.ast.subscripts import (
     'expression',
     [
         # reverse
-        'items = items[::-1]',
+        'items[::-1]',
         # copy
         'other = items[:]',
         'other = items[::]',
@@ -39,8 +39,6 @@ def test_non_strict_slice_operation_bad(
 @pytest.mark.parametrize(
     'expression',
     [
-        # reverse
-        'items[::-1]',
         # copy
         'items[::]',
         'items[:]',

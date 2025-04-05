@@ -189,28 +189,31 @@ class CorrectKeyVisitor(base.BaseNodeVisitor):
 class StricterSliceOperations(base.BaseNodeVisitor):
     """Check for stricter operation with slices."""
 
-    def visit_Slice(self, node: ast.Slice):
-        """Check that there is no stricter way to use slices."""
+    def visit_Slice(self, node: ast.Slice) -> None:
+        """Visit slice."""
         self._check_reverse_through_slice(node)
         self._check_copy_through_slice(node)
+        self.generic_visit(node)
+
+    def visit_Subscript(self, node):
+        """Visit subscript."""
         self._check_pop_through_slice(node)
         self.generic_visit(node)
 
-    def _check_reverse_through_slice(self, node: ast.Slice):
-        if walk.get_closest_parent(node, ast.Assign):
-            if not (
-                node.lower is None
-                and node.upper is None
-                and node.step is not None
-                and self._is_negative_one_const(node.step)
-            ):
-                return
+    def _check_reverse_through_slice(self, node: ast.Slice) -> None:
+        if not (
+            node.lower is None
+            and node.upper is None
+            and node.step is not None
+            and self._is_negative_one_const(node.step)
+        ):
+            return
 
-            self.add_violation(
-                best_practices.NonStrictSliceOperationsViolation(node)
-            )
+        self.add_violation(
+            best_practices.NonStrictSliceOperationsViolation(node)
+        )
 
-    def _check_copy_through_slice(self, node: ast.Slice):
+    def _check_copy_through_slice(self, node: ast.Slice) -> None:
         if walk.get_closest_parent(node, ast.Assign):
             if not (
                 node.lower is None and node.upper is None and node.step is None
@@ -221,24 +224,24 @@ class StricterSliceOperations(base.BaseNodeVisitor):
                 best_practices.NonStrictSliceOperationsViolation(node)
             )
 
-    def _check_pop_through_slice(self, node: ast.Slice):
+    def _check_pop_through_slice(self, node: ast.Subscript) -> None:
+        checking_slice = node.slice
         assign = walk.get_closest_parent(node, ast.Assign)
         if not (
-            isinstance(assign, ast.Assign)
-            and node.lower is None
-            and node.upper is not None
-            and self._is_negative_one_const(node.upper)
+            isinstance(node.value, ast.Name)
+            and isinstance(assign, ast.Assign)
+            and isinstance(checking_slice, ast.Slice)
         ):
             return
 
-        subscript = walk.get_closest_parent(node, ast.Subscript)
         if not (
-            isinstance(subscript, ast.Subscript)
-            and isinstance(subscript.value, ast.Name)
+            checking_slice.lower is None
+            and checking_slice.upper is not None
+            and self._is_negative_one_const(checking_slice.upper)
         ):
             return
 
-        right_variable_name = subscript.value.id
+        right_variable_name = node.value.id
         for left_variable in name_nodes.flat_variable_names([assign]):
             if left_variable == right_variable_name:
                 self.add_violation(
