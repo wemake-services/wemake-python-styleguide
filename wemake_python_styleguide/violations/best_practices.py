@@ -94,6 +94,7 @@ Summary
    ProblematicFunctionParamsViolation
    AwaitInLoopViolation
    SneakyTypeVarWithDefaultViolation
+   NonStrictSliceOperationsViolation
 
 Best practices
 --------------
@@ -176,6 +177,7 @@ Best practices
 .. autoclass:: ProblematicFunctionParamsViolation
 .. autoclass:: AwaitInLoopViolation
 .. autoclass:: SneakyTypeVarWithDefaultViolation
+.. autoclass:: NonStrictSliceOperationsViolation
 
 """
 
@@ -3042,3 +3044,39 @@ class SneakyTypeVarWithDefaultViolation(ASTViolation):
 
     error_template = 'Found a TypeVarTuple following a TypeVar with default'
     code = 477
+
+
+@final
+class NonStrictSliceOperationsViolation(ASTViolation):
+    """
+    Forbid using non strict slice operations.
+
+    Reasoning:
+        We have two ways to do something.
+
+    Solution:
+        Prefer a more descriptive way.
+
+    Example::
+
+        # bad
+        items = items[::-1]
+        # good
+        items.reverse()
+
+        # bad
+        other = items[:]
+        # good
+        other = items.copy()
+
+        # bad
+        items = items[:-1]
+        # good
+        items.pop()
+
+    .. versionadded:: 1.2.0
+
+    """
+
+    error_template = 'Found non strict slice operation'
+    code = 478
