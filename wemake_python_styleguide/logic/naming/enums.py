@@ -4,13 +4,31 @@ from typing import Final
 
 from wemake_python_styleguide.logic.source import node_to_string
 
-_ENUM_NAMES: Final = (
+_CONCRETE_ENUM_NAMES: Final = (
+    'enum.StrEnum',
+    'StrEnum',
+    'enum.IntEnum',
+    'IntEnum',
+    'enum.IntFlag',
+    'IntFlag',
+)
+
+_REGULAR_ENUM_NAMES: Final = (
     'enum.Enum',
     'enum.EnumType',
     'enum.EnumMeta',
     'Enum',
     'EnumType',
     'EnumMeta',
+    'enum.Flag',
+    'Flag',
+    'enum.ReprEnum',
+    'ReprEnum',
+)
+
+_ENUM_NAMES: Final = (
+    *_CONCRETE_ENUM_NAMES,
+    *_REGULAR_ENUM_NAMES,
 )
 
 _ENUM_LIKE_NAMES: Final = (
@@ -32,9 +50,13 @@ def _has_one_of_base_classes(
     return any(enum_base in string_bases for enum_base in base_names)
 
 
-def has_enum_base(defn: ast.ClassDef) -> bool:
-    """Tells whether some class has `Enum` or similar class as its base."""
-    return _has_one_of_base_classes(defn, _ENUM_NAMES)
+def has_regular_enum_base(defn: ast.ClassDef) -> bool:
+    """Tells whether some class has `Enum` or similar class as its base.
+
+    Excluded `IntEnum`, `StrEnum`, `IntFlag` concrete `Enum` subclasses.
+    Because those classes have already been subclassed using primitives.
+    """
+    return _has_one_of_base_classes(defn, _REGULAR_ENUM_NAMES)
 
 
 def has_enum_like_base(defn: ast.ClassDef) -> bool:
