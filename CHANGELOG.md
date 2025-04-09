@@ -16,6 +16,11 @@ Semantic versioning in our case means:
   But, in the future we might change the configuration names/logic,
   change the client facing API, change code conventions significantly, etc.
 
+## 1.1.1
+
+### Bugfixes
+
+- Fixes `WPS115` false-positive on `StrEnum`, `IntEnum`, `IntFlag` attributes, #3381
 
 ## 1.1.0
 

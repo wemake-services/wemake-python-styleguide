@@ -77,7 +77,7 @@ class WrongClassDefVisitor(base.BaseNodeVisitor):
             self.add_violation(bp.BaseExceptionSubclassViolation(node))
         elif classes.is_forbidden_super_class(
             id_attr,
-        ) and not enums.has_enum_base(node):
+        ) and not enums.has_regular_enum_base(node):
             self.add_violation(
                 oop.BuiltinSubclassViolation(node, text=id_attr),
             )
