@@ -13,12 +13,46 @@ from wemake_python_styleguide.visitors.ast.subscripts import (
     [
         # reverse
         'items[::-1]',
+        'items[None::-1]',
+        'items[:None:-1]',
+        'items[None:None:-1]',
+        'items[-1::-1]',
+        'items[-1:None:-1]',
         # copy
-        'other = items[:]',
-        'other = items[::]',
+        'items[:]',
+        'items[None:]',
+        'items[:None]',
+        'items[None:None]',
+        'items[::]',
+        'items[None::]',
+        'items[:None:]',
+        'items[::None]',
+        'items[None:None:]',
+        'items[None::None]',
+        'items[:None:None]',
+        'items[None:None:None]',
+        'items[::1]',
+        'items[None::1]',
+        'items[:None:1]',
+        'items[None:None:1]',
+        'items[0:]',
+        'items[0:None]',
+        'items[0::]',
+        'items[0:None:]',
+        'items[0::None]',
+        'items[0:None:None]',
+        'items[0:None:1]',
         # pop
-        'items = items[:-1]',
-        'some, items = "some", items[:-1]',
+        'items[:-1]',
+        'items[None:-1]',
+        'items[None:-1:None]',
+        'items[0:-1]',
+        'items[0:-1:None]',
+        'items[:-1:]',
+        'items[None:-1:]',
+        'items[:-1:None]',
+        'items[0:-1:1]',
+        'items[None:-1:1]',
     ],
 )
 def test_non_strict_slice_operation_bad(
@@ -39,16 +73,18 @@ def test_non_strict_slice_operation_bad(
 @pytest.mark.parametrize(
     'expression',
     [
-        # copy
-        'items[::]',
-        'items[:]',
         # pop
         'other = items[:-1]',
         # other
         'items[0]',
         'items[:2]',
-        'a = items[1::-1]',
-        'a = items[0]',
+        'items[0:]',
+        'items[1::-1]',
+        'items[1:4:-1]',
+        'items[:x]',
+        'items[:-x]',
+        'items[::-x]',
+        'items[::x]',
     ],
 )
 def test_non_strict_slice_operation_good(
