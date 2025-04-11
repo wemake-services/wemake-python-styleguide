@@ -3059,20 +3059,15 @@ class NonStrictSliceOperationsViolation(ASTViolation):
 
     Example::
 
-        # bad
-        items = items[::-1]
-        # good
+        # Correct:
         items.reverse()
-
-        # bad
-        other = items[:]
-        # good
-        other = items.copy()
-
-        # bad
-        items = items[:-1]
-        # good
+        items.copy()
         items.pop()
+
+        # Wrong:
+        items[::-1]  # .reverse()
+        items[:]  # .copy()
+        items[:-1]  # .pop()
 
     .. versionadded:: 1.2.0
 
