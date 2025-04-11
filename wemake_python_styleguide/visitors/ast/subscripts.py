@@ -214,15 +214,14 @@ class StricterSliceOperations(base.BaseNodeVisitor):
         )
 
     def _check_copy_through_slice(self, node: ast.Slice) -> None:
-        if walk.get_closest_parent(node, ast.Assign):
-            if not (
-                node.lower is None and node.upper is None and node.step is None
-            ):
-                return
+        if not (
+            node.lower is None and node.upper is None and node.step is None
+        ):
+            return
 
-            self.add_violation(
-                best_practices.NonStrictSliceOperationsViolation(node)
-            )
+        self.add_violation(
+            best_practices.NonStrictSliceOperationsViolation(node)
+        )
 
     def _check_pop_through_slice(self, node: ast.Subscript) -> None:
         checking_slice = node.slice
