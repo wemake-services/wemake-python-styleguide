@@ -4,7 +4,7 @@ from wemake_python_styleguide.violations.best_practices import (
     NonStrictSliceOperationsViolation,
 )
 from wemake_python_styleguide.visitors.ast.subscripts import (
-    StricterSliceOperations,
+    StrictSliceOperations,
 )
 
 
@@ -41,6 +41,7 @@ from wemake_python_styleguide.visitors.ast.subscripts import (
         'items[0:None:]',
         'items[0::None]',
         'items[0:None:None]',
+        'items[0::1]',
         'items[0:None:1]',
         # pop
         'items[:-1]',
@@ -64,7 +65,7 @@ def test_non_strict_slice_operation_bad(
     """Testing for using non strict slice operations."""
     tree = parse_ast_tree(expression)
 
-    visitor = StricterSliceOperations(default_options, tree=tree)
+    visitor = StrictSliceOperations(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [NonStrictSliceOperationsViolation])
@@ -73,18 +74,27 @@ def test_non_strict_slice_operation_bad(
 @pytest.mark.parametrize(
     'expression',
     [
-        # pop
-        'other = items[:-1]',
-        # other
         'items[0]',
         'items[:2]',
-        'items[0:]',
+        'items[2:]',
+        'items[2::]',
+        'items[2::2]',
+        'items[2:2]',
+        'items[2:None:2]',
         'items[1::-1]',
+        'items[1:None:-1]',
         'items[1:4:-1]',
         'items[:x]',
+        'items[None:x]',
         'items[:-x]',
+        'items[None:-x]',
         'items[::-x]',
+        'items[None::-x]',
+        'items[:None:-x]',
         'items[::x]',
+        'items[None::x]',
+        'items[:None:x]',
+        'items[None:None:x]',
     ],
 )
 def test_non_strict_slice_operation_good(
@@ -96,7 +106,7 @@ def test_non_strict_slice_operation_good(
     """Testing for using non strict slice operations."""
     tree = parse_ast_tree(expression)
 
-    visitor = StricterSliceOperations(default_options, tree=tree)
+    visitor = StrictSliceOperations(default_options, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
