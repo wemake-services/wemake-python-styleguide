@@ -3062,12 +3062,10 @@ class NonStrictSliceOperationsViolation(ASTViolation):
         # Correct:
         items.reverse()
         items.copy()
-        items.pop()
 
         # Wrong:
         items[::-1]  # .reverse()
         items[:]  # .copy()
-        items[:-1]  # .pop()
 
     .. versionadded:: 1.2.0
 
