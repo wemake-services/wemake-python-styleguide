@@ -192,7 +192,6 @@ class StrictSliceOperations(base.BaseNodeVisitor):
         """Visit slice."""
         self._check_reverse(node)
         self._check_copy(node)
-        self._check_pop(node)
         self.generic_visit(node)
 
     def _check_reverse(self, node: ast.Slice) -> None:
@@ -220,26 +219,6 @@ class StrictSliceOperations(base.BaseNodeVisitor):
             return
 
         if not self._is_node_or_const_equal_None(node.upper):
-            return
-
-        if not (
-            self._is_node_or_const_equal_None(node.step)
-            or self._is_node_have_value(node.step, value_to_check=1)
-        ):
-            return
-
-        self.add_violation(
-            best_practices.NonStrictSliceOperationsViolation(node)
-        )
-
-    def _check_pop(self, node: ast.Slice) -> None:
-        if not (
-            self._is_node_or_const_equal_None(node.lower)
-            or self._is_node_have_value(node.lower, value_to_check=0)
-        ):
-            return
-
-        if not self._is_node_have_value(node.upper, value_to_check=-1):
             return
 
         if not (
