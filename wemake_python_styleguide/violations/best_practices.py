@@ -3061,11 +3061,12 @@ class NonStrictSliceOperationsViolation(ASTViolation):
 
         # Correct:
         items.reverse()
+        ''.join(reversed('abc'))
         items.copy()
 
         # Wrong:
-        items[::-1]  # .reverse()
-        items[:]  # .copy()
+        items[::-1]  # `.reverse()` or `reversed()`
+        items[:]  # `.copy()` or `copy.copy()`
 
     .. versionadded:: 1.2.0
 
