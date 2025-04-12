@@ -196,13 +196,13 @@ class StrictSliceOperations(base.BaseNodeVisitor):
 
     def _check_reverse(self, node: ast.Slice) -> None:
         if not (
-            self._is_node_or_const_equal_None(node.lower)
+            self._is_node_or_none(node.lower)
             or self._is_node_have_value(node.lower, value_to_check=-1)
         ):
             return
 
         if not (
-            self._is_node_or_const_equal_None(node.upper)
+            self._is_node_or_none(node.upper)
             and self._is_node_have_value(node.step, value_to_check=-1)
         ):
             return
@@ -213,16 +213,16 @@ class StrictSliceOperations(base.BaseNodeVisitor):
 
     def _check_copy(self, node: ast.Slice) -> None:
         if not (
-            self._is_node_or_const_equal_None(node.lower)
+            self._is_node_or_none(node.lower)
             or self._is_node_have_value(node.lower, value_to_check=0)
         ):
             return
 
-        if not self._is_node_or_const_equal_None(node.upper):
+        if not self._is_node_or_none(node.upper):
             return
 
         if not (
-            self._is_node_or_const_equal_None(node.step)
+            self._is_node_or_none(node.step)
             or self._is_node_have_value(node.step, value_to_check=1)
         ):
             return
@@ -231,7 +231,7 @@ class StrictSliceOperations(base.BaseNodeVisitor):
             best_practices.NonStrictSliceOperationsViolation(node)
         )
 
-    def _is_node_or_const_equal_None(self, node: ast.AST | None) -> bool:
+    def _is_node_or_none(self, node: ast.AST | None) -> bool:
         return node is None or (
             isinstance(node, ast.Constant) and node.value is None
         )
