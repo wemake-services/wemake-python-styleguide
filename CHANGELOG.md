@@ -16,6 +16,12 @@ Semantic versioning in our case means:
   But, in the future we might change the configuration names/logic,
   change the client facing API, change code conventions significantly, etc.
 
+## 1.2.0 WIP
+
+### Features
+
+- Adds `WPS478`: forbids using non strict slice operations, #1011
+
 ## 1.1.1
 
 ### Bugfixes
