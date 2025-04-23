@@ -17,6 +17,17 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
+## 1.2.0 WIP
+
+### Features
+
+- Adds `WPS478`: forbids using non strict slice operations, #1011
+
+### Bugfixes
+
+- Fixes `WPS115` false-positive on `StrEnum`, `IntEnum`, `IntFlag` attributes, #3381
+
+
 ## 1.1.0
 
 ### Command line utility

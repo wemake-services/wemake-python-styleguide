@@ -115,6 +115,7 @@ extend-exclude = [
 
 [tool.ruff.format]
 quote-style = "single"
+# This is only required because we have invalid on-purpose code in docstrings:
 docstring-code-format = false
 
 [tool.ruff.lint]

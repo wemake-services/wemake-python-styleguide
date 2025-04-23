@@ -182,3 +182,69 @@ class CorrectKeyVisitor(base.BaseNodeVisitor):
         return isinstance(real_node, ast.Constant) and isinstance(
             real_node.value, float
         )
+
+
+@final
+class StrictSliceOperations(base.BaseNodeVisitor):
+    """Check for stricter operation with slices."""
+
+    def visit_Slice(self, node: ast.Slice) -> None:
+        """Visit slice."""
+        self._check_reverse(node)
+        self._check_copy(node)
+        self.generic_visit(node)
+
+    def _check_reverse(self, node: ast.Slice) -> None:
+        if not (
+            self._is_node_or_none(node.lower)
+            or self._is_node_have_value(node.lower, value_to_check=-1)
+        ):
+            return
+
+        if not (
+            self._is_node_or_none(node.upper)
+            and self._is_node_have_value(node.step, value_to_check=-1)
+        ):
+            return
+
+        self.add_violation(
+            best_practices.NonStrictSliceOperationsViolation(node)
+        )
+
+    def _check_copy(self, node: ast.Slice) -> None:
+        if not (
+            self._is_node_or_none(node.lower)
+            or self._is_node_have_value(node.lower, value_to_check=0)
+        ):
+            return
+
+        if not self._is_node_or_none(node.upper):
+            return
+
+        if not (
+            self._is_node_or_none(node.step)
+            or self._is_node_have_value(node.step, value_to_check=1)
+        ):
+            return
+
+        self.add_violation(
+            best_practices.NonStrictSliceOperationsViolation(node)
+        )
+
+    def _is_node_or_none(self, node: ast.AST | None) -> bool:
+        return node is None or (
+            isinstance(node, ast.Constant) and node.value is None
+        )
+
+    def _is_node_have_value(
+        self, node: ast.AST | None, value_to_check: int
+    ) -> bool:
+        if value_to_check < 0:
+            return (
+                isinstance(node, ast.UnaryOp)
+                and isinstance(node.op, ast.USub)
+                and isinstance(node.operand, ast.Constant)
+                and node.operand.value == abs(value_to_check)
+            )
+
+        return isinstance(node, ast.Constant) and node.value == value_to_check
