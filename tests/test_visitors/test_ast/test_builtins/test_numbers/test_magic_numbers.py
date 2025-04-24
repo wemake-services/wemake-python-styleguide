@@ -152,7 +152,7 @@ def test_magic_number(
         inside_method,
         list_index,
         dict_key,
-        not_literal_type_hint
+        not_literal_type_hint,
     ],
 )
 @pytest.mark.parametrize(
@@ -202,7 +202,7 @@ def test_magic_number_whitelist(
         inside_method,
         list_index,
         dict_key,
-        not_literal_type_hint
+        not_literal_type_hint,
     ],
 )
 @pytest.mark.parametrize(
@@ -253,7 +253,7 @@ def test_magic_number_warning(
         inside_method,
         list_index,
         dict_key,
-        not_literal_type_hint
+        not_literal_type_hint,
     ],
 )
 @pytest.mark.parametrize(
