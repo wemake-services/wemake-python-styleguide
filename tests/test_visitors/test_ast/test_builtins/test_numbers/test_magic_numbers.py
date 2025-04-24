@@ -29,6 +29,8 @@ dict_definition_value = '{{"first": {0}}}'
 set_definition = '{{"first", {0}, "other"}}'
 tuple_definition = '({0}, )'
 
+literal_type_hint = 'code: Literal[{0}] = {0}'
+
 # Wrong usages:
 
 assignment_binop = 'final = {0} + 1'
@@ -68,6 +70,10 @@ some_dict = {{11: 12, 13: 14}}
 some_dict[{0}]
 """
 
+not_literal_type_hint = """
+foo: Bar[{0}] = {0}
+"""
+
 
 @pytest.mark.parametrize(
     'code',
@@ -83,6 +89,7 @@ some_dict[{0}]
         dict_definition_value,
         set_definition,
         tuple_definition,
+        literal_type_hint,
     ],
 )
 @pytest.mark.parametrize(
@@ -145,6 +152,7 @@ def test_magic_number(
         inside_method,
         list_index,
         dict_key,
+        not_literal_type_hint
     ],
 )
 @pytest.mark.parametrize(
@@ -194,6 +202,7 @@ def test_magic_number_whitelist(
         inside_method,
         list_index,
         dict_key,
+        not_literal_type_hint
     ],
 )
 @pytest.mark.parametrize(
@@ -244,6 +253,7 @@ def test_magic_number_warning(
         inside_method,
         list_index,
         dict_key,
+        not_literal_type_hint
     ],
 )
 @pytest.mark.parametrize(

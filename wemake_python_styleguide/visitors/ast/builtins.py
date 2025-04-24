@@ -189,15 +189,15 @@ class WrongNumberVisitor(base.BaseNodeTokenVisitor):
 
     def _check_is_magic(self, node: ast.Constant) -> None:
         parent = operators.get_parent_ignoring_unary(node)
-        if isinstance(parent, self._allowed_parents):
-            return
 
-        if node.value in constants.MAGIC_NUMBERS_WHITELIST:
+        if any((
+            isinstance(parent, self._allowed_parents),
+            node.value in constants.MAGIC_NUMBERS_WHITELIST,
+            isinstance(node.value, int)
+            and node.value <= self._non_magic_modulo,
+            self._check_is_number_in_typing_literal(parent),
+        )):
             return
-
-        if isinstance(node.value, int) and node.value <= self._non_magic_modulo:
-            return
-
         try:
             token = self._token_dict[node.lineno, node.col_offset]
         except KeyError:  # pragma: no cover
@@ -210,6 +210,13 @@ class WrongNumberVisitor(base.BaseNodeTokenVisitor):
 
         self.add_violation(
             best_practices.MagicNumberViolation(node, text=real_value),
+        )
+
+    def _check_is_number_in_typing_literal(self, node: ast.AST | None) -> bool:
+        return (
+            isinstance(node, ast.Subscript)
+            and isinstance(node.value, ast.Name)
+            and node.value.id == 'Literal'
         )
 
     def _check_is_approximate_constant(self, node: ast.Constant) -> None:
