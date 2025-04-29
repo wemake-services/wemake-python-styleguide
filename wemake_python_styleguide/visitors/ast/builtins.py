@@ -190,13 +190,16 @@ class WrongNumberVisitor(base.BaseNodeTokenVisitor):
     def _check_is_magic(self, node: ast.Constant) -> None:
         parent = operators.get_parent_ignoring_unary(node)
 
-        if any((
-            isinstance(parent, self._allowed_parents),
-            node.value in constants.MAGIC_NUMBERS_WHITELIST,
-            isinstance(node.value, int)
-            and node.value <= self._non_magic_modulo,
-            self._check_is_number_in_typing_literal(parent),
-        )):
+        is_non_magic = (
+            isinstance(node.value, int) and node.value <= self._non_magic_modulo
+        )
+
+        if (
+            isinstance(parent, self._allowed_parents)
+            or node.value in constants.MAGIC_NUMBERS_WHITELIST
+            or is_non_magic
+            or self._check_is_number_in_typing_literal(parent)
+        ):
             return
         try:
             token = self._token_dict[node.lineno, node.col_offset]
@@ -213,11 +216,17 @@ class WrongNumberVisitor(base.BaseNodeTokenVisitor):
         )
 
     def _check_is_number_in_typing_literal(self, node: ast.AST | None) -> bool:
-        return (
-            isinstance(node, ast.Subscript)
-            and isinstance(node.value, ast.Name)
-            and node.value.id == 'Literal'
-        )
+        if isinstance(node, ast.Subscript):
+            if (
+                isinstance(node.value, ast.Attribute)
+                and isinstance(node.value.value, ast.Name)
+                and node.value.value.id in {'typing', 'typing_extensions'}
+                and node.value.attr == 'Literal'
+            ):
+                return True
+            if isinstance(node.value, ast.Name) and node.value.id in 'Literal':
+                return True
+        return False
 
     def _check_is_approximate_constant(self, node: ast.Constant) -> None:
         try:
