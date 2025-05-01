@@ -8,6 +8,7 @@ Adapted from: https://github.com/best-doctor/flake8-annotations-complexity
 """
 
 import ast
+from collections.abc import Container
 from typing import TypeAlias
 
 _Annotation: TypeAlias = ast.expr | ast.Constant
@@ -44,3 +45,30 @@ def get_annotation_complexity(annotation_node: _Annotation) -> int:
             default=1,
         )
     return 1
+
+
+def check_is_node_in_specific_annotation(
+    node: ast.AST | None,
+    annotation_name: str,
+    annotation_modules: Container[str],
+) -> bool:
+    """
+    Check is node inside specific annotation.
+
+    Checks is ast node in annotation with name `annotation_name`
+    and is annotation module in `annotation_modules`.
+    """
+    if isinstance(node, ast.Subscript):
+        if (
+            isinstance(node.value, ast.Attribute)
+            and isinstance(node.value.value, ast.Name)
+            and node.value.value.id in annotation_modules
+            and node.value.attr == annotation_name
+        ):
+            return True
+        if (
+            isinstance(node.value, ast.Name)
+            and node.value.id in annotation_name
+        ):
+            return True
+    return False

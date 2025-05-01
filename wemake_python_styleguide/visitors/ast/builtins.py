@@ -9,6 +9,9 @@ from wemake_python_styleguide.compat.aliases import (
     FunctionNodes,
 )
 from wemake_python_styleguide.logic import nodes, source, walk
+from wemake_python_styleguide.logic.complexity.annotations import (
+    check_is_node_in_specific_annotation,
+)
 from wemake_python_styleguide.logic.tree import (
     attributes,
     operators,
@@ -198,7 +201,9 @@ class WrongNumberVisitor(base.BaseNodeTokenVisitor):
             isinstance(parent, self._allowed_parents)
             or node.value in constants.MAGIC_NUMBERS_WHITELIST
             or is_non_magic
-            or self._check_is_number_in_typing_literal(parent)
+            or check_is_node_in_specific_annotation(
+                parent, 'Literal', {'typing', 'typing_extensions'}
+            )
         ):
             return
         try:
@@ -214,19 +219,6 @@ class WrongNumberVisitor(base.BaseNodeTokenVisitor):
         self.add_violation(
             best_practices.MagicNumberViolation(node, text=real_value),
         )
-
-    def _check_is_number_in_typing_literal(self, node: ast.AST | None) -> bool:
-        if isinstance(node, ast.Subscript):
-            if (
-                isinstance(node.value, ast.Attribute)
-                and isinstance(node.value.value, ast.Name)
-                and node.value.value.id in {'typing', 'typing_extensions'}
-                and node.value.attr == 'Literal'
-            ):
-                return True
-            if isinstance(node.value, ast.Name) and node.value.id in 'Literal':
-                return True
-        return False
 
     def _check_is_approximate_constant(self, node: ast.Constant) -> None:
         try:
