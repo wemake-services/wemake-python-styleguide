@@ -3074,3 +3074,32 @@ class NonStrictSliceOperationsViolation(ASTViolation):
 
     error_template = 'Found non strict slice operation'
     code = 478
+
+
+@final
+class CommentInFormattedStringViolation(TokenizeViolation):
+    """
+    Forbid using comments inside f strings.
+
+    Reasoning:
+        Because comments make f string implicitly multiline.
+        And comments must not be present in strings. This is not right.
+
+    Solution:
+        Dont write comments inside f strings
+
+    Example::
+
+        # Correct:
+        element = f'<p>{content}</p>' # Create html element
+
+        # Wrong:
+        element = f'<p>{content # Create html element
+        }'
+
+    .. versionadded:: 1.2.0
+
+    """
+
+    error_template = 'Found comment inside formatted string'
+    code = 479

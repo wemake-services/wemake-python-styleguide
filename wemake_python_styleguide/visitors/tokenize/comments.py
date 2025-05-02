@@ -26,6 +26,7 @@ from wemake_python_styleguide.logic.system import is_executable_file, is_windows
 from wemake_python_styleguide.logic.tokens.constants import NEWLINES
 from wemake_python_styleguide.logic.tokens.strings import get_comment_text
 from wemake_python_styleguide.violations.best_practices import (
+    CommentInFormattedStringViolation,
     EmptyCommentViolation,
     ForbiddenInlineIgnoreViolation,
     OveruseOfNoCoverCommentViolation,
@@ -311,3 +312,23 @@ class NoqaVisitor(BaseTokenVisitor):
             self.add_violation(
                 OveruseOfNoqaCommentViolation(text=str(self._noqa_count)),
             )
+
+
+@final
+class CommentInFormattedStringVisitor(BaseTokenVisitor):
+    """Checks comment in formatted strings."""
+
+    _comment_in_fstring: ClassVar[re.Pattern[str]] = re.compile(
+        r'.*f[\"\'].*\{[^}]*#[^}]*$', re.MULTILINE
+    )
+
+    def visit_fstring_start(self, token: tokenize.TokenInfo) -> None:
+        """Preforms fstring check."""
+        self._check_is_fstring_ends_with_comment(token)
+
+    def _check_is_fstring_ends_with_comment(
+        self, token: tokenize.TokenInfo
+    ) -> None:
+        """Checks is formatted string ends with comment."""
+        if self._comment_in_fstring.match(token.line):
+            self.add_violation(CommentInFormattedStringViolation(token))
