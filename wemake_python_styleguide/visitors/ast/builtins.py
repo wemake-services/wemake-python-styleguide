@@ -9,6 +9,9 @@ from wemake_python_styleguide.compat.aliases import (
     FunctionNodes,
 )
 from wemake_python_styleguide.logic import nodes, source, walk
+from wemake_python_styleguide.logic.complexity.annotations import (
+    check_is_node_in_specific_annotation,
+)
 from wemake_python_styleguide.logic.tree import (
     attributes,
     operators,
@@ -180,6 +183,12 @@ class WrongNumberVisitor(base.BaseNodeTokenVisitor):
     )
 
     _non_magic_modulo: ClassVar[int] = 10
+    _allowed_modules_to_literal_type_hint: ClassVar[frozenset[str]] = (
+        frozenset((
+            'typing',
+            'typing_extensions',
+        ))
+    )
 
     def visit_Num(self, node: ast.Constant) -> None:
         """Checks wrong constants inside the code."""
@@ -189,15 +198,20 @@ class WrongNumberVisitor(base.BaseNodeTokenVisitor):
 
     def _check_is_magic(self, node: ast.Constant) -> None:
         parent = operators.get_parent_ignoring_unary(node)
-        if isinstance(parent, self._allowed_parents):
-            return
 
-        if node.value in constants.MAGIC_NUMBERS_WHITELIST:
-            return
+        is_non_magic = (
+            isinstance(node.value, int) and node.value <= self._non_magic_modulo
+        )
 
-        if isinstance(node.value, int) and node.value <= self._non_magic_modulo:
+        if (
+            isinstance(parent, self._allowed_parents)
+            or node.value in constants.MAGIC_NUMBERS_WHITELIST
+            or is_non_magic
+            or check_is_node_in_specific_annotation(
+                parent, 'Literal', self._allowed_modules_to_literal_type_hint
+            )
+        ):
             return
-
         try:
             token = self._token_dict[node.lineno, node.col_offset]
         except KeyError:  # pragma: no cover

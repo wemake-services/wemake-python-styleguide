@@ -26,7 +26,7 @@ Semantic versioning in our case means:
 ### Bugfixes
 
 - Fixes `WPS115` false-positive on `StrEnum`, `IntEnum`, `IntFlag` attributes, #3381
-
+- Fixes `WPS432`, now it ignores magic numbers in `Literal`, #3397
 
 ## 1.1.0
 
