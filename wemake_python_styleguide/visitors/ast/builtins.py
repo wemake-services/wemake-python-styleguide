@@ -183,6 +183,12 @@ class WrongNumberVisitor(base.BaseNodeTokenVisitor):
     )
 
     _non_magic_modulo: ClassVar[int] = 10
+    _allowed_modules_to_literal_type_hint: ClassVar[frozenset[str]] = (
+        frozenset((
+            'typing',
+            'typing_extensions',
+        ))
+    )
 
     def visit_Num(self, node: ast.Constant) -> None:
         """Checks wrong constants inside the code."""
@@ -202,7 +208,7 @@ class WrongNumberVisitor(base.BaseNodeTokenVisitor):
             or node.value in constants.MAGIC_NUMBERS_WHITELIST
             or is_non_magic
             or check_is_node_in_specific_annotation(
-                parent, 'Literal', {'typing', 'typing_extensions'}
+                parent, 'Literal', self._allowed_modules_to_literal_type_hint
             )
         ):
             return
