@@ -3089,7 +3089,7 @@ class CommentInFormattedStringViolation(TokenizeViolation):
         And comments must not be present in strings. This is not right.
 
     Solution:
-        Dont write comments inside f strings
+        Don't write comments inside fstrings.
 
     Example::
 
