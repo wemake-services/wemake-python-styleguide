@@ -95,6 +95,8 @@ Summary
    AwaitInLoopViolation
    SneakyTypeVarWithDefaultViolation
    NonStrictSliceOperationsViolation
+   CommentInFormattedStringViolation
+
 
 Best practices
 --------------
@@ -178,6 +180,7 @@ Best practices
 .. autoclass:: AwaitInLoopViolation
 .. autoclass:: SneakyTypeVarWithDefaultViolation
 .. autoclass:: NonStrictSliceOperationsViolation
+.. autoclass:: CommentInFormattedStringViolation
 
 """
 
@@ -3079,7 +3082,7 @@ class NonStrictSliceOperationsViolation(ASTViolation):
 @final
 class CommentInFormattedStringViolation(TokenizeViolation):
     """
-    Forbid using comments inside f strings.
+    Forbid using comments inside formatted strings.
 
     Reasoning:
         Because comments make f string implicitly multiline.

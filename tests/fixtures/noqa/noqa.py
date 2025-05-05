@@ -756,5 +756,5 @@ async def test_await_in_loop():
 
 some_sequence = some_sequence[::-1]  # noqa: WPS478
 
-html = f"<p>{content # Build html tag # noqa: WPS479
+html = f"<p>{content # comment # noqa: WPS479
 }</p>"

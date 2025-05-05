@@ -1,3 +1,5 @@
+from typing import Final
+
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
@@ -7,6 +9,8 @@ from wemake_python_styleguide.visitors.tokenize.comments import (
     CommentInFormattedStringVisitor,
 )
 
+quotes: Final[frozenset[str]] = frozenset(("'", '"'))
+
 # Correct
 fstring_without_comments = """
 foo = f"test{a}"
@@ -15,6 +19,11 @@ foo = f"test{a}"
 fstring_with_hash = """
 foo = f"test{a} # testing"
 """
+
+fstring_with_hash_between_braces = """
+foo = f"test{a} # comment {b} # comment"
+"""
+
 
 fstring_with_two_values = """
 f"My name is {name} and I am {age} years old."
@@ -31,12 +40,32 @@ foo = f"test{a # comment
 }"
 """
 
+fstring_with_comment_and_hash_on_new_line = """
+foo = f"test{a # comment
+} # comment"
+"""
+
+fstring_with_two_values_and_comment = """
+foo = f"test{a} and test{b # Testing values
+}"
+"""
+
+
+multiline_fstring_with_comment = """
+foo = (f"test{value}"
+       f"test{another_value}"
+       f"test{wrong # This is not allowed
+       }"
+       f"test{value}")
+"""
+
 fstring_with_comment_and_second_line = """
 foo = f"hello{bar # comment
 }world"
 """
 
 
+@pytest.mark.parametrize('quote', quotes)
 @pytest.mark.parametrize(
     'code',
     [
@@ -44,13 +73,14 @@ foo = f"hello{bar # comment
         fstring_with_two_values,
         fstring_with_math_operation,
         fstring_with_hash,
+        fstring_with_hash_between_braces,
     ],
 )
 def test_correct_formatted_string(
-    parse_tokens, assert_errors, default_options, code
+    parse_tokens, assert_errors, default_options, code, quote
 ) -> None:
     """Check that there are no violations in the correct string."""
-    file_tokens = parse_tokens(code)
+    file_tokens = parse_tokens(code.replace('"', quote))
 
     visitor = CommentInFormattedStringVisitor(
         default_options, file_tokens=file_tokens
@@ -60,14 +90,22 @@ def test_correct_formatted_string(
     assert_errors(visitor, [])
 
 
+@pytest.mark.parametrize('quote', quotes)
 @pytest.mark.parametrize(
-    'code', [fstring_with_comment, fstring_with_comment_and_second_line]
+    'code',
+    [
+        fstring_with_comment,
+        fstring_with_comment_and_second_line,
+        fstring_with_two_values_and_comment,
+        multiline_fstring_with_comment,
+        fstring_with_comment_and_hash_on_new_line,
+    ],
 )
 def test_wrong_formatted_string(
-    parse_tokens, assert_errors, default_options, code
+    parse_tokens, assert_errors, default_options, code, quote
 ) -> None:
     """Checking that the wrong string has violations."""
-    file_tokens = parse_tokens(code)
+    file_tokens = parse_tokens(code.replace('"', quote))
 
     visitor = CommentInFormattedStringVisitor(
         default_options, file_tokens=file_tokens
