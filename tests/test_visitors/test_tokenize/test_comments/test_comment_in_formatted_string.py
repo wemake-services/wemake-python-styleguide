@@ -2,12 +2,18 @@ from typing import Final
 
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY312
 from wemake_python_styleguide.violations.best_practices import (
     CommentInFormattedStringViolation,
 )
 from wemake_python_styleguide.visitors.tokenize.comments import (
     CommentInFormattedStringVisitor,
 )
+
+if not PY312:  # pragma: >=3.12 no cover
+    pytest.skip(
+        reason='comments in fstring was added in 3.12', allow_module_level=True
+    )  # pragma: no cover
 
 quotes: Final[frozenset[str]] = frozenset(("'", '"'))
 

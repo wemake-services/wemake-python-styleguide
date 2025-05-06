@@ -3084,12 +3084,14 @@ class CommentInFormattedStringViolation(TokenizeViolation):
     """
     Forbid using comments inside formatted strings.
 
+    Is only emitted on ``python3.12+``.
+
     Reasoning:
-        Because comments make f string implicitly multiline.
+        Comments make fstring implicitly multiline.
         And comments must not be present in strings. This is not right.
 
     Solution:
-        Dont write comments inside f strings
+        Don't write comments inside fstrings
 
     Example::
 

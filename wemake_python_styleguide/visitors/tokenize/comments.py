@@ -315,7 +315,9 @@ class NoqaVisitor(BaseTokenVisitor):
 
 
 @final
-class CommentInFormattedStringVisitor(BaseTokenVisitor):
+class CommentInFormattedStringVisitor(
+    BaseTokenVisitor
+):  # pragma: >=3.12 no cover
     """Checks comment in formatted strings."""
 
     _comment_in_fstring: ClassVar[re.Pattern[str]] = re.compile(
@@ -327,7 +329,8 @@ class CommentInFormattedStringVisitor(BaseTokenVisitor):
         self._check_is_fstring_ends_with_comment(token)
 
     def _check_is_fstring_ends_with_comment(
-        self, token: tokenize.TokenInfo
+        self,
+        token: tokenize.TokenInfo,
     ) -> None:
         """Checks is formatted string ends with comment."""
         if self._comment_in_fstring.match(token.line):
