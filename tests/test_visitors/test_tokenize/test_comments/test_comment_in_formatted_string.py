@@ -1,5 +1,3 @@
-from typing import Final
-
 import pytest
 
 from wemake_python_styleguide.compat.constants import PY312
@@ -15,7 +13,7 @@ if not PY312:  # pragma: >=3.12 no cover
         reason='comments in fstring was added in 3.12', allow_module_level=True
     )  # pragma: no cover
 
-quotes: Final[frozenset[str]] = frozenset(("'", '"'))
+quotes = frozenset(("'", '"', '"""', "'''"))
 
 # Correct
 fstring_without_comments = """
@@ -39,6 +37,19 @@ f"My name is {name} and I am {age} years old."
 fstring_with_math_operation = """
 f"The sum of {x} and {y} is {x + y}."
 """
+
+fstring_with_quotes = """
+f"My name is '{name}'"
+"""
+
+fstring_with_hash_between_quotes = """
+foo = f"hello" # comment "{bar}" # comment"
+"""
+
+
+fstring_in_docstring = '''
+foo = f"""hello"{bar}" # comment world"""
+'''
 
 # Wrong
 fstring_with_comment = """
@@ -70,6 +81,16 @@ foo = f"hello{bar # comment
 }world"
 """
 
+fstring_with_comment_between_quotes = """
+foo = f"hello'{bar # comment
+}'world"
+"""
+
+fstring_with_comment_in_docstring = '''
+foo = f"""hello"{bar # comment
+}world"""
+'''
+
 
 @pytest.mark.parametrize('quote', quotes)
 @pytest.mark.parametrize(
@@ -80,13 +101,20 @@ foo = f"hello{bar # comment
         fstring_with_math_operation,
         fstring_with_hash,
         fstring_with_hash_between_braces,
+        fstring_with_quotes,
+        fstring_in_docstring,
+        fstring_with_hash_between_quotes,
     ],
 )
 def test_correct_formatted_string(
     parse_tokens, assert_errors, default_options, code, quote
 ) -> None:
     """Check that there are no violations in the correct string."""
-    file_tokens = parse_tokens(code.replace('"', quote))
+    try:
+        file_tokens = parse_tokens(code.replace('"', quote))
+    except SyntaxError:
+        # We skip cases in which identical quotes are repeated incorrectly
+        return
 
     visitor = CommentInFormattedStringVisitor(
         default_options, file_tokens=file_tokens
@@ -105,13 +133,19 @@ def test_correct_formatted_string(
         fstring_with_two_values_and_comment,
         multiline_fstring_with_comment,
         fstring_with_comment_and_hash_on_new_line,
+        fstring_with_comment_between_quotes,
+        fstring_with_comment_in_docstring,
     ],
 )
 def test_wrong_formatted_string(
     parse_tokens, assert_errors, default_options, code, quote
 ) -> None:
     """Checking that the wrong string has violations."""
-    file_tokens = parse_tokens(code.replace('"', quote))
+    try:
+        file_tokens = parse_tokens(code.replace('"', quote))
+    except SyntaxError:
+        # We skip cases in which identical quotes are repeated incorrectly
+        return
 
     visitor = CommentInFormattedStringVisitor(
         default_options, file_tokens=file_tokens
