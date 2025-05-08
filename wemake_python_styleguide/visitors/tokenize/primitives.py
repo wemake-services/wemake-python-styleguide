@@ -230,12 +230,17 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
 
 
 class MultilineFormattedStringTokenVisitor(BaseTokenVisitor):
+    """
+    Checks incorrect formatted string usages.
+
+    """
+
     _multiline_fstring_pattern: ClassVar[re.Pattern[str]] = re.compile(
         r'.*f([\'\"])(?!\1\1).*(\{.*\}.)*.*\{[^\}]*\n',
     )
 
     def visit_fstring_start(self, token: tokenize.TokenInfo) -> None:
-        """Performs check"""
+        """Performs check."""
         self._check_fstring_is_multi_lined(token)
 
     def _check_fstring_is_multi_lined(self, token: tokenize.TokenInfo) -> None:

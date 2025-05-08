@@ -3082,7 +3082,9 @@ class NonStrictSliceOperationsViolation(ASTViolation):
 class MultilineFormattedStringViolation(TokenizeViolation):
     """
     Forbid using multi-line formatted string with single and double quotes.
+
     .. versionadded:: 1.2.0
+
     """
 
     error_template = 'Found multi-line formatted string'
