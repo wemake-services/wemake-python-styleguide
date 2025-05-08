@@ -14,6 +14,7 @@ PRESET: Final = (
     comments.ShebangVisitor,
     comments.NoqaVisitor,
     comments.EmptyCommentVisitor,
+    comments.CommentInFormattedStringVisitor,
     syntax.WrongKeywordTokenVisitor,
     primitives.WrongNumberTokenVisitor,
     primitives.WrongStringTokenVisitor,
