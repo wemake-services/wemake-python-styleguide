@@ -12,6 +12,7 @@ from wemake_python_styleguide.logic.tokens.strings import (
 from wemake_python_styleguide.violations import consistency
 from wemake_python_styleguide.violations.base import TokenizeViolation
 from wemake_python_styleguide.violations.best_practices import (
+    MultilineFormattedStringViolation,
     WrongUnicodeEscapeViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
@@ -226,3 +227,18 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         # but, since we don't recommend `f`-string, this is a low-priority
         modifiers = token.string[:-1]
         self._checker.check_string_modifiers(token, modifiers)
+
+
+class MultilineFormattedStringTokenVisitor(BaseTokenVisitor):
+    _multiline_fstring_pattern: ClassVar[re.Pattern[str]] = re.compile(
+        r'.*f([\'\"])(?!\1\1).*(\{.*\}.)*.*\{[^\}]*\n',
+    )
+
+    def visit_fstring_start(self, token: tokenize.TokenInfo) -> None:
+        """Performs check"""
+        self._check_fstring_is_multi_lined(token)
+
+    def _check_fstring_is_multi_lined(self, token: tokenize.TokenInfo) -> None:
+        """Finds if f-string is multi-line."""
+        if self._multiline_fstring_pattern.match(token.line):
+            self.add_violation(MultilineFormattedStringViolation(token))
