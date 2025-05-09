@@ -19,6 +19,9 @@ single_quote_formatted_string_wrong = """x=f'{ 1
 }'
 """
 
+fr_prefix_formatted_string_wrong = """x=fr'{1
+}'"""
+
 double_quote_formatted_string_wrong = """x=f" {2} { 1
 }"
 """
@@ -35,6 +38,10 @@ single_line_formatted_string = (
     """formatted_string_complex = f'1+1={1 + 1}'  # noqa: WPS237"""
 )
 
+fr_prefix_formatted_string = (
+    """formatted_string_complex = fr'1+1={1 + 1}'  # noqa: WPS237"""
+)
+
 
 @pytest.mark.parametrize(
     'code',
@@ -42,6 +49,7 @@ single_line_formatted_string = (
         triple_quote_formatted_string_first_correct,
         triple_quote_formatted_string_second_correct,
         single_line_formatted_string,
+        fr_prefix_formatted_string,
     ],
 )
 def test_correctly_formatted_string(
@@ -64,6 +72,7 @@ def test_correctly_formatted_string(
     [
         single_quote_formatted_string_wrong,
         double_quote_formatted_string_wrong,
+        fr_prefix_formatted_string_wrong,
     ],
 )
 def test_incorrectly_formatted_string(
