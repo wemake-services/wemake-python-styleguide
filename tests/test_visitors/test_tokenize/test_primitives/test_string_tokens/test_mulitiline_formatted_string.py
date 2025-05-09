@@ -1,11 +1,18 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY312
 from wemake_python_styleguide.violations.best_practices import (
     MultilineFormattedStringViolation,
 )
 from wemake_python_styleguide.visitors.tokenize.primitives import (
     MultilineFormattedStringTokenVisitor,
 )
+
+if not PY312:  # pragma: >=3.12 no cover
+    pytest.skip(
+        reason='unterminated string literal was added in 3.12',
+        allow_module_level=True,
+    )  # pragma: no cover
 
 # Wrong:
 single_quote_formatted_string_wrong = """x=f'{ 1
