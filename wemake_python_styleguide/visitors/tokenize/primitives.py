@@ -230,7 +230,9 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
 
 
 @final
-class MultilineFormattedStringTokenVisitor(BaseTokenVisitor):
+class MultilineFormattedStringTokenVisitor(
+    BaseTokenVisitor
+):  # pragma: >=3.12 cover
     """Checks incorrect formatted string usages."""
 
     _multiline_fstring_pattern: ClassVar[re.Pattern[str]] = re.compile(
