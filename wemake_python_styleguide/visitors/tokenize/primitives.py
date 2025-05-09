@@ -236,7 +236,7 @@ class MultilineFormattedStringTokenVisitor(BaseTokenVisitor):
     _multiline_fstring_pattern: ClassVar[re.Pattern[str]] = re.compile(
         r"""
         .*                  # (1) anything before the f-string
-        f(['"])             # (2) the ‘f’ prefix + a single or double quote
+        f(['"])             # (2) the `f` prefix + a single or double quote
         (?!\1\1)            # (3) not triple quote
         .*                  # (4) any characters up to…
         (\{.*\}.)*          # (5) any fully closed {…} expressions, if present
