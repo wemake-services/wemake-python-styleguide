@@ -22,7 +22,7 @@ Semantic versioning in our case means:
 ### Features
 
 - Adds `WPS478`: forbids using non strict slice operations, #1011
-- Adds `WPS479`: forbids using multiline f strings, #3405
+- Adds `WPS479`: forbids using multiline fstrings, #3405
 
 ### Bugfixes
 

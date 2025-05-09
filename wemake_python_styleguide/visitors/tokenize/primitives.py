@@ -229,6 +229,7 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         self._checker.check_string_modifiers(token, modifiers)
 
 
+@final
 class MultilineFormattedStringTokenVisitor(BaseTokenVisitor):
     """Checks incorrect formatted string usages."""
 

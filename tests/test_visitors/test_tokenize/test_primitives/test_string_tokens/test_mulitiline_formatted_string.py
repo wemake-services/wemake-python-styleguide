@@ -7,6 +7,7 @@ from wemake_python_styleguide.visitors.tokenize.primitives import (
     MultilineFormattedStringTokenVisitor,
 )
 
+# Wrong:
 single_quote_formatted_string_wrong = """x=f'{ 1
 }'
 """
@@ -15,6 +16,7 @@ double_quote_formatted_string_wrong = """x=f" {2} { 1
 }"
 """
 
+# Correct:
 triple_quote_formatted_string_first_correct = """x=f'''{ 1
 }'''
 """
