@@ -3084,20 +3084,21 @@ class MultilineFormattedStringViolation(TokenizeViolation):
     Forbid using multi-line formatted string with single and double quotes.
 
     Reasoning:
-        Multiline f-strings must use triple quotes for clarity; single f-strings may not span lines.
+        Multiline f-strings must use triple quotes for clarity.
+        Single f-strings may not span lines.
 
     Solution:
-        Use  \"\"\" quotes instead of single quotes.
+        Use triple quotes instead of single quotes.
 
     Example::
 
         # Correct:
-        x = f\"\"\" { 1
-        ...}\"\"\"
+        x = f''' { 1
+        ...}'''
 
         # Wrong:
-        x = f\" { 1
-        ...}\"
+        x = f' { 1
+        ...}'
 
     .. versionadded:: 1.2.0
 
