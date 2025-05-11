@@ -12,6 +12,7 @@ from wemake_python_styleguide.logic.tokens.strings import (
 from wemake_python_styleguide.violations import consistency
 from wemake_python_styleguide.violations.base import TokenizeViolation
 from wemake_python_styleguide.violations.best_practices import (
+    MultilineFormattedStringViolation,
     WrongUnicodeEscapeViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
@@ -226,3 +227,33 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
         # but, since we don't recommend `f`-string, this is a low-priority
         modifiers = token.string[:-1]
         self._checker.check_string_modifiers(token, modifiers)
+
+
+@final
+class MultilineFormattedStringTokenVisitor(
+    BaseTokenVisitor
+):  # pragma: >=3.12 cover
+    """Checks incorrect formatted string usages."""
+
+    _multiline_fstring_pattern: ClassVar[re.Pattern[str]] = re.compile(
+        r"""
+        .*                  # (1) anything before the f-string
+        fr?(['"])           # (2) `f` or `fr`prefix + a single or double quote
+        (?!\1\1)            # (3) not triple quote
+        .*                  # (4) any characters up to…
+        (\{.*\}.)*          # (5) any fully closed {…} expressions, if present
+        .*                  # (6) then more arbitrary chars
+        \{                  # (7) an opening brace of an f-expr
+        [^}]*\n             # (8) chars up to a newline (i.e. multiline)
+        """,
+        re.VERBOSE,
+    )
+
+    def visit_fstring_start(self, token: tokenize.TokenInfo) -> None:
+        """Performs check."""
+        self._check_fstring_is_multi_lined(token)
+
+    def _check_fstring_is_multi_lined(self, token: tokenize.TokenInfo) -> None:
+        """Finds if f-string is multi-line."""
+        if self._multiline_fstring_pattern.match(token.line):
+            self.add_violation(MultilineFormattedStringViolation(token))

@@ -20,4 +20,5 @@ PRESET: Final = (
     primitives.WrongStringTokenVisitor,
     statements.MultilineStringVisitor,
     conditions.IfElseVisitor,
+    primitives.MultilineFormattedStringTokenVisitor,
 )

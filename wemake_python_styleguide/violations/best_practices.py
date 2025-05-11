@@ -95,8 +95,8 @@ Summary
    AwaitInLoopViolation
    SneakyTypeVarWithDefaultViolation
    NonStrictSliceOperationsViolation
+   MultilineFormattedStringViolation
    CommentInFormattedStringViolation
-
 
 Best practices
 --------------
@@ -180,6 +180,7 @@ Best practices
 .. autoclass:: AwaitInLoopViolation
 .. autoclass:: SneakyTypeVarWithDefaultViolation
 .. autoclass:: NonStrictSliceOperationsViolation
+.. autoclass:: MultilineFormattedStringViolation
 .. autoclass:: CommentInFormattedStringViolation
 
 """
@@ -3079,6 +3080,33 @@ class NonStrictSliceOperationsViolation(ASTViolation):
     code = 478
 
 
+class MultilineFormattedStringViolation(TokenizeViolation):
+    """
+    Forbid using multi-line formatted string with single and double quotes.
+
+    Reasoning:
+        Multiline f-strings must use triple quotes for clarity.
+        Single f-strings may not span lines.
+
+    Solution:
+        Use triple quotes instead of single quotes.
+
+    Example::
+        x = f''' { 1
+        ...}'''
+
+        # Wrong:
+        x = f' { 1
+        ...}'
+
+    .. versionadded:: 1.2.0
+
+    """
+
+    error_template = 'Found multi-line formatted string'
+    code = 479
+
+
 @final
 class CommentInFormattedStringViolation(TokenizeViolation):
     """
@@ -3107,4 +3135,4 @@ class CommentInFormattedStringViolation(TokenizeViolation):
     """
 
     error_template = 'Found comment inside formatted string'
-    code = 479
+    code = 480
