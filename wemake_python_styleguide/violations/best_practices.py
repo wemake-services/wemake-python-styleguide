@@ -3080,6 +3080,7 @@ class NonStrictSliceOperationsViolation(ASTViolation):
     code = 478
 
 
+@final
 class MultilineFormattedStringViolation(TokenizeViolation):
     """
     Forbid using multi-line formatted string with single and double quotes.
