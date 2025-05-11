@@ -317,7 +317,7 @@ class NoqaVisitor(BaseTokenVisitor):
 @final
 class CommentInFormattedStringVisitor(
     BaseTokenVisitor
-):  # pragma: >=3.12 no cover
+):  # pragma: >=3.12 cover
     """Checks comment in formatted strings."""
 
     _comment_in_fstring: ClassVar[re.Pattern[str]] = re.compile(
