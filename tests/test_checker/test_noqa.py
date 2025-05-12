@@ -244,6 +244,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS477': 0,  # enabled only in python 3.13+
         'WPS478': 1,
         'WPS479': 0,
+        'WPS480': 0,  # only triggers on 3.12+
         'WPS500': 1,
         'WPS501': 1,
         'WPS502': 0,  # disabled since 1.0.0

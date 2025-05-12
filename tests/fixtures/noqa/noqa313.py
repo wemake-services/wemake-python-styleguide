@@ -9,3 +9,4 @@ class NewStyleGenerics[
     *FollowingTuple=*tuple[int, ...]  # noqa: WPS477
 ]:
     """TypeVarTuple follows a defaulted TypeVar."""
+

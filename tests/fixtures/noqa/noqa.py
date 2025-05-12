@@ -755,3 +755,4 @@ async def test_await_in_loop():
 
 
 some_sequence = some_sequence[::-1]  # noqa: WPS478
+
