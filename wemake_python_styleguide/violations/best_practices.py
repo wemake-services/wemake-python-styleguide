@@ -3093,6 +3093,8 @@ class MultilineFormattedStringViolation(TokenizeViolation):
         Use triple quotes instead of single quotes.
 
     Example::
+
+        # Correct
         x = f''' { 1
         ...}'''
 

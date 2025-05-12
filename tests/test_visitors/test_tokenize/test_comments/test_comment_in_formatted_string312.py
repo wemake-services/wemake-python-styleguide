@@ -55,6 +55,49 @@ foo = f"test{a # comment
 }"
 """
 
+rfstring_with_comment = """
+foo = rf"test{a # comment
+}"
+"""
+
+rfstring_with_comment_single_quotes = """
+foo = rf'test{a # comment
+}'
+"""
+
+
+rfstring_with_comment_triple_quotes = '''
+foo = rf"""test{a # comment
+}"""
+'''
+
+rfstring_with_comment_triple_single_quotes = """
+foo = rf'''test{a # comment
+}'''
+"""
+
+
+frstring_with_comment = """
+foo = fr"test{a # comment
+}"
+"""
+
+frstring_with_comment_single_quotes = """
+foo = fr'test{a # comment
+}'
+"""
+
+
+frstring_with_comment_triple_quotes = '''
+foo = fr"""test{a # comment
+}"""
+'''
+
+frstring_with_comment_triple_single_quotes = """
+foo = fr'''test{a # comment
+}'''
+"""
+
 fstring_with_comment_single_quotes = """
 foo = f'test{a # comment
 }'
@@ -133,6 +176,14 @@ def test_correct_formatted_string(
         fstring_with_comment_and_hash_on_new_line,
         fstring_with_comment_between_quotes,
         fstring_with_comment_in_docstring,
+        rfstring_with_comment,
+        rfstring_with_comment_triple_quotes,
+        rfstring_with_comment_single_quotes,
+        rfstring_with_comment_triple_single_quotes,
+        frstring_with_comment,
+        frstring_with_comment_triple_quotes,
+        frstring_with_comment_single_quotes,
+        frstring_with_comment_triple_single_quotes,
     ],
 )
 def test_wrong_formatted_string(
