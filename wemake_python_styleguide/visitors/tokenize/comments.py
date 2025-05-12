@@ -315,13 +315,20 @@ class NoqaVisitor(BaseTokenVisitor):
 
 
 @final
-class CommentInFormattedStringVisitor(
-    BaseTokenVisitor
-):  # pragma: >=3.12 cover
+class CommentInFormattedStringVisitor(BaseTokenVisitor):  # pragma: >=3.12 cover
     """Checks comment in formatted strings."""
 
     _comment_in_fstring: ClassVar[re.Pattern[str]] = re.compile(
-        r'.*f[\"\'].*\{[^}]*#[^}]*$', re.MULTILINE
+        r"""
+        .*                  # (1) anything before the f-string
+        fr?(['"])           # (2) `f` or `fr`prefix + a single or double quote
+        .*                  # (3) any characters up to…
+        \{                  # (4) opening brace
+        [^}]*               # (5) any characters except closing braces
+        #                   # (6) hash symbol
+        [^}]*\n             # (7) chars up to a newline (i.e. multiline)
+        """,
+        re.VERBOSE,
     )
 
     def visit_fstring_start(self, token: tokenize.TokenInfo) -> None:
