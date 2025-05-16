@@ -30,6 +30,22 @@ Semantic versioning in our case means:
 - Fixes `WPS115` false-positive on `StrEnum`, `IntEnum`, `IntFlag` attributes, #3381
 - Fixes `WPS432`, now it ignores magic numbers in `Literal`, #3397
 
+
+## 1.1.1
+
+### Bugfixes
+
+- Removes unnecessary WPS604 and WPS614 rules from the noqa.py, #3420
+- Fixes `NewStyledDecoratorViolation` for generic type specifications `my_func[T]`, #3417
+
+Due to PEP 695, it's now allowed to use [] in the decorator only for `python3.12+`.
+
+```python
+@decorator[T, V]
+def some_function(): ...
+```
+
+
 ## 1.1.0
 
 ### Command line utility

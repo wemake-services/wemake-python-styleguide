@@ -1,4 +1,5 @@
 import ast
+import sys
 from typing import Final, final
 
 from wemake_python_styleguide.logic.tree import attributes
@@ -9,11 +10,19 @@ from wemake_python_styleguide.violations.best_practices import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
-_ALLOWED_DECORATOR_TYPES: Final = (
-    ast.Attribute,
-    ast.Call,
-    ast.Name,
-)
+if sys.version_info >= (3, 12):
+    _ALLOWED_DECORATOR_TYPES: Final = (
+        ast.Attribute,
+        ast.Call,
+        ast.Name,
+        ast.Subscript,  # PEP 695 - Type Parameter Syntax
+    )
+else:
+    _ALLOWED_DECORATOR_TYPES: Final = (
+        ast.Attribute,
+        ast.Call,
+        ast.Name,
+    )
 
 
 @final

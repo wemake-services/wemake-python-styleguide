@@ -2662,7 +2662,8 @@ class NewStyledDecoratorViolation(ASTViolation):
        Because decorators should be simple and easy to read.
 
     Solution:
-        Use names, attributes, and calls as decorators only.
+        Use names, attributes and calls with generic type specifications
+        as decorators only.
         You are free to pass any args to function calls, however.
 
     Example::
@@ -2671,8 +2672,18 @@ class NewStyledDecoratorViolation(ASTViolation):
         @some.decorator(args)
         def my_function(): ...
 
+        Only for ``python3.12+``
+        @decorator[my_type](args)
+        def my_function(): ...
+
         # Wrong:
-        @some.decorator['method'] + other
+        @some.decorator + other.decorator
+        def my_function(): ...
+
+        @some.dict_decorators['method']
+        def my_function(): ...
+
+        @some.list_decorators[index]
         def my_function(): ...
 
     .. versionadded:: 0.15.0

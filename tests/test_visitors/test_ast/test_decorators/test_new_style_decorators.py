@@ -1,3 +1,5 @@
+import sys
+
 import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
@@ -18,6 +20,42 @@ class Some:
     def some(self): ...
 """
 
+if sys.version_info >= (3, 12):
+    wrong_decorators = [
+        'some + other',
+        'some[1] + other[1]',
+        'some.attr + other.attr',
+        'some[0].attr + other.attr[0]',
+        'really @ strange[0]',
+    ]
+    correct_decorators = [
+        'some',
+        'some()',
+        'some(index[1])',
+        'some.attr',
+        'some.attr(1 + 1)',
+        'some[my_type]',
+        'some[my_type](index)',
+        'some.attr[my_type]()',
+        'some.attr(1)[my_type]',
+    ]
+else:
+    wrong_decorators = [
+        'some[1]',
+        'some.attr[0]',
+        'some[0].attr',
+        'call()[1].attr',
+        'some + other',
+        'really @ strange[0]',
+    ]
+    correct_decorators = [
+        'some',
+        'some()',
+        'some(index[1])',
+        'some.attr',
+        'some.attr(1 + 1)',
+    ]
+
 
 @pytest.mark.parametrize(
     'code',
@@ -28,14 +66,7 @@ class Some:
 )
 @pytest.mark.parametrize(
     'decorator',
-    [
-        'some[1]',
-        'some.attr[0]',
-        'some[0].attr',
-        'call()[1].attr',
-        'some + other',
-        'really @ strange[0]',
-    ],
+    wrong_decorators,
 )
 def test_invalid_decorators(
     assert_errors,
@@ -63,13 +94,7 @@ def test_invalid_decorators(
 )
 @pytest.mark.parametrize(
     'decorator',
-    [
-        'some',
-        'some()',
-        'some(index[1])',
-        'some.attr',
-        'some.attr(1 + 1)',
-    ],
+    correct_decorators,
 )
 def test_valid_decorators(
     assert_errors,
