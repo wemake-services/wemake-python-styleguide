@@ -35,7 +35,8 @@ Semantic versioning in our case means:
 
 ### Bugfixes
 
-- Fixes `NewStyledDecoratorViolation` for generic type specifications `my_func[T]` #3417
+- Removes unnecessary WPS604 and WPS614 rules from the noqa.py, #3420
+- Fixes `NewStyledDecoratorViolation` for generic type specifications `my_func[T]`, #3417
 
 Due to PEP 695, it's now allowed to use [] in the decorator only for `python3.12+`.
 
