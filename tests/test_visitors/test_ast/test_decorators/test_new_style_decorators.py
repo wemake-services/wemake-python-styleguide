@@ -1,5 +1,6 @@
-import pytest
 import sys
+
+import pytest
 
 from wemake_python_styleguide.violations.best_practices import (
     NewStyledDecoratorViolation,
