@@ -107,7 +107,7 @@ class TooManyPublicAtts:  # noqa: WPS230
         self.boom = 7
 
 
-@property  # noqa: WPS614
+@property
 def function_name(  # noqa: WPS614
     value: int = 0,  # noqa: WPS110
 ):
@@ -118,7 +118,7 @@ def function_name(  # noqa: WPS614
 
 def some():  # noqa: WPS110
     class Nested:  # noqa: WPS431
-        """Docs."""  # noqa: WPS604
+        """Docs."""
 
     def nested():  # noqa: WPS430
         ...
