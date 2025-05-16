@@ -28,17 +28,6 @@ if sys.version_info >= (3, 12):
         'some[0].attr + other.attr[0]',
         'really @ strange[0]',
     ]
-else:
-    wrong_decorators = [
-        'some[1]',
-        'some.attr[0]',
-        'some[0].attr',
-        'call()[1].attr',
-        'some + other',
-        'really @ strange[0]',
-    ]
-
-if sys.version_info >= (3, 12):
     correct_decorators = [
         'some',
         'some()',
@@ -51,6 +40,14 @@ if sys.version_info >= (3, 12):
         'some.attr(1)[my_type]',
     ]
 else:
+    wrong_decorators = [
+        'some[1]',
+        'some.attr[0]',
+        'some[0].attr',
+        'call()[1].attr',
+        'some + other',
+        'really @ strange[0]',
+    ]
     correct_decorators = [
         'some',
         'some()',
