@@ -47,7 +47,7 @@ repos:
     hooks:
       - id: check-useless-excludes
 
-exclude: ^(tests/fixtures/|tests/test_formatter/__snapshots__/|tests/test_cli/__snapshots__/)
+exclude: ^(tests/fixtures/|.*?/__snapshots__/.*)
 
 ci:
   autofix_commit_msg: "[pre-commit.ci] auto fixes from pre-commit.com hooks"
