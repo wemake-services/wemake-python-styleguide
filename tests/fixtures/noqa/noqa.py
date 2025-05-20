@@ -730,7 +730,7 @@ for unique_element in range(10):
     my_print(4)
 
 
-@some_decorator['text']  # noqa: WPS466
+@some_decorator + other_decorator  # noqa: WPS466
 def my_function():
     return 1
 

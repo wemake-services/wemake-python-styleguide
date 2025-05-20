@@ -1,7 +1,9 @@
 import ast
 from typing import Final, final
 
+from wemake_python_styleguide.compat.constants import PY312
 from wemake_python_styleguide.logic.tree import attributes
+from wemake_python_styleguide.options.validation import ValidatedOptions
 from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations.best_practices import (
     NewStyledDecoratorViolation,
@@ -13,6 +15,11 @@ _ALLOWED_DECORATOR_TYPES: Final = (
     ast.Attribute,
     ast.Call,
     ast.Name,
+)
+
+_ALLOWED_DECORATOR_TYPES3_12: Final = (
+    *_ALLOWED_DECORATOR_TYPES,
+    ast.Subscript,  # PEP 695 - Type Parameter Syntax
 )
 
 
@@ -27,6 +34,18 @@ _ALLOWED_DECORATOR_TYPES: Final = (
 class WrongDecoratorVisitor(BaseNodeVisitor):
     """Checks decorators's correctness."""
 
+    def __init__(
+        self,
+        options: ValidatedOptions,
+        tree: ast.AST,
+        **kwargs,
+    ) -> None:
+        """Creates Decorator Visitor."""
+        self.ALLOWED_DECORATOR_TYPES: Final = (
+            _ALLOWED_DECORATOR_TYPES3_12 if PY312 else _ALLOWED_DECORATOR_TYPES
+        )
+        super().__init__(options, tree, **kwargs)
+
     def visit_any_function(self, node: AnyFunctionDef) -> None:
         """Checks functions' decorators."""
         self._check_new_decorator_syntax(node)
@@ -38,13 +57,13 @@ class WrongDecoratorVisitor(BaseNodeVisitor):
                 self.add_violation(NewStyledDecoratorViolation(decorator))
 
     def _is_allowed_decorator(self, node: ast.expr) -> bool:
-        if not isinstance(node, _ALLOWED_DECORATOR_TYPES):
+        if not isinstance(node, self.ALLOWED_DECORATOR_TYPES):
             return False
 
         if isinstance(node, ast.Name):
             return True  # Simple names are fine!
 
         return all(
-            isinstance(part, _ALLOWED_DECORATOR_TYPES)
+            isinstance(part, self.ALLOWED_DECORATOR_TYPES)
             for part in attributes.parts(node)
         )
