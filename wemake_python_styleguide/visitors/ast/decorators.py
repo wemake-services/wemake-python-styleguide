@@ -63,7 +63,6 @@ class WrongDecoratorVisitor(BaseNodeVisitor):
         if isinstance(node, ast.Name):
             return True  # Simple names are fine!
 
-        return all(
-            isinstance(part, self.ALLOWED_DECORATOR_TYPES)
-            for part in attributes.parts(node)
+        return attributes.only_consists_of_parts(
+            node, self.ALLOWED_DECORATOR_TYPES
         )
