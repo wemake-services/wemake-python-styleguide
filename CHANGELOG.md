@@ -40,6 +40,9 @@ Due to PEP-695, it's now allowed to use `[]` in the decorator only for `python3.
 def some_function(): ...
 ```
 
+- Improves `WPS349` highlighting, #3437
+
+
 ## 1.1.0
 
 ### Command line utility
