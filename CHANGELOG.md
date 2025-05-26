@@ -31,6 +31,7 @@ Semantic versioning in our case means:
 - Fixes `WPS115` false-positive on `StrEnum`, `IntEnum`, `IntFlag` attributes, #3381
 - Fixes `WPS432`, now it ignores magic numbers in `Literal`, #3397
 - Fixes `WPS466` for generic type specifications `MyClassDecorator[T]`, #3417
+- Fixes `WPS212` to ignore nested classes and functions when counting `return` statements, #3413
 
 Due to PEP-695, it's now allowed to use `[]` in the decorator only for `python3.12+`.
 
