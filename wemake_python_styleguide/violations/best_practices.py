@@ -97,6 +97,7 @@ Summary
    NonStrictSliceOperationsViolation
    MultilineFormattedStringViolation
    CommentInFormattedStringViolation
+   ComplexSliceIndexViolation
 
 Best practices
 --------------
@@ -182,6 +183,7 @@ Best practices
 .. autoclass:: NonStrictSliceOperationsViolation
 .. autoclass:: MultilineFormattedStringViolation
 .. autoclass:: CommentInFormattedStringViolation
+.. autoclass:: ComplexSliceIndexViolation
 
 """
 
@@ -3150,3 +3152,42 @@ class CommentInFormattedStringViolation(TokenizeViolation):
 
     error_template = 'Found comment inside formatted string'
     code = 480
+
+
+@final
+class ComplexSliceIndexViolation(ASTViolation):
+    """
+    Forbid using complex grammar for slice index.
+
+    Reasoning:
+        It is probably not a good idea to use complex grammar in slice indexes.
+        Because indexes should be simple and easy to read.
+
+    Solution:
+        Use names, constants and attributes as indexes only.
+        Without complex expressions in parentheses.
+
+    Example::
+
+        # Correct:
+        array[3:7]
+        array[:-(x + 3)]
+        array[::-index.step]
+        array[start_index:end_index]
+        array[index.start:index.end]
+        array[Slice.start:]
+
+        # Wrong:
+        array[my_dict["start_index"]:my_list[-1]]
+        array[start_index():index.end()]
+        array[Slice().start:]
+        array[-(-x + 1):]
+        array[(x * (y + 2)):]
+        array[(x + y + z):]
+
+    .. versionadded:: 1.2.0
+
+    """
+
+    error_template = 'Found complex slice index'
+    code = 481

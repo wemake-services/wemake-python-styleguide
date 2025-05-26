@@ -1,14 +1,41 @@
 import ast
-from typing import ClassVar, final
+from typing import ClassVar, Final, final
 
 from wemake_python_styleguide.logic import source
-from wemake_python_styleguide.logic.tree import functions, operators, slices
+from wemake_python_styleguide.logic.tree import (
+    attributes,
+    functions,
+    operators,
+    slices,
+)
+from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations import (
     best_practices,
     consistency,
     refactoring,
 )
 from wemake_python_styleguide.visitors import base
+
+_ALLOWED_BINOP_TYPES: Final = (
+    ast.Name,
+    ast.Constant,
+    ast.UnaryOp,
+)
+
+_ALLOWED_UNARYOP_TYPES: Final = (
+    ast.Name,
+    ast.Constant,
+    ast.BinOp,
+    ast.Attribute,
+)
+
+_ALLOWED_INDEX_TYPES: Final = (
+    ast.Name,
+    ast.Constant,
+    ast.BinOp,
+    ast.UnaryOp,
+    ast.Attribute,
+)
 
 
 @final
@@ -252,3 +279,67 @@ class StrictSliceOperations(base.BaseNodeVisitor):
             )
 
         return isinstance(node, ast.Constant) and node.value == value_to_check
+
+
+@final
+class SliceIndexVisitor(base.BaseNodeVisitor):
+    """Checks slices used in the code."""
+
+    def visit_Subscript(self, node: ast.Subscript) -> None:
+        """Visits slice."""
+        if not isinstance(node.slice, ast.Slice):
+            return
+
+        self._check_slice_complexity(node.slice)
+        self.generic_visit(node.slice)
+
+    def _check_slice_complexity(self, node: ast.Slice) -> None:
+        for index in (node.lower, node.upper, node.step):
+            if index is None:
+                continue
+
+            if not self._is_allowed_index(index, _ALLOWED_INDEX_TYPES):
+                self.add_violation(
+                    best_practices.ComplexSliceIndexViolation(index)
+                )
+
+    def _is_allowed_index(
+        self,
+        node: ast.expr,
+        allowed_types: AnyNodes,
+    ) -> bool:
+        for part in attributes.parts(node):
+            if isinstance(part, ast.UnaryOp) and not self._is_allowed_unaryop(
+                part, allowed_types
+            ):
+                return False
+
+            if isinstance(part, ast.BinOp) and not self._is_allowed_binop(
+                part, allowed_types
+            ):
+                return False
+
+            if not isinstance(part, allowed_types):
+                return False
+
+        return True
+
+    def _is_allowed_unaryop(
+        self,
+        node: ast.UnaryOp,
+        allowed_types: AnyNodes,
+    ) -> bool:
+        if allowed_types is _ALLOWED_INDEX_TYPES:
+            return self._is_allowed_index(node.operand, _ALLOWED_UNARYOP_TYPES)
+        return self._is_allowed_index(node.operand, allowed_types)
+
+    def _is_allowed_binop(
+        self, node: ast.BinOp, allowed_types: AnyNodes
+    ) -> bool:
+        if allowed_types is _ALLOWED_INDEX_TYPES:
+            return self._is_allowed_index(
+                node.left, _ALLOWED_BINOP_TYPES
+            ) and self._is_allowed_index(node.right, _ALLOWED_BINOP_TYPES)
+        return self._is_allowed_index(
+            node.left, allowed_types
+        ) and self._is_allowed_index(node.right, allowed_types)

@@ -24,6 +24,7 @@ Semantic versioning in our case means:
 - Adds `WPS478`: forbids using non strict slice operations, #1011
 - Adds `WPS479`: forbids using multiline fstrings, #3405
 - Adds `WPS480`: forbids using comments inside formatted string, #3404
+- Adds `WPS481`: forbids using complex slice indexes, #3427
 
 ### Bugfixes
 
