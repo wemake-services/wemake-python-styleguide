@@ -88,6 +88,23 @@ class _ComplexityCounter:
 
             function_variables.append(variable_def.id)
 
+    def _update_counters(self, node: AnyFunctionDef, sub_node: ast.AST) -> None:
+        """Updates statement counters for the given node."""
+        error_counters: _NodeTypeHandler = {
+            ast.Return: self.metrics.returns,
+            ast.Expr: self.metrics.expressions,
+            ast.Await: self.metrics.awaits,
+            ast.Assert: self.metrics.asserts,
+            ast.Raise: self.metrics.raises,
+        }
+
+        for types, counter in error_counters.items():
+            if isinstance(sub_node, types):
+                # We do not count returns in nested functions and classes
+                if types is ast.Return and get_context(sub_node) is not node:
+                    continue
+                counter[node] += 1
+
     def _check_sub_node(
         self,
         node: AnyFunctionDef,
@@ -99,17 +116,7 @@ class _ComplexityCounter:
         ):
             self._update_variables(node, sub_node)
 
-        error_counters: _NodeTypeHandler = {
-            ast.Return: self.metrics.returns,
-            ast.Expr: self.metrics.expressions,
-            ast.Await: self.metrics.awaits,
-            ast.Assert: self.metrics.asserts,
-            ast.Raise: self.metrics.raises,
-        }
-
-        for types, counter in error_counters.items():
-            if isinstance(sub_node, types):
-                counter[node] += 1
+        self._update_counters(node, sub_node)
 
 
 @final
