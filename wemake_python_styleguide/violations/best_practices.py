@@ -758,7 +758,7 @@ class YieldInComprehensionViolation(ASTViolation):
 
         # Wrong:
         list((yield letter) for letter in 'ab')
-        # Will resilt in: ['a', None, 'b', None]
+        # Will result in: ['a', None, 'b', None]
 
         list([(yield letter) for letter in 'ab'])
         # Will result in: ['a', 'b']
@@ -2506,7 +2506,7 @@ class ForbiddenInlineIgnoreViolation(SimpleViolation):
 @final
 class WrongMultilineStringUseViolation(TokenizeViolation):
     '''
-    Frobids direct usage of multiline strings.
+    Forbids direct usage of multiline strings.
 
     Multiline strings are only allowed in docstrings
     or assignments to variables.
@@ -2657,9 +2657,9 @@ class NewStyledDecoratorViolation(ASTViolation):
     earlier versions do not have this concept.
 
     Reasoning:
-       New grammar allows to use decorators in a more liberal way.
-       It is probably not a good idea.
-       Because decorators should be simple and easy to read.
+        New grammar allows to use decorators in a more liberal way.
+        It is probably not a good idea.
+        Because decorators should be simple and easy to read.
 
     Solution:
         Use names, attributes and calls with generic type specifications
@@ -2672,7 +2672,7 @@ class NewStyledDecoratorViolation(ASTViolation):
         @some.decorator(args)
         def my_function(): ...
 
-        Only for ``python3.12+``
+        # Only for `python3.12+`
         @MyClassDecorator[my_type](args)
         def my_function(): ...
 
