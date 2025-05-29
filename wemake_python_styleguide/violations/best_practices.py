@@ -2672,7 +2672,7 @@ class NewStyledDecoratorViolation(ASTViolation):
         @some.decorator(args)
         def my_function(): ...
 
-        Only for `python3.12+`
+        # Only for `python3.12+`
         @MyClassDecorator[my_type](args)
         def my_function(): ...
 
