@@ -65,7 +65,7 @@ syrupy = "^4.6"
 hypothesis = "^6.131"
 hypothesmith = "^0.3"
 
-mypy = "^1.13"
+mypy = "^1.16"
 types-flake8 = "^7.1"
 
 import-linter = "^2.0"
