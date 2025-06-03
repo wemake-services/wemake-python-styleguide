@@ -62,7 +62,7 @@ pytest-randomly = "^3.12"
 pytest-xdist = "^3.7"
 covdefaults = "^2.3"
 syrupy = "^4.6"
-hypothesis = "^6.132"
+hypothesis = "^6.133"
 hypothesmith = "^0.3"
 
 mypy = "^1.16"
