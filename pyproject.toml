@@ -57,7 +57,7 @@ pygments = "^2.5"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4"
-pytest-cov = "^6.0"
+pytest-cov = "^6.2"
 pytest-randomly = "^3.12"
 pytest-xdist = "^3.7"
 covdefaults = "^2.3"
