@@ -756,3 +756,6 @@ async def test_await_in_loop():
 
 some_sequence = some_sequence[::-1]  # noqa: WPS478
 
+array = array[my_dict["index"] :]  # noqa: WPS481
+array = array[: end_index()]  # noqa: WPS481
+array = array[:: (var_x * (var_y + 1))]  # noqa: WPS481
