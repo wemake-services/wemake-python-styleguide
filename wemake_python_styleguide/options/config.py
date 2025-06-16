@@ -437,7 +437,7 @@ class Configuration:
         _Option(
             '--max-lines-in-finally',
             defaults.MAX_LINES_IN_FINALLY,
-            'Maximum lines of expressions in a finally block.'
+            'Maximum lines of expressions in a finally block.',
         ),
         # Formatter:
         _Option(

@@ -41,6 +41,7 @@ finally:
     ...
 """
 
+
 @pytest.mark.parametrize(
     'code',
     [
@@ -64,10 +65,7 @@ def test_untrivial_try_blocks(
 
 @pytest.mark.parametrize(
     'code',
-    [
-        trivial_logic_example1,
-        trivial_logic_example2
-    ],
+    [trivial_logic_example1, trivial_logic_example2],
 )
 def test_correct_try_blocks(
     assert_errors,
