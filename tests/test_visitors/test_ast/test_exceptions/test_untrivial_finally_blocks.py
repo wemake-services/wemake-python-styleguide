@@ -88,10 +88,7 @@ def test_untrivial_try_blocks(
 
 @pytest.mark.parametrize(
     'code',
-    [
-        untrivial_logic_example1,
-        untrivial_logic_custom_example1
-    ],
+    [untrivial_logic_example1, untrivial_logic_custom_example1],
 )
 def test_custom_untrivial_try_blocks(
     assert_errors,
@@ -133,7 +130,7 @@ def test_correct_try_blocks(
     [
         trivial_logic_example1,
         trivial_logic_example2,
-        trivial_logic_custom_example1
+        trivial_logic_custom_example1,
     ],
 )
 def test_custom_correct_try_blocks(
