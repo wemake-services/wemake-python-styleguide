@@ -111,7 +111,7 @@ class WrongExceptHandlerVisitor(BaseNodeVisitor):
 
 
 @final
-class FatFinallyBlocksVisitor(BaseNodeVisitor):
+class UntrivialFinallyBlocksVisitor(BaseNodeVisitor):
     """Ensures that are no fat ``continuye`` blocks."""
 
     def visit_Finally(self, node: ast.Try) -> None:
