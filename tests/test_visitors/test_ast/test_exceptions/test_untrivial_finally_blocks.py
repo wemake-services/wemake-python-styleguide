@@ -11,57 +11,57 @@ from wemake_python_styleguide.visitors.ast.exceptions import (
 
 trivial_logic_example1 = """
 try:
-    ...
+    print()
 except:
-    ...
+    print()
 finally:
-    ...
+    print()
 """
 
 trivial_logic_example2 = """
 try:
-    ...
+    print()
 except:
-    ...
+    print()
 finally:
-    ...
-    ...
+    print()
+    print()
 """
 
 trivial_logic_custom_example1 = """
 try:
-    ...
+    print()
 except:
-    ...
+    print()
 finally:
-    ...
-    ...
-    ...
+    print()
+    print()
+    print()
 """
 
 # Wrong:
 
 untrivial_logic_example1 = """
 try:
-    ...
+    print()
 except:
-    ...
+    print()
 finally:
-    ...
-    ...
-    ...
+    print()
+    print()
+    print()
 """
 
 untrivial_logic_custom_example1 = """
 try:
-    ...
+    print()
 except:
-    ...
+    print()
 finally:
-    ...
-    ...
-    ...
-    ...
+    print()
+    print()
+    print()
+    print()
 """
 
 
