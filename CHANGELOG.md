@@ -1,3 +1,9 @@
+commit bd2c4a77abff9e5924a1f4b5c7ccde2c5de5b431
+Author: Alexeev Bronislav <alexeev.dev@mail.ru>
+Date:   Tue Jun 17 02:13:19 2025 +0700
+
+    add nix support
+
 commit afad1b9cf12804b74948ae3cbdc02457be33287e
 Author: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
 Date:   Mon Jun 16 19:34:05 2025 +0300

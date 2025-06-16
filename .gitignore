@@ -1,4 +1,7 @@
 #### joe made this: http://goel.io/joe
+#### NIX ####
+flake.lock
+
 #### python ####
 # Byte-compiled / optimized / DLL files
 .pytest_cache
@@ -212,4 +215,4 @@ fabric.properties
 # Used for testing:
 ex.py
 setup.py
-flake.lock
+
