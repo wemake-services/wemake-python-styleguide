@@ -11,7 +11,7 @@ from wemake_python_styleguide.violations.best_practices import (
     NonTrivialExceptViolation,
 )
 from wemake_python_styleguide.violations.complexity import (
-    UntrivialLogicInFinallyViolation,
+    ComplexFinallyViolation,
 )
 from wemake_python_styleguide.violations.refactoring import (
     NestedTryViolation,
@@ -131,4 +131,4 @@ class UntrivialFinallyBlocksVisitor(BaseNodeVisitor):
             lines.update(range(node.lineno, node.end_lineno + 1))
 
         if len(lines) >= self.options.max_lines_in_finally:
-            self.add_violation(UntrivialLogicInFinallyViolation(node))
+            self.add_violation(ComplexFinallyViolation(node))

@@ -1401,9 +1401,9 @@ class TooManyMatchCaseViolation(ASTViolation):
 
 
 @final
-class UntrivialLogicInFinallyViolation(ASTViolation):
+class ComplexFinallyViolation(ASTViolation):
     """
-    Forbids "fat" finally block.
+    Forbids complex finally block.
 
     Reasoning:
         It can contain few lines of code, but it shouldn't contain untrivial
@@ -1422,5 +1422,5 @@ class UntrivialLogicInFinallyViolation(ASTViolation):
     ..versionadded:: 1.1.0
     """
 
-    error_template = 'Found untrivial logic in `finally` block: {0}'
+    error_template = 'Found complex `finally` block: {0}'
     code = 243
