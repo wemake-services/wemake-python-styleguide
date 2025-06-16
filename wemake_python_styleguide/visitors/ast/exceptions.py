@@ -125,7 +125,7 @@ class UntrivialFinallyBlocksVisitor(BaseNodeVisitor):
         if not finally_body:
             return
 
-        lines = set()
+        lines: set[int] = set()
 
         if hasattr(node, 'end_lineno') and node.end_lineno is not None:
             lines.update(range(node.lineno, node.end_lineno + 1))
