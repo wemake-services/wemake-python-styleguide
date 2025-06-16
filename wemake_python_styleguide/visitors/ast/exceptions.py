@@ -125,10 +125,7 @@ class UntrivialFinallyBlocksVisitor(BaseNodeVisitor):
         if not finally_body:
             return
 
-        lines: set[int] = set()
+        lines = node.body[0]
 
-        if hasattr(node, 'end_lineno') and node.end_lineno is not None:
-            lines.update(range(node.lineno, node.end_lineno + 1))
-
-        if len(lines) >= self.options.max_lines_in_finally:
+        if len(lines.split('\n').strip()) >= self.options.max_lines_in_finally:
             self.add_violation(ComplexFinallyViolation(node))
