@@ -1,3 +1,9 @@
+commit c2721c0f6aebbc30940219e8ff38df9ccaa9394f
+Author: Alexeev Bronislav <alexeev.dev@mail.ru>
+Date:   Tue Jun 17 02:13:56 2025 +0700
+
+    update gitignore
+
 commit bd2c4a77abff9e5924a1f4b5c7ccde2c5de5b431
 Author: Alexeev Bronislav <alexeev.dev@mail.ru>
 Date:   Tue Jun 17 02:13:19 2025 +0700

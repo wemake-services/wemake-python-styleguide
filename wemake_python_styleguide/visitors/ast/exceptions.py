@@ -10,6 +10,9 @@ from wemake_python_styleguide.violations.best_practices import (
     IncorrectExceptOrderViolation,
     NonTrivialExceptViolation,
 )
+from wemake_python_styleguide.violations.complexity import (
+    UntrivialLogicInFinallyViolation,
+)
 from wemake_python_styleguide.violations.refactoring import (
     NestedTryViolation,
     UselessFinallyViolation,
@@ -105,3 +108,27 @@ class WrongExceptHandlerVisitor(BaseNodeVisitor):
                 return
 
         self.add_violation(NonTrivialExceptViolation(node.type))
+
+
+@final
+class FatFinallyBlocksVisitor(BaseNodeVisitor):
+    """Ensures that are no fat ``continuye`` blocks."""
+
+    def visit_Finally(self, node: ast.Try) -> None:
+        """Visits all finally nodes in the tree."""
+        self._check_fat_finally(node)
+        self.generic_visit(node)
+
+    def _check_fat_finally(self, node: ast.Try) -> None:
+        finally_body = node.finalbody
+
+        if not finally_body:
+            return
+
+        lines = set()
+
+        if hasattr(node, 'end_lineno') and node.end_lineno is not None:
+            lines.update(range(node.lineno, node.end_lineno + 1))
+
+        if len(lines) >= self.options.max_lines_in_finally:
+            self.add_violation(UntrivialLogicInFinallyViolation(node))
