@@ -63,6 +63,7 @@ Summary
    TooManyTypeParamsViolation
    TooManyMatchSubjectsViolation
    TooManyMatchCaseViolation
+   ComplexFinallyViolation
 
 Module complexity
 -----------------
@@ -109,7 +110,7 @@ Structure complexity
 .. autoclass:: TooManyTypeParamsViolation
 .. autoclass:: TooManyMatchSubjectsViolation
 .. autoclass:: TooManyMatchCaseViolation
-.. autoclass:: UntrivialLogicInFinallyViolation
+.. autoclass:: ComplexFinallyViolation
 
 """
 
@@ -1417,9 +1418,9 @@ class ComplexFinallyViolation(ASTViolation):
     Configuration:
         This rule is configurable with ``--max-lines-in-finally``.
         Default:
-        :int:`wemake_python_styleguide.options.defaults.MAX_LINES_IN_FINALLY.
+        :int:`wemake_python_styleguide.options.defaults.MAX_LINES_IN_FINALLY`
 
-    ..versionadded:: 1.1.0
+    .. versionadded:: 1.1.0
     """
 
     error_template = 'Found complex `finally` block: {0}'
