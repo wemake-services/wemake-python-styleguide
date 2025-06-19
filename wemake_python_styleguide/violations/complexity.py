@@ -63,6 +63,7 @@ Summary
    TooManyTypeParamsViolation
    TooManyMatchSubjectsViolation
    TooManyMatchCaseViolation
+   ComplexFinallyViolation
 
 Module complexity
 -----------------
@@ -109,6 +110,7 @@ Structure complexity
 .. autoclass:: TooManyTypeParamsViolation
 .. autoclass:: TooManyMatchSubjectsViolation
 .. autoclass:: TooManyMatchCaseViolation
+.. autoclass:: ComplexFinallyViolation
 
 """
 
@@ -1397,3 +1399,29 @@ class TooManyMatchCaseViolation(ASTViolation):
 
     error_template = 'Found too many cases in `match` block: {0}'
     code = 242
+
+
+@final
+class ComplexFinallyViolation(ASTViolation):
+    """
+    Forbids complex finally block.
+
+    Reasoning:
+        It can contain few lines of code, but it shouldn't contain untrivial
+        logic, which can not be understand very quickly at code reading.
+
+    Solution:
+        Refactoring the `finally` statement by lightening the semantic load.
+        Output logic into separate functions so that 1-2 expressions remain
+        in the finally block.
+
+    Configuration:
+        This rule is configurable with ``--max-lines-in-finally``.
+        Default:
+        :int:`wemake_python_styleguide.options.defaults.MAX_LINES_IN_FINALLY`
+
+    .. versionadded:: 1.1.0
+    """
+
+    error_template = 'Found complex `finally` block: {0}'
+    code = 243
