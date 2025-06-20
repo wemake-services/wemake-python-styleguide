@@ -251,5 +251,6 @@ class SimpleViolation(BaseViolation):
 
 def _prepend_skipping_whitespaces(prefix: str, text: str) -> str:
     lstripped_text = text.lstrip()
-    leading_whitespaces = text[: len(text) - len(lstripped_text)]
+    end_index = len(text) - len(lstripped_text)
+    leading_whitespaces = text[:end_index]
     return leading_whitespaces + prefix + lstripped_text

@@ -75,6 +75,7 @@ PRESET: Final = (
     subscripts.ImplicitDictGetVisitor,
     subscripts.CorrectKeyVisitor,
     subscripts.StrictSliceOperations,
+    subscripts.SliceIndexVisitor,
     decorators.WrongDecoratorVisitor,
     redundancy.RedundantEnumerateVisitor,
     pm.MatchSubjectVisitor,
