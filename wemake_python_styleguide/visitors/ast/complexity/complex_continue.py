@@ -27,10 +27,10 @@ class ComplexFinallyBlocksVisitor(BaseNodeVisitor):
             start_line = statement.lineno
             end_line = getattr(statement, 'end_lineno', None)
 
-            if end_line is not None:
-                total_lines += end_line - start_line + 1
-            else:
+            if end_line is None:
                 total_lines += 1
+            else:
+                total_lines += end_line - start_line + 1
 
         if total_lines > self.options.max_lines_in_finally:
             self.add_violation(complexity.ComplexFinallyViolation(node))
