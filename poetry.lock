@@ -2074,14 +2074,14 @@ test = ["argcomplete (>=3.0.3)", "mypy (>=1.7.0)", "pre-commit", "pytest (>=7.0,
 
 [[package]]
 name = "types-flake8"
-version = "7.2.0.20250330"
+version = "7.3.0.20250622"
 description = "Typing stubs for flake8"
 optional = false
 python-versions = ">=3.9"
 groups = ["dev"]
 files = [
-    {file = "types_flake8-7.2.0.20250330-py3-none-any.whl", hash = "sha256:af31590a269586309b80a439c94e59359e139e17475a8fc8d3c426ab01a40547"},
-    {file = "types_flake8-7.2.0.20250330.tar.gz", hash = "sha256:481e5c914a26fabd23e85704ad055f2716f9238740bfe6fe77259c2533cb970c"},
+    {file = "types_flake8-7.3.0.20250622-py3-none-any.whl", hash = "sha256:6d5a10d3578ec78045a99b599cf91dbffc2eca7a3820df1bfc7cd959e81d4253"},
+    {file = "types_flake8-7.3.0.20250622.tar.gz", hash = "sha256:caf6d06f2e5c40495947db230f127b85b57ada61d299c6ce043cc6d68eb2c749"},
 ]
 
 [package.dependencies]
@@ -2144,4 +2144,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "59cd497a1f7139efb2c72010b135b7a3959b429408a7991a65fb5ea02b105ab0"
+content-hash = "9fe743671d8ee1db20c23d406f2cf0d9a01891a72af12946dd719b1553918b65"
