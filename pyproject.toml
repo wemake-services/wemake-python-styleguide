@@ -53,7 +53,7 @@ python = "^3.10"
 
 flake8 = "^7.1"
 attrs = "*"
-pygments = "^2.5"
+pygments = "^2.19"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4"
