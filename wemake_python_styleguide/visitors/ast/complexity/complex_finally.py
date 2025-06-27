@@ -19,20 +19,14 @@ class ComplexFinallyBlocksVisitor(BaseNodeVisitor):
         if not node.finalbody:
             return
 
-        total_lines = 0
-
-        for stmt in node.finalbody:
-            if not hasattr(stmt, 'lineno'):
-                continue
-
-            start_line = stmt.lineno
-            end_line = getattr(stmt, 'end_lineno', None)
-
-            if end_line is None:
-                total_lines += 1
-            else:
-                total_lines += end_line - start_line + 1
-
+        first_line = node.finalbody[0].lineno
+        last_line = node.finalbody[-1].lineno
+        total_lines = last_line - first_line
         if total_lines > self.options.max_lines_in_finally:
-            self.add_violation(complexity.ComplexFinallyViolation(node,
-                                                                text=str(total_lines)))
+            self.add_violation(
+                complexity.ComplexFinallyViolation(
+                    node,
+                    text=str(total_lines),
+                    baseline=self.options.max_lines_in_finally,
+                ),
+            )
