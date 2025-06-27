@@ -5,7 +5,7 @@ from wemake_python_styleguide.visitors.ast.complexity import (  # noqa: WPS235
     annotations,
     calls,
     classes,
-    complex_continue,
+    complex_finally,
     counts,
     function,
     imports,
@@ -40,5 +40,5 @@ PRESET: Final = (
     annotations.AnnotationComplexityVisitor,
     pm.MatchSubjectsVisitor,
     pm.MatchCasesVisitor,
-    complex_continue.ComplexFinallyBlocksVisitor,
+    complex_finally.ComplexFinallyBlocksVisitor,
 )

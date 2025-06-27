@@ -3,7 +3,7 @@ import pytest
 from wemake_python_styleguide.violations.complexity import (
     ComplexFinallyViolation,
 )
-from wemake_python_styleguide.visitors.ast.complexity.complex_continue import (
+from wemake_python_styleguide.visitors.ast.complexity.complex_finally import (
     ComplexFinallyBlocksVisitor,
 )
 
