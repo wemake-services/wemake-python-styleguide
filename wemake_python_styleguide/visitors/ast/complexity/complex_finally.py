@@ -34,4 +34,5 @@ class ComplexFinallyBlocksVisitor(BaseNodeVisitor):
                 total_lines += end_line - start_line + 1
 
         if total_lines > self.options.max_lines_in_finally:
-            self.add_violation(complexity.ComplexFinallyViolation(node))
+            self.add_violation(complexity.ComplexFinallyViolation(node,
+                                                                text=str(total_lines)))

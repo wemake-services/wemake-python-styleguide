@@ -1423,5 +1423,5 @@ class ComplexFinallyViolation(ASTViolation):
     .. versionadded:: 1.1.0
     """
 
-    error_template = 'Found complex `finally` block: {0}'
+    error_template = 'Found too many lines in `finally` block: {0}'
     code = 243
