@@ -20,12 +20,13 @@ class ComplexFinallyBlocksVisitor(BaseNodeVisitor):
             return
 
         total_lines = 0
-        for statement in node.finalbody:
-            if not hasattr(statement, 'lineno'):
+
+        for stmt in node.finalbody:
+            if not hasattr(stmt, 'lineno'):
                 continue
 
-            start_line = statement.lineno
-            end_line = getattr(statement, 'end_lineno', None)
+            start_line = stmt.lineno
+            end_line = getattr(stmt, 'end_lineno', None)
 
             if end_line is None:
                 total_lines += 1
