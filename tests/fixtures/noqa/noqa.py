@@ -748,7 +748,7 @@ match user:
 def pos_only_problem(first_argpm=0, second_argpm=1, /):  # noqa: WPS475
     my_print(first_argpm, second_argpm)
 
-
+Я
 async def test_await_in_loop():
     for _ in range(10):
         await test_function()  # noqa: WPS476
@@ -756,3 +756,12 @@ async def test_await_in_loop():
 
 some_sequence = some_sequence[::-1]  # noqa: WPS478
 
+try:
+    my_print("1")
+except AnyError:
+    my_print("oh no error")
+finally: # noqa: WPS243
+    my_print("3 / 0")
+    my_print('zero division error')
+    my_print(3 / 3)
+    my_print('no zero division error')
