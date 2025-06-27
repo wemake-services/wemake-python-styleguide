@@ -9,7 +9,7 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 class ComplexFinallyBlocksVisitor(BaseNodeVisitor):
     """Ensures there are no complex ``finally`` blocks."""
 
-    def visit_Finally(self, node: ast.Try) -> None:
+    def visit_Try(self, node: ast.Try) -> None:
         """Visits all finally nodes in the tree."""
         self._check_complex_finally(node)
         self.generic_visit(node)
