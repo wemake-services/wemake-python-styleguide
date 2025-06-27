@@ -157,7 +157,7 @@ You can also show all options that ``flake8`` supports by running:
     :str:`wemake_python_styleguide.options.defaults.MAX_MATCH_CASES`
 - ``max-lines-in-finally`` - maximum lines in finally block of code
     defaults to
-    :str:`wemake_python_styleguide.options.default.MAX_LINES_IN_FINALLY`
+    :str:`wemake_python_styleguide.options.defaults.MAX_LINES_IN_FINALLY`
 
 .. rubric:: Formatter options
 
