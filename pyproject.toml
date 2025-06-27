@@ -71,7 +71,7 @@ types-flake8 = "^7.3"
 import-linter = "^2.0"
 
 astpath = "^0.9"
-lxml = "^5.1"
+lxml = "^6.0"
 nbqa = "^1.2"
 ruff = "^0.12"
 black = "^25.1"
