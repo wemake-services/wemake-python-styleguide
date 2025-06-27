@@ -5,6 +5,7 @@ from wemake_python_styleguide.visitors.ast.complexity import (  # noqa: WPS235
     annotations,
     calls,
     classes,
+    complex_continue,
     counts,
     function,
     imports,
@@ -13,7 +14,6 @@ from wemake_python_styleguide.visitors.ast.complexity import (  # noqa: WPS235
     offset,
     overuses,
     pm,
-    complex_continue
 )
 
 #: Used to store all complexity related visitors to be later passed to checker:
@@ -40,5 +40,5 @@ PRESET: Final = (
     annotations.AnnotationComplexityVisitor,
     pm.MatchSubjectsVisitor,
     pm.MatchCasesVisitor,
-    complex_continue.ComplexFinallyBlocksVisitor
+    complex_continue.ComplexFinallyBlocksVisitor,
 )
