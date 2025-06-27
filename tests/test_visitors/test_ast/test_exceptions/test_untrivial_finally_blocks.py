@@ -90,10 +90,7 @@ finally:
 
 @pytest.mark.parametrize(
     'code',
-    [
-        untrivial_logic_default_example1,
-        untrivial_logic_default_example2
-    ],
+    [untrivial_logic_default_example1, untrivial_logic_default_example2],
 )
 def test_untrivial_try_blocks(
     assert_errors,
@@ -112,10 +109,7 @@ def test_untrivial_try_blocks(
 
 @pytest.mark.parametrize(
     'code',
-    [
-        untrivial_logic_custom_example1,
-        untrivial_logic_custom_example2
-    ],
+    [untrivial_logic_custom_example1, untrivial_logic_custom_example2],
 )
 def test_custom_untrivial_try_blocks(
     assert_errors,
