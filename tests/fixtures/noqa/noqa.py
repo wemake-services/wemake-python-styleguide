@@ -748,7 +748,7 @@ match user:
 def pos_only_problem(first_argpm=0, second_argpm=1, /):  # noqa: WPS475
     my_print(first_argpm, second_argpm)
 
-Я
+
 async def test_await_in_loop():
     for _ in range(10):
         await test_function()  # noqa: WPS476
