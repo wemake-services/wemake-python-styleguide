@@ -1404,23 +1404,26 @@ class TooManyMatchCaseViolation(ASTViolation):
 @final
 class ComplexFinallyViolation(ASTViolation):
     """
-    Forbids complex finally block.
+    Forbids complex ``finally`` block.
 
     Reasoning:
-        It can contain few lines of code, but it shouldn't contain untrivial
-        logic, which can not be understand very quickly at code reading.
+        ``finally`` is very special. It executes code in all
+        cases and therefore can't fail. When there are many lines in ``finally``
+        it indicates a larger problem: brittle and complex cleanups.
 
     Solution:
-        Refactoring the `finally` statement by lightening the semantic load.
-        Output logic into separate functions so that 1-2 expressions remain
-        in the finally block.
+        Simplify the ``finally`` block. Use context managers, use ``ExitStack``.
 
     Configuration:
         This rule is configurable with ``--max-lines-in-finally``.
         Default:
-        :int:`wemake_python_styleguide.options.defaults.MAX_LINES_IN_FINALLY`
+        :str:`wemake_python_styleguide.options.defaults.MAX_LINES_IN_FINALLY`
 
-    .. versionadded:: 1.1.0
+    See also:
+        https://peps.python.org/pep-0765
+
+    .. versionadded:: 1.2.0
+
     """
 
     error_template = 'Found too many lines in `finally` block: {0}'

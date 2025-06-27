@@ -19,27 +19,29 @@ Semantic versioning in our case means:
 
 ## 1.2.0 WIP
 
-### Features
-
-- Adds `WPS478`: forbids using non strict slice operations, #1011
-- Adds `WPS479`: forbids using multiline fstrings, #3405
-- Adds `WPS480`: forbids using comments inside formatted string, #3404
-
-### Bugfixes
-
-- Removes unnecessary WPS604 and WPS614 rules from the noqa.py, #3420
-- Fixes `WPS115` false-positive on `StrEnum`, `IntEnum`, `IntFlag` attributes, #3381
-- Fixes `WPS432`, now it ignores magic numbers in `Literal`, #3397
-- Fixes `WPS466` for generic type specifications `MyClassDecorator[T]`, #3417
-- Fixes `WPS212` to ignore nested classes and functions when counting `return` statements, #3413
-
-Due to PEP-695, it's now allowed to use `[]` in the decorator only for `python3.12+`.
+Due to PEP-695, it's now allowed
+to use `[]` in decorators only for `python3.12+`.
 
 ```python
 @MyClassDecorator[T, V]
 def some_function(): ...
 ```
 
+### Features
+
+- Adds `WPS243`: forbids complex `finally` bodies, #3458
+- Adds `WPS478`: forbids using non strict slice operations, #1011
+- Adds `WPS479`: forbids using multiline fstrings, #3405
+- Adds `WPS480`: forbids using comments inside formatted string, #3404
+
+### Bugfixes
+
+- Removes unnecessary `WPS604` and `WPS614` rules from the `noqa.py`, #3420
+- Fixes `WPS115` false-positive on `StrEnum`, `IntEnum`, `IntFlag` attributes, #3381
+- Fixes `WPS432`, now it ignores magic numbers in `Literal`, #3397
+- Fixes `WPS466` for generic type specifications `MyClassDecorator[T]`, #3417
+- Fixes `WPS212` to ignore nested classes and functions
+  when counting `return` statements, #3413
 - Improves `WPS349` highlighting, #3437
 
 

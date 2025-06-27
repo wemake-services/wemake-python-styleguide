@@ -57,7 +57,7 @@ FORBIDDEN_MODULE_METADATA: Final = ()
 # ===========
 
 #: Maximum lines of expressions in a `finally` block.
-MAX_LINES_IN_FINALLY: Final = 1  # 2 - 1
+MAX_LINES_IN_FINALLY: Final = 2  # guessed
 
 #: Maximum number of `return` statements allowed in a single function.
 MAX_RETURNS: Final = 5  # 7-2

@@ -20,8 +20,10 @@ class ComplexFinallyBlocksVisitor(BaseNodeVisitor):
             return
 
         first_line = node.finalbody[0].lineno
-        last_line = node.finalbody[-1].lineno
-        total_lines = last_line - first_line
+        # `end_lineno` was added in 3.8, but typing is not really correct,
+        # we are pretty sure that it always exist in modern python versions.
+        last_line = getattr(node.finalbody[-1], 'end_lineno', 0) or 0
+        total_lines = last_line - first_line + 1
         if total_lines > self.options.max_lines_in_finally:
             self.add_violation(
                 complexity.ComplexFinallyViolation(
