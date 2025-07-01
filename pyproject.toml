@@ -51,13 +51,13 @@ wemake = "wemake_python_styleguide.formatter:WemakeFormatter"
 [tool.poetry.dependencies]
 python = "^3.10"
 
-flake8 = "^7.1"
+flake8 = "^7.3"
 attrs = "*"
-pygments = "^2.5"
+pygments = "^2.19"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4"
-pytest-cov = "^6.0"
+pytest-cov = "^6.2"
 pytest-randomly = "^3.12"
 pytest-xdist = "^3.7"
 covdefaults = "^2.3"
@@ -66,14 +66,14 @@ hypothesis = "^6.135"
 hypothesmith = "^0.3"
 
 mypy = "^1.16"
-types-flake8 = "^7.1"
+types-flake8 = "^7.3"
 
 import-linter = "^2.0"
 
 astpath = "^0.9"
-lxml = "^5.1"
+lxml = "^6.0"
 nbqa = "^1.2"
-ruff = "^0.11"
+ruff = "^0.12"
 black = "^25.1"
 
 [tool.poetry.group.docs]

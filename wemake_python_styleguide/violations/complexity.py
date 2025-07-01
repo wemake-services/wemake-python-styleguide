@@ -63,6 +63,7 @@ Summary
    TooManyTypeParamsViolation
    TooManyMatchSubjectsViolation
    TooManyMatchCaseViolation
+   ComplexFinallyViolation
 
 Module complexity
 -----------------
@@ -109,6 +110,7 @@ Structure complexity
 .. autoclass:: TooManyTypeParamsViolation
 .. autoclass:: TooManyMatchSubjectsViolation
 .. autoclass:: TooManyMatchCaseViolation
+.. autoclass:: ComplexFinallyViolation
 
 """
 
@@ -1397,3 +1399,32 @@ class TooManyMatchCaseViolation(ASTViolation):
 
     error_template = 'Found too many cases in `match` block: {0}'
     code = 242
+
+
+@final
+class ComplexFinallyViolation(ASTViolation):
+    """
+    Forbids complex ``finally`` block.
+
+    Reasoning:
+        ``finally`` is very special. It executes code in all
+        cases and therefore can't fail. When there are many lines in ``finally``
+        it indicates a larger problem: brittle and complex cleanups.
+
+    Solution:
+        Simplify the ``finally`` block. Use context managers, use ``ExitStack``.
+
+    Configuration:
+        This rule is configurable with ``--max-lines-in-finally``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_LINES_IN_FINALLY`
+
+    See also:
+        https://peps.python.org/pep-0765
+
+    .. versionadded:: 1.2.0
+
+    """
+
+    error_template = 'Found too many lines in `finally` block: {0}'
+    code = 243
