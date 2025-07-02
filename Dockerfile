@@ -20,7 +20,7 @@ FROM python:3.13.5-alpine
 LABEL maintainer="mail@sobolevn.me"
 LABEL vendor="wemake.services"
 
-ENV WPS_VERSION='1.0.0'
+ENV WPS_VERSION='1.2.0'
 ENV REVIEWDOG_VERSION='v0.20.3'
 
 RUN apk add --no-cache bash git wget

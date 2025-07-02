@@ -17,7 +17,7 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
-## 1.2.0 WIP
+## 1.2.0
 
 Due to PEP-695, it's now allowed
 to use `[]` in decorators only for `python3.12+`.
