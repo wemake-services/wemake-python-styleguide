@@ -7,7 +7,7 @@ format:
 
 .PHONY: lint
 lint:
-	poetry run ruff check --exit-non-zero-on-fix --diff
+	poetry run ruff check --exit-non-zero-on-fix
 	poetry run ruff format --check --diff
 	poetry run flake8 .
 	poetry run mypy wemake_python_styleguide scripts
