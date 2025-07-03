@@ -180,7 +180,8 @@ ignore = [
 external = [ "WPS" ]
 
 # Plugin configs:
-flake8-import-conventions.banned-from = [ "ast" ]
+flake8-import-conventions.banned-from = [ "ast", "datetime" ]
+flake8-import-conventions.aliases = { datetime = "dt" }
 flake8-quotes.inline-quotes = "single"
 mccabe.max-complexity = 6
 pydocstyle.convention = "google"
