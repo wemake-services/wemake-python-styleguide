@@ -1,6 +1,5 @@
-import functools
 import importlib
-from collections.abc import Callable, Sequence
+from collections.abc import Sequence
 from inspect import isclass
 from types import ModuleType
 
@@ -8,6 +7,7 @@ from docutils import nodes
 from docutils.statemachine import StringList
 from sphinx.application import Sphinx
 from sphinx.ext import autosummary
+from sphinx.ext.autodoc.directive import AutodocDirective
 from sphinx.util.docutils import SphinxDirective
 
 from wemake_python_styleguide.violations.base import BaseViolation
@@ -24,7 +24,12 @@ class PlugincodesDirective(SphinxDirective):
         module = importlib.import_module(module_full_path)
         violation_classes = self.get_violations(module)
 
-        return self.get_autosummary_nodes(violation_classes)
+        return [
+            *self.get_automodule_nodes(module_full_path),
+            nodes.subtitle(text='Summary'),  # FIXME: Dose not render correctly.
+            *self.get_autosummary_nodes(violation_classes),
+            *self.get_autoclass_nodes(violation_classes),
+        ]
 
     def get_violations(self, module: ModuleType) -> list[type[BaseViolation]]:
         """Get WPS Violation classes sorted by code."""
@@ -46,7 +51,7 @@ class PlugincodesDirective(SphinxDirective):
     ) -> Sequence[nodes.Node]:
         """Use autosummary directive to build violation nodes."""
         autosummary_content = StringList([
-            f'{violation_class.__module__}.{violation_class.__name__}'
+            f'{violation_class.__name__}'
             for violation_class in violation_classes
         ])
         local_autosummary = autosummary.Autosummary(
@@ -60,22 +65,47 @@ class PlugincodesDirective(SphinxDirective):
             state=self.state,
             state_machine=self.state_machine,
         )
-        local_autosummary.get_items = self._format_autosummary_items(
-            local_autosummary.get_items
-        )
 
         return local_autosummary.run()
 
-    def _format_autosummary_items(self, get_items: Callable):
-        @functools.wraps(get_items)
-        def wrapper(*args, **kwargs) -> list[tuple[str, str, str, str]]:
-            formatted_items = []
-            for autosummary_item in get_items(*args, **kwargs):
-                new_name = autosummary_item[0].split('.')[-1]
-                formatted_items.append((new_name, *autosummary_item[1:]))
-            return formatted_items
+    def get_autoclass_nodes(
+        self, violation_classes: list[type[BaseViolation]]
+    ) -> Sequence[nodes.Node]:
+        """Use autodoc for build violation docstring nodes."""
+        violation_class_nodes = []
+        for violation_class in violation_classes:
+            local_autodoc = AutodocDirective(
+                name='autoclass',
+                arguments=[f'{violation_class.__name__}'],
+                options={},
+                content=StringList(),
+                lineno=self.lineno,
+                content_offset=0,
+                block_text=self.block_text,
+                state=self.state,
+                state_machine=self.state_machine,
+            )
+            violation_class_nodes.extend(local_autodoc.run())
 
-        return wrapper
+        return violation_class_nodes
+
+    def get_automodule_nodes(
+        self, module_full_path: str
+    ) -> Sequence[nodes.Node]:
+        """Use autodoc for build violation module docstring nodes."""
+        local_autodoc = AutodocDirective(
+            name='automodule',
+            arguments=[module_full_path],
+            options={'no-members': None},
+            content=StringList(),
+            lineno=self.lineno,
+            content_offset=0,
+            block_text=self.block_text,
+            state=self.state,
+            state_machine=self.state_machine,
+        )
+
+        return local_autodoc.run()
 
 
 def setup(app: Sphinx):
