@@ -16,6 +16,12 @@ Semantic versioning in our case means:
   But, in the future we might change the configuration names/logic,
   change the client facing API, change code conventions significantly, etc.
 
+## 1.3.0 - WIP
+
+### Features
+
+- Adds custom Sphinx directive `.. plugincodes` for violation rendering, #1318
+
 
 ## 1.2.0
 
