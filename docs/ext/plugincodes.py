@@ -24,11 +24,28 @@ class PlugincodesDirective(SphinxDirective):
         module = importlib.import_module(module_full_path)
         violation_classes = self.get_violations(module)
 
+        third_party_directive_payload = {
+            'lineno': self.lineno,
+            'content_offset': 0,
+            'block_text': self.block_text,
+            'state': self.state,
+            'state_machine': self.state_machine,
+        }
+
+        summary_section = nodes.section(ids=['summary'])
+        summary_section += nodes.title(text='Summary')
+
         return [
-            *self.get_automodule_nodes(module_full_path),
-            nodes.subtitle(text='Summary'),  # FIXME: Dose not render correctly.
-            *self.get_autosummary_nodes(violation_classes),
-            *self.get_autoclass_nodes(violation_classes),
+            *self.get_automodule_nodes(
+                module_full_path, **third_party_directive_payload
+            ),
+            summary_section,
+            *self.get_autosummary_nodes(
+                violation_classes, **third_party_directive_payload
+            ),
+            *self.get_autoclass_nodes(
+                violation_classes, **third_party_directive_payload
+            ),
         ]
 
     def get_violations(self, module: ModuleType) -> list[type[BaseViolation]]:
@@ -48,49 +65,45 @@ class PlugincodesDirective(SphinxDirective):
     def get_autosummary_nodes(
         self,
         violation_classes: list[type[BaseViolation]],
+        **kwargs,
     ) -> Sequence[nodes.Node]:
         """Use autosummary directive to build violation nodes."""
         autosummary_content = StringList([
-            f'{violation_class.__name__}'
-            for violation_class in violation_classes
+            violation_class.__name__ for violation_class in violation_classes
         ])
         local_autosummary = autosummary.Autosummary(
             name='autosummary',
             arguments=[],
             options={'nosignatures': True},
             content=autosummary_content,
-            lineno=self.lineno,
-            content_offset=0,
-            block_text=self.block_text,
-            state=self.state,
-            state_machine=self.state_machine,
+            **kwargs,
         )
 
         return local_autosummary.run()
 
     def get_autoclass_nodes(
-        self, violation_classes: list[type[BaseViolation]]
+        self,
+        violation_classes: list[type[BaseViolation]],
+        **kwargs,
     ) -> Sequence[nodes.Node]:
         """Use autodoc for build violation docstring nodes."""
         violation_class_nodes = []
         for violation_class in violation_classes:
             local_autodoc = AutodocDirective(
                 name='autoclass',
-                arguments=[f'{violation_class.__name__}'],
+                arguments=[violation_class.__name__],
                 options={},
                 content=StringList(),
-                lineno=self.lineno,
-                content_offset=0,
-                block_text=self.block_text,
-                state=self.state,
-                state_machine=self.state_machine,
+                **kwargs,
             )
             violation_class_nodes.extend(local_autodoc.run())
 
         return violation_class_nodes
 
     def get_automodule_nodes(
-        self, module_full_path: str
+        self,
+        module_full_path: str,
+        **kwargs,
     ) -> Sequence[nodes.Node]:
         """Use autodoc for build violation module docstring nodes."""
         local_autodoc = AutodocDirective(
@@ -98,11 +111,7 @@ class PlugincodesDirective(SphinxDirective):
             arguments=[module_full_path],
             options={'no-members': None},
             content=StringList(),
-            lineno=self.lineno,
-            content_offset=0,
-            block_text=self.block_text,
-            state=self.state,
-            state_machine=self.state_machine,
+            **kwargs,
         )
 
         return local_autodoc.run()
