@@ -124,6 +124,7 @@ VARIABLE_NAMES_BLACKLIST: Final = frozenset(
         'param',
         'params',
         'parameters',
+        'arr',
         # Confusables:
         'no',
         'true',
@@ -132,6 +133,10 @@ VARIABLE_NAMES_BLACKLIST: Final = frozenset(
         'foo',
         'bar',
         'baz',
+        'spam',
+        'ham',
+        'tmp',
+        'temp',
     ),
 )
 

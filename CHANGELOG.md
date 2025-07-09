@@ -17,6 +17,13 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
+## 1.3.0 WIP
+
+
+### Features
+- Adds more names to `WPS110`: `spam`, `ham`, `tmp`, `temp`, `arr`
+
+
 ## 1.2.0
 
 Due to PEP-695, it's now allowed
