@@ -216,12 +216,12 @@ class TryExceptVisitor(BaseNodeVisitor):
             )
 
     def _check_finally_body_length(self, node: AnyTry) -> None:
-        if len(node.finalbody) > self.options.max_finally_body_length:
+        if len(node.finalbody) > self.options.max_lines_in_finally:
             self.add_violation(
                 complexity.TooLongFinallyBodyViolation(
                     node,
                     text=str(len(node.finalbody)),
-                    baseline=self.options.max_finally_body_length,
+                    baseline=self.options.max_lines_in_finally,
                 ),
             )
 

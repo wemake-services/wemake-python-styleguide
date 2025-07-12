@@ -48,7 +48,7 @@ finally:
 @pytest.mark.parametrize(
     'statements',
     [
-        'print(1)\n    print(2)',
+        'print(1)\n    print(2)\n    print(3)',
         'm.print(1)\n    m.print(2)\n    m.print(3)',
         'm = 1\n    p = 2\n    c = 3\n    x = 4',
     ],
@@ -87,9 +87,9 @@ def test_finally_body_count_default(
 @pytest.mark.parametrize(
     'statements',
     [
-        'print(1)\n    print(2)',
-        'm.print(1)\n    m.print(2)',
-        'm = 1\n    p = 2',
+        'print(1)\n    print(2)\n    print(3)',
+        'm.print(1)\n    m.print(2)\n    m.print(3)',
+        'm = 1\n    p = 2\n    c = 3',
     ],
 )
 @pytest.mark.parametrize(
@@ -125,17 +125,17 @@ def test_finally_body_wrong_custom_options(
     assert_errors(visitor, [TooLongFinallyBodyViolation])
     assert_error_text(
         visitor,
-        '2',
-        baseline=option_values.max_finally_body_length,
+        '3',
+        baseline=option_values.max_lines_in_finally,
     )
 
 
 @pytest.mark.parametrize(
     'statements',
     [
-        'print(1)\n    print(2)',
-        'm.print(1)\n    m.print(2)',
-        'm = 1\n    p = 2',
+        'print(1)\n    print(2)\n    print(3)',
+        'm.print(1)\n    m.print(2)\n    m.print(3)',
+        'm = 1\n    p = 2\n    c = 3',
     ],
 )
 @pytest.mark.parametrize(
@@ -163,7 +163,7 @@ def test_finally_body_count_custom_options(
     """Testing that default settings raise a warning."""
     tree = parse_ast_tree(code.format(statements))
 
-    option_values = options(max_finally_body_length=2)
+    option_values = options(max_lines_in_finally=3)
     visitor = TryExceptVisitor(option_values, tree=tree)
     visitor.run()
 
@@ -176,8 +176,10 @@ def test_finally_body_count_custom_options(
         'print(1)',
         'm.print(1)',
         'm = 1',
-        'print(\n   1\n    )',
+        'print(\n   1\n)',
         'print(\n   1,\n    2\n)',
+        'print(\n   1\n)\nprint(\n   2\n)',
+        'print(\n   1,\n    2\n)\nprint(\n   3,\n    4\n)',
     ],
 )
 @pytest.mark.parametrize(

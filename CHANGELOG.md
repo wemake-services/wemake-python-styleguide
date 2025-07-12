@@ -28,7 +28,6 @@ Semantic versioning in our case means:
 ### Bugfixes
 
 - Fixes `WPS243` to use number of statements in `finally` body instead of a number of lines, #3458
-- Rename `--max-lines-in-finally` option to `--max-finally-body-length`, #3458
 
 ## 1.2.0
 

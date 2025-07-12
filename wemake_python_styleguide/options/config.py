@@ -152,12 +152,13 @@ You can also show all options that ``flake8`` supports by running:
 - ``max-match-subjects`` - maximum number of subjects in a match statement,
     defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_MATCH_SUBJECTS`
-- ``max-match-cases`` - maximum number of cases in a match block of code
+- ``max-match-cases`` - maximum number of cases in a match block of code,
     defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_MATCH_CASES`
-- ``max-finally-body-length`` - maximum amount of finally block body length.
+- ``max-lines-in-finally`` - maximum amount of finally block body length.
+    Lines equal to statements.
     defaults to
-    :str:`wemake_python_styleguide.options.defaults.MAX_FINALLY_BODY_LENGTH`
+    :str:`wemake_python_styleguide.options.defaults.MAX_LINES_IN_FINALLY`
 
 .. rubric:: Formatter options
 
@@ -435,8 +436,8 @@ class Configuration:
             'Maximum number of match cases in a single match.',
         ),
         _Option(
-            '--max-finally-body-length',
-            defaults.MAX_FINALLY_BODY_LENGTH,
+            '--max-lines-in-finally',
+            defaults.MAX_LINES_IN_FINALLY,
             'Maximum amount of finally block body length.',
         ),
         # Formatter:

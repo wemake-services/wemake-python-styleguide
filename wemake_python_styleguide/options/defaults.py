@@ -57,7 +57,7 @@ FORBIDDEN_MODULE_METADATA: Final = ()
 # ===========
 
 #: Maximum amount of `finally` block body length.
-MAX_FINALLY_BODY_LENGTH: Final = 1  # best practice
+MAX_LINES_IN_FINALLY: Final = 2  # best practice
 
 #: Maximum number of `return` statements allowed in a single function.
 MAX_RETURNS: Final = 5  # 7-2

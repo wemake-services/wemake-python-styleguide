@@ -1418,9 +1418,10 @@ class TooLongFinallyBodyViolation(ASTViolation):
         Use context managers, use ``ExitStack``.
 
     Configuration:
-        This rule is configurable with ``--max-finally-body-length``.
+        This rule is configurable with ``--max-lines-in-finally``.
+        Lines equal to statements.
         Default:
-        :str:`wemake_python_styleguide.options.defaults.MAX_FINALLY_BODY_LENGTH`
+        :str:`wemake_python_styleguide.options.defaults.MAX_LINES_IN_FINALLY`
 
     See also:
         https://peps.python.org/pep-0765
