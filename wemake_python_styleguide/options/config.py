@@ -152,10 +152,11 @@ You can also show all options that ``flake8`` supports by running:
 - ``max-match-subjects`` - maximum number of subjects in a match statement,
     defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_MATCH_SUBJECTS`
-- ``max-match-cases`` - maximum number of cases in a match block of code
+- ``max-match-cases`` - maximum number of cases in a match block of code,
     defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_MATCH_CASES`
-- ``max-lines-in-finally`` - maximum lines in finally block of code
+- ``max-lines-in-finally`` - maximum amount of finally block body length.
+    Lines equal to statements.
     defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_LINES_IN_FINALLY`
 
@@ -437,7 +438,7 @@ class Configuration:
         _Option(
             '--max-lines-in-finally',
             defaults.MAX_LINES_IN_FINALLY,
-            'Maximum lines of expressions in a finally block.',
+            'Maximum amount of finally block body length.',
         ),
         # Formatter:
         _Option(

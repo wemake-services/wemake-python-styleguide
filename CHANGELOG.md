@@ -23,6 +23,11 @@ Semantic versioning in our case means:
 ### Features
 - Adds more names to `WPS110`: `spam`, `ham`, `tmp`, `temp`, `arr`
 
+## 1.2.1
+
+### Bugfixes
+
+- Fixes `WPS243` to use number of statements in `finally` body instead of a number of lines, #3458
 
 ## 1.2.0
 
