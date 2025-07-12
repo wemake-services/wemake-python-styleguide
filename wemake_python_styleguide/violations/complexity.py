@@ -63,7 +63,7 @@ Summary
    TooManyTypeParamsViolation
    TooManyMatchSubjectsViolation
    TooManyMatchCaseViolation
-   ComplexFinallyViolation
+   TooLongFinallyBodyViolation
 
 Module complexity
 -----------------
@@ -110,7 +110,7 @@ Structure complexity
 .. autoclass:: TooManyTypeParamsViolation
 .. autoclass:: TooManyMatchSubjectsViolation
 .. autoclass:: TooManyMatchCaseViolation
-.. autoclass:: ComplexFinallyViolation
+.. autoclass:: TooLongFinallyBodyViolation
 
 """
 
@@ -1402,9 +1402,9 @@ class TooManyMatchCaseViolation(ASTViolation):
 
 
 @final
-class ComplexFinallyViolation(ASTViolation):
+class TooLongFinallyBodyViolation(ASTViolation):
     """
-    Forbids complex ``finally`` block.
+    Forbid ``finally`` blocks with bodies that are too long.
 
     Reasoning:
         ``finally`` is very special. It executes code in all
@@ -1412,12 +1412,15 @@ class ComplexFinallyViolation(ASTViolation):
         it indicates a larger problem: brittle and complex cleanups.
 
     Solution:
-        Simplify the ``finally`` block. Use context managers, use ``ExitStack``.
+        Move things out of the ``finally`` block or create new functions.
+        The fewer lines you have in your ``finally`` block -
+        the safer you are from accidental errors.
+        Use context managers, use ``ExitStack``.
 
     Configuration:
-        This rule is configurable with ``--max-lines-in-finally``.
+        This rule is configurable with ``--max-finally-body-length``.
         Default:
-        :str:`wemake_python_styleguide.options.defaults.MAX_LINES_IN_FINALLY`
+        :str:`wemake_python_styleguide.options.defaults.MAX_FINALLY_BODY_LENGTH`
 
     See also:
         https://peps.python.org/pep-0765
@@ -1426,5 +1429,5 @@ class ComplexFinallyViolation(ASTViolation):
 
     """
 
-    error_template = 'Found too many lines in `finally` block: {0}'
+    error_template = 'Found too long `finally` block: {0}'
     code = 243

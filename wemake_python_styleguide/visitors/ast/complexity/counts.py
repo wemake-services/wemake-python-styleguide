@@ -191,6 +191,7 @@ class TryExceptVisitor(BaseNodeVisitor):
         """Ensures that try/except is correct."""
         self._check_except_count(node)
         self._check_try_body_length(node)
+        self._check_finally_body_length(node)
         self._check_exceptions_count(node)
         self.generic_visit(node)
 
@@ -211,6 +212,16 @@ class TryExceptVisitor(BaseNodeVisitor):
                     node,
                     text=str(len(node.body)),
                     baseline=self.options.max_try_body_length,
+                ),
+            )
+
+    def _check_finally_body_length(self, node: AnyTry) -> None:
+        if len(node.finalbody) > self.options.max_finally_body_length:
+            self.add_violation(
+                complexity.TooLongFinallyBodyViolation(
+                    node,
+                    text=str(len(node.finalbody)),
+                    baseline=self.options.max_finally_body_length,
                 ),
             )
 
