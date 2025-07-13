@@ -327,6 +327,8 @@ class WrongVariableNameViolation(ASTViolation):
         :py:data:`~wemake_python_styleguide.constants.VARIABLE_NAMES_BLACKLIST`.
 
     .. versionadded:: 0.1.0
+    .. versionchanged:: 1.3.0
+        Added more names: ``spam``, ``ham``, ``tmp``, ``temp``, ``arr``
 
     """
 
