@@ -1427,6 +1427,8 @@ class TooLongFinallyBodyViolation(ASTViolation):
         https://peps.python.org/pep-0765
 
     .. versionadded:: 1.2.0
+    .. versionchanged:: 1.3.0
+        Now we count statements in ``finally``, not physical lines.
 
     """
 
