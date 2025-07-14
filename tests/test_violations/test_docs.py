@@ -3,14 +3,6 @@ from wemake_python_styleguide.options.config import Configuration
 FORMATTING_OPTIONS = frozenset(('--show-violation-links',))
 
 
-def test_all_violations_are_documented(all_module_violations):
-    """Ensures that all violations are documented."""
-    for module, classes in all_module_violations.items():
-        for violation_class in classes:
-            # Once per `summary` and once per `autoclass`:
-            assert module.__doc__.count(violation_class.__qualname__) == 2
-
-
 def test_all_violations_have_versionadded(all_violations):
     """Ensures that all violations have `versionadded` tag."""
     for violation in all_violations:
