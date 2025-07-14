@@ -3,5 +3,4 @@
 OOP
 ===
 
-.. automodule:: wemake_python_styleguide.violations.oop
-   :no-members:
+.. plugincodes:: wemake_python_styleguide.violations.oop

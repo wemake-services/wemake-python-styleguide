@@ -3,5 +3,4 @@
 System
 ======
 
-.. automodule:: wemake_python_styleguide.violations.system
-   :no-members:
+.. plugincodes:: wemake_python_styleguide.violations.system

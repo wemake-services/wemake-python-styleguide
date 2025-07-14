@@ -3,5 +3,4 @@
 Consistency
 ===========
 
-.. automodule:: wemake_python_styleguide.violations.consistency
-   :no-members:
+.. plugincodes:: wemake_python_styleguide.violations.consistency
