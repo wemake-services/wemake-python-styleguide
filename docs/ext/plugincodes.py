@@ -117,7 +117,7 @@ class PlugincodesDirective(SphinxDirective):
         return local_autodoc.run()
 
 
-def setup(app: Sphinx):
+def setup(app: Sphinx) -> None:
     """Setup for sphinx extension."""
     app.setup_extension('sphinx.ext.autosummary')
     app.setup_extension('sphinx.ext.autodoc')
