@@ -2,6 +2,7 @@ import importlib
 from collections.abc import Sequence
 from inspect import isclass
 from types import ModuleType
+from typing import final
 
 from docutils import nodes
 from docutils.statemachine import StringList
@@ -13,6 +14,7 @@ from sphinx.util.docutils import SphinxDirective
 from wemake_python_styleguide.violations.base import BaseViolation
 
 
+@final
 class PlugincodesDirective(SphinxDirective):
     """Custom directive for parsing WPS violations for docs."""
 
