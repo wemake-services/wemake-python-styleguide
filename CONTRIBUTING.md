@@ -44,7 +44,7 @@ To install them you would need to run `install` command:
 poetry install
 ```
 
-To activate your `virtualenv` run `poetry shell`.
+To activate your `virtualenv` run `poetry env activate`.
 
 ### Adding new flake8 plugins
 

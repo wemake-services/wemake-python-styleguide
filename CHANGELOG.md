@@ -23,6 +23,18 @@ Semantic versioning in our case means:
 - Adds custom Sphinx directive `.. plugincodes` for violation rendering, #1318
 
 
+## 1.3.0
+
+### Features
+
+- Adds more names to `WPS110`: `spam`, `ham`, `tmp`, `temp`, `arr`
+
+### Bugfixes
+
+- Fixes `WPS243` to use number of statements in `finally` body
+  instead of a number of lines, #3458
+
+
 ## 1.2.0
 
 Due to PEP-695, it's now allowed
