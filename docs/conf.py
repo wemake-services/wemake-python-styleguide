@@ -59,6 +59,8 @@ extensions = [
     'added_value',
     # Used to build graphs:
     'sphinxcontrib.mermaid',
+    # Used to render WPS violations:
+    'docs.ext.plugincodes',
 ]
 
 autoclass_content = 'class'

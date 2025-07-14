@@ -3,5 +3,4 @@
 Complexity
 ==========
 
-.. automodule:: wemake_python_styleguide.violations.complexity
-   :no-members:
+.. plugincodes:: wemake_python_styleguide.violations.complexity

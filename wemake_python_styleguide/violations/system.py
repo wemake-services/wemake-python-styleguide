@@ -7,19 +7,6 @@ or some dependencies are missing.
 
 .. currentmodule:: wemake_python_styleguide.violations.system
 
-Summary
--------
-
-.. autosummary::
-   :nosignatures:
-
-   InternalErrorViolation
-
-Respect your objects
---------------------
-
-.. autoclass:: InternalErrorViolation
-
 """
 
 from typing import final
