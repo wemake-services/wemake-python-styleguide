@@ -48,12 +48,12 @@ class MultilineStringVisitor(BaseTokenVisitor):
 
         if previous_token and previous_token.exact_type != tokenize.EQUAL:
             self.add_violation(
-                best_practices.WrongMultilineStringUseViolation(previous_token)
+                best_practices.WrongMultilineStringUseViolation(previous_token),
             )
 
         if next_token and next_token.exact_type == tokenize.DOT:
             self.add_violation(
-                best_practices.WrongMultilineStringUseViolation(next_token)
+                best_practices.WrongMultilineStringUseViolation(next_token),
             )
 
     def _check_useless_multiline(

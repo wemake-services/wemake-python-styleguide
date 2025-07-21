@@ -121,6 +121,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
     ) -> None:
         if (
             isinstance(left, ast.Constant)
+            and isinstance(left.value, int | complex)
             and left.value in self._left_special_cases
             and right
             and isinstance(op, self._left_special_cases[left.value])
@@ -130,6 +131,10 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         non_negative_numbers = self._get_non_negative_nodes(left, right)
 
         for number in non_negative_numbers:
+            assert isinstance(  # for mypy  # noqa: S101
+                number.value,
+                int | complex,
+            )
             forbidden = self._meaningless_operations.get(number.value, None)
             if forbidden and isinstance(op, forbidden):
                 self.add_violation(

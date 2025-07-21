@@ -10,7 +10,8 @@ from wemake_python_styleguide.visitors.tokenize.comments import (
 
 if not PY312:  # pragma: >=3.12 no cover
     pytest.skip(
-        reason='comments in fstring was added in 3.12', allow_module_level=True
+        reason='comments in fstring was added in 3.12',
+        allow_module_level=True,
     )
 
 # Correct
@@ -152,13 +153,17 @@ foo = f"""hello"{bar # comment
     ],
 )
 def test_correct_formatted_string(
-    parse_tokens, assert_errors, default_options, code
+    parse_tokens,
+    assert_errors,
+    default_options,
+    code,
 ) -> None:
     """Check that there are no violations in the correct string."""
     file_tokens = parse_tokens(code)
 
     visitor = CommentInFormattedStringVisitor(
-        default_options, file_tokens=file_tokens
+        default_options,
+        file_tokens=file_tokens,
     )
     visitor.run()
 
@@ -187,13 +192,17 @@ def test_correct_formatted_string(
     ],
 )
 def test_wrong_formatted_string(
-    parse_tokens, assert_errors, default_options, code
+    parse_tokens,
+    assert_errors,
+    default_options,
+    code,
 ) -> None:
     """Checking that the wrong string has violations."""
     file_tokens = parse_tokens(code)
 
     visitor = CommentInFormattedStringVisitor(
-        default_options, file_tokens=file_tokens
+        default_options,
+        file_tokens=file_tokens,
     )
     visitor.run()
 

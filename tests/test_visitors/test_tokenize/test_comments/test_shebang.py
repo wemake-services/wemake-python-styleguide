@@ -82,7 +82,9 @@ def test_correct_shebang_executable2(
 ):
     """Testing cases when no errors should be reported."""
     path_to_file = make_file(
-        'test_file.py', template.format(code), is_executable=executable
+        'test_file.py',
+        template.format(code),
+        is_executable=executable,
     )
     file_tokens = parse_file_tokens(path_to_file)
 
@@ -127,7 +129,9 @@ def test_shebang_on_windows(
     """Testing cases when no errors should be reported."""
     monkeypatch.setattr(comments, 'is_windows', lambda: True)
     path_to_file = make_file(
-        'test_file.py', template.format(code), is_executable=executable
+        'test_file.py',
+        template.format(code),
+        is_executable=executable,
     )
     file_tokens = parse_file_tokens(path_to_file)
 
@@ -171,7 +175,9 @@ def test_shebang_with_stdin(
 ):
     """Testing cases when no errors should be reported."""
     path_to_file = make_file(
-        'test_file.py', template.format(code), is_executable=executable
+        'test_file.py',
+        template.format(code),
+        is_executable=executable,
     )
     file_tokens = parse_file_tokens(path_to_file)
 
@@ -210,7 +216,9 @@ def test_wrong_shebang_executable(
 ):
     """Testing cases when no errors should be reported."""
     path_to_file = make_file(
-        'test_file.py', template.format(code), is_executable=executable
+        'test_file.py',
+        template.format(code),
+        is_executable=executable,
     )
     file_tokens = parse_file_tokens(path_to_file)
 

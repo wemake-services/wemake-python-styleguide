@@ -6,7 +6,8 @@ from wemake_python_styleguide.cli.commands.explain.command import ExplainCommand
 def _configure_arg_parser() -> argparse.ArgumentParser:
     """Configures CLI arguments and subcommands."""
     parser = argparse.ArgumentParser(
-        prog='wps', description='WPS command line tool'
+        prog='wps',
+        description='WPS command line tool',
     )
     sub_parsers = parser.add_subparsers(
         help='sub-parser for exact wps commands',

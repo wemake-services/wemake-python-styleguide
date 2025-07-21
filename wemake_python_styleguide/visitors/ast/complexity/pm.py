@@ -24,7 +24,7 @@ class MatchSubjectsVisitor(BaseNodeVisitor):
                 node,
                 text=str(len(node.subject.elts)),
                 baseline=self.options.max_match_subjects,
-            )
+            ),
         )
 
 

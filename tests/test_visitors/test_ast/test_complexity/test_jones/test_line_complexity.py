@@ -86,7 +86,8 @@ regression3350 = 'x = f"Values: {a}, {b}, {c}, {d}"'
             line_with_complex_typealias,
             marks=[
                 pytest.mark.skipif(
-                    not PY312, reason='PEP695 was added in 3.12'
+                    not PY312,
+                    reason='PEP695 was added in 3.12',
                 ),
             ],
         ),

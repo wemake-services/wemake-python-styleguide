@@ -123,6 +123,7 @@ def test_numbers_do_not_error(
         file_tokens = parse_tokens(mode(primitives_usages.format(number)))
 
         visitor = WrongNumberTokenVisitor(
-            default_options, file_tokens=file_tokens
+            default_options,
+            file_tokens=file_tokens,
         )
         visitor.run()

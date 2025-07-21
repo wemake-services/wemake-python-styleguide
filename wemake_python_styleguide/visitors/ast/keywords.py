@@ -171,7 +171,8 @@ class WrongKeywordVisitor(BaseNodeVisitor):
 
     def _check_keyword(self, node: ast.AST) -> None:
         if isinstance(node, ast.Pass) and walk.get_closest_parent(
-            node, ast.match_case
+            node,
+            ast.match_case,
         ):
             return  # We allow `pass` in `match: case:`
 

@@ -104,7 +104,8 @@ class WrongMethodVisitor(base.BaseNodeVisitor):
             return
 
         if not super_args.is_ordinary_super_call(
-            attribute.value, class_name
+            attribute.value,
+            class_name,
         ) or not function_args.is_call_matched_by_arguments(node, call_stmt):
             return
 

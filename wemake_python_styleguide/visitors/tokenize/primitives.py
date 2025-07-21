@@ -231,7 +231,7 @@ class WrongStringTokenVisitor(BaseTokenVisitor):
 
 @final
 class MultilineFormattedStringTokenVisitor(
-    BaseTokenVisitor
+    BaseTokenVisitor,
 ):  # pragma: >=3.12 cover
     """Checks incorrect formatted string usages."""
 
