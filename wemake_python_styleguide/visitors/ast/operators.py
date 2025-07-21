@@ -131,11 +131,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         non_negative_numbers = self._get_non_negative_nodes(left, right)
 
         for number in non_negative_numbers:
-            assert isinstance(  # for mypy  # noqa: S101
-                number.value,
-                int | complex,
-            )
-            forbidden = self._meaningless_operations.get(number.value, None)
+            forbidden = self._meaningless_operations.get(number.value)  # type: ignore[arg-type]
             if forbidden and isinstance(op, forbidden):
                 self.add_violation(
                     consistency.MeaninglessNumberOperationViolation(number),
