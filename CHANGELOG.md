@@ -19,10 +19,6 @@ Semantic versioning in our case means:
 
 ## WIP
 
-### Features
-
-- Default value of `MAX_CONDITIONS` for `WPS222` was increased from 4 to 5
-
 ### Misc
 
 - Adds custom Sphinx directive `.. plugincodes` for violation rendering, #1318

@@ -61,6 +61,20 @@ while (x > x1 or y < y1) or (small(z) and v) or last():
     ...
 """
 
+complex_match = """
+match some:
+    case 1 if (x > x1 or y < y1) or (small(z) and v) or last():
+        ...
+"""
+
+complex_gen_exp = """
+(
+    ...
+    for name in []
+    if (x > x1 or y < y1) or (small(z) and v) or last()
+)
+"""
+
 
 @pytest.mark.parametrize(
     'code',
@@ -98,6 +112,8 @@ def test_module_condition_counts_normal(
         complex_assignment,
         complex_condition,
         complex_while,
+        complex_match,
+        complex_gen_exp,
     ],
 )
 def test_module_condition_real_config(
