@@ -120,11 +120,10 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         right: ast.AST | None = None,
     ) -> None:
         if (
-            isinstance(left, ast.Constant)  # noqa: WPS222
-            and isinstance(left.value, int | complex)
+            right
+            and isinstance(left, ast.Constant)  # noqa: WPS222
             and left.value in self._left_special_cases
-            and right
-            and isinstance(op, self._left_special_cases[left.value])
+            and isinstance(op, self._left_special_cases[left.value])  # type: ignore[index]
         ):
             left = None
 
