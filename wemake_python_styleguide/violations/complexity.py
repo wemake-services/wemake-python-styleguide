@@ -682,6 +682,8 @@ class TooManyConditionsViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.5.0
+    .. versionchanged:: 1.4.0
+      The default value of ``MAX_CONDITIONS`` was changed from 4 to 5.
 
     """
 
