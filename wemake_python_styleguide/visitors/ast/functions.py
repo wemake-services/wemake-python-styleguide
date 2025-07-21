@@ -163,7 +163,7 @@ class WrongFunctionCallContextVisitor(base.BaseNodeVisitor):
         # only if `step` arg do not equals 1 or -1
         step_arg = args_len == 3 and operators.unwrap_unary_node(node.args[2])
         is_three_args_range = (
-            self._is_multiple_args_range_with_len(node)
+            self._is_multiple_args_range_with_len(node)  # noqa: WPS222
             and args_len == 3
             and isinstance(step_arg, ast.Constant)
             and isinstance(step_arg.value, int | float)

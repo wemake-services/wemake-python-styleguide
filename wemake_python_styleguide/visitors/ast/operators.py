@@ -120,7 +120,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         right: ast.AST | None = None,
     ) -> None:
         if (
-            isinstance(left, ast.Constant)
+            isinstance(left, ast.Constant)  # noqa: WPS222
             and isinstance(left.value, int | complex)
             and left.value in self._left_special_cases
             and right
