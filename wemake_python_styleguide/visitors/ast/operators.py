@@ -120,17 +120,17 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         right: ast.AST | None = None,
     ) -> None:
         if (
-            isinstance(left, ast.Constant)
+            right
+            and isinstance(left, ast.Constant)  # noqa: WPS222
             and left.value in self._left_special_cases
-            and right
-            and isinstance(op, self._left_special_cases[left.value])
+            and isinstance(op, self._left_special_cases[left.value])  # type: ignore[index]
         ):
             left = None
 
         non_negative_numbers = self._get_non_negative_nodes(left, right)
 
         for number in non_negative_numbers:
-            forbidden = self._meaningless_operations.get(number.value, None)
+            forbidden = self._meaningless_operations.get(number.value)  # type: ignore[arg-type]
             if forbidden and isinstance(op, forbidden):
                 self.add_violation(
                     consistency.MeaninglessNumberOperationViolation(number),

@@ -65,7 +65,7 @@ syrupy = "^4.6"
 hypothesis = "^6.135"
 hypothesmith = "^0.3"
 
-mypy = "^1.16"
+mypy = "^1.17"
 types-flake8 = "^7.3"
 
 import-linter = "^2.0"
@@ -130,6 +130,7 @@ select = [
   "ERA",  # flake8-eradicate
   "EXE",  # flake8-executable
   "F",    # pyflakes
+  "FA",   # flake8-future-annotations
   "FBT",  # flake8-boolean-trap
   "FLY",  # pyflint
   "FURB", # refurb
@@ -260,6 +261,7 @@ enable_error_code = [
   # "mutable-override",
   "unimported-reveal",
   "deprecated",
+  "exhaustive-match",
 ]
 
 disable_error_code = [

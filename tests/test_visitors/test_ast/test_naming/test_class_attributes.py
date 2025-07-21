@@ -111,7 +111,7 @@ def test_upper_case_enum_attributes(
     Python enums, but also Django enumerations
     """
     tree = parse_ast_tree(
-        static_attribute_with_base_template.format(base_class, attribute)
+        static_attribute_with_base_template.format(base_class, attribute),
     )
 
     visitor = WrongNameVisitor(default_options, tree=tree)
@@ -142,7 +142,7 @@ def test_upper_case_non_enum_attributes(
 ):
     """Testing that UPPER_CASE attributes still aren't allowed."""
     tree = parse_ast_tree(
-        static_attribute_with_base_template.format(base_class, attribute)
+        static_attribute_with_base_template.format(base_class, attribute),
     )
 
     visitor = WrongNameVisitor(default_options, tree=tree)

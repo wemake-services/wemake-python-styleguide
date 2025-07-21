@@ -279,7 +279,8 @@ class WrongStatementInLoopVisitor(base.BaseNodeVisitor):
                 return
 
         if isinstance(node_parent, ast.For) and self._is_node_in_loop_iter(
-            node, node_parent.iter
+            node,
+            node_parent.iter,
         ):
             # await allowed in loop definition
             return

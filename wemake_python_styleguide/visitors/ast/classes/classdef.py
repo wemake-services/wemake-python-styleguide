@@ -140,7 +140,8 @@ class ConsecutiveDefaultTypeVarsVisitor(base.BaseNodeVisitor):
     """Responsible for finding TypeVarTuple after a TypeVar with default."""
 
     def visit_ClassDef(  # pragma: >=3.13 cover
-        self, node: ast.ClassDef
+        self,
+        node: ast.ClassDef,
     ) -> None:
         """Check class definition for violation."""
         if hasattr(node, 'type_params'):  # pragma: >=3.13 cover
@@ -148,7 +149,8 @@ class ConsecutiveDefaultTypeVarsVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_generics(  # pragma: >=3.13 cover
-        self, type_params: Sequence[ast.AST]
+        self,
+        type_params: Sequence[ast.AST],
     ) -> None:
         had_default = False
         for type_param in type_params:
@@ -158,5 +160,5 @@ class ConsecutiveDefaultTypeVarsVisitor(base.BaseNodeVisitor):
             )
             if had_default and isinstance(type_param, TypeVarTuple):
                 self.add_violation(
-                    SneakyTypeVarWithDefaultViolation(type_param)
+                    SneakyTypeVarWithDefaultViolation(type_param),
                 )

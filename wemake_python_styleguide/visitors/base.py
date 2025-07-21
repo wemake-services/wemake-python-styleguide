@@ -304,7 +304,8 @@ class BaseNodeTokenVisitor(ast.NodeVisitor, BaseVisitor):
     @final
     @classmethod
     def from_checker(
-        cls: type['BaseNodeTokenVisitor'], checker
+        cls: type['BaseNodeTokenVisitor'],
+        checker,
     ) -> 'BaseNodeTokenVisitor':
         """Constructs visitor instance from the checker."""
         return cls(

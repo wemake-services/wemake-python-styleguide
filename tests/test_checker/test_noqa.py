@@ -349,7 +349,11 @@ ALWAYS: Final = True  # just for beautiful condition def
     ],
 )
 def test_noqa_fixture_disabled(
-    absolute_path, all_violations, filename, violations, run_condition
+    absolute_path,
+    all_violations,
+    filename,
+    violations,
+    run_condition,
 ):
     """End-to-End test to check that all violations are present."""
     if not run_condition:  # pragma: no cover
@@ -375,7 +379,10 @@ def test_noqa_fixture_disabled(
     assert stdout
     assert not stderr.count('WPS')
     _assert_errors_count_in_output(
-        stdout, violations, all_violations, total=filename == 'noqa.py'
+        stdout,
+        violations,
+        all_violations,
+        total=filename == 'noqa.py',
     )
 
 
@@ -419,7 +426,10 @@ def test_noqa_fixture(absolute_path, filename, run_condition):
     ],
 )
 def test_noqa_fixture_without_ignore(
-    absolute_path, filename, ignored_violations, run_condition
+    absolute_path,
+    filename,
+    ignored_violations,
+    run_condition,
 ):
     """End-to-End test to check that `noqa` works without ignores."""
     if not run_condition:  # pragma: no cover

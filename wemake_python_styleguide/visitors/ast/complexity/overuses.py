@@ -83,7 +83,10 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
 
         # Some strings are so common, that it makes no sense to check if
         # they are overused.
-        if node.value in self._ignored_string_constants:
+        if (
+            not isinstance(node.value, AnyTextPrimitive)
+            or node.value in self._ignored_string_constants
+        ):
             return
 
         if node.value not in self._string_constants_first_node:

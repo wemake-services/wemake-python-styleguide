@@ -76,7 +76,7 @@ class IfStatementVisitor(BaseNodeVisitor):
                     refactoring.DuplicateIfConditionViolation(
                         node,
                         text=condition,
-                    )
+                    ),
                 )
 
     def _check_useless_ternary(self, node: AnyIf) -> None:
@@ -167,7 +167,7 @@ class MatchVisitor(BaseNodeVisitor):
                     refactoring.DuplicateCasePatternViolation(
                         node,
                         text=condition,
-                    )
+                    ),
                 )
 
     def _parse_case(self, node: ast.match_case) -> str:

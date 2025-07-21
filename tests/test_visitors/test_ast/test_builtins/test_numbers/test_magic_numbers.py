@@ -149,7 +149,9 @@ def test_magic_number(
     file_tokens = parse_tokens(formated_code)
 
     visitor = WrongNumberVisitor(
-        default_options, tree=tree, file_tokens=file_tokens
+        default_options,
+        tree=tree,
+        file_tokens=file_tokens,
     )
     visitor.run()
 
@@ -200,7 +202,9 @@ def test_magic_number_whitelist(
     file_tokens = parse_tokens(formated_code)
 
     visitor = WrongNumberVisitor(
-        default_options, tree=tree, file_tokens=file_tokens
+        default_options,
+        tree=tree,
+        file_tokens=file_tokens,
     )
     visitor.run()
 
@@ -252,7 +256,9 @@ def test_magic_number_warning(
     file_tokens = parse_tokens(formated_code)
 
     visitor = WrongNumberVisitor(
-        default_options, tree=tree, file_tokens=file_tokens
+        default_options,
+        tree=tree,
+        file_tokens=file_tokens,
     )
     visitor.run()
 
@@ -302,7 +308,9 @@ def test_magic_number_octal_warning(
     file_tokens = parse_tokens(formated_code)
 
     visitor = WrongNumberVisitor(
-        default_options, tree=tree, file_tokens=file_tokens
+        default_options,
+        tree=tree,
+        file_tokens=file_tokens,
     )
 
     visitor.run()

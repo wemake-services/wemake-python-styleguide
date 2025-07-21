@@ -61,7 +61,8 @@ def test_correctly_formatted_string(
     """Ensures that correct formatting works."""
     tokens = parse_tokens(code)
     visitor = MultilineFormattedStringTokenVisitor(
-        default_options, file_tokens=tokens
+        default_options,
+        file_tokens=tokens,
     )
     visitor.run()
     assert_errors(visitor, [])
@@ -84,7 +85,8 @@ def test_incorrectly_formatted_string(
     """Ensures that correct formatting works."""
     tokens = parse_tokens(code)
     visitor = MultilineFormattedStringTokenVisitor(
-        default_options, file_tokens=tokens
+        default_options,
+        file_tokens=tokens,
     )
     visitor.run()
     assert_errors(visitor, [MultilineFormattedStringViolation])

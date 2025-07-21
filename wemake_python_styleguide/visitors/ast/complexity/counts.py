@@ -237,7 +237,7 @@ class TryExceptVisitor(BaseNodeVisitor):
                         except_handler,
                         text=str(len(exc_type.elts)),
                         baseline=self.options.max_except_exceptions,
-                    )
+                    ),
                 )
 
 
@@ -325,5 +325,5 @@ class TypeParamsVisitor(BaseNodeVisitor):  # pragma: >=3.12 cover
                     node,
                     text=str(len(type_params)),
                     baseline=self.options.max_type_params,
-                )
+                ),
             )

@@ -39,14 +39,17 @@ class PlugincodesDirective(SphinxDirective):
 
         return [
             *self.get_automodule_nodes(
-                module_full_path, **third_party_directive_payload
+                module_full_path,
+                **third_party_directive_payload,
             ),
             summary_section,
             *self.get_autosummary_nodes(
-                violation_classes, **third_party_directive_payload
+                violation_classes,
+                **third_party_directive_payload,
             ),
             *self.get_autoclass_nodes(
-                violation_classes, **third_party_directive_payload
+                violation_classes,
+                **third_party_directive_payload,
             ),
         ]
 

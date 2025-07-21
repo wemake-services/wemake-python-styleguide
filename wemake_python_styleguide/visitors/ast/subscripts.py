@@ -184,7 +184,8 @@ class CorrectKeyVisitor(base.BaseNodeVisitor):
     def _is_float_key(self, node: ast.expr) -> bool:
         real_node = operators.unwrap_unary_node(node)
         return isinstance(real_node, ast.Constant) and isinstance(
-            real_node.value, float
+            real_node.value,
+            float,
         )
 
 
@@ -212,7 +213,7 @@ class StrictSliceOperations(base.BaseNodeVisitor):
             return
 
         self.add_violation(
-            best_practices.NonStrictSliceOperationsViolation(node)
+            best_practices.NonStrictSliceOperationsViolation(node),
         )
 
     def _check_copy(self, node: ast.Slice) -> None:
@@ -232,7 +233,7 @@ class StrictSliceOperations(base.BaseNodeVisitor):
             return
 
         self.add_violation(
-            best_practices.NonStrictSliceOperationsViolation(node)
+            best_practices.NonStrictSliceOperationsViolation(node),
         )
 
     def _is_node_or_none(self, node: ast.AST | None) -> bool:
@@ -241,7 +242,9 @@ class StrictSliceOperations(base.BaseNodeVisitor):
         )
 
     def _is_node_have_value(
-        self, node: ast.AST | None, value_to_check: int
+        self,
+        node: ast.AST | None,
+        value_to_check: int,
     ) -> bool:
         if value_to_check < 0:
             return (

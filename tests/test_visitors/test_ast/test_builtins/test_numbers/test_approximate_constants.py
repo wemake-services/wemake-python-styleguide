@@ -33,7 +33,9 @@ def test_violation_on_approximate_constants(
     tree = parse_ast_tree(variable_str)
     file_tokens = parse_tokens(variable_str)
     visitor = WrongNumberVisitor(
-        default_options, tree=tree, file_tokens=file_tokens
+        default_options,
+        tree=tree,
+        file_tokens=file_tokens,
     )
     visitor.run()
 
@@ -82,7 +84,9 @@ def test_no_violations_on_right_constants(
     file_tokens = parse_tokens(variable_str)
 
     visitor = WrongNumberVisitor(
-        default_options, tree=tree, file_tokens=file_tokens
+        default_options,
+        tree=tree,
+        file_tokens=file_tokens,
     )
     visitor.run()
 

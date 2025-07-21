@@ -64,5 +64,6 @@ class WrongDecoratorVisitor(BaseNodeVisitor):
             return True  # Simple names are fine!
 
         return attributes.only_consists_of_parts(
-            node, self.ALLOWED_DECORATOR_TYPES
+            node,
+            self.ALLOWED_DECORATOR_TYPES,
         )

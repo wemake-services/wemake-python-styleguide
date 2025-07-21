@@ -66,7 +66,8 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
 
         for attribute in assigned.targets:
             if isinstance(
-                attribute, ast.Attribute
+                attribute,
+                ast.Attribute,
             ) and attributes.is_special_attr(attribute):
                 self.add_violation(oop.LambdaAttributeAssignedViolation(node))
 
