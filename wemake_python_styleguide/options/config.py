@@ -159,8 +159,8 @@ You can also show all options that ``flake8`` supports by running:
     Lines equal to statements.
     defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_LINES_IN_FINALLY`
-- ``max-conditions`` - Maximum number of conditions in a single ``if`` or
-    ``while`` statement.
+- ``max-conditions`` - Maximum number of conditions in a single boolop
+    expression.
     defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_CONDITIONS`
 
