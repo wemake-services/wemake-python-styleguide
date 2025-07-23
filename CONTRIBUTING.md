@@ -228,3 +228,8 @@ Number of current supporters:
 Here are the awesome people who contributed to our project:
 
 [![List of contributors](https://opencollective.com/wemake-python-styleguide/contributors.svg?width=890&button=0)](https://github.com/wemake-services/wemake-python-styleguide/graphs/contributors)
+
+## [Unreleased]
+
+### Added
+- Added a test to ensure all violation codes are integers.
