@@ -21,7 +21,7 @@ Semantic versioning in our case means:
 
 ### Features
 
-- Adds `--max-conditions` option
+- Adds `--max-conditions` option, #3493
 
 ### Misc
 
