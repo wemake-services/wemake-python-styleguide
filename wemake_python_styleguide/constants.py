@@ -419,9 +419,6 @@ MAX_LEN_TUPLE_OUTPUT: Final = 5
 #: Maximum number of compare nodes in a single expression.
 MAX_COMPARES: Final = 2
 
-#: Maximum number of conditions in a single ``if`` or ``while`` statement.
-MAX_CONDITIONS: Final = 4
-
 #: Maximum number of `elif` blocks in a single `if` condition:
 MAX_ELIFS: Final = 3
 

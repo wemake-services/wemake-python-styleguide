@@ -665,7 +665,7 @@ class TooManyConditionsViolation(ASTViolation):
     """
     Forbid conditions with too many logical operators.
 
-    We use :str:`wemake_python_styleguide.constants.MAX_CONDITIONS`
+    We use :str:`wemake_python_styleguide.options.defaults.MAX_CONDITIONS`
     as a default value.
 
     Reasoning:
@@ -677,6 +677,11 @@ class TooManyConditionsViolation(ASTViolation):
         We can reduce the complexity of a single ``if`` by doing two things:
         creating new variables or creating nested ``if`` statements.
         Both of these actions will trigger other complexity checks.
+
+    Configuration:
+        This rule is configurable with ``--max-conditions``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_CONDITIONS`
 
     We count ``and`` and ``or`` keywords as conditions.
 

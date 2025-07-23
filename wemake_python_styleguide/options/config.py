@@ -159,6 +159,10 @@ You can also show all options that ``flake8`` supports by running:
     Lines equal to statements.
     defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_LINES_IN_FINALLY`
+- ``max-conditions`` - Maximum number of conditions in a single ``if`` or
+    ``while`` statement.
+    defaults to
+    :str:`wemake_python_styleguide.options.defaults.MAX_CONDITIONS`
 
 .. rubric:: Formatter options
 
@@ -439,6 +443,12 @@ class Configuration:
             '--max-lines-in-finally',
             defaults.MAX_LINES_IN_FINALLY,
             'Maximum amount of finally block body length.',
+        ),
+        _Option(
+            '--max-conditions',
+            defaults.MAX_CONDITIONS,
+            'Maximum number of conditions in a single ``if`` or ``while`` '
+            'statement.',
         ),
         # Formatter:
         _Option(

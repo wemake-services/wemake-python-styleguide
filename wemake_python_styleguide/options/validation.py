@@ -102,6 +102,7 @@ class ValidatedOptions:
     max_match_subjects: int = attr.ib(validator=[_min_max(min=1)])
     max_match_cases: int = attr.ib(validator=[_min_max(min=1)])
     max_lines_in_finally: int = attr.ib(validator=[_min_max(min=1)])
+    max_conditions: int = attr.ib(validator=[_min_max(min=1)])
     show_violation_links: bool
     exps_for_one_empty_line: int
 
