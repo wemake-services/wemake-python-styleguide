@@ -686,7 +686,7 @@ class TooManyConditionsViolation(ASTViolation):
     We count ``and`` and ``or`` keywords as conditions.
 
     .. versionadded:: 0.1.0
-    .. versionchanged:: 0.5.0
+    .. versionchanged:: 1.4.0
 
     """
 
