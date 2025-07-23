@@ -58,3 +58,9 @@ def test_no_holes(all_violation_codes):
                 diff = code - previous_code
                 assert diff == 1 or diff > 2, module_codes[code].__qualname__
             previous_code = code
+
+
+def test_violation_code_is_int(all_violations):
+    """Ensures that all violations have an integer code."""
+    for violation in all_violations:
+        assert isinstance(violation.code, int)
