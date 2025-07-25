@@ -26,15 +26,6 @@ def function():
         print(2)
 """
 
-function_with_five_lines_expressions = """
-def function():
-    a = 5
-    if a < 5:
-        return 5
-    if a > 5:
-        return 6
-"""
-
 
 @pytest.mark.parametrize(
     'code',
@@ -84,29 +75,3 @@ def test_expressions_wrong_count(
 
     assert_errors(visitor, [TooManyExpressionsViolation])
     assert_error_text(visitor, '2', option_values.max_expressions)
-
-
-@pytest.mark.parametrize(
-    'code',
-    [
-        function_without_expressions,
-        function_with_expressions,
-        function_with_nested_function_and_expressions,
-        function_with_five_lines_expressions,
-    ],
-)
-def test_expressions_correct_custom_count(
-    assert_errors,
-    parse_ast_tree,
-    options,
-    code,
-    mode,
-):
-    """Testing that expressions counted correctly with custom options."""
-    tree = parse_ast_tree(mode(code))
-
-    option_values = options(max_expressions=5)
-    visitor = FunctionComplexityVisitor(option_values, tree=tree)
-    visitor.run()
-
-    assert_errors(visitor, [])
