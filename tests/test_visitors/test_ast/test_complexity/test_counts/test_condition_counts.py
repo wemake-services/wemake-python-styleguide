@@ -131,3 +131,29 @@ def test_module_condition_real_config(
 
     assert_errors(visitor, [TooManyConditionsViolation])
     assert_error_text(visitor, '5', baseline=4)
+
+
+@pytest.mark.parametrize(
+    'code',
+    [
+        complex_assignment,
+        complex_condition,
+        complex_while,
+        complex_match,
+        complex_gen_exp,
+    ],
+)
+def test_module_condition_custom_config(
+    assert_errors,
+    parse_ast_tree,
+    options,
+    code,
+):
+    """Testing that violations are raised when reaching max value."""
+    tree = parse_ast_tree(code)
+
+    option_values = options(max_conditions=5)
+    visitor = ConditionsVisitor(option_values, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])

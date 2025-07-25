@@ -152,6 +152,10 @@ MAX_MATCH_SUBJECTS: Final = 7  # 7 +- 0, guessed
 #: Maximum number of subjects in match statement.
 MAX_MATCH_CASES: Final = 7  # guessed
 
+#: Maximum number of conditions in a single ``if`` or ``while`` statement.
+MAX_CONDITIONS: Final = 4  # reasonable enough
+
+
 # ==========
 # Formatter:
 # ==========

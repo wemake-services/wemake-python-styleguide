@@ -19,6 +19,10 @@ Semantic versioning in our case means:
 
 ## WIP
 
+### Features
+
+- Adds `--max-conditions` option, #3493
+
 ### Misc
 
 - Adds custom Sphinx directive `.. plugincodes` for violation rendering, #1318
