@@ -686,8 +686,9 @@ class TooManyConditionsViolation(ASTViolation):
     We count ``and`` and ``or`` keywords as conditions.
 
     .. versionadded:: 0.1.0
+    .. versionchanged:: 0.5.0
     .. versionchanged:: 1.4.0
-
+        Added ``--max-conditions`` configuration options.
     """
 
     error_template = 'Found a condition with too much logic: {0}'
