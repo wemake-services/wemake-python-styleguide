@@ -21,6 +21,7 @@ Semantic versioning in our case means:
 
 ### Features
 
+- Allows `__init__.py` files to consist only of imports, #3486
 - Adds `--max-conditions` option, #3493
 
 ### Misc

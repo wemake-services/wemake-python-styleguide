@@ -452,6 +452,7 @@ class InitModuleHasLogicViolation(SimpleViolation):
 
     1. comments, since they are dropped before AST comes in play
     2. docstrings are used sometimes when required to state something
+    3. imports and re-exports to define a public API for the package
 
     It is also fine when you have different users that use your code.
     And you do not want to break everything for them.
