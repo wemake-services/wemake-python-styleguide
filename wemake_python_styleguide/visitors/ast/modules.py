@@ -48,6 +48,13 @@ class EmptyModuleContentsVisitor(BaseNodeVisitor):
         if not self._is_init() or not node.body:
             return
 
+        only_imports = all(
+            isinstance(statement, (ast.Import, ast.ImportFrom))
+            for statement in node.body
+        )
+        if only_imports:
+            return
+
         if len(node.body) > 1:
             self.add_violation(InitModuleHasLogicViolation())
             return
