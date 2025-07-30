@@ -24,6 +24,7 @@ from one import one_func
 from two import two_func
 """
 
+module_with_multiple_statements = 'x = 1\ny = 2'
 module_with_logic = """
 try:
     import some_module
@@ -40,6 +41,8 @@ except ImportError:
         empty_module,
         module_with_docstring,
         module_with_comments,
+        module_with_imports,
+        module_with_one_import,
     ],
 )
 def test_init_without_logic(
@@ -64,9 +67,8 @@ def test_init_without_logic(
 @pytest.mark.parametrize(
     'code',
     [
-        module_with_imports,
-        module_with_one_import,
         module_with_logic,
+        module_with_multiple_statements,
     ],
 )
 def test_init_with_logic(
