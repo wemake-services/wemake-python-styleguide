@@ -196,7 +196,6 @@ class WrongLoopDefinitionVisitor(base.BaseNodeVisitor):
         ast.Dict,
         ast.DictComp,
         ast.Set,
-        ast.SetComp,
         ast.GeneratorExp,
     )
 

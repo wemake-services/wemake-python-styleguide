@@ -1415,7 +1415,7 @@ class WrongLoopIterTypeViolation(ASTViolation):
     We forbid to use:
 
     - Lists and list comprehensions
-    - Sets and set comprehensions
+    - Sets
     - Dicts and dict comprehensions
     - Generator expressions
     - Empty tuples
