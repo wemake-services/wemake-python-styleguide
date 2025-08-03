@@ -57,7 +57,6 @@ def function():
         '{"key": value}',
         '{"key": value for value in call()}',
         '{1, 2, 3}',
-        '{set_item for set_item in call()}',
         '(elem for elem in call())',
     ],
 )
@@ -95,6 +94,7 @@ def test_iter_incorrect_type(
         'name',
         'call()',
         'set()',
+        '{set_item for set_item in call()}',
         'some.attr',
         'some.method()',
     ],
