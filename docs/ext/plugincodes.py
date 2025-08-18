@@ -93,11 +93,14 @@ class PlugincodesDirective(SphinxDirective):
     ) -> Sequence[nodes.Node]:
         """Use autodoc for build violation docstring nodes."""
         violation_class_nodes = []
+        options = {
+            'exclude-members': 'error_template,code',
+        }
         for violation_class in violation_classes:
             local_autodoc = AutodocDirective(
                 name='autoclass',
                 arguments=[violation_class.__name__],
-                options={},
+                options=options,
                 content=StringList(),
                 **kwargs,
             )
