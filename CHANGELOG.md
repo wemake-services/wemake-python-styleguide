@@ -27,6 +27,7 @@ Semantic versioning in our case means:
 ### Misc
 
 - Adds custom Sphinx directive `.. plugincodes` for violation rendering, #1318
+- Adds violation classes filter for docs rendering, #3490
 
 
 ## 1.3.0
