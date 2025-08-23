@@ -1,4 +1,5 @@
 import importlib
+import re
 from collections.abc import Sequence
 from inspect import isclass
 from types import ModuleType
@@ -6,6 +7,7 @@ from typing import final
 
 from docutils import nodes
 from docutils.statemachine import StringList
+from sphinx import addnodes
 from sphinx.application import Sphinx
 from sphinx.ext import autosummary
 from sphinx.ext.autodoc.directive import AutodocDirective
@@ -93,15 +95,19 @@ class PlugincodesDirective(SphinxDirective):
     ) -> Sequence[nodes.Node]:
         """Use autodoc for build violation docstring nodes."""
         violation_class_nodes = []
+        options = {
+            'exclude-members': 'error_template,code',
+        }
         for violation_class in violation_classes:
             local_autodoc = AutodocDirective(
                 name='autoclass',
                 arguments=[violation_class.__name__],
-                options={},
+                options=options,
                 content=StringList(),
                 **kwargs,
             )
-            violation_class_nodes.extend(local_autodoc.run())
+            filtered_nodes = self._filter_autoclass_nodes(local_autodoc.run())
+            violation_class_nodes.extend(filtered_nodes)
 
         return violation_class_nodes
 
@@ -120,6 +126,33 @@ class PlugincodesDirective(SphinxDirective):
         )
 
         return local_autodoc.run()
+
+    def _filter_autoclass_nodes(
+        self, nodes_to_filter: Sequence[nodes.Node]
+    ) -> Sequence[nodes.Node]:
+        all_nodes = (
+            inner_node
+            for node in nodes_to_filter
+            for inner_node in node.traverse(nodes.Node)
+        )
+        for node in all_nodes:
+            text_node = node.astext().strip()
+
+            if (
+                isinstance(node, addnodes.desc_annotation)
+                and text_node == 'final class'
+            ):
+                node.parent.remove(node)
+
+            if isinstance(node, addnodes.desc_parameterlist):
+                node.parent.remove(node)
+
+            if isinstance(node, nodes.paragraph) and re.match(
+                r'^Bases: [A-Za-z.]+$', text_node
+            ):
+                node.parent.remove(node)
+
+        return nodes_to_filter
 
 
 def setup(app: Sphinx) -> None:
