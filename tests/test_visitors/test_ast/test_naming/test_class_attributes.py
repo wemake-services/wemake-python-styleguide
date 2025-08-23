@@ -202,3 +202,65 @@ def test_regression423(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+def test_custom_enum_base_class_with_config(
+    assert_errors,
+    parse_ast_tree,
+    options,
+):
+    """Testing that custom enum base classes work with configuration."""
+    code = """
+class CommandsEnum(enum.Enum):
+    def __init__(self, short: str, long: str) -> None:
+        self.short = short
+        self.long = long
+
+class CommandsConfigureEnum(CommandsEnum):
+    VERBOSE = ('-v', '--verbose')
+    SILENT = ('-s', '--silent')
+    """
+
+    tree = parse_ast_tree(code)
+
+    # Test without configuration - should fail
+    visitor = WrongNameVisitor(options(), tree=tree)
+    visitor.run()
+    assert_errors(
+        visitor,
+        [UpperCaseAttributeViolation, UpperCaseAttributeViolation],
+    )
+
+    # Test with configuration - should pass
+    options_with_config = options(known_enum_bases=('CommandsEnum',))
+    visitor_with_config = WrongNameVisitor(options_with_config, tree=tree)
+    visitor_with_config.run()
+    assert_errors(visitor_with_config, [])
+
+
+def test_multiple_custom_enum_bases_with_config(
+    assert_errors,
+    parse_ast_tree,
+    options,
+):
+    """Testing that multiple custom enum base classes work with config."""
+    code = """
+class MyEnum(enum.Enum):
+    pass
+
+class AnotherEnum(str, enum.Enum):
+    pass
+
+class MyClass(MyEnum):
+    UPPER_CASE = 42
+
+class AnotherClass(AnotherEnum):
+    ANOTHER_UPPER = 'Hello world'
+    """
+
+    tree = parse_ast_tree(code)
+
+    options_with_config = options(known_enum_bases=('MyEnum', 'AnotherEnum'))
+    visitor_with_config = WrongNameVisitor(options_with_config, tree=tree)
+    visitor_with_config.run()
+    assert_errors(visitor_with_config, [])

@@ -63,6 +63,7 @@ class ValidatedOptions:
         validator=[_min_max(min=1, max=defaults.MAX_NOQA_COMMENTS)],
     )
     nested_classes_whitelist: tuple[str, ...] = attr.ib(converter=tuple)
+    known_enum_bases: tuple[str, ...] = attr.ib(converter=tuple)
     allowed_domain_names: tuple[str, ...] = attr.ib(converter=tuple)
     forbidden_domain_names: tuple[str, ...] = attr.ib(converter=tuple)
     allowed_module_metadata: tuple[str, ...] = attr.ib(converter=tuple)

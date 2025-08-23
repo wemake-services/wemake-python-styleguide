@@ -228,7 +228,7 @@ class _ClassBasedNameValidator(_RegularNameValidator):
             node,
             include_annotated=True,
         )
-        is_enum_like = enums.has_enum_like_base(node)
+        is_enum_like = enums.has_enum_like_base_with_config(node, self._options)
 
         for assign in class_attributes:
             for target in get_assign_targets(assign):

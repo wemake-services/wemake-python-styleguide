@@ -58,6 +58,9 @@ You can also show all options that ``flake8`` supports by running:
 - ``exps-for-one-empty-line`` - number of expressions in
     function or method body for available empty line (without code)
     :str:`wemake_python_styleguide.options.defaults.EXPS_FOR_ONE_EMPTY_LINE`
+- ``known-enum-bases`` - list of additional enum-like base class names that
+    should be treated as enums, defaults to
+    :str:`wemake_python_styleguide.options.defaults.KNOWN_ENUM_BASES`
 
 
 .. rubric:: Complexity options
@@ -282,6 +285,14 @@ class Configuration:
             '--exps-for-one-empty-line',
             defaults.EXPS_FOR_ONE_EMPTY_LINE,
             'Count of expressions for one empty line in a function body.',
+        ),
+        _Option(
+            '--known-enum-bases',
+            defaults.KNOWN_ENUM_BASES,
+            'List of additional enum-like base class names that should be '
+            'treated as enums.',
+            type=String,
+            comma_separated_list=True,
         ),
         # Complexity:
         _Option(

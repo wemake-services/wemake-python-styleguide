@@ -23,6 +23,7 @@ Semantic versioning in our case means:
 
 - Allows `__init__.py` files that consist only of imports, #3486
 - Adds `--max-conditions` option, #3493
+- Adds `--known-enum-bases` option to support custom enum-like base classes, #3513
 
 ### Misc
 

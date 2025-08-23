@@ -448,6 +448,11 @@ class UpperCaseAttributeViolation(ASTViolation):
         Rename your variables so that they conform
         to ``snake_case`` convention.
 
+    Configuration:
+        This rule is configurable with ``--known-enum-bases``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.KNOWN_ENUM_BASES`
+
     Example::
 
         # Correct:
