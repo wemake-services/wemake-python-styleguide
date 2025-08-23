@@ -84,7 +84,11 @@ def has_enum_like_base_with_config(
     if has_enum_like_base(defn):
         return True
 
-    if config.known_enum_bases:
-        return _has_one_of_base_classes(defn, config.known_enum_bases)
+    enum_bases = config.known_enum_bases
+    if enum_bases:
+        normalized: tuple[str, ...] = tuple({
+            name for base in enum_bases for name in (base, base.split('.')[-1])
+        })
+        return _has_one_of_base_classes(defn, normalized)
 
     return False

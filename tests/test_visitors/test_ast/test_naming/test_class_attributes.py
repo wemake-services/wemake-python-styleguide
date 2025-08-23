@@ -245,22 +245,76 @@ def test_multiple_custom_enum_bases_with_config(
 ):
     """Testing that multiple custom enum base classes work with config."""
     code = """
+class CommandsEnum(enum.Enum):
+    pass
+
 class MyEnum(enum.Enum):
     pass
 
-class AnotherEnum(str, enum.Enum):
-    pass
+class CommandsConfigureEnum(CommandsEnum):
+    VERBOSE = ('-v', '--verbose')
+    SILENT = ('-s', '--silent')
 
-class MyClass(MyEnum):
-    UPPER_CASE = 42
-
-class AnotherClass(AnotherEnum):
-    ANOTHER_UPPER = 'Hello world'
+class MyCommandsEnum(MyEnum):
+    DATA_OPTION = ('-d', '--data')
     """
 
     tree = parse_ast_tree(code)
 
-    options_with_config = options(known_enum_bases=('MyEnum', 'AnotherEnum'))
+    options_with_config = options(known_enum_bases=('CommandsEnum', 'MyEnum'))
+    visitor_with_config = WrongNameVisitor(options_with_config, tree=tree)
+    visitor_with_config.run()
+    assert_errors(visitor_with_config, [])
+
+
+def test_dotted_names_in_enum_bases_config(
+    assert_errors,
+    parse_ast_tree,
+    options,
+):
+    """Testing that dotted names in enum bases config work correctly."""
+    code = """
+class CommandsEnum(enum.Enum):
+    pass
+
+class CommandsConfigureEnum(CommandsEnum):
+    VERBOSE = ('-v', '--verbose')
+    SILENT = ('-s', '--silent')
+    """
+
+    tree = parse_ast_tree(code)
+
+    options_with_config = options(known_enum_bases=('module.CommandsEnum',))
+    visitor_with_config = WrongNameVisitor(options_with_config, tree=tree)
+    visitor_with_config.run()
+    assert_errors(visitor_with_config, [])
+
+
+def test_mixed_names_in_enum_bases_config(
+    assert_errors,
+    parse_ast_tree,
+    options,
+):
+    """Testing that mixed short and dotted names in enum bases config work."""
+    code = """
+class CommandsEnum(enum.Enum):
+    pass
+
+class MyEnum(enum.Enum):
+    pass
+
+class CommandsConfigureEnum(CommandsEnum):
+    VERBOSE = ('-v', '--verbose')
+
+class MyCommandsEnum(MyEnum):
+    DATA_OPTION = ('-d', '--data')
+    """
+
+    tree = parse_ast_tree(code)
+
+    options_with_config = options(
+        known_enum_bases=('CommandsEnum', 'module.MyEnum')
+    )
     visitor_with_config = WrongNameVisitor(options_with_config, tree=tree)
     visitor_with_config.run()
     assert_errors(visitor_with_config, [])
