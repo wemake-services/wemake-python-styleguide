@@ -2415,4 +2415,3 @@ class NotInWithUnaryOpViolation(ASTViolation):
 
     error_template = 'Found `not ... in ...`, use `not in`'
     code = 364
-
