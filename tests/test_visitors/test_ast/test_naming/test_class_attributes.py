@@ -44,6 +44,48 @@ upper_case_attributes = [
     'lower, UPPER = field',
 ]
 
+custom_enum_base_class = """
+class BaseEnum(enum.Enum):
+    def __init__(self, short: str, long: str) -> None:
+        self.short = short
+        self.long = long
+
+class ConcreteEnum(BaseEnum):
+    HELLO = 'h', 'hello'
+    WORLD = 'w', 'world'
+"""
+
+
+multiple_custom_enum_bases = """
+class FirstEnum(enum.Enum):
+    pass
+
+class SecondEnum(enum.Enum):
+    pass
+
+class FirstEnumSuccessor(FirstEnum):
+    HELLO = 'hello'
+    WORLD = 'world'
+
+class SecondEnumSuccessor(SecondEnum):
+    PING = 'pong'
+
+class MultiInheritanceEnum(FirstEnum, SecondEnum):
+    MULTI = 'multi'
+"""
+
+dotted_names_enum_bases = """
+from src import constants
+
+class FirstEnum(constants.MyEnum):
+    HELLO = 'hello'
+    WORLD = 'world'
+
+class SecondEnum(constants.MyEnum):
+    HELLO = 'hello'
+    WORLD = 'world'
+"""
+
 
 @pytest.mark.parametrize(
     'code',
@@ -201,4 +243,57 @@ def test_regression423(
     visitor = WrongNameVisitor(default_options, tree=tree)
     visitor.run()
 
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('with_configuration', [True, False])
+def test_custom_enum_base_class_with_config(
+    assert_errors,
+    parse_ast_tree,
+    options,
+    with_configuration,
+):
+    """Testing that custom enum base classes work with configuration."""
+    tree = parse_ast_tree(custom_enum_base_class)
+
+    if with_configuration:
+        options_with_config = options(known_enum_bases=('BaseEnum',))
+        visitor = WrongNameVisitor(options_with_config, tree=tree)
+        visitor.run()
+        assert_errors(visitor, [])
+    else:
+        options_without_config = options()
+        visitor = WrongNameVisitor(options_without_config, tree=tree)
+        visitor.run()
+        assert_errors(
+            visitor,
+            [UpperCaseAttributeViolation, UpperCaseAttributeViolation],
+        )
+
+
+def test_multiple_custom_enum_bases_with_config(
+    assert_errors,
+    parse_ast_tree,
+    options,
+):
+    """Testing that multiple custom enum base classes work with config."""
+    tree = parse_ast_tree(multiple_custom_enum_bases)
+
+    options = options(known_enum_bases=('FirstEnum', 'SecondEnum'))
+    visitor = WrongNameVisitor(options, tree=tree)
+    visitor.run()
+    assert_errors(visitor, [])
+
+
+def test_dotted_names_in_enum_bases_config(
+    assert_errors,
+    parse_ast_tree,
+    options,
+):
+    """Testing that dotted names in enum bases config work correctly."""
+    tree = parse_ast_tree(dotted_names_enum_bases)
+
+    options = options(known_enum_bases=('constants.MyEnum',))
+    visitor = WrongNameVisitor(options, tree=tree)
+    visitor.run()
     assert_errors(visitor, [])

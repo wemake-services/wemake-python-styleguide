@@ -3,6 +3,7 @@ from collections.abc import Collection
 from typing import Final
 
 from wemake_python_styleguide.logic.source import node_to_string
+from wemake_python_styleguide.options.validation import ValidatedOptions
 
 _CONCRETE_ENUM_NAMES: Final = (
     'enum.StrEnum',
@@ -68,3 +69,26 @@ def has_enum_like_base(defn: ast.ClassDef) -> bool:
     https://docs.djangoproject.com/en/5.1/ref/models/fields/#choices
     """
     return _has_one_of_base_classes(defn, _ENUM_LIKE_NAMES)
+
+
+def has_enum_like_base_with_config(
+    defn: ast.ClassDef,
+    config: ValidatedOptions,
+) -> bool:
+    """
+    Tells if some class has `Enum` or semantically similar class as its base.
+
+    This function also checks user-defined enum-like base classes from
+    configuration.
+    """
+    if has_enum_like_base(defn):
+        return True
+
+    enum_bases = config.known_enum_bases
+    if enum_bases:
+        normalized: tuple[str, ...] = tuple({
+            name for base in enum_bases for name in (base, base.split('.')[-1])
+        })
+        return _has_one_of_base_classes(defn, normalized)
+
+    return False

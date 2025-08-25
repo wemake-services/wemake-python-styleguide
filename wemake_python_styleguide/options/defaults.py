@@ -34,6 +34,9 @@ NESTED_CLASSES_WHITELIST: Final = (
     'Config',  # pydantic specific
 )
 
+#: List of additional enum-like base class names.
+KNOWN_ENUM_BASES: Final = ()
+
 #: Domain names that are removed from variable names' blacklist.
 ALLOWED_DOMAIN_NAMES: Final = ()
 
