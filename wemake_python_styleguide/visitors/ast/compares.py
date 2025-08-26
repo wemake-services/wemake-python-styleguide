@@ -245,17 +245,24 @@ class NotInUnaryVisitor(BaseNodeVisitor):
     """Forbids ``not a in b`` which should be written as ``a not in b``."""
 
     def visit_UnaryOp(self, node: ast.UnaryOp) -> None:
-        """Detects ``not (a in b)`` pattern syntactically.
+        """
+        Detects ``not (a in b)`` pattern syntactically.
 
         Python parses both ``not a in b`` and ``not (a in b)`` as a
         ``UnaryOp(Not, Compare(left, In, right))``; we catch this shape
         and suggest ``a not in b`` instead.
         """
+        self._check_legacy_not_in(node)
+        self.generic_visit(node)
+
+    def _check_legacy_not_in(self, node: ast.UnaryOp) -> None:
         if isinstance(node.op, ast.Not) and isinstance(
             node.operand,
             ast.Compare,
         ):
             comp = node.operand
-            if len(comp.ops) == 1 and isinstance(comp.ops[0], ast.In):
-                self.add_violation(NotInWithUnaryOpViolation(node))
-        self.generic_visit(node)
+            # Split condition to keep per-line Jones Complexity low (WPS221):
+            if len(comp.ops) == 1:
+                first_op = comp.ops[0]
+                if isinstance(first_op, ast.In):
+                    self.add_violation(NotInWithUnaryOpViolation(node))

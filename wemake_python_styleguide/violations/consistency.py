@@ -2409,9 +2409,9 @@ class NotInWithUnaryOpViolation(ASTViolation):
         if not (user in users):
             ...
 
-    .. versionadded:: 1.0.0
+    .. versionadded:: 1.5.0
 
     """
 
-    error_template = 'Found `not ... in ...`, use `not in`'
+    error_template = 'Found legacy `not ... in`, use `... not in` instead'
     code = 364

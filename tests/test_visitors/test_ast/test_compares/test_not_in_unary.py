@@ -43,6 +43,7 @@ def test_not_in_unary_detects(
         'if y in items: ...',
         'if not a is b: ...',
         'if not (a is b): ...',
+        'if not (x in y in z): ...',
     ],
 )
 def test_not_in_unary_ok(
