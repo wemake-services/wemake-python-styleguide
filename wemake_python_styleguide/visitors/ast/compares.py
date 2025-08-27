@@ -256,13 +256,15 @@ class NotInUnaryVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_legacy_not_in(self, node: ast.UnaryOp) -> None:
-        if isinstance(node.op, ast.Not) and isinstance(
-            node.operand,
-            ast.Compare,
-        ):
-            comp = node.operand
-            # Split condition to keep per-line Jones Complexity low (WPS221):
-            if len(comp.ops) == 1:
-                first_op = comp.ops[0]
-                if isinstance(first_op, ast.In):
-                    self.add_violation(NotInWithUnaryOpViolation(node))
+        if not isinstance(node.op, ast.Not):
+            return
+        if not isinstance(node.operand, ast.Compare):
+            return
+
+        comp = node.operand
+        if len(comp.ops) != 1:
+            return
+        if not isinstance(comp.ops[0], ast.In):
+            return
+
+        self.add_violation(NotInWithUnaryOpViolation(node))
