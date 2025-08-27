@@ -65,6 +65,7 @@ PRESET: Final = (
     compares.WrongConstantCompareVisitor,
     compares.InCompareSanityVisitor,
     compares.WrongFloatComplexCompareVisitor,
+    compares.NotInUnaryVisitor,
     conditions.IfStatementVisitor,
     conditions.BooleanConditionVisitor,
     conditions.MatchVisitor,

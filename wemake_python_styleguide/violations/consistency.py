@@ -2381,3 +2381,37 @@ class RaiseSystemExitViolation(ASTViolation):
 
     error_template = 'Found `raise SystemExit`, instead of using `sys.exit`'
     code = 363
+
+
+@final
+class NotInWithUnaryOpViolation(ASTViolation):
+    """
+    Forbid using ``not a in b`` instead of ``a not in b``.
+
+    Reasoning:
+        The expression ``not a in b`` is parsed as ``not (a in b)`` and is
+        equivalent to ``a not in b``. However, it is easy to misread as
+        ``(not a) in b`` or require extra parsing effort. Using the explicit
+        ``not in`` operator is clearer and idiomatic.
+
+    Solution:
+        Replace ``not a in b`` (or ``not (a in b)``) with ``a not in b``.
+
+    Example::
+
+        # Correct:
+        if user not in users:
+            ...
+
+        # Wrong:
+        if not user in users:
+            ...
+        if not (user in users):
+            ...
+
+    .. versionadded:: 1.5.0
+
+    """
+
+    error_template = 'Found legacy `not ... in`, use `... not in` instead'
+    code = 364

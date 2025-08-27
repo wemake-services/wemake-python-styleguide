@@ -17,6 +17,7 @@ from wemake_python_styleguide.violations.consistency import (
     ConstantCompareViolation,
     ConstantConditionViolation,
     MultipleInCompareViolation,
+    NotInWithUnaryOpViolation,
     ReversedComplexCompareViolation,
 )
 from wemake_python_styleguide.violations.refactoring import (
@@ -237,3 +238,33 @@ class WrongFloatComplexCompareVisitor(BaseNodeVisitor):
             node.value,
             float | complex,
         )
+
+
+@final
+class NotInUnaryVisitor(BaseNodeVisitor):
+    """Forbids ``not a in b`` which should be written as ``a not in b``."""
+
+    def visit_UnaryOp(self, node: ast.UnaryOp) -> None:
+        """
+        Detects ``not (a in b)`` pattern syntactically.
+
+        Python parses both ``not a in b`` and ``not (a in b)`` as a
+        ``UnaryOp(Not, Compare(left, In, right))``; we catch this shape
+        and suggest ``a not in b`` instead.
+        """
+        self._check_legacy_not_in(node)
+        self.generic_visit(node)
+
+    def _check_legacy_not_in(self, node: ast.UnaryOp) -> None:
+        if not isinstance(node.op, ast.Not):
+            return
+        if not isinstance(node.operand, ast.Compare):
+            return
+
+        comp = node.operand
+        if len(comp.ops) != 1:
+            return
+        if not isinstance(comp.ops[0], ast.In):
+            return
+
+        self.add_violation(NotInWithUnaryOpViolation(node))

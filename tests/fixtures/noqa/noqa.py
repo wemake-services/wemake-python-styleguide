@@ -765,3 +765,6 @@ finally:
     my_print('zero division error')
     my_print(3 / 3)
     my_print('no zero division error')
+
+if not user in users:  # noqa: WPS364
+    my_print('legacy not-in style')
