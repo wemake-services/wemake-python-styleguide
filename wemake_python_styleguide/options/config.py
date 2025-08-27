@@ -289,8 +289,7 @@ class Configuration:
         _Option(
             '--known-enum-bases',
             defaults.KNOWN_ENUM_BASES,
-            'List of additional enum-like base class names that should be '
-            'treated as enums.',
+            'List of additional enum-like base class names.',
             type=String,
             comma_separated_list=True,
         ),
