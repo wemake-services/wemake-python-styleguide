@@ -1,4 +1,8 @@
 import ast
+from wemake_python_styleguide.violations.best_practices import (
+LeakingForLoopViolation
+)
+
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from contextlib import suppress
@@ -286,3 +290,24 @@ class WrongStatementInLoopVisitor(base.BaseNodeVisitor):
             return
 
         self.add_violation(AwaitInLoopViolation(node))
+
+      def visit_any_loop(self, node: AnyLoop) -> None:
+        """Checks ``for`` and ``while`` loops."""
+        self._check_leaking_for_at_toplevel(node)   # <— προσθήκη
+        self._check_loop_needs_else(node)
+        self._check_lambda_inside_loop(node)
+        self._check_useless_continue(node)
+        self._check_infinite_while_loop(node)
+        self.generic_visit(node)
+
+    def _check_leaking_for_at_toplevel(self, node: AnyLoop) -> None:
+     # Θέλουμε μόνο for/async for (όχι while):
+     if not isinstance(node, (ast.For, ast.AsyncFor)):
+        return
+
+     # Αν ο κοντινότερος γονέας είναι Module ή ClassDef → flag
+     parent = nodes.get_parent(node)
+     if isinstance(parent, (ast.Module, ast.ClassDef)):
+        self.add_violation(LeakingForLoopViolation(node))
+
+
