@@ -309,5 +309,3 @@ class WrongStatementInLoopVisitor(base.BaseNodeVisitor):
      parent = nodes.get_parent(node)
      if isinstance(parent, (ast.Module, ast.ClassDef)):
         self.add_violation(LeakingForLoopViolation(node))
-
-
