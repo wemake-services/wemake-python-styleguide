@@ -2978,3 +2978,22 @@ class CommentInFormattedStringViolation(TokenizeViolation):
 
     error_template = 'Found comment inside formatted string'
     code = 480
+   # στο τέλος του αρχείου, δίπλα στις άλλες violations
+from wemake_python_styleguide.violations.base import ASTViolation
+
+class LeakingForLoopViolation(ASTViolation):
+    """
+    For-loop στο module (ή σε class body) που διαρρέει μεταβλητές στο ανώτερο scope.
+
+    Reasoning:
+        Τα for στο top-level αφήνουν το όνομα του βρόχου (π.χ. ``i``) διαθέσιμο
+        εκτός του βρόχου, κάτι που συνήθως είναι ανεπιθύμητο.
+
+    Solution:
+        Μεταφέρω τη λογική μέσα σε συνάρτηση ή χρησιμοποιώ εναλλακτικό
+        λειτουργικό pattern (π.χ. ``sum(...)``, ``any(...)``, ``all(...)``).
+
+    """
+
+    error_template = 'Found leaking for-loop in top-level/class body'
+    code = 0xWPSXYZ
