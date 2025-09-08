@@ -2980,24 +2980,17 @@ class CommentInFormattedStringViolation(TokenizeViolation):
     code = 480
 
 
-# στο τέλος  του αρχείου, δίπλα στις άλλες violations
-
-
-from wemake_python_styleguide.violations.base import ASTViolation
-
-
 class LeakingForLoopViolation(ASTViolation):
     """
-    For-loop στο module (ή σε class body) που διαρρέει μεταβλητές στο ανώτερο scope.
+    For-loop at module (or class body) scope leaking variables.
 
     Reasoning:
-        Τα for στο top-level αφήνουν το όνομα του βρόχου (π.χ. ``i``) διαθέσιμο
-        εκτός του βρόχου, κάτι που συνήθως είναι ανεπιθύμητο.
+        A top-level ``for`` loop leaves its target variable accessible
+        outside of the loop, which is usually unintended.
 
     Solution:
-        Μεταφέρω τη λογική μέσα σε συνάρτηση ή χρησιμοποιώ εναλλακτικό
-        λειτουργικό pattern (π.χ. ``sum(...)``, ``any(...)``, ``all(...)``).
-
+        Move the loop inside a function or use a functional pattern
+        (e.g., ``sum(...)``, ``any(...)``, ``all(...)``).
     """
 
     error_template = 'Found leaking for-loop in top-level/class body'
