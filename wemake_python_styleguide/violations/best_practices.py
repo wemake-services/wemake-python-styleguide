@@ -2978,8 +2978,13 @@ class CommentInFormattedStringViolation(TokenizeViolation):
 
     error_template = 'Found comment inside formatted string'
     code = 480
-   # στο τέλος  του αρχείου, δίπλα στις άλλες violations
+
+
+# στο τέλος  του αρχείου, δίπλα στις άλλες violations
+
+
 from wemake_python_styleguide.violations.base import ASTViolation
+
 
 class LeakingForLoopViolation(ASTViolation):
     """
@@ -2997,4 +3002,3 @@ class LeakingForLoopViolation(ASTViolation):
 
     error_template = 'Found leaking for-loop in top-level/class body'
     code = 0x01F0
-
