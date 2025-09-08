@@ -146,7 +146,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
 
     def _check_leaking_for_at_toplevel(self, node: AnyLoop) -> None:
         if not isinstance(node, (ast.For, ast.AsyncFor)):
-        return
+            return
 
         parent = nodes.get_parent(node)
         # Αν θέλεις μόνο top-level:
