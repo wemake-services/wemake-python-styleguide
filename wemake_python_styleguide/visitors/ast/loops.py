@@ -304,7 +304,7 @@ class WrongStatementInLoopVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_leaking_for_at_toplevel(self, node: AnyLoop) -> None:
-        
+
         if not isinstance(node, (ast.For, ast.AsyncFor)):
             return
 
