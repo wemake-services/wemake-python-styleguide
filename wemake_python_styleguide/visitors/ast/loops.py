@@ -1,8 +1,4 @@
 import ast
-from wemake_python_styleguide.violations.best_practices import (
-LeakingForLoopViolation
-)
-
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from contextlib import suppress
@@ -23,6 +19,7 @@ from wemake_python_styleguide.violations.best_practices import (
     AwaitInLoopViolation,
     InfiniteWhileLoopViolation,
     LambdaInsideLoopViolation,
+    LeakingForLoopViolation,
     LoopVariableDefinitionViolation,
 )
 from wemake_python_styleguide.violations.complexity import (
@@ -137,7 +134,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
 
     def visit_any_loop(self, node: AnyLoop) -> None:
         """Checks ``for`` and ``while`` loops."""
-        self._check_leaking_for_at_toplevel(node) #new
+        self._check_leaking_for_at_toplevel(node)  # new
         self._check_loop_needs_else(node)
         self._check_lambda_inside_loop(node)
         self._check_useless_continue(node)
