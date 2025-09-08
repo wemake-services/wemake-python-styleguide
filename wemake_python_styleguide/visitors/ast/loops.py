@@ -143,7 +143,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         self._check_useless_continue(node)
         self._check_infinite_while_loop(node)
         self.generic_visit(node)
-        
+
     def _check_leaking_for_at_toplevel(self, node: AnyLoop) -> None:
         if not isinstance(node, (ast.For, ast.AsyncFor)):
         return
