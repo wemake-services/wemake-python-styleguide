@@ -291,9 +291,12 @@ class WrongStatementInLoopVisitor(base.BaseNodeVisitor):
 
         self.add_violation(AwaitInLoopViolation(node))
 
-      def visit_any_loop(self, node: AnyLoop) -> None:
+     class WrongLoopVisitor(base.BaseNodeVisitor):
+    ...
+
+    def visit_any_loop(self, node: AnyLoop) -> None:
         """Checks ``for`` and ``while`` loops."""
-        self._check_leaking_for_at_toplevel(node)   # <— προσθήκη
+        self._check_leaking_for_at_toplevel(node)
         self._check_loop_needs_else(node)
         self._check_lambda_inside_loop(node)
         self._check_useless_continue(node)
@@ -301,11 +304,10 @@ class WrongStatementInLoopVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_leaking_for_at_toplevel(self, node: AnyLoop) -> None:
-     # Θέλουμε μόνο for/async for (όχι while):
-     if not isinstance(node, (ast.For, ast.AsyncFor)):
-        return
+        
+        if not isinstance(node, (ast.For, ast.AsyncFor)):
+            return
 
-     # Αν ο κοντινότερος γονέας είναι Module ή ClassDef → flag
-     parent = nodes.get_parent(node)
-     if isinstance(parent, (ast.Module, ast.ClassDef)):
-        self.add_violation(LeakingForLoopViolation(node))
+        parent = nodes.get_parent(node)
+        if isinstance(parent, (ast.Module, ast.ClassDef)):
+            self.add_violation(LeakingForLoopViolation(node))
