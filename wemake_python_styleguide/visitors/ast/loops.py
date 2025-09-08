@@ -137,11 +137,21 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
 
     def visit_any_loop(self, node: AnyLoop) -> None:
         """Checks ``for`` and ``while`` loops."""
+        self._check_leaking_for_at_toplevel(node) #new
         self._check_loop_needs_else(node)
         self._check_lambda_inside_loop(node)
         self._check_useless_continue(node)
         self._check_infinite_while_loop(node)
         self.generic_visit(node)
+        
+    def _check_leaking_for_at_toplevel(self, node: AnyLoop) -> None:
+        if not isinstance(node, (ast.For, ast.AsyncFor)):
+        return
+
+        parent = nodes.get_parent(node)
+        # Αν θέλεις μόνο top-level:
+        if isinstance(parent, ast.Module):
+            self.add_violation(LeakingForLoopViolation(node))
 
     def _check_loop_needs_else(self, node: AnyLoop) -> None:
         if node.orelse and not loops.has_break(node, break_nodes=(ast.Break,)):
@@ -290,24 +300,3 @@ class WrongStatementInLoopVisitor(base.BaseNodeVisitor):
             return
 
         self.add_violation(AwaitInLoopViolation(node))
-
-     class WrongLoopVisitor(base.BaseNodeVisitor):
-    ...
-
-    def visit_any_loop(self, node: AnyLoop) -> None:
-        """Checks ``for`` and ``while`` loops."""
-        self._check_leaking_for_at_toplevel(node)
-        self._check_loop_needs_else(node)
-        self._check_lambda_inside_loop(node)
-        self._check_useless_continue(node)
-        self._check_infinite_while_loop(node)
-        self.generic_visit(node)
-
-    def _check_leaking_for_at_toplevel(self, node: AnyLoop) -> None:
-
-        if not isinstance(node, (ast.For, ast.AsyncFor)):
-            return
-
-        parent = nodes.get_parent(node)
-        if isinstance(parent, (ast.Module, ast.ClassDef)):
-            self.add_violation(LeakingForLoopViolation(node))
