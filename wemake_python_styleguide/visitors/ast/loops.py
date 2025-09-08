@@ -146,7 +146,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
             return
 
         parent = nodes.get_parent(node)
-        # Αν θέλεις μόνο top-level:
+        # only for top-level:
         if isinstance(parent, ast.Module):
             self.add_violation(LeakingForLoopViolation(node))
 
