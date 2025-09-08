@@ -2994,4 +2994,4 @@ class LeakingForLoopViolation(ASTViolation):
     """
 
     error_template = 'Found leaking for-loop in top-level/class body'
-    code = 0x01F0
+    code = 0x1F0
