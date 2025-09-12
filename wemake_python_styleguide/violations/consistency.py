@@ -2456,6 +2456,6 @@ class SimplifiableMatchViolation(ASTViolation):
     """
 
     error_template = (
-        'Found simple ``match ... case _`` constructs, use ``if ... else``'
+        'Found simplifiable `match` statement that can be just `if`'
     )
     code = 365
