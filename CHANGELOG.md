@@ -17,6 +17,13 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
+## 1.5.0
+
+### Features
+
+- Adds `WPS365`: match statement can be simplified to `if`, #3520
+
+
 ## 1.4.0
 
 ### Features
