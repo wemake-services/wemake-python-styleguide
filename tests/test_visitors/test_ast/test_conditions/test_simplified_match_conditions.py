@@ -7,6 +7,7 @@ from wemake_python_styleguide.visitors.ast.conditions import (
     SimplifiableMatchVisitor,
 )
 
+# Wrong:
 simplifiable_match_template = """
 match subject:
     case {0}:
@@ -23,6 +24,15 @@ match subject:
         pass
 """
 
+simplifiable_with_const_as_binding_template = """
+    match subject:
+        case State.REJECTED as status:
+            pass
+        case _:
+            pass
+    """
+
+# Correct:
 complex_match = """
 match subject:
     case State.FIRST:
@@ -41,33 +51,41 @@ match subject:
         pass
 """
 
-sequence_match = """
-match subject:
-    case [1, 2]:
-        pass
-    case _:
-        pass
-"""
-
-mapping_match = """
-match subject:
-    case {"status": "ok"}:
-        pass
-    case _:
-        pass
-"""
-
-class_match = """
-match subject:
-    case SomeClass():
-        pass
-    case _:
-        pass
-"""
-
 guard_match = """
 match subject:
     case x if x > 0:
+        pass
+    case _:
+        pass
+"""
+
+class_with_args_match = """
+match subject:
+    case SomeClass(x):
+        pass
+    case _:
+        pass
+"""
+
+class_with_kwargs_match = """
+match subject:
+    case SomeClass(name=x):
+        pass
+    case _:
+        pass
+"""
+
+sequences_match = """
+match subject:
+    case [x, *rest]:
+        pass
+    case _:
+        pass
+"""
+
+mappings_match = """
+match subject:
+    case {"key": x}:
         pass
     case _:
         pass
@@ -83,6 +101,8 @@ match subject:
         '"string"',
         'ns.CONST',
         'State.REJECTED',
+        '[1, 2]',
+        '{"status": "ok"}',
     ],
 )
 def test_simplifiable_single_match(
@@ -128,14 +148,7 @@ def test_simplifiable_with_const_as_binding(
     default_options,
 ):
     """Test that `case CONST as name:` is still simplifiable."""
-    code = """
-    match subject:
-        case State.REJECTED as status:
-            pass
-        case _:
-            pass
-    """
-    tree = parse_ast_tree(code)
+    tree = parse_ast_tree(simplifiable_with_const_as_binding_template)
     visitor = SimplifiableMatchVisitor(default_options, tree=tree)
     visitor.run()
     assert_errors(visitor, [SimplifiableMatchViolation])
@@ -146,10 +159,11 @@ def test_simplifiable_with_const_as_binding(
     [
         complex_match,
         no_wildcard_match,
-        sequence_match,
-        mapping_match,
-        class_match,
         guard_match,
+        class_with_args_match,
+        class_with_kwargs_match,
+        sequences_match,
+        mappings_match,
     ],
 )
 def test_not_simplifiable_match_templates(

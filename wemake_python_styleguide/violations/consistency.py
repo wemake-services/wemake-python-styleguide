@@ -2452,6 +2452,7 @@ class SimplifiableMatchViolation(ASTViolation):
                 user = 'active'
 
     .. versionadded:: 1.5.0
+
     """
 
     error_template = (
