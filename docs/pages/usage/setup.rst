@@ -29,7 +29,7 @@ Required configuration
 ----------------------
 
 You must either provide ``--select=WPS`` to all your ``flake8`` calls,
-or add ``select = WPS`` into your ``flake8`` configration file.
+or add ``select = WPS`` into your ``flake8`` configuration file.
 
 Running
 -------

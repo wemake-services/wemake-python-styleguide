@@ -13,6 +13,7 @@ from wemake_python_styleguide.logic.tree import (
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations import (
     best_practices,
+    consistency,
     refactoring,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -188,3 +189,52 @@ class ChainedIsVisitor(BaseNodeVisitor):
             self.add_violation(refactoring.ChainedIsViolation(node))
 
         self.generic_visit(node)
+
+
+@final
+class SimplifiableMatchVisitor(BaseNodeVisitor):
+    """Checks for match statements that can be simplified to if/else."""
+
+    def visit_Match(self, node: ast.Match) -> None:
+        """Checks match statements."""
+        cases = node.cases
+        if len(cases) == 2:
+            first, second = cases
+            if (
+                self._is_wildcard_case(second)
+                and first.guard is None
+                and self._is_simple_pattern(first.pattern)
+            ):
+                self.add_violation(consistency.SimplifiableMatchViolation(node))
+
+        self.generic_visit(node)
+
+    def _is_wildcard_case(self, case: ast.match_case) -> bool:
+        """Returns True only for `case _:` (wildcard without binding)."""
+        pattern = case.pattern
+        return isinstance(pattern, ast.MatchAs) and pattern.pattern is None
+
+    def _is_simple_pattern(self, pattern: ast.pattern) -> bool:
+        """
+        Returns True for simple value patterns.
+
+        Like A, 1, ns.CONST, or A | B.
+        """
+        if isinstance(pattern, ast.MatchSingleton):
+            return True
+
+        if isinstance(pattern, ast.MatchValue):
+            return isinstance(
+                pattern.value, (ast.Constant, ast.Name, ast.Attribute)
+            )
+
+        if isinstance(pattern, ast.MatchOr):
+            return all(
+                self._is_simple_pattern(pattern) for pattern in pattern.patterns
+            )
+
+        if isinstance(pattern, ast.MatchAs):
+            inner = pattern.pattern
+            return inner is not None and self._is_simple_pattern(inner)
+
+        return False
