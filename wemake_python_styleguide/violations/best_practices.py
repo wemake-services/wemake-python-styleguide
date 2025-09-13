@@ -2978,3 +2978,20 @@ class CommentInFormattedStringViolation(TokenizeViolation):
 
     error_template = 'Found comment inside formatted string'
     code = 480
+
+
+class LeakingForLoopViolation(ASTViolation):
+    """
+    For-loop at module (or class body) scope leaking variables.
+
+    Reasoning:
+        A top-level ``for`` loop leaves its target variable accessible
+        outside of the loop, which is usually unintended.
+
+    Solution:
+        Move the loop inside a function or use a functional pattern
+        (e.g., ``sum(...)``, ``any(...)``, ``all(...)``).
+    """
+
+    error_template = 'Found leaking for-loop in top-level/class body'
+    code = 0x1F0
