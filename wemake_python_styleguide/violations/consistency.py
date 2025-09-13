@@ -2435,7 +2435,7 @@ class SimplifiableMatchViolation(ASTViolation):
         - When there are exactly two ``case`` statements
         - When the first case uses a simple pattern (e.g. liter, const, enums)
         - When the second case is a wildcard: ``case _:``
-        - When the first case has no guard (i.e. no ``if ...`` condition)
+        - When the first case has simple guard (e.g. ``x if x > 0``)
 
 
     Example::
