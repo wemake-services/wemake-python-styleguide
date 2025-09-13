@@ -9,6 +9,7 @@ from wemake_python_styleguide.logic.tree import (
     compares,
     ifs,
     operators,
+    pattern_matching,
 )
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations import (
@@ -197,74 +198,16 @@ class SimplifiableMatchVisitor(BaseNodeVisitor):
 
     def visit_Match(self, node: ast.Match) -> None:
         """Checks match statements."""
+        self._check_simplifiable_match(node)
+        self.generic_visit(node)
+
+    def _check_simplifiable_match(self, node: ast.Match) -> None:
         cases = node.cases
         if len(cases) == 2:
             first, second = cases
             if (
-                self._is_wildcard_case(second)
+                pattern_matching.is_wildcard_case(second)
                 and first.guard is None
-                and self._is_simple_pattern(first.pattern)
+                and pattern_matching.is_simple_pattern(first.pattern)
             ):
                 self.add_violation(consistency.SimplifiableMatchViolation(node))
-
-        self.generic_visit(node)
-
-    def _is_simple_pattern(self, pattern: ast.pattern) -> bool:
-        """Returns True if the pattern is simple enough to replace with `==`."""
-        if self._is_simple_value_or_singleton(pattern):
-            return True
-
-        if self._is_simple_composite(pattern):
-            return True
-
-        if isinstance(pattern, ast.MatchSequence):
-            return self._is_simple_sequence(pattern)
-
-        if isinstance(pattern, ast.MatchMapping):
-            return self._is_simple_mapping(pattern)
-
-        return False
-
-    def _is_simple_composite(self, pattern: ast.pattern) -> bool:
-        """Returns True/False for MatchOr and MatchAs, None otherwise."""
-        if isinstance(pattern, ast.MatchOr):
-            return all(self._is_simple_pattern(sub) for sub in pattern.patterns)
-        if isinstance(pattern, ast.MatchAs):
-            inner = pattern.pattern
-            return inner is not None and self._is_simple_pattern(inner)
-        return False
-
-    def _is_wildcard_case(self, case: ast.match_case) -> bool:
-        """Returns True only for `case _:`."""
-        pattern = case.pattern
-        return isinstance(pattern, ast.MatchAs) and pattern.pattern is None
-
-    def _is_simple_sequence(self, pattern: ast.MatchSequence) -> bool:
-        """Check [1, 2] but not [x, *rest]."""
-        return all(
-            self._is_simple_pattern(sub) for sub in pattern.patterns
-        ) and not any(
-            isinstance(sub, ast.MatchStar) for sub in pattern.patterns
-        )
-
-    def _is_simple_mapping(self, pattern: ast.MatchMapping) -> bool:
-        """Check {'key': 'value'}, keys must be constants."""
-        return all(
-            isinstance(key, ast.Constant) for key in pattern.keys
-        ) and all(self._is_simple_pattern(sub) for sub in pattern.patterns)
-
-    def _is_simple_value_or_singleton(self, pattern: ast.pattern) -> bool:
-        """
-        Checks if a pattern is a simple literal or singleton.
-
-        Supports:
-        - Single values: ``1``, ``"text"``, ``ns.CONST``.
-        - Singleton values: ``True``, ``False``, ``None``.
-        """
-        if isinstance(pattern, ast.MatchSingleton):
-            return True
-        if isinstance(pattern, ast.MatchValue):
-            return isinstance(
-                pattern.value, (ast.Constant, ast.Name, ast.Attribute)
-            )
-        return False

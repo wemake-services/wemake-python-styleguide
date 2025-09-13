@@ -101,8 +101,6 @@ match subject:
         '"string"',
         'ns.CONST',
         'State.REJECTED',
-        '[1, 2]',
-        '{"status": "ok"}',
     ],
 )
 def test_simplifiable_single_match(

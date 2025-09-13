@@ -2420,7 +2420,7 @@ class NotInWithUnaryOpViolation(ASTViolation):
 @final
 class SimplifiableMatchViolation(ASTViolation):
     """
-    Match statement can be simplified to `if`.
+    Some ``match`` statements can be simplified to ``if`` statements.
 
     Reasoning:
         Using ``match`` for simple two-case conditions
@@ -2429,12 +2429,14 @@ class SimplifiableMatchViolation(ASTViolation):
         Simple conditions should prefer readability and simplicity.
 
     Solution:
-        Replace simple ``match ... case _`` constructs with ``if ... else``.
+        Replace violating ``match ... case _`` statements with ``if ... else``.
 
-    When is this violation not issued?
-        - When there are more than two cases
-        - When the pattern is complex (e.g. deconstructing dicts, classes)
-        - When the wildcard case is not the last one
+    When is this violation is issued?
+        - When there are exactly two cases
+        - When the first case uses a simple pattern (e.g. liter, const, enums)
+        - When the second case is a wildcard: ``case _:``
+        - When the first case has no guard (i.e. no ``if ...`` condition)
+
 
     Example::
 
