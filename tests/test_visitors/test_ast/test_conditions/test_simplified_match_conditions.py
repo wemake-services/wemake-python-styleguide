@@ -24,6 +24,14 @@ match subject:
         pass
 """
 
+simplifiable_guard_match = """
+match subject:
+    case x if x > 0:
+        pass
+    case _:
+        pass
+"""
+
 # Correct:
 complex_match = """
 match subject:
@@ -85,25 +93,23 @@ match subject:
 
 
 @pytest.mark.parametrize(
-    ('code', 'as_binding'),
+    'code',
     [
-        ('1', ''),
-        ('True', ''),
-        ('None', ''),
-        ('"string"', ''),
-        ('ns.CONST', ''),
-        ('State.REJECTED', ''),
-        ('x if x > 0', ''),
-        ('2', ' as x'),
-        ('False', ' as x'),
-        ('"string"', ' as x'),
-        ('ns.CONST', ' as x'),
-        ('State.REJECTED', ' as x'),
+        '1',
+        'True',
+        'None',
+        '"string"',
+        'ns.CONST',
+        'State.REJECTED',
     ],
 )
+@pytest.mark.parametrize(
+    'as_binding',
+    ['', ' as x'],
+)
 def test_simplifiable_single_match(
-    code: str,
-    as_binding: str,
+    code,
+    as_binding,
     assert_errors,
     parse_ast_tree,
     default_options,
@@ -115,25 +121,36 @@ def test_simplifiable_single_match(
     assert_errors(visitor, [SimplifiableMatchViolation])
 
 
+def test_simplifiable_guarded_match(
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+):
+    """Test that guarded irrefutable match is simplified."""
+    tree = parse_ast_tree(simplifiable_guard_match)
+    visitor = SimplifiableMatchVisitor(default_options, tree=tree)
+    visitor.run()
+    assert_errors(visitor, [SimplifiableMatchViolation])
+
+
 @pytest.mark.parametrize(
-    ('left', 'right', 'as_binding'),
+    ('left', 'right'),
     [
-        ('1', '2', ''),
-        ('True', 'False', ''),
-        ('"a"', '"b"', ''),
-        ('State.OK', 'State.ERROR', ''),
-        ('"first" | "second"', '"third"', ''),
-        ('3', '4', ' as x'),
-        ('False', 'True', ' as x'),
-        ('"c"', '"d"', ' as x'),
-        ('State.BAD', 'State.DEBUG', ' as x'),
-        ('"first" | "second"', '"third"', ' as x'),
+        ('1', '2'),
+        ('True', 'False'),
+        ('"a"', '"b"'),
+        ('State.OK', 'State.ERROR'),
+        ('"first" | "second"', '"third"'),
     ],
 )
+@pytest.mark.parametrize(
+    'as_binding',
+    ['', ' as x'],
+)
 def test_simplifiable_union_match(
-    left: str,
-    right: str,
-    as_binding: str,
+    left,
+    right,
+    as_binding,
     assert_errors,
     parse_ast_tree,
     default_options,
@@ -160,7 +177,7 @@ def test_simplifiable_union_match(
     ],
 )
 def test_not_simplifiable_match_templates(
-    template: str,
+    template,
     assert_errors,
     parse_ast_tree,
     default_options,

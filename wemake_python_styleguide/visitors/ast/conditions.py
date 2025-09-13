@@ -206,18 +206,10 @@ class SimplifiableMatchVisitor(BaseNodeVisitor):
         if len(cases) == 2:
             first, second = cases
 
-            if (
-                pattern_matching.is_wildcard_pattern(second)
-                and first.guard is None
-                and pattern_matching.is_simple_pattern(first.pattern)
-            ):
-                self.add_violation(consistency.SimplifiableMatchViolation(node))
+            if not pattern_matching.is_wildcard_pattern(second):
                 return
 
-            if (
-                pattern_matching.is_wildcard_pattern(second)
-                and first.guard is not None
-                and pattern_matching.is_irrefutable_binding(first.pattern)
-            ):
+            if pattern_matching.is_irrefutable_binding(
+                first.pattern
+            ) or pattern_matching.is_simple_pattern(first.pattern):
                 self.add_violation(consistency.SimplifiableMatchViolation(node))
-                return
