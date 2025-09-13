@@ -2433,9 +2433,9 @@ class SimplifiableMatchViolation(ASTViolation):
 
     When is this violation is raised?
         - When there are exactly two ``case`` statements
-        - When the first case uses a simple pattern (e.g. liter, const, enums)
+        - When the first case uses a literal pattern
         - When the second case is a wildcard: ``case _:``
-        - When the first case has simple guard (e.g. ``x if x > 0``)
+        - When the first case has literal guard (e.g. ``x if x > 0``)
 
 
     Example::
