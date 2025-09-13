@@ -332,7 +332,7 @@ class CommentInFormattedStringVisitor(BaseTokenVisitor):  # pragma: >=3.12 cover
     )
 
     def visit_fstring_start(self, token: tokenize.TokenInfo) -> None:
-        """Preforms fstring check."""
+        """Performs fstring check."""
         self._check_is_fstring_ends_with_comment(token)
 
     def _check_is_fstring_ends_with_comment(

@@ -2415,3 +2415,48 @@ class NotInWithUnaryOpViolation(ASTViolation):
 
     error_template = 'Found legacy `not ... in`, use `... not in` instead'
     code = 364
+
+
+@final
+class SimplifiableMatchViolation(ASTViolation):
+    """
+    Some ``match`` statements can be simplified to ``if`` statements.
+
+    Reasoning:
+        Using ``match`` for simple two-case conditions
+        (including wildcard ``_``)
+        is unnecessarily verbose and less performant than a plain ``if/else``.
+        Simple conditions should prefer readability and simplicity.
+
+    Solution:
+        Replace violating ``match ... case _`` statements with ``if ... else``.
+
+    When is this violation is raised?
+        - When there are exactly two ``case`` statements
+        - When the first case uses a literal pattern
+        - When the second case is a wildcard: ``case _:``
+
+
+    Example::
+
+        # Correct:
+        if state == EventType.REJECT:
+            user = 'rejected'
+        else:
+            user = 'active'
+
+        # Wrong:
+        match state:
+            case EventType.REJECT:
+                user = 'rejected'
+            case _:
+                user = 'active'
+
+    .. versionadded:: 1.5.0
+
+    """
+
+    error_template = (
+        'Found simplifiable `match` statement that can be just `if`'
+    )
+    code = 365
