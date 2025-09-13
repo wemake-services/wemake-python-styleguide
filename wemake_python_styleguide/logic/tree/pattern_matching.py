@@ -47,10 +47,14 @@ def is_constant_subject(condition: ast.AST | list[ast.expr]) -> bool:
     return False
 
 
-def is_wildcard_case(case: ast.match_case) -> bool:
+def is_wildcard_pattern(case: ast.match_case) -> bool:
     """Returns True only for `case _:`."""
     pattern = case.pattern
-    return isinstance(pattern, ast.MatchAs) and pattern.pattern is None
+    return (
+        isinstance(pattern, ast.MatchAs)
+        and pattern.pattern is None
+        and pattern.name is None
+    )
 
 
 def is_simple_pattern(pattern: ast.pattern) -> bool:
@@ -85,3 +89,16 @@ def _is_simple_value_or_singleton(pattern: ast.pattern) -> bool:
             pattern.value, (ast.Constant, ast.Name, ast.Attribute)
         )
     return False
+
+
+def is_irrefutable_binding(pattern: ast.pattern) -> bool:
+    """
+    Returns True for patterns like ``case x:`` or ``case data:``.
+
+    These always match and just bind the subject to a name.
+    """
+    return (
+        isinstance(pattern, ast.MatchAs)
+        and pattern.pattern is None
+        and pattern.name is not None
+    )

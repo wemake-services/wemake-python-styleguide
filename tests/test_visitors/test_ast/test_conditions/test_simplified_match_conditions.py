@@ -53,7 +53,7 @@ match subject:
 
 guard_match = """
 match subject:
-    case x if x > 0:
+    case [x] if x > 0:
         pass
     case _:
         pass
@@ -101,6 +101,7 @@ match subject:
         '"string"',
         'ns.CONST',
         'State.REJECTED',
+        'x if x > 0',
     ],
 )
 def test_simplifiable_single_match(

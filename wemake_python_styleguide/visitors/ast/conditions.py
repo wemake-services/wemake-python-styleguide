@@ -205,9 +205,19 @@ class SimplifiableMatchVisitor(BaseNodeVisitor):
         cases = node.cases
         if len(cases) == 2:
             first, second = cases
+
             if (
-                pattern_matching.is_wildcard_case(second)
+                pattern_matching.is_wildcard_pattern(second)
                 and first.guard is None
                 and pattern_matching.is_simple_pattern(first.pattern)
             ):
                 self.add_violation(consistency.SimplifiableMatchViolation(node))
+                return
+
+            if (
+                pattern_matching.is_wildcard_pattern(second)
+                and first.guard is not None
+                and pattern_matching.is_irrefutable_binding(first.pattern)
+            ):
+                self.add_violation(consistency.SimplifiableMatchViolation(node))
+                return
