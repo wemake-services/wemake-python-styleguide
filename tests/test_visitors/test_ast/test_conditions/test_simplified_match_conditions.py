@@ -8,7 +8,7 @@ from wemake_python_styleguide.visitors.ast.conditions import (
 )
 
 # Wrong:
-simplifiable_match_template = """
+simplifiable_match_match = """
 match subject:
     case {0}:
         pass
@@ -16,7 +16,7 @@ match subject:
         pass
 """
 
-simplifiable_union_match_template = """
+simplifiable_union_match_match = """
 match subject:
     case {0} | {1}:
         pass
@@ -24,7 +24,7 @@ match subject:
         pass
 """
 
-simplifiable_with_const_as_binding_template = """
+simplifiable_with_const_as_binding_match = """
     match subject:
         case State.REJECTED as status:
             pass
@@ -110,7 +110,7 @@ def test_simplifiable_single_match(
     default_options,
 ):
     """Test that simple single-case match raises a violation."""
-    tree = parse_ast_tree(simplifiable_match_template.format(code))
+    tree = parse_ast_tree(simplifiable_match_match.format(code))
     visitor = SimplifiableMatchVisitor(default_options, tree=tree)
     visitor.run()
     assert_errors(visitor, [SimplifiableMatchViolation])
@@ -134,7 +134,7 @@ def test_simplifiable_union_match(
     default_options,
 ):
     """Test that union pattern raises violation."""
-    tree = parse_ast_tree(simplifiable_union_match_template.format(left, right))
+    tree = parse_ast_tree(simplifiable_union_match_match.format(left, right))
     visitor = SimplifiableMatchVisitor(default_options, tree=tree)
     visitor.run()
     assert_errors(visitor, [SimplifiableMatchViolation])
@@ -146,7 +146,7 @@ def test_simplifiable_with_const_as_binding(
     default_options,
 ):
     """Test that `case CONST as name:` is still simplifiable."""
-    tree = parse_ast_tree(simplifiable_with_const_as_binding_template)
+    tree = parse_ast_tree(simplifiable_with_const_as_binding_match)
     visitor = SimplifiableMatchVisitor(default_options, tree=tree)
     visitor.run()
     assert_errors(visitor, [SimplifiableMatchViolation])
