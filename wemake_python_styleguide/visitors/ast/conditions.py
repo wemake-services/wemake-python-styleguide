@@ -9,10 +9,12 @@ from wemake_python_styleguide.logic.tree import (
     compares,
     ifs,
     operators,
+    pattern_matching,
 )
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations import (
     best_practices,
+    consistency,
     refactoring,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -188,3 +190,26 @@ class ChainedIsVisitor(BaseNodeVisitor):
             self.add_violation(refactoring.ChainedIsViolation(node))
 
         self.generic_visit(node)
+
+
+@final
+class SimplifiableMatchVisitor(BaseNodeVisitor):
+    """Checks for match statements that can be simplified to if/else."""
+
+    def visit_Match(self, node: ast.Match) -> None:
+        """Checks match statements."""
+        self._check_simplifiable_match(node)
+        self.generic_visit(node)
+
+    def _check_simplifiable_match(self, node: ast.Match) -> None:
+        cases = node.cases
+        if len(cases) == 2:
+            first, second = cases
+
+            if not pattern_matching.is_wildcard_pattern(second):
+                return
+
+            if pattern_matching.is_irrefutable_binding(
+                first.pattern
+            ) or pattern_matching.is_simple_pattern(first.pattern):
+                self.add_violation(consistency.SimplifiableMatchViolation(node))

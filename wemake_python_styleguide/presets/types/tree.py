@@ -70,6 +70,7 @@ PRESET: Final = (
     conditions.BooleanConditionVisitor,
     conditions.MatchVisitor,
     conditions.ChainedIsVisitor,
+    conditions.SimplifiableMatchVisitor,
     iterables.IterableUnpackingVisitor,
     blocks.AfterBlockVariablesVisitor,
     subscripts.SubscriptVisitor,

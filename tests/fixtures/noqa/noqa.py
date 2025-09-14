@@ -616,6 +616,12 @@ match x:  # noqa: WPS242
     case 8:
         my_print('eighth')
 
+match subject:  # noqa: WPS365
+    case 1:
+        ...
+    case _:
+        ...
+
 
 my_print("""
 text
