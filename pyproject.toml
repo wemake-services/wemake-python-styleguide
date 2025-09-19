@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "poetry.core.masonry.api"
-requires = [ "poetry-core>=2.0" ]
+requires = [ "poetry-core>=2.2" ]
 
 [project]
 name = "wemake-python-styleguide"
@@ -57,15 +57,15 @@ pygments = "^2.19"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4"
-pytest-cov = "^6.2"
-pytest-randomly = "^3.12"
+pytest-cov = "^7.0"
+pytest-randomly = "^4.0"
 pytest-xdist = "^3.8"
 covdefaults = "^2.3"
 syrupy = "^4.6"
 hypothesis = "^6.135"
 hypothesmith = "^0.3"
 
-mypy = "^1.17"
+mypy = "^1.18"
 types-flake8 = "^7.3"
 
 import-linter = "^2.0"
@@ -73,7 +73,7 @@ import-linter = "^2.0"
 astpath = "^0.9"
 lxml = "^6.0"
 nbqa = "^1.2"
-ruff = "^0.12"
+ruff = "^0.13"
 black = "^25.1"
 
 [tool.poetry.group.docs]
