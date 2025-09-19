@@ -242,6 +242,11 @@ plugins = [
   "covdefaults",
 ]
 
+# Required since 7.10:
+patch = [
+  "subprocess",
+]
+
 [tool.mypy]
 # The mypy configurations: http://bit.ly/2zEl9WI
 ignore_missing_imports = true
