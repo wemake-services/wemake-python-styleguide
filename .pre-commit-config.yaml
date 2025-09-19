@@ -30,6 +30,9 @@ repos:
     rev: v1.13.0
     hooks:
       - id: zizmor
+        args:
+          - "--config=.github/zizmor.yml"
+          - "--no-progress"
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.11.0.1
     hooks:
