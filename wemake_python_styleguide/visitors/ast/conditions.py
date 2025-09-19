@@ -213,3 +213,25 @@ class SimplifiableMatchVisitor(BaseNodeVisitor):
                 first.pattern
             ) or pattern_matching.is_simple_pattern(first.pattern):
                 self.add_violation(consistency.SimplifiableMatchViolation(node))
+
+
+@final
+class LeakingForLoopVisitor(BaseNodeVisitor):
+    """Finds 'for' loops directly inside class or module bodies."""
+
+    def visit_ClassDef(self, node: ast.ClassDef) -> None:
+        """Checks that there are no 'for' loops inside class body."""
+        self._check_for_loops_in_body(node.body)
+        self.generic_visit(node)
+
+    def visit_Module(self, node: ast.Module) -> None:
+        """Checks that there are no 'for' loops inside module body."""
+        self._check_for_loops_in_body(node.body)
+        self.generic_visit(node)
+
+    def _check_for_loops_in_body(self, node_body: list[ast.stmt]) -> None:
+        for subnode in node_body:
+            if isinstance(subnode, ast.For):
+                self.add_violation(
+                    best_practices.LeakingForLoopViolation(subnode)
+                )

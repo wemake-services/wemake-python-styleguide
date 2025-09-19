@@ -317,7 +317,7 @@ def function_with_wrong_yield():
         yield  # noqa: WPS325
     yield 1
 
-for literal in bad_concatenation:  # noqa: WPS327, WPS328
+for literal in bad_concatenation:  # noqa: WPS327, WPS328, WPS481
     continue
 
 with open(bad_concatenation):  # noqa: WPS328
@@ -326,7 +326,7 @@ with open(bad_concatenation):  # noqa: WPS328
 
 my_print(biggesst > middle >= smallest)  # noqa: WPS334
 
-for index in [1, 2]:  # noqa: WPS335
+for index in [1, 2]:  # noqa: WPS335, WPS481
     my_print(index)
 
 string_concat = 'a' + 'b'  # noqa: WPS336
@@ -339,11 +339,11 @@ pi = 3.14 # noqa: WPS446
 my_print(lambda: 0)  # noqa: WPS522
 xterm += xterm + 1  # noqa: WPS524
 
-for range_len in range(len(file_obj)):  # noqa: WPS518
+for range_len in range(len(file_obj)):  # noqa: WPS518, WPS481
     my_print(range_len)
 
 sum_container = 0
-for sum_item in file_obj:  # noqa: WPS519
+for sum_item in file_obj:  # noqa: WPS519, WPS481
     sum_container += sum_item
 
 my_print(sum_container == [])  # noqa: WPS520
@@ -364,7 +364,7 @@ class ShadowsAttribute:
         self.second = 2  # noqa: WPS601
 
 
-for symbol in 'abc':  # noqa: WPS500
+for symbol in 'abc':  # noqa: WPS500, WPS481
     ...
 else:
     ...
@@ -386,7 +386,7 @@ class Example:
         return super().__eq__(object_)
 
 
-for loop_index in range(6):  # noqa: WPS426
+for loop_index in range(6):  # noqa: WPS426, WPS481
     my_print(lambda: loop_index)
 
 
@@ -409,7 +409,7 @@ class MyBadException(BaseException):  # noqa: WPS418
 class ClassWithWrongContents((lambda: object)()):  # noqa: WPS606
     __slots__ = ['a', 'a']  # noqa: WPS607
 
-    for bad_body_node in range(1):  # noqa: WPS604
+    for bad_body_node in range(1):  # noqa: WPS481, WPS604
         anti_wps604 = 1
 
     def method_with_no_args():  # noqa: WPS605
@@ -424,7 +424,7 @@ def bad_default_values(
     return True
 
 
-for nodes[0] in (1, 2, 3):  # noqa: WPS405
+for nodes[0] in (1, 2, 3):  # noqa: WPS405, WPS481
     ...
 
 with open('some') as MyBadException.custom:  # noqa: WPS406
@@ -631,7 +631,7 @@ text
 def get_item():  # noqa: WPS463
     return  # noqa: WPS324
 
-for _, something in enumerate(collection): # noqa: WPS468
+for _, something in enumerate(collection): # noqa: WPS468, WPS481
     report(something)
 
 variable_to_store_things = {
@@ -729,7 +729,7 @@ def wrong_comprehension2():
     ]
 
 
-for unique_element in range(10):
+for unique_element in range(10):  # noqa: WPS481
     if (other := unique_element) > 5:  # noqa: WPS332
         my_print(1)
 
@@ -774,3 +774,8 @@ finally:
 
 if not user in users:  # noqa: WPS364
     my_print('legacy not-in style')
+
+
+class ForLoopInClassBody:
+    for number in range(2):  # noqa: WPS481, WPS604
+        ...

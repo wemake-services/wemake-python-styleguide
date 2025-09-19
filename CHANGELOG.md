@@ -17,6 +17,13 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
+## 1.6.0
+
+### Features
+
+- Adds `WPS481`: for statement not allowed in class and module scopes, #3520
+
+
 ## 1.5.0
 
 ### Features
