@@ -221,17 +221,42 @@ class LeakingForLoopVisitor(BaseNodeVisitor):
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """Checks that there are no 'for' loops inside class body."""
-        self._check_for_loops_in_body(node.body)
+        self._check_for_loops(node.body)
         self.generic_visit(node)
 
     def visit_Module(self, node: ast.Module) -> None:
         """Checks that there are no 'for' loops inside module body."""
-        self._check_for_loops_in_body(node.body)
+        self._check_for_loops(node.body)
         self.generic_visit(node)
 
-    def _check_for_loops_in_body(self, node_body: list[ast.stmt]) -> None:
-        for subnode in node_body:
-            if isinstance(subnode, ast.For):
+    def _check_for_loops(self, body: list[ast.stmt]) -> None:
+        for subnode in body:
+            if not isinstance(subnode, ast.For):
+                continue
+
+            loop_vars = self._extract_loop_variables(subnode.target)
+
+            if not self._are_variables_deleted(loop_vars, body):
                 self.add_violation(
-                    best_practices.LeakingForLoopViolation(subnode)
+                    best_practices.LeakingForLoopViolation(subnode),
                 )
+
+    def _extract_loop_variables(self, target: ast.expr) -> set[str]:
+        return {
+            node.id for node in ast.walk(target) if isinstance(node, ast.Name)
+        }
+
+    def _are_variables_deleted(
+        self, variables: set[str], body: list[ast.stmt]
+    ) -> bool:
+        deleted = set()
+
+        for stmt in body:
+            if not isinstance(stmt, ast.Delete):
+                continue
+
+            for target in stmt.targets:
+                if isinstance(target, ast.Name):
+                    deleted.add(target.id)
+
+        return variables.issubset(deleted)

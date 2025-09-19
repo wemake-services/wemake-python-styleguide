@@ -774,8 +774,3 @@ finally:
 
 if not user in users:  # noqa: WPS364
     my_print('legacy not-in style')
-
-
-class ForLoopInClassBody:
-    for number in range(2):  # noqa: WPS481, WPS604
-        ...
