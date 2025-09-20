@@ -59,3 +59,31 @@ def get_subnodes_by_type(
     for child in ast.walk(node):
         if isinstance(child, subnodes_type):
             yield child
+
+
+def are_variables_deleted(
+    variables: set[str],
+    body: list[ast.stmt],
+) -> bool:
+    """Checks that given variables are deleted somewhere in the body."""
+    deleted: set[str] = set()
+
+    for node in ast.walk(ast.Module(body=body, type_ignores=[])):
+        if isinstance(node, ast.Delete):
+            for target in node.targets:
+                if isinstance(target, ast.Name):
+                    deleted.add(target.id)
+
+    return variables.issubset(deleted)
+
+
+def get_names_from_target(target: ast.expr) -> set[str]:
+    """
+    Extracts all variable names from a target expression.
+
+    Works with simple names and unpacking, e.g.:
+    - `for x in ...` -> {"x"}
+    - `for x, y in ...` -> {"x", "y"}
+    - `for (a, (b, c)) in ...` -> {"a", "b", "c"}
+    """
+    return {node.id for node in ast.walk(target) if isinstance(node, ast.Name)}

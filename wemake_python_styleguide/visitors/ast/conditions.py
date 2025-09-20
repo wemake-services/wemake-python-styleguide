@@ -11,6 +11,10 @@ from wemake_python_styleguide.logic.tree import (
     operators,
     pattern_matching,
 )
+from wemake_python_styleguide.logic.walk import (
+    are_variables_deleted,
+    get_names_from_target,
+)
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations import (
     best_practices,
@@ -234,29 +238,9 @@ class LeakingForLoopVisitor(BaseNodeVisitor):
             if not isinstance(subnode, ast.For):
                 continue
 
-            loop_vars = self._extract_loop_variables(subnode.target)
+            loop_vars = get_names_from_target(subnode.target)
 
-            if not self._are_variables_deleted(loop_vars, body):
+            if not are_variables_deleted(loop_vars, body):
                 self.add_violation(
                     best_practices.LeakingForLoopViolation(subnode),
                 )
-
-    def _extract_loop_variables(self, target: ast.expr) -> set[str]:
-        return {
-            node.id for node in ast.walk(target) if isinstance(node, ast.Name)
-        }
-
-    def _are_variables_deleted(
-        self, variables: set[str], body: list[ast.stmt]
-    ) -> bool:
-        deleted = set()
-
-        for stmt in body:
-            if not isinstance(stmt, ast.Delete):
-                continue
-
-            for target in stmt.targets:
-                if isinstance(target, ast.Name):
-                    deleted.add(target.id)
-
-        return variables.issubset(deleted)

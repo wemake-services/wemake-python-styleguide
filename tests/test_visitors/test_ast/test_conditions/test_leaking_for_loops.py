@@ -7,35 +7,64 @@ from wemake_python_styleguide.visitors.ast.conditions import (
     LeakingForLoopVisitor,
 )
 
-module_scope_code = 'for index in range(10):\n    index = index + 1'
-class_body_code = (
-    'class ClassWithBody:\n'
-    '    for index in range(10):\n'
-    '        index = index + 1'
-)
+module_scope_code = """
+for index in range(10):
+    index = index + 1
+"""
 
-for_with_del_module = f'{module_scope_code}\ndel index'
-for_with_del_class = (
-    'class ClassWithDel:\n'
-    '    for index in range(10):\n'
-    '        index = index + 1\n'
-    '    del index'
-)
+class_body_code = """
+class ClassWithBody:
+    for index in range(10):
+        index = index + 1
+"""
 
-for_with_wrong_del = f'{module_scope_code}\ndel other'
+for_with_del_module = """
+for index in range(10):
+    index = index + 1
+del index
+"""
 
-for_unpacking_with_del = 'for a, b in [(1, 2)]:\n    print(a, b)\ndel a, b'
+for_with_del_class = """
+class ClassWithDel:
+    for index in range(10):
+        index = index + 1
+    del index
+"""
 
-for_unpacking_with_partial_del = 'for a, b in [(1, 2)]:\n    print(a, b)\ndel a'
+for_with_wrong_del = """
+for index in range(10):
+    index = index + 1
+del other
+"""
 
-multiple_for_mixed = (
-    'for good in range(5):\n'
-    '    print(good)\n'
-    'del good\n'
-    '\n'
-    'for bad in range(5):\n'
-    '    print(bad)'
-)
+for_unpacking_with_del = """
+for a, b in [(1, 2)]:
+    print(a, b)
+del a, b
+"""
+
+for_unpacking_with_partial_del = """
+for a, b in [(1, 2)]:
+    print(a, b)
+del a
+"""
+
+multiple_for_mixed = """
+for good in range(5):
+    print(good)
+del good
+
+for bad in range(5):
+    print(bad)
+"""
+
+for_with_del_inside_if = """
+for i in range(10):
+    ...
+
+if True:
+    del i
+"""
 
 
 @pytest.mark.parametrize(
@@ -45,12 +74,6 @@ multiple_for_mixed = (
         class_body_code,
         for_with_wrong_del,
         for_unpacking_with_partial_del,
-    ],
-    ids=[
-        'module_scope',
-        'class_body',
-        'wrong_del',
-        'partial_unpacking_del',
     ],
 )
 def test_leaking_for_loop_violation(
@@ -74,11 +97,7 @@ def test_leaking_for_loop_violation(
         for_with_del_module,
         for_with_del_class,
         for_unpacking_with_del,
-    ],
-    ids=[
-        'module_with_del',
-        'class_with_del',
-        'unpacking_with_del',
+        for_with_del_inside_if,
     ],
 )
 def test_for_loop_with_del_no_violation(
