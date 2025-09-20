@@ -2978,3 +2978,43 @@ class CommentInFormattedStringViolation(TokenizeViolation):
 
     error_template = 'Found comment inside formatted string'
     code = 480
+
+
+@final
+class LeakingForLoopViolation(ASTViolation):
+    """
+    Found a leaking 'for' loop in a class or module body.
+
+    Reasoning:
+        'for' loops in class or module bodies leak iteration variables
+        into the surrounding namespace. This is almost never intended
+        and can lead to confusing bugs.
+
+    Solution:
+        Use list comprehensions, 'map()', or move the logic into a method
+        or helper function. If you must use 'for', explicitly 'del'
+        the variable afterward.
+
+    Example::
+
+        # bad
+        class Some:
+            for x in [1, 2]:
+                print(x)
+
+        # bad
+        for y in [3, 4]:
+            print(y)
+
+        # good
+        class Some:
+            _ = [print(x) for x in [1, 2]]
+
+        # good
+        some_list = [print(y) for y in [3, 4]]
+
+    .. versionadded:: 1.5.0
+    """
+
+    error_template = 'Found a leaking `for` loop in a class or module body'
+    code = 481

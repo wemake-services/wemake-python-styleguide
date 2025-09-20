@@ -11,6 +11,10 @@ from wemake_python_styleguide.logic.tree import (
     operators,
     pattern_matching,
 )
+from wemake_python_styleguide.logic.walk import (
+    are_variables_deleted,
+    get_names_from_target,
+)
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations import (
     best_practices,
@@ -213,3 +217,30 @@ class SimplifiableMatchVisitor(BaseNodeVisitor):
                 first.pattern
             ) or pattern_matching.is_simple_pattern(first.pattern):
                 self.add_violation(consistency.SimplifiableMatchViolation(node))
+
+
+@final
+class LeakingForLoopVisitor(BaseNodeVisitor):
+    """Finds 'for' loops directly inside class or module bodies."""
+
+    def visit_ClassDef(self, node: ast.ClassDef) -> None:
+        """Checks that there are no 'for' loops inside class body."""
+        self._check_for_loops(node.body)
+        self.generic_visit(node)
+
+    def visit_Module(self, node: ast.Module) -> None:
+        """Checks that there are no 'for' loops inside module body."""
+        self._check_for_loops(node.body)
+        self.generic_visit(node)
+
+    def _check_for_loops(self, body: list[ast.stmt]) -> None:
+        for subnode in body:
+            if not isinstance(subnode, ast.For):
+                continue
+
+            loop_vars = get_names_from_target(subnode.target)
+
+            if not are_variables_deleted(loop_vars, body):
+                self.add_violation(
+                    best_practices.LeakingForLoopViolation(subnode),
+                )
