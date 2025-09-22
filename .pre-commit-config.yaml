@@ -14,7 +14,7 @@ repos:
         args: ["--fix=lf"]
       - id: check-case-conflict
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.33.3
+    rev: 0.34.0
     hooks:
       - id: check-dependabot
       - id: check-github-workflows
@@ -39,7 +39,7 @@ repos:
       - id: shellcheck
         args: ["--severity=style"]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.13.0
+    rev: v0.13.1
     hooks:
       - id: ruff
         args: ["--exit-non-zero-on-fix"]
